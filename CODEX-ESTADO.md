@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 17:35** · publicado em **09/11/2026 17:36** (UTC-3)
+> Ultima resposta processada: **09/11/2026 17:42** · publicado em **09/11/2026 17:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 17:42 · sessao c84017ed8f71 · - · - · origem=Ronald (tmux)
+
+C11 por ato:
+
+| Ato | Evento demonstrável |
+|---|---|
+| Abertura `batida_ausente` | `abrir`: `chamados/models.py:977–980`; `criar`: `:1093–1099`. Ambos inserem evento no atomic do nascimento. |
+| Reabrir chamado/transição para VIVOS | `chamados/signals.py:194–203`, antes do best-effort/cartório. `_gravar_estado` salva dentro de atomic em `chamados/models.py:280–296`. |
+| Retratar duplicata | `chamados/services/fio.py:1354` → `carimbar_identidade` → save; receiver de pergunta em `chamados/signals.py:237–245`; save atômico em `chamados/models.py:3402–3413`. |
+| Validação | `chamados/services/validacao.py:136–139` salva e registra DP no mesmo atomic; evento pelo receiver acima. |
+| Morte pela leitura da célula | `ponto/portas/celula.py:894–902`: célula e evento no mesmo atomic. |
+| Reapontar pela porta fio | Captura origem em `chamados/services/fio.py:924`; salva em `:927`; acorda origem em `:929`, no atomic aberto em `:881`. |
+
+Lacunas adicionais:
+
+1. **Tranca de competência:** C6 morre por leitura da tranca em `chamados/juizes.py:1325–1328`; `trancar_periodo` não emite evento nem possui atomic próprio (`ponto/services/fechamento.py:1400–1430`). Construção permitida sugerida: atomic envolvendo criação/retranca e evento por `CelulaDia` da empresa dentro de `janela_fechamento(mes, ano, empresa_id)`. Essa janela aceita ID e consulta o corte canônico (`ponto/janelas.py:36–57`). Manter `disparar_no_ato` fora do atomic: pode abrir subprocesso (`chamados/services/competencia_trancada.py:290–298`). Segunda chamada com `ato=False` não emite novamente (`ponto/services/fechamento.py:1411`).
+
+2. **Reuso em `_nascer`:** muda célula/destino e salva, sem acordar origem (`chamados/models.py:2955–2998`). Hunk textual: capturar `cls.linhas_do_evento(cls.objects.filter(pk=ex.pk))` antes de `upd=[]`; após `ex.save(update_fields=upd)`, chamar `cls.acordar_celulas(linhas_antes)` no atomic existente (`chamados/models.py:2839`).
+
+3. **Reversão de regeneração:** save cru em `ponto/portas/celula.py:794–795`; termina em `:808`, sem emissão e sem `_o_chao_do_dia_mudou`. Edição chama esse rabo em `:627`; regeneração em `:354`. Hunk mínimo textual: `emitir_evento_celula(cel)` depois desse save, ainda no atomic de `:785`. Entretanto, o INSERT sozinho não relavra ATA/veredito: fábrica lê os motivos da célula em `chamados/services/fabrica_da_celula.py:170`. Não afirmar cobertura completa da reversão com esse hunk isolado.
+
+PERGUNTAS para sessão:
+
+- Aceita-se que o erro de outbox impeça a transição para VIVOS? O caminho alterado é o `post_save` de **qualquer save existente com mudança de status para VIVOS**, módulo de turno e célula (`chamados/signals.py:194–203`). Pela porta `_gravar_estado`, participa do mesmo atomic (`chamados/models.py:280–296`). Saves diretos não ganham atomic genérico: `ChamadoColaborador` não contém wrapper equivalente ao de PerguntaDisputa (`chamados/models.py:3402–3413`).
+- Se construir tranca+evento atomicamente, falha da outbox passa a desfazer a tranca. O comentário atual promete que a tranca nunca cai por causa da fila (`ponto/services/fechamento.py:1423`). Não resolver silenciosamente essa mudança.
+
+H2 continua aplicável à implementação atual: `registrar` só executa `bulk_create` (`chamados/models.py:3932–3934`); o texto acrescenta atomic+outbox (`docs/E4A_HUNKS_SESSAO.txt:66`). H4 corresponde às três mudanças necessárias: remover `--apply` do ENC (`config/crons.py:1521`), retirar nome da lista de juízes (`:2048`) e declarar papel vigia (`:2164–2169`). Sem H4 aplicado, cron chama opção ausente no comando desta cópia (`docs/E4A_HUNKS_SESSAO.txt:123`).
+
+## 09/11 17:42 · sessao 760a6e6cb3db · - · - · origem=Ronald (tmux)
+
+Mapa de provas existentes, sem executar ORM:
+
+| Porta | Prova aproveitável | Lacuna para selo EXPAND |
+|---|---|---|
+| A01 | Estado canônico + trilha: `chamados/tests/test_trilha_na_ordem_da_escrita.py:67`; porta válida: `chamados/tests/test_selo_e4_gates.py:59` | Comparar toda projeção das perguntas antes/depois, sem exigir DP para efeito Chamado. |
+| A02 | SILENCIO com autor: `chamados/tests/test_e1_entradas.py:121` | Exigir F/C preservados, instante correspondente e 2x sem novo DP. |
+| A04 | Exercício indireto na devolução: `chamados/tests/test_o261_recusa_fala.py:164` | Caso direto `reabrir_sistema`, F completo e 2x com uma nota; não possui DP próprio. |
+| A05 efeito puro | Carimbo aceito: `chamados/tests/test_o261e_f2_porta_carimbo.py:676`; recusa restaura memória/banco: `:713` | Caracterizar C completo com `resposta=None`; assinatura segue exceção conflitante do pedido. |
+| A07 | Três campos C limpos juntos: `chamados/tests/test_o261e_f2_porta_carimbo.py:754` | Exigir R/V intactos e nenhum DP inventado pelo efeito técnico. |
+| A08 | Exercício por correção com absorção: `chamados/tests/test_e1_volta2.py:200`; 2x = 1 DP: `:217` | Caso direto do lote, incluindo `outros` e C/R/V completo. |
+| A09 | 2x = mesmo estado e zero query na segunda: `chamados/tests/test_porta_chamado_e3.py:70` | Exigir demais projeções intactas e nenhum DP humano fabricado. |
+| A10 | DP VALIDACAO com autor e mesmo instante de V: `chamados/tests/test_e1_entradas.py:94` | Asserção explícita da projeção completa. `_carimbar_validacao` não declara idempotência própria. |
+| A11 | Conserva resposta/recusa, limpa V e reabre F: `chamados/tests/test_o261_recusa_fala.py:164`; conserva V legada em DP: `chamados/tests/test_e1_volta2.py:101` | Exigir exatamente um novo DP DEVOLUCAO e repetir a porta. |
+| A12 | Cada resposta é uma linha; anterior imutável; mesmo instante R/DP: `chamados/tests/test_e1_entradas.py:64`; invalida V: `chamados/tests/test_porta_resposta_pergunta.py:224` | Comparar toda projeção. Repetição não é idempotente: a própria prova caracteriza duas trilhas em `test_porta_resposta_pergunta.py:216`. |
+| A13 | Sem dados não fabrica DP: `chamados/tests/test_e1_entradas.py:115`; foto da absorção e 2x: `chamados/tests/test_e1_volta2.py:200`, `:217` | Reabertura ordinária com foto R/V, F intacto e exatamente 1 DP. |
+| A14 | 2x sem query; voz não sobrescrita: `chamados/tests/test_porta_chamado_e3.py:43`, `:50` | Exigir 1 DP RESPOSTA, instante injetado e R completo. |
+| A15 | Testemunha preservada e 2x sem mudar instante/trilha: `chamados/tests/test_porta_resposta_pergunta.py:241` | Exigir exatamente 1 DP RESPOSTA com texto/instante testemunhados. |
+| A16 | Via e L no mesmo save: `chamados/tests/test_porta_veredito_pergunta.py:343`; 2x = uma trilha: `:372` | Exigir R/V/C restante preservado e nenhum DP de decisão inventado. |
+| A19 | Uma RECUSA, autor/motivo e texto retirado: `chamados/tests/test_e1_entradas.py:103` | Exigir motivo projetado e R/V zerados; 2x = mesma projeção e um DP RECUSA. |
+| A21 | RETRATACAO, via terminal, resposta preservada: `chamados/tests/test_e1_entradas.py:142` | Repetir remoção e comparar motivos/contexto/projeção e quantidade de DP. |
+| A22 | 2x mesmo fato = uma pergunta e uma trilha: `chamados/tests/test_porta_pergunta_identidade.py:167`; reuso sem escrita: `chamados/tests/test_e1_v15.py:44` | Nascimento/defaults R/V/C e reuso conservando DP/projeções existentes. |
+| A23 | Limpa resposta e conta: `chamados/tests/test_porta_disputa_ciclo.py:283`; 2x não conta/trilha de novo: `:297` | Exigir exatamente um DP REABERTURA com autor/foto, além do contador/projeção já provados. |
+
+A fixture mais simples para um novo módulo ORM é `_Base` de `chamados/tests/test_e1_entradas.py:30`: cria Empresa/Colaborador/User; `_pergunta` nasce pela porta em `:37`; `_responder` executa o core e recarrega em `:44`. O relógio desse módulo é fixado por `RELOGIO` em `:26` e `freeze_time` em `:51`. Para efeitos que dependem de chamado/célula e lavra, a fixture de `chamados/tests/test_porta_veredito_pergunta.py:223` já prepara esse universo.
+
+Não recomendo afirmar “1 DP” para A01/A04/A05 puro/A07/A08 direto/A09/A16/A22: o vocabulário atual representa decisões humanas ou atos definidos, enquanto esses corpos executam efeitos/identidade. O requisito permite “DP ou efeito canônico”; adicionar RESPOSTA/REABERTURA a efeitos técnicos alteraria significado. (`chamados/models.py:3846`; `chamados/services/relavra_via.py:106`; `chamados/models.py:3192`; `chamados/models.py:2822`)
+
+Resultados dessas provas no banco desta cópia: **[nao verificado]**.
+
+## 09/11 17:42 · sessao f9abd31ce653 · - · - · origem=Ronald (tmux)
+
+Leitura concluída, sem escrita.
+
+| Porta | Evidência / classificação |
+|---|---|
+| A01 `_gravar_estado` | Efeito canônico Chamado + trilha no mesmo atomic: `chamados/models.py:280`, `:292`, `:296`. Não corresponde a um ato DP por pergunta. |
+| A02 `fechar` | Exceções já gravam `SILENCIO`: `chamados/models.py:1921`; F persiste no mesmo atomic: `:1934`. Fechamento normal conserva efeito/quitação, sem inventar decisão. |
+| A04 `reabrir_sistema` | Efeito no continente e nota existente: `chamados/models.py:2174`, `:2177`. `REABERTURA` disponível significa correção da pergunta, não reabertura do continente: `:3853`. |
+| A05 `carimbar`, ramo puro | Efeito/carimbo e L: `chamados/models.py:3118`, `:3140`, `:3141`. |
+| A05 assinatura | **Lacuna confirmada**: atribui R/V em `chamados/models.py:3121`, `:3124`; salva sem DP em `:3141`. |
+| A07 `descarimbar` | Limpeza do carimbo: `chamados/models.py:3197`, `:3201`; caller de lastro executa consequência do juiz: `chamados/services/relavra_via.py:242`, `:246`. |
+| A08 `descarimbar_em_lote` | Executor de limpeza: `chamados/models.py:3253`; correção registra DP antes do lote: `chamados/services/disputa_emissao.py:1612`, `:1627`. Ressuscitação conserva decisões antigas antes da limpeza: `chamados/models.py:1563`, `:1565`. |
+| A09 `encerrar_por_fato_no_espelho` | Efeito já existente do espelho, via idempotente: `chamados/models.py:3262`, `:3264`, `:3265`. |
+| A10 `_carimbar_validacao` | Já grava `VALIDACAO` no atomic do save: `chamados/services/validacao.py:136`, `:139`. |
+| A11 `devolver_validacao_recusada` | Já grava `DEVOLUCAO`: `chamados/services/validacao.py:201`, `:205`; segunda chamada não registra novamente quando V já nulo: `:195`. |
+| A12 resposta core | Já grava `RESPOSTA` no atomic: `chamados/services/disputa_emissao.py:1500`, `:1505`, `:1508`. Advertência permanece em `recusa_motivo`: `:1494`. |
+| A13 correção | Já grava `REABERTURA`/`RECUSA` antes da limpeza: `chamados/services/disputa_emissao.py:1602`, `:1612`, `:1624`, `:1629`. |
+| A14 automática | Já grava `RESPOSTA`: `chamados/services/disputa_emissao.py:1651`, `:1653`; guarda do texto mantém idempotência existente: `:1644`. |
+| A15 trilha | Já grava `RESPOSTA` no instante testemunhado: `chamados/services/disputa_emissao.py:1671`, `:1674`; guarda idempotente: `:1667`. |
+| A16 relavra | Efeito derivado + L pelo juiz existente: `chamados/services/relavra_via.py:120`, `:125`, `:127`. Não representa nova decisão humana. |
+| A19 recusa | Já delega DP `RECUSA` dentro do atomic da projeção: `chamados/services/validacao.py:588`, `:590`, `:593`; executor DP em `chamados/services/disputa_emissao.py:1612`. |
+| A21 remover motivo | Já grava `RETRATACAO` e carimbo no atomic: `chamados/models.py:2023`, `:2053`, `:2059`. |
+| A22 nascer/reuso | Reuso altera identidade/costura/L, sem nova escrita R/V/C: `chamados/models.py:2955`, `:2997`, `:2998`; nascimento aceita `campos` e persiste em `:3005`, `:3008`. |
+| A23 colaborador | Já delega correção com DP dentro do atomic do contador: `chamados/models.py:2232`, `:2234`, `:2236`; executor DP em `chamados/services/disputa_emissao.py:1612`. |
+
+A contradição precisa constar em PERGUNTAS: o pedido exclui expressamente A05 **ramo de assinatura**, mas manda começar pelo RED que exige DP precisamente nesse ramo. A falha é real (`chamados/models.py:3121`, `:3124`, `:3141`); qual instrução prevalece é **[nao verificado]**.
+
+Se autorizado pela sessão, o hunk mínimo de A05 deve acumular `RESPOSTA` somente ao preencher R ausente, `VALIDACAO` somente ao preencher V ausente, com texto/instante/autor das atribuições existentes; depois envolver `save` + `DecisaoPergunta.registrar` no mesmo atomic dentro do `try` atual. O rollback em memória existente precisa continuar cobrindo falha do registrar (`chamados/models.py:3137`, `:3143`, `:3144`). Não inserir DP no ramo puro nem repetir assinatura já presente (`:3120`, `:3123`).
+
+`registrar` não deduplica: faz apenas `bulk_create`, então a precondição deve continuar na porta (`chamados/models.py:3934`).
+
+O vocabulário disponível é fechado em oito atos (`chamados/models.py:3846`, `:3847`); classificar indiscriminadamente limpeza técnica, relavra, nascimento ou reabertura de continente como `REABERTURA` alteraria o significado documentado em `:3853`.
+
+Não encontrei `Parallel Change`/`Expand-Contract` nos dois catálogos consultados; resultado da busca local, não confirmação universal **[nao verificado]**. Termos efetivamente encontrados: `Single Writer Principle` em `docs/GLOSSARIO.md:12` e `Architecture Conformance Test` em `docs/GLOSSARIO.md:15`.
 
 ## 09/11 17:35 · sessao 98f00f1fa6ec · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
 
@@ -813,151 +908,4 @@ Conferi:
 
 Nenhum arquivo editado por este explorer; nenhum runtime executado [nao verificado].
 
-## 09/11 15:46 · sessao 5275290d9dd3 · FIO-E0-V4-E3 · verificador · origem=Code
-
-**PROCEDENTE adicional no TOTAL:** `tarefa_do_dia` ainda pode alcançar escrita indireta: carga → tranca → toque → `get_user_sistema()` → `User.objects.get_or_create`. Com tranca vigente e usuário ausente, a leitura pode criar usuário. Cura: leitura estrita do usuário, com erro se ausente, e teste que proíba criação nesse cenário. (`app/chamados/services/tarefa_do_dia.py:370`, `app/chamados/juizes.py:1173`, `app/core/utils.py:18`)
-
-As leis literais, triagem v3b, delta e entregas citadas não foram localizados na cópia; sua conferência literal e a identificação exata de F1/F2 ficam **[nao verificado]**. Abaixo, caminhos relativos a `app/`.
-
-1. **P1–P5: cura e mordida**
-
-| Item | Classificação e sítio | Teste que morde; passaria sem cura? | [nao verificado]
-|---|---|---|
-| P1 | **NAO PROCEDE no sítio corrigido.** Aviso e cobrança delegam à mesma lista central. `chamados/services/aviso_pendencia.py:9`, `chamados/services/cobranca.py:48`. | Fechada viva + aberta, e somente fechada: `chamados/tests/test_e3_v4_orm.py:20`, `:37`. **Não:** o filtro anterior incluiria a fechada. |
-| P2 | **NAO PROCEDE no sítio corrigido.** Lista nativa usa pendentes + histórico julgados por C6. `api/views.py:1058`. | O teste prova que a morta por tranca permanece em `q_vivas` e exige somente viva + respondida na API. **Não:** o SELECT anterior incluiria a morta; somente pendentes perderia a respondida. `chamados/tests/test_e3_v4_orm.py:42`, `:60`, `:66`. |
-| P3 | **NAO PROCEDE pelo `handle` do instrumento.** Lê sistema e fornece seu PK às dependências. `chamados/management/commands/diff_e3_sombra.py:94`, `:98`. | Ausência de sistema e tranca real: **não passariam** reintroduzindo criação ou retirando a semente. `chamados/tests/test_e3_diff_sombra.py:26`, `:41`. |
-| P4 | **NAO PROCEDE para exclusões, atribuição simples e `getattr` literal.** Models/registro entram na varredura. `chamados/tests/test_e3_pendentes_app.py:69`, `:75`, `:96`. | **Não:** inclusão e resolução são exigidas em `:119`, `:124`. O contador isolado de `:144` poderia passar com detector incompleto. |
-| P5 | **NAO PROCEDE no isolamento/custo corrigidos da consulta.** Memo novo, alimentação única e restauração do contexto. `chamados/juizes.py:1091`, `:1099`, `:1102`. | Uma/cinco perguntas frias e frescor após tranca, toque, retirada do toque e reabertura. **Não:** retirar lote ou reutilizar memo persistente viola essas asserções. `chamados/tests/test_e3_v4_orm.py:85`, `:101`. |
-
-A equivalência desses rótulos com o texto integral do v3b permanece **[nao verificado]**.
-
-2. **UNIDADE: ainda existem leitores externos**
-
-**FILA — o contador literal não é zero:**
-
-- Relatório calcula C6 + ausência de resposta; pauta semanal calcula `q_vivas + sem resposta + disputa aberta`. `chamados/relatorios_disputa.py:18`, `:21`; `chamados/services/cobranca.py:228`.
-- Painel/placar separa respondidas e não respondidas fora da consulta. `chamados/services/raiox.py:135`, `:139`, `:140`; consumidor `chamados/services/verbos.py:34`.
-- UI web combina `p.viva` e `respondida_em`; o fio também calcula `todas_respondidas`. `templates/chamados/partials/_card_atendimento.html:77`, `:94`, `:155`; `chamados/services/fio.py:340`.
-
-Esses cálculos não foram acrescentados pelo TOTAL fornecido. Qual deles corresponde exatamente a F1/F2, e quais exceções a lei autoriza, fica **[nao verificado]**.
-
-**NAO PROCEDE — kernels e dashboard corrigidos:** ambos os kernels e o dashboard contam perguntas da consulta central. `api/views.py:325`, `api/views_core.py:314`, `core/views.py:253`.
-
-3. **P5: memo, autoridade, equivalência e N+1**
-
-- **NAO PROCEDE — persistência do memo da consulta:** o `ContextVar` é global, mas o conteúdo nasce por chamada e o token é restaurado no `finally`. `chamados/juizes.py:1080`, `:1091`, `:1102`.
-- **NAO PROCEDE — predicado duplicado:** C6 chama o avulso; o avulso delega ao lote; toque avulso também delega ao lote. Empresa/competência e trilha são julgadas nesses mesmos corpos. `chamados/juizes.py:1327`, `:951`, `:1022`, `:1145`.
-- **FILA — equivalência irrestrita é falsa:** fora da consulta, o avulso conserva `_tranca_memo` no request/colaborador. Pode ler “não trancado”, ocorrer tranca e continuar retornando falso; a consulta seguinte usa memo novo e retorna verdadeiro. Reproduzido em memória. Cura eventual: invalidar o memo ou explicitar seu escopo de validade. `chamados/juizes.py:1064`, `:1068`, `:1024`, `:1091`.
-- **O `assertNumQueries` morde N+1 de tranca/toque no cenário exercitado:** exige nove consultas tanto com uma quanto com cinco perguntas, em instâncias frias. Não prova custo constante nos demais caminhos de C6. `chamados/tests/test_e3_v4_orm.py:90`, `:91`, `:97`, `:98`.
-
-4. **P3: escrita transitiva**
-
-**NAO PROCEDE para o comando normal:** a semente impede alcançar o `get_or_create`; todos os aliases recebem a guarda SQL, e há teste que injeta escritor numa dependência. `chamados/management/commands/diff_e3_sombra.py:92`, `:98`; `chamados/juizes.py:1173`; `chamados/tests/test_e3_diff_sombra.py:71`.
-
-**FILA da guarda:** aceita `SELECT … FOR UPDATE`; isso não demonstra caminho concreto de trava/escrita nesta árvore, mas impede considerá-la bloqueio universal de travas. Cura: rejeitar também essa forma e acrescentar caso negativo. `chamados/management/commands/diff_e3_sombra.py:35`.
-
-5. **Classes reincidentes no TOTAL**
-
-- **PROCEDENTE — escritor transitivo na tarefa:** é o achado inicial. O selo de zero escritas exercita cenário sem tranca e, portanto, pode passar apesar desse caminho. `chamados/services/tarefa_do_dia.py:370`, `chamados/juizes.py:1176`, `core/utils.py:18`, `chamados/tests/test_e2_tarefa_do_dia.py:878`.
-- **NAO PROCEDE — derivação paralela nos pontos examinados:** posição, passivo, lavra, tranca e verbos são lidos das autoridades existentes. `chamados/services/tarefa_do_dia.py:65`, `:346`, `:350`, `:367`, `:408`.
-- **NAO PROCEDE — fachada C17 pousada antecipadamente:** o instrumento compara resultados; não redireciona C17 para tarefa. `chamados/management/commands/diff_e3_sombra.py:124`, `:125`, `:127`.
-- **NAO PROCEDE — relógio novo dentro da tarefa/lavra leitora:** recebem instante; decisões/efeitos incluem igualdade, lavra futura é rejeitada e silêncio é estritamente futuro. `chamados/services/tarefa_do_dia.py:339`, `:358`; `chamados/veredito_lavrado.py:224`; `chamados/services/painel.py:190`. O fallback antigo de C6 ainda lê `date.today()`. `chamados/juizes.py:575`.
-- **FILA — selo C17 incompleto:** import relativo e alias por desempacotamento escapam do detector; nenhum quarto chamador real foi demonstrado. Cura: resolver `ImportFrom.level` e alvos compostos, com REDs. `chamados/tests/test_e3_pendentes_app.py:46`, `:78`.
-- **FILA — ocorrência repetida:** tarefa distingue `int_ida:2`, mas a identidade persistente exige posição derivada do motivo; a tarefa abstém ou pede emissão. Cura futura exige migrar identidade, emissão e leitura juntas. `chamados/services/tarefa_do_dia.py:67`, `:268`; `chamados/models.py:3425`. Exigibilidade nesta etapa **[nao verificado]**.
-
-6. **Escritores → leitores principais, inclusive fora do diff**
-
-| Dado/função | Quem produz/escreve → quem lê |
-|---|---|
-| `pendentes`, `historico` | Consulta particiona em memória: `chamados/services/pergunta_no_app.py:69` → kernels, dashboard e API: `api/views.py:325`, `:1023`, `:2561`; `api/views_core.py:314`; `core/views.py:253`. |
-| `perguntas_pendentes_do_colab` | Delega à consulta → aviso textual. `chamados/services/aviso_pendencia.py:9`, `:13`. Cobrança delega diretamente: `chamados/services/cobranca.py:48`. |
-| Saída da tarefa: instâncias, ações, razão, rota/fila/verbos/fio | Produção em memória: `chamados/services/tarefa_do_dia.py:237`, `:283`, `:433` → instrumento/projeções: `chamados/management/commands/diff_e3_sombra.py:125`, `:44`, `:51`. |
-| `data_evento`, identidade | Atribuição: `chamados/services/fio.py:800`; persistência do rechaveamento: `:1034`; identidade: `chamados/models.py:3425` → tarefa: `chamados/services/tarefa_do_dia.py:233`, `:324`; C6: `chamados/juizes.py:1386`. |
-| Resposta/validação e sequência | Projeção: `chamados/models.py:3121`, `:3124`, `:3141`; sequência: `:3934` → consulta: `chamados/services/pergunta_no_app.py:70`; passivo/decisões: `chamados/services/tarefa_do_dia.py:337`, `:346`. |
-| Ata/lâmpadas | Persistência pela porta: `ponto/portas/celula.py:969` → leitor único: `escala/services/leitor_celula.py:130` → tarefa: `chamados/services/tarefa_do_dia.py:84`; C6: `chamados/juizes.py:925`. |
-| Lavra e marcos | Escritores: `chamados/veredito_lavrado.py:250`, `:270` → validade: `:224`; tarefa: `chamados/services/tarefa_do_dia.py:350`; leitor legado: `chamados/services/raiox.py:184`. |
-| Ausência/cobertura | Estado: `ponto/services/ausencia.py:824`, `:835` → cobertura: `ponto/turnos.py:3064`; tarefa: `chamados/services/tarefa_do_dia.py:211`, `:152`. |
-| Status/silêncio, fila e verbos | Status: `chamados/models.py:296`; silêncio: `chamados/services/arquivo.py:166`, `:202` → painel: `chamados/services/painel.py:188`; verbos: `chamados/services/verbos.py:47`, `:51` → alimentação: `chamados/juizes.py:1460`. |
-| Tranca/toque e lote C6 | Período: `ponto/services/fechamento.py:1400`, `:1432`; trilha: `chamados/services/cobrar_dia.py:39`, `ponto/services/veredito_celula.py:355`, `chamados/views_arquivar.py:77` → lote: `chamados/juizes.py:1026`, `:1215`; consumidores: `:1327`, `chamados/models.py:1843`, `chamados/reconciliador.py:667`, `chamados/services/disputa_emissao.py:1844`, `chamados/services/tarefa_do_dia.py:370`. |
-
-7. **Merge futuro**
-
-**FILA — acoplamentos previsíveis:** preservar seleção/histórico nos três pontos da API; manter identidade do modelo compatível com a tarefa; preservar a regra compartilhada de posição. Alterações nesses pontos podem mudar comportamento sem conflito textual. Conflito efetivo com o outro main **[nao verificado]**. `api/views.py:325`, `:1058`, `:2561`; `chamados/models.py:3425`; `chamados/services/tarefa_do_dia.py:108`; `chamados/services/declaracao_texto.py:79`, `:134`.
-
-Resultado da suíte inteira e “48/48 mortos”: **[nao verificado]**. [nao verificado]
-
-## 09/11 15:46 · sessao 3efb1b2451e1 · CODEX-2-RAIAS-PORTAO-CPU · leitura · origem=Code
-
-**A matriz fixa quatro divergências procedentes: P1 na representação dos nomes; P2 no julgamento da pasta-pai; P3 no significado declarado de “run”; P4 nos esperados dos mutantes de carga.** O eco de diagnóstico é uma fragilidade adicional do classificador, sem mutante atual demonstrado que a produza. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:287`, `bin/codex_vagas_medida.py:114`, `bin/tests/test_codex_pergunta.sh:720`, `bin/tests/test_codex_pergunta.sh:747`; ocorrência do eco em mutante atual: [não verificado])
-
-Nesta matriz, **E** significa esperado e **A** significa atual. `E=A` indica concordância. O esperado aplica “arquivo em comum”, preserva arquivo exato sem `/`, pasta por componente com `/` e a recusa conservadora do mesmo nome com/sem `/`. (`CLAUDE.md:306`, `CLAUDE.md:307`, `CLAUDE.md:278`, `bin/codex_pergunta.sh:258`)
-
-Os resultados abaixo são leitura do código e dos casos escritos. GREEN atual da árvore e ocorrência em produção permanecem **[não verificado]**.
-
-**Convenções de persistência e retorno usadas em A e B**
-
-| Sigla | Esperado e atual, salvo divergência expressa |
-|---|---|
-| **P0** | Recusa anterior ao `ini`: nenhum novo par `ini/fim` nem novo `.rc` desta tentativa. Pode haver criação dos arquivos de lock; estado eventualmente publicado antes de uma recusa posterior é removido pelo EXIT. Artefatos antigos no mesmo nome não equivalem a sinais desta tentativa. (`bin/codex_pergunta.sh:228`, `bin/codex_pergunta.sh:236`, `bin/codex_pergunta.sh:380`, `bin/codex_pergunta.sh:392`, `bin/codex_pergunta.sh:428`) |
-| **PV** | Recusa de portão/teto/meta na admissão: P0 mais tentativa de append em `vaga2.log`, campos `hora, obra, motivo, load5, fonte`. Falha desse append não impede rc 2. (`bin/codex_pergunta.sh:249`, `bin/codex_pergunta.sh:250`) |
-| **P+** | Admitida: `.estado` temporário por rename, com `toca=`; depois `chamadas.log ini`. Após retorno do Codex: `.inventario`; no EXIT, `fim`, `.rc` e remoção do estado. `.id` somente com RC 0 e resposta nova desta chamada. (`bin/codex_pergunta.sh:310`, `bin/codex_pergunta.sh:311`, `bin/codex_pergunta.sh:428`, `bin/codex_pergunta.sh:560`, `bin/codex_pergunta.sh:229`, `bin/codex_pergunta.sh:232`, `bin/codex_pergunta.sh:236`, `bin/codex_pergunta.sh:603`) |
-| **P!** | P+ com `.inventario` proibido/falho, `.recusa`, `.rc rc=3`, `fim`; sem novo `.id`. A mensagem manda descartar a WT, mas não a remove automaticamente. (`bin/codex_pergunta.sh:576`, `bin/codex_pergunta.sh:578`, `bin/codex_pergunta.sh:579`, `bin/codex_pergunta.sh:587`, `bin/tests/test_codex_pergunta.sh:169`) |
-| **R0** | Admitida e execução/inventário verdes: retorno do CLI, 0 no controle; mensagem `sessao=… rc=0 jsonl=…`. Admissão, sozinha, não garante sucesso final. (`bin/codex_pergunta.sh:551`, `bin/codex_pergunta.sh:608`, `bin/codex_pergunta.sh:609`) |
-| **R2** | `construtor: … (rc 2; Codex nao chamado)`. (`bin/codex_pergunta.sh:244`) |
-| **RV2** | `VAGA2: … (rc 2; Codex nao chamado)`. (`bin/codex_pergunta.sh:250`) |
-| **R3** | `RECUSA rc 3 … wt DESCARTADA`; inventário proibido/falho vence qualquer retorno do CLI. (`bin/codex_pergunta.sh:557`, `bin/codex_pergunta.sh:578`, `bin/codex_pergunta.sh:587`) |
-
-**A. PORTA `--toca`**
-
-As comparações da admissão operam sobre declarações. O fim compara caminhos encontrados no inventário com essas declarações; só processa registros cuja primeira coluna seja `TOCADO`. (`bin/codex_pergunta.sh:270`, `bin/codex_pergunta.sh:278`, `bin/codex_pergunta.sh:280`)
-
-| Célula / estado do caminho | Argumento: parser/validação | Admissão: outra vaga viva | Inventário: classe, serialização e releitura | Juiz final: fora / comum | Persistido | Retorno | Prova: caso / mutante |
-|---|---|---|---|---|---|---|---|
-| **A1 Arquivo exato** `app/folha/views.py` | E=A: recebe em `TOCA[]`; sintaxe válida. (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:323`) | E=A: mesmo arquivo cruza; arquivo distinto não cruza, ressalvada cobertura por pasta. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:266`) | E=A para nome simples: `TOCADO`, TSV cru; leitor recupera o segundo campo. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:279`) | E=A: igualdade cobre somente esse arquivo; outro arquivo fica fora; cobertura da outra raia recusa. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:287`) | E=A: P+ se válido; P! se violar escopo. | E=A: R0/R3; conflito declarado na abertura dá RV2. | `c_toca_exato`, `c_toca_fim` / `toca_exato`, `toca_fim`; E1/E3. (`bin/tests/test_codex_pergunta.sh:559`, `bin/tests/test_codex_pergunta.sh:562`, `bin/tests/test_codex_pergunta.sh:732`, `bin/tests/test_codex_pergunta.sh:733`) |
-| **A2 Pasta/** `app/folha/` | E=A: `/` final declara pasta. (`bin/codex_pergunta.sh:321`) | E=A: cruza descendentes e pastas ancestrais declaradas. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:266`) | E=A: descendentes modificados são inventariados; pasta nova também ganha registro terminado em `/`. (`bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:217`) | E=A: prefixo com `/` cobre por componente. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:284`) | E=A: P+/P!. | E=A: R0/R3; sobreposição declarada dá RV2. | `c_toca_exato/controle_pasta` / `toca_exato`; E1. (`bin/tests/test_codex_pergunta.sh:567`, `bin/tests/test_codex_pergunta.sh:733`) |
-| **A3 Pasta-pai criada para arquivo nomeado**, sem outra declaração sob o pai | E=A: declara `app/novo/a.py`, sem exigir declaração ampla de `app/novo/`. (`bin/codex_pergunta.sh:323`) | E=A: compara o arquivo declarado com a outra declaração. (`bin/codex_pergunta.sh:273`) | E=A: cria registros `app/novo/` e `app/novo/a.py`; ambos em TSV cru. (`bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:217`) | E=A: pai necessário é aceito pelo meu escopo; arquivo continua exato. (`bin/codex_pergunta.sh:284`) | E=A: P+. | E=A: R0. | `c_toca_exato/controle_pasta_nova`; falta mutante específico da aceitação do pai. E6. (`bin/tests/test_codex_pergunta.sh:569`; mutante específico: [não verificado]) |
-| **A4 Arquivos irmãos sob pai novo**: minha `app/novo/a.py`, outra `app/novo/b.py` | E=A: ambas declarações válidas. (`bin/codex_pergunta.sh:323`) | E=A: admite, pois arquivos diferentes não cruzam. (`bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:273`) | E=A: a pasta-pai nova também é `TOCADO`. (`bin/codex_pergunta.sh:196`) | **DIVERGE P2. E:** pai necessário não constitui arquivo comum; aceita. **A:** aceita o pai no meu escopo, mas `cruza(outra, pai)` o considera comum com `b.py`. (`CLAUDE.md:306`, `bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:287`) | **E: P+. A: P!**, com falso motivo de arquivo comum. (`bin/codex_pergunta.sh:288`, `bin/codex_pergunta.sh:579`) | **E: R0. A: R3.** (`bin/codex_pergunta.sh:587`) | E6: caso irmãos novos / mutante restaura colisão pelo pai. E7: controle outra pasta cobrindo deve recusar. Novos: [não verificado]. Sítio atual: `bin/codex_pergunta.sh:287`. |
-| **A5 Pasta irmã / prefixo parecido**: `app/folhas/` × `app/folha/` | E=A: válida. (`bin/codex_pergunta.sh:323`) | E=A: disjuntas. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:266`) | E=A: nomes permanecem distintos no TSV simples. (`bin/codex_pergunta.sh:217`) | E=A: `folha/` não cobre `folhas/`; tocar esta última sob declaração da primeira fica fora. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:284`) | E=A: P+ quando declarada; P! quando fora. | E=A: R0/R3. | `c_v2_toca/controle`, `c_toca_exato/folha_nao_cobre_folhas` / `toca`, `toca_exato`; E1/E3. (`bin/tests/test_codex_pergunta.sh:530`, `bin/tests/test_codex_pergunta.sh:564`, `bin/tests/test_codex_pergunta.sh:725`, `bin/tests/test_codex_pergunta.sh:733`) |
-| **A6 Mesmo nome com e sem `/`** | E=A: ambas grafias válidas, com significados distintos de cobertura. (`bin/codex_pergunta.sh:258`, `bin/codex_pergunta.sh:323`) | E=A: recusa conservadora por igualdade após retirar `/`. (`CLAUDE.md:278`, `bin/codex_pergunta.sh:266`) | E=A: se já recusado, não alcança inventário final. Sem outra viva, inventário mantém arquivo e pasta com suas grafias. (`bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:306`) | E=A: sem `/` não autoriza descendentes; sobreposição com outra declaração continua proibida. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:287`) | E=A: PV na admissão; P+/P! nos cenários sem conflito inicial. | E=A: RV2; ou R0/R3 conforme o toque. | `c_v2_toca/app/folha`, `c_toca_exato/arquivo_nao_e_pasta` / `toca`, `toca_exato`; E1/E3. (`bin/tests/test_codex_pergunta.sh:529`, `bin/tests/test_codex_pergunta.sh:563`, `bin/tests/test_codex_pergunta.sh:725`, `bin/tests/test_codex_pergunta.sh:733`) |
-| **A7 Nome com TAB**: arquivo real `views.py<TAB>fora`, declaração exata `views.py` | E=A: argumento contendo TAB é recusado; a declaração simples passa. (`bin/codex_pergunta.sh:323`) | E=A sobre a declaração simples; desconhece o futuro nome com TAB. (`bin/codex_pergunta.sh:270`) | **DIVERGE P1. E:** nome com controle é PROIBIDO, com motivo próprio inequívoco. **A:** imprime nome cru; TAB divide campos, e só `c[1]` vira caminho. (`CLAUDE.md:278`, `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:279`, `bin/codex_pergunta.sh:282`) | **E:** recusa o nome real. **A:** compara apenas `views.py`, podendo aprová-lo como arquivo exato. (`bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:284`) | **E: P!. A:** pode ficar P+, com `.inventario` cujo segundo campo truncado aparenta ser permitido. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:560`) | **E: R3. A: R0 possível** no cenário isolado descrito. (`bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:587`, `bin/codex_pergunta.sh:609`) | E4/TAB / mutante remove proibição de controle. Caso e mutante próprios atuais: [não verificado]. Lista atual: `bin/tests/test_codex_pergunta.sh:617`. |
-| **A8 Nome com newline** | E=A: argumento completo recusado; declaração simples passa. (`bin/codex_pergunta.sh:323`) | E=A sobre a declaração simples. (`bin/codex_pergunta.sh:270`) | **DIVERGE P1. E:** PROIBIDO por controle. **A:** nome cru quebra registro em linhas; fragmento inicial é lido como caminho, fragmentos sem classe `TOCADO` são ignorados. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:278`, `bin/codex_pergunta.sh:280`) | **E:** recusa. **A:** prefixo anterior ao newline pode casar com arquivo exato declarado. (`bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:284`) | **E: P!. A:** P+ possível; registros físicos deixam de representar uma entrada por linha. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:560`) | **E: R3. A: R0 possível.** (`bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:609`) | E4/newline / mutante remove proibição de controle. Novos: [não verificado]. Sítios atuais: `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:278`. |
-| **A9 Nome com CR** | E=A: argumento completo recusado. (`bin/codex_pergunta.sh:323`) | E=A sobre eventual declaração simples. (`bin/codex_pergunta.sh:270`) | **DIVERGE P1. E:** PROIBIDO por controle. **A:** escrita crua e leitura textual com tradução de quebras permitem que CR separe o nome durante a leitura. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:278`) | **E:** recusa. **A:** pode comparar somente o prefixo anterior ao CR. (`bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:284`) | **E: P!. A:** P+ possível, sem preservação do nome real no julgamento. (`bin/codex_pergunta.sh:278`, `bin/codex_pergunta.sh:560`) | **E: R3. A: R0 possível.** (`bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:609`) | E4/CR / mutante remove proibição de controle. Novos: [não verificado]. |
-| **A10 Nome com espaço** | E=A: argumento com espaço recusado pela gramática atual restritiva. (`bin/codex_pergunta.sh:323`) | E=A: pode declarar pasta ancestral sem espaço. (`bin/codex_pergunta.sh:264`) | E=A: espaço não separa campos TSV; nome encontrado é preservado. (`bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:279`) | E=A: sob pasta declarada pode passar; `views.py espaço` não equivale ao arquivo exato `views.py`. (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:284`) | E=A: P+/P!, conforme cobertura. | E=A: R0/R3; argumento com espaço dá R2. | E5: controles positivo sob pasta e negativo contra arquivo exato / mutante reduz nome ao primeiro trecho separado por espaço. Novos: [não verificado]. |
-| **A11 Symlink tocado** | E=A: valida nome, não o tipo futuro. (`bin/codex_pergunta.sh:323`) | E=A: compara declarações. (`bin/codex_pergunta.sh:273`) | E=A: `lstat`; walk não segue diretório symlink; link tocado é PROIBIDO, motivo `symlink`. (`bin/codex_pergunta.sh:188`, `bin/codex_pergunta.sh:194`, `bin/codex_pergunta.sh:215`) | E=A: já proibido pelo inventário; o juiz de escopo não o reautoriza. (`bin/codex_pergunta.sh:280`, `bin/codex_pergunta.sh:576`) | E=A: P! no fim; se já inventariado no pré-check, P0. | E=A: R3 no fim; R2 no pré-check sujo. (`bin/codex_pergunta.sh:399`, `bin/codex_pergunta.sh:587`) | `c_p_link` / `p_link`; E8. (`bin/tests/test_codex_pergunta.sh:366`, `bin/tests/test_codex_pergunta.sh:663`) |
-| **A12 Hardlink** | E=A: argumento não concede exceção ao tipo. (`bin/codex_pergunta.sh:323`, `bin/codex_pergunta.sh:216`) | E=A: comparação lexical não substitui inventário. (`bin/codex_pergunta.sh:273`, `bin/codex_pergunta.sh:397`) | E=A: `nlink>1` entra mesmo com conteúdo igual; motivo `hardlink`. (`bin/codex_pergunta.sh:201`, `bin/codex_pergunta.sh:216`) | E=A: pré-check/revalidação recusam; se criado na execução, inventário final proíbe. (`bin/codex_pergunta.sh:399`, `bin/codex_pergunta.sh:530`, `bin/codex_pergunta.sh:560`) | E=A: P0 antes do `ini`; P! no fim. | E=A: R2 antes da execução; R3 no fim. | `hardlink_ini`, `p_hardlink_ident`, `revalida_hardlink`, `p_hardlink` / `inv_nlink`, `p_hardlink`; E8. (`bin/tests/test_codex_pergunta.sh:296`, `bin/tests/test_codex_pergunta.sh:403`, `bin/tests/test_codex_pergunta.sh:406`, `bin/tests/test_codex_pergunta.sh:656`, `bin/tests/test_codex_pergunta.sh:664`) |
-| **A13 `..`** | E=A: qualquer ocorrência de `..` é recusada, inclusive dentro de componente. (`bin/codex_pergunta.sh:323`) | E=A: não alcança. (`bin/codex_pergunta.sh:324`) | E=A: não alcança nesta chamada; inventário usa nomes relativos encontrados, não a grafia da operação. (`bin/codex_pergunta.sh:189`, `bin/codex_pergunta.sh:193`) | E=A: não alcança por esse argumento. | E=A: P0. | E=A: R2, `invalido`. | `c_toca_forma` / `toca_forma`; E2. (`bin/tests/test_codex_pergunta.sh:554`, `bin/tests/test_codex_pergunta.sh:731`) |
-| **A14 `//`** | E=A: recusado. (`bin/codex_pergunta.sh:323`) | E=A: não alcança. | E=A: não alcança por esse argumento. | E=A: não alcança. | E=A: P0. | E=A: R2, `invalido`. (`bin/codex_pergunta.sh:324`) | `c_toca_forma/app//x` / `toca_forma`; E2. (`bin/tests/test_codex_pergunta.sh:554`, `bin/tests/test_codex_pergunta.sh:731`) |
-| **A15 Absoluto** | E=A: recusado por não começar com `app/` ou `bin/`. (`bin/codex_pergunta.sh:323`) | E=A: não alcança. | E=A: não alcança por esse argumento. | E=A: não alcança. | E=A: P0. | E=A: R2, `invalido`. (`bin/codex_pergunta.sh:324`) | `c_toca_forma//abs` / `toca_forma`; E2. (`bin/tests/test_codex_pergunta.sh:554`, `bin/tests/test_codex_pergunta.sh:731`) |
-| **A16 Fora de `app/` e `bin/`** | E=A: declaração `ops/` recusada. (`bin/codex_pergunta.sh:323`) | E=A: não alcança por essa declaração. | E=A: se execução com outro argumento criar `FORA.txt` na WT, inventário marca PROIBIDO, `fora de app/ e bin/`. (`bin/codex_pergunta.sh:151`, `bin/codex_pergunta.sh:210`) | E=A: proibição independe do próprio `--toca`. (`bin/codex_pergunta.sh:280`, `bin/codex_pergunta.sh:576`) | E=A: P0 no argumento; P! no toque encontrado. | E=A: R2/R3. | `c_toca_forma`, `c_p_fora` / `toca_forma`, `p_fora`; E2/E10. (`bin/tests/test_codex_pergunta.sh:352`, `bin/tests/test_codex_pergunta.sh:554`, `bin/tests/test_codex_pergunta.sh:689`, `bin/tests/test_codex_pergunta.sh:731`) |
-| **A17 `bin/` comum** | E=A: permitido declarar. (`bin/codex_pergunta.sh:323`) | E=A: mesmas regras de arquivo/pasta comum. (`bin/codex_pergunta.sh:266`) | E=A: TOCADO se não houver outro motivo proibido; declaração `bin/...` concede root adicional `<wt>/bin`. (`bin/codex_pergunta.sh:151`, `bin/codex_pergunta.sh:539`, `bin/codex_pergunta.sh:543`) | E=A: exige cobertura própria e ausência de cobertura conflitante. (`bin/codex_pergunta.sh:284`, `bin/codex_pergunta.sh:287`) | E=A: P+/P!. | E=A: R0/R3. | `c_bin_ok`; E9. Caso atual: `bin/tests/test_codex_pergunta.sh:582`; mutante específico da concessão do root: [não verificado]. |
-| **A18 `bin/` protegido** | E=A: declaração pode passar; declarar não revoga proteção. (`bin/codex_pergunta.sh:323`, `bin/codex_pergunta.sh:162`) | E=A: pode admitir se declarações disjuntas. (`bin/codex_pergunta.sh:273`) | E=A: PROIBIDO pela lista protegida, mesmo coberto pelo `--toca`. (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:210`) | E=A: já proibido; não reautoriza. (`bin/codex_pergunta.sh:280`, `bin/codex_pergunta.sh:576`) | E=A: P!. | E=A: R3, motivo `protegido (segue do opus)`. | `c_bin_protegido` / `lista_protegida`, `p_protegido`; E9. (`bin/tests/test_codex_pergunta.sh:592`, `bin/tests/test_codex_pergunta.sh:736`, `bin/tests/test_codex_pergunta.sh:737`) |
-| **A19 `.claude/`** | E=A: `.claude/` na raiz é argumento inválido; `app/.claude/...` pode passar na sintaxe. (`bin/codex_pergunta.sh:323`) | E=A: eventual declaração válida passa só se disjunta. (`bin/codex_pergunta.sh:273`) | E=A: componente `.claude` é PROIBIDO em qualquer nível. (`bin/codex_pergunta.sh:147`) | E=A: cobertura própria não revoga proibição. (`bin/codex_pergunta.sh:280`, `bin/codex_pergunta.sh:576`) | E=A: P0 ou P!, conforme fase. | E=A: R2/R3. | `c_p_claude` / `p_claude`; E10. (`bin/tests/test_codex_pergunta.sh:348`, `bin/tests/test_codex_pergunta.sh:685`) |
-
-**ESMERIL-SEMÂNTICA:** em **A4/juiz final**, a admissão diz “arquivos disjuntos”, mas o fim transforma a pasta-pai necessária em arquivo comum. Em **A7–A9/inventário e juiz final**, o nome encontrado deixa de ser a unidade comparada: a representação admite delimitadores que o leitor interpreta estruturalmente. (`bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:196`, `bin/codex_pergunta.sh:287`, `bin/codex_pergunta.sh:217`, `bin/codex_pergunta.sh:279`, `bin/codex_pergunta.sh:282`)
-
-A linha de symlink refere-se ao **tocado/inventariado**; não demonstra proibição de todo symlink rastreado intacto. Escrita transitória desfeita antes do inventário, ou fora da WT sem vestígio nela, permanece **[não verificado]**. (`bin/codex_pergunta.sh:199`, `bin/codex_pergunta.sh:209`, `bin/codex_pergunta.sh:215`)
-
-**B. VAGA E PORTÕES**
-
-“1ª” abaixo significa nenhuma vaga viva; “2ª”, uma viva. A aplicação dos portões depende da **outra vaga viva**, inclusive quando a vaga disponível é a 1 e a ocupada é a 2. (`bin/codex_pergunta.sh:383`, `bin/codex_pergunta.sh:389`, `bin/codex_pergunta.sh:390`, `bin/codex_pergunta.sh:391`)
-
-| Célula / situação | Juiz: E × A | Admite/recusa: E × A | Persistido: E × A | Retorno: E × A | Prova: caso / mutante |
-|---|---|---|---|---|---|
-| **B1 1ª chamada** | E=A: meta-trava, tenta vaga 1, confirma outra livre. (`bin/codex_pergunta.sh:380`, `bin/codex_pergunta.sh:383`, `bin/codex_pergunta.sh:390`) | E=A: dispensa portões da segunda simultânea; publica estado. (`bin/codex_pergunta.sh:391`, `bin/codex_pergunta.sh:392`) | E=A: P+. | E=A: R0 se restante verde. | `c_positivo`, primeira chamada de `c_v2_admite`; E11. (`bin/tests/test_codex_pergunta.sh:315`, `bin/tests/test_codex_pergunta.sh:506`) Controle com portões vermelhos e nenhuma outra viva: [não verificado]. |
-| **B2 2ª chamada** | E=A: outra viva exige pausa, estado, carga, janela, desligador e escopo verdes. (`bin/codex_pergunta.sh:293`, `bin/codex_pergunta.sh:391`) | E=A: admite só após todos; publica sob meta. (`bin/codex_pergunta.sh:305`, `bin/codex_pergunta.sh:392`, `bin/codex_pergunta.sh:393`) | E=A: P+ com `vaga=2` no caso em que a primeira ocupa vaga 1. (`bin/
-
-[truncado em 20000 de 60850 caracteres]
-
-## 09/11 15:44 · sessao c2a5482fbf2c · - · - · origem=Ronald (tmux)
-
-- **P3 — NAO PROCEDE no instrumento:** o comando lê o usuário e fornece `sistema_pk` antes das dependências; o contexto restaura o memo ao sair. Assim, o fallback escritor fica inacessível pelo `handle` normal (`app/chamados/management/commands/diff_e3_sombra.py:94`, `app/chamados/management/commands/diff_e3_sombra.py:98`, `app/chamados/juizes.py:1111`, `app/chamados/juizes.py:1173`). Os testes de usuário ausente e de tranca real falhariam sem as respectivas curas (`app/chamados/tests/test_e3_diff_sombra.py:26`, `app/chamados/tests/test_e3_diff_sombra.py:41`). A guarda intercepta todos os aliases e o teste injeta escritor transitivo (`app/chamados/management/commands/diff_e3_sombra.py:92`, `app/chamados/tests/test_e3_diff_sombra.py:71`).
-
-- **PROCEDENTE fora do instrumento — leitura nova pode escrever:** `CargaDaTarefa` chama `dias_trancados`; com tranca e memo sem usuário, chega a `get_user_sistema().pk`, cujo corpo executa `get_or_create`. Portanto, usuário ausente permite INSERT durante `tarefa_do_dia` (`app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/juizes.py:1036`, `app/chamados/juizes.py:1173`, `app/core/utils.py:18`). Cura: obter o usuário por leitura estrita ou exigir sua identidade na borda; acrescentar teste de tranca com usuário ausente, bloqueando qualquer tentativa de criação. O teste atual de zero escritas não cria tranca (`app/chamados/tests/test_e2_tarefa_do_dia.py:878`).
-
-- **P4 — NAO PROCEDE para os defeitos nomeados:** atribuição simples e `getattr` literal são resolvidos; models e registro entram no universo (`app/chamados/tests/test_e3_pendentes_app.py:46`, `app/chamados/tests/test_e3_pendentes_app.py:69`, `app/chamados/tests/test_e3_pendentes_app.py:75`, `app/chamados/tests/test_e3_pendentes_app.py:96`). Os testes de inclusão e resolução falhariam sem cura; o contador isolado poderia passar perdendo o quarto chamador (`app/chamados/tests/test_e3_pendentes_app.py:119`, `app/chamados/tests/test_e3_pendentes_app.py:124`, `app/chamados/tests/test_e3_pendentes_app.py:144`).
-
-- **FILA — alcance residual do selo:** imports relativos ignoram `ImportFrom.level`; atribuição por desempacotamento não registra aliases. Ambos podem esconder um quarto chamador; uso real nesta árvore não demonstrado (`app/chamados/tests/test_e3_pendentes_app.py:46`, `app/chamados/tests/test_e3_pendentes_app.py:78`). Cura sugerida: resolver esses dois formatos e acrescentar respectivos REDs.
-
-- **FILA — guarda SQL:** aceita `SELECT … FOR UPDATE`; nenhum caminho concreto com essa trava foi demonstrado. Não constitui escritor P3 comprovado, mas impede chamar a guarda de bloqueio universal de travas (`app/chamados/management/commands/diff_e3_sombra.py:35`).
-
-_3209 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3212 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
