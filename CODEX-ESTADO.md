@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 23:15** · publicado em **08/11/2026 23:16** (UTC-3)
+> Ultima resposta processada: **08/11/2026 23:18** · publicado em **08/11/2026 23:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 23:18 · sessao 6fa4aad98c43 · deployportao · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 08/11 23:15 · sessao 7f6b12750a43 · - · - · origem=Ronald (tmux)
 
@@ -828,45 +832,4 @@ O helper retorna `True` também depois desse reuso, levando o agrupador a salvar
 
 Execução desse contraexemplo, ocorrência em produção e existência de um chamador produtivo BATIDA com atomic externo que alcance especificamente o novo bloco `2910`: **[nao verificado]**.
 
-## 08/11 17:53 · sessao 2663eef25924 · - · - · origem=Ronald (tmux)
-
-**Item 3: cura substancial, mas não matriz integral. Item 6: parcial.** Os novos testes exercitam os alvos reais e corrigem as falhas específicas anteriores; permanecem caminhos sem cobertura e mutantes plausíveis que os selos novos não detectam. (`app/chamados/tests/test_e1_v15f.py:165`, `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:342`; lacunas abaixo.)
-
-Suítes Django, banco, RED/GREEN históricos e sobrevivência de uma suíte inteira: **[nao verificado]**. Rodei somente AST/funções detectoras em memória, com `python3 -B`, sem importar Django nem escrever arquivos. **[nao verificado quanto a evidência persistida; resultados observados na ferramenta]**. [nao verificado]
-
-| Linha 15f | Conferência estática do caminho citado |
-|---|---|
-| A5 | Percorre a guarda e exige tipo exato `FatoEmOutroDia`; o dado tem **mesmo dia**, mas `instancia_marco='X'`, portanto prova a guarda por identidade diferente, não episódio realmente noutro dia. (`test_e1_v15f.py:284`, `:287`, `:292`; guarda `models.py:2873`, `:2881`; recusa da identidade `fio.py:1688`.) |
-| A6 | Real elege K; injeção inclui retratada no universo entregue ao juiz canônico e percorre `recusa_batida_retratada`. Declaração da injeção está correta. (`test_e1_v15f.py:296`, `:307`, `:312`; produção `models.py:2885`, `:2890`.) |
-| A12 | Primeiro teste recusa na entrada, antes do reuso. Segundo desativa essa guarda e espião exige chamada com canônica, atingindo o gate do reuso. Não prova ocorrência natural do segundo gate como primeira recusa. (`test_e1_v15f.py:327`, `:334`, `:339`, `:343`; produção `models.py:2930`.) | [nao verificado]
-| G6 | Injeta erro na porta real utilizada pelo comando, exige erros=3, PAREI, rollback e fotos iguais. Não há escrita parcial antes do erro nessa prova. (`test_e1_v15f.py:215`, `:217`, `:225`; produção `migrar_data_evento_dia_do_turno.py:400`, `:411`.) |
-| G7 | Remove índice, cria gêmea do fato, confirma universo conjunto; apply exige primeira migrada e segunda recusada por colisão. (`test_e1_v15f.py:228`, `:236`, `:240`, `:246`.) |
-| G8 | Primeiro membro usa porta real e grava; gêmea mente sucesso. Exige observação da escrita parcial, rollback de ambos e migração de outro grupo. Prova efetiva do atomic por grupo. (`test_e1_v15f.py:250`, `:257`, `:263`, `:266`, `:268`; contrato `migrar...py:407`, captura `:408`.) |
-| C1 | Absorção efetiva em `_fonte_materializada`. (`test_e1_v15f.py:361`; `migrar...py:70`.) |
-| C2 | Materializada sem plantada e sem via de absorção. (`test_e1_v15f.py:365`; `migrar...py:72`.) |
-| C3 | Duas **batidas plantadas**, não dois turnos vivos candidatos. (`test_e1_v15f.py:371`; `migrar...py:73`.) |
-| C4 | Plantada fora do intervalo usado para carregar turnos, nenhuma associação; prova `not ts`, não o outro ramo `len(ts)>1`. (`test_e1_v15f.py:375`; `migrar...py:77`, `:145`.) |
-| C5 | Remove saída e atinge exclusão da materializada antes do juiz do novo dia. (`test_e1_v15f.py:380`; `migrar...py:158`.) |
-| C6 | Juiz None injetado, atinge `_Fora sem_fonte`. (`test_e1_v15f.py:386`; `migrar...py:161`.) |
-| C7 | Dia divergente injetado, atinge juiz × turno da janela. (`test_e1_v15f.py:392`; `migrar...py:165`.) |
-| C8 | Materializa órfã e planta saída, atinge fora do aval. (`test_e1_v15f.py:399`; `migrar...py:168`.) |
-| C9 | Chama DRY real com sucesso e colisão. “Sem escrita” deve significar **sem persistência**: a porta escreve e o atomic desfaz. (`test_e1_v15f.py:405`; `fio.py:1029`, `:1030`, `:1032`.) |
-| Conversa | Porta real cria conversa datada; DRY/apply verificam exclusão/não migração; contador injeta NULL e compara com conversa datada. Rótulo só exige substring, não prova numeração do universo. (`test_e1_v15f.py:64`, `:72`, `:78`, `:96`, `:106`.) |
-| Ordem A8/A11 + G4/G3 | Um cenário combina rechave + costura; migrar usa base limpa, três migrantes, e reversão. **Não exercita G3 vetado**, nem prova A11 sem rechave; não verifica pk crescente. (`test_e1_v15f.py:117`, `:140`, `:147`; rastreador `test_e1_v9.py:51`, `:94`.) |
-| Catraca abrir | Agora exige exatamente `transaction.atomic()` como dono do bloco `_nascer` + contrato; mutações if True/savepoint=False/nullcontext são verificadas. (`test_e1_v15e_contrato_de_saida.py:109`, `:113`, `:206`.) |
-| Catraca migrar | Espião chama contrato real e verifica três PKs, dia relido e dia esperado; recompila `_migrar` real e muta chamada real. (`test_e1_v15f.py:165`, `:182`, `:185`, `:194`, `:199`, `:203`.) |
-| M6 | Deixou de aceitar motivo arbitrário: agora exige substring `pergunta_unica_por_episodio`. Prova morte pelo índice, não tratamento de acervo já duplicado. (`test_e1_v15e_contrato_de_saida.py:471`, `:548`, `:561`, `:567`.) |
-
-**Caminhos reais ainda sem linha/prova na extensão nova:** plantada associada a dois turnos; dois turnos só de saída; múltiplos turnos abertos candidatos da órfã; órfã sem marcos. São ramos distintos dos C3/C4 adicionados. (`migrar_data_evento_dia_do_turno.py:78`, `:105`, `:120`, `:123`; novos C3/C4 `test_e1_v15f.py:371`, `:375`.) A seção fornecida admite alguns, mas omite explicitamente os dois ramos adicionais `:78` e `:120` na lista final. **[nao verificado quanto à matriz não existente como arquivo na cópia]**.
-
-**Mutantes plausíveis ainda descobertos:**
-
-1. **Ordem invertida dentro da classe:** trocar apenas `order_by('pk')` por `order_by('-pk')` na query de Pergunta/Chamado/Disputa do helper. `violacoes_linhas` só acompanha rank, presença de algum Colaborador e PK desconhecida; não compara PKs. Seq descendente foi aceita em execução isolada do detector. (`test_e1_v9.py:94`, `:98`, `:106`, `:109`; exclusão explícita `:51`.) O teste antigo SQL ASC cobre **só Colaborador**, portanto escolher mutante em outra classe. (`test_e1_v13_ordem.py:59`, `:68`, `:71`.) [nao verificado]
-
-2. **Contrato pulado num ramo do migrar:** trocar a guarda por `if ok and ln['p'].chamado_destino_id is None:`. O detector AST continua devolvendo `[]`: ele busca chamada posterior em qualquer descendente do corpo do try, sem testar condição. (`test_e1_v15e_contrato_de_saida.py:143`, `:147`, `:149`; guarda de produção `migrar...py:406`.) Novos espiões usam migrantes da `_Cenario`, produzidos sem destino: `_pergunta` chama abrir sem destino, e gêmea também não passa destino. Assim o ramo com destino fica sem testemunha nesses testes. (`test_plantio_noturno_mais1.py:62`, `:64`; `test_migrar_data_evento_dia_do_turno.py:55`, `:65`, `:68`; `test_e1_v15f.py:233`, `:182`.) Sobrevivência da suíte completa **[nao verificado]**; sobrevivência do detector AST confirmada em memória. [nao verificado]
-
-3. **Atomic retirado da reversão:** substituir o `with transaction.atomic()` da reversão por `if True:`. A nova prova já fornece seu próprio atomic ao redor da chamada e só percorre sucesso; as bases são `django.test.TestCase`. Portanto não distingue transação da porta e transação fornecida pelo teste. (`migrar...py:465`; `test_e1_v15f.py:151`, `:153`; `_Cenario` em `test_migrar...py:48`; base `test_plantio_noturno_mais1.py:39`.) A catraca inspeciona somente `_migrar`, não `_reverter`. (`test_e1_v15e_contrato_de_saida.py:141`.) Suíte completa **[nao verificado]**. [nao verificado]
-
-O arnês não é derivação paralela manual: extrai AST/trecho da função real, recompila com uma substituição e instala objeto no módulo/classe de produção. (`test_e1_v15e_contrato_de_saida.py:331`, `:342`, `:349`, `:356`; `test_e1_v15f.py:185`.)
-
-_2922 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2923 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
