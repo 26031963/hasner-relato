@@ -1,7 +1,58 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 11:39** · publicado em **09/11/2026 11:39** (UTC-3)
+> Ultima resposta processada: **09/11/2026 11:41** · publicado em **09/11/2026 11:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 11:41 · sessao 6d93743673c9 · - · - · origem=Ronald (tmux)
+
+Fecho confirmado por AST em memória e inspeção de métodos:
+
+- `classificar_export → motivos_retencao_espelho → motivos_retencao_celula → nao_retem_pela_pausa → periodos_do_dia`. (`app/folha/export.py:960`, `:1266`, `:1253`, `:1165`, `:1142`)
+- `classificar_export → _codigos_nao_homologados → eventos_do_fechamento / _ciclo_do_colab / feriado_12x36_em_dobra / datas_falta → regua_para / alimentacao / TipoAusencia / Ausencia`. (`app/folha/export.py:966`, `:994`, `:995`, `:996`, `:1005`, `:380`, `:359`, `:180`)
+- `classificar_export → minutos_previstos_do_dia → EscalaColaborador.eh_dia_trabalho / marcos_do_dia / pausas_do_dia → TipoEscala / FolgaDia / Feriado`. (`app/folha/export.py:934`; `app/escala/utils.py:2266`, `:2269`, `:2291`; `app/escala/models.py:1096`, `:1133`, `:1208`, `:1286`, `:1395`)
+- `fora_da_folha → dias_que_seguram → classificar_export`; depois `alimentar_portas → particionar_verbos / qs_na_fila / pergunta_viva`; `porta_alcancavel_do_dia → chamado_que_lista / perguntas_do_app`. (`app/folha/fora_da_folha.py:161`, `:119`, `:166`; `app/chamados/juizes.py:1307`, `:1310`, `:1322`, `:1399`, `:1400`, `:1339`)
+- `pergunta_viva → dia_da_pergunta_trancado → periodo_trancado / _toque_humano_no_dia → LogAuditoria / User`; outros ramos chegam a `classificar_falta`, materialização e `turnos_do_colab`, lendo batidas, células, vínculos e templates. (`app/chamados/juizes.py:1157`, `:964`, `:971`, `:1087`, `:1088`, `:1221`, `:1234`, `:384`)
+
+A resolução sintática preliminar alcançou 178 funções; esse número exclui expansão posterior de métodos de instância, reexports e callbacks. Portanto, não equivale a prova de 178 funções no fecho completo. `[nao verificado]`
+
+`prontidao`, `grade_do_fechamento`, `get_motor_cct`, `EmpresaIntegracao`, `ExportacaoDominio` e `Holerite` não pertencem aos caminhos inspecionados dessas raízes; `grade_da_celula` entra por `_tipo_pelo_marco`, separadamente. (`app/folha/export.py:757`, `:986`; `app/chamados/services/materializacao.py:282`)
+
+Foram enviados ao principal os inventários detalhados de campos, o mapa de leituras de linhas completas e os relógios. Há uma escrita potencial dentro desse fecho: `get_user_sistema()` usa `User.objects.get_or_create(username='sistema')`; nenhum código da aplicação foi executado nesta inspeção. (`app/core/utils.py:18`; `app/chamados/juizes.py:1087`)
+
+## 09/11 11:41 · sessao 8a265e5c5b41 · - · - · origem=Ronald (tmux)
+
+O-OUTBOX verificado na cópia:
+
+- Modelo `EventoCelula`: campos `celula_id`, `colaborador_id`, `data`, `criado_em`, `processado_em`, `tentativas`, `erro`; sem payload e sem índice único de pendente. Não contém empresa nem competência gravadas (`app/escala/models.py:1845-1871`).
+- Escritor único: `emitir_evento_celula`; faz `EventoCelula.objects.create(celula_id=..., colaborador_id=..., data=...)` (`app/ponto/portas/celula.py:882-891`).
+- `salvar_e_emitir` grava célula e evento no mesmo `atomic`; somente mudanças de `veredito` ou `ata` acordam o consumidor (`app/ponto/portas/celula.py:878-902`).
+- Consumidor único de produção: comando `consumir_eventos_celula`, com advisory lock por schema; cron a cada minuto (`app/chamados/management/commands/consumir_eventos_celula.py:17-31`; `app/chamados/reconciliador.py:1215-1242`; `app/config/crons.py:393-394`).
+- Agrupa eventos por colaborador dentro de cada lote de até 500; não é debounce por empresa×competência. Roda lotes até esvaziar ou ultrapassar 45 s (`app/chamados/reconciliador.py:1209-1211`; `app/chamados/reconciliador.py:1342-1352`; `app/chamados/reconciliador.py:1402-1404`).
+- Consumidores funcionais: rejunção, retratação de perguntas absolvidas, retratação de chamados absolvidos, premissa morta, órfãs pela lâmpada e fechamento por lastro (`app/chamados/reconciliador.py:1363-1383`).
+- Falha mantém pendente, incrementa tentativas e guarda erro; após cinco tentativas sai do universo vivo; processados são apagados após sete dias (`app/chamados/reconciliador.py:1209-1210`; `app/chamados/reconciliador.py:1246-1255`; `app/chamados/reconciliador.py:1388-1404`).
+- Semeadura evita pendente vivo já existente por célula; a emissão ordinária não deduplica (`app/chamados/reconciliador.py:1278-1310`; `app/ponto/portas/celula.py:891`).
+
+Emissores já existentes:
+
+- `CelulaDia.lavrar_veredito`, `carimbar` e `carimbar_precedencia`: emitem condicionalmente pela interseção com veredito/ata; alteração apenas de status não emite (`app/ponto/portas/celula.py:1003`; `app/ponto/portas/celula.py:1013-1020`; `app/ponto/portas/celula.py:1035`; `app/ponto/portas/celula.py:1067`; `app/ponto/portas/celula.py:1082`).
+- `ChamadoColaborador.abrir` e `criar`: emitem quando nasce chamado de módulo de turno com célula ligada (`app/chamados/models.py:971-980`; `app/chamados/models.py:1093-1099`).
+- `recompute_turnos`: emite para turnos anteriormente abertos que fecharam, se existir célula para o dia (`app/ponto/nucleo.py:57-66`; `app/ponto/nucleo.py:86-93`).
+- `PerguntaDisputa.save`: atualização existente emite via receiver quando toca `CAMPOS_QUE_ACORDAM`; nascimento não emite. Save e receiver estão no mesmo `atomic` (`app/chamados/models.py:3220-3222`; `app/chamados/signals.py:237-244`; `app/chamados/models.py:3413-3423`).
+- `reabrir_para_correcao`: update em lote emite explicitamente depois da escrita; `descarimbar_em_lote`, isoladamente, não emite (`app/chamados/services/disputa_emissao.py:1602-1630`; `app/chamados/models.py:3252-3266`).
+- `PerguntaDisputa.acordar_celulas` deduplica as células apenas dentro da chamada, pela PK; usa FK da pergunta ou busca pelo par colaborador/data (`app/chamados/models.py:3231-3248`).
+- Batidas e ausências podem emitir indiretamente: seus saves/deletes chamam cartório, que lavra a célula; somente mudança de ata/veredito gera evento (`app/ponto/signals.py:85-93`; `app/ponto/signals.py:131-152`; `app/ponto/portas/celula.py:878-902`).
+- Mudança do status do chamado pode emitir indiretamente pelo rejulgamento da célula; alterações apenas de contexto/texto/urgência não passam nessa guarda (`app/chamados/signals.py:187-203`).
+- `DisputaSupervisao.fechar` pode emitir indiretamente ao fechar chamado-pai/materializar perguntas; não possui INSERT próprio no outbox (`app/chamados/signals.py:18-45`; `app/chamados/signals.py:147-163`).
+
+Correções relevantes ao aval:
+
+- Escala não pode ser classificada genericamente como “não invalida”: pós-save de `EscalaColaborador` chama `invalidar_previsto`, que atualiza `FechamentoMensal.atualizado_em` quando `previsto_em` não é nulo (`app/escala/signals.py:124-133`; `app/ponto/services/fechamento.py:1607-1613`).
+- `salvar_tipo` também invalida fechamento após regeneração de frota (`app/escala/services/cadastro_tipo.py:351-359`).
+- Ausência também não pode ser classificada genericamente como “não invalida”: edição e decisão chamam `invalidar_fechamento`; o update só alcança registros com `derivado_em` não nulo (`app/ponto/services/ausencia.py:518-524`; `app/ponto/services/ausencia.py:941-948`; `app/ponto/services/fechamento.py:1652-1656`).
+- `TipoEscalaAdmin` é escritor fora da porta: usa `admin.ModelAdmin` editável; `EscalaColaboradorAdmin` usa `SoLeitura`. O admin não chama o serviço `salvar_tipo` que faz a propagação/invalidação (`app/escala/admin.py:7-13`; `app/escala/services/cadastro_tipo.py:306-359`).
+- `CatalogoDominio`: escritor Python não encontrado; escritor de produção `[nao verificado]`. Modelo/leitor existem (`app/folha/models.py:248-258`; `app/folha/export.py:259-260`).
+
+Inventário de escritores enviado nas mensagens anteriores: Empresa/Colaborador/EscalaColaborador; FolgaDia/calendários/agenda; Ausencia/TipoAusencia; AgendamentoFerias/PeriodoAquisitivo; ChamadoColaborador/PerguntaDisputa/DisputaSupervisao; FechamentoMensal/PeriodoFechado/RubricaDominio. O censo AST da cópia foi executado sem escrita; ele próprio declara que saves de parâmetros, forms e modelos dinâmicos podem permanecer não atribuíveis, portanto não prova completude sozinho (`app/core/censo_escritas.py:43-56`).
 
 ## 09/11 11:39 · sessao 9d3a5d3f52b3 · - · - · origem=Ronald (tmux)
 
@@ -775,84 +826,4 @@ Não identifiquei SQL inequivocamente inválida somente pela leitura; execução
 
 Os selos não estão órfãos: a régua descobre `tests/test_*.sh` e bloqueia na falha (`bin/regua.sh:138`, `:140`, `:143`). A conferência é produzida pelo comum e consumida pelos dois caminhos e pelo selo PG (`bin/sonda_leitor_comum.sh:63`; `bin/sonda_leitura.sh:184`, `:187`; `bin/sonda_provisionar.sh:72`, `:144`, `:145`; `bin/tests/test_sonda_sem_grant_pg.sh:108`, `:110`).
 
-## 09/11 10:26 · sessao eb32a108d276 · - · - · origem=Ronald (tmux)
-
-T1 — **NAO permanece como falha de medição**: `is_grantable` entra nas duas parcelas de `esc_tab` e em `esc_seq`, `esc_schema`, `esc_banco`, `default_escrita`; todas passam pelo mesmo parser. Referências: `bin/sonda_leitor_comum.sh:103`, `:108`, `:112`, `:115`, `:118`, `:121`, `:122`, `:131-149`. Resultado efetivo em PG17: [nao verificado].
-
-T3 — **NAO permanece estaticamente**: `ro_banco` conta configuração do leitor no banco destino diferente de `on`; a porta remove esse ajuste e exige o mesmo `leitor|on` usado pela leitura antes de publicar a credencial. Referências: `bin/sonda_leitor_comum.sh:74-78`, `:132`, `:167-171`; `bin/sonda_provisionar.sh:108`, `:154-168`; `bin/sonda_leitura.sh:193-196`. Resultado efetivo: [nao verificado].
-
-**ESMERIL da conferência — sem divergência encontrada entre os consumidores operacionais.** Todas as chaves são produzidas por `_q_conferencia`; leitura e porta usam `_conferencia_pronta`, que exige quatro presenças iguais a `1`, demais valores iguais a `0`, recusando chave ausente. Referências: `bin/sonda_leitor_comum.sh:66-149`; `bin/sonda_leitura.sh:184-187`; `bin/sonda_provisionar.sh:72`, `:144-145`.
-
-| Campos | Produtor da medida |
-|---|---|
-| `role`, `super`, `poderes`, `login` | `bin/sonda_leitor_comum.sh:67-70` |
-| `ro`, `ro_banco` | `bin/sonda_leitor_comum.sh:71-78` |
-| `connect`, `usage_falta` | `bin/sonda_leitor_comum.sh:79-83` |
-| `tab_falta`, `seq_falta`, `default_falta` | `bin/sonda_leitor_comum.sh:84-98` |
-| `esc_tab`, `esc_seq`, `esc_schema`, `esc_banco` | `bin/sonda_leitor_comum.sh:99-118` |
-| `default_escrita`, `membro`, `dono` | `bin/sonda_leitor_comum.sh:119-125` |
-
-O selo falso replica os mesmos valores esperados e verifica trechos por chave; o selo PG usa a consulta e o parser comuns, e exige chave positiva nos estragos. Referências: `bin/tests/test_sonda_sem_grant.sh:62`, `:129`, `:184-219`; `bin/tests/test_sonda_sem_grant_pg.sh:107-111`, `:130-157`.
-
-**Escritores/leitores:**
-
-- Role, senha e ajustes de sessão: porta escreve em `bin/sonda_provisionar.sh:104-109`; conferência lê em `bin/sonda_leitor_comum.sh:67-78`, `:123-125`; login verifica em `:167-171`.
-- ACL/defaults: porta escreve em `bin/sonda_provisionar.sh:119-140`; conferência lê em `bin/sonda_leitor_comum.sh:79-125`.
-- `.env_leitor`: porta lê senha em `bin/sonda_provisionar.sh:75-78`, grava temporário/promove em `:165-168`; leitura lê/verifica em `bin/sonda_leitura.sh:173-179`, Docker recebe em `:234`.
-- `POSTGRES_DB/USER/PASSWORD/HOST/PORT`: Docker recebe em `bin/sonda_leitura.sh:234-236`; Django lê em `app/config/settings/saas.py:86-90`; sombra sobrescreve banco/host/porta em `app/config/settings/sombra.py:49-51`.
-- Segundo escritor operacional desses estados fora da porta: não encontrado na pesquisa; inexistência absoluta [nao verificado]. Escritores dos selos usam raiz temporária: `bin/tests/test_sonda_sem_grant.sh:86-94`; `bin/tests/test_sonda_sem_grant_pg.sh:77-83`, `:175-179`.
-
-**Limitação verificável do selo PG:** `docker run` da sonda vira no-op; assim ele não exercita conexão Django nem origem IP do container da sonda. Referência: `bin/tests/test_sonda_sem_grant_pg.sh:95`. Impacto em produção: [nao verificado].
-
-**Não sustentar achado pela ausência de REVOKE explícito de coluna:** a semântica real de propagação de `REVOKE ALL ON TABLES` não foi executada nesta auditoria; portanto alegar que os casos de coluna necessariamente ficam vermelhos seria [nao verificado]. A porta usa esse comando em `bin/sonda_provisionar.sh:121`; o selo exige cura em `bin/tests/test_sonda_sem_grant_pg.sh:139-147`.
-
-## 09/11 10:25 · sessao 305d1a7821ea · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
-
-1. **Cura na origem:** [materializacao.py:1388](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/services/materializacao.py:1388). A antiga guarda lia o carimbo como **fato de escrita a desfazer**, não como vitalidade. Agora o juiz do lastro decide a limpeza, executada por `descarimbar`. O contrato continua estrito: detecta comparações cruas com `None`; a comparação saiu do chamador, sem nova allowlist (`chamados/tests/test_contract_leitores_vitalidade.py:315`).
-
-   **ESCREVE:** `PerguntaDisputa.descarimbar`, pelo dono `_escrever_carimbo`, limpa `materializada_em`, `materializada_por` e `via_resolucao` juntos (`chamados/models.py:3206`, `:3100`). **LÊ:** juiz do lastro (`chamados/juizes.py:645`); devolução da validação (`chamados/services/validacao.py:163`). `_materializar_uma` chama o ato alterado (`chamados/services/materializacao.py:1439`).
-
-2. **M7:** novo caso em [test_bug_par_intervalo.py:273](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/test_bug_par_intervalo.py:273). Quatro perguntas representam duas pausas declaradas; o DNA tem uma pausa para impedir que outra guarda esconda M7. Cobra exatamente `(None, 'par_ambiguo')` e o efeito avulso do HEAD: recusa por paridade, validação devolvida, nenhuma batida nova, irmãs e chão preservados (`chamados/tests/test_bug_par_intervalo.py:288`, `:294`).
-
-   **ESCREVE a fixture:** `pergunta` e `responder` (`chamados/tests/test_bug_par_intervalo.py:81`, `:88`). **LÊ a identidade:** `identificar_par_intervalo`, consumido pela validação e pelo materializador (`chamados/services/materializacao.py:55`; `chamados/services/validacao.py:467`).
-
-3. **M35:** o helper agora fornece `disputa_obj` e `pode_agir_map`, abre o ramo real do modal e cobra o `<div>` completo do aviso, sem projeção injetada (`chamados/tests/test_bug_par_intervalo.py:481`, `:498`).
-
-   **ESCREVE o contexto:** helper do teste (`chamados/tests/test_bug_par_intervalo.py:487`); em produção, `fio.py:253`, `:258`, `:467`. **LÊ:** template real (`templates/chamados/partials/modal_fio.html:122`, `:160`), fragmento compartilhado (`templates/chamados/partials/_espera_par_intervalo.html:2`) e filtro (`chamados/templatetags/chamados_tags.py:16`).
-
-4. **Mutantes:** ajuste da âncora M6 e inclusão de M38 em [mutantes_bug_par_intervalo.py:34](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/mutantes_bug_par_intervalo.py:34), `:131`. O runner lê essas definições e recompila em memória (`chamados/tests/mutantes_bug_par_intervalo.py:212`).
-
-| Mutante | Teste discriminante | Asserção esperada | [nao verificado]
-|---|---|---|
-| M7 | `test_R7_multiplas_perguntas_nao_escolhem_primeiro_par` | Igualdade com `(None, 'par_ambiguo')`, linha 288. |
-| M25 / M35 | respectivos testes P5 de cartão/modal | Aviso HTML presente exatamente uma vez, linha 498. | [nao verificado]
-| M26 / M38 novo | `test_P6_O330_falha_com_carimbo_previo_descarimba_antes_de_devolver` | Ambas descarimbadas, linha 529; autor e via limpos, linhas 532–533. |
-| M6 | `test_R4_lastro_da_segunda_metade_reprova_as_duas` | Retorno recusado, linha 211. |
-
-Essas mortes por asserção nesta volta são **[nao verificado]**; não executei testes ou mutantes. [nao verificado]
-
-**DECISAO-ABERTA:** C7 já está ligado ao predicado nesta cópia (`chamados/models.py:1861`). Nenhuma alteração de model foi necessária nesta volta. GREEN e certificação pelo Code/opus permanecem **[nao verificado]**.
-
-Comandos individuais reservados ao Code:
-
-```bash
-DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_contract_leitores_vitalidade.LeitoresVitalidadeContract.test_ninguem_julga_vitalidade_por_carimbo_cru --noinput
-DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.test_R7_multiplas_perguntas_nao_escolhem_primeiro_par --noinput
-DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.test_P5_modal_le_espera_sem_projecao_injetada --noinput
-DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.test_P6_O330_falha_com_carimbo_previo_descarimba_antes_de_devolver --noinput
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M6
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M7
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M25
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M26
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M35
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M38
-```
-
-Executei somente a verificação estática abaixo: **rc 0**, `py_compile` dos três Python tocados sem persistir bytecode e conferência de sintaxe/âncoras M1–M38 (`chamados/tests/mutantes_bug_par_intervalo.py:173`, `:188`).
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
-```
-
-_3115 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3117 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
