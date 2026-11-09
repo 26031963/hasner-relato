@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 13:41** · publicado em **09/11/2026 13:46** (UTC-3)
+> Ultima resposta processada: **09/11/2026 13:48** · publicado em **09/11/2026 13:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 13:48 · sessao f59a012f0887 · - · - · origem=Ronald (tmux)
+
+| Contrato/célula | Evidência no vivo |
+|---|---|
+| Juiz único existente de prontidão de catálogo | `_conferencia_pronta`, `bin/sonda_leitor_comum.sh:158`, exige presenças=1/ausências=0 (`:154-168`); chamado pela porta `bin/sonda_provisionar.sh:173` e leitura `bin/sonda_leitura.sh:187`. |
+| Juiz de autenticação distinto, pergunta distinta | `_login_leitor`, `bin/sonda_leitor_comum.sh:191`; porta compara `leitor\|on` em `bin/sonda_provisionar.sh:187`; leitura em `bin/sonda_leitura.sh:196`. Não é duplicação da pergunta de catálogo. |
+| `saas_user` | É executor administrativo fixo (`bin/sonda_leitor_comum.sh:10`; `bin/sonda_provisionar.sh:51`; `bin/sonda_leitura.sh:166`) e concedente dos defaults (`bin/sonda_leitor_comum.sh:109`). **FALTA juiz de seus atributos, disponibilidade e capacidades**; ser superuser real: **[nao verificado]**. |
+| rc 0 da porta | Conferência pós-alteração aprovada, login `leitor\|on`, envfile promovido e modo 600 verificado (`bin/sonda_provisionar.sh:172-199`). Predicado é instantâneo; não certifica estabilidade depois das consultas. |
+| rc !=0 antes da transação 1 | Argumento/sudo recusam rc2 (`bin/sonda_provisionar.sh:45-47`); trava/senha inválida rc1 (`:69-84`). Sem SQL de alteração antes disso, mas lock/log podem ter sido criados (`:59-68`). |
+| rc !=0 na transação 1 | Role/atributos/senha/CONNECT dos outros bancos estão num único BEGIN/COMMIT, com ON_ERROR_STOP (`bin/sonda_provisionar.sh:51,105,118`). Estado final executado: **[nao verificado]**. |
+| rc !=0 depois da transação 1 | **Pode ficar parcialmente aplicado**: COMMIT role/senha/CONNECT em `bin/sonda_provisionar.sh:118`; ACL só começa `:127`; falhas de ACL, conferência/login/publicação não desfazem a primeira transação (`:169-196`). |
+| rc !=0 depois da transação 2 | Role e ACL já confirmados, env velho ainda intacto até `mv` (`bin/sonda_provisionar.sh:168,174,184,196`). **Não garante rollback global**. |
+| rc !=0 depois do `mv` | Env já pode ser novo: verificação de modo ocorre depois de sua promoção (`bin/sonda_provisionar.sh:196-198`). |
+| Trilha falha | `_fim` tenta log sem guarda e está sob `set -e`; falha de mkdir/append pode interromper antes do `exit "$rc"` (`bin/sonda_provisionar.sh:40,55-62`). O `pronto` já pode ter sido emitido (`:199`). **FALTA contrato/selo de coerência dessa célula**. |
+| `.env_leitor` ausente/sem senha | Porta gera senha (`bin/sonda_provisionar.sh:76-79`), alinha cluster (`:108`), só promove após prova (`:193-196`); leitura recusa rc5 (`bin/sonda_leitura.sh:173,179`; `_recusa :129-135`). |
+| `.env_leitor` antigo/inválido | Leitura recusa modo ≠600/HOST/sem senha (`bin/sonda_leitura.sh:174-179`); porta reaproveita somente primeira linha da senha, admite alfanumérica, regrava só senha (`bin/sonda_provisionar.sh:77,83-84,194`). |
+| Prod × sombra | Destinos fixos (`bin/sonda_leitor_comum.sh:28-29`), **um env compartilhado** (`:22`). Porta lê/gera uma senha (`bin/sonda_provisionar.sh:77-79`) e altera apenas o destino escolhido (`:108`). **FALTA garantia conjunta dos dois clusters após uma execução**. |
+| Sombra/carimbo | `--refazer` invalida antes do drop (`bin/sombra.sh:288-289`), chama porta antes do carimbo final (`:340-344`). A própria porta não escreve stamp: sua publicação é `.env_leitor` + log (`bin/sonda_provisionar.sh:60-61,193-199`). |
+| Idempotência | Mesmo segredo é reutilizado (`bin/sonda_provisionar.sh:77-79`), mas cada execução reaplica ALTER/REVOKE/GRANT e promove novo arquivo (`:108-168,193-196`), acrescentando trilha com data (`:60-61`). **2x = mesmo estado total é falso pelo log**; equivalência semântica ACL/configuração e caso de selo completo **FALTA**. |
+| Conferência ilegível | Leitura recusa consulta falha e parser inválido (`bin/sonda_leitura.sh:185-187`; `bin/sonda_leitor_comum.sh:160`). Porta registra erro na conferência inicial e continua tentando provisionar (`bin/sonda_provisionar.sh:72`); pós-conferência inválida recusa rc1 (`:172-176`). |
+| Cluster inacessível | Porta não trata conferência inicial inválida como parada (`bin/sonda_provisionar.sh:72`), mas escrita falha leva rc1 mascarado (`:93-97`). Leitura prod recusa consulta rc5 (`bin/sonda_leitura.sh:185`); sombra tenta subir cluster e pode sair rc1 antes (`:143-145`). |
+
+**Lista não fechada**, pelas seguintes fronteiras do catálogo:
+
+| Fronteira | Referência e consequência |
+|---|---|
+| Privilégios de relação cobrem todas as ACLs previstas, porém não todo objeto/capacidade PostgreSQL | Relações `r,p,v,m,f`, colunas e sequências não-sistema em `bin/sonda_leitor_comum.sh:112-125`; funções só LO nomeadas/SECURITY DEFINER não-sistema em `:136-141`; **FALTA enumeração das capacidades restantes**. |
+| Defaults `f` ignorados | `default_escrita` só examina tipos `r,S,n` (`bin/sonda_leitor_comum.sh:132-135`); default EXECUTE de funções **FALTA célula/juiz**, embora futuras SECURITY DEFINER sejam detectadas depois de criadas (`:139-142`). |
+| Inventário de leitura filtrado pelo executor | Tabelas/sequências vêm de `information_schema` (`bin/sonda_leitor_comum.sh:98-104`); comprovação de que saas_user enxerga universo inteiro **[nao verificado]**. |
+| PUBLIC DML detectado, não curado | Juiz conta leitor/PUBLIC (`bin/sonda_leitor_comum.sh:112-125`); REVOKE em relações revoga só leitor (`bin/sonda_provisionar.sh:129-130`). Porta pode terminar rc1 sem pronto (`:173-176`). |
+| Outros concedentes/defaults | Juiz cobre qualquer dono para `r/S/n` (`bin/sonda_leitor_comum.sh:132-135`); porta cura defaults de saas_user→leitor e leitor→PUBLIC (`bin/sonda_provisionar.sh:133-150`). **FALTA operação para demais concedentes/PUBLIC**, com recusa explícita (`:175`). |
+| Membro/dono | Juiz mede membership e ownership do cluster (`bin/sonda_leitor_comum.sh:146-148`); porta revoga memberships (`bin/sonda_provisionar.sh:112`), não reatribui objetos; informa REASSIGN/REVOKE manual (`:175`). |
+| Mutação concorrente e sessões anteriores | A porta só executa REVOKE CONNECT, sem encerrar sessões (`bin/sonda_provisionar.sh:117`); leitura confere, faz login e executa depois (`bin/sonda_leitura.sh:187,194,233`). **FALTA predicado de garantia contínua/caso concorrente**. |
+
+**Separação Ronald × técnico:**
+
+- **Decisão já estabelecida:** leitura não pode alterar role; só porta escreve (`bin/sonda_leitura.sh:28-33`); nada sem raspar/credencial no argv/prompt, escrita prod ou segundo envelope (`app/docs/CORTES.md:375`).
+- **`!` operacional prod:** comentário reserva porta prod ao Ronald; único bloqueio técnico local é `SUDO_USER`, não identidade Ronald (`bin/sonda_provisionar.sh:5,45-48`). Impacto de REVOKE PUBLIC em clientes externos **[nao verificado]**; operações amplas estão em `:117,156-159`.
+- **Lei já decide, sem novo corte:** um escritor com tripwire/trilha (`CLAUDE.md:32-34`), leitor sem regra própria (`:20-22`), risco medido antes (`:23-24`), lei existente antes de novo corte (`:25-27`).
+- **Se quiser enfraquecer garantia para aceitar alterações próprias detectadas depois:** isso altera promessa de “impossibilidade de acidente” (`bin/sonda_leitura.sh:8-15`) e escritor único (`CLAUDE.md:32`); não é mero ajuste técnico. Existência desses ALTER próprios está no selo (`bin/tests/test_sonda_sem_grant_pg.sh:365-376`).
+- **Técnico:** preencher enumeração, retornos por fase, atomicidade observável, projeção explícita de idempotência, cobertura das três identidades e mutantes específicos; não depende de inventar lei (`CLAUDE.md:20-32`).
+
+## 09/11 13:47 · sessao 9ad35765ebd1 · - · - · origem=Ronald (tmux)
+
+Execuções, RED/GREEN e mortes reais de mutantes: **[nao verificado]**. “Morderia” abaixo identifica asserção, sem execução.
+
+| Estado / role | Caso do selo e mordida identificável | FALTA |
+|---|---|---|
+| Limpo / leitor | Dois destinos, rc0, SELECT e env600: `bin/tests/test_sonda_sem_grant_pg.sh:219`; autenticação efetiva: `:301`, `:311`. | Comparação de catálogo/env após **duas** portas: FALTA (`:219`, `:308`). |
+| Role ausente / leitor | Conferência falsa `role=0`; rc5, mensagem, sem sonda, sem SQL escrito e trilha: `bin/tests/test_sonda_sem_grant.sh:127`, `:139`. | Recusa com role ausente em PG real: FALTA; primeira criação real é caso positivo (`bin/tests/test_sonda_sem_grant_pg.sh:222`). |
+| Senha desconhecida/divergente / leitor | Login falso falho: `bin/tests/test_sonda_sem_grant.sh:145`; senha errada real: `bin/tests/test_sonda_sem_grant_pg.sh:285`. | Role existente + env ausente + senha desconhecida explicitamente ensaiados: FALTA. |
+| Env ausente/antigo/sem senha / leitor | Recusa rc5 nomeada: `bin/tests/test_sonda_sem_grant.sh:147`, `:150`, `:252`. | Falhas de promoção `mktemp/chmod/mv` do env: FALTA nos casos da porta (`:255`, `:370`). |
+| Conferência muda/erro / leitor | `FAKE_CONF=''` e rc2; rc5 e sonda impedida: `bin/tests/test_sonda_sem_grant.sh:141`, `:143`, `:127`. | Cluster indisponível real: FALTA; rc2 é simulação de consulta (`:143`). |
+| Relação/coluna/sequência / leitor | Estragos de INSERT, UPDATE coluna, GRANT OPTION e USAGE: `bin/tests/test_sonda_sem_grant_pg.sh:250`; arnês exige chave positiva, rc5, cura e nova leitura: `:238`. | `nextval/setval` autenticados: FALTA na lista `:327`–`:341`. |
+| Relação/coluna/sequência / PUBLIC | Consulta textual exige `e.grantee=0`: `bin/tests/test_sonda_sem_grant.sh:217`. | Estrago PG concedido a PUBLIC: FALTA na lista `bin/tests/test_sonda_sem_grant_pg.sh:250`–`:268`; casos relacionais concedem ao leitor. |
+| TEMP/CREATE / leitor e PUBLIC | TEMP PUBLIC: `bin/tests/test_sonda_sem_grant_pg.sh:259`; negativas autenticadas TEMP/CREATE: `:333`–`:335`. | Negativa autenticada após retirar especificamente REVOKE PUBLIC: mutante executado [nao verificado]. |
+| LO / leitor e PUBLIC | Estrago PUBLIC: `bin/tests/test_sonda_sem_grant_pg.sh:267`; tentativas autenticadas: `:327`–`:329`. | Sete famílias de `bin/sonda_leitor_comum.sh:19` sem tentativa autenticada. |
+| SECURITY DEFINER / PUBLIC → leitor | Função nova: `bin/tests/test_sonda_sem_grant_pg.sh:266`; execução que escreve recusada: `:336`. | Concorrência criação após conferência: FALTA; tentativa é sequencial (`:238`, `:266`). |
+| Outros bancos / PUBLIC → leitor | Estrago CONNECT PUBLIC: `bin/tests/test_sonda_sem_grant_pg.sh:268`; negativas em postgres/template1, efeito LO zero: `:345`–`:354`. | Sessões já abertas e outros bancos enumerados dinamicamente no selo: FALTA; lista é postgres/template1 (`:345`). |
+| Defaults / saas_user → leitor | INSERT, SELECT grantable, schema grantable: `bin/tests/test_sonda_sem_grant_pg.sh:261`, `:262`, `:265`. | saas_user→PUBLIC e outro concedente→leitor/PUBLIC: FALTA na lista `:250`–`:268`. |
+| Defaults / leitor → PUBLIC | O leitor executa ALTER DEFAULT PRIVILEGES; exige sucesso, recusa posterior e cura: `bin/tests/test_sonda_sem_grant_pg.sh:365`–`:379`. | Sequência/schema e variante por schema autenticadas: FALTA; caso é tabela global (`:379`). |
+| ALTER próprio / leitor | Sucesso obrigatório do ALTER, rc5 posterior e cura: `bin/tests/test_sonda_sem_grant_pg.sh:365`–`:378`. | “Nenhuma escrita persistente pelo leitor” é incompatível com a asserção de sucesso (`:366`). |
+| Login barrado / leitor | PG_hba reject; porta não anuncia pronto, env preservado por SHA, sem temporário: `bin/tests/test_sonda_sem_grant_pg.sh:275`–`:281`. | Snapshot do catálogo após falha: FALTA nessas asserções. |
+| Impacto / saas_user | Role usada como administrador das fixtures: `bin/tests/test_sonda_sem_grant_pg.sh:162`; bootstrap é POSTGRES_USER: `:145`. | Prova de preservação de acesso legítimo **não-superuser**, ACL/defaults e estado de saas_user: FALTA; fixture não representa esse inventário. |
+
+Mutantes e limites de mordida:
+
+| Mutante | Asserção que morderia |
+|---|---|
+| Retirar REVOKE LO/definer/CONNECT (M1–M3) | Conferência pós-porta falha antes da credencial (`bin/sonda_provisionar.sh:172`–`:176`); selo acusa provisionamento/env (`bin/tests/test_sonda_sem_grant_pg.sh:223`–`:225`). A morte específica posterior “ESCRITA ACEITA” exige arnês adicional **[nao verificado]**. |
+| Retirar chaves esc_lo/esc_func/outros_bancos de CONF_AUSENCIA (M4–M6) | Estragos deixam de ser recusados: cobrança rc5 e ausência de sonda (`bin/tests/test_sonda_sem_grant_pg.sh:242`–`:244`, `:266`–`:268`). |
+| Retirar ADP leitor→PUBLIC (M7) | Reprovisionamento após default próprio precisa voltar rc0 (`bin/tests/test_sonda_sem_grant_pg.sh:372`, `:379`). |
+| Reintroduzir SQL escrito na leitura | Injeta GRANT, SELECT INTO, CTE DELETE; cobra rc5, recusa falante e SQL impedido antes do psql (`bin/tests/test_sonda_sem_grant.sh:237`–`:248`). |
+| Segredo em externo fora da lista/PATH absoluto | **FALTA** mordida universal; espiação enumera nomes e delega pelo PATH (`bin/tests/test_sonda_sem_grant.sh:306`–`:312`). |
+
+Atomicidade global e idempotência de catálogo não são provadas pelos controles de env preservado: a role/CONNECT confirma em uma transação e o ACL em outra (`bin/sonda_provisionar.sh:118`, `:127`, `:168`); o selo preserva SHA do env, sem comparar o catálogo anterior (`bin/tests/test_sonda_sem_grant.sh:281`–`:300`).
 
 ## 09/11 13:41 · sessao b63b62a74363 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
 
@@ -733,38 +810,4 @@ Mapa dos campos e funções:
 
 Outros escritores dinâmicos além dos produtores apontados não foram certificados exaustivamente **[nao verificado]**.
 
-## 09/11 12:21 · sessao 56d01450e0e8 · - · - · origem=Ronald (tmux)
-
-- **NAO PROCEDE — divergência nos quatro consumidores solicitados:** ambos badges usam `len(consulta_do_app(... )['pendentes'])`, dashboard idem e endpoint lê a mesma consulta: `app/api/views.py:325`, `app/api/views_core.py:314`, `app/core/views.py:253`, `app/api/views.py:2562`. Universo passa por C6 em `app/chamados/services/pergunta_no_app.py:54`; recorte pendente exige ausência de resposta e disputa aberta em `:67`. Fechada viva vai para histórico em `:70`, servido em `app/api/views.py:2588`; não necessariamente para `respondidas`, cujo filtro é `respondida_em` em `:2600`.
-
-- **PROCEDENTE — fonte paralela de pendência ao próprio colaborador:** `app/chamados/services/aviso_pendencia.py:7` recompõe seleção por q_vivas+C6+sem resposta em `:9`–`:13`, sem excluir disputa fechada. `aviso_texto_livre` usa essa lista (`:17`) e afirma “AGUARDANDO sua resposta” (`:21`); é chamado após mensagem do app em `app/api/views.py:1012`. Assim uma pergunta fechada viva, removida das pendentes pelo recorte em `pergunta_no_app.py:67`, ainda dispara aviso de pendência. Cura: consumidor ler `consulta_do_app()['pendentes']`.
-
-- **PROCEDENTE — outra lista de perguntas entregue pelo app:** `api_chamados` monta `disputas_abertas` diretamente em `app/api/views.py:1044`, carrega todas as respectivas perguntas sem C6 em `:1059`, agrupa em `:1065` e serializa em `:1174`–`:1193`. Pode entregar pergunta morta nessa lista; não é a mesma seleção da consulta. Cura sugerida: obter perguntas e classificação da consulta única, conforme contrato dessa outra tela.
-
-- **FILA — leitores internos preexistentes com universos distintos:** `_no_app` continua usando todas as C6 vivas em `app/chamados/juizes.py:1489`; contador `medir` e copiloto `do_dia` usam esse universo em `app/chamados/services/pergunta_no_app.py:160` e `:183`. O placar lê o comando em `bin/placar_code.sh:317`, que chama `medir` em `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:14`; portanto pode considerar “no app” uma fechada viva que agora está no histórico. Cura em fila: explicitar se disponibilidade no histórico satisfaz esse contador; autorização para mudar a semântica interna além do recorte dado [nao verificado].
-
-- **FILA — demais contadores/listagens paralelos:** `app/chamados/services/cobranca.py:229` só aplica q_vivas+sem resposta+aberta, sem C6, e devolve totais em `:248`; `app/chamados/services/acoes_disputa.py:95` e `app/chamados/services/disputa_emissao.py:1709` contam carimbo cru para mensagens de pendência; `app/chamados/views_cobrar.py:175` lista sem resposta sem C6. `bin/censo_folha.py:28` conta carimbo cru e rotula `PERG_VIVAS` em `:37`. `app/chamados/services/furo_sem_canal.py:80` usa só ausência de resposta para “pergunta aberta”, devolvendo contagem em `:95`; há cron desse contador em `app/config/crons.py:531`. São preexistentes; cura: leitores precisarem de pendência apresentada devem usar a consulta, leitores de vitalidade devem usar C6.
-
-- **NAO PROCEDE — L-111:** AST de todos os `.py` procurou definição, atributo e string literal do método; único nó encontrado foi a string do `hasattr` em `app/chamados/tests/test_badge_disputa_pendente.py:8`. Busca textual encontrou somente lápide/comentários/teste, nenhum chamador/template restante [nao verificado quanto a construção dinâmica de nome]. Método ausente no sítio, seguido de `Meta` em `app/chamados/models.py:1798`; lápide presente em `:1795`. Testes migrados mantêm asserções de ausência de fantasma e duas perguntas→2 em `test_esmeril2_left_join.py:19` e `:27`, morte pela absolvição em `test_fio_le_o_juiz.py:267` e `:272`. Matriz cruza endpoint, dashboard e dois kernels em `test_e3_app_orm.py:28`–`:45`, incluindo fechadas/respondidas em `:52`–`:60`. Execução própria [nao verificado].
-
-- **PROCEDENTE — N+1 permanece no badge, sem número constante universal:** consulta faz uma query inicial (`pergunta_no_app.py:47`–`:54`), porém C6 chama tranca por pergunta (`juizes.py:1297`, `:948`). Empresa é carregada uma vez se fria (`:1003`), tranca uma vez por competência (`:1020`–`:1024`; SELECT em `app/ponto/services/fechamento.py:1470`). Toque positivo é memoizado, negativo não (`juizes.py:1137`, `:1151`). Para N perguntas em uma competência trancada, sem toque humano, todas com célula e chamado, usuário sistema existente e memo frio: **`Q=3+E+5N`**, E=1 se Empresa fria, senão 0; os cinco SELECTs ficam em `:1185`, `:1200`, `:1211`, `:1224`, `:1234`. Empresa fria resulta **`4+5N`**. Sem perguntas, **1**; perguntas sem resposta com célula acusando e competências abertas: **`1+E+K`**, K competências ainda não memoizadas (`:1342`, `:1020`). É custo incremental de `consulta_do_app`, não da view inteira; medida real em produção [nao verificado]. Cura: alimentar tranca/toque por lote de pares em cada chamada, preservando frescor do negativo.
-
-- **PROCEDENTE — dependência potencialmente escritora na sombra:** tranca chama `_admin_tocou_os_dias_depois` (`juizes.py:1033`), que chama `get_user_sistema` (`:1145`); este faz `User.objects.get_or_create` em `app/core/utils.py:18`. Ausente o usuário, tentaria INSERT; a guarda do comando pode bloquear a tentativa, mas a cadeia não contém apenas leitores. Cura: resolver sistema por leitura `.get` no caminho da sombra, sem criação implícita.
-
-Mapa resumido: `consulta_do_app` produz mapas/listas somente em memória (`pergunta_no_app.py:65`–`:71`), lidos nos quatro sítios acima; `respondida_em` é lido pelo recorte em `:67` e escrito, entre outros, pela porta `PerguntaDisputa.carimbar` (`models.py:3121`, persistência `:3141`), além de caminhos de resposta/reabertura não censados integralmente [nao verificado]. `fechada_em` é lido em `pergunta_no_app.py:67`, escrito por fechamento em `models.py:1929` e salvo em `:1933`; reaberturas o limpam em `:2146`/`:2158` e `:2170`/`:2174`.
-
-## 09/11 12:21 · sessao 764ff117cfac · - · - · origem=Ronald (tmux)
-
-- **PROCEDENTE — dependência tenta escrever:** o DIFF chama `carga_da_tarefa` (`app/chamados/management/commands/diff_e3_sombra.py:108`), que chama `dias_trancados` (`app/chamados/services/tarefa_do_dia.py:370`). Com tranca existente, este chega ao leitor de toque (`app/chamados/juizes.py:1025`, `:1033`), que chama `get_user_sistema` (`:1146`); esse helper executa `get_or_create` (`app/core/utils.py:18`). Se faltar o usuário, tenta criar; a guarda SQL impede a persistência (`app/chamados/management/commands/diff_e3_sombra.py:34`, `:92`). **Cura:** consultar o usuário com `.get`, tratando ausência sem criar, e testar esse ramo; a fixture atual sempre fornece o usuário (`app/chamados/tests/e3_fixtures.py:26`).
-
-- **PROCEDENTE, condicionado ao caminho de erro — escrita indireta/raspagem:** C6 pode chamar `registrar_engolido` (`app/chamados/juizes.py:1366`, `:1377`), que envia exceção e traceback ao logger (`app/core/observ.py:79`). A configuração SaaS conecta a raiz a arquivo e console (`app/config/settings/saas.py:183`), com `RotatingFileHandler` (`:138`). Isso ocorre antes da sanitização final do comando (`app/chamados/management/commands/diff_e3_sombra.py:97`). **Cura:** instrumento com tratamento sanitizado desse erro e teste de logger; ocorrência/configuração efetiva em produção **[nao verificado]**.
-
-- **NÃO PROCEDE — agendamento:** a entrada apenas pertence a `FORA_DE_PIPELINE` (`app/config/crons.py:769`). O render percorre `CRONS` (`:1865`); o inventário executável reúne `CRONS + ENCADEADOS` (`:1798`). O diagrama apresentado baixa tela para 109 sítios (`app/docs/ARQUITETURA.mmd:356`); o mapa registra 67 sem chamar, cinco que chamam e derivam, 37 desconhecidos (`app/docs/MAPA.md:91`).
-
-- **NÃO PROCEDE — novo juiz no registro:** o hunk fornecido só remove o pendente do dashboard **[nao verificado quanto ao histórico Git indisponível]**. O sítio atual lê `consulta_do_app` (`app/core/views.py:252`). O selo de tela verifica desaparecimento de impressões, sem certificar sozinho a cura (`app/core/tests/test_contract_juiz_tela.py:34`). O mérito funcional vem da matriz que exige duas perguntas na mesma disputa → duas pendências e verifica dashboard e ambos kernels (`app/chamados/tests/test_e3_app_orm.py:28`, `:39`, `:47`).
-
-- **NÃO PROCEDE — quatro casos sem mordida:** há expectativas distintas para só fila, A/B, verbo do universo e isento (`app/chamados/tests/test_e3_portas_tarefa.py:32`, `:40`, `:49`, `:57`), com mutações correspondentes (`app/chamados/tests/e3_mutantes.py:49`). O mutante que inventa `cobrar` também encontra expectativa explícita de `validar` (`app/chamados/tests/test_e3_portas_tarefa.py:75`). O RED adicional envenena C6, exige uma alimentação e nenhuma query na releitura (`:113`).
-
-- **FILA — alcance da evidência dos testes:** alguns testes novos preservam comportamento já existente, portanto passariam sem a cura, como o contrato C17 (`app/chamados/tests/test_e3_pendentes_app.py:126`). Isso não invalida os casos acima. O runner transforma qualquer falha em código 1 (`app/chamados/tests/e3_mutantes.py:127`); a causa individual das 30 mortes, sem suas saídas, permanece **[nao verificado]**. A guarda de arquivos examina somente o corpo do comando (`app/chamados/tests/test_e3_diff_sombra.py:77`, `:94`), deixando fora as dependências concretas citadas.
-
-_3151 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3153 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
