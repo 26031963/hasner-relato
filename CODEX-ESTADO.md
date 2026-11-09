@@ -1,7 +1,25 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:29** · publicado em **09/11/2026 10:30** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:36** · publicado em **09/11/2026 10:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:36 · sessao 463d4de49e19 · - · - · origem=Ronald (tmux)
+
+**PROCEDENTE — paridade inclui batidas retratadas.** O pós-par consulta `_vizinha_mesmo_tipo` após ambas as escritas, mas esse helper lê `Batida.objects` sem excluir `retratada_em`; uma S retratada às 01:30 reprova S01/E02 mesmo quando o conjunto vivo alterna. Cura: consumir `batidas_apuraveis`, acrescentando RED com retratada entre metades. `app/chamados/services/materializacao.py:1366`; `app/chamados/services/materializacao.py:178`; `app/chamados/services/materializacao.py:184`; autoridade efetiva: `app/ponto/turnos.py:2866`. Ocorrência em produção: [nao verificado].
+
+**NAO PROCEDE — divisão transacional para par identificado.** Validação direta e varredura chegam a `_materializar_uma`; O330 também, com inclusão explícita dos carimbos sem lastro. O envelope identifica o par, espera ambas respondidas/validadas e chama `_materializar_par`; as duas escritas, julgamento posterior, carimbos e reconciliação ficam no mesmo savepoint. `app/chamados/services/validacao.py:469`; `app/chamados/services/validacao.py:474`; `app/chamados/services/materializacao.py:1596`; `app/chamados/services/passivo_validado.py:532`; `app/chamados/services/materializacao.py:1414`; `app/chamados/services/materializacao.py:1433`; `app/chamados/services/materializacao.py:1344`; `app/chamados/services/materializacao.py:1361`; `app/chamados/services/materializacao.py:1373`; `app/chamados/services/materializacao.py:1380`.
+
+A garantia tem universo delimitado: quando identidade retorna `None`, aplica-se uma pergunta avulsa. Portanto, o código admite plantio individual para intervalo sem par elegível; isso inclui irmã já materializada e casos ambíguos, preservando o caminho avulso. `app/chamados/services/materializacao.py:73`; `app/chamados/services/materializacao.py:77`; `app/chamados/services/materializacao.py:1431`; teste explícito da irmã aplicada: `app/chamados/tests/test_bug_par_intervalo.py:725`.
+
+**NAO PROCEDE — inversão entre dois validadores dessas metades.** Ambos adquirem primeiro a mesma linha do Colaborador, depois disputas, chamados e perguntas; os grupos são ordenados por PK. A validação relê a pergunta após travar. O330 trava o conjunto da competência antes dos dias. `app/chamados/services/materializacao.py:125`; `app/chamados/services/materializacao.py:134`; `app/chamados/models.py:2677`; `app/chamados/models.py:2686`; `app/chamados/models.py:2699`; `app/chamados/models.py:2703`; `app/chamados/services/validacao.py:434`; `app/chamados/services/validacao.py:435`; `app/chamados/services/passivo_validado.py:435`.
+
+**FILA — prova concorrente.** O teste confere argumentos das travas, sem duas conexões concorrentes; ausência operacional de deadlock é [nao verificado]. `app/chamados/tests/test_bug_par_intervalo.py:605`.
+
+**Censo de plantadores:** os únicos consumidores de `registrar_batida` cujo plantio recebe `PerguntaDisputa` são os ramos hora e data/hora; ambos chegam pelo envelope comum. `app/chamados/services/materializacao.py:1017`; `app/chamados/services/materializacao.py:1098`; `app/chamados/services/materializacao.py:1477`.
+
+Demais consumidores encontrados por AST, considerando nomes importados/apelidos e chamadas por atributo: APIs de chão (`app/api/views.py:684`, `app/api/views_core.py:681`), exceção (`app/chamados/services/acoes_chamado.py:44`), regularização externa (`app/chamados/services/regularizacao_ext.py:77`), justificativas (`app/ponto/services/justificativa.py:188`, `app/ponto/services/justificativa.py:361`, `app/ponto/views.py:1815`), triagem (`app/ponto/services/triagem_batida.py:701`) e veredito do dia (`app/ponto/services/veredito_celula.py:322`). Instrumento PWA: `app/ponto/management/commands/testar_pwa.py:184`, `:198`, `:219`, `:228`, `:229`.
+
+**FILA — unidades externas parcialmente aplicáveis.** Regularização externa continua após falha de metade e pode marcar lote materializado; veredito do dia acumula erro por marco e só reverte se nenhuma ação ocorreu. Não são o aceite das duas PerguntaDisputa. `app/chamados/services/regularizacao_ext.py:166`; `app/chamados/services/regularizacao_ext.py:191`; `app/chamados/services/regularizacao_ext.py:197`; `app/ponto/services/veredito_celula.py:320`; `app/ponto/services/veredito_celula.py:342`.
 
 ## 09/11 10:29 · sessao cbbbf78661b6 · SONDA-SEM-GRANT · verificador · origem=Code
 
@@ -490,20 +508,4 @@ Resultados de execução desses selos e do mutante novo “portão removido”: 
 
 - **Teto opus é conduta declarada, sem guarda no wrapper**. (`CLAUDE.md:350-353`).
 
-## 09/11 09:01 · sessao 87cc07e0ba8f · - · - · origem=Ronald (tmux)
-
-Inspeção estática apenas; veredictos de execução e situação no host: [nao verificado].
-
-- O selo direto da vaga é `bin/tests/test_codex_pergunta.sh`: `c_vaga` prende `logs/construtor.vaga` e exige recusa também com outro `LOGD` (`:193–198`). O helper exige rc esperado, motivo e ausência de chamada ao Codex (`:116–120`).
-- O mutante que morde especificamente `#G:vaga` troca `_recusa2` por `true`, preservando o `flock` que falhou e permitindo prosseguir (`bin/tests/test_codex_pergunta.sh:468`; guarda em `bin/codex_pergunta.sh:233`). O teste detecta a continuação pelo rc/motivo/chamada (`bin/tests/test_codex_pergunta.sh:116–120`).
-- Dois mutantes mordem `#G:vaga_sitio`: raiz do script `$R` em vez de `dirname($_CDIR)` (`bin/tests/test_codex_pergunta.sh:498`, caso de cópia em outra raiz `:374–378`); `$VIVO` em vez do common-dir (`:499`, caso de outra worktree do mesmo repositório `:351–355`).
-- Há proteção contra resposta substituir o inode da vaga (`bin/tests/test_codex_pergunta.sh:230–232`, mutante `:454`); controle de basename semelhante permitido (`:218–220`); abertura impossível com fd6 herdado deve recusar explicitamente (`:234–238`, mutante `:455`); topologia sem `<raiz>/.git` recusa construtor (`:361–364`, mutante `:500`), mas permite leitura (`:366–371`, mutante `:501`).
-- O mecanismo exige mutante para cada etiqueta `#G:` (`bin/tests/test_codex_pergunta.sh:507–508`), aplica a alteração por etiqueta (`:511–520`), executa o caso correspondente e exige que fique vermelho (`:523–527`). O verde atual do host continua [nao verificado].
-- Os casos e mutantes listados não contêm portão CPU da vaga 2, `--toca` ou desligador da segunda vaga (`bin/tests/test_codex_pergunta.sh:410–415`, `:437–505`). O mutante atual `vaga` prova exclusão de **todo segundo construtor** pelo comportamento antigo; não é ainda o selo “vaga 2 sem portão” do novo contrato (`bin/tests/test_codex_pergunta.sh:193–198`, `:468`).
-- O inventário e descarte já têm selo: positivo exige `.rc`, `.inventario`, `.id` e log final (`bin/tests/test_codex_pergunta.sh:245–266`); recusa exige rc3, motivo, ausência de `.id` (`:122–128`), e mutante da decisão final neutraliza `if [ "$_IRC" -ne 0 ]` (`:487`). Interseção entre raias não aparece nesses casos (`:410–415`).
-- A trava única tem `bin/tests/test_trava_teste.sh`: varredura de runners da suite e molde (`:39–71`), execução em cópia com lock isolado (`:103–115`), dois chamadores serializados (`:117–127`) e ausência de vez com rc75 (`:130–137`). `bin/tests/test_suite_sh.sh` cobre o comando canônico da documentação, sua passagem por `suite.sh` e por `trava_teste.sh` (`:37–58`), com fixtures nos dois sentidos (`:65–85`).
-- Os selos `test_*.sh` são chamados pela régua antes da suite (`bin/regua.sh:138–145`); execução efetiva nesta produção: [nao verificado].
-- Inserir `vaga=1|2` deslocando campos de `chamadas.log` quebra ao menos leitores posicionais dos próprios testes: papel `$3`, fase `$6`, thread `$7`, rc `$8` (`bin/tests/test_codex_pergunta.sh:265`) e duração `$9` (`bin/tests/test_codex_sonda.sh:96–98`). Acrescentar campo ao fim preserva essas posições específicas; compatibilidade de todos os consumidores depende da inspeção deles [nao verificado].
-- `bin/tests/prova_codex_pergunta_real.sh` é prova manual que chama Codex real e verifica efeito do sandbox, não selo automático de concorrência (`:2–14`, `:85–86`, `:134–141`).
-
-_3099 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3100 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
