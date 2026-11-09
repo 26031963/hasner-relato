@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 14:11** · publicado em **09/11/2026 14:12** (UTC-3)
+> Ultima resposta processada: **09/11/2026 14:13** · publicado em **09/11/2026 14:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 14:13 · sessao c07d957d350d · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
+
+As curas específicas de 4, 7a e 7b estão na árvore. Porém, há um **contracaso W no cruzamento entre pendência preservada e irmã retratada**: a metade aceita deixa de ser reconhecida como espera, e C7 permite fechar sem aplicação (`app/chamados/juizes.py:2137`; `app/chamados/services/materializacao.py:1434`, `:112`; `app/chamados/models.py:1863`, `:1953`). Ocorrência em produção e execução desse contracaso: **[nao verificado]**.
+
+| Item | Veredito | Classe | Evidência e contraexemplo concreto |
+|---|---|---|---|
+| **0 — triagem 4** | **NAO PROCEDE que continue aberto** | W corrigido | S127 agora consulta C7, preservando disputa vazia. O teste exige a recusa específica na transição real, antes da escrita (`app/chamados/juizes.py:2137`; `app/chamados/tests/test_bug_par_intervalo.py:468`). |
+| **0 — triagem 7a** | **NAO PROCEDE que continue aberto, nos dois defeitos apontados** | W corrigido | Limpeza exclusiva de ESPERA e preservação do motivo com pendência estão implementadas. O cruzamento restante está no item 3 abaixo (`app/chamados/services/materializacao.py:1376`, `:1434`). |
+| **0 — triagem 7b** | **NAO PROCEDE que falte o rótulo** | F | M38 está explicitamente rotulado estrutural; a diferença cobrada é chamada de método (`app/chamados/tests/test_bug_par_intervalo.py:815`, `:842`). |
+| **1 — delegação S127** | **NAO PROCEDE duplicação restante em S127** | F | Consome C7 inteiro. Em snapshot estável, C7 não pode liberar quando o antigo `fio_vivo` travava, pois incorpora `not fio_vivo` (`app/chamados/juizes.py:2137`; `app/chamados/models.py:1863`). |
+| **2 — recusa residual após aplicação** | **PROCEDENTE** | F | Falha conjunta grava recusa nas duas; reaceitar primeiro uma grava ESPERA nessa; reaceitar a segunda aplica ambas, mas conserva nela a recusa anterior (`app/chamados/services/materializacao.py:1392`, `:1435`, `:1376`). |
+| **3 — pendência impede reconhecer espera** | **PROCEDENTE** | **W** | Pendência impede gravar ESPERA; motivo técnico impede o juiz de reconhecer espera. Retratada a irmã, C7 libera fechamento apesar da metade aceita sem aplicação (`app/chamados/services/materializacao.py:1434`, `:112`; `app/chamados/models.py:1863`, `:1953`). |
+| **3 — limpeza posterior da pendência** | **NAO PROCEDE como caminho localizado** | F | O escritor encontrado grava valor não vazio; não localizei limpador runtime. Limpeza externa/dinâmica: **[nao verificado]** (`app/chamados/services/materializacao.py:937`). |
+| **4 — outra recomposição de I19** | **NAO PROCEDE no censo da cópia** | F | Consulta única compartilhada pelo comando e contraprova; I18 e I6 são outras perguntas, com filtros diferentes (`app/chamados/management/commands/auditar_invariantes_chamados.py:549`, `:1118`, `:1081`, `:536`; `app/chamados/tests/test_bug_par_intervalo.py:503`). |
+| **5 — campos com significados incompatíveis** | **PROCEDENTE** | W/F | A incompatibilidade interfere na retenção do fechamento acima; também produz apresentação “não plantou” quando o escritor efetivamente plantou pelo motivo (`app/chamados/services/materializacao.py:476`, `:1014`; `app/chamados/services/explicador.py:93`). |
+| **6 — M38 estrutural** | **PROCEDENTE; rótulo verdadeiro** | F | Com três campos vazios, `descarimbar` retorna sem alterar estado ou salvar. M38 pula essa chamada; o teste diferencia pelas chamadas, não pelo resultado funcional (`app/chamados/models.py:3218`; `app/chamados/tests/mutantes_bug_par_intervalo.py:131`; `app/chamados/tests/test_bug_par_intervalo.py:842`). |
+
+O **contracaso W** não precisa tomar a fixture como dado: os escritores permitem esta sequência condicional; sua ocorrência em produção permanece **[nao verificado]**.
+
+1. Uma saída ainda avulsa não encontra tipo pelo marco. A derivação produz pendência e o ramo grava `pendencia_admin` junto do motivo (`app/chamados/services/materializacao.py:79`, `:388`, `:476`, `:937`).
+2. Uma recusa posterior, por exemplo competência aprovada, retorna `None`; a saída normal do `atomic` preserva a pendência, enquanto a validação é devolvida. Isso dispensa competência exportada (`app/ponto/janelas.py:87`; `app/chamados/services/materializacao.py:1022`, `:1482`, `:1514`; `app/chamados/services/validacao.py:202`).
+3. Nasce a irmã pela emissão; revalidar a primeira com a irmã ainda sem aceite conserva sua validação, pendência e recusa não-ESPERA, sem aplicar a batida (`app/chamados/services/disputa_emissao.py:834`; `app/chamados/services/materializacao.py:1434`; `app/chamados/services/validacao.py:473`).
+4. A irmã sai do fato por retratação. A primeira morre no C6 por estar validada; a irmã morre pela identidade. A primeira também fica fora de `respostas_sem_veredito` e do juiz de espera (`app/chamados/models.py:2078`; `app/chamados/juizes.py:1153`, `:1164`; `app/chamados/models.py:1851`; `app/chamados/services/materializacao.py:112`).
+5. **C7 libera.** `Disputa.fechar` passa pela consulta sob trava e salva o fechamento. `transicionar('fechado')` também passa: a guarda adicional busca somente perguntas não validadas, e a guarda de FURO é exclusiva de `resolvido` (`app/chamados/models.py:1863`, `:1927`, `:1953`, `:344`, `:181`, `:199`).
+
+A diferença introduzida pela preservação é a **perda de retenção em C7**: gravar ESPERA conservaria a retenção depois da saída da irmã; preservar motivo técnico faz o juiz rejeitá-la. Não atribuo à troca S127 uma nova permissividade lógica: sua composição ficou mais restritiva (`app/chamados/services/materializacao.py:116`, `:112`, `:1434`; `app/chamados/models.py:1863`).
+
+Os sete testes V5 têm a seguinte discriminação, por leitura das asserções; mortes executadas dos mutantes: **[nao verificado]**. [nao verificado]
+
+| Teste em `app/chamados/tests/test_bug_par_intervalo.py` | Passaria sem a cura correspondente? | Onde morde |
+|---|---|---|
+| Fechado retido, `:472` | **Não** | Exige mensagem específica de S127 em `:468`; não basta qualquer bloqueio. M45 substitui justamente essa delegação (`app/chamados/tests/mutantes_bug_par_intervalo.py:157`). |
+| Resolvido retido, `:475` | **Não** | A eventual recusa posterior por FURO não satisfaz a mensagem exigida em `:468` (`app/chamados/models.py:192`). M48: `app/chamados/tests/mutantes_bug_par_intervalo.py:167`. |
+| Disputa vazia, `:478` | **Sim** | Controle de preservação: retorno da disputa e transição bloqueada em `:482`, `:484`. |
+| Todas mortas, `:488` | **Sim** | Controle positivo: `None` em `:496` e status persistido em `:499`. |
+| Pendência anterior, `:506` | **Não** | Sobrescrita antiga falha imediatamente na comparação do motivo em `:517`, antes de depender do I19. |
+| Pendência nascida no plantio, `:527` | **Não** | Observa os campos produzidos no ramo e compara depois da aplicação em `:542`, `:552`. |
+| Limpeza exclusiva, `:556` | **Não** | Limpeza ampla falha em `:565`; nunca limpar falha em `:566`. |
+
+Esses testes cobrem separadamente pendência preservada e irmã retratada com ESPERA; não combinam pendência preservada com irmã retratada (`app/chamados/tests/test_bug_par_intervalo.py:459`, `:506`).
+
+O censo AST, considerando importações com apelido e atribuições simples, encontrou estes quatro sítios de chamada executável; reflexão arbitrária e nomes montados dinamicamente: **[nao verificado]**.
+
+| Chamador de `disputa_viva_do_chamado` | Uso do retorno |
+|---|---|
+| `app/chamados/models.py:154`, apelido `_disp_viva` importado em `:153` | Disputa retornada provoca `ValueError`; ausência permite prosseguir até `_aplicar` (`:155`, `:199`). `Chamado.fechar` chega por `transicionar` (`:454`). |
+| `app/chamados/tests/test_disputa_s127.py:45` | Devolve resultado ao teste e cobra uma consulta C7 em `:47`. |
+| `app/chamados/tests/test_bug_par_intervalo.py:482` | Cobra retorno da disputa vazia. |
+| `app/chamados/tests/test_bug_par_intervalo.py:496` | Cobra `None`, seguido da transição real em `:497`. |
+
+Inspeção de fonte e alvos de mutação não são chamadas ao juiz (`app/chamados/tests/test_pergunta_viva_no_guarda.py:37`; `app/chamados/tests/mutantes_bug_par_intervalo.py:157`, `:167`). Os caminhos automáticos localizados consultam C7 diretamente, inclusive reconciliador, materializador e beco (`app/chamados/reconciliador.py:411`, `:1170`; `app/chamados/services/materializacao.py:1534`; `app/chamados/services/becos.py:56`).
+
+**C7 não é inteiramente puro nem barato por construção.** Carrega perguntas duas vezes; para cada pergunta elegível à espera, o identificador consulta irmãs e escala, formando padrão N+1. Contagem e latência reais: **[nao verificado]** (`app/chamados/models.py:1862`, `:1850`; `app/chamados/services/materializacao.py:114`, `:70`, `:87`). A cadeia C6 pode ler `date.today()`, já alcançável pelo `fio_vivo` antigo (`app/chamados/juizes.py:1217`, `:575`, `:1262`). Há memos em instância e um efeito persistente condicional: a leitura de toque humano chama `get_user_sistema`, implementado com `get_or_create`; ausência do usuário em produção: **[nao verificado]** (`app/chamados/juizes.py:862`, `:1087`; `app/core/utils.py:18`). Esses pontos são **F**, sem escrita errada ou efeito financeiro demonstrado pelo dado fornecido **[nao verificado]**.
+
+Os valores de `recusa_motivo` não formam enumeração fechada: o campo aceita texto livre, e os escritores abaixo permitem resíduos anteriores à aplicação (`app/chamados/models.py:2577`).
+
+| Valor/origem | Escritor e elegibilidade |
+|---|---|
+| Motivo técnico de tipo não conferido | Produzido na derivação e gravado com pendência (`app/chamados/services/materializacao.py:479`, `:937`). Deve sobreviver enquanto representar essa pendência; apagá-lo viola I19 (`app/chamados/management/commands/auditar_invariantes_chamados.py:549`). |
+| Recusa de paridade, data, competência ou falha conjunta | `_carimbar_recusa` grava o texto; produtores incluem guarda de paridade, data e falha do par (`app/chamados/services/materializacao.py:1190`, `:1000`, `:1324`, `:1392`). |
+| `Recusada por ...` | Recusa humana grava; resposta posterior normal não limpa automaticamente esse campo (`app/chamados/services/validacao.py:605`; `app/chamados/services/disputa_emissao.py:1483`, `:1505`). |
+| `Colaborador respondeu ... exige decisao...` | Escape grava; resposta normal posterior pode preservar o texto (`app/chamados/services/disputa_emissao.py:1494`, `:1483`). |
+| Descrição de duplicata | Porta de identidade grava, mas essa linha fica fora do universo do par (`app/chamados/services/fio.py:1350`; `app/chamados/services/materializacao.py:72`). |
+| ESPERA | Envelope usa o escritor existente; aplicação limpa exclusivamente esse valor (`app/chamados/services/materializacao.py:1435`, `:1376`). |
+
+Uma recusa histórica sem pendência pode, portanto, ficar obsoleta após sucesso; **não encontrei escrita posterior errada causada apenas por esse resíduo** nos leitores pedidos. Devolução ignora materializadas; validação usa erros do ato; vigia e passivo reconhecem lastro; flip exige a via `paridade_recusada`, diferente da aplicação normal; I18 exige não materializada (`app/chamados/services/validacao.py:190`, `:491`, `:511`; `app/chamados/services/vigia_carimbo.py:112`; `app/chamados/services/passivo_validado.py:329`; `app/ponto/services/flip_auto.py:128`; `app/chamados/services/materializacao.py:1283`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1081`). **F** para esse resíduo isolado; efeito adicional em produção: **[nao verificado]**.
+
+Na apresentação, a metade técnica validada some da lista do detalhe porque não é C6 viva nem espera; o fio de disputa aberta carrega todas e mostra pendência/motivo no modal (`app/chamados/services/acoes_chamado.py:349`; `app/chamados/juizes.py:1153`; `app/chamados/services/fio.py:221`, `:225`; `app/templates/chamados/partials/modal_fio.html:222`). O explicador afirma “NAO plantou” antes de consultar lastro, embora o escritor possa plantar e conservar pendência; o cartão também diz conferir “antes de lançar”. Essa divergência é **F** (`app/chamados/services/explicador.py:93`, `:101`; `app/chamados/services/materializacao.py:1014`; `app/templates/chamados/partials/_card_atendimento.html:183`).
+
+`o_que_segura` consulta exportação, dias retidos e a porta do dia; não lê diretamente pendência/motivo. A alimentação dessa porta usa C6, que exclui a metade validada. A frase resultante depende das demais portas daquele dia e é **[nao verificado]** para o dado fornecido (`app/folha/fora_da_folha.py:215`, `:221`, `:226`; `app/chamados/juizes.py:1322`, `:1153`).
+
+Quanto às demais classes estruturais, as batidas continuam pela porta, os carimbos pela porta do modelo e as travas pelo adquirente comum em ordem Colaborador → Disputa → Chamado → Pergunta; não identifiquei outro escritor introduzido fora dessas portas nos caminhos examinados. Prova concorrente com duas conexões: **[nao verificado]** (`app/chamados/services/materializacao.py:1014`, `:1283`, `:134`; `app/chamados/models.py:2683`, `:2692`, `:2705`, `:2709`). A identidade e os instantes continuam consumindo suas fontes existentes, sem nova derivação paralela nesses trechos (`app/chamados/services/materializacao.py:87`, `:88`, `:1349`).
+
+M38 satisfaz exatamente a alternativa estrutural solicitada: o rótulo existe, e o executável confirma a limitação. As asserções de estado/trilha desse cenário não constituem contracaso comportamental à guarda antiga (`app/chamados/tests/test_bug_par_intervalo.py:815`, `:842`, `:864`; `app/chamados/models.py:3218`).
 
 ## 09/11 14:11 · sessao d1463be4513a · - · - · origem=Ronald (tmux)
 
@@ -833,23 +908,4 @@ Quanto às decisões abertas: aceitar escrita própria do papel como “somente 
 
 A lista LO futura é limitação de cobertura, e a criação posterior de SECURITY DEFINER é alteração do universo conferido; não constituem, sozinhas, derivação paralela ou relógio fora da borda. O contrato exige, porém, cura da classe e selo que morde, e enumera explicitamente segundo escritor e selo sem mordida entre as classes de reprovação. (`bin/sonda_leitor_comum.sh:19`; `bin/sonda_leitor_comum.sh:139`; `CLAUDE.md:66`; `CLAUDE.md:370`; `CLAUDE.md:372`)
 
-## 09/11 13:36 · sessao 298ff21ca46b · - · - · origem=Ronald (tmux)
-
-**V7b ainda não garante ordem e origem de cada linha.** O fluxo direto de stdout e o fluxo de stderr via `tee|sed` concorrem; esperar a pipeline terminar garante conclusão antes da raspagem, sem garantir a ordem original entre os descritores. Sem newline no stdout, a marca do stderr também pode entrar no meio da mesma linha. (`bin/codex_pergunta.sh:322,333`)
-
-Há perda anterior de origem: o próprio envelope junta stdout e stderr do `docker run` com `2>&1` antes do filtro; ambos chegam ao wrapper como stdout, sem `[stderr]`. O carimbo identifica somente stderr do envelope nessa fronteira. (`bin/sonda_leitura.sh:233,240`; `bin/codex_pergunta.sh:322`)
-
-- **RC normal: correto quanto ao envelope.** O wrapper habilita `nounset` e `pipefail`, sem `errexit`; captura imediatamente `PIPESTATUS[0]`, preservando os retornos 0, 5 e demais falhas do envelope. (`bin/codex_pergunta.sh:54,322,323,326`)
-- **Falhas do transporte: lacuna.** Os retornos de `tee` e `sed` são ignorados. Envelope com rc 0 permite continuar mesmo que outro estágio falhe e perca stderr; o retorno da atribuição substitui o resultado agregado da pipeline. (`bin/codex_pergunta.sh:322,326,333`)
-- **Ramo 5 impede o bruto de chegar ao Codex.** Sai antes da raspagem, da construção do prompt e da chamada ao Codex. A limpeza tenta remover o diretório temporário no EXIT. (`bin/codex_pergunta.sh:325,333,359,423,267`)
-- **Filtro de rc 5 não é raspagem.** Qualquer linha de stderr iniciada por `sonda_leitura:` é emitida crua; um segredo nessa linha passa pelo filtro textual. A ocorrência real disso está **[nao verificado]**. (`bin/codex_pergunta.sh:324`)
-- **Ressalva ao cenário anterior:** o envelope real remapeia rc 5 da sonda para 1; portanto, não está demonstrado que o Python arbitrário consiga selecionar o ramo de recusa imprimindo o prefixo e saindo 5. As recusas normais são produzidas antes da execução pela função `_recusa`. (`bin/sonda_leitura.sh:129,135,243,244`)
-- **`tee` mantém cópia crua local**, enquanto sua saída segue pelo `sed` para o bruto; não imprime diretamente o conteúdo no stderr do chamador. A raspagem posterior trata nomes e CPF, sem filtro geral de senhas. Senha arbitrária impressa com envelope rc 0 pode permanecer no texto raspado; vazamento ocorrido **[nao verificado]**. (`bin/codex_pergunta.sh:322,333`; `bin/raspar_publico.py:31,36`; `bin/nome_no_texto.py:87,110,121`)
-
-O selo cobra a sequência espaçada por dois `sleep 0.3`, a presença da marca em uma linha específica e ausência da marca nos sentinelas de stdout. Não cobre rajada, linhas parciais, stderr original do processo dentro do envelope nem falha de `tee/sed`. (`bin/tests/test_codex_sonda.sh:53,54,55,104,105,107,108`; `bin/sonda_leitura.sh:240`)
-
-O caso rc 5 cobra ausência de chamada ao Codex e ausência dos segredos sem prefixo; as duas linhas prefixadas da fixture não contêm segredo, deixando o filtro textual sem teste dessa condição. (`bin/tests/test_codex_sonda.sh:42,43,44,45,96,97,100`)
-
-O mutante “colar stderr no fim” atingiria a comparação da ordem e a cobrança da marca. Sua execução e morte efetiva, assim como os resultados RED/GREEN relatados: **[nao verificado]**. (`bin/tests/test_codex_sonda.sh:105,106,107`)
-
-_3163 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3164 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
