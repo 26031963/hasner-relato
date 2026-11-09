@@ -1,7 +1,195 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 06:21** · publicado em **09/11/2026 06:23** (UTC-3)
+> Ultima resposta processada: **09/11/2026 06:43** · publicado em **09/11/2026 06:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 06:43 · sessao 41bbd4564418 · DEPLOY-EXCLUSAO-ENVELOPE · verificador · origem=Code
+
+**Parecer: não daria VERDE nesta volta.** O fluxo de sucesso fecha as duas janelas para envelopes desta versão, mas encontrei autoespera no `vigia_arvore`, execução auxiliar sem compartilhada, retenção sem teto global e lacunas nos leitores e no selo. (`bin/deploy.sh:316`, `bin/deploy.sh:442`, `app/core/esteira_vigia.py:1267`, `bin/cron_run.sh:50`, `app/core/management/commands/pipeline_placar.py:74`, `bin/tests/test_deploy_exclusao_cron.sh:168`)
+
+Validação por execução, duração real dos deploys e comportamento observado em produção: **[nao verificado]**. [nao verificado]
+
+**1. Fechamento das janelas, saídas e morte do deploy** [nao verificado]
+
+No fluxo de sucesso, **sim, para quem passa pelo envelope novo e disputa o mesmo arquivo**: o único apply está depois da aquisição exclusiva; o único restart também, com a última consulta de marcas já dentro dela. O envelope adquire compartilhada antes de criar MARCA ou lançar `CMD`; o unlock explícito só vem depois das três provas de rota. (`bin/deploy.sh:319`, `bin/deploy.sh:337`, `bin/deploy.sh:363`, `bin/deploy.sh:364`, `bin/deploy.sh:437`, `bin/deploy.sh:442`, `bin/cron_run.sh:17`, `bin/cron_run.sh:22`, `bin/cron_run.sh:24`)
+
+Não localizei ramo que aplique migration ou execute restart sem passar pela exclusiva. HUP sem migration fica deliberadamente fora dela; `--conferir` termina antes desses atos. (`bin/deploy.sh:237`, `bin/deploy.sh:316`, `bin/deploy.sh:336`, `bin/deploy.sh:359`, `bin/deploy.sh:381`)
+
+**A promessa “segura até reload conferido” vale somente no sucesso.** `falhou()` executa `exit 1`; pode encerrar após falha do migrate, do HUP, da troca de workers ou das rotas, sem chegar ao unlock normal. Não há mecanismo nesses caminhos que mantenha a exclusão até uma recuperação posterior. (`bin/deploy.sh:92`, `bin/deploy.sh:337`, `bin/deploy.sh:381`, `bin/deploy.sh:394`, `bin/deploy.sh:440`, `bin/deploy.sh:442`)
+
+O arquivo permanece; a posse está no fd 4. A saída fecha o descritor do processo, mas **não garante liberação imediata se algum descendente ainda o conservar**: a biblioteca declara herança, e o lançamento do comando não fecha o fd. Descendente efetivamente sobrevivendo à morte de um deploy nesta produção: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:10`, `bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:42`, `bin/cron_run.sh:24`)
+
+A transição de versão também merece distinção: o restart relê marcas para acomodar envelope antigo já em memória; o migrate normal não consulta essas marcas. Portanto a exclusiva, sozinha, não demonstra proteção contra um cron antigo que ainda não participa do protocolo. Existência desse cron durante a publicação: **[nao verificado]**. (`bin/deploy.sh:108`, `bin/deploy.sh:315`, `bin/deploy.sh:337`, `bin/deploy.sh:362`, `bin/deploy.sh:363`)
+
+**2. Envelope, MARCA/FIM e rc 75**
+
+O `CMD` só roda no ramo armado após aquisição compartilhada bem-sucedida. MARCA fica nesse ramo; FIM só é criado para rc 0 ou 2. Sem vez, o envelope grava placar com rc 75, não cria MARCA/FIM e sai pelo epílogo. (`bin/cron_run.sh:17`, `bin/cron_run.sh:20`, `bin/cron_run.sh:22`, `bin/cron_run.sh:24`, `bin/cron_run.sh:27`, `bin/cron_run.sh:30`, `bin/cron_run.sh:39`, `bin/cron_run.sh:55`)
+
+**Há uma exceção à afirmação ampla “nenhum comando entra no core”:** sem compartilhada, o epílogo ainda tenta executar `docker exec ... cron_quebrado`. Esse alarme pode entrar no core enquanto a exclusiva responsável pela recusa continua tomada. Sua saída é descartada; a FLAG só nasce se a chamada funcionar. (`bin/cron_run.sh:49`, `bin/cron_run.sh:50`)
+
+O 75 não identifica exclusivamente timeout de deploy: também cobre biblioteca ausente, falha de `mkdir`, abertura do arquivo ou aquisição; além disso, um `CMD` pode devolver 75 por conta própria. A linha do placar não registra uma causa separada. (`bin/cron_run.sh:17`, `bin/cron_run.sh:24`, `bin/cron_run.sh:27`, `bin/cron_run.sh:30`, `bin/trava_deploy_exclusao.sh:31`, `bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:34`)
+
+Há significados anteriores de 75: “sem vez” na trava de testes, tratado pelo pre-push como “não rodou”; limite/indisponibilidade e pausa no wrapper Codex. Isso não constitui colisão automática entre scripts, mas impede interpretar 75 como um significado global único. (`bin/trava_teste.sh:18`, `bin/trava_teste.sh:38`, `bin/pre-push.sh:149`, `bin/codex_pergunta.sh:22`, `bin/codex_pergunta.sh:41`)
+
+Para os leitores de cron, 75 é erro: `EXITS_DE_ALARME=(0,2)`; o vigia aceita o inteiro e abre pauta sem tratamento particular para 75. A corrente registra esse retorno, continua os elos e não faz retry; um dependente sem FIM pode terminar no próprio teto com rc 2 e ALARME. (`app/core/services/crons_quebrados.py:16`, `app/core/services/crons_quebrados.py:46`, `app/core/management/commands/cron_quebrado.py:16`, `app/core/management/commands/cron_quebrado.py:37`, `bin/encadeado.sh:64`, `bin/encadeado.sh:66`, `bin/encadeado.sh:92`)
+
+**3. Autoespera, aninhamentos e segundo plano**
+
+O reload das 03:30 evita autoespera: é RAW envelopado, mas `--reload-agendado` recusa migration pendente e não arma exclusiva. (`app/config/crons.py:326`, `app/config/crons.py:1863`, `bin/deploy.sh:211`, `bin/deploy.sh:316`)
+
+**Existe outro caminho cron → deploy:** `vigia_arvore.sh` chama `esteira_vigia.py curar`, que pode chamar deploy `--sem-sombra`, inclusive novamente ao desfazer o revert. Se esse deploy precisar aplicar migration, tentará exclusiva enquanto seu envelope ancestral conserva compartilhada: espera até 600 s e recusa contra si mesmo. A chamada Python também descarta o retorno do deploy e segue para os testes. (`app/config/crons.py:296`, `bin/vigia_arvore.sh:176`, `app/core/esteira_vigia.py:1267`, `app/core/esteira_vigia.py:1269`, `app/core/esteira_vigia.py:1275`, `bin/cron_run.sh:24`, `bin/deploy.sh:233`, `bin/deploy.sh:319`, `bin/trava_deploy_exclusao.sh:26`)
+
+O outro cron encontrado chamando deploy, `vigia_logins --auto`, usa `--sem-migrate`; com pendência ele recusa, sem pendência não pede exclusiva. (`app/config/crons.py:303`, `bin/vigia_logins.sh:87`, `bin/deploy.sh:215`, `bin/deploy.sh:316`)
+
+A corrente não aninha envelopes por sua construção: `; encadeado.sh` vem depois do envelope raiz, e cada elo faz `exec` de seu próprio envelope. `deploy_agendado` entra diretamente por cron.d e executa a esteira recebida, sem envelope próprio; as fatias realmente agendadas são **[nao verificado]**. (`app/config/crons.py:1885`, `bin/encadeado.sh:102`, `bin/encadeado.sh:104`, `bin/deploy_agendado.sh:55`, `bin/deploy_agendado.sh:73`)
+
+A cadeia toma árvore e régua antes do deploy final. Já `sombra.sh --conferir`, chamado pelo deploy, não passa pelos ramos que adquirem a trava da sombra e não executa o bloco de crons. (`bin/molde_fatia/cadeia.sh:11`, `bin/molde_fatia/cadeia.sh:14`, `bin/molde_fatia/cadeia.sh:89`, `bin/deploy.sh:162`, `bin/sombra.sh:438`, `bin/sombra.sh:451`, `bin/sombra.sh:463`)
+
+**Comandos efetivamente agendados em `crons.py` com lançamento explícito por `&`, `nohup` ou `setsid`: nenhum localizado.** O gerador executa RAW/Django sincronamente e acrescenta a corrente com `;`. Os jobs `Popen` citados no arquivo pertencem a `FORA_DE_PIPELINE`. (`app/config/crons.py:282`, `app/config/crons.py:350`, `app/config/crons.py:594`, `app/config/crons.py:688`, `app/config/crons.py:705`, `app/config/crons.py:769`, `app/config/crons.py:1369`, `app/config/crons.py:1863`, `app/config/crons.py:1885`)
+
+Há assíncronos vizinhos: fabricante usa `setsid nohup ... &`; o observador de árvore fecha fds 6–9, mas deixa 4 aberto e vive enquanto o pai existir. Caminho demonstrado de um cron até esses lançamentos, ou filho de cron segurando compartilhada indefinidamente: **[nao verificado]**. (`bin/fabricante.sh:187`, `bin/trava.sh:68`, `bin/trava.sh:69`)
+
+**4. Quem escreve e quem lê**
+
+| Objeto | Escritores e consumidores localizados |
+|---|---|
+| Caminho da trava | Uma definição literal, derivada da raiz da biblioteca; usada para criar diretório e abrir o arquivo. (`bin/trava_deploy_exclusao.sh:16`, `bin/trava_deploy_exclusao.sh:31`, `bin/trava_deploy_exclusao.sh:32`) |
+| fd 4 | A função comum abre; `flock` adquire; fecha na recusa; a soltura explícita faz unlock e close. (`bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:34`, `bin/trava_deploy_exclusao.sh:37`, `bin/trava_deploy_exclusao.sh:42`) |
+| Funções da biblioteca | Wrappers compartilhado/exclusivo chamam a implementação comum; consumidores são envelope e deploy; soltura explícita só no deploy. (`bin/trava_deploy_exclusao.sh:28`, `bin/trava_deploy_exclusao.sh:40`, `bin/trava_deploy_exclusao.sh:41`, `bin/cron_run.sh:17`, `bin/deploy.sh:319`, `bin/deploy.sh:442`) |
+| `espera_deploy` | Envelope escreve; leitores explícitos localizados somente no selo novo. (`bin/cron_run.sh:30`, `bin/tests/test_deploy_exclusao_cron.sh:165`, `bin/tests/test_deploy_exclusao_cron.sh:182`, `bin/tests/test_deploy_exclusao_cron.sh:237`) |
+
+Os leitores operacionais diretos do JSONL localizados foram estes; nenhum usa `espera_deploy`:
+
+| Leitor | Interpretação e consequência |
+|---|---|
+| `crons_quebrados` | Usa chegada `ini` para escolher a última corrida em 26 h e classifica por exit. (`app/core/services/crons_quebrados.py:36`, `app/core/services/crons_quebrados.py:39`, `app/core/services/crons_quebrados.py:42`, `app/core/services/crons_quebrados.py:46`) |
+| `pipeline_placar` | Toda linha incrementa `rodou`: uma tentativa sem comando vira `rodou=1, erros=1`, situação ERRO. (`app/core/management/commands/pipeline_placar.py:73`, `app/core/management/commands/pipeline_placar.py:74`, `app/core/management/commands/pipeline_placar.py:78`, `app/core/management/commands/pipeline_placar.py:92`) |
+| `crons_duracao.py` | Inclui `dur` sem filtrar exit; tentativas sem comando entram no p95 e podem reduzir a medida. Efeito efetivo: **[nao verificado]**. (`bin/crons_duracao.py:69`, `bin/crons_duracao.py:75`, `bin/crons_duracao.py:76`) |
+| `corrida_no_horario` | Recebe `ini` e filtra seu minuto, embora a documentação diga “começou no horário”. Agora isso mede chegada ao envelope, podendo anteceder o comando em até 300 s. (`app/config/crons.py:2305`, `app/config/crons.py:2328`, `app/config/crons.py:2332`, `bin/cron_run.sh:7`, `bin/cron_run.sh:24`) |
+
+`dur` exclui a aquisição, mas inclui preparação da MARCA; `fim−ini` inclui a espera. Nenhum dos leitores diretos acima calcula essa diferença. Há, portanto, uma mudança real entre “chegou”, “rodou” e “começou o comando” que o comentário novo não resolve nos consumidores. (`bin/cron_run.sh:7`, `bin/cron_run.sh:19`, `bin/cron_run.sh:22`, `bin/cron_run.sh:29`, `bin/cron_run.sh:30`)
+
+**5. Tetos de 300/600 e corrente**
+
+**600 s limita aquisição, não retenção.** Depois de obter exclusiva, o deploy inclui migrate sem timeout, consultas `docker top` sem timeout, até 270 s nominais de sleeps dos workers, três esperas de disponibilidade de até 180 s cada e provas de rota sem timeout. Não existe teto global demonstrável para quanto segura. (`bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`, `bin/deploy.sh:337`, `bin/deploy.sh:377`, `bin/deploy.sh:386`, `bin/deploy.sh:391`, `bin/deploy.sh:403`, `bin/deploy.sh:406`, `bin/deploy.sh:419`, `bin/deploy.sh:442`)
+
+Assim, **um deploy com migration pode terminar com sucesso e ainda fazer um cron atingir 300 s**, sair 75 e alarmar sem FIM. A afirmação de que 300 “cobre” a troca e deixa 600 para a corrente não demonstra cobertura de migration, disponibilidade e rotas. (`bin/trava_deploy_exclusao.sh:17`, `bin/trava_deploy_exclusao.sh:21`, `bin/cron_run.sh:27`, `bin/cron_run.sh:39`, `bin/cron_run.sh:50`)
+
+Os 900 s pertencem ao dependente e começam antes da consulta dos carimbos; não são folga integral garantida quando o deploy começa. HE espera deslogados por 1800 s, mas quem espera HE continua com 900 s. Tempo efetivo disponível e duração real do deploy: **[nao verificado]**. (`bin/encadeado.sh:86`, `bin/encadeado.sh:92`, `app/config/crons.py:1550`, `app/config/crons.py:1563`)
+
+**6. Classes de reprovação anteriores**
+
+- **Fonte do caminho:** há uma definição textual, mas ela é relativa à biblioteca carregada. Deploy carrega da própria raiz; envelope carrega da viva absoluta. Executar deploy de outra cópia pode disputar outro arquivo enquanto opera os mesmos containers. Ocorrência operacional: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:16`, `bin/deploy.sh:317`, `bin/cron_run.sh:17`, `bin/deploy.sh:337`)
+- **Derivação paralela:** aquisição, tetos e descritor estão centralizados na biblioteca; a diferença de raiz acima continua possível. (`bin/trava_deploy_exclusao.sh:16`, `bin/trava_deploy_exclusao.sh:21`, `bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:28`)
+- **Ordem:** cadeia → árvore → régua → exclusiva está demonstrada. Não demonstrei ciclo inverso envolvendo árvore/régua; a autoespera concreta é compartilhada ancestral → exclusiva no auto-revert. (`bin/molde_fatia/cadeia.sh:11`, `bin/molde_fatia/cadeia.sh:14`, `bin/molde_fatia/cadeia.sh:89`, `app/core/esteira_vigia.py:1267`, `bin/deploy.sh:319`)
+- **Relógio:** espera registrada e `dur` usam subtração de `date +%s`, sem proteção contra salto do relógio; podem divergir do tempo transcorrido ou ficar negativos. (`bin/trava_deploy_exclusao.sh:33`, `bin/trava_deploy_exclusao.sh:35`, `bin/cron_run.sh:19`, `bin/cron_run.sh:29`)
+- **Campo com dois significados:** `rodou` passa a incluir tentativa recusada; 75 agrega causas diferentes; filtro de “início” usa chegada. (`app/core/management/commands/pipeline_placar.py:74`, `bin/cron_run.sh:17`, `bin/cron_run.sh:27`, `app/config/crons.py:2328`)
+
+Os mutantes “sem exclusiva” e “exit 75 antes do epílogo” têm asserções capazes de acusá-los em a1/a2 e b2. Porém o arquivo apenas aceita fontes alternativas; execução e mordida observadas dos mutantes/RED: **[nao verificado]**. (`bin/tests/test_deploy_exclusao_cron.sh:32`, `bin/tests/test_deploy_exclusao_cron.sh:135`, `bin/tests/test_deploy_exclusao_cron.sh:152`, `bin/tests/test_deploy_exclusao_cron.sh:187`)
+
+**Falta mordida para soltura prematura:** b1 exige comando após HUP; b3, após restart. O Docker falso troca workers e responde às provas imediatamente; esses casos não demonstram reprovar soltura antes da conferência final. d4 apenas verifica `30 < teto < 900`, sem validar orçamento temporal. (`bin/tests/test_deploy_exclusao_cron.sh:90`, `bin/tests/test_deploy_exclusao_cron.sh:96`, `bin/tests/test_deploy_exclusao_cron.sh:168`, `bin/tests/test_deploy_exclusao_cron.sh:205`, `bin/tests/test_deploy_exclusao_cron.sh:258`)
+
+**7. Contrato e selos vizinhos**
+
+Pela leitura, não vejo quebra das condições textuais de `contrato_deploy.sh`: HUP único e conjunto, restart manual único precedido de recusa e três provas de rota continuam presentes. Esse contrato não cobra a nova exclusiva; sua checagem de migration usa a primeira ocorrência de `migrate_schemas`, que é consulta, não apply. Resultado executado: **[nao verificado]**. (`bin/contrato_deploy.sh:24`, `bin/contrato_deploy.sh:33`, `bin/contrato_deploy.sh:47`, `bin/contrato_deploy.sh:54`, `bin/deploy.sh:184`, `bin/deploy.sh:337`, `bin/deploy.sh:437`)
+
+Copiar a biblioteca sem substituir caminho nos vizinhos está correto nesta implementação: ela deriva o lock de seu próprio local. Entretanto, os vizinhos continuam plantando MARCA sem adquirir compartilhada; preservam a prova da recusa por marca, não comprovam o protocolo novo. O selo novo entra na régua pelo glob existente. (`bin/trava_deploy_exclusao.sh:16`, `bin/tests/test_deploy_reload_gracioso.sh:41`, `bin/tests/test_deploy_reload_gracioso.sh:92`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:71`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:78`, `bin/regua.sh:138`)
+
+Há divergência do contrato anterior registrado: cron 600/deploy não bloqueante/`espera_lock`/dois contadores ESTADO versus cron 300/deploy esperando 600/`espera_deploy`, sem consumo operacional desse campo nos leitores encontrados. Aval posterior para essa mudança de desenho: **[nao verificado]**. (`app/docs/RELATO.md:25`, `bin/trava_deploy_exclusao.sh:21`, `bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`, `bin/cron_run.sh:30`)
+
+## 09/11 06:42 · sessao c9691c154609 · - · - · origem=Ronald (tmux)
+
+1. **Caminho de sucesso fecha as duas janelas para envelopes desta versão.** O único apply está em `bin/deploy.sh:337`, e o único restart em `bin/deploy.sh:364`; ambos passam pela aquisição exclusiva em `bin/deploy.sh:316-325`. O envelope só cria MARCA e executa após adquirir compartilhada (`bin/cron_run.sh:17-24`). A lib mantém a trava no fd 4 (`bin/trava_deploy_exclusao.sh:32-36`).
+
+2. **Falha não preserva a exclusão até uma prova concluída.** `falhou()` chama `exit 1` (`bin/deploy.sh:92`); pode ocorrer depois de começar migrate, depois do HUP, durante conferência de workers ou nas rotas (`bin/deploy.sh:337`, `bin/deploy.sh:381`, `bin/deploy.sh:394`, `bin/deploy.sh:440`). Só no sucesso há unlock explícito depois das três provas (`bin/deploy.sh:437-442`). Assim, um deploy abortado pode liberar a exclusão sem reload conferido; consistência resultante do banco/código depende do ponto da falha e das migrations [nao verificado].
+
+3. **A morte do processo não garante liberação imediata se houver descendente vivo.** A própria lib declara herança pelos filhos (`bin/trava_deploy_exclusao.sh:10-11`); o fd é aberto sem fechamento no comando de cron (`bin/trava_deploy_exclusao.sh:32`, `bin/cron_run.sh:24`). O arquivo de lock permanece; exclusão depende dos descritores, não da existência do arquivo (`bin/trava_deploy_exclusao.sh:14-16`, `bin/trava_deploy_exclusao.sh:32-42`). Descendente concreto de cron que retenha indefinidamente: [nao verificado].
+
+4. **Aninhamentos encontrados:**
+   - Reload agendado é RAW envelopado → deploy `--reload-agendado` (`app/config/crons.py:326-327`, `app/config/crons.py:1861-1863`). Esse modo não arma migration pendente: recusa em `bin/deploy.sh:211-214`; sem restart/apply não pede exclusiva (`bin/deploy.sh:316`). Portanto esse caminho evita autoespera.
+   - Outro caminho existe: cron `vigia_arvore.sh` (`app/config/crons.py:296`) → `core/esteira_vigia.py curar` (`bin/vigia_arvore.sh:176`) → deploy `--sem-sombra` (`app/core/esteira_vigia.py:1267-1268`, `app/core/esteira_vigia.py:1275`). Se esse deploy armar apply, tenta exclusiva enquanto o envelope ancestral segura compartilhada: autoespera até 600 s e recusa (`bin/cron_run.sh:17-24`, `bin/deploy.sh:233`, `bin/deploy.sh:316-323`, `bin/trava_deploy_exclusao.sh:26`).
+   - `vigia_logins.sh --auto` é cron e chama deploy, mas usa `--sem-migrate`, que recusa migrations pendentes e evita exclusiva (`app/config/crons.py:303`, `bin/vigia_logins.sh:87`, `bin/deploy.sh:215-218`, `bin/deploy.sh:316`).
+   - Corrente não aninha envelopes por construção: o render acrescenta `; encadeado.sh` depois do envelope raiz, e cada elo faz exec do seu envelope (`app/config/crons.py:1884-1885`, `bin/encadeado.sh:102-104`).
+   - `deploy_agendado` entra diretamente por cron.d e executa a esteira fornecida; não cria envelope próprio (`bin/deploy_agendado.sh:54-56`, `bin/deploy_agendado.sh:68-73`). Fatias realmente agendadas [nao verificado].
+   - Cadeia toma árvore e régua antes de deploy; o deploy final pode adquirir exclusiva nessa ordem (`bin/molde_fatia/cadeia.sh:11-14`, `bin/molde_fatia/cadeia.sh:88-89`, `bin/deploy.sh:316-325`). `sombra.sh --conferir`, usado pelo deploy, não adquire a trava da sombra (`bin/deploy.sh:162`, `bin/sombra.sh:438`, `bin/sombra.sh:451`, `bin/sombra.sh:463`).
+
+5. **Segundo plano:** não há `&`, `nohup` ou `setsid` nos comandos efetivamente declarados em CRONS; o gerador lança RAW/Django pelo envelope e a corrente por `;` (`app/config/crons.py:282-352`, `app/config/crons.py:594-595`, `app/config/crons.py:688-706`, `app/config/crons.py:1861-1885`). Os RAW inspecionados usam execução síncrona, incluindo `noturno.py` (`eval/noturno.py:32-44`, `eval/noturno.py:93-94`), fábrica (`bin/fabrica_estado.py:63-66`), alarme de sessão (`bin/alarme_sessao_ociosa.py:142-150`) e backup (`scripts/backup_all.sh:6-8`). Efeitos transitivos arbitrários dos comandos Django [nao verificado].
+
+   Há lançamentos assíncronos vizinhos, sem caminho demonstrado a partir dessas entradas: fabricante usa `setsid nohup ... &` (`bin/fabricante.sh:187`); controlador/esteiras usam `Popen` (`app/core/esteira_vigia.py:801-802`, `app/core/esteira_vigia.py:917-918`). A esteira está declarada como timer fora do cron (`app/config/crons.py:764-767`). O observador de árvore fecha fds 6–9, mas não 4, e dura enquanto o pai existir (`bin/trava.sh:68-69`); cron → esse observador [nao verificado]. Os três jobs `Popen` descritos em `crons.py` pertencem a FORA_DE_PIPELINE, não a CRONS (`app/config/crons.py:769`, `app/config/crons.py:1369-1371`).
+
+6. **Posse não tem teto de 600 s.** Esse teto limita a aquisição (`bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`). Depois dela, o deploy inclui migrate sem timeout (`bin/deploy.sh:337`), consultas `docker top` sem timeout (`bin/deploy.sh:377-379`), até 270 s nominais de sleeps dos workers (`bin/deploy.sh:382-395`), três esperas de disponibilidade de até 180 s cada (`bin/deploy.sh:402-408`) e provas de rota sem timeout (`bin/deploy.sh:419-439`). Portanto um deploy com migration pode superar 300 s mesmo terminando com sucesso, levando cron ao rc 75; duração efetivamente observada em produção [nao verificado].
+
+## 09/11 06:41 · sessao 5299063743ea · - · - · origem=Ronald (tmux)
+
+**Achados que merecem bloquear a confirmação:**
+
+1. **O caminho “sem vez” ainda entra no core:** o `CMD` não roda e MARCA/FIM não são criados, mas o epílogo chama `docker exec ... cron_quebrado` sem ter conseguido a compartilhada. Isso permite executar o alarme no core durante a migration/exclusiva que impediu o cron. A ausência de execução real em produção é [nao verificado]. (`bin/cron_run.sh:17`, `bin/cron_run.sh:20`, `bin/cron_run.sh:27`, `bin/cron_run.sh:39`, `bin/cron_run.sh:46`, `bin/cron_run.sh:50`)
+
+2. **O placar passa a chamar “rodou” uma tentativa que não executou o comando.** `pipeline_placar.medidos()` incrementa `rodou` para toda linha e conta `75` também como erro. Assim, o caso sem vez aparece como `rodou=1, erros=1`; não como `NAO_RODOU`. (`app/core/management/commands/pipeline_placar.py:69`, `app/core/management/commands/pipeline_placar.py:73`, `app/core/management/commands/pipeline_placar.py:78`, `app/core/management/commands/pipeline_placar.py:92`)
+
+3. **Tentativas sem comando entram na duração medida.** `crons_duracao.py` aceita qualquer `dur` inteiro, filtra pelo `ini` e não verifica `exit`; portanto uma tentativa rc75 com `dur≈0` entra no p95. Muitas dessas tentativas podem diminuir a duração calculada. Diminuição efetiva em produção: [nao verificado]. (`bin/crons_duracao.py:69`, `bin/crons_duracao.py:71`, `bin/crons_duracao.py:73`, `bin/crons_duracao.py:75`, `bin/crons_duracao.py:76`)
+
+4. **300/600 não limitam o tempo segurando a exclusiva.** São os tempos passados ao `flock -w`, isto é, limites de aquisição. Depois de obter a exclusiva, migrate não tem timeout; há até 270 segundos nominais de sleeps de troca de workers, até três esperas de disponibilidade com timeout180, e provas de rota sem timeout. O total de retenção não tem limite demonstrável no script. (`bin/trava_deploy_exclusao.sh:21`, `bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`, `bin/deploy.sh:337`, `bin/deploy.sh:382`, `bin/deploy.sh:386`, `bin/deploy.sh:391`, `bin/deploy.sh:403`, `bin/deploy.sh:406`, `bin/deploy.sh:419`, `bin/deploy.sh:442`)
+
+**Pergunta 2 — envelope e rc75**
+
+O único lançamento do `CMD` está no ramo `VEZ=0`, que só é armado depois de source e aquisição compartilhada bem-sucedidos; MARCA está nesse mesmo ramo, e FIM só é escrito para rc0/2. Não localizei caminho normal que rode o `CMD` ou faça MARCA/FIM sem vez. A execução de `cron_quebrado` no epílogo é a exceção acima. (`bin/cron_run.sh:16`, `bin/cron_run.sh:17`, `bin/cron_run.sh:20`, `bin/cron_run.sh:22`, `bin/cron_run.sh:24`, `bin/cron_run.sh:39`, `bin/cron_run.sh:50`)
+
+O `75` significa tanto timeout quanto falha ao carregar biblioteca, criar diretório, abrir arquivo ou executar/adquirir `flock`; o placar não contém uma causa separada. Portanto `exit75` isolado não prova “esperou deploy e atingiu teto”. (`bin/cron_run.sh:17`, `bin/cron_run.sh:27`, `bin/trava_deploy_exclusao.sh:31`, `bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:34`, `bin/trava_deploy_exclusao.sh:38`)
+
+Há usos preexistentes de75: `trava_teste.sh` usa “não conseguiu a vez”, e `pre-push.sh` distingue isso de vermelho de código; `codex_pergunta.sh` usa75 para limite/indisponibilidade e também pausa. São contextos distintos, não uma reserva global de significado. (`bin/trava_teste.sh:18`, `bin/trava_teste.sh:38`, `bin/pre-push.sh:149`, `bin/codex_pergunta.sh:22`, `bin/codex_pergunta.sh:41`, `bin/codex_pergunta.sh:54`)
+
+Nos leitores de cron,75 é inequivocamente erro: `EXITS_DE_ALARME=(0,2)`, e todos os demais exits aparecem como cron quebrado; o comando `cron_quebrado` aceita o inteiro e abre pauta sem especializar75. (`app/core/services/crons_quebrados.py:16`, `app/core/services/crons_quebrados.py:46`, `app/core/management/commands/cron_quebrado.py:16`, `app/core/management/commands/cron_quebrado.py:37`)
+
+A corrente não dá retry nem tratamento especial a75: registra o rc, continua os próximos elos e devolve o último rc não zero observado. Sem FIM do predecessor, um dependente espera seu teto e sai2 com ALARME. (`bin/encadeado.sh:64`, `bin/encadeado.sh:66`, `bin/encadeado.sh:68`, `bin/encadeado.sh:86`, `bin/encadeado.sh:92`, `bin/encadeado.sh:94`)
+
+**Pergunta 4 — escritores e leitores**
+
+| Objeto | Escritores/operadores | Leitores/consumidores |
+|---|---|---|
+| Caminho da trava | Única definição literal localizada; deriva da raiz da biblioteca. (`bin/trava_deploy_exclusao.sh:16`) | A função comum usa o caminho para mkdir/open. (`bin/trava_deploy_exclusao.sh:31`, `bin/trava_deploy_exclusao.sh:32`) |
+| fd4 | Função comum abre em append, fecha na falha; soltura explícita faz unlock/close. (`bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:37`, `bin/trava_deploy_exclusao.sh:42`) | `flock` opera no fd4; filhos o herdam segundo contrato declarado e ausência de close no lançamento. (`bin/trava_deploy_exclusao.sh:10`, `bin/trava_deploy_exclusao.sh:34`, `bin/cron_run.sh:24`) |
+| Função interna | `_trava_deploy_exclusao_toma` implementa aquisição/medida. (`bin/trava_deploy_exclusao.sh:28`) | Wrappers compartilhado/exclusivo. (`bin/trava_deploy_exclusao.sh:40`, `bin/trava_deploy_exclusao.sh:41`) |
+| Compartilhada | Wrapper chama interna com `-s`. (`bin/trava_deploy_exclusao.sh:40`) | Envelope. (`bin/cron_run.sh:17`) |
+| Exclusiva/soltura | Wrapper chama interna com `-x`; soltura faz `-u`. (`bin/trava_deploy_exclusao.sh:41`, `bin/trava_deploy_exclusao.sh:42`) | Deploy. (`bin/deploy.sh:319`, `bin/deploy.sh:442`) |
+| `espera_deploy` | Envelope escreve uma linha com o valor. (`bin/cron_run.sh:18`, `bin/cron_run.sh:30`) | Leitores explícitos localizados apenas no selo novo. (`bin/tests/test_deploy_exclusao_cron.sh:165`, `bin/tests/test_deploy_exclusao_cron.sh:182`, `bin/tests/test_deploy_exclusao_cron.sh:237`) |
+
+Os leitores operacionais diretos de `placar.jsonl` localizados foram:
+
+- `crons_quebrados()`: lê `ini`, nome/emp e exit; escolhe a última chegada por cron em26h; ignora duração e espera. (`app/core/services/crons_quebrados.py:30`, `app/core/services/crons_quebrados.py:36`, `app/core/services/crons_quebrados.py:39`, `app/core/services/crons_quebrados.py:42`, `app/core/services/crons_quebrados.py:46`)
+- `pipeline_placar.medidos()`: agrupa pelo dia de `ini`, conta rodadas/erros/alarmes e máximo de `dur`; ignora espera. (`app/core/management/commands/pipeline_placar.py:65`, `app/core/management/commands/pipeline_placar.py:70`, `app/core/management/commands/pipeline_placar.py:73`, `app/core/management/commands/pipeline_placar.py:80`)
+- `crons_duracao.py`: janela de sete dias por `ini`, filtro horário, p95 de `dur`; ignora espera e exit. (`bin/crons_duracao.py:55`, `bin/crons_duracao.py:61`, `bin/crons_duracao.py:69`, `bin/crons_duracao.py:73`, `bin/crons_duracao.py:76`)
+- `corrida_no_horario()` recebe `ini` do leitor anterior e decide pelo minuto de chegada; sua documentação ainda diz “começou no horário agendado”. O comando pode começar até300s depois dessa chegada. (`app/config/crons.py:2304`, `app/config/crons.py:2305`, `app/config/crons.py:2328`, `app/config/crons.py:2332`, `bin/cron_run.sh:7`, `bin/cron_run.sh:19`, `bin/cron_run.sh:24`)
+
+`ini` é chegada, `fim` é horário após a tentativa/comando, e `dur` é diferença dos tempos após aquisição. Logo agora `fim−ini` inclui espera enquanto `dur` a exclui; nenhum dos leitores diretos acima calcula `fim−ini`. “Só comando” é aproximado: `T0` antecede mkdir/echo/trap da MARCA. (`bin/cron_run.sh:7`, `bin/cron_run.sh:19`, `bin/cron_run.sh:22`, `bin/cron_run.sh:23`, `bin/cron_run.sh:29`, `bin/cron_run.sh:30`)
+
+**Perguntas 5/6 — tetos, fonte e relógio**
+
+Um cron que chegue durante retenção exclusiva superior300s termina75 sem FIM e tenta alarmar. Não é necessário que os900s da corrente acabem para esse alarme; e, se o dependente já consumiu parte do seu teto, não há folga universal de600s. Os1800s de HE são a espera de HE por deslogados; o sucessor de HE continua com900s. Ocorrência real num deploy normal: [nao verificado]. (`bin/trava_deploy_exclusao.sh:21`, `bin/cron_run.sh:27`, `bin/cron_run.sh:39`, `bin/cron_run.sh:50`, `bin/encadeado.sh:86`, `bin/encadeado.sh:92`, `app/config/crons.py:1549`, `app/config/crons.py:1550`, `app/config/crons.py:1562`, `app/config/crons.py:1563`)
+
+Há fonte única textual do caminho, mas **não há caminho global independente da cópia**: deploy carrega sua `RAIZ/bin`, enquanto cron_run carrega a biblioteca absoluta da viva; a biblioteca deriva o lock de sua própria raiz. Um deploy executado de outra raiz pode disputar outro inode/arquivo e operar os mesmos containers. Se isso ocorre operacionalmente: [nao verificado]. (`bin/deploy.sh:317`, `bin/cron_run.sh:17`, `bin/trava_deploy_exclusao.sh:16`, `bin/deploy.sh:337`, `bin/deploy.sh:364`)
+
+Espera registrada e duração usam `date +%s`, sem defesa/clamp para salto do relógio; portanto os números podem ficar negativos ou divergir do tempo efetivamente transcorrido. A biblioteca passa o teto a `flock -w`, mas a medição é uma subtração independente do relógio civil. (`bin/trava_deploy_exclusao.sh:33`, `bin/trava_deploy_exclusao.sh:34`, `bin/trava_deploy_exclusao.sh:35`, `bin/cron_run.sh:19`, `bin/cron_run.sh:29`, `bin/cron_run.sh:30`)
+
+O contrato anterior anexado exige `espera_lock`, espera cron600/deploy não bloqueante e contadores ESTADO. A cópia implementa `espera_deploy`, cron300/deploy600 e não fornece consumidor operacional desse novo campo nos leitores encontrados; autorização posterior dessa mudança contratual é [nao verificado]. (`bin/trava_deploy_exclusao.sh:21`, `bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`, `bin/cron_run.sh:30`; contrato_v2.txt no prompt, sem numeração: [nao verificado])
+
+## 09/11 06:41 · sessao 2ef9d324e8ba · - · - · origem=Ronald (tmux)
+
+Leitura estática concluída; não executei testes nem alterei arquivos. Resultados RED/GREEN e mutantes efetivamente executados: **[nao verificado]**. [nao verificado]
+
+1. **Há lacuna de mordida na retenção até a prova de rota.** O código solta a exclusiva depois das provas (`bin/deploy.sh:437-442`), mas b1 apenas exige comando depois do HUP e b3 apenas depois do restart (`bin/tests/test_deploy_exclusao_cron.sh:165-168`, `bin/tests/test_deploy_exclusao_cron.sh:203-205`). O Docker falso avança imediatamente a geração no HUP e responde imediatamente às provas (`bin/tests/test_deploy_exclusao_cron.sh:90-98`). Esses cenários não demonstram reprovar um mutante que solte logo após HUP/restart, antes de conferir workers/rotas; isso exigiria atraso controlado e observação nessas etapas (`bin/tests/test_deploy_exclusao_cron.sh:93-98`, `bin/tests/test_deploy_exclusao_cron.sh:165-168`).
+
+2. **Os dois mutantes requeridos têm asserções que deveriam mordê-los, mas faltam as execuções.** Tirar a exclusiva deve quebrar a1/a2: exigem recusa sem migrate/HUP enquanto cron vive e migrate posterior ao fim do comando (`bin/tests/test_deploy_exclusao_cron.sh:129-154`). `exit 75` antes do epílogo deve quebrar b2: exige linha no placar, espera, chamada do vigia e ausência de MARCA/FIM (`bin/tests/test_deploy_exclusao_cron.sh:175-192`). O arquivo disponibiliza `DEPLOY_SRC`/`CRON_RUN_SRC`; não fabrica nem executa automaticamente os mutantes (`bin/tests/test_deploy_exclusao_cron.sh:32-35`, `bin/tests/test_deploy_exclusao_cron.sh:264-265`). Mordida observada: **[nao verificado]**.
+
+3. **O novo selo participa da régua.** `regua.sh` executa todos os `bin/tests/test_*.sh` e interrompe no primeiro vermelho (`bin/regua.sh:138-145`). A checagem d4, contudo, só exige `30 < teto_cron < 900`; não demonstra que migrate + conferência + rota cabem em 300 s nem que o dependente conserva 600 s (`bin/tests/test_deploy_exclusao_cron.sh:255-259`).
+
+4. **Copiar a biblioteca sem substituir o caminho nos selos vizinhos é correto para esta implementação.** Ela deriva o arquivo de trava do seu próprio `BASH_SOURCE`, e os vizinhos a copiam para `$F/bin`; portanto usa `$F/logs/deploy_exclusao.lock` (`bin/trava_deploy_exclusao.sh:16`, `bin/tests/test_deploy_reload_gracioso.sh:41`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:71`). Não identifiquei segunda definição operacional do nome do arquivo na cópia; ambos os chamadores carregam a biblioteca (`bin/cron_run.sh:17`, `bin/deploy.sh:317`).
+
+5. **Os vizinhos continuam simulando marca sem tomar a compartilhada.** O selo de reload cria `docker exec` em background e planta a marca; o de portões planta marcas antes do deploy, na casca ou no migrate (`bin/tests/test_deploy_reload_gracioso.sh:91-97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:78`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:112-113`). Isso preserva a cobertura da recusa por marca, mas não implementa a conversão dos vizinhos para segurar o lock pedida no `contrato_v2.txt` anexado **[nao verificado: anexo sem arquivo:linha disponível]**.
+
+6. **Não vejo quebra das condições textuais de `contrato_deploy.sh`.** O HUP permanece único e conjunto; restart permanece único, no ramo manual e depois da recusa; as três provas e a falha por rota continuam presentes (`bin/contrato_deploy.sh:24-51`, `bin/contrato_deploy.sh:69-82`; implementação: `bin/deploy.sh:359-381`, `bin/deploy.sh:437-440`). O contrato textual não cobra a nova exclusiva e sua checagem de migration usa a primeira ocorrência de `migrate_schemas`, que é consulta, não o apply; logo não prova a posição do apply (`bin/contrato_deploy.sh:54-59`, `bin/deploy.sh:184`, `bin/deploy.sh:337`). Aprovação executada do contrato: **[nao verificado]**.
+
+7. **Há divergência explícita do contrato anterior registrado.** O registro promete cron esperando 600 s, deploy `-x -n`, campo `espera_lock` e dois contadores no ESTADO (`app/docs/RELATO.md:25`). A implementação usa cron 300 s, deploy esperando 600 s e campo `espera_deploy` (`bin/trava_deploy_exclusao.sh:21-26`, `bin/trava_deploy_exclusao.sh:34`, `bin/cron_run.sh:30`). Isso é mudança de desenho, não simples realização literal daquele contrato; aval posterior para essas diferenças: **[nao verificado]**.
 
 ## 09/11 06:21 · sessao 771c488d1489 · SELOS-CANON-I1 · verificador · origem=Code
 
@@ -911,102 +1099,4 @@ Persistem duas diferenças de significado: **“briefs aprovados” conta linhas
 
 11. **OBSERVACAO — trilhas atuais.** APROVADO: `_censo_nega`, com publicação adiada no Agent; FORA: `main_censo`; DESLIGADO: `main_censo` e `_censo_desligado`; negativa real chama-se `NEGOU DISJUNTOR CENSO`, sem evento literal CENSO NEGA. `bin/disjuntor.py:1623`; `bin/disjuntor.py:1707`; `bin/disjuntor.py:2162`; `bin/disjuntor.py:2148`; `bin/disjuntor.py:1779`; `bin/disjuntor.py:1801`; `bin/disjuntor.py:1812`; `bin/disjuntor.py:2167`. O escritor comum carimba `datetime.now()` e trunca o detalhe em 300 caracteres; a medida interpreta carimbo local, conta linhas, correlaciona obra+pid+hash12 em até 600 s e calcula união NEGOU→APROVADO dividida por 3600. `bin/disjuntor.py:168`; `bin/disjuntor.py:173`; `bin/disjuntor.py:1949`; `bin/disjuntor.py:1990`; `bin/disjuntor.py:2026`; `bin/disjuntor.py:2038`.
 
-## 09/11 04:04 · sessao 66abcd07f52f · - · - · origem=Ronald (tmux)
-
-1. **PROCEDENTE-candidato — P3 ainda não reúne todo o texto entregue ao construtor.** `main_censo` recebe os nomes dos anexos, lê somente a pergunta e une ambos; não lê conteúdo dos anexos. O despacho efetivo concatena o conteúdo de todos eles. Um anexo geral contendo referência a `logs/outra/brief_ruim.md` chega ao construtor, mas essa referência não entra no coletor, salvo coincidência com o glob da obra. Contraprova em memória confirmou que o texto entregue ao juiz contém apenas `/raiz/logs/e3/envelope.txt\n<pergunta>`. `bin/disjuntor.py:2152`; `bin/disjuntor.py:2154`; `bin/disjuntor.py:2156`; `bin/codex_pergunta.sh:315`; `bin/codex_pergunta.sh:344`. O selo cobre anexos cujo próprio nome é brief, não referências internas: `bin/tests/test_censo_antes_da_vaga.sh:138`.
-
-2. **PROCEDENTE-candidato — P4 corrige autoridade do julgamento, mas divide as trilhas entre raízes.** O wrapper de uma cópia passa a raiz do repositório vivo ao censo; `main_censo` grava ali. Entretanto, `LOGD` continua, por padrão, sob a raiz do script, e o `ini` é gravado nesse `LOGD`. Uma cópia/worktree pode deixar aprovação e abertura em árvores distintas; `_censo_24h(raiz)` procura ambos numa só árvore. `bin/codex_pergunta.sh:55`; `bin/codex_pergunta.sh:88`; `bin/codex_pergunta.sh:234`; `bin/codex_pergunta.sh:292`; `bin/disjuntor.py:2167`; `bin/disjuntor.py:1982`; `bin/disjuntor.py:2018`. A rota de cópia é expressamente suportada: `bin/codex_pergunta.sh:237`. Ocorrência produtiva: **[nao verificado]**.
-
-3. **PROCEDENTE-candidato — fail-closed depende da representação literal do JSON.** `_censo_na_excecao` procura o trecho cru `"Agent"`; `_guarda_import` repete esse teste. JSON truncado com `"tool_name":"Ag\u0065nt"` e cópia `/wt-` não produz negativa nesse fallback. Contraprova em memória: retorno `None`; com `"Agent"` literal, retorna negativa. `bin/disjuntor.py:72`; `bin/disjuntor.py:1657`; `bin/disjuntor.py:1807`; `bin/disjuntor.py:1828`. Comportamento do consumidor real diante de payload truncado/erro Python: **[nao verificado]**. `SyntaxError` no próprio arquivo também precede a instalação da guarda: `bin/disjuntor.py:62`; `bin/disjuntor.py:82`.
-
-4. **OBSERVACAO — um julgamento de censo por via está implementado no caminho normal.** Agent passa pelo hook; Codex construtor passa pelo wrapper. O hook deixou de julgar censo da chamada Bash ao wrapper. `bin/disjuntor.py:1731`; `bin/disjuntor.py:1748`; `bin/disjuntor.py:1752`; `bin/codex_pergunta.sh:184`; `bin/codex_pergunta.sh:234`. Não encontrei, nesses caminhos normais, a mesma abertura julgada pelos dois mecanismos de censo; o ramo excepcional pode reexecutar `_censo_nega` após falha do processamento do Agent. `bin/disjuntor.py:1661`.
-
-5. **OBSERVACAO — compatibilidade de IDs continua diferente por via.** CLI agora admite `ABC` e `09-TURNO-ABERTO-EXPOSTA`; o extrator de Agent continua sem reconhecê-los, e Agent em cópia recebe negativa permanente “sem obra”, independentemente do brief. Contraprova em memória: `_obra_de` retorna `None` para ambos. `bin/disjuntor.py:132`; `bin/disjuntor.py:144`; `bin/disjuntor.py:594`; `bin/disjuntor.py:1751`; `bin/disjuntor.py:2144`; `bin/codex_pergunta.sh:188`. Isso já integrava a definição anterior do Agent; uma regressão nova desses IDs nessa via é **[nao verificado]**.
-
-6. **PROCEDENTE-candidato — identidade com cauda continua sem suporte integral.** `_obra_de("obra O9 (C)…")` retorna `O9 (C)`, mas `_briefs_da_obra` e `_parei_censo_no_relato` rejeitam espaço/parênteses pelo `OBRA_CENSO_ID`. Logo o glob literal da obra desaparece e uma negativa dessa identidade não publica o PAREI censo; citar brief diretamente pode resolver o primeiro problema, não o segundo. `bin/disjuntor.py:137`; `bin/disjuntor.py:285`; `bin/disjuntor.py:588`; `bin/disjuntor.py:602`; `bin/disjuntor.py:1563`. Existência atual de obra assim na fila: **[nao verificado]**.
-
-7. **OBSERVACAO — sessão principal e wrapper de leitura.** Ausência de `agent_id` não isenta a sessão principal ao despachar Agent ou comando contendo `codex_pergunta`. `bin/disjuntor.py:1716`. Wrapper com `CODEX_PAPEL=leitura`, sem `--construtor`, não passa pelo novo censo; com essa flag recebe a recusa anterior de incompatibilidade papel/flag. `bin/codex_pergunta.sh:184`; `bin/codex_pergunta.sh:185`; `bin/codex_pergunta.sh:407`. As chamadas concretas desta sessão e negativas produtivas não constam do dado: **[nao verificado]**.
-
-8. **PROCEDENTE-candidato — confinamento dos briefs tem duas regras.** Referências citadas são resolvidas e conferidas contra `RAIZ/logs`; briefs descobertos por glob são resolvidos por `realpath` e unidos sem a mesma conferência. Um link em `logs/<obra>/brief*.md` ou na pasta da obra pode alimentar o juiz com arquivo externo; a referência externa citada diretamente seria recusada. `bin/disjuntor.py:1549`; `bin/disjuntor.py:1554`; `bin/disjuntor.py:1566`; `bin/disjuntor.py:1574`. A presença real desses links é **[nao verificado]**.
-
-Nenhum arquivo foi criado/editado/apagado; verificações executadas somente em memória com `python3 -B`. Execução integral dos selos: **[nao verificado]**.
-
-## 09/11 04:03 · sessao 399ce1c11505 · - · - · origem=Ronald (tmux)
-
-1. **PROCEDENTE-candidato — PAREI censo mascara o painel anterior e pode esconder a liberação do B3.** `no_topo` insere acima da primeira linha útil, sem substituir/remover o painel anterior (`app/core/esteira_vigia.py:886`; `app/core/esteira_vigia.py:889`). Contraexemplo reproduzido exclusivamente em memória, usando as funções reais extraídas por AST:
-
-   ```text
-   antes:  [ESPERANDO: suite | pid=123, ERRO-BOBO OBRA-E3: defeito corrigido] [nao verificado]
-   depois: [PAREI: censo-OBRA-E3 | espera Codex, ESPERANDO: suite | pid=123] [nao verificado]
-   ```
-
-   A linha B3 permanece no arquivo, na terceira posição útil, invisível para `_bloco_do_topo`, que para em duas (`bin/hook_stop_fila1.py:425`; `bin/hook_stop_fila1.py:442`). O Stop julga exclusivamente a primeira linha para ESPERANDO/censo e não procura o ESPERANDO deslocado à segunda (`bin/hook_stop_fila1.py:746`; `bin/hook_stop_fila1.py:751`). Sem wrapper vivo para o novo censo, a espera antiga comprovável fica mascarada (`bin/hook_stop_fila1.py:732`; `bin/hook_stop_fila1.py:749`). Efeito produtivo: **[nao verificado]**.
-
-2. **OBSERVACAO — inventário dos leitores de primeira/segunda linha.**
-
-   | Leitor | Recorte e pressuposto |
-   |---|---|
-   | `_linha_do_topo` | Devolve somente `b[0]`: primeira útil é o painel vigente. `bin/hook_stop_fila1.py:410`; `bin/hook_stop_fila1.py:411`. |
-   | `_esperando_com_prova` | Primeira linha deve ser PAREI censo literal ou ESPERANDO com produtor/prova. Segunda linha não participa. `bin/hook_stop_fila1.py:746`; `bin/hook_stop_fila1.py:752`. |
-   | `_parei_do_em_curso` | Primeira linha deve começar PAREI, conter `!`, passar exclusões CLEAR/COTA/SONDA e referir fila pertinente. `bin/hook_stop_fila1.py:1198`; `bin/hook_stop_fila1.py:1201`; `bin/hook_stop_fila1.py:1213`; `bin/hook_stop_fila1.py:1218`; `bin/hook_stop_fila1.py:1223`. |
-   | `_orcamento` | Primeira linha decide o reconhecimento do PAREI CLEAR. `bin/hook_stop_fila1.py:1002`; `bin/hook_stop_fila1.py:1004`. |
-   | `_orcamento_contido`, recuperação | Primeira linha deve ser CLEAR e handoff recente para recuperação excepcional. `bin/hook_stop_fila1.py:1119`. |
-   | `_disjuntor_contido('b4')` | Entrega primeira linha para `b4_stop`; COTA deve ocupar essa posição. `bin/hook_stop_fila1.py:1138`; `bin/disjuntor.py:1290`. |
-   | B3 `_topo_consistente` → `linhas_libera_b3` | Fotografa duas primeiras úteis e busca DESENHO/ERRO-BOBO nelas. `bin/disjuntor.py:759`; `bin/disjuntor.py:1003`. |
-   | Handoff, prova censo | Consulta primeira linha pelo Stop; compartilha reconhecimento, não o inventário textual abaixo. `bin/handoff_sessao.sh:128`. |
-   | Handoff, inventário textual | Varre bloco inteiro até primeiro `## `, coleta PAREI/lei/!, exibe quatro primeiros. Pode exibir parada que Stop não considera vigente. `bin/handoff_sessao.sh:102`; `bin/handoff_sessao.sh:109`; `bin/handoff_sessao.sh:111`. |
-   | Alarme `_tem_parei` | Varre primeiras quarenta linhas físicas, aceita qualquer PAREI genérico e exige prova apenas do censo. Pode aceitar parada antiga deslocada abaixo do painel vigente. `bin/alarme_sessao_ociosa.py:124`; `bin/alarme_sessao_ociosa.py:134`; `bin/alarme_sessao_ociosa.py:137`; `bin/alarme_sessao_ociosa.py:140`. |
-   | Confirmação do escritor censo | Relê `_bloco_do_topo(...)[0]` e compara a linha recém-publicada; isso prova localização, não compatibilidade com painel/B3 deslocados. `bin/disjuntor.py:301`; `bin/disjuntor.py:302`. |
-
-3. **OBSERVACAO — escritores e travas.** Censo chama a porta nova (`bin/disjuntor.py:299`); alarmes do disjuntor usam `no_relato` (`bin/disjuntor.py:269`). Ambas delegam à mesma trava de diretório e gravação por temporário/replace (`app/core/esteira_vigia.py:842`; `app/core/esteira_vigia.py:891`; `app/core/esteira_vigia.py:853`; `app/core/esteira_vigia.py:921`; `app/core/esteira_vigia.py:926`). O vigia escreve alarmes por `no_relato`, em ALARMES, sem julgar painel linha 1/2 (`app/core/esteira_vigia.py:898`; `app/core/esteira_vigia.py:1603`). `vigia_arvore.sh` também delega à porta (`bin/vigia_arvore.sh:166`; `bin/vigia_arvore.sh:170`).
-
-   O Stop atual não escreve PAREI: seu comentário preserva a remoção desse comportamento (`bin/hook_stop_fila1.py:1379`; `bin/hook_stop_fila1.py:1387`). Escrita manual efetiva do painel nesta produção: **[nao verificado]**.
-
-4. **PROCEDENTE-candidato — segundo escritor fora da trava continua existente e pode restaurar fotografia antiga do topo.** `gerar_cortes.escrever` lê RELATO inteiro e depois regrava inteiro diretamente (`bin/gerar_cortes.py:117`; `bin/gerar_cortes.py:136`). `deploy_agendado.relato` faz o mesmo (`bin/deploy_agendado.sh:37`; `bin/deploy_agendado.sh:44`). Nenhum desses trechos toma a trava da porta; um intercalamento leitura antiga → censo publica PAREI → regravação antiga perde o PAREI novo, embora o escritor estivesse alterando outra seção (`app/core/esteira_vigia.py:850`; `app/core/esteira_vigia.py:853`). Ocorrência produtiva: **[nao verificado]**. Residual já declarado no próprio contrato de `no_relato`: `app/core/esteira_vigia.py:839`.
-
-5. **PROCEDENTE-candidato — selo de topo prova inserção, mas não o contrato compartilhado das posições.** Os cenários de `casos_topo` começam com painel neutro, exigem censo em primeiro e painel neutro em segundo (`bin/tests/test_censo_antes_da_vaga.sh:299`; `bin/tests/test_censo_antes_da_vaga.sh:307`; `bin/tests/test_censo_antes_da_vaga.sh:309`). Não há ali ESPERANDO/PAREI útil anterior combinado com linha B3; o teste, portanto, aceita precisamente o deslocamento que esconde o B3 do leitor limitado a duas linhas (`bin/tests/test_censo_antes_da_vaga.sh:297`; `bin/tests/test_censo_antes_da_vaga.sh:328`; `bin/hook_stop_fila1.py:442`). Execução integral dos selos: **[nao verificado]**.
-
-6. **OBSERVACAO — P1/P2 têm cura real local, mas não encerram o defeito de integração do topo.** A idempotência compara o painel vigente sob a trava; histórico inferior não impede republicação (`app/core/esteira_vigia.py:882`; `app/core/esteira_vigia.py:883`; `app/core/esteira_vigia.py:891`). A posição publicada é verificada pelo leitor do Stop (`bin/disjuntor.py:301`). Entretanto, recortes paralelos de Stop/B3, handoff e alarme continuam atribuindo vigência a posições diferentes (`bin/hook_stop_fila1.py:411`; `bin/hook_stop_fila1.py:442`; `bin/handoff_sessao.sh:102`; `bin/alarme_sessao_ociosa.py:124`). Classes presentes: **derivação paralela**, **segundo escritor fora da porta** e **selo sem mordida sobre a interação painel/B3**, nas referências dos achados 1, 2, 4 e 5.
-
-## 09/11 03:50 · sessao 3bc64869901f · PAR-NAO-ADJACENTE · verificador · origem=Code
-
-1. **Sim, `_n += 0` está morto pelos dois testes novos.** A asserção direta exige `('par', 1, 'S')` no índice 4 e `('par', 1, 'E')` no índice 6; o mutante devolve número zero. A asserção do alinhador também falha: exige `{0:0, 1:1, 2:3, 3:4, 4:6, 5:7}`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:140`; `app/escala/utils.py:471`.
-
-2. **Sim, o pareador real produz os dois pares com essa alimentação.** O helper cria as batidas, monta o mapa por instante local truncado no minuto e chama `parear_turnos`, sem mock dessas funções. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:57`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:116`.
-
-   O rastreio é:
-
-   - **08h abre; 18h fecha.** A entrada está a 120 minutos do marco de intervalo mais próximo, fora da absorção de 90 minutos; a saída também está fora. Seguem pelos ramos normais de abertura e fechamento. `app/ponto/turnos.py:1356`; `app/ponto/turnos.py:1402`; `app/ponto/turnos.py:1491`.
-   - **As seis batidas internas permanecem no turno.** `X` e `Xi` recebem `_intra_dur` e `_intra_ata`; somente `Xi` recebe `_intra_declarado`. O ramo `_iv` acrescenta essas batidas e continua, sem abrir ou fechar turno pelo tipo gravado. `app/ponto/turnos.py:1310`; `app/ponto/turnos.py:1316`; `app/ponto/turnos.py:1324`; `app/ponto/turnos.py:1371`.
-   - **`_pares_marcados` encontra declaradas `[10h, 11h, 14h, 15h]`**, nessa ordem, e casa posições alternadas: `10→11` e `14→15`. Essa passagem não exige tipos gravados `S→E`. Marca as quatro pontas como usadas; depois, cada adjacência restante toca uma dessas pontas e é ignorada. `app/ponto/turnos.py:811`; `app/ponto/turnos.py:812`; `app/ponto/turnos.py:820`.
-   - **Ambos entram em `intervalos_do_turno`:** duram 60 minutos, acima do piso de 15. Na transcrição, cada par atravessa somente uma `X`, sem ponta de outro par; recebe respectivamente números 0 e 1. `app/ponto/turnos.py:499`; `app/ponto/turnos.py:545`; `app/escala/utils.py:456`; `app/escala/utils.py:467`; `app/escala/utils.py:471`.
-
-   **O oráculo confere com a regra implementada para o mapa fornecido:** o segundo par é declarado nos instantes 14–15h, embora os marcos de intervalo passados ao pareador sejam 10–11h. O carimbo `Xi` precede a inferência por proximidade do marco. O alinhador recebe separadamente as duas pausas cadastrais e verifica o encaixe completo. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:122`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:137`; `app/ponto/turnos.py:1316`.
-
-   Esses testes **fornecem o mapa manualmente**; sua produção pelo leitor real de uma ata persistida, para esse arranjo: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:62`.
-
-3. **Sobra um sobrevivente simples: `_n += 1` → `_n = 1`.** Todos os testes de `ParNaoAdjacente` continuam passando: nenhum exige um terceiro par aceito. Com dois pares, ambos os algoritmos emitem `0,1`; com três, o original emite `0,1,2`, enquanto o mutante emite `0,1,1`. Portanto, a lacuna diminuiu, mas permanece na numeração do terceiro par. `app/escala/utils.py:459`; `app/escala/utils.py:469`; `app/escala/utils.py:471`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:89`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:125`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:171`.
-
-   No ensaio reduzido em memória dos **13 corpos das duas classes sem banco**, com funções reais extraídas e infraestrutura Django/timezone substituída: original **13/13**, `_n += 0` **11/13**, `_n = 1` **13/13**, tanto em ordem normal quanto inversa. As duas falhas foram exatamente nas asserções acima. Execução integral Django: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:50`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:140`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:182`.
-
-4. **Nos dois testes do delta v3:** data fixa; objetos novos por chamada; sem nome/CPF; sem leitura do relógio corrente ou estado compartilhado entre testes no caminho examinado. A ordem cronológica das batidas compõe a geometria do caso; não exige executar um teste antes do outro. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:43`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:59`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:125`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:132`; `app/ponto/turnos.py:1217`.
-
-   **No diff total, permanece a ressalva da integração:** `ParNaoAdjacenteNaAta` herda uma fixture que cria nome e CPF; a criação da escala alcança `localdate()` por signal, e as batidas alcançam cartório com relógio corrente. Influência efetiva disso nas asserções: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:250`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:305`; `app/ponto/signals.py:63`; `app/ponto/signals.py:93`; `app/ponto/signals.py:135`; `app/ponto/services/cartorio.py:1965`; `app/ponto/services/cartorio.py:1989`.
-
-## 09/11 03:49 · sessao 7ccf7d4cd575 · - · - · origem=Ronald (tmux)
-
-Ensaio reduzido executado em memória, sem Django/banco e sem escrever arquivos: funções reais extraídas da cópia, timezone substituído por `ZoneInfo('America/Sao_Paulo')` e classes adaptadas a `unittest.TestCase`; execução integral Django: [nao verificado]. `app/ponto/turnos.py:1192`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:50`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:182`.
-
-| Variante | Ordem normal | Ordem inversa |
-|---|---:|---:|
-| Original | 13/13 | 13/13 |
-| `_n += 0` | 11/13 | 11/13 |
-| `_n = 1` | 13/13 | 13/13 |
-
-Os 13 corpos são os oito testes de `ParNaoAdjacente` e cinco de `PapeisDoTurnoLimites`; as alterações foram aplicadas somente à string compilada em memória. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:89`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:171`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:199`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:230`; `app/escala/utils.py:471`.
-
-`_n += 0` falha exatamente nas asserções das linhas **128** e **140**. A primeira encontra o segundo par com número `0`; a segunda recebe `{0:0, 1:2, 3:4, 4:6, 5:7}`, pois a solta `10:20` ocupa o marco `10:00` após a colisão dos números. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:140`; `app/escala/utils.py:530`; `app/escala/utils.py:565`.
-
-O sobrevivente `_n = 1` permanece confirmado: nenhum corpo exige um terceiro par aceito; nesse terceiro par ele repetiria `1`, enquanto o original emitiria `2`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:116`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:129`; `app/escala/utils.py:469`; `app/escala/utils.py:471`.
-
-_3032 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3036 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
