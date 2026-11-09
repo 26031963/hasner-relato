@@ -1,7 +1,131 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 01:04** · publicado em **09/11/2026 01:09** (UTC-3)
+> Ultima resposta processada: **09/11/2026 01:10** · publicado em **09/11/2026 01:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 01:10 · sessao 62a6fe9645f5 · E1-FILA-V2-2-TRAVA · censo · origem=Code
+
+**O conjunto inicial não cobre todo o alcance possível do ato.** Há caminhos para travar/escrever chamados terminais que não eram órfãos nem destinos previamente coletados, e para alcançar perguntas por relações sem filtro de colaborador. Isso é demonstrável no código; ocorrência concreta, quantidade e colaboradores afetados em produção: **[nao verificado]**. (`chamados/reconciliador.py:910–954`, `:1582–1644`; `ponto/services/cluster_espurio.py:127–147`; `chamados/services/disputa_emissao.py:1747–1751`)
+
+As referências abaixo são relativas a `app/`. O anexo manda consultar o código vivo quando houver divergência. (`docs/JUIZES.md:14`)
+
+**1. Escritores e travas depois de `_trava_do_repasse`**
+
+Chamando o colaborador do ato de `c` e os órfãos recebidos de `O`, o conjunto efetivamente travado hoje é:
+
+| Classe | Predicado inicial |
+|---|---|
+| Colaborador | Somente `pk=c`. (`chamados/services/disputa_emissao.py:954`, `:958`) |
+| Pergunta | `colaborador_id=c OR chamado_destino_id IN O`, sem restrição de dia, disputa ou materialização. (`chamados/services/disputa_emissao.py:956–959`) |
+| Disputa | Disputas dessas perguntas, abertas ou fechadas, mais todas as abertas de `c`. (`chamados/services/disputa_emissao.py:958`; `chamados/models.py:2679–2684`) |
+| Chamado | `O`, destinos dessas perguntas, todos os vivos de `c` e pais das disputas travadas **que estejam abertas**. Uma disputa fechada explicitada não acrescenta automaticamente seu pai. (`chamados/services/disputa_emissao.py:959`; `chamados/models.py:2685–2696`) |
+
+A autoridade ordena cada tabela por PK, mas não verifica se os IDs recebidos pertencem ao colaborador informado. (`chamados/models.py:2674`, `:2683`, `:2696`, `:2700–2701`)
+
+O censo do corpo e das cascatas síncronas é:
+
+| Linha/modelo alcançado | Cadeia e operação | Está no conjunto inicial? |
+|---|---|---|
+| **Disputa da pergunta já costurada ao órfão** | Busca por destino → complementa perguntas → grava `motivos`. (`chamados/services/disputa_emissao.py:1002–1016`) | A disputa encontrada entra pela mesma relação de destino usada no topo. Seu colaborador não é acrescentado por isso. (`chamados/services/disputa_emissao.py:956–959`) |
+| **Disputa aberta de `c`** | Busca aberta → grava motivos; também pode gravar contexto na cauda de entradas pendentes. (`chamados/services/disputa_emissao.py:1028–1030`, `:1063–1064`, `:1186–1202`, `:293–296`) | Sim, se preexistente e aberta no topo. (`chamados/models.py:2681–2684`) |
+| **Disputa nova e chamado-pai novo/reutilizado** | `Chamado.abrir` → eventual nota/fusão de contexto → `Disputa.objects.create`. (`chamados/services/disputa_emissao.py:1036–1060`) | Pai reutilizado vivo de `c`: sim. Linhas novas ainda não existiam para serem travadas. (`chamados/models.py:2691`, `:971`; `chamados/services/disputa_emissao.py:1055`) |
+| **Órfãos recebidos** | `analisar()` nos ramos complemento, intervalo, ata, episódio e fallback → `_gravar_estado` → `save`. (`chamados/services/disputa_emissao.py:1017`, `:1091`, `:1110`, `:1155`, `:1184`; `chamados/models.py:800–806`, `:290–296`) | Seus IDs estão explicitados no topo. (`chamados/services/disputa_emissao.py:955`, `:959`) |
+| **Pergunta nova ou canônica reutilizada** | `_criar_pergunta_se_couber`/`gerar_perguntas_disputa` → `Pergunta.abrir` → `_nascer`; insere nova ou grava célula, destino e lavra da existente. (`chamados/services/disputa_emissao.py:834–843`, `:439–452`; `chamados/models.py:2985–3019`) | Existente com coluna `colaborador_id=c`: sim. Nascimento com disputa de outro dono pode tomar outro Colaborador depois do topo. (`chamados/services/disputa_emissao.py:956`; `chamados/models.py:2853`) |
+| **Pergunta reutilizada com dia incorreto; sua disputa e destinos** | `_nascer` → trava C/D/Ch/P → `rechavear_no_reuso` → `rechavear_data_evento` → grava dia/célula/lavra; acorda célula antiga. (`chamados/models.py:2948–2965`; `chamados/services/fio.py:1001–1003`, `:1033–1039`) | Cobertos quando a pergunta entrou no topo: este já inclui sua disputa e destino atual; o destino pedido é órfão/vivo. Isso não cobre automaticamente donos divergentes. (`chamados/services/disputa_emissao.py:956–959`) |
+| **Pergunta órfã criada pela cauda** | `perguntar_entradas_pendentes` → `gerar_perguntas_disputa` → `reatar_pergunta_orfa`. (`chamados/services/disputa_emissao.py:294`, `:459–464`, `:1202`) | A pergunta é nova; os chamados que o reatamento descobrir não estão necessariamente no topo. (`chamados/reconciliador.py:1582–1585`, `:910–921`) |
+| **Destino vivo derivado; pergunta reapontada** | Derivador busca vivos do dono da disputa → `reapontar_resolvedora` → trava C/Ch, eventualmente D/P da colisão → grava pergunta. (`chamados/services/disputa_emissao.py:198–201`; `chamados/reconciliador.py:1552–1553`; `chamados/services/fio.py:889–925`) | Vivo de `c`: sim. Se o dono da disputa divergir de `c`, a cobertura não decorre do topo. (`chamados/models.py:2691`; `chamados/services/disputa_emissao.py:958`) |
+| **Destino histórico encerrado** | Reatamento busca histórico → costura no histórico único → chama resolver. A costura trava o chamado mesmo sem alterar seu status. (`chamados/reconciliador.py:1582–1585`, `:1638–1644`; `chamados/services/fio.py:768`) | **Não necessariamente:** pode não ser órfão, vivo, pai aberto nem destino anterior de pergunta coletada. (`chamados/services/disputa_emissao.py:956–959`; `chamados/models.py:2687–2691`) |
+| **Chamado do dia renascido pelo c2** | Reatamento sem histórico → c1 ou c2 → `abrir(colaborador, módulo, data)` sem status → renascimento → costura. (`chamados/reconciliador.py:1615–1618`, `:910–954`; `chamados/models.py:906`, `:921–923`) | **Não necessariamente**, pela mesma ausência dos terminais independentes no predicado inicial. (`chamados/models.py:2687–2691`) |
+| **Disputa fechada pelo próprio agrupador/c1** | `pode_fechar` → `fechar` → trava universo C/D/Ch → grava fechamento. (`chamados/services/disputa_emissao.py:1210–1219`; `chamados/reconciliador.py:405–413`; `chamados/models.py:1918–1920`, `:1940–1944`) | Disputa aberta preexistente de `c`: sim; disputas novas não existiam no topo. Pais/relações de outro dono exigem análise relacional adicional. (`chamados/models.py:2681–2687`) |
+| **Pai pelo S88** | `post_save(Disputa)` → busca pai só por PK → `reconciliar` → nota. O gate pode travar novamente C, abertas e chamados. (`chamados/signals.py:18–45`; `chamados/models.py:711`) | Pai de disputa aberta no topo: sim. FK para outro dono ou disputa que só abriu posteriormente: cobertura não garantida. (`chamados/models.py:2685–2691`) |
+| **Perguntas pelo S143/S128** | Chamado encerrado → resolver → busca por destino → carimba P → pode reabrir pai, carimbar irmãs e fechar disputas. (`chamados/signals.py:90–115`; `chamados/services/disputa_emissao.py:1721`, `:1747–1751`, `:1787`, `:1804–1814`, `:1827–1888`) | P de `c`: sim. P estrangeira ligada a chamado alcançado fora de `O`, suas irmãs e sua disputa: **não necessariamente**. (`chamados/services/disputa_emissao.py:956`, `:1747–1751`, `:1836–1861`) |
+| **Perguntas pelo S144** | `post_save(Disputa fechada)` → todas as pendentes daquela disputa → `carimbar` → `save`. Esse receiver não planta batida. (`chamados/signals.py:147–163`; `chamados/services/materializacao.py:1408–1431`; `chamados/models.py:3152`) | Sim para as P coletadas pelo topo; não há filtro pela coluna colaborador na consulta do S144. (`chamados/services/materializacao.py:1418–1419`) |
+| **Perguntas relavradas pela mudança de estado** | `_gravar_estado`, cruzando a fronteira de `ENCERRADOS`, busca P por destino sem dono → `lavrar` → salva lavra. (`chamados/models.py:273`, `:303–312`; `chamados/veredito_lavrado.py:234–255`) | P de `c`: sim. P estrangeira em chamado alcançado fora de `O`: **não necessariamente**. (`chamados/services/disputa_emissao.py:956–959`) |
+| **Urgência do próprio chamado** | `post_save(Chamado encerrado)` → `_rebaixar_sem_post_save`. (`chamados/signals.py:53–72`) | A cobertura é a do próprio chamado; não amplia por si só o conjunto de chamados. (`chamados/signals.py:72`) |
+
+O cartório amplia o alcance acima:
+
+| Caminho do cartório | Escrita/trava e cobertura |
+|---|---|
+| **Entrada síncrona** | Nascimento/mudança de status → `julgar_celula(colaborador, dia)` → julgamento da célula. (`chamados/signals.py:187–203`; `ponto/services/cartorio.py:1976–1991`) |
+| **E2, colaborador inteiro** | Busca P por `disputa__colaborador`, inclusive disputas fechadas → carimba → eventualmente fecha disputa. Se a coluna P.colaborador divergir da disputa, o topo pode não ter coletado a P. (`ponto/services/cartorio.py:958–963`; `chamados/reconciliador.py:593–614`, `:627–641`; `chamados/services/disputa_emissao.py:956`) |
+| **Fecho e reatamento dos vivos** | Reconcilia chamados vivos, podendo passar novamente por S143 e pela costura anterior ao fechamento. Vivos de `c` estão no topo; suas perguntas estrangeiras não são coletadas automaticamente. (`ponto/services/cartorio.py:1488`, `:1501`, `:1522`; `chamados/models.py:435–437`, `:2691`) |
+| **Ressuscitação de perguntas** | Chamado → relação reversa `perguntas_que_resolvem`, sem dono → trava suas D/P → registra decisões antigas → descarimba em lote → reabre disputas fechadas. A guarda do lote pode recusar dono não travado; ela não demonstra cobertura do conjunto inicial. (`chamados/models.py:1483–1489`, `:1550–1572`, `:3258–3266`) |
+| **Pai de disputa reaberta** | Depois da ressuscitação, uma nova chamada com `abertas_do_colaborador=True` passa a incluir o pai dessa disputa, mesmo terminal. Ele podia faltar no topo quando a disputa estava fechada. (`chamados/models.py:1571–1572`, `:2685–2687`; `chamados/services/disputa_emissao.py:530`) |
+| **Fábrica após lavra** | Desfaz carimbos, trava C/D/P, cria/agrega disputa e gera perguntas. No julgamento, o primeiro descarimbo usa `reabrir_fechada=False`; o helper `perguntar` também chama o descarimbador por motivo. (`ponto/services/cartorio.py:985–997`; `chamados/services/fabrica_da_celula.py:145–151`, `:174–186`; `chamados/services/relavra_via.py:230–246`) |
+| **Emissor do chamado do dia** | `abrir` por colaborador/módulo/data **sem filtro de status**; pode renascer terminal não coletado e depois atualizar seus marcos/contexto. (`ponto/services/cartorio.py:1740–1742`, `:1778–1789`; `ponto/management/commands/detectar_ausencias.py:693–713`, `:743–744`) |
+| **Cluster de outros dias** | Julgamento → cluster → janela de 14 dias → `abrir` sem status; fecha vivos ou tenta renascer encerrados daquelas chaves. Terminais independentes das relações iniciais faltam no topo. (`ponto/services/cartorio.py:990–994`; `ponto/services/cluster_espurio.py:12`, `:40–49`, `:123–147`) |
+| **Limbo** | Emissor → `agrupar_furo` → trava C/D abertas/Ch furo+pai → contexto, reapontamento, reconciliação e nota. (`ponto/management/commands/detectar_ausencias.py:760–761`; `chamados/services/limbo_folgas.py:274–292`) |
+
+Há ainda escritas em modelos fora das quatro tabelas da autoridade:
+
+| Modelo | Onde é escrito; cobertura pelo topo |
+|---|---|
+| `CelulaDia` | Lavra/carimbo/precedência do cartório → `save`; **não está no topo**. (`ponto/services/cartorio.py:1802`, `:1822`, `:1997`; `ponto/portas/celula.py:900`, `:1067`, `:1082`) |
+| `EventoCelula` | INSERT pelo save da célula, nascimento de chamado e mudanças de pergunta; **não está no topo**. Emitir o evento não equivale a consumir o reconciliador naquela chamada. (`ponto/portas/celula.py:882–902`; `chamados/signals.py:237–244`; `chamados/models.py:3239–3248`) |
+| `DecisaoPergunta` | Ressuscitação preserva a projeção anterior antes do descarimbo; **não está no topo**. (`chamados/models.py:1563–1565`) |
+| `FollowupChamado` | Notas de agrupamento, renascimento, fechamento e reabertura → INSERT. Só há escrita do Chamado pela nota quando existe `contexto_novo`. (`chamados/services/nota.py:102–123`) |
+| `LogAuditoria` | Eventos/trilhas convergem ao INSERT; **não está no topo**. (`core/observ.py:134–137`) |
+| `User` sistema | `get_user_sistema` pode inserir por `get_or_create`; **não está no topo**. (`core/utils.py:18`) |
+| `Pauta` e `ContadorPauta` | Limbo exportado → pauta → contador departamental, com criação/UPDATE; **não estão no topo**. (`chamados/services/fabrica_da_celula.py:181–182`, `:245–251`; `pautas/services.py:180–188`, `:352–357`) |
+| `PushSubscription` | Push pode apagar inscrição expirada; **não está no topo**. (`chamados/push_utils.py:24`, `:49–51`) |
+| `Colaborador`, campos FCM | Push pode limpar token em lote, inclusive de outro colaborador; cobertura não garantida. (`chamados/fcm_utils.py:41`, `:89–94`; `colaboradores/fcm.py:60–62`; `colaboradores/services/colaborador.py:88`) |
+
+Os callbacks precisam de uma fronteira separada: são agendados por `on_commit`, portanto as travas da transação original não protegem suas transações posteriores. (`chamados/signals.py:144`, `:225`, `:293`, `:356`)
+
+| Callback | Alcance posterior |
+|---|---|
+| **Beco da pergunta** | Reabre uma transação, trava universo D/Ch, resolve destinos terminais e fecha D. (`chamados/signals.py:214–225`; `chamados/services/becos.py:41–57`, `:72–78`) |
+| **Isento** | Percorre todos os vivos do colaborador e escreve o véu de silêncio, com trava/save por chamado. (`chamados/signals.py:269–293`; `chamados/services/silencio_isentos.py:24–31`, `:41–58`; `chamados/services/arquivo.py:170–173`) |
+| **Filho morto** | Chama o reconciliador completo: E2, reatamento e retratação dos vivos. A retratação também pode rejeitar a `Justificativa` relacionada. (`chamados/signals.py:337–356`; `chamados/reconciliador.py:1428–1437`, `:1449–1460`, `:529–540`) |
+| **Regularizações confirmadas** | Pode gravar `RegularizacaoItemBatida`/`RegularizacaoExterna`, criar/corrigir/apagar Batida e encerrar seu chamado. Batida dispara novamente núcleo, cartório e reconciliador. (`chamados/signals.py:129–144`; `chamados/services/regularizacao_ext.py:127–205`, `:218–224`; `ponto/signals.py:26–50`, `:135–140`, `:215`) |
+| **Derivações da Batida retomada** | Reconstrói `TurnoMaterializado`, emite eventos e agenda recalcular fechamento; este grava `FechamentoMensal` e substitui `DiaPago`. Outros efeitos internos da derivação financeira: **[nao verificado]**. (`ponto/nucleo.py:59–93`; `ponto/services/fechamento.py:898`, `:1144`, `:1160`, `:1191–1201`, `:1810–1824`; `ponto/services/dia_pago.py:359–360`) |
+
+**2. Dono: pode alcançar outro colaborador?**
+
+**Sim, condicionalmente às relações e argumentos existentes.** Os caminhos abaixo não permitem concluir que isso ocorreu em produção: **[nao verificado]**.
+
+| Acesso sem filtro suficiente de dono | Consequência possível |
+|---|---|
+| Complemento: `filter(chamado_destino=ch, materializada_em__isnull=True)` | Obtém a disputa pela pergunta encontrada, sem exigir que seja de `c`. O topo inclui essa D/P, mas não seu Colaborador. (`chamados/services/disputa_emissao.py:1002–1016`, `:956–959`) |
+| S143: `filter(chamado_destino=chamado, …)` | Pode carimbar P estrangeira, alcançar sua disputa, irmãs e pai. (`chamados/services/disputa_emissao.py:1747–1751`, `:1787`, `:1804–1814`, `:1827–1861`) |
+| Relavra: `filter(chamado_destino_id=self.pk, validada_em__isnull=True)` | Pode salvar lavra de P estrangeira ao mudar o status do chamado. (`chamados/models.py:309–312`; `chamados/veredito_lavrado.py:255`) |
+| Ressuscitação: `self.perguntas_que_resolvem` | Pode alcançar D/P de outro dono. O lote tem guarda de colaboradores travados e pode recusar; não há filtro de proprietário na seleção reversa. (`chamados/models.py:1483–1489`, `:1550–1565`, `:3258–3260`) |
+| S88: `filter(pk=instance.chamado_id)` | Pode entrar no gate do pai de outro colaborador se a FK estiver assim. (`chamados/signals.py:32–42`) |
+| FCM: `Colaborador.objects.filter(fcm_token=fcm_token)` | Pode atualizar outros colaboradores com o mesmo token, sem filtro por `c`. (`chamados/fcm_utils.py:41`; `colaboradores/fcm.py:55–62`) |
+| Regularização pós-commit: `item.batida_alvo` | A operação usa a Batida relacionada sem conferir ali o colaborador; uma relação cruzada pode disparar cascatas do outro dono. (`chamados/services/regularizacao_ext.py:127–155`) |
+
+As portas atuais recusam **nova costura** para destino de outro dono, mas isso não valida universalmente relações já gravadas nem os argumentos da porta externa. (`chamados/models.py:2848`; `chamados/services/fio.py:863–865`, `:1575–1579`)
+
+O próprio nascimento de P verifica igualdade entre sua coluna colaborador e a disputa; essa verificação só roda quando `_state.adding`. Integridade de todo o acervo existente: **[nao verificado]**. (`chamados/models.py:3420–3423`, `:3430–3435`)
+
+**3. Chamado terminal pode voltar a ser escrito? Entra hoje?**
+
+**Sim, especialmente `resolvido`/`fechado`.** Estes são `ENCERRADOS`; `cancelado`/`superado` também são terminais, mas o renascimento não os reabre. (`chamados/catalogo/motor.py:24–32`; `chamados/models.py:991–993`, `:1019`)
+
+Há três cadeias independentes:
+
+- **Reatar histórico:** cauda do agrupador → geração → reatamento → busca histórico encerrado → costura → trava do chamado → resolver. Aqui ele pode apenas ser travado, sem renascer. (`chamados/services/disputa_emissao.py:1202`, `:294`, `:459–464`; `chamados/reconciliador.py:1582–1585`, `:1638–1644`; `chamados/services/fio.py:768`)
+- **Renascer chamado do dia:** reatamento → c2 → `abrir` sem filtro de status → `_renascer_por_premissa_viva` → `reabrir` → grava estado → ressuscita perguntas. (`chamados/reconciliador.py:1617`, `:910–921`; `chamados/models.py:921–923`, `:1019`, `:1442–1451`)
+- **Renascer pela cascata do cartório:** mudança de status → cartório → emissor do dia ou cluster de outros dias → `abrir` sem status → mesmo renascimento. (`chamados/signals.py:203`; `ponto/services/cartorio.py:990–994`, `:1778–1780`; `ponto/management/commands/detectar_ausencias.py:693–713`; `ponto/services/cluster_espurio.py:130–147`)
+
+**Ele só entra hoje se coincidir com alguma relação inicial:** órfão explícito, destino coletado ou pai de disputa aberta travada. O ramo “todos do colaborador” inclui somente `VIVOS`; não cobre todos os terminais dessas chaves. (`chamados/services/disputa_emissao.py:955–959`; `chamados/models.py:2685–2696`)
+
+O filtro direto da fábrica que rejeita `ENCERRADOS` não elimina esses caminhos indiretos. (`chamados/services/disputa_emissao.py:755–756`; `chamados/reconciliador.py:910–921`)
+
+**4. Fecho mínimo e computabilidade**
+
+Para as **linhas preexistentes das quatro entidades**, o mínimo precisa ser um **fecho relacional dos caminhos efetivamente alcançáveis**, não apenas “abertas/vivos de `c`”. As relações necessárias são:
+
+1. Colaboradores donos de cada Chamado, Disputa e Pergunta alcançada — considerando tanto a coluna da P quanto sua disputa, sem presumir igualdade no legado. (`chamados/models.py:2853`; `chamados/services/fio.py:889`, `:1001`; `chamados/reconciliador.py:628`)
+2. Disputas das perguntas alcançadas e abertas dos colaboradores cujo universo for solicitado; também as fechadas que a ressuscitação pode reabrir. (`chamados/models.py:1562–1572`, `:2681–2684`)
+3. Chamados recebidos, destinos, pais das disputas alcançadas **inclusive as inicialmente fechadas que podem abrir**, vivos dos universos solicitados e candidatos históricos/terminais dos lookups do reatamento, emissor e cluster. (`chamados/models.py:2685–2691`; `chamados/reconciliador.py:1582–1585`, `:910–921`; `ponto/services/cluster_espurio.py:130–147`)
+4. Perguntas alcançadas por coluna colaborador, por dono da disputa, por destino reverso, por âncora no pai sem destino e por irmandade dentro de disputa; repetir as relações enquanto surgirem novos membros. (`chamados/services/disputa_emissao.py:956`, `:1747–1751`, `:1836`; `chamados/reconciliador.py:628`; `chamados/models.py:345`, `:1483–1489`)
+5. Se a notificação fizer parte do ato, colaboradores selecionáveis pela mesma chave FCM, além dos modelos auxiliares efetivamente escritos. (`chamados/fcm_utils.py:41`; `colaboradores/fcm.py:60–62`)
+
+Esse é o predicado de **menor fecho por a
+
+[truncado em 20000 de 33469 caracteres]
 
 ## 09/11 01:04 · sessao 35a2cddeaac6 · DISPARAR-PERGUNTAS-NO-CONTRATO-20 · censo · origem=Code
 
@@ -940,29 +1064,4 @@ Evidências e exclusões:
 
 Rodei o censo AST puro em memória, sem Django nem gravação de arquivo. Ele confirma os sítios acima, mas não fornece prova formal de ausência: o próprio censo admite operações não atribuíveis e inferências (`app/core/censo_escritas.py:38`, `app/core/censo_escritas.py:43`, `app/core/censo_escritas.py:49`).
 
-## 09/11 00:17 · sessao 579d17b8fa80 · - · - · origem=Ronald (tmux)
-
-Análise estática; execução e sobrevivência dinâmica dos mutantes: [nao verificado].
-
-- **Curas efetivas:** a segunda leitura ocorre também no ramo com recusa; o helper exige exatamente duas chamadas após capturar a exceção (`app/chamados/tests/test_e1_fila.py:474`, `app/chamados/tests/test_e1_fila.py:489`, `app/chamados/tests/test_e1_fila.py:491`).
-- **None:** retirar `- {None}` de `fio.py:2093` volta a recusar a troca Disputa→None e é detectado pelo teste novo (`app/chamados/tests/test_e1_fila.py:526`).
-- **XOR:** substituir a diferença por diferença simétrica recusa o conjunto vazio e é detectado (`app/chamados/tests/test_e1_fila.py:521`; cálculo em `app/chamados/services/fio.py:2092`).
-- **Cardinalidade da Disputa:** comparar somente tamanhos perde a substituição mantendo uma linha; o novo caso altera a disputa da pergunta existente e exige recusa (`app/chamados/tests/test_e1_fila.py:509`, `app/chamados/tests/test_e1_fila.py:517`).
-- **Migração efetiva:** agora exige simultaneamente `migradas=[p.pk]`, demais saídas vazias e FK gravado no destino; remover o laço deixa o FK antigo e a lista vazia (`app/chamados/tests/test_e1_fila.py:539`, `app/chamados/tests/test_e1_fila.py:551`, `app/chamados/tests/test_e1_fila.py:555`).
-- **MORDE:** recompila a função real com uma substituição cujo trecho deve aparecer exatamente uma vez; não usa uma função fictícia (`app/chamados/tests/test_e1_fila.py:48`; extração em `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:331`).
-
-Lacunas e mutantes sobreviventes por inspeção:
-
-1. **Mensagem parcialmente coberta.** A única exigência sobre seu conteúdo é a substring `disputas [1000000000]`; os casos exclusivos de Colaborador e Pergunta só exigem mensagem verdadeira. Trocar `sorted(_fora[0])` ou `sorted(_fora[1])` por `[]`, trocar os IDs velho/novo do prefixo, ou ordenar a disputa em ordem inversa conserva os asserts atuais (`app/chamados/tests/test_e1_fila.py:494`, `app/chamados/tests/test_e1_fila.py:507`, `app/chamados/tests/test_e1_fila.py:519`; mensagem em `app/chamados/services/fio.py:2096`).
-
-2. **Mensagem com conjunto maior também escapa.** Substituir o último argumento por `sorted({x.disputa_id for x in _sob} - {None})` imprime todas as disputas presentes, inclusive as já travadas. No único teste que verifica texto, a única disputa foi substituída, portanto o conjunto maior coincide com o esperado; o caso de acréscimo não examina texto (`app/chamados/tests/test_e1_fila.py:502`, `app/chamados/tests/test_e1_fila.py:509`, `app/chamados/tests/test_e1_fila.py:519`; argumento em `app/chamados/services/fio.py:2098`).
-
-3. **Cardinalidade de Pergunta continua sem substituição equivalente.** Trocar a condição `_fora[1]` por `len({x.pk for x in _sob}) > len({x.pk for x in _ps})` conserva os casos presentes: eles acrescentam PK ou esvaziam o conjunto; a troca conservando cardinalidade cobre somente Disputa (`app/chamados/tests/test_e1_fila.py:498`, `app/chamados/tests/test_e1_fila.py:509`, `app/chamados/tests/test_e1_fila.py:523`; guarda em `app/chamados/services/fio.py:2094`).
-
-4. **Colaborador requer cuidado.** O mutante `len(C_sob)>len(_cs)` é detectado: `_cs` já contém os dois donos, e acrescentar o colaborador sintético faz 2 contra 2. Já comparar cardinalidades dos colaboradores das duas leituras de Pergunta, `len(C_sob)>len(C_ps)`, conserva os casos atuais porque não existe substituição exclusiva de colaborador mantendo cardinalidade (`app/chamados/tests/test_e1_fila.py:147`, `app/chamados/tests/test_e1_fila.py:500`; formação de `_cs` em `app/chamados/services/fio.py:2085`).
-
-5. **Precedência da conferência não é exigida.** Mover `_migrar_sob_trava` para imediatamente antes do `if _fora` conserva as verificações atuais: as corridas usam a pergunta de outro colaborador, recusada pela porta antes de gravar, e depois a exceção continua ocorrendo. O teste “nada migra” verifica apenas o destino final desse cenário já recusável; o cenário que efetivamente migra é exercitado sem corrida (`app/chamados/tests/test_e1_fila.py:147`, `app/chamados/tests/test_e1_fila.py:547`, `app/chamados/tests/test_e1_fila.py:563`; recusa anterior à escrita em `app/chamados/services/fio.py:863`; ordem atual em `app/chamados/services/fio.py:2094`).
-
-6. **Corrida simulada, sem escritor concorrente.** O helper modifica somente o retorno da segunda chamada; o laço consulta novamente o banco real. Portanto esses testes demonstram a condição de recusa, mas não demonstram concorrência real, aquisição das travas ou que o mesmo universo continue estável depois da conferência (`app/chamados/tests/test_e1_fila.py:474`, `app/chamados/tests/test_e1_fila.py:486`; releituras em `app/chamados/services/fio.py:2118`, `app/chamados/services/fio.py:2122`).
-
-_2961 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2962 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
