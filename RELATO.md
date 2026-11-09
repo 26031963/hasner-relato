@@ -1,6 +1,15 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: lancar_suite_v6.sh | pid=1464701
+SERIE-E-SO 16:0x (aval, substitui E-PRIMEIRO-NA-VAGA): so E2/E3/E4 abrem vaga ate E4 no ar; Codex 1 vaga. Lancador da matriz I-3 (pid 1865485, gated, Codex NAO chamado, matriz.out inexistente) encerrado + waiter. Congelamentos abaixo, BACKLOG intacto.
+❄ CODEX-2-RAIAS: copia wt-codex2raias-090624 e381017bf; matriz.r rc 0 + triagem_matriz.txt prontas; falta volta 3 (opus) contra E1-E25, selos, suite, preverif, opus final, pouso.
+❄ SELOS-CANON-I3: copia wt-selos-canon-i3-113049 4561d76e6; falta matriz (1a rodada parada por teto, 2a encerrada antes do Codex), volta 4, suite, preverif, opus final, pouso.
+❄ SONDA-SEM-GRANT: copia wt-sonda-sem-grant-075803 c5e7df309; falta volta 8 + preverif/opus/pouso; sondas de prod seguem congeladas (envelope escreve GRANT), frota so pela sombra.
+❄ BUG-PAR: copia wt-codex-bug-par-do-intervalo-em-dois-atos-144706 18171d661 (v2 9503746dd + hunks models.py da sessao), nada executado; falta rebase sobre main com E2+E3, RED/GREEN, mutantes M1-M50, suite, impacto na sombra, preverif, opus final, pouso. col960 so contido pela orientacao ao admin.
+❄ O10-D-PERMUTA-RECIPROCA: sem copia de construcao; censo_v2 + lei 12:0x prontos; falta construtor, selos RED 1-6, suite, preverif, opus, pouso.
+❄ RETRATO-POR-EVENTO: sem copia de construcao; censo_v1.r pronto; falta construtor Codex, suite, preverif, opus, pouso.
+❄ PECAS-APOSENTAVEIS-NO-ESTADO: nao comecada (era depois do pouso CODEX-2-RAIAS); falta a obra inteira.
+❄ AUDITORIA-0911 A-E: medida; falta A-E (prod congelada: so sombra).
 BUG-PAR 15:5x: construtor v2 rc 0 -> commit 9503746dd na copia (contraparte = outra pergunta OU marca ja batida da mesma pausa; sem_par so sem nenhuma; 13 testes, M41-M50; nada executado; entrega logs/BUG-PAR-O-PAR/entrega_v2.r). Sessao: hunks models.py (pode_fechar le obrigacoes_par_intervalo; fechar re-pergunta C7 depois da trava) -> 18171d661. Proximo: rebase sobre o main com E2+E3 DEPOIS do pouso, suite (aval E2-E3-POUSAM). I-3: matriz gated (load5<6), waiter bsr86gupu.
 E3 15:4x: avais E2-E3-POUSAM-ANTES-DO-BUG-PAR + E-PRIMEIRO-NA-VAGA. A copia 7c16da320 ja tem o main 3803e6623 (merge 77da997b4; main nao andou). Suite inteira v6 em curso (logs/fio_e3/v6_suite.log, trava pega 15:4x); preverif Codex v6 (papel verificador, diff total 3803e6623..7c16da320 + delta 77da997b4..7c16da320) no gate FIFO do wrapper, na frente da matriz I-3: pega a 1a vaga que soltar (logs/fio_e3/preverif_v6.r). Depois: opus final, comboio E2+E3, pouso, deploy; BUG-PAR rebase sobre o main novo antes da suite dele.
 CODEX-2-RAIAS/I3 15:5x: matriz CODEX-2-RAIAS rc 0 em 10 min (logs/CODEX-2-RAIAS/matriz.r: A1-A19, B1-B17, C1-C7, D1-D5, contrato E1-E25); triagem triagem_matriz.txt (P1-P4 confirmados, F5 sobe ao contrato E24). Volta 3 opus abre DEPOIS do opus final da E3 (E-PRIMEIRO-NA-VAGA). Matriz I-3 entrou como 3o Codex com load5 10 (fura teto 2 + E-PRIMEIRO): parada por mim (grupo do meu lancador), relancada por lancar_matriz_b.sh (pid 1865485) que espera o preverif E3 + load5<6.

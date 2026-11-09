@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 15:55:37.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (208.9 MB). Acoes na janela: **968**.
+**Medido em 09/11/2026 16:00:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (208.9 MB). Acoes na janela: **964**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:00:53 | TaskStop |  | `-` |
+| 16:00:52 | Bash |  | `cd /home/ronald/saas-hasner; kill -TERM -- -1865485; /usr/bin/sleep 2; ps -p 1865485 -o pid= \|\| echo morto; ls logs/SELOS-CANON-I3/matriz.out 2>&1 \| head -1` |
+| 16:00:49 | Bash |  | `cd /home/ronald/saas-hasner; date '+%H:%M'; ps -o pid,pgid,etime,cmd --ppid 1865485; ls -la logs/SELOS-CANON-I3/matriz.out 2>&1; pgrep -af codex_pergunta \| cut -c1-150; cat /proc/loadavg; tail -c 200 logs/fio_e3/v6_suite.log` |
 | 15:50:22 | Bash |  | `W=/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706; cd $W && git diff 1947268f7 9503746dd -- app/chamados/services/materializacao.py \| head -150` |
 | 15:50:19 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(3,"BUG-PAR 15:5x: construtor v2 rc 0 -> commit 9503746dd na copia (contraparte = outra pergunta OU marca ja batida da mesma pausa; sem_par so sem nenhuma; 13 testes, M41-M50; nada executado; entrega logs/BUG-PAR-O-PAR/entrega_v2.r). Sessao: hunks models.py (pode_fechar le obrigacoes_par ...` |
 | 15:50:15 | Bash |  | `date '+%H:%M' && sed -n 1,12p docs/RELATO.md \| cut -c1-220` |
@@ -971,10 +974,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:08:49 | Bash | Read I-1 preverif v3 answer | `cd /home/ronald/saas-hasner/logs/selos_canon && tail -3 i1_preverif_v3.out; wc -c i1_preverif_v3.r; cat i1_preverif_v3.r` |
 | 04:02:44 | Bash | Update ESPERANDO pid and log E2 green | `kill -0 1896030 && python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') assert t[1].startswith('ESPERANDO:') t[1]='ESPERANDO: trava_teste.sh \| pid=1896030' t.insert(2,"FIO-E0-V4-E2 04:02: suite inteira v3 na copia ad77299d (inclui V2-2 89df8c52) VERDE -- OK (skipped=42, expected failures=41), Ran 14731, rc=0 (logs/fio_e0_v4/e2_rebase/suite_v3.log). Nao pousa ate E3. Trava passou a s ...` |
 | 04:02:37 | Bash | Read E2 suite v3 verdict and trava holder | `cd /home/ronald/saas-hasner && L=logs/fio_e0_v4/e2_rebase/suite_v3.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep '^rc=' $L \| tail -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date` |
-| 04:00:30 | Bash | Log I-1 volta 3 in RELATO | `python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') t.insert(2,"SELOS-CANON-I1 03:5x: construtor volta 3 = eec4007f7 (copia wt-i1-censovaga-015903): P1-P6 + achados 6/7 da triagem v2 curados segundo o construtor; selo 22 mutantes mordem, codex_pergunta 75; P7-P9 DESCARTADOS ao opus. Falso vermelho de worktree: test_handoff_sessao (settings.json aponta a raiz principal). Pre-verifica ...` |
-| 04:00:27 | Bash | Run Codex pre-verifier v3 for I-1 | `bash /home/ronald/saas-hasner/logs/selos_canon/i1_lancar_preverif_v3.sh` |
-| 04:00:24 | Bash | Prepare I-1 preverif v3 question, triage, launcher | `cd /home/ronald/saas-hasner && D=logs/selos_canon && rm -rf logs/selos_canon_i1/diff_v3.diff && rmdir logs/selos_canon_i1 2>/dev/null; ls logs/selos_canon_i1 2>/dev/null git diff 457e8afa..eec4007f7 > $D/i1_diff_v3_delta.diff; git diff 6adca14f..eec4007f7 > $D/i1_diff_v3_total.diff; wc -l $D/i1_diff_v3_*.diff cat > $D/i1_triagem_v2.txt <<'EOF' TRIAGEM DA VOLTA 2 (pre-verificador v2, i1_preverif_v2 ...` |
-| 04:00:01 | Bash | Read prior I-1 preverif v2 launcher and question | `cd /home/ronald/saas-hasner/logs/selos_canon && cat i1_lancar_preverif_v2.sh; cat i1_preverif_v2.q \| head -60; ls i1_*` |
-| 03:59:54 | Bash | Find prior I-1 Codex question/answer files | `cd /home/ronald/saas-hasner && grep -rl "SELOS-CANON-I1" logs/*/ 2>/dev/null \| grep -E '\.(q\|r\|sh)$' \| head` |
-| 03:59:51 | Bash | List prior I-1 preverif artifacts | `cd /home/ronald/saas-hasner && D=logs/selos_canon_i1; ls logs/selos_canon_i1/selos_canon_i1 \| head -30; ls logs/codex 2>/dev/null \| grep -i I1 \| tail -5` |
-| 03:59:49 | Bash | Save I-1 v3 diff and inspect logs dir | `cd /home/ronald/saas-hasner && D=logs/selos_canon_i1; mkdir -p $D; git -C /home/ronald/wt-i1-censovaga-015903 log --oneline -4; git diff 457e8afa..eec4007f7 > $D/diff_v3.diff; wc -l $D/diff_v3.diff; ls $D; ls logs \| grep -i i1 \| head` |
