@@ -1,7 +1,78 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 02:59** · publicado em **09/11/2026 03:01** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:06** · publicado em **09/11/2026 03:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:06 · sessao b385027a2194 · COBPARC-ATA-DEFASADA-09 · leitura · origem=Code
+
+1. **Cálculo pela regra, antes da comparação:** o campo mede minutos de relógio em **HH:MM, sem segundos**, atribuídos ao dia do turno. A madrugada de 04/09 pertence ao turno iniciado em 03/09, pela L-085. (`app/ponto/turnos.py:584`, `app/ponto/turnos.py:605`, `app/docs/LEIS.md:117`)
+
+   A L-087 permite que a batida gravada como **E às 21:01** cumpra o marco **S21:00**: o papel vem do instante contra o marco. Nesse alinhamento, 20:00 e 21:02 sobram; a pausa declarada é **21:01→22:00**. Uma órfã interposta não desfaz esse par: a autoridade casa primeiro as duas pontas declaradas. (`app/docs/LEIS.md:119`, `app/escala/utils.py:230`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:1816`)
+
+   Portanto: **14:51→21:01 = 370 min; 22:00→02:50 = 290 min; total = 660 min**, equivalentemente **719 − 59 = 660**. A pausa supera o piso de 15 minutos associado ao art. 71 §1 da CLT pela cópia; pagamento e indenização de intrajornada são outra apuração. (`app/ponto/turnos.py:495`, `app/ponto/turnos.py:710`, `app/ponto/turnos.py:717`)
+
+2. **O seletor explica a diferença; a subtração final continua a mesma.** O alinhamento por custo, `app/escala/utils.py:_alinhar:216`, escolhe 21:01 para S21:00 e produz a pausa de 59 minutos; `app/ponto/turnos.py:realizado_dos_turnos:758` desconta essa pausa, resultando em **660**. (`app/escala/utils.py:230`, `app/ponto/turnos.py:767`)
+
+   O caminho atual perde esse par em **`app/escala/utils.py:_papeis_do_turno:467`**: exige `_iz == _i + 1`. Como existe a órfã 21:02 entre 21:01 e 22:00, as pontas passam a ser `sol`. Depois, **`app/escala/utils.py:_alinhar_por_papel:564`** percorre as soltas cronologicamente: 20:00 ocupa primeiro S21:00; 21:01 encontra o marco ocupado. A pausa vira **20:00→22:00 = 120 min**, dando **719 − 120 = 599**, isto é, **−61 min**. (`app/escala/utils.py:472`, `app/escala/utils.py:566`, `app/escala/utils.py:571`, `app/ponto/turnos.py:758`)
+
+   No `gitlog.txt` fornecido, `fba8aac8` identifica a obra **JUIZ-DO-PAR-CURA-NA-FONTE**, com declaração v2/10; atribuir-lhe precisamente a introdução da linha 467 exige o diff histórico **[não verificado]**. A cópia documenta o pouso dessa mudança como **`b3bf529e`, em 29/10**, nomeando `_papeis_do_turno` entre as funções alteradas. (`app/docs/RELATO.md:1657`, `app/docs/RELATO.md:1709`)
+
+   **Falta fechar a proveniência histórica:** o anexo não fornece `lavrada_em/regra_versao` da ata **[não verificado]**. `julgada_em` não prova quando seu número foi escrito: `carimbar` atualiza esse campo, enquanto a ata só é substituída quando diferente. Setembro permanece atualmente em `regra:1`; isso não identifica o corpo histórico do seletor. (`app/ponto/portas/celula.py:1060`, `app/ponto/portas/celula.py:995`, `app/ponto/services/cartorio.py:188`)
+
+3. **ESTRUTURA é o dono sustentável, pelo mecanismo localizado.** O contrato manda transportar cada par inteiro e impede que soltas movam o par; a exigência de adjacência descarta um intervalo que a autoridade reconhece. O sítio é **`_papeis_do_turno:467`**, com consequência em **`_alinhar_por_papel:566`**. (`app/escala/utils.py:507`, `app/escala/utils.py:511`, `app/ponto/turnos.py:811`)
+
+   O e6 sozinho não prova isso: ESTRUTURA é seu resultado residual, e sua assinatura não recebe idade ou versão da ata. Aqui há evidência adicional no código; a conclusão não depende apenas do rótulo da sonda. (`app/ponto/management/commands/e6_oraculo.py:53`, `app/ponto/management/commands/e6_oraculo.py:69`, `app/ponto/management/commands/e6_oraculo.py:110`)
+
+4. **Leitores e significado:**
+
+   - **Diretos:** `leitor_celula` usa o número como evidência de trabalho e o transporta para a grade; o PDF de validação soma minutos e divide por 60. (`app/escala/services/leitor_celula.py:369`, `app/escala/services/leitor_celula.py:406`, `app/folha/validacao_pdf.py:48`, `app/folha/validacao_pdf.py:54`)
+   - **Via grade:** causas da folha, classificação do dia, comparação ata/juiz, calendário e diagnóstico “sem turno pareado” do espelho. (`app/folha/causas.py:85`, `app/ponto/supra_juiz.py:224`, `app/ponto/services/bordas_realizado.py:87`, `app/colaboradores/services/calendario.py:359`, `app/ponto/services/espelho.py:892`)
+   - **Fechamento e percentual:** transformam o valor, aplicando **teto pelo previsto de cada dia**; portanto seus números derivados têm significado mais restrito que o relógio líquido da ata. (`app/ponto/services/dia_pago.py:394`, `app/ponto/services/fechamento.py:1064`, `app/folha/export.py:1096`)
+   - **Espelho:** seu campo homônimo não copia o número da ata; consulta `realizado_do_dia`. `realizado_h` converte para horas com uma casa decimal; `pago_h` vem do pagamento lavrado. (`app/ponto/services/espelho.py:290`, `app/ponto/services/espelho.py:783`, `app/ponto/services/espelho.py:799`, `app/ponto/services/espelho.py:801`)
+
+   A referência temporal é **dia do turno**, e a unidade original é **minuto de relógio**. As transformações para horas, cumprimento limitado ao previsto e pagamento impedem tratar todos os campos homônimos como equivalentes. (`app/ponto/turnos.py:2930`, `app/ponto/turnos.py:719`, `app/ponto/services/dia_pago.py:382`, `app/ponto/services/espelho.py:801`)
+
+dono: ESTRUTURA app/escala/utils.py:_papeis_do_turno:467
+
+## 09/11 03:04 · sessao 5e96103287be · - · - · origem=Ronald (tmux)
+
+A investigação corrige minha hipótese inicial: os 8 segundos são batidas internas absorvidas neste turno; o piso de par degenerado não decide esta diferença. O defeito está no transporte do intervalo conhecido para os papéis do alinhamento. (`app/ponto/turnos.py:1316`, `app/escala/utils.py:467`)
+
+- **Regra: 660 minutos.** Papel pelo marco, independentemente do tipo gravado (L-087): a luz mais próxima de S21:00 é 21:01; 21:02 fica mais distante, e 20:00 fica a uma hora. A pausa fica 21:01→22:00, 59 minutos; os segmentos são 14:51→21:01 = 370 e 22:00→02:50 = 290, total **660**. A cauda é do turno de 03/09 (L-085); o campo usa HH:MM, truncando segundos. Os horários vêm do anexo fornecido, sem arquivo físico conferido [não verificado]. Bases: `app/docs/LEIS.md:119`, `app/docs/LEIS.md:117`, `app/ponto/turnos.py:584`, `app/ponto/turnos.py:605`, `app/ponto/turnos.py:710`.
+- **A pausa declarada deve sobreviver à órfã interposta.** R2b declara: com hii/hfi acesos, o par é a pausa; `_pares_marcados` casa essas duas luzes primeiro, sem exigir adjacência. (`app/ponto/turnos.py:1816`, `app/ponto/turnos.py:811`)
+- **Mecanismo exato de 599:** `_papeis_do_turno` recebe esse intervalo, mas exige `_iz == _i + 1`. Como a batida 21:02 está entre 21:01 e 22:00, o par é descartado e vira batidas `sol`. `_alinhar_por_papel` percorre as soltas cronologicamente; 20:00 ocupa S21:00 primeiro, 21:01 perde porque já ocupado e 22:00 ocupa E22:00. A pausa passa a 120 minutos: 719−120 = **599**, diferença −61. (`app/escala/utils.py:455`, `app/escala/utils.py:467`, `app/escala/utils.py:472`, `app/escala/utils.py:564`, `app/escala/utils.py:566`)
+- **A ata anterior efetivamente alimenta o turno.** 21:02 vira `X` por estar a ≤15 minutos da luz 21:01; 20:00 passa pela exceção de perna solta próxima do intervalo, também vira `X`; 21:01 e 22:00 viram `Xi`. Assim, o turno chega com a pausa declarada não adjacente, que o transportador depois perde. (`app/escala/orfa_classe.py:28`, `app/ponto/turnos.py:1742`, `app/ponto/turnos.py:1763`, `app/ponto/turnos.py:1787`, `app/ponto/turnos.py:1804`, `app/ponto/turnos.py:1827`)
+- **ESTRUTURA é sustentável**, com sítio em `_papeis_do_turno:467` e consequência em `_alinhar_por_papel:566`; o próprio contrato diz que cada par deve sentar inteiro e que soltas nunca movem o par. (`app/escala/utils.py:505`, `app/escala/utils.py:511`) O e6 sozinho apenas dá o resíduo, sem julgar frescor de ata ou versão. (`app/ponto/management/commands/e6_oraculo.py:69`, `app/ponto/management/commands/e6_oraculo.py:98`)
+- **CLT e unidade:** o piso de intervalo de 15 minutos é atribuído ao art.71 §1 pela cópia, e o campo declara FATO entre batidas; pagamento, indenização, tolerâncias e janela HE pertencem ao motor. Não aplicar a L-097 para cortar os 9 minutos iniciais deste campo. (`app/ponto/turnos.py:495`, `app/ponto/turnos.py:710`, `app/ponto/turnos.py:717`, `app/escala/utils.py:299`)
+
+## 09/11 03:03 · sessao a52cb32772c9 · - · - · origem=Ronald (tmux)
+
+- **Não há `lavrada_em` nem `regra_versao` na definição da célula examinada:** existem `julgada_em` e `impressao` (`app/escala/models.py:1738-1746`), `veredito_em` (`:1772`), ata JSON (`:1778`) e `insumos_em` (`:1805`). A sonda fornecida imprime esses campos, mas não fornece os dois metadados pedidos; `lavrada_em/regra_versao` específicos desta ata permanecem **[não verificado]**.
+
+- **`julgada_em` não deve ser chamado automaticamente de instante da lavratura da ata:** `carimbar` atualiza-o junto com insumos e impressão (`app/ponto/portas/celula.py:1047-1067`), enquanto `lavrar_veredito` altera ata quando diferente (`:995-996`, `:1027-1033`). No caso fornecido há `julgada_em=11/10` e `veredito_em=02/10`; são campos diferentes e não provam qual commit escreveu originalmente o número **[não verificado]**.
+
+- **Versão declarada atual para setembro é 1**, mesmo com o seletor atual: `app/ponto/services/cartorio.py:132`, `:257-267`; a própria explicação de v2 registra “a 09 fica em regra:1 — FOTO” (`:183-188`). A versão vai para os componentes do hash (`:465-472`), chamado com `versao_para` (`:1143-1146`, `:1348-1353`); hash igual pula sem `forcar` (`:1358-1364`). Logo v1 **não identifica imutavelmente um corpo histórico do seletor**, nem recupera a versão histórica da ata.
+
+- **Commit comprovado documentalmente para a mudança na fonte:** `app/docs/RELATO.md:1657-1660` identifica `b3bf529e`, pouso de **29/10 07:11**, merge da raia `7d028f1c`. A fonte declarada é `_match_marcos` (`:1659`); o detalhamento nomeia `_alinhar_por_papel`, `_papeis_do_turno` e `_papeis_por_alternancia` (`:1709`) e explica a mudança de assentamento pelo papel (`:1710`).
+
+- **`fba8aac8` no anexo:** o título fornecido permite atribuir-lhe o bump `(2, '2026-10')`; atribuir precisamente o trecho seletor e o delta de 61 minutos a esse commit individual requer o diff histórico **[não verificado]**. O documento da cópia confirma o vínculo da v2 com essa obra (`app/ponto/services/cartorio.py:183-188`), mas o pouso nomeado documentalmente é `b3bf529e` (`app/docs/RELATO.md:1657-1660`), ausente do `gitlog.txt` fornecido **[não verificado]**.
+
+- `.git` não existe na raiz da cópia, verificado por leitura do diretório; sem arquivo citável: **[não verificado]**. Portanto não foi possível conferir `git show`, ancestralidade ou diff de `fba8aac8`/`b3bf529e`; para fechar o item histórico faltam os diffs/objetos históricos e o metadado da lavratura deste registro **[não verificado]**.
+
+## 09/11 03:02 · sessao a52cb32772c9 · - · - · origem=Ronald (tmux)
+
+Leitores da **ata** e seus desdobramentos:
+
+- **Diretos:** `app/escala/services/leitor_celula.py:369` usa o campo como evidência de fato no dia; `:406` transporta `int(ata.get('minutos_realizados') or 0)` para a grade, sob a data da célula (`:361`, `:373`). `app/folha/validacao_pdf.py:48` lê diretamente a ata, soma minutos e dias com valor não zero (`:50-52`) e converte para horas (`:54`).
+- **Grade → folha:** `app/folha/export.py:329-338` obtém a grade da ata. `app/ponto/services/dia_pago.py:364-402` lê o realizado da grade, limita cada dia ao previsto (`:394`), restringe a trabalho/ausência (`:387-388`) e retorna os mapas por data. `app/ponto/services/fechamento.py:1060-1064` soma esse mapa para `FechamentoMensal.minutos_realizados`. São **minutos de cumprimento com teto por dia**, portanto campo homônimo com significado mais restrito que o relógio da ata (`app/ponto/services/dia_pago.py:367-384`).
+- **Percentual e diagnóstico:** `app/folha/export.py:1096-1098` faz cap diário do realizado da grade e converte para horas; `app/folha/causas.py:85-88` verifica realizado zero; `app/ponto/supra_juiz.py:224` lê o realizado para classificação; `app/ponto/services/bordas_realizado.py:87-88` compara ata/grade com o juiz de turnos.
+- **Calendário:** `app/colaboradores/services/calendario.py:359` armazena o número vindo da grade da célula; `:718-719` usa-o com a ausência de turno para produzir a palavra “Sem turno pareado”. A regra desse uso está em `app/ponto/services/dia_decidido.py:158-179`.
+- **Espelho:** usa a ata para o mesmo diagnóstico `ata_sem_turno` em `app/ponto/services/espelho.py:891-894`. **O campo homônimo `espelho.minutos_realizados` é calculado pelo juiz**, não copiado do número da ata: `:675-676` → `_realizado_do_dia_tela` (`:267-294`) → `realizado_do_dia` → `realizado_dos_turnos` (`app/ponto/turnos.py:774-795`, `:707-771`). Publica o resultado em `app/ponto/services/espelho.py:783`; `realizado_h` divide por 60 e arredonda a uma casa em `:799-800`; o topo soma horas em `:910-912`.
+- **Sondas que leem esse homônimo do espelho**, não diretamente o número da ata: `app/ponto/management/commands/e6_oraculo.py:263-268` (fallback para `pago_h × 60`), `app/ponto/management/commands/e6_piso_autopsia.py:117-123`, `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:70-71`, `app/folha/porta_export.py:509-510`.
+
+**Dia e unidade:** `app/ponto/turnos.py:2929-2933` declara explicitamente que o dia da célula/grade/ata é **dia do turno**; o cálculo filtra `t.data_turno == data` (`:719`), mede relógio em minutos (`:740-741`), desconta pausas (`:756-767`) e arredonda para inteiro (`:771`). Nos leitores diretos e da grade acima não aparece recorte do valor à meia-noite; a data usada é a da célula/grade (`app/escala/services/leitor_celula.py:361-406`, `app/ponto/services/dia_pago.py:390-401`).
+
+**Não confundir significados:** ata/juiz = relógio líquido; fechamento/DiaPago homônimo = cumprimento limitado ao previsto por dia; `pago_h` = pagamento lavrado ou motor. O próprio espelho separa realizado e pago (`app/ponto/services/espelho.py:783-810`) e documenta o teto do fechamento (`:905-907`). A correção semântica de todo uso indireto fora dos sítios examinados permanece [não verificado].
 
 ## 09/11 02:59 · sessao adbb51c775ba · E1-FILA-V2-2-TRAVA · construtor · origem=Code
 
@@ -845,128 +916,4 @@ As cadeias de fatia e auto-cura chamam `--reload-copia` e `--sem-sombra`, portan
 
 Não há prova de crontab cru atualmente instalado; os exemplos antigos de linhas cruas em docstrings de commands são instruções, não evidência de instalação. (`app/ponto/management/commands/detectar_ausencias.py:9`; `app/ponto/management/commands/processar_alertas_avancados.py:7`; situação instalada: [nao verificado])
 
-## 09/11 02:21 · sessao 2bd182e82d5b · - · - · origem=Ronald (tmux)
-
-**1. Censo da marca na cópia**
-
-- Escritor operacional localizado: `bin/cron_run.sh:9-10` cria `logs/crons_em_curso/${N}_${E}.$$`, grava início e remove no `EXIT`. A marca nasce antes do comando (`bin/cron_run.sh:11`) e permanece durante placar, carimbo e chamada ao vigia (`bin/cron_run.sh:13-37`).
-- Leitor operacional localizado: `bin/deploy.sh:108-113`. Enumera arquivos, considera vivo o PID da extensão quando `/proc/PID` existe, apaga marcas sem esse PID e recusa restart. Chamado antes dos portões (`bin/deploy.sh:115-117`) e imediatamente antes do restart (`bin/deploy.sh:338-342`).
-- Escritor secundário: o próprio deploy apaga marcas julgadas órfãs (`bin/deploy.sh:109`).
-- `bin/contrato_deploy.sh:79-82` não lê o diretório em execução: inspeciona texto dos scripts e exige que o deploy e o envelope contenham `crons_em_curso`.
-- Testes escrevem marcas em fixtures: `bin/tests/test_deploy_reload_gracioso.sh:34,91`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:63,76,88,110`. Em particular, o selo de reload exige recusa mediante marca, sem pegar o futuro lock (`bin/tests/test_deploy_reload_gracioso.sh:125-131`); os casos 15/16 também injetam marca durante a prova de casca (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:192-198`).
-
-Não localizei leitores do diretório em hook, vigias ou `gerar_estado` mediante busca integral da cópia; outros acessos indiretos/dinâmicos são **[nao verificado]**. O hook mede trabalho por processos de teste/push (`bin/hook_stop_fila1.py:373-397`) e bloqueia clear por outro lock, `logs/sombra.lock` (`bin/hook_stop_fila1.py:785-794`). O vigia da esteira usa trava própria e delega ao Python (`bin/vigia_esteira.sh:8-11`); vigia da árvore também tem trava própria (`bin/vigia_arvore.sh:25`).
-
-Existe consumidor **documental/humano** do significado da marca: esperar a conclusão da sombra pela ausência de `sombra.sh_-.*`, nunca por pgrep (`CLAUDE.md:92`; `app/docs/INFRA.md:59-60`). O contrato não define se a marca será criada antes ou depois da espera no lock; preservação exata desse significado é **[nao verificado]**. Se criada antes, passará a incluir cron esperando; se criada depois, não mostrará a fila — inferência de `bin/cron_run.sh:9-11` e do contrato fornecido **[nao verificado: implementação proposta ausente]**.
-
-Há um escritor histórico fora do envelope mencionado no relato: `logs/gate10/gate10_condicao1.sh`, com marca própria durante apply de aproximadamente 45 minutos (`app/docs/RELATO.md:4472-4489`). Não está comprovado como código presente/ativo; existência atual e migração para lock são **[nao verificado]**.
-
-**6. Confronto com a lei escrita**
-
-- **Sem contradição demonstrada com seção 2:** ela manda publicar via deploy, usa HUP automático e reserva `--restart` manual com recusa por cron vivo (`CLAUDE.md:90`). O lock exclusivo não bloqueante conserva recusa; HUP permanece fora do problema do exec (`bin/deploy.sh:322-337`). Preservar todos os demais portões é **[nao verificado]**, pois implementação ausente.
-- **Seção 7 / lap-67:** a autoridade declarativa é `config/crons.py`, não uma lista nova no contrato (`CLAUDE.md:236-239`; `app/docs/LAPIDES.md:736-741`). Introduzir lock no envelope não contradiz essa fonte. “Todo cron” continuar passando pelo envelope é **[nao verificado]** e depende do censo do outro explorer.
-- **Seção 7 / lap-68:** corrente continua dependendo do arquivo do anterior, não do minuto (`CLAUDE.md:240-242`; `app/docs/LAPIDES.md:745-751`). Rc75 não carimba fim hoje, pois só 0/2 carimbam (`bin/cron_run.sh:19-25`); portanto dependente não recebe conclusão bem sucedida inventada.
-- **GATE TEMPORAL:** o texto exige cron/arquivo para espera longa, proíbe sleep do Code e `pgrep -f` (`CLAUDE.md:204`). O contrato põe espera limitada no processo do cron, via lock em arquivo, e não propõe pgrep. Não demonstrada contradição com essa formulação; comportamento real é **[nao verificado]**.
-- **“Recusa, não espera”:** a regra atual é dirigida ao deploy `--restart`, não ao cron (`bin/deploy.sh:103-117`). O selo condena explicitamente `ESPERA_CRON_S` e o retorno do “espera-e-reinicia” (`bin/contrato_deploy.sh:50-51`). Cron esperar deploy com `-w 600`, enquanto deploy usa `-n`, não reintroduz esse fallback; implementação é **[nao verificado]**.
-- **Incompatibilidade mecânica a tratar:** substituir a decisão da marca pelo lock deixa os selos atuais presos à autoridade antiga: exigência textual (`bin/contrato_deploy.sh:79-82`) e fixtures que só criam marca (`bin/tests/test_deploy_reload_gracioso.sh:125-131`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:192-198`). Isso é incompatibilidade dos testes com a migração proposta, não prova de contradição com a lei.
-- A frase “rc75 não é vermelho” existe no capítulo da **suite** (`CLAUDE.md:95-104`), enquanto o envelope de cron classifica qualquer saída diferente de 0/2 como falha (`bin/cron_run.sh:27-35`). Generalizar a exceção da suite a todos os crons não é sustentado pelo texto.
-
-## 09/11 02:21 · sessao c79c9d113d29 · - · - · origem=Ronald (tmux)
-
-Q4 — **O fail-open está declarado no contrato existente desta cópia:** “FALHA ABERTO: toda excecao vira linha FALHA na trilha e a ferramenta passa; medida ilegivel = ‘nao sei’, nunca age.” (`bin/disjuntor.py:34`). O tratamento externo mantém essa regra, exceto B3, que nega quando não sabe; CENSO ganha seu próprio `except Exception`, grava `CENSO ABRIU-SEM` e retorna `None`. (`bin/disjuntor.py:1643`, `bin/disjuntor.py:1645`, `bin/disjuntor.py:1653`, `bin/disjuntor.py:1504`, `bin/disjuntor.py:1525`).
-
-**Isso não basta para realizar o aval específico:** o I-1 fornecido exige recusa de brief sem CENSO, enquanto essa exceção permite continuar sem obter a decisão do juiz. A compatibilidade autorizada dessa exceção com o aval é **[nao verificado]**. (`bin/disjuntor.py:1504`, `bin/disjuntor.py:1525`; aval literal fornecido, sem arquivo numerado na cópia).
-
-**LEI-AKITA 1 não equivale simplesmente a “qualquer tratamento de exceção é proibido”:** ela caracteriza fallback como sobrevivência de derivador paralelo. Portanto, apenas chamar este ramo de fail-open não demonstra violação da linha 1; há, porém, conflito verificável com “exceção [...] nunca destravando a trava” e com a literalidade do aval. (`CLAUDE.md:17`, `CLAUDE.md:19`, `CLAUDE.md:32`, `CLAUDE.md:34`, `CLAUDE.md:37`).
-
-Q8 — mapa dos escritores e leitores:
-
-| Objeto | Quem escreve | Quem lê / significado |
-|---|---|---|
-| `logs/sessao/disjuntor.log` | Porta física `trilha`, append com carimbo próprio e detalhe limitado a 300 caracteres; exceção de escrita é engolida. (`bin/disjuntor.py:68`, `bin/disjuntor.py:135`, `bin/disjuntor.py:139`, `bin/disjuntor.py:140`, `bin/disjuntor.py:142`) | `ler` conta eventos gerais; `_censo_24h` interpreta eventos CENSO. O hook também reconhece o arquivo como trilha própria, proibida para provar espera por avanço de arquivo. (`bin/disjuntor.py:1717`, `bin/disjuntor.py:1725`, `bin/disjuntor.py:1784`, `bin/hook_stop_fila1.py:583`, `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:598`) |
-| `CENSO OK <obra> :: via=... brief=...` | `_censo_nega`, depois de validar os briefs citados. (`bin/disjuntor.py:1513`, `bin/disjuntor.py:1517`) | `_censo_24h` incrementa `ok` e encerra o intervalo daquela obra. (`bin/disjuntor.py:1771`, `bin/disjuntor.py:1797`) |
-| `CENSO ABRIU-SEM <obra> :: ...` | `_censo_nega`, se uma exceção escapar do check. (`bin/disjuntor.py:1525`) | `_censo_24h` incrementa `abertos_sem`. (`bin/disjuntor.py:1777`, `bin/disjuntor.py:1801`) |
-| `NEGOU DISJUNTOR CENSO: construtor de <obra> sem CENSO...` | `main_pretool`, antes de enviar JSON deny. (`bin/disjuntor.py:1636`, `bin/disjuntor.py:1639`) | `_censo_24h` inicia intervalo por obra e incrementa `negados`. (`bin/disjuntor.py:1771`, `bin/disjuntor.py:1794`) |
-| Medidas `abertos_sem`, `negados`, `ok`, `ociosa_h`, `esperando` | `_censo_24h` calcula o dicionário, consumido por `ler`. (`bin/disjuntor.py:1767`, `bin/disjuntor.py:1807`) | `_censo_txt` apresenta as medidas; `linha` a inclui; `gerar_estado` importa `ler/linha` e grava o destino recebido. (`bin/disjuntor.py:1812`, `bin/disjuntor.py:1820`, `bin/disjuntor.py:1895`, `bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`, `bin/gerar_estado.py:390`) |
-| `ESTADO.md` publicado | `relato.sh` pede `$TMP/ESTADO.md` ao gerador e o entrega à raspagem. (`bin/relato.sh:38`, `bin/relato.sh:103`, `bin/relato.sh:105`) | O destino público recebe esse artefato raspado; consumo posterior em produção **[nao verificado]**. (`bin/relato.sh:105`) |
-| Linha literal `PAREI: censo-<obra> \| espera Codex` no topo | O diff **manda a sessão escrever**, não grava essa linha: é texto da negativa; `--censo` também só imprime instrução. Escritor concreto da linha em produção **[nao verificado]**. (`bin/disjuntor.py:1414`, `bin/disjuntor.py:1521`, `bin/disjuntor.py:1908`) | `_esperando_com_prova` lê o primeiro painel via `_linha_do_topo`, exige forma literal e chama `_prova_censo`. (`bin/hook_stop_fila1.py:400`, `bin/hook_stop_fila1.py:702`, `bin/hook_stop_fila1.py:705`) |
-| Linha automática `(NEGOU CENSO)` no RELATO | `relato_negacao` monta linha de máquina e usa `core.esteira_vigia.no_relato`; **não é** a linha PAREI do topo. (`bin/disjuntor.py:221`, `bin/disjuntor.py:234`, `bin/disjuntor.py:236`) | A porta insere em `## ALARMES DA ESTEIRA`, preservando o topo; a escrita usa flock no diretório e temporário único. (`app/core/esteira_vigia.py:815`, `app/core/esteira_vigia.py:829`, `app/core/esteira_vigia.py:834`, `app/core/esteira_vigia.py:879`, `app/core/esteira_vigia.py:884`) |
-
-**Há divergência de leitores da linha PAREI censo.** O Stop a trata como ESPERANDO provado e compartilha a mesma resposta memoizada com o orçamento; a liberação ocorre por essa prova. (`bin/hook_stop_fila1.py:703`, `bin/hook_stop_fila1.py:740`, `bin/hook_stop_fila1.py:1040`, `bin/hook_stop_fila1.py:1283`).
-
-O handoff exibe `PAREI`, mas decide “trava o item?”/“devolve o turno?” somente pelos predicados genéricos; esses exigem `!`, ausente na linha censo. Assim, com censo vivo, o Stop pode liberar enquanto o handoff imprime “item em curso ANDA” e “não [...] devolve”. (`bin/handoff_sessao.sh:108`, `bin/handoff_sessao.sh:120`, `bin/handoff_sessao.sh:123`, `bin/hook_stop_fila1.py:1171`, `bin/hook_stop_fila1.py:1284`).
-
-O alarme aceita qualquer substring `PAREI:` nas primeiras 40 linhas, sem prova; portanto desarma também com o produtor morto, situação em que o Stop registra falta de prova. (`bin/alarme_sessao_ociosa.py:119`, `bin/alarme_sessao_ociosa.py:124`, `bin/alarme_sessao_ociosa.py:127`, `bin/alarme_sessao_ociosa.py:42`, `bin/hook_stop_fila1.py:1286`).
-
-**Achado material de semântica das medidas:** `OK` e `ABRIU-SEM` nascem durante a avaliação CENSO, antes de outras travas ainda capazes de negar a abertura. No Agent, CENSO antecede B4; no Codex, antecede `codex_decide`. Logo esses eventos provam passagem/falha do check, não abertura efetiva de construtor. (`bin/disjuntor.py:1517`, `bin/disjuntor.py:1525`, `bin/disjuntor.py:1583`, `bin/disjuntor.py:1588`, `bin/disjuntor.py:1603`, `bin/disjuntor.py:1607`, `bin/disjuntor.py:1621`).
-
-`ociosa_h` soma, por obra, do primeiro NEGOU ao próximo OK ou até agora; não consulta ocupação da vaga nem processo censo. É duração de intervalos de negativas, e pode somar obras simultâneas ou encerrar num OK cuja abertura depois foi negada. A correspondência com “horas de vaga ociosa” é **[nao verificado]**. (`bin/disjuntor.py:1778`, `bin/disjuntor.py:1795`, `bin/disjuntor.py:1800`, `bin/disjuntor.py:1807`).
-
-Além disso, trilha inexistente produz zero, enquanto falha ao gravar trilha é silenciada; logo zero nesse contador não prova zero aberturas reais sem censo. (`bin/disjuntor.py:142`, `bin/disjuntor.py:1803`).
-
-**Relógio/ordem:** as funções novas recebem `agora` na medida e não introduzem leitura direta nova do relógio; o escritor existente `trilha` já usa `datetime.now`, e as bordas `main_pretool`/CLI obtêm `time.time`. Não há prova de novo relógio fora da borda no diff; permanece o carimbo existente da trilha. (`bin/disjuntor.py:140`, `bin/disjuntor.py:1632`, `bin/disjuntor.py:1774`, `bin/disjuntor.py:1780`, `bin/disjuntor.py:1903`).
-
-Não há nova ordem entre locks demonstrada nesses trechos: CENSO usa a porta de append existente, declarada sem trava; a linha de máquina no RELATO continua usando a porta e a trava existentes. A ordem **entre verificações** afeta o significado dos eventos de abertura, conforme acima. (`bin/disjuntor.py:1637`, `bin/disjuntor.py:1642`, `app/core/esteira_vigia.py:834`, `bin/disjuntor.py:1603`).
-
-Observação de fonte: `app/docs/CORTES.md` desta cópia termina na linha 425; as referências 428/430 pertencem ao raspado fornecido e não podem ser tratadas como linhas existentes desta cópia. (`app/docs/CORTES.md:425`; conteúdo integral das linhas raspadas: **[nao verificado]**).
-
-## 09/11 02:21 · sessao 33daae8acd7e · - · - · origem=Ronald (tmux)
-
-Q6 — Há uma só autoridade de vivacidade de processo: `_prova_censo` chama `_prova_pid`, reutilizando exclusão de ancestral, comparação do executável/script, estabilidade do PID e rejeição de Z/X (`bin/hook_stop_fila1.py:682`, `bin/hook_stop_fila1.py:523`, `bin/hook_stop_fila1.py:529`, `bin/hook_stop_fila1.py:535`, `bin/hook_stop_fila1.py:546`).
-
-A regra de vínculo com o censo é nova: procura wrapper desta raiz, mesmo UID, `CODEX_OBRA` exato e papel censo/leitura; o ESPERANDO genérico aceita produtor e pid/arquivo declarados, sem exigir obra/papel. Portanto, não são predicados idênticos; há composição com o juiz de processo existente e uma regra específica nova de identificação do produtor (`bin/hook_stop_fila1.py:661`, `bin/hook_stop_fila1.py:663`, `bin/hook_stop_fila1.py:671`, `bin/hook_stop_fila1.py:682`, `bin/hook_stop_fila1.py:715`, `bin/hook_stop_fila1.py:729`).
-
-Ambos entram na mesma decisão `_esperando_com_prova`, memoização, orçamento e liberação do Stop; não foi criada liberação final independente (`bin/hook_stop_fila1.py:703`, `bin/hook_stop_fila1.py:707`, `bin/hook_stop_fila1.py:740`, `bin/hook_stop_fila1.py:1040`, `bin/hook_stop_fila1.py:1283`).
-
-Os mutantes simples “aceitar construtor”, “casar prefixo de obra” e “liberar quando o processo já foi removido” encontram casos negativos específicos, com exigência de block/siga e motivo NOPROVA (`bin/tests/test_hook_esperando_com_prova.sh:80`, `bin/tests/test_hook_esperando_com_prova.sh:84`, `bin/tests/test_hook_esperando_com_prova.sh:87`, `bin/tests/test_hook_esperando_com_prova.sh:206`, `bin/tests/test_hook_esperando_com_prova.sh:209`, `bin/tests/test_hook_esperando_com_prova.sh:214`).
-
-Sobreviventes plausíveis por leitura: remover proteção contra zumbi, UID ou troca de starttime. A fixture mata e faz `wait`, removendo o processo; não produz Z/X, outra identidade de usuário ou reciclagem de PID durante leitura. Execução desses mutantes: [nao verificado]. (`bin/hook_stop_fila1.py:546`, `bin/hook_stop_fila1.py:671`, `bin/hook_stop_fila1.py:685`, `bin/tests/test_hook_esperando_com_prova.sh:31`, `bin/tests/test_hook_esperando_com_prova.sh:57`, `bin/tests/test_hook_esperando_com_prova.sh:194`, `bin/tests/test_hook_esperando_com_prova.sh:213`).
-
-Q7 — Os quatro mutantes declarados têm mordida demonstrável por leitura das asserções:
-
-- Linha ausente passa a zero: altera o resultado esperado do caso sem-linha, rc 1. (`bin/tests/test_censo_antes_da_vaga.sh:70`, `bin/tests/test_censo_antes_da_vaga.sh:175`).
-- Remover corte: altera os dois casos que retiram o corte da última pergunta. (`bin/tests/test_censo_antes_da_vaga.sh:71`, `bin/tests/test_censo_antes_da_vaga.sh:72`, `bin/tests/test_censo_antes_da_vaga.sh:176`).
-- Tirar porta Agent: deixa de produzir a negativa específica CENSO exigida nos casos Agent negativos. (`bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:112`, `bin/tests/test_censo_antes_da_vaga.sh:177`).
-- Tirar porta Codex: deixa de produzir aquela negativa no caso construtor sem brief. (`bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:131`, `bin/tests/test_censo_antes_da_vaga.sh:178`).
-
-A harness exige retorno não zero da função de casos depois da mutação e verifica âncora única; portanto, não basta declarar o mutante. Rodada integral dos selos: [nao verificado], pois criam arquivos (`bin/tests/test_censo_antes_da_vaga.sh:160`, `bin/tests/test_censo_antes_da_vaga.sh:165`, `bin/tests/test_censo_antes_da_vaga.sh:170`, `bin/tests/test_censo_antes_da_vaga.sh:173`).
-
-**Mutante sobrevivente concreto:** trocar `for q in perguntas:` por `for q in perguntas[-1:]:`. Verifica somente a última pergunta; os dois casos que retiram corte mexem sempre na última. Reproduzi todos os 15 resultados de `casos_rc` em memória, extraindo AST e usando StringIO, sem gravar arquivos; também confirmei aceitação da primeira pergunta sem corte com a última cortada. A costura usa apenas briefs conforme/sem-linha, sem casos N>0 adicionais. (`bin/disjuntor.py:1469`, `bin/tests/test_censo_antes_da_vaga.sh:68`, `bin/tests/test_censo_antes_da_vaga.sh:71`, `bin/tests/test_censo_antes_da_vaga.sh:72`, `bin/tests/test_censo_antes_da_vaga.sh:99`, `bin/tests/test_censo_antes_da_vaga.sh:100`, `bin/tests/test_censo_antes_da_vaga.sh:112`).
-
-A asserção positiva `_passa_censo` é fraca: qualquer saída sem `CENSO` passa, inclusive deny de outra trava ou saída vazia por erro/timeout; o status de `_pre` não é conferido. Já as negativas exigem deny+CENSO+PAREI específico. (`bin/tests/test_censo_antes_da_vaga.sh:97`, `bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:106`).
-
-A medida verifica rótulos e presença de número decimal, sem valor esperado; não há caso que provoque exceção e valide `ABRIU-SEM`, nem duração conhecida para ociosidade. Assim, retirar a trilha do ramo de exceção de `_censo_nega` permanece sem cobertura demonstrada. (`bin/tests/test_censo_antes_da_vaga.sh:141`, `bin/tests/test_censo_antes_da_vaga.sh:144`, `bin/tests/test_censo_antes_da_vaga.sh:147`, `bin/disjuntor.py:1525`, `bin/disjuntor.py:1526`).
-
-## 09/11 02:21 · sessao 341d3f8bce55 · - · - · origem=Ronald (tmux)
-
-2. **Um juiz de conteúdo localizado, mas a cobertura da porta é incompleta.** `censo_do_brief` decide a forma do bloco; `_censo_nega` o chama para os briefs reconhecidos; a CLI `--censo` chama a mesma função. O Stop prova produtor vivo, não o conteúdo do brief. `gerar_estado` apenas consome `disjuntor.ler/linha`; handoff consome predicados de fila/PAREI. Não localizei outro reconhecedor de “brief tem CENSO” nesses leitores nem autoridade anterior dessa pergunta em `app/core/juizes.py`/`app/docs/JUIZES.md`; a ausência global de qualquer implementação equivalente fica **[nao verificado]**. (`bin/disjuntor.py:1417`, `bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`, `bin/hook_stop_fila1.py:649`, `bin/gerar_estado.py:280`, `bin/handoff_sessao.sh:120`, `app/core/juizes.py:170`, `app/core/juizes.py:706`, `app/core/juizes.py:1025`, `app/core/juizes.py:1173`, `app/core/juizes.py:1285`, `app/docs/JUIZES.md:19`)
-
-3. **Vias e escapes demonstráveis pela cópia:**
-
-| Forma | Trava nova / classificação |
-|---|---|
-| `Agent`, tipo fora de `SO_LEITURA`, prompt com caminho absoluto terminado `wt-*`, obra reconhecida e presente nos andáveis | Passa em `_censo_nega`. (`bin/disjuntor.py:98`, `bin/disjuntor.py:100`, `bin/disjuntor.py:1603`, `bin/disjuntor.py:1507`) |
-| Mesmo `Agent`, mas `Construa OBRA-E3 ...` sem âncora `obra X`/`leitura ... da X` | `_obra_de` retorna `None`; `_censo_nega` libera. Escape real se o trabalho é construtor estrutural da fila 1. (`bin/disjuntor.py:108`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1507`) |
-| `Agent` construtor com cópia cujo nome não casa `wt-*`, caminho relativo ou sem cópia citada | Não entra no novo ramo. É escape real se ainda é construtor da classe avalizada; o teste define “sem cópia” como não construtor, mas não prova que escrever seja impossível. (`bin/disjuntor.py:100`, `bin/disjuntor.py:1603`, `bin/tests/test_censo_antes_da_vaga.sh:129`) |
-| `Bash` com `CODEX_OBRA=X CODEX_PAPEL=construtor bin/codex_pergunta.sh --construtor ...` | Interceptado pelo parser e `_censo_nega`. (`bin/disjuntor.py:1332`, `bin/disjuntor.py:1583`) |
-| Wrapper com papel/obra herdados: `export CODEX_OBRA=X CODEX_PAPEL=construtor; bin/codex_pergunta.sh --construtor ...` | Parser lê `papel='?'`, obra vazia; novo ramo pula. Wrapper aceita ambiente herdado. **Escape real de uma via autorizada.** (`bin/disjuntor.py:1333`, `bin/disjuntor.py:1343`, `bin/disjuntor.py:1584`, `bin/codex_pergunta.sh:81`) |
-| `env CODEX_OBRA=X CODEX_PAPEL=construtor bin/codex_pergunta.sh ...` | `_INVOC_RE` admite `env` como prefixo, mas as atribuições só antes dos prefixos; não reconhece esta chamada. **Escape real**, wrapper lê o ambiente normalmente. (`bin/disjuntor.py:1250`, `bin/disjuntor.py:1342`, `bin/codex_pergunta.sh:81`) |
-| `bash -c "..."`, invocação encapsulada em script externo | Residual expressamente declarado; wrapper não consulta CENSO antes da vaga nem do `codex exec`. Escape real se abre construtor abrangido pelo aval. (`bin/disjuntor.py:1247`, `bin/codex_pergunta.sh:233`, `bin/codex_pergunta.sh:394`) |
-| Wrapper chamado diretamente no terminal/fora do `PreToolUse` | Nenhuma guarda CENSO no wrapper; B3 já tem consulta própria para verificador. A abertura de construtor continua possível sem consulta CENSO. (`bin/codex_pergunta.sh:370`, `bin/codex_pergunta.sh:384`, `bin/codex_pergunta.sh:394`) |
-| `codex exec` direto | Residual declarado, porém proibido pela regra de uso do wrapper; via irregular, não evidência de uma segunda abertura autorizada. (`bin/disjuntor.py:1248`, `CLAUDE.md:347`) |
-| Construtor de obra fechada/fila 2, leitura/censo/verificador | Fora da classe construtor estrutural fila 1. (`bin/disjuntor.py:1507`, `bin/tests/test_censo_antes_da_vaga.sh:123`, `bin/tests/test_censo_antes_da_vaga.sh:125`, `bin/tests/test_censo_antes_da_vaga.sh:127`, `bin/tests/test_censo_antes_da_vaga.sh:135`) |
-| `bin/fabricante.sh` abre `claude -p` para fabricar fatias | A abertura dessa sessão não é `Agent`; não passa pela trava nova. O próprio fabricante se declara esteira estrutural e distingue fabricar em `.esteira/` da aplicação por `construir.py`; enquadramento de cada fatia como “obra ESTRUTURA (fila 1)” do aval **[nao verificado]**. (`bin/fabricante.sh:2`, `bin/fabricante.sh:6`, `bin/fabricante.sh:150`, `bin/fabricante.sh:162`) |
-
-As chamadas do hook configuradas na cópia apontam o caminho absoluto `/home/ronald/saas-hasner/bin/disjuntor.py`; que o arquivo vivo nesse caminho contenha este diff é **[nao verificado]**. (`.claude/settings.json:68`)
-
-As respostas dos parsers acima foram confirmadas por chamadas puras em memória, com bytecode desabilitado; não executei wrapper nem teste com criação de arquivos. Referências da implementação: `bin/disjuntor.py:1250`, `bin/disjuntor.py:1332`, `bin/disjuntor.py:511`.
-
-5. **A trava não inventa outra definição de andável.** `_fila1_viva` lê BACKLOG e chama diretamente `H._itens_andaveis`; este usa `_item_parado`, o mesmo predicado de `_item_da_ordem_viva` e `_ids_que_nao_andam`. Não há derivação paralela nova de pertencimento à fila nessa costura. (`bin/disjuntor.py:1489`, `bin/disjuntor.py:1498`, `bin/hook_stop_fila1.py:158`, `bin/hook_stop_fila1.py:212`, `bin/hook_stop_fila1.py:218`, `bin/hook_stop_fila1.py:239`, `bin/hook_stop_fila1.py:333`)
-
-**Andáveis e item em curso são perguntas distintas:** os andáveis vêm do bloco OBRAS; o item em curso vem do marcador `ORDEM-VIVA-TOPO`, sem fallback pela ordem física. A própria documentação da função explicita essa distinção. (`bin/hook_stop_fila1.py:180`, `bin/hook_stop_fila1.py:196`, `bin/hook_stop_fila1.py:221`, `bin/hook_stop_fila1.py:245`, `bin/hook_stop_fila1.py:1292`)
-
-**B3 não é juiz de fila 1.** Seu universo vem de reprovações/triagens por obra e o juiz `estado_b3` devolve parada/livre/não sei; não consulta BACKLOG para decidir pertencimento à fila. Compartilha com I-1 o reconhecedor de identidade `_obra_de`, o que não transforma B3 em outro juiz da fila. (`bin/disjuntor.py:903`, `bin/disjuntor.py:909`, `bin/disjuntor.py:993`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1604`)
-
-**Fragilidade separada:** BACKLOG ausente vira texto vazio, logo conjunto de fila vazio e liberação silenciosa sem `CENSO ABRIU-SEM`; não é divergência de predicado, mas erro de fonte interpretado como “não abrangido”. (`bin/disjuntor.py:1493`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1498`, `bin/disjuntor.py:1507`)
-
-_2988 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2992 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
