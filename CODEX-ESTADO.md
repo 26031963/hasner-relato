@@ -1,7 +1,663 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 07:48** · publicado em **09/11/2026 07:48** (UTC-3)
+> Ultima resposta processada: **09/11/2026 07:53** · publicado em **09/11/2026 07:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 07:53 · sessao 0e7deca660a7 · AUDITORIA-0911 · leitura · origem=Code
+
+**Não há número novo de produção nem commit de cura nesta auditoria.** As sondas abaixo não foram executadas; o hash informado não foi comprovado como commit Git nesta cópia. [nao verificado] [nao verificado]
+
+**A — Os contadores não medem o mesmo universo.**
+
+| Grandeza | Quem conta | Universo literal e unidade |
+|---|---|---|
+| Badge **1.177** do anexo [nao verificado] | `lavrar_badge_navbar` → `exige_o_admin` → `particionar_verbos` | `ChamadoColaborador.objects.filter(status_local__in=VIVOS)`, com `VIVOS=('aberto','em_analise','registrado')`; soma somente verbos `validar` e `decidir`. **Chamados**, não perguntas/toques. `app/core/management/commands/lavrar_badge_navbar.py:72`; `app/chamados/services/painel.py:155`; `app/chamados/catalogo/motor.py:24`; `app/chamados/services/verbos.py:22`. |
+| **4.323** referido no aval [nao verificado] | Se corresponde à coluna `chamados_vivos`, é `vivos.count()` | Mesmo filtro `status_local__in=VIVOS`; **chamados**. Não corresponde a `lavradas` nem a `sobra`. `app/chamados/management/commands/lavrar_perguntas_stale.py:56`; `app/chamados/management/commands/lavrar_perguntas_stale.py:71`. |
+| `universo=77xx` do stale | `universo.count()` | `PerguntaDisputa.objects.filter(chamado_destino__in=vivos)`; **perguntas**, sem o fallback pelo chamado da disputa que o badge utiliza. `app/chamados/management/commands/lavrar_perguntas_stale.py:57`; `app/chamados/services/raiox.py:54`. |
+| `perguntas_stale_agora` | `len(pks_stale_por_varredura(universo))` | Perguntas daquele universo com lavra ausente, relógio vencido ou insumo posterior à lavra. `app/chamados/services/raiox.py:31`. |
+| `lavradas / sobra` | Laço `lavrar(p)` / `max(len(stale)-teto,0)` | **Perguntas processadas nesta rodada / perguntas fora do teto**; teto padrão 500. `app/chamados/management/commands/lavrar_perguntas_stale.py:35`; `app/chamados/management/commands/lavrar_perguntas_stale.py:60`; `app/chamados/management/commands/lavrar_perguntas_stale.py:84`. |
+| **7.716 literal encontrado** | Não é apresentado como contador do stale | A ocorrência documental é a **meta histórica de 98% do oráculo**, em **dia-colab**: `7.716−7.193=523`, sobre 7.873 comparados. Atribuir exatamente 7.716 ao universo de perguntas de uma rodada é [nao verificado]. `app/docs/RELATO-ARQUIVO.md:23683`; `app/docs/RELATO-ARQUIVO.md:23695`. |
+
+O arquivo de log mistura dois lavradores: `lavrar_placar_situacional` conta o universo de colaboradores em operação; o badge pertence ao `lavrar_badge_navbar`. A diferença entre esses universos não demonstra, sozinha, defeito estrutural. `app/core/management/commands/lavrar_placar_situacional.py:54`; `app/core/management/commands/lavrar_badge_navbar.py:85`.
+
+A separação solicitada tem estes limites de autoridade:
+
+| Classe pedida | Juiz existente |
+|---|---|
+| Legítimo | **SEM JUIZ composto.** Premissa viva inclui resultado conservador quando falta insumo; não prova legitimidade geral. `app/chamados/catalogo/premissa.py:128`. |
+| Repetido | O registro aponta para **`ChamadoColaborador.abrir`**, uma porta de escrita. **SEM JUIZ equivalente de leitura** para censar todos os repetidos; não chamar essa porta na sonda. `app/core/juizes.py:268`. |
+| Sem porta | `porta_alcancavel_do_dia`; seu `None` significa ausência das portas daquele corte. “Resolver dia” e acesso manual por URL estão explicitamente fora desse juiz. `app/core/juizes.py:277`; `app/chamados/juizes.py:1361`; `app/chamados/juizes.py:1387`. |
+| Premissa superada | `premissa_morta`, alimentada por `_veredito_premissa`; respeitar `escopo` e `viva`. `app/core/juizes.py:263`; `app/chamados/reconciliador.py:247`. |
+| Exige humano | Medida pelo verbo existente `validar/decidir`; **SEM JUIZ composto adicional** para esse rótulo. `app/chamados/services/verbos.py:22`. |
+| Pergunta viva/encerrada atualmente | C6, `pergunta_viva`. Via `duplicata` registrada é encerramento por identidade; não equivale a censo de repetição ativa. `app/core/juizes.py:266`; `app/chamados/juizes.py:1163`. |
+
+Esses resultados podem sobrepor-se. Não há autoridade citada que estabeleça uma partição exclusiva entre os cinco rótulos; a sonda mantém os eixos separados. `app/core/juizes.py:263`; `app/core/juizes.py:266`; `app/core/juizes.py:277`.
+
+**Nasce/permanece/encerra históricos antes/depois do deploy não são reconstruíveis com exatidão pelos campos atuais.** A pergunta não tem carimbo próprio de nascimento; `data_evento` é a data do fato. O chamado pode reabrir; seus carimbos atuais não fornecem todos os intervalos. `DecisaoPergunta` registra atos, sem registrar todas as mudanças de C6 provocadas por insumos externos. O fluxo histórico pedido permanece [nao verificado]. `app/chamados/models.py:2431`; `app/chamados/models.py:2455`; `app/chamados/models.py:292`; `app/chamados/models.py:3857`.
+
+A sonda A mede os contadores literais, o estoque atual e os carimbos disponíveis por competência; não apresenta carimbo de fechamento como fluxo completo. As competências usam o juiz da empresa: com corte 21, outubro é 21/09–20/10 e novembro é 21/10–20/11. `app/ponto/janelas.py:10`; `app/ponto/janelas.py:36`; `app/chamados/juizes.py:2090`.
+
+**Preâmbulo comum às sondas.** Executar somente após a cura do envelope, em Python/Django já inicializado e com conexões abertas em leitura. O envelope atual executa `GRANT` antes da sonda; este bloqueio interno não cobre aquela execução anterior. `bin/sonda_leitura.sh:157`; `bin/sonda_leitura.sh:161`; `bin/sonda_leitura.sh:192`.
+
+```python
+# PREAMBULO COMUM — não executado nesta auditoria.
+import sys
+sys.dont_write_bytecode = True
+
+import json
+import logging
+import re
+from contextlib import ExitStack, contextmanager
+from django.db import connections
+
+class SondaRecusada(BaseException):
+    pass  # não pode ser engolida pelos except Exception da aplicação
+
+def saida(**dados):
+    print(json.dumps(dados, ensure_ascii=False, default=str))
+
+@contextmanager
+def leitura():
+    anterior = logging.root.manager.disable
+    logging.disable(10**9)  # nenhuma saída incidental nominal dos leitores
+    try:
+        with ExitStack() as pilha:
+            for conn in connections.all():
+                # O envelope curado deve inicializar as conexões antes daqui.
+                if conn.connection is None:
+                    raise SondaRecusada("conexao nao inicializada pelo envelope")
+                if conn.in_atomic_block or not conn.get_autocommit():
+                    raise SondaRecusada("exige autocommit, fora de atomic")
+
+                def somente_select(execute, sql, params, many, context):
+                    texto = str(sql).strip()
+                    if (
+                        not re.match(r"(?is)^SELECT\b", texto)
+                        or ";" in texto
+                        or re.search(
+                            r"(?is)\bFOR\s+(UPDATE|SHARE|NO\s+KEY|KEY\s+SHARE)\b"
+                            r"|\b(nextval|setval|set_config|pg_advisory\w*)\s*\(",
+                            texto,
+                        )
+                    ):
+                        raise SondaRecusada("SQL fora do contrato SELECT")
+                    return execute(sql, params, many, context)
+
+                pilha.enter_context(conn.execute_wrapper(somente_select))
+                with conn.cursor() as cur:
+                    cur.execute(
+                        "SELECT current_setting('transaction_read_only'), "
+                        "rolsuper FROM pg_roles WHERE rolname=current_user"
+                    )
+                    estado = cur.fetchone()
+                if estado != ("on", False):
+                    raise SondaRecusada("conexao sem contrato de leitura")
+            yield
+    finally:
+        logging.disable(anterior)
+```
+
+Não envolver as sondas em `atomic`: `reconciliaria()` tem caminho de trava quando já está dentro de transação. O bloqueio usa `BaseException` porque o fechamento captura `Exception` e poderia ocultar uma tentativa recusada. `app/chamados/models.py:705`; `app/ponto/services/fechamento.py:1303`.
+
+```python
+# SONDA A — contadores e eixos atuais, competências 10 e 11.
+# Fontes: lavrar_perguntas_stale.py:56; verbos.py:25;
+# core/juizes.py:263,266,274,277.
+from collections import Counter
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+def sonda_A():
+    from chamados.models import ChamadoColaborador as CH, PerguntaDisputa as PD
+    from chamados.catalogo.motor import VIVOS
+    from chamados.services.verbos import (
+        particionar_verbos, exige_o_admin, VERBOS_DO_ADMIN,
+    )
+    from chamados.services.raiox import pks_stale_por_varredura
+    from chamados.juizes import (
+        competencia_do_chamado, pergunta_viva,
+        alimentar_portas, porta_alcancavel_do_dia,
+    )
+    from chamados.reconciliador import _veredito_premissa
+    from ponto.janelas import janela_atual
+
+    deploy = datetime(2026, 11, 9, 1, 52, [nao verificado]
+                      tzinfo=ZoneInfo("America/Sao_Paulo"))
+    vivos = CH.objects.filter(status_local__in=VIVOS)
+    universo = PD.objects.filter(chamado_destino__in=vivos)
+    part = particionar_verbos(vivos)
+    stale = set(pks_stale_por_varredura(universo))
+    saida(
+        item="A", recorte="global_literal",
+        badge=exige_o_admin(part["contagens"]),
+        chamados_vivos=vivos.count(),
+        universo_perguntas=universo.count(),
+        perguntas_stale_agora=len(stale),
+        lavraria_com_teto_500=min(500, len(stale)),
+        sobra_com_teto_500=max(len(stale)-500, 0),
+    )
+
+    chamados = list(CH.objects.select_related("colaborador__empresa", "celula"))
+    alimentacao = alimentar_portas(
+        {c.celula_id for c in chamados if c.celula_id}
+    )
+    cont = Counter()
+
+    def contar(mes, entidade, causa, eixo, resultado):
+        cont[(mes, entidade, causa, eixo, resultado)] += 1
+
+    def lado(ts):
+        return ("SEM CARIMBO" if ts is None else
+                "antes_deploy" if ts < deploy else "depois_deploy") [nao verificado]
+
+    for c in chamados:
+        cp = competencia_do_chamado(c)
+        if cp is None:
+            contar(None, "chamado", (c.modulo_origem, c.subcategoria),
+                   "competencia", "SEM FATO DATADO")
+            continue
+        if cp.ano != 2026 or cp.mes not in (10, 11):
+            continue
+        causa = (c.modulo_origem, c.subcategoria)
+        contar(cp.mes, "chamado", causa, "status_atual", c.status_local)
+        contar(cp.mes, "chamado", causa, "nascimento_registrado", lado(c.criado_em))
+        contar(cp.mes, "chamado", causa, "carimbo_fecho_atual", lado(c.resolvido_em))
+        contar(cp.mes, "chamado", causa, "legitimo", "SEM JUIZ")
+        contar(cp.mes, "chamado", causa, "repetido_leitura", "SEM JUIZ")
+        try:
+            v = _veredito_premissa(c)
+            resultado = (
+                "SEM JUIZ" if v is None else
+                "superada" if not v.viva else v.motivo
+            )
+            contar(cp.mes, "chamado", causa, "premissa", resultado)
+        except Exception as exc:
+            contar(cp.mes, "chamado", causa, "premissa",
+                   "JUIZ FALHOU:" + type(exc).__name__)
+        if c.status_local in VIVOS:
+            porta = porta_alcancavel_do_dia(
+                c.celula_id, alimentacao=alimentacao
+            )
+            contar(cp.mes, "chamado", causa, "porta_do_corte",
+                   porta["rota"] if porta else "sem porta")
+            verbo = part["mapa"].get(c.pk)
+            contar(cp.mes, "chamado", causa, "verbo", verbo)
+            if verbo in VERBOS_DO_ADMIN:
+                contar(cp.mes, "chamado", causa, "exige_humano",
+                       "verbo_do_admin")
+
+    for p in PD.objects.select_related(
+        "disputa__colaborador__empresa", "celula", "chamado_destino"
+    ).iterator():
+        causa = (p.motivo, p.instancia_marco)
+        if p.conversa or p.data_evento is None:
+            contar(None, "pergunta", causa, "competencia",
+                   "SEM DIA DE TURNO")
+            continue
+        fim = janela_atual(p.data_evento, p.disputa.colaborador.empresa)[1]
+        if fim.year != 2026 or fim.month not in (10, 11):
+            continue
+        contar(fim.month, "pergunta", causa, "C6_atual",
+               "viva" if pergunta_viva(p) else "encerrada")
+        contar(fim.month, "pergunta", causa, "via_registrada", p.via_resolucao)
+        contar(fim.month, "pergunta", causa, "legitimo", "SEM JUIZ")
+        if p.chamado_destino_id in part["mapa"]:
+            contar(fim.month, "pergunta", causa, "universo_stale", "destino_vivo")
+        if p.pk in stale:
+            contar(fim.month, "pergunta", causa, "stale", "sim")
+
+    for (mes, entidade, causa, eixo, resultado), n in sorted(
+        cont.items(), key=lambda x: str(x[0])
+    ):
+        saida(item="A", competencia=mes, entidade=entidade,
+              causa=causa, eixo=eixo, resultado=resultado, n=n)
+    saida(
+        item="A", nasce_permanece_encerra_historico=None,
+        limite="[nao verificado]: sem fotos e insumos historicos; "
+               "carimbos atuais nao reconstroem C6 e portas anteriores",
+    )
+
+with leitura():
+    sonda_A()
+```
+
+**Dono A:** divergência entre um contador e sua própria lista seria provavelmente **ESTRUTURA**, padrão **Single Source of Truth / Aggregate Root**. Números diferentes com universos diferentes não bastam para essa atribuição. `app/docs/GLOSSARIO.md:11`; `app/ponto/management/commands/e6_oraculo.py:57`.
+
+**B — Ausência aprovada até DiaPago/export.**
+
+| Degrau | Leitura/efeito existente |
+|---|---|
+| Cobertura | Para folha, somente `status='aprovada'`; para cobrança, exclui rejeitada. Sobreposição vence por `(data,pk)` mais recente. `app/ponto/turnos.py:2511`; `app/ponto/turnos.py:2735`. |
+| Célula/grade | Overlay da ausência na grade; leitor da célula entrega a ata lavrada. `app/escala/utils.py:1188`; `app/escala/services/leitor_celula.py:345`. |
+| Resolver dia | Lê batidas cruas de D até D+2 e chama `grade_dia`. No pedido `trabalhou`, recusa se `tipo_dia != 'trabalho'`. Isso não demonstra perda no motor. `app/ponto/services/veredito_celula.py:234`; `app/ponto/services/veredito_celula.py:241`; `app/ponto/services/simular_dia.py:5`. |
+| Motor | Fechamento lê cobertura, acrescenta ABONA a `datas_justificadas` e entrega ausências integrais ao motor. A integral zera atraso/saída antecipada, preservando horas trabalhadas. `app/ponto/services/fechamento.py:683`; `app/ponto/services/fechamento.py:751`; `app/ponto/motor_calculo_v2.py:1085`. |
+| Abono diário | `por_dia_da_grade`: previsto menos cobertura das batidas no dia de ausência. O comentário cita col39/15-10 como precedente, não como medição atual de #4879. `app/ponto/services/dia_pago.py:364`; `app/ponto/services/dia_pago.py:375`. |
+| DiaPago | Lavra recebe os mesmos períodos e mapas do fechamento. `somente_leitura=True` só permanece leitura com `lavrar_dias_pagos=False`. `app/ponto/services/fechamento.py:1191`; `app/ponto/services/fechamento.py:1201`. |
+| Export | `classificar_export` julga entrada; `montar_linhas_export` lê fechamento e eventos, sem recalcular. Registros de horas são mensais; datas individuais existem no bloco de faltas. `app/folha/export.py:757`; `app/folha/export.py:717`; `app/folha/export.py:224`. |
+
+O dado fornecido não contém os valores dos degraus de #4879. Portanto, o ponto concreto da perda de cobertura permanece [nao verificado].
+
+```python
+# SONDA B — ausência/célula/Resolver/motor/projeção/export, sem escritores.
+# Fontes: fechamento.py:448,683,751,1128,1191; dia_pago.py:364;
+# veredito_celula.py:234; export.py:682.
+def sonda_B():
+    import datetime as dt
+    from collections import Counter
+    from django.utils import timezone
+    from colaboradores.models import Colaborador
+    from ponto.models import Ausencia, Batida, DiaPago, FechamentoMensal
+    from ponto.turnos import cobertura_ausencia_periodo, cobre_parte_do_dia
+    from ponto.services.efeito_ausencia import efeitos_da_ausencia
+    from escala.services.leitor_celula import grade_da_celula
+    from ponto.services.simular_dia import grade_dia
+    from ponto.services.dia_pago import CAMPOS_DIA, por_dia_da_grade
+    from ponto.services.fechamento import recalcular_fechamento_mes
+    from folha.export import (
+        janela_competencia, classificar_export,
+        montar_linhas_export, partes_da_linha,
+    )
+    from folha.models import ExportacaoDominio, anotar_vigencia, so_vigentes
+
+    c = Colaborador.objects.select_related("empresa").get(pk=39)
+    d = dt.date(2026, 10, 15)
+    agora = timezone.now()
+    ini, fim = janela_competencia(c.empresa, 10, 2026)
+    a = Ausencia.objects.get(pk=4879, colaborador=c)
+    campos_a = ("status", "tipo", "data", "data_fim",
+                "minutos", "hora_ini", "hora_fim")
+    saida(item="B", degrau="ausencia",
+          lido={k: getattr(a, k) for k in campos_a},
+          efeito=a.efeito, parcial=cobre_parte_do_dia(a))
+
+    for para in ("folha", "cobranca"):
+        vencedora = cobertura_ausencia_periodo(c, d, d, para=para).get(d)
+        saida(item="B", degrau="cobertura", para=para,
+              ausencia_vencedora=getattr(vencedora, "pk", None),
+              efeito=getattr(vencedora, "efeito", None))
+    efeitos = efeitos_da_ausencia(c, d, d)
+    saida(item="B", degrau="efeitos",
+          lido={k: d in efeitos[k]
+                for k in ("justificadas", "suprimidas", "dia_inteiro")})
+
+    campos_grade = (
+        "tipo_dia", "cobertura_parcial", "ausencia_id",
+        "minutos_previstos", "minutos_realizados", "n_missing", "n_ok",
+    )
+    g = grade_da_celula(c, d, d)
+    saida(item="B", degrau="celula",
+          lido=[{k: x.get(k) for k in campos_grade}
+                for x in g.get("dias") or []])
+    mapas = por_dia_da_grade(g)
+    def valor_dia(m):
+        return m.get(d, m.get(str(d)))
+    saida(item="B", degrau="grade_para_DiaPago",
+          lido=dict(zip(("abono", "previsto", "realizado"),
+                        (valor_dia(m) for m in mapas))))
+
+    j0 = timezone.make_aware(dt.datetime.combine(d, dt.time.min))
+    reais = list(Batida.objects.filter(
+        colaborador=c, timestamp__gte=j0,
+        timestamp__lt=j0+dt.timedelta(days=2),
+    ).order_by("timestamp"))
+    saida(item="B", degrau="batidas_lidas_pelo_Resolver",
+          lido=[{k: getattr(b, k) for k in (
+              "timestamp", "tipo", "origem", "is_intervalo",
+              "aprovada", "retratada_em",
+          )} for b in reais])
+    marcos, dd = grade_dia(c, reais, d, agora=agora)
+    saida(item="B", degrau="Resolver_grade",
+          lido={k: dd.get(k) for k in campos_grade},
+          marcos=[{k: m.get(k) for k in ("tipo", "hora")}
+                  if isinstance(m, dict) else None for m in marcos])
+
+    # Observa os objetos/locais do caminho real, em memória.
+    def perfil(frame, event, arg):
+        if event != "return":
+            return
+        path, fn = frame.f_code.co_filename, frame.f_code.co_name
+        loc = frame.f_locals
+        if path.endswith("/ponto/services/fechamento.py") and fn == "_montar_motor":
+            saida(item="B", degrau="motor_recebeu",
+                  integral=d in arg.dias_com_ausencia_inteira,
+                  justificada=d in arg.datas_justificadas)
+        if path.endswith("/ponto/services/fechamento.py") and fn == "recalcular_fechamento_mes":
+            r = loc.get("resultado")
+            mapa = getattr(r, "dia_da_jornada", {}) or {}
+            periodos = [p for p in (getattr(r, "periodos", []) or [])
+                        if mapa.get(id(p)) == d]
+            saida(item="B", degrau="motor_devolveu",
+                  periodos=[{k: getattr(p, k, None) for k in (
+                      "entrada", "saida", "minutos_trabalhados",
+                      "minutos_atraso", "minutos_saida_antecipada",
+                  )} for p in periodos],
+                  furo_motor=d in (getattr(r, "datas_falta", []) or []),
+                  mapas_para_DiaPago={
+                      k: valor_dia(loc.get(k) or {})
+                      for k in ("_abono_dia", "_prev_dia_m", "_real_dia_m",
+       
+
+[truncado em 20000 de 44487 caracteres]
+
+## 09/11 07:52 · sessao 7c9934466d7c · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · leitura · origem=Code
+
+O bloqueio está na aplicação **por pergunta**, antes da porta de escrita: cada metade encontra uma vizinha do mesmo tipo e é recusada. A palavra “colada” traduz uma guarda cujo raio atual é **12 horas**. `app/chamados/services/validacao.py:461`; `app/chamados/services/materializacao.py:85`; `app/chamados/services/materializacao.py:875`; `app/chamados/catalogo/recusa.py:26`.
+
+O commit introdutor, o censo de produção e o resultado executado do RED permanecem **[nao verificado]**. Esta cópia não disponibilizou histórico Git; o dado raspado fornece o caso nominal, sem população completa. **[nao verificado]** [nao verificado]
+
+1. **Origem da recusa.**
+
+A recusa concreta deste caminho é:
+
+```python
+_viz = _vizinha_mesmo_tipo(disputa.colaborador, ts, _tipo)
+if _viz is not None and not _plantio_preenche_furo_na_data(
+        disputa.colaborador, ts):
+    ...
+```
+
+Fonte: `app/chamados/services/materializacao.py:875`.
+
+`_vizinha_mesmo_tipo` procura a batida imediatamente anterior e, depois, a imediatamente posterior, dentro de ±12h. Retorna a primeira vizinha encontrada do mesmo tipo; não filtra aprovação nem `retratada_em`. A exceção consulta se o plantio preenche um furo na célula da **data civil do plantio**. `app/chamados/services/materializacao.py:85`; `app/chamados/services/materializacao.py:142`; `app/chamados/services/materializacao.py:170`.
+
+Quando essa recusa acontece, o código não chega a `registrar_batida`. Se o marco cobrado não estiver comprovadamente aceso, registra a recusa e mantém a pergunta sem materialização; a validação recusada é devolvida ao administrador. `app/chamados/services/materializacao.py:901`; `app/chamados/services/materializacao.py:913`; `app/chamados/services/materializacao.py:926`; `app/chamados/services/validacao.py:464`.
+
+A porta `registrar_batida` **não contém uma recusa geral de duas batidas iguais distantes**. Ela deduplica mesmo tipo próximo, verifica competência para escrita administrativa e pode recusar colisão com tipo oposto. `app/ponto/registro_batida.py:106`; `app/ponto/registro_batida.py:132`; `app/ponto/registro_batida.py:138`.
+
+As tentativas de `git log -L` e `git blame` falharam com `fatal: not a git repository`; portanto, commit, data e mensagem de introdução de cada trecho abaixo são **[nao verificado]**. [nao verificado]
+
+| Trecho | Evidência disponível na cópia | Introdução Git |
+|---|---|---|
+| Vizinha do mesmo tipo, raio 12h | Comentário atribui a guarda a “fio-quebrado 01/08”. `app/chamados/services/materializacao.py:85` | **[nao verificado]** |
+| Recusa antes do plantio | Comentário também menciona 01/08. `app/chamados/services/materializacao.py:872` | **[nao verificado]** |
+| Tratamento por lâmpada do marco | Comentário atribui a alteração a 18/10. `app/chamados/services/materializacao.py:889` | **[nao verificado]** |
+| Frase “colada / duas seguidas iguais” | Regra `PARIDADE`. `app/chamados/catalogo/recusa.py:26` | **[nao verificado]** |
+| Dedup/colisão na porta única | Predicados efetivos da porta. `app/ponto/registro_batida.py:106`; `app/ponto/registro_batida.py:138` | **[nao verificado]** |
+
+O relato associa `225256c1` ao fecho/trava do repasse, `e017181f` a `REPASSE_RECUSADO` e `e9bf5de2` aos consumidores dessa recusa. Isso não prova a introdução da guarda de paridade nesses commits. `app/docs/RELATO.md:27`; `app/docs/RELATO.md:17`; `app/docs/RELATO.md:11`.
+
+**Qual commit introduziu a recusa que trava o caso 960: [nao verificado].** Os comentários apontam antecedentes anteriores à E1; não substituem blame. A identificação do deploy às 01:52 também não foi confirmada: o relato da V2-2 registra pouso às 03:3x. `app/chamados/services/materializacao.py:872`; `app/docs/RELATO.md:3`.
+
+2. **Unidade de trabalho hoje.**
+
+O fluxo de validação é:
+
+```text
+view/fio
+  → acao_validar_pergunta
+  → validar_pergunta(UMA pergunta)
+      atomic + travas
+      → carimbar validação
+      → _materializar_uma(pergunta atual)
+      → devolver validação se recusada
+  → varrer outras perguntas validadas da disputa
+```
+
+Fontes: `app/chamados/views.py:483`; `app/chamados/services/fio.py:585`; `app/chamados/services/acoes_disputa.py:13`; `app/chamados/services/validacao.py:425`; `app/chamados/services/validacao.py:461`; `app/chamados/services/validacao.py:469`.
+
+A varredura seleciona perguntas respondidas, validadas e sem materialização, chamando `_materializar_uma` individualmente. Cada unidade abre seu próprio `atomic`, planta, exige lastro e pede carimbo ao C6; reprovação desfaz aquela unidade. `app/chamados/services/materializacao.py:1369`; `app/chamados/services/materializacao.py:1220`; `app/chamados/services/materializacao.py:1232`; `app/chamados/services/materializacao.py:1277`.
+
+Quem grava a batida é `registrar_batida`, chamado pelo ramo de hora com `autoridade_humana=False` e `fato_de_chao=False`. `app/chamados/services/materializacao.py:926`; `app/ponto/registro_batida.py:157`.
+
+“Regularizar disputa” também entrega as perguntas ao materializador granular; não constitui um ato próprio para o par de intervalo. `app/chamados/services/acoes_disputa.py:139`; `app/chamados/services/fio.py:670`.
+
+Existe ainda “decidir o dia”, via `veredito_celula_view → veredito_celula`, com simulação do conjunto e escrita pela mesma porta, mas esse caminho decide o dia e pode preencher marcos; não é o aceite das duas declarações deste par. `app/ponto/views.py:3312`; `app/ponto/views.py:3340`; `app/ponto/services/veredito_celula.py:223`; `app/ponto/services/veredito_celula.py:277`; `app/ponto/services/veredito_celula.py:322`.
+
+**SEM JUIZ DO PAR DE PERGUNTAS.** Há vínculo por disputa, motivo, dia do turno e posição do marco, mas nenhuma identidade compartilhada da pausa. O código declara expressamente que duas pausas no mesmo dia ainda colidem nos mesmos motivos e que nenhum emissor carrega o índice da pausa. `app/chamados/models.py:2424`; `app/chamados/models.py:2431`; `app/chamados/models.py:2442`; `app/chamados/services/declaracao_texto.py:48`.
+
+Os mais próximos são:
+
+| Autoridade existente | O que responde |
+|---|---|
+| `intervalos_do_turno` | Intervalos entre **batidas** julgadas pelo pareador. `app/core/juizes.py:202`; `app/ponto/turnos.py:502` |
+| `MARCO_DA_PERGUNTA` | Saída → S/hii; volta → E/hfi. `app/chamados/juizes.py:882` |
+| `instancia_do_motivo` | Posições `int_ida` e `int_volta`, sem índice compartilhado da pausa. `app/chamados/services/declaracao_texto.py:42` |
+| `CelulaDia.PARES_PAUSA_DNA` | Pares canônicos dos **marcos**: hii/hfi e hii2/hfi2. `app/escala/models.py:1652` |
+| Emissor de intervalo ausente | Lê `marcos_faltantes` e emite uma pergunta por marco S/E. `app/chamados/services/disputa_emissao.py:1132` |
+
+Preencher arbitrariamente `instancia_marco` para inventar essa identidade é recusado pelo modelo. `app/chamados/models.py:3436`.
+
+3. **Texto e tolerância.**
+
+“Marcação […] colada nesse horário” e “duas seguidas iguais” nascem na regra `PARIDADE`. A tradução reconhece substrings do erro; não mede distância temporal. A casca de validação e o followup usam essa tradução. `app/chamados/catalogo/recusa.py:26`; `app/chamados/catalogo/recusa.py:77`; `app/chamados/services/acoes_disputa.py:32`; `app/chamados/services/materializacao.py:1091`.
+
+| Uso real | Tolerância efetiva | Consequência |
+|---|---:|---|
+| Guarda de paridade | ±12h | Recusa condicionada ao furo. `app/chamados/services/materializacao.py:85`; `app/chamados/services/materializacao.py:875` |
+| Mesmo tipo na porta | ±60s, inclusivos | Reutiliza a existente. `app/ponto/registro_batida.py:106` |
+| Reuso do materializador | ±20min | Reutiliza a existente. `app/chamados/juizes.py:235` |
+| Colisão de tipo oposto | ±300s com escala/marcos; ±60s sem | Pode recusar. `app/ponto/registro_batida.py:21`; `app/ponto/registro_batida.py:138` |
+| Exceção por marco próprio | ±5min | Afasta colisão oposta. `app/ponto/registro_batida.py:35`; `app/ponto/registro_batida.py:145` |
+
+Não existe, nessa regra de apresentação, um predicado próprio de “colada”. Associar a frase automaticamente aos 5min da CCT seria introduzir uma ligação que o código atual não faz. `app/chamados/catalogo/recusa.py:77`; `app/core/models.py:59`.
+
+4. **Desenho de cura — proposto, não implementado. [nao verificado]**
+
+Para o par cuja identidade esteja comprovada, o ato deve:
+
+- Registrar o aceite da primeira metade, preservar a declaração e responder **“falta a outra metade do intervalo”**, sem plantar nem reconciliar parcialmente. **[nao verificado: desenho]**
+- Quando ambas estiverem respondidas e validadas, travar o conjunto, reler as duas, derivar os instantes pela função existente e gravar ambas numa transação pela porta única. **[nao verificado: desenho]**
+- Julgar alternância e lastro sobre o conjunto completo; qualquer reprovação deve desfazer as duas batidas e os carimbos de aplicação. Só depois reconciliar destinos e avaliar fechamento. **[nao verificado: desenho]**
+
+Um `atomic` ao redor do laço atual não basta: a primeira metade continuaria encontrando a guarda individual antes do plantio. O reparador O330 já julga geometria após um grupo do dia, mas ainda chama `_materializar_uma` para cada pergunta. `app/chamados/services/materializacao.py:875`; `app/chamados/services/passivo_validado.py:474`; `app/chamados/services/passivo_validado.py:516`; `app/chamados/services/passivo_validado.py:536`.
+
+**Limite do desenho:** sem juiz novo, é necessário demonstrar como os juízes existentes de marco/turno e os pares canônicos do DNA identificam inequivocamente as duas perguntas. Esse adaptador não existe hoje; “mesma disputa + mesmo dia” sozinho não resolve a lacuna declarada das duas pausas. `app/escala/models.py:1652`; `app/chamados/services/declaracao_texto.py:48`. O desenho geral ainda não está fechado. **[nao verificado]**
+
+| Sítio/campo | Quem escreve hoje | Quem lê / ponto afetado |
+|---|---|---|
+| `resposta_colab`, `respondida_em` | Porta de resposta. `app/chamados/services/disputa_emissao.py:1464` | Validação e derivação. `app/chamados/services/validacao.py:393`; `app/chamados/services/materializacao.py:846` |
+| `validada_em/por` | `_carimbar_validacao`; devolução da recusa. `app/chamados/services/validacao.py:127`; `app/chamados/services/validacao.py:195` | Seleção e estado da pergunta. `app/chamados/services/materializacao.py:1369`; `app/chamados/models.py:3330` |
+| Unidade aplicada | `_materializar_uma`. `app/chamados/services/materializacao.py:1158` | Validação direta e varredura. `app/chamados/services/validacao.py:461`; `app/chamados/services/materializacao.py:1375` |
+| Batida: instante/tipo/origem | `registrar_batida`. `app/ponto/registro_batida.py:157` | Juiz do lastro após plantio. `app/chamados/services/materializacao.py:1233` |
+| `pergunta_origem` | Materializador por `anotar`. `app/chamados/services/materializacao.py:946` | Lastro vinculado à pergunta. `app/chamados/services/materializacao.py:941` |
+| Materialização/via | `PerguntaDisputa.carimbar`. `app/chamados/models.py:3103` | C6 e seletor granular. `app/chamados/models.py:3139`; `app/chamados/services/materializacao.py:1372` |
+| Recusa/espera e apresentação | Recusa canônica; casca traduz. `app/chamados/services/materializacao.py:1083`; `app/chamados/services/acoes_disputa.py:32` | Modal e estado de aplicação. `app/templates/chamados/partials/modal_fio.html:225`; `app/chamados/services/materializacao.py:425` |
+| Fechamento | `DisputaSupervisao.fechar`. `app/chamados/models.py:1863` | `pode_fechar` e cauda materializadora. `app/chamados/models.py:1856`; `app/chamados/services/materializacao.py:1302` |
+| Sequência E1 | `DecisaoPergunta.registrar`. `app/chamados/models.py:3942` | Histórico `respostas_anteriores`. `app/chamados/models.py:3849` |
+
+Os riscos concretos são:
+
+- **Fechamento antecipado:** `validada_em` mata a pergunta no primeiro degrau; guardar uma metade validada exige manter a pendência do par corretamente visível aos leitores e ao fechamento. `app/chamados/models.py:3330`; `app/chamados/models.py:1856`.
+- **Reconciliação entre metades:** o ramo atual reconcilia imediatamente após cada plantio; ambas precisam permanecer sob o escopo de aplicação antes dessa cauda. `app/chamados/services/materializacao.py:974`; `app/chamados/services/materializacao.py:1114`.
+- **Concorrência:** preservar ordem Colaborador → Disputas → Chamados → Perguntas, incluindo destinos e clones, antes da escrita. `app/chamados/models.py:2637`; `app/chamados/services/validacao.py:431`.
+- **Chão e motor:** conservar a separação institucional `fato_de_chao=False`; não transferir essa recusa para a batida de chão nem produzir horas não declaradas. `app/chamados/services/materializacao.py:829`; `app/chamados/services/materializacao.py:927`; `app/ponto/registro_batida.py:129`.
+- **Append-only E1:** acrescentar atos pela porta; nunca editar/apagar decisões anteriores nem perder projeção legada sem linha. `app/chamados/models.py:3821`; `app/chamados/models.py:3914`; `app/chamados/models.py:3942`.
+
+5. **Sonda SELECT pronta como texto; não executada. [nao verificado]**
+
+O contador do badge é `exige_o_admin(particionar_verbos(qs_vivos())['contagens'])`. O lavrador persiste esse total em `PlacarNavbar`; `PlacarSituacional` é outro placar. `app/chamados/services/verbos.py:25`; `app/core/context_processors.py:88`; `app/core/management/commands/lavrar_badge_navbar.py:72`; `app/core/management/commands/lavrar_placar_situacional.py:56`.
+
+A sonda abaixo reutiliza derivação, reuso e guarda reais. Não chama materialização nem `registrar_batida`. Como falta juiz do par de perguntas, sua saída se chama **candidatos com dupla recusa**, sem certificar “mesma pausa”. O enquadramento de produção e os resultados continuam **[nao verificado]**.
+
+```python
+# Executar no shell Django do tenant já selecionado.
+# Proposta não executada [nao verificado].
+from collections import Counter, defaultdict
+from contextlib import ExitStack
+import json
+import re
+from unittest.mock import patch
+
+from django.db import connections
+from django.utils import timezone
+
+from chamados.models import PerguntaDisputa as P
+from chamados.services.materializacao import (
+    _ts_tipo_do_plantio,
+    _batida_existente_na_janela,
+    _vizinha_mesmo_tipo,
+    _plantio_preenche_furo_na_data,
+)
+from chamados.services.painel import qs_vivos
+from chamados.services.verbos import (
+    particionar_verbos, exige_o_admin, VERBOS_DO_ADMIN,
+)
+from core.models import PlacarNavbar
+from ponto.janelas import janela_atual
+
+COLAB_PK = None  # None: população inteira; 960: recorte nominal.
+
+class ForaDoEnvelope(BaseException):
+    pass
+
+def somente_select(execute, sql, params, many, context):
+    # BaseException evita ser engolida por helpers com except Exception.
+    if many or not re.match(r"^\s*SELECT\b", sql, re.I):
+        raise ForaDoEnvelope("Sonda interrompida: comando fora de SELECT")
+    return execute(sql, params, many, context)
+
+def novo_balde():
+    return {
+        "classes": Counter(),
+        "disputas": set(),
+        "disputas_no_badge": set(),
+        "chamados_do_badge": set(),
+        "colabs_pk": set(),
+    }
+
+agora = timezone.now()  # Um relógio para toda a rodada.
+
+with ExitStack() as stack:
+    for conn in connections.all():
+        stack.enter_context(conn.execute_wrapper(somente_select))
+    stack.enter_context(patch("django.utils.timezone.now", return_value=agora))
+
+    # Fonte real do total e da pertença aos verbos do administrador.
+    part = particionar_verbos(qs_vivos())
+    badge = exige_o_admin(part["contagens"])
+    admin_ids = {
+        pk for pk, verbo in part["mapa"].items()
+        if verbo in VERBOS_DO_ADMIN
+    }
+    assert len(admin_ids) == badge
+
+    lavrado = PlacarNavbar.objects.filter(pk=1).values(
+        "badge_chamados", "lavrado_em"
+    ).first()
+    if lavrado and lavrado["lavrado_em"]:
+        lavrado["lavrado_em"] = timezone.localtime(
+            lavrado["lavrado_em"]
+        ).isoformat()
+
+    perguntas = (
+        P.objects.filter(
+            disputa__fechada_em__isnull=True,
+            motivo__in=("intervalo_saida", "intervalo_volta"),
+            conversa=False,
+        )
+        .exclude(via_resolucao__in=P.VIAS_FORA_DO_FATO)
+        .select_related(
+            "disputa__colaborador__empresa", "chamado_destino", "celula"
+        )
+        .order_by("disputa_id", "data_evento", "pk")
+    )
+    if COLAB_PK is not None:
+        perguntas = perguntas.filter(disputa__colaborador_id=COLAB_PK)
+
+    grupos = defaultdict(lambda: defaultdict(list))
+    for p in perguntas:
+        grupos[(p.disputa_id, p.data_evento)][p.motivo].append(p)
+
+    baldes = defaultdict(novo_balde)
+    todas_disputas = set()
+    todas_no_badge = set()
+
+    for (disputa_pk, dia), metades in grupos.items():
+        linhas = [p for lista in metades.values() for p in lista]
+        col = linhas[0].disputa.colaborador
+
+        if dia is None:
+            chave = (str(col.empresa_id), "SEM_DATA", "", "")
+        else:
+            ini, fim = janela_atual(dia, col.empresa)
+            chave = (
+                str(col.empresa_id), fim.strftime("%Y-%m"),
+                ini.isoformat(), fim.isoformat(),
+            )
+        b = baldes[chave]
+
+        saidas = metades["intervalo_saida"]
+        voltas = metades["intervalo_volta"]
+        if dia is None:
+            b["classes"]["sem_data"] += 1
+            continue
+        if not saidas or not voltas:
+            b["classes"]["sem_duas_metades"] += 1
+            continue
+        if len(saidas) != 1 or len(voltas) != 1:
+            b["classes"]["multiplas_linhas_ambiguas"] += 1
+            continue
+
+        par = [saidas[0], voltas[0]]
+        if any(p.materializada_em is not None for p in par):
+            b["classes"]["com_carimbo_nao_reaplicado_pela_porta_atual"] += 1
+            continue
+        if any(
+            p.respondida_em is None or not (p.resposta_colab or "").strip()
+            for p in par
+        ):
+            b["classes"]["sem_duas_respostas"] += 1
+            continue
+
+        recusas = []
+        derivacao_ok = True
+        for p in par:
+            erros = []
+            instante, tipo = _ts_tipo_do_plantio(p.disputa, p, erros)
+            if instante is None:
+                derivacao_ok = False
+                break
+
+            # Composição dos helpers efetivamente usados no plantio.
+            existente = _batida_existente_na_janela(col, instante, tipo)
+            vizinha = (
+                _vizinha_mesmo_tipo(col, instante, tipo)
+                if existente is None else None
+            )
+            recusas.append(
+                existente is None
+                and vizinha is not None
+                and not _plantio_preenche_furo_na_data(col, instante)
+            )
+
+        if not derivacao_ok:
+            b["classes"]["derivacao_indisponivel"] += 1
+            continue
+        if not all(recusas):
+            b["classes"]["sem_dupla_recusa"] += 1
+            continue
+
+        b["classes"]["candidato_dupla_recusa"] += 1
+        b["disputas"].add(disputa_pk)
+        b["colabs_pk"].add(col.pk)
+        todas_disputas.add(disputa_pk)
+
+        # Associação explicitamente por pai/destinos do candidato.
+        # Não confunde quantidade de disputas com quantidade de chamados.
+        vinculados = {par[0].disputa.chamado_id}
+        vinculados.update(p.chamado_destino_id for p in par)
+        comuns = (vinculados - {None}) & admin_ids
+        if comuns:
+            b["disputas_no_badge"].add(disputa_pk)
+            b["chamados_do_badge"].update(comuns)
+            todas_no_badge.add(disputa_pk)
+
+    saida = []
+    for chave, b in sorted(baldes.items()):
+        empresa_pk, competencia, ini, fim = chave
+        saida.append({
+            "empresa_pk": empresa_pk,
+            "competencia": competencia,
+            "inicio": ini,
+            "fim": fim,
+            "classes": dict(b["classes"]),
+            "disputas_candidatas": len(b["disputas"]),
+            "disputas_com_chamado_admin_vinculado": len(
+                b["disputas_no_badge"]
+            ),
+            "chamados_admin_vinculados
+
+[truncado em 20000 de 30506 caracteres]
 
 ## 09/11 07:48 · sessao 652ccdb4046d · - · - · origem=Ronald (tmux)
 
@@ -879,120 +1535,4 @@ Sugestão de classificação por subtema:
 
 A ausência atual de célula viva do achado 3 é informação do laudo fornecido, não conclusão obtida por acesso a produção (`i1_opus_final_2.md:4`).
 
-## 09/11 06:43 · sessao 41bbd4564418 · DEPLOY-EXCLUSAO-ENVELOPE · verificador · origem=Code
-
-**Parecer: não daria VERDE nesta volta.** O fluxo de sucesso fecha as duas janelas para envelopes desta versão, mas encontrei autoespera no `vigia_arvore`, execução auxiliar sem compartilhada, retenção sem teto global e lacunas nos leitores e no selo. (`bin/deploy.sh:316`, `bin/deploy.sh:442`, `app/core/esteira_vigia.py:1267`, `bin/cron_run.sh:50`, `app/core/management/commands/pipeline_placar.py:74`, `bin/tests/test_deploy_exclusao_cron.sh:168`)
-
-Validação por execução, duração real dos deploys e comportamento observado em produção: **[nao verificado]**. [nao verificado]
-
-**1. Fechamento das janelas, saídas e morte do deploy** [nao verificado]
-
-No fluxo de sucesso, **sim, para quem passa pelo envelope novo e disputa o mesmo arquivo**: o único apply está depois da aquisição exclusiva; o único restart também, com a última consulta de marcas já dentro dela. O envelope adquire compartilhada antes de criar MARCA ou lançar `CMD`; o unlock explícito só vem depois das três provas de rota. (`bin/deploy.sh:319`, `bin/deploy.sh:337`, `bin/deploy.sh:363`, `bin/deploy.sh:364`, `bin/deploy.sh:437`, `bin/deploy.sh:442`, `bin/cron_run.sh:17`, `bin/cron_run.sh:22`, `bin/cron_run.sh:24`)
-
-Não localizei ramo que aplique migration ou execute restart sem passar pela exclusiva. HUP sem migration fica deliberadamente fora dela; `--conferir` termina antes desses atos. (`bin/deploy.sh:237`, `bin/deploy.sh:316`, `bin/deploy.sh:336`, `bin/deploy.sh:359`, `bin/deploy.sh:381`)
-
-**A promessa “segura até reload conferido” vale somente no sucesso.** `falhou()` executa `exit 1`; pode encerrar após falha do migrate, do HUP, da troca de workers ou das rotas, sem chegar ao unlock normal. Não há mecanismo nesses caminhos que mantenha a exclusão até uma recuperação posterior. (`bin/deploy.sh:92`, `bin/deploy.sh:337`, `bin/deploy.sh:381`, `bin/deploy.sh:394`, `bin/deploy.sh:440`, `bin/deploy.sh:442`)
-
-O arquivo permanece; a posse está no fd 4. A saída fecha o descritor do processo, mas **não garante liberação imediata se algum descendente ainda o conservar**: a biblioteca declara herança, e o lançamento do comando não fecha o fd. Descendente efetivamente sobrevivendo à morte de um deploy nesta produção: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:10`, `bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:42`, `bin/cron_run.sh:24`)
-
-A transição de versão também merece distinção: o restart relê marcas para acomodar envelope antigo já em memória; o migrate normal não consulta essas marcas. Portanto a exclusiva, sozinha, não demonstra proteção contra um cron antigo que ainda não participa do protocolo. Existência desse cron durante a publicação: **[nao verificado]**. (`bin/deploy.sh:108`, `bin/deploy.sh:315`, `bin/deploy.sh:337`, `bin/deploy.sh:362`, `bin/deploy.sh:363`)
-
-**2. Envelope, MARCA/FIM e rc 75**
-
-O `CMD` só roda no ramo armado após aquisição compartilhada bem-sucedida. MARCA fica nesse ramo; FIM só é criado para rc 0 ou 2. Sem vez, o envelope grava placar com rc 75, não cria MARCA/FIM e sai pelo epílogo. (`bin/cron_run.sh:17`, `bin/cron_run.sh:20`, `bin/cron_run.sh:22`, `bin/cron_run.sh:24`, `bin/cron_run.sh:27`, `bin/cron_run.sh:30`, `bin/cron_run.sh:39`, `bin/cron_run.sh:55`)
-
-**Há uma exceção à afirmação ampla “nenhum comando entra no core”:** sem compartilhada, o epílogo ainda tenta executar `docker exec ... cron_quebrado`. Esse alarme pode entrar no core enquanto a exclusiva responsável pela recusa continua tomada. Sua saída é descartada; a FLAG só nasce se a chamada funcionar. (`bin/cron_run.sh:49`, `bin/cron_run.sh:50`)
-
-O 75 não identifica exclusivamente timeout de deploy: também cobre biblioteca ausente, falha de `mkdir`, abertura do arquivo ou aquisição; além disso, um `CMD` pode devolver 75 por conta própria. A linha do placar não registra uma causa separada. (`bin/cron_run.sh:17`, `bin/cron_run.sh:24`, `bin/cron_run.sh:27`, `bin/cron_run.sh:30`, `bin/trava_deploy_exclusao.sh:31`, `bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:34`)
-
-Há significados anteriores de 75: “sem vez” na trava de testes, tratado pelo pre-push como “não rodou”; limite/indisponibilidade e pausa no wrapper Codex. Isso não constitui colisão automática entre scripts, mas impede interpretar 75 como um significado global único. (`bin/trava_teste.sh:18`, `bin/trava_teste.sh:38`, `bin/pre-push.sh:149`, `bin/codex_pergunta.sh:22`, `bin/codex_pergunta.sh:41`)
-
-Para os leitores de cron, 75 é erro: `EXITS_DE_ALARME=(0,2)`; o vigia aceita o inteiro e abre pauta sem tratamento particular para 75. A corrente registra esse retorno, continua os elos e não faz retry; um dependente sem FIM pode terminar no próprio teto com rc 2 e ALARME. (`app/core/services/crons_quebrados.py:16`, `app/core/services/crons_quebrados.py:46`, `app/core/management/commands/cron_quebrado.py:16`, `app/core/management/commands/cron_quebrado.py:37`, `bin/encadeado.sh:64`, `bin/encadeado.sh:66`, `bin/encadeado.sh:92`)
-
-**3. Autoespera, aninhamentos e segundo plano**
-
-O reload das 03:30 evita autoespera: é RAW envelopado, mas `--reload-agendado` recusa migration pendente e não arma exclusiva. (`app/config/crons.py:326`, `app/config/crons.py:1863`, `bin/deploy.sh:211`, `bin/deploy.sh:316`)
-
-**Existe outro caminho cron → deploy:** `vigia_arvore.sh` chama `esteira_vigia.py curar`, que pode chamar deploy `--sem-sombra`, inclusive novamente ao desfazer o revert. Se esse deploy precisar aplicar migration, tentará exclusiva enquanto seu envelope ancestral conserva compartilhada: espera até 600 s e recusa contra si mesmo. A chamada Python também descarta o retorno do deploy e segue para os testes. (`app/config/crons.py:296`, `bin/vigia_arvore.sh:176`, `app/core/esteira_vigia.py:1267`, `app/core/esteira_vigia.py:1269`, `app/core/esteira_vigia.py:1275`, `bin/cron_run.sh:24`, `bin/deploy.sh:233`, `bin/deploy.sh:319`, `bin/trava_deploy_exclusao.sh:26`)
-
-O outro cron encontrado chamando deploy, `vigia_logins --auto`, usa `--sem-migrate`; com pendência ele recusa, sem pendência não pede exclusiva. (`app/config/crons.py:303`, `bin/vigia_logins.sh:87`, `bin/deploy.sh:215`, `bin/deploy.sh:316`)
-
-A corrente não aninha envelopes por sua construção: `; encadeado.sh` vem depois do envelope raiz, e cada elo faz `exec` de seu próprio envelope. `deploy_agendado` entra diretamente por cron.d e executa a esteira recebida, sem envelope próprio; as fatias realmente agendadas são **[nao verificado]**. (`app/config/crons.py:1885`, `bin/encadeado.sh:102`, `bin/encadeado.sh:104`, `bin/deploy_agendado.sh:55`, `bin/deploy_agendado.sh:73`)
-
-A cadeia toma árvore e régua antes do deploy final. Já `sombra.sh --conferir`, chamado pelo deploy, não passa pelos ramos que adquirem a trava da sombra e não executa o bloco de crons. (`bin/molde_fatia/cadeia.sh:11`, `bin/molde_fatia/cadeia.sh:14`, `bin/molde_fatia/cadeia.sh:89`, `bin/deploy.sh:162`, `bin/sombra.sh:438`, `bin/sombra.sh:451`, `bin/sombra.sh:463`)
-
-**Comandos efetivamente agendados em `crons.py` com lançamento explícito por `&`, `nohup` ou `setsid`: nenhum localizado.** O gerador executa RAW/Django sincronamente e acrescenta a corrente com `;`. Os jobs `Popen` citados no arquivo pertencem a `FORA_DE_PIPELINE`. (`app/config/crons.py:282`, `app/config/crons.py:350`, `app/config/crons.py:594`, `app/config/crons.py:688`, `app/config/crons.py:705`, `app/config/crons.py:769`, `app/config/crons.py:1369`, `app/config/crons.py:1863`, `app/config/crons.py:1885`)
-
-Há assíncronos vizinhos: fabricante usa `setsid nohup ... &`; o observador de árvore fecha fds 6–9, mas deixa 4 aberto e vive enquanto o pai existir. Caminho demonstrado de um cron até esses lançamentos, ou filho de cron segurando compartilhada indefinidamente: **[nao verificado]**. (`bin/fabricante.sh:187`, `bin/trava.sh:68`, `bin/trava.sh:69`)
-
-**4. Quem escreve e quem lê**
-
-| Objeto | Escritores e consumidores localizados |
-|---|---|
-| Caminho da trava | Uma definição literal, derivada da raiz da biblioteca; usada para criar diretório e abrir o arquivo. (`bin/trava_deploy_exclusao.sh:16`, `bin/trava_deploy_exclusao.sh:31`, `bin/trava_deploy_exclusao.sh:32`) |
-| fd 4 | A função comum abre; `flock` adquire; fecha na recusa; a soltura explícita faz unlock e close. (`bin/trava_deploy_exclusao.sh:32`, `bin/trava_deploy_exclusao.sh:34`, `bin/trava_deploy_exclusao.sh:37`, `bin/trava_deploy_exclusao.sh:42`) |
-| Funções da biblioteca | Wrappers compartilhado/exclusivo chamam a implementação comum; consumidores são envelope e deploy; soltura explícita só no deploy. (`bin/trava_deploy_exclusao.sh:28`, `bin/trava_deploy_exclusao.sh:40`, `bin/trava_deploy_exclusao.sh:41`, `bin/cron_run.sh:17`, `bin/deploy.sh:319`, `bin/deploy.sh:442`) |
-| `espera_deploy` | Envelope escreve; leitores explícitos localizados somente no selo novo. (`bin/cron_run.sh:30`, `bin/tests/test_deploy_exclusao_cron.sh:165`, `bin/tests/test_deploy_exclusao_cron.sh:182`, `bin/tests/test_deploy_exclusao_cron.sh:237`) |
-
-Os leitores operacionais diretos do JSONL localizados foram estes; nenhum usa `espera_deploy`:
-
-| Leitor | Interpretação e consequência |
-|---|---|
-| `crons_quebrados` | Usa chegada `ini` para escolher a última corrida em 26 h e classifica por exit. (`app/core/services/crons_quebrados.py:36`, `app/core/services/crons_quebrados.py:39`, `app/core/services/crons_quebrados.py:42`, `app/core/services/crons_quebrados.py:46`) |
-| `pipeline_placar` | Toda linha incrementa `rodou`: uma tentativa sem comando vira `rodou=1, erros=1`, situação ERRO. (`app/core/management/commands/pipeline_placar.py:73`, `app/core/management/commands/pipeline_placar.py:74`, `app/core/management/commands/pipeline_placar.py:78`, `app/core/management/commands/pipeline_placar.py:92`) |
-| `crons_duracao.py` | Inclui `dur` sem filtrar exit; tentativas sem comando entram no p95 e podem reduzir a medida. Efeito efetivo: **[nao verificado]**. (`bin/crons_duracao.py:69`, `bin/crons_duracao.py:75`, `bin/crons_duracao.py:76`) |
-| `corrida_no_horario` | Recebe `ini` e filtra seu minuto, embora a documentação diga “começou no horário”. Agora isso mede chegada ao envelope, podendo anteceder o comando em até 300 s. (`app/config/crons.py:2305`, `app/config/crons.py:2328`, `app/config/crons.py:2332`, `bin/cron_run.sh:7`, `bin/cron_run.sh:24`) |
-
-`dur` exclui a aquisição, mas inclui preparação da MARCA; `fim−ini` inclui a espera. Nenhum dos leitores diretos acima calcula essa diferença. Há, portanto, uma mudança real entre “chegou”, “rodou” e “começou o comando” que o comentário novo não resolve nos consumidores. (`bin/cron_run.sh:7`, `bin/cron_run.sh:19`, `bin/cron_run.sh:22`, `bin/cron_run.sh:29`, `bin/cron_run.sh:30`)
-
-**5. Tetos de 300/600 e corrente**
-
-**600 s limita aquisição, não retenção.** Depois de obter exclusiva, o deploy inclui migrate sem timeout, consultas `docker top` sem timeout, até 270 s nominais de sleeps dos workers, três esperas de disponibilidade de até 180 s cada e provas de rota sem timeout. Não existe teto global demonstrável para quanto segura. (`bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`, `bin/deploy.sh:337`, `bin/deploy.sh:377`, `bin/deploy.sh:386`, `bin/deploy.sh:391`, `bin/deploy.sh:403`, `bin/deploy.sh:406`, `bin/deploy.sh:419`, `bin/deploy.sh:442`)
-
-Assim, **um deploy com migration pode terminar com sucesso e ainda fazer um cron atingir 300 s**, sair 75 e alarmar sem FIM. A afirmação de que 300 “cobre” a troca e deixa 600 para a corrente não demonstra cobertura de migration, disponibilidade e rotas. (`bin/trava_deploy_exclusao.sh:17`, `bin/trava_deploy_exclusao.sh:21`, `bin/cron_run.sh:27`, `bin/cron_run.sh:39`, `bin/cron_run.sh:50`)
-
-Os 900 s pertencem ao dependente e começam antes da consulta dos carimbos; não são folga integral garantida quando o deploy começa. HE espera deslogados por 1800 s, mas quem espera HE continua com 900 s. Tempo efetivo disponível e duração real do deploy: **[nao verificado]**. (`bin/encadeado.sh:86`, `bin/encadeado.sh:92`, `app/config/crons.py:1550`, `app/config/crons.py:1563`)
-
-**6. Classes de reprovação anteriores**
-
-- **Fonte do caminho:** há uma definição textual, mas ela é relativa à biblioteca carregada. Deploy carrega da própria raiz; envelope carrega da viva absoluta. Executar deploy de outra cópia pode disputar outro arquivo enquanto opera os mesmos containers. Ocorrência operacional: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:16`, `bin/deploy.sh:317`, `bin/cron_run.sh:17`, `bin/deploy.sh:337`)
-- **Derivação paralela:** aquisição, tetos e descritor estão centralizados na biblioteca; a diferença de raiz acima continua possível. (`bin/trava_deploy_exclusao.sh:16`, `bin/trava_deploy_exclusao.sh:21`, `bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:28`)
-- **Ordem:** cadeia → árvore → régua → exclusiva está demonstrada. Não demonstrei ciclo inverso envolvendo árvore/régua; a autoespera concreta é compartilhada ancestral → exclusiva no auto-revert. (`bin/molde_fatia/cadeia.sh:11`, `bin/molde_fatia/cadeia.sh:14`, `bin/molde_fatia/cadeia.sh:89`, `app/core/esteira_vigia.py:1267`, `bin/deploy.sh:319`)
-- **Relógio:** espera registrada e `dur` usam subtração de `date +%s`, sem proteção contra salto do relógio; podem divergir do tempo transcorrido ou ficar negativos. (`bin/trava_deploy_exclusao.sh:33`, `bin/trava_deploy_exclusao.sh:35`, `bin/cron_run.sh:19`, `bin/cron_run.sh:29`)
-- **Campo com dois significados:** `rodou` passa a incluir tentativa recusada; 75 agrega causas diferentes; filtro de “início” usa chegada. (`app/core/management/commands/pipeline_placar.py:74`, `bin/cron_run.sh:17`, `bin/cron_run.sh:27`, `app/config/crons.py:2328`)
-
-Os mutantes “sem exclusiva” e “exit 75 antes do epílogo” têm asserções capazes de acusá-los em a1/a2 e b2. Porém o arquivo apenas aceita fontes alternativas; execução e mordida observadas dos mutantes/RED: **[nao verificado]**. (`bin/tests/test_deploy_exclusao_cron.sh:32`, `bin/tests/test_deploy_exclusao_cron.sh:135`, `bin/tests/test_deploy_exclusao_cron.sh:152`, `bin/tests/test_deploy_exclusao_cron.sh:187`)
-
-**Falta mordida para soltura prematura:** b1 exige comando após HUP; b3, após restart. O Docker falso troca workers e responde às provas imediatamente; esses casos não demonstram reprovar soltura antes da conferência final. d4 apenas verifica `30 < teto < 900`, sem validar orçamento temporal. (`bin/tests/test_deploy_exclusao_cron.sh:90`, `bin/tests/test_deploy_exclusao_cron.sh:96`, `bin/tests/test_deploy_exclusao_cron.sh:168`, `bin/tests/test_deploy_exclusao_cron.sh:205`, `bin/tests/test_deploy_exclusao_cron.sh:258`)
-
-**7. Contrato e selos vizinhos**
-
-Pela leitura, não vejo quebra das condições textuais de `contrato_deploy.sh`: HUP único e conjunto, restart manual único precedido de recusa e três provas de rota continuam presentes. Esse contrato não cobra a nova exclusiva; sua checagem de migration usa a primeira ocorrência de `migrate_schemas`, que é consulta, não apply. Resultado executado: **[nao verificado]**. (`bin/contrato_deploy.sh:24`, `bin/contrato_deploy.sh:33`, `bin/contrato_deploy.sh:47`, `bin/contrato_deploy.sh:54`, `bin/deploy.sh:184`, `bin/deploy.sh:337`, `bin/deploy.sh:437`)
-
-Copiar a biblioteca sem substituir caminho nos vizinhos está correto nesta implementação: ela deriva o lock de seu próprio local. Entretanto, os vizinhos continuam plantando MARCA sem adquirir compartilhada; preservam a prova da recusa por marca, não comprovam o protocolo novo. O selo novo entra na régua pelo glob existente. (`bin/trava_deploy_exclusao.sh:16`, `bin/tests/test_deploy_reload_gracioso.sh:41`, `bin/tests/test_deploy_reload_gracioso.sh:92`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:71`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:78`, `bin/regua.sh:138`)
-
-Há divergência do contrato anterior registrado: cron 600/deploy não bloqueante/`espera_lock`/dois contadores ESTADO versus cron 300/deploy esperando 600/`espera_deploy`, sem consumo operacional desse campo nos leitores encontrados. Aval posterior para essa mudança de desenho: **[nao verificado]**. (`app/docs/RELATO.md:25`, `bin/trava_deploy_exclusao.sh:21`, `bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`, `bin/cron_run.sh:30`)
-
-## 09/11 06:42 · sessao c9691c154609 · - · - · origem=Ronald (tmux)
-
-1. **Caminho de sucesso fecha as duas janelas para envelopes desta versão.** O único apply está em `bin/deploy.sh:337`, e o único restart em `bin/deploy.sh:364`; ambos passam pela aquisição exclusiva em `bin/deploy.sh:316-325`. O envelope só cria MARCA e executa após adquirir compartilhada (`bin/cron_run.sh:17-24`). A lib mantém a trava no fd 4 (`bin/trava_deploy_exclusao.sh:32-36`).
-
-2. **Falha não preserva a exclusão até uma prova concluída.** `falhou()` chama `exit 1` (`bin/deploy.sh:92`); pode ocorrer depois de começar migrate, depois do HUP, durante conferência de workers ou nas rotas (`bin/deploy.sh:337`, `bin/deploy.sh:381`, `bin/deploy.sh:394`, `bin/deploy.sh:440`). Só no sucesso há unlock explícito depois das três provas (`bin/deploy.sh:437-442`). Assim, um deploy abortado pode liberar a exclusão sem reload conferido; consistência resultante do banco/código depende do ponto da falha e das migrations [nao verificado].
-
-3. **A morte do processo não garante liberação imediata se houver descendente vivo.** A própria lib declara herança pelos filhos (`bin/trava_deploy_exclusao.sh:10-11`); o fd é aberto sem fechamento no comando de cron (`bin/trava_deploy_exclusao.sh:32`, `bin/cron_run.sh:24`). O arquivo de lock permanece; exclusão depende dos descritores, não da existência do arquivo (`bin/trava_deploy_exclusao.sh:14-16`, `bin/trava_deploy_exclusao.sh:32-42`). Descendente concreto de cron que retenha indefinidamente: [nao verificado].
-
-4. **Aninhamentos encontrados:**
-   - Reload agendado é RAW envelopado → deploy `--reload-agendado` (`app/config/crons.py:326-327`, `app/config/crons.py:1861-1863`). Esse modo não arma migration pendente: recusa em `bin/deploy.sh:211-214`; sem restart/apply não pede exclusiva (`bin/deploy.sh:316`). Portanto esse caminho evita autoespera.
-   - Outro caminho existe: cron `vigia_arvore.sh` (`app/config/crons.py:296`) → `core/esteira_vigia.py curar` (`bin/vigia_arvore.sh:176`) → deploy `--sem-sombra` (`app/core/esteira_vigia.py:1267-1268`, `app/core/esteira_vigia.py:1275`). Se esse deploy armar apply, tenta exclusiva enquanto o envelope ancestral segura compartilhada: autoespera até 600 s e recusa (`bin/cron_run.sh:17-24`, `bin/deploy.sh:233`, `bin/deploy.sh:316-323`, `bin/trava_deploy_exclusao.sh:26`).
-   - `vigia_logins.sh --auto` é cron e chama deploy, mas usa `--sem-migrate`, que recusa migrations pendentes e evita exclusiva (`app/config/crons.py:303`, `bin/vigia_logins.sh:87`, `bin/deploy.sh:215-218`, `bin/deploy.sh:316`).
-   - Corrente não aninha envelopes por construção: o render acrescenta `; encadeado.sh` depois do envelope raiz, e cada elo faz exec do seu envelope (`app/config/crons.py:1884-1885`, `bin/encadeado.sh:102-104`).
-   - `deploy_agendado` entra diretamente por cron.d e executa a esteira fornecida; não cria envelope próprio (`bin/deploy_agendado.sh:54-56`, `bin/deploy_agendado.sh:68-73`). Fatias realmente agendadas [nao verificado].
-   - Cadeia toma árvore e régua antes de deploy; o deploy final pode adquirir exclusiva nessa ordem (`bin/molde_fatia/cadeia.sh:11-14`, `bin/molde_fatia/cadeia.sh:88-89`, `bin/deploy.sh:316-325`). `sombra.sh --conferir`, usado pelo deploy, não adquire a trava da sombra (`bin/deploy.sh:162`, `bin/sombra.sh:438`, `bin/sombra.sh:451`, `bin/sombra.sh:463`).
-
-5. **Segundo plano:** não há `&`, `nohup` ou `setsid` nos comandos efetivamente declarados em CRONS; o gerador lança RAW/Django pelo envelope e a corrente por `;` (`app/config/crons.py:282-352`, `app/config/crons.py:594-595`, `app/config/crons.py:688-706`, `app/config/crons.py:1861-1885`). Os RAW inspecionados usam execução síncrona, incluindo `noturno.py` (`eval/noturno.py:32-44`, `eval/noturno.py:93-94`), fábrica (`bin/fabrica_estado.py:63-66`), alarme de sessão (`bin/alarme_sessao_ociosa.py:142-150`) e backup (`scripts/backup_all.sh:6-8`). Efeitos transitivos arbitrários dos comandos Django [nao verificado].
-
-   Há lançamentos assíncronos vizinhos, sem caminho demonstrado a partir dessas entradas: fabricante usa `setsid nohup ... &` (`bin/fabricante.sh:187`); controlador/esteiras usam `Popen` (`app/core/esteira_vigia.py:801-802`, `app/core/esteira_vigia.py:917-918`). A esteira está declarada como timer fora do cron (`app/config/crons.py:764-767`). O observador de árvore fecha fds 6–9, mas não 4, e dura enquanto o pai existir (`bin/trava.sh:68-69`); cron → esse observador [nao verificado]. Os três jobs `Popen` descritos em `crons.py` pertencem a FORA_DE_PIPELINE, não a CRONS (`app/config/crons.py:769`, `app/config/crons.py:1369-1371`).
-
-6. **Posse não tem teto de 600 s.** Esse teto limita a aquisição (`bin/trava_deploy_exclusao.sh:26`, `bin/trava_deploy_exclusao.sh:34`). Depois dela, o deploy inclui migrate sem timeout (`bin/deploy.sh:337`), consultas `docker top` sem timeout (`bin/deploy.sh:377-379`), até 270 s nominais de sleeps dos workers (`bin/deploy.sh:382-395`), três esperas de disponibilidade de até 180 s cada (`bin/deploy.sh:402-408`) e provas de rota sem timeout (`bin/deploy.sh:419-439`). Portanto um deploy com migration pode superar 300 s mesmo terminando com sucesso, levando cron ao rc 75; duração efetivamente observada em produção [nao verificado].
-
-_3054 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3056 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

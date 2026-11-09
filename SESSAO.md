@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 07:48:24.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (183.7 MB). Acoes na janela: **960**.
+**Medido em 09/11/2026 07:53:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (183.7 MB). Acoes na janela: **958**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -968,5 +968,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:54:46 | Bash | Create merge7 copy and run catraca diff | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-e1merge7-$(date +%H%M%S) && test ! -e $W && git worktree add --detach $W e2f865f5 2>&1 \| tail -1 && cd $W && git merge --no-ff --no-commit 6dee2010 2>&1 \| tail -1; git rev-parse -q --verify MERGE_HEAD; git status --porcelain \| wc -l; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; cd app && PYTHOND ...` |
 | 19:54:41 | Bash | Read juiz and fio diff of 15h | `cd /home/ronald/wt-fioe1v15h-192401 && git show HEAD -- app/chamados/juizes.py \| sed -n 1,60p; git show HEAD -- app/chamados/services/fio.py \| grep -n '^+' \| sed -n 1,50p` |
 | 19:54:38 | Bash | Verify 15h commit and logs | `cd /home/ronald/wt-fioe1v15h-192401 && git log --oneline -2 && git show --stat --format= HEAD \| tail -8 && git status --porcelain \| head; L=/home/ronald/saas-hasner/logs/fio_e0_v4; for f in e1_v15h_red e1_v15h_green; do echo $f; grep -E '^(OK\|FAILED)($\| \()' $L/$f.log \| tail -1; grep '^Ran ' $L/$f.log \| tail -1; done` |
-| 19:52:29 | Bash | Point ESPERANDO at builder's GREEN run | `cd /home/ronald/saas-hasner/app; sed -i '2s#.*#ESPERANDO: trava_teste.sh \| pid=1391054#' docs/RELATO.md; sed -n 2p docs/RELATO.md; grep -E '^(OK\|FAILED)' ../logs/fio_e0_v4/e1_v15h_red.log \| tail -1` |
-| 19:52:25 | Bash | Find builder's background suite process | `date +%H:%M; ps -eo pid,etime,args \| grep -E 'suite.sh\|manage.py test' \| grep -v grep \| cut -c1-200; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; ls -t /home/ronald/saas-hasner/logs/fio_e0_v4/ \| head -5` |
