@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 17:42** · publicado em **09/11/2026 17:46** (UTC-3)
+> Ultima resposta processada: **09/11/2026 17:58** · publicado em **09/11/2026 18:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 17:58 · sessao 323aebf8a713 · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
+
+Entrega: [E4A_V2_ENTREGA.txt](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:1).
+
+- 35 testes sem banco passaram; oito mutantes morderam e foram restaurados. [Evidências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_TESTES.txt:29). [nao verificado]
+- ORM não executado; comando preparado para a sessão. [Referência](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:175).
+- O pouso ainda depende dos hunks e das decisões explícitas sobre A05 e C11. [Pendências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:222). [nao verificado]
 
 ## 09/11 17:42 · sessao c84017ed8f71 · - · - · origem=Ronald (tmux)
 
@@ -891,21 +899,4 @@ A entrega contém todos os chamadores, efeitos nos leitores, endereço de cada h
 
 Somente verificações estáticas foram executadas. **RED/GREEN, mortes, concorrência e efeitos em produção: [nao verificado].** C7/fechar permanecem para os hunks da sessão. [Pendências](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA_V2.r:110)
 
-## 09/11 15:47 · sessao 6b3547444afa · - · - · origem=Ronald (tmux)
-
-Não encontrei falha concreta no diff que impeça os testes positivos ou inclua a batida no universo de escrita. Revisão estática, execução [nao verificado]. [nao verificado]
-
-Conferi:
-
-- Identidade usa o DNA do dia, alinhamento existente e `batidas_apuraveis`; exige uma candidata: `chamados/services/materializacao.py:113`.
-- `perguntas_do_par` separa seleção/escritas da testemunha: `chamados/services/materializacao.py:67`.
-- Projeção da testemunha é A e seus IDs não entram em `par_ids`: `chamados/services/materializacao.py:570`, `:634`.
-- Ordem compara instantes antes da escrita e instantes reais depois; paridade examina ambas as metades: `chamados/services/materializacao.py:1443`, `:1457`, `:1467`.
-- ON distingue A factual da testemunha de A da pergunta; replay de aplicação retorna antes de decisões/escritas: `chamados/services/materializacao.py:1537`, `:1542`.
-- Casca aceita uma pergunta, template não cria entrada horária da testemunha: `chamados/services/acoes_disputa.py:23`, `templates/chamados/partials/_par_intervalo.html:37`.
-- Testes positivos exigem uma chamada à porta, ordem integral E–S–E–S e preservação da batida existente: `chamados/tests/test_bug_par_unidade.py:428`, `:456`.
-- Testes de universo e O330 trabalham somente com a pergunta: `chamados/tests/test_bug_par_unidade.py:622`, `:634`.
-
-Nenhum arquivo editado por este explorer; nenhum runtime executado [nao verificado].
-
-_3212 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3213 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
