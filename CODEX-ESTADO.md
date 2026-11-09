@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:27** · publicado em **09/11/2026 03:27** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:28** · publicado em **09/11/2026 03:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:28 · sessao 494b8856f826 · - · - · origem=Ronald (tmux)
+
+Arquivo abreviado: `T = app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py`.
+
+| Teste novo | Condição/retorno anteriores reconstruídos do diff | Cópia atual | [nao verificado]
+|---|---|---|
+| `test_RED_duas_soltas_entre_20_e_22` | Falha no papel, T:94 | Passa, T:88 |
+| `test_RED_anexo_2101_22_preserva_660_minutos` | Falha no papel, T:102 | Passa, T:98 |
+| `test_RED_uma_solta_entre_12_e_13` | Falha no papel, T:112 | Passa, T:106 |
+| `test_aninhado_mantem_exatamente_os_papeis_do_HEAD` | Passa | Passa, T:115 |
+| `test_aninhado_abaixo_do_piso_tambem_veta_o_par_externo` | Passa | Passa, T:130 |
+| `test_alinhador_le_k_e_numero_do_par_sem_depender_da_ordem_das_tuplas` | Passa | Passa, T:139 |
+| `test_RED_builder_preserva_o_par_e_os_660_minutos_do_anexo` | Execução integral [nao verificado]; a primeira asserção diretamente afetada é o papel, T:242 | Execução integral [nao verificado], T:234 |
+
+**Limite da execução:** os seis testes puros foram executados em memória por AST, com funções reais de `turnos.py`, `_papeis_do_turno`, `_alinhar_por_papel`, `encadear_marcos` e os próprios testes; `SimpleTestCase` substituído por `unittest.TestCase`, timezone substituído por implementação `zoneinfo America/Sao_Paulo`. Isso verifica os corpos dos seis testes nesse ambiente reduzido; execução Django/HEAD histórico integral [nao verificado]. O código atual está em `app/escala/utils.py:437`; reconstrução anterior corresponde ao diff fornecido, com comparação de adjacência e retorno `out` em `diff_v1.diff`, hunk `@@ -464,14 +463,15 @@`.
+
+**Selo com mordida limitada:** três testes novos passam também com condição anterior: os dois aninhados e o alinhador; portanto “cada teste novo falha no HEAD” é falso para os corpos verificados. Os números 599/660 são calculados pelo juiz sem depender da função alterada: T:89, T:96, T:99, T:104; a aritmética usa `intervalos_do_turno` em `app/ponto/turnos.py:756`. No teste de integração, premissa do par e número aparecem antes do papel, respectivamente T:238 e T:240; resultado integral no HEAD [nao verificado].
+
+**Mutante sobrevivente:** trocar apenas `_iz < len(_bats) - 1` por `_iz <= len(_bats) - 1`, em `app/escala/utils.py:466`, passou nos seis corpos executados. Ele permite classificar a última batida como fim de par e ainda emitir `'sai'`, porque a emissão final continua em `app/escala/utils.py:473`. Os arranjos novos usam fins interiores, T:84, T:108, T:118; logo não exercitam essa guarda. Sobrevivência na integração integral [nao verificado], embora seu par também termine antes da borda, T:217.
+
+**Relógio, identidade e ordem:**
+
+- `ParNaoAdjacente` usa `SimpleNamespace` sem nome/CPF, data fixa e instantes explícitos: T:42, T:58, T:84. Cada chamada constrói novas batidas e novo mapa, T:58; não há dependência explícita entre testes nessa classe, T:88. [nao verificado]
+- `ParNaoAdjacenteNaAta` herda fixture com username, CPF e nome literais, T:154–160. Origem real desses identificadores [nao verificado].
+- As entradas diretas do julgamento estão fixadas: `hoje` em T:223, builder `agora=DEPOIS_DE_TUDO` em T:184; esse instante é fixo em `app/escala/tests/instante.py:12`.
+- Ainda há relógio indireto: criar `EscalaColaborador` em T:168 aciona `app/ponto/signals.py:72`, cujo caminho usa `timezone.localdate()` em `app/ponto/signals.py:63`. Criar batidas em T:221 aciona `app/ponto/signals.py:131`, chama julgamento em `app/ponto/signals.py:93`, e `julgar_celula` consulta relógio em `app/ponto/services/cartorio.py:1965`, `:1986`, `:1989`. Os signals são importados em `app/ponto/apps.py:7`; não há freeze/desconexão nos novos testes, T:49 e T:212. Influência efetiva disso nos asserts e independência integral da ordem [nao verificado].
+- Há escrita direta de `cel.ata` na fixture, fora da porta: T:226 e T:232. É uma escrita introduzida no teste; o diff de produção continua sendo somente a função de transcrição, `app/escala/utils.py:437`.
 
 ## 09/11 03:27 · sessao f1da0f00d814 · - · - · origem=Ronald (tmux)
 
@@ -1082,66 +1110,4 @@ O update direto saiu: há comentário explícito em `app/colaboradores/services/
 
 Migrations apenas declaram campos/choices (`app/chamados/migrations/0013_disputasupervisao.py:24`; `app/chamados/migrations/0049_disputa_motivo_fechamento.py:15`). Há escritores crus em **testes** que montam estado legado, por exemplo `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:141`, `:168`; `app/chamados/tests/test_reabrir_orfas_enterradas.py:81`; `app/chamados/tests/test_selo_universo_reconciliador.py:104`; `app/chamados/tests/test_signals.py:268`. Eles não são escritores de produção; nenhum teste foi executado [não verificado].
 
-## 09/11 02:53 · sessao f5e8149ba135 · E1-FILA-V2-2-TRAVA · verificador · origem=Code
-
-**Não daria o aval completo: A1 continua parcial.** As duas telas distinguem a recusa, mas quatro chamadores descartam o retorno e o passivo ainda conta chamados recusados como “APLICADO”. (`app/chamados/services/acoes_disputa.py:225`; `app/chamados/services/cobrar_dia.py:50`; `app/chamados/services/pergunta_no_app.py:186`; `app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:29`)
-
-1. **A1 — recusa falante e contagem**
-
-   | Chamador | Comportamento diante de `REPASSE_RECUSADO` |
-   |---|---|
-   | `acoes_disputa` | Testa identidade antes de testar falsidade ou acessar `.pk`; devolve aviso explícito. `app/chamados/services/acoes_disputa.py:225`, `app/chamados/services/acoes_disputa.py:229` |
-   | `cobrar_dia` | Testa identidade e devolve `ok=False`; a view apresenta aviso. `app/chamados/services/cobrar_dia.py:50`; `app/chamados/views_cobrar.py:326` |
-   | `pergunta_no_app` | Descarta retorno, soma `len(chs)` e devolve os totais; o comando imprime **APLICADO**, inclusive para repasses recusados. `app/chamados/services/pergunta_no_app.py:186`; `app/chamados/services/pergunta_no_app.py:187`; `app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:29` |
-   | `detectar_ausencias` | Descarta retorno. O catch genérico não anuncia uma recusa que agora chegou como retorno normal. `app/ponto/management/commands/detectar_ausencias.py:801`; `app/ponto/management/commands/detectar_ausencias.py:802` |
-   | `processar_alertas_turno` | Descarta retorno e continua devolvendo o chamado. `app/ponto/management/commands/processar_alertas_turno.py:384`; `app/ponto/management/commands/processar_alertas_turno.py:387` |
-   | `processar_alertas_avancados` | Descarta retorno e continua. “Chamado criado” corresponde ao Ch criado antes; esse contador não demonstra repasse concluído. `app/ponto/management/commands/processar_alertas_avancados.py:121`; `app/ponto/management/commands/processar_alertas_avancados.py:158`; `app/ponto/management/commands/processar_alertas_avancados.py:162` |
-
-   **Nenhum desses seis usa atualmente o objeto truthy como Disputa:** dois fazem comparação por identidade; quatro ignoram o resultado. A contagem enganosa concreta está no passivo. As referências de cada consumidor estão na tabela acima.
-
-2. **Atomic externo, estado parcial e evento**
-
-   O `except` está fora **somente do atomic próprio do repasse**. Existe caminho dentro de transação externa: `_gravar_estado` abre atomic, trava e salva Ch; o signal chama cartório, que usa o emissor de ausências e pode alcançar o repasse. (`app/chamados/services/disputa_emissao.py:1049`; `app/chamados/services/disputa_emissao.py:1290`; `app/chamados/models.py:280`; `app/chamados/models.py:290`; `app/chamados/models.py:296`; `app/chamados/signals.py:203`; `app/ponto/services/cartorio.py:1964`; `app/ponto/services/cartorio.py:1990`; `app/ponto/management/commands/detectar_ausencias.py:801`)
-
-   **Sim: o repasse pode ser desfeito e o trabalho anterior do chamador permanecer.** Isso é inclusive exigido pelo teste do marcador anterior. Em `cobrar_dia`, toque e julgamento precedem a chamada recusada; portanto “nada feito” descreve o repasse, não todo o pedido. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:238`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:265`; `app/chamados/services/cobrar_dia.py:39`; `app/chamados/services/cobrar_dia.py:41`; `app/chamados/services/cobrar_dia.py:49`; `app/chamados/services/disputa_emissao.py:1021`)
-
-   **O evento não sobrevive ao rollback externo.** Seu gravador abre atomic na mesma conexão, sem persistência independente. Além disso, é best-effort: pode retornar `None`, enquanto o agrupador devolve o sentinel sem conferir a gravação. Logo, `REPASSE_RECUSADO` **não garante evento persistido**. (`app/core/observ.py:103`; `app/core/observ.py:105`; `app/core/observ.py:133`; `app/core/observ.py:139`; `app/chamados/services/disputa_emissao.py:1293`; `app/chamados/services/disputa_emissao.py:1296`)
-
-   Não encontrei segundo produtor nominal de `repasse_recusado`: a porta produz o evento e delega a persistência à autoridade genérica existente. (`app/chamados/services/disputa_emissao.py:1293`; `app/core/observ.py:134`)
-
-3. **A2 e mutantes da volta 2**
-
-   **A2 ganhou mordida no código do teste:** o novo cenário chama a porta real sem wrapper da helper nem cauda injetada, exige uma Disputa, exige C estrangeiro antes da primeira D e verifica a ordem. O MORDE injeta exatamente a lambda local antes do `with`. **Passagem efetiva no Postgres desta volta: [nao verificado].** (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:190`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:199`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:202`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:204`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:211`)
-
-   Para as remoções pedidas, há testes que rejeitam: ausência do catch, retorno `None`, ausência do evento e remoção das duas checagens das telas. **Não identifiquei sobrevivente dessas remoções diretas** nos oráculos examinados; isso não prova a suíte completa da volta 2 verde. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:164`; `app/chamados/tests/test_e1_fila_v2_2_recusa.py:173`; `app/chamados/tests/test_e1_fila_v2_2_recusa.py:179`; `app/chamados/tests/test_e1_fila_v2_2_recusa.py:188`)
-
-   A lacuna permanece nos quatro consumidores ignorados: os testes de recusa exercitam agrupador, iniciar e cobrar, não exigem correção da contagem do passivo nem anúncio nos três crons. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:126`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:244`; `app/chamados/services/pergunta_no_app.py:187`)
-
-4. **S1 / S2 / S3**
-
-   - **S1:** a fixture move a P materializada para `alvo`, preservando `ch2` sem P; conserva o assert de chegada à cauda e o de reabertura da D. A causa anterior foi tratada sem afrouxar esses asserts; alcançar a cauda no Postgres permanece **[nao verificado]**. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:79`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:118`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:120`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:127`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:129`)
-   - **S2:** B023 foi tratado na origem, capturando variáveis pelos argumentos default das closures. Ruff completo nesta revisão: **[nao verificado]**. (`app/chamados/tests/test_e1_fila_v2_2_trava.py:254`; `app/chamados/tests/test_e1_fila_v2_2_trava.py:270`; `app/chamados/tests/test_e1_fila_v2_2_trava.py:367`)
-   - **S3:** **1196 é a linha real**, `data_entrada = _tz.localtime(batida_origem.timestamp).date()`. O registro corresponde ao sítio B1 e o selo compara as linhas reais por igualdade. (`app/chamados/services/disputa_emissao.py:1196`; `app/core/tests/test_medida_turno_do_par.py:268`; `app/core/tests/test_medida_turno_do_par.py:533`; `app/core/medida_turno_do_par.py:225`)
-
-5. **Classes históricas de reprovação**
-
-   **Segundo juiz / derivação paralela / relógio novo:** não identifiquei nas funções acrescentadas. O fecho percorre relações; o mérito do fechamento continua em `pode_fechar()`. (`app/chamados/services/disputa_emissao.py:957`; `app/chamados/services/disputa_emissao.py:959`; `app/chamados/services/disputa_emissao.py:974`; `app/chamados/services/disputa_emissao.py:1275`)
-
-   **Ordem interna:** a helper pede C ordenados, depois D/Ch/P pela autoridade existente, e recusa crescimento. As pré-travas da porta externa continuam existindo; não foram curadas aqui. (`app/chamados/services/disputa_emissao.py:1001`; `app/chamados/services/disputa_emissao.py:1007`; `app/chamados/services/disputa_emissao.py:1012`; `app/chamados/models.py:2674`; `app/chamados/models.py:2683`; `app/chamados/models.py:2696`; `app/chamados/models.py:2700`; `app/chamados/models.py:290`)
-
-   **Terminal reatável:** está incluído pela semente `VIVOS + ENCERRADOS`; HIST também procura `ENCERRADOS`. A exclusão de cancelado/superado dessa semente não demonstra quebra desse aval. (`app/chamados/services/disputa_emissao.py:960`; `app/chamados/reconciliador.py:1582`; `app/chamados/catalogo/motor.py:30`; `app/chamados/catalogo/motor.py:31`)
-
-   **Retorno com três significados:** está documentado e separado por identidade nas telas, mas não consumido integralmente. Atenção adicional: `None` pode ocorrer **depois de complementar perguntas e gravar D/Ch**; não equivale a “zero escrita”. (`app/chamados/services/disputa_emissao.py:1029`; `app/chamados/services/disputa_emissao.py:1078`; `app/chamados/services/disputa_emissao.py:1081`; `app/chamados/services/disputa_emissao.py:1091`)
-
-6. **Quem escreve e quem lê**
-
-   | Objeto | Escritor | Leitores |
-   |---|---|---|
-   | Retorno | `None`: `app/chamados/services/disputa_emissao.py:1046`, `app/chamados/services/disputa_emissao.py:1091`; D: `app/chamados/services/disputa_emissao.py:1285`, `app/chamados/services/disputa_emissao.py:1288`; sentinel: `app/chamados/services/disputa_emissao.py:1296` | Identidade: `app/chamados/services/acoes_disputa.py:225`, `app/chamados/services/cobrar_dia.py:50`; quatro descartadores identificados no item 1. |
-   | Evento `repasse_recusado` | Produção: `app/chamados/services/disputa_emissao.py:1293`; persistência: `app/core/observ.py:134` | Leitor específico encontrado: teste em `app/chamados/tests/test_e1_fila_v2_2_integracao.py:262`. Leitor genérico de produção: auditoria em `app/core/views.py:705`, com filtro livre de ação em `app/core/views.py:710`. |
-
-   O histórico dos chamados não inclui esse evento de modelo `Colaborador`, pois filtra `Chamado`/`ChamadoColaborador`. Consumidor operacional específico, retry e visibilidade efetiva em produção: **[nao verificado]**. (`app/chamados/services/historico.py:86`; `app/chamados/services/disputa_emissao.py:1293`)
-
-   Executei os **23 testes sem banco: OK**, usando `python3 -B`; relatório persistido dessa execução: **[nao verificado]**. Postgres e suíte completa da volta 2: **[nao verificado]**. (`app/chamados/tests/test_e1_fila_v2_2_trava.py:1`; `app/chamados/tests/test_e1_fila_v2_2_recusa.py:1`)
-
-_3004 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3005 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
