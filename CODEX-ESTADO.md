@@ -1,7 +1,120 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:37** · publicado em **09/11/2026 03:38** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:42** · publicado em **09/11/2026 03:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:42 · sessao b891029b1740 · PAR-NAO-ADJACENTE · verificador · origem=Code
+
+Os três pontos da v1 estão tratados na v2. Permanece uma lacuna de cobertura: o mutante que deixa todos os pares com número zero sobrevive aos testes novos sem banco. `app/escala/utils.py:475`; `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:203`; `app/escala/utils.py:471`.
+
+A cópia disponibilizada não contém repositório Git acessível; identidade com o HASH e execução do HEAD histórico `b57ce0a1`: **[nao verificado]**. A comparação abaixo considera o algoritmo anterior mostrado no diff fornecido e o código presente. `app/escala/utils.py:437`.
+
+1. **Fechamento dos achados da v1**
+
+| Achado | Situação na v2 |
+|---|---|
+| Ordenação por `k` alterava listas sem par novo | **Corrigido.** As triplas carregam a posição em `_bats`; o retorno ordena por essa posição e depois remove esse índice auxiliar. Os testes incluem `locs` desordenado e timestamp repetido. `app/escala/utils.py:458`; `app/escala/utils.py:475`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:172`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:186`. |
+| Mutante `_iz <= N−1` sobrevivia | **Cobertura acrescentada.** A condição continua estrita; o teste exige apenas `ent`, `sol`, `sai` quando o par termina na última batida. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:194`. |
+| “Aninhado não muda” ignorava interno não adjacente | **Contrato corrigido e caso acrescentado.** Externo vetado; interno não adjacente atravessando solta vira par. Esse caso usa pares mockados: sua produção pelo pareador real continua **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:156`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:203`. |
+
+2. **Preservação quando nenhum par é não adjacente**
+
+**Sim, por comparação dos algoritmos fornecidos; não encontrei contraexemplo nessa condição.** Para um par adjacente, `_iz == _i + 1`, o intervalo de índices examinado pelo veto é vazio. A aceitação continua igual à anterior; o fechamento emitido antecipadamente continua imediatamente seguinte à abertura, portanto ordenar pela posição em `_bats` conserva a lista antiga. As guardas de borda permanecem estritas. `app/escala/utils.py:461`; `app/escala/utils.py:467`; `app/escala/utils.py:468`; `app/escala/utils.py:475`.
+
+Isso também conserva as peculiaridades anteriores: ordenação estável de `batidas`, primeiro `k` de cada timestamp em `locs`, última posição daquele timestamp em `_pos`, possíveis `k` repetidos e ausência de deduplicação do retorno. `app/escala/utils.py:449`; `app/escala/utils.py:450`; `app/escala/utils.py:457`; `app/escala/utils.py:475`.
+
+Os três testes novos fixam as listas antigas para ausência de par, par adjacente e timestamps repetidos com `locs` desordenado. Não constituem, isoladamente, prova exaustiva; a conclusão geral vem do raciocínio acima. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:172`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:180`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:186`.
+
+3. **Mordida dos testes** [nao verificado]
+
+Executei os **11 corpos novos sem banco em memória**, extraindo funções da cópia e substituindo a infraestrutura Django/timezone: todos passaram, e as mutações abaixo foram reprovadas pelos testes indicados. Isso é um ensaio reduzido; execução integral Django e integração com banco: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:50`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:155`.
+
+| Teste novo | Mutação que o reprova | [nao verificado]
+|---|---|
+| Duas soltas, linha 89 | Repor exigência `_iz == _i + 1`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:95`; `app/escala/utils.py:467`. |
+| Anexo 660, linha 99 | Repor adjacência. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:103`; `app/escala/utils.py:467`. |
+| Uma solta, linha 107 | Repor adjacência. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:113`; `app/escala/utils.py:467`. |
+| Aninhado com interno adjacente, linha 116 | Remover veto de pontas intermediárias: o externo passa indevidamente. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128`; `app/escala/utils.py:468`. |
+| Aninhado abaixo do piso, linha 135 | Retirar `pausas_abaixo_do_piso` da composição de `_pares`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:141`; `app/escala/utils.py:454`. |
+| Alinhador independente da ordem, linha 144 | Trocar busca pelo rótulo `ent` por `papeis[0][0]`. A lista invertida revela o erro. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:151`; `app/escala/utils.py:525`. |
+| Sem par, desordenado, linha 172 | Ordenar triplas por `k`, usando `_p[1]`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:177`; `app/escala/utils.py:475`. |
+| Adjacente, desordenado, linha 180 | Mesma ordenação por `k`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:183`; `app/escala/utils.py:475`. |
+| Timestamp repetido, linha 186 | Substituir `setdefault` por atribuição, conservando o último `k`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:191`; `app/escala/utils.py:449`. |
+| Fechamento na última, linha 194 | Trocar `< N−1` por `<= N−1`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:199`; `app/escala/utils.py:467`. |
+| Interno não adjacente, linha 203 | Repor adjacência. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:210`; `app/escala/utils.py:467`. |
+| Builder, linha 299 | Repor adjacência viola a asserção direta dos papéis, por análise estática; execução desse teste: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:307`; `app/escala/utils.py:467`. |
+
+**Mutante sobrevivente:** `_n += 1` → `_n += 0` passou nos 11 corpos reduzidos. Nenhum caso novo exige dois pares aceitos com números distintos; o teste de integração também só espera `par 0`. Com dois pares, esse mutante faz o alinhador sobrescrever as pontas no mesmo agrupamento. Sobrevivência na suíte integral: **[nao verificado]**. `app/escala/utils.py:471`; `app/escala/utils.py:530`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:210`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:307`.
+
+O teste do builder verifica seu dicionário, **não uma ata relavrada e relida da persistência**. A ata preparada manualmente contém lâmpadas e órfãs, sem `minutos_realizados`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:249`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:291`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:305`.
+
+4. **Escritores, leitores e significados**
+
+| Retorno/campo | Escrita e leitura identificadas |
+|---|---|
+| Lista `(k, papel)` | `_papeis_do_turno` produz; `_match_marcos` recebe; `_alinhar_por_papel` interpreta rótulos e agrupa por número/letra. Não exige tuplas S/E consecutivas. `app/escala/utils.py:475`; `app/escala/utils.py:597`; `app/escala/utils.py:525`; `app/escala/utils.py:530`. |
+| Órfãs e consumo | `_match_marcos` emite órfãs na ordem da lista e marca `consumed[k]`. Logo, a ordem do retorno é observável. `app/escala/utils.py:622`; `app/escala/utils.py:624`. |
+| Células, papel e tipo real | O casamento passa separadamente tipo do marco e tipo gravado; `_celula_do_marco` mantém `tipo`/`papel` separados de `tipo_real`. O propositor compara explicitamente esses significados. `app/escala/utils.py:620`; `app/escala/utils.py:326`; `app/ponto/propositor.py:66`. |
+| Ata | Cartório transporta células para lâmpadas e copia órfãs/minutos; chama `lavrar_veredito(save=False)`; a porta atribui a ata, e `carimbar` persiste os campos pela mesma porta. `app/ponto/services/cartorio.py:679`; `app/ponto/services/cartorio.py:706`; `app/ponto/services/cartorio.py:711`; `app/ponto/services/cartorio.py:1802`; `app/ponto/services/cartorio.py:1822`; `app/ponto/portas/celula.py:1028`; `app/ponto/portas/celula.py:1067`; `app/ponto/portas/celula.py:900`. |
+| `minutos_realizados` | Builder consulta `realizado_do_dia`; leitores incluem grade, validação PDF, comparação ata×juiz e diagnóstico do espelho. `app/escala/utils.py:2046`; `app/escala/utils.py:2059`; `app/escala/services/leitor_celula.py:406`; `app/folha/validacao_pdf.py:48`; `app/ponto/services/bordas_realizado.py:87`; `app/ponto/services/espelho.py:891`. |
+
+Há uma distinção que deve permanecer: papel `par` inclui pausas abaixo do piso; o adaptador envia ao motor somente `intervalos_do_turno`. Esses conjuntos não são intercambiáveis, mas isso não demonstra leitor novo com interpretação errada. `app/escala/utils.py:454`; `app/ponto/adaptador_motor.py:44`; `app/ponto/turnos.py:545`; `app/ponto/turnos.py:565`.
+
+5. **Classes de reprovação e relógio**
+
+- **Segundo juiz / derivação paralela:** a alteração consulta os pares existentes e decide sua representabilidade, sem redescobri-los por tipo ou duração. Continua omitindo o externo aninhado. O produtor por alternância já existe e só entra sem `turno`. `app/escala/utils.py:454`; `app/escala/utils.py:468`; `app/escala/utils.py:478`; `app/escala/utils.py:598`.
+- **Segundo escritor:** nenhum novo escritor produtivo aparece no trecho; há escrita direta de `ata` na preparação do teste. `app/escala/utils.py:475`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:291`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:297`.
+- **Selo sem mordida:** cada teste tem mutação discriminada acima, mas falta cobertura de numeração com dois pares aceitos e de releitura após persistência. `app/escala/utils.py:471`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:210`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:305`.
+- **Campo com dois significados:** os leitores examinados distinguem papel de tipo gravado e par geométrico de intervalo descontável. Ausência universal de outros conflitos: **[nao verificado]**. `app/escala/utils.py:326`; `app/ponto/propositor.py:66`; `app/ponto/adaptador_motor.py:44`.
+
+**Não há `timezone.now()` nem `timezone.localdate()` chamado no corpo de teste novo.** A data é fixa e o builder recebe `DEPOIS_DE_TUDO`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:43`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:89`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:172`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:249`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:299`; `app/escala/tests/instante.py:12`.
+
+**A fixture de integração ainda alcança relógio corrente indiretamente:** criação da escala → signal → `localdate()`; criação das batidas → signal → cartório sem `agora` → `localdate()`/`now()`. Influência efetiva nos asserts: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:233`; `app/ponto/signals.py:72`; `app/ponto/signals.py:63`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:286`; `app/ponto/signals.py:135`; `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:1965`; `app/ponto/services/cartorio.py:1989`.
+
+## 09/11 03:39 · sessao f3ebd92d8e31 · - · - · origem=Ronald (tmux)
+
+Os 12 testes novos têm uma mutação identificável que viola suas asserções; isso é análise estática, sem execução Django dos mutantes. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:89`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:299`.
+
+| Teste, identificado pela linha | Mutação que o reprova | [nao verificado]
+|---|---|
+| Duas soltas, :89 | Repor adjacência `_iz == _i + 1` na condição. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:95` |
+| Anexo 660, :99 | Repor adjacência. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:103` |
+| Uma solta, :107 | Repor adjacência. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:113` |
+| Aninhado interno adjacente, :116 | Remover veto de pontas intermediárias: externo passa a ser emitido. `app/escala/utils.py:468`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128` |
+| Aninhado abaixo do piso, :135 | Retirar `pausas_abaixo_do_piso` de `_pares`: interno desaparece e externo fica elegível. `app/escala/utils.py:454`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:141` |
+| Alinhador independente da ordem, :144 | Trocar busca de entrada por `_ent = papeis[0][0]`: lista invertida revela dependência posicional. `app/escala/utils.py:525`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:151` |
+| Sem par e locs desordenado, :172 | Ordenar triplas por `k`, `_p[1]`, em vez de posição `_p[0]`. `app/escala/utils.py:475`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:177` |
+| Adjacente e locs desordenado, :180 | Mesma ordenação por `k`. `app/escala/utils.py:475`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:183` |
+| Timestamp repetido, :186 | Trocar `setdefault` por atribuição, conservando último `k`. `app/escala/utils.py:449`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:191` |
+| Fechamento na última, :194 | Trocar `< len(_bats)-1` por `<= len(_bats)-1`. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:199` |
+| Aninhado interno não adjacente, :203 | Repor adjacência. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:210` |
+| Builder, :299 | Repor adjacência: asserção direta dos papéis já reprova. `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:307` |
+
+**Mutante simples sobrevivente aos testes novos, por inspeção:** `_n += 1` → `_n += 0`. Nenhum novo caso espera mais de um par aceito; todos os pares esperados têm número zero. Execução integral deste mutante: `[nao verificado]`. `app/escala/utils.py:471`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:95`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:103`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:113`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:128`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:141`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:150`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:183`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:210`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:307`.
+
+**Relógio:** nenhum corpo de teste novo chama `timezone.now()` ou `timezone.localdate()`. Os helpers usam `DIA` fixo, e o builder recebe `DEPOIS_DE_TUDO`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:43`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:57`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:161`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:249`; `app/escala/tests/instante.py:12`.
+
+A fixture de integração alcança relógio indiretamente: criação da escala → signal → `localdate()`; criação das batidas → signal → cartório sem `agora` → `localdate()`/`now()`. Influência concreta nas asserções: `[nao verificado]`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:233`; `app/ponto/signals.py:72`; `app/ponto/signals.py:63`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:286`; `app/ponto/signals.py:131`; `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:1965`; `app/ponto/services/cartorio.py:1989`.
+
+O teste de integração verifica o dicionário do builder, não relê `minutos_realizados` persistido pela porta; sua ata é preparada com escrita direta na fixture. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:249`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:291`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:297`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:305`.
+
+## 09/11 03:39 · sessao 58456d9ce782 · - · - · origem=Ronald (tmux)
+
+- `_papeis_do_turno` escreve apenas a lista transitória `(k,papel)`; `_match_marcos` é o único chamador produtivo direto encontrado. O alinhador agrupa pares por número e letra; não exige tuplas consecutivas. `_match_marcos` usa timestamps para extremos, preserva a ordem recebida nas órfãs e marca `consumed[k]`. `app/escala/utils.py:475`; `app/escala/utils.py:597`; `app/escala/utils.py:525`; `app/escala/utils.py:530`; `app/escala/utils.py:607`; `app/escala/utils.py:622`; `app/escala/utils.py:624`.
+
+- Existe produtor alternativo preexistente, `_papeis_por_alternancia`, para períodos alternados; só é chamado quando `turno is None`. Não é uma nova derivação introduzida pela obra. `app/escala/utils.py:478`; `app/escala/utils.py:490`; `app/escala/utils.py:497`; `app/escala/utils.py:598`.
+
+- A alteração lê as duas consultas do juiz e filtra representabilidade; não refaz a decisão por duração ou tipo. As autoridades registradas são `_match_marcos` para ocupação e `intervalos_do_turno` para intervalo. O filtro continua podendo omitir pares, portanto “transcrição de todos os pares” seria excessivo. `app/escala/utils.py:454`; `app/escala/utils.py:467`; `app/core/juizes.py:200`; `app/core/juizes.py:202`.
+
+- Campos afetados indiretamente: `_match_marcos` produz células e órfãs; células conservam `tipo_real` vindo de `locs`, distinguindo-o do papel `S/E` do par. `lampadas_do_dia` transporta o tipo real. Não encontrei leitor produtivo que interprete o papel do par como o tipo gravado; essa universalidade fora dos pontos pesquisados é `[nao verificado]`. `app/escala/utils.py:620`; `app/escala/utils.py:622`; `app/escala/utils.py:327`; `app/ponto/services/cartorio.py:679`.
+
+- Minutos seguem outra cadeia: builder consulta `realizado_do_dia`, `ata_do_dia` transporta, cartório entrega à porta, porta atribui e persiste. Não há novo escritor produtivo nesse trecho. A integração nova escreve a ata diretamente na preparação da fixture. `app/escala/utils.py:2046`; `app/escala/utils.py:2059`; `app/ponto/services/cartorio.py:706`; `app/ponto/services/cartorio.py:1802`; `app/ponto/portas/celula.py:1028`; `app/ponto/portas/celula.py:1035`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:291`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:297`.
+
+- Leitores do minuto: grade da célula, conferência PDF, residual ata×juiz e diagnóstico `ata_sem_turno`. `app/escala/services/leitor_celula.py:406`; `app/folha/validacao_pdf.py:48`; `app/ponto/services/bordas_realizado.py:87`; `app/ponto/services/espelho.py:891`.
+
+- Distinção explícita de significado: `par` inclui pausas abaixo do piso; intervalos enviados ao motor e descontados do realizado vêm somente de `intervalos_do_turno`, com piso de 900 segundos. Isso não demonstra conflito novo entre leitores. `app/escala/utils.py:454`; `app/ponto/turnos.py:499`; `app/ponto/turnos.py:545`; `app/ponto/turnos.py:565`; `app/ponto/adaptador_motor.py:44`; `app/ponto/turnos.py:756`.
+
+- O teste de integração consulta o builder e o retorno transitório; não relê uma nova ata persistida pela porta com `minutos_realizados=660`. A ata semeada manualmente contém lâmpadas e órfãs. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:291`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:304`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:305`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:309`.
 
 ## 09/11 03:37 · sessao 3bbc841fcd90 · PAR-NAO-ADJACENTE · construtor · origem=Code
 
@@ -969,81 +1082,4 @@ A investigação corrige minha hipótese inicial: os 8 segundos são batidas int
 - **ESTRUTURA é sustentável**, com sítio em `_papeis_do_turno:467` e consequência em `_alinhar_por_papel:566`; o próprio contrato diz que cada par deve sentar inteiro e que soltas nunca movem o par. (`app/escala/utils.py:505`, `app/escala/utils.py:511`) O e6 sozinho apenas dá o resíduo, sem julgar frescor de ata ou versão. (`app/ponto/management/commands/e6_oraculo.py:69`, `app/ponto/management/commands/e6_oraculo.py:98`)
 - **CLT e unidade:** o piso de intervalo de 15 minutos é atribuído ao art.71 §1 pela cópia, e o campo declara FATO entre batidas; pagamento, indenização, tolerâncias e janela HE pertencem ao motor. Não aplicar a L-097 para cortar os 9 minutos iniciais deste campo. (`app/ponto/turnos.py:495`, `app/ponto/turnos.py:710`, `app/ponto/turnos.py:717`, `app/escala/utils.py:299`)
 
-## 09/11 03:03 · sessao a52cb32772c9 · - · - · origem=Ronald (tmux)
-
-- **Não há `lavrada_em` nem `regra_versao` na definição da célula examinada:** existem `julgada_em` e `impressao` (`app/escala/models.py:1738-1746`), `veredito_em` (`:1772`), ata JSON (`:1778`) e `insumos_em` (`:1805`). A sonda fornecida imprime esses campos, mas não fornece os dois metadados pedidos; `lavrada_em/regra_versao` específicos desta ata permanecem **[não verificado]**.
-
-- **`julgada_em` não deve ser chamado automaticamente de instante da lavratura da ata:** `carimbar` atualiza-o junto com insumos e impressão (`app/ponto/portas/celula.py:1047-1067`), enquanto `lavrar_veredito` altera ata quando diferente (`:995-996`, `:1027-1033`). No caso fornecido há `julgada_em=11/10` e `veredito_em=02/10`; são campos diferentes e não provam qual commit escreveu originalmente o número **[não verificado]**.
-
-- **Versão declarada atual para setembro é 1**, mesmo com o seletor atual: `app/ponto/services/cartorio.py:132`, `:257-267`; a própria explicação de v2 registra “a 09 fica em regra:1 — FOTO” (`:183-188`). A versão vai para os componentes do hash (`:465-472`), chamado com `versao_para` (`:1143-1146`, `:1348-1353`); hash igual pula sem `forcar` (`:1358-1364`). Logo v1 **não identifica imutavelmente um corpo histórico do seletor**, nem recupera a versão histórica da ata.
-
-- **Commit comprovado documentalmente para a mudança na fonte:** `app/docs/RELATO.md:1657-1660` identifica `b3bf529e`, pouso de **29/10 07:11**, merge da raia `7d028f1c`. A fonte declarada é `_match_marcos` (`:1659`); o detalhamento nomeia `_alinhar_por_papel`, `_papeis_do_turno` e `_papeis_por_alternancia` (`:1709`) e explica a mudança de assentamento pelo papel (`:1710`).
-
-- **`fba8aac8` no anexo:** o título fornecido permite atribuir-lhe o bump `(2, '2026-10')`; atribuir precisamente o trecho seletor e o delta de 61 minutos a esse commit individual requer o diff histórico **[não verificado]**. O documento da cópia confirma o vínculo da v2 com essa obra (`app/ponto/services/cartorio.py:183-188`), mas o pouso nomeado documentalmente é `b3bf529e` (`app/docs/RELATO.md:1657-1660`), ausente do `gitlog.txt` fornecido **[não verificado]**.
-
-- `.git` não existe na raiz da cópia, verificado por leitura do diretório; sem arquivo citável: **[não verificado]**. Portanto não foi possível conferir `git show`, ancestralidade ou diff de `fba8aac8`/`b3bf529e`; para fechar o item histórico faltam os diffs/objetos históricos e o metadado da lavratura deste registro **[não verificado]**.
-
-## 09/11 03:02 · sessao a52cb32772c9 · - · - · origem=Ronald (tmux)
-
-Leitores da **ata** e seus desdobramentos:
-
-- **Diretos:** `app/escala/services/leitor_celula.py:369` usa o campo como evidência de fato no dia; `:406` transporta `int(ata.get('minutos_realizados') or 0)` para a grade, sob a data da célula (`:361`, `:373`). `app/folha/validacao_pdf.py:48` lê diretamente a ata, soma minutos e dias com valor não zero (`:50-52`) e converte para horas (`:54`).
-- **Grade → folha:** `app/folha/export.py:329-338` obtém a grade da ata. `app/ponto/services/dia_pago.py:364-402` lê o realizado da grade, limita cada dia ao previsto (`:394`), restringe a trabalho/ausência (`:387-388`) e retorna os mapas por data. `app/ponto/services/fechamento.py:1060-1064` soma esse mapa para `FechamentoMensal.minutos_realizados`. São **minutos de cumprimento com teto por dia**, portanto campo homônimo com significado mais restrito que o relógio da ata (`app/ponto/services/dia_pago.py:367-384`).
-- **Percentual e diagnóstico:** `app/folha/export.py:1096-1098` faz cap diário do realizado da grade e converte para horas; `app/folha/causas.py:85-88` verifica realizado zero; `app/ponto/supra_juiz.py:224` lê o realizado para classificação; `app/ponto/services/bordas_realizado.py:87-88` compara ata/grade com o juiz de turnos.
-- **Calendário:** `app/colaboradores/services/calendario.py:359` armazena o número vindo da grade da célula; `:718-719` usa-o com a ausência de turno para produzir a palavra “Sem turno pareado”. A regra desse uso está em `app/ponto/services/dia_decidido.py:158-179`.
-- **Espelho:** usa a ata para o mesmo diagnóstico `ata_sem_turno` em `app/ponto/services/espelho.py:891-894`. **O campo homônimo `espelho.minutos_realizados` é calculado pelo juiz**, não copiado do número da ata: `:675-676` → `_realizado_do_dia_tela` (`:267-294`) → `realizado_do_dia` → `realizado_dos_turnos` (`app/ponto/turnos.py:774-795`, `:707-771`). Publica o resultado em `app/ponto/services/espelho.py:783`; `realizado_h` divide por 60 e arredonda a uma casa em `:799-800`; o topo soma horas em `:910-912`.
-- **Sondas que leem esse homônimo do espelho**, não diretamente o número da ata: `app/ponto/management/commands/e6_oraculo.py:263-268` (fallback para `pago_h × 60`), `app/ponto/management/commands/e6_piso_autopsia.py:117-123`, `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:70-71`, `app/folha/porta_export.py:509-510`.
-
-**Dia e unidade:** `app/ponto/turnos.py:2929-2933` declara explicitamente que o dia da célula/grade/ata é **dia do turno**; o cálculo filtra `t.data_turno == data` (`:719`), mede relógio em minutos (`:740-741`), desconta pausas (`:756-767`) e arredonda para inteiro (`:771`). Nos leitores diretos e da grade acima não aparece recorte do valor à meia-noite; a data usada é a da célula/grade (`app/escala/services/leitor_celula.py:361-406`, `app/ponto/services/dia_pago.py:390-401`).
-
-**Não confundir significados:** ata/juiz = relógio líquido; fechamento/DiaPago homônimo = cumprimento limitado ao previsto por dia; `pago_h` = pagamento lavrado ou motor. O próprio espelho separa realizado e pago (`app/ponto/services/espelho.py:783-810`) e documenta o teto do fechamento (`:905-907`). A correção semântica de todo uso indireto fora dos sítios examinados permanece [não verificado].
-
-## 09/11 02:59 · sessao adbb51c775ba · E1-FILA-V2-2-TRAVA · construtor · origem=Code
-
-B1/B2 implementados:
-
-| Arquivo::função | Alteração |
-|---|---|
-| [pergunta_no_app.py:175](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/pergunta_no_app.py:175)::`perguntar` | Conta chamados recusados em `recusados`, excluindo-os de `chamados`. |
-| [perguntar_chamados_sem_pergunta.py:19](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:19)::`Command.handle` | Imprime `colabs`, `chamados` e `recusados` separadamente. |
-| [detectar_ausencias.py:802](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/ponto/management/commands/detectar_ausencias.py:802)::`Command._abrir_chamado` | Recusa gera uma linha em **stderr**, com pk e mensagem oficial. |
-| [processar_alertas_turno.py:385](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/ponto/management/commands/processar_alertas_turno.py:385)::`Command._abrir_chamado_critico` | Recusa gera uma linha em **stdout**, com pk e mensagem oficial. |
-| [processar_alertas_avancados.py:159](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/ponto/management/commands/processar_alertas_avancados.py:159)::`Command.handle` | Recusa gera uma linha em **stdout**, com pk e mensagem oficial. |
-
-Grep dos leitores do dict encontrou como consumidor de produção o comando acima, agora ajustado ([importação:20](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:20), [leitura:29](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:29)):
-
-```bash
-rg -n 'pergunta_no_app.*import.*perguntar|pergunta_no_app\.perguntar|\bperguntar\(alvo' --glob '*.py' --glob '!**/migrations/**' .
-```
-
-Testes novos em [test_e1_fila_v2_2_consumidores.py:131](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_consumidores.py:131)::`ConsumidoresRecusaSemBancoTest`. Os seis RED falharam antes da cura; após a cura, passaram ([RED:157](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_consumidores.py:157)). [nao verificado]
-
-Comandos reproduzíveis:
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-T=chamados.tests.test_e1_fila_v2_2_consumidores
-
-python3 -B -m unittest -v "$T" -k RED
-
-for caso in \
-  MORDE_passivo_sem_checagem_da_recusa \
-  MORDE_passivo_conta_lotes_em_vez_de_chamados_recusados \
-  MORDE_comando_omite_recusados \
-  MORDE_ausencias_sem_checagem_da_recusa \
-  MORDE_turno_sem_checagem_da_recusa \
-  MORDE_avancados_sem_checagem_da_recusa
-do
-  python3 -B -m unittest -v "$T" -k "$caso"
-done
-
-python3 -B -m unittest -q "$T" \
-  chamados.tests.test_e1_fila_v2_2_recusa \
-  chamados.tests.test_e1_fila_v2_2_trava
-```
-
-Resultados: **6 RED verdes; seis mutantes detectados, cada MORDE individual OK; bateria de 40 testes OK** ([MORDE:222](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_consumidores.py:222)). Os testes executam os trechos reais por AST, sem banco; os crons completos ficam [nao verificado] ([limite do teste:1](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_consumidores.py:1)). [nao verificado]
-
-Ruff indisponível no ambiente; lint: [nao verificado].
-
-_3007 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3010 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

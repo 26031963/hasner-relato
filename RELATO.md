@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=3908378
+ESPERANDO: trava_teste.sh | pid=1541241
+PAR-NAO-ADJACENTE 04:1x: pre-verificador v2 rc 0 (preverif_v2.r): os 3 achados da v1 fechados; lista identica ao HEAD sem par nao adjacente (sem contraexemplo); PROCEDENTE mutante _n+=0 sobrevive (nenhum teste com 2 pares; grep ('par', 1 nos testes = 0, conferido). DESCARTADOS ao opus: builder nao relido da persistencia; relogio indireto da fixture _Base. Suite v2 cancelada (volta superada, PRE-APROVADO-AMPLIA a; container da propria suite morto por id, 6 pontos de montagem removidos). Volta 3 Codex rodando (construtor_v3.q).
+FIO-E0-V4-E2 04:0x: suite v2 da copia b5a2b56c FAILED 1 em 14679, rc 1 (suite_v2.log): so a catraca LINHAS_REGISTRADAS -- turnos.py::_dia_das_batidas_puro 2945->2955 e dia_do_turno_da_batida 2923->2933, deslocamento do hunk E2 em turnos.py:2749 (texto da linha igual ao main, 149 entradas conferidas por script). Commit 93a48702 + merge do main 89df8c52 (V2-2) sem conflito = ad77299d. Suite v3 na fila (suite_v3.log). E2 nao pousa ate a E3.
 PAR-NAO-ADJACENTE 03:5x: volta 2 Codex rc 0 -> commit 99f2b921 na copia (retorno ordenado pela posicao em _bats = ordem do HEAD; 5 testes novos com oraculo a mao: locs desordenado x2, timestamp repetido, fecho na ultima batida mata o mutante <=, aninhado com interno nao adjacente). Verificador em memoria movido para logs/par_nao_adjacente/. Pre-verificador v2 e suite v2 (suite_v2.log, na fila da trava) rodando.
 PAR-NAO-ADJACENTE 03:4x: pre-verificador Codex v1 rc 0 (logs/par_nao_adjacente/preverif_v1.r). Triagem, conferida em escala/utils.py:466/474: PROCEDENTES (1) sorted por k muda a ordem do HEAD com locs fora de ordem -> ordenar pela posicao em _bats; (2) mutante _iz<=N-1 sobrevive; (3) aninhado com interno nao adjacente muda (interno vira par) -> teste + docstring. DESCARTADOS ao opus: fixture NaAta herda nome/CPF e relogio indireto da base _Base existente; NaAta le o builder, nao o persistido; aninhados sao caracterizacao (nao RED). Suite v1 cancelada (volta superada, PRE-APROVADO-AMPLIA a). Volta 2 Codex construtor rodando (construtor_v2.q).
 E1-FILA-V2-2-TRAVA POUSO 09/11 03:3x: opus final APROVA (fecho antes da 1a escrita em :1056, HIST/renascer cobertos, 2 mutantes mordem); A3 deadlock _gravar_estado x repasse, A4, B3, B4 com acervo 0 -> fila pela E1-OPUS5-POUSA-OU-FILA (uso do B3 rearmado, aval NOITE-NON-STOP-0911 item 2). Merge --no-ff e9bf5de2, cmp 13/13 contra a copia, commit 89df8c52, deploy --sem-migrate rc 0 (3 rotas provadas, importerror_500=0; logs/e1fila_v22/deploy.log), smoke 5 min: Traceback/ERROR core 0 ui 0. Medida: voltas Codex 3 construtor + 2 pre-verif, reprovas opus 0, leituras opus 1 (vs E1: 15 voltas opus).
@@ -5589,6 +5591,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**09/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
 **08/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
