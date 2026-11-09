@@ -1,7 +1,143 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 13:48** · publicado em **09/11/2026 13:51** (UTC-3)
+> Ultima resposta processada: **09/11/2026 13:52** · publicado em **09/11/2026 13:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 13:52 · sessao 3b20bcb6caff · SONDA-SEM-GRANT · leitura · origem=Code
+
+**A matriz está ABERTA.** Existe juiz único da conferência de catálogo, mas falta uma transição completa com contrato único de prontidão, falha e idempotência. A porta confirma alterações em duas transações e publica a credencial depois delas. (`bin/sonda_leitor_comum.sh:158`; `bin/sonda_provisionar.sh:118`; `bin/sonda_provisionar.sh:168`; `bin/sonda_provisionar.sh:196`)
+
+Referências abreviadas abaixo são **arquivo:linha**, com esta expansão:
+
+| Sigla | Arquivo |
+|---|---|
+| C | `bin/sonda_leitor_comum.sh` |
+| P | `bin/sonda_provisionar.sh` |
+| L | `bin/sonda_leitura.sh` |
+| T | `bin/tests/test_sonda_sem_grant.sh` |
+| G | `bin/tests/test_sonda_sem_grant_pg.sh` |
+| S | `bin/sombra.sh` |
+
+Execuções, RED/GREEN, mortes efetivas dos mutantes e estado atual de PROD: **[nao verificado]**. A coluna PROVA identifica casos e asserções existentes; não homologa os relatos dos anexos.
+
+**1. Estados e fechamento**
+
+O estado deve ser tratado como vetor: destino × existência/atributos do leitor × credencial × ACL vigente × defaults × autenticação × fase da transição. Esses componentes são consultados ou alterados separadamente no vivo. (`C:26`; `C:79`; `C:132`; `C:191`; `P:105`; `P:127`; `P:193`)
+
+| Dimensão | Estados encontrados/contemplados no vivo |
+|---|---|
+| Destino | PROD=`saas_db/saas_hasner`; sombra=`sombra_db/sombra`; credencial compartilhada. (`C:22`; `C:28`; `C:29`) |
+| Role | Ausente; sem LOGIN; super/poderes; membro; dono; configuração global ou por banco divergente. (`C:80`; `C:87`; `C:146`; `C:147`) |
+| Credencial | Ausente; sem senha; modo diferente de 600; formato antigo com HOST; senha divergente; senha conhecida apenas pelo cluster. (`L:173`; `L:178`; `L:194`; `P:79`) |
+| Relações | Leitura faltante; ACL aberta em tabela/view/partição/foreign table, coluna ou sequência; GRANT OPTION. (`C:97`; `C:112`; `C:122`) |
+| Fora de relação | LO nomeados; SECURITY DEFINER não-sistema; CONNECT em outros bancos; TEMP/CREATE; CREATE/GRANT OPTION em schema. (`C:126`; `C:129`; `C:136`; `C:139`; `C:143`) |
+| Defaults | De `saas_user`; do leitor; de outro concedente; destinados ao leitor ou PUBLIC, nos tipos consultados `r/S/n`. (`C:105`; `C:132`; `P:133`; `P:150`) |
+| Alteração pelo leitor | `read_only` global/por banco, senha e defaults próprios alterados com sucesso antes da detecção seguinte. (`G:365`; `G:376`; `G:379`) |
+| Instrumento/transição | Conferência muda, incompleta ou com erro; login recusado; cluster inacessível; trava ocupada; falha após cada COMMIT, na publicação ou na trilha. (`L:185`; `C:160`; `P:69`; `P:118`; `P:168`; `P:196`; `P:55`) | [nao verificado]
+
+**Não está FECHADA por catálogo.** Há enumeração de relações/ACL, mas funções são limitadas por nomes e `prosecdef`; defaults consultados excluem tipos diferentes de `r/S/n`. A leitura de tabelas/sequências usa `information_schema`, sem prova fornecida de visibilidade integral do executor real. (`C:98`; `C:102`; `C:112`; `C:132`; `C:136`; `C:139`)
+
+| Prova necessária de fechamento | Situação |
+|---|---|
+| Inventário completo dos objetos, ACL, defaults e capacidades, incluindo o complemento das consultas atuais | **FALTA**; fronteiras atuais em `C:112`, `C:132`, `C:136`, `C:139`. |
+| Cada item inventariado classificado como permitido, recusado ou fora do contrato, sem resto sem classificação | **FALTA**; lista LO nominal e defaults filtrados. (`C:19`; `C:134`) |
+| Cobertura de combinações, concorrência e sessões anteriores | **FALTA**; conferir, autenticar e executar são etapas separadas; CONNECT é revogado sem operação de encerramento de sessões. (`L:187`; `L:194`; `L:233`; `P:117`) |
+
+**2. Matriz estado × role**
+
+Convenções com expansão contratual:
+
+| Símbolo | Significado existente |
+|---|---|
+| **J(k)** | `_q_conferencia` mede a chave; `_conferencia_pronta` decide. Porta e leitura delegam ao mesmo predicado. (`C:76`; `C:158`; `P:173`; `L:187`) |
+| **A** | `_login_leitor` mede autenticação/sessão; a comparação `leitor\|on` está repetida nos dois chamadores. (`C:191`; `P:187`; `L:196`) |
+| **E+T** | Em sucesso, promoção de `.env_leitor` e tentativa de trilha da porta; em falha, vale a matriz de fases adiante. (`P:193`; `P:196`; `P:60`) |
+| **R(k)** | Leitura recusa rc **5**, nomeando a falta e a porta; registra trilha após instalação do trap. (`L:126`; `L:129`; `L:187`) |
+| **✓** | Porta rc **0**, mensagem `pronto`, após conferência, login e publicação; leitura executa a sonda e devolve seu rc, remapeando 5→1. (`P:173`; `P:187`; `P:199`; `L:233`; `L:244`) |
+| **F** | Porta rc **1**, sem anúncio regular de pronto, por falha SQL, conferência ou login. (`P:93`; `P:174`; `P:184`) |
+| **N/A** | Dimensão inaplicável: PUBLIC é representado como grantee `0`, não como a role de LOGIN examinada. (`C:74`; `C:149`) |
+
+“Role” abaixo identifica o titular afetado ou concedente. `saas_user` também é o executor administrativo fixo; seus próprios atributos/capacidades não são objeto do juiz atual. (`C:10`; `C:109`; `P:51`; `L:166`)
+
+| Estado | Role | JUIZ → OPERAÇÃO | PERSISTIDO | RETORNO | PROVA / mutante |
+|---|---|---|---|---|---|
+| Role ausente | leitor | J(role) → CREATE/ALTER. (`C:80`; `P:107`) | Role, senha/configuração; E+T. (`P:108`; `P:109`) | R(role); porta ✓ se completar. | Recusa falsa `T:139`; criação `G:222`. Mutante isolante da ausência: **FALTA**. |
+| Role ausente | saas_user | **FALTA** bootstrap/juiz; conexão já exige esse usuário. (`P:51`; `L:166`) | Sem restauração prevista desse executor. (`P:107`) | Falha SQL F / conferência R. (`P:93`; `L:185`) | **FALTA**. |
+| Role ausente | PUBLIC | N/A: grantee `0`. (`C:74`) | N/A. | N/A. | N/A. |
+| Presente, senha desconhecida/divergente | leitor | A; porta usa senha do arquivo ou gera outra e altera role. (`C:191`; `P:77`; `P:79`; `P:108`) | Senha do destino; E+T. | R(login); porta ✓/F. (`L:194`; `P:184`) | Divergência real `G:287`; ignorar login morderia `G:289`. Caso “role existente + arquivo ausente”: **FALTA**. |
+| Presente, senha desconhecida/divergente | saas_user | **FALTA** juiz da sua senha; conexão administrativa usa socket sem senha no script. (`C:10`; `P:51`) | Nenhuma rotação desse usuário prevista. (`P:108`) | Dependente da conexão administrativa. (`P:93`) | **FALTA**. |
+| Presente, senha desconhecida/divergente | PUBLIC | N/A. (`C:74`) | N/A. | N/A. | N/A. |
+| `.env_leitor` ausente/desatualizado/inválido | leitor | Guardas locais + A; porta normaliza arquivo ao concluir. (`L:173`; `L:179`; `P:194`) | E+T; cluster pode mudar antes do arquivo. (`P:108`; `P:196`) | R(credencial/HOST/login); ✓/F. | Ausência/HOST/sem senha `T:147`, `T:150`, `T:252`; falhas mktemp/chmod/mv: **FALTA**. |
+| `.env_leitor` ausente/desatualizado/inválido | saas_user | N/A como credencial desse usuário: arquivo é consumido pelo login leitor. (`L:194`) | Arquivo não publica senha de `saas_user`. (`P:194`) | **FALTA** garantia de disponibilidade do executor. (`P:51`) | **FALTA**. |
+| `.env_leitor` ausente/desatualizado/inválido | PUBLIC | N/A. (`C:74`; `C:22`) | N/A. | N/A. | N/A. |
+| ACL de relação/coluna/sequência aberta | leitor | J(esc_tab/esc_seq) → REVOKE relações, depois SELECT. (`C:112`; `C:122`; `P:129`; `P:165`) | ACL; E+T. Revogação explícita de ACL de coluna: **FALTA** no bloco. (`P:128`) | R(chave); ✓ se zerar, senão F. (`P:173`) | Estragos `G:250`–`G:255`; mutante específico por subtipo: **FALTA**. |
+| ACL de relação/coluna/sequência aberta | saas_user | **FALTA** juiz de seus privilégios; consulta filtra leitor/PUBLIC. (`C:116`; `C:125`) | Porta concede leitura ao leitor, sem contrato de preservação do executor. (`P:165`) | **FALTA** retorno sobre esse sujeito. | **FALTA**. |
+| ACL de relação/coluna/sequência aberta | PUBLIC | J detecta; operação de revogação relacional de PUBLIC: **FALTA**. (`C:116`; `P:129`) | ACL aberta pode permanecer; fases anteriores já confirmadas. (`P:118`; `P:173`) | R(chave); porta F. | Só cobrança textual `T:217`; estrago PG PUBLIC relacional e mutante: **FALTA**. |
+| ACL LO aberta | leitor | J(esc_lo) → REVOKE das famílias nomeadas. (`C:136`; `P:156`) | `pg_proc.proacl`; E+T. | R(esc_lo); ✓/F. | Tentativas `G:327`–`G:329`; M1 atingiria primeiro `G:223`. Sete famílias sem tentativa: **FALTA** frente a `C:19`. |
+| ACL LO aberta | saas_user | **FALTA** juiz de capacidades/impacto; filtro não o inclui. (`C:138`) | REVOKE não o nomeia. (`P:156`) | **FALTA** garantia de acesso preservado. | **FALTA**. |
+| ACL LO aberta | PUBLIC | J(esc_lo) → REVOKE EXECUTE. (`C:136`; `P:156`) | `proacl`; E+T. | R(esc_lo); ✓/F. | Estrago `G:267`; retirar chave, M4, morderia `G:242`. |
+| SECURITY DEFINER aberta/nova | leitor | J(esc_func) → REVOKE não-sistema. (`C:139`; `P:157`) | `proacl`; E+T. | R(esc_func); ✓/F. | Escrita autenticada `G:336`; M2 atingiria primeiro `G:223`. |
+| SECURITY DEFINER aberta/nova | saas_user | **FALTA** juiz de impacto no dono/app. (`C:142`; `P:157`) | ACL do objeto é alterada, sem prova de clientes preservados. (`P:157`) | **FALTA** retorno sobre impacto. | **FALTA**. |
+| SECURITY DEFINER aberta/nova | PUBLIC | J(esc_func) → REVOKE EXECUTE. (`C:139`; `P:157`) | `proacl`; E+T. | R(esc_func); ✓/F. | Função nova `G:266`; retirar chave, M5, morderia `G:242`. Concorrência: **FALTA**. |
+| CONNECT em outro banco | leitor | J(outros_bancos) → REVOKE ALL nos outros bancos conectáveis. (`C:143`; `P:117`) | `pg_database.datacl`; E+T. | R(outros_bancos); ✓/F. | Novas conexões `G:345`; M3 atingiria primeiro `G:223`. Sessão anterior: **FALTA**. |
+| CONNECT em outro banco | saas_user | **FALTA** juiz de continuidade de acesso; não é sujeito da contagem. (`C:145`) | Efeito indireto via PUBLIC depende de seus privilégios reais. (`P:117`) | **FALTA** retorno de impacto. | Superuser real/acesso preservado: **[nao verificado]**. |
+| CONNECT em outro banco | PUBLIC | J(outros_bancos) → REVOKE CONNECT em todos os outros `datallowconn`. (`C:143`; `P:117`) | `datacl`; E+T. | R(outros_bancos); ✓/F. | Estrago `G:268`; retirar chave, M6, morderia `G:242`. |
+| TEMP/CREATE/GRANT OPTION em banco/schema | leitor | J(esc_banco/esc_schema) → REVOKE ALL; repõe CONNECT/USAGE. (`C:126`; `P:131`; `P:158`; `P:162`) | ACL banco/schema; E+T. | R(chave); ✓/F. | Estragos `G:256`–`G:258`; tentativas `G:333`–`G:335`; mutante específico: **FALTA**. |
+| TEMP/CREATE/GRANT OPTION em banco/schema | saas_user | **FALTA** juiz de impacto; excluído do filtro. (`C:128`; `C:131`) | Possível perda do que dependia de PUBLIC. (`P:132`; `P:159`) | **FALTA** retorno de impacto. | **FALTA**. |
+| TEMP/CREATE/GRANT OPTION em banco/schema | PUBLIC | J → revoga CREATE schema e TEMP/CREATE banco; não toda ACL grantable restante. (`C:128`; `C:131`; `P:132`; `P:159`) | ACL; eventual resíduo permanece detectável. (`P:173`) | R(chave); ✓ ou F. | TEMP `G:259`; demais variantes PUBLIC e mutantes: **FALTA**. |
+| Defaults do leitor abertos | leitor | J(default_escrita/dono) → revoga defaults próprios destinados a PUBLIC. (`C:132`; `C:147`; `P:136`; `P:150`) | `pg_default_acl`; E+T. | R(chave); ✓/F. | ALTER próprio `G:379`; M7 morderia reprovisionamento `G:372`. |
+| Defaults do leitor abertos | saas_user | N/A como concedente dessa célula; operação distingue os dois donos. (`P:133`; `P:136`) | Nenhuma garantia própria adicional. | N/A. | **FALTA** prova de impacto combinado. |
+| Defaults do leitor abertos | PUBLIC | J detecta destinatário; porta revoga tabelas/sequências por schema e `r/S/n` globais. (`C:133`; `P:136`; `P:150`) | `pg_default_acl`; E+T. | R(default_escrita); ✓/F. | Tabela global `G:379`; sequência/schema/por-schema autenticados: **FALTA**. |
+| Defaults de `saas_user` abertos | leitor | J(default_escrita/default_falta) → remove grants e repõe SELECT. (`C:105`; `C:132`; `P:133`; `P:163`) | `pg_default_acl`; E+T. | R(chave); ✓/F. | Estragos `G:261`, `G:262`, `G:265`; mutantes específicos: **FALTA**. |
+| Defaults de `saas_user` abertos | saas_user | J examina seus defaults **para leitor**, não seus poderes gerais. (`C:109`; `C:133`) | Defaults alterados como concedente. (`P:133`; `P:143`; `P:163`) | ✓/F segundo prontidão do leitor. (`P:173`) | Tabela futura legível `G:230`; preservação de outros destinatários: **FALTA**. |
+| Defaults de `saas_user` abertos | PUBLIC | J detecta `r/S/n`; operação para revogar esses grants de PUBLIC: **FALTA**. (`C:132`; `P:133`; `P:150`) | Default aberto pode permanecer. (`P:175`) | R(default_escrita); porta F. | Caso PG e mutante: **FALTA**. |
+| Defaults de outro concedente abertos | leitor | J detecta; cura automática: **FALTA**. (`C:132`; `P:175`) | Default permanece; outras fases podem estar confirmadas. (`P:118`; `P:168`) | R(default_escrita); F. | Caso PG/mutante: **FALTA**. |
+| Defaults de outro concedente abertos | saas_user | **FALTA** avaliação de dependências desse executor. (`C:133`) | Sem operação específica. (`P:133`; `P:150`) | **FALTA** retorno próprio. | **FALTA**. |
+| Defaults de outro concedente abertos | PUBLIC | J detecta; cura automática: **FALTA**. (`C:133`; `P:175`) | Default permanece. | R(default_escrita); F. | Caso PG/mutante: **FALTA**. |
+| Leitor altera `read_only`/senha | leitor | J(ro/ro_banco)+A → próxima leitura recusa; porta realinha. (`C:84`; `C:87`; `P:108`; `P:111`) | Alteração do leitor persiste até cura; depois E+T. (`G:365`; `G:371`) | ALTER deve dar 0 no selo; leitura seguinte R; porta ✓/F. (`G:366`; `G:368`) | `G:376`–`G:378`; mutante de **impedimento**: **FALTA**, pois selo exige aceitação. |
+| Leitor altera `read_only`/senha | saas_user | N/A como titular; atua administrativamente na cura. (`P:51`; `P:108`) | Estado alterado é do leitor. (`P:109`) | N/A. | Prova de preservação do executor: **FALTA**. |
+| Leitor altera `read_only`/senha | PUBLIC | N/A; default próprio para PUBLIC está na célula anterior de defaults. (`G:379`) | N/A nesta célula. | N/A. | N/A. |
+| Super/poderes/membership/ownership | leitor | J; cura atributos/membros; reatribuição de propriedade: **FALTA** na porta. (`C:81`; `C:146`; `P:108`; `P:112`; `P:175`) | Atributos/membros alterados; propriedade pode permanecer. | R(chave); ✓ ou F. (`P:173`) | Membership/super `G:260`, `G:264`; dono falso `T:195`; ownership real/mutante: **FALTA**. |
+| Super/poderes/membership/ownership | saas_user | **FALTA** juiz de seus atributos/heranças. (`C:149`) | Não normalizados pela porta. (`P:108`) | **FALTA** retorno próprio. | **FALTA**. |
+| Super/poderes/membership/ownership | PUBLIC | N/A como role proprietária/membro examinada. (`C:146`; `C:147`) | ACL PUBLIC continua avaliada nas células próprias. (`C:116`) | N/A. | N/A. |
+| Leitura/default de leitura faltante | leitor | J(usage/tab/seq/default_falta) → CONNECT, USAGE, SELECT e defaults. (`C:92`; `C:105`; `P:160`; `P:166`) | ACL/defaults; E+T. | R(chave); ✓/F. | Falta falsa `T:137`; tabela futura `G:230`; mutantes por dimensão: **FALTA**. |
+| Leitura/default de leitura faltante | saas_user | Seu OID é o concedente exigido; visibilidade integral do inventário: **FALTA** prova. (`C:98`; `C:109`) | Defaults desse concedente. (`P:163`) | ✓/F segundo leitor. (`P:173`) | Fixture `G:145`; equivalência ao executor real: **[nao verificado]**. |
+| Leitura/default de leitura faltante | PUBLIC | SELECT/USAGE/CONNECT simples são admitidos, sem exigência de que PUBLIC os possua. (`C:116`; `C:128`; `C:131`) | Porta não concede leitura a PUBLIC. (`P:160`; `P:165`) | Não decide presença de leitura por PUBLIC. (`C:92`) | Caso isolante: **FALTA**. |
+| Conferência ilegível/erro | leitor | J rejeita prefixo/chaves; falha SQL recusa. Porta tolera erro **antes**, rejeita **depois**. (`C:160`; `C:164`; `L:185`; `P:72`; `P:173`) | Leitura: trilha; porta: alterações já confirmadas podem ficar. (`L:121`; `P:168`) | L5; P1 após conferência final. | Mudo/erro/chave ausente `T:141`, `T:143`, `T:199`; duplicata/valor contraditório: **FALTA**. |
+| Conferência ilegível/erro | saas_user | Executor da consulta; diagnóstico próprio: **FALTA**. (`L:166`; `P:51`) | Trilha tenta registrar erro genérico. (`P:72`; `P:60`) | L5/P1; sem distinguir causa administrativa. (`L:185`; `P:174`) | Caso separado por causa: **FALTA**. |
+| Conferência ilegível/erro | PUBLIC | A conferência inteira é recusada; sem decisão parcial confiável de suas ACL. (`C:158`; `L:187`) | ACL não é curada pela leitura. (`L:166`) | L5/P1. (`L:185`; `P:174`) | Caso específico PUBLIC: **FALTA**. |
+| Cluster inacessível | leitor | PROD: consulta recusa; sombra tenta subir cluster primeiro. (`L:143`; `L:185`) | Sombra pode alterar estado Docker; porta tenta trilha. (`L:144`; `P:60`) | PROD L5; sombra pode L1; porta falha SQL P1. (`L:144`; `P:93`) | Simulação de consulta `T:143`; indisponibilidade real/mutante: **FALTA**. |
+| Cluster inacessível | saas_user | Conexão administrativa não disponível; reparo: **FALTA**. (`P:51`) | Estado do banco não conferido. (`P:72`) | Falha SQL P1. (`P:93`) | **FALTA**. |
+| Cluster inacessível | PUBLIC | Estado ACL não observável nessa execução. (`C:143`; `L:185`) | **[nao verificado]**. | Recusa por conferência, não por ACL medida. (`L:185`) | **FALTA**. |
+| Pronto; PROD × sombra | leitor | J+A separados; destino fixo; garantia conjunta dos dois clusters: **FALTA**. (`C:28`; `C:29`; `P:173`; `P:187`) | ACL do destino + E+T; sombra só carimba depois da porta. (`P:169`; `S:340`; `S:341`) | ✓ no destino escolhido. (`P:199`) | Ambos `G:220`, `G:309`; comparação de estado 2×: **FALTA**. |
+| Pronto; PROD × sombra | saas_user | **FALTA** juiz da disponibilidade/capacidade do app nos dois clusters. (`C:149`) | Defaults alterados; impacto via PUBLIC não certificado. (`P:117`; `P:163`) | Nenhuma pós-condição própria. (`P:173`) | **FALTA**. |
+| Pronto; PROD × sombra | PUBLIC | J considera ACL do destino e CONNECT dos demais bancos do cluster escolhido. (`C:129`; `C:143`) | Revogações amplas, inclusive em outros bancos. (`P:117`; `P:157`; `P:159`) | ✓ não certifica clientes legítimos dependentes de PUBLIC. (`C:145`) | `postgres/template1` em `G:345`; inventário real/clientes: **[nao verificado]**. |
+
+**3. Contrato de saída e falha**
+
+O predicado de catálogo existente é:
+
+```text
+role = login = ro = connect = 1
+todas as chaves de CONF_AUSENCIA = 0
+```
+
+Ele é definido em `C:154`–`C:168`. Além dele, a porta cobra login `leitor|on` e arquivo promovido com modo 600; esses últimos não são verificáveis apenas por catálogo. (`P:183`; `P:187`; `P:196`; `P:198`)
+
+| Saída/fase | Garantia atual e estado que pode ficar |
+|---|---|
+| **rc 0** | Conferência aprovada, depois login aprovado, depois arquivo publicado. **FALTA** garantia de que o catálogo continua igual no instante do retorno, diante de concorrência entre essas etapas. (`P:172`; `P:183`; `P:196`) | [nao verificado]
+| Falha antes da transação da role | Sem alterações SQL enviadas por essa execução; lock/log podem existir. Argumento/sudo: rc2; trava/senha inválida: rc1. (`P:45`; `P:47`; `P:68`; `P:70`; `P:84`) |
+| Falha dentro da transação da role | BEGIN/COMMIT com `ON_ERROR_STOP`; não há COMMIT intermediário do laço de bancos. Resultado concreto após falha: **[nao verificado]**. (`P:51`; `P:105`; `P:117`; `P:118`) | [nao verificado]
+| Falha após primeiro COMMIT | Role/senha/configuração/membership/CONNECT podem estar novos; ACL e arquivo podem continuar antigos. **Não há atomicidade global.** (`P:118`; `P:127`; `P:196`) | [nao verificado]
+| Falha após segundo COMMIT | Role e ACL podem estar novos, arquivo ainda antigo; conferência/login recusam a publicação. (`P:168`; `P:174`; `P:184`) | [nao verificado]
+| Falha depois do `mv` | Arquivo já pode ser novo: verificação final ocorre após a promoção. (`P:196`; `P:198`) |
+| Falha na trilha | `pronto` pode já ter sido emitido; o trap tenta gravar depois, sem tratamento específico da falha de append. **FALTA** contrato/selo de coerência mensagem–persistência–rc. (`P:199`; `P:55`; `P:61`) |
+| Falha da porta dentro de `--refazer` | Carimbo já invalidado; falha impede publicação final. Esse caminho não mantém o verde anterior. (`S:288`; `S:265`; `S:340`; `S:341`) | [nao verificado]
+
+**Idempotência:** `2× = mesmo estado total
+
+[truncado em 20000 de 23724 caracteres]
 
 ## 09/11 13:48 · sessao f59a012f0887 · - · - · origem=Ronald (tmux)
 
@@ -778,36 +914,4 @@ RED 45, GREEN e mortes dos 38: **[nao verificado]**; não executei suites nem co
 
    Caminhos dessa tabela são relativos a `app/`. Censo recursivo exaustivo de **todos** os escritores/leitores dinâmicos de cada insumo transitivo: **[nao verificado]**. DIFF medido por chamador/caso em produção e liberação da fachada: **[nao verificado]**.
 
-## 09/11 12:22 · sessao c3a90278ff0c · - · - · origem=Ronald (tmux)
-
-- **NAO PROCEDE — segundo juiz de rota/fila/verbos.** A extensão compõe ações já decididas e lê a partição existente: `tarefa_do_dia.py:403`, `:409`, `:425-434` → `juizes.py:1429`, `:1432` → `verbos.py:34`, `:47` → `catalogo/natureza.py:72`. A autoridade permanece C19 (`core/juizes.py:291`).
-
-- **NAO PROCEDE — migração prematura.** C17 continua julgando em `juizes.py:1545-1557`; seus três consumidores continuam em `folha/fora_da_folha.py:67`, `vigia_fio.py:635`, `cadastro_realidade.py:488`. O diff fornecido não altera esses corpos; comparação independente com a base, sem `.git`, **[nao verificado]**.
-
-- **NAO PROCEDE — alteração de campos antigos da tarefa.** A projeção E3 escreve somente `rota/fila/verbos/fio` (`tarefa_do_dia.py:433-434`); a saída anterior nasce em `:177-178`. Igualdade do dicionário completo muda pela adição das chaves; nenhum consumidor de produção externo anterior de `tarefa_do_dia` foi localizado; o novo consumidor é `diff_e3_sombra.py:118`. Exaustividade contra chamadas dinâmicas **[nao verificado]**.
-
-- **NAO PROCEDE — semântica temporal das comparações novas.** Silêncio vigente usa `silenciado_ate > agora` tanto na fila quanto no verbo; igualdade significa retorno à fila/histórico (`painel.py:190`, `verbos.py:51`). Teto usa `marco+teto <= agora` (`ponto/services/cartorio.py:858`); decisões, passivo e efeitos usam horizonte inclusivo (`tarefa_do_dia.py:339`, `:347`, `:358`). O intervalo de dias é inclusivo (`diff_e3_sombra.py:105-106`, `:114`).
-
-- **FILA — horizonte completo do DIFF não é controlado por `--agora`.** O comando entrega o instante à alimentação (`diff_e3_sombra.py:107`), mas esta chama C6 (`juizes.py:1472`), cujo fallback pode ler `date.today()` (`juizes.py:1357`, `:575`). É dependência existente, sem leitura direta nova do relógio no comando; medir com instante presente ou tornar explícito o horizonte do C6 antes de alegar reprodução temporal integral.
-
-Mapa dos campos e funções:
-
-| Produção/escrita | Leitura |
-|---|---|
-| `alimentar_fila`: `juizes.py:1429-1438` | `alimentar_portas`, `juizes.py:1465`; tarefa, `tarefa_do_dia.py:409`, `:426-429` |
-| `alimentar_portas`: `juizes.py:1470-1476` | `folha/fora_da_folha.py:62`; `vigia_fio.py:604`; `cadastro_realidade.py:484`; C17, `juizes.py:1545`; DIFF, `diff_e3_sombra.py:107` |
-| Projeção tarefa: `tarefa_do_dia.py:433-434`; projeção C17: `juizes.py:1556-1557` | Folha lê fio/fila em `fora_da_folha.py:78`, `:225`; vigia lê verbos/rota em `vigia_fio.py:643-646`; cadastro lê existência em `cadastro_realidade.py:488`; DIFF lê em `diff_e3_sombra.py:43`, `:50-57`, `:133-134` |
-| `agora`: entrada/parsing `diff_e3_sombra.py:83-88`, guarda `tarefa_do_dia.py:317` | `tarefa_do_dia.py:339`, `:347`, `:350`, `:358`, `:363`, `:411` |
-| `dia_do_turno`: argumento `tarefa_do_dia.py:442`, saída `:177`; pergunta agrupada por `data_evento`, `:324-329` | Instâncias e seleção, `:393`, `:400-405` |
-| `data_civil`: conversão do instante do marco, `tarefa_do_dia.py:102` | Saída por instância, `:186`, sem substituir a chave de agrupamento `:329` |
-| `status_local`: nascimento `models.py:1095`; mudança `:228-229`, persistência `:296` | `painel.py:155`, `:189` |
-| `silenciado_ate`: `arquivo.py:166-172`, `:202-210` | `painel.py:190`; `verbos.py:45`, `:48-51` |
-| `modulo_origem`: nascimento por `**campos`, `models.py:1095`, campo `:46` | `verbos.py:45`, `:47` → `catalogo/natureza.py:44-54` |
-| `urgencia`: nascimento `models.py:1095`; escala `:550-553`; rebaixa `:470-473`; restaura `:251-253` | `verbos.py:45`, `:60-61` |
-| `criado_em`: `auto_now_add`, `models.py:67` | Atraso, `verbos.py:45`, `:57-58` |
-| Dia da pergunta: `models.py:2786`, derivação `:2871-2875`; conversa civil `:2798` | Tarefa exclui conversa e agrupa por dia do fato, `tarefa_do_dia.py:325-329` |
-| Âncora: `fio.py:116-117` | `tarefa_do_dia.py:125`, `:362`; C17 `juizes.py:1549`; DIFF `diff_e3_sombra.py:63` |
-
-Outros escritores dinâmicos além dos produtores apontados não foram certificados exaustivamente **[nao verificado]**.
-
-_3153 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
