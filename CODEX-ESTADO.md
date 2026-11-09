@@ -1,7 +1,120 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 16:14** · publicado em **09/11/2026 16:16** (UTC-3)
+> Ultima resposta processada: **09/11/2026 16:20** · publicado em **09/11/2026 16:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 16:20 · sessao 34f39634760c · - · - · origem=Ronald (tmux)
+
+**C — definições e passivo**
+
+| Contador | Universo e incremento |
+|---|---|
+| `fio_morto` | Parte dos chamados `VIVOS` com célula, recorta `FURO_MODULES` e lê células com veredito acusador; tira fio vivo, hoje/futuro e quatro baldes com ação/dono; incrementa por célula restante. `app/chamados/services/vigia_fio.py:335`, `:349`, `:378`, `:418`, `:437`, `:449`. |
+| `fio_morto_cobrando` | Subconjunto dos dias acima com algum chamado do vocabulário em `COBRANCA`; mapa em `app/chamados/services/vigia_fio.py:351`, incremento em `:451`. |
+| `fio_morto_alcance` | Dia-colaborador que segura folha, nas competências enumeradas por `competencias_a_lavrar`, sem porta, fora de hoje/futuro e dos quatro baldes; universo em `app/chamados/services/vigia_fio.py:580`, `:586`, `:591`; porta em `:638`; exclusões em `:648`, `:654`; incremento em `:695`. Fontes reais: `app/folha/fora_da_folha.py:102`, `app/ponto/services/he_pendente_lavrado.py:209`. |
+| `materializada_viva` | Quantidade de perguntas com carimbo elegível a desfazer, disputa aberta e julgadas vivas por C6; separa competência entregue de aberta. Universo em `app/chamados/services/vigia_fio.py:805`, juiz em `:813`, dono em `:816`, contador em `:847`; elegibilidade canônica em `app/chamados/services/relavra_via.py:171`, `:181`. |
+
+A medida anexada permite classificar **377 = 2 + 0 + 17 + 284 + 74**, sem nova sonda. Os números vêm do anexo, sem arquivo local numerado: **[nao verificado]**. A interpretação das classes vem dos seguintes sítios:
+
+| Classe | Número anexado | Significado efetivo e limite da conclusão |
+|---|---:|---|
+| a | 2 | Chamado vivo fora da fila; detalhes anexados `registrado`. Não equivale automaticamente a silêncio temporário. `app/chamados/services/vigia_fio.py:664`, `:669`. |
+| b | 0 | Pergunta viva respondida sem texto. `app/chamados/services/vigia_fio.py:673`. |
+| c | 17 | Pergunta viva respondida sob destino terminal. `app/chamados/services/vigia_fio.py:675`. |
+| d | 284 | Sem pergunta viva, colaborador aparece na CxR, **dia não aparece** na lista. A classe não prova que o dia tem dono CADASTRO/BATIDA. `app/chamados/services/vigia_fio.py:677`; declaração explícita em `:520`. |
+| e | 74 | 50 `pergunta_viva_sob_chamado_terminal` + 24 `sem_pergunta_viva`, conforme anexo **[nao verificado]**; regras em `app/chamados/services/vigia_fio.py:685`, `:687`. |
+
+Os 170 `fio_do_admin`, 276 `decisao_do_dia_pendente`, 16 `aguarda_decisao_de_ausencia`, 2 `escala_nao_descreve_o_dia` e 3 `alcance_de_hoje_pra_frente` não compõem os 377, pelo controle de fluxo de `app/chamados/services/vigia_fio.py:648`, `:654`, `:657`, `:695`; seus valores são do anexo **[nao verificado]**.
+
+Também não se pode somar os 2 `materializada_viva` aos 377: um contador conta perguntas, o outro conta dias, e a interseção não foi fornecida. `app/chamados/services/vigia_fio.py:591`, `:818`, `:851`.
+
+Os cinco dias do universo antigo já vêm divididos em quatro com perguntas da porta sem alvo e um sem pergunta na porta; `fio_morto_com_alvo=0`, conforme anexo **[nao verificado]**. A porta `passivo_validado` não é solução universal: exclui `plantio_fora_do_slot` e `slot_nao_derivavel` em `app/chamados/services/passivo_validado.py:60`, aplicando esse veto em `:330`; o alvo do vigia deriva dessa declaração em `app/chamados/services/vigia_fio.py:152`.
+
+**O que pode cair prospectivamente:** parar carimbos derivados indevidos e completar decisões E1 impede novas combinações incompatíveis; porém o efeito quantitativo de cada porta sobre cada contador é **[nao verificado]**. Há dependência real dos leitores antigos: `censo` ainda chama `fio_do_dia`/C6 em `app/chamados/services/vigia_fio.py:418`, e `censo_alcance` usa `alimentar_portas`/C17 em `:604`, `:638` e `dono_fora_do_fio` em `:654`. Só remover escritores não demonstra queda imediata nesses contadores.
+
+Para separar o passivo por cura real, “**precisa medida na sombra**”: chamar `censo_alcance`, `carimbos_sem_lastro_por_dono`, `tarefa_do_dia` e as portas correspondentes; para os 284, ler a mesma `lista`/`dias_na_lista` carregada por `ListaDoAdmin._carregar`, sem inventar mapa classe→dono. `app/chamados/services/vigia_fio.py:212`, `:216`, `:217`, `:542`, `:789`; `app/chamados/services/tarefa_do_dia.py:442`. O próprio vigia proíbe deduzir dono de classe em `app/chamados/services/vigia_fio.py:99`.
+
+**C3 — backfill único, desenho e limitações das portas existentes**
+
+1. Inventário DRY pela fonte real, agrupado por competência e com todas as linhas sem porta; não truncar o passivo. O censo já conserva todo `sem_porta` em `app/chamados/services/vigia_fio.py:630`; competência real em `app/ponto/services/fechamento.py:1602`. Leis de origem: L-003 `app/docs/LEIS.md:61`, L-121 `:142`, L-124 `:145`.
+2. Preservar a projeção legada como decisão antes de retirar o campo que a guarda: produtor canônico `DecisaoPergunta.linhas_da_projecao_sem_linha` em `app/chamados/models.py:3903`, inserção canônica `registrar` em `:3932`. Não fabricar texto de respostas antigas sobrescritas: limite declarado em `app/chamados/management/commands/backfill_decisoes_pergunta.py:12`.
+3. **Não afirmar que o `--aplicar` E1 atual resolve essa etapa.** Ele mede as projeções R/V, mas explicitamente não as aplica; só escreve colisões e silêncio faltante. `app/chamados/management/commands/backfill_decisoes_pergunta.py:3`, `:6`, `:25`, `:426`.
+4. Exportada fica fora com lista para o `!`, conforme pedido literal do usuário **[nao verificado]**; precedente mecânico real: lista de projeções por competência em `app/chamados/management/commands/backfill_decisoes_pergunta.py:455`, `:471`, `:480`; grupos exportados fora e rc 3 em `:620`. Não usar a permissividade geral de L-113 para alargar esse aval específico: L-004 `app/docs/LEIS.md:62`.
+5. Escrever reversão antes de qualquer alteração, incluindo estado das perguntas, disputas, chamados e fatos atingidos. Precedente existente em `app/chamados/management/commands/reabrir_orfas_enterradas.py:123`, `:128`, `:137`; o comando E1 atual não fornece essa reversão em arquivo **[nao verificado]**.
+6. DRY e APPLY devem atravessar a mesma porta, com rollback no DRY; molde existente em `app/chamados/management/commands/backfill_decisoes_pergunta.py:578`, `:582`, `:584`. Ordem de travas real em `app/chamados/models.py:2626`; uso no reparo em `app/chamados/management/commands/reabrir_orfas_enterradas.py:153`.
+7. Por espécie de ato: decisão faltante por `registrar`; Batida pela materialização que chega a `registrar_batida` em `app/chamados/services/materializacao.py:926`, `:1006`; ausência por `app/chamados/services/materializacao.py:462`; ausência de pergunta pela fábrica `app/chamados/services/fabrica_da_celula.py:139`; carimbo sem lastro pela porta `app/chamados/services/relavra_via.py:187`, hoje chamando `descarimbar` em `:246`. Essas portas precisam da cura E4 antes de reutilização no backfill.
+8. Idempotência não vem de `registrar`: ele faz `bulk_create` direto em `app/chamados/models.py:3934`. A seleção canônica deduplica por pergunta+ato+instante em `:3916`, `:3920`, `:3924`; deve ser relida sob trava. O requisito “duas execuções, mesmo estado, uma trilha por ato” ainda exige selo E4 **[nao verificado]**.
+9. A porta de desfazer carimbo já evita segunda trilha quando não há ação: relê elegibilidade sob trava em `app/chamados/services/relavra_via.py:230`, `:238`, continua se não há candidato em `:240`, grava trilha só depois da mudança em `:248`.
+10. O carimbo único é sobrescrito por `os.replace` em `app/chamados/management/commands/vigiar_fio_morto.py:134`; sozinho não prova três rodadas consecutivas. As três evidências precisam ser retidas pela sessão ou receber contrato próprio de sequência **[nao verificado]**.
+
+**D — alarme**
+
+- `ALARMA_EM_0` atual contém três chaves em `app/chamados/management/commands/vigiar_fio_morto.py:83`; `ESPERADO_DO_CARIMBO` já leva `materializada_viva=0` e `fio_morto_alcance=0` em `:96`. Os esperados não precisam virar 377/2 nem ganhar tolerância.
+- **Armadilha concreta:** apenas acrescentar as duas chaves à tupla causa consulta inexistente: `gritou` lê `d[k]` em `:179`, enquanto alcance/mvv só são anexados ao dicionário do carimbo em `:221`. O desenho deve usar a composição dos contadores antes de julgar o alarme. Esse ajuste está dentro de `app/`.
+- O texto/comentário “fora do alarme até zerar” está em `:93`; `materializada_viva` também se apresenta como “não alarma” em `:195`. Precisam acompanhar o contrato final.
+- O cron já usa `--alarme --alarme-passivo`: `app/config/crons.py:1718`; não é necessário mudar esse arquivo proibido apenas para ativar as novas chaves.
+- Com números não zero, o painel **já** acusa FORA DO ESPERADO: `bin/fio_estado.py:125`, `:180`. Ativar o alarme antes do backfill acrescenta `gritou` e rc 2: `app/chamados/management/commands/vigiar_fio_morto.py:204`, `:232`; o carimbo fica gravado antes da saída em `:207`, `:211`.
+- Ordem de saída: portas/leitores coerentes → backfill permitido → nova medição → prova das três rodadas → alarme definitivo; essa ordem operacional cumpre o aval fornecido **[nao verificado]**.
+- Leitor direto do JSON: `bin/fio_estado.py:98`, `:104`; compara todos os esperados em `:125`, lê chaves/alarme em `:146`, monta aviso condicionado em `:182`. Consumidor da representação: `bin/gerar_estado.py:260`. Outros leitores por acesso dinâmico: **[nao verificado]**.
+- `bin/fio_estado.py:182` já deixa de imprimir o aviso quando a chave entra no carimbo; não exige hunk funcional para essa retirada. Docstring velha em `bin/fio_estado.py:50` é hunk de sessão, por estar fora de `app/`.
+
+**Selos que precisam mudar / mutantes**
+
+1. O selo atual exige que alcance **não** esteja no alarme: `app/chamados/tests/test_o261e_f5_alcance.py:459`, `:471`. Inverter para exigir inclusão após a etapa; mutante: retirar a chave.
+2. O conjunto de chaves antigas é fixado em `app/chamados/tests/test_o261_vigia_fio.py:753`, `:759`, e exige presença no `censo` simples em `:767`. Adaptar ao mapa composto; mutantes: continuar usando `d[k]`; omitir alcance/mvv da composição.
+3. Selo funcional: fio antigo zero com alcance=1 e depois mvv=1 deve alarmar e deixar JSON completo; mutantes: ler só `d`, calcular `gritou` antes da composição, sair antes de `_carimbar`. Arquivo E4 proposto ainda inexistente **[nao verificado]**.
+4. Prova do carimbo como fotografia já existe em `app/chamados/tests/test_o261_vigia_fio.py:812`, esperados em `:819`.
+5. Idempotência de desfazer carimbo já tem precedente em `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:122`; E4 precisa medir a operação inteira, sem supor que o precedente cobre todo o lote. Mutante: `registrar` incondicional na segunda corrida.
+6. Exportada intocada precisa comparar hash de FM/TXT antes/depois e testar exportação surgindo entre DRY e trava; selo E4 ainda **[nao verificado]**. Precedente de lista/recusa atual em `app/chamados/management/commands/backfill_decisoes_pergunta.py:480`, `:620`.
+
+**Proibidos para C/D**
+
+A cura da porta `descarimbar` e das decisões de projeção exige hunk de sessão em `app/chamados/models.py:3192`, `:3903`; a composição/alarme fica com o construtor em `app/chamados/management/commands/vigiar_fio_morto.py:178`; representação/documentação de host fica com a sessão em `bin/fio_estado.py:50`; o cron existente já passa as opções em `app/config/crons.py:1718`. Migração só por este subescopo C/D não é demonstrada; remoção física de campos demanda etapa de sessão **[nao verificado]**.
+
+## 09/11 16:20 · sessao 8e342f692882 · - · - · origem=Ronald (tmux)
+
+Todas as **20 definições de alteração** abaixo estão nas mesmas linhas do censo fornecido. Os seis nascimentos também permanecem em `models.py:833,1054,2822` e `disputa_emissao.py:474,1024,1299`. Identidade criptográfica da cópia: **[nao verificado]**, pois `git rev-parse HEAD` encontrou diretório sem repositório Git.
+
+Abreviações de leitores, todos de produção:
+
+- **LC**: `app/chamados/juizes.py:645,796,1322,1411`; `app/chamados/models.py:3023,3182,3315`; `app/chamados/services/materializacao.py:425,496,1089,1369`; `app/chamados/services/relavra_via.py:118`; `app/chamados/services/raiox.py:51,153`. São leituras do campo C/via; C6 e pré-filtro permanecem ativos.
+- **LR**: `app/chamados/models.py:3023,3315,3486,3508,3903`; `app/chamados/juizes.py:1339,1444,1590,1597,1765`; `app/chamados/services/pergunta_no_app.py:70`; `app/chamados/services/materializacao.py:829,1369`; `app/chamados/services/validacao.py:576,580,912`; `app/chamados/services/disputa_emissao.py:1644,1667`. Ainda leem R.
+- **LV**: `app/chamados/models.py:3023,3315,3903`; `app/chamados/juizes.py:1323`; `app/chamados/services/materializacao.py:1369`; `app/chamados/services/validacao.py:144,373,573,695`; `app/ponto/services/procedencia_batida.py:54`. Ainda leem V.
+- **LF**: `app/chamados/models.py:1820,1852,2123,2160,2179,2247,2626`; `app/chamados/services/pergunta_no_app.py:70`; `app/chamados/services/disputa_emissao.py:34,474,942,1024,1299`; `app/chamados/signals.py:19,121,148`. Ainda leem F.
+- **LS**: `app/chamados/models.py:119,128,201,410,663,695,717,773,800,809,833,983,1318,1362,1602,1619`; `app/chamados/services/painel.py:96,135,158,198`; `app/chamados/reconciliador.py:238,761,961,1201,1441,1529`; `app/chamados/signals.py:54,75,91,179,188,270,337`. Ainda leem estado canônico do chamado.
+- **LL**: `app/chamados/veredito_lavrado.py:107,151,213,279`; `app/chamados/services/tarefa_do_dia.py:349`; `app/chamados/services/raiox.py:10,51,153`. L é cache declarado; a tarefa já o lê em `tarefa_do_dia.py:351-352`.
+
+| Célula/porta atual | Campo escrito | Fato disponível para substituir | Leitor / divergência e destino esperado |
+|---|---|---|---|
+| A01 `app/chamados/models.py:201 _gravar_estado` — efeito/decisão | `status_local,resolvido_em,via_encerramento,respondido_por`, urgência e L delegado | **Chamado**, transição e trilha no mesmo ato (`:294-300`) | LS; permanece porta canônica do efeito chamado. Não pode somar seu estado canônico como se fosse cópia derivada da pergunta. |
+| A02 `models.py:1852 fechar` — efeito/exceção decisão | F; C delegado | DP `SILENCIO` nas exceções (`:1921`); fechamento normal só F/trilha (`:1930-1937`) | LF/LC. **DIVERGE**: fechamento normal não possui fato DP equivalente; exceção possui. Separar fato humano de fechamento derivado antes de retirar F. |
+| A03 `models.py:2123 reabrir_admin` — decisão | limpa F, contador/motivos | Nenhuma linha DP desta reabertura; autor, contador e F apenas (`:2135-2158`) | LF. **DIVERGE**: não confundir com DP `REABERTURA` da resposta. Metadados/limite permanecem; decisão precisa fato antes de retirar F. |
+| A04 `models.py:2160 reabrir_sistema` — efeito | limpa F | Pergunta voltou a viver, com nota no chamado (`:2174-2177`) | LF. **DIVERGE**: consumidores ainda exigem F aberto; retirar projeção apenas junto da troca. |
+| A05 `models.py:3092 carimbar` — efeito/assinatura decisão | C, completa R/V, opcional L | Batida/Ausência/chamado/ata conforme ramo; DP apenas se outro chamador já o gravou | LC/LR/LV/LL. **DIVERGE**: a porta completa assinatura em `:3119-3125` sem registrar DP. Remover escrita C; assinatura não pode sumir; L declarado permanece. |
+| A06 `models.py:3157 carimbar_identidade` — efeito/decisão delegada | C, `recusa_motivo` opcional | DP retratação quando chamado por `remover_motivo:2053`; outros ramos não têm um fato DP uniforme | LC; a própria tarefa lê via atual (`tarefa_do_dia.py:216-228`). **DIVERGE crítico**: duplicata não tem fato datado (`:220-221`); parar via quebra identidade/dedup, além da pendência. |
+| A07 `models.py:3192 descarimbar` — efeito | limpa C | Retração/ausência rejeitada/resposta nova conforme chamador | LC. **DIVERGE**: remover limpeza junto de todos consumidores e do índice que usa via, nunca isoladamente. |
+| A08 `models.py:3241 descarimbar_em_lote` — efeito | limpa C e `outros` R/V recebidos | DP da reabertura (`disputa_emissao.py:1612`) quando esse é chamador | LC/LR/LV. **DIVERGE**: filtro terminal por via ainda necessário (`models.py:3253-3255`); efeito deve ler decisões/identidade factual. |
+| A09 `models.py:3257 encerrar_por_fato_no_espelho` — efeito | via | Fato do marco já lavrado, descrito em `:3258-3261` | LC; **DIVERGE** para leitores via. Via derivada deixa de ser escrita quando leitores conferirem efeito. |
+| A10 `app/chamados/services/validacao.py:127 _carimbar_validacao` — decisão | V | DP `VALIDACAO` no mesmo instante (`:139-141`) | LV; **DIVERGE** nos leitores V. V sai; DP é fato. |
+| A11 `validacao.py:163 devolver_validacao_recusada` — decisão | limpa V, preserva R | DP `DEVOLUCAO` (`:205`) | LV/LR; **DIVERGE**. Fatos anteriores preservados, tarefa lê ato em `tarefa_do_dia.py:138-139`. |
+| A12 `app/chamados/services/disputa_emissao.py:1422 responder_pergunta_disputa_core` — decisão | R, limpa V/C, recusa explicativa | DP `RESPOSTA` (`:1508`); escape é `ato_texto`, não DP `RECUSA` | LR/LV/LC; **DIVERGE**. R/V/C derivados saem; resposta passa a ser conteúdo do ato vigente. |
+| A13 `disputa_emissao.py:1559 reabrir_para_correcao` — decisão | limpa R/V e C opcional | DP `REABERTURA`/`RECUSA` com foto (`:1612-1625`) | LR/LV/LC; **DIVERGE**. Não escreve F hoje; não atribuir a esta porta reabertura da disputa. |
+| A14 `disputa_emissao.py:1635 responder_automaticamente` — decisão sistema | R | DP `RESPOSTA` (`:1653-1654`) | LR; **DIVERGE**. Idempotência atual usa texto projetado (`:1644`); precisa consultar ato. |
+| A15 `disputa_emissao.py:1658 carimbar_resposta_pela_trilha` — decisão reconstruída | `respondida_em` | DP `RESPOSTA`, instante da testemunha (`:1674-1675`) | LR; **DIVERGE**. Guarda atual R/texto (`:1667`) precisa ler sequência; não trocar instante por agora. |
+| A16 `app/chamados/services/relavra_via.py:106 relavrar` — efeito | via + L | Via derivada do fato (`:95-103`), L da autoridade | LC/LL; **DIVERGE** na via. Encolhe para L, ou desaparece quando não tiver trabalho próprio; não deixar segundo juiz morto (L-111). |
+| A17 `app/chamados/services/materializacao.py:784 _materializar_resposta_hora` — efeito | `pendencia_admin,recusa_motivo`, efeitos/carimbos delegados | Batida quando sucesso (`:859`); na pendência técnica o fato DP é **nenhum** (`:845-851`) | `app/chamados/services/explicador.py:68`; `materializacao.py:784`; auditorias. **DIVERGE**: mensagem técnica não vira decisão humana. Recalcular resultado técnico pela porta real ou guardar fato do insucesso, sem conservar estado derivado disfarçado. |
+| A18 `materializacao.py:1083 _carimbar_recusa` — efeito técnico | `recusa_motivo`, C identidade delegado | Nenhum DP; nota `recusa_materializacao` (`:1107`) e colisão existente | `materializacao.py:1089-1094`, `explicador.py:68`; LC. **DIVERGE**: não tratar colisão como DP `RECUSA` humana. |
+| A19 `validacao.py:533 recusar_pergunta` — decisão | recusa, R/V delegado | DP `RECUSA` (`:593-594` → `disputa_emissao.py:1612`) | `validacao.py:573-584`, `explicador.py:68`, LR/LV. **DIVERGE**: idempotência depende R (`:576`), motivo projetado pode sair após leitor do ato. |
+| A20 `validacao.py:625 conferir_data_do_fato` — decisão | `data_conferida_em/por` | **Nenhum DP**; LogAuditoria com dias/justificativa (`:667-672`) | `validacao.py:662`; `materializacao.py:1193`. **DIVERGE**: remover sem substituto factual trava materialização; DP `ATOS` não tem conferência (`models.py:3846-3856`). |
+| A21 condicional `models.py:1968 remover_motivo` — decisão + metadados próprios | motivos/contexto; C delegado | DP `RETRATACAO` (`:2053-2057`) | `tarefa_do_dia.py:230-232` lê ato, mas `:227` ainda lê via; C6 `juizes.py:1334`. **DIVERGE**: muda no diff de E4 por identidade/terminalidade, portanto deve entrar na matriz mesmo fora das 20 alterações contadas. |
+
+**Nascimento que a E4 obriga a mudar:** `PerguntaDisputa._nascer` (`app/chamados/models.py:2822`) inicializa projeções e faz costura/L no reuso; a remoção física de campos ou a proibição de escrevê-los precisa contemplar essa porta. Não é permitida exclusão por estar rotulada “fica”. Defaults dos campos também exigem revisão no modelo (`app/chamados/models.py:2444`, `:3366`).
+
+**16 versus 26:** a soma reconstruída do censo é **16 primeiras alterações + quatro alterações adicionais =20; + seis nascimentos =26**. `remover_motivo` tem decisão delegada/metadados próprios e não integra os 20 campos derivados escritos diretamente listados. A comparação literal **16 → N** não mede o mesmo universo de **26** (censo fornecido **[nao verificado]** como arquivo local; definições verificadas nos endereços acima).
+
+**N defendível:** alvo **N=0 portas que escrevem estado DERIVADO da pergunta**, lista residual vazia; conservar separadamente o escritor factual `DecisaoPergunta.registrar` (`models.py:3932`), efeitos Batida/Ausência/chamado e cache L declarado. Isso não significa zero escritores do sistema. Não é honesto declarar “16→4” somando três famílias de efeitos com um executor DP: seria troca da unidade de contagem. `DecisaoPergunta` declara explicitamente que as projeções são transitórias até E4 (`models.py:3832-3833`).
+
+**Bloqueio real da cópia:** E3-A centraliza a consulta do app, mas não a desliga dos campos. `consulta_do_app:69` chama `perguntas_do_app`, que usa `q_vivas:49` e C6 `:57`; depois particiona por R/F (`:70`). C6 ainda lê V (`juizes.py:1323`), C/via (`:1334,1360,1366`) e R/texto (`:1339`). A seleção materializadora ainda exige R/V/M (`materializacao.py:1369-1373`). A própria tarefa usa R/V para detectar passivo (`tarefa_do_dia.py:346` → `models.py:3903`) e via para identidade (`tarefa_do_dia.py:227`). Logo, cortar somente escritores deixa leitores de produção dependentes dos campos; **a E4 exige troca coordenada desses leitores**, inclusive modelos proibidos, antes de ser fechada.
 
 ## 09/11 16:14 · sessao 756b2c3a17e7 · FIO-E0-V4-E4-ESCRITORES · censo · origem=Code
 
@@ -777,32 +890,4 @@ Decisões abertas:
 5. Probe concorrente: decisão técnica; corrigir a alegação absoluta de inocuidade da entrega (`bin/trava_teste.sh:39-40,47-50`).
 7. Migração: não há leitor produtivo remanescente do antigo caminho encontrado no código; único leitor produtivo agora pede `--hist` (`bin/codex_vagas_medida.py:115-130`). Existência/conteúdo real dos históricos antigos: **[não verificado]**; não afirmar “nada a migrar” como fato de produção.
 
-## 09/11 15:12 · sessao 8b64751089c9 · - · - · origem=Ronald (tmux)
-
-T2: **não encontrei morte acidental concreta entre os mutantes declarados**; o classificador agora exige todos os fragmentos esperados, e ERRADO/VIVO reprovam o selo. `bin/tests/test_codex_pergunta.sh:742`, `bin/tests/test_codex_pergunta.sh:775`.
-
-- O acidente anterior de `saida_symlink` foi corrigido: o caso exige a mensagem específica `saida <...>.lock e symlink`; a guarda seguinte escreve `codex: trava <...>.lock e symlink`. `bin/tests/test_codex_pergunta.sh:201`, `bin/codex_pergunta.sh:338`, `bin/codex_pergunta.sh:511`.
-- `_recusa` cobra motivo, rc e ausência de chamada; `_inv_recusa` procura PROIBIDO e motivo no terceiro campo. Assim, os esperados “motivo ausente” e “sem PROIBIDO” identificam asserções determinadas, mesmo quando outra guarda ainda recusa a chamada. `bin/tests/test_codex_pergunta.sh:163`, `bin/tests/test_codex_pergunta.sh:169`, `bin/tests/test_codex_pergunta.sh:644`.
-- O autoteste morde o controlador convertido em `echo MORTO`: os testes de outra asserção, dois esperados e esperado vazio falham. Reproduzi a função em memória, com leitura simulada pelo `grep`, sem escrever arquivos: original `ERRADO|MORTO|ERRADO|ERRADO|VIVO`; mutado `MORTO|MORTO|MORTO|MORTO|VIVO`. `bin/tests/test_codex_pergunta.sh:750`.
-- Limite: o classificador usa substring sem ancoragem; uma linha `diagnostico: FALHA: <esperado>` também conta MORTO. Os autotestes não exercitam esse eco. Não localizei um caso atual que produza essa situação; sua ocorrência na lista permanece **[não verificado]**. `bin/tests/test_codex_pergunta.sh:747`, `bin/tests/test_codex_pergunta.sh:750`.
-- **Regressão objetiva de portabilidade do selo:** `NPL=nproc-2` e o motivo do caso são dinâmicos, mas dois esperados cravam `load5 6.00`. Com `nproc!=8`, esses mutantes dão ERRADO mesmo morrendo pela asserção pretendida. É falso vermelho, não falso verde; a VM da autorização tem 8 CPUs segundo o dado recebido **[não verificado na cópia]**. `bin/tests/test_codex_pergunta.sh:100`, `bin/tests/test_codex_pergunta.sh:520`, `bin/tests/test_codex_pergunta.sh:720`, `bin/tests/test_codex_pergunta.sh:722`.
-
-Não executei os selos completos, pois criam e removem arquivos; os resultados GREEN da entrega não foram reproduzidos. `bin/tests/test_codex_pergunta.sh:22`, `bin/tests/test_codex_pergunta.sh:23`, `bin/tests/test_codex_pergunta.sh:769`.
-
-## 09/11 15:11 · sessao 22223ccca92c · - · - · origem=Ronald (tmux)
-
-Dois procedentes em T1:
-
-1. **Escape do `--toca` por TAB ou newline no nome real.** O inventário emite `t` sem escape em TSV (`bin/codex_pergunta.sh:217`), enquanto o consumidor separa por linha/TAB e usa somente `c[1]` (`bin/codex_pergunta.sh:278-282`). Assim, o arquivo real `app/folha/views.py<TAB>fora` é julgado como `app/folha/views.py` e passa por `--toca app/folha/views.py`, embora seja outro arquivo; reproduzi o rc 0 em memória executando `_TOCA_PY` real com `StringIO`, sem escrever arquivo. A lista de caracteres do `--toca` não protege nomes de arquivos encontrados pelo inventário (`bin/codex_pergunta.sh:323`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:217`).
-
-2. **Admissão e fim divergem para arquivos novos irmãos sob pai novo.** `app/novo/a.py` versus `app/novo/b.py` não cruzam na admissão (`bin/codex_pergunta.sh:263-275`). Criar `a.py` produz também `TOCADO app/novo/` (`bin/codex_pergunta.sh:195-196`); o fim aceita esse pai como necessário ao meu arquivo, mas o considera cruzado com o arquivo da outra raia (`bin/codex_pergunta.sh:283-288`). Reproduzi em memória admissão rc 0 e fim rc 3. É falsa recusa por pasta comum, contrária ao critério de arquivo comum (`CLAUDE.md:306-308`).
-
-Demais verificações:
-
-- A primitiva de interpretação é compartilhada: sem `/` final é igualdade exata; com `/` é prefixo por componente; admissão e fim chamam a mesma definição (`bin/codex_pergunta.sh:263-287`).
-- `..`, `/./`, `//`, caminho absoluto e raiz diversa de `app/` ou `bin/` são recusados no argumento (`bin/codex_pergunta.sh:323-324`). `app/.` terminal passa na forma, mas não cobre descendentes; não identifiquei escape por isso (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:323`).
-- Symlink tocado é `PROIBIDO`; o walk não segue symlink e usa `lstat` (`bin/codex_pergunta.sh:188-194`, `bin/codex_pergunta.sh:215`). Ausência de escape transitório durante execução: [não verificado].
-- O chamador fornece `--toca`; o parser escreve `TOCA[]`, a validação restringe o formato, `_publica_estado` grava `toca=`, `_toca_de` lê esse campo, `_portoes` julga a admissão e o fim relê o estado da outra raia (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:321-324`, `bin/codex_pergunta.sh:308-312`, `bin/codex_pergunta.sh:291`, `bin/codex_pergunta.sh:295-306`, `bin/codex_pergunta.sh:565-574`).
-- Os controles novos cobrem arquivo exato, pasta por componente e pai novo com uma raia; não cobrem TAB/newline nem dois arquivos irmãos sob pai novo (`bin/tests/test_codex_pergunta.sh:562-570`).
-
-_3198 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3200 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

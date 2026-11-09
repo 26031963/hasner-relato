@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 16:16:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (209.7 MB). Acoes na janela: **1008**.
+**Medido em 09/11/2026 16:21:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.5 MB). Acoes na janela: **1020**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:18:35 | Bash |  | `cd /home/ronald/saas-hasner; tail -3 logs/hook_stop_fila1.log \| cut -c1-300; sed -i '3s/ \| arquivo=.*$//' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 16:18:31 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/ \| grep -i hook \| head; tail -5 $(ls -t logs/*hook*stop* logs/hook*/* 2>/dev/null \| head -1) 2>/dev/null; sed -n 812,856p bin/hook_stop_fila1.py` |
+| 16:18:22 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -fx "bash logs/FIO-E0-V4-E4-ESCRITORES/lancar_matriz_e4.sh" && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! push') L.insert(2,'ESPERANDO: lancar_matriz_e4.sh \| pid=3685670 \| arquivo=logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r') open(p,'w').write('\n'.join(L)) EOF sed -n 3,4p app/docs/RELATO.md \| cut -c1-12 ...` |
+| 16:18:16 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1255,1300p bin/hook_stop_fila1.py; sed -n 1395,1440p bin/hook_stop_fila1.py` |
+| 16:18:13 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "_SO_BANG\\|ESPERANDO\\|def _topo\\|startswith" bin/hook_stop_fila1.py \| head -40` |
+| 16:18:02 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '4s\|$\| Matriz E4 LANCADA 16:2x: lancar_matriz_e4.sh pid=3685670 (Codex leitura, base 05e6aa147, resposta logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r).\|' app/docs/RELATO.md; sed -n 4p app/docs/RELATO.md \| tail -c 200` |
+| 16:17:37 | Bash |  | `cd /home/ronald/saas-hasner; /usr/bin/sleep 20; cat logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.out; pgrep -fx "bash logs/FIO-E0-V4-E4-ESCRITORES/lancar_matriz_e4.sh"` |
+| 16:17:33 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES cat > $D/aval_serie_e.txt <<'EOF' aval Ronald 09/11 16:1x SERIE-E-PRONTO-E-O-FIO (complementa SERIE-E-SO). UNIDADE: dia-colab do fio_morto_alcance. Nenhuma lei nova. A serie E so esta FEITA quando, numa rodada do carimbo apos o pouso da E4: (1) fio_morto_alcance = 0, ou cada dia restante com dono nomeado (ESTRUTURA vira obra E, CADASTRO/B ...` |
+| 16:17:02 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; sed -n 74,140p $D/censo_v2.r \| cut -c1-250; grep -n "fio_morto_alcance" app/chamados/management/commands/vigiar_fio_morto.py \| head` |
+| 16:16:56 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/CODEX-2-RAIAS/ \| head -30; head -60 logs/CODEX-2-RAIAS/matriz.q 2>/dev/null; sed -n 1,40p logs/fio_e0_v4/aval.txt` |
+| 16:16:53 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: lancar_censo_v2.sh') L[2]=('PAREI: ! push E2+E3 bloqueado por lei_akita \| espera Ronald -- main 05e6aa147 NO AR (deploy rc 0), 44+ commits a frente de origin/main 6adca14fe. ' 'test_lei_akita 3 FALHA: 77da997b e ad77299d (merges do main 3803e6623 na copia E3) caem  ...` |
+| 16:16:43 | Bash |  | `cd /home/ronald/saas-hasner; head -12 app/docs/RELATO.md \| cut -c1-300; date` |
 | 16:15:39 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; python3 -c " import json;d=json.load(open('app/logs/fio_morto.json')) out={k:d[k] for k in ('censo','alcance') if k in d} s=json.dumps(out,ensure_ascii=False,indent=1); print(len(s)) open('$D/carimbo_0648_contadores.json','w').write(s)"; grep -cE '"col[0-9]\|cpf\|nome' $D/carimbo_0648_contadores.json; head -c 1500 $D/carimbo_0648_contado ...` |
 | 16:15:27 | Bash |  | `cd /home/ronald/saas-hasner/logs; sed -n 1,4p fio_e0_v4/aval.txt \| cut -c1-2500` |
 | 16:15:25 | Bash |  | `cd /home/ronald/saas-hasner/logs; ls fio_e0_v4/ \| head -30; grep -n -i 'E4' fio_e0_v4/aval.txt \| cut -c1-600 \| head -20` |
