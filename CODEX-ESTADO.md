@@ -1,7 +1,139 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:55** · publicado em **09/11/2026 08:59** (UTC-3)
+> Ultima resposta processada: **09/11/2026 09:03** · publicado em **09/11/2026 09:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 09:03 · sessao cc20c7413249 · CODEX-2-RAIAS-PORTAO-CPU · leitura · origem=Code
+
+**O contrato cobre o núcleo do aval, mas deixa lacunas de execução; a cópia ainda implementa uma única vaga, sem os quatro portões da segunda.** (contrato.txt:2-6; bin/codex_pergunta.sh:228-239.)
+
+Nas referências aos anexos, contei o cabeçalho do contrato como linha 1, os cinco itens como linhas 2–6 e o aval como linha 1. São referências ao texto fornecido; presença desses arquivos na cópia: [nao verificado].
+
+**1. Cobertura de cada exigência literal**
+
+Todas as exigências abaixo vêm de `aval_codex_2_raias_portao_cpu.txt:1`.
+
+| Exigência do aval | Atendimento no contrato |
+|---|---|
+| “até 2 construtores Codex simultâneos” | Duas vagas nomeadas; a segunda só é tentada quando a primeira está presa. Falta definir a coordenação que garante essa condição durante a abertura. (contrato.txt:2.) |
+| “2a vaga SO abre com load de 5 min < 6 (nproc 8 - 2)” | Prevê `load5 < nproc-2`; a mensagem exemplificada usa `>=6`. Equivale ao corte 6 quando `nproc=8`; valor efetivo no host: [nao verificado]. (contrato.txt:2-3.) |
+| “medido no /proc/loadavg na hora da abertura” | Fonte e momento constam; ilegibilidade recusa. (contrato.txt:2,4.) |
+| “fora de 06:00-07:30” | Consta, mas sem fuso ou definição da inclusão exata de 07:30. (contrato.txt:2-3.) |
+| “sem arquivo em comum com a 1a raia” | Prevê interseção, `--toca` obrigatório para a segunda e reconferência final. Não define quando a primeira publica/atualiza o conjunto nem quanto tempo o preserva para a outra conferir. (contrato.txt:4.) |
+| “teto total de construtores = 3 (2 Codex + 1 opus)” | Duas vagas Codex e opus 1 por conduta compõem esse teto; não há guarda conjunta prometida. A cópia também declara opus como conduta. (contrato.txt:2,4; CLAUDE.md:350-353.) |
+| “Suite inteira continua serializada pela trava unica” | Preservado expressamente; o instrumento existente prende `/tmp/juliani_db_test.lock` durante o comando. (contrato.txt:4; bin/trava_teste.sh:21,35-42.) |
+| “Medida (…) no RELATO 1x por dia” | Os quatro indicadores e a frequência constam. Faltam responsável, acionamento e modo de produzir média diária, ocupação e `%/h`. (contrato.txt:5.) |
+| “load medio do dia passar de 7” | Mesmo limiar, avaliado na abertura da segunda vaga. Não descreve o tratamento de uma segunda vaga já em execução. (contrato.txt:6.) |
+| “Codex passar de 85% antes do reset, volta a 1 sozinho” | Mesmo limiar e condição; não especifica qual janela de `used_percent`, validade da leitura ou duração do desligamento. (contrato.txt:6.) |
+| “wrapper recusa a 2a vaga sem o portao”; mutante removido vermelho | Repetido expressamente, mas ainda sem esse caso no selo atual. (contrato.txt:6; bin/tests/test_codex_pergunta.sh:410-415,437-505.) |
+| Custo: carga adicional e cota “~2x mais rapido” | Não repetido nas cinco cláusulas. Comprovação desse custo pelo dado fornecido: [nao verificado]. (contrato.txt:2-6.) |
+| “Segue a fila; PAREI so em lei ou !” | Não repetido nas cinco cláusulas; elas tampouco descrevem alteração dessa orientação. (contrato.txt:2-6.) |
+
+As fontes de medida precisam ser distinguidas: `ler_semanal()` entrega porcentagem e duração da janela, **sem `resets_at`**; `leituras_semanais()` já oferece histórico com hora e reset da janela semanal principal. `statusline_cota.py` grava uma fotografia de porcentagem/hora/reset, sobrescrevendo a anterior, e não calcula `%/h`. A trava registra ocupante e início atuais, sem produzir histórico de ocupação. (bin/codex_limite_estado.py:118-123,131-161; bin/statusline_cota.py:45-63; bin/trava_teste.sh:40-41.)
+
+**2. Onde os portões entram e qual estado falta**
+
+O sítio comum vem do `git-common-dir`, em `#G:vaga_sitio`; não é simplesmente `$R`, `$VIVO` ou `$LOGD`. A abertura atual usa fd 6 em append, seguida de `flock -n`; sua falha encerra a chamada em `#G:vaga`. **É nesse ramo de falha que o contrato coloca load, janela, arquivos e desligador, antes da admissão na vaga 2.** Não há esse ramo adicional hoje. (bin/codex_pergunta.sh:72-78,228-239; contrato.txt:2.)
+
+- **Load e janela:** pertencem à decisão de abertura da vaga 2. Depois da vaga atual ainda há espera pelo slot geral e pela trava da resposta; portanto abertura da vaga e início do Codex são momentos distintos. (contrato.txt:2; bin/codex_pergunta.sh:341-369,394-398.)
+- **Arquivo em comum:** comparação na abertura e reconferência junto ao inventário final, antes da liberação da resposta para triagem. O descarte atual por inventário já ocorre antes do `.id`. (contrato.txt:4; bin/codex_pergunta.sh:413-426,442-445.)
+- **Desligador:** o automático pertence à abertura da segunda vaga. O manual tem caminho próprio no contrato; hoje o wrapper consulta apenas a pausa geral `logs/pausas/codex-construtor`. `pausar.sh` já exige dono, motivo e saída e registra trilha. (contrato.txt:6; bin/codex_pergunta.sh:191,387; bin/pausar.sh:31-47.)
+
+**Hoje o wrapper não publica na vaga o que a raia 1 toca.** O arquivo recebe abertura e lock; `_INV0` é uma fotografia inicial obrigatoriamente vazia, `_INV1` fica em variável na revalidação, e só depois do Codex o inventário é persistido em `<resposta>.inventario`. (bin/codex_pergunta.sh:232-239,386-392,413.)
+
+Para cumprir a comparação descrita, falta vincular ao ocupante atual: identidade da chamada, WT, base e conjunto de caminhos comparáveis, distinguindo estado ainda não publicado de conjunto vazio. Também falta preservar a informação necessária até a reconferência das duas raias; uma fotografia vazia na abertura não informa os próximos arquivos que a primeira tocará. São lacunas do mecanismo prometido, não novos critérios de admissão. (contrato.txt:4; bin/codex_pergunta.sh:237-239,413.)
+
+O inventário existente já compara arquivos com a base, inclui status, ignorados e varredura de filesystem, e emite `TOCADO`/`PROIBIDO`. **`diff base..HEAD` sozinho não resolve:** no fluxo aceito, HEAD deve continuar igual à base; HEAD diferente já é proibido. Não existe opção `--toca` no parser atual. (bin/codex_pergunta.sh:58-66,137-178,234.)
+
+**3. Riscos pedidos**
+
+- **Corrida entre aberturas:** hoje não existe vaga 2. No desenho anexado, observar a vaga 1 presa e depois tomar a 2 não garante que a primeira continue presa: seu dono pode terminar no intervalo. Outra abertura pode então tomar a 1, enquanto a 2 carrega informação do ocupante anterior. O contrato não especifica coordenação dessa transição. Há ainda o intervalo entre adquirir a primeira vaga e terminar sua validação, quando o estado pode não estar pronto. (contrato.txt:2,4; bin/codex_pergunta.sh:233-242.)
+
+- **Recusa calada:** a recusa atual fala por stderr. Entretanto, ocorre antes do trap e do registro `ini`; assim, não deixa `ini/fim` nem `.rc` dessa tentativa. Um acompanhamento limitado a esses artefatos não a verá. (bin/codex_pergunta.sh:183,233,249-262,285-286.)
+
+- **Relógio e borda:** os `date` atuais não fixam fuso; o contrato não resolve fuso nem extremos da janela. As esperas posteriores podem atravessar 06:00 ou 07:30. Isso exige distinguir “hora da abertura”, exigida pelo aval, de “hora de iniciar o Codex”; o contrato não exige encerramento de uma execução que atravesse a janela. Relógio real do host: [nao verificado]. (contrato.txt:2; bin/codex_pergunta.sh:245,341-369,374,394.)
+
+- **Espera bloqueante:** o contrato garante recusa imediata pelo portão fechado, mas isso não elimina as esperas existentes por slot geral e resposta depois de admitido. Se “ninguém espera” pretendia abranger a chamada inteira, há incompatibilidade. (contrato.txt:3; bin/codex_pergunta.sh:341-369.)
+
+- **RC reaproveitado:** rc 2 já cobre uso/validação e vaga ocupada; rc 3 já cobre cópia, trava de resposta/B3 e inventário; rc 75 já cobre pausa geral e limite. Os novos rc 2/3 não identificariam a causa sozinhos: o motivo precisa sobreviver ao chamador. (contrato.txt:3-4; bin/codex_pergunta.sh:66,183,191,233,294-296,367-371,415-435.)
+
+- **Arquivo da vaga/inode:** a proteção atual reserva somente o caminho exato de `construtor.vaga`; não reservaria automaticamente `construtor.vaga2`. Publicar estado substituindo o arquivo por rename pode separar o caminho do inode ainda preso pelo flock — justamente o acidente que a reserva atual evita. O rename de `pausar.sh` serve ao desligador separado; reutilizá-lo no arquivo travado teria esse risco. Leitores externos à cópia: [nao verificado]. (bin/codex_pergunta.sh:69-78,232-233; bin/pausar.sh:45-46.)
+
+- **`chamadas.log`:** a quebra depende da posição do campo novo. O parser fixa obra/papel/hash/pid/tipo/sessão/rc/duração por índice; acrescentar `vaga=1` ou `vaga=2` ao fim preserva essas posições, inserir no meio pode corromper a leitura. O parser continuará sem distinguir vagas. Contagem, últimas chamadas, procedência e tokens dependem dele; o contrato não especifica a posição. (contrato.txt:5; bin/codex_limite_estado.py:55-78,82-96,185-194.) Os próprios selos fixam posições como `$3`, `$6`, `$7` e `$8`. (bin/tests/test_codex_pergunta.sh:265.)
+
+**4. Selos existentes e mutantes**
+
+| Cobertura existente | Caso e mutante |
+|---|---|
+| Vaga ocupada, inclusive com outro LOGD | `c_vaga` exige rc 2, motivo e Codex não chamado. **O mutante direto de `#G:vaga` troca `_recusa2` por `true`**, deixando prosseguir após falhar o flock. (bin/tests/test_codex_pergunta.sh:116-120,193-198,468.) |
+| Sítio independente da raiz do script | `c_vaga_copia`; mutante de `#G:vaga_sitio` troca `dirname($_CDIR)` por `$R`. (bin/tests/test_codex_pergunta.sh:374-378,498.) |
+| Mesmo sítio entre worktrees do repositório | `c_vaga_outra_wt`; mutante troca `dirname($_CDIR)` por `$VIVO`. (bin/tests/test_codex_pergunta.sh:351-355,499.) |
+| Reserva do caminho e falha de abertura | `c_vaga_reservada` e `c_vaga_abre`, incluindo fd 6 herdado; mutantes neutralizam as recusas correspondentes. (bin/tests/test_codex_pergunta.sh:230-238,454-455.) |
+| Topologia válida e leitura independente da vaga | Construtor sem sítio recusa; papéis de leitura continuam. Mutantes `vaga_topologia` e `vaga_leitura`. (bin/tests/test_codex_pergunta.sh:361-371,500-501.) |
+| Inventário/descarte individual | Positivo verifica inventário, `.rc`, `.id` e log; recusa verifica rc 3 e ausência de `.id`; mutante neutraliza a decisão final. **Não comprova interseção entre raias.** (bin/tests/test_codex_pergunta.sh:122-128,245-266,410-415,487.) |
+| Trava única de suite | `test_trava_teste.sh` usa lock isolado, comprova ordem entre dois chamadores e rc 75 sem vez. (bin/tests/test_trava_teste.sh:103-137.) |
+
+O mecanismo do selo exige mutante para cada etiqueta `#G:` e acusa quando o caso correspondente continua verde após a mutação. **O mutante atual da vaga comprova a proibição antiga de qualquer segundo construtor; não comprova o portão da segunda vaga autorizado pelo aval.** (bin/tests/test_codex_pergunta.sh:193-198,468,507-527.)
+
+Resultados de execução desses selos e do mutante novo “portão removido”: [nao verificado].
+
+## 09/11 09:01 · sessao 692d6935cbf8 · - · - · origem=Ronald (tmux)
+
+- **Sítio e entrada:** a vaga é derivada do `git-common-dir` do repo vivo em `bin/codex_pergunta.sh:72-78`; o construtor confere topologia em `:189`, abre o arquivo em append em `:231-232` e tenta `flock -n` em `:233`. Hoje só há uma vaga, com recusa falante rc 2; a vaga 2 e os quatro portões não existem nesse ramo (`bin/codex_pergunta.sh:228-239`).
+
+- **Posição dos portões:** no desenho anexado, entram no ramo de falha do primeiro `flock`, hoje `#G:vaga`, antes de admitir a vaga 2 (`bin/codex_pergunta.sh:233`). Entretanto, ainda existem esperas pelo slot geral e pela trava da resposta antes do Codex; uma leitura de load/hora nesse ponto pode envelhecer antes da execução (`bin/codex_pergunta.sh:341-369`, `:394-398`).
+
+- **Estado disponível:** o arquivo da vaga apenas é aberto, sem receber identificação ou arquivos tocados (`bin/codex_pergunta.sh:232`). O precheck exige inventário vazio; a revalidação também guarda a saída apenas em variável; somente o inventário final é persistido em `<resposta>.inventario` (`bin/codex_pergunta.sh:237-239`, `:386-392`, `:413`). Portanto o wrapper não publica hoje o que a raia 1 toca enquanto trabalha (`bin/codex_pergunta.sh:232`, `:413`).
+
+- **Dados necessários para cumprir a comparação:** identificação da chamada/WT/base e conjunto de caminhos ligados ao ocupante atual, com indicação de publicação pronta/em curso/final. O contrato não especifica protocolo de publicação nem preservação do estado até ambas reconferirem [nao verificado]. A fotografia vazia da abertura não prevê os toques posteriores (`bin/codex_pergunta.sh:237-239`). O inventário atual produz `TOCADO<TAB>caminho<TAB>motivo`, inclui status e varredura contra a base; HEAD diferente da base é proibido (`bin/codex_pergunta.sh:137-178`). Não existe `--toca` no parser (`bin/codex_pergunta.sh:58-66`).
+
+- **Reconferência final:** o ponto natural é junto ao inventário, antes de emitir `.id`; a recusa já vence outros rc e impede o sidecar (`bin/codex_pergunta.sh:408-426`, `:442-445`). Se a primeira raia apagar seu estado ao terminar antes da segunda, a segunda perde a comparação; a duração desse estado não foi definida no contrato [nao verificado].
+
+- **Corrida:** hoje não há vaga 2 (`bin/codex_pergunta.sh:233`). No contrato, entre observar a vaga 1 presa e tomar a vaga 2, a primeira pode terminar; faltou tornar verificável que continua ocupada [nao verificado]. Além disso, a primeira adquire o lock antes de validar/publicar qualquer inventário, portanto a segunda pode encontrá-la antes de haver estado pronto (`bin/codex_pergunta.sh:233-242`).
+
+- **Recusa calada:** `_recusa2` escreve motivo no stderr (`bin/codex_pergunta.sh:183`). Contudo, a recusa da vaga ocorre antes de instalar o trap e de registrar `ini`; não produz `.rc` ou `ini/fim`, o que a torna invisível para leitores que só acompanham esses artefatos (`bin/codex_pergunta.sh:233`, `:245-262`, `:285-286`).
+
+- **RC:** 2 já significa uso/validação; 3 já cobre cópia, trava da resposta e inventário; 75 já significa pausa geral e limite. Acrescentar portão em 2 e sobreposição em 3 mantém ambiguidades que exigem motivo/artefato para distinguir (`bin/codex_pergunta.sh:66`, `:183`, `:191`, `:294-296`, `:367-369`, `:415-435`).
+
+- **Relógio:** os `date` atuais não explicitam fuso; o contrato não define fuso nem inclusão exata das bordas [nao verificado] (`bin/codex_pergunta.sh:245`, `:252-255`, `:285`, `:343`, `:374`). As esperas posteriores à vaga podem atravessar a borda (`bin/codex_pergunta.sh:341-369`).
+
+- **Leitores:** `codex_limite_estado.py` lê campos posicionais: tipo em `p[5]`, sessão em `p[6]`, rc em `p[7]`, duração em `p[8]`; inserir `vaga=...` antes deles quebra a leitura, enquanto acrescentar após os campos existentes preserva esse parser, mas ele não passa a distinguir vagas (`bin/codex_limite_estado.py:55-67`). Tokens e procedência dependem da sessão assim obtida (`bin/codex_limite_estado.py:185-194`; `bin/gerar_codex_estado.py:153-155`).
+
+- **Desligador manual:** `pausar.sh` aceita caminho arbitrário e registra QUEM/QUANDO/POR_QUE/SAIDA, publica por rename e mantém trilha; isso serve ao arquivo novo descrito no contrato, mas o wrapper atual só consulta a pausa geral `logs/pausas/codex-construtor` (`bin/pausar.sh:31-47`; `bin/codex_pergunta.sh:191`, `:387`).
+
+## 09/11 09:01 · sessao 6661071fd3d5 · - · - · origem=Ronald (tmux)
+
+- **Não há quebra demonstrada apenas por adicionar `vaga=1|2`**: o leitor atual ignora campos finais, pois aceita `len(p)>=9`; inserir o novo campo antes das posições existentes deslocaria a interpretação. Chave `(obra,hash,pid)` em `p[1],p[3],p[4]`; tipo em `p[5]`; sessão, rc e duração em `p[6:9]`. O contrato não informa a posição da coluna. (`bin/codex_limite_estado.py:56-67`; contrato fornecido, item 4 [nao verificado como arquivo local]).
+
+- **Leitores afetados por deslocamento**: contagem por papel (`bin/codex_limite_estado.py:71-78`), últimas chamadas/rc (`bin/codex_limite_estado.py:82-88`), origem Code (`bin/codex_limite_estado.py:92-96`; `bin/gerar_codex_estado.py:154-155`; `bin/gerar_codex_estado.py:176`), tokens por papel (`bin/codex_limite_estado.py:185-194`) e painel/disjuntor (`bin/gerar_estado.py:269`; `bin/disjuntor.py:1603`; `bin/disjuntor.py:1611`). O selo também fixa `$3`, `$6`, `$7`, `$8`. (`bin/tests/test_codex_pergunta.sh:265-266`).
+
+- **Arquivo da vaga hoje não contém estado da raia**: o trecho abre em append e adquire lock; o inventário inicial fica em `_INV0`, e o final vai para `$RESPOSTA.inventario`. Não há publicação desses dados na vaga nesse fluxo. (`bin/codex_pergunta.sh:231-239`; `bin/codex_pergunta.sh:413`). Consumidores externos à cópia [nao verificado].
+
+- **Identidade do inode importa**: o próprio comentário explica que usar o nome da vaga como resposta substituiria o inode preso; a proteção reserva somente o caminho exato da vaga atual. Uma futura `construtor.vaga2` não fica reservada por essa comparação atual. (`bin/codex_pergunta.sh:69-78`). Publicar estado da vaga por rename pode deixar o flock preso no inode anterior, pelo mesmo mecanismo documentado. (`bin/codex_pergunta.sh:69`; `bin/codex_pergunta.sh:232-233`).
+
+- **`pausar.sh` atende trilha do desligador separado**: exige quem, motivo e condição de saída, escreve temporário e renomeia, registra pausa; soltura também registra trilha. (`bin/pausar.sh:25-28`; `bin/pausar.sh:31-47`). Usar esse rename no próprio arquivo de lock teria o risco anterior. (`bin/pausar.sh:46`; `bin/codex_pergunta.sh:69`).
+
+- **rc reaproveitados**: rc 2 já significa validação/recusa anterior à chamada, não especificamente portão; rc 3 já significa inventário proibido/falho, mas também trava de resposta recusada ou B3. (`bin/codex_pergunta.sh:183`; `bin/codex_pergunta.sh:367-371`; `bin/codex_pergunta.sh:410-426`). rc 75 também serve à pausa do construtor e ao LIMITE; distinguir só por número não distingue causa. (`bin/codex_pergunta.sh:191`; `bin/codex_pergunta.sh:432-435`).
+
+- **Recusa não é registrada em `chamadas.log` quando acontece na vaga**: a guarda da vaga está antes da instalação do trap e da linha `ini`; portanto o motivo atual sai por stderr, mas não produz par `ini/fim` nem `.rc` desse fluxo. (`bin/codex_pergunta.sh:233`; `bin/codex_pergunta.sh:249-262`; `bin/codex_pergunta.sh:285-286`). `.rc` depende de `INI=1`. (`bin/codex_pergunta.sh:251-256`).
+
+- **Teto opus é conduta declarada, sem guarda no wrapper**. (`CLAUDE.md:350-353`).
+
+## 09/11 09:01 · sessao 87cc07e0ba8f · - · - · origem=Ronald (tmux)
+
+Inspeção estática apenas; veredictos de execução e situação no host: [nao verificado].
+
+- O selo direto da vaga é `bin/tests/test_codex_pergunta.sh`: `c_vaga` prende `logs/construtor.vaga` e exige recusa também com outro `LOGD` (`:193–198`). O helper exige rc esperado, motivo e ausência de chamada ao Codex (`:116–120`).
+- O mutante que morde especificamente `#G:vaga` troca `_recusa2` por `true`, preservando o `flock` que falhou e permitindo prosseguir (`bin/tests/test_codex_pergunta.sh:468`; guarda em `bin/codex_pergunta.sh:233`). O teste detecta a continuação pelo rc/motivo/chamada (`bin/tests/test_codex_pergunta.sh:116–120`).
+- Dois mutantes mordem `#G:vaga_sitio`: raiz do script `$R` em vez de `dirname($_CDIR)` (`bin/tests/test_codex_pergunta.sh:498`, caso de cópia em outra raiz `:374–378`); `$VIVO` em vez do common-dir (`:499`, caso de outra worktree do mesmo repositório `:351–355`).
+- Há proteção contra resposta substituir o inode da vaga (`bin/tests/test_codex_pergunta.sh:230–232`, mutante `:454`); controle de basename semelhante permitido (`:218–220`); abertura impossível com fd6 herdado deve recusar explicitamente (`:234–238`, mutante `:455`); topologia sem `<raiz>/.git` recusa construtor (`:361–364`, mutante `:500`), mas permite leitura (`:366–371`, mutante `:501`).
+- O mecanismo exige mutante para cada etiqueta `#G:` (`bin/tests/test_codex_pergunta.sh:507–508`), aplica a alteração por etiqueta (`:511–520`), executa o caso correspondente e exige que fique vermelho (`:523–527`). O verde atual do host continua [nao verificado].
+- Os casos e mutantes listados não contêm portão CPU da vaga 2, `--toca` ou desligador da segunda vaga (`bin/tests/test_codex_pergunta.sh:410–415`, `:437–505`). O mutante atual `vaga` prova exclusão de **todo segundo construtor** pelo comportamento antigo; não é ainda o selo “vaga 2 sem portão” do novo contrato (`bin/tests/test_codex_pergunta.sh:193–198`, `:468`).
+- O inventário e descarte já têm selo: positivo exige `.rc`, `.inventario`, `.id` e log final (`bin/tests/test_codex_pergunta.sh:245–266`); recusa exige rc3, motivo, ausência de `.id` (`:122–128`), e mutante da decisão final neutraliza `if [ "$_IRC" -ne 0 ]` (`:487`). Interseção entre raias não aparece nesses casos (`:410–415`).
+- A trava única tem `bin/tests/test_trava_teste.sh`: varredura de runners da suite e molde (`:39–71`), execução em cópia com lock isolado (`:103–115`), dois chamadores serializados (`:117–127`) e ausência de vez com rc75 (`:130–137`). `bin/tests/test_suite_sh.sh` cobre o comando canônico da documentação, sua passagem por `suite.sh` e por `trava_teste.sh` (`:37–58`), com fixtures nos dois sentidos (`:65–85`).
+- Os selos `test_*.sh` são chamados pela régua antes da suite (`bin/regua.sh:138–145`); execução efetiva nesta produção: [nao verificado].
+- Inserir `vaga=1|2` deslocando campos de `chamadas.log` quebra ao menos leitores posicionais dos próprios testes: papel `$3`, fase `$6`, thread `$7`, rc `$8` (`bin/tests/test_codex_pergunta.sh:265`) e duração `$9` (`bin/tests/test_codex_sonda.sh:96–98`). Acrescentar campo ao fim preserva essas posições específicas; compatibilidade de todos os consumidores depende da inspeção deles [nao verificado].
+- `bin/tests/prova_codex_pergunta_real.sh` é prova manual que chama Codex real e verifica efeito do sandbox, não selo automático de concorrência (`:2–14`, `:85–86`, `:134–141`).
 
 ## 09/11 08:55 · sessao fb013bdd83d7 · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -485,235 +617,4 @@ Os selos entram no loop da régua; sua existência não prova que executaram ou 
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 09/11 08:20 · sessao 7e7cab7dc194 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
-
-A cura está escrita: o par identificado aplica as duas metades no mesmo `atomic`, com paridade e lastro julgados após as duas escritas. **[RED nao executado]**; GREEN e mortalidade dos mutantes permanecem **[nao verificado]**. Fonte: [materializacao.py:1302](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/services/materializacao.py:1302).
-
-Por hunk:
-
-| Arquivo:linha | Alteração |
-|---|---|
-| `chamados/services/materializacao.py:55` | Predicado único `identificar_par_intervalo`: disputa/data, unicidade das metades e mesmo par canônico. Ambiguidade devolve `par_ambiguo`; consulta `chamados/juizes.py:882` e `escala/models.py:1652`. |
-| `chamados/services/materializacao.py:91` | Reúne disputas, pais, destinos, clones e perguntas antes da escrita; adquire travas pela porta existente de `chamados/models.py:2637`. |
-| `chamados/services/materializacao.py:844` | `par_em_ato` adia a guarda individual e a reconciliação. Escrita continua por `registrar_batida`, em `:987`. |
-| `chamados/services/materializacao.py:1220` | Extrai o carimbo compartilhado; `:1264` extrai a conferência de data. Ambos servem ao par e ao caminho avulso. |
-| `chamados/services/materializacao.py:1302` | Mantém ambas em voo; grava, julga conjunto, exige lastro, carimba e reconcilia. Falha desfaz o savepoint e devolve as duas validações pelo dono. |
-| `chamados/services/materializacao.py:1372` | Despacha par/avulsa, espera e contadores. Respeita o universo selecionado; `:1415` conserva o caminho avulso. |
-| `chamados/services/validacao.py:434` | Trava antes de validar; preserva o primeiro aceite e retorna `aguardando_par`. A devolução distingue espera de recusa em `:193`. |
-| `chamados/services/materializacao.py:1526` | Varredura processa cada unidade uma vez e conta ambas as perguntas aplicadas. |
-| `chamados/services/passivo_validado.py:432` | Pré-trava toda a competência; `:529` entrega ao ato apenas o universo selecionado pelo O330, incluindo carimbos sem lastro. |
-| `chamados/catalogo/recusa.py:25` | Espera com código próprio e tradução por igualdade. `COLADA` exige testemunha de mesmo tipo dentro de ±60s; paridade distante perde esse texto. |
-| `templates/chamados/partials/modal_fio.html:229` | Exibe a espera nos ramos validado e não validado; segundo ponto em `:243`. |
-| `chamados/tests/test_contract_leitores_vitalidade.py:124` | Atualiza o censo para o corpo avulso extraído e a elegibilidade do par. |
-
-Os escritores e leitores dos campos envolvidos ficam assim:
-
-| Campo/função | Quem escreve | Quem lê |
-|---|---|---|
-| `resposta_colab/respondida_em` | Porta existente, `chamados/services/disputa_emissao.py:1422` | Derivação `materializacao.py:384`; prontidão `:1383`. |
-| `validada_em/por` e decisões E1 | Dono existente, `validacao.py:127` e `:163`; sequência em `chamados/models.py:3943` | Dispatcher `materializacao.py:1383`; C6 `chamados/juizes.py:1153`; consulta `chamados/models.py:3359`. |
-| `recusa_motivo` | `materializacao.py:1144`; limpeza após aplicação em `:1352` | Devolução/espera `validacao.py:193`; catálogo `recusa.py:92`; apresentação `materializacao.py:479`. |
-| Batida: instante, tipo e origem | Porta existente `ponto/registro_batida.py:94` | Guarda `materializacao.py:139`; lastro existente `chamados/juizes.py:645`. |
-| `pergunta_origem` | `anotar`, chamado em `materializacao.py:1008`; porta em `ponto/registro_batida.py:235` | Lastro `chamados/juizes.py:703`. |
-| Materialização, via e lavra | `materializacao.py:1220` → `chamados/models.py:3103` → `chamados/veredito_lavrado.py:234` | Identidade `materializacao.py:55`; estado `:479`; seleção `:1557`; estado do modelo `chamados/models.py:3035`. |
-| `pendencia_admin` | Ramo existente `materializacao.py:910` | Template `templates/chamados/partials/modal_fio.html:221`. |
-| Estado de aplicação | `materializacao.py:479`, montado por `chamados/services/fio.py:336` | Template `modal_fio.html:229`; casca da validação `chamados/services/acoes_disputa.py:13`. |
-| `processadas/aplicadas/pares` | Dispatcher `materializacao.py:1372` | Varredura `:1568`; O330 `passivo_validado.py:570`; consolidação `:385`; saída JSON existente `chamados/management/commands/materializar_passivo_validado.py:135`. |
-| Fechamento | Cauda existente `materializacao.py:1490` → `chamados/models.py:1863` | Autoridade `pode_fechar`, `chamados/models.py:1856`. |
-
-O primeiro aceite permanece validado e aparece com “Falta a outra metade do intervalo”. Para C6, essa primeira pergunta continua morta pelo degrau de validação; a outra metade segura o fechamento nominal. O RED cobra isso, inclusive executando callbacks após o primeiro aceite. Fontes: `validacao.py:482`, `chamados/juizes.py:1153`, `chamados/models.py:1856`, [test_bug_par_intervalo.py:104](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/test_bug_par_intervalo.py:104) e `:164`. Resultado funcional: **[nao verificado]**.
-
-O RED cobre R1–R9, rollback da segunda escrita, lastro, reconciliação, proteção em voo, travas e limites do O330. R7 usa 20/09 porque o índice parcial impede duplicar os motivos na data nominal. Fontes: `chamados/tests/test_bug_par_intervalo.py:35`, `:151`, `:182`, `:255`, `:342`, `:390`, `:401`, `:418`; índice em `chamados/models.py:3482`.
-
-Comando reservado à sessão para RED na base e GREEN na cura: `chamados/tests/test_bug_par_intervalo.py:1`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo --noinput
-```
-
-Cada mutante altera o fonte real **em memória** e executa seu teste-alvo. Os comandos individuais abaixo correspondem às definições de [mutantes_bug_par_intervalo.py:17](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/mutantes_bug_par_intervalo.py:17). Não foram executados; falha de ambiente não demonstra mutante morto. Fonte: `mutantes_bug_par_intervalo.py:1`. [nao verificado]
-
-```bash
-mutar() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo "$1"
-}
-mutar M1  # remove atomic do par
-mutar M2  # remove espera
-mutar M3  # restaura guarda individual
-mutar M4  # remove paridade final
-mutar M5  # remove ordem temporal
-mutar M6  # remove lastro
-mutar M7  # escolhe metades ambiguas
-mutar M8  # remove testemunha de colada
-mutar M9  # remove par canonico
-mutar M10 # remove devolucao das validacoes
-mutar M11 # reconcilia entre metades
-mutar M12 # conta apenas uma aplicacao
-mutar M13 # zera contador
-mutar M14 # remove protecao em voo
-mutar M15 # remove trava das perguntas
-mutar M16 # aplica fora do universo O330
-mutar M17 # repara carimbo pela porta normal
-mutar M18 # ignora disputas adicionais
-```
-
-DECISAO-ABERTA: nenhuma escolha adicional de identidade foi introduzida; ambiguidades seguem pelo caminho avulso, conforme `materializacao.py:55` e `:1400`. Permanecem **[nao verificado]**: execução RED/GREEN, mortalidade dos mutantes, concorrência real, renderização Django, censo populacional e commit introdutor. [nao verificado]
-
-Log final: executei o comando abaixo, que usa `py_compile` sem persistir bytecode; sete arquivos Python compilaram e os 18 mutantes tiveram âncora única, sintaxe e teste-alvo conferidos. Implementação da checagem: `chamados/tests/mutantes_bug_par_intervalo.py:87`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
-```
-
-```text
-py_compile: 7 arquivos, rc 0, sem persistencia
-M1–M18: ancora unica, sintaxe e teste-alvo conferidos [nao verificado]
-RED/GREEN: NAO EXECUTADOS
-Mutantes funcionais: NAO EXECUTADOS
-```
-
-## 09/11 08:12 · sessao 79c1c84e8d87 · - · - · origem=Ronald (tmux)
-
-Encontrei dois problemas concretos:
-
-- **Ordem de travas no O330:** a transação percorre várias disputas, mas trava cada disputa apenas ao chegar à unidade. Uma segunda disputa fechada pode ser travada depois das perguntas da primeira. Precisa reunir todas as disputas, destinos, clones e perguntas no topo da transação. `chamados/services/passivo_validado.py:371`; `chamados/services/passivo_validado.py:429`; `chamados/services/materializacao.py:90`; `chamados/services/materializacao.py:1372`.
-- **Aplicação fora do universo do reparador:** a identidade admite irmã carimbada sem lastro; essa irmã pode ter sido excluída do lote por `plantio_fora_do_slot`. A unidade a aplica mesmo assim, e o contador só contabiliza perguntas do grupo original. Precisa exigir autorização das duas metades pelo universo do lote, recusando o conjunto se faltar uma. `chamados/services/materializacao.py:73`; `chamados/services/materializacao.py:1329`; `chamados/services/passivo_validado.py:330`; `chamados/services/passivo_validado.py:523`; `chamados/services/vigia_carimbo.py:113`.
-
-O segundo problema também amplia o universo da porta normal: uma volta já carimbada sem lastro volta a ser aplicada ao validar a saída, embora a seleção normal exclua perguntas materializadas. O teste R9 atual cobre apenas motivo retratado. `chamados/services/materializacao.py:73`; `chamados/services/materializacao.py:1542`; `chamados/tests/test_bug_par_intervalo.py:310`.
-
-O R8 atual usa perguntas sem carimbo; falta cobrir o formato real do passivo com carimbo falso e a irmã fora do universo. `chamados/tests/test_bug_par_intervalo.py:297`; `chamados/tests/test_o330_plantio_nao_abre_turno.py:101`.
-
-Revisão por leitura; testes não executados. [nao verificado] [nao verificado]
-
-## 09/11 08:04 · sessao 47aa24b5876b · DEPLOY-EXCLUSAO-ENVELOPE · verificador · origem=Code
-
-**Não daria VERDE irrestrito nesta volta.** P2 ainda permite alarme sem compartilhada quando a biblioteca não carrega; o marcador de P1 pode sobreviver ao envelope e provocar falsa recusa; o RELATO continua publicando parâmetros anteriores. (`bin/cron_run.sh:54`, `app/core/esteira_vigia.py:917`, `bin/trava_deploy_exclusao.sh:61`, `app/docs/RELATO.md:25`)
-
-Resultados executados do protocolo, RED/GREEN, m1–m5 e ocorrência dos cenários em produção: **[nao verificado]**. O selo cria, altera e remove arquivos, portanto sua execução não cabe nesta revisão somente leitura. (`bin/tests/test_deploy_exclusao_cron.sh:60`, `bin/tests/test_deploy_exclusao_cron.sh:78`, `bin/tests/test_deploy_exclusao_cron.sh:170`)
-
-1. **P1–P6: cura efetiva e limites**
-
-| Item | Caminho corrigido | O que permanece aberto |
-|---|---|---|
-| **P1 — parcial** | Envelope toma compartilhada e exporta marcador; deploy com migration chega à aquisição exclusiva, reconhece marcador e retorna 2 sem executar o `flock`; deploy traduz isso em recusa rc 1, nomeando envelope e trava. Remove a espera de 600 s contra o ancestral nesse caminho. (`bin/trava_deploy_exclusao.sh:57`, `bin/trava_deploy_exclusao.sh:58`, `bin/trava_deploy_exclusao.sh:61`, `bin/deploy.sh:328`, `bin/deploy.sh:330`, `bin/deploy.sh:95`) | Marcador não prova posse atual: não valida PID nem compartilhada. Há caminho assíncrono concreto descrito abaixo. A recusa também ocorre somente depois dos portões anteriores, não imediatamente na entrada do script. (`bin/trava_deploy_exclusao.sh:61`, `bin/deploy.sh:308`, `bin/deploy.sh:325`) |
-| **P2 — parcial** | Timeout com biblioteca carregada → fecha fd 4 → RC75/placar → readquire compartilhada sem teto → chama alarme → grava FLAG se a chamada funcionar. Assim o alarme espera a exclusiva sair. (`bin/trava_deploy_exclusao.sh:53`, `bin/trava_deploy_exclusao.sh:64`, `bin/cron_run.sh:28`, `bin/cron_run.sh:31`, `bin/cron_run.sh:54`) | Biblioteca ausente → função inexistente → `! declare -F` permite o `docker exec` sem compartilhada. Falha na readquisição ou no Docker também não tem retry nesse epílogo; a FLAG não nasce. (`bin/cron_run.sh:17`, `bin/cron_run.sh:54`, `bin/cron_run.sh:59`) |
-| **P3 — corrigido no caminho que executa comando** | `ini` e `T0` agora nascem depois da aquisição; espera fica em campo separado. Elimina a inclusão da fila em `fim−ini` daquele caminho. (`bin/cron_run.sh:17`, `bin/cron_run.sh:19`, `bin/cron_run.sh:20`, `bin/cron_run.sh:31`) | SEM VEZ também recebe `ini`, embora nenhum comando comece; `dur` inclui preparação da marca. Os consumidores continuam contando tentativas recusadas, conforme detalhado adiante. (`bin/cron_run.sh:23`, `bin/cron_run.sh:26`, `bin/cron_run.sh:31`, `app/core/management/commands/pipeline_placar.py:74`) |
-| **P4 — corrigido para os filhos escolhidos** | Docker de top/HUP, árvore de disponibilidade e Docker da prova recebem fd 4 fechado. Fecha a herança pelo neto da prova contemplado pelo selo. (`bin/deploy.sh:391`, `bin/deploy.sh:395`, `bin/deploy.sh:417`, `bin/deploy.sh:436`) | Não equivale a fechar em todo filho; pipelines auxiliares e `sleep` continuam herdando. Migrate/restart ficam deliberadamente abertos. Morte do deploy durante essas operações não é provada pelo caso f. (`bin/deploy.sh:351`, `bin/deploy.sh:378`, `bin/deploy.sh:401`, `bin/deploy.sh:405`, `bin/tests/test_deploy_exclusao_cron.sh:304`) |
-| **P5 — asserção acrescentada; mordida não certificada** | Caso g introduz provas lentas e exige três provas terminadas antes do comando, em normal e restart. (`bin/tests/test_deploy_exclusao_cron.sh:104`, `bin/tests/test_deploy_exclusao_cron.sh:320`, `bin/tests/test_deploy_exclusao_cron.sh:333`) | Não comprova que o cron chegou durante a prova; definições/resultados dos mutantes não foram fornecidos. Mordida observada: **[nao verificado]**. (`bin/tests/test_deploy_exclusao_cron.sh:324`, `bin/tests/test_deploy_exclusao_cron.sh:329`) |
-| **P6 — parcial documental** | O contrato v3 anexado descreve 300/600, retomada sem teto, marcador e `espera_deploy`. (`contrato_v3.txt:3`, `contrato_v3.txt:5`, anexo) | RELATO ainda contém cron600/deploy não bloqueante/`espera_lock`/dois contadores; acima há somente resumo de v2. Envio “uma vez” e publicação física do v3: **[nao verificado]**. (`app/docs/RELATO.md:21`, `app/docs/RELATO.md:25`) |
-
-2. **Aninhamento: existe caminho legítimo para marcador obsoleto**
-
-O caminho encontrado é condicional, mas está no código:
-
-- `vigia_arvore` é RAW envelopado; quando passa a vermelho, chama `esteira_vigia.py curar`. (`app/config/crons.py:296`, `app/config/crons.py:1863`, `bin/vigia_arvore.sh:172`, `bin/vigia_arvore.sh:176`)
-- **`curar` não é opção reconhecida por `main()`**: cai em `passada()`. O auto-revert possui outra opção, `auto-revert`, e também pode ser acionado pela passada em `cura_sem_efeito`. (`app/core/esteira_vigia.py:1578`, `app/core/esteira_vigia.py:1606`, `app/core/esteira_vigia.py:1549`, `app/core/esteira_vigia.py:1552`)
-- A passada pode escolher um relance e chamar `relancar → _lancar`. Se `systemd-run` falhar, `_lancar` usa `Popen(nohup bash esteira.sh, start_new_session=True)`, sem substituir ambiente nem preservar fd 4 explicitamente. O processo destacado pode conservar o marcador depois que o envelope termina. (`app/core/esteira_vigia.py:542`, `app/core/esteira_vigia.py:562`, `app/core/esteira_vigia.py:1516`, `app/core/esteira_vigia.py:936`, `app/core/esteira_vigia.py:913`, `app/core/esteira_vigia.py:917`)
-- Existe esteira legítima que chega a deploy: o código cria fatias pelo molde de autocura; seu `esteira.sh` chama `cadeia.sh`, que chama deploy. Se chegar depois da saída do envelope e houver migration pendente, o marcador antigo provoca falsa recusa de aninhamento. (`app/core/esteira_vigia.py:1426`, `app/core/esteira_vigia.py:1429`, `bin/molde_autocura/esteira.sh:23`, `bin/molde_autocura/cadeia.sh:86`, `bin/deploy.sh:325`, `bin/trava_deploy_exclusao.sh:61`)
-
-Falha efetiva do `systemd-run`, duração desse descendente e migration pendente nessa ocasião: **[nao verificado]**.
-
-Nos demais caminhos pedidos:
-
-| Caminho | Resultado da leitura |
-|---|---|
-| Humano | Deploy não limpa nem valida a procedência do marcador; se recebido, basta estar preenchido para recusar a aquisição exclusiva. Shell interativo filho efetivamente lançado por esses fluxos: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:61`) |
-| `deploy_agendado` | A linha gravada em cron.d não transporta o ambiente do agendador; `rodar` executa esteiras sincronamente. Uma chamada direta de `rodar` tampouco limpa marcador herdado. (`bin/deploy_agendado.sh:55`, `bin/deploy_agendado.sh:56`, `bin/deploy_agendado.sh:73`) |
-| Reload 03:30 | É envelopado, mas recusa migration pendente e, no HUP puro, não pede exclusiva. (`app/config/crons.py:326`, `bin/deploy.sh:214`, `bin/deploy.sh:325`) |
-| Cadeia/esteira | O caminho destacado acima alcança a cadeia de autocura. A cadeia chama deploy sem limpar o marcador. (`app/core/esteira_vigia.py:917`, `bin/molde_autocura/esteira.sh:23`, `bin/molde_autocura/cadeia.sh:86`) |
-| `pos_push` | O script atual atualiza e commita TICKETS; não contém porta direta de deploy. (`bin/pos_push.sh:19`, `bin/pos_push.sh:29`, `bin/pos_push.sh:39`) |
-
-O único escritor funcional localizado é o `export` da biblioteca; o único leitor decisório é o teste de variável não vazia. Deploy também a imprime. `solta_trava_deploy` apenas destrava/fecha fd, sem limpar marcador. (`bin/trava_deploy_exclusao.sh:58`, `bin/trava_deploy_exclusao.sh:61`, `bin/trava_deploy_exclusao.sh:65`, `bin/deploy.sh:331`)
-
-Ainda em P1/F6: os deploys de `auto_revert` usam `capture_output=True` e descartam o retorno. Portanto a recusa emitida pelo deploy não está demonstrada como visível no log desse chamador, apesar do comentário novo. (`app/core/esteira_vigia.py:1267`, `app/core/esteira_vigia.py:1269`, `app/core/esteira_vigia.py:1275`, `bin/deploy.sh:321`)
-
-3. **Epílogo: espera infinita possível; ciclo de deadlock não demonstrado**
-
-**Sim, o cron pode ficar indefinidamente no epílogo.** A retomada chama `flock -s` sem `-w`; migrate e prova de rota não têm timeout. A exclusiva só é solta no caminho normal posterior às provas. (`bin/trava_deploy_exclusao.sh:50`, `bin/trava_deploy_exclusao.sh:64`, `bin/deploy.sh:351`, `bin/deploy.sh:433`, `bin/deploy.sh:456`)
-
-Isso demonstra retenção ilimitada, não um ciclo por si só. No trecho sob exclusiva, a consulta de cron do restart **recusa imediatamente**, sem esperar o envelope; os demais passos esperam workers, disponibilidade e rotas. Não encontrei nesse percurso exclusiva → espera cron → espera compartilhada. Bloqueios externos de banco/runtime: **[nao verificado]**. (`bin/deploy.sh:113`, `bin/deploy.sh:115`, `bin/deploy.sh:377`, `bin/deploy.sh:400`, `bin/deploy.sh:417`, `bin/deploy.sh:433`)
-
-O percurso do alarme é `cron_quebrado.handle → avisar_quebra → escrever`: cria Pauta, grava trilha em LogAuditoria e atualiza ContadorPauta. Recuperação atualiza Pauta, trilha e contador. Não encontrei chamada a deploy ou outro `cron_run` nesse percurso de escrita. (`app/core/management/commands/cron_quebrado.py:22`, `app/core/management/commands/cron_quebrado.py:37`, `app/core/services/crons_quebrados.py:71`, `app/pautas/services.py:180`, `app/pautas/services.py:186`, `app/pautas/services.py:188`, `app/pautas/services.py:272`, `app/core/observ.py:133`)
-
-Há também **tempo invisível**: placar, `fim`, `dur` e `espera_deploy` são gravados antes da retomada ilimitada. O envelope pode continuar vivo por tempo arbitrário depois do `fim` registrado. (`bin/cron_run.sh:18`, `bin/cron_run.sh:30`, `bin/cron_run.sh:31`, `bin/cron_run.sh:54`, `bin/cron_run.sh:59`)
-
-4. **`ini`, leitores e histórico**
-
-A alteração restaura o sentido aproximado anterior para comandos executados: início depois da fila, ainda antes da preparação da marca. Não restaura literalmente “início do comando” para SEM VEZ, pois nesse ramo não existe comando iniciado. (`bin/cron_run.sh:19`, `bin/cron_run.sh:23`, `bin/cron_run.sh:25`, `bin/cron_run.sh:26`)
-
-| Leitor | Consequência |
-|---|---|
-| `corrida_no_horario` | Compara o minuto de `ini` com tolerância `<3`. Um disparo legítimo que espere 3–5 minutos pela trava pode sair da medição de duração. (`app/config/crons.py:2304`, `app/config/crons.py:2329`, `app/config/crons.py:2332`, `bin/trava_deploy_exclusao.sh:37`) |
-| `crons_duracao` | Filtra data/horário de `ini`, mas aceita `dur` sem filtrar exit. Tentativa SEM VEZ pode entrar como amostra curta. (`bin/crons_duracao.py:69`, `bin/crons_duracao.py:71`, `bin/crons_duracao.py:73`, `bin/crons_duracao.py:75`) |
-| `pipeline_placar` | Agrupa pelo dia de `ini`; toda linha incrementa `rodou`, inclusive comando recusado; 75 incrementa erros. Espera atravessando meia-noite pode mudar o dia de atribuição. (`app/core/management/commands/pipeline_placar.py:70`, `app/core/management/commands/pipeline_placar.py:74`, `app/core/management/commands/pipeline_placar.py:78`) |
-| `crons_quebrados` | Usa `ini` na janela de 26 horas e na seleção da corrida mais recente; 75 continua erro. (`app/core/services/crons_quebrados.py:36`, `app/core/services/crons_quebrados.py:39`, `app/core/services/crons_quebrados.py:42`, `app/core/services/crons_quebrados.py:46`) |
-
-O escritor apenas apenda; não regrava histórico. Esses leitores não normalizam versões usando `espera_deploy`. Portanto, **se existirem linhas da v1**, continuam interpretadas literalmente com o sentido antigo de chegada, enquanto novas linhas usam o instante posterior à aquisição. Existência e quantidade dessas linhas em produção: **[nao verificado]**. (`bin/cron_run.sh:31`, `bin/crons_duracao.py:69`, `app/core/management/commands/pipeline_placar.py:70`, `app/core/services/crons_quebrados.py:36`)
-
-Na busca por `placar.jsonl`, não localizei outro leitor operacional direto além desses; as referências de `vigiar_fio_morto` e `sombra.sh` são explicativas. (`app/chamados/management/commands/vigiar_fio_morto.py:19`, `bin/sombra.sh:122`)
-
-5. **fd 4: cobertura útil, sem garantia universal**
-
-Os fechamentos cobrem as chamadas Docker apontadas por P4 e toda a árvore iniciada por `timeout` na disponibilidade. Contudo, `awk`, `tr`, `sed`, `tail`, substituições de comando e o `sleep 2` não receberam fechamento próprio. Logo “todo filho nasce sem fd 4” seria falso; não localizei lançamento explicitamente destacado desses auxiliares sob a exclusiva. Sobrevivência efetiva após morte do deploy: **[nao verificado]**. (`bin/deploy.sh:391`, `bin/deploy.sh:401`, `bin/deploy.sh:405`, `bin/deploy.sh:417`, `bin/deploy.sh:436`)
-
-**Migrate e Docker restart conservarem fd é coerente com a intenção declarada:** enquanto esses clientes conservarem o descritor, podem conservar a exclusão após a saída do shell. Isso não prova a promessa mais forte de exclusão enquanto qualquer trabalho interno ao container sobreviver; o selo observa o fd do Docker falso no host. Essa garantia dentro do container: **[nao verificado]**. (`bin/deploy.sh:94`, `bin/deploy.sh:351`, `bin/deploy.sh:378`, `bin/tests/test_deploy_exclusao_cron.sh:92`)
-
-O caso f verifica diretamente fd fechado nos filhos classificados e aberto no migrate. Porém executa deploy com sucesso, chegando ao unlock explícito; não mata o deploy durante migrate/restart. Assim não certifica F1 nem a retenção depois de abandono anormal. (`bin/tests/test_deploy_exclusao_cron.sh:304`, `bin/tests/test_deploy_exclusao_cron.sh:307`, `bin/tests/test_deploy_exclusao_cron.sh:310`, `bin/deploy.sh:456`)
-
-6. **Selo, m1–m5 e casos vazios**
-
-**m1, m2, m3, m4 e m5: [nao verificado] individualmente.** Não foram fornecidas suas definições nem resultados; o selo aceita fontes alternativas, mas isso não identifica qual transformação corresponde a cada nome. (`bin/tests/test_deploy_exclusao_cron.sh:43`, `bin/tests/test_deploy_exclusao_cron.sh:44`, `bin/tests/test_deploy_exclusao_cron.sh:45`)
-
-Há asserções dirigidas às propriedades: b2 cobra alarme depois da última prova e FLAG; e cobra recusa aninhada rápida e identificada; f cobra descritores; g cobra comando depois das três provas. Capacidade observada de cada mutante violá-las: **[nao verificado]**. (`bin/tests/test_deploy_exclusao_cron.sh:217`, `bin/tests/test_deploy_exclusao_cron.sh:293`, `bin/tests/test_deploy_exclusao_cron.sh:310`, `bin/tests/test_deploy_exclusao_cron.sh:333`)
-
-Quanto ao **RED de g**, o delta fornecido não move a soltura: a v1 já a fazia depois das provas. Portanto não há soltura prematura real demonstrada na v1; o novo caso protege essa propriedade contra regressão introduzida. RED executado contra a base sem exclusão ou contra mutante de soltura antecipada: **[nao verificado]**. (`diff_v2_delta.diff`, anexo; `bin/deploy.sh:451`, `bin/deploy.sh:456`)
-
-Há lacunas concretas:
-
-- **d3 pode passar sem comprovar seu cenário:** ignora retorno da espera por `CMD-INI` e do `wait`; basta qualquer falha antecipada do deploy e zero restart. Não exige diagnóstico de recusa por cron nem sucesso do cron. (`bin/tests/test_deploy_exclusao_cron.sh:278`, `bin/tests/test_deploy_exclusao_cron.sh:280`, `bin/tests/test_deploy_exclusao_cron.sh:282`)
-- **g exige provas e comando presentes**, mas não sobreposição. Os retornos de espera são ignorados; se o cron só for escalonado depois das provas, passa sem disputar aquela janela. (`bin/tests/test_deploy_exclusao_cron.sh:324`, `bin/tests/test_deploy_exclusao_cron.sh:327`, `bin/tests/test_deploy_exclusao_cron.sh:329`, `bin/tests/test_deploy_exclusao_cron.sh:333`)
-- **b1 aceita folga negativa arbitrária:** cobra somente `(fim−ini)−dur <=1`, sem limite inferior nem confronto com timestamp do comando. (`bin/tests/test_deploy_exclusao_cron.sh:144`, `bin/tests/test_deploy_exclusao_cron.sh:197`)
-- **d4 verifica desigualdade numérica**, não orçamento completo de deploy. (`bin/tests/test_deploy_exclusao_cron.sh:344`)
-
-7. **Classes anteriores de reprovação**
-
-| Classe | Situação nesta cópia |
-|---|---|
-| Segunda fonte do caminho | Uma definição funcional localizada. Entretanto, deriva da biblioteca carregada: deploy usa sua própria raiz e envelope usa a viva absoluta. Cópias distintas continuam podendo disputar arquivos distintos enquanto chamam os mesmos containers; não há guarda de raiz viva nesses trechos. (`bin/trava_deploy_exclusao.sh:32`, `bin/deploy.sh:53`, `bin/deploy.sh:326`, `bin/cron_run.sh:17`, `bin/deploy.sh:351`) |
-| Derivação paralela | Aquisição, tetos e fd estão centralizados. Já a inferência “marcador preenchido = ancestral ainda segura compartilhada” não é validada e falha no caminho destacado acima. (`bin/trava_deploy_exclusao.sh:44`, `bin/trava_deploy_exclusao.sh:61`, `app/core/esteira_vigia.py:917`) |
-| Selo sem mordida | Novas asserções existem; d3 permanece permissivo e g não assegura sobreposição. Mordida de m1–m5: **[nao verificado]**. (`bin/tests/test_deploy_exclusao_cron.sh:282`, `bin/tests/test_deploy_exclusao_cron.sh:333`) |
-| Ordem de trava | Cadeia toma árvore, régua e depois exclusiva. A autoespera compartilhada → exclusiva recebe recusa; não demonstrei ciclo inverso sob exclusiva. (`bin/molde_autocura/cadeia.sh:10`, `bin/molde_autocura/cadeia.sh:13`, `bin/molde_autocura/cadeia.sh:86`, `bin/trava_deploy_exclusao.sh:61`) |
-| Relógio | Espera e duração usam relógio de parede. Mesmo sem contenção, cruzar um segundo entre os dois `date` pode produzir espera 1; d2 exige exatamente zero. Saltos efetivos de relógio: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:49`, `bin/trava_deploy_exclusao.sh:51`, `bin/cron_run.sh:20`, `bin/cron_run.sh:30`, `bin/tests/test_deploy_exclusao_cron.sh:268`) |
-| ESMERIL — `espera_deploy` | Mede aquisição inicial, exclui retomada do alarme e não identifica causa de 75. Um comando pode esperar, obter vez e devolver 75; falha imediata pode registrar zero. (`bin/cron_run.sh:18`, `bin/cron_run.sh:25`, `bin/cron_run.sh:31`, `bin/cron_run.sh:54`, `bin/trava_deploy_exclusao.sh:46`) |
-| ESMERIL — `ini`/`dur` | Sucesso recupera início depois da fila; recusa recebe início sem comando; duração inclui preparação e exclui epílogo. O leitor `rodou` continua somando tentativa sem execução. (`bin/cron_run.sh:19`, `bin/cron_run.sh:23`, `bin/cron_run.sh:26`, `bin/cron_run.sh:54`, `app/core/management/commands/pipeline_placar.py:74`) |
-
-## 09/11 08:01 · sessao ac563cc2105e · - · - · origem=Ronald (tmux)
-
-**Há caminho legítimo no código para marcador herdado sobreviver ao envelope, condicionado à falha de `systemd-run`; ocorrência em produção [nao verificado].** O teste usa somente variável não vazia, sem validar PID, arquivo ou posse da compartilhada. (`bin/trava_deploy_exclusao.sh:61`)
-
-Caminho completo:
-
-1. O cron agenda `vigia_arvore.sh`, envelopado pelo gerador de crontab. (`app/config/crons.py:296`, `app/config/crons.py:1863`)
-2. O envelope exporta o marcador e chama o comando sincronamente. (`bin/trava_deploy_exclusao.sh:58`, `bin/cron_run.sh:25`)
-3. Na transição para vermelho, o script chama **`esteira_vigia.py curar`**. (`bin/vigia_arvore.sh:172`, `bin/vigia_arvore.sh:176`)
-4. **`curar` não é opção tratada em `main()`**: a opção de auto-revert se chama `auto-revert`; `curar` cai na chamada geral de `passada()`. (`app/core/esteira_vigia.py:1577`, `app/core/esteira_vigia.py:1578`, `app/core/esteira_vigia.py:1606`)
-5. A passada pode selecionar um relance e chamar `relancar()`, que chama `_lancar()`. (`app/core/esteira_vigia.py:542`, `app/core/esteira_vigia.py:562`, `app/core/esteira_vigia.py:1513`, `app/core/esteira_vigia.py:1516`, `app/core/esteira_vigia.py:936`)
-6. `_lancar()` tenta `systemd-run`; **se ele falhar**, usa `Popen(['nohup','bash','esteira.sh'], start_new_session=True)`, sem fornecer ambiente substituto nem `pass_fds`. O descendente herda o marcador e pode continuar depois do retorno do Python e da saída do envelope; sua efetiva duração nessa produção [nao verificado]. (`app/core/esteira_vigia.py:913`, `app/core/esteira_vigia.py:915`, `app/core/esteira_vigia.py:917`, `bin/cron_run.sh:59`)
-7. Há fatia legítima capaz de chegar a deploy: o próprio código cria a partir de `bin/molde_autocura` e enfileira; seu `esteira.sh` chama `cadeia.sh`, que chama deploy. (`app/core/esteira_vigia.py:1414`, `app/core/esteira_vigia.py:1417`, `app/core/esteira_vigia.py:1424`, `app/core/esteira_vigia.py:1426`, `app/core/esteira_vigia.py:1428`, `bin/molde_autocura/esteira.sh:23`, `bin/molde_autocura/cadeia.sh:86`)
-8. Se esse deploy precisar de migration, o marcador antigo o faz recusar como aninhado, mesmo depois do envelope ancestral terminar. Pendência efetiva de migration nesse cenário [nao verificado]. (`bin/deploy.sh:236`, `bin/deploy.sh:325`, `bin/trava_deploy_exclusao.sh:61`, `bin/deploy.sh:329`)
-
-**Limites e distinções:**
-
-- O molde de fatia moderno entrega ao integrador e não chama cadeia/deploy nesse fluxo; o caminho completo acima usa o molde de autocura ainda criado pelo código. (`bin/molde_fatia/esteira.sh:24`, `bin/molde_fatia/esteira.sh:26`, `app/core/esteira_vigia.py:1426`)
-- O caminho síncrono para auto-revert existe na passada, no ramo `cura_sem_efeito`; não é correto dizer que a opção literal `curar` chama diretamente `auto_revert()`. (`app/core/esteira_vigia.py:1549`, `app/core/esteira_vigia.py:1552`, `app/core/esteira_vigia.py:1578`, `app/core/esteira_vigia.py:1606`)
-- `auto_revert()` chama ambos os deploys com `subprocess.run`; enquanto essa chamada síncrona provém do envelope, o ancestral continua vivo. Os retornos são descartados; `capture_output=True` também captura a recusa sem publicá-la nesse trecho, portanto o comentário “a recusa fala no log dele” não está demonstrado pelo chamador. (`app/core/esteira_vigia.py:1267`, `app/core/esteira_vigia.py:1268`, `app/core/esteira_vigia.py:1269`, `app/core/esteira_vigia.py:1275`, `bin/deploy.sh:321`)
-- `deploy_agendado` agenda uma nova execução direta em `/etc/cron.d` e roda as esteiras sincronamente. Agendar dentro de um envelope não grava esse marcador na linha gerada; invocar diretamente `rodar` em ambiente já contaminado tampouco o limpa. (`bin/deploy_agendado.sh:55`, `bin/deploy_agendado.sh:56`, `bin/deploy_agendado.sh:73`)
-- Reload 03:30 é envelopado, mas recusa migration pendente e evita aquisição exclusiva quando faz somente HUP. (`app/config/crons.py:326`, `app/config/crons.py:1863`, `bin/deploy.sh:214`, `bin/deploy.sh:325`)
-- `pos_push.sh` atual escreve/commita TICKETS e termina; não é porta direta de deploy. (`bin/pos_push.sh:18`, `bin/pos_push.sh:19`, `bin/pos_push.sh:20`, `bin/pos_push.sh:29`, `bin/pos_push.sh:39`)
-- Shell interativo destacado com marcador antigo é possível em tese, mas não identifiquei lançamento desse tipo nos caminhos lidos: **[nao verificado]**.
-- O observador de árvore é assíncrono, fecha fds 6–9 e conserva 4 se herdado, mas apenas espera o pai e grava evento; não chama deploy. (`bin/trava.sh:67`, `bin/trava.sh:68`, `bin/trava.sh:69`)
-- O fabricante também lança esteira destacada, porém caminho de cron até ele não foi demonstrado: **[nao verificado]**. (`bin/fabricante.sh:187`)
-
-O único escritor funcional localizado do marcador é o export da biblioteca; o único leitor decisório é seu teste de não vazio; deploy apenas o imprime. Não existe limpeza no `solta_trava_deploy()`, que somente destrava/fecha o fd. (`bin/trava_deploy_exclusao.sh:58`, `bin/trava_deploy_exclusao.sh:61`, `bin/trava_deploy_exclusao.sh:65`, `bin/deploy.sh:331`, `bin/deploy.sh:332`)
-
-_3079 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3083 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
