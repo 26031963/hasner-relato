@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 04:31:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (178.2 MB). Acoes na janela: **894**.
+**Medido em 09/11/2026 04:36:25.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (178.3 MB). Acoes na janela: **899**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:32:15 | Bash | Fix I-1 time label | `sed -i '3s/^SELOS-CANON-I1 04:5x:/SELOS-CANON-I1 04:3x:/' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-30` |
+| 04:32:13 | Bash | Check time and trava pid | `date +%H:%M; kill -0 320723 && echo viva` |
+| 04:32:10 | Bash | Log I-1 volta 4 in RELATO | `python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') assert t[1].startswith('ESPERANDO:') t.insert(2,"SELOS-CANON-I1 04:5x: construtor volta 4 = f2cb8705 (faixa do censo acima da janela de 2 linhas do Stop/B3, anexo julgado pelo conteudo, glob confinado, guarda por json, janela t<=agora); selo 34 mutantes mordem, RED contra eec4007f rc 2. 4 voltas de construtor + 3 pre-verif -> CODEX ...` |
+| 04:32:07 | Bash | Queue I-1 full suite on f2cb8705 | `bash /home/ronald/saas-hasner/logs/selos_canon/i1_lancar_suite.sh` |
+| 04:32:04 | Bash | Save I-1 v4 diffs, prep suite launcher | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-i1-censovaga-015903 log --oneline -1 && git diff eec4007f7..f2cb87051 > logs/selos_canon/i1_diff_v4_delta.diff && git diff 6adca14f..f2cb87051 > logs/selos_canon/i1_diff_v4_total.diff && wc -l logs/selos_canon/i1_diff_v4_*.diff cat logs/selos_canon/../selos_canon_i1 2>/dev/null; ls logs/selos_canon \| grep -i suite; cat > logs/selos_canon/i1_la ...` |
 | 04:27:02 | Bash | Update ESPERANDO to new suite trava pid | `ps -o args= -p 320723 \| cut -c1-60 && python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') assert t[1].startswith('ESPERANDO:') t[1]='ESPERANDO: trava_teste.sh \| pid=320723' t.insert(2,"PAR-NAO-ADJACENTE 04:2x: suite v3 (f1d492c5) FAILED 1 so na catraca (9 linhas de escala/utils.py +1, texto identico conferido por difflib contra b57ce0a1) -> commit 795cafdf na copia; suite v4 na tr ...` |
 | 04:26:43 | Bash | Get trava holder pid for new suite | `/usr/bin/sleep 15; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
 | 04:26:41 | Bash | Run PAR full suite v4 on 795cafdf | `bash /home/ronald/saas-hasner/logs/par_nao_adjacente/lancar_suite_v4.sh` |
