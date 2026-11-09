@@ -1,7 +1,160 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:28** · publicado em **09/11/2026 03:32** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:37** · publicado em **09/11/2026 03:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:37 · sessao 3bbc841fcd90 · PAR-NAO-ADJACENTE · construtor · origem=Code
+
+Aplicado em [escala/utils.py:458](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:458): cada item carrega sua posição em `_bats`; o retorno ordena por essa posição e remove-a: [nao verificado]
+
+```diff
+-    out = [(_ks[0], 'ent')]
++    out = [(0, _ks[0], 'ent')]
+…
+-            out += [(_ks[_i], ('par', _n, 'S')), (_ks[_iz], ('par', _n, 'E'))]
++            out += [(_i, _ks[_i], ('par', _n, 'S')), (_iz, _ks[_iz], ('par', _n, 'E'))]
+…
+-            out.append((_ks[_i], 'sol'))
+-    out.append((_ks[-1], 'sai'))
+-    return sorted(out, key=lambda _p: _p[0])
++            out.append((_i, _ks[_i], 'sol'))
++    out.append((len(_bats) - 1, _ks[-1], 'sai'))
++    return [(_k, _papel) for _i, _k, _papel in sorted(out, key=lambda _p: _p[0])]
+```
+
+A linha em branco do docstring voltou em [utils.py:439](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:439). O teste aninhado recebeu nome e docstring qualificados: externo vetado igual ao HEAD; interno segue a regra do par não adjacente. [teste:116](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:116) [nao verificado]
+
+`_match_marcos` lê o retorno, passa-o ao alinhador e emite órfãs na ordem recebida. O alinhador identifica bordas pelos rótulos e pares pelo número/S/E. [utils.py:597](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:597), [utils.py:622](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:622), [utils.py:525](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:525)
+
+Sem par não adjacente, as emissões já seguem as posições crescentes de `_bats`; ordenar por essas posições preserva essa lista, inclusive a ordem estável dos timestamps iguais e os `k` repetidos. [utils.py:450](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:450), [utils.py:461](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:461)
+
+Os cinco testes novos têm oráculos manuais e mock declarado das consultas do juiz: [nao verificado]
+
+| Caso | O que reprova |
+|---|---|
+| Sem par, `locs` desordenado | Ordenação por `k`. [teste:172](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:172) | [nao verificado]
+| Par adjacente, `locs` desordenado | Regressão da lista do HEAD. [teste:180](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:180) | [nao verificado]
+| Timestamp repetido | Reordenação ou perda das ocorrências repetidas. [teste:186](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:186) | [nao verificado]
+| Fechamento na última batida | Mutante `<` → `<=`: emite `par/E` e `sai` no mesmo índice. [teste:194](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:194) | [nao verificado]
+| Aninhado com interno não adjacente | Interno reduzido a `sol/sol`, externo aceito ou fechamento fora da ordem. [teste:203](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:203) | [nao verificado]
+
+Comandos reproduzíveis pelo [verificador em memória:45](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/verificar_par_nao_adjacente_memoria.py:45):
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+verificador_par=escala/tests/verificar_par_nao_adjacente_memoria.py
+python3 "$verificador_par" --modo atual
+python3 "$verificador_par" --modo volta1
+python3 "$verificador_par" --modo pre-cura
+python3 "$verificador_par" --modo mutante-por-k
+python3 "$verificador_par" --modo mutante-sem-ordenar
+python3 "$verificador_par" --modo mutante-ultima
+python3 "$verificador_par" --compilar
+```
+
+Resultados reduzidos: atual **5/5**; volta 1 reprova os três casos de ordem; pré-cura preserva esses três e reprova o interno não adjacente. Os três mutantes morreram nas falhas esperadas. [verificador:93](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/verificar_par_nao_adjacente_memoria.py:93)
+
+`py_compile` passou nos três arquivos tocados, interceptando apenas a gravação de bytecode. [verificador:102](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/verificar_par_nao_adjacente_memoria.py:102) Suite não executada; execução integral Django e certificação: **[nao verificado]**. [nao verificado]
+
+## 09/11 03:32 · sessao 7ca8d208fcb4 · PAR-NAO-ADJACENTE · verificador · origem=Code
+
+A cópia contém a implementação proposta e os testes novos. A comparação abaixo usa o comportamento anterior descrito no diff; identidade do checkout com o HASH e execução do HEAD histórico: **[nao verificado]**. Referências da versão presente: `app/escala/utils.py:437`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:49`.
+
+**1) Quais arranjos mudam**
+
+A condição nova usa **índices e igualdade de timestamps completos**. Para uma abertura no índice `i`, escolhe o fechamento pelo último índice daquele timestamp; exige `0 < i < iz < N−1` e nenhuma batida intermediária cujo timestamp pertença ao conjunto de pontas de **qualquer** par, incluindo pausas abaixo do piso. Não verifica o tipo gravado das pontas. `app/escala/utils.py:453`; `app/escala/utils.py:456`; `app/escala/utils.py:464`; `app/escala/utils.py:466`.
+
+| Arranjo | Comparação com o comportamento anterior |
+|---|---|
+| Par interior adjacente, isoladamente | Continua aceito: não há índice intermediário para vetá-lo. `app/escala/utils.py:466` |
+| Par interior não adjacente, atravessando somente batidas sem timestamp de ponta | Passa de pontas `sol` para `par`; as intermediárias continuam `sol`. `app/escala/utils.py:467`; `app/escala/utils.py:468`; `app/escala/utils.py:472` |
+| Aninhado com par interno adjacente | O externo continua recusado; o interno continua aceito. Os testes fixam exatamente isso. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:115`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:130` |
+| Aninhado cujo par interno também é não adjacente | **O arranjo pode mudar:** o externo permanece vetado, mas o interno passa se atravessar somente soltas. Portanto “aninhado não muda” não vale sem qualificar o interior. `app/escala/utils.py:466`; `app/escala/utils.py:467` |
+| Cruzado, com quatro pontas distintas: `a<c<z<w` | Ambos continuam recusados: cada vão contém uma ponta do outro. A ocorrência desse formato na saída real do pareador não está demonstrada pelos anexos: **[nao verificado]**. `app/escala/utils.py:455`; `app/escala/utils.py:467` |
+| Par começando no primeiro índice ou terminando no último | Continua sem transcrição como par: a primeira batida não entra no laço; o fechamento deve ser estritamente interior. `app/escala/utils.py:457`; `app/escala/utils.py:460`; `app/escala/utils.py:466`; `app/escala/utils.py:473` |
+| Timestamp de uma batida do turno ausente de `locs`, ou índice já consumido | Continua retornando `None`, antes de examinar os pares. A presença é por timestamp, não por identidade do objeto ou tipo. `app/escala/utils.py:446`; `app/escala/utils.py:450`; `app/escala/utils.py:451` |
+| Ponta declarada pelo juiz ausente de `turno.batidas` | Sem posição para o fechamento, não transcreve esse par. Isso não é uma guarda nova. `app/escala/utils.py:456`; `app/escala/utils.py:465`; `app/escala/utils.py:466` |
+| `locs` fora de ordem cronológica | **Pode mudar a lista mesmo sem nenhum par novo:** agora o retorno ordena por `k`, não pela cronologia de `_bats`. `app/escala/utils.py:449`; `app/escala/utils.py:474` |
+
+Há ressalvas específicas para repetições:
+
+- Mesmo `HH:MM`, mas segundos diferentes, permanece distinguível aqui; a chave não é truncada ao minuto. `app/escala/utils.py:448`; `app/escala/utils.py:450`; `app/escala/utils.py:456`.
+- Timestamp completo repetido colapsa identidades: `_idx` conserva o **primeiro** `k`; `_pos` conserva a **última** posição; `_ini_par` conserva o último fechamento para uma abertura repetida. Essa combinação já decorre dos mapas usados pela função. `app/escala/utils.py:448`; `app/escala/utils.py:454`; `app/escala/utils.py:456`.
+- Uma duplicata intermediária de uma ponta também veta o vão: o filtro compara timestamps, sem distinguir “esta ponta” de “outro objeto no mesmo instante”. Duplicatas de soltas podem atravessar e produzir `k` repetido no retorno. `app/escala/utils.py:450`; `app/escala/utils.py:455`; `app/escala/utils.py:467`; `app/escala/utils.py:472`.
+- Duas batidas adjacentes com timestamp idêntico podem receber `S` e `E` do mesmo par e o mesmo `k`: a condição exige ordem dos **índices**, não duração positiva. O juiz admite pares com `z.timestamp >= a.timestamp`. `app/escala/utils.py:466`; `app/escala/utils.py:468`; `app/ponto/turnos.py:813`.
+- `_fins` também é um conjunto de timestamps: aceitar um fechamento faz o laço pular qualquer abertura posterior com aquele timestamp. Portanto pontas compartilhadas não devem ser tratadas como pares independentes. `app/escala/utils.py:459`; `app/escala/utils.py:462`; `app/escala/utils.py:469`.
+
+Assim, além da ampliação pretendida, há mudança de ordenação e possível renumeração dos pares posteriores, pois `_n` cresce para cada par aceito. Uma afirmação de preservação de **toda a lista** exige considerar esses efeitos. `app/escala/utils.py:468`; `app/escala/utils.py:470`; `app/escala/utils.py:474`.
+
+**2) Ordem do retorno e leitores**
+
+O chamador produtivo direto identificado é `_match_marcos`. Ele usa a lista para localizar extremos por timestamp, alinhar, emitir órfãs e marcar consumo; não lê pares como duas tuplas obrigatoriamente consecutivas. `app/escala/utils.py:596`; `app/escala/utils.py:605`; `app/escala/utils.py:613`; `app/escala/utils.py:621`; `app/escala/utils.py:622`.
+
+O alinhador encontra `ent`/`sai` pelos rótulos, agrupa pontas pelo número do par e pelas letras `S`/`E`, ordena os números e ordena soltas pelo timestamp. Portanto esse leitor não depende da antiga proximidade das tuplas S/E. **A ordem das órfãs**, porém, segue a lista recebida. `app/escala/utils.py:524`; `app/escala/utils.py:526`; `app/escala/utils.py:530`; `app/escala/utils.py:564`; `app/escala/utils.py:621`.
+
+`k` pode repetir nas colisões descritas acima; `k=None` impede o retorno da lista pela guarda anterior. O `sorted` não deduplica nem corrige colisões. `app/escala/utils.py:448`; `app/escala/utils.py:451`; `app/escala/utils.py:474`.
+
+**3) Quem escreve, quem lê e qual significado**
+
+| Conteúdo | Produção e leitura |
+|---|---|
+| Papéis transitórios `par`/`sol` | `_papeis_do_turno` produz; `_alinhar_por_papel` e `_match_marcos` leem. Existe outro produtor do mesmo formato, `_papeis_por_alternancia`, acionado sem `turno`. `app/escala/utils.py:468`; `app/escala/utils.py:472`; `app/escala/utils.py:477`; `app/escala/utils.py:596`; `app/escala/utils.py:613` |
+| `minutos_realizados` destinado à ata | O builder consulta `realizado_do_dia`; `ata_do_dia` transporta o inteiro; o cartório entrega a ata a `lavrar_veredito`, cuja porta atribui e persiste. `app/escala/utils.py:2045`; `app/escala/utils.py:2058`; `app/ponto/services/cartorio.py:706`; `app/ponto/services/cartorio.py:1802`; `app/ponto/portas/celula.py:1028`; `app/ponto/portas/celula.py:1035` |
+| Leitores do minuto lavrado | `grade_da_celula`, conferência PDF, comparação ata×juiz e diagnóstico `ata_sem_turno` no espelho. `app/escala/services/leitor_celula.py:406`; `app/folha/validacao_pdf.py:48`; `app/ponto/services/bordas_realizado.py:87`; `app/ponto/services/espelho.py:891` |
+| Intervalos enviados ao motor | `periodos_de_turnos` copia `intervalos_do_turno`; o caminho da ata também transporta pausas declaradas, recuperando timestamps das batidas. `_intra_real` soma os intervalos recebidos. `app/ponto/adaptador_motor.py:44`; `app/ponto/motor_calculo_v2.py:713`; `app/ponto/motor_calculo_v2.py:721`; `app/ponto/motor_calculo_v2.py:1909` |
+
+**Não há um significado único intercambiável entre esses conteúdos:**
+
+- **Par geométrico versus descanso descontável:** o papel `par` inclui pausas abaixo do piso; o adaptador transporta somente intervalos de pelo menos 900 segundos. Confundir esses conjuntos alteraria a conta. `app/escala/utils.py:453`; `app/ponto/turnos.py:499`; `app/ponto/turnos.py:545`; `app/ponto/turnos.py:565`; `app/ponto/adaptador_motor.py:44`.
+- **Dia:** o realizado usa `data_turno`; o motor mantém mapa para esse dia, mas há trechos com fallback explícito para a data civil da entrada. Não cabe substituir indiscriminadamente um pelo outro. `app/ponto/turnos.py:719`; `app/ponto/motor_calculo_v2.py:884`; `app/ponto/motor_calculo_v2.py:894`; `app/ponto/motor_calculo_v2.py:685`.
+- **Precisão:** o realizado trunca cada ponta ao minuto antes de subtrair; o motor soma segundos/60. A ata endereça por minuto, e o motor recupera o primeiro objeto daquele minuto. O alimentador de papéis da ata, diferentemente, recusa luzes com quantidade de batidas diferente de um. `app/ponto/turnos.py:605`; `app/ponto/turnos.py:740`; `app/ponto/turnos.py:758`; `app/ponto/motor_calculo_v2.py:600`; `app/ponto/motor_calculo_v2.py:609`; `app/ponto/motor_calculo_v2.py:1911`; `app/ponto/turnos.py:1656`.
+- **Pontas:** o juiz aceita igualdade temporal; a transcrição exige índices interiores; o realizado admite fechamento da pausa igual ao fim; o motor conserva interseções de duração positiva. As contas subtraem instantes, sem acrescentar uma unidade pelas pontas. `app/ponto/turnos.py:813`; `app/escala/utils.py:466`; `app/ponto/turnos.py:759`; `app/ponto/motor_calculo_v2.py:1886`; `app/ponto/motor_calculo_v2.py:1887`; `app/ponto/motor_calculo_v2.py:1911`.
+
+Os **660** da fixture correspondem a `21:01→22:00`, após truncamento; `20:00→22:00` corresponde aos **599** do outro teste. Isso não demonstra igualdade com o resultado financeiro do motor. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:96`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:104`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:204`.
+
+**4) Classes de reprovação**
+
+- **Segundo juiz / derivação paralela:** o trecho alterado lê os pares das funções existentes e calcula sua representabilidade; não redescobre pares por tipo ou duração. As autoridades registradas continuam sendo `_match_marcos` para ocupação de marcos e `intervalos_do_turno` para intervalo. Entretanto, ele continua omitindo alguns pares do juiz, como o externo aninhado; não é transcrição irrestrita de todos os pares. `app/core/juizes.py:200`; `app/core/juizes.py:202`; `app/escala/utils.py:453`; `app/escala/utils.py:467`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:123`.
+- **Segundo escritor:** a função produtiva só devolve uma lista. O teste novo de integração, contudo, atribui e salva `CelulaDia.ata` diretamente, fora da porta registrada — preparação de fixture, não novo escritor produtivo. `app/escala/utils.py:474`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:226`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:232`; `app/core/portas.py:112`.
+- **Campo com dois significados:** nenhum campo persistido novo aparece no trecho alterado. O cuidado necessário é distinguir `par` geométrico, intervalo descontável e minuto de relógio, conforme os contratos acima. `app/escala/utils.py:453`; `app/escala/utils.py:474`; `app/ponto/adaptador_motor.py:44`; `app/ponto/turnos.py:605`.
+
+Quanto ao RED, executei **os seis corpos puros em memória**, com funções extraídas do código e substituições de Django/timezone. Isso verifica esse ambiente reduzido; execução integral Django e HEAD histórico: **[nao verificado]**. Os corpos e as funções exercitadas estão em `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:49`; `app/escala/utils.py:437`; `app/escala/utils.py:502`.
+
+| Teste novo | Condição anterior reconstruída | Proposta, execução reduzida | [nao verificado]
+|---|---|---|
+| Duas soltas | Falha na asserção dos papéis | Passa. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:94` |
+| Anexo 21:01→22 | Falha nos papéis | Passa. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:102` |
+| Uma solta | Falha nos papéis | Passa. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:112` |
+| Aninhado | Passa | Passa. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:115` |
+| Aninhado abaixo do piso | Passa | Passa. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:130` |
+| Ordem do alinhador | Passa | Passa. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:139` |
+| Integração NaAta | **[nao verificado]** | **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:234` |
+
+Logo, **não é verdade que cada teste novo reprova a condição anterior**. Os três últimos testes puros preservam comportamentos. Além disso, o teste NaAta consulta o builder; não relê `minutos_realizados` persistido pela porta. A ata inserida manualmente nem contém essa chave. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:184`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:226`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:240`.
+
+**Mutante sobrevivente na execução reduzida:** trocar `_iz < len(_bats)-1` por `_iz <= len(_bats)-1` passou nos seis testes. Permitiria emitir fechamento de par na última batida e também `sai`; os casos novos não exercitam esse limite. Sobrevivência na integração integral: **[nao verificado]**. `app/escala/utils.py:466`; `app/escala/utils.py:468`; `app/escala/utils.py:473`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:84`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:108`.
+
+**5) Relógio, nome/CPF e ordem**
+
+`ParNaoAdjacente` usa data fixa e objetos novos `SimpleNamespace`, sem nome/CPF e sem consulta explícita ao relógio nos seus corpos. Não há dependência explícita entre os seis testes. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:42`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:58`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:88`.
+
+`ParNaoAdjacenteNaAta` **herda nome, CPF e username literais** da fixture; origem real desses identificadores: **[nao verificado]**. Seus argumentos diretos fixam `hoje` e `agora`. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:158`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:159`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:184`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:223`; `app/escala/tests/instante.py:12`.
+
+Essa fixture, entretanto, **alcança relógio solto indiretamente**: criar a escala aciona recomputação com `timezone.localdate()`; criar batidas aciona o cartório sem `agora`, que consulta data/hora corrente. Influência efetiva nos asserts e independência integral da ordem: **[nao verificado]**. `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:168`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:221`; `app/ponto/signals.py:63`; `app/ponto/signals.py:72`; `app/ponto/signals.py:93`; `app/ponto/signals.py:131`; `app/ponto/services/cartorio.py:1965`; `app/ponto/services/cartorio.py:1989`.
+
+**6) Outros sítios e classificação da pergunta**
+
+| Sítio | Mesma pergunta ou outra? |
+|---|---|
+| `_papeis_por_alternancia` e Zona 5 | Mesma finalidade de alinhamento, **outro contrato de entrada**: pontas de períodos alternadas, sem `turno`, e não todas as batidas internas. O defeito idêntico por esse caminho está **[nao verificado]**. `app/escala/utils.py:489`; `app/escala/utils.py:491`; `app/escala/utils.py:496`; `app/escala/utils.py:597`; `app/ponto/motor_calculo_v2.py:3060`; `app/ponto/motor_calculo_v2.py:3062` |
+| `marco_ocupado_pela_batida` | Também usa o alinhamento sem turno; um único período não satisfaz a guarda de quatro pontas da alternância. Outro contrato, sem demonstração do mesmo defeito. `app/escala/utils.py:427`; `app/escala/utils.py:489` |
+| `_alinhar_por_papel` | Exige consecutividade dos **marcos cadastrais** S/E, não das batidas reais. Outra condição. `app/escala/utils.py:517`; `app/escala/utils.py:520`; `app/escala/utils.py:561` |
+| `_pares_marcados` | Há adjacência no ramo residual, mas ele **produz a decisão do juiz**. Pontas declaradas são pareadas antes. Alterá-lo muda a pergunta de origem, potencialmente os minutos. `app/ponto/turnos.py:811`; `app/ponto/turnos.py:818`; `app/ponto/turnos.py:880` |
+| `_borda_posicional` e `_pausa_fechada_carimbada` | Procuram figuras entre vizinhas para decidir borda/pausa carimbada; não transcrevem a lista de pares recebida. Outra pergunta. `app/ponto/turnos.py:679`; `app/ponto/turnos.py:697`; `app/ponto/turnos.py:912`; `app/ponto/turnos.py:924` |
+| Adaptador, `_intra_real`, `segmentos_do_motor` | Transportam ou consomem intervalos sem exigir adjacência entre batidas cruas. `app/ponto/adaptador_motor.py:44`; `app/ponto/motor_calculo_v2.py:1910`; `app/ponto/calculador/alimentacao.py:133` |
+| Caminho da ata para o motor | Lê pares pelas chaves declaradas da ata/DNA e recupera seus instantes. Não exige vizinhança entre batidas cruas. `app/ponto/juiz_batida.py:280`; `app/ponto/motor_calculo_v2.py:714` |
+| Vão entre períodos no motor | Compara períodos consecutivos e consulta o par exato no juiz. Outra representação; não é a transcrição das batidas internas para papéis. `app/ponto/motor_calculo_v2.py:2978`; `app/ponto/motor_calculo_v2.py:2983`; `app/ponto/motor_calculo_v2.py:2987` |
+| `primeiro_furo_posicional` | Deduz candidato por duração entre marcas adjacentes para responder sobre furo posicional. Outra pergunta, sem receber o par pronto do juiz. `app/ponto/propositor.py:282`; `app/ponto/propositor.py:296` |
 
 ## 09/11 03:28 · sessao 494b8856f826 · - · - · origem=Ronald (tmux)
 
@@ -893,221 +1046,4 @@ Resultados: **6 RED verdes; seis mutantes detectados, cada MORDE individual OK; 
 
 Ruff indisponível no ambiente; lint: [nao verificado].
 
-## 09/11 02:56 · sessao 996a00785e71 · C7-DISPUTA-FECHA-POR-UM-JUIZ · censo · origem=Code
-
-**CENSO**
-
-O núcleo C7 e o escritor de Chamado já estão implementados nos sítios do plano. A falta principal encontrada é **idade ainda absolvendo indiretamente dentro do C6**; também restam apresentações que anunciam “pode fechar” sem consultar toda a resposta do C7. (`app/chamados/models.py:1856`; `app/chamados/juizes.py:674`; `app/chamados/services/explicador.py:137`; `app/chamados/tests/test_chokepoint_chamado_gate.py:152`)
-
-Execução de suíte, impacto atual em produção e correspondência independente da cópia ao HASH informado: **[não verificado]**. [nao verificado]
-
-**leitores:**
-
-| Sítio | Resultado da leitura |
-|---|---|
-| `app/core/juizes.py:266`, `app/core/juizes.py:267` | C6 e C7 já registrados: `pergunta_viva` e `DisputaSupervisao.pode_fechar`. |
-| `app/chamados/models.py:1856` | C7 exige ausência de respostas sem veredito **e** ausência de `fio_vivo`. |
-| `app/chamados/models.py:1894`, `app/chamados/models.py:1904` | `.fechar` reaplica a guarda de resposta e consulta C6; fechamento normal recusa pergunta viva. |
-| `app/chamados/models.py:3375` | `p.viva` já delega diretamente a `pergunta_viva`; não mantém regra independente. |
-| `app/chamados/models.py:3336` | `q_vivas` é pré-filtro deliberadamente amplo; não representa a resposta exata do juiz. |
-| `app/chamados/services/materializacao.py:1314` | Contagem de pendentes apenas compõe retorno; quem libera fechamento é `pode_fechar`, em `:1316`. |
-| `app/chamados/services/becos.py:29` | Visibilidade, resposta e destino identificam o **recorte de beco**; `FECHAVEL` depende de C7 em `:33`, reaplicado em `:56`. |
-| `app/chamados/services/acoes_disputa.py:130`, `app/chamados/services/fio.py:660` | Ainda barram **regularização/materialização** quando existe viva sem resposta. São guardas da ação anterior ao fechamento; a autorização final volta a C7 em `app/chamados/services/materializacao.py:1316`. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:83` | Pré-checagem usa somente `fio_vivo`; tenta `.fechar` em `:88` e captura a recusa adicional da porta em `:92`. Não contorna a porta. |
-
-**Falta efetiva: relógio dentro do juiz consumido pelo fechamento.**
-
-- `_dentro_da_janela_viva` usa `date.today()` e a janela corrente/anterior. (`app/chamados/juizes.py:569`, `app/chamados/juizes.py:575`, `app/chamados/juizes.py:601`)
-- Em `_pergunta_materializada_de_fato`, pergunta carimbada por via sem testemunha recebe `True` simplesmente por estar **fora da janela**, antes da consulta ao fato. (`app/chamados/juizes.py:660`, `app/chamados/juizes.py:674`, `app/chamados/juizes.py:679`)
-- No fallback sem slot, destino encerrado só é confrontado com a falta quando o dia está dentro da janela; fora dela, `_dest_ok` pode resolver a pergunta. (`app/chamados/juizes.py:743`, `app/chamados/juizes.py:764`, `app/chamados/juizes.py:774`)
-- C6 restringe a rechecagem da falta à janela e depois consulta esse lastro; portanto o relógio ainda pode retirar vitalidade e liberar C7. Trata-se de caminho estático identificado; quantidade atualmente afetada: **[não verificado]**. (`app/chamados/juizes.py:1217`, `app/chamados/juizes.py:1234`; `app/chamados/models.py:1861`)
-- O caso C7 de silêncio testa disputa aberta há 45 dias com pergunta recente **sem carimbo**; não cobre esses dois caminhos carimbados. (`app/chamados/tests/test_c7_red_minimos.py:115`, `app/chamados/tests/test_c7_red_minimos.py:289`, `app/chamados/tests/test_c7_red_minimos.py:299`)
-
-**Apresentação e outros usos, sem autorização de fechamento:**
-
-| Sítio | O que decide |
-|---|---|
-| `app/chamados/services/explicador.py:137` | Produz `pode_fechar = not fio_vivo(ps)`, sem a guarda adicional de respostas sem veredito. O consumidor transforma isso em orientação “Fechar/regularizar”; há possibilidade de apresentação divergir da porta. (`app/chamados/services/desenlace.py:63`; `app/chamados/models.py:1861`) |
-| `app/chamados/services/fio.py:312` | Carrega a explicação para apresentação; pode passar perguntas do chamado, enquanto C7 avalia a disputa inteira. (`app/chamados/models.py:1861`) |
-| `app/chamados/relatorios_disputa.py:18` | Classifica `PRONTA_FECHAR` apenas pela ausência de vivas; não consulta a guarda adicional C7. (`app/chamados/relatorios_disputa.py:20`) |
-| `app/chamados/services/explicador.py:93` | Lastro explica o estado individual; a decisão agregada está separada em `:137`. |
-| `app/chamados/services/fio.py:283`, `app/chamados/services/raiox.py:185` | `.viva` e lastro/cache escolhem disponibilidade de ação na tela. |
-| `app/chamados/services/raiox.py:72`, `app/chamados/services/raiox.py:133` | `q_vivas` alimenta crédito/badge. |
-| `app/chamados/services/janela_colab.py:63`, `app/chamados/services/cobranca.py:229` | Visibilidade fora da janela e contagem para cobrança/SLA. |
-| `app/chamados/services/aviso_pendencia.py:11`, `app/chamados/services/pergunta_no_app.py:47`, `app/chamados/services/vigia_fio.py:748` | Pré-filtro SQL seguido de C6 para aviso, app e vigia, respectivamente. |
-| `app/chamados/management/commands/arquivar_competencia_encerrada.py:158` | `p.viva` impede arquivamento de **Chamado** com conversa viva; não fecha disputa. |
-| `app/chamados/services/disputa_emissao.py:1781` | Lastro protege pergunta respondida contra carimbo S128; fechamento fica separado em `:1887`. |
-
-A reaplicação estática do detector C7 não encontrou `q_vivas`, lastro ou `.viva` autorizando diretamente fechamento. Esse detector examina `if/while` cujo corpo fecha, com aliases e derivações locais; **não alcança toda dependência indireta**, como a janela acima. (`app/chamados/tests/test_c7_red_minimos.py:475`, `app/chamados/tests/test_c7_red_minimos.py:491`, `app/chamados/tests/test_c7_red_minimos.py:496`)
-
-**escritores:**
-
-O estado aberta/fechada da disputa é `fechada_em`; a propriedade `aberta` deriva desse campo. O único escritor material de **fechamento** encontrado em produção foi `DisputaSupervisao.fechar`, que salva data, autor, resolução e motivo juntos, com trilha. (`app/chamados/models.py:1754`, `app/chamados/models.py:1832`, `app/chamados/models.py:1940`, `app/chamados/models.py:1944`, `app/chamados/models.py:1945`)
-
-Os **15 sítios de chamada direta** encontrados:
-
-| Sítio | Porta e consulta anterior |
-|---|---|
-| `app/api/foto_recebida.py:80` | `.fechar` normal; valida antes em `:79`; C6 é consultado dentro da porta. |
-| `app/chamados/models.py:1958` | `admin_encerra` → `.fechar`, exceção nomeada; exige motivo preenchido em `:1955`. |
-| `app/chamados/models.py:2080` | `remover_motivo` → `.fechar` normal quando acabam motivos; C6 fica na porta. |
-| `app/colaboradores/services/desligamento.py:142` | `.fechar`, exceção `desligamento`; consulta respostas sem veredito em `:140`. |
-| `app/ponto/services/entrada_sincronizada.py:59` | `.fechar` normal; `pode_fechar` em `:58`. |
-| `app/chamados/services/becos.py:57` | `.fechar` normal; `pode_fechar` em `:56`. |
-| `app/chamados/services/competencia_trancada.py:204` | `.fechar`, exceção `competencia_trancada`; `pode_fechar` em `:202`. |
-| `app/chamados/services/disputa_emissao.py:1216` | `.fechar` normal; `pode_fechar` em `:1210`; ausência de ata ainda impede autoencerramento em `:1211`. |
-| `app/chamados/services/disputa_emissao.py:1888` | `.fechar` normal; `pode_fechar` em `:1887`; pergunta em voo adia fechamento em `:1885`. |
-| `app/chamados/services/materializacao.py:586` | `.fechar` normal; `pode_fechar` em `:585`. |
-| `app/chamados/services/materializacao.py:1333` | `.fechar` normal; `pode_fechar` em `:1316`. |
-| `app/chamados/reconciliador.py:412` | `.fechar` normal; `pode_fechar` em `:411`. |
-| `app/chamados/reconciliador.py:612` | `.fechar` normal; `pode_fechar` em `:611`. |
-| `app/chamados/reconciliador.py:1171` | `.fechar` normal; respostas sem veredito em `:1163`, C7 em `:1170`. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88` | `.fechar` normal; `fio_vivo` em `:83`; recusa da porta capturada em `:92`. |
-
-Esses chamadores não calculam idade para fechar; a dependência de relógio identificada está **dentro do C6**, alcançado pela porta. (`app/chamados/juizes.py:674`, `app/chamados/juizes.py:764`, `app/chamados/juizes.py:1234`; `app/chamados/models.py:1904`)
-
-Não foi encontrado `update/bulk_update` de produção fechando disputa fora da porta. As outras atribuições materiais de `fechada_em` encontradas são **reaberturas**, que escrevem `None`. (`app/chamados/models.py:1944`, `app/chamados/models.py:2157`, `app/chamados/models.py:2169`, `app/chamados/models.py:2181`, `app/chamados/models.py:2185`) Escritor dinâmico ou externo à cópia: **[não verificado]**.
-
-Os caminhos indiretos relevantes também chegam às portas:
-
-- Signals de posto/âncora → `remover_motivo` → `.fechar`. (`app/colaboradores/signals.py:77`; `app/escala/signals.py:161`; `app/chamados/models.py:2080`)
-- Signal de pergunta → serviço de becos → C7 → `.fechar`. (`app/chamados/signals.py:223`; `app/chamados/services/becos.py:56`)
-- Cron de becos está configurado com `--alarme`; o comando só aplica quando `--apply` e sem `--alarme`. (`app/config/crons.py:663`; `app/chamados/management/commands/fechar_becos_disputa.py:30`)
-- S143 → resolver perguntas → C7 → `.fechar`. (`app/chamados/signals.py:115`; `app/chamados/services/disputa_emissao.py:1887`)
-- Ato de trancar e comando de passivo usam o mesmo serviço de competência trancada. (`app/ponto/services/fechamento.py:1427`; `app/chamados/management/commands/encerrar_por_competencia_trancada.py:29`; `app/chamados/services/competencia_trancada.py:204`)
-- Materialização comum e passivo compartilham a cauda de fechamento. (`app/chamados/services/materializacao.py:1378`; `app/chamados/services/passivo_validado.py:405`)
-- O signal posterior ao fechamento da disputa reconcilia **Chamado**, não regrava fechamento da disputa. (`app/chamados/signals.py:42`)
-
-**L-111 e desligamento:**
-
-| Item | Situação na cópia |
-|---|---|
-| `reconciliar_disputa_zumbi` | Command ausente, sem chamada executável encontrada; lápide em `app/config/crons.py:835`; teste de ausência em `app/chamados/tests/test_c7_red_minimos.py:57`. |
-| `heal_disputas_legado` | Command ausente, sem chamada executável encontrada; lápide em `app/config/crons.py:1444`; teste de ausência em `app/chamados/tests/test_c7_red_minimos.py:61`. |
-| `veredito_do_explicador` | Definição e chamadas ausentes; lápide em `app/chamados/juizes.py:2115`; teste de ausência em `app/chamados/tests/test_c7_red_minimos.py:51`. |
-| `disputa_fecha_na_cascata_de_desligamento` | Definição e chamadas ausentes; lápide em `app/chamados/juizes.py:2116`; teste de ausência em `app/chamados/tests/test_c7_red_minimos.py:54`. |
-| Expiração por silêncio de 30 dias | Bloco removido, com lápide; teste cobra ausência das funções e da opção antiga. (`app/chamados/management/commands/arquivar_competencia_encerrada.py:61`; `app/chamados/tests/test_c7_red_minimos.py:307`) |
-| `.update` do desligamento | **Já saiu**. Hoje há guarda em `app/colaboradores/services/desligamento.py:140` e `.fechar(..., motivo=FECHOU_DESLIGAMENTO)` em `:142`. |
-
-Os testes remanescentes dos quatro apagados verificam ausência; não os invocam. Há escritas cruas de estado legado em fixtures, separadas do inventário de produção. (`app/chamados/tests/test_c7_red_minimos.py:51`; `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:141`; `app/chamados/tests/test_signals.py:268`)
-
-**Escritor de Chamado — cinco mecânicos:**
-
-| Origem | Escrita atual |
-|---|---|
-| `app/ponto/management/commands/reconciliar_grade.py:454` | `retirar_contexto`. |
-| `app/ponto/management/commands/reconciliar_grade.py:473` | `renovar_contexto` e `retirar_contexto` em `:474`. |
-| `app/ponto/management/commands/gerar_celulas.py:255` | `renovar_contexto`. |
-| `app/chamados/management/commands/nomear_marco_por_lampada.py:109` | `renovar_contexto`; evento condicionado à escrita em `:111`. |
-| `app/ponto/views.py:288` | `renovar_contexto`, preservando o restante do contexto. |
-
-A persistência desses atos fica nas portas de contexto; **nenhum dos cinco sítios continua salvando cru**. (`app/chamados/services/contexto.py:104`, `app/chamados/services/contexto.py:127`)
-
-**Escritor de Chamado — seis operações/sítios:**
-
-| Origem | Campo | Porta atual |
-|---|---|---|
-| `app/chamados/services/cobranca.py:178` | `prazo_sla` | `definir_prazo_sla`; persistência em `app/chamados/models.py:591`. |
-| `app/chamados/services/disputa_emissao.py:1642` | `prazo_sla` | Mesma porta, `app/chamados/models.py:573`. |
-| `app/ponto/management/commands/escalonar_chamados_supervisao.py:103` | `escalonado_para_dp`, instante | `marcar_escalonado_dp`; persistência em `app/chamados/models.py:610`. |
-| `app/chamados/services/abertura.py:115` | Nome real: `ticket_id_glpi` | `apontar_ticket_glpi`; persistência em `app/chamados/services/vinculos.py:117`. |
-| `app/chamados/services/limbo_folgas.py:69` | `descricao` | `reescrever_texto`; persistência em `app/chamados/services/texto.py:36`. |
-| `app/api/views.py:3160` | `titulo`, `assunto` | `reescrever_texto`, definida em `app/chamados/services/texto.py:21`. |
-
-São seis **sítios**, com SLA em dois deles; todos já passam por porta. A enumeração está também no selo E1. (`app/chamados/tests/test_porta_chamado_e1.py:132`)
-
-A matriz já declara `teste=` e `idempotencia=`. O censo AST atribuível retornou zero escritores de Chamado fora dos módulos declarados como porta; seu alcance exclui testes/migrations e admite escritas não atribuíveis. (`app/core/contratos_estruturais.py:497`, `app/core/contratos_estruturais.py:500`; `app/core/portas.py:196`; `app/core/censo_escritas.py:43`, `app/core/censo_escritas.py:54`)
-
-Há documentação envelhecida: a nota que ainda acusa `.update` no desligamento e a que lista quatro vizinhos fora de porta não descrevem mais essas chamadas atuais. (`app/core/contratos_estruturais.py:730`, `app/core/contratos_estruturais.py:1015`; `app/colaboradores/services/desligamento.py:142`; `app/chamados/tests/test_chokepoint_chamado_gate.py:152`, `app/chamados/tests/test_chokepoint_chamado_gate.py:161`)
-
-**DECISÕES:**
-
-1. **Encaixe da retirada de idade:** corrigir os ramos temporais dentro do C6 existente, preservando C7 como consumidor; escolher a organização dos auxiliares e cobrir os caminhos carimbados e sem slot. A lei já proíbe absolvê-los por relógio; não exige juiz novo. (`app/docs/BACKLOG.md:1466`; `app/chamados/juizes.py:674`, `app/chamados/juizes.py:764`)
-
-2. **Unificar a resposta apresentada:** decidir como explicador e relatório consumirão `d.pode_fechar()` e como receberão o conjunto completo da disputa. Hoje seus booleanos usam só C6, enquanto C7 acrescenta respostas sem veredito. (`app/chamados/services/explicador.py:137`; `app/chamados/services/fio.py:312`; `app/chamados/relatorios_disputa.py:20`; `app/chamados/models.py:1861`)
-
-3. **Trava e releitura da porta:** definir o encaixe da avaliação sob trava. Atualmente respostas e vivas são lidas antes do `atomic` e da tomada de travas; possível divergência concorrente é inferência estática, reprodução **[não verificado]**. (`app/chamados/models.py:1894`, `app/chamados/models.py:1903`, `app/chamados/models.py:1913`, `app/chamados/models.py:1918`)
-
-4. **Tela de encerramento:** falta oferecer a porta existente por uma ação fina com motivo obrigatório; o backlog a mantém como obra própria `C7-TELA-ADMIN-ENCERRA`. Nome da rota, botão e apresentação são desenho; a regra já está na porta. (`app/docs/BACKLOG.md:1469`; `app/chamados/models.py:1951`, `app/chamados/models.py:1955`)
-
-5. **Não reconstruir E1/E2 do escritor de Chamado:** os onze sítios pedidos já migraram; resta reconciliar a descrição antiga do backlog/matriz com o código e manter os selos existentes. (`app/docs/BACKLOG.md:1466`; `app/chamados/tests/test_chokepoint_chamado_gate.py:152`, `app/chamados/tests/test_chokepoint_chamado_gate.py:161`; `app/core/contratos_estruturais.py:497`)
-
-6. **Sobreposição documental com obras em curso:**
-
-   | Arquivo | Sobreposição a coordenar |
-   |---|---|
-   | `chamados/services/disputa_emissao.py` | Autoencerramento/S128 do censo e fila `RETRATADA-CONVERSA-E-REABRIR`; a E4 também prevê reduzir escritores de estado da pergunta. (`app/chamados/services/disputa_emissao.py:1210`, `:1887`; `app/docs/BACKLOG.md:782`, `:1859`) |
-   | `chamados/services/fio.py` | Explicação/regularização e migração dos leitores para `tarefa_do_dia` na E3, que absorve FIO-MUDO-B. (`app/chamados/services/fio.py:312`, `:660`; `app/docs/BACKLOG.md:1807`, `:1858`) |
-   | `chamados/models.py` | Porta C7 já contém mudanças de trava/decisão da E1; E4 prevê encolher portas de estado da pergunta. (`app/chamados/models.py:1914`, `:1930`; `app/docs/BACKLOG.md:1859`) |
-   | `chamados/juizes.py` | A retirada de idade toca C6, também nomeado pela obra E2 e pelo passivo O261-b. (`app/chamados/juizes.py:674`; `app/docs/BACKLOG.md:1857`, `:2237`) |
-
-   Conflitos efetivos de merge entre branches/worktrees: **[não verificado]**.
-
-As faltas identificadas acima são de implementação, apresentação e encaixe; a lei fornecida já determina juiz único, exceções por porta e proibição da absolvência por idade. Não identifiquei decisão normativa adicional necessária para essas correções. (`app/docs/BACKLOG.md:1466`)
-
-perguntas de lei: 0
-
-## 09/11 02:54 · sessao f4a9775a4f46 · - · - · origem=Ronald (tmux)
-
-Censo por AST de 3.459 arquivos `.py` da cópia, sem falhas de parse; incluídos arquivos fora de `app`. Não há definição nem chamada AST dos quatro nomes L-111, inclusive `call_command('nome')`; referências restantes são lápides, documentação e testes de ausência (`app/chamados/juizes.py:2115`; `app/config/crons.py:835`; `app/config/crons.py:1444`; `app/chamados/tests/test_c7_red_minimos.py:45`). Execução de produção, Git/HEAD real e banco: [não verificado].
-
-**Escritor material da disputa**
-
-- `DisputaSupervisao.fechar`: atribui `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` e salva somente esses campos; consulta respostas sem veredito e `pergunta_viva`, grava trilha; `app/chamados/models.py:1894`, `:1904`, `:1940`, `:1944`, `:1945`.
-- `admin_encerra` exige motivo preenchido e delega à porta; `app/chamados/models.py:1951`, `:1955`, `:1958`.
-- Reaberturas escrevem **abertura**, não fechamento: `reabrir_admin` zera campos e salva; `app/chamados/models.py:2157`, `:2169`. `reabrir_sistema` idem; `:2181`, `:2185`.
-- Nenhum `update`/`bulk_update` de `fechada_em` de produção encontrado na varredura; contrato explícito e tripwire em `app/core/portas.py:424` e `app/chamados/tests/test_c7_red_minimos.py:574`. Limite: AST estático não prova inexistência de escritor dinâmico externo [não verificado].
-- `DisputaSupervisao` usa `fechada_em` como estado aberta/fechada (`app/chamados/models.py:1754`, `:1832`); `status_local` refere-se a Chamado, não a esse campo da disputa (`app/chamados/signals.py:33`).
-
-**Todos os 15 chamadores diretos de `.fechar` de disputa**
-
-| Local | Consulta anterior / seleção | Porta |
-|---|---|---|
-| `app/api/foto_recebida.py:80` | Último motivo foto; valida respostas em `:79`; sem pré-`pode_fechar` | Normal; própria porta consulta C6 |
-| `app/chamados/models.py:1958` | Motivo obrigatório `:1955` | `admin_encerra` |
-| `app/chamados/models.py:2080` | Sem motivos restantes `:2074`; sem pré-`pode_fechar` | Normal; própria porta consulta C6 |
-| `app/colaboradores/services/desligamento.py:142` | `respostas_sem_veredito` em `:140` | Exceção `desligamento` |
-| `app/ponto/services/entrada_sincronizada.py:59` | `pode_fechar` em `:58`; seleção de pai com um único órfão `:54` | Normal |
-| `app/chamados/services/becos.py:57` | `pode_fechar` em `:56` | Normal |
-| `app/chamados/services/competencia_trancada.py:204` | `pode_fechar` em `:202` | Exceção `competencia_trancada` |
-| `app/chamados/services/disputa_emissao.py:1216` | `pode_fechar` em `:1210`; sem ata impede fecho em `:1211` | Normal |
-| `app/chamados/services/disputa_emissao.py:1888` | `pode_fechar` em `:1887`; pergunta em voo impede em `:1885` | Normal |
-| `app/chamados/services/materializacao.py:586` | `pode_fechar` em `:585` | Normal |
-| `app/chamados/services/materializacao.py:1333` | `pode_fechar` em `:1316`; contagem `perguntas_vivas_de` em `:1314` só compõe retorno | Normal |
-| `app/chamados/reconciliador.py:412` | `pode_fechar` em `:411` | Normal |
-| `app/chamados/reconciliador.py:612` | `pode_fechar` em `:611` | Normal |
-| `app/chamados/reconciliador.py:1171` | Respostas sem veredito em `:1163`; `pode_fechar` em `:1170` | Normal |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88` | `fio_vivo` em `:83`; porta recusa respostas e comando captura `ValueError` em `:92` | Normal |
-
-Nenhum desses **chamadores diretos** calcula idade para executar fechamento; porém o juiz consultado mantém dependência indireta de relógio: `app/chamados/juizes.py:674`–`:675`, `:764`, alcançados por C6 em `:1234` e pela porta em `app/chamados/models.py:1904`. Portanto não afirmar “idade totalmente eliminada”.
-
-**Desligamento**
-
-O update direto saiu: há comentário explícito em `app/colaboradores/services/desligamento.py:133`, guarda de respostas em `:140`, chamada `.fechar(... motivo=FECHOU_DESLIGAMENTO)` em `:142`. O teste busca especificamente `update(fechada_em=...)` em `app/chamados/tests/test_c7_red_minimos.py:34`.
-
-**Signals, crons e commands indiretos**
-
-- `app/escala/signals.py:161` e `app/colaboradores/signals.py:77` chamam `remover_motivo`, que fecha pela porta em `app/chamados/models.py:2080`; a seleção “acabaram motivos” continua em `:2074`, mas a porta valida C6.
-- Evento de Pergunta chama fechamento de beco em `app/chamados/signals.py:223`–`:225` → `app/chamados/services/becos.py:74`, `:78` → `.fechar` em `:57`; classificação própria de beco usa visibilidade/resposta/status do destino em `:29`–`:33`, e decisão final consulta `pode_fechar`.
-- Command beco aplica via serviço em `app/chamados/management/commands/fechar_becos_disputa.py:57`; sua agenda usa **`--alarme`**, que não aplica (`app/config/crons.py:663`; `app/chamados/management/commands/fechar_becos_disputa.py:30`).
-- S143 chama resolver ao salvar status terminal de Chamado (`app/chamados/signals.py:104`, `:115`) → wrapper em `app/chamados/services/disputa_emissao.py:1706`, `:1722` → fecho em `:1888`.
-- O post-save de disputa fecha **Chamado**, não disputa, por `ch.reconciliar()` em `app/chamados/signals.py:42`; os demais receivers de disputa retomam regularizações e materialização (`:134`, `:163`).
-- Tranca dispara pelo ato em `app/ponto/services/fechamento.py:1427`; comando de passivo chama o mesmo serviço em `app/chamados/management/commands/encerrar_por_competencia_trancada.py:29`; está fora de rotina em `app/config/crons.py:1268`.
-- `encerrar_perguntas_com_fato` é passivo declarado fora de rotina em `app/config/crons.py:1329`; escreve disputa exclusivamente pela chamada da tabela.
-- Materialização comum e passivo compartilham `_fechar_disputa_se_quitada`: `app/chamados/services/materializacao.py:1378`; `app/chamados/services/passivo_validado.py:405`.
-- Reconciliador de colaborador alcança fechamento por célula e órfãs em `app/chamados/reconciliador.py:1365`, `:1375`; lavra sem turno em `:1615`.
-- Command `app/ponto/management/commands/fechar_chamados_meio_periodo.py:109` chama `.fechar` em **ChamadoColaborador** (universo em `:49`, `:55`), portanto não entra nos 15 de disputa.
-
-**L-111**
-
-- `veredito_do_explicador` e `disputa_fecha_na_cascata_de_desligamento`: apagados; lápide em `app/chamados/juizes.py:2115`–`:2119`; testes verificam ausência de definição em `app/chamados/tests/test_c7_red_minimos.py:51`, `:54`.
-- `reconciliar_disputa_zumbi`: arquivo ausente; lápide de registro em `app/config/crons.py:835`; teste verifica ausência de arquivo em `app/chamados/tests/test_c7_red_minimos.py:57`.
-- `heal_disputas_legado`: arquivo ausente; lápide em `app/config/crons.py:1444`; teste verifica ausência em `app/chamados/tests/test_c7_red_minimos.py:61`.
-- Nenhum chamador executável produção/teste desses quatro nomes; testes remanescentes testam ausência, não invocam portas apagadas (`app/chamados/tests/test_c7_red_minimos.py:51`–`:63`). Documentação histórica ainda cita implementação antiga, por exemplo `app/docs/TICKETS.md:1070` e `app/chamados/tests/test_porta_disputa_ciclo.py:51`; não tratar prosa antiga como código vivo.
-- Bloco de expiração de 30 dias foi apagado com lápide em `app/chamados/management/commands/arquivar_competencia_encerrada.py:61`–`:64`. Ainda há prosa antiga no cabeçalho, explicitamente marcada revogada em `:38`.
-
-**Fixtures/migrations**
-
-Migrations apenas declaram campos/choices (`app/chamados/migrations/0013_disputasupervisao.py:24`; `app/chamados/migrations/0049_disputa_motivo_fechamento.py:15`). Há escritores crus em **testes** que montam estado legado, por exemplo `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:141`, `:168`; `app/chamados/tests/test_reabrir_orfas_enterradas.py:81`; `app/chamados/tests/test_selo_universo_reconciliador.py:104`; `app/chamados/tests/test_signals.py:268`. Eles não são escritores de produção; nenhum teste foi executado [não verificado].
-
-_3005 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3007 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
