@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 17:51:22.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (213.6 MB). Acoes na janela: **1058**.
+**Medido em 09/11/2026 17:56:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (213.6 MB). Acoes na janela: **1055**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1065,6 +1065,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:57:40 | Bash | Check hook ESPERANDO accepted forms | `cd /home/ronald/saas-hasner && /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -30` |
 | 05:57:35 | Agent | Opus final 2 PAR-NAO-ADJACENTE | `Obra PAR-NAO-ADJACENTE: verificador FINAL (2a leitura, depois de uma REPROVA) e dono do veredito antes do pouso. Codigo de negocio (escala/utils.py, alinhamento marco->batida que alimenta a ata/celula e, por ela, minutos e dinheiro). Voce nao viu a construcao. Somente leitura: nao edite, nao rode python/py_compile dentro da copia, nao rode a suite, nao mate processo nem container. Grave NADA; devo ...` |
 | 05:57:15 | Bash | Read PAR suite v5 verdict | `cd /home/ronald/saas-hasner && L=logs/par_nao_adjacente/suite_v5.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head; date '+%H:%M'; bin/trava_teste.sh --quem; cd /home/ronald/wt-codex-par-nao-adjacente-031500 && git status --porcelain && git log --oneline -1` |
-| 05:54:32 | Bash | Log I-1 postmortem classes in RELATO | `cd /home/ronald/saas-hasner && sed -i '3a SELOS-CANON-I1 05:5x POSTMORTEM opus 1 (Codex censo, logs/selos_canon/i1_postmortem_opus1.r): achado 1 = (a) FALHA DO CODEX (v1 viu _fila1_viva -> _itens_andaveis sem ligar celula qualificada x id nu; v3 viu `O9 (C)` vs glob, triagem marcou procedente-menor); 2 = (e) nao perguntado (Code); 3 = (e) retirar PAREI + (a) papel leitura como prova; 4/5 = codigo  ...` |
-| 05:54:24 | Bash | Read rest of postmortem | `cd /home/ronald/saas-hasner && tail -c +5000 logs/selos_canon/i1_postmortem_opus1.r \| head -c 4000` |
-| 05:54:21 | Bash | Read I-1 postmortem classification | `cd /home/ronald/saas-hasner && tail -2 logs/selos_canon/i1_postmortem_opus1.out; head -c 5000 logs/selos_canon/i1_postmortem_opus1.r` |
