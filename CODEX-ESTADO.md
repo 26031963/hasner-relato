@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 17:58** · publicado em **09/11/2026 18:02** (UTC-3)
+> Ultima resposta processada: **09/11/2026 18:11** · publicado em **09/11/2026 18:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 18:11 · sessao 06071fff5ff7 · - · - · origem=Ronald (tmux)
+
+Não encontrei caminho do `disparar` que ainda pergunte por DATA sem previsão fora da fábrica. Não recomendo alteração produtiva.
+
+O universo célula lê `motivos_que_o_evento_deixou` em `chamados/management/commands/disparar_perguntas_competencia.py:112`, que passa por `motivos_a_perguntar` em `chamados/services/fabrica_da_celula.py:205`, calcula o teto em `:87` e entrega esse teto a `motivos_pela_ata` em `:107`. O universo FIO MUDO também passa explicitamente o teto em `chamados/management/commands/disparar_perguntas_competencia.py:158`. `vencidos=None` retorna `[]` em `chamados/services/fabrica_da_celula.py:38`. Só os motivos selecionados chegam ao escritor em `chamados/management/commands/disparar_perguntas_competencia.py:270`.
+
+Ajustes identificados por leitura, sem executar ORM:
+
+- `test_fabrica_pela_ata.py::FabricaPelaAta.test_05_sem_turno_previsto_vai_ao_cadastro_sem_pergunta` exige uma saída `CADASTRO-SEM-TURNO` ausente no comando HEAD; retirar essa exigência futura, conservando zero perguntas. `chamados/tests/test_fabrica_pela_ata.py:63`.
+- `test_selo_emissor_fio_mudo.py::EmissorPedeDoChamadoMudoTest` tem seis casos afetados: `test_MORDE_o_emissor_ACHA_o_chamado_mudo`, `test_MORDE_desligado_e_barrado_e_NOMEADO`, `test_MORDE_competencia_exportada_VOLTA_a_ser_pedida`, `test_MORDE_pergunta_MORTA_do_MESMO_FATO_e_piso_F1t`, `test_MORDE_o_cron_leva_os_dois_caminhos_e_diz_por_porta`, `test_o_dry_nao_grava_nada`. As fixtures não têm vínculo nem DNA; o helper injeta ata, mas não previsão. `chamados/tests/test_selo_emissor_fio_mudo.py:36`, `:62`.
+- No mesmo módulo, `FioMudoNaoSobreviveAUmCicloTest.test_MORDE_o_chamado_mudo_nao_sobrevive_a_um_ciclo` usa a mesma forma sem vínculo. `chamados/tests/test_selo_emissor_fio_mudo.py:256`, `:291`. Ajuste menor: dar previsão explícita no mock `marcos_vencidos` dentro de `_lei_e_ata`, acompanhado de comentário da LEI-PASSADO-SEM-MARCOS. Acrescentar vínculo antes de plantar o Chamado pode fazer o signal emitir antes do exercício; essa consequência precisa ser considerada. `chamados/signals.py:210`.
+- `test_o261_julgamento_desfaz_carimbo.py::_Cenario._cenario` tem DNA, mas nenhum vínculo. Sem EC, `marcos_com_teto` retorna `[]`; a guarda nova manda a Pauta antes da coleta de carimbos. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:53`, `ponto/services/cartorio.py:856`, `chamados/services/fabrica_da_celula.py:164`.
+- Quatro casos O261 inferidos vermelhos: `JulgamentoDesfazCarimboSemLastroTest.test_MORDE_o_julgamento_desfaz_o_carimbo_da_pergunta_viva`, `.test_julgar_duas_vezes_e_idempotente`, `VigiaMaterializadaVivaTest.test_MORDE_o_vigia_conta_e_zera_depois_do_julgamento`, `.test_MORDE_exportada_conta_no_balde_do_DP_e_o_julgamento_nao_tem_fronteira`. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:88`, `:122`, `:208`, `:221`.
+- O cenário O261 também alimenta `test_e1_v6_horizonte.py::FabricaLeOFatoTest.test_RED_pergunta_retratada_nao_cala_o_fato_que_volta_na_celula`, cuja expectativa passa de `['saida_sem_entrada']` a `[]`. `chamados/tests/test_e1_v6_horizonte.py:459`, `:467`. Acrescentar vínculo ao cenário compartilhado conserva a intenção desses testes sob a lei; existe `dar_vinculo` em `chamados/tests/_vinculo_do_dia.py:18`.
+
+Nos outros apps com referências explícitas, não identifiquei expectativa alterada: F3 tem vínculo/DNA (`escala/tests/test_f3_beco1_cadastro_entrou.py:54`, `:72`); `test_cods_do_ato` e `test_classificar_falta_escala` substituem a fábrica (`ponto/tests/test_cods_do_ato.py:67`, `:95`; `ponto/tests/test_classificar_falta_escala.py:24`). Exaustividade sobre caminhos indiretos de todos os signals/cartório da árvore: [nao verificado]. Resultados ORM: [nao verificado].
+
+## 09/11 18:10 · sessao 85fcb794b0e7 · - · - · origem=Ronald (tmux)
+
+Inventário dos campos/valores do diff produtivo `f2962ab8d → 46d313581`:
+
+| Campo/valor | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| DP `pergunta/pergunta_id`, `ato`, `ato_em`, `ato_por/id`, `ato_texto`, `ato_motivo` | `DecisaoPergunta.registrar`: `chamados/models.py:3945`; novas assinaturas de nascimento: `:3015`; conversão da projeção em linhas RESPOSTA/VALIDACAO: `:3929`, `:3933` | Correspondência para preservar legado: `chamados/models.py:3923`; histórico: `:3504`; tarefa por sequência/horizonte: `chamados/services/tarefa_do_dia.py:131`, `:337` |
+| DP fotos `respondida_original_em`, `validada_original_em`, `validada_original_por_id` e vínculos de absorção | Portas existentes, gravadas pelo mesmo executor `chamados/models.py:3945`; campos e restrições: `:3873`, `:3894` | Histórico distingue atos com foto: `chamados/models.py:3509`; tarefa lê ato final: `chamados/services/tarefa_do_dia.py:136`; constraints: `chamados/models.py:3894` |
+| Pergunta `respondida_em/resposta_colab` | Porta de resposta existente: `chamados/services/disputa_emissao.py:1464`; nascimento recebe `**campos`: `chamados/models.py:3010`; ressuscitação limpa instante via `:1566` | Nova conversão para DP: `chamados/models.py:3920`, `:3929`; C6 mantém projeção: `chamados/juizes.py:1339`; app: `chamados/services/pergunta_no_app.py:70` |
+| Pergunta `validada_em/validada_por/id` | Validação existente: `chamados/services/validacao.py:134`; resposta invalida: `chamados/services/disputa_emissao.py:1477`; ressuscitação: `chamados/models.py:1566` | Conversão para DP: `chamados/models.py:3931`; C6: `chamados/juizes.py:1323` |
+| Pergunta `materializada_em/materializada_por/id/via_resolucao` | Porta de carimbo: `chamados/models.py:3093`; limpeza por lote: `:3260`; ressuscitação usa a porta: `:1566` | C6: `chamados/juizes.py:1334`, `:1360`, `:1366`; fábrica busca candidatas com carimbo: `chamados/services/fabrica_da_celula.py:136` |
+| Pergunta `pk`, `disputa_id`, `disputa__colaborador_id`, `celula/id`, `data_evento`, `chamado_destino/id`, `conversa`, `motivo` | Nascimento conserva campos: `chamados/models.py:3010`; reuso: `:2962`, `:2978`; reapontamento: `chamados/services/fio.py:925`; data canônica: `chamados/services/fio.py:790` | Captura de origem do evento: `chamados/models.py:3224`; reuso: `:2958`; ressuscitação: `:1565`; reapontamento: `chamados/services/fio.py:924`; fábrica/dedup: `chamados/services/fabrica_da_celula.py:113`, `:116` |
+| Pergunta `veredito_lavrado/julgado_em/janela_expira_em` | Lavrador existente: `chamados/veredito_lavrado.py:270`; reuso salva os mesmos campos: `chamados/models.py:3001`; fio: `chamados/services/fio.py:927` | Validade temporal: `chamados/veredito_lavrado.py:228`; tarefa mantém seu leitor: `chamados/services/tarefa_do_dia.py:351` |
+| Chamado `status_local`, `_b5_status_antes`, `modulo_origem`, `celula_id`, `pk`, `colaborador` | Estado pela porta existente: `chamados/models.py:228`; snapshot do status persistido: `chamados/signals.py:184` | Novo evento de volta a VIVOS: `chamados/signals.py:191`, `:201`; VIVOS segue catálogo: `chamados/catalogo/motor.py:24`; julgamento seguinte: `chamados/signals.py:214` |
+| EventoCelula `celula_id/colaborador_id/data` | Escritor único: `ponto/portas/celula.py:892`; novos emissores: `chamados/models.py:1568`, `:3003`, `:3946`; `chamados/services/fio.py:929`; `chamados/signals.py:207`; reversão: `ponto/portas/celula.py:796` | Consumidor agrupa por colaborador e IDs: `chamados/reconciliador.py:1346`, `:1350`, `:1352`; fábrica lê datas do lote e relê célula atual: `chamados/services/fabrica_da_celula.py:260`, `:262` |
+| EventoCelula `processado_em/tentativas/erro` | Consumidor existente, depois da nova fábrica: `chamados/reconciliador.py:1395`, `:1401` | Seleção pendente: `chamados/reconciliador.py:1343`, `:1393`; retenção: `:1408` |
+| CelulaDia `pk/data/colaborador_id`, `trabalha`, `ata`, `veredito`, `julgada_em`; Colaborador `situacao='ativo'` | Portas existentes da célula/cartório: `ponto/portas/celula.py:900`, `:1002`; cadastro define situação: `colaboradores/models.py:323` | Fábrica mantém leitura da célula: `chamados/services/fabrica_da_celula.py:80`, `:88`, `:91`; novo encaminhamento CADASTRO: `:164`; consumidor relê atual por colaborador/data: `:262` |
+| Retorno `vencidos=None`, `set()`, pares `(tipo, HH:MM)` | Adaptador do teto: `chamados/services/fabrica_da_celula.py:26`, `:28`; a autoridade continua `cartorio.marcos_vencidos` | `None`/vazio deixam de autorizar pergunta: `chamados/services/fabrica_da_celula.py:38`; `None` passado encaminha CADASTRO: `:166`; pares limitam motivos: `:49` |
+| Pauta `ancora_tipo=ANCORA_COLAB`, `ancora_id`, `destinatario_departamento='dp'`, `pai=None`, marcador `CADASTRO: PASSADO SEM TURNO PREVISTO`, `autor_user` sistema `ti`, `remetente_informado='ti'`, `texto` | Novo chamador: `chamados/services/fabrica_da_celula.py:294`; escritor único efetivo: `pautas/services.py:180` | Guarda histórica por colaborador/cabeça/DP/marcador: `chamados/services/fabrica_da_celula.py:274`; `ANCORA_COLAB` é importado, sem literal inventado: `:273` |
+| Celula `dna/dna_anterior/trabalha/escala_geradora_id/regenerada_em/regeneracoes` | Reversão existente conserva sua escrita: `ponto/portas/celula.py:786`, `:794`; diff acrescenta somente evento `:796` | Própria reversão lê DNA anterior: `ponto/portas/celula.py:777`, `:783`; leitor de reescrita: `escala/services/regeneracao.py:84`, `:104`; fábrica continua lendo ata/célula, `chamados/services/fabrica_da_celula.py:91`, `:107` |
+
+O diff produtivo não altera escritores de cron, registro de juízes, campos de conferência, pendência administrativa ou recusa técnica; os novos testes podem compará-los, mas isso não acrescenta escrita produtiva. Evidência: `git diff f2962ab8d 46d313581 -- chamados/models.py chamados/reconciliador.py chamados/services/fabrica_da_celula.py chamados/services/fio.py chamados/signals.py ponto/portas/celula.py`; cada bloco acima referencia os fontes reais.
+
+Comando ORM principal e vizinhos diretamente relacionados às funções alteradas, para a sessão executar, sem execução aqui:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings_test \
+chamados.tests.test_e4_expand_orm \
+chamados.tests.test_e1_entradas \
+chamados.tests.test_e1_volta2 \
+chamados.tests.test_e1_v12 \
+chamados.tests.test_e1_v13_cadeia \
+chamados.tests.test_e1_v15 \
+chamados.tests.test_e1_v15b \
+chamados.tests.test_e1_v15d_um_ponto_de_escrita \
+chamados.tests.test_e1_v15f \
+chamados.tests.test_e1_v15g_portas \
+chamados.tests.test_e1_v5_ordem_trava \
+chamados.tests.test_e1_v5_portas_backfill \
+chamados.tests.test_e1_v6_horizonte \
+chamados.tests.test_e1_v9 \
+chamados.tests.test_fabrica_pela_ata \
+chamados.tests.test_fabrica_por_evento \
+chamados.tests.test_f1c4_3_emissores \
+chamados.tests.test_cobparc5_parcial_sem_periodo_so_lista \
+chamados.tests.test_pergunta_do_dia_em_curso \
+chamados.tests.test_o261_julgamento_desfaz_carimbo \
+chamados.tests.test_jv4a_disparar_vigia_da_celula \
+chamados.tests.test_c20_juiz3_outbox \
+chamados.tests.test_jv3_reconciliar_vira_vigia \
+chamados.tests.test_orfas_pelo_evento \
+chamados.tests.test_orfas_nao_morre_na_guarda_da_porta \
+chamados.tests.test_porta_reapontamento_pergunta \
+chamados.tests.test_o261e_f1_codex_v5 \
+chamados.tests.test_o261e_f1_porta_encerramento \
+chamados.tests.test_reconciliar_pergunta_a_premissa \
+chamados.tests.test_e2_celula_regenerada_reavalia \
+ponto.tests.test_porta_celula_dia \
+ponto.tests.test_hx_cartorio_ressuscita \
+ponto.tests.test_d3_impressao_cobre_insumos \
+ponto.tests.test_c3_ordem_dos_receivers_da_batida \
+ponto.tests.test_lastro_parte2_fecho_no_evento \
+ponto.tests.test_lastro_parte3_fecho_na_pergunta \
+ponto.tests.test_o_outbox_celula \
+ponto.tests.test_bug114_fechador_de_dois_dias \
+ponto.tests.test_bug115_lampada_do_marco \
+ponto.tests.test_orfas_vigia
+```
+
+Evidência de vizinhança: imports da fábrica em `chamados/tests/test_fabrica_por_evento.py:35`, `test_f1c4_3_emissores.py:76`, `test_o261_julgamento_desfaz_carimbo.py:82`; consumidor em `test_c20_juiz3_outbox.py:241`, `test_jv3_reconciliar_vira_vigia.py:141`, `ponto/tests/test_o_outbox_celula.py:165`; fio em `chamados/tests/test_porta_reapontamento_pergunta.py:271`; signal em `chamados/tests/test_reconciliar_pergunta_a_premissa.py:269` e `ponto/tests/test_d3_impressao_cobre_insumos.py:369`; reversão em `ponto/tests/test_porta_celula_dia.py:184`; ressuscitação em `chamados/tests/test_e1_v13_cadeia.py:140`.
+
+Todos os resultados ORM permanecem `[nao verificado]`.
 
 ## 09/11 17:58 · sessao 323aebf8a713 · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
 
@@ -868,35 +958,4 @@ Omissões antigas de metadados/conteiner, fora do N literal de estado da pergunt
 
 Chamadores das principais omissões: `_rebaixar_sem_post_save` é chamado por `app/chamados/signals.py:72`; escalada por `app/ponto/services/triagem_batida.py:292`, `:369`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:132`, `app/ponto/management/commands/processar_alertas_avancados.py:176`; prazos por `app/chamados/services/cobranca.py:178` e `app/chamados/services/disputa_emissao.py:1715`; recibo DP por `app/ponto/management/commands/escalonar_chamados_supervisao.py:103`; anotar contexto da Disputa por `app/chamados/views.py:1343` e `app/ponto/management/commands/escalonar_chamados_supervisao.py:159`; renovar por `app/ponto/management/commands/alertar_disputas_pendentes.py:48`; entradas pendentes por `app/chamados/services/disputa_emissao.py:685`, `:1267`. `rebaixar` teve somente chamadores diretos de teste localizados: `app/chamados/tests/test_selo_e4_gates.py:73`, `:84`, `:89`; chamada dinâmica produtiva [nao verificado].
 
-## 09/11 16:05 · sessao 6ed3e3a2c318 · - · - · origem=Ronald (tmux)
-
-D1–D15 permanecem; o diff não resolve nem elimina as distinções de estado já catalogadas. D2, D9 e D11 precisam incorporar os novos leitores e os limites explícitos abaixo. (`app/chamados/models.py:3023`; `app/chamados/models.py:3092`; `app/chamados/juizes.py:1322`; `app/chamados/services/pergunta_no_app.py:60`; `app/chamados/management/commands/diff_e3_sombra.py:105`)
-
-- **D2 ampliada:** pré-filtro SQL, julgamento C6, partição de apresentação e tarefa são operações diferentes. `consulta_do_app` particiona as C6 vivas: pendente exige `respondida_em is None` **e** disputa aberta; demais vivas vão ao histórico. A carga da tarefa agora chama `alimentar_fila`, sem executar novamente C6. (`app/chamados/models.py:3325`; `app/chamados/services/pergunta_no_app.py:69`; `app/chamados/services/tarefa_do_dia.py:407`; `app/chamados/juizes.py:1450`)
-- **D9 ampliada:** janela C6 continua inclusiva e usa `date.today()`; expiração da lavra usa dia local do `agora` recebido, com `janela_expira_em <= hoje_local`. O instrumento passou a declarar que `--agora` não controla aquele relógio C6. Divergência efetiva em produção: **[nao verificado]**. (`app/chamados/juizes.py:575`; `app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:104`; `app/chamados/veredito_lavrado.py:116`; `app/chamados/management/commands/diff_e3_sombra.py:105`)
-- **D11 ampliada:** disputa fechada continua sem demonstrar ausência de tarefa. A alteração põe pergunta viva de disputa fechada no histórico do app; o teste mantém a aceitação pelo POST. Atenção: `reabrir_por_colab` recusa disputa fechada antes de delegar a correção; a afirmação ampla do v1 sobre correção sem reabrir o continente deve referir-se à porta `reabrir_para_correcao`, não ao wrapper de colaborador. (`app/chamados/services/pergunta_no_app.py:70`; `app/api/tests/test_hx_api_estado.py:54`; `app/chamados/models.py:2221`; `app/chamados/models.py:2234`; `app/chamados/services/disputa_emissao.py:1559`)
-
-Duas decisões adicionais justificadas, omitidas no v1:
-
-- **D16 — “No app” e “pendente no app” têm universos diferentes.** `perguntas_do_app` devolve todas as C6 vivas; `consulta_do_app` extrai pendentes de disputa aberta e mantém as restantes no histórico. O leitor C17 `_no_app` continua usando a coleção completa de `perguntas_do_app`. Isso já tem corte de unidade; não é pergunta de lei nova. (`app/chamados/services/pergunta_no_app.py:44`; `app/chamados/services/pergunta_no_app.py:60`; `app/chamados/juizes.py:1509`; `app/chamados/juizes.py:1519`; `app/docs/PROMPTS.md:2002`)
-- **D17 — `rota/fila/verbos/fio` de C17 e tarefa não prometem a mesma coisa.** C17 parte da alcançabilidade pela fila e pelas perguntas C6; a tarefa parte das ações exigíveis e publica somente suas portas. `fio` C17 pode ser `chamado`; o da tarefa também exprime `sistema` e `nao_sei`. O corte já escolheu a resposta da tarefa e condicionou a troca dos três chamadores ao DIFF. (`app/chamados/juizes.py:1532`; `app/chamados/juizes.py:1575`; `app/chamados/services/tarefa_do_dia.py:425`; `app/chamados/services/tarefa_do_dia.py:431`; `app/docs/PROMPTS.md:2007`)
-
-Correção de inventário do v1: **`_estado_da_decisao` não existe nesta cópia**. As referências v1 de passivo e validação pertencem a `_pela_decisao`, definida na linha 115; passivo na 127 e validação na 140. O diff fornecido não renomeia essa função. (`app/chamados/services/tarefa_do_dia.py:115`; `app/chamados/services/tarefa_do_dia.py:127`; `app/chamados/services/tarefa_do_dia.py:140`)
-
-Chamadores produtivos C17 confirmados pelo scanner AST extraído sem importar a aplicação: `vigia_fio.censo_alcance`, `cadastro_realidade.beco_em_lote`, `fora_da_folha._porta`. O instrumento chama `_porta` existente; não cria quarto chamador direto. (`app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:488`; `app/folha/fora_da_folha.py:67`; `app/chamados/management/commands/diff_e3_sombra.py:124`)
-
-**Perguntas de lei: 0.** O v1 não tinha perguntas abertas; unidade do app e destino de C17 já têm respostas literais, inclusive a emenda posterior que condiciona a fachada ao DIFF. (`app/docs/PROMPTS.md:2002`; `app/docs/PROMPTS.md:2007`)
-
-Leis/cortes checados: L-002, L-007, L-051, L-061, L-073, L-080, L-085, L-088, L-110, L-111, L-113, L-117 e L-124; FIO-E0-V4; LEI-TRANCA-E2-JUIZ; LEI-E3-UNIDADE-E-C17; LEI-C17-UM-JUIZ. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:92`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:100`; `app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:137`; `app/docs/LEIS.md:151`; `app/docs/LEIS.md:138`; `app/docs/LEIS.md:145`; `app/docs/CORTES.md:426`; `app/docs/CORTES.md:427`; `app/docs/PROMPTS.md:2002`; `app/docs/PROMPTS.md:2007`)
-
-## 09/11 15:48 · sessao 43a71806087d · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
-
-Cura escrita para a unidade **pergunta + testemunha-batida**, com A factual, escrita apenas da pergunta, ordem por instante e paridade final. [materializacao.py:72](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:72)
-
-Foram escritos 13 testes novos, reforçada a fixture `sem_par` e acrescentados M41–M50. O M41 recoloca a cegueira à batida contraparte e aponta para o teste (a). [Testes e mutantes](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA_V2.r:117) [nao verificado]
-
-A entrega contém todos os chamadores, efeitos nos leitores, endereço de cada hunk e **comandos individuais**. [Entrega v2](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA_V2.r:1)
-
-Somente verificações estáticas foram executadas. **RED/GREEN, mortes, concorrência e efeitos em produção: [nao verificado].** C7/fechar permanecem para os hunks da sessão. [Pendências](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA_V2.r:110)
-
-_3213 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3215 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
