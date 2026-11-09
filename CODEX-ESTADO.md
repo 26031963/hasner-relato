@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:02** · publicado em **09/11/2026 10:03** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:10** · publicado em **09/11/2026 10:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:10 · sessao 86b79a2759f4 · FIO-E0-V4-E4-ESCRITORES · censo · origem=Code
+
+**O número 16 confere para as portas de alteração do estado. Incluindo os nascimentos por `create`/`get_or_create`/inserção, como o pedido exige, são 22 portas produtivas: 16 + 2 criadores de Chamado + 3 de Disputa + 1 de Pergunta.** Há ainda o executor genérico `PerguntaDisputa.save` e uma exclusão restrita a ensaio, discriminados abaixo. A diferença não é uma porta nova da E4: é a inclusão dos nascimentos que o recorte histórico separava como identidade. (`app/docs/RELATO.md:242`; `app/chamados/models.py:833`; `app/chamados/models.py:1054`; `app/chamados/models.py:2822`; `app/chamados/services/disputa_emissao.py:474`; `app/chamados/services/disputa_emissao.py:1024`; `app/chamados/services/disputa_emissao.py:1299`; `app/chamados/models.py:3402`; `app/chamados/models.py:563`)
+
+A classificação usa a E1: **decisão** é o ato preservado na sequência append-only; **efeito** é sua consequência, conferida contra o fato/lavra; **fica** é identidade, data, cache ou metadado do continente. Uma porta pode ter ramos diferentes, explicitados sem contá-la duas vezes. A E1 declara que os campos atuais são projeção até a E4; a tarefa exige conferir decisões e efeitos, sem escritor próprio. (`app/chamados/models.py:3828`; `app/chamados/models.py:3833`; `app/chamados/models.py:3840`; `app/chamados/services/tarefa_do_dia.py:118`; `app/chamados/services/tarefa_do_dia.py:140`; `app/docs/CORTES.md:426`)
+
+A análise foi estática por AST, incluindo imports com apelido, imports relativos, módulos `__init__` e imports locais. Não houve importação da aplicação, consulta a banco/log nem escrita de arquivo. Completude perante despacho inteiramente dinâmico, SQL construído dinamicamente, templates e execução real: **[nao verificado]**. Nos chamadores abaixo, **P** significa código produtivo/operacional; **T** identifica testemunhas de teste, sem afirmar execução delas nem esgotar todas as fixtures de nascimento. **[nao verificado]** [nao verificado]
+
+Para compactar os campos repetidos:
+
+- **C** = `materializada_em`, `materializada_por`, `via_resolucao`. (`app/chamados/models.py:3117`)
+- **R** = `resposta_colab`, `respondida_em`; **V** = `validada_em`, `validada_por`. (`app/chamados/models.py:2444`; `app/chamados/models.py:3366`)
+- **L** = `veredito_lavrado`, `julgado_em`, `janela_expira_em`. (`app/chamados/veredito_lavrado.py:250`)
+- **F** = `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`. (`app/chamados/models.py:1933`)
+- **DP** = `DecisaoPergunta`; “sem DP próprio” não significa ausência de trilha nem ausência de decisão registrada pelo chamador. (`app/chamados/models.py:3836`; `app/chamados/services/disputa_emissao.py:1612`)
+
+Leis/cortes conferidos para as decisões abaixo: L-002, L-007, L-051, L-061, L-073, L-080, L-085, L-088, L-110, L-111, L-113, L-117 e L-124; FIO-E0-V4 e LEI-TRANCA-E2-JUIZ. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:92`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:100`; `app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:137`; `app/docs/LEIS.md:151`; `app/docs/LEIS.md:138`; `app/docs/LEIS.md:145`; `app/docs/CORTES.md:426`; `app/docs/CORTES.md:427`)
+
+## CENSO
+
+escritores:
+
+- `app/chamados/models.py:201` `ChamadoColaborador._gravar_estado` -- `status_local=novo`; ao terminar, `resolvido_em` recebe instante, `via_encerramento=via`, urgência é rebaixada; ao reviver, limpa resolução/via e restaura urgência; pode gravar `respondido_por`; grava `atualizado_em` -- **efeito** nas transições derivadas; **decisao** no ramo de transição humana. Persiste em `app/chamados/models.py:296`; sem DP próprio, com trilha `estado_chamado` e relavra L das perguntas atingidas. P: `_aplicar` (`app/chamados/models.py:450`), `analisar` (`app/chamados/models.py:806`), `reconciliar` (`app/chamados/models.py:654`), `cancelar` (`app/chamados/models.py:788`), `reabrir` (`app/chamados/models.py:1442`), `encerrar` (`app/chamados/models.py:1616`), `encerrar_por_competencia_trancada` (`app/chamados/models.py:1636`). T: `app/chamados/tests/test_hx_b7_trilha.py:32`; `app/chamados/tests/test_o261e_f1_porta_encerramento.py:206`; `app/chamados/tests/test_o261e_f1_codex_v5.py:89`.
+
+- `app/chamados/models.py:1852` `DisputaSupervisao.fechar` -- F recebe instante, autor, texto e motivo; excepcionalmente carimba perguntas vivas -- **efeito** no fechamento normal, após nenhuma viva/resposta sem veredito; **decisao** nas exceções `admin_encerra`/`desligamento`, que já registram DP `SILENCIO` no mesmo atomic (`app/chamados/models.py:1915`; `app/chamados/models.py:1921`; `app/chamados/models.py:1933`). P: `admin_encerra` e `remover_motivo` (`app/chamados/models.py:1947`; `app/chamados/models.py:2069`); reconciliador (`app/chamados/reconciliador.py:412`; `app/chamados/reconciliador.py:612`; `app/chamados/reconciliador.py:1171`); foto (`app/api/foto_recebida.py:80`); desligamento (`app/colaboradores/services/desligamento.py:142`); entrada sincronizada (`app/ponto/services/entrada_sincronizada.py:59`); materialização (`app/chamados/services/materializacao.py:586`; `app/chamados/services/materializacao.py:1333`); emissão (`app/chamados/services/disputa_emissao.py:1281`; `app/chamados/services/disputa_emissao.py:1961`); tranca (`app/chamados/services/competencia_trancada.py:204`); beco (`app/chamados/services/becos.py:57`); comandos (`app/ponto/management/commands/fechar_chamados_meio_periodo.py:109`; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`). T: `app/chamados/tests/test_porta_disputa_ciclo.py:285`; o contrato e as exceções estão na própria porta (`app/chamados/models.py:1855`).
+
+- `app/chamados/models.py:2123` `DisputaSupervisao.reabrir_admin` -- limpa F; incrementa `reaberturas_admin`; pode agregar `motivos` -- **decisao** no ato administrativo; **fica** o contador/metadado. Persiste em `app/chamados/models.py:2158`; sem DP próprio. P: `app/chamados/services/acoes_disputa.py:259`. T: `app/chamados/tests/test_disputa_transicoes.py:134`; `app/chamados/tests/test_disputa_transicoes.py:148`; `app/chamados/tests/test_disputa_transicoes.py:156`; `app/chamados/tests/test_disputa_transicoes.py:163`; `app/chamados/tests/test_disputa_transicoes.py:172`; `app/chamados/tests/test_disputa_transicoes.py:181`.
+
+- `app/chamados/models.py:2160` `DisputaSupervisao.reabrir_sistema` -- limpa F -- **efeito**, religando o continente após a pergunta voltar a exigir ação. Persiste em `app/chamados/models.py:2174`; sem DP próprio. P: `app/chamados/models.py:1572`; `app/chamados/services/materializacao.py:686`; `app/chamados/services/validacao.py:218`; `app/chamados/services/relavra_via.py:261`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:165`. Chamador direto de teste não localizado: **[nao verificado]**.
+
+- `app/chamados/models.py:3092` `PerguntaDisputa.carimbar` -- C recebe instante/autor/via; opcionalmente completa `respondida_em`, V e L -- **efeito** para o carimbo; **decisao** quando completa resposta/validação. Persiste em `app/chamados/models.py:3141`; sem DP próprio, inclusive nos ramos que completam assinaturas (`app/chamados/models.py:3119`). P: `app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:595`; `app/chamados/models.py:3276`; `app/chamados/services/materializacao.py:561`; `app/chamados/services/materializacao.py:1277`; `app/chamados/services/materializacao.py:1431`; `app/chamados/services/disputa_emissao.py:1860`; `app/chamados/services/disputa_emissao.py:1934`. T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:725`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:738`; `app/chamados/tests/test_o261e_f2_fila.py:194`; `app/chamados/tests/test_o261e_f2_fila.py:205`; `app/chamados/tests/test_o261e_f2_fila.py:221`; `app/chamados/tests/test_o261e_f2_fila.py:228`.
+
+- `app/chamados/models.py:3157` `PerguntaDisputa.carimbar_identidade` -- C recebe via terminal/autor/instante, ou preserva autor/instante anteriores; pode gravar `recusa_motivo` -- **efeito** da identidade/decisão aplicável; o ato humano que o determina é **decisao**. Persiste em `app/chamados/models.py:3179`; sem DP próprio. P: `fechar_por_admin` (`app/chamados/models.py:3053`), `remover_motivo` (`app/chamados/models.py:2058`), recusa/paridade (`app/chamados/services/materializacao.py:924`; `app/chamados/services/materializacao.py:1099`), duplicata (`app/chamados/services/fio.py:1350`). O chamador `remover_motivo` já registra DP `RETRATACAO` (`app/chamados/models.py:2053`); `Disputa.fechar` registra `SILENCIO` (`app/chamados/models.py:1921`). T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:744`; `app/chamados/tests/test_e1_v5_portas_backfill.py:166`; `app/chamados/tests/test_e1_volta2.py:131`.
+
+- `app/chamados/models.py:3192` `PerguntaDisputa.descarimbar` -- C passa a `None/None/''`; recusa linha fora do fato; `salvar=False` só prepara memória -- **efeito**. Persiste em `app/chamados/models.py:3201`; sem DP próprio. P: `app/chamados/models.py:3287`; `app/chamados/models.py:3304`; `app/chamados/models.py:3311`; simulação sem persistência em `app/chamados/models.py:1506`; `app/chamados/services/relavra_via.py:246`. T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:758`; `app/chamados/tests/test_e1_v5_portas_backfill.py:168`; `app/chamados/tests/test_e1_v5_portas_backfill.py:176`.
+
+- `app/chamados/models.py:3241` `PerguntaDisputa.descarimbar_em_lote` -- C passa a `None/None/''`, mais campos recebidos em `outros`; exclui vias fora do fato -- **efeito**. `QuerySet.update` em `app/chamados/models.py:3253`; sem DP próprio. P: `app/chamados/models.py:1565`; `app/chamados/services/disputa_emissao.py:1627`, cujo chamador registra DP antes do update (`app/chamados/services/disputa_emissao.py:1612`). T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:752`; `app/chamados/tests/test_e1_v13_ordem.py:90`; `app/chamados/tests/test_e1_v13_ordem.py:101`; `app/chamados/tests/test_e1_v13_ordem.py:106`.
+
+- `app/chamados/models.py:3257` `PerguntaDisputa.encerrar_por_fato_no_espelho` -- somente `via_resolucao=fato_materializado` -- **efeito**. Persiste em `app/chamados/models.py:3265`; sem DP próprio. P: `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68`. T: `app/chamados/tests/test_porta_chamado_e3.py:72`; `app/chamados/tests/test_porta_chamado_e3.py:74`; `app/chamados/tests/test_e1_v5_portas_backfill.py:170`.
+
+- `app/chamados/services/validacao.py:127` `_carimbar_validacao` -- V recebe instante/autor -- **decisao**. Save em `app/chamados/services/validacao.py:137`; DP `VALIDACAO`, mesmo instante/atomic, em `app/chamados/services/validacao.py:139`. P: `_aceitar_a_folga` (`app/chamados/services/validacao.py:288`; `app/chamados/services/validacao.py:320`) e `validar_pergunta` (`app/chamados/services/validacao.py:435`). T: `app/chamados/tests/test_e1_entradas.py:98`.
+
+- `app/chamados/services/validacao.py:163` `devolver_validacao_recusada` -- V passa a nulo, preservando a resposta; pode reabrir o continente pela porta -- **decisao** `DEVOLUCAO`. Save em `app/chamados/services/validacao.py:202`; DP no mesmo atomic em `app/chamados/services/validacao.py:205`. P: `app/chamados/services/validacao.py:464`. T: `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:144`; `app/chamados/tests/test_o261_recusa_fala.py:178`; `app/chamados/tests/test_o261_recusa_fala.py:186`; `app/chamados/tests/test_o261_recusa_fala.py:199`; `app/chamados/tests/test_o261_recusa_fala.py:210`; `app/chamados/tests/test_e1_volta2.py:108`.
+
+- `app/chamados/services/disputa_emissao.py:1422` `responder_pergunta_disputa_core` -- grava R; limpa V anterior; pode descarimbar e gravar recusa explicativa de escape -- **decisao** `RESPOSTA`; limpeza dos carimbos é consequência da resposta nova. Save em `app/chamados/services/disputa_emissao.py:1505`; DP em `app/chamados/services/disputa_emissao.py:1508`, preservando projeção legada sem linha. P: `app/api/views.py:2651`; `app/chamados/views.py:1283`; `app/chamados/services/declaracao_texto.py:419`; `app/chamados/services/declaracao_texto.py:693`; `app/chamados/services/acoes_disputa.py:371`. T: `app/chamados/tests/test_porta_resposta_pergunta.py:177`; `app/chamados/tests/test_porta_resposta_pergunta.py:209`; `app/chamados/tests/test_porta_resposta_pergunta.py:229`; `app/chamados/tests/test_e1_volta2.py:62`; `app/chamados/tests/test_e1_volta2.py:75`.
+
+- `app/chamados/services/disputa_emissao.py:1559` `reabrir_para_correcao` -- limpa R e V; opcionalmente desfaz C da absorção -- **decisao** `REABERTURA` ou `RECUSA`. DP com foto anterior em `app/chamados/services/disputa_emissao.py:1612`; update em `app/chamados/services/disputa_emissao.py:1629`, ou porta de lote em `app/chamados/services/disputa_emissao.py:1627`; emite evento da célula no mesmo atomic. P, incluindo apelidos locais: `app/chamados/models.py:2234`; `app/chamados/views.py:1436`; `app/chamados/services/materializacao.py:682`; `app/chamados/services/validacao.py:593`; `app/chamados/services/acoes_disputa.py:103`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`. T: `app/chamados/tests/test_reabrir_nao_destroi.py:42`; `app/chamados/tests/test_reabrir_nao_destroi.py:102`; `app/chamados/tests/test_e1_v13_ordem.py:64`; `app/chamados/tests/test_e1_volta2.py:210`; `app/chamados/tests/test_e1_volta2.py:226`.
+
+- `app/chamados/services/disputa_emissao.py:1635` `responder_automaticamente` -- R recebe texto/instante do fato entregue por outro caminho; não sobrescreve texto existente -- **decisao** de sistema `RESPOSTA`. Save em `app/chamados/services/disputa_emissao.py:1652`; DP em `app/chamados/services/disputa_emissao.py:1653`. P: `app/api/foto_recebida.py:48`. T: `app/chamados/tests/test_porta_chamado_e3.py:46`; `app/chamados/tests/test_porta_chamado_e3.py:48`; `app/chamados/tests/test_porta_chamado_e3.py:53`.
+
+- `app/chamados/services/disputa_emissao.py:1658` `carimbar_resposta_pela_trilha` -- `respondida_em` recebe o instante original testemunhado, sem inventar instante da resposta -- **decisao** reconstruída `RESPOSTA`. Save em `app/chamados/services/disputa_emissao.py:1673`; DP em `app/chamados/services/disputa_emissao.py:1674`. P: `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`. T: `app/chamados/tests/test_curar_perguntas_em_limbo.py:37`; `app/chamados/tests/test_curar_perguntas_em_limbo.py:50`; `app/chamados/tests/test_curar_perguntas_em_limbo.py:51`; `app/chamados/tests/test_porta_resposta_pergunta.py:247`; `app/chamados/tests/test_porta_resposta_pergunta.py:251`; `app/chamados/tests/test_porta_resposta_pergunta.py:262`.
+
+- `app/chamados/services/relavra_via.py:106` `relavrar` -- via derivada atual e L, no mesmo save -- **efeito** para a via; **fica** L como cache. Save em `app/chamados/services/relavra_via.py:127`; sem DP próprio; exclui vias que não pertencem a `VIAS_DERIVADAS` (`app/chamados/services/relavra_via.py:118`). P: `app/chamados/services/relavra_via.py:157`; `app/chamados/management/commands/relavrar_via_i6.py:102`. T: `app/chamados/tests/test_porta_veredito_pergunta.py:363`; `app/chamados/tests/test_porta_veredito_pergunta.py:383`; `app/chamados/tests/test_porta_veredito_pergunta.py:386`; `app/chamados/tests/test_porta_veredito_pergunta.py:404`.
+
+- `app/chamados/models.py:833` `ChamadoColaborador.abrir` -- cria identidade/contexto e `status_local` inicial decidido pelo motor; `get_or_create` em `app/chamados/models.py:971`, defaults em `app/chamados/models.py:938` -- **fica** o nascimento/identidade; não é escritor da tarefa. Sem DP próprio. P: `app/ponto/views.py:3012`; `app/escala/regua_defesa.py:51`; `app/api/views.py:1997`; `app/chamados/reconciliador.py:910`; `app/chamados/views.py:973`; `app/ponto/services/cluster_espurio.py:130`; `app/ponto/services/ausencia.py:659`; `app/ponto/management/commands/detectar_par_relampago.py:368`; `app/ponto/management/commands/reconciliar_grade.py:507`; `app/ponto/management/commands/detectar_ausencias.py:190`; `app/ponto/management/commands/detectar_ausencias.py:271`; `app/ponto/management/commands/detectar_ausencias.py:510`; `app/ponto/management/commands/detectar_ausencias.py:693`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151`; `app/ponto/management/commands/processar_alertas_turno.py:335`; `app/chamados/services/disputa_emissao.py:568`; `app/chamados/services/disputa_emissao.py:1101`; `app/chamados/services/disputa_emissao.py:1336`; `app/chamados/services/adesao.py:74`. T: `app/ponto/tests/test_o_outbox_celula.py:287`; `app/ponto/tests/test_o_outbox_celula.py:555`.
+
+- `app/chamados/models.py:1054` `ChamadoColaborador.criar` -- cria identidade/contexto/status inicial; auditoria aberta pode nascer `registrado` pela decisão do motor (`app/chamados/models.py:1064`); create em `app/chamados/models.py:1095` -- **fica**. Sem DP próprio. P, incluindo `_Chamado`, `_Ch9` e `_ChG`: `app/colaboradores/views.py:1978`; `app/colaboradores/views.py:2363`; `app/ponto/utils.py:40`; `app/ponto/utils.py:103`; `app/ponto/views.py:291`; `app/api/views_core.py:747`; `app/api/views.py:747`; `app/api/views.py:2201`; `app/colaboradores/services/vinculo.py:393`; `app/colaboradores/services/desligamento.py:163`; `app/ponto/services/justificativa.py:291`; `app/ponto/services/geofence.py:339`; `app/ponto/services/triagem_batida.py:107`; `app/ponto/services/triagem_batida.py:336`; `app/ponto/services/triagem_batida.py:459`; `app/ponto/management/commands/processar_alertas_avancados.py:121`; `app/chamados/services/regularizacao_ext.py:246`; `app/chamados/services/abertura.py:47`; `app/chamados/services/abertura.py:172`. Ensaio: `app/chamados/management/commands/smoke_chamados.py:123`. T: `app/colaboradores/tests/test_vincular_escala_selos.py:26`; `app/ponto/tests/test_cobertura_followup.py:45`.
+
+- `app/chamados/services/disputa_emissao.py:474` `_abrir_ou_agregar_disputa` -- cria continente, motivos/contexto e estado inicial aberto, `fechada_em=NULL` pelo campo; create em `app/chamados/services/disputa_emissao.py:587` -- **fica**. Default em `app/chamados/models.py:1754`; sem DP próprio. P: `app/chamados/services/disputa_emissao.py:627`; `app/chamados/services/disputa_emissao.py:662`; `app/ponto/management/commands/reconciliar_grade.py:424`. Ensaio: `app/chamados/management/commands/smoke_chamados.py:99`. T: `app/chamados/tests/test_e1_fila_v2_2_integracao.py:132`.
+
+- `app/chamados/services/disputa_emissao.py:1024` `criar_disputa_a_partir_de_chamados_orfaos` -- cria continente aberto, identidade, motivos/contexto; create em `app/chamados/services/disputa_emissao.py:1120` -- **fica**. `fechada_em=NULL` pelo default (`app/chamados/models.py:1754`); sem DP próprio. P: `app/ponto/management/commands/processar_alertas_avancados.py:159`; `app/ponto/management/commands/detectar_ausencias.py:802`; `app/ponto/management/commands/processar_alertas_turno.py:385`; `app/chamados/services/cobrar_dia.py:49`; `app/chamados/services/pergunta_no_app.py:208`; `app/chamados/services/acoes_disputa.py:222`. T: `app/chamados/tests/test_chamados_models.py:135`; `app/chamados/tests/test_chamados_models.py:155`; `app/chamados/tests/test_chamados_models.py:157`; `app/tenants/tests.py:74`; `app/tenants/tests.py:85`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:78`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:244`.
+
+- `app/chamados/services/disputa_emissao.py:1299` `criar_disputa_ancora_de_chamado` -- cria continente aberto e vínculo com chamado, motivos/contexto; create em `app/chamados/services/disputa_emissao.py:1355` -- **fica**. `fechada_em=NULL` pelo default (`app/chamados/models.py:1754`); sem DP próprio. P: `app/chamados/services/acoes_disputa.py:189`. T: `app/chamados/tests/test_fio_ancora.py:74`; `app/chamados/tests/test_fio_ancora.py:92`; `app/chamados/tests/test_fio_ancora.py:93`; `app/chamados/tests/test_fio_ancora.py:104`; `app/chamados/tests/test_fio_ancora.py:151`; `app/chamados/tests/test_3b_reuso_1061.py:30`.
+
+- `app/chamados/models.py:2822` `PerguntaDisputa._nascer` -- insere identidade, dia, instância, célula,
+
+[truncado em 20000 de 75733 caracteres]
 
 ## 09/11 10:02 · sessao 0516585baa5b · - · - · origem=Ronald (tmux)
 
@@ -468,64 +536,4 @@ Rastreio das três funções, incluindo arquivos fora do diff:
 
 Leitores do selo encontrados: chamadas diretas a `_pertence_fila1` em `bin/tests/test_censo_antes_da_vaga.sh:605` e `bin/tests/test_censo_antes_da_vaga.sh:611`; mutações textuais das listas em `bin/tests/test_censo_antes_da_vaga.sh:750` e `bin/tests/test_censo_antes_da_vaga.sh:763`. Chamadas dinâmicas não identificáveis por referências nominais permanecem [nao verificado].
 
-## 09/11 08:41 · sessao 880e3d56c067 · FIO-E0-V4-E3 · construtor · origem=Code
-
-| Hunk | Alteração / escrita e leitura |
-|---|---|
-| [core/juizes.py:759](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/core/juizes.py:759) | Baixa pontual do dashboard; registro lido pelo selo em `core/tests/test_contract_juiz_tela.py:34`. |
-| [chamados/models.py:1795](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/models.py:1795) | Método removido, lápide no sítio. Guarda contra retorno em `chamados/tests/test_e3_pendentes_app.py:285`. |
-| [tarefa_do_dia.py:363](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/services/tarefa_do_dia.py:363) | Carga escreve `_verbos`, `_fila`, `_fila_cel`; tarefa lê em `:411` e `:422`. Fontes chamadas: `particionar_verbos(qs_vivos())['mapa']` e `qs_na_fila()`, também lidas por C17 em `chamados/juizes.py:1447` e `:1450`. |
-| [tarefa_do_dia.py:418](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/services/tarefa_do_dia.py:418) | Escreve campos aditivos `rota/fila/verbos/fio`; leitores novos: DIFF `:120` e testes `test_e3_tarefa_portas.py:96`. | [nao verificado]
-| [verbos.py:30](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/services/verbos.py:30) | Recebe `agora` da tarefa em `tarefa_do_dia.py:367`; conserva valor padrão dos leitores existentes, incluindo `painel.py:230` e `juizes.py:1447`. |
-| [test_e3_pendentes_app.py:99](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_e3_pendentes_app.py:99) | M1–M5 com fixtures ORM, relógio congelado e views completas; M6/M7 mantidos em `:306` e `:321`. |
-| [test_esmeril2_left_join.py:19](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_esmeril2_left_join.py:19) | Migra para `consulta_do_app`: preserva ausência de fantasma e exige duas perguntas → duas pendências. |
-| [test_fio_le_o_juiz.py:263](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_fio_le_o_juiz.py:263) | Migra leitura para `consulta_do_app`; preserva desaparecimento da pergunta absolvida. |
-| [test_dashboard_badge.py:37](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/core/tests/test_dashboard_badge.py:37) | Migra comparação da tela para `consulta_do_app`. Seus leitores de produção continuam em `api/views.py:325`, `api/views_core.py:314`, `core/views.py:253` e `api/views.py:2562`. |
-| `test_badge_disputa_pendente.py` — excluído | Sustentava unidade por disputa; substituição por pergunta em `test_e3_pendentes_app.py:176`. |
-| [test_e3_tarefa_portas.py:1](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_e3_tarefa_portas.py:1) | Quatro respostas escritas antes do aditivo; fixtures escrevem fatos, testes leem a tarefa. | [nao verificado]
-| [diff_tarefa_portas.py:23](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/management/commands/diff_tarefa_portas.py:23) | Barreira SQL; comparação lê `_porta` e tarefa em `:118`. Escreve somente saída agregada em `:132`. |
-| [test_e3_diff_portas.py:49](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_e3_diff_portas.py:49) | Selo injeta escrita indireta e exige aborto antes do driver; identidade antes da raspagem em `:72`. |
-| [e3_mutantes.py:15](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/e3_mutantes.py:15) | Catálogo de mutações; `aplicar_mutante`, em `:53`, remenda funções somente em memória e restaura após cada teste. | [nao verificado]
-
-**DECISAO-ABERTA:** a interpretação “sem ações ⇒ sem porta” está explícita em `test_e3_tarefa_portas.py:10`. Medição na sombra por L-099/SONDA-SEM-GRANT e efeito na folha: **[nao verificado]**. C17 conserva os três chamadores em `fora_da_folha.py:67`, `vigia_fio.py:635` e `cadastro_realidade.py:488`.
-
-Comandos preparados, **não executados**; RED, mortes dos mutantes e resultados da suíte: **[nao verificado]**. [nao verificado]
-
-```bash
-t() {
-  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    --settings=config.settings.ci "$@"
-}
-SELOS="chamados.tests.test_e3_pendentes_app chamados.tests.test_e3_tarefa_portas chamados.tests.test_e3_diff_portas"
-
-t $SELOS core.tests.test_contract_juiz_tela \
-  chamados.tests.test_esmeril2_left_join \
-  chamados.tests.test_fio_le_o_juiz core.tests.test_dashboard_badge
-
-# RED: retirar o aditivo.
-E3_MUTANTE=sem_aditivo t chamados.tests.test_e3_tarefa_portas
-
-# Um comando por mutante catalogado; esperado RED.
-for m in $(PYTHONDONTWRITEBYTECODE=1 python3 -c \
-  'from chamados.tests.e3_mutantes import MUTANTES; print(*MUTANTES, "legado_publico", "registro_dashboard", "quarto_c17_alias")')
-do
-  E3_MUTANTE="$m" t $SELOS
-done
-
-# DIFF: NÃO RODADO; universo a fornecer pela sombra.
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py diff_tarefa_portas \
-  --colaborador ID --inicio AAAA-MM-DD --fim AAAA-MM-DD
-```
-
-Saída observada da compilação e auditoria estática dos arquivos acima:
-
-```text
-py_compile: OK nos 12 .py presentes; saída interceptada em memória.
-Arquivos de bytecode escritos: 0.
-Mutantes: 18 alvos textuais únicos, sintaxe compilável; sem execução.
-C17: 3 chamadores diretos por AST.
-Legado removido: 0 chamadas de produção por AST.
-git diff --check: sem saída.
-```
-
-_3093 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3094 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

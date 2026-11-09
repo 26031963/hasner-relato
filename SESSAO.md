@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 10:08:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (191.7 MB). Acoes na janela: **1131**.
+**Medido em 09/11/2026 10:13:58.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (192.4 MB). Acoes na janela: **1134**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:13:56 | Bash | RELATO top, git status, lei_akita seal logic | `cd /home/ronald/saas-hasner; head -12 app/docs/RELATO.md \| cut -c1-250; git status --short \| head; git log origin/main -1 --oneline; git log -1 --oneline; grep -n 'PADRAO-NA-CURA\\|instrumento\\|negocio\\|EXCEC\\|allow' bin/tests/test_lei_akita.sh \| head -40` |
+| 10:13:50 | Bash | Inspect outputs of the three Codex jobs | `cd /home/ronald/saas-hasner; for f in logs/fio_e3/construtor_v3.out logs/FIO-E0-V4-E4-ESCRITORES/censo_v1.out logs/bug_par_dois_atos/construtor_v3.out; do echo "== $f"; ls -la $f 2>&1; grep -a '^rc=' $f; tail -c 300 $f; echo; done; pgrep -af codex_pergunta \| cut -c1-150; ls -la logs/FIO-E0-V4-E4-ESCRITORES/ logs/bug_par_dois_atos/ \| tail -20` |
+| 10:13:44 | Bash | Check running jobs and lei_akita seal on main | `cd /home/ronald/saas-hasner; date; for p in 3630778 3671740 4087951; do ps -p $p -o pid=,etime=,args= \| cut -c1-120 \|\| echo "$p morto"; done; tail -2 logs/fio_e3/construtor_v3.out logs/FIO-E0-V4-E4-ESCRITORES/censo_v1.out 2>/dev/null; uptime; bash bin/tests/test_lei_akita.sh 2>&1 \| tail -15; echo rc=$?` |
 | 09:54:02 | Bash | Confirm launch and record in BACKLOG/RELATO | `cd /home/ronald/saas-hasner; /usr/bin/sleep 5; tail -4 logs/FIO-E0-V4-E4-ESCRITORES/censo_v1.out; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| FIO-E0-V4-E4-ESCRITORES \|')][0] c=L[i].split('\|'); c[4]=' censo P13 no Codex 09/11 09:5x (aval E4-CENSO-JA; logs/FIO-E0-V4-E4-ESCRITORES/censo_v1.r); construtor so apos pouso E2+E ...` |
 | 09:53:48 | Bash | Write E4 censo question and launch Codex censo | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; mkdir -p $D cat > $D/censo_v1.q <<'EOF' OBRA FIO-E0-V4-E4-ESCRITORES -- CENSO P13 (papel censo, SO LEITURA). Hash = copia da E3 (main + E1 + E2 + E3 volta 2). UNIDADE (aval E4-CENSO-JA, anexo; nao reinterprete): PORTA DE ESCRITA DE ESTADO DA PERGUNTA. Ponto de partida (RELATO V4-5): "16 portas de estado (1 Chamado + 3 Disputa + 12 Pergun ...` |
 | 09:53:33 | Bash | Read CENSO block field rules | `cd /home/ronald/saas-hasner; sed -n 1495,1524p bin/disjuntor.py; sed -n 1555,1600p bin/disjuntor.py` |
