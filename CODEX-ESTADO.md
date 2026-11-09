@@ -1,7 +1,364 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:10** · publicado em **09/11/2026 03:11** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:14** · publicado em **09/11/2026 03:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:14 · sessao 8538307186c7 · SELOS-CANON-I1 · verificador · origem=Code
+
+1. **OBSERVACAO — P1..P7: a volta 2 não cura todos integralmente.**
+
+| Item | Resultado da conferência |
+|---|---|
+| **P1** | **Parcial.** Wrapper passa pelo censo antes da vaga; Agent sem obra é negado. Porém `export` herdado é negado mesmo com censo válido, pois o hook exige obra escrita na invocação. `bin/codex_pergunta.sh:230`; `bin/disjuntor.py:1691`; `bin/disjuntor.py:1713`. |
+| **P2** | **Descoberta literal curada:** existe glob `logs/<OBRA>/brief*.md`, unido aos citados. A costura com briefs citados em pasta diferente continua quebrada no wrapper, que entrega texto vazio ao juiz. `bin/disjuntor.py:1536`; `bin/disjuntor.py:1570`; `bin/disjuntor.py:2087`. |
+| **P3** | **Curado só na forma.** Escreve pela porta existente, mas em ALARMES; o Stop procura a primeira linha útil do painel. A idempotência também não é atômica. `bin/disjuntor.py:258`; `bin/disjuntor.py:269`; `app/core/esteira_vigia.py:863`; `bin/hook_stop_fila1.py:407`. |
+| **P4** | **Parcial.** BACKLOG ausente e exceções dentro de `_censo_nega` negam; JSON ilegível ainda termina com rc 0 e sem `deny`. `bin/disjuntor.py:1544`; `bin/disjuntor.py:1590`; `bin/disjuntor.py:1751`; `bin/disjuntor.py:1790`. |
+| **P5** | **Contraexemplos originais curados:** examina todas as perguntas e ancora o corte. O positivo exige stdout vazio, mas não verifica rc 0 do processo. `bin/disjuntor.py:1454`; `bin/disjuntor.py:1512`; `bin/tests/test_censo_antes_da_vaga.sh:124`; `bin/tests/test_censo_antes_da_vaga.sh:139`. |
+| **P6** | **Parcial.** Há união dos intervalos e adiamento do OK do Agent. O OK do wrapper continua anterior à vaga e é contado como abertura efetiva. `bin/disjuntor.py:1924`; `bin/disjuntor.py:1662`; `bin/codex_pergunta.sh:230`; `bin/disjuntor.py:1988`. |
+| **P7** | **Reconhecedor compartilhado; semântica incompleta.** Stop, handoff e alarme usam a mesma função, mas selecionam lugares diferentes do RELATO. `bin/hook_stop_fila1.py:716`; `bin/handoff_sessao.sh:128`; `bin/alarme_sessao_ociosa.py:124`; `bin/alarme_sessao_ociosa.py:137`. |
+
+2. **PROCEDENTE-candidato — classificação dos pontos abertos 1..9.**
+
+| Ponto | Classificação e fundamento |
+|---|---|
+| **1** | **Defeito:** PAREI entra abaixo de ALARMES, preservando o painel anterior; não satisfaz o leitor do Stop/handoff. Ausência de hora é comprovada; permanência pela dieta é **[nao verificado]**. `app/core/esteira_vigia.py:829`; `app/core/esteira_vigia.py:867`; `bin/disjuntor.py:1457`; `bin/hook_stop_fila1.py:408`. |
+| **2** | **Defeito:** existência é consultada antes do lock; a inserção travada não deduplica. Dois chamadores podem inserir duas vezes. Além disso, uma linha histórica em qualquer lugar impede republicação posterior. `bin/disjuntor.py:258`; `bin/disjuntor.py:261`; `app/core/esteira_vigia.py:848`; `app/core/esteira_vigia.py:867`. |
+| **3** | **Defeito de costura:** o PreToolUse aceita brief citado em pasta diferente; o wrapper perde essa citação e exige o glob literal. Portanto uma abertura pode passar no hook e ser recusada pela CLI com o mesmo brief conforme. Que as pastas atuais de produção sejam slugs é **[nao verificado]**. `bin/tests/test_censo_antes_da_vaga.sh:166`; `bin/disjuntor.py:1536`; `bin/disjuntor.py:2087`. |
+| **4** | **Defeito de autoridade:** a vaga é do repositório vivo, mas o julgamento usa BACKLOG/briefs da raiz do script. Cópia desatualizada sem a obra retorna FORA/rc 0. Divergência efetiva em produção: **[nao verificado]**. `bin/codex_pergunta.sh:55`; `bin/codex_pergunta.sh:76`; `bin/codex_pergunta.sh:230`; `bin/disjuntor.py:1544`; `bin/disjuntor.py:2083`. |
+| **5** | **Defeito no contrato anunciado da chave:** “existindo, nenhum disjuntor age” não corresponde à CLI, que não consulta `desligado()`. A diferença está declarada, mas aceite específico desse desvio é **[nao verificado]**. `bin/disjuntor.py:35`; `bin/disjuntor.py:1756`; `bin/disjuntor.py:2069`. |
+| **6** | **Endurecimento declarado, com regressões concretas:** negar construtor sem obra é intencional; negar `export` com censo válido e IDs anteriormente admitidos é incompatibilidade adicional. `bin/disjuntor.py:1713`; `bin/disjuntor.py:1691`; `bin/codex_pergunta.sh:188`; `bin/disjuntor.py:2075`. |
+| **7** | **Defeito na cobertura alegada:** abertura fora do wrapper não é automaticamente contada; sem `ini` no chamadas.log ela desaparece da medida. A rota direta também é proibida pela conduta existente. `bin/disjuntor.py:1972`; `bin/disjuntor.py:1975`; `bin/codex_pergunta.sh:288`; `CLAUDE.md:348`. |
+| **8** | **Risco de compatibilidade declarado da forma restritiva:** exige `? cortada por Ronald <token>` no fim; texto posterior invalida. Não é outro escape; é redução das formas aceitas. Aceitação de formatos reais afetados: **[nao verificado]**. `bin/disjuntor.py:1454`; `bin/disjuntor.py:1513`. |
+| **9** | **Fora do aval funcional de I1; ajuste coerente do selo vizinho.** A mutação continua retirando `bash|sh`; `env` passou a ramo separado. Verde efetivo nesta auditoria: **[nao verificado]**. `bin/disjuntor.py:1288`; `bin/tests/test_disjuntor.sh:1741`. |
+
+**Chamadores expostos ao ponto 6:** agentes construtores em cópia, inclusive a rota documental `wt-ui`; wrapper com obra herdada por `export`; wrapper alcançado por script ou `bash -c`. Os dois primeiros podem receber negativa diretamente no hook; os últimos passam pela porta acrescentada ao wrapper. `CLAUDE.md:306`; `CLAUDE.md:309`; `bin/disjuntor.py:1691`; `bin/disjuntor.py:1711`; `bin/codex_pergunta.sh:230`.
+
+**Lista de processos/prompts individualmente vivos: [nao verificado].** Os exemplos de `export` e Agent sem obra nos anexos são fixtures, não identificação de chamadores de produção. `bin/tests/test_censo_antes_da_vaga.sh:174`; `bin/tests/test_censo_antes_da_vaga.sh:178`.
+
+O predicado exato do Agent é:
+
+- `tool_name == 'Agent'`;
+- tipo fora de `{'verificador','Explore','Plan','claude-code-guide','statusline-setup'}`;
+- prompt casando `COPIA_RE = /[^\s"'\\:]*/wt-[A-Za-z0-9._-]+`;
+- obra obtida pela primeira ocorrência válida entre as âncoras `obra[s] <ID>` e `leitura … da <ID>`, esta limitada a 80 caracteres sem quebra. `bin/disjuntor.py:102`; `bin/disjuntor.py:104`; `bin/disjuntor.py:115`; `bin/disjuntor.py:545`; `bin/disjuntor.py:1711`.
+
+O ID validado é `(?:[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)+|[A-Z]+\d+[A-Z0-9]*)`. A busca ignora caixa, mas a validação não; cauda opcional participa da identidade dos IDs sem hífen. Reconhecimento sintático não significa pertencer à fila: isso é consultado depois. `bin/disjuntor.py:108`; `bin/disjuntor.py:110`; `bin/disjuntor.py:562`; `bin/disjuntor.py:570`; `bin/disjuntor.py:1567`.
+
+**A sessão principal não tem isenção ao despachar Agent ou wrapper:** a saída antecipada por ausência de `agent_id` exclui expressamente essas chamadas. Que esta sessão tenha emitido uma chamada afetada é **[nao verificado]**. `bin/disjuntor.py:1673`.
+
+3. **PROCEDENTE-candidato — fail-closed ainda tem buracos; há negativas espúrias permanentes.**
+
+JSON truncado levanta em `json.loads`, mantendo `payload={}`. O classificador devolve lista vazia; o fallback pelo texto cru só existe quando o próprio classificador levanta. O caminho termina com rc 0, stdout vazio e “ferramenta liberada”. Esse resultado foi reproduzido em memória. `bin/disjuntor.py:1748`; `bin/disjuntor.py:1751`; `bin/disjuntor.py:1594`; `bin/disjuntor.py:1611`; `bin/disjuntor.py:1790`.
+
+BACKLOG legível, mas sem marcador OBRAS, também vira fila vazia: `_itens_andaveis` retorna `[]`, e o censo libera como fora da fila. Ausência de estrutura não é distinguida de universo realmente vazio. `bin/hook_stop_fila1.py:225`; `bin/disjuntor.py:1546`; `bin/disjuntor.py:1567`; `bin/disjuntor.py:2083`.
+
+Falhas de importação anteriores a `main_pretool` não estão protegidas pelo seu `try`; settings chama Python diretamente. **Que o harness real abra após traceback/rc 1 é [nao verificado]**: seu consumidor de PreToolUse não está demonstrado pela cópia. `bin/disjuntor.py:59`; `bin/disjuntor.py:1747`; `.claude/settings.json:68`.
+
+No inverso, há duas recusas independentes da qualidade do brief:
+
+- `export CODEX_OBRA=… CODEX_PAPEL=construtor; wrapper --construtor …` continua sem obra para o hook, mesmo com censo conforme. `bin/disjuntor.py:1385`; `bin/disjuntor.py:1691`.
+- IDs como `ABC` e `09-TURNO-ABERTO-EXPOSTA` passam no contrato anterior do wrapper e falham no novo `main_censo`. Não se resolvem corrigindo o brief. Chamadas atuais desses IDs: **[nao verificado]**. `bin/codex_pergunta.sh:188`; `bin/disjuntor.py:108`; `bin/disjuntor.py:2075`.
+
+4. **PROCEDENTE-candidato — ESMERIL-SEMANTICA do PAREI: mesma porta, lugar incompatível.**
+
+Sim: negativa comum e PAREI carregam `esteira_vigia.py` e chamam `no_relato`. Não foi acrescentado um escritor independente nesse caminho. `bin/disjuntor.py:195`; `bin/disjuntor.py:240`; `bin/disjuntor.py:267`; `bin/disjuntor.py:269`.
+
+A string escrita corresponde à forma aceita pelo reconhecedor; o problema é onde ela fica. `bin/disjuntor.py:1457`; `bin/hook_stop_fila1.py:700`.
+
+| Consumidor | Lugar efetivamente lido |
+|---|---|
+| **Escritor** | Insere dentro de ALARMES, preservando o painel anterior. `app/core/esteira_vigia.py:829`; `app/core/esteira_vigia.py:867`. |
+| **Stop** | Primeira linha útil após o cabeçalho. `bin/hook_stop_fila1.py:407`; `bin/hook_stop_fila1.py:438`; `bin/hook_stop_fila1.py:715`. |
+| **Handoff** | Coleta até o primeiro `##`; prova a linha devolvida pelo Stop. `bin/handoff_sessao.sh:102`; `bin/handoff_sessao.sh:128`. |
+| **Alarme** | Procura nas primeiras 40 linhas. Pode encontrar ALARMES enquanto Stop/handoff não encontram. `bin/alarme_sessao_ociosa.py:124`; `bin/alarme_sessao_ociosa.py:137`. |
+
+A contraprova em memória usando o fixture do próprio selo colocou PAREI na linha 7, enquanto `_linha_do_topo()` devolveu `texto neutro do painel`. O selo apenas conta a ocorrência no arquivo inteiro; o teste do Stop fabrica PAREI diretamente no topo. Falta a prova integrada negativa → escritor → leitor. `bin/tests/test_censo_antes_da_vaga.sh:145`; `bin/tests/test_censo_antes_da_vaga.sh:202`; `bin/tests/test_hook_esperando_com_prova.sh:62`.
+
+5. **OBSERVACAO — `#G:censo` atual recusa qualquer rc não zero antes da vaga.**
+
+A expressão é `python3 -I … --censo "$OBRA" || _recusa2 …`; `_recusa2` termina com rc 2. Portanto **erro Python com traceback/rc 1 recusa**, assim como rc 2, 127 ou outro não zero. O `flock` vem depois. `bin/codex_pergunta.sh:183`; `bin/codex_pergunta.sh:230`; `bin/codex_pergunta.sh:236`.
+
+O selo mantém a vaga ocupada e exige que o motivo seja censo, exercitando essa ordem. `bin/tests/test_codex_pergunta.sh:210`.
+
+6. **PROCEDENTE-candidato — existem mutantes simples não distinguidos pelos casos apresentados.**
+
+As contraprovas abaixo foram exercitadas em memória; **sobrevivência à execução integral dos selos: [nao verificado]**. A previsão de sobrevivência decorre dos casos indicados. `bin/tests/test_censo_antes_da_vaga.sh:149`; `bin/tests/test_censo_antes_da_vaga.sh:186`; `bin/tests/test_hook_esperando_com_prova.sh:233`; `bin/tests/test_codex_pergunta.sh:85`.
+
+| Alvo / mutação | Por que os casos não distinguem; defeito introduzido |
+|---|---|
+| **`_censo_nega`: `+ ok` → `+ ok[-1:]`** | O caso com vários citados põe o ruim por último. Continua negando ali, mas libera **ruim seguido de bom**, ignorando o primeiro. `bin/disjuntor.py:1570`; `bin/tests/test_censo_antes_da_vaga.sh:149`. |
+| **`_briefs_da_obra`: glob ordenado → glob ordenado `[-1:]`** | O cenário múltiplo põe `brief_v2.md` ruim por último. Falta a inversão: primeiro ruim, último bom. `bin/disjuntor.py:1536`; `bin/tests/test_censo_antes_da_vaga.sh:181`; `bin/tests/test_censo_antes_da_vaga.sh:186`. |
+| **`prova_parei_censo`: não reconhecido retorna `''`, em vez de `None`** | Os casos novos chamam diretamente a prova apenas com linhas de censo. O handoff passaria a declarar espera provada para painel comum, pois trata `''` como sucesso. `bin/hook_stop_fila1.py:698`; `bin/handoff_sessao.sh:128`; `bin/tests/test_hook_esperando_com_prova.sh:237`. |
+| **`#G:censo`: recusar somente rc 1** | O fake recusa exclusivamente com rc 1. O mutante mantém esse caso e libera rc 2/127. `bin/tests/test_codex_pergunta.sh:85`; `bin/tests/test_codex_pergunta.sh:210`; `bin/tests/test_codex_pergunta.sh:525`. |
+
+Também falta assert numérico do contador `ok`: os asserts numéricos cobrem abertos, negados e horas. `bin/tests/test_censo_antes_da_vaga.sh:246`.
+
+7. **PROCEDENTE-candidato — trilhas e medidas ainda atribuem significados diferentes ao mesmo evento.**
+
+| Linha | Quem escreve | Quem lê / significado |
+|---|---|---|
+| **CENSO OK** | CLI por `_censo_nega`; Agent após `_pretool` permitir. `bin/disjuntor.py:1581`; `bin/disjuntor.py:1664`. | `_censo_24h` aumenta `ok`, encerra espera e apresenta “aberturas que passaram”. `bin/disjuntor.py:1961`; `bin/disjuntor.py:1963`; `bin/disjuntor.py:1988`. |
+| **CENSO FORA** | `main_censo`. `bin/disjuntor.py:2084`. | Registra par obra/PID como cobertura suficiente; não aumenta `ok` nem encerra espera anterior. `bin/disjuntor.py:1955`; `bin/disjuntor.py:1960`. |
+| **NEGA: linha real `NEGOU DISJUNTOR CENSO`** | PreToolUse normal, recuperação de exceção e CLI. `bin/disjuntor.py:1763`; `bin/disjuntor.py:1774`; `bin/disjuntor.py:2089`. | Conta negativas; abre intervalo somente se reconhecer `construtor de <obra> sem CENSO`. Negativas sem obra não abrem intervalo. `bin/disjuntor.py:1949`. |
+| **CENSO DESLIGADO** | `_censo_desligado`, para Agent. `bin/disjuntor.py:1742`. | Soma em `abertos_sem`. `bin/disjuntor.py:1958`; `bin/disjuntor.py:1977`. |
+| **PAREI censo** | `_parei_censo_no_relato` pela porta do vigia. `bin/disjuntor.py:269`. | Stop, handoff e alarme, com os recortes divergentes do achado 4. `bin/hook_stop_fila1.py:716`; `bin/handoff_sessao.sh:128`; `bin/alarme_sessao_ociosa.py:137`. |
+| **`chamadas.log` / `ini`** | Wrapper, antes da chamada efetiva. `bin/codex_pergunta.sh:288`. | `codex_limite_estado._linhas_chamadas`, depois `_censo_24h`. `bin/codex_limite_estado.py:49`; `bin/disjuntor.py:1972`. |
+
+O **OK da CLI significa brief aprovado**, pois ocorre antes da vaga. O leitor o transforma em **construtor aberto**. CLI avulsa ou recusa posterior por vaga ocupada aumenta aberturas e encerra espera sem abertura. `bin/disjuntor.py:2087`; `bin/codex_pergunta.sh:230`; `bin/codex_pergunta.sh:236`; `bin/disjuntor.py:1961`.
+
+A correlação aceita `(obra,pid)` de toda a história, sem contemporaneidade ou hash. Um PID reutilizado pode esconder abertura sem aprovação contemporânea; a chave original do chamadas.log dispõe também de hash. Ocorrência real: **[nao verificado]**. `bin/disjuntor.py:1957`; `bin/disjuntor.py:1975`; `bin/codex_limite_estado.py:63`.
+
+A união corrige sobreposição, mas mede intervalos NEGOU→OK, sem consultar ocupação da vaga; não prova “horas de vaga ociosa”. `bin/disjuntor.py:1924`; `bin/disjuntor.py:1953`; `bin/disjuntor.py:1968`.
+
+8. **OBSERVACAO — classes estruturais presentes nesta fatia.**
+
+- **Segundo juiz:** não apareceu clone do juiz de forma; há divisão da autoridade por raiz entre censo e vaga. `bin/disjuntor.py:1575`; `bin/codex_pergunta.sh:76`; `bin/codex_pergunta.sh:230`.
+- **Segundo escritor fora da porta:** não neste caminho; a violação é leitura de idempotência fora da trava. `bin/disjuntor.py:261`; `bin/disjuntor.py:269`; `app/core/esteira_vigia.py:848`.
+- **Borda temporal:** correlação com PID histórico sem limite de tempo, comprovada no leitor; ocorrência produtiva **[nao verificado]**. `bin/disjuntor.py:1957`; `bin/disjuntor.py:1975`.
+- **Derivação paralela:** recortes independentes decidem quais linhas representam a parada atual. `bin/hook_stop_fila1.py:407`; `bin/handoff_sessao.sh:102`; `bin/alarme_sessao_ociosa.py:124`.
+- **Selo sem mordida:** falta ligação escritor→Stop e faltam as inversões/rcs dos mutantes acima. `bin/tests/test_censo_antes_da_vaga.sh:202`; `bin/tests/test_hook_esperando_com_prova.sh:62`; `bin/tests/test_codex_pergunta.sh:85`.
+- **Ordem de trava:** censo antes da vaga está correto; deduplicação antes do lock permanece incorreta. `bin/codex_pergunta.sh:230`; `bin/codex_pergunta.sh:236`; `bin/disjuntor.py:261`.
+- **Campo com dois significados:** **presente em CENSO OK**, aprovação do brief no escritor e abertura efetiva no leitor. `bin/disjuntor.py:1581`; `bin/disjuntor.py:1988`.
+
+Os verdes relatados pelo construtor não foram reexecutados nesta auditoria; execução integral e comportamento de produção permanecem **[nao verificado]**.
+
+## 09/11 03:13 · sessao 4f60167f1d5f · PAR-NAO-ADJACENTE · censo · origem=Code
+
+**1. A adjacência não tem justificativa de lei demonstrada**
+
+O contrato registrado manda transportar **o par do juiz inteiro**, acomodar a saída na última ponta e tratar soltas pelo marco mais próximo livre. Não exige pontas consecutivas entre as batidas; essa condição aparece na implementação. (`app/docs/RELATO.md:1710`, `app/escala/utils.py:467`, `app/escala/utils.py:507`, `app/escala/utils.py:511`)
+
+O pouso `b3bf529e`, em 29/10, está registrado. A introdução precisa da condição em `9da200c8` e a razão histórica dessa escolha ficam **[nao verificado]**: esta cópia não contém o histórico Git consultável. (`app/docs/RELATO.md:1657`)
+
+Os casos pedidos não demonstram dependência da adjacência:
+
+| Caso | O que protege |
+|---|---|
+| **col345** | A entrada às 15:00 cumpriu a volta `hfi`; o período de trabalho é 15:00→18:56. Não apresenta pausa com solta interposta. (`app/ponto/tests/test_calculador_portoes_de_marco.py:15`, `app/ponto/tests/test_calculador_portoes_de_marco.py:56`) |
+| **col60/O271** | E12:00→S19:06: cabeça atrasada em 300 minutos, mesmo estando sobre `hii`. As contraprovas distinguem entrada em `hfi`. (`app/ponto/tests/test_o271_pontualidade_no_comercial.py:177`, `app/ponto/tests/test_o271_pontualidade_no_comercial.py:192`) |
+| **[nome]** | Cluster de quatro batidas não pode preencher marcos distantes; a proteção é o filtro final, independente de `_iz == _i + 1`. (`app/ponto/tests/test_pareador_cluster_marco.py:53`, `app/escala/utils.py:572`) |
+| **Nominais da obra** | A, controle, convergência e noturno usam quatro batidas, com pontas internas adjacentes; B/C/D/E/F exercitam bordas e soltas. (`app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:104`, `:129`, `:143`, `:154`, `:165`, `:212`, `:223`, `:326`, `:358`) |
+
+Por inspeção, esses exemplos preservam a elegibilidade dos pares ao trocar a comparação por `>`; resultado de executar a alteração contra a bateria: **[nao verificado]**. Há precedente explícito protegendo o **par declarado contra o adjacente guloso**, embora a sobra daquele teste esteja antes do par. (`app/ponto/tests/test_o68b_papel_da_ata_no_motor.py:701`)
+
+**O contraexemplo à troca isolada é o aninhamento descrito abaixo**, permitido pela construção atual do extrator. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`)
+
+**2. Arranjos que precisam ser distinguidos**
+
+Os leitores públicos repartem os mesmos pares marcados pelo piso: `intervalos_do_turno` entrega os de pelo menos 15 minutos; `pausas_abaixo_do_piso`, o restante. A adjacência não é garantia conjunta deles: a passagem declarada casa suas pontas primeiro. (`app/ponto/turnos.py:545`, `app/ponto/turnos.py:565`, `app/ponto/turnos.py:811`)
+
+| Arranjo | Resultado da leitura |
+|---|---|
+| **Uma solta entre duas pontas declaradas** | O par declarado permanece inteiro; a batida sem outro papel é `sol`, tratada depois. Rejeitá-lo por adjacência contradiz esse contrato. (`app/ponto/turnos.py:811`, `app/escala/utils.py:440`, `app/escala/utils.py:507`, `app/escala/utils.py:511`) |
+| **Pares cruzados** | Com instantes distintos e lista cronológica, os dois laços atuais não os produzem: declarados são casados sucessivamente; os demais usam vizinhos sem pontas declaradas. (`app/ponto/turnos.py:1217`, `app/ponto/turnos.py:812`, `app/ponto/turnos.py:819`, `app/ponto/turnos.py:820`) |
+| **Pares aninhados** | São possíveis: a primeira passagem reserva apenas as pontas declaradas; um par adjacente inteiramente dentro delas pode sobreviver à segunda passagem. (`app/ponto/turnos.py:815`, `app/ponto/turnos.py:820`, `app/ponto/turnos.py:880`) |
+| **Volta igual à saída verdadeira** | As bordas reais são excluídas dos pares por identidade. Deve permanecer o limite interior, além de `iz > i`; a última batida continua `sai`. (`app/ponto/turnos.py:802`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:880`, `app/escala/utils.py:473`) |
+| **“Solta” que é ponta de outro par** | Ela tem papel de par. Não se pode pular todo o trecho até a volta e apagar essas pontas. (`app/escala/utils.py:440`, `app/escala/utils.py:507`) |
+| **Duas pausas disjuntas com solta entre elas** | Transportam-se os dois pares em ordem; depois a solta tenta seu marco mais próximo, livre e compatível com a cronologia. (`app/escala/utils.py:539`, `app/escala/utils.py:564`) |
+
+**Contraexemplo concreto, deduzido do código:** ata/DNA `08/12/13/17`; batidas `E08, S12, S12:10, E12:30, E13, S17`. As extras podem receber `X`; 12/13 recebem `Xi`; o pareador absorve as internas. O extrator pode devolver **12→13 e 12:10→12:30**. Ocorrência desse arranjo na frota: **[nao verificado]**. (`app/ponto/turnos.py:1761`, `app/ponto/turnos.py:1787`, `app/ponto/turnos.py:1804`, `app/ponto/turnos.py:1827`, `app/ponto/turnos.py:1315`, `app/ponto/turnos.py:1371`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:880`)
+
+Com apenas uma pausa cadastral, aceitar ambos faz o alinhador retornar `None` e seguir para a DP; com duas, ele pode distribuir externo e interno em pausas sucessivas, invertendo a cronologia entre os pares. (`app/escala/utils.py:530`, `app/escala/utils.py:535`, `app/escala/utils.py:561`, `app/escala/utils.py:613`, `app/escala/utils.py:625`)
+
+A **L-085** conserva o dia de início da jornada; a **L-087** impede decidir papel pelo tipo gravado; **[nome]** ainda pode retirar associações no filtro final. Nenhuma prioridade explícita para pausas aninhadas foi demonstrada: **[nao verificado]**. (`app/docs/LEIS.md:117`, `app/docs/LEIS.md:119`, `app/escala/utils.py:578`)
+
+**3. Cura mínima na fonte e derivações paralelas**
+
+Para pares **internos, disjuntos e com pontas identificáveis**, a mudança local é reconhecer:
+
+```python
+0 < _i < _iz < len(_bats) - 1
+```
+
+em lugar da exigência de vizinhança. Conservam-se as pontas e a associação S/E entregues pelo juiz; não se procura outro parceiro. Isso é desenho proposto, ainda não implementado nem testado. (`app/escala/utils.py:454`, `app/escala/utils.py:467`; execução **[nao verificado]**)
+
+O percurso deve continuar visitando as batidas entre as pontas. As que não pertencem a nenhum par recebem `sol`; as pontas de outros pares conservam seu papel. O alinhador já acomoda bordas e pares antes de examinar soltas, que não deslocam ocupantes; o filtro [nome] continua por último. (`app/escala/utils.py:461`, `app/escala/utils.py:468`, `app/escala/utils.py:472`, `app/escala/utils.py:558`, `app/escala/utils.py:564`, `app/escala/utils.py:578`)
+
+**Não considero segura a cura geral como uma troca isolada de operador.** É preciso conferir o conjunto completo de pares antes de transcrevê-lo. Para sobreposição, o desenho sem fallback é explicitar o conflito, sem escolher vencedor no adaptador nem acrescentar queda para a DP. Esse tratamento é proposta; sua implementação e comportamento ficam **[nao verificado]**. A necessidade decorre do aninhamento permitido e da capacidade limitada do alinhador. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/escala/utils.py:535`)
+
+Há outras adjacências a distinguir:
+
+- **`_papeis_por_alternancia`** deriva pausas dos vizinhos S/E dos períodos. É a derivação paralela de papel usada sem `turno=`, exigindo pelo menos quatro batidas alternadas e duração até 26 horas. Não consulta os pares completos do turno. (`app/escala/utils.py:477`, `app/escala/utils.py:489`, `app/escala/utils.py:496`, `app/escala/utils.py:597`)
+- **`_pares_marcados`** mantém adjacência própria para os pares residuais, depois dos declarados; essa é parte da autoridade existente, não deve ser refeita no adaptador. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`)
+- **`_pausa_fechada_carimbada`** também percorre vizinhos, mas responde à figura da L-115, inclusive onde o extrator de pausas corretamente devolve vazio. Não é substituível mecanicamente por `intervalos_do_turno`. (`app/ponto/turnos.py:912`, `app/ponto/turnos.py:915`, `app/ponto/turnos.py:924`, `app/ponto/turnos.py:1005`)
+- **`_borda_posicional`** procura um único vão interior adjacente somente quando nenhum turno tem pausa marcada; é outra pergunta, com exclusão explícita da autoridade já presente. (`app/ponto/turnos.py:654`, `app/ponto/turnos.py:679`, `app/ponto/turnos.py:697`)
+
+**Pergunta de lei 1:** quando o extrator entrega uma pausa declarada externa e outra pausa inteiramente dentro dela, qual resultado deve valer: somente a declarada, ambas com tratamento explícito da sobreposição, ou turno conflitante? O código admite a figura; a regra de desempate permanece **[nao verificado]**. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`)
+
+**4. Leitores e dinheiro**
+
+| Caminho | Leitura e consequência |
+|---|---|
+| **Ata** | O builder passa `turno=` ao alinhador; monta cópias das células com as novas lâmpadas/órfãs, repareia e calcula o realizado. O cartório serializa esse número. É o caminho diretamente atingido por `_papeis_do_turno`. (`app/escala/utils.py:1701`, `app/escala/utils.py:1886`, `app/escala/utils.py:1898`, `app/escala/utils.py:2045`, `app/ponto/services/cartorio.py:706`) |
+| **Zona 5** | Chama `_match_marcos` sem turno, sobre os períodos; identifica P1/P2 e aplica atraso/antecipada. Usa a derivação por alternância quando elegível. (`app/ponto/motor_calculo_v2.py:3060`, `app/ponto/motor_calculo_v2.py:3062`, `app/ponto/motor_calculo_v2.py:3077`, `app/escala/utils.py:597`) |
+| **`marco_ocupado_pela_batida`** | Chama o mesmo alinhador sem turno e transcreve rótulo/delta; identifica a batida por HH:MM. (`app/escala/utils.py:427`, `app/escala/utils.py:429`) |
+| **`regua_defesa.cumpriu_a_volta_do_intervalo`** | Consulta esse leitor com um período e exige `hfi` dentro da tolerância. Com duas batidas, permanece na DP; motor e calculador usam a resposta. (`app/escala/regua_defesa.py:489`, `app/escala/regua_defesa.py:493`, `app/escala/utils.py:489`, `app/ponto/motor_calculo_v2.py:2117`, `app/ponto/calculador/regras.py:251`) |
+| **Outros chamadores diretos** | Builder single, passagem de diagnóstico e detector de anomalias desabilitam a derivação. (`app/escala/utils.py:776`, `app/escala/utils.py:1650`, `app/chamados/detector_anomalias.py:212`) |
+
+Assim, mudar `_papeis_do_turno` não muda diretamente todos os chamadores. O efeito financeiro também pode chegar **pela ata**, cujo papel alimenta o pareador do motor e os intervalos transportados pelo adaptador. (`app/escala/utils.py:596`, `app/ponto/motor_calculo_v2.py:495`, `app/ponto/motor_calculo_v2.py:503`, `app/ponto/adaptador_motor.py:44`)
+
+Os números envolvidos têm contas distintas:
+
+- **Realizado da ata:** minutos HH:MM entre bordas, menos os intervalos reconhecidos. (`app/ponto/turnos.py:740`, `app/ponto/turnos.py:756`, `app/ponto/turnos.py:758`, `app/ponto/turnos.py:767`)
+- **Pagamento e intrajornada:** no 12x36, o motor recorta a janela, desconta a pausa real e calcula supressão/tolerância; `DiaPago` recebe trabalhadas e intra indenizada convertidas em horas. (`app/ponto/motor_calculo_v2.py:2759`, `app/ponto/motor_calculo_v2.py:2764`, `app/ponto/motor_calculo_v2.py:2771`, `app/ponto/motor_calculo_v2.py:2784`, `app/ponto/services/dia_pago.py:178`, `app/ponto/services/dia_pago.py:186`)
+- **Leitores derivados:** leitor da célula, PDF, causas, classificação, calendário e comparação ata/juiz consomem o realizado; fechamento e percentual ainda aplicam teto diário pelo previsto. (`app/escala/services/leitor_celula.py:406`, `app/folha/validacao_pdf.py:54`, `app/folha/causas.py:85`, `app/ponto/supra_juiz.py:224`, `app/colaboradores/services/calendario.py:359`, `app/ponto/services/bordas_realizado.py:87`, `app/ponto/services/dia_pago.py:394`, `app/ponto/services/fechamento.py:1064`, `app/folha/export.py:1096`)
+
+**No dado raspado fornecido**, gravado→rejulgado:
+
+| Campo | Antes → depois |
+|---|---|
+| Ata `minutos_realizados` | **660 → 599 min**, diferença −61. **[nao verificado]** |
+| Motor `intra_descontada` | **58,0130167 → 119,6599667 min**, diferença +61,64695. **[nao verificado]** |
+| Intrajornada indenizada | **0 → 0**. **[nao verificado]** |
+| Pagamento lavrado exibido | **10,87 h → 10,87 h**, rubricas exibidas iguais. **[nao verificado]** |
+
+Esses rótulos indicam ausência de arquivo:linha local para o anexo. O segundo `minutos_trabalhados` foi raspado; novo pagamento lavrado, impacto em reais e impacto financeiro da frota permanecem **[nao verificado]**. O espelho distingue realizado calculado de pagamento lavrado. (`app/ponto/services/espelho.py:783`, `app/ponto/services/espelho.py:799`, `app/ponto/services/espelho.py:811`)
+
+**5. Sonda de impacto — somente texto**
+
+A sonda usa `CargaDaJanela`, que carrega `batidas_apuraveis` e chama o mesmo corpo de `turnos_do_colab` usado pela ata. Conta turnos fechados com célula existente, sem julgar ou lavrar. (`app/ponto/turnos.py:3009`, `app/ponto/turnos.py:3022`, `app/escala/utils.py:1581`)
+
+O agrupamento usa **21..20**, conforme solicitado, pela função existente; empresa significa o FK atual do colaborador, sem reconstrução histórica. (`app/ponto/janelas.py:24`, `app/colaboradores/models.py:321`) O banco sombra mantém o schema `juliani`. (`app/config/settings/sombra.py:13`, `app/config/settings/sombra.py:29`)
+
+Texto para shell Django inicializado; execução e resultados: **[nao verificado]**.
+
+```python
+import json
+from collections import defaultdict
+from datetime import date
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador
+from ponto.janelas import periodo_apuracao_atual
+from ponto.turnos import (
+    CargaDaJanela,
+    intervalos_do_turno,
+    pausas_abaixo_do_piso,
+)
+
+NAME = connection.settings_dict["NAME"]
+assert NAME == "sombra"
+
+class _Rollback(Exception):
+    pass
+
+saida = None
+
+try:
+    with schema_context("juliani"):
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+                )
+                cursor.execute("SELECT current_database()")
+                assert cursor.fetchone()[0] == "sombra"
+
+            inicio = date(2026, 9, 21)
+            hoje = timezone.localdate()
+            assert hoje >= inicio
+
+            # Todos, sem filtro de situação.
+            # app/colaboradores/models.py:321
+            colabs = list(
+                Colaborador.objects.all().only("id", "empresa_id").order_by("pk")
+            )
+
+            # Mesmo corpo do pareador, universo apurável e pad oficiais.
+            # app/ponto/turnos.py:2953,3009,3022
+            carga = CargaDaJanela(colabs, inicio, hoje)
+            grupos = defaultdict(list)
+            examinados = 0
+            fechados_sem_celula = 0
+
+            for colab in colabs:
+                for turno in carga.turnos(colab):
+                    if (
+                        turno.aberto
+                        or turno.entrada is None
+                        or turno.saida is None
+                    ):
+                        continue
+
+                    dia = turno.data_turno
+                    assert dia is not None and inicio <= dia <= hoje
+
+                    if carga.celula(colab.pk, dia) is None:
+                        fechados_sem_celula += 1
+                        continue
+
+                    examinados += 1
+
+                    # Os dois leitores repartem os pares do juiz pelo piso.
+                    # app/ponto/turnos.py:545,565
+                    pares = (
+                        list(intervalos_do_turno(turno))
+                        + list(pausas_abaixo_do_piso(turno))
+                    )
+                    if not pares:
+                        continue
+
+                    # Só mede posições; não procura nem escolhe parceiros.
+                    # Mesma ordenação de app/escala/utils.py:450.
+                    bats = sorted(turno.batidas, key=lambda b: b.timestamp)
+                    pos = {b.timestamp: i for i, b in enumerate(bats)}
+
+                    # Sem resultado parcial baseado em índice ambíguo.
+                    if len(pos) != len(bats):
+                        raise RuntimeError(
+                            f"timestamp ambiguo colab_pk={colab.pk} data={dia}"
+                        )
+                    if any(a not in pos or z not in pos for a, z in pares):
+                        raise RuntimeError(
+                            f"ponta ausente colab_pk={colab.pk} data={dia}"
+                        )
+
+                    if not any(pos[z] > pos[a] + 1 for a, z in pares):
+                        continue
+
+                    # Corte 21 explicitamente solicitado.
+                    # app/ponto/janelas.py:24
+                    comp_ini, comp_fim = periodo_apuracao_atual(dia, 21)
+                    grupos[(comp_ini, comp_fim, colab.empresa_id)].append(
+                        (colab.pk, dia.isoformat())
+                    )
+
+            linhas = []
+            for (ci, cf, empresa_pk), ocorrencias in sorted(grupos.items()):
+                linhas.append({
+                    "competencia": cf.strftime("%Y-%m"),
+                    "janela": [ci.isoformat(), cf.isoformat()],
+                    "empresa_pk": empresa_pk,
+                    "n_turnos": len(ocorrencias),
+                    "n_colabs": len({pk for pk, _ in ocorrencias}),
+                    # Uma entrada por turno afetado; pode repetir pk/data.
+                    "colab_pk_data": sorted(ocorrencias),
+                })
+
+            saida = {
+                "inicio": inicio.isoformat(),
+                "hoje": hoje.isoformat(),
+                "turnos_fechados_com_celula": examinados,
+                "turnos_fechados_sem_celula": fechados_sem_celula,
+                "turnos_afetados": sum(len(v) for v in grupos.values()),
+                "grupos_afetados": linhas,
+            }
+
+            # Rollback também no término normal.
+            raise _Rollback()
+
+except _Rollback:
+    pass
+
+print(json.dumps(saida, ensure_ascii=False, separators=(",", ":")))
+```
+
+A contagem mede presença de par não adjacente; não estima mudança de ata ou dinheiro, que também depende das guardas e do alinhamento subsequente. (`app/escala/utils.py:600`, `app/escala/utils.py:613`, `app/escala/utils.py:578`)
+
+perguntas de lei: 1
 
 ## 09/11 03:10 · sessao 67cbec47612d · - · - · origem=Ronald (tmux)
 
@@ -783,54 +1140,4 @@ Os testes E1 possuem casos de idempotência para SLA, DP, GLPI e texto, e E2 pos
 
 - **O teste de savepoint não demonstra durabilidade diante do rollback externo.** Injeta recusa na helper antes das escritas do corpo; confirma marcador anterior ainda presente dentro de atomic externo e conjuntos D/P iguais. Não força rollback externo nem consulta o evento depois dele. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:238`, `:241`, `:262`, `:265`, `:266`; primeira escrita do corpo: `app/chamados/services/disputa_emissao.py:1081`) O nível zero exigido pelo teste sem banco refere-se apenas à transação simulada. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:68`, `:146`)
 
-## 09/11 02:52 · sessao bb3c9cd21af8 · - · - · origem=Ronald (tmux)
-
-- **Um produtor nominal do evento em produção:** `criar_disputa_a_partir_de_chamados_orfaos` captura `UniversoMudouSobATrava` depois de sair de seu atomic e chama `evento('repasse_recusado', 'Colaborador', colaborador.pk, ...)`; depois devolve o sentinel. Não encontrei segundo produtor nominal fora dessa porta. (`app/chamados/services/disputa_emissao.py:1290`, `app/chamados/services/disputa_emissao.py:1293`, `app/chamados/services/disputa_emissao.py:1296`)
-
-- **Persistência não é garantida pelo retorno:** `core.observ.evento` grava `LogAuditoria` dentro de atomic próprio, sob `engolir`; falhas são consumidas e a função retorna `None`. O agrupador ignora esse retorno e ainda devolve `REPASSE_RECUSADO`. Portanto “sentinel ⇒ evento persistido” não é contrato efetivo. (`app/core/observ.py:85`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`, `app/chamados/services/disputa_emissao.py:1293`)
-
-- **O evento participa da transação externa:** seu atomic não abre conexão independente nem agenda commit separado. Assim, sobrevive ao rollback do savepoint do repasse já encerrado; não sobrevive a rollback posterior do atomic do chamador. O teste verifica existência antes de sair de um atomic externo bem-sucedido, sem ensaio de rollback externo. Persistência real desta volta no Postgres: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1049`, `app/chamados/services/disputa_emissao.py:1290`, `app/core/observ.py:133`, `app/chamados/tests/test_e1_fila_v2_2_integracao.py:237`, `app/chamados/tests/test_e1_fila_v2_2_integracao.py:262`)
-
-- **Leitores do evento:** leitura específica encontrada apenas na integração (`LogAuditoria.objects.get(acao='repasse_recusado', ...)`), com assertions de descrição/motivo. A tela genérica de auditoria pode ler e exibir o evento; aceita filtro de ação livre e mostra ação/modelo/objeto/descrição. O histórico de chamados do colaborador o exclui, pois filtra modelos `Chamado` e `ChamadoColaborador`, enquanto este evento usa `Colaborador`. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:262`, `app/chamados/tests/test_e1_fila_v2_2_integracao.py:264`, `app/core/views.py:705`, `app/core/views.py:710`, `app/core/views.py:733`, `app/templates/core/log_auditoria.html:68`, `app/templates/core/log_auditoria.html:71`, `app/templates/core/log_auditoria.html:73`, `app/chamados/services/historico.py:86`, `app/chamados/services/disputa_emissao.py:1293`)
-
-- **Fecho sem segundo juiz/derivação paralela identificados:** o código novo lê relações C/D/Ch/P até ponto fixo; o fechamento continua delegado a `disputa.pode_fechar()`, autoridade registrada. Fecho/helper não consultam relógio; o limite de 128 provoca recusa declarada. (`app/chamados/services/disputa_emissao.py:957`, `app/chamados/services/disputa_emissao.py:959`, `app/chamados/services/disputa_emissao.py:964`, `app/chamados/services/disputa_emissao.py:974`, `app/chamados/services/disputa_emissao.py:985`, `app/chamados/services/disputa_emissao.py:1275`, `app/core/juizes.py:267`)
-
-- **Sem segundo adquiridor de trava introduzido:** a helper passa conjuntos ordenados à autoridade existente; os `select_for_update` continuam em `PerguntaDisputa.trava_na_ordem`, na ordem C→D→Ch→P. Isso não elimina pré-travas de portas externas. (`app/chamados/services/disputa_emissao.py:1001`, `app/chamados/services/disputa_emissao.py:1007`, `app/chamados/models.py:2674`, `app/chamados/models.py:2683`, `app/chamados/models.py:2696`, `app/chamados/models.py:2700`, `app/chamados/models.py:290`)
-
-- **Terminal reatável incluído:** o fecho semeia `VIVOS + ENCERRADOS`; o ramo HIST de `reatar_pergunta_orfa` também procura `ENCERRADOS`. `cancelado`/`superado` pertencem a `TERMINAIS`, mas não a esse universo HIST; sua exclusão da semente não demonstra quebra do aval “terminal reatável”. Pais/destinos explicitamente alcançados entram independentemente do status. (`app/chamados/services/disputa_emissao.py:960`, `app/chamados/services/disputa_emissao.py:973`, `app/chamados/services/disputa_emissao.py:980`, `app/chamados/reconciliador.py:1582`, `app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`)
-
-## 09/11 02:52 · sessao 0f44a4ea4bdd · - · - · origem=Ronald (tmux)
-
-A1 está **parcialmente curado**: apenas dois dos seis chamadores distinguem a identidade de recusa; os quatro demais descartam o retorno. (`app/chamados/services/acoes_disputa.py:225`, `app/chamados/services/cobrar_dia.py:50`, `app/chamados/services/pergunta_no_app.py:186`, `app/ponto/management/commands/detectar_ausencias.py:801`, `app/ponto/management/commands/processar_alertas_turno.py:384`, `app/ponto/management/commands/processar_alertas_avancados.py:158`)
-
-| Chamador | Leitura do retorno / efeito |
-|---|---|
-| `acoes_disputa` | Testa `is REPASSE_RECUSADO` antes do falso/`None` e do acesso `.pk`; retorna aviso falante. `app/chamados/services/acoes_disputa.py:225`, `:227`, `:229` |
-| `cobrar_dia` | Testa identidade, devolve `ok=False` e mensagem explícita; view mapeia para aviso. `app/chamados/services/cobrar_dia.py:50`, `:51`; `app/chamados/views_cobrar.py:325`, `:326` |
-| `pergunta_no_app.perguntar` | Ignora retorno e soma todos os chamados; comando imprime `APLICADO` mesmo que todos os repasses tenham recusado. **Contagem mentirosa concreta.** `app/chamados/services/pergunta_no_app.py:186`, `:187`, `:188`; `app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:29` |
-| `detectar_ausencias` | Ignora retorno; catch genérico só se ativa para exceção, portanto não escreve o antigo erro stderr quando chega sentinel. `app/ponto/management/commands/detectar_ausencias.py:801`, `:802`, `:803` |
-| `processar_alertas_turno` | Ignora retorno; devolve o **chamado**, não o sentinel, portanto não há confusão sentinel→D nessa porta. `app/ponto/management/commands/processar_alertas_turno.py:384`, `:385`, `:387` |
-| `processar_alertas_avancados` | Ignora retorno; imprime “Chamado criado” e incrementa processados, rótulos relativos ao Ch efetivamente criado antes. Não demonstra que contou repasse como feito. `app/ponto/management/commands/processar_alertas_avancados.py:121`, `:141`, `:158`, `:161`, `:164` |
-
-Não encontrei chamador de produção que use o sentinel como Disputa: os dois consumidores efetivos fazem identidade; os outros quatro o descartam. (`app/chamados/services/acoes_disputa.py:225`, `app/chamados/services/cobrar_dia.py:50`, `app/chamados/services/pergunta_no_app.py:186`, `app/ponto/management/commands/detectar_ausencias.py:801`, `app/ponto/management/commands/processar_alertas_turno.py:384`, `app/ponto/management/commands/processar_alertas_avancados.py:158`)
-
-**Atomicidade:** o catch fica fora somente do atomic interno do repasse, não necessariamente da transação inteira; escrita anterior do chamador pode permanecer. (`app/chamados/services/disputa_emissao.py:1049`, `:1290`, `:1291`)
-
-Existe cadeia por atomic externo: `_gravar_estado` abre atomic, trava e escreve Ch; o post-save chama cartório; cartório usa o emissor `detectar_ausencias`, que chega ao repasse. (`app/chamados/models.py:280`, `:290`, `:296`; `app/chamados/signals.py:187`, `:203`; `app/ponto/services/cartorio.py:1964`, `:1990`, `:1740`, `:1778`; `app/ponto/management/commands/detectar_ausencias.py:801`)
-
-Nessa cadeia, o savepoint do repasse pode voltar e o ato externo continuar; a guarda da ordem não cobre as pré-travas já adquiridas antes da entrada, questão A3 que a triagem fornecida declarou fora desta obra. (`app/chamados/models.py:290`, `:296`; `app/chamados/services/disputa_emissao.py:1056`, `:1290`; `triagem_v1.txt:4` **[numeração do anexo nao verificada]**)
-
-O evento **não tem persistência independente**: `core.observ.evento` insere `LogAuditoria` com atomic/savepoint na mesma conexão padrão; rollback do chamador o desfaz. Também é best-effort: pode devolver `None` após falha engolida, e o repasse devolve sentinel sem verificar a gravação. (`app/core/observ.py:103`, `:105`, `:133`, `:134`, `:139`; `app/chamados/services/disputa_emissao.py:1293`, `:1296`)
-
-`cobrar_dia` já gravou toque e chamou julgamento antes do repasse; “nada feito” descreve somente o repasse desfeito, não todo o pedido. (`app/chamados/services/cobrar_dia.py:39`, `:41`, `:49`; `app/chamados/services/disputa_emissao.py:1021`, `:1294`)
-
-**Censo retorno/evento:**
-
-- Produtor da identidade: definição em `app/chamados/services/disputa_emissao.py:1020`; retorno de recusa em `:1296`; retorno `None` em `:1046` e `:1090`; retorno D em `:1285` e `:1288`.
-- Exportação da função antiga por `models`: `app/chamados/models.py:4082`; os crons e ação continuam importando por esse alias. `app/chamados/services/acoes_disputa.py:213`; `app/ponto/management/commands/detectar_ausencias.py:792`; `app/ponto/management/commands/processar_alertas_turno.py:375`; `app/ponto/management/commands/processar_alertas_avancados.py:149`.
-- Único produtor literal de produção localizado para ação `repasse_recusado`: `app/chamados/services/disputa_emissao.py:1293`; persistidor genérico único usado por ele: `app/core/observ.py:134`.
-- Leitores de produção do retorno: ação e cobrança; descartadores: os quatro listados acima. (`app/chamados/services/acoes_disputa.py:225`; `app/chamados/services/cobrar_dia.py:50`; `app/chamados/services/pergunta_no_app.py:186`; `app/ponto/management/commands/detectar_ausencias.py:801`; `app/ponto/management/commands/processar_alertas_turno.py:384`; `app/ponto/management/commands/processar_alertas_avancados.py:158`)
-- Leitores específicos do evento localizados são testes: conferem literal/descrição/motivo em memória e consultam `LogAuditoria`. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:143`, `:144`, `:145`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:262`, `:263`, `:264`)
-- Consumidor operacional específico de `repasse_recusado`, retry e visibilidade em produção: **[nao verificado]**.
-
-_2999 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3001 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
