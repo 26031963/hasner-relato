@@ -1,7 +1,135 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 11:12** · publicado em **09/11/2026 11:12** (UTC-3)
+> Ultima resposta processada: **09/11/2026 11:15** · publicado em **09/11/2026 11:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 11:15 · sessao 8db4566726fa · O10-D-PERMUTA-NA-TELA · censo · origem=Code
+
+1) **Há entradas genéricas pelo app/PWA; pedido próprio de permuta, com o par estruturado, não foi confirmado [nao verificado].** `Ausencia` guarda uma pessoa e um período; `ChamadoColaborador` guarda solicitação textual e contexto JSON, sem campos próprios para os dois lados da troca (`app/ponto/models.py:743`; `app/ponto/models.py:786`; `app/chamados/models.py:38`).
+
+| Entrada existente | Endpoint, view e gravação |
+|---|---|
+| Ausência pelo app | `GET/POST /api/ausencias/` → `api_ausencias`; o POST chama `criar_ausencia`, identificando o colaborador e `registrado_por=request.user` (`app/api/urls.py:82`; `app/api/views.py:1700`; `app/api/views.py:1836`). |
+| Ausência pelo PWA | `/ponto/ausencias/submeter/` → `submeter_ausencia`; chama a mesma porta e renderiza `ponto/submeter_ausencia.html` (`app/ponto/urls.py:64`; `app/ponto/views.py:2467`; `app/ponto/views.py:2536`; `app/ponto/views.py:2560`). |
+| Solicitação textual pelo app | `POST /api/chamados/abrir/` → `api_abrir_chamado`; grava assunto, descrição, classificação, urgência e `modulo_origem='app_colaborador'` (`app/api/urls.py:87`; `app/api/views.py:2153`; `app/api/views.py:2201`). |
+| Solicitação textual pelo PWA | `/chamados/abrir/` → `abrir_chamado`, serviço `abrir_chamado_local`, template `chamados/form_abertura.html` (`app/chamados/urls.py:10`; `app/chamados/views.py:147`; `app/chamados/views.py:196`). |
+
+A taxonomia dos chamados contém **“Escala / Turno” → “Troca de turno”**, permitindo um pedido textual dessa natureza; isso não constitui ligação estruturada entre duas cartas ou efetivação da troca (`app/chamados/classificador.py:38`; `app/api/views.py:2201`).
+
+`Ausencia` contém colaborador, tipo, `data/data_fim`, minutos, dias corridos, horários de cobertura parcial, descrição, documento, prazo, chamado de origem, documento de referência, status, autor e carimbos de aprovação/criação (`app/ponto/models.py:743`; `app/ponto/models.py:768`; `app/ponto/models.py:776`; `app/ponto/models.py:799`). O tipo aceito vem do catálogo vivo; a disponibilidade real de `troca_de_plantao` nesse cadastro é **[nao verificado]**, e esse código não consta das choices estáticas do modelo (`app/ponto/services/ausencia.py:193`; `app/api/views.py:1883`; `app/ponto/models.py:661`).
+
+| Estado de `Ausencia` | Quem escreve no fluxo encontrado |
+|---|---|
+| `aguardando_documento` | `criar_ausencia` usa `estado_inicial`: tipo exige documento e não há anexo (`app/ponto/services/ausencia.py:333`; `app/ponto/services/ausencia.py:790`). |
+| `aguardando_decisao` | Criação com documento ou sem exigência dele; `anexar_documento` também transfere para esse estado; o escalonador faz isso quando vence o prazo documental (`app/ponto/services/ausencia.py:790`; `app/ponto/services/ausencia.py:873`; `app/ponto/services/ausencia.py:999`). |
+| `aprovada` / `rejeitada` | `decidir`, ato do DP, chama o escritor de status `mudar_estado` (`app/ponto/services/ausencia.py:808`; `app/ponto/services/ausencia.py:897`). |
+
+App e PWA também abrem o chamado `ausencia_colab`, com `ausencia_id`, data, tipo e presença de documento; ele avisa o DP e leva ao registro, sem decidir a ausência (`app/api/views.py:1871`; `app/ponto/views.py:2546`; `app/ponto/services/ausencia.py:637`; `app/ponto/services/ausencia.py:659`).
+
+Os chamados possuem os estados genéricos `aberto`, `em_analise`, `resolvido`, `fechado`, `cancelado`, `registrado` e `superado`; nascem pela fábrica `criar`, e a escrita posterior de `status_local` converge em `_gravar_estado`, incluindo ações de gestão por `transicionar` (`app/chamados/models.py:28`; `app/chamados/models.py:1054`; `app/chamados/models.py:201`; `app/chamados/services/acoes_chamado.py:313`).
+
+| Quem lê hoje no código | Registros consumidos |
+|---|---|
+| App | GET das últimas 30 ausências do próprio colaborador, com status e descrição; API de chamados visíveis do colaborador (`app/api/views.py:1876`; `app/api/views.py:1031`). |
+| Admin/DP | Lista de ausências, com filtros de tipo/status e ações; painel de chamados (`app/ponto/views.py:2155`; `app/ponto/urls.py:53`; `app/chamados/services/painel.py:96`). |
+| PWA “Meu Atendimento” | Solicitações e pendências do colaborador; a abertura de novas solicitações depende de `app_solicitacoes`, cujo valor real é **[nao verificado]** (`app/chamados/views.py:612`; `app/chamados/services/solicitacoes_no_app.py:1`). |
+| API mensageria/DP | Ausências, contagens por tipo/status e fila aguardando decisão (`app/api/views_mensageria.py:736`). |
+| Automação documental | `escalonar_documentos_ausencia` lê ausências aguardando documento; fechamento de chamados consulta a ausência associada (`app/ponto/management/commands/escalonar_documentos_ausencia.py:25`; `app/ponto/services/ausencia.py:992`; `app/ponto/services/ausencia.py:686`). |
+| Automação de chamados | `alertar_chamados_sla` lê a fila de chamados e trata vencimentos (`app/chamados/management/commands/alertar_chamados_sla.py:20`; `app/chamados/management/commands/alertar_chamados_sla.py:44`). |
+
+A API de perguntas permite responder uma `PerguntaDisputa` já existente do colaborador; um caminho que transforme essa resposta em par de permuta é **[nao verificado]** (`app/api/views.py:2616`; `app/api/views.py:2643`). Pedidos efetivamente existentes e execução desses crons em produção são **[nao verificado]**.
+
+2) **A porta efetiva duas edições de dia; não faz uma permutação de quatro células.** Ela põe `(cedente, data da carta cedente)` como folga e `(substituto, data da carta substituto)` como trabalho; não grava automaticamente o movimento inverso nas outras duas combinações pessoa/data (`app/ponto/portas/celula.py:673`).
+
+A assinatura é (`app/ponto/portas/celula.py:632`):
+
+```python
+trocar_plantao(
+    ausencia_cedente, ausencia_substituto, *,
+    autor, motivo, barrados=None, apesar_da_lavra=''
+)
+```
+
+| Argumento | Significado demonstrado |
+|---|---|
+| `ausencia_cedente` | Instância persistida de `Ausencia`; sua pessoa/data serão editadas para `trabalha=False` (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`). |
+| `ausencia_substituto` | Outra `Ausencia`; sua pessoa/data serão editadas para `trabalha=True` (`app/ponto/portas/celula.py:659`; `app/ponto/portas/celula.py:673`). |
+| `autor` | Objeto com `pk`, usado como autor da edição e da trilha (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:668`; `app/ponto/portas/celula.py:686`). |
+| `motivo` | Texto obrigatório após `strip`, incluído nas trilhas (`app/ponto/portas/celula.py:648`; `app/ponto/portas/celula.py:668`; `app/ponto/portas/celula.py:691`). |
+| `barrados` | Lista opcional que recebe motivos de recusa, incluindo lavra e falta de vínculo (`app/ponto/portas/celula.py:571`; `app/ponto/portas/celula.py:586`; `app/ponto/portas/celula.py:694`). |
+| `apesar_da_lavra` | Valor repassado aos dois lados; quando verdadeiro, pula a guarda de lavra e fica registrado na trilha (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:614`; `app/ponto/portas/celula.py:668`). |
+
+As cartas são relidas do banco com trava, usando seus `pk`; a porta exige `documento` preenchido, mas não verifica conteúdo ou existência física do arquivo (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:664`). Nos chamadores de teste, vêm de `Ausencia.objects.create`, com tipo `declaracao` e status `aguardando_decisao`; a montagem do par por um chamador de produção presente nesta cópia é **[nao verificado]** (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`).
+
+| Condição | Comportamento atual da porta |
+|---|---|
+| Autor ausente / motivo vazio | Levanta `ValueError`; não retorna `recusada` nesses casos (`app/ponto/portas/celula.py:646`). |
+| Um lado ausente, registro apagado, mesma pessoa ou falta de uma carta | Retorna `recusada`, com motivo em `barrados` quando fornecido (`app/ponto/portas/celula.py:653`; `app/ponto/portas/celula.py:694`). |
+| Interjornada de 11h | **Não há checagem de descanso ou consulta aos turnos vizinhos** no corpo da troca/edição (`app/ponto/portas/celula.py:559`; `app/ponto/portas/celula.py:646`). |
+| Sobreposição de turnos | **Não há checagem geométrica de sobreposição** antes das edições (`app/ponto/portas/celula.py:668`; `app/ponto/portas/celula.py:675`). |
+| Competência exportada/lavrada | Cada lado passa pela guarda de `editar_dia`; se barrar, o par retorna `recusada` e desfaz o outro lado (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:675`). |
+| Alcance da lavra | Inclui TXT vigente **ou holerite publicado do próprio colaborador**; não equivale simplesmente a `FechamentoMensal.status` (`app/ponto/management/commands/gerar_celulas.py:126`; `app/folha/export.py:589`). |
+| Permissão | Exige identificação de autor, mas não verifica `is_staff`, perfil, `tem_acao` ou permissão contextual (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:668`). |
+| Vínculo | Recusa se o juiz do vínculo do dia não devolver vínculo; não exige que os dois tenham o mesmo vínculo, tipo de escala ou empresa (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:673`). |
+| Datas iguais/diferentes | Não compara as datas. Há testes escritos esperando sucesso tanto na mesma data quanto em datas/competências diferentes (`app/ponto/portas/celula.py:673`; `app/ponto/tests/test_o10b_editar_dia_troca.py:178`; `app/ponto/tests/test_o10b_editar_dia_troca.py:260`). |
+| Tipo/status/período das cartas | Não exige tipo específico ou aprovação; usa somente `Ausencia.data`, sem recusar `data_fim > data` (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:675`; `app/docs/BACKLOG.md:1876`). |
+
+Portanto, dos quatro controles citados no aval, **interjornada, sobreposição e permissão do autor não são recusas implementadas**; há somente identificação do autor. A guarda de competência lavrada existe, com a abertura explícita por `apesar_da_lavra` (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:675`).
+
+O substituto recebe os marcos do **próprio vínculo/template naquela data**, não os horários copiados do cedente; o produtor `montar_dna` congela esses marcos (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:591`; `app/ponto/management/commands/gerar_celulas.py:73`).
+
+A transação principal do par é **um `atomic` externo**, contendo as duas chamadas de `editar_dia`; cada edição possui seu `atomic` aninhado, e cada gravação de auditoria usa outro savepoint. Não são dois commits independentes para os lados (`app/ponto/portas/celula.py:652`; `app/ponto/portas/celula.py:592`; `app/core/observ.py:133`). As cartas e células são travadas; as células seguem ordem por `(colaborador_id, data)` (`app/ponto/portas/celula.py:657`; `app/ponto/portas/celula.py:593`; `app/ponto/portas/celula.py:673`).
+
+Quando ambos mudam, grava duas edições e suas trilhas `editar_dia`, mais uma trilha `trocar_plantao`; se ambos já estiverem iguais, retorna `igual` sem essas novas gravações. Falha obrigatória de trilha levanta exceção e desfaz o ato (`app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:611`; `app/ponto/portas/celula.py:619`; `app/ponto/portas/celula.py:679`; `app/ponto/portas/celula.py:686`).
+
+Há efeitos adicionais condicionais: marca de cobrança órfã no mesmo ato; rejulgamento de dias já alcançados pelo relógio, salvo vereditos humanos; agendamento do recálculo financeiro, rejunção e reavaliação de falta após commit. Assim, **o conjunto inteiro de efeitos não cabe numa quantidade fixa de transações**, embora o par editado tenha uma transação principal (`app/ponto/portas/celula.py:625`; `app/ponto/portas/celula.py:422`; `app/ponto/portas/celula.py:445`; `app/ponto/portas/celula.py:490`; `app/ponto/services/fechamento.py:1824`).
+
+Os chamadores concretos encontrados estão no teste O10-B: helper e chamadas diretas para confirmação, incompletude, repetição e par vazio (`app/ponto/tests/test_o10b_editar_dia_troca.py:112`; `app/ponto/tests/test_o10b_editar_dia_troca.py:193`; `app/ponto/tests/test_o10b_editar_dia_troca.py:226`; `app/ponto/tests/test_o10b_editar_dia_troca.py:246`; `app/ponto/tests/test_o10b_editar_dia_troca.py:307`). O relato menciona um lote `trocas_plantao_lote_o10c.py:160`, mas esse arquivo/chamador não foi localizado nesta cópia: **[nao verificado]**; o próprio relato registra ausência de chamador de UI (`app/docs/RELATO.md:426`).
+
+3) **Os leitores principais consultam a célula, mas há leituras diretas dos horários da base.** `EC.eh_dia_trabalho` retorna `cel.trabalha`; `EC.marcos_do_dia` lê `cel.dna.marcos` antes do fallback ao template (`app/escala/models.py:1087`; `app/escala/models.py:1117`).
+
+| Leitor | Caminho comprovado |
+|---|---|
+| Espelho admin | View → `espelho_do_colab`; previsto da competência por `grade_da_celula` (`app/ponto/views.py:157`; `app/ponto/services/espelho.py:506`). |
+| Espelho app | Usa `espelho_do_colab`; há exceção nos horários dos dias sem card, abaixo (`app/api/views.py:1379`; `app/api/views.py:1611`). |
+| PDF do espelho | Dias por `espelho_do_colab`; coluna “Previsto” usa template diretamente, abaixo (`app/relatorios/pdf_espelho.py:596`; `app/relatorios/pdf_espelho.py:903`). |
+| Calendário admin | Grade por `grade_da_celula`, status por `status_dos_dias_lavrados`, rubricas por `DiaPago` (`app/colaboradores/services/calendario.py:332`; `app/colaboradores/services/calendario.py:602`; `app/colaboradores/services/calendario.py:655`). |
+| Calendário/escala app | `eh_dia_trabalho` para trabalho/folga; template direto para horários (`app/api/views.py:950`; `app/api/views.py:955`). |
+| Escala PWA e agenda admin | Usam `EC.eh_dia_trabalho` e `EC.marcos_do_dia` (`app/escala/views.py:38`; `app/colaboradores/views.py:2223`; `app/colaboradores/views.py:2232`). |
+| Folha/motor | Fechamento consulta `eh_dia_trabalho`, fornece células e chama apuração com EC; o motor consulta os métodos do EC (`app/ponto/services/fechamento.py:729`; `app/ponto/services/fechamento.py:750`; `app/ponto/services/fechamento.py:278`; `app/ponto/motor_calculo_v2.py:2290`; `app/ponto/motor_calculo_v2.py:2447`). |
+| TXT | Verbas vêm de `FechamentoMensal`; retenção consulta células e a grade delega a `grade_da_celula`, sem recalcular os valores pelo template (`app/folha/export.py:703`; `app/folha/export.py:1206`; `app/folha/export.py:329`). |
+
+Os leitores diretos da base encontrados nesses caminhos são:
+
+| Leitura direta | Efeito sobre o dia trocado |
+|---|---|
+| `/api/escala/v2/`: `te.marcos_do_dia` | Horários não vêm do DNA; trabalho/folga vem da célula (`app/api/views.py:950`; `app/api/views.py:955`; `app/api/views.py:968`). |
+| Espelho app, dias sem card: `tipo_escala.marcos_do_dia` | Mesma separação: célula decide trabalho/folga, template fornece horários previstos (`app/api/views.py:1611`; `app/api/views.py:1613`; `app/api/views.py:1639`). |
+| Bloco escala de `/api/me/`, nas duas cascas | Horários vêm do template; não representa uma leitura dos marcos congelados do dia (`app/api/views.py:259`; `app/api/views_core.py:248`). |
+| Coluna “Previsto” do PDF | Usa `tipo_escala.hora_inicio/hora_fim` nas linhas com turnos, sem consultar o DNA daquela linha (`app/relatorios/pdf_espelho.py:903`; `app/relatorios/pdf_espelho.py:978`). |
+| Resumos/cabeçalhos de escala | Tela, PDF e “minha escala” apresentam horários da base; as linhas da escala PWA continuam usando EC (`app/ponto/services/espelho.py:201`; `app/relatorios/pdf_espelho.py:730`; `app/templates/escala/minha_escala.html:33`; `app/escala/views.py:43`). |
+| Caminho antigo `montar_grade_prevista`, sem mapa de DNA | Trabalho passa pelo EC, mas horários podem vir diretamente do template; existe chamador sem mapa (`app/escala/utils.py:760`; `app/escala/utils.py:767`; `app/escala/utils.py:1016`). |
+
+Esses caminhos podem mostrar **horários incompatíveis com a célula** quando template/escala ativa e DNA/geradora divergem; não permitem afirmar que toda troca apareceria errada, pois o trabalho/folga passa pela célula e a própria troca gera o DNA do substituto a partir do template dele. Divergência concreta de um par de produção: **[nao verificado]** (`app/api/views.py:950`; `app/api/views.py:1611`; `app/ponto/portas/celula.py:591`; `app/ponto/management/commands/gerar_celulas.py:81`).
+
+Fora desses consumidores principais, também há leitura direta da base na correção E/S retroativa, no propositor, na defesa de pergunta e no horário da cobrança “abriu e não bateu”; o efeito concreto deles sobre uma permuta é **[nao verificado]** (`app/api/views.py:619`; `app/api/views_core.py:612`; `app/ponto/propositor.py:334`; `app/chamados/juizes.py:1546`; `app/ponto/services/abriu_nao_bateu.py:193`).
+
+4) **Os seis campos explícitos da edição são escritos por `editar_dia`, dentro da porta canônica da célula.** Gerar, regenerar e reverter são outras operações do mesmo módulo, não escritores externos (`app/ponto/portas/celula.py:600`; `app/ponto/portas/celula.py:609`; `app/core/portas.py:107`).
+
+| Campo | Escrita e leitores encontrados |
+|---|---|
+| `trabalha` | Troca escreve `False/True`; outros atos da porta também o escrevem. Leitores: `EC.eh_dia_trabalho`, grade, cartório e detalhe do dia (`app/ponto/portas/celula.py:673`; `app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:788`; `app/ponto/portas/celula.py:849`; `app/escala/models.py:1096`; `app/escala/services/leitor_celula.py:381`; `app/ponto/services/cartorio.py:1408`; `app/ponto/services/dia_do_colab.py:91`). |
+| `dna` | Produzido por `montar_dna`, gravado pela edição; gerar/regenerar/reverter também escrevem. Leitores: marcos, pausas, extra declarada, cartório e juiz de batida (`app/ponto/portas/celula.py:591`; `app/ponto/portas/celula.py:604`; `app/ponto/portas/celula.py:244`; `app/ponto/portas/celula.py:786`; `app/ponto/portas/celula.py:849`; `app/escala/models.py:1124`; `app/escala/models.py:1189`; `app/escala/models.py:1235`; `app/ponto/services/cartorio.py:1348`; `app/ponto/juiz_batida.py:158`). |
+| `escala_geradora` | Edição escreve o vínculo escolhido para aquele dia; geração/regeneração/reversão também escrevem. O juiz `vinculo_do_dia` lê a geradora e exige sua vigência (`app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:605`; `app/ponto/portas/celula.py:259`; `app/ponto/portas/celula.py:789`; `app/ponto/portas/celula.py:849`; `app/escala/alimentacao.py:269`). |
+| `origem` | Edição escreve `'editada'`; geração automática escreve `'gerada'`. Regeneração/reversão restringem-se a gerada; geração pula editada; vigias de template também filtram gerada (`app/ponto/portas/celula.py:606`; `app/ponto/portas/celula.py:259`; `app/ponto/portas/celula.py:238`; `app/ponto/portas/celula.py:777`; `app/ponto/portas/celula.py:854`; `app/ponto/management/commands/tripwire_celulas.py:21`; `app/escala/management/commands/celulas_contra_o_template.py:29`). |
+| `editada_em` | Edição escreve o instante atual. Leitores: carimbos de reescrita/cobrança órfã, fato novo do cartório, invalidação de perguntas, fase 12x36 e detalhe do dia (`app/ponto/portas/celula.py:598`; `app/ponto/portas/celula.py:607`; `app/escala/services/regeneracao.py:72`; `app/ponto/services/cartorio.py:365`; `app/chamados/veredito_lavrado.py:176`; `app/escala/services/fase_12x36.py:188`; `app/ponto/services/dia_do_colab.py:94`). |
+| `editada_por` | Edição escreve `autor`; `_estado_da_edicao` lê para a trilha. Outro leitor de produção dessa identidade: **[nao verificado]** (`app/ponto/portas/celula.py:608`; `app/ponto/portas/celula.py:531`). |
+
+Todos esses campos também são lidos para antes/depois e idempotência; se a célula não existir, a edição cria `colaborador/data`, e `gerada_em` nasce automaticamente. As autoridades consultam a célula por essa chave, e os relógios de invalidação leem `gerada_em` (`app/ponto/portas/celula.py:524`; `app/ponto/portas/celula.py:594`; `app/ponto/portas/celula.py:600`; `app/escala/models.py:1702`; `app/escala/models.py:1092`; `app/chamados/veredito_lavrado.py:178`).
+
+A edição não escreve os campos de regeneração `regenerada_em/regeneracoes/dna_anterior`; tampou
+
+[truncado em 20000 de 25142 caracteres]
 
 ## 09/11 11:12 · sessao be52b0625b15 · - · - · origem=Ronald (tmux)
 
@@ -709,72 +837,4 @@ Inventário do carimbo:
 
 A gravação material dos campos passa por `carimbar`, que preserva os campos não substituídos (`bin/sombra.sh:89`, `bin/sombra.sh:91`, `bin/sombra.sh:94`, `bin/sombra.sh:97`). O selo de host testa a invalidação bem-sucedida contra carimbo verde, mas não cobre falha da escrita do carimbo (`bin/tests/test_sonda_sem_grant.sh:361`, `bin/tests/test_sonda_sem_grant.sh:362`, `bin/tests/test_sonda_sem_grant.sh:364`).
 
-## 09/11 10:10 · sessao 86b79a2759f4 · FIO-E0-V4-E4-ESCRITORES · censo · origem=Code
-
-**O número 16 confere para as portas de alteração do estado. Incluindo os nascimentos por `create`/`get_or_create`/inserção, como o pedido exige, são 22 portas produtivas: 16 + 2 criadores de Chamado + 3 de Disputa + 1 de Pergunta.** Há ainda o executor genérico `PerguntaDisputa.save` e uma exclusão restrita a ensaio, discriminados abaixo. A diferença não é uma porta nova da E4: é a inclusão dos nascimentos que o recorte histórico separava como identidade. (`app/docs/RELATO.md:242`; `app/chamados/models.py:833`; `app/chamados/models.py:1054`; `app/chamados/models.py:2822`; `app/chamados/services/disputa_emissao.py:474`; `app/chamados/services/disputa_emissao.py:1024`; `app/chamados/services/disputa_emissao.py:1299`; `app/chamados/models.py:3402`; `app/chamados/models.py:563`)
-
-A classificação usa a E1: **decisão** é o ato preservado na sequência append-only; **efeito** é sua consequência, conferida contra o fato/lavra; **fica** é identidade, data, cache ou metadado do continente. Uma porta pode ter ramos diferentes, explicitados sem contá-la duas vezes. A E1 declara que os campos atuais são projeção até a E4; a tarefa exige conferir decisões e efeitos, sem escritor próprio. (`app/chamados/models.py:3828`; `app/chamados/models.py:3833`; `app/chamados/models.py:3840`; `app/chamados/services/tarefa_do_dia.py:118`; `app/chamados/services/tarefa_do_dia.py:140`; `app/docs/CORTES.md:426`)
-
-A análise foi estática por AST, incluindo imports com apelido, imports relativos, módulos `__init__` e imports locais. Não houve importação da aplicação, consulta a banco/log nem escrita de arquivo. Completude perante despacho inteiramente dinâmico, SQL construído dinamicamente, templates e execução real: **[nao verificado]**. Nos chamadores abaixo, **P** significa código produtivo/operacional; **T** identifica testemunhas de teste, sem afirmar execução delas nem esgotar todas as fixtures de nascimento. **[nao verificado]** [nao verificado]
-
-Para compactar os campos repetidos:
-
-- **C** = `materializada_em`, `materializada_por`, `via_resolucao`. (`app/chamados/models.py:3117`)
-- **R** = `resposta_colab`, `respondida_em`; **V** = `validada_em`, `validada_por`. (`app/chamados/models.py:2444`; `app/chamados/models.py:3366`)
-- **L** = `veredito_lavrado`, `julgado_em`, `janela_expira_em`. (`app/chamados/veredito_lavrado.py:250`)
-- **F** = `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`. (`app/chamados/models.py:1933`)
-- **DP** = `DecisaoPergunta`; “sem DP próprio” não significa ausência de trilha nem ausência de decisão registrada pelo chamador. (`app/chamados/models.py:3836`; `app/chamados/services/disputa_emissao.py:1612`)
-
-Leis/cortes conferidos para as decisões abaixo: L-002, L-007, L-051, L-061, L-073, L-080, L-085, L-088, L-110, L-111, L-113, L-117 e L-124; FIO-E0-V4 e LEI-TRANCA-E2-JUIZ. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:92`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:100`; `app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:137`; `app/docs/LEIS.md:151`; `app/docs/LEIS.md:138`; `app/docs/LEIS.md:145`; `app/docs/CORTES.md:426`; `app/docs/CORTES.md:427`)
-
-## CENSO
-
-escritores:
-
-- `app/chamados/models.py:201` `ChamadoColaborador._gravar_estado` -- `status_local=novo`; ao terminar, `resolvido_em` recebe instante, `via_encerramento=via`, urgência é rebaixada; ao reviver, limpa resolução/via e restaura urgência; pode gravar `respondido_por`; grava `atualizado_em` -- **efeito** nas transições derivadas; **decisao** no ramo de transição humana. Persiste em `app/chamados/models.py:296`; sem DP próprio, com trilha `estado_chamado` e relavra L das perguntas atingidas. P: `_aplicar` (`app/chamados/models.py:450`), `analisar` (`app/chamados/models.py:806`), `reconciliar` (`app/chamados/models.py:654`), `cancelar` (`app/chamados/models.py:788`), `reabrir` (`app/chamados/models.py:1442`), `encerrar` (`app/chamados/models.py:1616`), `encerrar_por_competencia_trancada` (`app/chamados/models.py:1636`). T: `app/chamados/tests/test_hx_b7_trilha.py:32`; `app/chamados/tests/test_o261e_f1_porta_encerramento.py:206`; `app/chamados/tests/test_o261e_f1_codex_v5.py:89`.
-
-- `app/chamados/models.py:1852` `DisputaSupervisao.fechar` -- F recebe instante, autor, texto e motivo; excepcionalmente carimba perguntas vivas -- **efeito** no fechamento normal, após nenhuma viva/resposta sem veredito; **decisao** nas exceções `admin_encerra`/`desligamento`, que já registram DP `SILENCIO` no mesmo atomic (`app/chamados/models.py:1915`; `app/chamados/models.py:1921`; `app/chamados/models.py:1933`). P: `admin_encerra` e `remover_motivo` (`app/chamados/models.py:1947`; `app/chamados/models.py:2069`); reconciliador (`app/chamados/reconciliador.py:412`; `app/chamados/reconciliador.py:612`; `app/chamados/reconciliador.py:1171`); foto (`app/api/foto_recebida.py:80`); desligamento (`app/colaboradores/services/desligamento.py:142`); entrada sincronizada (`app/ponto/services/entrada_sincronizada.py:59`); materialização (`app/chamados/services/materializacao.py:586`; `app/chamados/services/materializacao.py:1333`); emissão (`app/chamados/services/disputa_emissao.py:1281`; `app/chamados/services/disputa_emissao.py:1961`); tranca (`app/chamados/services/competencia_trancada.py:204`); beco (`app/chamados/services/becos.py:57`); comandos (`app/ponto/management/commands/fechar_chamados_meio_periodo.py:109`; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`). T: `app/chamados/tests/test_porta_disputa_ciclo.py:285`; o contrato e as exceções estão na própria porta (`app/chamados/models.py:1855`).
-
-- `app/chamados/models.py:2123` `DisputaSupervisao.reabrir_admin` -- limpa F; incrementa `reaberturas_admin`; pode agregar `motivos` -- **decisao** no ato administrativo; **fica** o contador/metadado. Persiste em `app/chamados/models.py:2158`; sem DP próprio. P: `app/chamados/services/acoes_disputa.py:259`. T: `app/chamados/tests/test_disputa_transicoes.py:134`; `app/chamados/tests/test_disputa_transicoes.py:148`; `app/chamados/tests/test_disputa_transicoes.py:156`; `app/chamados/tests/test_disputa_transicoes.py:163`; `app/chamados/tests/test_disputa_transicoes.py:172`; `app/chamados/tests/test_disputa_transicoes.py:181`.
-
-- `app/chamados/models.py:2160` `DisputaSupervisao.reabrir_sistema` -- limpa F -- **efeito**, religando o continente após a pergunta voltar a exigir ação. Persiste em `app/chamados/models.py:2174`; sem DP próprio. P: `app/chamados/models.py:1572`; `app/chamados/services/materializacao.py:686`; `app/chamados/services/validacao.py:218`; `app/chamados/services/relavra_via.py:261`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:165`. Chamador direto de teste não localizado: **[nao verificado]**.
-
-- `app/chamados/models.py:3092` `PerguntaDisputa.carimbar` -- C recebe instante/autor/via; opcionalmente completa `respondida_em`, V e L -- **efeito** para o carimbo; **decisao** quando completa resposta/validação. Persiste em `app/chamados/models.py:3141`; sem DP próprio, inclusive nos ramos que completam assinaturas (`app/chamados/models.py:3119`). P: `app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:595`; `app/chamados/models.py:3276`; `app/chamados/services/materializacao.py:561`; `app/chamados/services/materializacao.py:1277`; `app/chamados/services/materializacao.py:1431`; `app/chamados/services/disputa_emissao.py:1860`; `app/chamados/services/disputa_emissao.py:1934`. T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:725`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:738`; `app/chamados/tests/test_o261e_f2_fila.py:194`; `app/chamados/tests/test_o261e_f2_fila.py:205`; `app/chamados/tests/test_o261e_f2_fila.py:221`; `app/chamados/tests/test_o261e_f2_fila.py:228`.
-
-- `app/chamados/models.py:3157` `PerguntaDisputa.carimbar_identidade` -- C recebe via terminal/autor/instante, ou preserva autor/instante anteriores; pode gravar `recusa_motivo` -- **efeito** da identidade/decisão aplicável; o ato humano que o determina é **decisao**. Persiste em `app/chamados/models.py:3179`; sem DP próprio. P: `fechar_por_admin` (`app/chamados/models.py:3053`), `remover_motivo` (`app/chamados/models.py:2058`), recusa/paridade (`app/chamados/services/materializacao.py:924`; `app/chamados/services/materializacao.py:1099`), duplicata (`app/chamados/services/fio.py:1350`). O chamador `remover_motivo` já registra DP `RETRATACAO` (`app/chamados/models.py:2053`); `Disputa.fechar` registra `SILENCIO` (`app/chamados/models.py:1921`). T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:744`; `app/chamados/tests/test_e1_v5_portas_backfill.py:166`; `app/chamados/tests/test_e1_volta2.py:131`.
-
-- `app/chamados/models.py:3192` `PerguntaDisputa.descarimbar` -- C passa a `None/None/''`; recusa linha fora do fato; `salvar=False` só prepara memória -- **efeito**. Persiste em `app/chamados/models.py:3201`; sem DP próprio. P: `app/chamados/models.py:3287`; `app/chamados/models.py:3304`; `app/chamados/models.py:3311`; simulação sem persistência em `app/chamados/models.py:1506`; `app/chamados/services/relavra_via.py:246`. T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:758`; `app/chamados/tests/test_e1_v5_portas_backfill.py:168`; `app/chamados/tests/test_e1_v5_portas_backfill.py:176`.
-
-- `app/chamados/models.py:3241` `PerguntaDisputa.descarimbar_em_lote` -- C passa a `None/None/''`, mais campos recebidos em `outros`; exclui vias fora do fato -- **efeito**. `QuerySet.update` em `app/chamados/models.py:3253`; sem DP próprio. P: `app/chamados/models.py:1565`; `app/chamados/services/disputa_emissao.py:1627`, cujo chamador registra DP antes do update (`app/chamados/services/disputa_emissao.py:1612`). T: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:752`; `app/chamados/tests/test_e1_v13_ordem.py:90`; `app/chamados/tests/test_e1_v13_ordem.py:101`; `app/chamados/tests/test_e1_v13_ordem.py:106`.
-
-- `app/chamados/models.py:3257` `PerguntaDisputa.encerrar_por_fato_no_espelho` -- somente `via_resolucao=fato_materializado` -- **efeito**. Persiste em `app/chamados/models.py:3265`; sem DP próprio. P: `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68`. T: `app/chamados/tests/test_porta_chamado_e3.py:72`; `app/chamados/tests/test_porta_chamado_e3.py:74`; `app/chamados/tests/test_e1_v5_portas_backfill.py:170`.
-
-- `app/chamados/services/validacao.py:127` `_carimbar_validacao` -- V recebe instante/autor -- **decisao**. Save em `app/chamados/services/validacao.py:137`; DP `VALIDACAO`, mesmo instante/atomic, em `app/chamados/services/validacao.py:139`. P: `_aceitar_a_folga` (`app/chamados/services/validacao.py:288`; `app/chamados/services/validacao.py:320`) e `validar_pergunta` (`app/chamados/services/validacao.py:435`). T: `app/chamados/tests/test_e1_entradas.py:98`.
-
-- `app/chamados/services/validacao.py:163` `devolver_validacao_recusada` -- V passa a nulo, preservando a resposta; pode reabrir o continente pela porta -- **decisao** `DEVOLUCAO`. Save em `app/chamados/services/validacao.py:202`; DP no mesmo atomic em `app/chamados/services/validacao.py:205`. P: `app/chamados/services/validacao.py:464`. T: `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:144`; `app/chamados/tests/test_o261_recusa_fala.py:178`; `app/chamados/tests/test_o261_recusa_fala.py:186`; `app/chamados/tests/test_o261_recusa_fala.py:199`; `app/chamados/tests/test_o261_recusa_fala.py:210`; `app/chamados/tests/test_e1_volta2.py:108`.
-
-- `app/chamados/services/disputa_emissao.py:1422` `responder_pergunta_disputa_core` -- grava R; limpa V anterior; pode descarimbar e gravar recusa explicativa de escape -- **decisao** `RESPOSTA`; limpeza dos carimbos é consequência da resposta nova. Save em `app/chamados/services/disputa_emissao.py:1505`; DP em `app/chamados/services/disputa_emissao.py:1508`, preservando projeção legada sem linha. P: `app/api/views.py:2651`; `app/chamados/views.py:1283`; `app/chamados/services/declaracao_texto.py:419`; `app/chamados/services/declaracao_texto.py:693`; `app/chamados/services/acoes_disputa.py:371`. T: `app/chamados/tests/test_porta_resposta_pergunta.py:177`; `app/chamados/tests/test_porta_resposta_pergunta.py:209`; `app/chamados/tests/test_porta_resposta_pergunta.py:229`; `app/chamados/tests/test_e1_volta2.py:62`; `app/chamados/tests/test_e1_volta2.py:75`.
-
-- `app/chamados/services/disputa_emissao.py:1559` `reabrir_para_correcao` -- limpa R e V; opcionalmente desfaz C da absorção -- **decisao** `REABERTURA` ou `RECUSA`. DP com foto anterior em `app/chamados/services/disputa_emissao.py:1612`; update em `app/chamados/services/disputa_emissao.py:1629`, ou porta de lote em `app/chamados/services/disputa_emissao.py:1627`; emite evento da célula no mesmo atomic. P, incluindo apelidos locais: `app/chamados/models.py:2234`; `app/chamados/views.py:1436`; `app/chamados/services/materializacao.py:682`; `app/chamados/services/validacao.py:593`; `app/chamados/services/acoes_disputa.py:103`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`. T: `app/chamados/tests/test_reabrir_nao_destroi.py:42`; `app/chamados/tests/test_reabrir_nao_destroi.py:102`; `app/chamados/tests/test_e1_v13_ordem.py:64`; `app/chamados/tests/test_e1_volta2.py:210`; `app/chamados/tests/test_e1_volta2.py:226`.
-
-- `app/chamados/services/disputa_emissao.py:1635` `responder_automaticamente` -- R recebe texto/instante do fato entregue por outro caminho; não sobrescreve texto existente -- **decisao** de sistema `RESPOSTA`. Save em `app/chamados/services/disputa_emissao.py:1652`; DP em `app/chamados/services/disputa_emissao.py:1653`. P: `app/api/foto_recebida.py:48`. T: `app/chamados/tests/test_porta_chamado_e3.py:46`; `app/chamados/tests/test_porta_chamado_e3.py:48`; `app/chamados/tests/test_porta_chamado_e3.py:53`.
-
-- `app/chamados/services/disputa_emissao.py:1658` `carimbar_resposta_pela_trilha` -- `respondida_em` recebe o instante original testemunhado, sem inventar instante da resposta -- **decisao** reconstruída `RESPOSTA`. Save em `app/chamados/services/disputa_emissao.py:1673`; DP em `app/chamados/services/disputa_emissao.py:1674`. P: `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`. T: `app/chamados/tests/test_curar_perguntas_em_limbo.py:37`; `app/chamados/tests/test_curar_perguntas_em_limbo.py:50`; `app/chamados/tests/test_curar_perguntas_em_limbo.py:51`; `app/chamados/tests/test_porta_resposta_pergunta.py:247`; `app/chamados/tests/test_porta_resposta_pergunta.py:251`; `app/chamados/tests/test_porta_resposta_pergunta.py:262`.
-
-- `app/chamados/services/relavra_via.py:106` `relavrar` -- via derivada atual e L, no mesmo save -- **efeito** para a via; **fica** L como cache. Save em `app/chamados/services/relavra_via.py:127`; sem DP próprio; exclui vias que não pertencem a `VIAS_DERIVADAS` (`app/chamados/services/relavra_via.py:118`). P: `app/chamados/services/relavra_via.py:157`; `app/chamados/management/commands/relavrar_via_i6.py:102`. T: `app/chamados/tests/test_porta_veredito_pergunta.py:363`; `app/chamados/tests/test_porta_veredito_pergunta.py:383`; `app/chamados/tests/test_porta_veredito_pergunta.py:386`; `app/chamados/tests/test_porta_veredito_pergunta.py:404`.
-
-- `app/chamados/models.py:833` `ChamadoColaborador.abrir` -- cria identidade/contexto e `status_local` inicial decidido pelo motor; `get_or_create` em `app/chamados/models.py:971`, defaults em `app/chamados/models.py:938` -- **fica** o nascimento/identidade; não é escritor da tarefa. Sem DP próprio. P: `app/ponto/views.py:3012`; `app/escala/regua_defesa.py:51`; `app/api/views.py:1997`; `app/chamados/reconciliador.py:910`; `app/chamados/views.py:973`; `app/ponto/services/cluster_espurio.py:130`; `app/ponto/services/ausencia.py:659`; `app/ponto/management/commands/detectar_par_relampago.py:368`; `app/ponto/management/commands/reconciliar_grade.py:507`; `app/ponto/management/commands/detectar_ausencias.py:190`; `app/ponto/management/commands/detectar_ausencias.py:271`; `app/ponto/management/commands/detectar_ausencias.py:510`; `app/ponto/management/commands/detectar_ausencias.py:693`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151`; `app/ponto/management/commands/processar_alertas_turno.py:335`; `app/chamados/services/disputa_emissao.py:568`; `app/chamados/services/disputa_emissao.py:1101`; `app/chamados/services/disputa_emissao.py:1336`; `app/chamados/services/adesao.py:74`. T: `app/ponto/tests/test_o_outbox_celula.py:287`; `app/ponto/tests/test_o_outbox_celula.py:555`.
-
-- `app/chamados/models.py:1054` `ChamadoColaborador.criar` -- cria identidade/contexto/status inicial; auditoria aberta pode nascer `registrado` pela decisão do motor (`app/chamados/models.py:1064`); create em `app/chamados/models.py:1095` -- **fica**. Sem DP próprio. P, incluindo `_Chamado`, `_Ch9` e `_ChG`: `app/colaboradores/views.py:1978`; `app/colaboradores/views.py:2363`; `app/ponto/utils.py:40`; `app/ponto/utils.py:103`; `app/ponto/views.py:291`; `app/api/views_core.py:747`; `app/api/views.py:747`; `app/api/views.py:2201`; `app/colaboradores/services/vinculo.py:393`; `app/colaboradores/services/desligamento.py:163`; `app/ponto/services/justificativa.py:291`; `app/ponto/services/geofence.py:339`; `app/ponto/services/triagem_batida.py:107`; `app/ponto/services/triagem_batida.py:336`; `app/ponto/services/triagem_batida.py:459`; `app/ponto/management/commands/processar_alertas_avancados.py:121`; `app/chamados/services/regularizacao_ext.py:246`; `app/chamados/services/abertura.py:47`; `app/chamados/services/abertura.py:172`. Ensaio: `app/chamados/management/commands/smoke_chamados.py:123`. T: `app/colaboradores/tests/test_vincular_escala_selos.py:26`; `app/ponto/tests/test_cobertura_followup.py:45`.
-
-- `app/chamados/services/disputa_emissao.py:474` `_abrir_ou_agregar_disputa` -- cria continente, motivos/contexto e estado inicial aberto, `fechada_em=NULL` pelo campo; create em `app/chamados/services/disputa_emissao.py:587` -- **fica**. Default em `app/chamados/models.py:1754`; sem DP próprio. P: `app/chamados/services/disputa_emissao.py:627`; `app/chamados/services/disputa_emissao.py:662`; `app/ponto/management/commands/reconciliar_grade.py:424`. Ensaio: `app/chamados/management/commands/smoke_chamados.py:99`. T: `app/chamados/tests/test_e1_fila_v2_2_integracao.py:132`.
-
-- `app/chamados/services/disputa_emissao.py:1024` `criar_disputa_a_partir_de_chamados_orfaos` -- cria continente aberto, identidade, motivos/contexto; create em `app/chamados/services/disputa_emissao.py:1120` -- **fica**. `fechada_em=NULL` pelo default (`app/chamados/models.py:1754`); sem DP próprio. P: `app/ponto/management/commands/processar_alertas_avancados.py:159`; `app/ponto/management/commands/detectar_ausencias.py:802`; `app/ponto/management/commands/processar_alertas_turno.py:385`; `app/chamados/services/cobrar_dia.py:49`; `app/chamados/services/pergunta_no_app.py:208`; `app/chamados/services/acoes_disputa.py:222`. T: `app/chamados/tests/test_chamados_models.py:135`; `app/chamados/tests/test_chamados_models.py:155`; `app/chamados/tests/test_chamados_models.py:157`; `app/tenants/tests.py:74`; `app/tenants/tests.py:85`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:78`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:244`.
-
-- `app/chamados/services/disputa_emissao.py:1299` `criar_disputa_ancora_de_chamado` -- cria continente aberto e vínculo com chamado, motivos/contexto; create em `app/chamados/services/disputa_emissao.py:1355` -- **fica**. `fechada_em=NULL` pelo default (`app/chamados/models.py:1754`); sem DP próprio. P: `app/chamados/services/acoes_disputa.py:189`. T: `app/chamados/tests/test_fio_ancora.py:74`; `app/chamados/tests/test_fio_ancora.py:92`; `app/chamados/tests/test_fio_ancora.py:93`; `app/chamados/tests/test_fio_ancora.py:104`; `app/chamados/tests/test_fio_ancora.py:151`; `app/chamados/tests/test_3b_reuso_1061.py:30`.
-
-- `app/chamados/models.py:2822` `PerguntaDisputa._nascer` -- insere identidade, dia, instância, célula,
-
-[truncado em 20000 de 75733 caracteres]
-
-_3113 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3114 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

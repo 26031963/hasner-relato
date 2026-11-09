@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 11:12:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (195.7 MB). Acoes na janela: **1183**.
+**Medido em 09/11/2026 11:18:09.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (195.7 MB). Acoes na janela: **1179**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1189,7 +1189,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:20:42 | Bash | Read aplicar_declaracao signature and body | `cd /home/ronald/wt-e1fila-211900/app; grep -n "^def aplicar_declaracao\\|^def propostas_do_chamado\\|^def declarar_hora_colab\\|^def _trava_do_ato" chamados/services/declaracao_texto.py; sed -n "$(grep -n '^def aplicar_declaracao' chamados/services/declaracao_texto.py \| cut -d: -f1),+8p" chamados/services/declaracao_texto.py; sed -n 660,700p chamados/services/declaracao_texto.py; grep -n "aplicar ...` |
 | 23:20:38 | Bash | Find callers and read existing E1-FILA test | `cd /home/ronald/wt-e1fila-211900/app; git grep -n "migrar_resolvedoras_vivas" -- '*.py' \| grep -v /tests/; echo ----; sed -n 1,60p chamados/tests/test_e1_fila.py; echo ....; sed -n 150,240p chamados/tests/test_e1_fila.py` |
 | 23:20:28 | Bash | Inspect sites of the two opus blockers | `cd /home/ronald/wt-e1fila-211900/app; sed -n 640,660p chamados/services/declaracao_texto.py; echo ----; sed -n 2060,2100p chamados/services/fio.py; echo ----; sed -n 1400,1425p chamados/models.py; echo ----; grep -n "UniversoMudouSobATrava" -r --include=*.py . \| grep -v "/tests/"` |
-| 23:13:10 | Bash | Add fila rows to BACKLOG | `python3 - <<'EOF' p='docs/BACKLOG.md' L=open(p).read().split('\n') i=[k for k,x in enumerate(L) if x.startswith('\| DEPLOY-RESPAWN-SEM-PORTAO \|')] assert len(i)==1 novas=[ '\| ATOMICIDADE-DA-PORTA-DIVIDA \| fila 2 INSTRUMENTO: test_atomicidade_da_porta VERMELHO ja no origin (6 violacoes, chamados/models.py trava_na_ordem 4x e ferias 2x; divida 8 acima do teto 5); fora do pre-push, so na regua \|  ...` |
-| 23:13:02 | Bash | Find related BACKLOG rows | `cd /home/ronald/saas-hasner/app; grep -n "BUG-DEPLOY-PORTAO\\|DEPLOY-RESPAWN\\|ATOMICIDADE\\|SIGPIPE\\|E1-FILA" docs/BACKLOG.md \| cut -c1-250` |
-| 23:12:59 | Agent | Opus final E1-FILA verification | `Leitura final (opus) da obra FIO-E0-V4-E1-FILA, antes do pouso. Voce nao viu a construcao: procure o que esta errado. SOMENTE LEITURA: nao edite, nao rode suite, nao rode python nem importe nada da copia (so leia arquivos e use git). Copia: /home/ronald/wt-e1fila-211900 (HEAD ef9d6e4c, 2 commits sobre a5df8ed5 = main). Diff: `git -C /home/ronald/wt-e1fila-211900 diff a5df8ed5 HEAD`. Mensagens dos  ...` |
-| 23:12:46 | Bash | Check E1-FILA Codex and triage status | `cd /home/ronald/saas-hasner; ls -la --time-style=+%H:%M logs/fio_e0_v4/ \| grep -i "e1fila\\|e1_fila\\|triagem_e1" ; tail -30 logs/fio_e0_v4/triagem_e1_fila.txt` |
