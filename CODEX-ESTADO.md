@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 13:11** · publicado em **09/11/2026 13:13** (UTC-3)
+> Ultima resposta processada: **09/11/2026 13:27** · publicado em **09/11/2026 13:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 13:27 · sessao 83f938655465 · - · - · origem=Ronald (tmux)
+
+1. Tentativa em `INTRUSO_COPIA.txt` — saída literal; código de saída `1`. [nao verificado]
+
+```text
+/bin/bash: line 1: /home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/INTRUSO_COPIA.txt: Read-only file system
+```
+
+2. Tentativa em `INTRUSO_VIVA.txt` — saída literal; código de saída `1`. [nao verificado]
+
+```text
+/bin/bash: line 1: /home/ronald/saas-hasner/INTRUSO_VIVA.txt: Read-only file system
+```
+
+3. Tentativa em `INTRUSO_TMP.txt` — saída literal; código de saída `1`. [nao verificado]
+
+```text
+/bin/bash: line 1: /tmp/INTRUSO_TMP.txt: Read-only file system
+```
+
+## 09/11 13:27 · sessao 0c99726e989d · - · - · origem=Ronald (tmux)
+
+ok.
 
 ## 09/11 13:11 · sessao 84f2029d65e7 · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -802,38 +826,4 @@ perguntas de lei: 4
 3. **v1.5 — não respondida:** quais condições de tipo, status e período tornam as quatro cartas elegíveis? **[nao verificado]**; a exigência documental atual é apenas presença de `documento` (`app/ponto/portas/celula.py:664`).
 4. **v1.6 — não respondida:** eventual resultado `folga_trabalhada` deve pedir decisão do admin? Continua registrada como pergunta aberta (`app/docs/RELATO.md:449`; `app/docs/BACKLOG.md:1876`).
 
-## 09/11 11:53 · sessao 1d0e367e27e2 · - · - · origem=Ronald (tmux)
-
-Complemento:
-
-- **O cache encontrado não reaproveita automaticamente a fotografia da primeira troca.** `julgar_celula` relê a célula e cria contadores novos; seus caches de regra/veto/afastamento são locais, e o `finally` restaura ou limpa o estado da thread (`app/ponto/services/cartorio.py:1976`, `app/ponto/services/cartorio.py:1988`, `app/ponto/services/cartorio.py:1138`, `app/ponto/services/cartorio.py:1274`, `app/ponto/services/cartorio.py:1296`, `app/ponto/services/cartorio.py:1074`). O identity map de EC é atributo das instâncias explicitamente envolvidas em `celulas_do_ato`, instalado/restaurado pelo contexto; os carregadores usados pela edição e pelo cartório fazem queries novas (`app/escala/models.py:1063`, `app/escala/alimentacao.py:43`, `app/escala/alimentacao.py:47`, `app/escala/alimentacao.py:355`, `app/escala/alimentacao.py:148`, `app/escala/servico_jornada.py:46`). Cache de objetos mantidos por um futuro compositor: **[nao verificado]**.
-
-- **Há efeito externo possível antes do commit: push de supervisão.** O rejulgamento síncrono pode alcançar `_abrir_chamado`, cujo caminho chama `push_supervisao` imediatamente; este chega a `webpush`, sem `on_commit` nesse encadeamento (`app/ponto/portas/celula.py:434`, `app/ponto/services/cartorio.py:1740`, `app/ponto/management/commands/detectar_ausencias.py:774`, `app/chamados/push_utils.py:89`, `app/chamados/push_utils.py:110`, `app/chamados/push_utils.py:40`). Portanto, rollback das escritas SQL não promete recolher uma notificação eventualmente enviada; ocorrência real, destinatários e subscriptions: **[nao verificado]**.
-
-## 09/11 11:52 · sessao 1d0e367e27e2 · - · - · origem=Ronald (tmux)
-
-Novidades para consolidação, por leitura estática:
-
-- **Recusa retornada pela 2ª chamada não desfaz automaticamente a 1ª.** `trocar_plantao` abre seu `atomic`, lança `_TrocaRecusada` internamente, captura após sair dele e retorna `'recusada'`; portanto, um `atomic` externo que termine normalmente preserva a primeira troca. O compositor precisa tratar a recusa fazendo o rollback externo; exceções não capturadas, como falha obrigatória da trilha, já propagam (`app/ponto/portas/celula.py:652`, `app/ponto/portas/celula.py:676`, `app/ponto/portas/celula.py:692`, `app/ponto/portas/celula.py:694`). Ensaio específico com duas trocas externas: **[nao verificado]**.
-
-- **A ordenação atual é por par, não pelas quatro células/cartas.** Cada chamada trava cartas por `pk`, depois edita células por `(colaborador_id, data)`; o lock da célula ocorre dentro de `editar_dia` (`app/ponto/portas/celula.py:656`, `app/ponto/portas/celula.py:657`, `app/ponto/portas/celula.py:673`, `app/ponto/portas/celula.py:593`). Com A<B, a composição faz A/d1,B/d1,A/d2,B/d2: A/d2 vem depois de B/d1, contrariando uma ordenação global das quatro chaves; duas composições concorrentes que iniciem pelos pares opostos podem esperar circularmente pelos lotes de cartas/células — dedução das duas aquisições locais (`app/ponto/portas/celula.py:657`, `app/ponto/portas/celula.py:673`). Deadlock efetivamente ocorrido em produção: **[nao verificado]**. O teste de concorrência declarado consulta AST, e o teste de ordem mede apenas uma troca; não demonstram concorrência real da composição de quatro células (`app/ponto/tests/test_o10b_editar_dia_troca.py:314`, `app/ponto/tests/test_o10b_editar_dia_troca.py:442`).
-
-- **Lavra é reconsultada em cada `editar_dia`, inclusive antes de decidir `'igual'`.** A empresa vem de query própria; `_competencias_exportadas` consulta os candidatos e o juiz, sem cache compartilhado entre chamadas; `apesar_da_lavra` pula a guarda (`app/ponto/portas/celula.py:513`, `app/ponto/portas/celula.py:568`, `app/ponto/management/commands/gerar_celulas.py:154`, `app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/management/commands/gerar_celulas.py:173`, `app/ponto/portas/celula.py:594`). Não há lock de exportação nessa consulta, nem validação antecipada das quatro células no corpo atual (`app/ponto/management/commands/gerar_celulas.py:161`, `app/ponto/portas/celula.py:675`).
-
-- **A 2ª chamada relê instâncias.** Os objetos `Ausencia` recebidos servem para extrair `pk`; as cartas e seus colaboradores são recarregados, e a célula é relida com trava em cada edição (`app/ponto/portas/celula.py:656`, `app/ponto/portas/celula.py:657`, `app/ponto/portas/celula.py:593`). O vínculo também é alimentado novamente por queries de células e escalas (`app/escala/alimentacao.py:316`, `app/escala/alimentacao.py:329`, `app/escala/alimentacao.py:355`, `app/escala/alimentacao.py:357`; query de células em `app/escala/alimentacao.py:73`). Assim, não há reaproveitamento das instâncias anteriores nesse caminho; visibilidade concreta em execução: **[nao verificado]**.
-
-- **`'igual'` é por célula e não aborta o outro lado.** A igualdade exige origem editada, mesmo `trabalha`, DNA e geradora; ignora motivo/autor novos, preserva carimbo e retorna antes da trilha, marca órfã e efeitos posteriores (`app/ponto/portas/celula.py:594`, `app/ponto/portas/celula.py:596`, `app/ponto/portas/celula.py:598`, `app/ponto/portas/celula.py:611`, `app/ponto/portas/celula.py:625`, `app/ponto/portas/celula.py:627`). A troca só retorna `'igual'` após visitar ambos; com apenas um lado igual, grava a trilha do par incluindo o resultado de cada lado (`app/ponto/portas/celula.py:673`, `app/ponto/portas/celula.py:679`, `app/ponto/portas/celula.py:683`, `app/ponto/portas/celula.py:690`). As quatro células distintas não compartilham essa chave de igualdade; reaproveitar a mesma pessoa/data com sentido inverso altera novamente `trabalha`, não vira no-op (`app/ponto/portas/celula.py:594`, `app/ponto/portas/celula.py:675`).
-
-- **Carimbos são independentes por edição.** Cada célula alterada recebe seu próprio `timezone.now`; não existe carimbo comum da permuta; `gerada_em` permanece o de criação, e a edição só salva os seis campos indicados (`app/ponto/portas/celula.py:598`, `app/ponto/portas/celula.py:609`, `app/escala/models.py:1702`). Coincidência temporal concreta: **[nao verificado]**.
-
-- **Não há deduplicação entre chamadas para os efeitos.** A deduplicação financeira `_por_competencia` é uma variável local de `_o_chao_do_dia_mudou`; `editar_dia` chama esse rabo separadamente, com um dia (`app/ponto/portas/celula.py:450`, `app/ponto/portas/celula.py:456`, `app/ponto/portas/celula.py:627`). Se as quatro células mudarem, o caminho direto agenda quatro recálculos e quatro callbacks de rejunção+reavaliação; se d1/d2 caírem na mesma competência, o mesmo colaborador/competência é recalculado duas vezes. Não há cancelamento ou chave de coalescência nesse registro (`app/ponto/portas/celula.py:458`, `app/ponto/services/fechamento.py:1807`, `app/ponto/services/fechamento.py:1824`, `app/ponto/portas/celula.py:490`, `app/ponto/portas/celula.py:502`). Contagem total incluindo signals e efeitos transitivos: **[nao verificado]**.
-
-- **Rejunção repetida é limitada por FK nula; reavaliação, por chamados vivos.** A rejunção procura `celula__isnull=True`; a reavaliação usa `universo` com `status_local__in=VIVOS`, recorta os dias e encerra somente os considerados espúrios pelo juiz (`app/chamados/rejuncao.py:60`, `app/chamados/rejuncao.py:98`, `app/chamados/services/feriado_reavaliar.py:17`, `app/chamados/services/feriado_reavaliar.py:33`, `app/chamados/services/feriado_reavaliar.py:76`, `app/chamados/services/feriado_reavaliar.py:82`). Portanto, são consultas repetidas, sem equivaler necessariamente a novas escritas; colisões concretas: **[nao verificado]**.
-
-- **Rejulgamento acontece antes do commit externo e vê estados intermediários da composição.** Cada edição chama o juiz imediatamente após escrever sua célula; pula futuro e vereditos humanos, e engole falhas (`app/ponto/portas/celula.py:627`, `app/ponto/portas/celula.py:427`, `app/ponto/portas/celula.py:430`, `app/ponto/portas/celula.py:434`, `app/ponto/portas/celula.py:437`). O caminho direto não adia os quatro rejulgamentos para o estado final; eventual interferência entre seus resultados: **[nao verificado]**.
-
-- **Cobrança órfã é marcada na transação, separadamente por célula/dia.** O marcador lê os carimbos recém-escritos, filtra cobranças vivas e grava `orfa_regeneracao` com instante próprio e marcos de emissão, usando a porta de contexto (`app/ponto/portas/celula.py:625`, `app/ponto/management/commands/gerar_celulas.py:241`, `app/ponto/management/commands/gerar_celulas.py:243`, `app/ponto/management/commands/gerar_celulas.py:255`, `app/chamados/services/contexto.py:101`). Quatro células distintas não sobrescrevem diretamente o mesmo carimbo de célula; alcance concreto dos chamados associados: **[nao verificado]**.
-
-- **Rollback externo efetivo inclui trilhas e escritas dos efeitos imediatos, mas os savepoints não são commits independentes.** Auditoria usa outro `transaction.atomic` e cria o `LogAuditoria` dentro dele; falta de trilha causa `RuntimeError` na edição/troca (`app/core/observ.py:124`, `app/core/observ.py:133`, `app/ponto/portas/celula.py:619`, `app/ponto/portas/celula.py:692`). Os efeitos posteriores estão registrados em `on_commit`, não executados diretamente nessa parte do caminho (`app/ponto/services/fechamento.py:1824`, `app/ponto/portas/celula.py:502`). Se o compositor realmente desfizer o atomic externo, a intenção documentada é que callbacks só rodem com fato gravado (`app/ponto/services/fechamento.py:1802`); descarte efetivo da fila por Django em execução: **[nao verificado]**. Mensagens de log e contadores em memória não são gravações transacionais e podem permanecer após falha (`app/core/observ.py:73`, `app/ponto/portas/celula.py:439`).
-
-_3140 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3142 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
