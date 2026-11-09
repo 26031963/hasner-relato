@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 14:51** · publicado em **09/11/2026 14:54** (UTC-3)
+> Ultima resposta processada: **09/11/2026 15:11** · publicado em **09/11/2026 15:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 15:11 · sessao 22223ccca92c · - · - · origem=Ronald (tmux)
+
+Dois procedentes em T1:
+
+1. **Escape do `--toca` por TAB ou newline no nome real.** O inventário emite `t` sem escape em TSV (`bin/codex_pergunta.sh:217`), enquanto o consumidor separa por linha/TAB e usa somente `c[1]` (`bin/codex_pergunta.sh:278-282`). Assim, o arquivo real `app/folha/views.py<TAB>fora` é julgado como `app/folha/views.py` e passa por `--toca app/folha/views.py`, embora seja outro arquivo; reproduzi o rc 0 em memória executando `_TOCA_PY` real com `StringIO`, sem escrever arquivo. A lista de caracteres do `--toca` não protege nomes de arquivos encontrados pelo inventário (`bin/codex_pergunta.sh:323`, `bin/codex_pergunta.sh:193`, `bin/codex_pergunta.sh:217`).
+
+2. **Admissão e fim divergem para arquivos novos irmãos sob pai novo.** `app/novo/a.py` versus `app/novo/b.py` não cruzam na admissão (`bin/codex_pergunta.sh:263-275`). Criar `a.py` produz também `TOCADO app/novo/` (`bin/codex_pergunta.sh:195-196`); o fim aceita esse pai como necessário ao meu arquivo, mas o considera cruzado com o arquivo da outra raia (`bin/codex_pergunta.sh:283-288`). Reproduzi em memória admissão rc 0 e fim rc 3. É falsa recusa por pasta comum, contrária ao critério de arquivo comum (`CLAUDE.md:306-308`).
+
+Demais verificações:
+
+- A primitiva de interpretação é compartilhada: sem `/` final é igualdade exata; com `/` é prefixo por componente; admissão e fim chamam a mesma definição (`bin/codex_pergunta.sh:263-287`).
+- `..`, `/./`, `//`, caminho absoluto e raiz diversa de `app/` ou `bin/` são recusados no argumento (`bin/codex_pergunta.sh:323-324`). `app/.` terminal passa na forma, mas não cobre descendentes; não identifiquei escape por isso (`bin/codex_pergunta.sh:264`, `bin/codex_pergunta.sh:323`).
+- Symlink tocado é `PROIBIDO`; o walk não segue symlink e usa `lstat` (`bin/codex_pergunta.sh:188-194`, `bin/codex_pergunta.sh:215`). Ausência de escape transitório durante execução: [não verificado].
+- O chamador fornece `--toca`; o parser escreve `TOCA[]`, a validação restringe o formato, `_publica_estado` grava `toca=`, `_toca_de` lê esse campo, `_portoes` julga a admissão e o fim relê o estado da outra raia (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:321-324`, `bin/codex_pergunta.sh:308-312`, `bin/codex_pergunta.sh:291`, `bin/codex_pergunta.sh:295-306`, `bin/codex_pergunta.sh:565-574`).
+- Os controles novos cobrem arquivo exato, pasta por componente e pai novo com uma raia; não cobrem TAB/newline nem dois arquivos irmãos sob pai novo (`bin/tests/test_codex_pergunta.sh:562-570`).
 
 ## 09/11 14:51 · sessao 8edd85065351 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · sonda · origem=Code
 
@@ -817,62 +833,4 @@ Discriminação dos sete testes V5, inferida do código; mortes executadas dos m
 
 O selo estrutural S127 exige chamada a `pode_fechar`, proíbe recomposição nominal de C6/espera e confere a cadeia C7→C6 em `app/chamados/tests/test_pergunta_viva_no_guarda.py:39`. O teste com dublê cobra efetivamente uma chamada C7 em `app/chamados/tests/test_disputa_s127.py:47`; os casos funcionais V5 acima sustentam o comportamento real em `app/chamados/tests/test_bug_par_intervalo.py:469`.
 
-## 09/11 14:06 · sessao 8e2f0f5eb602 · CODEX-2-RAIAS-PORTAO-CPU · verificador · origem=Code
-
-**Há ressalvas PROCEDENTES sobre limpeza após SIGKILL, semântica de `--toca` e medição da ocupação da trava.** A união dos testes não apresenta perda aparente nem nomes duplicados; a morte efetiva dos mutantes permanece **[nao verificado]**. Evidências abaixo. [nao verificado]
-
-“PROCEDENTE” indica achado; “NAO PROCEDE” descarta a acusação no trecho examinado.
-
-| Item | Parecer | Evidência |
-|---|---|---|
-| **1. Corrida na admissão** | **NAO PROCEDE entre wrappers novos.** Ordem: meta → prender própria vaga → consultar outra → portões → publicar estado → soltar meta. | `bin/codex_pergunta.sh:378`, `bin/codex_pergunta.sh:381`, `bin/codex_pergunta.sh:388`, `bin/codex_pergunta.sh:390` |
-| Limpeza em rc3/timeout | **NAO PROCEDE falha no caminho normal:** retorno do `timeout` segue pelo inventário e pelo EXIT; inventário irregular vence com rc3. | `bin/codex_pergunta.sh:549`, `bin/codex_pergunta.sh:558`, `bin/codex_pergunta.sh:585`, `bin/codex_pergunta.sh:607` |
-| Limpeza após SIGKILL | **PROCEDENTE:** remoção depende exclusivamente de EXIT; `.estado` pode ficar órfão. Estado sozinho não prende vaga: vida é julgada pelo flock. FD6 segue aberto na chamada dos filhos; duração efetiva dessa retenção **[nao verificado]**. | `bin/codex_pergunta.sh:236`, `bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:254`, `bin/codex_pergunta.sh:539` |
-| Limpeza sob meta | **PROCEDENTE como recusa conservadora:** remoção ocorre fora da meta; outra admissão pode encontrar flock ainda ocupado e estado já ausente, recusando. | `bin/codex_pergunta.sh:236`, `bin/codex_pergunta.sh:294` |
-| **2. Fonte e limite do load5** | **NAO PROCEDE fonte diferente:** `/proc/loadavg`, segundo campo, exige estritamente `< nproc-2`. | `bin/codex_pergunta.sh:118`, `bin/codex_pergunta.sh:295`, `bin/codex_pergunta.sh:296` |
-| “Na abertura” | Medido durante a admissão. **PROCEDENTE se significa início efetivo do CLI:** depois existem desligador, fila de slots e trava da resposta; a revalidação não relê load/hora. | `bin/codex_pergunta.sh:301`, `bin/codex_pergunta.sh:483`, `bin/codex_pergunta.sh:510`, `bin/codex_pergunta.sh:528` |
-| Janela | Implementa **[06:00,07:30)**: 06:00 recusa; 07:30 aceita. Selo cobra esses extremos. Inclusividade pretendida pelo aval: **[nao verificado]**. | `bin/codex_pergunta.sh:298`, `bin/codex_pergunta.sh:299`, `bin/tests/test_codex_pergunta.sh:524` |
-| Desligador ilegível | **NAO PROCEDE abertura:** exceção retorna2; wrapper recusa qualquer nãozero. Média `>7` ou uso `>85` com reset futuro desliga; igualdade passa. | `bin/codex_vagas_medida.py:85`, `bin/codex_vagas_medida.py:91`, `bin/codex_vagas_medida.py:94`, `bin/codex_pergunta.sh:301` |
-| Terceira chamada | **NAO PROCEDE ultrapassar teto:** ambos flocks ocupados causam rc2/VAGA2. | `bin/codex_pergunta.sh:381`, `bin/codex_pergunta.sh:384`, `bin/codex_pergunta.sh:250` |
-| **3. Obrigatoriedade e cobrança de `--toca`** | **NAO PROCEDE ausência de guarda:** obrigatório no construtor; TOCADO fora do próprio alcance ou cruzando o da outra viva produz rc3. | `bin/codex_pergunta.sh:319`, `bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:285`, `bin/codex_pergunta.sh:572` |
-| Arquivo × prefixo | **PROCEDENTE se sem `/` significa arquivo exato:** `rstrip("/")` apaga a distinção; `app/folha` e `app/folha/` cobrem descendentes igualmente, embora a mensagem diga “pasta termina em /”. **NAO PROCEDE se todo argumento é prefixo por componente:** nessa interpretação o comparador é consistente e não confunde `folha` com `folhas`. | `bin/codex_pergunta.sh:262`, `bin/codex_pergunta.sh:263`, `bin/codex_pergunta.sh:319` |
-| **4. Protegidos e cabeçalho** | **NAO PROCEDE segundo juiz/lista operacional:** PROTEGIDOS alimenta o inventário; cabeçalho extrai texto dessa mesma fonte. | `bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:242` |
-| Writable roots e Claude | **NAO PROCEDE liberação geral:** root extra `<wt>/bin` somente com `--toca bin/...`; `.claude/` é proibido. Entradas executáveis configuradas estão na lista protegida; fecho de imports foi deliberadamente excluído. | `bin/codex_pergunta.sh:537`, `bin/codex_pergunta.sh:541`, `bin/codex_pergunta.sh:147`, `bin/codex_pergunta.sh:156`; `.claude/settings.json:9`, `.claude/settings.json:20`, `.claude/settings.json:44`, `.claude/settings.json:68`, `.claude/settings.json:76` |
-| **6. Histórico e crescimento** | **NAO PROCEDE segundo escritor operacional:** append centralizado após flock. Crescimento sem limite nesse código; leitor percorre tudo. Rotação externa **[nao verificado]**. | `bin/trava_teste.sh:27`, `bin/trava_teste.sh:40`, `bin/trava_teste.sh:45`, `bin/codex_vagas_medida.py:107` |
-| Ocupação medida | **PROCEDENTE:** trava é global, histórico é por raiz da cópia; outras worktrees podem ficar fora da medida. `ini` órfão conta até agora, mesmo sem confirmação de flock; falha de append é ignorada. | `bin/trava_teste.sh:21`, `bin/trava_teste.sh:26`, `bin/trava_teste.sh:27`, `bin/codex_vagas_medida.py:103`, `bin/codex_vagas_medida.py:124` |
-
-**5. Leitores de `chamadas.log`: NAO PROCEDE interpretar `vaga=N` como rc/duração nos leitores encontrados.**
-
-| Leitor | Posição usada / evidência |
-|---|---|
-| `codex_limite_estado.py` | Sessão=`p[6]`, rc=`p[7]`, duração=`p[8]`; aceita campos adicionais. `bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:67` |
-| `gerar_codex_estado.py` / `gerar_estado.py` | Delegam ao leitor anterior. `bin/gerar_codex_estado.py:176`, `bin/gerar_estado.py:269` |
-| `disjuntor.py` | Delega contagem, tokens e inícios à mesma autoridade. `bin/disjuntor.py:2023`, `bin/disjuntor.py:2031`, `bin/disjuntor.py:2121` |
-| Selos posicionais | Sonda usa `$8`/`$9`; pergunta usa `$7`/`$8`. Último campo é usado explicitamente como vaga. `bin/tests/test_codex_sonda.sh:98`, `bin/tests/test_codex_pergunta.sh:335`, `bin/tests/test_codex_pergunta.sh:495` |
-| Nova medida | Usa `p[-1]` explicitamente como `vaga=2`. Portanto o comentário antigo “leitor único” ficou desatualizado. `bin/codex_vagas_medida.py:139`, `bin/gerar_codex_estado.py:41` |
-
-| **7. União e selos** | Parecer |
-|---|---|
-| Perdeu caso / duplicou nome | **NAO PROCEDE na comparação estática com o diff fornecido:** 90 casos/funções, sem duplicação; fake `--censo`, casos I1 e novos v2/toca/bin coexistem. Antigo `p_bin` foi substituído pela permissão e proteção seletivas. Comparação integral com ancestrais **[nao verificado]**. `bin/tests/test_codex_pergunta.sh:82`, `bin/tests/test_codex_pergunta.sh:248`, `bin/tests/test_codex_pergunta.sh:575`, `bin/tests/test_codex_pergunta.sh:601` |
-| Mutante sem mordida | **NAO PROCEDE ausência estática:** 93 entradas, sem linha duplicada, com casos existentes. Há cobrança específica de rc/motivo/não chamada; PROIBIDO; VAGA2/log; protegidos individuais. `bin/tests/test_codex_pergunta.sh:163`, `bin/tests/test_codex_pergunta.sh:169`, `bin/tests/test_codex_pergunta.sh:498`, `bin/tests/test_codex_pergunta.sh:580`, `bin/tests/test_codex_pergunta.sh:630` |
-| Cada morte foi específica? | **PROCEDENTE a ressalva:** controlador aceita qualquer texto `FALHA`, sem exigir a asserção esperada. Execução e morte efetiva dos 93: **[nao verificado]**. `bin/tests/test_codex_pergunta.sh:740` |
-| `CODEX_TESTE_*` fora do selo | **NAO PROCEDE uso dentro de Git ou com vivo de produção:** recusa antes de consumir fontes falsas. Porém a guarda reconhece topologia, não identidade do selo; qualquer cópia fora de Git com vivo fora de produção satisfaz essa condição. Selo testa apenas o ramo Git. `bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:118`, `bin/tests/test_codex_pergunta.sh:588` |
-
-| **8. Estado novo** | Quem escreve | Quem lê |
-|---|---|---|
-| `construtor.vaga2` | Wrapper abre/prende; `_viva` também abre para sondagem. `bin/codex_pergunta.sh:383`, `bin/codex_pergunta.sh:254` | flock na admissão/fim. `bin/codex_pergunta.sh:388`, `bin/codex_pergunta.sh:564` |
-| `construtor.vaga{1,2}.estado` | Wrapper publica por rename e remove no EXIT; selo fabrica estados isolados. `bin/codex_pergunta.sh:309`, `bin/codex_pergunta.sh:236`, `bin/tests/test_codex_pergunta.sh:484` | `_toca_de`, abertura/fim; selo verifica ciclo. `bin/codex_pergunta.sh:289`, `bin/codex_pergunta.sh:293`, `bin/codex_pergunta.sh:565`, `bin/tests/test_codex_pergunta.sh:510` |
-| `vaga2.log` | `_recusa_v2`. `bin/codex_pergunta.sh:249` | Medida e selo. `bin/codex_vagas_medida.py:141`, `bin/tests/test_codex_pergunta.sh:491` |
-| `trava_teste.hist` | `_hist`; selo escreve somente histórico isolado. `bin/trava_teste.sh:27`, `bin/tests/test_trava_teste.sh:103`, `bin/tests/test_trava_teste.sh:142` | Medida e selo isolado. `bin/codex_vagas_medida.py:107`, `bin/tests/test_trava_teste.sh:145` |
-
-| Classe anteriormente reprovadora | Resultado |
-|---|---|
-| Segundo juiz que duplica registrado | **NAO PROCEDE nos sítios examinados:** inventário único; leitura semanal reutilizada. `bin/codex_pergunta.sh:136`, `bin/codex_vagas_medida.py:75` |
-| Segundo escritor fora da porta | **NAO PROCEDE nos estados novos:** escritores identificados acima; nova medida apenas lê cota. `bin/codex_vagas_medida.py:148`, `bin/statusline_cota.py:54` |
-| Relógio fora da borda | **NAO PROCEDE na função do desligador:** recebe `agora` do CLI. Ressalva de envelhecimento antes da execução permanece. `bin/codex_vagas_medida.py:83`, `bin/codex_vagas_medida.py:201`, `bin/codex_pergunta.sh:298` |
-| Derivação paralela de fonte única | **NAO PROCEDE para quota/protegidos:** delegação e extração da fonte original. **PROCEDENTE fragmentação da medida global da trava.** `bin/codex_vagas_medida.py:76`, `bin/codex_pergunta.sh:242`, `bin/trava_teste.sh:26` |
-| Selo sem mordida | **PROCEDENTE a fragilidade do critério de morte**, sem prova de mutante sobrevivente. `bin/tests/test_codex_pergunta.sh:740` |
-| Ordem de trava | **NAO PROCEDE deadlock demonstrado:** admissão usa tentativas não bloqueantes das vagas; espera pela meta é limitada. `bin/codex_pergunta.sh:379`, `bin/codex_pergunta.sh:381`, `bin/codex_pergunta.sh:384`, `bin/codex_pergunta.sh:563` |
-| Campo com dois significados | **PROCEDENTE sob interpretação arquivo exato; NAO PROCEDE sob prefixo por componente.** `bin/codex_pergunta.sh:262`, `bin/codex_pergunta.sh:319` |
-
-_3178 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3179 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
