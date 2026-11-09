@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 07:42:51.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (183.7 MB). Acoes na janela: **958**.
+**Medido em 09/11/2026 07:48:24.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (183.7 MB). Acoes na janela: **960**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:44:07 | Bash | Record bug aval in docs | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| SONDA-SEM-GRANT')][0] L.insert(i,"\| BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS \| **fila 1 BUG PROVADO, NA FRENTE** (aval 09/11 07:4x, logs/aval_bug_par_dois_atos.txt; padrao=juiz do par + unidade de trabalho) \| saida e volta da mesma pausa validadas isola ...` |
+| 07:43:53 | Bash | Save aval, launch Codex reading for bug | `cd /home/ronald/saas-hasner && date +%H:%M && D=logs/bug_par_dois_atos && mkdir -p $D && cat > logs/aval_bug_par_dois_atos.txt <<'EOF' aval Ronald: BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS -- UNIDADE: par de intervalo (saida+volta da mesma pausa). BUG PROVADO, NA FRENTE DA FILA. FONTE: colab 960, disputa #5644 (chamado #35664), batidas 133756 E 21/10 18:32 e 133794 S 22/10 06:30; respostas saida 01:00 e  ...` |
 | 07:38:53 | Bash | Confirm E3 constructor alive | `cd /home/ronald/saas-hasner && kill -0 3579667 && echo vivo; sed -n 2p app/docs/RELATO.md; tail -2 logs/fio_e3/construtor_v1.out` |
 | 07:38:50 | Bash | Record audit in BACKLOG, PROMPTS, RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| FIO-E0-V4-E4-ESCRITORES')][0] L[i+1:i+1]=[ "\| SONDA-SEM-GRANT \| **fila 1 instrumento, NA FRENTE** (aval AUDITORIA-0911 09/11 07:3x; padrao=n/a (instrumento)) \| bin/sonda_leitura.sh roda ALTER ROLE PASSWORD + GRANT + ALTER DEFAULT PRIVILEGES como  ...` |
 | 07:38:36 | Bash | Find BACKLOG OBRAS block layout | `cd /home/ronald/saas-hasner && grep -n "^## \\|^\| ID\\|^\|---" app/docs/BACKLOG.md \| awk -F: '$1>1700' \| head; sed -n 1863,1866p app/docs/BACKLOG.md \| cut -c1-150` |
