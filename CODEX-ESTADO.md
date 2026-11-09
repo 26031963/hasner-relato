@@ -1,7 +1,152 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 00:35** · publicado em **09/11/2026 00:36** (UTC-3)
+> Ultima resposta processada: **09/11/2026 00:40** · publicado em **09/11/2026 00:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 00:40 · sessao d3b51dece676 · FIO-E0-V4-E1-FILA · sonda · origem=Code
+
+Transcrição literal do trecho fornecido; execução e autenticidade [nao verificado]:
+
+```text
+sonda_leitura: sonda_v22b_acervo.py [a670b468a300454b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+2026-11-09 00:37:11,564 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=4929, colab=42) — pergunta criada SEM destino.
+2026-11-09 00:37:11,594 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=4929, colab=42) — pergunta criada SEM destino.
+2026-11-09 00:37:18,056 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'saida_sem_entrada' (disputa=7952, colab=364) — pergunta criada SEM destino.
+2026-11-09 00:37:18,063 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=7952, colab=364) — pergunta criada SEM destino.
+2026-11-09 00:37:20,948 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_saida' (disputa=5362, colab=503) — pergunta criada SEM destino.
+2026-11-09 00:37:26,476 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_saida' (disputa=7721, colab=584) — pergunta criada SEM destino.
+2026-11-09 00:37:26,485 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_volta' (disputa=7721, colab=584) — pergunta criada SEM destino.
+2026-11-09 00:37:26,493 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=7721, colab=584) — pergunta criada SEM destino.
+2026-11-09 00:37:39,118 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'saida_sem_entrada' (disputa=1651, colab=841) — pergunta criada SEM destino.
+2026-11-09 00:37:39,129 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_saida' (disputa=1651, colab=841) — pergunta criada SEM destino.
+2026-11-09 00:37:39,140 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_volta' (disputa=1651, colab=841) — pergunta criada SEM destino.
+2026-11-09 00:37:39,154 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=1651, colab=841) — pergunta criada SEM destino.
+2026-11-09 00:37:39,167 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'saida_sem_entrada' (disputa=4984, colab=844) — pergunta criada SEM destino.
+2026-11-09 00:37:39,178 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_saida' (disputa=4984, colab=844) — pergunta criada SEM destino.
+2026-11-09 00:37:39,187 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'intervalo_volta' (disputa=4984, colab=844) — pergunta criada SEM destino.
+2026-11-09 00:37:39,197 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=4984, colab=844) — pergunta criada SEM destino.
+2026-11-09 00:37:39,410 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=1397, colab=865) — pergunta criada SEM destino.
+2026-11-09 00:37:45,002 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'saida_sem_entrada' (disputa=4542, colab=917) — pergunta criada SEM destino.
+2026-11-09 00:37:45,017 WARNING chamados.services.disputa_emissao S160 _derivar_chamado_destino: 2 candidatos pro motivo 'orfao_14h' (disputa=4542, colab=917) — pergunta criada SEM destino.
+REATAR universo colabs= 248 perguntas= 3359 erros= 0
+REATAR reapontaria a Chamado TERMINAL (HIST)= 0 pks(ate 20)= []
+REATAR reapontaria a Chamado vivo (derivado)= 11
+REATAR reapontaria a Chamado de OUTRO colab= 0
+REATAR chegaria ao lavrar (c1)= 3344 ao reemitir (c2, renascer possivel)= 3344 pks(ate 20)= [51431, 29870, 35204, 51830, 52437, 52500, 54837, 54898, 36476, 36477, 36484, 36485, 36486, 36487, 36488, 36489, 36490, 36491, 36492, 36493]
+FIM sonda_v22b_acervo
+```
+
+**Cobertura integral das interceptações: [nao verificado].** O fonte `sonda_v22b_acervo.py` não acompanha o dado e não foi localizado na cópia; a saída não informa quais atributos foram substituídos nem seus retornos. Portanto, não consigo identificar uma escrita como comprovadamente **não interceptada**. [nao verificado]
+
+A conferência do código mostra os seguintes pontos relevantes:
+
+- `perguntas_orfas_reatavies` apenas monta o filtro; `reconciliar_perguntas_orfas_colab` percorre esse conjunto, chama `reatar_pergunta_orfa` e registra exceções. (`app/chamados/reconciliador.py:1495`, `app/chamados/reconciliador.py:1517`, `app/chamados/reconciliador.py:1522`, `app/chamados/reconciliador.py:1525`)
+- **Costura:** `reapontar_resolvedora` salva a pergunta e pode retratar outras perguntas por colisão; essa retratação chega ao `save` de `carimbar_identidade`. Substituir a função inteira impede a execução desses caminhos internos. (`app/chamados/services/fio.py:913`, `app/chamados/services/fio.py:916`, `app/chamados/services/fio.py:1324`, `app/chamados/services/fio.py:1342`, `app/chamados/models.py:3180`)
+- **c1:** pode obter/criar o usuário sistema, carimbar a pergunta e fechar a disputa. Substituir `lavrar_sem_turno_aberto` inteira impede esses caminhos internos. (`app/chamados/reconciliador.py:400`, `app/chamados/reconciliador.py:405`, `app/chamados/reconciliador.py:412`; escritas em `app/core/utils.py:18`, `app/chamados/models.py:3142`, `app/chamados/models.py:1934`)
+- **c2:** pode criar ou renascer chamado e depois costurar a pergunta. Há também `cartorio.julgar_celula` durante a avaliação de `_ctx_c2`, **antes de entrar em `ChamadoColaborador.abrir`**. Interceptar somente `abrir` não bloqueia essa chamada; substituir `reemitir_chamado_do_dia` inteira bloqueia o caminho. (`app/chamados/reconciliador.py:702`, `app/chamados/reconciliador.py:910`, `app/chamados/reconciliador.py:920`, `app/chamados/reconciliador.py:954`, `app/chamados/models.py:922`, `app/chamados/models.py:971`)
+- **Atenção ao HIST:** em `resolver_perguntas_por_chamado_resolvido(hist[0], get_user_sistema())`, o argumento `get_user_sistema()` é executado mesmo que o resolvedor tenha sido substituído. Ele contém `User.objects.get_or_create`, uma escrita potencial se o usuário não existir. Esse caminho depende de o reapontamento retornar `_ok=True`; sua interceptação pela sonda permanece [nao verificado]. (`app/chamados/reconciliador.py:1638`, `app/chamados/reconciliador.py:1639`, `app/chamados/reconciliador.py:1644`, `app/core/utils.py:18`)
+- Os `save`s reais de pergunta também alcançam receivers: fechamento de beco após commit e emissão condicional de evento da célula. A emissão chega a `EventoCelula.objects.create`. (`app/chamados/signals.py:224`, `app/chamados/signals.py:225`, `app/chamados/signals.py:244`, `app/chamados/models.py:3238`, `app/ponto/portas/celula.py:891`)
+
+**Import local: sim, pega o atributo substituído**, desde que a substituição esteja em `chamados.services.fio.reapontar_resolvedora` quando o import executar. O vínculo local é obtido dentro de cada chamada de `reatar_pergunta_orfa`; c2 também faz seu próprio import local. A substituição efetivamente feita pela sonda permanece [nao verificado]. (`app/chamados/reconciliador.py:1546`, `app/chamados/reconciliador.py:791`)
+
+## 09/11 00:39 · sessao 572f905bcef1 · BUG-DEPLOY-PORTAO · verificador · origem=Code
+
+1. **Achado funcional: pendências simultâneas deixam as duas portas bloqueadas.** Com `PEND=1` e `PEND_MSG=1`, o deploy normal recusa pelo mensageria e recomenda `--restart`; este recusa pelo core e recomenda deploy normal. A orientação nova não resolve essa combinação. O caso 17 cobre apenas sua recusa no modo normal; o 22 cobre somente mensageria pendente. Ocorrência em produção: [nao verificado]. (`bin/deploy.sh:200`, `bin/deploy.sh:202`, `bin/deploy.sh:219`, `bin/deploy.sh:225`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:198`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:218`)
+
+2. **Pergunta 1 — não identifiquei caminho para apply do core com `RESTART=1`.** `APLICAR_MIGRATE` e `RESTART` nascem zerados, neutralizando valores herdados. O único escritor posterior de `APLICAR_MIGRATE=1` está no `else` depois da recusa de restart; `falhou` encerra o script. Os ramos anteriores também encerram ou, no conferir, não armam o apply. (`bin/deploy.sh:61`, `bin/deploy.sh:70`, `bin/deploy.sh:92`, `bin/deploy.sh:206`, `bin/deploy.sh:208`, `bin/deploy.sh:211`, `bin/deploy.sh:215`, `bin/deploy.sh:219`, `bin/deploy.sh:230`, `bin/deploy.sh:312`)
+
+   As flags não são combinadas: apenas `$1` seleciona o modo. `--restart --sem-migrate` interpreta `--sem-migrate` como motivo; na ordem inversa, seleciona somente `--sem-migrate`. Isso também vale para `--sem-sombra`, `--conferir` e `--reload-*`. `DEPLOY_SEM_SOMBRA` herdado dispensa a sombra, sem alterar a autorização de migrate. (`bin/deploy.sh:56`, `bin/deploy.sh:63`, `bin/deploy.sh:64`, `bin/deploy.sh:65`, `bin/deploy.sh:72`, `bin/deploy.sh:74`, `bin/deploy.sh:82`, `bin/deploy.sh:85`, `bin/deploy.sh:86`, `bin/deploy.sh:152`)
+
+3. **Pergunta 2 — somente mensageria pendente conserva o caminho ao restart, com os demais portões verdes.** `RESTART=1` escapa da recusa por `PEND_MSG`; `PEND=0` não arma o apply do core. Depois dos portões, chega à checagem final de cron e ao `docker restart saas_core saas_ui mensageria`. O compose declara o migrate do mensageria no boot; sua execução real em produção é [nao verificado]. (`bin/deploy.sh:200`, `bin/deploy.sh:204`, `bin/deploy.sh:302`, `bin/deploy.sh:312`, `bin/deploy.sh:335`, `bin/deploy.sh:338`, `bin/deploy.sh:339`; `docker-compose.mensageria.yml:20`)
+
+4. **Pergunta 3 — censo dos leitores e escritores:**
+
+   | Nome | Escritores | Leitores/chamadas |
+   |---|---|---|
+   | `PEND` | `bin/deploy.sh:185`, `187` | `bin/deploy.sh:189`, `204`, `209`, `212`, `216`, `224` |
+   | `APLICAR_MIGRATE` | `bin/deploy.sh:61`, `230` | `bin/deploy.sh:312` |
+   | `RESTART` | `bin/deploy.sh:70`, `73` | `bin/deploy.sh:115`, `200`, `219`, `335`, `441` |
+   | `recusa_restart_com_cron` | definição em `bin/deploy.sh:110` | chamadas em `bin/deploy.sh:117`, `338` |
+
+   O leitor textual externo é `bin/contrato_deploy.sh`: reconhece o ramo `RESTART`, exige a chamada antes do restart e exige a função. Não exige migrate no restart nem checagem na 1c. O selo injeta `APLICAR_MIGRATE` pelo ambiente; o outro `PEND`, em `sondas.sh`, é um diretório independente. (`bin/contrato_deploy.sh:41`, `bin/contrato_deploy.sh:47`, `bin/contrato_deploy.sh:50`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:109`; `bin/sondas.sh:18`, `bin/sondas.sh:21`)
+
+   Não identifiquei leitor decisório que dependa do significado antigo: `PEND` continua booleano do check, `APLICAR_MIGRATE` autoriza o apply e `RESTART` seleciona a publicação por restart. A incompatibilidade está nas recomendações recíprocas do achado 1 e na descrição obsoleta do caso 14, abaixo. (`bin/deploy.sh:184`, `bin/deploy.sh:200`, `bin/deploy.sh:225`, `bin/deploy.sh:230`, `bin/deploy.sh:312`, `bin/deploy.sh:335`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:187`)
+
+5. **Pergunta 4 — remover a chamada da 1c não cria caminho sem recusa antes do restart.** O único `docker restart` continua imediatamente depois de `recusa_restart_com_cron`; há também a chamada inicial. Permanece a corrida entre a amostragem final e o restart: o envelope pode criar uma marca nesse intervalo, sem trava compartilhada. É o residual explicitamente preservado, não uma proteção de exclusão. (`bin/deploy.sh:117`, `bin/deploy.sh:309`, `bin/deploy.sh:338`, `bin/deploy.sh:339`; `bin/cron_run.sh:9`, `bin/cron_run.sh:10`)
+
+6. **Pergunta 5 — os quatro casos mordem as regressões nomeadas, por inspeção das asserções, com limites:**
+
+   - **11:** exige erro, zero apply e zero restart. Se o migrate voltar e gerar o cron falso, a recusa final não mascara o apply: o contador o reprova. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:86`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:111`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:174`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:175`)
+   - **13:** cobra a mesma recusa sem cron injetado, cobrindo o restart com core pendente e portões configurados verdes. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:182`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:183`)
+   - **22:** exige sucesso, zero apply do core e um restart quando somente mensageria pende. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:218`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:219`)
+   - **23:** exige esses mesmos resultados sem pendências injetadas. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:222`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:223`)
+
+   **Limites:** 11/13 não fixam a seção nem a mensagem da recusa; movê-la para depois dos portões, ainda antes do apply, preservaria suas asserções. 22/23 contam qualquer comando `restart`, sem conferir seus containers; o docker falso não executa boot. Portanto, não provam a aplicação real da migration do mensageria. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:94`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:120`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:175`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:183`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:219`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:223`)
+
+7. **Pergunta 6 — há duas afirmações documentais falsas.** “Antes de qualquer portão” contradiz a ordem: árvore, cron, auth e sombra vêm antes da recusa nova. Já “antes do banco andar”, no sentido de impedir o apply do core, corresponde ao fluxo. (`bin/deploy.sh:101`, `bin/deploy.sh:117`, `bin/deploy.sh:145`, `bin/deploy.sh:162`, `bin/deploy.sh:221`, `bin/deploy.sh:224`, `bin/deploy.sh:313`)
+
+   O caso 14 ficou obsoleto: ainda diz que a **1c** recusa o cron nascido na casca, mas agora sua pendência de core aborta na seção 1, antes de executar a casca que criaria a marca. A 1c já não contém essa recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:39`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:74`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:186`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:187`; `bin/deploy.sh:219`, `bin/deploy.sh:312`)
+
+O selo comportamental não foi executado nesta revisão: ele cria e remove arquivos temporários. Resultado dinâmico dos casos: [nao verificado]. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:60`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:64`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:131`)
+
+## 09/11 00:39 · sessao d2e43dd5157c · - · - · origem=Ronald (tmux)
+
+Auditoria das fronteiras, sem assumir os patches da sonda:
+
+- `reatar_pergunta_orfa` chama c1 em `app/chamados/reconciliador.py:1615`; c1 obtém usuário em `:400`, carimba em `:405` e fecha disputa em `:412`. Escritas internas: `app/core/utils.py:18` (`User.objects.get_or_create`), `app/chamados/models.py:3142` (`carimbar.save`), `app/chamados/models.py:1934` (`DisputaSupervisao.fechar.save`) e auditoria em `app/chamados/models.py:1935` → `app/core/observ.py:134`.
+- c2 é chamado em `app/chamados/reconciliador.py:1617`; chama `ChamadoColaborador.abrir` em `:910` e `reapontar_resolvedora` em `:954`. O argumento `defaults` avalia `_ctx_c2` em `:920`, que pode executar `cartorio.julgar_celula` em `:702` **antes da chamada a `abrir`**. Interceptar c2 inteiro cobre esse caminho; interceptar apenas `abrir` não cobre a avaliação de `_ctx_c2`. (`app/chamados/reconciliador.py:702`, `:910`, `:920`)
+- `abrir` pode criar chamado em `app/chamados/models.py:971`; no existente encerrado chama renascimento em `:922`, cuja execução pode reabrir em `:1019` e anexar nota em `:1022`. A nota grava em `app/chamados/services/nota.py:103` ou `:107`.
+- HIST: após reapontamento aprovado, a expressão `resolver_perguntas_por_chamado_resolvido(hist[0], get_user_sistema())` avalia `get_user_sistema()` antes de chamar o resolvedor. Assim, **mesmo com o resolvedor substituído**, o `get_or_create` do usuário continua alcançável, salvo interceptação adicional ou retorno `_ok=False` no reapontamento. (`app/chamados/reconciliador.py:1638`, `:1639`, `:1644`; `app/core/utils.py:18`)
+- Resolver histórico, quando executado: carimba em `app/chamados/services/disputa_emissao.py:1764` e `:1838`, pode reabrir pai em `:1789`, inserir nota em `:1791`, auditar em `:1841` e fechar disputa em `:1865`. Gravações correspondentes: `app/chamados/models.py:3142`, `app/chamados/services/nota.py:103`, `app/core/observ.py:134`, `app/chamados/models.py:1934`.
+- `_derivar_chamado_destino` consulta candidatos e pode emitir WARNING; não contém gravação ORM no corpo lido. (`app/chamados/services/disputa_emissao.py:198`, `:226`, `:240`, `:254`)
+- `_dia_fora_do_alcance_c` escreve somente memo na instância no corpo lido, em `app/chamados/reconciliador.py:748`.
+
+Sem o código da sonda, quais desses pontos foram efetivamente interceptados permanece **[nao verificado]**.
+
+## 09/11 00:38 · sessao 5900d8a4c6d7 · - · - · origem=Ronald (tmux)
+
+- **Bloqueio circular quando ambos pendem:** modo normal recusa `PEND_MSG>0` e recomenda `--restart`; este recusa `PEND>0` e recomenda modo normal. Nenhum dos dois avança com `PEND=1/PEND_MSG=1`; `--conferir` apenas consulta. Referências: `bin/deploy.sh:200`, `bin/deploy.sh:202`, `bin/deploy.sh:219`, `bin/deploy.sh:225`, `bin/deploy.sh:234`. Ocorrência em produção: **[nao verificado]**. O caso 17 cobre apenas a recusa normal com ambos pendentes; o 22 cobre somente mensageria pendente: `bin/tests/test_deploy_portoes_antes_do_migrate.sh:198`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:218`.
+
+- **Censo `PEND`:** escritores `bin/deploy.sh:185`, `bin/deploy.sh:187`; leitores `bin/deploy.sh:189`, `bin/deploy.sh:204`, `bin/deploy.sh:209`, `bin/deploy.sh:212`, `bin/deploy.sh:216`, `bin/deploy.sh:224`. O homônimo em `bin/sondas.sh:18` é caminho de diretório, lido em `bin/sondas.sh:19`, `bin/sondas.sh:21`, `bin/sondas.sh:22`.
+
+- **Censo `APLICAR_MIGRATE`:** escritores `bin/deploy.sh:61`, `bin/deploy.sh:230`; único leitor decisório `bin/deploy.sh:312`. O selo injeta o valor de ambiente em `bin/tests/test_deploy_portoes_antes_do_migrate.sh:109` e cobra sua neutralização em `bin/tests/test_deploy_portoes_antes_do_migrate.sh:170`.
+
+- **Censo `RESTART`:** escritores `bin/deploy.sh:70`, `bin/deploy.sh:73`; leitores `bin/deploy.sh:115`, `bin/deploy.sh:200`, `bin/deploy.sh:219`, `bin/deploy.sh:335`, `bin/deploy.sh:441`. O último escolhe apenas a mensagem final: `bin/deploy.sh:442`, `bin/deploy.sh:444`.
+
+- **Censo `recusa_restart_com_cron`:** definição `bin/deploy.sh:110`; chamadas `bin/deploy.sh:117`, `bin/deploy.sh:338`. O contrato externo reconhece textualmente o ramo `RESTART` e exige chamada antes do restart e definição da função: `bin/contrato_deploy.sh:41`, `bin/contrato_deploy.sh:47`, `bin/contrato_deploy.sh:50`. Esses leitores não exigem migrate no restart nem rechecagem na 1c: `bin/contrato_deploy.sh:41`, `bin/contrato_deploy.sh:45`, `bin/contrato_deploy.sh:47`.
+
+- **Sem leitor decisório com significado antigo identificado:** `PEND` permanece resultado booleano do check; `APLICAR_MIGRATE` continua autorização de apply; `RESTART` continua seleção da publicação por restart. A incompatibilidade encontrada está nas recomendações operacionais recíprocas, quando ambos pendem: `bin/deploy.sh:184`, `bin/deploy.sh:200`, `bin/deploy.sh:225`, `bin/deploy.sh:230`, `bin/deploy.sh:312`, `bin/deploy.sh:335`.
+
+## 09/11 00:38 · sessao 3198ce51949f · - · - · origem=Ronald (tmux)
+
+- **Comentário falso:** `bin/deploy.sh:221` promete recusa “antes de qualquer portao”, porém árvore, cron, auth e sombra já passaram em `bin/deploy.sh:101`, `bin/deploy.sh:117`, `bin/deploy.sh:145` e `bin/deploy.sh:162`. A recusa nova ocorre em `bin/deploy.sh:219`. A promessa de impedir o apply do core é sustentada pela atribuição exclusiva em `bin/deploy.sh:230` e pelo apply em `bin/deploy.sh:312`.
+
+- **Caso 14 ficou com explicação falsa:** o cabeçalho e a mensagem atribuem a recusa à 1c (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:39`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:187`). Mas ele fornece core pendente em `bin/tests/test_deploy_portoes_antes_do_migrate.sh:186`, portanto aborta na seção 1 (`bin/deploy.sh:219`), antes da prova que criaria o cron (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:74`). A 1c também já não tem recusa por cron (`bin/deploy.sh:312`).
+
+- **Casos 11 e 13 mordem o retorno do migrate no restart:** ambos exigem `RC!=0`, zero apply e zero restart (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:175`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:183`). O contador exclui `--check` e `--plan` (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:111`). No 11, a marca só surgiria no apply falso (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:86`); mesmo que a recusa final por cron evitasse restart, o apply contado reprovaria o caso (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:175`). O 13 também cobre o caminho sem cron injetado (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:182`).
+
+- **Casos 22 e 23 mordem o fechamento indevido do restart:** o 22 injeta somente pendência de mensageria e exige sucesso, zero apply do core e uma chamada restart (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:218`); o 23 exige o mesmo sem pendência injetada (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:222`). Eles cobrem uma recusa ampliada indevidamente para mensageria ou para todo restart (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:219`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:223`).
+
+- **Limites dos quatro casos:** 11/13 não verificam a seção ou mensagem da recusa nem ausência de chamadas aos portões; verificam apenas os três resultados (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:175`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:183`). Mover a recusa para depois dos portões, mantendo-a antes do apply, preservaria essas asserções (`bin/deploy.sh:302`, `bin/deploy.sh:312`). 22/23 contam qualquer linha `restart`, sem conferir os containers (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:120`); o docker falso devolve sucesso sem executar boot (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:94`). Assim, não provam aplicação real da migration de mensageria [nao verificado].
+
+- **Demais comentários novos:** “nunca num --restart”, entendido como apply do core, combina com o fluxo (`bin/deploy.sh:219`, `bin/deploy.sh:230`, `bin/deploy.sh:312`). O boot declarado de mensageria executa migrate (`docker-compose.mensageria.yml:20`). A janela entre a amostragem final de cron e o restart continua explícita no código (`bin/deploy.sh:338`, `bin/deploy.sh:339`); o envelope cria marca sem trava compartilhada e executa o comando uma vez (`bin/cron_run.sh:9`, `bin/cron_run.sh:11`). Testes não executados nesta revisão [nao verificado].
+
+## 09/11 00:38 · sessao 7a58b9f3bf40 · - · - · origem=Ronald (tmux)
+
+1. **Não há caminho ordinário com `RESTART=1` e apply do core.** `APLICAR_MIGRATE` e `RESTART` são zerados, anulando valores herdados; somente o modo `--restart` arma `RESTART`. O único escritor posterior de `APLICAR_MIGRATE=1` está no `else` depois da recusa por `RESTART`; `falhou` encerra o shell. (`bin/deploy.sh:61`, `bin/deploy.sh:70`, `bin/deploy.sh:72`, `bin/deploy.sh:92`, `bin/deploy.sh:219`, `bin/deploy.sh:230`, `bin/deploy.sh:312`)
+
+2. **As opções não são combinadas pelo parser.** Apenas `$1` define o modo; `$2` é motivo em `--restart` e `--sem-sombra`. Portanto, `--restart --sem-migrate` interpreta `--sem-migrate` como motivo, mantendo a recusa do core; na ordem inversa o modo será `--sem-migrate`, sem restart. `DEPLOY_SEM_SOMBRA` altera somente a dispensa da sombra, sem armar migration. (`bin/deploy.sh:56`, `bin/deploy.sh:63`, `bin/deploy.sh:72`, `bin/deploy.sh:74`, `bin/deploy.sh:82`, `bin/deploy.sh:85`, `bin/deploy.sh:86`, `bin/deploy.sh:152`, `bin/deploy.sh:219`)
+
+3. **Mensageria pendente com core sem pendência conserva o restart, condicionado aos outros portões.** `RESTART=1` dispensa a recusa de mensageria; `PEND=0` não arma o apply; o fluxo chega à recusa final por cron e ao comando de restart. O compose declara migration da mensageria no boot. (`bin/deploy.sh:200`, `bin/deploy.sh:204`, `bin/deploy.sh:230`, `bin/deploy.sh:335`, `bin/deploy.sh:338`, `bin/deploy.sh:339`, `docker-compose.mensageria.yml:20`)
+
+4. **Remover a checagem da 1c não deixa caminho sem chamada de recusa antes do restart.** Há recusa inicial e outra imediatamente anterior ao único `docker restart`; `falhou` encerra a execução. Permanece a janela entre a amostragem final e o comando: o envelope cria sua marca independentemente, sem exclusão comum. (`bin/deploy.sh:92`, `bin/deploy.sh:115`, `bin/deploy.sh:117`, `bin/deploy.sh:338`, `bin/deploy.sh:339`, `bin/cron_run.sh:9`, `bin/cron_run.sh:10`, `bin/cron_run.sh:11`)
+
+5. **Comentário falso de ordem:** “Recusa AQUI, antes de qualquer portao” não corresponde ao fluxo. A árvore, o cron e os portões de auth/sombra vêm antes da seção 1; `--sem-sombra` pode inclusive gravar seu log antes dessa recusa. (`bin/deploy.sh:221`, `bin/deploy.sh:101`, `bin/deploy.sh:117`, `bin/deploy.sh:145`, `bin/deploy.sh:160`, `bin/deploy.sh:162`, `bin/deploy.sh:224`)
+
+6. **“Única porta” da migration da mensageria precisa ser lido no escopo do deploy.** O compose executa `migrate` em qualquer boot que use esse comando; o código prova que `--restart` é a porta deste script para provocá-lo. Exclusividade operacional fora dele: [nao verificado]. (`bin/deploy.sh:223`, `bin/deploy.sh:335`, `bin/deploy.sh:339`, `docker-compose.mensageria.yml:20`)
+
+Nenhum teste foi executado; comportamento real dos containers, banco e marcas de produção: [nao verificado]. [nao verificado]
 
 ## 09/11 00:35 · sessao 50955c5d0d17 · FIO-E0-V4-E1-FILA · sonda · origem=Code
 
@@ -560,307 +705,4 @@ Achados centrais:
 - O selo não prova alvos do restart: só conta linhas `^restart`; o vizinho efetivamente compara `restart saas_core saas_ui mensageria` no caminho verde (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:109`, `:172`; `bin/tests/test_deploy_reload_gracioso.sh:134-139`).
 - A alegação de que o vizinho prova readiness/rotas/reciclagem está exagerada: ele falsifica `selo_reciclagem` como sucesso, responde `STATUS 200` incondicionalmente e não tem injeção de falha de readiness/rota; prova principalmente exec sobrevivente, HUP, troca de workers e alguns modos/recusas (`bin/tests/test_deploy_reload_gracioso.sh:40-42`, `:57-58`, `:107-112`, `:116-156`).
 
-## 08/11 23:36 · sessao 1256d4b89cb3 · BUG-DEPLOY-PORTAO · verificador · origem=Code
-
-A volta 3 elimina a **recusa por cron após um apply bem-sucedido do core**, mas passa a permitir o restart sobre um cron recém-nascido. A afirmação “morto e refeito” não está sustentada por mecanismo de repetição; além disso, o selo de configuração continua podendo reprovar depois da publicação. (`bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:296`, `bin/cron_run.sh:11`, `bin/cron_run.sh:38`, `bin/deploy.sh:409`)
-
-A análise abaixo é estática. RED/VERDE, execução dos mutantes e efeitos reais em produção: **[nao verificado]**. Não executei o selo porque ele cria e remove arquivos. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:44`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:107`)
-
-1) É preciso separar **passar pela posição da seção 1c** de **ter executado seu apply com sucesso**. O apply é condicional; sua falha encerra o script imediatamente. (`bin/deploy.sh:298`, `bin/deploy.sh:300`, `bin/deploy.sh:92`)
-
-| Modo | Apply da 1c e caminhos que podem terminar sem completar a publicação das três cascas |
-|---|---|
-| Normal | Com pendência, faz apply; pode terminar por falha do próprio migrate, do HUP ou da troca dos workers. Sem pendência, pula apply e permanece sujeito às falhas de HUP/troca. (`bin/deploy.sh:223`, `bin/deploy.sh:300`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
-| `--sem-migrate` | Com pendência, recusa **antes** da 1c. Se chega à seção 2, não fez apply e pode falhar no HUP/troca. (`bin/deploy.sh:215`, `bin/deploy.sh:216`, `bin/deploy.sh:61`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
-| `--sem-sombra` | Pode migrar normalmente; depois disso, tem os mesmos caminhos de falha de migrate/HUP/troca do normal. O modo dispensa sombra por motivo, não migration nem auth. (`bin/deploy.sh:87`, `bin/deploy.sh:89`, `bin/deploy.sh:143`, `bin/deploy.sh:152`, `bin/deploy.sh:300`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
-| `--reload-agendado` | Com pendência, recusa antes da 1c. Sem pendência, não aplica migrate; pode falhar no HUP/troca. (`bin/deploy.sh:65`, `bin/deploy.sh:211`, `bin/deploy.sh:212`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
-| `--reload-copia` | Com pendência, recusa antes da 1c. Sem pendência, não aplica migrate; pode falhar no HUP/troca. (`bin/deploy.sh:82`, `bin/deploy.sh:208`, `bin/deploy.sh:209`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
-| `--restart` | Com apply bem-sucedido, pula a recusa de cron na seção 2 e tenta restart; pode terminar por falha do migrate ou do restart. **Sem apply**, pode terminar por **RECUSA de cron** na seção 2, antes de chamar restart. (`bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:326`, `bin/deploy.sh:112`) |
-| `--conferir` | Não alcança a 1c: termina antes, sem publicação. (`bin/deploy.sh:227`, `bin/deploy.sh:229`) |
-
-Depois de uma chamada de HUP/restart, ainda existem estas saídas explícitas:
-
-| Saída | O que permite concluir |
-|---|---|
-| Timeout de disponibilidade de qualquer casca | A publicação foi tentada; não se confirmou que as três ficaram disponíveis. (`bin/deploy.sh:365`, `bin/deploy.sh:366`, `bin/deploy.sh:368`) |
-| Uma ou mais rotas reprovadas | A publicação foi tentada; a prova funcional falhou. Não demonstra, por si só, ausência de recarga. (`bin/deploy.sh:399`, `bin/deploy.sh:400`, `bin/deploy.sh:401`, `bin/deploy.sh:402`) |
-| Selo de reciclagem vermelho | Reprova depois da tentativa de publicação por configuração/cmdline/compose/crontab. É uma guarda de conformidade posterior, não apenas erro operacional de HUP/restart. (`bin/deploy.sh:409`, `bin/selo_reciclagem.sh:46`, `bin/selo_reciclagem.sh:54`, `bin/selo_reciclagem.sh:64`, `bin/selo_reciclagem.sh:72`, `bin/selo_reciclagem.sh:78`) |
-| Final “OK” sem PIDs anteriores conhecidos | O código admite continuar apenas com aviso quando não consegue listar os workers anteriores. Nesse caminho, não exige prova da troca deles. Recarga efetiva: **[nao verificado]**. (`bin/deploy.sh:341`, `bin/deploy.sh:346`, `bin/deploy.sh:431`) |
-
-Portanto: **há RECUSA depois da posição da 1c**, no `--restart` **sem apply**, pela marca de cron. **Não há essa recusa depois de apply bem-sucedido**; o curto-circuito a desabilita. (`bin/deploy.sh:325`, `bin/deploy.sh:112`)
-
-Falhas do apply, HUP ou restart não garantem ausência de efeitos parciais; o script encerra sem executar recuperação nesses ramos. Efeito parcial real: **[nao verificado]**. (`bin/deploy.sh:300`, `bin/deploy.sh:326`, `bin/deploy.sh:343`, `bin/deploy.sh:92`)
-
-A frase literal “todo portão antes do migrate” continua mais forte que o código: o selo de reciclagem permanece depois dele, embora esse selo já não impeça a tentativa de publicação. (`bin/deploy.sh:300`, `bin/deploy.sh:409`)
-
-2) O censo de escritores e leitores é este:
-
-| Estado | Quem escreve | Quem lê |
-|---|---|---|
-| `APLICAR_MIGRATE` | Inicialização `0`; seleção elegível `1`. São dois pontos de atribuição no mesmo script. (`bin/deploy.sh:61`, `bin/deploy.sh:223`) | Decide o apply e decide dispensar a recusa posterior de cron. Portanto são **dois leitores**, contrariando o comentário “UM leitor”. (`bin/deploy.sh:298`, `bin/deploy.sh:325`, `bin/deploy.sh:59`) |
-| `RESTART` | Inicialização `0`; somente o primeiro argumento `--restart` seleciona `1`. (`bin/deploy.sh:70`, `bin/deploy.sh:72`, `bin/deploy.sh:73`) | Recusa inicial de cron; exceção da pendência da mensageria; recusa pré-apply; seleção restart/HUP; mensagem final. (`bin/deploy.sh:115`, `bin/deploy.sh:200`, `bin/deploy.sh:299`, `bin/deploy.sh:322`, `bin/deploy.sh:428`) |
-| Marcas de produção | O envelope cria diretório, escreve `<nome>_<empresa>.<PID>` e remove no `EXIT`. **Deploy também escreve no ciclo de vida: apaga marcas consideradas mortas.** (`bin/cron_run.sh:9`, `bin/cron_run.sh:10`, `bin/deploy.sh:109`) | Deploy enumera arquivos, testa `/proc/<PID>`, extrai o nome e usa o resultado para recusar. Não lê o timestamp do conteúdo. (`bin/deploy.sh:108`, `bin/deploy.sh:109`, `bin/deploy.sh:111`, `bin/deploy.sh:112`) |
-
-Fora do deploy: [nao verificado]
-
-- O selo desta obra remove `APLICAR_MIGRATE` herdado e o injeta novamente quando `FAKE_HERDA_APLICAR` está presente; o caso 10 seleciona essa injeção. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`)
-- O contrato estrutural lê o **texto** do teste de `RESTART`, não o valor da variável. Também procura textualmente a presença do mecanismo de marcas nos dois scripts. (`bin/contrato_deploy.sh:41`, `bin/contrato_deploy.sh:81`, `bin/contrato_deploy.sh:82`)
-- O selo gracioso escreve marca com PID do processo falso; o selo desta obra escreve `cron_falso.1`. As respectivas limpezas removem as árvores falsas. (`bin/tests/test_deploy_reload_gracioso.sh:90`, `bin/tests/test_deploy_reload_gracioso.sh:91`, `bin/tests/test_deploy_reload_gracioso.sh:104`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:107`)
-
-**Os valores originais de `APLICAR_MIGRATE` e `RESTART` herdados do ambiente não alcançam seus leitores:** ambos são sobrescritos primeiro. (`bin/deploy.sh:61`, `bin/deploy.sh:70`, `bin/deploy.sh:298`, `bin/deploy.sh:115`)
-
-Isso não significa ambiente neutralizado em geral. Continuam sendo entradas deliberadas: `DEPLOY_SEM_SOMBRA`, `SEM_JANELA_AUTH_MOTIVO`, `SEM_PROVA_DE_CASCA`, `HOST_TENANT` e as costuras `JANELA_AUTH_STAMP/DOW/HHMM`. Elas alcançam leitores e podem mudar o comportamento correspondente. (`bin/deploy.sh:85`, `bin/deploy.sh:143`, `bin/deploy.sh:282`, `bin/deploy.sh:376`, `bin/janela_auth.sh:36`, `bin/janela_auth.sh:49`, `bin/janela_auth.sh:50`)
-
-O escritor das marcas usa caminho absoluto, enquanto deploy lê relativo à sua `RAIZ`. A equivalência desses diretórios em produção é **[nao verificado]**. (`bin/cron_run.sh:9`, `bin/deploy.sh:53`, `bin/deploy.sh:108`)
-
-3) No cenário perguntado, com apply do core bem-sucedido:
-
-- **Volta 2:** consultava novamente as marcas e podia recusar antes do restart, deixando o apply executado sem publicar as cascas. A chamada incondicional removida estava em `bin/deploy.sh` da volta 2:318, conforme o hunk `-315/+321` do anexo `codex_deployportao3.diff`.
-- **Volta 3:** `APLICAR_MIGRATE=1` dispensa essa consulta; o restart é chamado apesar do cron recém-nascido. (`bin/deploy.sh:325`, `bin/deploy.sh:326`)
-- Se esse cron estiver executando por `docker exec` numa casca reiniciada, ele fica exposto à interrupção que o próprio script documenta. Morte concreta e código de saída nesta produção: **[nao verificado]**. (`bin/deploy.sh:311`, `bin/deploy.sh:314`)
-
-“Idempotente” não implica “automaticamente reexecutado”. O envelope executa o comando uma vez, carimba conclusão apenas para rc `0/2`, tenta alarmar nas outras falhas e sai; não contém retry. A idempotência universal é requisito textual, não prova apresentada. (`bin/cron_run.sh:11`, `bin/cron_run.sh:22`, `bin/cron_run.sh:32`, `bin/cron_run.sh:38`, `CLAUDE.md:246`)
-
-A interrupção pode ainda deixar dependentes sem carimbo de conclusão: eles aguardam o arquivo e alarmam ao atingir o teto. A recuperação efetiva da corrente é **[nao verificado]**. (`bin/cron_run.sh:25`, `bin/encadeado.sh:89`, `bin/encadeado.sh:92`, `bin/encadeado.sh:94`)
-
-Uma ordem concebível seria **bloquear novas admissões de cron → drenar os existentes → manter o bloqueio durante migrate/publicação → liberar**. Isso exigiria uma exclusão compartilhada entre envelope e deploy, ausente na sequência atual; sua implementação e viabilidade aqui são **[nao verificado]**. (`bin/cron_run.sh:9`, `bin/cron_run.sh:11`, `bin/deploy.sh:299`, `bin/deploy.sh:300`, `bin/deploy.sh:326`)
-
-Para prometer também ausência absoluta de atendimento com Python velho sobre schema novo, seria necessário tratar o tráfego durante migrate/publicação, por pausa/drenagem ou compatibilidade das migrations. Essa alternativa não está sendo proposta como correta para esta aplicação: **[nao verificado]**.
-
-4) Estes são os mutantes mortos **por inspeção das asserções**, não por execução:
-
-| Caso | Mutante que distingue |
-|---|---|
-| **1** | Migrar antes da recusa de auth, ou ignorá-la no normal: exige falha, zero apply e zero HUP. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:111`) |
-| **2** | Migrar antes da recusa de sombra, ou ignorá-la: mesmas exigências. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:114`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:115`) |
-| **3** | Omitir/duplicar apply; aplicar antes da primeira auth/sombra/casca; trocar `sombra --conferir` por outra operação; omitir HUP. Exige contagens e primeira passagem dos três portões anterior ao apply. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:95`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`) |
-| **4** | Isentar o agendado da **chamada** à auth. Ignorar apenas seu retorno pode escapar deste caso, porque a pendência já oferece outra recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:122`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123`, `bin/deploy.sh:211`) |
-| **5** | Perguntar auth/sombra, aplicar migrate ou enviar HUP em `--conferir`. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:126`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:127`) |
-| **6** | Aplicar antes da prova de casca recusar, ou ignorar sua recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:130`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:131`) |
-| **7** | Fazer `--sem-sombra` também dispensar auth, ou migrar antes da recusa dela. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:134`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:135`) |
-| **8** | Aplicar sem pendência; deixar de enviar HUP no caminho sem pendência. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:138`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:139`) |
-| **9** | Consultar auth no agendado e ignorar seu retorno: não há pendência para mascarar o erro. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:142`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:143`) |
-| **10** | Deixar `APLICAR_MIGRATE=1` herdado provocar apply em `--sem-migrate`. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:147`) |
-| **11** | Restaurar a recusa incondicional da volta 2 depois do apply. A mordida depende de `/proc/1` existir: a marca falsa usa PID fixo `1`, e o leitor consulta `/proc`. Essa precondição ambiental é **[nao verificado]**. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`, `bin/deploy.sh:109`) |
-
-Mutantes plausíveis que **ainda sobrevivem aos 11 por inspeção**; execução: **[nao verificado]**:
-
-- **Mover o bloco inteiro da 1c para depois da seção 2.** `ORDEM_OK` compara portões com apply, mas não compara apply com HUP/restart. No caso 11, o restart passa a acontecer antes de a marca nascer, e as contagens continuam aceitas. É o sobrevivente mais diretamente contrário ao pré-requisito schema → publicação. (`bin/deploy.sh:298`, `bin/deploy.sh:358`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`)
-- **Remover as recusas prévias de cron.** Nenhum cenário instala cron antes delas; a única marca deste selo nasce durante o apply falso. (`bin/deploy.sh:117`, `bin/deploy.sh:299`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:45`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`)
-- **Remover a guarda de pendência da mensageria.** O falso responde sempre sucesso ao check dela. (`bin/deploy.sh:200`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:69`)
-- **Remover a recusa de pendência do agendado ou de `--sem-migrate`.** O agendado com pendência já encontra auth vermelha; `--sem-migrate` só é exercitado sem pendência. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:122`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:142`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/deploy.sh:211`, `bin/deploy.sh:215`)
-- **Dispensar auth/sombra no `--reload-copia`.** Nenhum dos onze casos seleciona esse modo. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:118`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:122`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:126`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:130`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:134`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:138`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:142`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150`)
-- **Acrescentar uma segunda consulta de auth/sombra/casca depois do apply.** Os falsos mantêm a mesma resposta durante toda a corrida; os vermelhos já encerraram antes, e os verdes continuam verdes. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:54`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:55`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:56`)
-- **Reiniciar somente `saas_core`.** `N_RST` conta chamadas, não alvos; restart e rotas falsos continuam verdes. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:70`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:101`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`)
-- **Retirar provas de workers/readiness/rotas, ignorar falha de apply/restart ou retirar o selo de reciclagem.** As asserções não exigem essas provas, os comandos relevantes não oferecem falha na fixture, e o selo é substituído por sucesso constante. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:51`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:70`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`)
-
-5) Para as classes históricas, distinguindo alteração nova de problema já presente:
-
-| Classe | Sim/não e prova |
-|---|---|
-| Segundo juiz que duplica juiz registrado | **Não no diff.** Deploy continua perguntando à auth existente; o selo substitui respostas, sem reproduzir a regra de horário. (`bin/deploy.sh:145`, `bin/janela_auth.sh:53`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:54`) |
-| Segundo escritor fora da porta | **Sim no ciclo de vida das marcas, já existente:** envelope escreve/remove e deploy também remove. **Não aparece novo aplicador/publicador no diff.** (`bin/cron_run.sh:10`, `bin/deploy.sh:109`, `bin/deploy.sh:300`, `bin/deploy.sh:326`, `bin/deploy.sh:343`) |
-| Relógio lido fora da borda | **Não introduzido pelo diff.** A decisão temporal de auth continua usando suas costuras declaradas; o novo cron falso não consulta relógio. (`bin/janela_auth.sh:49`, `bin/janela_auth.sh:50`, `bin/janela_auth.sh:55`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`) |
-| Derivação paralela de fonte única | **Não no diff.** A elegibilidade do apply é decidida no ramo da seção 1; os dois pontos seguintes consomem a mesma variável. (`bin/deploy.sh:204`, `bin/deploy.sh:223`, `bin/deploy.sh:298`, `bin/deploy.sh:325`) |
-| Selo/RED sem mordida | **Sim para partes do contrato, não para o selo inteiro.** Há mordida contra a recusa pós-apply, mas falta contra publicação antes do apply e contra a promessa de cron refeito. RED realmente demonstrado: **[nao verificado]**. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`) |
-| Ordem de trava | **Sim: falta reservar o intervalo.** Observar marcas antes de migrar não impede novos crons entre observação e restart; o envelope marca/executa sem exclusão compartilhada. (`bin/deploy.sh:299`, `bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:326`, `bin/cron_run.sh:9`, `bin/cron_run.sh:11`) |
-| Pouso antes do pré-requisito | **Sim quanto ao pré-requisito ainda escrito “restart recusa com cron vivo”.** A nova exceção publica sem essa condição no cenário 11. Quanto à ordem core migrate → publicação, **não no código atual**, embora o selo aceite sua inversão. (`CLAUDE.md:90`, `bin/deploy.sh:325`, `bin/deploy.sh:326`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150`, `bin/deploy.sh:300`) |
-| Campo com dois significados | **Não demonstrado nos flags alterados.** O novo uso de `APLICAR_MIGRATE` depende corretamente do fluxo anterior; os limites das marcas e dos contadores estão discriminados abaixo. (`bin/deploy.sh:223`, `bin/deploy.sh:298`, `bin/deploy.sh:300`, `bin/deploy.sh:325`) |
-
-O censo semântico das variáveis lidas/escritas pelas linhas alteradas é:
-
-| Campos/variáveis | Concordância entre escritores e leitores |
-|---|---|
-| `APLICAR_MIGRATE` | `1` nasce como intenção elegível. Ao alcançar o leitor da seção 2, o comando já retornou sucesso, pois falha termina o script. Logo a inferência nesse leitor é válida; não prova alteração material do banco. O comentário de “UM leitor” está errado. (`bin/deploy.sh:223`, `bin/deploy.sh:300`, `bin/deploy.sh:92`, `bin/deploy.sh:325`, `bin/deploy.sh:59`) |
-| `RESTART`, `RESTART_MOTIVO` | Significam seleção manual e justificativa textual. Escrita e leituras concordam; o motivo não prova necessidade técnica do boot. (`bin/deploy.sh:70`, `bin/deploy.sh:73`, `bin/deploy.sh:74`, `bin/deploy.sh:75`, `bin/deploy.sh:322`, `bin/deploy.sh:429`) |
-| `FAKE_CRON_NO_MIGRATE`, `FAKE_HERDA_APLICAR` | São habilitadores por **presença não vazia**, não booleanos numéricos gerais. Os casos fornecidos usam `1`, coerentemente. (`bin/tests/test_deploy_portoes_antes_do_migrate.s
-
-[truncado em 20000 de 22901 caracteres]
-
-## 08/11 23:35 · sessao 4ff4663f72a0 · FIO-E0-V4-E1-FILA · verificador · origem=Code
-
-**A captura está no lugar correto para isolar a recusa da migração, mas não torna atômico o ato maior dos chamadores. Há retornos `False` ignorados e contadores que anunciam trabalho recusado.** (`app/chamados/models.py:1414-1425`; `app/chamados/services/adesao.py:92`; `app/ponto/management/commands/reconciliar_grade.py:254-259`, `:529-531`.)
-
-Análise estática da cópia. Execução dos testes, comportamento efetivo do banco e ocorrências em produção: **[nao verificado]**. [nao verificado]
-
-**1. Quem chama `ChamadoColaborador.reabrir`**
-
-No quadro, “sem atomic” significa sem envoltório explícito no caminho identificado. Os dicionários de banco da cópia não configuram `ATOMIC_REQUESTS`; configuração efetiva de produção: **[nao verificado]**. (`app/config/settings/prod.py:9-18`; `app/config/settings/saas.py:83-92`.)
-
-| Chamador produtivo direto | Atomic externo à migração | Tratamento de `False` |
-|---|---|---|
-| `_renascer_por_premissa_viva` — `app/chamados/models.py:1019` | **Sim via `abrir`**, que abre atomic antes de chamar o renascimento. **Sem atomic identificado via resposta tardia**. (`app/chamados/models.py:902`, `:922`; `app/chamados/services/resposta_tardia.py:31-45`.) | Propaga `False`. `abrir` descarta esse resultado e retorna `(existente, False)`: esse segundo booleano significa **criado**, não reaberto. Resposta tardia registra nota/log e devolve `tardia`. (`app/chamados/models.py:1019-1024`, `:922-924`; `app/chamados/services/resposta_tardia.py:45-67`.) |
-| Desarquivar — `app/chamados/views_arquivar.py:70` | Sem atomic identificado. (`app/chamados/views_arquivar.py:51-70`.) | Retorna `ok=False`, mas atribui **qualquer recusa a irmão vivo**. Para universo alterado, apresenta razão incorreta. (`app/chamados/views_arquivar.py:70-72`.) |
-| Adesão — `app/chamados/services/adesao.py:92` | Sem atomic identificado no serviço/comando. (`app/chamados/services/adesao.py:44-92`; `app/escala/management/commands/apurar_furos_diarios.py:6-21`.) | **Ignora e incrementa `pais_reabertos` incondicionalmente**; o comando apresenta esse contador. (`app/chamados/services/adesao.py:92`; `app/escala/management/commands/apurar_furos_diarios.py:21`.) |
-| Reabrir disputa administrativamente — `app/chamados/services/acoes_disputa.py:267` | Sem atomic identificado no serviço, dispatcher ou views de entrada. (`app/chamados/services/acoes_disputa.py:232-296`; `app/chamados/services/fio.py:583`; `app/chamados/views.py:658-674`, `:868-954`.) | **Ignora**; segue com ocorrência, pushes, auditoria e sucesso. As mensagens anunciam a **disputa**, efetivamente reaberta antes; não revelam que o chamado recusou. (`app/chamados/services/acoes_disputa.py:256-296`.) |
-| Reabrir competência — `app/chamados/services/competencia_trancada.py:265` | **Sim**, atomic por chamado. (`app/chamados/services/competencia_trancada.py:264`.) | Só escreve nota/evento e incrementa se `True`; `False` pula esses efeitos. (`app/chamados/services/competencia_trancada.py:265-272`.) |
-| Resolver perguntas de chamado resolvido — `app/chamados/services/disputa_emissao.py:1812` | **Sim**: o wrapper aproveita atomic existente ou abre um. O desvio da competência trancada retorna antes de alcançar essa chamada. (`app/chamados/services/disputa_emissao.py:1715-1722`, `:1742-1743`.) | Só anexa nota de reabertura se `True`; segue o processamento depois da recusa. (`app/chamados/services/disputa_emissao.py:1812-1830`.) |
-| Reabrir órfãs — `app/chamados/management/commands/reabrir_orfas_enterradas.py:172` | **Sim**, atomic por pergunta. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:146`.) | Descarta o booleano, **relê o estado** e registra `pai_falhou` se continua encerrado; imprime falhas. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:172-189`.) |
-| Ausência ainda aberta — `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49` | Sem atomic identificado. (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:22-55`.) | Só nota e incremento se `True`; nenhuma explicação própria para `False`. (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49-55`.) |
-| Reconciliar grade — `app/ponto/management/commands/reconciliar_grade.py:530` | Sem atomic identificado nesse caminho. (`app/ponto/management/commands/reconciliar_grade.py:488-531`.) | **Ignora e retorna `None`**; o chamador entende ausência de veto e incrementa `CREATE`, incluindo a entrada em `creates`. (`app/ponto/management/commands/reconciliar_grade.py:529-531`, `:254-259`.) |
-| Detectar ausências/limbo — `app/ponto/management/commands/detectar_ausencias.py:301` | Sem atomic identificado nesse caminho. (`app/ponto/management/commands/detectar_ausencias.py:271-304`.) | Ignora; não anuncia reabertura nem registra explicação própria nesse trecho. (`app/ponto/management/commands/detectar_ausencias.py:300-304`.) |
-
-Para a **nova exceção**, esses chamadores não eliminam a tentativa de trilha: a própria porta chama `evento` antes de devolver `False`. A persistência é best-effort, portanto não há garantia estática de linha gravada. Outras recusas, como `agrupado` e `transicao`, continuam retornando sem evento próprio nesses ramos. (`app/chamados/models.py:1421-1425`, `:1406-1407`, `:1437-1438`; `app/core/observ.py:105-139`.)
-
-**2. Savepoint, conexão utilizável e escritas anteriores**
-
-**Sob atomic externo saudável, sim, por desenho:** a migração entra em `transaction.atomic()` padrão; a exceção sai desse bloco antes de ser capturada por `reabrir`. O rollback pertence ao savepoint interno, preservando o atomic externo. O repositório documenta o mesmo mecanismo de isolamento na implementação de `evento`. Verificação efetiva da conexão após essa sequência: **[nao verificado]**. (`app/chamados/services/fio.py:2074-2094`; `app/chamados/models.py:1414-1417`; `app/core/observ.py:124-133`.)
-
-Isso cobre os caminhos com atomic da tabela: `abrir`, competência, resolver perguntas e reabrir órfãs. Nos demais caminhos, sob autocommit normal, o atomic da migração é a **transação externa**, não savepoint; sua saída excepcional encerra essa transação antes da captura. Configuração operacional de autocommit: **[nao verificado]**. (`app/chamados/models.py:902`; `app/chamados/services/competencia_trancada.py:264`; `app/chamados/services/disputa_emissao.py:1720`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`; `app/chamados/services/fio.py:2074`; `app/chamados/models.py:1417`.)
-
-**Não há migração parcialmente escrita nesse ramo:** o `raise` ocorre antes de `_migrar_sob_trava`; até ali há leituras e aquisição de travas, sem alteração de dados de negócio pela migração. (`app/chamados/services/fio.py:2084-2094`; `app/chamados/models.py:2674-2701`.)
-
-**Há atos maiores que permanecem parcialmente realizados:**
-
-- **Admin, sem atomic abrangente:** a disputa é reaberta e nasce pergunta de conversa **antes** da tentativa sobre o chamado; `False` não desfaz essas escritas e não impede os efeitos posteriores. (`app/chamados/services/acoes_disputa.py:256-296`.)
-- **Órfãs, mesmo com atomic:** pergunta e disputa já foram reabertas; a recusa do pai vira `pai_falhou`, sem rollback dessas etapas anteriores. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:157-177`.)
-- **Competência:** `PeriodoFechado` é salvo antes do gancho best-effort que devolve a fila; os fechamentos mensais são atualizados depois. Não há transação nova para o conjunto. (`app/ponto/services/fechamento.py:1435-1452`.)
-
-Logo, o comentário “o ato inteiro desfez” vale para **a migração**, não para todo trabalho anteriormente executado pelo chamador. (`app/chamados/services/fio.py:2026-2029`, `:2074-2094`; `app/chamados/services/acoes_disputa.py:256-267`.)
-
-**3. Escritores e leitores de `reabertura_recusada` / `depois['motivo']`**
-
-Os emissores produtivos encontrados são:
-
-| Emissor | Conteúdo de `depois` |
-|---|---|
-| `_trilha_do_veto`, para renascimento/reabertura | `modulo_origem`, `dia`, **`veto`**, `via`, `colaborador`. (`app/chamados/models.py:1166-1188`.) |
-| Admin sem fato novo | `status_local`, `via_encerramento`. (`app/chamados/models.py:1396-1398`.) |
-| Premissa regularizada | `status_local`. (`app/chamados/models.py:1402-1404`.) |
-| Universo alterado sob trava | `irmao`, **`motivo='universo_mudou_sob_trava'`**, `erro`. (`app/chamados/models.py:1421-1424`.) |
-
-O leitor específico encontrado é a **deduplicação do veto**, que exige também `modulo_origem`, `dia`, `veto` e `via`. O novo evento não satisfaz essa chave e não suprime aquela trilha. (`app/chamados/models.py:1172-1183`, `:1424`.)
-
-Não localizei leitor produtivo específico de `motivo` para essa ação; o teste lê explicitamente esse campo. Completude diante de acesso dinâmico/reflexão: **[nao verificado]**. (`app/chamados/tests/test_e1_fila.py:517`.)
-
-Os leitores genéricos relevantes têm estes comportamentos:
-
-- A auditoria consulta todas as ações, filtra ação literal e conta registros, sem classificar motivos. Seu seletor usa `ACOES`, que **não oferece** `reabertura_recusada`; o filtro por GET continua aceitando a ação. (`app/core/views.py:705-738`; `app/core/models.py:286-294`.)
-- O vigia de escritas por cron conta **linhas de auditoria**, independentemente da ação. A recusa entra nessa contagem, coerente com o rótulo declarado; não significa reabertura realizada. (`app/chamados/services/vigia_loop.py:68-96`.)
-- Os vigias de transição e confronto trilha/banco, e o histórico de estados, filtram `estado_chamado`; não interpretam essa recusa como mudança de estado. (`app/chamados/services/vigia_loop.py:28-34`, `:114-121`; `app/chamados/services/historico.py:44`, `:86-95`.)
-
-Não há prova encontrada de leitor contando errado por presumir um conjunto antigo de motivos. Há **payloads heterogêneos**, sem `motivo` obrigatório em todas as recusas; o sentido comum do evento continua sendo recusa de reabertura. (`app/chamados/models.py:1187`, `:1398`, `:1404`, `:1424`.)
-
-**4. Mordida dos testes novos e mutantes sobreviventes** [nao verificado]
-
-**`A3AplicarDeclaracaoTest`: morde a retirada simples da chamada naquele cenário.** A prova exige presença da pergunta canônica e do destino na sequência, e ausência de inversão; o mutante remove a chamada real e exige inversão. O cenário usa disputa canônica fechada e destino encerrado de PK menor. (`app/chamados/tests/test_e1_fila.py:182-191`, `:436-454`.)
-
-O alcance é menor que uma prova funcional completa: a proposta é mockada, `_r` é ignorado, linhas nascidas durante o ato são excluídas e o rastreador não cobre `executemany` nem travas de FK do INSERT. (`app/chamados/tests/test_e1_fila.py:63-71`, `:438-447`; `app/chamados/tests/test_e1_v9.py:46-53`.)
-
-**`A2UniversoMudouSobATravaTest`: morde a retirada da conferência e as alterações simples no tratamento da recusa.** Retirar o `try/except`, trocar `False`, trocar o motivo ou o irmão viola as asserções explícitas. (`app/chamados/tests/test_e1_fila.py:479-497`, `:508-518`.)
-
-Entretanto, a “corrida” é sintética; o teste de `reabrir` substitui tanto a migração quanto `evento`. Não verifica concorrência real, rollback seguido de escrita no chamador, nem INSERT real da trilha. (`app/chamados/tests/test_e1_fila.py:466-477`, `:499-505`.)
-
-Mutantes que as asserções dessas classes deixam escapar **por inspeção**; sobrevivência executada: **[nao verificado]**:
-
-| Mutante de produção | Por que escapa |
-|---|---|
-| Executar `_trava_do_ato` em `aplicar_declaracao` **somente para `saida_sem_entrada`**, omitindo outros motivos | A proposta testada sempre usa esse motivo; a retirada simples ainda seria detectada. (`app/chamados/tests/test_e1_fila.py:180`, `:438`, `:451-454`; `app/chamados/services/declaracao_texto.py:650`.) |
-| Trocar o retorno final de `aplicar_declaracao` por resultado incorreto, preservando as operações | O resultado `_r` não é conferido. (`app/chamados/services/declaracao_texto.py:690-691`; `app/chamados/tests/test_e1_fila.py:444-447`.) |
-| Trocar `if _fora[0] or _fora[1]` por **`and`** | O objeto extra introduz simultaneamente colaborador **e** PK novos; não há casos separados para cada diferença. (`app/chamados/services/fio.py:2089-2090`; `app/chamados/tests/test_e1_fila.py:469-476`.) |
-| Suprimir `_migrar_sob_trava`, preservando conferência e travas | A classe não exige migração nominal bem-sucedida nem conteúdo de `out`; os testes herdados verificam aquisição/ordem das travas. (`app/chamados/services/fio.py:2094`; `app/chamados/tests/test_e1_fila.py:158-171`, `:479-497`.) |
-| Emitir a recusa com **modelo ou objeto_id errados** | O mock confere ação, quantidade, motivo e irmão; não confere modelo/objeto. (`app/chamados/models.py:1421`; `app/chamados/tests/test_e1_fila.py:515-518`.) |
-| Ampliar a captura para `RuntimeError`, engolindo falhas adicionais | Só a exceção específica é injetada. (`app/chamados/models.py:1417`; `app/chamados/tests/test_e1_fila.py:501-504`.) |
-| Retirar a implementação real de persistência de `evento`, mantendo a chamada | Nesse teste, `evento` é mockado. (`app/chamados/tests/test_e1_fila.py:504`; `app/core/observ.py:133-138`.) |
-
-A conferência também **não compara mudanças de `disputa_id` em perguntas já conhecidas**, embora esse ID componha a trava inicial. Possibilidade de escritor concorrente produtivo realizar essa mudança: **[nao verificado]**. (`app/chamados/services/fio.py:2086-2089`.)
-
-**5. Outra porta capaz de levantar `UniversoMudouSobATrava`**
-
-**Nenhuma outra porta produtiva nominal encontrada fora de `reabrir`.** O `raise` está em `migrar_resolvedoras_vivas`; a chamada produtiva identificada está no ramo `irmao_vivo`, com captura específica. Os caminhos indiretos são os chamadores da pergunta 1. Chamadas dinâmicas em execução: **[nao verificado]**. (`app/chamados/services/fio.py:2091`; `app/chamados/models.py:1411-1417`.)
-
-**6. Classes de reprovação**
-
-O quadro distingue o delta desta volta dos resíduos relacionados na cópia; ausência universal na árvore ou no ambiente não está provada. **[nao verificado]**
-
-| Classe | Constatação com prova |
-|---|---|
-| **Segundo juiz duplicando juiz registrado** | **Não identificado no delta.** A captura traduz falha técnica em recusa; a migração continua consultando `pergunta_viva`, autoridade registrada. (`app/chamados/models.py:1417-1425`; `app/chamados/services/fio.py:2108-2119`; `app/core/juizes.py:266`.) |
-| **Segundo escritor fora da porta** | **Não identificado no delta.** O novo evento passa pelo escritor de auditoria `evento`; não acrescenta escrita direta de estado. (`app/chamados/models.py:1421-1425`; `app/core/observ.py:94-138`.) |
-| **Relógio fora da borda** | **Sim, residual na cadeia do juiz:** `_dentro_da_janela_viva` ainda lê `date.today()`. A cura de `expira_em` usa `timezone.now`, mas não elimina essa leitura do juiz. (`app/chamados/juizes.py:569-575`; `app/chamados/veredito_lavrado.py:95-102`.) |
-| **Derivação paralela de fonte única** | **Sim, fórmula temporal reproduzida:** `expira_em` reimplementa o intervalo da janela para derivar sua expiração. Divergência observada entre as duas implementações: **[nao verificado]**. (`app/chamados/veredito_lavrado.py:117-143`; `app/chamados/juizes.py:575-601`.) |
-| **Selo/RED sem mordida** | **Não para os alvos estreitos declarados; insuficiente para garantias amplas.** Há mutantes explícitos de remoção, mas integração transacional/persistência é substituída por mocks e sobrevivem os mutantes listados acima. (`app/chamados/tests/test_e1_fila.py:449-454`, `:489-518`.) |
-| **Ordem de trava** | **Ordem local implementada; ordem de toda chamada composta [nao verificado].** Há chamadores que já seguram C ou C/D/Ch/P antes de a migração adquirir seu conjunto, inclusive colaboradores adicionais. A prova nova não percorre essas composições. (`app/chamados/models.py:905`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:153-156`; `app/chamados/services/disputa_emissao.py:1721`, `:1787`, `:1812`; `app/chamados/services/fio.py:2084-2087`; `app/chamados/tests/test_e1_fila.py:499-505`.) |
-| **Pouso antes do pré-requisito** | **Pouso/deploy [nao verificado].** Na ordem do ato administrativo, há efeitos anteriores à confirmação de reabertura do chamado, e o fluxo continua após recusa. (`app/chamados/services/acoes_disputa.py:256-296`.) |
-| **Campo com dois significados** | **Sim nos contadores:** `pais_reabertos` pode contar tentativa recusada; `CREATE` pode incluir emissão cujo chamado permaneceu encerrado. **Não demonstrado em `depois['motivo']`**, que tem um único valor emitido identificado. (`app/chamados/services/adesao.py:92`; `app/ponto/management/commands/reconciliar_grade.py:254-259`, `:529-531`; `app/chamados/models.py:1424`.) |
-
-## 08/11 23:34 · sessao 7f2da60deb0c · FIO-E0-V4-E1-FILA · censo · origem=Code
-
-Nos anexos, conto as linhas desde a primeira linha de cada bloco, incluindo linhas vazias e excluindo o cabeçalho `== anexo: ... ==`.
-
-| Achado | Classe | Trecho literal da pergunta | Trecho literal da resposta | Linha de triagem |
-|---|---|---|---|---|
-| **1 — Falta de RED próprio para `aplicar_declaracao`** | **(a), na leitura de cobertura:** o tema dos testes estava perguntado; a resposta reconheceu a porta, mas não apontou sua falta de teste. (`codex_e1fila.q:7`; `codex_e1fila.r:72`) | “Os testes novos (test_e1_fila.py) mordem o que dizem morder?” (`codex_e1fila.q:7`). Na volta 2: “selo/RED sem mordida” (`codex_e1fila_v2.q:9`). | Sobre `aplicar_declaracao`: “Mesmo prefixo no atomic da emissão/resposta.” (`codex_e1fila.r:72`). A avaliação de A3 aponta outra lacuna: “Não exige a Disputa fechada na sequência.” (`codex_e1fila.r:31`). **Esses trechos não denunciam a ausência de caso para a porta irmã.** | Não há descarte específico dessa ausência. O registro próximo diz: “o ramo do rechaveamento por dia diferente continua sem caso proprio (fila)” — outro problema, não a cobertura de `aplicar_declaracao`. (`triagem_e1_fila.txt:29`, `triagem_e1_fila.txt:30`) | [nao verificado]
-| **2 — `UniversoMudouSobATrava`: sem teste, observabilidade e tratamento produtivo** | **(b), pelo critério solicitado de algum trecho tocar o achado:** Codex viu a falta de teste e a propagação da exceção; a triagem colocou a lacuna de teste em FILA. Isso não demonstra que tenha identificado todos os componentes do bloqueante. (`codex_e1fila.r:30`; `codex_e1fila.r:90`; `triagem_e1_fila.txt:27`) | “Os testes novos [...] mordem o que dizem morder?” (`codex_e1fila.q:7`); “ou regra de negocio nova?” (`codex_e1fila.q:8`). Na volta 2: “Os descartes e as linhas de FILA da triagem: algum deles e procedente para ESTA obra” (`codex_e1fila_v2.q:7`). | A2: “Não testa crescimento do universo entre leitura e trava, nem entrada por chamador já travado.” (`codex_e1fila.r:30`). Item 8: “crescimento detectado aborta o atomic por exceção, propagada ao chamador, sem retry nessa porta.” (`codex_e1fila.r:90`). | “A2 nao testa crescimento do universo nem chamador ja travado -> FILA (UniversoMudouSobATrava sem teste de corrida; o chamador travado e o item 5).” **Não apresenta justificativa própria para adiar o teste de crescimento.** (`triagem_e1_fila.txt:27`, `triagem_e1_fila.txt:28`) | [nao verificado]
-
-**Limites da classificação:**
-
-- **Achado 1:** adoto “tema presente” como cobertura dos testes nas portas tocadas. Mencionar a trava de `aplicar_declaracao` não equivale a detectar seu RED ausente; também não autoriza atribuir à triagem um descarte que ela não registrou. A afirmação experimental “apagar a chamada sobrevive à suíte inteira” é **(c)** quanto à confirmação por execução nesta auditoria: **[nao verificado]**. (`codex_e1fila.q:5`; `codex_e1fila.q:7`; `codex_e1fila.r:72`; `triagem_e1_fila.txt:29`) [nao verificado]
-- **Achado 2:** o **(b) é parcial**. A resposta registra propagação, mas não denuncia literalmente “sem trilha nem contador”; tampouco há descarte específico desses componentes. Os motivos “sem ocorrência verificada” e mudança de desenho pertencem ao problema do **chamador já travado**, não constituem justificativa expressa para deixar a exceção crua ou sem observabilidade. (`codex_e1fila.r:90`; `triagem_e1_fila.txt:27`; `triagem_e1_fila.txt:59`)
-- A cópia atual já contém alterações identificadas como curas posteriores desses bloqueantes; elas não provam o que foi detectado nas duas verificações anteriores. ([test_e1_fila.py](/home/ronald/codex_ws/602a7d739b34f2a8524a4210bb4423a807f40331/app/chamados/tests/test_e1_fila.py:430); [models.py](/home/ronald/codex_ws/602a7d739b34f2a8524a4210bb4423a807f40331/app/chamados/models.py:1418))
-
-## 08/11 23:33 · sessao 0f34790ec36d · - · - · origem=Ronald (tmux)
-
-Confirmado por inspeção: **mover todo o bloco 1c para depois da seção 2 sobrevive aos 11 casos**; execução [nao verificado]. (`bin/deploy.sh:298-301`, `:358`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:110-152`)
-
-- `ORDEM_OK` exige somente auth/sombra/casca **antes do apply**; não compara apply com HUP/restart. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:95-104`)
-- O caso 3 aceita migrate=1 e HUP=1, independentemente da ordem entre eles. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`)
-- No caso 11, `APLICAR_MIGRATE=1` já dispensa a recusa da seção 2; o restart falso acontece primeiro, depois o migrate cria a marca. A asserção aceita as mesmas contagens e rc=0. (`bin/deploy.sh:223`, `:325-326`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `:76`, `:150-152`)
-
-Assim, o mutante publica antes do pré-requisito de schema e transforma “cron nascido durante migrate antes do restart” em “marca criada depois do restart”, sem ser denunciado pelas asserções. (`bin/deploy.sh:24-28`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:95-104`, `:151`)
-
-## 08/11 23:32 · sessao 3dbe97426882 · - · - · origem=Ronald (tmux)
-
-Censo estático: **10 chamadas produtivas diretas** a `ChamadoColaborador.reabrir`; não inclui `ponto.services.fechamento.reabrir`, que opera `FechamentoMensal` (`app/ponto/services/fechamento.py:1349`).
-
-| Chamador | Atomic externo à migração | O que faz com False |
-|---|---|---|
-| `_renascer_por_premissa_viva` | Via `abrir`, sim: atomic `app/chamados/models.py:902`, chamada transitiva `:922`. Via resposta tardia, nenhum atomic local: `app/chamados/services/resposta_tardia.py:31`, `:45`; view `app/chamados/views.py:1039`, `:1053`. | Propaga False em `app/chamados/models.py:1019`. `abrir` descarta esse bool e retorna `(existente, False)`, cujo segundo elemento significa “criado”, não “reaberto” (`:922–924`). Resposta tardia faz nota/log/Pauta e devolve estado `tardia`, sem anunciar reabertura (`app/chamados/services/resposta_tardia.py:45`, `:52`, `:54`, `:58`, `:67`). |
-| Desarquivar | Sem atomic local, view apenas `login_required` (`app/chamados/views_arquivar.py:51–70`). | Devolve JSON `ok=False`, mas texto atribui **qualquer recusa** a irmão vivo (`:70–72`); para universo mudou, razão exibida é errada. |
-| Sincronizar adesão | Sem atomic local; comando chamador também não envolve atomic (`app/chamados/services/adesao.py:44`, `app/escala/management/commands/apurar_furos_diarios.py:6–21`). | **Conta como reaberto mesmo False**: `pai.reabrir(); r['pais_reabertos'] += 1` (`app/chamados/services/adesao.py:92`), depois imprime contador (`app/escala/management/commands/apurar_furos_diarios.py:21`). |
-| Reabrir disputa admin | Sem atomic no serviço (`app/chamados/services/acoes_disputa.py:232–296`), no dispatcher (`app/chamados/services/fio.py:485`, `:583`) ou nas duas views de entrada (`app/chamados/views.py:658–674`, `:868–954`). | **Ignora False** (`app/chamados/services/acoes_disputa.py:267`); anexa ocorrência, envia pushes e responde sucesso (`:271`, `:275`, `:287`, `:296`). A mensagem fala da disputa, efetivamente reaberta, mas o chamado pode continuar encerrado. |
-| Reabrir competência | Sim, atomic por chamado (`app/chamados/services/competencia_trancada.py:264`). | Só nota/log/incremento se True (`:265–272`); False pula efeitos, não levanta erro. |
-| Resolver perguntas por chamado resolvido | Sim: wrapper usa atomic existente ou abre um (`app/chamados/services/disputa_emissao.py:1720–1722`). Ramo da tranca sai antes de chegar à chamada (`:1715–1716`, `:1742–1743`). | Só anexa nota de reabertura se True (`:1812–1814`). |
-| Comando reabrir órfãs | Sim, atomic por pergunta (`app/chamados/management/commands/reabrir_orfas_enterradas.py:146`). | Ignora bool, mas relê estado, registra `pai_falhou` ou incrementa reabertos (`:172–177`), imprime falhas (`:185–189`). **Não desfaz** pergunta/disputa já reabertas (`:157–167`). |
-| Comando ausência aberta | Sem atomic local (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:22–55`). | Só nota e incremento se True (`:49–54`). |
-| Reconciliar grade | Sem atomic no caminho `_emitir_furo` (`app/ponto/management/commands/reconciliar_grade.py:488–531`); atomic `:472` é de outro método e termina antes. | **Ignora False**, retorna None (`:530–531`). Chamador interpreta None como ausência de veto e incrementa `plan['CREATE']` / `creates` (`:254–259`). |
-| Detectar ausências, limbo | Sem atomic no caminho do comando (`app/ponto/management/commands/detectar_ausencias.py:61`, `:271–303`). | Ignora False (`:301`), sem contador específico nem aviso da recusa nesse chamador (`:300–304`). |
-
-**Fronteira transacional:** `migrar_resolvedoras_vivas` abre `transaction.atomic()` com configuração padrão (`app/chamados/services/fio.py:2074`); levanta em `:2091` **antes** de executar `_migrar_sob_trava` em `:2094`. Antes da recusa há leituras e `select_for_update`; a função de trava não grava dados de negócio (`app/chamados/models.py:2674`, `:2683`, `:2696`, `:2700`). `reabrir` captura **depois da saída** desse atomic (`app/chamados/models.py:1415–1417`). Sob atomic externo saudável, a conclusão contratual é rollback ao savepoint e conexão utilizável; o próprio repositório documenta esse mecanismo em `app/core/observ.py:124–133`. Sem atomic externo, esse bloco abre uma transação e a encerra com rollback; a ocorrência da recusa entra depois em outro atomic próprio (`app/chamados/models.py:1421`, `app/core/observ.py:133`). Validação efetiva da conexão/Django em execução: **[nao verificado]**.
-
-Configurações da cópia não ativam `ATOMIC_REQUESTS` nem desativam autocommit nos dicionários de produção/on-prem e SaaS (`app/config/settings/prod.py:9–18`, `app/config/settings/saas.py:83–92`); configuração efetiva carregada em produção: **[nao verificado]**.
-
-**Há escrita anterior que fica:** no fluxo admin, `d_fec.reabrir_admin` salva a disputa (`app/chamados/services/acoes_disputa.py:256`, `app/chamados/models.py:2169`), abre Pergunta de conversa (`app/chamados/services/acoes_disputa.py:260`) e só depois tenta reabrir o chamado (`:267`); a recusa não desfaz essas escritas, nem bloqueia os efeitos posteriores (`:271–296`). No modal ainda há marcação de notas lidas antes do dispatcher (`app/chamados/views.py:879–880`, `:954`). Isso é parcialidade do **ato maior**, não migração pela metade (`app/chamados/services/fio.py:2091–2094`).
-
-Mesmo com savepoint externo há parcialidade de negócio intencional/concreta: órfãs já alteraram Pergunta/Disputa quando pai recusa (`app/chamados/management/commands/reabrir_orfas_enterradas.py:157–175`); competência grava `PeriodoFechado` antes de tentar devolver chamados, em gancho best-effort, e depois reabre fechamentos mensais (`app/ponto/services/fechamento.py:1435–1452`).
-
-A trilha de `universo_mudou_sob_trava` é tentada pela própria porta (`app/chamados/models.py:1421–1425`), inclusive nos chamadores que ignoram False. Persistência não é garantida: `evento` é best-effort e retorna None se falhar (`app/core/observ.py:94–105`, `:133–139`); sucesso real do INSERT sem banco/log: **[nao verificado]**.
-
-**Lacuna dos testes para esta pergunta:** o teste de `reabrir` substitui migração por `side_effect` e substitui `evento` por mock (`app/chamados/tests/test_e1_fila.py:499–505`); verifica False e argumentos (`:514–518`), mas não executa a integração rollback/savepoint → INSERT da trilha → escrita posterior do chamador. Essa garantia integrada permanece **[nao verificado]**.
-
-**Possível ordem de trava transitiva a investigar:** atomic de `abrir` já segura um Colaborador (`app/chamados/models.py:905`), órfãs já seguram C/D/Ch/P (`app/chamados/management/commands/reabrir_orfas_enterradas.py:153–156`), resolver já trava universo e pode ter escrito Pergunta antes de reabrir pai (`app/chamados/services/disputa_emissao.py:1721`, `:1787`, `:1812`). A migração então pode adquirir conjunto adicional de Colaboradores (`app/chamados/services/fio.py:2084–2087`), inclusive de pergunta alheia, caso expressamente admitido em comentário (`:2080–2081`). A ordem local ordenada não prova a ordem da transação inteira; existência/alcançabilidade de dados que realizem esse caminho: **[nao verificado]**.
-
-## 08/11 23:31 · sessao ec542bc3f363 · - · - · origem=Ronald (tmux)
-
-No escopo do diff, com distinção entre defeito novo e limite já existente:
-
-| Classe | Veredito e prova |
-|---|---|
-| Segundo juiz duplicando juiz registrado | **Não.** O novo teste substitui auth/sombra/casca por respostas falsas, sem reimplementar suas regras; deploy continua chamando `janela_auth.sh`. O juiz de horário permanece `proibido()`. `bin/tests/test_deploy_portoes_antes_do_migrate.sh:54-56`; `bin/deploy.sh:145`; `bin/janela_auth.sh:53-61`. |
-| Segundo escritor fora da porta | **Não introduzido.** `APLICAR_MIGRATE=0` inicializa estado local e `=1` decide apply; não há publicador novo: seguem um restart e um HUP. A exclusão de marca morta por deploy é escritor de limpeza **já existente**, além do envelope produtor/removedor. `bin/deploy.sh:61,108-109,223,326,343`; `bin/cron_run.sh:9-10`. |
-| Relógio fora da borda | **Não introduzido.** O diff não acrescenta leitura de relógio; auth concentra `date` nas costuras `_dow/_hhmm`, com substituição explícita de teste. O caso 11 usa `/proc/1`, não relógio. `bin/janela_auth.sh:45-56`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`; `bin/deploy.sh:109`. |
-| Derivação paralela de fonte única | **Não no patch.** A decisão de aplicar continua derivada do `--check` e modo, em um ramo; a seção 2 consome a mesma variável. Não nasce regra auth paralela. `bin/deploy.sh:184-188,204-224,298-300,325`; `bin/deploy.sh:145`. |
-| Selo/RED sem mordida | **Não é inteiramente sem mordida**, mas **sim, há lacunas relevantes**. Caso 11 mata a recusa incondicional pós-apply, porém só cria `cron_falso.1`; o Docker falso não mata nem reexecuta cron. `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68,76,150-152`. RED efetivamente executado nesta volta: **[nao verificado]**. |
-| Ordem de trava | **Sim.** Checar cron antes de migrate e depois dispensar a checagem não impede admissão concorrente: envelope marca e executa sem coordenação com deploy. `bin/deploy.sh:299-300,325-326`; `bin/cron_run.sh:9-11`. Ausência de cron no instante observado não reserva o intervalo. |
-| Pouso antes do pré-requisito | **Sim, pela regra ainda escrita “restart recusa com cron vivo”.** Depois de migrate, o novo ramo permite restart apesar da marca recém-criada, contrariando a promessa vigente. `CLAUDE.md:90`; `bin/deploy.sh:325-326`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150-152`. **Outro resto do contrato literal “todo portão antes de migrate”:** selo de reciclagem continua posterior a migrate/reload e pode reprovar por configuração/crontab. `bin/deploy.sh:300,326,343,409`; `bin/selo_reciclagem.sh:46-78`. |
-| Campo com dois significados | **Não demonstrado em `APLICAR_MIGRATE`, apesar da prosa incorreta.** Na escrita `=1` significa “apply planejado”; no leitor `:325`, o controle de fluxo permite inferir “apply retornou 0”, pois falha em `:300` termina por `falhou`, definido em `:92`. Portanto o novo leitor tem pré-condição válida; não lê intenção como sucesso antes de executar. `bin/deploy.sh:92,223,298-300,325`. O comentário “UM leitor” é falso: há dois, `:298` e `:325`, além de dois pontos de atribuição, `:61` e `:223`. |
-
-Outras observações úteis para consolidar:
-
-- O selo estrutural antigo só busca o texto `recusa_restart_com_cron` antes do restart; a linha nova mantém esse texto mesmo quando o curto-circuito dispensa sua execução. Assim, esse selo aceita a perda da garantia universal. `bin/contrato_deploy.sh:45-47`; `bin/deploy.sh:325`.
-- O teste de reload gracioso verifica cron existente **no começo**; não verifica o nascido durante migrate. `bin/tests/test_deploy_reload_gracioso.sh:125-131`.
-- “Todo cron é idempotente” é requisito escrito, não prova de reexecução: o envelope executa uma vez, mede RC, carimba somente 0/2 e alerta falha; não contém repetição automática do comando interrompido. `CLAUDE.md:246`; `bin/cron_run.sh:11-13,22-25,29-38`.
-- Semântica dos campos novos do teste: `FAKE_CRON_NO_MIGRATE` é presença habilitadora, `FAKE_HERDA_APLICAR` injeta ambiente, `N_RST` conta linhas de chamadas restart. Seus escritores e leitores concordam nos usos fornecidos, mas `N_RST=1` não prova três cascas reiniciadas nem cron preservado. `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68,90,101,146,150-151`.
-- A marca de cron registra PID do **envelope do host**, não identidade do processo `docker exec`; deploy usa apenas existência de `/proc/<pid>`, sem conferir identidade ou conteúdo do arquivo. Isso admite falso “vivo” por PID reutilizado e não é novidade do diff. `bin/cron_run.sh:9-11`; `bin/deploy.sh:108-109`.
-
-_2946 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2952 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
