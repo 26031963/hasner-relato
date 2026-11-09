@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:39** · publicado em **09/11/2026 10:40** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:51** · publicado em **09/11/2026 10:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:51 · sessao f5bd0a6923b7 · - · - · origem=Ronald (tmux)
+
+- **PROCEDENTE — T4 residual em bloco:** partindo de carimbo hoje/OK, uma nova execução pode calcular `FALHOU`, falhar ao gravar e terminar com o `echo` bem-sucedido, preservando o OK anterior. `conferir` aceita esse OK se ainda houver migrations. Cura: invalidar antes da execução e exigir sucesso da publicação; testar carimbo inicialmente OK, erro no bloco e falha de gravação. (`bin/sombra.sh:356,407,417,428,429,430,433,455,459`)
+
+- **PROCEDENTE — incremental conserva cobertura mentirosa:** altera a janela e confirma a transação antes de atualizar o carimbo. Falha da prova ou máscara deixa o carimbo antigo; falha de `carimbar` também é ignorada pelo `echo` seguinte. Um carimbo anteriormente `completa/OK` continua descrevendo cobertura completa. Cura: invalidar antes da alteração, preservar explicitamente os insumos necessários e exigir a publicação final; selo cobrando invalidação e recusa após cada falha. (`bin/sombra.sh:210,214,216,218,224,225,228`; `bin/sombra_incremental.sh:61,66,68,77,81,85`; `app/core/sombra_cobertura.py:39,40,41`)
+
+- **NÃO PROCEDE — fim do refazer como preservação de verde antigo:** invalidação é exigida antes do drop; a publicação final é o último comando da função, portanto seu rc se propaga. Falha mantém dia vazio/REFAZENDO. `--dump-agora` converge para a mesma invalidação antes do drop; `conferir` não grava o carimbo. (`bin/sombra.sh:110,259,264,265,275,276,328,331,332,436,459`)
+
+- **NÃO PROCEDE — predicados iguais:** o placar exige dia hoje, status diferente de REFAZENDO e número presente; conferir exige dia hoje, status exatamente OK e migrations positivas, ignorando o número. Status vazio com número: placar mostra número, conferir recusa. Hoje/OK sem INCOMPLETA: placar mostra `?`, conferir pode aprovar. Dia vazio ou ontem são rejeitados pelos dois; REFEITA/DIVERGE/FALHOU são admitidos como medida pelo placar, mas não como ensaio verde por conferir. São perguntas diferentes; centralizar parser e definições explícitas de validade/prontidão evita apresentar duas regras como idênticas. (`bin/placar_code.sh:34,35,36,37`; `bin/sombra.sh:439,455,456,459`)
+
+- **PROCEDENTE — terceiro predicado e parsing próprio:** cobertura aceita hoje com OK **ou REFEITA**, depois aplica tipo/base/janela, sem consultar existência do banco. Seu parser usa última ocorrência e remove espaços/aspas; placar usa última ocorrência literal, enquanto conferir concatena todas as ocorrências. Cura: parser comum e predicados nomeados para perguntas distintas. (`app/core/sombra_cobertura.py:18,19,20,21,34,35,37,39,42,45,47`; `bin/placar_code.sh:34,35,36`; `bin/sombra.sh:439`)
+
+- **Leitores diretos operacionais:** incremental lê DIA/BASE/TIPO/STATUS; bloco lê DIA/DIVERGE; conferir lê DIA/STATUS/TIPO/JANELAS/BASE/INCREMENTAL_EM/DIVERGE/ERROS; placar lê DIA/STATUS/INCOMPLETA; cobertura lê DIA/STATUS/TIPO/JANELAS/BASE. (`bin/sombra.sh:210,211,224,356,427,439,441,443,444`; `bin/placar_code.sh:34,35,36`; `app/core/sombra_cobertura.py:35,37,39,42,45`)
+
+- **Leitores indiretos, sem regra própria do carimbo:** deploy; verde do placar; portão da esteira em `trava.sh`; simulação de folha e diff de janela. Estes dois últimos também exigem cobertura. (`bin/deploy.sh:162`; `bin/placar_code.sh:169`; `bin/trava.sh:40,43,52`; `bin/simular_folha.sh:68,70`; `bin/diff_janela_he_total.sh:19,22`)
+
+- **FILA — relógio:** HOJE é capturado antes da trava; incremental e publicação completa consultam novamente a data; cobertura calcula hoje por conta própria. O placar adiciona captura anterior à chamada posterior de conferir. Cura: data de referência única na borda adequada, passada aos leitores; travessia real da meia-noite **[nao verificado]**. (`bin/sombra.sh:83,211,328,464,466,468,470,477`; `app/core/sombra_cobertura.py:34`; `bin/placar_code.sh:39,169`)
+
+- **NÃO PROCEDE — segundo escritor operacional localizado:** os quatro caminhos escrevem por `carimbar`; invalidação escreve DIA/STATUS/INCOMPLETA, completo escreve os três, incremental/bloco escrevem STATUS. Escritor externo/manual **[nao verificado]**. (`bin/sombra.sh:92,101,110,225,227,328,329,331,430,432`)
+
+## 09/11 10:51 · sessao 86ce7ad8eff9 · - · - · origem=Ronald (tmux)
+
+- **2a/2b: fechados no código e selos mordem a causa indicada.** Estragos `SUPERUSER` e default de schema grantable entram no mesmo ciclo: chave positiva, rc 5, recusa nomeada, ausência de execução e cura pela porta. O log fornecido registra falhas correspondentes; alterações exatas dos mutantes e execução independente **[nao verificado]**. (`bin/tests/test_sonda_sem_grant_pg.sh:181`, `:183`, `:185`, `:186`, `:187`, `:189`, `:207`, `:208`)
+
+- **4: guarda fechada; mordida pertinente.** `carimbar` propaga falhas e `refazer` aborta antes do drop; 9c cobra ausência de `dropdb`, rc, mensagem e temporários. **Ressalva do selo:** caso `mv` aponta `STAMP` para caminho ausente, mas compara o outro arquivo `RF/stamp`; essa asserção não prova preservação de um carimbo existente após falha final de `mv`. (`bin/sombra.sh:94`, `:98`, `:99`, `:101`, `:275`; `bin/tests/test_sonda_sem_grant.sh:396`, `:399`, `:408`, `:409`, `:410`, `:411`, `:413`)
+
+- **6: fechado no pedido literal; mordida pertinente.** Os casos dia vazio, `REFAZENDO`, ontem e número vazio cobram `?`; o mutante registrado cai nessa comparação. Status vazio não foi incluído no selo. (`bin/placar_code.sh:37`; `bin/tests/test_sonda_sem_grant.sh:434`, `:436`, `:437`, `:438`, `:439`, `:440`, `:441`, `:442`)
+
+- **10: falha silenciosa original fechada, identidade ainda PROCEDENTE.** Cleanup preserva rc e acusa container ainda encontrado; o selo mata o comportamento antigo por rc e argv. Porém o trap antecede a criação: se `run --name "$PGT"` falhar por colisão, `EXIT` chama `rm -f "$PGT"` sobre o container alheio. Cura: registrar o ID da criação bem-sucedida, remover somente esse ID e não remover após criação recusada. O selo não cobre colisão. (`bin/tests/test_sonda_sem_grant_pg.sh:39`, `:41`, `:42`, `:44`, `:48`, `:50`, `:76`, `:80`, `:82`, `:93`, `:95`)
+
+- **Nome vazio: NÃO PROCEDE no fluxo atual.** A atribuição sempre contém prefixo literal e PID; a alteração de `PGT` no teste fica no subshell. **“Nome exato criado pelo selo”: não provado**, pois exatidão do nome não prova autoria. (`bin/tests/test_sonda_sem_grant_pg.sh:35`, `:72`, `:73`, `:74`)
+
+- **Limite da verificação de limpeza:** `rm` falha sem exame direto e qualquer erro de `inspect` equivale a “ausente”; o fake não distingue ausência de falha da consulta. Falha efetiva do Docker **[nao verificado]**. (`bin/tests/test_sonda_sem_grant_pg.sh:41`, `:42`, `:85`, `:86`, `:87`, `:88`)
+
+## 09/11 10:50 · sessao 72a0c7209703 · - · - · origem=Ronald (tmux)
+
+- **PROCEDENTE quanto à diferença de cobertura; cura automática ampliada pode ir à FILA.** `REVOKE ... ON SCHEMAS` cura o caso `$PGU → leitor`, mas a conferência conta defaults de **qualquer** concedente e também de `PUBLIC`; a porta só revoga defaults `FOR ROLE $PGU ... FROM $ROLE`. Isso vale para schemas, tabelas e sequências. (bin/sonda_provisionar.sh:125-132; bin/sonda_leitor_comum.sh:119-122)
+- **Não há falso pronto nesse caso:** `default_escrita != 0` reprova o parser; leitura sai rc 5 e porta sai rc 1 antes de promover `.env_leitor`. Há bloqueio persistente sem autocura pela porta. (bin/sonda_leitor_comum.sh:132,145; bin/sonda_leitura.sh:187,129-135; bin/sonda_provisionar.sh:147-151,171)
+- **Quem cura:** o código manda `REASSIGN/REVOKE a mao`; para defaults, a correção sugerida é um operador autorizado revogar no concedente/objeto/escopo original, para `leitor` ou `PUBLIC`. A realização disso em produção é **[nao verificado]**. (bin/sonda_provisionar.sh:150; bin/sonda_leitor_comum.sh:119-122)
+- **Item 2b fechado no domínio testado:** novo estrago é `saas_user → leitor`, `USAGE ON SCHEMAS WITH GRANT OPTION`; a estrutura exige chave positiva, rc 5, chave na recusa, sonda não executada e recuperação pela porta. Outros concedentes e defaults para `PUBLIC` não têm casos nesse conjunto. (bin/tests/test_sonda_sem_grant_pg.sh:179-191,192-209)
+- **Item 2a fechado estruturalmente:** estrago SUPERUSER chega à consulta real e às mesmas quatro cobranças; a porta escreve NOSUPERUSER. (bin/tests/test_sonda_sem_grant_pg.sh:156-159,182-189,207; bin/sonda_leitor_comum.sh:68; bin/sonda_provisionar.sh:105)
+
+Mapa dos insumos SQL alterados:
+
+| Estado/campo | Quem escreve | Quem lê |
+|---|---|---|
+| Default schema de `$PGU` para `leitor` | Porta: REVOKE. (bin/sonda_provisionar.sh:132,144) | Conferência `defaclobjtype='n'`, ACL/grantee/privilégio/grantable. (bin/sonda_leitor_comum.sh:119-122) |
+| `rolsuper` | Porta NOSUPERUSER; fixture SUPERUSER. (bin/sonda_provisionar.sh:105; bin/tests/test_sonda_sem_grant_pg.sh:207) | Consulta `super`; parser e consumidores. (bin/sonda_leitor_comum.sh:68,132,145; bin/sonda_leitura.sh:187; bin/sonda_provisionar.sh:148) |
+| `default_escrita` | Derivado da consulta, sem escritor materializado de catálogo com esse nome. (bin/sonda_leitor_comum.sh:119-122) | Parser; porta antes/depois; leitura; selo PG. (bin/sonda_leitor_comum.sh:132,145; bin/sonda_provisionar.sh:72,147-148; bin/sonda_leitura.sh:184-187; bin/tests/test_sonda_sem_grant_pg.sh:182-186) |
+| `PGU/ROLE/SCHEMAS/PG/BANCO` | Constantes e `_destino`. (bin/sonda_leitor_comum.sh:8-15,22-25) | Geração SQL e execução psql da porta/conferência. (bin/sonda_provisionar.sh:51,125-132; bin/sonda_leitor_comum.sh:64,96,120) |
+| `.env_leitor` / senha | Porta, temporário e promoção. (bin/sonda_provisionar.sh:168-171) | Porta lê senha; leitura valida/lê e passa ao container. (bin/sonda_provisionar.sh:77; bin/sonda_leitura.sh:173-178,234) |
 
 ## 09/11 10:39 · sessao c1c80cb6a02e · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
 
@@ -487,28 +539,4 @@ Entrega: [F1–F8, causas, hunks, escritores/leitores e comandos de RED/mutantes
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 09/11 09:08 · sessao 790af1e10d16 · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 09/11 09:08 · sessao be6e6f7b42d9 · - · - · origem=Ronald (tmux)
-
-- **P1 ainda PROCEDENTE, fechamento parcial.** A conferência passou a contar ACL direto/PUBLIC de tabelas e colunas, sequências, schemas, banco e defaults; também membership e ownership. Porém ignora `is_grantable`: SELECT/USAGE/CONNECT com grant option continua considerado permitido, embora habilite DCL. Conserto mínimo: contar `e.is_grantable OR e.privilege_type <> '<permitido>'` nas respectivas chaves e acrescentar caso comportamental ao selo. (`bin/sonda_leitor_comum.sh:87`, `bin/sonda_leitor_comum.sh:101`, `bin/sonda_leitor_comum.sh:107`; validade em PostgreSQL 17 executado: [nao verificado])
-
-- **Cura de P1 incompleta, com recusa segura.** O provisionador revoga ACL de tabela/sequência/schema do leitor e defaults de `saas_user`; não remove ACL de coluna, DML de PUBLIC em tabelas/sequências, defaults de outros donos nem defaults de schema. A conferência verifica essas classes mais amplas e a pós-conferência impede publicação quando restam privilégios. Conserto mínimo: explicitar que esses casos exigem saneamento separado, ou revogá-los deliberadamente pela porta, contemplando o impacto nos demais papéis. (`bin/sonda_provisionar.sh:105`, `bin/sonda_provisionar.sh:110`, `bin/sonda_provisionar.sh:129`; `bin/sonda_leitor_comum.sh:92`, `bin/sonda_leitor_comum.sh:107`)
-
-- **P3: fechado no fluxo serial; concorrência permanece PROCEDENTE.** O arquivo só é criado/promovido depois da pós-conferência, mediante temporário único e `mv`; falhas anteriores preservam o arquivo anterior. Contudo a senha é escolhida antes das alterações no banco e não há exclusão entre duas chamadas: dois provisionamentos sem arquivo podem escolher senhas distintas e ordenar ALTER ROLE/mv de formas incompatíveis. Conserto mínimo: trava compartilhada entre destinos envolvendo leitura/geração da senha até promoção do arquivo. (`bin/sonda_provisionar.sh:63`, `bin/sonda_provisionar.sh:66`, `bin/sonda_provisionar.sh:88`, `bin/sonda_provisionar.sh:129`, `bin/sonda_provisionar.sh:140`, `bin/sonda_provisionar.sh:143`)
-
-- **P5: correção estática presente.** A senha admite apenas caracteres alfanuméricos, entra por `\set pw` e é referenciada como `:'pw'` fora de DO; stdout é descartado e stderr é mascarado antes de voltar ao chamador. Conserto adicional para esse achado específico: nenhum identificado na análise estática. Execução e comportamento de logs do PostgreSQL real: [nao verificado]. (`bin/sonda_provisionar.sh:70`, `bin/sonda_provisionar.sh:78`, `bin/sonda_provisionar.sh:88`, `bin/sonda_provisionar.sh:92`)
-
-- **ESMERIL-SEMANTICA: a chave `ro` tem um sentido compartilhado, mas “pronto” operacional diverge.** `ro` significa somente configuração global da role, com `setdatabase=0`; leitura e provisionamento usam o mesmo produtor/parser. Entretanto a leitura exige também `default_transaction_read_only=on` na sessão TCP, enquanto o provisionador altera apenas a configuração global e anuncia pronto sem esse login. Um override específico de banco não é inspecionado nem removido por esses trechos. Conserto mínimo: conferir/sanear o override do destino e exigir o mesmo login antes do `mv`; o fake atual devolve invariavelmente `leitor|on`. (`bin/sonda_leitor_comum.sh:64`, `bin/sonda_leitor_comum.sh:119`; `bin/sonda_provisionar.sh:93`, `bin/sonda_provisionar.sh:129`, `bin/sonda_provisionar.sh:146`; `bin/sonda_leitura.sh:205`, `bin/sonda_leitura.sh:211`; `bin/tests/test_sonda_sem_grant.sh:60`)
-
-- **Demais chaves: identidade compartilhada, sem tradução encontrada nesses consumidores.** `role/super/poderes/login` vêm de `pg_roles`; `connect` verifica CONNECT efetivo; `usage_falta`, `tab_falta` e `seq_falta` contam ausência de leitura em `public juliani`; `default_falta` exige os quatro pares schema×tipo de defaults de `saas_user`; `esc_*` contam ACL diferente da operação permitida; `default_escrita` inspeciona defaults de qualquer dono; `membro` conta memberships diretos; `dono` conta dependências de ownership no cluster. O parser exige as 17 chaves e compara presença com 1 e ausência com 0. (`bin/sonda_leitor_comum.sh:60`, `bin/sonda_leitor_comum.sh:69`, `bin/sonda_leitor_comum.sh:80`, `bin/sonda_leitor_comum.sh:87`, `bin/sonda_leitor_comum.sh:107`, `bin/sonda_leitor_comum.sh:111`, `bin/sonda_leitor_comum.sh:119`, `bin/sonda_leitor_comum.sh:126`)
-
-- **SQL PostgreSQL 17: nenhum erro sintático identificado nesses pontos por análise estática; execução real [nao verificado].** `printf` transforma `%%I` em `%I` para `format`; os comandos dinâmicos estão em `DO ... EXECUTE`; as variáveis psql ficam fora de corpos dollar-quoted; defaults usam `FOR ROLE saas_user`, coerente com `PGU`. O selo fake grava texto e retorna resultados preparados, sem interpretar esse SQL. (`bin/sonda_provisionar.sh:88`, `bin/sonda_provisionar.sh:92`, `bin/sonda_provisionar.sh:94`, `bin/sonda_provisionar.sh:105`, `bin/sonda_provisionar.sh:110`, `bin/sonda_provisionar.sh:120`; `bin/sonda_leitor_comum.sh:8`; `bin/tests/test_sonda_sem_grant.sh:56`, `bin/tests/test_sonda_sem_grant.sh:59`, `bin/tests/test_sonda_sem_grant.sh:71`)
-
-## 09/11 09:08 · sessao 437ffdfdf483 · - · - · origem=Ronald (tmux)
-
-[resposta retida: senha_atribuida -- nao se publica credencial nem caminho de segredo]
-
-_3103 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3106 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
