@@ -1,7 +1,256 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 23:32** · publicado em **08/11/2026 23:32** (UTC-3)
+> Ultima resposta processada: **08/11/2026 23:36** · publicado em **08/11/2026 23:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 23:36 · sessao 1256d4b89cb3 · BUG-DEPLOY-PORTAO · verificador · origem=Code
+
+A volta 3 elimina a **recusa por cron após um apply bem-sucedido do core**, mas passa a permitir o restart sobre um cron recém-nascido. A afirmação “morto e refeito” não está sustentada por mecanismo de repetição; além disso, o selo de configuração continua podendo reprovar depois da publicação. (`bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:296`, `bin/cron_run.sh:11`, `bin/cron_run.sh:38`, `bin/deploy.sh:409`)
+
+A análise abaixo é estática. RED/VERDE, execução dos mutantes e efeitos reais em produção: **[nao verificado]**. Não executei o selo porque ele cria e remove arquivos. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:44`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:107`)
+
+1) É preciso separar **passar pela posição da seção 1c** de **ter executado seu apply com sucesso**. O apply é condicional; sua falha encerra o script imediatamente. (`bin/deploy.sh:298`, `bin/deploy.sh:300`, `bin/deploy.sh:92`)
+
+| Modo | Apply da 1c e caminhos que podem terminar sem completar a publicação das três cascas |
+|---|---|
+| Normal | Com pendência, faz apply; pode terminar por falha do próprio migrate, do HUP ou da troca dos workers. Sem pendência, pula apply e permanece sujeito às falhas de HUP/troca. (`bin/deploy.sh:223`, `bin/deploy.sh:300`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
+| `--sem-migrate` | Com pendência, recusa **antes** da 1c. Se chega à seção 2, não fez apply e pode falhar no HUP/troca. (`bin/deploy.sh:215`, `bin/deploy.sh:216`, `bin/deploy.sh:61`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
+| `--sem-sombra` | Pode migrar normalmente; depois disso, tem os mesmos caminhos de falha de migrate/HUP/troca do normal. O modo dispensa sombra por motivo, não migration nem auth. (`bin/deploy.sh:87`, `bin/deploy.sh:89`, `bin/deploy.sh:143`, `bin/deploy.sh:152`, `bin/deploy.sh:300`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
+| `--reload-agendado` | Com pendência, recusa antes da 1c. Sem pendência, não aplica migrate; pode falhar no HUP/troca. (`bin/deploy.sh:65`, `bin/deploy.sh:211`, `bin/deploy.sh:212`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
+| `--reload-copia` | Com pendência, recusa antes da 1c. Sem pendência, não aplica migrate; pode falhar no HUP/troca. (`bin/deploy.sh:82`, `bin/deploy.sh:208`, `bin/deploy.sh:209`, `bin/deploy.sh:343`, `bin/deploy.sh:356`) |
+| `--restart` | Com apply bem-sucedido, pula a recusa de cron na seção 2 e tenta restart; pode terminar por falha do migrate ou do restart. **Sem apply**, pode terminar por **RECUSA de cron** na seção 2, antes de chamar restart. (`bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:326`, `bin/deploy.sh:112`) |
+| `--conferir` | Não alcança a 1c: termina antes, sem publicação. (`bin/deploy.sh:227`, `bin/deploy.sh:229`) |
+
+Depois de uma chamada de HUP/restart, ainda existem estas saídas explícitas:
+
+| Saída | O que permite concluir |
+|---|---|
+| Timeout de disponibilidade de qualquer casca | A publicação foi tentada; não se confirmou que as três ficaram disponíveis. (`bin/deploy.sh:365`, `bin/deploy.sh:366`, `bin/deploy.sh:368`) |
+| Uma ou mais rotas reprovadas | A publicação foi tentada; a prova funcional falhou. Não demonstra, por si só, ausência de recarga. (`bin/deploy.sh:399`, `bin/deploy.sh:400`, `bin/deploy.sh:401`, `bin/deploy.sh:402`) |
+| Selo de reciclagem vermelho | Reprova depois da tentativa de publicação por configuração/cmdline/compose/crontab. É uma guarda de conformidade posterior, não apenas erro operacional de HUP/restart. (`bin/deploy.sh:409`, `bin/selo_reciclagem.sh:46`, `bin/selo_reciclagem.sh:54`, `bin/selo_reciclagem.sh:64`, `bin/selo_reciclagem.sh:72`, `bin/selo_reciclagem.sh:78`) |
+| Final “OK” sem PIDs anteriores conhecidos | O código admite continuar apenas com aviso quando não consegue listar os workers anteriores. Nesse caminho, não exige prova da troca deles. Recarga efetiva: **[nao verificado]**. (`bin/deploy.sh:341`, `bin/deploy.sh:346`, `bin/deploy.sh:431`) |
+
+Portanto: **há RECUSA depois da posição da 1c**, no `--restart` **sem apply**, pela marca de cron. **Não há essa recusa depois de apply bem-sucedido**; o curto-circuito a desabilita. (`bin/deploy.sh:325`, `bin/deploy.sh:112`)
+
+Falhas do apply, HUP ou restart não garantem ausência de efeitos parciais; o script encerra sem executar recuperação nesses ramos. Efeito parcial real: **[nao verificado]**. (`bin/deploy.sh:300`, `bin/deploy.sh:326`, `bin/deploy.sh:343`, `bin/deploy.sh:92`)
+
+A frase literal “todo portão antes do migrate” continua mais forte que o código: o selo de reciclagem permanece depois dele, embora esse selo já não impeça a tentativa de publicação. (`bin/deploy.sh:300`, `bin/deploy.sh:409`)
+
+2) O censo de escritores e leitores é este:
+
+| Estado | Quem escreve | Quem lê |
+|---|---|---|
+| `APLICAR_MIGRATE` | Inicialização `0`; seleção elegível `1`. São dois pontos de atribuição no mesmo script. (`bin/deploy.sh:61`, `bin/deploy.sh:223`) | Decide o apply e decide dispensar a recusa posterior de cron. Portanto são **dois leitores**, contrariando o comentário “UM leitor”. (`bin/deploy.sh:298`, `bin/deploy.sh:325`, `bin/deploy.sh:59`) |
+| `RESTART` | Inicialização `0`; somente o primeiro argumento `--restart` seleciona `1`. (`bin/deploy.sh:70`, `bin/deploy.sh:72`, `bin/deploy.sh:73`) | Recusa inicial de cron; exceção da pendência da mensageria; recusa pré-apply; seleção restart/HUP; mensagem final. (`bin/deploy.sh:115`, `bin/deploy.sh:200`, `bin/deploy.sh:299`, `bin/deploy.sh:322`, `bin/deploy.sh:428`) |
+| Marcas de produção | O envelope cria diretório, escreve `<nome>_<empresa>.<PID>` e remove no `EXIT`. **Deploy também escreve no ciclo de vida: apaga marcas consideradas mortas.** (`bin/cron_run.sh:9`, `bin/cron_run.sh:10`, `bin/deploy.sh:109`) | Deploy enumera arquivos, testa `/proc/<PID>`, extrai o nome e usa o resultado para recusar. Não lê o timestamp do conteúdo. (`bin/deploy.sh:108`, `bin/deploy.sh:109`, `bin/deploy.sh:111`, `bin/deploy.sh:112`) |
+
+Fora do deploy: [nao verificado]
+
+- O selo desta obra remove `APLICAR_MIGRATE` herdado e o injeta novamente quando `FAKE_HERDA_APLICAR` está presente; o caso 10 seleciona essa injeção. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`)
+- O contrato estrutural lê o **texto** do teste de `RESTART`, não o valor da variável. Também procura textualmente a presença do mecanismo de marcas nos dois scripts. (`bin/contrato_deploy.sh:41`, `bin/contrato_deploy.sh:81`, `bin/contrato_deploy.sh:82`)
+- O selo gracioso escreve marca com PID do processo falso; o selo desta obra escreve `cron_falso.1`. As respectivas limpezas removem as árvores falsas. (`bin/tests/test_deploy_reload_gracioso.sh:90`, `bin/tests/test_deploy_reload_gracioso.sh:91`, `bin/tests/test_deploy_reload_gracioso.sh:104`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:107`)
+
+**Os valores originais de `APLICAR_MIGRATE` e `RESTART` herdados do ambiente não alcançam seus leitores:** ambos são sobrescritos primeiro. (`bin/deploy.sh:61`, `bin/deploy.sh:70`, `bin/deploy.sh:298`, `bin/deploy.sh:115`)
+
+Isso não significa ambiente neutralizado em geral. Continuam sendo entradas deliberadas: `DEPLOY_SEM_SOMBRA`, `SEM_JANELA_AUTH_MOTIVO`, `SEM_PROVA_DE_CASCA`, `HOST_TENANT` e as costuras `JANELA_AUTH_STAMP/DOW/HHMM`. Elas alcançam leitores e podem mudar o comportamento correspondente. (`bin/deploy.sh:85`, `bin/deploy.sh:143`, `bin/deploy.sh:282`, `bin/deploy.sh:376`, `bin/janela_auth.sh:36`, `bin/janela_auth.sh:49`, `bin/janela_auth.sh:50`)
+
+O escritor das marcas usa caminho absoluto, enquanto deploy lê relativo à sua `RAIZ`. A equivalência desses diretórios em produção é **[nao verificado]**. (`bin/cron_run.sh:9`, `bin/deploy.sh:53`, `bin/deploy.sh:108`)
+
+3) No cenário perguntado, com apply do core bem-sucedido:
+
+- **Volta 2:** consultava novamente as marcas e podia recusar antes do restart, deixando o apply executado sem publicar as cascas. A chamada incondicional removida estava em `bin/deploy.sh` da volta 2:318, conforme o hunk `-315/+321` do anexo `codex_deployportao3.diff`.
+- **Volta 3:** `APLICAR_MIGRATE=1` dispensa essa consulta; o restart é chamado apesar do cron recém-nascido. (`bin/deploy.sh:325`, `bin/deploy.sh:326`)
+- Se esse cron estiver executando por `docker exec` numa casca reiniciada, ele fica exposto à interrupção que o próprio script documenta. Morte concreta e código de saída nesta produção: **[nao verificado]**. (`bin/deploy.sh:311`, `bin/deploy.sh:314`)
+
+“Idempotente” não implica “automaticamente reexecutado”. O envelope executa o comando uma vez, carimba conclusão apenas para rc `0/2`, tenta alarmar nas outras falhas e sai; não contém retry. A idempotência universal é requisito textual, não prova apresentada. (`bin/cron_run.sh:11`, `bin/cron_run.sh:22`, `bin/cron_run.sh:32`, `bin/cron_run.sh:38`, `CLAUDE.md:246`)
+
+A interrupção pode ainda deixar dependentes sem carimbo de conclusão: eles aguardam o arquivo e alarmam ao atingir o teto. A recuperação efetiva da corrente é **[nao verificado]**. (`bin/cron_run.sh:25`, `bin/encadeado.sh:89`, `bin/encadeado.sh:92`, `bin/encadeado.sh:94`)
+
+Uma ordem concebível seria **bloquear novas admissões de cron → drenar os existentes → manter o bloqueio durante migrate/publicação → liberar**. Isso exigiria uma exclusão compartilhada entre envelope e deploy, ausente na sequência atual; sua implementação e viabilidade aqui são **[nao verificado]**. (`bin/cron_run.sh:9`, `bin/cron_run.sh:11`, `bin/deploy.sh:299`, `bin/deploy.sh:300`, `bin/deploy.sh:326`)
+
+Para prometer também ausência absoluta de atendimento com Python velho sobre schema novo, seria necessário tratar o tráfego durante migrate/publicação, por pausa/drenagem ou compatibilidade das migrations. Essa alternativa não está sendo proposta como correta para esta aplicação: **[nao verificado]**.
+
+4) Estes são os mutantes mortos **por inspeção das asserções**, não por execução:
+
+| Caso | Mutante que distingue |
+|---|---|
+| **1** | Migrar antes da recusa de auth, ou ignorá-la no normal: exige falha, zero apply e zero HUP. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:111`) |
+| **2** | Migrar antes da recusa de sombra, ou ignorá-la: mesmas exigências. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:114`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:115`) |
+| **3** | Omitir/duplicar apply; aplicar antes da primeira auth/sombra/casca; trocar `sombra --conferir` por outra operação; omitir HUP. Exige contagens e primeira passagem dos três portões anterior ao apply. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:95`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`) |
+| **4** | Isentar o agendado da **chamada** à auth. Ignorar apenas seu retorno pode escapar deste caso, porque a pendência já oferece outra recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:122`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123`, `bin/deploy.sh:211`) |
+| **5** | Perguntar auth/sombra, aplicar migrate ou enviar HUP em `--conferir`. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:126`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:127`) |
+| **6** | Aplicar antes da prova de casca recusar, ou ignorar sua recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:130`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:131`) |
+| **7** | Fazer `--sem-sombra` também dispensar auth, ou migrar antes da recusa dela. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:134`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:135`) |
+| **8** | Aplicar sem pendência; deixar de enviar HUP no caminho sem pendência. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:138`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:139`) |
+| **9** | Consultar auth no agendado e ignorar seu retorno: não há pendência para mascarar o erro. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:142`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:143`) |
+| **10** | Deixar `APLICAR_MIGRATE=1` herdado provocar apply em `--sem-migrate`. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:147`) |
+| **11** | Restaurar a recusa incondicional da volta 2 depois do apply. A mordida depende de `/proc/1` existir: a marca falsa usa PID fixo `1`, e o leitor consulta `/proc`. Essa precondição ambiental é **[nao verificado]**. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`, `bin/deploy.sh:109`) |
+
+Mutantes plausíveis que **ainda sobrevivem aos 11 por inspeção**; execução: **[nao verificado]**:
+
+- **Mover o bloco inteiro da 1c para depois da seção 2.** `ORDEM_OK` compara portões com apply, mas não compara apply com HUP/restart. No caso 11, o restart passa a acontecer antes de a marca nascer, e as contagens continuam aceitas. É o sobrevivente mais diretamente contrário ao pré-requisito schema → publicação. (`bin/deploy.sh:298`, `bin/deploy.sh:358`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`)
+- **Remover as recusas prévias de cron.** Nenhum cenário instala cron antes delas; a única marca deste selo nasce durante o apply falso. (`bin/deploy.sh:117`, `bin/deploy.sh:299`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:45`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`)
+- **Remover a guarda de pendência da mensageria.** O falso responde sempre sucesso ao check dela. (`bin/deploy.sh:200`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:69`)
+- **Remover a recusa de pendência do agendado ou de `--sem-migrate`.** O agendado com pendência já encontra auth vermelha; `--sem-migrate` só é exercitado sem pendência. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:122`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:142`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/deploy.sh:211`, `bin/deploy.sh:215`)
+- **Dispensar auth/sombra no `--reload-copia`.** Nenhum dos onze casos seleciona esse modo. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:118`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:122`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:126`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:130`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:134`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:138`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:142`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:146`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150`)
+- **Acrescentar uma segunda consulta de auth/sombra/casca depois do apply.** Os falsos mantêm a mesma resposta durante toda a corrida; os vermelhos já encerraram antes, e os verdes continuam verdes. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:54`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:55`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:56`)
+- **Reiniciar somente `saas_core`.** `N_RST` conta chamadas, não alvos; restart e rotas falsos continuam verdes. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:70`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:101`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`)
+- **Retirar provas de workers/readiness/rotas, ignorar falha de apply/restart ou retirar o selo de reciclagem.** As asserções não exigem essas provas, os comandos relevantes não oferecem falha na fixture, e o selo é substituído por sucesso constante. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:51`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:70`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`)
+
+5) Para as classes históricas, distinguindo alteração nova de problema já presente:
+
+| Classe | Sim/não e prova |
+|---|---|
+| Segundo juiz que duplica juiz registrado | **Não no diff.** Deploy continua perguntando à auth existente; o selo substitui respostas, sem reproduzir a regra de horário. (`bin/deploy.sh:145`, `bin/janela_auth.sh:53`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:54`) |
+| Segundo escritor fora da porta | **Sim no ciclo de vida das marcas, já existente:** envelope escreve/remove e deploy também remove. **Não aparece novo aplicador/publicador no diff.** (`bin/cron_run.sh:10`, `bin/deploy.sh:109`, `bin/deploy.sh:300`, `bin/deploy.sh:326`, `bin/deploy.sh:343`) |
+| Relógio lido fora da borda | **Não introduzido pelo diff.** A decisão temporal de auth continua usando suas costuras declaradas; o novo cron falso não consulta relógio. (`bin/janela_auth.sh:49`, `bin/janela_auth.sh:50`, `bin/janela_auth.sh:55`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`) |
+| Derivação paralela de fonte única | **Não no diff.** A elegibilidade do apply é decidida no ramo da seção 1; os dois pontos seguintes consomem a mesma variável. (`bin/deploy.sh:204`, `bin/deploy.sh:223`, `bin/deploy.sh:298`, `bin/deploy.sh:325`) |
+| Selo/RED sem mordida | **Sim para partes do contrato, não para o selo inteiro.** Há mordida contra a recusa pós-apply, mas falta contra publicação antes do apply e contra a promessa de cron refeito. RED realmente demonstrado: **[nao verificado]**. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`) |
+| Ordem de trava | **Sim: falta reservar o intervalo.** Observar marcas antes de migrar não impede novos crons entre observação e restart; o envelope marca/executa sem exclusão compartilhada. (`bin/deploy.sh:299`, `bin/deploy.sh:300`, `bin/deploy.sh:325`, `bin/deploy.sh:326`, `bin/cron_run.sh:9`, `bin/cron_run.sh:11`) |
+| Pouso antes do pré-requisito | **Sim quanto ao pré-requisito ainda escrito “restart recusa com cron vivo”.** A nova exceção publica sem essa condição no cenário 11. Quanto à ordem core migrate → publicação, **não no código atual**, embora o selo aceite sua inversão. (`CLAUDE.md:90`, `bin/deploy.sh:325`, `bin/deploy.sh:326`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:150`, `bin/deploy.sh:300`) |
+| Campo com dois significados | **Não demonstrado nos flags alterados.** O novo uso de `APLICAR_MIGRATE` depende corretamente do fluxo anterior; os limites das marcas e dos contadores estão discriminados abaixo. (`bin/deploy.sh:223`, `bin/deploy.sh:298`, `bin/deploy.sh:300`, `bin/deploy.sh:325`) |
+
+O censo semântico das variáveis lidas/escritas pelas linhas alteradas é:
+
+| Campos/variáveis | Concordância entre escritores e leitores |
+|---|---|
+| `APLICAR_MIGRATE` | `1` nasce como intenção elegível. Ao alcançar o leitor da seção 2, o comando já retornou sucesso, pois falha termina o script. Logo a inferência nesse leitor é válida; não prova alteração material do banco. O comentário de “UM leitor” está errado. (`bin/deploy.sh:223`, `bin/deploy.sh:300`, `bin/deploy.sh:92`, `bin/deploy.sh:325`, `bin/deploy.sh:59`) |
+| `RESTART`, `RESTART_MOTIVO` | Significam seleção manual e justificativa textual. Escrita e leituras concordam; o motivo não prova necessidade técnica do boot. (`bin/deploy.sh:70`, `bin/deploy.sh:73`, `bin/deploy.sh:74`, `bin/deploy.sh:75`, `bin/deploy.sh:322`, `bin/deploy.sh:429`) |
+| `FAKE_CRON_NO_MIGRATE`, `FAKE_HERDA_APLICAR` | São habilitadores por **presença não vazia**, não booleanos numéricos gerais. Os casos fornecidos usam `1`, coerentemente. (`bin/tests/test_deploy_portoes_antes_do_migrate.s
+
+[truncado em 20000 de 22901 caracteres]
+
+## 08/11 23:35 · sessao 4ff4663f72a0 · FIO-E0-V4-E1-FILA · verificador · origem=Code
+
+**A captura está no lugar correto para isolar a recusa da migração, mas não torna atômico o ato maior dos chamadores. Há retornos `False` ignorados e contadores que anunciam trabalho recusado.** (`app/chamados/models.py:1414-1425`; `app/chamados/services/adesao.py:92`; `app/ponto/management/commands/reconciliar_grade.py:254-259`, `:529-531`.)
+
+Análise estática da cópia. Execução dos testes, comportamento efetivo do banco e ocorrências em produção: **[nao verificado]**. [nao verificado]
+
+**1. Quem chama `ChamadoColaborador.reabrir`**
+
+No quadro, “sem atomic” significa sem envoltório explícito no caminho identificado. Os dicionários de banco da cópia não configuram `ATOMIC_REQUESTS`; configuração efetiva de produção: **[nao verificado]**. (`app/config/settings/prod.py:9-18`; `app/config/settings/saas.py:83-92`.)
+
+| Chamador produtivo direto | Atomic externo à migração | Tratamento de `False` |
+|---|---|---|
+| `_renascer_por_premissa_viva` — `app/chamados/models.py:1019` | **Sim via `abrir`**, que abre atomic antes de chamar o renascimento. **Sem atomic identificado via resposta tardia**. (`app/chamados/models.py:902`, `:922`; `app/chamados/services/resposta_tardia.py:31-45`.) | Propaga `False`. `abrir` descarta esse resultado e retorna `(existente, False)`: esse segundo booleano significa **criado**, não reaberto. Resposta tardia registra nota/log e devolve `tardia`. (`app/chamados/models.py:1019-1024`, `:922-924`; `app/chamados/services/resposta_tardia.py:45-67`.) |
+| Desarquivar — `app/chamados/views_arquivar.py:70` | Sem atomic identificado. (`app/chamados/views_arquivar.py:51-70`.) | Retorna `ok=False`, mas atribui **qualquer recusa a irmão vivo**. Para universo alterado, apresenta razão incorreta. (`app/chamados/views_arquivar.py:70-72`.) |
+| Adesão — `app/chamados/services/adesao.py:92` | Sem atomic identificado no serviço/comando. (`app/chamados/services/adesao.py:44-92`; `app/escala/management/commands/apurar_furos_diarios.py:6-21`.) | **Ignora e incrementa `pais_reabertos` incondicionalmente**; o comando apresenta esse contador. (`app/chamados/services/adesao.py:92`; `app/escala/management/commands/apurar_furos_diarios.py:21`.) |
+| Reabrir disputa administrativamente — `app/chamados/services/acoes_disputa.py:267` | Sem atomic identificado no serviço, dispatcher ou views de entrada. (`app/chamados/services/acoes_disputa.py:232-296`; `app/chamados/services/fio.py:583`; `app/chamados/views.py:658-674`, `:868-954`.) | **Ignora**; segue com ocorrência, pushes, auditoria e sucesso. As mensagens anunciam a **disputa**, efetivamente reaberta antes; não revelam que o chamado recusou. (`app/chamados/services/acoes_disputa.py:256-296`.) |
+| Reabrir competência — `app/chamados/services/competencia_trancada.py:265` | **Sim**, atomic por chamado. (`app/chamados/services/competencia_trancada.py:264`.) | Só escreve nota/evento e incrementa se `True`; `False` pula esses efeitos. (`app/chamados/services/competencia_trancada.py:265-272`.) |
+| Resolver perguntas de chamado resolvido — `app/chamados/services/disputa_emissao.py:1812` | **Sim**: o wrapper aproveita atomic existente ou abre um. O desvio da competência trancada retorna antes de alcançar essa chamada. (`app/chamados/services/disputa_emissao.py:1715-1722`, `:1742-1743`.) | Só anexa nota de reabertura se `True`; segue o processamento depois da recusa. (`app/chamados/services/disputa_emissao.py:1812-1830`.) |
+| Reabrir órfãs — `app/chamados/management/commands/reabrir_orfas_enterradas.py:172` | **Sim**, atomic por pergunta. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:146`.) | Descarta o booleano, **relê o estado** e registra `pai_falhou` se continua encerrado; imprime falhas. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:172-189`.) |
+| Ausência ainda aberta — `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49` | Sem atomic identificado. (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:22-55`.) | Só nota e incremento se `True`; nenhuma explicação própria para `False`. (`app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49-55`.) |
+| Reconciliar grade — `app/ponto/management/commands/reconciliar_grade.py:530` | Sem atomic identificado nesse caminho. (`app/ponto/management/commands/reconciliar_grade.py:488-531`.) | **Ignora e retorna `None`**; o chamador entende ausência de veto e incrementa `CREATE`, incluindo a entrada em `creates`. (`app/ponto/management/commands/reconciliar_grade.py:529-531`, `:254-259`.) |
+| Detectar ausências/limbo — `app/ponto/management/commands/detectar_ausencias.py:301` | Sem atomic identificado nesse caminho. (`app/ponto/management/commands/detectar_ausencias.py:271-304`.) | Ignora; não anuncia reabertura nem registra explicação própria nesse trecho. (`app/ponto/management/commands/detectar_ausencias.py:300-304`.) |
+
+Para a **nova exceção**, esses chamadores não eliminam a tentativa de trilha: a própria porta chama `evento` antes de devolver `False`. A persistência é best-effort, portanto não há garantia estática de linha gravada. Outras recusas, como `agrupado` e `transicao`, continuam retornando sem evento próprio nesses ramos. (`app/chamados/models.py:1421-1425`, `:1406-1407`, `:1437-1438`; `app/core/observ.py:105-139`.)
+
+**2. Savepoint, conexão utilizável e escritas anteriores**
+
+**Sob atomic externo saudável, sim, por desenho:** a migração entra em `transaction.atomic()` padrão; a exceção sai desse bloco antes de ser capturada por `reabrir`. O rollback pertence ao savepoint interno, preservando o atomic externo. O repositório documenta o mesmo mecanismo de isolamento na implementação de `evento`. Verificação efetiva da conexão após essa sequência: **[nao verificado]**. (`app/chamados/services/fio.py:2074-2094`; `app/chamados/models.py:1414-1417`; `app/core/observ.py:124-133`.)
+
+Isso cobre os caminhos com atomic da tabela: `abrir`, competência, resolver perguntas e reabrir órfãs. Nos demais caminhos, sob autocommit normal, o atomic da migração é a **transação externa**, não savepoint; sua saída excepcional encerra essa transação antes da captura. Configuração operacional de autocommit: **[nao verificado]**. (`app/chamados/models.py:902`; `app/chamados/services/competencia_trancada.py:264`; `app/chamados/services/disputa_emissao.py:1720`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`; `app/chamados/services/fio.py:2074`; `app/chamados/models.py:1417`.)
+
+**Não há migração parcialmente escrita nesse ramo:** o `raise` ocorre antes de `_migrar_sob_trava`; até ali há leituras e aquisição de travas, sem alteração de dados de negócio pela migração. (`app/chamados/services/fio.py:2084-2094`; `app/chamados/models.py:2674-2701`.)
+
+**Há atos maiores que permanecem parcialmente realizados:**
+
+- **Admin, sem atomic abrangente:** a disputa é reaberta e nasce pergunta de conversa **antes** da tentativa sobre o chamado; `False` não desfaz essas escritas e não impede os efeitos posteriores. (`app/chamados/services/acoes_disputa.py:256-296`.)
+- **Órfãs, mesmo com atomic:** pergunta e disputa já foram reabertas; a recusa do pai vira `pai_falhou`, sem rollback dessas etapas anteriores. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:157-177`.)
+- **Competência:** `PeriodoFechado` é salvo antes do gancho best-effort que devolve a fila; os fechamentos mensais são atualizados depois. Não há transação nova para o conjunto. (`app/ponto/services/fechamento.py:1435-1452`.)
+
+Logo, o comentário “o ato inteiro desfez” vale para **a migração**, não para todo trabalho anteriormente executado pelo chamador. (`app/chamados/services/fio.py:2026-2029`, `:2074-2094`; `app/chamados/services/acoes_disputa.py:256-267`.)
+
+**3. Escritores e leitores de `reabertura_recusada` / `depois['motivo']`**
+
+Os emissores produtivos encontrados são:
+
+| Emissor | Conteúdo de `depois` |
+|---|---|
+| `_trilha_do_veto`, para renascimento/reabertura | `modulo_origem`, `dia`, **`veto`**, `via`, `colaborador`. (`app/chamados/models.py:1166-1188`.) |
+| Admin sem fato novo | `status_local`, `via_encerramento`. (`app/chamados/models.py:1396-1398`.) |
+| Premissa regularizada | `status_local`. (`app/chamados/models.py:1402-1404`.) |
+| Universo alterado sob trava | `irmao`, **`motivo='universo_mudou_sob_trava'`**, `erro`. (`app/chamados/models.py:1421-1424`.) |
+
+O leitor específico encontrado é a **deduplicação do veto**, que exige também `modulo_origem`, `dia`, `veto` e `via`. O novo evento não satisfaz essa chave e não suprime aquela trilha. (`app/chamados/models.py:1172-1183`, `:1424`.)
+
+Não localizei leitor produtivo específico de `motivo` para essa ação; o teste lê explicitamente esse campo. Completude diante de acesso dinâmico/reflexão: **[nao verificado]**. (`app/chamados/tests/test_e1_fila.py:517`.)
+
+Os leitores genéricos relevantes têm estes comportamentos:
+
+- A auditoria consulta todas as ações, filtra ação literal e conta registros, sem classificar motivos. Seu seletor usa `ACOES`, que **não oferece** `reabertura_recusada`; o filtro por GET continua aceitando a ação. (`app/core/views.py:705-738`; `app/core/models.py:286-294`.)
+- O vigia de escritas por cron conta **linhas de auditoria**, independentemente da ação. A recusa entra nessa contagem, coerente com o rótulo declarado; não significa reabertura realizada. (`app/chamados/services/vigia_loop.py:68-96`.)
+- Os vigias de transição e confronto trilha/banco, e o histórico de estados, filtram `estado_chamado`; não interpretam essa recusa como mudança de estado. (`app/chamados/services/vigia_loop.py:28-34`, `:114-121`; `app/chamados/services/historico.py:44`, `:86-95`.)
+
+Não há prova encontrada de leitor contando errado por presumir um conjunto antigo de motivos. Há **payloads heterogêneos**, sem `motivo` obrigatório em todas as recusas; o sentido comum do evento continua sendo recusa de reabertura. (`app/chamados/models.py:1187`, `:1398`, `:1404`, `:1424`.)
+
+**4. Mordida dos testes novos e mutantes sobreviventes** [nao verificado]
+
+**`A3AplicarDeclaracaoTest`: morde a retirada simples da chamada naquele cenário.** A prova exige presença da pergunta canônica e do destino na sequência, e ausência de inversão; o mutante remove a chamada real e exige inversão. O cenário usa disputa canônica fechada e destino encerrado de PK menor. (`app/chamados/tests/test_e1_fila.py:182-191`, `:436-454`.)
+
+O alcance é menor que uma prova funcional completa: a proposta é mockada, `_r` é ignorado, linhas nascidas durante o ato são excluídas e o rastreador não cobre `executemany` nem travas de FK do INSERT. (`app/chamados/tests/test_e1_fila.py:63-71`, `:438-447`; `app/chamados/tests/test_e1_v9.py:46-53`.)
+
+**`A2UniversoMudouSobATravaTest`: morde a retirada da conferência e as alterações simples no tratamento da recusa.** Retirar o `try/except`, trocar `False`, trocar o motivo ou o irmão viola as asserções explícitas. (`app/chamados/tests/test_e1_fila.py:479-497`, `:508-518`.)
+
+Entretanto, a “corrida” é sintética; o teste de `reabrir` substitui tanto a migração quanto `evento`. Não verifica concorrência real, rollback seguido de escrita no chamador, nem INSERT real da trilha. (`app/chamados/tests/test_e1_fila.py:466-477`, `:499-505`.)
+
+Mutantes que as asserções dessas classes deixam escapar **por inspeção**; sobrevivência executada: **[nao verificado]**:
+
+| Mutante de produção | Por que escapa |
+|---|---|
+| Executar `_trava_do_ato` em `aplicar_declaracao` **somente para `saida_sem_entrada`**, omitindo outros motivos | A proposta testada sempre usa esse motivo; a retirada simples ainda seria detectada. (`app/chamados/tests/test_e1_fila.py:180`, `:438`, `:451-454`; `app/chamados/services/declaracao_texto.py:650`.) |
+| Trocar o retorno final de `aplicar_declaracao` por resultado incorreto, preservando as operações | O resultado `_r` não é conferido. (`app/chamados/services/declaracao_texto.py:690-691`; `app/chamados/tests/test_e1_fila.py:444-447`.) |
+| Trocar `if _fora[0] or _fora[1]` por **`and`** | O objeto extra introduz simultaneamente colaborador **e** PK novos; não há casos separados para cada diferença. (`app/chamados/services/fio.py:2089-2090`; `app/chamados/tests/test_e1_fila.py:469-476`.) |
+| Suprimir `_migrar_sob_trava`, preservando conferência e travas | A classe não exige migração nominal bem-sucedida nem conteúdo de `out`; os testes herdados verificam aquisição/ordem das travas. (`app/chamados/services/fio.py:2094`; `app/chamados/tests/test_e1_fila.py:158-171`, `:479-497`.) |
+| Emitir a recusa com **modelo ou objeto_id errados** | O mock confere ação, quantidade, motivo e irmão; não confere modelo/objeto. (`app/chamados/models.py:1421`; `app/chamados/tests/test_e1_fila.py:515-518`.) |
+| Ampliar a captura para `RuntimeError`, engolindo falhas adicionais | Só a exceção específica é injetada. (`app/chamados/models.py:1417`; `app/chamados/tests/test_e1_fila.py:501-504`.) |
+| Retirar a implementação real de persistência de `evento`, mantendo a chamada | Nesse teste, `evento` é mockado. (`app/chamados/tests/test_e1_fila.py:504`; `app/core/observ.py:133-138`.) |
+
+A conferência também **não compara mudanças de `disputa_id` em perguntas já conhecidas**, embora esse ID componha a trava inicial. Possibilidade de escritor concorrente produtivo realizar essa mudança: **[nao verificado]**. (`app/chamados/services/fio.py:2086-2089`.)
+
+**5. Outra porta capaz de levantar `UniversoMudouSobATrava`**
+
+**Nenhuma outra porta produtiva nominal encontrada fora de `reabrir`.** O `raise` está em `migrar_resolvedoras_vivas`; a chamada produtiva identificada está no ramo `irmao_vivo`, com captura específica. Os caminhos indiretos são os chamadores da pergunta 1. Chamadas dinâmicas em execução: **[nao verificado]**. (`app/chamados/services/fio.py:2091`; `app/chamados/models.py:1411-1417`.)
+
+**6. Classes de reprovação**
+
+O quadro distingue o delta desta volta dos resíduos relacionados na cópia; ausência universal na árvore ou no ambiente não está provada. **[nao verificado]**
+
+| Classe | Constatação com prova |
+|---|---|
+| **Segundo juiz duplicando juiz registrado** | **Não identificado no delta.** A captura traduz falha técnica em recusa; a migração continua consultando `pergunta_viva`, autoridade registrada. (`app/chamados/models.py:1417-1425`; `app/chamados/services/fio.py:2108-2119`; `app/core/juizes.py:266`.) |
+| **Segundo escritor fora da porta** | **Não identificado no delta.** O novo evento passa pelo escritor de auditoria `evento`; não acrescenta escrita direta de estado. (`app/chamados/models.py:1421-1425`; `app/core/observ.py:94-138`.) |
+| **Relógio fora da borda** | **Sim, residual na cadeia do juiz:** `_dentro_da_janela_viva` ainda lê `date.today()`. A cura de `expira_em` usa `timezone.now`, mas não elimina essa leitura do juiz. (`app/chamados/juizes.py:569-575`; `app/chamados/veredito_lavrado.py:95-102`.) |
+| **Derivação paralela de fonte única** | **Sim, fórmula temporal reproduzida:** `expira_em` reimplementa o intervalo da janela para derivar sua expiração. Divergência observada entre as duas implementações: **[nao verificado]**. (`app/chamados/veredito_lavrado.py:117-143`; `app/chamados/juizes.py:575-601`.) |
+| **Selo/RED sem mordida** | **Não para os alvos estreitos declarados; insuficiente para garantias amplas.** Há mutantes explícitos de remoção, mas integração transacional/persistência é substituída por mocks e sobrevivem os mutantes listados acima. (`app/chamados/tests/test_e1_fila.py:449-454`, `:489-518`.) |
+| **Ordem de trava** | **Ordem local implementada; ordem de toda chamada composta [nao verificado].** Há chamadores que já seguram C ou C/D/Ch/P antes de a migração adquirir seu conjunto, inclusive colaboradores adicionais. A prova nova não percorre essas composições. (`app/chamados/models.py:905`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:153-156`; `app/chamados/services/disputa_emissao.py:1721`, `:1787`, `:1812`; `app/chamados/services/fio.py:2084-2087`; `app/chamados/tests/test_e1_fila.py:499-505`.) |
+| **Pouso antes do pré-requisito** | **Pouso/deploy [nao verificado].** Na ordem do ato administrativo, há efeitos anteriores à confirmação de reabertura do chamado, e o fluxo continua após recusa. (`app/chamados/services/acoes_disputa.py:256-296`.) |
+| **Campo com dois significados** | **Sim nos contadores:** `pais_reabertos` pode contar tentativa recusada; `CREATE` pode incluir emissão cujo chamado permaneceu encerrado. **Não demonstrado em `depois['motivo']`**, que tem um único valor emitido identificado. (`app/chamados/services/adesao.py:92`; `app/ponto/management/commands/reconciliar_grade.py:254-259`, `:529-531`; `app/chamados/models.py:1424`.) |
+
+## 08/11 23:34 · sessao 7f2da60deb0c · FIO-E0-V4-E1-FILA · censo · origem=Code
+
+Nos anexos, conto as linhas desde a primeira linha de cada bloco, incluindo linhas vazias e excluindo o cabeçalho `== anexo: ... ==`.
+
+| Achado | Classe | Trecho literal da pergunta | Trecho literal da resposta | Linha de triagem |
+|---|---|---|---|---|
+| **1 — Falta de RED próprio para `aplicar_declaracao`** | **(a), na leitura de cobertura:** o tema dos testes estava perguntado; a resposta reconheceu a porta, mas não apontou sua falta de teste. (`codex_e1fila.q:7`; `codex_e1fila.r:72`) | “Os testes novos (test_e1_fila.py) mordem o que dizem morder?” (`codex_e1fila.q:7`). Na volta 2: “selo/RED sem mordida” (`codex_e1fila_v2.q:9`). | Sobre `aplicar_declaracao`: “Mesmo prefixo no atomic da emissão/resposta.” (`codex_e1fila.r:72`). A avaliação de A3 aponta outra lacuna: “Não exige a Disputa fechada na sequência.” (`codex_e1fila.r:31`). **Esses trechos não denunciam a ausência de caso para a porta irmã.** | Não há descarte específico dessa ausência. O registro próximo diz: “o ramo do rechaveamento por dia diferente continua sem caso proprio (fila)” — outro problema, não a cobertura de `aplicar_declaracao`. (`triagem_e1_fila.txt:29`, `triagem_e1_fila.txt:30`) | [nao verificado]
+| **2 — `UniversoMudouSobATrava`: sem teste, observabilidade e tratamento produtivo** | **(b), pelo critério solicitado de algum trecho tocar o achado:** Codex viu a falta de teste e a propagação da exceção; a triagem colocou a lacuna de teste em FILA. Isso não demonstra que tenha identificado todos os componentes do bloqueante. (`codex_e1fila.r:30`; `codex_e1fila.r:90`; `triagem_e1_fila.txt:27`) | “Os testes novos [...] mordem o que dizem morder?” (`codex_e1fila.q:7`); “ou regra de negocio nova?” (`codex_e1fila.q:8`). Na volta 2: “Os descartes e as linhas de FILA da triagem: algum deles e procedente para ESTA obra” (`codex_e1fila_v2.q:7`). | A2: “Não testa crescimento do universo entre leitura e trava, nem entrada por chamador já travado.” (`codex_e1fila.r:30`). Item 8: “crescimento detectado aborta o atomic por exceção, propagada ao chamador, sem retry nessa porta.” (`codex_e1fila.r:90`). | “A2 nao testa crescimento do universo nem chamador ja travado -> FILA (UniversoMudouSobATrava sem teste de corrida; o chamador travado e o item 5).” **Não apresenta justificativa própria para adiar o teste de crescimento.** (`triagem_e1_fila.txt:27`, `triagem_e1_fila.txt:28`) | [nao verificado]
+
+**Limites da classificação:**
+
+- **Achado 1:** adoto “tema presente” como cobertura dos testes nas portas tocadas. Mencionar a trava de `aplicar_declaracao` não equivale a detectar seu RED ausente; também não autoriza atribuir à triagem um descarte que ela não registrou. A afirmação experimental “apagar a chamada sobrevive à suíte inteira” é **(c)** quanto à confirmação por execução nesta auditoria: **[nao verificado]**. (`codex_e1fila.q:5`; `codex_e1fila.q:7`; `codex_e1fila.r:72`; `triagem_e1_fila.txt:29`) [nao verificado]
+- **Achado 2:** o **(b) é parcial**. A resposta registra propagação, mas não denuncia literalmente “sem trilha nem contador”; tampouco há descarte específico desses componentes. Os motivos “sem ocorrência verificada” e mudança de desenho pertencem ao problema do **chamador já travado**, não constituem justificativa expressa para deixar a exceção crua ou sem observabilidade. (`codex_e1fila.r:90`; `triagem_e1_fila.txt:27`; `triagem_e1_fila.txt:59`)
+- A cópia atual já contém alterações identificadas como curas posteriores desses bloqueantes; elas não provam o que foi detectado nas duas verificações anteriores. ([test_e1_fila.py](/home/ronald/codex_ws/602a7d739b34f2a8524a4210bb4423a807f40331/app/chamados/tests/test_e1_fila.py:430); [models.py](/home/ronald/codex_ws/602a7d739b34f2a8524a4210bb4423a807f40331/app/chamados/models.py:1418))
+
+## 08/11 23:33 · sessao 0f34790ec36d · - · - · origem=Ronald (tmux)
+
+Confirmado por inspeção: **mover todo o bloco 1c para depois da seção 2 sobrevive aos 11 casos**; execução [nao verificado]. (`bin/deploy.sh:298-301`, `:358`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:110-152`)
+
+- `ORDEM_OK` exige somente auth/sombra/casca **antes do apply**; não compara apply com HUP/restart. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:95-104`)
+- O caso 3 aceita migrate=1 e HUP=1, independentemente da ordem entre eles. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`)
+- No caso 11, `APLICAR_MIGRATE=1` já dispensa a recusa da seção 2; o restart falso acontece primeiro, depois o migrate cria a marca. A asserção aceita as mesmas contagens e rc=0. (`bin/deploy.sh:223`, `:325-326`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `:76`, `:150-152`)
+
+Assim, o mutante publica antes do pré-requisito de schema e transforma “cron nascido durante migrate antes do restart” em “marca criada depois do restart”, sem ser denunciado pelas asserções. (`bin/deploy.sh:24-28`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:95-104`, `:151`)
 
 ## 08/11 23:32 · sessao 3dbe97426882 · - · - · origem=Ronald (tmux)
 
@@ -600,154 +849,4 @@ O teto mudou de “dias ±1” para `P.colaborador=C ∪ P.destino∈órfãos`; 
 
 A checagem de igualdade entre `P.colaborador` e o dono da D roda apenas no nascimento; portanto ela não prova consistência de todo o acervo lido pelas cascatas (`app/chamados/models.py:3410-3425`). A cobertura exata exigiria o fechamento transitivo das relações efetivamente seguidas — destinos reversos, D das P alcançadas, irmãs, pais e universos dos novos donos — além dos terminais que a reemissão pode renascer; `_trava_do_repasse` faz somente uma expansão (`app/chamados/services/disputa_emissao.py:954-959`; caminhos: `1747-1883`; `app/chamados/reconciliador.py:910-911`; `app/chamados/models.py:906-924`).
 
-## 08/11 22:44 · sessao 00b27372de1d · - · - · origem=Ronald (tmux)
-
-**Descartes/FILA que merecem ressalva**
-
-- **Item 5/A2, chamador já travado: caminho continua aberto.** O command filtra `irmao_vivo`/irmãs antes da transação; depois trava C/D/Ch/P e chama novamente `pai.reabrir()`. Se um irmão surgir entre filtro e trava, `reabrir()` entra em migração; esta coleta perguntas dos dois chamados e tenta travar seus colaboradores, inclusive outro colaborador, depois das linhas já presas pelo command. A recusa de destino cruzado na costura ocorre posteriormente e não impede essa aquisição de C. Ocorrência em produção: [nao verificado]. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:105`, `:108`, `:146`, `:153`, `:172`; `app/chamados/models.py:1390`, `:1411`; `app/chamados/services/fio.py:2037`, `:2085`, `:2086`, `:2094`, `:2160`.)
-- **A recusa `UniversoMudouSobATrava` não cura o chamador previamente travado:** ela verifica crescimento entre as duas leituras internas da migração; a primeira aquisição interna de C já aconteceu antes dessa conferência. (`app/chamados/services/fio.py:2084`, `:2086`, `:2088`, `:2090`.)
-- **Fila 3/f5 é dívida real preexistente:** `_dentro_da_janela_viva` continua lendo `date.today()` sem parâmetro; `expira_em` reproduz sua guarda com um dia obtido por `timezone.localdate`. O novo `relogio_virou` centraliza somente invalidação do cache; não é novo juiz de mérito. A autoridade registrada continua `pergunta_viva`. (`app/chamados/juizes.py:569`, `:575`, `:601`; `app/chamados/veredito_lavrado.py:102`, `:105`, `:114`, `:120`, `:137`, `:141`; `app/core/juizes.py:266`.)
-- **A3 parcial continua parcial:** o teste exige agora a D fechada, mas prepara a pergunta e a declaração para `DIA`; não exercita o ramo de reuso com data divergente que chama rechaveamento. (`app/chamados/tests/test_e1_fila.py:185`, `:194`, `:196`, `:204`; `app/chamados/models.py:2938`, `:2945`.)
-- **Não confirmei cascata efetiva A3→cartório.** Existe a ligação genérica de `post_save` de Chamado ao cartório, mas depende de mudança de status e dia forte; o pai criado pela declaração recebe somente `origem`, sem dia forte. Assim, usar essa cascata específica como reprovação exige mais caminho: [nao verificado]. (`app/chamados/signals.py:191`, `:192`, `:201`, `:202`, `:203`; `app/chamados/services/disputa_emissao.py:630`; `app/chamados/juizes.py:98`, `:117`, `:127`.)
-
-**Testes e instrumento** [nao verificado]
-
-- O descarte de exigir identificação textual da violação P3/P6/P7 é defensável: os mutantes introduzem explicitamente trava de P antes de C, e o contrato exige sequência inválida; P7 também exige três migrações. Isso não prova execução verde nesta auditoria: [nao verificado]. (`app/chamados/tests/test_e1_fila.py:311`, `:314`, `:319`, `:324`, `:332`, `:337`, `:338`.)
-- O rastreador realmente ignora `executemany` e travas de FK. Portanto seus verdes não provam a ordem de **todas** as aquisições possíveis; não encontrei nesta subtarefa um caminho concreto adicional que explore esses dois limites: [nao verificado]. (`app/chamados/tests/test_e1_v9.py:51`, `:69`, `:72`; `app/chamados/tests/test_e1_fila.py:62`.)
-
-**Classes/f7**
-
-- O contrato exige ordem por transação, conjunto completo no topo e cada classe por PK; logo o caminho concorrente do command acima pertence ao escopo, apesar de a ocorrência não estar demonstrada. (`app/chamados/models.py:2629`, `:2633`, `:2634`.)
-- A documentação f7 agora enumera a escrita do nascimento/reuso e a limpeza por `SET_NULL`; o campo efetivamente declara essa política. A afirmação literal “só o banco” não demonstra trigger ou `ON DELETE SET NULL` no DDL: isso está [nao verificado]. (`app/chamados/services/fio.py:808`, `:811`, `:813`; `app/chamados/models.py:3375`, `:3377`.)
-- O contrato de escritores continua listando `models.py` e `fio.py`; o delta de prosa não elimina nem acrescenta escritor próprio de aplicação. (`app/core/tests/test_contract_escritores_estado.py:61`; `app/chamados/services/fio.py:808`.)
-
-## 08/11 22:27 · sessao ec61578336e4 · FIO-E0-V4-E1-FILA · verificador · origem=Code
-
-**A ordem global ainda não está demonstrada para o atomic inteiro:** o repasse pode alcançar perguntas fora da pré-trava, e a migração pode receber travas já mantidas pelo chamador. (`app/chamados/services/disputa_emissao.py:955`, `:1206`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:153`, `:172`)
-
-Resultados RED/GREEN, migrations aplicadas, contagens e ocorrência dos cenários em produção: **[nao verificado]**. [nao verificado]
-
-1. **ALTA — O novo “teto” do repasse não cobre tudo que a mesma transação pode escrever.** A pré-trava inclui perguntas costuradas nos órfãos e perguntas do colaborador nos dias dos órfãos ±1 ou sem dia. A cauda chama `perguntar_entradas_pendentes`, que obtém outros dias do contexto da disputa e chama a geração de perguntas. (`app/chamados/services/disputa_emissao.py:955`, `:958`, `:1206`, `:278`, `:283`, `:294`)
-
-   Um caminho permitido pelo código é: P de pk maior pré-travada no dia do órfão; entrada pendente de outro dia, fora do recorte; reuso de P canônica antiga desse outro dia; atribuição de célula/destino e **UPDATE dessa P de pk menor depois da maior**. O reuso procura a canônica globalmente e salva as alterações. Reprodução e ocorrência no acervo: [nao verificado]. (`app/chamados/services/disputa_emissao.py:443`; `app/chamados/models.py:2905`, `:2919`, `:2958`, `:2975`, `:2999`)
-
-   Há outra expansão pela cascata síncrona: `analisar → _gravar_estado/save → post_save → cartório`; havendo adiamentos pela lâmpada, o cartório chama a retratação das perguntas absolvidas **do colaborador inteiro**, sem recorte de dia. Ela pode atualizar P antiga que não entrou no teto. (`app/chamados/services/disputa_emissao.py:1021`; `app/chamados/models.py:806`, `:296`; `app/chamados/signals.py:203`; `app/ponto/services/cartorio.py:951`, `:959`; `app/chamados/reconciliador.py:584`, `:595`, `:627`)
-
-2. **ALTA — A data de expiração continua com contratos de fuso incompatíveis.** O escritor usa `localdate(agora)`; `esta_stale` compara `agora.date()` e `julgado_em.date()`, e a varredura repete essas comparações. A configuração declara São Paulo e `USE_TZ=True`. Portanto, com instantes UTC, escritor e leitores podem estar em dias diferentes. É problema preexistente mantido pelo diff. (`app/chamados/veredito_lavrado.py:103`, `:126`, `:196`, `:199`; `app/chamados/services/raiox.py:36`, `:41`; `app/config/settings/base.py:93`, `:95`)
-
-   A consequência pode ultrapassar algumas horas: se a lavra ocorrer antes da meia-noite local, mas seu dia UTC já for a data de expiração, a condição `julgado_em.date() < janela_expira_em` fica falsa. Esse ramo deixa de invalidar a lavra quando o dia local alcançar a expiração. É uma consequência das condições; ocorrência real: [nao verificado]. (`app/chamados/veredito_lavrado.py:196`, `:199`)
-
-3. **MÉDIA — f5 une o instante do carimbo ao da expiração, mas não ao julgamento.** `lavrar` chama o juiz antes de capturar `_agora`; o juiz ainda lê `date.today()` independentemente. O backfill captura `hoje` e `agora` separadamente e executa o juiz novamente por linha. Logo, “mesmo instante” vale para `julgado_em` e `expira_em`, não para a decisão inteira. (`app/chamados/veredito_lavrado.py:234`, `:242`, `:244`; `app/chamados/juizes.py:575`; `app/chamados/management/commands/backfill_veredito_lavrado.py:94`, `:95`, `:105`)
-
-4. **MÉDIA — A1 elimina a sintaxe escolhida, não toda derivação paralela.** Permanecem os equivalentes com aliases: `c or dc` em `fecho_cruza_dias` e no backfill de decisões. O detector AST procura diretamente `.disputa.colaborador[_id]` como alternativa de `or`, sem resolver aliases. (`app/chamados/services/fio.py:1844`, `:1847`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:199`; `app/chamados/tests/test_e1_fila.py:76`, `:86`)
-
-   Também permanece uma identidade dividida no rechaveamento: trava/dedup usam `p.colaborador_id`, mas célula nova e despertar usam `p.disputa.colaborador_id`. A igualdade é verificada no nascimento, sem nova conferência nesse `save` de linha existente. Divergência efetiva no acervo: [nao verificado]. (`app/chamados/services/fio.py:1000`, `:1021`, `:1022`, `:1024`, `:1035`; `app/chamados/models.py:3410`, `:3423`)
-
-5. **MÉDIA — A2 ordena sua própria chamada, não o prefixo transacional de todos os chamadores.** `reabrir_orfas_enterradas` já mantém C/D/Ch/P quando chama `pai.reabrir`; o ramo `irmao_vivo` chama a migração, cujo conjunto pode acrescentar C de outra pergunta. Isso permite aquisição de C depois de D/Ch/P já seguros. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:146`, `:153`, `:172`; `app/chamados/models.py:1411`, `:1414`; `app/chamados/services/fio.py:2037`, `:2085`, `:2086`)
-
-   **A ressalva é necessária:** o pré-filtro desse comando já exclui `irmao_vivo`. O caminho exige mudança entre o pré-filtro e a trava — por exemplo, surgimento de irmão nesse intervalo — ou mudança posterior da decisão. Acervo cruzado sozinho não demonstra esse caminho; ocorrência: [nao verificado]. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:105`, `:108`, `:153`)
-
-6. **MÉDIA — Os testes novos têm cobertura útil, mas algumas alegações excedem o que verificam.** [nao verificado]
-
-   | Teste | O que efetivamente demonstra | [nao verificado]
-   |---|---|
-   | **A1** | Varre produção e detecta os exemplos sintáticos declarados; pode passar com os aliases sobreviventes do achado 4. (`app/chamados/tests/test_e1_fila.py:99`, `:109`, `:122`; `app/chamados/services/fio.py:1847`) |
-   | **A2** | Não é vazio: exige os dois colaboradores e detecta a aquisição adicional fora de ordem. Não testa crescimento do universo entre leitura e trava, nem entrada por chamador já travado. (`app/chamados/tests/test_e1_fila.py:147`, `:151`, `:154`; `app/chamados/services/fio.py:2088`) |
-   | **A3** | **Morde por motivo diferente do anunciado para a Disputa fechada:** fixture e pedido usam o mesmo dia; isso pula o ramo que trava a Disputa existente por rechaveamento. O cenário exercita Ch destino de pk menor depois de Ch vivo maior. Não exige a Disputa fechada na sequência. (`app/chamados/tests/test_e1_fila.py:173`, `:175`, `:183`, `:191`, `:195`; `app/chamados/tests/test_e1_v9.py:145`; `app/chamados/models.py:2938`; `app/chamados/services/fio.py:768`) |
-   | **F1** | Não é vazio: verifica o complemento inicial. Porém o único chamado já tem P pendente; após complementar, ele é eliminado pelo filtro e a porta retorna `None`. Não alcança os laços principais, entradas pendentes ou fecho. O retorno é descartado. (`app/chamados/tests/test_e1_fila.py:229`, `:237`, `:254`; `app/chamados/services/disputa_emissao.py:1006`, `:1022`, `:1029`) |
-   | **P3/P6/P7** | Injetam P antes de C e exigem alguma violação; P7 também exige `migradas=3`. Mordem essa inversão, mas não identificam especificamente qual violação matou o mutante. (`app/chamados/tests/test_e1_fila.py:273`, `:282`, `:295`, `:302`) |
-   | **F5** | Os testes com datas diferentes distinguem o relógio da borda de `date.today()`. O teste “MESMO instante” devolve uma constante de `now`; duas leituras independentes devolveriam os mesmos valores e passariam. (`app/chamados/tests/test_e1_fila.py:307`, `:319`, `:322`, `:330`) |
-
-   O rastreador observa **UPDATE simples e FOR UPDATE**, elimina reacessos e verifica rank/pk. Não observa `executemany` nem travas de FK; verifica a presença de algum C anterior, sem comprovar que seja o dono de cada linha. `_travar` captura somente a chamada isolada e exclui pks nascidos durante ela. (`app/chamados/tests/test_e1_v9.py:47`, `:68`, `:86`, `:95`, `:109`; `app/chamados/tests/test_e1_fila.py:57`, `:65`)
-
-7. **INFORMATIVA — `colaborador_id=None`: possível em memória; não demonstrado em linha persistida compatível com o esquema.** O FK atual é NOT NULL; a migration preenche o acervo pela Disputa antes de impor essa restrição. Aplicação real dessa migration e estado de produção: [nao verificado]. (`app/chamados/models.py:2431`; `app/chamados/migrations/0051_decisao_pergunta.py:25`, `:101`)
-
-   `_nascer` monta a instância final sem colaborador explícito; o preenchimento acontece em `save → _chave_de_identidade`. Já o stub consultado antes do nascimento e o proxy do juiz recebem `colaborador_id` explicitamente. Não identifiquei nesse caminho uma leitura alterada que dependa do FK ainda ausente. (`app/chamados/models.py:3006`, `:3009`, `:3410`, `:3420`, `:3422`, `:2874`, `:2884`)
-
-   `lavrar_sem_turno_aberto` passa a usar `p.colaborador` como alternativa, mas seu chamador produtivo localizado fornece `colab` explicitamente. (`app/chamados/reconciliador.py:368`, `:1615`)
-
-O mapa dos campos mostra estes escritores, leitores e significados:
-
-| Campo | Quem escreve | Quem lê; significado |
-|---|---|---|
-| `P.colaborador_id` | `_chave_de_identidade` no nascimento; preenchimento do acervo na migration. (`app/chamados/models.py:3410`, `:3422`; `app/chamados/migrations/0051_decisao_pergunta.py:25`) | Dedup/fato livre, chave, costura, migração e juiz de destino usam o FK da pergunta. É identidade por pk; os leitores pela Disputa e os aliases ainda sobrevivem. (`app/chamados/models.py:2752`, `:2764`; `app/chamados/services/fio.py:1449`, `:862`, `:2085`; `app/chamados/juizes.py:2003`) |
-| `P.chamado_destino` | `_nascer` cria/reusa; `reapontar_resolvedora` recostura. `_costura_nao_mata_o_fio` atribui temporariamente e restaura. (`app/chamados/models.py:2975`, `:3006`; `app/chamados/services/fio.py:921`, `:779`, `:783`) | Materialização, crédito destino-ou-pai e guardas do fio. É FK opcional para o chamado resolvedor, sujeita ao juiz de dono/turno/estado. (`app/chamados/services/materializacao.py:339`; `app/chamados/services/raiox.py:54`, `:60`; `app/chamados/services/fio.py:906`, `:908`) |
-| `P.julgado_em` | `lavrar`; backfill atribui e persiste pelo gravador em lote. (`app/chamados/veredito_lavrado.py:243`, `:221`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`) | Stale, varredura e foto da lavra. É **instante**, comparado estritamente com marcos posteriores; a conversão para dia causa a divergência do achado 2. (`app/chamados/veredito_lavrado.py:193`, `:199`, `:203`, `:252`; `app/chamados/services/raiox.py:41`, `:44`) |
-| `P.janela_expira_em` | `lavrar` e backfill, mediante `expira_em`; restauração da foto apenas em memória. (`app/chamados/veredito_lavrado.py:244`, `:260`; `app/chamados/management/commands/backfill_veredito_lavrado.py:140`) | Stale, varredura e comparação do backfill. É **date**, primeiro dia inválido a partir do probe: validade termina exclusivamente nessa data; stale usa expiração inclusiva, `<= hoje`. Para fato já expirado, a função pode devolver o próprio dia do ato. (`app/chamados/veredito_lavrado.py:126`, `:130`, `:196`; `app/chamados/services/raiox.py:41`; `app/chamados/management/commands/backfill_veredito_lavrado.py:121`) |
-| `P.data_evento` | Atribuição central em `gravar_dia_do_fato`; nascimento, costura que data e rechaveamento chamam esse ponto. (`app/chamados/services/fio.py:800`, `:878`, `:1027`; `app/chamados/models.py:3008`) | Dedup, identidade, materialização, juiz do chamado e expiração. **Já tem dois significados discriminados:** dia do turno para fato; dia civil local do pedido para conversa. (`app/chamados/models.py:2781`, `:2794`, `:2799`; `app/chamados/services/materializacao.py:345`; `app/chamados/juizes.py:75`; `app/chamados/veredito_lavrado.py:244`) |
-| `D.fechada_em` | `fechar` carimba; reaberturas administrativa/sistêmica limpam. (`app/chamados/models.py:1930`, `:1934`, `:2147`, `:2171`) | Pré-trava, emissão e signals. É **instante de fechamento**; NULL significa aberta. (`app/chamados/models.py:2671`; `app/chamados/services/disputa_emissao.py:531`; `app/chamados/signals.py:28`, `:129`, `:153`) |
-| `D.motivos` | Emissão agrega/cria; agrupador complementa; modelo apara/remove e reabertura administrativa recompõe. (`app/chamados/services/disputa_emissao.py:541`, `:589`, `:1019`, `:1191`; `app/chamados/models.py:1964`, `:2061`, `:2153`) | Emissão, complemento e remoção sob trava. É lista de identificadores de motivos; sua inclusão pode preceder as guardas que decidem se nasce pergunta. (`app/chamados/services/disputa_emissao.py:536`, `:1017`, `:825`; `app/chamados/models.py:2029`) |
-| `Ch.status_local` | Nascimento e `_gravar_estado`, que salva e dispara signals. (`app/chamados/models.py:971`, `:1095`, `:228`, `:296`) | Catálogo/transições, pré-trava dos vivos, costura e signals. É estado categórico; vivo/encerrado/terminal vêm dos conjuntos do catálogo. (`app/chamados/models.py:803`, `:2681`; `app/chamados/services/fio.py:755`, `:770`; `app/chamados/signals.py:70`, `:96`) |
-
-O mapa das funções também exige distinguir chave gravada, dia julgado e instante:
-
-| Função | Contrato e consumidores |
-|---|---|
-| `PerguntaDisputa.trava_na_ordem` | Ignora None/repetidos; ordena cada tabela por pk; adquire C→D→Ch→P. Não ordena retrospectivamente as travas do chamador. É usada pelas portas e pelos dois helpers novos. (`app/chamados/models.py:2650`, `:2664`, `:2673`, `:2686`, `:2690`; `app/chamados/services/declaracao_texto.py:293`; `app/chamados/services/disputa_emissao.py:954`) |
-| `fio.universo_do_fato` | Parte de `do_fato`, filtra pelo dia real do turno e fecha o componente; serve a `_nascer`, `_candidata_reusavel` e à nova pré-trava da declaração. Não é simplesmente igualdade da data gravada. (`app/chamados/services/fio.py:1784`, `:1800`, `:1822`; `app/chamados/models.py:2905`; `app/chamados/services/declaracao_texto.py:244`, `:294`) |
-| `fio.chave_do_dia` | Retorna `(FK, motivo, data_evento gravada, instancia_marco)`. Seus sete usos internos alimentam identidade/cache/vizinhança; o dia real pode ser obtido depois pelo juiz. (`app/chamados/services/fio.py:1449`, `:1450`, `:1437`, `:1455`, `:1478`, `:1510`, `:1645`, `:1658`, `:1790`) |
-| `chamados.juizes.dia_do_fato` | Escada: célula; catálogo/contexto; dia local da batida; menor data das perguntas não conversacionais; finalmente `.date()` do instante cru do contexto. Portanto os degraus fracos não garantem a mesma força semântica de “dia do turno”. O repasse novo usa a escada completa. (`app/chamados/juizes.py:53`, `:75`, `:98`, `:114`, `:129`, `:133`, `:166`; `app/chamados/services/disputa_emissao.py:956`) |
-| `veredito_lavrado.expira_em` | Usa limites inclusivos da janela, como o juiz, e devolve o primeiro probe fora dela; consumidores são `lavrar` e backfill. Só distingue ausência de data, não conversa: conversas novas têm data civil não nula. (`app/chamados/veredito_lavrado.py:123`, `:130`, `:244`; `app/chamados/juizes.py:601`; `app/chamados/management/commands/backfill_veredito_lavrado.py:111`; `app/chamados/models.py:2799`) |
-
-Para a sequência transacional, **C = Colaborador, D = DisputaSupervisao, Ch = ChamadoColaborador, P = PerguntaDisputa**. Toda aquisição agrupada abaixo usa pk crescente pelo adquirente; UPDATE de linha já pré-travada é reentrante. (`app/chamados/models.py:2650`, `:2664`, `:2673`, `:2686`, `:2690`)
-
-| Porta/atomic | Sequência efetiva |
-|---|---|
-| `_trava_do_ato` / `declarar_hora_colab` | C; leitura do universo; D abertas + D do fato; Ch vivos/pais das abertas + declarado + destinos do fato; P do fato. Emissão readquire C/D/Ch e atualiza D ou insere Ch/D; depois costura/`abrir`, UPDATE P e resposta. A resposta pode ainda levantar arquivo de destino/pai pela porta de campo. (`app/chamados/services/declaracao_texto.py:293`, `:295`, `:342`, `:354`, `:364`, `:370`, `:413`; `app/chamados/services/disputa_emissao.py:530`, `:565`, `:1434`, `:1436`, `:1465`; `app/chamados/services/materializacao.py:711`, `:718`; `app/chamados/services/arquivo.py:209`) |
-| `aplicar_declaracao` | Mesmo prefixo no atomic da emissão/resposta. **A validação está fora desse bloco**; abre outro atomic com C→D→Ch→UPDATE P, seguido da materialização. Sem atomic externo, são transações distintas. (`app/chamados/services/declaracao_texto.py:648`, `:650`, `:687`, `:690`; `app/chamados/services/validacao.py:425`, `:431`, `:435`) |
-| `_trava_do_repasse` / agrupador | C; cálculo do teto; D explícitas+abertas; Ch órfãos/destinos/pais/vivos; P selecionadas. Depois complemento/`abrir`, UPDATE D, `analisar` e cascatas; corpo principal; entradas pendentes; possível `fechar`. O teto incompleto permite aquisições novas posteriores, conforme achado 1. (`app/chamados/services/disputa_emissao.py:954`, `:962`, `:988`, `:1017`, `:1020`, `:1021`, `:1206`, `:1220`) |
-| `PerguntaDisputa.abrir/_nascer` | `_sob_contrato` abre atomic; `_nascer` readquire C. Reuso com rechaveamento toma C→D→Ch→P antes de rechavear; reuso normal pode tomar Ch pela costura e fazer UPDATE P; nascimento faz INSERT P. (`app/chamados/models.py:2817`, `:2843`, `:2938`, `:2945`, `:2973`, `:2999`, `:3009`) |
-| `reapontar_resolvedora` | Sem colisão: C→Ch destino→UPDATE P. Com colisão: C→D→Ch→P do lote, costura, retratação e UPDATE P. O bloco usa `savepoint=False`; sob atomic externo conserva suas travas até o fim dele. (`app/chamados/services/fio.py:880`, `:888`, `:903`, `:908`, `:920`, `:923`) |
-| `rechavear_data_evento` / `fato_livre_para` | C→D→P; `fato_livre_para` readquire C; valida destino por leitura; UPDATE P. Não adquire Ch por essa validação. (`app/chamados/services/fio.py:1000`, `:1022`, `:1029`, `:1033`; `app/chamados/models.py:2764`, `:2765`) |
-| `retratar_para_canonica` | C→D→P de canônica+perdedoras; UPDATE P pela porta de identidade. Mesmo com perdedoras vazias ainda trava a canônica. (`app/chamados/services/fio.py:1326`, `:1328`, `:1331`; `app/chamados/models.py:3172`, `:3180`) |
-| `migrar_resolvedoras_vivas` | Calcula conjunto; C de todos→D do conjunto→Ch velho/novo→P do conjunto; relê; recusa crescimento; reaponta para novo e retrata. A chamada isolada corrige a dupla aquisição de C; não corrige prefixos externos. (`app/chamados/services/fio.py:2084`, `:2086`, `:2088`, `:2091`, `:2160`, `:2166`) |
-| Command `_migrar` / `_reverter` | `_migrar` herda atomic do `handle`; `_reverter` abre seu próprio. Ambos pré-travam o lote C→D→Ch→P; chamadas por linha e rechaveamento reencontram essas linhas. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:237`, `:374`, `:389`, `:400`, `:465`, `:470`, `:485`, `:492`) |
-| `DisputaSupervisao.remover_motivo` | C; lote C→D→Ch→P; UPDATE P; UPDATE D. O eventual `fechar` ocorre depois do atomic próprio, mas continua na mesma transação se existir atomic externo. (`app/chamados/models.py:2023`, `:2026`, `:2052`, `:2061`, `:2064`) |
-| `lavrar_sem_turno_aberto` | Não abre atomic global: carimba P e pode depois fechar D. Em autocommit, o atomic do save P termina antes do atomic de fechamento D; com atomic externo, depende do prefixo dele. (`app/chamados/reconciliador.py:405`, `:411`; `app/chamados/models.py:3412`, `:1903`, `:1908`) |
-| `lavrar` / backfill de lavra | Fazem UPDATE P, individual ou em lote, sem pré-trava C/D/Ch própria. `expira_em`, `_hoje`, `chave_do_dia` e `_conjunto_da_migracao` não adquirem essas travas. (`app/chamados/veredito_lavrado.py:95`, `:106`, `:221`, `:246`; `app/chamados/services/fio.py:1442`, `:2032`) |
-
-As cascatas relevantes são: Ch encerrado pode atualizar sua urgência e resolver perguntas; D fechada pode reconciliar o pai e materializar pendentes; mudança de estado de Ch pode chamar o cartório sincronamente. P agenda o fechamento do beco em `on_commit` e emite outbox sincronamente. Não se deve contar o callback pós-commit como se ainda mantivesse as travas da transação encerrada. (`app/chamados/signals.py:72`, `:115`, `:42`, `:163`, `:203`, `:225`, `:244`)
-
-Os chamadores das declarações nas views fazem leitura comum antes da chamada, sem aquisição explícita prévia nesses corpos. A menção a `core/views_ia.py:150` é um homônimo: chama outro `_aplicar_declaracao`, que despacha declaração de dias pelo intake. Transação adicional de middleware/configuração de produção: [nao verificado]. (`app/chamados/views.py:363`, `:480`, `:1046`, `:1090`; `app/core/views_ia.py:150`, `:754`, `:775`)
-
-Foram localizadas seis cha
-
-[truncado em 20000 de 21940 caracteres]
-
-## 08/11 22:24 · sessao 65246f94aba2 · - · - · origem=Ronald (tmux)
-
-Complementos:
-
-- `lavrar_sem_turno_aberto` não abre transação nem trava C/D/Ch/P: carimba P e depois pode fechar D (`app/chamados/reconciliador.py:405-413`). Em autocommit, o `save` de P encerra seu próprio `atomic` (`app/chamados/models.py:3412-3413`) antes do `atomic` de D (`:1903-1910`); portanto não há P→D mantidas nesse caso. Com transação externa, a ordem depende do prefixo do chamador. A emissão chama a porta dentro de `atomic` próprio após criar a pergunta (`app/chamados/services/disputa_emissao.py:459-465`); o reconciliador avulso não abre `atomic` em volta do laço (`app/chamados/reconciliador.py:1520-1525`, `:1615`).
-
-- `remover_motivo` começa com C, depois trava C→D→Ch→P do conjunto (`app/chamados/models.py:2023-2028`); atualiza P (`:2052-2060`) e D (`:2061-2063`) já travadas. `fechar` é chamado após o `atomic` próprio (`:2064-2070`): sem transação externa é outro ato; com externa, conserva as travas anteriores.
-
-- `_migrar` herda o `atomic` do comando (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:237-242`), trava o lote C→D→Ch→P (`:374-378`), e as travas por grupo/linha e o rechaveamento reencontram esse conjunto (`:381-400`). `_reverter` abre um `atomic`, trava o lote inteiro (`:465-473`) e depois retrava por linha/rechaveia (`:485-492`).
-
-- Encontrei seis chamadas diretas de produção ao agrupador: `app/chamados/services/acoes_disputa.py:221`, `app/chamados/services/pergunta_no_app.py:186`, `app/chamados/services/cobrar_dia.py:47`, `app/ponto/management/commands/processar_alertas_avancados.py:158`, `app/ponto/management/commands/processar_alertas_turno.py:384`, `app/ponto/management/commands/detectar_ausencias.py:801`. `app/chamados/models.py:4072` é reexportação; as outras duas chamadas são testes (`app/tenants/tests.py:74`, `:85`). O “sétimo chamador” alegado no texto do commit é [nao verificado].
-
-## 08/11 22:23 · sessao 1ebe59f1dec7 · - · - · origem=Ronald (tmux)
-
-**Sequência das declarações.** Sem atomic externo, `declarar_hora_colab` abre o atomic em `app/chamados/services/declaracao_texto.py:342`; `_trava_do_ato` toma C, calcula o universo e toma D abertas + D do fato, Ch vivos/pais das abertas + destino declarado + destinos do fato, P do fato (`:293-297`). Cada grupo é ordenado por PK pelo adquirente (`app/chamados/models.py:2650-2691`). `disputa_para_declaracao` chama `_abrir_ou_agregar_disputa`, cuja aquisição C/D/Ch é reentrante para as linhas existentes; agrega motivos por UPDATE D ou cria Ch/D (`app/chamados/services/disputa_emissao.py:627-630,530-592`). Depois vêm `_candidata_reusavel`, eventual reapontamento ou `abrir`, resposta e nota (`app/chamados/services/declaracao_texto.py:357-371,413-419`). A resposta readquire C e faz UPDATE P (`app/chamados/services/disputa_emissao.py:1431-1436`); sua cauda pode levantar arquivo no destino/pai, o que toma C/D/Ch pela porta de campo e faz UPDATE Ch (`app/chamados/services/disputa_emissao.py:1464-1465`; `app/chamados/services/materializacao.py:710-722`; `app/chamados/services/arquivo.py:209-210`). O fim do atomic próprio é `app/chamados/services/declaracao_texto.py:419`; callbacks `on_commit` de P ficam para depois do commit externo (`app/chamados/signals.py:214-225`).
-
-**`aplicar_declaracao` tem duas fases transacionais.** O primeiro atomic começa em `app/chamados/services/declaracao_texto.py:648`, toma o mesmo conjunto (`:650`), emite/reusa disputa e pergunta e responde (`:653-661,681-689`). `validar_pergunta` está **fora** desse bloco (`:690`). A validação abre outro atomic e toma C → D abertas + D da pergunta → Ch vivos/pais/destino/clones, depois UPDATE P pelo carimbo; a materialização individual ocorre dentro desse bloco (`app/chamados/services/validacao.py:425-466`). O lote da disputa é chamado **fora** desse atomic (`:469`) e percorre todas as perguntas prontas antes do fecho (`app/chamados/services/materializacao.py:1369-1379`). Se há atomic externo do chamador, os blocos continuam na mesma transação externa; sem ele, não se deve juntar essas aquisições numa única sequência contínua (`app/chamados/services/declaracao_texto.py:648-690`; `app/chamados/services/validacao.py:425-469`).
-
-**Chamadores confirmados.** As views leem o Chamado com `get_object_or_404` e chamam diretamente as portas; não há aquisição prévia explícita nesses corpos (`app/chamados/views.py:359-363,477-481,1041-1046,1089-1091`). A referência `core/views_ia.py:150` é homônimo: despacha `declarar_folga`/`declarar_falta` para `_aplicar_declaracao(request, proposta)`, que chama `core.intake.escritor_de(acao)` com dias/tipo, não a porta de horário tocada (`app/core/views_ia.py:149-150,754-776`). Transação adicional introduzida por configuração/middleware em produção [nao verificado].
-
-**Achados prioritários dos testes.** [nao verificado]
-
-1. **Média — A3 acusa motivo mais amplo do que demonstra.** Com o mesmo `DIA` na fixture e no pedido, `_nascer` pula a aquisição de D existente condicionada à mudança de dia (`app/chamados/tests/test_e1_fila.py:175,183-185`; `app/chamados/tests/test_e1_v9.py:145-147`; `app/chamados/models.py:2938-2948`). O mutante morde o Ch destino de PK menor depois do Ch vivo maior, e não necessariamente D fechada depois de Ch (`app/chamados/tests/test_e1_fila.py:173-178,195-199`; `app/chamados/services/fio.py:762-769`).
-
-2. **Média — F1 termina no complemento inicial.** A fixture fornece contexto sem `marcos_faltantes` e P viva costurada (`app/chamados/tests/test_e1_fila.py:229-246`); `cobra_marcos_da_ata` é falso (`app/chamados/services/disputa_emissao.py:732-735`; `app/ponto/services/lastro.py:74-79`). Após complementar, o filtro elimina o único Ch por já ter P não materializada e retorna `None` (`app/chamados/services/disputa_emissao.py:1004-1030`). Não cobre a cauda da porta (`:1032-1223`); `_r` é ignorado (`app/chamados/tests/test_e1_fila.py:254,264`).
-
-3. **Alta — O teto do repasse é incompleto.** Pré-trava somente dias dos órfãos ±1/nulos e perguntas já costuradas (`app/chamados/services/disputa_emissao.py:955-963`), mas a cauda processa dias arbitrários de `entradas_pendentes` (`:1206,273-296`). Pode reusar e atualizar P canônica antiga de PK menor fora do teto, depois das P já pré-travadas (`:443-451`; `app/chamados/models.py:2905-2919,2958-2999`). Ocorrência em prod [nao verificado]; F1 não alcança essa cauda (`app/chamados/services/disputa_emissao.py:1029-1030`).
-
-4. **Média — A1 passa com derivador equivalente sobrevivente.** O detector busca sintaxe `.disputa.colaborador` como alternativa de `or`, sem aliases (`app/chamados/tests/test_e1_fila.py:76-93`); `fecho_cruza_dias` ainda lê ambas as colunas e usa `c or dc` (`app/chamados/services/fio.py:1844-1847`).
-
-5. **Baixa — F5 não prova uma única leitura de relógio.** O teste fixa `now` em constante e compara somente valores finais; duas leituras independentes passariam (`app/chamados/tests/test_e1_fila.py:322-328`). O código atual efetivamente repassa `_agora` (`app/chamados/veredito_lavrado.py:242-244`).
-
-6. **Média — Cobertura de ordem não equivale à transação inteira.** `_travar` captura apenas a chamada isolada e filtra linhas novas (`app/chamados/tests/test_e1_fila.py:57-69`); A2/A3 não exercitam prefixos de chamadores, a porta irmã, nem universo crescendo entre leitura e trava (`:147-160,181-199`). O rastreador inclui UPDATE simples e FOR UPDATE, mas ignora `executemany` e travas de FK; identifica presença de algum C, sem conferir o dono da linha (`app/chamados/tests/test_e1_v9.py:47-53,68-90,95-116`).
-
-Execução dos testes e resultado GREEN [nao verificado]. [nao verificado]
-
-_2928 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2932 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
