@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 17:13** · publicado em **09/11/2026 17:15** (UTC-3)
+> Ultima resposta processada: **09/11/2026 17:35** · publicado em **09/11/2026 17:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 17:35 · sessao 98f00f1fa6ec · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
+
+**E4a não está pronta:** o RED final mantém 9 falhas, incluindo identidade, fatos ausentes e registro C20. [Resultado](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_TESTES.txt:784).
+
+- [Entrega: diff, escritores/leitores, lacunas e pendências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_ENTREGA.txt:1).
+- [Hunks textuais para a sessão](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_HUNKS_SESSAO.txt:1).
+- [Provas: 24 testes verdes e comandos dos 18 mutantes que falharam e foram restaurados](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_TESTES.txt:1). [nao verificado]
+
+Sem commit, pela proibição de escrever em `.git*`. [Registro](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_ENTREGA.txt:292). [nao verificado]
 
 ## 09/11 17:13 · sessao af1c0c27e636 · - · - · origem=Ronald (tmux)
 
@@ -950,31 +960,4 @@ A linha de symlink refere-se ao **tocado/inventariado**; não demonstra proibiç
 
 - **FILA — guarda SQL:** aceita `SELECT … FOR UPDATE`; nenhum caminho concreto com essa trava foi demonstrado. Não constitui escritor P3 comprovado, mas impede chamar a guarda de bloqueio universal de travas (`app/chamados/management/commands/diff_e3_sombra.py:35`).
 
-## 09/11 15:44 · sessao 76b09c74f4a9 · - · - · origem=Ronald (tmux)
-
-- **NAO PROCEDE — segundo juiz/escritor no recorte auditado:** tarefa lê a decisão ordenada por `ato_em,pk`, passivo pela autoridade existente, lavra por `esta_stale`, tranca por `dias_trancados`, fila/verbos por `alimentar_fila`; publica apenas portas das ações já julgadas. `app/chamados/services/tarefa_do_dia.py:337`, `:346`, `:350`, `:367`, `:407`, `:425`. O helper de dia sem trabalho delega ao juiz existente. `app/ponto/supra_juiz.py:65`.
-- **NAO PROCEDE — pouso antecipado da fachada C17:** os únicos consumidores produtivos encontrados de tarefa/carga estão no instrumento da sombra. `app/chamados/management/commands/diff_e3_sombra.py:115`, `:125`. A tarefa usa `alimentar_fila`, sem chamar C17. `app/chamados/services/tarefa_do_dia.py:407`.
-- **FILA — identidade de segunda pausa:** a saída diferencia `int_ida:2`; a pergunta persistente ainda exige a posição derivada do motivo, recusando outro valor. A tarefa declara desconhecimento quando existe pergunta da posição; sem pergunta, solicita emissão sem identidade persistente específica para a repetição. Isso impede afirmar resolução completa de pausas repetidas; obrigação nesta etapa depende da lei literal ausente. `app/chamados/services/tarefa_do_dia.py:67`, `:268`; `app/chamados/models.py:3425`. Cura futura: identidade persistente por ocorrência, emissão e leitor migrados juntos. [nao verificado]
-- **NAO PROCEDE — ambiguidade temporal introduzida no julgamento:** turno selecionado por `data_evento` com `conversa=False`, intervalo inclusivo; decisão e efeito incluem igualdade com `agora`; teto vence na igualdade; lavra futura é rejeitada. `app/chamados/services/tarefa_do_dia.py:324`, `:339`, `:358`; `app/ponto/services/cartorio.py:858`; `app/chamados/veredito_lavrado.py:224`. A fila exclui silêncio estritamente futuro. `app/chamados/services/painel.py:188`.
-
-Mapa de escrita → leitura:
-
-| Dado | Escritor/autoridade | Leitor novo |
-|---|---|---|
-| Decisão | `app/chamados/models.py:3932` (`bulk_create`) | tarefa `:337` |
-| Passivo | `app/chamados/models.py:3903` | tarefa `:346` |
-| Dia do fato | `app/chamados/services/fio.py:800`; rechaveamento salva `:1034` | tarefa `:324`, `:233` |
-| Identidade/posição | `app/chamados/models.py:3414`; posição comum `app/chamados/services/declaracao_texto.py:79` | tarefa `:65`, `:108`; declaração `:134` |
-| Ata/lâmpada | `app/ponto/services/cartorio.py:638`, `:1811` → `app/ponto/portas/celula.py:969` | `app/escala/services/leitor_celula.py:130` → tarefa `:84` |
-| Lavra | `app/chamados/veredito_lavrado.py:250`, `:270` | tarefa `:350`; validade `app/chamados/veredito_lavrado.py:224` |
-| Batida apurável | universo `app/ponto/turnos.py:2875`; criação datada `app/ponto/models.py:79` | tarefa `:358` |
-| Status do chamado | `app/chamados/models.py:228`, `:296` | fila `app/chamados/services/painel.py:188` |
-| Silêncio | `app/chamados/services/arquivo.py:166`, `:202` | painel `:190`; verbos `app/chamados/services/verbos.py:51` |
-| Âncora | leitura comum `app/chamados/services/fio.py:116` | tarefa `:125`, `:362` |
-| Rota/fila/verbos/fio | produção exclusivamente em tarefa `:425` | projeção da sombra `app/chamados/management/commands/diff_e3_sombra.py:43`, `:47` |
-
-**FILA — merge futuro:** pontos de acoplamento concretos são as três consultas da API (`app/api/views.py:325`, `:1023`, `:2561`), a identidade do modelo (`app/chamados/models.py:3414`) e a posição compartilhada (`app/chamados/services/declaracao_texto.py:79`). Ressuscitar método antigo, mudar identidade ou substituir a regra de posição pode alterar o comportamento; conflito efetivo com main não é demonstrável sem o outro lado. [nao verificado]
-
-Anexos literais e triagem não foram localizados; essa ausência limita a classificação da fila de pausas e a conferência literal dos pré-requisitos. [nao verificado]
-
-_3208 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3209 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
