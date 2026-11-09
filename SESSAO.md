@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 11:23:43.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (195.7 MB). Acoes na janela: **1166**.
+**Medido em 09/11/2026 11:28:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (195.7 MB). Acoes na janela: **1149**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1159,20 +1159,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:28:42 | Bash | See previous LEI-AKITA line for the deploy-portao obra | `cd /home/ronald/wt-deployportao-224857 && git log -1 --format=%b 6c8d2cba \| grep LEI-AKITA` |
 | 23:28:38 | Bash | See why import_tardio is red in the copy | `cd /home/ronald/wt-deployportao-224857 && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4` |
 | 23:28:35 | Bash | Check copy version of import_tardio seal and what 471dbf26 touched | `cd /home/ronald/wt-deployportao-224857 && sed -n 36,40p bin/tests/test_import_tardio_contra_o_ar.sh; head -20 bin/tests/test_import_tardio_contra_o_ar.sh \| grep -n pipefail; git show --stat 471dbf26 \| tail -8` |
-| 23:28:29 | Bash | Inspect import_tardio seal's self-test mechanics | `cd /home/ronald/saas-hasner && grep -n "e860aef\\|no_ar\\|MORDE\\|merge-base\\|git " bin/tests/test_import_tardio_contra_o_ar.sh \| head -30` |
-| 23:28:22 | Bash | Read the inventory seal script | `cd /home/ronald/wt-deployportao-224857 && sed -n 1,60p bin/tests/test_inventario_pessoal_no_commit.sh` |
-| 23:28:19 | Bash | Show full output of inventory seal in copy | `cd /home/ronald/wt-deployportao-224857 && bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| grep -v "^ *$" \| head -20` |
-| 23:28:16 | Bash | Check whether main HEAD already has the renamed key | `cd /home/ronald/saas-hasner && git show HEAD:bin/sombra_regras_pessoais.py \| grep -c decisaopergunta; git status --porcelain bin/sombra_regras_pessoais.py; cd /home/ronald/wt-deployportao-224857 && git log --oneline -3 -- bin/sombra_regras_pessoais.py; bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| tail -2` |
-| 23:28:12 | Bash | Census of old table name under bin/ | `cd /home/ronald/wt-deployportao-224857 && git grep -n "respostaanterior" -- bin/ \| head; git grep -n "decisaopergunta" -- bin/ \| head -3` |
-| 23:28:06 | Bash | Find how the old table was declared in the PII inventory | `cd /home/ronald/saas-hasner && grep -n "respostaanterior\\|decisaopergunta" bin/sombra_regras_pessoais.py \| head; grep -n "ISENTOS" bin/sombra_regras_pessoais.py \| head -3` |
-| 23:27:10 | Bash | Show why the two pre-existing seals are red | `cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -8; echo ====; bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| tail -8` |
-| 23:26:17 | Bash | Compare two suspicious seals between copy and main tree | `for d in /home/ronald/wt-deployportao-224857 /home/ronald/saas-hasner; do cd $d; for t in bin/tests/test_import_tardio_contra_o_ar.sh bin/tests/test_inventario_pessoal_no_commit.sh; do bash $t >/dev/null 2>&1; echo "$d $t rc=$?"; done; done` |
-| 23:25:17 | Bash | Run all host seals that reference deploy.sh in the copy | `cd /home/ronald/wt-deployportao-224857 && for t in $(grep -l "deploy.sh" bin/tests/test_*.sh); do r=$(bash "$t" 2>&1 \| tail -1); echo "$t :: $r"; done 2>&1 \| tail -30` |
-| 23:25:11 | Bash | Cure deploy.sh findings, extend seal, run RED vs volta-2 and GREEN | `cd /home/ronald/wt-deployportao-224857 && python3 - <<'EOF' f='bin/deploy.sh' s=open(f).read() def rep(old,new): global s assert s.count(old)==1,(old[:60],s.count(old)) s=s.replace(old,new) rep("""SO_CONFERIR=0 PULAR_MIGRATE=0 ""","""SO_CONFERIR=0 PULAR_MIGRATE=0 # APLICAR_MIGRATE tem UM escritor (secao 1, core pendente e modo elegivel) e UM leitor (secao 1c); nasce 0 aqui para # o valor herdado d ...` |
-| 23:24:39 | Bash | Read restart parsing and cron guard function | `cd /home/ronald/wt-deployportao-224857 && sed -n 70,120p bin/deploy.sh; sed -n 1,15p bin/cron_run.sh` |
-| 23:24:29 | Bash | Read deploy.sh parser, 1c, section 2 and the seal | `cd /home/ronald/wt-deployportao-224857 && sed -n 52,70p bin/deploy.sh; echo ----; sed -n 286,322p bin/deploy.sh; echo ----; cat bin/tests/test_deploy_portoes_antes_do_migrate.sh` |
-| 23:24:17 | Bash | Read Codex volta 2 full findings | `cd /home/ronald/saas-hasner && sed -n 1,69p logs/fio_e0_v4/codex_deployportao2.r` |
-| 23:24:15 | Bash | Skim Codex volta 2 response structure | `cd /home/ronald/saas-hasner && grep -nE "^#\|ACHADO\|BLOQUE\|procede\|^- \|^[0-9]+\." logs/fio_e0_v4/codex_deployportao2.r \| head -60` |
-| 23:24:12 | Bash | Commit volta 3 in copy; check Codex deploy-portao status | `cd /home/ronald/wt-e1fila-211900 && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/msg_e1fila3.txt <<'EOF' FIO-E0-V4-E1-FILA volta 3 (opus final 6 REPROVOU, 2 bloqueantes procedentes): RED da porta irma aplicar_declaracao e recusa FALANTE da A2 em reabrir 1. aplicar_declaracao (declaracao_texto.py:650) recebeu a trava do ato sem caso proprio: ap ...` |
-| 23:23:58 | Bash | See previous commit LEI-AKITA lines in copy | `cd /home/ronald/wt-e1fila-211900 && git log -2 --format='%h %s%n%b' \| grep -E "^[0-9a-f]{8} \|LEI-AKITA"` |
-| 23:23:55 | Bash | Census of callers of the porta in the copy | `cd /home/ronald/wt-e1fila-211900/app && git grep -n "migrar_resolvedoras_vivas\\|UniversoMudouSobATrava" -- '*.py' \| grep -v "/tests/"; git status --porcelain` |
