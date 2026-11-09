@@ -1,7 +1,67 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:34** · publicado em **09/11/2026 08:36** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:41** · publicado em **09/11/2026 08:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:41 · sessao 880e3d56c067 · FIO-E0-V4-E3 · construtor · origem=Code
+
+| Hunk | Alteração / escrita e leitura |
+|---|---|
+| [core/juizes.py:759](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/core/juizes.py:759) | Baixa pontual do dashboard; registro lido pelo selo em `core/tests/test_contract_juiz_tela.py:34`. |
+| [chamados/models.py:1795](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/models.py:1795) | Método removido, lápide no sítio. Guarda contra retorno em `chamados/tests/test_e3_pendentes_app.py:285`. |
+| [tarefa_do_dia.py:363](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/services/tarefa_do_dia.py:363) | Carga escreve `_verbos`, `_fila`, `_fila_cel`; tarefa lê em `:411` e `:422`. Fontes chamadas: `particionar_verbos(qs_vivos())['mapa']` e `qs_na_fila()`, também lidas por C17 em `chamados/juizes.py:1447` e `:1450`. |
+| [tarefa_do_dia.py:418](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/services/tarefa_do_dia.py:418) | Escreve campos aditivos `rota/fila/verbos/fio`; leitores novos: DIFF `:120` e testes `test_e3_tarefa_portas.py:96`. | [nao verificado]
+| [verbos.py:30](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/services/verbos.py:30) | Recebe `agora` da tarefa em `tarefa_do_dia.py:367`; conserva valor padrão dos leitores existentes, incluindo `painel.py:230` e `juizes.py:1447`. |
+| [test_e3_pendentes_app.py:99](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_e3_pendentes_app.py:99) | M1–M5 com fixtures ORM, relógio congelado e views completas; M6/M7 mantidos em `:306` e `:321`. |
+| [test_esmeril2_left_join.py:19](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_esmeril2_left_join.py:19) | Migra para `consulta_do_app`: preserva ausência de fantasma e exige duas perguntas → duas pendências. |
+| [test_fio_le_o_juiz.py:263](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_fio_le_o_juiz.py:263) | Migra leitura para `consulta_do_app`; preserva desaparecimento da pergunta absolvida. |
+| [test_dashboard_badge.py:37](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/core/tests/test_dashboard_badge.py:37) | Migra comparação da tela para `consulta_do_app`. Seus leitores de produção continuam em `api/views.py:325`, `api/views_core.py:314`, `core/views.py:253` e `api/views.py:2562`. |
+| `test_badge_disputa_pendente.py` — excluído | Sustentava unidade por disputa; substituição por pergunta em `test_e3_pendentes_app.py:176`. |
+| [test_e3_tarefa_portas.py:1](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_e3_tarefa_portas.py:1) | Quatro respostas escritas antes do aditivo; fixtures escrevem fatos, testes leem a tarefa. | [nao verificado]
+| [diff_tarefa_portas.py:23](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/management/commands/diff_tarefa_portas.py:23) | Barreira SQL; comparação lê `_porta` e tarefa em `:118`. Escreve somente saída agregada em `:132`. |
+| [test_e3_diff_portas.py:49](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/test_e3_diff_portas.py:49) | Selo injeta escrita indireta e exige aborto antes do driver; identidade antes da raspagem em `:72`. |
+| [e3_mutantes.py:15](/home/ronald/wt-codex-fio-e0-v4-e3-073210/app/chamados/tests/e3_mutantes.py:15) | Catálogo de mutações; `aplicar_mutante`, em `:53`, remenda funções somente em memória e restaura após cada teste. | [nao verificado]
+
+**DECISAO-ABERTA:** a interpretação “sem ações ⇒ sem porta” está explícita em `test_e3_tarefa_portas.py:10`. Medição na sombra por L-099/SONDA-SEM-GRANT e efeito na folha: **[nao verificado]**. C17 conserva os três chamadores em `fora_da_folha.py:67`, `vigia_fio.py:635` e `cadastro_realidade.py:488`.
+
+Comandos preparados, **não executados**; RED, mortes dos mutantes e resultados da suíte: **[nao verificado]**. [nao verificado]
+
+```bash
+t() {
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    --settings=config.settings.ci "$@"
+}
+SELOS="chamados.tests.test_e3_pendentes_app chamados.tests.test_e3_tarefa_portas chamados.tests.test_e3_diff_portas"
+
+t $SELOS core.tests.test_contract_juiz_tela \
+  chamados.tests.test_esmeril2_left_join \
+  chamados.tests.test_fio_le_o_juiz core.tests.test_dashboard_badge
+
+# RED: retirar o aditivo.
+E3_MUTANTE=sem_aditivo t chamados.tests.test_e3_tarefa_portas
+
+# Um comando por mutante catalogado; esperado RED.
+for m in $(PYTHONDONTWRITEBYTECODE=1 python3 -c \
+  'from chamados.tests.e3_mutantes import MUTANTES; print(*MUTANTES, "legado_publico", "registro_dashboard", "quarto_c17_alias")')
+do
+  E3_MUTANTE="$m" t $SELOS
+done
+
+# DIFF: NÃO RODADO; universo a fornecer pela sombra.
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py diff_tarefa_portas \
+  --colaborador ID --inicio AAAA-MM-DD --fim AAAA-MM-DD
+```
+
+Saída observada da compilação e auditoria estática dos arquivos acima:
+
+```text
+py_compile: OK nos 12 .py presentes; saída interceptada em memória.
+Arquivos de bytecode escritos: 0.
+Mutantes: 18 alvos textuais únicos, sintaxe compilável; sem execução.
+C17: 3 chamadores diretos por AST.
+Legado removido: 0 chamadas de produção por AST.
+git diff --check: sem saída.
+```
 
 ## 09/11 08:34 · sessao b4de1741aa55 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
 
@@ -1216,17 +1276,4 @@ with ExitStack() as stack:
 
 [truncado em 20000 de 30506 caracteres]
 
-## 09/11 07:48 · sessao 652ccdb4046d · - · - · origem=Ronald (tmux)
-
-B/C concluídos em leitura; scripts e referências enviados ao agente principal.
-
-- Ausência: cobertura `app/ponto/turnos.py:2511`, `:2735`; grade `app/escala/utils.py:1188`; Resolver `app/ponto/services/veredito_celula.py:237`; motor `app/ponto/services/fechamento.py:683`, `:751`; desconto `app/ponto/motor_calculo_v2.py:1085`; abono diário `app/ponto/services/dia_pago.py:364`; lavra `app/ponto/services/fechamento.py:1191`; exportação `app/folha/export.py:717`.
-- Caso col39/15-10 aparece como precedente da regra que abona apenas o previsto não coberto pelas batidas, sem demonstrar o estado atual: `app/ponto/services/dia_pago.py:375`.
-- Pareamento: entrada pela porta `app/ponto/turnos.py:2846`, alimentação canônica `:1918`, chamada ao pareador `:1992`.
-- Espúrias: detecção `app/ponto/management/commands/detectar_par_relampago.py:63`, guardas `:158`, simulação `:229`, pares embutidos `:275`.
-- Geo: juiz puro `app/ponto/services/geofence.py:95`; escritor com alertas/push não deve ser chamado na sonda, `:232`.
-- Dono: usar `InsumosDoDono.dono`, que chama `dono_da_divergencia`, sem reproduzir seus critérios: `app/ponto/management/commands/e6_oraculo.py:182`, `:53`.
-- Donos concretos e ponto atual da perda de cobertura dos alvos: [não verificado].
-- Padrões candidatos quando comprovada ESTRUTURA: Single Source of Truth e CQRS com projeções reconstruíveis, `app/docs/GLOSSARIO.md:11`, `:22`.
-
-_3073 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3074 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
