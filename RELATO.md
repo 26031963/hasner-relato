@@ -1,6 +1,10 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lancar_suite_v4.sh | pid=857081
+ESPERANDO: lancar_construtor_v4.sh | pid=3570552
+E3 13:0x: suite inteira 77da997b4 (E3 3b + main 3803e6623) OK (skipped=42, expected failures=41), Ran 14755, rc 0 (logs/fio_e3/v4_suite.log): o merge do main nao quebrou nada; a arvore do pouso sera a da volta 4.
+E3 13:0x: preverif v3b rc 0 -> triagem P1-P5 procedentes (aviso_pendencia e api_chamados_v2 com lista propria de pendentes; get_or_create indireto no diff_e3_sombra; catraca M7 sem apelido por atribuicao/getattr; badge 3+5N SELECT), F1-F4 fila (logs/fio_e3/triagem_preverif_v3b.txt) -> volta 4 construtor Codex em wt-codex-fio-e0-v4-e3-130214 (base 77da997b4). Suite v4 da 77da997b4 segue so como prova do merge.
+SONDA-SEM-GRANT 13:0x: preverif v6 rc 0: P1/P2/P3/P5 fechados, sed :92 curado; triagem (logs/auditoria_0911/triagem_preverif_v6.txt): V7a leitor nunca testado logado COMO leitor (lo_create/temp/insert) + V7b ordem stderr -> volta 7 construtor opus; senha em argv fora do diff (db_teste.sh:55, esteira_vigia.py:752, core/hooks/pre-push.sh:82, CONFIRMADO) -> obra SEGREDO-ARGV-RESIDUO; carimbo da sombra mentindo por caminhos sem invalidar -> obra SOMBRA-CARIMBO-MENTE (BACKLOG).
+SELOS-CANON-I3 13:0x: volta 2 opus 7ca9bd4d2 (T1-T8; RED 45 falhas contra 6053c80f5, GREEN rc 0, 38 mutantes por FALHA especifica; logs/SELOS-CANON-I3/entrega_v2.txt) -> preverif Codex v2 -> i3_preverif_v2.r.
 E3 12:1x: mutantes v3b 30/30 mortos; main 3803e6623 mergeado na copia (77da997b4, 1 arquivo em comum: catraca test_medida_turno_do_par, auto-merge) -> suite inteira da arvore do pouso logs/fio_e3/v4_suite.log; preverif Codex v3b (slot 2) -> logs/fio_e3/preverif_v3b.r.
 BUG-PAR 12:1x: mutantes v4 44/44 mortos (logs/bug_par_dois_atos/mutantes_v4.log). Arquivos em comum com a E3 (api/views.py, chamados/models.py, declaracao_texto.py): suite inteira so depois do pouso E2+E3, com merge do main na copia; preverif v4 na proxima vaga Codex.
 SELOS-CANON-I3 12:1x: preverif v1 REPROVADO (i3_preverif_v1.r) -> triagem T1-T8 procedentes, D1-D3 descarte (logs/SELOS-CANON-I3/triagem_preverif_v1.txt) -> volta 2 construtor opus (bin/ protegido) na copia wt-selos-canon-i3-113049.
