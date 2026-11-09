@@ -1,7 +1,36 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:10** · publicado em **09/11/2026 10:13** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:25** · publicado em **09/11/2026 10:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:25 · sessao 936ff5f03d79 · - · - · origem=Ronald (tmux)
+
+T4 — **PROCEDENTE residual; fecha apenas o caminho sem erro de arquivo.** A invalidação grava `SOMBRA_DIA=` e `SOMBRA_STATUS=REFAZENDO` antes do `dropdb`, sob a trava (`bin/sombra.sh:104`, `bin/sombra.sh:269`, `bin/sombra.sh:270`, `bin/sombra.sh:458`). Porém o script usa `set -uo pipefail`, sem `-e`, e não testa o retorno da invalidação; falha no `mv` do carimbo permite continuar para o `dropdb` com carimbo antigo verde (`bin/sombra.sh:45`, `bin/sombra.sh:97`, `bin/sombra.sh:269`). Conserto mínimo: `invalidar_carimbo || falhou ...`; fazer `carimbar` propagar falhas intermediárias e criar temporário na pasta do carimbo (`bin/sombra.sh:89`).
+
+A invalidação normal é recusada por incremental, bloco, conferir e cobertura; placar e deploy delegam sua decisão a conferir (`bin/sombra.sh:204`, `bin/sombra.sh:350`, `bin/sombra.sh:453`, `app/core/sombra_cobertura.py:35`, `app/core/sombra_cobertura.py:37`, `bin/placar_code.sh:155`, `bin/deploy.sh:162`). Entretanto **PROCEDENTE semântica residual no placar**: ele continua apresentando o antigo `SOMBRA_INCOMPLETA=0` como medida do “carimbo de hoje”, mesmo após dia vazio/REFAZENDO (`bin/placar_code.sh:160`, `bin/placar_code.sh:161`). Conserto mínimo: publicar `?` quando o carimbo não for válido para essa medida (`bin/placar_code.sh:160`).
+
+T5 — **NÃO, no caminho da cópia a corrida relatada está fechada.** O `flock` vem antes da leitura/geração da senha e permanece aberto até o `mv` (`bin/sonda_provisionar.sh:68`, `bin/sonda_provisionar.sh:69`, `bin/sonda_provisionar.sh:75`, `bin/sonda_provisionar.sh:79`, `bin/sonda_provisionar.sh:168`). A chamada do refazer segue sombra → porta (`bin/sombra.sh:458`, `bin/sombra.sh:321`, `bin/sombra.sh:246`). Nenhuma aquisição da trava da sombra consta no provisionador; inversão/autoe­spera nesse caminho: **NÃO** (`bin/sonda_provisionar.sh:41`, `bin/sonda_provisionar.sh:68`, `bin/sonda_provisionar.sh:153`). A trava da sombra evita reacquisição nos filhos pela marca herdada (`bin/sombra_trava.sh:22`, `bin/sombra_trava.sh:38`).
+
+Relógio — **PROCEDENTE preexistente D3.** `HOJE` é capturado antes de aguardar a trava; a data da base é consultada novamente ao publicar, permitindo datas discordantes se a espera/execução cruzar meia-noite (`bin/sombra.sh:83`, `bin/sombra.sh:458`, `bin/sombra.sh:322`). A cobertura também consulta relógio quando o chamador omite `hoje` (`app/core/sombra_cobertura.py:34`, `bin/sombra.sh:236`). Conserto mínimo: capturar o dia depois da trava e passar a data explicitamente; cruzamento real em produção [nao verificado].
+
+Inventário do carimbo:
+
+| Campos | Quem escreve | Quem lê |
+|---|---|---|
+| `SOMBRA_DIA` | invalidação/completo (`bin/sombra.sh:104`, `bin/sombra.sh:322`) | incremental/bloco/conferir/cobertura (`bin/sombra.sh:204`, `bin/sombra.sh:350`, `bin/sombra.sh:433`, `app/core/sombra_cobertura.py:35`) |
+| `SOMBRA_STATUS` | invalidação/incremental/completo/bloco (`bin/sombra.sh:104`, `bin/sombra.sh:221`, `bin/sombra.sh:325`, `bin/sombra.sh:426`) | incremental/conferir/cobertura (`bin/sombra.sh:218`, `bin/sombra.sh:433`, `app/core/sombra_cobertura.py:37`) |
+| `SOMBRA_TIPO` | incremental/completo (`bin/sombra.sh:219`, `bin/sombra.sh:322`) | incremental/conferir/cobertura (`bin/sombra.sh:205`, `bin/sombra.sh:435`, `app/core/sombra_cobertura.py:39`) |
+| `SOMBRA_BASE_DIA` | completo (`bin/sombra.sh:322`) | incremental/conferir/cobertura (`bin/sombra.sh:205`, `bin/sombra.sh:437`, `app/core/sombra_cobertura.py:45`) |
+| `SOMBRA_JANELA_INI/FIM` | incremental/completo (`bin/sombra.sh:219`, `bin/sombra.sh:323`) | conferir/cobertura (`bin/sombra.sh:437`, `app/core/sombra_cobertura.py:42`) |
+| `SOMBRA_DIVERGE` | completo (`bin/sombra.sh:323`) | bloco/conferir (`bin/sombra.sh:421`, `bin/sombra.sh:438`) |
+| `SOMBRA_INCOMPLETA` | completo (`bin/sombra.sh:323`) | placar (`bin/placar_code.sh:160`) |
+| `SOMBRA_INCREMENTAL_EM` | incremental (`bin/sombra.sh:220`) | conferir (`bin/sombra.sh:437`) |
+| `SOMBRA_ERROS` | bloco (`bin/sombra.sh:425`) | conferir (`bin/sombra.sh:438`) |
+| `DUMP`, `REFEITA`, `BLOCO` | completo/bloco (`bin/sombra.sh:322`, `bin/sombra.sh:324`, `bin/sombra.sh:424`) | leitor operacional [nao verificado] |
+| `INCREMENTAL_S`, `BLOCO_NA_JANELA` | incremental (`bin/sombra.sh:220`, `bin/sombra.sh:221`) | leitor operacional [nao verificado] |
+| `COMANDOS`, `ALARMES`, `FORA_DO_ENSAIO` | bloco (`bin/sombra.sh:424`, `bin/sombra.sh:425`) | leitor operacional [nao verificado] |
+
+A gravação material dos campos passa por `carimbar`, que preserva os campos não substituídos (`bin/sombra.sh:89`, `bin/sombra.sh:91`, `bin/sombra.sh:94`, `bin/sombra.sh:97`). O selo de host testa a invalidação bem-sucedida contra carimbo verde, mas não cobre falha da escrita do carimbo (`bin/tests/test_sonda_sem_grant.sh:361`, `bin/tests/test_sonda_sem_grant.sh:362`, `bin/tests/test_sonda_sem_grant.sh:364`).
 
 ## 09/11 10:10 · sessao 86b79a2759f4 · FIO-E0-V4-E4-ESCRITORES · censo · origem=Code
 
@@ -520,20 +549,4 @@ Confirmei apenas em memória, com `python3 -B`, o resultado do predicado vivo e 
 
 Limite: a asserção direta aceita qualquer `ValueError`, sem conferir sua mensagem (`bin/tests/test_censo_antes_da_vaga.sh:606`). Na implementação lida, para essas entradas não vazias, o `ValueError` explícito é o de pertença ambígua (`bin/disjuntor.py:1681`, `:1691`); não encontrei vacuidade concreta nesse trecho.
 
-## 09/11 08:47 · sessao 1b91c105ad23 · - · - · origem=Ronald (tmux)
-
-Rastreio das três funções, incluindo arquivos fora do diff:
-
-- **`_pertence_fila1`**: definição única em `bin/disjuntor.py:1669`. Leitores produtivos encontrados: `_censo_nega`, em `bin/disjuntor.py:1704`, e `main_censo`, em `bin/disjuntor.py:2267`. Ambos interpretam `False` como FORA/passagem e exceção como NAO SEI/negativa; `True` leva ao censo (`bin/disjuntor.py:1704-1731`, `bin/disjuntor.py:2267-2281`).
-- **`_token_da_celula`**: definição única em `bin/disjuntor.py:1651`; leitores produtivos encontrados somente nas listas `exatas` e `nomeiam` de `_pertence_fila1`, em `bin/disjuntor.py:1685-1686`. Retorna string ou `None`; a nomeação não aceita id vazio, portanto o `None` não casa pelo espelho (`bin/disjuntor.py:1660-1666`, `bin/hook_stop_fila1.py:115-117`).
-- **`_casa_id_inteiro`**: definição única em `bin/hook_stop_fila1.py:110`. Leitores diretos encontrados: `_pertence_fila1`, em `bin/disjuntor.py:1686`, e `_parei_do_em_curso`, em `bin/hook_stop_fila1.py:1301` e `bin/hook_stop_fila1.py:1313`. Todos consomem bool; a implementação usa caixa normalizada e fronteira `[A-Z0-9-]`, inclusive permitindo underscore como separador (`bin/hook_stop_fila1.py:115-117`). A fronteira de extração da célula usa a mesma classe ASCII (`bin/disjuntor.py:1664`).
-
-**Fora do diff:** o handoff não lê diretamente essas três funções: pede item em curso ao hook, e usa seus bools como bools, sem a antiga confusão bool/lista (`bin/handoff_sessao.sh:64`, `bin/handoff_sessao.sh:71`, `bin/handoff_sessao.sh:120-123`). Para PAREI censo, pede o reconhecedor compartilhado e distingue `None`, `''` e motivo (`bin/handoff_sessao.sh:129-134`). O alarme também não lê diretamente as três funções; pede `prova_parei_censo` e só considera provado o retorno `''` (`bin/alarme_sessao_ociosa.py:127-140`).
-
-**Classe presente fora do diff: derivação paralela da fila.** O alarme possui `_fila` próprio: procura `## OBRAS`, conta bullets/linhas e exclui `☑`, `FEITO` ou `FECHAD` em qualquer posição (`bin/alarme_sessao_ociosa.py:89-116`). O juiz compartilhado do hook delimita por marcador e usa `_item_parado`, que também exclui CONGELADA, FILA 2, PAREI e outras marcas (`bin/hook_stop_fila1.py:95-97`, `bin/hook_stop_fila1.py:171-180`, `bin/hook_stop_fila1.py:231-252`). Assim, são respostas potencialmente divergentes à contagem da fila; o alarme usa sua resposta para decidir o disparo (`bin/alarme_sessao_ociosa.py:40-45`, `bin/alarme_sessao_ociosa.py:148-150`). Isso é herdado e não constitui outro caminho de autorização da vaga do censo (`bin/alarme_sessao_ociosa.py:144-164`).
-
-**Igualdades fora do predicado existem, mas respondem outra pergunta:** o hook compara célula crua com o alvo declarado no marcador para localizar o item em curso (`bin/hook_stop_fila1.py:209-227`) e remove esse item por igualdade da lista de andáveis (`bin/hook_stop_fila1.py:270-273`). Não convém afirmar genericamente “não há igualdade obra × célula”; há essa igualdade, sem decidir a pertença usada pelo censo (`bin/disjuntor.py:1704`, `bin/disjuntor.py:2267`).
-
-Leitores do selo encontrados: chamadas diretas a `_pertence_fila1` em `bin/tests/test_censo_antes_da_vaga.sh:605` e `bin/tests/test_censo_antes_da_vaga.sh:611`; mutações textuais das listas em `bin/tests/test_censo_antes_da_vaga.sh:750` e `bin/tests/test_censo_antes_da_vaga.sh:763`. Chamadas dinâmicas não identificáveis por referências nominais permanecem [nao verificado].
-
-_3094 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3095 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

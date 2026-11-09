@@ -1,7 +1,12 @@
 # RELATO — esteira saas-hasner
-PAREI: censo-BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | espera Codex
 
-ESPERANDO: codex_pergunta.sh | pid=3630778
+ESPERANDO: codex_pergunta.sh | pid=1664973
+CODEX-2-RAIAS 10:24: load1 10,1 (suite E3 + crons lavrar_*) > 7 -> volta a 1 vaga nova: nenhum Codex novo abre ate load5 < 6; os 2 em voo (BUG-PAR construtor pid 1664973, SONDA preverif slot 2) seguem.
+LEI-AKITA-I1 10:2x: bug no caminho -- test_lei_akita VERMELHO no main (3 commits I-1 nao publicados ddb5c72c/3a1c5a27/a6087ea2 com padrao=n/a (instrumento) tocando app/core/esteira_vigia.py, negocio pelo selo). Cura na origem: reword so do termo para padrao=escritor unico (o diff realiza UM escritor + UMA trava do RELATO: _sob_trava_do_relato/_grava_relato), arvores identicas (git diff vazio, %T igual), main a6087ea21 -> 3803e6623 por update-ref com guarda; selo OK 13/14. Reversao: git update-ref refs/heads/main akita-pre-rewrite (bundle logs/selos_canon/pre_rewrite.bundle). Copia SONDA re-parentada igual: 94a64b681 -> 7bfa8f5ad (arvore igual).
+BUG-PAR 10:2x: PAREI censo-BUG-PAR RESPONDIDA por brief logs/BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS/brief.md (censo da volta 1, perguntas de lei: 0; disjuntor --censo rc 0); volta 3 Codex relancada (pid 1664973).
+E3 10:2x: volta 3 Codex rc 0 (F2 codigo: alimentar_fila carregada 1x por lote; F1 confere com a lei literal -- fechada vai ao historico; F3-F8 selos) + sessao FORA_DE_PIPELINE diff_e3_sombra e diagrama regerado na copia -> commit ddf5980ac na copia; suite INTEIRA + 30 mutantes pela trava (logs/fio_e3/lancar_green_v3.sh -> v3_suite.log, v3_mutantes.log).
+SONDA-SEM-GRANT 10:2x: construtor opus v3 entregou (T1-T5 RED->GREEN, mutantes 16/16, logs/auditoria_0911/entrega_v3.txt); Codex preverif v3 lancado sobre 7bfa8f5ad (preverif_sonda_v3.r).
+E4-ESCRITORES 10:3x: censo Codex rc 0 conferido (amostra 6/6), 16 portas confirmadas + 6 nascimentos = 22, 15 DECISOES, perguntas de lei: 0 -> logs/FIO-E0-V4-E4-ESCRITORES/brief.md, disjuntor --censo rc 0. Construtor espera o pouso E2+E3.
 E4-ESCRITORES 09:5x: aval E4-CENSO-JA recebido (logs/aval_e4_censo_ja.txt); DESPACHO E4: censo P13 -> Codex (papel censo, hash dc0ecbdeb = copia E3), saida na forma do bloco CENSO para virar logs/FIO-E0-V4-E4-ESCRITORES/brief.md; construtor depois do pouso E2+E3.
 E3 09:4x: GREEN parcial dc0ecbdeb FAILED (failures=9, errors=3; logs/fio_e3/v2_green_falhas.txt) -> construtor Codex volta 3 (F1-F8; F1 pergunta viva em disputa fechada sumiu = possivel regressao). Sessao depois: FORA_DE_PIPELINE diff_e3_sombra (config/crons.py) + regerar diagrama.
 BUG-PAR 09:4x: RED 14/14 vermelhos (v2_red.log); GREEN FAILED 1 (contrato carimbo cru em _materializar_par :1388); mutantes 35/37 mortos, M7 e M35 VIVOS -> volta 3 Codex (construtor_v3.q) na fila da vaga (1 construtor Codex por vez; E3 primeiro, fila 1).
