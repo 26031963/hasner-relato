@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 17:58** · publicado em **08/11/2026 18:01** (UTC-3)
+> Ultima resposta processada: **08/11/2026 22:22** · publicado em **08/11/2026 22:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 22:22 · sessao 1ebe59f1dec7 · - · - · origem=Ronald (tmux)
+
+1. **Média — A1 prova só a forma sintática, não a ausência de derivação paralela.** O detector reconhece apenas `BoolOp Or` cuja alternativa contém diretamente `.disputa.colaborador[_id]`; aliases ficam fora (`app/chamados/tests/test_e1_fila.py:76-93`). Há derivação equivalente no código de produção: `values_list` entrega ambos os colaboradores e a chave usa `c or dc` (`app/chamados/services/fio.py:1844-1847`). Portanto o teste pode passar com derivador paralelo sobrevivente, embora efetivamente examine arquivos de produção (`app/chamados/tests/test_e1_fila.py:99-111`).
+
+2. **Média — O mutante A3 morde ordem de PK de Chamado; não demonstra a aquisição tardia da Disputa fechada anunciada.** O cenário fornece `ex.data_evento=DIA` pela base e passa o mesmo `DIA` na declaração (`app/chamados/tests/test_e1_v9.py:145-147`; `app/chamados/tests/test_e1_fila.py:175,183-185`). O ramo de `_nascer` que trava a disputa existente exige diferença de dia (`app/chamados/models.py:2938-2948`). Com igualdade, a costura trava o Chamado por `_costura_nao_mata_o_fio` e salva a Pergunta (`app/chamados/services/fio.py:762-769`; `app/chamados/models.py:2996-2999`). A inversão exercitada é o destino de PK menor, criado antes do Chamado vivo (`app/chamados/tests/test_e1_fila.py:173-178`). O teste aceita qualquer violação e não exige a Disputa fechada na sequência (`app/chamados/tests/test_e1_fila.py:188-199`).
+
+3. **Média — F1 cobre somente o complemento inicial do agrupador.** A fixture entrega a mesma instância `ch`, com contexto contendo apenas `data_turno` e uma Pergunta pendente já costurada (`app/chamados/tests/test_e1_fila.py:229-246`). `cobra_marcos_da_ata` resulta falso sem `marcos_faltantes` (`app/chamados/services/disputa_emissao.py:732-735`; `app/ponto/services/lastro.py:74-79`). O primeiro laço complementa essa disputa; depois o filtro elimina o único Chamado por já ter Pergunta não materializada e retorna `None` (`app/chamados/services/disputa_emissao.py:1004-1030`). Assim os testes não alcançam o corpo principal, os loops posteriores, `perguntar_entradas_pendentes` ou o fecho (`app/chamados/services/disputa_emissao.py:1032-1223`). O teste não é vazio: exige Perguntas costuradas e presença da Disputa na sequência; porém descarta o retorno e não verifica a porta inteira (`app/chamados/tests/test_e1_fila.py:252-265`).
+
+4. **Alta — O “teto” do repasse não cobre a cauda dos dias pendentes da disputa.** O conjunto inicial considera somente Perguntas costuradas nos órfãos e datas dos órfãos ±1 ou nulas (`app/chamados/services/disputa_emissao.py:955-963`). A mesma transação termina chamando `perguntar_entradas_pendentes`, que extrai outros dias do contexto da disputa e chama `gerar_perguntas_disputa` (`app/chamados/services/disputa_emissao.py:1206`; `app/chamados/services/disputa_emissao.py:273-296`). Essa geração pode abrir/reusar uma Pergunta canônica de outra disputa para um dia fora daquele conjunto (`app/chamados/services/disputa_emissao.py:443-451`; `app/chamados/models.py:2905-2919`). Se essa Pergunta tem PK menor que alguma já pré-travada e recebe célula/destino, seu `UPDATE` ocorre posteriormente, quebrando a ordem de PK de Pergunta (`app/chamados/models.py:2958-2999`). É um caminho permitido pelo código; ocorrência no acervo/prod [nao verificado]. F1 não o cobre porque retorna antes, conforme item 3.
+
+5. **Baixa — F5 “MESMO instante” não distingue uma leitura de duas leituras do relógio.** O teste fixa `timezone.now()` em uma constante e compara somente os dois valores finais (`app/chamados/tests/test_e1_fila.py:322-328`). Uma implementação com duas leituras independentes desse relógio produziria a mesma tupla e passaria; não há `call_count`, `side_effect` ou inspeção do argumento passado a `expira_em` (`app/chamados/tests/test_e1_fila.py:322-328`). O código atual passa explicitamente `_agora`, o que é verificável na implementação (`app/chamados/veredito_lavrado.py:242-244`). Os outros testes F5 realmente distinguem `_hoje(agora)` de `date.today()` usando duas datas diferentes (`app/chamados/tests/test_e1_fila.py:307-320,330-333`).
+
+6. **Média — Os testes novos não verificam a transação inteira dos chamadores nem a recusa por universo alterado.** `_travar` inicia a captura imediatamente antes da chamada isolada e filtra os PKs nascidos durante ela (`app/chamados/tests/test_e1_fila.py:57-69`). A2 chama diretamente `migrar_resolvedoras_vivas`; A3 chama diretamente `declarar_hora_colab`; não exercitam entrada já travada por `reabrir`/views, nem `aplicar_declaracao` (`app/chamados/tests/test_e1_fila.py:147-160,181-199`). Os dois casos A2 verificam ordenação e o mutante de chamada duplicada; nenhum provoca o crescimento entre `_conjunto_da_migracao` e sua releitura (`app/chamados/tests/test_e1_fila.py:147-160`).
+
+7. **Informativa — O rastreador inclui UPDATE, com limites específicos.** Ele observa `UPDATE` simples e `SELECT ... FOR UPDATE`, consulta os PKs e elimina reacessos à mesma linha (`app/chamados/tests/test_e1_v9.py:68-90`). Não observa `executemany`, INSERT ou travas de FK; o próprio helper declara parte desse limite (`app/chamados/tests/test_e1_v9.py:47-53,69-70`). A regra de violação identifica rank inferior posterior, PK decrescente e ausência de qualquer Colaborador anterior, mas não valida se esse Colaborador é o dono de cada linha (`app/chamados/tests/test_e1_v9.py:95-116`). Os testes P3/P6/P7 inserem deliberadamente a aquisição de Pergunta antes de Colaborador; suas assertions exigem qualquer violação, sem especificar qual (`app/chamados/tests/test_e1_fila.py:273-303`).
+
+8. **Limite sobre acervo cruzado do repasse.** A seleção por destino pode trazer Pergunta de outro colaborador, enquanto a pré-trava de Colaborador continua restrita ao argumento da porta (`app/chamados/services/disputa_emissao.py:954-963`). Entretanto o caminho simples de complemento passa a disputa dessa Pergunta com o Chamado do argumento; `_nascer` recusa o destino cruzado antes de adquirir outro Colaborador (`app/chamados/services/disputa_emissao.py:1006-1017,834-841`; `app/chamados/models.py:2837-2843`). Esse caminho sozinho não basta para afirmar deadlock por segunda aquisição de Colaborador; ocorrência de outra cascata [nao verificado].
+
+A análise foi estática; execução dos testes, resultado GREEN e comportamento concorrente efetivo [nao verificado]. [nao verificado]
+
+## 08/11 22:21 · sessao 65246f94aba2 · - · - · origem=Ronald (tmux)
+
+1. **Média — o novo “teto” do repasse não cobre toda a cascata síncrona do cartório.** `_trava_do_repasse` trava perguntas costuradas nos órfãos ou do colaborador nos dias ±1/sem dia (`app/chamados/services/disputa_emissao.py:954-963`). O corpo chama `ch.analisar()` (`:1021`, `:1095`, `:1114`, `:1159`), que passa por `_gravar_estado/save` (`app/chamados/models.py:800-806`, `:280-296`); o `post_save` chama o cartório (`app/chamados/signals.py:187-203`). Havendo adiamentos pela lâmpada (`app/ponto/services/cartorio.py:1482-1485`), o cartório chama `retratar_perguntas_absolvidas_por_celula(colab)` (`:951-959`). Essa função varre o colaborador inteiro, sem recorte de dia (`app/chamados/reconciliador.py:584`, `:627-642`), e atualiza perguntas via `carimbar/save` (`:592-595`; `app/chamados/models.py:3142`). Assim, uma pergunta antiga de outro dia, com pk menor que alguma já travada pelo repasse, pode ser adquirida por UPDATE depois dela. A ocorrência e a reprodução desse cenário são [nao verificado].
+
+2. **Média — A2 não ordena travas já mantidas pelos chamadores.** `reabrir_orfas_enterradas` trava C/D/Ch/P no mesmo `atomic` (`app/chamados/management/commands/reabrir_orfas_enterradas.py:146-156`) e depois chama `pai.reabrir()` (`:168-172`); o ramo `irmao_vivo` de `reabrir` chama a migração (`app/chamados/models.py:1411-1415`), que acrescenta colaboradores das perguntas costuradas e do universo (`app/chamados/services/fio.py:2037-2038`, `:2084-2087`). O caminho exige mudança entre o pré-filtro e a trava: o pré-filtro já exclui `irmao_vivo` (`app/chamados/management/commands/reabrir_orfas_enterradas.py:105-112`). Um irmão que apareça depois dele pode levar a nova aquisição de C após D/Ch/P; ocorrência [nao verificado].
+
+3. **Inventário da ordem efetiva das portas de fio.** `trava_na_ordem` ignora None e ordena pks (`app/chamados/models.py:2650-2664`); trava D explícitas/abertas (`:2667-2676`), Ch explícitos/pais das abertas/vivos (`:2677-2687`), depois P (`:2689-2691`).
+
+   - `reapontar_resolvedora`, sem colisão: C (`app/chamados/services/fio.py:887-888`), Ch destino pela costura (`:906-908`, `:768`), UPDATE P (`:923`). Com colisão: lote C→D→Ch→P (`:903-905`), retratação reentrante (`:920`), UPDATE P (`:923`).
+   - `rechavear_data_evento`: C→D→P (`app/chamados/services/fio.py:1000-1001`), C reentrante por `fato_livre_para` (`:1022`), UPDATE P (`:1033`).
+   - `retratar_para_canonica`: C→D→P (`app/chamados/services/fio.py:1326-1331`), UPDATE P por `carimbar_identidade` (`app/chamados/models.py:3172-3180`). Mesmo sem perdedoras ainda trava a canônica (`app/chamados/services/fio.py:1326-1329`).
+   - `migrar_resolvedoras_vivas`: C de todos os envolvidos→D do conjunto→Ch velho/novo→P do conjunto (`app/chamados/services/fio.py:2084-2087`); relê e recusa crescimento por C/P (`:2088-2093`); reaponta apenas para `novo` (`:2160`) e retrata usando a canônica do universo (`:2137-2141`, `:2166`). Não identifiquei aquisição adicional de Ch externo nesse corpo; a costura trava apenas o destino recebido (`:768`).
+
+4. **Signals das perguntas não acrescentam C/D/Ch/P imediatamente.** O fechamento do beco fica em `on_commit` (`app/chamados/signals.py:214-225`); o outbox síncrono chama `acordar_celulas` (`:237-244`). O `save` da pergunta envolve UPDATE e signals num `atomic` próprio (`app/chamados/models.py:3403-3413`). Já o signal do chamado pode entrar sincronamente no cartório (`app/chamados/signals.py:187-203`), portanto precisa integrar a análise da transação inteira.
+
+## 08/11 22:21 · sessao a5b4ba247a80 · - · - · origem=Ronald (tmux)
+
+Auditoria dos campos e semântica, sem execução de testes. [nao verificado]
+
+1. **[ALTA] Relógios continuam discordando.** `expira_em` agora obtém dia civil local de `agora` (`app/chamados/veredito_lavrado.py:103,126`), enquanto `esta_stale` usa `agora.date()` e `julgado_em.date()` (`app/chamados/veredito_lavrado.py:196,199`) e a varredura usa `timezone.now().date()`/`_jul.date()` (`app/chamados/services/raiox.py:36,41`). O projeto configura `USE_TZ=True` e São Paulo (`app/config/settings/base.py:93,95`). Portanto, nos instantes em que UTC e São Paulo estão em dias distintos, não há contrato temporal único entre escritor e leitores; ocorrência em produção [nao verificado].
+
+2. **[MÉDIA] f5 unifica carimbo e expiração, mas não o julgamento.** `lavrar` executa o juiz antes de capturar `_agora`, depois passa esse instante somente a `expira_em` (`app/chamados/veredito_lavrado.py:233-244`). O juiz ainda lê `date.today()` por conta própria (`app/chamados/juizes.py:575`); o backfill captura `hoje=localdate()` e `agora=now()` separadamente e volta a executar o juiz por linha (`app/chamados/management/commands/backfill_veredito_lavrado.py:94-105`). A janela do juiz e da expiração usa extremos inclusivos (`app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:130`); a obsolescência dispara na data de expiração, inclusivamente (`app/chamados/veredito_lavrado.py:196`).
+
+3. **[MÉDIA] A1 não elimina toda derivação alternativa.** Há o fallback equivalente em tuplas `c or dc` no contador `fecho_cruza_dias` (`app/chamados/services/fio.py:1844-1847`). Em `rechavear_data_evento`, trava/dedup usam o FK da pergunta (`app/chamados/services/fio.py:1000,1022`), mas busca e despertar da célula usam o colaborador da disputa (`app/chamados/services/fio.py:1021,1024,1035`). O `save` só confere/preenche igualdade na inserção (`app/chamados/models.py:3410-3425`); não existe essa conferência nesse `save` para objetos existentes. Divergência real do acervo [nao verificado].
+
+4. **[INFORMATIVA] `None` é possível em instância não salva, mas não há evidência de um caminho de produção novo que dependa dele.** `_nascer` cria inicialmente a pergunta final sem informar colaborador (`app/chamados/models.py:3006`), e `save` chama `_chave_de_identidade`, preenchendo-o da disputa (`app/chamados/models.py:3410-3422`). O stub usado antes para perguntar pelo dia recebe `colaborador_id` explicitamente (`app/chamados/models.py:2874`), assim como o proxy do juiz (`app/chamados/models.py:2884`). O esquema atual é NOT NULL (`app/chamados/models.py:2431`); a migration primeiro preenche todo acervo pela disputa e depois aplica NOT NULL (`app/chamados/migrations/0051_decisao_pergunta.py:25,101-108`). Acervo persistido com NULL e migrations efetivamente aplicadas em produção [nao verificado].
+
+5. **[INFORMATIVA] Dois significados de `data_evento` são preexistentes e discriminados por `conversa`.** Pergunta datada exige dia do turno (`app/chamados/models.py:2781-2788`); conversa recebe dia civil local do pedido (`app/chamados/models.py:2794-2800`). `gravar_dia_do_fato` é a atribuição única do campo (`app/chamados/services/fio.py:790-800`), usada pelo nascimento (`app/chamados/models.py:3008`), costura que data (`app/chamados/services/fio.py:878`) e rechaveamento (`app/chamados/services/fio.py:1027`). A escada `dia_do_fato` ignora conversas (`app/chamados/juizes.py:75-83`), mas `expira_em` e `lavrar` não recebem o discriminador, apenas `data_evento` (`app/chamados/veredito_lavrado.py:123-130,244`). Portanto, `expira_em(None)` não caracteriza todas as conversas: conversas novas têm data não nula (`app/chamados/models.py:2799`).
+
+Mapa de escritores/leitores comprovados:
+
+| Campo/função | Escritores/implementação | Leitores de produção comprovados |
+|---|---|---|
+| `P.colaborador_id` | Inserção, conferência e preenchimento: `models.py:3410-3425`; migração: `migrations/0051_decisao_pergunta.py:25` | Dedup `models.py:2752,2764-2771`; chave `services/fio.py:1449`; costura `services/fio.py:862,887`; migração `services/fio.py:2087-2091`; juiz de destino `juizes.py:2003` |
+| `P.chamado_destino` | `_nascer`, criação/reuso `models.py:2975,2999,3006,3009`; costura `services/fio.py:921-924`; atribuição temporária sem save `services/fio.py:779-783` | Materializador `services/materializacao.py:339`; crédito destino-ou-pai `services/raiox.py:54-64`; juiz/costura `services/fio.py:778`, `juizes.py:1994-2003`; trava/migração `services/fio.py:2087-2091` |
+| `P.julgado_em/janela_expira_em` | `lavrar`: `veredito_lavrado.py:242-246`; backfill calcula `management/commands/backfill_veredito_lavrado.py:139-140` e persiste via `veredito_lavrado.py:218-221`; restauração só em memória `veredito_lavrado.py:255-260` | `esta_stale`: `veredito_lavrado.py:193-203`; varredura `services/raiox.py:31-44`; foto `veredito_lavrado.py:252`; recorte/backfill `management/commands/backfill_veredito_lavrado.py:120-136` |
+| `P.data_evento` | Atribuição `services/fio.py:800`, callers acima | Índice/dedup `models.py:2751,3473-3482`; materialização `services/materializacao.py:344-347,473-476`; escada `juizes.py:80-83`; chave/universo `services/fio.py:1450,1783-1807`; expiração `veredito_lavrado.py:244` |
+| `D.fechada_em` | Fechar `models.py:1930-1934`; reabrir admin/sistema `models.py:2147-2159,2171-2175` | Universo de trava `models.py:2671-2675`; emissão `services/disputa_emissao.py:531-533`; signals `signals.py:28,129,153` |
+| `D.motivos` | Emissão `services/disputa_emissao.py:541,589,1019-1020,1061,1067-1068,1096-1097,1191-1192,1288,1294-1295`; aparar `models.py:1964-1966`; remover `models.py:2061-2063`; reabrir admin `models.py:2153-2159` | Emissão `services/disputa_emissao.py:536-540,1017,1190`; remoção relê sob trava `models.py:2029-2030`; lista de IDs ativos conforme definição `models.py:1728-1730` |
+| `Ch.status_local` | Nascimento `models.py:971,1095`; mudança de estado `models.py:228` | Universo de trava `models.py:2681`; costura `services/fio.py:770-771`; signals `signals.py:70,96,272,341`; gates usam `motor.decidir`, exemplo `models.py:1601` |
+| `trava_na_ordem` | Implementação ordena pks, ignora None, adquire C,D,Ch,P: `models.py:2650-2691` | Helpers novos declaração `services/declaracao_texto.py:293-297`, repasse `services/disputa_emissao.py:954-963`; portas `services/fio.py:1000,1328,2087` |
+| `universo_do_fato` | `services/fio.py:1774-1825`, funda-se no `do_fato` e admite pelo dia real do turno | `_nascer` `models.py:2905`; candidata reutilizável `services/declaracao_texto.py:244`; helper de trava `services/declaracao_texto.py:294` |
+| `chave_do_dia` | Tupla FK,motivo,data gravada,instância: `services/fio.py:1449-1450` | Sete usos internos: `services/fio.py:1437,1455,1478,1510,1645,1658,1790` |
+| `juizes.dia_do_fato` | Escada célula → catálogo/data_turno → data civil local de batida → menor data pergunta de disputa → data de instante cru de contexto: `juizes.py:50-53,73-84,98-138,159-166` | Repasse novo `services/disputa_emissao.py:956`; declaração `services/declaracao_texto.py:193,324,455,565,600`; reconciliador `reconciliador.py:139,200,286,1023,1290` |
+| `expira_em` | `veredito_lavrado.py:106-133`; `None` sem dia, devolve primeiro probe fora da janela, com probe inicial `max(localdate(agora), data_evento)` | `lavrar` `veredito_lavrado.py:244`; backfill `management/commands/backfill_veredito_lavrado.py:111` |
+
+A afirmação “DOIS escritores de destino” tem escopo de criação/costura intencional: o FK também declara `on_delete=SET_NULL`, que autoriza escrita implícita de NULL ao excluir o chamado (`app/chamados/models.py:3375-3380`). Não há caminho concreto de exclusão identificado nesta auditoria [nao verificado].
 
 ## 08/11 17:58 · sessao 3691d7efd094 · FIO-E0-V4-E1 · verificador · origem=Code
 
@@ -716,220 +784,4 @@ Fontes exatas, para empresa `EMP`:
 
 **8792:** usar ausência decidida cujo tipo desconta; zero batidas, sozinho, não estabelece a rubrica. `app/docs/LEIS.md:87`.
 
-## 08/11 16:38 · sessao ae3c2c50aa96 · FIO-E0-V4-E2-FUNCAO · leitura · origem=Code
-
-**1. MATRIZ DE TRANSIÇÕES**
-
-Referências abreviadas:
-
-- `T` = anexo `predesenho_e2_tarefa_do_dia_e93205c6.py`, numerado desde a primeira linha.
-- `P` = `app/chamados/tests/test_e2_tarefa_do_dia.py` do diff; a coluna de prova identifica o teste escrito. Execução dos testes: [nao verificado].
-- `E1` = arquivo da árvore fornecida; `E2` = arquivo de destino do diff.
-- `NS↑` = define `nao_sei=True`; `[]` = nenhuma ação. Nos ramos por instância, outra instância pode já ter definido `nao_sei=True`. (`T:173`, `T:246`, `T:283`)
-- `porta=P` = chamado retornado por `chamado_que_lista`, se estiver na fila; caso contrário, `None`. (`T:122`, `T:123`)
-
-As linhas abaixo seguem a precedência do código. Os retornos antecipados do corpo acontecem **depois** da montagem da carga e da obtenção de grade, instâncias, marcos e cobertura. (`T:308`, `T:396`, `T:399`)
-
-| Estado de entrada — leitura e origem | Resultado do juiz consultado | Operação | Retorno | Prova existente em P |
-|---|---|---|---|---|
-| `agora=None`, argumento da porta (`T:416`) | Nenhum consultado | Levanta exceção | `ValueError` (`T:417`) | `SeloDeterminismoERelogio.test_MORDE_sem_agora_recusa` |
-| Sem `carga` (`T:418`) | Resultados carregados para um colaborador e um dia | Abre carga e delega | Resultado de `carga.tarefa` (`T:419`, `T:422`) | `SeloDeterminismoERelogio.test_determinismo_e_lote_igual_a_casca` |
-| Carga fornecida, mesmo `agora` (`T:420`) | Usa o instante da carga | Delega | Resultado de `carga.tarefa` (`T:422`) | `SeloDeterminismoERelogio.test_determinismo_e_lote_igual_a_casca` |
-| `carga.agora != agora` (`T:420`) | Nenhum novo julgamento | Levanta exceção | `ValueError` (`T:421`) | sem teste | [nao verificado]
-| Dia fora de `[carga.ini,carga.fim]` (`T:394`) | Nenhum julgamento desse dia | Levanta exceção | `ValueError` (`T:395`) | `Caso12Verificador.test_a_carga_so_responde_a_sua_janela` |
-| Colaborador sem entrada em `_cadastro`, inclusive colaborador não carregado (`T:317`, `T:376`) | Grade não chega a ser consultada | Acesso direto ao mapa | `KeyError`; não produz `nao_sei` (`T:376`) | sem teste | [nao verificado]
-| Grade sem `dias`/`isento_ponto`, ou retornando `None` (`T:376`, `T:378`) | Retorno sem o contrato esperado | Indexa o retorno sem proteção | `KeyError`/`TypeError`; não produz `nao_sei` (`T:378`) | sem teste | [nao verificado]
-| Dia chega ao juiz sem `insumo_dia_sem_trabalho` ou sem suas chaves | Insumo ausente | Acesso direto às chaves | `KeyError` propagado (`T:199`; `app/ponto/supra_juiz.py:70`, `:71`) | sem teste |
-| Autoridade indisponível, importação ou chamada lança exceção | Não há resposta utilizável | Não há `try/except` na porta/carga/corpo | Propaga a exceção (`T:308`, `T:347`, `T:367`, `T:376`, `T:422`) | sem teste | [nao verificado]
-| Grade: `tipo_dia='fora_vinculo'` (`T:176`) | Leitor único declarou fora do vínculo | Encerra antes da isenção/tranca | Razão `fora_vinculo`; instâncias vazias; `nao_sei=False` (`T:177`) | `Caso13VinculoEIsencaoPeloLeitorUnico.test_demitido_na_vespera_sem_fato_nao_deve_nada`; `test_admitido_amanha_sem_fato_nao_deve_nada` |
-| Grade: isenção verdadeira, sem retorno anterior (`T:180`) | Leitor único declarou isenção | Conserva instâncias, esvazia ações | `isento_ponto`; sem ações (`T:181`) | `Caso13VinculoEIsencaoPeloLeitorUnico.test_isento_de_ponto_nao_deve_marco` |
-| Par `(colab,dia)` presente em `_trancado` (`T:367`, `T:187`) | `dias_trancados` verdadeiro | Conserva instâncias, esvazia ações | `competencia_trancada`; sem ações (`T:190`) | `Caso14DiaArquivadoPelaTranca.test_dia_trancado_nao_tem_tarefa` |
-| Competência reaberta, ou toque humano posterior reconhecido (`T:367`) | Juiz da tranca falso | Segue o julgamento normal | Não retorna `competencia_trancada` (`T:187`) | `Caso14DiaArquivadoPelaTranca.test_reaberta_nao_tranca`; `test_desarquivado_pelo_O44_e_julgado_como_qualquer_dia`; `test_cobrar_e_resolver_dia_desarquivam_so_aquele_dia` |
-| Juiz da tranca não encontra período fechado | Ausência de tranca resulta em falso | Segue o julgamento normal | Demais ramos (`E1 app/chamados/juizes.py:965`; `T:187`) | `Caso1DoisMarcosNoMesmoDia.test_cada_instancia_tem_a_sua_tarefa` |
-| `gdia=None`, ou grade declara `sem_celula` (`T:196`) | Dia ausente/sem célula no leitor único | Encerra | `sem_celula`; instâncias vazias; `NS↑` (`T:197`) | `Caso2NoturnoSemIrA23.test_a_pergunta_da_saida_e_do_turno_de_21_pelo_dia_do_turno` — parcial: verifica célula e instâncias, não a razão/NS |
-| Dia de trabalho sem instâncias; há marcos e nenhum venceu (`T:200`, `T:201`) | Teto: todos pendentes | Encerra | `nao_venceu`; instâncias vazias; `nao_sei=False` (`T:204`) | `CasoClassesDoDiffV6b.test_T_ata_sem_lampadas_antes_de_todo_teto_nada_e_exigivel` |
-| Dia de trabalho sem instâncias; algum marco venceu (`T:200`) | Teto já exigível; leitor não fornece lâmpadas | Encerra | `ata_sem_lampadas`; `NS↑` (`T:206`) | `Caso12Verificador.test_dia_de_trabalho_sem_lampadas_e_nao_sei`; teste T acima | [nao verificado]
-| Dia de trabalho sem instâncias e sem marcos (`T:200`) | Teto sem resposta: lista vazia | Mesmo ramo residual | `ata_sem_lampadas`; `NS↑` (`T:206`) | sem teste específico | [nao verificado]
-| Dia sem trabalho, sem instâncias (`T:199`, `T:232`) | `dia_sem_trabalho=True` | Laço vazio | Instâncias vazias; razão geral permanece `''` (`T:173`, `T:286`) | `Caso5TrocaDePlantao.test_cada_um_deve_o_seu_turno` |
-| Instância em dia sem trabalho (`T:238`) | `dia_sem_trabalho=True` | Não consulta a decisão da pergunta | `dia_sem_trabalho`; ações `[]` (`T:239`) | `Caso12Verificador.test_folga_com_lampadas_apagadas_nao_cobra` |
-| Lâmpada `True` (`T:241`) | Leitor único: marco aceso | Não consulta decisão/cobertura para cobrar | `aceso`; ações `[]` (`T:242`) | `CasoClassesDoDiffV6b.test_L_lampada_acesa_responde_antes_da_pergunta` |
-| Lâmpada `None`, inclusive chave `acesa_lavrada` ausente (`T:84`, `T:244`) | Leitor não sabe se aconteceu | Marca desconhecimento | `lampada_nao_sabe`; ações `[]`; `NS↑` (`T:245`) | sem teste com asserção específica desse retorno | [nao verificado]
-| Lâmpada apagada sem marco correspondente por tipo/hora (`T:74`, `T:99`) | Teto ausente: `vencido=None` | Marca desconhecimento | `marco_fora_do_turno`; ações `[]`; `NS↑` (`T:248`) | sem teste | [nao verificado]
-| Vínculo do dia ausente ou sem tipo de escala | Corpo do teto devolve `[]` | Sem casamento de teto; aplica os ramos anteriores conforme as lâmpadas | `marco_fora_do_turno` ou `ata_sem_lampadas`, salvo retorno anterior (`E2 app/ponto/services/cartorio.py:855`; `T:99`, `T:206`, `T:248`) | sem teste específico |
-| Marco apagado ainda não vencido (`T:252`) | Teto falso | Aguarda o teto | `nao_venceu`; ações `[]` (`T:253`) | `Caso1DoisMarcosNoMesmoDia.test_o_teto_e_por_marco` |
-| Agora antes do fim do turno, mas marco anterior vencido | Teto é individual por marco | Julga o marco anterior; mantém o fim pendente | Pode haver tarefa antes do fim do turno (`T:252`, `T:274`) | `Caso1DoisMarcosNoMesmoDia.test_o_teto_e_por_marco` |
-| Agora depois do fim, antes de fim + 30 minutos | Teto da saída ainda falso | Aguarda | Saída `nao_venceu` (`E2 app/ponto/services/cartorio.py:859`; `T:252`) | `Caso2NoturnoSemIrA23.test_a_saida_de_22_vence_pelo_instante` |
-| Agora alcançou marco + teto | Teto verdadeiro, por `<= agora` | Segue para cobertura/pergunta | Não há encerramento global por “turno terminou” (`E2 app/ponto/services/cartorio.py:859`; `T:255`) | `Caso2NoturnoSemIrA23.test_a_saida_de_22_vence_pelo_instante`; `SeloDeterminismoERelogio.test_relogio_1400_x_1401_sem_escrita` |
-| Cobertura parcial lavrada (`T:208`) | `ausencia_parcial_cobra_o_resto=True` | Desconsidera cobertura geral; segue pelas lâmpadas/perguntas | Demais ramos (`T:208`) | sem teste específico | [nao verificado]
-| Sem cobertura para o dia (`T:208`) | Cobertura ausente: `None` | Segue para pergunta | Demais ramos (`T:255`, `T:265`) | `Caso1DoisMarcosNoMesmoDia.test_cada_instancia_tem_a_sua_tarefa` |
-| Cobertura aprovada, marco apagado e vencido (`T:255`) | Ausência `aprovada` | Dispensa ação | `ausencia_aprovada`; ações `[]` (`T:256`) | `Caso4Atestado.test_ausencia_sem_pergunta_pela_cobertura` |
-| Cobertura aguardando documento (`T:258`) | Ausência `aguardando_documento` | Atribui ao colaborador | `ausencia_aguarda_documento`; `entregar_documento(colaborador,None)` (`T:259`) | `Caso12Verificador.test_ausencia_aguardando_documento_e_do_colaborador` |
-| Outra cobertura não rejeitada (`T:262`) | Ausência ainda a decidir | Atribui ao admin | `ausencia_a_decidir`; `decidir_ausencia(admin,None)` (`T:263`) | `Caso4Atestado.test_ausencia_sem_pergunta_pela_cobertura` |
-| Segunda ocorrência da posição, com pergunta na posição (`T:266`) | Identidade não separa a ocorrência | Não escolhe pergunta | `instancia_sem_identidade`; ações `[]`; `NS↑` (`T:268`) | sem teste | [nao verificado]
-| Segunda ocorrência, sem pergunta na posição (`T:266`) | Nenhuma pergunta encontrada | Solicita emissão | `sem_pergunta`; `perguntar(sistema,emissor)` (`T:272`) | sem teste | [nao verificado]
-| Primeira ocorrência sem pergunta (`T:274`) | Nenhuma pergunta encontrada | Solicita emissão | `sem_pergunta`; `perguntar(sistema,emissor)` (`T:275`) | `Caso1DoisMarcosNoMesmoDia.test_cada_instancia_tem_a_sua_tarefa` |
-| Há perguntas candidatas (`T:265`) | Não consulta a canônica da E1; toma a última por `pk` | Define `pergunta_id` e consulta decisão | Resultado de `_pela_decisao` (`T:278`, `T:280`) | sem teste com candidatas concorrentes | [nao verificado]
-
-A seleção de perguntas tem estes caminhos próprios; uma pergunta excluída deixa a instância seguir como `sem_pergunta` se nenhuma outra candidata permanecer. (`T:221`, `T:274`)
-
-| Estado de entrada — leitura e origem | Resultado do juiz consultado | Operação | Retorno | Prova existente em P |
-|---|---|---|---|---|
-| `conversa=True` (`T:322`) | Discriminador da pergunta do fato | Não carrega a conversa | Sem candidata dessa conversa (`T:321`) | `Caso12Verificador.test_a_conversa_nao_e_a_pergunta_do_marco` |
-| `data_evento=NULL` ou fora da janela (`T:323`) | **Não consulta** `dia_do_turno_da_linha` | Query exclui a linha | Não há ramo `nao_sei` específico dessa pergunta (`T:321`, `T:326`) | sem teste para NULL | [nao verificado]
-| Pergunta gravada no dia civil seguinte, diferente do turno pedido (`T:323`, `T:230`) | **Não relê** o dia pelo juiz do turno | Não associa à véspera | Turno pedido fica sem essa pergunta | `Caso2NoturnoSemIrA23.test_MORDE_data_evento_do_dia_civil_nao_e_relido_como_vespera` |
-| Motivo fora do catálogo de marcos (`T:222`) | Catálogo não o identifica como marco | Ignora | Sem candidata desse motivo | sem teste específico | [nao verificado]
-| Via fora do fato, inclusive duplicata (`T:224`) | Via atual exclui a identidade | Ignora, salvo exceção temporal da retratação | Sem candidata | sem teste específico para duplicata | [nao verificado]
-| Via `motivo_retratado`, sem retratação posterior a `agora` (`T:224`) | Identidade atual excluída | Ignora | Sem candidata | `SeloHorizonteCortaOsFatosDaPergunta.test_no_presente_a_via_atual_decide_como_antes` |
-| Via `motivo_retratado`, mas ato de retratação posterior a `agora` (`T:338`) | Ato ainda fora do horizonte | Permite que a pergunta participe | Decisão anterior continua aplicável (`T:224`) | `SeloHorizonteCortaOsFatosDaPergunta.test_retratacao_posterior_a_agora_nao_mata_a_pergunta_em_agora` |
-| Última decisão até `agora` é retratação (`T:228`) | Sequência encerra a participação | Ignora | Sem candidata | mesmo teste anterior, leitura após a retratação | [nao verificado]
-| Via limpa e resposta posterior à retratação (`T:224`, `T:228`) | Último ato é resposta | Mantém a pergunta | `aguarda_validacao` | `SeloHorizonteCortaOsFatosDaPergunta.test_no_presente_a_via_atual_decide_como_antes` |
-| Decisão posterior a `agora` (`T:336`) | Ato não pertence ao horizonte | Não inclui em `_dec` | Julga pela última decisão até `agora`, ou pela ausência dela | `SeloHorizonteCortaOsFatosDaPergunta.test_decisao_posterior_a_agora_nao_existe_em_agora`; `test_ultima_decisao_e_a_ultima_ate_agora` |
-| Passivo com `ato_em > agora` (`T:343`) | Autoridade da E1 devolve instante posterior | Não inclui no passivo | Não bloqueia a decisão anterior | `SeloHorizonteCortaOsFatosDaPergunta.test_passivo_posterior_a_agora_nao_existe_em_agora` |
-| Batida com `criado_em > agora` (`T:355`) | Efeito ainda fora do horizonte | Não inclui em `_efeitos` | Dentro do SIM, segue sem esse efeito | `SeloHorizonteCortaOsFatosDaPergunta.test_efeito_posterior_a_agora_nao_existe_em_agora` |
-
-Para os próximos ramos, a instância já passou por dia de trabalho, lâmpada apagada, teto vencido, cobertura e seleção de pergunta. (`T:238`, `T:255`, `T:280`) [nao verificado]
-
-| Estado de entrada — leitura e origem | Resultado do juiz consultado | Operação | Retorno | Prova existente em P |
-|---|---|---|---|---|
-| Pergunta no passivo (`T:124`) | `linhas_da_projecao_sem_linha`: projeção sem ato correspondente | Não inventa ação | `passivo_sem_linha`; ações `[]`; `NS↑` (`T:125`, `T:282`) | `Caso8PassivoSemInventar.test_projecao_sem_linha_e_nao_sei` |
-| Nenhuma decisão até `agora` (`T:126`) | Sequência vazia | Cobra resposta | `aguarda_resposta`; `responder(colaborador,P)` (`T:127`) | `Caso1DoisMarcosNoMesmoDia.test_a_resposta_de_uma_nao_fecha_a_outra` |
-| Última decisão resposta com texto vazio (`T:129`) | `texto_vazio=True` | Cobra nova resposta | `respondida_sem_texto`; `responder(colaborador,P)` (`T:131`) | sem teste | [nao verificado]
-| Última decisão resposta com texto (`T:130`) | `texto_vazio=False` | Encaminha ao admin | `aguarda_validacao`; `validar(admin,P)` (`T:132`) | `Caso1DoisMarcosNoMesmoDia.test_a_resposta_de_uma_nao_fecha_a_outra` |
-| Última decisão recusa (`T:133`) | Sequência: `RECUSA` | Devolve ao colaborador | `devolvida_ao_colaborador`; `responder(colaborador,P)` (`T:134`) | sem teste | [nao verificado]
-| Última decisão reabertura (`T:133`) | Sequência: `REABERTURA` | Devolve ao colaborador | Mesmo retorno anterior | `CasoClassesDoDiffV6b.test_C_chamado_vivo_e_porta_nao_dono` |
-| Última decisão devolução (`T:135`) | Sequência: materialização recusada | Encaminha ao admin | `materializacao_recusada`; `validar(admin,P)` (`T:136`) | `Caso3MaterializacaoRecusada.test_devolucao_volta_ao_admin` |
-| Validação; lavra ausente, vazia ou indeterminada (`T:348`, `T:139`) | Sem SIM/NAO vigente | Não chama novamente o juiz caro | `veredito_sem_lavra_vigente`; ações `[]`; `NS↑` (`T:140`) | `Caso11ViaSemTestemunha.test_sem_lavra_vigente_e_nao_sei` |
-| Validação; lavra vencida por insumo posterior ou expiração (`T:349`) | `esta_stale=True` | Exclui lavra utilizável | Mesmo retorno anterior | `Caso7EventoSemEntrega.test_o_efeito_e_o_veredito_do_juiz_e_nao_suposto`; `Caso12Verificador.test_lavra_com_relogio_virado_e_nao_sei` |
-| Validação; `julgado_em > agora` | `esta_stale=True`: lavra futura | Exclui lavra utilizável | Mesmo retorno anterior (`T:349`, `T:140`; `E2 app/chamados/veredito_lavrado.py:199`) | `Selo0514LavraNoRelogioDaBorda.test_lavra_julgada_depois_de_agora_nao_existe_em_agora` |
-| Validação; lavra vigente `nao` (`T:141`) | Juiz do fechamento lavrado: NAO | Solicita materialização | `validada_sem_efeito`; `materializar(sistema,materializacao)` (`T:142`) | `Caso7EventoSemEntrega.test_o_efeito_e_o_veredito_do_juiz_e_nao_suposto` |
-| Validação; lavra vigente SIM e Batida apurável carregada (`T:143`) | SIM; efeito presente | Solicita novo julgamento da célula | `efeito_sem_lampada`; `rejulgar(sistema,cartorio)` (`T:144`) | mesmo teste anterior | [nao verificado]
-| Validação; lavra vigente SIM, sem Batida apurável carregada (`T:145`) | SIM, inclusive via sem testemunha | Encerra | `encerrada_pelo_juiz`; ações `[]` | `Caso11ViaSemTestemunha.test_o_juiz_do_fechamento_responde_e_nao_a_batida` |
-| Última decisão silêncio (`T:146`) | Sequência: `SILENCIO` | Encerra | `silencio_decidido`; ações `[]` (`T:147`) | `Caso6Concorrencia.test_ato_duplicado_e_a_mesma_tarefa` |
-| Absorção; ausência aprovada (`T:150`) | Status atual da ausência: aprovada | Encerra | `absorvida_aprovada`; ações `[]` (`T:151`) | sem teste desse ramo: `Caso4` é interceptado pela cobertura | [nao verificado]
-| Absorção; ausência rejeitada (`T:152`) | Status atual: rejeitada | Devolve ao colaborador | `absorcao_rejeitada`; `responder(colaborador,P)` (`T:153`) | `Caso4Atestado.test_absorcao_segue_a_decisao_da_ausencia` |
-| Absorção; aguardando documento (`T:154`) | Status atual: aguardando documento | Atribui ao colaborador | `absorcao_aguarda_documento`; `entregar_documento(colaborador,None)` (`T:155`) | `Caso12Verificador.test_absorcao_aguardando_documento_e_do_colaborador` |
-| Absorção; outro status, inclusive ausência/status ausente (`T:149`) | Status não corresponde aos três anteriores | Atribui ao admin | `absorcao_pendente`; `decidir_ausencia(admin,P)` (`T:156`) | sem teste desse ramo | [nao verificado]
-| Ato não reconhecido (`T:157`) | Sequência sem interpretação neste corpo | Marca desconhecimento | `ato_desconhecido:<ato>`; ações `[]`; `NS↑` | sem teste | [nao verificado]
-| Âncora ausente ou chamado fora da fila (`T:123`) | `chamado_que_lista=None`, ou fila não o contém | Mantém ação sem porta | Ação de responder/validar/decidir com `porta=None` | `CasoClassesDoDiffV6b.test_U_universo_soberano_sem_chamado_cada_dono_pela_sequencia`; `Caso12Verificador.test_a_porta_e_o_chamado_na_fila` |
-
-Há duas distinções necessárias sobre **juiz devolvendo None/ausente**:
-
-| Estado de entrada — leitura e origem | Resultado do juiz consultado | Operação | Retorno | Prova existente em P |
-|---|---|---|---|---|
-| Juiz do dia do episódio devolve `None` | A E2 **não consulta esse juiz** ao carregar as perguntas; usa `data_evento` gravado (`T:321`) | Não existe tradução desse None na tarefa | Não há retorno específico; as recusas pertencem às portas da E1 (`app/chamados/services/fio.py:1395`, `:1407`) | sem teste |
-| Juiz do fechamento devolve `None` durante **lavrar**, fora da tarefa | O ternário de `lavrar` trata o retorno como falso | Lavra `nao`; se vigente e com validação, tarefa pede materialização | `validada_sem_efeito`, não `nao_sei` (`E2 app/chamados/veredito_lavrado.py:237`; `T:142`) | sem teste para o juiz retornando None |
-| Juiz do fechamento lança exceção durante **lavrar** | `lavrar` captura e grava `indeterminado` | Tarefa exclui essa lavra | `veredito_sem_lavra_vigente`; `NS↑` (`E2 app/chamados/veredito_lavrado.py:239`, `:243`; `T:349`, `T:140`) | `Caso11ViaSemTestemunha.test_sem_lavra_vigente_e_nao_sei` verifica o valor indeterminado, não a falha do juiz |
-
-A declaração “0 escritores” tem uma dependência que não permite afirmá-la incondicionalmente: o juiz da tranca chama `get_user_sistema`, cujo corpo usa `get_or_create`. O teste da tranca prepara esse usuário antes da medição; sua existência em produção não aparece no dado fornecido. (`E2 app/chamados/juizes.py:1124`; `app/core/utils.py:18`; `P::Selo14JuizEmLote._universo`; existência em produção: [nao verificado])
-
----
-
-**2. O QUE O REBASE SOBRE A E1 MUDA**
-
-“Não mudou” abaixo significa conteúdo integral igual ao blob OLD indicado no diff, conferido por hash do arquivo. “Mudou” significa conteúdo atual diferente daquele blob; histórico intermediário de edições/reversões: [nao verificado].
-
-Os caminhos da tabela são relativos a `app/`.
-
-| Arquivo do diff | E1 também mudou? | Encontro e significado — referências dos dois lados |
-|---|---|---|
-| `chamados/juizes.py` | **Sim** — `86a84167` → `8b80f4d4` | E1 usa `_dia_de_turno_da_pergunta`: conversa devolve `None`, sem competência de fato. O hunk E2 lê `data_evento` cru no lote de um, recolocando o dia civil da conversa na tranca. (`E1:332`, `:336`, `:948`; `E2:933`) |
-| `chamados/management/commands/auditar_invariantes_chamados.py` | **Sim** — `e0faea82` → `e18325f6` | No trecho S6, continuam as chamadas antigas sem horizonte/agora. E2 acrescenta uma borda comum para marcos e staleness. Onde mais o arquivo dive
-
-[truncado em 20000 de 28413 caracteres]
-
-## 08/11 16:37 · sessao 1f01c7b4cabf · - · - · origem=Ronald (tmux)
-
-**Lista emitida encontrada: 8 eventos, sujeitos ao cadastro de rubrica por empresa/global.** São sete eventos em horas e um em dias; os códigos FOPAG vigentes em produção não são verificáveis sem o cadastro. `app/folha/export.py:439-452`, `app/folha/export.py:732-736`, `app/folha/export.py:976-983`, `app/folha/models.py:47-54`.
-
-| Evento exportado | Fonte em produção |
-|---|---|
-| `hora_extra_diurna` — HE50 | `app/folha/export.py:441` |
-| `hora_extra_100_diurna` — HE100 normal | `app/folha/export.py:421`, `app/folha/export.py:442` |
-| `hora_extra_feriado_diurna` — HE100 feriado | `app/folha/export.py:420-423`, `app/folha/export.py:443` |
-| `folga_trabalhada_diurna` | `app/folha/export.py:446` |
-| `adicional_noturno` | `app/folha/export.py:447` |
-| `intrajornada_diurna` | `app/folha/export.py:448` |
-| `atraso_diurno` — atraso **mais** saída antecipada | `app/folha/export.py:383-399`, `app/folha/export.py:451-452` |
-| `falta_diurna` — dias decididos | `app/folha/export.py:169-185`, `app/folha/export.py:215-220`, `app/folha/export.py:732-736` |
-
-Não confundir com os 24 itens possíveis de `EVENTO_CHOICES`: o gerador efetivo emite somente os oito acima. `app/folha/models.py:13-38`, `app/folha/export.py:722-736`.
-
-HE noturna e hora reduzida não geram linha independente; o adicional inclui as horas noturnas trabalhadas, inclusive extras. DSR é excluído expressamente. Existem helpers de 8932, mas a montagem efetiva não os chama nem emite esse evento. `app/folha/export.py:424-437`, `app/folha/export.py:453-460`, `app/folha/export.py:193-206`, `app/folha/export.py:722-736`.
-
-Códigos históricos/documentados: HE50 150, HE100/feriado/FT 200, adicional 25, intra 270, atraso+antecipada 8069, falta 8792; o código configurado vigente segue **[não verificado]**. Fontes: `app/folha/export.py:384`, `app/folha/export.py:430-458`, `app/folha/export.py:187-214`; HE100 global 200: `app/folha/migrations/0009_evento_he100_rubrica_200.py:9-10`; FT global passa a 200: `app/folha/migrations/0008_folga_trabalhada_rubrica_200.py:1-11`. Há demonstração explícita de intra global 243 e override por empresa 270: `app/folha/tests/test_r1_caracterizacao_rubricas_map.py:21-43`.
-
-**Mutantes de exportação que escapam ao escopo das duas baterias.** Os arquivos `test_o280_bateria_da_lei.py` e `test_bateria_lavratura.py` não chamam os montadores de TXT/eventos; a primeira costura chama motor e calculador, a segunda cartório. A sobrevivência abaixo é conclusão de leitura; execução de mutantes: **[não verificado]**. `app/ponto/tests/test_o280_bateria_da_lei.py:128-159`, `app/ponto/tests/test_o280_bateria_da_lei.py:3538-3558`, `app/ponto/tests/test_o280_bateria_da_lei.py:4609-4636`, `app/ponto/tests/test_bateria_lavratura.py:134-145`.
-
-| Evento | Mutação concreta | Caso mínimo que deve comparar também a emissão |
-|---|---|---|
-| HE50 | Substituir valor de `hora_extra_diurna` por zero. `app/folha/export.py:441` | Jornada CLT comum, uma hora extra autorizada: exige uma hora no evento HE50; art.59 §1 e L-097. `app/docs/LEIS.md:115` |
-| HE100 normal | Retirar a subtração `- extra_100_feriado`. `app/folha/export.py:421` | Feriado decidido cuja HE100 toda é feriado: exigir **zero no evento normal** e total no evento feriado. Não exige decidir a faixa >2h. Regra da separação: `app/folha/export.py:420-443`; dúvida da faixa: `app/ponto/tests/test_o280_bateria_da_lei.py:2198-2206`. |
-| HE100 feriado | Inverter/negar a condição que preserva dobra cadastrada no 12x36. `app/folha/export.py:422` | Par de fixtures 12x36 com sindicato `feriado_12x36_em_dobra=False/True`, exigindo ausência/presença da parcela. `app/folha/export.py:406-412`; cadastro e leitor: `app/core/models.py:56`, `app/core/regua_cct.py:477`. |
-| FT | Zerar `horas_folga_trabalhada`. `app/folha/export.py:446` | Trabalho comprovado em folga com escala certa: horas em FT/100%; cortes 19 e 27/09 descritos em `app/ponto/calculador/regras.py:367-388`; rubrica global: `app/folha/migrations/0008_folga_trabalhada_rubrica_200.py:1-11`. |
-| Noturno | Zerar `horas_noturnas`. `app/folha/export.py:447` | 12x36 com AplicacaoConvencao cl.38-d: hora de 60min mantém adicional, não zero. L-036: `app/docs/LEIS.md:84`. |
-| Intra | Zerar `horas_intra_indenizada`. `app/folha/export.py:448` | Supressão **integral** de intervalo devido evita escolher entre integral e suprimido parcial: ambos coincidem neste caso; L-031/L-032: `app/docs/LEIS.md:79-80`. Para supressão parcial, manter DUVIDA conforme conflito declarado. |
-| Atraso+antecipada | Suprimir a parcela de saída antecipada da chamada. `app/folha/export.py:451-452` | Dia com ambas as pontas devidas e não nulas; exigir soma no TXT, respeitando teto previsto−realizado. Soma da rubrica: `app/folha/export.py:383-399`; L-093: `app/docs/LEIS.md:111`. |
-| Falta | Omitir `_buf.extend(montar_bloco_falta(...))`. `app/folha/export.py:735` | Um dia de falta **decidida/aprovada**, sem batidas, exige um dia e registro 11 com data; dia apenas sem batida não substitui a decisão para esta rubrica. L-039: `app/docs/LEIS.md:87`; emissão: `app/folha/export.py:169-185`, `app/folha/export.py:215-220`. |
-
-**Normas que exigem cuidado na consolidação:**
-
-- L-031 diz só o suprimido, mas sua própria linha declara que a leitura da flag foi adiada: não tratar descrição do motor como decisão nova. `app/docs/LEIS.md:79`.
-- L-086 contém texto antigo sobre feriado previsto, explicitamente revogado na própria linha: feriado previsto dobra segundo cadastro/ciclo. `app/docs/LEIS.md:118`.
-- A faixa HE100 acima de duas horas não tem lastro normativo achado na bateria; ela própria o declara. `app/ponto/tests/test_o280_bateria_da_lei.py:2198-2206`, `app/ponto/tests/test_o280_bateria_da_lei.py:3705-3712`. Use DUVIDA para um valor positivo dessa faixa.
-- L-085: turno pertence ao início. `app/docs/LEIS.md:117`.
-- L-035/L-036: prorrogação e redução devem seguir regime/cadastro/CCT, inclusive cl.38-d. `app/docs/LEIS.md:83-84`.
-- O obstáculo declarado de construir caso completo que entra no TXT está mesmo na ponta citada pelo backlog: `app/folha/tests/test_porta_do_export.py:216-229`; não é uma prova de fechamento=export=DiaPago, porque o teste declara que passou a chamar a função de comparação isolada.
-
-## 08/11 16:37 · sessao 253d5dbeaf26 · - · - · origem=Ronald (tmux)
-
-Leitura concluída; nenhum motor/teste executado e nenhuma escrita realizada. [não verificado] [nao verificado]
-
-**Normas utilizáveis na tabela**
-
-| Regra | Evidência |
-|---|---|
-| Gabarito = regra aplicada a cadastro e batidas; 4 propriedades fixas | `app/docs/LEIS.md:136` |
-| Fonte de previsto = grade; proibido derivador paralelo | `app/docs/LEIS.md:75` |
-| Jornada pertence ao dia de início, inclusive feriado | `app/docs/LEIS.md:117` |
-| Feriado previsto pode dobrar conforme ciclo/cadastro; cláusula antiga L-086 foi revogada | `app/docs/LEIS.md:118` |
-| Teto de pontualidade = previsto − trabalhado; soma atraso + antecipada limitada; rateio proporcional | `app/docs/LEIS.md:111` |
-| L-031 True indeniza somente suprimido, False preassinalado; registro também declara leitura da flag adiada | `app/docs/LEIS.md:79` |
-| Piso legal tolerância 5 min/marcação e 10/dia | `app/core/regua_cct.py:39` |
-| CLT 12x36 não prorroga noturno pós-05h; CLT comum prorroga; CCT depende do sindicato | `app/core/regua_cct.py:153` |
-| Cl.38-d Vigilantes Londrina, PR000251/2026: hora 60 minutos no 12x36, adicional permanece | `app/core/regua_cct.py:127` |
-| Empresa CCT sem aplicação/empate → piso legal com `fonte`; empate não escolhe pela ordem | `app/core/regua_cct.py:1`, `app/core/regua_cct.py:269`, `app/core/regua_cct.py:366` |
-
-**Lacuna principal do recorte dos cinco casos**
-
-A fixture base cria empresa sem `regime_trabalhista` (`app/ponto/tests/test_o280_bateria_da_lei.py:1113`), e a costura chama `get_motor` diretamente (`app/ponto/tests/test_o280_bateria_da_lei.py:146`, `app/ponto/tests/test_o280_bateria_da_lei.py:156`). Portanto os casos F4b/F4c de flags não provam a escolha pelo cadastro Empresa + AplicacaoConvencao + Sindicato. O F4c troca o fator por argumento direto e compara resultados (`app/ponto/tests/test_o280_bateria_da_lei.py:4358`). Criação de AplicacaoConvencao/Sindicato nesses dois arquivos: não achei. [não verificado]
-
-**Casos mínimos sugeridos para a tabela 2**
-
-| id | cadastro e batidas locais | resposta pela regra | norma |
-|---|---|---|---|
-| CCT-REAL-38D | 12x36 19–07, pausa 01–02; regime CCT, aplicação vigente Vigilantes, redução afastada e pós5=False, dia sem feriado; E19/S01/E02/S07 | Noturno relógio `(22–01)=180 + (02–05)=180 = 360 min`; legais `360 × 1 = 360 min = 6h`; adicional continua devido, não multiplicar as horas da rubrica por 20% | `app/core/regua_cct.py:127` |
-| CCT-SEM-APLICACAO | Mesmas batidas, empresa CCT sem aplicação | Noturno relógio 360; legais `360 × 60/52,5 = 411,428571 min = 6,857142h`; `fonte` informa sem aplicação | `app/core/regua_cct.py:153`, `app/core/regua_cct.py:366` |
-| CCT-EMPATE | Mesmas batidas; duas aplicações vigentes no mesmo nível | Mesmo piso: `360 × 60/52,5 = 411,428571 min`; fonte informa empate; repetir invertendo a ordem das aplicações | `app/core/regua_cct.py:269`, `app/core/regua_cct.py:366` |
-| CCT-6X1 | 6x1 noturno 19–07 com pausa 01–02; empresa CCT + aplicação SINEEPRES, pós5=False | Com cláusula comprovada restringindo a 22–05, relógio360 e legais411,428571; texto primário da cl.10 não achei nesta busca; vinculação legal específica permanece **DUVIDA** | Restrição configurável descrita em `app/core/models.py:72`; regra cadastro em `app/core/regua_cct.py:166` |
-| CCT-FERIADO-12X36 | 12x36 07–19, pausa12–13, empresa CCT com aplicação e sindicato feriado_12x36_em_dobra=True; feriado previsto | Jornada trabalhada `300+360=660 min`; pela regra cadastrada, dobra660 min; cláusula específica que conceda a dobra não achei, então **DUVIDA** para nome/cláusula da CCT | `app/core/models.py:49`, `app/folha/export.py:402` |
-| LEI-71 | 5x2 08–17 pausa cadastral12–13, pausa realizada12–12:30; empresa CLT; sem feriado | **DUVIDA**: aplicar só suprimido pós-2017 ou critério “INTEGRAL” declarado no comentário? Não fechar número por iniciativa própria | `app/docs/LEIS.md:79`, `app/ponto/motor_calculo_v2.py:66` |
-| LEI-58 | 5x2 08–17 pausa12–13; CLT; E08:06/S12/E13/S17; sem feriado | **DUVIDA**: prevalece literal 5/marcação e 10/dia ou decisão declarada 10/ponta? O caso isola marcação >5 com total diário <10 | `app/core/regua_cct.py:45`, `app/ponto/motor_calculo_v2.py:52`, `app/ponto/tests/test_o280_bateria_da_lei.py:650` |
-| LEI-DEGRAU | Dia normal com excesso superior a120 minutos e pares reconhecidos | **DUVIDA**: qual cláusula cria 100% após duas horas? Art.59 só fixa mínimo50%; não inventar repartição | `app/ponto/tests/test_o280_bateria_da_lei.py:2203` |
-
-**Correção indispensável para o inventário**
-
-F9 começa anunciando 5/10 legal, mas os asserts reais esperam atraso **0 em08:07** e **11 em08:11**. Não contar F9 como teste de cobrança literal após cinco minutos. `app/ponto/tests/test_o280_bateria_da_lei.py:3294`, `app/ponto/tests/test_o280_bateria_da_lei.py:3351`, `app/ponto/tests/test_o280_bateria_da_lei.py:3355`.
-
-F1 calcula o esperado pela própria autoridade de previsto, sem número legal independente; não contar como caso com gabarito aberto independente do código. `app/ponto/tests/test_o280_bateria_da_lei.py:1302`, `app/ponto/tests/test_o280_bateria_da_lei.py:1316`.
-
-**Outras lacunas/limites**
-
-Troca de empresa no meio da competência não tem cadastro temporal correspondente; o próprio CASOS F5b declara fora, pois colaborador tem uma empresa e a troca reescreve a janela inteira. `app/ponto/tests/test_o280_bateria_da_lei.py:379`.
-
-A dificuldade da prova completa export/fechamento está documentada: a fixture precisa integração Domínio, fechamento com horas, células julgadas em todos os dias e rubricas homologadas; o teste referido acabou medindo função parcial. `app/folha/tests/test_porta_do_export.py:216`.
-
-Para 8932, o ponto exporta dias aprovados dos tipos que abonam, exceto exclusões do catálogo; férias ficam em módulo próprio. `app/folha/export.py:193`, `app/folha/export.py:207`. Não tratar abonos do motor como prova automática da linha8932: essa rubrica consulta Ausencia diretamente. `app/folha/export.py:201`.
-
-Para mutantes do export, todos os casos “pela porta real” devem ir até o TXT: mesmo F11c mede FechamentoMensal e DiaPago, sem provar emissão do TXT. `app/ponto/tests/test_o280_bateria_da_lei.py:1732`, `app/ponto/tests/test_o280_bateria_da_lei.py:1745`.
-
-_2905 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2908 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
