@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:31** · publicado em **09/11/2026 08:31** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:34** · publicado em **09/11/2026 08:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:34 · sessao b4de1741aa55 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
+
+**PROCEDENTE: a cura do par reconhecido está estruturada, mas identidade, leitores da espera e rollback do O330 ainda impedem afirmar o contrato universal.** `app/chamados/services/materializacao.py:84`, `app/chamados/services/explicador.py:97`, `app/chamados/services/validacao.py:190`.
+
+1. **ATO ÚNICO — NAO PROCEDE para o par identificado; a universalidade não está atendida.**
+
+   O par reconhecido entra no mesmo `atomic`, põe ambas em voo, desliga a guarda individual e julga paridade/lastro depois das duas chamadas. Carimbos e reconciliação vêm depois. Toda batida nova desse ramo passa pela porta; reuso pode dispensar `registrar_batida`. `app/chamados/services/materializacao.py:1315`, `app/chamados/services/materializacao.py:1335`, `app/chamados/services/materializacao.py:1340`, `app/chamados/services/materializacao.py:1347`, `app/chamados/services/materializacao.py:919`, `app/chamados/services/materializacao.py:987`.
+
+   **Ainda existe aplicação individual de intervalo:** `sem_par`, `par_ambiguo` e `marcos_sem_par` caem no avulso. A irmã já aplicada é explicitamente cobrada como controle desse comportamento. Não equivale a garantir ato conjunto para todo motivo de intervalo. `app/chamados/services/materializacao.py:77`, `app/chamados/services/materializacao.py:1400`, `app/chamados/services/materializacao.py:1447`, `app/chamados/tests/test_bug_par_intervalo.py:444`.
+
+   Chamadores encontrados por AST:
+
+   | Função chamada | Chamadores; apelido |
+   |---|---|
+   | `_materializar_uma` | `validar_pergunta`, import sem alias: `app/chamados/services/validacao.py:466`, chamadas `:469`, `:474`; varredura, nome local: `app/chamados/services/materializacao.py:1565`; `_plantar_o_dia`, import sem alias: `app/chamados/services/passivo_validado.py:39`, chamada `:529`. |
+   | `_materializar_resposta_hora` | `_materializar_par` e `_materializar_avulsa`, nomes locais: `app/chamados/services/materializacao.py:1336`, `app/chamados/services/materializacao.py:1447`; reexport sem chamada: `app/chamados/models.py:4077`. |
+   | `registrar_batida`, neste materializador | Import sem alias; ramo hora e ramo data/hora: `app/chamados/services/materializacao.py:986`, `app/chamados/services/materializacao.py:987`, `app/chamados/services/materializacao.py:1068`. |
+
+   **FILA — outros atos de preenchimento de intervalo também admitem resultado parcial:** `veredito_celula` captura falha por escrita e só desfaz quando nenhuma ação deu certo; regularização externa continua após uma criação recusada. São decisões do dia/regularização externa, com unidades próprias, não o aceite destas duas `PerguntaDisputa`. Cura: auditar atomicidade dessas unidades separadamente; não incluí-las numa promessa universal já cumprida. `app/ponto/services/veredito_celula.py:320`, `app/ponto/services/veredito_celula.py:327`, `app/ponto/services/veredito_celula.py:342`, `app/chamados/services/regularizacao_ext.py:172`, `app/chamados/services/regularizacao_ext.py:176`, `app/chamados/services/regularizacao_ext.py:197`.
+
+2. **TRAVAS — NAO PROCEDE a inversão entre os dois validadores descritos.**
+
+   `_travar_ato_materializacao` trava primeiro Colaborador; depois entrega o universo à porta que adquire Disputas → Chamados → Perguntas, cada tabela por PK. Dois validadores do mesmo colaborador serializam antes de alcançar qualquer metade. `app/chamados/services/materializacao.py:95`, `app/chamados/services/materializacao.py:104`, `app/chamados/models.py:2674`, `app/chamados/models.py:2683`, `app/chamados/models.py:2696`, `app/chamados/models.py:2700`.
+
+   Seus quatro sítios de chamada estão dentro de transação: validação, envelope comum, competência O330 e dia O330; todos usam import sem alias ou nome local. `app/chamados/services/validacao.py:428`, `app/chamados/services/validacao.py:434`, `app/chamados/services/materializacao.py:1378`, `app/chamados/services/materializacao.py:1379`, `app/chamados/services/passivo_validado.py:371`, `app/chamados/services/passivo_validado.py:432`, `app/chamados/services/passivo_validado.py:519`, `app/chamados/services/passivo_validado.py:520`.
+
+   **FILA — prova concorrente:** R3 executa as validações sequencialmente; não exercita duas conexões disputando locks. Deadlock executado ou ausência dele: **[nao verificado]**. `app/chamados/tests/test_bug_par_intervalo.py:174`.
+
+3. **ESTADO — PROCEDENTE: a espera ganhou significado que vários leitores não conhecem.**
+
+   A primeira metade fica `VALIDADA`, sem `materializada_em`, morta para C6 e fora de `respostas_sem_veredito`. A porta nova preserva essa validação e retorna `aguardando_par`. `app/chamados/models.py:3041`, `app/chamados/juizes.py:1153`, `app/chamados/models.py:1851`, `app/chamados/services/validacao.py:192`, `app/chamados/services/validacao.py:482`.
+
+   | Leitor | Consequência |
+   |---|---|
+   | Explicador/modal | Diagnostica `validada_sem_gravar`, manda corrigir escala ou TI/DP e anuncia “o sistema não conseguiu gravar”, mesmo com espera legítima. **PROCEDENTE.** `app/chamados/services/explicador.py:97`, `app/templates/chamados/partials/modal_fio.html:449`. |
+   | Declaração/admin/app | Considera validação sem registro uma falha e manda refazer o horário; a projeção da API reutiliza essa família de leitores. **PROCEDENTE.** `app/chamados/services/declaracao_texto.py:221`, `app/chamados/services/declaracao_texto.py:406`, `app/chamados/services/declaracao_texto.py:677`, `app/api/views.py:1119`. |
+   | Vigia do carimbo/O330 | Inclui a espera em `sem_plantio_nenhum` e `resposta_enviada_sem_gravacao`, “esperado 0”; o reparador seleciona esse universo. **PROCEDENTE.** `app/chamados/services/vigia_carimbo.py:97`, `app/chamados/services/vigia_carimbo.py:116`, `app/chamados/services/vigia_carimbo.py:140`, `app/chamados/services/passivo_validado.py:324`. |
+   | Cron desse vigia | O padrão não alarma esse passivo: usa apenas `--alarme`; o contador entra com `--alarme-passivo`. **NAO PROCEDE** alarme automático padrão por essa causa. `app/config/crons.py:1751`, `app/chamados/management/commands/vigiar_carimbo_sem_registro.py:73`. |
+   | Placar | A metade sai do crédito de perguntas vivas; conta como validação humana, sem exigir aplicação. **NAO PROCEDE** chamar essa contagem de materialização. `app/chamados/services/raiox.py:72`, `app/chamados/services/verbos.py:34`, `app/chamados/services/painel.py:268`. |
+   | Auditor I18 | Não a acusa como sem dono, pois exige `recusa_motivo=''`. **NAO PROCEDE** essa falsa orfandade específica. `app/chamados/management/commands/auditar_invariantes_chamados.py:1075`. |
+
+   **PROCEDENTE — fechamento contingente à irmã:** a espera não bloqueia C7 por si. Se a irmã sair do conjunto vivo/sem-veredito, `pode_fechar()` pode autorizar fechamento com a primeira ainda sem aplicação; há fechadores automáticos que consomem esse resultado. Cura: representar a pendência do ato no juiz de fechamento e testar retirada da irmã entre aceites. `app/chamados/models.py:1851`, `app/chamados/models.py:1861`, `app/chamados/services/becos.py:56`.
+
+   `vigia_fio` incorpora classes do vigia do carimbo; `o_que_segura` delega à porta alcançável. Reabertura ou impacto quantitativo dessas esperas em produção: **[nao verificado]**. `app/chamados/services/vigia_fio.py:463`, `app/chamados/services/vigia_fio.py:485`, `app/folha/fora_da_folha.py:65`, `app/folha/fora_da_folha.py:221`.
+
+   **Cura comum:** os leitores acima devem consumir um estado canônico de espera antes de diagnosticar falha, preservando separadamente a dívida real de gravação. `app/chamados/services/materializacao.py:496`.
+
+4. **IDENTIDADE — PROCEDENTE: contar uma saída e uma volta não prova a mesma pausa.**
+
+   O identificador consulta disputa/data/motivo e compara o mapa global, que hoje fornece sempre `S/hii` e `E/hfi`. Não consulta os slots reais do dia. Assim, uma saída remanescente da primeira pausa e uma volta da segunda passam pela identificação. As duas pausas compartilham os mesmos motivos. Cura mínima: abster quando houver múltiplas pausas reais sem identidade suficiente; solução completa: vincular os slots pela autoridade existente de marcos. `app/chamados/services/materializacao.py:70`, `app/chamados/services/materializacao.py:84`, `app/chamados/juizes.py:885`, `app/ponto/marcos.py:35`.
+
+   `MARCO_DA_PERGUNTA`, `PARES_PAUSA_DNA`, `instancia_do_motivo` e a leitura das lâmpadas respondem perguntas diferentes; não são outro agrupador equivalente de perguntas. Não precisam chamar o agrupador novo. A divergência é ele afirmar identidade sem consumir a distinção real entre pausas. `app/chamados/juizes.py:882`, `app/escala/models.py:1652`, `app/chamados/services/declaracao_texto.py:42`, `app/chamados/juizes.py:917`.
+
+   **PROCEDENTE — prova insuficiente de preservação de HEAD:** R7 conserva escala de uma pausa e cria quatro perguntas; prova ambiguidade por quantidade, não duas pausas no DNA nem o casal cruzado remanescente. Para quatro elegíveis há fallback avulso; preservação universal com duas pausas reais: **[nao verificado]**. `app/chamados/tests/test_bug_par_intervalo.py:45`, `app/chamados/tests/test_bug_par_intervalo.py:255`, `app/chamados/services/materializacao.py:77`, `app/chamados/services/materializacao.py:1400`.
+
+5. **TEXTO — parcialmente atendido.**
+
+   **NAO PROCEDE** espera por substring: existe chave exata, reconhecida antes das regras textuais, mantendo retorno triplo. Os consumidores desempacotam esse contrato sem enumeração fechada de códigos. `app/chamados/catalogo/recusa.py:25`, `app/chamados/catalogo/recusa.py:95`, `app/chamados/services/acoes_disputa.py:34`, `app/chamados/services/fio.py:703`, `app/chamados/services/validacao.py:548`.
+
+   **NAO PROCEDE** “colada” por vizinha distante no novo ramo: ele exige mesmo colaborador/tipo, não retratada, dentro de ±60 segundos inclusivos. **PROCEDENTE**, porém, a duplicação dessa regra fora da porta. Cura: extrair o predicado de leitura em `registro_batida.py` e reutilizá-lo nos dois consumidores. `app/chamados/services/materializacao.py:1328`, `app/chamados/services/materializacao.py:1333`, `app/ponto/registro_batida.py:106`.
+
+   O prefixo de recusa conjunta conserva a causa para classificação; a casca de validação repassa a mensagem de espera sem anunciar ponto gravado. **NAO PROCEDE** quebra desses contratos. Permanecem as divergências de leitores do item 3. `app/chamados/services/materializacao.py:1362`, `app/chamados/catalogo/recusa.py:99`, `app/chamados/services/acoes_disputa.py:50`.
+
+   O modal ganhou caixas de espera nos ramos validada/não validada. É renderizado pela casca modal e pelo retorno parcial compartilhado pelos POSTs das duas cascas; o GET do fio completo usa outro template. O cartão de detalhe continua apenas com “validada”. **PROCEDENTE** apresentação incompleta; cura: compartilhar a apresentação do estado. `app/templates/chamados/partials/modal_fio.html:229`, `app/templates/chamados/partials/modal_fio.html:243`, `app/chamados/views.py:927`, `app/chamados/services/fio.py:494`, `app/chamados/views.py:674`, `app/chamados/views.py:697`, `app/templates/chamados/partials/_pergunta_card.html:20`.
+
+6. **ROLLBACK/E1 — atendido no caso normal; PROCEDENTE a exceção O330.**
+
+   A falha da segunda escrita desfaz as novas batidas/carimbos antes da recusa; depois há releitura e devolução das validações, acrescentando decisões. Não há edição/apagamento de decisões anteriores nesse fluxo. **NAO PROCEDE** quebra append-only demonstrada pelo diff. `app/chamados/services/materializacao.py:1315`, `app/chamados/services/materializacao.py:1356`, `app/chamados/services/materializacao.py:1361`, `app/chamados/services/validacao.py:202`, `app/chamados/services/validacao.py:208`, `app/chamados/models.py:3943`.
+
+   **PROCEDENTE — carimbo prévio sem lastro:** O330 admite esse estado; rollback restaura o carimbo anterior, e a devolução retorna sem limpar validação quando `materializada_em` permanece preenchido. Portanto não garante “zero materializada_em e ambas devolvidas” nesse universo. Cura: tratar explicitamente o descarimbo sem lastro pela porta dona antes da devolução, preservando E1. R4 não cobre essa combinação. `app/chamados/services/passivo_validado.py:531`, `app/chamados/services/materializacao.py:73`, `app/chamados/services/validacao.py:190`, `app/chamados/models.py:3203`, `app/chamados/tests/test_bug_par_intervalo.py:182`, `app/chamados/tests/test_bug_par_intervalo.py:390`.
+
+7. **CLASSES/PROVAS — não tomar GREEN ou RED agregado como demonstração completa.**
+
+   **NAO PROCEDE** segundo escritor novo de batida/carimbo fora das portas nesse ramo: criação, vínculo e carimbo usam as portas existentes. **PROCEDENTE** derivação paralela de proximidade e identidade insuficiente, conforme itens 4–5. `app/chamados/services/materializacao.py:987`, `app/chamados/services/materializacao.py:1008`, `app/chamados/services/materializacao.py:1256`.
+
+   **FILA — relógio:** o helper extraído lê `now()` por metade, e a aprovação lê outro instante. A expressão já existia no corpo anterior fornecido; regressão temporal concreta: **[nao verificado]**. Cura sugerida: receber o instante da borda do ato. `app/chamados/services/materializacao.py:1223`, `app/chamados/services/materializacao.py:1348`, `app/chamados/services/materializacao.py:993`.
+
+   Os mutantes substituem função real no módulo e executam teste-alvo; morte efetiva por asserção de M1–M18: **[nao verificado]**. M1/M10 miram rollback/devolução; M2/M3 espera/guarda individual; M4–M6 julgamento final; M7/M13 ambiguidade/contagem; M8 proximidade; M9 mapa; M11–M18 reconciliação, contagem, voo, travas e universos. `app/chamados/tests/mutantes_bug_par_intervalo.py:18`, `app/chamados/tests/mutantes_bug_par_intervalo.py:43`, `app/chamados/tests/mutantes_bug_par_intervalo.py:53`, `app/chamados/tests/mutantes_bug_par_intervalo.py:127`.
+
+   **PROCEDENTE:** M9 só altera artificialmente o mapa; não morde identidade real de duas pausas. **FILA:** M15/M18 conferem argumentos de trava, não concorrência SQL. R9 contém controles de comportamento legado que podem falhar na base apenas pelo import novo; isso não demonstra necessidade funcional da cura. `app/chamados/tests/test_bug_par_intervalo.py:463`, `app/chamados/tests/test_bug_par_intervalo.py:332`, `app/chamados/tests/test_bug_par_intervalo.py:361`, `app/chamados/tests/test_bug_par_intervalo.py:419`, `app/chamados/tests/test_bug_par_intervalo.py:446`.
+
+8. **ESCRITORES/LEITORES E SEMÂNTICA — inventário central, complementando os sítios acima.**
+
+   | Campo/fonte | Quem escreve | Quem lê |
+   |---|---|---|
+   | `validada_em/por` | Validação/devolução: `app/chamados/services/validacao.py:134`, `:202`; nova resposta: `app/chamados/services/disputa_emissao.py:1477`; carimbo/ressuscitação: `app/chamados/models.py:3135`, `:1565`. | C6/C7/estado: `app/chamados/juizes.py:1153`, `app/chamados/models.py:1851`, `:3041`; declaração, explicador, vigias e placares: item 3; projeção E1: `app/chamados/models.py:3924`; reconciliação: `app/chamados/reconciliador.py:629`, `:1049`. |
+   | `materializada_em/por`, `via_resolucao` | Porta interna e descarimbo em lote: `app/chamados/models.py:3099`, `:3266`; entradas `carimbar`, identidade, descarimbar: `:3103`, `:3168`, `:3203`. | Identificador/seletor: `app/chamados/services/materializacao.py:73`, `:1560`; fato/C6: `app/chamados/juizes.py:660`, `:1164`; relavra: `app/chamados/services/relavra_via.py:181`, `:244`; placar/veredito: `app/chamados/services/painel.py:67`, `app/chamados/veredito_lavrado.py:188`. |
+   | `recusa_motivo`, `pendencia_admin` | Ramo hora/recusa/limpeza conjunta: `app/chamados/services/materializacao.py:910`, `:1163`, `:1352`; recusa humana: `app/chamados/services/validacao.py:604`; escape: `app/chamados/services/disputa_emissao.py:1494`; identidade: `app/chamados/models.py:3188`. | Devolução/catálogo: `app/chamados/services/validacao.py:193`, `app/chamados/catalogo/recusa.py:95`; explicador: `app/chamados/services/explicador.py:85`; auditorias: `app/chamados/management/commands/auditar_invariantes_chamados.py:1075`; flip: `app/ponto/services/flip_auto.py:132`; apresentação residual: `app/templates/chamados/partials/_card_atendimento.html:186`. |
+   | `resposta_colab`, `respondida_em` | Resposta: `app/chamados/services/disputa_emissao.py:1464`; auto-resposta por carimbo: `app/chamados/models.py:3130`. | Prontidão/derivação: `app/chamados/services/materializacao.py:1384`, `:410`; C6/C7: `app/chamados/juizes.py:1169`, `app/chamados/models.py:1852`; E1: `app/chamados/models.py:3931`. |
+   | Identidade, motivo, dia, destino, conversa | Abertura factual/conversa: `app/chamados/models.py:2784`, `:2809`, `:3016`. | Identificador/travas: `app/chamados/services/materializacao.py:67`, `:99`; derivação: `:393`; fechamento/alcance: `app/chamados/models.py:1850`, `app/chamados/juizes.py:948`. |
+   | `contexto_json.marcos_faltantes` | Nascimento/reconstrução/renovação: `app/chamados/reconciliador.py:707`, `app/ponto/services/cartorio.py:1742`, `app/ponto/management/commands/reconciliar_grade.py:473`; porta de renovação: `app/chamados/services/contexto.py:102`. | Casamento/plantio: `app/chamados/juizes.py:534`, `app/chamados/services/materializacao.py:327`, `:463`; emissão: `app/chamados/services/disputa_emissao.py:1140`; lastro/grade: `app/ponto/services/lastro.py:75`, `app/escala/utils.py:1066`; regeneração: `app/escala/services/regeneracao.py:149`. |
+   | Batida: `timestamp`, tipo, origem, aprovação, vínculo | Criação: `app/ponto/registro_batida.py:157`; anotação: `:254`; vínculo: `app/chamados/services/materializacao.py:1008`. | Proximidade/paridade: `app/ponto/registro_batida.py:107`, `app/chamados/services/materializacao.py:148`; lastro: `app/chamados/juizes.py:267`; competência: `app/ponto/janelas.py:84`. |
+
+   **PROCEDENTE** a divergência semântica de `validada_em`: aceite pendente no escritor novo, terminalidade/falha em leitores antigos. **FILA** a fronteira de competência: O330 agrupa pelo dia do turno, enquanto a porta verifica o dia civil local do timestamp; são cálculos distintos já presentes, sem contraprova produtiva neste dado. A derivação overnight continua centralizada e aware; não encontrei nova conversão de fuso nesse diff. `app/chamados/services/materializacao.py:1402`, `app/chamados/juizes.py:1153`, `app/chamados/services/passivo_validado.py:113`, `app/ponto/janelas.py:84`, `app/chamados/services/materializacao.py:468`, `app/chamados/services/materializacao.py:475`.
+
+   Exaustividade de **todos** os leitores/escritores de cada atributo incidental transitivamente alcançado pelo diff, além deste inventário: **[nao verificado]**. Execução independente de RED/GREEN, população completa e resultados dos mutantes: **[nao verificado]**.
 
 ## 09/11 08:31 · sessao 0c3a374ff426 · - · - · origem=Ronald (tmux)
 
@@ -1132,198 +1229,4 @@ B/C concluídos em leitura; scripts e referências enviados ao agente principal.
 - Donos concretos e ponto atual da perda de cobertura dos alvos: [não verificado].
 - Padrões candidatos quando comprovada ESTRUTURA: Single Source of Truth e CQRS com projeções reconstruíveis, `app/docs/GLOSSARIO.md:11`, `:22`.
 
-## 09/11 07:47 · sessao b18df0b7c494 · - · - · origem=Ronald (tmux)
-
-D — achados e sonda para consolidação. Nenhum arquivo criado e nenhum acesso ao banco executado.
-
-1. O “8” é soma de unidades diferentes: chamados de premissa morta + perguntas absolvidas + chamados com rejunção pendente + chamados absolvidos pela célula + eventos mortos + chamados cujo juiz falhou. Não é contagem distinta de chamados. Fonte: `app/chamados/management/commands/reconciliar_chamados.py:118`.
-
-2. No último trecho fornecido, `8 = 2 perguntas absolvidas + 6 chamados absolvidos pela célula`; o `16` anterior era `1 + 15`. Esses números vêm exclusivamente do anexo colado, sem arquivo correspondente na cópia: **[não verificado]**.
-
-3. O vigia “premissa morta” desconta quem tem evento pendente por colaborador e exclui retenção/fecho recusado; “célula absolveu” apenas verifica ausência de evento pendente da célula e **não desconta retenção nem fecho recusado**. Portanto, parte dos seis pode ser retenção legítima, sem defeito de entrega. Fontes: `app/chamados/management/commands/reconciliar_chamados.py:62`, `app/chamados/management/commands/reconciliar_chamados.py:73`, `app/chamados/management/commands/reconciliar_chamados.py:79`, `app/chamados/reconciliador.py:1269`.
-
-| Subclasse | Evento/consumidor e alcance demonstrado |
-|---|---|
-| Premissa morta | Recompute que remove um turno aberto emite pelo mesmo atomic, condicionado a existir célula: `app/ponto/nucleo.py:60`, `app/ponto/nucleo.py:86`. Nascimento de chamado de turno também emite: `app/chamados/models.py:974`, `app/chamados/models.py:1093`. Consumidor reavalia premissa: `app/chamados/reconciliador.py:1369`. Relógio/deploy que muda a premissa sem recompute continua sem produtor declarado: `app/chamados/management/commands/reconciliar_chamados.py:21`. |
-| Pergunta absolvida | Save de veredito/ata emite: `app/ponto/portas/celula.py:878`, `app/ponto/portas/celula.py:894`. Consumidor chama `retratar_perguntas_absolvidas_por_celula`: `app/chamados/reconciliador.py:1365`. O juiz efetivo é `pergunta_viva`, depois a tranca: `app/chamados/reconciliador.py:650`, `app/chamados/reconciliador.py:661`. |
-| Rejunção | Mesmo evento; consumidor liga primeiro a célula, antes da absolvição: `app/chamados/reconciliador.py:1363`. Regeneração também chama diretamente após commit: `app/ponto/portas/celula.py:493`. O candidato exige vivo, escopo DIA, célula nula e célula existente: `app/chamados/rejuncao.py:59`, `app/chamados/rejuncao.py:81`. |
-| Célula absolveu | Mesmo evento; consumidor chama o retratador: `app/chamados/reconciliador.py:1368`. Predicado exige célula com veredito que não acusa e sem marcos pendentes: `app/chamados/reconciliador.py:1018`. A retratação ainda passa por retenção e `reconciliar()`: `app/chamados/reconciliador.py:518`. |
-| Eventos mortos | Não falta necessariamente emissor: evento com ≥5 tentativas e sem processamento sai da fila viva. Fontes: `app/chamados/reconciliador.py:1207`, `app/chamados/reconciliador.py:1246`, `app/chamados/reconciliador.py:1252`. Falhas de chamados/premissa deixam o evento pendente e incrementam tentativas: `app/chamados/reconciliador.py:1389`. |
-| Juiz falhou | É exceção do julgamento de premissa para chamado sem evento pendente, contada pelo vigia: `app/chamados/management/commands/reconciliar_chamados.py:73`, `app/chamados/management/commands/reconciliar_chamados.py:82`. No consumidor, falha da premissa é acumulada e retém o evento: `app/chamados/reconciliador.py:1462`. |
-| Fantasma com “morfologia” | Morfologia é apenas diagnóstico; quem conta como fantasma é núcleo fechado nas datas + premissa do catálogo morta: `app/ponto/management/commands/reconciliar_fantasmas.py:199`, `app/ponto/management/commands/reconciliar_fantasmas.py:245`, `app/ponto/management/commands/reconciliar_fantasmas.py:256`. Mesmo caminho de evento/retratador da premissa; sem célula, o recompute não emite: `app/ponto/nucleo.py:86`. |
-
-Há um mecanismo concreto de resíduo apesar de evento marcado como processado: os caminhos da pergunta e da rejunção engolem exceções, enquanto o consumidor os chama sem coletor `falhas`; depois marca o evento processado se a lista continuar vazia. Isso é possibilidade demonstrada pelo código, **não prova do ocorrido nos resíduos fornecidos**. Fontes: `app/chamados/reconciliador.py:601`, `app/chamados/reconciliador.py:615`, `app/chamados/reconciliador.py:669`, `app/chamados/rejuncao.py:90`, `app/chamados/rejuncao.py:109`, `app/chamados/reconciliador.py:1364`, `app/chamados/reconciliador.py:1390`.
-
-Também há processamento sem fechamento por decisão legítima: `_retratar` retorna `False` sob retenção; isso não é falha para o consumidor. O contador “célula absolveu” e o contador de fantasmas podem continuar contando esse chamado. Fontes: `app/chamados/reconciliador.py:437`, `app/chamados/reconciliador.py:518`, `app/chamados/reconciliador.py:1269`, `app/ponto/management/commands/reconciliar_fantasmas.py:264`.
-
-O conjunto completo de fantasmas colado tem 36 linhas: 11 diagnósticos de morfologia, 2 sem abertura, 2 incompletos e 21 `ok`; 13 têm pergunta e 23 não. O 38 não aparece no dado fornecido: **[não verificado]**. Não somar esses 36 ao alarme do reconciliador: universos e unidades diferem e podem sobrepor. Fontes dos universos: `app/ponto/management/commands/reconciliar_fantasmas.py:157`, `app/chamados/management/commands/reconciliar_chamados.py:59`, `app/chamados/reconciliador.py:1201`.
-
-O evento não registra origem nem payload; registra célula/colaborador/dia e estado de processamento. Processados são apagados após sete dias. Portanto, o código e os logs colados não permitem atribuir a cada resíduo qual emissor faltou historicamente. Fontes: `app/escala/models.py:1845`, `app/escala/models.py:1857`, `app/chamados/reconciliador.py:1404`.
-
-Dono provável do mecanismo sem produtor ou de exceção engolida: **ESTRUTURA**, por inferência de falha de entrega/consumo; padrão **Transactional Outbox / O-OUTBOX**, e, para morte por relógio/deploy sem evento, **sinal derivado do estado, reconciliação level-triggered**. Fontes dos padrões: `app/docs/GLOSSARIO.md:13`, `app/docs/GLOSSARIO.md:17`, `app/docs/PLANO-PADROES.md:10`. Retenção `irma_orfa` exige validação humana; não autoriza chamar o caso de bug estrutural. Fonte: `app/chamados/reconciliador.py:441`.
-
-Sonda D, para executar somente depois do envelope seguro. Ela usa os predicados existentes, agrega por classe e não imprime nomes, CPF ou IDs. O guard deve ser instalado **antes** destes imports; não executar consumidor, semeadura nem comando com `--apply`. Fontes dos predicados: `app/chamados/reconciliador.py:645`, `app/chamados/rejuncao.py:66`, `app/chamados/reconciliador.py:1018`, `app/ponto/management/commands/reconciliar_fantasmas.py:245`.
-
-```python
-# Dentro do envelope SELECT-only já instalado.
-# Não envolver em transaction.atomic(): reconciliaria() muda o caminho
-# para trava_na_ordem quando in_atomic_block.
-# Fontes: chamados/models.py:657 e :705-711.
-import json
-from collections import Counter
-from django.db import connection
-from django.db.models import Count
-
-assert connection.get_autocommit() and not connection.in_atomic_block
-
-from chamados.catalogo.motor import VIVOS
-from chamados.catalogo.premissa import avaliar, FATO_TURNO_ABERTO
-from chamados.juizes import dia_do_fato
-from chamados.models import ChamadoColaborador
-from chamados import reconciliador as r
-from chamados.rejuncao import _candidatos
-from colaboradores.models import Colaborador
-from escala.models import EscalaColaborador, EventoCelula
-from ponto.management.commands.reconciliar_fantasmas import (
-    MODULOS_ALVO, _parse_pendentes, _completude,
-)
-
-conta = Counter()
-alarme = Counter()
-pendentes_colab = set(
-    r.eventos_pendentes().values_list("colaborador_id", flat=True)
-)
-pendentes_celula = set(
-    r.eventos_pendentes().values_list("celula_id", flat=True)
-)
-
-def add(classe, modulo="", subcategoria="", causa="", diagnostico=""):
-    conta[(classe, modulo or "", subcategoria or "", causa, diagnostico)] += 1
-
-def diagnostico_do_fecho(ch):
-    try:
-        ret = r.retencao_da_retratacao(ch)
-        if ret is not None:
-            return "retencao:" + ret[0]  # não imprime os IDs do detalhe
-        return "fecharia" if ch.reconciliaria() else "gate_recusa"
-    except Exception as exc:
-        return "falha_gate:" + type(exc).__name__
-
-# Universo literal do vigia de premissa.
-for ch in ChamadoColaborador.objects.filter(
-    status_local__in=VIVOS
-).select_related("colaborador").order_by("pk").iterator():
-    if ch.colaborador_id in pendentes_colab:
-        continue
-    try:
-        vd = r._veredito_premissa(ch)
-        if vd is None or vd.viva:
-            continue
-        ret = r.retencao_da_retratacao(ch)
-        if ret is not None or not ch.reconciliaria():
-            add("premissa_morta_retida_MEDIDA",
-                ch.modulo_origem, ch.subcategoria, vd.motivo,
-                "retencao:" + ret[0] if ret else "gate_recusa")
-            continue
-    except Exception as exc:
-        add("juiz_falhou", ch.modulo_origem, ch.subcategoria,
-            type(exc).__name__)
-        alarme["juiz_falhou"] += 1
-        continue
-    add("premissa_morta_sem_evento", ch.modulo_origem,
-        ch.subcategoria, vd.motivo)
-    alarme["premissa_morta"] += 1
-
-# Os geradores abaixo são os mesmos lidos pelo vigia.
-for colab in Colaborador.objects.all().order_by("pk").iterator():
-    if colab.pk in pendentes_colab:
-        continue
-    for p in r.perguntas_absolvidas_pela_celula(colab):
-        add("pergunta_absolvida_sem_evento", causa=p.motivo)
-        alarme["pergunta_absolvida"] += 1
-    for ch, cel in _candidatos(colab):
-        add("rejuncao_sem_evento", ch.modulo_origem, ch.subcategoria)
-        alarme["rejuncao"] += 1
-
-# Reproduz a contagem de célula SEM retirar retenções,
-# e acrescenta o diagnóstico separado do motivo de não fechar.
-for ch in r._chamados_de_turno_vivos().iterator():
-    achado = r._absolvido_pela_celula(ch)
-    if achado is None:
-        continue
-    dia, cel = achado
-    if cel.pk not in pendentes_celula:
-        add("celula_absolveu_sem_evento", ch.modulo_origem,
-            ch.subcategoria, cel.veredito,
-            diagnostico_do_fecho(ch))
-        alarme["celula_absolveu"] += 1
-
-for row in EventoCelula.objects.filter(
-    processado_em__isnull=True,
-    tentativas__gte=r.MAX_TENTATIVAS_EVENTO,
-).values("tentativas").annotate(n=Count("pk")).order_by("tentativas"):
-    n = row["n"]
-    conta[("eventos_mortos", "", "",
-           "tentativas=" + str(row["tentativas"]), "")] += n
-    alarme["eventos_mortos"] += n
-
-# Universo literal de reconciliar_fantasmas.
-for ch in ChamadoColaborador.objects.filter(
-    modulo_origem__in=MODULOS_ALVO,
-    status_local__in=VIVOS,
-).select_related("colaborador").order_by("pk").iterator():
-    dia = dia_do_fato(ch)
-    ctx = ch.contexto_json or {}
-    if dia:
-        datas = [dia]
-    elif ch.modulo_origem == "entrada_bloqueada_turno_aberto":
-        datas = _parse_pendentes(ctx.get("pendentes"))
-    else:
-        datas = []
-    if not datas:
-        add("fantasma_skip_sem_data", ch.modulo_origem, ch.subcategoria)
-        continue
-    if any(r._tem_turno_aberto(ch.colaborador, dia=d) for d in datas):
-        add("fantasma_legitimo_nucleo", ch.modulo_origem, ch.subcategoria)
-        continue
-    vd = avaliar(ch.modulo_origem, ch.subcategoria,
-                 fatos={FATO_TURNO_ABERTO: False})
-    if not vd.escopo or vd.viva:
-        add("fantasma_skip_catalogo", ch.modulo_origem, ch.subcategoria)
-        continue
-
-    ec = EscalaColaborador.objects.filter(
-        colaborador_id=ch.colaborador_id, ativa=True
-    ).select_related("tipo_escala").first()
-    diags = set()
-    if ec and ec.tipo_escala:
-        te = ec.tipo_escala
-        tem_int = bool(te.hora_inicio_intervalo and te.hora_fim_intervalo)
-        for d in datas:
-            motivo = _completude(ch.colaborador_id, ec, te, tem_int, d)[4]
-            # Apenas rótulo agregado do diagnóstico já produzido.
-            diags.add(
-                "morfologia" if motivo.startswith("morfologia:") else
-                "incompleto" if motivo.startswith("incompleto ") else motivo
-            )
-    else:
-        diags.add("sem_escala_ativa_sem_diagnostico")
-    add("fantasma", ch.modulo_origem, ch.subcategoria,
-        "|".join(sorted(diags)), diagnostico_do_fecho(ch))
-
-print(json.dumps({
-    "alarme_por_subclasse": dict(alarme),
-    "alarme_soma_unidades_heterogeneas": sum(alarme.values()),
-    "classes": [
-        {
-            "classe": k[0], "modulo": k[1], "subcategoria": k[2],
-            "causa": k[3], "diagnostico": k[4], "n": n,
-        }
-        for k, n in sorted(conta.items())
-    ],
-}, ensure_ascii=False, sort_keys=True))
-```
-
-Limitação: o resultado descreve o estado observado durante a leitura, não reconstrói por si a história de entrega nem elimina concorrência entre SELECTs. **[não verificado]**
-
-_3072 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3073 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
