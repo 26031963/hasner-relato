@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 01:46:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **617**.
+**Medido em 09/11/2026 01:51:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **619**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:51:04 | Bash | Deploy E1-FILA | `cd /home/ronald/saas-hasner; git status --porcelain app/ bin/ \| grep -v "^??" \| head; bash bin/deploy.sh > logs/fio_e0_v4/deploy_e1fila_0909.log 2>&1; echo rc=$?; tail -25 logs/fio_e0_v4/deploy_e1fila_0909.log` |
+| 01:51:00 | Bash | Read sombra result and conferir | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/byu7lbj4p.output \| tail -15; cd /home/ronald/saas-hasner; bin/sombra.sh --conferir 2>&1 \| tail -5; date` |
 | 01:00:14 | Bash | Confirm censo launched | `/usr/bin/sleep 5; cat /home/ronald/saas-hasner/logs/e1fila_v22/censo.out; tail -2 /home/ronald/saas-hasner/logs/fio_e0_v4/sombra_bloco_0909.log` |
 | 01:00:12 | Bash | Launch Codex censo for V2-2 | `mkdir -p /home/ronald/saas-hasner/logs/e1fila_v22; cat > /home/ronald/saas-hasner/logs/e1fila_v22/censo.q <<'EOF' OBRA E1-FILA-V2-2-TRAVA, papel CENSO (so leitura, arquivo:linha em toda afirmacao; o que nao abriu = [nao verificado]). Contexto: a porta `chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos` trava no topo, por `_trava_do_repasse`, um conjunto pela autoridad ...` |
 | 00:59:55 | Bash | Read Codex V2-2 finding and trava code | `cd /home/ronald/saas-hasner/app; grep -n "V2-2\\|V2.2\\|2\." ../logs/fio_e0_v4/codex_e1fila_v2.r \| head -5; awk '/V2-2\|^2\./,/^3\./' ../logs/fio_e0_v4/codex_e1fila_v2.r \| head -40; sed -n 935,1000p chamados/services/disputa_emissao.py` |
