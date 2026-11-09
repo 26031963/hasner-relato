@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 19:59** · publicado em **09/11/2026 19:59** (UTC-3)
+> Ultima resposta processada: **09/11/2026 20:04** · publicado em **09/11/2026 20:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 20:04 · sessao 2390bdb8a8f2 · FIO-E0-V4-E4-ESCRITORES · censo · origem=Code
+
+Nos anexos, numerei as linhas desde a primeira linha de cada conteúdo, incluindo linhas vazias. Classifico o **achado específico**, distinguindo-o de outros problemas na mesma função.
+
+| achado | classe | trecho .q | trecho .r | linha da triagem | 1 linha de motivo |
+|---|---|---|---|---|---|
+| **P1 — consulta desnecessária e justificativa C8** | **(e) NÃO PERGUNTADO** | “cada escritor tocado, chamado 2x, produz o mesmo estado, 1 linha de trilha e 0 duplicata?” (`preverif_e4a1.q:41`) | “dedup conserva a linha e só salva reuso com alterações” (`preverif_e4a1.r:162`) | F2 discute “re-emite EventoCelula” e “outbox at-least-once”, sem tratar da consulta de captura (`triagem_preverif_e4a1.txt:24–26`). | Faltou perguntar sobre custo SQL do reuso **sem alteração** e validade da justificativa C8; idempotência de estado não verifica consulta dispensável (`preverif_e4a1.q:41`; `app/chamados/models.py:2958,2993–3003`). |
+| **P2 — ramo por `perguntar` continua sem `hoje`** | **(a) tema presente; ramo específico não visto** | “D9: o C6 […] le date.today() / relogio no caminho que este diff toca?” (`preverif_e4a1.q:14–15`) | “Há também o caminho fábrica → desfazer carimbo → `pergunta_viva` → janela, igualmente sem instante injetado” (`preverif_e4a1.r:33`) | “PROCEDENTE […] -> CURADO”; descreve a passagem direta de `hoje`, sem identificar o segundo ramo (`triagem_preverif_e4a1.txt:8–12`). | A resposta viu D9, mas não enumerou o caminho por `perguntar`; a triagem aceitou e curou parcialmente, portanto **não houve descarte desse achado** (`app/chamados/services/fabrica_da_celula.py:140–142,178,188`). |
+| **P3 — ausência de contador/vigia** | **(d) tema abordado de forma insuficiente; nenhum dos dois viu** | “dia passado sem marcos previstos NAO gera pergunta por data. Algum caminho […] ainda gera pergunta para esse dia?” (`preverif_e4a1.q:36–37`) | “Pauta sem turno […] **CONFORME:** […] inclui pautas já feitas/canceladas” (`preverif_e4a1.r:165`) | E3 descarta outro problema: “ha batida de entrada, nao e o 'dia passado sem nada'” (`triagem_preverif_e4a1.txt:17–21`). | PASSADO-SEM-MARCOS foi perguntado pelo lado da emissão proibida; faltou explicitar a obrigação positiva do contador e o ciclo após fechar/cancelar a Pauta (`app/docs/PROMPTS.md:2004`; `app/chamados/services/fabrica_da_celula.py:277–304`). |
+| **P4 — RED sobrescrito pelo GREEN** | **(c) fora do alcance: evidência de execução posterior** | “selo/RED sem mordida […] algum teste passa com o codigo produtivo revertido” (`preverif_e4a1.q:28–29`) | “CONFORME para os sete mutantes declarados” (`preverif_e4a1.r:107`) | A cura posterior anuncia “RED/GREEN: ponto/tests/test_porta_celula_dia.py” (`triagem_preverif_e4a1.txt:3–7`). | O achado é a perda do registro RED da cura posterior, relatada no anexo; não é o defeito de reversão que o Codex identificou (`opus_final_e4a1_1.txt:24–26`; `triagem_preverif_e4a1.txt:3–7`). |
+| **P5 — “o caso comum”** | **(c) fora do alcance temporal da leitura** | “Copia lida: o commit 6a1fc54f7”; “julgue o codigo contra os avais e leis anexos” (`preverif_e4a1.q:2–4`) | “A porta física da sequência continua sendo `registrar`” (`preverif_e4a1.r:54`) | F1 descarta duplicação por replay, não vocabulário (`triagem_preverif_e4a1.txt:22–23`); as curas seguem “sem 2a volta Codex” (`:27`). | A frase foi acrescentada na cura posterior de `registrar([])`; ela não existia no corpo lido em 6a, portanto não cabe atribuir sua ausência àquela resposta (`6a1fc54f7/app/chamados/models.py:3939–3948`; `app/chamados/models.py:3943–3946`). |
+
+A comparação temporal dos snapshots disponíveis mostra:
+
+- **P1:** a consulta já estava em **6a1fc54f7**, exatamente antes de `upd = []`; permaneceu igual em 629f2d244. Portanto, **não nasceu nas curas posteriores**. O aumento dos tetos e a justificativa C8 são posteriores (`6a1fc54f7/app/chamados/models.py:2958–2959`; [models.py:2958](/home/ronald/codex_ws/629f2d244fa0f0c527e56a2697b4c633b263b729/app/chamados/models.py:2958); `6a1fc54f7/app/ponto/tests/test_selo_chokepoint_escrita.py:180,187`; `app/ponto/tests/test_selo_chokepoint_escrita.py:180,187`). Sua introdução especificamente no diff **f2962ab8d..6a1fc54f7**, em vez de já existir na base, permanece **[nao verificado]**: a base e o patch não estavam disponíveis nesta consulta.
+- **P2:** o ramo `perguntar_pela_celula → perguntar → desfazer_carimbo_sem_lastro` já existia sem propagação de `hoje`; a cura posterior acrescentou `hoje=hoje` somente à chamada direta. O furo permaneceu, enquanto a cura parcial e seu selo nasceram depois (`6a1fc54f7/app/chamados/services/fabrica_da_celula.py:128–137,180–182`; [fabrica_da_celula.py:178](/home/ronald/codex_ws/629f2d244fa0f0c527e56a2697b4c633b263b729/app/chamados/services/fabrica_da_celula.py:178); `app/chamados/services/fabrica_da_celula.py:188`; `app/chamados/tests/test_e4a_relogio_injetado.py:61–63`).
+- **P4:** o bloco de rejulgamento e os testes correspondentes foram acrescentados depois de 6a; a sobrescrita do log é sustentada pelo dado raspado, sem confirmação independente de execução (`6a1fc54f7/app/ponto/portas/celula.py:807–809`; [celula.py:809](/home/ronald/codex_ws/629f2d244fa0f0c527e56a2697b4c633b263b729/app/ponto/portas/celula.py:809); `app/ponto/tests/test_porta_celula_dia.py:257–282`; `opus_final_e4a1_1.txt:24`). Há divergência documental: o `RELATO.md:8` desta cópia contém “E4a 17:09”, não a citação RED atribuída a ele pelo opus ([RELATO.md:8](/home/ronald/codex_ws/629f2d244fa0f0c527e56a2697b4c633b263b729/app/docs/RELATO.md:8); `opus_final_e4a1_1.txt:24`).
+
+**Contagem da tabela: (a) 1; (b) 0; (c) 2; (d) 1; (e) 1. Total: 5.**
 
 ## 09/11 19:59 · sessao 81d39397ed64 · - · - · origem=Ronald (tmux)
 
@@ -763,25 +783,4 @@ Recomendação para mutantes: executar a função produtiva extraída de fonte c
 
 Exaustividade por reflexão, SQL ou nomes montados dinamicamente: **[nao verificado]**.
 
-## 09/11 17:06 · sessao a086c7213e12 · - · - · origem=Ronald (tmux)
-
-| Template | Leitores adicionais ao `censo_v2` fornecido |
-|---|---|
-| `app/templates/chamados/partials/modal_fio.html` | R: `:184`, `:216`, `:218`, `:219`; V: `:227`; F: `:378`, e por `disputa_obj.aberta`: `:75`, `:325`; R indireto por `leitura_da_resposta`: `:249`; R indireto por `todas_respondidas`: `:333`. |
-| `app/templates/chamados/partials/_card_atendimento.html` | R: `:94`, `:100`, `:108`, `:135`, `:137`, `:142`, `:148`, `:155`, `:176`, `:177`, `:384`, `:385`; via: `:186`; V/C/R por `p.estado`: `:183`; F por `disputa_obj.aberta`: `:10`, `:15`; R/F por `pode_solicitar_correcao`: `:190`. |
-| `app/templates/chamados/partials/_pergunta_card.html` | R: `:24`, `:29`, `:31`, `:32`; V: `:20`, `:23`, `:42`; R indireto por `leitura_da_resposta`: `:43`. |
-| `app/templates/chamados/partials/_lote_preview.html` | R: `:24`. |
-| `app/templates/chamados/fio_colaborador.html` | F por `disputa_obj.aberta`: `:164`, `:169`. |
-| `app/templates/chamados/detalhe_local.html` | F por contexto `disputa_aberta`: `:6`, `:296`; seleção por `fechada_em__isnull=True` em `app/chamados/services/acoes_chamado.py:336`. |
-
-| Comprovação dos aliases | Fonte |
-|---|---|
-| `aberta` lê `fechada_em`. | `app/chamados/models.py:1821` |
-| `estado` lê V/C/R. | `app/chamados/models.py:3030`, `:3032`, `:3034`, `:3035`, `:3037` |
-| `resposta_display` lê `resposta_colab`. | `app/chamados/models.py:3510`, `:3515`, `:3523`, `:3530`, `:3532` |
-| `leitura_da_resposta` lê R por `getattr`. | `app/chamados/templatetags/chamados_tags.py:128` |
-| `todas_respondidas` deriva de `all(p.respondida_em)`; `pode_solicitar_correcao` combina isso com `d.aberta`. | `app/chamados/services/fio.py:340`, `:341`, `:342` |
-
-Correção da mensagem anterior: não há ocorrência de `pode_solicitar_correcao` no modal; a ocorrência encontrada é apenas `app/templates/chamados/partials/_card_atendimento.html:190`.
-
-_3223 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
