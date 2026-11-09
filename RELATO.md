@@ -1,5 +1,6 @@
 # RELATO — esteira saas-hasner
-ESPERANDO: trava_teste.sh | pid=1896030
+ESPERANDO: trava_teste.sh | pid=320723
+PAR-NAO-ADJACENTE 04:2x: suite v3 (f1d492c5) FAILED 1 so na catraca (9 linhas de escala/utils.py +1, texto identico conferido por difflib contra b57ce0a1) -> commit 795cafdf na copia; suite v4 na trava (logs/par_nao_adjacente/suite_v4.log). Opus final depois do verde.
 SELOS-CANON-I1 04:1x: pre-verificador v3 rc 0 -- PROCEDENTES itens 2 (no_topo empurra ESPERANDO/B3 para fora do recorte; conferido esteira_vigia.py:865-891), 4 (CLI julga nome do anexo, nao conteudo; conferido disjuntor.py:2152), 6/7 menores, 8 (4 mutantes sobrevivem); item 3 DESCARTADO -> fila (escritores do RELATO fora da trava, anteriores a obra). Triagem logs/selos_canon/i1_triagem_v3.txt. Volta 4 ao mesmo construtor (agente com contexto; troca no meio custaria o contexto -- decisao tecnica).
 FIO-E0-V4-E2 04:02: suite inteira v3 na copia ad77299d (inclui V2-2 89df8c52) VERDE -- OK (skipped=42, expected failures=41), Ran 14731, rc=0 (logs/fio_e0_v4/e2_rebase/suite_v3.log). Nao pousa ate E3. Trava passou a suite do PAR (pid 1896030).
 SELOS-CANON-I1 03:5x: construtor volta 3 = eec4007f7 (copia wt-i1-censovaga-015903): P1-P6 + achados 6/7 da triagem v2 curados segundo o construtor; selo 22 mutantes mordem, codex_pergunta 75; P7-P9 DESCARTADOS ao opus. Falso vermelho de worktree: test_handoff_sessao (settings.json aponta a raiz principal). Pre-verificador Codex v3 lancado (logs/selos_canon/i1_preverif_v3.r).
