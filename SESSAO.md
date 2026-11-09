@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 01:14:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **662**.
+**Medido em 09/11/2026 01:20:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **659**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -669,6 +669,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:20:37 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/fio_e0_v4/suite_e1_merge_b74da998.log; for t in numeros_exatos linhas_reais_congeladas a_classificar_publicado; do echo "== $t"; awk "/FAIL: test_.*$t/{f=1} f&&/^(\+\|-\|\?) /{print} f&&/^(FAIL\|ERROR\|Ran ):?/&&!/$t/{exit}" $L \| cut -c1-200 \| head -20; done; sed -n 1,40p /home/ronald/wt-e1merge-125704/app/core/tests/test_medida_turno_do_par.py` |
 | 13:20:32 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/fio_e0_v4/suite_e1_merge_b74da998.log; /bin/grep -n 'FAIL: test_CATRACA_numeros_exatos' -A30 $L \| /bin/grep -v '^\s*$' \| head -45` |
 | 13:20:29 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bzh2jfh8g.output; ls -d /home/ronald/wt-fioe1v15c2-* 2>/dev/null` |
-| 13:15:39 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO') L.insert(4,"E1 sombra sobre b74da998 (logs/fio_e0_v4/sombra_e1_pouso_b74da998.out, sombra_e1_inv_b74da998.out, sombra_e1_desc_causa_b74da998.out): DRY igual ao f4d69b25 (universo 20527, migra 4 vivas/0 mat, os mesmos 5 grupos exportados fora, dedup 0, PERGUNTA_SOB ...` |
-| 13:15:32 | SendMessage |  | `-` |
-| 13:15:08 | Bash |  | `sed -n 1,30p /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py; cd /home/ronald/saas-hasner; /bin/grep -n 'descarimb' app/docs/CORTES.md app/docs/LEIS.md \| cut -c1-300 \| head` |
