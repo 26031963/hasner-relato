@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 13:39** · publicado em **09/11/2026 13:40** (UTC-3)
+> Ultima resposta processada: **09/11/2026 13:41** · publicado em **09/11/2026 13:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 13:41 · sessao b63b62a74363 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · verificador · origem=Code
+
+**P1–P5 da triagem v3 estão corrigidos nos sítios apontados, mas restam dois PROCEDENTES funcionais: fechamento do chamado por S127 e perda do motivo de `pendencia_admin`. M38 tem mordida estrutural, sem demonstrar diferença comportamental no cenário vazio.** Referências abaixo relativas a `app/`. (`chamados/models.py:1927`; `chamados/juizes.py:2138`; `chamados/services/materializacao.py:1375`; `chamados/tests/test_bug_par_intervalo.py:724`.)
+
+**0. P1–P5 v3 — NAO PROCEDE que continuem abertos nesses pontos.**
+
+| Item | Cura efetiva | Asserção discriminante |
+|---|---|---|
+| P1: retratadas | Vizinhança usa universo apurável. `chamados/services/materializacao.py:178`; `ponto/turnos.py:2866` | Exige aplicação e sequência canônica preservando retratada. `chamados/tests/test_bug_par_intervalo.py:176` |
+| P2: descarimbo vazio | Compara os três campos antes de salvar. `chamados/models.py:3218` | Zero saves e agendamentos, duas vezes. `chamados/tests/test_bug_par_intervalo.py:492` |
+| P3: fechamento | Conserva modalidade original e consulta C7 após trava. `chamados/models.py:1908`; `chamados/models.py:1927` | Chama `fechar`, exige consulta após trava e estado intacto. `chamados/tests/test_bug_par_intervalo.py:517`; `chamados/tests/test_bug_par_intervalo.py:523` |
+| P4: espera prematura | Exige validação própria. `chamados/services/materializacao.py:109` | Cobra predicado, declaração e validação pelo administrador. `chamados/tests/test_bug_par_intervalo.py:533`; `chamados/tests/test_bug_par_intervalo.py:550`; `chamados/tests/test_bug_par_intervalo.py:566` |
+| P5: desaparecimento | Detalhe inclui C6 viva **ou espera**. `chamados/services/acoes_chamado.py:349` | GET real cobra pergunta no contexto e aviso HTML. `chamados/tests/test_bug_par_intervalo.py:636`; `chamados/tests/test_bug_par_intervalo.py:641` |
+
+Execução independente dos testes e causa efetiva das 44 mortes informadas: **[nao verificado]**. [nao verificado]
+
+**1. Ato único — NAO PROCEDE para par identificado; a garantia não abrange todo motivo de intervalo.**
+
+Validação, varredura e O330 convergem em `_materializar_uma`. O par entra inteiro em voo e no mesmo savepoint; ambas as aplicações precedem julgamento temporal, vizinhança, lastro, carimbos e reconciliação. (`chamados/services/validacao.py:474`; `chamados/services/materializacao.py:1593`; `chamados/services/passivo_validado.py:532`; `chamados/services/materializacao.py:1341`; `chamados/services/materializacao.py:1358`; `chamados/services/materializacao.py:1361`; `chamados/services/materializacao.py:1378`.)
+
+O rastreamento AST com imports, apelidos e atribuições simples encontrou os plantadores de perguntas nos ramos hora/data-hora; hora é chamada pelo par ou pela avulsa. Chamadas dinâmicas por reflexão: **[nao verificado]**. (`chamados/services/materializacao.py:1014`; `chamados/services/materializacao.py:1095`; `chamados/services/materializacao.py:1359`; `chamados/services/materializacao.py:1475`; `chamados/models.py:4091`.)
+
+**Há plantio individual:** `sem_par`, `par_ambiguo` e `marcos_sem_par` seguem pela avulsa; o teste exige plantio da metade cuja irmã já foi aplicada. Isso preserva esse comportamento explícito, não prova equivalência irrestrita com o HEAD anterior. (`chamados/services/materializacao.py:1428`; `chamados/tests/test_bug_par_intervalo.py:940`.)
+
+**FILA:** regularização externa e veredito da célula admitem aplicação parcial em unidades próprias; não são o aceite deste par de perguntas. (`chamados/services/regularizacao_ext.py:172`; `chamados/services/regularizacao_ext.py:176`; `ponto/services/veredito_celula.py:322`; `ponto/services/veredito_celula.py:342`.)
+
+**2. Rollback — comportamento conferido, com limite de prova após commit.** [nao verificado]
+
+Após desfazer o savepoint, cada pergunta é relida. O resultado depende do lastro restaurado. (`chamados/services/materializacao.py:1384`; `chamados/services/materializacao.py:1388`.)
+
+| Condição após rollback | Estado resultante |
+|---|---|
+| Sem lastro, dentro do fato | `materializada_em=None`, autor `None`, via `''`; recusa conjunta gravada; devolução limpa validação/autor para resposta de hora elegível. `chamados/models.py:3222`; `chamados/services/materializacao.py:1392`; `chamados/services/validacao.py:190`; `chamados/services/validacao.py:202` |
+| Com lastro | Carimbo anterior preservado; recusa conjunta ainda é registrada; materialização preenchida impede devolução. `chamados/services/materializacao.py:1388`; `chamados/services/materializacao.py:1392`; `chamados/services/validacao.py:190` |
+| Fora do fato | Excluída da identificação e protegida novamente no descarimbo. `chamados/services/materializacao.py:72`; `chamados/models.py:3215` |
+
+Descarimbo vazio agora não salva. Descarimbo efetivo salva somente os três campos: agenda beco e emite evento da célula, mas não relavra veredito nem cria diretamente auditoria; a devolução acrescenta decisão e evento quando muda o estado. (`chamados/models.py:3224`; `chamados/signals.py:225`; `chamados/signals.py:244`; `ponto/portas/celula.py:891`; `chamados/services/validacao.py:208`; `chamados/services/validacao.py:224`.)
+
+O censo estático continua vendo o sítio `save`; ausência de execução desse save é outra medida. (`core/censo_escritas.py:364`; `chamados/models.py:3226`.)
+
+O teste cobra primeira tentativa com quatro saves/dois eventos e segunda com zero saves e foto idêntica. Entretanto, captura callbacks com `execute=False`: idempotência dos efeitos após commit real permanece **[nao verificado]**. (`chamados/tests/test_bug_par_intervalo.py:721`; `chamados/tests/test_bug_par_intervalo.py:726`; `chamados/tests/test_bug_par_intervalo.py:738`; `chamados/tests/test_bug_par_intervalo.py:745`.)
+
+**FILA:** descarimbo/devolução não relavram o veredito persistido; remover timestamps não garante avanço do marco de staleness. Consequência concreta neste par e perda de carimbo legítimo: **[nao verificado]**. (`chamados/models.py:3226`; `chamados/services/validacao.py:205`; `chamados/veredito_lavrado.py:187`; `chamados/veredito_lavrado.py:212`.)
+
+**3. Travas — NAO PROCEDE inversão entre os dois validadores pelo fluxo conferido.**
+
+Ambos começam pelo Colaborador; depois travam Disputas, Chamados e Perguntas em ordem de PK. O330 inclui previamente as disputas fechadas dos itens. **FILA:** demonstração concorrente com duas conexões, **[nao verificado]**. (`chamados/services/materializacao.py:125`; `chamados/services/materializacao.py:134`; `chamados/models.py:2683`; `chamados/models.py:2692`; `chamados/models.py:2705`; `chamados/models.py:2709`; `chamados/services/passivo_validado.py:435`.)
+
+**4. Leitores — PROCEDENTE: S127 libera o chamado enquanto C7 retém a disputa.**
+
+Com metade aceita em espera e irmã fora do fato, C6 considera ambas mortas; C7 retém a disputa. Porém `disputa_viva_do_chamado` só consulta vazio/C6, e `transicionar` usa essa resposta. As guardas seguintes também excluem a validada. Assim, o caminho para `fechado` pode passar; a guarda adicional de premissa vale apenas para `resolvido`. (`chamados/juizes.py:1153`; `chamados/models.py:1864`; `chamados/juizes.py:2138`; `chamados/models.py:154`; `chamados/models.py:344`; `chamados/models.py:181`; `chamados/catalogo/motor.py:100`.)
+
+**Cura:** S127 deve consumir C7, preservando sua exceção de disputa vazia; RED pela chamada real a `transicionar`, usando o cenário da irmã retratada. (`chamados/juizes.py:2138`; `chamados/tests/test_bug_par_intervalo.py:449`.)
+
+Os demais leitores conferidos:
+
+- Explicador, declaração, devolução, vigia de carimbo e O330 distinguem espera de falha. (`chamados/services/explicador.py:74`; `chamados/services/declaracao_texto.py:213`; `chamados/services/validacao.py:193`; `chamados/services/vigia_carimbo.py:109`; `chamados/services/passivo_validado.py:326`.)
+- Painel/badge não creditam a metade validada; a irmã determina Validar/Cobrar, ou sobra Decidir no chamado acionável. (`chamados/services/raiox.py:72`; `chamados/services/raiox.py:137`; `chamados/catalogo/natureza.py:48`; `chamados/catalogo/natureza.py:61`.)
+- Fio conserva perguntas da disputa aberta; beco consulta C7. (`chamados/services/fio.py:221`; `chamados/services/fio.py:253`; `chamados/services/becos.py:56`.)
+- `o_que_segura` lê a porta alcançável. Vigia de fio continua julgando vitalidade por C6 e só depois abre `porta_aguardando_par`; portanto essa classe não elimina, por si, eventual alarme de fio morto. Contracaso executado: **[nao verificado]**. (`folha/fora_da_folha.py:77`; `chamados/services/vigia_fio.py:416`; `chamados/services/vigia_fio.py:430`; `chamados/services/vigia_fio.py:448`; `chamados/services/vigia_fio.py:462`.)
+
+**5. Identidade — NAO PROCEDE derivação paralela.**
+
+O identificador concentra elegibilidade, multiplicidade e abstenção por duas pausas; lê pausas da autoridade existente. A tag apenas delega ao predicado de espera. `par_ambiguo` segue avulsa; o teste cobra irmãs intactas nesse cenário. (`chamados/services/materializacao.py:70`; `chamados/services/materializacao.py:77`; `chamados/services/materializacao.py:87`; `escala/models.py:1189`; `escala/models.py:1197`; `chamados/templatetags/chamados_tags.py:19`; `chamados/tests/test_bug_par_intervalo.py:329`.)
+
+**6. Texto/tela — NAO PROCEDE nos caminhos conferidos.**
+
+“Colada” exige testemunha viva de mesmo tipo em ±60 segundos inclusivos, pela mesma função usada na porta. Espera tem entrada própria de catálogo. Detalhe e modal incluem o mesmo partial; os testes agora cobram GET real das duas telas. Renderização executada nesta revisão: **[nao verificado]**. (`ponto/registro_batida.py:94`; `ponto/registro_batida.py:115`; `chamados/services/materializacao.py:1354`; `chamados/catalogo/recusa.py:25`; `templates/chamados/partials/_pergunta_card.html:29`; `templates/chamados/partials/modal_fio.html:160`; `chamados/tests/test_bug_par_intervalo.py:623`.)
+
+**7. Classes estruturais e semântica.**
+
+**PROCEDENTE — espera e limpeza destroem motivo de pendência técnica.** O ramo hora grava `pendencia_admin` junto de seu motivo e pode continuar aplicando. Depois, o par apaga qualquer motivo, deixando exatamente o estado acusado por I19. A primeira espera também pode sobrescrever motivo anterior. Ocorrência em produção: **[nao verificado]**. (`chamados/services/materializacao.py:477`; `chamados/services/materializacao.py:937`; `chamados/services/materializacao.py:1375`; `chamados/services/materializacao.py:1433`; `chamados/services/materializacao.py:1190`; `chamados/management/commands/auditar_invariantes_chamados.py:1112`.)
+
+**Cura:** preservar o par pendência/motivo tanto ao registrar quanto ao retirar espera; não zerar pendência automaticamente. RED deve aplicar par com pendência anterior e com pendência produzida durante plantio, cobrando motivo preservado e I19 vazio. (`chamados/services/materializacao.py:937`; `chamados/services/materializacao.py:1375`; `chamados/services/materializacao.py:1433`.)
+
+M7 agora isola multiplicidade com DNA de uma pausa; M35 cobra o HTML específico do include. **NAO PROCEDE** a vacuidade anterior desses dois. (`chamados/tests/test_bug_par_intervalo.py:307`; `chamados/tests/test_bug_par_intervalo.py:315`; `chamados/tests/test_bug_par_intervalo.py:664`.)
+
+**PROCEDENTE como limitação de prova:** M38 morre pela chamada observada a `descarimbar`. Com os três campos vazios, a guarda antiga produz o mesmo estado/trilha após P2. Para sustentar cura funcional, falta contracaso em que a guarda antiga deixe estado errado; alternativamente, rotular esse selo como estrutural. (`chamados/tests/mutantes_bug_par_intervalo.py:134`; `chamados/tests/test_bug_par_intervalo.py:724`; `chamados/models.py:3218`.)
+
+**FILA:** relógio continua lido por metade na aprovação e no carimbo; não há instante único propagado pelo ato. Também permanece a diferença entre competência pelo dia do turno no O330 e pelo dia civil na porta. (`chamados/services/materializacao.py:1020`; `chamados/services/materializacao.py:1250`; `chamados/services/passivo_validado.py:113`; `ponto/janelas.py:84`.)
+
+**8. Mapa adicional de escritores/leitores.**
+
+| Campo/valor | Escritores conferidos | Leitores conferidos |
+|---|---|---|
+| Resposta/instante | `chamados/services/disputa_emissao.py:1464`; `chamados/models.py:3141` | `chamados/services/materializacao.py:110`; `chamados/services/raiox.py:136` |
+| Validação/autor | `chamados/services/validacao.py:134`; `chamados/services/validacao.py:202`; `chamados/services/disputa_emissao.py:1477`; `chamados/models.py:3144` | `chamados/juizes.py:1153`; `chamados/models.py:1851`; `chamados/services/painel.py:67` |
+| Materialização/autor/via | `chamados/models.py:3108`; `chamados/models.py:3194`; `chamados/models.py:3222`; `chamados/models.py:3280`; `chamados/services/relavra_via.py:125` | `chamados/juizes.py:660`; `chamados/services/validacao.py:190`; `chamados/veredito_lavrado.py:187` |
+| Recusa/pendência | `chamados/services/materializacao.py:937`; `chamados/services/materializacao.py:1190`; `chamados/services/materializacao.py:1375`; `chamados/services/validacao.py:605`; `chamados/services/disputa_emissao.py:1494`; `chamados/models.py:3197` | `chamados/services/materializacao.py:112`; `chamados/services/validacao.py:195`; `chamados/services/explicador.py:98`; `chamados/management/commands/auditar_invariantes_chamados.py:1112` |
+| Dia/contexto/marcos | `chamados/services/fio.py:800`; `chamados/models.py:1123` | `chamados/services/materializacao.py:425`; `chamados/services/materializacao.py:428`; `chamados/services/materializacao.py:490`; `chamados/services/declaracao_texto.py:468` |
+| Batida: instante/tipo/origem/vínculo/retração | `ponto/registro_batida.py:159`; `chamados/services/materializacao.py:1035`; `ponto/registro_batida.py:276` | `ponto/registro_batida.py:99`; `ponto/turnos.py:2866`; `chamados/juizes.py:734` |
+| Espera/projeção | `chamados/services/materializacao.py:1433`; `chamados/services/declaracao_texto.py:485` | `chamados/models.py:1864`; `chamados/templatetags/chamados_tags.py:19`; `api/views.py:1126`; `templates/chamados/partials/_card_atendimento.html:215` |
+| Lavra/trilha/eventos | `chamados/veredito_lavrado.py:250`; `chamados/services/validacao.py:208`; `ponto/portas/celula.py:891` | `chamados/veredito_lavrado.py:204`; `chamados/services/raiox.py:133`; `chamados/signals.py:244` |
+
+Exaustividade transitiva de todos os acessos dinâmicos, suite completa, concorrência real e efeitos em produção: **[nao verificado]**. [nao verificado]
 
 ## 09/11 13:39 · sessao f2e59b370272 · - · - · origem=Ronald (tmux)
 
@@ -671,8 +767,4 @@ Mapa resumido: `consulta_do_app` produz mapas/listas somente em memória (`pergu
 
 - **FILA — alcance da evidência dos testes:** alguns testes novos preservam comportamento já existente, portanto passariam sem a cura, como o contrato C17 (`app/chamados/tests/test_e3_pendentes_app.py:126`). Isso não invalida os casos acima. O runner transforma qualquer falha em código 1 (`app/chamados/tests/e3_mutantes.py:127`); a causa individual das 30 mortes, sem suas saídas, permanece **[nao verificado]**. A guarda de arquivos examina somente o corpo do comando (`app/chamados/tests/test_e3_diff_sombra.py:77`, `:94`), deixando fora as dependências concretas citadas.
 
-## 09/11 12:21 · sessao d8ef53d0b9a7 · SONDA-SEM-GRANT · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3150 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3151 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

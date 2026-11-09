@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: lancar_green_v5.sh | pid=1480312
+ORDEM-BUG-PAR-ANTES-E-SONDA-MATRIZ 13:4x (aval, logs/ORDEM-BUG-PAR-ANTES/aval.txt): (1) BUG-PAR pousa antes de E2+E3 -- triado o preverif v4: merge do main na copia 43dc937f2, suite, opus final, pouso; E3 251fc4842 refaz merge+suite depois (a suite v5 da E3 em curso segue como RED/GREEN+mutantes da volta 4). (2) SONDA sem volta 8: pre-desenho MATRIZ DE TRANSICOES pelo Codex encadeado ao fim do preverif v7 (logs/auditoria_0911/matriz_sonda.q -> .r); BACKLOG SONDA-MATRIZ-DE-TRANSICOES.
 E3 13:3x: volta 4 Codex rc 0, inventario limpo (11 arquivos, nenhum proibido) -> commit 251fc4842 na copia wt-codex-fio-e0-v4-e3-130214 (P1-P5 + F4) -> suite inteira + mutantes (20 novos) logs/fio_e3/v5_suite.log e v5_mutantes.log.
 SELOS-CANON-I3 13:3x: preverif v2 REPROVA (logs/SELOS-CANON-I3/i3_preverif_v2.r); amostra conferida (disjuntor.py:964-977 desempate por N; :905-918 carimbo sem exclusao; :2020 x :2686 ordem carimbo/FORA) -> triagem A1-A11 (triagem_preverif_v2.txt) -> volta 3 construtor opus (protegido) -> entrega_v3.txt.
 SONDA-SEM-GRANT 13:3x: volta 7 opus c5e7df309 (V7a lo_*/SECURITY DEFINER/outros bancos fechados, selo pg logado COMO leitor 44 falhas -> 0; V7b ordem stdout/stderr; 8 mutantes) -> wt limpa -> preverif Codex v7 (logs/auditoria_0911/preverif_sonda_v7.r). DECISAO-ABERTA 4 medida no sombra_db: logins = saas_user (super) + leitor; revogar CONNECT de PUBLIC nao corta ninguem legitimo. Prod segue o `!` do 1o provisionar.

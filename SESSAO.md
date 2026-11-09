@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 13:40:43.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (201.0 MB). Acoes na janela: **1061**.
+**Medido em 09/11/2026 13:46:09.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (201.1 MB). Acoes na janela: **1064**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:45:53 | Bash | Add BACKLOG row and PROMPTS line | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' f='BACKLOG.md'; L=open(f,encoding='utf-8').read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| SONDA-SEM-GRANT \|')]; assert len(i)==1 row='\| SONDA-MATRIZ-DE-TRANSICOES \| **fila 1 instrumento** (aval ORDEM-BUG-PAR-ANTES-E-SONDA-MATRIZ 09/11 13:4x, logs/ORDEM-BUG-PAR-ANTES/aval.txt; padrao=n/a (instrumento)) \| SONDA na volta ...` |
+| 13:45:44 | Bash | Inspect SONDA backlog row columns | `cd /home/ronald/saas-hasner/app/docs; sed -n 1865p BACKLOG.md \| awk -F'\|' '{print NF; for(i=1;i<=NF;i++) print i": "substr($i,1,120)}'` |
+| 13:45:40 | Bash | Save aval and inspect PROMPTS/BACKLOG | `cd /home/ronald/saas-hasner; date; mkdir -p logs/ORDEM-BUG-PAR-ANTES; cat > logs/ORDEM-BUG-PAR-ANTES/aval.txt <<'EOF' aval Ronald: ORDEM-BUG-PAR-ANTES-E-SONDA-MATRIZ -- substitui qualquer versao anterior. (1) BUG-PAR pousa ANTES do comboio E2+E3 (bug provado, admin travado; aval BUG-PAR NA FRENTE): assim que o preverif v4 triar, merge do main na copia 43dc937f2, suite inteira, opus final, pouso, d ...` |
 | 13:35:52 | Bash | Fix ESPERANDO pid in RELATO | `cd /home/ronald/saas-hasner/app/docs && sed -i '3s/^ESPERANDO: lancar_green_v5.sh \| pid=1480304$/ESPERANDO: lancar_green_v5.sh \| pid=1480312/' RELATO.md && sed -n 3p RELATO.md` |
 | 13:35:49 | Bash | Inspect lancar_green_v5 pids | `ps -o pid,args -p 1480191,1480304,1480312 \| cut -c1-150; pgrep -af lancar_green_v5 \| cut -c1-150` |
 | 13:35:45 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 789,856p bin/hook_stop_fila1.py; tail -5 logs/hook_stop*.log 2>/dev/null \| cut -c1-300` |
