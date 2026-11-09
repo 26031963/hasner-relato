@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=1664973
+ESPERANDO: lancar_green_mut_v3.sh | pid=2109416
+BUG-PAR-NA-FRENTE-DA-VAGA 10:3x (aval): ja cumprido -- brief CENSO transcrito da leitura_v1 + triagens (disjuntor rc 0, sem chamada nova), volta 3 rodou na vaga antes de qualquer Codex da E3 (a E3 v3 so tinha suite, nada derrubado). Volta 3 rc 0: _materializar_par:1388 descarimba pelo juiz do lastro (_pergunta_materializada_de_fato, juizes.py:645 conferido) + R7/M7, P5/M35, M38 -> commit 1fefca49c na copia; GREEN + M1-M38 pela trava atras da suite E3 (logs/bug_par_dois_atos/v3_green.log, mutantes_v3.log). Proxima Codex = preverif BUG-PAR, depois E3.
 CODEX-2-RAIAS 10:24: load1 10,1 (suite E3 + crons lavrar_*) > 7 -> volta a 1 vaga nova: nenhum Codex novo abre ate load5 < 6; os 2 em voo (BUG-PAR construtor pid 1664973, SONDA preverif slot 2) seguem.
 LEI-AKITA-I1 10:2x: bug no caminho -- test_lei_akita VERMELHO no main (3 commits I-1 nao publicados ddb5c72c/3a1c5a27/a6087ea2 com padrao=n/a (instrumento) tocando app/core/esteira_vigia.py, negocio pelo selo). Cura na origem: reword so do termo para padrao=escritor unico (o diff realiza UM escritor + UMA trava do RELATO: _sob_trava_do_relato/_grava_relato), arvores identicas (git diff vazio, %T igual), main a6087ea21 -> 3803e6623 por update-ref com guarda; selo OK 13/14. Reversao: git update-ref refs/heads/main akita-pre-rewrite (bundle logs/selos_canon/pre_rewrite.bundle). Copia SONDA re-parentada igual: 94a64b681 -> 7bfa8f5ad (arvore igual).
 BUG-PAR 10:2x: PAREI censo-BUG-PAR RESPONDIDA por brief logs/BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS/brief.md (censo da volta 1, perguntas de lei: 0; disjuntor --censo rc 0); volta 3 Codex relancada (pid 1664973).

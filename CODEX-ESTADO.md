@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:25** · publicado em **09/11/2026 10:25** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:29** · publicado em **09/11/2026 10:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:29 · sessao cbbbf78661b6 · SONDA-SEM-GRANT · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 09/11 10:26 · sessao 415d564f876f · - · - · origem=Ronald (tmux)
+
+T2 está implementado: o selo executa a conferência real, exige a chave certa positiva e recusa rc 5; o primeiro estrago é INSERT, suficiente para detectar `AND false` nas subconsultas de `esc_tab` (`bin/tests/test_sonda_sem_grant_pg.sh:108`, `:133`, `:136`, `:137`, `:144`). A execução verde e os “16/16 mortos” permanecem **[nao verificado]**: o usuário não forneceu `sonda_v3_mut.log`, RED ou GREEN, e os próprios selos só apontam para esses arquivos (`bin/tests/test_sonda_sem_grant.sh:32`; `bin/tests/test_sonda_sem_grant_pg.sh:21`).
+
+**PROCEDENTE — cobertura semântica ainda incompleta.** Há contraprovas estáticas adicionais aos mutantes alegados:
+
+- Trocar a medida de `super` por constante zero (`bin/sonda_leitor_comum.sh:68`) não encontra caso de leitor superuser: o falso devolve `super=0`, e os estragos PG não incluem esse atributo (`bin/tests/test_sonda_sem_grant.sh:62`, `:129`; `bin/tests/test_sonda_sem_grant_pg.sh:144`). Sobrevivência executada **[nao verificado]**. Conserto mínimo: conceder SUPERUSER na fixture e exigir `super>0`, rc 5 e ausência de execução da sonda.
+- Remover `is_grantable` apenas do ramo de defaults de schema (`bin/sonda_leitor_comum.sh:122`) escapa da cobrança textual, que verifica somente o ramo SELECT, e dos estragos PG, que não incluem defaults de schema (`bin/tests/test_sonda_sem_grant.sh:214`; `bin/tests/test_sonda_sem_grant_pg.sh:144`). Sobrevivência executada **[nao verificado]**. Conserto mínimo: caso `ALTER DEFAULT PRIVILEGES ... GRANT USAGE ON SCHEMAS ... WITH GRANT OPTION`, exigindo `default_escrita>0`.
+
+Sete estragos PG já exercitam comportamento previsto na volta 2: INSERT, UPDATE de coluna, USAGE de sequência, CREATE de schema, TEMP de PUBLIC, membership e default INSERT (`bin/tests/test_sonda_sem_grant_pg.sh:144`, `:145`, `:149`, `:151`, `:153`, `:154`, `:155`; predicados atuais anteriores ao acréscimo de `is_grantable`: `bin/sonda_leitor_comum.sh:103`, `:108`, `:112`, `:115`, `:118`, `:121`, `:123`). Resultado executado com código v2 **[nao verificado]**. Os seis GRANT OPTION e o override por banco são os casos dirigidos às novidades T1/T3 (`bin/tests/test_sonda_sem_grant_pg.sh:146`, `:147`, `:148`, `:150`, `:152`, `:156`, `:157`).
+
+**NÃO — trap ausente no erro normal.** O trap é instalado antes do nascimento do container e cobre as saídas explícitas por falha de criação, readiness, pg_hba e âncora (`bin/tests/test_sonda_sem_grant_pg.sh:37`, `:38`, `:44`, `:46`, `:53`, `:57`, `:82`). **PROCEDENTE, restrito:** a limpeza ignora falha de `docker stop` e não verifica remoção; vazamento nessa condição **[nao verificado]** (`bin/tests/test_sonda_sem_grant_pg.sh:37`). Conserto mínimo: fallback por nome exato com `docker rm -f`, conservando o rc original e tornando falha da limpeza visível.
+
+Não identifiquei SQL inequivocamente inválida somente pela leitura; execução em PG17 **[nao verificado]**. O alvo declarado sai de `IMAGEM=postgres:17-alpine` (`bin/db_teste.sh:23`; `bin/tests/test_sonda_sem_grant_pg.sh:31`). Bash `-n` passou; execução dos testes não realizada **[nao verificado]**.
+
+Os selos não estão órfãos: a régua descobre `tests/test_*.sh` e bloqueia na falha (`bin/regua.sh:138`, `:140`, `:143`). A conferência é produzida pelo comum e consumida pelos dois caminhos e pelo selo PG (`bin/sonda_leitor_comum.sh:63`; `bin/sonda_leitura.sh:184`, `:187`; `bin/sonda_provisionar.sh:72`, `:144`, `:145`; `bin/tests/test_sonda_sem_grant_pg.sh:108`, `:110`).
+
+## 09/11 10:26 · sessao eb32a108d276 · - · - · origem=Ronald (tmux)
+
+T1 — **NAO permanece como falha de medição**: `is_grantable` entra nas duas parcelas de `esc_tab` e em `esc_seq`, `esc_schema`, `esc_banco`, `default_escrita`; todas passam pelo mesmo parser. Referências: `bin/sonda_leitor_comum.sh:103`, `:108`, `:112`, `:115`, `:118`, `:121`, `:122`, `:131-149`. Resultado efetivo em PG17: [nao verificado].
+
+T3 — **NAO permanece estaticamente**: `ro_banco` conta configuração do leitor no banco destino diferente de `on`; a porta remove esse ajuste e exige o mesmo `leitor|on` usado pela leitura antes de publicar a credencial. Referências: `bin/sonda_leitor_comum.sh:74-78`, `:132`, `:167-171`; `bin/sonda_provisionar.sh:108`, `:154-168`; `bin/sonda_leitura.sh:193-196`. Resultado efetivo: [nao verificado].
+
+**ESMERIL da conferência — sem divergência encontrada entre os consumidores operacionais.** Todas as chaves são produzidas por `_q_conferencia`; leitura e porta usam `_conferencia_pronta`, que exige quatro presenças iguais a `1`, demais valores iguais a `0`, recusando chave ausente. Referências: `bin/sonda_leitor_comum.sh:66-149`; `bin/sonda_leitura.sh:184-187`; `bin/sonda_provisionar.sh:72`, `:144-145`.
+
+| Campos | Produtor da medida |
+|---|---|
+| `role`, `super`, `poderes`, `login` | `bin/sonda_leitor_comum.sh:67-70` |
+| `ro`, `ro_banco` | `bin/sonda_leitor_comum.sh:71-78` |
+| `connect`, `usage_falta` | `bin/sonda_leitor_comum.sh:79-83` |
+| `tab_falta`, `seq_falta`, `default_falta` | `bin/sonda_leitor_comum.sh:84-98` |
+| `esc_tab`, `esc_seq`, `esc_schema`, `esc_banco` | `bin/sonda_leitor_comum.sh:99-118` |
+| `default_escrita`, `membro`, `dono` | `bin/sonda_leitor_comum.sh:119-125` |
+
+O selo falso replica os mesmos valores esperados e verifica trechos por chave; o selo PG usa a consulta e o parser comuns, e exige chave positiva nos estragos. Referências: `bin/tests/test_sonda_sem_grant.sh:62`, `:129`, `:184-219`; `bin/tests/test_sonda_sem_grant_pg.sh:107-111`, `:130-157`.
+
+**Escritores/leitores:**
+
+- Role, senha e ajustes de sessão: porta escreve em `bin/sonda_provisionar.sh:104-109`; conferência lê em `bin/sonda_leitor_comum.sh:67-78`, `:123-125`; login verifica em `:167-171`.
+- ACL/defaults: porta escreve em `bin/sonda_provisionar.sh:119-140`; conferência lê em `bin/sonda_leitor_comum.sh:79-125`.
+- `.env_leitor`: porta lê senha em `bin/sonda_provisionar.sh:75-78`, grava temporário/promove em `:165-168`; leitura lê/verifica em `bin/sonda_leitura.sh:173-179`, Docker recebe em `:234`.
+- `POSTGRES_DB/USER/PASSWORD/HOST/PORT`: Docker recebe em `bin/sonda_leitura.sh:234-236`; Django lê em `app/config/settings/saas.py:86-90`; sombra sobrescreve banco/host/porta em `app/config/settings/sombra.py:49-51`.
+- Segundo escritor operacional desses estados fora da porta: não encontrado na pesquisa; inexistência absoluta [nao verificado]. Escritores dos selos usam raiz temporária: `bin/tests/test_sonda_sem_grant.sh:86-94`; `bin/tests/test_sonda_sem_grant_pg.sh:77-83`, `:175-179`.
+
+**Limitação verificável do selo PG:** `docker run` da sonda vira no-op; assim ele não exercita conexão Django nem origem IP do container da sonda. Referência: `bin/tests/test_sonda_sem_grant_pg.sh:95`. Impacto em produção: [nao verificado].
+
+**Não sustentar achado pela ausência de REVOKE explícito de coluna:** a semântica real de propagação de `REVOKE ALL ON TABLES` não foi executada nesta auditoria; portanto alegar que os casos de coluna necessariamente ficam vermelhos seria [nao verificado]. A porta usa esse comando em `bin/sonda_provisionar.sh:121`; o selo exige cura em `bin/tests/test_sonda_sem_grant_pg.sh:139-147`.
+
+## 09/11 10:25 · sessao 305d1a7821ea · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
+
+1. **Cura na origem:** [materializacao.py:1388](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/services/materializacao.py:1388). A antiga guarda lia o carimbo como **fato de escrita a desfazer**, não como vitalidade. Agora o juiz do lastro decide a limpeza, executada por `descarimbar`. O contrato continua estrito: detecta comparações cruas com `None`; a comparação saiu do chamador, sem nova allowlist (`chamados/tests/test_contract_leitores_vitalidade.py:315`).
+
+   **ESCREVE:** `PerguntaDisputa.descarimbar`, pelo dono `_escrever_carimbo`, limpa `materializada_em`, `materializada_por` e `via_resolucao` juntos (`chamados/models.py:3206`, `:3100`). **LÊ:** juiz do lastro (`chamados/juizes.py:645`); devolução da validação (`chamados/services/validacao.py:163`). `_materializar_uma` chama o ato alterado (`chamados/services/materializacao.py:1439`).
+
+2. **M7:** novo caso em [test_bug_par_intervalo.py:273](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/test_bug_par_intervalo.py:273). Quatro perguntas representam duas pausas declaradas; o DNA tem uma pausa para impedir que outra guarda esconda M7. Cobra exatamente `(None, 'par_ambiguo')` e o efeito avulso do HEAD: recusa por paridade, validação devolvida, nenhuma batida nova, irmãs e chão preservados (`chamados/tests/test_bug_par_intervalo.py:288`, `:294`).
+
+   **ESCREVE a fixture:** `pergunta` e `responder` (`chamados/tests/test_bug_par_intervalo.py:81`, `:88`). **LÊ a identidade:** `identificar_par_intervalo`, consumido pela validação e pelo materializador (`chamados/services/materializacao.py:55`; `chamados/services/validacao.py:467`).
+
+3. **M35:** o helper agora fornece `disputa_obj` e `pode_agir_map`, abre o ramo real do modal e cobra o `<div>` completo do aviso, sem projeção injetada (`chamados/tests/test_bug_par_intervalo.py:481`, `:498`).
+
+   **ESCREVE o contexto:** helper do teste (`chamados/tests/test_bug_par_intervalo.py:487`); em produção, `fio.py:253`, `:258`, `:467`. **LÊ:** template real (`templates/chamados/partials/modal_fio.html:122`, `:160`), fragmento compartilhado (`templates/chamados/partials/_espera_par_intervalo.html:2`) e filtro (`chamados/templatetags/chamados_tags.py:16`).
+
+4. **Mutantes:** ajuste da âncora M6 e inclusão de M38 em [mutantes_bug_par_intervalo.py:34](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-075842/app/chamados/tests/mutantes_bug_par_intervalo.py:34), `:131`. O runner lê essas definições e recompila em memória (`chamados/tests/mutantes_bug_par_intervalo.py:212`).
+
+| Mutante | Teste discriminante | Asserção esperada | [nao verificado]
+|---|---|---|
+| M7 | `test_R7_multiplas_perguntas_nao_escolhem_primeiro_par` | Igualdade com `(None, 'par_ambiguo')`, linha 288. |
+| M25 / M35 | respectivos testes P5 de cartão/modal | Aviso HTML presente exatamente uma vez, linha 498. | [nao verificado]
+| M26 / M38 novo | `test_P6_O330_falha_com_carimbo_previo_descarimba_antes_de_devolver` | Ambas descarimbadas, linha 529; autor e via limpos, linhas 532–533. |
+| M6 | `test_R4_lastro_da_segunda_metade_reprova_as_duas` | Retorno recusado, linha 211. |
+
+Essas mortes por asserção nesta volta são **[nao verificado]**; não executei testes ou mutantes. [nao verificado]
+
+**DECISAO-ABERTA:** C7 já está ligado ao predicado nesta cópia (`chamados/models.py:1861`). Nenhuma alteração de model foi necessária nesta volta. GREEN e certificação pelo Code/opus permanecem **[nao verificado]**.
+
+Comandos individuais reservados ao Code:
+
+```bash
+DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_contract_leitores_vitalidade.LeitoresVitalidadeContract.test_ninguem_julga_vitalidade_por_carimbo_cru --noinput
+DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.test_R7_multiplas_perguntas_nao_escolhem_primeiro_par --noinput
+DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.test_P5_modal_le_espera_sem_projecao_injetada --noinput
+DJANGO_SETTINGS_MODULE=config.settings.saas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.test_P6_O330_falha_com_carimbo_previo_descarimba_antes_de_devolver --noinput
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M6
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M7
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M25
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M26
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M35
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo M38
+```
+
+Executei somente a verificação estática abaixo: **rc 0**, `py_compile` dos três Python tocados sem persistir bytecode e conferência de sintaxe/âncoras M1–M38 (`chamados/tests/mutantes_bug_par_intervalo.py:173`, `:188`).
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
+```
 
 ## 09/11 10:25 · sessao 936ff5f03d79 · - · - · origem=Ronald (tmux)
 
@@ -405,148 +506,4 @@ Inspeção estática apenas; veredictos de execução e situação no host: [nao
 - Inserir `vaga=1|2` deslocando campos de `chamadas.log` quebra ao menos leitores posicionais dos próprios testes: papel `$3`, fase `$6`, thread `$7`, rc `$8` (`bin/tests/test_codex_pergunta.sh:265`) e duração `$9` (`bin/tests/test_codex_sonda.sh:96–98`). Acrescentar campo ao fim preserva essas posições específicas; compatibilidade de todos os consumidores depende da inspeção deles [nao verificado].
 - `bin/tests/prova_codex_pergunta_real.sh` é prova manual que chama Codex real e verifica efeito do sandbox, não selo automático de concorrência (`:2–14`, `:85–86`, `:134–141`).
 
-## 09/11 08:55 · sessao fb013bdd83d7 · FIO-E0-V4-E3 · construtor · origem=Code
-
-| Hunk | ESCRITA / LEITURA |
-|---|---|
-| `chamados/juizes.py:1420,1448,1451` | `alimentar_portas` recebe `agora`; lê `qs_na_fila` (`chamados/services/painel.py:158`) e `particionar_verbos`. |
-| `chamados/services/verbos.py:30,35` | Partição aceita relógio explícito; continua escrevendo `mapa/contagens` (`:36`). |
-| `chamados/services/tarefa_do_dia.py:27,34,373,403,418` | Acrescenta `rota/fila/verbos/fio` (`:433`), selecionando portas das ações exigíveis. Lê `alimentar_portas` (`:409`). |
-| `chamados/management/commands/diff_e3_sombra.py:30,41,46,60,81,101` | Lê C17 pelo chamador existente (`:117`) e tarefa (`:118`); escreve somente agregados em stdout (`:99`). Guarda SQL em `:92`. |
-| `chamados/tests/e3_fixtures.py:13,16,40,65` | Fixtures ORM, `colNNN`, relógio congelado; lidas pelas três baterias novas. |
-| `chamados/tests/test_e3_app_orm.py:12,20,28,47` | M1–M5 pelas views completas dos dois kernels, endpoint e dashboard. |
-| `chamados/tests/test_e3_portas_tarefa.py:1,32,40,49,57` | Quatro respostas esperadas escritas antes da implementação; casos adicionais em `:67,75,84,100`. |
-| `chamados/tests/test_badge_disputa_pendente.py:6` | Substitui casos antigos pelo selo `test_MORDE_pendentes_do_colaborador_nao_pode_voltar`. |
-| `chamados/tests/test_esmeril2_left_join.py:10,19,27` | Migra para `consulta_do_app`: sem filhos conta zero; duas perguntas contam duas. |
-| `chamados/tests/test_fio_le_o_juiz.py:40,263,267,272` | Migra preservando a prova de vitalidade C6. |
-| `core/tests/test_dashboard_badge.py:10,17,40,45` | Migra para a mesma consulta lida pelo dashboard (`core/views.py:253`). |
-| `chamados/tests/test_e3_pendentes_app.py:81,98,113` | Remove matriz com ORM dublado; preserva catraca M7 e contrato puro C17. |
-| `chamados/tests/test_e3_diff_sombra.py:39,54,68,96,115` | Selos contra escrita SQL/arquivo e contra perda das projeções/casos. |
-| `chamados/tests/e3_mutantes.py:19,69,83` | Define mutantes em memória e imprime cada comando individual (`:75`). |
-
-Leitores externos de `alimentar_portas`: `folha/fora_da_folha.py:62`, `chamados/services/vigia_fio.py:604`, `escala/services/cadastro_realidade.py:484`, C17 em `chamados/juizes.py:1536`.
-
-Leitores externos da partição: `chamados/services/painel.py:230`, `fila.py:55`, `na_fila.py:19`, `verbos.py:171`; `chamados/views_arquivar.py:124`, `views_cobrar.py:77`, `management/commands/arquivar_prescritos.py:50`; `colaboradores/services/ficha.py:155`, `core/context_processors.py:90`, `api/views_mensageria.py:395,453,1149`.
-
-Os campos novos são lidos pelo instrumento (`chamados/management/commands/diff_e3_sombra.py:41,46`). Os três leitores atuais continuam chamando C17: `folha/fora_da_folha.py:67`, `chamados/services/vigia_fio.py:635`, `escala/services/cadastro_realidade.py:488`.
-
-**DECISAO-ABERTA:** remoção do método e baixa no registro ficam com a sessão; DIFF com L-099 antes da ligação. O selo L-111 exige ausência do método (`chamados/tests/test_badge_disputa_pendente.py:6`); resultado RED ainda **[nao verificado]**.
-
-Comandos preparados para a sessão; não executados:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_portas_tarefa chamados.tests.test_badge_disputa_pendente --settings=config.settings.ci
-
-# Imprime o comando individual de cada mutante:
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_mutantes
-
-# DIFF — executar somente após a sonda:
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py diff_e3_sombra --colab ID --inicio AAAA-MM-DD --fim AAAA-MM-DD --agora INSTANTE_COM_FUSO
-```
-
-`py_compile` executado sem gravar bytecode:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -c 'import py_compile, sys; from unittest.mock import patch; patch("importlib._bootstrap_external._write_atomic").start(); [py_compile.compile(p,cfile=p+".verificacao",doraise=True) for p in sys.argv[1:]]' $(GIT_OPTIONAL_LOCKS=0 git ls-files -m -o --exclude-standard -- '*.py')
-```
-
-Log: **14 arquivos compilados; `git diff --check` rc 0**. Suíte, RED, mutantes e DIFF não executados; comportamento **[nao verificado]**. [nao verificado]
-
-## 09/11 08:50 · sessao 6499c93501d2 · SELOS-CANON-I1 · verificador · origem=Code
-
-**O item 1 está curado quanto à abertura indevida da vaga.** O espelho está no predicado comum; o Agent chega nele, e o wrapper usa o mesmo predicado, embora recuse previamente os IDs com espaço. Há resíduos fora do diff e um limite na prova do PAREI, detalhados abaixo. (`bin/disjuntor.py:1686`, `:1850`, `:2248`, `:2267`.)
-
-1. **Cura nas duas vias e caminhos alternativos**
-
-   - O Agent chama `_censo_nega`, que consulta `_pertence_fila1`. Agora, célula `O9` contra obra `O9 (C)` ou `O9 NOTURNO-X` produz `ValueError`, convertido em negativa NAO SEI. A saída antecipada como FORA deixou de ocorrer nesses pares. (`bin/disjuntor.py:1850`, `:1704`, `:1686`, `:1691`, `:1730`.)
-   - O wrapper chama `--censo` antes de prender a vaga; `main_censo` consulta `_pertence_fila1` e passa a mesma lista de células para `_censo_nega`. Os exemplos com espaço já são recusados antes dessa consulta; no wrapper real, a validação é ainda anterior, no shell. (`bin/codex_pergunta.sh:188`, `:234`, `:240`; `bin/disjuntor.py:2248`, `:2266–2275`.)
-   - Nos caminhos de autorização de censo examinados, a decisão passa pelo predicado comum. A igualdade existente nele compara **obra com token**, dentro do próprio juiz. (`bin/disjuntor.py:1685`, `:1704`, `:2267`.)
-   - **Existem igualdades fora dele:** o hook compara a célula crua com o alvo do marcador para localizar o item em curso e remove esse item da lista por igualdade. São decisões de marcador/ordem, distintas da autorização do censo. (`bin/hook_stop_fila1.py:223`, `:273`.)
-   - **Existe uma derivação própria de fila no alarme**, descrita no item 4. Ela alimenta o disparo do alarme, sem autorizar vaga de construtor. (`bin/alarme_sessao_ociosa.py:89–116`, `:148–154`.)
-
-2. **Quem define, quem lê e significado dos retornos**
-
-   | Função | Definição e leitores encontrados |
-   |---|---|
-   | `_pertence_fila1` | Definida em `bin/disjuntor.py:1669`; leitores produtivos em `:1704` e `:2267`; chamadas diretas do selo em `bin/tests/test_censo_antes_da_vaga.sh:605` e `:611`. |
-   | `_token_da_celula` | Definida em `bin/disjuntor.py:1651`; lida nas listas `exatas` e `nomeiam`, em `:1685–1686`. |
-   | `_casa_id_inteiro` | Definida em `bin/hook_stop_fila1.py:110`; lida pelo predicado em `bin/disjuntor.py:1686` e pelo julgamento do PAREI em `bin/hook_stop_fila1.py:1301` e `:1313`. |
-
-   As versões mutantes são escritas pelo mecanismo do selo em cópias de `bin/`; há mutações desses critérios em `bin/tests/test_censo_antes_da_vaga.sh:750–763`, aplicadas por `:669–678`.
-
-   Os dois leitores produtivos de `_pertence_fila1` concordam: `False` permite seguir como FORA; `True` exige o censo; exceção gera negativa NAO SEI. (`bin/disjuntor.py:1704–1731`, `:2267–2281`.) `_token_da_celula` retorna string ou `None`; o espelho não transforma `None` em correspondência, porque `_casa_id_inteiro` rejeita ID vazio. (`bin/disjuntor.py:1660–1666`; `bin/hook_stop_fila1.py:115`.)
-
-   A nomeação ignora caixa e usa fronteira ASCII que exclui letra, dígito e hífen; underscore é separador. A extração do token usa a mesma classe de fronteira. A igualdade exata permanece sensível à caixa, razão de `o9 × O9` resultar em ambiguidade. (`bin/hook_stop_fila1.py:117`; `bin/disjuntor.py:1664`, `:1685–1691`.)
-
-   Alarme e handoff chegam a esses critérios indiretamente pelo hook. Para a prova de PAREI censo, ambos respeitam o contrato próprio do reconhecedor: `None` significa “não é linha de censo”; `''`, prova válida; texto, motivo de reprovação. (`bin/alarme_sessao_ociosa.py:127–140`; `bin/handoff_sessao.sh:129–134`; `bin/hook_stop_fila1.py:773–785`.) O handoff também consome os julgamentos booleanos do hook como booleanos. (`bin/handoff_sessao.sh:120–123`.)
-
-3. **Matriz do predicado literal**
-
-   Cada linha considera `_pertence_fila1(obra, [celula])`. A coluna anterior corresponde à retirada do espelho, exatamente a mutação declarada no selo. (`bin/disjuntor.py:1685–1692`; `bin/tests/test_censo_antes_da_vaga.sh:763`.)
-
-   | Obra | Célula | Atual | Sem espelho | Sítio da saída atual |
-   |---|---|---|---|---|
-   | `O1` | `O142` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
-   | `O142` | `O1` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
-   | `O9` | `O9` | `True` — DENTRO | `True` | `bin/disjuntor.py:1689–1690` |
-   | `O9 (C)` | `O9` | `ValueError` — NAO SEI | `False` | `bin/disjuntor.py:1691` |
-   | `O9 NOTURNO-X` | `O9` | `ValueError` — NAO SEI | `False` | `bin/disjuntor.py:1691` |
-   | `OBRA-Q (A)` | `OBRA-Q` | `ValueError` — NAO SEI | `False` | `bin/disjuntor.py:1691` |
-   | `09-TURNO-ABERTO-EXPOSTA` | `O9` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
-   | `O67b` | `O9` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
-   | `o9` | `O9` | `ValueError` — NAO SEI | `ValueError` | `bin/disjuntor.py:1691` |
-
-   **Há três conversões de FORA para NAO SEI**, e elas passam a negar na porta do Agent. O código as declara ambiguidades pretendidas; demonstrar que alguma corresponde a uma obra **de fato fora da fila** em produção é **[nao verificado]** com o dado fornecido. Também não há base para garantir ausência de toda negativa legítima afetada. (`bin/disjuntor.py:1674–1680`, `:1730–1731`.)
-
-   A matriz não equivale à extração do prompt: `OBRA-Q (A)` vira `OBRA-Q` no Agent; `09-TURNO-ABERTO-EXPOSTA`, `O67b` e `o9` não satisfazem o reconhecedor de obra desse caminho. Obra ilegível é negada antes da pertença. (`bin/disjuntor.py:157`, `:602–627`, `:1847–1849`.)
-
-4. **Classes de reprovação**
-
-   - **Derivação paralela presente:** o alarme conta sua própria fila, excluindo `☑`, `FEITO` e `FECHAD`; o hook usa marcadores e `_item_parado`, incluindo exclusões como CONGELADA, FILA 2 e PAREI. Uma linha apenas CONGELADA/FILA 2 pode ser contada pelo alarme e excluída pelo hook. (`bin/alarme_sessao_ociosa.py:89–116`; `bin/hook_stop_fila1.py:95–97`, `:171–180`, `:231–252`.)
-   - **Escritores fora da porta presentes na cópia:** `gerar_cortes.py` e `deploy_agendado.sh` regravam RELATO diretamente; o escritor canônico declara esse resíduo. A cura examinada usa `no_relato`/`no_topo`. (`bin/gerar_cortes.py:117–136`; `bin/deploy_agendado.sh:31–44`; `app/core/esteira_vigia.py:839–840`; `bin/disjuntor.py:294`, `:324`.)
-   - **Segundo juiz de negócio concorrendo com autoridade registrada:** não demonstrado nesta cura; conclusão abrangente sobre todos os registros: **[nao verificado]**. O caminho examinado reutiliza o hook, o predicado, o coletor e o juiz de brief. (`bin/disjuntor.py:1637`, `:1704`, `:1710`, `:1715`.)
-   - **Relógio fora da borda:** não aparece na decisão de pertença/token; a medida recebe `agora` e filtra futuro e janela. (`bin/disjuntor.py:1651–1692`, `:2066`, `:2094`, `:2127–2131`.)
-   - **Ordem de trava:** o censo antecede a vaga; as portas de RELATO compartilham trava, liberada ao retornar. Não identifiquei inversão nesse percurso. (`bin/codex_pergunta.sh:234–240`; `app/core/esteira_vigia.py:843`, `:846–862`, `:892`.)
-   - **Campo com dois significados:** `_censo_nega` usa `None` para “porta passa”, abrangendo FORA e aprovação; isso está documentado, e `main_censo` distingue FORA pelo predicado. Não encontrei leitor tomando esse `None` por DENTRO. (`bin/disjuntor.py:1696`, `:1704–1705`, `:1724`, `:2267–2275`.)
-
-5. **Mordida dos casos novos e seu limite**
-
-   - **Laço Agent:** prepara célula `O9` sem `O9 (C)` e exige negativa JSON, motivo de censo, PAREI com a obra inteira e negativa correspondente na trilha. Saída vazia reprova. Sem espelho, o predicado retorna FORA antes da validação de forma, retirando a negativa cobrada. (`bin/tests/test_censo_antes_da_vaga.sh:580`, `:520–527`, `:588–591`; `bin/disjuntor.py:1687–1688`, `:1704–1706`.)
-   - **ESPELHO direto:** exige `ValueError` nos três pares e exatamente `False` nos dois controles de prefixo. Portanto, “sempre retornar FORA” e “sempre levantar” reprovam. Aceita qualquer `ValueError`, sem validar a mensagem. (`bin/tests/test_censo_antes_da_vaga.sh:603–619`.)
-   - **Mutante:** remove precisamente o espelho e executa `casos_pertenca`; há exigência de âncora única, controle sem mutação e propagação de falha pelo retorno dos casos. (`bin/tests/test_censo_antes_da_vaga.sh:763`, `:675–686`, `:662–665`, `:647`.)
-   - **Wrapper:** os dois casos são controles expressamente declarados, inclusive no nome; passam com ou sem a cura porque a forma é recusada antes da pertença. (`bin/tests/test_censo_antes_da_vaga.sh:585–593`; `bin/disjuntor.py:2248–2250`.)
-   - **Limite material:** o laço Agent prova o PAREI **na mensagem**. Para esses IDs com espaço, `_parei_censo_no_relato` retorna antes de gravar; o laço não cobra persistência no topo. Logo, a mordida demonstra negativa/trilha, mas não demonstra PAREI gravado desses exemplos. (`bin/tests/test_censo_antes_da_vaga.sh:520–527`, `:590–591`; `bin/disjuntor.py:309–311`.)
-
-A execução integral do selo e seu resultado verde permanecem **[nao verificado]**; o script cria e altera arquivos de teste. (`bin/tests/test_censo_antes_da_vaga.sh:27–35`, `:669–678`.) O conteúdo integral da lei citada como `CORTES.md:428` também permanece **[nao verificado]**: a cópia termina em `app/docs/CORTES.md:425`, e o anexo fornecido traz somente o início daquela linha.
-
-## 09/11 08:48 · sessao 400ac2cb4b5d · - · - · origem=Ronald (tmux)
-
-Não encontrei classe nova dessas no caminho da cura do censo, com os limites abaixo.
-
-- **Juiz/derivação única:** `_fila1_viva` delega o universo ao hook; `_censo_nega` usa `_pertence_fila1`, `_briefs_do_censo` e `censo_do_brief`. Agent chama essa porta; wrapper chama `--censo`. A classificação adicional em `main_censo` repete o mesmo predicado e reutiliza a mesma lista `fila`. (`bin/disjuntor.py:1633`, `bin/disjuntor.py:1704`, `bin/disjuntor.py:1710`, `bin/disjuntor.py:1715`, `bin/disjuntor.py:1850`, `bin/disjuntor.py:2266`, `bin/disjuntor.py:2275`; `bin/codex_pergunta.sh:234`.)
-- **Escritor/ordem:** a negativa passa por `ev.no_relato`; PAREI passa por `ev.no_topo` e é relido pelo reconhecedor do Stop. Ambas as portas usam o mesmo flock; leitura, classificação, idempotência e gravação do topo ficam sob a trava. O wrapper executa censo antes de tentar vaga; a trava do RELATO já foi fechada quando chega à vaga. (`bin/disjuntor.py:293`, `bin/disjuntor.py:323`; `app/core/esteira_vigia.py:842`, `app/core/esteira_vigia.py:859`, `app/core/esteira_vigia.py:877`, `app/core/esteira_vigia.py:893`; `bin/codex_pergunta.sh:234`, `bin/codex_pergunta.sh:240`.)
-- **Relógio:** pertença/token não consultam relógio; `_censo_24h` recebe `agora`, exclui futuro e aplica a janela ao casar a abertura. `trilha` consulta relógio para carimbar o registro. (`bin/disjuntor.py:1651`, `bin/disjuntor.py:1669`, `bin/disjuntor.py:2066`, `bin/disjuntor.py:2094`, `bin/disjuntor.py:2127`, `bin/disjuntor.py:198`.)
-- **Campo/retorno:** `None` de `_censo_nega` significa “porta passa”, tanto FORA quanto APROVADO; `main_censo` distingue FORA pelo bool do mesmo `_pertence_fila1`, portanto não interpreta `None` como DENTRO. (`bin/disjuntor.py:1696`, `bin/disjuntor.py:1704`, `bin/disjuntor.py:1723`, `bin/disjuntor.py:2267`, `bin/disjuntor.py:2271`.)
-- **Resíduo explícito fora dessa cura:** o escritor declara escritores externos que não pegam sua trava: edição manual, `gerar_cortes.py` e `deploy_agendado.sh`. O alcance desses caminhos não foi auditado por este agente. (`app/core/esteira_vigia.py:838`.) A lista usada pelo censo contém somente andáveis; a situação de obra PARADA continua dependente desse recorte. (`bin/disjuntor.py:1637`.)
-
-Autoridade registrada para esta pergunta específica em outro lugar e efeitos atuais em produção: [nao verificado].
-
-## 09/11 08:47 · sessao fb09f4e39450 · - · - · origem=Ronald (tmux)
-
-Os três novos elementos têm mordida por leitura do código; execução integral do selo permanece [nao verificado].
-
-- **Laço Agent:** a fixture remove `O9 (C)` e mantém `O9` sozinho antes dos casos (`bin/tests/test_censo_antes_da_vaga.sh:576`, `:580`). Os prompts preservam as identidades `O9 (C)` e `O9 NOTURNO-X`, pela cauda e pela identidade de id nu (`bin/disjuntor.py:164`, `:616`, `:624`). Os casos exigem JSON `deny`, `DISJUNTOR CENSO` e PAREI da obra completa (`bin/tests/test_censo_antes_da_vaga.sh:520`), além de última negativa correspondente e ausência de FORA (`:524`); saída vazia reprova (`:522`). O laço executa essas verificações nas duas obras (`:588`–`:593`).
-
-- **Por que mata a ausência do espelho:** sem o segundo sentido, essas obras não aparecem dentro da célula `O9`, logo `nomeiam` e `exatas` ficam vazios e a função retorna `False` (`bin/disjuntor.py:1685`–`:1688`). `_censo_nega` então retorna `None` antes da validação da forma (`:1704`–`:1706`), deixando de fornecer a negativa exigida pelo caso Agent (`bin/tests/test_censo_antes_da_vaga.sh:590`). Com o espelho, há nomeação sem correspondência exata, e a função levanta `ValueError`, convertido em negativa NAO SEI (`bin/disjuntor.py:1686`, `:1691`, `:1730`).
-
-- **Wrapper:** são controles sem poder de distinguir a cura, expressamente declarados assim no comentário e no nome do caso (`bin/tests/test_censo_antes_da_vaga.sh:585`, `:593`). `main_censo` recusa espaço antes da leitura da fila e da pertença (`bin/disjuntor.py:2248`, `:2266`). Não há controle ocultamente apresentado como mordida nova nesses dois casos (`bin/tests/test_censo_antes_da_vaga.sh:585`–`:586`).
-
-- **ESPELHO direto:** chama o predicado efetivamente importado do diretório `$B`, exige `ValueError` nos três pares e reprova qualquer retorno, inclusive `False` (`bin/tests/test_censo_antes_da_vaga.sh:598`–`:608`). Os controles `O1/O142` e inverso exigem exatamente `False`; um predicado que sempre levante também reprova (`:609`–`:619`). A chamada direta cobre `OBRA-Q (A)`, que o Agent normalizaria para `OBRA-Q` (`bin/disjuntor.py:624`–`:627`; justificativa no selo `:596`).
-
-- **Mutante:** remove exatamente o segundo sentido e roda `casos_pertenca` (`bin/tests/test_censo_antes_da_vaga.sh:763`). A infraestrutura exige âncora única (`:675`–`:678`), exige retorno não zero dos casos (`:681`–`:686`) e roda previamente uma cópia sem mutação nos mesmos grupos (`:662`–`:665`). `casos_pertenca` acumula `ok=1` e retorna esse valor, de modo que suas falhas chegam ao julgador do mutante (`:590`, `:619`, `:647`).
-
-Confirmei apenas em memória, com `python3 -B`, o resultado do predicado vivo e dessa substituição: os três pares espelho dão `ValueError` no vivo e `False` no mutante; os dois controles de prefixo dão `False` em ambos. Esses resultados são explicados por `bin/disjuntor.py:1685`–`:1692` e pela substituição de `bin/tests/test_censo_antes_da_vaga.sh:763`; a suite completa e o seu resultado final são [nao verificado].
-
-Limite: a asserção direta aceita qualquer `ValueError`, sem conferir sua mensagem (`bin/tests/test_censo_antes_da_vaga.sh:606`). Na implementação lida, para essas entradas não vazias, o `ValueError` explícito é o de pertença ambígua (`bin/disjuntor.py:1681`, `:1691`); não encontrei vacuidade concreta nesse trecho.
-
-_3095 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3099 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
