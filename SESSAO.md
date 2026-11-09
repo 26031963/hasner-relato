@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 01:03:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **671**.
+**Medido em 09/11/2026 01:09:02.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **662**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -672,12 +672,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:15:39 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ERRO-BOBO') L.insert(4,"E1 sombra sobre b74da998 (logs/fio_e0_v4/sombra_e1_pouso_b74da998.out, sombra_e1_inv_b74da998.out, sombra_e1_desc_causa_b74da998.out): DRY igual ao f4d69b25 (universo 20527, migra 4 vivas/0 mat, os mesmos 5 grupos exportados fora, dedup 0, PERGUNTA_SOB ...` |
 | 13:15:32 | SendMessage |  | `-` |
 | 13:15:08 | Bash |  | `sed -n 1,30p /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py; cd /home/ronald/saas-hasner; /bin/grep -n 'descarimb' app/docs/CORTES.md app/docs/LEIS.md \| cut -c1-300 \| head` |
-| 13:06:07 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/sombra/e1_desc_causa.py <<'EOF' import io from django.core.management import call_command from django.db import connection, transaction class Rb(Exception): pass try: with transaction.atomic(): call_command('migrate_schemas', schema_name='juliani', interactive=False, verbosity=0) connection.set_schema('juliani') from chamados.management.commands.migrar_data_ ...` |
-| 13:05:59 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 160,194p /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py; /bin/grep -n 'def _migrar\\|def _w\\|_erros_base\\|def handle' /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py` |
-| 13:05:49 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i 'descarimb' logs/fio_e0_v4/codex_e1_v18.r \| cut -c1-400 \| head -12; ls -la --time-style=+%d/%H:%M logs/fio_e0_v4/codex_e1_v18.r` |
-| 13:05:47 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rln 'descarimbaria' app/docs/ logs/fio_e0_v4/*.r logs/fio_e0_v4/*.md 2>/dev/null \| head; /bin/grep -rn 'descarimbaria' app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md 2>/dev/null \| cut -c1-300 \| head -8; /bin/grep -n 'descarimbaria' logs/fio_e0_v4/opus_final2_e1_6695e972.md \| cut -c1-300 \| head` |
-| 13:05:41 | Bash |  | `sed -n 195,245p /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py` |
-| 13:05:38 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n '379' app/docs/RELATO.md app/docs/BACKLOG.md logs/fio_e0_v4/opus_final2_e1_6695e972.md 2>/dev/null \| cut -c1-300 \| head; sed -n 371,400p /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py` |
-| 13:05:35 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -c 'DESCARIMBARIA ' logs/fio_e0_v4/dry_e1_pouso_f4d69b25.out logs/fio_e0_v4/sombra_e1_pouso_b74da998.out logs/fio_e0_v4/sombra_e1_inv_b74da998.out; /bin/grep -n 'descarimbaria' /home/ronald/wt-e1merge-125704/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py \| head -20; /bin/grep -rn 'descarimbaria' app/docs/RELATO.md app/docs/BACKLOG.md \|  ...` |
-| 13:05:30 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/fio_e0_v4/sombra_e1_inv_b74da998.out; /bin/grep -nE '^(APLIC\|GRAV\|aplic\|grav\|reversao\|REVERS\|universo=\|PAREI\|esperado)' $O \| cut -c1-200 \| head; /bin/grep -n 'INVARIANTE ===' -B8 $O \| cut -c1-200` |
-| 13:05:25 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bj3ayscgw.output; tail -8 /home/ronald/saas-hasner/logs/fio_e0_v4/sombra_e1_inv_b74da998.out \| cut -c1-200` |
