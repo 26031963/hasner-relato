@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 13:35:11.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (200.9 MB). Acoes na janela: **1054**.
+**Medido em 09/11/2026 13:40:43.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (201.0 MB). Acoes na janela: **1061**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:35:52 | Bash | Fix ESPERANDO pid in RELATO | `cd /home/ronald/saas-hasner/app/docs && sed -i '3s/^ESPERANDO: lancar_green_v5.sh \| pid=1480304$/ESPERANDO: lancar_green_v5.sh \| pid=1480312/' RELATO.md && sed -n 3p RELATO.md` |
+| 13:35:49 | Bash | Inspect lancar_green_v5 pids | `ps -o pid,args -p 1480191,1480304,1480312 \| cut -c1-150; pgrep -af lancar_green_v5 \| cut -c1-150` |
+| 13:35:45 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 789,856p bin/hook_stop_fila1.py; tail -5 logs/hook_stop*.log 2>/dev/null \| cut -c1-300` |
+| 13:35:43 | Bash | Check how stop hook reads ESPERANDO | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
+| 13:35:26 | Bash | Update RELATO header with status lines | `cd /home/ronald/saas-hasner/app/docs; P=$(pgrep -f 'bash logs/fio_e3/lancar_green_v5.sh' \| head -1); echo $P; python3 - "$P" <<'EOF' import sys p=sys.argv[1] f='RELATO.md'; L=open(f,encoding='utf-8').read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: lancar_green_v5.sh \| pid=%s' % p novas=[ "E3 13:3x: volta 4 Codex rc 0, inventario limpo (11 arquivos, nenhum proibido) -> co ...` |
+| 13:35:17 | Bash | Show RELATO header | `cd /home/ronald/saas-hasner/app/docs; sed -n 1,8p RELATO.md \| cut -c1-250; pgrep -f lancar_green_v5.sh \| head -1` |
+| 13:35:14 | Bash | Confirm v4 question and suite start | `cd /home/ronald/saas-hasner; grep -c "44/44" logs/bug_par_dois_atos/preverif_v4.q; cat logs/bug_par_dois_atos/preverif_v4.out; tail -3 logs/fio_e3/v5_suite.log` |
 | 13:35:05 | Bash | Build and launch BUG-PAR preverif v4 | `cd /home/ronald/saas-hasner; D=logs/bug_par_dois_atos sed -e 's/PRE-VERIFICADOR v3/PRE-VERIFICADOR v4/' -e 's/commit 1fefca49c (copia sobre main 89df8c52d; voltas 1, 2 e 3)/commit 43dc937f2 (copia sobre main 89df8c52d; voltas 1-4)/' -e 's/diff_v3.diff/diff_v4.diff (e diff_v4_delta.diff = so a volta 4, 1fefca49c..43dc937f2)/' -e 's/triagem anterior triagem_preverif_v1.txt; entrega da volta 3 constr ...` |
 | 13:34:56 | Bash | Prepare BUG-PAR v4 diffs | `cd /home/ronald/saas-hasner; D=logs/bug_par_dois_atos; W=/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046 git -C $W log --oneline -1; git -C $W status --porcelain \| wc -l; ls $D/construtor_v4.r $D/leis_sitios_v3.txt; tail -15 $D/lancar_green_mut_v4.sh \| head -3; ls $D/*.log 2>/dev/null \| tail; git -C $W diff 89df8c52d..43dc937f2 > $D/diff_v4.diff; git -C $W diff 1fefca49c..43dc937 ...` |
 | 13:34:52 | Bash | Read BUG-PAR preverif v3 template | `cd /home/ronald/saas-hasner/logs/bug_par_dois_atos; ls \| grep -E 'preverif\|lancar\|entrega\|triagem' ; cat lancar_preverif_v3.sh; echo ===; cat preverif_v3.q` |
