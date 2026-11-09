@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 09:08** · publicado em **09/11/2026 09:10** (UTC-3)
+> Ultima resposta processada: **09/11/2026 09:10** · publicado em **09/11/2026 09:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 09:10 · sessao 34f994372353 · SONDA-SEM-GRANT · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 09/11 09:08 · sessao 790af1e10d16 · - · - · origem=Ronald (tmux)
 
@@ -592,14 +596,4 @@ Fixtures e riscos consolidados:
 
 Não escrevi arquivos nem executei testes. [nao verificado] [nao verificado]
 
-## 09/11 08:25 · sessao afb90b29fac5 · - · - · origem=Ronald (tmux)
-
-- Fontes que C17 já lê: `chamados/juizes.py::alimentar_portas` fornece `verbo` por `particionar_verbos(qs_vivos())` (`:1290-1293`), `fila_ids`/`fila_cel` por `qs_na_fila()` (`:1296-1301`). C17 compõe essas fontes em `:1376-1392`. Usar diretamente as autoridades dentro da carga da tarefa evita copiar C17.
-- Atenção ao relógio: `particionar_verbos` lê `timezone.now()` em `chamados/services/verbos.py:35`. Acrescentar parâmetro opcional `agora` permite à tarefa preservar seu relógio explícito; `qs_na_fila(agora=)` já existe em `painel.py:158-190`.
-- A carga da tarefa já coleta âncoras de perguntas e sua pertença à fila, mas não chamados da célula: `tarefa_do_dia.py:358-361`. O retorno atual sai por `_tarefa_pura` em `:399-402`. Ali cabe enriquecer aditivamente com `rota`, `fila`, `verbos`, `fio`, preservando campos anteriores.
-- Fixture ORM de referência: `test_e2_tarefa_do_dia.py:69-138`: Empresa, Praça, Posto, Colaborador, TipoEscala, EscalaColaborador, CelulaDia com DNA e lâmpadas. Reafirmar a ata depois de criar pergunta porque os sinais relavram (`:104-108`). Aplicar `freeze_time` na classe nova e nomes `colNNN`.
-- Caso A/B real já demonstrado em `test_o261e_f5b_juiz_porta.py:124-141`: A aberto da célula, B aberto sem célula, pergunta destinada a B. Painel responde `{A: 'decidir', B: 'cobrar'}`; C17 responde `fila=(A,)`.
-- Dia isento: fonte é `Colaborador.isento_ponto`, lida por `core/constants.py:13-18`; tarefa extingue ações em `tarefa_do_dia.py:179-187`.
-- DECISAO-ABERTA: os anexos determinam que prevalece a tarefa, mas não fixam os valores literais dos campos aditivos nos casos sem pergunta/sem ações. A interpretação precisa ficar explícita nos quatro testes escritos antes da implementação. Execução/comportamento futuro: [nao verificado]. [nao verificado]
-
-_3086 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
