@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 05:10** · publicado em **09/11/2026 05:14** (UTC-3)
+> Ultima resposta processada: **09/11/2026 05:15** · publicado em **09/11/2026 05:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 05:15 · sessao c7cd8e1c6f6d · PAR-NAO-ADJACENTE · construtor · origem=Code
+
+Corrigido: pausas abaixo do piso que disputam pontas com intervalos são retiradas do pareamento; suas batidas ficam `sol`. O conflito entre dois intervalos conserva o casamento adjacente atribuído ao b57ce0a1. [escala/utils.py:455](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:455)
+
+Hunks entregues:
+
+- Docstring e transcrição da prioridade, sem a afirmação falsa sobre aninhados. [utils.py:438](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:438)
+- Teste aninhado reescrito: exige o par 20:00/22:00 e verifica `_alinhar_por_papel`, incluindo [nome]. [teste:182](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:182) [nao verificado]
+- Cruzamento testado nos dois sentidos, com consultas mockadas explicitamente. [teste:287](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:287) [nao verificado]
+- Antigo teste:230 **reescrito**, caracterizando ambos os intervalos não adjacentes como soltos. [teste:266](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:266) [nao verificado]
+- `LINHAS_REGISTRADAS`: somente deslocamento de **+8 linhas**, com motivo registrado. [core/tests/test_medida_turno_do_par.py:247](/home/ronald/wt-codex-par-nao-adjacente-031500/app/core/tests/test_medida_turno_do_par.py:247)
+
+Para cada teste novo ou alterado, estes são os resultados **esperados** no b57ce0a1; execução nessa revisão: **[nao verificado]**.
+
+| Teste/hunk | Esperado | Por quê | [nao verificado]
+|---|---|---|
+| [Duas soltas:89](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:89), comentário corrigido | Falha | Exige par não adjacente. |
+| [Três pares:142](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:142) | Falha | Exige três pares não adjacentes, numerados 0/1/2. |
+| [Dois intervalos, interno adjacente:166](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:166), docstring corrigida | Passa | Mantém o interno adjacente. |
+| [Aninhado abaixo do piso:182](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:182) | Falha | Exige o externo, anteriormente perdido. |
+| [Pausa curta separada:196](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:196) | Passa | Ambos os pares são adjacentes e separados. |
+| [Sem par:235](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:235) | Passa | Caracterização; removido `RED`. |
+| [Par adjacente:243](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:243) | Passa | Caracterização; removido `RED`. |
+| [Timestamp repetido:249](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:249) | Passa | Caracterização; removido `RED`. |
+| [Dois intervalos aninhados:266](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:266) | Passa | Nenhum par é adjacente. |
+| [Dois intervalos cruzados:277](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:277) | Passa | Nenhum par é adjacente. |
+| [Pausa curta cruzada:287](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:287) | Falha | Exige preservar e alinhar o intervalo atravessado. |
+
+Quem escreve e quem lê:
+
+| Papel | Escritor | Leitor |
+|---|---|---|
+| `('par', n, S/E)` | `_papeis_do_turno` [477](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:477); `_papeis_por_alternancia` [506](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:506) | `_alinhar_por_papel`: agrupa por número/lado [538](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:538), senta o par [570](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:570). |
+| `sol` | `_papeis_do_turno` [481](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:481) | `_alinhar_por_papel` [540](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:540), encaixe posterior [573](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:573). |
+| `ent` / `sai` | `_papeis_do_turno` [466](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:466), [482](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:482); alternância [504](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:504), [507](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:507) | `_alinhar_por_papel` [533](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:533), [534](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:534). |
+
+`_match_marcos` encaminha os papéis ao alinhador e percorre todos para órfãs/consumo. [utils.py:622](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:622), [630](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:630)
+
+Ensaio reduzido: **17/17**; os oito mutantes terminaram com **rc=1 por asserção**. Comandos e limitações estão no [ensaio:3](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/ensaio_par_nao_adjacente.py:3):
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+ensaio_par=escala/tests/ensaio_par_nao_adjacente.py
+python3 -B "$ensaio_par"
+MUTANTE=sem_prioridade python3 -B "$ensaio_par"
+MUTANTE=so_aninhado python3 -B "$ensaio_par"
+MUTANTE=so_inicio python3 -B "$ensaio_par"
+MUTANTE=so_fim python3 -B "$ensaio_par"
+MUTANTE=apaga_pausas python3 -B "$ensaio_par"
+MUTANTE=lei_nova_dois_intervalos python3 -B "$ensaio_par"
+MUTANTE=numero_zero python3 -B "$ensaio_par"
+MUTANTE=numero_um python3 -B "$ensaio_par"
+python3 -B "$ensaio_par" --py-compile
+```
+
+`py_compile` passou nos quatro arquivos, interceptando escrita de bytecode. [ensaio:37](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/ensaio_par_nao_adjacente.py:37) Suite Django e builder: **[nao verificado]**; esta entrega não declara certificação. [nao verificado]
 
 ## 09/11 05:10 · sessao 781c071dafd8 · PAR-NAO-ADJACENTE · censo · origem=Code
 
@@ -921,242 +978,4 @@ A união corrige sobreposição, mas mede intervalos NEGOU→OK, sem consultar o
 
 Os verdes relatados pelo construtor não foram reexecutados nesta auditoria; execução integral e comportamento de produção permanecem **[nao verificado]**.
 
-## 09/11 03:13 · sessao 4f60167f1d5f · PAR-NAO-ADJACENTE · censo · origem=Code
-
-**1. A adjacência não tem justificativa de lei demonstrada**
-
-O contrato registrado manda transportar **o par do juiz inteiro**, acomodar a saída na última ponta e tratar soltas pelo marco mais próximo livre. Não exige pontas consecutivas entre as batidas; essa condição aparece na implementação. (`app/docs/RELATO.md:1710`, `app/escala/utils.py:467`, `app/escala/utils.py:507`, `app/escala/utils.py:511`)
-
-O pouso `b3bf529e`, em 29/10, está registrado. A introdução precisa da condição em `9da200c8` e a razão histórica dessa escolha ficam **[nao verificado]**: esta cópia não contém o histórico Git consultável. (`app/docs/RELATO.md:1657`)
-
-Os casos pedidos não demonstram dependência da adjacência:
-
-| Caso | O que protege |
-|---|---|
-| **col345** | A entrada às 15:00 cumpriu a volta `hfi`; o período de trabalho é 15:00→18:56. Não apresenta pausa com solta interposta. (`app/ponto/tests/test_calculador_portoes_de_marco.py:15`, `app/ponto/tests/test_calculador_portoes_de_marco.py:56`) |
-| **col60/O271** | E12:00→S19:06: cabeça atrasada em 300 minutos, mesmo estando sobre `hii`. As contraprovas distinguem entrada em `hfi`. (`app/ponto/tests/test_o271_pontualidade_no_comercial.py:177`, `app/ponto/tests/test_o271_pontualidade_no_comercial.py:192`) |
-| **[nome]** | Cluster de quatro batidas não pode preencher marcos distantes; a proteção é o filtro final, independente de `_iz == _i + 1`. (`app/ponto/tests/test_pareador_cluster_marco.py:53`, `app/escala/utils.py:572`) |
-| **Nominais da obra** | A, controle, convergência e noturno usam quatro batidas, com pontas internas adjacentes; B/C/D/E/F exercitam bordas e soltas. (`app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:104`, `:129`, `:143`, `:154`, `:165`, `:212`, `:223`, `:326`, `:358`) |
-
-Por inspeção, esses exemplos preservam a elegibilidade dos pares ao trocar a comparação por `>`; resultado de executar a alteração contra a bateria: **[nao verificado]**. Há precedente explícito protegendo o **par declarado contra o adjacente guloso**, embora a sobra daquele teste esteja antes do par. (`app/ponto/tests/test_o68b_papel_da_ata_no_motor.py:701`)
-
-**O contraexemplo à troca isolada é o aninhamento descrito abaixo**, permitido pela construção atual do extrator. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`)
-
-**2. Arranjos que precisam ser distinguidos**
-
-Os leitores públicos repartem os mesmos pares marcados pelo piso: `intervalos_do_turno` entrega os de pelo menos 15 minutos; `pausas_abaixo_do_piso`, o restante. A adjacência não é garantia conjunta deles: a passagem declarada casa suas pontas primeiro. (`app/ponto/turnos.py:545`, `app/ponto/turnos.py:565`, `app/ponto/turnos.py:811`)
-
-| Arranjo | Resultado da leitura |
-|---|---|
-| **Uma solta entre duas pontas declaradas** | O par declarado permanece inteiro; a batida sem outro papel é `sol`, tratada depois. Rejeitá-lo por adjacência contradiz esse contrato. (`app/ponto/turnos.py:811`, `app/escala/utils.py:440`, `app/escala/utils.py:507`, `app/escala/utils.py:511`) |
-| **Pares cruzados** | Com instantes distintos e lista cronológica, os dois laços atuais não os produzem: declarados são casados sucessivamente; os demais usam vizinhos sem pontas declaradas. (`app/ponto/turnos.py:1217`, `app/ponto/turnos.py:812`, `app/ponto/turnos.py:819`, `app/ponto/turnos.py:820`) |
-| **Pares aninhados** | São possíveis: a primeira passagem reserva apenas as pontas declaradas; um par adjacente inteiramente dentro delas pode sobreviver à segunda passagem. (`app/ponto/turnos.py:815`, `app/ponto/turnos.py:820`, `app/ponto/turnos.py:880`) |
-| **Volta igual à saída verdadeira** | As bordas reais são excluídas dos pares por identidade. Deve permanecer o limite interior, além de `iz > i`; a última batida continua `sai`. (`app/ponto/turnos.py:802`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:880`, `app/escala/utils.py:473`) |
-| **“Solta” que é ponta de outro par** | Ela tem papel de par. Não se pode pular todo o trecho até a volta e apagar essas pontas. (`app/escala/utils.py:440`, `app/escala/utils.py:507`) |
-| **Duas pausas disjuntas com solta entre elas** | Transportam-se os dois pares em ordem; depois a solta tenta seu marco mais próximo, livre e compatível com a cronologia. (`app/escala/utils.py:539`, `app/escala/utils.py:564`) |
-
-**Contraexemplo concreto, deduzido do código:** ata/DNA `08/12/13/17`; batidas `E08, S12, S12:10, E12:30, E13, S17`. As extras podem receber `X`; 12/13 recebem `Xi`; o pareador absorve as internas. O extrator pode devolver **12→13 e 12:10→12:30**. Ocorrência desse arranjo na frota: **[nao verificado]**. (`app/ponto/turnos.py:1761`, `app/ponto/turnos.py:1787`, `app/ponto/turnos.py:1804`, `app/ponto/turnos.py:1827`, `app/ponto/turnos.py:1315`, `app/ponto/turnos.py:1371`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:880`)
-
-Com apenas uma pausa cadastral, aceitar ambos faz o alinhador retornar `None` e seguir para a DP; com duas, ele pode distribuir externo e interno em pausas sucessivas, invertendo a cronologia entre os pares. (`app/escala/utils.py:530`, `app/escala/utils.py:535`, `app/escala/utils.py:561`, `app/escala/utils.py:613`, `app/escala/utils.py:625`)
-
-A **L-085** conserva o dia de início da jornada; a **L-087** impede decidir papel pelo tipo gravado; **[nome]** ainda pode retirar associações no filtro final. Nenhuma prioridade explícita para pausas aninhadas foi demonstrada: **[nao verificado]**. (`app/docs/LEIS.md:117`, `app/docs/LEIS.md:119`, `app/escala/utils.py:578`)
-
-**3. Cura mínima na fonte e derivações paralelas**
-
-Para pares **internos, disjuntos e com pontas identificáveis**, a mudança local é reconhecer:
-
-```python
-0 < _i < _iz < len(_bats) - 1
-```
-
-em lugar da exigência de vizinhança. Conservam-se as pontas e a associação S/E entregues pelo juiz; não se procura outro parceiro. Isso é desenho proposto, ainda não implementado nem testado. (`app/escala/utils.py:454`, `app/escala/utils.py:467`; execução **[nao verificado]**)
-
-O percurso deve continuar visitando as batidas entre as pontas. As que não pertencem a nenhum par recebem `sol`; as pontas de outros pares conservam seu papel. O alinhador já acomoda bordas e pares antes de examinar soltas, que não deslocam ocupantes; o filtro [nome] continua por último. (`app/escala/utils.py:461`, `app/escala/utils.py:468`, `app/escala/utils.py:472`, `app/escala/utils.py:558`, `app/escala/utils.py:564`, `app/escala/utils.py:578`)
-
-**Não considero segura a cura geral como uma troca isolada de operador.** É preciso conferir o conjunto completo de pares antes de transcrevê-lo. Para sobreposição, o desenho sem fallback é explicitar o conflito, sem escolher vencedor no adaptador nem acrescentar queda para a DP. Esse tratamento é proposta; sua implementação e comportamento ficam **[nao verificado]**. A necessidade decorre do aninhamento permitido e da capacidade limitada do alinhador. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/escala/utils.py:535`)
-
-Há outras adjacências a distinguir:
-
-- **`_papeis_por_alternancia`** deriva pausas dos vizinhos S/E dos períodos. É a derivação paralela de papel usada sem `turno=`, exigindo pelo menos quatro batidas alternadas e duração até 26 horas. Não consulta os pares completos do turno. (`app/escala/utils.py:477`, `app/escala/utils.py:489`, `app/escala/utils.py:496`, `app/escala/utils.py:597`)
-- **`_pares_marcados`** mantém adjacência própria para os pares residuais, depois dos declarados; essa é parte da autoridade existente, não deve ser refeita no adaptador. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`)
-- **`_pausa_fechada_carimbada`** também percorre vizinhos, mas responde à figura da L-115, inclusive onde o extrator de pausas corretamente devolve vazio. Não é substituível mecanicamente por `intervalos_do_turno`. (`app/ponto/turnos.py:912`, `app/ponto/turnos.py:915`, `app/ponto/turnos.py:924`, `app/ponto/turnos.py:1005`)
-- **`_borda_posicional`** procura um único vão interior adjacente somente quando nenhum turno tem pausa marcada; é outra pergunta, com exclusão explícita da autoridade já presente. (`app/ponto/turnos.py:654`, `app/ponto/turnos.py:679`, `app/ponto/turnos.py:697`)
-
-**Pergunta de lei 1:** quando o extrator entrega uma pausa declarada externa e outra pausa inteiramente dentro dela, qual resultado deve valer: somente a declarada, ambas com tratamento explícito da sobreposição, ou turno conflitante? O código admite a figura; a regra de desempate permanece **[nao verificado]**. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`)
-
-**4. Leitores e dinheiro**
-
-| Caminho | Leitura e consequência |
-|---|---|
-| **Ata** | O builder passa `turno=` ao alinhador; monta cópias das células com as novas lâmpadas/órfãs, repareia e calcula o realizado. O cartório serializa esse número. É o caminho diretamente atingido por `_papeis_do_turno`. (`app/escala/utils.py:1701`, `app/escala/utils.py:1886`, `app/escala/utils.py:1898`, `app/escala/utils.py:2045`, `app/ponto/services/cartorio.py:706`) |
-| **Zona 5** | Chama `_match_marcos` sem turno, sobre os períodos; identifica P1/P2 e aplica atraso/antecipada. Usa a derivação por alternância quando elegível. (`app/ponto/motor_calculo_v2.py:3060`, `app/ponto/motor_calculo_v2.py:3062`, `app/ponto/motor_calculo_v2.py:3077`, `app/escala/utils.py:597`) |
-| **`marco_ocupado_pela_batida`** | Chama o mesmo alinhador sem turno e transcreve rótulo/delta; identifica a batida por HH:MM. (`app/escala/utils.py:427`, `app/escala/utils.py:429`) |
-| **`regua_defesa.cumpriu_a_volta_do_intervalo`** | Consulta esse leitor com um período e exige `hfi` dentro da tolerância. Com duas batidas, permanece na DP; motor e calculador usam a resposta. (`app/escala/regua_defesa.py:489`, `app/escala/regua_defesa.py:493`, `app/escala/utils.py:489`, `app/ponto/motor_calculo_v2.py:2117`, `app/ponto/calculador/regras.py:251`) |
-| **Outros chamadores diretos** | Builder single, passagem de diagnóstico e detector de anomalias desabilitam a derivação. (`app/escala/utils.py:776`, `app/escala/utils.py:1650`, `app/chamados/detector_anomalias.py:212`) |
-
-Assim, mudar `_papeis_do_turno` não muda diretamente todos os chamadores. O efeito financeiro também pode chegar **pela ata**, cujo papel alimenta o pareador do motor e os intervalos transportados pelo adaptador. (`app/escala/utils.py:596`, `app/ponto/motor_calculo_v2.py:495`, `app/ponto/motor_calculo_v2.py:503`, `app/ponto/adaptador_motor.py:44`)
-
-Os números envolvidos têm contas distintas:
-
-- **Realizado da ata:** minutos HH:MM entre bordas, menos os intervalos reconhecidos. (`app/ponto/turnos.py:740`, `app/ponto/turnos.py:756`, `app/ponto/turnos.py:758`, `app/ponto/turnos.py:767`)
-- **Pagamento e intrajornada:** no 12x36, o motor recorta a janela, desconta a pausa real e calcula supressão/tolerância; `DiaPago` recebe trabalhadas e intra indenizada convertidas em horas. (`app/ponto/motor_calculo_v2.py:2759`, `app/ponto/motor_calculo_v2.py:2764`, `app/ponto/motor_calculo_v2.py:2771`, `app/ponto/motor_calculo_v2.py:2784`, `app/ponto/services/dia_pago.py:178`, `app/ponto/services/dia_pago.py:186`)
-- **Leitores derivados:** leitor da célula, PDF, causas, classificação, calendário e comparação ata/juiz consomem o realizado; fechamento e percentual ainda aplicam teto diário pelo previsto. (`app/escala/services/leitor_celula.py:406`, `app/folha/validacao_pdf.py:54`, `app/folha/causas.py:85`, `app/ponto/supra_juiz.py:224`, `app/colaboradores/services/calendario.py:359`, `app/ponto/services/bordas_realizado.py:87`, `app/ponto/services/dia_pago.py:394`, `app/ponto/services/fechamento.py:1064`, `app/folha/export.py:1096`)
-
-**No dado raspado fornecido**, gravado→rejulgado:
-
-| Campo | Antes → depois |
-|---|---|
-| Ata `minutos_realizados` | **660 → 599 min**, diferença −61. **[nao verificado]** |
-| Motor `intra_descontada` | **58,0130167 → 119,6599667 min**, diferença +61,64695. **[nao verificado]** |
-| Intrajornada indenizada | **0 → 0**. **[nao verificado]** |
-| Pagamento lavrado exibido | **10,87 h → 10,87 h**, rubricas exibidas iguais. **[nao verificado]** |
-
-Esses rótulos indicam ausência de arquivo:linha local para o anexo. O segundo `minutos_trabalhados` foi raspado; novo pagamento lavrado, impacto em reais e impacto financeiro da frota permanecem **[nao verificado]**. O espelho distingue realizado calculado de pagamento lavrado. (`app/ponto/services/espelho.py:783`, `app/ponto/services/espelho.py:799`, `app/ponto/services/espelho.py:811`)
-
-**5. Sonda de impacto — somente texto**
-
-A sonda usa `CargaDaJanela`, que carrega `batidas_apuraveis` e chama o mesmo corpo de `turnos_do_colab` usado pela ata. Conta turnos fechados com célula existente, sem julgar ou lavrar. (`app/ponto/turnos.py:3009`, `app/ponto/turnos.py:3022`, `app/escala/utils.py:1581`)
-
-O agrupamento usa **21..20**, conforme solicitado, pela função existente; empresa significa o FK atual do colaborador, sem reconstrução histórica. (`app/ponto/janelas.py:24`, `app/colaboradores/models.py:321`) O banco sombra mantém o schema `juliani`. (`app/config/settings/sombra.py:13`, `app/config/settings/sombra.py:29`)
-
-Texto para shell Django inicializado; execução e resultados: **[nao verificado]**.
-
-```python
-import json
-from collections import defaultdict
-from datetime import date
-
-from django.db import connection, transaction
-from django.utils import timezone
-from django_tenants.utils import schema_context
-
-from colaboradores.models import Colaborador
-from ponto.janelas import periodo_apuracao_atual
-from ponto.turnos import (
-    CargaDaJanela,
-    intervalos_do_turno,
-    pausas_abaixo_do_piso,
-)
-
-NAME = connection.settings_dict["NAME"]
-assert NAME == "sombra"
-
-class _Rollback(Exception):
-    pass
-
-saida = None
-
-try:
-    with schema_context("juliani"):
-        with transaction.atomic():
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-                )
-                cursor.execute("SELECT current_database()")
-                assert cursor.fetchone()[0] == "sombra"
-
-            inicio = date(2026, 9, 21)
-            hoje = timezone.localdate()
-            assert hoje >= inicio
-
-            # Todos, sem filtro de situação.
-            # app/colaboradores/models.py:321
-            colabs = list(
-                Colaborador.objects.all().only("id", "empresa_id").order_by("pk")
-            )
-
-            # Mesmo corpo do pareador, universo apurável e pad oficiais.
-            # app/ponto/turnos.py:2953,3009,3022
-            carga = CargaDaJanela(colabs, inicio, hoje)
-            grupos = defaultdict(list)
-            examinados = 0
-            fechados_sem_celula = 0
-
-            for colab in colabs:
-                for turno in carga.turnos(colab):
-                    if (
-                        turno.aberto
-                        or turno.entrada is None
-                        or turno.saida is None
-                    ):
-                        continue
-
-                    dia = turno.data_turno
-                    assert dia is not None and inicio <= dia <= hoje
-
-                    if carga.celula(colab.pk, dia) is None:
-                        fechados_sem_celula += 1
-                        continue
-
-                    examinados += 1
-
-                    # Os dois leitores repartem os pares do juiz pelo piso.
-                    # app/ponto/turnos.py:545,565
-                    pares = (
-                        list(intervalos_do_turno(turno))
-                        + list(pausas_abaixo_do_piso(turno))
-                    )
-                    if not pares:
-                        continue
-
-                    # Só mede posições; não procura nem escolhe parceiros.
-                    # Mesma ordenação de app/escala/utils.py:450.
-                    bats = sorted(turno.batidas, key=lambda b: b.timestamp)
-                    pos = {b.timestamp: i for i, b in enumerate(bats)}
-
-                    # Sem resultado parcial baseado em índice ambíguo.
-                    if len(pos) != len(bats):
-                        raise RuntimeError(
-                            f"timestamp ambiguo colab_pk={colab.pk} data={dia}"
-                        )
-                    if any(a not in pos or z not in pos for a, z in pares):
-                        raise RuntimeError(
-                            f"ponta ausente colab_pk={colab.pk} data={dia}"
-                        )
-
-                    if not any(pos[z] > pos[a] + 1 for a, z in pares):
-                        continue
-
-                    # Corte 21 explicitamente solicitado.
-                    # app/ponto/janelas.py:24
-                    comp_ini, comp_fim = periodo_apuracao_atual(dia, 21)
-                    grupos[(comp_ini, comp_fim, colab.empresa_id)].append(
-                        (colab.pk, dia.isoformat())
-                    )
-
-            linhas = []
-            for (ci, cf, empresa_pk), ocorrencias in sorted(grupos.items()):
-                linhas.append({
-                    "competencia": cf.strftime("%Y-%m"),
-                    "janela": [ci.isoformat(), cf.isoformat()],
-                    "empresa_pk": empresa_pk,
-                    "n_turnos": len(ocorrencias),
-                    "n_colabs": len({pk for pk, _ in ocorrencias}),
-                    # Uma entrada por turno afetado; pode repetir pk/data.
-                    "colab_pk_data": sorted(ocorrencias),
-                })
-
-            saida = {
-                "inicio": inicio.isoformat(),
-                "hoje": hoje.isoformat(),
-                "turnos_fechados_com_celula": examinados,
-                "turnos_fechados_sem_celula": fechados_sem_celula,
-                "turnos_afetados": sum(len(v) for v in grupos.values()),
-                "grupos_afetados": linhas,
-            }
-
-            # Rollback também no término normal.
-            raise _Rollback()
-
-except _Rollback:
-    pass
-
-print(json.dumps(saida, ensure_ascii=False, separators=(",", ":")))
-```
-
-A contagem mede presença de par não adjacente; não estima mudança de ata ou dinheiro, que também depende das guardas e do alinhamento subsequente. (`app/escala/utils.py:600`, `app/escala/utils.py:613`, `app/escala/utils.py:578`)
-
-perguntas de lei: 1
-
-_3019 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3020 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
