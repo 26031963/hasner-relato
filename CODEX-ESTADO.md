@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 00:40** · publicado em **09/11/2026 00:42** (UTC-3)
+> Ultima resposta processada: **09/11/2026 00:45** · publicado em **09/11/2026 00:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 00:45 · sessao b8280ae407bb · FIO-E0-V4-E1-FILA · sonda · origem=Code
+
+Transcrição literal do dado fornecido; execução da sonda sem verificação independente. [nao verificado]
+
+```text
+ERRO p= 48633 _Lavra 
+ERRO p= 48634 _Lavra 
+ERRO p= 48637 _Lavra 
+ERRO p= 48638 _Lavra 
+ERRO p= 48641 _Lavra 
+REATARc universo colabs= 248 perguntas= 3359 erros= 52
+REATARc HIST reapontaria a TERMINAL= 0 a vivo= 11
+REATARc c1 lavraria= 0 julgar_celula escreveria= 0
+REATARc c2 abrir chamado= 33 criaria novo= 33 veto na porta= 0
+REATARc c2 abrir achou TERMINAL e tentou RENASCER= 0 status= []
+REATARc RENASCER escreveria (guardas passaram)= 0 vetado pelas guardas= 0
+REATARc pares (pergunta,chamado) que renasceriam (ate 20)= []
+FIM sonda_v22c_acervo
+```
+
+1. **Sim, existe dependência no código que pode mudar o caminho do c2.** `julgar_celula` chama `julgar_colab`; o corpo lavra e persiste a célula antes de a fábrica chamar a emissão de perguntas, que pode alcançar `reatar_pergunta_orfa` e o c2 ainda dentro do julgamento. (app/ponto/services/cartorio.py:1989, app/ponto/services/cartorio.py:1802, app/ponto/services/cartorio.py:1822, app/ponto/services/cartorio.py:997; app/chamados/services/fabrica_da_celula.py:186, app/chamados/services/fabrica_da_celula.py:151; app/chamados/services/disputa_emissao.py:464; app/chamados/reconciliador.py:1617)
+
+   Nesse caminho, o c2 consulta `protestos` e pode retornar antes de `abrir`; também consulta `ata` e `julgada_em` para o veto `parcial_so_lista`. Portanto, desfazer as escritas pode mudar essas decisões. (app/chamados/reconciliador.py:867, app/chamados/reconciliador.py:869, app/chamados/reconciliador.py:878, app/chamados/reconciliador.py:882) Que isso tenha mudado algum caso concreto da sonda: [nao verificado].
+
+2. **Não há nova guarda de veto depois da escrita que efetiva a reabertura.** `_renascer_por_premissa_viva` verifica situação, cascata, tranca e régua antes de chamar `reabrir`; esta consulta `recusa_da_reabertura` antes de `_gravar_estado`. Depois da gravação, ressuscita perguntas e retorna `True`; o renascimento anexa a ocorrência e retorna `True`. (app/chamados/models.py:1005, app/chamados/models.py:1019, app/chamados/models.py:1390, app/chamados/models.py:1432, app/chamados/models.py:1441, app/chamados/models.py:1022)
+
+   **Há uma ressalva para “primeira escrita”: recusas também podem escrever trilha ou redirecionar perguntas e retornar `False`.** Assim, interceptar qualquer escrita, sem distinguir sua finalidade, não prova renascimento; o veto já foi decidido antes desses efeitos. (app/chamados/models.py:1017, app/chamados/models.py:1396, app/chamados/models.py:1402, app/chamados/models.py:1414, app/chamados/models.py:1426) Como a sonda distingue essas escritas: [nao verificado].
+
+3. **Não há escrita persistente do c1 antes da chamada a `get_user_sistema`.** Antes dela estão as guardas; `p.carimbar` e o eventual fechamento da disputa vêm depois. (app/chamados/reconciliador.py:362, app/chamados/reconciliador.py:371, app/chamados/reconciliador.py:398, app/chamados/reconciliador.py:400, app/chamados/reconciliador.py:405, app/chamados/reconciliador.py:412) A própria `get_user_sistema` usa `get_or_create`, podendo escrever durante a chamada. (app/core/utils.py:18)
 
 ## 09/11 00:40 · sessao d3b51dece676 · FIO-E0-V4-E1-FILA · sonda · origem=Code
 
@@ -674,35 +704,4 @@ Para **b5**, o descarte é procedente no contrato específico de ordem: o RED ex
 
 - O comentário limita demais o residual ao cron que “NASCE durante o migrate” e à “duração do migrate” (`bin/deploy.sh:295`, `bin/deploy.sh:296`). Sem exclusão entre envelope e deploy, a marca pode nascer **depois da varredura prévia terminar, antes do apply começar**, ou **depois do apply retornar, antes da varredura final**; nesses caminhos o banco pode andar e a seção 2 recusar (`bin/deploy.sh:300`, `bin/deploy.sh:301`, `bin/deploy.sh:324`, `bin/deploy.sh:326`, `bin/cron_run.sh:9`). Uma marca também pode nascer depois da varredura final e antes do restart, permitindo matar seu comando (`bin/deploy.sh:326`, `bin/deploy.sh:327`, `bin/cron_run.sh:9`, `bin/cron_run.sh:11`). Ocorrência real desses interleavings: [nao verificado].
 
-## 08/11 23:54 · sessao ff715dfd3348 · - · - · origem=Ronald (tmux)
-
-Auditoria estática, sem executar o selo; resultados de execução ou RED dos mutantes continuam [nao verificado].
-
-Os casos matam estas famílias de mutante, conforme suas asserções:
-
-| Caso | Mutante detectado | Prova |
-|---|---|---|
-| 1 | Auth removida/ignorada ou consultada depois de aplicar migration. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123-125` |
-| 2 | Sombra removida/ignorada ou consultada depois do apply. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:127-129` |
-| 3 | Apply ausente/duplicado; algum dos três portões ausente ou depois do apply; publicação antes do apply; HUP ausente/duplicado. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103-117`, `:131-133` |
-| 4 | Agendado dispensa **chamar** auth; conta sua passagem mesmo que a pendência também recusasse. Não isola o respeito ao retorno de auth. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:135-137` |
-| 5 | `--conferir` aplica/publica, passa por auth ou sombra, ou deixa de terminar com sucesso. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:139-141` |
-| 6 | Prova de casca removida/ignorada ou depois do apply. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:143-145` |
-| 7 | `--sem-sombra` também dispensa auth ou aplica antes dela. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:147-149` |
-| 8 | Apply incondicional sem pendência; não publicar quando não precisa migrar. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:151-153` |
-| 9 | Agendado chama auth mas ignora sua recusa: aqui não existe a pendência que mascarava isso no caso 4. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:155-157` |
-| 10 | Inicialização de `APLICAR_MIGRATE=0` removida, deixando o valor herdado aplicar migration em `--sem-migrate`. | `bin/deploy.sh:61`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:98`, `:159-161` |
-| 11 | Recusa final removida ou condicionada como na volta 3, permitindo restart depois do apply com cron vivo. | `bin/deploy.sh:326`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:75`, `:163-165` |
-| 12 | Remoção de **todas** as recusas que impediriam migrar com cron inicialmente vivo. Não identifica qual das recusas anteriores respondeu. | `bin/deploy.sh:115-118`, `:299-301`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:96-98`, `:167-169` |
-| 13 | Apply ausente/duplicado, restart ausente/duplicado ou restart antes do apply. | `bin/tests/test_deploy_portoes_antes_do_migrate.sh:110-114`, `:171-173` |
-
-Achados centrais:
-
-- **Caso 12 não morde a remoção isolada da recusa imediatamente antes do apply**, `deploy.sh:300`: o cron nasce antes de iniciar o script (`test:97`) e já é recusado em `deploy.sh:117`. Remover só `117` também sobrevive porque `300` continua recusando. Falta criar cron entre 0e e 1c para provar a redução dessa janela (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:96-98`, `:167-169`; `bin/deploy.sh:115-118`, `:299-301`).
-- **Sobrevivente de linha efetivamente tocada pelo diff:** substituir `deploy.sh:326` por `[ "$APLICAR_MIGRATE" != 1 ] || recusa_restart_com_cron`. Mantém a recusa quando apply=1, passando 11/13; caso12 cai em0e. Pula a recusa final quando apply=0, permitindo matar cron nascido depois de0e num `--restart` sem migration core. Todos os casos de restart do selo usam `FAKE_PEND_CORE=1` (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:163`, `:167`, `:171`).
-- Outro sobrevivente dessa linha: condicionar `326` a `PEND_MSG=0`. O falso de mensageria retorna sempre0, impedindo distinguir a variante; em `PEND_MSG=1`, `--restart` é permitido e precisaria preservar a recusa final (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`; `bin/deploy.sh:194-203`, `:326`).
-- O comentário novo anuncia PUB_OK nos casos **3,8,11**, mas o código exige apenas nos **3,13**; 8 não tem apply e11 não tem publicação, portanto PUB_OK seria0 em ambos (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:36`, `:110-114`, `:132`, `:152`, `:164`, `:172`).
-- O selo não prova alvos do restart: só conta linhas `^restart`; o vizinho efetivamente compara `restart saas_core saas_ui mensageria` no caminho verde (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:109`, `:172`; `bin/tests/test_deploy_reload_gracioso.sh:134-139`).
-- A alegação de que o vizinho prova readiness/rotas/reciclagem está exagerada: ele falsifica `selo_reciclagem` como sucesso, responde `STATUS 200` incondicionalmente e não tem injeção de falha de readiness/rota; prova principalmente exec sobrevivente, HUP, troca de workers e alguns modos/recusas (`bin/tests/test_deploy_reload_gracioso.sh:40-42`, `:57-58`, `:107-112`, `:116-156`).
-
-_2952 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2953 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
