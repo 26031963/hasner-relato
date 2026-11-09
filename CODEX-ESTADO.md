@@ -1,7 +1,70 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 16:29** · publicado em **09/11/2026 16:31** (UTC-3)
+> Ultima resposta processada: **09/11/2026 17:07** · publicado em **09/11/2026 17:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 17:07 · sessao 08f5868560fb · FIO-E0-V4-E4-ESCRITORES · leitura · origem=Code
+
+**É (b): leitor a migrar para o fato antes de cessar a escrita legada.** O template consome campos cuja escritora já está no censo; não acrescenta porta de escrita. (`app/templates/chamados/partials/modal_fio.html:169`, `:170`; `app/chamados/services/validacao.py:664`, `:665`; anexo `censo_v2.r:407`)
+
+| Item | Resultado e evidência |
+|---|---|
+| **1 — Template: instante** | Dentro do ramo de divergência dos dias, `if perg.data_conferida_em` escolhe mostrar “Conferida em”, formatada `d/m/Y H:i`; sem instante, oferece formulário conforme permissão ou informa bloqueio. (`app/templates/chamados/partials/modal_fio.html:162`, `:169`, `:170`, `:171`, `:179`) |
+| **1 — Template: autor** | `if perg.data_conferida_por` decide mostrar autoria; `get_full_name\|default:perg.data_conferida_por.username` apresenta nome completo ou username. (`app/templates/chamados/partials/modal_fio.html:170`) |
+| **1 — Contexto/apelidos** | O objeto percorre `p → perguntas_por_chamado → ch.perguntas_disputa → perg`; os campos chegam pelo próprio objeto. (`app/chamados/services/fio.py:225`, `:243`, `:253`; `app/templates/chamados/partials/modal_fio.html:157`) |
+| **1 — Views/contextos** | Render completo e parcial chamam o mesmo montador e passam `chamados`; o parcial também fornece `pode_conferir_data` pela permissão `gerir_chamados`. A view de conferência delega autor/justificativa ao serviço. (`app/chamados/views.py:889`, `:927`, `:931`, `:1312`; `app/chamados/services/fio.py:446`, `:465`, `:474`) |
+| **1 — Python** | Fora da escritora, `_materializar_uma` lê somente `data_conferida_em`: divergência com instante nulo bloqueia materialização. Dentro da escritora, instante não nulo impede repetir a conferência. (`app/chamados/services/materializacao.py:1193`, `:1199`; `app/chamados/services/validacao.py:662`, `:663`) |
+| **1 — JS estático** | Não localizei leitor literal desses valores **[nao verificado]**. O formulário encontrado aciona a rota por HTMX, sem transportar os campos de conferência. (`app/templates/chamados/partials/modal_fio.html:172`, `:174`) |
+| **1 — Leituras de teste** | Conferem presença/ausência, autoria por `data_conferida_por_id` e preservação do instante no segundo pedido; `em1` é o apelido local. (`app/chamados/tests/test_data_do_fato_divergente.py:191`, `:192`, `:203`, `:211`; `app/chamados/tests/test_porta_validacao_pergunta.py:292`, `:293`, `:306`, `:315`, `:322`, `:327`) |
+| **2 — Escritores** | Porta semântica produtiva: `conferir_data_do_fato`, que atribui instante/autor e persiste ambos; `save` é executor. Há escrita direta de preparação nos testes. A FK ainda declara `SET_NULL` quando o usuário é excluído. (`app/chamados/services/validacao.py:664`, `:665`, `:666`; `app/chamados/models.py:3402`, `:3412`, `:2457`; `app/chamados/tests/test_data_do_fato_divergente.py:155`, `:166`) |
+| **2 — Ato correspondente** | A porta emite **`LogAuditoria`: ação `conferir_data`, modelo `PerguntaDisputa`, objeto `p.pk`**, com dia anterior, dia válido e justificativa; a trilha recebe usuário e tem `criado_em` próprio. **Nenhuma DP de conferência** consta em `ATOS`. (`app/chamados/services/validacao.py:667`, `:668`, `:669`, `:670`, `:671`, `:672`; `app/core/auditoria.py:22`, `:24`; `app/core/models.py:295`, `:307`; `app/chamados/models.py:3848`) |
+| **3 — E4** | **(b), sem aumentar 26 (+27 informado):** migrar a leitura do instante/autoria para o ato correspondente antes de abandonar suas escritas. O candidato factual existente é o log acima; sua gravação admite falha sem impedir o fluxo. Cobertura histórica por pergunta: **[nao verificado]**. Onde não houver registro equivalente, **falta fato**: conferência daquele par de dias, autor, instante e justificativa. (`app/templates/chamados/partials/modal_fio.html:169`, `:170`; `app/chamados/services/validacao.py:664`, `:667`; `app/core/observ.py:98`, `:139`) |
+
+| 4 — Outros leitores de template ausentes do `censo_v2` fornecido | Ocorrências confirmadas |
+|---|---|
+| Modal: R/V/F, incluindo indiretos | `app/templates/chamados/partials/modal_fio.html:184`, `:216`, `:218`, `:219`, `:227`, `:378`; `aberta`: `:75`, `:325`; `leitura_da_resposta`: `:249`; `todas_respondidas`: `:333`. |
+| Card: R/via/estado/F | `app/templates/chamados/partials/_card_atendimento.html:94`, `:100`, `:108`, `:135`, `:137`, `:142`, `:148`, `:155`, `:176`, `:177`, `:384`, `:385`; via `:186`; estado `:183`; aberta `:10`, `:15`; correção `:190`. |
+| Card de pergunta: R/V | `app/templates/chamados/partials/_pergunta_card.html:20`, `:23`, `:24`, `:29`, `:31`, `:32`, `:42`, `:43`. |
+| Preview: R | `app/templates/chamados/partials/_lote_preview.html:24`. |
+| F por contexto/propriedade | `app/templates/chamados/fio_colaborador.html:164`, `:169`; `app/templates/chamados/detalhe_local.html:6`, `:296`. |
+| Correspondência dos indiretos | `aberta → fechada_em`: `app/chamados/models.py:1821`; `estado → V/C/R`: `:3030`, `:3032`, `:3034`, `:3037`; filtro → R: `app/chamados/templatetags/chamados_tags.py:128`; flags → R/F: `app/chamados/services/fio.py:340`, `:341`, `:342`; contexto → F: `app/chamados/services/acoes_chamado.py:336`. |
+
+Exaustividade por reflexão, SQL ou nomes montados dinamicamente: **[nao verificado]**.
+
+## 09/11 17:06 · sessao a086c7213e12 · - · - · origem=Ronald (tmux)
+
+| Template | Leitores adicionais ao `censo_v2` fornecido |
+|---|---|
+| `app/templates/chamados/partials/modal_fio.html` | R: `:184`, `:216`, `:218`, `:219`; V: `:227`; F: `:378`, e por `disputa_obj.aberta`: `:75`, `:325`; R indireto por `leitura_da_resposta`: `:249`; R indireto por `todas_respondidas`: `:333`. |
+| `app/templates/chamados/partials/_card_atendimento.html` | R: `:94`, `:100`, `:108`, `:135`, `:137`, `:142`, `:148`, `:155`, `:176`, `:177`, `:384`, `:385`; via: `:186`; V/C/R por `p.estado`: `:183`; F por `disputa_obj.aberta`: `:10`, `:15`; R/F por `pode_solicitar_correcao`: `:190`. |
+| `app/templates/chamados/partials/_pergunta_card.html` | R: `:24`, `:29`, `:31`, `:32`; V: `:20`, `:23`, `:42`; R indireto por `leitura_da_resposta`: `:43`. |
+| `app/templates/chamados/partials/_lote_preview.html` | R: `:24`. |
+| `app/templates/chamados/fio_colaborador.html` | F por `disputa_obj.aberta`: `:164`, `:169`. |
+| `app/templates/chamados/detalhe_local.html` | F por contexto `disputa_aberta`: `:6`, `:296`; seleção por `fechada_em__isnull=True` em `app/chamados/services/acoes_chamado.py:336`. |
+
+| Comprovação dos aliases | Fonte |
+|---|---|
+| `aberta` lê `fechada_em`. | `app/chamados/models.py:1821` |
+| `estado` lê V/C/R. | `app/chamados/models.py:3030`, `:3032`, `:3034`, `:3035`, `:3037` |
+| `resposta_display` lê `resposta_colab`. | `app/chamados/models.py:3510`, `:3515`, `:3523`, `:3530`, `:3532` |
+| `leitura_da_resposta` lê R por `getattr`. | `app/chamados/templatetags/chamados_tags.py:128` |
+| `todas_respondidas` deriva de `all(p.respondida_em)`; `pode_solicitar_correcao` combina isso com `d.aberta`. | `app/chamados/services/fio.py:340`, `:341`, `:342` |
+
+Correção da mensagem anterior: não há ocorrência de `pode_solicitar_correcao` no modal; a ocorrência encontrada é apenas `app/templates/chamados/partials/_card_atendimento.html:190`.
+
+## 09/11 17:06 · sessao d2ea68ef7256 · - · - · origem=Ronald (tmux)
+
+| Caminho | Evidência e uso |
+|---|---|
+| Transporte para template | `montar_chamados_fio` busca objetos `PerguntaDisputa` como `p`; agrupa em `perguntas_por_chamado`, anexa em `ch.perguntas_disputa`; template percorre como `perg`. Logo, `p → ch.perguntas_disputa → perg` é o apelido relevante; não há cópia separada dos dois campos. (`app/chamados/services/fio.py:225`, `:243`, `:253`; `app/templates/chamados/partials/modal_fio.html:157`) |
+| Seleção/preload | Perguntas das disputas abertas; nas fechadas aplica `q_vivas` e depois `pergunta_viva`. `select_related` inclui disputa/célula/destino; prefetch inclui decisões com `validada_original_por`/`ato_por`; não inclui `data_conferida_por`. (`app/chamados/services/fio.py:221`, `:224`, `:225`, `:226`, `:227`, `:231`, `:238`) |
+| Contexto completo | `_resp_modal_full` chama `montar_chamados_fio(..., com_explicacao=True)` e passa `'chamados': chamados` para `modal_fio.html`. Não calcula outro valor de conferência. (`app/chamados/views.py:889`, `:927`, `:931`) |
+| Contexto parcial | `contexto_parcial_fio` chama o mesmo montador, passa `chamados` e define `pode_conferir_data` pela ação `gerir_chamados`. Consumido no re-render pós-ação de `processar_post_fio` e na reabertura de disputa. (`app/chamados/services/fio.py:446`, `:465`, `:474`, `:496`, `:497`; `app/chamados/views.py:1399`, `:1400`) |
+| Leitura do par no modal | Dentro do ramo de divergência entre dias, `if perg.data_conferida_em` decide exibir conferência em vez do formulário/bloqueio. Mostra timestamp `d/m/Y H:i`; `if perg.data_conferida_por` controla a autoria; usa `get_full_name|default:...username`. Sem timestamp, oferece formulário se `pode_conferir_data`, senão informa bloqueio. (`app/templates/chamados/partials/modal_fio.html:162`, `:169`, `:170`, `:171`, `:172`, `:179`) |
+| Casca HTTP | `conferir_data_pergunta` valida método/permissão e delega ao serviço com autor e justificativa; não lê os campos. (`app/chamados/views.py:1308`, `:1310`, `:1312`, `:1313`) |
+| JS | Busca literal por `data_conferida`/`conferir_data` em `app/**/*.js` não encontrou ocorrência; cobertura dinâmica: **[nao verificado]**. O acionamento concreto está no atributo HTMX do template, `hx-post` para `conferir_data_pergunta`, `hx-swap="none"`. (`app/templates/chamados/partials/modal_fio.html:172`) |
+
+Detalhe potencialmente útil: o contexto **completo** não fornece `pode_conferir_data`; o parcial fornece. Portanto a diferença comprovável é ausência/presença dessa chave nos dois construtores, sem inferir resultado produtivo. (`app/chamados/views.py:927`; `app/chamados/services/fio.py:474`; comportamento produtivo: **[nao verificado]**)
 
 ## 09/11 16:29 · sessao f6ee62474778 · FIO-E0-V4-E4-ESCRITORES · leitura · origem=Code
 
@@ -841,94 +904,4 @@ F — escritores/leitores de B:
 
 P4 deve entrar no contrato E como teste de portabilidade dos dois registros mutantes `portao/carga`: cenário e esperado precisam variar juntos com NPL, incluindo host simulado distinto de8; o mutante que retorna “6.00” fixo deve morrer pela asserção de esperado incorreto, não por outra falha. O defeito atual está nos literais; execução desse futuro teste [não verificado]. (`bin/tests/test_codex_pergunta.sh:100`, `:520`, `:720`, `:722`)
 
-## 09/11 15:38 · sessao 11601509dba7 · - · - · origem=Ronald (tmux)
-
-A matriz A pode usar estes sítios comuns: argumento `bin/codex_pergunta.sh:71`, `:321`, `:323`; admissão `:270`, `:305`; inventário `:196`, `:217`; leitura `:278`, `:279`, `:282`; juiz final `:284`, `:287`; estado `:310`, `:311`, leitura `:291`; persistência e retorno `:560`, `:574`, `:579`, `:587`, `:603`, `:609`. A lei de arquivo comum está em `CLAUDE.md:306`, `:307`; cura restritiva em `CLAUDE.md:278`.
-
-| Linha A | Esperado × atual e localização |
-|---|---|
-| Arquivo exato | Concordam: argumento sem `/` cobre só igualdade (`bin/codex_pergunta.sh:264`); outro arquivo é admitido, mesmo arquivo recusa (`:266`, `:273`); TOCADO fora recusa rc 3 (`:284`, `:587`). Caso `c_toca_exato` em `bin/tests/test_codex_pergunta.sh:563`, `:565`; mutante `toca_exato` em `:733`, `toca_fim` em `:732`. |
-| Pasta `/` | Concordam: prefixo inclui `/`, logo pasta cobre descendentes por componente (`bin/codex_pergunta.sh:264`). Casos `controle_pasta` e `folha_nao_cobre_folhas` em `bin/tests/test_codex_pergunta.sh:564`, `:567`; mutante `toca_exato` em `:733`. |
-| Pasta pai criada para arquivo nomeado | Sem outra raia, concordam: pasta nova vira TOCADO (`bin/codex_pergunta.sh:196`), pai necessário é aceito (`:284`); caso existente em `bin/tests/test_codex_pergunta.sh:569`. Com meu `app/novo/a.py` e outro `app/novo/b.py`, **DIVERGE P2**: admissão disjunta (`bin/codex_pergunta.sh:266`), fim considera `app/novo/` comum com `b.py` (`:287`). Lei exige arquivo comum (`CLAUDE.md:306`). Falta caso concorrente; futuro `[não verificado]`. |
-| Pasta irmã | Concordam: `app/folhas/` não cruza `app/folha/` (`bin/codex_pergunta.sh:264`, `:266`); caso admissão em `bin/tests/test_codex_pergunta.sh:530`; caso fim `:564`. |
-| Mesmo nome com e sem `/` | Concordam na recusa restritiva da admissão: igualdade após remover `/` (`bin/codex_pergunta.sh:266`, `CLAUDE.md:278`); caso `app/folha` contra `app/folha/` em `bin/tests/test_codex_pergunta.sh:529`. Sem `/` continua arquivo exato no fim (`bin/codex_pergunta.sh:264`), não permissão para descendentes; caso `bin/tests/test_codex_pergunta.sh:563`. |
-| TAB | Argumento recusa (`bin/codex_pergunta.sh:323`). Nome encontrado no FS não recebe validação equivalente: **DIVERGE P1**. Inventário imprime cru (`:217`); leitor separa TAB e usa só segundo campo (`:279`, `:282`). `app/folha/views.py<TAB>fora` passa por declaração exata `app/folha/views.py`. Falta caso/mutante próprio no CASOS/lista atuais (`bin/tests/test_codex_pergunta.sh:617`, `:618`, `:730`, `:737`). |
-| Newline | Argumento recusa (`bin/codex_pergunta.sh:323`). **DIVERGE P1**: impressão crua cria outra linha (`:217`); leitura linha a linha aceita primeiro fragmento como nome exato (`:278`, `:282`), demais fragmentos sem classe TOCADO são ignorados (`:280`). Falta caso/mutante próprio (`bin/tests/test_codex_pergunta.sh:617`, `:618`). |
-| CR | Argumento recusa (`bin/codex_pergunta.sh:323`). **DIVERGE P1**: `open` em modo texto usa leitura universal de quebras; CR do nome vira quebra antes da comparação (`:278`, `:282`); impressão é crua (`:217`). Falta caso/mutante próprio (`bin/tests/test_codex_pergunta.sh:617`, `:618`). |
-| Espaço | Argumento recusa (`bin/codex_pergunta.sh:323`). No FS, TSV conserva o espaço; nome com espaço sob pasta declarada pode ser TOCADO permitido, enquanto `views.py espaço` está fora de declaração exata `views.py` (`:217`, `:279`, `:284`). Não confundir a gramática restritiva do argumento com proibição de espaço em todo arquivo descoberto. Caso específico atual `[não verificado]`. |
-| Symlink tocado | Nome sintaticamente válido pode ser declarado (`bin/codex_pergunta.sh:323`); inventário usa `lstat` (`:194`), marca symlink PROIBIDO (`:215`), rc 3 (`:219`, `:587`). Caso `c_p_link`/mutante `p_link`: `bin/tests/test_codex_pergunta.sh:366`, `:663`. Symlink transitório desfeito antes do fim `[não verificado]`. |
-| Hardlink | Preexistente entra em TOCADO mesmo com conteúdo igual (`bin/codex_pergunta.sh:201`), causando pré-check não vazio rc 2 (`:397`, `:399`); criado no trabalho vira PROIBIDO (`:216`) e rc 3 (`:587`). Casos `p_hardlink`, `p_hardlink_ident`, `revalida_hardlink`: `bin/tests/test_codex_pergunta.sh:367`, `:403`, `:406`; mutantes `inv_nlink`/`p_hardlink`: `:656`, `:657`, `:658`, `:664`. |
-| `..`, `//`, absoluto | Argumentos recusados antes da admissão (`bin/codex_pergunta.sh:323`, `:324`). Casos atuais `bin/tests/test_codex_pergunta.sh:554`; mutante `toca_forma` `:731`. Inventário produz caminhos relativos da WT (`bin/codex_pergunta.sh:189`, `:193`), não a grafia original de uma operação. Escape transitório ou escrita fora da WT `[não verificado]`. |
-| Fora de `app/` e `bin/` | Argumento recusa (`bin/codex_pergunta.sh:323`); arquivo encontrado dentro da WT mas fora dessas raízes é PROIBIDO (`:151`). Caso `p_fora` `bin/tests/test_codex_pergunta.sh:352`, mutante `:689`. |
-| `bin/` comum | Permitido quando coberto pelo próprio TOCA e sem cruzamento (`bin/codex_pergunta.sh:151`, `:284`, `:287`); writable root extra é ativado por declaração `bin/...` (`:539`, `:543`). Caso `bin_ok` `bin/tests/test_codex_pergunta.sh:582`. Mutante específico para concessão do writable root `[não verificado]`. |
-| `bin/` protegido | Argumento pode passar e admissão também; inventário proíbe independentemente do TOCA (`bin/codex_pergunta.sh:157`, `:162`, `:210`). Casos todos protegidos `bin/tests/test_codex_pergunta.sh:590`, `:592`; mutantes `lista_protegida` e `p_protegido` `:736`, `:737`. |
-| `.claude/` | Raiz `.claude/` é argumento inválido; `app/.claude/...` ou `bin/.claude/...` são argumentos sintaticamente válidos (`bin/codex_pergunta.sh:323`), porém inventário sempre proíbe componente `.claude` (`:147`). Caso `p_claude` `bin/tests/test_codex_pergunta.sh:348`; mutante `:685`. |
-
-Confirmei em memória, sem criar arquivos, o trecho real `_TOCA_PY`: `views.py<TAB>fora`, `views.py<NL>fora` e `views.py<CR>fora` retornam 0 contra declaração exata `views.py`; `views.py espaço` retorna 3. Os sítios que determinam os resultados são `bin/codex_pergunta.sh:217`, `:278`, `:279`, `:282`, `:284`.
-
-Para P2, o teste novo deve provar **admissão e fim rc 0** para irmãos novos `a.py`/`b.py`, e também **fim rc 3** quando a outra declaração passa a cobrir `app/novo/`; os controles distinguem arquivo comum de pai necessário (`CLAUDE.md:306`, `bin/codex_pergunta.sh:284`, `:287`). O mutante exigido deve restaurar a colisão simétrica sobre a pasta pai e morrer no controle positivo; outro deve eliminar a recusa quando a outra raia cobre a pasta e morrer no controle negativo. Esses casos/mutantes futuros estão `[não verificado]`.
-
-Persistência comum: argumento válido admitido é publicado como linhas `toca=` cruas e rename (`bin/codex_pergunta.sh:310`, `:311`), relido por `sed` (`:291`); nomes do inventário são TSV cru (`:217`), acrescidos de PROIBIDO pelo juiz final (`:575`), e `.recusa` retém linhas que não começam com TOCADO (`:579`). Em saída normal, estado é removido (`:236`), chamadas.log ganha `fim` (`:229`), `.rc` registra o retorno (`:232`); inventário proibido força 3 (`:587`), sucesso com resposta nova produz `.id` (`:603`). Como o filtro é por linha crua, fragmentos de nome com newline podem sobreviver em `.recusa` sem estrutura de registro (`:217`, `:579`).
-
-A célula precisa de ESMERIL-SEMÂNTICA é **pai novo × outra declaração de arquivo irmão no juiz final**: admissão diz disjunto (`bin/codex_pergunta.sh:266`, `:273`), fim diz arquivo comum por causa da pasta TOCADA (`:196`, `:287`). P1 acrescenta divergência de representação: argumento validado não contém controles (`:323`), mas inventário e leitor não preservam o nome encontrado (`:217`, `:278`, `:282`).
-
-## 09/11 15:34 · sessao 6b3547444afa · - · - · origem=Ronald (tmux)
-
-Censo textual runtime completo de chamadas diretas nesta cópia:
-
-| Chamador | Dependência da forma atual | Adaptação necessária |
-|---|---|---|
-| `chamados/services/materializacao.py:129` — `reabrir_selecao` | Todos os elementos têm PK de pergunta | Seleção, trava administrativa e reabertura abrangem só perguntas; testemunha fica factual |
-| `chamados/services/materializacao.py:524` — projeção | `metade(q)` lê campos/decisões de pergunta | Projetar testemunha como A, identificar sua origem e manter `par_ids` exclusivo das perguntas |
-| `chamados/services/materializacao.py:1433` — ato | Validação, novas, replay, recusa e correção percorrem perguntas | Escrever apenas perguntas; não chamar decisão, carimbo ou resposta sobre testemunha |
-| `chamados/services/materializacao.py:1539` — `_materializar_uma` | `{q.pk for q in par}` vira universo/processadas | Testemunha não é pergunta selecionável nem escrita nova |
-| `chamados/services/validacao.py:721` | Unidade intersecta seleção elegível | Extrair IDs só das perguntas |
-| `chamados/services/passivo_validado.py:385` | DRY verifica universo e conta unidade | Considerar uma pergunta autorizada + testemunha factual, sem acrescentar ID de batida a `autorizadas` |
-| `chamados/management/commands/validar_classe_a.py:90` | DRY compara IDs com seleção de perguntas | Mesma extração exclusiva de perguntas |
-
-As chamadas de teste atuais ficam em `chamados/tests/test_bug_par_unidade.py:386`, `:475`, `:586`; há substituição do identificador por tupla artificial em `:502`. Âncoras de mutantes referem o identificador em `chamados/tests/bug_par_mutantes.py:27`, `:55`, `:58`, `:79`, `:103`.
-
-Riscos concretos:
-
-- `chamados/services/acoes_disputa.py:23` exige exatamente duas perguntas; precisa aceitar um ou dois IDs e deixar o ato canônico conferir a identidade completa.
-- `chamados/services/materializacao.py:1467` bloqueia recusa se qualquer metade for A. Deve considerar A de pergunta separadamente da testemunha A, para recusar a pergunta e preservar o chão.
-- `templates/chamados/partials/_par_intervalo.html:37` gera um campo obrigatório para cada metade. A testemunha deve ser exibida e excluída dos campos de correção.
-- `chamados/services/materializacao.py:1499` usa `par[0]` como pergunta; com saída batida, primeiro item pode ser testemunha.
-- `chamados/services/materializacao.py:1519` passa `n_mat=2`; precisa contar perguntas efetivamente aplicadas.
-
-Leitores indiretos:
-
-| Leitor | Efeito esperado da projeção canônica |
-|---|---|
-| Vigia carimbo, `chamados/services/vigia_carimbo.py:107` | Continua julgando a pergunta pelo seu `codigo`; testemunha A não absolve pergunta V/R |
-| Vigia fio, `chamados/services/vigia_fio.py:168` | Continua consumindo obrigação conjunta |
-| Explicador, `chamados/services/explicador.py:73` | Transporta estado/capacidades novos; pergunta + batida pode estar pronta |
-| Auditoria I6/I18, `chamados/management/commands/auditar_invariantes_chamados.py:537`, `:557` | Obrigação só desaparece quando pergunta e testemunha completam aplicação |
-| O330, `chamados/services/passivo_validado.py:325` | Inventário autorizado contém perguntas; testemunha-batida não entra em reversão, seleção nem contador de perguntas |
-| O330 contagem, `chamados/services/passivo_validado.py:565` | Já conta apenas perguntas presentes no grupo, se `processadas/aplicadas` mantiverem IDs de perguntas |
-| Projeção textual, `chamados/services/declaracao_texto.py:477` | `pode_decidir_par` pode ser verdadeiro com uma pergunta respondida e contraparte batida |
-| API, `api/views.py:1126` | Transporta esse resultado por `estado_par`, `estado_metade`, `aplicada` e capacidades |
-| Tag, `chamados/templatetags/chamados_tags.py:18` | Já consulta a autoridade sem fórmula paralela |
-| Cartões/modal, `templates/chamados/partials/_card_atendimento.html:77`, `_pergunta_card.html:20`, `modal_fio.html:160` | Todos usam o include único `_par_intervalo.html` |
-| Fechamento explicado, `chamados/services/explicador.py:142` | Continua lendo C7; nenhuma nova fórmula local |
-
-Somente leitura realizada; nenhum runtime ou banco executado. Resultados comportamentais [nao verificado].
-
-## 09/11 15:31 · sessao 08d8d268322f · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
-
-A construção está escrita. A [entrega completa](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:1) contém:
-
-| Entrega | Endereço |
-|---|---|
-| Tabela arquivo:linha de cada hunk | [relatório:41](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:41) |
-| 47 testes e o que cada um morde | [relatório:173](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:173) | [nao verificado]
-| Comando individual de cada teste | [relatório:225](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:225) | [nao verificado]
-| 40 mutantes, âncoras e comandos | [relatório:283](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:283) |
-
-O juiz do par permanece na ampliação de [estado_aplicacao_pergunta](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:512). A porta conjunta está em [operar_par_intervalo](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:1406); a obrigação pronta para C7 consumir está em [obrigacoes_par_intervalo](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:112). É a autoridade existente de aplicação ampliada para a unidade PAR; a justificativa está no [relatório:7](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:7).
-
-`models.py` permanece para a sessão. Os trechos exatos para C7, captura de `pelo_juiz` antes da linha 1905 e reconsulta após a trava terminada na linha 1920 estão no [relatório:12](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:12). Até esses hunks, ficam previstos RED: V/T técnico, V/V, `fechar`, ambas as transições por S127 e releitura sob trava. **Execução: [nao verificado].**
-
-Foram conferidas sintaxe, âncoras e catracas estáticas; **Django e mutantes não foram executados**. RED/GREEN, mortes, concorrência e efeitos em produção permanecem **[nao verificado]**; não há certificação nesta entrega. ([registro das verificações](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:375))
-
-_3202 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3205 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
