@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:42** · publicado em **09/11/2026 03:43** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:48** · publicado em **09/11/2026 03:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:48 · sessao 7ccf7d4cd575 · - · - · origem=Ronald (tmux)
+
+Sobra o mutante `_n += 1` → `_n = 1`: a classe `ParNaoAdjacente` cobre no máximo dois pares aceitos, cujos números continuam sendo `0,1`; os testes novos exigem exatamente isso. `app/escala/utils.py:471`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:125`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:132`.
+
+Ele não é equivalente: com três pares disjuntos não adjacentes, por exemplo índices `1→3`, `4→6`, `7→9`, emite números `0,1,1`, enquanto o original emite `0,1,2`. Confirmei o contraexemplo executando a função extraída por AST em memória, com consultas de pares substituídas; execução integral Django: [nao verificado]. `app/escala/utils.py:459`; `app/escala/utils.py:469`; `app/escala/utils.py:471`.
+
+Também sobra o mutante `range(_i + 1, _iz)` → `range(_i + 1, _iz - 1)`: os casos aninhados da classe conservam outra ponta intermediária antes da última posição examinada, portanto continuam vetando o externo. `app/escala/utils.py:468`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:149`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:164`.
+
+Contraexemplo desse segundo mutante: pares cruzados `1→4` e `3→5`; original veta ambos, mutante aceita ambos porque deixa de examinar as pontas imediatamente anteriores aos fechamentos. Confirmei com pares fornecidos em memória; produção desses pares pelo pareador real: [nao verificado]. `app/escala/utils.py:467`; `app/escala/utils.py:468`.
+
+## 09/11 03:46 · sessao 9b78e3bf994b · PAR-NAO-ADJACENTE · construtor · origem=Code
+
+Acrescentei os dois testes com pareador real e oráculos literais: [nao verificado]
+
+- Papéis exatos dos pares `0` e `1`: [teste:125](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:125). [nao verificado]
+- Cada ponta alinhada à sua pausa: [teste:132](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:132). [nao verificado]
+
+No ensaio reduzido abaixo, ambos passaram no original e **ambos mataram `_n += 0`**, respectivamente nas asserções das linhas 128 e 140. `py_compile` passou sem gravar bytecode. Execução integral Django: **[nao verificado]**; suíte não executada. [nao verificado]
+
+Comando executado para compilação, original e mutante, inteiramente em memória:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import ast
+import datetime
+import py_compile
+import sys
+import types
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+from zoneinfo import ZoneInfo
+
+ROOT = Path.cwd()
+TEST = ROOT / 'escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py'
+with patch('py_compile.importlib._bootstrap_external._write_atomic') as write:
+    py_compile.compile(str(TEST), cfile='verificacao-em-memoria.pyc', doraise=True)
+    assert write.call_count == 1
+print('py_compile: OK, escrita de bytecode interceptada')
+
+
+def module(name):
+    obj = types.ModuleType(name)
+    sys.modules[name] = obj
+    return obj
+
+
+def extract(path, predicate, namespace):
+    tree = ast.parse(path.read_text(), filename=str(path))
+    tree.body = [node for node in tree.body if predicate(node)]
+    exec(compile(tree, str(path), 'exec'), namespace)
+
+
+# Somente infraestrutura substituida; pareador e leitores vem da copia.
+tz = ZoneInfo('America/Sao_Paulo')
+timezone = module('django.utils.timezone')
+timezone.make_aware = lambda dt: dt.replace(tzinfo=tz)
+timezone.localtime = lambda dt: dt.astimezone(tz)
+timezone.localdate = lambda dt: dt.astimezone(tz).date()
+module('django').utils = module('django.utils')
+sys.modules['django.utils'].timezone = timezone
+module('escala').utils = module('escala.utils')
+utils = sys.modules['escala.utils']
+utils.__dict__.update(datetime=datetime, timezone=timezone)
+module('ponto').turnos = module('ponto.turnos')
+turnos = sys.modules['ponto.turnos']
+module('escala.servico_jornada')
+extract(ROOT / 'escala/servico_jornada.py',
+        lambda n: isinstance(n, ast.FunctionDef) and n.name == 'turno_cruza_meia_noite',
+        sys.modules['escala.servico_jornada'].__dict__)
+module('ponto.management')
+module('ponto.management.commands')
+eco = module('ponto.management.commands.detectar_par_relampago')
+extract(ROOT / 'ponto/management/commands/detectar_par_relampago.py',
+        lambda n: isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and
+                  t.id == 'DURACAO_ECO_SEG' for t in n.targets), eco.__dict__)
+extract(ROOT / 'ponto/turnos.py',
+        lambda n: n.lineno < 1504 and not (isinstance(n, ast.ImportFrom) and
+                                          n.module == 'core.dia_do_turno'), turnos.__dict__)
+utils_path = ROOT / 'escala/utils.py'
+utils_source = utils_path.read_text()
+functions = {'_papeis_do_turno', '_alinhar_por_papel', 'encadear_marcos'}
+extract(utils_path, lambda n: isinstance(n, ast.FunctionDef) and n.name in functions,
+        utils.__dict__)
+ns = dict(datetime=datetime, SimpleNamespace=types.SimpleNamespace,
+          SimpleTestCase=unittest.TestCase, timezone=timezone)
+extract(TEST, lambda n: (isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and
+                         t.id == 'DIA' for t in n.targets)) or
+        (isinstance(n, (ast.FunctionDef, ast.ClassDef)) and
+         n.name in {'_aw', 'ParNaoAdjacente'}), ns)
+tests = [
+    'test_RED_dois_pares_nao_adjacentes_recebem_numeros_distintos',
+    'test_RED_alinhador_senta_dois_pares_nao_adjacentes_nas_duas_pausas',
+]
+for name in tests:
+    case = ns['ParNaoAdjacente'](name)
+    getattr(case, name)()
+    print('ORIGINAL PASS:', name)
+
+assert utils_source.count('_n += 1') == 1
+mutant = ast.parse(utils_source.replace('_n += 1', '_n += 0'), filename=str(utils_path))
+mutant.body = [n for n in mutant.body if isinstance(n, ast.FunctionDef) and
+               n.name == '_papeis_do_turno']
+exec(compile(mutant, str(utils_path), 'exec'), utils.__dict__)
+for name in tests:
+    case = ns['ParNaoAdjacente'](name)
+    try:
+        getattr(case, name)()
+    except AssertionError as error:
+        print('MUTANTE MORTO:', name)
+        print(str(error).splitlines()[0])
+    else:
+        raise AssertionError('MUTANTE SOBREVIVEU: ' + name)
+PY
+```
 
 ## 09/11 03:42 · sessao b891029b1740 · PAR-NAO-ADJACENTE · verificador · origem=Code
 
@@ -1040,46 +1156,4 @@ Há precedente explícito contra redescobrir o par pela adjacência: o teste da 
 
 6. **OBSERVACAO — ausência de hora comprovada; efeito da dieta [nao verificado].** A string escrita não contém carimbo temporal. Não localizei, nesta auditoria, implementação da dieta que permita provar sua permanência por esse motivo. (`bin/disjuntor.py:1457`; `bin/disjuntor.py:255`; [nao verificado].)
 
-## 09/11 03:06 · sessao b385027a2194 · COBPARC-ATA-DEFASADA-09 · leitura · origem=Code
-
-1. **Cálculo pela regra, antes da comparação:** o campo mede minutos de relógio em **HH:MM, sem segundos**, atribuídos ao dia do turno. A madrugada de 04/09 pertence ao turno iniciado em 03/09, pela L-085. (`app/ponto/turnos.py:584`, `app/ponto/turnos.py:605`, `app/docs/LEIS.md:117`)
-
-   A L-087 permite que a batida gravada como **E às 21:01** cumpra o marco **S21:00**: o papel vem do instante contra o marco. Nesse alinhamento, 20:00 e 21:02 sobram; a pausa declarada é **21:01→22:00**. Uma órfã interposta não desfaz esse par: a autoridade casa primeiro as duas pontas declaradas. (`app/docs/LEIS.md:119`, `app/escala/utils.py:230`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:1816`)
-
-   Portanto: **14:51→21:01 = 370 min; 22:00→02:50 = 290 min; total = 660 min**, equivalentemente **719 − 59 = 660**. A pausa supera o piso de 15 minutos associado ao art. 71 §1 da CLT pela cópia; pagamento e indenização de intrajornada são outra apuração. (`app/ponto/turnos.py:495`, `app/ponto/turnos.py:710`, `app/ponto/turnos.py:717`)
-
-2. **O seletor explica a diferença; a subtração final continua a mesma.** O alinhamento por custo, `app/escala/utils.py:_alinhar:216`, escolhe 21:01 para S21:00 e produz a pausa de 59 minutos; `app/ponto/turnos.py:realizado_dos_turnos:758` desconta essa pausa, resultando em **660**. (`app/escala/utils.py:230`, `app/ponto/turnos.py:767`)
-
-   O caminho atual perde esse par em **`app/escala/utils.py:_papeis_do_turno:467`**: exige `_iz == _i + 1`. Como existe a órfã 21:02 entre 21:01 e 22:00, as pontas passam a ser `sol`. Depois, **`app/escala/utils.py:_alinhar_por_papel:564`** percorre as soltas cronologicamente: 20:00 ocupa primeiro S21:00; 21:01 encontra o marco ocupado. A pausa vira **20:00→22:00 = 120 min**, dando **719 − 120 = 599**, isto é, **−61 min**. (`app/escala/utils.py:472`, `app/escala/utils.py:566`, `app/escala/utils.py:571`, `app/ponto/turnos.py:758`)
-
-   No `gitlog.txt` fornecido, `fba8aac8` identifica a obra **JUIZ-DO-PAR-CURA-NA-FONTE**, com declaração v2/10; atribuir-lhe precisamente a introdução da linha 467 exige o diff histórico **[não verificado]**. A cópia documenta o pouso dessa mudança como **`b3bf529e`, em 29/10**, nomeando `_papeis_do_turno` entre as funções alteradas. (`app/docs/RELATO.md:1657`, `app/docs/RELATO.md:1709`)
-
-   **Falta fechar a proveniência histórica:** o anexo não fornece `lavrada_em/regra_versao` da ata **[não verificado]**. `julgada_em` não prova quando seu número foi escrito: `carimbar` atualiza esse campo, enquanto a ata só é substituída quando diferente. Setembro permanece atualmente em `regra:1`; isso não identifica o corpo histórico do seletor. (`app/ponto/portas/celula.py:1060`, `app/ponto/portas/celula.py:995`, `app/ponto/services/cartorio.py:188`)
-
-3. **ESTRUTURA é o dono sustentável, pelo mecanismo localizado.** O contrato manda transportar cada par inteiro e impede que soltas movam o par; a exigência de adjacência descarta um intervalo que a autoridade reconhece. O sítio é **`_papeis_do_turno:467`**, com consequência em **`_alinhar_por_papel:566`**. (`app/escala/utils.py:507`, `app/escala/utils.py:511`, `app/ponto/turnos.py:811`)
-
-   O e6 sozinho não prova isso: ESTRUTURA é seu resultado residual, e sua assinatura não recebe idade ou versão da ata. Aqui há evidência adicional no código; a conclusão não depende apenas do rótulo da sonda. (`app/ponto/management/commands/e6_oraculo.py:53`, `app/ponto/management/commands/e6_oraculo.py:69`, `app/ponto/management/commands/e6_oraculo.py:110`)
-
-4. **Leitores e significado:**
-
-   - **Diretos:** `leitor_celula` usa o número como evidência de trabalho e o transporta para a grade; o PDF de validação soma minutos e divide por 60. (`app/escala/services/leitor_celula.py:369`, `app/escala/services/leitor_celula.py:406`, `app/folha/validacao_pdf.py:48`, `app/folha/validacao_pdf.py:54`)
-   - **Via grade:** causas da folha, classificação do dia, comparação ata/juiz, calendário e diagnóstico “sem turno pareado” do espelho. (`app/folha/causas.py:85`, `app/ponto/supra_juiz.py:224`, `app/ponto/services/bordas_realizado.py:87`, `app/colaboradores/services/calendario.py:359`, `app/ponto/services/espelho.py:892`)
-   - **Fechamento e percentual:** transformam o valor, aplicando **teto pelo previsto de cada dia**; portanto seus números derivados têm significado mais restrito que o relógio líquido da ata. (`app/ponto/services/dia_pago.py:394`, `app/ponto/services/fechamento.py:1064`, `app/folha/export.py:1096`)
-   - **Espelho:** seu campo homônimo não copia o número da ata; consulta `realizado_do_dia`. `realizado_h` converte para horas com uma casa decimal; `pago_h` vem do pagamento lavrado. (`app/ponto/services/espelho.py:290`, `app/ponto/services/espelho.py:783`, `app/ponto/services/espelho.py:799`, `app/ponto/services/espelho.py:801`)
-
-   A referência temporal é **dia do turno**, e a unidade original é **minuto de relógio**. As transformações para horas, cumprimento limitado ao previsto e pagamento impedem tratar todos os campos homônimos como equivalentes. (`app/ponto/turnos.py:2930`, `app/ponto/turnos.py:719`, `app/ponto/services/dia_pago.py:382`, `app/ponto/services/espelho.py:801`)
-
-dono: ESTRUTURA app/escala/utils.py:_papeis_do_turno:467
-
-## 09/11 03:04 · sessao 5e96103287be · - · - · origem=Ronald (tmux)
-
-A investigação corrige minha hipótese inicial: os 8 segundos são batidas internas absorvidas neste turno; o piso de par degenerado não decide esta diferença. O defeito está no transporte do intervalo conhecido para os papéis do alinhamento. (`app/ponto/turnos.py:1316`, `app/escala/utils.py:467`)
-
-- **Regra: 660 minutos.** Papel pelo marco, independentemente do tipo gravado (L-087): a luz mais próxima de S21:00 é 21:01; 21:02 fica mais distante, e 20:00 fica a uma hora. A pausa fica 21:01→22:00, 59 minutos; os segmentos são 14:51→21:01 = 370 e 22:00→02:50 = 290, total **660**. A cauda é do turno de 03/09 (L-085); o campo usa HH:MM, truncando segundos. Os horários vêm do anexo fornecido, sem arquivo físico conferido [não verificado]. Bases: `app/docs/LEIS.md:119`, `app/docs/LEIS.md:117`, `app/ponto/turnos.py:584`, `app/ponto/turnos.py:605`, `app/ponto/turnos.py:710`.
-- **A pausa declarada deve sobreviver à órfã interposta.** R2b declara: com hii/hfi acesos, o par é a pausa; `_pares_marcados` casa essas duas luzes primeiro, sem exigir adjacência. (`app/ponto/turnos.py:1816`, `app/ponto/turnos.py:811`)
-- **Mecanismo exato de 599:** `_papeis_do_turno` recebe esse intervalo, mas exige `_iz == _i + 1`. Como a batida 21:02 está entre 21:01 e 22:00, o par é descartado e vira batidas `sol`. `_alinhar_por_papel` percorre as soltas cronologicamente; 20:00 ocupa S21:00 primeiro, 21:01 perde porque já ocupado e 22:00 ocupa E22:00. A pausa passa a 120 minutos: 719−120 = **599**, diferença −61. (`app/escala/utils.py:455`, `app/escala/utils.py:467`, `app/escala/utils.py:472`, `app/escala/utils.py:564`, `app/escala/utils.py:566`)
-- **A ata anterior efetivamente alimenta o turno.** 21:02 vira `X` por estar a ≤15 minutos da luz 21:01; 20:00 passa pela exceção de perna solta próxima do intervalo, também vira `X`; 21:01 e 22:00 viram `Xi`. Assim, o turno chega com a pausa declarada não adjacente, que o transportador depois perde. (`app/escala/orfa_classe.py:28`, `app/ponto/turnos.py:1742`, `app/ponto/turnos.py:1763`, `app/ponto/turnos.py:1787`, `app/ponto/turnos.py:1804`, `app/ponto/turnos.py:1827`)
-- **ESTRUTURA é sustentável**, com sítio em `_papeis_do_turno:467` e consequência em `_alinhar_por_papel:566`; o próprio contrato diz que cada par deve sentar inteiro e que soltas nunca movem o par. (`app/escala/utils.py:505`, `app/escala/utils.py:511`) O e6 sozinho apenas dá o resíduo, sem julgar frescor de ata ou versão. (`app/ponto/management/commands/e6_oraculo.py:69`, `app/ponto/management/commands/e6_oraculo.py:98`)
-- **CLT e unidade:** o piso de intervalo de 15 minutos é atribuído ao art.71 §1 pela cópia, e o campo declara FATO entre batidas; pagamento, indenização, tolerâncias e janela HE pertencem ao motor. Não aplicar a L-097 para cortar os 9 minutos iniciais deste campo. (`app/ponto/turnos.py:495`, `app/ponto/turnos.py:710`, `app/ponto/turnos.py:717`, `app/escala/utils.py:299`)
-
-_3010 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3012 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
