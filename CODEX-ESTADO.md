@@ -1,7 +1,144 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 04:04** · publicado em **09/11/2026 04:05** (UTC-3)
+> Ultima resposta processada: **09/11/2026 04:08** · publicado em **09/11/2026 04:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 04:08 · sessao e275d0649b92 · SELOS-CANON-I1 · verificador · origem=Code
+
+1. **OBSERVACAO — a volta 3 tem curas reais, mas não encerra todos os PROCEDENTES da triagem v2.**
+
+| PROCEDENTE | Resultado |
+|---|---|
+| **P1/achado 4: PAREI no lugar errado** | **Curado localmente:** publica na primeira linha útil e relê pelo Stop. **Integração incompleta:** desloca o painel anterior e pode esconder a linha B3. `bin/disjuntor.py:299`; `bin/disjuntor.py:301`; `app/core/esteira_vigia.py:888`; `bin/hook_stop_fila1.py:442`. |
+| **P2: existência/idempotência/trava** | **Curado dentro da porta:** leitura, comparação com painel vigente e gravação ficam sob a mesma trava; histórico inferior não impede republicação. Escritores externos continuam podendo perder essa atualização. `app/core/esteira_vigia.py:878`; `app/core/esteira_vigia.py:883`; `app/core/esteira_vigia.py:891`; `bin/gerar_cortes.py:136`. |
+| **P3: briefs diferentes entre bocas** | **Parcial:** há coletor compartilhado, mas a CLI lê somente o conteúdo da pergunta; dos anexos recebe apenas caminhos. Referências internas aos anexos ficam ausentes do julgamento. `bin/disjuntor.py:1573`; `bin/disjuntor.py:2152`; `bin/disjuntor.py:2154`; `bin/codex_pergunta.sh:315`. |
+| **P4: raiz errada** | **Curado para BACKLOG/briefs do julgamento:** wrapper passa a raiz viva. **Costura da medida incompleta:** aprovação e `ini` podem nascer em raízes diferentes. `bin/codex_pergunta.sh:234`; `bin/disjuntor.py:2157`; `bin/codex_pergunta.sh:88`; `bin/codex_pergunta.sh:293`. |
+| **P5: chave ignorada pela CLI** | **Curado:** consulta `desligado(raiz)`, registra DESLIGADO e retorna zero. `bin/disjuntor.py:2147`; `bin/disjuntor.py:2148`; `bin/disjuntor.py:2150`. |
+| **P6/achado 3: dois julgamentos, IDs e fail-closed** | **Parcial:** divisão por via implementada; IDs anteriores do wrapper aceitos; BACKLOG sem marcador e JSON truncado literal negados. A guarda ainda depende da representação textual do JSON e não cobre `SyntaxError` anterior à instalação. `bin/disjuntor.py:1731`; `bin/disjuntor.py:1752`; `bin/disjuntor.py:2144`; `bin/disjuntor.py:1586`; `bin/disjuntor.py:1657`; `bin/disjuntor.py:82`. |
+| **Achado 6: quatro mutantes anteriores** | **Casos discriminantes acrescentados:** ruim antes do bom, último do glob, painel neutro e rc 2. Há novos sobreviventes no item 8. Verde integral: **[nao verificado]**. `bin/tests/test_censo_antes_da_vaga.sh:138`; `bin/tests/test_censo_antes_da_vaga.sh:147`; `bin/tests/test_censo_antes_da_vaga.sh:303`; `bin/tests/test_codex_pergunta.sh:230`. |
+| **Achado 7: aprovação confundida com abertura** | **Parcial:** separa APROVADO e correlaciona obra+PID+hash12 em 600 s. Entretanto, `ini` ainda precede recusas que impedem chamar o Codex; “briefs aprovados” também conta eventos, não arquivos. `bin/disjuntor.py:2026`; `bin/disjuntor.py:2028`; `bin/codex_pergunta.sh:292`; `bin/codex_pergunta.sh:399`; `bin/disjuntor.py:2007`. |
+
+2. **PROCEDENTE-candidato — a cura do topo mascara contratos anteriores de posição.**
+
+`no_topo` acrescenta uma linha acima do painel vigente, preservando todas as anteriores. Contraprova em memória com as funções reais: `[ESPERANDO, ERRO-BOBO B3]` torna-se `[PAREI censo, ESPERANDO, ERRO-BOBO B3]`. O Stop passa a julgar o censo; a liberação B3 cai para a terceira linha útil e desaparece do seu recorte. `app/core/esteira_vigia.py:888`; `bin/hook_stop_fila1.py:411`; `bin/hook_stop_fila1.py:442`; `bin/disjuntor.py:759`; `bin/disjuntor.py:1003`.
+
+A segunda linha **não é alternativa de ESPERANDO/PAREI para o Stop**: ela existe para B3. Assim, uma espera anteriormente comprovável pode deixar de liberar o Stop quando o novo censo não tiver wrapper vivo. `bin/hook_stop_fila1.py:425`; `bin/hook_stop_fila1.py:746`; `bin/hook_stop_fila1.py:749`; `bin/hook_stop_fila1.py:751`.
+
+| Leitor | Posição e pressuposto |
+|---|---|
+| `_linha_do_topo` | Primeira útil representa o painel vigente. `bin/hook_stop_fila1.py:411`. |
+| `_esperando_com_prova` | Primeira útil deve declarar ESPERANDO ou PAREI censo comprovado; não busca a segunda. `bin/hook_stop_fila1.py:746`; `bin/hook_stop_fila1.py:751`. |
+| `_parei_do_em_curso` → `_relato_parou` | Primeira útil deve declarar PAREI com `!`, respeitar exclusões e referir o item pertinente. `bin/hook_stop_fila1.py:1198`; `bin/hook_stop_fila1.py:1213`; `bin/hook_stop_fila1.py:1218`; `bin/hook_stop_fila1.py:1249`. |
+| Orçamento/CLEAR e recuperação | Consultam a primeira útil para reconhecer CLEAR. `bin/hook_stop_fila1.py:1002`; `bin/hook_stop_fila1.py:1119`. |
+| B4/COTA | Recebe a primeira útil para decidir COTA. `bin/hook_stop_fila1.py:1138`. |
+| B3 | Fotografa as duas primeiras úteis e procura nelas DESENHO/ERRO-BOBO. `bin/disjuntor.py:759`; `bin/disjuntor.py:1003`. |
+| Confirmação da publicação censo | Compara somente a primeira útil com o PAREI recém-escrito. `bin/disjuntor.py:301`; `bin/disjuntor.py:302`. |
+| Handoff | Prova censo pela primeira útil; seu inventário textual percorre até o primeiro `##` e exibe quatro perguntas. `bin/handoff_sessao.sh:102`; `bin/handoff_sessao.sh:110`; `bin/handoff_sessao.sh:128`. |
+| Alarme | Procura PAREI nas primeiras 40 linhas físicas; exige prova somente para censo. Pode reconhecer uma parada deslocada que o Stop ignora. `bin/alarme_sessao_ociosa.py:124`; `bin/alarme_sessao_ociosa.py:137`; `bin/alarme_sessao_ociosa.py:140`. |
+
+O selo exige que o painel neutro desça à segunda posição, mas não combina ESPERANDO/PAREI anterior com linha B3. Portanto, prova a inserção e aceita o deslocamento defeituoso. `bin/tests/test_censo_antes_da_vaga.sh:299`; `bin/tests/test_censo_antes_da_vaga.sh:307`; `bin/tests/test_censo_antes_da_vaga.sh:309`.
+
+3. **PROCEDENTE-candidato — permanecem escritores do RELATO fora da trava compartilhada.**
+
+O censo escreve por `no_topo`; alarmes do disjuntor e do vigia usam `no_relato`. Essas portas compartilham trava e gravação por temporário/replace. Stop e B3 consomem o painel; o Stop preserva explicitamente a retirada da antiga escrita automática de PAREI. `bin/disjuntor.py:299`; `bin/disjuntor.py:269`; `app/core/esteira_vigia.py:1603`; `app/core/esteira_vigia.py:843`; `app/core/esteira_vigia.py:891`; `app/core/esteira_vigia.py:926`; `bin/hook_stop_fila1.py:1379`.
+
+Porém, `gerar_cortes` e `deploy_agendado` leem e regravam o RELATO inteiro diretamente. O intercalamento “leitura antiga → publicação censo → regravação antiga” perde o novo PAREI, mesmo quando o escritor externo modifica outra seção. É residual declarado, não curado pela trava nova. Ocorrência produtiva: **[nao verificado]**. `bin/gerar_cortes.py:117`; `bin/gerar_cortes.py:136`; `bin/deploy_agendado.sh:37`; `bin/deploy_agendado.sh:44`; `app/core/esteira_vigia.py:839`.
+
+4. **PROCEDENTE-candidato — o coletor compartilhado ainda recebe universos diferentes e aplica confinamentos diferentes.**
+
+Na CLI, `partes = list(anexos)` acrescenta os **nomes** dos anexos; somente `texto_de` é aberto. No despacho, o wrapper concatena o **conteúdo** dos anexos. Um envelope contendo referência a outro brief ruim pode chegar ao construtor sem essa referência passar pelo censo. O selo cobre anexo cujo próprio caminho é brief, não essa referência interna. `bin/disjuntor.py:2152`; `bin/disjuntor.py:2154`; `bin/disjuntor.py:2156`; `bin/codex_pergunta.sh:315`; `bin/codex_pergunta.sh:344`; `bin/tests/test_censo_antes_da_vaga.sh:138`.
+
+Além disso, referências citadas são resolvidas e conferidas contra `RAIZ/logs`; o glob da obra é resolvido por `realpath` e unido sem a mesma conferência. Um link no brief ou na pasta da obra pode entregar arquivo externo ao juiz, embora a mesma referência externa citada diretamente seja recusada. Presença desses links em produção: **[nao verificado]**. `bin/disjuntor.py:1549`; `bin/disjuntor.py:1554`; `bin/disjuntor.py:1566`; `bin/disjuntor.py:1574`.
+
+5. **OBSERVACAO — um julgamento por via existe no caminho normal; a rota externa continua aberta tecnicamente e proibida por conduta.**
+
+Agent construtor reconhecido passa pelo PreToolUse; Codex construtor pelo wrapper. O hook deixou de julgar o censo da chamada Bash ao wrapper. Não aparece, nesses caminhos normais, a mesma abertura julgada pelos dois mecanismos; a recuperação excepcional pode chamar novamente `_censo_nega` para Agent. `bin/disjuntor.py:1748`; `bin/disjuntor.py:1752`; `bin/disjuntor.py:1731`; `bin/codex_pergunta.sh:234`; `bin/disjuntor.py:1662`.
+
+Uma chamada direta a `codex exec`, sem wrapper, não alcança essas portas de censo: na sessão principal, um Bash sem `codex_pergunta` sai antecipadamente. Essa rota permanece proibida pela conduta, conforme o descarte P7; ocorrência produtiva: **[nao verificado]**. `bin/disjuntor.py:1716`; `CLAUDE.md:348`.
+
+A sessão principal **não tem isenção** ao despachar Agent ou wrapper. `CODEX_PAPEL=leitura`, sem `--construtor`, fica fora do censo novo; leitura com essa flag recebe a recusa de incompatibilidade papel/flag. Uma negativa espúria nova para a chamada concreta desta sessão: **[nao verificado]**. `bin/disjuntor.py:1716`; `bin/codex_pergunta.sh:184`; `bin/codex_pergunta.sh:185`.
+
+6. **PROCEDENTE-candidato — fail-closed ainda depende da grafia do JSON; identidade do Agent não cabe integralmente nas portas seguintes.**
+
+A guarda de import e o fallback cru procuram literalmente `"Agent"` e `/wt-`. JSON equivalente com `"\u0041gent"` e `\/wt-` não satisfaz essas substrings. Em memória, a guarda emitiu `deny` para a representação literal e nenhum `deny` para a equivalente escapada. Que o consumidor real abra após traceback/rc sem negativa é **[nao verificado]**: a configuração apresentada apenas executa Python. `bin/disjuntor.py:72`; `bin/disjuntor.py:1657`; `.claude/settings.json:68`.
+
+`SyntaxError` no próprio módulo precede a instalação da guarda. Já no wrapper, todo rc não zero do Python impede chegar à vaga. `bin/disjuntor.py:62`; `bin/disjuntor.py:82`; `bin/codex_pergunta.sh:234`; `bin/codex_pergunta.sh:240`.
+
+IDs como `ABC` foram compatibilizados na CLI, mas continuam ilegíveis para o extrator do Agent; isso já fazia parte da definição anterior dessa via, portanto regressão nova aí é **[nao verificado]**. Há também incompatibilidade interna demonstrável: `_obra_de` admite `O9 (C)`, enquanto glob e publicação PAREI rejeitam espaço/parênteses. Uma negativa dessa identidade pode não publicar PAREI. Obra atual assim na fila: **[nao verificado]**. `bin/disjuntor.py:132`; `bin/disjuntor.py:594`; `bin/disjuntor.py:602`; `bin/disjuntor.py:1563`; `bin/disjuntor.py:285`; `bin/disjuntor.py:2144`.
+
+7. **PROCEDENTE-candidato — a medida ainda mistura tentativa e abertura, pode separar suas fontes e não mede ocupação da vaga.**
+
+O wrapper grava `ini` antes da raspagem, da trava da resposta e da revalidação. Essas etapas podem terminar sem chamar Codex; mesmo assim, `_censo_24h` conta o `ini` casado como abertura. A chamada efetiva só ocorre depois. Portanto, o antigo defeito semântico não desapareceu integralmente. `bin/codex_pergunta.sh:292`; `bin/codex_pergunta.sh:309`; `bin/codex_pergunta.sh:318`; `bin/codex_pergunta.sh:376`; `bin/codex_pergunta.sh:399`; `bin/codex_pergunta.sh:401`; `bin/disjuntor.py:2035`.
+
+O censo grava na raiz viva; `ini` usa `LOGD`, por padrão sob a raiz do script, e aceita outros diretórios sob `R/logs`. O leitor procura exclusivamente `<raiz>/logs/codex/chamadas.log`. Wrapper de cópia ou `CODEX_LOGD` alternativo pode separar aprovação e `ini`, fazendo a abertura desaparecer ou parecer sem aprovação. Ocorrência produtiva: **[nao verificado]**. `bin/codex_pergunta.sh:88`; `bin/codex_pergunta.sh:193`; `bin/codex_pergunta.sh:234`; `bin/codex_pergunta.sh:293`; `bin/codex_limite_estado.py:22`; `bin/codex_limite_estado.py:52`.
+
+O novo rótulo das horas descreve corretamente NEGOU→APROVADO, mas o cálculo não consulta ocupação da vaga: a medida literal de “vaga ociosa” continua sem prova. Também falta limitar eventos a `t <= agora`; um APROVADO Agent uma hora no futuro contou em memória como aprovado e abertura. `bin/disjuntor.py:2003`; `bin/disjuntor.py:2007`; `bin/disjuntor.py:2009`; `bin/disjuntor.py:2038`; `bin/disjuntor.py:2041`.
+
+8. **PROCEDENTE-candidato — há novos mutantes simples não distinguidos pelos casos.**
+
+| Alvo/mutante | Lacuna e contraprova |
+|---|---|
+| **`_briefs_do_censo`: `return todos, fora` → `return todos, []`** | O caso externo existente continua negado por ausência de qualquer brief. Falta **bom local + referência externa**: original nega; mutante libera. `bin/disjuntor.py:1575`; `bin/disjuntor.py:1614`; `bin/tests/test_censo_antes_da_vaga.sh:214`. |
+| **`_censo_24h`: retirar `k not in usados and`** | Preserva todos os números da fixture: a reutilização nela ocorre fora dos 600 s. Com uma aprovação e dois `ini` da mesma identidade em 10 s, original dá com=1/sem=1; mutante com=2/sem=0. `bin/disjuntor.py:2027`; `bin/disjuntor.py:2033`; `bin/tests/test_censo_antes_da_vaga.sh:394`; `bin/tests/test_censo_antes_da_vaga.sh:397`. |
+| **`no_topo`: retornar `False` quando `i is None`** | Casos usam painel neutro existente. Com RELATO contendo apenas cabeçalho, original publica PAREI; mutante não publica. Contraprova executada em memória. `app/core/esteira_vigia.py:885`; `bin/tests/test_censo_antes_da_vaga.sh:299`; `bin/tests/test_censo_antes_da_vaga.sh:322`. |
+| **`_guarda_import`: retirar a condição da chave desligada** | Os casos de import não combinam import quebrado com chave desligada. O mutante passaria esses cenários, mas negaria quando deveria respeitar a chave. `bin/disjuntor.py:72`; `bin/tests/test_censo_antes_da_vaga.sh:345`; `bin/tests/test_censo_antes_da_vaga.sh:352`. |
+
+As contraprovas acima foram verificadas em memória; sobrevivência à **execução integral** dos selos: **[nao verificado]**. Os mutantes anteriores de último citado/glob, neutro e rc 1 exclusivo agora têm casos específicos. `bin/tests/test_censo_antes_da_vaga.sh:457`; `bin/tests/test_censo_antes_da_vaga.sh:458`; `bin/tests/test_censo_antes_da_vaga.sh:459`; `bin/tests/test_codex_pergunta.sh:545`.
+
+O positivo do PreToolUse ainda verifica somente stdout vazio, sem exigir rc zero. Assim, o selo continua podendo chamar de passagem limpa uma falha silenciosa. `bin/tests/test_censo_antes_da_vaga.sh:186`; `bin/tests/test_censo_antes_da_vaga.sh:201`.
+
+9. **OBSERVACAO — escritores, leitores e unidades das trilhas.**
+
+| Linha/fato | Quem escreve | Quem lê e significado |
+|---|---|---|
+| **CENSO APROVADO** | `_censo_nega`; Agent publica depois de `_pretool` permitir. `bin/disjuntor.py:1623`; `bin/disjuntor.py:1707`. | `_censo_24h` conta aprovações, fecha espera e correlaciona wrapper com `ini`; Agent é tratado como abertura. `bin/disjuntor.py:2004`; `bin/disjuntor.py:2007`; `bin/disjuntor.py:2009`; `bin/disjuntor.py:2035`. |
+| **CENSO FORA** | `main_censo`. `bin/disjuntor.py:2162`. | Casamento isenta o `ini` de com/sem; não encerra espera anterior. `bin/disjuntor.py:2006`; `bin/disjuntor.py:2034`. |
+| **NEGA: real `NEGOU DISJUNTOR CENSO`** | PreToolUse normal, recuperação e CLI. `bin/disjuntor.py:1801`; `bin/disjuntor.py:1812`; `bin/disjuntor.py:2167`. | Conta negativas; abre intervalo por obra somente quando reconhece `construtor de … sem CENSO`. `bin/disjuntor.py:1995`; `bin/disjuntor.py:1998`. |
+| **CENSO DESLIGADO** | Agent e CLI. `bin/disjuntor.py:1779`; `bin/disjuntor.py:2148`. | Agent soma diretamente em sem; wrapper precisa casar com `ini`. `bin/disjuntor.py:2005`; `bin/disjuntor.py:2036`. |
+| **PAREI censo** | `_parei_censo_no_relato` → `no_topo`. `bin/disjuntor.py:299`. | Stop, handoff e alarme compartilham reconhecedor, porém selecionam recortes diferentes. `bin/hook_stop_fila1.py:746`; `bin/handoff_sessao.sh:128`; `bin/alarme_sessao_ociosa.py:124`. |
+| **`chamadas.log` / `ini`** | Wrapper, antes da chamada efetiva. `bin/codex_pergunta.sh:292`. | Parser cria chave **(obra,hash,PID)**; censo reordena corretamente para **(obra,PID,hash)**. Também alimenta contagem por papel, últimas chamadas e procedência. `bin/codex_limite_estado.py:63`; `bin/disjuntor.py:2026`; `bin/codex_limite_estado.py:71`; `bin/codex_limite_estado.py:82`; `bin/codex_limite_estado.py:92`. |
+
+A correlação atual usa hash de 12 caracteres, PID, obra, consumo único e janela anterior de 600 segundos; as horas são união dos intervalos dividida por 3600. Não encontrei troca de PID por hash nessa indexação. `bin/disjuntor.py:2002`; `bin/disjuntor.py:2026`; `bin/disjuntor.py:2028`; `bin/disjuntor.py:2033`; `bin/disjuntor.py:2038`.
+
+Persistem duas diferenças de significado: **“briefs aprovados” conta linhas APROVADO**, embora uma linha possa listar vários arquivos; **`ini` é tentativa iniciada no wrapper**, mas os leitores o apresentam como chamada/abertura acontecida. `bin/disjuntor.py:1621`; `bin/disjuntor.py:2007`; `bin/disjuntor.py:2054`; `bin/codex_limite_estado.py:72`; `bin/codex_pergunta.sh:399`.
+
+`CENSO OK` legado deixou de ser reconhecido: um `ini` recente coberto apenas por OK antigo aparece sem aprovação. Existência dessas linhas na janela produtiva: **[nao verificado]**. `bin/disjuntor.py:1946`; `bin/disjuntor.py:2029`.
+
+10. **OBSERVACAO — classes estruturais ainda presentes.**
+
+| Classe | Situação |
+|---|---|
+| **Segundo juiz** | Não apareceu clone do juiz de forma; divisão normal por via está implementada. Há seleção paralela do que representa parada vigente. `bin/disjuntor.py:1617`; `bin/disjuntor.py:1731`; `bin/handoff_sessao.sh:102`; `bin/alarme_sessao_ociosa.py:124`. |
+| **Segundo escritor fora da porta** | Presente e capaz de sobrescrever publicação concorrente. `bin/gerar_cortes.py:136`; `bin/deploy_agendado.sh:44`. |
+| **Relógio fora da borda** | Janela não exclui futuro; escritor da trilha captura seu próprio `datetime.now()`. `bin/disjuntor.py:173`; `bin/disjuntor.py:2003`; `bin/disjuntor.py:2024`. |
+| **Derivação paralela** | Stop: primeira; B3: duas; handoff: bloco; alarme: 40 físicas. `bin/hook_stop_fila1.py:411`; `bin/hook_stop_fila1.py:442`; `bin/handoff_sessao.sh:102`; `bin/alarme_sessao_ociosa.py:124`. |
+| **Selo sem mordida** | Interação painel/B3 e mutantes do item 8 não são distinguidos. `bin/tests/test_censo_antes_da_vaga.sh:299`; `bin/tests/test_censo_antes_da_vaga.sh:394`. |
+| **Ordem de trava** | Censo antes da vaga e idempotência sob trava estão corretos; escritores externos não participam. `bin/codex_pergunta.sh:234`; `bin/codex_pergunta.sh:240`; `app/core/esteira_vigia.py:891`; `bin/gerar_cortes.py:136`. |
+| **Campo com dois significados** | Continua em `ini`/abertura e evento APROVADO/quantidade de briefs. `bin/codex_pergunta.sh:292`; `bin/disjuntor.py:1972`; `bin/disjuntor.py:2007`; `bin/disjuntor.py:2054`. |
+
+## 09/11 04:05 · sessao 992b267357f7 · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — aprovação + `ini` ainda não prova abertura.** O wrapper escreve `ini` antes de raspagem, espera por slot, trava da resposta e revalidação; essas etapas podem recusar sem chamar Codex. O leitor conta esse `ini` como abertura de fato. `bin/codex_pergunta.sh:292`; `bin/codex_pergunta.sh:309`; `bin/codex_pergunta.sh:318`; `bin/codex_pergunta.sh:376`; `bin/codex_pergunta.sh:399`; `bin/codex_pergunta.sh:401`; `bin/disjuntor.py:1972`; `bin/disjuntor.py:2023`. Ocorrência produtiva: **[nao verificado]**.
+
+2. **PROCEDENTE-candidato — trilha e `ini` podem nascer em raízes diferentes e desaparecer da medida.** O censo recebe a raiz viva; `ini` usa `CODEX_LOGD`, cujo padrão é a raiz do script e cuja guarda permite outros diretórios sob `R/logs`. A medida lê exclusivamente `<raiz>/logs/codex/chamadas.log`. `bin/codex_pergunta.sh:88`; `bin/codex_pergunta.sh:193`; `bin/codex_pergunta.sh:234`; `bin/codex_pergunta.sh:293`; `bin/codex_limite_estado.py:22`; `bin/codex_limite_estado.py:52`; `bin/disjuntor.py:2018`. O selo verifica argv e `ini` separadamente da árvore da medida. `bin/tests/test_codex_pergunta.sh:222`; `bin/tests/test_censo_antes_da_vaga.sh:369`.
+
+3. **PROCEDENTE-candidato — sobrevivente de consumo único.** Remover `k not in usados and` de `bin/disjuntor.py:2027` preservou, em memória, todos os números da fixture: sem=7, com=2, aprovados=4, negados=2, horas=1,9972 → texto `2.0`. A fixture reutiliza a identidade somente 55 minutos depois, quando a janela de 600 s já exclui a aprovação. `bin/tests/test_censo_antes_da_vaga.sh:383`; `bin/tests/test_censo_antes_da_vaga.sh:394`; `bin/tests/test_censo_antes_da_vaga.sh:397`. Na contraprova com uma aprovação e dois `ini` da mesma identidade em 10 s: original com=1/sem=1; mutante com=2/sem=0. Código: `bin/disjuntor.py:2027`; `bin/disjuntor.py:2033`. Execução integral dos selos: **[nao verificado]**.
+
+4. **PROCEDENTE-candidato — sobrevivente do coletor.** Alterar `return todos, fora` para `return todos, []` preserva a negativa do único caso externo: ele não possui brief local e continua negando por ausência de briefs. `bin/disjuntor.py:1575`; `bin/disjuntor.py:1614`; `bin/tests/test_censo_antes_da_vaga.sh:214`. Em memória, bom local + referência externa: original nega; mutante libera. Não há essa combinação nos casos mostrados. `bin/tests/test_censo_antes_da_vaga.sh:208`; `bin/tests/test_censo_antes_da_vaga.sh:216`. Execução integral: **[nao verificado]**.
+
+5. **PROCEDENTE-candidato — guarda de import depende da representação literal do JSON.** JSON válido com `tool_name:"\u0041gent"` e `/wt-` representado como `\/wt-` decodifica para o mesmo payload construtor, mas não satisfaz as substrings da guarda. Em memória, payload literal emitiu `deny`; equivalente escapado não emitiu. `bin/disjuntor.py:72`. O fallback de JSON ilegível repete a dependência literal. `bin/disjuntor.py:1662`. Que o harness abra após traceback/rc sem deny: **[nao verificado]**; a configuração apenas chama Python diretamente. `.claude/settings.json:68`.
+
+6. **OBSERVACAO — outro mutante da guarda não está distinguido.** Remover a condição da chave desligada em `bin/disjuntor.py:72` mantém os casos de import apresentados, mas negaria Agent com import quebrado mesmo com a chave desligada. Os casos cobrem Agent quebrado, Bash quebrado e Agent conforme; não chave desligada + import quebrado. `bin/tests/test_censo_antes_da_vaga.sh:345`; `bin/tests/test_censo_antes_da_vaga.sh:352`. Sobrevivência integral: **[nao verificado]**.
+
+7. **PROCEDENTE-candidato — janela não limita o futuro.** A medida usa apenas `t >= corte`, sem `t <= agora`, tanto nos eventos quanto nos `ini`. Um APROVADO Agent uma hora no futuro foi contado em memória como aprovado=1/com=1. `bin/disjuntor.py:1996`; `bin/disjuntor.py:2003`; `bin/disjuntor.py:2007`; `bin/disjuntor.py:2024`. Existência de carimbos futuros produtivos: **[nao verificado]**.
+
+8. **OBSERVACAO — unidade de “briefs aprovados” é evento.** Uma linha pode listar vários briefs, mas a medida soma um por linha APROVADO; o rótulo diz briefs aprovados. `bin/disjuntor.py:1621`; `bin/disjuntor.py:2007`; `bin/disjuntor.py:2054`. Duas aprovações do mesmo arquivo somam duas; uma aprovação de dois arquivos soma uma. `bin/disjuntor.py:1621`; `bin/disjuntor.py:2007`.
+
+9. **OBSERVACAO — compatibilidade da trilha antiga perdida.** `CENSO OK` não é reconhecido pela regex nova. Um `ini` recente coberto apenas por OK legado conta sem aprovação; negativas antigas não fecham por esse OK. `bin/disjuntor.py:1946`; `bin/disjuntor.py:2006`; `bin/disjuntor.py:2029`. Existência de linhas antigas na janela produtiva: **[nao verificado]**.
+
+10. **OBSERVACAO — inventário de leitores de `ini`.** O escritor é o wrapper; o parser único constrói chave `(obra,hash,pid)`. `bin/codex_pergunta.sh:292`; `bin/codex_limite_estado.py:49`; `bin/codex_limite_estado.py:63`. Seus consumidores são contagem por papel, últimas chamadas, procedência por `fim.thread_id`, tokens por papel e censo; os últimos dois cruzam fatos diferentes. `bin/codex_limite_estado.py:71`; `bin/codex_limite_estado.py:82`; `bin/codex_limite_estado.py:92`; `bin/codex_limite_estado.py:185`; `bin/disjuntor.py:2018`. `gerar_codex_estado` usa a procedência para rotular origem=Code. `bin/gerar_codex_estado.py:153`.
+
+11. **OBSERVACAO — trilhas atuais.** APROVADO: `_censo_nega`, com publicação adiada no Agent; FORA: `main_censo`; DESLIGADO: `main_censo` e `_censo_desligado`; negativa real chama-se `NEGOU DISJUNTOR CENSO`, sem evento literal CENSO NEGA. `bin/disjuntor.py:1623`; `bin/disjuntor.py:1707`; `bin/disjuntor.py:2162`; `bin/disjuntor.py:2148`; `bin/disjuntor.py:1779`; `bin/disjuntor.py:1801`; `bin/disjuntor.py:1812`; `bin/disjuntor.py:2167`. O escritor comum carimba `datetime.now()` e trunca o detalhe em 300 caracteres; a medida interpreta carimbo local, conta linhas, correlaciona obra+pid+hash12 em até 600 s e calcula união NEGOU→APROVADO dividida por 3600. `bin/disjuntor.py:168`; `bin/disjuntor.py:173`; `bin/disjuntor.py:1949`; `bin/disjuntor.py:1990`; `bin/disjuntor.py:2026`; `bin/disjuntor.py:2038`.
 
 ## 09/11 04:04 · sessao 66abcd07f52f · - · - · origem=Ronald (tmux)
 
@@ -1004,59 +1141,4 @@ Q2/Q3 — leitura concluída, sem execução.
 
 **Decisão de lei candidata:** quando o juiz devolve pausa declarada externa e outra pausa inteiramente dentro dela, qual é a pausa válida — conservar ambas, privilegiar a declarada ou considerar o turno conflitante? O código permite a figura; a regra localizada não resolve o conflito. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/escala/utils.py:507`; resposta legal **[não verificado]**)
 
-## 09/11 03:10 · sessao cd0a18573d10 · - · - · origem=Ronald (tmux)
-
-1. **PROCEDENTE-candidato — P6 curado parcialmente; `OK` continua com dois significados.** O escritor registra aprovação do brief antes da vaga, mas o leitor chama isso de “aberturas que passaram”. Uma CLI avulsa ou uma chamada posteriormente recusada por vaga ocupada aumenta `ok` e encerra a espera sem abrir construtor. Fontes: `bin/disjuntor.py:1579`, `bin/disjuntor.py:2087`, `bin/codex_pergunta.sh:230`, `bin/codex_pergunta.sh:236`, `bin/disjuntor.py:1961`, `bin/disjuntor.py:1963`, `bin/disjuntor.py:1988`. Prova em memória, executando funções extraídas por AST: `NEGOU 11:00 + OK 11:30`, sem nenhum `ini`, devolveu `ok=1`, `ociosa_h=0.5`, `esperando=[]`; execução integral dos selos [nao verificado].
-
-2. **PROCEDENTE-candidato — correlação da medida admite PID reutilizado.** Os pares `(obra,pid)` são recolhidos de toda a história, sem verificar contemporaneidade ou hash; a chamada é dispensada apenas por encontrar esse par. Fontes: `bin/disjuntor.py:1955`, `bin/disjuntor.py:1957`, `bin/disjuntor.py:1975`. O registro original dispõe também de hash: `bin/codex_limite_estado.py:63`. Prova em memória: `OK` de 01/10, obra/pid111, mais `ini` de 09/11 com outro hash/pid111, sem aprovação contemporânea, produziu `abertos_sem=0`; incidência real [nao verificado].
-
-3. **PROCEDENTE-candidato — ponto aberto 7 não garante cobertura fora do wrapper.** A medida lê somente `ini` de `logs/codex/chamadas.log`; o próprio wrapper é seu escritor. Uma abertura direta sem esse registro não entra na conta; a exceção implementada é `Agent` com chave desligada. Fontes: `bin/codex_pergunta.sh:249`, `bin/codex_pergunta.sh:288`, `bin/codex_limite_estado.py:52`, `bin/disjuntor.py:1972`, `bin/disjuntor.py:1975`, `bin/disjuntor.py:1742`. Aberturas reais fora do wrapper [nao verificado].
-
-4. **PROCEDENTE-candidato — P2 tem contenção diferente entre glob e citados.** Citados exigem que o caminho real fique sob `RAIZ/logs/<dir>`; arquivos descobertos pelo glob são convertidos por `realpath` sem a mesma verificação. Assim, condicionalmente a um symlink em `logs/<OBRA>/brief*.md` apontando para fora, o juiz recebe o destino externo já resolvido. Fontes: `bin/disjuntor.py:1520`, `bin/disjuntor.py:1525`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1575`. Existência desses symlinks [nao verificado].
-
-5. **PROCEDENTE-candidato — mutante simples do glob escapa à cobertura apresentada.** Alterar o retorno de `_briefs_da_obra` para `sorted(glob.glob(...))[-1:]` conserva o cenário testado, cujo último brief é ruim, mas deixa passar um primeiro brief ruim seguido de último bom. Fontes: `bin/disjuntor.py:1536`, `bin/tests/test_censo_antes_da_vaga.sh:181`, `bin/tests/test_censo_antes_da_vaga.sh:186`, `bin/tests/test_censo_antes_da_vaga.sh:188`. Prova em memória executada: original/mutante negam bom+ruim; original nega ruim+bom; mutante libera ruim+bom. Sobrevivência integral aos selos [nao verificado], prevista pela cobertura lida.
-
-6. **PROCEDENTE-candidato — selo do wrapper só exerce rc1.** Mutante de `#G:censo`: substituir `python ... || _recusa2 ...` por `python ...; [ "$?" -ne 1 ] || _recusa2 ...`. Ele mantém a recusa exercida pelo fake, mas libera rc2/127. Fontes: `bin/codex_pergunta.sh:230`, `bin/tests/test_codex_pergunta.sh:76`, `bin/tests/test_codex_pergunta.sh:85`, `bin/tests/test_codex_pergunta.sh:210`, `bin/tests/test_codex_pergunta.sh:525`. Prova shell em memória: original e mutante retornam 2 para rc1; para rc2/127 original retorna 2 e mutante retorna 0. Sobrevivência integral [nao verificado]. **O código atual recusa qualquer rc diferente de zero, inclusive traceback Python com rc1:** `bin/codex_pergunta.sh:230`.
-
-7. **OBSERVACAO — P5 cura os contraexemplos declarados.** Todas as perguntas são examinadas, a forma do corte termina em `? cortada por Ronald <aval>`, e o positivo exige saída vazia. Fontes: `bin/disjuntor.py:1454`, `bin/disjuntor.py:1512`, `bin/tests/test_censo_antes_da_vaga.sh:90`, `bin/tests/test_censo_antes_da_vaga.sh:139`. O selo não verifica numericamente o contador `ok`; seus asserts numéricos cobrem somente abertos, negados e horas: `bin/tests/test_censo_antes_da_vaga.sh:246`. Portanto, previsão por inspeção: mutante `oks += 0` em `bin/disjuntor.py:1961` não é distinguido; execução integral [nao verificado].
-
-8. **OBSERVACAO — escritores e leitores da trilha.** Todos os eventos usam `trilha`, que escreve `logs/sessao/disjuntor.log` com timestamp local e detalhe limitado a 300 caracteres: `bin/disjuntor.py:72`, `bin/disjuntor.py:139`, `bin/disjuntor.py:144`.
-   - `CENSO OK`: `_censo_nega` na CLI ou `pretool` após suas decisões; leitores de medida em `_censo_24h`. Fontes: `bin/disjuntor.py:1581`, `bin/disjuntor.py:1664`, `bin/disjuntor.py:1960`.
-   - `CENSO FORA`: `main_censo`; leitor incorpora o PID como aprovação suficiente, mas não encerra espera nem aumenta `ok`. Fontes: `bin/disjuntor.py:2084`, `bin/disjuntor.py:1955`, `bin/disjuntor.py:1960`.
-   - `NEGOU DISJUNTOR CENSO`: `main_pretool`, seu tratamento de exceção e `main_censo`; leitor conta negativas e inicia espera apenas quando reconhece `construtor de <obra> sem CENSO`. Fontes: `bin/disjuntor.py:1763`, `bin/disjuntor.py:1774`, `bin/disjuntor.py:2089`, `bin/disjuntor.py:1949`.
-   - `CENSO DESLIGADO`: `_censo_desligado`; leitor soma em `abertos_sem`. Fontes: `bin/disjuntor.py:1742`, `bin/disjuntor.py:1958`, `bin/disjuntor.py:1977`.
-   - `PAREI censo`: escritor `_parei_censo_no_relato`; leitores compartilham `prova_parei_censo`, mas a análise de lugar/formato ficou com o agente `parei`. Fontes: `bin/disjuntor.py:247`, `bin/hook_stop_fila1.py:692`, `bin/alarme_sessao_ociosa.py:137`, `bin/handoff_sessao.sh:128`.
-
-## 09/11 03:10 · sessao ede921335bff · - · - · origem=Ronald (tmux)
-
-1. **PROCEDENTE-candidato — P4 permanece parcial: JSON ilegível abre pelo protocolo do próprio hook.** Se `json.loads` levanta, `payload` continua `{}`; `_aberturas_construtor({})` devolve `[]`, portanto o fallback pelo texto cru nem é executado e `main_pretool` termina com rc 0, sem JSON `deny`. Reprodução em memória, sem escrita: entrada truncada `{"tool_name":"Agent","tool_input":{"prompt":"/home/ronald/wt-x"}` produziu rc 0 e stdout vazio. `bin/disjuntor.py:1748`, `bin/disjuntor.py:1751`, `bin/disjuntor.py:1594`, `bin/disjuntor.py:1611`, `bin/disjuntor.py:1614`, `bin/disjuntor.py:1790`.
-
-2. **OBSERVACAO — exceção anterior ao julgamento também pode terminar sem negativa quando o censo é válido.** `_censo_na_excecao` apenas refaz o censo; se ele passa, retorna `None` e a exceção original termina em “ferramenta liberada”, rc 0. Isso é mais estreito que a promessa textual “exceção = nega”. `bin/disjuntor.py:1618`, `bin/disjuntor.py:1622`, `bin/disjuntor.py:1767`, `bin/disjuntor.py:1790`.
-
-3. **OBSERVACAO — importações anteriores ao `try` não têm proteção local; abertura efetiva pelo harness é [nao verificado].** Os imports globais precedem `main_pretool`; a configuração chama Python diretamente, sem tradutor externo de rc para `deny`. Falha ali pode produzir traceback/rc 1 sem JSON de decisão, mas a implementação do harness que interpreta esse rc não está na cópia examinada. `bin/disjuntor.py:59`, `bin/disjuntor.py:1747`, `.claude/settings.json:68`; comportamento real do harness: **[nao verificado]**. O arquivo `eval/harness.py` executa perguntas HTTP do copiloto e não implementa o consumidor de PreToolUse. `eval/harness.py:14`, `eval/harness.py:52`.
-
-4. **PROCEDENTE-candidato — export herdado é negado mesmo com censo conforme.** O classificador só lê atribuições da mesma invocação. Assim, `export CODEX_OBRA=OBRA-E3 CODEX_PAPEL=construtor; bin/codex_pergunta.sh --construtor ...` chega com `obra=''` e é recusado antes de consultar qualquer brief. O teste exercita essa forma somente sem brief; a restrição excede “export sem brief”. `bin/disjuntor.py:1371`, `bin/disjuntor.py:1385`, `bin/disjuntor.py:1690`, `bin/disjuntor.py:1692`, `bin/tests/test_censo_antes_da_vaga.sh:174`.
-
-5. **PROCEDENTE-candidato — contrato de ID incompatível causa negativas permanentes para formas anteriormente aceitas pelo wrapper.** O wrapper admite `^[A-Z0-9-]+$`; `main_censo` exige `_OBRA_ID`, que começa por letra e exige hífen ou letras seguidas de dígitos. Exemplos `ABC` e `09-TURNO-ABERTO-EXPOSTA` passam no primeiro e falham no segundo independentemente do brief. `bin/codex_pergunta.sh:188`, `bin/disjuntor.py:108`, `bin/disjuntor.py:2075`. A existência de chamada atual dessas formas é **[nao verificado]**; o reconhecedor do BACKLOG admite IDs iniciados por dígito explicitamente. `bin/hook_stop_fila1.py:113`, `bin/hook_stop_fila1.py:120`.
-
-6. **PROCEDENTE-candidato — ponto aberto 4: raiz de julgamento pode divergir da raiz da vaga.** `R` vem do arquivo do wrapper; `VIVO` é separado. O censo executa o disjuntor de `R`, cujo BACKLOG e glob também são de `R`, enquanto a vaga deriva do repositório vivo. Uma cópia com BACKLOG antigo sem aquela obra retorna `CENSO FORA`/rc 0, mesmo que o BACKLOG vivo exigisse censo. `bin/codex_pergunta.sh:55`, `bin/codex_pergunta.sh:56`, `bin/codex_pergunta.sh:76`, `bin/codex_pergunta.sh:230`, `bin/disjuntor.py:71`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1544`, `bin/disjuntor.py:2083`. Ocorrência dessa divergência em produção: **[nao verificado]**. O selo de cópia apenas fornece disjuntor falso e verifica a vaga ocupada; não confronta dois BACKLOGs. `bin/tests/test_codex_pergunta.sh:392`.
-
-7. **OBSERVACAO — predicado exato de obra reconhecida no Agent.** A chamada entra no censo quando `tool_name == 'Agent'`, `subagent_type` não pertence a `{'verificador','Explore','Plan','claude-code-guide','statusline-setup'}` e o prompt casa `/[^\s"\'\\:]*/wt-[A-Za-z0-9._-]+`. `bin/disjuntor.py:102`, `bin/disjuntor.py:104`, `bin/disjuntor.py:1711`. `_obra_de` procura a primeira ocorrência válida entre `obra[s] <ID>` e `leitura ... da <ID>` — nesta segunda âncora, até 80 caracteres sem quebra —, com regex insensível à caixa, mas validação posterior sensível à caixa. O ID é `(?:[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)+|[A-Z]+\d+[A-Z0-9]*)`; cauda opcional `(letra)` ou outro ID hifenizado integra a identidade somente quando o ID original não tem hífen. `bin/disjuntor.py:108`, `bin/disjuntor.py:110`, `bin/disjuntor.py:115`, `bin/disjuntor.py:545`, `bin/disjuntor.py:559`, `bin/disjuntor.py:567`.
-
-8. **OBSERVACAO — chamadores expostos ao ponto 6, distinguindo rotas de ocorrências.**
-   - Agentes construtores de cópia, inclusive a rota documental de UI em `wt-ui`, sem obra reconhecida no prompt: passam a negar. `CLAUDE.md:306`, `CLAUDE.md:309`, `bin/disjuntor.py:1711`.
-   - Wrapper construtor com variáveis herdadas por `export`, sem `CODEX_OBRA` escrita na invocação: passa a negar no hook, independentemente do brief. `bin/disjuntor.py:1371`, `bin/disjuntor.py:1692`.
-   - Wrapper chamado por script/`bash -c`: a via executada passa pelo novo `--censo`, ainda que o hook não consiga interpretar o shell. `bin/disjuntor.py:1281`, `bin/codex_pergunta.sh:230`.
-   - A sessão principal **não é isenta** quando abre Agent ou chama wrapper: a saída antecipada por ausência de `agent_id` exclui expressamente essas ferramentas. `bin/disjuntor.py:1673`.
-   - O tipo `verificador` declarado na configuração de agente é isento desse ramo de censo. `.claude/agents/verificador.md:2`, `bin/disjuntor.py:102`.
-   
-   Não há no dado fornecido nomes/transcripts de chamadas atualmente vivas que permitam identificar quais efetivamente cairão nessas condições: **[nao verificado]**. Os exemplos concretos de export e Agent sem obra são fixtures, não prova de produção. `bin/tests/test_censo_antes_da_vaga.sh:174`, `bin/tests/test_censo_antes_da_vaga.sh:178`.
-
-9. **OBSERVACAO — Q5 está curada na expressão do wrapper.** `python3 -I ... --censo "$OBRA" || _recusa2` recusa qualquer rc diferente de zero; `_recusa2` termina com rc 2. Portanto Python com traceback/rc 1 recusa; o `flock` só ocorre depois. `bin/codex_pergunta.sh:183`, `bin/codex_pergunta.sh:230`, `bin/codex_pergunta.sh:236`. O selo mantém a vaga presa e exige recusa por censo, provando a ordem pretendida pelo teste. `bin/tests/test_codex_pergunta.sh:210`.
-
-10. **OBSERVACAO — pontos abertos 5, 8 e 9.**
-    - **5: risco declarado; desligamento comum não cobre a CLI.** `main_censo` não consulta `desligado`; o PreToolUse consulta. O texto da configuração enumera B1–B4/B4-CODEX/ANEXO-ENXUTO como escopo da chave, sem incluir censo. `bin/disjuntor.py:1756`, `bin/disjuntor.py:2069`, `bin/disjuntor_settings.json:3`. Exigência de que essa mesma chave desligue I1: **[nao verificado]**.
-    - **8: restrição de formato declarada.** O juiz exige literalmente `? cortada por Ronald <token>` no fim; texto posterior deixa de contar, embora contenha a expressão de corte. `bin/disjuntor.py:1454`, `bin/disjuntor.py:1512`. A triagem fornecida pede ancoragem; autorização de todos os formatos rejeitados: **[nao verificado]**.
-    - **9: ajuste coerente da âncora.** A mutação continua removendo `bash|sh` do ramo pertinente; `env` passou a ramo separado com atribuições. `bin/disjuntor.py:1288`, `bin/tests/test_disjuntor.sh:1741`. Execução verde do selo nesta auditoria: **[nao verificado]**.
-
-_3016 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3018 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
