@@ -1,7 +1,283 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:06** · publicado em **09/11/2026 03:06** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:10** · publicado em **09/11/2026 03:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:10 · sessao 67cbec47612d · - · - · origem=Ronald (tmux)
+
+Q2/Q3 — leitura concluída, sem execução.
+
+- **A adjacência não é garantia do juiz.** `_pares_marcados` casa primeiro as pontas declaradas, podendo haver batidas entre elas; depois examina pares adjacentes remanescentes. Os dois leitores públicos apenas repartem esse resultado pelo piso. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/ponto/turnos.py:545`, `app/ponto/turnos.py:565`)
+
+- **Aninhamento é estruturalmente alcançável.** Exemplo por inspeção: DNA/ata `08/12/13/17`; batidas `E08,S12,S12:10,E12:30,E13,S17`. As duas extras podem passar como `_resto` de duas batidas, virar `X`; 12/13 viram `Xi`. O pareador carimba e absorve todas as quatro internas, fechando às 17. O juiz devolve `(12,13)` e `(12:10,12:30)`: reserva apenas as pontas declaradas, deixando as duas extras disponíveis ao segundo laço. Ocorrência real desse exemplo: **[não verificado]**. (`app/ponto/turnos.py:1761`, `app/ponto/turnos.py:1787`, `app/ponto/turnos.py:1804`, `app/ponto/turnos.py:1827`, `app/ponto/turnos.py:1315`, `app/ponto/turnos.py:1371`, `app/ponto/turnos.py:1491`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:820`, `app/ponto/turnos.py:880`)
+
+- **Só `==` → `>` não basta para aquele arranjo.** Com uma pausa cadastral, os dois pares fazem `_alinhar_por_papel` devolver `None`, caindo no alinhamento antigo; com duas pausas, o par externo pode ocupar a primeira e o interno a segunda, produzindo sequência temporal inversa entre a volta externa e a ida interna. O alinhador não valida a ordem cronológica entre pares; distribui-os pela ordem numérica recebida. (`app/escala/utils.py:530`, `app/escala/utils.py:535`, `app/escala/utils.py:551`, `app/escala/utils.py:561`, `app/escala/utils.py:613`, `app/escala/utils.py:625`)
+
+- **Cruzamento não nasce dos dois laços sobre uma lista cronológica com instantes distintos:** declarados são emparelhados sucessivamente; os outros têm pontas adjacentes, sem usar pontas declaradas. Aninhamento permanece possível porque não se reserva o interior. O pareador ordena a entrada por timestamp. (`app/ponto/turnos.py:1217`, `app/ponto/turnos.py:812`, `app/ponto/turnos.py:819`, `app/ponto/turnos.py:820`)
+
+- **Volta que é saída verdadeira não é pausa do juiz:** as bordas são excluídas por identidade na passagem declarada e na gulosa. Portanto a cura deve preservar o limite interior `0 < i < iz < len(bats)-1`; a última batida continua `sai`, sentada no último marco. (`app/ponto/turnos.py:802`, `app/ponto/turnos.py:811`, `app/ponto/turnos.py:880`, `app/escala/utils.py:467`, `app/escala/utils.py:473`, `app/escala/utils.py:559`)
+
+- **Solta entre pontas:** só recebe `sol` se não pertence a nenhum par. Não se deve “pular até a volta”, pois isso apagaria os papéis de outras pontas interiores. O contrato manda transportar todos os pares e depois tratar as soltas, sem mover borda/par; cada solta tenta o marco mais próximo, livre e compatível com a ordem. O cluster guard [nome] ainda roda por último e pode retirar uma associação já feita. (`app/escala/utils.py:440`, `app/escala/utils.py:507`, `app/escala/utils.py:511`, `app/escala/utils.py:564`, `app/escala/utils.py:578`)
+
+- **Duas pausas disjuntas com solta entre elas:** transcrever ambos os pares na ordem e manter a batida intermediária como `sol`; a distribuição busca a menor distância total entre pares e pausas disponíveis. L-085 mantém o dia da jornada; L-087 impede decidir o papel pelo tipo gravado; nenhuma das duas fornece prioridade para pares sobrepostos. (`app/escala/utils.py:539`, `app/escala/utils.py:553`, `app/escala/utils.py:564`, `app/docs/LEIS.md:117`, `app/docs/LEIS.md:119`; prioridade legal para sobrepostos **[não verificado]**)
+
+- **Desenho mínimo:** em `_papeis_do_turno`, reconhecer pontas interiores não adjacentes por `_iz > _i`, conferir primeiro o conjunto completo de pontas e só então atribuir `sol` às demais. Preservar a associação S/E do juiz e o alinhador existente. A cura geral precisa tornar explícito o conflito de sobreposição, sem selecionar vencedor nem acrescentar queda para DP. O código atual não possui esse tratamento. (`app/escala/utils.py:454`, `app/escala/utils.py:467`, `app/escala/utils.py:472`, `app/escala/utils.py:613`; proposta de tratamento explícito **[não verificado]**)
+
+- **Derivação paralela:** `_papeis_por_alternancia` reconstrói pausas por S/E adjacentes na forma `E S E S …`; só é usada sem `turno`, com `derivar=True`, ao menos quatro batidas, tipos alternados e duração até 26h. É a outra derivação de papel, pertinente à Zona 5. (`app/escala/utils.py:477`, `app/escala/utils.py:489`, `app/escala/utils.py:496`, `app/escala/utils.py:596`)
+
+- **Outra adjacência, pergunta diferente:** `_pausa_fechada_carimbada` usa `zip(bats,bats[1:])`, duas pontas carimbadas e piso/teto; alimenta `_saida_pela_posicao_entre_turnos`. Sua docstring distingue figura de dinheiro e declara casos em que `_pares_marcados` corretamente não entrega pausa; substituir essa função por `intervalos_do_turno` apagaria essa diferença de contrato. (`app/ponto/turnos.py:912`, `app/ponto/turnos.py:915`, `app/ponto/turnos.py:924`, `app/ponto/turnos.py:1005`)
+
+**Decisão de lei candidata:** quando o juiz devolve pausa declarada externa e outra pausa inteiramente dentro dela, qual é a pausa válida — conservar ambas, privilegiar a declarada ou considerar o turno conflitante? O código permite a figura; a regra localizada não resolve o conflito. (`app/ponto/turnos.py:811`, `app/ponto/turnos.py:818`, `app/escala/utils.py:507`; resposta legal **[não verificado]**)
+
+## 09/11 03:10 · sessao cd0a18573d10 · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — P6 curado parcialmente; `OK` continua com dois significados.** O escritor registra aprovação do brief antes da vaga, mas o leitor chama isso de “aberturas que passaram”. Uma CLI avulsa ou uma chamada posteriormente recusada por vaga ocupada aumenta `ok` e encerra a espera sem abrir construtor. Fontes: `bin/disjuntor.py:1579`, `bin/disjuntor.py:2087`, `bin/codex_pergunta.sh:230`, `bin/codex_pergunta.sh:236`, `bin/disjuntor.py:1961`, `bin/disjuntor.py:1963`, `bin/disjuntor.py:1988`. Prova em memória, executando funções extraídas por AST: `NEGOU 11:00 + OK 11:30`, sem nenhum `ini`, devolveu `ok=1`, `ociosa_h=0.5`, `esperando=[]`; execução integral dos selos [nao verificado].
+
+2. **PROCEDENTE-candidato — correlação da medida admite PID reutilizado.** Os pares `(obra,pid)` são recolhidos de toda a história, sem verificar contemporaneidade ou hash; a chamada é dispensada apenas por encontrar esse par. Fontes: `bin/disjuntor.py:1955`, `bin/disjuntor.py:1957`, `bin/disjuntor.py:1975`. O registro original dispõe também de hash: `bin/codex_limite_estado.py:63`. Prova em memória: `OK` de 01/10, obra/pid111, mais `ini` de 09/11 com outro hash/pid111, sem aprovação contemporânea, produziu `abertos_sem=0`; incidência real [nao verificado].
+
+3. **PROCEDENTE-candidato — ponto aberto 7 não garante cobertura fora do wrapper.** A medida lê somente `ini` de `logs/codex/chamadas.log`; o próprio wrapper é seu escritor. Uma abertura direta sem esse registro não entra na conta; a exceção implementada é `Agent` com chave desligada. Fontes: `bin/codex_pergunta.sh:249`, `bin/codex_pergunta.sh:288`, `bin/codex_limite_estado.py:52`, `bin/disjuntor.py:1972`, `bin/disjuntor.py:1975`, `bin/disjuntor.py:1742`. Aberturas reais fora do wrapper [nao verificado].
+
+4. **PROCEDENTE-candidato — P2 tem contenção diferente entre glob e citados.** Citados exigem que o caminho real fique sob `RAIZ/logs/<dir>`; arquivos descobertos pelo glob são convertidos por `realpath` sem a mesma verificação. Assim, condicionalmente a um symlink em `logs/<OBRA>/brief*.md` apontando para fora, o juiz recebe o destino externo já resolvido. Fontes: `bin/disjuntor.py:1520`, `bin/disjuntor.py:1525`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1570`, `bin/disjuntor.py:1575`. Existência desses symlinks [nao verificado].
+
+5. **PROCEDENTE-candidato — mutante simples do glob escapa à cobertura apresentada.** Alterar o retorno de `_briefs_da_obra` para `sorted(glob.glob(...))[-1:]` conserva o cenário testado, cujo último brief é ruim, mas deixa passar um primeiro brief ruim seguido de último bom. Fontes: `bin/disjuntor.py:1536`, `bin/tests/test_censo_antes_da_vaga.sh:181`, `bin/tests/test_censo_antes_da_vaga.sh:186`, `bin/tests/test_censo_antes_da_vaga.sh:188`. Prova em memória executada: original/mutante negam bom+ruim; original nega ruim+bom; mutante libera ruim+bom. Sobrevivência integral aos selos [nao verificado], prevista pela cobertura lida.
+
+6. **PROCEDENTE-candidato — selo do wrapper só exerce rc1.** Mutante de `#G:censo`: substituir `python ... || _recusa2 ...` por `python ...; [ "$?" -ne 1 ] || _recusa2 ...`. Ele mantém a recusa exercida pelo fake, mas libera rc2/127. Fontes: `bin/codex_pergunta.sh:230`, `bin/tests/test_codex_pergunta.sh:76`, `bin/tests/test_codex_pergunta.sh:85`, `bin/tests/test_codex_pergunta.sh:210`, `bin/tests/test_codex_pergunta.sh:525`. Prova shell em memória: original e mutante retornam 2 para rc1; para rc2/127 original retorna 2 e mutante retorna 0. Sobrevivência integral [nao verificado]. **O código atual recusa qualquer rc diferente de zero, inclusive traceback Python com rc1:** `bin/codex_pergunta.sh:230`.
+
+7. **OBSERVACAO — P5 cura os contraexemplos declarados.** Todas as perguntas são examinadas, a forma do corte termina em `? cortada por Ronald <aval>`, e o positivo exige saída vazia. Fontes: `bin/disjuntor.py:1454`, `bin/disjuntor.py:1512`, `bin/tests/test_censo_antes_da_vaga.sh:90`, `bin/tests/test_censo_antes_da_vaga.sh:139`. O selo não verifica numericamente o contador `ok`; seus asserts numéricos cobrem somente abertos, negados e horas: `bin/tests/test_censo_antes_da_vaga.sh:246`. Portanto, previsão por inspeção: mutante `oks += 0` em `bin/disjuntor.py:1961` não é distinguido; execução integral [nao verificado].
+
+8. **OBSERVACAO — escritores e leitores da trilha.** Todos os eventos usam `trilha`, que escreve `logs/sessao/disjuntor.log` com timestamp local e detalhe limitado a 300 caracteres: `bin/disjuntor.py:72`, `bin/disjuntor.py:139`, `bin/disjuntor.py:144`.
+   - `CENSO OK`: `_censo_nega` na CLI ou `pretool` após suas decisões; leitores de medida em `_censo_24h`. Fontes: `bin/disjuntor.py:1581`, `bin/disjuntor.py:1664`, `bin/disjuntor.py:1960`.
+   - `CENSO FORA`: `main_censo`; leitor incorpora o PID como aprovação suficiente, mas não encerra espera nem aumenta `ok`. Fontes: `bin/disjuntor.py:2084`, `bin/disjuntor.py:1955`, `bin/disjuntor.py:1960`.
+   - `NEGOU DISJUNTOR CENSO`: `main_pretool`, seu tratamento de exceção e `main_censo`; leitor conta negativas e inicia espera apenas quando reconhece `construtor de <obra> sem CENSO`. Fontes: `bin/disjuntor.py:1763`, `bin/disjuntor.py:1774`, `bin/disjuntor.py:2089`, `bin/disjuntor.py:1949`.
+   - `CENSO DESLIGADO`: `_censo_desligado`; leitor soma em `abertos_sem`. Fontes: `bin/disjuntor.py:1742`, `bin/disjuntor.py:1958`, `bin/disjuntor.py:1977`.
+   - `PAREI censo`: escritor `_parei_censo_no_relato`; leitores compartilham `prova_parei_censo`, mas a análise de lugar/formato ficou com o agente `parei`. Fontes: `bin/disjuntor.py:247`, `bin/hook_stop_fila1.py:692`, `bin/alarme_sessao_ociosa.py:137`, `bin/handoff_sessao.sh:128`.
+
+## 09/11 03:10 · sessao ede921335bff · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — P4 permanece parcial: JSON ilegível abre pelo protocolo do próprio hook.** Se `json.loads` levanta, `payload` continua `{}`; `_aberturas_construtor({})` devolve `[]`, portanto o fallback pelo texto cru nem é executado e `main_pretool` termina com rc 0, sem JSON `deny`. Reprodução em memória, sem escrita: entrada truncada `{"tool_name":"Agent","tool_input":{"prompt":"/home/ronald/wt-x"}` produziu rc 0 e stdout vazio. `bin/disjuntor.py:1748`, `bin/disjuntor.py:1751`, `bin/disjuntor.py:1594`, `bin/disjuntor.py:1611`, `bin/disjuntor.py:1614`, `bin/disjuntor.py:1790`.
+
+2. **OBSERVACAO — exceção anterior ao julgamento também pode terminar sem negativa quando o censo é válido.** `_censo_na_excecao` apenas refaz o censo; se ele passa, retorna `None` e a exceção original termina em “ferramenta liberada”, rc 0. Isso é mais estreito que a promessa textual “exceção = nega”. `bin/disjuntor.py:1618`, `bin/disjuntor.py:1622`, `bin/disjuntor.py:1767`, `bin/disjuntor.py:1790`.
+
+3. **OBSERVACAO — importações anteriores ao `try` não têm proteção local; abertura efetiva pelo harness é [nao verificado].** Os imports globais precedem `main_pretool`; a configuração chama Python diretamente, sem tradutor externo de rc para `deny`. Falha ali pode produzir traceback/rc 1 sem JSON de decisão, mas a implementação do harness que interpreta esse rc não está na cópia examinada. `bin/disjuntor.py:59`, `bin/disjuntor.py:1747`, `.claude/settings.json:68`; comportamento real do harness: **[nao verificado]**. O arquivo `eval/harness.py` executa perguntas HTTP do copiloto e não implementa o consumidor de PreToolUse. `eval/harness.py:14`, `eval/harness.py:52`.
+
+4. **PROCEDENTE-candidato — export herdado é negado mesmo com censo conforme.** O classificador só lê atribuições da mesma invocação. Assim, `export CODEX_OBRA=OBRA-E3 CODEX_PAPEL=construtor; bin/codex_pergunta.sh --construtor ...` chega com `obra=''` e é recusado antes de consultar qualquer brief. O teste exercita essa forma somente sem brief; a restrição excede “export sem brief”. `bin/disjuntor.py:1371`, `bin/disjuntor.py:1385`, `bin/disjuntor.py:1690`, `bin/disjuntor.py:1692`, `bin/tests/test_censo_antes_da_vaga.sh:174`.
+
+5. **PROCEDENTE-candidato — contrato de ID incompatível causa negativas permanentes para formas anteriormente aceitas pelo wrapper.** O wrapper admite `^[A-Z0-9-]+$`; `main_censo` exige `_OBRA_ID`, que começa por letra e exige hífen ou letras seguidas de dígitos. Exemplos `ABC` e `09-TURNO-ABERTO-EXPOSTA` passam no primeiro e falham no segundo independentemente do brief. `bin/codex_pergunta.sh:188`, `bin/disjuntor.py:108`, `bin/disjuntor.py:2075`. A existência de chamada atual dessas formas é **[nao verificado]**; o reconhecedor do BACKLOG admite IDs iniciados por dígito explicitamente. `bin/hook_stop_fila1.py:113`, `bin/hook_stop_fila1.py:120`.
+
+6. **PROCEDENTE-candidato — ponto aberto 4: raiz de julgamento pode divergir da raiz da vaga.** `R` vem do arquivo do wrapper; `VIVO` é separado. O censo executa o disjuntor de `R`, cujo BACKLOG e glob também são de `R`, enquanto a vaga deriva do repositório vivo. Uma cópia com BACKLOG antigo sem aquela obra retorna `CENSO FORA`/rc 0, mesmo que o BACKLOG vivo exigisse censo. `bin/codex_pergunta.sh:55`, `bin/codex_pergunta.sh:56`, `bin/codex_pergunta.sh:76`, `bin/codex_pergunta.sh:230`, `bin/disjuntor.py:71`, `bin/disjuntor.py:1536`, `bin/disjuntor.py:1544`, `bin/disjuntor.py:2083`. Ocorrência dessa divergência em produção: **[nao verificado]**. O selo de cópia apenas fornece disjuntor falso e verifica a vaga ocupada; não confronta dois BACKLOGs. `bin/tests/test_codex_pergunta.sh:392`.
+
+7. **OBSERVACAO — predicado exato de obra reconhecida no Agent.** A chamada entra no censo quando `tool_name == 'Agent'`, `subagent_type` não pertence a `{'verificador','Explore','Plan','claude-code-guide','statusline-setup'}` e o prompt casa `/[^\s"\'\\:]*/wt-[A-Za-z0-9._-]+`. `bin/disjuntor.py:102`, `bin/disjuntor.py:104`, `bin/disjuntor.py:1711`. `_obra_de` procura a primeira ocorrência válida entre `obra[s] <ID>` e `leitura ... da <ID>` — nesta segunda âncora, até 80 caracteres sem quebra —, com regex insensível à caixa, mas validação posterior sensível à caixa. O ID é `(?:[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)+|[A-Z]+\d+[A-Z0-9]*)`; cauda opcional `(letra)` ou outro ID hifenizado integra a identidade somente quando o ID original não tem hífen. `bin/disjuntor.py:108`, `bin/disjuntor.py:110`, `bin/disjuntor.py:115`, `bin/disjuntor.py:545`, `bin/disjuntor.py:559`, `bin/disjuntor.py:567`.
+
+8. **OBSERVACAO — chamadores expostos ao ponto 6, distinguindo rotas de ocorrências.**
+   - Agentes construtores de cópia, inclusive a rota documental de UI em `wt-ui`, sem obra reconhecida no prompt: passam a negar. `CLAUDE.md:306`, `CLAUDE.md:309`, `bin/disjuntor.py:1711`.
+   - Wrapper construtor com variáveis herdadas por `export`, sem `CODEX_OBRA` escrita na invocação: passa a negar no hook, independentemente do brief. `bin/disjuntor.py:1371`, `bin/disjuntor.py:1692`.
+   - Wrapper chamado por script/`bash -c`: a via executada passa pelo novo `--censo`, ainda que o hook não consiga interpretar o shell. `bin/disjuntor.py:1281`, `bin/codex_pergunta.sh:230`.
+   - A sessão principal **não é isenta** quando abre Agent ou chama wrapper: a saída antecipada por ausência de `agent_id` exclui expressamente essas ferramentas. `bin/disjuntor.py:1673`.
+   - O tipo `verificador` declarado na configuração de agente é isento desse ramo de censo. `.claude/agents/verificador.md:2`, `bin/disjuntor.py:102`.
+   
+   Não há no dado fornecido nomes/transcripts de chamadas atualmente vivas que permitam identificar quais efetivamente cairão nessas condições: **[nao verificado]**. Os exemplos concretos de export e Agent sem obra são fixtures, não prova de produção. `bin/tests/test_censo_antes_da_vaga.sh:174`, `bin/tests/test_censo_antes_da_vaga.sh:178`.
+
+9. **OBSERVACAO — Q5 está curada na expressão do wrapper.** `python3 -I ... --censo "$OBRA" || _recusa2` recusa qualquer rc diferente de zero; `_recusa2` termina com rc 2. Portanto Python com traceback/rc 1 recusa; o `flock` só ocorre depois. `bin/codex_pergunta.sh:183`, `bin/codex_pergunta.sh:230`, `bin/codex_pergunta.sh:236`. O selo mantém a vaga presa e exige recusa por censo, provando a ordem pretendida pelo teste. `bin/tests/test_codex_pergunta.sh:210`.
+
+10. **OBSERVACAO — pontos abertos 5, 8 e 9.**
+    - **5: risco declarado; desligamento comum não cobre a CLI.** `main_censo` não consulta `desligado`; o PreToolUse consulta. O texto da configuração enumera B1–B4/B4-CODEX/ANEXO-ENXUTO como escopo da chave, sem incluir censo. `bin/disjuntor.py:1756`, `bin/disjuntor.py:2069`, `bin/disjuntor_settings.json:3`. Exigência de que essa mesma chave desligue I1: **[nao verificado]**.
+    - **8: restrição de formato declarada.** O juiz exige literalmente `? cortada por Ronald <token>` no fim; texto posterior deixa de contar, embora contenha a expressão de corte. `bin/disjuntor.py:1454`, `bin/disjuntor.py:1512`. A triagem fornecida pede ancoragem; autorização de todos os formatos rejeitados: **[nao verificado]**.
+    - **9: ajuste coerente da âncora.** A mutação continua removendo `bash|sh` do ramo pertinente; `env` passou a ramo separado com atribuições. `bin/disjuntor.py:1288`, `bin/tests/test_disjuntor.sh:1741`. Execução verde do selo nesta auditoria: **[nao verificado]**.
+
+## 09/11 03:10 · sessao 4358b47b3955 · FIO-E0-V4-E2 · construtor · origem=Code
+
+Contrato E2 aplicado em `chamados/veredito_lavrado.py:119`, `:141`, `:213` e `chamados/management/commands/backfill_veredito_lavrado.py:111`. **Resta o ACHADO da catraca**, conforme a condição imposta: `instancias_do_turno` não monta universo pela porta (`chamados/services/tarefa_do_dia.py:88`). Suíte, testes RED e morte dos mutantes: **[nao verificado]**.
+
+Alterações por hunk:
+
+| Arquivo:linha atual | Alteração |
+|---|---|
+| [chamados/veredito_lavrado.py:95](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/veredito_lavrado.py:95) | `_hoje(agora)` obrigatório; somente converte o instante; rejeita `None`. |
+| `chamados/veredito_lavrado.py:107` | `relogio_virou` exige `agora`; conserva as duas comparações em dia local. |
+| `chamados/veredito_lavrado.py:119` | `expira_em(data_evento, hoje)` obrigatório, com `hoje` do tipo `date`; cálculo começa em `max(hoje, data_evento)` em `:141`. |
+| `chamados/veredito_lavrado.py:213` | `esta_stale(p, marcos, agora)` obrigatório; conserva rejeição de lavra futura em `:224`. |
+| `chamados/veredito_lavrado.py:273` | `lavrar` fornece o dia local do mesmo instante gravado em `julgado_em`. |
+| [backfill_veredito_lavrado.py:87](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/management/commands/backfill_veredito_lavrado.py:87) | Importa o conversor puro; lê um instante em `:94`, converte em `:95` e passa `hoje` em `:111`. |
+| [chamados/services/raiox.py:10](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/services/raiox.py:10) | Varredura exige `agora`; saiu a leitura interna do relógio. Marcos, lavra futura e comparação local usam esse horizonte em `:38`, `:41`, `:43`. |
+| [lavrar_perguntas_stale.py:59](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/management/commands/lavrar_perguntas_stale.py:59) | Command lê o relógio e entrega o horizonte à varredura em `:60`. |
+| [chamados/tests/test_e1_fila.py:352](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/tests/test_e1_fila.py:352) | Migração do chamador indireto de `expira_em`; mutantes atualizados em `:377`, `:384`; demais chamadas migradas em `:413`, `:427`. |
+| [test_selo_concordancia_varredura_stale.py:56](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/tests/test_selo_concordancia_varredura_stale.py:56) | Um horizonte compartilhado pela varredura e pelo leitor da lavra. |
+| [test_selo_get_nao_escreve.py:72](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/chamados/tests/test_selo_get_nao_escreve.py:72) | Três chamadas entregam o instante explicitamente: `:72`, `:102`, `:116`. |
+| [escala/tests/test_signal_ancora.py:107](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/escala/tests/test_signal_ancora.py:107) | Atualizada a âncora do mutante de lavra futura; varredura recebe instante com relógio envenenado em `:119`. |
+| `escala/tests/test_signal_ancora.py:281` | Acrescentados seis RED e seis métodos de mutação para contratos, conversão local e passagem dos argumentos pelos commands. |
+| [core/tests/test_medida_turno_do_par.py:313](/home/ronald/wt-codex-fio-e0-v4-e2-015740/app/core/tests/test_medida_turno_do_par.py:313) | Dois motivos individuais e registro `[1167, 1319]`. |
+
+Inventário dos chamadores alterados, antes → depois:
+
+| Função | Arquivo:linha anterior → atual | Migração |
+|---|---|---|
+| `_hoje` | `chamados/veredito_lavrado.py:114 → :116` | Já passava `agora`; mantido. |
+| `_hoje` | `chamados/veredito_lavrado.py:137 → removida` | `expira_em` usa diretamente `hoje`, agora em `:141`. |
+| `_hoje` | nova em `chamados/veredito_lavrado.py:273` | Converte `_agora` da lavra. |
+| `_hoje` | nova em `chamados/management/commands/backfill_veredito_lavrado.py:95` | Converte `agora` do command. |
+| `expira_em` | `chamados/veredito_lavrado.py:267 → :273` | `agora=_agora` → `_hoje(_agora)`. |
+| `expira_em` | `chamados/management/commands/backfill_veredito_lavrado.py:111 → :111` | `agora=agora` → `hoje`. |
+| `expira_em`, indireto por `fn` | `chamados/tests/test_e1_fila.py:352 → :352` | `fn(DIA)` → `fn(DIA, timezone.localdate(timezone.now()))`. |
+| `esta_stale` | `chamados/tests/test_e1_fila.py:412 → :413` | Acrescentado `marcos=None` explícito. |
+| `relogio_virou` | `chamados/veredito_lavrado.py:222 → :228` | Já passava `agora`; mantido. |
+| `relogio_virou` | `chamados/services/raiox.py:41 → :43` | Recebe agora o horizonte originado no command. |
+| `pks_stale_por_varredura` | `chamados/management/commands/lavrar_perguntas_stale.py:58 → :60` | Acrescentado `agora`. |
+| mesma | `chamados/tests/test_e1_fila.py:426 → :427` | Acrescentado `agora`. |
+| mesma | `chamados/tests/test_selo_concordancia_varredura_stale.py:56 → :57` | Acrescentado o instante compartilhado. |
+| mesma | `chamados/tests/test_selo_get_nao_escreve.py:72 → :72`, `:102 → :102`, `:116 → :116` | Relógio fornecido pelo teste chamador. |
+| mesma, indireto por `fn` | `escala/tests/test_signal_ancora.py:121 → :121` | Acrescentado `self.AGORA`; relógio interno envenenado. |
+
+Demais chamadas diretas, já compatíveis, antes → depois:
+
+| Função | Chamadores preservados |
+|---|---|
+| `expira_em` | `chamados/tests/test_selo_lavrado_orfaos.py:60→60`, `:61→61`, `:85→85`, `:86→86`, `:97→97`; `chamados/tests/test_e2_tarefa_do_dia.py:686→686`. |
+| `esta_stale` | `chamados/services/tarefa_do_dia.py:349→349`; `chamados/management/commands/auditar_invariantes_chamados.py:1167→1167`; `chamados/tests/test_e2_tarefa_do_dia.py:685→685`; `chamados/tests/test_porta_veredito_pergunta.py:270→270`, `:275→275`; `chamados/tests/test_selo_concordancia_varredura_stale.py:60→60`; `chamados/tests/test_selo_lavrado_orfaos.py:103→103`, `:115→115`, `:118→118`, `:128→128`, `:130→130`. |
+
+As omissões em `chamados/tests/test_e2_tarefa_do_dia.py:696` e `:698` permanecem: são precisamente os testes que exigem `TypeError`. Os novos leitores indiretos dos contratos e das funções estão em `escala/tests/test_signal_ancora.py:294`, `:303`, `:317`, `:334`, `:353`, `:375`, `:408`.
+
+Outros consumidores de `lavrar`: `chamados/models.py:312`, `:3007`, `:3150`; `chamados/services/fio.py:923`, `:1033`; `chamados/services/relavra_via.py:126`; `chamados/management/commands/lavrar_perguntas_stale.py:89`. Nos testes: `chamados/tests/test_e1_fila.py:372`; `chamados/tests/test_porta_veredito_pergunta.py:271`, `:286`, `:292`, `:318`, `:322`; `chamados/tests/test_selo_teto_placar.py:97`; `chamados/tests/test_profile_placar_rodinha.py:159`.
+
+Consumidores dos commands: backfill em `chamados/tests/test_porta_veredito_pergunta.py:502`, `:509`; lavra stale em `chamados/tests/test_selo_cron_lavrar_stale.py:45` e `chamados/tests/test_selo_get_nao_escreve.py:115`; novos exercícios diretos em `escala/tests/test_signal_ancora.py:395`, `:423`.
+
+Mantive `_dia_de_turno_da_pergunta` na tranca (`chamados/juizes.py:949`). Ele devolve `data_evento` para perguntas de fato e `None` para conversa (`chamados/juizes.py:332`). Os confrontos E2 consultados usam perguntas de fato (`chamados/tests/test_e2_tarefa_do_dia.py:1127`, `:1198`, `:1208`); passagem desses testes: **[nao verificado]**.
+
+Os registros deslocados continuam apontando para `_julgar_colab_corpo`: conversão da adesão em `ponto/services/cartorio.py:1167` e recorte das batidas em `:1319`. Os motivos individuais ficaram em `core/tests/test_medida_turno_do_par.py:313` e `:314`. Igualdade textual com o fonte histórico indisponível de `2ea1f4c3`: **[nao verificado]**.
+
+**ACHADO catraca: chamados/services/tarefa_do_dia.py:88.** A função recebe marcos prontos e converte a data civil em `:99`; não chama `parear_turnos` nem monta universo pela porta. Não acrescentei sua entrada a `CLASSIFICAR` (`core/tests/test_medida_turno_do_par.py:344`).
+
+Os sete testes do anexo ficam assim; passagem efetiva de cada um: **[nao verificado]**. [nao verificado]
+
+| Teste | Motivo tratado ou pendência | [nao verificado]
+|---|---|
+| `test_a_tarefa_e_a_lavra_lidas_sem_relogio` — `chamados/tests/test_e2_tarefa_do_dia.py:667` | `date` entra diretamente em `expira_em`; `_hoje` somente converte instante explícito (`chamados/veredito_lavrado.py:104`, `:141`). |
+| `test_a_VESPERA_e_LEI_o_ultimo_dia_da_competencia_vive_UMA_a_mais` — `chamados/tests/test_selo_lavrado_orfaos.py:69` | Corrigido o contrato de entrada; preservado o limite com `- timedelta(days=1)` (`chamados/veredito_lavrado.py:145`). |
+| `test_expira_em_devolve_FIM_DE_COMPETENCIA_nao_prazo_fixo` — `chamados/tests/test_selo_lavrado_orfaos.py:42` | Corrigido o contrato de entrada; preservado avanço pelo fim da competência (`chamados/veredito_lavrado.py:142`, `:147`). |
+| `test_esta_stale_exige_agora` — `chamados/tests/test_e2_tarefa_do_dia.py:692` | Assinaturas obrigatórias em `chamados/veredito_lavrado.py:119`, `:213`. |
+| `test_tarefa_e_leitores_da_lavra_nao_leem_o_relogio` — `chamados/tests/test_e2_tarefa_do_dia.py:1009` | Removida a leitura interna de `_hoje`; leitura da lavra permanece na borda declarada (`chamados/veredito_lavrado.py:104`, `:271`). |
+| `test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit` — agora `core/tests/test_medida_turno_do_par.py:535` | Registro ajustado em `core/tests/test_medida_turno_do_par.py:315`. |
+| `test_a_classificar_publicado_sem_entrar_como_criterio_amplo` — agora `core/tests/test_medida_turno_do_par.py:541` | **Pendência mantida pelo ACHADO acima. Não afirmo que passa.** |
+
+Comandos individuais para o Code, não executados aqui. Os seis RED e seis métodos MORDE novos estão em `escala/tests/test_signal_ancora.py:294`, `:303`, `:324`, `:328`, `:343`, `:347`, `:363`, `:367`, `:395`, `:399`, `:423`, `:427`:
+
+```bash
+r() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
+    --settings=config.settings_test "$1"
+}
+c() { r "escala.tests.test_signal_ancora.RebaseE2ContratoRelogioTest.$1"; }
+
+c test_RED_argumentos_obrigatorios
+c test_MORDE_defaults_opcionais
+c test_RED_hoje_so_converte_instante
+c test_MORDE_hoje_le_relogio
+c test_RED_expira_recebe_date_sem_relogio
+c test_MORDE_expira_rele_relogio
+c test_RED_relogio_virou_preserva_dois_dias_locais
+c test_MORDE_dia_UTC_em_cada_lado
+c test_RED_backfill_passa_date_do_mesmo_instante
+c test_MORDE_backfill_instante_ou_segundo_relogio
+c test_RED_command_stale_entrega_horizonte
+c test_MORDE_command_omite_horizonte
+```
+
+Comandos dos exercícios existentes afetados pela migração (`escala/tests/test_signal_ancora.py:101`, `:105`, `:124`, `:128`, `:134`; `chamados/tests/test_e1_fila.py:354`, `:370`, `:375`, `:382`, `:409`, `:420`):
+
+```bash
+l() { r "escala.tests.test_signal_ancora.RebaseE2LeitoresTest.$1"; }
+
+l test_RED_lavra_futura
+l test_MORDE_lavra_futura
+l test_RED_varredura_no_mesmo_horizonte
+l test_MORDE_varredura_sem_corte
+l test_MORDE_varredura_aceita_lavra_futura
+
+r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_RED_expira_em_le_o_relogio_da_borda
+r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_a_lavra_e_a_janela_leem_o_MESMO_instante
+r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_MORDE_duas_leituras_do_relogio_na_lavra
+r chamados.tests.test_e1_fila.F5RelogioDaBordaTest.test_MORDE_a_volta_do_date_today
+r chamados.tests.test_e1_fila.DiaLocalEstaStaleTest.test_RED_esta_stale_le_o_dia_local
+r chamados.tests.test_e1_fila.DiaLocalVarreduraTest.test_RED_a_varredura_le_o_dia_local
+```
+
+`py_compile` concluiu com rc=0 nos nove arquivos alterados listados acima. Comando executado, com escrita de bytecode bloqueada:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import py_compile
+import subprocess
+from unittest.mock import patch
+
+arquivos = subprocess.check_output(
+    ['git', 'diff', '--name-only', '--relative'], text=True
+).splitlines()
+
+with patch('py_compile.os.makedirs'), \
+     patch('py_compile.importlib._bootstrap_external._write_atomic'):
+    for arquivo in arquivos:
+        if arquivo.endswith('.py'):
+            py_compile.compile(arquivo, doraise=True)
+            print('OK:', arquivo)
+PY
+```
+
+## 09/11 03:09 · sessao 0c12bed4fd26 · - · - · origem=Ronald (tmux)
+
+Q4 — cadeia e efeitos, somente leitura:
+
+- `_match_marcos` é o ponto comum de alinhamento; recebe papel de `_papeis_do_turno` quando há `turno=`, ou de `_papeis_por_alternancia` sem turno. O ramo de papéis gera células, órfãs e marca as batidas consumidas. (`app/escala/utils.py:585`, `app/escala/utils.py:596`, `app/escala/utils.py:613`, `app/escala/utils.py:620`)
+- O builder por turno passa `turno=`; o single e o dry-run chamam com `derivar=False`. Assim, corrigir apenas `_papeis_do_turno` incide diretamente no builder por turno, enquanto esses outros caminhos conservam a DP. (`app/escala/utils.py:776`, `app/escala/utils.py:1650`, `app/escala/utils.py:1701`)
+- Para apurar o realizado da montagem atual, o builder cria cópias em memória das células, entrega as lâmpadas e órfãs recém-montadas, chama `turnos_do_colab` com elas e depois `realizado_do_dia`; grava seu resultado no dict da grade. Essa é a passagem pela qual um novo alinhamento altera o intervalo reconhecido e o número da ata. (`app/escala/utils.py:1886`, `app/escala/utils.py:1892`, `app/escala/utils.py:1898`, `app/escala/utils.py:2045`, `app/escala/utils.py:2058`)
+- O cartório carrega `batidas_apuraveis`, chama o builder e serializa lâmpadas, órfãs e `minutos_realizados` em `ata_do_dia`. (`app/ponto/services/cartorio.py:1121`, `app/ponto/services/cartorio.py:1126`, `app/ponto/services/cartorio.py:696`, `app/ponto/services/cartorio.py:706`)
+- A Zona 5 do motor chama `_match_marcos` **sem** `turno=` sobre entradas/saídas dos períodos do dia, associa períodos aos marcos `hi`/`hfi` e aplica atraso/antecipada. Sua leitura direta usa `_papeis_por_alternancia`, portanto a troca da adjacência de `_papeis_do_turno` não basta, isoladamente, para afirmar mudança direta neste caminho. (`app/ponto/motor_calculo_v2.py:3060`, `app/ponto/motor_calculo_v2.py:3062`, `app/ponto/motor_calculo_v2.py:3064`, `app/ponto/motor_calculo_v2.py:3077`, `app/escala/utils.py:597`)
+- `marco_ocupado_pela_batida` transcreve `_match_marcos`, sem turno, devolvendo rótulo/delta; o casamento com a batida usa HH:MM. (`app/escala/utils.py:395`, `app/escala/utils.py:427`, `app/escala/utils.py:429`)
+- `regua_defesa.cumpriu_a_volta_do_intervalo` entrega apenas um período a esse leitor e exige `hfi` com delta dentro da tolerância; esse único período fica na DP, porque a derivação por alternância exige pelo menos quatro batidas. Motor e calculador consultam esse predicado para retirar o previsto de entrada de quem cumpriu a volta. (`app/escala/regua_defesa.py:489`, `app/escala/regua_defesa.py:491`, `app/escala/regua_defesa.py:493`, `app/escala/utils.py:485`, `app/escala/utils.py:489`, `app/ponto/motor_calculo_v2.py:2117`, `app/ponto/calculador/regras.py:251`)
+
+Dinheiro e leitores:
+
+- O realizado líquido subtrai `intervalos_do_turno`; a conversão para minutos acontece antes da subtração. (`app/ponto/turnos.py:740`, `app/ponto/turnos.py:756`, `app/ponto/turnos.py:758`, `app/ponto/turnos.py:767`)
+- O motor também lê o papel da ata quando recebe células alimentadas, chama o mesmo pareador e transporta os intervalos pelo adaptador. Portanto o alinhamento pode chegar ao cálculo financeiro **pela ata**, além dos chamadores diretos de `_match_marcos`. (`app/ponto/motor_calculo_v2.py:495`, `app/ponto/motor_calculo_v2.py:500`, `app/ponto/motor_calculo_v2.py:503`, `app/ponto/motor_calculo_v2.py:530`, `app/ponto/adaptador_motor.py:44`)
+- No 12x36, o motor recorta os intervalos na janela, calcula pausa real, subtrai da duração, calcula supressão com tolerância e grava minutos trabalhados/indenização. A tolerância de intrajornada é dez minutos na cópia. (`app/ponto/motor_calculo_v2.py:2764`, `app/ponto/motor_calculo_v2.py:2771`, `app/ponto/motor_calculo_v2.py:2774`, `app/ponto/motor_calculo_v2.py:2776`, `app/ponto/motor_calculo_v2.py:2784`, `app/ponto/motor_calculo_v2.py:2785`, `app/ponto/motor_calculo_v2.py:69`)
+- `DiaPago` recebe horas trabalhadas e intrajornada indenizada dividindo os campos do período por 60. O espelho lê `realizado_h` da autoridade do realizado e `pago_h`/rubricas da lavratura, portanto os números podem divergir. (`app/ponto/services/dia_pago.py:178`, `app/ponto/services/dia_pago.py:186`, `app/ponto/services/espelho.py:783`, `app/ponto/services/espelho.py:799`, `app/ponto/services/espelho.py:811`, `app/ponto/services/espelho.py:813`)
+- O leitor da célula transporta o realizado da ata; o PDF de validação soma e divide por 60. Causas, classificação, comparação ata/juiz e calendário também o leem. (`app/escala/services/leitor_celula.py:369`, `app/escala/services/leitor_celula.py:406`, `app/folha/validacao_pdf.py:48`, `app/folha/validacao_pdf.py:54`, `app/folha/causas.py:85`, `app/ponto/supra_juiz.py:224`, `app/ponto/services/bordas_realizado.py:87`, `app/colaboradores/services/calendario.py:359`)
+- Fechamento e percentual usam realizado limitado ao previsto de cada dia; a mesma diferença pode desaparecer no teto ou afetar cumprimento/abono. (`app/ponto/services/dia_pago.py:394`, `app/ponto/services/dia_pago.py:395`, `app/ponto/services/fechamento.py:1061`, `app/ponto/services/fechamento.py:1064`, `app/folha/export.py:1096`, `app/folha/export.py:1103`)
+
+No dado raspado, antes→rejulgado: ata **660→599 min**, pausa descontada pelo motor **58,0130167→119,6599667 min**; indenização intrajornada **0→0**; pagamento já lavrado **10,87 h→10,87 h**, com rubricas exibidas idênticas. São evidências do texto fornecido, sem arquivo local/linha: **[não verificado]**. O segundo `minutos_trabalhados` está raspado, e o dado não prova novo pagamento lavrado nem valor em reais: **[não verificado]**.
+
+## 09/11 03:09 · sessao 49739fa9eed9 · - · - · origem=Ronald (tmux)
+
+A exigência de adjacência não tem motivação documentada nos trechos localizados. A declaração da obra manda transcrever o papel do juiz e acomodar “par numa pausa”, deixando as soltas para o marco livre mais próximo; não menciona exigir batidas consecutivas. (`app/docs/RELATO.md:1709`, `app/docs/RELATO.md:1710`, `app/escala/utils.py:440`, `app/escala/utils.py:507`)
+
+O pouso registrado é `b3bf529e`, em 29/10 07:11; o texto identifica `_match_marcos`, a ata, Zona 5 e `cumpriu_a_volta` como consumidores da mesma resposta. (`app/docs/RELATO.md:1657`, `app/docs/RELATO.md:1659`) O diff que atribui a introdução precisamente a `9da200c8` não está disponível nesta cópia sem `.git`: **[não verificado]**. Não localizei justificativa adicional nos resultados de busca em LAPIDES/CORTES: **[não verificado]**.
+
+Os casos nomeados não demonstram dependência da adjacência:
+
+- **col345:** o caso é uma entrada de trabalho às 15:00 que corresponde à volta `hfi`; o par fechado é **15:00→18:56**, e o teste impede atraso falso. Não é pausa com batida interposta. (`app/ponto/tests/test_calculador_portoes_de_marco.py:15`, `app/ponto/tests/test_calculador_portoes_de_marco.py:56`)
+- **col60/O271:** usa **E12:00→S19:06**, distingue a cabeça atrasada do turno da volta e cobra atraso cru de 300 minutos. As contraprovas usam entrada em `hfi` e `hfi+5`, sem atraso. São períodos sem pausa interna. (`app/ponto/tests/test_o271_pontualidade_no_comercial.py:177`, `app/ponto/tests/test_o271_pontualidade_no_comercial.py:192`, `app/ponto/tests/test_o271_pontualidade_no_comercial.py:200`)
+- **[nome]:** o cluster tem quatro batidas — 18:56, 18:58, 19:04, 19:05 — e exige órfãs em vez de ocupar marcos distantes; qualquer pausa interna dessa sequência é adjacente. A proteção correspondente permanece no filtro final de `_alinhar_por_papel`, separado da condição de adjacência. (`app/ponto/tests/test_pareador_cluster_marco.py:53`, `app/ponto/tests/test_pareador_cluster_marco.py:59`, `app/escala/utils.py:572`)
+- **Nominais da obra:** A, controle regular, convergência de tipo trocado e noturno apresentam quatro batidas, com as duas pontas internas consecutivas; B/F/C/D/E tratam entrada/saída ou batida solta, sem pausa não adjacente. (`app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:104`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:165`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:326`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:358`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:129`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:143`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:154`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:212`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:223`)
+
+Por inspeção, retirar apenas `_iz == _i + 1` não altera a elegibilidade dos pares desses exemplos: os pares continuam adjacentes; os casos sem par continuam sem par. Execução dessa alteração contra os testes: **[não verificado]**. A afirmação universal de que “nenhum caso quebraria” também fica **[não verificado]**. [nao verificado]
+
+Há precedente explícito contra redescobrir o par pela adjacência: o teste da O68b documenta que o par declarado deve vencer o adjacente guloso e compara a resposta com/sem uma sobra. Não é o mesmo cenário da solta *entre* as pontas, mas confirma a prioridade do par declarado. (`app/ponto/tests/test_o68b_papel_da_ata_no_motor.py:623`, `app/ponto/tests/test_o68b_papel_da_ata_no_motor.py:701`)
+
+## 09/11 03:08 · sessao 9d4f10c661b8 · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — P3/ponto aberto 1: cura apenas formal.** O PAREI passa pela porta existente, mas entra em `## ALARMES DA ESTEIRA`, enquanto o Stop julga somente a primeira linha útil do painel e o handoff encerra a coleta no primeiro `##`. O alarme procura apenas nas primeiras 40 linhas. Assim, compartilhar o reconhecedor não garante que leiam a linha escrita. (`bin/disjuntor.py:267`; `app/core/esteira_vigia.py:863`; `bin/hook_stop_fila1.py:407`; `bin/hook_stop_fila1.py:429`; `bin/handoff_sessao.sh:102`; `bin/handoff_sessao.sh:128`; `bin/alarme_sessao_ociosa.py:124`.)
+
+   Prova executada somente em memória, com as funções extraídas por AST: o fixture do selo recebe o PAREI na linha 7, mas `_linha_do_topo()` devolve `texto neutro do painel`; o processamento foi interrompido antes de `mkstemp`. A divergência decorre diretamente da inserção e seleção existentes. (`bin/tests/test_censo_antes_da_vaga.sh:145`; `app/core/esteira_vigia.py:864`; `bin/hook_stop_fila1.py:438`.)
+
+2. **PROCEDENTE-candidato — ponto aberto 2: idempotência sem atomicidade.** A consulta de existência precede a aquisição do lock pelo escritor; dois chamadores podem observar ausência e inserir duas vezes. A porta serializa cada inserção, mas não deduplica dentro da trava. (`bin/disjuntor.py:258`; `bin/disjuntor.py:261`; `bin/disjuntor.py:269`; `app/core/esteira_vigia.py:844`; `app/core/esteira_vigia.py:854`; `app/core/esteira_vigia.py:867`.)
+
+   Além disso, a consulta percorre o arquivo inteiro: uma linha histórica impede republicação e promoção ao painel em negativa posterior da mesma obra. (`bin/disjuntor.py:259`; `bin/disjuntor.py:260`; `bin/disjuntor.py:261`.)
+
+3. **OBSERVACAO — P7 parcialmente curado.** Stop, handoff e alarme chamam `prova_parei_censo`, e a string produzida coincide com a forma literal aceita. Entretanto, os recortes diferem: primeira linha útil, bloco anterior ao primeiro título e primeiras 40 linhas, respectivamente. Permanece a divergência semântica de localização descrita no achado 1. (`bin/disjuntor.py:1457`; `bin/hook_stop_fila1.py:696`; `bin/hook_stop_fila1.py:700`; `bin/hook_stop_fila1.py:716`; `bin/handoff_sessao.sh:102`; `bin/handoff_sessao.sh:128`; `bin/alarme_sessao_ociosa.py:124`; `bin/alarme_sessao_ociosa.py:137`.)
+
+4. **PROCEDENTE-candidato — selo sem mordida na ligação escritor → leitor.** O selo do censo apenas conta a linha em todo o RELATO; o selo do Stop fabrica a linha diretamente no topo. Nenhum desses casos exige que o RELATO produzido pela negativa seja reconhecido pelo Stop. Isso permite os testes locais passarem preservando o defeito do achado 1. (`bin/tests/test_censo_antes_da_vaga.sh:201`; `bin/tests/test_censo_antes_da_vaga.sh:202`; `bin/tests/test_hook_esperando_com_prova.sh:62`; `bin/tests/test_hook_esperando_com_prova.sh:209`.)
+
+5. **OBSERVACAO — mesma porta, sem segundo escritor acrescentado nessa alteração.** Tanto a negativa comum quanto o PAREI carregam `app/core/esteira_vigia.py` e chamam `no_relato`; lock e substituição atômica pertencem a essa porta. Isso comprova identidade do escritor, mas não adequação da seção escolhida para um PAREI. (`bin/disjuntor.py:195`; `bin/disjuntor.py:238`; `bin/disjuntor.py:240`; `bin/disjuntor.py:267`; `bin/disjuntor.py:269`; `app/core/esteira_vigia.py:848`; `app/core/esteira_vigia.py:884`.)
+
+6. **OBSERVACAO — ausência de hora comprovada; efeito da dieta [nao verificado].** A string escrita não contém carimbo temporal. Não localizei, nesta auditoria, implementação da dieta que permita provar sua permanência por esse motivo. (`bin/disjuntor.py:1457`; `bin/disjuntor.py:255`; [nao verificado].)
 
 ## 09/11 03:06 · sessao b385027a2194 · COBPARC-ATA-DEFASADA-09 · leitura · origem=Code
 
@@ -557,363 +833,4 @@ O evento **não tem persistência independente**: `core.observ.evento` insere `L
 - Leitores específicos do evento localizados são testes: conferem literal/descrição/motivo em memória e consultam `LogAuditoria`. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:143`, `:144`, `:145`; `app/chamados/tests/test_e1_fila_v2_2_integracao.py:262`, `:263`, `:264`)
 - Consumidor operacional específico de `repasse_recusado`, retry e visibilidade em produção: **[nao verificado]**.
 
-## 09/11 02:49 · sessao 07ae55071934 · E1-FILA-V2-2-TRAVA · construtor · origem=Code
-
-Implementei A1 com **captura única fora do `atomic`**: o agrupador registra `repasse_recusado` e devolve `REPASSE_RECUSADO`, distinto de `None`. O savepoint permite preservar o ato externo; a verificação PostgreSQL dessa preservação está **[nao verificado]**. [disputa_emissao.py:1048](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:1048), [captura:1290](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:1290)
-
-Quem escreve o evento/retorno é o agrupador, via `core.observ.evento`. Quem lê o retorno são `acao_iniciar_disputa_orfaos` e `cobrar_dia`, com mensagens próprias; o evento é consultado pelo RED SQL. Leitura operacional da trilha: **[nao verificado]**. [ação:225](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/acoes_disputa.py:225), [cobrar_dia:50](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/cobrar_dia.py:50), [RED SQL:262](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:262)
-
-Também alterei:
-
-- **S1:** `_caso_b` usa destino independente para a P materializada, preservando `ch2` sem P e o assert da cauda. [integração:118](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:118)
-- **S2:** os três closures capturam as variáveis por defaults. [trava:254](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:254)
-- **S3:** o registro acompanha a linha `1196`. [catraca:268](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:268)
-
-Os REDs de A1 exercitam agrupador e telas; os mutantes retiram captura, evento, retorno distinguível e leitores. Passaram **23 testes sem banco**. A catraca passou **35 testes**; reaplicar `[1131]` em memória fez seu RED falhar. Os sete Python tocados passaram por `py_compile` em memória, sem gravar bytecode. [resultados e comandos:4](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/e1_fila_v2_2_verificacao.txt:4) [nao verificado]
-
-**A2:** acrescentei agrupador real com P estrangeira e detector exigindo C estrangeiro antes da primeira D. O mutante insere a lambda antes do `with` e exige falha nesse assert. Consegui compilá-lo; **não consegui executar o caso PostgreSQL [nao verificado]**. [integração:190](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:190)
-
-A relação completa `arquivo::funcao` e o comando de cada RED/mutante estão no [registro de entrega:137](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/e1_fila_v2_2_verificacao.txt:137). PostgreSQL A1/A2/S1, Ruff e suíte inteira permanecem **[nao verificado]**; certificação reservada ao Code e opus final. [nao verificado]
-
-## 09/11 02:40 · sessao 26af97663c42 · - · - · origem=Ronald (tmux)
-
-S2: capturar por defaults as variáveis dos laços:
-
-- `crescer(*args, original=original, lidas=lidas, classe=classe, pk=pk)` nos dois pontos ([test_e1_fila_v2_2_trava.py:254](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:254), [mesmo arquivo:367](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:367)).
-- `lambda c, o, m=m: _fecho_antigo(m, c, o)` ([mesmo arquivo:270](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_trava.py:270)).
-
-S3: atualizar o registro da linha B1 do agrupador após a cura A1; hoje `[1131]`, enquanto o censo atual calcula `[1188]` ([test_medida_turno_do_par.py:268](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:268)). A regra exige registro no mesmo diff e compara sem consultar Git ([mesmo arquivo:17](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:17), [mesmo arquivo:533](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:533)). Preserve a identidade da função: extrair o corpo para outra função exigiria também rever `REGISTRO` ([mesmo arquivo:526](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:526)).
-
-Comandos executados, sem editar:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest chamados.tests.test_e1_fila_v2_2_trava
-```
-
-Resultado baseline: 15 testes OK [nao verificado por arquivo persistido]. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-from core.medida_turno_do_par import censo
-c = censo('.')
-print([(i['chave'], i['linhas'])
-       for i in c['derivacoes_de_dia']['itens']
-       if 'disputa_emissao.py' in i['chave']])
-PY
-```
-
-O ambiente tem `python3`, sem Django ou Ruff; execução desses verificadores reais fica [nao verificado]. O runner da catraca sem Django está documentado em [test_medida_turno_do_par.py:20](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/core/tests/test_medida_turno_do_par.py:20).
-
-## 09/11 02:40 · sessao 75dba09147d1 · - · - · origem=Ronald (tmux)
-
-S1: a fixture ocupa `self.ch2` com P materializada ([integracao.py:118](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila_v2_2_integracao.py:118)), embora ele exista para atravessar o filtro como segundo órfão ([test_e1_fila.py:260](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila.py:260)). A regra pode excluí-lo por P materializada sem célula acusando ([disputa_emissao.py:759](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:759)); então o agrupador retorna antes da cauda ([disputa_emissao.py:1082](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:1082)). Cura sugerida: criar chamado independente como destino da P materializada e ressuscitá-lo na cauda, preservando `self.ch2` sem P; execução PostgreSQL [nao verificado].
-
-A2: acrescentar teste que execute o agrupador real com D/P estrangeiras apontando o chamado local, sem wrapper da helper e sem cauda artificial; inspecionar `linhas_travadas` e exigir C estrangeiro por `for_update` antes da primeira D. O detector distingue aquisição e atualização ([test_e1_v9.py:71](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_v9.py:71)). O fecho encontra o estrangeiro por P reversa ao destino ([disputa_emissao.py:965](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/services/disputa_emissao.py:965)). [nao verificado]
-
-MORDE sugerido: gerar função mutante usando `fila.mutante_ou_falha` ([test_e1_fila.py:48](/home/ronald/wt-codex-e1-fila-v2-2-trava-015419/app/chamados/tests/test_e1_fila.py:48)), inserir `_trava_do_repasse = lambda *a, **k: None` imediatamente antes do `with` e reutilizar o teste, exigindo falha no assert do C estrangeiro. Sem execução [nao verificado]. [nao verificado]
-
-## 09/11 02:24 · sessao 69b9fc6d95cb · SELOS-CANON-I1 · verificador · origem=Code
-
-**Parecer: o diff realiza parte do I-1, mas não sustenta aprovação integral.** Há escapes de abertura, a negativa não escreve o PAREI exigido e as medidas contam decisões intermediárias como abertura/ociosidade. (`bin/disjuntor.py:1332`, `bin/disjuntor.py:1521`, `bin/disjuntor.py:1588`, `bin/disjuntor.py:1607`, `bin/disjuntor.py:1777`)
-
-As referências abaixo são da cópia. Identidade Git com o hash/base informados e resultados em produção: **[nao verificado]**. A execução integral dos selos também fica **[nao verificado]**; seus scripts criam arquivos e cópias. (`bin/tests/test_censo_antes_da_vaga.sh:21`, `bin/tests/test_censo_antes_da_vaga.sh:160`)
-
-1. **O diff realiza o aval literal? Parcialmente.**
-
-   Na tabela, “aval I-1” refere-se ao parágrafo fornecido no anexo `aval_selos_do_canon_0811.txt`; a numeração do arquivo original é **[nao verificado]**.
-
-   | Exigência do aval I-1 | Realização ou falta |
-   |---|---|
-   | Interceptar abertura de construtor ESTRUTURA/fila 1 | Há chamadas no ramo Agent e no ramo Bash/Codex, condicionadas a reconhecedores textuais. A cobertura não alcança todas as chamadas aceitas pelo wrapper; detalhes na resposta 3. (`bin/disjuntor.py:1583`, `bin/disjuntor.py:1603`) |
-   | Ler `logs/<obra>/brief*.md` | Lê os caminhos **citados na abertura**, com um nível de diretório sob `RAIZ/logs`. Não descobre automaticamente o brief da obra nem verifica que o diretório/conteúdo corresponde à obra declarada. (`bin/disjuntor.py:1413`, `bin/disjuntor.py:1475`, `bin/disjuntor.py:1513`) |
-   | CENSO com leitores/escritores por AST e arquivo:linha | Verifica título, campos e existência de **alguma referência por regex em cada categoria**. Não verifica AST, existência dos sítios, completude nem referência em cada item. Isso não exige necessariamente executar AST na abertura, mas o check não comprova a procedência exigida. (`bin/disjuntor.py:1409`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`) |
-   | DECISOES listadas | Exige algum conteúdo não vazio em `decisoes`; aceita também texto na própria linha, sem lista. (`bin/disjuntor.py:1452`, `bin/disjuntor.py:1463`) |
-   | Linha literal `perguntas de lei: N` | Implementada, com recusa de repetição e conferência da quantidade de itens reconhecidos abaixo. (`bin/disjuntor.py:1408`, `bin/disjuntor.py:1445`, `bin/disjuntor.py:1465`) |
-   | N>0: corte em cada pergunta | Percorre cada pergunta reconhecida e exige a substring `cortada por Ronald` seguida de token. Não verifica autenticidade do aval nem negação textual: `NAO cortada por Ronald X` satisfaz a regex. (`bin/disjuntor.py:1411`, `bin/disjuntor.py:1469`) |
-   | Falha = rc 1; sessão só abre com rc 0 | A CLI `--censo` retorna 0/1. A abertura interceptada usa JSON `deny`, com retorno zero do hook; não há chamada obrigatória da CLI pelo wrapper. Há equivalência de bloqueio nas chamadas reconhecidas, mas não implementação literal do protocolo rc na abertura. (`bin/disjuntor.py:1532`, `bin/disjuntor.py:1654`, `bin/disjuntor.py:1905`, `bin/codex_pergunta.sh:394`) |
-   | Linha PAREI no RELATO | **Falta escrita automática:** a negativa manda a sessão escrevê-la. A escrita automática existente produz outra linha, `(NEGOU CENSO)`, na seção de alarmes. (`bin/disjuntor.py:1521`, `bin/disjuntor.py:221`, `bin/disjuntor.py:236`) |
-   | PAREI censo vale como ESPERANDO PROVADO | Implementado com prova adicional de wrapper vivo, obra e papel, compartilhando o caminho de espera do Stop e do orçamento. (`bin/hook_stop_fila1.py:703`, `bin/hook_stop_fila1.py:740`, `bin/hook_stop_fila1.py:1040`, `bin/hook_stop_fila1.py:1283`) |
-   | Duas medidas no ESTADO | Os campos chegam ao gerador, mas seus significados não comprovam abertura efetiva nem vaga ociosa; resposta 8. (`bin/disjuntor.py:1777`, `bin/disjuntor.py:1817`, `bin/gerar_estado.py:280`) |
-   | Allowlist vazia; desligamento só Ronald | Não aparece allowlist específica no novo check. Continua existindo a chave global, com proteção contra sua manipulação pelo Code. Ausência de obra reconhecida ou BACKLOG, porém, libera sem constituir allowlist explícita. (`bin/disjuntor.py:151`, `bin/disjuntor.py:156`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1507`) |
-   | Selo com mutante de linha ausente | Presente e com asserção que o atinge; cobertura adicional tem lacunas, resposta 7. (`bin/tests/test_censo_antes_da_vaga.sh:70`, `bin/tests/test_censo_antes_da_vaga.sh:175`) |
-
-   Pouso próprio, código somente depois da E1 e cumprimento da ordem I-1/I-3/I-2: **[nao verificado]**. O registro disponível ainda descreve a condição “código só depois do pouso da E1”. (`app/docs/PROMPTS.md:1983`, `app/docs/BACKLOG.md:728`)
-
-2. **Há outro juiz de “brief tem censo”?**
-
-   Nos caminhos examinados, há **um reconhecedor do conteúdo**: `censo_do_brief`, chamado tanto por `_censo_nega` quanto por `--censo`. `_prova_censo` decide existência de produtor vivo; `gerar_estado` apresenta medidas; o handoff consulta fila/PAREI. Eles não repetem a validação do bloco. (`bin/disjuntor.py:1417`, `bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`, `bin/hook_stop_fila1.py:649`, `bin/gerar_estado.py:280`, `bin/handoff_sessao.sh:120`)
-
-   Não localizei autoridade anterior dessa pergunta no registro ou no lookup examinados. `JUIZES.md` declara que é consulta e aponta `app/core/juizes.py` como registro vivo; a existência de equivalente não identificado fica **[nao verificado]**. (`app/docs/JUIZES.md:7`, `app/core/juizes.py:170`, `app/core/juizes.py:706`, `app/core/juizes.py:1025`, `app/core/juizes.py:1173`, `app/core/juizes.py:1285`)
-
-   Portanto, há cobertura incompleta da porta; não há evidência suficiente para acusar **segundo juiz que duplica juiz registrado**. (`bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`; autoridade anterior equivalente: **[nao verificado]**)
-
-3. **Formas de abrir construtor e escapes.**
-
-   | Forma demonstrável | Trava e classificação |
-   |---|---|
-   | Agent fora de `SO_LEITURA`, com caminho absoluto `wt-*` e obra reconhecida/andável | Passa pela trava. (`bin/disjuntor.py:98`, `bin/disjuntor.py:100`, `bin/disjuntor.py:1603`) |
-   | Mesmo Agent, mas sem âncora reconhecível de obra — por exemplo, `Construa OBRA-E3...` | Obra pode virar `None`, que libera. **Escape real se continua sendo construtor estrutural da fila 1.** (`bin/disjuntor.py:111`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1507`) |
-   | Agent com cópia sem nome `wt-*`, caminho relativo ou cópia não citada | Não entra no ramo. **Escape real quando o trabalho pertence à classe do aval**; ausência desse padrão textual não prova ausência de construção. (`bin/disjuntor.py:100`, `bin/disjuntor.py:1603`) |
-   | Bash com atribuições imediatamente antes do wrapper: `CODEX_OBRA=X CODEX_PAPEL=construtor bin/codex_pergunta.sh --construtor ...` | Passa pela trava. (`bin/disjuntor.py:1332`, `bin/disjuntor.py:1583`) |
-   | `export CODEX_OBRA=X CODEX_PAPEL=construtor; bin/codex_pergunta.sh --construtor ...` | Hook lê papel `?` e obra vazia; wrapper aceita o ambiente herdado. **Escape real na própria via autorizada.** (`bin/disjuntor.py:1333`, `bin/disjuntor.py:1343`, `bin/disjuntor.py:1584`, `bin/codex_pergunta.sh:81`) |
-   | `env CODEX_OBRA=X CODEX_PAPEL=construtor bin/codex_pergunta.sh ...` | A regex admite prefixos, mas não essas atribuições depois de `env`. **Escape real.** (`bin/disjuntor.py:1250`, `bin/disjuntor.py:1338`, `bin/codex_pergunta.sh:81`) |
-   | Wrapper dentro de `bash -c`, script externo ou encapsulamentos residuais | Limitação expressamente declarada; o wrapper não impõe CENSO na sua entrada. **Escape real se abre construtor abrangido.** (`bin/disjuntor.py:1247`, `bin/codex_pergunta.sh:233`, `bin/codex_pergunta.sh:394`) |
-   | Wrapper executado fora do PreToolUse | Não tem guarda própria de CENSO; toma vaga e executa o construtor. Uso concreto dessa via em produção: **[nao verificado]**. (`bin/codex_pergunta.sh:233`, `bin/codex_pergunta.sh:370`, `bin/codex_pergunta.sh:394`) |
-   | `codex exec` direto | Escape técnico declarado, mas via proibida pela regra do wrapper; não demonstra uma segunda abertura autorizada. (`bin/disjuntor.py:1248`, `CLAUDE.md:347`) |
-   | `bin/fabricante.sh`, que inicia `claude -p` | A abertura da sessão não é Agent e não recebe essa trava. Enquadramento de cada fabricação como obra fila 1 do aval: **[nao verificado]**. (`bin/fabricante.sh:2`, `bin/fabricante.sh:150`, `bin/fabricante.sh:162`) |
-   | Leitura/censo/verificador legítimos, obra fechada ou fila 2 | Fora da classe construtor estrutural fila 1. (`bin/disjuntor.py:1507`, `bin/tests/test_censo_antes_da_vaga.sh:123`, `bin/tests/test_censo_antes_da_vaga.sh:125`, `bin/tests/test_censo_antes_da_vaga.sh:127`, `bin/tests/test_censo_antes_da_vaga.sh:135`) |
-
-   Outras formas não localizadas: **[nao verificado]**. A configuração fornecida chama um caminho absoluto da árvore viva; instalação deste diff naquele caminho também é **[nao verificado]**. (`.claude/settings.json:68`)
-
-4. **Fail-open contradiz lei ou contrato?**
-
-   **O contrato existente declara fail-open explicitamente:** “toda excecao vira linha FALHA na trilha e a ferramenta passa”. O tratamento externo preserva isso, com exceção expressa do B3. O novo CENSO herda a política e retorna `None` após `ABRIU-SEM`. (`bin/disjuntor.py:34`, `bin/disjuntor.py:1643`, `bin/disjuntor.py:1645`, `bin/disjuntor.py:1525`)
-
-   Logo, não contradiz essa cláusula do disjuntor. Isso, porém, não demonstra autorização para excepcionar o aval específico de abertura somente com censo fechado; essa compatibilidade permanece **[nao verificado]**. (`bin/disjuntor.py:44`, `bin/disjuntor.py:1504`, `bin/disjuntor.py:1525`)
-
-   LEI-AKITA 1 não permite concluir que qualquer tratamento de exceção seja automaticamente “fallback”: seu texto associa o termo à sobrevivência de derivador paralelo. Existe tensão mais direta com “exceção [...] nunca destravando a trava” e com a literalidade do aval. (`CLAUDE.md:17`, `CLAUDE.md:19`, `CLAUDE.md:32`, `CLAUDE.md:34`, `CLAUDE.md:37`)
-
-   A trilha também não é garantida: `trilha` engole falhas de escrita. Assim, uma liberação excepcional pode ficar sem `ABRIU-SEM` observável. (`bin/disjuntor.py:142`, `bin/disjuntor.py:1526`)
-
-5. **“Fila 1” é definição paralela?**
-
-   **Nesta costura, não.** `_fila1_viva` chama diretamente `_itens_andaveis`, que aplica `_item_parado`; o hook usa esse mesmo predicado para decidir quais linhas andam. (`bin/disjuntor.py:1489`, `bin/disjuntor.py:1498`, `bin/hook_stop_fila1.py:158`, `bin/hook_stop_fila1.py:212`, `bin/hook_stop_fila1.py:218`)
-
-   “Todos os andáveis” e “item em curso” são perguntas diferentes: o conjunto vem de OBRAS; o item em curso vem de `ORDEM-VIVA-TOPO`. Não selecionar apenas o item do marcador não constitui divergência de fila. (`bin/hook_stop_fila1.py:179`, `bin/hook_stop_fila1.py:218`, `bin/hook_stop_fila1.py:243`, `bin/hook_stop_fila1.py:1292`)
-
-   B3 decide parada/liberação por reprovações e triagens da obra; não é autoridade de pertencimento à fila 1. (`bin/disjuntor.py:903`, `bin/disjuntor.py:909`, `bin/disjuntor.py:993`)
-
-   Há outro defeito: BACKLOG ausente vira conjunto vazio, liberando sem `ABRIU-SEM`. É falha de fonte interpretada como “fora do universo”, não derivação paralela. (`bin/disjuntor.py:1493`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1507`)
-
-6. **A prova de ESPERANDO é a mesma? Quais mutantes passam?**
-
-   A vivacidade usa a autoridade existente `_prova_pid`: identidade de executável/script, ancestralidade, estabilidade do processo e rejeição de Z/X. A nova função a chama, em vez de copiar esses testes. (`bin/hook_stop_fila1.py:523`, `bin/hook_stop_fila1.py:529`, `bin/hook_stop_fila1.py:535`, `bin/hook_stop_fila1.py:546`, `bin/hook_stop_fila1.py:682`)
-
-   O predicado completo é diferente: CENSO descobre o wrapper por `/proc` e exige raiz, UID, obra exata e papel censo/leitura; ESPERANDO genérico recebe produtor e PID/arquivo declarados. É uma composição específica nova, não uma segunda implementação da vivacidade. Ambos compartilham decisão, memoização, orçamento e liberação final. (`bin/hook_stop_fila1.py:661`, `bin/hook_stop_fila1.py:671`, `bin/hook_stop_fila1.py:682`, `bin/hook_stop_fila1.py:715`, `bin/hook_stop_fila1.py:740`, `bin/hook_stop_fila1.py:1040`, `bin/hook_stop_fila1.py:1283`)
-
-   Os exemplos “aceitar construtor”, “casar prefixo” e “aceitar ausência após morte” têm casos negativos específicos. Não cabe declará-los sobreviventes por simples leitura. (`bin/tests/test_hook_esperando_com_prova.sh:206`, `bin/tests/test_hook_esperando_com_prova.sh:209`, `bin/tests/test_hook_esperando_com_prova.sh:214`)
-
-   Remover a guarda de UID ou a comparação adicional de starttime são candidatos sem caso dedicado no bloco novo; sobrevivência executada desses mutantes: **[nao verificado]**. O teste de morte faz `wait`, não simula reciclagem do PID. (`bin/hook_stop_fila1.py:671`, `bin/hook_stop_fila1.py:685`, `bin/tests/test_hook_esperando_com_prova.sh:31`, `bin/tests/test_hook_esperando_com_prova.sh:194`)
-
-7. **Os quatro mutantes mordem? Há sobreviventes?**
-
-   **Os quatro têm mordida nas asserções:**
-
-   | Mutante | Caso que o atinge |
-   |---|---|
-   | Linha ausente vale zero | Exige rc 1 sem a linha. (`bin/tests/test_censo_antes_da_vaga.sh:70`, `bin/tests/test_censo_antes_da_vaga.sh:175`) |
-   | Não exigir corte | Casos retiram o corte da última pergunta. (`bin/tests/test_censo_antes_da_vaga.sh:71`, `bin/tests/test_censo_antes_da_vaga.sh:72`, `bin/tests/test_censo_antes_da_vaga.sh:176`) |
-   | Agent sem porta | Negativos exigem `deny`, motivo CENSO e PAREI específico. (`bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:112`, `bin/tests/test_censo_antes_da_vaga.sh:177`) |
-   | Codex sem porta | A mesma exigência no construtor sem brief. (`bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:131`, `bin/tests/test_censo_antes_da_vaga.sh:178`) |
-
-   A harness verifica âncora única e exige que a função de casos falhe após a mutação. Resultado da rodada integral: **[nao verificado]**. (`bin/tests/test_censo_antes_da_vaga.sh:165`, `bin/tests/test_censo_antes_da_vaga.sh:170`, `bin/tests/test_censo_antes_da_vaga.sh:173`)
-
-   **Sobrevivente concreto por análise e reprodução em memória:** trocar `for q in perguntas:` por `for q in perguntas[-1:]:`. Todos os negativos de corte alteram a última pergunta; a primeira poderia ficar sem corte. A costura não acrescenta caso com N>0. (`bin/disjuntor.py:1469`, `bin/tests/test_censo_antes_da_vaga.sh:71`, `bin/tests/test_censo_antes_da_vaga.sh:72`, `bin/tests/test_censo_antes_da_vaga.sh:99`, `bin/tests/test_censo_antes_da_vaga.sh:100`)
-
-   Outro candidato em `_censo_nega` é retirar a trilha da exceção: não há cenário que provoque essa exceção e confira `ABRIU-SEM`. A medida só exige rótulos e número decimal, sem duração ou contagem esperada. (`bin/disjuntor.py:1525`, `bin/tests/test_censo_antes_da_vaga.sh:141`, `bin/tests/test_censo_antes_da_vaga.sh:147`)
-
-   A asserção positiva também é insuficiente: `_passa_censo` aceita qualquer saída sem “CENSO”, inclusive negativa B4 ou saída vazia; o status de `_pre` não é conferido. (`bin/tests/test_censo_antes_da_vaga.sh:97`, `bin/tests/test_censo_antes_da_vaga.sh:106`)
-
-8. **Quem escreve, quem lê e onde muda o significado?**
-
-   | Objeto | Escritor | Leitor |
-   |---|---|---|
-   | Brief: CENSO, leitores, escritores, decisões e perguntas | Escritor real/procedência AST: **[nao verificado]** | `censo_do_brief`. (`bin/disjuntor.py:1420`, `bin/disjuntor.py:1438`) |
-   | BACKLOG/OBRAS usado no universo | Escritor real desta evidência: **[nao verificado]** | `_fila1_viva` → `_itens_andaveis`. (`bin/disjuntor.py:1494`, `bin/disjuntor.py:1498`) |
-   | Ambiente `CODEX_OBRA`/`CODEX_PAPEL` do produtor | Fornecido pelo lançador; o wrapper o recebe. (`bin/codex_pergunta.sh:81`) | `_prova_censo` lê `/proc/<pid>/environ`. (`bin/hook_stop_fila1.py:678`, `bin/hook_stop_fila1.py:682`) |
-   | `disjuntor.log` | Porta `trilha`, com carimbo e detalhe limitado a 300 caracteres. (`bin/disjuntor.py:135`, `bin/disjuntor.py:140`) | Leitor geral e `_censo_24h`; hook o proíbe como arquivo de prova de progresso próprio. (`bin/disjuntor.py:1717`, `bin/disjuntor.py:1784`, `bin/hook_stop_fila1.py:585`) |
-   | `CENSO OK`, com obra/via/brief | `_censo_nega`. (`bin/disjuntor.py:1518`) | Conta `ok` e encerra intervalo da obra. (`bin/disjuntor.py:1797`) |
-   | `CENSO ABRIU-SEM`, com obra/via/falha | Exceção de `_censo_nega`. (`bin/disjuntor.py:1525`) | Conta `abertos_sem`. (`bin/disjuntor.py:1801`) |
-   | `NEGOU DISJUNTOR CENSO...` | `main_pretool`, antes do JSON deny. (`bin/disjuntor.py:1636`, `bin/disjuntor.py:1639`) | Inicia intervalo e conta `negados`. (`bin/disjuntor.py:1794`) |
-   | `abertos_sem`, `negados`, `ok`, `ociosa_h`, `esperando` | `_censo_24h`, em memória. (`bin/disjuntor.py:1807`) | `_censo_txt` → `linha` → `gerar_estado`. (`bin/disjuntor.py:1812`, `bin/disjuntor.py:1895`, `bin/gerar_estado.py:280`) |
-   | ESTADO publicado | Gerador grava destino; `relato.sh` entrega o temporário à raspagem. (`bin/gerar_estado.py:390`, `bin/relato.sh:38`, `bin/relato.sh:105`) | Consumo posterior efetivo: **[nao verificado]** |
-   | PAREI censo no topo | O diff instrui a sessão; escritor concreto: **[nao verificado]**. (`bin/disjuntor.py:1521`, `bin/disjuntor.py:1908`) | Stop, handoff e alarme, com sentidos divergentes abaixo. (`bin/hook_stop_fila1.py:703`, `bin/handoff_sessao.sh:108`, `bin/alarme_sessao_ociosa.py:127`) |
-   | Linha automática `(NEGOU CENSO)` no RELATO | `relato_negacao` pela porta `esteira_vigia.no_relato`, preservando o topo. (`bin/disjuntor.py:221`, `bin/disjuntor.py:236`, `app/core/esteira_vigia.py:829`) | Não substitui a linha literal consumida pelo reconhecedor de espera. (`bin/hook_stop_fila1.py:705`) |
-
-   **ESMERIL-SEMANTICA presente nas medidas:** `OK` e `ABRIU-SEM` acontecem antes de B4/`codex_decide` e das validações do wrapper. Provam resultado do check, não abertura efetiva. (`bin/disjuntor.py:1518`, `bin/disjuntor.py:1526`, `bin/disjuntor.py:1588`, `bin/disjuntor.py:1607`, `bin/codex_pergunta.sh:387`)
-
-   `ociosa_h` soma intervalos por obra entre NEGOU e OK/agora; não consulta vaga. Pode somar esperas simultâneas e encerrar em OK seguido de outra negativa. Correspondência com “horas de vaga ociosa”: **[nao verificado]**. Trilha ausente vira zero, embora falha de escrita seja silenciada. (`bin/disjuntor.py:1795`, `bin/disjuntor.py:1800`, `bin/disjuntor.py:1803`, `bin/disjuntor.py:1807`, `bin/disjuntor.py:142`)
-
-   **Divergência no PAREI:** com produtor vivo, Stop libera por espera provada; handoff consulta somente PAREI genérico, que exige `!`, e pode informar “não devolve”. Com produtor morto, o alarme ainda desarma pela substring PAREI, enquanto Stop acusa falta de prova. (`bin/hook_stop_fila1.py:1171`, `bin/hook_stop_fila1.py:1283`, `bin/handoff_sessao.sh:120`, `bin/handoff_sessao.sh:123`, `bin/alarme_sessao_ociosa.py:42`, `bin/alarme_sessao_ociosa.py:127`)
-
-9. **Classes de reprovação presentes.**
-
-   | Classe | Conclusão |
-   |---|---|
-   | Segundo juiz duplicando registrado | **Não demonstrado** para conteúdo do brief; as duas entradas chamam a mesma função. (`bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`) |
-   | Segundo escritor fora da porta | **Não demonstrado** nas novas escritas: trilha e linha automática reutilizam portas existentes. O PAREI obrigatório, contudo, não é escrito pelo diff. (`bin/disjuntor.py:1518`, `bin/disjuntor.py:1639`, `bin/disjuntor.py:236`, `bin/disjuntor.py:1521`) |
-   | Relógio novo fora da borda | **Não demonstrado**: `_censo_24h` recebe `agora`; o carimbo próprio pertence ao escritor já existente. (`bin/disjuntor.py:140`, `bin/disjuntor.py:1774`, `bin/disjuntor.py:1903`) |
-   | Derivação paralela da fila | **Não**, nesta costura: chama o juiz do hook. (`bin/disjuntor.py:1498`) |
-   | Selo/RED sem mordida | Os quatro declarados têm mordida; há sobrevivente de “cada pergunta”, positivos fracos e medida sem valor esperado. RED integral evidenciado: **[n
-
-[truncado em 20000 de 20824 caracteres]
-
-## 09/11 02:23 · sessao 4474b71ff4e2 · DEPLOY-EXCLUSAO-ENVELOPE · leitura · origem=Code
-
-O código confirma a janela entre consultar a marca e reiniciar; ele próprio a nomeia como residual (ii). **A exclusão proposta ainda não está implementada no envelope desta cópia**, que executa o comando diretamente (`bin/deploy.sh:307-314`; `bin/cron_run.sh:9-13`). Estado efetivo de produção, crontab instalado e timers ativos: **[nao verificado]**.
-
-**1. Quem lê e escreve `logs/crons_em_curso/`**
-
-| Componente | Comportamento comprovado |
-|---|---|
-| `cron_run.sh` | Cria uma marca por corrida, com PID na extensão; remove no `EXIT`. A marca cobre comando, gravação do placar, carimbo de fim e tentativa de aviso ao vigia (`bin/cron_run.sh:9-37`). |
-| `deploy.sh` | Lê as marcas, verifica `/proc/PID`, apaga as consideradas órfãs e recusa `--restart`. Consulta antes dos demais portões e novamente imediatamente antes do restart (`bin/deploy.sh:108-117`; `bin/deploy.sh:338-342`). |
-| `contrato_deploy.sh` | Inspeciona o **texto dos scripts**, exigindo referência à marca; não consulta o diretório operacional (`bin/contrato_deploy.sh:79-82`). |
-| Testes | Criam marcas em ambientes falsos e exigem recusa baseada nelas (`bin/tests/test_deploy_reload_gracioso.sh:91`; `bin/tests/test_deploy_reload_gracioso.sh:125-131`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:192-198`). |
-
-Não localizei outro acesso operacional ao diretório em hook, vigias ou `gerar_estado`; acessos indiretos ou externos à cópia: **[nao verificado]**. O hook possui uma guarda diferente, baseada em `logs/sombra.lock` (`bin/hook_stop_fila1.py:785-794`).
-
-Há um consumidor escrito do **significado** da marca: esperar o término da sombra pela ausência de `sombra.sh_-.*` (`CLAUDE.md:92`; `app/docs/INFRA.md:59-60`). O contrato não determina quando criar a marca em relação à aquisição do lock: se criada antes, também representará espera; se depois, não mostrará quem aguarda. Preservação desse significado na implementação: **[nao verificado]**.
-
-Há ainda registro histórico de um gate que escrevia marca própria durante um apply, fora do envelope. O relato cita `logs/gate10/gate10_condicao1.sh`; presença e uso atual desse escritor, assim como sua futura adesão ao lock: **[nao verificado]** (`app/docs/RELATO.md:4472-4489`).
-
-**2. Reiniciar ou recriar cascas: cobertura e escapes**
-
-| Via | Resultado da leitura |
-|---|---|
-| `deploy.sh --restart "motivo"` | É o ramo que o contrato propõe proteger. Hoje exige motivo e chama `docker restart` das três cascas após consultar marcas (`bin/deploy.sh:72-75`; `bin/deploy.sh:338-342`). Implementação do exclusivo: **[nao verificado]**. |
-| Normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia` | Usam HUP; não têm fallback para restart. O código explica que o HUP vai ao master e preserva o comando executado por `docker exec` (`bin/deploy.sh:322-359`). |
-| Reload das 03:30 | Está declarado como `--reload-agendado`, passa pelo envelope e chega ao mesmo HUP. Teria o compartilhado proposto, sem adquirir o exclusivo do ramo `--restart` (`app/config/crons.py:326-327`; `app/config/crons.py:1861-1863`; `bin/deploy.sh:346-359`). |
-| `docker compose up -d`, rebuild/recreate | São explicitamente atos de infra externos ao deploy; escapam do exclusivo descrito (`bin/deploy.sh:20-22`; `bin/deploy.sh:66-69`). O README também contém uma sequência direta de remoção/recriação de `saas_web`; uso atual: **[nao verificado]** (`README.md:35-38`). |
-| Restart automático | Mensageria declara `restart: unless-stopped`, sem participação no lock proposto. Política efetivamente instalada: **[nao verificado]** (`docker-compose.mensageria.yml:9`). |
-| Outros caminhos examinados | Os moldes chamam `--reload-copia`; o vigia de login chama `--sem-migrate`, portanto chegam ao HUP. `recursos.sh` aplica `docker update` (`bin/molde_fatia/cadeia.sh:32`; `bin/molde_fatia/cadeia.sh:48`; `bin/vigia_logins.sh:87`; `bin/recursos.sh:140-145`). |
-
-Reinício manual externo, host, daemon, OOM e configuração efetiva de core/ui: **[nao verificado]**. O compose principal é declarado específico do ambiente e ignorado (`.gitignore:40-41`).
-
-Existe também uma ambiguidade no término do exclusivo: o contrato fala em “prova de casca depois do restart”, mas hoje `prova_de_casca.sh` roda **antes**; depois do restart há espera das cascas e provas de rota (`bin/deploy.sh:292-298`; `bin/deploy.sh:380-418`).
-
-**3. Disparos fora de `cron_run.sh`**
-
-**`RAW` não significa sem envelope:** todas as entradas de `CRONS`, inclusive `RAW`, passam por `_run`; cada elo executado também entra em `cron_run.sh` (`app/config/crons.py:1483-1486`; `app/config/crons.py:1860-1874`; `bin/encadeado.sh:102-104`).
-
-Existem, porém, caminhos externos:
-
-- **Despachante da corrente:** nasce depois que o envelope da raiz terminou e consulta `saas_core` para obter os elos antes de entrar em qualquer envelope. Essa consulta escapa do compartilhado; se falhar, registra ALARME e sai 2 sem passar pelo vigia do envelope (`app/config/crons.py:1884-1885`; `bin/encadeado.sh:40-52`).
-- **Cron avulso em `/etc/cron.d`:** `deploy_agendado.sh` gera chamada direta a si próprio e executa as esteiras diretamente. Não ganha compartilhado automaticamente (`bin/deploy_agendado.sh:54-57`; `bin/deploy_agendado.sh:63-73`).
-- **Timers:** esteira, fabricante, integrador, relato e teto dia/noite têm `ExecStart` direto, sem envelope (`bin/hasner-esteira.service:15`; `bin/hasner-fabricante.service:14`; `bin/hasner-integrador.service:13`; `bin/hasner-relato.service:15`; `bin/hasner-teto-dia.service:7`; `bin/hasner-teto-noite.service:7`).
-- **Exemplo concreto de timer usando casca:** relato chama `relato_nomes.sh`, que faz `docker exec saas_core` diretamente (`bin/relato.sh:32`; `bin/relato_nomes.sh:17-21`).
-- **Chamadas manuais:** `lavrar_deslogados.sh` mantém uma porta manual com `docker exec` direto (`bin/lavrar_deslogados.sh:11-18`).
-
-Crontab cru, cron.d e timers efetivamente instalados em produção: **[nao verificado]**. Portanto, “todo cron” não está demonstrado como cobertura global; o código demonstra cobertura dos comandos envelopados e dos elos que chegam ao envelope (`app/config/crons.py:1860-1885`; `bin/encadeado.sh:102-104`).
-
-**4. Crons longos e recusa prolongada**
-
-Não localizei `placar.jsonl` na cópia; durações típicas atuais: **[nao verificado]**. Existe um snapshot datado de **31/10**, calculado como **p95 × 1,5, piso 30 s**, preservando medidas antigas quando faltam novas; os números abaixo não são duração típica bruta nem limite de execução (`app/config/crons_duracao.json:106-110`; `bin/crons_duracao.py:69-95`).
-
-| Cron | Medida com folga | Fonte |
-|---|---:|---|
-| Sombra | 5.188 s — 86min28s | `app/config/crons_duracao.json:78` |
-| Noturno | 1.800 s — 30min | `app/config/crons_duracao.json:56` |
-| `lavrar_he_pendente` | 1.274 s — 21min14s | `app/config/crons_duracao.json:43` |
-| Cartório | 760 s — 12min40s | `app/config/crons_duracao.json:63` |
-| Auditoria de invariantes | 420 s — 7min | `app/config/crons_duracao.json:11` |
-| Esmeril / scores | 340 s / 310 s | `app/config/crons_duracao.json:28`; `app/config/crons_duracao.json:14` |
-
-A sombra é um único envelope para `--refazer && --bloco`. A corrente não mantém um envelope contínuo: cada elo espera carimbos antes de entrar no seu próprio envelope (`app/config/crons.py:350-352`; `app/config/crons.py:1884-1885`; `bin/encadeado.sh:84-104`).
-
-O backup percorre schemas e faz dumps sem timeout declarado nesses scripts; seu valor de 30 s coincide com o piso e não prova rapidez nem duração de horas (`scripts/backup_all.sh:5-8`; `scripts/backup_tenant.sh:10-12`; `app/config/crons_duracao.json:12`).
-
-O `vigia_arvore` pode permanecer bastante tempo: espera pelo retrato, pode aguardar até 3.600 s pela trava da suíte e executa suítes/repetições em primeiro plano. Horas são possíveis pelo fluxo; frequência e duração típica: **[nao verificado]** (`bin/vigia_arvore.sh:38-43`; `bin/vigia_arvore.sh:83-106`; `bin/trava_teste.sh:22-38`).
-
-**Isso já recusa restart hoje:** a marca permanece durante esses comandos e o deploy recusa enquanto encontra seu PID vivo. Mantido o escopo, a duração longa não é uma restrição nova do compartilhado; a mudança fecha a janela entre consulta e restart. “Sempre recusado” não é demonstrável sem dados de execução (`bin/cron_run.sh:9-11`; `bin/deploy.sh:108-113`; `bin/deploy.sh:341-342`).
-
-**5. Esperar 600 s, sair 75, corrente e TI**
-
-**Rc 75 é falha para o envelope atual**, se chegar ao seu epílogo: grava `exit:75`, não escreve novo carimbo de fim, tenta avisar `cron_quebrado` e termina 75. Só 0 e 2 são aceitos como conclusão (`bin/cron_run.sh:11-38`). O serviço destina a pauta à TI (`app/core/services/crons_quebrados.py:57-73`).
-
-Há quatro ressalvas:
-
-- Um **`exit 75` antecipado** na aquisição do futuro lock pularia placar e aviso. A implementação precisa encaminhar essa falha ao epílogo; isso ainda está **[nao verificado]** (`bin/cron_run.sh:11-35`).
-- A pauta é uma **tentativa** via `docker exec`, com saída ocultada e flag criada somente após sucesso. Pauta efetivamente criada: **[nao verificado]** (`bin/cron_run.sh:30-35`).
-- A corrente é chamada mesmo se a raiz falhar, por causa do `;`. Sem carimbo, o dependente espera, alarma e sai 2 **antes do envelope**; esse timeout não gera automaticamente pauta daquele elo. O percurso continua nos elos seguintes (`app/config/crons.py:1884-1885`; `bin/encadeado.sh:64-68`; `bin/encadeado.sh:84-104`).
-- Os carimbos são por dia. Um sucesso anterior no mesmo dia não é apagado por rc 75 posterior e pode satisfazer o dependente (`bin/cron_run.sh:22-25`; `bin/encadeado.sh:81-89`).
-
-O contador atual considera a última corrida em **26 h**; não substitui a nova contagem contratual de ocorrências de rc 75 por lock em **24 h** (`app/core/services/crons_quebrados.py:17-47`).
-
-Também falta definir `dur` versus `espera_lock`: conservar o relógio inicial antes da espera faria essa espera entrar no p95, pois o medidor não desconta `espera_lock` nem filtra falhas (`bin/cron_run.sh:7-13`; `bin/crons_duracao.py:69-76`).
-
-**6. Confronto com a lei escrita**
-
-- **“Recusa, não espera”: não há contradição demonstrada.** A regra é dirigida ao deploy `--restart`; o contrato faz o cron esperar e mantém o deploy não bloqueante. O mecanismo proibido é esperar e depois reiniciar por cima (`bin/deploy.sh:103-117`; `bin/contrato_deploy.sh:50-51`).
-- **Seção 2:** permanece compatível se conservar HUP automático, restart manual e os demais portões; essa preservação futura está **[nao verificado]** (`CLAUDE.md:90`).
-- **Seção 7 / lap-67:** o lock não exige mudar a fonte declarativa dos crons; afirmar equivalência com o instalado continua **[nao verificado]** (`CLAUDE.md:236-239`; `app/docs/LAPIDES.md:736-741`).
-- **Lap-68:** a corrente deve continuar dependendo dos arquivos de fim. Rc 75 sem novo carimbo respeita essa condição, com a ressalva dos carimbos anteriores do mesmo dia (`CLAUDE.md:240-242`; `app/docs/LAPIDES.md:745-751`; `bin/encadeado.sh:81-94`).
-- **GATE TEMPORAL:** esperar no processo do cron por exclusão em arquivo não demonstra retorno de `pgrep` nem de esperador de sessão do Code (`CLAUDE.md:204`; implementação proposta **[nao verificado]**).
-- **Rc 75 “não é vermelho”:** essa exceção está no capítulo da suíte; o envelope dos crons aceita somente 0/2. Generalizá-la aos crons contradiz o tratamento atual (`CLAUDE.md:95-104`; `bin/cron_run.sh:27-35`).
-
-Os selos atuais precisam acompanhar a troca de autoridade: hoje exigem referência à marca e simulam cron vivo criando apenas arquivo, sem adquirir o futuro compartilhado (`bin/contrato_deploy.sh:79-82`; `bin/tests/test_deploy_reload_gracioso.sh:125-131`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:192-198`).
-
-Por fim, o contrato não remove expressamente a recusa residual de `--restart` com migration pendente no core. Essa recusa continua escrita e ocorre antes da aquisição final proposta; sua retirada ou alteração não está comprovada (`bin/deploy.sh:219-228`).
-
-## 09/11 02:22 · sessao edca7285fe1d · - · - · origem=Ronald (tmux)
-
-**Q4 — crons longos e efeito no restart**
-
-Não há duração atual de produção comprovada pelo anexo; `placar.jsonl` de produção está [nao verificado]. A cópia contém um snapshot declarado como gerado em **31/10**, janela de sete dias, `p95 × 1,5`, piso de 30 segundos — não é duração típica bruta nem teto de execução (`app/config/crons_duracao.json:106-110`; `bin/crons_duracao.py:69-76`). Medições antigas são preservadas quando faltam novas (`bin/crons_duracao.py:83-95`).
-
-| Cron | Medida versionada com folga | Fonte |
-|---|---:|---|
-| `sombra.sh` | 5188 s ≈ 86 min | `app/config/crons_duracao.json:78` |
-| `noturno.py` | 1800 s = 30 min | `app/config/crons_duracao.json:56` |
-| `lavrar_he_pendente` | 1274 s ≈ 21 min | `app/config/crons_duracao.json:43` |
-| `processar_cartorio` | 760 s ≈ 13 min | `app/config/crons_duracao.json:63` |
-| `auditar_invariantes_chamados` | 420 s = 7 min | `app/config/crons_duracao.json:11` |
-| `esmeril_espelho` | 340 s | `app/config/crons_duracao.json:28` |
-| `calcular_scores` | 310 s | `app/config/crons_duracao.json:14` |
-| `backup_all.sh` | 30 s, sujeito ao piso | `app/config/crons_duracao.json:12,110` |
-
-O backup percorre os schemas e executa um dump por schema; não há timeout declarado nesses scripts. Isso permite demora, mas não prova backup de horas (`scripts/backup_all.sh:5-8`; `scripts/backup_tenant.sh:10-12`).
-
-A sombra é **um único envelope** para `--refazer && --bloco`; portanto, o compartilhado cobriria ambos e suas esperas internas (`app/config/crons.py:350-352,1861-1863`). A trava própria da sombra pode esperar 1800 s antes do trabalho (`bin/sombra_trava.sh:18,26-28`).
-
-A corrente **não é um envelope contínuo**: o render coloca `; encadeado.sh --corrente ...` depois do `cron_run` da raiz (`app/config/crons.py:1873-1885`). A espera dos carimbos acontece antes de entrar no envelope de cada elo; o compartilhado seria adquirido apenas ao executar cada elo (`bin/encadeado.sh:84-104`). Portanto, somar todos os elos não prova um compartilhado contínuo de horas.
-
-Há um caso adicional: `vigia_arvore`. O fallback declarado de 3300 s é **sobrescrito**, não combinado por máximo, pelo JSON que registra 30 s (`app/config/crons.py:139,159-160`; `app/config/crons_duracao.json:89`). O código pode esperar 600 s pelo retrato, esperar até 3600 s pela trava da suíte e executar suítes em primeiro plano, incluindo repetições; não há timeout global para a suíte (`bin/vigia_arvore.sh:38-43,83-88,106,131-135`; `bin/trava_teste.sh:22,35-38`). Horas são possíveis pelo código; duração típica de horas e restart “sempre recusado” permanecem [nao verificado].
-
-**Esses tempos já bloqueiam o restart por marca:** ela nasce antes do comando e fica até a saída; o deploy recusa qualquer marca cujo PID exista (`bin/cron_run.sh:9-11`; `bin/deploy.sh:108-113`). Mantido o mesmo escopo, o compartilhado não acrescenta a duração do cron à recusa; acrescenta exclusão atômica na janela que hoje existe entre verificar e reiniciar (`bin/deploy.sh:341-342`).
-
-**Q5 — rc 75, corrente e TI**
-
-Se **o comando devolve 75 ao epílogo atual**, o envelope grava `exit:75`, não escreve `logs/fim/`, tenta chamar `cron_quebrado` e sai 75 (`bin/cron_run.sh:11-13,22-25,29-38`). O serviço classifica qualquer saída diferente de 0 e 2 como quebrado e escreve pauta destinada a TI (`app/core/services/crons_quebrados.py:16,45-47,57-73`).
-
-Mas o contrato ainda precisa determinar o caminho de falha da aquisição: um **`exit 75` antecipado**, antes desse epílogo, não grava placar nem chama vigia. A aquisição proposta não está implementada em `cron_run.sh`; o fluxo atual executa diretamente o comando (`bin/cron_run.sh:7-13`). Garantia futura de passar RC=75 pelo epílogo: [nao verificado].
-
-A pauta não é garantida pelo retorno 75 sozinho: o envelope usa `docker exec`, oculta sua saída e cria a flag apenas se a chamada der certo; com flag já existente, não repete a chamada (`bin/cron_run.sh:30-35`). Pauta efetivamente criada sem acesso ao banco/log: [nao verificado].
-
-A raiz usa `;`, portanto a corrente é chamada mesmo depois de rc75 (`app/config/crons.py:1884-1885`). Sem carimbo do gatilho, cada dependente espera, escreve ALARME e sai 2 sem executar seu comando (`bin/encadeado.sh:84-97`). Essa expiração acontece **fora do cron_run**, logo não gera automaticamente placar/vigia daquele elo; o percorrimento continua nos elos seguintes (`bin/encadeado.sh:64-68,102-104`).
-
-Há uma ressalva: carimbos são por **dia**, não por tentativa. O envelope não remove carimbo de sucesso anterior; o encadeado consulta apenas sua existência. Uma repetição com rc75 pode deixar disponível um carimbo bem-sucedido anterior do mesmo dia e permitir o dependente (`bin/cron_run.sh:22-25`; `bin/encadeado.sh:81-89`). Isso já é propriedade do protocolo atual.
-
-O contador atual de quebrados usa a corrida mais recente nas últimas **26 horas**, não o contador contratual de rc75 por lock em 24 h (`app/core/services/crons_quebrados.py:17,24-47`).
-
-**Ressalva de medição:** se o futuro envelope conservar `T0` antes da espera e `dur=T1-T0`, a espera entrará na duração usada pelo medidor; ele não filtra por `exit` nem desconta `espera_lock`. Assim, até timeouts rc75 podem inflar o p95 e alterar horários derivados (`bin/cron_run.sh:7,13`; `bin/crons_duracao.py:69-76`). A definição futura de `dur` versus `espera_lock` está [nao verificado].
-
-## 09/11 02:22 · sessao 00b70fe1c898 · - · - · origem=Ronald (tmux)
-
-**Q2 — Cobertura dos reinícios**
-
-| Via | O que a cópia implementa | Cobertura pelo contrato proposto |
-|---|---|---|
-| `deploy.sh --restart "motivo"` | Modo manual, exige motivo; verifica marcas antes dos portões e novamente imediatamente antes de `docker restart saas_core saas_ui mensageria`. A própria cópia documenta a janela entre amostragem e restart. (`bin/deploy.sh:72-75,108-117,310-314,338-342`) | É a via nomeada pelo contrato fornecido; sua implementação com flock ainda é [nao verificado]. |
-| Deploy normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia` | Convergem para HUP das três cascas, com troca dos workers; falha do HUP não provoca fallback para restart. (`bin/deploy.sh:322-337,343-372`) | Ficam fora do exclusivo descrito, mas o código explica que `docker exec` não recebe esse HUP, destinado ao master PID 1. (`bin/deploy.sh:327-329`) Comportamento real das cascas de produção: [nao verificado]. |
-| Reload diário 03:30 | `RAW('30 3 * * *', ...deploy.sh --reload-agendado)`; RAW também recebe `cron_run.sh`. (`app/config/crons.py:326-327,1475,1483-1486,1860-1864`) O modo usa o ramo HUP. (`bin/deploy.sh:65,346-359`) | Pelo contrato, teria o compartilhado do envelope, mas não o exclusivo do `--restart`. A premissa de que esse reload mata o cron não é sustentada pelo código: ele descreve preservação do exec. (`bin/deploy.sh:327-329`) |
-| `docker compose up -d`, rebuild/recreate | Explicitamente fora de `deploy.sh`; imagem, command e Env novos precisam de ato de infra. (`bin/deploy.sh:20-22,66-69`) README ainda ensina `docker rm -f saas_web && docker-compose up -d --no-deps web`. (`README.md:35-38`) | Escapam: não chamam o exclusivo descrito no contrato. Execução atual desses comandos: [nao verificado]. |
-| Restart automático da casca | Mensageria declara `restart: unless-stopped`. (`docker-compose.mensageria.yml:9`) | Não há aquisição de flock nessa definição; política/comportamento vivo: [nao verificado]. |
-| Outros scripts examinados | `recursos.sh` aplica `docker update`, não restart; `db_teste.sh` e `sombra_db.sh` criam ou dão start nos próprios bancos auxiliares. (`bin/recursos.sh:140-145`; `bin/db_teste.sh:49-70`; `bin/sombra_db.sh:86-100`) | Esses trechos não reiniciam core/ui/mensageria. Outras vias externas, reinício de host/daemon, OOM e ações manuais: [nao verificado]. |
-
-O `docker-compose.yml` principal não está na cópia e é declarado específico de produção/dev e ignorado; não se pode provar daqui a configuração core/ui instalada. (`.gitignore:40-41`; ausência na busca da cópia: [nao verificado])
-
-As cadeias de fatia e auto-cura chamam `--reload-copia` e `--sem-sombra`, portanto chegam ao HUP, não a um restart adicional. (`bin/molde_fatia/cadeia.sh:32,48,89`; `bin/molde_autocura/cadeia.sh:31,45,86`; `bin/deploy.sh:338-359`) O auto-revert do vigia de login chama `--sem-migrate`, igualmente HUP. (`bin/vigia_logins.sh:87`; `bin/deploy.sh:338-359`)
-
-**Q3 — Existem disparos fora do envelope**
-
-- **Todos os `CRONS` declarados, inclusive `RAW`, são envelopados** por `_run`; os elos também entram por `cron_run.sh`. (`app/config/crons.py:1475,1483-1486,1860-1874`; `bin/encadeado.sh:102-104`) Crontab instalado de produção idêntico ao render: [nao verificado].
-- **O despachante da corrente escapa antes dos elos:** a linha gerada executa `encadeado.sh --corrente` depois do wrapper da raiz; esse despachante faz `docker exec saas_core ... crons corrente` antes de entrar no wrapper dos elos. (`app/config/crons.py:1884-1885`; `bin/encadeado.sh:40-45,64,102-104`) Se esse render falhar, apenas escreve ALARME e sai 2: não chega a `cron_run.sh`/`cron_quebrado`. (`bin/encadeado.sh:47-52`) Portanto, o contrato de lock apenas no envelope **não protege o próprio nascimento da corrente** desse restart.
-- **Cron avulso em `/etc/cron.d`:** `deploy_agendado.sh agendar` grava chamada direta a `deploy_agendado.sh rodar`, que executa as esteiras diretamente. (`bin/deploy_agendado.sh:54-57,63-73`) Esse disparo não passa pelo envelope; se a esteira chama `deploy.sh --restart`, terá a proteção do lado deploy prevista pelo contrato, mas seus demais comandos não ganham compartilhado automaticamente. Conteúdo e instalação dos cron.d vivos: [nao verificado].
-- **Timers systemd diretos:** esteira, fabricante, integrador, relato e teto dia/noite chamam scripts em `ExecStart` diretamente, sem `cron_run.sh`. (`bin/hasner-esteira.service:15`; `bin/hasner-fabricante.service:14`; `bin/hasner-integrador.service:13`; `bin/hasner-relato.service:15`; `bin/hasner-teto-dia.service:7`; `bin/hasner-teto-noite.service:7`) Os respectivos disparos estão declarados nos timers. (`bin/hasner-esteira.timer:7`; `bin/hasner-fabricante.timer:8`; `bin/hasner-integrador.timer:6`; `bin/hasner-relato.timer:5-6`; `bin/hasner-teto-dia.timer:5`; `bin/hasner-teto-noite.timer:5`) Instalação/ativação viva: [nao verificado].
-- **Exemplo concreto de timer que usa uma casca:** `hasner-relato.service` chama `relato.sh`; este chama `relato_nomes.sh`, que executa Django no core diretamente. (`bin/hasner-relato.service:15`; `bin/relato.sh:32`; `bin/relato_nomes.sh:17-21`) Esse trabalho escapa do compartilhado proposto; não é correto concluir que todo timer listado executa cron de negócio.
-- **Chamadas manuais existentes também escapam:** `lavrar_deslogados.sh` documenta sua chamada manual e executa diretamente `docker exec ... lavrar_deslogados`; o agendamento normal desse comando pertence à corrente. (`bin/lavrar_deslogados.sh:11-18`) `gate_cobranca.sh` executa sondas e `cartao_x_txt_divergentes` diretamente; `placar_code.sh` executa diversos management commands diretamente. (`bin/gate_cobranca.sh:36-40`; `bin/placar_code.sh:215-218,238-259`) Uso efetivo dessas portas durante restart: [nao verificado].
-
-Não há prova de crontab cru atualmente instalado; os exemplos antigos de linhas cruas em docstrings de commands são instruções, não evidência de instalação. (`app/ponto/management/commands/detectar_ausencias.py:9`; `app/ponto/management/commands/processar_alertas_avancados.py:7`; situação instalada: [nao verificado])
-
-_2992 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2999 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
