@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 14:02** · publicado em **09/11/2026 14:02** (UTC-3)
+> Ultima resposta processada: **09/11/2026 14:06** · publicado em **09/11/2026 14:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 14:06 · sessao 8e2f0f5eb602 · CODEX-2-RAIAS-PORTAO-CPU · verificador · origem=Code
+
+**Há ressalvas PROCEDENTES sobre limpeza após SIGKILL, semântica de `--toca` e medição da ocupação da trava.** A união dos testes não apresenta perda aparente nem nomes duplicados; a morte efetiva dos mutantes permanece **[nao verificado]**. Evidências abaixo. [nao verificado]
+
+“PROCEDENTE” indica achado; “NAO PROCEDE” descarta a acusação no trecho examinado.
+
+| Item | Parecer | Evidência |
+|---|---|---|
+| **1. Corrida na admissão** | **NAO PROCEDE entre wrappers novos.** Ordem: meta → prender própria vaga → consultar outra → portões → publicar estado → soltar meta. | `bin/codex_pergunta.sh:378`, `bin/codex_pergunta.sh:381`, `bin/codex_pergunta.sh:388`, `bin/codex_pergunta.sh:390` |
+| Limpeza em rc3/timeout | **NAO PROCEDE falha no caminho normal:** retorno do `timeout` segue pelo inventário e pelo EXIT; inventário irregular vence com rc3. | `bin/codex_pergunta.sh:549`, `bin/codex_pergunta.sh:558`, `bin/codex_pergunta.sh:585`, `bin/codex_pergunta.sh:607` |
+| Limpeza após SIGKILL | **PROCEDENTE:** remoção depende exclusivamente de EXIT; `.estado` pode ficar órfão. Estado sozinho não prende vaga: vida é julgada pelo flock. FD6 segue aberto na chamada dos filhos; duração efetiva dessa retenção **[nao verificado]**. | `bin/codex_pergunta.sh:236`, `bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:254`, `bin/codex_pergunta.sh:539` |
+| Limpeza sob meta | **PROCEDENTE como recusa conservadora:** remoção ocorre fora da meta; outra admissão pode encontrar flock ainda ocupado e estado já ausente, recusando. | `bin/codex_pergunta.sh:236`, `bin/codex_pergunta.sh:294` |
+| **2. Fonte e limite do load5** | **NAO PROCEDE fonte diferente:** `/proc/loadavg`, segundo campo, exige estritamente `< nproc-2`. | `bin/codex_pergunta.sh:118`, `bin/codex_pergunta.sh:295`, `bin/codex_pergunta.sh:296` |
+| “Na abertura” | Medido durante a admissão. **PROCEDENTE se significa início efetivo do CLI:** depois existem desligador, fila de slots e trava da resposta; a revalidação não relê load/hora. | `bin/codex_pergunta.sh:301`, `bin/codex_pergunta.sh:483`, `bin/codex_pergunta.sh:510`, `bin/codex_pergunta.sh:528` |
+| Janela | Implementa **[06:00,07:30)**: 06:00 recusa; 07:30 aceita. Selo cobra esses extremos. Inclusividade pretendida pelo aval: **[nao verificado]**. | `bin/codex_pergunta.sh:298`, `bin/codex_pergunta.sh:299`, `bin/tests/test_codex_pergunta.sh:524` |
+| Desligador ilegível | **NAO PROCEDE abertura:** exceção retorna2; wrapper recusa qualquer nãozero. Média `>7` ou uso `>85` com reset futuro desliga; igualdade passa. | `bin/codex_vagas_medida.py:85`, `bin/codex_vagas_medida.py:91`, `bin/codex_vagas_medida.py:94`, `bin/codex_pergunta.sh:301` |
+| Terceira chamada | **NAO PROCEDE ultrapassar teto:** ambos flocks ocupados causam rc2/VAGA2. | `bin/codex_pergunta.sh:381`, `bin/codex_pergunta.sh:384`, `bin/codex_pergunta.sh:250` |
+| **3. Obrigatoriedade e cobrança de `--toca`** | **NAO PROCEDE ausência de guarda:** obrigatório no construtor; TOCADO fora do próprio alcance ou cruzando o da outra viva produz rc3. | `bin/codex_pergunta.sh:319`, `bin/codex_pergunta.sh:282`, `bin/codex_pergunta.sh:285`, `bin/codex_pergunta.sh:572` |
+| Arquivo × prefixo | **PROCEDENTE se sem `/` significa arquivo exato:** `rstrip("/")` apaga a distinção; `app/folha` e `app/folha/` cobrem descendentes igualmente, embora a mensagem diga “pasta termina em /”. **NAO PROCEDE se todo argumento é prefixo por componente:** nessa interpretação o comparador é consistente e não confunde `folha` com `folhas`. | `bin/codex_pergunta.sh:262`, `bin/codex_pergunta.sh:263`, `bin/codex_pergunta.sh:319` |
+| **4. Protegidos e cabeçalho** | **NAO PROCEDE segundo juiz/lista operacional:** PROTEGIDOS alimenta o inventário; cabeçalho extrai texto dessa mesma fonte. | `bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:162`, `bin/codex_pergunta.sh:242` |
+| Writable roots e Claude | **NAO PROCEDE liberação geral:** root extra `<wt>/bin` somente com `--toca bin/...`; `.claude/` é proibido. Entradas executáveis configuradas estão na lista protegida; fecho de imports foi deliberadamente excluído. | `bin/codex_pergunta.sh:537`, `bin/codex_pergunta.sh:541`, `bin/codex_pergunta.sh:147`, `bin/codex_pergunta.sh:156`; `.claude/settings.json:9`, `.claude/settings.json:20`, `.claude/settings.json:44`, `.claude/settings.json:68`, `.claude/settings.json:76` |
+| **6. Histórico e crescimento** | **NAO PROCEDE segundo escritor operacional:** append centralizado após flock. Crescimento sem limite nesse código; leitor percorre tudo. Rotação externa **[nao verificado]**. | `bin/trava_teste.sh:27`, `bin/trava_teste.sh:40`, `bin/trava_teste.sh:45`, `bin/codex_vagas_medida.py:107` |
+| Ocupação medida | **PROCEDENTE:** trava é global, histórico é por raiz da cópia; outras worktrees podem ficar fora da medida. `ini` órfão conta até agora, mesmo sem confirmação de flock; falha de append é ignorada. | `bin/trava_teste.sh:21`, `bin/trava_teste.sh:26`, `bin/trava_teste.sh:27`, `bin/codex_vagas_medida.py:103`, `bin/codex_vagas_medida.py:124` |
+
+**5. Leitores de `chamadas.log`: NAO PROCEDE interpretar `vaga=N` como rc/duração nos leitores encontrados.**
+
+| Leitor | Posição usada / evidência |
+|---|---|
+| `codex_limite_estado.py` | Sessão=`p[6]`, rc=`p[7]`, duração=`p[8]`; aceita campos adicionais. `bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:67` |
+| `gerar_codex_estado.py` / `gerar_estado.py` | Delegam ao leitor anterior. `bin/gerar_codex_estado.py:176`, `bin/gerar_estado.py:269` |
+| `disjuntor.py` | Delega contagem, tokens e inícios à mesma autoridade. `bin/disjuntor.py:2023`, `bin/disjuntor.py:2031`, `bin/disjuntor.py:2121` |
+| Selos posicionais | Sonda usa `$8`/`$9`; pergunta usa `$7`/`$8`. Último campo é usado explicitamente como vaga. `bin/tests/test_codex_sonda.sh:98`, `bin/tests/test_codex_pergunta.sh:335`, `bin/tests/test_codex_pergunta.sh:495` |
+| Nova medida | Usa `p[-1]` explicitamente como `vaga=2`. Portanto o comentário antigo “leitor único” ficou desatualizado. `bin/codex_vagas_medida.py:139`, `bin/gerar_codex_estado.py:41` |
+
+| **7. União e selos** | Parecer |
+|---|---|
+| Perdeu caso / duplicou nome | **NAO PROCEDE na comparação estática com o diff fornecido:** 90 casos/funções, sem duplicação; fake `--censo`, casos I1 e novos v2/toca/bin coexistem. Antigo `p_bin` foi substituído pela permissão e proteção seletivas. Comparação integral com ancestrais **[nao verificado]**. `bin/tests/test_codex_pergunta.sh:82`, `bin/tests/test_codex_pergunta.sh:248`, `bin/tests/test_codex_pergunta.sh:575`, `bin/tests/test_codex_pergunta.sh:601` |
+| Mutante sem mordida | **NAO PROCEDE ausência estática:** 93 entradas, sem linha duplicada, com casos existentes. Há cobrança específica de rc/motivo/não chamada; PROIBIDO; VAGA2/log; protegidos individuais. `bin/tests/test_codex_pergunta.sh:163`, `bin/tests/test_codex_pergunta.sh:169`, `bin/tests/test_codex_pergunta.sh:498`, `bin/tests/test_codex_pergunta.sh:580`, `bin/tests/test_codex_pergunta.sh:630` |
+| Cada morte foi específica? | **PROCEDENTE a ressalva:** controlador aceita qualquer texto `FALHA`, sem exigir a asserção esperada. Execução e morte efetiva dos 93: **[nao verificado]**. `bin/tests/test_codex_pergunta.sh:740` |
+| `CODEX_TESTE_*` fora do selo | **NAO PROCEDE uso dentro de Git ou com vivo de produção:** recusa antes de consumir fontes falsas. Porém a guarda reconhece topologia, não identidade do selo; qualquer cópia fora de Git com vivo fora de produção satisfaz essa condição. Selo testa apenas o ramo Git. `bin/codex_pergunta.sh:112`, `bin/codex_pergunta.sh:118`, `bin/tests/test_codex_pergunta.sh:588` |
+
+| **8. Estado novo** | Quem escreve | Quem lê |
+|---|---|---|
+| `construtor.vaga2` | Wrapper abre/prende; `_viva` também abre para sondagem. `bin/codex_pergunta.sh:383`, `bin/codex_pergunta.sh:254` | flock na admissão/fim. `bin/codex_pergunta.sh:388`, `bin/codex_pergunta.sh:564` |
+| `construtor.vaga{1,2}.estado` | Wrapper publica por rename e remove no EXIT; selo fabrica estados isolados. `bin/codex_pergunta.sh:309`, `bin/codex_pergunta.sh:236`, `bin/tests/test_codex_pergunta.sh:484` | `_toca_de`, abertura/fim; selo verifica ciclo. `bin/codex_pergunta.sh:289`, `bin/codex_pergunta.sh:293`, `bin/codex_pergunta.sh:565`, `bin/tests/test_codex_pergunta.sh:510` |
+| `vaga2.log` | `_recusa_v2`. `bin/codex_pergunta.sh:249` | Medida e selo. `bin/codex_vagas_medida.py:141`, `bin/tests/test_codex_pergunta.sh:491` |
+| `trava_teste.hist` | `_hist`; selo escreve somente histórico isolado. `bin/trava_teste.sh:27`, `bin/tests/test_trava_teste.sh:103`, `bin/tests/test_trava_teste.sh:142` | Medida e selo isolado. `bin/codex_vagas_medida.py:107`, `bin/tests/test_trava_teste.sh:145` |
+
+| Classe anteriormente reprovadora | Resultado |
+|---|---|
+| Segundo juiz que duplica registrado | **NAO PROCEDE nos sítios examinados:** inventário único; leitura semanal reutilizada. `bin/codex_pergunta.sh:136`, `bin/codex_vagas_medida.py:75` |
+| Segundo escritor fora da porta | **NAO PROCEDE nos estados novos:** escritores identificados acima; nova medida apenas lê cota. `bin/codex_vagas_medida.py:148`, `bin/statusline_cota.py:54` |
+| Relógio fora da borda | **NAO PROCEDE na função do desligador:** recebe `agora` do CLI. Ressalva de envelhecimento antes da execução permanece. `bin/codex_vagas_medida.py:83`, `bin/codex_vagas_medida.py:201`, `bin/codex_pergunta.sh:298` |
+| Derivação paralela de fonte única | **NAO PROCEDE para quota/protegidos:** delegação e extração da fonte original. **PROCEDENTE fragmentação da medida global da trava.** `bin/codex_vagas_medida.py:76`, `bin/codex_pergunta.sh:242`, `bin/trava_teste.sh:26` |
+| Selo sem mordida | **PROCEDENTE a fragilidade do critério de morte**, sem prova de mutante sobrevivente. `bin/tests/test_codex_pergunta.sh:740` |
+| Ordem de trava | **NAO PROCEDE deadlock demonstrado:** admissão usa tentativas não bloqueantes das vagas; espera pela meta é limitada. `bin/codex_pergunta.sh:379`, `bin/codex_pergunta.sh:381`, `bin/codex_pergunta.sh:384`, `bin/codex_pergunta.sh:563` |
+| Campo com dois significados | **PROCEDENTE sob interpretação arquivo exato; NAO PROCEDE sob prefixo por componente.** `bin/codex_pergunta.sh:262`, `bin/codex_pergunta.sh:319` |
+
+## 09/11 14:04 · sessao 8eb5063e6871 · - · - · origem=Ronald (tmux)
+
+| Item | Resultado fundamentado |
+|---|---|
+| Corrida na admissão | **NAO PROCEDE entre wrappers novos**: META é presa antes das vagas, cobre leitura da outra, portões e publicação; solta depois. Ordem: META → vaga; nenhuma espera bloqueante pela vaga. `bin/codex_pergunta.sh:378`, `:381`, `:388`, `:390`, `:391`. |
+| Limpeza universal / SIGKILL | **PROCEDENTE**: só há `trap EXIT`; remoção depende dele. SIGKILL deixa `.estado` órfão; não existe recuperação explícita, apenas substituição na publicação seguinte. `bin/codex_pergunta.sh:236`, `:240`, `:309`. FD6 permanece aberto na chamada de timeout/Codex; sobrevivência efetiva em descendentes [nao verificado]. `:380`, `:539`. |
+| Limpeza concorrente | **PROCEDENTE como recusa conservadora**: `_saida` remove estado fora da META; outra chamada pode observar flock ocupado e estado ausente, recusando. `bin/codex_pergunta.sh:236`, `:254`, `:294`. Não demonstra terceira vaga. `:384`. |
+| rc3 / timeout | Caminhos normais passam pelo inventário e EXIT; inventário irregular vence o rc original com rc3. `bin/codex_pergunta.sh:549`, `:558`, `:585`, `:607`, `:240`. Não cobre matar o próprio wrapper. `:240`. |
+| Load / relógio | Fonte real `/proc/loadavg`, campo 2; exige `< nproc-2`. `bin/codex_pergunta.sh:118`, `:295`, `:296`. **PROCEDENTE quanto a envelhecimento antes do início efetivo**: leitura ocorre antes de desligador, fila global e trava da resposta; revalidação não relê portões. `:298`, `:301`, `:483`, `:510`, `:528`. Se “abertura” significa a admissão da vaga, a leitura está nessa borda. `:388`. |
+| Janela | Implementa **[06:00,07:30)**: 06:00 proibida; 07:30 permitida. `bin/codex_pergunta.sh:299`. Selo cobra 0600/0729 contra 0559/0730. `bin/tests/test_codex_pergunta.sh:524`. Inclusividade exigida pelo aval [nao verificado]. |
+| Desligador | Fonte ilegível retorna2 e wrapper recusa qualquer nãozero. `bin/codex_vagas_medida.py:85`, `:88`; `bin/codex_pergunta.sh:301`. Limites: média `>7`, used `>85` e reset futuro; igualdade aceita. `bin/codex_vagas_medida.py:91`, `:94`. |
+| Teto | Terceira chamada recusa quando ambos flocks ocupados, rc2/VAGA2. `bin/codex_pergunta.sh:381`, `:384`, `:250`. |
+| `--toca` obrigatório / rc3 | Obrigatório e validado no construtor. `bin/codex_pergunta.sh:319`, `:321`. Fora do próprio alcance ou cruzando o da outra viva gera PROIBIDO e rc3. `:282`, `:285`, `:572`, `:585`. |
+| Campo com dois significados | **PROCEDENTE se ausência de `/` significa arquivo exato**: mensagem diz “pasta termina em /”, porém `rstrip("/")` torna `app/folha` e `app/folha/` equivalentes; ambos cobrem descendentes. `bin/codex_pergunta.sh:319`, `:262`, `:263`. **NAO PROCEDE se todo argumento significa prefixo por componente**: implementação consistente nessa interpretação, sem prefixo textual indevido `folha`→`folhas`. `:263`, `:265`. |
+| Protegidos / cabeçalho | **NAO PROCEDE duplicação do juiz**: lista em PROTEGIDOS alimenta o inventário; cabeçalho extrai texto da própria fonte. `bin/codex_pergunta.sh:157`, `:162`, `:242`, `:465`. |
+| Writable roots / hooks | `bin` extra só com argumento começando `bin/`; diretório de trabalho continua `app`. `bin/codex_pergunta.sh:537`, `:541`, `:543`. `.claude/` é proibido pelo inventário; raiz `.claude` não é writable root. `:147`, `:537`. Entradas configuradas estão cobertas pela lista: `.claude/settings.json:9`, `:20`, `:44`, `:68`, `:76`; `bin/codex_pergunta.sh:158`. Fecho de imports deliberadamente excluído; proteção integral das dependências [nao verificado]. `:156`. |
+
+Ressalva: a META só serializa participantes que a respeitam. O comentário admite wrapper velho (`bin/codex_pergunta.sh:87`), cujo trecho anterior fornecido no diff não toma META; no misto, um velho pode ocupar vaga1 depois de o novo, na vaga2, observar vaga1 livre. A segurança do portão nesse interleaving [nao verificado]; o teto de dois flocks permanece. `bin/codex_pergunta.sh:388`, `:384`.
+
+## 09/11 14:04 · sessao 6f45d6f77543 · - · - · origem=Ronald (tmux)
+
+| Item | Resultado e prova |
+|---|---|
+| 5 — `vaga=N` quebra leitor? | **NAO PROCEDE.** `codex_limite_estado.py:56,63-67` lê thread/rc/duração por `p[6]/p[7]/p[8]`; `gerar_codex_estado.py:176` delega a ele; `disjuntor.py:2023,2031,2121` também delega. `gerar_estado.py:269-270` usa a mesma autoridade. |
+| 5 — selos posicionais | **NAO PROCEDE.** `test_codex_sonda.sh:97-98` usa `$8` como rc e `$9` como duração; `test_codex_pergunta.sh:261,335` usa posições fixas. O último campo é interpretado explicitamente como vaga em `test_codex_pergunta.sh:495` e `codex_vagas_medida.py:139`. Nenhum desses o interpreta como rc/duração. |
+| 6 — escritor único | **NAO PROCEDE** a acusação de segundo escritor de produção: `trava_teste.sh:27` concentra append; chamadas em `:45-46`, depois do flock `:40`. O selo escreve histórico isolado: `test_trava_teste.sh:103,142-145`. |
+| 6 — ocupação global incompleta | **PROCEDENTE.** Trava global fixa em `/tmp` (`trava_teste.sh:21`), histórico por raiz da cópia (`:26`), leitor só da própria raiz (`codex_vagas_medida.py:103`). Runs por outras worktrees podem ficar fora dessa medida. |
+| 6 — histórico órfão infla ocupação | **PROCEDENTE.** `ini` sem `fim` conta até agora (`codex_vagas_medida.py:124-128`); append falho é ignorado (`trava_teste.sh:27`) e limpeza depende de EXIT (`:46`). Não há reconciliação com flock nesse leitor (`codex_vagas_medida.py:101-129`). |
+| 6 — rotação/crescimento | Append sem limite em `trava_teste.sh:27`; leitor percorre tudo em `codex_vagas_medida.py:107-108`. Rotação externa: **[nao verificado]**. |
+| Fonte semanal paralela | **NAO PROCEDE.** A nova medida chama `codex_limite_estado.leituras_semanais` (`codex_vagas_medida.py:75-79`), também usada pelo orçamento (`codex_limite_estado.py:169`; `disjuntor.py:1451-1452`). Claude é somente leitura de fotos (`codex_vagas_medida.py:148-154`); escritor segue `statusline_cota.py:49-54`. |
+
+| Estado novo | Quem escreve | Quem lê |
+|---|---|---|
+| `construtor.vaga2` | Wrapper abre em append, prende flock: `codex_pergunta.sh:383-384`; `_viva` também abre para sondar `:254`. | `_viva`: `:255`; admissão: `:388`; fim: `:564`. Selo: `test_codex_pergunta.sh:487`. |
+| `construtor.vaga{1,2}.estado` | Wrapper publica por temporário+rename: `codex_pergunta.sh:306-310`; apaga no EXIT `:236`. Selo fabrica estados: `test_codex_pergunta.sh:484,488`. | `_toca_de`: `codex_pergunta.sh:289`, chamado na abertura `:293` e fim `:565`; selo verifica publicação/remoção `test_codex_pergunta.sh:510-517`. |
+| `vaga2.log` | `codex_pergunta.sh:249`. Diretório já criado antes da admissão: `:361`. | Medida: `codex_vagas_medida.py:141-143`; selo: `test_codex_pergunta.sh:491,503-504,521`. |
+| `trava_teste.hist` | `trava_teste.sh:27,45-46`. | Medida: `codex_vagas_medida.py:103-129`; selo isolado: `test_trava_teste.sh:145`. |
+
+Observação: a nova medida faz leitura própria de `chamadas.log` (`codex_vagas_medida.py:135-140`), portanto o comentário “leitor único” de `gerar_codex_estado.py:41` deixou de descrever todos os leitores. Ela conta a pergunta nova `vaga=2`; não encontrei duplicação do julgamento semanal, que continua delegado (`codex_vagas_medida.py:75-79`).
+
+## 09/11 14:03 · sessao a17614b1120f · - · - · origem=Ronald (tmux)
+
+| Verificação | Resultado e evidência |
+|---|---|
+| União I1 + v2/toca/bin | **NAO PROCEDE** perda aparente no diff fornecido: fake `--censo` preservado (`bin/tests/test_codex_pergunta.sh:82`); casos I1 (`:248`, `:264`, `:606`) e mutantes (`:698`) coexistem com novos casos (`:506`, `:607`) e mutantes (`:704`). Comparação integral com ancestrais: **[nao verificado]**. |
+| Nomes duplicados | **NAO PROCEDE**: 90 nomes em `CASOS`, 90 funções correspondentes, sem repetição; nenhuma das 93 linhas de mutantes é duplicada (`bin/tests/test_codex_pergunta.sh:601`, `:630`). Repetições de tags servem cenários distintos, por exemplo `portao` carga/toca (`:706`). |
+| Mutante sem caso | **NAO PROCEDE**, estaticamente: toda tag `#G` tem mutante e todo mutante aponta a função existente; cobertura também é cobrada pelo selo (`bin/tests/test_codex_pergunta.sh:724`). |
+| Mordida dos novos casos | Há asserções específicas: validação cobra rc, motivo e ausência de chamada (`bin/tests/test_codex_pergunta.sh:163`); inventário cobra motivo em `PROIBIDO`, rc3 e sidecars (`:169`); segunda vaga cobra `VAGA2`, incremento unitário e motivo no log (`:498`); protegidos são exercitados individualmente (`:580`). |
+| “Cada mutante morreu pela asserção específica” | **PROCEDENTE a ressalva**: o controlador aceita qualquer texto `FALHA` como morte, sem conferir qual asserção falhou (`bin/tests/test_codex_pergunta.sh:740`). Resultado efetivo dos 93 mutantes: **[nao verificado]**. |
+| Fontes falsas | Guarda real recusa wrapper dentro de Git ou vivo de produção (`bin/codex_pergunta.sh:112`); teste cobre somente wrapper dentro de Git (`bin/tests/test_codex_pergunta.sh:588`). Não prova exclusividade do selo: qualquer wrapper fora de Git com vivo fora de produção satisfaz a condição (`bin/codex_pergunta.sh:113`). |
+| Sintaxe dos mutantes | Os 93 textos mutados passaram por `bash -n` via stdin e compilação Python do inventário em memória; execução comportamental não realizada **[nao verificado]**. O selo completo cria/remove arquivos (`bin/tests/test_codex_pergunta.sh:22`, `:78`). |
 
 ## 09/11 14:02 · sessao 94effc8c3aed · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
 
@@ -762,163 +872,4 @@ GIT_OPTIONAL_LOCKS=0 git diff --check
 
 **DECISAO-ABERTA:** ligação da fachada continua aguardando DIFF por chamador/caso, L-099 e SONDA-SEM-GRANT; resultado de produção **[nao verificado]**. C17 permanece em `chamados/juizes.py:1541`; os três chamadores permanecem em `folha/fora_da_folha.py:67`, `chamados/services/vigia_fio.py:635` e `escala/services/cadastro_realidade.py:488`.
 
-## 09/11 13:07 · sessao 07a8155e702d · SELOS-CANON-I3 · verificador · origem=Code
-
-**REPROVADO: T1, T2, T4 e T8 ainda não fecham a classe.** Há casamento com tentativa errada, escolha incorreta entre fotografias, carimbo concorrente e perda definitiva de eventos do placar. (`bin/disjuntor.py:932`, `bin/disjuntor.py:969`, `bin/disjuntor.py:916`, `bin/disjuntor.py:1316`)
-
-RED de 45 falhas, GREEN, morte executada dos 38 mutantes, condição dos hooks instalados e ocorrência em produção: **[nao verificado]**.
-
-**1. T1…T8**
-
-| Item | Classificação e conclusão |
-|---|---|
-| **T1** | **PROCEDENTE.** Obra+pid+hash12+janela não identifica a tentativa. Uma tentativa fotografa, perde a vaga e termina; outra, com PID reciclado e mesma obra/hash, abre DESLIGADA dentro dos 600 s. Como essa abertura não produz fotografia, seu `ini` pode efetivar a fotografia recusada anterior. O fotógrafo considera somente SNAPSHOT; o censo considera também DESLIGADO/FORA: compartilhar a função não compartilha o casamento. **Cura:** identificador único da tentativa, ou publicação da fotografia depois da vaga. (`bin/disjuntor.py:932`, `bin/disjuntor.py:956`, `bin/disjuntor.py:964`, `bin/disjuntor.py:2467`, `bin/disjuntor.py:2487`) |
-| **T1 — desempate** | **PROCEDENTE.** Duas fotografias Agent no mesmo segundo, primeiro N=5 e depois N=3, resultam em N=5: `sort()` ordena `(instante,N,via)` e o leitor escolhe a última tupla. **Cura:** ordenar pela abertura identificada, sem usar N como desempate. (`bin/disjuntor.py:958`, `bin/disjuntor.py:969`, `bin/disjuntor.py:977`) |
-| **T2** | **PROCEDENTE.** O carimbo nasce por leitura seguida de append, sem exclusão comum: dois processos podem ler ausência e gravar dois carimbos. É idempotente sequencialmente, não sob corrida. **Cura:** leitura/criação sob exclusão única, preservando um marco confiável. (`bin/disjuntor.py:907`, `bin/disjuntor.py:916`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`) |
-| **T3** | **NAO PROCEDE quanto ao N paralelo.** B3 e `--etapas` consultam `_fotografia_efetiva`; a configuração manda consumir esse N. Os defeitos dessa autoridade continuam sendo T1. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:2719`, `.claude/agents/verificador.md:18`) |
-| **T4** | **PROCEDENTE, cura parcial.** `_obra_de` participa das duas pontas, mas não é a representação única: entrada CLI aceita ID sem espaços; fotografia e medida usam `\S+`; B3 reconhece `O9 (C)`. A guarda impede alguns IDs incompatíveis, porém uma identidade qualificada reconhecida no final não pode ser fotografada pela porta. **Cura:** contrato canônico de identidade em abertura, fotografia, consulta e final, preservando caudas significativas. (`bin/disjuntor.py:178`, `bin/disjuntor.py:652`, `bin/disjuntor.py:884`, `bin/disjuntor.py:886`, `bin/disjuntor.py:2031`, `bin/disjuntor.py:2035`) |
-| **T5** | **NAO PROCEDE quanto à DIETA.** O helper lê vivo+arquivo. Há **dois consumidores**: opus confirma K e B3 conta K por reconhecimento textual; portanto “leitor único” só descreve o helper de código. `n` confirmado e `n_rel` reconhecido são cruzados pelo mínimo; isso, isoladamente, não prova duplicação de juiz cadastrado. (`bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`, `bin/disjuntor.py:1090`, `.claude/agents/verificador.md:18`) |
-| **T6** | **NAO PROCEDE quanto à mistura original.** Cabeças e contadores foram separados; ETAPAS não entra no reconhecedor que escreve PAREI censo. Não existe PAREI ETAPAS nesse caminho. (`bin/disjuntor.py:1789`, `bin/disjuntor.py:1792`, `bin/disjuntor.py:334`, `bin/disjuntor.py:2406`, `bin/disjuntor.py:2502`) |
-| **T7** | **NAO PROCEDE no recorte corrigido.** Harness exige rc≠0 **e** a FALHA específica; há guarda n≤N e casos para resultado `?` e K fora de 1…N. Isso não certifica toda a classe de fotografia; faltas abaixo. (`bin/tests/test_etapas_no_brief.sh:446`, `bin/disjuntor.py:1090`, `bin/tests/test_etapas_no_brief.sh:397`, `bin/tests/test_etapas_no_brief.sh:403`) |
-| **T8** | **PROCEDENTE.** SEM-FOTO entrou no denominador e ganhou esperado zero, mas o memo é persistido **antes** do anúncio não estrito. Se o JSON gravar e o append falhar, o evento desaparece definitivamente: o memo impede nova emissão, enquanto ESTADO lê somente a trilha. **Cura:** evento persistido com o memo e publicação idempotente por aid, ou medição pelo estado com instante canônico. (`bin/disjuntor.py:2531`, `bin/disjuntor.py:2535`, `bin/disjuntor.py:397`, `bin/disjuntor.py:407`, `bin/disjuntor.py:1316`, `bin/disjuntor.py:219`, `bin/disjuntor.py:1059`) |
-
-**Sobre o `ini`: NAO PROCEDE a hipótese de escrita anterior ao flock.** Ele está depois da aquisição da vaga. Entretanto inventário e raspagem ficam no intervalo; `flock -n` não prova duração máxima até o `ini`. (`bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:244`, `bin/codex_pergunta.sh:283`, `bin/codex_pergunta.sh:292`)
-
-**Sobre a isenção: PROCEDENTE.** Ela consulta trilha e chamadas, sem depender do mtime do RELATO; porém aceita SNAPSHOT/CENSO APROVADO pré-vaga como prova de “abertura”, inclusive tentativa que não efetivou. **Cura:** provar a primeira abertura efetiva pela mesma identidade da tentativa. (`bin/disjuntor.py:889`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1027`, `bin/codex_pergunta.sh:234`, `bin/codex_pergunta.sh:240`)
-
-**SEM-FOTO realmente entra como reprovação no B3**, independentemente da via que originou a abertura. A universalidade falha antes: fotografia indevidamente aceita, isenção indevida ou classificação FORA evitam chegar a SEM-FOTO. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:1065`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:1077`, `bin/disjuntor.py:1254`)
-
-**2. As 12 decisões**
-
-| Nº | Classificação |
-|---|---|
-| **1** | **NAO PROCEDE como estado mentiroso:** ausência de PAREI próprio não transforma a negativa em CENSO; há recusa e registro no RELATO. (`bin/disjuntor.py:2071`, `bin/disjuntor.py:2263`, `bin/disjuntor.py:2702`) |
-| **2** | **PROCEDENTE:** o marco representa primeiro uso bem-sucedido, não deploy. DESLIGADO engole falha do carimbo e permite abertura; um carimbo posterior pode chamar essa abertura do código novo de legado. **Cura:** marco confiável, concorrência resolvida e ausência sem fabricação de isenção. (`bin/disjuntor.py:916`, `bin/disjuntor.py:2668`, `bin/disjuntor.py:2672`, `bin/disjuntor.py:1071`) |
-| **3** | **NAO PROCEDE:** `-1` é sentinela interna, convertido em mensagem própria; entra na fila existente de reprovações. (`bin/disjuntor.py:1077`, `bin/disjuntor.py:1254`, `bin/disjuntor.py:1278`) |
-| **4** | **NAO PROCEDE para obra comprovadamente externa.** A prova histórica insuficiente está na decisão 6. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:1065`) |
-| **5** | **NAO PROCEDE mecanicamente:** sujeita, sem foto e sem abertura anterior provada termina SEM-FOTO. A cronologia histórica alegada “pré-I1/pós-carimbo”: **[nao verificado]**. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:1077`) |
-| **6** | **PROCEDENTE:** abertura DESLIGADA na fila 1, depois retirada da fila, pode virar FORA. O histórico de sujeição não reconhece DESLIGADO. **Cura:** preservar a sujeição da abertura, inclusive desligada ou indeterminada. (`bin/disjuntor.py:891`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1045`) |
-| **7** | **PROCEDENTE:** wrapper exige carimbo antes de dispensar FORA; Agent dispensa FORA antes do carimbo. Amplia escopo numa única via. **Cura:** manter a mesma condição de aplicação nas duas entradas. (`bin/disjuntor.py:2025`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`, `bin/disjuntor.py:2693`; `CLAUDE.md:37`) |
-| **8** | **NAO PROCEDE como aprovação indevida:** não empresta foto da identidade nua. Permanece a incompatibilidade de representações de T4. (`bin/disjuntor.py:652`, `bin/disjuntor.py:1063`, `bin/disjuntor.py:1077`) |
-| **9** | **FILA — mensagem:** prefixo externo ainda diz CENSO para negativa ETAPAS; detalhe e eventos distinguem os motivos. Não é mistura dos contadores. (`bin/codex_pergunta.sh:234`, `bin/disjuntor.py:2406`, `bin/disjuntor.py:2502`) |
-| **10** | **FILA — validação:** execução de ruff/AST/bash-n alegada **[nao verificado]**. |
-| **11** | **FILA — ambiente:** causa e exclusividade ambiental do vermelho **[nao verificado]**. |
-| **12** | **PROCEDENTE:** janela e consumo único não substituem identidade da tentativa; sobrevivem os contraexemplos T1. (`bin/disjuntor.py:932`, `bin/disjuntor.py:936`, `bin/disjuntor.py:2409`) |
-
-**3. Demais classes**
-
-- **PROCEDENTE — relógio fora da borda:** o instante interno de `trilha_linhas` passou a decidir isenção. Fotografias também aceitam futuro: não recebem `agora`, enquanto o censo o aplica. **Cura:** propagar o instante da borda e usar identidade/ordem persistida para distinguir aberturas. (`bin/disjuntor.py:213`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:958`, `bin/disjuntor.py:964`, `bin/disjuntor.py:2456`, `bin/disjuntor.py:2251`)
-- **NAO PROCEDE como segundo escritor introduzido:** append converge em `trilha_linhas`; estado converge em `_com_estado`; ESTADO consome `ler/linha`. Isso não resolve atomicidade carimbo/evento/memo. (`bin/disjuntor.py:218`, `bin/disjuntor.py:226`, `bin/disjuntor.py:397`, `bin/gerar_estado.py:280`)
-- **NAO PROCEDE quanto a N paralelo; duplicação de juiz registrado não demonstrada.** Existe uma autoridade consultada pelas duas entradas de N; há duas verificações de n com significados explícitos acima. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:2719`, `bin/disjuntor.py:1090`)
-- **FILA — pouso antes do pré-requisito:** Bash principal continua podendo retornar antes do B3; é o caminho herdado apontado em D2. (`bin/disjuntor.py:2174`, `bin/disjuntor.py:2202`)
-- **Semântica efetiva:** `hash12` do wrapper identifica o commit; o hash de cada brief é outro campo. N é máximo dos briefs; `n_v` é confirmação do opus e `n_rel` é reconhecimento textual. Casamento usa `[ini−600,ini]`; medição usa `[agora−86400,agora]`, ambas inclusivas. O rótulo “pousos” mede finais conferidos, não merges realizados. (`bin/codex_pergunta.sh:292`, `bin/disjuntor.py:2055`, `bin/disjuntor.py:2059`, `bin/disjuntor.py:1090`, `bin/disjuntor.py:933`, `bin/disjuntor.py:2525`, `bin/disjuntor.py:2552`)
-
-**4. Selos e quatro reancoragens**
-
-| Mutante | Mesma propriedade? |
-|---|---|
-| `abertura-sem-janela` | **NAO PROCEDE alteração de propriedade:** remove o limite inferior; fixture separa aprovação/ini por uma hora. (`bin/tests/test_censo_antes_da_vaga.sh:723`, `bin/tests/test_censo_antes_da_vaga.sh:470`, `bin/tests/test_censo_antes_da_vaga.sh:480`, `bin/tests/test_censo_antes_da_vaga.sh:486`) |
-| `sem-consumo-unico` | **NAO PROCEDE:** uma aprovação para dois ini deve continuar dando com=1/sem=1. (`bin/tests/test_censo_antes_da_vaga.sh:731`, `bin/tests/test_censo_antes_da_vaga.sh:503`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:510`) |
-| `ini-do-futuro` | **NAO PROCEDE:** remove somente a exclusão do ini futuro. (`bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:511`) |
-| `pertenca-wrapper-propria` | **NAO PROCEDE:** continua contrapondo pertencimento canônico à célula crua. Esta âncora vai para `if dentro is False:`, não para `_casa_wrapper_ini`. (`bin/tests/test_censo_antes_da_vaga.sh:753`, `bin/tests/test_censo_antes_da_vaga.sh:535`, `bin/tests/test_censo_antes_da_vaga.sh:536`) |
-
-**PROCEDENTE — cobertura faltante:** T1 fabrica `ini`, usa PIDs distintos e não disputa o flock. Faltam os contraexemplos acima, carimbo concorrente e perda de anúncio após memo. Falta também positivo Agent→fotografia→B3/`--etapas`: retirar a ingestão Agent não encontra esse teste. **Cura:** acrescentar esses casos e seus mutantes específicos; sobrevivência executada **[nao verificado]**. (`bin/tests/test_etapas_no_brief.sh:72`, `bin/tests/test_etapas_no_brief.sh:320`, `bin/tests/test_etapas_no_brief.sh:322`, `bin/tests/test_etapas_no_brief.sh:148`, `bin/tests/test_etapas_no_brief.sh:176`, `bin/disjuntor.py:958`)
-
-**FILA — harness vizinho:** ainda aceita qualquer rc≠0; portanto suas mensagens não certificam morte pela FALHA correta. Casos `?` e K fora de N já verdes antes podem legitimamente matar mutantes novos. (`bin/tests/test_censo_antes_da_vaga.sh:685`, `bin/tests/test_etapas_no_brief.sh:513`, `bin/tests/test_etapas_no_brief.sh:514`)
-
-**5. Quem escreve / quem lê**
-
-| Arquivo/campo | Escritor | Leitor |
-|---|---|---|
-| Briefs: CENSO, ETAPAS, K | Autor real **[nao verificado]** | Coletor e validadores: `bin/disjuntor.py:1931`, `bin/disjuntor.py:2047`, `bin/disjuntor.py:2050` |
-| BACKLOG / fila | Autor real **[nao verificado]** | Leitor delegado e pertencimento: `bin/disjuntor.py:1958`, `bin/disjuntor.py:1990` |
-| `disjuntor.log`: instante/evento/detalhe | Append e limite de 300: `bin/disjuntor.py:213`, `bin/disjuntor.py:218` | Fotografia, abertura, sujeição, medidores: `bin/disjuntor.py:951`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449`, `bin/disjuntor.py:2518` |
-| INSTALADO | `bin/disjuntor.py:916` | `bin/disjuntor.py:909`; efeito na isenção: `bin/disjuntor.py:1071` |
-| SNAPSHOT: obra/N/via/pid/hash/briefs | Porta CLI: `bin/disjuntor.py:2059`, `bin/disjuntor.py:2064`; Agent: `bin/disjuntor.py:2068`, `bin/disjuntor.py:2162` | `bin/disjuntor.py:951`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042` |
-| CENSO APROVADO/FORA/DESLIGADO | `bin/disjuntor.py:2064`, `bin/disjuntor.py:2162`, `bin/disjuntor.py:2694`, `bin/disjuntor.py:2670`, `bin/disjuntor.py:2238` | `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449` |
-| `chamadas.log`: ini/fim, obra/papel/hash12/pid | Wrapper: `bin/codex_pergunta.sh:292`, `bin/codex_pergunta.sh:259` | Parser: `bin/codex_limite_estado.py:49`; consumidores novos: `bin/disjuntor.py:964`, `bin/disjuntor.py:1027`; censo: `bin/disjuntor.py:2483` |
-| Transcript/meta/handback/aid | Harness real **[nao verificado]**; fixture: `bin/tests/test_etapas_no_brief.sh:160` | `bin/disjuntor.py:868`, `bin/disjuntor.py:872`, `bin/disjuntor.py:681`, `bin/disjuntor.py:687` |
-| `ETAPAS: n/N` | Instrução ao verificador: `.claude/agents/verificador.md:18`; execução **[nao verificado]** | `bin/disjuntor.py:1088` |
-| RELATO + RELATO-ARQUIVO / linhas ETAPA | Autor e executor da DIETA **[nao verificado]**; fixtures: `bin/tests/test_etapas_no_brief.sh:47`, `bin/tests/test_etapas_no_brief.sh:381` | `bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`; opus: `.claude/agents/verificador.md:18` |
-| `disjuntor_estado.json`: memo, reprovações, metade | Conferência/incorporação: `bin/disjuntor.py:1091`, `bin/disjuntor.py:1253`; flock/replace: `bin/disjuntor.py:376`, `bin/disjuntor.py:397` | Memo e decisão: `bin/disjuntor.py:1059`, `bin/disjuntor.py:1269` |
-| ETAPAS finais: FORA/isenta/SEM-FOTO/METADE/PROVADAS | Prepara: `bin/disjuntor.py:1067`, `bin/disjuntor.py:1073`, `bin/disjuntor.py:1078`, `bin/disjuntor.py:1097`, `bin/disjuntor.py:1099`; publica: `bin/disjuntor.py:1316` | `bin/disjuntor.py:2518` |
-| NEGOU / ALVO / alarme no RELATO | `bin/disjuntor.py:2260`, `bin/disjuntor.py:2700`, `bin/disjuntor.py:302`, `bin/disjuntor.py:319` → `app/core/esteira_vigia.py:843` | Sujeição e contadores: `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449`, `bin/disjuntor.py:2518` |
-| PAREI censo | `bin/disjuntor.py:349` → `app/core/esteira_vigia.py:865`; trava: `app/core/esteira_vigia.py:854` | Stop/handoff/alarme: `bin/hook_stop_fila1.py:773`, `bin/handoff_sessao.sh:130`, `bin/alarme_sessao_ociosa.py:137` |
-| Hooks / linha ETAPAS do ESTADO | Configuração: `.claude/settings.json:68`, `.claude/settings.json:9`; composição: `bin/disjuntor.py:2402`, `bin/disjuntor.py:2649`; gravação: `bin/gerar_estado.py:390` | B3 pelos hooks: `bin/disjuntor.py:2186`, `bin/disjuntor.py:2202`, `bin/hook_stop_fila1.py:1204`; gerador/publicação: `bin/gerar_estado.py:281`, `bin/relato.sh:38`, `bin/relato.sh:105` |
-
-## 09/11 13:05 · sessao 8ac92c7e3053 · - · - · origem=Ronald (tmux)
-
-T1/T2 **não fechados na classe**:
-
-- **PROCEDENTE — tentativa errada aceita.** Snapshot recusado de `(obra,pid,hash12)` pode casar com `ini` de PID reciclado cuja nova abertura foi DESLIGADA/FORA, sem produzir snapshot próprio. `_fotografias` casa somente snapshots; `_censo_24h` casa também DESLIGADO/FORA, portanto o mesmo helper pode selecionar tentativas diferentes. Demonstrado em memória: snapshot t100 + `ini` t210 → casamento aceito. Cura: identificador único da tentativa compartilhado ou fotografia após a vaga. (`bin/disjuntor.py:932`, `bin/disjuntor.py:956`, `bin/disjuntor.py:964`, `bin/disjuntor.py:2467`, `bin/disjuntor.py:2487`)
-- **PROCEDENTE — empate temporal troca N.** `v.sort()` ordena `(t,N,via)`; N5 seguido de N3 no mesmo segundo retorna N5. Demonstrado executando somente funções extraídas por AST, com arquivos simulados em memória. Cura: ordem/identidade inequívoca da abertura; timestamp em segundos não desempata. (`bin/disjuntor.py:954`, `bin/disjuntor.py:969`, `bin/disjuntor.py:977`)
-- **PROCEDENTE — carimbo concorrente.** Dois processos podem ler ausência e ambos escrever; ausência de trava entre leitura e append. Demonstrado em memória com duas leituras intercaladas: dois carimbos. A trava B3 não protege chamadas independentes do wrapper/Agent. Cura: criação/leitura idempotente sob exclusão comum. (`bin/disjuntor.py:907`, `bin/disjuntor.py:916`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`)
-- **PROCEDENTE — relógio decide fora da borda.** Carimbo usa `datetime.now()` dentro do escritor; essa hora agora decide isenção. Fotos futuras são aceitas, inclusive wrapper chamando casamento sem `agora`; censo exclui futuro. Cura: passar instante da borda e ordenar por identidade persistida da abertura. (`bin/disjuntor.py:213`, `bin/disjuntor.py:958`, `bin/disjuntor.py:964`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:2251`, `bin/disjuntor.py:2456`)
-- **NAO PROCEDE — `ini` antes da vaga.** O escritor fica depois do `flock`; entretanto há inventário e raspagem entre ambos, sem garantia de “segundos”. (`bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:244`, `bin/codex_pergunta.sh:283`, `bin/codex_pergunta.sh:292`)
-
-Decisões:
-
-- **2 PROCEDENTE:** carimbo representa primeiro uso bem sucedido, não instalação/deploy. Wrapper DESLIGADO engole falha do carimbo e ainda pode registrar `ini`; carimbo posterior permite chamar essa abertura do código novo de legado. Cura: marco de instalação persistido/confiável, com falha e concorrência tratadas. (`bin/disjuntor.py:916`, `bin/disjuntor.py:2668`, `bin/codex_pergunta.sh:292`, `bin/disjuntor.py:1071`)
-- **3 NAO PROCEDE:** SEM-FOTO entra na mesma fila B3 e dispara pelo limiar existente; não é simples aviso. (`bin/disjuntor.py:1077`, `bin/disjuntor.py:1254`, `bin/disjuntor.py:1272`)
-- **4 NAO PROCEDE, condicional:** FORA é dispensado quando pertencimento atual e eventos reconhecidos não demonstram sujeição. A limitação histórica está na decisão 6. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1043`, `bin/disjuntor.py:1065`)
-- **5 NAO PROCEDE:** comprovadamente sujeita, sem foto e sem abertura anterior ao carimbo, entra SEM-FOTO. Possibilidade histórica de “pré-I1, pós-I3” real: **[nao verificado]**. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:1077`)
-- **6 PROCEDENTE:** fila1 aberta DESLIGADA após carimbo e removida antes do final vira FORA: `_SUJEITA_RE` não reconhece DESLIGADO, e BACKLOG atual não preserva pertencimento da abertura. Cura: registrar sujeição da abertura, inclusive desligada/indeterminada. (`bin/disjuntor.py:891`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1065`)
-- **7 PROCEDENTE:** wrapper fora da fila1 pode ser recusado só porque carimbo não grava; Agent fora retorna antes dessa escrita. Cura: preservar escopo fila1 nas duas vias. (`bin/disjuntor.py:2025`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`, `bin/disjuntor.py:2693`)
-- **12 PROCEDENTE:** janela inclusiva `[ini−600,ini]` e consumo único não fornecem identidade da tentativa; os contraexemplos acima sobrevivem. (`bin/disjuntor.py:933`, `bin/disjuntor.py:936`, `bin/disjuntor.py:2409`)
-
-A isenção consulta trilha e `chamadas.log`, sem mtime do RELATO; mas inclui snapshot não efetivado e CENSO APROVADO pré-vaga como prova de “abertura”. Cura: primeira abertura efetiva pelo mesmo identificador canônico. (`bin/disjuntor.py:889`, `bin/disjuntor.py:1022`, `bin/disjuntor.py:1027`, `bin/codex_pergunta.sh:234`, `bin/codex_pergunta.sh:240`)
-
-## 09/11 13:05 · sessao ac5e5ec8886f · - · - · origem=Ronald (tmux)
-
-- **T3 — NAO PROCEDE quanto a N paralelo:** B3 e `--etapas` usam `_fotografia_efetiva`; verificador recebe ordem explícita de consumir esse N. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:2719`, `.claude/agents/verificador.md:18`)
-- **T4 — parcial:** `_obra_de` está na abertura Agent, guarda da abertura CLI, final B3 e consulta `--etapas`; o wrapper ainda recebe ID literal, e snapshots/medidas usam `\S+`, enquanto `_obra_de` aceita identidade com cauda/espaço. Final `O9 (C)` é recusado por falta da fotografia própria; não houve unificação integral das representações. (`bin/disjuntor.py:2207`, `bin/disjuntor.py:2035`, `bin/disjuntor.py:681`, `bin/disjuntor.py:2714`, `bin/codex_pergunta.sh:188`, `bin/disjuntor.py:884`, `bin/disjuntor.py:886`, `bin/disjuntor.py:649`)
-- **T5 — cura da DIETA presente, “leitor único” absoluto falso:** um helper de código reúne vivo+arquivo; porém verificador conta K separadamente e B3 aplica seu próprio parser/filtro para n. Divergência humana efetivamente ocorrida: **[nao verificado]**. Cura para centralizar contagem: expor Ks/n pelo leitor canônico e reservar ao opus a confirmação do conteúdo. (`bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`, `.claude/agents/verificador.md:18`, `app/docs/LEIS.md:60`)
-- **T6 — cabeças/placares separados:** ETAPAS possui literal próprio; `_obra_da_negativa` só reconhece CENSO, portanto ETAPAS não dispara PAREI censo. O placar ETAPAS reconhece negativa própria e CENSO permanece restrito à sua cabeça. (`bin/disjuntor.py:1789`, `bin/disjuntor.py:1792`, `bin/disjuntor.py:333`, `bin/disjuntor.py:2502`, `bin/disjuntor.py:2406`)
-- **T8 — PROCEDENTE, perda permanente da medida:** memo é gravado antes do anúncio; anúncio usa trilha não estrita, que engole erro. Falha de append com JSON gravável perde PROVADAS/METADE/SEM-FOTO definitivamente, pois o memo impede repetir; ESTADO lê só a trilha e poderá publicar zero. Cura: evento persistido com memo/outbox, entrega idempotente por aid, ou medição pelo estado com instante canônico. (`bin/disjuntor.py:1091`, `bin/disjuntor.py:396`, `bin/disjuntor.py:407`, `bin/disjuntor.py:1315`, `bin/disjuntor.py:225`, `bin/disjuntor.py:219`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:2516`, `bin/disjuntor.py:2538`)
-- **T8 — conta implementada:** inclui SEM-FOTO no denominador e contador próprio esperado zero; exclui FORA/isentos. Janela inclusiva nas duas bordas. Rótulo continua dizendo “pousos”, mas universo é finais APROVADOS conferidos. (`bin/disjuntor.py:2525`, `bin/disjuntor.py:2528`, `bin/disjuntor.py:2531`, `bin/disjuntor.py:2535`, `bin/disjuntor.py:2552`)
-
-Inventário consolidável:
-
-| Arquivo/campo | Escritor | Leitor |
-|---|---|---|
-| Briefs / CENSO / ETAPAS | Autor real **[nao verificado]**; fixture em `bin/tests/test_etapas_no_brief.sh:65` | Coletor `bin/disjuntor.py:1931`; validadores `bin/disjuntor.py:1818`, `bin/disjuntor.py:1875`; aplicação `bin/disjuntor.py:2047` |
-| BACKLOG / fila | Autor real **[nao verificado]** | `bin/disjuntor.py:1954` delega `_itens_andaveis` em `bin/disjuntor.py:1958`; pertinência `bin/disjuntor.py:1990` |
-| `disjuntor.log` / instante / evento / detalhe | Append central `bin/disjuntor.py:209`; relógio interno `bin/disjuntor.py:213`; truncamento `bin/disjuntor.py:218` | Fotos `bin/disjuntor.py:951`; abertura `bin/disjuntor.py:1018`; sujeição `bin/disjuntor.py:1040`; CENSO `bin/disjuntor.py:2447`; ETAPAS `bin/disjuntor.py:2516` |
-| INSTALADO | `_instalacao_etapas`, `bin/disjuntor.py:916` | Mesma função, `bin/disjuntor.py:909` |
-| SNAPSHOT / obra / N / via / pid / hash12 / briefs | Porta CLI `bin/disjuntor.py:2058`, `bin/disjuntor.py:2064`; Agent acumula `bin/disjuntor.py:2068`, publica `bin/disjuntor.py:2162` | `_fotografias` `bin/disjuntor.py:951`; `_primeira_abertura` `bin/disjuntor.py:1020`; `_sujeita` `bin/disjuntor.py:1042` |
-| CENSO APROVADO/FORA/DESLIGADO | `bin/disjuntor.py:2064`, `bin/disjuntor.py:2162`, `bin/disjuntor.py:2694`, `bin/disjuntor.py:2670`, `bin/disjuntor.py:2238` | `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449` |
-| `chamadas.log` / ini / obra / papel / hash12 / pid | Wrapper `bin/codex_pergunta.sh:292`, depois do flock `bin/codex_pergunta.sh:240`; fim `bin/codex_pergunta.sh:259` | Parser `bin/codex_limite_estado.py:49`; chamado por `bin/disjuntor.py:964`, `bin/disjuntor.py:1027`, `bin/disjuntor.py:2483` |
-| Transcript/meta / handback / aid / obra / veredito | Harness real **[nao verificado]**; fixture `bin/tests/test_etapas_no_brief.sh:160` | `bin/disjuntor.py:868`, `bin/disjuntor.py:869`, `bin/disjuntor.py:872`, `bin/disjuntor.py:681`, `bin/disjuntor.py:687` |
-| ETAPAS n/N | Verificador instruído em `.claude/agents/verificador.md:18`; execução **[nao verificado]** | `bin/disjuntor.py:1088` |
-| ETAPA obra K / resultado no vivo+arquivo | Autor real e executor da DIETA **[nao verificado]**; fixture `bin/tests/test_etapas_no_brief.sh:47`, `bin/tests/test_etapas_no_brief.sh:381` | `bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`; também `.claude/agents/verificador.md:18` |
-| `disjuntor_estado.json` / memo / b3.reprovados / metade | Conferência `bin/disjuntor.py:1056`, `bin/disjuntor.py:1091`; incorporação B3 `bin/disjuntor.py:1253`; persistência sob flock `bin/disjuntor.py:376`, `bin/disjuntor.py:396` | Memo `bin/disjuntor.py:1059`; decisão B3 `bin/disjuntor.py:1264` |
-| Eventos ETAPAS finais | Prepara `bin/disjuntor.py:1067`, `bin/disjuntor.py:1073`, `bin/disjuntor.py:1078`, `bin/disjuntor.py:1097`, `bin/disjuntor.py:1099`; publica `bin/disjuntor.py:1315` | `bin/disjuntor.py:2518` |
-| NEGOU ETAPAS/CENSO / ALVO / RELATO | `bin/disjuntor.py:2260`, `bin/disjuntor.py:2271`, `bin/disjuntor.py:2700`; RELATO via `bin/disjuntor.py:319` → `app/core/esteira_vigia.py:843`; ALVO `bin/disjuntor.py:302` | Sujeição `bin/disjuntor.py:1042`; contadores `bin/disjuntor.py:2449`, `bin/disjuntor.py:2518` |
-| PAREI censo | `bin/disjuntor.py:340` → `app/core/esteira_vigia.py:865`, trava comum `app/core/esteira_vigia.py:846` | Stop `bin/hook_stop_fila1.py:773`; handoff `bin/handoff_sessao.sh:130`; alarme `bin/alarme_sessao_ociosa.py:137` |
-| Hook PreToolUse / Stop | Configurações `.claude/settings.json:68`, `.claude/settings.json:9` | Agent final `bin/disjuntor.py:2202`; Codex verificador `bin/disjuntor.py:2186`; Stop delega `bin/hook_stop_fila1.py:1204` |
-| Linha ETAPAS no ESTADO | `ler` em `bin/disjuntor.py:2402`; composição `bin/disjuntor.py:2649`; gerador delega `bin/gerar_estado.py:280`, grava `bin/gerar_estado.py:390`; publicação `bin/relato.sh:38`, `bin/relato.sh:105` | Consumidores reais posteriores **[nao verificado]** |
-
-## 09/11 13:04 · sessao c81d9af71fbe · - · - · origem=Ronald (tmux)
-
-T7 **NAO PROCEDE no recorte corrigido**: harness exige simultaneamente rc≠0 e `FALHA (<caso>)`; guarda n≤N e casos `?`/K fora do intervalo existem. (`bin/tests/test_etapas_no_brief.sh:446`, `bin/disjuntor.py:1090`, `bin/tests/test_etapas_no_brief.sh:397`, `bin/tests/test_etapas_no_brief.sh:403`, `bin/tests/test_etapas_no_brief.sh:512`)
-
-| Reancoragem | Mesma propriedade por inspeção |
-|---|---|
-| abertura-sem-janela | Sim: retira apenas limite inferior dos 600s; fixture G tem aprovação uma hora anterior ao ini e deve aumentar “sem”. (`bin/tests/test_censo_antes_da_vaga.sh:723`, `bin/tests/test_censo_antes_da_vaga.sh:470`, `bin/tests/test_censo_antes_da_vaga.sh:480`, `bin/tests/test_censo_antes_da_vaga.sh:486`) |
-| sem-consumo-unico | Sim: permite reaproveitar aprovação para dois ini da mesma chave; fixture/asserções exigem com=1, sem=1. (`bin/tests/test_censo_antes_da_vaga.sh:731`, `bin/tests/test_censo_antes_da_vaga.sh:503`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:510`) |
-| ini-do-futuro | Sim: retira somente limite superior; ini T futuro passa a casar e viola com=1. (`bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/tests/test_censo_antes_da_vaga.sh:504`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:511`) |
-| pertenca-wrapper-propria | Sim: troca pertencimento decidido pelo teste da célula crua; obra qualificada volta a FORA. (`bin/tests/test_censo_antes_da_vaga.sh:753`, `bin/tests/test_censo_antes_da_vaga.sh:535`, `bin/tests/test_censo_antes_da_vaga.sh:536`, `bin/disjuntor.py:2693`) |
-
-São três reancoragens para `_casa_wrapper_ini` e uma para `if dentro is False:`. (`bin/tests/test_censo_antes_da_vaga.sh:723`, `bin/tests/test_censo_antes_da_vaga.sh:731`, `bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/tests/test_censo_antes_da_vaga.sh:753`)
-
-**PROCEDENTE — cobertura incompleta da classe fotografia:** retirar a aceitação da fotografia Agent em `_fotografias` não encontra caso que confira esse N no B3 ou `--etapas`; os positivos abrem pelo wrapper fabricando ini, enquanto os testes Agent verificam escrita/negação. Cura: positivo ponta a ponta com única fotografia Agent, mais mutante removendo sua ingestão. Sobrevivência executada [nao verificado]. (`bin/disjuntor.py:958`, `bin/tests/test_etapas_no_brief.sh:67`, `bin/tests/test_etapas_no_brief.sh:77`, `bin/tests/test_etapas_no_brief.sh:148`, `bin/tests/test_etapas_no_brief.sh:153`, `bin/tests/test_etapas_no_brief.sh:176`, `bin/tests/test_etapas_no_brief.sh:359`)
-
-**PROCEDENTE — T1 não certificado na classe:** o caso usa PIDs distintos e fabrica ini; não disputa o flock real. Cura: identidade única da abertura e casos mesma chave/PID reciclado, duas aberturas no mesmo segundo, relógio invertido e carimbo concorrente. (`bin/tests/test_etapas_no_brief.sh:72`, `bin/tests/test_etapas_no_brief.sh:320`, `bin/tests/test_etapas_no_brief.sh:322`, `bin/tests/test_etapas_no_brief.sh:323`, `bin/disjuntor.py:931`, `bin/disjuntor.py:969`)
-
-**FILA — harness vizinho herdado:** `test_censo_antes_da_vaga` continua aceitando qualquer rc≠0, sem exigir a falha específica. As quatro propriedades permanecem verificáveis por inspeção; morte executada pelo motivo certo [nao verificado]. (`bin/tests/test_censo_antes_da_vaga.sh:685`)
-
-Casos `?` e K fora do intervalo podem passar antes da cura e continuar úteis como controles/matadores dos mutantes adicionados; isso sozinho **NAO PROCEDE** como defeito. (`bin/tests/test_etapas_no_brief.sh:397`, `bin/tests/test_etapas_no_brief.sh:403`, `bin/tests/test_etapas_no_brief.sh:513`, `bin/tests/test_etapas_no_brief.sh:514`)
-
-RED 45, GREEN e mortes dos 38: **[nao verificado]**; não executei suites nem consultei logs de produção. [nao verificado]
-
-_3155 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
