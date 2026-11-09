@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 13:03:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (199.9 MB). Acoes na janela: **1034**.
+**Medido em 09/11/2026 13:08:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (199.9 MB). Acoes na janela: **1035**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:03:25 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() old='ESPERANDO: lancar_construtor_v4.sh \| pid=3570552\n'; assert t.count(old)==1 t=t.replace(old, old+"E3 13:0x: suite inteira 77da997b4 (E3 3b + main 3803e6623) OK (skipped=42, expected failures=41), Ran 14755, rc 0 (logs/fio_e3/v4_suite.log): o merge do main nao quebrou nada; a arvore do pouso sera a da volt ...` |
 | 13:03:21 | Bash |  | `cd /home/ronald/saas-hasner; grep -E '^(OK\|FAILED)($\| \()' logs/fio_e3/v4_suite.log \| tail -1; grep '^Ran' logs/fio_e3/v4_suite.log \| tail -1; sed -i 's/^ESPERANDO: lancar_suite_v4.sh \| pid=857081$/ESPERANDO: lancar_construtor_v4.sh \| pid=3570552/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 13:03:17 | Bash |  | `cd /home/ronald/saas-hasner; tail -4 logs/fio_e3/v4_suite.log; pgrep -af 'suite.sh\|lancar_' \| cut -c1-120` |
 | 13:03:15 | Bash |  | `ps -p 857081 -o pid=,etime=; date +%H:%M` |

@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 12:24** · publicado em **09/11/2026 12:26** (UTC-3)
+> Ultima resposta processada: **09/11/2026 13:07** · publicado em **09/11/2026 13:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 13:07 · sessao 07a8155e702d · SELOS-CANON-I3 · verificador · origem=Code
+
+**REPROVADO: T1, T2, T4 e T8 ainda não fecham a classe.** Há casamento com tentativa errada, escolha incorreta entre fotografias, carimbo concorrente e perda definitiva de eventos do placar. (`bin/disjuntor.py:932`, `bin/disjuntor.py:969`, `bin/disjuntor.py:916`, `bin/disjuntor.py:1316`)
+
+RED de 45 falhas, GREEN, morte executada dos 38 mutantes, condição dos hooks instalados e ocorrência em produção: **[nao verificado]**.
+
+**1. T1…T8**
+
+| Item | Classificação e conclusão |
+|---|---|
+| **T1** | **PROCEDENTE.** Obra+pid+hash12+janela não identifica a tentativa. Uma tentativa fotografa, perde a vaga e termina; outra, com PID reciclado e mesma obra/hash, abre DESLIGADA dentro dos 600 s. Como essa abertura não produz fotografia, seu `ini` pode efetivar a fotografia recusada anterior. O fotógrafo considera somente SNAPSHOT; o censo considera também DESLIGADO/FORA: compartilhar a função não compartilha o casamento. **Cura:** identificador único da tentativa, ou publicação da fotografia depois da vaga. (`bin/disjuntor.py:932`, `bin/disjuntor.py:956`, `bin/disjuntor.py:964`, `bin/disjuntor.py:2467`, `bin/disjuntor.py:2487`) |
+| **T1 — desempate** | **PROCEDENTE.** Duas fotografias Agent no mesmo segundo, primeiro N=5 e depois N=3, resultam em N=5: `sort()` ordena `(instante,N,via)` e o leitor escolhe a última tupla. **Cura:** ordenar pela abertura identificada, sem usar N como desempate. (`bin/disjuntor.py:958`, `bin/disjuntor.py:969`, `bin/disjuntor.py:977`) |
+| **T2** | **PROCEDENTE.** O carimbo nasce por leitura seguida de append, sem exclusão comum: dois processos podem ler ausência e gravar dois carimbos. É idempotente sequencialmente, não sob corrida. **Cura:** leitura/criação sob exclusão única, preservando um marco confiável. (`bin/disjuntor.py:907`, `bin/disjuntor.py:916`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`) |
+| **T3** | **NAO PROCEDE quanto ao N paralelo.** B3 e `--etapas` consultam `_fotografia_efetiva`; a configuração manda consumir esse N. Os defeitos dessa autoridade continuam sendo T1. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:2719`, `.claude/agents/verificador.md:18`) |
+| **T4** | **PROCEDENTE, cura parcial.** `_obra_de` participa das duas pontas, mas não é a representação única: entrada CLI aceita ID sem espaços; fotografia e medida usam `\S+`; B3 reconhece `O9 (C)`. A guarda impede alguns IDs incompatíveis, porém uma identidade qualificada reconhecida no final não pode ser fotografada pela porta. **Cura:** contrato canônico de identidade em abertura, fotografia, consulta e final, preservando caudas significativas. (`bin/disjuntor.py:178`, `bin/disjuntor.py:652`, `bin/disjuntor.py:884`, `bin/disjuntor.py:886`, `bin/disjuntor.py:2031`, `bin/disjuntor.py:2035`) |
+| **T5** | **NAO PROCEDE quanto à DIETA.** O helper lê vivo+arquivo. Há **dois consumidores**: opus confirma K e B3 conta K por reconhecimento textual; portanto “leitor único” só descreve o helper de código. `n` confirmado e `n_rel` reconhecido são cruzados pelo mínimo; isso, isoladamente, não prova duplicação de juiz cadastrado. (`bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`, `bin/disjuntor.py:1090`, `.claude/agents/verificador.md:18`) |
+| **T6** | **NAO PROCEDE quanto à mistura original.** Cabeças e contadores foram separados; ETAPAS não entra no reconhecedor que escreve PAREI censo. Não existe PAREI ETAPAS nesse caminho. (`bin/disjuntor.py:1789`, `bin/disjuntor.py:1792`, `bin/disjuntor.py:334`, `bin/disjuntor.py:2406`, `bin/disjuntor.py:2502`) |
+| **T7** | **NAO PROCEDE no recorte corrigido.** Harness exige rc≠0 **e** a FALHA específica; há guarda n≤N e casos para resultado `?` e K fora de 1…N. Isso não certifica toda a classe de fotografia; faltas abaixo. (`bin/tests/test_etapas_no_brief.sh:446`, `bin/disjuntor.py:1090`, `bin/tests/test_etapas_no_brief.sh:397`, `bin/tests/test_etapas_no_brief.sh:403`) |
+| **T8** | **PROCEDENTE.** SEM-FOTO entrou no denominador e ganhou esperado zero, mas o memo é persistido **antes** do anúncio não estrito. Se o JSON gravar e o append falhar, o evento desaparece definitivamente: o memo impede nova emissão, enquanto ESTADO lê somente a trilha. **Cura:** evento persistido com o memo e publicação idempotente por aid, ou medição pelo estado com instante canônico. (`bin/disjuntor.py:2531`, `bin/disjuntor.py:2535`, `bin/disjuntor.py:397`, `bin/disjuntor.py:407`, `bin/disjuntor.py:1316`, `bin/disjuntor.py:219`, `bin/disjuntor.py:1059`) |
+
+**Sobre o `ini`: NAO PROCEDE a hipótese de escrita anterior ao flock.** Ele está depois da aquisição da vaga. Entretanto inventário e raspagem ficam no intervalo; `flock -n` não prova duração máxima até o `ini`. (`bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:244`, `bin/codex_pergunta.sh:283`, `bin/codex_pergunta.sh:292`)
+
+**Sobre a isenção: PROCEDENTE.** Ela consulta trilha e chamadas, sem depender do mtime do RELATO; porém aceita SNAPSHOT/CENSO APROVADO pré-vaga como prova de “abertura”, inclusive tentativa que não efetivou. **Cura:** provar a primeira abertura efetiva pela mesma identidade da tentativa. (`bin/disjuntor.py:889`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1027`, `bin/codex_pergunta.sh:234`, `bin/codex_pergunta.sh:240`)
+
+**SEM-FOTO realmente entra como reprovação no B3**, independentemente da via que originou a abertura. A universalidade falha antes: fotografia indevidamente aceita, isenção indevida ou classificação FORA evitam chegar a SEM-FOTO. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:1065`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:1077`, `bin/disjuntor.py:1254`)
+
+**2. As 12 decisões**
+
+| Nº | Classificação |
+|---|---|
+| **1** | **NAO PROCEDE como estado mentiroso:** ausência de PAREI próprio não transforma a negativa em CENSO; há recusa e registro no RELATO. (`bin/disjuntor.py:2071`, `bin/disjuntor.py:2263`, `bin/disjuntor.py:2702`) |
+| **2** | **PROCEDENTE:** o marco representa primeiro uso bem-sucedido, não deploy. DESLIGADO engole falha do carimbo e permite abertura; um carimbo posterior pode chamar essa abertura do código novo de legado. **Cura:** marco confiável, concorrência resolvida e ausência sem fabricação de isenção. (`bin/disjuntor.py:916`, `bin/disjuntor.py:2668`, `bin/disjuntor.py:2672`, `bin/disjuntor.py:1071`) |
+| **3** | **NAO PROCEDE:** `-1` é sentinela interna, convertido em mensagem própria; entra na fila existente de reprovações. (`bin/disjuntor.py:1077`, `bin/disjuntor.py:1254`, `bin/disjuntor.py:1278`) |
+| **4** | **NAO PROCEDE para obra comprovadamente externa.** A prova histórica insuficiente está na decisão 6. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:1065`) |
+| **5** | **NAO PROCEDE mecanicamente:** sujeita, sem foto e sem abertura anterior provada termina SEM-FOTO. A cronologia histórica alegada “pré-I1/pós-carimbo”: **[nao verificado]**. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:1077`) |
+| **6** | **PROCEDENTE:** abertura DESLIGADA na fila 1, depois retirada da fila, pode virar FORA. O histórico de sujeição não reconhece DESLIGADO. **Cura:** preservar a sujeição da abertura, inclusive desligada ou indeterminada. (`bin/disjuntor.py:891`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1045`) |
+| **7** | **PROCEDENTE:** wrapper exige carimbo antes de dispensar FORA; Agent dispensa FORA antes do carimbo. Amplia escopo numa única via. **Cura:** manter a mesma condição de aplicação nas duas entradas. (`bin/disjuntor.py:2025`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`, `bin/disjuntor.py:2693`; `CLAUDE.md:37`) |
+| **8** | **NAO PROCEDE como aprovação indevida:** não empresta foto da identidade nua. Permanece a incompatibilidade de representações de T4. (`bin/disjuntor.py:652`, `bin/disjuntor.py:1063`, `bin/disjuntor.py:1077`) |
+| **9** | **FILA — mensagem:** prefixo externo ainda diz CENSO para negativa ETAPAS; detalhe e eventos distinguem os motivos. Não é mistura dos contadores. (`bin/codex_pergunta.sh:234`, `bin/disjuntor.py:2406`, `bin/disjuntor.py:2502`) |
+| **10** | **FILA — validação:** execução de ruff/AST/bash-n alegada **[nao verificado]**. |
+| **11** | **FILA — ambiente:** causa e exclusividade ambiental do vermelho **[nao verificado]**. |
+| **12** | **PROCEDENTE:** janela e consumo único não substituem identidade da tentativa; sobrevivem os contraexemplos T1. (`bin/disjuntor.py:932`, `bin/disjuntor.py:936`, `bin/disjuntor.py:2409`) |
+
+**3. Demais classes**
+
+- **PROCEDENTE — relógio fora da borda:** o instante interno de `trilha_linhas` passou a decidir isenção. Fotografias também aceitam futuro: não recebem `agora`, enquanto o censo o aplica. **Cura:** propagar o instante da borda e usar identidade/ordem persistida para distinguir aberturas. (`bin/disjuntor.py:213`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:958`, `bin/disjuntor.py:964`, `bin/disjuntor.py:2456`, `bin/disjuntor.py:2251`)
+- **NAO PROCEDE como segundo escritor introduzido:** append converge em `trilha_linhas`; estado converge em `_com_estado`; ESTADO consome `ler/linha`. Isso não resolve atomicidade carimbo/evento/memo. (`bin/disjuntor.py:218`, `bin/disjuntor.py:226`, `bin/disjuntor.py:397`, `bin/gerar_estado.py:280`)
+- **NAO PROCEDE quanto a N paralelo; duplicação de juiz registrado não demonstrada.** Existe uma autoridade consultada pelas duas entradas de N; há duas verificações de n com significados explícitos acima. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:2719`, `bin/disjuntor.py:1090`)
+- **FILA — pouso antes do pré-requisito:** Bash principal continua podendo retornar antes do B3; é o caminho herdado apontado em D2. (`bin/disjuntor.py:2174`, `bin/disjuntor.py:2202`)
+- **Semântica efetiva:** `hash12` do wrapper identifica o commit; o hash de cada brief é outro campo. N é máximo dos briefs; `n_v` é confirmação do opus e `n_rel` é reconhecimento textual. Casamento usa `[ini−600,ini]`; medição usa `[agora−86400,agora]`, ambas inclusivas. O rótulo “pousos” mede finais conferidos, não merges realizados. (`bin/codex_pergunta.sh:292`, `bin/disjuntor.py:2055`, `bin/disjuntor.py:2059`, `bin/disjuntor.py:1090`, `bin/disjuntor.py:933`, `bin/disjuntor.py:2525`, `bin/disjuntor.py:2552`)
+
+**4. Selos e quatro reancoragens**
+
+| Mutante | Mesma propriedade? |
+|---|---|
+| `abertura-sem-janela` | **NAO PROCEDE alteração de propriedade:** remove o limite inferior; fixture separa aprovação/ini por uma hora. (`bin/tests/test_censo_antes_da_vaga.sh:723`, `bin/tests/test_censo_antes_da_vaga.sh:470`, `bin/tests/test_censo_antes_da_vaga.sh:480`, `bin/tests/test_censo_antes_da_vaga.sh:486`) |
+| `sem-consumo-unico` | **NAO PROCEDE:** uma aprovação para dois ini deve continuar dando com=1/sem=1. (`bin/tests/test_censo_antes_da_vaga.sh:731`, `bin/tests/test_censo_antes_da_vaga.sh:503`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:510`) |
+| `ini-do-futuro` | **NAO PROCEDE:** remove somente a exclusão do ini futuro. (`bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:511`) |
+| `pertenca-wrapper-propria` | **NAO PROCEDE:** continua contrapondo pertencimento canônico à célula crua. Esta âncora vai para `if dentro is False:`, não para `_casa_wrapper_ini`. (`bin/tests/test_censo_antes_da_vaga.sh:753`, `bin/tests/test_censo_antes_da_vaga.sh:535`, `bin/tests/test_censo_antes_da_vaga.sh:536`) |
+
+**PROCEDENTE — cobertura faltante:** T1 fabrica `ini`, usa PIDs distintos e não disputa o flock. Faltam os contraexemplos acima, carimbo concorrente e perda de anúncio após memo. Falta também positivo Agent→fotografia→B3/`--etapas`: retirar a ingestão Agent não encontra esse teste. **Cura:** acrescentar esses casos e seus mutantes específicos; sobrevivência executada **[nao verificado]**. (`bin/tests/test_etapas_no_brief.sh:72`, `bin/tests/test_etapas_no_brief.sh:320`, `bin/tests/test_etapas_no_brief.sh:322`, `bin/tests/test_etapas_no_brief.sh:148`, `bin/tests/test_etapas_no_brief.sh:176`, `bin/disjuntor.py:958`)
+
+**FILA — harness vizinho:** ainda aceita qualquer rc≠0; portanto suas mensagens não certificam morte pela FALHA correta. Casos `?` e K fora de N já verdes antes podem legitimamente matar mutantes novos. (`bin/tests/test_censo_antes_da_vaga.sh:685`, `bin/tests/test_etapas_no_brief.sh:513`, `bin/tests/test_etapas_no_brief.sh:514`)
+
+**5. Quem escreve / quem lê**
+
+| Arquivo/campo | Escritor | Leitor |
+|---|---|---|
+| Briefs: CENSO, ETAPAS, K | Autor real **[nao verificado]** | Coletor e validadores: `bin/disjuntor.py:1931`, `bin/disjuntor.py:2047`, `bin/disjuntor.py:2050` |
+| BACKLOG / fila | Autor real **[nao verificado]** | Leitor delegado e pertencimento: `bin/disjuntor.py:1958`, `bin/disjuntor.py:1990` |
+| `disjuntor.log`: instante/evento/detalhe | Append e limite de 300: `bin/disjuntor.py:213`, `bin/disjuntor.py:218` | Fotografia, abertura, sujeição, medidores: `bin/disjuntor.py:951`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449`, `bin/disjuntor.py:2518` |
+| INSTALADO | `bin/disjuntor.py:916` | `bin/disjuntor.py:909`; efeito na isenção: `bin/disjuntor.py:1071` |
+| SNAPSHOT: obra/N/via/pid/hash/briefs | Porta CLI: `bin/disjuntor.py:2059`, `bin/disjuntor.py:2064`; Agent: `bin/disjuntor.py:2068`, `bin/disjuntor.py:2162` | `bin/disjuntor.py:951`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042` |
+| CENSO APROVADO/FORA/DESLIGADO | `bin/disjuntor.py:2064`, `bin/disjuntor.py:2162`, `bin/disjuntor.py:2694`, `bin/disjuntor.py:2670`, `bin/disjuntor.py:2238` | `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449` |
+| `chamadas.log`: ini/fim, obra/papel/hash12/pid | Wrapper: `bin/codex_pergunta.sh:292`, `bin/codex_pergunta.sh:259` | Parser: `bin/codex_limite_estado.py:49`; consumidores novos: `bin/disjuntor.py:964`, `bin/disjuntor.py:1027`; censo: `bin/disjuntor.py:2483` |
+| Transcript/meta/handback/aid | Harness real **[nao verificado]**; fixture: `bin/tests/test_etapas_no_brief.sh:160` | `bin/disjuntor.py:868`, `bin/disjuntor.py:872`, `bin/disjuntor.py:681`, `bin/disjuntor.py:687` |
+| `ETAPAS: n/N` | Instrução ao verificador: `.claude/agents/verificador.md:18`; execução **[nao verificado]** | `bin/disjuntor.py:1088` |
+| RELATO + RELATO-ARQUIVO / linhas ETAPA | Autor e executor da DIETA **[nao verificado]**; fixtures: `bin/tests/test_etapas_no_brief.sh:47`, `bin/tests/test_etapas_no_brief.sh:381` | `bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`; opus: `.claude/agents/verificador.md:18` |
+| `disjuntor_estado.json`: memo, reprovações, metade | Conferência/incorporação: `bin/disjuntor.py:1091`, `bin/disjuntor.py:1253`; flock/replace: `bin/disjuntor.py:376`, `bin/disjuntor.py:397` | Memo e decisão: `bin/disjuntor.py:1059`, `bin/disjuntor.py:1269` |
+| ETAPAS finais: FORA/isenta/SEM-FOTO/METADE/PROVADAS | Prepara: `bin/disjuntor.py:1067`, `bin/disjuntor.py:1073`, `bin/disjuntor.py:1078`, `bin/disjuntor.py:1097`, `bin/disjuntor.py:1099`; publica: `bin/disjuntor.py:1316` | `bin/disjuntor.py:2518` |
+| NEGOU / ALVO / alarme no RELATO | `bin/disjuntor.py:2260`, `bin/disjuntor.py:2700`, `bin/disjuntor.py:302`, `bin/disjuntor.py:319` → `app/core/esteira_vigia.py:843` | Sujeição e contadores: `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449`, `bin/disjuntor.py:2518` |
+| PAREI censo | `bin/disjuntor.py:349` → `app/core/esteira_vigia.py:865`; trava: `app/core/esteira_vigia.py:854` | Stop/handoff/alarme: `bin/hook_stop_fila1.py:773`, `bin/handoff_sessao.sh:130`, `bin/alarme_sessao_ociosa.py:137` |
+| Hooks / linha ETAPAS do ESTADO | Configuração: `.claude/settings.json:68`, `.claude/settings.json:9`; composição: `bin/disjuntor.py:2402`, `bin/disjuntor.py:2649`; gravação: `bin/gerar_estado.py:390` | B3 pelos hooks: `bin/disjuntor.py:2186`, `bin/disjuntor.py:2202`, `bin/hook_stop_fila1.py:1204`; gerador/publicação: `bin/gerar_estado.py:281`, `bin/relato.sh:38`, `bin/relato.sh:105` |
+
+## 09/11 13:05 · sessao 8ac92c7e3053 · - · - · origem=Ronald (tmux)
+
+T1/T2 **não fechados na classe**:
+
+- **PROCEDENTE — tentativa errada aceita.** Snapshot recusado de `(obra,pid,hash12)` pode casar com `ini` de PID reciclado cuja nova abertura foi DESLIGADA/FORA, sem produzir snapshot próprio. `_fotografias` casa somente snapshots; `_censo_24h` casa também DESLIGADO/FORA, portanto o mesmo helper pode selecionar tentativas diferentes. Demonstrado em memória: snapshot t100 + `ini` t210 → casamento aceito. Cura: identificador único da tentativa compartilhado ou fotografia após a vaga. (`bin/disjuntor.py:932`, `bin/disjuntor.py:956`, `bin/disjuntor.py:964`, `bin/disjuntor.py:2467`, `bin/disjuntor.py:2487`)
+- **PROCEDENTE — empate temporal troca N.** `v.sort()` ordena `(t,N,via)`; N5 seguido de N3 no mesmo segundo retorna N5. Demonstrado executando somente funções extraídas por AST, com arquivos simulados em memória. Cura: ordem/identidade inequívoca da abertura; timestamp em segundos não desempata. (`bin/disjuntor.py:954`, `bin/disjuntor.py:969`, `bin/disjuntor.py:977`)
+- **PROCEDENTE — carimbo concorrente.** Dois processos podem ler ausência e ambos escrever; ausência de trava entre leitura e append. Demonstrado em memória com duas leituras intercaladas: dois carimbos. A trava B3 não protege chamadas independentes do wrapper/Agent. Cura: criação/leitura idempotente sob exclusão comum. (`bin/disjuntor.py:907`, `bin/disjuntor.py:916`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`)
+- **PROCEDENTE — relógio decide fora da borda.** Carimbo usa `datetime.now()` dentro do escritor; essa hora agora decide isenção. Fotos futuras são aceitas, inclusive wrapper chamando casamento sem `agora`; censo exclui futuro. Cura: passar instante da borda e ordenar por identidade persistida da abertura. (`bin/disjuntor.py:213`, `bin/disjuntor.py:958`, `bin/disjuntor.py:964`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:2251`, `bin/disjuntor.py:2456`)
+- **NAO PROCEDE — `ini` antes da vaga.** O escritor fica depois do `flock`; entretanto há inventário e raspagem entre ambos, sem garantia de “segundos”. (`bin/codex_pergunta.sh:240`, `bin/codex_pergunta.sh:244`, `bin/codex_pergunta.sh:283`, `bin/codex_pergunta.sh:292`)
+
+Decisões:
+
+- **2 PROCEDENTE:** carimbo representa primeiro uso bem sucedido, não instalação/deploy. Wrapper DESLIGADO engole falha do carimbo e ainda pode registrar `ini`; carimbo posterior permite chamar essa abertura do código novo de legado. Cura: marco de instalação persistido/confiável, com falha e concorrência tratadas. (`bin/disjuntor.py:916`, `bin/disjuntor.py:2668`, `bin/codex_pergunta.sh:292`, `bin/disjuntor.py:1071`)
+- **3 NAO PROCEDE:** SEM-FOTO entra na mesma fila B3 e dispara pelo limiar existente; não é simples aviso. (`bin/disjuntor.py:1077`, `bin/disjuntor.py:1254`, `bin/disjuntor.py:1272`)
+- **4 NAO PROCEDE, condicional:** FORA é dispensado quando pertencimento atual e eventos reconhecidos não demonstram sujeição. A limitação histórica está na decisão 6. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1043`, `bin/disjuntor.py:1065`)
+- **5 NAO PROCEDE:** comprovadamente sujeita, sem foto e sem abertura anterior ao carimbo, entra SEM-FOTO. Possibilidade histórica de “pré-I1, pós-I3” real: **[nao verificado]**. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1071`, `bin/disjuntor.py:1077`)
+- **6 PROCEDENTE:** fila1 aberta DESLIGADA após carimbo e removida antes do final vira FORA: `_SUJEITA_RE` não reconhece DESLIGADO, e BACKLOG atual não preserva pertencimento da abertura. Cura: registrar sujeição da abertura, inclusive desligada/indeterminada. (`bin/disjuntor.py:891`, `bin/disjuntor.py:1036`, `bin/disjuntor.py:1065`)
+- **7 PROCEDENTE:** wrapper fora da fila1 pode ser recusado só porque carimbo não grava; Agent fora retorna antes dessa escrita. Cura: preservar escopo fila1 nas duas vias. (`bin/disjuntor.py:2025`, `bin/disjuntor.py:2028`, `bin/disjuntor.py:2690`, `bin/disjuntor.py:2693`)
+- **12 PROCEDENTE:** janela inclusiva `[ini−600,ini]` e consumo único não fornecem identidade da tentativa; os contraexemplos acima sobrevivem. (`bin/disjuntor.py:933`, `bin/disjuntor.py:936`, `bin/disjuntor.py:2409`)
+
+A isenção consulta trilha e `chamadas.log`, sem mtime do RELATO; mas inclui snapshot não efetivado e CENSO APROVADO pré-vaga como prova de “abertura”. Cura: primeira abertura efetiva pelo mesmo identificador canônico. (`bin/disjuntor.py:889`, `bin/disjuntor.py:1022`, `bin/disjuntor.py:1027`, `bin/codex_pergunta.sh:234`, `bin/codex_pergunta.sh:240`)
+
+## 09/11 13:05 · sessao ac5e5ec8886f · - · - · origem=Ronald (tmux)
+
+- **T3 — NAO PROCEDE quanto a N paralelo:** B3 e `--etapas` usam `_fotografia_efetiva`; verificador recebe ordem explícita de consumir esse N. (`bin/disjuntor.py:1063`, `bin/disjuntor.py:2719`, `.claude/agents/verificador.md:18`)
+- **T4 — parcial:** `_obra_de` está na abertura Agent, guarda da abertura CLI, final B3 e consulta `--etapas`; o wrapper ainda recebe ID literal, e snapshots/medidas usam `\S+`, enquanto `_obra_de` aceita identidade com cauda/espaço. Final `O9 (C)` é recusado por falta da fotografia própria; não houve unificação integral das representações. (`bin/disjuntor.py:2207`, `bin/disjuntor.py:2035`, `bin/disjuntor.py:681`, `bin/disjuntor.py:2714`, `bin/codex_pergunta.sh:188`, `bin/disjuntor.py:884`, `bin/disjuntor.py:886`, `bin/disjuntor.py:649`)
+- **T5 — cura da DIETA presente, “leitor único” absoluto falso:** um helper de código reúne vivo+arquivo; porém verificador conta K separadamente e B3 aplica seu próprio parser/filtro para n. Divergência humana efetivamente ocorrida: **[nao verificado]**. Cura para centralizar contagem: expor Ks/n pelo leitor canônico e reservar ao opus a confirmação do conteúdo. (`bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`, `.claude/agents/verificador.md:18`, `app/docs/LEIS.md:60`)
+- **T6 — cabeças/placares separados:** ETAPAS possui literal próprio; `_obra_da_negativa` só reconhece CENSO, portanto ETAPAS não dispara PAREI censo. O placar ETAPAS reconhece negativa própria e CENSO permanece restrito à sua cabeça. (`bin/disjuntor.py:1789`, `bin/disjuntor.py:1792`, `bin/disjuntor.py:333`, `bin/disjuntor.py:2502`, `bin/disjuntor.py:2406`)
+- **T8 — PROCEDENTE, perda permanente da medida:** memo é gravado antes do anúncio; anúncio usa trilha não estrita, que engole erro. Falha de append com JSON gravável perde PROVADAS/METADE/SEM-FOTO definitivamente, pois o memo impede repetir; ESTADO lê só a trilha e poderá publicar zero. Cura: evento persistido com memo/outbox, entrega idempotente por aid, ou medição pelo estado com instante canônico. (`bin/disjuntor.py:1091`, `bin/disjuntor.py:396`, `bin/disjuntor.py:407`, `bin/disjuntor.py:1315`, `bin/disjuntor.py:225`, `bin/disjuntor.py:219`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:2516`, `bin/disjuntor.py:2538`)
+- **T8 — conta implementada:** inclui SEM-FOTO no denominador e contador próprio esperado zero; exclui FORA/isentos. Janela inclusiva nas duas bordas. Rótulo continua dizendo “pousos”, mas universo é finais APROVADOS conferidos. (`bin/disjuntor.py:2525`, `bin/disjuntor.py:2528`, `bin/disjuntor.py:2531`, `bin/disjuntor.py:2535`, `bin/disjuntor.py:2552`)
+
+Inventário consolidável:
+
+| Arquivo/campo | Escritor | Leitor |
+|---|---|---|
+| Briefs / CENSO / ETAPAS | Autor real **[nao verificado]**; fixture em `bin/tests/test_etapas_no_brief.sh:65` | Coletor `bin/disjuntor.py:1931`; validadores `bin/disjuntor.py:1818`, `bin/disjuntor.py:1875`; aplicação `bin/disjuntor.py:2047` |
+| BACKLOG / fila | Autor real **[nao verificado]** | `bin/disjuntor.py:1954` delega `_itens_andaveis` em `bin/disjuntor.py:1958`; pertinência `bin/disjuntor.py:1990` |
+| `disjuntor.log` / instante / evento / detalhe | Append central `bin/disjuntor.py:209`; relógio interno `bin/disjuntor.py:213`; truncamento `bin/disjuntor.py:218` | Fotos `bin/disjuntor.py:951`; abertura `bin/disjuntor.py:1018`; sujeição `bin/disjuntor.py:1040`; CENSO `bin/disjuntor.py:2447`; ETAPAS `bin/disjuntor.py:2516` |
+| INSTALADO | `_instalacao_etapas`, `bin/disjuntor.py:916` | Mesma função, `bin/disjuntor.py:909` |
+| SNAPSHOT / obra / N / via / pid / hash12 / briefs | Porta CLI `bin/disjuntor.py:2058`, `bin/disjuntor.py:2064`; Agent acumula `bin/disjuntor.py:2068`, publica `bin/disjuntor.py:2162` | `_fotografias` `bin/disjuntor.py:951`; `_primeira_abertura` `bin/disjuntor.py:1020`; `_sujeita` `bin/disjuntor.py:1042` |
+| CENSO APROVADO/FORA/DESLIGADO | `bin/disjuntor.py:2064`, `bin/disjuntor.py:2162`, `bin/disjuntor.py:2694`, `bin/disjuntor.py:2670`, `bin/disjuntor.py:2238` | `bin/disjuntor.py:1020`, `bin/disjuntor.py:1042`, `bin/disjuntor.py:2449` |
+| `chamadas.log` / ini / obra / papel / hash12 / pid | Wrapper `bin/codex_pergunta.sh:292`, depois do flock `bin/codex_pergunta.sh:240`; fim `bin/codex_pergunta.sh:259` | Parser `bin/codex_limite_estado.py:49`; chamado por `bin/disjuntor.py:964`, `bin/disjuntor.py:1027`, `bin/disjuntor.py:2483` |
+| Transcript/meta / handback / aid / obra / veredito | Harness real **[nao verificado]**; fixture `bin/tests/test_etapas_no_brief.sh:160` | `bin/disjuntor.py:868`, `bin/disjuntor.py:869`, `bin/disjuntor.py:872`, `bin/disjuntor.py:681`, `bin/disjuntor.py:687` |
+| ETAPAS n/N | Verificador instruído em `.claude/agents/verificador.md:18`; execução **[nao verificado]** | `bin/disjuntor.py:1088` |
+| ETAPA obra K / resultado no vivo+arquivo | Autor real e executor da DIETA **[nao verificado]**; fixture `bin/tests/test_etapas_no_brief.sh:47`, `bin/tests/test_etapas_no_brief.sh:381` | `bin/disjuntor.py:989`, `bin/disjuntor.py:992`, `bin/disjuntor.py:1004`; também `.claude/agents/verificador.md:18` |
+| `disjuntor_estado.json` / memo / b3.reprovados / metade | Conferência `bin/disjuntor.py:1056`, `bin/disjuntor.py:1091`; incorporação B3 `bin/disjuntor.py:1253`; persistência sob flock `bin/disjuntor.py:376`, `bin/disjuntor.py:396` | Memo `bin/disjuntor.py:1059`; decisão B3 `bin/disjuntor.py:1264` |
+| Eventos ETAPAS finais | Prepara `bin/disjuntor.py:1067`, `bin/disjuntor.py:1073`, `bin/disjuntor.py:1078`, `bin/disjuntor.py:1097`, `bin/disjuntor.py:1099`; publica `bin/disjuntor.py:1315` | `bin/disjuntor.py:2518` |
+| NEGOU ETAPAS/CENSO / ALVO / RELATO | `bin/disjuntor.py:2260`, `bin/disjuntor.py:2271`, `bin/disjuntor.py:2700`; RELATO via `bin/disjuntor.py:319` → `app/core/esteira_vigia.py:843`; ALVO `bin/disjuntor.py:302` | Sujeição `bin/disjuntor.py:1042`; contadores `bin/disjuntor.py:2449`, `bin/disjuntor.py:2518` |
+| PAREI censo | `bin/disjuntor.py:340` → `app/core/esteira_vigia.py:865`, trava comum `app/core/esteira_vigia.py:846` | Stop `bin/hook_stop_fila1.py:773`; handoff `bin/handoff_sessao.sh:130`; alarme `bin/alarme_sessao_ociosa.py:137` |
+| Hook PreToolUse / Stop | Configurações `.claude/settings.json:68`, `.claude/settings.json:9` | Agent final `bin/disjuntor.py:2202`; Codex verificador `bin/disjuntor.py:2186`; Stop delega `bin/hook_stop_fila1.py:1204` |
+| Linha ETAPAS no ESTADO | `ler` em `bin/disjuntor.py:2402`; composição `bin/disjuntor.py:2649`; gerador delega `bin/gerar_estado.py:280`, grava `bin/gerar_estado.py:390`; publicação `bin/relato.sh:38`, `bin/relato.sh:105` | Consumidores reais posteriores **[nao verificado]** |
+
+## 09/11 13:04 · sessao c81d9af71fbe · - · - · origem=Ronald (tmux)
+
+T7 **NAO PROCEDE no recorte corrigido**: harness exige simultaneamente rc≠0 e `FALHA (<caso>)`; guarda n≤N e casos `?`/K fora do intervalo existem. (`bin/tests/test_etapas_no_brief.sh:446`, `bin/disjuntor.py:1090`, `bin/tests/test_etapas_no_brief.sh:397`, `bin/tests/test_etapas_no_brief.sh:403`, `bin/tests/test_etapas_no_brief.sh:512`)
+
+| Reancoragem | Mesma propriedade por inspeção |
+|---|---|
+| abertura-sem-janela | Sim: retira apenas limite inferior dos 600s; fixture G tem aprovação uma hora anterior ao ini e deve aumentar “sem”. (`bin/tests/test_censo_antes_da_vaga.sh:723`, `bin/tests/test_censo_antes_da_vaga.sh:470`, `bin/tests/test_censo_antes_da_vaga.sh:480`, `bin/tests/test_censo_antes_da_vaga.sh:486`) |
+| sem-consumo-unico | Sim: permite reaproveitar aprovação para dois ini da mesma chave; fixture/asserções exigem com=1, sem=1. (`bin/tests/test_censo_antes_da_vaga.sh:731`, `bin/tests/test_censo_antes_da_vaga.sh:503`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:510`) |
+| ini-do-futuro | Sim: retira somente limite superior; ini T futuro passa a casar e viola com=1. (`bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/tests/test_censo_antes_da_vaga.sh:504`, `bin/tests/test_censo_antes_da_vaga.sh:507`, `bin/tests/test_censo_antes_da_vaga.sh:511`) |
+| pertenca-wrapper-propria | Sim: troca pertencimento decidido pelo teste da célula crua; obra qualificada volta a FORA. (`bin/tests/test_censo_antes_da_vaga.sh:753`, `bin/tests/test_censo_antes_da_vaga.sh:535`, `bin/tests/test_censo_antes_da_vaga.sh:536`, `bin/disjuntor.py:2693`) |
+
+São três reancoragens para `_casa_wrapper_ini` e uma para `if dentro is False:`. (`bin/tests/test_censo_antes_da_vaga.sh:723`, `bin/tests/test_censo_antes_da_vaga.sh:731`, `bin/tests/test_censo_antes_da_vaga.sh:747`, `bin/tests/test_censo_antes_da_vaga.sh:753`)
+
+**PROCEDENTE — cobertura incompleta da classe fotografia:** retirar a aceitação da fotografia Agent em `_fotografias` não encontra caso que confira esse N no B3 ou `--etapas`; os positivos abrem pelo wrapper fabricando ini, enquanto os testes Agent verificam escrita/negação. Cura: positivo ponta a ponta com única fotografia Agent, mais mutante removendo sua ingestão. Sobrevivência executada [nao verificado]. (`bin/disjuntor.py:958`, `bin/tests/test_etapas_no_brief.sh:67`, `bin/tests/test_etapas_no_brief.sh:77`, `bin/tests/test_etapas_no_brief.sh:148`, `bin/tests/test_etapas_no_brief.sh:153`, `bin/tests/test_etapas_no_brief.sh:176`, `bin/tests/test_etapas_no_brief.sh:359`)
+
+**PROCEDENTE — T1 não certificado na classe:** o caso usa PIDs distintos e fabrica ini; não disputa o flock real. Cura: identidade única da abertura e casos mesma chave/PID reciclado, duas aberturas no mesmo segundo, relógio invertido e carimbo concorrente. (`bin/tests/test_etapas_no_brief.sh:72`, `bin/tests/test_etapas_no_brief.sh:320`, `bin/tests/test_etapas_no_brief.sh:322`, `bin/tests/test_etapas_no_brief.sh:323`, `bin/disjuntor.py:931`, `bin/disjuntor.py:969`)
+
+**FILA — harness vizinho herdado:** `test_censo_antes_da_vaga` continua aceitando qualquer rc≠0, sem exigir a falha específica. As quatro propriedades permanecem verificáveis por inspeção; morte executada pelo motivo certo [nao verificado]. (`bin/tests/test_censo_antes_da_vaga.sh:685`)
+
+Casos `?` e K fora do intervalo podem passar antes da cura e continuar úteis como controles/matadores dos mutantes adicionados; isso sozinho **NAO PROCEDE** como defeito. (`bin/tests/test_etapas_no_brief.sh:397`, `bin/tests/test_etapas_no_brief.sh:403`, `bin/tests/test_etapas_no_brief.sh:513`, `bin/tests/test_etapas_no_brief.sh:514`)
+
+RED 45, GREEN e mortes dos 38: **[nao verificado]**; não executei suites nem consultei logs de produção. [nao verificado]
 
 ## 09/11 12:24 · sessao eab8c15e7201 · FIO-E0-V4-E3 · verificador · origem=Code
 
@@ -630,346 +789,4 @@ Para cada chamada, a porta exige:
 
 **Divergência documental relevante:** o aval fornecido diz “BACKLOG:1879 corrigido”, mas a linha 1879 desta cópia trata `BO-0511-G2-TRIAGEM`; não trata permuta (`app/docs/BACKLOG.md:1879`). A presença do aval novo em arquivo da cópia é **[nao verificado]**.
 
-## 09/11 11:52 · sessao 299fbae42c6c · - · - · origem=Ronald (tmux)
-
-Pré-checagens reutilizáveis encontradas:
-
-| Checagem | Código sem escrita e limite |
-|---|---|
-| Competência exportada/lavrada | `competencia_fechada_para_celula(empresa_id, mes, ano, colaborador_id=None, fontes=False)` retorna bool ou fontes, combinando TXT vigente e holerite do próprio colaborador com lote publicado; executa consultas, sem gravação (`app/folha/export.py:589`; `app/folha/export.py:609`). Está registrado como K9 (`app/core/juizes.py:315`). |
-| TXT entregue | `competencia_entregue` retorna bool ou registro vigente, excluindo o vigente invalidado; chama `anotar_vigencia`/`so_vigentes`, que consultam e anotam instâncias em memória, sem persistir (`app/folha/export.py:556`; `app/folha/export.py:580`; `app/folha/models.py:192`; `app/folha/models.py:203`). |
-| Janela lavrada do dia | `_competencias_exportadas` enumera competências candidatas, pergunta K9 e converte em janelas; pode ser reutilizada antes das quatro escritas, como já faz `editar_dia` (`app/ponto/management/commands/gerar_celulas.py:126`; `app/ponto/management/commands/gerar_celulas.py:161`; `app/ponto/management/commands/gerar_celulas.py:172`; `app/ponto/portas/celula.py:568`). |
-| Recusa falante da lavra | `autoridade_da_lavra` escolhe a competência intersectada e `fonte_da_lavra` traduz as fontes retornadas pelo mesmo K9; não gravam (`app/ponto/management/commands/gerar_celulas.py:183`; `app/ponto/management/commands/gerar_celulas.py:208`). |
-| Permissão por ação | `tem_acao(user, *acoes)` retorna bool por autenticação, superuser e permissões `colaboradores.rbac_*`; não grava (`app/colaboradores/mixins.py:322`). `editar_escalas` já é ação usada nas views de escala; sua eleição específica para confirmar permuta: **[nao verificado]** (`app/escala/views.py:140`). |
-| Permissão contextual de chamado | `pode_agir_chamado` retorna a permissão do departamento dono do chamado; é reutilizável para esse contexto, sem julgar os quatro dias nem o par (`app/chamados/utils.py:32`; `app/chamados/utils.py:52`; `app/chamados/utils.py:68`). |
-| Interjornada 11h | Validador pronto localizado: **[nao verificado]**. O helper de disponibilidade declara expressamente que **não** valida descanso interjornada de 11h (`app/ponto/utils.py:141`; `app/ponto/utils.py:152`). |
-| Sobreposição geométrica de turnos | Validador pronto do par localizado: **[nao verificado]**. Há componentes de geometria e leitura, abaixo, mas eles não retornam esse veredito (`app/escala/servico_jornada.py:61`; `app/core/juizes.py:195`). |
-
-Componentes reaproveitáveis de geometria: `EC.eh_dia_trabalho` lê célula ou fallback do vínculo; `EC.marcos_do_dia` lê DNA ou template; `marcos_turno(..., ec=..., celulas=...)` encadeia marcos em datetimes crescentes, inclusive virada da meia-noite; `fim_turno` retorna o último marco. São insumos para calcular descanso e colisão, não um juiz que valide a permuta (`app/escala/models.py:1087`; `app/escala/models.py:1098`; `app/escala/models.py:1117`; `app/escala/servico_jornada.py:61`; `app/escala/servico_jornada.py:89`).
-
-Cuidado com domínio: `ausencias_sobrepostas`, `veto_de_lancamento` e `checar_ausencia` são consultas/validações reutilizáveis de **Ausência/fato humano**, não sobreposição horária de plantões; `checar_ausencia` já é prévia explicitamente sem escrita (`app/ponto/turnos.py:2795`; `app/ponto/precedencia.py:430`; `app/ponto/services/checar_ausencia.py:15`).
-
-No caminho de escrita, a lavra já é bloqueada por `editar_dia` antes do seu `atomic`; não existe necessidade de extrair o juiz da escrita, pois K9 e a enumeração de janelas já estão separados (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:592`; `app/folha/export.py:589`). Identificação do autor e motivo são guardas locais, não autorização; `trocar_plantao` apenas exige `autor.pk`/motivo e chama `editar_dia`, sem `tem_acao`/`pode_agir_chamado` (`app/ponto/portas/celula.py:646`; `app/ponto/portas/celula.py:668`). Interjornada e colisão geométrica tampouco aparecem como guardas locais nessas portas; implementação pronta dessas duas verificações: **[nao verificado]** (`app/ponto/portas/celula.py:559`; `app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:673`).
-
-`core/permissoes` nesta cópia: **[nao verificado]**; os endereços concretos de permissão encontrados são os acima (`app/colaboradores/mixins.py:322`; `app/chamados/utils.py:68`).
-
-## 09/11 11:50 · sessao d03007e09ff6 · RETRATO-POR-EVENTO · censo · origem=Code
-
-O frescor atual pode deixar passar mudanças nas fontes do retrato: ele observa somente o carimbo do fechamento, enquanto o lavrador também lê cadastro, células, vínculos, férias, ausências, rubricas e o fio dos chamados. Porém, “escala e ausência não invalidam” não vale para todos os caminhos desta cópia: existem invalidações indiretas do fechamento. (`app/folha/retrato_folha.py:1298`; `app/escala/signals.py:124`; `app/ponto/services/ausencia.py:941`)
-
-Execução atual dos crons, conteúdo atual da fila e custo atual de produção: **[nao verificado]**.
-
-**1. Fontes do lavrador**
-
-O caminho começa em `handle → montar_linhas → fora_da_folha → dias_que_seguram → classificar_export`; acrescenta `_causas_gravadas` e, para o dono do bloqueio, `alimentar_portas/porta_alcancavel_do_dia`. (`app/folha/management/commands/lavrar_retrato_folha.py:65`; `app/folha/retrato_folha.py:1157`; `app/folha/retrato_folha.py:1160`; `app/folha/fora_da_folha.py:119`; `app/folha/fora_da_folha.py:166`; `app/folha/fora_da_folha.py:178`)
-
-O fecho inclui os seguintes caminhos transitivos:
-
-- Retenção → célula → protestos → juiz dos períodos/pausas. (`app/folha/export.py:960`; `app/folha/export.py:1266`; `app/folha/export.py:1253`; `app/folha/export.py:1142`)
-- Homologação → eventos do fechamento, ciclo do vínculo, régua CCT e datas de ausência. (`app/folha/export.py:994`; `app/folha/export.py:995`; `app/folha/export.py:996`; `app/folha/export.py:1005`)
-- Cadastro zero → previsto → métodos de vínculo/template → folgas e feriados. (`app/folha/export.py:934`; `app/escala/utils.py:2266`; `app/escala/utils.py:2269`; `app/escala/models.py:1286`; `app/escala/models.py:1395`)
-- Dono → fila/verbos/pergunta viva → tranca, trilha humana, materialização e batidas. (`app/chamados/juizes.py:1307`; `app/chamados/juizes.py:1310`; `app/chamados/juizes.py:1322`; `app/chamados/juizes.py:1157`; `app/chamados/juizes.py:1088`; `app/chamados/juizes.py:1234`)
-
-A enumeração abaixo distingue **leitura ORM da linha inteira** de consumo individual em Python: consultas sem `only/defer/values` carregam os campos concretos declarados, inclusive campos que a decisão não usa. É por isso que `Colaborador.cpf` aparece no inventário, embora o classificador use nome/código e não consulte o atributo CPF. (`app/folha/export.py:777`; `app/folha/export.py:831`; `app/colaboradores/models.py:319`)
-
-Nas relações, o nome do campo inclui a coluna correspondente `*_id`; `pk` designa a identidade usada nas consultas. As declarações desses campos estão nos respectivos modelos. (`app/colaboradores/models.py:321`; `app/escala/models.py:872`; `app/chamados/models.py:2424`)
-
-Campos carregados por ORM, um por linha:
-
-```text
-Empresa.pk -> handle (app/folha/management/commands/lavrar_retrato_folha.py:51)
-Empresa.razao_social -> empresas_visiveis (app/colaboradores/queries.py:87)
-Empresa.nome_fantasia -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.cnpj -> empresas_visiveis (app/colaboradores/queries.py:86)
-Empresa.ativa -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.em_rollout -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.dia_inicio_competencia -> corte_da_empresa (app/ponto/janelas.py:49)
-Empresa.janela_he_ativa -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.janela_he_piso_min -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.limite_decisao_he_min -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.janela_he_teto_min -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.janela_he_saida_ativa -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.janela_he_saida_teto_min -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.he_pendente_trava_export -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.janela_he_desde -> empresas_visiveis (app/colaboradores/queries.py:85)
-Empresa.regime_trabalhista -> regua_para (app/core/regua_cct.py:353)
-
-FechamentoMensal.pk -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.colaborador -> classificar_export (app/folha/export.py:779)
-FechamentoMensal.mes -> classificar_export (app/folha/export.py:778)
-FechamentoMensal.ano -> classificar_export (app/folha/export.py:778)
-FechamentoMensal.status -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.horas_trabalhadas -> classificar_export (app/folha/export.py:823)
-FechamentoMensal.horas_noturnas -> eventos_do_fechamento (app/folha/export.py:447)
-FechamentoMensal.horas_extras -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.horas_extras_50 -> eventos_do_fechamento (app/folha/export.py:441)
-FechamentoMensal.horas_extras_50_noturna -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.horas_extras_100 -> eventos_do_fechamento (app/folha/export.py:421)
-FechamentoMensal.horas_extras_100_feriado -> eventos_do_fechamento (app/folha/export.py:420)
-FechamentoMensal.horas_extras_100_noturna -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.horas_folga_trabalhada -> eventos_do_fechamento (app/folha/export.py:446)
-FechamentoMensal.horas_atraso -> eventos_do_fechamento (app/folha/export.py:452)
-FechamentoMensal.horas_saida_antecipada -> eventos_do_fechamento (app/folha/export.py:452)
-FechamentoMensal.horas_falta -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.horas_intra_indenizada -> eventos_do_fechamento (app/folha/export.py:448)
-FechamentoMensal.turnos_abertos -> classificar_export (app/folha/export.py:825)
-FechamentoMensal.minutos_previstos -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.dias_incertos -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.minutos_abonados -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.minutos_realizados -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.dias_previstos -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.motivos_espelho -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.causa_espelho -> _causas_gravadas (app/folha/retrato_folha.py:1115)
-FechamentoMensal.previsto_em -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.derivado_em -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.semanas_dsr_ok -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.semanas_dsr_perdido -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.horas_reflexo_dsr -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.saldo_banco_horas -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.inconsistencias -> classificar_export (app/folha/export.py:960)
-FechamentoMensal.aprovado_por -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.aprovado_em -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.observacao -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.criado_em -> classificar_export (app/folha/export.py:777)
-FechamentoMensal.atualizado_em -> classificar_export (app/folha/export.py:777)
-
-Colaborador.pk -> dias_que_seguram (app/folha/fora_da_folha.py:131)
-Colaborador.isento_ponto -> isento_ponto (app/core/constants.py:18)
-Colaborador.matricula_hasner -> classificar_export (app/folha/export.py:779)
-Colaborador.matricula_nexti -> classificar_export (app/folha/export.py:779)
-Colaborador.codigo_dominio -> classificar_export (app/folha/export.py:832)
-Colaborador.cod_esocial -> classificar_export (app/folha/export.py:779)
-Colaborador.cpf -> classificar_export (app/folha/export.py:779)
-Colaborador.nome -> classificar_export (app/folha/export.py:831)
-Colaborador.empresa -> classificar_export (app/folha/export.py:778)
-Colaborador.posto -> classificar_export (app/folha/export.py:779)
-Colaborador.situacao -> classificar_export (app/folha/export.py:802)
-Colaborador.data_admissao -> motivos_retencao_celula (app/folha/export.py:1198)
-Colaborador.data_demissao -> motivos_retencao_celula (app/folha/export.py:1200)
-Colaborador.cargo -> classificar_export (app/folha/export.py:779)
-Colaborador.data_nascimento -> classificar_export (app/folha/export.py:779)
-Colaborador.genero -> classificar_export (app/folha/export.py:779)
-Colaborador.estado_civil -> classificar_export (app/folha/export.py:779)
-Colaborador.pis -> classificar_export (app/folha/export.py:779)
-Colaborador.rg -> classificar_export (app/folha/export.py:779)
-Colaborador.rg_emissor -> classificar_export (app/folha/export.py:779)
-Colaborador.telefone -> classificar_export (app/folha/export.py:779)
-Colaborador.telefone2 -> classificar_export (app/folha/export.py:779)
-Colaborador.email_pessoal -> classificar_export (app/folha/export.py:779)
-Colaborador.end_rua -> classificar_export (app/folha/export.py:779)
-Colaborador.end_numero -> classificar_export (app/folha/export.py:779)
-Colaborador.end_complemento -> classificar_export (app/folha/export.py:779)
-Colaborador.end_bairro -> classificar_export (app/folha/export.py:779)
-Colaborador.end_cidade -> classificar_export (app/folha/export.py:779)
-Colaborador.end_uf -> classificar_export (app/folha/export.py:779)
-Colaborador.end_cep -> classificar_export (app/folha/export.py:779)
-Colaborador.motivo_desligamento -> classificar_export (app/folha/export.py:779)
-Colaborador.usuario -> classificar_export (app/folha/export.py:779)
-Colaborador.perfil -> classificar_export (app/folha/export.py:779)
-Colaborador.deve_trocar_senha -> classificar_export (app/folha/export.py:779)
-Colaborador.fcm_token -> classificar_export (app/folha/export.py:779)
-Colaborador.foto -> classificar_export (app/folha/export.py:779)
-Colaborador.fcm_removido_em -> classificar_export (app/folha/export.py:779)
-Colaborador.notificacao_negada_em -> classificar_export (app/folha/export.py:779)
-Colaborador.fcm_removido_motivo -> classificar_export (app/folha/export.py:779)
-Colaborador.onboarding_completo -> classificar_export (app/folha/export.py:779)
-Colaborador.wk_em_operacao -> classificar_export (app/folha/export.py:779)
-Colaborador.onboarding_pendente -> classificar_export (app/folha/export.py:779)
-Colaborador.aceite_termos_em -> classificar_export (app/folha/export.py:779)
-Colaborador.aceite_termos_versao -> classificar_export (app/folha/export.py:779)
-Colaborador.gps_concedido_em -> classificar_export (app/folha/export.py:779)
-Colaborador.camera_concedida_em -> classificar_export (app/folha/export.py:779)
-Colaborador.notif_concedida_em -> classificar_export (app/folha/export.py:779)
-Colaborador.telefone_confirmado_em -> classificar_export (app/folha/export.py:779)
-Colaborador.email_confirmado_em -> classificar_export (app/folha/export.py:779)
-Colaborador.criado_em -> classificar_export (app/folha/export.py:779)
-Colaborador.atualizado_em -> classificar_export (app/folha/export.py:779)
-Colaborador.plataforma_principal -> classificar_export (app/folha/export.py:779)
-
-CelulaDia.pk -> motivos_retencao_celula (app/folha/export.py:1221)
-CelulaDia.colaborador -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.data -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.trabalha -> motivos_retencao_celula (app/folha/export.py:1255)
-CelulaDia.origem -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.escala_geradora -> vinculo_do_dia (app/escala/alimentacao.py:270)
-CelulaDia.dna -> periodos_do_dia (app/ponto/juiz_batida.py:158)
-CelulaDia.gerada_em -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.regenerada_em -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.regeneracoes -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.dna_anterior -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.editada_em -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.editada_por -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.julgada_em -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.impressao -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.veredito -> motivos_retencao_celula (app/folha/export.py:1233)
-CelulaDia.veredito_via -> _pergunta_viva_calc (app/chamados/juizes.py:1168)
-CelulaDia.veredito_em -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.protestos -> motivos_retencao_celula (app/folha/export.py:1246)
-CelulaDia.ata -> periodos_do_dia (app/ponto/juiz_batida.py:157)
-CelulaDia.ausencia -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.tem_entrada -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.tem_saida -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.insumos_em -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.status_dia -> motivos_retencao_celula (app/folha/export.py:1206)
-CelulaDia.status_rotulo -> motivos_retencao_celula (app/folha/export.py:1206)
-
-EscalaColaborador.pk -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:155)
-EscalaColaborador.colaborador -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:149)
-EscalaColaborador.posto -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-EscalaColaborador.tipo_escala -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.data_inicio -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:149)
-EscalaColaborador.data_fim -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:151)
-EscalaColaborador.ativa -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:150)
-EscalaColaborador.regua_confianca -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.regua_classe -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.regua_avaliada_em -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.regua_dias_baixo -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.regua_corroborada_em -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.regua_corroborada_por -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.folga_calendario -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.trabalha_em_feriado -> eh_dia_trabalho_calculado (app/escala/models.py:1390)
-EscalaColaborador.data_ancora_colaborador -> classificar_export (app/folha/export.py:801)
-EscalaColaborador.origem_ancora -> classificar_export (app/folha/export.py:930)
-EscalaColaborador.chamado_ancora -> classificar_export (app/folha/export.py:930)
-
-TipoEscala.pk -> classificar_export (app/folha/export.py:930)
-TipoEscala.codigo -> classificar_export (app/folha/export.py:930)
-TipoEscala.descricao -> classificar_export (app/folha/export.py:930)
-TipoEscala.minutos_jornada -> classificar_export (app/folha/export.py:930)
-TipoEscala.hora_inicio -> marcos_do_dia (app/escala/models.py:343)
-TipoEscala.hora_fim -> marcos_do_dia (app/escala/models.py:343)
-TipoEscala.hora_inicio_intervalo -> marcos_do_dia (app/escala/models.py:344)
-TipoEscala.hora_fim_intervalo -> marcos_do_dia (app/escala/models.py:345)
-TipoEscala.hora_inicio_intervalo2 -> pausas_cadastradas (app/escala/models.py:276)
-TipoEscala.hora_fim_intervalo2 -> pausas_cadastradas (app/escala/models.py:276)
-TipoEscala.noturno -> classificar_export (app/folha/export.py:930)
-TipoEscala.permite_hora_extra -> classificar_export (app/folha/export.py:930)
-TipoEscala.he_extra_antes_min -> classificar_export (app/folha/export.py:930)
-TipoEscala.he_extra_depois_min -> classificar_export (app/folha/export.py:930)
-TipoEscala.folga_calendario_padrao -> classificar_export (app/folha/export.py:930)
-TipoEscala.intervalo_modo -> _intervalo_livre (app/escala/models.py:250)
-TipoEscala.intervalo_indenizavel -> periodos_do_dia (app/ponto/juiz_batida.py:310)
-TipoEscala.intervalo_duracao_min -> intervalo_cadastrado (app/ponto/juiz_batida.py:143)
-TipoEscala.apelido -> classificar_export (app/folha/export.py:930)
-TipoEscala.tipo_ciclo -> classificar_export (app/folha/export.py:800)
-TipoEscala.ciclo_dias -> classificar_export (app/folha/export.py:930)
-TipoEscala.is_template -> classificar_export (app/folha/export.py:930)
-TipoEscala.template_nome -> classificar_export (app/folha/export.py:930)
-TipoEscala.data_ancora -> classificar_export (app/folha/export.py:930)
-TipoEscala.dias_trabalho_semana -> eh_dia_trabalho (app/escala/models.py:831)
-TipoEscala.template_pai -> classificar_export (app/folha/export.py:930)
-TipoEscala.nivel -> classificar_export (app/folha/export.py:930)
-TipoEscala.tipo_base -> classificar_export (app/folha/export.py:930)
-TipoEscala.editavel -> classificar_export (app/folha/export.py:930)
-TipoEscala.perfil_apuracao -> classificar_export (app/folha/export.py:930)
-TipoEscala.folga_dia_semana -> eh_dia_trabalho (app/escala/models.py:838)
-TipoEscala.horarios_por_dia -> _override_do_dia (app/escala/models.py:227)
-
-Posto.pk -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.nome -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.empresa -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.tolerante_offline -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.praca -> regua_para (app/core/regua_cct.py:330)
-Posto.municipio -> lugar_do_vinculo (app/core/feriados.py:122)
-Posto.endereco -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.numero -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.complemento -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.bairro -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.cidade -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.cep -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.opera_em_feriado -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.lotacao_minima -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.lotacao_maxima -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.latitude -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.longitude -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.raio_metros -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.ativo -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Posto.revisar -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-
-Praca.pk -> regua_para (app/core/regua_cct.py:330)
-Praca.nome -> regua_para (app/core/regua_cct.py:330)
-Praca.cidade -> regua_para (app/core/regua_cct.py:330)
-Praca.estado -> regua_para (app/core/regua_cct.py:330)
-Praca.sindicato -> regua_para (app/core/regua_cct.py:330)
-Praca.obs -> regua_para (app/core/regua_cct.py:330)
-Praca.adicional_noturno_percentual -> regua_para (app/core/regua_cct.py:330)
-Praca.tolerancia_minutos -> regua_para (app/core/regua_cct.py:330)
-Praca.banco_horas_prazo_dias -> regua_para (app/core/regua_cct.py:330)
-Praca.ativa -> regua_para (app/core/regua_cct.py:330)
-
-Municipio.pk -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Municipio.codigo_ibge -> escalas_do_periodo_por_colab (app/escala/alimentacao.py:152)
-Municipio.nome -> _lugar (app/core/feriados.py:53)
-Municipio.uf -> _lugar (app/core/feriados.py:52)
-
-Feriado.pk -> feriados_de (app/core/feriados.py:83)
-Feriado.nome -> feriados_de (app/core/feriados.py:83)
-Feriado.data -> _qs (app/core/feriados.py:29)
-Feriado.abrangencia -> alcanca (app/core/feriados.py:60)
-Feriado.uf -> alcanca (app/core/feriados.py:63)
-Feriado.municipio -> alcanca (app/core/feriados.py:66)
-Feriado.fonte -> feriados_de (app/core/feriados.py:83)
-
-AplicacaoConvencao.pk -> _aplicacao_vigente (app/core/regua_cct.py:259)
-AplicacaoConvencao.sindicato -> _aplicacao_vigente (app/core/regua_cct.py:255)
-AplicacaoConvencao.empresa -> _aplicacao_vigente (app/core/regua_cct.py:254)
-AplicacaoConvencao.praca -> _aplicacao_vigente (app/core/regua_cct.py:256)
-AplicacaoConvencao.ativo -> _aplicacao_vigente (app/core/regua_cct.py:254)
-AplicacaoConvencao.criado_em -> _aplicacao_vigente (app/core/regua_cct.py:259)
-AplicacaoConvencao.criado_por -> _aplicacao_vigente (app/core/regua_cct.py:259)
-AplicacaoConvencao.motivo -> _aplicacao_vigente (app/co
-
-[truncado em 20000 de 69455 caracteres]
-
-## 09/11 11:41 · sessao 6d93743673c9 · - · - · origem=Ronald (tmux)
-
-Fecho confirmado por AST em memória e inspeção de métodos:
-
-- `classificar_export → motivos_retencao_espelho → motivos_retencao_celula → nao_retem_pela_pausa → periodos_do_dia`. (`app/folha/export.py:960`, `:1266`, `:1253`, `:1165`, `:1142`)
-- `classificar_export → _codigos_nao_homologados → eventos_do_fechamento / _ciclo_do_colab / feriado_12x36_em_dobra / datas_falta → regua_para / alimentacao / TipoAusencia / Ausencia`. (`app/folha/export.py:966`, `:994`, `:995`, `:996`, `:1005`, `:380`, `:359`, `:180`)
-- `classificar_export → minutos_previstos_do_dia → EscalaColaborador.eh_dia_trabalho / marcos_do_dia / pausas_do_dia → TipoEscala / FolgaDia / Feriado`. (`app/folha/export.py:934`; `app/escala/utils.py:2266`, `:2269`, `:2291`; `app/escala/models.py:1096`, `:1133`, `:1208`, `:1286`, `:1395`)
-- `fora_da_folha → dias_que_seguram → classificar_export`; depois `alimentar_portas → particionar_verbos / qs_na_fila / pergunta_viva`; `porta_alcancavel_do_dia → chamado_que_lista / perguntas_do_app`. (`app/folha/fora_da_folha.py:161`, `:119`, `:166`; `app/chamados/juizes.py:1307`, `:1310`, `:1322`, `:1399`, `:1400`, `:1339`)
-- `pergunta_viva → dia_da_pergunta_trancado → periodo_trancado / _toque_humano_no_dia → LogAuditoria / User`; outros ramos chegam a `classificar_falta`, materialização e `turnos_do_colab`, lendo batidas, células, vínculos e templates. (`app/chamados/juizes.py:1157`, `:964`, `:971`, `:1087`, `:1088`, `:1221`, `:1234`, `:384`)
-
-A resolução sintática preliminar alcançou 178 funções; esse número exclui expansão posterior de métodos de instância, reexports e callbacks. Portanto, não equivale a prova de 178 funções no fecho completo. `[nao verificado]`
-
-`prontidao`, `grade_do_fechamento`, `get_motor_cct`, `EmpresaIntegracao`, `ExportacaoDominio` e `Holerite` não pertencem aos caminhos inspecionados dessas raízes; `grade_da_celula` entra por `_tipo_pelo_marco`, separadamente. (`app/folha/export.py:757`, `:986`; `app/chamados/services/materializacao.py:282`)
-
-Foram enviados ao principal os inventários detalhados de campos, o mapa de leituras de linhas completas e os relógios. Há uma escrita potencial dentro desse fecho: `get_user_sistema()` usa `User.objects.get_or_create(username='sistema')`; nenhum código da aplicação foi executado nesta inspeção. (`app/core/utils.py:18`; `app/chamados/juizes.py:1087`)
-
-## 09/11 11:41 · sessao 8a265e5c5b41 · - · - · origem=Ronald (tmux)
-
-O-OUTBOX verificado na cópia:
-
-- Modelo `EventoCelula`: campos `celula_id`, `colaborador_id`, `data`, `criado_em`, `processado_em`, `tentativas`, `erro`; sem payload e sem índice único de pendente. Não contém empresa nem competência gravadas (`app/escala/models.py:1845-1871`).
-- Escritor único: `emitir_evento_celula`; faz `EventoCelula.objects.create(celula_id=..., colaborador_id=..., data=...)` (`app/ponto/portas/celula.py:882-891`).
-- `salvar_e_emitir` grava célula e evento no mesmo `atomic`; somente mudanças de `veredito` ou `ata` acordam o consumidor (`app/ponto/portas/celula.py:878-902`).
-- Consumidor único de produção: comando `consumir_eventos_celula`, com advisory lock por schema; cron a cada minuto (`app/chamados/management/commands/consumir_eventos_celula.py:17-31`; `app/chamados/reconciliador.py:1215-1242`; `app/config/crons.py:393-394`).
-- Agrupa eventos por colaborador dentro de cada lote de até 500; não é debounce por empresa×competência. Roda lotes até esvaziar ou ultrapassar 45 s (`app/chamados/reconciliador.py:1209-1211`; `app/chamados/reconciliador.py:1342-1352`; `app/chamados/reconciliador.py:1402-1404`).
-- Consumidores funcionais: rejunção, retratação de perguntas absolvidas, retratação de chamados absolvidos, premissa morta, órfãs pela lâmpada e fechamento por lastro (`app/chamados/reconciliador.py:1363-1383`).
-- Falha mantém pendente, incrementa tentativas e guarda erro; após cinco tentativas sai do universo vivo; processados são apagados após sete dias (`app/chamados/reconciliador.py:1209-1210`; `app/chamados/reconciliador.py:1246-1255`; `app/chamados/reconciliador.py:1388-1404`).
-- Semeadura evita pendente vivo já existente por célula; a emissão ordinária não deduplica (`app/chamados/reconciliador.py:1278-1310`; `app/ponto/portas/celula.py:891`).
-
-Emissores já existentes:
-
-- `CelulaDia.lavrar_veredito`, `carimbar` e `carimbar_precedencia`: emitem condicionalmente pela interseção com veredito/ata; alteração apenas de status não emite (`app/ponto/portas/celula.py:1003`; `app/ponto/portas/celula.py:1013-1020`; `app/ponto/portas/celula.py:1035`; `app/ponto/portas/celula.py:1067`; `app/ponto/portas/celula.py:1082`).
-- `ChamadoColaborador.abrir` e `criar`: emitem quando nasce chamado de módulo de turno com célula ligada (`app/chamados/models.py:971-980`; `app/chamados/models.py:1093-1099`).
-- `recompute_turnos`: emite para turnos anteriormente abertos que fecharam, se existir célula para o dia (`app/ponto/nucleo.py:57-66`; `app/ponto/nucleo.py:86-93`).
-- `PerguntaDisputa.save`: atualização existente emite via receiver quando toca `CAMPOS_QUE_ACORDAM`; nascimento não emite. Save e receiver estão no mesmo `atomic` (`app/chamados/models.py:3220-3222`; `app/chamados/signals.py:237-244`; `app/chamados/models.py:3413-3423`).
-- `reabrir_para_correcao`: update em lote emite explicitamente depois da escrita; `descarimbar_em_lote`, isoladamente, não emite (`app/chamados/services/disputa_emissao.py:1602-1630`; `app/chamados/models.py:3252-3266`).
-- `PerguntaDisputa.acordar_celulas` deduplica as células apenas dentro da chamada, pela PK; usa FK da pergunta ou busca pelo par colaborador/data (`app/chamados/models.py:3231-3248`).
-- Batidas e ausências podem emitir indiretamente: seus saves/deletes chamam cartório, que lavra a célula; somente mudança de ata/veredito gera evento (`app/ponto/signals.py:85-93`; `app/ponto/signals.py:131-152`; `app/ponto/portas/celula.py:878-902`).
-- Mudança do status do chamado pode emitir indiretamente pelo rejulgamento da célula; alterações apenas de contexto/texto/urgência não passam nessa guarda (`app/chamados/signals.py:187-203`).
-- `DisputaSupervisao.fechar` pode emitir indiretamente ao fechar chamado-pai/materializar perguntas; não possui INSERT próprio no outbox (`app/chamados/signals.py:18-45`; `app/chamados/signals.py:147-163`).
-
-Correções relevantes ao aval:
-
-- Escala não pode ser classificada genericamente como “não invalida”: pós-save de `EscalaColaborador` chama `invalidar_previsto`, que atualiza `FechamentoMensal.atualizado_em` quando `previsto_em` não é nulo (`app/escala/signals.py:124-133`; `app/ponto/services/fechamento.py:1607-1613`).
-- `salvar_tipo` também invalida fechamento após regeneração de frota (`app/escala/services/cadastro_tipo.py:351-359`).
-- Ausência também não pode ser classificada genericamente como “não invalida”: edição e decisão chamam `invalidar_fechamento`; o update só alcança registros com `derivado_em` não nulo (`app/ponto/services/ausencia.py:518-524`; `app/ponto/services/ausencia.py:941-948`; `app/ponto/services/fechamento.py:1652-1656`).
-- `TipoEscalaAdmin` é escritor fora da porta: usa `admin.ModelAdmin` editável; `EscalaColaboradorAdmin` usa `SoLeitura`. O admin não chama o serviço `salvar_tipo` que faz a propagação/invalidação (`app/escala/admin.py:7-13`; `app/escala/services/cadastro_tipo.py:306-359`).
-- `CatalogoDominio`: escritor Python não encontrado; escritor de produção `[nao verificado]`. Modelo/leitor existem (`app/folha/models.py:248-258`; `app/folha/export.py:259-260`).
-
-Inventário de escritores enviado nas mensagens anteriores: Empresa/Colaborador/EscalaColaborador; FolgaDia/calendários/agenda; Ausencia/TipoAusencia; AgendamentoFerias/PeriodoAquisitivo; ChamadoColaborador/PerguntaDisputa/DisputaSupervisao; FechamentoMensal/PeriodoFechado/RubricaDominio. O censo AST da cópia foi executado sem escrita; ele próprio declara que saves de parâmetros, forms e modelos dinâmicos podem permanecer não atribuíveis, portanto não prova completude sozinho (`app/core/censo_escritas.py:43-56`).
-
-_3135 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3139 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
