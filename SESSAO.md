@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 14:44:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (205.0 MB). Acoes na janela: **1034**.
+**Medido em 09/11/2026 14:49:26.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (205.3 MB). Acoes na janela: **1051**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:48:58 | Bash |  | `cd /home/ronald/saas-hasner; rm -rf logs/BUG-PAR-O-PAR/__pycache__; setsid nohup bash logs/BUG-PAR-O-PAR/lancar_sonda.sh >/dev/null 2>&1 </dev/null & /usr/bin/sleep 40; cat logs/BUG-PAR-O-PAR/sonda_par.out \| head -20` |
+| 14:48:55 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/BUG-PAR-O-PAR; cat > $D/sonda_par.py <<'EOF' # BUG-PAR-O-PAR passo 1 secao 9: censo de PROD das metades de intervalo (LEITURA, porta leitor). Sem nome: so pk. from collections import Counter, defaultdict from chamados.models import PerguntaDisputa as P FORA = P.VIAS_FORA_DO_FATO qs = P.objects.filter(motivo__in=('intervalo_saida', 'intervalo_volta'), conversa=Fa ...` |
+| 14:48:39 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/chamados/models.py \| awk 'NR>=2380 && NR<=2580' \| grep -nE '^\s{4}[a-z_]+ = models\.' \| head -40; git show HEAD:app/chamados/models.py \| grep -n 'VIAS_FORA_DO_FATO ='` |
+| 14:48:34 | Bash |  | `cd /home/ronald/saas-hasner; head -20 logs/h02/sonda_col129.py` |
+| 14:48:32 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/h02/lancar.sh; ls logs/h02 \| head` |
+| 14:48:30 | Bash |  | `cd /home/ronald/saas-hasner; grep -rl -- '--sonda ' logs/*/*.sh logs/*.sh 2>/dev/null \| head -3; sed -n '1,60p' bin/codex_pergunta.sh \| grep -n -i 'sonda' \| head -20` |
+| 14:48:27 | Bash |  | `cd /home/ronald/saas-hasner/logs; grep -l -- '--sonda' */lancar_*.sh 2>/dev/null \| head -3; f=$(grep -l -- '--sonda' */lancar_*.sh 2>/dev/null \| head -1); cat $f` |
+| 14:48:04 | Bash |  | `cd /home/ronald/saas-hasner; /usr/bin/sleep 20; cat logs/BUG-PAR-O-PAR/construtor_v1.out \| head; pgrep -af 'lancar_construtor_v1' \| grep -v pgrep` |
+| 14:47:46 | Bash |  | `cd /home/ronald/saas-hasner; W2=/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706; git worktree move /home/ronald/wt-codex-bug-par-o-par-144706 $W2 && git -C $W2 log --oneline -1 && git -C $W2 status --porcelain \| wc -l; sed -i "s#wt-codex-bug-par-o-par-144706#wt-codex-bug-par-do-intervalo-em-dois-atos-144706#" logs/BUG-PAR-O-PAR/lancar_construtor_v1.sh; mv logs/BUG-PAR-O-PAR/constru ...` |
+| 14:47:36 | Bash |  | `cd /home/ronald/saas-hasner; setsid nohup bash logs/BUG-PAR-O-PAR/lancar_construtor_v1.sh >/dev/null 2>&1 </dev/null & sleep 5; pgrep -f 'BUG-PAR-O-PAR/lancar_construtor_v1.sh'; head -3 logs/BUG-PAR-O-PAR/construtor_v1.out` |
+| 14:47:32 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/BUG-PAR-O-PAR; cat > $D/construtor_v1.q <<'EOF' OBRA BUG-PAR-O-PAR-E-A-UNIDADE -- passo 2, VOLTA 1 (papel construtor, copia propria a partir do MAIN 3803e6623; escreva SO em <wt>/app). LEI (anexo aval_unidade.txt, corte literal do Ronald; nao reinterprete): UNIDADE = par de intervalo. A acao do admin opera o PAR INTEIRO: validar/recusar/corrigir as duas metades  ...` |
+| 14:47:06 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/BUG-PAR-O-PAR; cat > $D/triagem_matriz.txt <<'EOF' TRIAGEM matriz_par.r (passo 1, Codex leitura, rc 0) -- sessao 09/11 14:5x. Amostra conferida no main 3803e6623: materializacao.py:1433 = return (escritor de ESPERA so existe no diff v5, nao no main -- git grep ESPERA_PAR_INTERVALO HEAD = 0); estado_aplicacao_pergunta :425; C6 _pergunta_viva_calc juizes.py:1153 m ...` |
+| 14:46:47 | Bash |  | `cd /home/ronald/saas-hasner/logs/bug_par_dois_atos; cat lancar_construtor_v5.sh; head -c 2500 construtor_v1.q; echo; echo ====; head -c 1500 construtor_v1.r; ls -d /home/ronald/wt-codex-bug-par*` |
+| 14:46:45 | Bash |  | `cd /home/ronald/saas-hasner; git log --oneline -1 main; ls logs/bug_par_dois_atos/ \| grep -i 'lancar\\|constr' ; cat logs/BUG-PAR-O-PAR/lancar_matriz.sh` |
+| 14:46:35 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/chamados/services/materializacao.py \| sed -n '1428,1436p;421,430p'; git show HEAD:app/chamados/juizes.py \| sed -n '2126,2140p;1150,1156p'; git show HEAD:app/chamados/models.py \| sed -n '1856,1864p'; git grep -c ESPERA_PAR_INTERVALO HEAD -- app \| head` |
+| 14:46:28 | Read |  | `/home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/matriz_par.r` |
+| 14:46:26 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/byepe3p7t.output` |
 | 14:44:23 | Bash |  | `cd /home/ronald/saas-hasner/logs; until grep -q '^rc=' BUG-PAR-O-PAR/matriz_par.out 2>/dev/null; do /usr/bin/sleep 30; done; date; grep '^rc=' BUG-PAR-O-PAR/matriz_par.out; wc -c BUG-PAR-O-PAR/matriz_par.r` |
 | 14:44:17 | Bash |  | `kill 1777313; sleep 1; pgrep -af 'matriz_par.out' \| grep -v pgrep \| wc -l` |
 | 14:44:13 | Bash |  | `pkill -u ronald -f "until grep -q '\^rc=' BUG-PAR-O-PAR/matriz_par.out" ; sleep 0; pgrep -af 'matriz_par.out' \| grep -v pgrep \| head` |

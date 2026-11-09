@@ -1,7 +1,176 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 14:40** · publicado em **09/11/2026 14:44** (UTC-3)
+> Ultima resposta processada: **09/11/2026 14:49** · publicado em **09/11/2026 14:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 14:49 · sessao edf66e4dad99 · - · - · origem=Ronald (tmux)
+
+Exploração concluída, sem edições nem execução de Python/Django.
+
+| Ponto | Evidência e consequência |
+|---|---|
+| C7 atual | `chamados/models.py:1856`: apenas respostas sem veredito e `fio_vivo`; falta consumir obrigação do par. |
+| `fechar` | Capturar `pelo_juiz = motivo is None` antes de `chamados/models.py:1905`; reler C7 após `trava_na_ordem`, em `chamados/models.py:1918`, preservando exceções nomeadas. |
+| Fotos append-only | `reabrir_para_correcao`, `chamados/services/disputa_emissao.py:1571`, registra RECUSA/REABERTURA com foto antes de limpar resposta e validação; não escreve pendência/motivo. |
+| Sequência | `DecisaoPergunta`, `chamados/models.py:3857`; somente RECUSA/REABERTURA aceitam foto em `chamados/models.py:3867`; porta de criação em `chamados/models.py:3943`. |
+| Fixture | A fixture anexada usa campos existentes; manter `pk=960`, `nome='col960'`, relógio congelado, CNPJ sintético. CPF `[cpf]` normaliza para vazio: `core/identifiers.py:25` e `colaboradores/models.py:417`. |
+| Ambiguidade | Duplicatas de mesmo marco só cabem no acervo anterior ao horizonte do índice: `chamados/models.py:3483`. Não inventar `instancia_marco`: `chamados/models.py:3439`. |
+| S127 antigo | Dublês e expectativa precisam migrar para C7 em `chamados/tests/test_disputa_s127.py:17` e `chamados/tests/test_pergunta_viva_no_guarda.py:24`. |
+| Teste legado afetado | `chamados/tests/test_fio_intervalo.py:115` espera materializar duas aceitas sem fornecer escala/DNA. Preservar o caso e explicitar abstinência ou fornecer identidade comprovável conforme a lei. |
+| Selo de escritores | `chamados/tests/test_porta_validacao_pergunta.py:79` enumera atos com escrita exatos; novo `save` em helper diferente pode exigir ajuste fundamentado do selo. |
+| Concorrência | Molde real com duas conexões em `chamados/tests/test_e1_identidade_corrida.py:22`; exige `TransactionTestCase`, porque `TestCase` mantém fixture em transação não visível às threads. |
+| Molde de mutantes | Arquivo `e3_mutantes` sob `app/`: [nao verificado — busca não encontrou]. Nenhum caminho externo foi consultado. |
+
+Primeiro aceite singular preservado em outros testes existentes: [nao verificado — busca não encontrou]. Execução, compatibilidade das fixtures e mortes de mutantes: [nao verificado]. [nao verificado]
+
+## 09/11 14:49 · sessao 3e47de222653 · - · - · origem=Ronald (tmux)
+
+Leitura concluída; nenhuma edição nem execução de Python/manage.py.
+
+| Entrada | Adaptação necessária |
+|---|---|
+| Validar detalhe/modal | Casca `acao_validar_pergunta` já traduz `ok=False`; pode encaminhar pedido explicitamente conjunto à porta do par, mantendo singular recusado. `chamados/services/acoes_disputa.py:19`, `:46`. |
+| Recusar | Acrescentar guarda `not r['ok']`: hoje estados novos acabam em toast de sucesso. `chamados/services/acoes_disputa.py:82`, `:87`. |
+| Corrigir | Desviar intervalo antes de qualquer nota/resposta: escreve nota em `:359`, responde em `:371` e só depois valida em `:379`. Singular deve sair antes de `:352`. `chamados/services/acoes_disputa.py:345`. |
+| Reabrir questionário | `_corrig(d)` pode selecionar uma irmã só; formar e validar universo de pares antes de `_reabrir(qs)`. `chamados/services/acoes_disputa.py:96`, `:103`. |
+| Inline | Universo atual vem de C6, portanto pode esconder V legado; laço chama porta singular. Precisa agrupar uma vez por identidade, mantendo universo autorizado. `chamados/views_cobrar.py:169`, `:208`. |
+| Lote JSON/tela/chat | Convergem em `validar_lote_classe_a`; correção central alcança JSON. `chamados/views_cobrar.py:247`, `:261`. |
+| Comando classe A | `--limite` corta perguntas, podendo separar irmãs; APPLY chama singular. Selection incompleta precisa impedir conjunto. `chamados/management/commands/validar_classe_a.py:69`, `:100`. |
+| Fio | Novas ações precisam entrar na porteira contextual e preservar política de disputa fechada. `chamados/services/fio.py:558`, `:573`, `:600`. |
+| Detalhe | Gates usam `chamado_que_lista` da pergunta âncora; serviço precisa conferir ambas no escopo autorizado. `chamados/views.py:501`, `:518`, `:536`. |
+
+Templates e resposta:
+
+- `_pergunta_card.html` tem formas singulares em `:76`, `:102`, `:125`; modal em `:264`, `:280`, `:291`, `:302`. Um ramo exclusivo de intervalo com include conjunto evita oferecer meia validação.
+- O fragmento htmx atual recarrega apenas a âncora com `{perg, pode_agir}`; precisa renderizar conjunto ou atualizar irmã por OOB. `chamados/views.py:399`, `:404`.
+- O cartão do colaborador afirma “antes de lançar” só pela pendência, sem perguntar pelo lastro. `templates/chamados/partials/_card_atendimento.html:183`.
+- O modal dá prioridade à pendência sobre aplicação. `templates/chamados/partials/modal_fio.html:221`, `:226`.
+
+Casos antigos a inspecionar para reescrever expectativas, sem apagar: `chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:137`, `:151`, `:159`, `:176`, `:185`; `chamados/tests/test_s139.py:26`; `chamados/tests/test_marco_por_motivo.py:59`.
+
+Comportamento executado, cobertura completa de portas e efeitos concorrentes: [nao verificado].
+
+## 09/11 14:46 · sessao 5a6bf4616dff · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · leitura · origem=Code
+
+**Matriz contra o MAIN informado.** `FALTA` significa comportamento a construir; não significa comportamento já comprovado. Os testes propostos abaixo não foram executados. **[nao verificado: implementação e execução futuras]** [nao verificado]
+
+Há uma diferença de base que precisa ficar explícita: no MAIN, `materializacao.py:1433` é um retorno, e `declaracao_texto.py:485` seleciona marcos aceitos. A escrita de `ESPERA_PAR_INTERVALO` está no **diff v5 fornecido**, não nesses pontos do MAIN. O materializador atual opera uma pergunta, e a projeção atual publica apenas `aceita`. (`app/chamados/services/materializacao.py:1158`, `app/chamados/services/materializacao.py:1433`, `app/chamados/services/declaracao_texto.py:471`, `app/chamados/services/declaracao_texto.py:485`; ausência do símbolo no censo: **[nao verificado: ausência sem endereço próprio]**)
+
+**1. Estados e ESMERIL-SEMÂNTICA**
+
+Os seis nomes solicitados precisam ser uma **projeção derivada**: a propriedade existente só distingue pendente, respondida, validada e resolvida. Não existe hoje uma enumeração exclusiva com os seis estados. (`app/chamados/models.py:3041`)
+
+| Código | Estado da metade | Fonte existente no MAIN | Contrato da leitura nova |
+|---|---|---|---|
+| S | Sem resposta | `resposta_colab`, `respondida_em`; reabertura limpa ambos. (`app/chamados/models.py:2455`, `app/chamados/services/disputa_emissao.py:1590`) | Ausência de declaração atual; não confundir com recusa humana histórica. **FALTA** |
+| R | Respondida | A porta grava resposta e instante. (`app/chamados/services/disputa_emissao.py:1464`) | Declaração presente, sem aceite/aplicação atual. **FALTA** |
+| V | Validada | `validada_em/por`, escritos por `_carimbar_validacao`, com decisão E1. (`app/chamados/services/validacao.py:127`, `app/chamados/services/validacao.py:139`) | Aceite sem aplicação comprovada: dívida legada, nunca “aguardando” persistido. **FALTA** |
+| A | Aplicada | Carimbo `materializada_em/por/via` pela porta; testemunha julgada por `_pergunta_materializada_de_fato`. (`app/chamados/models.py:3103`, `app/chamados/juizes.py:645`) | Para intervalo, exige resolução factual da metade; carimbo de identidade/retratação não prova batida. **FALTA** |
+| N | Recusada | Recusa humana escreve motivo e chama reabertura com `ato='recusa'`; a projeção perde resposta/validação. (`app/chamados/services/validacao.py:584`, `app/chamados/services/validacao.py:593`, `app/chamados/services/disputa_emissao.py:1590`) | Ler a sequência de decisões e respostas posteriores; `recusa_motivo != ''` não identifica recusa atual. **FALTA** |
+| T | Retratada/fora do fato | `via_resolucao`, `fora_do_fato()`; inclui duplicata e motivo retratado. (`app/chamados/models.py:2401`, `app/chamados/models.py:3201`) | Terminalidade de identidade, separada de aplicação. Não ressuscitar a linha. (`app/chamados/models.py:3180`, `app/chamados/models.py:3206`) |
+
+**Ordem da projeção proposta:** primeiro identidade fora do fato; depois aplicação factual; depois decisão atual de recusa; depois aceite; depois resposta/ausência. Preservar os indicadores originais e a trilha como evidência, sem apagá-los para fabricar exclusividade. **FALTA — [nao verificado: desenho]**
+
+| Campo | Mais de um significado hoje | Consequência obrigatória |
+|---|---|---|
+| `validada_em` | Registra aceite e também mata imediatamente a pergunta no C6, mesmo sem aplicação. (`app/chamados/services/validacao.py:134`, `app/chamados/juizes.py:1153`) | Não usar morte no C6 como prova de aplicação do par. **FALTA** |
+| `materializada_em` | Carimbo de aplicação e de resolução por identidade, inclusive retratação. (`app/chamados/models.py:3103`, `app/chamados/models.py:3185`) | Não apresentar toda materializada como batida aplicada. **FALTA** |
+| `recusa_motivo` | Recusa materializadora, recusa humana, escape e descrição de identidade. (`app/chamados/services/materializacao.py:1102`, `app/chamados/services/validacao.py:584`, `app/chamados/services/disputa_emissao.py:1494`, `app/chamados/models.py:3188`) | Não usá-lo como enumeração do par. Motivo do ato conjunto vai à decisão/trilha. **FALTA** |
+| `pendencia_admin` | O comentário diz “recusou plantar”; o rótulo diz “plantada pelo motivo”. O escritor pode gravar pendência e continuar até `registrar_batida`. (`app/chamados/models.py:2555`, `app/chamados/models.py:2562`, `app/chamados/services/materializacao.py:850`, `app/chamados/services/materializacao.py:927`) | Conferência técnica e existência de batida devem ser apresentadas separadamente. **FALTA** |
+| `respondida_em` / resposta | Timestamp sozinho não garante conteúdo; a aplicação exige texto não vazio. (`app/chamados/services/materializacao.py:829`) | Incoerência entre texto e instante deve gerar insumo inconsistente, sem aceite/aplicação automática. **FALTA** |
+| Fora do fato | Também recebe carimbo e pode ser reconhecida pelo juiz como resolvida sem testemunha de batida. (`app/chamados/models.py:3185`, `app/chamados/juizes.py:670`) | Preservar resolução de identidade sem chamá-la de intervalo aplicado. **FALTA** |
+
+O W semântico já tem base no MAIN: o explicador afirma “NAO plantou” diante da pendência antes de perguntar pelo lastro, embora o ramo possa ter plantado. (`app/chamados/services/explicador.py:85`, `app/chamados/services/explicador.py:87`, `app/chamados/services/explicador.py:93`, `app/chamados/services/materializacao.py:850`, `app/chamados/services/materializacao.py:927`)
+
+**2. Autoridades da matriz**
+
+| Pergunta | Autoridade existente | Por que não resolve sozinha o par / destino |
+|---|---|---|
+| Quais são as duas perguntas da mesma pausa? | Motivos → S/hii e E/hfi; pausas e pares canônicos do DNA. (`app/chamados/juizes.py:885`, `app/escala/models.py:1166`, `app/escala/models.py:1197`) | Adaptador `identificar_par_intervalo`: **FALTA no MAIN**. Os motivos não carregam índice da pausa. (`app/chamados/services/declaracao_texto.py:48`) |
+| Qual o estado de aplicação? | `estado_aplicacao_pergunta`. (`app/chamados/services/materializacao.py:425`) | Hoje avalia uma pergunta e sua vizinha. Deve delegar intervalo à avaliação única do conjunto. Extração do juiz derivado do par: **FALTA** |
+| A testemunha factual existe? | `_pergunta_materializada_de_fato`. (`app/chamados/juizes.py:645`) | Reutilizar sua autoridade de lastro, distinguindo as vias de identidade; não duplicar procura de batida nos leitores. (`app/chamados/juizes.py:670`, `app/chamados/juizes.py:732`) |
+| A pergunta está viva? | C6, `pergunta_viva`. (`app/core/juizes.py:266`) | Não responde aplicação do par: `validada_em` já devolve falso. (`app/chamados/juizes.py:1153`) |
+| A disputa pode fechar? | C7, `DisputaSupervisao.pode_fechar`. (`app/core/juizes.py:267`, `app/chamados/models.py:1856`) | Ampliar a autoridade existente para consumir obrigações derivadas do par. **FALTA** |
+| O chamado pode encerrar com essa disputa? | S127, `disputa_viva_do_chamado`. (`app/chamados/juizes.py:2126`) | Hoje recompõe pelo `fio_vivo`; deve consumir C7 inteiro, conservando a exceção de disputa vazia. (`app/chamados/juizes.py:2137`) |
+| O vão entre batidas foi intervalo? | `intervalos_do_turno`. (`app/core/juizes.py:202`) | Julga batidas, não identifica duas declarações nem decide aceite administrativo. Não serve como substituto da identidade das perguntas. (`app/core/juizes.py:202`, `app/chamados/services/declaracao_texto.py:48`) |
+
+O juiz derivado proposto é a ampliação da autoridade de aplicação existente, com identidade alimentada pelas fontes acima; telas, C7 e vigias consomem sua resposta. Não haverá um juiz de espera em cada consumidor. **FALTA — [nao verificado: desenho]**
+
+| Identidade | Contrato |
+|---|---|
+| Par único | Mesma disputa e dia do turno, duas metades inequívocas, marcos pertencentes à mesma pausa declarada. **FALTA**; fontes: `app/chamados/models.py:2424`, `app/chamados/models.py:2431`, `app/escala/models.py:1197` |
+| Ambíguo | Multiplicidade de candidatas ou duas pausas sem índice que prove a associação: abstenção explícita. Não escolher primeiro PK nem aplicar avulsa. **FALTA**; lacuna existente: `app/chamados/services/declaracao_texto.py:48` |
+| Sem par | Pergunta de intervalo sem contraparte identificável: informar a falta da identidade; nenhuma aplicação individual. **FALTA**; unidade atual individual: `app/chamados/services/materializacao.py:1158` |
+| Contraparte retratada | A identidade ativa pode deixar de formar par, mas o aceite residual da metade ainda no fato continua sendo obrigação de fechamento. **FALTA**; risco atual: `app/chamados/juizes.py:1153`, `app/chamados/models.py:1851` |
+| Índice inventado | Não preencher `instancia_marco` arbitrariamente para resolver ambiguidade: o modelo exige a derivação do motivo. (`app/chamados/models.py:3436`, `app/chamados/models.py:3441`) |
+
+**3. Contratos de operação, persistência e fechamento usados na matriz**
+
+Todas as operações seguintes são **FALTA como unidade PAR**. As referências identificam as portas existentes a reutilizar.
+
+| Código | Operação e persistência | Tela e prova |
+|---|---|---|
+| O0 | **Nenhuma operação administrativa do par.** Zero alteração de validação, materialização, pendência ou motivo para representar espera. A resposta continua pela porta existente. (`app/chamados/services/disputa_emissao.py:1464`) | “Aguardando a outra metade”, derivado das declarações; indicar qual falta. Teste `test_espera_nao_escreve`: fotografar campos, decisões, notas e eventos antes/depois. **FALTA** |
+| OV | **Validar par.** Duas declarações presentes; travar/reler ambas antes do primeiro carimbo. Validar, registrar/reutilizar as duas batidas pela porta, julgar conjunto e lastro, carimbar ambas e só então reconciliar. Qualquer falha desfaz o ato inteiro. Portas: `app/chamados/services/validacao.py:127`, `app/ponto/registro_batida.py:94`, `app/chamados/models.py:3103` | “Intervalo aplicado” somente após as duas testemunhas. `test_validar_par_atomico`: nenhuma observação intermediária contém só uma aplicação. **FALTA** |
+| ON | **Recusar par.** Motivo obrigatório, foto anterior e decisões `RECUSA` das duas metades no mesmo ato; reabertura pela porta. Motivo conjunto em `ato_motivo`/trilha, sem transformá-lo em estado de `recusa_motivo`. (`app/chamados/services/disputa_emissao.py:1590`, `app/chamados/services/disputa_emissao.py:1612`, `app/chamados/models.py:3876`) | “Par recusado; corrigir as declarações”. Não anuncia aplicação nem quitação automática. `test_recusar_par_preserva_fotos`: duas projeções devolvidas, histórico intacto. **FALTA** |
+| OC | **Corrigir par.** Ato explícito sobre o conjunto; preserva decisões anteriores e usa as portas de resposta, reabertura e aplicação pertinentes. Não preenche hora ausente por inferência. (`app/chamados/services/disputa_emissao.py:1464`, `app/chamados/services/disputa_emissao.py:1590`, `app/chamados/models.py:3914`) | Mostra as duas metades e o impedimento concreto. `test_corrigir_par_sem_inferencia`: nenhum horário sintético e nenhuma alteração avulsa. **FALTA** |
+| OL | **Corrigir aplicação parcial legada.** Rejulgar o conjunto sob a mesma porta; preservar/reutilizar testemunha válida, sem duplicar a metade existente. Dedup e reuso já existem. (`app/ponto/registro_batida.py:113`, `app/chamados/services/materializacao.py:859`) | “Aplicação parcial; corrigir o par”. Não oferecer “validar a que falta”. `test_legado_parcial_reusa_testemunha`: testemunha anterior intacta, resultado conjunto comprovado. **FALTA** |
+| OT | **Corrigir obrigação cuja irmã saiu do fato.** Não ressuscitar T. Se o fato continuar cobrado, a identidade deve ser recomposta pelas portas existentes; se deixou de existir, sua resolução deve alcançar a obrigação residual com trilha. (`app/chamados/models.py:3193`, `app/chamados/models.py:3206`) | “Contraparte fora do fato; revisar o par”. `test_irma_retratada_nao_apaga_divida`: aceite residual continua retendo até resolução explícita. **FALTA** |
+| OI | **Nenhuma no replay de par aplicado.** Mesmo estado, nenhuma batida ou decisão adicional. Uma revisão com conteúdo diferente é outro ato explícito. Imutabilidade: `app/chamados/models.py:3903` | “Intervalo aplicado”. `test_replay_par_aplicado`: fotografias iguais e zero duplicata. **FALTA** |
+
+| Fechamento | MAIN | Contrato da construção |
+|---|---|---|
+| C7 | Exige ausência de respostas sem veredito e de perguntas vivas. (`app/chamados/models.py:1861`) | **FALTA:** acrescentar a retenção das obrigações do par, inclusive aceite sem aplicação, independentemente de `pendencia_admin` e `recusa_motivo`. |
+| `Disputa.fechar` | Examina respostas/vivas antes do `atomic`; trava depois. (`app/chamados/models.py:1894`, `app/chamados/models.py:1903`, `app/chamados/models.py:1918`) | **FALTA:** no percurso normal, reler C7 sob a trava antes da escrita de fechamento. Preservar as portas nomeadas de exceção e seus contratos. (`app/chamados/models.py:1884`) |
+| S127 | Retém disputa vazia ou `fio_vivo`. (`app/chamados/juizes.py:2138`) | **FALTA:** disputa vazia ou C7 retendo. Nenhuma recomposição local do estado do par. |
+| `transicionar('fechado'/'resolvido')` | Ambos passam por S127; a guarda adicional de FURO é exclusiva de `resolvido`. (`app/chamados/models.py:148`, `app/chamados/models.py:181`) | **FALTA:** ambos precisam parar pela retenção S127/C7 do par, antes de `_aplicar`. (`app/chamados/models.py:199`) |
+| Liberação | C7 continua autoridade da disputa inteira. (`app/chamados/models.py:1856`) | “Liberar” abaixo significa apenas que **este par** não retém; outras perguntas, competência e guardas existentes continuam sendo julgadas. **FALTA** |
+
+**4. Matriz 6×6 reduzida**
+
+A tabela contém as **21 classes por simetria de estados**, cobrindo as 36 posições. A simetria não troca os papéis temporais: saída continua S/hii e volta E/hfi. (`app/chamados/juizes.py:885`)
+
+Não há escritor do par no MAIN que permita declarar combinações entre metades impossíveis: validar, recusar e retratar operam individualmente. A existência dessas portas não prova a ocorrência de cada combinação em produção. (`app/chamados/services/validacao.py:435`, `app/chamados/services/validacao.py:593`, `app/chamados/models.py:2062`; ocorrência populacional: **[nao verificado]**)
+
+**Todas as células de operação/tela/fechamento/prova abaixo são FALTA para o PAR**, com os contratos O acima. O juiz é a ampliação de `estado_aplicacao_pergunta` descrita na seção 2. (`app/chamados/services/materializacao.py:425`)
+
+| Combinação, inclusive transposta | Evidência de leitura/independência no MAIN | Operação → persistência | Tela derivada | Fechamento do par | Teste sugerido + asserção | [nao verificado]
+|---|---|---|---|---|---|
+| S/S | Respostas e instantes. `disputa_emissao.py:1590` | O0 | Aguardando as duas respostas | Reter enquanto cobrado | `test_SS`: zero aceite, batida ou espera gravada |
+| S/R | Resposta individual. `disputa_emissao.py:1464` | O0 | Aguardando a metade S | Reter | `test_SR`: declarar uma não valida nenhuma |
+| S/V | Aceite individual. `validacao.py:435` | OC para devolver/corrigir legado; sem validação parcial | Aceite legado sem par pronto | Reter, mesmo com motivo técnico | `test_SV`: C7 falso e zero aplicação |
+| S/A | Aplicação individual. `materializacao.py:1220` | OL | Aplicação parcial legada | Reter até resolver conjunto | `test_SA`: não completar silenciosamente |
+| S/N | Recusa limpa resposta. `validacao.py:593` | O0; nova declaração pela porta | Aguardando respostas/correção | Reter enquanto cobrado | `test_SN`: recusa histórica não vira resposta |
+| S/T | Fora do fato é terminal. `models.py:3201` | Nenhuma aplicação; identidade incompleta | Contraparte fora do fato | Reter cobrança remanescente | `test_ST`: sem fallback avulso |
+| R/R | Validação atual por pergunta. `validacao.py:435` | OV / ON / OC | Par pronto para decisão | Reter até ato completo | `test_RR`: um comando decide ambas |
+| R/V | Aceite mata só a validada. `juizes.py:1153` | OV / ON / OC sobre ambas | Par com aceite legado | Reter até aplicação/decisão conjunta | `test_RV`: não preservar meia validação nova |
+| R/A | Aplicação individual. `materializacao.py:1220` | OL | Aplicação parcial; revisar conjunto | Reter | `test_RA`: reuso não duplica primeira |
+| R/N | Recusa e resposta são atos distintos. `models.py:3857` | OC; OV só após duas declarações atuais | Corrigir as declarações | Reter | `test_RN`: não recuperar hora antiga como atual |
+| R/T | Identidade terminal. `models.py:3180` | Nenhuma aplicação; recompor identidade primeiro | Sem par ativo completo | Reter resposta/cobrança remanescente | `test_RT`: R não aplica avulsa |
+| V/V | C6 mata ambas pelo aceite. `juizes.py:1153` | OV / ON / OC para legado | Aceites sem aplicação | **Reter**; não são quitação | `test_VV`: C7 falso sem duas aplicações |
+| V/A | Aceite e aplicação são independentes. `models.py:3043` | OL | Aplicação parcial legada | Reter | `test_VA`: metade aplicada não quita outra | [nao verificado]
+| V/N | Recusa da outra não desfaz aceite. `validacao.py:593` | OC sobre conjunto | Aceite residual e declaração recusada | Reter | `test_VN`: motivo de recusa não oculta V |
+| V/T | V mata no C6; T também pode morrer por identidade. `juizes.py:1153`, `juizes.py:1164` | OT | Aceite sem aplicação; irmã fora do fato | **Reter — RED W#3** | `test_VT_pendencia`: C7/S127/fechar retêm com motivo não-ESPERA |
+| A/A | Carimbo e testemunha. `models.py:3103`, `juizes.py:645` | OI; OC somente para outro ato explícito | Intervalo aplicado | Não retém por aplicação | `test_AA`: replay idêntico, zero nova linha/batida | [nao verificado]
+| A/N | Recusa não é reversão de batida. `validacao.py:573` | OL | Aplicação parcial e recusa | Reter até revisão conjunta | `test_AN`: recusar não apaga chão |
+| A/T | Retratação não prova aplicação da irmã. `models.py:3185` | OT / OL | Conjunto sem resolução factual integral | Reter obrigação residual | `test_AT`: sem ressurreição de T nem quitação presumida |
+| N/N | Recusa devolve perguntas. `disputa_emissao.py:1590` | Nenhuma no replay; aguardar novas declarações | Par recusado, aguardando correção | Recusa não quita cobrança | `test_NN`: repetir não duplica RECUSA |
+| N/T | Decisão e identidade distintas. `models.py:3857`, `models.py:3201` | Nenhuma aplicação; revisar identidade/cobrança | Recusa e contraparte fora do fato | Reter cobrança remanescente | `test_NT`: nenhuma hora histórica aplicada | [nao verificado]
+| T/T | Ambas fora do fato. `models.py:3201` | Nenhuma | Fato retirado; histórico preservado | Não retém por essas identidades | `test_TT`: C7 conserva regras das demais perguntas |
+
+Nas referências abreviadas da matriz, `models.py`, `juizes.py` e os serviços pertencem a `app/chamados/`.
+
+| Situação adicional | Juiz/operação | Persistência, tela, fechamento e prova |
+|---|---|---|
+| **AMBÍGUO** | Identificador e avaliação do par: **FALTA**. Não selecionar candidatas arbitrariamente. Lacuna documentada em `app/chamados/services/declaracao_texto.py:48` | Zero aplicação/aceite do pedido singular; tela explica ambiguidade; obrigações existentes continuam retidas. `test_ambiguo_nao_escolhe_pk`: quatro candidatas intactas. **FALTA** |
+| **Intervalo SEM PAR** | Identificador: **FALTA**. A aplicação avulsa atual não serve. (`app/chamados/services/materializacao.py:1158`) | Recusa falante: falta contraparte identificada; não dizer “colada”. `test_sem_par_nao_aplica_avulsa`: zero escrita e impedimento explícito. **FALTA** |
+| **Resposta/instante incoerentes ou carimbo sem lastro** | Fontes de resposta e lastro existentes. (`app/chamados/services/materializacao.py:829`, `app/chamados/juizes.py:645`) | Não forçar enquadramento saudável nos seis rótulos; devolver impedimento e dívida real. `test_insumo_incoerente`: não aplicar/fechar por ignorância. **FALTA** |
+
+| “Impossível” | Escritor que impede |
+|---|---|
+| V persistida por **novo** aceite sem aplicação integral | **FALTA:** porta do par deve manter validação e aplicação no mesmo `atomic`; falha reverte ambas. A porta atual 
+
+[truncado em 20000 de 51628 caracteres]
 
 ## 09/11 14:40 · sessao 685913bd30a3 · - · - · origem=Ronald (tmux)
 
@@ -724,217 +893,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo -
 
 **DECISAO-ABERTA:** M38 permanece prova estrutural, conforme a alternativa solicitada; contracaso comportamental: **[nao verificado]** (`chamados/tests/test_bug_par_intervalo.py:815`). Execução dos REDs, GREEN e certificação pelo Code/opus: **[nao verificado]**.
 
-## 09/11 13:52 · sessao 3b20bcb6caff · SONDA-SEM-GRANT · leitura · origem=Code
-
-**A matriz está ABERTA.** Existe juiz único da conferência de catálogo, mas falta uma transição completa com contrato único de prontidão, falha e idempotência. A porta confirma alterações em duas transações e publica a credencial depois delas. (`bin/sonda_leitor_comum.sh:158`; `bin/sonda_provisionar.sh:118`; `bin/sonda_provisionar.sh:168`; `bin/sonda_provisionar.sh:196`)
-
-Referências abreviadas abaixo são **arquivo:linha**, com esta expansão:
-
-| Sigla | Arquivo |
-|---|---|
-| C | `bin/sonda_leitor_comum.sh` |
-| P | `bin/sonda_provisionar.sh` |
-| L | `bin/sonda_leitura.sh` |
-| T | `bin/tests/test_sonda_sem_grant.sh` |
-| G | `bin/tests/test_sonda_sem_grant_pg.sh` |
-| S | `bin/sombra.sh` |
-
-Execuções, RED/GREEN, mortes efetivas dos mutantes e estado atual de PROD: **[nao verificado]**. A coluna PROVA identifica casos e asserções existentes; não homologa os relatos dos anexos.
-
-**1. Estados e fechamento**
-
-O estado deve ser tratado como vetor: destino × existência/atributos do leitor × credencial × ACL vigente × defaults × autenticação × fase da transição. Esses componentes são consultados ou alterados separadamente no vivo. (`C:26`; `C:79`; `C:132`; `C:191`; `P:105`; `P:127`; `P:193`)
-
-| Dimensão | Estados encontrados/contemplados no vivo |
-|---|---|
-| Destino | PROD=`saas_db/saas_hasner`; sombra=`sombra_db/sombra`; credencial compartilhada. (`C:22`; `C:28`; `C:29`) |
-| Role | Ausente; sem LOGIN; super/poderes; membro; dono; configuração global ou por banco divergente. (`C:80`; `C:87`; `C:146`; `C:147`) |
-| Credencial | Ausente; sem senha; modo diferente de 600; formato antigo com HOST; senha divergente; senha conhecida apenas pelo cluster. (`L:173`; `L:178`; `L:194`; `P:79`) |
-| Relações | Leitura faltante; ACL aberta em tabela/view/partição/foreign table, coluna ou sequência; GRANT OPTION. (`C:97`; `C:112`; `C:122`) |
-| Fora de relação | LO nomeados; SECURITY DEFINER não-sistema; CONNECT em outros bancos; TEMP/CREATE; CREATE/GRANT OPTION em schema. (`C:126`; `C:129`; `C:136`; `C:139`; `C:143`) |
-| Defaults | De `saas_user`; do leitor; de outro concedente; destinados ao leitor ou PUBLIC, nos tipos consultados `r/S/n`. (`C:105`; `C:132`; `P:133`; `P:150`) |
-| Alteração pelo leitor | `read_only` global/por banco, senha e defaults próprios alterados com sucesso antes da detecção seguinte. (`G:365`; `G:376`; `G:379`) |
-| Instrumento/transição | Conferência muda, incompleta ou com erro; login recusado; cluster inacessível; trava ocupada; falha após cada COMMIT, na publicação ou na trilha. (`L:185`; `C:160`; `P:69`; `P:118`; `P:168`; `P:196`; `P:55`) | [nao verificado]
-
-**Não está FECHADA por catálogo.** Há enumeração de relações/ACL, mas funções são limitadas por nomes e `prosecdef`; defaults consultados excluem tipos diferentes de `r/S/n`. A leitura de tabelas/sequências usa `information_schema`, sem prova fornecida de visibilidade integral do executor real. (`C:98`; `C:102`; `C:112`; `C:132`; `C:136`; `C:139`)
-
-| Prova necessária de fechamento | Situação |
-|---|---|
-| Inventário completo dos objetos, ACL, defaults e capacidades, incluindo o complemento das consultas atuais | **FALTA**; fronteiras atuais em `C:112`, `C:132`, `C:136`, `C:139`. |
-| Cada item inventariado classificado como permitido, recusado ou fora do contrato, sem resto sem classificação | **FALTA**; lista LO nominal e defaults filtrados. (`C:19`; `C:134`) |
-| Cobertura de combinações, concorrência e sessões anteriores | **FALTA**; conferir, autenticar e executar são etapas separadas; CONNECT é revogado sem operação de encerramento de sessões. (`L:187`; `L:194`; `L:233`; `P:117`) |
-
-**2. Matriz estado × role**
-
-Convenções com expansão contratual:
-
-| Símbolo | Significado existente |
-|---|---|
-| **J(k)** | `_q_conferencia` mede a chave; `_conferencia_pronta` decide. Porta e leitura delegam ao mesmo predicado. (`C:76`; `C:158`; `P:173`; `L:187`) |
-| **A** | `_login_leitor` mede autenticação/sessão; a comparação `leitor\|on` está repetida nos dois chamadores. (`C:191`; `P:187`; `L:196`) |
-| **E+T** | Em sucesso, promoção de `.env_leitor` e tentativa de trilha da porta; em falha, vale a matriz de fases adiante. (`P:193`; `P:196`; `P:60`) |
-| **R(k)** | Leitura recusa rc **5**, nomeando a falta e a porta; registra trilha após instalação do trap. (`L:126`; `L:129`; `L:187`) |
-| **✓** | Porta rc **0**, mensagem `pronto`, após conferência, login e publicação; leitura executa a sonda e devolve seu rc, remapeando 5→1. (`P:173`; `P:187`; `P:199`; `L:233`; `L:244`) |
-| **F** | Porta rc **1**, sem anúncio regular de pronto, por falha SQL, conferência ou login. (`P:93`; `P:174`; `P:184`) |
-| **N/A** | Dimensão inaplicável: PUBLIC é representado como grantee `0`, não como a role de LOGIN examinada. (`C:74`; `C:149`) |
-
-“Role” abaixo identifica o titular afetado ou concedente. `saas_user` também é o executor administrativo fixo; seus próprios atributos/capacidades não são objeto do juiz atual. (`C:10`; `C:109`; `P:51`; `L:166`)
-
-| Estado | Role | JUIZ → OPERAÇÃO | PERSISTIDO | RETORNO | PROVA / mutante |
-|---|---|---|---|---|---|
-| Role ausente | leitor | J(role) → CREATE/ALTER. (`C:80`; `P:107`) | Role, senha/configuração; E+T. (`P:108`; `P:109`) | R(role); porta ✓ se completar. | Recusa falsa `T:139`; criação `G:222`. Mutante isolante da ausência: **FALTA**. |
-| Role ausente | saas_user | **FALTA** bootstrap/juiz; conexão já exige esse usuário. (`P:51`; `L:166`) | Sem restauração prevista desse executor. (`P:107`) | Falha SQL F / conferência R. (`P:93`; `L:185`) | **FALTA**. |
-| Role ausente | PUBLIC | N/A: grantee `0`. (`C:74`) | N/A. | N/A. | N/A. |
-| Presente, senha desconhecida/divergente | leitor | A; porta usa senha do arquivo ou gera outra e altera role. (`C:191`; `P:77`; `P:79`; `P:108`) | Senha do destino; E+T. | R(login); porta ✓/F. (`L:194`; `P:184`) | Divergência real `G:287`; ignorar login morderia `G:289`. Caso “role existente + arquivo ausente”: **FALTA**. |
-| Presente, senha desconhecida/divergente | saas_user | **FALTA** juiz da sua senha; conexão administrativa usa socket sem senha no script. (`C:10`; `P:51`) | Nenhuma rotação desse usuário prevista. (`P:108`) | Dependente da conexão administrativa. (`P:93`) | **FALTA**. |
-| Presente, senha desconhecida/divergente | PUBLIC | N/A. (`C:74`) | N/A. | N/A. | N/A. |
-| `.env_leitor` ausente/desatualizado/inválido | leitor | Guardas locais + A; porta normaliza arquivo ao concluir. (`L:173`; `L:179`; `P:194`) | E+T; cluster pode mudar antes do arquivo. (`P:108`; `P:196`) | R(credencial/HOST/login); ✓/F. | Ausência/HOST/sem senha `T:147`, `T:150`, `T:252`; falhas mktemp/chmod/mv: **FALTA**. |
-| `.env_leitor` ausente/desatualizado/inválido | saas_user | N/A como credencial desse usuário: arquivo é consumido pelo login leitor. (`L:194`) | Arquivo não publica senha de `saas_user`. (`P:194`) | **FALTA** garantia de disponibilidade do executor. (`P:51`) | **FALTA**. |
-| `.env_leitor` ausente/desatualizado/inválido | PUBLIC | N/A. (`C:74`; `C:22`) | N/A. | N/A. | N/A. |
-| ACL de relação/coluna/sequência aberta | leitor | J(esc_tab/esc_seq) → REVOKE relações, depois SELECT. (`C:112`; `C:122`; `P:129`; `P:165`) | ACL; E+T. Revogação explícita de ACL de coluna: **FALTA** no bloco. (`P:128`) | R(chave); ✓ se zerar, senão F. (`P:173`) | Estragos `G:250`–`G:255`; mutante específico por subtipo: **FALTA**. |
-| ACL de relação/coluna/sequência aberta | saas_user | **FALTA** juiz de seus privilégios; consulta filtra leitor/PUBLIC. (`C:116`; `C:125`) | Porta concede leitura ao leitor, sem contrato de preservação do executor. (`P:165`) | **FALTA** retorno sobre esse sujeito. | **FALTA**. |
-| ACL de relação/coluna/sequência aberta | PUBLIC | J detecta; operação de revogação relacional de PUBLIC: **FALTA**. (`C:116`; `P:129`) | ACL aberta pode permanecer; fases anteriores já confirmadas. (`P:118`; `P:173`) | R(chave); porta F. | Só cobrança textual `T:217`; estrago PG PUBLIC relacional e mutante: **FALTA**. |
-| ACL LO aberta | leitor | J(esc_lo) → REVOKE das famílias nomeadas. (`C:136`; `P:156`) | `pg_proc.proacl`; E+T. | R(esc_lo); ✓/F. | Tentativas `G:327`–`G:329`; M1 atingiria primeiro `G:223`. Sete famílias sem tentativa: **FALTA** frente a `C:19`. |
-| ACL LO aberta | saas_user | **FALTA** juiz de capacidades/impacto; filtro não o inclui. (`C:138`) | REVOKE não o nomeia. (`P:156`) | **FALTA** garantia de acesso preservado. | **FALTA**. |
-| ACL LO aberta | PUBLIC | J(esc_lo) → REVOKE EXECUTE. (`C:136`; `P:156`) | `proacl`; E+T. | R(esc_lo); ✓/F. | Estrago `G:267`; retirar chave, M4, morderia `G:242`. |
-| SECURITY DEFINER aberta/nova | leitor | J(esc_func) → REVOKE não-sistema. (`C:139`; `P:157`) | `proacl`; E+T. | R(esc_func); ✓/F. | Escrita autenticada `G:336`; M2 atingiria primeiro `G:223`. |
-| SECURITY DEFINER aberta/nova | saas_user | **FALTA** juiz de impacto no dono/app. (`C:142`; `P:157`) | ACL do objeto é alterada, sem prova de clientes preservados. (`P:157`) | **FALTA** retorno sobre impacto. | **FALTA**. |
-| SECURITY DEFINER aberta/nova | PUBLIC | J(esc_func) → REVOKE EXECUTE. (`C:139`; `P:157`) | `proacl`; E+T. | R(esc_func); ✓/F. | Função nova `G:266`; retirar chave, M5, morderia `G:242`. Concorrência: **FALTA**. |
-| CONNECT em outro banco | leitor | J(outros_bancos) → REVOKE ALL nos outros bancos conectáveis. (`C:143`; `P:117`) | `pg_database.datacl`; E+T. | R(outros_bancos); ✓/F. | Novas conexões `G:345`; M3 atingiria primeiro `G:223`. Sessão anterior: **FALTA**. |
-| CONNECT em outro banco | saas_user | **FALTA** juiz de continuidade de acesso; não é sujeito da contagem. (`C:145`) | Efeito indireto via PUBLIC depende de seus privilégios reais. (`P:117`) | **FALTA** retorno de impacto. | Superuser real/acesso preservado: **[nao verificado]**. |
-| CONNECT em outro banco | PUBLIC | J(outros_bancos) → REVOKE CONNECT em todos os outros `datallowconn`. (`C:143`; `P:117`) | `datacl`; E+T. | R(outros_bancos); ✓/F. | Estrago `G:268`; retirar chave, M6, morderia `G:242`. |
-| TEMP/CREATE/GRANT OPTION em banco/schema | leitor | J(esc_banco/esc_schema) → REVOKE ALL; repõe CONNECT/USAGE. (`C:126`; `P:131`; `P:158`; `P:162`) | ACL banco/schema; E+T. | R(chave); ✓/F. | Estragos `G:256`–`G:258`; tentativas `G:333`–`G:335`; mutante específico: **FALTA**. |
-| TEMP/CREATE/GRANT OPTION em banco/schema | saas_user | **FALTA** juiz de impacto; excluído do filtro. (`C:128`; `C:131`) | Possível perda do que dependia de PUBLIC. (`P:132`; `P:159`) | **FALTA** retorno de impacto. | **FALTA**. |
-| TEMP/CREATE/GRANT OPTION em banco/schema | PUBLIC | J → revoga CREATE schema e TEMP/CREATE banco; não toda ACL grantable restante. (`C:128`; `C:131`; `P:132`; `P:159`) | ACL; eventual resíduo permanece detectável. (`P:173`) | R(chave); ✓ ou F. | TEMP `G:259`; demais variantes PUBLIC e mutantes: **FALTA**. |
-| Defaults do leitor abertos | leitor | J(default_escrita/dono) → revoga defaults próprios destinados a PUBLIC. (`C:132`; `C:147`; `P:136`; `P:150`) | `pg_default_acl`; E+T. | R(chave); ✓/F. | ALTER próprio `G:379`; M7 morderia reprovisionamento `G:372`. |
-| Defaults do leitor abertos | saas_user | N/A como concedente dessa célula; operação distingue os dois donos. (`P:133`; `P:136`) | Nenhuma garantia própria adicional. | N/A. | **FALTA** prova de impacto combinado. |
-| Defaults do leitor abertos | PUBLIC | J detecta destinatário; porta revoga tabelas/sequências por schema e `r/S/n` globais. (`C:133`; `P:136`; `P:150`) | `pg_default_acl`; E+T. | R(default_escrita); ✓/F. | Tabela global `G:379`; sequência/schema/por-schema autenticados: **FALTA**. |
-| Defaults de `saas_user` abertos | leitor | J(default_escrita/default_falta) → remove grants e repõe SELECT. (`C:105`; `C:132`; `P:133`; `P:163`) | `pg_default_acl`; E+T. | R(chave); ✓/F. | Estragos `G:261`, `G:262`, `G:265`; mutantes específicos: **FALTA**. |
-| Defaults de `saas_user` abertos | saas_user | J examina seus defaults **para leitor**, não seus poderes gerais. (`C:109`; `C:133`) | Defaults alterados como concedente. (`P:133`; `P:143`; `P:163`) | ✓/F segundo prontidão do leitor. (`P:173`) | Tabela futura legível `G:230`; preservação de outros destinatários: **FALTA**. |
-| Defaults de `saas_user` abertos | PUBLIC | J detecta `r/S/n`; operação para revogar esses grants de PUBLIC: **FALTA**. (`C:132`; `P:133`; `P:150`) | Default aberto pode permanecer. (`P:175`) | R(default_escrita); porta F. | Caso PG e mutante: **FALTA**. |
-| Defaults de outro concedente abertos | leitor | J detecta; cura automática: **FALTA**. (`C:132`; `P:175`) | Default permanece; outras fases podem estar confirmadas. (`P:118`; `P:168`) | R(default_escrita); F. | Caso PG/mutante: **FALTA**. |
-| Defaults de outro concedente abertos | saas_user | **FALTA** avaliação de dependências desse executor. (`C:133`) | Sem operação específica. (`P:133`; `P:150`) | **FALTA** retorno próprio. | **FALTA**. |
-| Defaults de outro concedente abertos | PUBLIC | J detecta; cura automática: **FALTA**. (`C:133`; `P:175`) | Default permanece. | R(default_escrita); F. | Caso PG/mutante: **FALTA**. |
-| Leitor altera `read_only`/senha | leitor | J(ro/ro_banco)+A → próxima leitura recusa; porta realinha. (`C:84`; `C:87`; `P:108`; `P:111`) | Alteração do leitor persiste até cura; depois E+T. (`G:365`; `G:371`) | ALTER deve dar 0 no selo; leitura seguinte R; porta ✓/F. (`G:366`; `G:368`) | `G:376`–`G:378`; mutante de **impedimento**: **FALTA**, pois selo exige aceitação. |
-| Leitor altera `read_only`/senha | saas_user | N/A como titular; atua administrativamente na cura. (`P:51`; `P:108`) | Estado alterado é do leitor. (`P:109`) | N/A. | Prova de preservação do executor: **FALTA**. |
-| Leitor altera `read_only`/senha | PUBLIC | N/A; default próprio para PUBLIC está na célula anterior de defaults. (`G:379`) | N/A nesta célula. | N/A. | N/A. |
-| Super/poderes/membership/ownership | leitor | J; cura atributos/membros; reatribuição de propriedade: **FALTA** na porta. (`C:81`; `C:146`; `P:108`; `P:112`; `P:175`) | Atributos/membros alterados; propriedade pode permanecer. | R(chave); ✓ ou F. (`P:173`) | Membership/super `G:260`, `G:264`; dono falso `T:195`; ownership real/mutante: **FALTA**. |
-| Super/poderes/membership/ownership | saas_user | **FALTA** juiz de seus atributos/heranças. (`C:149`) | Não normalizados pela porta. (`P:108`) | **FALTA** retorno próprio. | **FALTA**. |
-| Super/poderes/membership/ownership | PUBLIC | N/A como role proprietária/membro examinada. (`C:146`; `C:147`) | ACL PUBLIC continua avaliada nas células próprias. (`C:116`) | N/A. | N/A. |
-| Leitura/default de leitura faltante | leitor | J(usage/tab/seq/default_falta) → CONNECT, USAGE, SELECT e defaults. (`C:92`; `C:105`; `P:160`; `P:166`) | ACL/defaults; E+T. | R(chave); ✓/F. | Falta falsa `T:137`; tabela futura `G:230`; mutantes por dimensão: **FALTA**. |
-| Leitura/default de leitura faltante | saas_user | Seu OID é o concedente exigido; visibilidade integral do inventário: **FALTA** prova. (`C:98`; `C:109`) | Defaults desse concedente. (`P:163`) | ✓/F segundo leitor. (`P:173`) | Fixture `G:145`; equivalência ao executor real: **[nao verificado]**. |
-| Leitura/default de leitura faltante | PUBLIC | SELECT/USAGE/CONNECT simples são admitidos, sem exigência de que PUBLIC os possua. (`C:116`; `C:128`; `C:131`) | Porta não concede leitura a PUBLIC. (`P:160`; `P:165`) | Não decide presença de leitura por PUBLIC. (`C:92`) | Caso isolante: **FALTA**. |
-| Conferência ilegível/erro | leitor | J rejeita prefixo/chaves; falha SQL recusa. Porta tolera erro **antes**, rejeita **depois**. (`C:160`; `C:164`; `L:185`; `P:72`; `P:173`) | Leitura: trilha; porta: alterações já confirmadas podem ficar. (`L:121`; `P:168`) | L5; P1 após conferência final. | Mudo/erro/chave ausente `T:141`, `T:143`, `T:199`; duplicata/valor contraditório: **FALTA**. |
-| Conferência ilegível/erro | saas_user | Executor da consulta; diagnóstico próprio: **FALTA**. (`L:166`; `P:51`) | Trilha tenta registrar erro genérico. (`P:72`; `P:60`) | L5/P1; sem distinguir causa administrativa. (`L:185`; `P:174`) | Caso separado por causa: **FALTA**. |
-| Conferência ilegível/erro | PUBLIC | A conferência inteira é recusada; sem decisão parcial confiável de suas ACL. (`C:158`; `L:187`) | ACL não é curada pela leitura. (`L:166`) | L5/P1. (`L:185`; `P:174`) | Caso específico PUBLIC: **FALTA**. |
-| Cluster inacessível | leitor | PROD: consulta recusa; sombra tenta subir cluster primeiro. (`L:143`; `L:185`) | Sombra pode alterar estado Docker; porta tenta trilha. (`L:144`; `P:60`) | PROD L5; sombra pode L1; porta falha SQL P1. (`L:144`; `P:93`) | Simulação de consulta `T:143`; indisponibilidade real/mutante: **FALTA**. |
-| Cluster inacessível | saas_user | Conexão administrativa não disponível; reparo: **FALTA**. (`P:51`) | Estado do banco não conferido. (`P:72`) | Falha SQL P1. (`P:93`) | **FALTA**. |
-| Cluster inacessível | PUBLIC | Estado ACL não observável nessa execução. (`C:143`; `L:185`) | **[nao verificado]**. | Recusa por conferência, não por ACL medida. (`L:185`) | **FALTA**. |
-| Pronto; PROD × sombra | leitor | J+A separados; destino fixo; garantia conjunta dos dois clusters: **FALTA**. (`C:28`; `C:29`; `P:173`; `P:187`) | ACL do destino + E+T; sombra só carimba depois da porta. (`P:169`; `S:340`; `S:341`) | ✓ no destino escolhido. (`P:199`) | Ambos `G:220`, `G:309`; comparação de estado 2×: **FALTA**. |
-| Pronto; PROD × sombra | saas_user | **FALTA** juiz da disponibilidade/capacidade do app nos dois clusters. (`C:149`) | Defaults alterados; impacto via PUBLIC não certificado. (`P:117`; `P:163`) | Nenhuma pós-condição própria. (`P:173`) | **FALTA**. |
-| Pronto; PROD × sombra | PUBLIC | J considera ACL do destino e CONNECT dos demais bancos do cluster escolhido. (`C:129`; `C:143`) | Revogações amplas, inclusive em outros bancos. (`P:117`; `P:157`; `P:159`) | ✓ não certifica clientes legítimos dependentes de PUBLIC. (`C:145`) | `postgres/template1` em `G:345`; inventário real/clientes: **[nao verificado]**. |
-
-**3. Contrato de saída e falha**
-
-O predicado de catálogo existente é:
-
-```text
-role = login = ro = connect = 1
-todas as chaves de CONF_AUSENCIA = 0
-```
-
-Ele é definido em `C:154`–`C:168`. Além dele, a porta cobra login `leitor|on` e arquivo promovido com modo 600; esses últimos não são verificáveis apenas por catálogo. (`P:183`; `P:187`; `P:196`; `P:198`)
-
-| Saída/fase | Garantia atual e estado que pode ficar |
-|---|---|
-| **rc 0** | Conferência aprovada, depois login aprovado, depois arquivo publicado. **FALTA** garantia de que o catálogo continua igual no instante do retorno, diante de concorrência entre essas etapas. (`P:172`; `P:183`; `P:196`) | [nao verificado]
-| Falha antes da transação da role | Sem alterações SQL enviadas por essa execução; lock/log podem existir. Argumento/sudo: rc2; trava/senha inválida: rc1. (`P:45`; `P:47`; `P:68`; `P:70`; `P:84`) |
-| Falha dentro da transação da role | BEGIN/COMMIT com `ON_ERROR_STOP`; não há COMMIT intermediário do laço de bancos. Resultado concreto após falha: **[nao verificado]**. (`P:51`; `P:105`; `P:117`; `P:118`) | [nao verificado]
-| Falha após primeiro COMMIT | Role/senha/configuração/membership/CONNECT podem estar novos; ACL e arquivo podem continuar antigos. **Não há atomicidade global.** (`P:118`; `P:127`; `P:196`) | [nao verificado]
-| Falha após segundo COMMIT | Role e ACL podem estar novos, arquivo ainda antigo; conferência/login recusam a publicação. (`P:168`; `P:174`; `P:184`) | [nao verificado]
-| Falha depois do `mv` | Arquivo já pode ser novo: verificação final ocorre após a promoção. (`P:196`; `P:198`) |
-| Falha na trilha | `pronto` pode já ter sido emitido; o trap tenta gravar depois, sem tratamento específico da falha de append. **FALTA** contrato/selo de coerência mensagem–persistência–rc. (`P:199`; `P:55`; `P:61`) |
-| Falha da porta dentro de `--refazer` | Carimbo já invalidado; falha impede publicação final. Esse caminho não mantém o verde anterior. (`S:288`; `S:265`; `S:340`; `S:341`) | [nao verificado]
-
-**Idempotência:** `2× = mesmo estado total
-
-[truncado em 20000 de 23724 caracteres]
-
-## 09/11 13:48 · sessao f59a012f0887 · - · - · origem=Ronald (tmux)
-
-| Contrato/célula | Evidência no vivo |
-|---|---|
-| Juiz único existente de prontidão de catálogo | `_conferencia_pronta`, `bin/sonda_leitor_comum.sh:158`, exige presenças=1/ausências=0 (`:154-168`); chamado pela porta `bin/sonda_provisionar.sh:173` e leitura `bin/sonda_leitura.sh:187`. |
-| Juiz de autenticação distinto, pergunta distinta | `_login_leitor`, `bin/sonda_leitor_comum.sh:191`; porta compara `leitor\|on` em `bin/sonda_provisionar.sh:187`; leitura em `bin/sonda_leitura.sh:196`. Não é duplicação da pergunta de catálogo. |
-| `saas_user` | É executor administrativo fixo (`bin/sonda_leitor_comum.sh:10`; `bin/sonda_provisionar.sh:51`; `bin/sonda_leitura.sh:166`) e concedente dos defaults (`bin/sonda_leitor_comum.sh:109`). **FALTA juiz de seus atributos, disponibilidade e capacidades**; ser superuser real: **[nao verificado]**. |
-| rc 0 da porta | Conferência pós-alteração aprovada, login `leitor\|on`, envfile promovido e modo 600 verificado (`bin/sonda_provisionar.sh:172-199`). Predicado é instantâneo; não certifica estabilidade depois das consultas. |
-| rc !=0 antes da transação 1 | Argumento/sudo recusam rc2 (`bin/sonda_provisionar.sh:45-47`); trava/senha inválida rc1 (`:69-84`). Sem SQL de alteração antes disso, mas lock/log podem ter sido criados (`:59-68`). |
-| rc !=0 na transação 1 | Role/atributos/senha/CONNECT dos outros bancos estão num único BEGIN/COMMIT, com ON_ERROR_STOP (`bin/sonda_provisionar.sh:51,105,118`). Estado final executado: **[nao verificado]**. |
-| rc !=0 depois da transação 1 | **Pode ficar parcialmente aplicado**: COMMIT role/senha/CONNECT em `bin/sonda_provisionar.sh:118`; ACL só começa `:127`; falhas de ACL, conferência/login/publicação não desfazem a primeira transação (`:169-196`). |
-| rc !=0 depois da transação 2 | Role e ACL já confirmados, env velho ainda intacto até `mv` (`bin/sonda_provisionar.sh:168,174,184,196`). **Não garante rollback global**. |
-| rc !=0 depois do `mv` | Env já pode ser novo: verificação de modo ocorre depois de sua promoção (`bin/sonda_provisionar.sh:196-198`). |
-| Trilha falha | `_fim` tenta log sem guarda e está sob `set -e`; falha de mkdir/append pode interromper antes do `exit "$rc"` (`bin/sonda_provisionar.sh:40,55-62`). O `pronto` já pode ter sido emitido (`:199`). **FALTA contrato/selo de coerência dessa célula**. |
-| `.env_leitor` ausente/sem senha | Porta gera senha (`bin/sonda_provisionar.sh:76-79`), alinha cluster (`:108`), só promove após prova (`:193-196`); leitura recusa rc5 (`bin/sonda_leitura.sh:173,179`; `_recusa :129-135`). |
-| `.env_leitor` antigo/inválido | Leitura recusa modo ≠600/HOST/sem senha (`bin/sonda_leitura.sh:174-179`); porta reaproveita somente primeira linha da senha, admite alfanumérica, regrava só senha (`bin/sonda_provisionar.sh:77,83-84,194`). |
-| Prod × sombra | Destinos fixos (`bin/sonda_leitor_comum.sh:28-29`), **um env compartilhado** (`:22`). Porta lê/gera uma senha (`bin/sonda_provisionar.sh:77-79`) e altera apenas o destino escolhido (`:108`). **FALTA garantia conjunta dos dois clusters após uma execução**. |
-| Sombra/carimbo | `--refazer` invalida antes do drop (`bin/sombra.sh:288-289`), chama porta antes do carimbo final (`:340-344`). A própria porta não escreve stamp: sua publicação é `.env_leitor` + log (`bin/sonda_provisionar.sh:60-61,193-199`). |
-| Idempotência | Mesmo segredo é reutilizado (`bin/sonda_provisionar.sh:77-79`), mas cada execução reaplica ALTER/REVOKE/GRANT e promove novo arquivo (`:108-168,193-196`), acrescentando trilha com data (`:60-61`). **2x = mesmo estado total é falso pelo log**; equivalência semântica ACL/configuração e caso de selo completo **FALTA**. |
-| Conferência ilegível | Leitura recusa consulta falha e parser inválido (`bin/sonda_leitura.sh:185-187`; `bin/sonda_leitor_comum.sh:160`). Porta registra erro na conferência inicial e continua tentando provisionar (`bin/sonda_provisionar.sh:72`); pós-conferência inválida recusa rc1 (`:172-176`). |
-| Cluster inacessível | Porta não trata conferência inicial inválida como parada (`bin/sonda_provisionar.sh:72`), mas escrita falha leva rc1 mascarado (`:93-97`). Leitura prod recusa consulta rc5 (`bin/sonda_leitura.sh:185`); sombra tenta subir cluster e pode sair rc1 antes (`:143-145`). |
-
-**Lista não fechada**, pelas seguintes fronteiras do catálogo:
-
-| Fronteira | Referência e consequência |
-|---|---|
-| Privilégios de relação cobrem todas as ACLs previstas, porém não todo objeto/capacidade PostgreSQL | Relações `r,p,v,m,f`, colunas e sequências não-sistema em `bin/sonda_leitor_comum.sh:112-125`; funções só LO nomeadas/SECURITY DEFINER não-sistema em `:136-141`; **FALTA enumeração das capacidades restantes**. |
-| Defaults `f` ignorados | `default_escrita` só examina tipos `r,S,n` (`bin/sonda_leitor_comum.sh:132-135`); default EXECUTE de funções **FALTA célula/juiz**, embora futuras SECURITY DEFINER sejam detectadas depois de criadas (`:139-142`). |
-| Inventário de leitura filtrado pelo executor | Tabelas/sequências vêm de `information_schema` (`bin/sonda_leitor_comum.sh:98-104`); comprovação de que saas_user enxerga universo inteiro **[nao verificado]**. |
-| PUBLIC DML detectado, não curado | Juiz conta leitor/PUBLIC (`bin/sonda_leitor_comum.sh:112-125`); REVOKE em relações revoga só leitor (`bin/sonda_provisionar.sh:129-130`). Porta pode terminar rc1 sem pronto (`:173-176`). |
-| Outros concedentes/defaults | Juiz cobre qualquer dono para `r/S/n` (`bin/sonda_leitor_comum.sh:132-135`); porta cura defaults de saas_user→leitor e leitor→PUBLIC (`bin/sonda_provisionar.sh:133-150`). **FALTA operação para demais concedentes/PUBLIC**, com recusa explícita (`:175`). |
-| Membro/dono | Juiz mede membership e ownership do cluster (`bin/sonda_leitor_comum.sh:146-148`); porta revoga memberships (`bin/sonda_provisionar.sh:112`), não reatribui objetos; informa REASSIGN/REVOKE manual (`:175`). |
-| Mutação concorrente e sessões anteriores | A porta só executa REVOKE CONNECT, sem encerrar sessões (`bin/sonda_provisionar.sh:117`); leitura confere, faz login e executa depois (`bin/sonda_leitura.sh:187,194,233`). **FALTA predicado de garantia contínua/caso concorrente**. |
-
-**Separação Ronald × técnico:**
-
-- **Decisão já estabelecida:** leitura não pode alterar role; só porta escreve (`bin/sonda_leitura.sh:28-33`); nada sem raspar/credencial no argv/prompt, escrita prod ou segundo envelope (`app/docs/CORTES.md:375`).
-- **`!` operacional prod:** comentário reserva porta prod ao Ronald; único bloqueio técnico local é `SUDO_USER`, não identidade Ronald (`bin/sonda_provisionar.sh:5,45-48`). Impacto de REVOKE PUBLIC em clientes externos **[nao verificado]**; operações amplas estão em `:117,156-159`.
-- **Lei já decide, sem novo corte:** um escritor com tripwire/trilha (`CLAUDE.md:32-34`), leitor sem regra própria (`:20-22`), risco medido antes (`:23-24`), lei existente antes de novo corte (`:25-27`).
-- **Se quiser enfraquecer garantia para aceitar alterações próprias detectadas depois:** isso altera promessa de “impossibilidade de acidente” (`bin/sonda_leitura.sh:8-15`) e escritor único (`CLAUDE.md:32`); não é mero ajuste técnico. Existência desses ALTER próprios está no selo (`bin/tests/test_sonda_sem_grant_pg.sh:365-376`).
-- **Técnico:** preencher enumeração, retornos por fase, atomicidade observável, projeção explícita de idempotência, cobertura das três identidades e mutantes específicos; não depende de inventar lei (`CLAUDE.md:20-32`).
-
-## 09/11 13:47 · sessao 9ad35765ebd1 · - · - · origem=Ronald (tmux)
-
-Execuções, RED/GREEN e mortes reais de mutantes: **[nao verificado]**. “Morderia” abaixo identifica asserção, sem execução.
-
-| Estado / role | Caso do selo e mordida identificável | FALTA |
-|---|---|---|
-| Limpo / leitor | Dois destinos, rc0, SELECT e env600: `bin/tests/test_sonda_sem_grant_pg.sh:219`; autenticação efetiva: `:301`, `:311`. | Comparação de catálogo/env após **duas** portas: FALTA (`:219`, `:308`). |
-| Role ausente / leitor | Conferência falsa `role=0`; rc5, mensagem, sem sonda, sem SQL escrito e trilha: `bin/tests/test_sonda_sem_grant.sh:127`, `:139`. | Recusa com role ausente em PG real: FALTA; primeira criação real é caso positivo (`bin/tests/test_sonda_sem_grant_pg.sh:222`). |
-| Senha desconhecida/divergente / leitor | Login falso falho: `bin/tests/test_sonda_sem_grant.sh:145`; senha errada real: `bin/tests/test_sonda_sem_grant_pg.sh:285`. | Role existente + env ausente + senha desconhecida explicitamente ensaiados: FALTA. |
-| Env ausente/antigo/sem senha / leitor | Recusa rc5 nomeada: `bin/tests/test_sonda_sem_grant.sh:147`, `:150`, `:252`. | Falhas de promoção `mktemp/chmod/mv` do env: FALTA nos casos da porta (`:255`, `:370`). |
-| Conferência muda/erro / leitor | `FAKE_CONF=''` e rc2; rc5 e sonda impedida: `bin/tests/test_sonda_sem_grant.sh:141`, `:143`, `:127`. | Cluster indisponível real: FALTA; rc2 é simulação de consulta (`:143`). |
-| Relação/coluna/sequência / leitor | Estragos de INSERT, UPDATE coluna, GRANT OPTION e USAGE: `bin/tests/test_sonda_sem_grant_pg.sh:250`; arnês exige chave positiva, rc5, cura e nova leitura: `:238`. | `nextval/setval` autenticados: FALTA na lista `:327`–`:341`. |
-| Relação/coluna/sequência / PUBLIC | Consulta textual exige `e.grantee=0`: `bin/tests/test_sonda_sem_grant.sh:217`. | Estrago PG concedido a PUBLIC: FALTA na lista `bin/tests/test_sonda_sem_grant_pg.sh:250`–`:268`; casos relacionais concedem ao leitor. |
-| TEMP/CREATE / leitor e PUBLIC | TEMP PUBLIC: `bin/tests/test_sonda_sem_grant_pg.sh:259`; negativas autenticadas TEMP/CREATE: `:333`–`:335`. | Negativa autenticada após retirar especificamente REVOKE PUBLIC: mutante executado [nao verificado]. |
-| LO / leitor e PUBLIC | Estrago PUBLIC: `bin/tests/test_sonda_sem_grant_pg.sh:267`; tentativas autenticadas: `:327`–`:329`. | Sete famílias de `bin/sonda_leitor_comum.sh:19` sem tentativa autenticada. |
-| SECURITY DEFINER / PUBLIC → leitor | Função nova: `bin/tests/test_sonda_sem_grant_pg.sh:266`; execução que escreve recusada: `:336`. | Concorrência criação após conferência: FALTA; tentativa é sequencial (`:238`, `:266`). |
-| Outros bancos / PUBLIC → leitor | Estrago CONNECT PUBLIC: `bin/tests/test_sonda_sem_grant_pg.sh:268`; negativas em postgres/template1, efeito LO zero: `:345`–`:354`. | Sessões já abertas e outros bancos enumerados dinamicamente no selo: FALTA; lista é postgres/template1 (`:345`). |
-| Defaults / saas_user → leitor | INSERT, SELECT grantable, schema grantable: `bin/tests/test_sonda_sem_grant_pg.sh:261`, `:262`, `:265`. | saas_user→PUBLIC e outro concedente→leitor/PUBLIC: FALTA na lista `:250`–`:268`. |
-| Defaults / leitor → PUBLIC | O leitor executa ALTER DEFAULT PRIVILEGES; exige sucesso, recusa posterior e cura: `bin/tests/test_sonda_sem_grant_pg.sh:365`–`:379`. | Sequência/schema e variante por schema autenticadas: FALTA; caso é tabela global (`:379`). |
-| ALTER próprio / leitor | Sucesso obrigatório do ALTER, rc5 posterior e cura: `bin/tests/test_sonda_sem_grant_pg.sh:365`–`:378`. | “Nenhuma escrita persistente pelo leitor” é incompatível com a asserção de sucesso (`:366`). |
-| Login barrado / leitor | PG_hba reject; porta não anuncia pronto, env preservado por SHA, sem temporário: `bin/tests/test_sonda_sem_grant_pg.sh:275`–`:281`. | Snapshot do catálogo após falha: FALTA nessas asserções. |
-| Impacto / saas_user | Role usada como administrador das fixtures: `bin/tests/test_sonda_sem_grant_pg.sh:162`; bootstrap é POSTGRES_USER: `:145`. | Prova de preservação de acesso legítimo **não-superuser**, ACL/defaults e estado de saas_user: FALTA; fixture não representa esse inventário. |
-
-Mutantes e limites de mordida:
-
-| Mutante | Asserção que morderia |
-|---|---|
-| Retirar REVOKE LO/definer/CONNECT (M1–M3) | Conferência pós-porta falha antes da credencial (`bin/sonda_provisionar.sh:172`–`:176`); selo acusa provisionamento/env (`bin/tests/test_sonda_sem_grant_pg.sh:223`–`:225`). A morte específica posterior “ESCRITA ACEITA” exige arnês adicional **[nao verificado]**. |
-| Retirar chaves esc_lo/esc_func/outros_bancos de CONF_AUSENCIA (M4–M6) | Estragos deixam de ser recusados: cobrança rc5 e ausência de sonda (`bin/tests/test_sonda_sem_grant_pg.sh:242`–`:244`, `:266`–`:268`). |
-| Retirar ADP leitor→PUBLIC (M7) | Reprovisionamento após default próprio precisa voltar rc0 (`bin/tests/test_sonda_sem_grant_pg.sh:372`, `:379`). |
-| Reintroduzir SQL escrito na leitura | Injeta GRANT, SELECT INTO, CTE DELETE; cobra rc5, recusa falante e SQL impedido antes do psql (`bin/tests/test_sonda_sem_grant.sh:237`–`:248`). |
-| Segredo em externo fora da lista/PATH absoluto | **FALTA** mordida universal; espiação enumera nomes e delega pelo PATH (`bin/tests/test_sonda_sem_grant.sh:306`–`:312`). |
-
-Atomicidade global e idempotência de catálogo não são provadas pelos controles de env preservado: a role/CONNECT confirma em uma transação e o ACL em outra (`bin/sonda_provisionar.sh:118`, `:127`, `:168`); o selo preserva SHA do env, sem comparar o catálogo anterior (`bin/tests/test_sonda_sem_grant.sh:281`–`:300`).
-
-_3171 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3174 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
