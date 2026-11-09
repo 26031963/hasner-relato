@@ -1,6 +1,10 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lancar_construtor_v4.sh | pid=3570552
+ESPERANDO: lancar_green_v5.sh | pid=1480312
+E3 13:3x: volta 4 Codex rc 0, inventario limpo (11 arquivos, nenhum proibido) -> commit 251fc4842 na copia wt-codex-fio-e0-v4-e3-130214 (P1-P5 + F4) -> suite inteira + mutantes (20 novos) logs/fio_e3/v5_suite.log e v5_mutantes.log.
+SELOS-CANON-I3 13:3x: preverif v2 REPROVA (logs/SELOS-CANON-I3/i3_preverif_v2.r); amostra conferida (disjuntor.py:964-977 desempate por N; :905-918 carimbo sem exclusao; :2020 x :2686 ordem carimbo/FORA) -> triagem A1-A11 (triagem_preverif_v2.txt) -> volta 3 construtor opus (protegido) -> entrega_v3.txt.
+SONDA-SEM-GRANT 13:3x: volta 7 opus c5e7df309 (V7a lo_*/SECURITY DEFINER/outros bancos fechados, selo pg logado COMO leitor 44 falhas -> 0; V7b ordem stdout/stderr; 8 mutantes) -> wt limpa -> preverif Codex v7 (logs/auditoria_0911/preverif_sonda_v7.r). DECISAO-ABERTA 4 medida no sombra_db: logins = saas_user (super) + leitor; revogar CONNECT de PUBLIC nao corta ninguem legitimo. Prod segue o `!` do 1o provisionar.
+BUG-PAR 13:3x: preverif Codex v4 sobre 43dc937f2 (voltas 1-4, mutantes 44/44) -> logs/bug_par_dois_atos/preverif_v4.r; suite inteira segue esperando o pouso E2+E3.
 E3 13:0x: suite inteira 77da997b4 (E3 3b + main 3803e6623) OK (skipped=42, expected failures=41), Ran 14755, rc 0 (logs/fio_e3/v4_suite.log): o merge do main nao quebrou nada; a arvore do pouso sera a da volta 4.
 E3 13:0x: preverif v3b rc 0 -> triagem P1-P5 procedentes (aviso_pendencia e api_chamados_v2 com lista propria de pendentes; get_or_create indireto no diff_e3_sombra; catraca M7 sem apelido por atribuicao/getattr; badge 3+5N SELECT), F1-F4 fila (logs/fio_e3/triagem_preverif_v3b.txt) -> volta 4 construtor Codex em wt-codex-fio-e0-v4-e3-130214 (base 77da997b4). Suite v4 da 77da997b4 segue so como prova do merge.
 SONDA-SEM-GRANT 13:0x: preverif v6 rc 0: P1/P2/P3/P5 fechados, sed :92 curado; triagem (logs/auditoria_0911/triagem_preverif_v6.txt): V7a leitor nunca testado logado COMO leitor (lo_create/temp/insert) + V7b ordem stderr -> volta 7 construtor opus; senha em argv fora do diff (db_teste.sh:55, esteira_vigia.py:752, core/hooks/pre-push.sh:82, CONFIRMADO) -> obra SEGREDO-ARGV-RESIDUO; carimbo da sombra mentindo por caminhos sem invalidar -> obra SOMBRA-CARIMBO-MENTE (BACKLOG).
