@@ -1,7 +1,112 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 22:44** · publicado em **08/11/2026 22:45** (UTC-3)
+> Ultima resposta processada: **08/11/2026 22:47** · publicado em **08/11/2026 22:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 22:47 · sessao acbe2fb35c2e · FIO-E0-V4-E1-FILA · verificador · origem=Code
+
+**O delta fecha os defeitos pontuais de dia local e dos três sítios A1, mas não fecha a garantia global do repasse:** ainda há Chamado terminal e relações com outro colaborador alcançáveis depois da trava inicial de P (`app/chamados/veredito_lavrado.py:114`; `app/chamados/services/fio.py:1022`; `app/chamados/services/disputa_emissao.py:956`; `app/chamados/reconciliador.py:1617`; `app/chamados/services/disputa_emissao.py:1747`).
+
+A execução das suites, os resultados RED→verde citados nos anexos e a ocorrência desses caminhos em produção são **[nao verificado]**. [nao verificado]
+
+**1. Achados marcados CURADO**
+
+| Achado | Conferência do delta |
+|---|---|
+| **1 — teto do repasse** | **Fecha a omissão por dia:** seleciona toda P de C, além das costuradas nos órfãos. **Não fecha o teto transitivo:** as cascatas alcançam outras P/D e Chamados terminais fora dessa seleção; caminhos detalhados abaixo (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/reconciliador.py:1617`). |
+| **2 — local × UTC** | **Fecha nos dois leitores apontados:** ambos chamam `relogio_virou`, que converte hoje e a lavra para dia local. Não significa que todo leitor temporal do sistema passe por ela: o backfill mantém conta própria (`app/chamados/veredito_lavrado.py:114`; `app/chamados/veredito_lavrado.py:208`; `app/chamados/services/raiox.py:41`; `app/chamados/management/commands/backfill_veredito_lavrado.py:113`). |
+| **4 — A1** | **Fecha os três sítios apontados:** backfill e contador usam diretamente o FK; rechaveamento usa `p.colaborador_id` para célula e despertar. A regressão desse terceiro sítio continua fora do selo novo (`app/chamados/management/commands/backfill_decisoes_pergunta.py:199`; `app/chamados/services/fio.py:1845`; `app/chamados/services/fio.py:1022`; `app/chamados/tests/test_e1_fila.py:87`). |
+| **6-F1** | **Fecha a saída vazia identificada:** acrescenta segundo órfão sem P e exige retorno não nulo. Isso não comprova todos os ramos das cascatas (`app/chamados/tests/test_e1_fila.py:261`; `app/chamados/tests/test_e1_fila.py:269`; `app/chamados/tests/test_e1_fila.py:275`). |
+| **6-F5** | **Fecha a fraqueza do relógio constante:** cada leitura avança um dia e o mutante retira o instante compartilhado. O juiz real continua mockado nesse teste (`app/chamados/tests/test_e1_fila.py:359`; `app/chamados/tests/test_e1_fila.py:364`; `app/chamados/tests/test_e1_fila.py:376`). |
+| **6-A3 parcial** | **Continua parcial:** agora exige a D fechada na sequência, mas pergunta e declaração permanecem no mesmo `DIA`; não exercita o reuso que entra no rechaveamento por dia divergente (`app/chamados/tests/test_e1_fila.py:185`; `app/chamados/tests/test_e1_fila.py:194`; `app/chamados/tests/test_e1_fila.py:204`; `app/chamados/models.py:2938`). |
+| **8 — escritores de destino** | **A documentação passa a mencionar SET_NULL**, correspondente à política declarada no FK. A expressão “só o banco” não comprova execução por ação SQL/trigger: isso é **[nao verificado]**. A conferência da mensagem do commit, “seis” versus “sete”, também é **[nao verificado]** (`app/chamados/services/fio.py:808`; `app/chamados/services/fio.py:814`; `app/chamados/models.py:3377`). |
+
+**2. Conjunto do repasse e caminhos que escapam**
+
+Chamando de **C** o colaborador recebido, **O** os órfãos e **P₀** as perguntas selecionadas, o conjunto inicialmente travado é este; a chamada ocorre dentro do atomic, antes do complemento e das demais escritas (`app/chamados/services/disputa_emissao.py:984`; `app/chamados/services/disputa_emissao.py:991`):
+
+| Classe | Conjunto inicial |
+|---|---|
+| **C** | Somente C; os donos das D/Ch fornecidas explicitamente não são automaticamente acrescentados (`app/chamados/services/disputa_emissao.py:954`; `app/chamados/models.py:2663`). |
+| **P₀** | `P.colaborador=C OU P.chamado_destino∈O` (`app/chamados/services/disputa_emissao.py:956`). |
+| **D₀** | Todas as D abertas de C, mais as D de P₀, abertas ou fechadas (`app/chamados/services/disputa_emissao.py:958`; `app/chamados/models.py:2669`). |
+| **Ch₀** | O, destinos de P₀, todos os Ch vivos de C e pais das D selecionadas que estejam abertas. O recolhimento desses pais não exige que a D pertença a C (`app/chamados/services/disputa_emissao.py:959`; `app/chamados/models.py:2673`; `app/chamados/models.py:2677`; `app/chamados/models.py:2680`). |
+
+O conjunto **alcançável** precisa incluir as expansões abaixo, repetidas enquanto outra cascata encontrar novas linhas; a seleção inicial não calcula esse fechamento (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/services/disputa_emissao.py:1827`; `app/chamados/models.py:1908`):
+
+- **Corpo e cauda:** D da P encontrada por destino, D aberta/criada, perguntas criadas ou reusadas, órfãos analisados e perguntas dos dias extraídos do contexto da D (`app/chamados/services/disputa_emissao.py:1002`; `app/chamados/services/disputa_emissao.py:1013`; `app/chamados/services/disputa_emissao.py:1028`; `app/chamados/services/disputa_emissao.py:1202`; `app/chamados/services/disputa_emissao.py:278`; `app/chamados/services/disputa_emissao.py:294`).
+- **Cartório:** outros Ch vivos reconciliados, P absolvidas do colaborador inteiro e D que essas retratações podem fechar (`app/chamados/signals.py:203`; `app/ponto/services/cartorio.py:1488`; `app/ponto/services/cartorio.py:1522`; `app/ponto/services/cartorio.py:958`; `app/chamados/reconciliador.py:584`; `app/chamados/reconciliador.py:612`).
+- **Resolver/S143:** P encontradas pelo destino, suas D, todas as irmãs dessas D e respectivos pais; ao fechar uma D, também o C e o universo aberto do dono dela (`app/chamados/services/disputa_emissao.py:1747`; `app/chamados/services/disputa_emissao.py:1804`; `app/chamados/services/disputa_emissao.py:1827`; `app/chamados/services/disputa_emissao.py:1836`; `app/chamados/models.py:1908`).
+- **Fechamento:** reconciliação síncrona do pai e carimbo de pendentes aprovadas da D. Retomada de regularizações e fechamento de becos estão em `on_commit`, portanto ficam fora desta cascata síncrona (`app/chamados/signals.py:42`; `app/chamados/signals.py:163`; `app/chamados/services/materializacao.py:1418`; `app/chamados/signals.py:144`; `app/chamados/signals.py:225`).
+
+Há dois contraexemplos relevantes ao teto:
+
+**a) Chamado terminal existente, com todos os donos consistentes.** A cauda pode criar P sem destino; `gerar_perguntas_disputa` chama `reatar_pergunta_orfa`, que pode reemitir o Chamado do dia. A busca não restringe a vivos; `Chamado.abrir` pode renascer um terminal existente (`app/chamados/services/disputa_emissao.py:444`; `app/chamados/services/disputa_emissao.py:459`; `app/chamados/reconciliador.py:1617`; `app/chamados/reconciliador.py:838`; `app/chamados/reconciliador.py:910`; `app/chamados/models.py:906`; `app/chamados/models.py:921`).
+
+Se esse terminal não era órfão, pai de D aberta nem destino de P preexistente, ficou fora de Ch₀; o renascimento adquire sua trava posteriormente, embora o topo já tenha travado P₀ e a cauda já tenha inserido a nova P. Seus gates podem recusar casos concretos; ocorrência no dado: **[nao verificado]** (`app/chamados/models.py:2677`; `app/chamados/models.py:2680`; `app/chamados/models.py:3009`; `app/chamados/models.py:1019`; `app/chamados/models.py:1432`; `app/chamados/models.py:290`).
+
+**b) D/Ch de outro colaborador por costura preexistente.** Considere ChX vivo de C, fora de O, com P2 de C2 apontando para ele. ChX entra por “vivos de C”, mas P2/D2 não entram pelo predicado de P₀. O cartório pode reconciliar ChX; o S143 busca P2 pelo destino **sem filtro de colaborador**, pode carimbá-la e segue D2, suas irmãs e seu pai Ch2 (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/models.py:2680`; `app/ponto/services/cartorio.py:1488`; `app/chamados/signals.py:115`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/services/disputa_emissao.py:1787`; `app/chamados/services/disputa_emissao.py:1804`; `app/chamados/services/disputa_emissao.py:1836`).
+
+A reabertura de Ch2 ou o fechamento de D2 adquire C2 e seu universo depois das P já presas. O nascimento atual recusa nova costura cruzada, mas isso não elimina a leitura do acervo existente; existência dessa configuração em produção: **[nao verificado]** (`app/chamados/services/disputa_emissao.py:1812`; `app/chamados/services/disputa_emissao.py:1888`; `app/chamados/models.py:1908`; `app/chamados/models.py:2838`).
+
+Portanto, **há linhas alcançáveis fora do conjunto travado antes da primeira escrita**, inclusive D/Ch de outro colaborador; a ampliação para toda P de C não resolve essas expansões reversas e transitivas (`app/chamados/services/disputa_emissao.py:956`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/models.py:1908`).
+
+**3. `janela_expira_em`, `julgado_em` e relógio**
+
+| Operação | Escritores/leitores |
+|---|---|
+| **Derivação normal** | `lavrar`: amostra `_agora`, atribui `julgado_em`, calcula a janela com o mesmo instante e salva ambos (`app/chamados/veredito_lavrado.py:251`). |
+| **Outro derivador/escritor** | Backfill: calcula a janela e atribui ambos; persiste pela porta de lote. É exceção nominal no contrato (`app/chamados/management/commands/backfill_veredito_lavrado.py:111`; `app/chamados/management/commands/backfill_veredito_lavrado.py:139`; `app/chamados/management/commands/backfill_veredito_lavrado.py:143`; `app/core/tests/test_contract_escritores_estado.py:74`). |
+| **Restauração** | `desfazer_lavra_em_memoria` restaura a fotografia, inclusive ambos os campos (`app/chamados/veredito_lavrado.py:261`; `app/chamados/veredito_lavrado.py:268`). |
+| **Persistência sem nova derivação** | Reuso, carimbo, reapontamento, rechaveamento e relavra recebem os valores de `lavrar` (`app/chamados/models.py:2996`; `app/chamados/models.py:3139`; `app/chamados/services/fio.py:923`; `app/chamados/services/fio.py:1033`; `app/chamados/services/relavra_via.py:126`). |
+| **Leitores temporais principais** | `esta_stale` e varredura chamam `relogio_virou`; ambos também comparam marco com `julgado_em` (`app/chamados/veredito_lavrado.py:208`; `app/chamados/veredito_lavrado.py:212`; `app/chamados/services/raiox.py:41`; `app/chamados/services/raiox.py:44`). |
+| **Outros leitores** | Fotografia de rollback, serialização de reversão do passivo e comparação persistido/recalculado no backfill (`app/chamados/veredito_lavrado.py:261`; `app/chamados/services/passivo_validado.py:64`; `app/chamados/services/passivo_validado.py:83`; `app/chamados/management/commands/backfill_veredito_lavrado.py:121`; `app/chamados/management/commands/backfill_veredito_lavrado.py:135`). |
+
+As unidades são distintas e coerentes nos dois leitores corrigidos: `julgado_em` é **instante**, `janela_expira_em` é **dia**; para o ramo do relógio, o instante é convertido para dia local. A regra é `expira <= hoje` e `dia_local(lavra) < expira`: expiração inclusiva, lavra estritamente anterior; marco usa `marco > julgado_em` (`app/chamados/models.py:2588`; `app/chamados/models.py:2594`; `app/chamados/veredito_lavrado.py:114`; `app/chamados/veredito_lavrado.py:212`).
+
+A janela viva inclui os dois extremos; `expira_em` procura o primeiro dia fora dela, compatível com invalidar quando `hoje >= expira` (`app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:141`; `app/chamados/veredito_lavrado.py:143`).
+
+**Não há um único relógio para todo o ato.** O juiz ainda lê `date.today()` e é chamado antes de `lavrar` amostrar `_agora`; o teste F5 o substitui por mock. A configuração é São Paulo com timezone habilitado, mas a igualdade efetiva entre dia do processo e dia local em produção é **[nao verificado]** (`app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:242`; `app/chamados/veredito_lavrado.py:251`; `app/chamados/tests/test_e1_fila.py:364`; `app/config/settings/base.py:93`).
+
+**Há outro leitor com conta própria:** o backfill lê `localdate()` e `now()` separadamente e calcula `e <= hoje`. Portanto pode atravessar meia-noite entre as amostras; ocorrência real: **[nao verificado]** (`app/chamados/management/commands/backfill_veredito_lavrado.py:94`; `app/chamados/management/commands/backfill_veredito_lavrado.py:95`; `app/chamados/management/commands/backfill_veredito_lavrado.py:113`).
+
+Também permanece a ambiguidade anterior do campo: a descrição promete valor determinístico por evento, mas, para evento já expirado, `expira_em` devolve o dia da consulta/lavra, porque começa em `max(hoje, data_evento)` (`app/chamados/models.py:2597`; `app/chamados/veredito_lavrado.py:137`; `app/chamados/veredito_lavrado.py:142`).
+
+**4. FILA e descartes**
+
+- **Item 5 / A2 com chamador já travado: procedente quanto à ordem global.** O filtro de irmão/irmãs ocorre antes do atomic. Um irmão pode surgir antes da aquisição de C; depois de C/D/Ch/P presos, `pai.reabrir()` consulta novamente e entra em migração. Esta tenta adquirir todos os C das perguntas, inclusive outro colaborador, antes da recusa posterior de costura. Ocorrência em produção: **[nao verificado]** (`app/chamados/management/commands/reabrir_orfas_enterradas.py:105`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:153`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:172`; `app/chamados/models.py:1411`; `app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2160`).
+- **`UniversoMudouSobATrava` não fecha esse caso:** a conferência de crescimento vem depois da aquisição interna dos C; ela não desfaz preventivamente a ordem já imposta pelo chamador (`app/chamados/services/fio.py:2084`; `app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2088`; `app/chamados/services/fio.py:2090`).
+- **Fila 3/f5 é dívida real no caminho lido pela obra:** a cura de `expira_em` não torna único o relógio do julgamento completo. Pode ser adiada como desenho, mas não sustenta a afirmação de mesmo instante entre juiz e lavra (`app/chamados/juizes.py:569`; `app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:242`; `app/chamados/veredito_lavrado.py:251`).
+- **A3 por dia diferente e A2 por crescimento continuam lacunas de prova:** o caso A3 permanece no mesmo dia; o cenário A2 monta dois colaboradores estáticos (`app/chamados/tests/test_e1_fila.py:146`; `app/chamados/tests/test_e1_fila.py:157`; `app/chamados/tests/test_e1_fila.py:185`; `app/chamados/tests/test_e1_fila.py:194`).
+- **Descarte P3/P6/P7 é defensável:** os mutantes introduzem explicitamente P antes de C e exigem sequência inválida; P7 exige também três migrações. Não é necessário exigir uma mensagem textual específica para demonstrar essa mutação (`app/chamados/tests/test_e1_fila.py:311`; `app/chamados/tests/test_e1_fila.py:320`; `app/chamados/tests/test_e1_fila.py:333`; `app/chamados/tests/test_e1_fila.py:337`).
+- **Rastreador:** ignorar `executemany` e trava de FK é limitação real da prova, não comprovação de outra violação concreta. Os verdes desse instrumento não demonstram todas as aquisições possíveis; um contraexemplo adicional especificamente nesses mecanismos é **[nao verificado]** (`app/chamados/tests/test_e1_v9.py:51`; `app/chamados/tests/test_e1_v9.py:69`).
+
+A ordem exigida é por transação, inclusive entre colaboradores, com todos os C antes da primeira D; por isso a ausência de ocorrência demonstrada não elimina o caminho estático do item 5 (`app/chamados/models.py:2629`; `app/chamados/models.py:2652`; `app/chamados/tests/test_e1_v15g_portas.py:8`).
+
+**5. Os testes mordem? Passam vazios?** [nao verificado]
+
+| Teste | Avaliação estática | [nao verificado]
+|---|---|
+| **A1 por `values_list`** | Morde os dois sítios antigos: o censo real acusa chamadas com ambos os campos. **Não morde** a regressão direta `colab_id = p.disputa.colaborador_id`, pois só reconhece `or` ou chamadas com ambos os nomes (`app/chamados/tests/test_e1_fila.py:87`; `app/chamados/tests/test_e1_fila.py:98`; `app/chamados/tests/test_e1_fila.py:118`; `app/chamados/services/fio.py:1022`). |
+| **Teto do repasse** | Não é vazio: cria P a vinte dias e exige sua P e D na sequência; o recorte anterior ±1 não inclui essa P. Contudo testa apenas `_trava_do_repasse`, não as cascatas nem outros colaboradores (`app/chamados/tests/test_e1_fila.py:292`; `app/chamados/tests/test_e1_fila.py:295`; `app/chamados/tests/test_e1_fila.py:297`; `app/chamados/tests/test_e1_fila.py:299`). |
+| **F1 com segundo órfão** | Retira a vacuidade conhecida pelo retorno não nulo. O mutante morde a retirada da trava ampla; não demonstra, sozinho, necessidade da ampliação para qualquer dia (`app/chamados/tests/test_e1_fila.py:261`; `app/chamados/tests/test_e1_fila.py:275`; `app/chamados/tests/test_e1_fila.py:281`; `app/chamados/tests/test_e1_fila.py:285`). |
+| **F5 relógio que anda** | Com evento já expirado, duas amostras produzem dias diferentes; a asserção de igualdade falha se `expira_em` voltar a ler sozinho. O mutante exige justamente essa diferença. Não prova o relógio do juiz real, que está mockado (`app/chamados/tests/test_e1_fila.py:359`; `app/chamados/tests/test_e1_fila.py:364`; `app/chamados/tests/test_e1_fila.py:372`; `app/chamados/tests/test_e1_fila.py:376`). |
+| **F5 `date.today`** | Borda simulada em março contra mundo congelado em novembro distingue as fontes de relógio; o mutante deve divergir do resultado esperado (`app/chamados/tests/test_e1_fila.py:342`; `app/chamados/tests/test_e1_fila.py:350`; `app/chamados/tests/test_e1_fila.py:355`; `app/chamados/tests/test_e1_fila.py:383`). |
+| **DiaLocalEstaStale** | Dois casos efetivos: antes da meia-noite local espera False; depois, com lavra na noite anterior, True. As contas UTC anteriores dão os resultados contrários (`app/chamados/tests/test_e1_fila.py:393`; `app/chamados/tests/test_e1_fila.py:401`; `app/chamados/tests/test_e1_fila.py:410`). |
+| **DiaLocalVarredura** | Cria uma P, atualiza os campos e consulta sua PK; o caso esperado True impede passar com queryset vazio (`app/chamados/tests/test_e1_fila.py:420`; `app/chamados/tests/test_e1_fila.py:422`; `app/chamados/tests/test_e1_fila.py:425`; `app/chamados/tests/test_e1_fila.py:426`). |
+| **A3 alterado** | A nova asserção prova presença da D fechada; não prova execução do rechaveamento por dia divergente (`app/chamados/tests/test_e1_fila.py:194`; `app/chamados/tests/test_e1_fila.py:204`; `app/chamados/models.py:2938`). |
+
+Os mutantes falham explicitamente quando sua âncora não existe, evitando montagem silenciosamente inoperante; execução das suites nesta auditoria: **[nao verificado]** (`app/chamados/tests/test_e1_fila.py:47`; `app/chamados/tests/test_e1_fila.py:50`).
+
+**6. Classes que já reprovaram obra**
+
+- **Ordem de trava:** permanece nos caminhos de terminal e de outro colaborador descritos acima; é a principal insuficiência do teto alterado (`app/chamados/reconciliador.py:1617`; `app/chamados/models.py:921`; `app/chamados/services/disputa_emissao.py:1747`; `app/chamados/models.py:1908`).
+- **Selo sem cobertura da cura inteira:** o novo selo morde os aliases, mas deixa passar a reversão do rechaveamento para o colaborador da D (`app/chamados/tests/test_e1_fila.py:87`; `app/chamados/tests/test_e1_fila.py:98`; `app/chamados/services/fio.py:1022`).
+- **Relógio fora da borda compartilhada:** continua no juiz alcançado por `lavrar`; o delta não introduz essa dívida, mas também não a elimina (`app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:242`; `app/chamados/veredito_lavrado.py:251`).
+- **Derivação paralela:** os três sítios A1 apontados foram corrigidos; permanece a reprodução preexistente da regra de janela em `expira_em` e no juiz (`app/chamados/management/commands/backfill_decisoes_pergunta.py:199`; `app/chamados/services/fio.py:1022`; `app/chamados/services/fio.py:1847`; `app/chamados/veredito_lavrado.py:120`; `app/chamados/juizes.py:601`).
+- **Segundo escritor:** o backfill continua atribuindo os campos fora de `lavrar`, com exc
+
+[truncado em 20000 de 20745 caracteres]
 
 ## 08/11 22:44 · sessao 2858cbb65143 · - · - · origem=Ronald (tmux)
 
@@ -764,124 +869,4 @@ Na coluna de caso, **“— sem juiz”** significa que falta uma resposta autor
 
 Contagem das 28 linhas referenciadas: **6 com caso que morde; 1 sem divergência; 0 sumidos; 21 sem juiz**. As igualdades de subperguntas anotadas em `explicador:132`, `detectar_par_relampago:290` e `geofence:51` não foram contadas novamente. (`app/chamados/services/explicador.py:137`; `app/ponto/management/commands/detectar_par_relampago.py:300`; `app/ponto/services/geofence.py:60`.)
 
-## 08/11 16:45 · sessao 75defa6f7a41 · V3-BATERIA-DE-CASOS-PELA-REGRA · leitura · origem=Code
-
-A bateria existe, mas **não achei prova completa de espelho = fechamento = exportação = DiaPago**. F11c alcança fechamento e DiaPago; o teste da porta do export declara que terminou na função de comparação, sem atravessar o TXT. (`app/ponto/tests/test_o280_bateria_da_lei.py:1714`; `app/folha/tests/test_porta_do_export.py:224`)
-
-Leitura estática, sem executar motor ou testes e sem alterar arquivos. Resultado verde desta cópia, sobrevivência executada dos mutantes e estado de produção: **[não verificado]**. [nao verificado]
-
-**1. INVENTÁRIO**
-
-Nesta cópia, contei **138 IDs em `CASOS`** — 117 classificados como `mes`, oito como `periodo` e 13 como `fora` —, **165 métodos de teste na O280** e **52 na lavratura**. IDs, métodos, propriedades e releituras não são a mesma contagem. (`app/ponto/tests/test_o280_bateria_da_lei.py:278`; `app/ponto/tests/test_o280_bateria_da_lei.py:1067`; `app/ponto/tests/test_o280_bateria_da_lei.py:1073`; `app/ponto/tests/test_bateria_lavratura.py:169`)
-
-O censo abaixo distingue **oráculo positivo explícito na apuração** de **teste da rubrica emitida no TXT**. Não contei gêmeos “MEDIDOS” como resposta pela regra; o próprio arquivo os define como números do motor atual. Zeros e propriedades de conservação também não foram contados como casos positivos. (`app/ponto/tests/test_o280_bateria_da_lei.py:50`; `app/ponto/tests/test_o280_bateria_da_lei.py:2874`)
-
-| Rubrica efetivamente emitida | Origem da emissão | Casos positivos explícitos relacionados na bateria | Prova até o TXT nos dois arquivos |
-|---|---|---:|---:|
-| `hora_extra_diurna` — HE50 | `app/folha/export.py:441` | **0**; o positivo direto encontrado é gêmeo medido | **0** |
-| `hora_extra_100_diurna` — HE100 normal | `app/folha/export.py:421`; `app/folha/export.py:442` | **0** com faixa positiva decidida pela norma | **0** |
-| `hora_extra_feriado_diurna` | `app/folha/export.py:443` | **8 IDs / 10 métodos** | **0** |
-| `folga_trabalhada_diurna` | `app/folha/export.py:446` | **5 cenários / 7 métodos**, principalmente minutos de FT do motor | **0** |
-| `adicional_noturno` | `app/folha/export.py:447` | **12 IDs / 16 métodos** | **0** |
-| `intrajornada_diurna` | `app/folha/export.py:448` | **5 IDs / 5 métodos**; há pino e dimensionamento parcial pendente | **0** |
-| `atraso_diurno` — atraso **+ antecipada** | `app/folha/export.py:383`; `app/folha/export.py:451` | **27 IDs / 29 métodos** relacionados às duas parcelas | **0** |
-| `falta_diurna` — dias decididos | `app/folha/export.py:732` | **0 da rubrica final**; dois IDs afirmam montantes de falta total | **0** |
-
-A ausência de teste até o TXT decorre do alcance das costuras: motor/releitura na O280 e cartório na lavratura; F11c acrescenta fechamento e DiaPago, sem conferir emissão. (`app/ponto/tests/test_o280_bateria_da_lei.py:128`; `app/ponto/tests/test_o280_bateria_da_lei.py:3549`; `app/ponto/tests/test_o280_bateria_da_lei.py:1745`; `app/ponto/tests/test_bateria_lavratura.py:134`)
-
-Não confundi os eventos possíveis do cadastro com os emitidos: **HE noturna não tem linha própria**, e **DSR não é evento de importação**. Código FOPAG vigente por empresa: **[não verificado]**; é cadastro. (`app/folha/export.py:424`; `app/folha/export.py:453`; `app/folha/models.py:47`)
-
-Os nomes e as normas dos casos positivos são estes. A repetição v2/v3 do mesmo ID não acrescenta outro caso, conforme a própria costura declara. (`app/ponto/tests/test_o280_bateria_da_lei.py:3541`)
-
-| ID / cobertura | Nome do teste | Norma que cita / localização | [nao verificado]
-|---|---|---|
-| F10 — feriado | `test_F10_feriado_em_dia_de_trabalho_dobra_a_jornada_INTEIRA`; `test_v3_F10_a_dobra_vem_do_juiz_IMPORTADO` | Súmula 146. `app/ponto/tests/test_o280_bateria_da_lei.py:1480`; `app/ponto/tests/test_o280_bateria_da_lei.py:4458` |
-| F10b — feriado | `test_F10b_o_dia_em_dobro_nao_volta_ao_calculo_normal_de_HE`; `test_v3_F10b_a_dobra_SUBSTITUI_a_faixa_do_excedente` | Súmula 146; não pagar novamente o excedente. `app/ponto/tests/test_o280_bateria_da_lei.py:1496`; `app/ponto/tests/test_o280_bateria_da_lei.py:4475` |
-| F10c — feriado | `test_F10c_feriado_previsto_na_escala_dobra_igual_e_o_ramo_morto_nao_fala` | L-086, cláusula antiga de feriado revogada; Súmula 146. `app/ponto/tests/test_o280_bateria_da_lei.py:1510` |
-| F11 — feriado e noturno | `test_F11_feriado_no_turno_partido_leva_o_noturno_para_HE100_noturna` | Súmulas 146/264; CLT art.73 §2. `app/ponto/tests/test_o280_bateria_da_lei.py:1654` |
-| F11r — feriado e noturno | `test_F11r_referencia_o_12x36_ja_passa_a_dobra_pelo_split` | Súmulas 146/264; CLT art.73. O ciclo da fixture é 6x1. `app/ponto/tests/test_o280_bateria_da_lei.py:1675` |
-| F11b — feriado e noturno | `test_F11b_feriado_no_comercial_que_entra_na_janela_noturna` | Súmulas 146/264; CLT art.73 §2. `app/ponto/tests/test_o280_bateria_da_lei.py:1697` |
-| F11c — feriado e noturno | `test_F11c_promocao_ft_feriado_leva_a_parte_noturna_para_a_folha` | Corte BO-B(3), 23/10; Súmula 264. `app/ponto/tests/test_o280_bateria_da_lei.py:1714` |
-| F11d — feriado e noturno | `test_F11d_partido_de_dois_pares_todo_noturno_do_feriado_e_HE100_noturna` | Súmulas 146/264/60 II; CLT art.73 §5. `app/ponto/tests/test_o280_bateria_da_lei.py:1769` |
-| F3 — FT | `test_F3_feriado_em_dia_de_folga_e_folga_trabalhada` | Súmula 146; cortes 19/09 e 30/09. `app/ponto/tests/test_o280_bateria_da_lei.py:1386` |
-| F3b — FT | `test_F3b_feriado_em_folga_no_ramo_que_dobra_deixa_o_campo_sem_leitor`; `test_v3_F3b_CURA_o_periodo_de_FOLGA_nao_guarda_dobra_sem_leitor` | Súmula 146; corte 19/09, FT fora da HE. `app/ponto/tests/test_o280_bateria_da_lei.py:1783`; `app/ponto/tests/test_o280_bateria_da_lei.py:4514` |
-| F8 — FT | `test_F8_dobra_real_com_lastro` | Súmula 146; cortes 19/09 e 30/09. `app/ponto/tests/test_o280_bateria_da_lei.py:2041` |
-| B-O263FT — FT | `test_B_O263FT_folga_trabalhada_nao_se_recorta`; `test_v3_B_O263FT_na_folga_nao_ha_marco_e_nada_pousa` | O263-FT; L-084. `app/ponto/tests/test_o280_bateria_da_lei.py:2702`; `app/ponto/tests/test_o280_bateria_da_lei.py:4092` |
-| Sem ID — FT | `test_v3_a_folga_trabalhada_segue_a_familia_1` | Corte 19/09, FT fora da HE. `app/ponto/tests/test_o280_bateria_da_lei.py:4540` |
-| F2 — noturno | `test_F2_borda_utc_turno_21_03`; `test_v3_F2_a_janela_do_art73_pelo_juiz_IMPORTADO` | CLT art.73 §§1/2; Súmula 60; L-085. `app/ponto/tests/test_o280_bateria_da_lei.py:1330`; `app/ponto/tests/test_o280_bateria_da_lei.py:4309` |
-| F4 — noturno | `test_F4_feriado_em_12x36_noturno_e_hora_simples` | CLT art.59-A; art.73; parecer registrado de 08/09. `app/ponto/tests/test_o280_bateria_da_lei.py:1399` |
-| F4b — noturno | `test_F4b_a_prorrogacao_pos_05h_e_cadastro_e_nao_default`; `test_v3_F4b_a_prorrogacao_vem_do_CADASTRO_e_NAO_de_default` | CLT art.73 §5; Súmula 60 II; art.59-A, parágrafo único. `app/ponto/tests/test_o280_bateria_da_lei.py:1420`; `app/ponto/tests/test_o280_bateria_da_lei.py:4338` |
-| F4c — noturno | `test_F4c_a_hora_reduzida_afastada_muda_o_fator_nao_o_relogio`; `test_v3_F4c_a_cl38d_muda_o_FATOR_e_nao_o_relogio` | CCT Vigilantes Londrina, cl.38-d. `app/ponto/tests/test_o280_bateria_da_lei.py:1446`; `app/ponto/tests/test_o280_bateria_da_lei.py:4358` |
-| F10i — noturno | `test_F10i_GUARDA_sem_trabalho_em_00_05_a_cauda_nao_prorroga` | Súmula 60 II. `app/ponto/tests/test_o280_bateria_da_lei.py:1628` |
-| B-O263 — noturno | `test_B_O263_intervalo_batido_nao_recebe_adicional_noturno`; `test_v3_B_O263_o_intervalo_gozado_sai_do_adicional` | CLT art.73 §2; O263. `app/ponto/tests/test_o280_bateria_da_lei.py:2689`; `app/ponto/tests/test_o280_bateria_da_lei.py:4321` |
-| I26-H1 — noturno | `test_i26_H1_a_janela_noturna_do_PAR_e_o_intervalo_gozado` | CLT arts.73 §2 e 4. `app/ponto/tests/test_o280_bateria_da_lei.py:5966` |
-| B-O272b — intra | `test_B_O272b_com_a_janela_LIGADA_o_recorte_nao_desconta_duas_vezes` | O272; L-097; CLT art.71. `app/ponto/tests/test_o280_bateria_da_lei.py:2552` |
-| B-SOBRA — intra | `test_B_SOBRA_batida_no_raio_da_ponta_nao_vira_marco_de_intervalo` | BUG-SOBRA-TIPO-TROCADO; CLT art.71 §§1/4. `app/ponto/tests/test_o280_bateria_da_lei.py:2760` |
-| F7d — intra | `test_v3_F7d_a_pausa_REAL_fora_do_marco_e_intrajornada` | CLT art.71 §§1/2/4; Súmula 437. `app/ponto/tests/test_o280_bateria_da_lei.py:3738` |
-| F7e — intra, pinado | `test_v3_F7e_PINADO_o_descanso_que_HOUVE_nao_se_indeniza` | CLT art.71 §§1/2/4; Súmula 437; L-099. O próprio corpo registra pergunta sobre a geometria. `app/ponto/tests/test_o280_bateria_da_lei.py:3803` |
-| B-P4b — intra | `test_v3_B_P4b_o_par_REPETIDO_paga_UM_turno_UMA_vez` | CLT art.4; L-110. `app/ponto/tests/test_o280_bateria_da_lei.py:5253` |
-| F-FOTO — falta total | `test_F_FOTO_folga_avulsa_no_mes_nao_apaga_o_folga_dia_semana` | L-023. `app/ponto/tests/test_o280_bateria_da_lei.py:2058` |
-| F-FOTOb — falta total | `test_F_FOTOb_foto_parcial_no_12x36_a_fase_sai_da_foto_nao_da_ancora` | L-023 e L-022. `app/ponto/tests/test_o280_bateria_da_lei.py:2090` |
-
-Os **27 IDs de pontualidade** estão abaixo. Eles não testam a composição final da linha `atraso_diurno`, que soma as duas parcelas. (`app/folha/export.py:383`)
-
-| ID | Nome do teste | Norma citada / localização | [nao verificado]
-|---|---|---|
-| F5 | `test_F5_troca_de_vinculo_no_meio_da_competencia` | L-021; L-099; O262. `app/ponto/tests/test_o280_bateria_da_lei.py:1867` |
-| A14b | `test_A14b_o_limiar_do_par_relampago_e_quem_zera_o_A14`; `test_v3_A14b_acima_do_limiar_o_TETO_le_o_trabalhado_da_v3` | Limiar do par relâmpago; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:2460`; `app/ponto/tests/test_o280_bateria_da_lei.py:4140` |
-| B-O271a | `test_B_O271a_comercial_tem_pontualidade`; `test_v3_B_O271a_o_comercial_passa_pela_MESMA_regua` | O271; CLT art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:2714`; `app/ponto/tests/test_o280_bateria_da_lei.py:4036` |
-| F9 | `test_F9_a_tolerancia_tem_dois_numeros_e_o_segundo_e_diario`; `test_v3_F9_a_tolerancia_e_o_teto_pelo_juiz_IMPORTADO` | Art.58 §1; Súmula 366; decisão da casa de dez por marcação. `app/ponto/tests/test_o280_bateria_da_lei.py:3294`; `app/ponto/tests/test_o280_bateria_da_lei.py:3989` |
-| B-I27a e B-I27b | `test_v3_B_I27a_e_b_o_marco_e_do_dia_da_JORNADA_nao_do_dia_da_BATIDA` | L-085; art.58 §1; Súmula 366; L-093/L-084. `app/ponto/tests/test_o280_bateria_da_lei.py:4163` |
-| B-I27e | `test_v3_B_I27d_e_e_o_turno_partido_que_atravessa_a_meia_noite` | L-085/L-084/L-093; art.58 §1. `app/ponto/tests/test_o280_bateria_da_lei.py:4205` |
-| B-I27f | `test_v3_B_I27f_o_plantao_de_24h_MORDE_a_comparacao_que_nao_e_juiz` | O276; regra de bordas coincidentes. `app/ponto/tests/test_o280_bateria_da_lei.py:4230` |
-| I26-A1 | `test_i26_A1_cabeca_longe_conta_a_TOTALIDADE` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5551` |
-| I26-A4 | `test_i26_A4_cauda_antes_do_marco_conta_a_TOTALIDADE` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5587` |
-| I26-B1 | `test_i26_B1_o_RED_do_O271_pelo_teto_da_L093` | L-084/L-093; art.58; Súmula 366. `app/ponto/tests/test_o280_bateria_da_lei.py:5624` |
-| I26-B2 | `test_i26_B2_cauda_antes_do_marco_no_comercial` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5632` |
-| I26-B3 | `test_i26_B3_a_fronteira_da_tolerancia_nos_DOIS_lados` | Art.58 §1; Súmula 366; tolerância dez da casa. `app/ponto/tests/test_o280_bateria_da_lei.py:5639` |
-| I26-B5 | `test_i26_B5_uma_ponta_longe_cobra_mesmo_a_235` | L-084/L-093; art.58; Súmula 366. `app/ponto/tests/test_o280_bateria_da_lei.py:5673` |
-| I26-D1 | `test_i26_D1_a_batida_no_hii_e_saida_PARA_o_intervalo` | O271; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5689` |
-| I26-D4 | `test_i26_D4_a_fronteira_e_a_CONFORMIDADE_nunca_o_raio` | O271; conformidade dez da casa. `app/ponto/tests/test_o280_bateria_da_lei.py:5710` |
-| I26-E1 | `test_i26_E1_o_RED_da_L084_uma_ponta_longe_COBRA` | L-084/L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5733` |
-| I26-E2 | `test_i26_E2_dentro_dos_180_a_cura_de_26_09_nao_afrouxa` | L-084. `app/ponto/tests/test_o280_bateria_da_lei.py:5745` |
-| I26-E5 | `test_i26_E4_E5_o_gate_do_T8_e_o_seu_PAR_DE_CONTROLE` | L-084/L-093. E5 é a metade positiva. `app/ponto/tests/test_o280_bateria_da_lei.py:5759` |
-| I26-F1 | `test_i26_F1_cabeca_longe_no_noturno` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5780` |
-| I26-F2 | `test_i26_F2_cauda_antes_do_marco_no_noturno` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5787` |
-| I26-F3 | `test_i26_F3_as_DUAS_pontas_no_noturno_e_o_PAR_que_se_afirma` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5794` |
-| I26-G1 | `test_i26_G1_a_saida_PARA_o_intervalo_nao_e_fim_de_turno` | O271; art.58 §1; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5857` |
-| I26-G2 | `test_i26_G2_a_volta_do_intervalo_no_fragmento_de_depois` | O271; art.58 §1; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5878` |
-| I26-G3 | `test_i26_G3_antecipada_REAL_com_o_intervalo_no_meio` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5895` |
-| I26-G4 | `test_i26_G4_atraso_REAL_com_o_intervalo_no_meio` | Art.58 §1; Súmula 366; L-093. `app/ponto/tests/test_o280_bateria_da_lei.py:5911` |
-| I26-G5 | `test_i26_G5_duracao_sem_janela_e_sem_volta_NAO_compra_o_gate` | L-084; CLT art.71 §1. `app/ponto/tests/test_o280_bateria_da_lei.py:5926` |
-
-Há quatro limites materiais nesse inventário:
-
-- **HE total não prova HE50/HE100 separadamente.** `test_i26_H2_acima_do_limite_a_hora_segue_devida_sem_teto` afirma o excesso e a soma das partes, recusando fixar o degrau sem lastro. (`app/ponto/tests/test_o280_bateria_da_lei.py:5991`)
-- **F9 não prova cobrança legal após cinco minutos.** O corpo espera atraso zero às 08:07 e onze minutos às 08:11. A questão do anexo permanece questão de lei. (`app/ponto/tests/test_o280_bateria_da_lei.py:3351`; `app/ponto/tests/test_o280_bateria_da_lei.py:3355`; `app/docs/BACKLOG.md:1629`)
-- **Intra parcial escrita não equivale a dimensionamento homologado.** F7d/F7e escrevem o suprimido; o backlog mantém o conflito art.71 pós-2017 × “INTEGRAL” pendente. (`app/ponto/tests/test_o280_bateria_da_lei.py:3760`; `app/ponto/tests/test_o280_bateria_da_lei.py:3806`; `app/docs/BACKLOG.md:1629`)
-- **Falta total não prova `falta_diurna`.** F1/A1 constroem esperado pelo próprio previsto; a rubrica exportada exige ausência decidida cujo tipo desconta. (`app/ponto/tests/test_o280_bateria_da_lei.py:1316`; `app/ponto/tests/test_o280_bateria_da_lei.py:2140`; `app/docs/LEIS.md:87`)
-
-**2. CASOS QUE FALTAM**
-
-Os casos E abaixo completam a conferência **até a emissão**, lacuna dos dois arquivos. Os C completam a seleção pelo cadastro real: a fixture atual não declara regime e chama `get_motor` diretamente; flags passadas ao motor não provam Empresa → Aplicação → Sindicato. (`app/ponto/tests/test_o280_bateria_da_lei.py:1113`; `app/ponto/tests/test_o280_bateria_da_lei.py:146`; `app/docs/BACKLOG.md:1530`)
-
-Cada linha descreve uma fixture proposta, não um colaborador de produção. Os resultados são referências de horas/minutos/dias; valor monetário sem salário-base: **[não verificado]**.
-
-| id | cadastro — escala, regime, empresa/aplicação, sindicato, feriado | batidas — horário local | rubrica | valor devido pela REGRA, com aritmética aberta | norma |
-|---|---|---|---|---|---|
-| **E1** | 5x2, 08–17, pausa12–13; empresa CLT, sem aplicação, sindicato não aplicável; dia útil sem feriado; HE autorizada | E08 / S12 / E13 / S18 | HE50; intra | Trabalhado `240+300=540`; previsto `540−60=480`; excesso `540−480=60min` → **1h de HE50**, no piso legal. Pausa integral gozada → intra **0** | CLT art.59 §1; L-097. `app/docs/LEIS.md:115`; `app/ponto/tests/test_o280_bateria_da_lei.py:461` |
-| **E2** | 5x2, 08–17, pausa12–13; CLT, sem aplicação; feriado cadastrado, previsto como trabalho, sem compensação | E08 / S12 / E13 / S17 | HE100 feriado **e ausência de HE100 normal** | `240+240=480min` → **8h de referência em feriado a100%**; parcela normal **0**. Não emitir novamente as mesmas8h como HE100 normal | Súmula146; L-086 vigente; conservação L-110. `app/ponto/tests/test_o280_bateria_da_lei.py:1483`; `app/docs/LEIS.md:118`; `app/docs/LEIS.md:136` |
-| **E3** | 5x2, folga declarada no dia, escala certa; CLT, sem aplicação/sindicato aplicável; sem feriado | E08 / S12 / E13 / S17 | FT | `240+240=480min` → **8h de FT a100%**; nenhuma HE de feriado | Cortes19/09 e27/09, CLASSE3-FOLGA-100; L-084. `app/ponto/calculador/regras.py:377`; `app/ponto/calculador/regras.py:381` |
-| **E4** | 12x36, plantão19–07, pausa01–02; **CLT declarado**, sem aplicação/sindicato aplicável; sem feriado | E19 / S01(+1) / E02(+1) / S07(+1) | Noturno | Janela estrita: `(22–01)+(02–05)=180+180=360min`; reduzida: `360÷52,5=6,857142h` → **6,86h** na precisão centesimal | CLT arts.73 §§1/2 e59-A, parágrafo único; L-035. `app/docs/LEIS.md:83`; `app/core/regua_cct.py:159` |
-| **E5** | 5x2, 08–17, intervalo cadastrado60min, indenizável; CLT, sem aplicação/sindicato aplicável; sem feriado | E08 / S17; nenhuma pausa | Intra | Intervalo devido60, gozado0: `60−0=60min` → **1h de referência indenizada**, com acréscimo legal. Supressão total evita escolher entre os critérios divergentes de supressão parcial | CLT art.71 §4; L-031/L-032. `app/docs/LEIS.md:79`; `app/docs/LEIS.md:80` |
-| **E6** | 5x2, 08–17, pausa12–13; CLT, sem aplicação/sindicato aplicável; sem feriado | E08:20 / S12 / E13 / S16:30 | Atraso + antecipada | Trabalhado `220+210=430`; falta temporal `480−430=50`; atraso20 + antecipada30 = **50min**, ou `50÷60=0,833333h`. As duas pontas superam ambas as tolerâncias em disputa | CLT art.58 §1; Súmula366; L-084/L-093; composição da rubrica. `app/docs/LEIS.md:116`; `app/docs/LEIS.md:111`; `app/folha/export.py:383` |
-| **E7** | 5x2, 08–17, pausa12–13; CLT, sem aplicação/sindicato aplicável; sem feriado; **ausência aprovada de um dia, tipo descontante,480min** | Nenhuma | Falta | Decisão cobre um dia: **1dia** de falta; dimensão temporal `480÷60=8h`. Conferir também a data no registro11 | L-039; contrato do bloco de falta. `app/docs/LEIS.md:87`; `app/folha/export.py:215` |
-| **C1** | 12x36,19–07, pausa01–02; empresa CCT, **aplicação vigente** Vigilantes Londrina PR000251/2026; redução afastada e pós5 desmarcado; sem feriado | E19 / S01(+1) / E02(+1) / S07(+1) | Noturno | `180+180=360min`; hora da cl.38-d tem60min: `360÷60=` **6h**. Adicional segue devido | CCT cl.38-d; L-036. `app/core/regua_cct.py:129`; `app/docs/LEIS.md:84` |
-| **C2** | Mesma escala; empresa **CCT sem AplicacaoConvencao vigente**, sem sindicato selecionado; sem feriado | Mesmas de C1 | Noturno + fonte da regra | A lacuna não retira pós5: `(22–07)−60=480min`; `480÷52,5=` **9,142857h**, ou548,57min legais. Fonte deve acusar **sem aplicação** | L-035: exceção12x36 só com CLT declarado; corte registrado sobre lacuna. `app/docs/LEIS.md:83`; `app/core/regua_cct.py:192`; `app/core/regua_cct.py:204`; `app/core/regua_cct.py:371` |
-| **C3** | Mesma escala; empresa CCT com **duas aplicações vigentes no mesmo nível**, sindicatos conflitantes; sem feriado | Mesmas de C1 | Noturno + fonte da regra | Não escolher pela inserção. Piso preservado: `480÷52,5=` **9,142857h**. Fonte acusa **empate**; inverter inserção mantém resultado | L-006/L-034; regra registrada de empate. `app/docs/LEIS.md:64`; `app/docs/LEIS.md:82`; `app/core/regua_cct.py:27`; `app/core/regua_cct.py:371` |
-| **C4** | 6x1 noturno,19–07, pausa01–02; empresa CCT com aplicação SINEEPRES vigente; sem feriado | Mesmas de C1 | Noturno | **DUVIDA:** qual texto/cláusula vigente do SINEEPRES decide a prorrogação e a redução neste cadastro? Referência à cl.10 existe; texto integral não achei | L-035; referências cadastrais. `app/docs/LEIS.md:83`; `app/core/views_config.py:293`; `app/core/models.py:72` |
-| **C5** | 12x36,07–19, pausa12–13; empresa CCT com aplicação e sindicato com `feriado_12x36_em_dobra=True`; feriado previs
-
-[truncado em 20000 de 27006 caracteres]
-
-_2914 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2915 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
