@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: lancar_green_mut_v4.sh | pid=291956
+SELOS-CANON-I3 11:3x: construtor OPUS volta 1 aberto (vaga de opus livre apos SONDA v5), copia nova de main 3803e6623 (logs/SELOS-CANON-I3/wt.txt), brief logs/SELOS-CANON-I3/brief.md -> entrega_v1.txt.
+SONDA-SEM-GRANT 11:3x: volta 5 opus 500bbdde3, mutantes 12/12; P4 conferido: parser unico bin/sombra_carimbo.sh, conferir le carimbo_ensaio_verde_de_hoje (sombra.sh:480), placar le carimbo_incompleta_de_hoje (placar_code.sh:35). DECISAO-ABERTA 1/2/6/8 lado seguro; 3 (dois HOJE placar x conferir), 4 (--com-a-sombra/--rodar sem carimbo), 5 (incremental repoe INCOMPLETA) -> fila + anexo do opus final. Suite inteira -> sonda_v5_suite.log (pid 2015542, na trava).
 O10-D-PERMUTA-NA-TELA 11:0x: aval recebido; DESPACHO O10-D: censo (1)-(4) -> Codex papel censo, slot 1 (load1 10,7 > 7 = 1 vaga, livre) -> logs/O10-D-PERMUTA-NA-TELA/censo_v1.r | construtor Codex + opus final depois da fila 1.
 BUG-PAR 11:07: GREEN v4 OK Ran 51 rc=0 (copia 43dc937f2); mutantes M1-M44 em curso -> mutantes_v4.log (M1 morto).
 SELOS-CANON-I3 11:1x: brief do construtor pronto logs/SELOS-CANON-I3/brief.md (CENSO do contratos.r + 4 etapas com RESULTADO; DECISAO TECNICA: conferencia de etapas no opus final contra linhas ETAPA ja no RELATO; denominador = snapshot na abertura). Abre com OPUS (disjuntor.py protegido) quando a vaga de opus liberar (hoje: SONDA v5).
