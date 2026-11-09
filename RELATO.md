@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: push_tudo.sh | pid=2299813
+ESPERANDO: codex_pergunta.sh | pid=2685265
+PUSH 17:28: lote 3803e6623..8e852ec8c (33 commits, inclui PUSH-80A6 8e852ec8c) NO REMOTO, pre-push OK rc=0; pos_push e1386841a (TICKETS O112). PROVA: git merge-base --is-ancestor 8e852ec8c origin/main = NO_REMOTO.
 E4a 17:25 [fio_morto_alcance=371]: aval E4-EXPAND-CONTRACT registrado (substitui E4-EM-DOIS-POUSOS): E4a EXPAND (porta grava ato, projecao segue escrita, contrato 20) -> E4b BACKFILL -> E4c LEITORES -> E4d CONTRACT. Construtor em voo segue (2685265); na entrega, triagem_entrega_e4a.txt separa hunk de leitor (E4c) e de contract (E4d). 6 obras de fato proprio (A03,A05,A06,A17,A18,A20) REGISTRADAS; A20 com pergunta de lei registrada, nao aberta.
 E4a 17:20 [fio_morto_alcance=371]: aval E4A-PREVERIF-PERGUNTA-DIRETA registrado (aval_preverif_pergunta.txt): as 3 perguntas (A03/A17/A18 fato portador; D8; D9 Clock Injection) entram no .q do preverif, resposta com arquivo:linha do diff; 'perde informacao' = procedente bloqueante e conta no tripwire 5. Construtor segue (wrapper 2685265).
 E4a 17:17 [fio_morto_alcance=371]: aval E4A-LEITOR-DO-MODAL registrado (aval_leitor_modal.txt): modal_fio.html:170 entra no selo de ausencia de leitores (teste 2) e vai ANEXO do preverif da E4a; construtor em voo segue (wrapper 2685265), sem censo novo. Bate com o adendo_template.r (classe b).
