@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 01:36:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **620**.
+**Medido em 09/11/2026 01:41:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (168.2 MB). Acoes na janela: **617**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -627,6 +627,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:54:11 | Agent | Opus final 3 for E1 | `OPUS FINAL 3 for obra FIO-E0-V4-E1 (repo saas-hasner, Django ponto eletronico; read /home/ronald/saas-hasner/CLAUDE.md sections 0, 4 and 7b first). You are the adversarial final reader before pouso (merge+deploy to prod). Read-only: do not edit any file, do not run docker/suites/sombra, do not run Python from any worktree. Read code with Read/Grep/git. TREE TO JUDGE: /home/ronald/wt-e1merge2-13302 ...` |
 | 13:53:53 | Bash | Check merge copy is clean | `cd /home/ronald/wt-e1merge2-133028 && git log --oneline -1 && git status --porcelain \| grep -v '^??' \| head; git status --porcelain \| head -5` |
 | 13:53:49 | Bash | Read suite verdict | `L=/home/ronald/saas-hasner/logs/fio_e0_v4/suite_e1_merge2_76644dc8.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head` |
-| 13:39:06 | Bash | Save merge diff; read opus final 2 header | `cd /home/ronald/wt-e1merge2-133028 && git diff 89d195af HEAD > /home/ronald/saas-hasner/logs/fio_e0_v4/opus3_e1_merge_76644dc8.diff && git diff 6695e972 3d8ebe87 --stat 2>/dev/null \| tail -1; chmod 600 /home/ronald/saas-hasner/logs/fio_e0_v4/opus3_e1_merge_76644dc8.diff; head -30 /home/ronald/saas-hasner/logs/fio_e0_v4/opus_final2_e1_6695e972.md` |
-| 13:39:01 | Bash | List triage/opus files and merge diff size | `cd /home/ronald/saas-hasner/logs/fio_e0_v4 && ls \| grep -E 'triagem\|codex_e1_v15\|opus' ; cd /home/ronald/wt-e1merge2-133028 && git diff --stat 89d195af HEAD \| tail -3` |
-| 13:38:59 | Bash | Record sombra result, list triage files | `python3 - <<'PY' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(4, "E1 sombra sobre 76644dc8 (logs/fio_e0_v4/sombra_e1_inv_76644dc8.out): --aplicar 4/0 dentro do rollback GRAVOU: universo 20527, migradas=4 recusadas=0, descarimbaria=0, descarimbaria_delta_universo=0, foto_universo=379 (passivo, nao bloqueia), exportada_fora=0, erros=0; os 5 grupos exportados FORA (PAREI do `!`, intocado ...` |
