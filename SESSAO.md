@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/11/2026 22:07:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (156.3 MB). Acoes na janela: **549**.
+**Medido em 08/11/2026 22:13:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (156.3 MB). Acoes na janela: **548**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -558,4 +558,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:15:46 | Bash | Find enclosing try for abrir call | `cd /home/ronald/wt-fioe1-225336/app && python3 - <<'PY' import ast src=open('chamados/services/disputa_emissao.py').read();t=ast.parse(src) for n in ast.walk(t): if isinstance(n,ast.Try) and n.lineno<=444<=n.end_lineno: in_body=any(b.lineno<=444<=b.end_lineno for b in n.body) print('try',n.lineno,n.end_lineno,'in_body',in_body,[ast.unparse(h.type) if h.type else 'bare' for h in n.handlers]) if isi ...` |
 | 10:15:41 | Bash | Rearm B3 per aval and check try around abrir | `cd /home/ronald/saas-hasner && python3 bin/disjuntor.py --rearma-b3 CXR-TELA-LE-O-MOTOR "aval Ronald REARMA-B3-CXR-TELA-LE-O-MOTOR 08/11 10:1x: reprova 1 do opus final (71c91c97) foi ERRO-BOBO de fixture (selo C3 sem celula indefinida, mutante 525 verde por beco_em_lote vazio), curado na volta 4, opus final 2 APROVA 6a5e5ad8, pousada 94d41ea5 e NO AR; nenhuma lei nem juiz em pergunta"; echo rc=$?; ...` |
 | 10:15:33 | Bash | Check broad except around emission call | `cd /home/ronald/wt-fioe1-225336/app && sed -n 425,470p chamados/services/disputa_emissao.py \| /bin/grep -n 'try\\|except\\|abrir' ; /bin/grep -n 'except Exception' chamados/services/disputa_emissao.py \| head; ls management 2>/dev/null; /bin/grep -rln 'migrar_data_evento_dia_do_turno' --include=*.py . \| head -3; bin=1; bin/trava_teste.sh --quem 2>/dev/null; /home/ronald/saas-hasner/bin/trava_tes ...` |
-| 10:11:55 | Bash | Confer E1 finding 3a/3b evidence | `cd /home/ronald/saas-hasner && /bin/grep -nE 'FatoEmOutroDia\|ResolvedoraCruzada\|^(OK\|FAILED)\|^Ran' logs/fio_e0_v4/e1_v14_sonda.log \| head -12 \| cut -c1-250; /bin/grep -rn 'except.*\(FatoEmOutroDia\\|ResolvedoraCruzada\)' /home/ronald/wt-fioe1-225336/app --include=*.py \| /bin/grep -v /tests/ \| wc -l; sed -n 340,390p /home/ronald/wt-fioe1-225336/app/chamados/services/disputa_emissao.py \| /b ...` |
