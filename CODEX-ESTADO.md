@@ -1,7 +1,143 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:51** · publicado em **09/11/2026 10:51** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:53** · publicado em **09/11/2026 10:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:53 · sessao 476fb91835ff · - · - · origem=Ronald (tmux)
+
+Mapa por leitura estática:
+
+| Função/campo | Escritor/dono | Leitores fora do diff |
+|---|---|---|
+| `aguarda_outra_metade_intervalo` | Predicado sem escrita: `chamados/services/materializacao.py:101`. | C7 `chamados/models.py:1864`; explicador `chamados/services/explicador.py:74`; declaração `chamados/services/declaracao_texto.py:213`, consumida em `:382`, `:485`, `:678`; validação/devolução `chamados/services/validacao.py:193`, `:483`; vigia `chamados/services/vigia_carimbo.py:109`; tag `chamados/templatetags/chamados_tags.py:19`; estado de aplicação `chamados/services/materializacao.py:527`. |
+| `_vizinha_mesmo_tipo` | Consulta sem escrita: `chamados/services/materializacao.py:169`. | Estado da aplicação `chamados/services/materializacao.py:542`; aplicação individual `:965`; par posterior `:1367`; reexport em `chamados/models.py:4080`. |
+| `batidas_apuraveis` | Autoridade sem escrita, filtro de retratação em `ponto/turnos.py:2866`. | Espelho `ponto/services/espelho.py:1022`; turno órfão `ponto/utils_turno_orfao.py:28`; diagnóstico `ponto/services/diagnostico_escala.py:142`; fio `chamados/services/fio.py:1521`, `:1881`; validação `chamados/services/validacao.py:896`; consultas em lote `ponto/turnos.py:2989`, `:3009`. |
+| Contexto `perguntas_disputa` do detalhe | `chamados/services/acoes_chamado.py:348`, publicado em `:409`. | View GET `chamados/views.py:549`; loop `templates/chamados/detalhe_local.html:309`; include `:310`. Modal possui escritor próprio em `chamados/services/fio.py:253`, consumido por `templates/chamados/partials/modal_fio.html:156`. |
+| `validada_em/por` | Aceite `chamados/services/validacao.py:134`; devolução `:202`; nova resposta `chamados/services/disputa_emissao.py:1477`; reabertura em lote `:1590`; carimbo completando validação `chamados/models.py:3138`; reabertura da disputa `:1565`. | C6 `chamados/juizes.py:1153`; foto da validação `chamados/services/validacao.py:147`; crédito por autor `chamados/services/verbos.py:240`; C7 `chamados/models.py:1850`. |
+| `materializada_em/por/via_resolucao` | Porta comum `_escrever_carimbo`, `chamados/models.py:3100`–`:3104`; descarimbo `:3211`; lote `:3269`; via por fato `:3278`; relavra `chamados/services/relavra_via.py:125`. | Lastro `chamados/juizes.py:660`, `:672`, `:687`; C6 `:1164`, `:1190`; devolução `chamados/services/validacao.py:188`; lavra persistida `chamados/veredito_lavrado.py:187`. |
+| `Batida.retratada_em` | Retração pela porta `ponto/registro_batida.py:276`, escrita efetiva por `anotar` em `:255`; desfazer humano por `anotar` em `ponto/services/retratar_humano.py:207`. | Universo canônico `ponto/turnos.py:2866`; tolerância `ponto/registro_batida.py:99`; lastro `ponto/services/lastro.py:262`; vigia de carimbo `chamados/services/vigia_carimbo.py:119`. |
+
+Efeitos do `save` de descarimbo: agendamento pelo receiver `chamados/signals.py:215`–`:225`; emissão por `chamados/signals.py:242`; resolução da célula e chamada da porta em `chamados/models.py:3235`–`:3252`. Ausência de deduplicação nessa emissão consta da porta `ponto/portas/celula.py:891`.
+
+Texto mínimo para a SESSÃO, sem edição realizada:
+
+P2: inserir entre o retorno de `fora_do_fato` e `_escrever_carimbo`, em `chamados/models.py:3211`:
+
+```python
+        if (self.materializada_em is None
+                and self.materializada_por_id is None
+                and self.via_resolucao == ''):
+            return []
+```
+
+P3: guardar a modalidade original antes do `if motivo is None` de `chamados/models.py:1909`:
+
+```python
+        pelo_juiz = motivo is None
+```
+
+Após a chamada completa de `trava_na_ordem`, em `chamados/models.py:1923`, inserir:
+
+```python
+            if pelo_juiz and not self.pode_fechar():
+                raise ValueError(
+                    'Nao e possivel fechar a disputa #%s: C7 reteve o fechamento.' % self.pk)
+```
+
+A flag precisa conservar a entrada original: antes da trava, o código já converte `motivo=None` em `FECHOU_VAZIA` ou `FECHOU_VEREDITO`; verificar `motivo is None` somente depois disso tornaria a guarda inoperante. (`chamados/models.py:1916`)
+
+Essa inserção consulta C7 sob trava, mas as leituras anteriores de `_pend`, `perguntas` e `vivas` permanecem anteriores à trava; proteção integral dessas leituras exigiria movê-las para dentro do bloco após a trava. (`chamados/models.py:1897`, `:1907`, `:1921`)
+
+Exaustividade transitiva do mapa: [nao verificado]. Nenhum teste, sintaxe, banco, rede ou escrita foi executado por este explorer. [nao verificado] [nao verificado]
+
+## 09/11 10:52 · sessao f14c3a354d98 · SONDA-SEM-GRANT · verificador · origem=Code
+
+**Não fecharia a volta 4:** permanecem caminhos que conservam carimbo verde após alteração da sombra e uma limpeza que pode remover container alheio por colisão de nome. (bin/sombra.sh:214,225,228,430,433; bin/tests/test_sonda_sem_grant_pg.sh:41,50,93,95)
+
+1. **Itens PROCEDENTES da triagem v3**
+
+| Item | Fechamento e mordida |
+|---|---|
+| **2a — fechado; NÃO PROCEDE reabrir a lacuna original.** | SUPERUSER é aplicado; o selo exige `super>0`, rc 5, recusa nomeada e sonda não executada. O log registra precisamente essas falhas para `super=0`. (bin/tests/test_sonda_sem_grant_pg.sh:183,185,186,187,207; anexo sonda_v4_mut.log:11) |
+| **2b — fechado para `$PGU → leitor`; NÃO PROCEDE reabrir esse caso.** | O estrago de schema grantable passa pelas mesmas cobranças; a porta agora revoga esse default. O mutante da medição morre na detecção; retirar o REVOKE morre na recuperação pela porta. (bin/tests/test_sonda_sem_grant_pg.sh:183,189,208; bin/sonda_provisionar.sh:132; anexo sonda_v4_mut.log:16,31) |
+| **4 — guarda original fechada; residuais abaixo são PROCEDENTES.** | `carimbar` verifica as operações e `refazer` exige invalidação antes do drop. O log mata ausência da guarda e retorno do `mv` ignorado pela asserção “chamou dropdb”. (bin/sombra.sh:94,95,98,99,101,275,276; bin/tests/test_sonda_sem_grant.sh:408; anexo sonda_v4_mut.log:1,26) |
+| **6 — fechado no pedido literal; NÃO PROCEDE reabrir invalidado/ontem.** | Placar retorna `?` nesses casos; invalidação também apaga INCOMPLETA. O log registra a comparação esperada matando a leitura antiga. (bin/placar_code.sh:37; bin/sombra.sh:110; bin/tests/test_sonda_sem_grant.sh:434,436,439; anexo sonda_v4_mut.log:6) |
+| **10 — silêncio original corrigido; identidade ainda PROCEDENTE.** | O selo cobra rc preservado, falha nomeada e `rm -f` exato; o log mata a implementação antiga nessas cobranças. Isso não demonstra autoria do container removido. (bin/tests/test_sonda_sem_grant_pg.sh:40,44,48,76,80,82; anexo sonda_v4_mut.log:21) |
+
+O log fornecido registra sete mortes compatíveis com as asserções indicadas; patches exatos dos mutantes, comandos completos, baseline e reexecução independente são **[nao verificado]**. (anexo sonda_v4_mut.log:1,6,11,16,21,26,31)
+
+**PROCEDENTE — ressalva no selo 9c:** no caso `mv`, o STAMP aponta para `sem_dir/stamp`, mas a asserção de integridade compara outro arquivo, `RF/stamp`. Ela não prova preservação do carimbo existente após falha do `mv` final. Cura sugerida: provocar a falha final mantendo STAMP apontado para o carimbo verde efetivamente examinado. A mordida contra alcançar `dropdb` continua válida. (bin/tests/test_sonda_sem_grant.sh:394,396,399,408,411)
+
+2. **T4: outros caminhos**
+
+- **PROCEDENTE — bloco:** começando com hoje/OK, nova execução pode calcular FALHOU, falhar em `carimbar` e terminar com o `echo` bem-sucedido. O OK anterior permanece; `conferir` pode aprová-lo enquanto houver migrations. Cura sugerida: invalidar sob a trava antes de executar o bloco, exigir publicação final e testar erro do bloco combinado com falha de gravação. (bin/sombra.sh:356,407,417,429,430,433,455,459)
+- **PROCEDENTE — incremental:** a transação altera a janela antes da prova e das máscaras, sem invalidar o carimbo. Falha posterior conserva o verde anterior; falha em `carimbar` também é engolida pelo `echo`. Se o carimbo anterior era completa/OK, a cobertura ainda aceita “completa”. Cura sugerida: invalidar antes da alteração, guardar explicitamente os insumos necessários e exigir publicação final. (bin/sombra_incremental.sh:61,66,68,81,85; bin/sombra.sh:214,216,218,225,228; app/core/sombra_cobertura.py:39,40,41)
+- **NÃO PROCEDE — fim do refazer:** `carimbar` é o último comando da função, portanto seu rc se propaga; se falhar, a invalidação anterior permanece. `--dump-agora` converge para a mesma guarda antes do drop; `conferir` não escreve o carimbo. (bin/sombra.sh:110,259,275,276,328,331,332,436,459)
+
+3. **Predicados: NÃO são iguais**
+
+| Caso | Placar | `conferir`, supondo migrations positivas |
+|---|---|---|
+| Dia vazio ou ontem | `?` | Recusa |
+| Hoje, status vazio, INCOMPLETA=0 | `0` | Recusa |
+| Hoje, OK, INCOMPLETA ausente | `?` | Aceita |
+| Hoje, REFEITA/DIVERGE/FALHOU, número presente | Mostra número | Recusa |
+| Hoje, REFAZENDO | `?` | Recusa |
+
+Essas diferenças decorrem de `STATUS != REFAZENDO` mais número obrigatório no placar, contra `STATUS=OK` mais existência mínima do banco em `conferir`. (bin/placar_code.sh:34,35,36,37; bin/sombra.sh:439,455,457,459)
+
+**PROCEDENTE — derivação própria no novo leitor.** Completude medida e ensaio verde são perguntas distintas; não devem ser anunciadas como predicados iguais. Cura sugerida: uma autoridade com parser comum e predicados explicitamente distintos. A cobertura já possui terceiro julgamento: hoje, OK ou REFEITA, depois tipo/base/janela. Até o parsing diverge: última ocorrência no placar, concatenação em `conferir`, última ocorrência com normalização na cobertura. (CLAUDE.md:20,21,22; bin/placar_code.sh:34,37; bin/sombra.sh:439; app/core/sombra_cobertura.py:18,21,35,37,42,45)
+
+Leitores operacionais encontrados:
+
+- **Diretos:** incremental, bloco e `conferir`; placar; `core/sombra_cobertura.py`. (bin/sombra.sh:210,211,224,356,427,439,443,444; bin/placar_code.sh:34,35,36; app/core/sombra_cobertura.py:35,37,39,42,45)
+- **Delegados, sem predicado próprio do stamp:** deploy, indicador verde do placar, esteira em `trava.sh`, simulação de folha e diff de janela; os dois últimos também exigem cobertura. (bin/deploy.sh:162; bin/placar_code.sh:169; bin/trava.sh:52; bin/simular_folha.sh:68,70; bin/diff_janela_he_total.sh:19,22)
+
+4. **Porta/defaults — PROCEDENTE a cobertura desigual**
+
+`REVOKE ... ON SCHEMAS` cobre defaults de `$PGU` para `leitor`. A conferência conta defaults de **qualquer concedente**, destinados ao leitor **ou PUBLIC**, também para tabelas e sequências. A porta não revoga todo esse universo. (bin/sonda_provisionar.sh:125,126,128,129,132; bin/sonda_leitor_comum.sh:119,120,121,122)
+
+**A porta deixa esses privilégios, mas não deixa passar como pronto:** a leitura recusa rc 5; a porta recusa rc 1 antes de promover `.env_leitor`. Há bloqueio sem autocura, sem falso pronto nesse caminho. Quem cura é o operador autorizado, revogando o default no concedente/destinatário/escopo de origem; o próprio diagnóstico orienta REVOKE manual. Cura efetiva em produção: **[nao verificado]**. (bin/sonda_leitor_comum.sh:132,145; bin/sonda_leitura.sh:187,135; bin/sonda_provisionar.sh:148,150,151,171)
+
+5. **`_limpa` — PROCEDENTE colisão; NÃO PROCEDE nome vazio no fluxo atual**
+
+O trap precede a criação. Se `run --name "$PGT"` falhar por colisão, o EXIT executa `rm -f "$PGT"` sobre o container que já ocupava o nome. A guarda só exclui três nomes conhecidos; não prova autoria. Cura sugerida: remover exclusivamente o ID obtido da criação bem-sucedida, sem remover por nome após criação recusada; acrescentar caso de colisão ao selo. (bin/tests/test_sonda_sem_grant_pg.sh:35,36,41,50,93,95)
+
+PGT não fica vazio nessa atribuição: contém prefixo literal e PID; a substituição usada pela fixture ocorre em subshell. (bin/tests/test_sonda_sem_grant_pg.sh:35,72,73,74)
+
+**PROCEDENTE — ausência não comprovada:** o rc de `rm` é ignorado e qualquer falha de `inspect` equivale a “sumiu”. Cura sugerida: distinguir inexistência de falha da consulta e testar esta última. Falha real do Docker: **[nao verificado]**. (bin/tests/test_sonda_sem_grant_pg.sh:41,42,85,86,87,88)
+
+6. **Classes adicionais**
+
+- **Segundo escritor operacional do stamp — NÃO PROCEDE no código localizado:** publicação e invalidação passam por `carimbar`; os escritores adicionais dos selos usam fixtures temporárias. Escritor externo/manual: **[nao verificado]**. (bin/sombra.sh:101,110,225,328,430; bin/tests/test_sonda_sem_grant.sh:363,394,432,447)
+- **Relógio — FILA para o preexistente; PROCEDENTE no novo leitor independente:** HOJE nasce antes da trava, a base relê a data e a cobertura usa `date.today()`. O placar acrescenta outra captura antes de chamar posteriormente `conferir`. Cura sugerida: referência temporal obtida na borda e passada aos julgamentos. Travessia efetiva da meia-noite: **[nao verificado]**. (anexo triagem_preverif_v3.txt:10; bin/sombra.sh:83,328,464; app/core/sombra_cobertura.py:34; bin/placar_code.sh:39,169)
+- **Selo sem mordida — NÃO PROCEDE como acusação geral:** há mortes pertinentes registradas; preservação no caso `mv`, identidade do container e os caminhos incremental/bloco continuam fora dessa prova. (anexo sonda_v4_mut.log:1,6,11,16,21,26,31; bin/tests/test_sonda_sem_grant.sh:396,411; bin/tests/test_sonda_sem_grant_pg.sh:80,93)
+- **Campos com dois sentidos — PROCEDENTE na interpretação de prontidão:** STATUS distingue resultado do refazer e resultado do bloco; incremental preserva o status anterior mesmo declarando bloco fora da janela. DIA sozinho não significa pronto, e INCOMPLETA é a medição do refazer. Cura sugerida: preservar essas distinções na autoridade comum, sem equiparar “medição válida” a “ensaio verde”. (bin/sombra.sh:227,319,329,331,432; bin/placar_code.sh:37; app/core/sombra_cobertura.py:37)
+
+7. **Quem escreve / quem lê**
+
+Todos os campos do stamp abaixo são materializados por `carimbar`; ele lê o anterior, produz temporários e promove o resultado. (bin/sombra.sh:94,95,98,99,101)
+
+| Campo de `.sombra_stamp` | Quem escreve | Quem lê |
+|---|---|---|
+| DIA | Invalidação/completo: sombra.sh:110,328 | sombra.sh:210,356,439; placar_code.sh:34; sombra_cobertura.py:35 |
+| STATUS | Invalidação/incremental/completo/bloco: sombra.sh:110,227,331,432 | sombra.sh:224,439; placar_code.sh:35; sombra_cobertura.py:37 |
+| INCOMPLETA | Invalidação/completo: sombra.sh:110,329 | placar_code.sh:36 |
+| TIPO / BASE_DIA | Incremental/completo: sombra.sh:225,328 | sombra.sh:211,441,443; sombra_cobertura.py:39,45 |
+| JANELA_INI/FIM | Incremental/completo: sombra.sh:225,329 | sombra.sh:443; sombra_cobertura.py:42 |
+| DIVERGE | Completo: sombra.sh:329 | sombra.sh:427,444 |
+| INCREMENTAL_EM / ERROS | Incremental/bloco: sombra.sh:226,431 | sombra.sh:443,444 |
+| DUMP, REFEITA, BLOCO, INCREMENTAL_S, BLOCO_NA_JANELA, COMANDOS, ALARMES, FORA_DO_ENSAIO | sombra.sh:226,227,328,330,430,431 | Leitor operacional desses campos: **[nao verificado]** |
+
+| Outros estados/arquivos alcançados pelo delta | Quem escreve / quem lê |
+|---|---|
+| Defaults de schema; `super` | Porta revoga default e escreve NOSUPERUSER; consulta produz `default_escrita`/`super`; parser, porta e leitura consomem. Fixtures aplicam os estragos. (bin/sonda_provisionar.sh:105,132,148; bin/sonda_leitor_comum.sh:68,119,132,145; bin/sonda_leitura.sh:187; bin/tests/test_sonda_sem_grant_pg.sh:207,208) |
+| `.env_leitor`, senha, temporário | Porta lê senha e publica; leitura valida/lê e entrega ao container. (bin/sonda_provisionar.sh:77,168,169,171; bin/sonda_leitura.sh:173,174,178,234) |
+| Fontes recortadas pelos selos | Selos leem `sombra.sh` e `placar_code.sh`; escritor dessas fontes não é identificado pelo dado. (bin/tests/test_sonda_sem_grant.sh:358,359,380,422) **[nao verificado]** |
+| Fixtures 9/9c/10: stamps, dumps vazios, docker falso, argv, saída e temporários | Selo monta; docker falso registra argv; asserções leem. (bin/tests/test_sonda_sem_grant.sh:363,383,384,385,387,394,403,408,411,413,432,447,450) |
+| Fixtures `_limpa`: `lf/docker`, `lf/argv`, `lf/out`, `lf/t`; container PGT | Selo cria entradas; falso grava argv; asserções leem; `_limpa` remove pasta/container e consulta existência. (bin/tests/test_sonda_sem_grant_pg.sh:41,42,46,61,63,71,74,76,80,93) |
+| Imagem/recursos do selo PG | Selo lê `recursos.sh` e `db_teste.sh`; autoria desses valores: **[nao verificado]**. (bin/tests/test_sonda_sem_grant_pg.sh:29,31) |
+| Trilhas de provisionamento/leitura e saída da porta na sombra | Traps escrevem as trilhas; sombra redireciona e lê a falha da porta. Outros leitores operacionais: **[nao verificado]**. (bin/sonda_provisionar.sh:60,61; bin/sonda_leitura.sh:121,122; bin/sombra.sh:252,253) |
 
 ## 09/11 10:51 · sessao f5bd0a6923b7 · - · - · origem=Ronald (tmux)
 
@@ -527,16 +663,4 @@ Entrega: [F1–F8, causas, hunks, escritores/leitores e comandos de RED/mutantes
 
 **DECISAO-ABERTA:** DIFF/L-099 antes da fachada; crons e diagramas com a sessão. [Referência](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:90).
 
-## 09/11 09:17 · sessao bbec4829eb42 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
-
-5. Entrega no [relatório por hunk, escritores/leitores e comandos individuais](docs/BUG-PAR-INTERVALO-V2.txt:9).
-
-- **DECISÃO-ABERTA — P2:** ligação de C7 ao predicado reservada à sessão; import e linha exata em [entrega:205](docs/BUG-PAR-INTERVALO-V2.txt:205). Teste: [test_P2_C7_nao_fecha_se_irma_sai_do_fato](chamados/tests/test_bug_par_intervalo.py:388).
-- **Verificação:** `py_compile` sem persistência retornou rc 0; âncoras e sintaxe de M1–M37 conferidas. [entrega:301](docs/BUG-PAR-INTERVALO-V2.txt:301)
-- **Sem execução da suíte ou dos mutantes:** RED/GREEN e mortes por asserção **[nao verificado]**. F1–F4 e produção permanecem fora da cobertura. [entrega:218](docs/BUG-PAR-INTERVALO-V2.txt:218)
-
-## 09/11 09:10 · sessao 34f994372353 · SONDA-SEM-GRANT · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3106 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3108 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
