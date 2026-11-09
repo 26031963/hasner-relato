@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 02:23:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (172.2 MB). Acoes na janela: **739**.
+**Medido em 09/11/2026 02:29:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (172.4 MB). Acoes na janela: **747**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:25:06 | Bash | Confirm V2-2 suite pid alive | `ps -p 381128 -o pid,etime,args \| cut -c1-120; sed -n 2p /home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 02:25:04 | Agent | I-1 volta 2 construtor | `Voce e o CONSTRUTOR (volta 2) da obra SELOS-CANON-I1 (CENSO-ANTES-DA-VAGA) no repo /home/ronald/saas-hasner. Trabalhe SO na copia /home/ronald/wt-i1-censovaga-015903 (git worktree, HEAD 1e7d50b6 = sua volta 1). Nunca edite /home/ronald/saas-hasner (arvore viva), nunca rode a suite Django, nunca faca push/merge/deploy, nunca mate processos que nao lancou. Leia /home/ronald/saas-hasner/CLAUDE.md sec ...` |
+| 02:24:49 | Bash | Write I-1 triage and RELATO lines | `cd /home/ronald/saas-hasner; cat > logs/selos_canon/i1_triagem_v1.txt <<'EOF' TRIAGEM I-1 pre-verificador v1 (02:2x, conferida abrindo disjuntor.py:1507/1469/1521, codex_pergunta.sh:81/394): P1 PROCEDENTE escapes (obra None libera; export/env/bash -c/script): o WRAPPER passa a chamar `disjuntor.py --censo` no --construtor e recusa rc!=0 (porta na via, nao so no hook); Agent construtor wt-* sem obr ...` |
+| 02:24:36 | Bash | Check I-1 worktree state | `cd /home/ronald/wt-i1-censovaga-015903 && git log --oneline -2 && git status --porcelain \| head` |
+| 02:24:31 | Bash | Read I-1 aval text | `cd /home/ronald/saas-hasner; /bin/grep -n "I-1" logs/selos_canon/aval_selos_do_canon_0811.txt \| cut -c1-1500 \| head -5; ls /home/ronald/wt-i1-censovaga-015903/logs/selos_canon/ 2>/dev/null; ls logs/selos_canon/` |
+| 02:24:19 | Bash | Write contract v2 and read I-1 preverifier | `cd /home/ronald/saas-hasner; cat > logs/deploy_exclusao/contrato_v2.txt <<'EOF' CONTRATO DEPLOY-EXCLUSAO-ENVELOPE v2 (02:2x, ajustado pela leitura Codex contrato_codex.r; aval DEPLOY-RESTART-RESIDUAL (i); instrumento): quem chama: bin/cron_run.sh pega `flock -s -w 600` em logs/deploy_exclusao.lock ANTES de criar a marca crons_em_curso (marca = rodando, nunca esperando; o relogio de `dur` comeca de ...` |
+| 02:24:10 | Bash | Read current contract and HEAD | `cd /home/ronald/saas-hasner; cat logs/deploy_exclusao/contrato.txt; git rev-parse --short HEAD; git log -1 --format=%s origin/main \| cut -c1-80; date +%H:%M` |
+| 02:24:00 | Bash | Read Codex answer on exclusion contract | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bb8rl7voy.output \| tail -4; cat logs/deploy_exclusao/contrato_codex.r` |
 | 02:23:09 | Bash | Read C7 state | `cd /home/ronald/saas-hasner; sed -n 1466p app/docs/BACKLOG.md \| cut -c400-1500; /bin/grep -n "C7" app/docs/RELATO.md \| cut -c1-250 \| head` |
 | 02:23:07 | Bash | Find C7 backlog item | `cd /home/ronald/saas-hasner; /bin/grep -n "^\| C7\b\\|^\| C7 \\|C7-" app/docs/BACKLOG.md \| cut -c1-400 \| head; ls logs \| /bin/grep -i c7` |
 | 02:23:04 | Bash | Record ATA-PAUSA ordering decision in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read().split('\n') s.insert(3,"ATA-X-TURNO-PAUSA 02:2x: ordem pelo aval CODEX-CONSTRUTOR-ESTRUTURAL = ultima da fila Codex (depois de C7 e COBPARC a); o toque no motor segue sob o ! ATA-PAUSA-NO-MOTOR (CORTES.md:304, condicao 10/10 + dinheiro igual). Nada aberto agora; vaga Codex construtor ocupada pela V2-2 volta 2." ...` |

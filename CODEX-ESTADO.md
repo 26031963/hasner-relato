@@ -1,7 +1,240 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 02:22** · publicado em **09/11/2026 02:23** (UTC-3)
+> Ultima resposta processada: **09/11/2026 02:24** · publicado em **09/11/2026 02:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 02:24 · sessao 69b9fc6d95cb · SELOS-CANON-I1 · verificador · origem=Code
+
+**Parecer: o diff realiza parte do I-1, mas não sustenta aprovação integral.** Há escapes de abertura, a negativa não escreve o PAREI exigido e as medidas contam decisões intermediárias como abertura/ociosidade. (`bin/disjuntor.py:1332`, `bin/disjuntor.py:1521`, `bin/disjuntor.py:1588`, `bin/disjuntor.py:1607`, `bin/disjuntor.py:1777`)
+
+As referências abaixo são da cópia. Identidade Git com o hash/base informados e resultados em produção: **[nao verificado]**. A execução integral dos selos também fica **[nao verificado]**; seus scripts criam arquivos e cópias. (`bin/tests/test_censo_antes_da_vaga.sh:21`, `bin/tests/test_censo_antes_da_vaga.sh:160`)
+
+1. **O diff realiza o aval literal? Parcialmente.**
+
+   Na tabela, “aval I-1” refere-se ao parágrafo fornecido no anexo `aval_selos_do_canon_0811.txt`; a numeração do arquivo original é **[nao verificado]**.
+
+   | Exigência do aval I-1 | Realização ou falta |
+   |---|---|
+   | Interceptar abertura de construtor ESTRUTURA/fila 1 | Há chamadas no ramo Agent e no ramo Bash/Codex, condicionadas a reconhecedores textuais. A cobertura não alcança todas as chamadas aceitas pelo wrapper; detalhes na resposta 3. (`bin/disjuntor.py:1583`, `bin/disjuntor.py:1603`) |
+   | Ler `logs/<obra>/brief*.md` | Lê os caminhos **citados na abertura**, com um nível de diretório sob `RAIZ/logs`. Não descobre automaticamente o brief da obra nem verifica que o diretório/conteúdo corresponde à obra declarada. (`bin/disjuntor.py:1413`, `bin/disjuntor.py:1475`, `bin/disjuntor.py:1513`) |
+   | CENSO com leitores/escritores por AST e arquivo:linha | Verifica título, campos e existência de **alguma referência por regex em cada categoria**. Não verifica AST, existência dos sítios, completude nem referência em cada item. Isso não exige necessariamente executar AST na abertura, mas o check não comprova a procedência exigida. (`bin/disjuntor.py:1409`, `bin/disjuntor.py:1454`, `bin/disjuntor.py:1460`) |
+   | DECISOES listadas | Exige algum conteúdo não vazio em `decisoes`; aceita também texto na própria linha, sem lista. (`bin/disjuntor.py:1452`, `bin/disjuntor.py:1463`) |
+   | Linha literal `perguntas de lei: N` | Implementada, com recusa de repetição e conferência da quantidade de itens reconhecidos abaixo. (`bin/disjuntor.py:1408`, `bin/disjuntor.py:1445`, `bin/disjuntor.py:1465`) |
+   | N>0: corte em cada pergunta | Percorre cada pergunta reconhecida e exige a substring `cortada por Ronald` seguida de token. Não verifica autenticidade do aval nem negação textual: `NAO cortada por Ronald X` satisfaz a regex. (`bin/disjuntor.py:1411`, `bin/disjuntor.py:1469`) |
+   | Falha = rc 1; sessão só abre com rc 0 | A CLI `--censo` retorna 0/1. A abertura interceptada usa JSON `deny`, com retorno zero do hook; não há chamada obrigatória da CLI pelo wrapper. Há equivalência de bloqueio nas chamadas reconhecidas, mas não implementação literal do protocolo rc na abertura. (`bin/disjuntor.py:1532`, `bin/disjuntor.py:1654`, `bin/disjuntor.py:1905`, `bin/codex_pergunta.sh:394`) |
+   | Linha PAREI no RELATO | **Falta escrita automática:** a negativa manda a sessão escrevê-la. A escrita automática existente produz outra linha, `(NEGOU CENSO)`, na seção de alarmes. (`bin/disjuntor.py:1521`, `bin/disjuntor.py:221`, `bin/disjuntor.py:236`) |
+   | PAREI censo vale como ESPERANDO PROVADO | Implementado com prova adicional de wrapper vivo, obra e papel, compartilhando o caminho de espera do Stop e do orçamento. (`bin/hook_stop_fila1.py:703`, `bin/hook_stop_fila1.py:740`, `bin/hook_stop_fila1.py:1040`, `bin/hook_stop_fila1.py:1283`) |
+   | Duas medidas no ESTADO | Os campos chegam ao gerador, mas seus significados não comprovam abertura efetiva nem vaga ociosa; resposta 8. (`bin/disjuntor.py:1777`, `bin/disjuntor.py:1817`, `bin/gerar_estado.py:280`) |
+   | Allowlist vazia; desligamento só Ronald | Não aparece allowlist específica no novo check. Continua existindo a chave global, com proteção contra sua manipulação pelo Code. Ausência de obra reconhecida ou BACKLOG, porém, libera sem constituir allowlist explícita. (`bin/disjuntor.py:151`, `bin/disjuntor.py:156`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1507`) |
+   | Selo com mutante de linha ausente | Presente e com asserção que o atinge; cobertura adicional tem lacunas, resposta 7. (`bin/tests/test_censo_antes_da_vaga.sh:70`, `bin/tests/test_censo_antes_da_vaga.sh:175`) |
+
+   Pouso próprio, código somente depois da E1 e cumprimento da ordem I-1/I-3/I-2: **[nao verificado]**. O registro disponível ainda descreve a condição “código só depois do pouso da E1”. (`app/docs/PROMPTS.md:1983`, `app/docs/BACKLOG.md:728`)
+
+2. **Há outro juiz de “brief tem censo”?**
+
+   Nos caminhos examinados, há **um reconhecedor do conteúdo**: `censo_do_brief`, chamado tanto por `_censo_nega` quanto por `--censo`. `_prova_censo` decide existência de produtor vivo; `gerar_estado` apresenta medidas; o handoff consulta fila/PAREI. Eles não repetem a validação do bloco. (`bin/disjuntor.py:1417`, `bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`, `bin/hook_stop_fila1.py:649`, `bin/gerar_estado.py:280`, `bin/handoff_sessao.sh:120`)
+
+   Não localizei autoridade anterior dessa pergunta no registro ou no lookup examinados. `JUIZES.md` declara que é consulta e aponta `app/core/juizes.py` como registro vivo; a existência de equivalente não identificado fica **[nao verificado]**. (`app/docs/JUIZES.md:7`, `app/core/juizes.py:170`, `app/core/juizes.py:706`, `app/core/juizes.py:1025`, `app/core/juizes.py:1173`, `app/core/juizes.py:1285`)
+
+   Portanto, há cobertura incompleta da porta; não há evidência suficiente para acusar **segundo juiz que duplica juiz registrado**. (`bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`; autoridade anterior equivalente: **[nao verificado]**)
+
+3. **Formas de abrir construtor e escapes.**
+
+   | Forma demonstrável | Trava e classificação |
+   |---|---|
+   | Agent fora de `SO_LEITURA`, com caminho absoluto `wt-*` e obra reconhecida/andável | Passa pela trava. (`bin/disjuntor.py:98`, `bin/disjuntor.py:100`, `bin/disjuntor.py:1603`) |
+   | Mesmo Agent, mas sem âncora reconhecível de obra — por exemplo, `Construa OBRA-E3...` | Obra pode virar `None`, que libera. **Escape real se continua sendo construtor estrutural da fila 1.** (`bin/disjuntor.py:111`, `bin/disjuntor.py:511`, `bin/disjuntor.py:1507`) |
+   | Agent com cópia sem nome `wt-*`, caminho relativo ou cópia não citada | Não entra no ramo. **Escape real quando o trabalho pertence à classe do aval**; ausência desse padrão textual não prova ausência de construção. (`bin/disjuntor.py:100`, `bin/disjuntor.py:1603`) |
+   | Bash com atribuições imediatamente antes do wrapper: `CODEX_OBRA=X CODEX_PAPEL=construtor bin/codex_pergunta.sh --construtor ...` | Passa pela trava. (`bin/disjuntor.py:1332`, `bin/disjuntor.py:1583`) |
+   | `export CODEX_OBRA=X CODEX_PAPEL=construtor; bin/codex_pergunta.sh --construtor ...` | Hook lê papel `?` e obra vazia; wrapper aceita o ambiente herdado. **Escape real na própria via autorizada.** (`bin/disjuntor.py:1333`, `bin/disjuntor.py:1343`, `bin/disjuntor.py:1584`, `bin/codex_pergunta.sh:81`) |
+   | `env CODEX_OBRA=X CODEX_PAPEL=construtor bin/codex_pergunta.sh ...` | A regex admite prefixos, mas não essas atribuições depois de `env`. **Escape real.** (`bin/disjuntor.py:1250`, `bin/disjuntor.py:1338`, `bin/codex_pergunta.sh:81`) |
+   | Wrapper dentro de `bash -c`, script externo ou encapsulamentos residuais | Limitação expressamente declarada; o wrapper não impõe CENSO na sua entrada. **Escape real se abre construtor abrangido.** (`bin/disjuntor.py:1247`, `bin/codex_pergunta.sh:233`, `bin/codex_pergunta.sh:394`) |
+   | Wrapper executado fora do PreToolUse | Não tem guarda própria de CENSO; toma vaga e executa o construtor. Uso concreto dessa via em produção: **[nao verificado]**. (`bin/codex_pergunta.sh:233`, `bin/codex_pergunta.sh:370`, `bin/codex_pergunta.sh:394`) |
+   | `codex exec` direto | Escape técnico declarado, mas via proibida pela regra do wrapper; não demonstra uma segunda abertura autorizada. (`bin/disjuntor.py:1248`, `CLAUDE.md:347`) |
+   | `bin/fabricante.sh`, que inicia `claude -p` | A abertura da sessão não é Agent e não recebe essa trava. Enquadramento de cada fabricação como obra fila 1 do aval: **[nao verificado]**. (`bin/fabricante.sh:2`, `bin/fabricante.sh:150`, `bin/fabricante.sh:162`) |
+   | Leitura/censo/verificador legítimos, obra fechada ou fila 2 | Fora da classe construtor estrutural fila 1. (`bin/disjuntor.py:1507`, `bin/tests/test_censo_antes_da_vaga.sh:123`, `bin/tests/test_censo_antes_da_vaga.sh:125`, `bin/tests/test_censo_antes_da_vaga.sh:127`, `bin/tests/test_censo_antes_da_vaga.sh:135`) |
+
+   Outras formas não localizadas: **[nao verificado]**. A configuração fornecida chama um caminho absoluto da árvore viva; instalação deste diff naquele caminho também é **[nao verificado]**. (`.claude/settings.json:68`)
+
+4. **Fail-open contradiz lei ou contrato?**
+
+   **O contrato existente declara fail-open explicitamente:** “toda excecao vira linha FALHA na trilha e a ferramenta passa”. O tratamento externo preserva isso, com exceção expressa do B3. O novo CENSO herda a política e retorna `None` após `ABRIU-SEM`. (`bin/disjuntor.py:34`, `bin/disjuntor.py:1643`, `bin/disjuntor.py:1645`, `bin/disjuntor.py:1525`)
+
+   Logo, não contradiz essa cláusula do disjuntor. Isso, porém, não demonstra autorização para excepcionar o aval específico de abertura somente com censo fechado; essa compatibilidade permanece **[nao verificado]**. (`bin/disjuntor.py:44`, `bin/disjuntor.py:1504`, `bin/disjuntor.py:1525`)
+
+   LEI-AKITA 1 não permite concluir que qualquer tratamento de exceção seja automaticamente “fallback”: seu texto associa o termo à sobrevivência de derivador paralelo. Existe tensão mais direta com “exceção [...] nunca destravando a trava” e com a literalidade do aval. (`CLAUDE.md:17`, `CLAUDE.md:19`, `CLAUDE.md:32`, `CLAUDE.md:34`, `CLAUDE.md:37`)
+
+   A trilha também não é garantida: `trilha` engole falhas de escrita. Assim, uma liberação excepcional pode ficar sem `ABRIU-SEM` observável. (`bin/disjuntor.py:142`, `bin/disjuntor.py:1526`)
+
+5. **“Fila 1” é definição paralela?**
+
+   **Nesta costura, não.** `_fila1_viva` chama diretamente `_itens_andaveis`, que aplica `_item_parado`; o hook usa esse mesmo predicado para decidir quais linhas andam. (`bin/disjuntor.py:1489`, `bin/disjuntor.py:1498`, `bin/hook_stop_fila1.py:158`, `bin/hook_stop_fila1.py:212`, `bin/hook_stop_fila1.py:218`)
+
+   “Todos os andáveis” e “item em curso” são perguntas diferentes: o conjunto vem de OBRAS; o item em curso vem de `ORDEM-VIVA-TOPO`. Não selecionar apenas o item do marcador não constitui divergência de fila. (`bin/hook_stop_fila1.py:179`, `bin/hook_stop_fila1.py:218`, `bin/hook_stop_fila1.py:243`, `bin/hook_stop_fila1.py:1292`)
+
+   B3 decide parada/liberação por reprovações e triagens da obra; não é autoridade de pertencimento à fila 1. (`bin/disjuntor.py:903`, `bin/disjuntor.py:909`, `bin/disjuntor.py:993`)
+
+   Há outro defeito: BACKLOG ausente vira conjunto vazio, liberando sem `ABRIU-SEM`. É falha de fonte interpretada como “fora do universo”, não derivação paralela. (`bin/disjuntor.py:1493`, `bin/disjuntor.py:1496`, `bin/disjuntor.py:1507`)
+
+6. **A prova de ESPERANDO é a mesma? Quais mutantes passam?**
+
+   A vivacidade usa a autoridade existente `_prova_pid`: identidade de executável/script, ancestralidade, estabilidade do processo e rejeição de Z/X. A nova função a chama, em vez de copiar esses testes. (`bin/hook_stop_fila1.py:523`, `bin/hook_stop_fila1.py:529`, `bin/hook_stop_fila1.py:535`, `bin/hook_stop_fila1.py:546`, `bin/hook_stop_fila1.py:682`)
+
+   O predicado completo é diferente: CENSO descobre o wrapper por `/proc` e exige raiz, UID, obra exata e papel censo/leitura; ESPERANDO genérico recebe produtor e PID/arquivo declarados. É uma composição específica nova, não uma segunda implementação da vivacidade. Ambos compartilham decisão, memoização, orçamento e liberação final. (`bin/hook_stop_fila1.py:661`, `bin/hook_stop_fila1.py:671`, `bin/hook_stop_fila1.py:682`, `bin/hook_stop_fila1.py:715`, `bin/hook_stop_fila1.py:740`, `bin/hook_stop_fila1.py:1040`, `bin/hook_stop_fila1.py:1283`)
+
+   Os exemplos “aceitar construtor”, “casar prefixo” e “aceitar ausência após morte” têm casos negativos específicos. Não cabe declará-los sobreviventes por simples leitura. (`bin/tests/test_hook_esperando_com_prova.sh:206`, `bin/tests/test_hook_esperando_com_prova.sh:209`, `bin/tests/test_hook_esperando_com_prova.sh:214`)
+
+   Remover a guarda de UID ou a comparação adicional de starttime são candidatos sem caso dedicado no bloco novo; sobrevivência executada desses mutantes: **[nao verificado]**. O teste de morte faz `wait`, não simula reciclagem do PID. (`bin/hook_stop_fila1.py:671`, `bin/hook_stop_fila1.py:685`, `bin/tests/test_hook_esperando_com_prova.sh:31`, `bin/tests/test_hook_esperando_com_prova.sh:194`)
+
+7. **Os quatro mutantes mordem? Há sobreviventes?**
+
+   **Os quatro têm mordida nas asserções:**
+
+   | Mutante | Caso que o atinge |
+   |---|---|
+   | Linha ausente vale zero | Exige rc 1 sem a linha. (`bin/tests/test_censo_antes_da_vaga.sh:70`, `bin/tests/test_censo_antes_da_vaga.sh:175`) |
+   | Não exigir corte | Casos retiram o corte da última pergunta. (`bin/tests/test_censo_antes_da_vaga.sh:71`, `bin/tests/test_censo_antes_da_vaga.sh:72`, `bin/tests/test_censo_antes_da_vaga.sh:176`) |
+   | Agent sem porta | Negativos exigem `deny`, motivo CENSO e PAREI específico. (`bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:112`, `bin/tests/test_censo_antes_da_vaga.sh:177`) |
+   | Codex sem porta | A mesma exigência no construtor sem brief. (`bin/tests/test_censo_antes_da_vaga.sh:103`, `bin/tests/test_censo_antes_da_vaga.sh:131`, `bin/tests/test_censo_antes_da_vaga.sh:178`) |
+
+   A harness verifica âncora única e exige que a função de casos falhe após a mutação. Resultado da rodada integral: **[nao verificado]**. (`bin/tests/test_censo_antes_da_vaga.sh:165`, `bin/tests/test_censo_antes_da_vaga.sh:170`, `bin/tests/test_censo_antes_da_vaga.sh:173`)
+
+   **Sobrevivente concreto por análise e reprodução em memória:** trocar `for q in perguntas:` por `for q in perguntas[-1:]:`. Todos os negativos de corte alteram a última pergunta; a primeira poderia ficar sem corte. A costura não acrescenta caso com N>0. (`bin/disjuntor.py:1469`, `bin/tests/test_censo_antes_da_vaga.sh:71`, `bin/tests/test_censo_antes_da_vaga.sh:72`, `bin/tests/test_censo_antes_da_vaga.sh:99`, `bin/tests/test_censo_antes_da_vaga.sh:100`)
+
+   Outro candidato em `_censo_nega` é retirar a trilha da exceção: não há cenário que provoque essa exceção e confira `ABRIU-SEM`. A medida só exige rótulos e número decimal, sem duração ou contagem esperada. (`bin/disjuntor.py:1525`, `bin/tests/test_censo_antes_da_vaga.sh:141`, `bin/tests/test_censo_antes_da_vaga.sh:147`)
+
+   A asserção positiva também é insuficiente: `_passa_censo` aceita qualquer saída sem “CENSO”, inclusive negativa B4 ou saída vazia; o status de `_pre` não é conferido. (`bin/tests/test_censo_antes_da_vaga.sh:97`, `bin/tests/test_censo_antes_da_vaga.sh:106`)
+
+8. **Quem escreve, quem lê e onde muda o significado?**
+
+   | Objeto | Escritor | Leitor |
+   |---|---|---|
+   | Brief: CENSO, leitores, escritores, decisões e perguntas | Escritor real/procedência AST: **[nao verificado]** | `censo_do_brief`. (`bin/disjuntor.py:1420`, `bin/disjuntor.py:1438`) |
+   | BACKLOG/OBRAS usado no universo | Escritor real desta evidência: **[nao verificado]** | `_fila1_viva` → `_itens_andaveis`. (`bin/disjuntor.py:1494`, `bin/disjuntor.py:1498`) |
+   | Ambiente `CODEX_OBRA`/`CODEX_PAPEL` do produtor | Fornecido pelo lançador; o wrapper o recebe. (`bin/codex_pergunta.sh:81`) | `_prova_censo` lê `/proc/<pid>/environ`. (`bin/hook_stop_fila1.py:678`, `bin/hook_stop_fila1.py:682`) |
+   | `disjuntor.log` | Porta `trilha`, com carimbo e detalhe limitado a 300 caracteres. (`bin/disjuntor.py:135`, `bin/disjuntor.py:140`) | Leitor geral e `_censo_24h`; hook o proíbe como arquivo de prova de progresso próprio. (`bin/disjuntor.py:1717`, `bin/disjuntor.py:1784`, `bin/hook_stop_fila1.py:585`) |
+   | `CENSO OK`, com obra/via/brief | `_censo_nega`. (`bin/disjuntor.py:1518`) | Conta `ok` e encerra intervalo da obra. (`bin/disjuntor.py:1797`) |
+   | `CENSO ABRIU-SEM`, com obra/via/falha | Exceção de `_censo_nega`. (`bin/disjuntor.py:1525`) | Conta `abertos_sem`. (`bin/disjuntor.py:1801`) |
+   | `NEGOU DISJUNTOR CENSO...` | `main_pretool`, antes do JSON deny. (`bin/disjuntor.py:1636`, `bin/disjuntor.py:1639`) | Inicia intervalo e conta `negados`. (`bin/disjuntor.py:1794`) |
+   | `abertos_sem`, `negados`, `ok`, `ociosa_h`, `esperando` | `_censo_24h`, em memória. (`bin/disjuntor.py:1807`) | `_censo_txt` → `linha` → `gerar_estado`. (`bin/disjuntor.py:1812`, `bin/disjuntor.py:1895`, `bin/gerar_estado.py:280`) |
+   | ESTADO publicado | Gerador grava destino; `relato.sh` entrega o temporário à raspagem. (`bin/gerar_estado.py:390`, `bin/relato.sh:38`, `bin/relato.sh:105`) | Consumo posterior efetivo: **[nao verificado]** |
+   | PAREI censo no topo | O diff instrui a sessão; escritor concreto: **[nao verificado]**. (`bin/disjuntor.py:1521`, `bin/disjuntor.py:1908`) | Stop, handoff e alarme, com sentidos divergentes abaixo. (`bin/hook_stop_fila1.py:703`, `bin/handoff_sessao.sh:108`, `bin/alarme_sessao_ociosa.py:127`) |
+   | Linha automática `(NEGOU CENSO)` no RELATO | `relato_negacao` pela porta `esteira_vigia.no_relato`, preservando o topo. (`bin/disjuntor.py:221`, `bin/disjuntor.py:236`, `app/core/esteira_vigia.py:829`) | Não substitui a linha literal consumida pelo reconhecedor de espera. (`bin/hook_stop_fila1.py:705`) |
+
+   **ESMERIL-SEMANTICA presente nas medidas:** `OK` e `ABRIU-SEM` acontecem antes de B4/`codex_decide` e das validações do wrapper. Provam resultado do check, não abertura efetiva. (`bin/disjuntor.py:1518`, `bin/disjuntor.py:1526`, `bin/disjuntor.py:1588`, `bin/disjuntor.py:1607`, `bin/codex_pergunta.sh:387`)
+
+   `ociosa_h` soma intervalos por obra entre NEGOU e OK/agora; não consulta vaga. Pode somar esperas simultâneas e encerrar em OK seguido de outra negativa. Correspondência com “horas de vaga ociosa”: **[nao verificado]**. Trilha ausente vira zero, embora falha de escrita seja silenciada. (`bin/disjuntor.py:1795`, `bin/disjuntor.py:1800`, `bin/disjuntor.py:1803`, `bin/disjuntor.py:1807`, `bin/disjuntor.py:142`)
+
+   **Divergência no PAREI:** com produtor vivo, Stop libera por espera provada; handoff consulta somente PAREI genérico, que exige `!`, e pode informar “não devolve”. Com produtor morto, o alarme ainda desarma pela substring PAREI, enquanto Stop acusa falta de prova. (`bin/hook_stop_fila1.py:1171`, `bin/hook_stop_fila1.py:1283`, `bin/handoff_sessao.sh:120`, `bin/handoff_sessao.sh:123`, `bin/alarme_sessao_ociosa.py:42`, `bin/alarme_sessao_ociosa.py:127`)
+
+9. **Classes de reprovação presentes.**
+
+   | Classe | Conclusão |
+   |---|---|
+   | Segundo juiz duplicando registrado | **Não demonstrado** para conteúdo do brief; as duas entradas chamam a mesma função. (`bin/disjuntor.py:1514`, `bin/disjuntor.py:1906`) |
+   | Segundo escritor fora da porta | **Não demonstrado** nas novas escritas: trilha e linha automática reutilizam portas existentes. O PAREI obrigatório, contudo, não é escrito pelo diff. (`bin/disjuntor.py:1518`, `bin/disjuntor.py:1639`, `bin/disjuntor.py:236`, `bin/disjuntor.py:1521`) |
+   | Relógio novo fora da borda | **Não demonstrado**: `_censo_24h` recebe `agora`; o carimbo próprio pertence ao escritor já existente. (`bin/disjuntor.py:140`, `bin/disjuntor.py:1774`, `bin/disjuntor.py:1903`) |
+   | Derivação paralela da fila | **Não**, nesta costura: chama o juiz do hook. (`bin/disjuntor.py:1498`) |
+   | Selo/RED sem mordida | Os quatro declarados têm mordida; há sobrevivente de “cada pergunta”, positivos fracos e medida sem valor esperado. RED integral evidenciado: **[n
+
+[truncado em 20000 de 20824 caracteres]
+
+## 09/11 02:23 · sessao 4474b71ff4e2 · DEPLOY-EXCLUSAO-ENVELOPE · leitura · origem=Code
+
+O código confirma a janela entre consultar a marca e reiniciar; ele próprio a nomeia como residual (ii). **A exclusão proposta ainda não está implementada no envelope desta cópia**, que executa o comando diretamente (`bin/deploy.sh:307-314`; `bin/cron_run.sh:9-13`). Estado efetivo de produção, crontab instalado e timers ativos: **[nao verificado]**.
+
+**1. Quem lê e escreve `logs/crons_em_curso/`**
+
+| Componente | Comportamento comprovado |
+|---|---|
+| `cron_run.sh` | Cria uma marca por corrida, com PID na extensão; remove no `EXIT`. A marca cobre comando, gravação do placar, carimbo de fim e tentativa de aviso ao vigia (`bin/cron_run.sh:9-37`). |
+| `deploy.sh` | Lê as marcas, verifica `/proc/PID`, apaga as consideradas órfãs e recusa `--restart`. Consulta antes dos demais portões e novamente imediatamente antes do restart (`bin/deploy.sh:108-117`; `bin/deploy.sh:338-342`). |
+| `contrato_deploy.sh` | Inspeciona o **texto dos scripts**, exigindo referência à marca; não consulta o diretório operacional (`bin/contrato_deploy.sh:79-82`). |
+| Testes | Criam marcas em ambientes falsos e exigem recusa baseada nelas (`bin/tests/test_deploy_reload_gracioso.sh:91`; `bin/tests/test_deploy_reload_gracioso.sh:125-131`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:192-198`). |
+
+Não localizei outro acesso operacional ao diretório em hook, vigias ou `gerar_estado`; acessos indiretos ou externos à cópia: **[nao verificado]**. O hook possui uma guarda diferente, baseada em `logs/sombra.lock` (`bin/hook_stop_fila1.py:785-794`).
+
+Há um consumidor escrito do **significado** da marca: esperar o término da sombra pela ausência de `sombra.sh_-.*` (`CLAUDE.md:92`; `app/docs/INFRA.md:59-60`). O contrato não determina quando criar a marca em relação à aquisição do lock: se criada antes, também representará espera; se depois, não mostrará quem aguarda. Preservação desse significado na implementação: **[nao verificado]**.
+
+Há ainda registro histórico de um gate que escrevia marca própria durante um apply, fora do envelope. O relato cita `logs/gate10/gate10_condicao1.sh`; presença e uso atual desse escritor, assim como sua futura adesão ao lock: **[nao verificado]** (`app/docs/RELATO.md:4472-4489`).
+
+**2. Reiniciar ou recriar cascas: cobertura e escapes**
+
+| Via | Resultado da leitura |
+|---|---|
+| `deploy.sh --restart "motivo"` | É o ramo que o contrato propõe proteger. Hoje exige motivo e chama `docker restart` das três cascas após consultar marcas (`bin/deploy.sh:72-75`; `bin/deploy.sh:338-342`). Implementação do exclusivo: **[nao verificado]**. |
+| Normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia` | Usam HUP; não têm fallback para restart. O código explica que o HUP vai ao master e preserva o comando executado por `docker exec` (`bin/deploy.sh:322-359`). |
+| Reload das 03:30 | Está declarado como `--reload-agendado`, passa pelo envelope e chega ao mesmo HUP. Teria o compartilhado proposto, sem adquirir o exclusivo do ramo `--restart` (`app/config/crons.py:326-327`; `app/config/crons.py:1861-1863`; `bin/deploy.sh:346-359`). |
+| `docker compose up -d`, rebuild/recreate | São explicitamente atos de infra externos ao deploy; escapam do exclusivo descrito (`bin/deploy.sh:20-22`; `bin/deploy.sh:66-69`). O README também contém uma sequência direta de remoção/recriação de `saas_web`; uso atual: **[nao verificado]** (`README.md:35-38`). |
+| Restart automático | Mensageria declara `restart: unless-stopped`, sem participação no lock proposto. Política efetivamente instalada: **[nao verificado]** (`docker-compose.mensageria.yml:9`). |
+| Outros caminhos examinados | Os moldes chamam `--reload-copia`; o vigia de login chama `--sem-migrate`, portanto chegam ao HUP. `recursos.sh` aplica `docker update` (`bin/molde_fatia/cadeia.sh:32`; `bin/molde_fatia/cadeia.sh:48`; `bin/vigia_logins.sh:87`; `bin/recursos.sh:140-145`). |
+
+Reinício manual externo, host, daemon, OOM e configuração efetiva de core/ui: **[nao verificado]**. O compose principal é declarado específico do ambiente e ignorado (`.gitignore:40-41`).
+
+Existe também uma ambiguidade no término do exclusivo: o contrato fala em “prova de casca depois do restart”, mas hoje `prova_de_casca.sh` roda **antes**; depois do restart há espera das cascas e provas de rota (`bin/deploy.sh:292-298`; `bin/deploy.sh:380-418`).
+
+**3. Disparos fora de `cron_run.sh`**
+
+**`RAW` não significa sem envelope:** todas as entradas de `CRONS`, inclusive `RAW`, passam por `_run`; cada elo executado também entra em `cron_run.sh` (`app/config/crons.py:1483-1486`; `app/config/crons.py:1860-1874`; `bin/encadeado.sh:102-104`).
+
+Existem, porém, caminhos externos:
+
+- **Despachante da corrente:** nasce depois que o envelope da raiz terminou e consulta `saas_core` para obter os elos antes de entrar em qualquer envelope. Essa consulta escapa do compartilhado; se falhar, registra ALARME e sai 2 sem passar pelo vigia do envelope (`app/config/crons.py:1884-1885`; `bin/encadeado.sh:40-52`).
+- **Cron avulso em `/etc/cron.d`:** `deploy_agendado.sh` gera chamada direta a si próprio e executa as esteiras diretamente. Não ganha compartilhado automaticamente (`bin/deploy_agendado.sh:54-57`; `bin/deploy_agendado.sh:63-73`).
+- **Timers:** esteira, fabricante, integrador, relato e teto dia/noite têm `ExecStart` direto, sem envelope (`bin/hasner-esteira.service:15`; `bin/hasner-fabricante.service:14`; `bin/hasner-integrador.service:13`; `bin/hasner-relato.service:15`; `bin/hasner-teto-dia.service:7`; `bin/hasner-teto-noite.service:7`).
+- **Exemplo concreto de timer usando casca:** relato chama `relato_nomes.sh`, que faz `docker exec saas_core` diretamente (`bin/relato.sh:32`; `bin/relato_nomes.sh:17-21`).
+- **Chamadas manuais:** `lavrar_deslogados.sh` mantém uma porta manual com `docker exec` direto (`bin/lavrar_deslogados.sh:11-18`).
+
+Crontab cru, cron.d e timers efetivamente instalados em produção: **[nao verificado]**. Portanto, “todo cron” não está demonstrado como cobertura global; o código demonstra cobertura dos comandos envelopados e dos elos que chegam ao envelope (`app/config/crons.py:1860-1885`; `bin/encadeado.sh:102-104`).
+
+**4. Crons longos e recusa prolongada**
+
+Não localizei `placar.jsonl` na cópia; durações típicas atuais: **[nao verificado]**. Existe um snapshot datado de **31/10**, calculado como **p95 × 1,5, piso 30 s**, preservando medidas antigas quando faltam novas; os números abaixo não são duração típica bruta nem limite de execução (`app/config/crons_duracao.json:106-110`; `bin/crons_duracao.py:69-95`).
+
+| Cron | Medida com folga | Fonte |
+|---|---:|---|
+| Sombra | 5.188 s — 86min28s | `app/config/crons_duracao.json:78` |
+| Noturno | 1.800 s — 30min | `app/config/crons_duracao.json:56` |
+| `lavrar_he_pendente` | 1.274 s — 21min14s | `app/config/crons_duracao.json:43` |
+| Cartório | 760 s — 12min40s | `app/config/crons_duracao.json:63` |
+| Auditoria de invariantes | 420 s — 7min | `app/config/crons_duracao.json:11` |
+| Esmeril / scores | 340 s / 310 s | `app/config/crons_duracao.json:28`; `app/config/crons_duracao.json:14` |
+
+A sombra é um único envelope para `--refazer && --bloco`. A corrente não mantém um envelope contínuo: cada elo espera carimbos antes de entrar no seu próprio envelope (`app/config/crons.py:350-352`; `app/config/crons.py:1884-1885`; `bin/encadeado.sh:84-104`).
+
+O backup percorre schemas e faz dumps sem timeout declarado nesses scripts; seu valor de 30 s coincide com o piso e não prova rapidez nem duração de horas (`scripts/backup_all.sh:5-8`; `scripts/backup_tenant.sh:10-12`; `app/config/crons_duracao.json:12`).
+
+O `vigia_arvore` pode permanecer bastante tempo: espera pelo retrato, pode aguardar até 3.600 s pela trava da suíte e executa suítes/repetições em primeiro plano. Horas são possíveis pelo fluxo; frequência e duração típica: **[nao verificado]** (`bin/vigia_arvore.sh:38-43`; `bin/vigia_arvore.sh:83-106`; `bin/trava_teste.sh:22-38`).
+
+**Isso já recusa restart hoje:** a marca permanece durante esses comandos e o deploy recusa enquanto encontra seu PID vivo. Mantido o escopo, a duração longa não é uma restrição nova do compartilhado; a mudança fecha a janela entre consulta e restart. “Sempre recusado” não é demonstrável sem dados de execução (`bin/cron_run.sh:9-11`; `bin/deploy.sh:108-113`; `bin/deploy.sh:341-342`).
+
+**5. Esperar 600 s, sair 75, corrente e TI**
+
+**Rc 75 é falha para o envelope atual**, se chegar ao seu epílogo: grava `exit:75`, não escreve novo carimbo de fim, tenta avisar `cron_quebrado` e termina 75. Só 0 e 2 são aceitos como conclusão (`bin/cron_run.sh:11-38`). O serviço destina a pauta à TI (`app/core/services/crons_quebrados.py:57-73`).
+
+Há quatro ressalvas:
+
+- Um **`exit 75` antecipado** na aquisição do futuro lock pularia placar e aviso. A implementação precisa encaminhar essa falha ao epílogo; isso ainda está **[nao verificado]** (`bin/cron_run.sh:11-35`).
+- A pauta é uma **tentativa** via `docker exec`, com saída ocultada e flag criada somente após sucesso. Pauta efetivamente criada: **[nao verificado]** (`bin/cron_run.sh:30-35`).
+- A corrente é chamada mesmo se a raiz falhar, por causa do `;`. Sem carimbo, o dependente espera, alarma e sai 2 **antes do envelope**; esse timeout não gera automaticamente pauta daquele elo. O percurso continua nos elos seguintes (`app/config/crons.py:1884-1885`; `bin/encadeado.sh:64-68`; `bin/encadeado.sh:84-104`).
+- Os carimbos são por dia. Um sucesso anterior no mesmo dia não é apagado por rc 75 posterior e pode satisfazer o dependente (`bin/cron_run.sh:22-25`; `bin/encadeado.sh:81-89`).
+
+O contador atual considera a última corrida em **26 h**; não substitui a nova contagem contratual de ocorrências de rc 75 por lock em **24 h** (`app/core/services/crons_quebrados.py:17-47`).
+
+Também falta definir `dur` versus `espera_lock`: conservar o relógio inicial antes da espera faria essa espera entrar no p95, pois o medidor não desconta `espera_lock` nem filtra falhas (`bin/cron_run.sh:7-13`; `bin/crons_duracao.py:69-76`).
+
+**6. Confronto com a lei escrita**
+
+- **“Recusa, não espera”: não há contradição demonstrada.** A regra é dirigida ao deploy `--restart`; o contrato faz o cron esperar e mantém o deploy não bloqueante. O mecanismo proibido é esperar e depois reiniciar por cima (`bin/deploy.sh:103-117`; `bin/contrato_deploy.sh:50-51`).
+- **Seção 2:** permanece compatível se conservar HUP automático, restart manual e os demais portões; essa preservação futura está **[nao verificado]** (`CLAUDE.md:90`).
+- **Seção 7 / lap-67:** o lock não exige mudar a fonte declarativa dos crons; afirmar equivalência com o instalado continua **[nao verificado]** (`CLAUDE.md:236-239`; `app/docs/LAPIDES.md:736-741`).
+- **Lap-68:** a corrente deve continuar dependendo dos arquivos de fim. Rc 75 sem novo carimbo respeita essa condição, com a ressalva dos carimbos anteriores do mesmo dia (`CLAUDE.md:240-242`; `app/docs/LAPIDES.md:745-751`; `bin/encadeado.sh:81-94`).
+- **GATE TEMPORAL:** esperar no processo do cron por exclusão em arquivo não demonstra retorno de `pgrep` nem de esperador de sessão do Code (`CLAUDE.md:204`; implementação proposta **[nao verificado]**).
+- **Rc 75 “não é vermelho”:** essa exceção está no capítulo da suíte; o envelope dos crons aceita somente 0/2. Generalizá-la aos crons contradiz o tratamento atual (`CLAUDE.md:95-104`; `bin/cron_run.sh:27-35`).
+
+Os selos atuais precisam acompanhar a troca de autoridade: hoje exigem referência à marca e simulam cron vivo criando apenas arquivo, sem adquirir o futuro compartilhado (`bin/contrato_deploy.sh:79-82`; `bin/tests/test_deploy_reload_gracioso.sh:125-131`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:192-198`).
+
+Por fim, o contrato não remove expressamente a recusa residual de `--restart` com migration pendente no core. Essa recusa continua escrita e ocorre antes da aquisição final proposta; sua retirada ou alteração não está comprovada (`bin/deploy.sh:219-228`).
 
 ## 09/11 02:22 · sessao edca7285fe1d · - · - · origem=Ronald (tmux)
 
@@ -1052,168 +1285,4 @@ for p in sorted(pathlib.Path('app').rglob('*.py')):
 
 Execução utilizada: `PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'` com esse corpo; nenhum arquivo criado/editado/apagado pelo script. `[nao verificado]` para a afirmação global sobre estado externo ao comando; o corpo usa só leituras, AST e impressão.
 
-## 09/11 00:56 · sessao 866e10ad1838 · - · - · origem=Ronald (tmux)
-
-**(1) Definição e diferenças**
-
-O comando importa `VIVOS` em `app/chamados/management/commands/disparar_perguntas_competencia.py:77` e chama “vivo” o chamado com `status_local__in=VIVOS`, necessariamente ligado a célula cuja `data` está na janela solicitada; não filtra módulo em `:141`. `VIVOS=('aberto','em_analise','registrado')`; `COBRANCA=('aberto','em_analise')` é outro conjunto (`app/chamados/catalogo/motor.py:24-31`).
-
-A autoridade registrada para chamado vivo é `_C1→VIVOS`; pergunta viva é `_C6→pergunta_viva`; redução da coleção é `_C15→fio_vivo` (`app/core/juizes.py:107-125`, `:261-275`). O anexo vivo `app/docs/JUIZES.md:54-57` remete aos conjuntos do motor; o registro explica expressamente que `VIVOS` não responde se existe cobrança/fio (`app/core/juizes.py:100-106`).
-
-O comando usa `any(_viva(p) for p in ch.perguntas_que_resolvem.all())` (`.../disparar_perguntas_competencia.py:148`). `_viva` é `models.pergunta_viva`, reexportação direta de `juizes.pergunta_viva` (`app/chamados/models.py:4060-4063`). Logo, **a decisão por pergunta é a mesma autoridade**, sem filtro próprio de materializada/retratada/encerrada nesse primeiro teste. A redução é expressão equivalente ao corpo de `fio_vivo`, mas está copiada em vez de chamar `_C15` (`app/chamados/juizes.py:1253-1262`).
-
-`pergunta_viva` memoiza e delega a `_pergunta_viva_calc` (`app/chamados/juizes.py:837-863`); degraus atuais:
-
-- validada e dia trancado morrem (`:1153-1158`);
-- via que vence resposta + materializada morre (`:1164-1165`);
-- respondida com texto vive salvo decisão admin/concordância com luz (`:1167-1181`);
-- identidade + materializada morre (`:1189-1191`);
-- materializada cujo próprio marco acendeu morre (`:1196-1198`);
-- célula acusadora vive; célula que absolve pode ser provisória (`:1200-1215`);
-- fallback consulta **dia do turno**, janela viva e `classificar_falta` (`:1216-1226`);
-- sem materialização vive; materializada depende de lastro (`:1227-1238`).
-
-**DECISÃO D1 — universo/status:** `_C1` responde somente status, sem janela, FK de célula ou módulo; o comando restringe célula/janela, mas inclui `registrado` e todos os módulos (`motor.py:24-29`; comando `:141`). Isso é diferente de “cobrança viva”.
-
-**DECISÃO D2 — coleção:** pergunta viva sob outro destino, mesmo dia/fato, não impede o primeiro teste do comando; ele olha `perguntas_que_resolvem` daquele chamado. O vigia legado olha todas as perguntas da célula (`comando:147-148`; `vigia_fio.py:398-417`). [nao verificado]
-
-**DECISÃO D3 — alvo emitível não é todo chamado sem pergunta viva:** o comando exclui parcial na lista, ausência de motivo vencido, desligado, `_ja_perguntou` e qualquer linha de identidade do fato (`comando:154-219`).
-
-**DECISÃO D4 — duas identidades:** `_ja_perguntou` consulta motivo/data/conversa=False **dentro da disputa encontrada** e decide via `fio_vivo`; `linhas_dos_fatos` consulta **coluna colaborador**, motivo/data/**instância_marco**, conversa=False e exclui `VIAS_FORA_DO_FATO`, independentemente de vida (`disputa_emissao.py:1314-1323`; `models.py:2729-2753`). O comando escolhe `DisputaSupervisao.objects.filter(colaborador=colab).first()` antes do primeiro teste (`comando:172-175`). [nao verificado]
-
-**DECISÃO D5 — retratada/duplicata:** `linhas_dos_fatos` exclui ambas via fonte `VIAS_FORA_DO_FATO=('duplicata','motivo_retratado')`; não exclui pergunta apenas por ser validada/materializada/encerrada. Portanto `[BARRADO] FIO DECIDIDO` é existência do fato, não teste de “validada” (`models.py:2391`, `:2752-2753`; comando `:215-228`). [nao verificado]
-
-**DECISÃO D6 — regra de emissão célula versus fio:** `motivos_a_perguntar` consulta `dia_sem_trabalho`, ativo, futuro, veredito acusador e parcial (`fabrica_da_celula.py:89-104`); ramo fio mudo chama diretamente `motivos_pela_ata` e teto, sem chamar essas guardas integralmente (`comando:154-159`). O rótulo “dia ACUSADO pela lei” não equivale a `cel.veredito in VEREDITOS_ACUSAM`: o ramo do fio não faz essa comparação (`comando:158`, `:221`).
-
-**DECISÃO D7 — tempo:** fio usa `ch.celula.data` como dia do turno e teto por instante, incluindo hoje se o marco venceu; ramo célula do vigia exclui hoje e ontem enquanto candidato do vigia de hora (`comando:91-112`, `:150-159`). `vencidos_no_instante` preserva exceção por data: passado sem marcos devolve `None`; hoje/futuro sem marcos devolve conjunto vazio (`fabrica_da_celula.py:15-31`).
-
-**(3) Leitores e unidade**
-
-| Leitor | Universo/unidade/significado |
-|---|---|
-| Comando `[EMITE]`, `ALVOS`, empresas | Lista de **tuplas distintas colaborador/dia/motivo**, não contagem bruta de chamados. Escolhe primeiro motivo ainda não visto por chamado; imprime total `_mudos`, depois `ALVOS` após `--limite`. `disparar_perguntas_competencia.py:158-219`, `:220-245`. |
-| Comando `FABRICA-POR-EVENTO` | **Perguntas/motivos do ramo célula** que o evento deixou de emitir, mais quantidade de células distintas; não é contador de fio mudo. `:102-113`, `:237-243`. |
-| `--alarme` | Acusa célula e fio mudo; ramo fio usa lista já cortada por limite; nada escreve. `:235`, `:253-260`. |
-| Auditor F1 | **Chamados** em todos VIVOS, sem qualquer pergunta viva **e sem qualquer resposta textual**; exclui desligado, dia inapúravel e dia absolvido por `classificar_falta`; dia é primeira `p.data_evento` disponível, só depois célula. Sem janela explícita. `auditar_invariantes_chamados.py:1626-1684`. |
-| Auditor F1t | Piso excluído do F1: pergunta daquele motivo/dia por disputa.colaborador, via não vazia, morta pelo juiz e célula acusadora. Não usa `linhas_dos_fatos`, não exclui retratada/conversa por identidade. `:1706-1720`. |
-| `vigia_fio.censo` | **Células/dias**, universo de chamados VIVOS com célula, somente `FURO_MODULES`; exige célula acusadora, lê todas perguntas da célula, separa hoje/futuro, e retira quatro baldes com dono/ação. Sem janela de competência. `vigia_fio.py:334-379`, `:398-449`. `fio_morto_cobrando` é subconjunto em COBRANCA (`:350-351`, `:451-452`). |
-| `vigia_fio.censo_alcance` | **Dias retidos na folha**, nas competências abertas e empresas visíveis; verifica porta na fila/app pelo C17. Não exige chamado vivo; hoje/futuro e quatro baldes de lei saem do contador. `vigia_fio.py:542-583`, `:635-699`. Código distingue explicitamente este contador do legado (`:493-499`). |
-| `vigiar_fio_morto` | Mede os dois censos no mesmo `hoje`, captura um instante para data/carimbo; grava alcance e legado. Esperado 0; alcance **ainda fora de ALARMA_EM_0**. `vigiar_fio_morto.py:82-96`, `:159-178`, `:210-225`. |
-| `bin/fio_estado.py` | Lê carimbo; manchete **fio_morto_alcance**, antigo só “universo antigo/regressão”. Compara esperado do próprio carimbo e idade do instante `medido_em`; não recalcula universo. `:121-162`, `:175-190`. |
-| `bin/gerar_estado.py` | Incorpora essa composição por `ler/linha`. `:253-261`. |
-| `bin/placar_code.sh` | De `logs/fio_mudo.log`, raspa **somente FABRICA-POR-EVENTO**, exigindo mtime posterior à meia-noite civil do host. Rótulo `perguntas_que_o_julgamento_nao_fez`, fora TOTAL. Não raspa `[EMITE] FIO MUDO`. `:388-390`. |
-| Placar estrutural de crons | Conta **nomes de crons com papel juiz**, não chamados/perguntas/dias; encadeados contam. `config/crons.py:2343-2352`; `bin/placar_code.sh:482-486`. |
-| Matriz contrato 20 | Consome lista `JUIZES_POR_VARREDURA` e `PENDENTES_CHAMADO` como exceções à célula juiz/chamado; não lê número do fio. `contratos_estruturais.py:261-270`. |
-| Corrente crons | Executa comando com `--comp-corrente --apply`, após `apurar_furos_diarios`, log fio_mudo. Comentário reconhece escrita do fio sem evento. `config/crons.py:1516-1517`, `:2039-2043`. |
-| `vigia_loop.escritas_por_cron`/placar | **Linhas LogAuditoria** por ator `sistema:<cron>` na janela móvel de 7×24h; objetos distintos modelo/id e regravados >3. Não conta perguntas vivas e omite escrita sem trilha. `vigia_loop.py:61-99`; `bin/placar_code.sh:201-209`. |
-| `pergunta_no_app.medir` | **Chamados** COBRANCA, CALADOS_POR_ISENCAO, colaborador ativo; usa `_dia` do catálogo/contexto, exclui hoje/futuro; conta causas de ausência no app, inclusive causas de silêncio legítimo/admin. `pergunta_no_app.py:56-97`, `:122-152`. |
-| Command de mesmo nome | Publica contador e causa/dono. `chamados_vivos_sem_pergunta_no_app.py:12-21`. |
-| `pergunta_no_app.do_dia` / copiloto | Chamados VIVOS no dia apurado pelo contexto; lista perguntas app e retenção. `pergunta_no_app.py:155-172`; `ponto/services/dia_do_colab.py:99-109`; `cobrar_dia.py:43-50`. |
-| Tela atendimento | `tem_pergunta_viva` exige **viva E ação possível**, mais estreito que comando; formulário furo sem flag só em aberto/em_analise. `fio.py:279-287`; `_card_atendimento.html:203-205`. |
-| App/ficha | Perguntas do app passam `q_vivas` generoso e depois juiz exato, universo pessoa e qualquer disputa. `pergunta_no_app.py:42-53`; `api/views.py:2567-2568`; `colaboradores/services/ficha.py:166`. |
-| Instrumento reparo | Lê censo legado para antes/depois do passivo. `materializar_passivo_validado.py:201-203`. |
-
-`q_vivas` promete **continência, não igualdade**; quem usa só SQL não mede pergunta viva exatamente (`models.py:3326-3333`). Diferenças F1/comando/vigia acima são decisões concretas de universo, unidade, dia e exclusão; nenhum desses números deve ser intercambiado sem escolher qual pergunta responder.
-
-**(6) Condição de saída e C11**
-
-Literal: **“sai quando o fio mudo for medido e o C11 pousar”** (`app/docs/CORTES.md:305`; `bin/tests/test_papel_prazo_nao_deriva.sh:307`). `LEIS.md:315` só lista o identificador; não transcreve nem define C11.
-
-A exceção implementada contém motivo e saída; selo exige campos e exige cron ainda na lista, mas **não testa se fio foi medido ou se C11 pousou** (`bin/tests/test_papel_prazo_nao_deriva.sh:300-326`).
-
-**C11 foi esclarecido posteriormente no registro de aval:** `app/docs/PROMPTS.md:1875` registra 05/11 16:0x **CONTRATO-20-DECISOES**: “**3 FIO MUDO C11=(i), evento na abertura de batida_ausente + 5 atos de perda, universo 494, padrao=evento**”. Antecedente: `PROMPTS.md:1519` e `RELATO.md:1829` registram medir as 12 células: sem furo fecha por lastro; com furo evento de abertura. Essa evidência documental impede dizer genericamente “não existe definição de C11”.
-
-C11 desse aval não deve ser confundido com `_C11` ausência (`core/juizes.py:117`, `:271`) ou assinatura C11 folga sem porta (`escala/services/cadastro_realidade.py:119-126`). São identificadores de perguntas distintas.
-
-**Estado da cópia:** comando continua emitindo no fio (`disparar...:282-295`), cron continua juiz (`config/crons.py:2039-2043`), exceção continua presente (`test_papel...:302-309`): saída estrutural **não cumprida nesta cópia**. Medida/pouso efetivo em produção e números históricos documentados: **[nao verificado]**, porque dado fornecido não traz sonda/log. O código já mede via comando/F1/vigia, mas com universos distintos; não prova execução ou dimensão real.
-
-**Script AST adicional que usei para identificar consumidores diretos** (inventário principal de escritores ficou com outro agente):
-
-```python
-import ast
-import pathlib
-
-for root in ("app", "bin"):
-    for p in sorted(pathlib.Path(root).rglob("*.py")):
-        if any(x in p.parts for x in ("tests", "migrations", "logs")):
-            continue
-        if p.name.startswith("test_"):
-            continue
-        try:
-            tree = ast.parse(p.read_text())
-        except (SyntaxError, UnicodeError):
-            continue
-        aliases = {}
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom) and node.module in (
-                "chamados.services.vigia_fio",
-                "chamados.services.pergunta_no_app",
-                "config.crons",
-                "fio_estado",
-            ):
-                for item in node.names:
-                    aliases[item.asname or item.name] = (
-                        node.module, item.name
-                    )
-        for node in ast.walk(tree):
-            if (
-                isinstance(node, ast.Call)
-                and isinstance(node.func, ast.Name)
-                and node.func.id in aliases
-            ):
-                print(
-                    f"{p}:{node.lineno}: "
-                    f"{aliases[node.func.id]}"
-                )
-```
-
-
-## 09/11 00:56 · sessao 9f546eba1d3b · - · - · origem=Ronald (tmux)
-
-**Q4 — ramo escritor**
-
-- O comando seleciona `ChamadoColaborador.status_local__in=VIVOS`, com célula na janela; descarta chamado com alguma pergunta viva ligada, parcial só lista, sem motivo vencido da ata, colaborador inativo, pergunta viva na disputa encontrada e fato já existente. O alvo é `(colab, ch.celula.data, motivo)`, deduplicado nessa chave; portanto a seleção ocorre antes das travas da escrita. `app/chamados/management/commands/disparar_perguntas_competencia.py:141-219`.
-- Escreve por `fabrica_da_celula.perguntar(... origem='disparo_competencia', origem_carimbo='emissor fio mudo')`; `--apply` envolve o lote inteiro em `transaction.atomic()`, com push silenciado por padrão. Dry executa a mesma escrita e força rollback com `RuntimeError`; `--alarme` retorna antes dessa escrita. `app/chamados/management/commands/disparar_perguntas_competencia.py:253-260`, `:270-295`, `:306-317`.
-- `perguntar` primeiro tenta derrubar carimbos sem lastro de perguntas não conversacionais do motivo/dia; depois chama `criar_ou_atualizar_disputa(colab,[motivo],{motivo:{'data':dia.isoformat()}})` e, se houver disputa, `gerar_perguntas_disputa`. A primeira porta já gera perguntas tanto no nascimento como no reuso, portanto a chamada posterior repete a geração sob dedup. `app/chamados/services/fabrica_da_celula.py:139-152`; `app/chamados/services/disputa_emissao.py:662-688`.
-- Pode gravar carimbo desfeito, reabertura de disputa fechada, disputa nova/motivos/contexto agregado, chamado-pai, perguntas e costuras/trilhas associadas; cada efeito depende de seus gates. Carimbo desfeito e reabertura: `app/chamados/services/relavra_via.py:219-260`; disputa/contexto/pai: `app/chamados/services/disputa_emissao.py:535-603`; geração/costura: `:443-469`.
-- Data inicial: **dia do turno da célula**, `ch.celula.data`, e não data civil do pedido. A geração lê `contexto[motivo]['data']`, usa `dia_do_fato` do destino e passa `dia_do_turno_da_celula(_dia_p)` à porta. `app/chamados/management/commands/disparar_perguntas_competencia.py:150`; `app/chamados/services/fabrica_da_celula.py:149`; `app/chamados/services/disputa_emissao.py:371-375`, `:230-254`, `:443-451`; `app/ponto/turnos.py:2929-2933`.
-- A porta de nascimento ainda deriva o dia real do episódio, quando houver batida de origem; reuso com dia diferente passa pelo rechaveamento, cujo veto lê competência exportada/desconhecida dos dias antigo e novo. Logo, **não afirmar que nenhuma parte da cadeia consulta exportada**. `app/chamados/models.py:2860-2876`, `:2925-2955`; `app/chamados/services/fio.py:1039-1058`.
-- O caminho comum do fio mudo não consulta `limbo_vai_a_pauta` nem tem guarda própria de tranca/exportada; usa diretamente `perguntar`. Já o caminho da célula consulta limbo entregue e cria Pauta DP em vez da pergunta. `app/chamados/management/commands/disparar_perguntas_competencia.py:270-283`; `app/chamados/services/fabrica_da_celula.py:175-186`, `:190-198`.
-- A tranca entra na leitura de vitalidade de perguntas existentes por C6: `validada_em` mata, depois `dia_da_pergunta_trancado` mata. A seleção sem pergunta existente não faz essa consulta sobre uma pergunta nascente. `app/chamados/juizes.py:1152-1158`; `app/chamados/management/commands/disparar_perguntas_competencia.py:148-219`. Existência desse caso em produção: `[nao verificado]`.
-
-**Travas do ramo:**
-
-1. `desfazer_carimbo_sem_lastro`: atomic por pergunta; `trava_na_ordem(C, disputas=[D], perguntas=[P])`, releitura e juiz antes de descarimbar. `app/chamados/services/relavra_via.py:219-246`.
-2. `_abrir_ou_agregar_disputa`: atomic; trava universo do colaborador — C, todas disputas abertas, pais e chamados vivos — antes de gravar. `app/chamados/services/disputa_emissao.py:521-530`; implementação da ordem: `app/chamados/models.py:2627-2692`.
-3. `PerguntaDisputa._nascer`: atomic sob contrato de saída e trava C antes de dedup/nascimento; conversa também trava C. `app/chamados/models.py:2817-2820`, `:2839-2843`.
-4. Não identifiquei escrita D/Ch/P desse ramo anterior à aquisição de C nessas portas. Isso **não significa** que todo `save()` de pergunta tenha selo `exigir_colaboradores_travados`: `PerguntaDisputa.save` só envolve `super().save` em atomic. `app/chamados/models.py:3403-3413`. O selo explícito aparece em portas específicas, como `descarimbar_em_lote`: `:3247-3255`.
-5. O atomic externo do comando percorre múltiplos colaboradores sem pré-travar o conjunto por PK: a queryset não tem `order_by`, `_mudos` preserva sua iteração e `_rodar` percorre a lista. Isso difere da regra documentada de travar todos os C da transação em ordem antes de D/Ch/P. `app/chamados/management/commands/disparar_perguntas_competencia.py:141-147`, `:218-219`, `:273-295`; `app/chamados/models.py:2652-2666`. É diferença estrutural de ordem, não caminho identificado sem **a** trava do dono.
-
-**Q5 — eventos e encaixes existentes**
-
-| Ponto | O que existe e o que trava |
-|---|---|
-| Pergunta salva após resposta/validação/carimbo/retrato/reapontamento | `_outbox_post_save_pergunta`, síncrono, exceto nascimento/raw; só campos em `CAMPOS_QUE_ACORDAM` ou save completo. `app/chamados/signals.py:237-244`; campos: `app/chamados/models.py:3210-3212`. Save e evento entram juntos no atomic de `PerguntaDisputa.save`; o receiver não adquire C/D/Ch/P. `:3403-3413`, `:3221-3238`. |
-| Destino/dia/célula mudados | O outbox captura **estado atual** da pergunta: FK célula, ou fallback `(disputa.colaborador,data_evento)`; não captura sozinho âncora antiga. `app/chamados/models.py:3215-3238`. `reapontar_resolvedora` salva destino e lavra, tomando C e trava do destino pela costura; não acorda explicitamente a célula antiga. `app/chamados/services/fio.py:873-917`. `rechavear_data_evento` toma C/D/P, salva dia/célula e acorda também a célula velha explicitamente. `:989-1028`. |
-| Pergunta salva: beco de disputa | `_becos_post_save_pergunta` agenda `on_commit`, best-effort; chama `fechar_beco_da_disputa`. `app/chamados/signals.py:214-225`. Só é beco com pai terminal, nenhuma pergunta visível e C7 permitindo fechar. `app/chamados/services/becos.py:25-33`. O ato usa atomic e trava C/D/todos Ch envolvidos/universo aberto antes de resolver e fechar. `:41-57`. Não cobre genericamente chamado vivo sem pergunta viva, pois o pai precisa estar terminal. |
-| Chamado nasce ou muda status | `_cartorio_post_save_chamado` chama `julgar_celula` sincronicamente, exceto raw/status igual/em_julgamento. `app/chamados/signals.py:178-203`. `_gravar_estado` já trava universo C/D/Ch antes de save e cascatas. `app/chamados/models.py:280-296`. A fábrica roda apenas para as datas que este ato julgou, portanto o signal não garante emissão se o julgamento pulou por impressão estável. `app/ponto/services/cartorio.py:981-997`. |
-| Chamado de turno nasce em `abrir` / `criar` | Emitem `EventoCelula` no mesmo atomic se módulo de turno e célula presente. `app/chamados/models.py:971-980`, `:1093-1099`. `abrir` toma C pela porta: `:905`; `criar` deve ser examinado no inventário de escritores, pois o fragmento da emissão não toma C por conta própria. |
-| Chamado reabre | `_gravar_estado` provoca signal do cartório, depois `ressuscitar_perguntas`; não há chamada direta à fábrica na reabertura. `app/chamados/models.py:1429-1442`. Não nasce pergunta nova necessariamente; universo de ressuscitação pode ser vazio. `:1444-1456`. |
-| Consumidor da célula | Rejunta células, retrata perguntas absolvidas, retrata chamados, premissa morta, encerra órfãs e fecha cobrança com lastro. **Não chama fábrica/perguntar.** `app/chamados/reconciliador.py:1363-1383`. O consumidor não toma C/D por conta própria: portas travam cada ato; atomic curto só marca eventos. `:1323-1327`, `:1387-1397`. Exclusão da execução por advisory lock está no comando. `app/chamados/management/commands/consumir_eventos_celula.py:17-23`. Frequência é um minuto, portanto outbox não significa executar no mesmo instante do save. `app/config/crons.py:394`. |
-| Fecho por lastro no consumidor | Só `batida_ausente` em `qs_na_fila`, marcos da célula acesos; atomic une `reconciliar` e nota. `app/ponto/services/lastro.py:364-403`. `reconciliar` chama gates premissa e pergunta viva; releitura dentro do atomic toma C/D/Ch universo. `app/chamados/models.py:650-655`, `:682-688`, `:707-712`. Não é regra genérica “sem pergunta viva → fecha”. |
-| Perguntas absolvidas pela célula | Atomic por pergunta, trava C e exige selo; carimba por C6. Depois pode fechar disputa via C7. `app/chamados/reconciliador.py:592-614`. |
-| Disputa fecha | S88 tenta fechar pai por `reconciliar()` e nota no mesmo atomic; S144 materializa pendentes pela porta. Ambos best-effort. `app/chamados/signals.py:18-49`, `:147-165`. |
-
-A função `emitir_evento_celula` apenas cria a linha do outbox; não julga, fecha nem emite pergunta diretamente. `app/ponto/portas/celula.py:882-891`.
-
-**Perguntas de lei possíveis para consolidação, sem resposta proposta**
-
-1. Quando a última pergunta deixa de viver e o dia continua acusando, o efeito exigido é fechar chamado, reemitir pergunta ou encaminhar decisão ao admin? Dependem: comando `:148-219`, consumidor `reconciliador.py:1363-1383`, gate `models.py:717-725`.
-2. Linha do fato existente, sem pergunta viva, deve continuar “fio decidido” barrado ou pode ganhar nova pergunta/ressuscitação? O código barra toda linha que ainda pertence ao fato; o texto impresso a chama decidida mesmo sem testar `validada_em` nesse gate. `disparar_perguntas_competencia.py:201-228`; `models.py:2728-2737`.
-3. O fio mudo em célula `trabalha=None` e competência entregue segue perguntando ou deve seguir a Pauta DP do caminho da célula? Dependem: comando `:270-283`; fábrica `:181-198`.
-4. O evento de nascimento/reabertura de chamado precisa produzir pergunta independentemente de uma nova lavra da célula, ou vale depender do julgamento efetivo? Dependem: signals `:187-203`; cartório `:981-997`; reabertura `models.py:1429-1442`.
-5. Dia trancado sem pergunta anterior pode receber linha nova que C6 mantém morta por leitura? Dependem: comando `:148-219`; fábrica `:139-151`; C6 `juizes.py:1152-1158`. Ocorrência em produção `[nao verificado]`.
-
-Os pontos 2–5 devem ser filtrados pela leitura integral das leis pelo agente responsável; aqui são divergências entre caminhos, sem determinar se já existe aval suficiente.
-
-_2974 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2976 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
