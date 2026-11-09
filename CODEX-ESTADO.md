@@ -1,7 +1,24 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 15:14** · publicado em **09/11/2026 15:17** (UTC-3)
+> Ultima resposta processada: **09/11/2026 15:31** · publicado em **09/11/2026 15:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 15:31 · sessao 08d8d268322f · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
+
+A construção está escrita. A [entrega completa](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:1) contém:
+
+| Entrega | Endereço |
+|---|---|
+| Tabela arquivo:linha de cada hunk | [relatório:41](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:41) |
+| 47 testes e o que cada um morde | [relatório:173](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:173) | [nao verificado]
+| Comando individual de cada teste | [relatório:225](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:225) | [nao verificado]
+| 40 mutantes, âncoras e comandos | [relatório:283](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:283) |
+
+O juiz do par permanece na ampliação de [estado_aplicacao_pergunta](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:512). A porta conjunta está em [operar_par_intervalo](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:1406); a obrigação pronta para C7 consumir está em [obrigacoes_par_intervalo](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/chamados/services/materializacao.py:112). É a autoridade existente de aplicação ampliada para a unidade PAR; a justificativa está no [relatório:7](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:7).
+
+`models.py` permanece para a sessão. Os trechos exatos para C7, captura de `pelo_juiz` antes da linha 1905 e reconsulta após a trava terminada na linha 1920 estão no [relatório:12](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:12). Até esses hunks, ficam previstos RED: V/T técnico, V/V, `fechar`, ambas as transições por S127 e releitura sob trava. **Execução: [nao verificado].**
+
+Foram conferidas sintaxe, âncoras e catracas estáticas; **Django e mutantes não foram executados**. RED/GREEN, mortes, concorrência e efeitos em produção permanecem **[nao verificado]**; não há certificação nesta entrega. ([registro das verificações](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706/app/docs/BUG_PAR_ENTREGA.r:375))
 
 ## 09/11 15:14 · sessao f5a6761ef894 · CODEX-2-RAIAS-PORTAO-CPU · verificador · origem=Code
 
@@ -842,24 +859,4 @@ Quanto às demais classes estruturais, as batidas continuam pela porta, os carim
 
 M38 satisfaz exatamente a alternativa estrutural solicitada: o rótulo existe, e o executável confirma a limitação. As asserções de estado/trilha desse cenário não constituem contracaso comportamental à guarda antiga (`app/chamados/tests/test_bug_par_intervalo.py:815`, `:842`, `:864`; `app/chamados/models.py:3218`).
 
-## 09/11 14:11 · sessao d1463be4513a · - · - · origem=Ronald (tmux)
-
-**Cruzamento PROCEDENTE, classe W, demonstrável estaticamente; ocorrência em produção [nao verificado].**
-
-O estado `validada_em != None`, `materializada_em == None`, `pendencia_admin != ''`, `recusa_motivo` técnico pode nascer por portas reais:
-
-1. Antes de existir a irmã, saída responde `12:00`; destino não tem marco do motivo, e escala 19–07 com pausa 01–02 deixa todos os marcos a mais de 240 minutos da resposta. `_tipo_pelo_marco` não acha tipo pela tolerância (`app/chamados/services/materializacao.py:374`–`:388`); `_ts_tipo_do_plantio` anexa `PEND_TIPO_NAO_CONFERIDO`, mas continua derivação (`:476`, `:493`).
-2. O ramo grava os dois campos (`app/chamados/services/materializacao.py:937`–`:938`). Com competência **aprovada, sem precisar ser exportada**, `registrar_batida` devolve recusa (`app/ponto/janelas.py:87`, `app/ponto/registro_batida.py:139`).
-3. O ramo retorna `None` (`app/chamados/services/materializacao.py:1022`–`:1027`); `_materializar_avulsa` retorna de dentro do `atomic` sem levantar (`:1482`–`:1483`), preservando a pendência. O `finally` grava o motivo da recusa (`:1514`–`:1515`); competência não é `COLISAO`, logo não ganha carimbo materializado (`:1181`, `:1189`). A validação é devolvida pela porta (`app/chamados/services/validacao.py:470`, `:202`–`:205`).
-4. Nasce a irmã e o admin revalida a primeira com confirmação de implausibilidade. Com par incompleto, V5 pula o carimbo de espera por haver pendência (`app/chamados/services/materializacao.py:1434`); o ramo de par da validação não chama `devolver_validacao_recusada` (`app/chamados/services/validacao.py:473`–`:479`). Ficam aceite, pendência e recusa não-ESPERA, sem plantio.
-5. A irmã sai por `remover_motivo`, que carimba identidade de retratação (`app/chamados/models.py:2071`–`:2079`). A primeira morre no degrau `validada_em` (`app/chamados/juizes.py:1153`); a irmã morre pela identidade (`:1164`). `respostas_sem_veredito` exclui ambas (`app/chamados/models.py:1851`), e o juiz de espera exclui a primeira por sua recusa técnica (`app/chamados/services/materializacao.py:112`). **C7 passa a devolver True** (`app/chamados/models.py:1863`).
-
-O fechamento humano real passa S127 e chega à escrita: `transicionar('fechado')` chama S127 (`app/chamados/models.py:154`), a guarda adicional busca somente perguntas **não validadas** (`:344`), e aplica em `:199`, `:450`, salvando estado em `:296`. A primeira técnica não entra; a irmã retratada não está viva.
-
-Há ainda efeito real de escrita da **disputa**: `Disputa.fechar` consulta C7 sob trava (`app/chamados/models.py:1927`) e salva fechamento em `:1953`. Se o pai estiver terminal, o beco classifica por C7 (`app/chamados/services/becos.py:31`–`:33`) e chama `d.fechar` em `:56`–`:57`; saves de pergunta agendam essa entrada em `app/chamados/signals.py:225`.
-
-**Comparação com ac3/v4:** a mudança V5 de `if q.validada_em` para `if q.validada_em and not q.pendencia_admin` introduz a perda de retenção de C7: antes a primeira ganhava ESPERA, que continuava retendo após retratação da irmã (`app/chamados/services/materializacao.py:116`); agora preserva motivo técnico, que o mesmo juiz rejeita em `:112`. O S127 antigo já permitia o fechamento **humano** nesse cenário, pois ignorava toda espera; portanto esse ato humano não deve ser apresentado como regressão nova da troca S127. A liberação nova comprovável é **C7 permitir fechamento da disputa**, e V5 também deixa passar o mesmo cruzamento no S127 atual (`app/chamados/juizes.py:2137`).
-
-Os testes existentes cobrem separadamente preservação técnica (`app/chamados/tests/test_bug_par_intervalo.py:508`) e irmã retratada com ESPERA (`:459`–`:465`); não combinam as condições. Seu GREEN não demonstra que esse cruzamento esteja fechado.
-
-_3182 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
