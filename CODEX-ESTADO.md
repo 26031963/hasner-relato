@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 03:14** · publicado em **09/11/2026 03:16** (UTC-3)
+> Ultima resposta processada: **09/11/2026 03:27** · publicado em **09/11/2026 03:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 03:27 · sessao f1da0f00d814 · - · - · origem=Ronald (tmux)
+
+- **Juiz novo/derivação:** o diff lê pares prontos de `intervalos_do_turno` e `pausas_abaixo_do_piso`; não reconstrói duração nem pareamento a partir de tipos. Acrescenta filtro de representabilidade no alinhamento: nenhuma ponta de outro par estritamente entre as pontas. A autoridade registrada continua `intervalos_do_turno` para “o vão foi intervalo?”. `app/escala/utils.py:453`, `app/escala/utils.py:466`, `app/core/juizes.py:202`.
+- **Escritor:** o trecho produtivo alterado só devolve lista em memória. O teste novo grava `CelulaDia.ata` diretamente, como preparação da fixture, em `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:226` e `:232`. A porta registrada de produção é `ponto/portas/celula.py`; `lavrar_veredito` atribui a ata e persiste pela operação. `app/core/portas.py:112`, `app/ponto/portas/celula.py:969`, `app/ponto/portas/celula.py:1027`.
+- **Relógio no trecho produtivo alterado:** não lê “agora”; trabalha sobre timestamps recebidos e sobre o turno fechado. `app/escala/utils.py:444`, `:449`, `:453`. Isso não prova ausência de relógio nos caminhos das fixtures: criar batidas dispara sinais de núcleo e cartório. `app/ponto/signals.py:34`, `:131`.
+
+Censo dos sítios de adjacência e classificação:
+
+| Sítio | Classificação |
+|---|---|
+| `_papeis_por_alternancia` | **Mesma pergunta de alinhamento; outro contrato de entrada.** Recebe pontas dos períodos já alternadas `E,S,E,S`, exige ≥4 e envelope ≤26h, depois chama cada vão interno `S,E` de par. É o caminho sem `turno`, não alterado pelo diff. `app/escala/utils.py:477`, `:484`, `:496`, `:596`. |
+| Zona 5 do motor | Alimenta esse caminho apenas com entradas/saídas dos períodos e sem `turno=`. Há adjacência das pontas nessa representação, não teste de vizinhança entre todas as batidas do juiz. Demonstrar o mesmo defeito por esse caminho fica **[nao verificado]**. `app/ponto/motor_calculo_v2.py:3060`, `:3062`. |
+| `marco_ocupado_pela_batida` / `cumpriu_a_volta` | Também chama `_match_marcos` sem turno; par único fica no alinhamento usual porque a alternância exige quatro batidas. Mesma autoridade de alinhamento, contrato distinto. `app/escala/utils.py:424`, `:427`, `:485`. |
+| `_alinhar_por_papel` | A consecutividade exigida é dos **marcos cadastrais** `S,E`, não das batidas reais. Outra condição; não reproduz o defeito. Reconstrói cada par pelo número e pelas letras S/E. `app/escala/utils.py:507`, `:517`, `:527`, `:561`. |
+| `_pares_marcados` | Usa adjacência no ramo residual, mas é **produção da decisão do juiz**, não transcrição de decisão recebida. As pontas declaradas Xi são pareadas primeiro, independentemente de batidas internas; o restante usa vizinhas e marcas/tipos. Alterar isso responde outra pergunta e pode mudar minutos. `app/ponto/turnos.py:798`, `:811`, `:818`, `:875`. |
+| `periodos_de_turnos` | **Transporte sem adjacência:** copia diretamente `intervalos_do_turno(t)`. `app/ponto/adaptador_motor.py:27`, `:44`. |
+| `_intra_real` | **Leitor sem adjacência:** soma duração dos pares recebidos. `app/ponto/motor_calculo_v2.py:1909`. |
+| `_periodos_pelo_marco` / `juiz_batida.periodos_do_dia` | Outro transporte para o motor: pausa vem das chaves declaradas no DNA/ata, não da vizinhança das batidas cruas. Recupera os instantes reais de cada ponta antes de transportar. `app/ponto/juiz_batida.py:280`, `app/ponto/motor_calculo_v2.py:713`. |
+| `segmentos_do_motor` | **Leitor sem adjacência:** ordena intervalos recebidos e corta segmentos por eles. `app/ponto/calculador/alimentacao.py:129`. |
+| Motor, vão entre períodos | Examina períodos consecutivos e consulta existência do par exato na lista do juiz. É outra representação, não cópia das batidas internas para papéis. `app/ponto/motor_calculo_v2.py:2978`, `:2983`, `:2987`. |
+| `primeiro_furo_posicional` | Busca intervalo por duração entre marcas adjacentes para decidir furo posicional; **outra pergunta**, não transcrição do par recebido do juiz. `app/ponto/propositor.py:261`, `:282`, `:296`. |
+
+Não encontrei, nos leitores diretos das duas funções de pares, outra restrição idêntica à removida de `_papeis_do_turno`; os transportes efetivos identificados estão acima. A afirmação universal de que nenhum outro caminho reproduz o defeito permanece **[nao verificado]**.
+
+## 09/11 03:27 · sessao 12e7e733d8cb · - · - · origem=Ronald (tmux)
+
+**Ordem e `k`.** O único chamador produtivo direto encontrado de `_papeis_do_turno` é `_match_marcos`; este calcula extremos por timestamp, chama o alinhador, emite órfãs na ordem recebida e marca consumo por índice. Não precisa que S/E de um par sejam tuplas vizinhas. (`app/escala/utils.py:596`, `:605`, `:613`, `:621`, `:622`).
+
+O alinhador localiza entrada/saída pelo rótulo, reconstrói pares por número e posição S/E, ordena os números dos pares e ordena soltas pelo timestamp. Assim, `sorted(out,key=k)` não altera a associação nesse leitor; pode alterar a ordem textual das órfãs se `locs` não vier cronológico. (`app/escala/utils.py:524`, `:525`, `:526`, `:530`, `:564`, `:621`).
+
+`k` pode repetir: `_idx.setdefault(timestamp,k)` aponta todos os objetos com timestamp exato igual ao primeiro índice; `_pos` aponta o mesmo timestamp ao último objeto. `k=None` impede o retorno de lista, pela guarda anterior ao `sorted`. (`app/escala/utils.py:446`, `:448`, `:450`, `:451`, `:456`, `:474`).
+
+**Escritores/leitores e significados.**
+
+- Papel transitório: `_papeis_do_turno` produz bordas, par e solta; `_papeis_por_alternancia` é outro produtor existente do mesmo formato, usado somente sem turno e com `derivar=True`. O alinhador lê ambos pelo contrato comum. (`app/escala/utils.py:453`, `:468`, `:472`, `:477`, `:495`, `:596`, `:597`, `:598`, `:613`).
+- `'par'` inclui **intervalos e pausas abaixo do piso**; não significa automaticamente pausa descontável. O adaptador transporta ao motor somente `intervalos_do_turno`, cujo piso é `>=900` segundos. (`app/escala/utils.py:453`; `app/ponto/turnos.py:499`, `:545`, `:565`; `app/ponto/adaptador_motor.py:44`).
+- Minuto da ata: builder pergunta `realizado_do_dia` com turnos do juiz e grava zero declarado quando `sem_turno`; `ata_do_dia` copia para inteiro; a persistência ocorre por `lavrar_veredito`, não em `_papeis_do_turno`. (`app/escala/utils.py:2045`, `:2058`; `app/ponto/services/cartorio.py:696`, `:706`, `:1802`; `app/ponto/portas/celula.py:969`, `:995`, `:1028`, `:1035`).
+- Leitores diretos relevantes do minuto lavrado: `grade_da_celula` copia `ata['minutos_realizados']`; validação PDF soma por célula; `ata_sem_turno` recebe o número pela grade; vigia compara com o juiz. (`app/escala/services/leitor_celula.py:406`; `app/folha/validacao_pdf.py:44`, `:48`, `:52`; `app/ponto/services/dia_decidido.py:158`, `:163`, `:179`; `app/ponto/services/bordas_realizado.py:76`, `:87`).
+- Transporte ao motor: `periodos_de_turnos` preserva timestamps de bordas e intervalos; `_periodos_via_autoridade` passa o trio ao caminho pelo marco; esse caminho também pode substituir intervalos pelos declarados pelo juiz da ata. Recupera os segundos do objeto real mediante índice por minuto e `setdefault`. (`app/ponto/adaptador_motor.py:37`, `:43`, `:44`; `app/ponto/motor_calculo_v2.py:530`, `:531`, `:593`, `:596`, `:600`, `:602`, `:609`, `:713`, `:721`).
+- **Dia**: realizado filtra `t.data_turno==data`; mapa do motor lê `t.data_turno`; há fallback declarado para data civil quando o mapa não responde. Órfãs da saída podem ser arquivadas no dia seguinte quando o juiz diz `cross_meianoite`. Portanto dia do turno e dia civil coexistem com funções diferentes. (`app/ponto/turnos.py:719`; `app/ponto/motor_calculo_v2.py:884`, `:894`, `:685`, `:687`; `app/escala/utils.py:1963`, `:1971`, `:1972`, `:1973`).
+- **Precisão**: papel aqui usa timestamp completo; realizado trunca **cada ponta** ao minuto antes de subtrair; motor soma segundos/60. A ata usa HH:MM e seu alimentador rejeita minutos com número de batidas diferente de um, enquanto `_instante_real` do motor usa o primeiro objeto no minuto. São contratos distintos, com perda de identidade no minuto já existente. (`app/escala/utils.py:450`, `:454`, `:456`; `app/ponto/turnos.py:605`, `:740`, `:758`, `:1604`, `:1613`, `:1656`; `app/ponto/motor_calculo_v2.py:600`, `:606`, `:609`, `:1911`).
+- **Pontas**: seleção de pares declarados admite `z>=a`; piso inclui exatamente 900s; transcrição exige índices estritamente interiores; realizado inclui pausa com `z<=fim`; recorte do motor conserva apenas interseção de duração positiva. Não há soma de “+1 minuto” nas pontas. (`app/ponto/turnos.py:813`, `:545`, `:759`; `app/escala/utils.py:466`; `app/ponto/motor_calculo_v2.py:1886`, `:1887`, `:1911`).
+
+**Outro caminho importante para a questão 6.** Zona 5 cria `locs` só com entradas/saídas de períodos e chama `_match_marcos` **sem** `turno`; passa por `_papeis_por_alternancia`, e não pela função alterada. Essa forma descreve períodos alternados, não transcrição de batidas extras do mesmo turno; classificá-la como a mesma falha só porque usa fatias adjacentes confundiria os operandos. (`app/ponto/motor_calculo_v2.py:3060`, `:3062`; `app/escala/utils.py:484`, `:489`, `:491`, `:496`, `:597`, `:598`).
+
+## 09/11 03:24 · sessao e20ede192d9b · PAR-NAO-ADJACENTE · construtor · origem=Code
+
+Cura aplicada, árvore modificada e sem commit. A única função de produção alterada é `_papeis_do_turno`; a comparação AST está registrada em [resultados:94](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:94). [nao verificado]
+
+Há uma contradição no caso 1: **719 − 120 = 599** para pausa 20:00→22:00; **660** corresponde à pausa 21:01→22:00 do anexo. Como a pergunta ficou sem resposta, preservei os dois oráculos em testes separados; o teste do builder usa o anexo. [teste:88](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:88), [teste:203](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:203). [nao verificado]
+
+O diff, por hunk:
+
+| Arquivo:linha | Alteração |
+|---|---|
+| [utils.py:437](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:437) | Docstring registra a restrição para pares não adjacentes. |
+| [utils.py:453](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:453) | Materializa os pares dos dois leitores e reúne **todas** as pontas, inclusive abaixo do piso. |
+| [utils.py:466](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:466) | Troca a adjacência pela guarda abaixo; continua visitando o miolo e retorna as tuplas por `k`. |
+| [testes:29](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:29) | Acrescenta imports para fixtures sem banco. | [nao verificado]
+| [testes:49](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:49) | Acrescenta seis testes com pareador e extratores reais, sem mock do juiz. | [nao verificado]
+| [testes:203](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:203) | Acrescenta fixture do builder e asserção de 660 minutos. | [nao verificado]
+| [executor:1](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_sem_banco.py:1) | Novo executor limitado por AST e mutantes em memória. |
+| [resultados:1](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:1) | Comandos, resultados e hashes dos fontes verificados. |
+
+A guarda efetiva ficou assim em [utils.py:466](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:466):
+
+```diff
+- if _iz is not None and 0 < _iz < len(_bats) - 1 and _iz == _i + 1:
++ if (_iz is not None and 0 < _i < _iz < len(_bats) - 1
++         and not any(_bats[_j].timestamp in _pontas_par for _j in range(_i + 1, _iz))):
+```
+
+O caso 3 **é montável pelo pareador real**: o extrator entrega 12→13 e 12:10→12:30. HEAD e cura conservam exatamente:
+
+```text
+ent, sol, ('par', 0, 'S'), ('par', 0, 'E'), sol, sai
+```
+
+A caracterização passa nos dois; retirar a guarda faz esse teste falhar. Também há proteção para o par interno abaixo do piso. [teste:115](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:115), [resultados:14](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:14), [resultados:47](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:47). [nao verificado]
+
+Quanto aos leitores e à semântica:
+
+- O único chamador direto de produção das duas funções é `_match_marcos`. Ele usa os índices para células e consumo, sem exigir pontas adjacentes. [utils.py:596](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:596), [utils.py:613](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:613).
+- O alinhador agrupa por número do par e ordena as soltas pelo instante. **Não depende da ordem das tuplas**; a reversão é testada. Contudo, a lista de órfãs segue essa ordem, por isso preservei `out` ordenado por `k`. [utils.py:530](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:530), [utils.py:564](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:564), [utils.py:621](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:621), [teste:139](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:139). [nao verificado]
+- `par` continua sendo o par numerado S/E; a consecutividade exigida pelo alinhador pertence aos **marcos cadastrais**. `sol` continua sendo tratada depois, sem deslocar ocupantes. A exceção histórica do aninhado permanece caracterizada. [utils.py:507](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:507), [utils.py:564](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:564).
+- Pela fonte comum, os demais caminhos são builder, single, diagnóstico, leitor de marco, Zona 5 e detector. Os caminhos sem `turno=` conservam sua seleção anterior. [utils.py:1701](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:1701), [utils.py:776](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:776), [utils.py:1650](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:1650), [utils.py:427](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/utils.py:427), [motor:3062](/home/ronald/wt-codex-par-nao-adjacente-031500/app/ponto/motor_calculo_v2.py:3062), [detector:212](/home/ronald/wt-codex-par-nao-adjacente-031500/app/chamados/detector_anomalias.py:212).
+- O censo estrutural referencia `_alinhar_por_papel`; preservei seu corpo e suas posições, assim como `_papeis_por_alternancia`. [censo:247](/home/ronald/wt-codex-par-nao-adjacente-031500/app/core/tests/test_medida_turno_do_par.py:247), [resultados:109](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:109).
+
+A prova local limitada produziu **3 falhas no HEAD e 6 testes passando com a cura**. Os cinco mutantes falharam por asserção, respectivamente com 3, 2, 3, 3 e 1 falhas. [resultados:7](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:7), [resultados:18](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:18), [resultados:29](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:29). [nao verificado]
+
+Comandos executados, a partir de `app/`, registrados nesse arquivo:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py --head
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py --mutante adjacencia
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py --mutante aceita_aninhado
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py --mutante pula_soltas
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py --mutante sem_ordem
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/par_nao_adjacente_sem_banco.py --mutante ignora_pares_curtos
+```
+
+`py_compile` passou nos três fontes, interceptando somente a gravação para não criar bytecode; comando completo em [resultados:85](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:85). [nao verificado]
+
+**Builder e testes Django existentes: [nao verificado].** Não executei a suíte, conforme a restrição de banco; comando pendente em [resultados:4](/home/ronald/wt-codex-par-nao-adjacente-031500/app/escala/tests/par_nao_adjacente_resultados.txt:4): [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_juiz_do_par_ata_casa_pelo_turno
+```
 
 ## 09/11 03:14 · sessao 8538307186c7 · SELOS-CANON-I1 · verificador · origem=Code
 
@@ -1034,110 +1144,4 @@ Migrations apenas declaram campos/choices (`app/chamados/migrations/0013_disputa
 
    Executei os **23 testes sem banco: OK**, usando `python3 -B`; relatório persistido dessa execução: **[nao verificado]**. Postgres e suíte completa da volta 2: **[nao verificado]**. (`app/chamados/tests/test_e1_fila_v2_2_trava.py:1`; `app/chamados/tests/test_e1_fila_v2_2_recusa.py:1`)
 
-## 09/11 02:53 · sessao 5149a4a62a93 · - · - · origem=Ronald (tmux)
-
-Censo de leitores por AST/leitura, sem alteração de arquivos:
-
-- **Juiz C7 existente:** `app/chamados/models.py:1856` → `pode_fechar()` exige ausência de `respostas_sem_veredito()` e ausência de `fio_vivo`; `app/chamados/models.py:1834` define a primeira lista; `app/chamados/juizes.py:1253` define `fio_vivo` como `any(pergunta_viva(p))`. A porta reaplica a guarda de resposta e o C6 em `app/chamados/models.py:1894` e `app/chamados/models.py:1904`.
-- **Registro vivo:** autoridades C6/C7 declaradas em `app/core/juizes.py:266` e `app/core/juizes.py:267`.
-- **`p.viva` já não é cópia:** retorna diretamente `pergunta_viva(self)` em `app/chamados/models.py:3375`; `q_vivas` declara ser pré-filtro amplo, não valor exato, em `app/chamados/models.py:3336`.
-
-**Leitores que efetivamente liberam fechamento e já consultam C7:**
-
-| Local | Decisão |
-|---|---|
-| `app/chamados/services/disputa_emissao.py:1210` | Autoencerramento após emissão usa `pode_fechar`; ausência de ata ainda impede autoencerramento em `:1211`. |
-| `app/chamados/services/disputa_emissao.py:1887` | S128 usa `pode_fechar`; pergunta em materialização impede reentrada em `:1885`. |
-| `app/chamados/services/materializacao.py:585` | Ausência declarada: `pode_fechar`. |
-| `app/chamados/services/materializacao.py:1316` | Quitação granular: `pode_fechar`. O contador `pendentes` de `:1314` apenas compõe retorno, não decide fechamento. |
-| `app/chamados/reconciliador.py:411` | Reconciliação por pergunta: `pode_fechar`. |
-| `app/chamados/reconciliador.py:611` | Retratação por célula: `pode_fechar`. |
-| `app/chamados/reconciliador.py:1163` | Respostas sem veredito são relatadas; autorização final por `pode_fechar` em `:1170`. |
-| `app/chamados/services/becos.py:33` | Classificação `FECHAVEL` vem de C7; `:56` reaplica antes da porta. O recorte `vis` de `:29` identifica beco, não libera fechamento. |
-| `app/chamados/services/competencia_trancada.py:153` | Medição usa `pode_fechar`; aplicação reaplica em `:202` e chama porta com motivo em `:204`, sem carimbar perguntas. |
-| `app/ponto/services/entrada_sincronizada.py:58` | Disputa existente usa `pode_fechar`. |
-| `app/api/foto_recebida.py:79` | Valida antes e chama diretamente `.fechar` em `:80`; o juiz fica na porta. O recorte por motivos de `:70` escolhe aparar ou tentar fechar, não permite bypass. |
-
-**Resíduos de decisão/apresentação a distinguir:**
-
-- `app/chamados/services/acoes_disputa.py:130` e `app/chamados/services/fio.py:660`: recusam a ação de **regularização/materialização** se alguma pergunta viva está sem resposta. São guardas anteriores à materialização, não autorização de fechamento; fechamento real volta a C7 em `app/chamados/services/materializacao.py:1316`.
-- `app/chamados/services/explicador.py:137`: rótulo `pode_fechar` usa apenas `not fio_vivo(ps)`, sem a guarda `respostas_sem_veredito` de C7. Seu consumidor de produção é apresentação: `app/chamados/services/fio.py:312`; `app/chamados/services/desenlace.py:63` transforma o booleano em texto “Fechar/regularizar”.
-- `app/chamados/relatorios_disputa.py:18`: declara `PRONTA_FECHAR` quando não há vivas, também sem consultar a guarda adicional C7 (`:20`); é relatório, não escritor (`coletar` em `:26`).
-- `app/chamados/services/explicador.py:93`: lastro continua usado para explicar estado individual; a decisão agregada já usa C6 em `:137`.
-- `app/chamados/services/fio.py:283`: `.viva` + lastro/cache só escolhe presença de ação na tela.
-- `app/chamados/services/raiox.py:72` e `:133`: `q_vivas` + veredito persistido constroem crédito/badge; não fecham disputa. Lastro direto é fallback de botão em `:185`.
-- `app/chamados/services/janela_colab.py:63`: `q_vivas` amplia visibilidade de chamados fora da janela; não fecha disputa.
-- `app/chamados/services/cobranca.py:229`: `q_vivas` alimenta contagem de pessoas caladas/SLA; não fecha disputa.
-- `app/chamados/services/aviso_pendencia.py:11` e `:13`: pré-filtro SQL seguido de C6, só aviso.
-- `app/chamados/services/pergunta_no_app.py:47` e `:53`: pré-filtro SQL seguido de C6, lista do app.
-- `app/chamados/services/vigia_fio.py:748` e `:755`: pré-filtro SQL seguido de C6, conta vivas em disputa fechada.
-- `app/chamados/management/commands/arquivar_competencia_encerrada.py:158`: `any(p.viva)` impede arquivamento de **chamado** com conversa viva, sem fechamento da disputa; expiração por silêncio foi removida, com lápide em `:61`.
-- `app/ponto/services/veredito_celula.py:180`: `q_vivas` seleciona perguntas para a decisão humana do dia; carimbo pela porta da pergunta em `:189`, reconciliação de chamados em `:202`; não escreve fechamento da disputa diretamente.
-- `app/chamados/services/disputa_emissao.py:1781`: lastro protege pergunta respondida contra o carimbo S128; autorização de fechamento está separada, em C7 (`:1887`).
-
-**Idade ainda subsiste indiretamente no juiz C6 — lacuna relevante:**
-
-1. `app/chamados/juizes.py:569` / `:575` / `:601`: `_dentro_da_janela_viva` depende de `date.today()` e competências corrente/anterior.
-2. `app/chamados/juizes.py:660`: pergunta com via sem testemunha e carimbo chega ao retorno **True por estar fora da janela**, em `:674`–`:675`, dispensando a rechecagem do fato que existe em `:679`.
-3. `app/chamados/juizes.py:764`: fallback de slot ausente só contradiz destino encerrado com o fato quando dentro da janela; fora dela aceita `_dest_ok` em `:774`.
-4. `app/chamados/juizes.py:1217`: C6 só reconsulta falta dentro da janela; depois consulta esse lastro em `:1234`. Assim, há caminho de vitalidade/fechamento dependente do relógio mesmo com todos os chamadores passando por C7. Quantos registros de produção entram nele: **[não verificado]**.
-5. O caso de silêncio em `app/chamados/tests/test_c7_red_minimos.py:289` usa pergunta muda criada pelo helper sem carimbo (`:115`); não cobre esses caminhos carimbados.
-
-**Resultado AST específico:** reapliquei em memória os auxiliares de `app/chamados/tests/test_c7_red_minimos.py:452`–`:500` aos arquivos Python de `app`, excluindo testes/migrações/dependências: zero achados para `q_vivas`/lastro/`.viva` autorizando fechamento e zero por `disputa_so_de_falta`/`MOTIVOS_SO_DE_FALTA`. A abrangência é a do detector: `if`/`while` cujo corpo fecha (`:496`), inclusive aliases e derivações locais (`:485`–`:494`); não demonstra ausência de regras indiretas como a janela acima.
-
-## 09/11 02:53 · sessao c85e4c4944fc · - · - · origem=Ronald (tmux)
-
-Item 5 está implementado nos sítios nomeados pelo plano: E1 cobre seis sítios e E2 cobre os cinco mecânicos; as listas dos testes confirmam esse recorte. `app/chamados/tests/test_porta_chamado_e1.py:132`; `app/chamados/tests/test_porta_chamado_e2.py:80`.
-
-| Sítio | Escrita atual | Porta |
-|---|---|---|
-| `app/chamados/services/cobranca.py:178` | `prazo_sla` do lote | `ChamadoColaborador.definir_prazo_sla`, persistência em `app/chamados/models.py:591` |
-| `app/chamados/services/disputa_emissao.py:1642` | `prazo_sla` da recobrança | mesma porta, `app/chamados/models.py:573` |
-| `app/ponto/management/commands/escalonar_chamados_supervisao.py:103` | `escalonado_para_dp` e instante | `marcar_escalonado_dp`, persistência em `app/chamados/models.py:610` |
-| `app/chamados/services/abertura.py:115` | campo real `ticket_id_glpi` | `apontar_ticket_glpi`, persistência em `app/chamados/services/vinculos.py:117` |
-| `app/chamados/services/limbo_folgas.py:69` | `descricao` | `reescrever_texto`, persistência em `app/chamados/services/texto.py:36` |
-| `app/api/views.py:3160` | `titulo` e `assunto` | mesma porta, `app/chamados/services/texto.py:21` |
-
-São **seis sítios**, contendo cinco nomes de campo do aval; `prazo_sla` aparece em dois sítios e o sítio do título também escreve `assunto`. `app/chamados/tests/test_porta_chamado_e1.py:1`; `app/chamados/tests/test_porta_chamado_e1.py:132`; `app/api/views.py:3160`.
-
-| Cinco mecânicos | Escrita atual |
-|---|---|
-| `app/ponto/management/commands/reconciliar_grade.py:454` | `retirar_contexto(ch, 'orfa_regeneracao')` |
-| `app/ponto/management/commands/reconciliar_grade.py:473` | `renovar_contexto` seguido de `retirar_contexto` em atomic, na linha 474 |
-| `app/ponto/management/commands/gerar_celulas.py:255` | `renovar_contexto` |
-| `app/chamados/management/commands/nomear_marco_por_lampada.py:109` | `renovar_contexto`; evento somente quando a porta escreveu, linha 111 |
-| `app/ponto/views.py:288` | `renovar_contexto`, fundindo as chaves informadas |
-
-As persistências do contexto ficam em `app/chamados/services/contexto.py:104` e `app/chamados/services/contexto.py:127`; o nascimento permanece tratado separadamente pela porta de abertura. `app/chamados/services/contexto.py:7`.
-
-O `delete` vizinho também migrou: `app/ponto/management/commands/zerar_dados_operacionais.py:84` chama `ChamadoColaborador.apagar_em_ensaio`; a porta exige banco de ensaio antes de apagar. `app/chamados/models.py:563`; `app/chamados/models.py:569`.
-
-A matriz já declara:
-
-- `teste='chamados.tests.test_chokepoint_chamado_gate.ChokepointChamadoGate'`. `app/core/contratos_estruturais.py:497`.
-- `idempotencia='chamados.tests.test_porta_chamado_e3.IdempotenciaDaFamiliaChamado'`. `app/core/contratos_estruturais.py:500`.
-- `verde=True`. `app/core/contratos_estruturais.py:501`.
-
-A frase “QUATRO vizinhos fora” em `app/core/contratos_estruturais.py:1015` é relato histórico da C1 e está desatualizada perante as chamadas efetivas acima; o próprio comentário posterior do gate registra E1/E2 e teto zero. `app/chamados/tests/test_chokepoint_chamado_gate.py:152`; `app/chamados/tests/test_chokepoint_chamado_gate.py:161`; `app/chamados/tests/test_chokepoint_chamado_gate.py:313`.
-
-Executei somente o varredor AST puro, com bytecode desabilitado: retornou **16 escritas atribuíveis de ChamadoColaborador, todas em módulos declarados como porta; zero fora**. Esse resultado tem o alcance do varredor, que exclui testes/migrations e mantém balde de não atribuíveis; não prova ausência de escritores que ele não reconheça. `app/core/censo_escritas.py:43`; `app/core/censo_escritas.py:54`; `app/core/censo_escritas.py:469`; `app/core/portas.py:196`.
-
-A leitura AST complementar das atribuições e `save/update` dos campos nomeados não encontrou escrita crua adicional de `ChamadoColaborador` fora dessas portas; os demais `descricao` encontrados pertencem a outras entidades. [não verificado por teste de execução] [nao verificado]
-
-Os testes E1 possuem casos de idempotência para SLA, DP, GLPI e texto, e E2 possui caso de retirada ausente sem query; não executei testes nem consultei produção. `app/chamados/tests/test_porta_chamado_e1.py:57`; `app/chamados/tests/test_porta_chamado_e1.py:81`; `app/chamados/tests/test_porta_chamado_e1.py:94`; `app/chamados/tests/test_porta_chamado_e1.py:117`; `app/chamados/tests/test_porta_chamado_e2.py:45`.
-
-## 09/11 02:52 · sessao 9e4f32c36ea4 · - · - · origem=Ronald (tmux)
-
-- **A2 recebeu mordida por porta real:** `_agrupador_com_C_estrangeiro` chama o agrupador sem wrapper da helper nem cauda injetada, exige Disputa real, C estrangeiro antes da primeira D e ordem sem violações. O MORDE injeta exatamente a lambda local antes do `with` e exige falha por ausência do C estrangeiro. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:190`, `:199`, `:202`, `:204`, `:206`, `:211`) **Execução PostgreSQL: [nao verificado]**; não há Django/freezegun instalado neste ambiente **[nao verificado]**.
-
-- **Os quatro mutantes da recusa têm oráculo que os rejeita:** identidade do retorno e mensagem nas telas, evento único depois do atomic e nenhuma D/P nova. Há MORDE para catch, evento, `None` e leitores das duas telas. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:126`, `:140`, `:164`, `:173`, `:179`, `:188`) Rodei os 23 testes sem banco de `trava` e `recusa`, com `python3 -B`: **23/23 OK**; resultado não persistido **[nao verificado]**.
-
-- **S1: fixture corrigida sem afrouxar assert.** P materializada passa para `alvo`, preservando `ch2` sem P; ressuscitação usa `alvo`; permanecem assert de chegada à cauda e de D reaberta. Isso remove a causa identificada de vacuidade, mas passagem no Postgres da volta 2 segue **[nao verificado]**. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:118`, `:120`, `:121`, `:127`, `:129`, `:79`; origem de `ch2` sem P: `app/chamados/tests/test_e1_fila.py:260`)
-
-- **S2: B023 curado na origem**, capturando variáveis pelos defaults das closures; configuração continua selecionando B e não ignora B023. Ruff completo: **[nao verificado]**. (`app/chamados/tests/test_e1_fila_v2_2_trava.py:254`, `:270`, `:367`; `app/ruff.toml:5`, `:6`)
-
-- **S3: 1196 corresponde ao sítio real congelado**, `data_entrada = _tz.localtime(batida_origem.timestamp).date()`. O censo marca `.date()` de operando rastreado como B1; o selo compara todas as linhas registradas por igualdade. (`app/core/tests/test_medida_turno_do_par.py:268`, `:533`; `app/chamados/services/disputa_emissao.py:1196`; `app/core/medida_turno_do_par.py:217`, `:225`) Rodei esse teste isolado em memória, substituindo somente `SimpleTestCase` por `unittest.TestCase`: **OK**; resultado não persistido **[nao verificado]**.
-
-- **O teste de savepoint não demonstra durabilidade diante do rollback externo.** Injeta recusa na helper antes das escritas do corpo; confirma marcador anterior ainda presente dentro de atomic externo e conjuntos D/P iguais. Não força rollback externo nem consulta o evento depois dele. (`app/chamados/tests/test_e1_fila_v2_2_integracao.py:238`, `:241`, `:262`, `:265`, `:266`; primeira escrita do corpo: `app/chamados/services/disputa_emissao.py:1081`) O nível zero exigido pelo teste sem banco refere-se apenas à transação simulada. (`app/chamados/tests/test_e1_fila_v2_2_recusa.py:68`, `:146`)
-
-_3001 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3004 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
