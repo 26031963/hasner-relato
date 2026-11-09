@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:50** · publicado em **09/11/2026 08:53** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:55** · publicado em **09/11/2026 08:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:55 · sessao fb013bdd83d7 · FIO-E0-V4-E3 · construtor · origem=Code
+
+| Hunk | ESCRITA / LEITURA |
+|---|---|
+| `chamados/juizes.py:1420,1448,1451` | `alimentar_portas` recebe `agora`; lê `qs_na_fila` (`chamados/services/painel.py:158`) e `particionar_verbos`. |
+| `chamados/services/verbos.py:30,35` | Partição aceita relógio explícito; continua escrevendo `mapa/contagens` (`:36`). |
+| `chamados/services/tarefa_do_dia.py:27,34,373,403,418` | Acrescenta `rota/fila/verbos/fio` (`:433`), selecionando portas das ações exigíveis. Lê `alimentar_portas` (`:409`). |
+| `chamados/management/commands/diff_e3_sombra.py:30,41,46,60,81,101` | Lê C17 pelo chamador existente (`:117`) e tarefa (`:118`); escreve somente agregados em stdout (`:99`). Guarda SQL em `:92`. |
+| `chamados/tests/e3_fixtures.py:13,16,40,65` | Fixtures ORM, `colNNN`, relógio congelado; lidas pelas três baterias novas. |
+| `chamados/tests/test_e3_app_orm.py:12,20,28,47` | M1–M5 pelas views completas dos dois kernels, endpoint e dashboard. |
+| `chamados/tests/test_e3_portas_tarefa.py:1,32,40,49,57` | Quatro respostas esperadas escritas antes da implementação; casos adicionais em `:67,75,84,100`. |
+| `chamados/tests/test_badge_disputa_pendente.py:6` | Substitui casos antigos pelo selo `test_MORDE_pendentes_do_colaborador_nao_pode_voltar`. |
+| `chamados/tests/test_esmeril2_left_join.py:10,19,27` | Migra para `consulta_do_app`: sem filhos conta zero; duas perguntas contam duas. |
+| `chamados/tests/test_fio_le_o_juiz.py:40,263,267,272` | Migra preservando a prova de vitalidade C6. |
+| `core/tests/test_dashboard_badge.py:10,17,40,45` | Migra para a mesma consulta lida pelo dashboard (`core/views.py:253`). |
+| `chamados/tests/test_e3_pendentes_app.py:81,98,113` | Remove matriz com ORM dublado; preserva catraca M7 e contrato puro C17. |
+| `chamados/tests/test_e3_diff_sombra.py:39,54,68,96,115` | Selos contra escrita SQL/arquivo e contra perda das projeções/casos. |
+| `chamados/tests/e3_mutantes.py:19,69,83` | Define mutantes em memória e imprime cada comando individual (`:75`). |
+
+Leitores externos de `alimentar_portas`: `folha/fora_da_folha.py:62`, `chamados/services/vigia_fio.py:604`, `escala/services/cadastro_realidade.py:484`, C17 em `chamados/juizes.py:1536`.
+
+Leitores externos da partição: `chamados/services/painel.py:230`, `fila.py:55`, `na_fila.py:19`, `verbos.py:171`; `chamados/views_arquivar.py:124`, `views_cobrar.py:77`, `management/commands/arquivar_prescritos.py:50`; `colaboradores/services/ficha.py:155`, `core/context_processors.py:90`, `api/views_mensageria.py:395,453,1149`.
+
+Os campos novos são lidos pelo instrumento (`chamados/management/commands/diff_e3_sombra.py:41,46`). Os três leitores atuais continuam chamando C17: `folha/fora_da_folha.py:67`, `chamados/services/vigia_fio.py:635`, `escala/services/cadastro_realidade.py:488`.
+
+**DECISAO-ABERTA:** remoção do método e baixa no registro ficam com a sessão; DIFF com L-099 antes da ligação. O selo L-111 exige ausência do método (`chamados/tests/test_badge_disputa_pendente.py:6`); resultado RED ainda **[nao verificado]**.
+
+Comandos preparados para a sessão; não executados:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_portas_tarefa chamados.tests.test_badge_disputa_pendente --settings=config.settings.ci
+
+# Imprime o comando individual de cada mutante:
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_mutantes
+
+# DIFF — executar somente após a sonda:
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py diff_e3_sombra --colab ID --inicio AAAA-MM-DD --fim AAAA-MM-DD --agora INSTANTE_COM_FUSO
+```
+
+`py_compile` executado sem gravar bytecode:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -c 'import py_compile, sys; from unittest.mock import patch; patch("importlib._bootstrap_external._write_atomic").start(); [py_compile.compile(p,cfile=p+".verificacao",doraise=True) for p in sys.argv[1:]]' $(GIT_OPTIONAL_LOCKS=0 git ls-files -m -o --exclude-standard -- '*.py')
+```
+
+Log: **14 arquivos compilados; `git diff --check` rc 0**. Suíte, RED, mutantes e DIFF não executados; comportamento **[nao verificado]**. [nao verificado]
 
 ## 09/11 08:50 · sessao 6499c93501d2 · SELOS-CANON-I1 · verificador · origem=Code
 
@@ -669,35 +716,4 @@ Caminho completo:
 
 O único escritor funcional localizado do marcador é o export da biblioteca; o único leitor decisório é seu teste de não vazio; deploy apenas o imprime. Não existe limpeza no `solta_trava_deploy()`, que somente destrava/fecha o fd. (`bin/trava_deploy_exclusao.sh:58`, `bin/trava_deploy_exclusao.sh:61`, `bin/trava_deploy_exclusao.sh:65`, `bin/deploy.sh:331`, `bin/deploy.sh:332`)
 
-## 09/11 08:01 · sessao 76b19fbb493b · - · - · origem=Ronald (tmux)
-
-P2 está curado no caminho normal de timeout com biblioteca carregada: aquisição compartilhada falha, fd4 fecha, comando não roda, RC75 entra no placar e o epílogo readquire compartilhada sem teto antes do `docker exec cron_quebrado`; FLAG nasce somente com retorno zero. (`bin/trava_deploy_exclusao.sh:50`, `bin/trava_deploy_exclusao.sh:53`, `bin/trava_deploy_exclusao.sh:64`, `bin/cron_run.sh:17`, `bin/cron_run.sh:28`, `bin/cron_run.sh:31`, `bin/cron_run.sh:54`)
-
-**P2 não está fechado para biblioteca ausente/ilegível:** esse ramo também é oficialmente SEM VEZ/75; porém a condição `! declare -F trava_alarme_compartilhada` libera o `docker exec` sem readquirir qualquer compartilhada. Ocorrência em produção: [nao verificado]. (`bin/cron_run.sh:10`, `bin/cron_run.sh:16`, `bin/cron_run.sh:17`, `bin/cron_run.sh:28`, `bin/cron_run.sh:54`)
-
-**Pode esperar para sempre:** a readquisição é `flock -s` sem `-w`; o deploy pode conservar exclusiva dentro do migrate ou de uma prova sem timeout. O cron fica vivo no epílogo, sem FIM e sem MARCA no ramo SEM VEZ. Isso é retenção ilimitada demonstrável, não prova de ciclo de deadlock. (`bin/trava_deploy_exclusao.sh:50`, `bin/trava_deploy_exclusao.sh:64`, `bin/deploy.sh:351`, `bin/deploy.sh:433`, `bin/deploy.sh:456`, `bin/cron_run.sh:21`, `bin/cron_run.sh:40`, `bin/cron_run.sh:54`, `bin/cron_run.sh:59`)
-
-No trecho com exclusiva, não encontrei deploy esperando um cron/envelope: o segundo `recusa_restart_com_cron` consulta marcas e falha imediatamente; troca de workers e provas esperam workers/HTTP, não carimbos da corrente. Não há ciclo concreto deploy exclusiva → espera cron → espera compartilhada nesses caminhos lidos. Bloqueios externos de banco/runtime: [nao verificado]. (`bin/deploy.sh:113`, `bin/deploy.sh:115`, `bin/deploy.sh:377`, `bin/deploy.sh:400`, `bin/deploy.sh:417`, `bin/deploy.sh:433`)
-
-O escritor do alarme segue `cron_quebrado.handle → avisar_quebra → pautas.services.escrever`: consulta User/Empresa/Pauta, cria Pauta, escreve LogAuditoria e atualiza ContadorPauta. Recuperação atualiza Pauta, trilha e contador. Não encontrei chamada a deploy/cron_run nesse percurso nem receptor de sinais para Pauta/ContadorPauta/LogAuditoria; os modelos lidos não sobrescrevem `save`. Registro dinâmico externo: [nao verificado]. (`app/core/management/commands/cron_quebrado.py:22`, `app/core/management/commands/cron_quebrado.py:35`, `app/core/management/commands/cron_quebrado.py:37`, `app/core/services/crons_quebrados.py:63`, `app/core/services/crons_quebrados.py:66`, `app/core/services/crons_quebrados.py:71`, `app/core/services/crons_quebrados.py:80`, `app/pautas/services.py:180`, `app/pautas/services.py:186`, `app/pautas/services.py:188`, `app/pautas/services.py:272`, `app/pautas/services.py:344`, `app/pautas/services.py:369`, `app/core/observ.py:133`, `app/pautas/models.py:67`, `app/pautas/models.py:143`)
-
-P3 restaura `ini` após aquisição no caminho que executa CMD; conserva assinatura legível pelos leitores existentes. Literalmente, `ini` antecede mkdir/MARCA e `dur` inclui essa preparação. No SEM VEZ não existe início de comando: `ini` representa o instante após aquisição recusada; `dur` mede o curto ramo de recusa. Logo “ini = início do COMANDO” ainda não descreve todas as linhas. (`bin/cron_run.sh:17`, `bin/cron_run.sh:19`, `bin/cron_run.sh:20`, `bin/cron_run.sh:23`, `bin/cron_run.sh:25`, `bin/cron_run.sh:26`, `bin/cron_run.sh:31`)
-
-| Leitor real | Efeito |
-|---|---|
-| `crons_quebrados` | Usa `ini` para janela de 26h e corrida mais recente; 75 continua erro. Mudança de ordenação possível quando há linhas concorrentes e semânticas históricas distintas. (`app/core/services/crons_quebrados.py:36`, `app/core/services/crons_quebrados.py:39`, `app/core/services/crons_quebrados.py:42`, `app/core/services/crons_quebrados.py:46`) |
-| `pipeline_placar` | Usa data de `ini`; cada linha soma `rodou`, inclusive SEM VEZ; 75 soma erros; `dur` entra no máximo. Espera cruzando meia-noite desloca a tentativa ao dia do fim da aquisição. (`app/core/management/commands/pipeline_placar.py:70`, `app/core/management/commands/pipeline_placar.py:74`, `app/core/management/commands/pipeline_placar.py:78`, `app/core/management/commands/pipeline_placar.py:80`) |
-| `crons_duracao` | Usa data e filtro de horário de `ini`; inclui qualquer `dur` inteiro, sem filtrar exit. SEM VEZ pode contribuir amostra curta se estiver no horário. (`bin/crons_duracao.py:69`, `bin/crons_duracao.py:71`, `bin/crons_duracao.py:73`, `bin/crons_duracao.py:75`) |
-| `corrida_no_horario` | Tolerância padrão de 3 minutos, comparação `<3`; comando atrasado pela trava em 3–5 minutos pode sair da medição mesmo sendo disparo agendado legítimo. (`app/config/crons.py:2304`, `app/config/crons.py:2329`, `app/config/crons.py:2332`, `bin/trava_deploy_exclusao.sh:37`) |
-
-Não achei outro leitor operacional direto de JSONL pelo grep de `placar.jsonl`; `vigiar_fio_morto` apenas comenta o arquivo, e `sombra.sh` referencia `pipeline_placar`. Não há consumo operacional de `espera_deploy` nesses leitores. (`app/chamados/management/commands/vigiar_fio_morto.py:19`, `bin/sombra.sh:122`, `bin/crons_duracao.py:69`, `app/core/management/commands/pipeline_placar.py:70`, `app/core/services/crons_quebrados.py:36`)
-
-Não há migração/regravação histórica no escritor: ele só apenda JSON. Linhas antigas continuam interpretadas pelo seu `ini` literal; leitores não usam versão nem `espera_deploy` para normalizar registros v1/v2. Existência de registros v1 em produção: [nao verificado]. (`bin/cron_run.sh:31`, `app/core/services/crons_quebrados.py:36`, `app/core/management/commands/pipeline_placar.py:70`, `bin/crons_duracao.py:69`)
-
-**Métrica invisível do P2:** `ESPERA` é capturada e placar gravado antes da readquisição ilimitada. Portanto o tempo de epílogo não aparece em `espera_deploy`, `dur` ou `fim`, embora o envelope continue vivo. (`bin/cron_run.sh:18`, `bin/cron_run.sh:30`, `bin/cron_run.sh:31`, `bin/cron_run.sh:54`, `bin/cron_run.sh:59`)
-
-**F4 não se resolve por `espera_deploy>0`:** sucesso de aquisição também pode esperar e CMD retornar 75; falha imediata de aquisição pode registrar espera zero; ajuste de relógio pode alterar o valor. É duração de aquisição, não causa. (`bin/trava_deploy_exclusao.sh:46`, `bin/trava_deploy_exclusao.sh:49`, `bin/trava_deploy_exclusao.sh:50`, `bin/trava_deploy_exclusao.sh:51`, `bin/cron_run.sh:25`, `bin/cron_run.sh:31`)
-
-P6 continua divergente no RELATO real: linha 25 ainda publica cron600/deploy não bloqueante/espera_lock/dois contadores/desliga só corte; linha21 fala contrato v2. Não há atualização para v3 nesse trecho. Envio único ao Codex não pode ser comprovado pelo código. (`app/docs/RELATO.md:21`, `app/docs/RELATO.md:25`; envio: [nao verificado])
-
-_3078 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3079 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
