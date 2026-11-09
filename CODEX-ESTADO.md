@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 13:52** · publicado em **09/11/2026 13:57** (UTC-3)
+> Ultima resposta processada: **09/11/2026 14:02** · publicado em **09/11/2026 14:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 14:02 · sessao 94effc8c3aed · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
+
+Implementei a cura de S127 e a preservação do motivo administrativo; M38 ficou explicitamente **ESTRUTURAL** no teste (`chamados/juizes.py:2137`; `chamados/services/materializacao.py:1376`, `:1434`; `chamados/tests/test_bug_par_intervalo.py:815`). **RED/GREEN executados, mortes dos mutantes e resultado em produção: [nao verificado].**
+
+Entrega por hunk:
+
+| Arquivo:linha | Alteração |
+|---|---|
+| [juizes.py:2126](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/juizes.py:2126) | S127 preserva a exceção vazia e consome `not disputa.pode_fechar()`, sem recompor C6 ou espera. |
+| [materializacao.py:1338](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/services/materializacao.py:1338) | Importa o motivo canônico; limpeza em `:1376` retira exclusivamente `ESPERA_PAR_INTERVALO`. Espera em `:1434` preserva metades com `pendencia_admin`. |
+| [auditar_invariantes_chamados.py:546](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/management/commands/auditar_invariantes_chamados.py:546) | Extrai a consulta existente para `perguntas_i19()`; o comando passa a consumi-la em `:1118`. |
+| [test_bug_par_intervalo.py:457](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/tests/test_bug_par_intervalo.py:457) | REDs escritos antes da cura: `transicionar` real para fechado/resolvido; contracasos vazio e todas mortas; pendência anterior, pendência criada no plantio e limpeza exclusiva da espera. Cobrança do I19 real em `:503`. |
+| `chamados/tests/test_bug_par_intervalo.py:815` | Docstring explica que M38 morde a chamada; com carimbo vazio, a guarda antiga conserva o mesmo estado/trilha. |
+| [test_disputa_s127.py:24](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/tests/test_disputa_s127.py:24) | Dublê suporta `exists()`; controle e cobrança da consulta C7 em `:37`. |
+| [test_pergunta_viva_no_guarda.py:35](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/tests/test_pergunta_viva_no_guarda.py:35) | Selo estrutural exige S127 → C7 → C6 e proíbe recomposição local. |
+| [mutantes_bug_par_intervalo.py:157](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/tests/mutantes_bug_par_intervalo.py:157) | M45–M49; compilação dos tocados em `:223`; comandos individuais v5 em `:245`. |
+
+Os testes novos pertencem ao `TestCase` com `freeze_time` e cadastro sintético `col960` (`chamados/tests/test_bug_par_intervalo.py:32`, `:45`).
+
+Censo de leitores de `disputa_viva_do_chamado`:
+
+| Leitor | Efeito |
+|---|---|
+| `chamados/models.py:153`, `:154` | Único chamador de produção encontrado: `transicionar` passa a reter também os impedimentos exclusivos de C7, mantendo a exceção vazia (`chamados/juizes.py:2137`). |
+| `chamados/tests/test_disputa_s127.py:45` | Testa o adaptador controlando C7; cobra a consulta em `:47`. |
+| `chamados/tests/test_pergunta_viva_no_guarda.py:37` | Inspeciona o fonte e exige delegação integral. |
+| `chamados/tests/test_bug_par_intervalo.py:482`, `:496` | Contracasos consultam a função real; os dois REDs principais chegam indiretamente por `transicionar` em `:469`. |
+| `chamados/tests/mutantes_bug_par_intervalo.py:157`, `:167` | M45/M48 recompilam S127 substituindo C7 pela recomposição antiga. |
+| `chamados/tests/test_o261_fio_tem_uma_porta.py:25` | Referência documental histórica; não é chamada executável. |
+
+Exaustividade de acessos dinâmicos: **[nao verificado]**.
+
+Quem escreve e quem lê, inclusive fora do diff:
+
+| Campo/função | ESCREVE / dono | LÊ / chama |
+|---|---|---|
+| `pendencia_admin` + motivo técnico | Escritor conjunto permanece em `materializacao.py:937`; fixtures em `test_bug_par_intervalo.py:513`. | Espera `materializacao.py:1434`; explicador `explicador.py:93`; I19 `auditar_invariantes_chamados.py:549`; modal `templates/chamados/partials/modal_fio.html:222`; cartão `_card_atendimento.html:183`. |
+| `recusa_motivo` | `materializacao.py:937`, `:1190`, `:1377`; `validacao.py:605`; `disputa_emissao.py:1494`; `chamados/models.py:3197`, chamado também por `fio.py:1351`. | Espera `materializacao.py:112`, `:116`; devolução/trilha `validacao.py:147`, `:195`, `:211`; explicador `explicador.py:98`; seleção O330 `passivo_validado.py:66`; auditor `auditar_invariantes_chamados.py:536`, `:549`, `:1081`; `ponto/services/flip_auto.py:132`; modal `modal_fio.html:226`; cartão `_card_atendimento.html:186`. |
+| `_materializar_par` | Definição `materializacao.py:1329`; limpeza de motivo em `:1377`. | `_materializar_uma`, `materializacao.py:1438`; testes `test_bug_par_intervalo.py:843`, `:862`. | [nao verificado]
+| `_materializar_uma` | Definição `materializacao.py:1402`; espera usa o escritor existente `_carimbar_recusa` em `:1435`. | Validação `validacao.py:469`, `:474`; varredura `materializacao.py:1595`; O330 `passivo_validado.py:532`. |
+| `perguntas_i19` | Consulta sem escrita, `auditar_invariantes_chamados.py:546`. | Comando `:1118`; teste `test_bug_par_intervalo.py:503`. | [nao verificado]
+| `MUTANTES` e fontes | Definições novas `mutantes_bug_par_intervalo.py:157`. | Mutação `:196`; conferência estática `:237`; emissão de comandos `:261`. |
+
+Mutantes e asserções discriminantes previstas — **mortes executadas: [nao verificado]**:
+
+| Mutante | Regressão | Asserção que deve matar |
+|---|---|---|
+| M45 / M48 | S127 recompõe sem C7 (`mutantes_bug_par_intervalo.py:157`, `:167`). | Exige erro específico de S127 na chamada real para fechado/resolvido (`test_bug_par_intervalo.py:468`). |
+| M46 | Limpeza de qualquer motivo (`mutantes_bug_par_intervalo.py:161`). | Par pendência/motivo permanece igual ao observado durante o plantio (`test_bug_par_intervalo.py:552`). |
+| M47 | Espera sobrescreve pendência (`mutantes_bug_par_intervalo.py:164`). | Motivo anterior preservado imediatamente após a espera (`test_bug_par_intervalo.py:517`). |
+| M49 | Nunca limpa espera (`mutantes_bug_par_intervalo.py:171`). | Espera antiga deve ficar vazia após aplicar (`test_bug_par_intervalo.py:566`). |
+| M38 | Guarda antiga pula descarimbo vazio (`mutantes_bug_par_intervalo.py:131`). | Cobra ambas as chamadas; selo estrutural (`test_bug_par_intervalo.py:842`, `:815`). |
+
+Comandos individuais reservados ao Code; correspondem ao emissor `--comandos-v5` (`chamados/tests/mutantes_bug_par_intervalo.py:245`):
+
+```bash
+export DJANGO_SETTINGS_MODULE=config.settings.ci
+export PYTHONDONTWRITEBYTECODE=1
+
+teste() { [nao verificado]
+  python3 manage.py test "chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.$1" --noinput
+}
+mutante() {
+  python3 -m chamados.tests.mutantes_bug_par_intervalo "$1"
+}
+
+teste test_V5_S127_transicionar_fechado_retem_espera_com_irma_retratada [nao verificado]
+teste test_V5_S127_transicionar_resolvido_retem_espera_com_irma_retratada [nao verificado]
+teste test_V5_S127_sem_pergunta_segue_travando [nao verificado]
+teste test_V5_S127_todas_mortas_sem_resposta_pendente_libera [nao verificado]
+teste test_V5_pendencia_anterior_preserva_motivo_na_espera_e_no_par [nao verificado]
+teste test_V5_pendencia_nascida_no_plantio_preserva_motivo_e_I19 [nao verificado]
+teste test_V5_limpeza_retira_so_espera_preserva_outro_motivo [nao verificado]
+teste test_V4_P6_falha_com_carimbo_vazio_duas_vezes_mesmo_estado_e_trilha [nao verificado]
+
+mutante M38
+mutante M45
+mutante M46
+mutante M47
+mutante M48
+mutante M49
+
+python3 manage.py test \
+  chamados.tests.test_disputa_s127 \
+  chamados.tests.test_pergunta_viva_no_guarda --noinput
+```
+
+Executei a conferência abaixo: **rc 0**, `py_compile` dos sete arquivos tocados sem persistência; âncoras únicas, sintaxe e existência dos alvos M1–M49 conferidas (`chamados/tests/mutantes_bug_par_intervalo.py:212`, `:231`, `:237`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
+```
+
+**DECISAO-ABERTA:** M38 permanece prova estrutural, conforme a alternativa solicitada; contracaso comportamental: **[nao verificado]** (`chamados/tests/test_bug_par_intervalo.py:815`). Execução dos REDs, GREEN e certificação pelo Code/opus: **[nao verificado]**.
 
 ## 09/11 13:52 · sessao 3b20bcb6caff · SONDA-SEM-GRANT · leitura · origem=Code
 
@@ -826,92 +921,4 @@ Casos `?` e K fora do intervalo podem passar antes da cura e continuar úteis co
 
 RED 45, GREEN e mortes dos 38: **[nao verificado]**; não executei suites nem consultei logs de produção. [nao verificado]
 
-## 09/11 12:24 · sessao eab8c15e7201 · FIO-E0-V4-E3 · verificador · origem=Code
-
-**Há achados PROCEDENTES de unidade residual, custo e leitura indireta na sombra; os quatro consumidores principais estão unificados.** (`app/chamados/services/aviso_pendencia.py:13`; `app/chamados/juizes.py:1149`; `app/core/utils.py:18`; `app/api/views.py:325,2562`; `app/api/views_core.py:314`; `app/core/views.py:253`)
-
-1. **UNIDADE — NAO PROCEDE nos quatro consumidores; PROCEDENTE no restante do app.**
-
-   Badge dos dois kernels, dashboard e `api_disputa_perguntas` leem `consulta_do_app`. Ela aplica C6 e separa pendentes por **sem resposta + disputa aberta**. Fechada viva vai ao `historico`; só entra também em `respondidas` quando possui `respondida_em`. (`app/chamados/services/pergunta_no_app.py:54,67`; `app/api/views.py:2588,2600`)
-
-   Permanecem fontes paralelas:
-
-   - **PROCEDENTE:** aviso após mensagem recompõe C6 + sem resposta, incluindo fechada viva, e informa “AGUARDANDO sua resposta”. A cobrança reutiliza esse leitor. **Cura:** ambos consumirem `consulta_do_app()['pendentes']`. (`app/chamados/services/aviso_pendencia.py:9,13,21`; `app/api/views.py:1013,2236`; `app/chamados/services/cobranca.py:47`)
-   - **PROCEDENTE:** `api_chamados_v2` carrega todas as perguntas das disputas abertas, sem C6, e entrega outra lista em `perguntas_disputa`. Pode servir pergunta morta. **Cura:** consumir a seleção/classificação central. (`app/api/views.py:1044,1059,1174`)
-   - **FILA — universos internos distintos:** placar/copiloto e `_no_app` continuam considerando todas as C6 vivas, inclusive fechadas agora disponíveis apenas no histórico. Definir se histórico satisfaz “pergunta no app”. (`app/chamados/juizes.py:1489`; `app/chamados/services/pergunta_no_app.py:160,183`; `bin/placar_code.sh:317`)
-   - **FILA — dívida preexistente:** há contagens por carimbo cru na cobrança, ações da disputa, censo da folha e contador com cron. Não certificam pendência apresentada pelo app. (`app/chamados/services/cobranca.py:229`; `app/chamados/services/acoes_disputa.py:95`; `bin/censo_folha.py:28`; `app/chamados/services/furo_sem_canal.py:80`; `app/config/crons.py:531`)
-
-   Fechada viva também pode aparecer no fio administrativo e seus templates: esse caminho aplica C6 às fechadas; o fio do colaborador usa outro recorte. (`app/chamados/services/fio.py:216,238,253`; `app/templates/chamados/partials/modal_fio.html:156`)
-
-2. **JUIZ ÚNICO C17 — NAO PROCEDE a acusação de cópia da partição ou ligação antecipada.**
-
-   A tarefa chama `alimentar_fila`, que chama as autoridades existentes `particionar_verbos(qs_vivos(), agora=...)` e `qs_na_fila(agora=...)`. A partição chama `creditos_perguntas` e `verbo_do_chamado`; `_portas_da_tarefa` compõe portas a partir das ações já julgadas pelo C19. (`app/chamados/services/tarefa_do_dia.py:409,425`; `app/chamados/juizes.py:1429,1432`; `app/chamados/services/verbos.py:34,47`; `app/core/juizes.py:291`)
-
-   C17 **ainda não virou fachada delegante**: conserva seu julgamento. Os três chamadores permanecem folha, vigia e cadastro; seus corpos não constam como alterados no diff fornecido. Comparação histórica independente com a base: **[nao verificado]**. (`app/chamados/juizes.py:1545`; `app/folha/fora_da_folha.py:67`; `app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:488`)
-
-   Os campos antigos da tarefa são preservados; entram quatro chaves aditivas. A igualdade do dicionário inteiro muda, mas não foi localizado consumidor anterior de produção sendo migrado; o novo consumidor é o DIFF. Chamadas dinâmicas não localizáveis: **[nao verificado]**. (`app/chamados/services/tarefa_do_dia.py:177,433`; `app/chamados/management/commands/diff_e3_sombra.py:118`)
-
-3. **L-111 — NAO PROCEDE a permanência do método.**
-
-   Método removido, lápide no sítio; busca AST/textual não encontrou chamada, alias importado, `getattr` literal ou template restante. Construção dinâmica do nome: **[nao verificado]**. (`app/chamados/models.py:1795`; `app/chamados/tests/test_badge_disputa_pendente.py:8`)
-
-   Os testes migrados ainda exigem: zero sem filhos, duas perguntas → duas pendências, desaparecimento após absolvição e concordância entre endpoint, dashboard e dois kernels. (`app/chamados/tests/test_esmeril2_left_join.py:19,27`; `app/chamados/tests/test_fio_le_o_juiz.py:267,272`; `app/chamados/tests/test_e3_app_orm.py:28,39,47`)
-
-4. **SOMBRA — PROCEDENTE a objeção à cadeia estritamente só de leitura.**
-
-   O comando não contém escritor ORM direto e envolve todos os aliases na guarda SQL. Porém `dias_trancados` chega a `get_user_sistema`, que executa **`get_or_create`**. Se o usuário faltar, haverá tentativa de criação; a guarda impede que o SQL escritor alcance o cursor. **Cura:** resolver por leitura `.get`, falhar explicitamente na ausência e testar esse ramo; a fixture atual sempre cria `sistema`. (`app/chamados/management/commands/diff_e3_sombra.py:34,92,108`; `app/chamados/services/tarefa_do_dia.py:370`; `app/chamados/juizes.py:1033,1146`; `app/core/utils.py:18`; `app/chamados/tests/e3_fixtures.py:26`)
-
-   **PROCEDENTE, no caminho de erro:** C6 pode registrar exceção/traceback; a configuração SaaS inclui arquivo de log. A sanitização final do comando não desfaz essa emissão. **Cura:** tratamento sanitizado durante o instrumento e teste das dependências. Configuração efetiva e ocorrência em produção: **[nao verificado]**. (`app/chamados/juizes.py:1366,1377`; `app/core/observ.py:79`; `app/config/settings/saas.py:138,183`; `app/chamados/management/commands/diff_e3_sombra.py:98`)
-
-   **NAO PROCEDE — agendamento:** `FORA_DE_PIPELINE` apenas declara; geração do cron percorre `CRONS`, e inventário executável reúne `CRONS + ENCADEADOS`. O diagrama apenas baixa tela de 110 para 109 sítios; não liga fachada nem acrescenta execução. (`app/config/crons.py:769,1798,1865`; `app/docs/ARQUITETURA.mmd:356`; `app/docs/MAPA.md:209`)
-
-5. **REGISTRO DE TELA — NAO PROCEDE novo juiz ou alteração adicional nesse arquivo.**
-
-   No diff fornecido, `core/juizes.py` perde somente o pendente do dashboard; C17 e C19 continuam registrados. A leitura curada está no dashboard. (`app/core/juizes.py:289,291,756`; `app/core/views.py:253`)
-
-   O selo de tela sozinho verifica impressões remanescentes, portanto não prova a cura funcional. O mérito vem da matriz ORM que exige duas perguntas na mesma disputa → duas pendências nos consumidores completos. (`app/core/tests/test_contract_juiz_tela.py:34`; `app/chamados/tests/test_e3_app_orm.py:28,39,47`)
-
-6. **CLASSES DE REPROVAÇÃO.**
-
-   - **PROCEDENTE — catraca incompleta:** resolve aliases de importação, mas não `p = porta_alcancavel_do_dia` nem `getattr(j, 'porta_alcancavel_do_dia')(...)`; também exclui `models.py` e `core/juizes.py`. Esses desvios escapam da contagem. **Cura:** ampliar resolução/escopo e acrescentar mutantes dessas formas. Isso não demonstra quarto chamador atual. (`app/chamados/tests/test_e3_pendentes_app.py:49,67,98,113`)
-   - **NAO PROCEDE — quatro casos sem mordida:** há expectativas próprias para só fila, A/B, verbos do universo e isento, com mutantes correspondentes. O verbo inventado encontra ainda expectativa explícita de `validar`. Nem todo teste novo precisa falhar sem a cura: o contrato preservado de C17 é regressão. Causa individual das 30 mortes apenas por `rc=1`: **[nao verificado]**. (`app/chamados/tests/test_e3_portas_tarefa.py:32,40,49,57,75`; `app/chamados/tests/e3_mutantes.py:49,127`; `app/chamados/tests/test_e3_pendentes_app.py:126`)
-   - **NAO PROCEDE — nova inversão de travas:** a extensão escreve mapas em memória, sem introduzir aquisição de trava; a tentativa escritora indireta está no item 4. (`app/chamados/juizes.py:1428`; `app/chamados/services/tarefa_do_dia.py:425`)
-   - **FILA — relógio integral da comparação:** o comando recebe instante explícito e o propaga, mas C17 ainda chama C6, cujo fallback lê `date.today()`. Portanto `--agora` não controla toda a comparação histórica. **Cura:** explicitar esse limite ou alimentar o horizonte dessa dependência antes de alegar reprodução integral. (`app/chamados/management/commands/diff_e3_sombra.py:84,107`; `app/chamados/juizes.py:1472,1357,575`)
-   - **NAO PROCEDE — ambiguidade nova demonstrada:** tarefa exclui conversa ao agrupar `data_evento`; conversa continua gravando dia civil, fato usa dia do turno, e `data_civil` da instância deriva do instante do marco. Silêncio usa `> agora`; igualdade retorna à fila/histórico. Decisões e efeitos usam `<= agora`; janela de dias inclui as duas pontas. (`app/chamados/models.py:2786,2798`; `app/chamados/services/tarefa_do_dia.py:102,325,339,358`; `app/chamados/services/painel.py:190`; `app/chamados/services/verbos.py:51`; `app/chamados/management/commands/diff_e3_sombra.py:114`)
-
-   `rota='porta_fila'` pode coexistir com `fila=()` quando o verbo é histórico: rota usa a âncora exigível na célula; `fila` exclui verbos fora da lista padrão. O caso está explicitamente testado. (`app/chamados/services/tarefa_do_dia.py:428,429,433`; `app/chamados/tests/test_e3_portas_tarefa.py:109`)
-
-7. **CUSTO — PROCEDENTE: não há número constante universal no badge.**
-
-   A consulta inicial é uma, mas C6 consulta tranca por pergunta; competência é memoizada, toque negativo não. **Cura:** alimentar tranca/toque em lote por chamada, preservando frescor entre chamadas. (`app/chamados/services/pergunta_no_app.py:47,54`; `app/chamados/juizes.py:948,1020,1137,1151`)
-
-   Contagem estática incremental de `consulta_do_app`, não de `api_me` inteiro:
-
-   | Cenário | SELECTs |
-   |---|---:|
-   | Nenhuma pergunta candidata | **1** (`pergunta_no_app.py:47`) |
-   | Sem resposta, célula acusando, competências abertas | **1 + E + K** (`juizes.py:1003,1023,1342`) |
-   | N perguntas, uma competência trancada, nenhum toque humano, células/chamados existentes, `sistema` existente e memo frio | **3 + E + 5N** (`juizes.py:1146,1185,1200,1211,1224,1234`) |
-
-   `E=1` se Empresa precisar ser carregada; `K` é o número de competências ainda não memoizadas. Empresa fria no último cenário: **4 + 5N**. Outros ramos de C6 variam; quantidade observada em produção: **[nao verificado]**. (`app/chamados/juizes.py:1003,1020,1361,1374`)
-
-8. **QUEM ESCREVE / QUEM LÊ — rastro principal, inclusive fora do diff.**
-
-   | Campo/função | Produtor/escritor | Leitores |
-   |---|---|---|
-   | `pendentes/historico` | `pergunta_no_app.py:65` — memória | `api/views.py:325,2562`; `api/views_core.py:314`; `core/views.py:253` |
-   | `respondida_em/resposta_colab` | `disputa_emissao.py:1464,1650,1671`; reabertura `:1590,1629`; carimbo `models.py:3121` | Consulta `pergunta_no_app.py:67`; C6 `juizes.py:1309`; crédito `raiox.py:139` |
-   | `fechada_em` | Fecha `models.py:1929`; reabre `:2146,2170` | Consulta `pergunta_no_app.py:67`; fio `fio.py:216`; lista paralela `api/views.py:1046` |
-   | `validada_em/materializada_em/via_resolucao` | `validacao.py:134,199`; `models.py:3088,3179,3253` | C6 `juizes.py:1293,1304,1330`; crédito `raiox.py:135` |
-   | Âncora/data da pergunta | Nascimento `models.py:2786,2872`; portas `fio.py:804,970` | `chamado_que_lista`, `fio.py:116`; tarefa `tarefa_do_dia.py:329,362`; C17 `juizes.py:1549` |
-   | `veredito_lavrado/julgado_em/janela_expira_em` | `veredito_lavrado.py:250,270` | Crédito `raiox.py:135`; tarefa `tarefa_do_dia.py:350` |
-   | Decisões, `ato_em`, efeitos | Sequência `models.py:3934`; resposta/validação `disputa_emissao.py:1653`, `validacao.py:139` | Tarefa `tarefa_do_dia.py:337,346,358` |
-   | `verbo/fila_ids/fila_cel` | `juizes.py:1429` — memória, autoridades painel/partição | `juizes.py:1465`; `tarefa_do_dia.py:409,426` |
-   | `rota/fila/verbos/fio` | Tarefa `tarefa_do_dia.py:433`; C17 separado `juizes.py:1556` | DIFF `diff_e3_sombra.py:43,50`; atuais C17: `fora_da_folha.py:78,225`, `vigia_fio.py:643`, `cadastro_realidade.py:488` |
-   | `status_local/silenciado_ate` | `models.py:228,296,1095`; `services/arquivo.py:166,202` | `painel.py:155,189`; `verbos.py:45,51` |
-   | `modulo_origem/urgencia/criado_em` | `models.py:1095,550,67` | `verbos.py:45,47,57,60` |
-   | `dia_do_turno/agora/data_civil` | Entrada `tarefa_do_dia.py:442`; parsing `diff_e3_sombra.py:83`; saída `tarefa_do_dia.py:102,177` | Carga/horizontes `tarefa_do_dia.py:317,339,358,411`; partição `verbos.py:51` |
-
-   Caminhos dessa tabela são relativos a `app/`. Censo recursivo exaustivo de **todos** os escritores/leitores dinâmicos de cada insumo transitivo: **[nao verificado]**. DIFF medido por chamador/caso em produção e liberação da fachada: **[nao verificado]**.
-
-_3154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3155 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
