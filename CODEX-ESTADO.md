@@ -1,7 +1,261 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **08/11/2026 23:54** · publicado em **08/11/2026 23:54** (UTC-3)
+> Ultima resposta processada: **08/11/2026 23:57** · publicado em **09/11/2026 00:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 08/11 23:57 · sessao 667030d3457f · FIO-E0-V4-E1-FILA · verificador · origem=Code
+
+**A volta 4 corrige a omissão de Disputa na conferência, mas b2 ficou parcialmente curado: o teste novo exige resultado preenchido, sem exigir migração efetiva. A equivalência literal entre IDs comparados e IDs traváveis também falha para `None`.** (`app/chamados/services/fio.py:2091`; `app/chamados/tests/test_e1_fila.py:511`; `app/chamados/models.py:2660`)
+
+Execução da suíte, concorrência real e incidência em produção: **[nao verificado]**. [nao verificado]
+
+1. **Triagem: descartes, filas e curas**
+
+| Item | Verificação |
+|---|---|
+| **a — FILA dos chamadores que ignoram `False`** | **Procedente como defeito pendente.** Adesão incrementa sempre; reconciliador devolve `None` após ignorar a recusa e seu chamador conta `CREATE`; ação administrativa ignora o retorno e anuncia sucesso; view atribui qualquer recusa a irmão vivo. (`app/chamados/services/adesao.py:92`; `app/ponto/management/commands/reconciliar_grade.py:529`; `app/ponto/management/commands/reconciliar_grade.py:254`; `app/chamados/services/acoes_disputa.py:267`; `app/chamados/services/acoes_disputa.py:296`; `app/chamados/views_arquivar.py:70`) A justificativa histórica “anteriores à obra”: **[nao verificado]**. |
+| **b1 — `or` → `and`** | **Curado no alvo.** Há crescimento isolado de Pergunta, Colaborador e Disputa, além do mutante explícito. (`app/chamados/tests/test_e1_fila.py:489`; `app/chamados/tests/test_e1_fila.py:504`) |
+| **b2 — supressão do laço** | **Cura parcial.** O par novo distingue a supressão literal, mas aceita só `recusadas`. Seu cenário põe uma Pergunta do primeiro colaborador em chamados do segundo; o reapontamento recusa esse cruzamento antes da escrita. Logo “o laço produziu resultado” foi coberto; “migração efetiva sob trava” não foi exigida pelo novo RED. (`app/chamados/tests/test_e1_fila.py:147`; `app/chamados/tests/test_e1_fila.py:511`; `app/chamados/tests/test_e1_fila.py:517`; `app/chamados/services/fio.py:863`) |
+| **b3 — captura ampliada para `RuntimeError`** | **Curado.** O teste exige propagação da exceção genérica; a captura produtiva continua específica. (`app/chamados/tests/test_e1_fila.py:566`; `app/chamados/models.py:1417`) |
+| **b4 — modelo/objeto do evento** | **Curado.** Agora exige exatamente `('ChamadoColaborador', velho.pk)`. (`app/chamados/tests/test_e1_fila.py:564`) |
+| **b5 — DESCARTE do retorno de `aplicar_declaracao`** | **Procedente para a promessa de trava.** O RED exige canônica, destino e ordem; a proposta é selecionada antes da chamada de trava. Isso não certifica sucesso funcional completo da aplicação. (`app/chamados/tests/test_e1_fila.py:442`; `app/chamados/services/declaracao_texto.py:643`) |
+| **b6 — trava para só um motivo** | **DESCARTE procedente na implementação atual.** O helper recebe motivo/dia e consulta o universo correspondente, sem restringir motivo; ambas as portas o chamam após selecionar o fato. (`app/chamados/services/declaracao_texto.py:282`; `app/chamados/services/declaracao_texto.py:346`; `app/chamados/services/declaracao_texto.py:650`) |
+| **c — mudança de `disputa_id`** | **Curado para entrada de ID novo não nulo.** A diferença de disputas participa da recusa e ganhou caso isolado; resta a assimetria de `None` descrita abaixo. (`app/chamados/services/fio.py:2091`; `app/chamados/tests/test_e1_fila.py:497`) |
+| **d — relógio e derivação da janela** | **FILA tecnicamente procedente.** O juiz ainda usa `date.today()`, enquanto `expira_em` reproduz a condição da janela em implementação própria. (`app/chamados/juizes.py:575`; `app/chamados/juizes.py:601`; `app/chamados/veredito_lavrado.py:120`; `app/chamados/veredito_lavrado.py:136`) O registro prévio na fila citada: **[nao verificado]**. |
+
+2. **Quem escreve, quem lê e o universo conferido**
+
+| Campo/valor | Escritor comprovado | Leitor relevante |
+|---|---|---|
+| Pergunta `pk` | `BigAutoField`; nascimento insere com `save(force_insert=True)`. (`app/chamados/migrations/0014_perguntadisputa.py:19`; `app/chamados/models.py:3019`) | Lista pedida à trava e diferença de Perguntas. (`app/chamados/services/fio.py:2087`; `app/chamados/services/fio.py:2091`) |
+| Pergunta `colaborador_id` | `_chave_de_identidade` deriva da Disputa e rejeita valor divergente; migration preenche o acervo. (`app/chamados/models.py:3430`; `app/chamados/migrations/0051_decisao_pergunta.py:25`) | `_cs`, conferência e consulta da identidade do fato. (`app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2091`; `app/chamados/models.py:2762`) |
+| Pergunta `disputa_id` | Nascimento recebe `disputa` e insere a Pergunta. (`app/chamados/models.py:3016`) | Pedido à trava, diferença nova e trava interna da retratação. (`app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2092`; `app/chamados/services/fio.py:1329`) |
+| Donos de `velho`/`novo` | A migração recebe as instâncias e lê seus `colaborador_id`; não os escreve. (`app/chamados/services/fio.py:2042`; `app/chamados/services/fio.py:2085`) | Entram em `_cs`, mesmo sem Pergunta daquele dono. (`app/chamados/services/fio.py:2085`) |
+| `_conjunto_da_migracao` | É lista calculada: Perguntas destinadas a velho/novo, somadas ao universo de cada uma; pode conter repetição. (`app/chamados/services/fio.py:2037`) | Duas leituras: cálculo inicial e conferência após a trava. (`app/chamados/services/fio.py:2084`; `app/chamados/services/fio.py:2088`) |
+
+**Quem altera a pertinência ao conjunto:** nascimento e reapontamento/reuso escrevem `chamado_destino`; rechaveamento altera dia/célula; carimbo altera a via que a consulta do fato exclui. A expansão delega a `universo_da_linha`/`fecho_do_fato`. (`app/chamados/models.py:3016`; `app/chamados/models.py:2971`; `app/chamados/services/fio.py:922`; `app/chamados/services/fio.py:1028`; `app/chamados/models.py:3182`; `app/chamados/models.py:2732`; `app/chamados/services/fio.py:1906`)
+
+**O pedido desta chamada é exatamente:**
+
+| Classe | IDs solicitados |
+|---|---|
+| Colaborador | Donos de velho/novo ∪ colaboradores das `_ps`. (`app/chamados/services/fio.py:2085`) |
+| Disputa | `disputa_id` das `_ps`. (`app/chamados/services/fio.py:2086`) |
+| Chamado | Somente `velho.pk` e `novo.pk`. (`app/chamados/services/fio.py:2086`) |
+| Pergunta | `pk` das `_ps`. (`app/chamados/services/fio.py:2087`) |
+
+`trava_na_ordem` elimina repetidos e `None`, consulta linhas existentes e executa **C → D → Ch → P**, cada classe por PK crescente. Nesta chamada, os pais das Disputas não são acrescentados automaticamente: falta a flag `abertas_do_colaborador`. (`app/chamados/models.py:2660`; `app/chamados/models.py:2674`; `app/chamados/models.py:2683`; `app/chamados/models.py:2687`; `app/chamados/models.py:2696`; `app/chamados/models.py:2700`; `app/chamados/services/fio.py:2086`)
+
+**Para IDs existentes e não nulos, a conferência cobre corretamente inclusão por classe.** Encolhimento e troca de associações entre IDs já travados podem passar: não exigem outra linha. Exigir igualdade dos conjuntos recusaria desnecessariamente esses casos. (`app/chamados/services/fio.py:2091`)
+
+**Não há uma quarta coleção dinâmica de PKs de Chamado omitida:** os dois PKs vêm dos argumentos e permanecem fixos. Entretanto, seus donos são lidos das instâncias recebidas e não são relidos sob trava; uma troca persistida de dono não seria conferida aqui. Escritor produtivo dessa troca e sua alcançabilidade: **[nao verificado]**. (`app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2088`)
+
+A imutabilidade de `Pergunta.colaborador_id`/`disputa_id` após nascimento também não é garantida pelo `save`: a validação da identidade só roda quando `adding`; depois ele delega ao ORM. Escrita indireta que explore isso: **[nao verificado]**. (`app/chamados/models.py:3420`)
+
+3. **Mordida e mutantes sobreviventes**
+
+Os casos isolados mordem a ausência de cada parcela da guarda, mas simulam mudança **acrescentando** um `SimpleNamespace`; nos casos de colaborador/disputa, acrescentam outro objeto com PK já existente, em vez de substituir a versão anterior. Não demonstram corrida entre transações. (`app/chamados/tests/test_e1_fila.py:473`; `app/chamados/tests/test_e1_fila.py:495`)
+
+O helper `_recusa_com` retorna imediatamente na exceção: sua asserção de duas leituras só executa quando não houve recusa. O teste separado de recusa original, porém, exige as duas leituras. (`app/chamados/tests/test_e1_fila.py:484`; `app/chamados/tests/test_e1_fila.py:529`)
+
+Os seguintes mutantes não são distinguidos pelos formatos dos novos casos; sobrevivência na **suíte inteira**: **[nao verificado]**. [nao verificado]
+
+| Mutante | Falha que escapa |
+|---|---|
+| Diferença de disputas `A - B` → `A ^ B` | Recusa também encolhimento; os casos acrescentam uma linha e não exercitam remoção. (`app/chamados/services/fio.py:2092`; `app/chamados/tests/test_e1_fila.py:476`) |
+| Parcela de disputas → `{len(_sob)} - {len(_ps)}` | Passa no crescimento artificial, mas perde troca real de disputa mantendo o número de Perguntas. (`app/chamados/services/fio.py:2092`; `app/chamados/tests/test_e1_fila.py:473`) |
+| Remover `key=str` | A mensagem pode explodir com diferença contendo simultaneamente `None` e inteiro; nenhum caso novo produz essa diferença mista. (`app/chamados/services/fio.py:2097`; `app/chamados/tests/test_e1_fila.py:469`; `app/chamados/tests/test_e1_fila.py:492`) |
+| Imprimir a parcela errada na mensagem | Os testes conferem ocorrência da exceção, sem exigir os IDs de disputas no texto. (`app/chamados/services/fio.py:2097`; `app/chamados/tests/test_e1_fila.py:502`; `app/chamados/tests/test_e1_fila.py:527`) |
+
+A fragilidade de b2 é dos testes novos: já existe teste antigo que exige `migradas`, relê a Pergunta e verifica destino persistido. (`app/chamados/tests/test_e1_v15g_portas.py:364`)
+
+4. **`disputa_id=None`**
+
+**`None` nunca é travado como Disputa.** `_pks` o remove; com `disputas=[None]`, sem universo adicional, nem há consulta de Disputa. A diferença nova, entretanto, conserva `None` como elemento comparável. (`app/chamados/models.py:2660`; `app/chamados/models.py:2682`; `app/chamados/services/fio.py:2092`)
+
+| Disputas antes → depois | Resultado da guarda |
+|---|---|
+| `{7}` → `{None}` | Recusa por `{None}`, embora nenhuma Disputa nova precise de trava. (`app/chamados/services/fio.py:2092`; `app/chamados/models.py:2661`) |
+| `{7, None}` → `{None}` | Aceita: `None` já estava no conjunto inicial. (`app/chamados/services/fio.py:2092`) |
+| `{None}` → `{8}` | Recusa corretamente por `{8}`. (`app/chamados/services/fio.py:2092`) |
+| `{7, 8}` → `{8}` | Aceita corretamente o encolhimento. (`app/chamados/services/fio.py:2092`) |
+
+Portanto, **comparado e travável não são literalmente equivalentes**. Contudo, `Pergunta.disputa` é FK obrigatória tanto no modelo quanto na migration de criação. `None` persistido no esquema real de produção: **[nao verificado]**; nos testes, ele é explicitamente sintético. (`app/chamados/models.py:2424`; `app/chamados/migrations/0014_perguntadisputa.py:27`; `app/chamados/tests/test_e1_fila.py:469`)
+
+5. **Classes de reprovação**
+
+| Classe | Resposta com escopo |
+|---|---|
+| **Segundo juiz duplicando registrado** | **Não nas linhas novas:** conferem cobertura de IDs; o laço continua consultando `pergunta_viva`, autoridade C6 registrada. (`app/chamados/services/fio.py:2091`; `app/chamados/services/fio.py:2123`; `app/core/juizes.py:266`) |
+| **Segundo escritor fora da porta** | **Não acrescentado pela V4:** a escrita permanece depois da conferência, pelo laço existente. Ausência global de qualquer escritor indireto: **[nao verificado]**. (`app/chamados/services/fio.py:2098`) |
+| **Relógio fora da borda** | **Sim no contexto**, no `date.today()` do juiz; a lavra usa `_hoje` com `timezone.now`. (`app/chamados/juizes.py:575`; `app/chamados/veredito_lavrado.py:102`) |
+| **Derivação paralela de fonte única** | **Sim no contexto:** `expira_em` reproduz a condição da janela do juiz. (`app/chamados/veredito_lavrado.py:120`; `app/chamados/veredito_lavrado.py:141`; `app/chamados/juizes.py:601`) |
+| **Selo/RED sem mordida** | **Parcial em b2:** morde supressão literal, mas não exige migração efetiva. (`app/chamados/tests/test_e1_fila.py:511`; `app/chamados/tests/test_e1_fila.py:517`) |
+| **Ordem de trava** | **Não há inversão acrescentada pela V4:** mantém pedido único no topo e recusa antes do laço quando falta ID. Ordem global sob concorrência real: **[nao verificado]**. (`app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2093`) |
+| **Pouso antes do pré-requisito** | **Não no miolo novo:** conferência precede laço; aprovação do destino precede retratação. Pouso/deploy e cumprimento dos pré-requisitos externos: **[nao verificado]**. (`app/chamados/services/fio.py:2098`; `app/chamados/services/fio.py:2164`; `app/chamados/services/fio.py:2170`) |
+| **Campo com dois significados** | **Sim, declarado no contexto:** `data_evento` representa dia do turno para fato e dia civil para conversa; há discriminador e tratamento explícitos. A V4 não altera esse campo. (`app/chamados/models.py:2820`; `app/chamados/juizes.py:2006`; `app/chamados/services/fio.py:2091`) |
+
+## 08/11 23:57 · sessao e1c9c1085810 · BUG-DEPLOY-PORTAO-ANTES-DO-MIGRATE · verificador · origem=Code
+
+**REPROVA para o contrato absoluto informado.** A volta 4 restaura a recusa exigida para cron vivo, mas conserva um portão depois do migrate; o caso 11 agora exige justamente banco alterado e restart recusado (`bin/deploy.sh:301,326`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:163–165`; `CLAUDE.md:90`). Autorização para excepcionar esse caminho do contrato: [nao verificado].
+
+A análise abaixo é estática. Execução dos 13 casos, RED dos mutantes e ocorrência desses caminhos em produção: [nao verificado].
+
+**1. Triagem da volta 3**
+
+| Item | Veredito nesta obra |
+|---|---|
+| **PROCEDENTE 1** | Curou a violação da lei do restart: a recusa voltou a ser incondicional. Não curou simultaneamente o contrato de portões antes do migrate (`bin/deploy.sh:294–301,323–327`; `CLAUDE.md:90`). |
+| **PROCEDENTE 2** | “UM leitor” agora corresponde ao único teste do valor de `APLICAR_MIGRATE`. “UM escritor” exige distinguir a inicialização da armação; literalmente há duas atribuições (`bin/deploy.sh:59–61,223,299`). |
+| **PROCEDENTE 3** | Curado estaticamente: `PUB_OK` compara apply com a primeira publicação e é exigido nos casos 3 e 13 (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110–114,132,172`). RED efetivo: [nao verificado]. |
+| **PROCEDENTE 4** | **Mal curado:** o caso 12 cria cron antes de iniciar o deploy; a guarda inicial já recusa. Remover somente a rechecagem imediatamente anterior ao apply continua passando esse cenário (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:97–98,167–169`; `bin/deploy.sh:115–118,300`). |
+| **PROCEDENTE 5** | A dependência de PID fixo foi retirada: as marcas usam `$$` do selo, exportado para o falso migrate (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:75,96–97`). |
+| **NÃO PROCEDE 6** | Defensável **na localização declarada**: a configuração agenda deploy e envelope sob `/home/ronald/saas-hasner`. Não é equivalência universal: o envelope escreve em endereço absoluto e o deploy lê relativamente à própria localização (`app/config/crons.py:19,326,1475,1486`; `bin/cron_run.sh:9`; `bin/deploy.sh:53,108`). Caminhos efetivos em produção: [nao verificado]. |
+| **FILA 7** | **Pertence à promessa desta obra:** a 1c afirma que mensageria já respondeu. Hoje sua guarda precede o apply, mas o falso deste selo sempre responde sucesso para ela; o vizinho testa recusa por mensageria, sem exigir banco core intocado (`bin/deploy.sh:194–203,292,301`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`; `bin/tests/test_deploy_reload_gracioso.sh:150–156`). |
+| **FILA 8** | **Pertence à promessa:** faltam cenários verdes de auth com pendência em agendado/`--sem-migrate`. O caso 4 para antes, por auth; o caso 10 não tem pendência. Remover as recusas desses modos sobreviveria aos 13 por inspeção (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:135–137,159–161`; `bin/deploy.sh:211–218`). |
+| **FILA 9** | Lacuna de cobertura, sem defeito atual demonstrado: `--reload-copia` passa pela mesma chamada de auth, mas não aparece nos 13 cenários (`bin/deploy.sh:82,126,145`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123–173`). |
+| **DESCARTE 10** | **Improcedente como descarte.** Consultar novamente pode obter outra resposta e encerrar o deploy após o apply. Além disso, a consulta também apaga marcas consideradas mortas (`bin/deploy.sh:92,108–113,301,326`). |
+| **FILA 11** | O contador realmente não prova os alvos, mas o vizinho exige a linha exata do restart das três cascas. Não é bloqueio adicional demonstrado aqui (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:109,172`; `bin/tests/test_deploy_reload_gracioso.sh:134–139`). |
+| **DESCARTE 12** | **Justificativa exagerada:** o vizinho verifica troca de workers e sobrevivência do exec, mas simula reciclagem verde, rotas 200 e sucesso dos demais exec. Não demonstra mordida de falhas de readiness/rotas/reciclagem (`bin/tests/test_deploy_reload_gracioso.sh:40–41,57–58,107–112`). Provas de resultado da publicação continuam distintas de pré-requisitos verificáveis antes dela (`bin/deploy.sh:344–357,365–403`). |
+| **DESCARTE 13** | **Procede para reabertura sob o contrato literal.** Reciclagem vermelha encerra o deploy depois de migrate/publicação; verifica inclusive configuração e crontab, condições que podem já estar erradas antes do apply (`bin/deploy.sh:301,327,344,410`; `bin/selo_reciclagem.sh:45–48,53–78`). |
+| **PERGUNTA 14** | Continua material: as consultas não estabelecem exclusão com o nascimento de cron. Restaurar a última consulta preserva a recusa observada, mas não fecha a corrida (`bin/deploy.sh:108–117,300,326–327`; `bin/cron_run.sh:9–11`). |
+
+**2. Escritores e leitores**
+
+| Campo/protocolo | Quem escreve | Quem lê |
+|---|---|---|
+| `APLICAR_MIGRATE` | Deploy inicializa `0` e arma `1` quando há pendência core em modo elegível (`bin/deploy.sh:61,204–223`). O selo injeta `1` herdado no caso 10, sobrescrito pela inicialização (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:98,159`). | Único leitor operacional: decisão de executar apply (`bin/deploy.sh:299`). |
+| `RESTART` | Deploy inicializa `0`; somente `MODO=--restart` escreve `1`, exigindo motivo (`bin/deploy.sh:70–75`). | Guarda inicial; exceção da pendência de mensageria; rechecagem pré-apply; escolha restart/HUP; mensagem final (`bin/deploy.sh:115,200,300,323,429`). Fora dele, o contrato lê o **texto** do ramo (`bin/contrato_deploy.sh:41–47`). |
+| Marcas `logs/crons_em_curso` | Envelope cria diretório/nome `N_E.$$`, grava timestamp e remove no `EXIT` (`bin/cron_run.sh:9–10`). **Deploy também modifica o conjunto**, apagando marcas sem PID existente (`bin/deploy.sh:108–109`). | Deploy enumera marcas, extrai PID do sufixo, consulta `/proc`, devolve nomes vivos e decide a recusa (`bin/deploy.sh:108–113`). A mesma função é chamada em três pontos (`bin/deploy.sh:117,300,326`). |
+
+O deploy **não lê o timestamp gravado dentro da marca**: seu protocolo efetivo usa existência do arquivo, nome e PID do sufixo (`bin/cron_run.sh:10`; `bin/deploy.sh:108–109`). O contrato externo apenas procura os textos dos caminhos, sem consumir marcas (`bin/contrato_deploy.sh:81–82`).
+
+Os escritores de marcas dos testes são o falso migrate e a preparação do cron anterior, além do selo vizinho com PID de seu exec falso (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:75,96–97`; `bin/tests/test_deploy_reload_gracioso.sh:90–91`). Os elos da corrente também entram pelo envelope, depois de esperar carimbos de fim (`bin/encadeado.sh:89,102–104`).
+
+Portanto, o comentário sobre `APLICAR_MIGRATE` bate quanto ao **leitor único** e ao **único ponto que arma a decisão**; não descreve literalmente uma única atribuição. A consulta das marcas tampouco é somente leitura (`bin/deploy.sh:59–61,109,223,299`).
+
+**3. Mordida dos casos 1–13**
+
+A tabela indica mutantes detectáveis pelas asserções, por inspeção; execução desses mutantes: [nao verificado].
+
+| Caso | Mutante que detecta |
+|---|---|
+| **1** | Auth removida, ignorada ou posterior ao apply: exige recusa sem migrate/HUP (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:123–125`). |
+| **2** | Sombra removida, ignorada ou posterior ao apply (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:127–129`). |
+| **3** | Apply ausente/duplicado; auth, sombra `--conferir` ou casca ausentes/depois dele; publicação antes do apply; HUP ausente/duplicado (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:103–117,131–133`). |
+| **4** | Agendado deixa de **chamar** auth. Não isola respeito ao retorno: a pendência também poderia recusar (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:135–137`). |
+| **5** | `--conferir` aplica/publica, consulta auth/sombra ou deixa de terminar com sucesso (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:139–141`). |
+| **6** | Prova de casca removida, ignorada ou posterior ao apply (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:143–145`). |
+| **7** | `--sem-sombra` também dispensa auth ou migra antes dela (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:147–149`). |
+| **8** | Apply incondicional sem pendência, ou ausência de HUP nesse caminho (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:151–153`). |
+| **9** | Agendado chama auth, mas ignora a recusa; sem pendência para mascarar o erro (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:155–157`). |
+| **10** | Retirada da inicialização permite `APLICAR_MIGRATE=1` herdado aplicar no `--sem-migrate` (`bin/deploy.sh:61`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:98,159–161`). |
+| **11** | Retirada da recusa final ou retorno à condição da volta 3, permitindo restart sobre cron nascido no apply (`bin/deploy.sh:326`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:75,163–165`). |
+| **12** | Retirada das barreiras anteriores ao apply para cron **já vivo no início**. Não distingue qual delas respondeu (`bin/deploy.sh:117,300`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:97,167–169`). |
+| **13** | Apply ausente/duplicado; restart ausente/duplicado; restart antes do apply (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110–114,171–173`). |
+
+**Sobreviventes relevantes:**
+
+- **Na linha efetivamente alterada `bin/deploy.sh:326`:** substituir a chamada por `[ "$APLICAR_MIGRATE" != 1 ] || recusa_restart_com_cron`. Preserva a recusa com apply, satisfazendo 11/13; o 12 para na guarda inicial. Deixa desprotegido cron tardio em restart **sem pendência core**, cenário inexistente nos 13 (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:163,167,171`; `bin/deploy.sh:117,326–327`).
+- **Na mesma linha alterada:** condicionar a recusa a `PEND_MSG=0`. Sobrevive porque o falso sempre devolve sucesso para mensageria; falha justamente quando há pendência dela e restart autorizado (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`; `bin/deploy.sh:194–203,326`).
+- **Na proteção que o novo caso 12 promete selar:** remover somente `bin/deploy.sh:300`. A marca anterior já é barrada em `117`; a marca do caso 11 só nasce dentro do migrate. Falta nascimento entre essas guardas (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:75,97,167–169`; `bin/deploy.sh:117,300–301`).
+
+Há também erro no comentário novo: anuncia comparação apply/publicação nos casos **3,8,11**, mas ela é exigida nos **3,13**. Pelas próprias definições, 8 não tem apply e 11 não tem publicação (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:36,110–114,132,152,164,172`).
+
+**4. Comentário da seção 1c e caminhos adicionais**
+
+A descrição acerta que auth, sombra aplicável, guardas de pendência e prova de casca ficam antes do apply; a prova de casca usa container sem rede (`bin/deploy.sh:145,151–162,194–218,286,301`; `bin/prova_de_casca.sh:30–34`). Acerta também que o envelope executa o comando uma vez, sem retry nesse fluxo, e que a corrente espera arquivos de conclusão (`bin/cron_run.sh:11,22–25,38`; `bin/encadeado.sh:89–96`).
+
+**A janela residual não se limita à duração do migrate.** Este caminho é permitido pela sequência do código:
+
+1. A consulta pré-apply termina sem marca viva (`bin/deploy.sh:300`; `bin/deploy.sh:108–111`).
+2. O migrate termina com sucesso (`bin/deploy.sh:301`).
+3. Um envelope cria sua marca **depois desse término** (`bin/cron_run.sh:9–11`).
+4. A seção 2 consulta novamente, encontra o cron e recusa (`bin/deploy.sh:324–327`).
+
+Logo, **sim**, há banco andado e recusa na seção 2 fora do residual literalmente descrito como cron que nasce “durante o migrate”. Também cabe nascimento depois da observação prévia e antes de começar o apply (`bin/deploy.sh:295–301,326`; `bin/cron_run.sh:9`).
+
+Existe ainda a corrida inversa: cron nasce depois da última observação e antes do restart; a consulta não impede que esse cron seja atingido pelo restart (`bin/deploy.sh:326–327`; `bin/cron_run.sh:9–11`). Ocorrência real: [nao verificado].
+
+O comentário promete pergunta no topo do RELATO, mas o topo disponível trata de outras obras; registro da pergunta prometida: [nao verificado] (`bin/deploy.sh:298`; `app/docs/RELATO.md:2–12`).
+
+**5. Classes de reprovação**
+
+| Classe | Sim/não e prova nesta versão |
+|---|---|
+| **Segundo juiz duplicando o existente** | **Não identificado na cura:** as três consultas chamam a mesma função; auth também permanece delegada ao mesmo script (`bin/deploy.sh:110–117,145,300,326`). |
+| **Segundo escritor fora da porta** | **Sim para mutação das marcas:** além do envelope, o deploy apaga marcas. É limpeza já existente, não novo aplicador de migration/publicador (`bin/cron_run.sh:9–10`; `bin/deploy.sh:109,301,327,344`). |
+| **Relógio fora da borda** | **Não introduzido pelas alterações mostradas:** a decisão temporal permanece em `janela_auth.sh`. Há limite preexistente: dia/hora são lidos separadamente e não são revalidados na publicação (`bin/janela_auth.sh:49–56`; `bin/deploy.sh:145,301,327,344`). Ocorrência de atravessar a janela: [nao verificado]. |
+| **Derivação paralela de fonte única** | **Não para a regra de recusa:** há função única reutilizada. O endereço das marcas tem duas bases de construção, equivalentes apenas na instalação declarada (`bin/deploy.sh:53,108–117,300,326`; `bin/cron_run.sh:9`; `app/config/crons.py:19`). |
+| **Selo/RED sem mordida** | **Sim, parcialmente:** caso 12 não protege isoladamente a rechecagem pré-apply; o comentário de cobertura também aponta casos errados (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:36,97,167–169`; `bin/deploy.sh:117,300`). RED executado: [nao verificado]. |
+| **Ordem de trava** | **Sim quanto à falta de exclusão comum**, não há deadlock demonstrado: envelope cria marca diretamente e deploy amostra sem impedir novos nascimentos (`bin/cron_run.sh:9–11`; `bin/deploy.sh:108–113,300,326–327`). |
+| **Pouso antes do pré-requisito** | **Sim para apply antes da decisão final de recusa**; não para a ordem atual apply→HUP/restart (`bin/deploy.sh:301,326–327,344`). O selo aceita expressamente o primeiro caminho (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:164`). |
+| **Campo com dois significados** | **Não demonstrado em `APLICAR_MIGRATE`/`RESTART`:** o primeiro é decisão de aplicar, não comprovante de aplicação; o segundo é modo manual, não comprovante de restart concluído. Seus leitores atuais respeitam isso (`bin/deploy.sh:61,70–75,115,200,223,299–300,323,429`). As marcas compartilham o protocolo de nome/PID; o timestamp não participa da decisão (`bin/cron_run.sh:9–10`; `bin/deploy.sh:108–113`). |
+
+O reload agendado **lê atualmente o mesmo portão de auth**, sem isenção por modo; a configuração chama esse mesmo deploy com `--reload-agendado` (`bin/deploy.sh:65,126–145`; `app/config/crons.py:326`). Instalação efetiva desse cron e resultado em produção: [nao verificado].
+
+## 08/11 23:56 · sessao 08a5d54a032d · - · - · origem=Ronald (tmux)
+
+**Conferência e trava.** Para IDs não nulos existentes, a condição é de inclusão correta: todo Colaborador/Pergunta/Disputa da segunda leitura precisa pertencer à respectiva classe solicitada na primeira. Trocas de associação entre linhas já cobertas e encolhimentos podem passar: não exigem adquirir outra linha. `_cs` inclui também os donos de `velho` e `novo`, portanto aceitar Pergunta cujo colaborador passou a ser um desses donos é correto: ele já foi solicitado à trava. (`app/chamados/services/fio.py:2084–2098`)
+
+| Valor | Escritor comprovado | Leitor relevante |
+|---|---|---|
+| Pergunta `pk` | Definição `BigAutoField(primary_key=True)` na criação do modelo; inserção por `p.save(force_insert=True)`. (`app/chamados/migrations/0014_perguntadisputa.py:19`; `app/chamados/models.py:3016–3019`) | Pedido da trava e conferência. (`app/chamados/services/fio.py:2086–2092`) |
+| Pergunta `disputa_id` | Nascimento por `p = cls(disputa=disputa, ...)`, seguido de inserção. (`app/chamados/models.py:3016–3019`) | Pedido da trava e diferença nova; retratação solicita novamente as disputas da canônica/perdedoras. (`app/chamados/services/fio.py:2086–2092`; `app/chamados/services/fio.py:1328–1330`) |
+| Pergunta `colaborador_id` | `_chave_de_identidade` deriva do dono da disputa e recusa valor explícito divergente; migration preenche o acervo. (`app/chamados/models.py:3430–3435`; `app/chamados/migrations/0051_decisao_pergunta.py:25`) | Construção de `_cs`, conferência, identidade/dedup do fato. (`app/chamados/services/fio.py:2085–2091`; `app/chamados/models.py:2761–2763`) |
+| `_conjunto_da_migracao` | Não é coluna: a função monta lista das Perguntas cujo destino é velho/novo e soma o universo de cada semente. (`app/chamados/services/fio.py:2032–2039`) | Leitura antes e depois da trava. (`app/chamados/services/fio.py:2084–2088`) |
+| Destino que determina sementes | Nascimento e reapontamento/reuso. (`app/chamados/models.py:3016`; `app/chamados/services/fio.py:922–925`; `app/chamados/models.py:2971–3009`) | Filtro das sementes. (`app/chamados/services/fio.py:2037`) |
+| Identidade que determina expansão | Dia/célula podem mudar no rechaveamento; via de resolução muda na porta do carimbo. (`app/chamados/services/fio.py:1028–1034`; `app/chamados/models.py:3182–3190`) | `universo_da_linha` delega ao fecho; o passo do fato exclui vias fora do fato. (`app/chamados/services/fio.py:1906–1911`; `app/chamados/models.py:2730–2736`) |
+
+**O que efetivamente é solicitado à trava:** C = `_cs`; D = disputas das `_ps`; Ch = `{velho.pk, novo.pk}`; P = pks das `_ps`. A implementação elimina `None` e repetidos, executa cada classe por pk crescente e na ordem C→D→Ch→P. Os Chamados pais das disputas **não** entram automaticamente nesta chamada: isso depende de `abertas_do_colaborador`, ausente aqui. (`app/chamados/services/fio.py:2085–2087`; `app/chamados/models.py:2660–2702`)
+
+**Chamado não conferido:** seu conjunto de pks é fixo pelos argumentos `velho`/`novo`; não depende de associação mutável das Perguntas. Logo não há quarta classe de pks dinâmica omitida nesta chamada. Contudo, os donos de `velho`/`novo` vêm das instâncias recebidas e não são relidos sob trava; `_sob` apenas relê Perguntas. Uma eventual troca persistida de dono dos endpoints não seria detectada por esta conferência. Escritor concreto dessa troca após nascimento não foi localizado; ocorrência e alcançabilidade: **[nao verificado]**. (`app/chamados/services/fio.py:2085–2092`)
+
+O censo AST em memória de Python de produção não encontrou atribuição explícita de `Pergunta.disputa/disputa_id` após nascimento, nem atualização literal dessas chaves. Não transforma imutabilidade em garantia: o `save` genérico só chama `_chave_de_identidade` em inserções e depois delega ao ORM; persistência por escritor indireto/dinâmico continua **[nao verificado]**. (`app/chamados/models.py:3420–3423`)
+
+**None quebra a equivalência literal entre conjunto comparado e conjunto travável.** `_pks` elimina `None`; `disputas=[None]` não executa consulta de Disputa. Entretanto, `_fora[2]` compara conjuntos crus. Portanto, se `None` aparece apenas na segunda leitura, ocorre recusa embora nenhuma nova linha de Disputa corresponda a esse valor. Se `None` já estava na primeira leitura, não há recusa por ele; qualquer ID real novo continua sendo recusado. (`app/chamados/models.py:2660–2661`; `app/chamados/models.py:2679–2684`; `app/chamados/services/fio.py:2091–2093`)
+
+Exemplos deduzidos da expressão:
+
+- Antes `{7}`, depois `{None}` → recusa por `{None}`, embora `None` não seja travado. (`app/chamados/services/fio.py:2092–2093`; `app/chamados/models.py:2661`)
+- Antes `{None, 7}`, depois `{None, 8}` → recusa por `{8}`. (`app/chamados/services/fio.py:2092–2093`)
+- Antes `{7, 8}`, depois `{8}` → aceita, corretamente para inclusão de linhas necessárias. (`app/chamados/services/fio.py:2092–2093`)
+
+A FK `Pergunta.disputa` é obrigatória tanto no modelo atual quanto na migration de criação: não declara `null=True`. Assim, a diferença de semântica existe na função, mas a presença de `None` em Pergunta persistida pelo esquema esperado não foi demonstrada; estado real do schema/dados de produção: **[nao verificado]**. (`app/chamados/models.py:2424–2428`; `app/chamados/migrations/0014_perguntadisputa.py:27`)
+
+## 08/11 23:55 · sessao 460631968e5b · - · - · origem=Ronald (tmux)
+
+Leitura estática; nenhuma execução de teste. Resultado de produção e RED/GREEN efetivo: [nao verificado]. [nao verificado]
+
+1. **Contrato absoluto ainda não está cumprido.** O apply ocorre em `bin/deploy.sh:301`, mas o portão de cron ainda pode recusar em `bin/deploy.sh:326`; o caso 11 passa a exigir exatamente `1 migrate / 0 restart / rc!=0`, aceitando esse residual no selo (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:163-165`). A lei local exige recusa do restart com cron vivo (`CLAUDE.md:90`); restaurá-la corrige a troca de lei da volta 3, mas não resolve simultaneamente a promessa “todo portão antes do migrate” (`bin/deploy.sh:294-298`).
+
+2. **PROCEDENTE 4 mal curado: caso 12 não protege a recusa imediatamente anterior ao apply.** A marca é criada antes da execução do deploy (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`), portanto a primeira consulta já recusa em `bin/deploy.sh:115-117`. Apagar somente `bin/deploy.sh:300` continua atendendo ao caso 12 (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:167-169`); o caso 11 só cria a marca dentro do apply (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:75`). Falta cenário com marca surgindo entre a 0e e a 1c (`bin/deploy.sh:117`, `bin/deploy.sh:300`).
+
+3. **DESCARTE 10 procede para esta obra.** “Só ler” não torna a segunda consulta inofensiva: `recusa_restart_com_cron` chama `falhou`, que termina com exit 1 (`bin/deploy.sh:92`, `bin/deploy.sh:110-113`), e a consulta após o apply está explicitamente presente (`bin/deploy.sh:301`, `bin/deploy.sh:326`).
+
+4. **O comentário 1c estreita demais o residual.** A janela real vai da observação de marcas feita na chamada de `bin/deploy.sh:300` até a observação feita na chamada de `bin/deploy.sh:326`, ambas por `bin/deploy.sh:111`. Pode surgir marca **depois que migrate terminou**, antes da consulta da seção 2; a criação de marca não toma trava compartilhada (`bin/cron_run.sh:9-11`). Logo há caminho estático banco andado + seção 2 recusando fora da expressão literal “cron que NASCE durante o migrate” (`bin/deploy.sh:295-297`). Ocorrência em produção: [nao verificado].
+
+5. **FILA 7 e 8 são dependências da promessa, mesmo preexistentes.** A 1c afirma que mensageria e pendências já responderam (`bin/deploy.sh:292`), e hoje de fato suas guardas estão antes do apply (`bin/deploy.sh:194-218`, `bin/deploy.sh:301`). Entretanto o falso nunca faz a mensageria recusar (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`); os cenários agendados com pendência têm auth vermelho e param antes dessa guarda (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:135-137`), e o `--sem-migrate` do caso 10 não tem pendência (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:159-161`). Remover as recusas de `bin/deploy.sh:211-218` sobrevive aos 13 por inspeção; execução do mutante: [nao verificado].
+
+6. **FILA 9 é lacuna de modo, sem bug atual demonstrado.** A cópia altera os indicadores em `bin/deploy.sh:82`, mas passa pela mesma chamada de auth, sem ramo de isenção por modo (`bin/deploy.sh:126-145`). Os 13 cenários não chamam `--reload-copia` (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:123-173`).
+
+7. **FILA 11: o limite do contador é real, mas há cobertura vizinha dos alvos.** Os 13 contam linhas iniciadas por restart (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:109`), enquanto o vizinho exige a linha exata `restart saas_core saas_ui mensageria` (`bin/tests/test_deploy_reload_gracioso.sh:135-139`). A lista atual é essa (`bin/deploy.sh:327`); resultado de execução do vizinho: [nao verificado].
+
+8. **DESCARTE 12 tem justificativa exagerada.** O vizinho verifica troca de workers e sobrevivência do exec nos casos verdes (`bin/tests/test_deploy_reload_gracioso.sh:107-112`), mas transforma `selo_reciclagem` em `exit 0` (`bin/tests/test_deploy_reload_gracioso.sh:40-41`), responde sempre `STATUS 200` às provas de rota (`bin/tests/test_deploy_reload_gracioso.sh:57`) e devolve sucesso aos outros exec, incluindo readiness (`bin/tests/test_deploy_reload_gracioso.sh:58`). Assim não demonstra mordida das recusas de readiness/rotas/reciclagem (`bin/deploy.sh:366-367`, `bin/deploy.sh:403`, `bin/deploy.sh:410`).
+
+9. **DESCARTE 13 exige ressalva para o contrato literal.** Reciclagem não é apenas contador: vermelho chama `falhou` após a publicação (`bin/deploy.sh:410`), e mede configurações do disco, cmdline/compose e crontab instalado (`bin/selo_reciclagem.sh:45-48`, `bin/selo_reciclagem.sh:53-78`). Essas verificações podem recusar por condição já existente antes do apply (`bin/deploy.sh:301`, `bin/deploy.sh:410`). A afirmação “todo portão respondeu” precisa de uma exclusão explícita desse selo ou de sua execução anterior; a exclusão não está na frase da 1c (`bin/deploy.sh:291-298`).
+
+10. **Registro de desenho prometido não localizado.** O comentário manda ao topo do RELATO (`bin/deploy.sh:298`), mas o topo da cópia trata de outras obras (`app/docs/RELATO.md:2-12`); busca em todo o arquivo por `deploy.?portao|portao.?antes` retornou zero ocorrências. Existência da pergunta prometida: [nao verificado].
+
+Classes arquiteturais, dentro deste delta:
+
+- **Segundo juiz: não demonstrado.** As três consultas usam a mesma função (`bin/deploy.sh:110`, `bin/deploy.sh:117`, `bin/deploy.sh:300`, `bin/deploy.sh:326`); auth continua em um script (`bin/deploy.sh:145`).
+- **Segundo escritor de publicação: não introduzido pelo delta.** Restart permanece no ramo explícito e HUP no outro ramo (`bin/deploy.sh:323-344`); a recusa restaurada não acrescenta publicação (`bin/deploy.sh:326`).
+- **Relógio fora da borda: nenhum novo `date` no delta fornecido [nao verificado quanto ao histórico].** O juiz lê dia e hora separadamente (`bin/janela_auth.sh:49-56`) e o deploy o consulta antes de checks, collectstatic, prova e migrate (`bin/deploy.sh:145`, `bin/deploy.sh:184`, `bin/deploy.sh:266`, `bin/deploy.sh:286`, `bin/deploy.sh:301`); atravessar a janela temporal antes da publicação é possível por escalonamento, ocorrência [nao verificado].
+- **Derivação paralela: não na recusa de cron.** Repetição chama a função única (`bin/deploy.sh:110-117`, `bin/deploy.sh:300`, `bin/deploy.sh:326`).
+- **Selo sem mordida: sim, parcialmente.** Caso 12 não distingue a retirada da linha 300; configuração de marca anterior e primeira recusa provam a máscara (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/deploy.sh:115-117`). RED efetivamente rodado: [nao verificado].
+- **Ordem/exclusão de trava: sim, falta exclusão comum; deadlock não demonstrado.** O envelope cria marca e roda comando diretamente (`bin/cron_run.sh:9-11`); o deploy somente amostra a marca (`bin/deploy.sh:108-113`, `bin/deploy.sh:300-326`).
+- **Pouso antes do pré-requisito: não para apply antes de publicação nos caminhos atuais** (`bin/deploy.sh:301`, `bin/deploy.sh:327`, `bin/deploy.sh:344`); **sim para apply antes da decisão final de recusa**, no residual aceito (`bin/deploy.sh:301`, `bin/deploy.sh:326`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:164`).
 
 ## 08/11 23:54 · sessao d3cf7e7093bb · - · - · origem=Ronald (tmux)
 
@@ -519,208 +773,4 @@ A rotina lista marcas com PID presente em `/proc` e remove marcas cujo PID não 
 
 Mapa completo enviado nas mensagens anteriores, incluindo variáveis de ambos os selos e campos dos logs/fixtures.
 
-## 08/11 23:14 · sessao 5594ec55ebdb · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 08/11 23:08 · sessao 6ea0bd9fb4d7 · BUG-DEPLOY-PORTAO · verificador · origem=Code
-
-**1. Auth e sombra agora antecedem o migrate, mas ainda há efeitos antes de portões e recusas depois de alterações no banco.** A sequência efetiva é esta. (`bin/deploy.sh:123`, `bin/deploy.sh:159`, `bin/deploy.sh:217`, `bin/deploy.sh:280`, `bin/deploy.sh:306`)
-
-| Ordem | Passo e efeito | Posição dos portões |
-|---|---|---|
-| 1 | `arvore_sem_conflito`: lê índice e arquivos; pode encerrar qualquer modo. | Primeiro portão, antes dos demais passos abaixo. (`bin/deploy.sh:98`, `bin/arvore_sem_conflito.sh:19`, `bin/arvore_sem_conflito.sh:29`) |
-| 2 | Só `--restart`: verifica crons e **apaga marcas de PID morto**. | Depois da árvore; antes de auth, sombra e pendências. A própria verificação já modifica arquivos. (`bin/deploy.sh:105`, `bin/deploy.sh:106`, `bin/deploy.sh:114`) |
-| 3 | Auth: chama `janela_auth.sh` ou anuncia a dispensa por motivo. | Antes de sombra, consultas de pendências e migrate; omitido em `--conferir`. (`bin/deploy.sh:123`, `bin/deploy.sh:140`, `bin/deploy.sh:142`) |
-| 4 | Sombra: chama `--conferir` ou **apenda `deploy_sem_sombra.log`**. O helper real executa também **`mkdir -p logs/sombra`**, antes de validar o carimbo. | Depois de auth; antes das recusas por mensageria/core pendentes. Agendado puro é isento; cópia não. (`bin/deploy.sh:148`, `bin/deploy.sh:157`, `bin/deploy.sh:159`, `bin/sombra.sh:84`, `bin/sombra.sh:410`) |
-| 5 | Executa os dois `--check`; qualquer resposta não zero vira pendência. | Mensageria pendente recusa antes de aplicar migration, exceto em conferir/restart. (`bin/deploy.sh:181`, `bin/deploy.sh:191`, `bin/deploy.sh:197`) |
-| 6 | Core pendente: executa `--plan`; conferir informa; cópia, agendado e sem-migrate recusam; demais **aplicam `migrate_schemas --tenant`**. | Árvore, primeira recusa do restart, auth, sombra e guarda de mensageria já foram tratados conforme o modo. (`bin/deploy.sh:202`, `bin/deploy.sh:203`, `bin/deploy.sh:205`, `bin/deploy.sh:208`, `bin/deploy.sh:212`, `bin/deploy.sh:217`) |
-| 7 | Conferir encerra. Nos demais, `collectstatic` pode **reescrever estáticos/manifest**; falha apenas avisa. | Depois das pendências; antes da prova de casca. (`bin/deploy.sh:221`, `bin/deploy.sh:258`, `bin/deploy.sh:260`) |
-| 8 | Prova de casca: **cria temporário, cria/remove container efêmero e apaga temporário**; pode recusar. App montado somente leitura, logs em tmpfs, rede desativada. | **Depois do migrate e collectstatic**, antes da publicação. Pode ser dispensada por `SEM_PROVA_DE_CASCA`. (`bin/deploy.sh:276`, `bin/deploy.sh:280`, `bin/prova_de_casca.sh:28`, `bin/prova_de_casca.sh:30`, `bin/prova_de_casca.sh:34`, `bin/prova_de_casca.sh:46`) |
-| 9 | Restart: **repete a recusa por cron**, podendo novamente apagar marcas, e executa **`docker restart`**. Demais modos enviam **HUP aos três containers** e aguardam troca de workers. | A segunda recusa pode acontecer **depois de migrar**. Falha de HUP/troca também ocorre depois das escritas anteriores. (`bin/deploy.sh:306`, `bin/deploy.sh:307`, `bin/deploy.sh:324`, `bin/deploy.sh:337`) |
-| 10 | O comando declarado para o boot do mensageria **aplica `migrate --noinput`**. | Efeito do ramo restart segundo o compose; configuração efetiva do container vivo: **[nao verificado]**. (`docker-compose.mensageria.yml:20`) |
-| 11 | Espera os containers e executa `Client.get` em três rotas. Resposta inadequada encerra o deploy. | **Depois da publicação**. Escrita de negócio por essas requisições: **[nao verificado]**. (`bin/deploy.sh:346`, `bin/deploy.sh:362`, `bin/deploy.sh:380`, `bin/deploy.sh:383`) |
-| 12 | Selo de reciclagem ainda pode recusar; contador de ImportError lê log. | Ambos depois da publicação; o contador não é portão. (`bin/deploy.sh:390`, `bin/deploy.sh:393`, `bin/importerror_na_janela.sh:13`, `bin/importerror_na_janela.sh:32`) |
-| 13 | **Trunca/escreve `deploy.stamp.novo`, substitui `deploy.stamp`, cria diretório e apenda histórico**. | Depois das provas e selo. Histórico exclui agendado puro e prova de casca dispensada; stamp não tem essas exclusões. (`bin/deploy.sh:396`, `bin/deploy.sh:400`, `bin/deploy.sh:404`, `bin/deploy.sh:405`, `bin/deploy.sh:406`) |
-
-Portanto, **sim: permanece alteração de schema/dados antes da prova de casca e da segunda recusa do restart**, sem compensação correspondente nesses ramos de falha. O HUP/restart também antecede os portões de rotas e reciclagem. A cura resolve especificamente a recusa tardia de auth/sombra; não estabelece atomicidade integral. (`bin/deploy.sh:217`, `bin/deploy.sh:281`, `bin/deploy.sh:306`, `bin/deploy.sh:324`, `bin/deploy.sh:383`, `bin/deploy.sh:390`)
-
-“Antes de qualquer escrita” também é literalmente excessivo pelos arquivos acima. Além disso, comandos Django podem carregar settings que criam `/app/logs` e configuram arquivos de log; ocorrência efetiva dessas escritas neste ambiente: **[nao verificado]**. (`bin/deploy.sh:121`, `app/manage.py:9`, `app/config/settings/saas.py:118`, `app/config/settings/saas.py:139`, `app/config/settings/saas.py:163`)
-
-**2. A política de inclusão dos modos foi preservada; os caminhos que recusam antecipadamente mudaram.** O parser considera somente `$1` como modo. (`bin/deploy.sh:56`, `bin/deploy.sh:60`, `bin/deploy.sh:79`, `bin/deploy.sh:83`)
-
-| Modo | Auth, salvo motivo de dispensa | Sombra |
-|---|---|---|
-| Normal | Exigida | Exigida, salvo motivo herdado. (`bin/deploy.sh:140`, `bin/deploy.sh:148`) |
-| `--conferir` | Não executa | Não executa. O fluxo anterior também encerrava antes do bloco removido, conforme o diff. (`bin/deploy.sh:123`, `bin/deploy.sh:221`) |
-| `--sem-migrate` | Exigida | Exigida, salvo motivo herdado. (`bin/deploy.sh:61`, `bin/deploy.sh:140`, `bin/deploy.sh:148`) |
-| `--sem-sombra` | Exigida | Dispensada com motivo obrigatório e tentativa de registro. (`bin/deploy.sh:83`, `bin/deploy.sh:85`, `bin/deploy.sh:140`, `bin/deploy.sh:157`) |
-| `--reload-agendado` | Exigida | Isento. (`bin/deploy.sh:62`, `bin/deploy.sh:140`, `bin/deploy.sh:148`) |
-| `--reload-copia` | Exigida | Exigida, salvo motivo herdado. (`bin/deploy.sh:79`, `bin/deploy.sh:140`, `bin/deploy.sh:148`) |
-| `--restart` | Exigida | Exigida, salvo motivo herdado. (`bin/deploy.sh:69`, `bin/deploy.sh:140`, `bin/deploy.sh:148`) |
-
-A resposta literal a “antes não passava e agora passa” é **sim, em caminhos recusados**: antes, mensageria pendente ou core pendente em sem-migrate/agendado/cópia encerravam antes de alcançar auth/sombra. Agora executam os portões aplicáveis primeiro. Isso altera a primeira causa/mensagem de falha e pode deixar registro de dispensa de sombra em uma tentativa posteriormente recusada ou cujo migrate falhe. (`bin/deploy.sh:140`, `bin/deploy.sh:158`, `bin/deploy.sh:197`, `bin/deploy.sh:205`, `bin/deploy.sh:208`, `bin/deploy.sh:212`, `bin/deploy.sh:217`)
-
-**3. Os chamadores identificados são os seguintes; instalação e execução reais em produção permanecem [nao verificado].**
-
-| Origem | Chamada e dependência observável |
-|---|---|
-| Cron declarado | 03:30, `--reload-agendado`, com saída em log. (`app/config/crons.py:326`) |
-| Integrador | Wrapper chama o lote; lote faz `--reload-copia` após copiar, descartando seu retorno. O deploy final `--sem-sombra` tem retorno conferido antes de marcar FIM/NO_AR. (`bin/integrador.sh:52`, `app/core/integrador_lote.py:627`, `app/core/integrador_lote.py:638`, `app/core/integrador_lote.py:753`, `app/core/integrador_lote.py:754`, `app/core/integrador_lote.py:763`) |
-| Molde de fatia | `--reload-copia` após desfazer e copiar; final `--sem-sombra`. Reconhece sucesso final pelo texto `^deploy: OK`. (`bin/molde_fatia/cadeia.sh:32`, `bin/molde_fatia/cadeia.sh:48`, `bin/molde_fatia/cadeia.sh:89`, `bin/molde_fatia/cadeia.sh:90`) |
-| Molde autocura | Mesmas três chamadas e reconhecimento textual. (`bin/molde_autocura/cadeia.sh:31`, `bin/molde_autocura/cadeia.sh:45`, `bin/molde_autocura/cadeia.sh:86`, `bin/molde_autocura/cadeia.sh:87`) |
-| Vigia de logins | Após revert, chama `--sem-migrate`; falha é anunciada. (`bin/vigia_logins.sh:87`) |
-| Vigia da esteira | Auto-revert e revert do revert chamam `--sem-sombra`, descartando os retornos dos deploys. (`app/core/esteira_vigia.py:1267`, `app/core/esteira_vigia.py:1275`) |
-| Fatia abono | Deploy normal, depois backfill; verifica falha do pipeline do deploy. (`fatias_agendadas/abono-no-ar/esteira.sh:37`, `fatias_agendadas/abono-no-ar/esteira.sh:45`) |
-| Fatia o135 | Usa `--conferir`; após merge usa `--sem-migrate` e guarda seu retorno. (`fatias_agendadas/o135-teto20/esteira.sh:80`, `fatias_agendadas/o135-teto20/esteira.sh:116`, `fatias_agendadas/o135-teto20/esteira.sh:117`) |
-| Agendador genérico | Delega à `esteira.sh` da fatia. (`bin/deploy_agendado.sh:73`) |
-| Fabricante | Declara que não publica e proíbe deploy; comportamento indireto de conteúdo gerado: **[nao verificado]**. (`bin/fabricante.sh:8`, `bin/fabricante.sh:17`, `bin/fabricante_prompt.md:70`) |
-| Selos | Os dois testes comportamentais executam uma cópia do deploy contra docker falso. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:34`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:74`, `bin/tests/test_deploy_reload_gracioso.sh:36`, `bin/tests/test_deploy_reload_gracioso.sh:95`) |
-
-Os consumos observados são retorno final, mensagem final ou descarte do retorno; não há nesses pontos uma espera por “migrate antes do carimbo”. Dependência externa ou dinâmica dessa ordem: **[nao verificado]**. (`app/core/integrador_lote.py:754`, `bin/molde_fatia/cadeia.sh:90`, `app/core/esteira_vigia.py:1267`)
-
-**4. O selo morde a regressão principal no modo normal, mas não demonstra sua promessa universal.** Não executei os selos: eles criam e removem arquivos temporários. Os resultados abaixo são análise estática, não execução de mutantes. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:31`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:34`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:86`)
-
-| Caso | O que efetivamente cobra |
-|---|---|
-| 1 — auth recusa | Normal, core pendente: exige rc não zero, zero migrate contado e zero HUP. Mover auth para depois do migrate normal quebra essa expectativa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:89`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`) |
-| 2 — sombra recusa | Mesma cobrança para sombra no normal. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:93`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:94`) |
-| 3 — verde | Exige um migrate, um HUP e registro dos dois portões antes do migrate. É a proteção contra passar apenas por falha antecipada. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:79`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:83`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:98`) |
-| 4 — agendado | Exige apenas rc não zero e zero HUP. Não põe core pendente, não exige ausência de migrate nem confirma que auth causou a recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:101`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:102`) |
-| 5 — conferir | Exige sucesso sem migrate/HUP mesmo com auth recusando. Não verifica ausência de chamada à sombra. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:105`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:106`) |
-
-Há mutantes que a matriz deixa escapar, por inferência estática:
-
-- **Antecipar os portões somente no normal e manter o bloco antigo nos demais modos.** Os três primeiros casos passam; o agendado ainda recusa auth sem HUP; conferir continua saindo antes. A ordem continua desprotegida em sem-sombra/restart/cópia. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:89`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:93`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:101`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:105`)
-- **Trocar `sombra --conferir` por outra operação.** O falso aceita qualquer argumento; a medição de ordem procura somente `PORTAO sombra`. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:42`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:81`)
-- **Acrescentar outro efeito não contado**, como restart antes do portão: o falso aceita comandos desconhecidos, enquanto as asserções contam somente a forma específica de migrate e HUP. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:60`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:76`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:77`)
-
-Há ainda contaminação possível pelo ambiente: o selo limpa `SEM_SOMBRA_MOTIVO`, mas o deploy imediatamente a sobrescreve usando `DEPLOY_SEM_SOMBRA`. Um valor herdado nessa segunda variável dispensa o falso portão e pode produzir vermelho com a cura correta. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:74`, `bin/deploy.sh:82`, `bin/deploy.sh:149`)
-
-**5. O diff contém 19 substituições, em 18 linhas — não 17.**
-
-| Grupo | Quantidade e valores |
-|---|---|
-| Atomicidade | 2: `M`, `C`, saídas do varredor sobre fixtures. (`bin/tests/test_atomicidade_da_porta.sh:55`, `bin/tests/test_atomicidade_da_porta.sh:56`, `bin/tests/test_atomicidade_da_porta.sh:83`, `bin/tests/test_atomicidade_da_porta.sh:84`) |
-| Import tardio | 2: `OUT`, `MORDE`, stdout/stderr do Python. (`bin/tests/test_import_tardio_contra_o_ar.sh:23`, `bin/tests/test_import_tardio_contra_o_ar.sh:25`, `bin/tests/test_import_tardio_contra_o_ar.sh:37`, `bin/tests/test_import_tardio_contra_o_ar.sh:38`) |
-| Inventário | 2: `OUT`, `MORDE`, saída de `_rodar`. (`bin/tests/test_inventario_pessoal_no_commit.sh:31`, `bin/tests/test_inventario_pessoal_no_commit.sh:33`, `bin/tests/test_inventario_pessoal_no_commit.sh:61`, `bin/tests/test_inventario_pessoal_no_commit.sh:62`) |
-| Akita | 3: `PADRAO_OUT` e duas consultas a `MORDE_OUT` na mesma linha. (`bin/tests/test_lei_akita.sh:730`, `bin/tests/test_lei_akita.sh:734`) |
-| Raia | 10: cinco consultas a `SEM`, cinco a `COM`, ambos JSON. (`bin/tests/test_raia_declarada_no_estado.sh:63`, `bin/tests/test_raia_declarada_no_estado.sh:69`, `bin/tests/test_raia_declarada_no_estado.sh:79`) |
-
-Nas saídas normais declaradas pelos produtores, não identifiquei valor que seja uma opção isolada de `echo`, como `-n`/`-e`: há prefixos de diagnóstico, marcadores ou JSON. Sob `echo` sem interpretação de escapes, ambos os caminhos acrescentam a quebra final ao valor capturado; a mudança pretendida é eliminar o produtor que pode receber SIGPIPE. Configuração efetiva de `echo` no ambiente de produção: **[nao verificado]**. (`bin/atomicidade_da_porta.py:97`, `bin/import_tardio_contra_o_ar.py:204`, `bin/inventario_pessoal_dos_modelos.py:85`, `bin/tests/test_lei_akita.sh:719`, `bin/tests/test_lei_akita.sh:725`, `bin/tests/test_raia_declarada_no_estado.sh:63`)
-
-**Não há equivalência universal de bytes:** `SEM`/`COM` contêm escapes JSON `\n`, pois `linha()` produz texto multilinha. Um `echo` configurado para expandir escapes transforma esse conteúdo; a here-string o preserva. Mudança adicional de veredito nos casos concretos fornecidos: **[nao verificado]**. (`bin/raias_estado.py:153`, `bin/tests/test_raia_declarada_no_estado.sh:65`, `bin/tests/test_raia_declarada_no_estado.sh:69`, `bin/tests/test_raia_declarada_no_estado.sh:79`)
-
-**Sobraram pipelines da mesma classe sob `pipefail`:**
-
-- `printf ... | grep -qxF` na régua de tickets. (`bin/regua_tickets.sh:15`, `bin/regua_tickets.sh:87`)
-- Quatro `printf ... | grep -q...` no selo da suite. (`bin/tests/test_suite_sh.sh:14`, `bin/tests/test_suite_sh.sh:51`, `bin/tests/test_suite_sh.sh:53`, `bin/tests/test_suite_sh.sh:55`, `bin/tests/test_suite_sh.sh:57`)
-- `printf | grep | grep -q` no selo da sonda. (`bin/tests/test_codex_sonda.sh:9`, `bin/tests/test_codex_sonda.sh:91`)
-- Função produtora com `git show | grep -q`. (`bin/tests/test_codex_estado_evento.sh:9`, `bin/tests/test_codex_estado_evento.sh:57`, `bin/tests/test_codex_estado_evento.sh:62`)
-- Função produtora com `cat | grep -q`; nesses ramos, falha do pipeline pode anunciar “negado” apesar de encontrar o marcador. Isso é inferência do encadeamento, não reprodução dinâmica. (`bin/tests/prova_codex_pergunta_real.sh:15`, `bin/tests/prova_codex_pergunta_real.sh:142`, `bin/tests/prova_codex_pergunta_real.sh:144`, `bin/tests/prova_codex_pergunta_real.sh:147`, `bin/tests/prova_codex_pergunta_real.sh:152`)
-
-O `grep -c` remanescente de Akita consome toda a entrada: isoladamente não tem o encerramento antecipado de `-q`. O diagnóstico com `head -2` ainda pode cortar o produtor, mas está na mensagem de uma falha já decidida. (`bin/tests/test_lei_akita.sh:729`, `bin/tests/test_lei_akita.sh:734`, `bin/tests/test_lei_akita.sh:735`)
-
-**6. Sim: o selo textual admite falsos positivos e negativos.** A regex exige a forma estreita `echo "$NOME" | grep -...q`; a seleção de arquivos exige somente que o texto contenha `pipefail`. (`bin/tests/test_grep_q_sem_sigpipe.sh:14`, `bin/tests/test_grep_q_sem_sigpipe.sh:19`)
-
-- **Falsos negativos:** nomes com dígitos, `${OUT}`, espaçamento diferente, continuação de linha, caminho explícito para grep, `--quiet`, produtores `printf`/`cat`/funções, subdiretórios e pipefail herdado sem essa palavra no arquivo. Os pipelines reais da resposta 5 ilustram essa lacuna. (`bin/tests/test_grep_q_sem_sigpipe.sh:14`, `bin/tests/test_grep_q_sem_sigpipe.sh:19`, `bin/tests/test_grep_q_sem_sigpipe.sh:24`, `bin/regua_tickets.sh:87`, `bin/tests/prova_codex_pergunta_real.sh:144`)
-- **Falsos positivos:** `pipefail` apenas em comentário ou desativado; forma canônica dentro de string/heredoc/comentário inline. O filtro exclui somente comentários de linha inteira e não interpreta shell. (`bin/tests/test_grep_q_sem_sigpipe.sh:19`, `bin/tests/test_grep_q_sem_sigpipe.sh:20`)
-- **Autoprova incompleta:** MORDE 1 cobre apenas a forma canônica. MORDE 2 calcula `r_pipe`, mas não exige que seja zero: fica verde sempre que `r_here=1`, mesmo se o pipeline antigo também acertar. (`bin/tests/test_grep_q_sem_sigpipe.sh:30`, `bin/tests/test_grep_q_sem_sigpipe.sh:31`, `bin/tests/test_grep_q_sem_sigpipe.sh:37`, `bin/tests/test_grep_q_sem_sigpipe.sh:40`)
-
-**7. Os leitores efetivos da chave são genéricos, pelo conjunto `ISENTOS`.** Inventário de modelos e selo SQL montam a cobertura com `set(R.ISENTOS)` e comparam `tabela.coluna`; portanto passam a reconhecer a chave nova. (`bin/sombra_regras_pessoais.py:230`, `bin/inventario_pessoal_dos_modelos.py:52`, `bin/inventario_pessoal_dos_modelos.py:78`, `bin/sombra_selo_pessoal.py:25`, `bin/sombra_selo_pessoal.py:34`)
-
-Não encontrei consumidor literal da chave antiga em `bin/`/`app/`; consumidores por nomes construídos dinamicamente: **[nao verificado]**. A ocorrência literal remanescente de `chamados_respostaanterior` no instrumento é comentário sobre o incidente. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:9`)
-
-O **modelo antigo** permanece na criação histórica, no `RenameModel` e em um teste AST que vigia os dois nomes; isso não equivale a código corrente consultando a tabela antiga. A troca da isenção acompanha o rename declarado. (`app/chamados/migrations/0050_resposta_anterior.py:17`, `app/chamados/migrations/0051_decisao_pergunta.py:41`, `app/chamados/tests/test_reabrir_nao_destroi.py:129`, `bin/sombra_regras_pessoais.py:230`)
-
-**8. Escritores e leitores dos estados pedidos:**
-
-| Estado | Quem escreve | Quem lê |
-|---|---|---|
-| `logs/deploy.stamp` | Deploy escreve `QUANDO`, `COMMIT`, `TITULO` em `.novo` e faz `mv`, usando caminho absoluto de produção. (`bin/deploy.sh:397`, `bin/deploy.sh:398`, `bin/deploy.sh:399`, `bin/deploy.sh:400`) | Janela lê `COMMIT`, com override de caminho; import tardio lê `COMMIT`, salvo override; handoff lê `QUANDO`/`COMMIT`; vigia lê os três campos para atribuição/quarentena, auto-revert e diagnóstico de relógio. (`bin/janela_auth.sh:36`, `bin/janela_auth.sh:39`, `bin/import_tardio_contra_o_ar.py:46`, `bin/import_tardio_contra_o_ar.py:50`, `bin/handoff_sessao.sh:254`, `bin/handoff_sessao.sh:255`, `app/core/esteira_vigia.py:990`, `app/core/esteira_vigia.py:1160`, `app/
-
-[truncado em 20000 de 22621 caracteres]
-
-## 08/11 23:03 · sessao 351fb2a58f19 · - · - · origem=Ronald (tmux)
-
-Q5 — há **19 substituições em 18 linhas**, pelos sítios atuais: atomicidade 2; import tardio 2; inventário 2; lei Akita 3; raias 10. A linha 734 da lei Akita contém duas substituições. (`bin/tests/test_atomicidade_da_porta.sh:56,84`; `bin/tests/test_import_tardio_contra_o_ar.sh:25,38`; `bin/tests/test_inventario_pessoal_no_commit.sh:33,62`; `bin/tests/test_lei_akita.sh:730,734`; `bin/tests/test_raia_declarada_no_estado.sh:69-73,79-83`)
-
-Proveniência e equivalência:
-
-- `M` e `C` são saídas do varredor Python sobre fixtures controlados; a primeira linha tem prefixo literal `select_for_update:`. Não podem ser apenas opções `-n`/`-e` nesse caminho normal. (`bin/tests/test_atomicidade_da_porta.sh:43-55,64-83`; `bin/atomicidade_da_porta.py:97-103`)
-- `OUT`/`MORDE` do import vêm do Python, com stderr incluído; os caminhos normais imprimem prefixos `IMPORT_TARDIO`. (`bin/tests/test_import_tardio_contra_o_ar.sh:23,37`; `bin/import_tardio_contra_o_ar.py:153,204-217`)
-- `OUT`/`MORDE` do inventário vêm de `docker run`, juntando stderr e stdout; o programa imprime `INVENTARIO_MODELOS`. Conteúdo adicional emitido pelo Docker em produção: **[nao verificado]**. (`bin/tests/test_inventario_pessoal_no_commit.sh:23-31,61`; `bin/inventario_pessoal_dos_modelos.py:48,58,85-93`)
-- `PADRAO_OUT`/`MORDE_OUT` vêm do Python embutido, que imprime marcadores literais `PADRAO_*`/`MORDE_*`. (`bin/tests/test_lei_akita.sh:719-734`)
-- `SEM`/`COM` vêm de `json.dumps(...)` sobre a fixture controlada. **Esses valores contêm barras invertidas reais**, pois o campo `linha` recebe texto multilinha e JSON representa as quebras como `\n`. (`bin/tests/test_raia_declarada_no_estado.sh:57-68,76-78`; `bin/raias_estado.py:153-154`)
-
-Com `echo` Bash usual, sem expansão de escapes, a troca preserva os bytes relevantes: os dois caminhos acrescentam uma quebra final ao valor já capturado por substituição de comando; a diferença intencional é eliminar o produtor sujeito a SIGPIPE. Nenhum desses arquivos configura `xpg_echo`; configuração herdada de produção: **[nao verificado]**. Se `xpg_echo` estiver habilitado, o `echo` antigo pode transformar `\n`, `\c` etc., enquanto a here-string preserva o conteúdo literal; logo equivalência absoluta de fluxo não está demonstrada, sobretudo nos JSONs. (`bin/tests/test_raia_declarada_no_estado.sh:63-73,79-83`; `bin/tests/test_atomicidade_da_porta.sh:15,55-56`; `bin/tests/test_import_tardio_contra_o_ar.sh:20,23-25`; `bin/tests/test_inventario_pessoal_no_commit.sh:17,31-33`; `bin/tests/test_lei_akita.sh:16,727-734`)
-
-Sobraram membros reais da mesma classe:
-
-| Local | Pipeline restante |
-|---|---|
-| `bin/regua_tickets.sh:15,87` | `printf "$DECLARADOS" \| grep -qxF` sob pipefail |
-| `bin/tests/test_suite_sh.sh:14,51-57` | Quatro `printf "$CORPO" \| grep -q...` |
-| `bin/tests/test_codex_sonda.sh:9,91` | `printf \| grep ... \| grep -q` |
-| `bin/tests/test_codex_estado_evento.sh:9,57,62` | Função que executa `git show`, canalizada para `grep -q` |
-| `bin/tests/prova_codex_pergunta_real.sh:15,142-152` | `_out(){ cat ...; }` canalizado para `grep -q` |
-
-No último exemplo, SIGPIPE no `cat` pode fazer um padrão presente cair no ramo que anuncia acesso “negado”; é inferência do encadeamento `&& ... || ...`, sem reprodução dinâmica. (`bin/tests/prova_codex_pergunta_real.sh:142-152`)
-
-O `echo "$PADRAO_OUT" | grep -c` restante consome a entrada inteira, portanto não é o mesmo problema de encerramento antecipado; o diagnóstico com `head -2` pode cortar o produtor, mas não decide o resultado do selo. (`bin/tests/test_lei_akita.sh:729,735`)
-
-Q6 — o selo é uma busca textual estreita, não um detector geral de SIGPIPE. A expressão só reconhece `echo "$NOME"` com letras/sublinhado, espaçamento exato e `grep -...q`; procura apenas nos dois níveis listados. (`bin/tests/test_grep_q_sem_sigpipe.sh:14,24`)
-
-**Falsos negativos:** `$OUT2`, `${OUT}`, espaçamento alternativo, continuação de linha, `/bin/grep`, `--quiet`, `printf`, `cat`, funções produtoras e scripts em subdiretórios escapam; pipefail herdado ou ativado por `source` sem a palavra no arquivo também escapa. Os exemplos reais acima passam pela regex. (`bin/tests/test_grep_q_sem_sigpipe.sh:14,19,24`; `bin/regua_tickets.sh:87`; `bin/tests/prova_codex_pergunta_real.sh:142-152`)
-
-**Falsos positivos:** basta a palavra `pipefail` em comentário ou em comando que o desative; só comentários de linha inteira são retirados. Uma ocorrência canônica dentro de string, heredoc ou comentário inline pode ser acusada mesmo sem ser pipeline executado. (`bin/tests/test_grep_q_sem_sigpipe.sh:19-20`)
-
-O MORDE 1 exercita somente a forma canônica, sem contraexemplos para precisão. O MORDE 2 calcula `r_pipe`, mas **não exige que seja zero**: fica verde sempre que `r_here=1`, mesmo se o pipeline antigo também acertar. Portanto ele não comprova a reprodução do SIGPIPE no ambiente em que roda. (`bin/tests/test_grep_q_sem_sigpipe.sh:30-32,35-41`)
-
-Não executei os selos: eles criam e removem temporários, contrariando a restrição somente leitura. (`bin/tests/test_grep_q_sem_sigpipe.sh:29-30`; `bin/tests/test_atomicidade_da_porta.sh:41-43`; `bin/tests/test_raia_declarada_no_estado.sh:31-55`)
-
-## 08/11 23:03 · sessao 6fde343d3c37 · - · - · origem=Ronald (tmux)
-
-Q1 — sequência e efeitos:
-
-| Ordem | Passo / efeito | Portões que já responderam |
-|---|---|---|
-| 1 | `arvore_sem_conflito` lê índice/disco; pode encerrar todos os modos. | Nenhum anterior. `bin/deploy.sh:98`; `bin/arvore_sem_conflito.sh:19-35`. |
-| 2 | Só `--restart`: primeira recusa de cron; durante a checagem **apaga marcas de PID morto** com `rm -f`. | Árvore; auth, sombra e pendências ainda não. `bin/deploy.sh:105-114`. |
-| 3 | Exceto conferir: auth ou motivo de dispensa; motivo só vai ao stdout deste script. | Árvore e primeira recusa do restart, quando aplicável. `bin/deploy.sh:123-145`. |
-| 4 | Exceto conferir/agendado: sombra ou dispensa. Dispensa **apenda arquivo de produção** `logs/deploy_sem_sombra.log`; sombra real também executa **`mkdir -p logs/sombra`** antes de conferir. | Auth já respondeu; mensageria e migration pendente ainda não. `bin/deploy.sh:148-159`; `bin/sombra.sh:81-84`. |
-| 5 | Checa migrations core e mensageria por subprocessos `docker exec`; mostra plano quando core pendente. A recusa de mensageria acontece antes do migrate aplicado; restart/conferir são dispensados dessa recusa. | Árvore/auth/sombra conforme modo. `bin/deploy.sh:181-202`. |
-| 6 | Core pendente: conferir só informa; cópia/agendado/sem-migrate recusam; demais aplicam `migrate_schemas --tenant`. | Todos os portões pedidos, **exceto a segunda recusa de restart**, já responderam; recusa mensageria é dispensada no restart. `bin/deploy.sh:197-217`. |
-| 7 | Conferir sai; demais podem escrever estáticos/manifest por `collectstatic`. | Pendências já tratadas. `bin/deploy.sh:221-224`; `bin/deploy.sh:257-261`. |
-| 8 | Prova de casca: cria temporário, cria/remove container efêmero e remove temporário; reprovação encerra. App está montado RO e logs em tmpfs. | Migration/collectstatic podem já ter ocorrido. `bin/deploy.sh:276-282`; `bin/prova_de_casca.sh:28-46`. |
-| 9 | Restart: **segunda recusa de cron**, novamente podendo apagar marcas mortas; depois `docker restart`. Demais: `docker kill -s HUP` nos três e checagem de troca dos workers. | Prova de casca já respondeu; segunda recusa pode impedir restart **depois** do migrate/collectstatic. `bin/deploy.sh:304-337`. |
-| 10 | Restart do mensageria executa migration no boot segundo compose; as configurações efetivas do container não foram fornecidas. | Portões anteriores passaram. `docker-compose.mensageria.yml:20`; configuração viva [não verificado]. |
-| 11 | Subprocessos esperam containers e fazem `Client.get` nas três rotas. Rotas ruins encerram **depois da publicação**. | Todos os portões pedidos anteriores já responderam. `bin/deploy.sh:345-383`. |
-| 12 | Selo reciclagem ainda pode reprovar depois da publicação; contador ImportError só lê arquivo. | Portões pedidos anteriores passaram. `bin/deploy.sh:390-393`; `bin/importerror_na_janela.sh:27-32`. |
-| 13 | Escreve/trunca `deploy.stamp.novo`, renomeia sobre `deploy.stamp`; depois cria diretório e apenda histórico, salvo agendado puro ou prova pulada. | Inclusive rotas e selo reciclagem já passaram. `bin/deploy.sh:396-407`. |
-
-Efeitos incidentais adicionais: os comandos Django usam por padrão settings SaaS; importar essas settings executa `os.makedirs('/app/logs')` e configura handlers de `errors.log`/`ponto.log`. Portanto não há base para prometer “zero arquivo escrito” por `--check`, `--plan` ou `--conferir`; ambiente efetivo/arquivos existentes [não verificado]. `app/manage.py:9-18`; `app/config/settings/saas.py:118-139`; `app/config/settings/saas.py:160-166`.
-
-Provas GET não demonstram escrita de negócio: UI sem login é protegida por `@login_required`; os dois healths apenas constroem JSON. Escrita de sessão/cache nessas chamadas [não verificado]. `bin/deploy.sh:362-365`; `app/colaboradores/urls.py:47`; `app/colaboradores/views.py:1008-1009`; `app/core/views.py:1302-1306`; `mensageria/config/urls.py:7-8`.
-
-**Conclusão Q1:** a cura põe auth e sombra antes do migrate, mas não torna deploy atômico. Migration ainda precede prova de casca, segunda recusa do restart, prova de rotas e selo reciclagem; esses passos podem recusar quando o banco já mudou. Também existe escrita de log/diretório antes dos portões de pendências. `bin/deploy.sh:157-158`; `bin/deploy.sh:217`; `bin/deploy.sh:280`; `bin/deploy.sh:306`; `bin/deploy.sh:383`; `bin/deploy.sh:390`.
-
-Q2 — política dos modos:
-
-| Modo | Auth | Sombra |
-|---|---|---|
-| normal | Sim, salvo motivo | Sim, salvo motivo herdado |
-| `--conferir` | Não | Não |
-| `--sem-migrate` | Sim, salvo motivo | Sim, salvo motivo herdado |
-| `--sem-sombra` | Sim, salvo motivo | Dispensa, motivo obrigatório/apendado |
-| `--reload-agendado` | Sim, salvo motivo | Isento |
-| `--reload-copia` | Sim, salvo motivo | Exigida, salvo motivo herdado |
-| `--restart` | Sim, salvo motivo | Exigida, salvo motivo herdado |
-
-As condições dessa tabela são `bin/deploy.sh:56-86` e `bin/deploy.sh:123-164`; pelo diff fornecido, as condições internas do bloco movido não mudaram. Não existe combinação de flags: só `$1` escolhe o modo e `$2` é lido para motivos. `bin/deploy.sh:56-85`.
-
-**Há mudança observável além de “ordem” em caminhos recusados:** antes, mensageria pendente ou core pendente com sem-migrate/agendado/cópia encerravam antes do bloco; agora esses caminhos executam auth e, quando cabível, sombra antes da recusa de pendência. Assim muda a primeira causa/mensagem de falha e pode existir registro “sem sombra” mesmo quando a migration subsequente falha ou a pendência impede publicação. `bin/deploy.sh:123-164`; `bin/deploy.sh:197-217`.
-
-`--conferir` continua fora dos dois portões; agendado continua isento só de sombra; cópia continua sujeito aos dois. A cura não introduz outra isenção nem torna agendado sujeito à sombra. `bin/deploy.sh:123`; `bin/deploy.sh:148`; `bin/deploy.sh:221-223`.
-
-_2936 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2940 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
