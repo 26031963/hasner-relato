@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:47** · publicado em **09/11/2026 08:47** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:50** · publicado em **09/11/2026 08:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:50 · sessao 6499c93501d2 · SELOS-CANON-I1 · verificador · origem=Code
+
+**O item 1 está curado quanto à abertura indevida da vaga.** O espelho está no predicado comum; o Agent chega nele, e o wrapper usa o mesmo predicado, embora recuse previamente os IDs com espaço. Há resíduos fora do diff e um limite na prova do PAREI, detalhados abaixo. (`bin/disjuntor.py:1686`, `:1850`, `:2248`, `:2267`.)
+
+1. **Cura nas duas vias e caminhos alternativos**
+
+   - O Agent chama `_censo_nega`, que consulta `_pertence_fila1`. Agora, célula `O9` contra obra `O9 (C)` ou `O9 NOTURNO-X` produz `ValueError`, convertido em negativa NAO SEI. A saída antecipada como FORA deixou de ocorrer nesses pares. (`bin/disjuntor.py:1850`, `:1704`, `:1686`, `:1691`, `:1730`.)
+   - O wrapper chama `--censo` antes de prender a vaga; `main_censo` consulta `_pertence_fila1` e passa a mesma lista de células para `_censo_nega`. Os exemplos com espaço já são recusados antes dessa consulta; no wrapper real, a validação é ainda anterior, no shell. (`bin/codex_pergunta.sh:188`, `:234`, `:240`; `bin/disjuntor.py:2248`, `:2266–2275`.)
+   - Nos caminhos de autorização de censo examinados, a decisão passa pelo predicado comum. A igualdade existente nele compara **obra com token**, dentro do próprio juiz. (`bin/disjuntor.py:1685`, `:1704`, `:2267`.)
+   - **Existem igualdades fora dele:** o hook compara a célula crua com o alvo do marcador para localizar o item em curso e remove esse item da lista por igualdade. São decisões de marcador/ordem, distintas da autorização do censo. (`bin/hook_stop_fila1.py:223`, `:273`.)
+   - **Existe uma derivação própria de fila no alarme**, descrita no item 4. Ela alimenta o disparo do alarme, sem autorizar vaga de construtor. (`bin/alarme_sessao_ociosa.py:89–116`, `:148–154`.)
+
+2. **Quem define, quem lê e significado dos retornos**
+
+   | Função | Definição e leitores encontrados |
+   |---|---|
+   | `_pertence_fila1` | Definida em `bin/disjuntor.py:1669`; leitores produtivos em `:1704` e `:2267`; chamadas diretas do selo em `bin/tests/test_censo_antes_da_vaga.sh:605` e `:611`. |
+   | `_token_da_celula` | Definida em `bin/disjuntor.py:1651`; lida nas listas `exatas` e `nomeiam`, em `:1685–1686`. |
+   | `_casa_id_inteiro` | Definida em `bin/hook_stop_fila1.py:110`; lida pelo predicado em `bin/disjuntor.py:1686` e pelo julgamento do PAREI em `bin/hook_stop_fila1.py:1301` e `:1313`. |
+
+   As versões mutantes são escritas pelo mecanismo do selo em cópias de `bin/`; há mutações desses critérios em `bin/tests/test_censo_antes_da_vaga.sh:750–763`, aplicadas por `:669–678`.
+
+   Os dois leitores produtivos de `_pertence_fila1` concordam: `False` permite seguir como FORA; `True` exige o censo; exceção gera negativa NAO SEI. (`bin/disjuntor.py:1704–1731`, `:2267–2281`.) `_token_da_celula` retorna string ou `None`; o espelho não transforma `None` em correspondência, porque `_casa_id_inteiro` rejeita ID vazio. (`bin/disjuntor.py:1660–1666`; `bin/hook_stop_fila1.py:115`.)
+
+   A nomeação ignora caixa e usa fronteira ASCII que exclui letra, dígito e hífen; underscore é separador. A extração do token usa a mesma classe de fronteira. A igualdade exata permanece sensível à caixa, razão de `o9 × O9` resultar em ambiguidade. (`bin/hook_stop_fila1.py:117`; `bin/disjuntor.py:1664`, `:1685–1691`.)
+
+   Alarme e handoff chegam a esses critérios indiretamente pelo hook. Para a prova de PAREI censo, ambos respeitam o contrato próprio do reconhecedor: `None` significa “não é linha de censo”; `''`, prova válida; texto, motivo de reprovação. (`bin/alarme_sessao_ociosa.py:127–140`; `bin/handoff_sessao.sh:129–134`; `bin/hook_stop_fila1.py:773–785`.) O handoff também consome os julgamentos booleanos do hook como booleanos. (`bin/handoff_sessao.sh:120–123`.)
+
+3. **Matriz do predicado literal**
+
+   Cada linha considera `_pertence_fila1(obra, [celula])`. A coluna anterior corresponde à retirada do espelho, exatamente a mutação declarada no selo. (`bin/disjuntor.py:1685–1692`; `bin/tests/test_censo_antes_da_vaga.sh:763`.)
+
+   | Obra | Célula | Atual | Sem espelho | Sítio da saída atual |
+   |---|---|---|---|---|
+   | `O1` | `O142` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
+   | `O142` | `O1` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
+   | `O9` | `O9` | `True` — DENTRO | `True` | `bin/disjuntor.py:1689–1690` |
+   | `O9 (C)` | `O9` | `ValueError` — NAO SEI | `False` | `bin/disjuntor.py:1691` |
+   | `O9 NOTURNO-X` | `O9` | `ValueError` — NAO SEI | `False` | `bin/disjuntor.py:1691` |
+   | `OBRA-Q (A)` | `OBRA-Q` | `ValueError` — NAO SEI | `False` | `bin/disjuntor.py:1691` |
+   | `09-TURNO-ABERTO-EXPOSTA` | `O9` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
+   | `O67b` | `O9` | `False` — FORA | `False` | `bin/disjuntor.py:1687–1688` |
+   | `o9` | `O9` | `ValueError` — NAO SEI | `ValueError` | `bin/disjuntor.py:1691` |
+
+   **Há três conversões de FORA para NAO SEI**, e elas passam a negar na porta do Agent. O código as declara ambiguidades pretendidas; demonstrar que alguma corresponde a uma obra **de fato fora da fila** em produção é **[nao verificado]** com o dado fornecido. Também não há base para garantir ausência de toda negativa legítima afetada. (`bin/disjuntor.py:1674–1680`, `:1730–1731`.)
+
+   A matriz não equivale à extração do prompt: `OBRA-Q (A)` vira `OBRA-Q` no Agent; `09-TURNO-ABERTO-EXPOSTA`, `O67b` e `o9` não satisfazem o reconhecedor de obra desse caminho. Obra ilegível é negada antes da pertença. (`bin/disjuntor.py:157`, `:602–627`, `:1847–1849`.)
+
+4. **Classes de reprovação**
+
+   - **Derivação paralela presente:** o alarme conta sua própria fila, excluindo `☑`, `FEITO` e `FECHAD`; o hook usa marcadores e `_item_parado`, incluindo exclusões como CONGELADA, FILA 2 e PAREI. Uma linha apenas CONGELADA/FILA 2 pode ser contada pelo alarme e excluída pelo hook. (`bin/alarme_sessao_ociosa.py:89–116`; `bin/hook_stop_fila1.py:95–97`, `:171–180`, `:231–252`.)
+   - **Escritores fora da porta presentes na cópia:** `gerar_cortes.py` e `deploy_agendado.sh` regravam RELATO diretamente; o escritor canônico declara esse resíduo. A cura examinada usa `no_relato`/`no_topo`. (`bin/gerar_cortes.py:117–136`; `bin/deploy_agendado.sh:31–44`; `app/core/esteira_vigia.py:839–840`; `bin/disjuntor.py:294`, `:324`.)
+   - **Segundo juiz de negócio concorrendo com autoridade registrada:** não demonstrado nesta cura; conclusão abrangente sobre todos os registros: **[nao verificado]**. O caminho examinado reutiliza o hook, o predicado, o coletor e o juiz de brief. (`bin/disjuntor.py:1637`, `:1704`, `:1710`, `:1715`.)
+   - **Relógio fora da borda:** não aparece na decisão de pertença/token; a medida recebe `agora` e filtra futuro e janela. (`bin/disjuntor.py:1651–1692`, `:2066`, `:2094`, `:2127–2131`.)
+   - **Ordem de trava:** o censo antecede a vaga; as portas de RELATO compartilham trava, liberada ao retornar. Não identifiquei inversão nesse percurso. (`bin/codex_pergunta.sh:234–240`; `app/core/esteira_vigia.py:843`, `:846–862`, `:892`.)
+   - **Campo com dois significados:** `_censo_nega` usa `None` para “porta passa”, abrangendo FORA e aprovação; isso está documentado, e `main_censo` distingue FORA pelo predicado. Não encontrei leitor tomando esse `None` por DENTRO. (`bin/disjuntor.py:1696`, `:1704–1705`, `:1724`, `:2267–2275`.)
+
+5. **Mordida dos casos novos e seu limite**
+
+   - **Laço Agent:** prepara célula `O9` sem `O9 (C)` e exige negativa JSON, motivo de censo, PAREI com a obra inteira e negativa correspondente na trilha. Saída vazia reprova. Sem espelho, o predicado retorna FORA antes da validação de forma, retirando a negativa cobrada. (`bin/tests/test_censo_antes_da_vaga.sh:580`, `:520–527`, `:588–591`; `bin/disjuntor.py:1687–1688`, `:1704–1706`.)
+   - **ESPELHO direto:** exige `ValueError` nos três pares e exatamente `False` nos dois controles de prefixo. Portanto, “sempre retornar FORA” e “sempre levantar” reprovam. Aceita qualquer `ValueError`, sem validar a mensagem. (`bin/tests/test_censo_antes_da_vaga.sh:603–619`.)
+   - **Mutante:** remove precisamente o espelho e executa `casos_pertenca`; há exigência de âncora única, controle sem mutação e propagação de falha pelo retorno dos casos. (`bin/tests/test_censo_antes_da_vaga.sh:763`, `:675–686`, `:662–665`, `:647`.)
+   - **Wrapper:** os dois casos são controles expressamente declarados, inclusive no nome; passam com ou sem a cura porque a forma é recusada antes da pertença. (`bin/tests/test_censo_antes_da_vaga.sh:585–593`; `bin/disjuntor.py:2248–2250`.)
+   - **Limite material:** o laço Agent prova o PAREI **na mensagem**. Para esses IDs com espaço, `_parei_censo_no_relato` retorna antes de gravar; o laço não cobra persistência no topo. Logo, a mordida demonstra negativa/trilha, mas não demonstra PAREI gravado desses exemplos. (`bin/tests/test_censo_antes_da_vaga.sh:520–527`, `:590–591`; `bin/disjuntor.py:309–311`.)
+
+A execução integral do selo e seu resultado verde permanecem **[nao verificado]**; o script cria e altera arquivos de teste. (`bin/tests/test_censo_antes_da_vaga.sh:27–35`, `:669–678`.) O conteúdo integral da lei citada como `CORTES.md:428` também permanece **[nao verificado]**: a cópia termina em `app/docs/CORTES.md:425`, e o anexo fornecido traz somente o início daquela linha.
+
+## 09/11 08:48 · sessao 400ac2cb4b5d · - · - · origem=Ronald (tmux)
+
+Não encontrei classe nova dessas no caminho da cura do censo, com os limites abaixo.
+
+- **Juiz/derivação única:** `_fila1_viva` delega o universo ao hook; `_censo_nega` usa `_pertence_fila1`, `_briefs_do_censo` e `censo_do_brief`. Agent chama essa porta; wrapper chama `--censo`. A classificação adicional em `main_censo` repete o mesmo predicado e reutiliza a mesma lista `fila`. (`bin/disjuntor.py:1633`, `bin/disjuntor.py:1704`, `bin/disjuntor.py:1710`, `bin/disjuntor.py:1715`, `bin/disjuntor.py:1850`, `bin/disjuntor.py:2266`, `bin/disjuntor.py:2275`; `bin/codex_pergunta.sh:234`.)
+- **Escritor/ordem:** a negativa passa por `ev.no_relato`; PAREI passa por `ev.no_topo` e é relido pelo reconhecedor do Stop. Ambas as portas usam o mesmo flock; leitura, classificação, idempotência e gravação do topo ficam sob a trava. O wrapper executa censo antes de tentar vaga; a trava do RELATO já foi fechada quando chega à vaga. (`bin/disjuntor.py:293`, `bin/disjuntor.py:323`; `app/core/esteira_vigia.py:842`, `app/core/esteira_vigia.py:859`, `app/core/esteira_vigia.py:877`, `app/core/esteira_vigia.py:893`; `bin/codex_pergunta.sh:234`, `bin/codex_pergunta.sh:240`.)
+- **Relógio:** pertença/token não consultam relógio; `_censo_24h` recebe `agora`, exclui futuro e aplica a janela ao casar a abertura. `trilha` consulta relógio para carimbar o registro. (`bin/disjuntor.py:1651`, `bin/disjuntor.py:1669`, `bin/disjuntor.py:2066`, `bin/disjuntor.py:2094`, `bin/disjuntor.py:2127`, `bin/disjuntor.py:198`.)
+- **Campo/retorno:** `None` de `_censo_nega` significa “porta passa”, tanto FORA quanto APROVADO; `main_censo` distingue FORA pelo bool do mesmo `_pertence_fila1`, portanto não interpreta `None` como DENTRO. (`bin/disjuntor.py:1696`, `bin/disjuntor.py:1704`, `bin/disjuntor.py:1723`, `bin/disjuntor.py:2267`, `bin/disjuntor.py:2271`.)
+- **Resíduo explícito fora dessa cura:** o escritor declara escritores externos que não pegam sua trava: edição manual, `gerar_cortes.py` e `deploy_agendado.sh`. O alcance desses caminhos não foi auditado por este agente. (`app/core/esteira_vigia.py:838`.) A lista usada pelo censo contém somente andáveis; a situação de obra PARADA continua dependente desse recorte. (`bin/disjuntor.py:1637`.)
+
+Autoridade registrada para esta pergunta específica em outro lugar e efeitos atuais em produção: [nao verificado].
 
 ## 09/11 08:47 · sessao fb09f4e39450 · - · - · origem=Ronald (tmux)
 
@@ -621,37 +700,4 @@ Não há migração/regravação histórica no escritor: ele só apenda JSON. Li
 
 P6 continua divergente no RELATO real: linha 25 ainda publica cron600/deploy não bloqueante/espera_lock/dois contadores/desliga só corte; linha21 fala contrato v2. Não há atualização para v3 nesse trecho. Envio único ao Codex não pode ser comprovado pelo código. (`app/docs/RELATO.md:21`, `app/docs/RELATO.md:25`; envio: [nao verificado])
 
-## 09/11 08:01 · sessao 98ec70eba7b9 · - · - · origem=Ronald (tmux)
-
-- **P5 tem asserção nova útil:** `g` executa três provas com atraso e exige `ultima(PROVA-FIM) < CMD-INI`, tanto normal quanto restart. Não passa se faltarem comando ou provas. (`bin/tests/test_deploy_exclusao_cron.sh:104`, `bin/tests/test_deploy_exclusao_cron.sh:319`, `bin/tests/test_deploy_exclusao_cron.sh:333`)
-
-- **Mordida observada de m1–m5: [nao verificado].** As definições e resultados desses cinco mutantes não estão nos anexos fornecidos nem foram localizados na cópia. O selo somente aceita caminhos alternativos para deploy, envelope e biblioteca; não gera nem executa uma bateria de mutantes própria. (`bin/tests/test_deploy_exclusao_cron.sh:43`, `bin/tests/test_deploy_exclusao_cron.sh:44`, `bin/tests/test_deploy_exclusao_cron.sh:45`)
-
-- **RED de `g`: distinguir bases.** A volta 1 já soltava depois das provas, conforme o `preverif_v1.r` fornecido, portanto não há demonstração de soltura prematura real nessa versão. Contra a base anterior sem protocolo de exclusão, a leitura indica que `g` alcança a janela: inicia cron após HUP/restart e compara seu comando com a última prova atrasada. Resultado executado contra qualquer base ou mutante: **[nao verificado]**. (`bin/tests/test_deploy_exclusao_cron.sh:323`, `bin/tests/test_deploy_exclusao_cron.sh:327`, `bin/tests/test_deploy_exclusao_cron.sh:329`, `bin/tests/test_deploy_exclusao_cron.sh:333`; anexo `preverif_v1.r`, trecho sobre `bin/deploy.sh:442`)
-
-- **Há caso que passa sem comprovar seu cenário:** `d3` ignora retorno da espera por `CMD-INI` e do `wait`, e aceita qualquer deploy não zero sem restart. Assim uma falha antecipada independente da concorrência satisfaz o teste. Não exige execução do cron nem diagnóstico de recusa por marca/trava. (`bin/tests/test_deploy_exclusao_cron.sh:278`, `bin/tests/test_deploy_exclusao_cron.sh:280`, `bin/tests/test_deploy_exclusao_cron.sh:282`)
-
-- **`g` não prova sobreposição efetiva:** os retornos de `espera_linha` são ignorados; não exige que o cron tenha chegado antes de `PROVA-FIM`. Um escalonamento que só execute o cron após as três provas satisfaz a ordem sem testar contenção naquela corrida. (`bin/tests/test_deploy_exclusao_cron.sh:324`, `bin/tests/test_deploy_exclusao_cron.sh:327`, `bin/tests/test_deploy_exclusao_cron.sh:329`, `bin/tests/test_deploy_exclusao_cron.sh:333`)
-
-- **P3 tem asserção incompleta:** b1 aceita qualquer `(fim-ini)-dur <= 1`, inclusive negativo arbitrário; não confronta `ini` com timestamp do comando. (`bin/tests/test_deploy_exclusao_cron.sh:144`, `bin/tests/test_deploy_exclusao_cron.sh:197`)
-
-- **P4 tem cobertura direta, mas limitada:** f exige zero filhos classificados com fd aberto, ao menos oito fechados e migrate aberto; cria netos na prova. Não testa morte do deploy durante migrate/restart nem verifica fd do restart nesse caso. A passagem normal chega ao unlock explícito, portanto a parte “neto não impede cron após deploy” não demonstra comportamento no abandono anormal. (`bin/tests/test_deploy_exclusao_cron.sh:106`, `bin/tests/test_deploy_exclusao_cron.sh:304`, `bin/tests/test_deploy_exclusao_cron.sh:307`, `bin/tests/test_deploy_exclusao_cron.sh:310`, `bin/deploy.sh:456`)
-
-- **P6 documental é parcial:** o anexo `contrato_v3.txt` descreve o desenho novo; a biblioteca aponta para ele. Porém RELATO mantém o contrato antigo de cron 600/deploy não bloqueante/`espera_lock`/contadores, com somente um resumo de v2 acima. Arquivo v3 físico, sequência de versões e envio “uma vez”: **[nao verificado]**. (`bin/trava_deploy_exclusao.sh:14`, `app/docs/RELATO.md:21`, `app/docs/RELATO.md:25`; anexo `contrato_v3.txt:2`, `contrato_v3.txt:3`, `contrato_v3.txt:5`)
-
-- **Relógio e causa:** d2 exige espera zero, mas a medição envolve dois `date +%s` e o processo flock; cruzar um segundo sem contenção pode produzir 1. `espera_deploy > 0` também não identifica causa de rc 75: um comando pode obter vez após espera e devolver 75 por si. (`bin/tests/test_deploy_exclusao_cron.sh:268`, `bin/trava_deploy_exclusao.sh:49`, `bin/trava_deploy_exclusao.sh:50`, `bin/trava_deploy_exclusao.sh:51`, `bin/cron_run.sh:17`, `bin/cron_run.sh:25`)
-
-Execução dos selos e mutantes: **[nao verificado]**; nenhuma execução realizada porque o selo cria, modifica e remove arquivos temporários. (`bin/tests/test_deploy_exclusao_cron.sh:60`, `bin/tests/test_deploy_exclusao_cron.sh:78`, `bin/tests/test_deploy_exclusao_cron.sh:170`)
-
-## 09/11 08:00 · sessao 79c1c84e8d87 · - · - · origem=Ronald (tmux)
-
-- Identidade disponível: `MARCO_DA_PERGUNTA` fixa saída em `S/hii` e volta em `E/hfi`; ambos pertencem ao primeiro par canônico de `CelulaDia.PARES_PAUSA_DNA`. `chamados/juizes.py:882`; `escala/models.py:1652`.
-- `instancia_marco` não identifica duas pausas: deriva apenas `int_ida/int_volta`; o modelo recusa valores inventados. `chamados/services/declaracao_texto.py:42`; `chamados/services/declaracao_texto.py:48`; `chamados/models.py:3436`.
-- C6 considera qualquer pergunta validada morta; seu prefiltro SQL também exige validação nula. Preservar a primeira validação significa deixá-la morta para C6, enquanto a outra metade mantém o caso pendente. Alterar esse comportamento exigiria compatibilizar o modelo proibido. `chamados/juizes.py:1153`; `chamados/models.py:3359`.
-- Fechamento consulta respostas sem veredito e `fio_vivo`; a metade ainda não validada bloqueia o caso nominal. Há risco fora do nominal se essa metade for absolvida pelo próprio C6. `chamados/models.py:1848`; `chamados/models.py:1856`; `chamados/juizes.py:1262`.
-- A espera precisa aparecer em `estado_aplicacao_pergunta` e no template: o ramo de validada atualmente renderiza apenas paridade e reuso. `chamados/services/materializacao.py:425`; `chamados/services/fio.py:335`; `templates/chamados/partials/modal_fio.html:227`.
-- A trava deve reunir destinos, clones e IDs das duas perguntas antes de validar; a porta central oferece todos esses argumentos. `chamados/models.py:2637`; `chamados/models.py:2648`; `chamados/models.py:2655`.
-
-Nenhuma escrita ou execução Django realizada. [nao verificado]
-
-_3076 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3078 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
