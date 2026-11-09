@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 09:03** · publicado em **09/11/2026 09:04** (UTC-3)
+> Ultima resposta processada: **09/11/2026 09:08** · publicado em **09/11/2026 09:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 09:08 · sessao 790af1e10d16 · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 09/11 09:08 · sessao be6e6f7b42d9 · - · - · origem=Ronald (tmux)
+
+- **P1 ainda PROCEDENTE, fechamento parcial.** A conferência passou a contar ACL direto/PUBLIC de tabelas e colunas, sequências, schemas, banco e defaults; também membership e ownership. Porém ignora `is_grantable`: SELECT/USAGE/CONNECT com grant option continua considerado permitido, embora habilite DCL. Conserto mínimo: contar `e.is_grantable OR e.privilege_type <> '<permitido>'` nas respectivas chaves e acrescentar caso comportamental ao selo. (`bin/sonda_leitor_comum.sh:87`, `bin/sonda_leitor_comum.sh:101`, `bin/sonda_leitor_comum.sh:107`; validade em PostgreSQL 17 executado: [nao verificado])
+
+- **Cura de P1 incompleta, com recusa segura.** O provisionador revoga ACL de tabela/sequência/schema do leitor e defaults de `saas_user`; não remove ACL de coluna, DML de PUBLIC em tabelas/sequências, defaults de outros donos nem defaults de schema. A conferência verifica essas classes mais amplas e a pós-conferência impede publicação quando restam privilégios. Conserto mínimo: explicitar que esses casos exigem saneamento separado, ou revogá-los deliberadamente pela porta, contemplando o impacto nos demais papéis. (`bin/sonda_provisionar.sh:105`, `bin/sonda_provisionar.sh:110`, `bin/sonda_provisionar.sh:129`; `bin/sonda_leitor_comum.sh:92`, `bin/sonda_leitor_comum.sh:107`)
+
+- **P3: fechado no fluxo serial; concorrência permanece PROCEDENTE.** O arquivo só é criado/promovido depois da pós-conferência, mediante temporário único e `mv`; falhas anteriores preservam o arquivo anterior. Contudo a senha é escolhida antes das alterações no banco e não há exclusão entre duas chamadas: dois provisionamentos sem arquivo podem escolher senhas distintas e ordenar ALTER ROLE/mv de formas incompatíveis. Conserto mínimo: trava compartilhada entre destinos envolvendo leitura/geração da senha até promoção do arquivo. (`bin/sonda_provisionar.sh:63`, `bin/sonda_provisionar.sh:66`, `bin/sonda_provisionar.sh:88`, `bin/sonda_provisionar.sh:129`, `bin/sonda_provisionar.sh:140`, `bin/sonda_provisionar.sh:143`)
+
+- **P5: correção estática presente.** A senha admite apenas caracteres alfanuméricos, entra por `\set pw` e é referenciada como `:'pw'` fora de DO; stdout é descartado e stderr é mascarado antes de voltar ao chamador. Conserto adicional para esse achado específico: nenhum identificado na análise estática. Execução e comportamento de logs do PostgreSQL real: [nao verificado]. (`bin/sonda_provisionar.sh:70`, `bin/sonda_provisionar.sh:78`, `bin/sonda_provisionar.sh:88`, `bin/sonda_provisionar.sh:92`)
+
+- **ESMERIL-SEMANTICA: a chave `ro` tem um sentido compartilhado, mas “pronto” operacional diverge.** `ro` significa somente configuração global da role, com `setdatabase=0`; leitura e provisionamento usam o mesmo produtor/parser. Entretanto a leitura exige também `default_transaction_read_only=on` na sessão TCP, enquanto o provisionador altera apenas a configuração global e anuncia pronto sem esse login. Um override específico de banco não é inspecionado nem removido por esses trechos. Conserto mínimo: conferir/sanear o override do destino e exigir o mesmo login antes do `mv`; o fake atual devolve invariavelmente `leitor|on`. (`bin/sonda_leitor_comum.sh:64`, `bin/sonda_leitor_comum.sh:119`; `bin/sonda_provisionar.sh:93`, `bin/sonda_provisionar.sh:129`, `bin/sonda_provisionar.sh:146`; `bin/sonda_leitura.sh:205`, `bin/sonda_leitura.sh:211`; `bin/tests/test_sonda_sem_grant.sh:60`)
+
+- **Demais chaves: identidade compartilhada, sem tradução encontrada nesses consumidores.** `role/super/poderes/login` vêm de `pg_roles`; `connect` verifica CONNECT efetivo; `usage_falta`, `tab_falta` e `seq_falta` contam ausência de leitura em `public juliani`; `default_falta` exige os quatro pares schema×tipo de defaults de `saas_user`; `esc_*` contam ACL diferente da operação permitida; `default_escrita` inspeciona defaults de qualquer dono; `membro` conta memberships diretos; `dono` conta dependências de ownership no cluster. O parser exige as 17 chaves e compara presença com 1 e ausência com 0. (`bin/sonda_leitor_comum.sh:60`, `bin/sonda_leitor_comum.sh:69`, `bin/sonda_leitor_comum.sh:80`, `bin/sonda_leitor_comum.sh:87`, `bin/sonda_leitor_comum.sh:107`, `bin/sonda_leitor_comum.sh:111`, `bin/sonda_leitor_comum.sh:119`, `bin/sonda_leitor_comum.sh:126`)
+
+- **SQL PostgreSQL 17: nenhum erro sintático identificado nesses pontos por análise estática; execução real [nao verificado].** `printf` transforma `%%I` em `%I` para `format`; os comandos dinâmicos estão em `DO ... EXECUTE`; as variáveis psql ficam fora de corpos dollar-quoted; defaults usam `FOR ROLE saas_user`, coerente com `PGU`. O selo fake grava texto e retorna resultados preparados, sem interpretar esse SQL. (`bin/sonda_provisionar.sh:88`, `bin/sonda_provisionar.sh:92`, `bin/sonda_provisionar.sh:94`, `bin/sonda_provisionar.sh:105`, `bin/sonda_provisionar.sh:110`, `bin/sonda_provisionar.sh:120`; `bin/sonda_leitor_comum.sh:8`; `bin/tests/test_sonda_sem_grant.sh:56`, `bin/tests/test_sonda_sem_grant.sh:59`, `bin/tests/test_sonda_sem_grant.sh:71`)
+
+## 09/11 09:08 · sessao 437ffdfdf483 · - · - · origem=Ronald (tmux)
+
+[resposta retida: senha_atribuida -- nao se publica credencial nem caminho de segredo]
 
 ## 09/11 09:03 · sessao cc20c7413249 · CODEX-2-RAIAS-PORTAO-CPU · leitura · origem=Code
 
@@ -578,43 +602,4 @@ Não escrevi arquivos nem executei testes. [nao verificado] [nao verificado]
 - Dia isento: fonte é `Colaborador.isento_ponto`, lida por `core/constants.py:13-18`; tarefa extingue ações em `tarefa_do_dia.py:179-187`.
 - DECISAO-ABERTA: os anexos determinam que prevalece a tarefa, mas não fixam os valores literais dos campos aditivos nos casos sem pergunta/sem ações. A interpretação precisa ficar explícita nos quatro testes escritos antes da implementação. Execução/comportamento futuro: [nao verificado]. [nao verificado]
 
-## 09/11 08:24 · sessao 2e5a8dc4c11c · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 09/11 08:24 · sessao ce974f8b148b · - · - · origem=Ronald (tmux)
-
-6. Os selos têm mordida parcial, sem prova integral do contrato:
-
-- **Leitura sem escrita no preparo capturado:** executam o envelope real nos dois modos, exigem consulta positiva, cluster, `sql_escrita=0`, arquivo intacto e host no argv. A detecção externa é regex sobre `sql.log`. (`bin/tests/test_sonda_sem_grant.sh:82`, `bin/tests/test_sonda_sem_grant.sh:85`, `bin/tests/test_sonda_sem_grant.sh:91`, `bin/tests/test_sonda_sem_grant.sh:93`, `bin/tests/test_sonda_sem_grant.sh:96`)
-- **Recusa nomeando falta e porta:** cobrem tabela sem grant, role ausente, catálogo vazio/falho, login falho, HOST antigo e arquivo ausente; exigem rc 5 e ausência da execução simulada. Não há casos separados para arquivo sem senha, permissões erradas, login com usuário/read-only errado, falta exclusiva de sequência/default/USAGE ou tentativa de SQL proibido pelo classificador. (`bin/tests/test_sonda_sem_grant.sh:100`, `bin/tests/test_sonda_sem_grant.sh:109`, `bin/tests/test_sonda_sem_grant.sh:123`; caminhos omitidos em `bin/sonda_leitura.sh:170`, `bin/sonda_leitura.sh:173`, `bin/sonda_leitura.sh:204`)
-- **Porta existe e escreve:** cobram algumas frases de DCL/DDL, senha sem HOST, modo 600 e trilha, nos dois destinos. Não procuram outro escritor na árvore; copiam apenas cinco scripts e substituem `sombra_db.sh` por stub. Também não exigem cluster correto para o provisionador. (`bin/tests/test_sonda_sem_grant.sh:67`, `bin/tests/test_sonda_sem_grant.sh:70`, `bin/tests/test_sonda_sem_grant.sh:129`, `bin/tests/test_sonda_sem_grant.sh:133`, `bin/tests/test_sonda_sem_grant.sh:141`)
-- **Propagação rc 5 no wrapper:** o novo caso exige rc 5, Codex não chamado, mensagem/porta visíveis e sentinelas brutas escondidas; usa envelope falso. Não cobre integração com envelope real nem payload terminando em 5. (`bin/tests/test_codex_sonda.sh:40`, `bin/tests/test_codex_sonda.sh:55`, `bin/tests/test_codex_sonda.sh:85`)
-- **Refazer chama porta antes de carimbar:** verifica somente presença textual e posição das duas linhas; não executa `refazer` nem força falha do provisionador. (`bin/tests/test_sonda_sem_grant.sh:150`)
-
-**O docker falso não cobre o payload.** Captura stdin/argv somente de `docker exec` contendo `psql`; `docker run` apenas imprime `SONDA_RODOU` e devolve zero. Não executa Django, driver ou `/sonda/sonda.py`; `sombra_db.sh` também não participa. (`bin/tests/test_sonda_sem_grant.sh:41`, `bin/tests/test_sonda_sem_grant.sh:46`, `bin/tests/test_sonda_sem_grant.sh:59`, `bin/tests/test_sonda_sem_grant.sh:70`; execução real em `bin/sonda_leitura.sh:241`)
-
-Mutantes plausíveis sobreviventes, por inspeção; execução dos mutantes **[nao verificado]**:
-
-1. Fazer `_escritas_no_texto` sempre devolver zero: nenhum caso injeta comando proibido; o preparo atual continua SELECT. (`bin/sonda_leitura.sh:147`; casos em `bin/tests/test_sonda_sem_grant.sh:85`, `bin/tests/test_sonda_sem_grant.sh:99`)
-2. Acrescentar `SELECT ... INTO ...` ou SELECT de função com efeito: o detector externo não contempla `INTO` nem identifica efeitos de funções. (`bin/tests/test_sonda_sem_grant.sh:32`)
-3. Remover o `falhou` após provisionamento, mantendo a chamada antes do carimbo: o teste de forma continua satisfeito. (`bin/sombra.sh:306`, `bin/sombra.sh:307`; `bin/tests/test_sonda_sem_grant.sh:150`)
-4. Acrescentar escritor em outro arquivo ou no bootstrap verdadeiro: não há censo/assertiva global de exclusividade. (`bin/tests/test_sonda_sem_grant.sh:67`, `bin/tests/test_sonda_sem_grant.sh:70`)
-5. Fazer o provisionador usar sempre `saas_db`: suas asserções procuram frases e `destino=` na trilha, sem conferir container/banco dos grants em cada modo. (`bin/tests/test_sonda_sem_grant.sh:129`, `bin/tests/test_sonda_sem_grant.sh:133`, `bin/tests/test_sonda_sem_grant.sh:141`)
-
-7. Classes presentes ou parcialmente resolvidas:
-
-- **Derivação paralela:** a pergunta de catálogo foi centralizada corretamente; ambos chamam as mesmas funções. Mas “pronto” operacional continua desigual: o provisionador anuncia pronto após catálogo; o leitor exige ainda arquivo válido e login TCP com `leitor|on`. (`bin/sonda_leitor_comum.sh:33`, `bin/sonda_leitor_comum.sh:69`; `bin/sonda_provisionar.sh:90`; `bin/sonda_leitura.sh:169`, `bin/sonda_leitura.sh:198`)
-- **Selo sem mordida:** o comentário remete o mutante a log externo; o próprio selo não o constrói/executa. O novo caso do wrapper demonstra as assertivas contra resposta simulada, sem provar confinamento do payload. Resultados/log citado **[nao verificado]**. (`bin/tests/test_sonda_sem_grant.sh:21`; `bin/tests/test_codex_sonda.sh:40`, `bin/tests/test_codex_sonda.sh:85`)
-- **`sql_escrita` não mede todo SQL escrito:** incrementa somente texto bloqueado pelo classificador, antes de enviar. Login usa caminho próprio, payload usa Django e bootstrap é outra chamada. Zero significa nenhuma tentativa classificada nesses pontos, não ausência integral de SQL de escrita. (`bin/sonda_leitura.sh:111`, `bin/sonda_leitura.sh:157`, `bin/sonda_leitura.sh:162`, `bin/sonda_leitura.sh:200`, `bin/sonda_leitura.sh:241`)
-- **rc 5 mistura causas:** credencial indisponível, catálogo/readiness, login e tentativa interna de SQL de escrita produzem o mesmo código; `recusa=` conserva texto normalizado, sem classe estruturada. (`bin/sonda_leitura.sh:125`, `bin/sonda_leitura.sh:127`, `bin/sonda_leitura.sh:160`, `bin/sonda_leitura.sh:169`, `bin/sonda_leitura.sh:181`, `bin/sonda_leitura.sh:202`)
-- **Recusa silenciosa ao bloquear SQL:** `_sql` chama `_recusa`, que executa `exit 5`; sua invocação na conferência redireciona stderr inteiro a `/dev/null`. Esse `exit` encerra o shell antes do `|| _recusa` externo, escondendo mensagem/porta justamente na tentativa de escrita; execução concreta **[nao verificado]**. (`bin/sonda_leitura.sh:126`, `bin/sonda_leitura.sh:131`, `bin/sonda_leitura.sh:158`, `bin/sonda_leitura.sh:179`)
-- **Ausência de trava global para credencial:** a porta usa o mesmo `$ENVFILE.novo` e reescreve o segredo antes do banco sem flock próprio; duas invocações independentes prod/sombra podem competir. A trava de `sombra.sh` protege aquele fluxo, não a invocação administrativa direta. Corrida concreta **[nao verificado]**. (`bin/sonda_provisionar.sh:61`, `bin/sonda_provisionar.sh:64`, `bin/sonda_provisionar.sh:69`; `bin/sombra_trava.sh:21`, `bin/sombra_trava.sh:28`)
-
-Os selos entram no loop da régua; sua existência não prova que executaram ou passaram. O pre-push documenta que esse loop não roda ali. Resultados **[nao verificado]**. (`bin/regua.sh:138`; `bin/pre-push.sh:13`)
-
-## 09/11 08:23 · sessao 7707844abd3f · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3083 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3086 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
