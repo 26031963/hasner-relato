@@ -1,7 +1,147 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 00:16** · publicado em **09/11/2026 00:16** (UTC-3)
+> Ultima resposta processada: **09/11/2026 00:19** · publicado em **09/11/2026 00:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 00:19 · sessao b599f9f2e362 · FIO-E0-V4-E1-FILA · verificador · origem=Code
+
+A cura produtiva está coerente com a normalização da trava; a cura dos testes ficou **parcial na mensagem e na cobertura da conferência**. A mensagem atual imprime as três parcelas corretamente, mas os testes só exigem os IDs da disputa. (`app/chamados/services/fio.py:2092`; `app/chamados/services/fio.py:2098`; `app/chamados/tests/test_e1_fila.py:507`; `app/chamados/tests/test_e1_fila.py:519`)
+
+Execução da suíte, conteúdo de `e1_fila_red5.log`, estado do banco e ocorrência em produção: **[nao verificado]**. [nao verificado]
+
+**1. Triagem: o que procede e o que ficou parcial**
+
+| Item da triagem | Verificação estática |
+|---|---|
+| `None` comparado, mas não travável | **Curado como alinhamento de conjuntos:** `_pks` ignora `None`; `_fora[2]` agora também. Porém, `PerguntaDisputa.disputa` é FK sem `null=True`: o teste fabrica a segunda leitura, sem gravar NULL. Não demonstra uma ocorrência produtiva. (`app/chamados/models.py:2661`; `app/chamados/services/fio.py:2093`; `app/chamados/models.py:2424`; `app/chamados/tests/test_e1_fila.py:509`) |
+| Resultado preenchido sem exigir migração | **Curado:** exige `([p.pk], [], [])` e relê o destino gravado. O MORDE sem laço exige lista vazia e destino antigo. (`app/chamados/tests/test_e1_fila.py:547`; `app/chamados/tests/test_e1_fila.py:555`) |
+| Diferença trocada por XOR | **Curado para o encolhimento exercitado:** a segunda leitura vazia deve passar. XOR produziria parcelas antigas e recusaria. (`app/chamados/tests/test_e1_fila.py:521`; `app/chamados/services/fio.py:2092`) |
+| Cardinalidade no lugar do conjunto de disputas | **Curado:** substitui a disputa mantendo a pergunta e exige recusa. (`app/chamados/tests/test_e1_fila.py:509`; `app/chamados/tests/test_e1_fila.py:513`) |
+| Mensagem sem IDs | **Parcial:** exige somente `disputas [1000000000]`; apagar os IDs de colaboradores ou perguntas da mensagem conserva os asserts existentes. (`app/chamados/tests/test_e1_fila.py:494`; `app/chamados/tests/test_e1_fila.py:507`; `app/chamados/tests/test_e1_fila.py:519`) |
+| Duas leituras só conferidas sem exceção | **Curado:** a asserção fica depois do `except`, nos dois ramos. (`app/chamados/tests/test_e1_fila.py:482`) |
+| Remoção de `key=str` | **Coerente:** a disputa referencia um `BigAutoField`; `None` sai antes da ordenação. (`app/chamados/migrations/0013_disputasupervisao.py:20`; `app/chamados/services/fio.py:2093`; `app/chamados/services/fio.py:2098`) |
+
+Os dois itens de FILA pertencem à investigação desta obra: são campos usados para escolher as travas, e o escopo inclui seus escritores e leitores. Isso não os transforma em defeitos concorrentes demonstrados; falta um escritor produtivo que altere esses FKs depois do nascimento. (`CLAUDE.md:376`; `app/chamados/services/fio.py:2085`; `app/chamados/models.py:3420`; alcance produtivo **[nao verificado]**)
+
+**2. Quem escreve, quem lê e o que efetivamente se compara**
+
+O conjunto nasce das perguntas apontadas para velho/novo, acrescido de `universo_da_linha` de cada uma. A mesma função é chamada antes e depois da trava. (`app/chamados/services/fio.py:2032`; `app/chamados/services/fio.py:2084`; `app/chamados/services/fio.py:2088`)
+
+| Campo/valor | Escritor | Leitores relevantes ao ato |
+|---|---|---|
+| `Pergunta.colaborador_id` | No nascimento, `_chave_de_identidade` deriva da disputa ou recusa divergência. Há também o preenchimento histórico da migration 0051. (`app/chamados/models.py:3430`; `app/chamados/migrations/0051_decisao_pergunta.py:25`) | Composição de `_cs`, conferência, trava de Colaborador e juiz da costura. (`app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2092`; `app/chamados/models.py:2674`; `app/chamados/juizes.py:2003`) |
+| `Pergunta.pk` | Identidade automática `BigAutoField`; a porta insere com `force_insert=True`. (`app/chamados/migrations/0014_perguntadisputa.py:19`; `app/chamados/models.py:3019`) | Lista para travar Perguntas, conferência e composição dos grupos do laço. (`app/chamados/services/fio.py:2087`; `app/chamados/services/fio.py:2092`; `app/chamados/services/fio.py:2143`) |
+| `Pergunta.disputa_id` | A disputa entra no construtor usado pelo nascimento; depois ocorre a inserção. (`app/chamados/models.py:3016`; `app/chamados/models.py:3019`) | Lista para travar Disputas, conferência e portas internas de retratação. (`app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2093`; `app/chamados/services/fio.py:1330`) |
+| Donos de velho/novo | O nascimento do Chamado recebe `colaborador`; `criar` o persiste. (`app/chamados/models.py:1054`; `app/chamados/models.py:1095`) | Entram em `_cs` pelas instâncias recebidas; a conferência não relê esses donos. (`app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2092`) |
+| Mensagem de `UniversoMudouSobATrava` | Montada com velho/novo e as três parcelas ordenadas. (`app/chamados/services/fio.py:2095`) | `reabrir` captura, registra `str(_e)[:300]` em `depois['erro']` e retorna `False`; o helper de teste captura a string inteira. (`app/chamados/models.py:1417`; `app/chamados/models.py:1424`; `app/chamados/tests/test_e1_fila.py:489`) |
+
+O evento é persistido pela porta `core.observ.evento`, que escreve `descricao` e `valor_depois` em `LogAuditoria`; portanto o registro produtivo pode conter somente os primeiros 300 caracteres do erro. (`app/core/observ.py:94`; `app/core/observ.py:134`; `app/chamados/models.py:1424`)
+
+Se `P0` é a primeira leitura e `P1` a segunda, a relação é esta:
+
+| Classe | IDs pedidos à trava | Parcela que provoca recusa |
+|---|---|---|
+| Colaborador | `C0 = {dono velho, dono novo} ∪ colaboradores(P0)` | `colaboradores(P1) − C0` |
+| Pergunta | `pk(P0)` | `pk(P1) − pk(P0)` |
+| Disputa | `disputas(P0) − {None}` após normalização | `(disputas(P1) − disputas(P0)) − {None}` |
+| Chamado | `{velho.pk, novo.pk}` | Não há parcela de conferência para Chamado. |
+
+Essas expressões vêm da chamada e da formação de `_fora`; a normalização está em `_pks`. (`app/chamados/services/fio.py:2085`; `app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2092`; `app/chamados/models.py:2661`)
+
+Logo:
+
+- **A conferência exige cobertura, não igualdade:** encolher é permitido; linhas da primeira leitura podem continuar travadas mesmo ausentes na segunda. (`app/chamados/services/fio.py:2092`; `app/chamados/tests/test_e1_fila.py:521`)
+- **Para `disputa_id` inteiro, não há filtro divergente entre os lados:** `_pks` não descarta zero ou negativos; descarta `None`, assim como a conferência. (`app/chamados/models.py:2661`; `app/chamados/services/fio.py:2093`)
+- **Não há valor `None` comparado como nova disputa faltante na v5.** O inverso possível é uma disputa antiga continuar travada após desaparecer da segunda leitura, comportamento deliberadamente aceito. (`app/chamados/services/fio.py:2093`; `app/chamados/tests/test_e1_fila.py:529`)
+- **IDs calculados não são comprovantes de linhas adquiridas:** as queries travam linhas existentes, e a migração não usa o retorno da trava para conferir aquisições. Integridade efetiva do banco: **[nao verificado]**. (`app/chamados/models.py:2674`; `app/chamados/models.py:2683`; `app/chamados/models.py:2702`; `app/chamados/services/fio.py:2086`)
+
+A ordem implementada é Colaborador → Disputa → Chamado → Pergunta, por PK em cada classe. (`app/chamados/models.py:2674`; `app/chamados/models.py:2683`; `app/chamados/models.py:2696`; `app/chamados/models.py:2700`)
+
+**3. Mordida dos testes e mutantes residuais** [nao verificado]
+
+Os testes novos distinguem estaticamente retirar `-{None}`, usar XOR, comparar cardinalidade das disputas e suprimir o laço. O instrumento de mutação recompila a função real e exige uma única ocorrência da âncora. (`app/chamados/tests/test_e1_fila.py:48`; `app/chamados/tests/test_e1_fila.py:513`; `app/chamados/tests/test_e1_fila.py:521`; `app/chamados/tests/test_e1_fila.py:526`; `app/chamados/tests/test_e1_fila.py:555`)
+
+Persistem estes mutantes plausíveis **pelos oráculos inspecionados**; sobrevivência executada na suíte inteira: **[nao verificado]**. [nao verificado]
+
+| Mutante | Por que os asserts atuais não o distinguem |
+|---|---|
+| Na mensagem, trocar `sorted(_fora[0])` ou `sorted(_fora[1])` por `[]` | Colaborador/Pergunta exigem apenas mensagem verdadeira; só Disputa tem conteúdo exigido. (`app/chamados/services/fio.py:2098`; `app/chamados/tests/test_e1_fila.py:507`; `app/chamados/tests/test_e1_fila.py:519`) |
+| Imprimir todas as disputas de `_sob`, em vez de somente as externas | No caso que verifica texto, a única disputa foi substituída; o caso que acrescenta disputa só exige recusa. (`app/chamados/tests/test_e1_fila.py:502`; `app/chamados/tests/test_e1_fila.py:509`; `app/chamados/tests/test_e1_fila.py:519`) |
+| Trocar a condição `_fora[1]` por crescimento da cardinalidade dos PKs | Há acréscimo de PK e esvaziamento, mas não substituição de PK mantendo cardinalidade. (`app/chamados/services/fio.py:2094`; `app/chamados/tests/test_e1_fila.py:498`; `app/chamados/tests/test_e1_fila.py:523`) |
+| Comparar apenas cardinalidades dos colaboradores de `P1` e `P0` | O caso exclusivo de colaborador acrescenta um valor; não substitui o conjunto mantendo tamanho. (`app/chamados/tests/test_e1_fila.py:500`; `app/chamados/tests/test_e1_fila.py:509`) |
+| Executar o laço imediatamente antes do `if _fora` | Os casos de corrida usam costura cruzada, já recusada pela porta; depois a exceção continua ocorrendo. O cenário efetivamente migrável só é usado sem corrida. (`app/chamados/tests/test_e1_fila.py:147`; `app/chamados/tests/test_e1_fila.py:547`; `app/chamados/tests/test_e1_fila.py:563`; `app/chamados/services/fio.py:863`) |
+
+O teste “nada migra” comprova recusa e destino final nesse cenário; **não comprova que uma migração possível foi impedida ou desfeita**. A segunda leitura é simulada, enquanto o laço volta a consultar o banco real. (`app/chamados/tests/test_e1_fila.py:474`; `app/chamados/tests/test_e1_fila.py:563`; `app/chamados/services/fio.py:2118`; `app/chamados/services/fio.py:2122`)
+
+**4. Escritores produtivos dos dois itens de FILA**
+
+**Não identifiquei escritor produtivo que troque esses FKs após o nascimento; não há prova universal de ausência — alcance concorrente [nao verificado].**
+
+- **Dono do Chamado:** sua fotografia realmente não é relida para `_cs`. A atribuição aparente em `pergunta_no_app` apenas compartilha a instância do mesmo colaborador dentro de grupos formados pelo próprio ID. A porta dinâmica de texto aceita somente título, assunto e descrição. (`app/chamados/services/fio.py:2085`; `app/chamados/services/pergunta_no_app.py:133`; `app/chamados/services/pergunta_no_app.py:139`; `app/chamados/services/texto.py:18`; `app/chamados/services/texto.py:25`)
+- **Colaborador/disputa da Pergunta:** a possibilidade programática existe: depois de `_state.adding`, `save` não repete a guarda da identidade. Isso prova permissividade da API, não um escritor que efetivamente altere os campos. (`app/chamados/models.py:3420`; `app/chamados/models.py:3423`; `app/chamados/models.py:3430`)
+- **Escritor histórico encontrado:** a migration 0051 preenche `colaborador_id` por `Subquery`, via `RunPython`; não é um caminho da execução normal da migração de resolvedoras. (`app/chamados/migrations/0051_decisao_pergunta.py:25`; `app/chamados/migrations/0051_decisao_pergunta.py:101`)
+- **Porta ampla encontrada:** `descarimbar_em_lote(**outros)` admite outros campos, mas os chamadores rastreados passam resposta/validação. O outro lote também usa dicionário fixo desses campos. (`app/chamados/models.py:3252`; `app/chamados/models.py:3266`; `app/chamados/models.py:1565`; `app/chamados/services/disputa_emissao.py:1517`; `app/chamados/services/disputa_emissao.py:1554`; `app/chamados/services/disputa_emissao.py:1556`)
+- **Escritas deste ato:** reapontamento grava destino/lavra, eventualmente dia; retratação grava carimbo e campos associados. Não alteram os três FKs investigados. (`app/chamados/services/fio.py:866`; `app/chamados/services/fio.py:879`; `app/chamados/services/fio.py:922`; `app/chamados/models.py:3128`; `app/chamados/models.py:3152`)
+
+Portanto, os dois FILA sustentam **riscos latentes da interface**, mas não sustentam, com a evidência disponível, uma corrida produtiva bloqueante. (`app/chamados/models.py:3420`; `app/chamados/services/fio.py:2085`; corrida produtiva **[nao verificado]**)
+
+**5. Classes que já reprovaram obra**
+
+| Classe | Resultado nesta verificação |
+|---|---|
+| Segundo juiz duplicando registrado | **Não nas linhas tocadas:** a guarda decide cobertura de travas; vitalidade continua delegada a `pergunta_viva`, registrada como autoridade. (`app/chamados/services/fio.py:2026`; `app/chamados/services/fio.py:2113`; `app/core/juizes.py:266`) |
+| Segundo escritor fora da porta | **Não nas linhas tocadas:** o diff modifica conjuntos/mensagem; o laço continua usando reapontamento e retratação pelas portas existentes. (`app/chamados/services/fio.py:2092`; `app/chamados/services/fio.py:2165`; `app/chamados/services/fio.py:2171`) |
+| Relógio fora da borda | **Não no delta v5:** a conferência não lê relógio. No caminho histórico de expiração, `_hoje` usa `timezone.now` ou o instante recebido. (`app/chamados/services/fio.py:2092`; `app/chamados/veredito_lavrado.py:95`) |
+| Derivação paralela de fonte única | **Não na construção do universo:** as duas leituras usam `_conjunto_da_migracao`; esta e o laço usam `universo_da_linha`. (`app/chamados/services/fio.py:2032`; `app/chamados/services/fio.py:2084`; `app/chamados/services/fio.py:2088`; `app/chamados/services/fio.py:2142`) |
+| Selo/RED sem mordida | **Sim, residual de cobertura:** IDs de duas classes, substituição de PK e precedência da conferência ainda têm os escapes descritos acima. (`app/chamados/tests/test_e1_fila.py:507`; `app/chamados/tests/test_e1_fila.py:519`; `app/chamados/tests/test_e1_fila.py:563`) |
+| Ordem de trava | **Não há inversão demonstrada neste ato:** uma chamada adquire as quatro classes na ordem; crescimento provoca exceção antes do laço. (`app/chamados/services/fio.py:2086`; `app/chamados/services/fio.py:2094`; `app/chamados/models.py:2674`; `app/chamados/models.py:2700`) |
+| Pouso antes do pré-requisito | **[nao verificado]**. A regra exige suíte verde antes do opus e opus antes do pouso; os anexos não comprovam essa sequência. (`CLAUDE.md:374`; `CLAUDE.md:378`) | [nao verificado]
+| Campo com dois significados | **Não introduzido pelo delta:** `disputa_id` continua sendo FK de Disputa; `None` é ignorado na normalização. A igualdade colaborador da Pergunta/disputa é verificada apenas no nascimento; divergência produtiva posterior **[nao verificado]**. (`app/chamados/models.py:2424`; `app/chamados/models.py:2661`; `app/chamados/models.py:3420`; `app/chamados/models.py:3433`) |
+
+## 09/11 00:17 · sessao aad97d481b14 · - · - · origem=Ronald (tmux)
+
+Não localizei escritor de produção que **mude**, após o nascimento, `ChamadoColaborador.colaborador_id`, `PerguntaDisputa.colaborador_id` ou `PerguntaDisputa.disputa_id`. O alcance concorrente dos dois itens de FILA permanece **[nao verificado]**, sem escritor concreto demonstrado.
+
+Evidências e exclusões:
+
+- **Nascimento da Pergunta:** `disputa` entra no construtor e a inserção ocorre com `force_insert=True` (`app/chamados/models.py:3016`, `app/chamados/models.py:3019`); `colaborador_id` é derivado da disputa ou validado contra ela (`app/chamados/models.py:3430`, `app/chamados/models.py:3432`, `app/chamados/models.py:3433`).
+- **Mutabilidade latente existe:** `save()` só chama a guarda da identidade quando `_state.adding` (`app/chamados/models.py:3420`); depois repassa ao `super().save()` (`app/chamados/models.py:3423`). Isso permite escrita programática futura, mas não demonstra um chamador produtivo que a faça.
+- **Escritor histórico:** a migração preenche `colaborador_id` por `Subquery` (`app/chamados/migrations/0051_decisao_pergunta.py:25`), registrada em `RunPython` (`app/chamados/migrations/0051_decisao_pergunta.py:101`). Não é escritor da execução normal de `migrar_resolvedoras_vivas`.
+- **A atribuição aparente `colaborador_id` no fluxo de abertura é proxy:** o objeto é `_Proxy`, não modelo persistido (`app/chamados/models.py:2888`, `app/chamados/models.py:2890`, `app/chamados/models.py:2894`).
+- **A atribuição aparente de dono do Chamado não troca o ID:** os chamados são agrupados pelo próprio `colaborador_id`, e a mesma instância é compartilhada no grupo, sem save (`app/chamados/services/pergunta_no_app.py:133`, `app/chamados/services/pergunta_no_app.py:139`, `app/chamados/services/pergunta_no_app.py:141`).
+- **`descarimbar_em_lote(**outros)` seria uma porta ampla:** aceita outros campos e escreve por `update` (`app/chamados/models.py:3252`, `app/chamados/models.py:3266`), mas os chamadores encontrados passam apenas resposta/validação (`app/chamados/models.py:1565`; `app/chamados/services/disputa_emissao.py:1517`, `app/chamados/services/disputa_emissao.py:1554`).
+- **Outros lotes:** `reabrir_para_correcao` escreve o dicionário fixo de resposta/validação (`app/chamados/services/disputa_emissao.py:1517`, `app/chamados/services/disputa_emissao.py:1556`); `bulk_update` escreve somente a lavra (`app/chamados/veredito_lavrado.py:217`, `app/chamados/veredito_lavrado.py:230`).
+- **Migração:** o reapontamento salva destino/lavra, eventualmente o dia (`app/chamados/services/fio.py:866`, `app/chamados/services/fio.py:879`, `app/chamados/services/fio.py:922`, `app/chamados/services/fio.py:924`); a retratação salva carimbo, resposta/validação e lavra (`app/chamados/models.py:3128`, `app/chamados/models.py:3133`, `app/chamados/models.py:3137`, `app/chamados/models.py:3151`, `app/chamados/models.py:3152`).
+- **`setattr` do texto do Chamado:** restrito a `titulo`, `assunto`, `descricao`, com recusa dos demais campos (`app/chamados/services/texto.py:18`, `app/chamados/services/texto.py:25`, `app/chamados/services/texto.py:27`, `app/chamados/services/texto.py:33`).
+- **`setattr` genérico de reexibição:** só altera memória, sem salvar (`app/core/reexibir.py:21`, `app/core/reexibir.py:45`, `app/core/reexibir.py:50`); seus chamadores são de colaboradores (`app/colaboradores/views.py:1094`, `app/colaboradores/views.py:1259`).
+- **Admin:** `app/chamados/admin.py` está vazio; a ausência também é documentada (`app/core/contratos_estruturais.py:331`). Não encontrei registro desses modelos nos outros admins nem ModelForm/ModelSerializer que os edite **[nao verificado: ausência universal]**. O `ready()` do app só importa signals (`app/chamados/apps.py:8`, `app/chamados/apps.py:10`).
+
+Rodei o censo AST puro em memória, sem Django nem gravação de arquivo. Ele confirma os sítios acima, mas não fornece prova formal de ausência: o próprio censo admite operações não atribuíveis e inferências (`app/core/censo_escritas.py:38`, `app/core/censo_escritas.py:43`, `app/core/censo_escritas.py:49`).
+
+## 09/11 00:17 · sessao 579d17b8fa80 · - · - · origem=Ronald (tmux)
+
+Análise estática; execução e sobrevivência dinâmica dos mutantes: [nao verificado].
+
+- **Curas efetivas:** a segunda leitura ocorre também no ramo com recusa; o helper exige exatamente duas chamadas após capturar a exceção (`app/chamados/tests/test_e1_fila.py:474`, `app/chamados/tests/test_e1_fila.py:489`, `app/chamados/tests/test_e1_fila.py:491`).
+- **None:** retirar `- {None}` de `fio.py:2093` volta a recusar a troca Disputa→None e é detectado pelo teste novo (`app/chamados/tests/test_e1_fila.py:526`).
+- **XOR:** substituir a diferença por diferença simétrica recusa o conjunto vazio e é detectado (`app/chamados/tests/test_e1_fila.py:521`; cálculo em `app/chamados/services/fio.py:2092`).
+- **Cardinalidade da Disputa:** comparar somente tamanhos perde a substituição mantendo uma linha; o novo caso altera a disputa da pergunta existente e exige recusa (`app/chamados/tests/test_e1_fila.py:509`, `app/chamados/tests/test_e1_fila.py:517`).
+- **Migração efetiva:** agora exige simultaneamente `migradas=[p.pk]`, demais saídas vazias e FK gravado no destino; remover o laço deixa o FK antigo e a lista vazia (`app/chamados/tests/test_e1_fila.py:539`, `app/chamados/tests/test_e1_fila.py:551`, `app/chamados/tests/test_e1_fila.py:555`).
+- **MORDE:** recompila a função real com uma substituição cujo trecho deve aparecer exatamente uma vez; não usa uma função fictícia (`app/chamados/tests/test_e1_fila.py:48`; extração em `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:331`).
+
+Lacunas e mutantes sobreviventes por inspeção:
+
+1. **Mensagem parcialmente coberta.** A única exigência sobre seu conteúdo é a substring `disputas [1000000000]`; os casos exclusivos de Colaborador e Pergunta só exigem mensagem verdadeira. Trocar `sorted(_fora[0])` ou `sorted(_fora[1])` por `[]`, trocar os IDs velho/novo do prefixo, ou ordenar a disputa em ordem inversa conserva os asserts atuais (`app/chamados/tests/test_e1_fila.py:494`, `app/chamados/tests/test_e1_fila.py:507`, `app/chamados/tests/test_e1_fila.py:519`; mensagem em `app/chamados/services/fio.py:2096`).
+
+2. **Mensagem com conjunto maior também escapa.** Substituir o último argumento por `sorted({x.disputa_id for x in _sob} - {None})` imprime todas as disputas presentes, inclusive as já travadas. No único teste que verifica texto, a única disputa foi substituída, portanto o conjunto maior coincide com o esperado; o caso de acréscimo não examina texto (`app/chamados/tests/test_e1_fila.py:502`, `app/chamados/tests/test_e1_fila.py:509`, `app/chamados/tests/test_e1_fila.py:519`; argumento em `app/chamados/services/fio.py:2098`).
+
+3. **Cardinalidade de Pergunta continua sem substituição equivalente.** Trocar a condição `_fora[1]` por `len({x.pk for x in _sob}) > len({x.pk for x in _ps})` conserva os casos presentes: eles acrescentam PK ou esvaziam o conjunto; a troca conservando cardinalidade cobre somente Disputa (`app/chamados/tests/test_e1_fila.py:498`, `app/chamados/tests/test_e1_fila.py:509`, `app/chamados/tests/test_e1_fila.py:523`; guarda em `app/chamados/services/fio.py:2094`).
+
+4. **Colaborador requer cuidado.** O mutante `len(C_sob)>len(_cs)` é detectado: `_cs` já contém os dois donos, e acrescentar o colaborador sintético faz 2 contra 2. Já comparar cardinalidades dos colaboradores das duas leituras de Pergunta, `len(C_sob)>len(C_ps)`, conserva os casos atuais porque não existe substituição exclusiva de colaborador mantendo cardinalidade (`app/chamados/tests/test_e1_fila.py:147`, `app/chamados/tests/test_e1_fila.py:500`; formação de `_cs` em `app/chamados/services/fio.py:2085`).
+
+5. **Precedência da conferência não é exigida.** Mover `_migrar_sob_trava` para imediatamente antes do `if _fora` conserva as verificações atuais: as corridas usam a pergunta de outro colaborador, recusada pela porta antes de gravar, e depois a exceção continua ocorrendo. O teste “nada migra” verifica apenas o destino final desse cenário já recusável; o cenário que efetivamente migra é exercitado sem corrida (`app/chamados/tests/test_e1_fila.py:147`, `app/chamados/tests/test_e1_fila.py:547`, `app/chamados/tests/test_e1_fila.py:563`; recusa anterior à escrita em `app/chamados/services/fio.py:863`; ordem atual em `app/chamados/services/fio.py:2094`).
+
+6. **Corrida simulada, sem escritor concorrente.** O helper modifica somente o retorno da segunda chamada; o laço consulta novamente o banco real. Portanto esses testes demonstram a condição de recusa, mas não demonstram concorrência real, aquisição das travas ou que o mesmo universo continue estável depois da conferência (`app/chamados/tests/test_e1_fila.py:474`, `app/chamados/tests/test_e1_fila.py:486`; releituras em `app/chamados/services/fio.py:2118`, `app/chamados/services/fio.py:2122`).
 
 ## 09/11 00:16 · sessao 13dc7743181f · - · - · origem=Ronald (tmux)
 
@@ -704,78 +844,4 @@ Outras observações úteis para consolidar:
 
 **Observação útil à conferência de travas:** o conjunto inicial inclui `disputa_id` nas travas, mas a conferência posterior só compara colaboradores e PKs das perguntas. Mudança de `disputa_id` de uma pergunta já conhecida não aciona esse `raise`; se uma escrita concorrente produtiva pode realizar isso nas condições do ato: [nao verificado] (`app/chamados/services/fio.py:2086`, `:2089`).
 
-## 08/11 23:30 · sessao 0f34790ec36d · - · - · origem=Ronald (tmux)
-
-Mapa estático, sem execução: o selo cria e remove arquivos, o que conflita com só leitura (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:44`, `:107`); resultados reais de RED/VERDE: [nao verificado].
-
-| Caso | Mutante que a asserção mata |
-|---|---|
-| 1 | Aplicar migrate antes da auth recusar, ou ignorar a recusa no normal: exige rc≠0, migrate=0 e HUP=0 (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110-112`; porta real `bin/deploy.sh:145-147`). |
-| 2 | Aplicar migrate antes da sombra recusar, ou ignorar a recusa: mesmas três exigências (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:114-116`; `bin/deploy.sh:162-165`). |
-| 3 | Eliminar migrate; aplicá-lo duas vezes; colocá-lo antes de auth/sombra/casca; chamar sombra com operação diferente de `--conferir`; eliminar HUP: exige migrate=1, HUP=1 e primeira passagem dos três portões anterior ao primeiro apply (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:95-104`, `:118-120`). |
-| 4 | Isentar o agendado da chamada à auth: exige N_JAN≥1. **Ignorar o retorno**, mantendo a chamada, pode sobreviver a este caso porque há pendência core e a guarda de agendado ainda recusa (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:122-124`; `bin/deploy.sh:211-214`). |
-| 5 | Consultar auth/sombra em `--conferir`, migrar ou enviar HUP nesse modo: exige rc=0 e todas essas contagens zeradas (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:126-128`). |
-| 6 | Adiar a prova de casca até depois do apply, ou ignorar sua recusa: exige falha sem migrate/HUP (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:130-132`; `bin/deploy.sh:286-287`). |
-| 7 | Fazer `--sem-sombra` também dispensar auth ou migrar antes dela: exige falha sem migrate/HUP (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:134-136`). |
-| 8 | Aplicar migrate incondicionalmente, inclusive sem pendência; eliminar o HUP no caminho sem pendência (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:138-140`). |
-| 9 | Chamar auth no agendado e ignorar sua recusa: agora não há pendência para esconder a falta de mordida (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:142-144`). |
-| 10 | Permitir que `APLICAR_MIGRATE=1` herdado determine apply em `--sem-migrate`; a fixture injeta explicitamente esse valor (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`, `:146-148`; inicialização real `bin/deploy.sh:61`). |
-| 11 | Restaurar a recusa incondicional por cron na seção 2 depois do apply, como na volta anterior: exige rc=0, migrate=1 e restart=1 (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:150-152`; decisão atual `bin/deploy.sh:325`). |
-
-Mutantes plausíveis sobreviventes, por inspeção das fixtures e asserções; execução dos mutantes: [nao verificado].
-
-- **Remover as recusas por cron antes do migrate**, nas linhas 117/299: nenhum caso instala cron previamente; o único cron falso nasce durante o apply (`bin/deploy.sh:117`, `:299`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `:150`).
-- **Remover a guarda de migration pendente da mensageria**: o falso sempre responde sucesso a esse check (`bin/deploy.sh:200-202`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:69`).
-- **Dispensar sombra/auth no `--reload-copia`**: nenhum dos 11 cenários usa esse modo (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:110-152`; condições reais `bin/deploy.sh:126`, `:151`).
-- **Adicionar uma segunda consulta a auth/sombra/casca depois do migrate**: os retornos dos falsos não mudam durante uma corrida; casos vermelhos já encerraram antes, casos verdes continuam verdes. Portanto não detectam um portão que muda de resposta com o tempo (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:54-56`, `:90`).
-- **Reiniciar somente `saas_core`**, omitindo as outras cascas: N_RST conta chamadas, não os alvos; restart falso sempre retorna 0, e readiness/rotas também ficam verdes (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:70-76`, `:101`, `:151`; comando real `bin/deploy.sh:326`).
-- **Eliminar provas de troca dos workers, readiness ou rotas**: nenhuma asserção exige essas chamadas; as fixtures já produzem troca de PID e STATUS 200 no caminho verde (`bin/deploy.sh:344-356`, `:368-370`, `:399-402`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:70`, `:73-75`, `:110-152`).
-- **Ignorar falha do apply ou do restart**: o docker falso não oferece retorno de falha nessas operações, logo os respectivos `|| falhou` não são exercitados (`bin/deploy.sh:300`, `:326`; `bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `:76`).
-- **Eliminar ou deslocar selo_reciclagem**: a fixture o substitui por `exit 0`; este selo não verifica a posição nem a mordida do selo real (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:51-53`; `bin/deploy.sh:409`).
-
-O caso 11 **não prova cron morto nem cron refeito**: apenas cria `cron_falso.1`, conta uma chamada de restart e exige rc=0; o falso não executa nem reexecuta cron (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:68`, `:76`, `:101`, `:150-152`).
-
-## 08/11 23:18 · sessao 6fa4aad98c43 · deployportao · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 08/11 23:15 · sessao 7f6b12750a43 · - · - · origem=Ronald (tmux)
-
-Análise estática; não executei selos ou mutantes, pois criam/removem temporários. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:36`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:96`, `bin/tests/test_grep_q_sem_sigpipe.sh:30`)
-
-| Caso | O que efetivamente morde e limite |
-|---|---|
-| 1 | Normal com pendência/auth recusando: exige falha, zero apply e zero HUP. Detecta apply anterior à auth nesse caminho. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:99`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:100`) |
-| 2 | Mesma proteção contra sombra recusando no normal. O falso aceita qualquer argumento; quem exige `--conferir` é a medição de ordem do caso 3. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:47`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:87`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:103`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:104`) |
-| 3 | Exige exatamente um apply, auth/sombra `--conferir`/casca anteriores a ele, sucesso e um HUP. Não exige ordem relativa entre os três portões. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:82`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:85`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:92`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:108`) |
-| 4 | Agora confirma chamada à auth, zero apply/HUP e falha, mas **não prova respeito ao retorno da auth**: com core pendente, a guarda de agendado também recusa. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:111`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:112`, `bin/deploy.sh:208`) |
-| 5 | Exige sucesso, zero apply/HUP e ausência de chamada à sombra. Não exige ausência de chamada à auth: uma chamada cujo resultado seja ignorado passaria. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:115`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:116`) |
-| 6 | Detecta apply normal anterior à casca recusando, bem como simples remoção da casca que deixe o deploy prosseguir. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:120`) |
-| 7 | Protege auth antes do apply em `--sem-sombra`; não testa casca nesse modo nem um deploy verde nele. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:123`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:124`) |
-
-Mutantes que passam, por inferência estática; execução dos mutantes: [nao verificado].
-
-- Repor apply na seção 1 **somente em `--sem-sombra`**, conservando apply tardio no normal: caso 7 recusa antes de alcançar a seção 1; os outros casos não exercitam esse apply antecipado. O mesmo vale para `--restart`, ausente da matriz. (`bin/deploy.sh:142`, `bin/deploy.sh:201`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:99`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123`)
-- Chamar auth em agendado e ignorar seu retorno: caso 4 continua vermelho pelo core pendente, com `N_JAN>=1`. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:111`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:112`, `bin/deploy.sh:208`)
-- Remover o escritor `APLICAR_MIGRATE=1` e executar apply incondicional após a casca: todos os casos que chegam ao apply usam pendência; nenhum caso verde usa `PEND=0`. (`bin/deploy.sh:220`, `bin/deploy.sh:292`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:99`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:107`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:123`)
-- Apenas remover o escritor normalmente falha no caso 3; **com `APLICAR_MIGRATE=1` herdado**, pode passar toda a matriz: o selo não limpa essa variável, e os casos negativos encerram antes do leitor tardio. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:80`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:108`, `bin/deploy.sh:292`)
-
-Reproduzi somente a varredura textual de `achados`, sem temporários: retornou zero linhas no conjunto efetivamente selecionado. Assim, não encontrei falso positivo efetivo atual; a regex crua casa a string legítima da própria fixture, mas o selo exclui seu próprio basename. (`bin/tests/test_grep_q_sem_sigpipe.sh:15`, `bin/tests/test_grep_q_sem_sigpipe.sh:19`, `bin/tests/test_grep_q_sem_sigpipe.sh:21`, `bin/tests/test_grep_q_sem_sigpipe.sh:25`, `bin/tests/test_grep_q_sem_sigpipe.sh:31`)
-
-A autoprova passou a exigir os dois resultados, mas não demonstra determinismo universal: gera aproximadamente 1,29 MB com `ALVO` no início e não mede capacidade do pipe nem comportamento de leitura do `grep`. Se capacidade mais leitura inicial forem menores que a saída, o produtor não consegue terminar antes do fechamento: agendamento, sozinho, não basta para fazê-lo acertar. Premissas das implementações/host real e intermitência em produção: [nao verificado]. (`bin/tests/test_grep_q_sem_sigpipe.sh:37`, `bin/tests/test_grep_q_sem_sigpipe.sh:39`, `bin/tests/test_grep_q_sem_sigpipe.sh:44`)
-
-Variáveis relevantes da alteração nos selos:
-
-| Variável | Escritor | Leitor |
-|---|---|---|
-| `FAKE_CASCA` | Caso 6. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:119`) | Script falso gerado. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:48`) |
-| `lc` | Posição da casca no log. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:88`) | Cálculo de ordem. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:92`) |
-| `N_JAN` | Contagem do log. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:89`) | Caso 4. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:112`) |
-| `N_SOM` | Contagem do log. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:90`) | Caso 5. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:116`) |
-| `ORDEM_OK` | Inicialização e comparação. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:91`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:93`) | Diagnóstico/caso 3. (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:94`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:108`) |
-| `RX` | Literal da regex. (`bin/tests/test_grep_q_sem_sigpipe.sh:15`) | `grep -nE`. (`bin/tests/test_grep_q_sem_sigpipe.sh:21`) |
-| `N` | Contagem dos achados da fixture. (`bin/tests/test_grep_q_sem_sigpipe.sh:32`) | Expectativa de três variantes. (`bin/tests/test_grep_q_sem_sigpipe.sh:33`) |
-| `X` | `printf` + `seq`. (`bin/tests/test_grep_q_sem_sigpipe.sh:37`) | Pipeline e here-string. (`bin/tests/test_grep_q_sem_sigpipe.sh:39`, `bin/tests/test_grep_q_sem_sigpipe.sh:40`) |
-| `r_pipe`, `r_here` | Ramos dos respectivos testes. (`bin/tests/test_grep_q_sem_sigpipe.sh:39`, `bin/tests/test_grep_q_sem_sigpipe.sh:40`) | Veredito e diagnóstico. (`bin/tests/test_grep_q_sem_sigpipe.sh:44`, `bin/tests/test_grep_q_sem_sigpipe.sh:45`) |
-
-_2941 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2944 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
