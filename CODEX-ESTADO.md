@@ -1,7 +1,138 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 16:07** · publicado em **09/11/2026 16:11** (UTC-3)
+> Ultima resposta processada: **09/11/2026 16:14** · publicado em **09/11/2026 16:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 16:14 · sessao 756b2c3a17e7 · FIO-E0-V4-E4-ESCRITORES · censo · origem=Code
+
+**O total comparável é 26 portas: 20 de alteração + 6 de nascimento, diferença de +4 sobre o número anunciado no v1.** As quatro adicionais já estavam descritas no v1: gravam pendência, recusa e conferência de data. Esses campos interferem no processamento da pergunta; não são apenas apresentação ou cache. (`app/chamados/services/materializacao.py:851`; `app/chamados/services/materializacao.py:1103`; `app/chamados/services/materializacao.py:1193`; `app/chamados/services/validacao.py:590`; `app/chamados/services/validacao.py:666`)
+
+A conferência foi estática por AST, sem importar a aplicação, executar testes, acessar banco/log ou escrever arquivos. Identidade criptográfica independente da cópia, execução produtiva, despacho inteiramente dinâmico, SQL dinâmico e consumidores por reflexão: **[nao verificado]**. [nao verificado]
+
+Para a soma, cada função com escrita semântica própria conta uma vez, mesmo quando também delega. `PerguntaDisputa.save` e `DecisaoPergunta.registrar` ficam discriminados como executores das portas: somá-los novamente duplicaria as persistências que executam. A sequência E1 possui efetivamente sua porta única de inserção. (`app/chamados/models.py:3402`; `app/chamados/models.py:3836`; `app/chamados/models.py:3932`)
+
+**Delta dos escritores.** Nenhum dos escritores do v1 foi eliminado ou teve seus campos/classificação alterados pelo diff fornecido; as definições das 26 portas permanecem nas linhas apresentadas no CENSO. O acréscimo de quatro ao total corrige a soma do v1; não representa quatro portas criadas pelo diff. (`app/chamados/models.py:201`; `app/chamados/models.py:2822`; `app/chamados/services/disputa_emissao.py:1422`; `app/chamados/services/materializacao.py:784`; `app/chamados/services/materializacao.py:1083`; `app/chamados/services/validacao.py:533`; `app/chamados/services/validacao.py:625`)
+
+Omissões antigas do inventário de escritores, acrescentadas abaixo como **fica**, sem aumentar o N de estado da pergunta:
+
+| Escritor omitido | Escrita própria | Chamadores encontrados |
+|---|---|---|
+| `app/chamados/models.py:488 rebaixar` | Urgência/original/atualização | T: `app/chamados/tests/test_selo_e4_gates.py:73`; P direto: **[nao verificado]** |
+| `app/chamados/models.py:513 escalar_urgencia` | Urgência/atualização | P: `app/ponto/services/triagem_batida.py:292`; `app/ponto/management/commands/processar_alertas_avancados.py:176` |
+| `app/chamados/models.py:618 _rebaixar_sem_post_save` | Urgência/original/atualização | P: `app/chamados/signals.py:72` |
+| `app/chamados/models.py:573 definir_prazo_sla` | Prazo/atualização | P: `app/chamados/services/cobranca.py:178`; `app/chamados/services/disputa_emissao.py:1715` |
+| `app/chamados/models.py:594 marcar_escalonado_dp` | Recibo de escalada/atualização | P: `app/ponto/management/commands/escalonar_chamados_supervisao.py:103` |
+| `app/chamados/models.py:2072 anotar_contexto` | Contexto da disputa | P: `app/chamados/views.py:1343`; `app/ponto/management/commands/escalonar_chamados_supervisao.py:159` |
+| `app/chamados/models.py:2105 renovar_contexto` | Contexto da disputa | P: `app/ponto/management/commands/alertar_disputas_pendentes.py:48` |
+| `app/chamados/services/disputa_emissao.py:257 perguntar_entradas_pendentes` | Contexto da disputa | P: `app/chamados/services/disputa_emissao.py:685`; `app/chamados/services/disputa_emissao.py:1267` |
+
+Chamadores de teste dessas omissões, salvo os expressamente apontados: **[nao verificado]**. [nao verificado]
+
+Também faltava a linha de escritor de `DecisaoPergunta.registrar`: preserva os atos E1 por `bulk_create`. Chamadores P incluem fechamento, retratação, absorção, resposta, validação, devolução e reconstrução; há testemunhas T específicas. (`app/chamados/models.py:3932`; `app/chamados/models.py:1921`; `app/chamados/models.py:2053`; `app/chamados/services/materializacao.py:563`; `app/chamados/services/validacao.py:139`; `app/chamados/services/validacao.py:205`; `app/chamados/services/disputa_emissao.py:1508`; `app/chamados/services/disputa_emissao.py:1612`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`; `app/chamados/tests/test_e1_volta2.py:84`)
+
+**Delta dos leitores.** As referências seguintes são as linhas atuais do lado `+` dos respectivos hunks do diff fornecido:
+
+| Leitor do v1 | Mudança efetiva |
+|---|---|
+| `app/api/views.py:991 api_chamados_v2` | A seleção crua passa a `consulta_do_app`; percorre pendentes + histórico e conserva somente disputas abertas nessa representação. Histórico respondido continua disponível para correção. (`app/api/views.py:1023`; `app/api/views.py:1058`; `app/api/views.py:1059`) |
+| `app/chamados/services/aviso_pendencia.py:7 perguntas_pendentes_do_colab` | Deixa de montar seleção própria; retorna a lista central de pendentes. (`app/chamados/services/aviso_pendencia.py:9`) |
+| `app/chamados/services/pergunta_no_app.py:60 consulta_do_app` | Passa a chamar `perguntas_do_app(..., em_lote=True)`; preserva a partição por resposta e fechamento. (`app/chamados/services/pergunta_no_app.py:69`; `app/chamados/services/pergunta_no_app.py:70`) |
+| `app/chamados/services/tarefa_do_dia.py:396 CargaDaTarefa.tarefa` | Troca `alimentar_portas` por `alimentar_fila`: a carga obtém fila/verbos sem rejulgar C6. (`app/chamados/services/tarefa_do_dia.py:408`; `app/chamados/services/tarefa_do_dia.py:409`) |
+| `app/chamados/services/cobranca.py:221 _calados` | Deslocamento de linha decorrente da mudança de `_pendentes`; mantém a leitura de respostas para a seleção dos calados. (`app/chamados/services/cobranca.py:229`) |
+| Leitores posteriores em `juizes.py` | Deslocamentos pelas inserções/refatoração; campos e significado dos leitores já listados permanecem, com endereços atuais no CENSO. (`app/chamados/juizes.py:1322`; `app/chamados/juizes.py:1590`; `app/chamados/juizes.py:1765`; `app/chamados/juizes.py:2306`) |
+
+Duas correções do v1 não são mudanças criadas pelo diff: `_estado_da_decisao` era o nome errado para `_pela_decisao`; a ocorrência de `data_conferida_por` na linha 666 é persistência, não consumidor. A definição de `atualizado_em` também não constitui leitor. (`app/chamados/services/tarefa_do_dia.py:115`; `app/chamados/services/validacao.py:665`; `app/chamados/services/validacao.py:666`; `app/chamados/models.py:68`)
+
+Leitores novos no diff ou ausentes do inventário v1, com seus caminhos de chamada principais:
+
+| Leitor | Campos/significado e origem | Chamadores |
+|---|---|---|
+| `app/chamados/juizes.py:1084 tranca_da_consulta` | Novo no diff; dia pelo juiz, resultado da tranca e memo restrito à consulta; apenas memória | P: `app/chamados/services/pergunta_no_app.py:56`; T indireto: `app/chamados/tests/test_e3_v4_orm.py:108` |
+| `app/chamados/juizes.py:1450 alimentar_fila` | Novo no diff; fila/célula/verbos do painel | P: `app/chamados/juizes.py:1495`; `app/chamados/services/tarefa_do_dia.py:409`; T: `app/chamados/tests/test_e3_portas_tarefa.py:119` |
+| `app/chamados/services/pergunta_no_app.py:44 perguntas_do_app` | Omitido no v1; R/V/C por `q_vivas` + C6; o diff acrescenta o contexto de consulta | P: `app/chamados/services/pergunta_no_app.py:69`; `app/chamados/juizes.py:1519`; T: `app/chamados/tests/test_n1_perguntas_do_app.py:94` |
+| `app/chamados/services/cobranca.py:45 _pendentes` | Omitido no v1; agora lê a mesma partição central | P: `app/chamados/services/cobranca.py:82`; `app/chamados/services/cobranca.py:163`; T: `app/chamados/tests/test_e3_v4_orm.py:31` |
+| `app/chamados/services/tarefa_do_dia.py:418 _portas_da_tarefa` | Omitido no v1; ações exigíveis + fila/verbos produzem rota/fila/verbos/fio | P: `app/chamados/services/tarefa_do_dia.py:412`; T indireto: `app/chamados/tests/test_e3_portas_tarefa.py:121` |
+| `app/chamados/services/painel.py:50 marcador_do_placar` | Omitido no v1; instantes de resolução/R/V/M invalidam apresentação | P: `app/chamados/services/painel.py:91`; T: `app/chamados/tests/test_selo_cadeia_placar.py:76` |
+| `app/chamados/models.py:336 _ancoradas` | Omitido no v1; destino e validação das perguntas ancoradas | P: `app/chamados/models.py:223` |
+| `app/chamados/models.py:374 _plano_pergunta_viva` | Omitido no v1; identidade/dia no plano de vivacidade | P: `app/chamados/models.py:419` |
+| `app/chamados/models.py:983 _renascer_por_premissa_viva` | Omitido no v1; via anterior do chamado | P: `app/chamados/models.py:922`; `app/chamados/services/resposta_tardia.py:45` |
+| `app/chamados/models.py:2626 trava_na_ordem` | Omitido no v1; fechamento/status durante aquisição das travas | P: `app/chamados/models.py:290` |
+| `app/chamados/models.py:2694 do_fato`; `app/chamados/models.py:2743 q_dos_fatos` | Omitidos no v1; conversa/via/dia/instância delimitam identidade do fato | P: `app/chamados/models.py:2770`; `app/chamados/services/fabrica_da_celula.py:124` |
+| `app/chamados/models.py:3039 fechar_por_admin` | Omitido no v1; via/M para idempotência do encerramento | P: `app/chamados/models.py:1918`; `app/ponto/services/veredito_celula.py:189` |
+| `app/chamados/juizes.py:339 _slot_esperado` | Omitido no v1; resposta usada na identificação do slot | P: `app/chamados/juizes.py:732`; T: `app/chamados/tests/test_marco_por_motivo.py:67` |
+| `app/chamados/juizes.py:604 _celulas_da_pergunta` | Omitido no v1; dia gravado e células pertinentes | P: `app/chamados/juizes.py:680`; `app/chamados/juizes.py:1392` |
+| `app/chamados/juizes.py:2148 resolvedora_valida` | Omitido no v1; discriminador conversa e dia pelo juiz | P: `app/chamados/services/fio.py:907`; T: `app/chamados/tests/test_e1_v15.py:110` |
+| `app/chamados/services/fio.py:929 _colisao_ao_datar`; `app/chamados/services/fio.py:1047 rechavear_no_reuso` | Omitidos no v1; dia/identidade no reuso | P: `app/chamados/services/fio.py:895`; `app/chamados/models.py:2949`; T: `app/chamados/tests/test_e1_v15f.py:408` |
+| `app/chamados/services/fio.py:1110 violacao_de_saida` | Omitido no v1; dia e contrato de saída da identidade | P: `app/chamados/services/fio.py:1137`; `app/chamados/services/fio.py:1169` |
+| `app/chamados/services/fio.py:1547 recusa_conversa` | Omitido no v1; conversa não recebe identidade de fato | P: `app/chamados/models.py:2769`; `app/chamados/services/fio.py:875` |
+| `app/chamados/services/fio.py:1869 perguntas_sobre_batida_retratada`; `app/chamados/services/fio.py:1987 fora_do_indice` | Omitidos no v1; conversa/via/dia em diagnósticos de identidade | P: `app/chamados/management/commands/backfill_decisoes_pergunta.py:545`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:486`; T: `app/chamados/tests/test_e1_v15c.py:93`; `app/chamados/tests/test_e1_v6_horizonte.py:138` |
+| `app/chamados/management/commands/diff_e3_sombra.py:42 candidata`; `app/chamados/management/commands/diff_e3_sombra.py:47 projecoes`; `app/chamados/management/commands/diff_e3_sombra.py:61 casos_do_par`; `app/chamados/management/commands/diff_e3_sombra.py:108 Command.comparar` | Omitidos no v1; comparação instrumental de C17/tarefa por campos, chamador e caso | P operacional: `app/chamados/management/commands/diff_e3_sombra.py:100`; `app/chamados/management/commands/diff_e3_sombra.py:126`; `app/chamados/management/commands/diff_e3_sombra.py:128`; T: `app/chamados/tests/test_e3_diff_sombra.py:20`; `app/chamados/tests/test_e3_diff_sombra.py:135` |
+
+Testemunhas T dos demais leitores omitidos não indicadas na tabela: **[nao verificado]**. O instrumento está declarado fora do pipeline; isso não demonstra que tenha sido executado. (`app/config/crons.py:771`)
+
+**D1–D15 não caíram.** D2 incorpora a partição pendentes/histórico e a retirada de C6 da alimentação da tarefa; D9 incorpora a limitação explícita de `--agora`; D11 precisa corrigir a atribuição do ramo: `reabrir_por_colab` recusa disputa fechada antes de delegar, enquanto `reabrir_para_correcao` é a porta que limpa respostas sem escrever F. (`app/chamados/services/pergunta_no_app.py:70`; `app/chamados/services/tarefa_do_dia.py:408`; `app/chamados/management/commands/diff_e3_sombra.py:105`; `app/chamados/models.py:2221`; `app/chamados/services/disputa_emissao.py:1559`)
+
+As novas distinções D16–D17 constam integralmente abaixo. Unidade do app e destino de C17 já receberam cortes; não abrem pergunta de lei nova. A troca de C17 continua condicionada ao DIFF, e seus três chamadores diretos permanecem os mesmos. (`app/docs/PROMPTS.md:2002`; `app/docs/PROMPTS.md:2007`; `app/folha/fora_da_folha.py:67`; `app/chamados/services/vigia_fio.py:635`; `app/escala/services/cadastro_realidade.py:488`)
+
+Leis/cortes checados: L-002, L-007, L-051, L-061, L-073, L-080, L-085, L-088, L-110, L-111, L-113, L-117 e L-124; FIO-E0-V4; LEI-TRANCA-E2-JUIZ; LEI-E3-UNIDADE-E-C17; LEI-C17-UM-JUIZ. **Perguntas de lei: 0.** (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:92`; `app/docs/LEIS.md:95`; `app/docs/LEIS.md:100`; `app/docs/LEIS.md:107`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:120`; `app/docs/LEIS.md:136`; `app/docs/LEIS.md:137`; `app/docs/LEIS.md:151`; `app/docs/LEIS.md:138`; `app/docs/LEIS.md:145`; `app/docs/CORTES.md:426`; `app/docs/CORTES.md:427`; `app/docs/PROMPTS.md:2002`; `app/docs/PROMPTS.md:2007`)
+
+Abreviações do inventário: **C** = `materializada_em/por`, `via_resolucao`; **R** = `resposta_colab`, `respondida_em`; **V** = `validada_em/por`; **L** = `veredito_lavrado`, `julgado_em`, `janela_expira_em`; **F** = `fechada_em/por`, `resolucao`, `motivo_fechamento`; **DP** = sequência `DecisaoPergunta`. (`app/chamados/models.py:3115`; `app/chamados/models.py:2444`; `app/chamados/models.py:3366`; `app/chamados/veredito_lavrado.py:250`; `app/chamados/models.py:1929`; `app/chamados/models.py:3828`)
+
+## CENSO
+
+escritores:
+
+- app/chamados/models.py:201 ChamadoColaborador._gravar_estado -- `status_local`, `resolvido_em`, `via_encerramento`, `respondido_por`, urgência/original, atualização; relavra perguntas atingidas -- efeito nos derivados; decisao na transição humana; fica atualização.
+- app/chamados/models.py:1852 DisputaSupervisao.fechar -- F; encerramento excepcional delega carimbo das perguntas e registra DP `SILENCIO` -- efeito no fechamento normal; decisao nas exceções.
+- app/chamados/models.py:2123 DisputaSupervisao.reabrir_admin -- limpa F, incrementa contador e pode agregar motivos -- decisao; fica contador/metadados.
+- app/chamados/models.py:2160 DisputaSupervisao.reabrir_sistema -- limpa F -- efeito.
+- app/chamados/models.py:3092 PerguntaDisputa.carimbar -- C; pode completar `respondida_em`, V e L -- efeito no carimbo; decisao nos ramos de assinatura; fica L.
+- app/chamados/models.py:3157 PerguntaDisputa.carimbar_identidade -- C, preservação opcional de instante/autor, `recusa_motivo` opcional -- efeito; decisao humana determinada pelo chamador.
+- app/chamados/models.py:3192 PerguntaDisputa.descarimbar -- limpa C; `salvar=False` prepara memória -- efeito.
+- app/chamados/models.py:3241 PerguntaDisputa.descarimbar_em_lote -- limpa C e grava campos recebidos em `outros` -- efeito.
+- app/chamados/models.py:3257 PerguntaDisputa.encerrar_por_fato_no_espelho -- `via_resolucao=fato_materializado` -- efeito.
+- app/chamados/services/validacao.py:127 _carimbar_validacao -- V e DP `VALIDACAO` -- decisao.
+- app/chamados/services/validacao.py:163 devolver_validacao_recusada -- limpa V, preserva resposta; DP `DEVOLUCAO` -- decisao.
+- app/chamados/services/disputa_emissao.py:1422 responder_pergunta_disputa_core -- R, limpa V; pode limpar C e registrar recusa explicativa; DP `RESPOSTA` -- decisao.
+- app/chamados/services/disputa_emissao.py:1559 reabrir_para_correcao -- limpa R/V e opcionalmente C; DP com foto anterior `REABERTURA` ou `RECUSA` -- decisao.
+- app/chamados/services/disputa_emissao.py:1635 responder_automaticamente -- R sem sobrescrever texto existente; DP `RESPOSTA` -- decisao de sistema.
+- app/chamados/services/disputa_emissao.py:1658 carimbar_resposta_pela_trilha -- `respondida_em` no instante da testemunha; DP `RESPOSTA` -- decisao reconstruída.
+- app/chamados/services/relavra_via.py:106 relavrar -- via derivada e L no mesmo save -- efeito na via; fica L.
+- app/chamados/services/materializacao.py:784 _materializar_resposta_hora -- `pendencia_admin`, `recusa_motivo`; plantio/carimbos delegados -- efeito.
+- app/chamados/services/materializacao.py:1083 _carimbar_recusa -- `recusa_motivo`; colisão delega C de identidade -- efeito de recusa técnica.
+- app/chamados/services/validacao.py:533 recusar_pergunta -- `recusa_motivo`; delega limpeza R/V e DP `RECUSA` -- decisao.
+- app/chamados/services/validacao.py:625 conferir_data_do_fato -- `data_conferida_em/por`, com justificativa e dois dias na trilha -- decisao.
+- app/chamados/models.py:833 ChamadoColaborador.abrir -- identidade/contexto e status inicial pelo motor -- fica nascimento.
+- app/chamados/models.py:1054 ChamadoColaborador.criar -- identidade/contexto e status inicial pelo motor -- fica nascimento.
+- app/chamados/services/disputa_emissao.py:474 _abrir_ou_agregar_disputa -- nascimento aberto, motivos/contexto -- fica.
+- app/chamados/services/disputa_emissao.py:1024 criar_disputa_a_partir_de_chamados_orfaos -- nascimento aberto, identidade, motivos/contexto -- fica.
+- app/chamados/services/disputa_emissao.py:1299 criar_disputa_ancora_de_chamado -- nascimento aberto, vínculo com chamado, motivos/contexto -- fica.
+- app/chamados/models.py:2822 PerguntaDisputa._nascer -- identidade, dia, instância, célula, destino, conteúdo/tipo/opções, defaults R/V/C; costura e L no reuso -- fica.
+- app/chamados/veredito_lavrado.py:240 gravar_lavras_em_lote -- L por `bulk_update` -- fica cache.
+- app/chamados/veredito_lavrado.py:254 lavrar -- L; `salvar=False` prepara memória -- fica cache.
+- app/chamados/services/arquivo.py:141 silenciar -- `silenciado_ate/por/motivo`, atualização -- fica prazo/metadados de apresentação.
+- app/chamados/services/arquivo.py:177 levantar -- limpa silêncio; atualização e primeiro `resgatado_em` -- fica.
+- app/chamados/services/fio.py:804 reapontar_resolvedora -- destino, célula/dia quando aplicável, L -- fica identidade/cache.
+- app/chamados/services/fio.py:970 rechavear_data_evento -- dia/célula e L -- fica identidade/data/cache.
+- app/chamados/models.py:1968 DisputaSupervisao.remover_motivo -- motivos/contexto próprios; DP `RETRATACAO` e C delegados -- decisao; fica metadados.
+- app/chamados/models.py:1949 DisputaSupervisao.aparar_motivo_respondido -- motivos/contexto; não apaga pergunta -- fica.
+- app/chamados/models.py:2179 DisputaSupervisao.reabrir_por_colab -- contador próprio; reabertura R/V delegada -- fica contador; decisao delegada.
+- app/chamados/models.py:2247 DisputaSupervisao.limpar_resolucao_residual -- `resolucao=''` em disputa aberta -- fica.
+- app/chamados/models.py:488 ChamadoColaborador.rebaixar -- urgência/original, atualização -- fica prioridade.
+- app/chamados/models.py:513 ChamadoColaborador.escalar_urgencia -- urgência, atualização -- fica prioridade.
+- app/chamados/models.py:618 ChamadoColaborador._rebaixar_sem_post_save -- urgência/original, atualização por update -- fica prioridade.
+- app/chamados/models.py:573 ChamadoColaborador.definir_prazo_sla -- prazo SLA, atualização -- fica prazo.
+- app/chamados/models.py:594 ChamadoColaborador.marcar_escalonado_dp -- recibo/instante da escalada, atualização -- fica.
+- app/chamados/models.py:2072 DisputaSupervisao.anotar_contexto -- contexto -- fica.
+- app/chamados/models.py:2105 DisputaSupervisao.renovar_contexto -- contexto -- fica.
+- app/chamados/services/disputa_emissao.py:257 perguntar_entradas_pendentes -- contexto da disputa; emissão delegada -- fica na escrita própria.
+- app/chamados/services/contexto.py:62 anotar_contexto -- `contexto_json`, atualização -- fica.
+- app/chamados/services/contexto.py:82 renovar_contexto -- `contexto_json`, atualização -- fica.
+- app/chamados/services/contexto.py:108 retirar_contexto -- `contexto_json`, atualização -- fica.
+- app/chamados/services/contexto.py:131 fundir_contexto -- `contexto_json`, atualização -- fica.
+- app/chamados/services/vinculos.py:81 apontar_justificativa -- 
+
+[truncado em 20000 de 67950 caracteres]
 
 ## 09/11 16:07 · sessao 7e56db703d9c · - · - · origem=Ronald (tmux)
 
@@ -674,80 +805,4 @@ Demais verificações:
 - O chamador fornece `--toca`; o parser escreve `TOCA[]`, a validação restringe o formato, `_publica_estado` grava `toca=`, `_toca_de` lê esse campo, `_portoes` julga a admissão e o fim relê o estado da outra raia (`bin/codex_pergunta.sh:71`, `bin/codex_pergunta.sh:321-324`, `bin/codex_pergunta.sh:308-312`, `bin/codex_pergunta.sh:291`, `bin/codex_pergunta.sh:295-306`, `bin/codex_pergunta.sh:565-574`).
 - Os controles novos cobrem arquivo exato, pasta por componente e pai novo com uma raia; não cobrem TAB/newline nem dois arquivos irmãos sob pai novo (`bin/tests/test_codex_pergunta.sh:562-570`).
 
-## 09/11 14:51 · sessao 8edd85065351 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · sonda · origem=Code
-
-**O anexo permite contar pares candidatos, mas não quantificar disputas distintas que passariam a ficar retidas.** São **112 pares em disputas abertas e 18 em fechadas**, nas classes citadas. [nao verificado — cálculo sobre o anexo]
-
-Não localizei `sonda_par.py` nesta cópia; portanto, não conferi seu conteúdo nem o hash anunciado. Uso `[nao verificado]` nas contagens do anexo e nas somas derivadas delas, sem confirmação independente de PROD. [nao verificado]
-
-1. **Censo por combinação**
-
-“Fechada” abaixo é total menos aberta, condicionado a ambos os dicionários cobrirem o mesmo recorte. [nao verificado]
-
-| Classe rotulada | Pares totais | Em abertas | Em fechadas | Evidência |
-|---|---:|---:|---:|---|
-| A/A | 3.793 | 1.494 | 2.299 | [nao verificado] |
-| A/R | 49 | 43 | 6 | [nao verificado] |
-| A/S | 53 | 52 | 1 | [nao verificado] |
-| A/T | 1 | 0 | 1 | [nao verificado] |
-| A/V | 5 | 2 | 3 | [nao verificado] |
-| R/R | 172 | 168 | 4 | [nao verificado] |
-| R/S | 18 | 17 | 1 | [nao verificado] |
-| S/S | 2.514 | 2.482 | 32 | [nao verificado] |
-| S/V | 4 | 4 | 0 | [nao verificado] |
-| T/T | 196 | 0 | 196 | [nao verificado] |
-| V/V | 18 | 11 | 7 | [nao verificado] |
-| **Total** | **6.823** | **4.273** | **2.550** | [nao verificado] |
-
-R/T, R/V, S/T e T/V não aparecem nos dicionários: contribuição zero **na saída apresentada**, sem comprovar zero na projeção correta da matriz. [nao verificado]
-
-Os 6.823 pares correspondem a **13.646 metades**, distribuídas pelos rótulos: **S=5.103, R=411, V=45, A=7.694, T=393**. Das 18.424 metades declaradas, **4.778 ficam fora dessa tabela**; sua distribuição por estado não foi fornecida. A conta dos grupos fecha: `9.900 − 2.756 sem_par − 321 ambíguos = 6.823`. [nao verificado]
-
-**N não é zero conhecido.** A recusa humana registra `ato='recusa'` na trilha e limpa resposta e validação da projeção; sem E1, uma metade recusada pode parecer S. Isso esconde, por exemplo, S/N dentro de S/S e A/N dentro de A/S. (`app/chamados/services/validacao.py:591`; `app/chamados/services/disputa_emissao.py:1590`; exemplos de redistribuição [nao verificado])
-
-2. **Retenção pelo C7 ampliado e legado**
-
-| Classe candidata | Pares em abertas | Pares em fechadas | Evidência |
-|---|---:|---:|---|
-| A/R | 43 | 6 | [nao verificado] |
-| A/S | 52 | 1 | [nao verificado] |
-| A/V | 2 | 3 | [nao verificado] |
-| A/T | 0 | 1 | [nao verificado] |
-| S/V | 4 | 0 | [nao verificado] |
-| V/V | 11 | 7 | [nao verificado] |
-| **Total** | **112** | **18** | [nao verificado] |
-
-V/R e V/T não acrescentam ocorrências nos dicionários apresentados. O total separado `V_sem_A=47` não deve ser somado aos pares: mistura unidades e pode sobrepor essas ocorrências. [nao verificado]
-
-**Não dá para chamar esses números de 112 disputas novas retidas e 18 disputas legadas.** Os exemplos repetem `disputa_pk`, inclusive entre combinações, e não fornecem a relação completa para deduplicação. [nao verificado — anexo `EXEMPLOS`]
-
-Também falta demonstrar **“que hoje fecham”**: C7 consulta todas as perguntas da disputa, exigindo ausência de resposta sem veredito e de fio vivo; outra pergunta pode já impedir seu fechamento. (`app/chamados/models.py:1850`; `app/chamados/models.py:1861`)
-
-A brecha para V está comprovada no código: C6 considera qualquer pergunta validada morta imediatamente, e `respostas_sem_veredito()` exclui as validadas, mesmo sem aplicação. Isso demonstra a possibilidade de escape, sem quantificar a população afetada. (`app/chamados/juizes.py:1153`; `app/chamados/models.py:1851`)
-
-Os 18 pares fechados são ocorrências candidatas de legado, sem autorização para correção automática do dado pela L-099; a porta `fechar()` também não reabre disputa já fechada. (`CLAUDE.md:176`; `app/chamados/models.py:1887`; quantidade [nao verificado])
-
-3. **`ESPERA_PAR_INTERVALO`**
-
-O anexo informa **`espera_gravada=0`**. A expressão também não apareceu na busca textual desta cópia. A afirmação histórica “v5 nunca pousou” permanece sustentada apenas pelo anexo. [nao verificado] [nao verificado]
-
-Zero gravado não significa zero obrigação pendente: o próprio anexo declara 47 ocorrências de `V_sem_A`. [nao verificado]
-
-4. **Rótulo versus predicado — LEI-AKITA 8**
-
-Sem o script, **não é possível certificar seu predicado nem atribuir-lhe uma inversão específica de precedência**. A lei exige medir pela função real, com rótulo correspondente ao universo contado. (`CLAUDE.md:35`; implementação da sonda [nao verificado])
-
-Os pontos verificáveis para confrontá-lo com `T > A factual > N atual > V > R/S` são:
-
-- **T antes de A:** linhas fora do fato são identificadas pelas vias `duplicata` e `motivo_retratado`; `fora_do_fato()` não depende de carimbo. Classificar pelo timestamp antes dessa identidade pode encobrir T. (`app/chamados/models.py:2401`; `app/chamados/models.py:3193`)
-- **A factual:** `materializada_em` sozinho não prova aplicação. `estado_aplicacao_pergunta()` reconhece explicitamente carimbo de recusa sem batida; o juiz de lastro dispõe de verificações de testemunha factual. (`app/chamados/services/materializacao.py:434`; `app/chamados/juizes.py:645`; `app/chamados/juizes.py:789`)
-- **N atual:** `recusa_motivo` também guarda recusa técnica; recusa humana histórica não basta para identificar a decisão vigente. A sequência contém respostas e validações e ordena por `ato_em, pk`. (`app/chamados/models.py:2567`; `app/chamados/models.py:3857`; `app/chamados/models.py:3889`)
-- **A função atual não entrega a matriz:** exige pergunta tipo hora com texto e retorna estados de aplicação, sem implementar aquela sequência S/R/V/A/N/T. (`app/chamados/services/materializacao.py:430`; `app/chamados/services/materializacao.py:432`)
-
-5. **O que exige outra leitura**
-
-Permanecem indeterminados: classificação correta das 18.424 metades; quantidade de N; identidade dos pares nos grupos ambíguos; classes das metades fora dos pares únicos; sobreposição dos 28 `pendencia_admin`; e correspondência entre os 47 `V_sem_A` e os 45 rótulos V dos pares únicos. [nao verificado]
-
-Para medir **disputas adicionais retidas**, falta uma leitura que associe cada par à disputa, deduplique os IDs, projete os estados com E1 e testemunha factual e compare, na mesma disputa, C7 atual com a obrigação ampliada. O agregado fornecido não contém esse cruzamento. (`app/chamados/models.py:1861`; `app/chamados/models.py:3839`; `app/chamados/juizes.py:645`; disponibilidade desse cruzamento [nao verificado])
-
-_3197 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3198 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
