@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 04:16:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (178.1 MB). Acoes na janela: **915**.
+**Medido em 09/11/2026 04:21:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (178.1 MB). Acoes na janela: **914**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -924,4 +924,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:25:44 | Bash | Find C7 census and E2 copy | `cd /home/ronald/saas-hasner; git log -1 --format=%B 60f48a10 \| grep -i -n -E 'c7\|28' \| head; ls -t logs/*/codex_*c7* logs/*/*c7*.r 2>/dev/null \| head; grep -rl -E '28 s[ií]tios' logs/*/codex_*.r 2>/dev/null \| head -3; ls -d ~/wt-fioe2* 2>/dev/null; git -C ~/wt-fioe2-025758 log --oneline -1 2>/dev/null` |
 | 16:25:40 | Bash | Find E2 and C7 28-sitios details | `cd /home/ronald/saas-hasner/app; grep -n -E '^\\| (FIO-E0-V4\|FIO-E0-V4-E2\|FIO-E0-V4-E1)' docs/BACKLOG.md \| cut -c1-900; grep -n 'tarefa_do_dia' -r docs/*.md \| cut -c1-200 \| head -5; grep -n -c '' /home/ronald/saas-hasner/logs/pergunta_sem_selo/*.r 2>/dev/null \| tail -3; ls /home/ronald/saas-hasner/logs/pergunta_sem_selo/ \| tail -8; ls /home/ronald/saas-hasner/logs/fio_e0_v4/ \| grep -E '\.( ...` |
 | 16:25:36 | Bash | Locate E2, C7, V3 references | `cd /home/ronald/saas-hasner/app; grep -n -E 'FIO-E0-V4-E2\|tarefa_do_dia\|PERGUNTA-SEM-SELO\|C7\|V3-BATERIA\|BATERIA' docs/BACKLOG.md \| cut -c1-260 \| head -20; ls /home/ronald/saas-hasner/logs/ \| grep -i -E 'c7\|pergunta_sem\|v3\|bateria' \| head; cat /home/ronald/saas-hasner/logs/aval_ordem_viva_0811.txt \| cut -c1-400 \| head -20` |
-| 16:20:28 | Bash | Check builder progress, refresh ESPERANDO | `P=$(ps -eo pid,args \| grep 'trava_teste.sh -- docker' \| grep -v grep \| awk '{print $1}' \| head -1); echo "p=$P"; ls -l --time-style=+%T /home/ronald/saas-hasner/logs/fio_e0_v4/ \| grep -E 'matriz\|v15e' ; date +%T; cd /home/ronald/saas-hasner/app; [ -n "$P" ] && sed -i "2s#.*#ESPERANDO: trava_teste.sh \| pid=$P#" docs/RELATO.md; echo '{"session_id":"707e509b-29e4-4438-9018-16733980c39a","trans ...` |
