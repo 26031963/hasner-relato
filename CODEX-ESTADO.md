@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 08:04** · publicado em **09/11/2026 08:04** (UTC-3)
+> Ultima resposta processada: **09/11/2026 08:12** · publicado em **09/11/2026 08:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 08:12 · sessao 79c1c84e8d87 · - · - · origem=Ronald (tmux)
+
+Encontrei dois problemas concretos:
+
+- **Ordem de travas no O330:** a transação percorre várias disputas, mas trava cada disputa apenas ao chegar à unidade. Uma segunda disputa fechada pode ser travada depois das perguntas da primeira. Precisa reunir todas as disputas, destinos, clones e perguntas no topo da transação. `chamados/services/passivo_validado.py:371`; `chamados/services/passivo_validado.py:429`; `chamados/services/materializacao.py:90`; `chamados/services/materializacao.py:1372`.
+- **Aplicação fora do universo do reparador:** a identidade admite irmã carimbada sem lastro; essa irmã pode ter sido excluída do lote por `plantio_fora_do_slot`. A unidade a aplica mesmo assim, e o contador só contabiliza perguntas do grupo original. Precisa exigir autorização das duas metades pelo universo do lote, recusando o conjunto se faltar uma. `chamados/services/materializacao.py:73`; `chamados/services/materializacao.py:1329`; `chamados/services/passivo_validado.py:330`; `chamados/services/passivo_validado.py:523`; `chamados/services/vigia_carimbo.py:113`.
+
+O segundo problema também amplia o universo da porta normal: uma volta já carimbada sem lastro volta a ser aplicada ao validar a saída, embora a seleção normal exclua perguntas materializadas. O teste R9 atual cobre apenas motivo retratado. `chamados/services/materializacao.py:73`; `chamados/services/materializacao.py:1542`; `chamados/tests/test_bug_par_intervalo.py:310`.
+
+O R8 atual usa perguntas sem carimbo; falta cobrir o formato real do passivo com carimbo falso e a irmã fora do universo. `chamados/tests/test_bug_par_intervalo.py:297`; `chamados/tests/test_o330_plantio_nao_abre_turno.py:101`.
+
+Revisão por leitura; testes não executados. [nao verificado] [nao verificado]
 
 ## 09/11 08:04 · sessao 47aa24b5876b · DEPLOY-EXCLUSAO-ENVELOPE · verificador · origem=Code
 
@@ -1654,8 +1667,4 @@ As referências aos anexos abaixo contam as linhas do texto colado, incluindo li
 
 **(c) aplica-se à comprovação operacional que faltava**, como execução integral/RED e eventos reais de produção; não à possibilidade de examinar estaticamente o espelho. A resposta declarou essas limitações, enquanto o código permite identificar a comparação unilateral. (`i1_preverif_v5.r:46,54,68`; `bin/disjuntor.py:1684`) Atribuir **(d), modo comum**, aos casos restantes exigiria evidência adicional sobre quem os examinou: **[não verificado]**.
 
-## 09/11 07:41 · sessao e9a3685d39c6 · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_3061 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3062 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
