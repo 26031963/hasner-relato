@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 00:45** · publicado em **09/11/2026 00:47** (UTC-3)
+> Ultima resposta processada: **09/11/2026 00:48** · publicado em **09/11/2026 00:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 00:48 · sessao d2b417eeeb67 · FIO-E0-V4-E1-FILA · sonda · origem=Code
+
+Transcrição literal do dado fornecido [nao verificado]:
+
+```text
+REATARd universo colabs= 248 perguntas= 3359 erros= 0
+REATARd HIST reapontaria a TERMINAL= 0 a vivo= 11
+REATARd c1 lavraria= 0 julgar_celula escreveria= 0
+REATARd c2 abrir chamado= 33 criaria novo= 33 veto na porta= 0
+REATARd c2 abrir achou TERMINAL e tentou RENASCER= 0 status= []
+REATARd RENASCER escreveria (guardas passaram)= 0 vetado pelas guardas= 0
+REATARd pares (pergunta,chamado) que renasceriam (ate 20)= []
+FIM sonda_v22d_acervo
+```
+
+1. **Não escreve quando `sistema` já existe.** A implementação retorna o usuário por `User.objects.get_or_create(username='sistema')[0]`; a criação ocorre quando ele não existe. A docstring que anuncia `DoesNotExist` diverge dessa implementação. — app/core/utils.py:15–18.
+
+2. **Não, considerando escrita persistida no banco e retorno booleano normal.** `carimbar` aplica o carimbo **em memória**, consulta `pergunta_viva` e pode desfazê-lo e retornar `False`, mas essa decisão ocorre **antes** do `save`. — app/chamados/models.py:3087–3091, 3119–3135, 3142.
+
+   Depois dessa gravação, `lavrar_sem_turno_aberto` consulta `p.disputa.pode_fechar()` para decidir o fechamento da disputa; o resultado dessa consulta não muda seu retorno: a função termina com `True`. Portanto, essa leitura posterior não sustenta a hipótese de “lavraria” contar um caso que retornaria `False`. — app/chamados/reconciliador.py:405–414.
+
+   Quando a lavra retorna `False`, `reatar_pergunta_orfa` ainda tenta o caminho de reemissão `(c2)`. — app/chamados/reconciliador.py:1615–1618.
 
 ## 09/11 00:45 · sessao b8280ae407bb · FIO-E0-V4-E1-FILA · sonda · origem=Code
 
@@ -688,20 +711,4 @@ Para a pergunta 5, separar **diff v4** de **contexto da obra**:
 
 Para **b5**, o descarte é procedente no contrato específico de ordem: o RED exige canônica e destino presentes na sequência e ausência de inversões (`app/chamados/tests/test_e1_fila.py:442-447`), enquanto a porta toma a trava depois de encontrar proposta (`app/chamados/services/declaracao_texto.py:643-650`). O teste não prova sucesso funcional da aplicação; isso fica **[nao verificado]**.
 
-## 08/11 23:54 · sessao 7d1c7808290c · - · - · origem=Ronald (tmux)
-
-- `APLICAR_MIGRATE`: escritores de valor são inicialização `0` e armação `1` (`bin/deploy.sh:61`, `bin/deploy.sh:223`); único leitor operacional é a decisão do apply (`bin/deploy.sh:299`). O comentário “UM escritor” é correto somente contando a armação e excluindo a inicialização explicitamente mencionada na linha seguinte; literalmente existem duas atribuições (`bin/deploy.sh:59`, `bin/deploy.sh:60`). O selo também injeta `APLICAR_MIGRATE=1` no ambiente do subprocesso, sobreposto pela inicialização (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:98`, `bin/deploy.sh:61`).
-
-- `RESTART`: escritores `0` e `1`, este último exclusivamente para `MODO=--restart` (`bin/deploy.sh:70`, `bin/deploy.sh:72`, `bin/deploy.sh:73`). Leitores: guarda inicial de cron (`bin/deploy.sh:115`), exceção da pendência da mensageria (`bin/deploy.sh:200`), guarda imediatamente anterior ao apply (`bin/deploy.sh:300`), escolha restart/HUP (`bin/deploy.sh:323`) e mensagem final (`bin/deploy.sh:429`). Fora dele, o contrato lê o texto do ramo, não o valor em execução (`bin/contrato_deploy.sh:41`).
-
-- Marcas: o envelope cria diretório/nome `N_E.$$`, escreve timestamp e registra remoção no `EXIT` (`bin/cron_run.sh:9`, `bin/cron_run.sh:10`). O deploy enumera arquivos, lê PID do sufixo, consulta `/proc`, devolve o nome dos vivos **e apaga marcas mortas**; portanto também é escritor de limpeza (`bin/deploy.sh:108`, `bin/deploy.sh:109`). A recusa consome esses nomes (`bin/deploy.sh:111`, `bin/deploy.sh:112`), sendo chamada em três pontos (`bin/deploy.sh:117`, `bin/deploy.sh:300`, `bin/deploy.sh:326`). O conteúdo ISO não é lido pelo deploy; o protocolo efetivo depende do nome e da existência do PID (`bin/cron_run.sh:10`, `bin/deploy.sh:109`).
-
-- Escritores dos selos: marca inicial e marca durante o migrate no selo desta obra (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:97`, `bin/tests/test_deploy_portoes_antes_do_migrate.sh:75`), ambas usando PID vivo exportado pelo selo (`bin/tests/test_deploy_portoes_antes_do_migrate.sh:96`); selo vizinho escreve marca com PID de seu processo falso (`bin/tests/test_deploy_reload_gracioso.sh:90`, `bin/tests/test_deploy_reload_gracioso.sh:91`). O contrato apenas procura os textos dos caminhos nos scripts (`bin/contrato_deploy.sh:81`, `bin/contrato_deploy.sh:82`).
-
-- O endereço do escritor é absoluto (`bin/cron_run.sh:9`); o leitor deriva a raiz da localização do script (`bin/deploy.sh:53`, `bin/deploy.sh:108`). A configuração agenda ambos sob `/home/ronald/saas-hasner`, tornando-os equivalentes **nessa localização declarada** (`app/config/crons.py:19`, `app/config/crons.py:326`, `app/config/crons.py:1475`, `app/config/crons.py:1486`). Equivalência universal ou resolução real do caminho em produção: [nao verificado].
-
-- Os elos também passam pelo mesmo escritor de marcas: `encadeado.sh` executa `cron_run.sh` depois de esperar arquivos de fim (`bin/encadeado.sh:89`, `bin/encadeado.sh:102`, `bin/encadeado.sh:104`). O envelope executa o comando uma vez, carimba fim apenas para rc `0`/`2`, e termina com o rc; não há retry nesse fluxo (`bin/cron_run.sh:11`, `bin/cron_run.sh:22`, `bin/cron_run.sh:25`, `bin/cron_run.sh:38`).
-
-- O comentário limita demais o residual ao cron que “NASCE durante o migrate” e à “duração do migrate” (`bin/deploy.sh:295`, `bin/deploy.sh:296`). Sem exclusão entre envelope e deploy, a marca pode nascer **depois da varredura prévia terminar, antes do apply começar**, ou **depois do apply retornar, antes da varredura final**; nesses caminhos o banco pode andar e a seção 2 recusar (`bin/deploy.sh:300`, `bin/deploy.sh:301`, `bin/deploy.sh:324`, `bin/deploy.sh:326`, `bin/cron_run.sh:9`). Uma marca também pode nascer depois da varredura final e antes do restart, permitindo matar seu comando (`bin/deploy.sh:326`, `bin/deploy.sh:327`, `bin/cron_run.sh:9`, `bin/cron_run.sh:11`). Ocorrência real desses interleavings: [nao verificado].
-
-_2953 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_2954 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
