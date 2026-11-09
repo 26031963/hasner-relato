@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 11:15** · publicado em **09/11/2026 11:18** (UTC-3)
+> Ultima resposta processada: **09/11/2026 11:39** · publicado em **09/11/2026 11:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 11:39 · sessao 9d3a5d3f52b3 · - · - · origem=Ronald (tmux)
+
+Resultado das questões 4–6, somente leitura:
+
+**4. Frescor e invalidação**
+
+- O juiz compara `Max(FechamentoMensal.atualizado_em)` por empresa/mês/ano com `RetratoFolha.lavrado_em`; fechamento posterior significa `desatualizado`. O universo consultado contém apenas competências atual e anterior das empresas visíveis (`app/folha/retrato_folha.py:1287-1306`).
+- A view lê esse juiz e recorta avisos para a competência e empresas exibidas, sem comparar carimbos por conta própria (`app/folha/views_retrato.py:199-210`).
+- Estados do juiz: `nunca lavrado`, `desatualizado`, `atualizado`; suas frases vêm de `_rotulo_admin` (`app/folha/retrato_folha.py:1276-1277`, `app/folha/retrato_folha.py:1323-1329`).
+- A barra mostra o aviso de desatualização ou `atualizado HH:MM`; sem retrato, a lista mostra “Sem retrato lavrado”. Nesse fluxo não há estado `atualizando` ou `falhou` (`app/templates/folha/_retrato_barra.html:19-22`, `app/templates/folha/_retrato_lista.html:17-20`).
+- `FechamentoMensal.atualizado_em` é `auto_now=True` (`app/ponto/models.py:479`).
+- Escritores que movem o carimbo: criação/lavra por `recalcular_fechamento_mes` (`app/ponto/services/fechamento.py:898-900`, `app/ponto/services/fechamento.py:1143-1161`); `aprovar` com save completo (`app/ponto/services/fechamento.py:1335-1340`); `restaurar_fechamento` (`app/ponto/services/fechamento.py:1392-1393`); `reabrir_periodo` (`app/ponto/services/fechamento.py:1449-1452`); `invalidar_previsto` (`app/ponto/services/fechamento.py:1610-1613`); `invalidar_fechamento` (`app/ponto/services/fechamento.py:1652-1656`).
+- Escritores que escrevem fechamento **sem mover esse carimbo**: `aprovar_lote` faz update sem `atualizado_em`; `reabrir_lote` também; `reabrir` faz save com `update_fields` que o omite (`app/ponto/services/fechamento.py:1329-1332`, `app/ponto/services/fechamento.py:1344-1354`). Portanto, o comentário “sobe em TODO save” precisa dessa ressalva (`app/folha/retrato_folha.py:1264`).
+- A afirmação genérica do aval de que escala/veredito/ausência não invalidam não descreve todos os caminhos desta cópia: save de `EscalaColaborador` chama `invalidar_previsto` por signal (`app/escala/signals.py:124-133`); edição e decisão de ausência chamam `invalidar_fechamento` (`app/ponto/services/ausencia.py:509-524`, `app/ponto/services/ausencia.py:935-948`); regeneração de células pode recalcular por competência (`app/ponto/portas/celula.py:445-458`).
+- Essas invalidações são condicionais: `invalidar_previsto` só atualiza linhas com `previsto_em` preenchido; `invalidar_fechamento` só atualiza linhas com `derivado_em` preenchido (`app/ponto/services/fechamento.py:1611-1613`, `app/ponto/services/fechamento.py:1652-1656`).
+- `recalcular_por_evento` agenda no `on_commit` a lavra do fechamento do colaborador na competência do fato; falha gera warning, sem propagar exceção (`app/ponto/services/fechamento.py:1798-1827`).
+- Chamadores dessa rederivação incluem batida, decisão de HE, folga aceita e validação de disputa (`app/ponto/registro_batida.py:177-178`, `app/ponto/portas/he.py:201-202`, `app/chamados/services/validacao.py:360-361`, `app/chamados/services/validacao.py:445-446`).
+- A família declara `ponto/services/fechamento.py` como porta única; o teste de censo AST tem allowlist e pendentes vazios e verifica escritores externos (`app/folha/tests/test_chokepoint_folha_gate.py:6-9`, `app/folha/tests/test_chokepoint_folha_gate.py:28-31`, `app/folha/tests/test_chokepoint_folha_gate.py:58-62`, `app/folha/tests/test_chokepoint_folha_gate.py:72`).
+
+**5. Custo**
+
+- O comando aceita uma empresa e competência explícitas; sem os filtros, percorre todas as empresas visíveis e competências anterior/atual. Portanto, suporta a unidade empresa × competência, mas a execução padrão é frota × duas competências (`app/folha/management/commands/lavrar_retrato_folha.py:38-40`, `app/folha/management/commands/lavrar_retrato_folha.py:48-65`).
+- A configuração do cron usa `--apply` sem `--empresa`; o comentário confirma uma corrida após todas as empresas do gatilho (`app/config/crons.py:1606-1609`, `app/config/crons.py:1627-1629`).
+- Cada `montar_linhas(empresa, mes, ano)` chama `fora_da_folha` uma vez; esta chama `dias_que_seguram`, que chama `classificar_export` uma vez. Assim, **uma chamada a `classificar_export` por empresa × competência**, oito no exemplo de quatro empresas × duas competências (`app/folha/retrato_folha.py:1156-1160`, `app/folha/fora_da_folha.py:160-162`, `app/folha/fora_da_folha.py:118-119`).
+- Produção histórica documentada: **17,8 s para oito retratos**, quatro empresas × duas competências, em 11/10; os subtotais são por empresa com duas competências: emp1 1,31 s; emp2 11,04 s; emp3 3,77 s; emp4 1,65 s. Não constituem medição por empresa × competência (`app/config/crons.py:1591-1594`; repetido na docstring `app/folha/management/commands/lavrar_retrato_folha.py:21-22`).
+- Outra execução registrada informa **12 s para oito retratos**, atuais/anterior, às 02:52 (`app/docs/RELATO.md:5193`); outra passagem registra oito retratos em 12 s pela via homologada, carimbo de 21/10 18:49:53 (`app/docs/RELATO.md:5533-5534`).
+- Há medição **unitária de sombra**, não produção nem tempo integral do lavrador: `fora_da_folha` real de emp2 × competência 11 passou de 7,3 s para 32,0 s no ensaio F5C de 30/10 (`app/docs/RELATO.md:1132`).
+- Há ensaio de sombra que registra **10,8 s para o ATO3 `lavrar_retrato_folha`**, com aviso de ambiente de teste em quatro núcleos; não é medida unitária de produção (`app/docs/RELATO.md:4764`).
+- `crons_duracao.json` contém **39 s** para o comando (`app/config/crons_duracao.json:49`). Isso é valor de agendamento calculado por **p95 das corridas dos últimos sete dias × 1,5, piso de 30 s**, não duração medida de uma unidade (`bin/crons_duracao.py:9-13`, `bin/crons_duracao.py:69-76`). O arquivo informa fonte `app/logs/placar.jsonl`, geração em 31/10, janela sete dias (`app/config/crons_duracao.json:106-110`).
+- O teste comprova uma linha por empresa/competência e idempotência, não benchmark de produção (`app/folha/tests/test_retrato_folha_contador.py:265-280`).
+- Custo atual medido em produção por empresa × competência: **[nao verificado]**. Não dividir os totais de oito retratos e apresentar a média como medição unitária.
+
+**6. Lei escrita**
+
+- O48 está registrada como fechamento = leitura da célula soberana em qualquer período; “recalcular deixa de existir”, somente atos persistem (`app/docs/CORTES.md:174`, `app/docs/PROMPTS.md:1135`).
+- A etapa do retrato declara fonte existente, universo por empresa e competência, retrato gravado em lote e proibição de calcular ao abrir a tela; chama isso de complemento da O48, sem lei nova (`app/docs/PROMPTS.md:1156`).
+- Rodar fora do horário do cron já é permitido pela regra de cron idempotente que “pode ser adiantado na mão” (`CLAUDE.md:246`); há aval específico para relavrar imediatamente pela porta e conferir com `classificar_export` (`app/docs/PROMPTS.md:1339`).
+- O padrão de evento/outbox e projeções já inclui retrato: `PLANO-PADROES` nomeia espelho, DiaPago, fechamento, retrato e pílulas como projeções reconstruíveis, além do outbox fora da pilha da batida (`app/docs/CORTES.md:288`).
+- O contrato outbox aprovado prescreve evento na mesma transação do veredito e consumidor idempotente a cada minuto; isso é a autorização escrita do mecanismo existente, não prova de que já consome eventos para relavrar retrato (`app/docs/CORTES.md:351`).
+- O aval de 22/10 registra invalidação por evento, depois recolocada após 20/20; é registro de ordem, não proibição permanente de lavra fora do cron (`app/docs/PROMPTS.md:1339`, `app/docs/PROMPTS.md:1341`).
+- Substituir o anterior está implementado pelo escritor único com `update_or_create(empresa, mes, ano)` (`app/folha/management/commands/lavrar_retrato_folha.py:74-76`), restrição única no banco (`app/folha/models.py:362-364`) e teste de segunda lavra preservando a mesma PK e uma linha (`app/folha/tests/test_retrato_folha_contador.py:270-280`).
+- A docstring explicita “SUBSTITUI, um por empresa+competência” (`app/folha/models.py:314-317`); a lei geral exige um escritor por entidade e idempotência “2x = mesmo estado, 1 linha de trilha, 0 duplicata” (`CLAUDE.md:173-175`).
+- A L-121 manda reconstruir projeções pela porta quando pousa cura de juiz, observando competência exportada e DIFF/reversão (`app/docs/LEIS.md:142`).
+- Para as duas perguntas delimitadas — execução fora do cron e substituição por empresa/competência — não identifiquei pergunta adicional de lei: as regras acima já cobrem ambas. A exigência de não propor lei nova por iniciativa própria está expressa (`app/docs/LEIS.md:138`, `CLAUDE.md:266-270`).
+
+Sugestão de fechamento do laudo consolidado: `perguntas de lei: 0`, seguido de lista vazia ou “Nenhuma”, com as referências acima.
 
 ## 09/11 11:15 · sessao 8db4566726fa · O10-D-PERMUTA-NA-TELA · censo · origem=Code
 
@@ -808,33 +855,4 @@ Executei somente a verificação estática abaixo: **rc 0**, `py_compile` dos tr
 PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
 ```
 
-## 09/11 10:25 · sessao 936ff5f03d79 · - · - · origem=Ronald (tmux)
-
-T4 — **PROCEDENTE residual; fecha apenas o caminho sem erro de arquivo.** A invalidação grava `SOMBRA_DIA=` e `SOMBRA_STATUS=REFAZENDO` antes do `dropdb`, sob a trava (`bin/sombra.sh:104`, `bin/sombra.sh:269`, `bin/sombra.sh:270`, `bin/sombra.sh:458`). Porém o script usa `set -uo pipefail`, sem `-e`, e não testa o retorno da invalidação; falha no `mv` do carimbo permite continuar para o `dropdb` com carimbo antigo verde (`bin/sombra.sh:45`, `bin/sombra.sh:97`, `bin/sombra.sh:269`). Conserto mínimo: `invalidar_carimbo || falhou ...`; fazer `carimbar` propagar falhas intermediárias e criar temporário na pasta do carimbo (`bin/sombra.sh:89`).
-
-A invalidação normal é recusada por incremental, bloco, conferir e cobertura; placar e deploy delegam sua decisão a conferir (`bin/sombra.sh:204`, `bin/sombra.sh:350`, `bin/sombra.sh:453`, `app/core/sombra_cobertura.py:35`, `app/core/sombra_cobertura.py:37`, `bin/placar_code.sh:155`, `bin/deploy.sh:162`). Entretanto **PROCEDENTE semântica residual no placar**: ele continua apresentando o antigo `SOMBRA_INCOMPLETA=0` como medida do “carimbo de hoje”, mesmo após dia vazio/REFAZENDO (`bin/placar_code.sh:160`, `bin/placar_code.sh:161`). Conserto mínimo: publicar `?` quando o carimbo não for válido para essa medida (`bin/placar_code.sh:160`).
-
-T5 — **NÃO, no caminho da cópia a corrida relatada está fechada.** O `flock` vem antes da leitura/geração da senha e permanece aberto até o `mv` (`bin/sonda_provisionar.sh:68`, `bin/sonda_provisionar.sh:69`, `bin/sonda_provisionar.sh:75`, `bin/sonda_provisionar.sh:79`, `bin/sonda_provisionar.sh:168`). A chamada do refazer segue sombra → porta (`bin/sombra.sh:458`, `bin/sombra.sh:321`, `bin/sombra.sh:246`). Nenhuma aquisição da trava da sombra consta no provisionador; inversão/autoe­spera nesse caminho: **NÃO** (`bin/sonda_provisionar.sh:41`, `bin/sonda_provisionar.sh:68`, `bin/sonda_provisionar.sh:153`). A trava da sombra evita reacquisição nos filhos pela marca herdada (`bin/sombra_trava.sh:22`, `bin/sombra_trava.sh:38`).
-
-Relógio — **PROCEDENTE preexistente D3.** `HOJE` é capturado antes de aguardar a trava; a data da base é consultada novamente ao publicar, permitindo datas discordantes se a espera/execução cruzar meia-noite (`bin/sombra.sh:83`, `bin/sombra.sh:458`, `bin/sombra.sh:322`). A cobertura também consulta relógio quando o chamador omite `hoje` (`app/core/sombra_cobertura.py:34`, `bin/sombra.sh:236`). Conserto mínimo: capturar o dia depois da trava e passar a data explicitamente; cruzamento real em produção [nao verificado].
-
-Inventário do carimbo:
-
-| Campos | Quem escreve | Quem lê |
-|---|---|---|
-| `SOMBRA_DIA` | invalidação/completo (`bin/sombra.sh:104`, `bin/sombra.sh:322`) | incremental/bloco/conferir/cobertura (`bin/sombra.sh:204`, `bin/sombra.sh:350`, `bin/sombra.sh:433`, `app/core/sombra_cobertura.py:35`) |
-| `SOMBRA_STATUS` | invalidação/incremental/completo/bloco (`bin/sombra.sh:104`, `bin/sombra.sh:221`, `bin/sombra.sh:325`, `bin/sombra.sh:426`) | incremental/conferir/cobertura (`bin/sombra.sh:218`, `bin/sombra.sh:433`, `app/core/sombra_cobertura.py:37`) |
-| `SOMBRA_TIPO` | incremental/completo (`bin/sombra.sh:219`, `bin/sombra.sh:322`) | incremental/conferir/cobertura (`bin/sombra.sh:205`, `bin/sombra.sh:435`, `app/core/sombra_cobertura.py:39`) |
-| `SOMBRA_BASE_DIA` | completo (`bin/sombra.sh:322`) | incremental/conferir/cobertura (`bin/sombra.sh:205`, `bin/sombra.sh:437`, `app/core/sombra_cobertura.py:45`) |
-| `SOMBRA_JANELA_INI/FIM` | incremental/completo (`bin/sombra.sh:219`, `bin/sombra.sh:323`) | conferir/cobertura (`bin/sombra.sh:437`, `app/core/sombra_cobertura.py:42`) |
-| `SOMBRA_DIVERGE` | completo (`bin/sombra.sh:323`) | bloco/conferir (`bin/sombra.sh:421`, `bin/sombra.sh:438`) |
-| `SOMBRA_INCOMPLETA` | completo (`bin/sombra.sh:323`) | placar (`bin/placar_code.sh:160`) |
-| `SOMBRA_INCREMENTAL_EM` | incremental (`bin/sombra.sh:220`) | conferir (`bin/sombra.sh:437`) |
-| `SOMBRA_ERROS` | bloco (`bin/sombra.sh:425`) | conferir (`bin/sombra.sh:438`) |
-| `DUMP`, `REFEITA`, `BLOCO` | completo/bloco (`bin/sombra.sh:322`, `bin/sombra.sh:324`, `bin/sombra.sh:424`) | leitor operacional [nao verificado] |
-| `INCREMENTAL_S`, `BLOCO_NA_JANELA` | incremental (`bin/sombra.sh:220`, `bin/sombra.sh:221`) | leitor operacional [nao verificado] |
-| `COMANDOS`, `ALARMES`, `FORA_DO_ENSAIO` | bloco (`bin/sombra.sh:424`, `bin/sombra.sh:425`) | leitor operacional [nao verificado] |
-
-A gravação material dos campos passa por `carimbar`, que preserva os campos não substituídos (`bin/sombra.sh:89`, `bin/sombra.sh:91`, `bin/sombra.sh:94`, `bin/sombra.sh:97`). O selo de host testa a invalidação bem-sucedida contra carimbo verde, mas não cobre falha da escrita do carimbo (`bin/tests/test_sonda_sem_grant.sh:361`, `bin/tests/test_sonda_sem_grant.sh:362`, `bin/tests/test_sonda_sem_grant.sh:364`).
-
-_3114 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3115 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
