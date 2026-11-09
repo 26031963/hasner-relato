@@ -85,10 +85,10 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 | celula/precedencia | 10/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
 | ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
-| chamado | 18/0 | 0 | 0 | 0 | 0 | 3 | 11 |
+| chamado | 20/0 | 0 | 0 | 0 | 0 | 3 | 11 |
 | feriado/prazo | 6/2 | 12 | 9 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
-| tela | 11/1 | 110 + sitio novo: nao sei (sem varredor) | 68 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
+| tela | 11/1 | 109 + sitio novo: nao sei (sem varredor) | 67 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
 | portas | 1/0 | 124 + sitio novo: nao sei (sem varredor) | 0 | 0 | 124 + sitio novo: nao sei (sem varredor) | 0 | 25 |
 | batida | 4/2 | 0 + sitio novo: nao sei (sem varredor) | 0 | 0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 2 |
 | escala | 2/0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 1 |
@@ -174,6 +174,8 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - este dia veta o nascimento/reabertura automatica de chamado de turno? -> `ponto/services/furos_vetados.py::motivo_do_veto` · registro 0
   - por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? -> `chamados/juizes.py::porta_alcancavel_do_dia` · registro 0
   - a cobranca do dia cala porque a celula lavrada diz que o dia nao e de trabalho? -> `chamados/juizes.py::dia_sem_trabalho` · registro 0
+  - quais acoes ainda sao exigiveis para cada instancia de marco do dia, de quem e por quais portas? -> `chamados/services/tarefa_do_dia.py::tarefa_do_dia` · registro 0
+  - o dia da pergunta esta arquivado pela tranca da competencia (trancada e nao tocada pelo admin depois)? -> `chamados/juizes.py::dia_da_pergunta_trancado` · registro 0
 
 ### feriado/prazo -- fora_de_autoridade('feriado/prazo') = 12
 - pendentes: sem chamar 9 · chama e deriva 2 · nao sei 1 · [pergunta sem juiz declarado (nao ha quem chamar): 1]
@@ -204,8 +206,8 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - que FechamentoMensal e o da competencia de hoje? -> `ponto/janelas.py::janela_atual` · registro 0
   - a competencia esta fechada para a celula deste colaborador (TXT vigente ou holerite publicado)? -> `folha/export.py::competencia_fechada_para_celula` · registro 0
 
-### tela -- fora_de_autoridade('tela') = 110
-- pendentes: sem chamar 68 · chama e deriva 5 · nao sei 37 + sitio novo: nao sei (sem varredor) · [nao e python (template/js): 36] · [pergunta sem juiz declarado (nao ha quem chamar): 1]
+### tela -- fora_de_autoridade('tela') = 109
+- pendentes: sem chamar 67 · chama e deriva 5 · nao sei 37 + sitio novo: nao sei (sem varredor) · [nao e python (template/js): 36] · [pergunta sem juiz declarado (nao ha quem chamar): 1]
 - padroes proibidos: 0 -- sem varredor de sitio novo: nao sei
 - selos: core/tests/test_badge_navbar_consome_particao.py, core/tests/test_contract_juiz_tela.py
 - perguntas:
@@ -216,7 +218,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - quais os totais da competencia (horas, HE, noturno, faltas)? -> `folha/export.py::eventos_do_fechamento` · registro 3 (sem chamar 3, chama e deriva 0, nao sei 0)
   - o colaborador entra na folha (e por que nao)? -> `folha/export.py::classificar_export` · registro 7 (sem chamar 3, chama e deriva 0, nao sei 4)
   - qual competencia a tela mostra? -> `ponto/janelas.py::janela_atual` · registro 17 (sem chamar 14, chama e deriva 3, nao sei 0)
-  - o chamado ou a pergunta esta vivo na fila? -> `chamados/juizes.py::pergunta_viva` · registro 11 (sem chamar 5, chama e deriva 0, nao sei 6)
+  - o chamado ou a pergunta esta vivo na fila? -> `chamados/juizes.py::pergunta_viva` · registro 10 (sem chamar 4, chama e deriva 0, nao sei 6)
   - a ausencia vale no dia (e quanto)? -> `ponto/catalogo/ausencias.py::efeito_vigente` · registro 7 (sem chamar 5, chama e deriva 0, nao sei 2)
   - o periodo de ferias esta vencido ou vencendo? -> `ferias/models.py::status_de_periodo` · registro 5 (sem chamar 2, chama e deriva 1, nao sei 2)
   - o dia oferece "Resolver dia" (a decisao do dia esta pendente na celula)? -> `colaboradores/services/calendario.py::resolver_dia_oferecido` · registro 0

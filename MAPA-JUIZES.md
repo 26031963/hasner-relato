@@ -102,10 +102,12 @@ esperam migrar -- a lista so encolhe).
 | este dia veta o nascimento/reabertura automatica de chamado de turno? | `ponto/services/furos_vetados.py::motivo_do_veto` |
 | o chamado e duplicado (mesmo fato)? | `chamados/models.py::ChamadoColaborador.abrir` |
 | o chamado esta vivo? | `chamados/catalogo/motor.py::VIVOS` |
+| o dia da pergunta esta arquivado pela tranca da competencia (trancada e nao tocada pelo admin depois)? | `chamados/juizes.py::dia_da_pergunta_trancado` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
 | pode transitar de um estado a outro? | `chamados/catalogo/motor.py::decidir` |
 | por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? | `chamados/juizes.py::porta_alcancavel_do_dia` |
 | por que o chamado vivo de furo nao tem pergunta no app? | `chamados/services/pergunta_no_app.py::retencao` |
+| quais acoes ainda sao exigiveis para cada instancia de marco do dia, de quem e por quais portas? | `chamados/services/tarefa_do_dia.py::tarefa_do_dia` |
 | qual a competencia do chamado? | `chamados/juizes.py::competencia_do_chamado` |
 | qual o dia do chamado? | `chamados/catalogo/modulos.py::data_do_chamado` |
 | quem pode agir no chamado? | `chamados/utils.py::pode_agir_chamado` |
@@ -140,7 +142,7 @@ esperam migrar -- a lista so encolhe).
 - **o que e dia util?** -- nenhuma: seg-sex sem feriado nem escala (VT, VA, janela comercial do escalonamento)
 - **que horas do turno que cruza a meia-noite contam como feriado?** -- nenhuma: tudo pela data local da ENTRADA (turno partido pelo dia da jornada); 191 vinculos ativos cruzam a meia-noite em 14/09 -- PARADO S6-BORDA-DO-FERIADO
 
-**PENDENTES nesta familia**: 13 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 12 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `tela`
 
@@ -181,9 +183,9 @@ esperam migrar -- a lista so encolhe).
 | `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 15 | 0 | 0 |
-| `chamado` | 18 | 0 | 0 |
+| `chamado` | 20 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
-| `feriado/prazo` | 6 | 2 | 13 |
+| `feriado/prazo` | 6 | 2 | 12 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **91** | **5** | **247** |
+| **total** | **93** | **5** | **246** |

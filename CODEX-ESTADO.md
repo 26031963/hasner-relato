@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 16:05** · publicado em **09/11/2026 16:06** (UTC-3)
+> Ultima resposta processada: **09/11/2026 16:07** · publicado em **09/11/2026 16:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 16:07 · sessao 7e56db703d9c · - · - · origem=Ronald (tmux)
+
+Fecho dos chamadores por AST, sem importar a aplicação:
+
+| Leitor | Campos/significado | Chamadores |
+|---|---|---|
+| `app/chamados/juizes.py:1084 tranca_da_consulta` | Dia do turno pelo juiz, resultado da tranca e memo restrito à consulta; memória, sem persistência. | P: `app/chamados/services/pergunta_no_app.py:56`. T indireto: `app/chamados/tests/test_e3_v4_orm.py:108`. |
+| `app/chamados/juizes.py:1450 alimentar_fila` | Fila, célula e verbos do painel; leitura indireta de status/silêncio/urgência. | P: `app/chamados/juizes.py:1495`; `app/chamados/services/tarefa_do_dia.py:409`. T: `app/chamados/tests/test_e3_portas_tarefa.py:119`. |
+| `app/chamados/services/tarefa_do_dia.py:396 CargaDaTarefa.tarefa` | Perguntas, decisões, efeitos, passivo, lavra e tranca carregados; agora alimenta painel sem chamar C6. | P: `app/chamados/services/tarefa_do_dia.py:452`. T: `app/chamados/tests/test_e3_portas_tarefa.py:121`. |
+| `app/chamados/services/tarefa_do_dia.py:418 _portas_da_tarefa` | Ações exigíveis, fila e verbos; publica rota/fila/verbos/fio. | P: `app/chamados/services/tarefa_do_dia.py:412`. T indireto: `app/chamados/tests/test_e3_portas_tarefa.py:121`. |
+| `app/chamados/management/commands/diff_e3_sombra.py:42 candidata` | Projeta rota/fila/verbos/fio da tarefa. | P operacional: mesmo arquivo `:126`. T: `app/chamados/tests/test_e3_diff_sombra.py:135`. |
+| `app/chamados/management/commands/diff_e3_sombra.py:47 projecoes` | Campos consumidos pelos três leitores C17. | P operacional: mesmo arquivo `:118`, `:127`. T: `app/chamados/tests/test_e3_diff_sombra.py:141`. |
+| `app/chamados/management/commands/diff_e3_sombra.py:61 casos_do_par` | Fila, perguntas vivas, âncoras e razão da tarefa; classifica casos do instrumento. | P operacional: mesmo arquivo `:128`. T direto: `[nao verificado]`. |
+| `app/chamados/management/commands/diff_e3_sombra.py:108 Command.comparar` | Compara C17 e tarefa por colaborador/dia; utiliza helpers anteriores. | P operacional: mesmo arquivo `:99`. T indireto: `app/chamados/tests/test_e3_diff_sombra.py:20`. |
+
+`diff_e3_sombra` é instrumento declarado fora do pipeline; declaração não demonstra execução. (`app/config/crons.py:771`) Execução produtiva de todos os chamadores acima: **[nao verificado]**.
+
+Correções indispensáveis do v1: `_estado_da_decisao` não existe no AST atual; o corpo correspondente é `_pela_decisao`, em `app/chamados/services/tarefa_do_dia.py:115`. O diff fornecido não demonstra renomeação desse corpo: **[nao verificado]** quanto à origem do erro do v1. A referência `data_conferida_por` em `app/chamados/services/validacao.py:666` é atribuição, não leitura; a guarda lê `data_conferida_em` em `:662`. `_resolv` existe em `app/chamados/services/becos.py:21`; `universo_da_linha` existe em `app/chamados/services/fio.py:1906`.
+
+## 09/11 16:07 · sessao 5bf5272c2c2f · - · - · origem=Ronald (tmux)
+
+A conferência AST manteve as 16 portas históricas e os seis nascimentos nas mesmas linhas do v1. Nenhum arquivo desses escritores é alterado pelo diff fornecido. A soma **22 é incompleta para a unidade declarada**: quatro gravadores adicionais de estado já constavam da lista do v1, mas ficaram fora da soma; o total de projeção é **20 alterações + 6 nascimentos = 26, diferença +4**, sem escritor criado pelo diff. (`app/chamados/services/materializacao.py:851`; `app/chamados/services/materializacao.py:1103`; `app/chamados/services/validacao.py:590`; `app/chamados/services/validacao.py:666`)
+
+As quatro portas adicionais afetam ação: pendência do admin muda a explicação antes do encerramento; recusa mantém aplicação pendente ou terminal conforme a causa; conferência de data libera plantio bloqueado por divergência. (`app/chamados/services/explicador.py:84`; `app/chamados/services/materializacao.py:1083`; `app/chamados/services/materializacao.py:1193`)
+
+Inventário das 26 portas:
+
+- `app/chamados/models.py:201` `ChamadoColaborador._gravar_estado` — status/resolução/via/autor/urgência/atualização — efeito|decisao.
+- `app/chamados/models.py:1852` `DisputaSupervisao.fechar` — F; delega carimbo excepcional — efeito|decisao.
+- `app/chamados/models.py:2123` `DisputaSupervisao.reabrir_admin` — F, contador, motivos — decisao|fica.
+- `app/chamados/models.py:2160` `DisputaSupervisao.reabrir_sistema` — F — efeito.
+- `app/chamados/models.py:3092` `PerguntaDisputa.carimbar` — C; condicionalmente R/V/L — efeito|decisao|fica.
+- `app/chamados/models.py:3157` `PerguntaDisputa.carimbar_identidade` — C, recusa opcional — efeito; decisão vem do chamador.
+- `app/chamados/models.py:3192` `PerguntaDisputa.descarimbar` — C nulo — efeito.
+- `app/chamados/models.py:3241` `PerguntaDisputa.descarimbar_em_lote` — C nulo, `outros` — efeito.
+- `app/chamados/models.py:3257` `PerguntaDisputa.encerrar_por_fato_no_espelho` — via — efeito.
+- `app/chamados/services/validacao.py:127` `_carimbar_validacao` — V — decisao.
+- `app/chamados/services/validacao.py:163` `devolver_validacao_recusada` — V nulo — decisao.
+- `app/chamados/services/disputa_emissao.py:1422` `responder_pergunta_disputa_core` — R, limpa V, recusa e C condicionais — decisao.
+- `app/chamados/services/disputa_emissao.py:1559` `reabrir_para_correcao` — limpa R/V, C opcional — decisao.
+- `app/chamados/services/disputa_emissao.py:1635` `responder_automaticamente` — R — decisao.
+- `app/chamados/services/disputa_emissao.py:1658` `carimbar_resposta_pela_trilha` — instante original da resposta — decisao.
+- `app/chamados/services/relavra_via.py:106` `relavrar` — via/L — efeito|fica.
+- `app/chamados/services/materializacao.py:784` `_materializar_resposta_hora` — pendência/recusa — efeito.
+- `app/chamados/services/materializacao.py:1083` `_carimbar_recusa` — recusa; delega C na colisão — efeito.
+- `app/chamados/services/validacao.py:533` `recusar_pergunta` — recusa; delega R/V — decisao.
+- `app/chamados/services/validacao.py:625` `conferir_data_do_fato` — data conferida/autor — decisao.
+- `app/chamados/models.py:833` `ChamadoColaborador.abrir` — identidade/contexto/status inicial — fica.
+- `app/chamados/models.py:1054` `ChamadoColaborador.criar` — identidade/contexto/status inicial — fica.
+- `app/chamados/services/disputa_emissao.py:474` `_abrir_ou_agregar_disputa` — nascimento da Disputa — fica.
+- `app/chamados/services/disputa_emissao.py:1024` `criar_disputa_a_partir_de_chamados_orfaos` — nascimento da Disputa — fica.
+- `app/chamados/services/disputa_emissao.py:1299` `criar_disputa_ancora_de_chamado` — nascimento da Disputa — fica.
+- `app/chamados/models.py:2822` `PerguntaDisputa._nascer` — identidade/defaults R/V/C; cache no reuso — fica.
+
+Demais escritores do v1 permanecem:
+
+- `app/chamados/veredito_lavrado.py:240` `gravar_lavras_em_lote` — L — fica/cache.
+- `app/chamados/veredito_lavrado.py:254` `lavrar` — L — fica/cache.
+- `app/chamados/services/arquivo.py:141` `silenciar` — silêncio/prazo/autoria/motivo/atualização — fica.
+- `app/chamados/services/arquivo.py:177` `levantar` — silêncio/resgate/atualização — fica.
+- `app/chamados/services/fio.py:804` `reapontar_resolvedora` — destino/célula/dia/L — fica.
+- `app/chamados/services/fio.py:970` `rechavear_data_evento` — dia/célula/L — fica.
+- `app/chamados/models.py:1968` `DisputaSupervisao.remover_motivo` — próprios motivos/contexto; decisão e carimbo delegados — decisao|fica.
+- `app/chamados/models.py:1949` `DisputaSupervisao.aparar_motivo_respondido` — motivos/contexto — fica.
+- `app/chamados/models.py:2179` `DisputaSupervisao.reabrir_por_colab` — contador; reabertura delegada — fica|decisao.
+- `app/chamados/models.py:2247` `DisputaSupervisao.limpar_resolucao_residual` — texto residual — fica.
+- `app/chamados/models.py:3402` `PerguntaDisputa.save` — executor genérico — fica.
+- `app/chamados/models.py:563` `ChamadoColaborador.apagar_em_ensaio` — exclusão restrita a ensaio — fica.
+- `app/chamados/models.py:349` `_vivas_entre`; `:1468` `_universo_da_ressuscitacao`; `:3086` `_escrever_carimbo`; `:3148` `_desfazer_em_memoria` — memória/simulação, sem persistência própria — fica.
+
+Omissão da lista de escritores do v1: `app/chamados/models.py:3932` `DecisaoPergunta.registrar`, `bulk_create` em `:3934`, campos do ato, autoria, instante, conteúdo, motivo, foto anterior e ligação de absorção — **decisao**. É a persistência canônica da sequência, sem ato novo independente: apresentá-la separadamente das 26 portas da projeção evita somar novamente todas as decisões que já a chamam. Seu executor `DecisaoPergunta.save` fica em `app/chamados/models.py:3892`.
+
+Chamadores produtivos da sequência:
+
+- `app/chamados/models.py:1921` `fechar`: SILENCIO.
+- `app/chamados/models.py:2053` `remover_motivo`: RETRATACAO.
+- `app/chamados/services/materializacao.py:563`: ABSORCAO.
+- `app/chamados/services/validacao.py:139`, `:205`.
+- `app/chamados/services/disputa_emissao.py:1508`, `:1612`, `:1653`, `:1674`.
+- `app/ponto/services/veredito_celula.py:194`: SILENCIO.
+- `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`: reconstrução operacional.
+- Testes exemplos: `app/chamados/tests/test_e2_tarefa_do_dia.py:120`, `:757`, `:779`; `app/chamados/tests/test_e1_volta2.py:84`, `:88`.
+
+Omissões antigas de metadados/conteiner, fora do N literal de estado da pergunta:
+
+- `app/chamados/models.py:488` `rebaixar`, save `:498`: urgência/original/atualização.
+- `app/chamados/models.py:513` `escalar_urgencia`, save `:553`: urgência/atualização.
+- `app/chamados/models.py:618` `_rebaixar_sem_post_save`, update `:636`: urgência/original/atualização.
+- `app/chamados/models.py:573` `definir_prazo_sla`, save `:591`: prazo/atualização.
+- `app/chamados/models.py:594` `marcar_escalonado_dp`, save `:610`: recibo do push/atualização.
+- `app/chamados/models.py:2072` `anotar_contexto`, save `:2102`.
+- `app/chamados/models.py:2105` `renovar_contexto`, save `:2120`.
+- `app/chamados/services/disputa_emissao.py:257` `perguntar_entradas_pendentes`, save `:296`: contexto da Disputa.
+- `app/chamados/services/contexto.py:62`, `:82`, `:108`, `:131`: `anotar_contexto`, `renovar_contexto`, `retirar_contexto`, `fundir_contexto`; contexto_json/atualização.
+- `app/chamados/services/vinculos.py:81`, `:93`, `:105`, `:121`, `:139`: justificativa/célula/ticket/responsável.
+
+Chamadores das principais omissões: `_rebaixar_sem_post_save` é chamado por `app/chamados/signals.py:72`; escalada por `app/ponto/services/triagem_batida.py:292`, `:369`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:132`, `app/ponto/management/commands/processar_alertas_avancados.py:176`; prazos por `app/chamados/services/cobranca.py:178` e `app/chamados/services/disputa_emissao.py:1715`; recibo DP por `app/ponto/management/commands/escalonar_chamados_supervisao.py:103`; anotar contexto da Disputa por `app/chamados/views.py:1343` e `app/ponto/management/commands/escalonar_chamados_supervisao.py:159`; renovar por `app/ponto/management/commands/alertar_disputas_pendentes.py:48`; entradas pendentes por `app/chamados/services/disputa_emissao.py:685`, `:1267`. `rebaixar` teve somente chamadores diretos de teste localizados: `app/chamados/tests/test_selo_e4_gates.py:73`, `:84`, `:89`; chamada dinâmica produtiva [nao verificado].
 
 ## 09/11 16:05 · sessao 6ed3e3a2c318 · - · - · origem=Ronald (tmux)
 
@@ -652,24 +750,4 @@ Permanecem indeterminados: classificação correta das 18.424 metades; quantidad
 
 Para medir **disputas adicionais retidas**, falta uma leitura que associe cada par à disputa, deduplique os IDs, projete os estados com E1 e testemunha factual e compare, na mesma disputa, C7 atual com a obrigação ampliada. O agregado fornecido não contém esse cruzamento. (`app/chamados/models.py:1861`; `app/chamados/models.py:3839`; `app/chamados/juizes.py:645`; disponibilidade desse cruzamento [nao verificado])
 
-## 09/11 14:50 · sessao 35b635788e2f · - · - · origem=Ronald (tmux)
-
-- `estado_aplicacao_pergunta` ainda não implementa a projeção S/R/V/A/N/T: exige `tipo_resposta='hora'` e texto; trata `materializada_em` como aplicada, exceto `paridade_recusada`; pode responder `ja_satisfeita` por batida aprovada ou `bloqueada_paridade`, sem exigir validação. (`app/chamados/services/materializacao.py:432`, `:434`, `:438`, `:447`, `:452`)
-- A factual não se prova apenas por `materializada_em`: o juiz de lastro pede testemunha externa, com caminhos para batida ligada, slot esperado e batida não retratada. (`app/chamados/juizes.py:645`, `:732`, `:734`, `:789`)
-- T deve prevalecer: as vias fora do fato são `duplicata` e `motivo_retratado`; ambas podem ter carimbo, tornando inadequado classificar A primeiro apenas pelo timestamp. (`app/chamados/models.py:2401`, `:2518`)
-- N fica escondido sobretudo em S quando não se lê E1: a recusa grava motivo e chama reabertura com `ato='recusa'`; a reabertura zera resposta, `respondida_em` e `validada_em`, preservando a foto na sequência. (`app/chamados/services/validacao.py:584`, `:591`; `app/chamados/services/disputa_emissao.py:1590`, `:1612`)
-- Recusa histórica não basta para N atual: a sequência inclui respostas e validações posteriores e ordena por `ato_em`, `pk`. O campo `recusa_motivo` também recebe recusa técnica do materializador; portanto não identifica sozinho recusa humana vigente. (`app/chamados/models.py:3857`, `:3889`, `:2567`)
-- O script `sonda_par.py` e a matriz `matriz_par` não foram encontrados pelo censo de nomes desta cópia; sua lógica exata, hash e correspondência dos rótulos permanecem **[não verificado]**.
-
-## 09/11 14:50 · sessao e86b8c634a3e · - · - · origem=Ronald (tmux)
-
-- C7 atual aceita somente disputa sem respostas sem veredito e sem fio vivo entre **todas** as perguntas; não consulta obrigação do par. [app/chamados/models.py:1856](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1856)
-- “Resposta sem veredito” exige `validada_em is None`, `materializada_em is None`, resposta por timestamp **ou** texto não vazio, e dia não trancado. [app/chamados/models.py:1850](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1850)
-- C6 mata imediatamente toda pergunta validada; assim, a validação sem aplicação pode desaparecer do fio atual. [app/chamados/juizes.py:1152](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/juizes.py:1152)
-- `fio_vivo` usa `any(pergunta_viva(p))`; basta outra pergunta viva na mesma disputa para ela já estar retida hoje. Logo somar pares de classes candidatas não mede disputas distintas nem incremento de retenção. [app/chamados/juizes.py:1262](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/juizes.py:1262), [app/chamados/models.py:1861](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1861)
-- S127 está em `chamados/juizes.py`, não `core/juizes.py`: disputa aberta barra o chamado se vazia ou com fio vivo; não chama C7 inteiro. [app/chamados/juizes.py:2126](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/juizes.py:2126)
-- `fechar` verifica resposta pendente e perguntas vivas **antes** do `atomic`/travas; não reconsulta C7 sob trava nesta cópia. [app/chamados/models.py:1894](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1894), [app/chamados/models.py:1913](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1913)
-- Disputa já fechada: repetição idêntica devolve `False`; outra entrada gera erro, sem reabertura nessa porta. [app/chamados/models.py:1887](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:1887)
-- `ESPERA_PAR_INTERVALO` não consta da lista de vias do modelo; busca textual em `app`, `bin` e extensões textuais da cópia retornou zero ocorrências. A ausência global não tem linha positiva para citar. [app/chamados/models.py:2533](/home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/app/chamados/models.py:2533); busca global [não verificado].
-
-_3195 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3197 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

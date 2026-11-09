@@ -337,12 +337,12 @@ flowchart TD
     ja_ferias_situacao_py(["ferias/situacao.py"]) --- jf_ausencia_ferias
     ja_ponto_catalogo_ausencias_py(["ponto/catalogo/ausencias.py"]) --- jf_ausencia_ferias
     jmais_ausencia_ferias["... +4 arquivos de juiz"] --- jf_ausencia_ferias
-    jf_chamado["chamado<br/>18 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
+    jf_chamado["chamado<br/>20 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
     ja_chamados_catalogo_modulos_py(["chamados/catalogo/modulos.py"]) --- jf_chamado
     ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_chamado
     ja_chamados_catalogo_premissa_py(["chamados/catalogo/premissa.py"]) --- jf_chamado
     ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_chamado
-    jmais_chamado["... +7 arquivos de juiz"] --- jf_chamado
+    jmais_chamado["... +8 arquivos de juiz"] --- jf_chamado
     jf_feriado_prazo["feriado/prazo<br/>6 com juiz · 2 sem juiz<br/>registro: 12 sitio(s)"]
     ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_feriado_prazo
     ja_ponto_catalogo_justificativas_py(["ponto/catalogo/justificativas.py"]) --- jf_feriado_prazo
@@ -353,7 +353,7 @@ flowchart TD
     ja_folha_export_py(["folha/export.py"]) --- jf_fechamento
     ja_ponto_janelas_py(["ponto/janelas.py"]) --- jf_fechamento
     ja_ponto_services_fechamento_py(["ponto/services/fechamento.py"]) --- jf_fechamento
-    jf_tela["tela<br/>11 com juiz · 1 sem juiz<br/>registro: 110 sitio(s)"]
+    jf_tela["tela<br/>11 com juiz · 1 sem juiz<br/>registro: 109 sitio(s)"]
     ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_tela
     ja_colaboradores_services_calendario_py(["colaboradores/services/calendario.py"]) --- jf_tela
     ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_tela
