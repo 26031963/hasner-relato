@@ -1,7 +1,114 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 14:06** · publicado em **09/11/2026 14:07** (UTC-3)
+> Ultima resposta processada: **09/11/2026 14:11** · publicado em **09/11/2026 14:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 14:11 · sessao d1463be4513a · - · - · origem=Ronald (tmux)
+
+**Cruzamento PROCEDENTE, classe W, demonstrável estaticamente; ocorrência em produção [nao verificado].**
+
+O estado `validada_em != None`, `materializada_em == None`, `pendencia_admin != ''`, `recusa_motivo` técnico pode nascer por portas reais:
+
+1. Antes de existir a irmã, saída responde `12:00`; destino não tem marco do motivo, e escala 19–07 com pausa 01–02 deixa todos os marcos a mais de 240 minutos da resposta. `_tipo_pelo_marco` não acha tipo pela tolerância (`app/chamados/services/materializacao.py:374`–`:388`); `_ts_tipo_do_plantio` anexa `PEND_TIPO_NAO_CONFERIDO`, mas continua derivação (`:476`, `:493`).
+2. O ramo grava os dois campos (`app/chamados/services/materializacao.py:937`–`:938`). Com competência **aprovada, sem precisar ser exportada**, `registrar_batida` devolve recusa (`app/ponto/janelas.py:87`, `app/ponto/registro_batida.py:139`).
+3. O ramo retorna `None` (`app/chamados/services/materializacao.py:1022`–`:1027`); `_materializar_avulsa` retorna de dentro do `atomic` sem levantar (`:1482`–`:1483`), preservando a pendência. O `finally` grava o motivo da recusa (`:1514`–`:1515`); competência não é `COLISAO`, logo não ganha carimbo materializado (`:1181`, `:1189`). A validação é devolvida pela porta (`app/chamados/services/validacao.py:470`, `:202`–`:205`).
+4. Nasce a irmã e o admin revalida a primeira com confirmação de implausibilidade. Com par incompleto, V5 pula o carimbo de espera por haver pendência (`app/chamados/services/materializacao.py:1434`); o ramo de par da validação não chama `devolver_validacao_recusada` (`app/chamados/services/validacao.py:473`–`:479`). Ficam aceite, pendência e recusa não-ESPERA, sem plantio.
+5. A irmã sai por `remover_motivo`, que carimba identidade de retratação (`app/chamados/models.py:2071`–`:2079`). A primeira morre no degrau `validada_em` (`app/chamados/juizes.py:1153`); a irmã morre pela identidade (`:1164`). `respostas_sem_veredito` exclui ambas (`app/chamados/models.py:1851`), e o juiz de espera exclui a primeira por sua recusa técnica (`app/chamados/services/materializacao.py:112`). **C7 passa a devolver True** (`app/chamados/models.py:1863`).
+
+O fechamento humano real passa S127 e chega à escrita: `transicionar('fechado')` chama S127 (`app/chamados/models.py:154`), a guarda adicional busca somente perguntas **não validadas** (`:344`), e aplica em `:199`, `:450`, salvando estado em `:296`. A primeira técnica não entra; a irmã retratada não está viva.
+
+Há ainda efeito real de escrita da **disputa**: `Disputa.fechar` consulta C7 sob trava (`app/chamados/models.py:1927`) e salva fechamento em `:1953`. Se o pai estiver terminal, o beco classifica por C7 (`app/chamados/services/becos.py:31`–`:33`) e chama `d.fechar` em `:56`–`:57`; saves de pergunta agendam essa entrada em `app/chamados/signals.py:225`.
+
+**Comparação com ac3/v4:** a mudança V5 de `if q.validada_em` para `if q.validada_em and not q.pendencia_admin` introduz a perda de retenção de C7: antes a primeira ganhava ESPERA, que continuava retendo após retratação da irmã (`app/chamados/services/materializacao.py:116`); agora preserva motivo técnico, que o mesmo juiz rejeita em `:112`. O S127 antigo já permitia o fechamento **humano** nesse cenário, pois ignorava toda espera; portanto esse ato humano não deve ser apresentado como regressão nova da troca S127. A liberação nova comprovável é **C7 permitir fechamento da disputa**, e V5 também deixa passar o mesmo cruzamento no S127 atual (`app/chamados/juizes.py:2137`).
+
+Os testes existentes cobrem separadamente preservação técnica (`app/chamados/tests/test_bug_par_intervalo.py:508`) e irmã retratada com ESPERA (`:459`–`:465`); não combinam as condições. Seu GREEN não demonstra que esse cruzamento esteja fechado.
+
+## 09/11 14:10 · sessao f88b05a1eeb9 · - · - · origem=Ronald (tmux)
+
+Itens 2/3/5 — provas consolidadas:
+
+| Ponto | Veredito/classe | Prova e contraexemplo |
+|---|---|---|
+| Recusa técnica deve sobreviver à aplicação | NÃO PROCEDE apagar indiscriminadamente, F | `_ts_tipo_do_plantio` sem marco acrescenta `tipo_nao_conferido` e texto dizendo **“batida plantada ... pelo MOTIVO”** (`app/chamados/services/materializacao.py:476`); ramo hora grava ambos (`:937`), pode plantar (`:1014`) e o par limpa exclusivamente ESPERA (`:1376`). Limpar motivo técnico deixaria `pendencia_admin` sem motivo, precisamente consulta I19 (`app/chamados/management/commands/auditar_invariantes_chamados.py:549`). |
+| Recusa não técnica pode sobrar num par aplicado | PROCEDENTE, F | Falha escreve recusa nas duas e devolve validação (`materializacao.py:1392`). Após corrigir a causa, primeiro reaceite grava ESPERA só na primeira (`:1434`); segundo reaceite aplica ambas e limpa apenas ESPERA (`:1376`). A segunda conserva “intervalo recusado em conjunto”, embora aplicada. Ocorrência no dado prod: [nao verificado]. | [nao verificado]
+| Leitores provocam escrita errada por essa recusa residual | NÃO PROCEDE demonstrado, F | Devolução retorna antes de ler motivo quando materializada (`app/chamados/services/validacao.py:190`); validação usa erros do ato (`:491`, `:511`) e retorna sucesso (`:538`). Vigia dá `com_registro` pelo lastro (`app/chamados/services/vigia_carimbo.py:112`); reparador pula essa classe (`app/chamados/services/passivo_validado.py:329`). Flip exige `via_resolucao=VIA_PARIDADE_RECUSADA` (`app/ponto/services/flip_auto.py:128`), enquanto aplicação usa a via pelo fato/declarou (`materializacao.py:1276`, `:1285`). I18 exige não materializada (`auditar_invariantes_chamados.py:1081`), I19 exige pendência (`:549`). |
+| Pendência anterior tira metade da apresentação de espera | PROCEDENTE, F; há desdobramento W abaixo | Espera não é gravada quando há pendência (`materializacao.py:1434`) e juiz rejeita motivo técnico (`:112`). Detalhe inclui somente C6 viva ou espera (`app/chamados/services/acoes_chamado.py:349`), enquanto C6 mata validada (`app/chamados/juizes.py:1153`): a metade validada com pendência fica fora dessa lista. Fio aberto carrega todas as perguntas (`app/chamados/services/fio.py:221`, `:225`), portanto nela permanece visível com badge “Pendencia do admin” e motivo (`app/templates/chamados/partials/modal_fio.html:222`). |
+| Pendência pode ser limpa depois sem regravar espera | NÃO PROCEDE na cópia, F | Único escritor runtime literal encontrado grava valor não vazio em `materializacao.py:937`; não há limpeza runtime localizada. Limpeza por SQL externo/dinâmico ou dado prod: [nao verificado]. |
+| Semântica “não plantou” versus “plantada sem tipo confirmado” | PROCEDENTE, F | Escritor planta pelo motivo e acende pendência (`materializacao.py:476`, `:937`, `:1014`); display do modelo diz “plantada pelo motivo” (`app/chamados/models.py:2571`). Explicador prioriza pendência e afirma “sistema NAO plantou” antes de consultar lastro (`app/chamados/services/explicador.py:93`, `:101`); cartão diz conferir “antes de lançar” (`app/templates/chamados/partials/_card_atendimento.html:183`). Isso pode ocorrer inclusive após sucesso do par (`materializacao.py:1376`). |
+| Pendência + irmã retratada libera fechamento com metade não aplicada | **PROCEDENTE condicional pelo código, W** | Há rota runtime abaixo; não foi executada e ocorrência em prod é [nao verificado]. | [nao verificado]
+
+Contraexemplo W, sem depender de fixture:
+
+1. Pergunta `intervalo_saida` está avulsa, sem irmã (`materializacao.py:79`); sem tipo identificável, ramo gera pendência (`:467`, `:476`) e grava `pendencia_admin`+motivo (`:937`).
+2. Vizinha S posterior aciona paridade (`:962`); marco não aceso leva a `_carimbar_recusa` e `return None` (`:987`, `:1000`). `_materializar_avulsa` retorna normalmente do atomic (`:1482`), preservando pendência; validação devolve `validada_em` a nulo (`validacao.py:470`, `:202`).
+3. Irmã passa a existir pela porta de emissão (`app/chamados/services/disputa_emissao.py:829`, `:834`, `:878`). Reaceitar a saída com irmã sem aceite chega a `materializacao.py:1434`, conserva pendência/recusa e deixa saída validada sem materialização.
+4. Remoção do motivo da irmã retrata-a pela porta (`app/chamados/models.py:2071`, `:2078`); sobrando o motivo da saída, retorna sem fechar (`:2083`).
+5. A saída morre no C6 por estar validada (`juizes.py:1153`); irmã retratada morre por identidade (`:1164`). Saída não entra em respostas sem veredito (`models.py:1851`), nem em espera por ter motivo técnico (`materializacao.py:112`). Logo C7 libera (`models.py:1863`).
+6. S127 libera (`juizes.py:2137`); `transicionar('fechado')` supera guarda C6 ancorada (`models.py:165`), evita guarda de FURO que só vale para `resolvido` (`:181`) e chama `_aplicar` (`:199`). A guarda final também só retém C6 viva (`:224`), antes de gravar estado (`:228`). **Fecha chamado com metade aceita e não aplicada**. Na versão anterior do envelope, o primeiro reaceite sobrescreveria o motivo por ESPERA; após retratar irmã, fallback `materializacao.py:116` reteria C7. [nao verificado]
+
+Escritores de `recusa_motivo` e valores alcançáveis:
+
+- Motivo técnico: `materializacao.py:937`, derivado em `:479`.
+- Espera, recusas de paridade/data/competência e falha conjunta: `_carimbar_recusa` em `:1190`; produtores em `:1000`, `:1312`, `:1392`, `:1417`, `:1435`, `:1515`.
+- Recusa humana “Recusada por ...”: `validacao.py:605`; reabertura não limpa motivo (`disputa_emissao.py:1590`, `:1629`), resposta normal também não o limpa (`:1483`, `:1505`).
+- Escapes “Colaborador respondeu ... exige decisao”: `disputa_emissao.py:1494`; resposta normal posterior pode preservar esse texto (`:1483`).
+- Duplicata escreve descrição apontando canônica (`fio.py:1350`), mas linha fica fora do fato e é excluída da identidade do par (`materializacao.py:72`).
+- Porta do modelo grava motivo fornecido (`models.py:3196`); limpeza do par está em `materializacao.py:1377`.
+
+`o_que_segura` não lê diretamente esses campos: usa exportação e dias retidos (`app/folha/fora_da_folha.py:215`), lê `porta_alcancavel_do_dia` (`:65`, `:221`) e traduz fio por DESTRAVA (`:226`). Alimentação da porta considera C6 (`app/chamados/juizes.py:1322`), não espera do par; metade validada não participa desse conjunto (`:1153`). Resultado concreto do dado prod nessa ferramenta: [nao verificado].
+
+## 09/11 14:08 · sessao d1463be4513a · - · - · origem=Ronald (tmux)
+
+**Item 1 — NÃO PROCEDE que S127 ainda duplique C7; PROCEDENTE custo/leitura indireta de relógio e efeito colateral condicional, classe F.** S127 consulta C7 e preserva exceção vazia em `app/chamados/juizes.py:2134` e `:2137`; C7 incorpora `respostas_sem_veredito`, `fio_vivo` e espera em `app/chamados/models.py:1862`.
+
+Censo AST de todos os `.py`, com importações `as` e propagação de atribuição simples de função:
+
+| Sítio executável | Consumo do retorno |
+|---|---|
+| `app/chamados/models.py:153`, chamada `:154`, alias `_disp_viva` | `transicionar` levanta `ValueError` se recebeu disputa (`:155`); sem bloqueio chega a `_aplicar` em `:199`, que chama `_gravar_estado` em `:450`; escreve estado em `:228` e salva no corpo seguinte. |
+| `app/chamados/tests/test_disputa_s127.py:45` | Guarda resultado e o devolve após cobrar consulta C7 em `:47`. |
+| `app/chamados/tests/test_bug_par_intervalo.py:482` | Cobra disputa sem perguntas retornada. |
+| `app/chamados/tests/test_bug_par_intervalo.py:496` | Cobra `None` quando todas morreram sem resposta pendente; depois transiciona realmente em `:497`. |
+
+Referências não executáveis à função: `inspect.getsource` em `app/chamados/tests/test_pergunta_viva_no_guarda.py:37`; nomes dos alvos mutantes em `app/chamados/tests/mutantes_bug_par_intervalo.py:157` e `:167`; referência histórica em docstring de `app/chamados/tests/test_o261_fio_tem_uma_porta.py:25`. Acessos construídos dinamicamente por strings e reflexão arbitrária: **[nao verificado]**.
+
+**Comparação de liberação:** em um mesmo snapshot, o novo bloqueio é mais restritivo: C7 só é verdadeiro com `not fio_vivo(perguntas)`, além das demais condições (`app/chamados/models.py:1863`). Portanto não há caso lógico estável em que C7 libere com o S127 antigo travando; concorrência entre consultas distintas: **[nao verificado]**. O contrário existe: saída validada em espera e volta retratada fazem ambas morrerem pelo C6, mas C7 retém a espera; cenário e asserções em `app/chamados/tests/test_bug_par_intervalo.py:459`, `:463`, `:465`. Isso alcança escrita por `transicionar('fechado'/'resolvido')`, bloqueada pela mensagem específica de S127 em `:468`; os wrappers estão em `:472` e `:475`.
+
+**Disputa vazia continua bloqueando:** curto-circuito `not disputa.perguntas.exists()` em `app/chamados/juizes.py:2137`; teste chama a transição real e verifica estado/trilha intactos em `app/chamados/tests/test_bug_par_intervalo.py:480`, `:484`, `:486`. Este contracaso passaria também com a regra antiga; protege preservação, não demonstra a cura.
+
+**Custo:** há consulta adicional `exists()` em `app/chamados/juizes.py:2137`, e C7 lê perguntas duas vezes, uma por `list(self.perguntas.all())` e outra em `respostas_sem_veredito()` (`app/chamados/models.py:1862`, `:1850`). Além disso, para cada pergunta elegível, a espera chama identificador (`app/chamados/services/materializacao.py:114`), que consulta irmãs em `:70` e escala em `:87`; o carregador consulta célula em `app/escala/servico_jornada.py:46`, e `pausas_do_dia` pode buscar novamente em `app/escala/models.py:1187`. Existe padrão N+1; quantidade real de queries/latência em produção: **[nao verificado]**.
+
+**Efeitos colaterais:** C7 não contém `save/update`, mas sua cadeia não é inteiramente pura: C6 grava memo na instância em `app/chamados/juizes.py:862`; tranca grava memo em `:996` e `:1066`. `respostas_sem_veredito` pode alcançar `dia_da_pergunta_trancado` (`app/chamados/models.py:1854`), `_admin_tocou_o_dia_depois` (`app/chamados/juizes.py:971`), `_toque_humano_no_dia` (`:1064`) e `get_user_sistema` (`:1087`), cujo código é `User.objects.get_or_create` em `app/core/utils.py:18`. Pode criar usuário ausente; ausência desse usuário em produção e escrita errada: **[nao verificado]**. Em falhas engolidas, há contador em memória e log em `app/core/observ.py:75` e `:79`.
+
+**Relógio:** C7 pode alcançar o C6 e `_dentro_da_janela_viva` (`app/chamados/juizes.py:1217`), que chama `date.today()` em `:575`. A cadeia já existia no S127 antigo por `fio_vivo`; não é leitura nova demonstrada da volta 5 (`app/chamados/juizes.py:1262`). Não afirmar “zero relógio”.
+
+**Cron:** não apareceu chamada direta de cron à função no censo AST; os sítios automáticos relevantes consultam C7 diretamente em `app/chamados/reconciliador.py:411`, `:611`, `:1170` e `app/chamados/services/materializacao.py:672`, `:1534`. O único chamador de produção de S127 é `transicionar`; `Chamado.fechar` delega a ele em `app/chamados/models.py:454`. Escrita automática que passa por `_gravar_estado` sem `transicionar` não ganha automaticamente esse bloqueio S127, pois o gate mostrado é local a `transicionar` (`app/chamados/models.py:148`).
+
+**Item 5 — juiz duplicado:** a recomposição antiga foi eliminada de S127 em favor de C7 (`app/chamados/juizes.py:2137`); fio continua reduzindo exclusivamente por C6 em `:1262`. Não há novo escritor de status nesta cura: o gate lança erro e a escrita continua em `_aplicar`/`_gravar_estado` (`app/chamados/models.py:155`, `:199`, `:450`). O risco de custo e relógio acima é **F**; ocorrência concreta de estado errado ou efeito exportada/dinheiro por essa troca: **[nao verificado]**.
+
+## 09/11 14:08 · sessao 724a79eb995d · - · - · origem=Ronald (tmux)
+
+| Item | Veredito | Classe | Evidência e contracaso |
+|---|---|---|---|
+| 0 / triagem 4 | **NAO PROCEDE que continue aberto.** | W corrigido | S127 consulta `not disputa.pode_fechar()` e preserva vazio em `app/chamados/juizes.py:2137`; `transicionar` aborta antes de `_aplicar` em `app/chamados/models.py:154` e `:199`. Contracaso discriminante: metade validada + irmã retratada, C6 sem vivas e C7 falso, em `app/chamados/tests/test_bug_par_intervalo.py:459`. |
+| 0 / triagem 7a | **NAO PROCEDE que continue aberto.** | W corrigido | Limpa somente espera em `app/chamados/services/materializacao.py:1376`; não sobrescreve motivo com pendência em `:1434`. Motivo técnico nasce conjuntamente com pendência em `:937`. |
+| 0 / triagem 7b | **NAO PROCEDE que falte o rótulo.** | F | O próprio teste rotula M38 estrutural em `app/chamados/tests/test_bug_par_intervalo.py:815`; a limitação é confirmada pelas operações executáveis, abaixo. |
+| 4 | **NAO PROCEDE derivação paralela de I19 encontrada.** | F | Consulta única `app/chamados/management/commands/auditar_invariantes_chamados.py:549`, consumida pelo comando em `:1118` e contraprova em `app/chamados/tests/test_bug_par_intervalo.py:503`. Censo AST de palavras-chave `pendencia_admin` em chamadas Python encontrou apenas essa consulta e a fixture `:513`; acessos dinâmicos [nao verificado]. |
+| 6 | **PROCEDENTE: M38 segue estrutural e o rótulo é verdadeiro.** | F | Fixture exige três campos vazios em `app/chamados/tests/test_bug_par_intervalo.py:827`; nessa condição `descarimbar` retorna antes de alterar campos, cache ou salvar, em `app/chamados/models.py:3218`. M38 acrescenta o curto-circuito pelo carimbo em `app/chamados/tests/mutantes_bug_par_intervalo.py:134`. A diferença cobrada é a lista de chamadas em `app/chamados/tests/test_bug_par_intervalo.py:842`, repetida em `:859`; asserções de estado/trilha não distinguem as implementações nesse cenário. |
+
+Discriminação dos sete testes V5, inferida do código; mortes executadas dos mutantes **[nao verificado]**: [nao verificado]
+
+| Teste em `app/chamados/tests/test_bug_par_intervalo.py` | Passaria sem a cura correspondente? | Asserção discriminante |
+|---|---|---|
+| `:472`, fechado retido | **Não.** | `assertRaisesRegex` em `:468`: S127 antigo libera o caminho sem vivas; novo aborta com mensagem de disputa. Guarda real em `app/chamados/models.py:155`. M45 em `app/chamados/tests/mutantes_bug_par_intervalo.py:157`. |
+| `:475`, resolvido retido | **Não.** | Mesma asserção `:468`; eventual recusa posterior por FURO (`app/chamados/models.py:181`, `:192`) não satisfaz o texto exigido. M48 em `app/chamados/tests/mutantes_bug_par_intervalo.py:167`. |
+| `:478`, disputa vazia | **Sim**, relativamente à troca S127. É controle de preservação. | C7 verdadeiro em `:481`, S127 retorna disputa em `:482`, transição bloqueada em `:484`. |
+| `:488`, todas mortas | **Sim**, relativamente à troca S127. É controle positivo de liberação. | Retorno `None` em `:496` e status persistido fechado em `:499`. |
+| `:506`, pendência anterior | **Não.** | A sobrescrita antiga falha imediatamente na comparação do motivo em `:517`; portanto não depende apenas de I19. Preservação após aplicação também cobrada em `:523`. M47 em `app/chamados/tests/mutantes_bug_par_intervalo.py:164`. |
+| `:527`, pendência nascida no plantio | **Não.** | Captura os dois campos reais produzidos durante o plantio em `:542`, comprova origem em `:549`/`:550`, compara após aplicação em `:552`. Limpeza ampla apaga o motivo e falha nessa comparação. M46 em `app/chamados/tests/mutantes_bug_par_intervalo.py:161`. |
+| `:556`, limpeza exclusiva | **Não** com limpeza ampla antiga; também não com limpeza desativada. | Limpeza ampla falha em `:565` (outro motivo preservado); nunca limpar falha em `:566` (espera vazia). M49 cobre a segunda mutação em `app/chamados/tests/mutantes_bug_par_intervalo.py:171`. |
+
+O selo estrutural S127 exige chamada a `pode_fechar`, proíbe recomposição nominal de C6/espera e confere a cadeia C7→C6 em `app/chamados/tests/test_pergunta_viva_no_guarda.py:39`. O teste com dublê cobra efetivamente uma chamada C7 em `app/chamados/tests/test_disputa_s127.py:47`; os casos funcionais V5 acima sustentam o comportamento real em `app/chamados/tests/test_bug_par_intervalo.py:469`.
 
 ## 09/11 14:06 · sessao 8e2f0f5eb602 · CODEX-2-RAIAS-PORTAO-CPU · verificador · origem=Code
 
@@ -745,131 +852,4 @@ O caso rc 5 cobra ausência de chamada ao Codex e ausência dos segredos sem pre
 
 O mutante “colar stderr no fim” atingiria a comparação da ordem e a cobrança da marca. Sua execução e morte efetiva, assim como os resultados RED/GREEN relatados: **[nao verificado]**. (`bin/tests/test_codex_sonda.sh:105,106,107`)
 
-## 09/11 13:36 · sessao 30ac7db3ccbc · - · - · origem=Ronald (tmux)
-
-Conferência e consumidores:
-
-- Os valores das chaves são produzidos por `_q_conferencia`; `esc_lo` conta itens ACL de leitor/PUBLIC nas famílias da lista, `esc_func` conta itens ACL em SECURITY DEFINER fora dos schemas de sistema, e `outros_bancos` conta itens CONNECT nos bancos conectáveis diferentes do destino. Não são contagens distintas de funções/bancos. (`bin/sonda_leitor_comum.sh:79`; `bin/sonda_leitor_comum.sh:136`; `bin/sonda_leitor_comum.sh:139`; `bin/sonda_leitor_comum.sh:143`)
-- `CONF_AUSENCIA` é definida uma vez e lida pelo parser/predicado `_conferencia_pronta`, que exige presença das chaves e valor textual zero. (`bin/sonda_leitor_comum.sh:155`; `bin/sonda_leitor_comum.sh:158`; `bin/sonda_leitor_comum.sh:161`; `bin/sonda_leitor_comum.sh:168`)
-- A leitura importa a biblioteca e usa query/parser compartilhados; a porta importa a mesma biblioteca, consulta antes/depois e só exige prontidão depois. (`bin/sonda_leitura.sh:48`; `bin/sonda_leitura.sh:184`; `bin/sonda_leitura.sh:187`; `bin/sonda_provisionar.sh:42`; `bin/sonda_provisionar.sh:72`; `bin/sonda_provisionar.sh:172`; `bin/sonda_provisionar.sh:173`)
-- Os dois destinos têm o mesmo algoritmo/significado: `_destino` apenas escolhe cluster e banco; as consultas usam `current_database()`. (`bin/sonda_leitor_comum.sh:28`; `bin/sonda_leitor_comum.sh:29`; `bin/sonda_leitor_comum.sh:130`; `bin/sonda_leitor_comum.sh:144`)
-- O parser próprio localizado é de instrumentação do selo, `_chave`; sua decisão de pronto ainda delega ao predicado comum. As linhas PRONTO do selo shell são fixtures. (`bin/tests/test_sonda_sem_grant_pg.sh:216`; `bin/tests/test_sonda_sem_grant_pg.sh:217`; `bin/tests/test_sonda_sem_grant.sh:69`; `bin/tests/test_sonda_sem_grant.sh:136`)
-
-Escritores do estado subjacente:
-
-- A porta revoga CONNECT dos outros bancos, EXECUTE dos LO, EXECUTE das SECURITY DEFINER e defaults próprios do leitor. (`bin/sonda_provisionar.sh:117`; `bin/sonda_provisionar.sh:136`; `bin/sonda_provisionar.sh:150`; `bin/sonda_provisionar.sh:156`; `bin/sonda_provisionar.sh:157`)
-- Não é correto dizer que todo esse estado tem apenas a porta como escritor: o selo explicitamente exige que o próprio leitor consiga alterar seus defaults/senha/default privileges e depois mede recusa/cura. Execução efetiva desses testes: [nao verificado]. (`bin/tests/test_sonda_sem_grant_pg.sh:362`; `bin/tests/test_sonda_sem_grant_pg.sh:376`; `bin/tests/test_sonda_sem_grant_pg.sh:379`)
-
-Laço dos outros bancos:
-
-- O laço está inteiro em um DO dentro de BEGIN/COMMIT, com `ON_ERROR_STOP`; falha em uma revogação não implica persistência das revogações anteriores dessa mesma transação. (`bin/sonda_provisionar.sh:51`; `bin/sonda_provisionar.sh:105`; `bin/sonda_provisionar.sh:117`; `bin/sonda_provisionar.sh:118`)
-- A operação completa não é atômica: role+CONNECT dão COMMIT antes da transação do ACL. Uma falha posterior pode conservar o CONNECT já revogado e deixar ACL antigo. (`bin/sonda_provisionar.sh:118`; `bin/sonda_provisionar.sh:127`; `bin/sonda_provisionar.sh:168`; `bin/sonda_provisionar.sh:169`)
-- Falha de SQL/checagem/login impede anúncio de pronto e promoção do envfile; não há rollback da primeira transação. (`bin/sonda_provisionar.sh:93`; `bin/sonda_provisionar.sh:97`; `bin/sonda_provisionar.sh:173`; `bin/sonda_provisionar.sh:183`; `bin/sonda_provisionar.sh:196`; `bin/sonda_provisionar.sh:199`)
-- O refazer invalida o stamp antes de destruir a sombra; falha da porta encerra o refazer antes da publicação final. Portanto pode deixar sombra vermelha com estado parcialmente aplicado, mas esse caminho não conserva o verde anterior. (`bin/sombra.sh:288`; `bin/sombra.sh:289`; `bin/sombra.sh:265`; `bin/sombra.sh:266`; `bin/sombra.sh:340`; `bin/sombra.sh:341`)
-- O cron configurado encadeia refazer e bloco com `&&`, portanto falha do refazer impede o bloco subsequente. (`app/config/crons.py:351`)
-- Em geral o REVOKE de PUBLIC afeta qualquer login não-superuser dependente desse privilégio; não há exclusão para `juliani_ref_*`. No inventário fornecido pelo usuário, só há saas_user super e leitor: outro login legítimo atual atingido não está demonstrado. Inventário e aplicação real: [nao verificado]. (`bin/sonda_provisionar.sh:117`)
-- Conferência verde só responde aos poderes do leitor; ela não certifica disponibilidade para outros usuários. Assim, poderia estar verde mesmo que o amplo REVOKE prejudicasse outro login existente fora do inventário dado. (`bin/sonda_leitor_comum.sh:136`; `bin/sonda_leitor_comum.sh:143`; `bin/sonda_leitor_comum.sh:145`)
-
-## 09/11 13:27 · sessao 83f938655465 · - · - · origem=Ronald (tmux)
-
-1. Tentativa em `INTRUSO_COPIA.txt` — saída literal; código de saída `1`. [nao verificado]
-
-```text
-/bin/bash: line 1: /home/ronald/codex_ws/3803e66235912bd9ba1a7aa5f20ee94d1dc307f3/INTRUSO_COPIA.txt: Read-only file system
-```
-
-2. Tentativa em `INTRUSO_VIVA.txt` — saída literal; código de saída `1`. [nao verificado]
-
-```text
-/bin/bash: line 1: /home/ronald/saas-hasner/INTRUSO_VIVA.txt: Read-only file system
-```
-
-3. Tentativa em `INTRUSO_TMP.txt` — saída literal; código de saída `1`. [nao verificado]
-
-```text
-/bin/bash: line 1: /tmp/INTRUSO_TMP.txt: Read-only file system
-```
-
-## 09/11 13:27 · sessao 0c99726e989d · - · - · origem=Ronald (tmux)
-
-ok.
-
-## 09/11 13:11 · sessao 84f2029d65e7 · FIO-E0-V4-E3 · construtor · origem=Code
-
-P1–P5 implementados. RED, execução ORM e mordida dos mutantes **[nao verificado]**; suite não executada. [nao verificado]
-
-| Item | Hunks e resposta esperada |
-|---|---|
-| P1 | `chamados/services/aviso_pendencia.py:7` e `cobranca.py:45` leem `consulta_do_app()['pendentes']`. Testes: fechada viva não avisa; aberta coincide com ambos os badges (`chamados/tests/test_e3_v4_orm.py:20`, `:37`). |
-| P2 | Seleção central em `api/views.py:1021`, `:1039`, `:1058`; preserva respondida viva da disputa aberta. ORM exige excluir pergunta sem carimbo terminal que C6 absolveu (`chamados/tests/test_e3_v4_orm.py:42`). |
-| P3 | Instrumento resolve `sistema` por leitura e fornece seu pk (`chamados/management/commands/diff_e3_sombra.py:94`; `chamados/juizes.py:1106`). Testes exigem erro explícito sem criação e envenenam `get_user_sistema` no ramo trancado (`chamados/tests/test_e3_diff_sombra.py:26`, `:41`). |
-| P4 | AST resolve atribuições e `getattr`; varredura inclui models/registro (`chamados/tests/test_e3_pendentes_app.py:64`, `:75`, `:82`, `:96`). Catraca permanece `=3` (`:144`); novos casos em `:119`, `:124`. |
-| P5 | Lote pela autoridade existente, com contexto descartado por chamada (`chamados/juizes.py:946`, `:1058`, `:1080`, `:1084`; `chamados/services/pergunta_no_app.py:44`, `:55`, `:69`). Selo migrado em `chamados/tests/test_contract_pergunta_viva.py:75`. ORM exige **9 queries para N=1 e N=5**, além de frescor após tranca/toque/reabertura (`chamados/tests/test_e3_v4_orm.py:80`, `:96`). |
-| F4 | Uma linha declara o limite de `date.today` (`chamados/management/commands/diff_e3_sombra.py:105`); leitor da saída ajustado (`chamados/tests/test_e3_diff_sombra.py:21`). |
-
-Escrita/leitura dos campos e funções alterados:
-
-| Escritor/produtor | Leitor |
-|---|---|
-| `pendentes/historico`: `chamados/services/pergunta_no_app.py:71`, `:73` | Aviso `aviso_pendencia.py:9`, `:13`; cobrança `cobranca.py:48`, `:82`, `:163`; kernels `api/views.py:325`, `api/views_core.py:314`; dashboard `core/views.py:253`; endpoints `api/views.py:1023`, `:2561`. |
-| Índices locais: `api/views.py:1064`, `:1065` | Serialização `api/views.py:1173`. |
-| `sistema_pk/memo`: `diff_e3_sombra.py:98` → `chamados/juizes.py:1111` | `_admin_tocou_os_dias_depois`, `chamados/juizes.py:1173`; carga da tarefa `chamados/services/tarefa_do_dia.py:370`. Chamador anterior do contexto: `chamados/management/commands/vigiar_fio_morto.py:171`. |
-| Contexto, memo e mapa de dias: `chamados/juizes.py:1091`, `:1096`, `:1099` | `_memo_da_tranca` `:1058`, lote `:992`, toque `:1165`, degrau C6 `:948`, `:1327`; descarte `:1102`. |
-| `em_lote`: `chamados/services/pergunta_no_app.py:69` | Seleção em `:56`; demais leitores mantêm chamada sem argumento em `:163`, `:186` e `chamados/juizes.py:1519`. |
-| Aliases/fontes/chamadas AST: `chamados/tests/test_e3_pendentes_app.py:80`, `:86`, `:114`, `:90` | Resolução `:66`, catraca `:145`; mutantes em `chamados/tests/e3_mutantes.py:36`, `:123`, executor `:138`. |
-
-Comandos dos testes, **não executados**: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_v4_orm.LeitoresPendentesV4Test --settings=config.settings.ci
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_diff_sombra --settings=config.settings.ci
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e3_pendentes_app.CatracaC17Test
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_v4_orm.CustoConsultaV4Test chamados.tests.test_contract_pergunta_viva.ExibicaoUsaADerivacaoTest --settings=config.settings.ci
-```
-
-Mutantes novos/ajustados, **mordida [nao verificado]** (`chamados/tests/e3_mutantes.py:34`, `:123`):
-
-```bash
-m() { PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_mutantes --mutante "$1"; }
-m aviso_inclui_historico
-m cobranca_inclui_historico
-m chamados_v2_sem_C6
-m chamados_v2_perde_respondida
-m diff_cria_sistema
-m diff_nao_alimenta_sistema
-m diff_omite_limite_relogio
-m consulta_sem_lote
-m consulta_memo_persistente
-m consulta_ignora_tranca
-m consulta_vazia
-m catraca_ignora_atribuicao
-m catraca_ignora_getattr
-m catraca_exclui_models
-m catraca_exclui_registro
-m quarto_c17_alias
-m quarto_c17_atribuicao
-m quarto_c17_atributo
-m quarto_c17_getattr
-m quarto_c17_getattr_atribuido
-```
-
-`py_compile`: **11 arquivos, rc 0**, interceptando bytecode; `git diff --check`: **rc 0**. Comando reproduzível:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import subprocess, py_compile
-from unittest.mock import patch
-paths = subprocess.check_output(
-    ['git', 'diff', '--name-only', '--relative'], text=True).splitlines()
-paths += ['chamados/tests/test_e3_v4_orm.py']
-with patch('importlib._bootstrap_external._write_atomic'):
-    for path in sorted(set(paths)):
-        if path.endswith('.py'):
-            py_compile.compile(path, cfile=path + '.verificacao', doraise=True)
-PY
-GIT_OPTIONAL_LOCKS=0 git diff --check
-```
-
-**DECISAO-ABERTA:** ligação da fachada continua aguardando DIFF por chamador/caso, L-099 e SONDA-SEM-GRANT; resultado de produção **[nao verificado]**. C17 permanece em `chamados/juizes.py:1541`; os três chamadores permanecem em `folha/fora_da_folha.py:67`, `chamados/services/vigia_fio.py:635` e `escala/services/cadastro_realidade.py:488`.
-
-_3159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3163 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
