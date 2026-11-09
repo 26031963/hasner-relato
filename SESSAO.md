@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 16:21:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.5 MB). Acoes na janela: **1020**.
+**Medido em 09/11/2026 16:26:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.5 MB). Acoes na janela: **1019**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1029,4 +1029,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:26:21 | Bash | Map registered escala/utils.py lines base to copy | `cd /home/ronald/wt-codex-par-nao-adjacente-031500 && git show b57ce0a1:app/escala/utils.py > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/utils_base.py && python3 - <<'EOF' import difflib,re,ast S='/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/' a=open(S+'utils_base.py').read().split('\n'); b=open('app ...` |
 | 04:26:14 | Bash | Find catraca entries for escala/utils.py | `cd /home/ronald/wt-codex-par-nao-adjacente-031500/app && grep -n "escala/utils.py" core/tests/test_medida_turno_do_par.py \| head -20; git diff b57ce0a1 --stat \| tail -3` |
 | 04:26:09 | Bash | Show PAR suite failure traceback | `cd /home/ronald/saas-hasner && L=logs/par_nao_adjacente/suite_v3.log; grep -n -A40 '^FAIL:' $L \| head -70` |
-| 04:26:07 | Bash | Read PAR suite v3 verdict and copy state | `cd /home/ronald/saas-hasner && L=logs/par_nao_adjacente/suite_v3.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep '^rc=' $L \| tail -1; git -C /home/ronald/wt-codex-par-nao-adjacente-031500 log --oneline -1; git -C /home/ronald/wt-codex-par-nao-adjacente-031500 status --porcelain \| head; date` |
