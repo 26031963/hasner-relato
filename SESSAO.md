@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 15:50:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (208.8 MB). Acoes na janela: **969**.
+**Medido em 09/11/2026 15:55:37.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (208.9 MB). Acoes na janela: **968**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:50:22 | Bash |  | `W=/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706; cd $W && git diff 1947268f7 9503746dd -- app/chamados/services/materializacao.py \| head -150` |
+| 15:50:19 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(3,"BUG-PAR 15:5x: construtor v2 rc 0 -> commit 9503746dd na copia (contraparte = outra pergunta OU marca ja batida da mesma pausa; sem_par so sem nenhuma; 13 testes, M41-M50; nada executado; entrega logs/BUG-PAR-O-PAR/entrega_v2.r). Sessao: hunks models.py (pode_fechar le obrigacoes_par ...` |
 | 15:50:15 | Bash |  | `date '+%H:%M' && sed -n 1,12p docs/RELATO.md \| cut -c1-220` |
 | 15:50:09 | Bash | Wait for SELOS-CANON-I3 matrix result | `cd /home/ronald/saas-hasner/logs/SELOS-CANON-I3; until grep -q '^rc=' matriz.out 2>/dev/null; do /usr/bin/sleep 60; done; date; tail -3 matriz.out; wc -c matriz.r` |
 | 15:50:06 | Bash |  | `W=/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-144706; cd $W && git add app/chamados/models.py && git commit -q -F - <<'EOF' BUG-PAR-O-PAR (sessao): C7 pergunta pelo par -- pode_fechar le obrigacoes_par_intervalo; fechar re-pergunta depois da trava models.py e proibido ao construtor Codex (rc 3); os tres hunks da sessao: pode_fechar soma obrigacoes_par_intervalo ao fio_vivo; fechar(moti ...` |
@@ -976,6 +978,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:59:54 | Bash | Find prior I-1 Codex question/answer files | `cd /home/ronald/saas-hasner && grep -rl "SELOS-CANON-I1" logs/*/ 2>/dev/null \| grep -E '\.(q\|r\|sh)$' \| head` |
 | 03:59:51 | Bash | List prior I-1 preverif artifacts | `cd /home/ronald/saas-hasner && D=logs/selos_canon_i1; ls logs/selos_canon_i1/selos_canon_i1 \| head -30; ls logs/codex 2>/dev/null \| grep -i I1 \| tail -5` |
 | 03:59:49 | Bash | Save I-1 v3 diff and inspect logs dir | `cd /home/ronald/saas-hasner && D=logs/selos_canon_i1; mkdir -p $D; git -C /home/ronald/wt-i1-censovaga-015903 log --oneline -4; git diff 457e8afa..eec4007f7 > $D/diff_v3.diff; wc -l $D/diff_v3.diff; ls $D; ls logs \| grep -i i1 \| head` |
-| 03:51:32 | Bash | Fix time label on RELATO line | `sed -i '3s/^PAR-NAO-ADJACENTE 04:3x:/PAR-NAO-ADJACENTE 03:5x:/' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-40` |
-| 03:51:30 | Bash | Check RELATO top, trava pid, E2 suite tail | `sed -n 1,3p docs/RELATO.md \| cut -c1-160; kill -0 1541241 && echo vivo; tail -2 /home/ronald/saas-hasner/logs/fio_e0_v4/e2_rebase/suite_v3.log; date` |
-| 03:50:22 | Bash | Log PAR v3 triage; confirm _n line untouched by diff | `python3 - <<'EOF' r='docs/RELATO.md'; t=open(r).read().split('\n') t.insert(2,"PAR-NAO-ADJACENTE 04:3x: pre-verificador v3 rc 0 (preverif_v3.r): _n+=0 morto (teste:128/140); pareador real produz 10-11 e 14-15 (turnos.py:811-820 rastreado). DESCARTADO ao opus: mutante _n=1 sobrevive com 3 pares -- a linha _n += 1 e do HEAD, o diff nao a toca (escala/utils.py:471, conferido no diff_v3), lacuna de co ...` |
