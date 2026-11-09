@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 13:07** · publicado em **09/11/2026 13:08** (UTC-3)
+> Ultima resposta processada: **09/11/2026 13:11** · publicado em **09/11/2026 13:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 13:11 · sessao 84f2029d65e7 · FIO-E0-V4-E3 · construtor · origem=Code
+
+P1–P5 implementados. RED, execução ORM e mordida dos mutantes **[nao verificado]**; suite não executada. [nao verificado]
+
+| Item | Hunks e resposta esperada |
+|---|---|
+| P1 | `chamados/services/aviso_pendencia.py:7` e `cobranca.py:45` leem `consulta_do_app()['pendentes']`. Testes: fechada viva não avisa; aberta coincide com ambos os badges (`chamados/tests/test_e3_v4_orm.py:20`, `:37`). |
+| P2 | Seleção central em `api/views.py:1021`, `:1039`, `:1058`; preserva respondida viva da disputa aberta. ORM exige excluir pergunta sem carimbo terminal que C6 absolveu (`chamados/tests/test_e3_v4_orm.py:42`). |
+| P3 | Instrumento resolve `sistema` por leitura e fornece seu pk (`chamados/management/commands/diff_e3_sombra.py:94`; `chamados/juizes.py:1106`). Testes exigem erro explícito sem criação e envenenam `get_user_sistema` no ramo trancado (`chamados/tests/test_e3_diff_sombra.py:26`, `:41`). |
+| P4 | AST resolve atribuições e `getattr`; varredura inclui models/registro (`chamados/tests/test_e3_pendentes_app.py:64`, `:75`, `:82`, `:96`). Catraca permanece `=3` (`:144`); novos casos em `:119`, `:124`. |
+| P5 | Lote pela autoridade existente, com contexto descartado por chamada (`chamados/juizes.py:946`, `:1058`, `:1080`, `:1084`; `chamados/services/pergunta_no_app.py:44`, `:55`, `:69`). Selo migrado em `chamados/tests/test_contract_pergunta_viva.py:75`. ORM exige **9 queries para N=1 e N=5**, além de frescor após tranca/toque/reabertura (`chamados/tests/test_e3_v4_orm.py:80`, `:96`). |
+| F4 | Uma linha declara o limite de `date.today` (`chamados/management/commands/diff_e3_sombra.py:105`); leitor da saída ajustado (`chamados/tests/test_e3_diff_sombra.py:21`). |
+
+Escrita/leitura dos campos e funções alterados:
+
+| Escritor/produtor | Leitor |
+|---|---|
+| `pendentes/historico`: `chamados/services/pergunta_no_app.py:71`, `:73` | Aviso `aviso_pendencia.py:9`, `:13`; cobrança `cobranca.py:48`, `:82`, `:163`; kernels `api/views.py:325`, `api/views_core.py:314`; dashboard `core/views.py:253`; endpoints `api/views.py:1023`, `:2561`. |
+| Índices locais: `api/views.py:1064`, `:1065` | Serialização `api/views.py:1173`. |
+| `sistema_pk/memo`: `diff_e3_sombra.py:98` → `chamados/juizes.py:1111` | `_admin_tocou_os_dias_depois`, `chamados/juizes.py:1173`; carga da tarefa `chamados/services/tarefa_do_dia.py:370`. Chamador anterior do contexto: `chamados/management/commands/vigiar_fio_morto.py:171`. |
+| Contexto, memo e mapa de dias: `chamados/juizes.py:1091`, `:1096`, `:1099` | `_memo_da_tranca` `:1058`, lote `:992`, toque `:1165`, degrau C6 `:948`, `:1327`; descarte `:1102`. |
+| `em_lote`: `chamados/services/pergunta_no_app.py:69` | Seleção em `:56`; demais leitores mantêm chamada sem argumento em `:163`, `:186` e `chamados/juizes.py:1519`. |
+| Aliases/fontes/chamadas AST: `chamados/tests/test_e3_pendentes_app.py:80`, `:86`, `:114`, `:90` | Resolução `:66`, catraca `:145`; mutantes em `chamados/tests/e3_mutantes.py:36`, `:123`, executor `:138`. |
+
+Comandos dos testes, **não executados**: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_v4_orm.LeitoresPendentesV4Test --settings=config.settings.ci
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_diff_sombra --settings=config.settings.ci
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e3_pendentes_app.CatracaC17Test
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e3_v4_orm.CustoConsultaV4Test chamados.tests.test_contract_pergunta_viva.ExibicaoUsaADerivacaoTest --settings=config.settings.ci
+```
+
+Mutantes novos/ajustados, **mordida [nao verificado]** (`chamados/tests/e3_mutantes.py:34`, `:123`):
+
+```bash
+m() { PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_mutantes --mutante "$1"; }
+m aviso_inclui_historico
+m cobranca_inclui_historico
+m chamados_v2_sem_C6
+m chamados_v2_perde_respondida
+m diff_cria_sistema
+m diff_nao_alimenta_sistema
+m diff_omite_limite_relogio
+m consulta_sem_lote
+m consulta_memo_persistente
+m consulta_ignora_tranca
+m consulta_vazia
+m catraca_ignora_atribuicao
+m catraca_ignora_getattr
+m catraca_exclui_models
+m catraca_exclui_registro
+m quarto_c17_alias
+m quarto_c17_atribuicao
+m quarto_c17_atributo
+m quarto_c17_getattr
+m quarto_c17_getattr_atribuido
+```
+
+`py_compile`: **11 arquivos, rc 0**, interceptando bytecode; `git diff --check`: **rc 0**. Comando reproduzível:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import subprocess, py_compile
+from unittest.mock import patch
+paths = subprocess.check_output(
+    ['git', 'diff', '--name-only', '--relative'], text=True).splitlines()
+paths += ['chamados/tests/test_e3_v4_orm.py']
+with patch('importlib._bootstrap_external._write_atomic'):
+    for path in sorted(set(paths)):
+        if path.endswith('.py'):
+            py_compile.compile(path, cfile=path + '.verificacao', doraise=True)
+PY
+GIT_OPTIONAL_LOCKS=0 git diff --check
+```
+
+**DECISAO-ABERTA:** ligação da fachada continua aguardando DIFF por chamador/caso, L-099 e SONDA-SEM-GRANT; resultado de produção **[nao verificado]**. C17 permanece em `chamados/juizes.py:1541`; os três chamadores permanecem em `folha/fora_da_folha.py:67`, `chamados/services/vigia_fio.py:635` e `escala/services/cadastro_realidade.py:488`.
 
 ## 09/11 13:07 · sessao 07a8155e702d · SELOS-CANON-I3 · verificador · origem=Code
 
@@ -758,35 +836,4 @@ Novidades para consolidação, por leitura estática:
 
 - **Rollback externo efetivo inclui trilhas e escritas dos efeitos imediatos, mas os savepoints não são commits independentes.** Auditoria usa outro `transaction.atomic` e cria o `LogAuditoria` dentro dele; falta de trilha causa `RuntimeError` na edição/troca (`app/core/observ.py:124`, `app/core/observ.py:133`, `app/ponto/portas/celula.py:619`, `app/ponto/portas/celula.py:692`). Os efeitos posteriores estão registrados em `on_commit`, não executados diretamente nessa parte do caminho (`app/ponto/services/fechamento.py:1824`, `app/ponto/portas/celula.py:502`). Se o compositor realmente desfizer o atomic externo, a intenção documentada é que callbacks só rodem com fato gravado (`app/ponto/services/fechamento.py:1802`); descarte efetivo da fila por Django em execução: **[nao verificado]**. Mensagens de log e contadores em memória não são gravações transacionais e podem permanecer após falha (`app/core/observ.py:73`, `app/ponto/portas/celula.py:439`).
 
-## 09/11 11:52 · sessao d8d8f4da4ae5 · - · - · origem=Ronald (tmux)
-
-3) **Correlação disponível por JSON; nenhuma API própria de correlação.**
-
-- `evento` aceita `acao/modelo/objeto_id`, descrição, `antes/depois`, ator e IP; não tem `correlacao/lote/grupo`. Os JSONs são gravados sem transformação em `valor_antes/valor_depois` (`app/core/observ.py:94`; `app/core/observ.py:133`). `evento_kw` encaminha somente os campos conhecidos: passar um kw adicional de correlação não o propaga (`app/core/observ.py:142`).
-- `LogAuditoria` possui um único `objeto_id` inteiro e dois JSONs; não possui coluna própria para correlação (`app/core/models.py:295`; `app/core/models.py:298`; `app/core/models.py:300`; `app/core/models.py:307`). Assim, há lugar técnico para incluir um identificador e as quatro chaves de célula + pedido dentro de `depois`; contrato/padrão específico já existente para permuta: **[nao verificado]** (`app/core/observ.py:136`).
-- Há precedente de **metadado livre de lote**: `extra={'lote': 'arquivar_lote', ...}` é acrescentado ao JSON de trilha junto a `chamado_pk/colaborador_id`; esse `lote` é rótulo fixo, não identificador exclusivo de cada execução (`app/chamados/views_arquivar.py:146`; `app/chamados/services/arquivo.py:130`; `app/chamados/services/arquivo.py:133`).
-- Há também precedente de **objeto agrupador**: eventos de holerite usam `modelo='LoteHolerite'` e `objeto_id=lote_id` (`app/holerite/management/commands/processar_lote_holerite.py:148`).
-- Hoje a troca não recebe nem propaga tal identificador: sua assinatura não o contém; registra `modelo='Ausencia'`, `objeto_id=a_c.pk` e JSON com dois lados, motivo e override, sem pedido/chamado/correlação (`app/ponto/portas/celula.py:632`; `app/ponto/portas/celula.py:682`; `app/ponto/portas/celula.py:686`). As trilhas individuais de edição também não recebem correlação (`app/ponto/portas/celula.py:611`).
-- A `Ausencia.chamado_origem` já pode ligar cada carta a um chamado, mas `trocar_plantao` não lê nem copia esse campo para sua trilha (`app/ponto/models.py:786`; `app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:682`).
-
-4) **Quatro células distintas exigem quatro registros de carta para a composição literal atual; não necessariamente quatro documentos físicos diferentes.**
-
-| Chamada | Carta cedente | Carta substituto |
-|---|---|---|
-| Primeira | `Ausencia(A,d1)` | `Ausencia(B,d1)` |
-| Segunda | `Ausencia(B,d2)` | `Ausencia(A,d2)` |
-
-A correspondência decorre de a porta escolher pessoa/data exclusivamente de cada carta relida e editar essas duas coordenadas; não recebe pessoa/data alternativas (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`). Uma mesma `Ausencia` tem uma pessoa e uma `data`; reutilizá-la na segunda chamada não passa a representar outra data (`app/ponto/models.py:743`; `app/ponto/models.py:750`). Reusar as mesmas duas cartas invertidas é aceito pelo corpo, mas volta a editar as mesmas duas células, não constitui quatro coordenadas distintas (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:673`).
-
-Para cada chamada, a porta exige:
-
-- Argumentos não nulos, registros encontrados pelos `pk`, colaboradores distintos dentro do par e `documento` verdadeiro em ambos (`app/ponto/portas/celula.py:653`; `app/ponto/portas/celula.py:660`; `app/ponto/portas/celula.py:662`; `app/ponto/portas/celula.py:664`).
-- Não compara nomes dos documentos nem abre os arquivos; o mesmo caminho de documento pode satisfazer mais de uma carta (`app/ponto/portas/celula.py:664`; `app/ponto/portas/celula.py:684`). O helper de teste inclusive permite repetir seu default `o10b/carta.pdf` (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`).
-- Não testa tipo, status, aprovação, `data_fim`, horários parciais, `documento_referencia` ou `chamado_origem`; não valida existência física ou conteúdo do anexo (`app/ponto/portas/celula.py:656`; `app/ponto/portas/celula.py:664`; `app/ponto/portas/celula.py:673`). Os campos existem no modelo (`app/ponto/models.py:749`; `app/ponto/models.py:751`; `app/ponto/models.py:768`; `app/ponto/models.py:786`; `app/ponto/models.py:791`; `app/ponto/models.py:799`).
-- Vínculo do dia e lavra são checados por `editar_dia` para cada coordenada, independentemente da carta (`app/ponto/portas/celula.py:568`; `app/ponto/portas/celula.py:584`; `app/ponto/portas/celula.py:675`).
-
-**Perguntas antigas e aval:** o aval fornecido responde que insuficiência de 11h e sobreposição devem participar da validação das quatro células antes de escrever; não detalha universo de turnos, elegibilidade entre empresas/vínculos/escalas, tipo/status/período documental, nem a pergunta `folga_trabalhada` (**anexo `aval_reciproca.txt`, conteúdo fornecido no enunciado; arquivo físico não localizado [nao verificado]**). A pergunta de `folga_trabalhada` continua registrada literalmente como aberta na cópia (`app/docs/RELATO.md:449`; `app/docs/BACKLOG.md:1876`).
-
-**Divergência documental relevante:** o aval fornecido diz “BACKLOG:1879 corrigido”, mas a linha 1879 desta cópia trata `BO-0511-G2-TRIAGEM`; não trata permuta (`app/docs/BACKLOG.md:1879`). A presença do aval novo em arquivo da cópia é **[nao verificado]**.
-
-_3139 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3140 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
