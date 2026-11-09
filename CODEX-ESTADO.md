@@ -1,7 +1,140 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 10:53** · publicado em **09/11/2026 10:56** (UTC-3)
+> Ultima resposta processada: **09/11/2026 10:59** · publicado em **09/11/2026 11:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 10:59 · sessao 6efcaa755ca3 · BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS · construtor · origem=Code
+
+Implementei P1/P4/P5 e escrevi primeiro os REDs, incluindo P2/P3 reservados à sessão. **RED executado, GREEN, mortes dos mutantes e resultado em produção: [nao verificado].**
+
+**Entrega por hunk**
+
+| Arquivo:linha | Alteração |
+|---|---|
+| [materializacao.py:109](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/services/materializacao.py:109) | Espera exige a própria metade validada. |
+| `chamados/services/materializacao.py:175` | Vizinhança usa `batidas_apuraveis`, autoridade que exclui retratadas (`ponto/turnos.py:2866`). |
+| [acoes_chamado.py:348](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/services/acoes_chamado.py:348) | Detalhe inclui C6 viva **ou** metade em espera pelo mesmo predicado. |
+| [test_bug_par_intervalo.py:164](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/tests/test_bug_par_intervalo.py:164) | P1: S retratada 01:30; valida S01/E02 e cobra alternância canônica, carimbos e fechamento. |
+| `chamados/tests/test_bug_par_intervalo.py:457` | Foto de estado/trilha; P2 cobra zero saves, eventos e agendamentos em duas chamadas (`:478`); P3 chama `fechar` real e exige consulta C7 após trava (`:497`). |
+| `chamados/tests/test_bug_par_intervalo.py:528` | P4: duas respondidas sem aceite; explicador, declaração do colaborador e aplicação pelo administrador (`:543`, `:556`). |
+| `chamados/tests/test_bug_par_intervalo.py:623` | P5: GET real do detalhe e modal, sem contexto injetado; cobra include e aviso HTML (`:627`, `:631`). |
+| `chamados/tests/test_bug_par_intervalo.py:702` | P6: carimbo inicialmente vazio; primeira falha cobra 4 saves, 4 agendamentos e 2 eventos; segunda cobra zero novas escritas e foto idêntica (`:726`, `:743`). |
+| [mutantes_bug_par_intervalo.py:131](/home/ronald/wt-codex-bug-par-do-intervalo-em-dois-atos-105046/app/chamados/tests/mutantes_bug_par_intervalo.py:131) | M38 restaura a guarda exata da volta 2; acrescentados M39–M44. |
+| `chamados/tests/mutantes_bug_par_intervalo.py:205` | Inclui `acoes_chamado.py` no `py_compile`; `--comandos-v4` imprime os comandos individuais com settings CI (`:226`). |
+
+Os novos testes usam a classe `TestCase`, relógio congelado e fixture `col960` existentes (`chamados/tests/test_bug_par_intervalo.py:32`, `:45`).
+
+**Quem escreve e quem lê**
+
+| Campo/função | ESCRЕVE / dono | LÊ, inclusive fora do diff |
+|---|---|---|
+| Espera do par | Predicado sem escrita: `materializacao.py:101`. | C7 `chamados/models.py:1864`; explicador `explicador.py:74`; declaração `declaracao_texto.py:213`, `:382`, `:678`; validação `validacao.py:193`, `:483`; vigia `vigia_carimbo.py:109`; tag `chamados_tags.py:19`. |
+| Vizinhança / universo | Consulta sem escrita: `materializacao.py:169`; autoridade `ponto/turnos.py:2846`. | Aplicação individual `materializacao.py:962`; julgamento posterior do par `:1364`; apresentação `:539`; reexport `chamados/models.py:4080`. |
+| `perguntas_disputa` | Contexto do detalhe `acoes_chamado.py:349`; contexto independente do modal `fio.py:253`. | View `chamados/views.py:549`; detalhe `templates/chamados/detalhe_local.html:309`; modal `templates/chamados/partials/modal_fio.html:156`. |
+| `validada_em/por` | Aceite `validacao.py:134`; devolução `:202`; nova resposta `disputa_emissao.py:1477`; complemento pelo carimbo `chamados/models.py:3138`. | Espera `materializacao.py:109`; C6 `chamados/juizes.py:1153`; C7 `chamados/models.py:1850`. |
+| `materializada_em/por`, `via_resolucao` | `_escrever_carimbo`, `chamados/models.py:3100`; descarimbo `:3211`; lote `:3269`; relavra `relavra_via.py:125`. | Lastro `chamados/juizes.py:660`; C6 `:1164`; devolução `validacao.py:188`; lavra persistida `veredito_lavrado.py:187`. |
+| `Batida.retratada_em` | Retração `ponto/registro_batida.py:276`, por `anotar` (`:255`). | Universo canônico `ponto/turnos.py:2866`; tolerância `ponto/registro_batida.py:99`; lastro `ponto/services/lastro.py:262`. |
+| Fotos e definições dos testes | Fixtures/helpers `test_bug_par_intervalo.py:81`, `:88`, `:472`, `:767`. | Asserções `:495`, `:526`, `:745`; alvos do runner `mutantes_bug_par_intervalo.py:131`. | [nao verificado]
+| `MUTANTES` / fontes | Definições `mutantes_bug_par_intervalo.py:131`. | Leitura/recompilação em memória `:166`, `:179`, `:249`; conferência estática `:217`. |
+
+O save do descarimbo agenda beco e pode emitir evento pelos receivers (`chamados/signals.py:225`, `:247`; `chamados/models.py:3252`). Exaustividade transitiva deste mapa: **[nao verificado]**.
+
+**Linhas exatas para a SESSÃO escrever em `chamados/models.py`**
+
+P2: após o retorno de `fora_do_fato`, antes de `_escrever_carimbo` (`chamados/models.py:3209`, `:3211`):
+
+```python
+        if (self.materializada_em is None
+                and self.materializada_por_id is None
+                and self.via_resolucao == ''):
+            return []
+```
+
+P3: antes do `if motivo is None` (`chamados/models.py:1908`):
+
+```python
+        pelo_juiz = motivo is None
+```
+
+Após a chamada completa de `trava_na_ordem` (`chamados/models.py:1923`):
+
+```python
+            if pelo_juiz and not self.pode_fechar():
+                raise ValueError(
+                    'Nao e possivel fechar a disputa #%s: C7 reteve o fechamento.' % self.pk)
+```
+
+É necessário conservar a modalidade original porque `motivo` recebe `FECHOU_VAZIA` ou `FECHOU_VEREDITO` antes da trava (`chamados/models.py:1914`).
+
+**Mutantes e asserções discriminantes previstas**
+
+| Mutante | Regressão | Asserção que deve matar |
+|---|---|---|
+| M38 | Guarda exata v2 | Ambas passam por `descarimbar` mesmo inicialmente vazias (`test_bug_par_intervalo.py:724`). |
+| M39 | Universo cru inclui retratada | Segunda validação aceita o par (`:176`). |
+| M40 | Espera sem validação própria | Predicado falso para metade apenas respondida (`:533`). |
+| M41 | Detalhe volta a filtrar só C6 | Metade em espera presente no contexto GET (`:641`). |
+| M42 | Aplicação retorna antes de validar | Própria metade recebe validação (`:566`). |
+| M43 | Declaração prematuramente em espera | Retorna `ja_declarada`, aguardando supervisão (`:550`). |
+| M44 | Tag omite espera no modal | Aviso HTML presente uma vez no GET real (`:642`). |
+
+M38 cobra a passagem pela porta; após P2, comparar somente estado/trilha não distingue a guarda antiga que pula um no-op (`test_bug_par_intervalo.py:724`, `:745`). Mortes executadas: **[nao verificado]**.
+
+Comandos individuais reservados ao Code; equivalentes aos impressos por `--comandos-v4` (`mutantes_bug_par_intervalo.py:226`):
+
+```bash
+export DJANGO_SETTINGS_MODULE=config.settings.ci
+export PYTHONDONTWRITEBYTECODE=1
+
+teste() { [nao verificado]
+  python3 manage.py test "chamados.tests.test_bug_par_intervalo.BugParIntervaloCol960.$1" --noinput
+}
+mutante() {
+  python3 -m chamados.tests.mutantes_bug_par_intervalo "$1"
+}
+
+teste test_V4_P1_par_aplica_com_S_retratada_entre_metades [nao verificado]
+teste test_V4_P2_descarimbar_vazio_duas_vezes_nao_escreve_nem_agenda [nao verificado]
+teste test_V4_P3_fechar_real_consulta_C7_sob_trava_e_retem_espera [nao verificado]
+teste test_V4_P4_respondidas_sem_aceite_aguardam_validacao [nao verificado]
+teste test_V4_P4_declaracao_colab_sem_aceite_aguarda_supervisao [nao verificado]
+teste test_V4_P4_aplicar_declaracao_valida_a_propria_metade [nao verificado]
+teste test_V4_P5_GET_detalhe_conserva_metade_em_espera [nao verificado]
+teste test_V4_P5_GET_modal_conserva_metade_em_espera [nao verificado]
+teste test_V4_P6_falha_com_carimbo_vazio_duas_vezes_mesmo_estado_e_trilha [nao verificado]
+
+mutante M38
+mutante M39
+mutante M40
+mutante M41
+mutante M42
+mutante M43
+mutante M44
+```
+
+Executei somente a conferência estática abaixo: **rc 0**, `py_compile` dos quatro Python tocados sem persistência e sintaxe/âncoras M1–M44 conferidas (`mutantes_bug_par_intervalo.py:195`, `:211`, `:217`). [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.mutantes_bug_par_intervalo --sintaxe
+```
+
+**DECISAO-ABERTA:** P2/P3 aguardam escrita da sessão; P6 depende de P2. A inserção proposta consulta C7 sob trava, mas as leituras anteriores de respostas/perguntas permanecem antes dela (`chamados/models.py:1897`, `:1906`, `:1921`). Prova concorrente, GREEN e certificação pelo Code/opus: **[nao verificado]**.
+
+## 09/11 10:57 · sessao 476fb91835ff · - · - · origem=Ronald (tmux)
+
+Considerando os novos comandos com `config.settings.ci`, não encontrei bloqueador concreto dos GETs por inspeção: `ci.py:5` seleciona `config.urls_ci`, `config/urls_ci.py:9` inclui as rotas de chamados e os middlewares de sessão/autenticação/mensagens vêm de `config/settings/base.py:47`, `:50`, `:55`. O administrador da fixture tem `is_staff=True` e `is_superuser=True` (`chamados/tests/test_bug_par_intervalo.py:41`), aceitos pelo gestor e por RBAC (`chamados/views.py:35`; `colaboradores/mixins.py:328`). Execução permanece [nao verificado].
+
+O modal recebe perguntas de disputas abertas sem filtro C6 (`chamados/services/fio.py:221`), associa a disputa em `:258` e o template entra pelo mapa real de permissão (`templates/chamados/partials/modal_fio.html:122`). O detalhe passa pelo contexto real da view (`chamados/views.py:549`) e pelo include em `templates/chamados/detalhe_local.html:310`. Os novos testes não injetam contexto (`chamados/tests/test_bug_par_intervalo.py:633`).
+
+As contagens do P6 correspondem ao caminho inspecionado **depois da cura P2**:
+
+- Duas recusas salvam apenas `recusa_motivo` (`chamados/services/materializacao.py:1195`), cada uma agenda um beco (`chamados/signals.py:225`) e não emite outbox porque esse campo não pertence a `CAMPOS_QUE_ACORDAM` (`chamados/models.py:3224`; `chamados/signals.py:245`).
+- Duas devoluções salvam validação (`chamados/services/validacao.py:205`), agendam outros dois becos e emitem os dois eventos (`chamados/signals.py:225`, `:247`; `chamados/models.py:3252`).
+- A segunda recusa idêntica não salva (`chamados/services/materializacao.py:1183`, `:1192`); validação já vazia não salva (`chamados/services/validacao.py:198`) e foto idêntica não audita (`:222`). As notas também dependem da mudança do motivo (`chamados/services/materializacao.py:1195`).
+
+O registro de trava em `on_commit` não deve inflar a primeira contagem: `_travar_ato_materializacao` está antes da captura (`chamados/tests/test_bug_par_intervalo.py:714`), e `_registrar_travados` não adiciona novamente colaborador já registrado (`chamados/services/trava_do_colaborador.py:42`). Resultado executado: [nao verificado].
+
+Única lacuna adicional do P6: o teste configura a falha fixa, mas não cobra que `_materializar_resposta_hora` foi realmente alcançada; uma recusa anterior estável poderia satisfazer parte das mesmas asserções (`chamados/tests/test_bug_par_intervalo.py:719`). Capturar esse mock e cobrar uma chamada por tentativa reforça a origem pretendida da falha. [nao verificado]
 
 ## 09/11 10:53 · sessao 476fb91835ff · - · - · origem=Ronald (tmux)
 
@@ -623,44 +756,4 @@ AST confirma o núcleo histórico de **16 portas = 1 Chamado + 3 Disputa + 12 Pe
 
 Varredura AST global dos campos principais não localizou persistência principal de Pergunta/Disputa/Chamado fora de `chamados/`; `regularizacao_ext.reg.materializada_em` pertence a outro modelo (`app/chamados/services/regularizacao_ext.py:198`). Completude frente a despacho inteiramente dinâmico que não exponha modelo nem campo no AST: [não verificado].
 
-## 09/11 09:56 · sessao 8573dd838240 · - · - · origem=Ronald (tmux)
-
-Autoridade lida e critério:
-
-- **DECISÃO** = fato próprio do ato humano/sistema; sequência única imutável, com instante, autor, texto e motivo; a projeção atual será encolhida pela E4. Atos existentes: resposta, validação, devolução, recusa, reabertura, silêncio, retratação e absorção. `app/chamados/models.py:3828`, `app/chamados/models.py:3850`.
-- **EFEITO** = consequência cuja ocorrência precisa ser conferida externamente; resposta validada não equivale a materialização. E2 distingue sem lavra vigente, validada sem efeito, efeito ainda não visto pela célula e encerrada pelo juiz. `app/chamados/services/tarefa_do_dia.py:118`, `app/chamados/services/tarefa_do_dia.py:140`.
-- **FICA** = identidade/data ou cache reconstruível: identidade da pergunta em `app/chamados/models.py:2424`; dia do turno atribuído exclusivamente por `gravar_dia_do_fato`, sem persistência própria, em `app/chamados/services/fio.py:790`; cache explícito da lavra em `app/chamados/veredito_lavrado.py:58`, `app/chamados/veredito_lavrado.py:74`.
-- `DecisaoPergunta.registrar` é a porta única da sequência; update/delete/bulk_update e edição de linha existente são recusados. `app/chamados/models.py:3814`, `app/chamados/models.py:3892`, `app/chamados/models.py:3931`.
-
-Ramos que impedem classificação ingênua por função:
-
-- `DisputaSupervisao.fechar`: default é **efeito** da inexistência de pergunta viva/resposta sem veredito; exceções `desligamento`/`admin_encerra` são **decisão** e já registram `SILENCIO` E1. `app/chamados/models.py:1855`, `app/chamados/models.py:1892`, `app/chamados/models.py:1915`.
-- `DisputaSupervisao.remover_motivo`: **decisão** `RETRATACAO` já registrada; carimbo terminal da pergunta e atualização da lista de motivos são consequências do ato. `app/chamados/models.py:2043`, `app/chamados/models.py:2053`.
-- `_materializar_ausencia_de_resposta`: vínculo de absorção já é fato `ABSORCAO` E1, com escape e ausência; carimbo da pergunta vem no mesmo atomic. `app/chamados/services/materializacao.py:549`, `app/chamados/services/materializacao.py:557`.
-- `responder_automaticamente`: **decisão** `RESPOSTA` de sistema sobre fato entregue por outro caminho, não cache descartável. `app/chamados/services/disputa_emissao.py:1635`, `app/chamados/services/disputa_emissao.py:1653`.
-- `carimbar_resposta_pela_trilha`: **decisão** reconstruída com o instante original testemunhado pela nota, não instante atual da reparação. `app/chamados/services/disputa_emissao.py:1658`, `app/chamados/services/disputa_emissao.py:1674`.
-
-Divergências semânticas para DECISÕES numeradas:
-
-1. **Carimbo de processamento ≠ prova de batida/fechamento.** Help text de `materializada_em` diz “batida criada + chamado fechado”; `carimbar_identidade` também escreve esse campo para identidade sem plantio e pode manter instante/autor anteriores. A E2 exige testemunha/lavra vigente. `app/chamados/models.py:3382`, `app/chamados/models.py:3157`, `app/chamados/models.py:3171`, `app/chamados/services/tarefa_do_dia.py:118`.
-2. **Estado visual por timestamps ≠ exigibilidade do ato.** `estado` chama validada+materializada de resolvida; E2 distingue validação sem efeito ou sem lavra vigente. `app/chamados/models.py:3030`, `app/chamados/services/tarefa_do_dia.py:140`.
-3. **`data_evento` = dia do turno, não dia civil da batida.** Help text antigo fala data do evento; identidade e E2 explicitam dia do turno. `app/chamados/models.py:2420`, `app/chamados/models.py:2424`, `app/chamados/services/tarefa_do_dia.py:213`, `app/chamados/services/fio.py:790`.
-4. **Expiração = dia civil local; julgamento = instante.** `relogio_virou` usa `janela_expira_em <= hoje_local`, mas a lavra só vence pelo relógio quando `localdate(julgado_em) < janela_expira_em`. Não se compara a data UTC. `app/chamados/veredito_lavrado.py:95`, `app/chamados/veredito_lavrado.py:107`.
-5. **Janela inclusiva e expiração exclusiva.** Janela viva inclui início da anterior menos um dia e fim da corrente; primeiro dia fora é a expiração. Não corresponde a duração fixa de 30/60 dias. `app/chamados/veredito_lavrado.py:119`, `app/chamados/veredito_lavrado.py:145`.
-6. **Resposta/validação legadas sem linha ≠ decisão E1 demonstrada.** E1 preserva a projeção anterior como linhas antes de sobrescrevê-la; E2 devolve `passivo_sem_linha`, sem inventar ação. `app/chamados/models.py:3903`, `app/chamados/services/tarefa_do_dia.py:127`.
-7. **`via_resolucao` não significa sempre declaração de hora.** Escape ATESTADO/FALTA_DIA e irmã muda usam ausência; o escritor pergunta `declarou_hora`, e a sequência liga a absorção à ausência concreta. `app/chamados/services/materializacao.py:534`, `app/chamados/services/materializacao.py:549`.
-8. **Fechamento de disputa ≠ julgamento de resposta.** Default só fecha após inexistência de viva e resposta sem veredito; fechamento excepcional decide silêncio e registra E1. `app/chamados/models.py:1823`, `app/chamados/models.py:1852`, `app/chamados/models.py:1915`.
-
-Leis/cortes conferidos: L-002 (`app/docs/LEIS.md:60`), L-007 (`:65`), L-051 (`:92`), L-061 (`:95`), L-073 (`:100`), L-080 (`:107`), L-085 (`:117`), L-088 (`:120`), L-110 (`:136`), L-111 (`:137`), L-117 (`:138`), L-124 (`:145`), L-113 (`:151`); FIO-MORTO-E-ESTRUTURAL (`app/docs/CORTES.md:253`), FIO-E0-V4 (`:426`), LEI-TRANCA-E2-JUIZ (`:427`). Essas autoridades respondem os pontos examinados; **perguntas de lei: 0** neste recorte. Não concluí censo integral de escritores/leitores, responsabilidade dos outros levantamentos. [não verificado]
-
-## 09/11 09:55 · sessao 3fe3faa2e17b · FIO-E0-V4-E3 · construtor · origem=Code
-
-Entrega: [F1–F8, causas, hunks, escritores/leitores e comandos de RED/mutantes](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:5).
-
-**F2: código. F1/F3/F4/F5/F6/F7/F8: selo.**
-
-`py_compile`: **10 arquivos, rc 0**, sem bytecode; `git diff --check`: rc 0. [Verificação e comandos](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:70). Suíte não executada; mordida dos RED/mutantes **[nao verificado]**. Ruff indisponível. [nao verificado]
-
-**DECISAO-ABERTA:** DIFF/L-099 antes da fachada; crons e diagramas com a sessão. [Referência](/home/ronald/wt-codex-fio-e0-v4-e3-084151/app/docs/ENTREGA_FIO_E0_V4_E3_V3.md:90).
-
-_3108 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3110 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
