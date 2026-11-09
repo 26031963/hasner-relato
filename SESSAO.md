@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 16:36:52.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.5 MB). Acoes na janela: **1006**.
+**Medido em 09/11/2026 16:42:35.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (210.7 MB). Acoes na janela: **1015**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:41:22 | Bash |  | `cd /home/ronald/saas-hasner; cp app/logs/fio_morto.json logs/FIO-E0-V4-E4-ESCRITORES/fio_morto_0648.json; time docker exec saas_core python manage.py tenant_command vigiar_fio_morto --alarme --alarme-passivo --schema=juliani > logs/FIO-E0-V4-E4-ESCRITORES/vigia_1641.out 2>&1; echo rc=$?; tail -5 logs/FIO-E0-V4-E4-ESCRITORES/vigia_1641.out \| cut -c1-300; python3 -c " import json;d=json.load(open(' ...` |
+| 16:41:16 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "vigiar_fio_morto" -A6 app/config/crons.py \| head -30; uptime` |
+| 16:41:12 | Agent | Cura selo lei_akita merge limpo | `You are the opus CONSTRUCTOR for a small instrument cure in repo /home/ronald/saas-hasner. Work ONLY in the git worktree /home/ronald/wt-akita-cc-164049 (branch akita-cc-164049, base 05e6aa147). Never edit /home/ronald/saas-hasner itself; never push; never run the Django suite; never touch other worktrees; kill only processes you start. AVAL (Ronald, literal scope): "80a6ca96: NAO reescrever histo ...` |
+| 16:40:49 | Bash |  | `cd /home/ronald/saas-hasner; N=$(date +%H%M%S); git worktree add -q ~/wt-akita-cc-$N -b akita-cc-$N 05e6aa147 && echo ~/wt-akita-cc-$N; git -C ~/wt-akita-cc-$N log --oneline -1; tail -3 logs/push_3803.log` |
+| 16:40:39 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 340,420p bin/tests/test_lei_akita.sh; sed -n 660,741p bin/tests/test_lei_akita.sh` |
+| 16:40:37 | Bash |  | `cd /home/ronald/saas-hasner; wc -l bin/tests/test_lei_akita.sh; grep -n "merge\\|parent\\|diff-tree\\|--cc\\|PUBLIC" bin/tests/test_lei_akita.sh \| head -50` |
+| 16:40:32 | Bash |  | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; git status --porcelain \| grep -v '^??' ; cat > logs/push_3803.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner bin/push.sh origin 3803e6623:main > logs/push_3803.log 2>&1 echo "rc=$?" >> logs/push_3803.log EOF setsid nohup bash logs/push_3803.sh >/dev/null 2>&1 </dev/null & /usr/bin/sleep 2; pgrep -fx "bash logs/push_3803.sh"` |
+| 16:40:25 | Bash |  | `cd /home/ronald/saas-hasner; cat bin/push.sh \| head -80; cat logs/push_e2e3.sh` |
+| 16:40:23 | Bash |  | `cd /home/ronald/saas-hasner; date; tail -3 logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.out; wc -c logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r; ls -la app/logs/fio_morto.json; sed -n 1,60p bin/push.sh \| grep -n "^#\\|usage\\|\$1" \| head -30; git log --oneline origin/main..3803e6623 \| wc -l` |
 | 16:18:35 | Bash |  | `cd /home/ronald/saas-hasner; tail -3 logs/hook_stop_fila1.log \| cut -c1-300; sed -i '3s/ \| arquivo=.*$//' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 16:18:31 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/ \| grep -i hook \| head; tail -5 $(ls -t logs/*hook*stop* logs/hook*/* 2>/dev/null \| head -1) 2>/dev/null; sed -n 812,856p bin/hook_stop_fila1.py` |
 | 16:18:22 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -fx "bash logs/FIO-E0-V4-E4-ESCRITORES/lancar_matriz_e4.sh" && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! push') L.insert(2,'ESPERANDO: lancar_matriz_e4.sh \| pid=3685670 \| arquivo=logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r') open(p,'w').write('\n'.join(L)) EOF sed -n 3,4p app/docs/RELATO.md \| cut -c1-12 ...` |
