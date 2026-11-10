@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 11:58:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (259.8 MB). Acoes na janela: **817**.
+**Medido em 10/11/2026 12:03:30.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (259.8 MB). Acoes na janela: **812**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -822,8 +822,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:09:55 | Bash |  | `cd /home/ronald/saas-hasner && ls logs/aval_* \| head -30; /bin/grep -l "CODE-VIVE-ATE-O-RESET" logs/aval_* 2>/dev/null \| head -3 \| xargs -r cat \| head -20; /bin/grep -n "porta de celula" bin/codex_pergunta.sh \| head` |
 | 00:09:48 | Bash |  | `cd /home/ronald/saas-hasner/logs/REVERTER-DIA-SEM-RECALCULO && cat construtor1.r.recusa 2>/dev/null \| head -20; ls` |
 | 00:09:45 | Bash |  | `cd /home/ronald/saas-hasner/logs && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b3boarnm4.output; ls -t MODO-COMUM-PASSADO-SEM-TURNO/push_reescrita_*.log \| head -1 \| xargs tail -3; echo; cat REVERTER-DIA-SEM-RECALCULO/construtor1.r; git -C /home/ronald/wt-codex-reverter-dia-sem-recalculo-235559 status --short` |
-| 23:58:40 | Bash |  | `until ! kill -0 2442505 2>/dev/null && ! kill -0 2524155 2>/dev/null; do /usr/bin/sleep 30; done; cd /home/ronald/saas-hasner/logs; for f in REVERTER-DIA-SEM-RECALCULO/construtor1.r.rc FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/censo1.out; do echo "== $f"; tail -n 2 $f; done` |
-| 23:58:37 | Bash |  | `pgrep -af "codex_pergunta.sh" \| /bin/grep -v pgrep \| cut -c1-200` |
-| 23:58:29 | Bash |  | `/usr/bin/sleep 5; cat /home/ronald/saas-hasner/logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/censo1.out \| /bin/grep -o "pid=[0-9]*"` |
-| 23:58:21 | Bash |  | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE && cat > censo1.q <<'EOF' OBRA FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE, censo volta 1 (so leitura). Copia do HEAD 7b0dbff79. FATO (logs/fio_mudo.log, cron disparar_perguntas_competencia --comp-corrente, rodadas 06/11..09/11 06:3x): a linha "FABRICA-POR-EVENTO: o julgamento deixou N pergunta(s) do caminho da celula sem emi ...` |
-| 23:58:04 | Bash |  | `cd /home/ronald/saas-hasner && O=FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE && n=$(/bin/grep -n "^VIGIA disparar_perguntas_competencia: 111" logs/fio_mudo.log \| tail -1 \| cut -d: -f1); echo $n; sed -n "${n}p" logs/fio_mudo.log \| /bin/grep -oE "\([0-9]+, '[0-9-]+', '[a-z_0-9]+'\)" \| awk -F"'" '{print $4}' \| sort \| uniq -c \| sort -rn \| tee logs/$O/motivos_111.txt; sed -n "${n}p" logs/fio_mudo ...` |
