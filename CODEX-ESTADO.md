@@ -1,7 +1,141 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 02:20** · publicado em **10/11/2026 02:20** (UTC-3)
+> Ultima resposta processada: **10/11/2026 02:26** · publicado em **10/11/2026 02:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 02:26 · sessao 7e3a8326b035 · REVERTER-DIA-SEM-RECALCULO · verificador · origem=Code
+
+**As cinco curas foram implementadas, com duas ressalvas: o teste Django não prova a precedência do ANTES perante a porta, e rollback externo não deixa trilha completa no banco.** A preparação precede a porta; a conclusão usa `on_commit`; o teste real inspeciona o ANTES somente após `call_command` retornar. (`app/ponto/management/commands/aplicar_col900.py:169`, `app/ponto/management/commands/aplicar_col900.py:199`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:159`)
+
+Executei os dois módulos sem banco: **36 testes, OK**, incluindo os 16 mutantes. A reprodução dos “74, OK”, a execução Django e a confirmação independente do hash informado ficam **[nao verificado]**. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:392`, `app/ponto/tests/test_reverter_regen_sem_banco.py:84`)
+
+**1. PROCEDENTES 1–5 e asserções**
+
+| PROCEDENTE | Verificação |
+|---|---|
+| **1 — protocolo e falhas** | Curado conforme pedido: auditoria ANTES obrigatória, JSON antes da porta, `fsync` do arquivo e diretório, preparação dentro do `try`, auditoria DEPOIS e `SystemExit` contextual quando o DEPOIS falha. (`app/ponto/management/commands/aplicar_col900.py:35`, `app/ponto/management/commands/aplicar_col900.py:79`, `app/ponto/management/commands/aplicar_col900.py:118`, `app/ponto/management/commands/aplicar_col900.py:165`) |
+| **2 — hash após callbacks** | Curado: a conclusão é registrada depois da última porta. O teste com fila de callbacks exige que permaneça `preparado` até executá-los. (`app/ponto/management/commands/aplicar_col900.py:184`, `app/ponto/management/commands/aplicar_col900.py:199`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:289`) |
+| **3 — estado e ator** | Curado: `laco_terminado/interrompido`; `quem.processo` vem diretamente de `log.ator`, sem fallback inventado. (`app/ponto/management/commands/aplicar_col900.py:88`, `app/ponto/management/commands/aplicar_col900.py:101`) |
+| **4 — mutantes coletados e Django real** | Curado formalmente: mutantes em método coletável, executados em memória; teste real com `call_command`, pasta temporária, auditoria e hashes reais, `captureOnCommitCallbacks(execute=True)`. Ressalva de precedência abaixo. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:392`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:139`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:153`) |
+| **5 — contador AST** | Curado no alcance solicitado: quinto posicional, `*args`, `**kwargs`, flag nomeada e alias de importação; inclui intrusos posicionais e aliases. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:31`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:65`) |
+
+Não identifiquei afrouxamento indevido: a troca de estado corrige sua promessa; o ator nulo do duplo é cobrado por igualdade, e existe contraste com ator não nulo; falha no DEPOIS agora exige auditoria ANTES e hashes/caminho no erro. A exigência financeira de retorno a 240 permanece. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:221`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:261`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:280`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:193`)
+
+**2. Condições do aval e IDA**
+
+- **Chamador automático zero:** a varredura passou exigindo exatamente um chamador produtivo com flag, `aplicar_col900`; o chamado está no ramo `--reverter`. Isso verifica os fontes alcançados pelo contador; invocações externas desse comando ficam **[nao verificado]**. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:50`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:60`, `app/ponto/management/commands/aplicar_col900.py:146`, `app/ponto/management/commands/aplicar_col900.py:184`)
+- **Trilha em exportada:** preparação consulta o juiz da lavra e fotografa todas as competências pedidas quando alguma está lavrada; grava em `/app/logs`. Falha no ANTES impede a porta; falha tratada no DEPOIS produz saída não zero com caminho e hashes disponíveis. Isso atende à cura prescrita, mas não garante ambos os logs e ambos os hashes em qualquer falha possível. (`app/ponto/management/commands/aplicar_col900.py:32`, `app/ponto/management/commands/aplicar_col900.py:63`, `app/ponto/management/commands/aplicar_col900.py:86`, `app/ponto/management/commands/aplicar_col900.py:118`)
+- **VOLTA sem flag barrada:** a guarda retorna antes de escrever; há contraste com flag e teste real comparando célula, DiaPago e hash inteiros. (`app/ponto/portas/celula.py:779`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:487`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:117`)
+
+A IDA conserva seu chamado ao rabo comum, e a VOLTA passou a chamar esse mesmo rabo. A guarda financeira de 09/2026 continua presente; o teste distingue restauração da célula de preservação do dinheiro nessa competência. Integridade histórica além do diff fornecido: **[nao verificado]**. (`app/ponto/portas/celula.py:354`, `app/ponto/portas/celula.py:811`, `app/ponto/services/fechamento.py:36`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:195`)
+
+**3. Escritores, leitores e significado dos campos**
+
+| Campo/grupo | Quem escreve/origem | Quem lê |
+|---|---|---|
+| JSON `colab`, `dias`, `quando`, `motivo`, `apesar_da_lavra` | Preparação: colaborador, argumentos e relógio. (`app/ponto/management/commands/aplicar_col900.py:68`) | Auditorias e testes; a conclusão reutiliza motivo e flag. (`app/ponto/management/commands/aplicar_col900.py:84`, `app/ponto/management/commands/aplicar_col900.py:111`) |
+| `competencias[].mes/ano/lavrada` | `competencia_do_fato` e juiz `competencia_fechada_para_celula`. (`app/ponto/management/commands/aplicar_col900.py:63`) | Preparação, conclusão e teste real. (`app/ponto/management/commands/aplicar_col900.py:99`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:165`) |
+| `hash_antes/hash_depois` | Helpers leem **FechamentoMensal**; preparação/conclusão armazenam. (`app/ponto/portas/regen_exportada.py:62`, `app/ponto/management/commands/aplicar_col900.py:74`, `app/ponto/management/commands/aplicar_col900.py:100`) | Logs ANTES/DEPOIS e testes. (`app/ponto/management/commands/aplicar_col900.py:82`, `app/ponto/management/commands/aplicar_col900.py:114`) |
+| `valores_antes` | Helper lê o subconjunto `CAMPOS`; pode devolver `None`. (`app/ponto/portas/regen_exportada.py:77`, `app/ponto/management/commands/aplicar_09_corte_b.py:67`) | Teste real compara a fotografia. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:165`) |
+| `celulas[data]` | Preparação copia o DNA atual; não é o `dna_anterior`. (`app/ponto/management/commands/aplicar_col900.py:76`) | Testes conferem a fotografia anterior ao ato. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:193`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:164`) |
+| `quem.processo/usuario_so` | `log.ator` e `getpass.getuser()`. (`app/ponto/management/commands/aplicar_col900.py:88`) | Descrição/payload DEPOIS e testes. (`app/ponto/management/commands/aplicar_col900.py:108`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:181`) |
+| `estado`, `registrado_em` | Preparação escreve `preparado`; conclusão escreve estado do laço e horário do registro. (`app/ponto/management/commands/aplicar_col900.py:71`, `app/ponto/management/commands/aplicar_col900.py:101`) | Log DEPOIS e testes; seu `quando` corresponde a `registrado_em`. (`app/ponto/management/commands/aplicar_col900.py:111`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:191`) |
+| `resultados[].dia/resultado/revertido` | Laço: sem vínculo ou booleano devolvido pela porta. (`app/ponto/management/commands/aplicar_col900.py:179`, `app/ponto/management/commands/aplicar_col900.py:187`) | Log DEPOIS e teste; não mede sucesso financeiro. (`app/ponto/management/commands/aplicar_col900.py:113`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:184`) |
+| LogAuditoria: ação, modelo, objeto, descrição, antes/depois | Comando monta os payloads; `evento_kw → evento → objects.create` persiste. (`app/ponto/management/commands/aplicar_col900.py:79`, `app/ponto/management/commands/aplicar_col900.py:105`, `app/core/observ.py:134`, `app/core/observ.py:142`) | Teste real consulta as duas ações; tela genérica exibe metadados e descrição. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:168`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:185`, `app/templates/core/log_auditoria.html:55`) |
+| LogAuditoria `ator/usuario/ip/criado_em` | `evento` resolve processo ou request; timestamp é automático. `ator` pode ser nulo fora de `manage.py`. (`app/core/observ.py:22`, `app/core/observ.py:108`, `app/core/models.py:303`) | JSON copia `ator`; tela mostra `usuario`, não interpreta `quem.processo`. (`app/ponto/management/commands/aplicar_col900.py:88`, `app/templates/core/log_auditoria.html:58`) |
+
+O hash cobre somente FechamentoMensal, exclui campos de controle e usa MD5 truncado a 12 caracteres; não certifica DNA nem DiaPago. O escritor financeiro continua sendo o fechamento. (`app/ponto/portas/regen_exportada.py:37`, `app/ponto/portas/regen_exportada.py:70`, `app/ponto/services/fechamento.py:1144`, `app/ponto/services/fechamento.py:1160`)
+
+Na célula, a VOLTA lê elegibilidade e os dois DNAs; escreve `dna`, limpa `dna_anterior`, recompõe `trabalha/escala_geradora`, atualiza `regenerada_em/regeneracoes` e emite EventoCelula. Geradora, trabalho e carimbo têm leitores existentes. (`app/ponto/portas/celula.py:776`, `app/ponto/portas/celula.py:785`, `app/escala/alimentacao.py:270`, `app/ponto/services/dia_do_colab.py:91`, `app/escala/services/regeneracao.py:119`)
+
+**Existe leitor com outro contrato:** a VOLTA usa a ação `regenerar_celulas_vinculo` com `{dna,revertida}`; `janelas_de_regeneracao` seleciona essa ação, exige `desde/ate` e pula a linha. É a incompatibilidade já indicada para fila. (`app/ponto/portas/celula.py:799`, `app/escala/services/regeneracao.py:58`)
+
+**Ordem:** em autocommit, o financeiro é solicitado dentro da porta e roda antes de sua devolução; sob `atomic` externo, seus callbacks são registrados antes da conclusão. Entretanto, falhas financeiras são engolidas com warning: a ordem garante posterioridade à tentativa, não sucesso do recálculo. (`app/ponto/portas/celula.py:458`, `app/ponto/services/fechamento.py:1807`, `app/ponto/services/fechamento.py:1818`, `app/ponto/services/fechamento.py:1824`, `app/ponto/management/commands/aplicar_col900.py:199`)
+
+**Rollback externo:** pela composição do protocolo, ficam no disco o JSON inicial `preparado`, `resultados=[]`, sem `hash_depois/registrado_em`; alterações bancárias e auditoria ANTES são desfeitas, e a conclusão não roda. Arquivo e banco não formam uma unidade atômica. Execução desse cenário com Django: **[nao verificado]**. (`app/ponto/management/commands/aplicar_col900.py:71`, `app/ponto/management/commands/aplicar_col900.py:89`, `app/ponto/management/commands/aplicar_col900.py:99`, `app/core/observ.py:133`)
+
+**4. Mordida do Django real e dos mutantes**
+
+- **JSON antes da porta:** o teste real reprova ausência, mas não prova precedência: verifica o arquivo após `call_command` retornar. Gravação tardia, ainda antes desse retorno, não é excluída por essas asserções. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:155`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:159`)
+- **Auditoria ANTES:** ausência total reprova pelo `.get`; sua presença antes da entrada na porta também não é observada pelo teste real. Essa ordem é cobrada pelo duplo na entrada de `_reverter`. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:168`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:181`)
+- **Hash antecipado:** há mordida substantiva: após callbacks, exige hash diferente do anterior e igualdade entre JSON e hash real, além de DNA restaurado e DiaPago 240. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:175`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:192`)
+- **16 mutantes:** todos passaram pelo verificador de falha pretendida: instalação obrigatória, zero erros acidentais, exatamente uma falha e mensagem esperada. Isso valida os probes com duplos; não equivale a 16 mutações executadas no Django real. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:404`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:447`)
+
+**5. Classes que já reprovaram obra**
+
+| Classe | Situação |
+|---|---|
+| Segundo juiz / derivação financeira paralela | Não introduzidos: VOLTA chama um rabo comum; este chama cartório e a porta financeira existentes. (`app/ponto/portas/celula.py:811`, `app/ponto/portas/celula.py:434`, `app/ponto/portas/celula.py:458`) |
+| Segundo escritor fora da porta | Não identificado no delta: reposição fica na porta e dinheiro no fechamento; JSON é trilha. (`app/ponto/portas/celula.py:794`, `app/ponto/services/fechamento.py:1160`, `app/ponto/management/commands/aplicar_col900.py:35`) |
+| Relógio fora da borda | Nenhum relógio decisório novo: a VOLTA reutiliza o rabo; os horários novos do comando são carimbos da trilha. (`app/ponto/portas/celula.py:426`, `app/ponto/management/commands/aplicar_col900.py:70`, `app/ponto/management/commands/aplicar_col900.py:102`) |
+| Selo sem mordida | Os mutantes mordem; permanece a lacuna temporal específica do teste Django descrita acima. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:456`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:159`) |
+| Ordem de trava | Continua a leitura sem `select_for_update`, antes do `atomic`; não há nova inversão demonstrada. (`app/ponto/portas/celula.py:776`, `app/ponto/portas/celula.py:785`) |
+| Pouso antes do pré-requisito | Ordem efetiva de deploy/pouso **[nao verificado]**. | [nao verificado]
+| Campo com dois significados | Estado e ator novos foram corrigidos; persiste o formato incompatível da ação antiga para `janelas_de_regeneracao`. (`app/ponto/management/commands/aplicar_col900.py:88`, `app/ponto/management/commands/aplicar_col900.py:101`, `app/ponto/portas/celula.py:804`, `app/escala/services/regeneracao.py:63`) |
+
+## 10/11 02:24 · sessao 08d109c13068 · - · - · origem=Ronald (tmux)
+
+Os PROCEDENTES 1–3 foram implementados conforme a cura descrita: ANTES obrigatório, JSON durável antes da porta, DEPOIS com erro contextual, conclusão em `on_commit`, estado preciso e ator copiado do LogAuditoria (`app/ponto/management/commands/aplicar_col900.py:47`, `:79`, `:88`, `:99`, `:118`, `:165`, `:199`).
+
+A garantia não equivale a sucesso incondicional: o recalculo pode falhar e apenas registrar warning; `laco_terminado` continua significando término do laço (`app/ponto/services/fechamento.py:1818`; `app/ponto/management/commands/aplicar_col900.py:101`).
+
+| Campo/grupo | Escritor e origem | Leitor observado |
+|---|---|---|
+| `colab`, `dias`, `quando`, `motivo`, flag | Preparação, argumentos e relógio (`aplicar_col900.py:68`) | Preparação/conclusão e testes (`aplicar_col900.py:84`, `:107`; `test_reverter_regen_recalcula_dinheiro.py:162`) | [nao verificado]
+| Competências e `lavrada` | Autoridades existentes (`aplicar_col900.py:63`; `folha/export.py:609`) | Fotografia e conclusão (`aplicar_col900.py:73`, `:99`) |
+| `hash_antes/depois` | Helpers leem exclusivamente FechamentoMensal (`regen_exportada.py:56`, `:62`) | Auditorias e testes (`aplicar_col900.py:82`, `:114`; `test_reverter_regen_recalcula_dinheiro.py:177`) | [nao verificado]
+| `valores_antes` | Subconjunto `CAMPOS`, podendo ser `None` (`regen_exportada.py:77`; `aplicar_09_corte_b.py:67`) | Testes (`test_reverter_regen_recalcula_dinheiro.py:165`) | [nao verificado]
+| `celulas` | Cópia do DNA atual (`aplicar_col900.py:76`) | Testes (`test_reverter_regen_recalcula_dinheiro.py:164`) | [nao verificado]
+| `quem` | `log.ator` e `getpass.getuser()` (`aplicar_col900.py:88`) | Conclusão e testes (`aplicar_col900.py:108`; `test_reverter_regen_recalcula_dinheiro.py:181`) | [nao verificado]
+| `estado`, `registrado_em` | Conclusão (`aplicar_col900.py:101`) | Auditoria DEPOIS e testes (`aplicar_col900.py:111`; `test_reverter_regen_recalcula_dinheiro.py:180`) | [nao verificado]
+| `resultados` | Laço: sem vínculo ou retorno booleano da porta (`aplicar_col900.py:179`, `:187`) | Auditoria DEPOIS e teste (`aplicar_col900.py:113`; `test_reverter_regen_recalcula_dinheiro.py:184`) | [nao verificado]
+| LogAuditoria ANTES/DEPOIS | `evento_kw → evento → objects.create` (`core/observ.py:133`, `:142`); payloads (`aplicar_col900.py:79`, `:105`) | Testes específicos e tela genérica (`test_reverter_regen_recalcula_dinheiro.py:168`, `:185`; `core/views.py:705`) |
+
+O hash não certifica DiaPago nem DNA: consulta somente FechamentoMensal, exclui campos de controle e usa MD5 truncado a 12 caracteres (`app/ponto/portas/regen_exportada.py:37`, `:70`). Se a leitura posterior falhar, o erro inclui caminho e hashes já obtidos, com `None` nos ausentes (`app/ponto/management/commands/aplicar_col900.py:118`).
+
+Sob rollback externo, a consequência esperada é: arquivo inicial `preparado`, `resultados=[]`, sem `hash_depois` nem `registrado_em`; auditoria ANTES e alterações bancárias revertidas, callbacks descartados. A composição arquivo/banco não é atômica (`app/ponto/management/commands/aplicar_col900.py:68`, `:89`, `:99`, `:199`; `app/core/observ.py:133`). Execução desse cenário com Django: [nao verificado].
+
+Há um leitor preexistente com contrato diferente: `janelas_de_regeneracao` seleciona a ação compartilhada com a IDA e exige `desde/ate`, enquanto a VOLTA escreve `dna/revertida`; ele ignora essa linha, conforme a fila já declarada (`app/escala/services/regeneracao.py:58`; `app/ponto/portas/celula.py:799`). Também permanece a consulta sem `select_for_update` (`app/ponto/portas/celula.py:776`).
+
+## 10/11 02:24 · sessao 9eefe90fc0d8 · - · - · origem=Ronald (tmux)
+
+- A VOLTA chama o mesmo rabo da IDA após seu `atomic`; a IDA já o chama, e a edição também segue esse desenho. A mudança fornecida troca apenas o bloco final da VOLTA; comprovação histórica por Git indisponível nesta cópia [nao verificado]. Referências atuais: `app/ponto/portas/celula.py:354`, `app/ponto/portas/celula.py:366`, `app/ponto/portas/celula.py:785`, `app/ponto/portas/celula.py:811`.
+
+- O rabo pergunta ao cartório antes de agendar dinheiro; exclui futuro e veredito humano, deduplica por competência usando `janela_atual`, chama `recalcular_por_evento` e agenda rejunção/falta espúria. Não introduz juiz ou escritor financeiro paralelo. `app/ponto/portas/celula.py:422`, `app/ponto/portas/celula.py:431`, `app/ponto/portas/celula.py:434`, `app/ponto/portas/celula.py:447`, `app/ponto/portas/celula.py:456`, `app/ponto/portas/celula.py:458`, `app/ponto/portas/celula.py:493`, `app/ponto/portas/celula.py:502`.
+
+- Em autocommit, o callback financeiro é solicitado dentro da porta; sob transação externa, ele fica registrado antes da conclusão do comando. O código financeiro agenda `_rodar` por `on_commit`, e `_rodar` calcula a competência pela autoridade `competencia_do_fato`. `app/ponto/services/fechamento.py:1807`, `app/ponto/services/fechamento.py:1809`, `app/ponto/services/fechamento.py:1824`, `app/ponto/management/commands/aplicar_col900.py:192`.
+
+- **A ordem não prova sucesso financeiro:** o juiz e o disparo financeiro engolem exceções; o próprio callback financeiro também engole falhas e apenas registra warning. Portanto `laco_terminado` é semanticamente adequado, e não certifica recalculado. `app/ponto/portas/celula.py:437`, `app/ponto/portas/celula.py:459`, `app/ponto/services/fechamento.py:1818`, `app/ponto/services/fechamento.py:1825`, `app/ponto/management/commands/aplicar_col900.py:101`.
+
+- A guarda da VOLTA sem flag precede qualquer escrita e retorna `False` em lavrada; o universo consultado é composto pelo juiz `competencia_fechada_para_celula`, compartilhado com a IDA. `app/ponto/portas/celula.py:779`, `app/ponto/portas/celula.py:782`, `app/ponto/management/commands/gerar_celulas.py:146`, `app/ponto/management/commands/gerar_celulas.py:152`, `app/folha/export.py:589`.
+
+- Setembro/2026 continua protegido na porta financeira: a competência consta da guarda e os colaboradores das empresas exportadas são excluídos do universo da escrita, com tentativa de auditoria. A flag da célula não desativa essa guarda. `app/ponto/services/fechamento.py:36`, `app/ponto/services/fechamento.py:560`, `app/ponto/services/fechamento.py:564`, `app/ponto/services/fechamento.py:569`.
+
+- Há **formato preexistente incompatível sob a mesma ação de auditoria**: a VOLTA grava `acao='regenerar_celulas_vinculo'` com `{dna, revertida}`; o leitor `janelas_de_regeneracao` seleciona essa mesma ação, espera `desde`/`ate` e ignora o registro por `KeyError`. É exatamente a fila já descartada da triagem, não uma cura desta volta. `app/ponto/portas/celula.py:800`, `app/ponto/portas/celula.py:804`, `app/escala/services/regeneracao.py:58`, `app/escala/services/regeneracao.py:63`, `app/escala/services/regeneracao.py:65`.
+
+- O leitor vivo do carimbo reconhece a VOLTA como reescrita: ela atualiza `regenerada_em`/`regeneracoes`; `reescrita_da_celula` combina regeneração e edição, alimentando cobrança órfã e apresentação do dia. `app/ponto/portas/celula.py:792`, `app/ponto/portas/celula.py:793`, `app/escala/services/regeneracao.py:72`, `app/escala/services/regeneracao.py:77`, `app/escala/services/regeneracao.py:119`, `app/ponto/services/dia_do_colab.py:93`.
+
+- A ausência preexistente de trava continua: a célula é lida antes do `atomic`, sem `select_for_update`; o delta fornecido não altera esse trecho. Não comprova nova inversão de ordem de trava. `app/ponto/portas/celula.py:776`, `app/ponto/portas/celula.py:785`; histórico além do delta [nao verificado].
+
+- O evento é escrito dentro do mesmo `atomic` da reposição; seu consumidor relê célula/chamados atuais, passando pelas portas existentes, e não é um segundo motor financeiro. `app/ponto/portas/celula.py:794`, `app/ponto/portas/celula.py:796`, `app/ponto/portas/celula.py:896`, `app/chamados/reconciliador.py:1320`, `app/chamados/reconciliador.py:1363`, `app/chamados/reconciliador.py:1368`.
+
+- O contrato AST cobra um único rabo, proíbe chamadas diretas de juiz/dinheiro e exige o rabo imediatamente após o `atomic`; seus mutantes incluem juiz paralelo, dinheiro paralelo, duplicação e posição dentro do `atomic`. `app/ponto/tests/test_reverter_regen_sem_banco.py:60`, `app/ponto/tests/test_reverter_regen_sem_banco.py:74`, `app/ponto/tests/test_reverter_regen_sem_banco.py:99`, `app/ponto/tests/test_reverter_regen_sem_banco.py:107`, `app/ponto/tests/test_reverter_regen_sem_banco.py:115`, `app/ponto/tests/test_reverter_regen_sem_banco.py:123`.
+
+## 10/11 02:24 · sessao 7add2b45be56 · - · - · origem=Ronald (tmux)
+
+- **16 mutantes: mordida confirmada na execução em memória.** Rodei os dois módulos sem banco com `PYTHONDONTWRITEBYTECODE=1`: **36 testes, OK**, incluindo o harness que exige instalação da mutação, nenhum erro acidental, exatamente uma falha e a mensagem pretendida. `app/ponto/tests/test_reverter_exportada_sem_banco.py:391`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:447`, `app/ponto/tests/test_reverter_regen_sem_banco.py:89`.
+
+- **Não identifiquei afrouxamento indevido no delta.** `concluido → laco_terminado` corrige a promessa do estado; `quem.processo=None` corresponde ao ator devolvido pelo duplo, com outro teste cobrando ator real não nulo; falha no DEPOIS agora exige auditoria ANTES e caminho/hashes no erro; arquivo recusado conserva exigência de parada e porta não chamada. `app/ponto/tests/test_reverter_exportada_sem_banco.py:221`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:223`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:247`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:261`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:280`.
+
+- **Django real verifica existência, conteúdo e resultado, mas não toda a precedência pedida.** As primeiras inspeções do JSON e da auditoria ANTES acontecem **depois de `call_command` retornar**; não há inspeção na entrada da porta. Portanto ausência total reprova, mas gravação tardia antes do retorno pode escapar. `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:155`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:159`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:168`.
+
+- **Contraexemplo estático:** deslocar a preparação para imediatamente depois da porta, antes do registro do resultado, conserva o JSON/auditoria disponíveis quando o teste os inspeciona; o comando conserva a coleção anterior de células e a porta consulta outra instância; o financeiro continua pendente no capture. Essa mutação não foi executada com Django **[nao verificado]**. `app/ponto/management/commands/aplicar_col900.py:161`, `app/ponto/management/commands/aplicar_col900.py:166`, `app/ponto/management/commands/aplicar_col900.py:184`, `app/ponto/management/commands/aplicar_col900.py:186`, `app/ponto/portas/celula.py:776`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:155`.
+
+- **A precedência efetiva é cobrada pelo teste com duplos:** `_reverter` inspeciona JSON preparado, auditoria ANTES, hashes, DNA e fsync ao entrar na porta. `app/ponto/tests/test_reverter_exportada_sem_banco.py:181`.
+
+- **Hash posterior: o Django real tem mordida substantiva.** Após executar os callbacks, exige mudança do hash e igualdade entre hash gravado no JSON e hash real atual; também exige DNA restaurado e `DiaPago=240`. Isso detecta foto do hash financeiro antigo no cenário testado. `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:175`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:179`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:192`.
+
+- **O teste Django real foi acrescentado conforme a cura formal do PROCEDENTE 4**, com `call_command`, `LOGS` temporário, auditoria real e capture natural dos callbacks; sua execução nesta revisão e o resultado informado de 74 testes permanecem **[nao verificado]**. `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:139`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:153`.
 
 ## 10/11 02:20 · sessao b927768c6655 · FIO-E0-V4-E4A-2 · verificador · origem=Code
 
@@ -760,260 +894,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
   --settings=config.settings.ci -v 2
 ```
 
-## 10/11 01:29 · sessao 41d9b8add366 · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-Implementei A/B/C nestes arquivos:
-
-- [pipeline_placar.py:85](/home/ronald/wt-codex-fio-e0-v4-e4a-2-012227/app/core/management/commands/pipeline_placar.py:85): recebe `dia`; fotografia de outra data retorna `FIO_MUDO NAO_MEDIDO`, informando as duas datas.
-- [vigiar_fio_morto.py:228](/home/ronald/wt-codex-fio-e0-v4-e4a-2-012227/app/chamados/management/commands/vigiar_fio_morto.py:228): carimba `cfm['esperado']`; retirado o literal independente.
-- [test_fio_mudo_placar.py:46](/home/ronald/wt-codex-fio-e0-v4-e4a-2-012227/app/core/tests/test_fio_mudo_placar.py:46): `TestCase`, imports normais, comandos por `call_command`, temporário em `/tmp`, consultas proibidas e oito mutantes percorridos por um teste. [nao verificado]
-
-Sobre escritores, leitores e semântica:
-
-- `hoje` nasce de `timezone.localdate(agora)` e é serializado pelo vigia; `_carimbar` publica o arquivo somente na rodada de frota (`app/chamados/management/commands/vigiar_fio_morto.py:167`, `:225`, `:137`, `:222`).
-- O único definidor de `esperado.fio_mudo_alvos` passa a ser o contador; o vigia transporta seu retorno (`app/chamados/management/commands/disparar_perguntas_competencia.py:88`; `app/chamados/management/commands/vigiar_fio_morto.py:228`).
-- O placar lê ambas as chaves; `fio_estado` compara todas as entradas de `esperado` e apresenta `hoje` (`app/core/management/commands/pipeline_placar.py:94`; `bin/fio_estado.py:125`, `:144`).
-- `hoje` representa dia civil local. A competência é uma janela derivada desse dia (`app/chamados/management/commands/vigiar_fio_morto.py:167`; `app/chamados/management/commands/disparar_perguntas_competencia.py:32`). Há uma diferença herdada de relógio: o placar sem `--dia` usa `date.today()` do processo, enquanto o vigia usa o fuso Django; equivalência dos fusos em produção é [nao verificado] (`app/core/management/commands/pipeline_placar.py:147`; `app/config/settings/base.py:93`).
-- `placar(dia)` passado exige fotografia daquele dia. O leitor continua abrindo o mesmo arquivo; se ele contiver outro dia, retorna `NAO_MEDIDO`, sem reconstruir histórico (`app/core/management/commands/pipeline_placar.py:92`; `app/core/tests/test_fio_mudo_placar.py:148`).
-
-Comando da suíte solicitada, incluindo os testes encontrados de `pipeline_placar`: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  core.tests.test_fio_mudo_placar \
-  chamados.tests.test_o261_vigia_fio \
-  chamados.tests.test_e4a2_disparar_e_vigia \
-  core.tests.test_crons_quebrados \
-  chamados.tests.test_contract_crons \
-  --settings=config.settings.ci -v 2
-```
-
-A tentativa parou antes da coleta: `ModuleNotFoundError: No module named 'django'`. Portanto, suíte, RED e mordidas não executaram; nenhum resultado funcional está certificado [nao verificado]. [nao verificado]
-
-Comando dos casos RED — alvo positivo, fotografia de outro dia e esperado vindo do contador (`app/core/tests/test_fio_mudo_placar.py:128`, `:136`, `:187`):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  core.tests.test_fio_mudo_placar.FioMudoPlacarTest.test_RED_alvo_um_alarma_e_sai_dois_com_chave \
-  core.tests.test_fio_mudo_placar.FioMudoPlacarTest.test_RED_carimbo_de_outro_dia_nao_mede_o_dia_do_placar \
-  core.tests.test_fio_mudo_placar.FioMudoPlacarTest.test_RED_carimbo_publica_esperado_do_contador_da_rodada \
-  --settings=config.settings.ci -v 2
-```
-
-O comando abaixo percorre **cada um** dos oito mutantes e exige a mensagem da asserção pretendida (`app/core/tests/test_fio_mudo_placar.py:257`):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  core.tests.test_fio_mudo_placar.FioMudoPlacarTest.test_mutantes_em_memoria_sao_rejeitados_pela_assercao_pretendida \
-  --settings=config.settings.ci -v 2
-```
-
-| Mutante — declaração em `app/core/tests/test_fio_mudo_placar.py:32` | Mordeu? |
-|---|---|
-| `leitor_ignora_hoje` | [nao verificado] |
-| `leitor_ignora_divergencia` | [nao verificado] |
-| `carimbo_esperado_literal` | [nao verificado] |
-| `ausencia_lida_como_zero` | [nao verificado] |
-| `leitor_limiar_proprio` | [nao verificado] |
-| `placar_rc_zero` | [nao verificado] |
-| `carimbo_numero_literal` | [nao verificado] |
-| `placar_sem_leitor` | [nao verificado] |
-
-Compilação em memória dos três arquivos e dos oito mutantes passou; `git diff --check` não apontou problemas. Certificação pela suíte: [nao verificado]. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache \
-  core/management/commands/pipeline_placar.py \
-  chamados/management/commands/vigiar_fio_morto.py \
-  core/tests/test_fio_mudo_placar.py
-```
-
-Ruff não executou: `No module named ruff`; limpeza Ruff [nao verificado]. RED na base e verificações com banco também ficaram sem rodar [nao verificado].
-
-## 10/11 01:29 · sessao 5bfff31eecde · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · verificador · origem=Code
-
-**Parecer: cura parcial.** O comando de suporte e os quatro bloqueadores de testes foram corrigidos, mas `ESTEIRA` ainda admite formas que o leitor reconhece e a guarda libera; também persistem reservas mais amplas que os leitores de algumas famílias (`app/pautas/management/commands/suporte_hasner.py:134`; `app/pautas/tests/test_prefixos_reservados.py:243`; `app/core/management/commands/alarme_esteira.py:15`; `app/pautas/marcadores.py:30`; `app/pautas/services.py:48`).
-
-**1. Achados PROCEDENTES da triagem, um por um**
-
-| Achado | Situação na volta 3 |
-|---|---|
-| `casefold` bloqueava caixa que os leitores não reconhecem | **Curado no código:** a guarda usa `strip()` e comparação sensível à caixa, sem `casefold` (`app/pautas/services.py:46`; `app/pautas/services.py:48`). |
-| Reserva bruta `ESTEIRA*` bloqueava prosa | **Parcialmente curado:** `ESTEIRANTE` e `ESTEIRA de compras` passam, mas a nova expressão não representa todas as chaves aceitas pelo leitor. Detalhamento no item 2 (`app/pautas/marcadores.py:30`; `app/core/management/commands/alarme_esteira.py:15`; `app/core/management/commands/alarme_esteira.py:34`). |
-| `suporte_hasner --responder` sem guarda | **Curado:** valida antes de responder/fechar e converte `ValidationError` em `CommandError` (`app/pautas/management/commands/suporte_hasner.py:134`; `app/pautas/management/commands/suporte_hasner.py:139`). |
-| Censo dependia de `git ls-files` | **Curado:** percorre a árvore com `os.walk`, lê os arquivos e propaga erro de diretório (`app/pautas/tests/test_prefixos_reservados_ast.py:29`; `app/pautas/tests/test_prefixos_reservados_ast.py:34`; `app/pautas/tests/test_prefixos_reservados_ast.py:43`). |
-| Selo legado exigia declaração na fábrica | **Curado:** admite declaração/inclusão no catálogo e importação na fábrica; mantém a restrição dos usos operacionais (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:160`; `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:164`; `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:265`). |
-| Mutantes executados somente em `__main__` | **Curado:** uma classe coletável `SimpleTestCase` chama o executor e reprova sobreviventes (`app/pautas/tests/test_prefixos_reservados.py:243`; `app/pautas/tests/test_prefixos_reservados.py:246`). |
-| Skip engolia `ImportError` de produção | **Curado para imports de produção:** eles ficaram fora do `try`. Resta a ressalva sobre erro interno ao próprio `import django`, descrita no item 5 (`app/pautas/tests/test_prefixos_reservados.py:225`; `app/pautas/tests/test_prefixos_reservados.py:239`). |
-
-A dualidade prosa/identidade continua no campo `texto`; não houve separação técnica dessa identidade nesta obra (`app/pautas/models.py:89`; `app/ponto/services/pautas_do_esmeril.py:67`).
-
-**2. Escritores, leitores e formas exatas**
-
-A guarda examina `texto.strip()`; o escritor comum também aplica `strip()` antes de persistir. Os leitores abaixo não aplicam normalização equivalente antes da seleção. O comportamento efetivo de collation no banco de produção permanece **[nao verificado]** (`app/pautas/services.py:46`; `app/pautas/services.py:180`; `app/chamados/services/fabrica_da_celula.py:305`).
-
-Na tabela, **P** é o prefixo exato da primeira coluna; “igual” compara o início do texto após o `strip` do escritor. As chamadas de escrita desembocam no escritor físico comum (`app/pautas/services.py:197`).
-
-| Prefixo reservado P | Quem escreve | Quem lê e forma casada | Guarda × leitor |
-|---|---|---|---|
-| `LIMBO EM COMPETENCIA EXPORTADA` | `app/chamados/services/fabrica_da_celula.py:274` | `P`; depois procura `[motivo:…]` (`app/chamados/services/fabrica_da_celula.py:254`; `app/chamados/services/fabrica_da_celula.py:255`) | Igual ao filtro inicial. |
-| `CADASTRO: PASSADO SEM TURNO PREVISTO` | Acrescenta `:` após P (`app/chamados/services/fabrica_da_celula.py:362`) | `P`, **sem exigir `:` final** (`app/chamados/services/fabrica_da_celula.py:305`) | Igual. |
-| `[ORFA-ENTERRADA]` | `app/chamados/management/commands/reabrir_orfas_enterradas.py:209` | `P` (`app/chamados/management/commands/reabrir_orfas_enterradas.py:202`) | Igual. |
-| `[PASSIVO-VALIDADO]` | Cabeça e filhas (`app/chamados/services/passivo_validado.py:230`; `app/chamados/services/passivo_validado.py:233`) | `P col<pk> <AAAA-MM>` (`app/chamados/services/passivo_validado.py:159`; `app/chamados/services/passivo_validado.py:164`) | Guarda mais ampla. |
-| `[PASSIVO-VALIDADO-FORA]` | `app/chamados/services/passivo_validado.py:267` | `P col<pk> <AAAA-MM>` (`app/chamados/services/passivo_validado.py:254`; `app/chamados/services/passivo_validado.py:256`) | Guarda mais ampla. |
-| `ARVORE VERMELHA` | Acrescenta `:` após P (`app/core/management/commands/alarme_arvore.py:52`) | `P`, sem exigir `:` (`app/core/management/commands/alarme_arvore.py:16`) | Igual; captura também prosa. |
-| `ESTEIRA` | `P <chave>: …` (`app/core/management/commands/alarme_esteira.py:56`) | `P <chave>:`; chave não é validada como token (`app/core/management/commands/alarme_esteira.py:15`; `app/core/management/commands/alarme_esteira.py:34`) | **Diverge:** guarda exige `ESTEIRA [^\s:]+:` (`app/pautas/marcadores.py:30`). |
-| `[CRON QUEBRADO]` | `app/core/services/crons_quebrados.py:68`; `app/core/services/crons_quebrados.py:72` | `P <nome> (empresa <emp-ou->)` (`app/core/services/crons_quebrados.py:54`) | Guarda mais ampla. |
-| `[FERIAS/PA-VENCIDO]` | `MARCADORES[codigo]` (`app/ferias/management/commands/pautas_de_ferias.py:145`; `app/ferias/management/commands/pautas_de_ferias.py:164`) | `P` (`app/ferias/management/commands/pautas_de_ferias.py:152`) | Igual. |
-| `[FERIAS/PA-VENCENDO]` | Mesmo escritor parametrizado (`app/ferias/management/commands/pautas_de_ferias.py:145`; `app/ferias/management/commands/pautas_de_ferias.py:164`) | `P` (`app/ferias/management/commands/pautas_de_ferias.py:152`) | Igual. |
-| `[FERIAS/CADASTRO]` | Mesmo escritor parametrizado (`app/ferias/management/commands/pautas_de_ferias.py:145`; `app/ferias/management/commands/pautas_de_ferias.py:164`) | `P` (`app/ferias/management/commands/pautas_de_ferias.py:152`) | Igual. |
-| `[PRE-FECHAMENTO]` | `app/folha/management/commands/pre_fechamento.py:111` | `P` para encerramento; `P <AAAA-MM-DD>` para deduplicação diária (`app/folha/management/commands/pre_fechamento.py:92`; `app/folha/management/commands/pre_fechamento.py:98`) | Igual ao leitor amplo; mais ampla que o diário. |
-| `[DIA EM ABERTO]` | `app/pautas/management/commands/pauta_dia_em_aberto.py:140` | `P` (`app/pautas/management/commands/pauta_dia_em_aberto.py:108`) | Igual. |
-| `[FOLGA NAO DEFINIDA - EXPORTADA]` | `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:135` | `P` (`app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:126`) | Igual. |
-| `[PAGO X DEVIDO - EXPORTADA]` | Cabeça e filhas (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:208`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:212`) | Chave `P col<pk> <AAAA-MM>` seguida de espaço; filhas acrescentam ` > `; reversão usa Python `startswith(P)` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:54`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:243`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:250`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:277`) | Igual ao leitor da reversão; mais ampla que os leitores da chave. |
-| `[A6/REVISAO-SEMANAL]` | Dono fornece P ao escritor semanal (`app/ponto/services/vigia_ausencia.py:239`; `app/pautas/semanal.py:278`) | `P <AAAA-Wss>` para semana; `P` para fechar a família (`app/pautas/semanal.py:199`; `app/pautas/semanal.py:228`) | Igual ao leitor amplo; mais ampla que o semanal. |
-| `[SUP/REVISAO-SEMANAL]` | Dono fornece P ao escritor semanal (`app/escala/services/fase_12x36.py:278`; `app/pautas/semanal.py:278`) | Mesmos leitores parametrizados (`app/pautas/semanal.py:199`; `app/pautas/semanal.py:228`) | Igual ao leitor amplo; mais ampla que o semanal. |
-| `Bateu ponto durante afastamento. A batid` | Emite `TEXTO_AFASTADO`, com possível complemento (`app/ponto/services/afastado_avisa.py:76`) | Primeiros **40 caracteres**, P (`app/pautas/marcadores.py:81`; `app/ponto/services/afastado_avisa.py:63`) | Igual; captura também prosa. |
-| `[HE-AUTORIZADA-EM-EXPORTADA]` | `app/ponto/services/autorizacao_he_periodo.py:245` | `P` (`app/ponto/services/autorizacao_he_periodo.py:242`) | Igual. |
-| `[COBERTURA-A-CONFIRMAR]` | `app/ponto/services/cobertura.py:336` | `P` (`app/ponto/services/cobertura.py:243`) | Igual. |
-| `[APP-401]` | `app/ponto/services/pautas_dos_deslogados.py:78` | `P` (`app/ponto/services/pautas_dos_deslogados.py:66`) | Igual. |
-| `[DISCORDANTE]` | `app/ponto/services/pautas_dos_discordantes.py:180` | ORM e Python usam `P`; depois divide no primeiro `:` e aplica `strip` à chave (`app/ponto/services/pautas_dos_discordantes.py:166`; `app/ponto/services/pautas_dos_discordantes.py:98`; `app/ponto/services/pautas_dos_discordantes.py:100`) | Igual ao reconhecimento inicial. |
-| `[TRANCA]` | `app/chamados/services/competencia_trancada.py:235` | `P` (`app/chamados/services/competencia_trancada.py:221`) | Igual. |
-| `[A4/SEM-DOCUMENTO]` | `app/ponto/services/ausencia.py:1060` | `P` (`app/ponto/services/ausencia.py:1044`) | Igual. |
-| `[A1-FERIAS/AG#` | Completa com `<agendamento.pk>]` (`app/ponto/services/ausencia.py:1231`; `app/ponto/services/ausencia.py:1250`) | `P<agendamento.pk>]` (`app/ponto/services/ausencia.py:1234`) | Guarda mais ampla. |
-| `[ESMERIL ` — **espaço final** | Completa com `<ação>]` (`app/ponto/services/pautas_do_esmeril.py:16`; `app/ponto/services/pautas_do_esmeril.py:50`; `app/ponto/services/pautas_do_esmeril.py:79`) | Seleciona `P`; extrai ação até `]`, sem exigir que esse fechamento exista (`app/ponto/services/pautas_do_esmeril.py:66`; `app/ponto/services/pautas_do_esmeril.py:67`) | Igual ao reconhecimento inicial. |
-
-**Lista A — leitor reconhece, guarda deixa passar:**
-
-- `ESTEIRA a b: relato`: o comando aceita `chave='a b'`, o escritor produz esse início e o leitor procura exatamente `ESTEIRA a b:`; o regex da guarda falha no espaço interno (`app/core/management/commands/alarme_esteira.py:34`; `app/core/management/commands/alarme_esteira.py:56`; `app/core/management/commands/alarme_esteira.py:15`; `app/pautas/marcadores.py:30`).
-- `ESTEIRA :a: relato`: a chave `:a` também é aceita; o regex exige um caractere diferente de `:` antes do primeiro delimitador (`app/core/management/commands/alarme_esteira.py:34`; `app/core/management/commands/alarme_esteira.py:15`; `app/pautas/marcadores.py:30`).
-
-A sonda em memória das funções reais devolveu **200 e uma escrita simulada** para ambos. Isso demonstra o desvio na porta isolada; existência de segunda cabeça viva em produção: **[nao verificado]** (`app/pautas/tests/test_prefixos_reservados.py:34`; `app/pautas/views.py:76`; `app/pautas/views.py:88`).
-
-`ESTEIRA a:b:` **é barrado**: o regex já casa `ESTEIRA a:`, pois não exige fim da string (`app/pautas/marcadores.py:30`; `app/pautas/services.py:47`).
-
-**Lista B — guarda barra formas que nenhum leitor encontrado daquela família casa:**
-
-| Exemplo barrado | Parte exigida pelo leitor que está ausente |
-|---|---|
-| `[PASSIVO-VALIDADO] relato` | ` col<pk> <AAAA-MM>` (`app/pautas/services.py:48`; `app/chamados/services/passivo_validado.py:159`; `app/chamados/services/passivo_validado.py:164`). |
-| `[PASSIVO-VALIDADO-FORA] relato` | ` col<pk> <AAAA-MM>` (`app/pautas/services.py:48`; `app/chamados/services/passivo_validado.py:254`; `app/chamados/services/passivo_validado.py:256`). |
-| `[CRON QUEBRADO] relato` | Nome e trecho ` (empresa …)` (`app/pautas/services.py:48`; `app/core/services/crons_quebrados.py:54`). |
-| `[A1-FERIAS/AG# sem fechamento` | Identificador seguido de `]` (`app/pautas/services.py:48`; `app/ponto/services/ausencia.py:1231`; `app/ponto/services/ausencia.py:1234`). |
-
-`ARVORE VERMELHA no jardim` e prosa iniciada pelos 40 caracteres de `AFASTADO` ficam corretamente reservadas **segundo os leitores atuais**, que também as capturam (`app/core/management/commands/alarme_arvore.py:16`; `app/ponto/services/afastado_avisa.py:63`).
-
-**3. Portas humanas**
-
-| Porta | Resultado |
-|---|---|
-| Criar cabeça por HTTP | Passa pela guarda antes da escrita (`app/pautas/views.py:76`; `app/pautas/views.py:77`). |
-| Responder por HTTP | Passa pela guarda antes da resposta (`app/pautas/views.py:114`; `app/pautas/views.py:115`). |
-| Compositor e formulário de resposta | Encaminham às respectivas rotas guardadas (`app/templates/core/_copiloto.html:544`; `app/templates/core/_copiloto.html:462`; `app/pautas/urls.py:9`; `app/pautas/urls.py:13`). |
-| `suporte_hasner --responder` | Passa pela guarda antes de responder ou fechar (`app/pautas/management/commands/suporte_hasner.py:134`). |
-| API de mensageria examinada | Apenas consulta e serializa pautas (`app/api/views_mensageria.py:1323`; `app/api/views_mensageria.py:1331`; `app/api/views_mensageria.py:1340`). |
-| Formulário de edição | Não há rota de edição no URLconf de Pauta (`app/pautas/urls.py:7`). Outra rota dinâmica: **[nao verificado]**. |
-| Admin, ModelForm ou serializer de escrita registrado dinamicamente | Não localizado no censo; ausência universal: **[nao verificado]**. |
-
-**Caminhos que não passam:**
-
-- **Shell chamando diretamente `services.escrever` ou `services.responder`:** a primeira função não invoca a guarda; a segunda delega à primeira. Uso humano efetivo em produção: **[nao verificado]** (`app/pautas/services.py:170`; `app/pautas/services.py:180`; `app/pautas/services.py:197`; `app/pautas/services.py:209`).
-- **ORM direto pelo shell:** o campo não declara validador reservado e o modelo não apresenta `clean`/`save` próprios. Uso efetivo: **[nao verificado]** (`app/pautas/models.py:89`; `app/pautas/models.py:110`; `app/pautas/models.py:136`).
-
-Os comandos emissores `alarme_arvore` e `alarme_esteira` também não chamam a guarda, mas constroem o início com seus próprios marcadores antes dos argumentos fornecidos (`app/core/management/commands/alarme_arvore.py:52`; `app/core/management/commands/alarme_esteira.py:56`).
-
-**4. Valores e imports**
-
-O censo acima identifica **21 arquivos donos**, portanto a premissa de “24 módulos” não corresponde aos arquivos enumerados; são **26 prefixos reservados**, incluindo as três entradas de `FERIAS` (`app/pautas/marcadores.py:36`; `app/pautas/marcadores.py:90`).
-
-**Comparando os valores removidos no diff fornecido com o catálogo atual, não há alteração dos marcadores.** As transformações menos triviais também preservam o resultado:
-
-- `TEXTO[:40]` passou a `AFASTADO = TEXTO_AFASTADO[:40]` (`app/pautas/marcadores.py:61`; `app/pautas/marcadores.py:81`; `app/ponto/services/afastado_avisa.py:11`).
-- `[A1-FERIAS/AG#%s]` continua sendo o prefixo aberto mais `%s]` (`app/pautas/marcadores.py:85`; `app/ponto/services/ausencia.py:1231`).
-- `[ESMERIL %s]` continua sendo `[ESMERIL ` mais `%s]`, preservando o espaço (`app/pautas/marcadores.py:88`; `app/ponto/services/pautas_do_esmeril.py:16`).
-- `[TRANCA]` permanece o mesmo início do texto e da consulta (`app/pautas/marcadores.py:78`; `app/chamados/services/competencia_trancada.py:221`; `app/chamados/services/competencia_trancada.py:230`).
-
-Essa conclusão usa o **diff fornecido**; comparação independente dos objetos Git de base/HEAD e autenticação do hash da cópia: **[nao verificado]**.
-
-**Não há ciclo novo através do catálogo:** ele contém dados e derivações locais, sem imports; `pautas.__init__` está vazio. A guarda importa o catálogo, sem carregar os donos (`app/pautas/marcadores.py:1`; `app/pautas/marcadores.py:81`; `app/pautas/marcadores.py:90`; `app/pautas/services.py:32`). Execução completa dos imports com Django: **[nao verificado]**.
-
-**5. Coleta, mutantes e skip**
-
-**Estruturalmente coletáveis pela suíte Django, sem `.git`.** A suíte monta a árvore em `/app`, chama `manage.py test`, inclui `pautas`, e usa um runner derivado de `DiscoverRunner`; o censo novo percorre arquivos diretamente (`bin/suite.sh:100`; `bin/suite.sh:102`; `bin/regua.sh:23`; `app/config/settings/ci.py:40`; `app/core/runner_quarentena.py:72`; `app/pautas/tests/test_prefixos_reservados_ast.py:34`).
-
-**Os mutantes agora participam da suíte:** `MutantesPrefixosTest` chama `executar_mutantes`; existe também teste que verifica essa chamada (`app/pautas/tests/test_prefixos_reservados.py:243`; `app/pautas/tests/test_prefixos_reservados.py:246`; `app/pautas/tests/test_prefixos_reservados_ast.py:186`).
-
-Nas execuções isoladas, sem escrita de arquivos:
-
-- Executor: **73 mortos, zero sobreviventes, rc 0**, com GREEN obrigatório e erros de infraestrutura não aceitos como morte dos mutantes de porta/selo (`app/pautas/tests/mutar_prefixos_reservados.py:173`; `app/pautas/tests/mutar_prefixos_reservados.py:191`; `app/pautas/tests/mutar_prefixos_reservados.py:195`; `app/pautas/tests/mutar_prefixos_reservados.py:227`).
-- Dois módulos de testes: **19 testes, OK, um skip por Django indisponível** (`app/pautas/tests/test_prefixos_reservados.py:225`; `app/pautas/tests/test_prefixos_reservados.py:229`).
-
-Execução efetiva pelo runner Django, integração HTTP/banco e RED contra a base: **[nao verificado]**. O ramo CLI `--base` ainda exige `git show`, mas não participa da execução coletada dos mutantes (`app/pautas/tests/mutar_prefixos_reservados.py:236`).
-
-**O skip não engole mais falhas de importação dos serviços, views ou models.** Ainda captura qualquer `ImportError` produzido durante o próprio `import django`, sem conferir sua origem; fora do runner, isso pode rotular um Django quebrado como ausente. No runner Django, a dependência já precisa carregar para iniciar a coleta (`app/pautas/tests/test_prefixos_reservados.py:225`; `app/pautas/tests/test_prefixos_reservados.py:239`; `app/core/runner_quarentena.py:15`).
-
-**Há mordida real, mas cobertura incompleta:** o selo fiscaliza a origem de keywords `texto__startswith`, e as derivações consideram principalmente o começo da expressão. Ele não prova equivalência completa da forma reconhecida pela guarda. O desvio de `ESTEIRA` coexistiu com censo sem erros e os 73 mutantes mortos (`app/pautas/tests/test_prefixos_reservados_ast.py:144`; `app/pautas/tests/test_prefixos_reservados_ast.py:173`; `app/pautas/tests/mutar_prefixos_reservados.py:210`; `app/pautas/marcadores.py:30`; `app/core/management/commands/alarme_esteira.py:15`).
-
-**6. Classes de reprovação**
-
-| Classe | Veredito |
-|---|---|
-| Segundo juiz duplicando autoridade registrada | **Não identificado no domínio de cadastro sem turno:** o registro aponta para `pauta_cadastro_existente`, e o escritor continua consultando essa função (`app/core/juizes.py:293`; `app/chamados/services/fabrica_da_celula.py:358`). |
-| Segundo escritor fora da porta | **Nenhum escritor físico novo identificado:** criação e resposta continuam pelo serviço registrado. O shell pode contornar a guarda usando esse próprio serviço, conforme item 3 (`app/core/portas.py:510`; `app/pautas/services.py:197`; `app/pautas/services.py:211`). |
-| Relógio fora da borda | **Não introduzido pela guarda:** ela depende somente do texto e do catálogo (`app/pautas/services.py:46`; `app/pautas/services.py:48`). |
-| Derivação paralela de fonte única | **Presente na interpretação da forma de `ESTEIRA`:** a guarda codifica uma gramática própria, mais estreita que a aceita pelo comando/leitor. Os valores dos marcadores, por sua vez, estão centralizados (`app/pautas/marcadores.py:30`; `app/core/management/commands/alarme_esteira.py:15`; `app/core/management/commands/alarme_esteira.py:34`). |
-| Selo/RED sem mordida | **Bloqueadores anteriores curados; cobertura da forma ainda insuficiente.** Há asserções e mutantes executáveis, mas eles não detectam o furo descrito (`app/pautas/tests/test_prefixos_reservados.py:243`; `app/pautas/tests/mutar_prefixos_reservados.py:191`; `app/pautas/tests/test_prefixos_reservados_ast.py:173`). |
-| Ordem de trava | **Preserv
-
-[truncado em 20000 de 20995 caracteres]
-
-## 10/11 01:24 · sessao f84f7073acf7 · - · - · origem=Ronald (tmux)
-
-As quatro curas da triagem estão implementadas:
-
-| Achado | Verificação |
-|---|---|
-| Censo dependia de Git | Curado: `os.walk` enumera a árvore, exclui runtime/tests e propaga erros de diretório (`app/pautas/tests/test_prefixos_reservados_ast.py:29`, `:34`, `:42`). |
-| Selo legado exigia constante na fábrica | Curado: permite declaração/inclusão somente no catálogo e import somente na fábrica; mantém restrição de usos operacionais (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:160`, `:162`, `:164`, `:265`). |
-| Mutantes apenas em `__main__` | Curado: `MutantesPrefixosTest(SimpleTestCase)` chama o executor e exige mortos positivos/nenhum sobrevivente (`app/pautas/tests/test_prefixos_reservados.py:243`). |
-| Skip engolia `ImportError` de produção | Curado: `try` contém somente `import django`; imports de produção estão no `else` (`app/pautas/tests/test_prefixos_reservados.py:225`, `:239`). |
-
-Os testes são estruturalmente coletáveis: a suite inclui `pautas`, monta `app/` e executa `manage.py test`; o runner deriva de `DiscoverRunner`. Nenhum teste novo consta na lista de quarentena (`bin/regua.sh:23`; `bin/suite.sh:100`; `app/core/runner_quarentena.py:72`; `app/core/testes_em_quarentena.txt:6`).
-
-O teste de coleta verifica dinamicamente que a classe chama o executor; há mutante que remove essa chamada e mutante que amplia o `try` para produção (`app/pautas/tests/test_prefixos_reservados_ast.py:186`; `app/pautas/tests/mutar_prefixos_reservados.py:121`).
-
-Executei em modo somente leitura com `PYTHONDONTWRITEBYTECODE=1 python3 -B`: [nao verificado]
-
-- Executor: rc 0, **73 mortos, zero sobreviventes**; resultado emitido pelo executor (`app/pautas/tests/mutar_prefixos_reservados.py:227`).
-- Dois módulos `unittest`: rc 0, **19 testes, OK, um skip por Django indisponível** (`app/pautas/tests/test_prefixos_reservados.py:229`).
-
-Execução efetiva no runner Django, HTTP/banco e RED contra a base: **[nao verificado]**. O modo `--base` ainda depende de `git show`, mas fica exclusivamente no ramo CLI; não participa da execução coletada dos mutantes (`app/pautas/tests/mutar_prefixos_reservados.py:236`).
-
-O skip não esconde mais `ImportError` de `pautas.services`, models ou views. Tecnicamente, ainda captura qualquer `ImportError` produzido durante o próprio `import django`, sem conferir `erro.name`; não demonstra distinção entre pacote ausente e import interno quebrado (`app/pautas/tests/test_prefixos_reservados.py:225`). Isso não permite esconder falha de produção no runner Django já iniciado (`app/core/runner_quarentena.py:15`; `app/pautas/tests/test_prefixos_reservados.py:239`).
-
-Há mordida real: o executor exige GREEN prévio e não aceita erros de infraestrutura como morte de mutantes de porta/selo (`app/pautas/tests/mutar_prefixos_reservados.py:173`, `:189`). O selo prova origem reservada dos keywords `texto__startswith`; não prova equivalência de sufixos, igualdade escritor/leitor, preservação byte a byte, Python `startswith`, `contains` ou regex (`app/pautas/tests/test_prefixos_reservados_ast.py:144`, `:173`; `app/pautas/tests/mutar_prefixos_reservados.py:205`).
-
-Ordem preservada no escritor de cadastro: `atomic → trava → juiz → escrever`; contador reutiliza o seletor (`app/chamados/services/fabrica_da_celula.py:355`, `:356`, `:358`, `:360`, `:336`). A guarda não lê relógio (`app/pautas/services.py:46`).
-
-## 10/11 01:24 · sessao df111cff54f0 · - · - · origem=Ronald (tmux)
-
-3. **Portas humanas identificadas com texto livre estão guardadas:** criação HTTP valida antes de `sv.escrever`; resposta HTTP valida antes de `sv.responder`; suporte valida antes de responder/fechar e converte `ValidationError` em `CommandError` (`app/pautas/views.py:76`, `app/pautas/views.py:114`, `app/pautas/management/commands/suporte_hasner.py:134`, `app/pautas/management/commands/suporte_hasner.py:139`).
-
-| Categoria | Resultado e evidência |
-|---|---|
-| Compositor/formulário | Envia para `/pautas/escrever/`, cuja view guarda o texto (`app/templates/core/_copiloto.html:544`; `app/pautas/views.py:76`). |
-| Formulário de resposta | Envia para `/pautas/<id>/responder/`, cuja view guarda o texto (`app/templates/core/_copiloto.html:462`; `app/pautas/views.py:114`). |
-| Formulário de edição de texto existente | Não há rota de edição no URLconf de Pauta; ausência universal de rota dinâmica: [nao verificado] (`app/pautas/urls.py:7`). |
-| API de mensageria | A função examinada apenas lista/serializa pautas (`app/api/views_mensageria.py:1323`, `app/api/views_mensageria.py:1331`, `app/api/views_mensageria.py:1340`). |
-| Django admin / serializers / ModelForms | Registro de `Pauta` não identificado no censo da cópia; ausência universal/dinâmica: [nao verificado]. O app config não registra modelos nem possui `ready` (`app/pautas/apps.py:4`). |
-| Shell de suporte usando `suporte_hasner` | Guardado (`app/pautas/management/commands/suporte_hasner.py:134`). |
-| Shell chamando diretamente `services.escrever` ou `services.responder` | **Não passa pela guarda**: `escrever` valida destinatário/âncora/vazio e grava, sem chamar `validar_texto_humano`; `responder` apenas delega a ele (`app/pautas/services.py:170`, `app/pautas/services.py:180`, `app/pautas/services.py:197`, `app/pautas/services.py:209`). Uso efetivo desse caminho humano em produção: [nao verificado]. |
-| ORM direto pelo shell | Campo não declara validador reservado e modelo não define `clean`/`save` próprios; o caminho padrão permanece possível pelo código, uso real: [nao verificado] (`app/pautas/models.py:89`, `app/pautas/models.py:110`, `app/pautas/models.py:136`). |
-
-**Emissores de sistema acionáveis por CLI** continuam sem guarda por desenho: `alarme_arvore` e `alarme_esteira` colocam seu próprio marcador antes dos argumentos, usando o escritor comum (`app/core/management/commands/alarme_arvore.py:50`, `app/core/management/commands/alarme_arvore.py:52`; `app/core/management/commands/alarme_esteira.py:54`, `app/core/management/commands/alarme_esteira.py:56`). Outro texto humano incorporado em Pauta é resposta tardia de chamado, mas recebe prefixo fixo `[RESPOSTA-TARDIA]` antes do conteúdo (`app/chamados/services/resposta_tardia.py:58`, `app/chamados/services/resposta_tardia.py:65`).
-
-**Achado importante para pergunta 2: a cura de ESTEIRA ainda deixa formas reconhecidas passarem.** A guarda exige `ESTEIRA [^\s:]+:`; contudo, o leitor concatena qualquer `chave`, e o comando só aplica `strip`, sem impedir espaços internos ou `:` (`app/pautas/marcadores.py:30`; `app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:34`). Exemplo demonstrável: `--motivo 'a b'` produz/lê `ESTEIRA a b:`, forma que a guarda deixa passar; idem chave `a:b` produz/lê `ESTEIRA a:b:` (`app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:56`; `app/pautas/marcadores.py:30`). Existência dessas chaves em produção: [nao verificado].
-
-**Classes:** escritor físico permanece `Pauta.objects.create` no serviço; resposta chama esse escritor e o registro de portas autoriza somente `pautas/services.py` (`app/pautas/services.py:197`, `app/pautas/services.py:211`; `app/core/portas.py:510`). A ordem da trava de cadastro continua `atomic → trava_na_ordem → pauta_cadastro_existente → escrever` (`app/chamados/services/fabrica_da_celula.py:355`, `app/chamados/services/fabrica_da_celula.py:356`, `app/chamados/services/fabrica_da_celula.py:358`, `app/chamados/services/fabrica_da_celula.py:360`).
-
-_3324 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3328 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
