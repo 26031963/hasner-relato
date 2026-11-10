@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 18:59** · publicado em **10/11/2026 19:01** (UTC-3)
+> Ultima resposta processada: **10/11/2026 19:05** · publicado em **10/11/2026 19:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 19:05 · sessao 49d9c6780845 · - · - · origem=Ronald (tmux)
+
+Auditoria estática; não executei testes nem banco. Execução efetiva em produção e chamadas construídas dinamicamente fora da cópia: [nao verificado]. [nao verificado]
+
+**1. `app/ponto/management/commands/reconciliar_grade.py::Command._disputa`**
+
+- Corpo em `:412`; delega ao núcleo em `:424`, passando `motivos=[]`, `origem='grade'`, contexto `{'origem':'grade'}`; retorna DS em `:428`. Não há chamada a `_disputa` dentro de `Command.handle` nem dos demais métodos do comando. A emissão efetiva do handle usa `_emitir_furo`, em `:250–254`.
+- Único chamador concreto desse método encontrado no repositório: `app/chamados/tests/test_porta_chamado_e3.py::PortasDeCampoTest.test_MORDE_a_disputa_da_grade_nasce_UMA_vez` (confirmar nome da classe caso necessário), definição `:91`, chamadas `Command()._disputa(self.colab)` em `:93` e `:94`. Exige mesmo PK, uma DS aberta, pai e prazo SLA em `:95–98`.
+- Pesquisei repo inteiro, inclusive arquivos ocultos fora `.git`, por `_disputa`, referências/importações de `reconciliar_grade`, aliases dos imports encontrados e referência textual para reflexão. Não apareceu `getattr(..., '_disputa')`, apelido ou chamada produtiva desse método. A inexistência universal de reflexão arbitrária construída em execução é [nao verificado].
+- Outros selos sustentam partes do método sem chamá-lo:
+  - `app/chamados/tests/test_sla_pelo_juiz.py::OPrazo...test_MORDE_a_grade`, `:115–123`: inspeção de fonte exige delegação ao núcleo e ausência de `DS.objects.create`.
+  - `app/chamados/tests/test_porta_chamado_e3.py::OsSitiosChamamOAto.test_cada_sitio_chama_o_seu_ato`, `:101–121`: catálogo AST inclui o arquivo com `_abrir_ou_agregar_disputa`.
+  - `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py::ProvasMemoria.test_chamada_grade_motivos_vazios_conta_estrutura`, `:416–420`: chama diretamente o núcleo com lista vazia, não `Command._disputa`; espera `(I7a,I7b)=(1,0)` em doubles.
+
+**Sim, `--apply` ainda escreve.** O texto “SEM ESCRITOR” do cabeçalho descreve o uso shadow, não a impossibilidade do ramo:
+
+- `Command.add_arguments`: flag presente, `:67`; handle lê em `:76`.
+- `Command.handle`: com `apply and not o['so_retratar']`, chama `_emitir_furo`, `:250–254`.
+- `Command._emitir_furo`: `ChamadoColaborador.abrir`, `:507–520`, e `ch.reabrir()` para terminal, `:529–530`; esse caminho termina sem chamar `_disputa`, `:531–532`.
+- `Command.handle`: `if apply:` chama `chamados.reconciliador.retratar`, `:305–316`.
+- `Command._relavrar_orfa`: com apply, retira `orfa_regeneracao`, `:452–454`; no ramo de relavra renova `marcos_faltantes`/`orfa_regeneracao_curada` e retira a marca em atomic, `:472–474`, além da trilha `:475–485`.
+- Cron configurado sem apply em `app/config/crons.py:460–462`. Selo `app/chamados/tests/test_hx_um_emissor.py::UmEmissorTest.test_reconciliar_grade_sem_apply_no_cron`, `:5–9`.
+- `app/ponto/tests/test_reconciliar_grade_sombra.py::ReconciliarGradeNaoEscreveTest.test_GOLDEN_sem_apply_nao_escreve_NADA`, `:58–63`, só cobre sem apply; anti-vacuidade/placar em `:65–88`.
+
+**2. Agrupador de órfãos**
+
+Função: `app/chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos`, definição `:1130`.
+
+**(i) Nascimento em relação às perguntas**
+
+- Filtro inicial de lista do admin em `:1150–1152`; atomic `:1155`; trava do repasse `:1162`.
+- Há complemento de perguntas em DS **preexistentes**, antes do filtro/nascimento, `:1168–1188`.
+- Filtro dos chamados a converter em `:1189–1197`; seleção de DS aberta em `:1199–1201`.
+- Se nenhuma DS aberta, abre pai em `:1207–1222`, anexa ocorrência se reutilizado em `:1223–1225`, cria DS em **`:1226–1231`** com colaborador, motivos, contexto `manual_orfaos`/IDs e pai.
+- Os laços locais que perguntam vêm **depois**: intervalo `:1241–1264`; ata `:1269–1281`; episódio `:1296–1326`; sem origem `:1334–1355`; pendentes `:1373`.
+- Portanto a DS local é criada antes de saber se haverá pergunta sua; o complemento inicial em outra DS não muda essa ordem. (`:1184`, `:1226`, `:1256`)
+
+**(ii) Ramo zero perguntas**
+
+- Não testa SQL “zero perguntas”; usa `disputa.pode_fechar()` em `:1381`.
+- Se absteve por ata e poderia fechar: acende `acender_sem_ata('auto_fecho_disputa',...)`, `:1382–1384`, preservando aberta.
+- Caso contrário, se pode fechar: chama `disputa.fechar(user_sistema, resolucao=...)` em `:1385–1390`, retorna em `:1391`, antes do push `:1392–1393`. [nao verificado]
+- `app/chamados/models.py::DisputaSupervisao.pode_fechar`, `:1848–1853`: ausência de respostas sem veredito e de fio vivo.
+- `::fechar`: com zero linhas `perguntas`, deriva `motivo=FECHOU_VAZIA`, `:1895–1903`; `'vazia'` definido em `:1781`.
+- Escritas diretas da DS: `fechada_em=now`, `fechada_por=user`, `resolucao=texto`, `motivo_fechamento='vazia'`; save desses quatro campos, `:1932–1936`; evento `disputa_fechada`, `:1937–1940`. Não apaga DS/pai nem zera seus IDs/contexto/motivos.
+- O ramo de fecho **não altera diretamente os chamados órfãos**. Nos laços anteriores, `analisar()` só é chamado quando helpers retornaram criação/complemento: `:1261–1262`, `:1280–1281`, `:1323–1326`, `:1354–1355`. Dia completo faz `continue` antes disso em `:1304–1305`/`:1341–1342`.
+- Atenção: **zero perguntas locais não prova que nenhum órfão foi analisado**, porque o helper ignora a dona retornada e pode devolver `_criou=True` para reuso estrangeiro (`:940–950`).
+- Pai passa pelo receiver de DS fechada, `app/chamados/signals.py::disputa_fechada_fecha_chamado_pai`, condição `:28`, `ch.reconciliar()` `:42`, nota `:45`; efeitos completos das cascatas dependem do acervo [nao verificado].
+- Testes que caracterizam vazio fechado: `app/chamados/tests/test_hx_disputa_muda_sem_ata.py::DisputaMudaSemAtaTest.test_com_ata_e_dia_completo_fecha_como_antes`, `:63–79`; `app/chamados/tests/test_hx_disputa_muda.py::...test_sem_nada_a_perguntar_nao_fica_aberta`, `:24–33`; `::test_nao_notifica_disputa_muda`, `:44–50`.
+
+**(iii) TODOS leitores de `'vazia'` encontrados**
+
+Pesquisa repo-wide por `motivo_fechamento`, `FECHOU_VAZIA`, `disputa_vazia`:
+
+1. **Único consumidor funcional específico**: `app/chamados/services/vigia_fio.py::disputa_vazia`, `:727–734`. Conta DS com `motivo_fechamento=DisputaSupervisao.FECHOU_VAZIA`. Sem filtro de abertura/data/empresa e sem recontar perguntas. Não seleciona nem marca órfãos. Não encontrei chamador produtivo desse contador; referências executáveis encontradas são testes.
+2. `app/chamados/tests/test_c7_red_minimos.py::C7_04_DisputaVaziaTest.test_RED_vazia_fecha_com_motivo_vazia_e_o_contador_conta`, `:174–183`: exige motivo `'vazia'` e delta 1 do contador.
+3. `::test_RED_o_contador_MORDE_disputa_com_pergunta_nao_conta`, `:185–192`: DS com pergunta fecha sem incrementar contador.
+4. `app/chamados/tests/test_c7_red_minimos.py::...test_MORDE_o_update_em_lote`, `:613–616`: fonte artificial `filter(motivo_fechamento='vazia').count()`, lida pelo detector AST para provar que filter não é escrita; não executa consulta ORM.
+5. Leitores **genéricos**, sem decisão específica por `'vazia'`: `app/chamados/models.py::DisputaSupervisao.fechar`, `:1879–1883`, compara o motivo recebido para idempotência; `app/chamados/management/commands/reabrir_orfas_enterradas.py::Command.handle`, `:128–138`, serializa campo em arquivo de reversão. Não funcionam como bloqueio de reagrupamento.
+6. Registro em `bin/sombra_regras_pessoais.py:177` classifica o campo como código choices; não é consumidor decisório de `'vazia'`.
+
+**(iv) Chamadores/filtros e idempotência**
+
+Se não nascesse a DS vazia, **não há marcador externo de “este conjunto já foi tentado” no agrupador**. Os IDs são guardados no contexto da DS/pai (`:1219`, `:1229`), mas o filtro de entrada não consulta esses IDs nem `motivo_fechamento`. O filtro usa regularizabilidade e pergunta existente por destino (`:1189–1194`); a regularizabilidade vem de `motivo_fora_da_fabrica`, `:850–899`, com status/categoria/célula/pergunta materializada/turno resolvido. O dedup local `_ja_perguntou` consulta motivo/dia/conversa dentro da própria DS, `:1518–1525`.
+
+Se os chamados continuam elegíveis, sem pergunta que os exclua e são novamente fornecidos pelo chamador, podem voltar; o que ocorrerá na próxima execução real é [nao verificado]. A própria DS fechada vazia **também não é consultada como selo de tentativa** (`:1199–1201` só procura abertas).
+
+Seis chamadores produtivos diretos:
+
+- `app/chamados/services/acoes_disputa.py::acao_iniciar_disputa_orfaos`, `:210–224`: todos chamados do colaborador (`:218`) filtrados por `chamado_orfao_e_regularizavel` (`:219`), passa request_user.
+- `app/chamados/services/pergunta_no_app.py::perguntar`, `:197–217`: só itens com causa `'fabrica_nao_rodou'` (`:206–208`), busca PKs e agrupa por colaborador (`:210–212`), `notificar` recebido, default False. Universo anterior de `::medir`: status COBRANCA, módulos CALADOS_POR_ISENCAO, colaborador ativo em `:144–153`; `::retencao` decide causa em `:90–119`.
+- `app/chamados/services/cobrar_dia.py::cobrar_dia`, `:45–49`: depois do julgamento, lê `do_dia`; somente IDs cuja causa é `'fabrica_nao_rodou'`; notificar True.
+- `app/ponto/management/commands/detectar_ausencias.py::Command._abrir_chamado`, `:796–802`: todos chamados do colab em COBRANCA e regularizáveis; best-effort `:790–806`.
+- `app/ponto/management/commands/processar_alertas_turno.py::Command._abrir_chamado_critico`, `:372–385`: só quando `criado`; COBRANCA + regularizáveis; best-effort `:373–389`.
+- `app/ponto/management/commands/processar_alertas_avancados.py::Command.handle`, `:153–159`: no ramo de criação do alerta, COBRANCA + regularizáveis; best-effort `:147–163`.
+
+Reexport de compatibilidade do agrupador em `app/chamados/models.py:4093`; não é outro implementador.
+
+**(v) Retorno estrangeiro ignorado**
+
+`app/chamados/services/disputa_emissao.py::_criar_pergunta_se_couber`:
+
+- Acrescenta motivo **antes** dos vetos, `:931–932`.
+- Ausência cobre: retorna `(motivos,False)`, `:933–934`; já perguntou local: idem `:935–936`.
+- Chama `PerguntaDisputa.abrir(...)` como expressão, sem atribuir/inspecionar `(pergunta, criada)`, `:940–949`.
+- Retorna sempre `(motivos, True)` depois da chamada, `:950`.
+- `app/chamados/models.py::PerguntaDisputa._nascer` elege canônica do universo global do fato em `:2905–2921`, sem exigir a DS recebida; retorna `ex, False, dia` em `:3008`, preservando dona. Logo esse True não prova pergunta nova nem pergunta local.
+- `::_complementar_marcos_faltantes`, `:984–986`, apenas acumula esse booleano. O agrupador pode analisar o órfão e mais tarde fechar a DS local zero perguntas, sem encaminhar motivos à dona efetiva (`:1323–1326`, `:1385–1391`).
+
+## 10/11 19:05 · sessao b5dd34352e46 · BO-0611-05 · construtor · origem=Code
+
+Cura e testes escritos; comandos, alterações e pendências na [entrega](/home/ronald/wt-codex-bo-0611-05-185609/app/ponto/tests/ENTREGA_BO_0611_05_VOLTA8.txt:9). [nao verificado]
+
+Sintaxe e mutante isolado do filtro passaram ([resultado](/home/ronald/wt-codex-bo-0611-05-185609/app/ponto/tests/ENTREGA_BO_0611_05_VOLTA8.txt:125)). RED/GREEN e mutantes de render seguem **[nao verificado]** por falta de Django; certificação permanece pendente ([FALTA](/home/ronald/wt-codex-bo-0611-05-185609/app/ponto/tests/ENTREGA_BO_0611_05_VOLTA8.txt:147)).
 
 ## 10/11 18:59 · sessao 30c755e4344e · BO-DISPUTA-SEM-PERGUNTA · leitura · origem=Code
 
@@ -742,64 +837,4 @@ A causa é o ramo de agregação ignorar o retorno do gerador (`app/chamados/ser
 
 PostgreSQL, signals e concorrência: [nao verificado].
 
-## 10/11 18:10 · sessao 6a680ef2adf3 · - · - · origem=Ronald (tmux)
-
-Itens 6–8, referências relativas à raiz.
-
-**6. QuerySet e ordem**
-
-- No caminho novo, `_pks(disputas)` executa **uma vez**: o núcleo passa `abertas_do_colaborador=True` e um colaborador, tornando `_universo=True`; a expressão `if _universo or _pks(disputas)` faz curto-circuito. Portanto a ocorrência de `:2674` não reitera o QuerySet nesse caminho. Não existem duas avaliações entre as quais uma dona possa nascer. `app/chamados/services/disputa_emissao.py:553`; `app/chamados/models.py:2669`; `app/chamados/models.py:2671`; `app/chamados/models.py:2674`.
-- A sequência inicial é C → leitura de IDs → D ordenadas por pk → Ch ordenados por pk; P entra posteriormente pela porta. `app/chamados/models.py:2666`; `app/chamados/models.py:2675`; `app/chamados/models.py:2688`; `app/chamados/models.py:2692`.
-- **Ressalva concreta na ordem por transação:** o tratamento de reuso trava somente donas retornadas + abertas + Ch vivos; a recursão amplia novamente para **todas** as DS, inclusive fechadas não retornadas. Havendo outra DS fechada X, a recursão pode adquirir X depois de Ch já adquirido no tratamento. Isso contradiz a ordem literal global por transação. `app/chamados/services/disputa_emissao.py:651`; `app/chamados/services/disputa_emissao.py:653`; `app/chamados/services/disputa_emissao.py:659`; `app/chamados/services/disputa_emissao.py:551`; `app/chamados/models.py:2688`.
-- Não decorre automaticamente um deadlock: C continua retido e serializa os escritores que seguem a mesma disciplina. Deadlock real ou escritor concorrente que contorne C: [nao verificado]. A porta declara C primeiro e ordenação crescente por tabela. `app/chamados/models.py:2631`; `app/chamados/models.py:2666`.
-- A sonda da volta 2 não cobre essa reentrada: cria DS aberta para entrar em agregação e substitui o gerador por Mock. `app/chamados/tests/test_bo_disputa_volta2_memoria.py:29`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:133`.
-
-**7. Tetos/C8**
-
-- A justificativa corresponde à expressão ORM real: `values_list('pk', flat=True)` de **todas** as DS do colaborador, avaliada após C. `app/chamados/services/disputa_emissao.py:551`; `app/chamados/models.py:2666`; `app/chamados/models.py:2671`; `app/ponto/tests/test_selo_chokepoint_escrita.py:180`; `app/ponto/tests/test_selo_chokepoint_escrita.py:193`.
-- É uma leitura adicional **por chamada do núcleo**; não é custo constante em linhas transferidas/travadas, pois cresce com o histórico de disputas. Também não significa uma única chamada por julgamento: a fábrica chama o núcleo em laço por motivo. `app/chamados/services/disputa_emissao.py:551`; `app/chamados/services/fabrica_da_celula.py:168`; `app/chamados/services/fabrica_da_celula.py:172`.
-- A sonda varia quantidade de Ch vivos, mantém duas DS e simula as consultas; prova número de avaliações nesse recorte, não os totais SQL 145/219. `app/chamados/tests/test_bo_disputa_volta2_memoria.py:24`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:28`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:30`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:142`. Totais SQL finais: [nao verificado].
-- C8 exige justificativa escrita junto ao número; isso existe. `PLANO_PISCADA.md:10`; `app/ponto/tests/test_selo_chokepoint_escrita.py:180`; `app/ponto/tests/test_selo_chokepoint_escrita.py:193`.
-
-**8. Mordida e limites**
-
-- O RED informado de ImportError/KeyError comprova falta do símbolo, **não** a observação de I7a=1 para o bug (a). O teste ORM importa o símbolo durante carga; os testes de exceção em memória consultam o contador antes de conferir as tabelas diretamente. `app/chamados/tests/test_bo_disputa_sem_pergunta.py:9`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:280`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:296`.
-- O modo `--base` atual resolve esse problema metodológico ao carregar somente o emissor antigo e manter o auditor atual como sonda. Nesse arranjo, `test_a_excecao_do_gerador_desfaz_agregado_e_preserva_batida` pode falhar por ASSERT em `:280`, observando `(1,0)` contra `(0,0)`; o teste após inserção pode falhar nas contagens `:297`. Isso é prova híbrida explicitada, não execução integral da base. `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:28`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:201`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:204`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:275`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:285`.
-- Os testes extraem e recompilam **o corpo real do código**, sem reimplementação manual do núcleo/gerador/contador. Criam novos objetos-função em namespace substituído: atomic, ORM, juiz da ata e porta P são doubles. Não certificam signals, SQL nem concorrência PostgreSQL. `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:36`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:69`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:88`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:176`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:224`.
-- A sonda volta 2 extrai a implementação real de `trava_na_ordem`, mas `Trava.filter` ignora o predicado e o resultado D contém sempre as duas DS fabricadas. Portanto comprova ordem de chamadas e argumentos, não que o SQL efetivamente seleciona o conjunto correto. `app/chamados/tests/test_bo_disputa_volta2_memoria.py:74`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:84`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:97`.
-- Não há vacuidade geral nos cenários principais: existe assert positivo de pergunta antes da exceção e o lote exige DS=2/PD=3. `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:290`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:336`.
-- **Teste individual fraco:** `test_declaracao_delega_pergunta_ao_consumidor` só exige `gerar.assert_not_called()`, sem conferir nascimento/retorno; passaria se o wrapper virasse no-op. A checagem estática de settings usa glob sem assert de universo não vazio, embora os arquivos existam nesta cópia. `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:384`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:427`.
-
-Executei somente Python `-B`: controles atuais passaram 14+2 testes; mutantes gerador/reuso/contador foram mortos com 5/2/5 assertions e trava repetida/consulta antecipada com 3/1 assertions. Evidência de execução desta sessão sem arquivo persistido: [nao verificado]. Os wrappers exigem controle verde e assertions, recusando erros de montagem. `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:449`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:174`.
-
-Comparação e execução direta da base indisponíveis porque `git show` retorna 128 nesta cópia; não substituí o RED informado por esse erro ambiental. [nao verificado]
-
-## 10/11 18:10 · sessao 5b97b39adce8 · - · - · origem=Ronald (tmux)
-
-1. **Há geração depois do atomic do núcleo.** O núcleo agora gera dentro de `atomic` tanto no nascimento quanto na agregação (`app/chamados/services/disputa_emissao.py:534`, `:596`, `:625`), mas o wrapper ainda chama `perguntar_entradas_pendentes` depois do retorno (`:748`), e essa função chama novamente o gerador (`:294`). Além disso, `fabrica_da_celula.perguntar` chama o wrapper (`app/chamados/services/fabrica_da_celula.py:172`) e depois chama diretamente o gerador (`:174`). Existe um caminho concreto sem atomic externo: consumidor `app/chamados/reconciliador.py:1387` → fábrica `:301` → `:219` → `:172/:174`; o atomic do consumidor só começa depois, em `app/chamados/reconciliador.py:1392`. A exceção da segunda geração é capturada em `:1388`, sem desfazer o núcleo anteriormente concluído. A reprodução SQL/produção é [nao verificado].
-
-2. **Censo de chamadores operacionais diretos.**
-
-   | Porta chamada | Chamador | Situação da pergunta |
-   |---|---|---|
-   | `_abrir_ou_agregar_disputa` | Recursão de reuso, `app/chamados/services/disputa_emissao.py:659` | Geração no atomic recursivo, dentro do atomic do tratamento `:651/:596`. |
-   | `_abrir_ou_agregar_disputa` | `disputa_para_declaracao`, `app/chamados/services/disputa_emissao.py:691` | Desliga geração `:695`; consumidores abaixo constroem pergunta no atomic deles. |
-   | `_abrir_ou_agregar_disputa` | Wrapper, `app/chamados/services/disputa_emissao.py:727` | Geração principal dentro `:625/:596`; pendentes depois `:748/:294`. |
-   | `_abrir_ou_agregar_disputa` | Grade, `app/ponto/management/commands/reconciliar_grade.py:424` | Passa `motivos=[]` `:425`; o laço do gerador não executa (`app/chamados/services/disputa_emissao.py:312`). Pode nascer DS sem pergunta. |
-   | `_abrir_ou_agregar_disputa` | Smoke, `app/chamados/management/commands/smoke_chamados.py:99` | Gera de novo `:102`, mas o `handle` envolve tudo em atomic com rollback `:39/:43`; não é exemplo de DS commitada antes da segunda geração. |
-   | `criar_ou_atualizar_disputa` | APIs, `app/api/views.py:794`, `app/api/views_core.py:794` | Geração principal no núcleo; pendentes podem gerar depois (`app/chamados/services/disputa_emissao.py:748`). |
-   | `criar_ou_atualizar_disputa` | PWA, `app/ponto/services/triagem_batida.py:734` | Mesma porta e ressalva dos pendentes (`app/chamados/services/disputa_emissao.py:748`). |
-   | `criar_ou_atualizar_disputa` | Retro de selfie, `app/ponto/management/commands/marcar_foto_ausente_retro.py:96` | Mesma porta e ressalva dos pendentes (`app/chamados/services/disputa_emissao.py:748`). |
-   | `criar_ou_atualizar_disputa` | Fábrica, `app/chamados/services/fabrica_da_celula.py:172` | Segunda geração explícita fora do atomic interno `:174`. |
-
-   Os únicos consumidores operacionais de `disputa_para_declaracao` encontrados são `declarar_hora_colab` e `aplicar_declaracao`: abrem atomic em `app/chamados/services/declaracao_texto.py:348/:654`, chamam a porta em `:360/:659` e abrem pergunta em `:376/:666`. Assim DS e pergunta pertencem à mesma transação desses consumidores; o retorno estrangeiro da pergunta nesses consumidores não passa pelo detector novo de nascimento do núcleo (`app/chamados/services/disputa_emissao.py:624`).
-
-3. **Outros nascimentos de DS.** O agrupador cria em `app/chamados/services/disputa_emissao.py:1186`, dentro do atomic `:1115`; perguntas de intervalo, ata, origem e fallback ficam dentro dele (`:1216`, `:1238`, `:1276`, `:1307`). A ausência de ata conserva os `continue` (`:1235`, `:1273`, `:1304`) e não fecha a DS quando `_absteve_por_ata` (`:1342`). A âncora cria DS em `:1421` e chama `PerguntaDisputa.abrir_conversa` em `:1434`, ambas dentro do atomic `:1385`; ignora o retorno da porta `:1434`. A grade já usa o núcleo com lista vazia (`app/ponto/management/commands/reconciliar_grade.py:424`), não um quarto `objects.create`.
-
-4. **Reuso no nascimento atende o mecanismo pedido.** O gerador devolve as perguntas obtidas da porta (`app/chamados/services/disputa_emissao.py:439/:444/:470`). No nascimento, o detector identifica `pergunta.disputa_id != disputa.pk`, distribui motivos por dona e levanta dentro do atomic (`:628/:635/:636`). A captura fica fora desse atomic (`:648`); o tratamento abre outro atomic (`:651`) e reentra no próprio ramo de agregação (`:659`). A dona é selecionada explicitamente sem filtro de aberta (`:562`); o save grava apenas `motivos`/`contexto` (`:570/:591/:594`), preservando `fechada_em` e FK da pergunta. Não há novo escritor de motivos fora do núcleo nesse tratamento (`:659`).
-
-5. **Mas o ramo de agregação ignora a pergunta estrangeira.** Quando já existe DS aberta, o código salva os motivos nela e chama `gerar_perguntas_disputa` sem inspecionar o retorno (`app/chamados/services/disputa_emissao.py:564/:594/:596/:597`). Se essa DS aberta estiver vazia — o caminho da grade permite isso (`app/ponto/management/commands/reconciliar_grade.py:424`) — e a porta devolver canônica de outra DS, ela pode continuar sem pergunta própria e com o motivo, enquanto a dona não recebe a agregação pelo mecanismo novo. O teste de estrangeira ORM só prepara dona fechada e ausência de DS aberta nova (`app/chamados/tests/test_bo_disputa_sem_pergunta.py:70`); a reprodução desse cenário adicional é [nao verificado].
-
-6. **Batida não entrou no atomic novo, mas a resposta pode falhar.** APIs gravam antes de chamar a disputa (`app/api/views_core.py:681/:794`, `app/api/views.py:684/:794`); o atomic novo pertence somente ao núcleo (`app/chamados/services/disputa_emissao.py:534`). PWA também registra antes (`app/ponto/services/triagem_batida.py:701/:734`). `registrar_batida` faz o `Batida.objects.create` em `app/ponto/registro_batida.py:157` e protege a etapa de fechamento posterior com `except Exception` (`:175/:179`). Porém a chamada de disputa das APIs não está protegida por um `try` envolvente (`app/api/views_core.py:794`, `app/api/views.py:794`); o núcleo captura apenas `_PerguntaDeOutraDisputa` (`app/chamados/services/disputa_emissao.py:648`). Logo um erro do gerador pode subir e impedir a resposta normal depois da gravação. Essa propagação já existia quando o wrapper gerava fora do atomic na base; novidade de runtime, estado HTTP efetivo e garantias PostgreSQL são [nao verificado].
-
-_3446 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3448 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
