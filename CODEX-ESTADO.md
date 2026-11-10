@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 01:00** · publicado em **10/11/2026 01:05** (UTC-3)
+> Ultima resposta processada: **10/11/2026 01:08** · publicado em **10/11/2026 01:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 01:08 · sessao 1b9519f63a52 · O169-FECHADA · construtor · origem=Code
+
+**Parei pela condição explícita do brief:** fechamento automático e decisão administrativa do dia gravam o mesmo par: `status_local='resolvido'`, `via_encerramento='sistema'`. Não é possível incluir um e excluir o outro pelos valores exigidos. (`ponto/services/cluster_espurio.py:124`; `ponto/services/veredito_celula.py:202`; `chamados/models.py:654`; `chamados/catalogo/motor.py:95`; `chamados/catalogo/motor.py:111`)
+
+| Escritor | Estado/via gravados |
+|---|---|
+| Automático: `reconciliar_colab` | `resolvido/sistema`, via `reconciliar()`. (`ponto/services/cluster_espurio.py:124`; `chamados/models.py:654`; `chamados/catalogo/motor.py:111`) |
+| Decisão administrativa do dia — deveria ficar fora | **Também `resolvido/sistema`**, pelo mesmo gate. (`ponto/services/veredito_celula.py:202`; `chamados/models.py:654`) |
+| Transição humana | Destino solicitado, incluindo `resolvido` ou `fechado`; via `admin`. (`chamados/services/acoes_chamado.py:313`; `chamados/catalogo/motor.py:95`; `chamados/catalogo/motor.py:100`) |
+| Desligamento | `fechado/cascade`. (`colaboradores/services/desligamento.py:155`; `chamados/models.py:1619`; `chamados/catalogo/motor.py:95`; `chamados/catalogo/motor.py:114`) |
+| Tranca | `fechado/competencia_trancada`. (`chamados/services/competencia_trancada.py:184`; `chamados/models.py:1632`; `chamados/models.py:1639`) |
+
+O núcleo escreve `status_local` e `via_encerramento`; ao voltar a vivo, limpa a via. A trilha `estado_chamado` registra estado anterior, novo e via, preservando a colisão acima. (`chamados/models.py:228`; `chamados/models.py:245`; `chamados/models.py:249`; `chamados/models.py:292`)
+
+Os leitores relevantes encontrados são:
+
+- **Serviço de cluster:** seleciona somente `VIVOS`; o dedup consulta qualquer estado. Assim, um encerrado com assinatura pode escapar tanto de `a_fechar` quanto de `a_abrir`. (`ponto/services/cluster_espurio.py:66`; `ponto/services/cluster_espurio.py:84`; `ponto/services/cluster_espurio.py:107`)
+- **Vigia:** lê essas pendências; atualmente não examina encerrados com assinatura. (`ponto/management/commands/detectar_cluster_espurio.py:50`; `ponto/management/commands/detectar_cluster_espurio.py:55`)
+- **Reabertura:** lê `cascade` para impedir renascimento e `admin` para exigir fato novo. (`chamados/models.py:1007`; `chamados/models.py:1342`)
+- **Arquivo e destranca:** leem `competencia_trancada`. (`chamados/views_arquivar.py:64`; `chamados/services/competencia_trancada.py:259`)
+- **Auditoria:** verifica terminal sem via e divergência entre status e última trilha. (`chamados/management/commands/auditar_invariantes_chamados.py:1069`; `chamados/services/vigia_loop.py:114`)
+
+**ESMERIL-SEMANTICA:** não ficou comprovada uma suposição universal “cluster encerrado = premissa morta”. O resolvedor de perguntas ainda consulta `pergunta_viva` antes de carimbar; porém existe fallback genérico que aceita destino encerrado como prova, com rechecagem limitada pela janela. Alcançar clusters concretos nesse vínculo: **[nao verificado]**. (`chamados/services/disputa_emissao.py:1840`; `chamados/juizes.py:760`; `chamados/juizes.py:766`; `chamados/juizes.py:776`)
+
+Entrega interrompida antes da edição: nenhum arquivo alterado; contador, RED novo e mutantes não implementados nem executados; ruff e suíte não executados. Certificação: **[nao verificado]**. O impedimento é a colisão `resolvido/sistema` demonstrada acima. [nao verificado]
+
+## 10/11 01:06 · sessao f142f1dcfd25 · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Item 2 implementado para revisão, com contador único `fio_mudo_alvos`, esperado `0`, dono `ESTRUTURA` ([declaração](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/management/commands/disparar_perguntas_competencia.py:88)).
+
+Arquivos tocados e motivos:
+
+- [disparar_perguntas_competencia.py:21](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/management/commands/disparar_perguntas_competencia.py:21): extrai a seleção existente; a linha `VIGIA FIO MUDO` usa o número dessa função.
+- [vigiar_fio_morto.py:181](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/management/commands/vigiar_fio_morto.py:181): chama a mesma função, imprime VFM e grava número/esperado no carimbo. A chave fica fora dos grupos de alarme próprios.
+- [pipeline_placar.py:85](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/core/management/commands/pipeline_placar.py:85): lê número e esperado do JSON. Ausência, ilegibilidade ou chave inválida geram `FIO_MUDO NAO_MEDIDO`, porque falta de medição não equivale a zero.
+- [test_fio_mudo_placar.py:105](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/core/tests/test_fio_mudo_placar.py:105): novos REDs, prova da função comum e dez mutantes.
+- [test_e4a2_disparar_e_vigia.py:151](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/tests/test_e4a2_disparar_e_vigia.py:151): adapta as provas de relógio/relatório à extração.
+- [test_o261_vigia_fio.py:814](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/tests/test_o261_vigia_fio.py:814): acrescenta a chave à comparação integral do carimbo.
+- [test_cobparc5_parcial_sem_periodo_so_lista.py:327](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:327): atualiza o endereço da leitura de `parcial_so_lista`.
+
+Quem escreve: `_carimbar`, chamado com a chave nova em [vigiar_fio_morto.py:223](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/chamados/management/commands/vigiar_fio_morto.py:223). Quem lê: o novo leitor do placar, acima, e [fio_estado.py:125](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/bin/fio_estado.py:125). Nos três leitores perguntados não há conjunto fechado que impeça a chave: `fio_estado` percorre `esperado.items()`, [gerar_estado.py:260](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/bin/gerar_estado.py:260) delega a ele, e [placar_code.sh:388](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/bin/placar_code.sh:388) raspa o texto `FABRICA-POR-EVENTO`.
+
+RED executado antes da cura: o alvo `1` devolveu alarmes `[]`. A reprodução final na base falhou nos três contratos: leitor, carimbo e função comum. Depois: **7 testes OK**; os **10 mutantes retornaram rc 1 por asserção**, sem erros de infraestrutura ([provas e mutações](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/core/tests/test_fio_mudo_placar.py:30)). [nao verificado]
+
+Comandos reproduzíveis, em `app/`:
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+teste_fio=core.tests.test_fio_mudo_placar
+
+# RED na base: três falhas esperadas
+FIO_MUDO_BASE=11f82cfec38bb5a0292e17ab29147a1d67ab25f7 python3 -m unittest \
+ "$teste_fio.FioMudoPlacarTest.test_RED_alvo_um_alarma_e_sai_dois_com_chave" \
+ "$teste_fio.FioMudoPlacarTest.test_RED_carimbo_publica_numero_esperado_e_linha_sem_alarme_proprio" \
+ "$teste_fio.FioMudoPlacarTest.test_mesma_funcao_alimenta_a_linha_e_o_carimbo" -v
+
+# Depois: 7 testes OK [nao verificado]
+python3 -m unittest "$teste_fio" -v
+
+# Cada comando abaixo deve falhar por asserção
+FIO_MUDO_MUTANTE=placar_sem_leitor python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=placar_comparacao_invertida python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=placar_limiar_proprio python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=placar_rc_zero python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=carimbo_sem_numero python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=carimbo_esperado_um python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=disparar_numero_proprio python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=vigiar_contador_proprio python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=contador_constante python3 -m unittest "$teste_fio" -v
+FIO_MUDO_MUTANTE=contador_sem_dedup python3 -m unittest "$teste_fio" -v
+```
+
+Ruff nos sete arquivos: `All checks passed!`, com:
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache \
+ chamados/management/commands/{disparar_perguntas_competencia,vigiar_fio_morto}.py \
+ core/management/commands/pipeline_placar.py \
+ core/tests/test_fio_mudo_placar.py \
+ chamados/tests/{test_e4a2_disparar_e_vigia,test_o261_vigia_fio,test_cobparc5_parcial_sem_periodo_so_lista}.py
+```
+
+As provas novas executam código por AST com dependências substituídas ([escopo](/home/ronald/wt-codex-fio-e0-v4-e4a-2-005728/app/core/tests/test_fio_mudo_placar.py:1)). Não rodaram: suite Django/ORM, banco, medição de produção ou pós-deploy. Condição de pouso e certificação Code/opus final: **[não verificado]**. [nao verificado]
 
 ## 10/11 01:00 · sessao c3956c64fa93 · REVERTER-DIA-SEM-RECALCULO · verificador · origem=Code
 
@@ -774,99 +858,4 @@ Já a fábrica e o vigia **podem considerar devidos os motivos desses dias**, de
 
 Logo, o código permite **SEM_ADESAO carimbado sem fábrica pelo julgamento, mas com motivos contados pelo vigia** quando os demais filtros permitem. Isso demonstra a possibilidade estrutural; sua incidência e participação nos números recebidos permanecem [nao verificado]. (`app/ponto/services/cartorio.py:1279`, `app/ponto/services/cartorio.py:997-1008`, `app/chamados/services/fabrica_da_celula.py:102-150`, `app/chamados/services/fabrica_da_celula.py:233-236`)
 
-## 10/11 00:28 · sessao b9ec0c8ed08e · - · - · origem=Ronald (tmux)
-
-Donos com testes diretamente ligados aos marcadores, em labels Django: [nao verificado]
-
-```text
-chamados.tests.test_competencia_trancada
-chamados.tests.test_reabrir_orfas_enterradas
-chamados.tests.test_o317_passivo_pela_porta
-chamados.tests.test_e4a_pauta_cadastro_contador
-chamados.tests.test_juiz_pauta_cadastro_sem_turno
-chamados.tests.test_e4_c20
-chamados.tests.test_f1c4_3_emissores
-core.tests.test_arvore_vermelha
-core.tests.test_esteira_sem_humano
-core.tests.test_crons_quebrados
-ferias.test_a3_situacao_de_ferias
-folha.tests.test_pre_fechamento
-ponto.tests.test_o214_item4_dia_do_admin
-ponto.tests.test_a6_vigia_familia_ausencia
-escala.tests.test_fase_12x36
-ponto.tests.test_afastado_nunca_bloqueia
-ponto.tests.test_afastado_na_batida
-ponto.tests.test_porta_ausencia_ferias
-ponto.tests.test_a4_estados_com_porta
-ponto.tests.test_o214_item2_autorizar_periodo
-ponto.tests.test_declarar_cobertura_passada
-ponto.tests.test_pautas_do_esmeril
-ponto.tests.test_lista_viva_dos_deslogados
-ponto.tests.test_o320_pauta_dos_discordantes
-pautas.tests.test_pauta_dia_em_aberto_classe
-pautas.tests.test_f3_beco1_pauta_exportada
-pautas.tests.test_pauta_pago_x_devido_exportada
-```
-
-Referências diretas e pertinentes:
-
-| Família | Teste | [nao verificado]
-|---|---|
-| TRANCA | `chamados/tests/test_competencia_trancada.py:158` |
-| ÓRFÃS | `chamados/tests/test_reabrir_orfas_enterradas.py:234` |
-| PASSIVO | `chamados/tests/test_o317_passivo_pela_porta.py:436` |
-| CADASTRO | `chamados/tests/test_e4a_pauta_cadastro_contador.py:20`, `test_juiz_pauta_cadastro_sem_turno.py:16`, `test_e4_c20.py:99` |
-| LIMBO | `chamados/tests/test_f1c4_3_emissores.py:190` |
-| ÁRVORE | `core/tests/test_arvore_vermelha.py:32` |
-| ESTEIRA | `core/tests/test_esteira_sem_humano.py:146` |
-| CRON | `core/tests/test_crons_quebrados.py:56` |
-| FÉRIAS | `ferias/test_a3_situacao_de_ferias.py:620` |
-| PRÉ-FECHAMENTO | `folha/tests/test_pre_fechamento.py:81` |
-| DIA | `pautas/tests/test_pauta_dia_em_aberto_classe.py:95` |
-| FOLGA | `pautas/tests/test_f3_beco1_pauta_exportada.py:36` |
-| PAGO | `pautas/tests/test_pauta_pago_x_devido_exportada.py:30` |
-| A6 semanal | `ponto/tests/test_a6_vigia_familia_ausencia.py:173` |
-| SUP semanal | `escala/tests/test_fase_12x36.py:151` |
-| AFASTADO | `ponto/tests/test_afastado_nunca_bloqueia.py:84`, `test_afastado_na_batida.py:94` |
-| A1 FÉRIAS | `ponto/tests/test_porta_ausencia_ferias.py:59` |
-| A4 DOCUMENTO | `ponto/tests/test_a4_estados_com_porta.py:157` |
-| HE | `ponto/tests/test_o214_item4_dia_do_admin.py:323`, `test_o214_item2_autorizar_periodo.py:169` |
-| COBERTURA | `ponto/tests/test_declarar_cobertura_passada.py:93` |
-| ESMERIL | `ponto/tests/test_pautas_do_esmeril.py:27` |
-| APP | `ponto/tests/test_lista_viva_dos_deslogados.py:192` |
-| DISCORDANTE | `ponto/tests/test_o320_pauta_dos_discordantes.py:59` |
-
-O teste de férias fica fora de `*/tests/*`; o teste de cron acessa o dono por `call_command('cron_quebrado', ...)`, em `core/tests/test_crons_quebrados.py:56`. Logo ambos escapam de uma seleção feita só por nomes de constantes/imports.
-
-Comando do grep das constantes específicas executado:
-
-```bash
-git grep -n -w \
-  -e PAUTA_SEM_TURNO -e PAUTA_LIMBO_EXPORTADA \
-  -e MARCADOR_FORA -e MARCADOR_PAUTA -e MARCADOR_A_CONFIRMAR \
-  -- '*/tests/*'
-```
-
-Também executei busca por todos os literais dos marcadores e varredura AST de imports dos donos: esta última identificou 99 módulos dependentes, mas muitos exercitam funções do dono sem relação com a família reservada, especialmente `ponto.services.ausencia`. [nao verificado]
-
-**Conflito concreto encontrado:** `chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:23` autoriza tocar `PAUTA_SEM_TURNO` apenas no seletor/escritor da fábrica. O selo captura import/nome/atributo/literal (`:115`) e reprova consumidores fora dessa lista (`:149`), no teste `:245`. A nova importação da constante por `pautas.services` precisa de ajuste estreito desse contrato e contraprova preservando a recusa de outro consumidor.
-
-Nenhum arquivo alterado.
-
-## 10/11 00:27 · sessao 6e2365d60a50 · - · - · origem=Ronald (tmux)
-
-- O vigia do `disparar` conta os motivos devolvidos por `motivos_que_o_evento_deixou`, para células passadas na janela; ontem é excluído enquanto `_ontem_em_janela` o entrega ao vigia de hora. Não verifica adesão nesse laço. `app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`.
-
-- `motivos_que_o_evento_deixou` chama `motivos_a_perguntar`; para limbo em competência entregue, desconta motivos já pautados, e nos demais casos devolve os motivos devidos diretamente. `app/chamados/services/fabrica_da_celula.py:225-236`.
-
-- `motivos_a_perguntar` verifica dia sem trabalho, `situacao == 'ativo'`, futuro, vencidos, veredito, parcial na lista e dedup pela pergunta do fato; não tem guarda de adesão. `app/chamados/services/fabrica_da_celula.py:100-150`. `dia_sem_trabalho` lê `trabalha`, tipo da ata e cobertura parcial, sem adesão. `app/chamados/juizes.py:426-441`.
-
-- `nunca_bateu` consta de `VEREDITOS_ACUSAM`; portanto esse veredito passa pela guarda da fábrica. Um SEM_ADESAO pode ser contado como devido quando satisfaz os demais filtros e tem motivos faltantes vencidos na ata, ainda sem pergunta do fato. Isso explica a possibilidade no código, não estabelece população ou causa real de produção. `app/escala/models.py:1767-1768`; `app/chamados/services/fabrica_da_celula.py:105-118`; `app/chamados/services/fabrica_da_celula.py:132-150`.
-
-- O contador usa `len(deixou)`, conta células distintas e declara que o lote não escreve essas perguntas; o alarme sai com código 2 se `deixou` não estiver vazio. `app/chamados/management/commands/disparar_perguntas_competencia.py:240-251`.
-
-- O vigia de hora candidata células `trabalha=True`, exclui desligado/isento, ontem fora de janela, nenhum marco vencido e batidas suficientes sem cobrança viva; chama `julgar_celula(...teto_de_hoje=True)` nas restantes. Não verifica adesão nesse percurso. `app/ponto/services/vigia_de_hora.py:21-23`; `app/ponto/services/vigia_de_hora.py:114-131`.
-
-- A própria documentação alerta: rodadas perdidas além da janela de ontem não são recuperadas pelo `disparar`, que apenas conta e alarma; a pergunta depende de novo julgamento ou sinal de batida. `app/ponto/services/vigia_de_hora.py:39-43`.
-
-_3297 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3299 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
