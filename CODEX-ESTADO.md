@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 01:29** · publicado em **10/11/2026 01:31** (UTC-3)
+> Ultima resposta processada: **10/11/2026 01:46** · publicado em **10/11/2026 01:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 01:46 · sessao 479a5d42a969 · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Cura escrita, com certificação pendente do Code/opus [nao verificado]. O corte usa somente a lâmpada `nunca_bateu`, centralizada em `dia_so_na_c5`; a fábrica devolve `[]` antes de emitir pergunta ou pauta de falta de turno (`chamados/services/fabrica_da_celula.py:67,85,163`).
+
+Referências abaixo relativas a `app/`.
+
+| Arquivo tocado | Motivo |
+|---|---|
+| `chamados/services/fabrica_da_celula.py:67` | Regra única de destino C5. |
+| `chamados/services/disputa_emissao.py:757` | Mesmo corte no repasse de órfãos, antes do atalho da ata. |
+| `chamados/services/resposta_tardia.py:46` | Impede reabrir chamado de dia destinado à C5. |
+| `chamados/services/pergunta_no_app.py:35` | Nomeia a retenção e seu destino administrativo. |
+| `chamados/management/commands/disparar_perguntas_competencia.py:22` | Exclui `nunca_bateu` dos alvos e calcula o contador irmão. |
+| `chamados/management/commands/vigiar_fio_morto.py:182` | Publica número, esperado e diagnóstico no carimbo. |
+| `core/management/commands/pipeline_placar.py:85` | Compartilha a leitura por dia, valida inteiros e alarma a divergência com dono CADASTRO. |
+| `chamados/tests/test_e4a2_nunca_bateu_sem_banco.py:164` | Selos executáveis sem Django, RED da base e oito mutantes. |
+| `chamados/tests/test_e4a2_nunca_bateu.py:19` | Selo de integração com ORM real, preparado para a suíte. |
+| `core/tests/test_fio_mudo_placar.py:139` | Integra o novo contador aos testes de carimbo e placar. |
+| `chamados/tests/test_o261_vigia_fio.py:811` | Atualiza a conferência integral do carimbo. |
+| `chamados/tests/test_e4a2_disparar_e_vigia.py:192` | Acrescenta o contador à fixture do relatório. |
+| `chamados/tests/test_o261_fabrica_le_a_lampada.py:84` | Inverte somente a expectativa de `nunca_bateu`, conforme o aval. |
+
+O vizinho que esperava retorno à fábrica para **todo** veredito acusador falhou com `'nunca_bateu_na_lista_c5' is not None`; agora preserva essa expectativa para os demais vereditos (`chamados/tests/test_o261_fabrica_le_a_lampada.py:84`). A fixture do relatório também quebrou por ausência de `cnb`; após o ajuste, seus dois testes por AST passaram (`chamados/tests/test_e4a2_disparar_e_vigia.py:192,218`).
+
+O contador compara **pares**, não apenas totais: `numero` é a quantidade de dias únicos com chamado vivo excluídos dos alvos; `esperado` é quantos desses mesmos pares aparecem na função real `colabs_nunca_bateu`; `fora_da_c5` identifica os ausentes (`chamados/management/commands/disparar_perguntas_competencia.py:22,38,40`).
+
+As janelas diferem: o disparar usa competência global; a C5 começa na competência anterior **por empresa** e termina ontem. A comparação usa explicitamente a interseção dessas janelas. Hoje continua excluído dos alvos `nunca_bateu`, mas fica fora dessa comparação (`chamados/management/commands/disparar_perguntas_competencia.py:24,34,58,79`; `escala/services/cadastro_realidade.py:177`).
+
+| Campo/valor | Quem escreve ou fornece | Quem lê no caminho alterado |
+|---|---|---|
+| `CelulaDia.veredito` | Porta da lavra, `ponto/portas/celula.py:983,1044`; ramo sem adesão, `ponto/services/cartorio.py:1173,1252` | Regra única, `fabrica_da_celula.py:67`; C5, `cadastro_realidade.py:180` |
+| Colaborador/data da célula | Porta de criação, `ponto/portas/celula.py:863` | Seleção e dedup do contador, `disparar_perguntas_competencia.py:69,80,37` |
+| `Chamado.status_local` | Nascimento/transição, `chamados/models.py:1054,228` | Universo `VIVOS`, `disparar_perguntas_competencia.py:69` |
+| `hoje`, janela e empresa | Relógio da rodada, `vigiar_fio_morto.py:165`; autoridades de janela, `ponto/janelas.py:60,66` | Contador e C5, `disparar_perguntas_competencia.py:31`; `cadastro_realidade.py:174` |
+| Lista C5 e retenção do desligado | Lista real, `cadastro_realidade.py:137,200`; retrato lavrado, `folha/management/commands/lavrar_retrato_folha.py:74` | Interseção do esperado, `disparar_perguntas_competencia.py:38` |
+| `nome`, `numero`, `esperado`, `dono`, `fora_da_c5`, `universo` | `disparar_perguntas_competencia.py:40` | Relatório, `:183`; carimbo, `vigiar_fio_morto.py:232,239,240` |
+| `censo/esperado.nunca_bateu_sem_adesao` e `hoje` do carimbo | `vigiar_fio_morto.py:228,232,239` | Placar: mesmo dia, inteiros e comparação, `pipeline_placar.py:95,100,106,136` |
+| Causa `nunca_bateu_na_lista_c5` | `disputa_emissao.py:759` | Retenção e catálogo de apresentação, `pergunta_no_app.py:35,101` |
+
+Os leitores executáveis de `VEREDITOS_ACUSAM` encontrados por `git grep` ficaram classificados assim:
+
+| Classe | Leitores |
+|---|---|
+| Emissão de pergunta: receberam corte | `fabrica_da_celula.py:100`; `disputa_emissao.py:772`, alcançado pelo corte em `:757` |
+| Reabertura de chamado: recebeu corte | `resposta_tardia.py:46` |
+| Vitalidade; sem nova emissão nesse leitor | `chamados/juizes.py:1321,1374`; `chamados/models.py:3357,3358` |
+| Absolvição, fechamento ou retenção de filhos | `chamados/reconciliador.py:641,1027`; `services/silencio_ausencia.py:41`; `services/limbo_folgas.py:194` |
+| Auditoria e contagem | `services/vigia_fio.py:331`; `auditar_invariantes_chamados.py:198,343,1391,1605,1647` |
+| Folha, vigias e relatório | `folha/export.py:1233`; `folha/services/vigia_pausa.py:155`; `ponto/services/vigia_ausencia_veredito.py:41`; `ponto/management/commands/ausencias_sem_efeito_na_celula.py:36`; `relatorios/dia_da_frota.py:55` |
+
+A porta ADESÃO abre ação de cadastro para supervisão/RH e declara expressamente que não há questionário para o colaborador responder; por isso não recebeu o corte de emissão de pergunta (`chamados/services/adesao.py:19,74,77`).
+
+Os contraexemplos estão cobertos: desligado entra na C5 somente pela lavra que segura o dia; adesão posterior não reinterpreta célula antiga; ausência já lavrada como `concorde` sai da C5 (`chamados/tests/test_e4a2_nunca_bateu_sem_banco.py:209,233`).
+
+Comandos reproduzíveis:
+
+```bash
+selo_e4a2=chamados.tests.test_e4a2_nunca_bateu_sem_banco
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest "$selo_e4a2" -v
+
+E4A2_BASE=43fb14698cc20dbb3802f2583a36792ce034d3ad \
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  "$selo_e4a2.NuncaBateuSemBancoTest.test_RED_zero_pergunta_um_item_c5" \
+  "$selo_e4a2.NuncaBateuSemBancoTest.test_RED_cartorio_chama_fabrica_real_sem_emitir_e_c5_lista" -v
+
+for mutante_e4a2 in \
+  fabrica_sem_corte contador_conta_nunca_bateu esperado_literal \
+  placar_sem_contador carimbo_esperado_literal carimbo_numero_literal \
+  repasse_sem_corte tardia_sem_corte
+do
+  E4A2_MUTANTE="$mutante_e4a2" PYTHONDONTWRITEBYTECODE=1 \
+    python3 -m unittest "$selo_e4a2.NuncaBateuSemBancoTest" -q
+done
+```
+
+Saída observada: **13 testes OK**; base: **2 falhas de asserção**; oito mutantes: **rc 1 por asserções, sem ERROR**. Os alvos e a verificação das mesmas asserções estão em `chamados/tests/test_e4a2_nunca_bateu_sem_banco.py:27,322`.
+
+A tentativa abaixo parou antes dos testes com `ModuleNotFoundError: No module named 'django'` (`manage.py:11`). Não houve execução de banco; a suíte Django pedida e os demais módulos vizinhos permanecem **[nao verificado]**. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  core.tests.test_fio_mudo_placar \
+  chamados.tests.test_o261_vigia_fio \
+  chamados.tests.test_e4a2_disparar_e_vigia \
+  chamados.tests.test_e4a2_nunca_bateu \
+  --settings=config.settings.ci -v 2
+```
 
 ## 10/11 01:29 · sessao 41d9b8add366 · FIO-E0-V4-E4A-2 · construtor · origem=Code
 
@@ -966,16 +1055,4 @@ Correção mínima: fazer a guarda reproduzir o texto persistido (`strip`, `app/
 
 6. **Selo/RED sem mordida: SIM quanto à certificação automática dos mutantes; NÃO quanto a vazio dos testes normais**, conforme distinção acima (`app/pautas/tests/mutar_prefixos_reservados.py:151`, `app/pautas/tests/test_prefixos_reservados.py:81`). **Relógio fora da borda: não identificado no catálogo/guarda/testes novos**; a guarda usa apenas texto e catálogo (`app/pautas/services.py:38`), e o catálogo contém dados (`app/pautas/marcadores.py:8`). Demais classes ficam para a consolidação dos outros rastreios.
 
-## 10/11 00:50 · sessao d458f6a143bf · - · - · origem=Ronald (tmux)
-
-3. **PROCEDENTE — comando manual sem guarda.** `--responder/--texto` recebe texto livre (`app/pautas/management/commands/suporte_hasner.py:45`, `:47`, `:63`), valida somente vazio (`:129`) e chama `sv.responder` (`:133`). O service delega a `escrever` (`app/pautas/services.py:208`), que aplica `strip` e persiste sem a guarda (`:177`, `:194`). Correção mínima: chamar `validar_texto_humano(texto)` nesse comando e converter `ValidationError` em `CommandError`. A restrição do comando ao próprio departamento existe (`app/pautas/management/commands/suporte_hasner.py:122`); impacto concreto sobre algum leitor em produção: **[nao verificado]**.
-
-3. **CONFORME — rotas HTTP examinadas.** As duas rotas de texto livre chamam a guarda (`app/pautas/views.py:76`, `:114`). O conjunto de rotas de Pauta não expõe edição nem encaminhamento (`app/pautas/urls.py:7`). A API de mensageria lista pautas usando serviços de leitura (`app/api/views_mensageria.py:1323`, `:1329`, `:1340`). Ausência universal de admin/serializador dinâmico: **[nao verificado]**; nenhum registro explícito foi encontrado.
-
-6. **Segundo escritor fora da porta: CONFORME no rastreio.** A criação encontrada está centralizada em `app/pautas/services.py:194`; respostas delegam à mesma porta (`:208`). O comando acima contorna a guarda humana, mas usa o escritor comum (`app/pautas/management/commands/suporte_hasner.py:133`).
-
-6. **Campo com dois significados: PROCEDENTE, persistente na cópia.** `texto` armazena prosa (`app/pautas/models.py:89`) e também identidade/ação: o esmeril monta o corpo e extrai ação do prefixo (`app/ponto/services/pautas_do_esmeril.py:50`, `:66`, `:67`); o juiz de cadastro seleciona por prefixo textual (`app/chamados/services/fabrica_da_celula.py:304`, `:305`, `:318`). Correção mínima desta obra: fechar todas as portas humanas; cura estrutural exigiria identidade própria separada da prosa. Introdução desse problema no diff: **[nao verificado]**.
-
-A resposta é o próprio modelo Pauta com `pai`, sem modelo PautaResposta separado (`app/pautas/models.py:99`). Texto humano encaminhado por `resposta_tardia` recebe cabeçalho fixo antes do conteúdo, impedindo que o usuário escolha o início (`app/chamados/services/resposta_tardia.py:62`, `:65`).
-
-_3308 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3309 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
