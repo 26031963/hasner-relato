@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 04:45:25.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1360**.
+**Medido em 10/11/2026 04:50:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1353**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1363,10 +1363,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:54:50 | Bash |  | `ps -o pid,pgid,etime,cmd -g $(ps -o pgid= -p 1341957 \| tr -d ' ') \| cut -c1-160` |
 | 16:54:38 | Bash |  | `cd /home/ronald/saas-hasner; head -c 3500 logs/disparar_c20/censo.r; echo; echo ...; grep -n "^#\\|^##" logs/disparar_c20/censo.r \| head -30; sed -n 300,310p app/docs/CORTES.md \| cut -c1-400` |
 | 16:54:36 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; grep -n -i "disparar_perguntas_competencia\\|disparar" $D/censo_v2.r \| head; echo ---; ls -la logs/disparar_c20/ 2>&1 \| head; echo ---; grep -n -i disparar $D/matriz_e4.r \| head; ps -p 1341960 -o etime=; ls -la logs/codex/FIO-E0-V4-E4-ESCRITORES_20261109_164828_1341960.jsonl \| cut -c25-` |
-| 16:49:44 | Bash |  | `cd /home/ronald/saas-hasner; while kill -0 851894 2>/dev/null; do /usr/bin/sleep 20; done; tail -5 logs/push_3803.log; git fetch -q origin && git merge-base --is-ancestor 3803e6623 origin/main && echo NO_REMOTO \|\| echo FORA` |
-| 16:49:41 | Bash |  | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys p='app/docs/RELATO.md'; L=open(p).read().split('\n') h=sys.argv[1] linha=(f"E4 {h} [fio_morto_alcance=371, carimbo 16:43]: DECISAO TECNICA (PARADA 5): E4 em N pousos -- V1 conservacao do acervo R/V/recusa -> DecisaoPergunta so por DecisaoPergunta.registrar (DRY default, exportada fora com lista p/ !, reversao antes, i ...` |
-| 16:49:33 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 851894 -o pid,etime,cmd 2>/dev/null; tail -3 logs/push_3803.log; sed -n 1,6p app/docs/RELATO.md \| cut -c1-200` |
-| 16:48:15 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; N=$(date +%H%M%S); WT=/home/ronald/wt-codex-fio-e0-v4-e4-escritores-$N; git worktree add -q $WT -b e4-v1-$N 05e6aa147 && echo $WT > $D/wt_v1.txt; git -C $WT log --oneline -1; cp logs/aval_ordem_viva_0811.txt /dev/null 2>&1 cat > $D/aval_respira.txt <<'EOF' aval Ronald 09/11 16:5x RESPIRA-POR-APARELHO: 1 vaga de construtor no sistema; 1 p ...` |
-| 16:47:48 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,40p app/chamados/management/commands/backfill_decisoes_pergunta.py \| cut -c1-200` |
-| 16:47:45 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -fx "bash logs/push_3803.sh"; tail -2 logs/push_3803.log\|cut -c1-150; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a='Censo: 10 de 30 merges do origin/main com --cc vazio, 20 com 1-5 secoes.' assert s.count(a)==1 s=s.replace(a,'Censo (refeito pela sessao 16:5x; o do construtor dizia 10): 6 de 30 merges do origin/main com --cc --name-only vazio, 24 c ...` |
-| 16:47:36 | Bash |  | `cd /home/ronald/saas-hasner; v=0;n=0; for h in $(git log --merges -30 --format=%H origin/main); do n=$((n+1)); c=$(git diff-tree --cc --name-only $h \| tail -n +2 \| grep -c .); [ "$c" = 0 ] && v=$((v+1)); done; echo "vazio=$v de $n"; python3 -c " import json;a=json.load(open('app/logs/fio_morto.json'))['alcance'];print({k:v for k,v in a.items() if not isinstance(v,(list,dict))}) o=json.load(open( ...` |
