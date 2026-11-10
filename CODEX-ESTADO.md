@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 10:13** · publicado em **10/11/2026 10:16** (UTC-3)
+> Ultima resposta processada: **10/11/2026 11:03** · publicado em **10/11/2026 11:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 11:03 · sessao 807eb8462b58 · - · - · origem=Ronald (tmux)
+
+- O universo E4b das classes **a–e** vem de `vigia_fio.censo_alcance`, com uma linha por dia retido: `[celula_id, colab_id, data_iso, competencia, rota, causa, detalhe, papel]`. A lista inclui **todos** os `rota == 'sem_porta'`, independentemente de `limite`; pode chamar `limite=0` e filtrar essas linhas. Conferir `len(linhas)==fio_morto_alcance` e contagem por causa contra `alcance_a`…`alcance_e`. (`app/chamados/services/vigia_fio.py:542`, `:548`, `:625`, `:628`, `:695`)
+
+- `censo` é outro universo: chamados vivos ligados à célula; sua lista `celulas_do_fio_morto` e `classes_do_fio_morto` sofre truncamento. Se for usado como controle, passar `limite=sys.maxsize` e conferir comprimento contra o contador. Ele não fornece classes a–e. (`app/chamados/services/vigia_fio.py:335`, `:449`, `:454`, `:475`)
+
+- `classificar` é importada de **vigia_carimbo**, e suas classes são `com_registro`, `sem_plantio_nenhum`, `plantio_fora_do_slot`, `slot_nao_derivavel`; não representa a classificação a–e do alcance. (`app/chamados/services/vigia_fio.py:328`, `:463`; `app/chamados/services/vigia_carimbo.py:65`, `:74`, `:105`)
+
+- A célula do alcance é buscada por `(colaborador_id, data)`; há membro legítimo sem célula (`celula_id=None`, causa e, detalhe `sem_celula`). Preservar o par mesmo sem FK. (`app/chamados/services/vigia_fio.py:593`, `:596`, `:667`)
+
+- O juiz de exportação é `folha.export.competencia_entregue`, composto com o juiz de janela em `vigia_fio.competencia_do_dia_entregue(dia, empresa, memo)`. Para rotular competência, usar `janela_atual(dia, empresa)[1].month/year`, nunca mês civil. (`app/chamados/services/vigia_fio.py:822`, `:836`, `:838`, `:843`; `app/folha/export.py:556`)
+
+- O alcance enumera a competência corrente e a anterior somente enquanto esta não foi entregue. Não declarar que o alcance cobre passivo exportado fora dessa enumeração. A corrente entra incondicionalmente, por isso ainda faz sentido consultar o juiz para cada célula. (`app/ponto/services/he_pendente_lavrado.py:209`, `:220`, `:223`; `app/chamados/services/vigia_fio.py:583`)
+
+- O comando real compartilha uma `ListaDoAdmin(hoje, empresas, agora=agora)` e usa `tranca_em_lote()`. Não chamar o comando inteiro: ele grava carimbo em arquivo. (`app/chamados/management/commands/vigiar_fio_morto.py:165`, `:169`, `:173`, `:217`)
+
+- Há erros engolidos: `ListaDoAdmin._carregar` registra e continua sem lista; `cadastro_realidade.lista` registra falhas parciais com `logging.exception`. Para cumprir “erro não conclui”, interceptar `registrar_engolido` e logs de erro com sentinela derivada de `BaseException`, além de conferir que `_dias/_colabs` responderam e `lista.sem_resposta==0`. O `BaseException` evita nova captura por `except Exception`. (`app/chamados/services/vigia_fio.py:205`, `:219`, `:225`, `:250`; `app/escala/services/cadastro_realidade.py:804`, `:807`, `:813`, `:817`, `:877`, `:880`)
+
+- Fonte da classe d: ausência de pergunta viva, dia fora de `dias_na_lista`, colaborador presente na lista; isso não atribui dono ao dia. O dono lavrado da lista vem de `dias_na_lista`, que pode responder `None`; não criar mapa classe→dono. (`app/chamados/services/vigia_fio.py:677`; `app/escala/services/cadastro_realidade.py:1044`, `:1050`; `app/chamados/services/vigia_fio.py:99`)
 
 ## 10/11 10:13 · sessao ba7a69ea94fc · FIO-E0-V4-E4A-2 · verificador · origem=Code
 
@@ -835,19 +855,4 @@ O harness exige alvo textual único, rejeita erros de infraestrutura e exige fal
 
 Limite: a contagem observa avaliações do dublê, inclusive resultado vazio; SQL real, banco, gates de escrita e produção permanecem [nao verificado]. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:7`, `:81`, `:158`)
 
-## 10/11 03:16 · sessao 3f625a779cd6 · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · construtor · origem=Code
-
-Corrigido na origem: o ramo sem SHA retorna `sem-commit:<arquivo>` ([esteira_vigia.py:1174](core/esteira_vigia.py:1174)).
-
-O [relatório de entrega](pautas/tests/prefixos_reservados_volta5.r:5) contém o censo de quem escreve/lê cada campo, arquivos tocados, comandos, saídas e comando individual dos mutantes.
-
-Resultados locais registrados:
-
-- RED nas bases `5b6861f6f` e `2c998ff23`, ambos com zero erros ([saída](pautas/tests/prefixos_reservados_volta5.r:67)).
-- Prefixos: 30 testes, 1 skip; core/zumbido: 11 testes OK ([saída](pautas/tests/prefixos_reservados_volta5.r:89)).
-- **88 mutantes mortos; zero sobreviventes**, incluindo chamada nova a `_pauta` sem cobertura ([saída](pautas/tests/prefixos_reservados_volta5.r:112)).
-- 2.205 rótulos reais válidos; caminho com espaço recusado, com stderr registrado ([saída](pautas/tests/prefixos_reservados_volta5.r:353)).
-
-Ruff ausente ([saída](pautas/tests/prefixos_reservados_volta5.r:108)). Integração Django/HTTP/banco e suite completa: **[nao verificado]**. Certificação permanece com Code e opus final.
-
-_3361 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3362 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
