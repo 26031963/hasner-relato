@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:08** · publicado em **09/11/2026 21:08** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:13** · publicado em **09/11/2026 21:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:13 · sessao d6f821d9f1e7 · - · - · origem=Ronald (tmux)
+
+**PROCEDENTE — ordem selada apenas pela forma.** Em memória, os 11 testes novos ficaram verdes para cada mutante: juiz sem `cel.data`, trava de outro colaborador, `falso.atomic()`, retorno antes do bloco, retorno após a trava, fechamento `>=` trocado por `<=` e contador fixado em zero. `_ordem_ok` não confere argumentos ou identidade das funções e ignora instruções intermediárias que interrompem o fluxo. Cura mínima: conferir argumentos, vínculo ao `transaction.atomic` e sequência executável; proteger fechamento/contador com testes semânticos. (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:170`, `:179`, `:182`, `:216`; `app/chamados/services/fabrica_da_celula.py:304`, `:320`, `:335`, `:337`)
+
+**PROCEDENTE — registro incompleto.** Chave errada mantendo o valor e segundo registro com o mesmo valor passam no teste de registro. Cura mínima: exigir a chave exata e unicidade do endereço nessa família. (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:195`; `app/core/juizes.py:293`)
+
+**CONFORME, com limites — o selo morde usos diretos.** Nome/import alias/atributo direto/literal completo são detectados; importar módulo e chamar seu atributo também é detectado, assim como outra constante contendo o mesmo literal. Entretanto, `getattr`, referência intermediária `f = modulo._pautas_cadastro; f()`, equivalente do escritor, `Q` com prefixo composto por `+`, regex sem literal completo e SQL com parâmetro composto escapam. Esses exemplos são mutantes hipotéticos, sem ocorrência encontrada no código atual. (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:47`, `:61`, `:111`, `:120`, `:124`, `:138`)
+
+**Caminho atual alcançável — entrada humana pode produzir o marcador.** POST de staff aceita texto, destinatário e âncora arbitrários e chama a porta genérica sem deduplicação específica/trava por colaborador. Entrada adequada pode criar outra pauta CADASTRO sem passar por `pauta_cadastro_sem_turno`; ocorrência real é `[nao verificado]`. Isso continua usando a porta genérica de Pauta, portanto não comprova escritor ORM fora dela. (`app/config/urls.py:36`; `app/pautas/urls.py:9`; `app/pautas/views.py:16`, `:72`, `:76`; `app/pautas/services.py:153`, `:180`)
+
+**Varredura — pode incluir arquivo não versionado.** Percorre filesystem, sem consultar Git; `staticfiles` do host é montado no container como diretório real, embora ignorado no Git. Logs/media ficam em tmpfs. `.py` inválido, ilegível ou sem UTF-8 pode falhar em leitura/parse; diretório inacessível pode ser omitido pelo `os.walk` sem `onerror`. Falha efetiva nesse container: `[nao verificado]`. Cura mínima: universo de fontes versionadas/materializado para o selo, distinguindo arquivos gerados. (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:26`, `:36`, `:132`, `:204`; `.gitignore:13`; `bin/arvore_do_push.sh:55`, `:81`)
+
+**Custo local:** varredura de 760 arquivos sem erros/violações em aproximadamente 1,63 s; os 11 testes em aproximadamente 1,67 s, usando `python3 -B`, AST e `unittest.TestCase` em memória. Tempo/resultado no container Django: `[nao verificado]`. O método que determina esse custo está em `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199`.
+
+**Limite importante:** os mutantes passaram apenas pelo selo novo. Testes funcionais anteriores já cobrem contador, fechamento e dia posterior; não se pode concluir que a suíte inteira os aceitaria. (`app/chamados/tests/test_e4a_pauta_cadastro_contador.py:55`, `:61`, `:76`, `:84`, `:88`)
+
+## 09/11 21:12 · sessao 57bbec0b6ee6 · - · - · origem=Ronald (tmux)
+
+- **Juiz e registro — CONFORME no caminho efetivo.** A chave nova de `JUIZES['chamado']` aponta para `pauta_cadastro_existente(colaborador_id, dia=None)`; o único chamador de produção específico passa `(cel.colaborador_id, cel.data)`. O universo é cabeça, departamento DP, âncora de pessoa e prefixo do marcador. Não há outro juiz de entrega CADASTRO registrado; `dia_sem_trabalho`, `tarefa_do_dia`, `pergunta_viva` e `dia_da_pergunta_trancado` respondem outras perguntas. (`app/core/juizes.py:278`, `app/core/juizes.py:290`, `app/core/juizes.py:291`, `app/core/juizes.py:292`, `app/core/juizes.py:293`; `app/chamados/services/fabrica_da_celula.py:279`, `app/chamados/services/fabrica_da_celula.py:288`, `app/chamados/services/fabrica_da_celula.py:337`)
+
+- **Escrita/leitura dos campos.** O marcador nasce como constante em `:276`, é consumido pelo filtro em `:285` e incorporado ao texto em `:342`. O escritor específico assina TI, destina a DP, usa `ANCORA_COLAB` e `str(cel.colaborador_id)`, sem vínculo ou data na chave. A porta genérica grava esses campos em `Pauta.objects.create`; o seletor e juiz leem os mesmos valores; contador deduplica por `ancora_id`. (`app/chamados/services/fabrica_da_celula.py:276`, `app/chamados/services/fabrica_da_celula.py:284`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:339`; `app/pautas/models.py:30`; `app/pautas/services.py:180`)
+
+- **Viva/fechada e datas — CONFORME com ressalva semântica.** Viva vem da autoridade `PautaQuerySet.vivas`: não feita e não cancelada. Fechada cobre `timezone.localdate(cancelado_em or feito_em) >= dia`; sem `dia`, só viva cobre. `feito_em` é escrito por `marcar_feita` e `marcar_feita_pelo_sistema`; `cancelado_em` por `cancelar`; os três usam instantes `timezone.now()`. O juiz converte esses instantes a data local, não compara uma `date` com um instante. Fuso base São Paulo e `USE_TZ=True`; fuso ativo real do processo: `[nao verificado]`. (`app/pautas/models.py:57`, `app/pautas/models.py:64`; `app/pautas/services.py:246`, `app/pautas/services.py:247`, `app/pautas/services.py:271`, `app/pautas/services.py:272`, `app/pautas/services.py:294`; `app/chamados/services/fabrica_da_celula.py:299`, `app/chamados/services/fabrica_da_celula.py:303`, `app/chamados/services/fabrica_da_celula.py:304`; `app/config/settings/base.py:93`, `app/config/settings/base.py:95`)
+
+- **Ressalva “DP já olhou”: não demonstrada.** A docstring diz que fechamento significa “o DP já olhou”, porém cancelamento é ato do autor e dispensa leitura; `pauta_cadastro_existente` não lê `lido_em`. Isso não muda a definição operacional declarada de “entregue”, mas não autoriza afirmar que DP leu/resolveu. A cura mínima é corrigir a explicação, se “entregue” significa encaminhada; mudar o predicado exige decidir se cancelamento deveria continuar cobrindo. (`app/chamados/services/fabrica_da_celula.py:292`, `app/chamados/services/fabrica_da_celula.py:301`, `app/pautas/models.py:94`, `app/pautas/services.py:288`, `app/pautas/services.py:294`)
+
+- **Uma pendência pelo escritor específico — CONFORME estático; concorrência real `[nao verificado]`.** O escritor abre `atomic`, trava a pessoa, consulta o juiz e escreve. `trava_na_ordem` executa `SELECT FOR UPDATE` da linha de `Colaborador`; portanto dois escritores cooperantes do mesmo colab serializam antes da seleção. Não há chave por dia/vínculo. (`app/chamados/services/fabrica_da_celula.py:334`, `app/chamados/services/fabrica_da_celula.py:335`, `app/chamados/services/fabrica_da_celula.py:337`, `app/chamados/services/fabrica_da_celula.py:339`; `app/chamados/models.py:2666`)
+
+- **Brecha alcançável hoje: segunda origem pelo POST genérico — PROCEDENTE se o contrato “UMA por colab” incluir todas as entradas do produto.** Staff autorizado pode postar duas vezes o mesmo texto com marcador, `ancora_tipo=colab`, mesmo id e DP: rota existe, view recebe tudo do POST, service grava sem reservar prefixo, travar pessoa ou deduplicar. Isso cria duas cabeças vivas; contador por `distinct` continua mostrando 1. Não é segundo escritor ORM fora da porta, mas entrada alternativa que contorna o escritor específico. O selo AST não vê valores vindos do POST. Ocorrência em produção `[nao verificado]`. Cura mínima: reservar o prefixo à entrada específica na porta comum e acrescentar teste negativo da entrada humana; não basta procurar mais tokens em fonte. (`app/config/urls.py:36`; `app/pautas/urls.py:9`; `app/pautas/views.py:16`, `app/pautas/views.py:73`, `app/pautas/views.py:76`, `app/pautas/views.py:80`, `app/pautas/views.py:81`; `app/pautas/services.py:153`, `app/pautas/services.py:180`; `app/chamados/services/fabrica_da_celula.py:320`; `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:120`)
+
+- **Contador: os quatro campos existem.** `nome='cadastro_sem_turno'`, número de `ancora_id` distintos vivos, `esperado=0`, `dono='CADASTRO'`. O vigia chama o contador e imprime nome no rótulo `VFM|CADASTRO_SEM_TURNO`, número, esperado e dono. JSON contém chave/número em `censo` e esperado em `esperado`, mas não transporta dono; o dono continua na função e linha textual. `bin/fio_estado.py` lê o JSON e compara genericamente esperado versus censo; `gerar_estado.py` usa essa apresentação. (`app/chamados/services/fabrica_da_celula.py:309`, `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:321`; `app/chamados/management/commands/vigiar_fio_morto.py:98`, `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:223`, `app/chamados/management/commands/vigiar_fio_morto.py:229`; `bin/fio_estado.py:104`, `bin/fio_estado.py:125`, `bin/fio_estado.py:191`; `bin/gerar_estado.py:260`)
+
+- **Vigia do contador — CONFORME como leitor.** `vigiar_fio_morto` só chama contador/imprime/carimba; CADASTRO fica fora de `ALARMA_SEMPRE` e `ALARMA_EM_0`, portanto nem dispara `SystemExit` por essa pendência. O leitor do ESTADO mostra divergência “fora do esperado”. O aval fornecido exige contador, não exige interromper a corrente por CADASTRO. (`app/chamados/management/commands/vigiar_fio_morto.py:83`, `app/chamados/management/commands/vigiar_fio_morto.py:84`, `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:181`, `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:239`; `bin/fio_estado.py:191`)
+
+- **Fechamento/dia novo — implementação e testes existentes.** Viva cobre qualquer dia; fechada cobre até a data local inclusiva. Dia posterior cria nova pauta, mantendo só uma viva pelo escritor cooperante. Isso é coerente com nova ocorrência de cadastro faltante; autorização literal específica dessa reemissão no aval raspado `[nao verificado]`; a decisão está expressa na docstring e no selo comportamental anterior. (`app/chamados/services/fabrica_da_celula.py:292`, `app/chamados/services/fabrica_da_celula.py:295`, `app/chamados/services/fabrica_da_celula.py:304`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:67`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:90`)
+
+- **Novo selo não protege todas as obrigações positivas.** Ele exige sítios, contagens de chamadas e forma sequencial; não fixa conteúdo dos filtros, número/dono/esperado, comparação de fechamento/data local, argumentos corretos da trava/juiz ou emissão em todos os emissores. Existem testes comportamentais anteriores para dois dias/uma pauta, quatro campos, feita/cancelada, dia posterior e dia antigo; o teste isolado de ordem/duas rodadas usa dublês, não duas conexões concorrentes. Cura mínima: preservar esses testes e acrescentar concorrência real e fronteira local de meia-noite, além de identidade/argumentos do AST. (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:174`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:216`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:51`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:55`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`; `app/chamados/tests/test_e4_c20.py:65`, `app/chamados/tests/test_e4_c20.py:96`, `app/chamados/tests/test_e4_c20.py:105`)
+
+- **Leitores genéricos não são outro juiz.** A aba seleciona por destinatário e viva, serializa texto/âncora/estado; o copiloto exibe `p.texto`; API mensageria lista recebidas DP e entrega texto/âncora; `pautas_do_colab` lista pautas de pessoa/dia sem interpretar o marcador. (`app/pautas/services.py:308`, `app/pautas/services.py:322`, `app/pautas/services.py:433`; `app/pautas/views.py:40`, `app/pautas/views.py:43`; `app/templates/core/_copiloto.html:405`; `app/api/views_mensageria.py:1324`, `app/api/views_mensageria.py:1329`, `app/api/views_mensageria.py:1334`)
+
+Não executei banco, log ou testes que escrevem arquivos. Resultado de execução da suíte e correspondência independente com o commit de produção `[nao verificado]`. [nao verificado]
+
+## 09/11 21:11 · sessao a1ada130ce61 · - · - · origem=Ronald (tmux)
+
+**PROCEDENTE — obrigação (i), fora da fábrica.** `disputa_emissao` pode perguntar por dia passado sem previsto: `_tem_base` aceita batidas (`app/chamados/services/disputa_emissao.py:814`); `classificar_falta` deixa a sequência prevista vazia sem escala (`app/escala/servico_jornada.py:396`) e mesmo assim acusa batida unilateral (`app/escala/servico_jornada.py:444`, `app/escala/servico_jornada.py:446`). `_ata_do_dia` autoriza continuar sem célula e sem escala (`app/chamados/services/disputa_emissao.py:899`, `app/chamados/services/disputa_emissao.py:906`); o agrupador chega à abertura (`app/chamados/services/disputa_emissao.py:1232`, `app/chamados/services/disputa_emissao.py:1241`). A porta verifica identidade/costura, mas chega à inserção sem guarda de previsão (`app/chamados/models.py:2789`, `app/chamados/models.py:2896`, `app/chamados/models.py:3017`). Ocorrência real em produção: **[nao verificado]**.
+
+Correção mínima: fazer o juiz canônico abster-se quando não há sequência prevista, proteger o caminho completo de emissão com caso negativo e encaminhar CADASTRO pela porta/evento autorizado. O novo selo só verifica nomes/sítios e forma do escritor, portanto não detecta essa emissão (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:138`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199`).
+
+**CONFORME — fio mudo não pergunta nesse caso.** Ele passa `vencidos_no_instante` a `motivos_pela_ata` e pula quando não há motivo (`app/chamados/management/commands/disparar_perguntas_competencia.py:158`, `app/chamados/management/commands/disparar_perguntas_competencia.py:160`); o helper devolve vazio para ausência de previsto (`app/chamados/services/fabrica_da_celula.py:38`). Esse ramo não encaminha ao CADASTRO; a entrega depende do evento da fábrica (`app/chamados/services/fabrica_da_celula.py:175`). O teste existente de lote sem turno monta apenas célula, sem chamado mudo, portanto não cobre especificamente esse ramo (`app/chamados/tests/test_fabrica_pela_ata.py:30`, `app/chamados/tests/test_fabrica_pela_ata.py:63`).
+
+**CONFORME — vigia versus emissor declarado.** O ramo célula conta (`app/chamados/management/commands/disparar_perguntas_competencia.py:112`); `--alarme` retorna antes de escrever (`app/chamados/management/commands/disparar_perguntas_competencia.py:253`). O fio mudo escreve com `--apply`, mas está explicitamente declarado como exceção de prazo, não vigia (`app/config/crons.py:2044`, `app/chamados/management/commands/disparar_perguntas_competencia.py:282`). Não classificar essa escrita, isoladamente, como violação.
+
+**CONFORME — contador CADASTRO não alarma deliberadamente.** O vigia lê o contador (`app/chamados/management/commands/vigiar_fio_morto.py:179`), publica número/esperado/dono e “não alarma” (`app/chamados/management/commands/vigiar_fio_morto.py:202`); CADASTRO está fora dos conjuntos de alarme (`app/chamados/management/commands/vigiar_fio_morto.py:83`, `app/chamados/management/commands/vigiar_fio_morto.py:84`). O aval fornecido exige contador, sem exigir alarme específico por cadastro **[nao verificado: anexo transcrito sem arquivo local]**. O selo novo não protege essa ligação ao vigia (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:206` apenas exige que o arquivo seja varrido).
+
+**Relógio:** no juiz novo, `localdate(fechou)` converte timestamp persistido, sem ler agora (`app/chamados/services/fabrica_da_celula.py:304`). No universo ampliado, há leitura de relógio dentro de `classificar_falta` (`app/escala/servico_jornada.py:368`) e fallback em `cobra_marcos_da_ata` (`app/chamados/services/disputa_emissao.py:744`); nenhuma dessas leituras é protegida pelo selo novo (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:124`).
+
+**Selos existentes relevantes, sem executar banco:** deduplicação sequencial e quatro campos do contador (`app/chamados/tests/test_e4a_pauta_cadastro_contador.py:51`); fechada não cala dia posterior (`app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`); fechada cobre dias anteriores e iguais (`app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`); trava antes de consulta com stubs, duas chamadas sequenciais (`app/chamados/tests/test_e4_c20.py:64`). Esses casos não demonstram dois processos concorrentes (`app/chamados/tests/test_e4_c20.py:105`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:52`).
 
 ## 09/11 21:08 · sessao 0784c8db88ae · MODO-COMUM-PASSADO-SEM-TURNO · construtor · origem=Code
 
@@ -852,99 +910,4 @@ Entrega: [E4A_V2_ENTREGA.txt](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-1710
 - ORM não executado; comando preparado para a sessão. [Referência](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:175).
 - O pouso ainda depende dos hunks e das decisões explícitas sobre A05 e C11. [Pendências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:222). [nao verificado]
 
-## 09/11 17:42 · sessao c84017ed8f71 · - · - · origem=Ronald (tmux)
-
-C11 por ato:
-
-| Ato | Evento demonstrável |
-|---|---|
-| Abertura `batida_ausente` | `abrir`: `chamados/models.py:977–980`; `criar`: `:1093–1099`. Ambos inserem evento no atomic do nascimento. |
-| Reabrir chamado/transição para VIVOS | `chamados/signals.py:194–203`, antes do best-effort/cartório. `_gravar_estado` salva dentro de atomic em `chamados/models.py:280–296`. |
-| Retratar duplicata | `chamados/services/fio.py:1354` → `carimbar_identidade` → save; receiver de pergunta em `chamados/signals.py:237–245`; save atômico em `chamados/models.py:3402–3413`. |
-| Validação | `chamados/services/validacao.py:136–139` salva e registra DP no mesmo atomic; evento pelo receiver acima. |
-| Morte pela leitura da célula | `ponto/portas/celula.py:894–902`: célula e evento no mesmo atomic. |
-| Reapontar pela porta fio | Captura origem em `chamados/services/fio.py:924`; salva em `:927`; acorda origem em `:929`, no atomic aberto em `:881`. |
-
-Lacunas adicionais:
-
-1. **Tranca de competência:** C6 morre por leitura da tranca em `chamados/juizes.py:1325–1328`; `trancar_periodo` não emite evento nem possui atomic próprio (`ponto/services/fechamento.py:1400–1430`). Construção permitida sugerida: atomic envolvendo criação/retranca e evento por `CelulaDia` da empresa dentro de `janela_fechamento(mes, ano, empresa_id)`. Essa janela aceita ID e consulta o corte canônico (`ponto/janelas.py:36–57`). Manter `disparar_no_ato` fora do atomic: pode abrir subprocesso (`chamados/services/competencia_trancada.py:290–298`). Segunda chamada com `ato=False` não emite novamente (`ponto/services/fechamento.py:1411`).
-
-2. **Reuso em `_nascer`:** muda célula/destino e salva, sem acordar origem (`chamados/models.py:2955–2998`). Hunk textual: capturar `cls.linhas_do_evento(cls.objects.filter(pk=ex.pk))` antes de `upd=[]`; após `ex.save(update_fields=upd)`, chamar `cls.acordar_celulas(linhas_antes)` no atomic existente (`chamados/models.py:2839`).
-
-3. **Reversão de regeneração:** save cru em `ponto/portas/celula.py:794–795`; termina em `:808`, sem emissão e sem `_o_chao_do_dia_mudou`. Edição chama esse rabo em `:627`; regeneração em `:354`. Hunk mínimo textual: `emitir_evento_celula(cel)` depois desse save, ainda no atomic de `:785`. Entretanto, o INSERT sozinho não relavra ATA/veredito: fábrica lê os motivos da célula em `chamados/services/fabrica_da_celula.py:170`. Não afirmar cobertura completa da reversão com esse hunk isolado.
-
-PERGUNTAS para sessão:
-
-- Aceita-se que o erro de outbox impeça a transição para VIVOS? O caminho alterado é o `post_save` de **qualquer save existente com mudança de status para VIVOS**, módulo de turno e célula (`chamados/signals.py:194–203`). Pela porta `_gravar_estado`, participa do mesmo atomic (`chamados/models.py:280–296`). Saves diretos não ganham atomic genérico: `ChamadoColaborador` não contém wrapper equivalente ao de PerguntaDisputa (`chamados/models.py:3402–3413`).
-- Se construir tranca+evento atomicamente, falha da outbox passa a desfazer a tranca. O comentário atual promete que a tranca nunca cai por causa da fila (`ponto/services/fechamento.py:1423`). Não resolver silenciosamente essa mudança.
-
-H2 continua aplicável à implementação atual: `registrar` só executa `bulk_create` (`chamados/models.py:3932–3934`); o texto acrescenta atomic+outbox (`docs/E4A_HUNKS_SESSAO.txt:66`). H4 corresponde às três mudanças necessárias: remover `--apply` do ENC (`config/crons.py:1521`), retirar nome da lista de juízes (`:2048`) e declarar papel vigia (`:2164–2169`). Sem H4 aplicado, cron chama opção ausente no comando desta cópia (`docs/E4A_HUNKS_SESSAO.txt:123`).
-
-## 09/11 17:42 · sessao 760a6e6cb3db · - · - · origem=Ronald (tmux)
-
-Mapa de provas existentes, sem executar ORM:
-
-| Porta | Prova aproveitável | Lacuna para selo EXPAND |
-|---|---|---|
-| A01 | Estado canônico + trilha: `chamados/tests/test_trilha_na_ordem_da_escrita.py:67`; porta válida: `chamados/tests/test_selo_e4_gates.py:59` | Comparar toda projeção das perguntas antes/depois, sem exigir DP para efeito Chamado. |
-| A02 | SILENCIO com autor: `chamados/tests/test_e1_entradas.py:121` | Exigir F/C preservados, instante correspondente e 2x sem novo DP. |
-| A04 | Exercício indireto na devolução: `chamados/tests/test_o261_recusa_fala.py:164` | Caso direto `reabrir_sistema`, F completo e 2x com uma nota; não possui DP próprio. |
-| A05 efeito puro | Carimbo aceito: `chamados/tests/test_o261e_f2_porta_carimbo.py:676`; recusa restaura memória/banco: `:713` | Caracterizar C completo com `resposta=None`; assinatura segue exceção conflitante do pedido. |
-| A07 | Três campos C limpos juntos: `chamados/tests/test_o261e_f2_porta_carimbo.py:754` | Exigir R/V intactos e nenhum DP inventado pelo efeito técnico. |
-| A08 | Exercício por correção com absorção: `chamados/tests/test_e1_volta2.py:200`; 2x = 1 DP: `:217` | Caso direto do lote, incluindo `outros` e C/R/V completo. |
-| A09 | 2x = mesmo estado e zero query na segunda: `chamados/tests/test_porta_chamado_e3.py:70` | Exigir demais projeções intactas e nenhum DP humano fabricado. |
-| A10 | DP VALIDACAO com autor e mesmo instante de V: `chamados/tests/test_e1_entradas.py:94` | Asserção explícita da projeção completa. `_carimbar_validacao` não declara idempotência própria. |
-| A11 | Conserva resposta/recusa, limpa V e reabre F: `chamados/tests/test_o261_recusa_fala.py:164`; conserva V legada em DP: `chamados/tests/test_e1_volta2.py:101` | Exigir exatamente um novo DP DEVOLUCAO e repetir a porta. |
-| A12 | Cada resposta é uma linha; anterior imutável; mesmo instante R/DP: `chamados/tests/test_e1_entradas.py:64`; invalida V: `chamados/tests/test_porta_resposta_pergunta.py:224` | Comparar toda projeção. Repetição não é idempotente: a própria prova caracteriza duas trilhas em `test_porta_resposta_pergunta.py:216`. |
-| A13 | Sem dados não fabrica DP: `chamados/tests/test_e1_entradas.py:115`; foto da absorção e 2x: `chamados/tests/test_e1_volta2.py:200`, `:217` | Reabertura ordinária com foto R/V, F intacto e exatamente 1 DP. |
-| A14 | 2x sem query; voz não sobrescrita: `chamados/tests/test_porta_chamado_e3.py:43`, `:50` | Exigir 1 DP RESPOSTA, instante injetado e R completo. |
-| A15 | Testemunha preservada e 2x sem mudar instante/trilha: `chamados/tests/test_porta_resposta_pergunta.py:241` | Exigir exatamente 1 DP RESPOSTA com texto/instante testemunhados. |
-| A16 | Via e L no mesmo save: `chamados/tests/test_porta_veredito_pergunta.py:343`; 2x = uma trilha: `:372` | Exigir R/V/C restante preservado e nenhum DP de decisão inventado. |
-| A19 | Uma RECUSA, autor/motivo e texto retirado: `chamados/tests/test_e1_entradas.py:103` | Exigir motivo projetado e R/V zerados; 2x = mesma projeção e um DP RECUSA. |
-| A21 | RETRATACAO, via terminal, resposta preservada: `chamados/tests/test_e1_entradas.py:142` | Repetir remoção e comparar motivos/contexto/projeção e quantidade de DP. |
-| A22 | 2x mesmo fato = uma pergunta e uma trilha: `chamados/tests/test_porta_pergunta_identidade.py:167`; reuso sem escrita: `chamados/tests/test_e1_v15.py:44` | Nascimento/defaults R/V/C e reuso conservando DP/projeções existentes. |
-| A23 | Limpa resposta e conta: `chamados/tests/test_porta_disputa_ciclo.py:283`; 2x não conta/trilha de novo: `:297` | Exigir exatamente um DP REABERTURA com autor/foto, além do contador/projeção já provados. |
-
-A fixture mais simples para um novo módulo ORM é `_Base` de `chamados/tests/test_e1_entradas.py:30`: cria Empresa/Colaborador/User; `_pergunta` nasce pela porta em `:37`; `_responder` executa o core e recarrega em `:44`. O relógio desse módulo é fixado por `RELOGIO` em `:26` e `freeze_time` em `:51`. Para efeitos que dependem de chamado/célula e lavra, a fixture de `chamados/tests/test_porta_veredito_pergunta.py:223` já prepara esse universo.
-
-Não recomendo afirmar “1 DP” para A01/A04/A05 puro/A07/A08 direto/A09/A16/A22: o vocabulário atual representa decisões humanas ou atos definidos, enquanto esses corpos executam efeitos/identidade. O requisito permite “DP ou efeito canônico”; adicionar RESPOSTA/REABERTURA a efeitos técnicos alteraria significado. (`chamados/models.py:3846`; `chamados/services/relavra_via.py:106`; `chamados/models.py:3192`; `chamados/models.py:2822`)
-
-Resultados dessas provas no banco desta cópia: **[nao verificado]**.
-
-## 09/11 17:42 · sessao f9abd31ce653 · - · - · origem=Ronald (tmux)
-
-Leitura concluída, sem escrita.
-
-| Porta | Evidência / classificação |
-|---|---|
-| A01 `_gravar_estado` | Efeito canônico Chamado + trilha no mesmo atomic: `chamados/models.py:280`, `:292`, `:296`. Não corresponde a um ato DP por pergunta. |
-| A02 `fechar` | Exceções já gravam `SILENCIO`: `chamados/models.py:1921`; F persiste no mesmo atomic: `:1934`. Fechamento normal conserva efeito/quitação, sem inventar decisão. |
-| A04 `reabrir_sistema` | Efeito no continente e nota existente: `chamados/models.py:2174`, `:2177`. `REABERTURA` disponível significa correção da pergunta, não reabertura do continente: `:3853`. |
-| A05 `carimbar`, ramo puro | Efeito/carimbo e L: `chamados/models.py:3118`, `:3140`, `:3141`. |
-| A05 assinatura | **Lacuna confirmada**: atribui R/V em `chamados/models.py:3121`, `:3124`; salva sem DP em `:3141`. |
-| A07 `descarimbar` | Limpeza do carimbo: `chamados/models.py:3197`, `:3201`; caller de lastro executa consequência do juiz: `chamados/services/relavra_via.py:242`, `:246`. |
-| A08 `descarimbar_em_lote` | Executor de limpeza: `chamados/models.py:3253`; correção registra DP antes do lote: `chamados/services/disputa_emissao.py:1612`, `:1627`. Ressuscitação conserva decisões antigas antes da limpeza: `chamados/models.py:1563`, `:1565`. |
-| A09 `encerrar_por_fato_no_espelho` | Efeito já existente do espelho, via idempotente: `chamados/models.py:3262`, `:3264`, `:3265`. |
-| A10 `_carimbar_validacao` | Já grava `VALIDACAO` no atomic do save: `chamados/services/validacao.py:136`, `:139`. |
-| A11 `devolver_validacao_recusada` | Já grava `DEVOLUCAO`: `chamados/services/validacao.py:201`, `:205`; segunda chamada não registra novamente quando V já nulo: `:195`. |
-| A12 resposta core | Já grava `RESPOSTA` no atomic: `chamados/services/disputa_emissao.py:1500`, `:1505`, `:1508`. Advertência permanece em `recusa_motivo`: `:1494`. |
-| A13 correção | Já grava `REABERTURA`/`RECUSA` antes da limpeza: `chamados/services/disputa_emissao.py:1602`, `:1612`, `:1624`, `:1629`. |
-| A14 automática | Já grava `RESPOSTA`: `chamados/services/disputa_emissao.py:1651`, `:1653`; guarda do texto mantém idempotência existente: `:1644`. |
-| A15 trilha | Já grava `RESPOSTA` no instante testemunhado: `chamados/services/disputa_emissao.py:1671`, `:1674`; guarda idempotente: `:1667`. |
-| A16 relavra | Efeito derivado + L pelo juiz existente: `chamados/services/relavra_via.py:120`, `:125`, `:127`. Não representa nova decisão humana. |
-| A19 recusa | Já delega DP `RECUSA` dentro do atomic da projeção: `chamados/services/validacao.py:588`, `:590`, `:593`; executor DP em `chamados/services/disputa_emissao.py:1612`. |
-| A21 remover motivo | Já grava `RETRATACAO` e carimbo no atomic: `chamados/models.py:2023`, `:2053`, `:2059`. |
-| A22 nascer/reuso | Reuso altera identidade/costura/L, sem nova escrita R/V/C: `chamados/models.py:2955`, `:2997`, `:2998`; nascimento aceita `campos` e persiste em `:3005`, `:3008`. |
-| A23 colaborador | Já delega correção com DP dentro do atomic do contador: `chamados/models.py:2232`, `:2234`, `:2236`; executor DP em `chamados/services/disputa_emissao.py:1612`. |
-
-A contradição precisa constar em PERGUNTAS: o pedido exclui expressamente A05 **ramo de assinatura**, mas manda começar pelo RED que exige DP precisamente nesse ramo. A falha é real (`chamados/models.py:3121`, `:3124`, `:3141`); qual instrução prevalece é **[nao verificado]**.
-
-Se autorizado pela sessão, o hunk mínimo de A05 deve acumular `RESPOSTA` somente ao preencher R ausente, `VALIDACAO` somente ao preencher V ausente, com texto/instante/autor das atribuições existentes; depois envolver `save` + `DecisaoPergunta.registrar` no mesmo atomic dentro do `try` atual. O rollback em memória existente precisa continuar cobrindo falha do registrar (`chamados/models.py:3137`, `:3143`, `:3144`). Não inserir DP no ramo puro nem repetir assinatura já presente (`:3120`, `:3123`).
-
-`registrar` não deduplica: faz apenas `bulk_create`, então a precondição deve continuar na porta (`chamados/models.py:3934`).
-
-O vocabulário disponível é fechado em oito atos (`chamados/models.py:3846`, `:3847`); classificar indiscriminadamente limpeza técnica, relavra, nascimento ou reabertura de continente como `REABERTURA` alteraria o significado documentado em `:3853`.
-
-Não encontrei `Parallel Change`/`Expand-Contract` nos dois catálogos consultados; resultado da busca local, não confirmação universal **[nao verificado]**. Termos efetivamente encontrados: `Single Writer Principle` em `docs/GLOSSARIO.md:12` e `Architecture Conformance Test` em `docs/GLOSSARIO.md:15`.
-
-_3229 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3232 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
