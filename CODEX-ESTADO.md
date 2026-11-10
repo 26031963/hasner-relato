@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 23:54** · publicado em **09/11/2026 23:55** (UTC-3)
+> Ultima resposta processada: **10/11/2026 00:01** · publicado em **10/11/2026 00:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 00:01 · sessao 7e1e0940e71c · - · - · origem=Ronald (tmux)
+
+Rastreio só leitura, com os principais sítios:
+
+- **Responsável por emitir:** `julgar_colab`, quando `apply_`, chama a fábrica apenas para as células cuja data entrou no `cods` deste ato; células puladas por impressão não passam nessa chamada. O `cods` é isolado do acumulador do lote. `app/ponto/services/cartorio.py:938`, `app/ponto/services/cartorio.py:993`, `app/ponto/services/cartorio.py:1006`.
+- **Segundo gatilho:** consumidor do outbox chama `perguntar_por_eventos` depois de rejunção, retratação de perguntas/chamados/premissa, órfãs e lastro; essa função relê as células **atuais** apenas das datas dos eventos daquele colaborador, sem rejulgá-las. `app/chamados/reconciliador.py:1363`, `app/chamados/reconciliador.py:1384`, `app/chamados/services/fabrica_da_celula.py:279`.
+
+**Quatro motivos, uma mesma regra:** início/E → `saida_sem_entrada`; fim/S → `orfao_14h`; ida/S → `intervalo_saida`; volta/E → `intervalo_volta`. Os quatro são família MARCO. Nesse caminho os nomes são códigos de lâmpadas faltantes: não há teste próprio “14 horas” para `orfao_14h`, nem exigência de saída existente para `saida_sem_entrada`. `app/chamados/services/declaracao_texto.py:42`, `app/chamados/catalogo/motivos.py:34`, `app/chamados/catalogo/motivos.py:48`, `app/chamados/services/fabrica_da_celula.py:68`.
+
+**Guardas comuns a escritor e vigia via `motivos_a_perguntar`:**
+
+- `dia_sem_trabalho(cel)` ou situação diferente de `ativo`; dia futuro; veredito preenchido fora de `VEREDITOS_ACUSAM`; `parcial_so_lista`; falta de marco vencido; ata que não autoriza/faltantes desconhecidos; lâmpada que não é faltante; motivo já ocupado no domínio do fato. `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/fabrica_da_celula.py:107`, `app/chamados/services/fabrica_da_celula.py:112`, `app/chamados/services/fabrica_da_celula.py:113`, `app/chamados/services/fabrica_da_celula.py:116`, `app/chamados/services/fabrica_da_celula.py:132`, `app/chamados/services/fabrica_da_celula.py:147`.
+- `dia_sem_trabalho` significa `trabalha=False` ou `ata.tipo_dia` preenchido diferente de trabalho; ausência parcial mantém cobrança do resto, salvo `trabalha=False`. `app/chamados/juizes.py:426`, `app/chamados/juizes.py:435`.
+- Sem turno previsto no passado: escritor pauta CADASTRO e retorna; vigia também obtém zero motivos porque `vencidos=None` termina em lista vazia, mas este N não mede ausência dessa pauta. `app/chamados/services/fabrica_da_celula.py:35`, `app/chamados/services/fabrica_da_celula.py:58`, `app/chamados/services/fabrica_da_celula.py:192`.
+- Limbo (`trabalha=None`) em competência entregue: escritor encaminha PAUTA DP, não pergunta; vigia conta motivos ainda sem pauta, inclusive considerando pautas feitas/canceladas. Logo o rótulo “perguntas não emitidas” agrega também falta de pauta. `app/chamados/services/fabrica_da_celula.py:205`, `app/chamados/services/fabrica_da_celula.py:219`, `app/chamados/services/fabrica_da_celula.py:233`, `app/chamados/services/fabrica_da_celula.py:250`.
+
+**“Emitida” significa identidade existente, não pergunta viva/pendente:** dedup lê pergunta `conversa=False`, data igual à célula, instância do motivo, coluna colaborador; só duplicata/motivo retratado saem do domínio. Pergunta decidida/materializada pode segurar identidade. A consulta externa ainda exige `disputa__colaborador=colab`, e não simplesmente a coluna da pergunta; isso é comum ao vigia e à pré-seleção do escritor. `app/chamados/services/fabrica_da_celula.py:138`, `app/chamados/services/fabrica_da_celula.py:141`, `app/chamados/models.py:2746`, `app/chamados/models.py:2393`.
+
+**Assimetria temporal que deve constar:** o cartório passa julgamento **anterior** capturado antes do corpo; vigia e consumidor usam `cel.julgada_em` persistido. Para parcial com período, esse carimbo participa de `parcial_so_lista` (“já julgada e sem fato novo”). Portanto compartilham função, mas não necessariamente o mesmo insumo temporal; a diferença tende a excluir no vigia/consumidor uma parcial que o primeiro ato podia emitir. `app/ponto/services/cartorio.py:951`, `app/ponto/services/cartorio.py:1008`, `app/chamados/services/fabrica_da_celula.py:116`, `app/chamados/services/fabrica_da_celula.py:233`, `app/chamados/services/fabrica_da_celula.py:292`, `app/ponto/services/cartorio.py:395`.
+
+**Horizonte/dia em curso:** piso, chamado vivo, desligamento, afastado e existência de vínculo/marco guardam a emissão do **chamado** no corpo; não são uma guarda direta adicional da fábrica de perguntas, chamada depois para datas julgadas. A fábrica usa sua guarda ativo + motivos da ata. `app/ponto/services/cartorio.py:1687`, `app/ponto/services/cartorio.py:1695`, `app/ponto/services/cartorio.py:1707`, `app/ponto/services/cartorio.py:1722`, `app/ponto/services/cartorio.py:1728`, `app/ponto/services/cartorio.py:1008`, `app/chamados/services/fabrica_da_celula.py:105`.
+
+O julgamento pode pular por nenhum marco vencido em hoje/ontem no modo de teto; impressão igual; ausência de dia na grade; modo completar status. Mesmo depois de julgar, veredito/ata podem legitimamente impedir motivos. `app/ponto/services/cartorio.py:1324`, `app/ponto/services/cartorio.py:1329`, `app/ponto/services/cartorio.py:1370`, `app/ponto/services/cartorio.py:1373`, `app/ponto/services/cartorio.py:1376`, `app/ponto/services/cartorio.py:960`.
+
+**Dia civil × turno:** teto usa marcos encadeados do turno ancorado em `cel.data`, +30 minutos; noturno de ontem pode ter saída ainda não vencida hoje. Embora `_marcos_faltantes` leia dia e véspera, fábrica só aceita faltantes com `f[0]==cel.data`. Escritor passa essa data no contexto; geração abre pergunta datada pelo dia do turno, conversa usa outra porta com dia civil. `app/ponto/services/cartorio.py:828`, `app/ponto/services/cartorio.py:831`, `app/ponto/services/cartorio.py:858`, `app/chamados/services/declaracao_texto.py:98`, `app/chamados/services/declaracao_texto.py:135`, `app/chamados/services/fabrica_da_celula.py:71`, `app/chamados/services/fabrica_da_celula.py:165`, `app/chamados/services/disputa_emissao.py:443`, `app/chamados/models.py:2794`.
+
+**Warning 969:** `_ata_do_dia` emite essa luz quando leitor diz `sem_celula` e existe escala vigente; também pode representar ata sem lâmpadas, não só ausência física de célula. Retorna `(False,None)`; vigia e fábrica retornariam zero motivos sob essa leitura. Logo não se pode ligar o warning aos 111 só pelo dado fornecido. `app/chamados/services/declaracao_texto.py:93`, `app/chamados/services/declaracao_texto.py:123`, `app/chamados/services/disputa_emissao.py:899`, `app/chamados/services/fabrica_da_celula.py:64`; relação de produção [não verificado].
+
+**Ponto de cuidado sobre retorno:** `perguntar_pela_celula` devolve `ms` selecionados, não o número confirmado de linhas criadas; `perguntar` chama geração, ignorando sua lista de retorno. A geração pode continuar por ausência de catálogo/data/dedup e a porta pode reusar linha. Portanto contador `perguntas_no_julgamento` não é confirmação independente de INSERT. `app/chamados/services/fabrica_da_celula.py:153`, `app/chamados/services/fabrica_da_celula.py:165`, `app/chamados/services/fabrica_da_celula.py:208`, `app/ponto/services/cartorio.py:1009`, `app/chamados/services/disputa_emissao.py:314`, `app/chamados/services/disputa_emissao.py:360`, `app/chamados/services/disputa_emissao.py:398`, `app/chamados/models.py:2776`.
+
+**Eventos:** apenas gravações dos campos ata/veredito acordam no `salvar_e_emitir`; save e evento são atômicos. Evento também nasce nas demais portas documentadas: chamado de turno nascendo, turno aberto fechando, pergunta alterando campo que solta chamado, semeadura. `app/ponto/portas/celula.py:892`, `app/ponto/portas/celula.py:896`, `app/ponto/portas/celula.py:908`.
+
+Consumidor marca processado inclusive quando fábrica legitimamente retorna vazio; exceção impede marca e aumenta tentativa, teto de órfã adia sem gastar tentativa; pendências com 5 falhas saem dos vivos. Assim uma guarda temporal da fábrica que não provoque `adiar` por órfã pode consumir o evento antes do vencimento, dependendo dos demais gatilhos para voltar àquela data — possibilidade estrutural, ocorrência nos 111 [não verificado]. `app/chamados/reconciliador.py:1207`, `app/chamados/reconciliador.py:1387`, `app/chamados/reconciliador.py:1392`.
+
+**Contraexemplos úteis para distinguir sem escolher:**
+
+- A/rótulo: célula limbo entregue com motivo devido sem pauta: N>0, emissão ao colaborador proibida e falta efetiva é pauta; ou parcial cuja diferença é o carimbo anterior/persistido. Sítios acima; presença na amostra [não verificado].
+- B/execução: célula julgada neste ato, `ms` não vazio, sem pergunta/pauta depois, evento disponível/consumido e nenhuma exceção; inspecionar continuidade entre seleção → geração/porta. `app/ponto/services/cartorio.py:1008`, `app/chamados/services/fabrica_da_celula.py:208`, `app/chamados/services/disputa_emissao.py:300`; existência de tal célula [não verificado].
+- C/gatilho: célula ainda devida pelo vigia, mas dia pulado por impressão e sem novo evento vivo; ou evento da data consumido quando marco não vencera e data não voltou ao julgamento. Diferente de B porque não houve tentativa emissora naquele estado/instante. `app/ponto/services/cartorio.py:1373`, `app/ponto/services/cartorio.py:1006`, `app/chamados/services/fabrica_da_celula.py:288`, `app/chamados/reconciliador.py:1400`; ocorrência na amostra [não verificado].
+
+## 10/11 00:00 · sessao ad68d6da3c84 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos condicionais quanto à produção:
+
+- Os quatro motivos são de marco: entrada `('inicio','E') → saida_sem_entrada`; saída `('fim','S') → orfao_14h`; intervalo `('int_ida','S') → intervalo_saida` e `('int_volta','E') → intervalo_volta`. As instâncias vêm dessa mesma tabela. `app/chamados/services/declaracao_texto.py:42-57`; família MARCO em `app/chamados/catalogo/motivos.py:34-35,48-49`.
+
+- O warning `sem_celula ... criar_questionario` significa que `_marcos_faltantes` respondeu sem ata ou sem marcos e havia escala vigente; `_ata_do_dia` acende warning e devolve `(False,None)`. Sem escala vigente, devolve `(True,None)`; erro de leitura também devolve `(True,None)`. Todos esses resultados produzem zero motivos no vigia porque `motivos_pela_ata` exige `pode=True` e `faltantes is not None`. Portanto o warning col969/dia07 não demonstra participação nos 111 sob a mesma foto. `app/chamados/services/disputa_emissao.py:884-910`; `app/chamados/services/fabrica_da_celula.py:64-66`. Associação temporal entre warning e contador além do dado fornecido: [não verificado].
+
+- `_marcos_faltantes` considera `missing` verdadeiro na ata; ignora isento, fora do vínculo, dia sem trabalho, lâmpada sem informação e ausência parcial que não deixa resto cobrável. A véspera só contribui saída final; se há faltantes no próprio dia, elimina a véspera. A fábrica ainda exige `f[0] == dia`, portanto os motivos da célula permanecem no dia do turno dela. `app/chamados/services/declaracao_texto.py:103-142`; `app/chamados/services/fabrica_da_celula.py:68-73`.
+
+- A fábrica já passou pela ata antes de chamar `perguntar`: `motivos_a_perguntar → motivos_pela_ata` e `perguntar_pela_celula → perguntar`. `_abrir_ou_agregar_disputa` somente cria/agrega disputa; `criar_ou_atualizar_disputa` gera perguntas em disputa nova e reutilizada. Não há segundo gate de ata dentro de `gerar_perguntas_disputa`. `app/chamados/services/fabrica_da_celula.py:132,198-210`; `app/chamados/services/disputa_emissao.py:474-603,669-682`.
+
+**Divergência estrutural concreta, candidata B, condicional ao estoque:**
+
+1. `saida_sem_entrada` e `orfao_14h` precisam de derivação de chamado-destino; os dois intervalos são datados, mas não pertencem a esse conjunto. `app/chamados/models.py:3657`; `app/chamados/services/disputa_emissao.py:26`.
+2. Sem destino inequívoco, `_derivar_chamado_destino` retorna `(None,None)`. `app/chamados/services/disputa_emissao.py:238-244`.
+3. Entrada/saída fazem dedup por `data_evento=_data_ev`, agora `None`, antes de escolher `_data_fallback` do dia válido. Uma pergunta anterior não-conversa, fora das vias retratada/duplicata, de mesmo motivo e mesma disputa, com `data_evento=NULL`, provoca `continue`; a célula D segue sem pergunta. O campo permite NULL. `app/chamados/services/disputa_emissao.py:410-424`; `app/chamados/models.py:2423-2425`.
+4. O vigia consulta o fato do dia D, com instância correta; a pergunta NULL não satisfaz essa consulta. Intervalos usam diretamente `_data_fallback=D` nesse pré-dedup, logo não compartilham esse exato mecanismo. `app/chamados/models.py:2746-2755`; `app/chamados/services/disputa_emissao.py:395-400`.
+
+**Contraexemplo distinguidor:** célula D elegível, sem pergunta do fato D; disputa aberta contendo pergunta NULL do mesmo motivo; nenhum destino derivável. O vigia conta, o gerador pula. Existência desse conjunto entre os 111: [não verificado].
+
+**Outra divergência condicional:** o pré-dedup do gerador usa disputa/motivo/data, sem exigir `instancia_marco` e coluna `colaborador`, enquanto o vigia exige ambos. Estoque inconsistente poderia fazê-lo contar e o gerador calar; a inserção normal atual deriva/valida essas colunas, portanto não prova ocorrência normal. `app/chamados/services/disputa_emissao.py:395-420`; `app/chamados/models.py:2753-2755,3425-3447`.
+
+Outras guardas abaixo da fábrica:
+
+- Motivo sem pergunta no catálogo: pula; os quatro da amostra possuem pergunta de hora no catálogo. `app/chamados/services/disputa_emissao.py:314-316`; `app/chamados/catalogo/perguntas.py:48-61,124-137`.
+- Texto sem data e sem fallback da grade: pula; hora sem dia do turno: pula. A fábrica normal passa `{motivo: {'data': dia.isoformat()}}`, então essas guardas não deveriam bloquear esse caminho sob entradas normais. `app/chamados/services/disputa_emissao.py:344-366,424-430`; `app/chamados/services/fabrica_da_celula.py:165`.
+- Porta recusa destino de outro colaborador ou resolvedora de outro turno; contrato de saída desfaz o ato se o dia gravado não corresponde ao recebido pelo ponto único. `app/chamados/models.py:2839-2840,2888-2890,2818-2822`.
+- Para MARCO normal, não deriva episódio de batida; o dia pedido da célula é confirmado como dia do turno. `app/chamados/models.py:3458-3462`; `app/chamados/services/fio.py:1630-1640`.
+- O dedup do fato inclui qualquer estado; exclui conversa, duplicata e motivo retratado. Pergunta decidida também segura o fato. `app/chamados/models.py:2697-2728,2746-2755`.
+- Reatar pergunta órfã ocorre depois do nascimento; falha é registrada e mantém a pergunta órfã. Logo essa falha de costura, isoladamente, não explica falta de pergunta contada por N. `app/chamados/services/disputa_emissao.py:459-470`.
+
+## 10/11 00:00 · sessao 4fa80517892c · - · - · origem=Ronald (tmux)
+
+**4. Portas de reparo**
+
+- Existe `consumir_eventos_celula --semear`; o comando semeia e **retorna sem consumir**. A execução seguinte sem `--semear` consome. (`app/chamados/management/commands/consumir_eventos_celula.py:14-15,28-31`)
+- Universo da semeadura: uma célula por `(colaborador, dia)` de **chamado vivo de módulo de turno**, mais as perguntas órfãs que `fantasma_pela_lampada` encerraria; exige célula existente e ausência de pendente vivo. **Não varre genericamente todas as células acusadoras sem pergunta**. (`app/chamados/reconciliador.py:1201-1204,1278-1311`)
+- O ramo de órfãs considera perguntas sem materialização, sem validação, disputa aberta, motivo `orfao_14h`/`saida_sem_entrada`, dia presente, submetidas ao predicado; não cobre intervalos por esse ramo. (`app/chamados/reconciliador.py:1037-1051,1302-1308`)
+- Chamador operacional encontrado da semeadura: o management command; chamadas explícitas adicionais estão nos testes. O cron declarado chama apenas o consumidor, **a cada minuto, sem `--semear`**. Execução histórica manual em produção: **[não verificado]**. (`app/chamados/management/commands/consumir_eventos_celula.py:28-31`; `app/config/crons.py:393-394`; `app/chamados/tests/test_orfas_pelo_evento.py:203-214`)
+- Consumir não amplia para todos os dias do colaborador: a fábrica relê células atuais **das datas dos eventos do lote**. (`app/chamados/services/fabrica_da_celula.py:279-293`)
+- Outra porta: `processar_cartorio --empresa X --apply --forcar`; `--forcar` manda rejulgar mesmo com impressão igual. Universo: todas as células passadas da empresa, sem filtro de situação do colaborador; não tem recorte de competência nesse comando. A fábrica continua sujeita às suas guardas. (`app/ponto/management/commands/processar_cartorio.py:25-29,45-65`)
+- O teste da semeadura prova semear → consumir → encerrar órfã, idempotência e não semear lâmpada apagada; não prova recuperação universal das perguntas ausentes do contador. (`app/chamados/tests/test_orfas_pelo_evento.py:200-228`)
+
+**5. Leitores**
+
+- `placar_code.sh`: raspa **última linha compatível** de `logs/fio_mudo.log`; se o arquivo não tiver mtime desde meia-noite local, imprime `?`. Supõe número esperado zero, dono Code, **fora do TOTAL**. A frescura é do arquivo, não do timestamp individual da linha raspa­da. (`bin/placar_code.sh:388-390`)
+- `ESTADO`: não encontrei leitor estruturado de N no gerador; ele captura as últimas 40 linhas do painel tmux, podendo transportar N incidentalmente se estiverem ali. O gerador publica seus placares estrutural/espelho por outras fontes. Um ESTADO publicado contendo N em produção: **[não verificado]**. (`bin/gerar_estado.py:184-190,367-389`)
+- `pipeline_placar`: não lê N nem `fio_mudo.log`; lê `placar.jsonl` com início, nome, empresa, exit e duração. Exit 2 vira **alarme de negócio**, distinto de erro de execução; pode apresentar `ALARME`. Porém o conjunto que faz o próprio pipeline alarmar contém `ERRO`, `NAO_RODOU` e `DEPENDENCIA_QUEBRADA`, não `ALARME`. (`app/core/management/commands/pipeline_placar.py:60-80,84-109,130-135`)
+- Relação indireta: N positivo provoca `SystemExit(2)` em `--alarme` ou `--apply`; a corrente usa `--comp-corrente --apply`. `cron_run` grava esse exit no JSONL e **carimba conclusão também para RC2**, permitindo a corrente continuar. (`app/chamados/management/commands/disparar_perguntas_competencia.py:247-263,302-303`; `app/config/crons.py:1521-1523`; `bin/cron_run.sh:11-25`)
+- Testes antigos assumem julgamento emite uma vez e lote conta o que ficou; teste de costura exige que `apply_=False` não pergunte. (`app/chamados/tests/test_fabrica_por_evento.py:34-43,60-81`)
+- Testes vigentes do vigia exigem: `--apply` não escrever pelo caminho da célula, contar e sair 2; limbo cobrar; folga não contar; já perguntada não contar; limbo exportado com pauta não contar, sem pauta contar; parcial sem período não contar; fio mudo continua escritor. (`app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:98-149,152-194`)
+- Os testes de relógio exigem hoje fora do contador, entrada no dia seguinte; piso inclui fim da competência anterior; noturno de ontem fica fora enquanto é candidato do vigia de hora e entra depois. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:109-163,374-401`)
+- O selo do elo exige log persistente `fio_mudo.log` e `--apply`, sem validar a semântica de N. (`app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:19-28`)
 
 ## 09/11 23:54 · sessao 19c98713e862 · REVERTER-DIA-SEM-RECALCULO · censo · origem=Code
 
@@ -999,199 +1094,4 @@ Derivação paralela de janela/teto: **não identificada no trecho inspecionado*
 
 **Linhas de fila prometidas:** inscrição de `E4A2-RELOGIO-FIO-VIVO` e `E4A2-JANELA-POR-EMPRESA` no BACKLOG desta cópia **[nao verificado]**; o registro geral da obra está em `app/docs/BACKLOG.md:1871`, e o comentário somente anuncia a fila de janela por empresa em `app/chamados/management/commands/disparar_perguntas_competencia.py:29`.
 
-## 09/11 22:24 · sessao b40cd15d984c · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-Alterados cinco arquivos, nos itens da volta 2:
-
-- [disparar_perguntas_competencia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/chamados/management/commands/disparar_perguntas_competencia.py:36): único `agora/hoje`, janela usando esse dia e `_viva(..., hoje=hoje)`. Reparo documentado em `:8`, janela global em `:28`, texto literal em `:136` e legenda em `:157`. A linha FABRICA permaneceu idêntica em bytes (`:154`).
-- [test_e4a2_disparar_e_vigia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/chamados/tests/test_e4a2_disparar_e_vigia.py:39): AST ampliado; captura DML da chamada inteira com dois alvos distintos, com/sem alarme (`:242`); mesmo coletor aplicado ao mutante ORM `UPDATE` (`:270`). [nao verificado]
-- [test_selo_emissor_fio_mudo.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/chamados/tests/test_selo_emissor_fio_mudo.py:266): mantém “nenhuma viva” e exige contagem total antes/depois igual.
-- [test_termometro_regua_prazo.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/escala/tests/test_termometro_regua_prazo.py:19) e [test_selfie_ausente_juiz.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/ponto/tests/test_selfie_ausente_juiz.py:148): exigem zero juízes, com o histórico solicitado.
-
-RED antes: o teste do relatório falhou exigindo a linha literal do brief: `FAILED (failures=1)`. Depois, os nove corpos de testes executados por AST/unittest passaram: `Ran 9 tests ... OK`. Essa execução inclui os mutantes de escrita/opções (`test_e4a2_disparar_e_vigia.py:74`), relógio (`:153`) e relatório/alarme (`:211`). [nao verificado]
-
-Comando usado para esses testes e seus mutantes, sem Django: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import ast
-import unittest
-from pathlib import Path
-
-p = Path('chamados/tests/test_e4a2_disparar_e_vigia.py')
-a = ast.parse(p.read_text())
-a.body = [
-    n for n in a.body
-    if not (
-        isinstance(n, ast.ImportFrom)
-        and (n.module.startswith('django') or n.module == 'freezegun')
-    )
-    and not (
-        isinstance(n, ast.ClassDef)
-        and any(isinstance(b, ast.Name) and b.id == 'TestCase' for b in n.bases)
-    )
-]
-ns = {'__file__': str(p.resolve()), 'SimpleTestCase': unittest.TestCase}
-exec(compile(a, str(p), 'exec'), ns)
-suite = unittest.TestSuite( [nao verificado]
-    unittest.defaultTestLoader.loadTestsFromTestCase(c)
-    for c in ns.values()
-    if isinstance(c, type)
-    and c is not unittest.TestCase
-    and issubclass(c, unittest.TestCase)
-)
-r = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
-raise SystemExit(not r.wasSuccessful())
-PY
-```
-
-Os testes reais pelo Django, a captura ORM, a mordida do `UPDATE` e a suíte completa ficaram **[nao verificado]**. A tentativa dos `SimpleTestCase` parou em `No module named 'django'`. O ruff também ficou **[nao verificado]**: a tentativa retornou `No module named ruff`. [nao verificado]
-
-Comandos pendentes para o Code, incluindo o mutante ORM:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
-  chamados.tests.test_e4a2_disparar_e_vigia \
-  chamados.tests.test_selo_emissor_fio_mudo \
-  escala.tests.test_termometro_regua_prazo \
-  ponto.tests.test_selfie_ausente_juiz
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache \
-  chamados/management/commands/disparar_perguntas_competencia.py \
-  chamados/tests/test_e4a2_disparar_e_vigia.py \
-  chamados/tests/test_selo_emissor_fio_mudo.py \
-  escala/tests/test_termometro_regua_prazo.py \
-  ponto/tests/test_selfie_ausente_juiz.py
-```
-
-## 09/11 22:10 · sessao 636b02405ee3 · FIO-E0-V4-E4A-2 · verificador · origem=Code
-
-[nao verificado] — identidade Git, ancestralidade, diff integral e relação exata dos arquivos tocados: a cópia fornecida não contém `.git`. Execução da suíte e condição de pouso em produção: [nao verificado]. [nao verificado]
-
-1. **QUEM ESCREVE / QUEM LÊ — CONFORME para rc e dependência; PROCEDENTE nas consequências da classificação.**
-
-| Valor | Definição/produtor | Leitores e significado |
-|---|---|---|
-| `JUIZES_POR_VARREDURA` | Tupla vazia em `app/config/crons.py:2032` | Alimenta papéis em `app/config/crons.py:2164`; exceção estrutural em `app/core/contratos_estruturais.py:264`; igualdade no tabuleiro em `app/core/tests/test_contract_tabuleiro.py:26`; selo de host em `bin/tests/test_papel_prazo_nao_deriva.sh:325` e `bin/tests/test_papel_prazo_nao_deriva.sh:328`. |
-| `PAPEL_DO_CRON` | Disparar declarado `vigia` em `app/config/crons.py:2168` | Consulta por `papel()` em `app/config/crons.py:2344`; juízes derivados em `app/config/crons.py:2356`; tabuleiro em `app/core/management/commands/gerar_diagrama.py:242`; subgrafo VIGIAS em `app/core/management/commands/gerar_diagrama.py:397`; selo de prazo em `bin/tests/test_papel_prazo_nao_deriva.sh:247`. |
-| Juízes derivados | Compreensão sobre todas as entradas em `app/config/crons.py:2356` | Medição padrão em `app/chamados/services/vigia_loop.py:82`; placar em `bin/placar_code.sh:484`, incluído no TOTAL em `bin/placar_code.sh:555`; desenho em `app/core/management/commands/gerar_diagrama.py:244`. |
-| Argv ENC | `--comp-corrente --alarme` em `app/config/crons.py:1521` | Transportado em `app/config/crons.py:1850`; serializado em `app/core/management/commands/crons.py:40`; executado em `bin/encadeado.sh:64` e `bin/encadeado.sh:102`; selado em `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:26` e `app/chamados/tests/test_selo_emissor_fio_mudo.py:193`. |
-| Rc | Com alarme, qualquer universo pendente produz 2; sem alarme termina normalmente em `app/chamados/management/commands/disparar_perguntas_competencia.py:160` | Runner captura/grava em `bin/cron_run.sh:11` e `bin/cron_run.sh:13`; aceita 0/2 para carimbo em `bin/cron_run.sh:22` e recuperação em `bin/cron_run.sh:32`; corrente acumula rc em `bin/encadeado.sh:65`; saúde aceita 0/2 em `app/core/services/crons_quebrados.py:46`; pipeline distingue alarme em `app/core/management/commands/pipeline_placar.py:75`. |
-| `FABRICA-POR-EVENTO` | Quantidade de motivos pendentes e pares colaborador/dia em `app/chamados/management/commands/disparar_perguntas_competencia.py:153` | Parser operacional em `bin/placar_code.sh:388`; parsers de testes em `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:74` e `app/chamados/tests/test_selo_disparo_nao_cobra_desligado.py:116`; asserções em `app/chamados/tests/test_fabrica_por_evento.py:83`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:127` e `app/chamados/tests/test_e4a2_disparar_e_vigia.py:115`. |
-| `VIGIA FIO MUDO` | `len(_mudos)` em `app/chamados/management/commands/disparar_perguntas_competencia.py:135` | Testes em `app/chamados/tests/test_selo_emissor_fio_mudo.py:173`, `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:48`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:437`, `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:136` e `app/chamados/tests/test_e4a2_disparar_e_vigia.py:114`. Leitor operacional específico: [nao verificado]. |
-| `ALVOS` e distribuição | Mesmo conjunto `_mudos`, sem limite, em `app/chamados/management/commands/disparar_perguntas_competencia.py:147` e `app/chamados/management/commands/disparar_perguntas_competencia.py:157` | Testes em `app/chamados/tests/test_selo_emissor_fio_mudo.py:181`, `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`, `app/chamados/tests/test_fabrica_pela_ata.py:51`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:106` e `app/chamados/tests/test_e4a2_disparar_e_vigia.py:116`. Leitor operacional específico: [nao verificado]. |
-| `[BARRADO]` | Quatro contadores em `app/chamados/management/commands/disparar_perguntas_competencia.py:138` | A barreira parcial é conferida em `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:174`; o teste de relatório injeta barreiras zeradas em `app/chamados/tests/test_e4a2_disparar_e_vigia.py:105`. Parser operacional da linha: [nao verificado]. |
-
-**CONFORME — rc 2 libera o dependente.** O runner cria o arquivo de fim também em rc 2; a corrente espera sua existência. `reconciliar_perguntas_orfas` depende desse gatilho e mede seu próprio universo, sem interpretar os contadores do disparar. “Fim” significa conclusão, não ausência de pendências (`bin/cron_run.sh:19`; `bin/cron_run.sh:22`; `bin/encadeado.sh:89`; `app/config/crons.py:1526`; `app/ponto/management/commands/reconciliar_perguntas_orfas.py:29`).
-
-**PROCEDENTE — não há uniformidade completa.** A classificação vazia produz incompatibilidades nos testes e falso diagnóstico no placar, detalhados abaixo. O pipeline também continua calculando esperados somente de `CRONS`, deixando ENCs fora desse universo (`app/escala/tests/test_termometro_regua_prazo.py:19`; `bin/placar_code.sh:209`; `app/core/management/commands/pipeline_placar.py:40`; `app/core/management/commands/pipeline_placar.py:108`).
-
-2. **TUPLA VAZIA / VEREDITOS — PROCEDENTE.**
-
-- **Duas asserções ainda exigem exatamente 1 juiz.** Correção mínima: exigir zero, mantendo as verificações das respectivas autoridades (`app/escala/tests/test_termometro_regua_prazo.py:19`; `app/ponto/tests/test_selfie_ausente_juiz.py:148`).
-- **O selo de host rejeita a exceção remanescente.** A exceção do disparar permanece, mas sua ausência na lista acrescenta falha. Apagá-la isoladamente também quebra o caso que exige sua isenção. Correção mínima: depois de comprovada a condição de saída, retirar a exceção e adaptar sua prova específica, preservando o caso que acusa outro cron (`bin/tests/test_papel_prazo_nao_deriva.sh:303`; `bin/tests/test_papel_prazo_nao_deriva.sh:325`; `bin/tests/test_papel_prazo_nao_deriva.sh:388`; `bin/tests/test_papel_prazo_nao_deriva.sh:390`).
-- **Vazio saudável vira “vigia falhou”.** `escritas_por_cron()` devolve `universo=0, crons={}`; o shell imprime somente membros e interpreta ausência de linhas como falha. Correção mínima: emitir representação explícita do universo vazio, distinguindo-o de erro de execução (`app/chamados/services/vigia_loop.py:93`; `app/chamados/services/vigia_loop.py:98`; `bin/placar_code.sh:207`; `bin/placar_code.sh:209`).
-- **Disparar desaparece da medição padrão de escritas.** Isso decorre da seleção pelos juízes vivos; não comprova ausência de escrita sem trilha. Correção mínima: preservar uma medição explícita do comando durante a verificação da retirada (`app/chamados/services/vigia_loop.py:64`; `app/chamados/services/vigia_loop.py:80`).
-
-**CONFORME — a célula chamado × “um juiz por pergunta” não muda de cor.** `C()` tem `verde=False`; essa célula não o sobrescreve; `verdes()` conta flags, não listas vazias. O aval contrário à reclassificação para produzir verde permanece, assim como a frase 19/20 do R6 (`app/core/contratos_estruturais.py:62`; `app/core/contratos_estruturais.py:262`; `app/core/contratos_estruturais.py:270`; `app/core/contratos_estruturais.py:1055`; `app/core/placar_estrutural.py:440`).
-
-**CONFORME — os leitores estruturais principais toleram vazio.** A derivação usa `sorted` e compreensão; o desenho usa `len` e laço; o selo compara listas e verifica exceções, sem indexar um primeiro juiz (`app/config/crons.py:2356`; `app/core/management/commands/gerar_diagrama.py:256`; `app/core/management/commands/gerar_diagrama.py:264`; `app/core/tests/test_contract_tabuleiro.py:26`; `app/core/tests/test_selo_contratos_estruturais.py:81`).
-
-Os demais testes de retirada conferem ausência de nomes específicos e continuam compatíveis com vazio: `app/chamados/tests/test_jv3_reconciliar_vira_vigia.py:243`; `app/chamados/tests/test_jv1_feriado_vira_vigia.py:200`; `app/chamados/tests/test_varredura_isentos_evento.py:98`; `app/chamados/tests/test_varredura_feriado_evento.py:106`; `app/chamados/tests/test_varredura_becos_evento_pergunta.py:97`; `app/ponto/tests/test_varredura_lote_prazo.py:38`; `app/ponto/tests/test_varredura_fantasmas_evento.py:61`; `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:277`; `app/ponto/tests/test_vigia_de_hora.py:234`; `app/ponto/tests/test_vigia_intervalo_ausente.py:27`; `app/ponto/tests/test_par_relampago_pelo_turno.py:80`; `app/ponto/tests/test_orfas_vigia.py:115`; `app/ponto/tests/test_varredura_cluster_evento.py:90`; `app/ponto/tests/test_vigia_reconciliar_vinculo.py:26`; `app/ponto/tests/test_c2_vinculo_vira_lista.py:114`; `app/ponto/tests/test_varredura_classe_b_ausencia.py:35`. O teste da medição padrão exige igualdade com a lista viva, inclusive vazia (`app/chamados/tests/test_escritas_por_cron.py:65`).
-
-3. **ESCRITA REMANESCENTE / CHAMADORES — CONFORME no caminho de domínio inspecionado; garantia universal [nao verificado].**
-
-O comando conserva consultas e impressão; termina após o alarme. O parser oferece somente `ini`, `fim`, `comp-corrente`, `alarme` e `colab`; o ENC operacional já passa `--comp-corrente --alarme` (`app/chamados/management/commands/disparar_perguntas_competencia.py:21`; `app/chamados/management/commands/disparar_perguntas_competencia.py:70`; `app/chamados/management/commands/disparar_perguntas_competencia.py:92`; `app/chamados/management/commands/disparar_perguntas_competencia.py:160`; `app/config/crons.py:1521`).
-
-Há efeitos indiretos de **observabilidade**: `_ata_do_dia` pode chamar `acender_sem_ata` ou `registrar_engolido`; estes fazem logging e, no segundo caso, incrementam contador em memória. A escrita ORM de auditoria pertence a outra função, `evento()` (`app/chamados/services/disputa_emissao.py:895`; `app/chamados/services/disputa_emissao.py:908`; `app/chamados/services/declaracao_texto.py:63`; `app/core/observ.py:73`; `app/core/observ.py:94`; `app/core/observ.py:134`).
-
-Outro chamador executável passando as opções removidas, escrita de domínio por importação ou sinal alcançado nessa execução: **[nao verificado]**. As opções antigas presentes na base incorporada são texto histórico; há também comentário hipotético antigo, não chamada executável (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:165`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:218`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:5`).
-
-4. **RED NOVO — PROCEDENTE: mordida parcial.**
-
-O AST proíbe somente `perguntar`, `_rodar`, `atomic`, `RuntimeError` e as três opções. Os mutantes de escrita testados repetem essa lista (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:27`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:55`).
-
-Ele aceita nomes que efetivamente escrevem neste domínio: `criar_ou_atualizar_disputa`, `gerar_perguntas_disputa`, `PerguntaDisputa.abrir`, `.save()`, `.create()`, `.update()` e `reabrir_sistema`. As portas reais geram perguntas, inserem linhas e salvam reabertura (`app/chamados/services/disputa_emissao.py:662`; `app/chamados/services/disputa_emissao.py:444`; `app/chamados/models.py:3019`; `app/chamados/models.py:2177`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:27`).
-
-Um mutante concreto é inserir, antes de `_mudos.append`, `ChamadoColaborador.objects.filter(pk=ch.pk).update(titulo='mutante')`. O AST não acusa; o teste de banco compara apenas contagens; o teste de relatório executa somente o sufixo iniciado no primeiro `stdout.write`. Assim, essas verificações não observam tal alteração de estado (`app/chamados/management/commands/disparar_perguntas_competencia.py:133`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:24`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:94`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:140`). Aprovação desse mutante pela suíte inteira: **[nao verificado]**.
-
-**Correção mínima:** interceptar SQL durante a chamada completa e rejeitar DML, mantendo as contagens; ampliar a catraca para as portas reais identificadas (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:146`; `app/chamados/services/disputa_emissao.py:444`; `app/chamados/models.py:3019`).
-
-**CONFORME — parser e alarme têm mordida específica.** Há rejeição das três opções, combinações dos dois universos com/sem alarme e mutações de condição, rc e prefixo (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:76`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:98`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:123`).
-
-5. **INVERSÃO DOS TESTES — CONFORME em vários contratos; PROCEDENTE numa garantia enfraquecida.** [nao verificado]
-
-Relação exata dos arquivos tocados: **[nao verificado]**. Os contratos atuais relacionados são:
-
-| Teste | Garantia atual | [nao verificado]
-|---|---|
-| `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:78` | Célula: zero perguntas, contador exato e rc 2. FIO MUDO: zero e rc 2 em `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:132`; retratada conserva uma linha em `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:156`; parcial mantém zero e rc 0 em `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:172`. |
-| `app/chamados/tests/test_selo_emissor_fio_mudo.py:184` | Exatamente um ENC, alarme e ausência de apply. Sem chave conserva contagem em `app/chamados/tests/test_selo_emissor_fio_mudo.py:205`. |
-| `app/chamados/tests/test_pergunta_do_dia_em_curso.py:435` | Marco vencido contado e nenhuma pergunta criada; o helper não verifica rc explicitamente em `app/chamados/tests/test_pergunta_do_dia_em_curso.py:422`. |
-| `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:19` | Preserva formato de seis posições, log e argv; exige alarme e rejeita apply. |
-| `app/ponto/tests/test_varredura_lote_prazo.py:62` | Exige exatamente zero juízes e papel vigia. |
-| `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:34` | Conserva contagem de perguntas; confere alvos e distribuição em `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:48`. |
-| `app/chamados/tests/test_fabrica_por_evento.py:76` | Conserva contagem e exige contador da fábrica. |
-| `app/chamados/tests/test_fabrica_pela_ata.py:33` | Conserva contagem antes de devolver o relatório. |
-| `app/chamados/tests/test_e4a2_disparar_e_vigia.py:146` | Conserva quatro contagens e verifica rc com/sem alarme; limitação quanto a UPDATE descrita no item 4. |
-
-**PROCEDENTE — “nenhuma viva” não equivale a “nenhuma criada”.** No ciclo acusador, a nova asserção aceita uma pergunta criada já morta. Correção mínima: acrescentar comparação de contagem total antes/depois, além de ausência de vivas e rc 2 (`app/chamados/tests/test_selo_emissor_fio_mudo.py:266`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:270`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:272`).
-
-6. **LEGIBILIDADE SITUACIONAL — PROCEDENTE.**
-
-**CONFORME parcialmente:** o docstring identifica vigia, dois universos, rc e emissor por evento; o comentário aponta a fábrica. Isso atende parte da fronteira “quem manda aqui” (`app/chamados/management/commands/disparar_perguntas_competencia.py:1`; `app/chamados/management/commands/disparar_perguntas_competencia.py:13`; `CLAUDE.md:41`; `CLAUDE.md:168`).
-
-**PROCEDENTE — falta a ponte de reparo do estoque.** O comentário transforma estoque pendente em diagnóstico, mas não aponta a porta existente. Correção mínima: indicar `consumir_eventos_celula --semear` e esclarecer que a semeadura retorna antes do consumo, exigindo consumo posterior (`app/chamados/management/commands/disparar_perguntas_competencia.py:83`; `app/chamados/management/commands/consumir_eventos_celula.py:14`; `app/chamados/management/commands/consumir_eventos_celula.py:28`).
-
-**PROCEDENTE — comentários contraditórios.** O cadastro anuncia a saída para vigia e, logo depois, afirma que o FIO MUDO segue escrevendo; a docstring do contador ainda apresenta disparar como emissor. Correção mínima: marcar explicitamente esses trechos como situação anterior ou atualizar sua descrição (`app/config/crons.py:2044`; `app/config/crons.py:2046`; `app/config/crons.py:2353`).
-
-A condição legal de saída continua preservada no corte e no selo; não foi apagada desses lugares. Perda de outra história normativa sem cópia equivalente: **[nao verificado]** (`app/docs/CORTES.md:305`; `bin/tests/test_papel_prazo_nao_deriva.sh:307`).
-
-7. **CLASSES QUE JÁ REPROVARAM OBRA.**
-
-| Classe | Veredito |
-|---|---|
-| Segundo juiz duplicando registrado | **CONFORME no trecho inspecionado:** consulta regra compartilhada da fábrica, `parcial_so_lista`, pergunta viva e domínio do fato (`app/chamados/management/commands/disparar_perguntas_competencia.py:80`; `app/chamados/management/commands/disparar_perguntas_competencia.py:99`; `app/chamados/management/commands/disparar_perguntas_competencia.py:105`; `app/chamados/management/commands/disparar_perguntas_competencia.py:129`). |
-| Segundo escritor fora da porta | **CONFORME no caminho de domínio inspecionado**, com limite probatório do RED apontado no item 4 (`app/chamados/management/commands/disparar_perguntas_competencia.py:133`; `app/chamados/management/commands/disparar_perguntas_competencia.py:160`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:27`). |
-| Relógio fora da borda | **PROCEDENTE:** `_viva(p)` não recebe `_hoje`; pode alcançar `date.today()`. `_ja_perguntou` também chega a `fio_vivo`, que não injeta hoje. Correção mínima: propagar o dia capturado na borda pelos leitores (`app/chamados/management/commands/disparar_perguntas_competencia.py:99`; `app/chamados/management/commands/disparar_perguntas_competencia.py:124`; `app/chamados/juizes.py:1389`; `app/chamados/juizes.py:577`; `app/chamados/services/disputa_emissao.py:1419`; `app/chamados/juizes.py:1434`). |
-| Derivação paralela de fonte única | **CONFORME no teto e janela:** chama funções existentes; há problemas de parâmetros/semântica abaixo (`app/chamados/management/commands/disparar_perguntas_competencia.py:38`; `app/chamados/management/commands/disparar_perguntas_competencia.py:109`). |
-| Selo/RED sem mordida suficiente | **PROCEDENTE**, para escritores alternativos e UPDATE (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:27`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:143`). |
-| Ordem de trava | **[nao verificado]** quanto à execução e concorrência. O comando inspecionado faz seleção e relatório, sem novo bloco transacional (`app/chamados/management/commands/disparar_perguntas_competencia.py:70`; `app/chamados/management/commands/disparar_perguntas_competencia.py:134`). |
-| Pouso antes do pré-requisito | **[nao verificado]** quanto ao pouso efetivo. A condição exige medição do FIO MUDO e C11 pousado; o registro exige medição com C11 no ar. A chamada ao escritor no consumidor prova código local, não implantação. Correção mínima: apresentar essa evidência antes de liberar pouso (`app/docs/CORTES.md:305`; `app/docs/RELATO.md:26`; `app/chamados/reconciliador.py:1387`). |
-| Campo com dois significados | **PROCEDENTE**, nos casos seguintes (`app/chamados/management/commands/disparar_perguntas_competencia.py:139`; `app/chamados/management/commands/disparar_perguntas_competencia.py:153`; `app/chamados/services/fabrica_da_celula.py:211`). |
-
-**PROCEDENTE — unidade:** `FABRICA-POR-EVENTO` diz “perguntas”, mas pode contar falta de Pauta DP; `FIO DECIDIDO` decorre de existência de linha do fato, sem exigir validação humana. Correção mínima: explicar as unidades e ajustar a legenda da barreira, preservando o prefixo consumido pelo placar (`app/chamados/services/fabrica_da_celula.py:211`; `app/chamados/management/commands/disparar_perguntas_competencia.py:129`; `app/chamados/management/commands/disparar_perguntas_competencia.py:139`; `app/chamados/models.py:2753`; `bin/placar_code.sh:388`).
-
-**PROCEDENTE — corte por empresa:** o comentário promete corte por empresa, mas `janela_atual` é chamada sem empresa; nesse caso o corte é 21. Correção mínima: tornar o universo explicitamente global ou calcular a janela por empresa usando a mesma autoridade (`app/chamados/management/commands/disparar_perguntas_competen
-
-[truncado em 20000 de 21489 caracteres]
-
-## 09/11 22:08 · sessao d88a5eaae8fc · - · - · origem=Ronald (tmux)
-
-3. **CONFORME quanto à retirada da escrita de domínio:** o comando termina após consultas, contadores e eventual `SystemExit(2)`; as opções restantes são `ini/fim/comp-corrente/alarme/colab` (`app/chamados/management/commands/disparar_perguntas_competencia.py:21-32,70-163`). Os helpers examinados consultam a ata, o juiz e o domínio do fato; o escritor continua separado em `perguntar_pela_celula` (`app/chamados/services/fabrica_da_celula.py:15-54,67-130,151-190,205-236`).
-
-- A chamada indireta `_ata_do_dia` pode produzir observabilidade: `acender_sem_ata` só chama `logging.warning`; `registrar_engolido` modifica contador em memória e chama `logging.error`. Nenhuma delas chama o escritor de `LogAuditoria`, que é outra função (`app/chamados/services/disputa_emissao.py:884-910`; `app/chamados/services/declaracao_texto.py:63-72`; `app/core/observ.py:73-82,94-138`).
-- Os signals inspecionados são registrados no `ready` e respondem a `pre_save/post_save`; o comando não executa essas operações. Ausência universal de efeitos em toda dependência de inicialização Django: **[nao verificado]** (`app/chamados/apps.py:8-10`; `app/chamados/signals.py:178-188,227-250`).
-- O cron real passa somente `--comp-corrente --alarme` (`app/config/crons.py:1521`). As chamadas inspecionadas não passam opções removidas (`app/chamados/tests/test_selo_emissor_fio_mudo.py:58-65,260-261,292-293`; `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:61-66`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:34-41`; `app/chamados/tests/test_fabrica_por_evento.py:76-84`; `app/chamados/tests/test_fabrica_pela_ata.py:34-41`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:198-199`; `app/chamados/tests/test_selo_disparo_nao_cobra_desligado.py:84-90`).
-- Strings antigas restantes são história/base de teste, não chamadores atuais: BASE embutida conserva as três opções; TICKETS relata atos passados (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:165-166,218-223`; `app/docs/TICKETS.md:1116,1120`). O `--apply` de `test_cobparc5...:294` é encaminhado a outro comando, `emitir_furo_retroativo` (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:278-294`).
-
-6. **PROCEDENTE — documentação situacional incompleta/contraditória.**
-
-- O novo docstring identifica vigia, finalidade e escritor por evento; os comentários apontam a fábrica e preservam as guardas relevantes (`app/chamados/management/commands/disparar_perguntas_competencia.py:1-15,54-67,83-85,102-109,127-129`).
-- Falta uma ponte para o reparo do estoque no texto do comando; a porta existente é `consumir_eventos_celula --semear`, que apenas semeia e retorna — consumir exige execução posterior normal (`app/chamados/management/commands/disparar_perguntas_competencia.py:1-19,83-85`; `app/chamados/management/commands/consumir_eventos_celula.py:14-15,25-31`). Correção mínima: citar essa sequência no docstring.
-- O comentário novo anuncia VIGIA, mas a continuação ainda afirma “segue ESCREVENDO — não há evento”; a função de contagem também afirma que disparar emite pergunta (`app/config/crons.py:2044-2047,2348-2354`). Correção mínima: atualizar as frases ao estado novo, conservando a história como passado.
-- A história de teto por instante e emissão por evento continua na fábrica; a exceção/condição de saída continua no corte. Não demonstrei lei viva apagada sem outra localização (`app/chamados/services/fabrica_da_celula.py:1-11`; `app/docs/CORTES.md:305`; BASE histórica: `app/chamados/tests/test_e4a2_disparar_e_vigia.py:174-190`).
-
-7. Classes:
-
-- **Segundo juiz registrado: CONFORME no trecho examinado.** Seleção chama as autoridades existentes de motivos, vivo, parcial e domínio do fato (`app/chamados/management/commands/disparar_perguntas_competencia.py:15,99,105,109,124,129`).
-- **Segundo escritor: CONFORME estaticamente**, com limite de inicialização acima (`app/chamados/management/commands/disparar_perguntas_competencia.py:70-163`; `app/chamados/services/fabrica_da_celula.py:133-147,177-190`).
-- **Relógio fora da borda: PROCEDENTE, preexistente.** O comando chama `_viva(p)` sem `_hoje`; o juiz pode alcançar `_dentro_da_janela_viva`, cujo fallback é `date.today()`. `_ja_perguntou` também chega a `fio_vivo` sem transportar o dia (`app/chamados/management/commands/disparar_perguntas_competencia.py:99,124`; `app/chamados/juizes.py:1388-1389,569-578,1425-1434`; `app/chamados/services/disputa_emissao.py:1412-1419`). Correção mínima: propagar o dia capturado por ambas as cadeias. Há ainda duas leituras independentes de relógio na própria borda, antes/depois dos imports (`app/chamados/management/commands/disparar_perguntas_competencia.py:38,49-51`).
-- **Derivação paralela de fonte única: CONFORME quanto a teto/motivos**, delegados à fábrica e ao cartório (`app/chamados/management/commands/disparar_perguntas_competencia.py:15,80,109`; `app/chamados/services/fabrica_da_celula.py:15-29`; `app/ponto/services/cartorio.py:831-859`).
-- **Ordem de trava: CONFORME no comando**, que não abre transação/trava no corpo atual; efeitos concorrentes concretos: **[nao verificado]** (`app/chamados/management/commands/disparar_perguntas_competencia.py:34-163`).
-- **Pouso antes do pré-requisito: [nao verificado], não liberado.** O corte exige medição e C11 pousado; o RELATO concretiza “`--apply` achar 0 com C11 no ar”. O dado fornecido não prova essa rodada (`app/docs/CORTES.md:305`; `app/docs/RELATO.md:26`). A implementação do consumidor/C11 na cópia não comprova implantação (`app/chamados/reconciliador.py:1384-1387`).
-- **Semântica de janela: PROCEDENTE, preexistente.** `--comp-corrente` chama `janela_atual` sem empresa, portanto usa corte default 21 e aplica uma janela conjunta, embora o comentário diga incluir corte por empresa (`app/chamados/management/commands/disparar_perguntas_competencia.py:24-27,38,70,92`; `app/ponto/janelas.py:36-51,60-63`). Correção mínima: explicitar universo de corte padrão ou calcular janela por empresa conforme contrato autorizado.
-- **Inclusividade e dia do turno: CONFORME no recorte explícito.** INI/FIM são inclusivos; o primeiro universo estende o piso e exclui hoje/ontem ainda coberto pelo vigia; o segundo usa a data da célula; vencimento é por instante e usa o turno encadeado (`app/chamados/management/commands/disparar_perguntas_competencia.py:68-80,92,101,109`; `app/ponto/services/cartorio.py:831-859`). A linha “janela” imprime a solicitada, sem revelar o piso ampliado do primeiro universo (`app/chamados/management/commands/disparar_perguntas_competencia.py:69-70,152`).
-- **Unidade do contador: PROCEDENTE, preexistente.** `FABRICA-POR-EVENTO` diz “perguntas”, mas o helper também retorna motivos de Pauta DP ausente no limbo exportado (`app/chamados/management/commands/disparar_perguntas_competencia.py:153-156`; `app/chamados/services/fabrica_da_celula.py:205-216`). `[BARRADO] FIO DECIDIDO` conta existência de linha do fato, sem provar decisão humana (`app/chamados/management/commands/disparar_perguntas_competencia.py:127-140`). Correção mínima: corrigir as legendas preservando o prefixo consumido pelo placar (`bin/placar_code.sh:388-390`).
-
-_3263 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
