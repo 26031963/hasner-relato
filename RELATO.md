@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=3588989
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=352506
 DESENHO FIO-E0-V4-E4A-2: lei=lampada 4a pergunta=quem LE o alarme do vigia que substitui o escritor do lote (linha VIGIA FIO MUDO e rc 2 nao chegam a placar_code.sh:388, pipeline_placar.py:9,40 so itera CRONS, crons_quebrados.py:17 aceita rc 2) e o pouso espera o --alarme de 10/11 06:3x achar ALVOS 0 com o C11 no ar app/chamados/management/commands/disparar_perguntas_competencia.py:135
 
 PAREI: reverter-dia-celula-protegida | espera Ronald (!) -- REVERTER-DIA-SEM-RECALCULO: cura DECIDIDA PELA LEI (CORTES PORTA-DO-DINHEIRO-JA-EXISTE + L-020) = reverter_regeneracao_dia troca o julgar_celula proprio (app/ponto/portas/celula.py:812-822, ~11 linhas) por 1 chamada a _o_chao_do_dia_mudou (o rabo da IDA e de editar_dia: julga, recalcular_por_evento 1x/competencia, rejuncao). celula.py e PROIBIDO ao construtor (codex_pergunta.sh:110, construtor1 rc 3, wt descartada) e o CODE-VIVE-ATE-O-RESET item 1 so deixa a sessao em hunk de 1 linha: preciso de excecao `!` no molde SELO-PAPEL-PRAZO-BIN (sessao escreve o hunk ~-11/+3 em celula.py; testes novos pelo construtor). Prova da lacuna: logs/REVERTER-DIA-SEM-RECALCULO/censo1.r sec.2/6; RED instrumentado 480!=240 no construtor1.r.
