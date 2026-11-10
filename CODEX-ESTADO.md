@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 11:24** · publicado em **10/11/2026 11:25** (UTC-3)
+> Ultima resposta processada: **10/11/2026 11:37** · publicado em **10/11/2026 11:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 11:37 · sessao 112a44ad6ecd · URGENCIA-E4B · sonda · origem=Code
+
+**O badge lavrado, 1.228, é o contador conhecido mais próximo de 1.233: diferença de 5.** A comparação com Justificativas pendentes permanece **[nao verificado]**, pois seu valor não aparece no trecho recebido. Fonte: saída `NAVBAR_EXIBIDA`, `app/core/context_processors.py:68`.
+
+Esta resposta consolida a saída fornecida. Nova execução, role efetiva, transação READ ONLY e rollback: **[nao verificado]**. O dado termina durante um `ITEM_CENTRAL`; conclusão da execução, eventual `ERRO_SONDA`, passo e cadeia de locais: **[nao verificado]**.
+
+**1. Contadores — retrato fornecido**
+
+| Contador | Valor | Distância de 1.233 | Registro da saída → arquivo:linha |
+|---|---:|---:|---|
+| **Badge lavrado** | **1.228** | **5** | `NAVBAR_EXIBIDA` → `app/core/context_processors.py:68` |
+| Central de Atendimento — total da lista | 3.606 | 2.373 | `ATENDIMENTO_CONTEXTO_REAL` → `app/chamados/services/painel.py:198` |
+| Validar | 543 | 690 | `ATENDIMENTO_CONTEXTO_REAL` → `app/chamados/services/verbos.py:30` |
+| Cobrar | 2.346 | 1.113 | Mesmo registro → `app/chamados/services/verbos.py:30` |
+| Decidir | 680 | 553 | Mesmo registro → `app/chamados/services/verbos.py:30` |
+| Soma Validar + Cobrar + Decidir | 3.569 | 2.336 | Cálculo sobre o mesmo registro → `app/chamados/services/verbos.py:30` |
+| Controle atual do admin: Validar + Decidir | 1.223 | 10 | `BADGE_EXIBIDO_VS_ADMIN_ATUAL` → `app/chamados/services/verbos.py:25` |
+| Justificativas pendentes | **[nao verificado]** | **[nao verificado]** | Contagem definida em `app/ponto/views.py:1736`; resultado ausente |
+
+O badge foi lavrado às **11:15:46 de 10/11/2026**; a saída informa diferença de **5** para o controle atual. A equivalência dos conjuntos e a decomposição dos 1.228 itens são **[nao verificado]**. Fonte: `NAVBAR_EXIBIDA` e `BADGE_EXIBIDO_VS_ADMIN_ATUAL` → `app/core/context_processors.py:68`; `app/chamados/services/verbos.py:30`.
+
+Os controles adicionais são **3.591 ativos**, compostos por **2.010 abertos + 1.581 em análise**. A conciliação item a item entre esses controles, a lista de 3.606 e as pilhas de 3.569 é **[nao verificado]**. Fonte: `ATENDIMENTO_CONTEXTO_REAL` → `app/chamados/services/painel.py:198`.
+
+**2. Partição por empresa, classe/verbo e dono**
+
+| Empresa | Classe de origem × verbo | Atribuído | Pilha | Departamento |
+|---|---|---|---|---|
+| 2 | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| 3 | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| 4 | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+
+A listagem parcial não permite fechar essas partições sobre os **3.606 itens**, nem sobre os **1.223 atuais do admin**; a partição do **badge lavrado de 1.228** também é **[nao verificado]**.
+
+O código distingue pilha e departamento: `admin_validar → validar`, `colab → cobrar`, `sem_pergunta/cadastro → decidir`, `registro → sem verbo`; o departamento tem outra função de classificação. Fontes: `app/chamados/catalogo/natureza.py:58`; `app/chamados/utils.py:32`.
+
+**3. `censo_alcance`: somente rota `sem_porta`, empresas 2, 3 e 4**
+
+| Classe | Significado | Corrente 11/2026, não entregue | Anterior 10/2026, não entregue | Entregue/exportada no recorte | Total | Registro → arquivo:linha |
+|---|---|---:|---:|---:|---:|---|
+| a | Chamado vivo com véu | 2 | 0 | 0 | 2 | `E4B_EXPORTACAO` → `app/chamados/services/vigia_fio.py:822` |
+| b | Respondida sem resposta | 0 | 0 | 0 | 0 | Mesmo registro/fonte |
+| c | Respondida com destino fechado | 4 | 12 | 0 | 16 | Mesmo registro/fonte |
+| d | Colaborador na lista; dia fora | 161 | 101 | 0 | 262 | Mesmo registro/fonte |
+| e | Outra | 47 | 5 | 0 | 52 | Mesmo registro/fonte |
+| **Total** | | **214** | **118** | **0** | **332** | Soma de `E4B_EXPORTACAO`; `UNIVERSO_E4B` → `app/chamados/services/vigia_fio.py:628` |
+
+Os rótulos das classes estão em `app/chamados/services/vigia_fio.py:538`. As colunas “anterior” foram calculadas como total menos corrente; o recorte informado contém apenas as competências **11/2026 e 10/2026**. Fonte: `UNIVERSO_E4B` → `app/chamados/services/vigia_fio.py:628`.
+
+Esse censo cobre a competência corrente e a anterior enquanto não entregue; **não cobre todo o histórico exportado**. Portanto, o zero de entregues da tabela vale apenas para esse recorte. Fonte: `app/ponto/services/he_pendente_lavrado.py:209`; `app/chamados/services/vigia_fio.py:583`.
+
+| Cruzamento solicitado | Quantidade |
+|---|---|
+| Itens da Central de Atendimento que caem nas 332 células sem porta | **[nao verificado]** |
+| Itens de Validar/Decidir que caem nelas | **[nao verificado]** |
+| Itens do badge lavrado que caem nelas | **[nao verificado]** |
+
+O controle antigo informa **4 fios mortos**, mas representa outro censo; não substitui os **332 sem porta por alcançabilidade**. Fontes: `CONTROLE_CENSO_ANTIGO` → `app/chamados/services/vigia_fio.py:449`; `UNIVERSO_E4B` → `app/chamados/services/vigia_fio.py:628`.
+
+## 10/11 11:36 · sessao c4bcf884eb66 · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+A regra foi restaurada; o **item 5 permanece pendente**.
+
+Arquivos tocados:
+
+- [fabrica_da_celula.py:120](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/chamados/services/fabrica_da_celula.py:120): não-acusador retorna `[]`; arquivo inteiro idêntico a `e13fa92e3`. Diff vazio, rc 0 ([prova](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:8)).
+- [test_e4a2_matriz_memoria.py:201](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/chamados/tests/test_e4a2_matriz_memoria.py:201): concorde exige zero; mutantes ajustados.
+- [test_pergunta_do_dia_em_curso.py:442](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/chamados/tests/test_pergunta_do_dia_em_curso.py:442): guarda usa `furo`, consulta diretamente o juiz e inclui caso próprio `concorde → 0`.
+- [Relato completo](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:1): comandos, provas e limites.
+
+Validação local: **RED reproduzido contra a 9d; 29 testes passaram; 19 mutantes rejeitados**, com comandos individuais no [relato:55](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:55). `_pks_de_empresa`, rótulo ALVOS e seus testes foram preservados ([prova:43](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:43)). [nao verificado]
+
+Os 14 testes mantêm seus corpos intactos, mas **10 exigem o rótulo antigo**, incompatível com o item 2 ([evidências:109](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:109)). Seus resultados Django e Ruff limpo estão **[não verificado]**: ambos indisponíveis neste Python ([limites:194](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:194)). [nao verificado]
+
+O censo de **quem escreve e quem lê cada campo** está no [relato:134](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:134).
 
 ## 10/11 11:24 · sessao ac3391eb6fde · FIO-E0-V4-E4A-2 · verificador · origem=Code
 
@@ -1300,109 +1375,4 @@ Também passaram por AST 11 testes de fonte/relógio/relatório/SQL e 10 do cens
 
 Não rodei integração com banco, os 165 módulos, suite inteira ou medição de produção: **[nao verificado]**. `PYTHONDONTWRITEBYTECODE=1 python3 -m ruff --version` retornou `No module named ruff`; Ruff limpo: **[nao verificado]**. Certificação por Code/suite e opus final: **[nao verificado]**. [nao verificado]
 
-## 10/11 09:47 · sessao b3403e72900e · FIO-E0-V4-E4A-2 · verificador · origem=Code
-
-**Pre-verificação: REPROVADA na aderência literal à MATRIZ.** Há seleção diferente do juiz da fábrica, caminho de classe (b) com rc 2, ausência de guarda da tranca na porta inteira e universo por Empresa, enquanto a matriz pede pks de colaborador. (`disparar_perguntas_competencia.py:72`, `:109`, `:189`, `:238`; `fabrica_da_celula.py:120`.)
-
-1. **MATRIZ (a), (b), (c), (d)**
-
-| Linha | Estado, juiz, operação e persistência | Retorno, prova e caminhos diferentes |
-|---|---|---|
-| **(a) PARCIAL** | Lê `veredito == 'nunca_bateu'` pelo predicado da fábrica; separa os pares em retidos e compara com C5. Não consulta adesão novamente nem chama a porta escritora. Nada escrito pelo contador. (`fabrica_da_celula.py:87`; `disparar_perguntas_competencia.py:98`, `:134`.) | O retido isolado retorna normalmente; a fábrica também retorna antes de emitir. A prova de divergência `(1,0)` está em `test_e4a2_matriz_memoria.py:130`. **Limites:** só entra chamado vivo; desligado ausente da C5 é retirado do numerador; datas anteriores ao piso também saem. Logo “um retido fora da C5 ⇒ divergência” não vale para todos os retidos. (`disparar_perguntas_competencia.py:42`, `:47`, `:86`; `fabrica_da_celula.py:183`.) |
-| **(b) NÃO CONFORME** | O contador chama diretamente `motivos_pela_ata` e aplica barreiras próprias; não passa pela decisão completa de `motivos_a_perguntar`. Conta `fio_mudo_alvos`, esperado 0, dono ESTRUTURA; nada escreve. (`disparar_perguntas_competencia.py:105`, `:109`, `:120`, `:129`, `:136`.) | **Pode retornar 2:** a mesma célula também alimenta `deixou`; com `--alarme`, isso produz `SystemExit(2)`. O teste de limbo exige precisamente FIO MUDO 1, deixou 1, nenhuma pergunta e rc 2. (`disparar_perguntas_competencia.py:199`, `:238`; `test_jv4a_disparar_vigia_da_celula.py:160`.) | [nao verificado]
-| **(c) CONFORME PARA PERGUNTA VIVA; MAIS ESTREITO QUE O TEXTO LITERAL** | Pergunta viva ligada ao chamado encerra a seleção antes dos dois contadores; nada escreve. (`disparar_perguntas_competencia.py:96`.) | Prova com controle positivo: `test_e4a2_matriz_memoria.py:147`; integração proposta: `test_e4a2_nunca_bateu.py:148`. Entretanto, uma linha com `materializada_em` e via retratada volta a ser alvo; portanto o código não implementa “qualquer materializada ⇒ nada”. (`test_jv4a_disparar_vigia_da_celula.py:151`, `:155`.) |
-| **(d) NÃO PROVADA NA PORTA INTEIRA** | O contador exclui chamados encerrados pelo filtro `VIVOS`; não consulta diretamente a tranca. O primeiro universo continua selecionando células. Nada escreve. (`disparar_perguntas_competencia.py:86`, `:189`.) | O teste em memória apenas troca status para `resolvido`. O teste Django tranca realmente, mas confere somente `_contador`, sem executar o comando inteiro. Como trancar não altera célula/ata, uma célula acusadora sem pergunta do fato continua alcançável pelo ramo `deixou`, permitindo rc 2. (`test_e4a2_matriz_memoria.py:156`; `test_e4a2_nunca_bateu.py:163`; `fechamento.py:1422`; `disparar_perguntas_competencia.py:199`, `:238`.) | [nao verificado]
-
-O contraexemplo mais direto ao **juiz único de (b)** já está nos testes: `concorde` deve produzir FIO MUDO 1, mas a fábrica rejeita veredito preenchido fora de `VEREDITOS_ACUSAM`; `concorde` está fora dessa tupla. Assim, compartilhar auxiliares não tornou a decisão de **DEVIDA** única. (`test_jv4a_disparar_vigia_da_celula.py:132`; `fabrica_da_celula.py:120`; `escala/models.py:1767`.)
-
-A prova chamada “classes a/b rc zero” **silencia explicitamente o outro ramo** com `motivos_que_o_evento_deixou=[]`. Prova o retorno dos contadores isolados, não o contrato da porta inteira. (`test_e4a2_nunca_bateu.py:128`, `:135`.)
-
-2. **CONTRATO DE SAÍDA, bancos 1–4**
-
-- **Banco 1 — realizado no código:** lista de juízes por varredura vazia, papel `vigia`, cron com `--alarme` e parser sem `--apply`. Há prova explícita da rejeição do argumento. (`config/crons.py:2032`, `:2168`, `:1521`; `disparar_perguntas_competencia.py:145`; `test_e4a2_matriz_memoria.py:55`.)
-- **Banco 2 — ligação realizada; significado divergente:** `fio_mudo_alvos` é carimbado e comparado pelo placar; alvo 1 deixa o placar vermelho. Porém o universo inclui o `concorde` rejeitado pela fábrica, como mostrado no item 1. (`vigiar_fio_morto.py:233`, `:241`; `pipeline_placar.py:135`; `test_e4a2_matriz_memoria.py:164`; `test_jv4a_disparar_vigia_da_celula.py:133`.)
-- **Banco 3 — realizado de forma diferente da matriz literal:** calcula `numero=|pares|` e `esperado=|pares∩C5|`, mas os pares já foram reduzidos por chamado vivo, piso temporal e exclusão de desligados ausentes da C5. Além disso, a entrada normalizada contém pks de **Empresa**. O teste exige deliberadamente `(0,0)` para desligado fora da C5. (`disparar_perguntas_competencia.py:42`, `:47`, `:49`, `:72`, `:86`; `test_e4a2_nunca_bateu.py:230`.) [nao verificado]
-- **Banco 4 — lista de exceções vazia e selo com mordida sintética:** não fica dependente de haver juiz real na lista para exercitar o verificador. (`bin/tests/test_papel_prazo_nao_deriva.sh:305`, `:384`, `:391`, `:405`.)
-
-O selo foi executado nesta sessão e terminou verde, anunciando 12 crons de prazo e zero juízes por varredura; não foi criado registro persistido dessa execução: **[nao verificado]**. [nao verificado]
-
-**Bancos 5 e 6:** alvo 165, suíte inteira, C11 efetivamente no ar e medição da rodada de produção permanecem **[nao verificado]**. O material fornecido não apresenta uma medição dessa rodada que certifique ALVOS 0: **[nao verificado]**. [nao verificado]
-
-3. **Universo e tipos recebidos**
-
-**Não: todo contador não recebe lista de pks de colaboradores.** `empresas` filtra `Empresa.pk`; `colab` é escalar separado; `contador_nunca_bateu` recebe pares contendo objetos Colaborador e extrai seus pks internamente. (`disparar_perguntas_competencia.py:41`, `:48`, `:58`, `:72`, `:89`, `:91`; `cadastro_realidade.py:177`.)
-
-| Chamador/entrada | Comportamento |
-|---|---|
-| `vigiar_fio_morto --empresa` | Ainda fornece `list[Empresa]`; a fronteira do contador converte para inteiros. (`vigiar_fio_morto.py:160`, `:181`; `disparar_perguntas_competencia.py:72`.) |
-| Frota e `disparar.handle` | Usam `None`, preservando todas as empresas; não materializam lista de pks. (`vigiar_fio_morto.py:156`; `disparar_perguntas_competencia.py:202`, `:65`.) |
-| Testes | Passam `[Empresa]`, `[empresa.pk]` e iterador de objeto com `.pk`; há comparação dos resultados. (`test_e4a2_nunca_bateu.py:118`, `:124`; `test_e4a2_matriz_memoria.py:125`.) | [nao verificado]
-| Tela C5 | Fornece conjunto de pks de Empresa. (`escala/views.py:487`.) |
-| Outro comando | `vigiar_retido_calado` fornece inteiros ou `None`; seu censo chama C5. (`vigiar_retido_calado.py:29`; `folha/vigia_retido_calado.py:43`.) |
-| Queryset/iterável na fronteira | Seus elementos são consumidos e convertidos por `.pk` ou `int`; não há validação de que representam Empresas. (`disparar_perguntas_competencia.py:72`.) |
-| String na fronteira | Pela compreensão, `"12"` vira `[1,2]`; `"1,2"` levanta `ValueError`; Empresa escalar não iterável levanta `TypeError`. (`disparar_perguntas_competencia.py:72`.) |
-| C5 chamada diretamente | Continua usando `list(empresas)` em `Empresa.pk__in`, sem a normalização da fronteira. A correção não protege chamadas diretas com objetos; execução dessa exceção ORM: **[nao verificado]**. (`cadastro_realidade.py:177`.) |
-
-Chamador concreto que ainda forneça string não foi identificado; ausência universal desse chamador: **[nao verificado]**. `pipeline_placar` lê o JSON e não chama o contador. (`pipeline_placar.py:92`, `:135`.)
-
-4. **Quem escreve, quem lê e significado**
-
-| Campo/saída | Escritor → leitor e unidade |
-|---|---|
-| **rc de `--alarme`** | `disparar` produz 2 somente por `deixou`; `cron_run` registra e considera 0/2 elo concluído; `crons_quebrados` também aceita ambos. Nenhum desses dois leitores interpreta 2 exclusivamente como FIO MUDO. (`disparar_perguntas_competencia.py:238`; `bin/cron_run.sh:13`, `:19`, `:22`; `crons_quebrados.py:16`, `:46`.) |
-| **`VIGIA FIO MUDO`** | Imprime `cfm.numero`; as provas conferem o texto e sua quantidade. (`disparar_perguntas_competencia.py:210`; `test_e4a2_matriz_memoria.py:191`.) |
-| **`FABRICA-POR-EVENTO`** | Imprime `len(deixou)`, incluindo pergunta **ou Pauta DP**. `placar_code` raspa esse prefixo, mas apresenta o resultado apenas como “perguntas que o julgamento não fez”. Há diferença de unidade/apresentação. (`disparar_perguntas_competencia.py:228`, `:231`; `bin/placar_code.sh:390`, `:392`.) |
-| **Contadores no carimbo** | `disparar` calcula; `vigiar_fio_morto` publica número e esperado; pipeline compara ambos. O vigia não inclui esses novos contadores em seu próprio `gritou`. (`disparar_perguntas_competencia.py:49`, `:136`; `vigiar_fio_morto.py:185`, `:233`, `:241`; `pipeline_placar.py:98`, `:105`.) |
-| **ESTADO renderizado** | `fio_estado` compara genericamente todas as chaves de `esperado`; exibe as novas quando divergentes. Não devolve o bloco integral C5 nem mostra explicitamente seus totais informativos. (`bin/fio_estado.py:125`, `:143`, `:191`.) |
-| **`c5_dias/c5_pessoas`** | Totais da C5 inteira, impressos nos dois comandos e guardados no bloco integral, fora de `censo/esperado`. (`disparar_perguntas_competencia.py:51`, `:205`; `vigiar_fio_morto.py:210`, `:242`.) |
-| **`celula_nunca_bateu`** | Causa atribuída pelo veredito; catálogo dá dono admin; `retencao`, `medir` e `do_dia` a propagam. Não comprova presença na C5. O comando publica causa/quantidade/dono; `dia_do_colab` lê `do_dia`. (`disputa_emissao.py:758`; `pergunta_no_app.py:35`, `:99`, `:167`, `:189`; `chamados_vivos_sem_pergunta_no_app.py:19`; `dia_do_colab.py:108`.) |
-
-Há três problemas adicionais de leitura:
-
-- **Hoje injetado escapa pelo segundo dedup:** contador → `_ja_perguntou` → `fio_vivo` → `pergunta_viva` sem `hoje` → fallback com `date.today()`. Pode mudar o balde de barreira; diferença no total final não foi demonstrada. (`disparar_perguntas_competencia.py:124`; `disputa_emissao.py:1422`; `chamados/juizes.py:1434`, `:1389`, `:577`.)
-- **rc 2 pode coexistir com `A5 OK`:** pipeline marca situação `ALARME`, mas não a acrescenta à lista que controla seu próprio alarme e conclusão. (`pipeline_placar.py:124`, `:131`, `:158`, `:163`.)
-- **Datas têm bordas diferentes:** seleção usa `celula.data`; o carimbo deriva dia civil local de um instante único; pipeline usa `date.today()` e duas chamadas `datetime.now()`. Falha concreta de fuso em produção: **[nao verificado]**. (`disparar_perguntas_competencia.py:101`; `vigiar_fio_morto.py:166`, `:230`; `pipeline_placar.py:148`.)
-
-5. **Os testes mordem?** [nao verificado]
-
-- **Memória C5/matriz:** os 12 mutantes C5 e 10 da matriz têm controle verde antes de cada mutação, ocorrência única do alvo e captura de `AssertionError` pela mensagem pretendida. (`test_e4a2_c5_memoria.py:30`, `:191`; `test_e4a2_matriz_memoria.py:24`, `:199`.) [nao verificado]
-- **Django:** os 11 mutantes de `nunca_bateu` e 12 do placar possuem controles e captura da asserção pretendida no código. Sua execução permanece **[nao verificado]**. (`test_e4a2_nunca_bateu.py:34`, `:311`; `test_fio_mudo_placar.py:30`, `:299`.)
-- **Escrita:** existe veto SQL da chamada inteira, incluindo callbacks `on_commit`, e controles de UPDATE que não mudam contagens. Portanto a prova proposta vai além de “quantidade de linhas não mudou”; execução Django **[nao verificado]**. (`test_e4a2_disparar_e_vigia.py:325`, `:338`, `:356`.)
-- **Rc na 9b:** o caso exclusivamente FIO MUDO foi invertido para zero; retratada, limbo e demais casos consultados conservaram 2, acrescentando prova da pendência da célula. As fórmulas gerais retiraram somente `_mudos` da condição. (`test_jv4a_disparar_vigia_da_celula.py:139`, `:157`, `:167`; `test_pergunta_do_dia_em_curso.py:194`, `:398`; `test_selo_emissor_fio_mudo.py:290`; `test_e4a2_disparar_e_vigia.py:202`.)
-- **Vacuidade:** as listas atuais são não vazias, mas seus laços não exigem quantidade mínima; esvaziar `MUTANTES` faria passar o teste de mutantes isolado. A tranca em memória é apenas status simulado, e a prova de rc injeta `deixou` manualmente. (`test_e4a2_matriz_memoria.py:156`, `:181`, `:199`; `test_e4a2_c5_memoria.py:191`.) [nao verificado]
-
-Nesta sessão passaram os 16 testes de memória, incluindo os 22 mutantes; também passaram 11 testes de fonte/relatório/relógio/SQL extraídos por AST, sem Django. Resultados observados sem registro persistido: **[nao verificado]**. Isso não certifica integração Django, os 165 módulos ou a suíte inteira: **[nao verificado]**. [nao verificado]
-
-6. **Classes que já reprovaram obra**
-
-| Classe | Resultado desta leitura |
-|---|---|
-| **Segundo juiz/derivação paralela** | **Presente na decisão de DEVIDA:** contador admite `concorde`, fábrica rejeita. (`disparar_perguntas_competencia.py:109`; `fabrica_da_celula.py:120`; `test_jv4a_disparar_vigia_da_celula.py:133`.) |
-| **Segundo escritor fora da porta** | Não identificado no corpo de `disparar`; o verificador de fonte veta portas e operações de escrita. Ausência de DML em toda integração: **[nao verificado]**. (`test_e4a2_disparar_e_vigia.py:38`, `:81`, `:325`.) |
-| **Relógio fora da borda** | **Presente**, pela cadeia do segundo dedup até `date.today()`. (`disparar_perguntas_competencia.py:124`; `chamados/juizes.py:1434`, `:577`.) |
-| **Selo/RED sem mordida** | Os mutantes exercitados mordem, mas não cobrem composição completa de rc e tranca; o teste de rc zero desliga justamente o ramo concorrente. (`test_e4a2_matriz_memoria.py:199`; `test_e4a2_nunca_bateu.py:135`, `:163`.) | [nao verificado]
-| **Ordem de trava** | Na porta de pauta consultada, trava antecede seleção e escrita; não identifiquei inversão nesse trecho. (`fabrica_da_celula.py:364`, `:365`, `:367`, `:369`.) |
-| **Campo com dois significados** | **Presente na apresentação:** `FABRICA-POR-EVENTO` soma perguntas e pautas, mas o raspador apresenta apenas perguntas; “FIO DECIDIDO” significa existência de linha do fato, sem exigir decisão humana. (`disparar_perguntas_competencia.py:214`, `:231`; `bin/placar_code.sh:392`.) |
-| **Pouso antes do pré-requisito** | Pouso, suíte completa e medição de produção não demonstrados: **[nao verificado]**. | [nao verificado]
-
-## 10/11 09:43 · sessao 745e78cb38b7 · - · - · origem=Ronald (tmux)
-
-Achados principais, todos na cópia:
-
-- **(b) não usa o mesmo juiz de DEVIDA.** O contador consulta `motivos_pela_ata` diretamente e aplica barreiras próprias (`app/chamados/management/commands/disparar_perguntas_competencia.py:105`, `:109`, `:120`, `:129`). O juiz da fábrica rejeita `veredito` preenchido fora de `VEREDITOS_ACUSAM` (`app/chamados/services/fabrica_da_celula.py:120`). O teste exige expressamente **concorde → FIO MUDO 1**, enquanto o juiz rejeita concorde (`app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:132`; `app/escala/models.py:1767`). É uma seleção paralela com resultado diferente, não apenas outro nome da mesma decisão.
-
-- **(b) pode produzir rc 2 na porta inteira.** A célula entra também em `deixou` (`app/chamados/management/commands/disparar_perguntas_competencia.py:199`), e `--alarme + deixou` sai 2 (`:238`). O caso limbo comprova FIO MUDO 1, deixou 1, nenhuma pergunta e rc 2 (`app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:160`). A prova “classes a/b rc zero” elimina esse caminho por mock (`app/chamados/tests/test_e4a2_nunca_bateu.py:135`).
-
-- **(d) só fica fora do contador por status encerrado; a porta inteira não tem guarda da tranca.** O contador filtra `VIVOS` (`app/chamados/management/commands/disparar_perguntas_competencia.py:86`). O primeiro universo seleciona células, incluindo as que continuam acusando depois de encerrado o chamado (`:189`, `:199`). Trancar não toca célula/ata e o encerramento é best effort (`app/ponto/services/fechamento.py:1422`). O teste de tranca só chama `_contador`, nunca o comando inteiro (`app/chamados/tests/test_e4a2_nunca_bateu.py:163`). A prova em memória muda apenas status para resolvido (`app/chamados/tests/test_e4a2_matriz_memoria.py:156`).
-
-- **Há relógio fora da borda pelo segundo dedup.** `contador_fio_mudo` repassa `hoje` à primeira vitalidade (`app/chamados/management/commands/disparar_perguntas_competencia.py:96`), mas `_ja_perguntou` não recebe hoje (`:124`). Este chama `fio_vivo` (`app/chamados/services/disputa_emissao.py:1422`), que chama `pergunta_viva(p)` sem hoje (`app/chamados/juizes.py:1434`). Nos degraus condicionais da vitalidade (`:1389`), `_dentro_da_janela_viva` usa `date.today()` (`:577`). O teste do relógio inspeciona somente `_viva` (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:158`).
-
-- **Universo literal não é lista de pks de colaboradores em todo contador.** `empresas` é normalizado para pks de Empresa (`app/chamados/management/commands/disparar_perguntas_competencia.py:72`) e filtra `empresa_id` (`:91`); C5 consulta `Empresa.pk` (`app/escala/services/cadastro_realidade.py:177`). `colab` é escalar opcional (`disparar_perguntas_competencia.py:58`, `:89`), e `contador_nunca_bateu` recebe pares com objetos Colaborador, convertidos internamente para `(colab.pk,dia)` (`:41`, `:48`).
-
-- **(c) a exclusão é de pergunta viva, não de toda pergunta materializada.** O teste retratada deixa uma linha `materializada_em` e exige novo alvo e rc 2, sem escrever irmã (`app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:151`, `:155`, `:158`). Logo “materializada → nada” precisa ser lido como “materializada e viva” para coincidir com esse código (`app/chamados/management/commands/disparar_perguntas_competencia.py:96`).
-
-- **(a) cálculo:** nunca_bateu é lido da lâmpada pelo predicado único da fábrica (`app/chamados/services/fabrica_da_celula.py:87`); a fábrica retorna vazio antes de emissão (`:183`); contador separa retidos (`app/chamados/management/commands/disparar_perguntas_competencia.py:98`), compara pares únicos com C5 (`:49`), respeita piso anterior/ontem e barreira RH (`:42`, `:47`). Os testes não provam o desenho literal para células sem chamado vivo: ambos os contadores partem de chamados vivos (`:86`).
-
-Executei apenas provas AST em memória com `python -B`: concorde deu juiz `[]` versus contador 1; handle com chamado encerrado e um motivo fornecido pelo juiz saiu 2. As bordas foram dubladas; isso confirma o fluxo acima, sem certificar integração Django. Execução sem registro em arquivo: **[nao verificado]**. [nao verificado]
-
-_3374 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3376 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
