@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 17:35:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (269.4 MB). Acoes na janela: **698**.
+**Medido em 10/11/2026 17:41:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (269.4 MB). Acoes na janela: **700**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:37:58 | Bash | Keep waiting for the waiter to exit | `timeout 590 tail --pid=995039 -f /dev/null; ps -p 995039 >/dev/null && echo vivo \|\| echo morto; date +%H:%M` |
+| 17:37:55 | Bash | Write volta 7 brief file | `cat > /home/ronald/saas-hasner/logs/BO-0611-05/brief_volta7.md <<'EOF' # BO-0611-05 volta 7 -- brief do construtor (aval LIBERA-B3, logs/BO-0611-05/aval_libera_b3_volta7_1110.txt) padrao=Single Source of Truth (juiz unico). Lei = juiz unico, nenhuma lei nova. Base: wt 4ffb05150. Censo (logs/BO-0611-05/censo_geo7.r): 41 sitios; juiz de fato = ponto/services/geofence.py:247 `not lat or not lon` (exp ...` |
 | 17:27:54 | Bash | Wait in foreground for the waiter to exit | `timeout 590 tail --pid=995039 -f /dev/null; ps -p 995039 >/dev/null && echo vivo \|\| echo morto; date +%H:%M` |
 | 17:27:48 | Bash | Read failure tracebacks | `cd /home/ronald/saas-hasner && /bin/grep -A25 -E '^FAIL: test_(registrar_batida_com_1\|CATRACA)' logs/BO-DISPUTA-SEM-PERGUNTA/mod1.log \| /bin/grep -vE '^\s*$' \| head -60` |
 | 17:27:41 | Bash | Inspect waiter script and mod1 verdict | `cd /home/ronald/saas-hasner && cat logs/BO-0611-05/espera_opus.sh; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/BO-DISPUTA-SEM-PERGUNTA/mod1.log \| tail -1; /bin/grep '^Ran ' logs/BO-DISPUTA-SEM-PERGUNTA/mod1.log \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' logs/BO-DISPUTA-SEM-PERGUNTA/mod1.log` |
