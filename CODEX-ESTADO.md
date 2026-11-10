@@ -1,7 +1,36 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 14:43** · publicado em **10/11/2026 14:44** (UTC-3)
+> Ultima resposta processada: **10/11/2026 14:50** · publicado em **10/11/2026 14:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 14:50 · sessao a97568efbc2e · - · - · origem=Ronald (tmux)
+
+Censo estático confirmado; nada escrito ou executado contra banco/rede.
+
+| Campo/caminho | Escritor e leitores confirmados |
+|---|---|
+| `Batida.latitude/longitude/gps_accuracy` | A API lê campos independentes e os passa à porta: `app/api/views_core.py:420`, `:421`, `:422`, `:687`; gêmeo `app/api/views.py:433`, `:434`, `:435`, `:690`. A porta sanitiza cada campo separadamente (`app/ponto/registro_batida.py:8`) e cria (`:157`). Campos aceitam nulos (`app/ponto/models.py:58`). |
+| Web clássico | Já passa os campos à mesma porta sem guarda nesse trecho: `app/ponto/services/triagem_batida.py:700`, `:707`. |
+| Ausência de geo | `verificar_geofence` escreve `AlertaGeofence.tipo='sem_gps'`, coordenadas nulas, havendo posto: `app/ponto/services/geofence.py:247`, `:249`, `:252`. Depois publica e abre/anexa ocorrência existente: `:309`, `:322`, `:335`. Sem posto, não cria esse alerta (`:248`). |
+| Mapas e contagem | Detalhe exclui ambos os nulos antes de converter (`app/colaboradores/services/detalhe.py:22`, `:53`, `:80`); fio também (`app/chamados/views.py:692`). Situacional propaga coordenadas+accuracy (`app/colaboradores/services/situacional.py:137`), painel também (`app/colaboradores/painel_cell.py:37`); pino distingue explicitamente `None` (`app/colaboradores/views.py:2474`). |
+| Outros leitores de nulos | Dashboard serializa nulos (`app/core/views.py:1024`); offline conta apenas latitude presente (`app/ponto/views.py:485`); relatório mostra ausência (`app/templates/chamados/partials/_relatorio_geo.html:30`); validade de alerta conserva ausência (`app/ponto/models.py:263`); reconciliação de geo filtra os dois nulos (`app/ponto/services/geofence.py:403`). |
+| Vínculo | Reconciliação aceita apenas coordenadas ambas presentes e não julga cadastro não ativo (`app/ponto/services/geofence.py:46`, `:51`). Detector da lista filtra somente latitude+accuracy (`app/ponto/services/vinculo_na_lista.py:49`) e faz `float(lon)` (`:56`). |
+
+**Riscos que devem constar na entrega:**
+
+- A API **pode passar só uma coordenada**. A remoção da guarda permite alcançar a porta com latitude preenchida e longitude ausente; não existe normalização do par na leitura/passagem citadas acima. Se accuracy também vier preenchida, o detector chega a `float(None)`. Caminho estático comprovado; ocorrência em produção **[nao verificado]**. `app/api/views_core.py:420`, `:421`, `:687`; `app/ponto/registro_batida.py:8`; `app/ponto/services/vinculo_na_lista.py:49`, `:56`.
+- `0.0` é preservado pelo escritor, pois não é `''` nem `None`; porém **alguns leitores equiparam zero à ausência**: geofence (`app/ponto/services/geofence.py:247`), drawer (`app/colaboradores/services/drawer.py:63`), dashboard (`app/templates/core/dashboard2.html:242`, `:287`) e contexto de ocorrência geo (`app/ponto/services/geofence.py:327`). Detalhe e pino distinguem `None` de zero nos pontos acima. Não alterar esses leitores nesta obra.
+- A API não grava uma fotografia histórica de `situacao` em `Batida`; usa o colaborador associado e passa os campos listados à porta (`app/api/views_core.py:681`, `:687`; `app/ponto/models.py:58`). `situacao` do cadastro é mutável: desligamento escreve `desligado` (`app/colaboradores/services/desligamento.py:104`) e reativação escreve `ativo` (`:210`), persistindo pela porta `salvar_inteiro` (`app/colaboradores/services/colaborador.py:73`).
+
+**Pós-escritor para desligado/férias:**
+
+- Núcleo recebe toda Batida e recompõe dias do timestamp; exceções são capturadas (`app/ponto/signals.py:19`, `:29`, `:34`).
+- Cartório recebe toda Batida e julga os dias derivados do timestamp, dentro de `engolir` (`app/ponto/signals.py:85`, `:108`, `:131`). A emissão de cobrança já suprime desligados pelo cadastro atual (`app/ponto/services/cartorio.py:1708`, `:1773`).
+- Reconciliador recebe toda Batida e captura exceções (`app/ponto/signals.py:206`); um ramo de ressuscitação já exige cadastro `ativo` (`app/chamados/reconciliador.py:820`).
+- Recalcular por evento é acionado depois do create, captura exceções e agenda por `on_commit`; competência vem do instante do fato (`app/ponto/registro_batida.py:157`, `:160`, `:175`; `app/ponto/services/fechamento.py:1798`, `:1809`, `:1824`).
+- Geofence não exige situação ativa no handler: lê posto e geo (`app/ponto/services/geofence.py:232`, `:236`, `:247`). Sua reconciliação de vínculo, separadamente, exige situação atual ativa (`:46`).
+- Férias já são detectadas pelo agendamento que cobre **hoje**, via juiz existente, e seguem como anomalia (`app/chamados/detector_anomalias.py:113`; `app/ponto/utils.py:85`, `:88`). Afastamento também pergunta ao juiz do dia, usando cadastro apenas para divergência (`app/ponto/services/afastado_avisa.py:38`).
+- Não encontrei, nesses handlers examinados, uma premissa de que desligado jamais possa chegar que force exceção antes/depois do create. Comportamento completo executado dos efeitos e demais transitivos **[nao verificado]**.
 
 ## 10/11 14:43 · sessao 753a9802ce09 · URGENCIA-E4B · sonda · origem=Code
 
@@ -1360,21 +1389,4 @@ Esse censo cobre a competência corrente e a anterior enquanto não entregue; **
 
 O controle antigo informa **4 fios mortos**, mas representa outro censo; não substitui os **332 sem porta por alcançabilidade**. Fontes: `CONTROLE_CENSO_ANTIGO` → `app/chamados/services/vigia_fio.py:449`; `UNIVERSO_E4B` → `app/chamados/services/vigia_fio.py:628`.
 
-## 10/11 11:36 · sessao c4bcf884eb66 · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-A regra foi restaurada; o **item 5 permanece pendente**.
-
-Arquivos tocados:
-
-- [fabrica_da_celula.py:120](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/chamados/services/fabrica_da_celula.py:120): não-acusador retorna `[]`; arquivo inteiro idêntico a `e13fa92e3`. Diff vazio, rc 0 ([prova](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:8)).
-- [test_e4a2_matriz_memoria.py:201](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/chamados/tests/test_e4a2_matriz_memoria.py:201): concorde exige zero; mutantes ajustados.
-- [test_pergunta_do_dia_em_curso.py:442](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/chamados/tests/test_pergunta_do_dia_em_curso.py:442): guarda usa `furo`, consulta diretamente o juiz e inclui caso próprio `concorde → 0`.
-- [Relato completo](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:1): comandos, provas e limites.
-
-Validação local: **RED reproduzido contra a 9d; 29 testes passaram; 19 mutantes rejeitados**, com comandos individuais no [relato:55](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:55). `_pks_de_empresa`, rótulo ALVOS e seus testes foram preservados ([prova:43](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:43)). [nao verificado]
-
-Os 14 testes mantêm seus corpos intactos, mas **10 exigem o rótulo antigo**, incompatível com o item 2 ([evidências:109](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:109)). Seus resultados Django e Ruff limpo estão **[não verificado]**: ambos indisponíveis neste Python ([limites:194](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:194)). [nao verificado]
-
-O censo de **quem escreve e quem lê cada campo** está no [relato:134](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:134).
-
-_3394 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3395 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
