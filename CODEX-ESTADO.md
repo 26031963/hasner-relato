@@ -1,7 +1,180 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 01:08** · publicado em **10/11/2026 01:10** (UTC-3)
+> Ultima resposta processada: **10/11/2026 01:15** · publicado em **10/11/2026 01:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 01:15 · sessao 19d6c776708f · FIO-E0-V4-E4A-2 · verificador · origem=Code
+
+**Parecer: REPROVADO para declarar a volta pronta.** O leitor novo aceita fotografia sem validar data ou origem, e os testes novos não provam sua integração real com Django. (`app/core/management/commands/pipeline_placar.py:85`; `app/core/tests/test_fio_mudo_placar.py:50`)
+
+A comparação histórica abaixo usa o diff fornecido; conferência independente dos objetos Git dos hashes **[nao verificado]**. Execução da suíte e condições atuais de produção **[nao verificado]**. [nao verificado]
+
+1. **Quem escreve e quem lê o carimbo**
+
+   O escritor operacional localizado é `vigiar_fio_morto.Command.handle`: monta o registro, chama `_carimbar` somente em frota e publica por arquivo `.novo` seguido de `os.replace`. O caminho aceita `settings.VIGIA_FIO_CARIMBO`; sem override, usa `<BASE_DIR>/logs/fio_morto.json`. (`app/chamados/management/commands/vigiar_fio_morto.py:105`; `app/chamados/management/commands/vigiar_fio_morto.py:130`; `app/chamados/management/commands/vigiar_fio_morto.py:222`)
+
+   O inventário das chaves de topo e seus leitores operacionais é:
+
+   | Chaves | Quem lê e para quê |
+   |---|---|
+   | `medido_em`, `hoje`, `banco` | `fio_estado` calcula idade/apresenta a identificação; o novo leitor do placar ignora esses campos. (`bin/fio_estado.py:127`; `bin/fio_estado.py:143`; `app/core/management/commands/pipeline_placar.py:91`) |
+   | `schema` | É publicado; não participa dos leitores operacionais examinados. (`app/chamados/management/commands/vigiar_fio_morto.py:227`; `bin/fio_estado.py:143`; `app/core/management/commands/pipeline_placar.py:91`) |
+   | `esperado`, `censo` | `fio_estado` compara **todas as entradas de `esperado`** com `censo`; o placar lê somente o par `fio_mudo_alvos`. (`bin/fio_estado.py:121`; `app/core/management/commands/pipeline_placar.py:94`) |
+   | `gritou`, `alarma_em_0` | `fio_estado` apresenta o alarme da rodada e a situação do alarme do alcance. (`bin/fio_estado.py:146`; `bin/fio_estado.py:182`; `bin/fio_estado.py:204`) |
+   | `alarma_sempre`, `alarme_passivo_ligado` | São publicados; não participam desses leitores operacionais. (`app/chamados/management/commands/vigiar_fio_morto.py:229`; `bin/fio_estado.py:143`; `app/core/management/commands/pipeline_placar.py:91`) |
+   | `alcance` | `fio_estado` lê `alcance_universo`, `alcance_cego` e `alcance_de_hoje_pra_frente`; as demais entradas não participam de seu veredito/apresentação. (`bin/fio_estado.py:74`; `bin/fio_estado.py:142`) |
+   | `materializada_viva_exportada`, `viva_em_disputa_fechada` | São publicados; não participam desses leitores operacionais. (`app/chamados/management/commands/vigiar_fio_morto.py:237`; `bin/fio_estado.py:143`; `app/core/management/commands/pipeline_placar.py:91`) |
+
+   Dentro de `esperado`, estão os nove contadores: `fio_morto`, `fio_morto_cobrando`, `fio_morto_com_alvo`, `dias_futuros_no_universo`, `respondida_sem_resposta`, `materializada_viva`, `fio_morto_alcance`, `cadastro_sem_turno` e `fio_mudo_alvos`. Todos são publicados com zero. (`app/chamados/management/commands/vigiar_fio_morto.py:90`; `app/chamados/management/commands/vigiar_fio_morto.py:98`)
+
+   O restante de `censo` é o dicionário integral de `censo()`, incluindo listas, classes, contadores auxiliares e chaves `porta_*`; o vigia acrescenta os cinco complementos ao serializar. O bloco `alcance` também é publicado integralmente, incluindo causas, baldes, competências, detalhes e listas. (`app/chamados/services/vigia_fio.py:356`; `app/chamados/services/vigia_fio.py:371`; `app/chamados/services/vigia_fio.py:535`; `app/chamados/services/vigia_fio.py:571`; `app/chamados/management/commands/vigiar_fio_morto.py:233`)
+
+   **A chave nova muda, sim, um veredito existente:** quando divergir do esperado, entra automaticamente em `fora_do_esperado` e na linha “FORA DO ESPERADO (carimbo inteiro)”. Não há conjunto fechado nesse comparador. A manchete continua sendo exclusivamente a do alcance. (`bin/fio_estado.py:125`; `bin/fio_estado.py:175`; `bin/fio_estado.py:191`)
+
+   `gerar_estado.py` delega a leitura e a frase a `fio_estado`, herdando esse efeito. `placar_code.sh` lê somente a linha `FABRICA-POR-EVENTO` do outro arquivo, `logs/fio_mudo.log`; não ganhou leitor de `fio_mudo_alvos`. (`bin/gerar_estado.py:260`; `bin/placar_code.sh:388`)
+
+   Há comparação **fechada nos testes**, já atualizada: igualdade integral de `censo` e `esperado`. Há também escritores de fixtures nos testes AST e no selo shell; isso não constitui segundo escritor operacional. (`app/chamados/tests/test_o261_vigia_fio.py:814`; `app/chamados/tests/test_o261_vigia_fio.py:824`; `app/core/tests/test_fio_mudo_placar.py:81`; `bin/tests/test_fio_estado.sh:34`)
+
+2. **Derivação do contador: base × cópia**
+
+   Pelo bloco removido/adicionado do diff fornecido, a seleção foi extraída, preservando o corpo antigo; a confirmação independente contra o objeto da base **[nao verificado]**. Na cópia, linha do disparar e número carimbado usam a mesma função. (`app/chamados/management/commands/disparar_perguntas_competencia.py:151`; `app/chamados/management/commands/vigiar_fio_morto.py:181`)
+
+   | Aspecto | Resultado |
+   |---|---|
+   | Universo | Chamados em `VIVOS`, vinculados à célula dentro da janela, sem pergunta viva; conserva parcial só lista, colaborador ativo, dedup da disputa e barreira de linha do fato. (`app/chamados/management/commands/disparar_perguntas_competencia.py:44`; `app/chamados/management/commands/disparar_perguntas_competencia.py:53`; `app/chamados/management/commands/disparar_perguntas_competencia.py:74`) |
+   | Janela | Disparar passa limites explícitos. A extensão nova permite omiti-los e chama `janela_atual(hoje)`. Ambos os crons usam a janela **global**, sem corte por empresa. (`app/chamados/management/commands/disparar_perguntas_competencia.py:32`; `app/chamados/management/commands/disparar_perguntas_competencia.py:111`; `app/chamados/management/commands/disparar_perguntas_competencia.py:151`; `app/ponto/janelas.py:60`) |
+   | Dedup | Continua por `(colaborador.pk, dia, motivo)`, escolhendo o primeiro motivo ainda não visto por passagem e marcando-o somente depois das barreiras. Não equivale a enumerar todos os motivos de cada chamado. (`app/chamados/management/commands/disparar_perguntas_competencia.py:63`; `app/chamados/management/commands/disparar_perguntas_competencia.py:86`) |
+   | Hoje/futuro | Não ganhou exclusão por data; delega o teto por instante a `vencidos_no_instante`, que consulta `cartorio.marcos_vencidos`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:63`; `app/chamados/services/fabrica_da_celula.py:15`) |
+   | Empresas | A outra extensão é o filtro opcional `empresas`. Disparar não o passa; vigiar passa seu recorte. Mesmo com recorte, a janela continua global. (`app/chamados/management/commands/disparar_perguntas_competencia.py:48`; `app/chamados/management/commands/disparar_perguntas_competencia.py:151`; `app/chamados/management/commands/vigiar_fio_morto.py:181`) |
+   | Amostragem | O disparar mede em sua rodada; vigiar mede novamente, mais tarde na corrente. Portanto a função é a mesma, mas os números não são necessariamente a mesma fotografia. (`app/config/crons.py:1521`; `app/config/crons.py:1718`) |
+
+   Nas bordas, disparar e vigiar capturam, cada um, um `timezone.now()` e derivam `hoje` desse instante. O placar usa `date.today()` e **duas** chamadas separadas de `datetime.now()`; ele não fornece relógio ao contador, apenas lê o arquivo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:109`; `app/chamados/management/commands/vigiar_fio_morto.py:166`; `app/core/management/commands/pipeline_placar.py:143`)
+
+   **Existe escape herdado do relógio:** `_ja_perguntou(d, motivo, dia)` não recebe `hoje`; chama `fio_vivo`, que chama `pergunta_viva(p)` sem esse argumento. Um ramo chega a `_dentro_da_janela_viva(..., hoje=None)` e lê `date.today()`. A primeira guarda do contador, por contraste, recebe `hoje`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:53`; `app/chamados/management/commands/disparar_perguntas_competencia.py:78`; `app/chamados/services/disputa_emissao.py:1419`; `app/chamados/juizes.py:1434`; `app/chamados/juizes.py:1389`; `app/chamados/juizes.py:577`)
+
+3. **Fotografia velha, empresa e ordem dos crons**
+
+   **Sim: fotografia velha pode ser usada sem qualquer indicação de velhice.** O leitor não consulta `hoje` nem `medido_em`: um `0/0` antigo não alarma; um `1/0` antigo continua alarmando. Até um placar de dia passado recebe a última fotografia disponível. (`app/core/management/commands/pipeline_placar.py:91`; `app/core/management/commands/pipeline_placar.py:101`; `app/core/management/commands/pipeline_placar.py:131`; `app/core/management/commands/pipeline_placar.py:144`)
+
+   **Recorte por empresa não sobrescreve o carimbo pela porta canônica:** o escritor só carimba quando `empresas is None`. Entretanto, o leitor aceita qualquer arquivo no caminho com os dois inteiros, sem conferir banco, schema ou escopo. Contaminação efetiva em produção **[nao verificado]**. (`app/chamados/management/commands/vigiar_fio_morto.py:219`; `app/chamados/management/commands/vigiar_fio_morto.py:241`; `app/core/management/commands/pipeline_placar.py:91`)
+
+   **Não existe `NAO_MEDIDO` automático toda manhã:** o arquivo válido de ontem continua aceito. Arquivo ausente, legado sem a chave ou inválido alarma imediatamente, em qualquer horário, sem distinguir “ainda não devido” de “medição atrasada”. Assim, há possibilidade de alarme prematuro enquanto aguarda a primeira medição válida; ocorrência diária em produção **[nao verificado]**. (`app/core/management/commands/pipeline_placar.py:98`; `app/core/management/commands/pipeline_placar.py:131`)
+
+   **A agenda não garante vigiar antes do placar.** O placar roda às 07:40 e declara dependência apenas de `auditar_invariantes_chamados`; vigiar está na corrente após `vigiar_pausa_export`. O encadeador pode esperar e expirar sem que essa agenda independente deixe de executar. A documentação também mostra essa separação. (`app/config/crons.py:747`; `app/config/crons.py:1718`; `bin/encadeado.sh:84`; `bin/encadeado.sh:92`; `app/docs/CRONS.md:39`; `app/docs/CRONS.md:61`)
+
+   Há diferença entre os leitores: `fio_estado` invalida a manchete depois de 26 horas; o leitor novo não tem expiração. (`bin/fio_estado.py:66`; `bin/fio_estado.py:140`; `app/core/management/commands/pipeline_placar.py:91`)
+
+4. **O alcance real dos testes** [nao verificado]
+
+   Os testes novos executam fonte **transformado**: removem todos os imports, substituem `BaseCommand` por `object`, zeram `CRONS/EMPRESAS`, trocam `medidos` e injetam colaboradores. Provam comportamentos desses fragmentos, mas não importação, descoberta dos comandos ou integração dos módulos reais. (`app/core/tests/test_fio_mudo_placar.py:50`; `app/core/tests/test_fio_mudo_placar.py:60`; `app/core/tests/test_fio_mudo_placar.py:82`; `app/core/tests/test_fio_mudo_placar.py:147`)
+
+   **São coletáveis no runner Django:** herdar de `unittest.TestCase` não os exclui; `core` integra as labels, a suíte chama `manage.py test` e o runner deriva de `DiscoverRunner`. Execução efetiva dessa árvore e resultado da suíte **[nao verificado]**. (`app/core/tests/test_fio_mudo_placar.py:71`; `bin/regua.sh:23`; `bin/suite.sh:102`; `app/core/runner_quarentena.py:72`)
+
+   Os dez mutantes novos não são percorridos por um teste: uma variável seleciona **um** durante o import. `suite.sh` não contém laço nem repasse explícito dessas variáveis ao Docker. (`app/core/tests/test_fio_mudo_placar.py:30`; `app/core/tests/test_fio_mudo_placar.py:43`; `bin/suite.sh:96`)
+
+   `FIO_MUDO_BASE` chama `git show`; a montagem declarada leva `app/` para `/app`, sem o `.git` da raiz. Esse mecanismo não funciona no cenário sem histórico indicado na pergunta. (`app/core/tests/test_fio_mudo_placar.py:27`; `bin/suite.sh:74`; `bin/suite.sh:100`)
+
+   O temporário escreve dentro de `app/core/tests` durante a execução. Há cleanup registrado, portanto resíduo permanente não é consequência necessária; interrupção abrupta pode deixá-lo. (`app/core/tests/test_fio_mudo_placar.py:74`; `app/core/tests/test_fio_mudo_placar.py:75`; `app/core/tests/test_fio_mudo_placar.py:81`)
+
+   **Existe prova real adjacente:** o teste do vigia usa `override_settings` e `call_command`, agora compara o contador real e a chave nova. Outro teste chama o disparar real com captura de SQL. Isso não cobre a integração real do novo leitor do placar. (`app/chamados/tests/test_o261_vigia_fio.py:780`; `app/chamados/tests/test_o261_vigia_fio.py:814`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:320`; `app/core/tests/test_fio_mudo_placar.py:79`)
+
+   A forma mínima proposta é manter a coleta e acrescentar:
+
+   - Teste Django com módulos importados normalmente, relógio congelado, temporário fora da árvore e `override_settings(VIGIA_FIO_CARIMBO=...)`; chamar vigia e placar por `call_command`, verificando conteúdo, texto e rc com/sem `--alarme`. O molde já existe no teste do vigia. (`app/chamados/tests/test_o261_vigia_fio.py:780`)
+   - Casos explícitos de fotografia velha, dia solicitado e identidade/escopo, hoje ausentes dos testes do leitor. (`app/core/tests/test_fio_mudo_placar.py:105`; `app/core/tests/test_fio_mudo_placar.py:119`)
+   - Um teste coletado que percorra os mutantes **em memória**, preservando imports e corrigindo os aliases onde são lidos; exigir a falha da asserção pretendida. Já existe molde de iteração de mutantes em memória no teste vizinho. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:220`)
+
+   Implementação e eficácia dessa proposta **[nao verificado]**.
+
+5. **Classes de reprovação**
+
+   | Classe | Constatação |
+   |---|---|
+   | Segundo juiz | Não identifiquei juiz novo na extração: ela continua consultando os predicados existentes. O registro mantém declarados os respondedores antigos até sua retirada na E3. (`app/chamados/management/commands/disparar_perguntas_competencia.py:53`; `app/chamados/management/commands/disparar_perguntas_competencia.py:63`; `app/core/juizes.py:153`) |
+   | Segundo escritor fora da porta | Não apareceu nova emissão de pergunta nesse caminho. Há, porém, efeito lateral herdado possível no juiz da tranca: `get_user_sistema()` usa `get_or_create`; portanto leitura estritamente sem DML depende dessa condição preexistente. (`app/chamados/management/commands/disparar_perguntas_competencia.py:88`; `app/chamados/juizes.py:1177`; `app/core/utils.py:18`) |
+   | Relógio fora da borda | Presente no caminho herdado `_ja_perguntou → fio_vivo → pergunta_viva → date.today()`, descrito no item 2. (`app/chamados/services/disputa_emissao.py:1419`; `app/chamados/juizes.py:1434`; `app/chamados/juizes.py:577`) |
+   | Derivação paralela | O número tem função compartilhada. O **esperado tem duas definições**: retorno do contador e literal independente em `ESPERADO_DO_CARIMBO`; a linha imprime o primeiro, o JSON publica o segundo. Hoje coincidem. (`app/chamados/management/commands/disparar_perguntas_competencia.py:88`; `app/chamados/management/commands/vigiar_fio_morto.py:98`; `app/chamados/management/commands/vigiar_fio_morto.py:207`; `app/chamados/management/commands/vigiar_fio_morto.py:228`) |
+   | Selo/RED sem mordida | Há asserções contra fragmentos, mas integração real do leitor e execução sistemática dos novos mutantes não estão provadas por esse arquivo. RED executado na base **[nao verificado]**. (`app/core/tests/test_fio_mudo_placar.py:43`; `app/core/tests/test_fio_mudo_placar.py:58`) |
+   | Ordem de trava | O contador novo ficou dentro de `tranca_em_lote`; esse contexto organiza memo, não adquire lock de banco. Não identifiquei inversão nova nesse trecho. (`app/chamados/management/commands/vigiar_fio_morto.py:174`; `app/chamados/juizes.py:1108`) |
+   | Pouso antes do pré-requisito | A condição documentada exige zero medido com C11 no ar; o comentário do selo continua citando o zero antigo. Cumprimento posterior da condição **[nao verificado]**. (`app/docs/RELATO.md:26`; `bin/tests/test_papel_prazo_nao_deriva.sh:303`) |
+   | ESMERIL-SEMANTICA | Há mistura temporal concreta: `placar(dia)` confronta execuções daquele dia, mas agrega fotografia sem vínculo com esse dia. Não há demonstração de mudança do significado da seleção `fio_mudo_alvos`. (`app/core/management/commands/pipeline_placar.py:71`; `app/core/management/commands/pipeline_placar.py:94`; `app/core/management/commands/pipeline_placar.py:131`) |
+
+6. **Itens 3–5 do `opus_final1.txt`**
+
+   - **Item 3 permanece:** lista vazia produz `crons={}`; o shell não imprime linhas, o `grep` falha e aparece “vigia falhou”. A implementação atual conserva essa cadeia. (`app/config/crons.py:2032`; `app/config/crons.py:2097`; `app/chamados/services/vigia_loop.py:80`; `app/chamados/services/vigia_loop.py:92`; `bin/placar_code.sh:204`)
+   - **Item 4 permanece pendente de comprovação:** não há no dado fornecido nova medida pós-deploy em PROD com `crons=['disparar_perguntas_competencia']` **[nao verificado]**. A função continua aceitando esse recorte explícito. (`app/chamados/services/vigia_loop.py:71`)
+   - **Item 5 não foi demonstrado como resolvido:** testes novos e um ramo opcional de Git não evidenciam RED executado da base. Existe fonte histórica embutida de outra base no teste adjacente, mas isso não comprova a execução exigida. (`app/core/tests/test_fio_mudo_placar.py:27`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:373`) Evidência nova em log **[nao verificado]**.
+
+## 10/11 01:12 · sessao 33b91741b66b · - · - · origem=Ronald (tmux)
+
+- **Extração preserva a seleção antiga segundo o diff fornecido**, com duas extensões: janela global quando `ini` e `fim` são omitidos e filtro opcional `empresas`; o disparar continua passando janela explícita e `colab`, sem filtro de empresas. Não foi possível comparar com objeto Git da base: esta cópia não contém repositório Git; comparação independente do hash da base [nao verificado]. (`app/chamados/management/commands/disparar_perguntas_competencia.py:21`, `:32`, `:45`, `:48`, `:151`; bloco removido de `diff_v4.patch` fornecido.)
+
+- **Universo:** chamados com `status_local ∈ VIVOS`, data da célula entre `ini` e `fim`, sem pergunta viva, respeitando parcial só lista, colaborador ativo, dedup da disputa e existência de linha do fato. Dedup local continua por `(colaborador.pk, dia, motivo)`, acrescido somente depois das barreiras; toma o primeiro motivo ainda não visto por passagem. Não acrescenta exclusão explícita de hoje/futuro: o teto por instante é delegado a `vencidos_no_instante`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:44`, `:53`, `:59`, `:63`, `:74`, `:78`, `:83`, `:86`; `app/chamados/services/fabrica_da_celula.py:15`.)
+
+- **Janela:** cron do disparar passa `--comp-corrente --alarme`; disparar obtém `janela_atual(hoje)` e entrega os limites ao contador. Vigiar chama contador sem limites, que também usa `janela_atual(hoje)` sem empresa. Portanto ambos usam corte global, normalmente 21, inclusive quando vigiar foi chamado com `--empresa`; esse argumento restringe colaboradores, não determina corte individual. (`app/config/crons.py:1521`; `app/chamados/management/commands/disparar_perguntas_competencia.py:111`, `:151`, `:32`, `:48`; `app/chamados/management/commands/vigiar_fio_morto.py:181`; `app/ponto/janelas.py:50`, `:60`.)
+
+- **Relógios nas bordas:** disparar lê um `timezone.now()` e deriva `timezone.localdate(agora)`; vigiar faz igual, em sua própria rodada. Assim o mesmo contador pode produzir números distintos em instantes diferentes, sem mudança na derivação. Placar usa `date.today()` e duas chamadas separadas de `datetime.now()`; não recalcula contador, apenas lê fotografia. Django declara `America/Sao_Paulo`, mas fuso efetivo dos processos em produção [nao verificado]. (`app/chamados/management/commands/disparar_perguntas_competencia.py:109`; `app/chamados/management/commands/vigiar_fio_morto.py:166`; `app/core/management/commands/pipeline_placar.py:143`; `app/config/settings/base.py:93`.)
+
+- **Há relógio interno herdado:** embora a primeira guarda passe `_viva(p, hoje=hoje)`, a segunda chama `_ja_perguntou` sem hoje; ela chama `fio_vivo`, que chama `pergunta_viva(p)` sem hoje. O fallback pode chegar a `date.today()` em `_dentro_da_janela_viva`. O diff mostra essa chamada já no corpo antigo: problema preservado, não introduzido pela extração. (`app/chamados/management/commands/disparar_perguntas_competencia.py:53`, `:78`; `app/chamados/services/disputa_emissao.py:1418`; `app/chamados/juizes.py:1434`, `:1389`, `:577`; bloco removido de `diff_v4.patch` fornecido.)
+
+- **Carimbo velho é aceito:** `alarmes_fio_mudo` verifica exclusivamente presença/tipo inteiro de `censo.fio_mudo_alvos` e `esperado.fio_mudo_alvos`. Não lê `hoje`, `medido_em`, `banco` ou `schema`; não recebe `dia` nem horário devido. Uma fotografia antiga `0/0` permite ausência de alarme, e uma antiga `1/0` continua alarmando. Até `pipeline_placar --dia <passado>` anexa a última fotografia disponível. (`app/core/management/commands/pipeline_placar.py:85`, `:94`, `:101`, `:131`, `:144`.)
+
+- **Outra empresa:** o escritor canônico impede que execução com `--empresa` substitua a fotografia de frota. Entretanto o leitor não valida origem/escopo; aceitará qualquer JSON no caminho configurado que contenha os dois inteiros, inclusive de outro banco/schema. Contaminação efetiva em produção [nao verificado]. (`app/chamados/management/commands/vigiar_fio_morto.py:156`, `:219`, `:222`, `:226`, `:241`; `app/core/management/commands/pipeline_placar.py:92`.)
+
+- **`NAO_MEDIDO` não surge automaticamente toda manhã:** não há expiração diária, então o carimbo válido de ontem continua sendo usado. Surge com arquivo ausente, ilegível, sem chave ou com tipo inválido, e ocorre em qualquer horário até existir fotografia válida, sem tolerância ligada à execução prevista. Afirmar ocorrência diária real seria [nao verificado]. (`app/core/management/commands/pipeline_placar.py:88`, `:91`, `:98`, `:131`.)
+
+- **Cron não garante vigiar antes do placar:** `vigiar_fio_morto` pertence à corrente, depois de `vigiar_pausa_export`; `pipeline_placar` tem horário independente 07:40 e declara dependência apenas de `auditar_invariantes_chamados`. O encadeador espera carimbos dos gatilhos da corrente, mas o placar não espera o carimbo do vigiar. A corrente pode atrasar/falhar sem impedir placar. (`app/config/crons.py:1718`, `:747`; `bin/encadeado.sh:84`, `:92`; `app/docs/CRONS.md:39`, `:45`, `:61`.)
+
+- **Divergência documental:** consulta marca cartório 06:28, código marca 06:27. O próprio documento declara `config/crons.py` como fonte prevalecente. (`app/docs/CRONS.md:33`, `:7`; `app/config/crons.py:616`.)
+
+- **Metadado esperado tem duas definições:** contador retorna `esperado=0`; a linha VFM imprime esse retorno, mas o JSON usa outro literal, de `ESPERADO_DO_CARIMBO`, não `cfm['esperado']`. Hoje coincidem; mudar somente retorno faria linha e JSON divergirem. A seleção e o número continuam compartilhados. (`app/chamados/management/commands/disparar_perguntas_competencia.py:88`; `app/chamados/management/commands/vigiar_fio_morto.py:98`, `:207`, `:228`.)
+
+## 10/11 01:12 · sessao 29ee3fe4196e · - · - · origem=Ronald (tmux)
+
+4. O arquivo novo é **coletável**, mas prova código transformado, não a integração dos módulos reais: remove todos os imports, troca `BaseCommand` por `object`, zera `CRONS/EMPRESAS` e injeta funções/mocks (`app/core/tests/test_fio_mudo_placar.py:50-62`, `:82-83`, `:147-177`, `:205-211`). A classe herda `unittest.TestCase`, compatível com a descoberta usada pelo runner; `core` está nas labels, a suite chama `manage.py test`, e o runner delega a `DiscoverRunner.build_suite` (`app/core/tests/test_fio_mudo_placar.py:71`; `bin/regua.sh:23`; `bin/suite.sh:102-103`; `app/config/settings/ci.py:40`; `app/core/runner_quarentena.py:72-76`). Fiz somente parse e coleta stdlib em memória: sete testes coletados; execução Django nessa cópia **[nao verificado]**.
+
+A cópia contém `[nome]`, sintaticamente válido; o `[nome]` do anexo é alteração da raspagem e não defeito do arquivo real (`app/core/tests/test_fio_mudo_placar.py:26-29`).
+
+Os mutantes novos **não são percorridos pela suite**: só um mutante selecionado por variável de ambiente altera a string durante o import; o script Docker não repassa explicitamente `FIO_MUDO_MUTANTE` ou `FIO_MUDO_BASE` (`app/core/tests/test_fio_mudo_placar.py:30-47`; `bin/suite.sh:96-103`). Herança eventual dessas variáveis por env-files/imagem **[nao verificado]**.
+
+`FIO_MUDO_BASE` depende de executar `git show`; o container recebe a montagem de `app/` em `/app`, sem montagem do `.git` da raiz. Portanto esse ramo depende de Git/histórico externo à montagem declarada e falha no cenário sem `.git` descrito na pergunta (`app/core/tests/test_fio_mudo_placar.py:27-29`; `bin/suite.sh:74`, `:100`).
+
+O `setUp` cria diretório dentro de `app/core/tests`; a limpeza está registrada e ocorre normalmente, mas a execução efetivamente escreve na árvore e uma interrupção abrupta pode deixar resíduos (`app/core/tests/test_fio_mudo_placar.py:73-81`, `:127-131`).
+
+**Existe prova real ao lado**, inclusive atualizada pelo v4: `_rodar` usa `override_settings(VIGIA_FIO_CARIMBO=...)` e `call_command('vigiar_fio_morto', ...)`; o teste compara o carimbo ao contador real e inclui a chave nova (`app/chamados/tests/test_o261_vigia_fio.py:780-785`, `:814-828`). Também existe chamada real de `disparar_perguntas_competencia` com captura de SQL (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:315-331`). Isso não cobre, sozinho, a integração real do leitor novo (`app/core/tests/test_fio_mudo_placar.py:79-84`).
+
+Forma mínima proposta: manter a coleta existente; acrescentar teste Django com `call_command('pipeline_placar', ...)`, `override_settings` e temporário fora da árvore; usar módulos importados normalmente, congelar o relógio e controlar só as entradas externas necessárias. Reaproveitar a fixture e chamada real do vigia para conferir o caminho contador → carimbo → placar; migrar os mutantes para um teste que percorra todos em memória e passe a mesma verificação a cada versão, preservando os imports. O repositório já possui os moldes `override_settings+call_command` e mutantes em memória (`app/chamados/tests/test_o261_vigia_fio.py:780-785`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:220-227`). A eficácia da implementação proposta permanece **[nao verificado]**.
+
+6. Sobre os itens 3–5 da reprovação:
+
+- **Item 3 permanece:** lista vazia → `crons={}` → nenhuma linha impressa → `grep` falha → mensagem “vigia falhou”; os sítios não foram tocados pelo diff v4 fornecido (`app/config/crons.py:2032`; `app/chamados/services/vigia_loop.py:80-99`; `bin/placar_code.sh:204-209`; anexo `diff_v4.patch` **[nao verificado: sem arquivo local do anexo]**).
+- **Item 4:** não há nova prova de medição pós-deploy em PROD nos dados fornecidos; cumprimento **[nao verificado]**. [nao verificado]
+- **Item 5:** os testes novos e o ramo opcional `FIO_MUDO_BASE` não constituem evidência de RED executado na base; além disso o ramo Git não resolve a execução na montagem sem `.git` (`app/core/tests/test_fio_mudo_placar.py:27-29`; `bin/suite.sh:100`). Há verificações de mutantes e fonte antiga embutida no teste Django existente, mas RED em log da base exigida continua **[nao verificado]** (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:220-227`, `:373`).
+
+## 10/11 01:11 · sessao cac1af8de873 · - · - · origem=Ronald (tmux)
+
+1. **Escritor de produção localizado:** `vigiar_fio_morto.Command.handle` monta o registro completo e chama `_carimbar` somente para frota (`empresas is None`); recorte `--empresa` imprime que não carimbou. `_carimbar` escreve `.novo` e faz `os.replace`. O caminho vem de `settings.VIGIA_FIO_CARIMBO` ou `<BASE_DIR>/logs/fio_morto.json`. (`app/chamados/management/commands/vigiar_fio_morto.py:105`, `:118`, `:130`, `:222`, `:241`.)
+
+2. **Chaves de topo escritas:** `medido_em`, `hoje`, `banco`, `schema`, `esperado`, `alarma_sempre`, `alarma_em_0`, `alarme_passivo_ligado`, `gritou`, `censo`, `alcance`, `materializada_viva_exportada`, `viva_em_disputa_fechada`. (`app/chamados/management/commands/vigiar_fio_morto.py:223`.)
+
+   - `esperado` contém nove contadores: `fio_morto`, `fio_morto_cobrando`, `fio_morto_com_alvo`, `dias_futuros_no_universo`, `respondida_sem_resposta`, `materializada_viva`, `fio_morto_alcance`, `cadastro_sem_turno`, **`fio_mudo_alvos`**, todos zero. (`app/chamados/management/commands/vigiar_fio_morto.py:90`, `:98`.)
+   - `censo` conserva todas as chaves de `censo()`, adiciona os cinco complementos `respondida_sem_resposta`, `materializada_viva`, `fio_morto_alcance`, `cadastro_sem_turno`, **`fio_mudo_alvos`**; `fio_do_admin_sem_resposta` é atualizado depois dos dois censos. As chaves originais e dinâmicas estão declaradas no serviço. (`app/chamados/management/commands/vigiar_fio_morto.py:182`, `:233`; `app/chamados/services/vigia_fio.py:356`, `:371`.)
+   - `alcance` conserva o resultado completo do censo de alcance: universo, competências, portas, futuro, contagem, papéis, detalhes, listas e causas/baldes derivados; `alcance_cego` é adicionado antes do retorno. (`app/chamados/services/vigia_fio.py:535`, `:571`, `:588`.)
+   - `viva_em_disputa_fechada` contém `perguntas` e `disputas`. (`app/chamados/services/vigia_fio.py:759`.)
+
+3. **Leitor direto host:** `bin/fio_estado.py` abre o caminho fixo `app/logs/fio_morto.json`; não usa o override Django. Lê `censo`, `esperado`, `medido_em`, `hoje`, `banco`, `gritou`, `alarma_em_0`, os campos necessários de `alcance` e um subconjunto nominal do censo para apresentação. Não usa `schema`, `alarma_sempre`, `alarme_passivo_ligado`, `materializada_viva_exportada` ou `viva_em_disputa_fechada` em sua saída/veredito. (`bin/fio_estado.py:65`, `:104`, `:121`, `:143`.)
+
+4. **A chave nova altera SIM o veredito de leitor já existente:** `fio_estado._ler_carimbo` percorre **todo** `esperado.items()` e compara cada valor com `censo.get(k)`. Logo `fio_mudo_alvos != esperado.fio_mudo_alvos` entra automaticamente em `fora_do_esperado` e aparece na linha **“FORA DO ESPERADO (carimbo inteiro)”**. Não há conjunto fechado impedindo a chave nova. A manchete continua regida exclusivamente por `fio_morto_alcance` e sua validade; ela pode continuar mostrando alcance zero e, abaixo, acusar FIO MUDO. (`bin/fio_estado.py:125`, `:175`, `:191`.)
+
+5. **Leitor indireto:** `bin/gerar_estado.py` chama `fio_estado.ler` e `fio_estado.linha`, portanto herda exatamente o efeito da chave nova sobre a seção de fio morto. (`bin/gerar_estado.py:260`.)
+
+6. **Leitor novo:** `pipeline_placar.alarmes_fio_mudo` usa o mesmo resolvedor de caminho do escritor; lê exclusivamente `censo.fio_mudo_alvos` e `esperado.fio_mudo_alvos`, exige `type(...) is int`, retorna `NAO_MEDIDO` por ausência/forma inválida e alarma por desigualdade. Não valida `medido_em`, `hoje`, `banco`, `schema`, escopo ou empresa. O alarme entra incondicionalmente em todo `placar(dia)` e pode causar rc 2 com `--alarme`. (`app/core/management/commands/pipeline_placar.py:10`, `:85`, `:94`, `:131`, `:153`.)
+
+7. **`placar_code.sh` não lê esse JSON nem a chave nova:** lê apenas a linha `FABRICA-POR-EVENTO` de `logs/fio_mudo.log`, com verificação de data do arquivo, publicando `perguntas_que_o_julgamento_nao_fez`. A volta 4 não liga `fio_mudo_alvos` ao seu `TOTAL`. (`bin/placar_code.sh:388`, `:389`, `:390`.)
+
+8. **Leitores/escritores de fixtures encontrados:** teste Django de carimbo chama o comando real com `override_settings`, lê o JSON e compara **o dicionário completo** de `censo` e `esperado` — conjunto fechado no teste, já atualizado pela volta 4; testes de alcance leem campos selecionados. O novo teste AST escreve JSON próprio e lê o carimbo gerado pelo módulo reconstruído; o selo shell escreve fixtures em temporário e invoca `fio_estado.py`. (`app/chamados/tests/test_o261_vigia_fio.py:783`, `:809`, `:814`, `:824`; `app/chamados/tests/test_o261e_f5_alcance.py:274`, `:290`, `:465`; `app/core/tests/test_fio_mudo_placar.py:74`, `:81`, `:181`; `bin/tests/test_fio_estado.sh:32`, `:71`, `:74`.)
+
+9. **Outro endereço de escrita em testes:** settings CI substituem o carimbo por arquivo em temporário externo à árvore; esse é um destino alternativo, não um segundo escritor de produção. (`app/config/settings/ci.py:30`.)
 
 ## 10/11 01:08 · sessao 1b9519f63a52 · O169-FECHADA · construtor · origem=Code
 
@@ -683,179 +856,4 @@ Achados na base, sem edições:
 
 Testes relacionados: `ponto/tests/test_afastado_nunca_bloqueia.py:67`, `ponto/tests/test_porta_ausencia_ferias.py:83`, `ponto/tests/test_pautas_do_esmeril.py:27`, `ponto/tests/test_a6_vigia_familia_ausencia.py:166`, `escala/tests/test_fase_12x36.py:136`. Execução desses testes: [nao verificado].
 
-## 10/11 00:32 · sessao e9da70ea9d32 · FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE · sonda · origem=Code
-
-O modo `--sonda` executa o envelope antes de chamar o agente e incorpora a saída raspada ao prompt; abaixo reproduzo integralmente o dado recebido, sem alegar nova execução. (`bin/codex_pergunta.sh:307-344`) Conteúdo de produção sem verificação independente: [nao verificado].
-
-```text
-sonda_leitura: sonda3.py [0d4b1316cd662228] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-col534 e2 situacao=ativo adm=2026-02-17 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1005 e2 situacao=ativo adm=2026-10-27 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col268 e2 situacao=ativo adm=2024-08-21 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col209 e2 situacao=ativo adm=2018-06-16 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col298 e2 situacao=ativo adm=2024-11-28 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col650 e2 situacao=ativo adm=2025-09-26 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col427 e2 situacao=ativo adm=2025-10-14 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1018 e2 situacao=ativo adm=2026-11-04 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1002 e2 situacao=ativo adm=2026-10-26 dem=None adesao=2026-11-09 vivas60=2 retratadas=0 ramo=COM_ADESAO
-col1027 e2 situacao=ativo adm=2026-11-04 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1009 e2 situacao=ativo adm=2026-11-01 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1019 e2 situacao=ativo adm=2026-11-03 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col312 e2 situacao=ativo adm=2025-02-13 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col144 e3 situacao=ativo adm=2023-04-19 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1016 e2 situacao=ativo adm=2026-11-01 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col1030 e2 situacao=ativo adm=2026-11-09 dem=None adesao=None vivas60=0 retratadas=0 ramo=SEM_ADESAO
-col982 e2 situacao=ativo adm=2026-10-07 dem=None adesao=2026-10-20 vivas60=20 retratadas=0 ramo=COM_ADESAO
-col155 e3 situacao=ativo adm=2022-09-29 dem=None adesao=2026-05-25 vivas60=97 retratadas=0 ramo=COM_ADESAO
-RAMO {'SEM_ADESAO': 15, 'COM_ADESAO': 3}
-ERROS 0
-== anexo: sonda1_resumo.txt ==
-agora_local 2026-11-10T00:12:27.212274-03:00
-janela 2026-10-21 2026-11-20 piso 2026-10-21
-N_ITENS 139 CELULAS 48
-POR_MOTIVO {'saida_sem_entrada': 45, 'orfao_14h': 48, 'intervalo_saida': 23, 'intervalo_volta': 23}
-POR_DIA {'2026-10-21': 1, '2026-10-26': 1, '2026-11-04': 2, '2026-11-05': 35, '2026-11-06': 18, '2026-11-07': 38, '2026-11-08': 16, '2026-11-09': 28}
-POR_EMPRESA {2: 134, 3: 5}
-A 0 B 0 sem_evento_pos_dia 135 sem_evento_nenhum 0 com_evento_pendente 0
-COMBO(A,B,ev_pos>0) {(False, False, False): 135, (False, False, True): 4}
-TRABALHA {'True': 139} VEREDITO {'nunca_bateu': 137, 'indefinida': 1, 'cobrado': 1}
-PERG_MESMO_DIA_QUALQUER>0 0
-ERROS 0
- col1005 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-05 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-05 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-06 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
- col1005 e2 2026-11-06 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
- col1005 e2 2026-11-06 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
- col1005 e2 2026-11-06 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
-```
-
-O material recebido registra `ERROS 0` nas duas saídas e três `COM_ADESAO`: col1002, col982 e col155. [nao verificado]
-
-1. **COM_ADESAO: sim, o ramo normal rejulgaria após cada novo vencimento, se fosse chamado para aquela célula.** A adesão vem da primeira batida não retratada da vida, independentemente de haver batida naquele dia. (`app/ponto/services/cartorio.py:1165-1173`) Com `teto_de_hoje`, os marcos vencidos são calculados para hoje e ontem; sem nenhum vencido, a célula sai como `cedo`. (`app/ponto/services/cartorio.py:1324-1344`) A quantidade de vencidos entra na impressão, portanto um novo marco vencido muda esse insumo. (`app/ponto/services/cartorio.py:1359-1365`; `app/ponto/services/cartorio.py:463-464`) Além disso, `veredito == 'nunca_bateu'` torna `_em_dia=False` mesmo com impressão igual, impedindo o pulo em `:1373`. (`app/ponto/services/cartorio.py:1366-1375`) Essa guarda provoca rejuízo dentro de uma chamada; ela não agenda outra chamada. (`app/ponto/services/cartorio.py:1314-1378`)
-
-2. **O caminho do julgamento até a fábrica depende da presença da data em `out['cods']`, inclusive quando os códigos são `[]`.** O wrapper retira os códigos acumulados do lote para isolar o ato atual e executa o corpo. (`app/ponto/services/cartorio.py:938-959`) O ramo normal classifica e grava `out.setdefault('cods', {})[data] = list(cods)`. (`app/ponto/services/cartorio.py:1424-1437`) Com `apply_=True`, lavra ata/veredito e carimba; depois, o wrapper lê `_julgadas = out.get('cods') or {}` e chama `perguntar_pela_celula` somente para datas presentes nesse dicionário. (`app/ponto/services/cartorio.py:1810-1835`; `app/ponto/services/cartorio.py:992-1008`) A fábrica calcula vencidos e motivos e, havendo motivos após as guardas, chama `perguntar`. (`app/chamados/services/fabrica_da_celula.py:190-210`)
-
-3. **Por que os COM_ADESAO não emitiram os marcos seguintes em produção: [nao verificado].** O raspado não apresenta `out['cods']`, os resultados das chamadas por célula nem o cruzamento dos 139 itens com os três colaboradores desse ramo. [nao verificado] A ausência de evento posterior, isoladamente, não demonstra ausência de oportunidade de rejuízo: o vigia de hora também chama `julgar_celula(..., teto_de_hoje=True)` para candidatas que passam pelas suas guardas. (`app/ponto/services/vigia_de_hora.py:114-131`) Há ainda uma entrada independente de `cods`: o consumidor chama `perguntar_por_eventos`, que relê as células das datas do lote e chama `perguntar_pela_celula`. (`app/chamados/reconciliador.py:1384-1387`; `app/chamados/services/fabrica_da_celula.py:279-293`) Execução, candidatura e resultado desses caminhos para cada COM_ADESAO: [nao verificado].
-
-4. **SEM_ADESAO: “carimba e não emite” corresponde ao encaminhamento do corpo do cartório.** Esse ramo tem sua própria idempotência; quando aplica, mantém `nunca_bateu` sem cobertura integral, lavra com `codigos=[]`, carimba e retorna em `:1279`. (`app/ponto/services/cartorio.py:1207-1216`; `app/ponto/services/cartorio.py:1243-1279`) Ele retorna antes da gravação de `out['cods']` em `:1437`; consequentemente, não encaminha essas datas à fábrica pelo laço do wrapper. (`app/ponto/services/cartorio.py:1279`; `app/ponto/services/cartorio.py:1437`; `app/ponto/services/cartorio.py:997-1008`) A guarda de rejuízo de `:1369` pertence ao ramo normal, alcançado quando existe adesão. (`app/ponto/services/cartorio.py:1173`; `app/ponto/services/cartorio.py:1279-1280`; `app/ponto/services/cartorio.py:1369`)
-
-5. **Sim: fábrica e vigia podem contar motivos desses SEM_ADESAO como devidos; não há guarda de adesão nesse caminho.** `nunca_bateu` integra explicitamente `VEREDITOS_ACUSAM`. (`app/escala/models.py:1767-1768`) `motivos_a_perguntar` verifica dia sem trabalho, situação ativa, futuro, vencimento, veredito, parcial na lista e deduplicação; lê os faltantes pela ata, sem consultar adesão. (`app/chamados/services/fabrica_da_celula.py:100-150`; `app/chamados/services/fabrica_da_celula.py:52-74`) `motivos_que_o_evento_deixou` retorna esses motivos, tratando separadamente a pauta do limbo exportado. (`app/chamados/services/fabrica_da_celula.py:225-236`) O vigia do `disparar` acumula cada motivo retornado nas células passadas elegíveis, imprime a contagem e gera `SystemExit(2)` no caminho de alarme quando há pendências. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`; `app/chamados/management/commands/disparar_perguntas_competencia.py:239-259`)
-
-Assim, há uma divergência demonstrável entre o ramo SEM_ADESAO, que retorna sem alimentar `cods`, e o leitor do vigia, que aceita seu veredito e pode encontrar marcos devidos na ata. (`app/ponto/services/cartorio.py:1253-1279`; `app/ponto/services/cartorio.py:997-1008`; `app/chamados/services/fabrica_da_celula.py:112-150,233-236`; `app/escala/models.py:1767-1768`) Quantificar essa divergência em todos os 139 itens ou atribuir a omissão concreta dos COM_ADESAO permanece [nao verificado].
-
-## 10/11 00:30 · sessao 0f26bcd03582 · - · - · origem=Ronald (tmux)
-
-- **SEM_ADESAO pode entrar como devido no vigia.** `motivos_que_o_evento_deixou` chama `motivos_a_perguntar` e retorna os motivos restantes, com desvio apenas para pauta do limbo exportado (`app/chamados/services/fabrica_da_celula.py:225-236`). `nunca_bateu` integra `VEREDITOS_ACUSAM` (`app/escala/models.py:1767-1768`).
-
-- **Não há guarda de adesão nesse caminho.** As guardas são dia sem trabalho/ativo, futuro, marcos vencidos, veredito, parcial e deduplicação (`app/chamados/services/fabrica_da_celula.py:102-150`). O teto consulta escala e vencimento por instante, com tolerância de 30 minutos (`app/ponto/services/cartorio.py:828-859`). A leitura dos faltantes usa ata, isenção, vínculo por admissão/demissão e tipo do dia; não consulta primeira batida/adesão (`app/chamados/services/declaracao_texto.py:100-143`; `app/escala/services/leitor_celula.py:365-398`).
-
-- **O vigia do disparar contabiliza esses motivos.** Seleciona passado, exclui ontem enquanto ainda estiver na janela do vigia de hora, chama `motivos_que_o_evento_deixou` e acrescenta cada motivo em `deixou` (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`). Imprime o total e, no caminho de alarme, lança `SystemExit(2)` se houver pendências (`app/chamados/management/commands/disparar_perguntas_competencia.py:240-259`).
-
-- **A divergência com “carimba e não emite” está no encaminhamento.** O ramo sem adesão lavra `codigos=[]`, carimba e retorna do corpo (`app/ponto/services/cartorio.py:1253-1279`). O wrapper encaminha à fábrica apenas datas presentes em `out['cods']` (`app/ponto/services/cartorio.py:992-1008`). Assim, o corpo pode deixar ata/veredito que o leitor do vigia considera cobravel sem colocar a data no conjunto encaminhado à fábrica (`app/ponto/services/cartorio.py:1253-1279`; `app/chamados/services/fabrica_da_celula.py:112-150`).
-
-- Os quatro motivos vêm das posições dos marcos: início/E → `saida_sem_entrada`; fim/S → `orfao_14h`; intervalo ida/S → `intervalo_saida`; intervalo volta/E → `intervalo_volta` (`app/chamados/services/declaracao_texto.py:42-46`). A fábrica limita os faltantes aos marcos vencidos (`app/chamados/services/fabrica_da_celula.py:58-74`).
-
-O raspado mostra oito itens exemplificados para `col1005`, identificado como SEM_ADESAO, e agregados gerais; não fornece o cruzamento completo de todos os 139 itens com os dois ramos, nem o histórico de execução de cada célula. [nao verificado]
-
-## 10/11 00:30 · sessao e5762b0ed2d9 · - · - · origem=Ronald (tmux)
-
-1. **COM_ADESAO: sim, se o julgamento for chamado.** A adesão é a primeira batida não retratada (`app/ponto/services/cartorio.py:1165-1167`); com adesão, o ramo sem adesão não é executado (`:1173`, `:1279`). No ramo normal, `nunca_bateu` torna `_em_dia=False` mesmo com impressão igual, impedindo o pulo por idempotência (`:1366-1375`). Com `teto_de_hoje=True`, hoje e ontem usam marcos vencidos por instante; nenhum vencido implica `continue` (`:1324-1344`). A quantidade de vencidos entra na impressão (`:1359-1365`; implementação em `:463-464`). Portanto, novo vencimento muda a impressão; e o antigo `nunca_bateu` já força rejuízo independentemente dessa mudança (`:1369`). Ainda há a saída `dia is None` (`:1376-1378`).
-
-2. **Caminho exato até a fábrica no julgamento.** `julgar_colab` retira `cods` do lote para isolar o ato (`app/ponto/services/cartorio.py:938-946`), executa o corpo (`:959`) e eventual segunda passada (`:980-984`). O corpo normal calcula `cods` e registra a data **mesmo se a lista de códigos for vazia** (`:1424-1437`). Com `apply_=True`, o wrapper lê `_julgadas = out.get('cods') or {}` e chama `perguntar_pela_celula` somente para datas presentes nesse dicionário (`:992-1008`). A ata e o veredito são lavrados antes do retorno do corpo (`:1810-1834`). No `finally`, os códigos do ato voltam ao acumulado do lote (`:1077-1084`).
-
-3. **SEM_ADESAO: o ramo não alimenta esse caminho.** Entra em `if adesao is None` (`app/ponto/services/cartorio.py:1173`); a impressão do ramo pode produzir pulo (`:1207-1216`). Se aplica, grava `nunca_bateu` sem cobertura integral e `codigos=[]` (`:1243-1253`), carimba (`:1275-1278`) e retorna (`:1279`), antes da única gravação de `out['cods'][data]` do corpo (`:1437`). Portanto, o wrapper não chama a fábrica para essas datas por esse ato (`:997-1008`). A guarda de `nunca_bateu` em `:1369` pertence ao **ramo normal**, alcançado depois de existir adesão, não ao ramo SEM_ADESAO (`:1173`, `:1279-1280`).
-
-4. **Há outra entrada da fábrica, independente de `cods`.** O consumidor de eventos pendentes busca lotes (`app/chamados/reconciliador.py:1343-1352`) e chama `perguntar_por_eventos` (`:1384-1387`); esta relê as células atuais das datas dos eventos e chama `perguntar_pela_celula` (`app/chamados/services/fabrica_da_celula.py:288-292`). Por isso, não cabe afirmar que SEM_ADESAO nunca pode receber pergunta: a exclusão demonstrada acima é a entrada por `cods` no julgamento. Falhas do consumidor impedem marcar os eventos como processados (`app/chamados/reconciliador.py:1388-1401`).
-
-5. **O relógio pode chamar sem evento novo.** O código agenda `vigia_de_hora --apply` a cada dez minutos (`app/config/crons.py:365-368`). A rotina candidata células `trabalha=True` de hoje e ontem (`app/ponto/services/vigia_de_hora.py:20-23`), aplica exclusões (`:117-129`) e chama `julgar_celula(..., teto_de_hoje=True)` (`:130-131`). Portanto, “sem evento posterior” sozinho não explica por que COM_ADESAO deixou de perguntar; a execução efetiva, candidatura e resultado dessas rodadas em produção são **[nao verificado]**. Ontem sai do alcance conforme `_ontem_em_janela` (`:47-58`, `:120-121`). O batch do cartório também chama `julgar_colab` para células passadas (`app/ponto/management/commands/processar_cartorio.py:49-65`).
-
-6. **Limite do dado raspado.** A saída fornecida não contém `out['cods']`, instantes dos vencimentos, resultado das rodadas do vigia, nem cruzamento individual entre COM_ADESAO e cada uma das 139 faltas; logo, a causa concreta da omissão dos marcos seguintes para cada COM_ADESAO permanece **[nao verificado]**. O código demonstra a possibilidade e o caminho de rejulgamento, mas não permite atribuir o caso de produção a pulo por impressão, falta de rodada, guarda da fábrica ou falha do consumidor sem essas observações **[nao verificado]**.
-
-## 10/11 00:29 · sessao 97b44640d8a7 · FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE · sonda · origem=Code
-
-**ERROS 18: a sonda não permite concluir a causa em produção nem validar a divisão COM_ADESAO/SEM_ADESAO.** O bloco recebido informa esse resultado; não houve nova execução nesta sessão. [nao verificado]
-
-O `--sonda` é executado pelo wrapper **antes** de chamar esta sessão; depois, a saída raspada entra no prompt. Abaixo devolvo integralmente o bloco recebido, incluindo o anexo, sem apresentá-lo como nova execução. (`bin/codex_pergunta.sh:311-318`, `bin/codex_pergunta.sh:338-344`; conteúdo recebido: [nao verificado])
-
-```text
-sonda_leitura: sonda2.py [abace131b830b2ec] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-ERRO 534 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1005 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 268 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 209 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 298 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 650 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 427 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1018 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1002 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1027 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1009 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1019 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 312 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 144 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1016 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 1030 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 982 AttributeError 'Colaborador' object has no attribute 'ativo'
-ERRO 155 AttributeError 'Colaborador' object has no attribute 'ativo'
-RAMO {'SEM_ADESAO': 15, 'COM_ADESAO': 3}
-ERROS 18
-VEREDITO: SONDA COM ERRO -- numero nao conclui
-== anexo: sonda1_resumo.txt ==
-agora_local 2026-11-10T00:12:27.212274-03:00
-janela 2026-10-21 2026-11-20 piso 2026-10-21
-N_ITENS 139 CELULAS 48
-POR_MOTIVO {'saida_sem_entrada': 45, 'orfao_14h': 48, 'intervalo_saida': 23, 'intervalo_volta': 23}
-POR_DIA {'2026-10-21': 1, '2026-10-26': 1, '2026-11-04': 2, '2026-11-05': 35, '2026-11-06': 18, '2026-11-07': 38, '2026-11-08': 16, '2026-11-09': 28}
-POR_EMPRESA {2: 134, 3: 5}
-A 0 B 0 sem_evento_pos_dia 135 sem_evento_nenhum 0 com_evento_pendente 0
-COMBO(A,B,ev_pos>0) {(False, False, False): 135, (False, False, True): 4}
-TRABALHA {'True': 139} VEREDITO {'nunca_bateu': 137, 'indefinida': 1, 'cobrado': 1}
-PERG_MESMO_DIA_QUALQUER>0 0
-ERROS 0
- col1005 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-05 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-05 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
- col1005 e2 2026-11-06 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
- col1005 e2 2026-11-06 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
- col1005 e2 2026-11-06 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
- col1005 e2 2026-11-06 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
-```
-
-**COM_ADESAO: sim, condicionalmente à chamada do julgamento.** No código, adesão é a data da primeira batida não retratada; havendo essa batida, o ramo `adesao is None` não é tomado. (`app/ponto/services/cartorio.py:1165-1173`)
-
-No ramo normal com `teto_de_hoje=True`:
-
-- Hoje, sem marco vencido, a célula é pulada; havendo vencidos, sua quantidade entra na impressão. O vencimento considera marco + 30 minutos. (`app/ponto/services/cartorio.py:1324-1328`, `app/ponto/services/cartorio.py:1359-1361`, `app/ponto/services/cartorio.py:828`, `app/ponto/services/cartorio.py:858-859`)
-- Cada aumento dessa quantidade muda a impressão, pois ela incorpora `teto`. Isso impede o pulo por impressão igual no vencimento seguinte. (`app/ponto/services/cartorio.py:463-464`, `app/ponto/services/cartorio.py:1369-1375`)
-- Enquanto o veredito persistido for `nunca_bateu`, `_em_dia` será falso **mesmo com impressão igual**. Essa condição impede o pulo por idempotência; depois que o veredito mudar, deixa de fazê-lo. (`app/ponto/services/cartorio.py:1366-1375`)
-- Isso não garante julgamento sem invocação, nem supera a ausência do dia na grade, que também causa `continue`. (`app/ponto/services/cartorio.py:1376-1378`)
-
-Existe gatilho pelo relógio: a configuração agenda `vigia_de_hora --apply` a cada dez minutos, e o serviço chama `julgar_celula(..., teto_de_hoje=True)` nas candidatas que passam suas guardas. Portanto, **ausência de evento posterior, isoladamente, não explica a falta dos marcos seguintes nesse ramo**. (`app/config/crons.py:367`, `app/ponto/services/vigia_de_hora.py:114-131`)
-
-O caminho até a fábrica é:
-
-1. O julgamento normal calcula `cods` e grava `out['cods'][data] = list(cods)`, inclusive quando a lista está vazia. (`app/ponto/services/cartorio.py:1424-1437`)
-2. O wrapper isola os códigos deste ato dos códigos anteriores do lote. (`app/ponto/services/cartorio.py:938-944`)
-3. Com `apply_`, lê `_julgadas = out.get('cods') or {}` e chama `perguntar_pela_celula` para cada célula cuja **data esteja nesse dicionário**; não exige códigos não vazios naquela data. (`app/ponto/services/cartorio.py:992-1008`)
-4. `perguntar_pela_celula` obtém os motivos; havendo motivos e sem encaminhamento à pauta, chama `perguntar`, que cria/atualiza a disputa e gera as perguntas. (`app/chamados/services/fabrica_da_celula.py:192-210`, `app/chamados/services/fabrica_da_celula.py:161-167`)
-
-**Por que não emitiu nos COM_ADESAO observados? [nao verificado].** O dado recebido não demonstra qual chamada ocorreu, qual guarda impediu a passagem ou quais motivos retornaram em cada ato; com `ERROS 18`, não atribuo causa a esses casos. [nao verificado]
-
-**SEM_ADESAO: há diferença demonstrável entre o caminho do cartório e a regra de contagem.** O comentário diz “carimba e nao emite”; esse ramo lavra/carimba e retorna sem preencher `out['cods']`. Assim, esse julgamento não habilita a chamada à fábrica pelo wrapper. (`app/ponto/services/cartorio.py:1168-1173`, `app/ponto/services/cartorio.py:1253-1279`, `app/ponto/services/cartorio.py:997-1008`)
-
-Já a fábrica e o vigia **podem considerar devidos os motivos desses dias**, dependendo das demais guardas:
-
-- `nunca_bateu` pertence expressamente a `VEREDITOS_ACUSAM`, portanto passa pelo filtro de veredito da fábrica. (`app/escala/models.py:1767-1768`, `app/chamados/services/fabrica_da_celula.py:113-114`)
-- `motivos_a_perguntar` verifica dia sem trabalho, `situacao == 'ativo'`, futuro, vencimento, veredito, parcial na lista e pergunta já existente; **não verifica adesão**. A situação ativa é consultada por `situacao`, não por atributo `ativo`. (`app/chamados/services/fabrica_da_celula.py:102-150`)
-- Os motivos precisam corresponder a marcos faltantes na ata e já vencidos; sem vencidos ou sem autorização/faltantes da ata, retorna lista vazia. (`app/chamados/services/fabrica_da_celula.py:58-74`)
-- `motivos_que_o_evento_deixou` chama essa mesma função, com tratamento adicional da pauta do limbo, **sem acrescentar guarda de adesão**. (`app/chamados/services/fabrica_da_celula.py:225-236`)
-- O vigia do `disparar` percorre células passadas da janela, exclui ontem enquanto ainda cabe ao vigia de hora e acrescenta cada motivo retornado a `deixou`, sem guarda de adesão nesse laço. Conta motivos e células distintas; esse caminho somente conta e alarma. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`, `app/chamados/management/commands/disparar_perguntas_competencia.py:240-251`)
-
-Logo, o código permite **SEM_ADESAO carimbado sem fábrica pelo julgamento, mas com motivos contados pelo vigia** quando os demais filtros permitem. Isso demonstra a possibilidade estrutural; sua incidência e participação nos números recebidos permanecem [nao verificado]. (`app/ponto/services/cartorio.py:1279`, `app/ponto/services/cartorio.py:997-1008`, `app/chamados/services/fabrica_da_celula.py:102-150`, `app/chamados/services/fabrica_da_celula.py:233-236`)
-
-_3299 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3303 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
