@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 18:22** · publicado em **10/11/2026 18:22** (UTC-3)
+> Ultima resposta processada: **10/11/2026 18:25** · publicado em **10/11/2026 18:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 18:25 · sessao 39c276452548 · BO-0611-05 · verificador · origem=Code
+
+**A volta 7 cura os três leitores delimitados, preservando a decisão do geofence. Não certificaria o pouso com a prova disponível: falta materializar o BACKLOG das divergências; RED histórico, mensagem do commit e smoke permanecem `[nao verificado]`.** (`app/templates/core/_d2_feed.html:16`; `app/templates/ponto/batidas_offline_pendentes.html:96`; `app/ponto/views.py:485`; `app/docs/CORTES.md:442`; `app/docs/BACKLOG.md:1873`)
+
+**1. LIBERA-B3: cinco itens e três proibidos**
+
+| Exigência | Veredito e sítio |
+|---|---|
+| **(1)** Extrair o juiz, geofence usá-lo, registrar e leitores perguntarem | **Cumprido no recorte autorizado.** Função em `app/ponto/services/geofence.py:126`, uso pelo geofence em `:269`, registro em `app/core/juizes.py:1201`, filtro em `app/core/templatetags/hasner_filters.py:34`, feeds e contador nos sítios citados acima. |
+| **(2)** Censo antes do construtor; divergências externas no BACKLOG | **Parcial.** Censo e brief foram fornecidos; cronologia independente `[nao verificado]`. Código e corte remetem as divergências ao BACKLOG, mas a linha encontrada continua sendo a original, “censo1 em curso”, sem registrar as divergências v7. (`app/core/juizes.py:1200`; `app/docs/CORTES.md:442`; `app/docs/BACKLOG.md:1873`) |
+| **(3)** Mutante de nulidade em um leitor fica vermelho | **Cumprido no desenho executável do selo:** controle, mutação isolada, coordenada válida, zero e leitor vizinho; execução Django nesta revisão `[nao verificado]`. (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:128`) |
+| **(4)** RED contra `da829e9f6`, com log guardado | **Não cumprido como evidência entregue.** Execução e log histórico `[nao verificado]`; o requisito continua registrado. (`CLAUDE.md:28`; `app/docs/CORTES.md:440`) |
+| **(5)** Commit LEI-AKITA + L-030 + correções de LEIS | **Parcial.** LEIS corrigidas; conteúdo da mensagem do commit `[nao verificado]`. (`app/docs/LEIS.md:78`; `app/docs/LEIS.md:165`; `CLAUDE.md:63`) |
+
+| Proibido | Veredito |
+|---|---|
+| Mexer no veredito do geofence | **Cumprido:** a extração preserva o predicado; detalhado no item 2. (`app/ponto/services/geofence.py:145`; `:269`) |
+| Fallback de coordenadas | **Cumprido no delta examinado:** juiz não inventa coordenada; ramo sem GPS grava `None` no alerta. (`app/ponto/services/geofence.py:145`; `:275`; `:276`) |
+| Tratar `0.0` como coordenada válida | **Cumprido nos três leitores curados; parcial na obra inteira.** Permanecem leitores por nulidade e um selo da obra exige zero como evidência no detector. Essa migração foi destinada à fila pelo aval, mas a fila não está materializada na cópia. (`app/ponto/views.py:485`; `app/ponto/services/vinculo_na_lista.py:49`; `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`; `app/docs/CORTES.md:442`; `app/docs/BACKLOG.md:1873`) |
+
+**2. Paridade de `tem_gps` com a base**
+
+**Sim, para todos os valores escalares enumerados na pergunta.** `bool(lat and lon)` equivale a `not (not lat or not lon)` para esses valores: qualquer componente falsy torna o par sem GPS; ambos truthy tornam o par com GPS. Não há contraexemplo entre `None`, `''`, zeros numéricos, `Decimal('0')`, `Decimal('0E-7')`, valores válidos, pares parciais e strings. (`app/ponto/services/geofence.py:145`; `app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:72`)
+
+**String não vazia é truthy**, inclusive `"0"`, `"0.0"` e `"abc"`; o juiz preserva a semântica anterior, não valida se a string representa coordenada. Uma string inválida pode falhar posteriormente na conversão numérica; esse comportamento não foi corrigido pela extração. (`app/ponto/services/geofence.py:145`; `app/ponto/services/geofence.py:88`)
+
+A alteração substitui apenas a condição de entrada do ramo: zero numérico continua produzindo `sem_gps`, com coordenadas do alerta nulas, sem reescrever a Batida. (`app/ponto/services/geofence.py:269`; `:274`; `:275`; `:276`)
+
+**3. Leitores, `load`, objetos e falha de render**
+
+Os dois templates perguntam pelo filtro; o contador pergunta diretamente à função. **O filtro não refaz a conta:** importa o módulo e devolve seu resultado. (`app/templates/core/_d2_feed.html:16`; `app/templates/ponto/batidas_offline_pendentes.html:96`; `app/ponto/views.py:485`; `app/core/templatetags/hasner_filters.py:33`; `:34`)
+
+**O `load` é local aos dois consumidores**, portanto independe de qual raiz os renderiza. (`app/templates/core/_d2_feed.html:1`; `app/templates/ponto/batidas_offline_pendentes.html:4`)
+
+Nos caminhos de produção encontrados:
+
+- O feed recebe uma **lista de models `Batida`**, tanto pela célula quanto pelo endpoint de dados; `b` não é dict nem linha de `values()`. (`app/core/cell.py:9`; `:20`; `app/core/views.py:1162`; `:1171`)
+- A página offline recebe **QuerySet de `Batida`**; cada `batida` do laço é model. O `values_list()` serve somente ao contador. (`app/ponto/views.py:441`; `:485`; `:489`; `app/templates/ponto/batidas_offline_pendentes.html:53`)
+
+**Dict ou `None` quebram o filtro com `AttributeError`**, porque ele exige `.latitude` e `.longitude`. Os testes usam `SimpleNamespace`, que satisfaz esse contrato; não cobrem dict/None. (`app/core/templatetags/hasner_filters.py:34`; `app/ponto/tests/test_bo0611_05_templates_geo.py:123`; `app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:100`)
+
+Não há proteção local envolvendo o render offline ou os renders do feed. Se a exceção propagar, a resposta offline inteira falha; no feed, falha a resposta do fragmento/JSON, sem necessariamente derrubar o dashboard já aberto. Propagação efetivamente executada pelo Django neste ambiente: **`[nao verificado]`**. (`app/ponto/views.py:488`; `app/core/live_cell.py:22`; `:28`; `app/core/views.py:1171`)
+
+**4. Universo e custo de `com_gps`**
+
+`pendentes` reúne todas as Batidas com `origem='offline_pendente'` e `aprovada=False`, ordenadas por timestamp. **A view não impõe teto, paginação, período ou filtro explícito por empresa/colaborador.** (`app/ponto/views.py:441`; `:446`)
+
+Há um `COUNT` para o total, leitura de todas as coordenadas e contagem em Python, seguida do queryset completo para render. Portanto o custo adicional cresce com o universo inteiro; volume e latência reais **`[nao verificado]`**. (`app/ponto/views.py:484`; `:485`; `:489`; `app/templates/ponto/batidas_offline_pendentes.html:53`)
+
+**Não encontrei regra GPS concorrente nessa página:** `sem_gps` é o complemento do contador pelo juiz, e cada linha usa o mesmo juiz. Cards e linhas são coerentes para um conjunto estável; alterações concorrentes entre as consultas **`[nao verificado]`**. (`app/ponto/views.py:486`; `app/templates/ponto/batidas_offline_pendentes.html:19`; `:23`; `:27`; `:96`)
+
+**5. Leitores remanescentes do censo**
+
+Continuam com decisão ou transformação própria:
+
+| Forma | Sítios atuais |
+|---|---|
+| Truthiness das duas coordenadas | `app/colaboradores/services/drawer.py:63`; `app/templates/core/dashboard2.html:242`; `:287` |
+| Truthiness individual | `app/ponto/services/geofence.py:349`; `:350`; `:391`; `:392`; `app/core/services/painel_op.py:227`; `:228`; `app/colaboradores/painel_cell.py:54`; `:55`; `app/colaboradores/services/situacional.py:199`; `:200` |
+| Nulidade conjunta | `app/chamados/views.py:692`; `app/ponto/services/geofence.py:52`; `:425`; `app/ponto/services/vinculo_na_lista.py:49`; `app/colaboradores/views.py:53`; `:337`; `:356`; `:395`; `:2474`; `app/colaboradores/services/detalhe.py:22`; `:53` |
+| Nulidade no contexto de chamado | `app/templates/chamados/partials/modal_fio.html:480`; `app/templates/chamados/partials/_relatorio_geo.html:30` |
+| Nulidade individual na serialização | `app/ponto/views.py:468`; `:469`; `app/core/views.py:1024`; `:1025` |
+| `isNaN` após conversão | `app/static/js/geo-colab-map.js:29`; `:39`; `app/templates/chamados/fio_colaborador.html:313`; `app/templates/chamados/painel_gestao.html:583` |
+| Coordenadas copiadas em alerta | `app/ponto/models.py:263`; `app/ponto/management/commands/reconciliar_alertas_geofence.py:42`; `app/templates/colaboradores/detalhe.html:142`; `app/templates/core/dashboard_supervisor.html:90` |
+
+**Há julgamentos próprios na mesma página do feed:** clicar na linha abre o drawer, que decide novamente em JavaScript. Para os floats/nulos emitidos pelo endpoint, inclusive zero numérico, atualmente coincide com o juiz; continua sendo derivação própria. (`app/templates/core/_d2_feed.html:4`; `app/core/views.py:1024`; `:1025`; `app/templates/core/dashboard2.html:242`; `:287`)
+
+**Há alcance sobre alerta/decisão:** vínculo aceita zero por nulidade e calcula distância; o reconciliador consome esse resultado. A reavaliação geofence também seleciona ocorrências por nulidade e pode retratar chamados. Efeito financeiro direto desses leitores **`[nao verificado]`**. (`app/ponto/services/geofence.py:52`; `:58`; `:67`; `app/chamados/reconciliador.py:300`; `app/ponto/services/geofence.py:425`; `:430`; `:440`)
+
+O aval manda registrar essa dívida sem ampliar a volta. A promessa está no corte, mas o BACKLOG disponível só contém a entrada original da BO; registro externo das divergências **`[nao verificado]`**. (`app/docs/CORTES.md:442`; `app/docs/BACKLOG.md:1873`)
+
+**6. Registro, corte e documentação**
+
+**A frase exigida está presente**, e o juiz está registrado. `tem_gps` não duplica `classificar_posicao`: presença de coordenadas e classificação de distância/accuracy/raio são perguntas distintas. (`CLAUDE.md:74`; `app/docs/CORTES.md:442`; `app/core/juizes.py:1191`; `:1201`; `app/ponto/services/geofence.py:95`; `:126`)
+
+Comparação em memória, sem escrita:
+
+- **`MAPA-JUIZES.md` integral confere** com o gerador, inclusive ordenação e cinco juízes de Batida. (`bin/gerar_mapa_juizes.py:17`; `:44`; `:65`; `app/docs/MAPA-JUIZES.md:19`; `:183`)
+- **`ARQUITETURA.mmd` integral confere** com a montagem dos blocos reais. (`app/core/management/commands/gerar_diagrama.py:344`; `:911`; `app/docs/ARQUITETURA.mmd:363`)
+- **As alterações de `MAPA.md` conferem.** Igualdade integral ficou **`[nao verificado]`** apenas para o contador de portas que exige resolver Django, em `app/docs/MAPA.md:231`. (`app/docs/MAPA.md:93`; `:247`; `app/core/management/commands/gerar_diagrama.py:827`; `app/core/portas_da_tela.py:108`)
+- **`JUIZES.md` está incompleto quanto ao novo juiz:** continua lookup sem entrada `tem_gps`; não apresenta regra GPS contraditória. O próprio documento manda acompanhar o registro vivo. (`app/docs/JUIZES.md:7`; `:14`; `:121`; `app/core/juizes.py:1201`)
+- **LEIS:78/:165 agora descrevem a cura e a barreira restante**, mantendo L-030 como PELA-METADE. (`app/docs/LEIS.md:78`; `:165`; `app/ponto/registro_batida.py:145`; `:150`)
+
+Os mapas refletem o **registro**, não provam ausência de leitores paralelos: a família continua sem pendentes cadastrados, apesar dos leitores remanescentes declarados. (`app/core/juizes.py:1200`; `:1266`)
+
+**7. Os selos mordem?**
+
+**Sim, por inspeção, os selos críticos possuem controles e mutações efetivas:**
+
+- O novo selo cobre zeros float/int/Decimal/`0E-7`, ausentes, parciais e válidos; a grade exige os dois resultados e reprova nulidade. (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:31`; `:65`; `:72`; `:82`)
+- O mutante troca **um** leitor, mantém controle válido, faz zero gerar link e exige a mesma asserção vermelha; o leitor vizinho permanece verde. A substituição exige âncora única. (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:128`; `app/ponto/tests/test_bo0611_05_templates_geo.py:51`)
+- Renderiza **as duas cascas reais**, com montagem de ensaio para o feed e página consumidora para offline; isso não substitui smoke de clique. (`app/ponto/tests/test_bo0611_05_templates_geo.py:31`; `:100`; `:107`)
+- Nos mutantes críticos, render e controles ficam fora de `assertRaises`, e não há `subTest` interno engolindo a falha esperada. (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:132`; `:137`; `app/ponto/tests/test_bo0611_05_templates_geo.py:190`)
+- A saída de offline de `leitores_geo` **não afrouxou a cobertura funcional**: o novo selo extrai a expressão real por AST, testa zero/parcial/mistura, mata nulidade e confere import/redefinição. (`app/ponto/tests/test_bo0611_05_leitores_geo.py:3`; `app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:170`; `:184`; `:193`; `:198`)
+- Contrato e teste de API foram fortalecidos: incluem o novo registro e afirmam que zero preservado pelo escritor é lido como ausência. (`app/ponto/tests/test_contract_juiz_batida.py:164`; `app/api/tests/test_l030_batida_pela_porta.py:40`; `:56`)
+
+Na obra inteira, o selo modal deixou de exigir `naoBloquear` quando não existe `hxConfirmar`; a cobertura JS nova proíbe confirmação antes do POST/fila, inclusive com comentário enganoso. As âncoras examinadas existem e são verificadas. (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:138`; `app/ponto/tests/test_l030_forma_js.py:91`; `:95`; `:110`; `app/templates/ponto/bater_ponto_v2.html:331`; `:344`)
+
+Os **14 testes puros executados ficaram verdes**, incluindo mutantes internos; sem log por regra de somente leitura, resultado persistido **`[nao verificado]`**. Render/POST não foram reexecutados porque Django está ausente; os 6672/ruff são resultados informados pela sessão, sem conferência independente **`[nao verificado]`**. [nao verificado]
+
+**8. Quem escreve, quem lê e tipos**
+
+**Escrita efetiva:** `registrar_batida`, nos dois `create`; semeadura também está na porta e exige banco de ensaio. Latitude/longitude são `DecimalField` nullable com sete casas. (`app/ponto/registro_batida.py:152`; `:157`; `:331`; `:333`; `:335`; `app/ponto/models.py:58`; `:59`)
+
+**Encaminham geo à porta:** os dois kernels e a triagem. A sanitização valida com `float(v)` sem substituir o valor original: preserva `0.0`; vazio, nulo e não numérico viram `None`. (`app/api/views.py:648`; `:654`; `app/api/views_core.py:640`; `:646`; `app/ponto/services/triagem_batida.py:701`; `:707`; `app/ponto/registro_batida.py:11`; `:15`; `:17`)
+
+**Leitores do resultado da função:** geofence, filtro dos feeds e contador offline. Há ainda uma chave homônima `tem_gps` produzida por cálculo próprio no drawer e consumida pelo template diagnóstico. (`app/ponto/services/geofence.py:269`; `app/core/templatetags/hasner_filters.py:34`; `app/ponto/views.py:485`; `app/colaboradores/services/drawer.py:63`; `app/templates/colaboradores/partials/_drawer_diagnostico.html:49`)
+
+**Sim, outros leitores aceitam zero como coordenada:** detalhe seleciona por nulidade e emite pontos de mapa; pino calcula distância; vínculo usa zero como evidência. O teste novo da obra exige explicitamente esse último comportamento. (`app/colaboradores/services/detalhe.py:22`; `:53`; `:82`; `app/templates/colaboradores/detalhe.html:231`; `app/colaboradores/views.py:2474`; `:2479`; `app/ponto/services/vinculo_na_lista.py:49`; `:57`; `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`)
+
+**Decimal/float/string:** zero numérico é falsy; string `"0.0"` é truthy. `floatdot` converte Decimal, float ou string numérica para float e imprime seis casas com ponto; string inválida retorna intacta. É formatação, não juiz de presença. O comportamento do objeto recém-criado antes de recarga do banco permanece **`[nao verificado]`**, pois a porta preserva o tipo recebido. (`app/ponto/services/geofence.py:145`; `app/core/templatetags/hasner_filters.py:22`; `:25`; `:26`; `app/ponto/registro_batida.py:15`)
+
+**9. Os quatro achados procedentes do Opus**
+
+| Achado | Situação atual |
+|---|---|
+| Zero acendia pino; teste confundia preservação com validade | **Curado nos sítios apontados:** feeds consultam o juiz e API afirma zero como ausência na leitura. Permanecem as divergências externas descritas nos itens 5/8. (`app/templates/core/_d2_feed.html:16`; `app/templates/ponto/batidas_offline_pendentes.html:96`; `app/api/tests/test_l030_batida_pela_porta.py:63`) |
+| RED contra a base sem log | **Não demonstrado; `[nao verificado]`.** Testes atuais não comprovam execução histórica contra `da829e9f6`. (`CLAUDE.md:28`) |
+| Pouso sem LEI-AKITA/L-030 | **Parcial:** documentação corrigida; mensagem do commit e passagem dos portões **`[nao verificado]`**. (`app/docs/LEIS.md:78`; `CLAUDE.md:63`) |
+| LEIS:78/:165 falsas | **Curado:** ambas removem as barreiras GPS/situação e conservam a ressalva de tipo oposto. (`app/docs/LEIS.md:78`; `:165`; `app/ponto/registro_batida.py:150`) |
+
+O smoke col677 nas duas cascas continua sendo requisito separado; sua realização **`[nao verificado]`**. (`app/docs/CORTES.md:440`)
+
+**10. Classes estruturais e commit** [nao verificado]
+
+**Não identifiquei novo juiz duplicando autoridade registrada, novo escritor fora da porta ou relógio introduzido pela extração:** `tem_gps` é puro, as perguntas registradas são distintas e os kernels encaminham à mesma porta. (`app/ponto/services/geofence.py:145`; `app/core/juizes.py:1191`; `:1201`; `app/api/views_core.py:640`; `app/api/views.py:648`)
+
+**Derivação paralela e dois sentidos de “tem geo” permanecem:** zero significa ausência para o juiz e amostra geográfica para leitores por nulidade. É dívida explicitamente adiada pelo aval, inclusive na mesma página do feed; falta seu registro concreto no BACKLOG disponível. (`app/ponto/services/geofence.py:145`; `:52`; `app/templates/core/dashboard2.html:242`; `app/docs/CORTES.md:442`; `app/docs/BACKLOG.md:1873`)
+
+Não encontrei falta de mordida nos selos examinados; **RED histórico, ordem de trava, liberação de vaga, pouso após pré-requisitos e smoke ficam `[nao verificado]`**. Os requisitos constam no corte e no protocolo. (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:128`; `app/docs/CORTES.md:440`; `CLAUDE.md:369`)
+
+**Linha LEI-AKITA completa no commit e citação L-030: `[nao verificado]`.** Sem histórico/mensagem do commit, não é possível conferir origem, testemunha, RED, quem-mais-lê, juízes novos e padrão; a forma obrigatória está em `CLAUDE.md:63`. [nao verificado]
+
+## 10/11 18:23 · sessao 4c9560844f07 · - · - · origem=Ronald (tmux)
+
+6. **Registro e corte cumpridos.** `tem_gps` consta em `app/core/juizes.py:1201`; a frase literal `corte Ronald: juiz tem_gps nasce` consta em `app/docs/CORTES.md:442`, exatamente o padrão exigido por `bin/tests/test_juiz_novo_tem_corte.sh:41`. O selo foi inspecionado, sem execução, pois cria temporário e pode reescrever a base (`bin/tests/test_juiz_novo_tem_corte.sh:32`, `:52`, `:57`).
+
+**Não duplica `classificar_posicao`:** esse juiz recebe distância/accuracy/raio e classifica dentro/fora/incerto (`app/ponto/services/geofence.py:95`, `:114`); `tem_gps` recebe latitude/longitude e responde presença (`:126`, `:145`). O registro também distingue explicitamente as duas perguntas (`app/core/juizes.py:1191`, `:1201`).
+
+**Documentação gerada:** comparei em memória, sem escrita:
+
+- `MAPA-JUIZES.md` integral **igual** à saída real de `bin/gerar_mapa_juizes.py:17` até `:65`; as perguntas são ordenadas por `sorted` em `:44`. A ordem atual — tem GPS antes de foto — está correta (`app/docs/MAPA-JUIZES.md:18`, `:19`, `:20`).
+- `ARQUITETURA.mmd` integral **igual** à montagem real de `app/core/management/commands/gerar_diagrama.py:911` até `:919`, usando todos os blocos reais. O nó batida vem do comprimento do registro (`:344`, `:346`).
+- `MAPA.md`: **todas as linhas conferidas, exceto o contador de portas em `app/docs/MAPA.md:231`**. O ambiente não tem Django; esse contador precisa do resolver (`app/core/portas_da_tela.py:108`, `:112`). Comparei o restante usando `mapa_cobertura(portas=[])`, cuja única diferença foi essa linha; portanto mudanças v7, tabela `app/docs/MAPA.md:93` e seção `:237` até `:248`, batem com o gerador (`app/core/management/commands/gerar_diagrama.py:827`, `:834`, `:850`). Igualdade integral incluindo os números 168/147: **[nao verificado]**.
+- `app/docs/JUIZES.md` continua um lookup sem entrada para `tem_gps`; declara que o vivo manda e manda corrigir divergência (`:7`, `:14`) e a tabela termina em `:121`. Está incompleto quanto ao novo juiz; não contém semântica GPS contraditória.
+
+**Registro de pendências não materializado:** o comentário promete que os demais leitores viram BACKLOG (`app/core/juizes.py:1200`, `app/docs/CORTES.md:442`), mas o registro da família permanece vazio (`app/core/juizes.py:1266`). No BACKLOG, identifiquei apenas a linha original da obra, ainda falando em censo em curso e construção futura (`app/docs/BACKLOG.md:1873`); não identifiquei linha específica das divergências geo7 ou BO-0611-05-RESTO-DA-CLASSE **[nao verificado quanto a eventual registro externo]**.
+
+9. **Quatro achados procedentes do Opus:**
+
+- Zero/pino: cura dos dois leitores e teste do escritor pertencem à revisão dos outros agentes; juiz atual declara zero sem GPS (`app/ponto/services/geofence.py:136`, `:145`).
+- RED contra `da829e9f6` com log guardado: **[nao verificado]**; não há logs/histórico fornecidos na cópia.
+- Linha LEI-AKITA e citação L-030 no commit: **[nao verificado]**; sem `.git`/mensagem do commit. A obrigação é verificável no código do selo, mas isso não comprova o commit (`bin/tests/test_lei_akita.sh:18`, `:22`, `:394`).
+- LEIS falsas: **curadas** em `app/docs/LEIS.md:78` e `:165`; ambas removem a alegação de 403 GPS/situação e preservam o resto da L-030 como PELA-METADE por colisão tipo oposto, consistente com `app/ponto/registro_batida.py:138`, `:145`, `:150`.
+
+Smoke de Ronald/col677 nas duas cascas e ordem de pouso após liberação de vaga: **[nao verificado]**; requisitos constam em `app/docs/CORTES.md:440` e despacho ainda futuro em `app/docs/RELATO.md:16`.
+
+10. **Classes estruturais:** nesta extração não aparece novo escritor, leitura de relógio ou trava: `tem_gps` é função pura de dois valores (`app/ponto/services/geofence.py:126`, `:145`), e seu registro não compete com juiz já registrado (`app/core/juizes.py:1191`, `:1201`). Re-derivações remanescentes estão assumidas no comentário, mas não entraram no contador de pendentes (`app/core/juizes.py:1200`, `:1266`); isso é dívida de fonte única ainda presente, cuja migração o aval mandou adiar (`app/docs/CORTES.md:442`). Certificação de toda a obra nas demais classes, commit completo e pré-requisitos históricos: **[nao verificado]**.
 
 ## 10/11 18:22 · sessao a76dbf51bc37 · - · - · origem=Ronald (tmux)
 
@@ -798,125 +957,4 @@ O fluxo normal leva o pai a **`resolvido`**, pelo motor e por `_gravar_estado`, 
 
 [truncado em 20000 de 21254 caracteres]
 
-## 10/11 16:22 · sessao a50c10442bff · - · - · origem=Ronald (tmux)
-
-Censo complementar, fora de `models.py`/`reconciliador.py`, para consolidação:
-
-**Regra comum aos `save()` abaixo:** o `post_save` de PerguntaDisputa agenda `fechar_beco_da_disputa` em `on_commit` (`app/chamados/signals.py:227-238`). Essa porta **só consulta C7 se** a disputa estiver aberta, não houver pergunta com `respondida_em=None` e destino não terminal, e o pai estiver em `TERMINAIS` (`app/chamados/services/becos.py:21-33`). Tem guarda de reentrada (`app/chamados/services/becos.py:70-78`). Portanto, “tem signal” não equivale a “sempre pergunta C7” (`app/chamados/services/becos.py:29-33`).
-
-| Carimbador / campos | Depois do carimbo, fechamento no fluxo |
-|---|---|
-| `_carimbar_validacao`: `validada_em/por`, save (`app/chamados/services/validacao.py:134-141`) | Fluxo normal: `validar_pergunta` chama materialização (`app/chamados/services/validacao.py:435-469`), cujo laço termina na cauda (`app/chamados/services/materializacao.py:1375-1379`) que pergunta C7 e fecha (`app/chamados/services/materializacao.py:1316-1333`); também signal condicionado acima. |
-| Aceite de folga usa o mesmo carimbo e `fechar_por_admin` (`app/chamados/services/validacao.py:288-296`, `:320-329`) | Chama `fechar_o_fio_do_dia` diretamente ou por `declarar_dia`; essa porta fecha perguntas por admin e reconcilia chamados (`app/ponto/services/veredito_celula.py:179-205`), acionando S143 quando status é encerrado (`app/chamados/signals.py:90-115`); também signal condicionado. |
-| `devolver_validacao_recusada`: zera `validada_em/por` (`app/chamados/services/validacao.py:195-208`) | Nenhum C7 direto na função; pode reabrir a disputa (`app/chamados/services/validacao.py:209-230`). Seu chamador normal depois materializa a disputa (`app/chamados/services/validacao.py:464-469`); também signal condicionado. |
-| `responder_pergunta_disputa_core`: `resposta_colab`, `respondida_em`, zera validação e descarimba carimbo obsoleto (`app/chamados/services/disputa_emissao.py:1467-1508`) | Nenhum C7 direto até retorno (`app/chamados/services/disputa_emissao.py:1513-1559`); signal condicionado. Se resposta vira ausência, chama `_materializar_ausencia_de_resposta` (`app/chamados/services/disputa_emissao.py:1538-1541`), que pergunta C7/fecha (`app/chamados/services/materializacao.py:585-586`). Chamador de correção administrativa também chama `validar_pergunta` após responder (`app/chamados/services/acoes_disputa.py:370-380`). |
-| `responder_automaticamente`: `resposta_colab/respondida_em` (`app/chamados/services/disputa_emissao.py:1647-1658`) | Signal condicionado; chamador direto da foto depois invoca `validar_pergunta` (`app/api/foto_recebida.py:43-51`) e alcança cauda C7 da materialização. |
-| `carimbar_resposta_pela_trilha`: `respondida_em` (`app/chamados/services/disputa_emissao.py:1670-1682`) | Nenhum C7 direto; signal condicionado. Chamador `curar_perguntas_em_limbo` só executa essa porta/reabertura e imprime resultado (`app/chamados/management/commands/curar_perguntas_em_limbo.py:64-70`). |
-| `reabrir_para_correcao`: `respondida_em=None`, `validada_em/por=None`, `resposta_colab=''`, opcionalmente descarimba absorção (`app/chamados/services/disputa_emissao.py:1593`, `:1629-1634`) | **QuerySet.update**, ou `descarimbar_em_lote`: não passa pelo signal de `save`; não consulta C7, emite evento de célula explicitamente (`app/chamados/services/disputa_emissao.py:1607-1609`, `:1630-1634`). Chamadores de UI seguem com nota/push/log (`app/chamados/views.py:1435-1457`; `app/chamados/services/acoes_disputa.py:102-114`). |
-| `recusar_pergunta`: grava `recusa_motivo`, depois usa reabertura acima (`app/chamados/services/validacao.py:584-594`) | O save do motivo agenda signal condicionado; no commit ele observa o estado após a reabertura. Nenhum C7 direto até retorno (`app/chamados/services/validacao.py:595-610`). |
-| `_materializar_ausencia_de_resposta`: carimba irmãs, via declaração/ausência, `resposta='validar'` (`app/chamados/services/materializacao.py:549-566`) | C7 e `fechar` explícitos (`app/chamados/services/materializacao.py:585-586`), sem exigir pai terminal. Destino só reconcilia se ausência não está em `ABERTAS` (`app/chamados/services/materializacao.py:580-582`). |
-| `_materializar_uma`: carimbo declaração/via do fato, resposta validada, lavra de veredito (`app/chamados/services/materializacao.py:1277-1282`); ramo paridade usa identidade (`app/chamados/services/materializacao.py:924`) | Chamadores: laço normal chama cauda C7 (`app/chamados/services/materializacao.py:1375-1379`); validação individual depois chama o laço (`app/chamados/services/validacao.py:463-469`); passivo chama unidade (`app/chamados/services/passivo_validado.py:516`) e cauda uma vez por disputa (`app/chamados/services/passivo_validado.py:401-406`). Também signal condicionado. |
-| `_carimbar_recusa`: colisão → identidade `fato_ocupado`; demais → `recusa_motivo` (`app/chamados/services/materializacao.py:1089-1107`) | Nenhum C7 direto dentro da função; integra unidade/materialização acima; também signal condicionado. Passivo pode gravar recusa de geometria após rollback (`app/chamados/services/passivo_validado.py:543-546`). |
-| `_materializar_resposta_hora`: `pendencia_admin/recusa_motivo` (`app/chamados/services/materializacao.py:845-851`) | Nenhum C7 direto nesse sítio; pertence à unidade/laço/cauda acima; signal condicionado. |
-| `materializar_pendentes_aprovadas`: carimbo `juiz_aprovou` (`app/chamados/services/materializacao.py:1418-1433`) | Nenhum C7 direto na função. Chamador é signal de disputa **já fechada**, condicionado a `fechada_em` preenchido (`app/chamados/signals.py:147-165`); seus saves também agendam Beco. Guarda pergunta em voo e lastro (`app/chamados/services/materializacao.py:1425-1431`). |
-| `_resolver_perguntas_por_chamado_resolvido`: carimbo por fato com `resposta='validar'` (`app/chamados/services/disputa_emissao.py:1863-1867`); ramo sem credor carimba com `resposta='responder'` (`:1935-1947`) | Cauda explícita C7/fechar (`app/chamados/services/disputa_emissao.py:1963-1964`). Não roda para encerramento por tranca (`:1818-1819`); não fecha disputa com pergunta em voo (`:1961-1962`). Ramo sem credor exige pai e destinos fora de `VIVOS` (`:1909-1915`). Também signal condicionado. |
-| `relavrar`: troca `via_resolucao` e lavra veredito no mesmo save (`app/chamados/services/relavra_via.py:125-139`) | Nenhum C7 direto; signal condicionado. Chamador command só chama `relavrar` e imprime (`app/chamados/management/commands/relavrar_via_i6.py:100-104`). |
-| `desfazer_carimbo_sem_lastro`: `p.descarimbar()` (`app/chamados/services/relavra_via.py:242-247`) | Nenhum C7 direto; se disputa fechada reabre (`app/chamados/services/relavra_via.py:259-263`); signal condicionado do descarimbo via save. |
-| `retratar_duplicata`: identidade `duplicata`, conserva carimbo anterior, grava motivo (`app/chamados/services/fio.py:1357-1363`) | Nenhum C7 direto na função ou chamador imediato `retratar_para_canonica` (`app/chamados/services/fio.py:1336-1342`); signal condicionado. |
-| Command `encerrar_perguntas_com_fato`: `encerrar_por_fato_no_espelho` (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:65-76`) | Após carimbos, testa `fio_vivo`, então chama `d.fechar()`; sem chamada nominal a C7 no command (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:80-93`). |
-| `conferir_data`: `data_conferida_em/por` (`app/chamados/services/validacao.py:664-666`) | Nenhum C7 direto até retorno (`app/chamados/services/validacao.py:667-674`); signal condicionado. |
-
-Outros gatilhos de reversão: ausência rejeitada chama reabertura com `desfazer_absorcao=True` e reabre disputas (`app/chamados/services/materializacao.py:679-690`); reabrir órfãs usa `reabrir_fantasma` e reabre disputa/pai (`app/chamados/management/commands/reabrir_orfas_enterradas.py:157-172`); competência reaberta chama `reabrir_por_competencia` e reabre chamados (`app/chamados/services/competencia_trancada.py:251-265`).
-
-`veredito_lavrado.lavrar` tem save individual (`app/chamados/veredito_lavrado.py:270-275`), enquanto `gravar_lavras_em_lote` usa `bulk_update` (`:237-250`): o segundo não tem signal/C7 dentro da porta (`:240-251`). O cron de stale chama `lavrar(p)` individualmente (`app/chamados/management/commands/lavrar_perguntas_stale.py:87-92`).
-
-Verificação estática adicional: executei em memória o próprio censo AST, sem importar Django e com `python3 -B`; seus critérios de atribuição e limites estão documentados em `app/core/censo_escritas.py:6-51`. Ele reconhece os saves de PD em `models.py:3006,3152,3190,3212,3276`, update em `:3264`, e os sítios externos da tabela; não deve ser apresentado como prova sem limites porque seu balde não atribuível é explícito (`app/core/censo_escritas.py:43-51`).
-
-Não encontrei escritor de PerguntaDisputa em `flip_auto.py`: as referências ao modelo nesse arquivo apenas consultam recusas de paridade (`app/ponto/services/flip_auto.py:125-140`).
-
-## 10/11 16:22 · sessao 8ca827f1088e · - · - · origem=Ronald (tmux)
-
-Censo de fechamento/leitores concluído sobre arquivos acessíveis, sem executar Django, banco ou logs. As contagens e situações de produção permanecem exclusivamente as fornecidas pelo usuário. [não verificado]
-
-**Escritores físicos do estado da disputa**
-
-| Ato | Escritor |
-|---|---|
-| Fechar | **Único sítio encontrado:** `DisputaSupervisao.fechar`: atribui `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` e salva os quatro campos — `app/chamados/models.py:1932-1936`. |
-| Reabrir administrativamente | Zera os quatro campos; salva em `app/chamados/models.py:2149-2161`. |
-| Reabrir pelo sistema | Zera os quatro campos; salva em `app/chamados/models.py:2173-2177`. |
-| Definição do estado | A disputa não usa campo `status`: `aberta` deriva de `fechada_em is None` — `app/chamados/models.py:1822-1824`; timestamp declarado em `:1757`. |
-
-A porta canônica exige usuário, recusa resposta sem veredito em qualquer modalidade e, sem exceção nomeada, recusa perguntas vivas; exceções são desligamento, admin encerra e competência trancada. Ela toma a ordem global de travas antes de gravar. `app/chamados/models.py:1876-1912`.
-
-O antigo bulk update de desligamento **já saiu**: o código atual chama a porta `fechar(..., motivo=FECHOU_DESLIGAMENTO)` e pula disputa com respostas sem veredito. `app/colaboradores/services/desligamento.py:132-142`. O comentário de exceção no instrumento `bin/esmeril_chamado_censo.py:64-71` está desatualizado frente a esse corpo.
-
-**Todos os 12 chamadores reais de `.pode_fechar()` fora de `tests/` encontrados por AST**
-
-| Função | Leitura / consequência |
-|---|---|
-| `lavrar_sem_turno_aberto` | `app/chamados/reconciliador.py:411` → `fechar` em `:412`. **Há chamada explícita nesta cópia**; distinguir os retornos anteriores, com o agente específico. |
-| `retratar_perguntas_absolvidas_por_celula` | `app/chamados/reconciliador.py:611` → `fechar` em `:612`. |
-| `encerrar_orfas_pela_lampada` | `app/chamados/reconciliador.py:1170` → `fechar` em `:1171`; respostas sem veredito são barradas previamente em `:1163-1169`. |
-| `_materializar_ausencia_de_resposta` | `app/chamados/services/materializacao.py:585` → `fechar` em `:586`. |
-| `_fechar_disputa_se_quitada` | `app/chamados/services/materializacao.py:1316` → `fechar` em `:1333`. |
-| `criar_disputa_a_partir_de_chamados_orfaos` | `app/chamados/services/disputa_emissao.py:1278`; se `_absteve_por_ata`, apenas acende aviso `:1279-1281`; caso contrário fecha em `:1284`. |
-| `_resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1963` → `fechar` em `:1964`; pergunta em voo impede a leitura/fecho em `:1961-1962`. |
-| `competencia_trancada.medir` | `app/chamados/services/competencia_trancada.py:153`: apenas seleciona; pai vivo fora do conjunto a encerrar impede inclusão em `:155-158`. |
-| `competencia_trancada.encerrar` | `app/chamados/services/competencia_trancada.py:202` → porta de exceção em `:204-205`; depende de `aplicar`, competência trancada e ações em `:167-168`. |
-| `becos.classificar` | `app/chamados/services/becos.py:33`: apenas classifica; **só chega ao C7 se pai terminal e nenhuma pergunta “visível”** em `:27-32`. |
-| `becos.fechar_beco` | `app/chamados/services/becos.py:56` → `fechar` em `:57`; toma travas, resolve perguntas dos chamados terminais e relê disputa em `:41-55`. |
-| `resolver_cobranca_da_entrada` | `app/ponto/services/entrada_sincronizada.py:58` → `fechar` em `:59`; recorte é pai manual com somente o órfão atual em `:47-56`. |
-
-`fechar()` não chama literalmente `.pode_fechar()`: aplica a mesma composição por `respostas_sem_veredito()` e perguntas julgadas por `pergunta_viva`, com as exceções nomeadas. `app/chamados/models.py:1886-1903`. O método C7 reúne resposta sem veredito e fio vivo. `app/chamados/models.py:1848-1853`.
-
-**Leitor indireto que deve constar na tabela de TODOS os carimbadores por `save()`**
-
-Cada `PerguntaDisputa.save()` alcança `_becos_post_save_pergunta`, que agenda `on_commit` → `fechar_beco_da_disputa`. `app/chamados/signals.py:227-238`. Essa entrada relê a disputa e exige classificação `FECHAVEL`. `app/chamados/services/becos.py:66-78`.
-
-Logo, para carimbador por `save()`, escrever “nenhum” absoluto seria incorreto: existe leitor indireto **condicional**. O classificador sai antes do C7 se houver qualquer pergunta com `respondida_em is None` e destino não terminal, ou se o pai não for terminal; não considera `materializada_em`/`validada_em` nesse pré-filtro. `app/chamados/services/becos.py:25-33`. O próprio comentário declara que `update()` direto nasce sem signal. `app/chamados/management/commands/fechar_becos_disputa.py:9-11`.
-
-Há também post-save síncrono emitindo evento da célula quando os campos acordadores mudam, mas seu corpo não chama C7 nem fecha a disputa: chama `PerguntaDisputa.acordar_celulas(...)`. `app/chamados/signals.py:250-257`.
-
-**Cron/vigia**
-
-Existe o vigia parcial de becos: a configuração agenda `fechar_becos_disputa --alarme` às 07:10. `app/config/crons.py:663`. Ele varre disputas abertas, porém classifica pelo recorte de beco acima. `app/chamados/management/commands/fechar_becos_disputa.py:32-43`; `app/chamados/services/becos.py:25-33`.
-
-Com `--alarme`, apenas lista/conta e termina com erro se achar candidato; **não fecha**. `app/chamados/management/commands/fechar_becos_disputa.py:30`, `:54-70`. O comando preserva `--apply` e aí chama `becos.fechar_beco`. `:23`, `:57-64`.
-
-**Não encontrei varredor de todo o universo “aberta + C7 True”, sem o recorte de beco.** A lista exaustiva de chamadas acima contém somente o classificador parcial como leitura usada pelo cron. O antigo comando `reconciliar_disputa_zumbi` está registrado como removido. `app/config/crons.py:840`. O contador `disputa_vazia` mede **fechadas com motivo vazia**, não abertas fecháveis. `app/chamados/services/vigia_fio.py:727-734`. `auditar_disputas` conta abertas sem motivos, não C7. `app/chamados/management/commands/auditar_disputas.py:166-177`.
-
-**Outro significado chamado “pode_fechar”**
-
-O explicador **não chama o método C7**: calcula somente `not fio_vivo(ps)` e devolve chave `pode_fechar`; não acrescenta a lista `respostas_sem_veredito()` do C7. `app/chamados/services/explicador.py:134-140`, `:163`; comparar `app/chamados/models.py:1853`.
-
-Essa chave alimenta a afirmação “Tudo validado e gravado” / “Fechar/regularizar” em `app/chamados/services/desenlace.py:63-65` e os textos/cores do modal em `app/templates/chamados/partials/modal_fio.html:434`, `:445`. O fio monta esse explicador em `app/chamados/services/fio.py:304-312`.
-
-A guarda S127 também usa outro recorte: disputa aberta sem nenhuma pergunta, ou `fio_vivo(perguntas)`; não chama C7. `app/chamados/juizes.py:2308-2322`.
-
-**Todos os chamadores de fechamento encontrados (delegam ao escritor único)**
-
-- `app/chamados/models.py:1950` (`admin_encerra`), `:2072` (`remover_motivo`, apenas se não sobra motivo, `:2066`).
-- `app/chamados/reconciliador.py:412`, `:612`, `:1171`.
-- `app/chamados/services/materializacao.py:586`, `:1333`.
-- `app/chamados/services/disputa_emissao.py:1284`, `:1964`.
-- `app/chamados/services/becos.py:57`.
-- `app/chamados/services/competencia_trancada.py:204`.
-- `app/ponto/services/entrada_sincronizada.py:59`.
-- `app/api/foto_recebida.py:80`: valida pelo dono antes; fecha diretamente quando não restam motivos além de foto (`:70-80`), sem consulta explícita ao C7.
-- `app/colaboradores/services/desligamento.py:142`.
-- `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`: sob `--apply` (`:53-55`), consulta `fio_vivo` em `:83`, chama porta e contabiliza recusa `ValueError` em `:92-93`.
-
-**Chamado-pai**
-
-Quando a disputa salva fechada, `disputa_fechada_fecha_chamado_pai` procura o pai e chama `ch.reconciliar()`, em atomic; não atua se criado, sem pai, sem timestamp ou pai já resolvido/fechado; falhas são engolidas com registro. `app/chamados/signals.py:18-50`.
-
-`reconciliar()` resolve pelo motor e `_gravar_estado`; o destino normal é `resolvido`, não `fechado`. `app/chamados/models.py:641-655`; `app/chamados/catalogo/motor.py:111`. Pode recusar por premissa ou pergunta viva. `app/chamados/models.py:682-689`.
-
-O escritor físico do pai é `_gravar_estado`: atribui `status_local` em `app/chamados/models.py:228`, salva em `:296`. O fechamento da disputa **não garante** fechamento do pai, por essas recusas e pelo `except` do receiver. `app/chamados/signals.py:42-50`.
-
-O inverso também não é uma trava universal: o humano bloqueia encerramento usando S127 (`fio_vivo`), sem exigir que `fechada_em` esteja preenchida. `app/chamados/models.py:148-171`; `app/chamados/juizes.py:2316-2322`. Resolver o pai dispara a resolução de perguntas em best effort; falha desse trabalho não desfaz o estado do pai. `app/chamados/signals.py:90-117`. O código tem tratamento explícito da combinação disputa aberta/pai terminal no serviço de becos. `app/chamados/services/becos.py:25-33`. O anexo fornecido afirma 7 pais resolvidos e 4 fechados entre as 18, sem confirmação independente. [não verificado]
-
-Não encontrei arquivo inacessível entre os caminhos rastreados; não li banco nem logs. Execução efetiva dos crons, callbacks e código em produção não é verificável nesta cópia. [não verificado]
-
-_3433 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3435 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
