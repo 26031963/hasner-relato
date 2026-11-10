@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 00:06:28.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (237.0 MB). Acoes na janela: **1329**.
+**Medido em 10/11/2026 00:11:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (237.8 MB). Acoes na janela: **1337**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:11:28 | Bash |  | `cd /home/ronald/saas-hasner && ls logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/; ls -t logs/*/sonda*.py \| head -5; sed -n 1,60p bin/sonda_leitura.sh \| head -60` |
+| 00:11:23 | Bash |  | `cd /home/ronald/saas-hasner && sed -i '3s#pid=2274253#pid=2274258#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
+| 00:11:20 | Bash |  | `cd /home/ronald/saas-hasner && ps -o pid,args -p 2274253,2274258 \| cut -c1-120; sed -i '3s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/push.sh \| pid=2274253#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
+| 00:11:16 | Bash |  | `cd /home/ronald/saas-hasner && date; L=$(ls -t logs/MODO-COMUM-PASSADO-SEM-TURNO/push_reescrita_*.log\|head -1); echo $L; tail -5 $L; pgrep -f "bin/push.sh" \| head; sed -n 1,6p app/docs/RELATO.md \| cut -c1-200` |
+| 00:10:18 | Bash |  | `cd /home/ronald/saas-hasner && git show HEAD:app/chamados/management/commands/disparar_perguntas_competencia.py \| sed -n 60,115p; git show HEAD:app/chamados/services/fabrica_da_celula.py \| sed -n 95,150p; git show HEAD:app/chamados/services/fabrica_da_celula.py \| sed -n 200,260p; ls logs/*/sonda*.py 2>/dev/null \| tail -3` |
+| 00:10:09 | Bash |  | `cd /home/ronald/saas-hasner && git worktree remove --force /home/ronald/wt-codex-reverter-dia-sem-recalculo-235559 && echo removida; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') line=("PAREI: reverter-dia-celula-protegida \| espera Ronald (!) -- REVERTER-DIA-SEM-RECALCULO: cura DECIDIDA PELA LEI (CORTES PORTA-DO-DINHEIRO-JA-EXISTE + L-020) = " "reverter_regeneracao_dia tr ...` |
+| 00:09:55 | Bash |  | `cd /home/ronald/saas-hasner && ls logs/aval_* \| head -30; /bin/grep -l "CODE-VIVE-ATE-O-RESET" logs/aval_* 2>/dev/null \| head -3 \| xargs -r cat \| head -20; /bin/grep -n "porta de celula" bin/codex_pergunta.sh \| head` |
+| 00:09:48 | Bash |  | `cd /home/ronald/saas-hasner/logs/REVERTER-DIA-SEM-RECALCULO && cat construtor1.r.recusa 2>/dev/null \| head -20; ls` |
+| 00:09:45 | Bash |  | `cd /home/ronald/saas-hasner/logs && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b3boarnm4.output; ls -t MODO-COMUM-PASSADO-SEM-TURNO/push_reescrita_*.log \| head -1 \| xargs tail -3; echo; cat REVERTER-DIA-SEM-RECALCULO/construtor1.r; git -C /home/ronald/wt-codex-reverter-dia-sem-recalculo-235559 status --short` |
 | 23:58:40 | Bash |  | `until ! kill -0 2442505 2>/dev/null && ! kill -0 2524155 2>/dev/null; do /usr/bin/sleep 30; done; cd /home/ronald/saas-hasner/logs; for f in REVERTER-DIA-SEM-RECALCULO/construtor1.r.rc FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/censo1.out; do echo "== $f"; tail -n 2 $f; done` |
 | 23:58:37 | Bash |  | `pgrep -af "codex_pergunta.sh" \| /bin/grep -v pgrep \| cut -c1-200` |
 | 23:58:29 | Bash |  | `/usr/bin/sleep 5; cat /home/ronald/saas-hasner/logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/censo1.out \| /bin/grep -o "pid=[0-9]*"` |
@@ -1338,4 +1347,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:14:53 | Bash |  | `cd /home/ronald/wt-sonda-sem-grant-075803; git log --oneline -1; git status --porcelain \| head; sed -n 88,98p bin/sonda_provisionar.sh; uptime; ps -o pid= -p 3923320; grep '^rc=' /home/ronald/saas-hasner/logs/SELOS-CANON-I3/preverif_v1.out 2>/dev/null; ls /home/ronald/saas-hasner/logs/SELOS-CANON-I3/ \| grep preverif` |
 | 12:11:54 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,x in enumerate(L) if x.startswith('SONDA-SEM-GRANT 12:0x: suite inteira')][0] L.insert(i,"SONDA-SEM-GRANT 12:1x: opus final REPROVA 500bbdde3 -- BLOQUEIA: senha do leitor no argv do sed (bin/sonda_provisionar.sh:92, conferido pela sessao; SEGREDO-FORA-DO-ARGV); construtor opus volta 6 aber ...` |
 | 12:11:49 | Agent | construtor opus SONDA-SEM-GRANT volta 6 | `Papel: CONSTRUTOR (opus), obra SONDA-SEM-GRANT, volta 6. Copia: /home/ronald/wt-sonda-sem-grant-075803 (HEAD 500bbdde3, base main 3803e6623). Escreva SO nessa copia; nunca na arvore viva /home/ronald/saas-hasner. Nao toque banco de prod nem rode bin/sonda_provisionar.sh contra prod. Nao rode a suite Django (a sessao roda). Mate so processos que voce mesmo lancou. ACHADO BLOQUEANTE do opus final (c ...` |
-| 12:11:28 | Bash |  | `cd /home/ronald/wt-sonda-sem-grant-075803; sed -n 80,100p bin/sonda_provisionar.sh; grep -n '_pw' bin/sonda_provisionar.sh \| head -20` |

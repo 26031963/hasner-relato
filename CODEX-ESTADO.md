@@ -1,7 +1,81 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 00:03** · publicado em **10/11/2026 00:06** (UTC-3)
+> Ultima resposta processada: **10/11/2026 00:09** · publicado em **10/11/2026 00:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 00:09 · sessao 1522924e199b · REVERTER-DIA-SEM-RECALCULO · construtor · origem=Code
+
+A cura está aplicada: a VOLTA chama uma vez `_o_chao_do_dia_mudou`, depois do `atomic`, com o motivo solicitado. Guardas, escrita, evento e trilha conservaram AST idêntico ao da base. [ponto/portas/celula.py:774](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/portas/celula.py:774), [ponto/portas/celula.py:809](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/portas/celula.py:809). [nao verificado]
+
+Arquivos tocados:
+
+- [ponto/portas/celula.py:809](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/portas/celula.py:809): substituição do julgamento paralelo pelo rabo comum.
+- [ponto/tests/test_reverter_regen_recalcula_dinheiro.py:18](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:18): contrato AST, contraexemplo da base guardado e teste ORM 240 → 480 → 240, com `on_commit` imediato. [nao verificado]
+- [ponto/tests/test_reverter_regen_sem_banco.py:28](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_sem_banco.py:28): execução instrumentada dos corpos reais e mutações somente em memória.
+
+Não ajustei mocks vizinhos: o alvo continua sendo `ponto.services.cartorio.julgar_celula`; a execução deles por Django ficou pendente. [ponto/tests/test_porta_celula_dia.py:263](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_porta_celula_dia.py:263).
+
+**RED antes e resultado depois.** Antes da cura, o verificador AST falhou com `VOLTA deve chamar o rabo comum uma vez`; o caso financeiro **instrumentado** falhou com `480 != 240`. Depois, o comando abaixo terminou com `Ran 22 tests … OK`. O teste com `DiaPago` real não foi executado: faltam Django e banco; seu RED/verde ORM permanece **[não verificado]**. [verificador:24](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:24), [caso instrumentado:186](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_sem_banco.py:186), [caso ORM:128](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:128). [nao verificado]
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+python3 -m unittest ponto.tests.test_reverter_regen_sem_banco chamados.tests.test_e4_expand -v
+```
+
+Os nove mutantes abaixo terminaram com `rc=1`, por asserções, sem erros de infraestrutura. Cobrem base antiga, omissão/duplicação do rabo, escritores paralelos, posição dentro do `atomic`, desligamento do recálculo, dias vazios e perda do motivo. [ponto/tests/test_reverter_regen_sem_banco.py:28](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_sem_banco.py:28).
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+selo_volta=ponto.tests.test_reverter_regen_sem_banco
+
+REVERTER_MUTANTE=base python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=sem_rabo python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=juiz_paralelo python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=dinheiro_paralelo python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=rabo_no_atomic python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=sem_dinheiro python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=dias_vazios python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=motivo_vazio python3 -m unittest "$selo_volta"
+REVERTER_MUTANTE=duas_vezes python3 -m unittest "$selo_volta"
+```
+
+**Escritores e leitores.** O alcance financeiro é a competência do colaborador, não somente o dia revertido: `recalcular_por_evento` agenda o fechamento mensal em `on_commit`. [ponto/services/fechamento.py:1809](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/services/fechamento.py:1809).
+
+| Campos alcançados | Quem escreve | Quem lê |
+|---|---|---|
+| `DiaPago`: os 15 `CAMPOS_DIA`, incluindo previstos, realizados e abonados; ajuste de DSR e banco | Inventário em `ponto/services/dia_pago.py:34`; `lavrar` substitui as linhas em `:359` | Todos são agregados em `ponto/services/dia_pago.py:562`; relatório em `relatorios/views.py:487`; espelho/PDF em `ponto/services/espelho.py:406` |
+| `DiaPago`: chaves, versão, `versao_motor`, `versao_dna`, `evento_origem`, `detalhe`, `furo_apurado` | `ponto/services/dia_pago.py:335`, `:345` | Chaves/versão em `:855`; detalhe em `:897`; furo em `:589`; régua em `folha/porta_export.py:285`. Leitores de `versao_dna` e `evento_origem`: **[não verificado]** |
+| `FechamentoMensal`: horas trabalhadas, noturnas, extras e subdivisões, folga, atraso, saída, falta e intra | Update canônico em `ponto/services/fechamento.py:1160` | Comparação campo a campo em `folha/porta_export.py:451`; rubricas TXT em `folha/export.py:420`; totais em `relatorios/cartao_pela_celula.py:94` |
+| Mensal: previstos/realizados/abonados, dias previstos, turnos abertos, inconsistências e banco | `ponto/services/fechamento.py:1175` | `relatorios/cartao_pela_celula.py:111`, `folha/export.py:1037`, `:1068` |
+| Mensal: semanas DSR, reflexo DSR, dias incertos | `ponto/services/fechamento.py:1177` | Reflexo segue para a lavratura em `:1207`; leitores individuais das semanas e dias incertos: **[não verificado]** |
+| Mensal: motivos, causa e carimbos | `ponto/services/fechamento.py:1186` | `folha/export.py:964`, `folha/retrato_folha.py:1115`, `folha/export.py:1037`, `ponto/services/fechamento.py:1696`, `ponto/views.py:1740` |
+| Chamado: `celula` e `atualizado_em`, pela rejunção | `chamados/rejuncao.py:119` → `chamados/services/vinculos.py:93` | Dia do fato em `chamados/juizes.py:98`; marcador do painel em `chamados/services/painel.py:64` |
+| Falta espúria: status, resolução, via, urgência e carimbos; nota e trilha | `chamados/services/feriado_reavaliar.py:46` → `chamados/models.py:641`, `:228`; nota em `chamados/services/nota.py:103` | Receivers em `chamados/signals.py:91`, `:188`; painel em `chamados/services/painel.py:64` |
+| Perguntas, condicionalmente: materialização/autor/via, resposta/validação quando cabíveis, veredito e carimbos; possível fechamento da disputa | `chamados/services/disputa_emissao.py:1860`, `chamados/models.py:3128`, `:3149`, `:1936` | Juiz em `chamados/juizes.py:662`, `:830`; frescor em `chamados/veredito_lavrado.py:228`; painel em `chamados/services/painel.py:66` |
+
+**ESMERIL-SEMÂNTICA:** não encontrei, nos leitores e chamador examinados, condição executável exigindo que a VOLTA deixe de recalcular; ausência absoluta **[não verificado]**. Há comentários que ainda descrevem a VOLTA como lacuna da reavaliação, em `ponto/management/commands/reavaliar_ausencias_feriado.py:15` e `chamados/signals.py:319`. O chamador operacional delega à porta em `ponto/management/commands/aplicar_col900.py:77`.
+
+Os contraexemplos limitam a promessa do golden:
+
+- **Futuro:** pula julgamento, mas agenda dinheiro e reavaliação; não garante ata restaurada para 240. `ponto/portas/celula.py:427`, `:458`; selo em `ponto/tests/test_reverter_regen_sem_banco.py:204`.
+- **Veredito humano:** preserva julgamento/ata humanos e agenda dinheiro; o selo conserva ata 480. `ponto/tests/test_reverter_regen_sem_banco.py:213`.
+- **Competência guardada:** 09/2026 exportada continua excluída da escrita financeira. `ponto/services/fechamento.py:36`, `:560`.
+- **`apesar_da_lavra`:** abre a guarda da célula, sem desligar a guarda financeira. `ponto/portas/celula.py:779`; `ponto/services/fechamento.py:560`.
+- **`aplicar_col900 --reverter`:** sem `--aplicar`, apenas simula; aplicando, usa a porta corrigida. “REVERTIDO” indica sucesso da reposição, sem certificar persistência financeira posterior. `ponto/management/commands/aplicar_col900.py:74`, `:77`; falhas financeiras são capturadas em `ponto/services/fechamento.py:1818`.
+
+**Pendências de execução:** o comando completo abaixo parou com `ModuleNotFoundError: No module named 'django'`. Ficaram sem executar o golden ORM, o `SimpleTestCase` pelo runner Django, `test_porta_celula_dia` e `test_ordem_regen_julga_antes_do_dinheiro`. O mesmo verificador AST rodou pelo selo sem banco. Certificação pelo Code/opus: **[não verificado]**. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  ponto.tests.test_reverter_regen_recalcula_dinheiro \
+  ponto.tests.test_reverter_regen_sem_banco \
+  ponto.tests.test_porta_celula_dia \
+  ponto.tests.test_ordem_regen_julga_antes_do_dinheiro \
+  chamados.tests.test_e4_expand \
+  --settings=config.settings.ci --verbosity=2
+```
+
+Ruff retornou `All checks passed!` nos três arquivos tocados, com `--no-cache`; `git diff --check` também passou. O brief externo não foi localizado nos dois caminhos tentados; conteúdo além do contrato transcrito **[não verificado]**. [nao verificado]
 
 ## 10/11 00:03 · sessao c850285aa1d5 · FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE · censo · origem=Code
 
@@ -1132,33 +1206,4 @@ Extraí e executei somente `escritas_sql` via AST em `python3 -B`, sem Django/DB
 
 **Classes:** segundo escritor no comando atual, **não identificado** no caminho inspecionado; garantia universal **[nao verificado]** (`app/chamados/management/commands/disparar_perguntas_competencia.py:81`, `:125`, `:130`, `:135`). Selo/RED sem mordida suficiente, **sim**, pelas duas lacunas concretas acima, sem negar a mordida comprovada do UPDATE síncrono (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:63`, `:258`, `:276`).
 
-## 09/11 22:41 · sessao 4056e2502796 · - · - · origem=Ronald (tmux)
-
-Curas e limites:
-
-- **6a CONFORME:** a docstring indica `consumir_eventos_celula --semear` e esclarece “semeia e retorna; consumo na rodada seguinte” (`app/chamados/management/commands/disparar_perguntas_competencia.py:8`). O consumidor confirma o retorno antes de consumir (`app/chamados/management/commands/consumir_eventos_celula.py:28`; `app/chamados/management/commands/consumir_eventos_celula.py:31`).
-- **7 CONFORME na correção prevista, parcial no callgraph inteiro:** `_viva(p, hoje=hoje)` recebe agora o dia da borda (`app/chamados/management/commands/disparar_perguntas_competencia.py:100`). Continua `_ja_perguntou` sem dia/instante (`app/chamados/management/commands/disparar_perguntas_competencia.py:125`), que chama `fio_vivo` (`app/chamados/services/disputa_emissao.py:1419`), que chama `pergunta_viva(p)` sem hoje (`app/chamados/juizes.py:1434`), permitindo `date.today()` (`app/chamados/juizes.py:577`). Preexistência desses trechos foi declarada no anexo fornecido; comprovação Git independente [nao verificado].
-- **Relógio adicional não mencionado na triagem:** mesmo a chamada corrigida `_viva(..., hoje=hoje)` pode alcançar `classificar_falta` (`app/chamados/juizes.py:1389`; `app/chamados/juizes.py:1393`). Essa função não recebe instante (`app/escala/servico_jornada.py:270`) e relê `_tz.now()` no teto do turno (`app/escala/servico_jornada.py:368`). Também há chamadas por `_pergunta_materializada_de_fato` (`app/chamados/juizes.py:681`; `app/chamados/juizes.py:770`). Correção mínima para a invariável global: propagar `agora` a esse leitor e `hoje` ao caminho `fio_vivo`; introdução desse defeito pelo delta [nao verificado].
-- **8b CONFORME:** comentário agora diz explicitamente janela GLOBAL, sem empresa, corte 21 (`app/chamados/management/commands/disparar_perguntas_competencia.py:28`). A implementação chama `janela_atual(hoje)` sem empresa (`app/chamados/management/commands/disparar_perguntas_competencia.py:42`); o default é efetivamente 21 (`app/ponto/janelas.py:50`; `app/ponto/janelas.py:63`). Linha de backlog na cópia [nao verificado].
-- **8c CONFORME na borda:** um único `timezone.now()` produz `agora`; `hoje=timezone.localdate(agora)`; competência recebe esse mesmo hoje (`app/chamados/management/commands/disparar_perguntas_competencia.py:38`; `app/chamados/management/commands/disparar_perguntas_competencia.py:42`). Garantia em todas as funções chamadas continua parcial pelos relógios acima (`app/chamados/juizes.py:577`; `app/escala/servico_jornada.py:368`).
-
-Mapa de escritores/leitores:
-
-| Valor | Escritor | Leitores e significado |
-|---|---|---|
-| `agora` | Borda do comando (`app/chamados/management/commands/disparar_perguntas_competencia.py:38`) | `_ontem_em_janela` recebe com hoje (`app/chamados/management/commands/disparar_perguntas_competencia.py:79`); fábrica recebe ambos (`app/chamados/management/commands/disparar_perguntas_competencia.py:81`); parcial recebe instante (`app/chamados/management/commands/disparar_perguntas_competencia.py:106`); teto do fio recebe ambos (`app/chamados/management/commands/disparar_perguntas_competencia.py:110`). |
-| `hoje` | Conversão local do mesmo instante (`app/chamados/management/commands/disparar_perguntas_competencia.py:39`) | Competência (`app/chamados/management/commands/disparar_perguntas_competencia.py:42`), ontem/piso/filtro `<hoje` (`app/chamados/management/commands/disparar_perguntas_competencia.py:69`), fábrica/teto (`app/chamados/management/commands/disparar_perguntas_competencia.py:81`; `app/chamados/management/commands/disparar_perguntas_competencia.py:110`), vitalidade direta (`app/chamados/management/commands/disparar_perguntas_competencia.py:100`). |
-| `hoje=` de pergunta_viva | Chamador acima; padrão `None` (`app/chamados/juizes.py:839`) | Integra chave do memo (`app/chamados/juizes.py:852`; `app/chamados/juizes.py:864`), é repassado ao cálculo (`app/chamados/juizes.py:856`), controla janela viva (`app/chamados/juizes.py:1389`) e testemunha materializada (`app/chamados/juizes.py:1406`). |
-| `hoje` dentro da janela viva | Argumento ou `date.today()` independente (`app/chamados/juizes.py:577`) | Chama janela corrente e anterior (`app/chamados/juizes.py:578`; `app/chamados/juizes.py:597`), aceita inclusivamente da véspera do início anterior ao fim corrente (`app/chamados/juizes.py:603`). |
-
-Os consumidores diretos de `agora` toleram representação UTC aware: comparam instantes e subtraem durações, sem extrair `.date()`, `.hour` ou `.time()` cru nesses caminhos (`app/ponto/services/vigia_de_hora.py:52`; `app/ponto/services/vigia_de_hora.py:58`; `app/ponto/services/cartorio.py:858`; `app/ponto/turnos.py:2116`; `app/ponto/turnos.py:2124`). A parcial encaminha o instante a `houve_fato_novo`, que usa intervalo `(desde, ate]` e compara carimbos (`app/ponto/services/cartorio.py:400`; `app/ponto/services/cartorio.py:345`; `app/ponto/services/cartorio.py:348`; `app/ponto/services/cartorio.py:365`). Seu teste de marco novo usa `marcos_vencidos` nos dois instantes recebidos (`app/ponto/services/cartorio.py:417`). Nenhum defeito novo por representar `agora` em UTC foi encontrado nesses consumidores (`app/ponto/services/cartorio.py:858`; `app/ponto/turnos.py:2124`).
-
-A configuração local declara São Paulo e `USE_TZ=True` (`app/config/settings/base.py:93`; `app/config/settings/base.py:95`). O fallback `date.today()` é o dia do processo, enquanto a borda usa o fuso corrente Django; igualdade desses dias no host de produção [nao verificado] (`app/chamados/juizes.py:577`; `app/chamados/management/commands/disparar_perguntas_competencia.py:39`).
-
-As janelas não são idênticas por desenho: fio mudo usa `[ini,fim]` (`app/chamados/management/commands/disparar_perguntas_competencia.py:93`); célula usa `[_piso,fim]` e exclui hoje, podendo estender piso até anteontem e excluir ontem ainda atendido pela vigia de hora (`app/chamados/management/commands/disparar_perguntas_competencia.py:70`; `app/chamados/management/commands/disparar_perguntas_competencia.py:79`). O teto de marco inclui igualdade em `marco+30min <= agora` (`app/ponto/services/cartorio.py:828`; `app/ponto/services/cartorio.py:858`). `_ontem_em_janela` inclui marco vencendo exatamente à meia-noite (`app/ponto/services/vigia_de_hora.py:53`). A linha `janela` ainda imprime somente a solicitada; não explicita o piso/exclusões da célula (`app/chamados/management/commands/disparar_perguntas_competencia.py:153`). Correção mínima de apresentação: imprimir também o universo efetivo da célula (`app/chamados/management/commands/disparar_perguntas_competencia.py:70`).
-
-O teste novo de relógio prova encaminhamento da borda e `hoje=` por fragmentos com mocks, incluindo o cenário UTC/local em dias diferentes (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:125`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:148`). Não executa a função real `pergunta_viva` nessa prova: avalia sua chamada com `Mock`; portanto não detecta as releituras internas acima (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:145`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:147`).
-
-Derivação paralela de janela/teto: **não identificada no trecho inspecionado**; o comando usa as autoridades existentes (`app/chamados/management/commands/disparar_perguntas_competencia.py:42`; `app/chamados/management/commands/disparar_perguntas_competencia.py:81`; `app/chamados/services/fabrica_da_celula.py:26`; `app/ponto/services/cartorio.py:843`). Sem Git, restrição dessa conclusão estritamente aos hunks do delta [nao verificado].
-
-_3267 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3268 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
