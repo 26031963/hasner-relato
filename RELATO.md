@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=328659
+ESPERANDO: /home/ronald/saas-hasner/bin/tests | pid=705500
 
 pergunta de escopo (aval CODE-VIVE-ATE-O-RESET item 1, LEI-AKITA 9): o pouso da E4a-2 deixa VERMELHO o selo de host bin/tests/test_papel_prazo_nao_deriva.sh -- :302-308 EXCECOES_DE_DELEGACAO nomeia disparar_perguntas_competencia e a regra do proprio selo (:300) acusa excecao de cron fora de JUIZES_POR_VARREDURA; a mordida :388 usa disparar como controle positivo. Cura = ~10 linhas em bin/ (dict vazio pela condicao de saida CORTES.md:305 cumprida + controle positivo com excecao sintetica). bin/ e proibido ao construtor e o aval so deixa a sessao fazer hunk de 1 linha: preciso de `!` para a sessao escrever essas ~10 linhas. Mesmo `!` cobre bin/placar_code.sh:205-209 (com 0 juizes por varredura `escritas_por_cron` devolve crons={} e o placar imprime "vigia falhou"; cura = linha explicita `escritas_por_cron=0 crons julgando` quando universo vazio, ~3 linhas; preverif1 item 3). Nao bloqueia construcao; bloqueia o pouso da E4a-2.
 
