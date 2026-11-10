@@ -1,7 +1,22 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 17:16** · publicado em **10/11/2026 17:19** (UTC-3)
+> Ultima resposta processada: **10/11/2026 17:53** · publicado em **10/11/2026 17:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 17:53 · sessao 33840901b286 · - · - · origem=Ronald (tmux)
+
+As duas queries vêm de [disputa_emissao.py:548](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:548) e [:549](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:549):
+
+- `SELECT ... FOR UPDATE` do Colaborador pela chamada separada de `trava_na_ordem`; implementação em [models.py:2666](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2666).
+- `SELECT pk` de todas as disputas do colaborador, incluindo fechadas.
+
+O `atomic` já existia na BASE; a comparação `git diff 6c0517eb9 69f1a8b4 -- chamados/services/disputa_emissao.py` mostra que o acréscimo está nessas leituras. Quantidades ORM locais: [nao verificado].
+
+É possível remover **uma** query: passe `donas` como QuerySet lazy e retire a chamada separada de `trava_na_ordem(colaborador)`. A própria porta trava o Colaborador em [models.py:2665](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2665) antes de avaliar os IDs em [:2671](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2671). O QuerySet guarda o resultado das avaliações seguintes; runtime com ORM: [nao verificado].
+
+A query restante lê o conjunto de donas necessário para incluir as disputas fechadas na trava antes de Chamado/Pergunta: [disputa_emissao.py:545](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:545). Ela fica fora dos loops de motivos/furos: [:543](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:543). Portanto, o acréscimo estrutural passa de **+2 para +1 por invocação do núcleo**; comparação ORM efetiva de 1 versus 3 furos: [nao verificado].
+
+Nenhum arquivo alterado.
 
 ## 10/11 17:16 · sessao af554e746a14 · BO-0611-05 · censo · origem=Code
 
@@ -1018,97 +1033,4 @@ BO061105_MUTANTE=modal PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test ponto
 
 Passaram as verificações estáticas de sintaxe, detector do selo e alteração única das quatro guardas; `git diff --check` não apontou problemas. A suite Django, os mutantes renderizados e o RED da base não foram reproduzidos localmente: [não verificado]. [nao verificado]
 
-## 10/11 15:20 · sessao e07786d04b22 · BO-0611-05 · construtor · origem=Code
-
-Cura aplicada nos oito sítios. Os quatro leitores Python tiveram **RED na base, GREEN na cura e mutante VERMELHO**. Os testes de HTML foram entregues, mas a renderização permanece **[nao verificado]**: o ambiente não encontra Django (`ponto/tests/test_bo0611_05_templates_geo.py:18`).
-
-Os seis arquivos de execução tocados agora exigem ambas as coordenadas não nulas:
-
-| Sítio | Arquivo:linha | RED / GREEN / mutante local |
-|---|---|---|
-| Posto, erro HTMX | [colaboradores/views.py:337](/home/ronald/wt-codex-bo-0611-05-144805/app/colaboradores/views.py:337) | rc 1 / 0 / 1 |
-| Posto, sucesso HTMX | `colaboradores/views.py:356` | rc 1 / 0 / 1 |
-| Escala | `colaboradores/views.py:395` | rc 1 / 0 / 1 |
-| Contador offline | [ponto/views.py:485](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/views.py:485) | rc 1 / 0 / 1 |
-| Feed | [templates/core/_d2_feed.html:16](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/core/_d2_feed.html:16) | [nao verificado] |
-| Lista offline | [templates/ponto/batidas_offline_pendentes.html:96](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/ponto/batidas_offline_pendentes.html:96) | [nao verificado] |
-| Relatório geo | [templates/chamados/partials/_relatorio_geo.html:30](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/chamados/partials/_relatorio_geo.html:30) | [nao verificado] |
-| Modal do fio | [templates/chamados/partials/modal_fio.html:480](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/chamados/partials/modal_fio.html:480) | [nao verificado] |
-
-Nenhum dos oito já exigia ambas. A consulta vizinha que já excluía as duas permanece como estava (`colaboradores/views.py:53`).
-
-Foram acrescentados dois módulos de teste: [nao verificado]
-
-- [test_bo0611_05_leitores_geo.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_leitores_geo.py:1): extrai e executa as quatro expressões reais por AST; o duplo aplica os filtros aos valores. Testa par completo, ambas as parciais, ausência total e mistura com completa (`:71`, `:112`). Cada mutante remove exatamente uma guarda de longitude (`:85`).
-- [test_bo0611_05_templates_geo.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:1): prepara renderização Django das páginas/partials e verifica links, botão de mapa e mensagem de ausência no HTML (`:145`). Usa as duas cascas reais; a montagem em `base_app.html` é de ensaio, sem criar rota de produção (`:88`). Os mutantes alteram somente o loader em memória (`:54`, `:179`). Execução: **[nao verificado]**.
-
-Nos quatro REDs Python, latitude preenchida com longitude `None` foi contada como geo. Os quatro mutantes reproduziram essa mesma falha de asserção; os controles com par completo passaram (`ponto/tests/test_bo0611_05_leitores_geo.py:118`, `:143`).
-
-Comandos reproduzíveis por sítio, partindo de `app/`:
-
-```bash
-for s in posto_erro posto_sucesso escala offline; do
-  # RED: rc 1
-  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.test_bo0611_05_leitores_geo \
-    --base 8c81227e03081ecc38fcc3fdaa9f7a5fd78f84a5 --sitio "$s"
-
-  # GREEN: rc 0
-  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.test_bo0611_05_leitores_geo --sitio "$s"
-
-  # MUTANTE: rc 1
-  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.test_bo0611_05_leitores_geo --mutante "$s"
-done
-```
-
-Para cada sítio de template, os comandos abaixo estão pendentes; resultados **[nao verificado]** (`ponto/tests/test_bo0611_05_templates_geo.py:40`, `:167`):
-
-```bash
-for s in feed offline relatorio modal; do
-  BO061105_BASE=8c81227e03081ecc38fcc3fdaa9f7a5fd78f84a5 \
-  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    "ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_$s" \
-    --settings=config.settings_test -v 2
-
-  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    "ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_$s" \
-    --settings=config.settings_test -v 2
-
-  BO061105_MUTANTE="$s" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    "ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_$s" \
-    --settings=config.settings_test -v 2
-done
-```
-
-Sobre **quem escreve e quem lê os campos**:
-
-| Campos | Escrita | Leitura e significado |
-|---|---|---|
-| `Batida.latitude` / `longitude` | Campos independentes e anuláveis (`ponto/models.py:58`). A porta sanitiza cada campo separadamente e grava `**campos`, preservando parcial (`ponto/registro_batida.py:5`, `:105`, `:152`, `:157`). | Os oito leitores estão relacionados acima. A autoridade trata ausência de qualquer coordenada como `sem_gps` (`ponto/services/geofence.py:247`). Detector e detalhe já exigem ambas (`ponto/services/vinculo_na_lista.py:49`; `colaboradores/services/detalhe.py:22`). |
-| `contexto_json.batida_lat` / `batida_lon` | Geofence copia cada coordenada separadamente para ocorrência e contexto (`ponto/services/geofence.py:327`, `:369`). A advertência transporta as duas chaves (`chamados/services/acoes_chamado.py:203`). | Relatório e modal são os leitores curados acima. A reavaliação já exclui ocorrências parciais (`ponto/services/geofence.py:383`, `:403`). |
-
-**Zero continua sendo uma diferença de significado:** o critério não nulo solicitado admite `0.0` nestes leitores; a autoridade ainda usa truthiness (`ponto/services/geofence.py:247`). Drawer e dashboard também usam truthiness, e a serialização situacional converte zero em vazio (`colaboradores/services/drawer.py:63`; `templates/core/dashboard2.html:242`; `colaboradores/services/situacional.py:199`). Esses outros sítios ficaram fora da cura.
-
-A execução conjunta terminou com **15 testes OK**, nestes quatro módulos (`ponto/tests/test_bo0611_05_leitores_geo.py:131`; `ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:119`; `api/tests/test_l030_selo_porta.py:73`; `ponto/tests/test_l030_forma_js.py:68`):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  ponto.tests.test_bo0611_05_leitores_geo \
-  ponto.tests.test_bo0611_05_vinculo_geo_parcial \
-  api.tests.test_l030_selo_porta \
-  ponto.tests.test_l030_forma_js -v
-```
-
-O selo de relógio também passou seus três métodos, substituindo somente `SimpleTestCase` por `unittest.TestCase` em AST na memória; isso não equivale ao runner Django (`core/tests/test_selo_teste_sem_relogio.py:66`).
-
-Não houve inversão de testes antigos; foram acrescentadas as regressões acima. Renderizações, suíte Django completa, variante com models reais e validação em navegador/produção: **[nao verificado]**. Ruff foi tentado e retornou `No module named ruff`; lint: **[nao verificado]**. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache \
-  colaboradores/views.py ponto/views.py \
-  ponto/tests/test_bo0611_05_leitores_geo.py \
-  ponto/tests/test_bo0611_05_templates_geo.py
-```
-
-Certificação pela suíte Code e revisão opus final: **[nao verificado]**. [nao verificado]
-
-_3424 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3425 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
