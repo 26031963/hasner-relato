@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 20:20** · publicado em **10/11/2026 20:21** (UTC-3)
+> Ultima resposta processada: **10/11/2026 20:27** · publicado em **10/11/2026 20:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 20:27 · sessao 99c28c41e23e · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Cura c8 preparada. A execução ORM e a nova contagem SQL ficam para a sessão: **[nao verificado]**.
+
+Arquivos e funções alterados, por item:
+
+1. [test_3b_reuso_746.py](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_3b_reuso_746.py:15)::`test_reusa_orfao_nao_duplica` e `test_sem_orfao_cria_normal`: chamadas usam `gps_mock`. As asserções e a subcategoria do órfão foram preservadas. (`:19–35`)
+
+2. [test_bo_disputa_volta5.py](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5.py:32)::`_dona`: cria a outra aberta depois da dona, com instante fixo posterior. O comentário registra a ordenação pressuposta; a ordenação de produção permanece `-aberta_em`. (`chamados/models.py:1804`)
+
+3. No mesmo arquivo:
+   - `test_replay_porta_real_conserva_dia_d_e_linha_da_dona_fechada_duas_vezes`: usa `bulk_create` para montar a batida sem `post_save` e afirma ausência de disputa aberta antes da medição. Preserva as exigências de quatro chamadas à porta e conservação do estado. (`:141–182`)
+   - `test_RED_d2_aberta_com_outros_motivos_e_canonica_em_fechada_duas_vezes`: acrescentado; exige retorno A, `values()` de B idêntico, FK da pergunta em B, motivo ausente de A, nenhum push e estado idêntico na segunda chamada. (`:186–218`) [nao verificado]
+   - **Não alterei D2**: o código já restringe A aos motivos locais, conserva B fechada e retorna A. (`chamados/services/disputa_emissao.py:592–597,619–633`)
+
+4. [disputa_emissao.py](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:773)::`criar_ou_atualizar_disputa`: elimina a segunda releitura quando pendentes não devolve perguntas. Mantém a primeira e mantém a segunda quando pendentes pode ter provocado fechamento. (`:774–786`)
+
+A conta proposta dos cinco acréscimos é:
+
+| Acréscimo | Decisão |
+|---|---|
+| SAVEPOINT + RELEASE externos | Ficam: protegem o atomic comum e o rollback da agregação em erro. (`disputa_emissao.py:606–633`) |
+| SELECT de perguntas locais | Fica: determina os motivos admitidos em A. (`:561–564,621`) |
+| Primeiro EXISTS | Fica: a cascata do gerador pode alcançar fechamento por outra instância. (`:495–501`; `chamados/reconciliador.py:411–413`) |
+| Segundo EXISTS sem perguntas pendentes | Sai. (`disputa_emissao.py:777–785`) |
+
+O savepoint exclusivo de nascimento já está depois do retorno de D2. (`disputa_emissao.py:633–636`)
+
+**Sai 1; ficam 4. Tetos propostos: 149 e 223.** As duas linhas receberam justificativa C8 e `MEDIDO <a preencher pela sessao>`; nenhum outro teto foi alterado. [test_selo_chokepoint_escrita.py:186](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/ponto/tests/test_selo_chokepoint_escrita.py:186), `:199`. Totais SQL: **[nao verificado]**.
+
+Acrescentei [test_bo_disputa_volta8_memoria.py](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta8_memoria.py:28)::`fonte`, `Ambiente8.__init__`, `Delta8Test.*` e `rodar`. O RED registrou `2 != 1` antes da cura; os controles atuais terminaram sem falhas, e os cinco mutantes produziram falhas por asserção. São provas com doubles, sem certificação ORM. (`:1–5,71–206`)
+
+Comandos do controle e de cada mutante:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta8_memoria.py
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta8_memoria.py --mutante reconsulta_sem_pendentes
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta8_memoria.py --mutante ignora_fecho_gerador
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta8_memoria.py --mutante ignora_fecho_pendentes
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta8_memoria.py --mutante estrangeira_em_a
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta8_memoria.py --mutante salva_fechada_d2
+```
+
+A rodada conjunta sem banco registrou 52 testes, sem falhas: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -q \
+  chamados.tests.test_bo_disputa_sem_pergunta_memoria \
+  chamados.tests.test_bo_disputa_volta2_memoria \
+  chamados.tests.test_bo_disputa_volta3_memoria \
+  chamados.tests.test_bo_disputa_volta4_memoria \
+  chamados.tests.test_bo_disputa_volta5_memoria \
+  chamados.tests.test_bo_disputa_volta5_replay_red_memoria \
+  chamados.tests.test_bo_disputa_volta8_memoria
+```
+
+Quanto aos leitores de `motivos`, c8 preserva a seleção e a persistência anteriores de D2. (`disputa_emissao.py:619–633`) A leitura de cada sítio continua sendo:
+
+| Leitor | Resultado usado |
+|---|---|
+| `api/foto_recebida.py:63,70` | Seleciona a dona aberta de foto e calcula motivos restantes. |
+| `colaboradores/signals.py:74` | Seleciona dona aberta de `posto_desativado`. |
+| `escala/signals.py:158` | Seleciona dona aberta de `ancora_ausente`. |
+| `chamados/models.py:2031–2037` | Revalida estado aberto e presença do motivo antes da remoção. |
+| `auditar_disputas.py:88,142,169,182–194` | Audita contexto, lista motivos e compara com perguntas locais. |
+| `auditar_invariantes_chamados.py:50` | Resolve os dias dos motivos registrados na disputa. |
+| `chamados/relatorios_disputa.py:52` | Exibe os motivos registrados. |
+| `chamados/services/acoes_disputa.py:149` | Compõe texto de regularização. |
+| `chamados/services/fio.py:680` | Compõe texto de regularização. |
+| `pauta_aparelhos_compartilhados.py:49–57` | Filtra motivo e lê seu contexto. |
+| `alertar_disputas_pendentes.py:82` | Registra os motivos no texto de auditoria. |
+| `templates/chamados/detalhe_local.html:301` | Exibe os motivos da aberta. |
+| `templates/chamados/partials/modal_fio.html:326` | Escolhe a orientação para âncora. |
+| `colaboradores/services/drawer.py:75–82` | Usa perguntas vivas para o banner. |
+
+Efeitos desses leitores sobre dados reais: **[nao verificado]**.
+
+Não executei testes com banco. Ruff também ficou pendente: executável e módulo indisponíveis no ambiente **[nao verificado quanto ao lint]**. Comandos para a sessão: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_3b_reuso_746 \
+  chamados.tests.test_bo_disputa_volta5 \
+  ponto.tests.test_selo_chokepoint_escrita
+
+ruff check --no-cache \
+  chamados/services/disputa_emissao.py \
+  chamados/tests/test_3b_reuso_746.py \
+  chamados/tests/test_bo_disputa_volta5.py \
+  chamados/tests/test_bo_disputa_volta8_memoria.py \
+  ponto/tests/test_selo_chokepoint_escrita.py
+```
 
 ## 10/11 20:20 · sessao 81bdf4d4b274 · BO-DISPUTA-SEM-PERGUNTA · sonda · origem=Code
 
@@ -964,51 +1057,4 @@ No escopo limitado de apresentar os verbos já existentes e preservar `value`, a
 **Linha para tabela consolidada:**  
 `BO-ROTULO-ENCERRADO | CLAUDE:20; LEIS-UI L2/L7; sem juiz registrado do rótulo; motor.decidir/transicionar/_gravar_estado | não/não | 13 (perímetro do rótulo; estado global n/a) | COMPLEMENTO de O137 (BACKLOG:1363) | Single Source of Truth (GLOSSARIO:11) | 0`
 
-## 10/11 19:53 · sessao 67ea159aafa1 · - · - · origem=Ronald (tmux)
-
-## PERGUNTA-DUPLICATA-1110
-
-**(a)** Aplicam-se L-001 (origem), L-002 (mesma autoridade), L-003 (medir função real), L-007 (escritor e trilha), em `app/docs/LEIS.md:59`, `:60`, `:61`, `:65`, e idempotência estrutural de `CLAUDE.md:175`.
-
-**Sem juiz registrado para “qual pergunta é duplicata / qual canônica fica”**: C8 pergunta pelo **chamado**, em `app/core/juizes.py:114`, e aponta para `ChamadoColaborador.abrir`, em `app/core/juizes.py:280`; a família chamado registrada termina em `app/core/juizes.py:294`, sem a eleição de pergunta. O lookup FIO aponta para `_disputa_do_chamado`, outra pergunta (`app/docs/JUIZES.md:40`).
-
-Quem decide hoje:
-
-- Identidade MARCO: colaborador/dia/motivo/instância; BATIDA: episódio/motivo, em `app/chamados/services/fio.py:1372`.
-- Canônica: primeira por pk com resposta não vazia (`(resposta_colab or '').strip()`); senão menor pk, em `app/chamados/services/fio.py:1225`.
-- Retratação permitida: `plano_de_retratacao`, em `app/chamados/services/fio.py:1259`, preserva mérito com resposta, episódios distintos e acervo sem episódio (`:1287`, `:1290`, `:1292`, `:1294`).
-- Porta: `retratar_para_canonica` (`app/chamados/services/fio.py:1319`) → `retratar_duplicata` (`:1345`) → `carimbar_identidade` (`app/chamados/models.py:3168`, save `:3190`). Nada se apaga; a referência à canônica entra em `recusa_motivo` (`app/chamados/services/fio.py:1359`).
-
-**(b)** Para a cura mínima compatível com o relato — medir corretamente e retratar excedentes pela porta existente — **cria estado: não; muda decisor: não**. O valor `duplicata` já existe (`app/chamados/models.py:2495`), a porta já grava via/carimbo/autor/motivo (`:3182`, `:3186`, `:3190`), e a eleição já é compartilhada inclusive pelo nascimento, via import apelidado `_canonica` (`:2905`, `:2921`). A presença efetiva desse estado no banco de produção permanece **[não verificado]**.
-
-Construir um **novo fato próprio de identidade** seria outra obra: `FIO-E0-V4-FATO-A06`, posterior à E4d, registrada em `app/docs/BACKLOG.md:1867`; não se deve presumir essa ampliação de escopo.
-
-**(c)** Como (b) é não/não, o censo global dos campos não é exigido pela condição do pedido. Para não apresentar “zero leitores”, contei o **perímetro das cinco funções de dedup acima** por AST em todos os `.py` da cópia, excluindo testes/migrations; resolvi `ImportFrom.asname`, incluindo `_canonica`. Resultado: **23 chamadas: 19 leituras de decisão e 4 delegações de escrita**, não 23 leitores/escritores globais dos campos. [nao verificado]
-
-| Arquivo | Sítios e forma |
-|---|---|
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py` | `:276` eleição; `:290` plano, categorias por truthiness em `:295`; `:331` delegação de escrita; `:393` eleição condicionada a `len>=2` em `:392`; `:396` leitura `['retrata']`; `:485` grupos; `:506` eleição/comparação com menor pk em `:507`; `:510` plano/contagem por `len` em `:512`. |
-| `app/chamados/management/commands/dedup_perguntas_fato.py` | `:58` grupos com recorte; `:76` eleição; `:81` plano, leitura `['retrata']` em `:88` e truthiness em `:89`. |
-| `app/chamados/models.py` | `:2921` eleição por alias `_canonica`, truthiness da lista e depois `is not None` em `:2922`. |
-| `app/chamados/services/declaracao_texto.py` | `:253` eleição, comparação disputa e `_reusavel` em `:254`; `:275` eleição depois de truthiness da lista em `:271`. |
-| `app/chamados/services/fio.py` | `:921` delegação de escrita sob truthiness em `:920`; `:956` eleição/comparação pk em `:957`; `:967` plano/`any` categorias em `:968`; `:1340` plano; `:1341` delegação de escrita em compreensão com truthiness do retorno; `:1832` eleição condicionada a sementes em `:1833`; `:2155` eleição/comparação pk em `:2165`; `:2158` plano/truthiness das recusas em `:2166`; `:2180` delegação de escrita/leitura `['retratadas']`. |
-
-O escritor físico subsequente é `app/chamados/models.py:3190`, chamado de `app/chamados/services/fio.py:1359`; fica **fora das 23 chamadas**, cujo perímetro são os cinco símbolos. O grep desses símbolos em HTML/JS/signals não encontrou ocorrências; isso não prova ausência de leitores dos campos por outras formas **[não verificado]**. `app/config/crons.py:783` menciona o backfill somente na declaração de papel de ato único (`:780`), não como chamada executável.
-
-Leituras relevantes para medir eventual inflação: C6 compara a via com `VIAS_QUE_VENCEM_A_RESPOSTA` e exige carimbo não nulo (`app/chamados/juizes.py:1336`); o queryset usa `via_resolucao__in` + `materializada_em__isnull=False` (`app/chamados/models.py:3352`) e os exclui em `:3359`; o app filtra `q_vivas` (`app/chamados/services/pergunta_no_app.py:50`), confirma C6 em `:58`, e separa pendentes por `respondida_em is None` e `fechada_em is None` em `:71`.
-
-**(d)** **COMPLEMENTO de FIO-E0-V4 E1**, identidade e backfill do acervo, casa `app/docs/BACKLOG.md:1848`; articulado à migração dos escritores E4 (`:1863`). Há ainda resíduo específico de duplicatas sobre episódio retratado em `:786`; não há dado fornecido que permita dizer que os 486 grupos incluem esse resíduo **[não verificado]**. Não é BO simples: as 23 chamadas acima atravessam modelo, serviços e dois commands.
-
-**(e)** Padrão direto: **idempotência pela chave do fato**, termo em `app/docs/GLOSSARIO.md:29`; fonte única/Aggregate Root consta em `:11`, e escritor único em `:12`. A identidade já é compartilhada pelo nascimento e pelo dedup (`app/chamados/models.py:2905`, `app/chamados/services/fio.py:1372`).
-
-**Conferência do relato:** “486 grupos / 848 excedentes em disputa aberta” é dado fornecido, sem chave de agrupamento nem pks; sua equivalência ao universo canônico é **[não verificado]**. “Disputa aberta” não define duplicidade: `do_fato` usa colaborador/família fora das vias terminais (`app/chamados/models.py:2717`, `:2724`), enquanto conversa nasce sempre, sem dedup (`:2794`). O agrupador real exclui conversa e vias fora do fato (`app/chamados/services/fio.py:1431`), aplica chaves por família (`:1945`) e exige grupo com membro no horizonte (`:1949`); nem toda perdedora é retratável (`:1290`).
-
-**Depende de dado:** contagem dos 486 grupos reclassificados pelo universo real; excedentes retratáveis versus mérito/episódios unidos/acervo sem episódio; distribuição por idade, horizonte e competência; quantos excedentes passam por C6 e efetivamente entram nos contadores/app. Os 848, isoladamente, não demonstram inflação **[não verificado]**.
-
-perguntas de lei: 0
-
-Para o escopo mínimo, a eleição e as recusas já têm regra explícita (`app/chamados/services/fio.py:1225`, `:1259`); registrar a autoridade existente é pendência de registro, não uma nova decisão de mérito. A união de acervo sem episódio com episódio está expressamente preservada e anotada como lei aberta (`:1274`), mas não foi demonstrado que o dado deste item exige resolvê-la **[não verificado]**.
-
-**Linha de tabela sugerida:** `PERGUNTA-DUPLICATA-1110 | L-001/002/003/007; sem juiz registrado de identidade de pergunta; fio.retratar_para_canonica | não/não (escopo mínimo) | 23 chamadas do perímetro (19 leitura/4 delegação), não censo global | COMPLEMENTO FIO-E0-V4 E1/E4 | idempotência pela chave do fato | 0`.
-
-_3491 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3492 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
