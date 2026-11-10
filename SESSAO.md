@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 04:56:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1342**.
+**Medido em 10/11/2026 05:01:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1339**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1349,6 +1349,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:02:34 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; N=$(date +%H%M%S); WT=/home/ronald/wt-codex-fio-e0-v4-e4-escritores-$N; git worktree add -q $WT -b e4-v1-$N 05e6aa147 && echo $WT > $D/wt_v1.txt sed -i "s#/home/ronald/wt-codex-fio-e0-v4-e4-escritores-[0-9]*#$WT#g" $D/construtor_v1.q $D/lancar_construtor_v1.sh; grep -c "$WT" $D/construtor_v1.q $D/lancar_construtor_v1.sh mv $D/construtor_ ...` |
 | 17:02:25 | Bash |  | `cd /home/ronald/wt-akita-hunk-165640; git log --oneline -1; git diff --stat 05e6aa147; git diff 05e6aa147 \| sed -n '/def arquivos_com_hunk_proprio/,/^@@/p' \| head -30; LEI_AKITA_HEAD=05e6aa147 bash bin/tests/test_lei_akita.sh 2>&1 \| tail -2; echo rc=$?` |
 | 17:02:21 | Bash |  | `cd /home/ronald/wt-akita-hunk-165640; grep -n "tem_linha\\|exige a linha\\|sem linha" bin/tests/test_lei_akita.sh \| head -20` |
-| 16:56:18 | Bash |  | `ps -p 851894 -o etime=; tail -2 /home/ronald/saas-hasner/logs/push_3803.log \| cut -c1-200` |
-| 16:56:14 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; grep -o 'matriz_e4.r[^ ]*' $D/lancar_construtor_v1.sh; sed -i 's#/matriz_e4.r #/matriz_e4.r --anexo $D/censo_disparar_c20.r --anexo $D/aval_c20.txt #' $D/lancar_construtor_v1.sh; grep -o 'anexo [^ ]*' $D/lancar_construtor_v1.sh` |
-| 16:56:12 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; cp logs/disparar_c20/censo.r $D/censo_disparar_c20.r; python3 - <<'EOF' p='logs/FIO-E0-V4-E4-ESCRITORES/construtor_v1.q'; s=open(p).read() a="ESCOPO DESTA VOLTA =" assert s.count(a)==1 add='''CONTRATO 20 NA CAUDA DA E4 (aval PUSH-80A6-PELO-HUNK-PROPRIO + CONTRATO-20-NA-CAUDA-DA-E4, anexo aval_c20.txt): o vermelho e disparar_perguntas_com ...` |
