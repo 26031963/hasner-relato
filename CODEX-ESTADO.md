@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 16:57** · publicado em **10/11/2026 16:57** (UTC-3)
+> Ultima resposta processada: **10/11/2026 17:00** · publicado em **10/11/2026 17:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 17:00 · sessao f212df288509 · BO-0611-05 · censo · origem=Code
+
+Numeração dos anexos: primeira linha de conteúdo = 1, contando linhas vazias.
+
+1. **(b) Falha da triagem.** O tema estava perguntado: “supoe outro significado (None x 0.0 x '', Decimal x float” (`preverif1.q:23`). O Codex viu: “geofence usa truthiness, enquanto os leitores alterados usam `is not None`; zero permanece na exclusão declarada” (`preverif1.r:37`). A triagem descartou literalmente: **“- 0.0 truthiness x is not None: fora do escopo declarado (brief volta 3); anexo ao opus.”** Motivo registrado: exclusão de escopo (`triagem_preverif1.txt:13`).
+
+2. **(c) Fora do alcance — não conta.** O achado cobra evidência do RED **executado contra a base**, não apenas mutantes ou inspeção (`opus_final1.txt:5`). A pergunta exigia: “RED/GREEN exigidos (aval): POST /api/ponto/bater/ sem coordenadas, colab ativo, nos DOIS kernels -> HOJE 403 e 0 Batida” (`construtor1.q:33`). A resposta delimitou: “POSTs reais, renderizações Django e os 100/100 relatados não foram reexecutados aqui: **[nao verificado]**” (`preverif1.r:66`). Não há trecho de resposta comprovando esse RED na base; RED executado pertence expressamente à classe (c) (`CLAUDE.md:383`).
+
+3. **(e) NÃO PERGUNTADO — falha de quem perguntou.** Não há trecho de pergunta solicitando conferir `LEI-AKITA`/`L-030` nas mensagens dos commits. O trecho próximo é “pouso antes do pre-requisito”, dentro da pergunta sobre classes de defeitos; isso pergunta por ordem do pouso, sem formular a conferência das marcações legais (`preverif1.q:24–26`; tema do achado em `opus_final1.txt:6`). Não há trecho correspondente nas `.r` fornecidas nem descarte correspondente na triagem (`triagem_preverif1.txt:1–13`). Respostas `construtor1.r`–`construtor6.r`: **[nao verificado]**, não fornecidas. [nao verificado]
+
+4. **(e) NÃO PERGUNTADO — falha de quem perguntou.** A pergunta cita “PELA-METADE em app/docs/LEIS.md:78 e :165” como contexto do aval; não pergunta se esses registros ficariam falsos após a cura (`censo1.q:1–3`). A construção também usa “L-030 PELA-METADE” como especificação (`construtor1.q:2`). Não há trecho `.q` pedindo atualização documental por L-106, trecho `.r` apontando essa desatualização ou descarte correspondente na triagem (`opus_final1.txt:7`; `triagem_preverif1.txt:1–13`).
+
+Evidência de avaliação por opus anterior, necessária para atribuir **(d)**: **[nao verificado]**, não fornecida.
+
+| achado | classe | trecho .q | trecho .r | linha da triagem |
+|---|---|---|---|---|
+| 1 — zero/nulo | **(b)** falha da triagem | “supoe outro significado (None x 0.0 x ''” — `preverif1.q:23` | “geofence usa truthiness, enquanto os leitores alterados usam `is not None`” — `preverif1.r:37` | “- 0.0 truthiness x is not None: fora do escopo declarado (brief volta 3); anexo ao opus.” — `triagem_preverif1.txt:13` |
+| 2 — RED na base | **(c)** não conta | “RED/GREEN exigidos […] HOJE 403 e 0 Batida” — `construtor1.q:33` | “POSTs reais […] não foram reexecutados aqui” — `preverif1.r:66`; não há comprovação do RED na base | Não há trecho correspondente — `triagem_preverif1.txt:1–13` |
+| 3 — marcações legais dos commits | **(e)** não perguntado | Não há trecho específico; “pouso antes do pre-requisito” — `preverif1.q:25` — não formula essa conferência | Não há trecho correspondente nas respostas fornecidas | Não há trecho correspondente — `triagem_preverif1.txt:1–13` | [nao verificado]
+| 4 — atualização de LEIS.md | **(e)** não perguntado | Não há pergunta de atualização; “PELA-METADE em app/docs/LEIS.md:78 e :165” é contexto — `censo1.q:2` | Não há trecho correspondente nas respostas fornecidas | Não há trecho correspondente — `triagem_preverif1.txt:1–13` |
+
+## 10/11 16:58 · sessao e54c7972b4a6 · - · - · origem=Ronald (tmux)
+
+Para HX :58, o dia vem do chamado órfão: o teste grava `contexto_json.data_turno`; o agrupador preserva seu ID em `DS.contexto.chamados_orfaos_ids` e no contexto do pai. O leitor exato do ramo sem origem é `data_evento_do_contexto`. ([teste](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_hx_disputa_muda_sem_ata.py:46), [IDs](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1126), [leitura](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1232)) [nao verificado]
+
+Os outros leitores já usados para decidir a abstenção são `data_do_chamado`, no ramo por ata, e `resolver_data_evento`, no ramo com batida de origem. Este último devolve o dia do turno pela autoridade `_T1`. ([por ata](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1169), [por origem](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1205), [resolver](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/escala/servico_jornada.py:474))
+
+Evite `dia_do_fato(..., fortes=False)` como substituto universal: seus últimos degraus aceitam o dia civil do instante observado. `fortes=True` encerra antes desses degraus. ([guarda](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/juizes.py:127), [significado civil](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/juizes.py:141))
+
+O reuso conserva `ex.disputa_id`, mas pode costurar destino/célula antes de retornar. Portanto, o rollback precisa abranger toda a geração, inclusive perguntas próprias emitidas anteriormente na mesma lista. ([costura e retorno](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2958))
+
+A agregação na dona exige seleção explícita: o ramo atual consulta apenas disputas abertas. Uma dona fechada deve receber o motivo sem reabertura paralela; a necessidade dessa seleção decorre do filtro atual. ([seleção](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:532))
+
+A dona fechada também deve entrar na trava antes de chamado/pergunta. A ordem declarada é Colaborador → Disputa → Chamado → Pergunta; após rollback do nascimento, reentrar na porta com a dona permite respeitá-la. ([contrato da trava](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2629))
+
+Nenhum arquivo escrito, banco ou rede acessado nesta exploração. [nao verificado]
 
 ## 10/11 16:57 · sessao e439e679001b · - · - · origem=Ronald (tmux)
 
@@ -1029,76 +1066,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
   chamados.tests.test_invariantes_disputa
 ```
 
-## 10/11 15:00 · sessao 6d9c0cab7930 · - · - · origem=Ronald (tmux)
-
-Foram encontrados **3 sítios de criação produtivos**, todos em `app/chamados/services/disputa_emissao.py`: **587, 1123 e 1358**. Varredura AST de 3.493 arquivos, seguindo importações com alias, aliases por atribuição, managers, cadeias ORM e `apps.get_model`: nenhum outro `create/get_or_create/update_or_create/bulk_create` ou construção de instância nova de `DisputaSupervisao` fora de testes. A contagem é resultado da análise em memória, sem arquivo persistido: [nao verificado].
-
-| Sítio | Motivos no nascimento | Transação/pergunta | Saídas com D nova sem P |
-|---|---|---|---|
-| `_abrir_ou_agregar_disputa`, **587** | `list(motivos_lista)`, sem validar catálogo (**589**). Pode gravar grave. | `atomic` próprio **521**, termina retornando **603**, sem criar P. `criar_ou_atualizar_disputa` chama núcleo **662** e gerador posteriormente **670**. | Núcleo sempre retorna D antes de P (**603**). Gerador pode suprimir todos motivos ou lançar antes de inserir. Atomic externo pode evitar persistência em exceção; não impede reuso de P pertencente a outra D (**models.py:2907,2921,3008**). |
-| `criar_disputa_a_partir_de_chamados_orfaos`, **1123** | Nova começa `['orfao_14h']` (**1100–1101**), depois agrega motivos de marco. Grave não nasce deste create. | Atomic comum **1052**, pergunta depois de D, até retorno **1291**. | Guardas podem deixar zero P; ausência de ata impede fechamento automático (**1279–1281**). Exceção não capturada desfaz D; `UniversoMudouSobATrava` capturada **1293** somente após rollback. |
-| `criar_disputa_ancora_de_chamado`, **1358** | Nova somente `['ancora_ausente']` (**1335**). Grave não nasce deste create. | Atomic comum **1322**, `abrir_conversa` **1371**, retorno **1382**. | Guardas **1316,1318,1323** precedem create. Nenhuma saída entre create e pergunta. Exceções propagam e desfazem D. Conversa não usa dedup de fato (**models.py:2893**). |
-
-**Entrada de grave:** `app/api/views_core.py:730` e `app/api/views.py:733` acrescentam literalmente `batida_fora_escala_grave`; contexto `ultima_batida` em ambos **788** e chamada do helper **794**. Catálogo `app/chamados/catalogo/perguntas.py:82` define pergunta grave como `escolha` (**84**), sem `{data}` (**83**). Portanto as guardas de texto sem data e de pergunta `hora` não explicam, por si, uma disputa cujo único motivo é grave: `disputa_emissao.py:346,360,425`.
-
-**Ramo compatível com grave sem P:** `PerguntaDisputa._nascer` busca o fato global por colaborador/motivo/dia/episódio em `app/chamados/models.py:2907`, escolhe canônica em **2921**, atualiza apenas célula/destino em **2963–3006**, retorna a P existente em **3008**. Não transfere `disputa_id`. O gerador aceita a P devolvida e a acrescenta ao resultado em `disputa_emissao.py:470`; o chamador ignora o resultado em **670** e retorna D em **672**. Assim, P canônica de outra disputa permite sucesso normal deixando a recém-criada sem P. Atribuição das sete ocorrências a esse ramo: [nao verificado].
-
-**Todas guardas relevantes do gerador genérico:** motivo sem catálogo **315–316**; dedup local **325–329**; texto datado sem dia da grade **346–366**; motivo datado sem data ou já existente **398–401**; dedup por destino/data **417–420**; hora sem dia **425–430**; dedup de conversa **436–438**. Dedups locais implicam alguma P já existente na própria D; não explicam zero P numa D realmente nova. Exceção engolida de reatar em **462–469** ocorre depois do nascimento da P. Todas essas referências: `app/chamados/services/disputa_emissao.py`.
-
-**Guardas do agrupador de órfãos:** intervalo malformado/data inválida **1144,1149**; ata ausente **1172,1210,1241**; classificador sem motivo **1201,1238**; sem dia resolvido **1206**; sem origem e sem dia/base **1233,1235**. `_criar_pergunta_se_couber` acrescenta motivo antes das guardas (**828**), suprime por ausência coberta (**830–831**) ou dedup (**832–833**); ignora a informação de criação retornada por `abrir` (**837–847**). Complemento sem célula retorna falso (**862–867**), e erro de leitura é engolido (**868–871**). Fechamento final: **1270–1291**. Todas em `disputa_emissao.py`.
-
-O classificador delegado em `disputa_emissao.py:799–806` somente emite `saida_sem_entrada`, `orfao_14h` ou nenhum motivo: `app/escala/servico_jornada.py:445–471`. Irmãs vêm de `_MOTIVO_POR_MARCO`, somente `saida_sem_entrada`, `orfao_14h`, `intervalo_saida`, `intervalo_volta`: `app/chamados/services/declaracao_texto.py:42–47`.
-
-**Todos chamadores do núcleo:** helper genérico `disputa_emissao.py:662`; declaração `disputa_emissao.py:627`, chamada por `declaracao_texto.py:360,659`, dentro dos atomics **348,654**; `reconciliar_grade.py:424` passa motivos `[]` e retorna sem perguntar **428** — seu helper `_disputa` não tem chamador encontrado na cópia [nao verificado]; `smoke_chamados.py:99` percorre todos `MOTIVOS_CHOICES` (**91**), incluindo grave (`models.py:1725`), mas recusa banco cujo nome não contenha `test` (**32–35**) e força rollback (**39–43**).
-
-**Todos chamadores do helper genérico:** APIs **794** citadas; `app/ponto/services/triagem_batida.py:734`, somente `saida_sem_entrada` (**736**); `app/ponto/management/commands/marcar_foto_ausente_retro.py:96`, somente `foto_ausente` (**97**); `app/chamados/services/fabrica_da_celula.py:172`, recebe motivos do argumento de `perguntar` (**160**).
-
-Fixtures detectadas: **388 sítios em 296 arquivos**, sendo 387 `create` e um `get_or_create` (`app/chamados/tests/test_selo_i4b_um_chamado_por_turno.py:81`). Nenhum argumento `motivos` desses nós contém literalmente grave; alguns recebem variáveis. Contagem e ausência global: [nao verificado]. Exemplo que demonstra criação direta sem pergunta: `app/core/tests/test_placar_situacional_um_so_numero.py:75`.
-
-## 10/11 14:59 · sessao 5d1065688923 · - · - · origem=Ronald (tmux)
-
-**4 — Leitores e comportamento com zero perguntas**
-
-Não é correto dizer que S127 supõe existência: ele trata explicitamente a lista vazia como disputa bloqueante. A consulta pega a primeira disputa aberta do chamado, lê todas as perguntas e retorna a disputa quando `not perguntas` **ou** `fio_vivo(perguntas)`. [app/chamados/juizes.py:2308](app/chamados/juizes.py:2308), [app/chamados/juizes.py:2316](app/chamados/juizes.py:2316), [app/chamados/juizes.py:2319](app/chamados/juizes.py:2319)
-
-| Leitor | Resultado relevante |
-|---|---|
-| Guarda do encerramento do chamado | Usa S127 e levanta `ValueError` inclusive para disputa vazia; a mensagem manda cobrar resposta/validação e diz que a disputa fecha quando colaborador responde e supervisão valida. [app/chamados/models.py:148](app/chamados/models.py:148), [app/chamados/models.py:153](app/chamados/models.py:153), [app/chamados/models.py:155](app/chamados/models.py:155) |
-| `respostas_sem_veredito` / `pode_fechar` | Sobre zero P, a lista de respostas fica vazia e `fio_vivo([])` é `False`, portanto `pode_fechar()` devolve `True`. [app/chamados/models.py:1842](app/chamados/models.py:1842), [app/chamados/models.py:1853](app/chamados/models.py:1853), [app/chamados/juizes.py:1425](app/chamados/juizes.py:1425), [app/chamados/juizes.py:1434](app/chamados/juizes.py:1434) |
-| `DisputaSupervisao.fechar` | Distingue explicitamente zero P de P existentes sem viva: zero recebe `FECHOU_VAZIA`; demais recebem `FECHOU_VEREDITO`. [app/chamados/models.py:1895](app/chamados/models.py:1895), [app/chamados/models.py:1903](app/chamados/models.py:1903) |
-| Relatório de pendências | Zero P vira categoria técnica `SEM_PERGUNTA`; P existentes todas mortas viram `PRONTA_FECHAR`. [app/chamados/relatorios_disputa.py:6](app/chamados/relatorios_disputa.py:6), [app/chamados/relatorios_disputa.py:11](app/chamados/relatorios_disputa.py:11), [app/chamados/relatorios_disputa.py:18](app/chamados/relatorios_disputa.py:18) |
-| Consulta do app | Parte de `PerguntaDisputa`, filtra perguntas vivas e separa pendentes/histórico; uma D sem P não produz item nessa consulta. [app/chamados/services/pergunta_no_app.py:45](app/chamados/services/pergunta_no_app.py:45), [app/chamados/services/pergunta_no_app.py:49](app/chamados/services/pergunta_no_app.py:49), [app/chamados/services/pergunta_no_app.py:69](app/chamados/services/pergunta_no_app.py:69) |
-| API `/disputa/perguntas/` | Deriva `em_disputa` de `bool(perguntas)` e `disputa_id` da primeira P apenas se houver P; não deriva esses campos da existência de D aberta. [app/api/views.py:2560](app/api/views.py:2560), [app/api/views.py:2590](app/api/views.py:2590), [app/api/views.py:2592](app/api/views.py:2592) |
-| Montagem do fio | Carrega D separadamente, carrega P por outra query e usa `[]` se nenhuma; nesse caso marca `todas_respondidas=True` e `pode_solicitar_correcao=False`. [app/chamados/services/fio.py:184](app/chamados/services/fio.py:184), [app/chamados/services/fio.py:225](app/chamados/services/fio.py:225), [app/chamados/services/fio.py:253](app/chamados/services/fio.py:253), [app/chamados/services/fio.py:339](app/chamados/services/fio.py:339), [app/chamados/services/fio.py:344](app/chamados/services/fio.py:344) |
-| Juiz do dia do chamado | Usa datas das P das D; se nenhuma fornece data, retorna `None`. [app/chamados/juizes.py:56](app/chamados/juizes.py:56), [app/chamados/juizes.py:74](app/chamados/juizes.py:74), [app/chamados/juizes.py:84](app/chamados/juizes.py:84) |
-| `perguntas_vivas_de` | Retorna lista vazia normalmente. [app/chamados/juizes.py:1420](app/chamados/juizes.py:1420) |
-| Classificação de beco | D aberta sem P e com pai terminal é `FECHAVEL`, pois a lista `vis` fica vazia e chama `pode_fechar()`. [app/chamados/services/becos.py:25](app/chamados/services/becos.py:25), [app/chamados/services/becos.py:29](app/chamados/services/becos.py:29), [app/chamados/services/becos.py:33](app/chamados/services/becos.py:33) |
-| Gatilho do beco | É `post_save` de **PerguntaDisputa**; chama fechamento do beco em `on_commit`. D que nasce sem nenhuma P não produz por esse nascimento o evento desse receiver. [app/chamados/signals.py:227](app/chamados/signals.py:227), [app/chamados/signals.py:233](app/chamados/signals.py:233), [app/chamados/signals.py:238](app/chamados/signals.py:238) |
-| Resolver perguntas por chamado resolvido | No ramo sem credor, zero P provoca `continue` em `_abertas`; posteriormente há um laço separado que fecha D aberta se `pode_fechar()`. [app/chamados/services/disputa_emissao.py:1912](app/chamados/services/disputa_emissao.py:1912), [app/chamados/services/disputa_emissao.py:1916](app/chamados/services/disputa_emissao.py:1916), [app/chamados/services/disputa_emissao.py:1951](app/chamados/services/disputa_emissao.py:1951), [app/chamados/services/disputa_emissao.py:1963](app/chamados/services/disputa_emissao.py:1963) |
-| `_disputa_viva` do arquivamento | Retorna D somente quando `any(p.viva...)`; vazio retorna `None`. [app/chamados/management/commands/arquivar_competencia_encerrada.py:148](app/chamados/management/commands/arquivar_competencia_encerrada.py:148), [app/chamados/management/commands/arquivar_competencia_encerrada.py:158](app/chamados/management/commands/arquivar_competencia_encerrada.py:158) |
-
-**5 — Proteções existentes e limites**
-
-- A classe D declara `Meta` com índice `(colaborador, fechada_em)`, sem constraint de existência de P; sua migração de criação também só declara esse índice. A FK é no sentido **P → D**, obrigatória para P, com `CASCADE`: isso não exige que D tenha P. [app/chamados/models.py:1801](app/chamados/models.py:1801), [app/chamados/migrations/0013_disputasupervisao.py:18](app/chamados/migrations/0013_disputasupervisao.py:18), [app/chamados/migrations/0013_disputasupervisao.py:30](app/chamados/migrations/0013_disputasupervisao.py:30), [app/chamados/models.py:2416](app/chamados/models.py:2416)
-- Os índices únicos atuais exigem unicidade das **P existentes** por marco/episódio; não exigem quantidade mínima de P por D. [app/chamados/models.py:3481](app/chamados/models.py:3481), [app/chamados/migrations/0053_pergunta_unica_por_familia.py:57](app/chamados/migrations/0053_pergunta_unica_por_familia.py:57)
-- O `save` da P torna **P + EventoCelula** atômicos e deriva a identidade da P; esse código só roda quando se salva uma P, sem impor nascimento conjunto de D e P. [app/chamados/models.py:3413](app/chamados/models.py:3413), [app/chamados/models.py:3420](app/chamados/models.py:3420)
-- Os três receivers de `post_save` de D tratam fechamento; não geram P no nascimento: o primeiro retorna se `created`, e os outros dois retornam com `raw or created or not instance.fechada_em`. [app/chamados/signals.py:18](app/chamados/signals.py:18), [app/chamados/signals.py:28](app/chamados/signals.py:28), [app/chamados/signals.py:120](app/chamados/signals.py:120), [app/chamados/signals.py:129](app/chamados/signals.py:129), [app/chamados/signals.py:147](app/chamados/signals.py:147), [app/chamados/signals.py:153](app/chamados/signals.py:153)
-
-Existe **detector**, não bloqueio de nascimento:
-
-- `auditar_disputas` percorre D abertas, compara motivos das P e motivos da D, e acusa `motivo_sem_pergunta` quando o motivo existe no catálogo e `texto_pergunta_com_data(...) is not None`. [app/chamados/management/commands/auditar_disputas.py:161](app/chamados/management/commands/auditar_disputas.py:161), [app/chamados/management/commands/auditar_disputas.py:182](app/chamados/management/commands/auditar_disputas.py:182), [app/chamados/management/commands/auditar_disputas.py:188](app/chamados/management/commands/auditar_disputas.py:188)
-- Para `batida_fora_escala_grave`, a pergunta do catálogo é estática, sem `{data}`; o helper devolve o texto literal sem depender do contexto. Portanto, uma D aberta que contenha esse motivo e não tenha P correspondente satisfaz o detector. [app/chamados/catalogo/perguntas.py:81](app/chamados/catalogo/perguntas.py:81), [app/chamados/catalogo/query.py:52](app/chamados/catalogo/query.py:52), [app/chamados/catalogo/query.py:56](app/chamados/catalogo/query.py:56), [app/chamados/management/commands/auditar_disputas.py:188](app/chamados/management/commands/auditar_disputas.py:188)
-- O comando relata os resultados; se executou e se alguém leu o alerta referente às sete D: **[nao verificado]**. [app/chamados/management/commands/auditar_disputas.py:221](app/chamados/management/commands/auditar_disputas.py:221), [app/chamados/management/commands/auditar_disputas.py:233](app/chamados/management/commands/auditar_disputas.py:233)
-- Seu contador `disputa_aberta_vazia` significa **motivos=[]**, não zero P. Com motivo grave preservado, esse contador específico não acusa. [app/chamados/management/commands/auditar_disputas.py:169](app/chamados/management/commands/auditar_disputas.py:169), [app/chamados/management/commands/auditar_disputas.py:171](app/chamados/management/commands/auditar_disputas.py:171)
-- Outro contador, `vigia_fio.disputa_vazia`, só conta D com `motivo_fechamento=FECHOU_VAZIA`; não conta as abertas sem P. [app/chamados/services/vigia_fio.py:727](app/chamados/services/vigia_fio.py:727), [app/chamados/services/vigia_fio.py:734](app/chamados/services/vigia_fio.py:734)
-
-Os testes localizados não impõem a regra global pedida; alguns aceitam explicitamente zero P: [nao verificado]
-
-- S127 testa que D sem P bloqueia o encerramento, sem impedir seu nascimento. [app/chamados/tests/test_disputa_s127.py:46](app/chamados/tests/test_disputa_s127.py:46)
-- C7 cria D vazia, fecha pela porta, exige motivo `vazia` e incremento do contador. [app/chamados/tests/test_c7_red_minimos.py:169](app/chamados/tests/test_c7_red_minimos.py:169), [app/chamados/tests/test_c7_red_minimos.py:174](app/chamados/tests/test_c7_red_minimos.py:174)
-- `DisputaMudaSemAtaTest` exige que criação a partir de chamado órfão resulte em D **aberta com zero perguntas** quando não há ata. [app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51](app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51), [app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58](app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58)
-- INV2 exige que pergunta com `{data}` não nasça quando faltar a data no contexto; INV4/5 verificam recalibração de posto/âncora e preparam a fixture criando D e chamando o gerador separadamente. [app/chamados/tests/test_invariantes_disputa.py:81](app/chamados/tests/test_invariantes_disputa.py:81), [app/chamados/tests/test_invariantes_disputa.py:90](app/chamados/tests/test_invariantes_disputa.py:90), [app/chamados/tests/test_invariantes_disputa.py:127](app/chamados/tests/test_invariantes_disputa.py:127), [app/chamados/tests/test_invariantes_disputa.py:134](app/chamados/tests/test_invariantes_disputa.py:134)
-
-A existência de constraint ou trigger **instalado em prod** além do que consta nesta cópia é **[nao verificado]**.
-
-_3417 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3419 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
