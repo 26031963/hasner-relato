@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 08:51** · publicado em **10/11/2026 08:51** (UTC-3)
+> Ultima resposta processada: **10/11/2026 09:18** · publicado em **10/11/2026 09:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 09:18 · sessao a5cd4764c1cf · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Corrigi a caracterização para **FIO MUDO ⇒ rc 0**, mantendo contagem, impressão e nenhuma pergunta criada. O teste foi renomeado; a retratada agora exige explicitamente `deixou=1` antes de aceitar rc 2. [teste:132](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:132), [retratada:157](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:157). [nao verificado]
+
+Arquivos tocados, todos testes: [nao verificado]
+
+- [test_jv4a_disparar_vigia_da_celula.py:132](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:132): inversão e motivo da retratada.
+- [test_selo_emissor_fio_mudo.py:291](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_selo_emissor_fio_mudo.py:291): rc 2 condicionado à célula deixar 1.
+- [test_pergunta_do_dia_em_curso.py:194](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_pergunta_do_dia_em_curso.py:194): leitura explícita de pendência da célula.
+- [test_e4a2_matriz_memoria.py:41](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_e4a2_matriz_memoria.py:41): mutantes adicionais e conferência da impressão.
+
+A tabela usa caminhos relativos a `chamados/tests/`; linhas atuais:
+
+| Asserção | Origem do 2 | Ação |
+|---|---|---|
+| `test_jv4a_disparar_vigia_da_celula.py:83` | Célula deixou 1 | Mantida |
+| Mesmo arquivo`:90` | Limbo deixou 1 | Mantida |
+| Mesmo arquivo`:129` | Falta de pauta deixou 1 | Mantida |
+| Mesmo arquivo`:139` | FIO MUDO; célula deixou 0 | **Invertida para 0** |
+| Mesmo arquivo`:158` — antiga :157 | Retratada; célula `furo` deixou 1 | Mantida; motivo explicitado |
+| Mesmo arquivo`:167` | Limbo deixou 1, também FIO MUDO | Mantida |
+| `test_pergunta_do_dia_em_curso.py:135` | Célula deixou 2 | Mantida |
+| Mesmo arquivo`:163` | Células deixaram 2 ou 4 | Mantida |
+| Mesmo arquivo`:195` | Célula deixou 2 | Mantida; motivo explicitado |
+| Mesmo arquivo`:400` | Célula deixou quantidade positiva | Mantida; leitura fortalecida |
+| Mesmo arquivo`:404` | Célula deixou quantidade positiva | Mantida; motivo explicitado |
+| `test_selo_emissor_fio_mudo.py:292` | Célula deixou 1, também FIO MUDO | Mantida; motivo explicitado |
+| `test_selo_disparo_nao_cobra_desligado.py:118` | Célula deixou quantidade positiva | Mantida |
+| `test_e4a2_disparar_e_vigia.py:202` | Somente `alarme and celulas` | Mantida |
+| Mesmo arquivo`:330` | Célula deixou 1; também existe FIO MUDO | Mantida |
+| Mesmo arquivo`:117` | Erro de argumentos do parser | Mantida; não é retorno do vigia |
+| `test_e4a2_matriz_memoria.py:195` | Somente `alarme and celulas` | Mantida |
+| Mesmo arquivo`:64` | Erro de argumentos do parser | Mantida |
+
+A antiga :157 prepara `_celula(True)`, cujo padrão é `veredito='furo'`; portanto, não isola FIO MUDO. Agora o teste exige `deixou=1`, além de FIO MUDO 1 e nenhuma pergunta adicional. A execução ORM dessa explicação permanece **[nao verificado]**. `test_jv4a_disparar_vigia_da_celula.py:38,147,154-158`. [nao verificado]
+
+Os demais arquivos pedidos não exigem inversão: COLAB roda sem `--alarme`; F1 chama outro comando; nunca_bateu já exige retorno normal com e sem alarme. `test_colab_nao_vaza_fio_mudo.py:34,45,53`; `test_selo_f1_cego.py:75`; `test_e4a2_nunca_bateu.py:132-143`.
+
+Quem escreve o rc é `disparar_perguntas_competencia.py:238-242`: único `SystemExit(2)`, condicionado a `alarme and deixou`. Quem lê inclui os testes acima e `pipeline_placar.py:76-80`, que interpreta exit 2 como alarme de negócio. O placar lê FIO MUDO separadamente pelo ESTADO em `pipeline_placar.py:85-107,135`. O contrato informado de `bin/cron_run.sh:11`, aceitando 0 e 2 como elo feito, está **[nao verificado na copia]**.
+
+Execução local: **16 testes em memória passaram**, incluindo rejeição dos mutantes; isso não certifica a integração. Verificadores em `test_e4a2_matriz_memoria.py:171-208` e `test_e4a2_c5_memoria.py`. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4a2_matriz_memoria chamados.tests.test_e4a2_c5_memoria -v
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria fio_mudo_volta_a_rc_dois
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria celula_perde_rc_dois
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria fio_mudo_impresso_como_zero
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria vigia_escreve_pergunta
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria vigia_escreve_questionario
+```
+
+Não rodaram os módulos Django, o alvo 165 nem a suíte inteira: integração **[nao verificado]**. Ruff foi tentado com `PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache --config ruff.toml` nos quatro arquivos, mas o módulo está ausente; Ruff limpo **[nao verificado]**. [nao verificado]
 
 ## 10/11 08:51 · sessao 46e2e0dfb3e1 · FIO-E0-V4-E4A-2 · construtor · origem=Code
 
@@ -668,30 +722,4 @@ A identidade Git do HEAD/base não pôde ser autenticada nesta cópia: **[nao ve
 
    Os índices declarados de chamado cobrem status, urgência e criação; não há composto declarado para módulo/via/status. A célula tem unicidade e índice pessoa/data. O scheduler atribui 30 segundos ao detector. Cardinalidade atual, tamanho plausível da frota afetada, plano SQL, memória e duração após o diff: **[nao verificado]**. (`app/chamados/models.py:108`, `app/escala/models.py:1833`, `app/escala/models.py:1836`, `app/config/crons.py:136`.)
 
-## 10/11 02:34 · sessao 01935d990d69 · - · - · origem=Ronald (tmux)
-
-1. Universo efetivo: chamados `cluster_batida_espuria`, estado `resolvido/fechado`, via `sistema`, todas as idades e situações; `--colab` é único recorte opcional. Conta chamados, inclusive duplicados do mesmo dia; a assinatura vem da célula atual por `(colaborador_id,dia)`. Sem dia/célula/ata medida não soma. (`app/ponto/services/cluster_espurio.py:103-114`; `app/chamados/catalogo/motor.py:30`; `app/ponto/services/cluster_espurio.py:15-37`.)
-
-   Não equivale a “encerramentos automáticos”: decisão administrativa chama `reconciliar()` e grava a mesma via `sistema`; o teste exige contá-la mesmo com ausência parcial e assinatura remanescente. (`app/ponto/services/veredito_celula.py:201-205`; `app/chamados/models.py:654`; `app/chamados/catalogo/motor.py:95`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:162-167`.)
-
-   Há exclusão silenciosa alcançável: `via='legado'`. O backfill grava essa via em terminais de qualquer módulo sem via anterior; portanto alcança clusters, mas ela não aparece nas três exclusões declaradas. Há também via vazia no esquema/default e no reverso da migration; a existência de exemplos atuais em produção é [nao verificado]. (`app/chamados/migrations/0039_a3_via_backfill.py:26-28`; `app/ponto/services/cluster_espurio.py:103-118`; `app/chamados/models.py:54`; `app/chamados/migrations/0039_a3_via_backfill.py:34`.)
-
-2. O filtro presume identidade entre a via do evento e a origem automática; a porta administrativa acima desfaz essa identidade. A via representa “quem/como deixou de ser vivo”, sem motivo causal de idade/lastro. (`app/chamados/catalogo/motor.py:86-96`; `app/ponto/services/veredito_celula.py:201-205`.)
-
-3. Cron muda para rc 2 quando o novo número diverge do esperado, mesmo sem pendência antiga; roda diariamente às 06:24. (`app/ponto/management/commands/detectar_cluster_espurio.py:62-74`; `app/config/crons.py:598`.)
-
-   Um chamado já reaberto não pertence ao universo atual, e reabertura limpa a via; porém o contador não usa transação/lock e mantém objetos encerrados da primeira consulta enquanto lê células numa segunda consulta: corrida com reabertura é possível por construção, ocorrência real [nao verificado]. (`app/ponto/services/cluster_espurio.py:103-112`; `app/chamados/models.py:247-249`.)
-
-   Regeneração legítima pode mudar o passado e relavrar assinatura. A regeneração admite reescrever cadastro passado, salva DNA/trabalha e manda rejulgar; o cartório então chama o reconciliador. Se o dia estiver fora da janela de abertura, o contador lê a assinatura nova mas o reconciliador não tenta renascer o chamado daquele dia. Isso não prova fechamento original sem lastro. (`app/ponto/portas/celula.py:110-117`; `app/ponto/portas/celula.py:263-277`; `app/ponto/portas/celula.py:422-434`; `app/ponto/services/cartorio.py:998-1005`; `app/ponto/services/cluster_espurio.py:40-49`; `app/ponto/services/cluster_espurio.py:161-179`.)
-
-   Dentro da janela, não é correto dizer que dedup sempre impede renascimento: `abrir()` chama a porta de renascimento quando encontra encerrado. (`app/chamados/models.py:906-924`.)
-
-4. `rg -n --hidden --glob '!.git/**' 'fechados_por_idade' .` encontrou três linhas: `app/docs/CORTES.md:430`, `app/docs/RELATO.md:10`, `app/docs/BACKLOG.md:1877`. O corte nesta cópia está na linha 430, não 434. (`app/docs/CORTES.md:430`.)
-
-5. O contador novo usa a função comum de assinatura, mas existe duplicação anterior do limiar de 15 minutos no classificador de órfãs; o próprio backlog a registra como pendência. (`app/ponto/services/cluster_espurio.py:112`; `app/escala/orfa_classe.py:26-28`; `app/escala/orfa_classe.py:40-45`; `app/ponto/services/cluster_espurio.py:33-35`; `app/docs/BACKLOG.md:1793`.)
-
-6. Custo: uma consulta materializa todos os chamados selecionados com `select_related('celula')`; outra materializa células para `colaborador_id IN C` e `data IN D`, abrangendo combinações cruzadas, não só os pares presentes nos chamados. O teto lógico dessa segunda carga é `|C|×|D|` células existentes, mesmo que haja poucos pares de interesse. JSONs de célula podem ser carregados pelo join e novamente pela segunda consulta; a leitura da assinatura repete-se por chamado. (`app/ponto/services/cluster_espurio.py:107-112`; `app/escala/models.py:1697`; `app/escala/models.py:1833`.)
-
-   Índices declarados de chamado cobrem status/urgência/criação; não há índice composto declarado para módulo/via/status. A célula tem par único e índice colaborador/data. O scheduler reserva 30 segundos ao detector; cardinalidade, plano SQL, memória e duração atuais são [nao verificado]. (`app/chamados/models.py:103-113`; `app/escala/models.py:1833-1837`; `app/config/crons.py:136`.)
-
-_3351 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3352 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
