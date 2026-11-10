@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:13** · publicado em **09/11/2026 21:14** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:15** · publicado em **09/11/2026 21:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:15 · sessao d4c533f18057 · MODO-COMUM-PASSADO-SEM-TURNO · verificador · origem=Code
+
+**Há PROCEDENTES: emissão sem previsão, entrada alternativa de pauta, proteção insuficiente da ordem, teste incompleto do registro e explicação incorreta do fechamento.** As evidências e curas mínimas estão abaixo. Correspondência independente da cópia com `49015265a`, ocorrências reais e resultado da suíte no container: **[nao verificado]**.
+
+1. **QUEM ESCREVE / QUEM LÊ — CONFORME nos campos; PROCEDENTE na explicação de “entregue”.**
+
+| Campo/valor | Quem escreve | Quem lê e significado |
+|---|---|---|
+| Nova chave/valor de `JUIZES['chamado']` | Declaração em `app/core/juizes.py:293`. | Gerador do MAPA: `bin/gerar_mapa_juizes.py:40`; teste novo: `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:197`. |
+| `PAUTA_SEM_TURNO` / prefixo do texto | Constante em `app/chamados/services/fabrica_da_celula.py:276`; escritor específico incorpora ao texto em `app/chamados/services/fabrica_da_celula.py:342`. | `_pautas_cadastro` interpreta o prefixo; juiz e contador usam esse seletor. `app/chamados/services/fabrica_da_celula.py:285`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:315`. |
+| `Pauta.texto`, âncora e destinatário | A fábrica fornece DP, `ANCORA_COLAB` e `str(cel.colaborador_id)`; a porta comum persiste. É **pessoa**, sem vínculo nem dia na chave. `app/chamados/services/fabrica_da_celula.py:339`, `app/chamados/services/fabrica_da_celula.py:340`; `app/pautas/models.py:30`; `app/pautas/services.py:180`. | O seletor exige cabeça, DP, âncora colab e prefixo; o juiz restringe pela pessoa. `app/chamados/services/fabrica_da_celula.py:284`, `app/chamados/services/fabrica_da_celula.py:297`. |
+| `feito_em` | `marcar_feita` e `marcar_feita_pelo_sistema`, com instante `timezone.now()`. `app/pautas/services.py:246`, `app/pautas/services.py:247`, `app/pautas/services.py:271`, `app/pautas/services.py:273`. | `vivas()` exclui feitas; o juiz histórico converte o instante para data local. `app/pautas/models.py:57`; `app/chamados/services/fabrica_da_celula.py:301`, `app/chamados/services/fabrica_da_celula.py:304`. |
+| `cancelado_em` | `cancelar`, ato do autor, grava instante. `app/pautas/services.py:288`, `app/pautas/services.py:294`. | `vivas()` exclui canceladas; o juiz aceita cancelamento como fechamento e o prioriza sobre `feito_em`. `app/pautas/models.py:64`; `app/chamados/services/fabrica_da_celula.py:303`. |
+| `VFM\|CADASTRO_SEM_TURNO` e carimbo JSON | Vigia lê o contador, imprime número/esperado/dono e grava número e esperado no JSON. `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:223`, `app/chamados/management/commands/vigiar_fio_morto.py:229`. | `bin/fio_estado.py:104` lê o JSON e `bin/fio_estado.py:125` compara censo com esperado; `bin/gerar_estado.py:260` incorpora a apresentação. |
+
+Os leitores genéricos transportam esses campos sem decidir “entregue CADASTRO”: aba de pautas, API de mensageria e listagem da pessoa. A listagem da pessoa inclui histórico; a aba padrão usa vivas. São universos declaradamente diferentes, sem segundo significado para a âncora. `app/pautas/services.py:323`, `app/pautas/services.py:433`; `app/pautas/views.py:40`; `app/api/views_mensageria.py:1329`, `app/api/views_mensageria.py:1334`.
+
+**PROCEDENTE — “o DP já olhou” não decorre do predicado.** O juiz aceita cancelamento pelo autor e não consulta `lido_em`; a docstring afirma que o DP olhou. Cura mínima: descrever “já encaminhada e posteriormente fechada/cancelada”, sem prometer leitura ou resolução pelo DP. Alterar a cobertura do cancelamento exigiria decisão normativa específica. `app/chamados/services/fabrica_da_celula.py:292`, `app/chamados/services/fabrica_da_celula.py:301`; `app/pautas/services.py:288`, `app/pautas/services.py:294`.
+
+**CONFORME — instante versus data:** o armazenamento é de instantes; a cobertura usa `localdate(fechou) >= dia`, sendo `dia=cel.data`. A configuração base é São Paulo; fuso ativo efetivo em produção: **[nao verificado]**. `app/chamados/services/fabrica_da_celula.py:304`, `app/chamados/services/fabrica_da_celula.py:337`; `app/config/settings/base.py:93`, `app/config/settings/base.py:95`.
+
+2. **O selo morde — CONFORME para usos diretos; PROCEDENTE na ordem e no registro.**
+
+| Regra | O que pega | O que escapa |
+|---|---|---|
+| **a. Marcador/literal fora dos dois sítios** | Nome, import com alias, atributo direto e literal completo. Importar o módulo inteiro e acessar diretamente o atributo **é pego**; outra constante com o mesmo literal completo também. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:111`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:115`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:120`. | `getattr`, texto composto por soma, regex sem o literal completo e SQL parametrizado com texto composto não são resolvidos pelo varredor. Uso atual dessas técnicas para esse marcador: **[nao verificado]**. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:120`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:124`. |
+| **b. Seletor fora do juiz/contador** | Chamadas diretas e aliases de `from … import`. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:61`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:146`. | Referência intermediária, como `f = modulo._pautas_cadastro; f()`, e reflexão. Uso atual com essa finalidade: **[nao verificado]**. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:47`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:124`. |
+| **c. Escritor fora de `perguntar_pela_celula`** | Chamadas diretas ao escritor específico. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:148`. | Mesmas indireções de função; além disso, o **POST humano já existente** pode produzir o mesmo universo sem chamar o escritor específico. `app/pautas/views.py:76`, `app/pautas/views.py:80`, `app/pautas/views.py:81`; `app/pautas/services.py:180`. |
+| **d. Trava → juiz → escrever em `atomic`** | Inversões diretas, ausência ou repetição das chamadas e os casos negativos incluídos. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:174`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:257`. | Não valida argumentos, identidade do `atomic` nem interrupções do fluxo entre os passos. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:179`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:182`. |
+| **e. Registro** | Presença do endereço entre os valores da família. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:197`. | Chave errada e segundo registro do mesmo endereço passam. Cura mínima: exigir chave exata e unicidade. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:195`; `app/core/juizes.py:293`. |
+
+**PROCEDENTE — ordem com falsa garantia.** Na execução em memória, os **11 testes novos passaram**, individualmente, com: juiz sem `cel.data`; trava de outro colaborador; `falso.atomic()`; retorno antes do bloco; retorno após a trava; comparação de fechamento invertida; contador fixado em zero. Os pontos permissivos são `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:170`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:179`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:182`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:216`.
+
+Cura mínima: conferir argumentos da trava/juiz, identidade de `transaction.atomic` e sequência executável. Fechamento e contador precisam da proteção comportamental já existente; esses mutantes **não demonstram** que a suíte inteira passaria. `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:55`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`.
+
+**PROCEDENTE — brecha alcançável hoje pela entrada humana.** Staff autorizado pode enviar duas vezes marcador + DP + mesma âncora colab: a porta comum cria duas cabeças sem a trava/deduplicação específica, enquanto o contador `distinct` continua mostrando uma pessoa. Isso é segunda origem da pauta específica, usando a porta comum; ocorrência real: **[nao verificado]**. Cura mínima: reservar o prefixo ao fluxo específico na entrada comum, declarar essa validação no contrato do selo e testar a recusa pela entrada humana. `app/pautas/views.py:16`, `app/pautas/views.py:76`; `app/pautas/services.py:153`, `app/pautas/services.py:180`; `app/chamados/services/fabrica_da_celula.py:320`.
+
+3. **MESMA PERGUNTA / SEGUNDO JUIZ — CONFORME no chamador atual.**
+
+A chave registrada corresponde ao predicado efetivamente usado: cabeça DP de cadastro da pessoa, viva ou fechada em data local igual/posterior ao dia consultado. O chamador passa exatamente `(cel.colaborador_id, cel.data)`. A assinatura permite `dia=None`, caso em que responde apenas sobre vivas; essa forma não é a chamada da fábrica. `app/core/juizes.py:293`; `app/chamados/services/fabrica_da_celula.py:288`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:299`, `app/chamados/services/fabrica_da_celula.py:304`, `app/chamados/services/fabrica_da_celula.py:337`.
+
+O juiz não verifica sozinho “passado sem turno”; essa pré-condição vem do chamador. Logo, o contrato depende desse caminho, atualmente presente. `app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/fabrica_da_celula.py:174`.
+
+**Nenhum segundo juiz registrado da mesma entrega foi identificado.** `pergunta_viva`, `dia_sem_trabalho`, `tarefa_do_dia` e `dia_da_pergunta_trancado` têm outras perguntas; o contador mede somente pessoas com pendência viva. `app/core/juizes.py:278`, `app/core/juizes.py:290`, `app/core/juizes.py:291`, `app/core/juizes.py:292`; `app/chamados/services/fabrica_da_celula.py:320`.
+
+4. **OBRIGAÇÕES POSITIVAS — cumprimento e proteção.**
+
+| Obrigação | Código da cópia | Selo novo / cura mínima |
+|---|---|---|
+| **i. Passado sem turno não pergunta ao colab** | **CONFORME na fábrica**: encaminha cadastro e retorna. **CONFORME no fio mudo quanto ao silêncio**: helper devolve vazio e o ramo pula. **PROCEDENTE em `disputa_emissao`**, explicado abaixo. `app/chamados/services/fabrica_da_celula.py:175`, `app/chamados/services/fabrica_da_celula.py:38`; `app/chamados/management/commands/disparar_perguntas_competencia.py:158`, `app/chamados/management/commands/disparar_perguntas_competencia.py:160`. | O novo selo não testa essa obrigação nos emissores. Falta caso negativo completo para `disputa_emissao` e caso específico do fio mudo; falta também detectar cadastro não entregue quando esses caminhos apenas calam. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199`; `app/chamados/services/fabrica_da_celula.py:213`. |
+| **ii. Uma pendência por colab** | **CONFORME para escritores cooperantes**: `atomic`, trava da pessoa, seleção e escrita; a trava usa `SELECT FOR UPDATE`. Duas conexões reais: **[nao verificado]**. A entrada humana rompe a garantia global descrita no item 2. `app/chamados/services/fabrica_da_celula.py:334`, `app/chamados/services/fabrica_da_celula.py:337`; `app/chamados/models.py:2666`. | Testes anteriores cobrem dois dias e repetição sequencial; não equivalem a dois processos concorrentes. Falta ensaio com conexões distintas e proteção dos argumentos no AST. `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:51`; `app/chamados/tests/test_e4_c20.py:95`, `app/chamados/tests/test_e4_c20.py:105`. |
+| **iii. Nome/número/esperado/dono** | **CONFORME**: nome `cadastro_sem_turno`, número de pessoas distintas com pauta viva, esperado `0`, dono `CADASTRO`. Nome aparece também no rótulo VFM/chave JSON; número/esperado/dono aparecem na linha textual. O JSON não transporta dono. `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:321`; `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:229`. | O novo selo exige chamada ao seletor, sem conferir os quatro valores nem o consumo pelo vigia. O contrato dos quatro campos já tem teste anterior. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:217`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:55`. |
+| **iv. Fechada não reabre em laço** | **CONFORME** para dia anterior ou igual à data local do fechamento. Dia posterior permite nova pauta. `app/chamados/services/fabrica_da_celula.py:304`, `app/chamados/services/fabrica_da_celula.py:337`. | Proteção comportamental anterior cobre feita, cancelada, dia coberto e posterior; o AST novo não protege essa semântica. Falta caso na fronteira UTC/data local. `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:67`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:90`. |
+| **v. Vigia só alarma, nunca julga** | **CONFORME no acompanhamento CADASTRO**: lê, imprime e carimba; esse contador deliberadamente não dispara alarme operacional. O modo `--alarme` de disparar retorna antes da escrita. `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:202`; `app/chamados/management/commands/disparar_perguntas_competencia.py:253`. | O novo selo não proíbe julgamento/escrita no vigia; exigir que seu arquivo seja varrido não protege esse papel. O fio mudo escritor está declarado separadamente como exceção de prazo. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:206`; `app/config/crons.py:2044`. |
+
+**PROCEDENTE — caminho de emissão sem previsão.** `_tem_base` aceita batidas; `classificar_falta` pode manter `esperada=[]` e devolver motivo por batida unilateral; `_ata_do_dia` permite continuar sem célula/escala; o agrupador chama a abertura da pergunta. Portanto existe caminho de código que contraria a proibição fornecida, sem demonstrar ocorrência em produção. `app/chamados/services/disputa_emissao.py:814`; `app/escala/servico_jornada.py:396`, `app/escala/servico_jornada.py:444`, `app/escala/servico_jornada.py:446`; `app/chamados/services/disputa_emissao.py:906`, `app/chamados/services/disputa_emissao.py:1234`, `app/chamados/services/disputa_emissao.py:1241`.
+
+Cura mínima: fazer o classificador canônico respeitar a ausência de previsão e encaminhar a pendência pelo fluxo de evento/porta autorizado, com teste do emissor completo. A fila existente chama esse caso de “falta lei”, mas a exceção “sem turno **com batida**” não está no aval fornecido: autorização dessa exceção **[nao verificado]**. `app/docs/BACKLOG.md:1876`; `app/docs/PROMPTS.md:2004`.
+
+Quanto ao **dia posterior ao fechamento**: a implementação e os testes adotam uma nova pendência viva para uma nova ocorrência. Isso é compatível com “uma pendência viva por colab”; autorização literal específica dessa política no aval raspado: **[nao verificado]**. `app/chamados/services/fabrica_da_celula.py:295`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`.
+
+5. **CLASSES QUE JÁ REPROVARAM OBRA.**
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz que duplica registrado | **NÃO identificado para entrega CADASTRO.** `app/core/juizes.py:293`; `app/chamados/services/fabrica_da_celula.py:288`. |
+| Segundo escritor fora da porta | **NÃO demonstrado como escritor ORM externo; SIM, segunda origem que contorna a deduplicação específica**, pelo POST. `app/pautas/views.py:76`; `app/pautas/services.py:180`. |
+| Relógio fora da borda | **NÃO no novo juiz**: converte instante persistido. **SIM, preexistente no classificador do emissor**, que lê agora internamente. `app/chamados/services/fabrica_da_celula.py:304`; `app/escala/servico_jornada.py:368`. |
+| Derivação paralela de fonte única | **SIM para a política de emissão**: a fábrica cala sem previsão; o classificador ainda acusa unilateral sem sequência prevista. Não é segundo juiz de entrega. `app/chamados/services/fabrica_da_celula.py:38`; `app/escala/servico_jornada.py:396`, `app/escala/servico_jornada.py:444`. |
+| Selo/RED sem mordida | **SIM, parcialmente**: ordem e registro aceitam os mutantes descritos; usos diretos têm mordida. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:179`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:197`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:224`. |
+| Ordem de trava | **NÃO no escritor atual; SIM na proteção incompleta do selo.** `app/chamados/services/fabrica_da_celula.py:334`, `app/chamados/services/fabrica_da_celula.py:337`; `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:182`. |
+| Pouso antes do pré-requisito | **[nao verificado]**: cópia e relato não certificam execução/deploy; a exigência está em `CLAUDE.md:374`. | [nao verificado]
+| Campo com dois significados | **NÃO identificado nos tipos pessoa/data/instante; SIM na explicação de “entregue = DP olhou”.** `app/chamados/services/fabrica_da_celula.py:292`; `app/pautas/models.py:94`. |
+
+6. **VARREDURA DO FILESYSTEM — pode ler não versionado ou falhar; container efetivo [nao verificado].**
+
+O selo percorre o filesystem, sem inventário Git, incluindo `static`, `staticfiles`, `media` e `logs`. Na montagem da cópia, `staticfiles` vem do host e é ignorado pelo Git; logs/media usam tmpfs. Portanto um `.py` não versionado nesses locais pode entrar na certificação. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:26`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:37`; `.gitignore:12`, `.gitignore:13`; `bin/arvore_do_push.sh:55`, `bin/arvore_do_push.sh:81`.
+
+Leitura sem UTF-8, arquivo ilegível ou Python inválido pode interromper o teste; diretório inacessível pode ser omitido pelo `os.walk` sem `onerror`. Não há tratamento nesses pontos. Falha efetiva no container: **[nao verificado]**. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:37`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:132`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:204`.
+
+A medição local em memória varreu **760 arquivos em aproximadamente 1,63 s**; os 11 testes levaram aproximadamente **1,67 s**. Esse custo local é pequeno; tempo no container e crescimento dos diretórios: **[nao verificado]**. O percurso também enumera arquivos que não serão analisados como Python. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:37`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199`.
+
+**PROCEDENTES finais:**
+
+- Emissão sem previsão ainda alcançável em `disputa_emissao`; corrigir o predicado canônico e proteger o caminho completo. `app/escala/servico_jornada.py:444`; `app/chamados/services/disputa_emissao.py:1241`.
+- Entrada humana produz o marcador sem deduplicação específica; reservar essa espécie ao fluxo autorizado. `app/pautas/views.py:76`; `app/pautas/services.py:180`.
+- Selo de ordem aceita trava/juiz/atomic incorretos e fluxo interrompido; validar identidade, argumentos e sequência executável. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:179`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:182`.
+- Teste de registro aceita pergunta errada e duplicação; exigir chave exata e unicidade. `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:197`.
+- Explicação “DP já olhou” excede o predicado; corrigir a documentação do fechamento/cancelamento. `app/chamados/services/fabrica_da_celula.py:292`; `app/pautas/services.py:288`.
 
 ## 09/11 21:13 · sessao d6f821d9f1e7 · - · - · origem=Ronald (tmux)
 
@@ -902,12 +992,4 @@ Evidência de vizinhança: imports da fábrica em `chamados/tests/test_fabrica_p
 
 Todos os resultados ORM permanecem `[nao verificado]`.
 
-## 09/11 17:58 · sessao 323aebf8a713 · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
-
-Entrega: [E4A_V2_ENTREGA.txt](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:1).
-
-- 35 testes sem banco passaram; oito mutantes morderam e foram restaurados. [Evidências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_TESTES.txt:29). [nao verificado]
-- ORM não executado; comando preparado para a sessão. [Referência](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:175).
-- O pouso ainda depende dos hunks e das decisões explícitas sobre A05 e C11. [Pendências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_V2_ENTREGA.txt:222). [nao verificado]
-
-_3232 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3233 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
