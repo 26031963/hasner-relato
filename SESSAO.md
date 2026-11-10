@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 07:41:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1031**.
+**Medido em 10/11/2026 07:46:10.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1029**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1039,5 +1039,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:47:08 | Bash |  | `cd /home/ronald/wt-e4a-sessao-180409/app; sed -n 255,310p chamados/services/fabrica_da_celula.py; /bin/grep -n "esperado" chamados/services/vigia_fio.py \| head -20` |
 | 19:47:04 | Bash |  | `cd /home/ronald/wt-e4a-sessao-180409/app; /bin/grep -n 'def linhas_do_evento\\|def acordar_celulas' chamados/models.py; n=$(/bin/grep -n 'def linhas_do_evento' chamados/models.py \| cut -d: -f1); sed -n "$n,$((n+25))p" chamados/models.py; cat /home/ronald/saas-hasner/logs/aval_lei_passado_sem_marcos.txt \| head -40` |
 | 19:46:59 | Bash |  | `cd /home/ronald/wt-e4a-sessao-180409/app; sed -n 2945,3010p chamados/models.py; echo ----; sed -n 130,195p chamados/services/fabrica_da_celula.py` |
-| 19:42:55 | Bash |  | `F=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/aca5ac4956d637d52.output; s0=$(stat -c %s $F); /usr/bin/sleep 240; echo $s0 $(stat -c %s $F); date` |
-| 19:42:51 | ReadNotifications |  | `-` |
