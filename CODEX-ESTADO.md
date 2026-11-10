@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 22:24** · publicado em **09/11/2026 22:24** (UTC-3)
+> Ultima resposta processada: **09/11/2026 22:41** · publicado em **09/11/2026 22:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 22:41 · sessao df6029862e30 · - · - · origem=Ronald (tmux)
+
+**8a — CONFORME à cura local prevista.** A legenda declara pergunta **OU Pauta DP** e a barreira FIO DECIDIDO declara somente existência da linha, sem validação humana; as duas mudanças estão presas por asserções literais (`app/chamados/management/commands/disparar_perguntas_competencia.py:140`, `app/chamados/management/commands/disparar_perguntas_competencia.py:157`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:199`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:202`). O domínio consultado realmente não exige validação humana: usa colaborador, motivo, data, instância, `conversa=False` e exclusão das vias fora do fato (`app/chamados/models.py:2753`).
+
+**8d — CONFORME.** A linha contém o literal determinado, incluindo “dia ACUSADO pela lei” e “este lote nao as escreve”; o teste exige a linha inteira (`app/chamados/management/commands/disparar_perguntas_competencia.py:136`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:194`).
+
+**Quem escreve / quem lê as saídas:**
+
+| Valor | Escritor e significado | Leitores encontrados |
+|---|---|---|
+| `VIGIA FIO MUDO` | `len(_mudos)`, uma tupla elegível colaborador/dia/motivo por chamado visitado, com dedup global da chave; não conta todas as perguntas potencialmente faltantes de cada chamado (`app/chamados/management/commands/disparar_perguntas_competencia.py:110`, `app/chamados/management/commands/disparar_perguntas_competencia.py:133`, `app/chamados/management/commands/disparar_perguntas_competencia.py:136`). | Testes do selo: `app/chamados/tests/test_selo_emissor_fio_mudo.py:84`, `:127`, `:156`, `:173`, `:210`, `:274`, `:284`; colab: `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:48`; célula: `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:136`, `:155`, `:164`; teto: `app/chamados/tests/test_pergunta_do_dia_em_curso.py:432`, `:437`; RED: `app/chamados/tests/test_e4a2_disparar_e_vigia.py:194`, `:266`. Parser operacional específico em `app/` ou `bin/`: **[nao verificado]**. |
+| `FIO DECIDIDO` | `_bar['fato_ja_existe']`, incrementado após `linhas_dos_fatos(...).exists()` (`app/chamados/management/commands/disparar_perguntas_competencia.py:130`, `:140`). | Selo com linha materializada e validada: `app/chamados/tests/test_selo_emissor_fio_mudo.py:149`, `:155`; relatório sintético com contador zero: `app/chamados/tests/test_e4a2_disparar_e_vigia.py:184`, `:202`. Parser operacional específico: **[nao verificado]**. |
+| `LEGENDA` | Explica unidades mistas e significado da barreira (`app/chamados/management/commands/disparar_perguntas_competencia.py:157`). | Asserção literal do relatório: `app/chamados/tests/test_e4a2_disparar_e_vigia.py:199`. Parser operacional específico: **[nao verificado]**. |
+| `FABRICA-POR-EVENTO` | `len(deixou)` conta motivos faltantes; no limbo exportado a falta é de Pauta DP (`app/chamados/management/commands/disparar_perguntas_competencia.py:81`, `:154`; `app/chamados/services/fabrica_da_celula.py:205`, `:214`). | Parser operacional raspa somente o inteiro em `bin/placar_code.sh:388`; exige log modificado desde meia-noite do host em `:389`; reemite o campo `perguntas_que_o_julgamento_nao_fez` em `:390`. Regex de testes: `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:74`, `app/chamados/tests/test_selo_disparo_nao_cobra_desligado.py:116`. Asserções: `app/chamados/tests/test_fabrica_por_evento.py:83`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:127`, `:133`, `:161`, `:392`, `:396`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:196`, `:267`. Contrato do sed e do arquivo: `bin/tests/test_placar_conta_o_retido_do_lastro.sh:500`, `:501`, `:507`. |
+
+**PROCEDENTE — a semântica não se propaga completamente ao leitor operacional.** A legenda esclarece o log, mas o placar descarta essa legenda e conserva campo nomeado “perguntas” para quantidade que inclui motivos de Pauta DP (`app/chamados/services/fabrica_da_celula.py:211`, `bin/placar_code.sh:388`, `bin/placar_code.sh:390`). A linha complementar `VIGIA` também continua chamando tudo de pergunta (`app/chamados/management/commands/disparar_perguntas_competencia.py:160`). Correção mínima: conservar o prefixo consumido e esclarecer no rótulo operacional e nessa linha que a unidade é “motivos pendentes: pergunta ou pauta”. Atribuição deste resíduo como novidade do delta: **[nao verificado]**; a triagem já reconhecia a unidade mista.
+
+**Fluxo do log — CONFORME no código.** Cadastro associa o comando a `fio_mudo.log`; o encadeado transporta o caminho e redireciona stdout e stderr; o teste prende log, `--alarme` e ausência de `--apply` (`app/config/crons.py:1521`, `bin/encadeado.sh:58`, `bin/encadeado.sh:64`, `bin/encadeado.sh:102`, `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:25`). O vigia de falhas do runner interpreta **rc**, não estas linhas; 0/2 recebem carimbo e não abrem falha de execução (`bin/cron_run.sh:22`, `bin/cron_run.sh:32`). Existência/frescor desse log em produção: **[nao verificado]**.
+
+**Docs operacionais continuam descrevendo o contador como perguntas**, inclusive o crescimento histórico, sem a unidade Pauta DP (`app/docs/RELATO.md:27`, `app/docs/BACKLOG.md:1872`). O registro da condição de pouso continua exigindo zero do emissor com C11 no ar; não é prova de medição realizada (`app/docs/RELATO.md:26`, `app/docs/BACKLOG.md:1871`).
+
+**Classes no trecho inspecionado:**
+
+- **Segundo juiz — não identificado:** primeiro universo delega integralmente à regra compartilhada; segundo usa ata/teto, parcial, vitalidade e domínio do fato existentes (`app/chamados/management/commands/disparar_perguntas_competencia.py:81`, `:100`, `:106`, `:110`, `:125`, `:130`; `app/chamados/services/fabrica_da_celula.py:209`).
+- **Segundo escritor — não identificado no comando:** coleções locais e saída após consultas; emissor real segue em função distinta, que chama os escritores existentes (`app/chamados/management/commands/disparar_perguntas_competencia.py:133`, `:164`; `app/chamados/services/fabrica_da_celula.py:133`, `:145`). Garantia universal indireta cabe à inspeção RED/árvore de chamadas: **[nao verificado]** por este explorer.
+- **ESMERIL-SEMANTICA — cura local conforme; resíduo operacional procedente**, conforme campo “perguntas” descrito acima (`app/chamados/management/commands/disparar_perguntas_competencia.py:157`, `bin/placar_code.sh:390`).
+
+**Itens 2/3 da sessão permanecem visíveis, sem confundir com curas volta 2:** exceção de disparar continua em `bin/tests/test_papel_prazo_nao_deriva.sh:303`, e o teste a reprova fora da tupla em `:325`; placar ainda trata ausência de membros impressos como falha em `bin/placar_code.sh:209`. A triagem explicitamente os destinou à sessão, não ao construtor volta 2 [dado fornecido; sem arquivo local].
+
+**Linhas de fila prometidas:** inscrição de `E4A2-RELOGIO-FIO-VIVO` e `E4A2-JANELA-POR-EMPRESA` no BACKLOG desta cópia **[nao verificado]**; o registro geral da obra está em `app/docs/BACKLOG.md:1871`, e o comentário somente anuncia a fila de janela por empresa em `app/chamados/management/commands/disparar_perguntas_competencia.py:29`.
 
 ## 09/11 22:24 · sessao b40cd15d984c · FIO-E0-V4-E4A-2 · construtor · origem=Code
 
@@ -1198,31 +1229,4 @@ Há uma diferença entre a explicação e a garantia operacional: o predicado co
 
 **Número final medido: 1 sítio de produção responde semanticamente “este dia já está entregue ao DP como pendência CADASTRO?” — `pauta_cadastro_existente`.** Ele contém duas consultas, viva e histórica, sobre um único construtor específico do marcador. O censo mais amplo encontrou seis consultas concretas por colaborador, discriminadas acima. (`app/chamados/services/fabrica_da_celula.py:288`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:301`, `app/chamados/services/fabrica_da_celula.py:284`, `app/pautas/services.py:435`, `app/ponto/services/afastado_avisa.py:62`, `app/ponto/services/ausencia.py:1039`, `app/ponto/services/ausencia.py:1229`, `app/ponto/services/pautas_dos_deslogados.py:65`)
 
-## 09/11 20:57 · sessao 6838b687ee95 · - · - · origem=Ronald (tmux)
-
-Censo independente, somente leitura:
-
-| Consulta concreta por âncora de colaborador | Filtro e finalidade |
-|---|---|
-| `app/chamados/services/fabrica_da_celula.py:284` | `ANCORA_COLAB`, DP, cabeça, marcador `PAUTA_SEM_TURNO`; o marcador é definido em `:276`. |
-| `app/pautas/services.py:435` | `Q(ancora_tipo='colab', ...)` em `:436`, unido a âncoras de dia; lista geral de pautas do colaborador. |
-| `app/ponto/services/afastado_avisa.py:62` | Literal `'colab'`, supervisão, cabeça, feita/cancelada nulas, prefixo `TEXTO[:40]` (`:63–65`). |
-| `app/ponto/services/ausencia.py:1039` | Literal `'colab'`, DP, feita/cancelada nulas; marcador `[A4/SEM-DOCUMENTO]` definido em `:1038`. |
-| `app/ponto/services/ausencia.py:1229` | Literal `'colab'`, DP, feita/cancelada nulas; marcador `[A1-FERIAS/AG#%s]` definido em `:1228`. |
-| `app/ponto/services/pautas_dos_deslogados.py:65` | Alias `ANCORA='colab'` (`:28`), `DEPARTAMENTO='supervisao'` (`:27`), marcador `[APP-401]` (`:26`). |
-
-São **6 sítios concretos de consulta por colaborador**; somente o primeiro filtra o marcador objeto do censo. Os demais possuem marcadores/finalidades diferentes ou listagem geral, conforme as linhas acima.
-
-A consulta do marcador propaga-se para operações em `app/chamados/services/fabrica_da_celula.py:297` (viva por colaborador), `:301` (histórico por colaborador), `:315` (contador), `:319` (restrição por empresas), `:320` (contagem distinta).
-
-Há duas consultas de âncora parametrizada: `app/pautas/services.py:336`, em `pendentes_por_ancora(tipo, ident)`, e `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:242`, em `_existente(Pauta, ancora_tipo, ...)`. Os três chamadores desta última passam `ANCORA_COMPETENCIA` em `:183`, `:202`, `:222`. Chamador de `pendentes_por_ancora` não encontrado na varredura textual do repositório; uso dinâmico: [nao verificado].
-
-O endpoint genérico aceita texto/âncora do POST em `app/pautas/views.py:76–82`; portanto pode transportar conteúdo arbitrário, mas não contém referência ao marcador. A leitura genérica da aba entrega `p.texto` em `app/pautas/views.py:40`; a lista vem de `sv.listar_por_aba` em `:33`.
-
-O template do colaborador exibe texto e estado em `app/templates/colaboradores/detalhe.html:118–119`, usando contexto `pautas_do_colab` em `:113–115`. Não localizei produtor desse contexto fora da definição do service `app/pautas/services.py:433`; funcionamento desse painel em produção: [nao verificado].
-
-A AST independente percorreu todos os `.py` do repositório, excluindo diretórios `tests` e nomes `test_*.py`. Encontrou as seis consultas acima e cinco chamadas de escrita com âncora colab: fábrica `:339`, afastado `:74`, ausência `:1055` e `:1245`, deslogados `:77`. Somente a fábrica escreve o marcador alvo (`app/chamados/services/fabrica_da_celula.py:341–342`). Nenhum import com alias do modelo `Pauta` ou `ANCORA_COLAB` apareceu nessa varredura; resolução por reflexão/import dinâmico: [nao verificado].
-
-Para o número final, sugiro distinguir **6 sítios físicos de consulta concreta por colaborador**, **1 construtor de queryset específico do marcador** (`app/chamados/services/fabrica_da_celula.py:279`) e **1 predicado que responde semanticamente “este dia já foi entregue ao DP?”** (`app/chamados/services/fabrica_da_celula.py:288`), composto por consulta viva e consulta histórica (`:297`, `:301`).
-
-_3246 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3247 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
