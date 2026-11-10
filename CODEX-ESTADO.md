@@ -1,7 +1,50 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:48** · publicado em **09/11/2026 21:51** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:56** · publicado em **09/11/2026 21:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:56 · sessao f21c98f8a5d3 · E4A1-C6-X-PASSADO-SEM-TURNO · sonda · origem=Code
+
+```text
+sonda_leitura: sonda1.py [2c1dcdffa761bf36] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+agora_local 2026-11-09T21:53:44.006061-03:00
+DONO aberta universo 2 classes {'desfaz_pelo_julgamento': 2}
+  exemplos(pk_pergunta, colab, empresa, dia) []
+DONO exportada universo 187 classes {'sem_celula': 1, 'dia_sem_trabalho': 6, 'colab_nao_ativo': 132, 'desfaz_pelo_julgamento': 48}
+  exemplos(pk_pergunta, colab, empresa, dia) []
+ERROS 0
+```
+
+**1.** A saída acima é a fornecida no pedido. A tentativa de executar `python3 -B sonda1.py` falhou por arquivo inexistente; o fonte da sonda não foi disponibilizado na cópia. Portanto, a identidade das funções, da ordem e dos argumentos da sonda está **[nao verificado]**.
+
+No código, a sequência é:
+
+- Resolver `agora` e `hoje`, usando respectivamente `timezone.now()` e `timezone.localdate(agora)` quando ausentes: `app/chamados/services/fabrica_da_celula.py:160–161`.
+- Avaliar, por curto-circuito: `cel.data < hoje`, situação do **colaborador da célula** igual a `'ativo'`, e `not dia_sem_trabalho(cel)`: `app/chamados/services/fabrica_da_celula.py:172`.
+- Chamar `vencidos_no_instante(cel.colaborador, cel, hoje, agora)`; se retornar `None`, chamar `pauta_cadastro_sem_turno(cel)` e retornar `[]`, antes da coleta e do desfazimento: `app/chamados/services/fabrica_da_celula.py:173–180`.
+- Dentro de `vencidos_no_instante`, chamar `marcos_vencidos(colab, cel, cel.data, agora)`; retornar `None` somente quando `venc` e `pend` estão vazios e a data é passada: `app/chamados/services/fabrica_da_celula.py:25–29`.
+
+Há diferença entre os universos do vigia e da coleta do julgamento: o vigia filtra carimbo desfazível, disputa aberta e C6 vivo; a coleta do julgamento restringe também ao colaborador da célula, `data_evento=cel.data` e `conversa=False`, passando antes pelas guardas de `motivos_a_perguntar`. Referências: `app/chamados/services/vigia_fio.py:806–818`; `app/chamados/services/fabrica_da_celula.py:85–98`, `app/chamados/services/fabrica_da_celula.py:121–129`.
+
+O vigia chama `pergunta_viva(p)` sem `hoje` explícito; a porta chamada pelo julgamento usa `pergunta_viva(p, hoje=hoje)`. Referências: `app/chamados/services/vigia_fio.py:813`; `app/chamados/services/relavra_via.py:242`. Os argumentos usados pela sonda estão **[nao verificado]**.
+
+**2.** Sim, o vigia devolve **PKs de `PerguntaDisputa`**, acrescentando `p.pk` às listas por dono: `app/chamados/services/vigia_fio.py:804–818`.
+
+`p.celula` é uma FK armazenada e anulável, separada de `data_evento`; não é uma busca automática pela célula dessa data. O filtro do vigia não exige igualdade entre `p.celula.data` e `p.data_evento`. Logo, esse universo pode admitir vínculo com outro dia ou ausência de vínculo. Referências: `app/chamados/models.py:2414–2425`; `app/chamados/services/vigia_fio.py:806–807`.
+
+Já a coleta do julgamento encontra a pergunta pelo **`data_evento`**, sem exigir que sua FK aponte para a célula julgada: `app/chamados/services/fabrica_da_celula.py:121–129`. Portanto, não há garantia, nesse leitor, de que `p.celula` seja a célula cujo julgamento coletaria a pergunta.
+
+A saída fornecida mostra **1 `sem_celula`, em `exportada`**, e nenhuma ocorrência dessa classe em `aberta`. Sem o fonte da sonda, o significado exato desse rótulo — FK nula ou ausência da célula procurada por outra chave — está **[nao verificado]**.
+
+**3.** Para perguntas que permaneçam vivas pelo C6, os leitores incluem:
+
+- **C6 e propriedades:** o C6 pode retornar vivo apesar do carimbo por resposta, célula acusando, classificação da falta ou ausência de lastro; `.viva` delega ao C6 e `.estado` consulta o C6 antes de tratar o carimbo como resolvido. Referências: `app/chamados/juizes.py:1341–1353`, `app/chamados/juizes.py:1372–1406`; `app/chamados/models.py:3041–3047`, `app/chamados/models.py:3375`.
+- **Telas do colaborador:** `perguntas_do_app` filtra pelo C6; `consulta_do_app` separa pendentes e histórico; a API serve essas listas. Referências: `app/chamados/services/pergunta_no_app.py:44–74`; `app/api/views.py:2560–2562`, `app/api/views.py:2589–2601`.
+- **Telas administrativas:** o relatório classifica pelas perguntas vivas; o banner do drawer lê `perguntas_vivas_de`. Referências: `app/chamados/relatorios_disputa.py:18–23`; `app/colaboradores/services/drawer.py:77–82`.
+- **Contadores:** dashboard e badge contam as pendentes de `consulta_do_app`; a materialização conta `perguntas_vivas_de`; o vigia conta os carimbos vivos por dono e imprime `MATERIALIZADA_VIVA`. Referências: `app/core/views.py:252–253`; `app/api/views_core.py:313–316`; `app/chamados/services/materializacao.py:1313–1314`; `app/chamados/services/vigia_fio.py:847–851`; `app/chamados/management/commands/vigiar_fio_morto.py:198–199`.
+
+A saída fornecida não apresenta a classe `PASSADO_SEM_TURNO_nao_desfaz` nem exemplos dela; a presença de casos concretos dessa classe nessas telas e contadores está **[nao verificado]**.
 
 ## 09/11 21:48 · sessao a038309c1c18 · MODO-COMUM-PASSADO-SEM-TURNO · construtor · origem=Code
 
@@ -1139,45 +1182,4 @@ Também permanece o repasse por data, cujo gate admite ausência de escala e cuj
 
 [truncado em 20000 de 24374 caracteres]
 
-## 09/11 18:27 · sessao bcec07067663 · - · - · origem=Ronald (tmux)
-
-**E — Reversão de DNA: PROCEDENTE, bloqueia.** O evento é emitido no mesmo atomic da restauração, mas a restauração conserva ata/veredito anteriores (`app/ponto/portas/celula.py:785-796`). O consumidor chama C6 e fábrica sem relavrar a célula (`app/chamados/reconciliador.py:1364-1387`). C6 retorna pelo veredito antigo antes de consultar a classificação do dia (`app/chamados/juizes.py:1369-1392`). A fábrica combina teto do DNA atual com ata persistida (`app/ponto/services/cartorio.py:840-844`; `app/chamados/services/fabrica_da_celula.py:43-49`).
-
-Contracaso executado somente em memória, por extração AST das funções reais: restaurar DNA de trabalho sobre célula antes em folga deixou `trabalha=True`, `veredito='concorde'`, um evento e C6=False; simular a lavra faltante com `veredito='furo'` mudou C6=True. Isso demonstra a dependência do veredito antigo; ocorrência em produção [nao verificado]. Fontes executadas: `app/ponto/portas/celula.py:740`; `app/chamados/juizes.py:1322`.
-
-Correção mínima: o consumidor deve acionar o cartório para julgar o DNA restaurado antes das operações que leem C6/ata; reutilizar o juiz existente, como já faz o rabo compartilhado da regeneração (`app/ponto/portas/celula.py:422-440`).
-
-**E — Falha do evento na volta a VIVOS: CONFORME no caminho ordinário.** O savepoint fica dentro de `engolir`, permitindo seu rollback antes de engolir a exceção (`app/chamados/signals.py:205-207`). A falha deixa contador e ERROR com contexto/causa (`app/core/observ.py:73-91`). Não há perda sem rastro nesse caminho; comprovação com transação PostgreSQL [nao verificado]. O teste existente modela a transação com stub (`app/chamados/tests/test_e4_c20.py:117-174`).
-
-**E — PASSADO-SEM-MARCOS: PROCEDENTE, bloqueia.** O caminho principal da fábrica e o FIO MUDO do cron respeitam a nova guarda (`app/chamados/services/fabrica_da_celula.py:38-41`; `app/chamados/management/commands/disparar_perguntas_competencia.py:157-161`). Entretanto, o próprio C20 alcança um desvio:
-
-`perguntar` → `criar_ou_atualizar_disputa` → `perguntar_entradas_pendentes` → `classificar_falta` → `gerar_perguntas_disputa` → `PerguntaDisputa.abrir` (`app/chamados/services/fabrica_da_celula.py:138`; `app/chamados/services/disputa_emissao.py:682-685`; `app/chamados/services/disputa_emissao.py:282-294`; `app/chamados/services/disputa_emissao.py:443-452`).
-
-O contexto antigo pode conservar `entradas_pendentes` quando a fábrica atualiza apenas `data` (`app/chamados/services/disputa_emissao.py:548-559`). Sem escala ou marcos esperados, `classificar_falta` ainda retorna `orfao_14h` (`app/escala/servico_jornada.py:469-471`). Assim, evento de um dia com marcos pode emitir pergunta para outro dia passado sem turno previsto, contrariando `app/docs/PROMPTS.md:2004`.
-
-Também permanece o repasse por data: `_classificar_falta` seguido de `_criar_pergunta_se_couber`; `_ata_do_dia` permite continuar sem escala (`app/chamados/services/disputa_emissao.py:1234-1244`; `app/chamados/services/disputa_emissao.py:905-907`). A porta auxiliar verifica ausência e dedup, sem exigir turno previsto (`app/chamados/services/disputa_emissao.py:827-842`).
-
-Contracaso executado em memória: `classificar_falta` real, sem escala/marcos/batidas, retornou `('S','orfao_14h','SAIU')`; `perguntar_entradas_pendentes` real chamou a geração para o dia passado derivado da batida simulada. Ocorrência desse contexto em produção [nao verificado]. Fontes: `app/escala/servico_jornada.py:270`; `app/chamados/services/disputa_emissao.py:257`.
-
-Correção mínima: aplicar a guarda compartilhada de passado sem turno nos caminhos de emissão datada, incluindo entradas pendentes e repasse, encaminhando à pauta de cadastro; preservar a classificação global usada por outros leitores (`app/chamados/services/fabrica_da_celula.py:164-168`; `app/chamados/services/fabrica_da_celula.py:279-298`).
-
-**E — FABRICA-POR-EVENTO: cobertura parcial; zeragem [nao verificado].** Os emissores são cartório e consumidor (`app/ponto/services/cartorio.py:1006-1008`; `app/chamados/reconciliador.py:1386-1387`). O cron continua apenas contando esse universo, enquanto seu ramo FIO MUDO escreve (`app/chamados/management/commands/disparar_perguntas_competencia.py:109-113`; `app/chamados/management/commands/disparar_perguntas_competencia.py:270-295`). C20 examina somente datas presentes no lote de eventos; não recupera automaticamente todo estoque sem evento (`app/chamados/services/fabrica_da_celula.py:260-264`). A semeadura existente cobre chamados vivos e órfãs específicas, sem varrer todas as células sem pergunta (`app/chamados/reconciliador.py:1289-1311`). Portanto, o código não garante estancar a contagem; resultado no ar [nao verificado].
-
-**F — Reapontamento: PROCEDENTE contra a exigência literal de mesmo estado 2×.** Não existe no-op para destino/dia efetivamente iguais: o caminho sempre lavra, salva e acorda a origem (`app/chamados/services/fio.py:866`; `app/chamados/services/fio.py:925-929`). A lavra sempre avança `julgado_em` (`app/chamados/veredito_lavrado.py:270-273`). Além disso, o save acorda a célula atual e a chamada explícita acorda a anterior, que podem coincidir (`app/chamados/signals.py:251-257`; `app/chamados/services/fio.py:929`). Duplicatas na fila são admitidas pelo desenho; não equivalem automaticamente a duplicação de efeito/DP (`app/escala/models.py:1848-1850`).
-
-Correção mínima: retornar sem escrita quando destino e identidade efetivos não mudarem; emitir os acordares necessários por célula distinta no ato (`app/chamados/services/fio.py:924-929`; `app/chamados/models.py:3234-3244`).
-
-**F — Reversão sequencial: CONFORME quanto ao estado e evento.** Limpar `dna_anterior` faz a segunda chamada retornar False e não emitir novamente (`app/ponto/portas/celula.py:777-778`; `app/ponto/portas/celula.py:787`). Confirmado no contracaso em memória: primeira=True, segunda=False, um evento. Concorrência e uma trilha efetivamente persistida [nao verificado]; a leitura antecede o atomic e não usa trava de linha (`app/ponto/portas/celula.py:776`; `app/ponto/portas/celula.py:785`).
-
-**C — Célula/DNA e evento, mapa para consolidação.**
-
-| Elemento | Escritores | Leitores / significado |
-|---|---|---|
-| DNA | Produtor `app/ponto/management/commands/gerar_celulas.py:73`; atribuições na porta em `app/ponto/portas/celula.py:243`, `:259`, `:272`, `:600`, `:786`, `:850` | Marcos congelados em `app/escala/models.py:1117`; teto em `app/ponto/services/cartorio.py:840`; C6 em `app/chamados/juizes.py:634` e `:1369` |
-| `EventoCelula` | INSERT único `app/ponto/portas/celula.py:892`; acordares por pergunta `app/chamados/models.py:3227` | Consumidor `app/chamados/reconciliador.py:1315`; fábrica relê célula atual por colaborador/data em `app/chamados/services/fabrica_da_celula.py:262` |
-| Dia | Célula declara dia do turno em `app/ponto/turnos.py:2939`; batida resolve pelo pareamento em `app/ponto/turnos.py:2927`; atribuição única da pergunta em `app/chamados/services/fio.py:790` | Conversa conserva exceção explícita de dia civil em `app/chamados/services/fio.py:1612` e `:1626`; evento grava a data da célula em `app/ponto/portas/celula.py:892` |
-| Tempo | Instante do evento automático em `app/escala/models.py:1860`; consumidor captura agora em `app/chamados/reconciliador.py:1337` | Fábrica recebe esse instante e deriva dia local em `app/chamados/services/fabrica_da_celula.py:264`; teto por marco +30 min em `app/ponto/services/cartorio.py:828` |
-
-Procedentes encontrados: reversão sem relavra anterior ao consumo; desvio de emissão para passado sem turno; reapontamento sem idempotência de estado (`app/ponto/portas/celula.py:785`; `app/chamados/services/disputa_emissao.py:288`; `app/chamados/services/fio.py:925`).
-
-_3239 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3240 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
