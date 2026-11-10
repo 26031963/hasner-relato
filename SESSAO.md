@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 15:11:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (264.1 MB). Acoes na janela: **508**.
+**Medido em 10/11/2026 15:16:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (264.2 MB). Acoes na janela: **516**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:12:01 | Bash |  | `cd /home/ronald/saas-hasner/logs/BO-0611-05; while kill -0 3203387 2>/dev/null; do /usr/bin/sleep 30; done; date +%T; tail -2 c3.log; wc -c construtor3.r` |
+| 15:11:58 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/pid=3203381/pid=3203387/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as H; print(H._esperando_com_prova())"` |
+| 15:11:55 | Bash |  | `cd /home/ronald/saas-hasner/logs/BO-0611-05; cat c3.log \| tail -5; pgrep -af codex_pergunta \| /bin/grep -v pgrep \| cut -c1-150` |
+| 15:11:52 | Bash |  | `cd /home/ronald/saas-hasner; ps -o pid,cmd -p 3203381 \| tail -1 \| cut -c1-120; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=3203381' open(p,'w').write('\n'.join(L)) p='app/docs/BACKLOG.md'; s=open(p).read() a='14:49 construtor Codex volta 1' assert s.count(a)==1,  ...` |
+| 15:11:37 | Bash |  | `cd /home/ronald/saas-hasner/logs/BO-0611-05; setsid nohup ./lanca_c3.sh > c3.log 2>&1 < /dev/null & /usr/bin/sleep 8; cd /home/ronald/saas-hasner/logs/BO-0611-05; head -3 c3.log; pgrep -f 'codex_pergunta.sh --construtor' \| head -2` |
+| 15:11:34 | Bash |  | `cd /home/ronald/saas-hasner/logs/BO-0611-05; cat > construtor3.q <<'EOF' OBRA BO-0611-05, construtor volta 3. Base 8c81227e0 (wt informada). Escreve SO na wt, em app/. padrao=Single Writer Principle. Contexto: a volta 1 tirou o 403 de GPS; batida com par PARCIAL (so latitude ou so longitude) agora chega ao banco. A AUTORIDADE do sistema sobre "esta batida tem geo?" ja existe e trata parcial como S ...` |
+| 15:11:16 | Bash |  | `cd /home/ronald/saas-hasner/logs/BO-0611-05; cat lanca_c2.sh; ls` |
+| 15:11:10 | Bash |  | `cd /home/ronald/saas-hasner; W=$(cat logs/BO-0611-05/wt.txt); mv $W/app/ponto/tests/BO-0611-05_entrega.md logs/BO-0611-05/entrega2.md; cat > logs/BO-0611-05/msg_v2.txt <<'EOF' BO-0611-05 volta 2: detector vinculo_na_lista exige latitude E longitude nao nulas (par parcial alcancavel sem o 403) Codex construtor volta 2 (logs/BO-0611-05/construtor2.r, entrega2.md). Na base 051f45ef2 o detector filtra ...` |
 | 15:10:56 | Bash |  | `W=$(cat /home/ronald/saas-hasner/logs/BO-0611-05/wt.txt); cd $W; git diff; sed -n '8,60p' app/ponto/tests/BO-0611-05_entrega.md \| cut -c1-260` |
 | 15:10:52 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/BO-0611-05/construtor2.r; W=$(cat logs/BO-0611-05/wt.txt); cd $W && git status --porcelain && git diff --stat` |
 | 15:10:49 | Bash |  | `cd /home/ronald/saas-hasner; ps -p 2576308 -o etime=; tail -2 logs/BO-0611-05/c2.log; ls -la logs/BO-0611-05/construtor2.r 2>&1 \| tail -1; cat logs/aval_ordem_viva_0811.txt \| head -c 1200` |
