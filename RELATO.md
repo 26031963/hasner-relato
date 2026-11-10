@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-PAREI: censo-O169-FECHADA | espera Codex
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=1387352
 
 ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=352506
 lei: FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE (00:36) -- dia nunca_bateu de colab ATIVO sem nenhuma batida na vida vai ao APP ou so a LISTA do admin (C5)? Medido 10/11 00:12-00:33 em prod (sondas 1/3/4, ERROS 0): estoque 139 itens/48 celulas, 129 itens (44 cel) de 15 colabs SEM ADESAO. Hoje os sitios divergem: cartorio.py:1173-1279 (ramo adesao None, lavra nunca_bateu :1252) carimba e NAO emite + cadastro_realidade.py:180,690 poe o dia na lista C5 'Fazer a adesao ao app ou lancar a ausencia'; mas fabrica_da_celula.py:113 (nunca_bateu em VEREDITOS_ACUSAM, models.py:1767) e o vigia do disparar contam o dia como pergunta DEVIDA ao app. CORTES FIO-LE-O-JUIZ-OS-19 manda o juiz de dono L-099 decidir, e ele nao le adesao: devolve ESTRUTURA 29 / CADASTRO 15 nessas 44 celulas. Candidatas: (A) so lista C5 -- fabrica/vigia deixam de contar nunca_bateu como devido (cartorio e C5 ja fazem assim); (B) app -- o ramo sem adesao passa a emitir (contra HX-CARTORIO-NUNCA-BATEU). Os 10 itens de 3 colabs COM adesao seguem investigados a parte. logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/sonda{1,3,4}.r

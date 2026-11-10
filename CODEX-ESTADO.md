@@ -1,7 +1,112 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 00:35** · publicado em **10/11/2026 00:37** (UTC-3)
+> Ultima resposta processada: **10/11/2026 00:47** · publicado em **10/11/2026 00:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 00:47 · sessao 557d940ccf3a · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · construtor · origem=Code
+
+Cura implementada para certificação: uma guarda em [pautas/services.py:38](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/services.py:38), chamada pelas portas humanas de [escrever:76](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/views.py:76) e [responder:114](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/views.py:114).
+
+1. **Direção.** Sim: `import_module` escapa do detector A16, que examina apenas `Import`/`ImportFrom` de topo entre `ponto` e `chamados` (`core/tests/test_contract_direcao_a16.py:78`). Escolhi o módulo-folha [pautas/marcadores.py:1](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/marcadores.py:1): os donos importam constantes com seus aliases anteriores, e a guarda importa a mesma fonte. O detector real do A16 passou na execução isolada; a suíte A16 completa continua pendente (`pautas/tests/test_prefixos_reservados_ast.py:236`). O novo selo também recusa imports estáticos e dinâmicos no catálogo (`pautas/tests/test_prefixos_reservados_ast.py:28`).
+
+2. **Prefixos novos.** Entram os quatro: afastamento, sem documento, férias recusadas e esmeril. Todos identificam buscas reais por `texto__startswith` (`ponto/services/afastado_avisa.py:63`, `ponto/services/ausencia.py:1044`, `ponto/services/ausencia.py:1234`, `ponto/services/pautas_do_esmeril.py:66`). Reservar `Bateu ponto durante afastamento. A batid` bloqueia também prosa humana iniciada nesses 40 caracteres; ocorrência legítima em produção é **[nao verificado]** (`pautas/marcadores.py:77`, `pautas/services.py:44`).
+
+3. **Filhas.** Guardei também `responder`: há leitores sem filtro de pai e um leitor deliberado de filhas marcadas. Guardar somente cabeças deixaria a falsificação disponível por resposta (`ponto/services/ausencia.py:1044`, `pautas/management/commands/pauta_pago_x_devido_exportada.py:250`, `pautas/views.py:114`).
+
+Os leitores conservam os prefixos exatos e suas derivações por semana, competência, colaborador ou chave. A normalização nova fica somente na guarda humana; o escritor comum continua aplicando seu `strip` anterior (`pautas/services.py:44`, `pautas/services.py:177`, `pautas/semanal.py:199`, `chamados/services/passivo_validado.py:159`).
+
+Os donos abaixo foram tocados para importar a fonte única e reaproveitar as constantes nas buscas e escritas:
+
+| Constante/família | Escritor | Leitor |
+|---|---|---|
+| `PAUTA_LIMBO_EXPORTADA` | `chamados/services/fabrica_da_celula.py:274` | `chamados/services/fabrica_da_celula.py:254` |
+| `PAUTA_SEM_TURNO` | `chamados/services/fabrica_da_celula.py:362` | `chamados/services/fabrica_da_celula.py:305` |
+| `TRANCA` | `chamados/services/competencia_trancada.py:235` | `chamados/services/competencia_trancada.py:221` |
+| `ORFA_ENTERRADA` | `chamados/management/commands/reabrir_orfas_enterradas.py:209` | `chamados/management/commands/reabrir_orfas_enterradas.py:202` |
+| `PASSIVO_VALIDADO` | `chamados/services/passivo_validado.py:230` | `chamados/services/passivo_validado.py:164` |
+| `PASSIVO_VALIDADO_FORA` | `chamados/services/passivo_validado.py:267` | `chamados/services/passivo_validado.py:256` |
+| `ARVORE_VERMELHA` | `core/management/commands/alarme_arvore.py:52` | `core/management/commands/alarme_arvore.py:16` |
+| `ESTEIRA` | `core/management/commands/alarme_esteira.py:56` | `core/management/commands/alarme_esteira.py:15` |
+| `CRON_QUEBRADO` | `core/services/crons_quebrados.py:72` | `core/services/crons_quebrados.py:54` |
+| `FERIAS` — três marcadores | `ferias/management/commands/pautas_de_ferias.py:164` | `ferias/management/commands/pautas_de_ferias.py:152` |
+| `PRE_FECHAMENTO` | `folha/management/commands/pre_fechamento.py:111` | `folha/management/commands/pre_fechamento.py:92`, `:98` |
+| `DIA_EM_ABERTO` | `pautas/management/commands/pauta_dia_em_aberto.py:140` | `pautas/management/commands/pauta_dia_em_aberto.py:108` |
+| `FOLGA_EXPORTADA` | `pautas/management/commands/pauta_folga_nao_definida_exportada.py:135` | `pautas/management/commands/pauta_folga_nao_definida_exportada.py:126` |
+| `PAGO_DEVIDO_EXPORTADA` | `pautas/management/commands/pauta_pago_x_devido_exportada.py:208`, `:212` | `pautas/management/commands/pauta_pago_x_devido_exportada.py:243`, `:250` |
+| `REVISAO_AUSENCIA` | `ponto/services/vigia_ausencia.py:239` → `pautas/semanal.py:278` | `pautas/semanal.py:199`, `:228` |
+| `REVISAO_SUPERVISAO` | `escala/services/fase_12x36.py:278` → `pautas/semanal.py:278` | `pautas/semanal.py:199`, `:228` |
+| `TEXTO_AFASTADO` / `AFASTADO` | `ponto/services/afastado_avisa.py:76` | `ponto/services/afastado_avisa.py:63` |
+| `SEM_DOCUMENTO` | `ponto/services/ausencia.py:1060` | `ponto/services/ausencia.py:1044` |
+| `FERIAS_RECUSADA` | `ponto/services/ausencia.py:1250` | `ponto/services/ausencia.py:1234` |
+| `HE_EXPORTADA` | `ponto/services/autorizacao_he_periodo.py:245` | `ponto/services/autorizacao_he_periodo.py:242` |
+| `COBERTURA_A_CONFIRMAR` | `ponto/services/cobertura.py:336` | `ponto/services/cobertura.py:243` |
+| `ESMERIL` | `ponto/services/pautas_do_esmeril.py:79` | `ponto/services/pautas_do_esmeril.py:66`, `:67` |
+| `APP_401` | `ponto/services/pautas_dos_deslogados.py:78` | `ponto/services/pautas_dos_deslogados.py:66` |
+| `DISCORDANTE` | `ponto/services/pautas_dos_discordantes.py:180` | `ponto/services/pautas_dos_discordantes.py:98`, `:166` |
+
+Completam os arquivos tocados: catálogo, service e views citados acima; [teste da porta](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/tests/test_prefixos_reservados.py:73), [selo AST](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/tests/test_prefixos_reservados_ast.py:167) e [executor de RED/mutantes](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-003109/app/pautas/tests/mutar_prefixos_reservados.py:85). [nao verificado]
+
+**RED observado na base**, usando os corpos reais das funções com HTTP/persistência substituídos; não é prova de contagem em banco (`pautas/tests/test_prefixos_reservados.py:1`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados \
+  --base a4b809999338e30088fc00d8e885d90c1e40bcb0
+```
+
+```text
+testes=3 falhas=104 erros=0 [nao verificado]
+AssertionError: 200 != 400
+```
+
+**Depois**, os testes isolados e AST terminaram com `Ran 12 tests — OK (skipped=1)`; o skip declara a integração Django indisponível (`pautas/tests/test_prefixos_reservados.py:143`, `pautas/tests/test_prefixos_reservados_ast.py:167`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  pautas.tests.test_prefixos_reservados \
+  pautas.tests.test_prefixos_reservados_ast -v
+```
+
+**Mutantes:** saída observada `59 mortos; 0 sobreviventes`. Cobrem sete alterações de comportamento, retirada individual dos 26 reservados e troca individual dos 26 leitores; o executor imprime o comando de cada mutante (`pautas/tests/mutar_prefixos_reservados.py:37`, `:139`, `:147`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados
+
+# Exemplo individual:
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados \
+  --mutante sem_strip
+```
+
+Ruff nos 27 arquivos tocados devolveu `All checks passed!`, com as regras de `ruff.toml:5`; `git diff --check` também terminou sem saída.
+
+**Não rodou:** testes Django novos, `pautas.tests` inteiro e os testes dos donos abaixo. O comando tentou iniciar, mas parou em `ModuleNotFoundError: No module named 'django'`, antes da descoberta (`manage.py:11`). Integração HTTP, contagem real de Pauta e suítes dos donos permanecem **[nao verificado]**; os testes de POST/400/zero Pauta e texto comum/200 estão em `pautas/tests/test_prefixos_reservados.py:173`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  pautas.tests \
+  chamados.tests.test_competencia_trancada \
+  chamados.tests.test_juiz_pauta_cadastro_sem_turno \
+  chamados.tests.test_reabrir_orfas_enterradas \
+  chamados.tests.test_o317_passivo_pela_porta \
+  core.tests.test_crons_quebrados \
+  core.tests.test_contract_direcao_a16 \
+  core.tests.test_arvore_vermelha \
+  core.tests.test_esteira_sem_humano \
+  ferias.test_a3_situacao_de_ferias \
+  folha.tests.test_pre_fechamento \
+  ponto.tests.test_afastado_nunca_bloqueia \
+  ponto.tests.test_porta_ausencia_ferias \
+  ponto.tests.test_aus_f6_vencidas_pelo_juiz \
+  ponto.tests.test_pautas_do_esmeril \
+  ponto.tests.test_lista_viva_dos_deslogados \
+  ponto.tests.test_o320_pauta_dos_discordantes \
+  ponto.tests.test_a6_vigia_familia_ausencia \
+  ponto.tests.test_declarar_cobertura_passada \
+  ponto.tests.test_o214_item2_autorizar_periodo \
+  escala.tests.test_fase_12x36 \
+  --settings=config.settings_test --noinput
+```
+
+Para pautas históricas, o censo permite levantar candidatos pelos prefixos da tabela. Atribuir essas pautas a humanos apenas por `autor_user` não basta: o sistema pode assinar com superuser (`pautas/services.py:103`). Existência, quantidade e autoria humana em produção: **[nao verificado]**.
 
 ## 10/11 00:35 · sessao 12a663ea2904 · FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE · sonda · origem=Code
 
@@ -893,78 +998,4 @@ Dois cuidados adicionais:
 - Outras feições que poderiam separar residuais: catálogo encontrado; texto/data obtidos; destino aceito; contrato de saída cumprido. Há recusas correspondentes no código, mas ocorrência individual no raspado é **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:314–316,344–366,424–430`; `app/chamados/models.py:2818–2822,2839–2840,2888–2890`)
 - Não localizei `AGENTS.md`, `sonda1.py` ou `censo1.r` nos nomes pesquisados da cópia; conclusão sobre anexos fora da cópia: **[nao verificado]**.
 
-## 10/11 00:09 · sessao 1522924e199b · REVERTER-DIA-SEM-RECALCULO · construtor · origem=Code
-
-A cura está aplicada: a VOLTA chama uma vez `_o_chao_do_dia_mudou`, depois do `atomic`, com o motivo solicitado. Guardas, escrita, evento e trilha conservaram AST idêntico ao da base. [ponto/portas/celula.py:774](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/portas/celula.py:774), [ponto/portas/celula.py:809](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/portas/celula.py:809). [nao verificado]
-
-Arquivos tocados:
-
-- [ponto/portas/celula.py:809](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/portas/celula.py:809): substituição do julgamento paralelo pelo rabo comum.
-- [ponto/tests/test_reverter_regen_recalcula_dinheiro.py:18](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:18): contrato AST, contraexemplo da base guardado e teste ORM 240 → 480 → 240, com `on_commit` imediato. [nao verificado]
-- [ponto/tests/test_reverter_regen_sem_banco.py:28](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_sem_banco.py:28): execução instrumentada dos corpos reais e mutações somente em memória.
-
-Não ajustei mocks vizinhos: o alvo continua sendo `ponto.services.cartorio.julgar_celula`; a execução deles por Django ficou pendente. [ponto/tests/test_porta_celula_dia.py:263](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_porta_celula_dia.py:263).
-
-**RED antes e resultado depois.** Antes da cura, o verificador AST falhou com `VOLTA deve chamar o rabo comum uma vez`; o caso financeiro **instrumentado** falhou com `480 != 240`. Depois, o comando abaixo terminou com `Ran 22 tests … OK`. O teste com `DiaPago` real não foi executado: faltam Django e banco; seu RED/verde ORM permanece **[não verificado]**. [verificador:24](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:24), [caso instrumentado:186](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_sem_banco.py:186), [caso ORM:128](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:128). [nao verificado]
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-python3 -m unittest ponto.tests.test_reverter_regen_sem_banco chamados.tests.test_e4_expand -v
-```
-
-Os nove mutantes abaixo terminaram com `rc=1`, por asserções, sem erros de infraestrutura. Cobrem base antiga, omissão/duplicação do rabo, escritores paralelos, posição dentro do `atomic`, desligamento do recálculo, dias vazios e perda do motivo. [ponto/tests/test_reverter_regen_sem_banco.py:28](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/tests/test_reverter_regen_sem_banco.py:28).
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-selo_volta=ponto.tests.test_reverter_regen_sem_banco
-
-REVERTER_MUTANTE=base python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=sem_rabo python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=juiz_paralelo python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=dinheiro_paralelo python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=rabo_no_atomic python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=sem_dinheiro python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=dias_vazios python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=motivo_vazio python3 -m unittest "$selo_volta"
-REVERTER_MUTANTE=duas_vezes python3 -m unittest "$selo_volta"
-```
-
-**Escritores e leitores.** O alcance financeiro é a competência do colaborador, não somente o dia revertido: `recalcular_por_evento` agenda o fechamento mensal em `on_commit`. [ponto/services/fechamento.py:1809](/home/ronald/wt-codex-reverter-dia-sem-recalculo-235559/app/ponto/services/fechamento.py:1809).
-
-| Campos alcançados | Quem escreve | Quem lê |
-|---|---|---|
-| `DiaPago`: os 15 `CAMPOS_DIA`, incluindo previstos, realizados e abonados; ajuste de DSR e banco | Inventário em `ponto/services/dia_pago.py:34`; `lavrar` substitui as linhas em `:359` | Todos são agregados em `ponto/services/dia_pago.py:562`; relatório em `relatorios/views.py:487`; espelho/PDF em `ponto/services/espelho.py:406` |
-| `DiaPago`: chaves, versão, `versao_motor`, `versao_dna`, `evento_origem`, `detalhe`, `furo_apurado` | `ponto/services/dia_pago.py:335`, `:345` | Chaves/versão em `:855`; detalhe em `:897`; furo em `:589`; régua em `folha/porta_export.py:285`. Leitores de `versao_dna` e `evento_origem`: **[não verificado]** |
-| `FechamentoMensal`: horas trabalhadas, noturnas, extras e subdivisões, folga, atraso, saída, falta e intra | Update canônico em `ponto/services/fechamento.py:1160` | Comparação campo a campo em `folha/porta_export.py:451`; rubricas TXT em `folha/export.py:420`; totais em `relatorios/cartao_pela_celula.py:94` |
-| Mensal: previstos/realizados/abonados, dias previstos, turnos abertos, inconsistências e banco | `ponto/services/fechamento.py:1175` | `relatorios/cartao_pela_celula.py:111`, `folha/export.py:1037`, `:1068` |
-| Mensal: semanas DSR, reflexo DSR, dias incertos | `ponto/services/fechamento.py:1177` | Reflexo segue para a lavratura em `:1207`; leitores individuais das semanas e dias incertos: **[não verificado]** |
-| Mensal: motivos, causa e carimbos | `ponto/services/fechamento.py:1186` | `folha/export.py:964`, `folha/retrato_folha.py:1115`, `folha/export.py:1037`, `ponto/services/fechamento.py:1696`, `ponto/views.py:1740` |
-| Chamado: `celula` e `atualizado_em`, pela rejunção | `chamados/rejuncao.py:119` → `chamados/services/vinculos.py:93` | Dia do fato em `chamados/juizes.py:98`; marcador do painel em `chamados/services/painel.py:64` |
-| Falta espúria: status, resolução, via, urgência e carimbos; nota e trilha | `chamados/services/feriado_reavaliar.py:46` → `chamados/models.py:641`, `:228`; nota em `chamados/services/nota.py:103` | Receivers em `chamados/signals.py:91`, `:188`; painel em `chamados/services/painel.py:64` |
-| Perguntas, condicionalmente: materialização/autor/via, resposta/validação quando cabíveis, veredito e carimbos; possível fechamento da disputa | `chamados/services/disputa_emissao.py:1860`, `chamados/models.py:3128`, `:3149`, `:1936` | Juiz em `chamados/juizes.py:662`, `:830`; frescor em `chamados/veredito_lavrado.py:228`; painel em `chamados/services/painel.py:66` |
-
-**ESMERIL-SEMÂNTICA:** não encontrei, nos leitores e chamador examinados, condição executável exigindo que a VOLTA deixe de recalcular; ausência absoluta **[não verificado]**. Há comentários que ainda descrevem a VOLTA como lacuna da reavaliação, em `ponto/management/commands/reavaliar_ausencias_feriado.py:15` e `chamados/signals.py:319`. O chamador operacional delega à porta em `ponto/management/commands/aplicar_col900.py:77`.
-
-Os contraexemplos limitam a promessa do golden:
-
-- **Futuro:** pula julgamento, mas agenda dinheiro e reavaliação; não garante ata restaurada para 240. `ponto/portas/celula.py:427`, `:458`; selo em `ponto/tests/test_reverter_regen_sem_banco.py:204`.
-- **Veredito humano:** preserva julgamento/ata humanos e agenda dinheiro; o selo conserva ata 480. `ponto/tests/test_reverter_regen_sem_banco.py:213`.
-- **Competência guardada:** 09/2026 exportada continua excluída da escrita financeira. `ponto/services/fechamento.py:36`, `:560`.
-- **`apesar_da_lavra`:** abre a guarda da célula, sem desligar a guarda financeira. `ponto/portas/celula.py:779`; `ponto/services/fechamento.py:560`.
-- **`aplicar_col900 --reverter`:** sem `--aplicar`, apenas simula; aplicando, usa a porta corrigida. “REVERTIDO” indica sucesso da reposição, sem certificar persistência financeira posterior. `ponto/management/commands/aplicar_col900.py:74`, `:77`; falhas financeiras são capturadas em `ponto/services/fechamento.py:1818`.
-
-**Pendências de execução:** o comando completo abaixo parou com `ModuleNotFoundError: No module named 'django'`. Ficaram sem executar o golden ORM, o `SimpleTestCase` pelo runner Django, `test_porta_celula_dia` e `test_ordem_regen_julga_antes_do_dinheiro`. O mesmo verificador AST rodou pelo selo sem banco. Certificação pelo Code/opus: **[não verificado]**. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  ponto.tests.test_reverter_regen_recalcula_dinheiro \
-  ponto.tests.test_reverter_regen_sem_banco \
-  ponto.tests.test_porta_celula_dia \
-  ponto.tests.test_ordem_regen_julga_antes_do_dinheiro \
-  chamados.tests.test_e4_expand \
-  --settings=config.settings.ci --verbosity=2
-```
-
-Ruff retornou `All checks passed!` nos três arquivos tocados, com `--no-cache`; `git diff --check` também passou. O brief externo não foi localizado nos dois caminhos tentados; conteúdo além do contrato transcrito **[não verificado]**. [nao verificado]
-
-_3287 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3288 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
