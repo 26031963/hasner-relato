@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 17:53** · publicado em **10/11/2026 17:56** (UTC-3)
+> Ultima resposta processada: **10/11/2026 17:59** · publicado em **10/11/2026 18:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 17:59 · sessao 3960e7546cc4 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Volta 2 entregue: [ENTREGA, com comandos, RED e mutantes](chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:9).
+
+- Linhas registradas: **778, 779 e 1262**. [Registro](core/tests/test_medida_turno_do_par.py:267)
+- Trava duplicada removida; tetos **145/219**, com justificativa C8. [Cura](chamados/services/disputa_emissao.py:548), [tetos](ponto/tests/test_selo_chokepoint_escrita.py:180)
+- Sonda isolada: **6 → 5 consultas**, igualmente com 1 e 3 furos. [Medida](chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:54)
+
+SQL real e suite ORM completa: **[nao verificado]**. [nao verificado]
 
 ## 10/11 17:53 · sessao 33840901b286 · - · - · origem=Ronald (tmux)
 
@@ -980,57 +990,4 @@ Latitude-só encontrada nas exclusões expressas: alerta geofence (`app/template
 
 Não identifiquei novo juiz duplicado ou derivação paralela na alteração do detector: seleção do par completo alimenta o juiz existente (`app/ponto/services/vinculo_na_lista.py:49`, `:87`). O relógio lido pelo detector é `timezone.localdate()` já existente no trecho anterior à mudança fornecida (`app/ponto/services/vinculo_na_lista.py:46`). Comprovação de ordem de pouso, pré-requisitos e execução real das travas depende de evidência ausente no dado [nao verificado].
 
-## 10/11 15:28 · sessao 6067572c276b · BO-0611-05 · construtor · origem=Code
-
-Reescrito somente [test_bo0611_05_templates_geo.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:1). **Verde no runner Django: [não verificado]** — a tentativa local parou com `ModuleNotFoundError: django`. [nao verificado]
-
-O diff substitui `Engine` e os patches de reverse pelo molde obrigatório: cópia de `settings.TEMPLATES`, locmem sobre filesystem, `StaticFilesStorage`, `config.urls_ci` e `render_to_string`. Remove subprocess/git e `BO061105_BASE`. A mutação preserva `latitude is not None` e remove somente longitude. [renderização:80](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:80), [mutação:44](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:44)
-
-```diff
-- return fonte.replace(guarda, lat, 1)
-+ return fonte.replace(guarda, f'{lat} is not None', 1)
-
-- with patch('django.template.defaulttags.reverse', ...), ...:
--     return engine.get_template(entrada).render(Context(...))
-+ with override_settings(TEMPLATES=templates,
-+                        ROOT_URLCONF='config.urls_ci', STORAGES=storages), \
-+         patch('comunicados.services.texto_cobranca', ...):
-+     return render_to_string(entrada, contexto)
-```
-
-Diff completo, a partir de `app/`:
-
-```bash
-git diff -- ponto/tests/test_bo0611_05_templates_geo.py
-```
-
-Cada entrada abaixo chama o contrato comum nas **duas cascas**: completo exige exatamente um link ou botão; as três combinações incompletas exigem zero geo. Offline verifica a célula `⚠️ Sem GPS`; relatório verifica `sem coordenada (GPS ausente)`. [contrato:136](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:136), [combinações:157](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:157)
-
-| Sítio | Entrada do teste | [nao verificado]
-|---|---|
-| Feed | [test_MORDE_feed:165](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:165) |
-| Offline | [test_MORDE_offline:168](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:168) |
-| Relatório | [test_MORDE_relatorio:171](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:171) |
-| Modal | [test_MORDE_modal:174](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:174) |
-
-Para cada sítio, o teste de mutantes executa primeiro o contrato íntegro, verifica o completo mutado e exige que `(lat, None)` mutado produza geo. Depois cobra a falha da **mesma asserção**, sem `subTest`; renderização fica fora do `assertRaisesRegex`. [mutantes:177](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:177) [nao verificado]
-
-Sobre escritores e leitores:
-
-- A fixture escreve `Decimal/None` na batida; os campos persistidos são `DecimalField` nullable, lidos pelo feed e offline. [fixture:108](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:108), [campos:58](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/models.py:58), [feed:16](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/core/_d2_feed.html:16), [offline:96](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/ponto/batidas_offline_pendentes.html:96).
-- A fixture agora escreve `float/None` em `contexto_json.batida_lat/lon`, como o emissor geofence; relatório e modal leem essas chaves. Os valores testados são não zero ou `None`; o emissor usa truthiness, portanto zero tem outra conversão e não está coberto. [fixture:115](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:115), [emissor:369](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/services/geofence.py:369), [relatório:30](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/chamados/partials/_relatorio_geo.html:30), [modal:480](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/chamados/partials/modal_fio.html:480).
-
-Comandos para o runner, em `app/`. Os quatro comandos com mutação devem terminar VERMELHO; resultados ainda [não verificado]:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test ponto.tests.test_bo0611_05_templates_geo --settings=config.settings.ci
-
-BO061105_MUTANTE=feed PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_feed --settings=config.settings.ci
-BO061105_MUTANTE=offline PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_offline --settings=config.settings.ci
-BO061105_MUTANTE=relatorio PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_relatorio --settings=config.settings.ci
-BO061105_MUTANTE=modal PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_modal --settings=config.settings.ci
-```
-
-Passaram as verificações estáticas de sintaxe, detector do selo e alteração única das quatro guardas; `git diff --check` não apontou problemas. A suite Django, os mutantes renderizados e o RED da base não foram reproduzidos localmente: [não verificado]. [nao verificado]
-
-_3425 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3426 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
