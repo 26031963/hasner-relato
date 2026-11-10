@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 11:03** · publicado em **10/11/2026 11:03** (UTC-3)
+> Ultima resposta processada: **10/11/2026 11:04** · publicado em **10/11/2026 11:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 11:04 · sessao 53d91d880944 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+- A classe da origem mostrada na Central de Atendimento vem de `modulo_origem → painel._rotulo_origem → desenlace.rotulo`; a tela também exibe verbo de ação, proveniente de `particionar_verbos`. (`app/chamados/services/painel.py:36`, `app/chamados/services/painel.py:392`, `app/chamados/services/verbos.py:30`, `app/templates/chamados/partials/_lista_chamados.html:65`)
+- Para “dono”, preservar três dimensões distintas: atribuição humana `atribuido_a_id`, mostrada na lista detalhada; pilha operacional de `natureza.dono_do_chamado`; departamento competente de `utils.departamento_do_chamado`. Não chamar `e6_oraculo` para substituir nenhuma dessas autoridades. (`app/chamados/models.py:64`, `app/templates/chamados/partials/_lista_chamados.html:96`, `app/chamados/catalogo/natureza.py:41`, `app/chamados/utils.py:32`)
+- Insumos da pilha: `resp, viva = creditos_perguntas(qs_vivos(...))`; então `dono_do_chamado(ch.modulo_origem, ch.pk in resp, ch.pk in viva)`. A própria partição usa esses insumos e `verbo_do_chamado`, que delega ao dono. (`app/chamados/services/raiox.py:51`, `app/chamados/services/raiox.py:151`, `app/chamados/services/verbos.py:34`, `app/chamados/services/verbos.py:47`, `app/chamados/catalogo/natureza.py:72`)
+- Vínculo canônico singular do chamado: `(ch.colaborador_id, dia_do_fato(ch))`; a função prioriza `celula`, depois a chave declarada no catálogo e `data_turno`, depois batida/disputa/carimbos. Usar a função singular: `dias_do_fato` lê somente `data_turno` no degrau de contexto, enquanto a singular consulta também a chave do catálogo. (`app/chamados/models.py:38`, `app/chamados/juizes.py:87`, `app/chamados/juizes.py:98`, `app/chamados/juizes.py:113`, `app/chamados/juizes.py:187`)
+- `dia_do_fato` captura silenciosamente exceção da consulta ao catálogo; data inválida gera warning, e `fortes=True` devolve `None` antes dos degraus fracos. A sonda deve tratar falha capturada/aviso como incompletude; `None` não prova “fora do E4b”. (`app/chamados/juizes.py:115`, `app/chamados/juizes.py:125`, `app/chamados/juizes.py:127`)
+- O placar `ativos` é `abertos + em_analise` sobre `qs_na_fila`; o total da lista vem de outro corte dentro da mesma função. `qs_na_fila` exclui silêncio futuro; a partição marca silêncio passado como `historico`, que a lista padrão exclui. Portanto medir os dois contadores reais, sem afirmar equivalência. (`app/chamados/services/painel.py:189`, `app/chamados/services/painel.py:212`, `app/chamados/services/painel.py:222`, `app/chamados/services/verbos.py:48`, `app/chamados/services/painel.py:328`, `app/chamados/services/painel.py:333`)
+- Para obter a lista completa real sem reproduzir filtros: `montar_contexto_painel(..., f_modo='lista')`, seguido de `ctx['paginator'].object_list`; a paginação é montada depois do corte. Evita também o ramo resumo, que chama propositor e captura exceção. (`app/chamados/services/painel.py:333`, `app/chamados/services/painel.py:342`, `app/chamados/services/painel.py:422`, `app/chamados/services/painel.py:518`)
+- Justificativas: classe é `j.tipo`/`get_tipo_display`; vínculo é `(j.colaborador_id, j.data_turno)`; pendente significa literalmente “Pendente — aguardando DP”. `aprovada_por` é autor da decisão, não dono atribuído corrente. (`app/templates/ponto/fila_justificativas.html:108`, `app/templates/ponto/fila_justificativas.html:109`, `app/ponto/models.py:131`, `app/ponto/models.py:136`, `app/ponto/models.py:144`, `app/ponto/models.py:160`, `app/templates/ponto/partials/painel_justificativa.html:29`)
+- A tela de justificativas não possui helper do contador: o número exibido vem diretamente de `fila_justificativas`, em `Justificativa.objects.filter(status='pendente').count()`, sem filtro de empresa. Para chamar a lógica real, capturar o `render` da view com `RequestFactory` e usuário existente autorizado; não copiar esse queryset como se fosse função da tela. (`app/ponto/views.py:1695`, `app/ponto/views.py:1697`, `app/ponto/views.py:1736`, `app/ponto/views.py:1749`)
+- “Central de Chamados” no painel da justificativa é link para `chamados:painel_gestao`, não uma terceira tela. (`app/templates/ponto/partials/painel_justificativa.html:80`)
+- Não chamar a view do modal do fio: ela marca followups como lidos antes de montar contexto. (`app/chamados/views.py:877`, `app/chamados/views.py:880`)
 
 ## 10/11 11:03 · sessao 807eb8462b58 · - · - · origem=Ronald (tmux)
 
@@ -839,20 +855,4 @@ Ressalva de precisão: os textos descrevem classes de via; os escritores não co
 
 O rótulo ENCERRAR tampouco esgota todos os usos globais do gate: troca de escala encerra chamados `escala_aceite`, e regularização externa encerra seu chamado. Esses usos não demonstram exclusão incorretamente rotulada no módulo cluster: regularização cria módulo próprio; troca de escala filtra categoria. (`app/colaboradores/services/vinculo.py:384`, `app/colaboradores/services/vinculo.py:387`, `app/chamados/services/regularizacao_ext.py:205`, `app/chamados/services/regularizacao_ext.py:250`)
 
-## 10/11 08:45 · sessao 2a7073c850aa · - · - · origem=Ronald (tmux)
-
-B: **os três mutantes morrem pelas asserções pretendidas**, executando a fonte real alterada apenas em memória. O carregador lê/compila a fonte; serviço e comando são carregados inteiros; juízes puros vêm da fonte real. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:31`, `:104`, `:108`, `:130`)
-
-| Mutante | Falha observada na reexecução |
-|---|---|
-| FK cruzada: remove guarda de colaborador | `1 != 0` e `0 != 1`, ambas na asserção de `numero`; a FK cruzada tem assinatura inversa à célula correta. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:63`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:299`, `:302`) |
-| Consulta por par | `9 != 3` na contagem de avaliações; a asserção anterior de `numero` passa. Há três colaboradores, três datas por colaborador e consultas vazias também são contadas. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:66`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:83`, `:307`, `:313`, `:315`, `:316`) |
-| Rótulos humana/cascata trocados | Falha na igualdade exata de `excluidos`, independentemente de ocorrências. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:74`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233`, `:247`) |
-
-Executei `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_o169_cluster_encerrado_sem_lastro ponto.tests.test_o169_cluster_encerrado_mutantes -v`: **61 testes OK, incluindo os 35 mutantes listados; nenhum desses 35 sobreviveu**. Resultado desta execução [nao verificado por artefato persistido]; definição/coleta dos mutantes em `app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13`, `:150`.
-
-O harness exige alvo textual único, rejeita erros de infraestrutura e exige falha de asserção; nos três casos acima confirmei também a linha exata que falhou. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:135`, `:141`, `:142`)
-
-Limite: a contagem observa avaliações do dublê, inclusive resultado vazio; SQL real, banco, gates de escrita e produção permanecem [nao verificado]. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:7`, `:81`, `:158`)
-
-_3362 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3363 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
