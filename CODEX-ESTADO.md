@@ -1,7 +1,252 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 00:14** · publicado em **10/11/2026 00:16** (UTC-3)
+> Ultima resposta processada: **10/11/2026 00:19** · publicado em **10/11/2026 00:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 00:19 · sessao bdaf292c04d9 · FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE · sonda · origem=Code
+
+O modo `--sonda` executa o envelope antes de entregar o dado raspado ao agente. Não fiz nova execução; abaixo reproduzo integralmente a saída fornecida, até `ERROS 0`, sem incluir o anexo `censo1.r`. (`bin/codex_pergunta.sh:307–319,337–344`) Autenticidade e completude da execução original: [nao verificado].
+
+```text
+sonda_leitura: sonda1.py [d18d7cf94f65bba4] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+agora_local 2026-11-10T00:12:27.212274-03:00
+janela 2026-10-21 2026-11-20 piso 2026-10-21
+2026-11-10 00:12:29,540 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=266 data=2026-11-09 
+2026-11-10 00:12:29,911 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=958 data=2026-11-09 
+2026-11-10 00:12:30,492 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=994 data=2026-11-09 
+2026-11-10 00:12:31,111 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=833 data=2026-11-09 
+2026-11-10 00:12:31,717 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=887 data=2026-11-09 
+2026-11-10 00:12:34,485 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=735 data=2026-11-09 
+2026-11-10 00:12:35,077 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=89 data=2026-11-09 
+2026-11-10 00:12:37,575 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=251 data=2026-11-09 
+2026-11-10 00:12:37,731 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=238 data=2026-11-09 
+2026-11-10 00:12:37,893 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=107 data=2026-11-09 
+2026-11-10 00:12:37,935 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=49 data=2026-11-09 
+2026-11-10 00:12:38,680 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=294 data=2026-11-09 
+2026-11-10 00:12:39,339 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=556 data=2026-11-09 
+2026-11-10 00:12:39,936 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=562 data=2026-11-09 
+2026-11-10 00:12:40,954 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=364 data=2026-11-09 
+2026-11-10 00:12:41,197 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=118 data=2026-11-09 
+2026-11-10 00:12:41,840 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=945 data=2026-11-09 
+2026-11-10 00:12:43,430 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=849 data=2026-11-09 
+2026-11-10 00:12:43,503 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=301 data=2026-11-09 
+2026-11-10 00:12:43,781 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=256 data=2026-11-09 
+2026-11-10 00:12:45,555 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=1000 data=2026-11-09 
+2026-11-10 00:12:46,278 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=190 data=2026-11-09 
+2026-11-10 00:12:46,571 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=139 data=2026-11-09 
+2026-11-10 00:12:46,618 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=848 data=2026-11-09 
+2026-11-10 00:12:46,712 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=575 data=2026-11-09 
+2026-11-10 00:12:47,806 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=38 data=2026-11-09 
+2026-11-10 00:12:49,023 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=814 data=2026-11-09 
+2026-11-10 00:12:49,279 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=850 data=2026-11-09 
+2026-11-10 00:12:50,961 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=631 data=2026-11-09 
+2026-11-10 00:12:51,168 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=278 data=2026-11-09 
+2026-11-10 00:12:51,334 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=1001 data=2026-11-09 
+2026-11-10 00:12:51,440 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=390 data=2026-11-09 
+2026-11-10 00:12:51,553 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=259 data=2026-11-09 
+2026-11-10 00:12:51,788 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=1006 data=2026-11-09 
+2026-11-10 00:12:51,873 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=577 data=2026-11-09 
+2026-11-10 00:12:52,191 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=523 data=2026-11-09 
+2026-11-10 00:12:53,084 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=493 data=2026-11-09 
+2026-11-10 00:12:53,559 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=905 data=2026-11-09 
+2026-11-10 00:12:53,766 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=587 data=2026-11-09 
+2026-11-10 00:12:54,325 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=1012 data=2026-11-09 
+2026-11-10 00:12:54,335 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-10-21 
+2026-11-10 00:12:54,347 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-10-22 
+2026-11-10 00:12:54,360 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-10-23 
+2026-11-10 00:12:54,369 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-10-27 
+2026-11-10 00:12:54,381 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-10-30 
+2026-11-10 00:12:54,394 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-11-03 
+2026-11-10 00:12:54,404 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-11-04 
+2026-11-10 00:12:54,417 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-11-05 
+2026-11-10 00:12:54,427 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-11-06 
+2026-11-10 00:12:54,439 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=950 data=2026-11-09 
+2026-11-10 00:12:54,451 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-10-22 
+2026-11-10 00:12:54,460 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-10-24 
+2026-11-10 00:12:54,472 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-10-26 
+2026-11-10 00:12:54,484 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-10-28 
+2026-11-10 00:12:54,494 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-10-30 
+2026-11-10 00:12:54,506 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-11-01 
+2026-11-10 00:12:54,518 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-11-03 
+2026-11-10 00:12:54,528 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-11-05 
+2026-11-10 00:12:54,544 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-11-07 
+2026-11-10 00:12:54,555 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=969 data=2026-11-09 
+2026-11-10 00:12:54,818 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=701 data=2026-11-09 
+2026-11-10 00:12:55,130 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=258 data=2026-11-09 
+2026-11-10 00:12:56,041 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=968 data=2026-11-09 
+2026-11-10 00:12:56,172 WARNING chamados.fabrica sem_celula: ata nao lavrada, abstendo operacao=criar_questionario colaborador_id=726 data=2026-11-09 
+N_ITENS 139 CELULAS 48
+POR_MOTIVO {'saida_sem_entrada': 45, 'orfao_14h': 48, 'intervalo_saida': 23, 'intervalo_volta': 23}
+POR_DIA {'2026-10-21': 1, '2026-10-26': 1, '2026-11-04': 2, '2026-11-05': 35, '2026-11-06': 18, '2026-11-07': 38, '2026-11-08': 16, '2026-11-09': 28}
+POR_EMPRESA {2: 134, 3: 5}
+A 0 B 0 sem_evento_pos_dia 135 sem_evento_nenhum 0 com_evento_pendente 0
+COMBO(A,B,ev_pos>0) {(False, False, False): 135, (False, False, True): 4}
+TRABALHA {'True': 139} VEREDITO {'nunca_bateu': 137, 'indefinida': 1, 'cobrado': 1}
+PERG_MESMO_DIA_QUALQUER>0 0
+ITENS (colab,emp,dia,motivo,trab,A,B,n_ev,n_ev_pos,pend,perg_dia,julgada,ult_ev):
+ col1009 e2 2026-11-07 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 07:30:07 ultev=11-07 07:30:25
+ col1009 e2 2026-11-07 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 07:30:07 ultev=11-07 07:30:25
+ col1009 e2 2026-11-09 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 07:30:07 ultev=11-09 07:30:31
+ col1009 e2 2026-11-09 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 07:30:07 ultev=11-09 07:30:31
+ col1009 e2 2026-11-09 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 07:30:07 ultev=11-09 07:30:31
+ col1009 e2 2026-11-09 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 07:30:07 ultev=11-09 07:30:31
+ col1005 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
+ col1005 e2 2026-11-05 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
+ col1005 e2 2026-11-05 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
+ col1005 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:24
+ col1005 e2 2026-11-06 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
+ col1005 e2 2026-11-06 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
+ col1005 e2 2026-11-06 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
+ col1005 e2 2026-11-06 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:23
+ col1005 e2 2026-11-07 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 09:00:08 ultev=11-07 09:00:23
+ col1005 e2 2026-11-07 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 09:00:08 ultev=11-07 09:00:23
+ col1005 e2 2026-11-07 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 09:00:08 ultev=11-07 09:00:23
+ col1005 e2 2026-11-07 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 09:00:08 ultev=11-07 09:00:23
+ col1005 e2 2026-11-08 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-08 09:00:08 ultev=11-08 09:00:25
+ col1005 e2 2026-11-08 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-08 09:00:08 ultev=11-08 09:00:25
+ col1005 e2 2026-11-08 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-08 09:00:08 ultev=11-08 09:00:25
+ col1005 e2 2026-11-08 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-08 09:00:08 ultev=11-08 09:00:25
+ col1005 e2 2026-11-09 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 09:00:13 ultev=11-09 09:00:34
+ col1005 e2 2026-11-09 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 09:00:13 ultev=11-09 09:00:34
+ col1005 e2 2026-11-09 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 09:00:13 ultev=11-09 09:00:34
+ col1005 e2 2026-11-09 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 09:00:13 ultev=11-09 09:00:34
+ col1030 e2 2026-11-09 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 15:00:07 ultev=11-09 15:00:24
+ col1030 e2 2026-11-09 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 15:00:07 ultev=11-09 15:00:24
+ col427 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 19:30:09 ultev=11-05 19:30:21
+ col427 e2 2026-11-05 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 19:30:09 ultev=11-05 19:30:21
+ col427 e2 2026-11-05 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 19:30:09 ultev=11-05 19:30:21
+ col427 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 19:30:09 ultev=11-05 19:30:21
+ col427 e2 2026-11-07 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 19:30:07 ultev=11-07 19:30:22
+ col427 e2 2026-11-07 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 19:30:07 ultev=11-07 19:30:22
+ col427 e2 2026-11-07 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 19:30:07 ultev=11-07 19:30:22
+ col427 e2 2026-11-07 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 19:30:07 ultev=11-07 19:30:22
+ col1027 e2 2026-11-04 saida_sem_entrada trab=True A=False B=False ev=2 pos=2 pend=0 perg_dia=0 julg=11-05 16:03:54 ultev=11-05 16:03:54
+ col1027 e2 2026-11-04 orfao_14h trab=True A=False B=False ev=2 pos=2 pend=0 perg_dia=0 julg=11-05 16:03:54 ultev=11-05 16:03:54
+ col1027 e2 2026-11-06 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 06:30:07 ultev=11-06 06:30:17
+ col1027 e2 2026-11-06 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 06:30:07 ultev=11-06 06:30:17
+ col1027 e2 2026-11-08 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-08 06:30:07 ultev=11-08 06:30:17
+ col1027 e2 2026-11-08 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-08 06:30:07 ultev=11-08 06:30:17
+ col268 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 08:00:10 ultev=11-05 08:00:12
+ col268 e2 2026-11-05 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 08:00:10 ultev=11-05 08:00:12
+ col268 e2 2026-11-05 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 08:00:10 ultev=11-05 08:00:12
+ col268 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 08:00:10 ultev=11-05 08:00:12
+ col268 e2 2026-11-07 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 08:00:07 ultev=11-07 08:00:09
+ col268 e2 2026-11-07 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 08:00:07 ultev=11-07 08:00:09
+ col268 e2 2026-11-07 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 08:00:07 ultev=11-07 08:00:09
+ col268 e2 2026-11-07 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 08:00:07 ultev=11-07 08:00:09
+ col268 e2 2026-11-09 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 08:00:08 ultev=11-09 08:00:12
+ col268 e2 2026-11-09 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 08:00:08 ultev=11-09 08:00:12
+ col268 e2 2026-11-09 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 08:00:08 ultev=11-09 08:00:12
+ col268 e2 2026-11-09 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 08:00:08 ultev=11-09 08:00:12
+ col1019 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 06:30:09 ultev=11-05 06:30:21
+ col1019 e2 2026-11-07 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 06:30:08 ultev=11-07 06:30:17
+ col1019 e2 2026-11-07 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 06:30:08 ultev=11-07 06:30:17
+ col1019 e2 2026-11-09 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 06:30:08 ultev=11-09 06:30:19
+ col1019 e2 2026-11-09 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-09 06:30:08 ultev=11-09 06:30:19
+ col1016 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 18:30:09 ultev=11-05 18:30:28
+ col1016 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 18:30:09 ultev=11-05 18:30:28
+ col1016 e2 2026-11-07 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 18:30:08 ultev=11-07 18:30:29
+ col1016 e2 2026-11-07 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-07 18:30:08 ultev=11-07 18:30:29
+ col534 e2 2026-11-05 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:14
+ col534 e2 2026-11-05 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:14
+ col534 e2 2026-11-05 intervalo_volta trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:14
+ col534 e2 2026-11-05 orfao_14h trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-05 09:00:09 ultev=11-05 09:00:14
+ col534 e2 2026-11-06 saida_sem_entrada trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=11-06 09:00:10
+ col534 e2 2026-11-06 intervalo_saida trab=True A=False B=False ev=2 pos=0 pend=0 perg_dia=0 julg=11-06 09:00:05 ultev=
+
+[truncado em 20000 de 34482 caracteres]
+
+## 10/11 00:18 · sessao b9ec0c8ed08e · - · - · origem=Ronald (tmux)
+
+Censo na base `7b0dbff79`: 31 chamadas externas de `pautas.services.escrever`, mais `responder` interno (`pautas/services.py:194`); criação única em `pautas/services.py:180`. Portas humanas: cabeça em `pautas/views.py:76`, resposta em `pautas/views.py:113` → `pautas/services.py:194`.
+
+Chamadores completos, por arquivo:
+
+| Arquivo | Linhas de chamada |
+|---|---|
+| `chamados/management/commands/reabrir_orfas_enterradas.py` | 208 |
+| `chamados/services/competencia_trancada.py` | 231 |
+| `chamados/services/fabrica_da_celula.py` | 270, 360 |
+| `chamados/services/passivo_validado.py` | 229, 233, 266 |
+| `chamados/services/resposta_tardia.py` | 62 |
+| `colaboradores/management/commands/pauta_aparelhos_compartilhados.py` | 107 |
+| `core/management/commands/alarme_arvore.py` | 50 |
+| `core/management/commands/alarme_esteira.py` | 54 |
+| `core/services/crons_quebrados.py` | 71 |
+| `ferias/management/commands/pautas_de_ferias.py` | 167 |
+| `folha/management/commands/pre_fechamento.py` | 110 |
+| `pautas/management/commands/pauta_dia_em_aberto.py` | 127, 139, 142 |
+| `pautas/management/commands/pauta_folga_nao_definida_exportada.py` | 134, 139 |
+| `pautas/management/commands/pauta_pago_x_devido_exportada.py` | 207, 211, alias `_ps.escrever` |
+| `pautas/semanal.py` | 276 |
+| `pautas/views.py` | 76, alias `sv.escrever` |
+| `ponto/services/afastado_avisa.py` | 74 |
+| `ponto/services/ausencia.py` | 1055, 1245 |
+| `ponto/services/autorizacao_he_periodo.py` | 244 |
+| `ponto/services/cobertura.py` | 333 |
+| `ponto/services/pautas_do_esmeril.py` | 76 |
+| `ponto/services/pautas_dos_deslogados.py` | 77 |
+| `ponto/services/pautas_dos_discordantes.py` | 177 |
+
+Além das cabeças, escrevem filhas: `pautas/services.py:194`, `chamados/services/passivo_validado.py:233`, `pautas/management/commands/pauta_dia_em_aberto.py:127,142`, `pautas/management/commands/pauta_folga_nao_definida_exportada.py:139`, `pautas/management/commands/pauta_pago_x_devido_exportada.py:211`, `ponto/services/autorizacao_he_periodo.py:244-246`.
+
+AST encontra **26** keywords `texto__startswith`, todos sobre Pauta, em produção. Tabela de famílias (linhas da base):
+
+| Marcador / dono | Escritor | Leitor | Cabeças somente? |
+|---|---|---|---|
+| `PAUTA_LIMBO_EXPORTADA`, `chamados/services/fabrica_da_celula.py:239` | mesmo:270,275 | mesmo:254 | Sim, `pai__isnull=True` em 253 |
+| `PAUTA_SEM_TURNO`, mesmo:296 | mesmo:360,363 | mesmo:305 | Sim, 304 |
+| literal `[TRANCA]`, `chamados/services/competencia_trancada.py:218,223` | mesmo:231 | mesmo:218 | **Não** |
+| `MARCADOR` `[ORFA-ENTERRADA]`, `chamados/management/commands/reabrir_orfas_enterradas.py:32` | mesmo:208 | mesmo:202 | **Não** |
+| `MARCADOR` `[PASSIVO-VALIDADO]`, `chamados/services/passivo_validado.py:44` | mesmo:229,233 | mesmo:164, via `cabeca` em 159 | Sim, 164 |
+| `MARCADOR_FORA` `[PASSIVO-VALIDADO-FORA]`, mesmo:48 | mesmo:266 | mesmo:256, via `cabeca` em 254 | Sim, 256 |
+| `MARCADOR` `ARVORE VERMELHA`, `core/management/commands/alarme_arvore.py:11` | mesmo:50,53 | mesmo:16 | **Não** |
+| `MARCADOR` `ESTEIRA`, `core/management/commands/alarme_esteira.py:10` | mesmo:54,56 | mesmo:15, compõe motivo `chave` | **Não** |
+| `MARCADOR` `[CRON QUEBRADO]`, `core/services/crons_quebrados.py:15` | mesmo:71 | mesmo:54, compõe cron/empresa | **Não** |
+| `MARCADORES`, três valores `[FERIAS/PA-VENCIDO]`, `[FERIAS/PA-VENCENDO]`, `[FERIAS/CADASTRO]`, `ferias/management/commands/pautas_de_ferias.py:30-34` | mesmo:167, usa 149,159 | mesmo:156 | **Não** |
+| `MARCADOR` `[PRE-FECHAMENTO]`, `folha/management/commands/pre_fechamento.py:29` | mesmo:110 | mesmo:92,98, segundo usa data `de_hoje` em 93 | **Não**, ambos |
+| `MARCA` `[DIA EM ABERTO]`, `pautas/management/commands/pauta_dia_em_aberto.py:16` | mesmo:139; filhas 127,142 | mesmo:108 | **Não** |
+| `MARCA` `[FOLGA NAO DEFINIDA - EXPORTADA]`, `pautas/management/commands/pauta_folga_nao_definida_exportada.py:28` | mesmo:134; filhas 139 | mesmo:126 | Sim, 125 |
+| `MARCA` `[PAGO X DEVIDO - EXPORTADA]`, `pautas/management/commands/pauta_pago_x_devido_exportada.py:41` | mesmo:207; filhas 211 | mesmo:243,250, chave nasce em 54 | Cabeça: sim em 242; 250 lê `ja.respostas` **intencionalmente** |
+| `[A6/REVISAO-SEMANAL]`, `ponto/services/vigia_ausencia.py:28` | chama semanal em 239 → `pautas/semanal.py:276` | `pautas/semanal.py:199,228` | **Não**, ambos |
+| `[SUP/REVISAO-SEMANAL]`, `escala/services/fase_12x36.py:237` | chama semanal em 277-278 → `pautas/semanal.py:276` | `pautas/semanal.py:199,228` | **Não**, ambos |
+| `TEXTO[:40]`, `ponto/services/afastado_avisa.py:11` | mesmo:74,78 | mesmo:65 | Sim, 63 |
+| local `marcador` `[A4/SEM-DOCUMENTO]`, `ponto/services/ausencia.py:1038` | mesmo:1055,1060 | mesmo:1041 | **Não** |
+| local dinâmico `marcador` `[A1-FERIAS/AG#%s]`, mesmo:1228 | mesmo:1245,1250 | mesmo:1231 | **Não** |
+| `MARCADOR_PAUTA` `[HE-AUTORIZADA-EM-EXPORTADA]`, `ponto/services/autorizacao_he_periodo.py:124` | mesmo:244 | mesmo:242 | Sim |
+| `MARCADOR_A_CONFIRMAR` `[COBERTURA-A-CONFIRMAR]`, `ponto/services/cobertura.py:207` | mesmo:333,337 | mesmo:243 | **Não** |
+| `MARCADOR` `[ESMERIL %s]`, `ponto/services/pautas_do_esmeril.py:14` | mesmo:76, usa 49 | mesmo:64, literal `[ESMERIL ` | **Não** |
+| `MARCADOR` `[APP-401]`, `ponto/services/pautas_dos_deslogados.py:26` | mesmo:77, usa 48 | mesmo:66 | **Não** |
+| `MARCADOR` `[DISCORDANTE]`, `ponto/services/pautas_dos_discordantes.py:37` | mesmo:177, usa 93 | mesmo:166 | **Não** |
+
+`vivas()` e `nao_canceladas()` **não** filtram pai (`pautas/models.py:57-64`). Portanto não há exclusão implícita de respostas nos leitores assinalados “Não”.
+
+Dois escritores do censo não têm leitor `texto__startswith`: `[RESPOSTA-TARDIA]` em `chamados/services/resposta_tardia.py:65` e `APARELHO COMPARTILHADO` em `colaboradores/management/commands/pauta_aparelhos_compartilhados.py:99`.
+
+Semânticas que precisam sobreviver:
+
+- `PAGO` usa marcador + colab + competência (`pautas/management/commands/pauta_pago_x_devido_exportada.py:54`); a cabeça exige espaço depois da chave em 243; o leitor de filhas exige ` > ` em 250. Ainda há leitor Python `p.texto.startswith(MARCA)` na reversão em 277.
+- `PASSIVO` e `PASSIVO_FORA` são famílias distintas; o comentário explica que misturá-las falseia idempotência (`chamados/services/passivo_validado.py:245-248`).
+- `ESTEIRA` distingue motivo por `'%s %s:'` (`core/management/commands/alarme_esteira.py:15`).
+- `CRON` distingue nome/empresa (`core/services/crons_quebrados.py:54`).
+- `ESMERIL` usa prefixo aberto `[ESMERIL ` e depois faz parsing da ação por posição (`ponto/services/pautas_do_esmeril.py:64-65`), enquanto a constante é template `[ESMERIL %s]` em 14.
+- `DISCORDANTE` tem leitor Python adicional em `ponto/services/pautas_dos_discordantes.py:98`, seguido de parsing em 100-101.
+- `afastado` reserva só os primeiros 40 caracteres de uma frase normal, não uma tag (`ponto/services/afastado_avisa.py:65`).
+- `A1-FERIAS` é família dinâmica por agendamento (`ponto/services/ausencia.py:1228`).
+- `escrever` remove espaços externos antes de persistir (`pautas/services.py:164`); prefixo com espaço inicial humano acaba normalizado na base. Marcador no meio não casa com `startswith` por definição dos lookups existentes.
+- Os leitores usam `startswith`, não `istartswith` (26 sítios enumerados); o comportamento efetivo de collation do banco está `[não verificado]`. A normalização de caixa exigida para recusa pode ser aplicada só à guarda humana, conservando leitores. [nao verificado]
+- Responder cria filha, mantém âncora e inverte destinatário para usuário autor ou departamento (`pautas/services.py:192-201`). Isso pode afastar respostas humanas dos leitores que exigem departamento, mas não equivale a filtro de pai. Sem alterar leitores sem filtro, a afirmação “toda resposta está fora do juiz” seria falsa.
+
+Legado: é possível enumerar **candidatos** por prefixo + pai nulo, mas usuário não prova origem: `autor_sistema` recua a superuser (`pautas/services.py:89-93`); `Pauta.autor_user` só grava usuário (`pautas/models.py:102-106`). A trilha de criação grava remetente/remetente informado, sem canal humano/sistema (`pautas/services.py:186-188`, `_trilha` em 369-373). `LogAuditoria` oferece IP/ator (`core/models.py:302-307`), que poderia ajudar numa investigação autorizada, sem garantir classificação completa. Quantidade e identidade dos casos em produção: `[não verificado]`.
+
+Comandos usados para o censo:
+
+```bash
+git grep -n -E 'pautas.services|texto__startswith|escrever\(' -- '*.py' ':!*/tests/*'
+```
+
+Varredura AST somente leitura executada com `PYTHONDONTWRITEBYTECODE=1 python3`, sobre `git ls-files '*.py'`, excluindo testes/migrations; enumerou os 26 keywords e validou os imports/chamadas diretos mais aliases. Nenhum arquivo alterado. [nao verificado]
 
 ## 10/11 00:14 · sessao d84e0a927d5d · - · - · origem=Ronald (tmux)
 
@@ -854,256 +1099,4 @@ Q6 — resultados do grep literal solicitado:
 
 A busca literal não encontrou `O169` em CORTES/DOSSIES, nem `detectar_cluster_espurio` em CORTES, nem quarentena em LEIS; como ausência não possui linha própria, registrar como resultado do grep, com completude absoluta `[nao verificado]`.
 
-## 09/11 23:43 · sessao 2e2e8d3d1af2 · - · - · origem=Ronald (tmux)
-
-**3. RED de 15 dias e alcance do mutante**
-
-- Arquivo:teste: `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:74`, `ClusterNaoFechaPorIdadeTest.test_RED_dia_de_15_dias_com_assinatura_NAO_fecha_por_idade`; data congelada em `2026-10-26 15:00:00` na linha 38.
-- `_caso(15, ASSINADA)` cria chamado cujo **dia do fato** é `hoje - 15 dias`; não envelhece `criado_em`: `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:64-68`; o chamado guarda `contexto_json.data_turno`: `:43-46`.
-- O helper consulta `pendencias()['a_fechar']`, executa `reconciliar_colab`, recarrega o registro e verifica participação em `VIVOS`: `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:56-62`.
-- Asserções: chamado fora de `a_fechar` (`:76`) e permanece vivo (`:77`).
-- Mutante que faz dia do fato anterior ao horizonte entrar em `a_fechar` fica vermelho na primeira asserção, mesmo que `ch.reconciliar()` posteriormente impeça a gravação: confronto entre `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:59,76` e `app/ponto/services/cluster_espurio.py:108,123-125`.
-- **Limite:** mutante implantado exclusivamente no `Command.handle`, sem alterar o serviço, não é exercitado por esse RED: o helper chama serviço diretamente em `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:59-60`; o caminho manual do comando fica em `app/ponto/management/commands/detectar_cluster_espurio.py:45-48`. Mutante baseado em idade de `criado_em`, em vez de `data_turno`, também não está reproduzido nessa fixture: `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:43-46,65-66`.
-- Contraprova útil já existente: dia com 15 dias e ata sem assinatura **deve fechar**, `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:80-83`; evita conservação indiscriminada por idade.
-- História declarada: RED “3 FAIL em a_fechar”, cura e suite documentados em `app/docs/RELATO.md:7242-7248`; entrada fechada em `app/docs/BACKLOG.md:1790`. Logs originais `logs/c20_o169/red.log` e execução efetiva do mutante nesta sessão: **[nao verificado]**.
-
-**5. Saída atual e consumidores**
-
-| Sítio | Texto/contrato efetivamente consumido |
-|---|---|
-| `app/ponto/management/commands/detectar_cluster_espurio.py:52` | stdout por achado: `  [DRY] %s %s orfas=%s missing=%d` |
-| `app/ponto/management/commands/detectar_cluster_espurio.py:58` | stdout apply: `APPLY: %d chamado(s) abertos, %d reconciliado(s)` |
-| `app/ponto/management/commands/detectar_cluster_espurio.py:60` | stdout dry: `DRY: %d pendencia(s) que o evento nao resolveu` |
-| `app/ponto/management/commands/detectar_cluster_espurio.py:62-64` | stderr alarme: `VIGIA detectar_cluster_espurio: %d pendencia(s) que o evento nao resolveu (esperado 0): %s`, depois `SystemExit(2)` |
-| `app/config/crons.py:598` | agenda 06:24 com `--alarme`, grava `cluster_espurio.log`, depende de `reconciliar_grade` |
-| `app/config/crons.py:1875-1879` | redireciona stdout+stderr com `>> LOGS/log 2>&1`; `LOGS` é `/home/ronald/saas-hasner/logs`: `:19-20` |
-| `bin/cron_run.sh:11-13` | executa e consome **RC**, grava JSON com `nome`, `emp`, `ini`, `fim`, `dur`, `exit`; não raspa o texto stdout |
-| `bin/cron_run.sh:22-25,32-35` | RC 0 e 2 carimbam sucesso operacional; outros avisam quebra |
-| `app/core/services/crons_quebrados.py:30-47` | lê JSONL do envelope; avalia `exit`, não saída textual do detector; 0/2 aceitos em `:16` |
-| `bin/placar_code.sh:477-480` | raspa saída de **cron_quebrado**, regex `^crons_quebrados=\([0-9]*\)$`; não é a saída de detectar_cluster_espurio |
-| `bin/placar_code.sh:484-486` | importa `config.crons.juizes_por_varredura()` e conta tamanho; não consome stdout do detector |
-| `app/ponto/tests/test_varredura_cluster_evento.py:78-84` | chama detector com stdout/stderr `StringIO`, sem ler conteúdo; exige exit 2, ausência de escrita e depois ausência de alarme |
-| `app/ponto/tests/test_varredura_cluster_evento.py:88-95` | verifica nome fora de juízes de varredura, papel vigia e args `--alarme` sem `--apply`; não verifica formato |
-| `app/core/contratos_estruturais.py:262-270` | contrato do chamado referencia `config.crons.JUIZES_POR_VARREDURA` e pendentes; nota sobre O169. Não fornece parser de saída ali |
-| `bin/gerar_estado.py:184-190` | ESTADO pode incorporar últimas 40 linhas do painel tmux, como texto bruto; publicação específica da saída do detector por esse painel **[nao verificado]** |
-
-Não encontrei parser direto de `cluster_espurio.log`, do prefixo `VIGIA detectar_cluster_espurio` ou das linhas `DRY/APPLY` em busca textual ampla da árvore; como ausência não tem `arquivo:linha`, registro como **[nao verificado]**. A adição de linha própria preservando linhas existentes e RCs é compatível com os consumidores comprovados acima; consumidores externos ao checkout: **[nao verificado]**.
-
-Documentação divergente já presente: `app/docs/CRONS.md:31` ainda registra `06:24 detectar_cluster_espurio --apply`, enquanto declaração executável usa `--alarme` em `app/config/crons.py:598`.
-
-Selos vizinhos leem o **fonte**, não saída: `app/ponto/tests/test_guardas_par_relampago.py:115-126` proíbe strings de escrita em Batida e exige docstring “batida gravada NAO se toca”; `app/ponto/tests/test_detectar_cluster_espurio.py:8,56-57,73-74` importa/testa `dias_com_cluster`.
-
-## 09/11 22:58 · sessao b8554cce33ca · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-Alterado somente [test_e4a2_disparar_e_vigia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-225337/app/chamados/tests/test_e4a2_disparar_e_vigia.py:61): lista fechada SQL, execução dos callbacks dentro da captura e mutante local `on_commit` (`:61`, `:320`, `:351`).
-
-- **RED antes:** 24 falhas nos casos novos; reprodução com o coletor antigo em memória falha em `WITH … UPDATE` (`:241`, `:256`).
-- **Depois:** `Ran 3 tests — OK`, incluindo rejeição dos seis mutantes do coletor (`:264`).
-- **Não rodaram:** os três testes ORM, incluindo comando com/sem alarme e mutantes UPDATE síncrono/on_commit (`:304`, `:333`, `:351`). Execução e resultados desses caminhos: **[nao verificado]**. Django/freezegun indisponíveis no Python consultado; nenhuma instalação realizada. [nao verificado]
-
-<details>
-<summary>Diff aplicado</summary> [nao verificado]
-
-```diff
---- a/app/chamados/tests/test_e4a2_disparar_e_vigia.py
-+++ b/app/chamados/tests/test_e4a2_disparar_e_vigia.py
-@@ -10,7 +10,7 @@
- from unittest.mock import Mock
- 
- from django.core.management import call_command
--from django.db import connection
-+from django.db import connection, transaction
- from django.test import SimpleTestCase, TestCase
- from django.test.utils import CaptureQueriesContext
- from freezegun import freeze_time
-@@ -59,8 +59,17 @@
- 
- 
- def escritas_sql(consultas):
--    """DML de qualquer tabela; SAVEPOINT/RELEASE e leituras nao entram."""
--    return [q['sql'] for q in consultas if re.match(r'^\s*(INSERT|UPDATE|DELETE)\b', q['sql'], re.I)]
-+    """Lista fechada de leitura/controle; SQL desconhecido conta como escrita."""
-+    escritas = []
-+    for consulta in consultas:
-+        sql = re.sub(r'\A(?:\s+|--[^\r\n]*(?:\r\n?|\n|$)|/\*.*?\*/)*', '', consulta['sql'], flags=re.S)
-+        leitura = re.match(r'^(SELECT|SAVEPOINT|RELEASE\s+SAVEPOINT|ROLLBACK\s+TO\s+SAVEPOINT|SET|SHOW)\b',
-+                           sql, re.I)
-+        if re.match(r'^WITH\b', sql, re.I):
-+            leitura = not re.search(r'\b(INSERT|UPDATE|DELETE|MERGE)\b', sql, re.I)
-+        if not leitura:
-+            escritas.append(consulta['sql'])
-+    return escritas
- 
- 
- class DispararEVigiaFonteTest(SimpleTestCase):
-@@ -219,10 +228,63 @@
- 
- 
- class DispararEVigiaSQLTest(SimpleTestCase):
-+    def _verificar_coletor(self, coletor):
-+        leituras = [
-+            'SELECT 1', ' select 1', 'SAVEPOINT "s1"', 'RELEASE SAVEPOINT "s1"',
-+            'ROLLBACK TO SAVEPOINT "s1"', 'SET TIME ZONE UTC', 'SHOW TIME ZONE',
-+            'release\n savepoint "s1"', 'rollback\tto\n savepoint "s1"',
-+            '-- c\n /* outro */ SELECT 1', '/* c */ -- outro\r\n SHOW TIME ZONE',
-+            'WITH x AS (SELECT 1) SELECT * FROM x',
-+        ]
-+        escritas = [
-+            'INSERT INTO tabela VALUES (1)', '\n update tabela SET campo=1', '\tDELETE FROM tabela',
-+            'WITH x AS (SELECT 1) UPDATE tabela SET campo=1',
-+            'with x as (select 1) insert into tabela select * from x',
-+            'WITH x AS (DELETE FROM tabela RETURNING *) SELECT * FROM x',
-+            'WITH x AS (SELECT 1) MERGE INTO tabela USING x ON false WHEN MATCHED THEN DO NOTHING',
-+            '/* c */ UPDATE tabela SET campo=1',
-+            '-- c\n /* outro */ DELETE FROM tabela',
-+            'TRUNCATE tabela', 'COPY tabela FROM STDIN', 'DO $$ BEGIN END $$', 'CALL rotina()',
-+            'BEGIN', 'COMMIT', 'ROLLBACK', 'RELEASE outra_coisa', 'ROLLBACK TO outra_coisa', [nao verificado]
-+            'SELECTED 1', 'SAVEPOINTED s1', 'RELEASE SAVEPOINTED s1',
-+            'ROLLBACK TO SAVEPOINTED s1', 'SETTING x', 'SHOWCASE x',
-+            '', ' -- so comentario', '/* comentario sem fim',
-+        ]
-+        for sql in leituras + escritas:
-+            self.assertEqual(coletor([{'sql': sql}]), [sql] if sql in escritas else [], sql)
-+
-+    def test_MORDE_WITH_comentarios_e_SQL_desconhecido(self):
-+        self._verificar_coletor(escritas_sql)
-+
-     def test_coletor_reconhece_DML_e_ignora_transacao_e_leitura(self):
-         dml = ['INSERT INTO tabela VALUES (1)', '\n update tabela SET campo=1', '\tDELETE FROM tabela']
-         leituras = ['SELECT 1', 'SAVEPOINT "s1"', 'RELEASE SAVEPOINT "s1"', 'ROLLBACK TO SAVEPOINT "s1"']
-         self.assertEqual(escritas_sql([{'sql': sql} for sql in leituras + dml]), dml)
-+
-+    def test_mutantes_do_coletor_sao_rejeitados(self):
-+        fonte = Path(__file__).read_text(encoding='utf-8')
-+        no = next(n for n in ast.parse(fonte).body if isinstance(n, ast.FunctionDef) and n.name == 'escritas_sql')
-+        fonte = ast.get_source_segment(fonte, no)
-+        mutantes = {
-+            'lista_aberta': ('if not leitura:',
-+                             "if not leitura and re.match(r'^(INSERT|UPDATE|DELETE)\\b', sql, re.I):"),
-+            'WITH_escritor_liberado': ("leitura = not re.search(r'\\b(INSERT|UPDATE|DELETE|MERGE)\\b', sql, re.I)",
-+                                      'leitura = True'),
-+            'MERGE_esquecido': ('INSERT|UPDATE|DELETE|MERGE', 'INSERT|UPDATE|DELETE'),
-+            'comentarios_nao_removidos':
-+                ("sql = re.sub(r'\\A(?:\\s+|--[^\\r\\n]*(?:\\r\\n?|\\n|$)|/\\*.*?\\*/)*', '', consulta['sql'], flags=re.S)",
-+                 "sql = consulta['sql'].lstrip()"),
-+            'prefixo_sem_fronteira': ('|SHOW)\\b', '|SHOW)'),
-+            'ignora_minusculas': ('re.I', '0'),
-+        }
-+        self._verificar_coletor(escritas_sql)
-+        for nome, (antes, depois) in mutantes.items():
-+            with self.subTest(mutante=nome):
-+                self.assertIn(antes, fonte)
-+                ns = {'re': re}
-+                exec(compile(fonte.replace(antes, depois), '<mutante_sql_%s>' % nome, 'exec'), ns)
-+                with self.assertRaises(AssertionError):
-+                    self._verificar_coletor(ns['escritas_sql'])
- 
- 
- class DispararEVigiaBancoTest(TestCase):
-@@ -256,12 +318,13 @@
-                 opts = dict(ini=dia_celula.isoformat(), fim=self.dia.isoformat(), alarme=alarme,
-                             stdout=out, stderr=StringIO())
-                 with CaptureQueriesContext(connection) as consultas:
--                    if alarme:
--                        with self.assertRaises(SystemExit) as cm:
--                            call_command('disparar_perguntas_competencia', **opts)
--                        self.assertEqual(cm.exception.code, 2)
--                    else:
--                        self.assertIsNone(call_command('disparar_perguntas_competencia', **opts))
-+                    with self.captureOnCommitCallbacks(execute=True):
-+                        if alarme:
-+                            with self.assertRaises(SystemExit) as cm:
-+                                call_command('disparar_perguntas_competencia', **opts)
-+                            self.assertEqual(cm.exception.code, 2)
-+                        else:
-+                            self.assertIsNone(call_command('disparar_perguntas_competencia', **opts))
-                 self.assertEqual(escritas_sql(consultas), [], out.getvalue())
-                 self.assertIn('VIGIA FIO MUDO: 1', out.getvalue())
-                 self.assertIn('FABRICA-POR-EVENTO: o julgamento deixou 1 ', out.getvalue())
-@@ -277,12 +340,34 @@
-             return ChamadoColaborador.objects.filter(pk=ch.pk).update(titulo='mutante')
- 
-         with CaptureQueriesContext(connection) as consultas:
--            self.assertEqual(mutante(), 1)
-+            with self.captureOnCommitCallbacks(execute=True):
-+                self.assertEqual(mutante(), 1)
-         dml = escritas_sql(consultas)
-         self.assertGreaterEqual(len(dml), 1)
-         self.assertEqual(self._contagens(), antes)
-         with self.assertRaises(AssertionError):
-             self.assertEqual(dml, [], 'o mesmo veto a DML deve rejeitar o mutante local')
-+
-+    def test_MORDE_o_mesmo_coletor_acusa_UPDATE_em_on_commit(self):
-+        from chamados.models import ChamadoColaborador
-+        from chamados.tests.test_selo_emissor_fio_mudo import EmissorPedeDoChamadoMudoTest
-+        _, ch = EmissorPedeDoChamadoMudoTest._mudo(self, 'E4A2 MUTANTE ON COMMIT') [nao verificado]
-+        antes = self._contagens()
-+
-+        def mutante():
-+            transaction.on_commit(lambda: ChamadoColaborador.objects.filter(pk=ch.pk).update(titulo='mutante on_commit'))
-+
-+        with CaptureQueriesContext(connection) as consultas:
-+            with self.captureOnCommitCallbacks(execute=True) as callbacks:
-+                mutante()
-+                self.assertEqual(escritas_sql(consultas), [], 'a escrita deve estar adiada ate a saida do contexto')
-+        self.assertEqual(len(callbacks), 1)
-+        dml = escritas_sql(consultas)
-+        self.assertGreaterEqual(len(dml), 1)
-+        self.assertEqual(ChamadoColaborador.objects.get(pk=ch.pk).titulo, 'mutante on_commit')
-+        self.assertEqual(self._contagens(), antes)
-+        with self.assertRaises(AssertionError):
-+            self.assertEqual(dml, [], 'o mesmo veto a DML deve rejeitar o mutante adiado')
-```
-
-</details>
-
-Comando executado para reproduzir RED e depois os três testes puros, incluindo todos os seis mutantes (`:256`, `:264`): [nao verificado]
-
-```bash
-sql_test() {
-  MODO="$1" PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import ast
-import os
-import re
-import unittest
-from pathlib import Path
-
-p = Path('chamados/tests/test_e4a2_disparar_e_vigia.py')
-nodes = [n for n in ast.parse(p.read_text()).body
-         if isinstance(n, (ast.FunctionDef, ast.ClassDef))
-         and n.name in ('escritas_sql', 'DispararEVigiaSQLTest')]
-ns = dict(ast=ast, re=re, Path=Path, __file__=str(p.resolve()),
-          SimpleTestCase=unittest.TestCase)
-exec(compile(ast.Module(body=nodes, type_ignores=[]), str(p), 'exec'), ns)
-cls = ns['DispararEVigiaSQLTest']
-if os.environ['MODO'] == 'red':
-    ns['escritas_sql'] = lambda qs: [q['sql'] for q in qs
-        if re.match(r'^\s*(INSERT|UPDATE|DELETE)\b', q['sql'], re.I)]
-    suite = unittest.TestSuite([cls('test_MORDE_WITH_comentarios_e_SQL_desconhecido')]) [nao verificado]
-else:
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(cls) [nao verificado]
-raise SystemExit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
-PY
-}
-sql_test red
-sql_test green
-```
-
-Saída da reprodução (`:256`, `:264`):
-
-```text
-RED:   Ran 1 test — FAILED (failures=1)
-GREEN: Ran 3 tests — OK
-```
-
-Comandos dos testes ORM pendentes, para o ambiente autorizado da suite (`:304`, `:333`, `:351`); **não executados**: [nao verificado]
-
-```bash
-teste_banco=chamados.tests.test_e4a2_disparar_e_vigia.DispararEVigiaBancoTest
-
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_banco.test_fio_mudo_conta_sem_escrever_com_e_sem_alarme" --verbosity 2
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_banco.test_MORDE_o_mesmo_coletor_acusa_UPDATE_sem_mudar_contagens" --verbosity 2
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_banco.test_MORDE_o_mesmo_coletor_acusa_UPDATE_em_on_commit" --verbosity 2
-```
-
-_3270 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3272 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
