@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 10:41:52.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (254.7 MB). Acoes na janela: **755**.
+**Medido em 10/11/2026 10:47:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (254.7 MB). Acoes na janela: **752**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -762,6 +762,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:53:04 | Bash |  | `sed -n 1790p docs/BACKLOG.md \| cut -c1-700; sed -n 55,80p ponto/management/commands/detectar_cluster_espurio.py; /bin/grep -rn "fechados_por_idade" --include=*.py . \| head -5` |
 | 22:52:59 | Bash |  | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bsxb0w4a1.output \| tail -3; ls -l logs/FIO-E0-V4-E4A-2/preverif2.r 2>&1 \| cut -c1-120` |
 | 22:52:58 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && /bin/grep -n "O169" BACKLOG.md \| head -8 \| cut -c1-260; /bin/grep -n "^\| E4A2-JANELA-POR-EMPRESA" BACKLOG.md \| cut -c1-300` |
-| 22:42:52 | Bash |  | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2 && while pgrep -f "codex_pergunta.sh --anexo triagem_preverif1" >/dev/null; do /usr/bin/sleep 20; done; tail -3 preverif2.log \| cut -c1-200; wc -l preverif2.r; cat preverif2.r` |
-| 22:42:46 | Bash |  | `cd /home/ronald/saas-hasner && git log --format='%h %s' origin/main..HEAD -- app/chamados/models.py \| cut -c1-140; git diff origin/main HEAD -- app/chamados/models.py \| head -50` |
-| 22:42:44 | Bash |  | `cd /home/ronald/saas-hasner && git log --format='%h %ad %s' --date=format:%d/%m -L '/def _vivas_entre/,+20:app/chamados/models.py' -s \| head -5 \| cut -c1-140; git log -1 --format='%h %ad' --date=format:'%d/%m %H:%M' -S'_dia_encerrado_puro' -- app/ponto/turnos.py; git log -1 --format='%h %ad' --date=format:'%d/%m %H:%M' -- bin/tests/test_esmeril_chamado_censo.sh; git log origin/main -1 --format=% ...` |
