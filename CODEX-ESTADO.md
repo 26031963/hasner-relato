@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 22:10** · publicado em **09/11/2026 22:13** (UTC-3)
+> Ultima resposta processada: **09/11/2026 22:24** · publicado em **09/11/2026 22:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 22:24 · sessao b40cd15d984c · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Alterados cinco arquivos, nos itens da volta 2:
+
+- [disparar_perguntas_competencia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/chamados/management/commands/disparar_perguntas_competencia.py:36): único `agora/hoje`, janela usando esse dia e `_viva(..., hoje=hoje)`. Reparo documentado em `:8`, janela global em `:28`, texto literal em `:136` e legenda em `:157`. A linha FABRICA permaneceu idêntica em bytes (`:154`).
+- [test_e4a2_disparar_e_vigia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/chamados/tests/test_e4a2_disparar_e_vigia.py:39): AST ampliado; captura DML da chamada inteira com dois alvos distintos, com/sem alarme (`:242`); mesmo coletor aplicado ao mutante ORM `UPDATE` (`:270`). [nao verificado]
+- [test_selo_emissor_fio_mudo.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/chamados/tests/test_selo_emissor_fio_mudo.py:266): mantém “nenhuma viva” e exige contagem total antes/depois igual.
+- [test_termometro_regua_prazo.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/escala/tests/test_termometro_regua_prazo.py:19) e [test_selfie_ausente_juiz.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508/app/ponto/tests/test_selfie_ausente_juiz.py:148): exigem zero juízes, com o histórico solicitado.
+
+RED antes: o teste do relatório falhou exigindo a linha literal do brief: `FAILED (failures=1)`. Depois, os nove corpos de testes executados por AST/unittest passaram: `Ran 9 tests ... OK`. Essa execução inclui os mutantes de escrita/opções (`test_e4a2_disparar_e_vigia.py:74`), relógio (`:153`) e relatório/alarme (`:211`). [nao verificado]
+
+Comando usado para esses testes e seus mutantes, sem Django: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import ast
+import unittest
+from pathlib import Path
+
+p = Path('chamados/tests/test_e4a2_disparar_e_vigia.py')
+a = ast.parse(p.read_text())
+a.body = [
+    n for n in a.body
+    if not (
+        isinstance(n, ast.ImportFrom)
+        and (n.module.startswith('django') or n.module == 'freezegun')
+    )
+    and not (
+        isinstance(n, ast.ClassDef)
+        and any(isinstance(b, ast.Name) and b.id == 'TestCase' for b in n.bases)
+    )
+]
+ns = {'__file__': str(p.resolve()), 'SimpleTestCase': unittest.TestCase}
+exec(compile(a, str(p), 'exec'), ns)
+suite = unittest.TestSuite( [nao verificado]
+    unittest.defaultTestLoader.loadTestsFromTestCase(c)
+    for c in ns.values()
+    if isinstance(c, type)
+    and c is not unittest.TestCase
+    and issubclass(c, unittest.TestCase)
+)
+r = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
+raise SystemExit(not r.wasSuccessful())
+PY
+```
+
+Os testes reais pelo Django, a captura ORM, a mordida do `UPDATE` e a suíte completa ficaram **[nao verificado]**. A tentativa dos `SimpleTestCase` parou em `No module named 'django'`. O ruff também ficou **[nao verificado]**: a tentativa retornou `No module named ruff`. [nao verificado]
+
+Comandos pendentes para o Code, incluindo o mutante ORM:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
+  chamados.tests.test_e4a2_disparar_e_vigia \
+  chamados.tests.test_selo_emissor_fio_mudo \
+  escala.tests.test_termometro_regua_prazo \
+  ponto.tests.test_selfie_ausente_juiz
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache \
+  chamados/management/commands/disparar_perguntas_competencia.py \
+  chamados/tests/test_e4a2_disparar_e_vigia.py \
+  chamados/tests/test_selo_emissor_fio_mudo.py \
+  escala/tests/test_termometro_regua_prazo.py \
+  ponto/tests/test_selfie_ausente_juiz.py
+```
 
 ## 09/11 22:10 · sessao 636b02405ee3 · FIO-E0-V4-E4A-2 · verificador · origem=Code
 
@@ -1160,61 +1225,4 @@ A AST independente percorreu todos os `.py` do repositório, excluindo diretóri
 
 Para o número final, sugiro distinguir **6 sítios físicos de consulta concreta por colaborador**, **1 construtor de queryset específico do marcador** (`app/chamados/services/fabrica_da_celula.py:279`) e **1 predicado que responde semanticamente “este dia já foi entregue ao DP?”** (`app/chamados/services/fabrica_da_celula.py:288`), composto por consulta viva e consulta histórica (`:297`, `:301`).
 
-## 09/11 20:57 · sessao 72b02e642af7 · - · - · origem=Ronald (tmux)
-
-Chamadores de produção encontrados por AST em todos os `*.py`, excluindo diretórios `tests`:
-
-```text
-app/chamados/management/commands/vigiar_fio_morto.py:179: contador_cadastro_sem_turno(empresas)
-app/chamados/services/fabrica_da_celula.py:315: _pautas_cadastro()
-app/chamados/services/fabrica_da_celula.py:337: pauta_cadastro_existente(cel.colaborador_id, cel.data)
-app/chamados/services/fabrica_da_celula.py:175: pauta_cadastro_sem_turno(cel)
-app/chamados/services/fabrica_da_celula.py:297: _pautas_cadastro()
-app/chamados/services/fabrica_da_celula.py:301: _pautas_cadastro(vivas=False)
-```
-
-O script executado, sem escrita:
-
-```python
-import ast, pathlib
-names = {
-    'pauta_cadastro_existente', '_pautas_cadastro',
-    'contador_cadastro_sem_turno', 'pauta_cadastro_sem_turno',
-}
-for p in sorted(pathlib.Path('.').rglob('*.py')):
-    if 'tests' in p.parts:
-        continue
-    try:
-        t = ast.parse(p.read_text())
-    except (SyntaxError, UnicodeError):
-        continue
-    aliases = {
-        a.asname or a.name: a.name
-        for n in ast.walk(t) if isinstance(n, ast.ImportFrom)
-        for a in n.names if a.name in names
-    }
-    for n in ast.walk(t):
-        if not isinstance(n, ast.Call):
-            continue
-        f = n.func
-        name = (
-            aliases.get(f.id, f.id) if isinstance(f, ast.Name)
-            else f.attr if isinstance(f, ast.Attribute) else ''
-        )
-        if name in names:
-            print(f'{p}:{n.lineno}: {ast.unparse(n)}')
-```
-
-- `pauta_cadastro_existente` recebe `dia` somente de `cel.data`; seu único chamador é `pauta_cadastro_sem_turno`. Não há chamador de produção omitindo `dia` na saída acima. A definição permite omiti-lo e, nesse caso, consulta somente pautas vivas: `app/chamados/services/fabrica_da_celula.py:337`, `app/chamados/services/fabrica_da_celula.py:299`.
-- O escritor recebe a célula de `perguntar_pela_celula`, depois da guarda `cel.data < hoje`, ativo, dia que não é sem trabalho, e `vencidos_no_instante(...) is None`: `app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/fabrica_da_celula.py:175`.
-- Portanto, o `dia` entregue à deduplicação é a **data da célula**, usada como âncora do turno; não é a data civil da saída de turno noturno. O teto recebe `cel.data`, e `marcos_turno` encadeia os marcos a partir desse dia, avançando ao dia seguinte quando necessário: `app/chamados/services/fabrica_da_celula.py:26`, `app/ponto/services/cartorio.py:841`, `app/escala/servico_jornada.py:62`, `app/escala/servico_jornada.py:81`.
-- `hoje` padrão é `timezone.localdate(agora)`; a data do fechamento também é extraída com `timezone.localdate(fechou)`. A configuração base declara `America/Sao_Paulo` e `USE_TZ=True`; a função não fornece um fuso explícito a `localdate`: `app/chamados/services/fabrica_da_celula.py:160`, `app/chamados/services/fabrica_da_celula.py:304`, `app/config/settings/base.py:93`, `app/config/settings/base.py:95`.
-- Viva significa **feito nulo e cancelado nulo**, pelo queryset do modelo. “Entregue” aceita viva independentemente de `dia`, ou histórica com `cancelado_em or feito_em` cuja data local seja `>= dia`; quando ambos existem, a expressão prioriza cancelamento. `lido_em` não entra nesse juízo: `app/pautas/models.py:57`, `app/pautas/models.py:64`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:303`.
-- O contador tem significado diferente: conta colaboradores distintos com pauta **viva**, sem parâmetro `dia` e sem incluir fechadas que ainda respondem “entregue” para dias antigos. Logo, contador zero não implica ausência de entrega ao DP: `app/chamados/services/fabrica_da_celula.py:315`, `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:304`.
-- O contador pode recortar colaboradores pelas empresas informadas; não altera a semântica de fechamento: `app/chamados/services/fabrica_da_celula.py:316`.
-- O vigia lê o contador, imprime `VFM|CADASTRO_SEM_TURNO`, e grava número e esperado no carimbo. Esse contador não integra os conjuntos usados para disparar alarme: `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:98`, `app/chamados/management/commands/vigiar_fio_morto.py:229`, `app/chamados/management/commands/vigiar_fio_morto.py:83`.
-- O relatório instrumental lê o carimbo e compara genericamente todas as chaves de `esperado`; assim pode mostrar `cadastro_sem_turno` como fora do esperado sem ler o marcador no banco. `gerar_estado` incorpora essa apresentação: `bin/fio_estado.py:104`, `bin/fio_estado.py:125`, `bin/fio_estado.py:191`, `bin/gerar_estado.py:260`.
-- Tela e API exibem o texto por caminhos genéricos, sem interpretar esse marcador: listagem da aba DP em `app/pautas/services.py:304`, `app/pautas/services.py:322`; serialização em `app/pautas/views.py:40`; apresentação em `app/templates/core/_copiloto.html:405`; API mensageria com aba padrão DP em `app/api/views_mensageria.py:1324`, `app/api/views_mensageria.py:1329`, `app/api/views_mensageria.py:1334`.
-- Existe template de detalhe do colaborador que mostra texto e estado, além do helper `pautas_do_colab` que consulta âncora literal `'colab'`. Não encontrei chamador Python desse helper; a alimentação efetiva dessa seção fica **[nao verificado]**: `app/templates/colaboradores/detalhe.html:118`, `app/templates/colaboradores/detalhe.html:119`, `app/pautas/services.py:433`, `app/pautas/services.py:436`.
-
-_3245 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3246 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
