@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 18:11** · publicado em **10/11/2026 18:12** (UTC-3)
+> Ultima resposta processada: **10/11/2026 18:13** · publicado em **10/11/2026 18:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 18:13 · sessao 05b0ac66455f · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
+
+**Não liberaria a obra inteira ainda:** restam geração fora da transação do núcleo, reuso estrangeiro ignorado na agregação, derivação paralela do dia no auditor e ampliação de travas na recuperação. (`app/chamados/services/fabrica_da_celula.py:174`; `app/chamados/services/disputa_emissao.py:596`; `app/chamados/management/commands/auditar_invariantes_chamados.py:46`; `app/chamados/services/disputa_emissao.py:659`)
+
+1. **Caminho (a): a geração principal foi protegida, mas ainda existe geração posterior ao commit do núcleo.** Nascimento e agregação chamam o gerador dentro de `atomic`. Porém o wrapper chama `perguntar_entradas_pendentes` depois desse retorno; ela também chama `gerar_perguntas_disputa`. (`app/chamados/services/disputa_emissao.py:534`, `:596`, `:625`, `:748`, `:294`)
+
+   Existe caminho operacional sem transação externa: consumidor → fábrica → núcleo → segunda geração. A fábrica chama o wrapper em `:172` e diretamente o gerador em `:174`; o consumidor só abre seu próximo `atomic` depois dessas chamadas e captura eventual exceção sem desfazer o núcleo concluído. Portanto **sim**, pode haver DS commitada antes de uma geração posterior levantar; isso, sozinho, não demonstra que ela ficou sem pergunta. (`app/chamados/services/fabrica_da_celula.py:172`, `:174`, `:219`, `:301`; `app/chamados/reconciliador.py:1387`, `:1388`, `:1392`)
+
+   Censo dos chamadores operacionais diretos:
+
+   | Porta | Chamador | Transação da pergunta |
+   |---|---|---|
+   | `_abrir_ou_agregar_disputa` | Recuperação recursiva, `app/chamados/services/disputa_emissao.py:659` | Geração dentro dos atomics da recuperação e do núcleo, `:651`, `:596`. |
+   | Mesma | `disputa_para_declaracao`, `app/chamados/services/disputa_emissao.py:691` | Desliga geração, `:695`; consumidores criam a pergunta na transação deles. |
+   | Mesma | Wrapper, `app/chamados/services/disputa_emissao.py:727` | Principal dentro; pendentes depois, `:748`. |
+   | Mesma | Grade, `app/ponto/management/commands/reconciliar_grade.py:424` | Passa motivos vazios, `:425`; pode nascer sem pergunta, pois o laço não executa, `app/chamados/services/disputa_emissao.py:312`. |
+   | Mesma | Smoke, `app/chamados/management/commands/smoke_chamados.py:99` | Repete geração em `:102`, mas tudo está no atomic externo com rollback, `:39`, `:43`. |
+   | `criar_ou_atualizar_disputa` | APIs, `app/api/views.py:794`; `app/api/views_core.py:794` | Principal no núcleo; ressalva dos pendentes em `app/chamados/services/disputa_emissao.py:748`. |
+   | Mesma | PWA, `app/ponto/services/triagem_batida.py:734` | Mesma situação do wrapper. |
+   | Mesma | Retro de selfie, `app/ponto/management/commands/marcar_foto_ausente_retro.py:96` | Mesma situação do wrapper. |
+   | Mesma | Fábrica, `app/chamados/services/fabrica_da_celula.py:172` | Segunda geração explícita em `:174`. |
+
+   Os consumidores da declaração mantêm DS e pergunta na mesma transação: `declarar_hora_colab` abre atomic, chama a porta e cria pergunta; `aplicar_declaracao` faz o mesmo. (`app/chamados/services/declaracao_texto.py:348`, `:360`, `:376`, `:654`, `:659`, `:666`)
+
+   Os outros nascimentos operacionais são: **agrupador**, DS e perguntas dentro do atomic, preservando os `continue` sem ata; **âncora**, DS e `abrir_conversa` dentro do mesmo atomic. Ambos continuam caminhos próprios; a âncora não inspeciona o retorno estrangeiro da porta. A grade usa o núcleo, sem quarto `objects.create`. (`app/chamados/services/disputa_emissao.py:1115`, `:1186`, `:1216`, `:1238`, `:1276`, `:1307`, `:1385`, `:1421`, `:1434`; `app/ponto/management/commands/reconciliar_grade.py:424`)
+
+   Chamadas diretas adicionais em testes estão em `app/chamados/tests/test_3b_reuso_746.py:23`, `:31`; `test_a2_batida_sem_linha.py:30`; `test_a2_data_evento_batida.py:24`, `:36`, `:43`, `:49`, `:54`; `test_bo_disputa_sem_pergunta.py:29`; `test_e1_fila_v2_2_integracao.py:132`; `test_e1_v6_horizonte.py:268`, `:269`, `:275`, `:451`, `:452`; `test_e1_volta2.py:171`; `test_plantio_noturno_mais1.py:206`, `:213`; `test_regressao_etapa7.py:226`, `:241`, `:244`, `:260`, `:264`; `test_smoke_ciclo_disputa.py:69`, `:70`; `app/ponto/tests/test_selfie_ausente_juiz.py:122`. A execução ORM dessas chamadas é [nao verificado].
+
+2. **Caminho (b): correto no nascimento; incompleto na agregação.** No nascimento, o detector identifica perguntas de outras disputas e levanta dentro do atomic. A captura fica fora dele; depois reentra no ramo existente de agregação para cada dona. Isso desfaz o ensaio antes da agregação definitiva. (`app/chamados/services/disputa_emissao.py:624`, `:628`, `:636`, `:648`, `:651`, `:659`)
+
+   A dona **fechada** é selecionada explicitamente, sem filtro de aberta. O ramo salva somente motivos/contexto, preservando `fechada_em` e a FK da pergunta. Não introduz segundo escritor desses campos fora da porta. (`app/chamados/services/disputa_emissao.py:562`, `:570`, `:591`, `:594`, `:659`; `app/chamados/models.py:3008`)
+
+   **Falha residual:** quando já existe DS aberta, o ramo ignora o retorno estrangeiro do gerador. Uma aberta vazia — possível pela grade — recebe o motivo, enquanto a dona da canônica não recebe essa agregação. A sonda com funções reais extraídas por AST e doubles confirmou aberta com motivo, dona sem ele e I7a=1; PostgreSQL/signals são [nao verificado]. (`app/chamados/services/disputa_emissao.py:564`, `:570`, `:596`, `:597`; `app/ponto/management/commands/reconciliar_grade.py:424`; infraestrutura da sonda em `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:82`)
+
+3. **Batida: ficou fora do atomic novo; sucesso da resposta não está protegido.** As APIs registram a batida antes de chamar a disputa; o atomic novo é interno ao núcleo. O PWA também registra primeiro. (`app/api/views_core.py:681`, `:794`; `app/api/views.py:684`, `:794`; `app/ponto/services/triagem_batida.py:701`, `:734`; `app/chamados/services/disputa_emissao.py:534`)
+
+   O chokepoint insere a batida e protege a etapa posterior de fechamento contra exceções. Já as chamadas de disputa nas APIs não possuem captura envolvente, e o núcleo captura somente `_PerguntaDeOutraDisputa`: uma exceção do gerador pode impedir a resposta normal depois da gravação. Portanto o patch não envolve a batida no rollback novo, mas também não prova “batida nunca barrada” como sucesso HTTP. Persistência efetiva/HTTP em runtime são [nao verificado]. (`app/ponto/registro_batida.py:157`, `:175`, `:179`; `app/api/views_core.py:794`; `app/api/views.py:794`; `app/chamados/services/disputa_emissao.py:648`)
+
+4. **HX-ATA-NAO-SABE: comportamento preservado no código atual; igualdade byte a byte com a base [nao verificado].** A cópia não fornece histórico Git para comparação independente; o patch anexado não declara hunks no agrupador nem no teste HX, enquanto as entregas alegam comparação AST do agrupador — isso não equivale a comparação de bytes. [nao verificado] [nao verificado]
+
+   A abstenção atual continua marcando falta de ata e evitando o fechamento; o teste continua exigindo zero perguntas, disputa aberta e WARNING `auto_fecho_disputa`, com cenários de contraste com ata. (`app/chamados/services/disputa_emissao.py:1234`, `:1235`, `:1272`, `:1273`, `:1303`, `:1304`, `:1342`; `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51`, `:58`, `:63`, `:77`)
+
+5. **I7a/I7b: universo e estado da ata estão corretos; a fonte do dia não está inteiramente unificada.** O filtro significa DS aberta com **zero linhas** de pergunta, sem filtro de vitalidade. “SEM ata” usa literalmente `_marcos_faltantes(...)[0] == 'sem_celula'`; dia indeterminável e `fora_vinculo` caem em I7a. Não nasceu outro predicado de presença de ata. (`app/chamados/management/commands/auditar_invariantes_chamados.py:67`, `:73`, `:74`; `app/chamados/services/declaracao_texto.py:91`)
+
+   Para órfãos identificados por IDs, reaproveita os leitores dos ramos correspondentes: `data_do_chamado`, `resolver_data_evento` com batida-origem e `data_evento_do_contexto`. Não troca diretamente pelo dia civil da abertura. (`app/chamados/management/commands/auditar_invariantes_chamados.py:33`; `app/chamados/services/disputa_emissao.py:1232`, `:1268`, `:1295`)
+
+   **Há derivação paralela fora desse ramo:** o gerador pode resolver por `_data_furo_da_grade`, que funde contexto do pai e prioriza `entrada_sem_saida.entrada_id`/`entrada_aberta_em`. O auditor ignora essas fontes e segue para `ultima_batida` ou pai/contexto. Além disso, havendo data explícita em algum motivo, retorna imediatamente, enquanto o gerador resolve separadamente cada motivo. (`app/chamados/services/disputa_emissao.py:53`, `:59`, `:68`, `:70`, `:346`, `:371`; `app/chamados/management/commands/auditar_invariantes_chamados.py:48`, `:50`, `:51`, `:58`)
+
+   A divergência foi reproduzida com AST real e doubles: origem no turno 08/07, contexto com 09/07; fonte do gerador devolve 08/07 e auditor consulta 09/07. Assim pode classificar como I7b pela ata do dia diferente. Ocorrência em produção é [nao verificado]. (`app/chamados/services/disputa_emissao.py:68`, `:76`; `app/chamados/management/commands/auditar_invariantes_chamados.py:58`, `:74`)
+
+6. **QuerySet: uma avaliação no caminho novo; o risco apontado não é dupla avaliação.** `_universo` fica verdadeiro, portanto `if _universo or _pks(disputas)` faz curto-circuito: `_pks` só itera `disputas` em `:2671`. Não há duas avaliações entre as quais uma dona possa nascer nesse caminho. Mesmo fora dele, reiterar o mesmo QuerySet normal pode usar seu cache; comportamento Django em runtime aqui é [nao verificado]. (`app/chamados/services/disputa_emissao.py:553`; `app/chamados/models.py:2669`, `:2671`, `:2674`)
+
+   A entrada inicial pede C → IDs → D por PK → Ch por PK; perguntas entram depois pela porta. (`app/chamados/models.py:2666`, `:2675`, `:2688`, `:2692`)
+
+   **A recuperação deixa uma lacuna na ordem por transação:** primeiro trava donas retornadas + abertas + chamados; a recursão volta a pedir **todas** as DS. Uma fechada adicional pode entrar depois de Ch já travado. A sonda da volta 2 não cobre esse caminho: prepara aberta e substitui o gerador por Mock. (`app/chamados/services/disputa_emissao.py:652`, `:659`, `:551`; `app/chamados/models.py:2688`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:29`, `:133`)
+
+   Isso não demonstra deadlock: C retido serializa escritores conformes. Deadlock efetivo com outro escritor, ou prova global de ausência dele, é [nao verificado]. A disciplina declarada é C primeiro e ordem crescente por tabela. (`app/chamados/models.py:2631`, `:2666`)
+
+7. **Tetos/C8: justificativa corresponde à leitura adicional, mas não certifica os totais.** Existe a seleção de PKs de todas as DS do colaborador, inclusive fechadas, depois da trava C; a justificativa está junto dos dois tetos, como exige C8. (`app/chamados/services/disputa_emissao.py:551`; `app/chamados/models.py:2666`, `:2671`; `app/ponto/tests/test_selo_chokepoint_escrita.py:180`, `:193`; `PLANO_PISCADA.md:10`)
+
+   É uma consulta adicional **por invocação do núcleo**. Linhas transferidas/travadas crescem com o histórico de DS; custo total não é constante. A fábrica também pode chamar a porta várias vezes, em laço por motivo. (`app/chamados/services/disputa_emissao.py:551`; `app/chamados/services/fabrica_da_celula.py:168`, `:172`)
+
+   A sonda varia chamados vivos, mantém duas DS e simula consultas; não mede o SQL completo de `registrar_batida`. Totais finais **145/219 são [nao verificado]**. (`app/chamados/tests/test_bo_disputa_volta2_memoria.py:24`, `:28`, `:30`, `:133`, `:142`)
+
+8. **Os erros do RED informado não provam o bug (a).** ImportError/KeyError do contador provam ausência do símbolo; não observam I7a=1. O teste ORM importa esse símbolo na carga, e os testes de exceção em memória consultam o contador antes das contagens diretas. (`app/chamados/tests/test_bo_disputa_sem_pergunta.py:9`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:280`, `:296`)
+
+   O modo `--base` atual usa **emissor antigo + auditor novo como sonda**, resolvendo essa deficiência metodológica. Nesse arranjo, o teste de exceção antes da pergunta confronta I7a com zero em `:280`; o teste após inserção confronta diretamente DS/pai/pergunta/log em `:297`; o teste de profundidade confronta `[1,1]` em `:381`. Reprodução desse modo contra o Git da base nesta cópia é [nao verificado]. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:28`, `:201`, `:204`, `:275`, `:285`, `:381`)
+
+   AST recompila os **corpos extraídos da cópia**, sem reimplementação manual do núcleo, gerador ou contador; entretanto ORM, atomic, juiz da ata e porta da pergunta são doubles. Isso testa lógica Python, sem certificar SQL, signals ou concorrência. Os wrappers exigem controle verde e morte por assertion, recusando erro de montagem. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:36`, `:69`, `:88`, `:176`, `:224`, `:449`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:174`)
+
+   Há testes com mordida positiva — pergunta existe antes da falha, lote exige DS=2/PD=3 — e um teste fraco: declaração apenas exige `assert_not_called`, passando se a função virar no-op. A sonda de travas ignora predicados no double e devolve sempre as duas DS, portanto não comprova a seleção SQL. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:290`, `:336`, `:384`; `app/chamados/tests/test_bo_disputa_volta2_memoria.py:74`, `:84`)
+
+9. **Escritores e leitores dos campos centrais:**
+
+   | Campo | Escritores | Leitores relevantes |
+   |---|---|---|
+   | `DS.motivos` | Núcleo, agrupador, âncora; portas de remoção/reabertura. (`app/chamados/services/disputa_emissao.py:570`, `:620`, `:1146`, `:1194`, `:1318`, `:1429`; `app/chamados/models.py:1966`, `:2063`, `:2159`) | Gerador, auditor e relatório. (`app/chamados/services/disputa_emissao.py:312`; `app/chamados/management/commands/auditar_invariantes_chamados.py:48`; `app/chamados/relatorios_disputa.py:52`) |
+   | `DS.contexto` | Núcleo, pendentes, agrupador/âncora, remoção/anotar/renovar. (`app/chamados/services/disputa_emissao.py:591`, `:621`, `:293`, `:1189`, `:1424`; `app/chamados/models.py:1967`, `:2064`, `:2104`, `:2122`) | Fonte da grade, gerador, pendentes e auditor. (`app/chamados/services/disputa_emissao.py:54`, `:273`, `:345`, `:372`, `:387`; `app/chamados/management/commands/auditar_invariantes_chamados.py:29`) |
+   | `DS.fechada_em` | Fechar e reabrir admin/sistema. (`app/chamados/models.py:1932`, `:2149`, `:2173`) | Seleção do núcleo, auditor e S127. (`app/chamados/services/disputa_emissao.py:558`, `:562`; `app/chamados/management/commands/auditar_invariantes_chamados.py:69`; `app/chamados/juizes.py:2316`) |
+   | `DS.chamado` | Três nascimentos; FK admite SET_NULL. (`app/chamados/services/disputa_emissao.py:622`, `:1190`, `:1425`; `app/chamados/models.py:1749`) | Auditor, fonte da grade, S127 e signal do pai. (`app/chamados/management/commands/auditar_invariantes_chamados.py:30`; `app/chamados/services/disputa_emissao.py:55`; `app/chamados/juizes.py:2316`; `app/chamados/signals.py:32`) |
+   | `Pergunta.disputa` | `_nascer`; reuso devolve existente preservando FK. (`app/chamados/models.py:3014`, `:3008`) | Detector estrangeiro, auditor pela relação inversa, S127 e relatório. (`app/chamados/services/disputa_emissao.py:628`; `app/chamados/management/commands/auditar_invariantes_chamados.py:69`; `app/chamados/juizes.py:2319`; `app/chamados/relatorios_disputa.py:12`) |
+   | Saída do auditor | `add`, apresentação stdout e HTML. (`app/chamados/management/commands/auditar_invariantes_chamados.py:636`, `:1915`, `:1930`) | Cron pede HTML; placar depende da execução. Leitura humana efetiva é [nao verificado]. (`app/config/crons.py:542`, `:747`) |
+
+   As chaves de origem também têm produtores existentes: API escreve `ultima_batida` e `entrada_sem_saida`; agrupador escreve `chamados_orfaos_ids`; fábrica escreve data por motivo. O auditor lê essas informações parcialmente, conforme o conflito do item 5. (`app/api/views_core.py:669`, `:788`; `app/chamados/services/disputa_emissao.py:1179`, `:1189`; `app/chamados/services/fabrica_da_celula.py:172`; `app/chamados/management/commands/auditar_invariantes_chamados.py:33`, `:48`, `:51`)
+
+   **Pergunta morta contar como linha não conflita com os leitores existentes:** relatório distingue lista vazia de lista sem vivas; fechamento distingue `VAZIA` de `VEREDITO`; S127 bloqueia zero linhas ou fio vivo. O conflito encontrado é a escolha do dia, não esse significado de “sem pergunta”. (`app/chamados/relatorios_disputa.py:12`, `:18`; `app/chamados/models.py:1903`; `app/chamados/juizes.py:2320`)
+
+10. **Classes reprovadoras e metadados.** Estão presentes a **derivação paralela de fonte única** e a **lacuna na ordem de trava da recuperação**; há ainda geração posterior ao núcleo e cobertura incompleta do reuso na agregação. (`app/chamados/management/commands/auditar_invariantes_chamados.py:46`; `app/chamados/services/disputa_emissao.py:652`, `:659`, `:596`; `app/chamados/services/fabrica_da_celula.py:174`)
+
+   Não aparece novo predicado concorrente de “SEM ata”, nem segundo escritor de motivos no tratamento novo: ele chama o juiz existente e reentra na porta existente. Também não aparece leitura nova de relógio na classificação I7a/I7b; `ultima_em` continua sendo timestamp da agregação. (`app/chamados/management/commands/auditar_invariantes_chamados.py:74`; `app/chamados/services/disputa_emissao.py:659`, `:587`)
+
+   **Linhas LEI-AKITA dos commits, ordem real de pouso e cumprimento do pré-requisito BO-0611-05: [nao verificado].** O molde exigido inclui origem, testemunha, RED, leitores, juízes e padrão; o ciclo exige suite e revisão antes do pouso. (`CLAUDE.md:62`, `:63`, `:65`; `app/docs/LEIS.md:147`)
+
+   Para fundamentar o pouso, cabem **L-001/L-002** — origem e fonte única —, **L-003** — medição —, **L-007** — escritor único —, **L-030** — batida — e **L-123/L-126** — padrão e certificação. O índice fornecido também aponta **L-050**, cuja fronteira exportada não pode ser reintroduzida. (`app/docs/LEIS.md:59`, `:60`, `:61`, `:65`, `:78`, `:91`, `:144`, `:147`)
+
+   Isso é diferente da cobrança automática por sítio: o selo exige citação quando o hunk cruza função da coluna **PROTEGE**; uma menção ao arquivo em DOSSIES/CORTES não basta para afirmar cobrança mecânica. Resultado desse selo para o pouso é [nao verificado]. (`bin/tests/test_lei_protege_sitio.sh:13`, `:77`, `:83`, `:176`, `:180`)
+
+   Não identifiquei afirmação específica de **LEIS.md/JUIZES.md que a cura torne falsa**; identifiquei código novo contrariando a exigência de fonte única. JUIZES continua sendo lookup, com correção obrigatória se divergir do código; não justifica cadastrar outro juiz para legitimar a derivação paralela. (`app/docs/LEIS.md:60`; `app/docs/JUIZES.md:7`, `:14`; `app/chamados/management/commands/auditar_invariantes_chamados.py:46`)
 
 ## 10/11 18:11 · sessao 9d5fc4a2156d · - · - · origem=Ronald (tmux)
 
@@ -862,76 +961,4 @@ rodar
 MUTANTE=linhas rodar CatracaTurnoDoParTest.test_MORDE_linhas_a1_b1_publicam_ocorrencia_e_nao_def
 ```
 
-## 10/11 15:37 · sessao b14693f6a721 · BO-0611-05 · construtor · origem=Code
-
-Alterado somente [app/ponto/tests/test_l030_forma_js.py](/home/ronald/wt-codex-bo-0611-05-153526/app/ponto/tests/test_l030_forma_js.py:58): guarda de `hxConfirmar` antes do POST e de cada fila. O `return false` da selfie continua permitido (app/templates/ponto/bater_ponto_v2.html:287).
-
-Censo dos tokens:
-
-| Token | Quem emite/define | Quem lê |
-|---|---|---|
-| `garantirRequisitos` | v2 define em app/templates/ponto/bater_ponto_v2.html:285 | v2 chama em :312; oráculo localiza em app/ponto/tests/test_l030_forma_js.py:33 |
-| `fetch` | v2 emite POST em app/templates/ponto/bater_ponto_v2.html:322 | oráculo em app/ponto/tests/test_l030_forma_js.py:58 |
-| `registrarBatidaOffline` | app/static/pwa.js:107 define; :310 exporta | v2 chama em app/templates/ponto/bater_ponto_v2.html:333 e :346; triagem em app/templates/ponto/triagem/apto.html:282; oráculo em app/ponto/tests/test_l030_forma_js.py:66 |
-| `hxConfirmar` | app/templates/core/_dialogo.html:172 define | guardas em app/ponto/tests/test_l030_forma_js.py:55, :58 e :66 |
-
-Nenhum dos dois templates atuais emite `hxConfirmar` nos intervalos protegidos; o controle das duas fontes passou (app/ponto/tests/test_l030_forma_js.py:72).
-
-Comandos executados, todos a partir de `app/`:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v ponto.tests.test_l030_forma_js
-```
-
-Antes da guarda: **rc 1**, oito mutantes escaparam. Depois: **rc 0**, dois testes passaram. Os novos casos cobrem começo de `garantirRequisitos`, POST e duas filas, com/sem comentário; cada caso exige controle verde, âncora única e exceção contendo `confirmacao` (app/ponto/tests/test_l030_forma_js.py:95).
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v ponto.tests.test_l030_templates_renderizados
-```
-
-**rc 1**, import interrompido por `ModuleNotFoundError: django`. Renderização das quatro combinações: **[nao verificado]**. A regra nova é alcançada pelo import do mesmo oráculo e sua chamada nesse teste (app/ponto/tests/test_l030_templates_renderizados.py:10, :37).
-
-Diff:
-
-```diff
-@@ -55,12 +55,15 @@
-         teste.assertNotIn('hxConfirmar', prefixo, 'confirmacao de GPS condiciona a fila') [nao verificado]
-     else:
-         teste.assertIn('fetch', tokens, 'POST ausente no JS emitido') [nao verificado]
-+        teste.assertNotIn('hxConfirmar', tokens[:tokens.index('fetch')], [nao verificado]
-+                          'confirmacao antes do POST')
-         teste.assertEqual(tokens.count('registrarBatidaOffline'), 2, 'faltou fila offline ou de erro de rede') [nao verificado]
-         # Antes da primeira fila (fetch falhou) e da segunda (offline),
-         # nenhum retorno pode impedir o enfileiramento.
-         for indice, nome in enumerate(tokens):
-             if nome != 'registrarBatidaOffline':
-                 continue
-+            teste.assertNotIn('hxConfirmar', tokens[:indice], 'confirmacao antes da fila') [nao verificado]
-             abertura = max(i for i in range(indice) if tokens[i] == 'try')
-             teste.assertNotIn('return', tokens[abertura:indice], 'retorno antes da fila') [nao verificado]
-@@ -88,3 +91,22 @@
-                 self.assertIn(alvo, original, 'mutante nao foi aplicado') [nao verificado]
-                 with self.assertRaisesRegex(AssertionError, 'GPS interrompe|confirmacao interrompe'):
-                     afirmar_sem_barreira(self, original.replace(alvo, mutacao, 1), triagem)
-+
-+        original = (TPL / 'ponto/bater_ponto_v2.html').read_text()
-+        for comentario in ('', ' /* naoBloquear */'):
-+            portao = "if (!await hxConfirmar('GPS ausente', 'Continuar')) {return false;}" + comentario
-+            chamada = "await hxConfirmar('GPS ausente', 'Continuar');" + comentario
-+            for alvo, mutacao in (
-+                ('async function garantirRequisitos(){',
-+                 'async function garantirRequisitos(){\n    ' + portao),
-+                ("var r=await fetch('/api/ponto/bater/',", chamada + "\n        var r=await fetch('/api/ponto/bater/',"),
-+                ('await window.JulianiPWA.registrarBatidaOffline(tipo, lat, lng,',
-+                 chamada + '\n          await window.JulianiPWA.registrarBatidaOffline(tipo, lat, lng,'),
-+                ('await window.JulianiPWA.registrarBatidaOffline(tipo, gpsLat, gpsLng,',
-+                 chamada + '\n        await window.JulianiPWA.registrarBatidaOffline(tipo, gpsLat, gpsLng,'),
-+            ):
-+                with self.subTest(alvo=alvo, comentario=comentario):
-+                    afirmar_sem_barreira(self, original)
-+                    self.assertEqual(original.count(alvo), 1, 'mutante exige ancora unica')
-+                    with self.assertRaisesRegex(AssertionError, 'confirmacao'):
-+                        afirmar_sem_barreira(self, original.replace(alvo, mutacao, 1))
-```
-
-_3430 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3431 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
