@@ -1,7 +1,77 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 00:59** · publicado em **10/11/2026 00:59** (UTC-3)
+> Ultima resposta processada: **10/11/2026 01:00** · publicado em **10/11/2026 01:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 01:00 · sessao c3956c64fa93 · REVERTER-DIA-SEM-RECALCULO · verificador · origem=Code
+
+A VOLTA passa a usar o caminho comum, mas “dinheiro 1x por competência” vale **por chamada**, e “humano não rejulga” protege somente o julgamento direto. Essas ressalvas precisam acompanhar a aprovação. (`app/ponto/portas/celula.py:427`, `app/ponto/portas/celula.py:450`, `app/ponto/portas/celula.py:811`)
+
+**1. Quem escreve e quem lê**
+
+| Campo/entidade | Escritor no caminho da VOLTA | Leitores relevantes |
+|---|---|---|
+| `CelulaDia.ata/veredito` | Cartório produz o julgamento; `lavrar_veredito` altera os campos; `carimbar` persiste por `salvar_e_emitir`, junto com o evento. (`app/ponto/services/cartorio.py:1811`, `app/ponto/services/cartorio.py:1833`, `app/ponto/portas/celula.py:1032`, `app/ponto/portas/celula.py:904`) | Grade prefere minutos/tipo lavrados e transporta veredito; juiz de cobrança lê `trabalha/ata.tipo_dia`. (`app/escala/services/leitor_celula.py:397`, `app/escala/services/leitor_celula.py:424`, `app/chamados/juizes.py:426`) |
+| `DiaPago` | `recalcular_por_evento` chama o fechamento; este entrega o resultado à lavratura, que apaga e recria as linhas da competência/versão. (`app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:1201`, `app/ponto/services/dia_pago.py:359`) | Calendário lê linhas por data; testemunha do export lê linhas da versão escolhida e carimbos da versão `motor`. (`app/colaboradores/services/calendario.py:290`, `app/folha/porta_export.py:75`, `app/folha/porta_export.py:284`) |
+| `FechamentoMensal` | Aberto usa `save`; demais estados usam `update` dos valores calculados e carimbos. (`app/ponto/services/fechamento.py:1137`, `app/ponto/services/fechamento.py:1160`) | TXT seleciona o fechamento gravado e extrai seus eventos. (`app/folha/export.py:711`, `app/folha/export.py:722`) |
+| `Chamado.celula/atualizado_em` | Rejunção chama `apontar_celula`, que preserva apontamento existente e escreve pela porta. (`app/chamados/rejuncao.py:107`, `app/chamados/services/vinculos.py:66`, `app/chamados/services/vinculos.py:93`) | `dia_do_fato` passa a preferir `chamado.celula.data`. (`app/chamados/juizes.py:98`) |
+| Estado/encerramento/urgência do chamado | Falta espúria chama `reconciliar`; `_gravar_estado` escreve o estado e os carimbos, com rebaixamento de urgência. (`app/chamados/services/feriado_reavaliar.py:47`, `app/chamados/models.py:228`, `app/chamados/models.py:244`, `app/chamados/signals.py:72`) | Receivers de encerramento resolvem perguntas e acionam o cartório quando muda o estado. (`app/chamados/signals.py:96`, `app/chamados/signals.py:115`, `app/chamados/signals.py:192`, `app/chamados/signals.py:216`) |
+| Carimbos/resolução e veredito das perguntas | S143 chama o resolvedor; este usa `PerguntaDisputa.carimbar`, podendo atualizar resposta/validação e relavrar `veredito_lavrado/julgado_em/janela_expira_em`. (`app/chamados/signals.py:115`, `app/chamados/services/disputa_emissao.py:1860`, `app/chamados/models.py:3128`, `app/chamados/models.py:3149`) | Estado da pergunta e seleção das ainda não materializadas. (`app/chamados/models.py:3043`, `app/chamados/services/disputa_emissao.py:1820`) |
+
+No financeiro, o alcance inclui as 15 rubricas de dia e os ajustes DSR/banco; no fechamento inclui também totais, contadores, motivos/causa do espelho e carimbos, conforme a lista efetivamente persistida. (`app/ponto/services/dia_pago.py:34`, `app/ponto/services/dia_pago.py:43`, `app/ponto/services/fechamento.py:1160`)
+
+A rejunção alcança **todos os chamados vivos de escopo DIA sem célula do colaborador**, inclusive fora dos dias revertidos; somente a falta espúria fica recortada pelos dias tocados. (`app/ponto/portas/celula.py:498`, `app/chamados/rejuncao.py:59`, `app/ponto/portas/celula.py:501`)
+
+Não encontrei dependência executável de “VOLTA não recalcula/não rejunta” nos leitores citados. Existe, porém, documentação agora desatualizada que lista a reversão como caso sem evento; o comando correspondente apenas conta e alarma. (`app/ponto/management/commands/reavaliar_ausencias_feriado.py:14`, `app/ponto/management/commands/reavaliar_ausencias_feriado.py:34`, `app/chamados/signals.py:319`)
+
+Na semântica, competência vem da **data do fato**, pelo corte da empresa; o dia dos períodos financeiros vem de `resultado.dia_da_jornada`, com fallback civil somente sem mapa. O diff reutiliza essas autoridades. (`app/ponto/services/fechamento.py:1809`, `app/ponto/services/fechamento.py:1594`, `app/ponto/services/dia_pago.py:715`, `app/ponto/janelas.py:60`, `app/ponto/services/fechamento.py:1217`, `app/ponto/services/dia_pago.py:128`)
+
+**2. Contraexemplos além do golden**
+
+- **Futuro:** pula o juiz direto e solicita dinheiro. Como a grade prefere a ata existente, DNA restaurado para 240 com ata preservada em 480 pode continuar produzindo previsto financeiro 480; os novos testes exigem somente o disparo nesse caso. (`app/ponto/portas/celula.py:431`, `app/ponto/portas/celula.py:445`, `app/escala/services/leitor_celula.py:399`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:105`)
+- **Humano:** mesma ressalva financeira. Além disso, falta espúria encerrada pelo callback pode chamar o cartório novamente pelo signal, sem filtro `_HUMANOS`; a lavra preserva veredito administrativo, mas permite atualizar a ata. Portanto “ata humana sempre intacta” não é garantia geral desse caminho. (`app/ponto/portas/celula.py:427`, `app/chamados/services/feriado_reavaliar.py:47`, `app/chamados/signals.py:216`, `app/ponto/portas/celula.py:1003`)
+- **Exportada com `apesar_da_lavra`:** sim, alcança dinheiro de exportada. O argumento abre a guarda do DNA; depois o callback chama normalmente o escritor mensal. **Exceção: 09/2026 exportada continua barrada**, porque a guarda financeira exclui esses colaboradores antes da escrita. (`app/ponto/portas/celula.py:779`, `app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:36`, `app/ponto/services/fechamento.py:558`)
+- **Motivo em exportada:** o motivo da VOLTA chega ao log posterior do evento, mas não é repassado como `motivo_exportada`; o aviso específico pode dizer “sem motivo declarado”. (`app/ponto/portas/celula.py:812`, `app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:1813`, `app/ponto/services/fechamento.py:547`)
+- **Sem `dna_anterior`:** retorna `False` antes da restauração e do rabo; igualmente para célula inexistente ou origem diferente de `gerada`. (`app/ponto/portas/celula.py:776`)
+- **Lote:** N reversões efetivas geram N pedidos financeiros, mesmo na mesma competência. O comando chama a porta por dia; cada chamada cria seu próprio dicionário de deduplicação. Cada cálculo alcança a competência inteira daquele colaborador. (`app/ponto/management/commands/aplicar_col900.py:65`, `app/ponto/management/commands/aplicar_col900.py:77`, `app/ponto/portas/celula.py:450`, `app/ponto/services/fechamento.py:1810`, `app/ponto/services/dia_pago.py:359`)
+- **Exceções em autocommit:** falhas tratadas no julgamento, financeiro ou callbacks não desfazem a restauração anterior. Pode haver DNA restaurado com projeções antigas; falha do juiz não impede a tentativa financeira. (`app/ponto/portas/celula.py:785`, `app/ponto/portas/celula.py:437`, `app/ponto/portas/celula.py:445`, `app/ponto/portas/celula.py:495`, `app/ponto/services/fechamento.py:1818`)
+- **Falha financeira parcial:** fechamento é persistido antes de `DiaPago`; erro da lavratura é engolido, e seu `delete/bulk_create` não está envolvido em um atomic próprio. O caminho permite projeções financeiras parcialmente atualizadas; ocorrência em produção [não verificado]. (`app/ponto/services/fechamento.py:1144`, `app/ponto/services/fechamento.py:1201`, `app/ponto/services/fechamento.py:1238`, `app/ponto/services/dia_pago.py:359`)
+
+**3. Atomic externo e ordem**
+
+O rabo está fora do `atomic` **local**. Dentro de um atomic externo, o juiz continua síncrono; dinheiro e reavaliação ficam no `on_commit` externo. Isso preserva juiz → dinheiro desta chamada, mas sair do bloco local não significa que a reversão já foi commitada. (`app/ponto/portas/celula.py:785`, `app/ponto/portas/celula.py:811`, `app/ponto/portas/celula.py:434`, `app/ponto/services/fechamento.py:1824`, `app/ponto/portas/celula.py:502`)
+
+Há ainda caminho do juiz por `reconciliar`, com `atomic(savepoint=False)`: exceção que atravesse esse bloco pode comprometer o atomic externo mesmo sendo posteriormente engolida pelo rabo. Reprodução desse cenário [não verificado]. (`app/ponto/services/cartorio.py:1499`, `app/chamados/models.py:650`, `app/ponto/portas/celula.py:437`)
+
+O financeiro também não é necessariamente o primeiro callback: o julgamento pode provocar fechamento de disputa/pergunta, que agenda retomada de regularizações ou fechamento de beco antes dele. A existência desses dados no caso concreto [não verificado]. (`app/chamados/signals.py:115`, `app/chamados/signals.py:144`, `app/chamados/signals.py:238`, `app/ponto/portas/celula.py:458`)
+
+**4. Os testes mordem?** [nao verificado]
+
+O golden tem mordida: `.get()` exige `DiaPago` existente, a montagem exige 480, e a VOLTA exige DNA antigo, `dna_anterior=None`, ata 240 e dinheiro 240. Ausência de fixture financeira falha, em vez de passar vazia. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:58`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:80`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:92`)
+
+Futuro/humano também detectam ausência completa do rabo: além do assert negativo do juiz, exigem chamada financeira única. Entretanto mockam o financeiro e não demonstram seu resultado nem exercitam a cascata com falta espúria. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:99`)
+
+O AST cobra chamada única, ausência de juiz/dinheiro diretos, posição e argumentos; seus mutantes exercitam essas restrições. Ele não verifica fluxo alcançável nem o corpo do helper. (`app/ponto/tests/test_reverter_regen_sem_banco.py:54`, `app/ponto/tests/test_reverter_regen_sem_banco.py:68`, `app/ponto/tests/test_reverter_regen_sem_banco.py:90`)
+
+Executei os 11 testes AST: passaram. Também aceitei, em memória, mutantes com retorno antecipado dentro do atomic e helper vazio; resultados sem artefato persistido [não verificado]. [nao verificado]
+
+O **RED na base com quatro failures não está comprovado** pelo material fornecido. A string `_FONTE_BASE` reduzida não substitui execução contra a base real. [não verificado] (`app/ponto/tests/test_reverter_regen_sem_banco.py:25`)
+
+**5. Classes de reprovação**
+
+Não aparece novo juiz, escritor fora da porta ou derivação financeira paralela no trecho alterado: ele delega ao helper comum e às autoridades existentes. Relógio continua sendo lido no helper e no cartório; não há nova leitura introduzida pela chamada. (`app/ponto/portas/celula.py:811`, `app/ponto/portas/celula.py:426`, `app/ponto/services/cartorio.py:1976`)
+
+As ressalvas concretas são **alcance insuficiente dos selos para a promessa ampla**, ausência de deduplicação entre VOLTAs e proteção humana restrita ao disparo direto. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:99`, `app/ponto/portas/celula.py:450`, `app/chamados/signals.py:216`)
+
+Há documentação com dois significados de `DiaPago.data`: modelo/calendário dizem “dia da entrada”, enquanto o escritor prioriza o mapa da jornada. A divergência é preexistente e o diff a alcança ao recalcular. (`app/ponto/models.py:298`, `app/ponto/models.py:319`, `app/colaboradores/services/calendario.py:288`, `app/ponto/services/dia_pago.py:128`)
+
+Não há trava nova no trecho substituído; execução concorrente e cumprimento de pré-requisitos de pouso [não verificado]. (`app/ponto/portas/celula.py:811`)
+
+**6. Outro sítio faz em dobro?**
+
+O chamador produtivo externo encontrado, `aplicar_col900`, não rejulga nem recalcula explicitamente depois da reversão: imprime e retorna. (`app/ponto/management/commands/aplicar_col900.py:77`, `app/ponto/management/commands/aplicar_col900.py:85`)
+
+Existem repetições indiretas: encerramento de falta espúria pode chamar o mesmo juiz novamente; e o consumidor do `EventoCelula` já tenta rejunção, agora também tentada pelo callback novo. A rejunção é protegida por FK nula e pela guarda da porta, portanto repete tentativa, sem criar outro escritor. (`app/chamados/signals.py:216`, `app/ponto/portas/celula.py:796`, `app/chamados/reconciliador.py:1364`, `app/ponto/portas/celula.py:498`, `app/chamados/rejuncao.py:62`, `app/chamados/services/vinculos.py:96`)
 
 ## 10/11 00:59 · sessao df47402d072f · - · - · origem=Ronald (tmux)
 
@@ -799,19 +869,4 @@ Nenhum arquivo alterado.
 
 - A própria documentação alerta: rodadas perdidas além da janela de ontem não são recuperadas pelo `disparar`, que apenas conta e alarma; a pergunta depende de novo julgamento ou sinal de batida. `app/ponto/services/vigia_de_hora.py:39-43`.
 
-## 10/11 00:27 · sessao 6de4b1b32b1f · - · - · origem=Ronald (tmux)
-
-O caminho do código demonstra:
-
-- `julgar_colab` retira o `cods` anterior do lote, mantendo o resultado por ato (`app/ponto/services/cartorio.py:944`). A fábrica roda com `apply_` e chama `perguntar_pela_celula` somente para datas presentes no `out['cods']` desse ato (`app/ponto/services/cartorio.py:992`, `app/ponto/services/cartorio.py:997`, `app/ponto/services/cartorio.py:1006-1008`).
-- O ramo normal registra toda célula efetivamente julgada em `out['cods'][data]`, inclusive lista vazia (`app/ponto/services/cartorio.py:1436-1437`). A seleção usa a presença da chave da data, não a presença de códigos na lista (`app/ponto/services/cartorio.py:1007`).
-- `adesao` é a primeira batida não retratada; ausência dela seleciona o ramo `nunca_bateu` (`app/ponto/services/cartorio.py:1165-1173`). Esse ramo carimba e retorna antes do ramo normal, sem registrar `out['cods']` (`app/ponto/services/cartorio.py:1253-1279`); portanto não habilita a fábrica do wrapper por esse ato (`app/ponto/services/cartorio.py:997-1008`).
-- `motivos_a_perguntar` guarda dia sem trabalho, situação diferente de `ativo`, futuro, veredito fora dos acusadores, parcial destinada à lista e existência da pergunta do fato; não consulta adesão (`app/chamados/services/fabrica_da_celula.py:102-150`). `nunca_bateu` integra expressamente `VEREDITOS_ACUSAM` (`app/escala/models.py:1767-1768`).
-- Os motivos vêm dos marcos faltantes da ata e são recortados pelos vencidos por instante (`app/chamados/services/fabrica_da_celula.py:52-74`). O vencimento usa o mesmo `cartorio.marcos_vencidos`; nenhum marco vencido resulta em nenhum motivo (`app/chamados/services/fabrica_da_celula.py:45-49`, `app/chamados/services/fabrica_da_celula.py:58-61`). A margem é 30 minutos e a comparação é `quando + timedelta(minutes=teto_min) <= agora` (`app/ponto/services/cartorio.py:828`, `app/ponto/services/cartorio.py:858-859`).
-- `perguntar_pela_celula` encaminha passado sem turno à pauta de cadastro, consulta os motivos e, havendo motivos, chama `perguntar` sob push silenciado; limbo de competência entregue vai à pauta DP (`app/chamados/services/fabrica_da_celula.py:192-210`). `perguntar` cria/atualiza a disputa e gera as perguntas (`app/chamados/services/fabrica_da_celula.py:161-167`).
-- `motivos_que_o_evento_deixou` usa `motivos_a_perguntar` e a exceção de pauta do limbo; não tem guarda de adesão (`app/chamados/services/fabrica_da_celula.py:225-236`). Portanto SEM_ADESAO com `nunca_bateu` pode retornar motivos devidos quando as outras guardas permitem, apesar do comentário “carimba e nao emite” do cartório (`app/ponto/services/cartorio.py:1168-1172`; `app/escala/models.py:1767-1768`; `app/chamados/services/fabrica_da_celula.py:102-150`).
-- O vigia do `disparar` seleciona passado da janela, exclui ontem ainda candidato do vigia de hora, acrescenta cada motivo devolvido à lista `deixou` e imprime sua contagem; também não consulta adesão nesse universo (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`, `app/chamados/management/commands/disparar_perguntas_competencia.py:240-243`).
-
-Para COM_ADESAO, se a célula chega ao ramo normal com `teto_de_hoje` e há vencidos, `nunca_bateu` impede `_em_dia`; a mudança do número de vencidos também integra a impressão, fazendo o marco novo participar do rejulgamento (`app/ponto/services/cartorio.py:1324-1344`, `app/ponto/services/cartorio.py:1359-1375`). Isso depende de o chamador selecionar e invocar o julgamento da célula; causa real de não emissão na produção permanece [não verificado].
-
-_3296 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3297 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
