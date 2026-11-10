@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 03:09:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1535**.
+**Medido em 10/11/2026 03:14:40.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1527**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1537,11 +1537,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:15:16 | Bash |  | `cd /home/ronald/saas-hasner/logs/CODEX-2-RAIAS && cat > triagem_preverif_v2.txt <<'EOF' TRIAGEM preverif v2 (e381017bf) -- sessao 09/11 15:3x. Amostra conferida abrindo arquivo:linha na copia. P1 PROCEDE: codex_pergunta.sh:217 imprime o caminho cru com TAB como separador; _TOCA_PY (:278) separa por TAB e le c[1] -> nome com TAB/NL escapa do --toca. Cura restritiva: inventario PROIBE nome com carac ...` |
 | 15:14:58 | Bash |  | `cd /home/ronald/wt-codex2raias-090624 && sed -n 210,222p bin/codex_pergunta.sh; sed -n 98,102p bin/tests/test_codex_pergunta.sh; sed -n 718,723p bin/tests/test_codex_pergunta.sh; sed -n 120,130p bin/codex_vagas_medida.py; sed -n 55,58p bin/tests/test_trava_hist_unico.sh; nproc` |
 | 15:14:48 | Bash |  | `cd /home/ronald/saas-hasner/logs/CODEX-2-RAIAS; tail -3 preverif_v2.out; wc -c preverif_v2.r; cat preverif_v2.r \| head -c 12000` |
-| 15:10:29 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[2].startswith('ESPERANDO:') novo='CODEX-2-RAIAS 15:1x: volta 2 (opus) e381017bf na copia: T1 --toca arquivo exato x pasta/, T2 mutante MORTO so pela mensagem (94/0/0), T3 historico unico da trava (HIST=$TRAVA.hist, --hist/--presa) + selo test_trava_hist_unico.sh; selos de  ...` |
-| 15:10:24 | Bash |  | `cd /home/ronald/saas-hasner && pgrep -f lancar_construtor_v1.sh \| head -2; sed -n 1,6p app/docs/RELATO.md \| cut -c1-200; grep -n 'CODEX-2-RAIAS' app/docs/RELATO.md \| head -5 \| cut -c1-160` |
-| 15:10:19 | Bash |  | `cd /home/ronald/wt-codex2raias-090624 && sed -n 25,50p bin/trava_teste.sh; sed -n 255,290p bin/codex_pergunta.sh; sed -n 98,115p bin/codex_vagas_medida.py` |
-| 15:10:15 | Bash |  | `cd /home/ronald/saas-hasner/logs/CODEX-2-RAIAS; until grep -q '^rc=' preverif_v2.out 2>/dev/null; do /usr/bin/sleep 30; done; date; tail -3 preverif_v2.out` |
-| 15:10:14 | Bash |  | `cd /home/ronald/saas-hasner/logs/CODEX-2-RAIAS; until grep -q '^rc=' suite_v2.log 2>/dev/null; do /usr/bin/sleep 30; done; date; grep -E '^(OK\|FAILED)($\| \()' suite_v2.log \| tail -1; grep '^Ran' suite_v2.log \| tail -1; grep '^rc=' suite_v2.log` |
-| 15:10:03 | Bash |  | `cd /home/ronald/saas-hasner && D=logs/CODEX-2-RAIAS && git -C /home/ronald/wt-codex2raias-090624 diff 3803e6623 e381017bf > $D/diff_v2_total.diff && git -C /home/ronald/wt-codex2raias-090624 diff 2a9b69048 e381017bf > $D/diff_v2_delta.diff && wc -l $D/diff_v2_*.diff && ls $D/triagem_preverif_v1.txt && cat > $D/lancar_suite_v2.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner D=logs/CODEX-2-RAIAS  ...` |
-| 15:09:45 | Bash |  | `cd /home/ronald/saas-hasner/logs/CODEX-2-RAIAS && cat lancar_suite_v1.sh; echo ----; cat lancar_preverif_v1.sh; echo ----; tail -3 suite_v1.log; head -c 1500 preverif_v1.q` |
-| 15:09:43 | Bash |  | `cd /home/ronald/wt-codex2raias-090624 && git log --oneline -3 && git status --porcelain \| head; git diff --stat 2a9b69048 e381017bf \| tail -3; date; cat /proc/loadavg; bin/trava_teste.sh --quem 2>&1 \| head -3; ls /home/ronald/saas-hasner/logs/CODEX-2-RAIAS/ \| tail -20` |
