@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 04:17:54.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1384**.
+**Medido em 10/11/2026 04:23:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1378**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1388,9 +1388,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:40:32 | Bash |  | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; git status --porcelain \| grep -v '^??' ; cat > logs/push_3803.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner bin/push.sh origin 3803e6623:main > logs/push_3803.log 2>&1 echo "rc=$?" >> logs/push_3803.log EOF setsid nohup bash logs/push_3803.sh >/dev/null 2>&1 </dev/null & /usr/bin/sleep 2; pgrep -fx "bash logs/push_3803.sh"` |
 | 16:40:25 | Bash |  | `cd /home/ronald/saas-hasner; cat bin/push.sh \| head -80; cat logs/push_e2e3.sh` |
 | 16:40:23 | Bash |  | `cd /home/ronald/saas-hasner; date; tail -3 logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.out; wc -c logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r; ls -la app/logs/fio_morto.json; sed -n 1,60p bin/push.sh \| grep -n "^#\\|usage\\|\$1" \| head -30; git log --oneline origin/main..3803e6623 \| wc -l` |
-| 16:18:35 | Bash |  | `cd /home/ronald/saas-hasner; tail -3 logs/hook_stop_fila1.log \| cut -c1-300; sed -i '3s/ \| arquivo=.*$//' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 16:18:31 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/ \| grep -i hook \| head; tail -5 $(ls -t logs/*hook*stop* logs/hook*/* 2>/dev/null \| head -1) 2>/dev/null; sed -n 812,856p bin/hook_stop_fila1.py` |
-| 16:18:22 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -fx "bash logs/FIO-E0-V4-E4-ESCRITORES/lancar_matriz_e4.sh" && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! push') L.insert(2,'ESPERANDO: lancar_matriz_e4.sh \| pid=3685670 \| arquivo=logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r') open(p,'w').write('\n'.join(L)) EOF sed -n 3,4p app/docs/RELATO.md \| cut -c1-12 ...` |
-| 16:18:16 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1255,1300p bin/hook_stop_fila1.py; sed -n 1395,1440p bin/hook_stop_fila1.py` |
-| 16:18:13 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "_SO_BANG\\|ESPERANDO\\|def _topo\\|startswith" bin/hook_stop_fila1.py \| head -40` |
-| 16:18:02 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '4s\|$\| Matriz E4 LANCADA 16:2x: lancar_matriz_e4.sh pid=3685670 (Codex leitura, base 05e6aa147, resposta logs/FIO-E0-V4-E4-ESCRITORES/matriz_e4.r).\|' app/docs/RELATO.md; sed -n 4p app/docs/RELATO.md \| tail -c 200` |
