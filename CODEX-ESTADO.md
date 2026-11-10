@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 20:27** · publicado em **10/11/2026 20:31** (UTC-3)
+> Ultima resposta processada: **10/11/2026 20:37** · publicado em **10/11/2026 20:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 20:37 · sessao a613d79df0b4 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Delta aplicado em cinco arquivos: [nao verificado]
+
+- **Item 1:** `core/tests/test_medida_turno_do_par.py::LINHAS_REGISTRADAS`: somente duas entradas mudaram: `_orfao_resolvido_cross_meianoite`, `[809, 810] → [815, 816]`; `criar_disputa_a_partir_de_chamados_orfaos`, `[1293] → [1299]`. [Registro](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/core/tests/test_medida_turno_do_par.py:267)
+- **Item 2:** `chamados/tests/test_bo_disputa_volta5.py::test_RED_d2_aberta_com_outros_motivos_e_canonica_em_fechada_duas_vezes`: `primeiro_estado` definido antes do laço; a comparação da segunda repetição permanece. [Código](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5.py:198)
+- **Item 3:** `chamados/services/disputa_emissao.py::perguntar_entradas_pendentes` registra explicitamente a chamada ao gerador; `::criar_ou_atualizar_disputa` usa esse sinal para decidir a segunda releitura. [Escritor do sinal](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:294), [leitor e comentário corrigido](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:779)
+
+Não provei que todas as cascatas sejam impossíveis quando o gerador devolve vazio. A cadeia concreta de fechamento passa por `reatar_pergunta_orfa` → `lavrar_sem_turno_aberto` → `p.disputa.fechar`; portanto, a dispensa agora depende da ausência de chamada, não do retorno vazio. [Gerador](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:497), [lavra](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/reconciliador.py:1619), [fechamento](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/reconciliador.py:411)
+
+O RED novo executa pendentes real, simula fechamento por outra instância no gerador e retorno vazio, e exige **zero push**. O mutante que restaura a decisão da c8 falha justamente por emitir push. [Teste e mutantes](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta8_memoria.py:183) [nao verificado]
+
+Mantidos **149/223**, com comentários atualizados em `ponto/tests/test_selo_chokepoint_escrita.py::TETOS`. Previsão: delta zero, pois a fábrica fornece data sem entradas pendentes. Nascimento pula pendentes; agregação sem chamada ao gerador conserva uma releitura. Medida ORM e identificação dos ramos efetivamente percorridos em cada cenário: **[nao verificado]**. [Fábrica](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/fabrica_da_celula.py:172), [tetos](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/ponto/tests/test_selo_chokepoint_escrita.py:186)
+
+Controles locais passaram: volta8 **8**, volta5 **15**, sem_pergunta **14** e catraca **35** testes. Os sete mutantes da volta8, `sem_guarda_push` e o registro com linhas antigas morreram por asserção. [Runner c9](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta8_memoria.py:258), [runner volta5](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5_memoria.py:382), [catraca](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/core/tests/test_medida_turno_do_par.py:540) [nao verificado]
+
+Comandos de memória e de cada mutante:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta8_memoria.py
+PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py
+PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_sem_pergunta_memoria.py
+
+for mutante_c9 in \
+  reconsulta_sem_pendentes ignora_fecho_gerador ignora_fecho_pendentes \
+  estrangeira_em_a salva_fechada_d2 omite_sinal_gerador_vazio \
+  retorno_vazio_dispensa_releitura
+do
+  PYTHONDONTWRITEBYTECODE=1 python3 -B \
+    chamados/tests/test_bo_disputa_volta8_memoria.py --mutante "$mutante_c9" || exit 1
+done
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B \
+  chamados/tests/test_bo_disputa_volta5_memoria.py --mutante sem_guarda_push
+```
+
+Catraca completa e mutante das linhas antigas, sem Django/banco:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+from pathlib import Path
+from types import ModuleType
+import unittest
+
+p = Path('core/tests/test_medida_turno_do_par.py').resolve()
+suite = ModuleType('suite_turno') [nao verificado]
+suite.__file__ = str(p) [nao verificado]
+source = p.read_text().replace(
+    'from django.test import SimpleTestCase',
+    'from unittest import TestCase as SimpleTestCase')
+exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
+runner = unittest.TextTestRunner(verbosity=2)
+if not runner.run(unittest.defaultTestLoader.loadTestsFromModule(suite)).wasSuccessful(): [nao verificado]
+    raise SystemExit(1)
+
+linhas = suite.LINHAS_REGISTRADAS['derivacoes_de_dia'] [nao verificado]
+linhas[('chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite', 'B1')] = [809, 810]
+linhas[('chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos', 'B1')] = [1293]
+resultado = runner.run(unittest.TestSuite([
+    suite.CatracaTurnoDoParTest( [nao verificado]
+        'test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit')]))
+if resultado.errors or len(resultado.failures) != 1:
+    raise SystemExit('mutante nao morreu por assertion')
+print('MUTANTE MORTO: linhas antigas')
+PY
+```
+
+Ruff indisponível no ambiente; lint, testes com banco, medidas ORM e certificação pela suite/opus ficam **[nao verificado]**. [nao verificado]
 
 ## 10/11 20:27 · sessao 99c28c41e23e · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -1010,51 +1079,4 @@ Busquei `sem_episodio_intocada`, `canonica_sem_episodio`, “sem episódio”, �
 
 O N=0 anterior era válido somente para o subconjunto já aceito pela porta, não para todo o item genérico.
 
-## 10/11 19:53 · sessao 235eacb48a70 · - · - · origem=Ronald (tmux)
-
-## BO-ROTULO-ENCERRADO
-
-**(a) Lei, juiz e porta.** A regra aplicável é “testemunha lê, não recalcula” (`CLAUDE.md:20`), acompanhada de tela e ação consultarem a mesma função (`app/docs/LEIS-UI.md:23`) e textos explicativos saírem do mapa do domínio (`app/docs/LEIS-UI.md:77`). Não encontrei uma lei literal “rótulo único por estado”; a fonte atual distingue duas perguntas: ação do administrador e espera do colaborador (`app/chamados/services/verbos.py:96`).
-
-Para **rótulo de ação**, **sem juiz registrado**: o registro da família chamado enumera transição, premissa, permissão, dia, perguntas e demais autoridades, sem essa pergunta (`app/core/juizes.py:272` até `:293`). Hoje decidem dois blocos literais: `app/templates/chamados/partials/modal_fio.html:667` e `app/templates/chamados/partials/painel_chamado_turno.html:76`. Para o rótulo de espera, decide `rotulo_para_pessoa`, através do filtro `espera` (`app/chamados/templatetags/chamados_tags.py:53`, `app/chamados/services/verbos.py:138`).
-
-A transição permanece com o juiz registrado `motor.decidir` (`app/core/juizes.py:274`, `app/docs/JUIZES.md:37`), acessado por `ChamadoColaborador.transicionar`/`pode_transicionar` (`app/chamados/models.py:119`, `:128`); seu escritor canônico é `_gravar_estado` (`app/chamados/models.py:201`).
-
-**Conferência do relato.** Confere: os dois detalhes mostram “Encerrado” nas opções `resolvido` e `fechado`, porque usam `espera|first` (`app/templates/chamados/detalhe.html:133`, `:134`; `app/templates/chamados/detalhe_local.html:396`, `:397`) e o mapa traduz ambos assim (`app/chamados/services/verbos.py:118`, `:119`). O mesmo defeito aparece também em um terceiro seletor, não mencionado no relato (`app/templates/chamados/fio_colaborador.html:269`, `:270`). Confere que o modal distingue “Encerrar”/“Encerrar e arquivar” (`app/templates/chamados/partials/modal_fio.html:668`, `:669`).
-
-Não confere a sugestão de uma **fonte comum já existente no modal**: os rótulos são literais no template; outro template repete os mesmos literais (`app/templates/chamados/partials/modal_fio.html:667`, `app/templates/chamados/partials/painel_chamado_turno.html:76`). O próprio comentário esclarece que ali se mostra **ação**, mantendo `value` como contrato com a view (`app/templates/chamados/partials/modal_fio.html:660`). O chamado de exemplo não pode ser conferido: depende de dado — contagem de ocorrências e renderização do pk citado em cada rota. [não verificado]
-
-**(b)** Cria estado: **não**, para a cura limitada a rótulos: `resolvido` e `fechado` já são valores do campo existente (`app/chamados/models.py:31`, `:32`, `:52`), e os seletores já enviam esses mesmos valores (`app/templates/chamados/detalhe_local.html:396`, `:397`). Muda decisor de negócio: **não**, nesse escopo; a ação recebe `novo_status` e chama a mesma porta (`app/chamados/services/acoes_chamado.py:287`, `:313`, `:315`), cuja validação delega ao juiz atual (`app/chamados/models.py:123`). Centralizar o vocabulário muda sua fonte de apresentação; não autoriza mudar o julgamento da transição (`app/chamados/catalogo/motor.py:139`).
-
-**(c) Censo relevante ao rótulo; censo global do estado dispensado por (b).** Unidade: função ou bloco de template; opções irmãs contam como um bloco. **13 sítios = 3 definidores + 10 leitores**:
-
-| Tipo | Sítio | Forma |
-|---|---|---|
-| Definidor | `app/chamados/services/verbos.py:114` | dicionário `ESPERA_COLAB`; valores `resolvido`/`fechado` iguais |
-| Definidor/renderizador | `app/templates/chamados/partials/modal_fio.html:667` | opções com texto literal e `value` de estado |
-| Definidor/renderizador | `app/templates/chamados/partials/painel_chamado_turno.html:76` | opções com texto literal e `value` de estado |
-| Leitor | `app/chamados/services/verbos.py:138` | normalização por truthiness em `:140`; `.get(st, fallback)` em `:141` |
-| Leitor | `app/chamados/templatetags/chamados_tags.py:53` | filtro registrado; import local e delegação em `:63`/`:64` |
-| Leitor | `app/templates/chamados/detalhe.html:36` | filtro `espera`, leitura de tupla para badge |
-| Leitor | `app/templates/chamados/detalhe_local.html:68` | filtro `espera`, leitura de tupla para badge |
-| Leitor | `app/templates/chamados/fio_colaborador.html:188` | filtro `espera`, leitura de tupla para badge |
-| Leitor | `app/templates/chamados/partials/painel_chamado_turno.html:18` | filtro `espera`, leitura de tupla para badge |
-| Leitor | `app/templates/chamados/partials/modal_fio.html:101` | filtro `espera`, leitura de tupla para badge |
-| Leitor | `app/templates/chamados/detalhe.html:132` | constantes de estado → `espera|first` |
-| Leitor | `app/templates/chamados/detalhe_local.html:395` | constantes de estado → `espera|first` |
-| Leitor | `app/templates/chamados/fio_colaborador.html:268` | constantes de estado → `espera|first` |
-
-Método executado: grep global em `.py`, `.html`, `.js` por `rotulo_para_pessoa`, `ESPERA_COLAB`, `|espera` e opções; AST dos Python de produção, com resolução de imports `as`. Encontrados um carregamento Python do mapa (`app/chamados/services/verbos.py:141`) e uma chamada da função (`app/chamados/templatetags/chamados_tags.py:64`). Nenhum outro alias/chamador foi encontrado; commands, `config/crons.py`, signals e JS de static não produziram ocorrências desses símbolos. Como prova negativa de execução sem artefato gravado, o resultado das buscas fica [não verificado] para quem só disponha deste relatório.
-
-**(d)** **COMPLEMENTO de O137 — ESMERIL-NO-RASTRO**, especificamente a classe testemunha/rótulo que não migrou, já descrita nessa casa (`app/docs/BACKLOG.md:1363`). A ligação é explícita no teste da família chamado: a classe B centraliza a pílula de espera em `rotulo_para_pessoa` (`app/chamados/tests/test_o137_esmeril_chamado.py:11`), e o próprio filtro identifica O137 (`app/chamados/templatetags/chamados_tags.py:55`). Não há prova de BO de sítio único: são três seletores afetados e dois modelos literais de ação (`app/templates/chamados/detalhe.html:132`, `app/templates/chamados/detalhe_local.html:395`, `app/templates/chamados/fio_colaborador.html:268`, `app/templates/chamados/partials/modal_fio.html:667`, `app/templates/chamados/partials/painel_chamado_turno.html:76`). Esse encaixe não afirma que a condição atual de execução da O137 esteja satisfeita; a casa exige família fechada (`app/docs/BACKLOG.md:1363`).
-
-**(e)** **Single Source of Truth / Aggregate Root — fonte única**, termo existente (`app/docs/GLOSSARIO.md:11`), aplicado ao vocabulário da ação, mantendo separado o vocabulário de espera já declarado (`app/chamados/services/verbos.py:96`).
-
-**(f)** perguntas de lei: 0
-
-No escopo limitado de apresentar os verbos já existentes e preservar `value`, a distinção ação/espera já está documentada (`app/templates/chamados/partials/modal_fio.html:660`, `app/chamados/services/verbos.py:96`); a obrigação de fonte única já existe (`CLAUDE.md:20`). Se se pretender registrar uma nova autoridade de domínio, aplica-se a regra de declaração prévia, assunto que este censo não autoriza construir (`CLAUDE.md:311`).
-
-**Linha para tabela consolidada:**  
-`BO-ROTULO-ENCERRADO | CLAUDE:20; LEIS-UI L2/L7; sem juiz registrado do rótulo; motor.decidir/transicionar/_gravar_estado | não/não | 13 (perímetro do rótulo; estado global n/a) | COMPLEMENTO de O137 (BACKLOG:1363) | Single Source of Truth (GLOSSARIO:11) | 0`
-
-_3492 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3493 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
