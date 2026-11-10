@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 19:13** · publicado em **10/11/2026 19:16** (UTC-3)
+> Ultima resposta processada: **10/11/2026 19:26** · publicado em **10/11/2026 19:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 19:26 · sessao f8ac4f4480e8 · - · - · origem=Ronald (tmux)
+
+Fechamento GPS: **54 leitores diretos + 11 sítios que gravam valores GPS = 65**, no universo declarado: `Batida`, coordenadas copiadas em `AlertaGeofence`, contexto geográfico do chamado e `Advertencia`. Não é reprodução da métrica “41” do anexo. Há ainda **3 apagadores diretos** desse estado; contando-os, são **68 operações**. A infraestrutura genérica de JSON e os consumidores indiretos ficam explicitados separadamente, sem duplicar o chamador específico. [não verificado: fechamento universal contra reflexão/SQL dinâmico]
+
+As 18 leituras sem predicado adicional, somadas às 36 já enviadas:
+
+| # | Sítio | Forma |
+|---|---|---|
+| 37 | `app/colaboradores/painel_cell.py:37` | lê par em tupla, condiciona à existência da batida |
+| 38 | `app/colaboradores/services/situacional.py:141` | `values_list`, preserva par em tupla em `:145` |
+| 39 | `app/colaboradores/services/detalhe.py:82` | converte par por `float`, após queryset filtrado |
+| 40 | `app/ponto/services/geofence.py:275` | copia par para alerta `sinal_ruim` |
+| 41 | `app/ponto/services/geofence.py:282` | copia par para alerta `gps_incerto` |
+| 42 | `app/ponto/services/geofence.py:293` | copia par para alerta `vinculo_divergente` |
+| 43 | `app/ponto/services/geofence.py:302` | copia par para alerta `ponto_fora` |
+| 44 | `app/ponto/services/geofence.py:383` | `.get` do par de cada ocorrência |
+| 45 | `app/ponto/services/geofence.py:384` | `.get` do par no contexto legado |
+| 46 | `app/chamados/services/acoes_chamado.py:203` | `.get` do par; copia para `Advertencia` |
+| 47 | `app/templates/chamados/fio_colaborador.html:116` | template/data attributes e coordenadas em `:118` |
+| 48 | `app/templates/chamados/fio_colaborador.html:125` | template/data attributes do histórico em `:126` |
+| 49 | `app/templates/colaboradores/detalhe.html:188` | leitura direta em link |
+| 50 | `app/templates/colaboradores/partials/_ps_linha.html:1` | leitura dos aliases `b_lat`/`b_lon` em data attributes |
+| 51 | `app/templates/colaboradores/detalhe.html:231` | aliases `pontos[0].lat/lng`, centro do mapa |
+| 52 | `app/templates/colaboradores/detalhe.html:238` | aliases `p.lat/lng`, posição do marcador |
+| 53 | `app/ponto/admin.py:34` | campos declarados `readonly_fields` |
+| 54 | `app/static/js/geo-colab-map.js:101` | wrapper copia aliases `d.blat/blon` para `shim`; chama consumidor em `:106` |
+
+As 11 gravações:
+
+| Sítio | Forma |
+|---|---|
+| `app/ponto/registro_batida.py:152` | `Batida.objects.create(**campos)`, ramo conflito humano |
+| `app/ponto/registro_batida.py:157` | `Batida.objects.create(**campos)`, ramo normal |
+| `app/ponto/registro_batida.py:335` | `bulk_create([Batida(**d)])`, ensaio; guarda em `:333` |
+| `app/ponto/services/geofence.py:249` | cria alerta `sem_gps`, coordenadas `None` |
+| `app/ponto/services/geofence.py:273` | cria alerta `sinal_ruim`, copia coordenadas |
+| `app/ponto/services/geofence.py:280` | cria alerta `gps_incerto`, copia coordenadas |
+| `app/ponto/services/geofence.py:291` | cria alerta `vinculo_divergente`, copia coordenadas |
+| `app/ponto/services/geofence.py:298` | cria alerta `ponto_fora`, copia coordenadas |
+| `app/ponto/services/geofence.py:337` | `_nota.anexar_ocorrencia`, contexto novo contendo ocorrência |
+| `app/ponto/services/geofence.py:339` | `_ChG.criar`, contexto geográfico em `:353` |
+| `app/chamados/services/acoes_chamado.py:193` | `Advertencia.objects.create`, coordenadas em `:203` |
+
+Apagadores diretos: `app/ponto/registro_batida.py:291` (`batida.delete()`), `:345` (`queryset.delete()`, só ensaio) e `app/ponto/management/commands/zerar_dados_operacionais.py:85` (`AlertaGeofence.objects.all().delete()`). A chamada de ensaio para Batida existe em `zerar_dados_operacionais.py:96` e `gerar_batidas_smoke_motor.py:61`; são chamadores do mesmo apagador.
+
+Portas transitivas e aliases:
+
+- `_BatidaGeo` é import de `Batida as _BatidaGeo` em `app/chamados/views.py:691`; o filtro está em `:692`.
+- `_ChG` é `ChamadoColaborador as _ChG`, `app/ponto/services/geofence.py:321`; `criar` entra em `app/chamados/models.py:1054`.
+- `_nota` é import local em `app/ponto/services/geofence.py:336`; a fusão segue `nota.py:110` → `:123` → `_ctx.fundir_contexto`; `_ctx` é alias declarado em `nota.py:56`. A fusão preserva lista por união (`contexto.py:147`) e escalar pela ausência da chave (`:155`), persistindo em `:163`.
+- O `save` de `Batida` em `registro_batida.py:254` não grava coordenadas: `CAMPOS_ANOTAVEIS` não as inclui (`:203`); campos fora do conjunto são recusados (`:241`).
+- O `update` de `reconciliar_alertas_geofence.py:52` grava apenas `obsoleto_em`.
+- A exclusão genérica de chamados de ensaio também remove o contexto junto: chamador `zerar_dados_operacionais.py:84`; não é um novo sítio que decide GPS.
+
+Crons/signals e consumidores indiretos:
+
+- `config/crons.py:597` agenda `detectar_vinculo_divergente --lavrar`; o command chama `achar` em `app/ponto/management/commands/detectar_vinculo_divergente.py:35` e `lavrar` em `:52`. O papel `lavra` está declarado em `config/crons.py:2041`.
+- `app/ponto/management/commands/reconciliar_vinculo.py:45` pergunta a `vinculo_diverge`; `:50` lê a contagem. O reconciliador também pergunta em `app/chamados/reconciliador.py:300`.
+- `app/ponto/management/commands/reconciliar_geofence.py:33` chama `reavaliar_chamados_geofence`.
+- O `post_save` de Posto, `app/ponto/signals.py:291`, chama a mesma reavaliação com `aplicar=True` em `:306`.
+- `config/crons.py:2074` registra geofence por evento; `:2079` registra vínculo por evento/vigia.
+- O JavaScript comum está nas duas cascas: `app/templates/base.html:88` e `app/templates/base_app.html:80`.
+
+Cobertura executada: busca global em Python/templates/JS por `latitude`, `longitude`, `batida_lat`, `batida_lon`, `b_lat`, `b_lon`, `tem_gps`; segunda busca pelos aliases `.lat`, `.lng`, `.blat`, `.blon`, data attributes e chamadas dos consumidores. AST sobre Python procurou atributos, keywords e constantes dessas coordenadas, independentemente do nome da variável/import. Executei também o censo real `core/censo_escritas.py::varrer_arvore` por `python3 -B`, que confirmou as três criações Batida e cinco criações Alerta; a capacidade/limites do censo estão em `app/core/censo_escritas.py:6`. A enumeração foi conferida por script em memória: 36 predicados +18 transportes/apresentações, sem duplicatas. Não executei Django nem testes.
+
+Exclusões explícitas: modelos `Posto`, `PingGeo`, `Justificativa`, definições de campos, bibliotecas de terceiros, testes/migrations, coordenada recebida antes da gravação e fila IndexedDB do PWA. Não são leituras do objeto persistido escolhido; por isso os guards de captura/API não pertencem aos 54. `Justificativa` possui outro par próprio em `app/ponto/models.py:156`; `PingGeo`, em `:1005`; `Posto`, em `app/colaboradores/models.py:264`.
+
+Pergunta de lei permanece **1**: qual predicado deve valer para ausência GPS, especialmente **zero numérico** e **par parcial**, quando a lei escrita proíbe regra nova de geo (`app/docs/CORTES.md:440`) e o código atual diverge entre truthiness (`geofence.py:247`), não nulidade (`:52`) e latitude isolada (`vinculo_na_lista.py:49`). A semântica normativa de zero não foi localizada. [não verificado]
 
 ## 10/11 19:13 · sessao ebd73717303d · BO-DISPUTA-SEM-PERGUNTA · leitura · origem=Code
 
@@ -930,14 +999,4 @@ Não localizei autoridade duplicada pela extração: o helper conserva os leitor
 
 Execução somente em memória nesta revisão: 23 testes verdes, abrangendo suite anterior, `Volta3Test` e selo extraído; sem banco/Git histórico. [nao verificado quanto à certificação Django/PostgreSQL] [nao verificado]
 
-## 10/11 18:29 · sessao 1510caea65c6 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-VOLTA 3 implementada; cura, comandos e rastreio na [entrega](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:3).
-
-- [27 testes de memória verdes](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:136) e [35 da catraca verdes](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:184). [nao verificado]
-- [RED contra a base: 6 assertions; sete mutantes novos mortos](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:142).
-- [Registro de linhas ajustado; tetos preservados](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:85).
-
-SQL/ORM pelo Code e certificação final pelo Opus: **[não verificado]**. [FALTA](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/ENTREGA_BO_DISPUTA_SEM_PERGUNTA.txt:244).
-
-_3455 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3456 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
