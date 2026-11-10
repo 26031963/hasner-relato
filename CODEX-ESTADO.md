@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 13:45** · publicado em **10/11/2026 13:46** (UTC-3)
+> Ultima resposta processada: **10/11/2026 14:43** · publicado em **10/11/2026 14:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 14:43 · sessao 753a9802ce09 · URGENCIA-E4B · sonda · origem=Code
+
+Base: saída raspada fornecida. Nova execução de `sonda4.py`, role leitor, ordem (c)→(a)→(b) e rollback: [nao verificado]. As referências abaixo sustentam as regras do código; as quantidades são exclusivamente do dado fornecido [nao verificado].
+
+1) **ESCOPO e B_FECHA**, no retrato fornecido [nao verificado]:
+
+| Medida | Atual | Base sonda3 informada | Delta |
+|---|---:|---:|---:|
+| Validar + Decidir | **1.214** | 1.215 | **−1** |
+| (b) | **263** | 263 | **0** |
+| Soma dos baldes MOTIVO_B | **263** | — | — |
+
+O delta de escopo usa a base solicitada; o registro `ESCOPO` nomeia essa base como `sonda2`, não `sonda3` [nao verificado]. A definição de Validar+Decidir está em `app/chamados/services/verbos.py:22`.
+
+2) **MOTIVO_B**: combinações exclusivas por destino; cada item pertence a um único balde, conforme `B_FECHA` fornecido [nao verificado].
+
+| Combinação | GLOBAL | Empresa 2 | Empresa 3 | Empresa 4 | Regra |
+|---|---:|---:|---:|---:|---|
+| resolvido:156(disputa_com_pergunta_viva) + fechado:156(disputa_com_pergunta_viva) | 108 | 83 | 21 | 4 | `app/chamados/models.py:156`; `app/chamados/juizes.py:2320` |
+| resolvido:156(disputa_sem_pergunta) + fechado:156(disputa_sem_pergunta) | 6 | 4 | 2 | 0 | `app/chamados/models.py:156`; `app/chamados/juizes.py:2320` |
+| resolvido:168 + fechado:139 | 2 | 2 | 0 | 0 | `app/chamados/models.py:168`; `app/chamados/models.py:139` |
+| resolvido:168 + fechado:168 | 139 | 106 | 31 | 2 | `app/chamados/models.py:168` |
+| resolvido:192 + fechado:139 | 8 | 6 | 2 | 0 | `app/chamados/models.py:192`; `app/chamados/models.py:139` |
+| sem_caixa | 0 | 0 | 0 | 0 | `app/templates/chamados/partials/modal_fio.html:650` |
+| **Soma = (b)** | **263** | **201** | **56** | **6** | Saída `B_FECHA` [nao verificado] |
+
+Os zeros representam ausência de registros desses baldes na saída fornecida, cuja soma fecha com (b) [nao verificado].
+
+3) **INCIDENCIA_LINHA**: itens em que a linha aparece, uma vez por item, mesmo quando aparece nos dois destinos; sem somar linhas [nao verificado].
+
+| Linha de recusa | GLOBAL | Empresa 2 | Empresa 3 | Empresa 4 |
+|---|---:|---:|---:|---:|
+| `app/chamados/models.py:134` | 0 | 0 | 0 | 0 |
+| `app/chamados/models.py:139` | 10 | 8 | 2 | 0 |
+| `app/chamados/models.py:156` | 114 | 87 | 23 | 4 |
+| `app/chamados/models.py:168` | 141 | 108 | 31 | 2 |
+| `app/chamados/models.py:192` | 8 | 6 | 2 | 0 |
+
+4) **Agregado do aval**, incluindo todas as categorias enumeradas [nao verificado]:
+
+| Categoria | GLOBAL | Empresa 2 | Empresa 3 | Empresa 4 | Regra |
+|---|---:|---:|---:|---:|---|
+| :139 justificativa pendente | 10 | 8 | 2 | 0 | `app/chamados/models.py:139` |
+| :156 disputa SEM pergunta | 6 | 4 | 2 | 0 | `app/chamados/juizes.py:2320` |
+| :156 disputa com pergunta VIVA | 108 | 83 | 21 | 4 | `app/chamados/juizes.py:2320` |
+| :168 pergunta viva ancorada | 141 | 108 | 31 | 2 | `app/chamados/models.py:168` |
+| :192 premissa do furo | 8 | 6 | 2 | 0 | `app/chamados/models.py:192` |
+| Formulário ausente/sem permissão ou GLPI só followup | 0 | 0 | 0 | 0 | `app/templates/chamados/partials/modal_fio.html:650`; GLPI só followup [nao verificado] |
+| Outras | 0 | 0 | 0 | 0 | Saída fornecida [nao verificado] |
+
+Regra adotada no agregado: **incidência por categoria**, uma vez por item em cada categoria presente. Assim, `resolvido:192 + fechado:139` entra em :192 e :139; `resolvido:168 + fechado:168` entra uma vez em :168. Esse agregado admite sobreposição; quem fecha **263** é a tabela de combinações MOTIVO_B [nao verificado].
 
 ## 10/11 13:45 · sessao 4cca0a32929a · URGENCIA-E4B · sonda · origem=Code
 
@@ -1325,127 +1377,4 @@ Os 14 testes mantêm seus corpos intactos, mas **10 exigem o rótulo antigo**, i
 
 O censo de **quem escreve e quem lê cada campo** está no [relato:134](/home/ronald/wt-codex-fio-e0-v4-e4a-2-112744/app/RELATO_FIO_E0_V4_E4A_2_9e.txt:134).
 
-## 10/11 11:24 · sessao ac3391eb6fde · FIO-E0-V4-E4A-2 · verificador · origem=Code
-
-**A 9d não está pronta: há nove asserções incompatíveis com o novo rótulo `ALVOS` e uma divergência entre a fábrica e o leitor de pergunta viva que precisa ser resolvida.** (`app/chamados/management/commands/disparar_perguntas_competencia.py:215`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`; `app/chamados/services/fabrica_da_celula.py:123`; `app/chamados/juizes.py:1386`.)
-
-1. **Chamadores e mudança de comportamento**
-
-   O censo imediato de produção é:
-
-   | Chamador/cadeia | Efeito da mudança |
-   |---|---|
-   | `perguntar_pela_celula → motivos_a_perguntar` | Pode criar pergunta antes bloqueada. (`app/chamados/services/fabrica_da_celula.py:210`; `app/chamados/services/fabrica_da_celula.py:222`.) |
-   | `cartorio.julgar_colab → perguntar_pela_celula` | Leva a mudança ao julgamento real das células desta passada. (`app/ponto/services/cartorio.py:1006`; `app/ponto/services/cartorio.py:1008`.) |
-   | `reconciliador → perguntar_por_eventos → perguntar_pela_celula` | Leva a mudança ao consumidor de eventos. O arquivo existente é `app/chamados/reconciliador.py`. (`app/chamados/reconciliador.py:1386`; `app/chamados/services/fabrica_da_celula.py:304`.) |
-   | `motivos_que_o_evento_deixou → motivos_a_perguntar` | Muda a pendência contada pelo vigia da célula; não emite. (`app/chamados/services/fabrica_da_celula.py:245`; `app/chamados/management/commands/disparar_perguntas_competencia.py:185`.) |
-   | `contador_fio_mudo → motivos_a_perguntar` | Muda os motivos contados; não emite. (`app/chamados/management/commands/disparar_perguntas_competencia.py:115`; `app/chamados/management/commands/disparar_perguntas_competencia.py:120`.) |
-
-   **Sim, existe caminho que passa a criar pergunta:** veredito preenchido não acusador, colaborador ativo, dia permitido pelo juiz de trabalho, turno ainda em curso, marco vencido faltante na ata, sem barreira parcial e sem pergunta ocupando o fato. A alteração alcança os escritores compartilhados, não somente o contador. (`app/chamados/services/fabrica_da_celula.py:112`; `app/chamados/services/fabrica_da_celula.py:119`; `app/chamados/services/fabrica_da_celula.py:123`; `app/chamados/services/fabrica_da_celula.py:126`; `app/chamados/services/fabrica_da_celula.py:142`; `app/chamados/services/fabrica_da_celula.py:160`.)
-
-   | Estado | Resultado da 9d |
-   |---|---|
-   | `nunca_bateu` | Continua retido antes da nova condição. (`app/chamados/services/fabrica_da_celula.py:105`.) |
-   | Veredito acusador | Não passa pelo novo teste de encerramento. (`app/chamados/services/fabrica_da_celula.py:120`.) |
-   | Não acusador + encerrado | Continua sem motivos. (`app/chamados/services/fabrica_da_celula.py:123`.) |
-   | Não acusador + em curso + falta vencida | Pode devolver motivo e alcançar a emissão. (`app/chamados/services/fabrica_da_celula.py:123`; `app/chamados/services/fabrica_da_celula.py:222`.) |
-   | Noturno de ontem ainda em curso | Recebe o mesmo tratamento; ontem civil não implica encerramento. (`app/chamados/services/fabrica_da_celula.py:123`; `app/ponto/turnos.py:2111`.) |
-   | Marco batido, sem falta lida | Não gera motivo. (`app/chamados/services/fabrica_da_celula.py:64`; `app/chamados/tests/test_pergunta_do_dia_em_curso.py:485`.) |
-   | Sem ata suficiente ou sem marco vencido | Não gera motivo. (`app/chamados/services/fabrica_da_celula.py:58`; `app/chamados/services/fabrica_da_celula.py:65`.) |
-
-   A emissão permanece **com push silenciado**; a porta de push retorna quando esse contexto está ativo. (`app/chamados/services/fabrica_da_celula.py:221`; `app/chamados/services/disputa_emissao.py:1753`.)
-
-   Incluir hoje e conservar o teto no juiz atende ao ALVO. Porém a condição abrange **todos** os não acusadores, inclusive `trabalhou`, `faltou` e `justificado`, sem distinguir `veredito_via='admin'`. O aval específico dessa extensão administrativa é [nao verificado]. (`aval_alvo_v9c_guarda_1110.txt:1`, anexo; `app/chamados/services/fabrica_da_celula.py:120`; `app/escala/models.py:1759`.)
-
-2. **Predicado e autoridade de `dia_encerrado`**
-
-   O predicado efetivo é:
-
-   `sem turno aberto vivo AND fim previsto existe AND agora >= fim previsto`.
-
-   Sem fim previsto, responde falso. Uma aberta pode continuar viva até a expiração definida pelo fim da janela do template mais quatro horas; portanto ultrapassar o fim previsto, sozinho, não basta. (`app/ponto/turnos.py:2000`; `app/ponto/turnos.py:2030`; `app/ponto/turnos.py:2115`; `app/ponto/turnos.py:2124`.)
-
-   A fábrica passa **`cel.data`, dia do turno**, e o `agora` recebido. `dia_encerrado_motivo` lê `timezone.now()` somente se não receber `agora`; a própria fábrica tem seu fallback anterior em `timezone.localtime()`. (`app/chamados/services/fabrica_da_celula.py:116`; `app/chamados/services/fabrica_da_celula.py:123`; `app/ponto/turnos.py:2096`; `app/ponto/turnos.py:2098`.)
-
-   **É autoridade registrada**, para “o dia está encerrado?”. Os cortes corrigidos permitem esse uso e proíbem substituí-lo por `data < hoje`. `par_completo` responde outra pergunta; não é substituto obrigatório aqui. (`app/core/juizes.py:235`; `app/core/juizes.py:236`; `app/docs/CORTES.md:55`; `app/docs/CORTES.md:62`; `CLAUDE.md:185`.)
-
-   Há, entretanto, outro critério já consumido pelo fio: `lastro.marcos_pendentes` identifica o caráter provisório da ata e é lido pelo C6. Esse critério não equivale necessariamente a `dia_encerrado`; a consequência está no item 6. (`app/ponto/services/lastro.py:138`; `app/chamados/juizes.py:1385`.)
-
-3. **Guarda, corpos congelados e asserções alteradas**
-
-   A guarda continua exigindo **`FIO MUDO: 1` às 13:40 e nenhuma pergunta escrita**. No delta 9d fornecido, seu corpo não foi alterado. Comparação independente byte a byte dos demais “corpos congelados”, sem baseline identificado na cópia: [nao verificado]. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:460`.)
-
-   As mudanças nas verificações existentes da 9d são:
-
-   - Troca do texto esperado de `ALVOS` e exigência da menção à Pauta DP: correspondem ao P3 da triagem. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:222`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:224`; `triagem_preverif8.txt:4`, anexo.)
-   - Mensagens específicas, mínimo de catálogo, trecho mutado único e `assertRaisesRegex`: fortalecem a rejeição dos mutantes e atendem ao P1. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:242`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:248`; `triagem_preverif8.txt:2`, anexo.)
-   - O helper passa a exigir rejeição de `concorde` quando `encerrado=True`. O teste anterior conserva esse padrão e continua exigindo zero; os casos em curso são acrescentados separadamente. (`app/chamados/tests/test_e4a2_matriz_memoria.py:100`; `app/chamados/tests/test_e4a2_matriz_memoria.py:169`; `app/chamados/tests/test_e4a2_matriz_memoria.py:194`; `app/chamados/tests/test_e4a2_matriz_memoria.py:199`.)
-
-   **Regressão certa:** nove asserções ficaram esperando `ALVOS: N perguntas`, incompatível com a saída atual `ALVOS: N motivos devidos...`:
-
-   - `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`, `:54`;
-   - `app/chamados/tests/test_selo_emissor_fio_mudo.py:84`, `:119`, `:173`;
-   - `app/chamados/tests/test_fabrica_pela_ata.py:51`, `:64`, `:71`;
-   - `app/chamados/tests/test_pergunta_do_dia_em_curso.py:106`.
-
-   A saída conflitante está em `app/chamados/management/commands/disparar_perguntas_competencia.py:215`.
-
-4. **`_pks_de_empresa`**
-
-   Os dois chamadores de produção são `contador_fio_mudo` e `contador_nunca_bateu`. O disparar entra com `None`; o vigiar entra com `None` ou lista materializada de instâncias `Empresa`. Não há escalar acidental nesses caminhos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:52`; `app/chamados/management/commands/disparar_perguntas_competencia.py:88`; `app/chamados/management/commands/disparar_perguntas_competencia.py:189`; `app/chamados/management/commands/vigiar_fio_morto.py:156`; `app/chamados/management/commands/vigiar_fio_morto.py:160`.)
-
-   Nos testes há listas de pks/instâncias, tuplas, iteradores e `None`. Empresa única, inteiro e texto aparecem **deliberadamente como entradas negativas**, esperando `TypeError`. (`app/chamados/tests/test_e4a2_nunca_bateu.py:119`; `app/chamados/tests/test_e4a2_nunca_bateu.py:125`; `app/chamados/tests/test_e4a2_nunca_bateu.py:310`; `app/chamados/tests/test_e4a2_c5_memoria.py:89`; `app/chamados/tests/test_e4a2_matriz_memoria.py:214`.)
-
-   Não há consumo duplo do gerador original: a primeira normalização produz lista, reutilizada no ORM e repassada à segunda normalização. Queryset é compatível com esse contrato de iteração; um chamador efetivo passando queryset é [nao verificado]. (`app/chamados/management/commands/disparar_perguntas_competencia.py:33`; `app/chamados/management/commands/disparar_perguntas_competencia.py:36`; `app/chamados/management/commands/disparar_perguntas_competencia.py:104`; `app/chamados/management/commands/disparar_perguntas_competencia.py:121`.)
-
-5. **Matriz (a)–(d) e bancos 1–4**
-
-   A estrutura do contador permanece:
-
-   | Contrato | Realização |
-   |---|---|
-   | (a) Retido `nunca_bateu` | Separado dos alvos; número de pares e esperado pela interseção com C5. (`app/chamados/management/commands/disparar_perguntas_competencia.py:66`; `:111`.) |
-   | (b) Motivo devido | Consulta o juiz e deduplica `(colab,dia,motivo)`; esperado zero. (`app/chamados/management/commands/disparar_perguntas_competencia.py:115`; `:116`; `:122`.) |
-   | (c) Pergunta viva | Qualquer pergunta viva ligada exclui o chamado inteiro, conforme o descarte P2. (`app/chamados/management/commands/disparar_perguntas_competencia.py:109`; `triagem_preverif8.txt:3`, anexo.) |
-   | (d) Tranca | Universo `VIVOS`, sem filtro paralelo para esconder chamado que a tranca não encerrou, conforme P4. (`app/chamados/management/commands/disparar_perguntas_competencia.py:99`; `triagem_preverif8.txt:5`, anexo.) |
-
-   O corte até ontem pertence à comparação C5; **não foi introduzido no universo do fio mudo**. (`app/chamados/management/commands/disparar_perguntas_competencia.py:64`; `app/chamados/management/commands/disparar_perguntas_competencia.py:99`.)
-
-   Bancos 1–4 continuam implementados: saída dos juízes por varredura e remoção de `--apply`; publicação dos dois contadores; leitura pelo pipeline; exceção real vazia com controles sintéticos no selo. (`app/config/crons.py:2032`; `app/chamados/management/commands/disparar_perguntas_competencia.py:132`; `app/chamados/management/commands/vigiar_fio_morto.py:233`; `app/core/management/commands/pipeline_placar.py:135`; `bin/tests/test_papel_prazo_nao_deriva.sh:305`; `bin/tests/test_papel_prazo_nao_deriva.sh:384`.)
-
-   A regressão comprovada é na compatibilidade dos testes do **banco 5**. A errata declara a medição de produção `06h35 FIO MUDO 0, ALVOS 0`; sua reprodução ou certificação para a semântica nova da 9d é [nao verificado]. (`app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`; `aval_errata_b3_matriz_1110.txt:1`, anexo.)
-
-6. **Quem escreve, quem lê e significado**
-
-   | Campo/valor | Escritor/fonte e leitores relevantes |
-   |---|---|
-   | `veredito` | Porta `lavrar_veredito`; o cartório fornece o julgamento e a via administrativa prevalece. Leem fábrica, C6, reconciliador e C5. (`app/ponto/portas/celula.py:974`; `:1003`; `:1035`; `app/chamados/services/fabrica_da_celula.py:120`; `app/chamados/juizes.py:1372`; `app/chamados/reconciliador.py:1027`; `app/escala/services/cadastro_realidade.py:181`.) |
-   | `ata` | Cartório monta e aplica o teto; porta persiste. Fábrica lê faltantes pela cadeia `_ata_do_dia → _marcos_faltantes → grade_da_celula`; C6 lê pendentes. (`app/ponto/services/cartorio.py:1811`; `app/ponto/portas/celula.py:1033`; `app/chamados/services/disputa_emissao.py:895`; `app/chamados/services/declaracao_texto.py:100`; `app/chamados/juizes.py:1385`.) |
-   | `julgada_em` | `carimbar` grava o instante. O cartório captura o valor anterior e o entrega à fábrica para `parcial_so_lista`; contador/avulso usam o persistido. (`app/ponto/portas/celula.py:1065`; `app/ponto/services/cartorio.py:954`; `:1008`; `app/chamados/services/fabrica_da_celula.py:126`.) |
-   | `ALVOS` | Disparar imprime quantidade de motivos e pessoas distintas. Os leitores incompatíveis encontrados são os nove testes do item 3. (`app/chamados/management/commands/disparar_perguntas_competencia.py:215`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`.) |
-   | `fio_mudo_alvos` | Contador deriva; vigiar publica número/esperado; pipeline compara; `fio_estado` também compara dinamicamente o carimbo inteiro. (`app/chamados/management/commands/disparar_perguntas_competencia.py:122`; `app/chamados/management/commands/vigiar_fio_morto.py:233`; `:241`; `app/core/management/commands/pipeline_placar.py:98`; `bin/fio_estado.py:125`.) |
-   | `nunca_bateu_sem_adesao` | Número e esperado são pares; totais C5 são informativos. No JSON, o nome aparece como número em `censo/esperado` e como objeto detalhado no topo; os leitores acessam esses níveis explicitamente. (`app/chamados/management/commands/disparar_perguntas_competencia.py:66`; `:69`; `app/chamados/management/commands/vigiar_fio_morto.py:234`; `:241`; `:242`.) |
-   | `rc` | Disparar: 2 somente por `--alarme` e pendência da célula. Vigiar: pelos próprios gritos. Pipeline: por seus alarmes com chave. (`app/chamados/management/commands/disparar_perguntas_competencia.py:219`; `app/chamados/management/commands/vigiar_fio_morto.py:252`; `app/core/management/commands/pipeline_placar.py:160`.) |
-
-   `cel.data` é dia do turno; `hoje` do carimbo é dia civil local da medição. O pipeline compara o dia civil solicitado com esse `hoje`, sem reinterpretá-lo como dia de cada alvo. (`app/ponto/turnos.py:2111`; `app/chamados/management/commands/vigiar_fio_morto.py:167`; `:230`; `app/core/management/commands/pipeline_placar.py:95`.)
-
-   **Divergência de significado encontrada:** a fábrica admite não acusador quando `dia_encerrado=False`; o C6 mata a pergunta não respondida desse não acusador se não houver `pendente` na ata. Assim, com falta vencida, turno em curso e ata sem pendentes, a fábrica pode produzir motivo enquanto o leitor considera a pergunta morta. O reconciliador também considera absolvido o não acusador sem pendentes. Ocorrência desse estado na produção fornecida: [nao verificado]. (`app/chamados/services/fabrica_da_celula.py:123`; `:142`; `app/chamados/juizes.py:1386`; `app/chamados/reconciliador.py:1029`.)
-
-7. **Mordida e vacuidade**
-
-   Os catálogos principais agora exigem mínimos: **11 NuncaBateu, 12 placar, 10 relatório, 19 matriz e 13 C5**. Os laços verificam controle verde, trecho único e falha pela mensagem pretendida; há provas específicas para catálogo vazio/encolhido. (`app/chamados/tests/test_e4a2_nunca_bateu.py:66`; `:318`; `:329`; `app/core/tests/test_fio_mudo_placar.py:53`; `:294`; `:319`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:39`; `:235`; `:245`; `app/chamados/tests/test_e4a2_matriz_memoria.py:82`; `:352`; `:365`; `app/chamados/tests/test_e4a2_c5_memoria.py:71`; `:201`; `:214`.)
-
-   O selo por AST dos catálogos Django prova sua defesa contra esvaziamento; **não executa os mutantes ORM nem seus `setUp`**. Os testes de memória do encerramento usam resposta dublada; a integração noturna está em teste Django separado. (`app/chamados/tests/test_e4a2_matriz_memoria.py:314`; `:325`; `:334`; `:151`; `app/chamados/tests/test_pergunta_do_dia_em_curso.py:297`.)
-
-   Nesta auditoria, os dois módulos de memória executaram **28 testes OK**, e o selo shell terminou **OK, rc 0**. Comprovantes persistidos dessas execuções e execução da integração/suíte inteira: [nao verificado]. [nao verificado]
-
-8. **Classes de reprovação**
-
-   - **Segundo juiz registrado duplicado:** não identificado na nova chamada; ela usa a autoridade existente. (`app/core/juizes.py:235`; `app/chamados/services/fabrica_da_celula.py:123`.)
-   - **Segundo escritor fora da porta:** não identificado no contador; a emissão segue pela fábrica existente. (`app/chamados/management/commands/disparar_perguntas_competencia.py:115`; `app/chamados/services/fabrica_da_celula.py:222`.)
-   - **Novo relógio fora da borda nesse caminho:** não identificado; contador repassa `agora`, e a nova chamada o conserva. (`app/chamados/management/commands/disparar_perguntas_competencia.py:115`; `app/chamados/services/fabrica_da_celula.py:123`.)
-   - **Selo vazio:** os mínimos corrigem o problema apontado; não certificam a suíte, que contém a incompatibilidade textual demonstrada. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:242`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`.)
-   - **Campo interpretado por critérios diferentes:** presente no caráter provisório do não acusador — encerramento do turno na fábrica versus pendência da ata no C6/reconciliador. (`app/chamados/services/fabrica_da_celula.py:123`; `app/chamados/juizes.py:1386`; `app/chamados/reconciliador.py:1029`.)
-   - **Nova inversão de trava ou pouso antes do pré-requisito:** não demonstrados pelo material fornecido; execução de pouso, ordem dinâmica e comprovação operacional dos pré-requisitos: [nao verificado]. [nao verificado]
-
-_3393 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3394 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
