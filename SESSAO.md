@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 17:41:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (269.4 MB). Acoes na janela: **700**.
+**Medido em 10/11/2026 17:46:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (269.7 MB). Acoes na janela: **712**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:45:52 | Bash | Narrow PAREI line and recheck hook | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! RESTART') old=L[2] L[2]='PAREI: ! RESTART da ORDEM-POS-E4A2 \| espera Ronald /restart + "retoma" (aval RESTART-SEGURO + complemento 17:4x; detalhe e proximos passos na linha RESTART-PRONTO-DETALHE abaixo)' det='RESTART-PRONTO-DETALHE: '+old.split('(aval RESTART-SEGU ...` |
+| 17:45:45 | Bash | Get item em curso from hook judge | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as H v,e,o=H._item_da_ordem_viva(H._backlog_texto()); print(v,repr(e))"` |
+| 17:45:41 | Bash | Read rest of PAREI logic | `cd /home/ronald/saas-hasner && sed -n 1290,1340p bin/hook_stop_fila1.py` |
+| 17:45:33 | Bash | Add bang to PAREI line and test hook | `cd /home/ronald/saas-hasner && sed -i '3s/^PAREI: RESTART \| PRONTO (/PAREI: ! RESTART \| PRONTO -- espera Ronald \/restart + "retoma" (/' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md \| cut -c1-110 && echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| head -3` |
+| 17:45:29 | Bash | Find prior RESTART PRONTO form | `cd /home/ronald/saas-hasner && /bin/grep -rhn "RESTART" app/docs/RELATO-ARQUIVO.md app/docs/RELATO.md app/docs/CORTES.md 2>/dev/null \| cut -c1-200 \| head` |
+| 17:45:24 | Bash | Read hook release logic | `cd /home/ronald/saas-hasner && sed -n 1255,1290p bin/hook_stop_fila1.py` |
+| 17:45:22 | Bash | Check how hook releases on PAREI | `cd /home/ronald/saas-hasner && /bin/grep -n "_SO_BANG\\|RESTART" bin/hook_stop_fila1.py \| head -20` |
+| 17:45:11 | Bash | Move DESENHO line into first useful lines | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('DESENHO BO-0611-05:')] assert len(i)==1 d=L.pop(i[0]) j=[k for k,l in enumerate(L) if l.startswith('PAREI: RESTART')][0] L.insert(j+1,d) open(p,'w').write('\n'.join(L)) EOF sed -n 1,6p app/docs/RELATO.md \| cut -c1-80; python3 -c " import sys; sys.path. ...` |
+| 17:44:55 | Bash | Write PAREI RESTART PRONTO at RELATO top | `cd /home/ronald/saas-hasner && date +%H:%M; ps -eo pid,args \| awk '$1==995039\|\|$1==3009092'; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() old='ESPERANDO: lanca_mod1.sh \| pid=3009092\n' assert s.count(old)==1 new=('PAREI: RESTART \| PRONTO (aval RESTART-SEGURO + complemento, 17:4x). Nada solto rodando: 0 processo da sessao, 0 nohup/setsid vivo (construtor c1 pid 1313800 morto rc=12 ...` |
+| 17:44:46 | TaskStop |  | `-` |
+| 17:44:43 | Bash | Check opus verifier finished | `f=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a8f0121cf08416c1a.output; ls -la $f; tail -c 300 $f; echo; ls -la /home/ronald/saas-hasner/logs/BO-0611-05/opus_final1.txt` |
+| 17:44:41 | ToolSearch |  | `-` |
 | 17:37:58 | Bash | Keep waiting for the waiter to exit | `timeout 590 tail --pid=995039 -f /dev/null; ps -p 995039 >/dev/null && echo vivo \|\| echo morto; date +%H:%M` |
 | 17:37:55 | Bash | Write volta 7 brief file | `cat > /home/ronald/saas-hasner/logs/BO-0611-05/brief_volta7.md <<'EOF' # BO-0611-05 volta 7 -- brief do construtor (aval LIBERA-B3, logs/BO-0611-05/aval_libera_b3_volta7_1110.txt) padrao=Single Source of Truth (juiz unico). Lei = juiz unico, nenhuma lei nova. Base: wt 4ffb05150. Censo (logs/BO-0611-05/censo_geo7.r): 41 sitios; juiz de fato = ponto/services/geofence.py:247 `not lat or not lon` (exp ...` |
 | 17:27:54 | Bash | Wait in foreground for the waiter to exit | `timeout 590 tail --pid=995039 -f /dev/null; ps -p 995039 >/dev/null && echo vivo \|\| echo morto; date +%H:%M` |
