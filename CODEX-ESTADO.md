@@ -1,7 +1,174 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 15:32** · publicado em **10/11/2026 15:32** (UTC-3)
+> Ultima resposta processada: **10/11/2026 15:37** · publicado em **10/11/2026 15:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 15:37 · sessao b14693f6a721 · BO-0611-05 · construtor · origem=Code
+
+Alterado somente [app/ponto/tests/test_l030_forma_js.py](/home/ronald/wt-codex-bo-0611-05-153526/app/ponto/tests/test_l030_forma_js.py:58): guarda de `hxConfirmar` antes do POST e de cada fila. O `return false` da selfie continua permitido (app/templates/ponto/bater_ponto_v2.html:287).
+
+Censo dos tokens:
+
+| Token | Quem emite/define | Quem lê |
+|---|---|---|
+| `garantirRequisitos` | v2 define em app/templates/ponto/bater_ponto_v2.html:285 | v2 chama em :312; oráculo localiza em app/ponto/tests/test_l030_forma_js.py:33 |
+| `fetch` | v2 emite POST em app/templates/ponto/bater_ponto_v2.html:322 | oráculo em app/ponto/tests/test_l030_forma_js.py:58 |
+| `registrarBatidaOffline` | app/static/pwa.js:107 define; :310 exporta | v2 chama em app/templates/ponto/bater_ponto_v2.html:333 e :346; triagem em app/templates/ponto/triagem/apto.html:282; oráculo em app/ponto/tests/test_l030_forma_js.py:66 |
+| `hxConfirmar` | app/templates/core/_dialogo.html:172 define | guardas em app/ponto/tests/test_l030_forma_js.py:55, :58 e :66 |
+
+Nenhum dos dois templates atuais emite `hxConfirmar` nos intervalos protegidos; o controle das duas fontes passou (app/ponto/tests/test_l030_forma_js.py:72).
+
+Comandos executados, todos a partir de `app/`:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v ponto.tests.test_l030_forma_js
+```
+
+Antes da guarda: **rc 1**, oito mutantes escaparam. Depois: **rc 0**, dois testes passaram. Os novos casos cobrem começo de `garantirRequisitos`, POST e duas filas, com/sem comentário; cada caso exige controle verde, âncora única e exceção contendo `confirmacao` (app/ponto/tests/test_l030_forma_js.py:95).
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v ponto.tests.test_l030_templates_renderizados
+```
+
+**rc 1**, import interrompido por `ModuleNotFoundError: django`. Renderização das quatro combinações: **[nao verificado]**. A regra nova é alcançada pelo import do mesmo oráculo e sua chamada nesse teste (app/ponto/tests/test_l030_templates_renderizados.py:10, :37).
+
+Diff:
+
+```diff
+@@ -55,12 +55,15 @@
+         teste.assertNotIn('hxConfirmar', prefixo, 'confirmacao de GPS condiciona a fila') [nao verificado]
+     else:
+         teste.assertIn('fetch', tokens, 'POST ausente no JS emitido') [nao verificado]
++        teste.assertNotIn('hxConfirmar', tokens[:tokens.index('fetch')], [nao verificado]
++                          'confirmacao antes do POST')
+         teste.assertEqual(tokens.count('registrarBatidaOffline'), 2, 'faltou fila offline ou de erro de rede') [nao verificado]
+         # Antes da primeira fila (fetch falhou) e da segunda (offline),
+         # nenhum retorno pode impedir o enfileiramento.
+         for indice, nome in enumerate(tokens):
+             if nome != 'registrarBatidaOffline':
+                 continue
++            teste.assertNotIn('hxConfirmar', tokens[:indice], 'confirmacao antes da fila') [nao verificado]
+             abertura = max(i for i in range(indice) if tokens[i] == 'try')
+             teste.assertNotIn('return', tokens[abertura:indice], 'retorno antes da fila') [nao verificado]
+@@ -88,3 +91,22 @@
+                 self.assertIn(alvo, original, 'mutante nao foi aplicado') [nao verificado]
+                 with self.assertRaisesRegex(AssertionError, 'GPS interrompe|confirmacao interrompe'):
+                     afirmar_sem_barreira(self, original.replace(alvo, mutacao, 1), triagem)
++
++        original = (TPL / 'ponto/bater_ponto_v2.html').read_text()
++        for comentario in ('', ' /* naoBloquear */'):
++            portao = "if (!await hxConfirmar('GPS ausente', 'Continuar')) {return false;}" + comentario
++            chamada = "await hxConfirmar('GPS ausente', 'Continuar');" + comentario
++            for alvo, mutacao in (
++                ('async function garantirRequisitos(){',
++                 'async function garantirRequisitos(){\n    ' + portao),
++                ("var r=await fetch('/api/ponto/bater/',", chamada + "\n        var r=await fetch('/api/ponto/bater/',"),
++                ('await window.JulianiPWA.registrarBatidaOffline(tipo, lat, lng,',
++                 chamada + '\n          await window.JulianiPWA.registrarBatidaOffline(tipo, lat, lng,'),
++                ('await window.JulianiPWA.registrarBatidaOffline(tipo, gpsLat, gpsLng,',
++                 chamada + '\n        await window.JulianiPWA.registrarBatidaOffline(tipo, gpsLat, gpsLng,'),
++            ):
++                with self.subTest(alvo=alvo, comentario=comentario):
++                    afirmar_sem_barreira(self, original)
++                    self.assertEqual(original.count(alvo), 1, 'mutante exige ancora unica')
++                    with self.assertRaisesRegex(AssertionError, 'confirmacao'):
++                        afirmar_sem_barreira(self, original.replace(alvo, mutacao, 1))
+```
+
+## 10/11 15:34 · sessao a91f3b33f6ad · BO-0611-05 · verificador · origem=Code
+
+1. **As recusas explícitas por GPS e situação foram removidas; “toda barreira”, literalmente, não.** Os dois kernels recebem coordenadas ausentes e seguem para `registrar_batida`; os templates seguem para POST/fila sem confirmação de GPS. (`app/api/views_core.py:393`, `app/api/views_core.py:403`, `app/api/views_core.py:640`; `app/api/views.py:406`, `app/api/views.py:648`; `app/templates/ponto/bater_ponto_v2.html:292`, `app/templates/ponto/bater_ponto_v2.html:333`, `app/templates/ponto/bater_ponto_v2.html:346`; `app/templates/ponto/triagem/apto.html:275`)
+
+   Permanecem caminhos que também alcançam uma tentativa sem GPS:
+
+   - Dedup retorna antes da porta; colisão oposta pode chegar à porta e não materializar outra batida. (`app/api/views_core.py:514`; `app/api/views.py:527`; `app/ponto/registro_batida.py:145`)
+   - Triagem online, recebendo `E` com turno aberto e sem `confirmar`, retorna uma confirmação antes do registro. Ela oferece cancelar. (`app/ponto/views.py:316`, `app/ponto/views.py:330`; `app/templates/ponto/triagem/turno_confirmar.html:15`, `app/templates/ponto/triagem/turno_confirmar.html:19`)
+   - Selfie ausente ainda interrompe a v2; câmera indisponível esconde o botão de confirmação offline da triagem. (`app/templates/ponto/bater_ponto_v2.html:287`, `app/templates/ponto/bater_ponto_v2.html:312`; `app/templates/ponto/triagem/apto.html:253`)
+
+   A fila PWA aceita nulos, omite esses campos no envio e não descarta por 403; descarta em HTTP OK ou 400. Não encontrei descarte condicionado à ausência de GPS nesse caminho. (`app/static/pwa.js:107`, `app/static/pwa.js:145`, `app/static/pwa.js:158`, `app/static/pwa.js:166`)
+
+2. **Sim, no caminho que cria uma batida nova, sem coordenadas grava `None/None` pela porta.** Os kernels passam os valores recebidos; a porta transforma `''`, `None` e valores não numéricos em `None` antes do `create`. Não há fallback para zero ou coordenada do posto nesse trajeto. (`app/api/views_core.py:403`, `app/api/views_core.py:646`; `app/api/views.py:654`; `app/ponto/registro_batida.py:5`, `app/ponto/registro_batida.py:105`, `app/ponto/registro_batida.py:157`)
+
+   Coordenada parcial permanece parcial; zero recebido permanece zero. Os testes distinguem expressamente esses contratos. (`app/api/tests/test_l030_batida_pela_porta.py:55`, `app/api/tests/test_l030_batida_pela_porta.py:60`, `app/api/tests/test_l030_batida_pela_porta.py:65`)
+
+   Não identifiquei escritor novo fora da porta nos caminhos alterados; a triagem web também usa `registrar_batida`. Isso não significa que toda tentativa produza uma linha nova: dedup devolve existente e colisão pode devolver `None`. (`app/ponto/services/triagem_batida.py:700`; `app/ponto/registro_batida.py:113`, `app/ponto/registro_batida.py:120`, `app/ponto/registro_batida.py:150`)
+
+3. **Não identifiquei regra nova de raio, precisão ou classificação de geofence nos sítios alterados.** A mudança do detector exige o par completo e continua alimentando sua classificação existente; o emissor continua chamando `classificar_posicao`, autoridade registrada. (`app/ponto/services/vinculo_na_lista.py:49`, `app/ponto/services/vinculo_na_lista.py:87`; `app/ponto/services/geofence.py:270`; `app/core/juizes.py:1191`)
+
+   As barreiras adicionais citadas no item 1 não foram introduzidas pelo diff fornecido. Alteração de `motor_calculo_v2.py` não aparece nesse diff; comparação independente com a base/hash, sem metadados Git nesta cópia: **[nao verificado]**.
+
+4. **Todos os leitores declarados passaram a rejeitar coordenada parcial:**
+
+   | Leitor | Guarda do par |
+   |---|---|
+   | Detector | `app/ponto/services/vinculo_na_lista.py:49` |
+   | Vínculo, três consultas | `app/colaboradores/views.py:337`, `app/colaboradores/views.py:356`, `app/colaboradores/views.py:395` |
+   | Contador offline | `app/ponto/views.py:485` |
+   | Feed | `app/templates/core/_d2_feed.html:16` |
+   | Tabela offline | `app/templates/ponto/batidas_offline_pendentes.html:96` |
+   | Relatório | `app/templates/chamados/partials/_relatorio_geo.html:30` |
+   | Modal | `app/templates/chamados/partials/modal_fio.html:480` |
+
+   Não encontrei outro leitor decisório de **Batida** aceitando latitude presente com longitude ausente: listagem, detalhe, drawer, dashboard, fio e pino já exigem ambos. (`app/colaboradores/views.py:53`; `app/colaboradores/services/detalhe.py:22`; `app/colaboradores/services/drawer.py:63`; `app/templates/core/dashboard2.html:242`; `app/chamados/views.py:692`; `app/colaboradores/views.py:2474`)
+
+   Há transmissores que preservam componentes separadamente, sem decidir “tem geo”: painel operacional e endpoint de detalhe. Há também testes somente de latitude no JS de captura/mapa: `desenharMapa`, aceitação da tentativa de fix e reaproveitamento do GPS na triagem. Portanto, a afirmação ampla “todo leitor de latitude exige o par” seria excessiva. (`app/core/services/painel_op.py:227`; `app/core/views.py:1024`; `app/templates/ponto/bater_ponto_v2.html:204`, `app/templates/ponto/bater_ponto_v2.html:294`; `app/templates/ponto/triagem/apto.html:217`)
+
+   A equivalência com a autoridade vale para **parcial com `None`**. Ela não é total: geofence usa truthiness, enquanto os leitores alterados usam `is not None`; zero permanece na exclusão declarada. (`app/ponto/services/geofence.py:247`; `app/templates/core/_d2_feed.html:16`)
+
+5. **As alterações de comportamento nos testes são devidas ao aval, com uma ressalva no selo modal:** [nao verificado]
+
+   | Teste alterado | Avaliação | [nao verificado]
+   |---|---|
+   | `test_gps_obrigatorio` | Inversão devida: exige 200, persistência com nulos e ausência do antigo log de recusa. (`app/api/tests/test_gps_obrigatorio.py:19`, `:24`, `:34`) |
+   | `test_api_bater_ponto` | Inversão devida para desligado/férias; exige 200 e uma batida. (`app/api/tests/test_api_bater_ponto.py:62`, `:84`) |
+   | `test_afastado_na_batida` | Inversão devida para férias; reforça 200 para afastado e mantém cobrança. (`app/ponto/tests/test_afastado_na_batida.py:109`, `:117`) |
+   | `test_afastado_nunca_bloqueia` | Troca a exigência de bloqueio por inspeção estrutural dos dois kernels; cobertura funcional complementar está no POST pela porta. (`app/ponto/tests/test_afastado_nunca_bloqueia.py:30`; `app/api/tests/test_l030_batida_pela_porta.py:49`) |
+   | `test_batida_sideeffects` | Inversão com reforço: exige batida nula, alerta `sem_gps` e chamado. (`app/ponto/tests/test_batida_sideeffects.py:125`) |
+   | `test_invariantes_disputa` | Mais estrito: remove a exceção que aceitava 403 por GPS. (`app/chamados/tests/test_invariantes_disputa.py:291`) |
+
+   **O selo modal condicionado não garante que o fluxo continue livre.** A condição acomoda a retirada das chamadas, mas só procura os textos `hxConfirmar(` e `naoBloquear`, sem conferir argumentos ou fluxo. (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:138`, `app/core/tests/test_selo_modal_nao_nasce_vazio.py:141`)
+
+   Contraprova executada somente em memória: inserir no começo de `garantirRequisitos()` o trecho abaixo passou tanto nesse selo quanto no oráculo JS novo; cancelar faria o chamador interromper antes do POST. (`app/templates/ponto/bater_ponto_v2.html:285`, `app/templates/ponto/bater_ponto_v2.html:312`; `app/ponto/tests/test_l030_forma_js.py:40`, `app/ponto/tests/test_l030_forma_js.py:55`)
+
+   ```js
+   if (!await hxConfirmar('GPS ausente', 'Continuar')) {return false;} /* naoBloquear */
+   ```
+
+6. **Os mutantes declarados mordem; a cobertura não é universal.**
+
+   - **403:** controle verde e mutantes nos dois kernels exercitam a mesma asserção estrutural. Ela encontra `Response(status=403)` sob condições que leem coordenadas/situação; não cobre qualquer forma possível de interrupção. (`app/api/tests/test_l030_selo_porta.py:37`, `app/api/tests/test_l030_selo_porta.py:60`, `app/api/tests/test_l030_selo_porta.py:78`)
+   - **Quatro consultas:** executei os quatro mutantes individuais; todos retornaram exit 1 por coordenada parcial contada como geo. A extração exige a quantidade esperada de consultas e a mutação exige exatamente uma guarda removida. (`app/ponto/tests/test_bo0611_05_leitores_geo.py:71`, `app/ponto/tests/test_bo0611_05_leitores_geo.py:95`, `app/ponto/tests/test_bo0611_05_leitores_geo.py:123`)
+   - **Detector:** controle verde ignora parcial; retirar a longitude faz a execução real chegar a `TypeError`. (`app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:142`)
+   - **JS:** os mutantes exigem âncora existente e foram detectados; permanece a contraprova do item 5. (`app/ponto/tests/test_l030_forma_js.py:74`, `app/ponto/tests/test_l030_forma_js.py:88`)
+   - **Quatro templates:** por inspeção, exigem âncora única, controle completo e mapa efetivamente criado pelo mutante antes de exigir a falha da mesma asserção. Não há `subTest` interno engolindo essa falha. Execução Django aqui: **[nao verificado]**. (`app/ponto/tests/test_bo0611_05_templates_geo.py:44`, `app/ponto/tests/test_bo0611_05_templates_geo.py:177`, `app/ponto/tests/test_bo0611_05_templates_geo.py:190`)
+
+   Os quatro módulos puros rodaram com **15/15 verdes**, incluindo suas verificações de mutação. POSTs reais, renderizações Django e os 100/100 relatados não foram reexecutados aqui: **[nao verificado]**. (`app/api/tests/test_l030_selo_porta.py:68`; `app/ponto/tests/test_l030_forma_js.py:68`; `app/ponto/tests/test_bo0611_05_leitores_geo.py:111`; `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:84`)
+
+7. **Censo de escrita, leitura e significado:**
+
+   | Campo/contrato | Quem escreve e quem lê |
+   |---|---|
+   | `Batida.latitude/longitude` | Captura JS → request/fila → kernels/triagem → sanitização e criação pela porta. Persistência em `DecimalField` nullable. (`app/templates/ponto/bater_ponto_v2.html:178`; `app/static/pwa.js:116`; `app/api/views_core.py:403`; `app/ponto/services/triagem_batida.py:700`; `app/ponto/registro_batida.py:105`; `app/ponto/models.py:58`) |
+   | `contexto_json.batida_lat/lon` | Geofence escreve `float` ou `None`, nos escalares e ocorrências. Relatório/modal leem o par; reavaliador filtra pares completos; advertência copia os valores. (`app/ponto/services/geofence.py:327`, `:369`, `:403`; `app/templates/chamados/partials/_relatorio_geo.html:30`; `app/templates/chamados/partials/modal_fio.html:480`; `app/chamados/services/acoes_chamado.py:203`) |
+   | `situacao` | Porta cadastral admite a operação; afastamento escreve `afastado`, reversor escreve `ativo`, desligamento escreve `desligado`. Na batida, o campo alimenta divergência/cobrança pelo juiz. (`app/colaboradores/services/colaborador.py:32`; `app/ponto/views.py:2435`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`; `app/colaboradores/services/desligamento.py:104`; `app/ponto/services/afastado_avisa.py:38`) |
+   | Resposta HTTP | API devolve sucesso normal, dedup ou colisão ignorada. V2 aceita qualquer HTTP OK; fila apaga em OK. Logo, 200/`sucesso=True` não implica criação nova. (`app/api/views_core.py:517`, `:668`, `:798`; `app/templates/ponto/bater_ponto_v2.html:327`; `app/static/pwa.js:158`) |
+   | Flags JS | `gpsLat/gpsLng` recebem fix; `_enviando` evita concorrência local; `_fotoBlob` controla selfie; `gps_aviso_visto` evita repetir aviso. (`app/templates/ponto/bater_ponto_v2.html:145`, `:178`, `:287`, `:308`; `app/templates/ponto/triagem/apto.html:277`) |
+
+   `''` é normalizado pela porta; `Decimal` é persistência, `float` é representação no JSON. Zero continua com significado divergente preexistente: geofence o considera sem GPS e o serializa como `None`. (`app/ponto/registro_batida.py:5`; `app/ponto/models.py:58`; `app/ponto/services/geofence.py:247`, `app/ponto/services/geofence.py:327`)
+
+   **Situação ainda bloqueia login e refresh**, embora não bloqueie o corpo da batida autenticada. Os testes novos usam `force_authenticate`, portanto não demonstram acesso real nessas situações. (`app/api/login_helpers.py:141`; `app/api/views_core.py:172`; `app/api/views.py:115`; `app/api/tests/test_l030_batida_pela_porta.py:35`)
+
+   Nos sinais inspecionados, núcleo/cartório trabalham com timestamp; realtime publica IDs/timestamp; reconciliador recebe colaborador. Geofence ocorre depois da porta, com exceção capturada; sem posto, não cria alerta `sem_gps`. (`app/ponto/signals.py:19`, `:108`, `:131`, `:213`; `app/ponto/realtime.py:32`; `app/api/views_core.py:768`; `app/ponto/services/geofence.py:248`)
+
+   Bloqueio local, fila e interpretação da resposta pelo Android/iOS efetivamente instalado: **[nao verificado]**.
+
+8. **Há duas classes relevantes presentes: barreira residual e lacuna concreta de selo.** A confirmação da triagem pode retornar antes da porta; o selo modal e o oráculo JS admitem a confirmação bloqueante demonstrada no item 5. (`app/ponto/views.py:316`; `app/core/tests/test_selo_modal_nao_nasce_vazio.py:141`; `app/ponto/tests/test_l030_forma_js.py:40`)
+
+   Também permanece a resposta de sucesso para colisão sem nova materialização, consumida como sucesso pelo PWA. Isso exige preservar a distinção entre “requisição aceita” e “nova batida criada”. (`app/ponto/registro_batida.py:150`; `app/api/views_core.py:669`; `app/static/pwa.js:158`)
+
+   Não identifiquei novo juiz duplicado, segundo escritor ou derivação paralela de classificação nos sítios alterados; eles continuam usando a porta e as autoridades existentes. (`app/api/views_core.py:640`; `app/api/views.py:648`; `app/ponto/services/vinculo_na_lista.py:87`; `app/core/juizes.py:1191`)
+
+   Ordem efetiva das travas, liberação da vaga, pouso, smoke nas duas cascas com col677 e certificação independente do hash/base: **[nao verificado]**. O smoke consta como pré-requisito do aval registrado. (`app/docs/CORTES.md:440`)
 
 ## 10/11 15:32 · sessao f27b4a22fdea · - · - · origem=Ronald (tmux)
 
@@ -1337,121 +1504,4 @@ def executar():
 
 [truncado em 20000 de 25148 caracteres]
 
-## 10/11 11:56 · sessao 0a7c8a61e347 · FIO-E0-V4-E4A-2 · verificador · origem=Code
-
-1. **Não é idêntica ao main informado.** A diferença integral da fábrica é: novo leitor da lâmpada `dia_nunca_bateu_sem_adesao` e duas guardas que retornam antes de emitir pergunta ou pauta. A barreira de veredito não acusador continua incondicional; a forma (B) saiu. (`app/chamados/services/fabrica_da_celula.py:87`, `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/fabrica_da_celula.py:120`, `app/chamados/services/fabrica_da_celula.py:183`.)
-
-   Conferi os blobs em memória: atual `8ab8001ca…`; retirando somente essas três adições, resulta `8a4052f6c…`, exatamente os índices do diff integral fornecido. Comparação direta com o commit main, sem `.git` nesta cópia: [nao verificado]. (`app/chamados/services/fabrica_da_celula.py:87`, `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/fabrica_da_celula.py:183`.)
-
-   Quem alcança a diferença:
-
-   - Cartório → `perguntar_pela_celula` → guarda de `nunca_bateu`. (`app/ponto/services/cartorio.py:1008`, `app/chamados/services/fabrica_da_celula.py:183`.)
-   - Reconciliador → `perguntar_por_eventos` → `perguntar_pela_celula`. (`app/chamados/reconciliador.py:1386`, `app/chamados/services/fabrica_da_celula.py:301`.)
-   - `contador_fio_mudo` lê o mesmo predicado para separar retidos; para os demais, pergunta a `motivos_a_perguntar`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:111`, `app/chamados/management/commands/disparar_perguntas_competencia.py:115`.)
-   - Repasse também lê o predicado e retém `nunca_bateu`. (`app/chamados/services/disputa_emissao.py:757`.)
-
-2. **Sim: a obra inteira muda emissão em produção.** Retira a escrita do lote e impede emissão para `nunca_bateu` na fábrica e no repasse; isso não deve ser confundido com a forma (B), retirada nas voltas finais. (`app/chamados/management/commands/disparar_perguntas_competencia.py:189`, `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/disputa_emissao.py:758`.)
-
-   Inventário dos arquivos produtivos alterados e dos escritores alcançados:
-
-   | Sítio | Efeito e escrita |
-   |---|---|
-   | `disparar_perguntas_competencia` | O escritor anterior foi removido pelo diff fornecido. Agora seleciona, conta, imprime e eventualmente retorna 2; não cria/reabre/fecha pergunta, chamado ou notificação. (`app/chamados/management/commands/disparar_perguntas_competencia.py:99`, `app/chamados/management/commands/disparar_perguntas_competencia.py:189`, `app/chamados/management/commands/disparar_perguntas_competencia.py:219`.) |
-   | Fábrica: `motivos_a_perguntar` | Leitura; `nunca_bateu` retorna vazio. (`app/chamados/services/fabrica_da_celula.py:105`.) |
-   | Fábrica: `perguntar_pela_celula` | **Pode escrever**, mas agora `nunca_bateu` sai antes de pauta, descarimbo e pergunta. Demais casos continuam pelas portas existentes, com push silenciado. (`app/chamados/services/fabrica_da_celula.py:183`, `app/chamados/services/fabrica_da_celula.py:204`, `app/chamados/services/fabrica_da_celula.py:209`, `app/chamados/services/fabrica_da_celula.py:218`.) |
-   | Fábrica: `perguntar` | Escritor alcançado: desfaz carimbo, cria/atualiza disputa e gera perguntas; seu corpo não mudou no diff integral. (`app/chamados/services/fabrica_da_celula.py:169`, `app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/fabrica_da_celula.py:174`.) |
-   | Repasse | Novo corte em `motivo_fora_da_fabrica`, usado antes dos caminhos de complemento e criação. Os caminhos restantes **podem escrever** chamado pai, disputa, perguntas, transição do chamado, fechamento e push. (`app/chamados/services/disputa_emissao.py:758`, `app/chamados/services/disputa_emissao.py:1066`, `app/chamados/services/disputa_emissao.py:1088`, `app/chamados/services/disputa_emissao.py:1104`, `app/chamados/services/disputa_emissao.py:1175`, `app/chamados/services/disputa_emissao.py:1284`, `app/chamados/services/disputa_emissao.py:1290`.) |
-   | `pergunta_no_app` | Acrescenta descrição/dono da retenção; não emite pergunta ou push. (`app/chamados/services/pergunta_no_app.py:35`.) |
-   | `resposta_tardia` | Diff apenas de formatação. Continua **podendo reabrir** pela porta existente, ou escrever nota, auditoria e pauta; não ganhou corte de `nunca_bateu`. (`app/chamados/services/resposta_tardia.py:45`, `app/chamados/services/resposta_tardia.py:53`, `app/chamados/services/resposta_tardia.py:55`, `app/chamados/services/resposta_tardia.py:63`.) |
-   | `vigiar_fio_morto` | **Escreve arquivo JSON**, não pergunta/chamado/push. Acrescenta os dois contadores ao carimbo. (`app/chamados/management/commands/vigiar_fio_morto.py:135`, `app/chamados/management/commands/vigiar_fio_morto.py:233`, `app/chamados/management/commands/vigiar_fio_morto.py:241`.) |
-   | Crons / placar | Cron troca `--apply` por `--alarme`; placar lê o carimbo e alarma, sem emitir entidades de atendimento. (`app/config/crons.py:1521`, `app/core/management/commands/pipeline_placar.py:92`, `app/core/management/commands/pipeline_placar.py:159`.) |
-
-   Portanto, não nasceu escritor novo de notificações; foram retirados caminhos que poderiam provocá-las, inclusive o antigo `--com-push` do lote. (`app/chamados/management/commands/disparar_perguntas_competencia.py:132`, `app/chamados/services/fabrica_da_celula.py:218`, `app/chamados/services/disputa_emissao.py:1289`.)
-
-3. **O `FIO MUDO: 1` vem do juiz real, com entradas controladas.** O teste chama diretamente `motivos_a_perguntar` e exige exatamente `['intervalo_volta']` às 13:40; o contador também chama essa função. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:454`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:475`, `app/chamados/management/commands/disparar_perguntas_competencia.py:115`.)
-
-   **Há escolhas explícitas na fixture:** grava `furo`/`concorde`, usa `bulk_create` para evitar sinais e dubla `_ata_do_dia` com faltas prescritas. Ela não substitui o resultado do juiz, mas também não prova que a lavra real produziria aquele veredito/ata. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:52`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:445`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:448`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:456`.)
-
-   **Concorde → 0 tem mordida contra (B):** exige vazio diretamente do juiz, com intervalo vencido e turno ainda em curso. A forma (B) liberaria esse caminho; execução Django dessa mutação: [nao verificado]. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:17`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:479`, `app/chamados/services/fabrica_da_celula.py:139`.)
-
-4. **As alterações dos testes existentes não são somente cosméticas.** Inventário versus o main representado pelo diff fornecido; comparação Git independente: [nao verificado]. [nao verificado]
-
-   | Teste/arquivo atual | Alteração da asserção | [nao verificado]
-   |---|---|
-   | `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:48`, `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`, `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:54` | Rótulos `[EMITE]`→`VIGIA` e ALVOS novo; números 1/1 e 2/2 preservados. |
-   | `app/chamados/tests/test_fabrica_pela_ata.py:51`, `app/chamados/tests/test_fabrica_pela_ata.py:64`, `app/chamados/tests/test_fabrica_pela_ata.py:71` | Só texto ALVOS, zero preservado. |
-   | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:140`, `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:141` | Alvo continua 1; perguntas **1→0**. |
-   | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:151`, `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:158` | Retratada: primeira pergunta passa a nascer pelo evento; estoque final **2→1**. Acrescenta pendência da célula 1 e rc 2. |
-   | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:168` | Limbo: perguntas **1→0**; pendência 1 e rc 2 permanecem. |
-   | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:177` | Retira diagnóstico `PARCIAL NA LISTA DO ADMIN 1`; exige total `VIGIA FIO MUDO: 0`. |
-   | `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:26` | Exige `--alarme` em lugar de `--apply`; acrescenta proibição de `--apply`. |
-   | `app/chamados/tests/test_o261_fabrica_le_a_lampada.py:103` | Para `nunca_bateu`, `None`→causa `celula_nunca_bateu`; demais acusadores mantêm `None`. |
-   | `app/chamados/tests/test_o261_vigia_fio.py:815`, `app/chamados/tests/test_o261_vigia_fio.py:825` | Igualdades completas de censo/esperado ganham os dois contadores. |
-   | `app/chamados/tests/test_pergunta_do_dia_em_curso.py:106` | ALVOS zero preservado, texto novo. |
-   | `app/chamados/tests/test_pergunta_do_dia_em_curso.py:424` | `assertNotIn` da linha zero→regex exigindo linha existente com número positivo: **reforço**. |
-   | `app/chamados/tests/test_pergunta_do_dia_em_curso.py:475`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:477` | Igualdade das perguntas emitidas `['intervalo_volta']`→ausência de perguntas; adiciona a mesma lista como resultado direto do juiz. |
-   | `app/chamados/tests/test_selo_emissor_fio_mudo.py:84`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:119`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:173` | ALVOS novo, número 1 preservado. |
-   | `app/chamados/tests/test_selo_emissor_fio_mudo.py:91`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:147` | Zero preservado; retiradas as exigências `desligado 1` e `FIO DECIDIDO 1`. |
-   | `app/chamados/tests/test_selo_emissor_fio_mudo.py:133`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:164` | Só `[EMITE]`→`VIGIA`, mesmos números; o método de `:164` já é `_test_`, não coletável. |
-   | `app/chamados/tests/test_selo_emissor_fio_mudo.py:188`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:201` | Cron exige alarme; mensagem dry-run substituída por alvo 1 e ausência de DRY/APLICADO. |
-   | `app/chamados/tests/test_selo_emissor_fio_mudo.py:270` | `assertTrue(vivas)`→`assertFalse(vivas)`; acrescenta conservação do estoque, contadores e rc. |
-   | `app/core/tests/test_medida_turno_do_par.py:268` | Posição registrada **1196→1199**, ajuste de localização. |
-   | `app/escala/tests/test_termometro_regua_prazo.py:19`, `app/ponto/tests/test_selfie_ausente_juiz.py:148`, `app/ponto/tests/test_varredura_lote_prazo.py:62` | Juízes por varredura **1→0**; acrescenta papel `vigia`. |
-   | `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:338`, `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:420` | Catraca troca obrigação de leitura direta no handle por delegação obrigatória do contador ao juiz. |
-   | `bin/tests/test_papel_prazo_nao_deriva.sh:305`, `bin/tests/test_papel_prazo_nao_deriva.sh:384` | Exceção real fica vazia; prova nominal usa exceção sintética e acrescenta verificação contra vazamento. |
-
-   **Há perda de cobertura diagnóstica nos três casos nomeados acima:** total zero não comprova a causa do bloqueio. Isso merece ser registrado como retirada de asserção, embora acompanhe a remoção desses diagnósticos do comando. (`app/chamados/tests/test_selo_emissor_fio_mudo.py:91`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:147`, `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:177`.)
-
-   No diff fornecido, não identifiquei `assertEqual`→`assertTrue`, encurtamento de `assertIn` para ocultar incompatibilidade, nem remoção integral de caso coletável; há inversões explícitas do contrato escritor→vigia e acréscimos de conservação de estoque. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:475`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:477`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:270`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:271`.)
-
-   As demais mudanças preexistentes são de fixture/chamada, preservando asserções: COBPARC, resposta tardia e desligado; há novas verificações de ausência de escrita. (`app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:198`, `app/chamados/tests/test_resposta_tardia.py:34`, `app/chamados/tests/test_selo_disparo_nao_cobra_desligado.py:90`, `app/chamados/tests/test_fabrica_por_evento.py:84`.)
-
-5. **Matriz e bancos 1–4 permanecem realizados no código examinado; não encontrei regressão deles no delta 9e/9f.** A restauração da barreira para não acusadores atende à última errata. (`app/chamados/services/fabrica_da_celula.py:120`, `app/chamados/tests/test_e4a2_matriz_memoria.py:198`.)
-
-   | Requisito | Realização |
-   |---|---|
-   | (a) Retido | Lê a lâmpada, sem recalcular adesão; fábrica retorna antes da emissão. Contador compara pares únicos com a C5 real, na interseção declarada; desligado somente nos pares conservados pela C5. (`app/chamados/services/fabrica_da_celula.py:89`, `app/chamados/services/fabrica_da_celula.py:183`, `app/chamados/management/commands/disparar_perguntas_competencia.py:54`, `app/chamados/management/commands/disparar_perguntas_competencia.py:59`, `app/chamados/management/commands/disparar_perguntas_competencia.py:66`.) |
-   | (b) Alvo | Pergunta ao juiz inteiro, deduplica todos os motivos; esperado 0, dono ESTRUTURA. Alvo isolado não produz rc 2 no disparar. (`app/chamados/management/commands/disparar_perguntas_competencia.py:115`, `app/chamados/management/commands/disparar_perguntas_competencia.py:122`, `app/chamados/management/commands/disparar_perguntas_competencia.py:219`.) |
-   | (c) Materializada | Pergunta viva exclui antes da separação dos dois contadores; materializada+retratada não é equiparada automaticamente a viva. (`app/chamados/management/commands/disparar_perguntas_competencia.py:109`, `app/chamados/services/fabrica_da_celula.py:145`, `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:153`.) |
-   | (d) Tranca | Contador seleciona VIVOS; prova de integração exige que a tranca encerre primeiro e depois ambos zerem. Execução ORM: [nao verificado]. (`app/chamados/management/commands/disparar_perguntas_competencia.py:99`, `app/chamados/tests/test_e4a2_nunca_bateu.py:164`.) |
-   | Errata de unidade | Fronteira recebe iterável, normaliza para **PKs de empresa**, inclusive na chamada direta da C5; escalar é erro. A C5 filtra `Empresa.pk`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:25`, `app/chamados/management/commands/disparar_perguntas_competencia.py:52`, `app/chamados/management/commands/disparar_perguntas_competencia.py:104`, `app/escala/services/cadastro_realidade.py:177`.) |
-   | Banco 1 | Fora da lista de juízes; parser sem `--apply`; cron em alarme. (`app/config/crons.py:2044`, `app/chamados/management/commands/disparar_perguntas_competencia.py:132`, `app/config/crons.py:1521`.) |
-   | Bancos 2/3 | Mesma função fornece os dois números/esperados ao carimbo; placar lê ambos e compara. Totais C5 ficam informativos. (`app/chamados/management/commands/vigiar_fio_morto.py:181`, `app/chamados/management/commands/vigiar_fio_morto.py:233`, `app/chamados/management/commands/vigiar_fio_morto.py:242`, `app/core/management/commands/pipeline_placar.py:135`.) |
-   | Banco 4 | Lista real vazia, mordida sintética com isolamento. Executei o selo: **OK, rc 0, juízes por varredura=0**. (`bin/tests/test_papel_prazo_nao_deriva.sh:305`, `bin/tests/test_papel_prazo_nao_deriva.sh:384`, `bin/tests/test_papel_prazo_nao_deriva.sh:406`.) |
-
-6. **Escritores e leitores relevantes aos campos do diff:**
-
-   | Campo/valor | Quem escreve / quem lê |
-   |---|---|
-   | `veredito` | Porta `lavrar_veredito` escreve; fábrica, repasse, resposta tardia e C5 leem. (`app/ponto/portas/celula.py:1035`, `app/chamados/services/fabrica_da_celula.py:89`, `app/chamados/services/fabrica_da_celula.py:120`, `app/chamados/services/disputa_emissao.py:758`, `app/chamados/services/resposta_tardia.py:45`, `app/escala/services/cadastro_realidade.py:181`.) |
-   | `ata` | Lavra escreve a ata; `carimbar_precedencia` possui sua chave. Fábrica lê pelo predicado parcial e por `_ata_do_dia`. (`app/ponto/portas/celula.py:1033`, `app/ponto/portas/celula.py:1084`, `app/chamados/services/fabrica_da_celula.py:123`, `app/chamados/services/fabrica_da_celula.py:64`.) |
-   | `julgada_em` | `carimbar` escreve. Cartório captura o anterior e o entrega à fábrica; fora do ato, fábrica usa o persistido. (`app/ponto/portas/celula.py:1065`, `app/ponto/services/cartorio.py:954`, `app/ponto/services/cartorio.py:1008`, `app/chamados/services/fabrica_da_celula.py:124`.) |
-   | Linha `ALVOS` | Disparar imprime motivos devidos, não promessa de perguntas emitidas; admite encaminhamento ao DP. (`app/chamados/management/commands/disparar_perguntas_competencia.py:215`.) |
-   | `fio_mudo_alvos` | Contador produz; vigiar persiste; pipeline e leitor genérico do ESTADO comparam número/esperado. (`app/chamados/management/commands/disparar_perguntas_competencia.py:122`, `app/chamados/management/commands/vigiar_fio_morto.py:241`, `app/core/management/commands/pipeline_placar.py:98`, `bin/fio_estado.py:125`.) |
-   | `nunca_bateu_sem_adesao` | Contador produz pares/interseção; vigiar publica número, esperado e detalhes; pipeline/ESTADO comparam. (`app/chamados/management/commands/disparar_perguntas_competencia.py:66`, `app/chamados/management/commands/vigiar_fio_morto.py:234`, `app/chamados/management/commands/vigiar_fio_morto.py:242`, `app/core/management/commands/pipeline_placar.py:136`, `bin/fio_estado.py:125`.) |
-   | `rc` | Disparar: 2 somente com alarme e pendência da célula. Pipeline: 2 com alarme e divergência. Corrente registra erro e continua os elos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:219`, `app/core/management/commands/pipeline_placar.py:159`, `bin/encadeado.sh:64`.) |
-   | ESTADO | Vigiar grava o carimbo; gerador chama `fio_estado`, que inclui divergências genéricas no documento final. (`app/chamados/management/commands/vigiar_fio_morto.py:135`, `bin/gerar_estado.py:260`, `bin/fio_estado.py:191`, `bin/gerar_estado.py:390`.) |
-
-   **Não localizei raspador produtivo do texto antigo de ALVOS na cópia.** O raspador identificado usa `FABRICA-POR-EVENTO: o julgamento deixou N`, preservado na saída. Leitores externos e logs reais: [nao verificado]. (`bin/placar_code.sh:390`, `app/chamados/management/commands/disparar_perguntas_competencia.py:209`.)
-
-   `nunca_bateu` continua acusador para outros contratos; a obra altera seu destino de emissão, não a tupla geral. A causa `celula_nunca_bateu` e o contador de pares têm nomes/unidades separados. (`app/escala/models.py:1767`, `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/pergunta_no_app.py:35`, `app/chamados/management/commands/disparar_perguntas_competencia.py:66`.)
-
-7. **Os mutantes mordem com controle verde e sem passagem vazia.** O executor exige uma única ocorrência da âncora, executa o controle e depois exige `AssertionError` com a mensagem pretendida. As âncoras dos três mutantes pedidos existem na fábrica atual. (`app/chamados/tests/test_e4a2_matriz_memoria.py:61`, `app/chamados/tests/test_e4a2_matriz_memoria.py:372`, `app/chamados/services/fabrica_da_celula.py:120`.)
-
-   Executei matriz+C5 em memória: **29 testes OK, rc 0**, cobrindo os catálogos de 19 e 13 mutantes. Também foram executados avulsos `juiz_reintroduz_forma_b`, `juiz_libera_concorde_em_curso` e `juiz_libera_concorde_noturno`: um teste OK/rc 0 cada, significando controle verde e mutante rejeitado. (`app/chamados/tests/test_e4a2_matriz_memoria.py:85`, `app/chamados/tests/test_e4a2_matriz_memoria.py:365`, `app/chamados/tests/test_e4a2_c5_memoria.py:68`, `app/chamados/tests/test_e4a2_c5_memoria.py:204`.)
-
-   O juiz nesses casos é a função real por AST, envolvida por `Mock(wraps=...)`; ORM, ata e outras bordas são dublados. O `dia_encerrado=False` é sentinela, e o caminho correto deve nunca chamá-lo. (`app/chamados/tests/test_e4a2_matriz_memoria.py:143`, `app/chamados/tests/test_e4a2_matriz_memoria.py:154`, `app/chamados/tests/test_e4a2_matriz_memoria.py:160`, `app/chamados/tests/test_e4a2_matriz_memoria.py:188`.)
-
-8. **Classes de reprovação:**
-
-   - **Segundo juiz:** não encontrei no cont
-
-[truncado em 20000 de 22595 caracteres]
-
-## 10/11 11:56 · sessao b29a0f87403e · - · - · origem=Ronald (tmux)
-
-Concordo: regularização vazia fica em **(b), “aceite nao mensuravel sem escrita”**. A porta existe, mas `pode_fechar()` mede apenas a disputa; concluir o chamado depende de `reconciliar()` no signal (`app/templates/chamados/partials/modal_fio.html:352`; `app/chamados/models.py:1848`; `app/chamados/signals.py:42`).
-
-Corrijo minha sugestão anterior: `reconciliaria()` chega a `trava_na_ordem()` dentro do `atomic`, que executa `SELECT FOR UPDATE`; não deve ser chamada nesse envelope (`app/chamados/models.py:661`; `app/chamados/models.py:672`; `app/chamados/models.py:707`; `app/chamados/models.py:711`; `app/chamados/models.py:2666`).
-
-_3409 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3411 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
