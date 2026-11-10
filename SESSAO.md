@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 14:01:26.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (260.1 MB). Acoes na janela: **525**.
+**Medido em 10/11/2026 14:06:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (260.1 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -528,10 +528,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:11:45 | Bash | Find module list used for alvo_v6 | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; ls -t \| head -30; head -3 alvo_v6.log` |
 | 02:11:40 | Bash | Read E4a-2 construtor7 result | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; cat construtor7.r.rc; tail -45 construtor7.r; cat construtor7.r.inventario; W=$(cat wt_construtor7.txt); git -C $W status --porcelain; tail -3 ../REVERTER-DIA-SEM-RECALCULO/construtor4.log` |
 | 02:11:36 | Bash | Check old waiter output | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b5iohx0tl.output; ls /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/construtor7.r* ; date +%H:%M` |
-| 02:05:45 | Bash | Wait for E4a-2 construtor7 to finish | `L=/home/ronald/saas-hasner/logs; until [ -s $L/FIO-E0-V4-E4A-2/construtor7.r.rc ]; do /usr/bin/sleep 20; done; cat $L/FIO-E0-V4-E4A-2/construtor7.r.rc` |
-| 02:05:42 | Bash | Add fila lines, queue REVERTER construtor4 launcher | `python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| E4A2-RELOGIO-FIO-VIVO \|')]; assert len(i)==1 if not any(l.startswith('\| REVERTER-LEITOR-JANELAS \|') for l in L): L[i[0]+1:i[0]+1]=[ "\| REVERTER-LEITOR-JANELAS \| fila (preverif2 REVERTER item 2, pre-existente) \| escala/services/regeneracao.py:58 janelas_de_regeneracao le so desde/at ...` |
-| 02:05:32 | Bash | Find fila anchor in BACKLOG | `cd /home/ronald/saas-hasner/app/docs && /bin/grep -n "E4A2-RELOGIO-FIO-VIVO" BACKLOG.md \| head -3` |
-| 02:05:29 | Bash | Triage REVERTER preverif2, write construtor4 brief | `cd /home/ronald/saas-hasner/logs/REVERTER-DIA-SEM-RECALCULO && cat > triagem_preverif2.txt <<'EOF' TRIAGEM preverif2 (sessao, 02:0x 10/11), hash e948e19b9. Conferido por amostra: aplicar_col900.py:146-173 (preparar fora do try), celula.py:740 (apesar_da_lavra aceita posicional), core/observ.py:22-32 (ator_do_processo devolve '' fora de manage.py). PROCEDENTE 1 (item 1b, 3): trilha L-092 nao e gara ...` |
-| 02:05:05 | Bash | Check porta signature and ator source | `/bin/grep -n "def reverter_regeneracao_dia" -A3 ponto/portas/celula.py; /bin/grep -n "def ator_do_processo" -A12 core/observ.py \| head -20` |
-| 02:04:50 | Bash | Read REVERTER preverif2 result | `cd /home/ronald/saas-hasner/logs/REVERTER-DIA-SEM-RECALCULO; wc -c preverif2.r; cat preverif2.r` |
-| 02:04:46 | Bash | Check waiter output and job files | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b8omf0zx9.output; L=/home/ronald/saas-hasner/logs; ls $L/REVERTER-DIA-SEM-RECALCULO/preverif2.* $L/FIO-E0-V4-E4A-2/construtor7.*; date +%H:%M` |
