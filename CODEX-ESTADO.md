@@ -1,7 +1,184 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 17:13** · publicado em **10/11/2026 17:13** (UTC-3)
+> Ultima resposta processada: **10/11/2026 17:16** · publicado em **10/11/2026 17:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 17:16 · sessao af554e746a14 · BO-0611-05 · censo · origem=Code
+
+O geofence decide pela **truthiness das duas coordenadas**:
+
+```python
+if not batida.latitude or not batida.longitude:
+```
+
+Essa é a expressão exata em `app/ponto/services/geofence.py:247`. Havendo posto, o ramo cria alerta `tipo='sem_gps'` e grava coordenadas **do alerta** como `None`; não altera latitude/longitude da Batida (`app/ponto/services/geofence.py:248`, `app/ponto/services/geofence.py:252`, `app/ponto/services/geofence.py:253`).
+
+O censo abaixo reúne **37 sítios diretos de Batida/contexto**, mais **4 sobre coordenadas copiadas em AlertaGeofence**, totalizando **41**, conforme as referências das tabelas. Incidência desses casos em produção: **[nao verificado]**.
+
+Convenção de contagem: cada expressão independente conta um sítio; cada filtro conjunto das duas coordenadas conta um. Mantive **N/N1 na sintaxe solicitada**: guardas inversas com `is None` e cadeias `.exclude(...=None)` aparecem como **O**, embora sejam testes de nulidade equivalentes. [nao verificado]
+
+**(i) Leitores de Batida gravada ou contexto de chamado — Python**
+
+| Arquivo:linha | Expressão literal | Forma | O que decide |
+|---|---|---|---|
+| `app/ponto/services/geofence.py:247` | `not batida.latitude or not batida.longitude` | T | Ramo de ausência que pode emitir `sem_gps`. |
+| `app/colaboradores/services/drawer.py:63` | `bool(b.latitude and b.longitude)` | T | Resultado `tem_gps` do drawer. |
+| `app/ponto/services/geofence.py:327` | `float(batida.latitude) if batida.latitude else None` | T1 | Latitude ou ausência na ocorrência do chamado. |
+| `app/ponto/services/geofence.py:328` | `float(batida.longitude) if batida.longitude else None` | T1 | Longitude ou ausência na ocorrência. |
+| `app/ponto/services/geofence.py:369` | `float(batida.latitude) if batida.latitude else None` | T1 | Latitude ou ausência no contexto legado. |
+| `app/ponto/services/geofence.py:370` | `float(batida.longitude) if batida.longitude else None` | T1 | Longitude ou ausência no contexto legado. |
+| `app/core/services/painel_op.py:227` | `entrada.latitude if entrada and entrada.latitude else None` | T1 | Latitude disponível no contexto do painel. |
+| `app/core/services/painel_op.py:228` | `entrada.longitude if entrada and entrada.longitude else None` | T1 | Longitude disponível no contexto do painel. |
+| `app/colaboradores/painel_cell.py:54` | `str(coord[0] or '')` | T1 | Latitude ou vazio no atributo da linha do painel. |
+| `app/colaboradores/painel_cell.py:55` | `str(coord[1] or '')` | T1 | Longitude ou vazio. |
+| `app/colaboradores/services/situacional.py:199` | `str((batida_coord.get(c.pk) or (None, None))[0] or '')` | T1 | Latitude ou vazio no painel em lote. |
+| `app/colaboradores/services/situacional.py:200` | `str((batida_coord.get(c.pk) or (None, None))[1] or '')` | T1 | Longitude ou vazio. |
+| `app/chamados/views.py:692` | `_BatidaGeo.objects.filter(colaborador=colaborador, latitude__isnull=False, longitude__isnull=False)` | N | Seleciona última localização e histórico para o fio. |
+| `app/ponto/views.py:485` | `pendentes.filter(latitude__isnull=False, longitude__isnull=False).count()` | N | Conta `com_gps`; `sem_gps` é o complemento em `app/ponto/views.py:486`. |
+| `app/ponto/services/geofence.py:52` | `colaborador=colaborador, latitude__isnull=False, longitude__isnull=False` | N | Seleciona batidas consideradas “COM GPS” por `vinculo_contagem`. |
+| `app/ponto/services/vinculo_na_lista.py:49` | `Batida.objects.filter(timestamp__date__gte=ini, latitude__isnull=False, longitude__isnull=False, gps_accuracy__isnull=False)` | N | Seleciona evidências geográficas para avaliar vínculo. |
+| `app/ponto/services/geofence.py:403` | `la is not None and lo is not None` | N | Seleciona ocorrências do contexto para reavaliar chamados. |
+| `app/ponto/views.py:468` | `str(batida.latitude) if batida.latitude is not None else None` | N1 | Latitude ou ausência no snapshot de auditoria offline. |
+| `app/ponto/views.py:469` | `str(batida.longitude) if batida.longitude is not None else None` | N1 | Longitude ou ausência no snapshot. |
+| `app/core/views.py:1024` | `float(b.latitude) if b.latitude is not None else None` | N1 | Latitude ou ausência no JSON do detalhe. |
+| `app/core/views.py:1025` | `float(b.longitude) if b.longitude is not None else None` | N1 | Longitude ou ausência no JSON. |
+| `app/colaboradores/views.py:53` | `Batida.objects.exclude(latitude=None).exclude(longitude=None)` | O | Conjunto de colaboradores com geo para vínculo. |
+| `app/colaboradores/views.py:337` | `Batida.objects.filter(colaborador=colaborador).exclude(latitude=None).exclude(longitude=None).exists()` | O | `tem_geo` no retorno HTMX de erro ao vincular posto. |
+| `app/colaboradores/views.py:356` | `Batida.objects.filter(colaborador=colaborador).exclude(latitude=None).exclude(longitude=None).exists()` | O | `tem_geo` no retorno HTMX de sucesso ao vincular posto. |
+| `app/colaboradores/views.py:395` | `Batida.objects.filter(colaborador=colaborador).exclude(latitude=None).exclude(longitude=None).exists()` | O | `tem_geo` ao renderizar linha de vínculo de escala. |
+| `app/colaboradores/services/detalhe.py:22` | `.exclude(latitude=None).exclude(longitude=None)` | O | Histórico geo e pontos do mapa. |
+| `app/colaboradores/services/detalhe.py:53` | `_todas.exclude(latitude=None).exclude(longitude=None).count()` | O | Contador total de batidas com geo. |
+| `app/colaboradores/views.py:2474` | `not coord or coord[0] is None or coord[1] is None` | O | Retorna pino `sem_gps`, cinza, para coordenadas da última Batida. |
+
+No último helper, uma falha de cálculo/conversão também retorna `sem_gps` pelo `except (TypeError, ValueError)`; é tratamento de exceção, separado da expressão direta de presença contabilizada acima (`app/colaboradores/views.py:2479`, `app/colaboradores/views.py:2481`).
+
+**(i) Leitores — templates e JavaScript**
+
+| Arquivo:linha | Expressão literal | Forma | O que decide |
+|---|---|---|---|
+| `app/templates/core/_d2_feed.html:16` | `b.latitude is not None and b.longitude is not None` | N | Exibe pino/link Google Maps. |
+| `app/templates/ponto/batidas_offline_pendentes.html:96` | `batida.latitude is not None and batida.longitude is not None` | N | Exibe link Google Maps. |
+| `app/templates/chamados/partials/modal_fio.html:480` | `chamado.modulo_origem == "gps_fora_geofence" and chamado.contexto_json.batida_lat is not None and chamado.contexto_json.batida_lon is not None` | N | Exibe bloco GPS e botão de mapa do chamado. |
+| `app/templates/chamados/partials/_relatorio_geo.html:30` | `chamado.contexto_json.batida_lat is not None and chamado.contexto_json.batida_lon is not None` | N | Exibe coordenadas e rota posto→batida. |
+| `app/templates/core/dashboard2.html:242` | `(b.latitude && b.longitude)` | T | Escolhe conteúdo GPS ou “Sem localizacao”. |
+| `app/templates/core/dashboard2.html:287` | `b.latitude && b.longitude` | T | Inicializa mapa e pino do drawer. |
+| `app/static/js/geo-colab-map.js:39` | `isNaN(blat) || isNaN(blon)` | O | Mostra ausência e retorna, ou prossegue com mapa. |
+| `app/templates/chamados/fio_colaborador.html:313` | `!window.L||isNaN(blat)||isNaN(blon)` | O | Mostra “Sem coordenada de GPS.” e retorna; inclui indisponibilidade da biblioteca. |
+| `app/templates/chamados/painel_gestao.html:583` | `isNaN(blat) || isNaN(blon)` | O | Mostra “Sem coordenada de GPS nesta batida.” e retorna, ou prossegue com mapa. |
+
+**(i) Equivalentes: coordenadas copiadas em AlertaGeofence**
+
+| Arquivo:linha | Expressão literal | Forma | O que decide |
+|---|---|---|---|
+| `app/ponto/models.py:263` | `self.latitude is None or self.longitude is None` | O | Em `ainda_vale`, ausência conserva a validade do alerta. |
+| `app/ponto/management/commands/reconciliar_alertas_geofence.py:42` | `lat is None or lon is None or not alvo` | O | Conta alerta como sem dado e pula reconciliação. |
+| `app/templates/colaboradores/detalhe.html:142` | `a.latitude` | T1 | Exibe link de mapa do alerta. |
+| `app/templates/core/dashboard_supervisor.html:90` | `a.latitude` | T1 | Exibe link de mapa do alerta ou “—”. |
+
+As coordenadas do alerta vêm da Batida nos ramos geográficos, por exemplo em `app/ponto/services/geofence.py:275` e `app/ponto/services/geofence.py:302`; no ramo `sem_gps`, recebem `None` (`app/ponto/services/geofence.py:253`).
+
+A soma dos sítios documentados nessas tabelas é:
+
+| Universo | T | T1 | N | N1 | O | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| Batida/contexto | 4 | 10 | 9 | 4 | 10 | **37** |
+| Cópias em alerta | 0 | 2 | 0 | 0 | 2 | **4** |
+| **Total operacional** | **4** | **12** | **9** | **4** | **12** | **41** |
+
+**Divergem da forma T do geofence todos os 37 sítios classificados T1, N, N1 ou O nas tabelas.** Os quatro T são `app/ponto/services/geofence.py:247`, `app/colaboradores/services/drawer.py:63`, `app/templates/core/dashboard2.html:242` e `app/templates/core/dashboard2.html:287`.
+
+A divergência de **forma** não implica o mesmo efeito em todos: T1 serializa/testa um componente; N/N1 e os O de nulidade preservam zero; os O com `isNaN` aceitam zero quando ele chega como número parseável (`app/ponto/services/geofence.py:327`, `app/core/views.py:1024`, `app/colaboradores/views.py:2474`, `app/static/js/geo-colab-map.js:29`, `app/static/js/geo-colab-map.js:39`). Se os nove O de nulidade forem agrupados semanticamente como N, o total equivalente fica **T=4, T1=12, N=18, N1=4, O=3** — os mesmos sítios, apenas outra convenção.
+
+Há consumidores de resultados prontos, sem novo cálculo sobre coordenadas; ficam fora dos 41:
+
+| Arquivo:linha | Expressão | Uso |
+|---|---|---|
+| `app/templates/colaboradores/partials/_drawer_diagnostico.html:49` | `b.tem_gps`, duas vezes | Cor e texto `ok/sem`; produtor em `app/colaboradores/services/drawer.py:63`. |
+| `app/templates/colaboradores/partials/vinculo_row.html:12` | `d.tem_geo` | Selo 📍; produtor em `app/colaboradores/views.py:84`. |
+| `app/templates/colaboradores/partials/_ps_linha.html:16` | `l.geo == 'verde'` | Apresentação do pino. |
+| `app/templates/colaboradores/partials/_ps_linha.html:17` | `l.geo == 'vermelho'` | Apresentação do pino. |
+| `app/templates/chamados/fio_colaborador.html:112` | `ultima_geo` | Bloco de última localização; seleção por coordenadas em `app/chamados/views.py:692`. |
+| `app/templates/colaboradores/detalhe.html:226` | `!pontos.length` | Ausência de pontos no mapa; seleção por coordenadas em `app/colaboradores/services/detalhe.py:22`. |
+
+Quanto a um nome reutilizável para “tem geo”: existe a **chave de dicionário** `'tem_gps': bool(b.latitude and b.longitude)`; não é método/propriedade da Batida (`app/colaboradores/services/drawer.py:63`). Existem variáveis locais `tem_geo` (`app/colaboradores/views.py:337`, `app/colaboradores/views.py:356`, `app/colaboradores/views.py:395`) e a função classificadora `_geo_do_pino(coord, posto)`, cujo guard de presença é próprio (`app/colaboradores/views.py:2454`, `app/colaboradores/views.py:2474`).
+
+O registro declara `classificar_posicao` para **“a batida esta dentro do geofence?”**, não um predicado de presença (`app/core/juizes.py:1191`). Essa função recebe distância, accuracy e raio (`app/ponto/services/geofence.py:95`). Não localizei função/propriedade/método booleano específico `tem_gps`, `tem_geo` ou `tem_coordenada`; inexistência absoluta sob qualquer nome: **[nao verificado]**.
+
+**(ii) Captura no navegador antes do POST — somente listagem**
+
+| Arquivo:linha | Captura/teste | [nao verificado]
+|---|---|
+| `app/templates/ponto/bater_ponto.html:293` | Geolocation e preenchimento das coordenadas. |
+| `app/templates/ponto/bater_ponto.html:482` | Captura com timeout. |
+| `app/templates/ponto/bater_ponto.html:503` | `!lat || !gpsCapturedAt || (Date.now() - gpsCapturedAt) > 60000` |
+| `app/templates/ponto/bater_ponto.html:505` | `if (gps)` |
+| `app/templates/ponto/bater_ponto.html:509` | `!lat || !lng` |
+| `app/templates/ponto/triagem/base_triagem.html:56` | Geolocation e preenchimento de `.campo-lat/.campo-lng`. |
+| `app/templates/ponto/triagem/apto.html:200` | Captura com timeout. |
+| `app/templates/ponto/triagem/apto.html:217` | `!lat || !gpsCapturedAt || (Date.now() - gpsCapturedAt) > 60000` |
+| `app/templates/ponto/triagem/apto.html:219` | `if (gps)` |
+| `app/templates/ponto/triagem/apto.html:221` | `lat && lng` |
+| `app/templates/ponto/triagem/apto.html:276` | `gpsLat == null || gpsLng == null` |
+| `app/templates/ponto/bater_ponto_v2.html:177` | `gpsLat!=null && gpsAccuracy!=null && acc>gpsAccuracy && (Date.now()-gpsCapturedAt)<120000` |
+| `app/templates/ponto/bater_ponto_v2.html:184` | Suporte/API de geolocation. |
+| `app/templates/ponto/bater_ponto_v2.html:189` | `gpsLat!=null` |
+| `app/templates/ponto/bater_ponto_v2.html:204` | `gpsLat==null` |
+| `app/templates/ponto/bater_ponto_v2.html:273` | Captura com timeout. |
+| `app/templates/ponto/bater_ponto_v2.html:292` | `gpsLat==null || gpsLng==null || !gpsCapturedAt || (Date.now()-gpsCapturedAt)>60000` |
+| `app/templates/ponto/bater_ponto_v2.html:294` | `!(g && g.lat!=null)` |
+| `app/templates/ponto/bater_ponto_v2.html:295` | `g && g.lat!=null` |
+| `app/static/pwa.js:289` | `capturarGPS`, coordenadas ou `null`. |
+| `app/static/pwa.js:394` | Captura para POST de ping geográfico. |
+| `app/templates/core/onboarding.html:264` | Geolocation para permissão, sem leitura de lat/lon no callback. |
+
+Também antes do POST, mas lendo uma batida **já guardada localmente no IndexedDB**, há dois sítios adicionais, fora dos 41 do servidor:
+
+| Arquivo:linha | Expressão literal | Forma | Decisão |
+|---|---|---|---|
+| `app/static/pwa.js:145` | `b.latitude != null` | O | Inclui latitude no POST de sincronização. |
+| `app/static/pwa.js:146` | `b.longitude != null` | O | Inclui longitude no POST de sincronização. |
+
+A origem é `batidas_pendentes` do IndexedDB (`app/static/pwa.js:116`, `app/static/pwa.js:131`). São dois testes individuais de não nulidade em JS, classificados O pela legenda literal.
+
+**Escritores de latitude/longitude da Batida**
+
+| Arquivo:linha | Escrita/origem | Tratamento |
+|---|---|---|
+| `app/ponto/registro_batida.py:152` | `Batida.objects.create(..., **campos)` | Caminho com conflito autorizado; sanitização anterior em `app/ponto/registro_batida.py:105`. |
+| `app/ponto/registro_batida.py:157` | `Batida.objects.create(..., **campos)` | Caminho normal; mesma sanitização. |
+| `app/api/views.py:654` | `latitude=latitude`, seguido de longitude | Encaminha `request.data` à porta; leitura em `app/api/views.py:416`, chamada em `app/api/views.py:648`. |
+| `app/api/views_core.py:646` | `latitude=latitude`, seguido de longitude | Encaminha `request.data`; leitura em `app/api/views_core.py:403`, chamada em `app/api/views_core.py:640`. |
+| `app/ponto/services/triagem_batida.py:707` | `latitude=latitude`, seguido de longitude | Encaminha POST/sessão à porta; chamada em `app/ponto/services/triagem_batida.py:701`. |
+| `app/ponto/registro_batida.py:335` | `Batida.objects.bulk_create([Batida(**d) for d in linhas], batch_size=500)` | Semeadura de ensaio, sem sanitização; guard em `app/ponto/registro_batida.py:333`. |
+
+A sanitização percorre latitude/longitude (`app/ponto/registro_batida.py:3`, `app/ponto/registro_batida.py:8`):
+
+- **`0.0` é preservado:** `float(v)` apenas valida, sem substituir o valor (`app/ponto/registro_batida.py:15`).
+- **`''` e `None` viram `None`**, assim como valores não numéricos (`app/ponto/registro_batida.py:11`, `app/ponto/registro_batida.py:17`).
+- A entrada web já aplica `request.POST.get('latitude') or None` e equivalente de longitude (`app/ponto/views.py:270`, `app/ponto/views.py:271`).
+- O chamador localizado da semeadura omite geo no dicionário; os campos são nullable (`app/ponto/management/commands/gerar_batidas_smoke_motor.py:107`, `app/ponto/management/commands/gerar_batidas_smoke_motor.py:182`, `app/ponto/models.py:58`, `app/ponto/models.py:59`).
+- A porta de anotação não inclui latitude/longitude nos campos permitidos e rejeita campos externos (`app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`).
+
+Estes produtores chamam `registrar_batida` **sem geo**; numa criação nova, latitude/longitude ficam nulas pelos campos do modelo (`app/ponto/models.py:58`, `app/ponto/models.py:59`):
+
+| Arquivo:linha | Produtor |
+|---|---|
+| `app/ponto/views.py:1815` | Saída aprovada em lote. |
+| `app/ponto/services/justificativa.py:188` | Saída após aprovação. |
+| `app/ponto/services/justificativa.py:361` | Ajuste retroativo. |
+| `app/ponto/services/veredito_celula.py:322` | Materialização manual. |
+| `app/chamados/services/regularizacao_ext.py:77` | Regularização externa. |
+| `app/chamados/services/materializacao.py:927` | `disputa_s84_retro`. |
+| `app/chamados/services/materializacao.py:1007` | `disputa_ancora`. |
+| `app/chamados/services/acoes_chamado.py:44` | `excecao_autorizada`. |
+
+Há teste existente que espera persistência de `0.0/0.0`, conversão de `''/''` para `None/None` e preservação de coordenada parcial (`app/api/tests/test_l030_batida_pela_porta.py:58`, `app/api/tests/test_l030_batida_pela_porta.py:63`, `app/api/tests/test_l030_batida_pela_porta.py:68`). Resultado de execução: **[nao verificado]**.
+
+Para delimitar a contagem operacional: fixtures também contêm decisões de nulidade ao montar dados sintéticos, fora dos 41 — `lat is None` e `lon is None` em `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:101` e `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:102` (**O**, dois); `lat is not None` e `lon is not None` em `app/ponto/tests/test_bo0611_05_templates_geo.py:115` e `app/ponto/tests/test_bo0611_05_templates_geo.py:116` (**N1**, dois).
+
+Há ainda leituras de entrada no servidor, anteriores à gravação: normalização do POST (`app/ponto/views.py:270`, `app/ponto/views.py:271`), truthiness individual para assinatura (`app/api/views.py:464`, `app/api/views.py:465`, `app/api/views_core.py:451`, `app/api/views_core.py:452`), recuperação individual da sessão (`app/ponto/services/triagem_batida.py:507`, `app/ponto/services/triagem_batida.py:509`) e sanitização (`app/ponto/registro_batida.py:11`). Elas não entram no subtotal de leitores de Batida gravada.
+
+Os testes de coordenadas **do Posto** e os pings de outro modelo também ficam fora desse subtotal; exemplos concretos são `app/ponto/services/geofence.py:259`, `app/templates/ponto/bater_ponto_v2.html:139`, `app/ponto/views.py:2941`, `app/api/views.py:2331` e `app/api/views_core.py:865`.
 
 ## 10/11 17:13 · sessao 0ca338b4e83a · - · - · origem=Ronald (tmux)
 
@@ -934,18 +1111,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache \
 
 Certificação pela suíte Code e revisão opus final: **[nao verificado]**. [nao verificado]
 
-## 10/11 15:10 · sessao 79dcdf5b3dda · BO-0611-05 · construtor · origem=Code
-
-Corrigido o leitor: o detector agora exige latitude **e** longitude não nulas antes de converter o par ([vinculo_na_lista.py:49](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/services/vinculo_na_lista.py:49)).
-
-- **RED na base `051f45ef2`:** `TypeError` por longitude None.
-- **GREEN:** 10 testes passaram. [nao verificado]
-- **Mutante sem filtro de longitude:** voltou a vermelho, após controle verde. [nao verificado]
-
-Resultados, comandos individuais, quatro arquivos tocados e **censo completo de escritores/leitores**, incluindo templates e JS: [entrega:8](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:8), [provas:120](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:120).
-
-Com `0.0`, nenhuma exceção foi identificada no censo; os tratamentos como ausência permanecem na fila ([item 4:103](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:103)).
-
-Django com models reais, suíte completa e Ruff: **[nao verificado]**; faltam dependências locais. O RED/GREEN executado usa a função real com consultas em memória ([limites:254](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:254)). [nao verificado]
-
-_3423 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3424 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
