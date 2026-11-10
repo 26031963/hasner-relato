@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 02:09:52.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (246.1 MB). Acoes na janela: **1474**.
+**Medido em 10/11/2026 02:15:23.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (246.3 MB). Acoes na janela: **1482**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:12:17 | Bash | Wait for E4a-2 v7 targeted suite verdict | `L=/home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/alvo_v7.log; until /bin/grep -qE '^(OK\|FAILED)($\| \()' $L \|\| /bin/grep -q "rc 75" $L; do /usr/bin/sleep 30; done; /bin/grep -E '^Ran [0-9]+ tests' $L \| tail -1; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1` |
+| 02:12:14 | Bash | Point RELATO ESPERANDO at REVERTER construtor4 | `cd /home/ronald/saas-hasner; P=$(pgrep -f "codex_pergunta.sh --construtor /home/ronald/wt-codex-reverter" \| head -1); echo $P; tail -2 logs/REVERTER-DIA-SEM-RECALCULO/construtor4.log; sed -i "3s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=$P#" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 02:12:09 | Bash | Commit with declared deletion; check REVERTER launcher | `W=$(cat /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/wt_construtor7.txt); cd $W && HASNER_COMMIT_DEL=1 git commit -q -F /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/msg_e4a2v7.txt 2>&1\|tail -3; git log --oneline -1; ls /home/ronald/saas-hasner/logs/REVERTER-DIA-SEM-RECALCULO/ \| /bin/grep -E "c4\|construtor4"; pgrep -af lanca_c4 \| head` |
+| 02:12:00 | Bash | Commit E4a-2 v7, run 162-module targeted suite | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; W=$(cat wt_construtor7.txt); cd $W && git add app/chamados/management/commands/disparar_perguntas_competencia.py app/chamados/services/disputa_emissao.py app/chamados/services/fabrica_da_celula.py app/chamados/services/pergunta_no_app.py app/chamados/services/resposta_tardia.py app/chamados/tests/test_e4a2_nunca_bateu.py app/chamados/tests/test_e4a ...` |
+| 02:11:52 | Write |  | `/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/msg_e4a2v7.txt` |
+| 02:11:45 | Bash | Find module list used for alvo_v6 | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; ls -t \| head -30; head -3 alvo_v6.log` |
+| 02:11:40 | Bash | Read E4a-2 construtor7 result | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; cat construtor7.r.rc; tail -45 construtor7.r; cat construtor7.r.inventario; W=$(cat wt_construtor7.txt); git -C $W status --porcelain; tail -3 ../REVERTER-DIA-SEM-RECALCULO/construtor4.log` |
+| 02:11:36 | Bash | Check old waiter output | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b5iohx0tl.output; ls /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/construtor7.r* ; date +%H:%M` |
 | 02:05:45 | Bash | Wait for E4a-2 construtor7 to finish | `L=/home/ronald/saas-hasner/logs; until [ -s $L/FIO-E0-V4-E4A-2/construtor7.r.rc ]; do /usr/bin/sleep 20; done; cat $L/FIO-E0-V4-E4A-2/construtor7.r.rc` |
 | 02:05:42 | Bash | Add fila lines, queue REVERTER construtor4 launcher | `python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| E4A2-RELOGIO-FIO-VIVO \|')]; assert len(i)==1 if not any(l.startswith('\| REVERTER-LEITOR-JANELAS \|') for l in L): L[i[0]+1:i[0]+1]=[ "\| REVERTER-LEITOR-JANELAS \| fila (preverif2 REVERTER item 2, pre-existente) \| escala/services/regeneracao.py:58 janelas_de_regeneracao le so desde/at ...` |
 | 02:05:32 | Bash | Find fila anchor in BACKLOG | `cd /home/ronald/saas-hasner/app/docs && /bin/grep -n "E4A2-RELOGIO-FIO-VIVO" BACKLOG.md \| head -3` |

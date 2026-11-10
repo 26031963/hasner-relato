@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 02:04** · publicado em **10/11/2026 02:09** (UTC-3)
+> Ultima resposta processada: **10/11/2026 02:11** · publicado em **10/11/2026 02:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 02:11 · sessao a40989c19dee · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Aplicada a cura nos quatro itens, com execução Django e certificação pendentes [nao verificado]. [nao verificado]
+
+Arquivos alterados e motivo:
+
+| Arquivo | Alteração |
+|---|---|
+| [resposta_tardia.py:45](chamados/services/resposta_tardia.py:45) | Retirado o corte; resposta consulta `_renascer_por_premissa_viva`. |
+| [fabrica_da_celula.py:67](chamados/services/fabrica_da_celula.py:67) | Helper nomeado pelo fato da lâmpada. |
+| [disputa_emissao.py:757](chamados/services/disputa_emissao.py:757), [pergunta_no_app.py:35](chamados/services/pergunta_no_app.py:35) | Causa `nunca_bateu_sem_adesao`; destino C5 na descrição. |
+| [disparar_perguntas_competencia.py:34](chamados/management/commands/disparar_perguntas_competencia.py:34) | Consulta C5 com mesmos `hoje/empresas`; desligado excluído vai ao balde RH na [linha 126](chamados/management/commands/disparar_perguntas_competencia.py:126). |
+| [test_selo_emissor_fio_mudo.py:43](chamados/tests/test_selo_emissor_fio_mudo.py:43), [test_o261_fabrica_le_a_lampada.py:117](chamados/tests/test_o261_fabrica_le_a_lampada.py:117) | Fixtures com adesão coerente e emissão do evento ausente, preservando o estoque mudo. |
+| [test_resposta_tardia.py:33](chamados/tests/test_resposta_tardia.py:33) | Fixture de furo ajustada; asserção original preservada; caso explícito `nunca_bateu` acrescentado. |
+| [test_medida_turno_do_par.py:268](core/tests/test_medida_turno_do_par.py:268) | Registro atualizado para ocorrência real `1199`. |
+| [test_e4a2_nunca_bateu.py:68](chamados/tests/test_e4a2_nunca_bateu.py:68) | Selo Django com vínculo, marcos vencidos, ata acusadora, controle positivo e mutantes. |
+
+Apagado `chamados/tests/test_e4a2_nunca_bateu_sem_banco.py`; ausência conferida por `exists=False`, sem conferência git [nao verificado].
+
+Censo dos campos e valores envolvidos:
+
+| Campo/valor | Quem escreve/produz | Quem lê |
+|---|---|---|
+| `veredito='nunca_bateu'` | Cartório calcula pela adesão em [cartorio.py:1165](ponto/services/cartorio.py:1165); modelo delega à porta em [models.py:1826](escala/models.py:1826). | Helper [fabrica_da_celula.py:69](chamados/services/fabrica_da_celula.py:69), repasse [disputa_emissao.py:758](chamados/services/disputa_emissao.py:758), contador e resposta tardia. |
+| `status_local` | `_gravar_estado`, [models.py:228](chamados/models.py:228). | Seleção do contador e [resposta_tardia.py:35](chamados/services/resposta_tardia.py:35); renascimento permanece na [porta existente:983](chamados/models.py:983). |
+| `situacao`, identidade/empresa | Porta do colaborador, [colaborador.py:55](colaboradores/services/colaborador.py:55); desligamento atribui em [desligamento.py:104](colaboradores/services/desligamento.py:104). | Novo filtro de universo em [disparar:38](chamados/management/commands/disparar_perguntas_competencia.py:38). |
+| Mapa C5 `{colab: dias}` | Autoridade [cadastro_realidade.py:180](escala/services/cadastro_realidade.py:180), incluindo retenção dos desligados. | Contador consulta na [linha 34](chamados/management/commands/disparar_perguntas_competencia.py:34). |
+| `nome/numero/esperado/dono/fora_da_c5/universo` | [Contador:46](chamados/management/commands/disparar_perguntas_competencia.py:46): `numero=|P|`, `esperado=|P∩C5|`. | Disparar [linha 193](chamados/management/commands/disparar_perguntas_competencia.py:193), vigiar [linha 210](chamados/management/commands/vigiar_fio_morto.py:210), carimbo [linha 231](chamados/management/commands/vigiar_fio_morto.py:231), placar [linha 98](core/management/commands/pipeline_placar.py:98). |
+| `barrados_desligado` → `barrados['desligado']` | [Contador:49](chamados/management/commands/disparar_perguntas_competencia.py:49), soma na [linha 126](chamados/management/commands/disparar_perguntas_competencia.py:126). | Relatório RH já existente, [linha 200](chamados/management/commands/disparar_perguntas_competencia.py:200). |
+| Causa `nunca_bateu_sem_adesao` | [disputa_emissao.py:759](chamados/services/disputa_emissao.py:759). | `retencao`, `dono`, `medir`, `do_dia` em [pergunta_no_app.py:99](chamados/services/pergunta_no_app.py:99). |
+
+Os leitores acima distinguem lâmpada de pertença: o helper lê `veredito`; a pertença é consultada à C5; o placar compara os números publicados ([fábrica:69](chamados/services/fabrica_da_celula.py:69), [contador:34](chamados/management/commands/disparar_perguntas_competencia.py:34), [placar:105](core/management/commands/pipeline_placar.py:105)). Outros pressupostos em execução: [nao verificado].
+
+O RED principal está em [test_e4a2_nunca_bateu.py:183](chamados/tests/test_e4a2_nunca_bateu.py:183):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4a2_nunca_bateu.NuncaBateuSoC5Test.test_RED_furo_emite_nunca_bateu_nao_emite_e_entrega_um_item_c5 --settings=config.settings.ci -v 2
+```
+
+Os oito mutantes estão [declarados na linha 33](chamados/tests/test_e4a2_nunca_bateu.py:33): fábrica sem corte, repasse sem corte, contador tratando nunca_bateu como alvo, esperado literal, esperado tautológico, universo ignorando C5, perda do balde RH e retorno do corte tardio. **O comando abaixo percorre cada um**, exigindo sua asserção específica no [método coletável:201](chamados/tests/test_e4a2_nunca_bateu.py:201):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4a2_nunca_bateu.NuncaBateuSoC5Test.test_mutantes_em_memoria_sao_rejeitados_pela_assercao_pretendida --settings=config.settings.ci -v 2
+```
+
+Comando da rodada solicitada, **não executado** [nao verificado]:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4a2_nunca_bateu chamados.tests.test_resposta_tardia chamados.tests.test_selo_emissor_fio_mudo chamados.tests.test_o261_fabrica_le_a_lampada core.tests.test_medida_turno_do_par core.tests.test_fio_mudo_placar --settings=config.settings.ci -v 2
+```
+
+Saída local: compilação em memória dos dez arquivos passou; os oito mutantes têm âncora única e sintaxe válida; o censo existente retornou `B1=[1199]` ([instrumento:448](core/medida_turno_do_par.py:448)). Isso não verifica a mordida Django [nao verificado].
+
+Sem acesso a banco nesta execução. Django, freezegun e ruff estão ausentes no Python disponível; `python3 -m ruff check --no-cache ...` terminou com `No module named ruff`. Suite, RED executado, rejeição dos mutantes e ruff limpo permanecem [nao verificado]. [nao verificado]
 
 ## 10/11 02:04 · sessao 969c0e5df6ab · REVERTER-DIA-SEM-RECALCULO · verificador · origem=Code
 
@@ -1008,30 +1063,4 @@ Forma mínima proposta: manter a coleta existente; acrescentar teste Django com 
 
 9. **Outro endereço de escrita em testes:** settings CI substituem o carimbo por arquivo em temporário externo à árvore; esse é um destino alternativo, não um segundo escritor de produção. (`app/config/settings/ci.py:30`.)
 
-## 10/11 01:08 · sessao 1b9519f63a52 · O169-FECHADA · construtor · origem=Code
-
-**Parei pela condição explícita do brief:** fechamento automático e decisão administrativa do dia gravam o mesmo par: `status_local='resolvido'`, `via_encerramento='sistema'`. Não é possível incluir um e excluir o outro pelos valores exigidos. (`ponto/services/cluster_espurio.py:124`; `ponto/services/veredito_celula.py:202`; `chamados/models.py:654`; `chamados/catalogo/motor.py:95`; `chamados/catalogo/motor.py:111`)
-
-| Escritor | Estado/via gravados |
-|---|---|
-| Automático: `reconciliar_colab` | `resolvido/sistema`, via `reconciliar()`. (`ponto/services/cluster_espurio.py:124`; `chamados/models.py:654`; `chamados/catalogo/motor.py:111`) |
-| Decisão administrativa do dia — deveria ficar fora | **Também `resolvido/sistema`**, pelo mesmo gate. (`ponto/services/veredito_celula.py:202`; `chamados/models.py:654`) |
-| Transição humana | Destino solicitado, incluindo `resolvido` ou `fechado`; via `admin`. (`chamados/services/acoes_chamado.py:313`; `chamados/catalogo/motor.py:95`; `chamados/catalogo/motor.py:100`) |
-| Desligamento | `fechado/cascade`. (`colaboradores/services/desligamento.py:155`; `chamados/models.py:1619`; `chamados/catalogo/motor.py:95`; `chamados/catalogo/motor.py:114`) |
-| Tranca | `fechado/competencia_trancada`. (`chamados/services/competencia_trancada.py:184`; `chamados/models.py:1632`; `chamados/models.py:1639`) |
-
-O núcleo escreve `status_local` e `via_encerramento`; ao voltar a vivo, limpa a via. A trilha `estado_chamado` registra estado anterior, novo e via, preservando a colisão acima. (`chamados/models.py:228`; `chamados/models.py:245`; `chamados/models.py:249`; `chamados/models.py:292`)
-
-Os leitores relevantes encontrados são:
-
-- **Serviço de cluster:** seleciona somente `VIVOS`; o dedup consulta qualquer estado. Assim, um encerrado com assinatura pode escapar tanto de `a_fechar` quanto de `a_abrir`. (`ponto/services/cluster_espurio.py:66`; `ponto/services/cluster_espurio.py:84`; `ponto/services/cluster_espurio.py:107`)
-- **Vigia:** lê essas pendências; atualmente não examina encerrados com assinatura. (`ponto/management/commands/detectar_cluster_espurio.py:50`; `ponto/management/commands/detectar_cluster_espurio.py:55`)
-- **Reabertura:** lê `cascade` para impedir renascimento e `admin` para exigir fato novo. (`chamados/models.py:1007`; `chamados/models.py:1342`)
-- **Arquivo e destranca:** leem `competencia_trancada`. (`chamados/views_arquivar.py:64`; `chamados/services/competencia_trancada.py:259`)
-- **Auditoria:** verifica terminal sem via e divergência entre status e última trilha. (`chamados/management/commands/auditar_invariantes_chamados.py:1069`; `chamados/services/vigia_loop.py:114`)
-
-**ESMERIL-SEMANTICA:** não ficou comprovada uma suposição universal “cluster encerrado = premissa morta”. O resolvedor de perguntas ainda consulta `pergunta_viva` antes de carimbar; porém existe fallback genérico que aceita destino encerrado como prova, com rechecagem limitada pela janela. Alcançar clusters concretos nesse vínculo: **[nao verificado]**. (`chamados/services/disputa_emissao.py:1840`; `chamados/juizes.py:760`; `chamados/juizes.py:766`; `chamados/juizes.py:776`)
-
-Entrega interrompida antes da edição: nenhum arquivo alterado; contador, RED novo e mutantes não implementados nem executados; ruff e suíte não executados. Certificação: **[nao verificado]**. O impedimento é a colisão `resolvido/sistema` demonstrada acima. [nao verificado]
-
-_3318 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3319 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
