@@ -1,7 +1,255 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 11:13** · publicado em **10/11/2026 11:15** (UTC-3)
+> Ultima resposta processada: **10/11/2026 11:20** · publicado em **10/11/2026 11:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 11:20 · sessao e4e84d07c69f · - · - · origem=Ronald (tmux)
+
+1. **Chamadores e efeito da 9d.** As três chamadas diretas de produção a `motivos_a_perguntar` são `perguntar_pela_celula`, `motivos_que_o_evento_deixou` e `contador_fio_mudo`; o cartório chama a primeira; o consumidor do reconciliador chama `perguntar_por_eventos`, que chama a primeira. O caminho informado como `chamados/services/reconciliador.py` corresponde nesta cópia a `app/chamados/reconciliador.py`. Referências: `app/chamados/services/fabrica_da_celula.py:210`, `app/chamados/services/fabrica_da_celula.py:245`, `app/chamados/management/commands/disparar_perguntas_competencia.py:115`, `app/ponto/services/cartorio.py:1008`, `app/chamados/reconciliador.py:1386`, `app/chamados/services/fabrica_da_celula.py:304`.
+
+   A mudança alcança **escritores reais**, não apenas o contador: um veredito preenchido fora de `VEREDITOS_ACUSAM` deixa de bloquear incondicionalmente e bloqueia somente quando `dia_encerrado=True`. Exige ainda colaborador ativo, dia não futuro, dia não dispensado, vencimento do marco, falta lida da ata, ausência de barreira parcial e ausência de pergunta que ocupe o fato. Referências: `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/fabrica_da_celula.py:112`, `app/chamados/services/fabrica_da_celula.py:119`, `app/chamados/services/fabrica_da_celula.py:123`, `app/chamados/services/fabrica_da_celula.py:126`, `app/chamados/services/fabrica_da_celula.py:142`, `app/chamados/services/fabrica_da_celula.py:160`.
+
+   Portanto existe caminho executável em que passa a nascer pergunta antes bloqueada: não acusador + dia em curso + marco vencido faltante. A regra também vale para ontem noturno enquanto o dia do turno não encerrou. Se a ata não apresentar falta vencida, não nasce motivo. Nunca-bateu continua bloqueado antes desse ramo. Referências: `app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/fabrica_da_celula.py:119`, `app/chamados/services/fabrica_da_celula.py:123`, `app/chamados/services/fabrica_da_celula.py:58`, `app/chamados/services/fabrica_da_celula.py:64`, `app/chamados/services/fabrica_da_celula.py:69`.
+
+   Esse alargamento cobre todos os vereditos preenchidos não acusadores, inclusive os administrativos que não estão na tupla acusadora; não está limitado a `concorde`. Referências: `app/chamados/services/fabrica_da_celula.py:120`, `app/escala/models.py:1759`, `app/escala/models.py:1767`.
+
+   A emissão pela fábrica permanece sob silêncio de push: `perguntar` roda dentro de `push_disputa_silenciado`, e o emissor de push retorna imediatamente quando o contexto está ativo. Referências: `app/chamados/services/fabrica_da_celula.py:220`, `app/chamados/services/disputa_emissao.py:1742`, `app/chamados/services/disputa_emissao.py:1753`.
+
+   A coleta de carimbadas pode agora ser alcançada nesses estados; seu desfazimento ocorre fora do bloco de silêncio, mas recebe `reabrir_fechada=False`, relê somente disputa aberta e executa `descarimbar`; os receivers de Pergunta observados agendam fechamento de beco e outbox, sem envio de push nesses corpos. Referências: `app/chamados/services/fabrica_da_celula.py:159`, `app/chamados/services/fabrica_da_celula.py:211`, `app/chamados/services/relavra_via.py:238`, `app/chamados/services/relavra_via.py:246`, `app/chamados/models.py:3203`, `app/chamados/signals.py:227`, `app/chamados/signals.py:250`.
+
+2. **`dia_encerrado` é a autoridade registrada, não um segundo juiz introduzido pela 9d.** Registro explícito: pergunta “o dia está encerrado?” → `ponto/turnos.py::dia_encerrado`. Referência: `app/core/juizes.py:235`.
+
+   O predicado efetivo é: não existe turno aberto ainda vivo **e** existe fim previsto **e** `agora >= fim`; sem previsto retorna falso. Turno aberto vivo pode expirar depois do fim da janela do template mais quatro horas; enquanto vivo, bloqueia o encerramento. Referências: `app/ponto/turnos.py:2000`, `app/ponto/turnos.py:2010`, `app/ponto/turnos.py:2024`, `app/ponto/turnos.py:2030`, `app/ponto/turnos.py:2115`, `app/ponto/turnos.py:2124`.
+
+   O novo chamador passa `cel.data` e o `agora` recebido; `dia_encerrado_motivo` só chama `timezone.now()` se `agora is None`. O carregamento de turnos é filtrado pelo `data_turno` do dia solicitado. Referências: `app/chamados/services/fabrica_da_celula.py:123`, `app/ponto/turnos.py:2096`, `app/ponto/turnos.py:2098`, `app/ponto/turnos.py:2111`.
+
+   Os cortes corrigidos autorizam esse juiz por fato encerrado e proíbem `data < hoje`; não exigem chamar outro juiz no seu lugar. O contrato admite instante ou fato encerrado. Referências: `app/docs/CORTES.md:55`, `app/docs/CORTES.md:62`, `CLAUDE.md:185`.
+
+3. **Leitor com semântica diferente a destacar no item 6/8.** `pergunta_viva` trata não acusador como provisório pela **ata**: consulta `lastro.marcos_pendentes`, e, se não há pendente, retorna falso. A fábrica passa a decidir essa exceção pelo **encerramento geométrico/temporal do turno**. São critérios distintos em código, embora possam coincidir nos casos usuais. Referências: `app/chamados/juizes.py:1372`, `app/chamados/juizes.py:1385`, `app/chamados/juizes.py:1386`, `app/ponto/services/lastro.py:138`, `app/chamados/services/fabrica_da_celula.py:123`.
+
+   Consequência dedutível: uma célula não acusadora, com falta vencida lida da ata, `dia_encerrado=False` e **sem `pendente` na ata** pode produzir motivo na fábrica enquanto o C6 considera a pergunta não viva. Existência desse estado no dado de produção: **[não verificado]**. Referências do caminho: `app/chamados/services/fabrica_da_celula.py:119`, `app/chamados/services/fabrica_da_celula.py:142`, `app/chamados/services/fabrica_da_celula.py:160`, `app/chamados/juizes.py:1386`.
+
+   O leitor de faltas não consulta o veredito nesse corpo: lê `missing` da grade e converte os marcos faltantes; assim o veredito não elimina por si só essa possibilidade. Referências: `app/chamados/services/declaracao_texto.py:100`, `app/chamados/services/declaracao_texto.py:119`, `app/chamados/services/declaracao_texto.py:131`.
+
+4. **Limites da conclusão normativa.** O aval ALVO fornecido manda incluir hoje no contador e deixar o teto no juiz, o que justifica corrigir o juiz compartilhado; autorização específica para todos os não acusadores administrativos e para a divergência fábrica/C6 acima não está demonstrada no texto fornecido. **[não verificado]**. A nova condição em si chama autoridade registrada e respeita o teto por instante antes de produzir motivos. Referências: `app/core/juizes.py:235`, `app/chamados/services/fabrica_da_celula.py:119`, `app/chamados/services/fabrica_da_celula.py:123`.
+
+## 10/11 11:19 · sessao b604c2a26d23 · - · - · origem=Ronald (tmux)
+
+Achado bloqueante de regressão: a saída nova é `ALVOS: N motivos devidos sem pergunta viva`, mas nove asserções existentes ainda exigem `ALVOS: N perguntas`; essas verificações ficam incompatíveis com o comando da cópia. `app/chamados/management/commands/disparar_perguntas_competencia.py:215`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`, `:54`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:84`, `:119`, `:173`; `app/chamados/tests/test_fabrica_pela_ata.py:51`, `:64`, `:71`; `app/chamados/tests/test_pergunta_do_dia_em_curso.py:106`.
+
+Item 3:
+
+- A guarda conserva exatamente as três operações: montar mudo, exigir `FIO MUDO: 1` às 13:40 e exigir ausência de pergunta. O delta 9d fornecido só acrescenta testes nesse arquivo; não altera o corpo da guarda. `app/chamados/tests/test_pergunta_do_dia_em_curso.py:460`.
+- Não confundir com `diff_obra_v9d.patch`: a obra inteira transformou a antiga exigência de emissão em contagem sem escrita, conforme matriz; a 9d não repete essa mudança. Corpo atual em `app/chamados/tests/test_pergunta_do_dia_em_curso.py:460`; comparação histórica depende do anexo fornecido [não verificado independentemente por Git].
+- Nas asserções existentes alteradas na 9d, a mudança substantiva é o contrato textual de ALVOS, acompanhada da exigência de mencionar Pauta DP; isso atende P3 da triagem fornecida. As demais alterações adicionam mensagens específicas, mínimos, unicidade do trecho mutado e novas verificações. `app/chamados/tests/test_e4a2_disparar_e_vigia.py:205`, `:222`, `:224`, `:242`, `:248`.
+- O helper de matriz condiciona a verificação de `concorde` a `encerrado`, mas o teste existente mantém o padrão `encerrado=True` e segue exigindo zero; novos testes cobrem `encerrado=False`. `app/chamados/tests/test_e4a2_matriz_memoria.py:100`, `:169`, `:194`, `:199`.
+- Integridade de todos os “corpos congelados”: [não verificado], pois não há `.git` na cópia nem manifesto identificado que nomeie esses corpos e seus hashes.
+
+Item 7:
+
+- Os catálogos agora têm mínimos: NuncaBateu 11, placar 12, relatório 10, matriz 19, C5 13. `app/chamados/tests/test_e4a2_nunca_bateu.py:66`; `app/core/tests/test_fio_mudo_placar.py:53`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:39`; `app/chamados/tests/test_e4a2_matriz_memoria.py:82`; `app/chamados/tests/test_e4a2_c5_memoria.py:71`.
+- Todos esses laços têm controle verde antes da mutação, trecho único e falha pela mensagem pretendida; catálogos vazios/encolhidos são exercitados explicitamente. `app/chamados/tests/test_e4a2_nunca_bateu.py:318`, `:329`; `app/core/tests/test_fio_mudo_placar.py:294`, `:319`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:235`, `:245`; `app/chamados/tests/test_e4a2_matriz_memoria.py:352`, `:365`; `app/chamados/tests/test_e4a2_c5_memoria.py:201`, `:214`.
+- Executei os dois módulos de memória com `PYTHONDONTWRITEBYTECODE=1`: 28 testes OK, sem banco e sem escrita. Os carregadores executam funções reais por AST e mantêm mutações em memória. `app/chamados/tests/e4_apoio.py:8`; `app/chamados/tests/e4_catracas.py:5`; resultado da execução sem arquivo persistido [não verificável por arquivo:linha].
+- O novo selo que carrega os catálogos Django por AST prova apenas sua defesa contra catálogo vazio/encolhido; não executa seus mutantes de integração nem seus `setUp`. Portanto não equivale a execução verde ORM. `app/chamados/tests/test_e4a2_matriz_memoria.py:314`, `:325`, `:334`.
+- Os testes novos de cenário para `concorde` em curso e noturno usam resposta dublada de `dia_encerrado` na bateria de memória; há teste Django separado, mas sua execução nesta auditoria permanece [não verificado]. `app/chamados/tests/test_e4a2_matriz_memoria.py:151`, `:205`; `app/chamados/tests/test_pergunta_do_dia_em_curso.py:297`.
+
+Consequência para bancos 1–4: a bateria de memória permanece verde e cobre seus contratos; banco 5/suíte inteira verde não está demonstrado e há incompatibilidade textual concreta introduzida na 9d. `app/chamados/tests/test_e4a2_matriz_memoria.py:87`, `:278`; `app/chamados/management/commands/disparar_perguntas_competencia.py:215`; `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`.
+
+## 10/11 11:19 · sessao eef2ccc05813 · - · - · origem=Ronald (tmux)
+
+Itens 4–6, leitura da cópia:
+
+1. `_pks_de_empresa` tem somente dois chamadores de produção: `contador_nunca_bateu` e `contador_fio_mudo`; aceita `None`, rejeita texto/bytes/objeto com `.pk` e não iteráveis, e materializa lista de `int`. Não há consumo duplo do gerador original: a primeira normalização produz lista, reutilizada no ORM e passada à segunda normalização. (`app/chamados/management/commands/disparar_perguntas_competencia.py:25`, `:52`, `:88`, `:104`, `:121`.)
+
+2. Entradas de produção: `Command.handle` do disparar omite `empresas` → `None`; vigiar passa `None` ou lista materializada de instâncias `Empresa`. Nenhum desses chamadores passa Empresa única ou pk escalar. (`app/chamados/management/commands/disparar_perguntas_competencia.py:189`; `app/chamados/management/commands/vigiar_fio_morto.py:156`, `:160`, `:181`.)
+
+3. Chamadores de testes: [nao verificado]
+   - Integração contador: listas de pk/Empresa (`app/chamados/tests/test_e4a2_nunca_bateu.py:119`, `:125`; `app/chamados/tests/test_pergunta_do_dia_em_curso.py:314`; `app/core/tests/test_fio_mudo_placar.py:282`).
+   - `None` implícito (`app/chamados/tests/test_o261_vigia_fio.py:811`; `app/core/tests/test_fio_mudo_placar.py:291`).
+   - Funções reais por AST: tupla, lista, iterador de Empresa/str; `dias` também iterador (`app/chamados/tests/test_e4a2_c5_memoria.py:76`, `:84`, `:89`; `app/chamados/tests/test_e4a2_matriz_memoria.py:237`).
+   - Escalares deliberadamente negativos: str, int, Empresa/objeto `.pk`; `None` explicitamente permitido (`app/chamados/tests/test_e4a2_nunca_bateu.py:310`; `app/chamados/tests/test_e4a2_matriz_memoria.py:214`).
+   - Não encontrei chamador passando queryset; aceitação de queryset é inferência direta de `iter()` + conversão de cada elemento. (`app/chamados/management/commands/disparar_perguntas_competencia.py:33`.)
+
+4. Matriz preservada no contador:
+   - (a) retido pela lâmpada `nunca_bateu`, sem escrever; unidade `(colab,dia)`, esperado interseção com C5; desligado só em pares presentes na C5; janela anterior por empresa até ontem (`app/chamados/management/commands/disparar_perguntas_competencia.py:54`, `:59`, `:64`, `:66`, `:111`).
+   - (b) lê todos os motivos do juiz e deduplica `(colab,dia,motivo)`, esperado 0 (`:115`, `:116`, `:122`).
+   - (c) qualquer pergunta viva ligada exclui o chamado inteiro dos dois contadores (`:109`).
+   - (d) universo `VIVOS`; tranca deve retirar o chamado pela sua porta, sem filtro adicional próprio do contador (`:99`; prova real `app/chamados/tests/test_e4a2_nunca_bateu.py:168`).
+   - O piso “até ontem” aplica-se apenas à comparação C5; fio mudo não exclui hoje (`:64`, `:99`).
+
+5. Bancos 1–4:
+   - 1: tupla de juízes vazia e papel vigia; parser sem apply (`app/config/crons.py:2032`, `:2168`; `app/chamados/management/commands/disparar_perguntas_competencia.py:132`).
+   - 2/3: mesmo contador alimenta números/esperados do carimbo e pipeline compara ambos (`app/chamados/management/commands/vigiar_fio_morto.py:181`, `:233`, `:241`; `app/core/management/commands/pipeline_placar.py:98`, `:105`, `:135`).
+   - 4: executei `PYTHONDONTWRITEBYTECODE=1 bash bin/tests/test_papel_prazo_nao_deriva.sh`: rc 0, `papel_prazo: 12 ... juizes_por_varredura=0`, `OK` [resultado de execução, sem arquivo persistido]. Exceção real vazia e controles sintéticos no próprio selo (`bin/tests/test_papel_prazo_nao_deriva.sh:305`, `:384`, `:405`).
+   - Integração banco/suite inteira não executada [não verificado]. [nao verificado]
+
+6. Escritores/leitores dos valores:
+   - `ALVOS`: escritor stdout calcula `len(_mudos)` de motivos e pessoas distintas; distribuição empresa também conta motivos (`app/chamados/management/commands/disparar_perguntas_competencia.py:201`, `:215`).
+   - `fio_mudo_alvos`: derivador único contador; vigiar escreve JSON por `_carimbar`, somente frota; pipeline lê dia civil e compara número/esperado; `bin/fio_estado.py` itera todas as chaves do esperado e mostra divergências (`app/chamados/management/commands/disparar_perguntas_competencia.py:122`; `app/chamados/management/commands/vigiar_fio_morto.py:118`, `:227`, `:241`; `app/core/management/commands/pipeline_placar.py:85`; `bin/fio_estado.py:125`, `:191`).
+   - `nunca_bateu_sem_adesao`: mesmo nome designa contador aninhado completo no retorno/topo JSON e número dentro de `censo`/`esperado`; leitores acessam esses níveis explicitamente. Informativos C5 não viram esperado (`app/chamados/management/commands/disparar_perguntas_competencia.py:66`, `:124`; `app/chamados/management/commands/vigiar_fio_morto.py:234`, `:241`, `:242`; `app/core/management/commands/pipeline_placar.py:98`).
+   - C5 é `{colab_id:[datas]}`, por empresa, anterior+corrente até ontem, desligados pela lavra do retrato; recebe pks, não Empresa (`app/escala/services/cadastro_realidade.py:137`, `:177`, `:181`, `:197`).
+   - `rc` disparar=2 só `--alarme` e deixou; fio mudo/retidos não alteram rc. Vigiar=2 pelos próprios gritos; pipeline=2 por alarmes com chave. `crons_quebrados` trata 0 e 2 como saídas esperadas (`app/chamados/management/commands/disparar_perguntas_competencia.py:219`; `app/chamados/management/commands/vigiar_fio_morto.py:252`; `app/core/management/commands/pipeline_placar.py:160`; `app/core/services/crons_quebrados.py:16`).
+
+**Regressão certa da 9d:** produção mudou para `ALVOS: N motivos devidos...`, mas nove asserções ainda exigem `ALVOS: N perguntas`: `app/chamados/tests/test_colab_nao_vaza_fio_mudo.py:49`, `:54`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:84`, `:119`, `:173`; `app/chamados/tests/test_fabrica_pela_ata.py:51`, `:64`, `:71`; `app/chamados/tests/test_pergunta_do_dia_em_curso.py:106`. A saída atual é incompatível com elas (`app/chamados/management/commands/disparar_perguntas_competencia.py:215`); suite inteira verde desta cópia [não verificado].
+
+## 10/11 11:19 · sessao 1d62df0db80f · URGENCIA-E4B · sonda · origem=Code
+
+A sonda retornou **ERRO_SONDA** no passo `alcance_a_e`, com código `ERRO_INTERNO_REGISTRAR_ENGOLIDO`; resultado: **INCONCLUSIVA; nenhum contador publicado** [nao verificado]. [nao verificado]
+
+Cadeia de locais, na ordem informada:
+
+1. `<string>:625` [nao verificado]
+2. `<string>:204` [nao verificado]
+3. `app/chamados/services/vigia_fio.py:485`
+4. `app/chamados/services/vigia_carimbo.py:106`
+5. `app/chamados/juizes.py:734`
+6. `app/chamados/juizes.py:359`
+7. `app/chamados/services/materializacao.py:386`
+8. `app/chamados/services/materializacao.py:302`
+9. `<string>:105` [nao verificado]
+
+O último ponto conferível chama `registrar_engolido` para `tipo_marco_divergente`, quando os tipos derivados divergem (`app/chamados/services/materializacao.py:299`, `app/chamados/services/materializacao.py:302`, `app/chamados/services/materializacao.py:303`).
+
+A saída também encadeia `builtins.Exception`, sem código nem locais; ambas as exceções têm `sqlstate: null` [nao verificado].
+
+Não há valores publicados para comparar com **1.233**, particionar por classe/dono/empresa ou medir `censo_alcance` e sua interseção com a Central [nao verificado]. [nao verificado]
+
+## 10/11 11:17 · sessao 3bed5b87a8db · - · - · origem=Ronald (tmux)
+
+Censo PWA por leitura, sem escrita.
+
+**Rotas e cascas**
+
+- `/ponto/bater/` chama `views.bater_ponto`; `/ponto/bater-v2/` chama a mesma view com `ui_v2=True`; `/ponto/batida-offline/` é outra porta de POST. (`app/ponto/urls.py:11`, `:12`, `:13`.)
+- V2 renderiza `ponto/bater_ponto_v2.html`; clássico renderiza `_template_triagem(context)`, normalmente `ponto/triagem/apto.html`. O arquivo `bater_ponto.html` não é o template escolhido nesses returns. (`app/ponto/views.py:225`, `:235`, `:356`, `:358`.)
+- V2, legado e base da triagem estendem **literalmente `base.html`**. Não usam a variável `base_tpl`, embora o processor a forneça. A execução destas telas dentro de `base_app.html` não está demonstrada por essas heranças. (`app/templates/ponto/bater_ponto_v2.html:1`; `app/templates/ponto/bater_ponto.html:1`; `app/templates/ponto/triagem/base_triagem.html:1`; `app/core/context_processors.py:194`, `:210`.)
+- As duas cascas carregam `pwa.js`, `geo-colab-map.js`, UI, tabela, popover, ícones, diálogo e drawer; `base.html` acrescenta filtros/fita, nudge, cobrança e copiloto. (`app/templates/base.html:20`, `:83`, `:85`, `:86`, `:88`, `:92`, `:93`, `:388`, `:393`, `:399`, `:432`, `:440`; `app/templates/base_app.html:20`, `:77`, `:78`, `:80`, `:85`, `:145`, `:154`, `:194`.)
+
+**Barreiras comprovadas**
+
+| Sítio | Condição e resultado | Classe L-030 / teste exigindo | [nao verificado]
+|---|---|---|
+| `app/templates/ponto/bater_ponto_v2.html:285`, `:287`, `:290`, `:325` | Sem `_fotoBlob` após capturar frame: toast de habilitar câmera/tirar selfie; `false`; clique retorna antes do POST. | Sim, impede fato por prova ausente; teste que exija essa barreira [nao verificado]. |
+| `app/templates/ponto/bater_ponto_v2.html:292`, `:297`, `:299`, `:300`, `:325` | Sem latitude ou longitude, após tentativas de GPS de 10 e 12 s: toast de habilitar localização/usar Justificativa; `false`; não envia. GPS velho dispara nova tentativa, mas GPS velho ainda existente não é recusado depois. | Sim; teste da barreira de template [nao verificado]. |
+| `app/templates/ponto/bater_ponto_v2.html:350`, `:353` | Exceção no fetch **e** coordenada nula: retorna antes de enfileirar offline. | Sim; teste [nao verificado]. Ramo hoje já antecedido pelo requisito acima. |
+| `app/templates/ponto/bater_ponto_v2.html:368`, `:370`, `:371` | Offline e coordenada nula: toast GPS/Justificativa; retorna antes da fila. | Sim; teste [nao verificado]. Ramo hoje já antecedido pelo requisito acima. |
+| `app/templates/ponto/triagem/apto.html:248`, `:253`, `:255` | Câmera offline falhou: “Camera indisponivel — contate o supervisor”; esconde `btn-capturar-off`; não há chamada da fila nesse catch. | Sim; teste [nao verificado]. |
+| `app/templates/ponto/triagem/apto.html:277`, `:278`, `:279`, `:281`, `:284` | GPS ausente e primeiro aviso da sessão: aguarda `hxConfirmar`; resposta falsa retorna antes de `registrarBatidaOffline`. | Confirmação condiciona fato à falta de prova; mesma classe enquanto impede envio. Teste exigindo cancelamento/guarda GPS [nao verificado]. |
+| `app/ponto/views.py:316`, `:329`, `:330` | POST E, turno aberto e sem `confirmar`: guarda GPS/foto em sessão, devolve HTML de confirmação, sem registro. | Sim, condicional de jornada antes do escritor. **Teste exige:** `app/ponto/tests/test_f7_ramos_frios.py:128`, `:135`, `:140`, `:141`, `:142` — exige sessão, nenhuma nova Batida e template `turno_confirmar.html`. |
+| `app/templates/ponto/bater_ponto_v2.html:64`, `:67`, `:69`, `:71` | `bloqueio_horario` ou `aguardando_confirmacao`: não renderiza botão; manda “Abrir ponto”. | Mesmo efeito de barreira de tela. Teste exigindo esse ramo V2 [nao verificado]. |
+| `app/ponto/views.py:243`, `:244` | Onboarding incompleto: redirect antes de processar POST ou abrir tela. | Barreira de acesso à batida por cadastro; teste específico [nao verificado]. |
+| `app/ponto/views.py:251`, `:253`, `:255` | **Só GET**, comunicado pendente: redirect para ciência antes da tela. POST não entra nesse ramo. | Interstitial de tela, não guarda da requisição de batida. **Teste exige:** `app/comunicados/tests.py:181`, `:184`, `:185`, `:186`; livre após ciência: `:188`, `:192`, `:193`. |
+
+O diálogo é cancelável por botão Não, clique fora ou Escape. `naoBloquear=true` significa somente **fail-open se o markup não montar**; não elimina a confirmação nem seu cancelamento. (`app/templates/core/_dialogo.html:157`, `:158`, `:159`, `:161`, `:172`, `:184`, `:185`.) O selo exige alcançar o diálogo nas duas cascas e exige o fail-open/string `naoBloquear`; não exige bloquear GPS ausente. (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:115`, `:117`, `:135`, `:138`, `:139`, `:141`.)
+
+**Ausências de barreira e sinais**
+
+- Precisão V2 `>200 m` apenas altera chip/texto; não retorna do envio. Raio apenas desenha mapa e altera badge “fora do raio”. (`app/templates/ponto/bater_ponto_v2.html:174`, `:214`, `:218`, `:220`, `:228`, `:229`, `:230`.)
+- `v2AvisoGps` contém “NAO sera registrada sem GPS”, mas não encontrei chamada dessa função; sua execução é [nao verificado]. (`app/templates/ponto/bater_ponto_v2.html:312`, `:313`, `:316`.)
+- Triagem online anuncia “Sem GPS - registrando para revisao” e segue até `form.submit()`. (`app/templates/ponto/triagem/apto.html:221`, `:225`, `:226`, `:235`.)
+- Triagem online, quando câmera falha, libera os botões sem selfie; entretanto o caminho de câmera bem-sucedida ainda exibe botão de ponto somente após callback de `toBlob`. (`app/templates/ponto/triagem/apto.html:156`, `:159`, `:163`, `:182`, `:185`.)
+- Legado mantém botões ocultos antes de selfie e no refazer; câmera negada oferece câmera do sistema; falha de processamento após confirmação libera mesmo sem blob. Seu uso por rota nesta cópia é [nao verificado]. (`app/templates/ponto/bater_ponto.html:246`, `:362`, `:366`, `:423`, `:449`, `:456`, `:465`, `:473`.)
+- Legado online permite GPS ausente e falha HTTP/rede cai para fila. (`app/templates/ponto/bater_ponto.html:507`, `:509`, `:510`, `:533`, `:540`, `:543`.)
+- A falta de colaborador elimina botão nas três famílias, como identificação necessária do titular. (`app/templates/ponto/bater_ponto_v2.html:39`; `app/templates/ponto/bater_ponto.html:8`; `app/templates/ponto/triagem/base_triagem.html:20`.)
+- Travas de clique em andamento são `_enviando` V2 e `_confirmandoOffline` triagem; retornam para evitar submissões concorrentes. (`app/templates/ponto/bater_ponto_v2.html:321`; `app/templates/ponto/triagem/apto.html:260`, `:262`.)
+
+**Fila PWA e service worker**
+
+- `registrarBatidaOffline` aceita coordenadas nulas e salva em IndexedDB; não há guarda geo. Erro de IndexedDB rejeita a promessa. (`app/static/pwa.js:107`, `:113`, `:116`, `:120`, `:121`.)
+- Sync só roda online e com meta `user-perfil=colaborador`; ordena por timestamp e omite campos latitude/longitude nulos do multipart. (`app/static/pwa.js:126`, `:127`, `:128`, `:137`, `:145`, `:146`.)
+- Embora a fila armazene timestamp corrigido, precisão e instante de captura, o POST monta tipo, coordenadas, `timestamp_dispositivo`, liveness e foto; não envia `timestamp`, `offline`, `gps_accuracy` ou `gps_captured_at`. (`app/static/pwa.js:114`, `:117`, `:143`, `:147`, `:150`, `:152`, `:153`.)
+- HTTP 2xx apaga item; HTTP 400 também apaga como definitivo, sem retry; 403/5xx permanecem na fila. (`app/static/pwa.js:158`, `:162`, `:166`, `:169`, `:172`, `:177`.)
+- SW retorna antes de interceptar qualquer método diferente de GET: **não há barreira POST no SW**. (`app/static/sw.js:35`, `:36`.)
+- Background sync delega à página aberta; sem página apenas notifica para abrir o app, não envia sozinho. (`app/static/sw.js:112`, `:116`, `:117`, `:119`, `:121`, `:123`.)
+- O mapa global trata coordenadas não numéricas mostrando “Sem localização de batida recente” e retorna sem construir Google Maps; não afeta envio de batida. (`app/static/js/geo-colab-map.js:28`, `:39`, `:40`, `:41`.)
+
+**Testes hoje explicitamente contrários à cura sem GPS** [nao verificado]
+
+- API exige 403 e código `gps_obrigatorio`: `app/api/tests/test_gps_obrigatorio.py:19`, `:21`, `:22`.
+- Exige auditoria `batida_recusada_sem_gps`: `app/api/tests/test_gps_obrigatorio.py:24`, `:28`.
+- Exige zero nova batida sem GPS: `app/api/tests/test_gps_obrigatorio.py:34`, `:38`.
+- Side-effects, apesar do nome antigo “cria alerta sem_gps”, exige 403/código após o flip: `app/ponto/tests/test_batida_sideeffects.py:119`, `:128`, `:130`, `:131`.
+- Há selo no sentido oposto a bloqueio por órfão: GET V2 com entrada de 40 h deve ser 200 e não conter “Abrir ponto”. (`app/ponto/tests/test_bater_nao_bloqueia.py:18`, `:20`, `:23`, `:24`, `:25`.)
+
+## 10/11 11:16 · sessao f90352db97b4 · - · - · origem=Ronald (tmux)
+
+Censo de testes e chokepoint concluído por leitura/AST em memória; resultados de execução da suíte [nao verificado]. [nao verificado]
+
+| Barreira/condição | Teste que a exige hoje | [nao verificado]
+|---|---|
+| GPS ausente → HTTP 403, `gps_obrigatorio` | `app/api/tests/test_gps_obrigatorio.py:21`, `:22`; `app/ponto/tests/test_batida_sideeffects.py:130`, `:131` |
+| GPS ausente → zero gravação | `app/api/tests/test_gps_obrigatorio.py:38`; `app/ponto/tests/test_batida_sideeffects.py:133` |
+| GPS ausente → auditoria da recusa | `app/api/tests/test_gps_obrigatorio.py:28` |
+| Desligado → HTTP 403 | `app/api/tests/test_api_bater_ponto.py:65` |
+| Desligado → conservar literalmente o dicionário de bloqueio nos dois kernels | `app/ponto/tests/test_afastado_nunca_bloqueia.py:33`, `:36`; kernels enumerados em `:25` |
+| Férias → resposta diferente de 200 | `app/api/tests/test_api_bater_ponto.py:88` |
+| Férias, inclusive com afastamento cobrindo hoje → HTTP 403 / `colab_ferias` | `app/ponto/tests/test_afastado_na_batida.py:115`, `:116` |
+| Tipo oposto em segundos na API → `ignorada_intervalo`, sucesso verdadeiro, ID da primeira, apenas uma linha | `app/api/tests/test_api_bater_ponto.py:639`, `:640`, `:641`, `:642` |
+| Tipo oposto em até 60 s no POST web → zero segunda batida | `app/ponto/tests/test_bater_colisao_oposto.py:42`; `app/ponto/tests/test_f9d_t1_caracterizacao_ramo_quente.py:120` |
+| POST web oposto → HTTP 200, `ignorada_intervalo`, ID e tipo da anterior | `app/ponto/tests/test_f9d_t1_caracterizacao_ramo_quente.py:115`, `:117`, `:118`, `:119` |
+| Tipo oposto a 120 s com template/marcos, origem `app` → `None` e conflito | `app/ponto/tests/test_dedup_envelope_template.py:41`, `:43`, `:46` |
+| Tipo oposto a 30 s, origem institucional `reg_externa` → `None`, conflito e nenhuma nova linha | `app/ponto/tests/test_registrar_batida.py:37`, `:41`, `:42`, `:43` |
+| Mesmo tipo a outro instante, +20 s → mesma linha, nenhuma nova | `app/ponto/tests/test_registrar_batida.py:72`, `:76`, `:78` |
+| API com timestamps distintos por 1 minuto → `ja_registrada`, apenas uma linha | `app/api/tests/test_bug127_dedup_unico.py:121`, `:122`, `:123`, `:124` |
+| Mesma chave exata, mesmo timestamp e outro tipo → batida existente | `app/ponto/tests/test_bater_mesma_chave_idempotente.py:47`, `:48`, `:49` |
+| Mesma chave exata de batida retratada → batida existente | `app/ponto/tests/test_bater_mesma_chave_idempotente.py:56`, `:57`, `:58` |
+
+A lei local nomeia explicitamente como pendências da mesma classe L-030: GPS ausente, desligado/férias e oposto em 60/300 s. A referência correta nesta cópia é `app/docs/LEIS.md:165`; `:162` corresponde à L-011. A regra superior está em `CLAUDE.md:140`.
+
+A AST de `registrar_batida` contém seis retornos e nenhum `raise` explícito: existente por mesmo tipo em `app/ponto/registro_batida.py:115`, existente por chave exata em `:122`, `None` por competência institucional em `:137`, `None` por colisão oposta em `:151`, criação com conflito em `:156`, criação normal em `:161`. A janela oposta é 300 s havendo escala/tipo/marcos e 60 s no restante (`app/ponto/registro_batida.py:30`, `:31`, `:32`); a busca usa limites inclusivos (`:142`, `:143`), apesar de a mensagem usar `<` (`:147`). A exceção de marco próprio aceita distância **≤5 minutos**, inclusive na véspera (`:41`, `:42`, `:48`).
+
+A guarda de competência não barra chão: depende de `not fato_de_chao`, cujo padrão deriva de `not autoridade_humana` (`app/ponto/registro_batida.py:130`, `:132`). Os testes exigem chão aceito em competência aprovada (`app/ponto/tests/test_ajuste_retroativo_folha_fechada.py:36`, `:40`, `:66`, `:70`) e materialização institucional com `fato_de_chao=False` recusada (`:56`, `:61`, `:62`).
+
+Não confundir testes que **toleram** uma barreira com os que a exigem: `app/chamados/tests/test_invariantes_disputa.py:292` reconhece o 403 de GPS e o exclui da verificação `<400` em `:295`; não exige a rejeição. `app/ponto/tests/test_gate_ferias_a_tela_diz.py:25`, `:32`, `:39`, `:40` exige apenas aviso e confirmação dentro do ramo de sucesso.
+
+Há testes que exigem aceitação, contrariando possíveis barreiras adicionais: [nao verificado]
+
+- Fora da cerca com precisão 5 → HTTP 200 e alerta/chamado: `app/ponto/tests/test_batida_sideeffects.py:104`, `:106`, `:110`, `:116`.
+- Fora da cerca sem precisão → HTTP 200 e `gps_incerto`: `app/ponto/tests/test_batida_sideeffects.py:150`, `:152`, `:158`.
+- GPS mock → HTTP 200 e motivo `gps_mock`: `app/api/tests/test_api_bater_ponto.py:159`, `:160`, `:164`, `:165`, `:169`, `:170`.
+- Afastado → HTTP 200, aviso e Pauta: `app/api/tests/test_api_bater_ponto.py:75`, `:76`, `:78`.
+- Sem posto → gravação exigida: `app/ponto/tests/test_batida_sideeffects.py:202`, `:203`.
+- Tipo fora de `E/S` → HTTP 400: `app/api/tests/test_api_bater_ponto.py:121`, `:127`.
+
+Teste que exige rejeição por `tolerante_offline`, raio ou precisão no registro de chão: [nao verificado]. [nao verificado]
+
+## 10/11 11:16 · sessao 2e59c613d923 · - · - · origem=Ronald (tmux)
+
+Sinal já existente, sem modelo novo: `Batida.latitude` e `Batida.longitude` aceitam `NULL`; `gps_accuracy` também é nullable, mas representa incerteza, não ausência de posição. Não há flag `sem_geo` em `Batida`; o sinal primário existente são as coordenadas ausentes. (`app/ponto/models.py:8`, `app/ponto/models.py:58`, `app/ponto/models.py:59`, `app/ponto/models.py:60`.)
+
+- Escritor: `_sanitiza_geo` transforma `''`, `None` ou valor não numérico em `None`; `registrar_batida` aplica isso antes da gravação. As portas web/API já repassam latitude/longitude ao escritor. (`app/ponto/registro_batida.py:3`, `app/ponto/registro_batida.py:11`, `app/ponto/registro_batida.py:16`, `app/ponto/registro_batida.py:105`, `app/ponto/services/triagem_batida.py:701`, `app/api/views_core.py:681`, `app/api/views.py:684`.)
+- Sinal secundário existente: `AlertaGeofence.tipo='sem_gps'`; `verificar_geofence` detecta coordenada ausente e, havendo posto, cria alerta com coordenadas nulas e texto “localização não validada”. Sem posto, esse ramo não cria alerta. (`app/ponto/models.py:233`, `app/ponto/services/geofence.py:247`, `app/ponto/services/geofence.py:248`, `app/ponto/services/geofence.py:252`, `app/ponto/services/geofence.py:256`.)
+- Gestão: o mesmo serviço abre/anexa ocorrência de `gps_ausente`, grava `batida_lat/batida_lon=None` no contexto e envia push de supervisão; o catálogo nomeia esse módulo “Batida sem GPS”. (`app/ponto/services/geofence.py:309`, `app/ponto/services/geofence.py:322`, `app/ponto/services/geofence.py:327`, `app/ponto/services/geofence.py:335`, `app/ponto/services/geofence.py:369`, `app/chamados/catalogo/modulos.py:162`.)
+- Invocação posterior ao registro: API nas duas cascas chama `verificar_geofence`; web também o chama. (`app/api/views_core.py:809`, `app/api/views_core.py:811`, `app/api/views.py:809`, `app/api/views.py:811`, `app/ponto/services/triagem_batida.py:752`.)
+
+Leitores e tratamento de `NULL`:
+
+| Leitor | Comportamento comprovado |
+|---|---|
+| Detalhe/mapa do colaborador | Exclui latitude e longitude nulas antes de converter com `float`; conta separadamente batidas com geo e alertas `sem_gps`. (`app/colaboradores/services/detalhe.py:20`, `app/colaboradores/services/detalhe.py:22`, `app/colaboradores/services/detalhe.py:53`, `app/colaboradores/services/detalhe.py:67`, `app/colaboradores/services/detalhe.py:80`.) |
+| Fio do colaborador | Histórico e última geo incluem só batidas com ambas as coordenadas. (`app/chamados/views.py:692`, `app/chamados/views.py:693`, `app/chamados/views.py:694`.) |
+| Painel situacional/pino | Lote passa latitude, longitude e accuracy; pino com coordenada ausente retorna `sem_gps`, cinza. (`app/colaboradores/services/situacional.py:137`, `app/colaboradores/services/situacional.py:145`, `app/colaboradores/painel_cell.py:37`, `app/colaboradores/views.py:2474`, `app/colaboradores/views.py:2475`.) |
+| Drawer do colaborador | `tem_gps=bool(latitude and longitude)`. (`app/colaboradores/services/drawer.py:63`.) |
+| API de detalhe da batida / dashboard | Serializa nulos; JS mostra “Sem localizacao” e só cria mapa com ambas as coordenadas. (`app/core/views.py:1024`, `app/core/views.py:1025`, `app/templates/core/dashboard2.html:242`, `app/templates/core/dashboard2.html:246`, `app/templates/core/dashboard2.html:287`.) |
+| Painel operacional | Propaga `None` na ausência de coordenada; presença usa `PingGeo`, não a coordenada da batida. (`app/core/services/painel_op.py:215`, `app/core/services/painel_op.py:227`, `app/core/services/painel_op.py:228`, `app/ponto/presenca.py:53`, `app/ponto/presenca.py:64`.) |
+| Offline pendente | Conta sem GPS pela ausência de latitude; template mostra “Sem GPS”. (`app/ponto/views.py:485`, `app/ponto/views.py:486`, `app/templates/ponto/batidas_offline_pendentes.html:96`, `app/templates/ponto/batidas_offline_pendentes.html:100`.) |
+| Relatório geo do chamado | Mostra “Batida registrada SEM GPS” e “sem coordenada (GPS ausente)”; não cria link de mapa sem latitude. (`app/templates/chamados/partials/_relatorio_geo.html:18`, `app/templates/chamados/partials/_relatorio_geo.html:19`, `app/templates/chamados/partials/_relatorio_geo.html:30`, `app/templates/chamados/partials/_relatorio_geo.html:34`.) |
+| Alerta ainda válido | Sem coordenada continua válido; não tenta calcular distância. (`app/ponto/models.py:263`, `app/ponto/models.py:264`.) |
+| Reconciliação de alertas | Coordenada ausente entra em `sem_dado` e é pulada. Comando é sob demanda. (`app/ponto/management/commands/reconciliar_alertas_geofence.py:42`, `app/ponto/management/commands/reconciliar_alertas_geofence.py:44`, `app/config/crons.py:1452`.) |
+| Reconciliação de chamados geo | Filtra ocorrências sem coordenadas; se não sobra ocorrência, mantém chamado. Cron chama o comando com `--alarme`. (`app/ponto/services/geofence.py:403`, `app/ponto/services/geofence.py:405`, `app/ponto/management/commands/reconciliar_geofence.py:33`, `app/config/crons.py:486`.) |
+| Reconciliação de vínculo | Seleciona somente ambas as coordenadas presentes; sem batidas com geo retorna `None`, sem julgar. (`app/ponto/services/geofence.py:51`, `app/ponto/services/geofence.py:55`, `app/ponto/services/geofence.py:67`.) |
+| Detector de vínculo/lavra | Exclui latitude nula, mas não longitude nula; lê accuracy não nula. (`app/ponto/services/vinculo_na_lista.py:49`.) |
+
+**Quebra concreta identificada:** meia coordenada (`latitude` preenchida, `longitude=None`, `gps_accuracy` preenchida) passa pelo filtro do detector e chega a `float(lon)`, que recebe `None`. Com ambas as coordenadas nulas, essa batida é excluída pelo filtro. A mesma insuficiência existe para posto com apenas latitude: seleção e guarda só verificam latitude antes de converter longitude. Ocorrência desses dados em produção: [nao verificado]. (`app/ponto/services/vinculo_na_lista.py:47`, `app/ponto/services/vinculo_na_lista.py:49`, `app/ponto/services/vinculo_na_lista.py:55`, `app/ponto/services/vinculo_na_lista.py:56`, `app/ponto/services/vinculo_na_lista.py:65`, `app/ponto/services/vinculo_na_lista.py:75`.)
+
+AST dos Python de `app/relatorios` e `app/folha` não encontrou acesso por atributo a `latitude`, `longitude` ou `gps_accuracy`; a busca textual nos dois domínios e em `motor_calculo_v2.py`/`turnos.py` também não encontrou essas referências. Para o motor, os trechos examinados consomem timestamp/tipo das batidas; demonstração executada com banco de batidas sem geo: [nao verificado]. (`app/ponto/motor_calculo_v2.py:578`, `app/ponto/motor_calculo_v2.py:598`, `app/ponto/motor_calculo_v2.py:609`, `app/ponto/motor_calculo_v2.py:663`.)
+
+Testes que já preservam a semântica sem geo: [nao verificado]
+
+- Alerta sem GPS continua válido, sem remedição. (`app/ponto/tests/test_alerta_obsoleto.py:58`, `app/ponto/tests/test_alerta_obsoleto.py:63`.)
+- Batida sem GPS não julga nem fecha divergência de vínculo. (`app/ponto/tests/test_varredura_vinculo_evento.py:57`, `app/ponto/tests/test_varredura_vinculo_evento.py:64`.)
+- Pino sem coordenada fica cinza nos leitores. (`app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py:215`, `app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py:221`.)
+- O teste chamado `test_sem_gps_cria_alerta_sem_gps_e_chamado` hoje exige o contrário do nome: HTTP 403, `gps_obrigatorio` e nenhuma batida gravada. (`app/ponto/tests/test_batida_sideeffects.py:119`, `app/ponto/tests/test_batida_sideeffects.py:128`, `app/ponto/tests/test_batida_sideeffects.py:130`, `app/ponto/tests/test_batida_sideeffects.py:135`.)
 
 ## 10/11 11:13 · sessao 9617f2b74b15 · FIO-E0-V4-E4B · leitura · origem=Code
 
@@ -1005,324 +1253,4 @@ Sobre rc na volta 9b:
 
 Alvo 165, suíte inteira, integração Django e resultado de produção: **[nao verificado]**. [nao verificado]
 
-## 10/11 09:18 · sessao a5cd4764c1cf · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-Corrigi a caracterização para **FIO MUDO ⇒ rc 0**, mantendo contagem, impressão e nenhuma pergunta criada. O teste foi renomeado; a retratada agora exige explicitamente `deixou=1` antes de aceitar rc 2. [teste:132](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:132), [retratada:157](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:157). [nao verificado]
-
-Arquivos tocados, todos testes: [nao verificado]
-
-- [test_jv4a_disparar_vigia_da_celula.py:132](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:132): inversão e motivo da retratada.
-- [test_selo_emissor_fio_mudo.py:291](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_selo_emissor_fio_mudo.py:291): rc 2 condicionado à célula deixar 1.
-- [test_pergunta_do_dia_em_curso.py:194](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_pergunta_do_dia_em_curso.py:194): leitura explícita de pendência da célula.
-- [test_e4a2_matriz_memoria.py:41](/home/ronald/wt-codex-fio-e0-v4-e4a-2-091339/app/chamados/tests/test_e4a2_matriz_memoria.py:41): mutantes adicionais e conferência da impressão.
-
-A tabela usa caminhos relativos a `chamados/tests/`; linhas atuais:
-
-| Asserção | Origem do 2 | Ação |
-|---|---|---|
-| `test_jv4a_disparar_vigia_da_celula.py:83` | Célula deixou 1 | Mantida |
-| Mesmo arquivo`:90` | Limbo deixou 1 | Mantida |
-| Mesmo arquivo`:129` | Falta de pauta deixou 1 | Mantida |
-| Mesmo arquivo`:139` | FIO MUDO; célula deixou 0 | **Invertida para 0** |
-| Mesmo arquivo`:158` — antiga :157 | Retratada; célula `furo` deixou 1 | Mantida; motivo explicitado |
-| Mesmo arquivo`:167` | Limbo deixou 1, também FIO MUDO | Mantida |
-| `test_pergunta_do_dia_em_curso.py:135` | Célula deixou 2 | Mantida |
-| Mesmo arquivo`:163` | Células deixaram 2 ou 4 | Mantida |
-| Mesmo arquivo`:195` | Célula deixou 2 | Mantida; motivo explicitado |
-| Mesmo arquivo`:400` | Célula deixou quantidade positiva | Mantida; leitura fortalecida |
-| Mesmo arquivo`:404` | Célula deixou quantidade positiva | Mantida; motivo explicitado |
-| `test_selo_emissor_fio_mudo.py:292` | Célula deixou 1, também FIO MUDO | Mantida; motivo explicitado |
-| `test_selo_disparo_nao_cobra_desligado.py:118` | Célula deixou quantidade positiva | Mantida |
-| `test_e4a2_disparar_e_vigia.py:202` | Somente `alarme and celulas` | Mantida |
-| Mesmo arquivo`:330` | Célula deixou 1; também existe FIO MUDO | Mantida |
-| Mesmo arquivo`:117` | Erro de argumentos do parser | Mantida; não é retorno do vigia |
-| `test_e4a2_matriz_memoria.py:195` | Somente `alarme and celulas` | Mantida |
-| Mesmo arquivo`:64` | Erro de argumentos do parser | Mantida |
-
-A antiga :157 prepara `_celula(True)`, cujo padrão é `veredito='furo'`; portanto, não isola FIO MUDO. Agora o teste exige `deixou=1`, além de FIO MUDO 1 e nenhuma pergunta adicional. A execução ORM dessa explicação permanece **[nao verificado]**. `test_jv4a_disparar_vigia_da_celula.py:38,147,154-158`. [nao verificado]
-
-Os demais arquivos pedidos não exigem inversão: COLAB roda sem `--alarme`; F1 chama outro comando; nunca_bateu já exige retorno normal com e sem alarme. `test_colab_nao_vaza_fio_mudo.py:34,45,53`; `test_selo_f1_cego.py:75`; `test_e4a2_nunca_bateu.py:132-143`.
-
-Quem escreve o rc é `disparar_perguntas_competencia.py:238-242`: único `SystemExit(2)`, condicionado a `alarme and deixou`. Quem lê inclui os testes acima e `pipeline_placar.py:76-80`, que interpreta exit 2 como alarme de negócio. O placar lê FIO MUDO separadamente pelo ESTADO em `pipeline_placar.py:85-107,135`. O contrato informado de `bin/cron_run.sh:11`, aceitando 0 e 2 como elo feito, está **[nao verificado na copia]**.
-
-Execução local: **16 testes em memória passaram**, incluindo rejeição dos mutantes; isso não certifica a integração. Verificadores em `test_e4a2_matriz_memoria.py:171-208` e `test_e4a2_c5_memoria.py`. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4a2_matriz_memoria chamados.tests.test_e4a2_c5_memoria -v
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria fio_mudo_volta_a_rc_dois
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria celula_perde_rc_dois
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria fio_mudo_impresso_como_zero
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria vigia_escreve_pergunta
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria vigia_escreve_questionario
-```
-
-Não rodaram os módulos Django, o alvo 165 nem a suíte inteira: integração **[nao verificado]**. Ruff foi tentado com `PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache --config ruff.toml` nos quatro arquivos, mas o módulo está ausente; Ruff limpo **[nao verificado]**. [nao verificado]
-
-## 10/11 08:51 · sessao 46e2e0dfb3e1 · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-Cura aplicada: normalização única para pks, rc 0 para FIO MUDO/retidos e exclusão da pergunta viva antes dos dois contadores. O rc 2 do caminho da célula permanece. [disparar:72](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/management/commands/disparar_perguntas_competencia.py:72), [disparar:95](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/management/commands/disparar_perguntas_competencia.py:95), [disparar:238](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/management/commands/disparar_perguntas_competencia.py:238). [nao verificado]
-
-Arquivos tocados:
-
-- [disparar_perguntas_competencia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/management/commands/disparar_perguntas_competencia.py:24): cura e textos.
-- [test_e4a2_matriz_memoria.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:1): novo; matriz e oito mutantes.
-- [test_e4a2_nunca_bateu.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_nunca_bateu.py:121): provas ORM e mutante escritor.
-- [test_e4a2_disparar_e_vigia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_disparar_e_vigia.py:202): contrato de retorno atualizado.
-- [test_fio_mudo_placar.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/core/tests/test_fio_mudo_placar.py:295): filtro por `empresa_id`.
-
-As provas da matriz ficaram assim:
-
-| Linha | Prova |
-|---|---|
-| (a) Retido; C5 ausente produz `(1,0)`; nenhuma escrita | [teste:126](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:126) | [nao verificado]
-| (b) Alvo; nenhuma escrita; placar vermelho | [teste:138](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:138), [teste:160](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:160) | [nao verificado]
-| (c) Pergunta viva exclui ambos, inclusive `nunca_bateu` | [teste:143](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:143) | [nao verificado]
-| (d) Encerrado fica fora; teste da tranca real entregue | [memória:152](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:152), [ORM:163](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_nunca_bateu.py:163). Execução ORM: [nao verificado] | [nao verificado]
-
-Os testes de fronteira, retorno e precedência da pergunta viva falharam antes das respectivas curas. Após as curas, os **16 testes sem banco passaram**, incluindo os oito mutantes com controle verde e captura da asserção pretendida. [testes:121](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:121), [testes:167](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:167), [mutantes:191](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:191). [nao verificado]
-
-Contrato de saída:
-
-1. Fora de `JUIZES_POR_VARREDURA` e parser rejeitando `--apply`: [teste:51](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:51). [nao verificado]
-2. `fio_mudo_alvos` no ESTADO, comparado pelo placar: [teste:160](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:160). [nao verificado]
-3. Retidos publicados/comparados e fronteira passando pks: [publicação:138](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_c5_memoria.py:138), [fronteira:121](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:121). [nao verificado]
-4. Selo executado: **OK**, com exceções vazias. [lista:305](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/bin/tests/test_papel_prazo_nao_deriva.sh:305), [saída:416](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/bin/tests/test_papel_prazo_nao_deriva.sh:416).
-5. Alvo de módulos e suíte inteira: **[nao verificado]**. [nao verificado]
-6. Produção: **[nao verificado]**; ALVOS 0 é o dado fornecido no briefing.
-
-Quem escreve e quem lê:
-
-| Campo | Escritor → leitor; significado |
-|---|---|
-| `empresas` | `vigiar_fio_morto.py:160` fornece objetos; `disparar_perguntas_competencia.py:72` normaliza uma vez → filtro `:91` e C5 em `cadastro_realidade.py:177`. São **pks de Empresa**. |
-| `fio_mudo_alvos` | `disparar_perguntas_competencia.py:136` calcula → `vigiar_fio_morto.py:233,241` carimba → `pipeline_placar.py:85,135` compara. Unidade: alvos `(colab,dia,motivo)`. |
-| `nunca_bateu_sem_adesao` | `disparar_perguntas_competencia.py:49` calcula pares/esperado C5 → `vigiar_fio_morto.py:234,241` → `pipeline_placar.py:136`. Unidade: pares `(colab,dia)`. |
-| Totais C5, diagnóstico e universo | `disparar_perguntas_competencia.py:51` → relatório `:204` e bloco integral em `vigiar_fio_morto.py:242`; totais informativos. |
-| Pergunta viva | Escritor existente em `fabrica_da_celula.py:160` → leitura em `disparar_perguntas_competencia.py:96`; encerra a seleção. |
-
-A divergência objeto/pk estava na entrada da C5 e foi corrigida. O dia contado continua sendo `celula.data`; `hoje` do carimbo é civil local. O placar compara a fotografia desse dia, enquanto `bin/fio_estado.py:125` compara os esperados publicados. O raspador de `bin/placar_code.sh:390` continua lendo exclusivamente `FABRICA-POR-EVENTO`. [seleção:86](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/management/commands/disparar_perguntas_competencia.py:86), [carimbo:230](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/management/commands/vigiar_fio_morto.py:230), [placar:94](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/core/management/commands/pipeline_placar.py:94).
-
-Comandos executáveis das provas e de cada mutante, definidos em [matriz:24](/home/ronald/wt-codex-fio-e0-v4-e4a-2-083750/app/chamados/tests/test_e4a2_matriz_memoria.py:24):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  chamados.tests.test_e4a2_c5_memoria \
-  chamados.tests.test_e4a2_matriz_memoria -v
-
-PYTHONDONTWRITEBYTECODE=1 bash ../bin/tests/test_papel_prazo_nao_deriva.sh
-
-for mutante in \
-  fronteira_repassa_empresa contador_nao_compara_c5 \
-  vigia_escreve_pergunta vigia_escreve_questionario \
-  placar_ignora_fio_mudo fio_mudo_volta_a_rc_dois \
-  pergunta_viva_vira_alvo chamado_encerrado_vira_alvo
-do
-  PYTHONDONTWRITEBYTECODE=1 python3 -m \
-    chamados.tests.test_e4a2_matriz_memoria "$mutante" || exit
-done
-```
-
-Para a sessão, a lista de módulos tocados/afetados é:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_o261_vigia_fio \
-  chamados.tests.test_snc2_toque_em_lote \
-  chamados.tests.test_e4a2_nunca_bateu \
-  chamados.tests.test_e4a2_disparar_e_vigia \
-  chamados.tests.test_e4a2_c5_memoria \
-  chamados.tests.test_e4a2_matriz_memoria \
-  chamados.tests.test_selo_emissor_fio_mudo \
-  core.tests.test_fio_mudo_placar \
-  --settings=config.settings.ci -v 2
-```
-
-Essa execução ORM, a suíte completa e a integração real da tranca permanecem **[nao verificado]**. Ruff também não executou: `No module named ruff`; Django/freezegun estão ausentes neste Python **[nao verificado por arquivo]**. A certificação permanece com a sessão e o opus final. [nao verificado]
-
-## 10/11 08:50 · sessao a8a93123d0a6 · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · verificador · origem=Code
-
-**A cura é parcial.** A gramática foi unificada e o mutante de espaço tem mordida; permanecem perda do diagnóstico da recusa, uma origem real omitida pelo censo e incompatibilidade com chaves antigas. Há também um contraexemplo à equivalência geral entre emissão e guarda. (`app/pautas/marcadores.py:31`, `app/pautas/tests/mutar_prefixos_reservados.py:132`, `app/core/esteira_vigia.py:936`, `app/core/esteira_vigia.py:1424`, `app/core/management/commands/alarme_esteira.py:62`)
-
-1. **Achados PROCEDENTES da triagem, um por um**
-
-   **A — duas gramáticas: curado quanto à fonte única.** `CHAVE_ESTEIRA` define a linguagem; `chave_esteira_valida` usa essa expressão; a reserva deriva dela. Comando e leitor usam o mesmo predicado, e a guarda humana consome o padrão derivado. Assim, `a b` e `:a` são recusadas antes de consultar, escrever ou fechar. (`app/pautas/marcadores.py:31`, `app/pautas/marcadores.py:34`, `app/pautas/marcadores.py:40`, `app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:34`, `app/pautas/services.py:47`)
-
-   **A — preservação dos emissores reais: não demonstrada integralmente.** A fila admite diretório com espaço, e emissores concatenam seu basename sem validação; portanto o código pode formar `fatia:a b`, agora recusada. Os basenames do censo são amostras sintéticas sem whitespace. Existência desse caso em produção: **[nao verificado]**. (`app/core/esteira_vigia.py:119`, `app/core/esteira_vigia.py:121`, `app/core/esteira_vigia.py:412`, `app/pautas/tests/test_prefixos_reservados_esteira.py:135`)
-
-   **B — ausência de teste de equivalência/mutante: curado para o caso apontado, incompleto como propriedade geral.** O teste executa o corpo do comando, captura o texto e aplica a guarda real; o mutante libera espaço no emissor. Reexecutado nesta sessão: **11 falhas, zero erros**. Porém a seleção de entradas não cobre todo valor aceito, conforme o contraexemplo de tamanho abaixo. (`app/pautas/tests/test_prefixos_reservados.py:288`, `app/pautas/tests/test_prefixos_reservados.py:297`, `app/pautas/tests/mutar_prefixos_reservados.py:132`, `app/pautas/tests/mutar_prefixos_reservados.py:235`)
-
-2. **ESTEIRA: quem escreve, quem lê e compatibilidade**
-
-   As origens das chaves são:
-
-   | Origem | Chaves e encaminhamento |
-   |---|---|
-   | `decidir` | Famílias por fatia/basename e alarmes fixos; acrescenta ações e registra a chave na memória. (`app/core/esteira_vigia.py:402`, `app/core/esteira_vigia.py:412`, `app/core/esteira_vigia.py:461`, `app/core/esteira_vigia.py:557`, `app/core/esteira_vigia.py:592`) |
-   | Emissores diretos | `relance:…`, `quarentena:zumbido:…`, `quarentena:prazo`, `quarentena:deposito`, `auto_revert`, `quarentena`, `arvore:vermelho`. (`app/core/esteira_vigia.py:992`, `app/core/esteira_vigia.py:1212`, `app/core/esteira_vigia.py:1274`, `app/core/esteira_vigia.py:1277`, `app/core/esteira_vigia.py:1307`, `app/core/esteira_vigia.py:1364`, `app/core/esteira_vigia.py:1371`) |
-   | `autocura` | `arvore:import` e `arvore:json`, incorporadas às ações de `passada`. (`app/core/esteira_vigia.py:1424`, `app/core/esteira_vigia.py:1427`, `app/core/esteira_vigia.py:1542`) |
-   | Transporte e escrita | `passada` envia motivo/resolver; `_pauta` chama `alarme_esteira`; o comando escreve `ESTEIRA <chave>: <texto>` por `services.escrever`. (`app/core/esteira_vigia.py:1603`, `app/core/esteira_vigia.py:1608`, `app/core/esteira_vigia.py:936`, `app/core/management/commands/alarme_esteira.py:60`) |
-
-   **Leitores:** `handle` escolhe motivo/resolver e valida; `pauta_viva` valida e procura a primeira viva por prefixo textual; resolver fecha essa pauta; a guarda humana reconhece a reserva derivada. (`app/core/management/commands/alarme_esteira.py:30`, `app/core/management/commands/alarme_esteira.py:18`, `app/core/management/commands/alarme_esteira.py:41`, `app/pautas/services.py:47`)
-
-   **Toda chave formável passa? Não.** Além do basename com espaço, o próprio teste demonstra que um caminho de teste com espaço é preservado em `sem-commit:<arquivo>` e produz chave recusada. O censo dos arquivos presentes não prova restrição dos futuros insumos externos. (`app/pautas/tests/test_prefixos_reservados_esteira.py:180`, `app/pautas/tests/test_prefixos_reservados_esteira.py:194`, `app/pautas/tests/test_prefixos_reservados_esteira.py:135`)
-
-   **Algo anteriormente aceito passa a ser recusado? Sim, no contrato do comando:** chaves com whitespace ou `:` inicial antes aceitas pelo fluxo fornecido agora encontram a rejeição explícita. Perda efetiva de alarme em produção: **[nao verificado]**. (`app/core/management/commands/alarme_esteira.py:34`; comportamento anterior: `diff_v45_delta.patch` fornecido, **[nao verificado]** na árvore Git)
-
-   **A recusa perde seu diagnóstico no caminho real.** O comando escreve stderr e retorna normalmente; `_pauta` captura stdout/stderr e descarta o resultado. Os relatos posteriores registram a ação presumida, sem confirmar que uma Pauta nasceu. Há rastro da tentativa em alguns caminhos, mas nenhum rastro próprio da rejeição nesse transporte. (`app/core/management/commands/alarme_esteira.py:35`, `app/core/esteira_vigia.py:936`, `app/core/esteira_vigia.py:1215`, `app/core/esteira_vigia.py:1604`)
-
-   Isso pode persistir: `decidir.alarme` registra a chave **antes** do envio; um alarme sem repetição periódica pode permanecer deduplicado mesmo sem Pauta criada. (`app/core/esteira_vigia.py:403`, `app/core/esteira_vigia.py:406`, `app/core/esteira_vigia.py:412`)
-
-   **Contraexemplo adicional:** uma chave de **472 letras** passa na gramática. Com os oito caracteres de `ESTEIRA `, o corte `[:480]` remove o delimitador `:`. O texto resultante passa pela guarda e não casa com o prefixo completo procurado pelo leitor. Reproduzi em memória; o teste explícito de comprimento usa apenas 460 letras. Ocorrência em produção: **[nao verificado]**. (`app/pautas/marcadores.py:31`, `app/core/management/commands/alarme_esteira.py:62`, `app/core/management/commands/alarme_esteira.py:18`, `app/pautas/services.py:47`, `app/pautas/tests/test_prefixos_reservados.py:274`)
-
-3. **Consumidores de `sem-commit:<arquivo>` e chave antiga** [nao verificado]
-
-   O rótulo agrupa os testes por dono e é propagado para `quem`, motivo `dono=…`, chave `quarentena:zumbido:…`, prosa da Pauta, relato e retorno. (`app/core/esteira_vigia.py:1174`, `app/core/esteira_vigia.py:1205`, `app/core/esteira_vigia.py:1211`, `app/core/esteira_vigia.py:1212`, `app/core/esteira_vigia.py:1215`, `app/core/esteira_vigia.py:1219`)
-
-   - **JSON:** `quarentenar` grava `quem` e motivo como valores; leitor desse JSON não foi identificado na cópia. Leitores externos: **[nao verificado]**. (`app/core/esteira_vigia.py:1243`, `app/core/esteira_vigia.py:1245`)
-   - **Lista:** o motivo é limitado a 120 caracteres; o parser interpreta ID/prazo e conserva o restante como texto. Runner e integrador consultam IDs, sem casar o formato do dono. (`app/core/esteira_vigia.py:1098`, `app/core/quarentena_lista.py:19`, `app/core/quarentena_lista.py:21`, `app/core/runner_quarentena.py:36`, `app/core/integrador_lote.py:780`)
-   - **Relato:** recebe e insere a linha sem interpretar o rótulo. (`app/core/esteira_vigia.py:1215`, `app/core/esteira_vigia.py:895`, `app/core/esteira_vigia.py:903`)
-
-   Não identifiquei consumidor operacional que case `sem commit (`; a forma antiga permanece como mutante. Ausência de consumidores fora da cópia: **[nao verificado]**. (`app/pautas/tests/mutar_prefixos_reservados.py:139`)
-
-   **Se existir uma Pauta antiga, ela fica inacessível por esses dois caminhos:** a chave nova procura outro prefixo; `--resolver` com a chave antiga é recusado pelo espaço antes da consulta. Sua existência em produção é **[nao verificado]**. (`app/core/esteira_vigia.py:1174`, `app/core/esteira_vigia.py:1212`, `app/core/management/commands/alarme_esteira.py:18`, `app/core/management/commands/alarme_esteira.py:34`)
-
-   Não atribuir isso a uma nova quebra de fechamento automático do zumbido: no fluxo examinado, retirar testes da quarentena já não resolve a Pauta correspondente. (`app/core/esteira_vigia.py:1260`, `app/core/esteira_vigia.py:1274`)
-
-4. **O censo AST é fechado? Morde código real?**
-
-   **Para nova chamada direta `_pauta([...])`, sim:** exige assinatura/lista/opção conhecidas e compara função, opção, expressão e multiplicidade por `Counter`. Nova chamada direta, mesmo válida ou duplicada, exige atualização explícita. (`app/pautas/tests/test_prefixos_reservados_esteira.py:61`, `app/pautas/tests/test_prefixos_reservados_esteira.py:95`, `app/pautas/tests/test_prefixos_reservados_esteira.py:128`, `app/pautas/tests/test_prefixos_reservados_esteira.py:231`)
-
-   **Para todas as origens reais de chaves, não.** `autocura` produz alarmes reais, mas as entradas usadas para testar `a[1]` de `passada` vêm somente de `decidir`. (`app/core/esteira_vigia.py:1424`, `app/core/esteira_vigia.py:1427`, `app/core/esteira_vigia.py:1542`, `app/pautas/tests/test_prefixos_reservados_esteira.py:132`, `app/pautas/tests/test_prefixos_reservados_esteira.py:147`)
-
-   Confirmei a fuga em memória: trocar `arvore:import` por **`arvore import`** manteve `rodar_porta` verde: **16 testes, zero falhas e zero erros**. Portanto uma chave inválida pode surgir numa origem real sem o selo acusar. (`app/core/esteira_vigia.py:1424`, `app/pautas/tests/mutar_prefixos_reservados.py:30`, `app/pautas/tests/test_prefixos_reservados_esteira.py:147`)
-
-   **São corpos reais com limites substituídos:** comando/leitor são compilados da AST real; catálogo e guarda são reais. Entretanto imports de topo são removidos, nomes são injetados, e BaseCommand/ORM/persistência são duplos. As expressões de `decidir` são avaliadas com entradas sintéticas, sem executar seus ramos. Isso prova regras e argumentos, não ligação real dos imports, CLI ou banco. (`app/pautas/tests/test_prefixos_reservados.py:28`, `app/pautas/tests/test_prefixos_reservados.py:233`, `app/pautas/tests/test_prefixos_reservados.py:237`, `app/pautas/tests/test_prefixos_reservados.py:259`, `app/pautas/tests/test_prefixos_reservados_esteira.py:135`)
-
-   **O mutante de espaço pedido morde**, mas sua morte não elimina a fuga de `autocura`. (`app/pautas/tests/mutar_prefixos_reservados.py:132`, `app/pautas/tests/test_prefixos_reservados.py:307`, `app/pautas/tests/test_prefixos_reservados_esteira.py:147`)
-
-5. **Mudança de `test_selo_zumbido_quarentena`**
-
-   **Preserva a mordida declarada:** executa `passada(dry=True, agora=T0)` real e exige `curar_zumbido(T0, True)` somente para árvore vermelha. (`app/core/tests/test_selo_zumbido_quarentena.py:135`, `app/core/tests/test_selo_zumbido_quarentena.py:138`, `app/core/esteira_vigia.py:1552`)
-
-   **Reduz a execução da costura do host:** `_ultima_atividade`, leitura de EVENTOS/SLOTS e existência de SLOTS agora são substituídas. A fila já é vazia e a própria cura continua mockada nessa classe; portanto esse teste não certifica tais leituras nem seus efeitos. (`app/core/tests/test_selo_zumbido_quarentena.py:125`, `app/core/tests/test_selo_zumbido_quarentena.py:126`, `app/core/tests/test_selo_zumbido_quarentena.py:134`, `app/core/esteira_vigia.py:704`, `app/core/esteira_vigia.py:1529`, `app/core/esteira_vigia.py:1532`)
-
-   `CuraTest` continua executando separadamente a cura real com bordas substituídas. A troca da classe-base está explícita; equivalência completa das proteções de infraestrutura de `SimpleTestCase` e `unittest.TestCase`: **[nao verificado]**. (`app/core/tests/test_selo_zumbido_quarentena.py:12`, `app/core/tests/test_selo_zumbido_quarentena.py:81`, `app/core/tests/test_selo_zumbido_quarentena.py:94`)
-
-6. **Classes que já reprovaram obra**
-
-   - **Segundo juiz:** não identificado nos caminhos alterados. O juiz de entrega ao DP continua registrado e chamado pelo escritor após a trava; a guarda humana decide outra pergunta. (`app/core/juizes.py:293`, `app/chamados/services/fabrica_da_celula.py:308`, `app/chamados/services/fabrica_da_celula.py:355`, `app/chamados/services/fabrica_da_celula.py:358`, `app/pautas/services.py:40`)
-   - **Segundo escritor fora da porta:** não identificado nesses caminhos; os emissores seguem chamando `services.escrever`. (`app/chamados/services/fabrica_da_celula.py:360`, `app/core/management/commands/alarme_esteira.py:60`, `app/pautas/services.py:197`)
-   - **Relógio fora da borda:** não introduzido nos predicados novos; a data é lida no comando. Ausência universal na obra: **[nao verificado]**. (`app/pautas/marcadores.py:34`, `app/pautas/services.py:40`, `app/core/management/commands/alarme_esteira.py:56`)
-   - **Derivação paralela:** curada para a gramática ESTEIRA nos três consumidores examinados. (`app/pautas/marcadores.py:40`, `app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:34`, `app/pautas/services.py:47`)
-   - **Selo sem mordida:** há mordida no defeito de espaço, porém o fechamento alegado é incompleto por omitir `autocura`. (`app/pautas/tests/mutar_prefixos_reservados.py:132`, `app/core/esteira_vigia.py:1424`, `app/pautas/tests/test_prefixos_reservados_esteira.py:147`)
-   - **ESMERIL-SEMANTICA: presente e preexistente.** O mesmo `texto` guarda prosa e identidade; o esmeril extrai a ação dele. Em ESTEIRA, isso também permite que a busca por `a` case uma Pauta de `a:b`, podendo suprimir abertura ou fechar outra chave. (`app/pautas/models.py:89`, `app/ponto/services/pautas_do_esmeril.py:50`, `app/ponto/services/pautas_do_esmeril.py:67`, `app/pautas/marcadores.py:31`, `app/core/management/commands/alarme_esteira.py:18`, `app/core/management/commands/alarme_esteira.py:41`, `app/core/management/commands/alarme_esteira.py:44`)
-
-Reexecução local: **41 testes, resultado OK com um skip explícito de integração Django**; essa execução não certifica HTTP/banco, produção ou a árvore futura do merge. (`app/pautas/tests/test_prefixos_reservados.py:358`; produção e merge: **[nao verificado]**)
-
-## 10/11 08:48 · sessao 9893d15b7198 · - · - · origem=Ronald (tmux)
-
-Q4: **fechado para novas chamadas diretas `_pauta([...])`, mas incompleto para todas as origens reais de chaves**. O varredor reconhece `ast.Name('_pauta')`, exige lista/uma opção e compara `Counter` por função, opção, expressão e multiplicidade; nova chamada direta, inclusive duplicada/válida, fica vermelha. Referências: `app/pautas/tests/test_prefixos_reservados_esteira.py:61`, `:95`, `:128`, `:231`.
-
-Existe origem real omitida: `autocura` emite `arvore:import` e `arvore:json`, acrescentadas às ações em `passada`; o censo de `a[1]` só alimenta valores gerados de `decidir`. Referências: `app/core/esteira_vigia.py:1424`, `:1427`, `:1542`; `app/pautas/tests/test_prefixos_reservados_esteira.py:132`, `:147`.
-
-Comprovei em memória, sem criar arquivos, substituindo apenas `'arvore:import'` por `'arvore import'`: `rodar_porta` continuou com **16 testes, zero falhas, zero erros**, e o censo continuou com 2515 valores. A deficiência decorre dos caminhos acima; execução adicional sem artefato persistido: [nao verificado] como evidência arquivada. Esse mutante não consta da lista de mutantes, que cobre alterações em `_pauta`/`decidir`: `app/pautas/tests/mutar_prefixos_reservados.py:146`.
-
-O mutante pedido **morde**: `esteira_emissor_aceita_chave_com_espaco` altera o corpo real do comando e produziu **11 falhas, zero erros**, repetindo o anexo. Referências da construção/aplicação/critério: `app/pautas/tests/mutar_prefixos_reservados.py:132`, `:30`, `:235`; asserções: `app/pautas/tests/test_prefixos_reservados.py:297`, `:307`, `:319`. Execução adicional sem artefato persistido: [nao verificado] como evidência arquivada.
-
-São corpos reais, com limites substituídos: comando/leitor compilados da AST real, catálogo real, `curar_zumbido`/`quarentenar` reais; ORM, subprocessos, persistência e BaseCommand são duplos. Referências: `app/pautas/tests/test_prefixos_reservados.py:233`, `:234`, `:237`, `:244`, `:259`; `app/pautas/tests/test_prefixos_reservados_esteira.py:21`, `:196`, `:223`. As emissões de `decidir` são expressões reais avaliadas com valores sintéticos, sem executar seus ramos: `app/pautas/tests/test_prefixos_reservados_esteira.py:135`. Imports de topo do alarme são removidos e nomes são injetados; sua ligação real não fica certificada: `app/pautas/tests/test_prefixos_reservados.py:234`, `:260`.
-
-Q5: **a mordida declarada da costura permanece**: executa `passada(dry=True, agora=T0)` real e exige `curar_zumbido(T0, True)` somente com árvore vermelha. Referências: `app/core/tests/test_selo_zumbido_quarentena.py:124`, `:138`; condição real: `app/core/esteira_vigia.py:1552`.
-
-Perde execução incidental de `_ultima_atividade` e das leituras reais de EVENTOS/SLOTS/`exists(SLOTS)`, agora substituídas; logo não prova toda a costura do host. Referências: `app/core/tests/test_selo_zumbido_quarentena.py:126`; `app/core/esteira_vigia.py:704`, `:1529`, `:1532`. A fila já é vazia e a cura permanece mockada nesse teste: `app/core/tests/test_selo_zumbido_quarentena.py:125`, `:134`. `CuraTest` continua exercitando separadamente `curar_zumbido` real com limites substituídos: `app/core/tests/test_selo_zumbido_quarentena.py:81`, `:94`.
-
-A mudança para unittest está explícita e mantém as quatro classes coletáveis: `app/core/tests/test_selo_zumbido_quarentena.py:12`, `:25`, `:60`, `:78`, `:121`. A proteção adicional contra acessos acidentais a banco antes fornecida pelo `SimpleTestCase` não é demonstrável pela cópia da dependência: [nao verificado]. Reexecutei os 11 testes core, todos verdes; não arquivei saída por restrição de somente leitura: [nao verificado] como evidência persistida.
-
-## 10/11 08:47 · sessao 439b841d9483 · O169-FECHADA · verificador · origem=Code
-
-1. **A: nenhuma via conhecida excluída continua como “desconhecida”.** O mapa cobre todas as vias de `VIAS_ENCERRAMENTO` diferentes de RECONCILIAR; `''` e `None` têm rótulos próprios. RECONCILIAR pertence ao universo contado. ([motor.py:93](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/catalogo/motor.py:93), [cluster_espurio.py:110](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:110), [cluster_espurio.py:126](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:126))
-
-| Via | Comparação com o escritor real |
-|---|---|
-| ENCERRAR | O gate documenta desligamento **e ajuste retroativo**, e grava a via correspondente. A omissão apontada foi corrigida. ([models.py:1605](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:1605), [models.py:1619](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:1619)) |
-| CANCELAR | O texto corresponde ao descarte de chamado vivo descrito pelo gate. Porém, o backfill também grava essa via apenas por encontrar status cancelado com via vazia; não comprova o motivo histórico. ([models.py:773](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:773), [0039_a3_via_backfill.py:25](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/migrations/0039_a3_via_backfill.py:25)) |
-| SUPERAR | Corresponde ao escritor remanescente: duplicata cancelada, irmão único do mesmo colaborador/data, gravação de `superado` e sua FK. O gate atual foi removido. ([0039_a3_via_backfill.py:15](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/migrations/0039_a3_via_backfill.py:15), [models.py:794](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:794)) |
-| VIA_LEGADO | Corresponde aos terminais que permaneceram sem via após as derivações do backfill. ([0039_a3_via_backfill.py:28](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/migrations/0039_a3_via_backfill.py:28)) |
-| TRANSICAO_HUMANA | `transicionar → _aplicar → _gravar_estado` grava essa via. O backfill também atribui `admin` por respondente não sistêmico; a via não prova passagem histórica por `transicionar`. ([models.py:199](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:199), [models.py:450](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:450), [0039_a3_via_backfill.py:26](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/migrations/0039_a3_via_backfill.py:26)) |
-| Competência trancada | O gate específico grava `VIA_COMPETENCIA_TRANCADA` pelo núcleo. ([models.py:1622](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:1622), [models.py:1639](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/models.py:1639)) |
-
-**Ressalva semântica:** ENCERRAR também atende outros usos globais, como substituição de aceite de escala; portanto seu rótulo não esgota todos os chamadores do gate. Isso não demonstra registro de cluster mal rotulado no dado fornecido. ([vinculo.py:384](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/colaboradores/services/vinculo.py:384); ocorrência no cluster: **[nao verificado]**)
-
-**JSON:** `None` e `''` não causam exceção no `json.dumps` atual. Contudo, `None` vira chave textual `"null"`: uma via desconhecida literal `'null'` colide com ela na serialização, inclusive nos rótulos. Reproduzido em memória; ocorrência dessa via e consumidor externo afetado: **[nao verificado]**. ([cluster_espurio.py:142](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:142), [cluster_espurio.py:145](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:145), [detectar_cluster_espurio.py:63](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:63))
-
-2. **B: os três mutantes morrem pelas asserções pretendidas.** O carregador compila a fonte real; serviço/comando são carregados inteiros, com ORM e ambiente substituídos por dublês. ([test_o169_cluster_encerrado_sem_lastro.py:31](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:31), [test_o169_cluster_encerrado_sem_lastro.py:104](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:104))
-
-| Mutante | Falha observada |
-|---|---|
-| FK cruzada | `1 != 0` e `0 != 1` na asserção de `numero`, usando assinaturas opostas nas células cruzada/correta. ([teste:299](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:299), [teste:302](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:302)) |
-| Consulta por par | `9 != 3` na contagem de consultas; a asserção anterior de `numero` passa. Consultas vazias também entram na contagem. ([teste:83](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:83), [teste:315](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:315), [teste:316](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:316)) |
-| Rótulos trocados | Falha na igualdade exata de `excluidos`, mesmo sem ocorrências. ([teste:233](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233), [teste:247](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:247)) |
-
-Na execução local: **61 testes OK, incluindo os 35 mutantes; nenhum listado sobreviveu**. O harness exige alvo único, rejeita erros de infraestrutura e exige falha de asserção. Isso não certifica SQL real nem produção. ([test_o169_cluster_encerrado_mutantes.py:135](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:135), [mutantes:141](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:141), [contrato:7](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:7))
-
-3. **Quem escreve e quem lê:**
-
-| Campo | Escritor em memória | Leitores encontrados |
-|---|---|---|
-| `excluidos` | Catálogo de motivos, inclusive sem ocorrências. ([cluster:126](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:126)) | JSON integral e contrato de rótulo exato. ([comando:63](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:63), [teste:247](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:247)) |
-| `fora_do_universo` | Quantidade observada por via, dentro do filtro de módulo/status/colaborador. ([cluster:106](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:106)) | JSON e contratos de contagem. ([comando:63](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:63), [teste:222](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:222)) |
-| `numero` | Soma **por chamado**, quando o par tem assinatura viva. ([cluster:125](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:125)) | JSON, decisão/mensagem do alarme e contratos. ([comando:63](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:63), [comando:70](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:70), [teste:348](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:348)) |
-| `esperado` | Constante zero. ([cluster:146](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:146)) | JSON e comparação `numero != esperado`; teste injeta `esperado=1` para provar a comparação. ([comando:70](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:70), [teste:416](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:416)) |
-
-Não identifiquei leitor atribuindo outro significado a esses campos. Atenção: `fora_do_universo` **não é censo de todos os terminais**: `ENCERRADOS` contém somente resolvido/fechado; status cancelado/superado ficam fora também dessa seleção. ([motor.py:30](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/chamados/catalogo/motor.py:30), [cluster:106](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:106))
-
-4. **Regressão numérica no delta: não.** O delta fornecido altera rótulos/importação e testes; preserva seleção, dia, guarda de FK, agrupamento, soma e `esperado=0`. Portanto não muda quem entra em `numero`. Impacto quantitativo em produção: **[nao verificado]**. ([cluster_espurio.py:106](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:106), [cluster_espurio.py:125](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:125), [cluster_espurio.py:146](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:146))
-
-5. **Classes anteriores, no diff da obra:**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz | Não identificado: usa `dia_do_fato` e o predicado existente `_leitura_da_celula`. ([cluster:102](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:102), [cluster:113](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:113), [cluster:125](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:125)) |
-| Segundo escritor fora da porta | Não identificado: contador só consulta; APPLY usa `reconciliar_colab`; alarme desabilita APPLY. ([cluster:109](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:109), [comando:39](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:39), [comando:51](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:51)) |
-| Relógio fora da borda | Não introduzido: leitura permanece no `handle`; contador não depende de hoje. ([comando:40](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:40), [cluster:88](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:88)) |
-| Derivação paralela | Não identificada: assinatura vem da leitura existente da célula, sem remontar grade. ([cluster:15](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:15), [cluster:125](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:125)) |
-| Selo sem mordida | Os três apontados agora mordem; nenhum dos 35 listados sobreviveu. RED histórico anterior à cura: **[nao verificado]**. ([mutantes:63](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:63), [mutantes:141](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:141)) |
-| Campo com dois significados | Não identificado nos leitores encontrados; permanece a ressalva de colisão das chaves no JSON descrita em A. ([cluster:146](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/services/cluster_espurio.py:146), [comando:63](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:63), [comando:70](/home/ronald/codex_ws/778aa33deaad9f8b780689d1d3fe5994ae240581/app/ponto/management/commands/detectar_cluster_espurio.py:70)) |
-
-## 10/11 08:47 · sessao 630ba9818bbe · - · - · origem=Ronald (tmux)
-
-- **Triagem A curada nos três pontos:** gramática definida em `app/pautas/marcadores.py:31`, predicado em `:34`, reserva derivada em `:40`; comando e leitor chamam esse predicado em `app/core/management/commands/alarme_esteira.py:34` e `:15`; guarda usa o padrão do catálogo em `app/pautas/services.py:47`.
-
-- **Triagem B ganhou mordida concreta:** teste executa comando e aplica guarda ao texto capturado em `app/pautas/tests/test_prefixos_reservados.py:288` e `:297`; mutante permite espaço no emissor em `app/pautas/tests/mutar_prefixos_reservados.py:133`; morte exige falha sem erro de infraestrutura em `:237`. Execução nesta exploração: [nao verificado].
-
-- **Segundo juiz/escritor não aparece nos caminhos examinados:** pergunta de cadastro permanece registrada em `app/core/juizes.py:293`; juiz continua em `app/chamados/services/fabrica_da_celula.py:308`; escritor segue trava → juiz → `pautas.services.escrever` em `:355`, `:358`, `:360`. Guarda de texto decide outra pergunta em `app/pautas/services.py:40`. Selo antigo foi adaptado para permitir declaração no catálogo e barrar uso operacional fora dos sítios em `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:160` e `:279`.
-
-- **Relógio:** predicados novos não leem relógio, conforme seus corpos em `app/pautas/marcadores.py:34` e `app/pautas/services.py:40`; `timezone.localdate()` está na borda do comando em `app/core/management/commands/alarme_esteira.py:56`, preexistente conforme diff fornecido. Ausência universal de leitura fora da borda: [nao verificado].
-
-- **ESMERIL-SEMANTICA permanece:** `Pauta.texto` é o campo de prosa em `app/pautas/models.py:89`; escritor embute ação em `app/ponto/services/pautas_do_esmeril.py:50`; leitor usa esse mesmo texto como identidade e extrai a ação em `:66` e `:67`.
-
-- **Problema adicional de identidade textual permanece em ESTEIRA:** gramática aceita `a` e `a:b` em `app/pautas/marcadores.py:31`; leitor para `a` busca prefixo `ESTEIRA a:` e também casa `ESTEIRA a:b: …` em `app/core/management/commands/alarme_esteira.py:18`. Portanto pode suprimir abertura em `:44`–`:47` ou fechar pauta de chave mais longa em `:39`–`:41`. O mecanismo é preexistente no leitor dado; ocorrência em produção: [nao verificado].
-
-## 10/11 08:47 · sessao 5ba882585d0a · - · - · origem=Ronald (tmux)
-
-Achados para as questões 2–3:
-
-- **Gramática única está implementada:** `[^\s:]\S*`, sem limite de tamanho; predicado por `re.fullmatch`; reserva derivada da mesma expressão. Comando e leitor chamam o predicado. A guarda humana usa `PADROES_RESERVADOS`. (`app/pautas/marcadores.py:31`, `app/pautas/marcadores.py:34`, `app/pautas/marcadores.py:40`, `app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:34`, `app/pautas/services.py:47`.)
-
-- **Quem escreve:** `decidir` produz `fatia`, `gate`, `limite`, `pronta_fora_da_fila`, `pausa_sem_dono`, `teto_morto`, `trava_a_vazia`, `repete`, `vigia_sem_efeito`; `passada` encaminha motivo/resolver. Outros emissores produzem `relance`, `quarentena:zumbido:<dono>`, `quarentena:prazo`, `quarentena:deposito`, `auto_revert`, `quarentena`, `arvore:vermelho`. (`app/core/esteira_vigia.py:412`, `:426`, `:431`, `:461`, `:483`, `:495`, `:532`, `:557`, `:592`, `:1603`, `:1608`, `:992`, `:1212`, `:1274`, `:1277`, `:1307`, `:1364`, `:1371`.)
-
-- **Quem lê:** memória de alarmes deduplica pela chave; `_pauta` envia argumentos ao comando; `handle` escolhe `resolver`/`motivo`; `pauta_viva` consulta prefixo textual; resolver fecha a primeira viva encontrada; abertura escreve `ESTEIRA <chave>: <texto>`. (`app/core/esteira_vigia.py:402`, `app/core/esteira_vigia.py:936`, `app/core/management/commands/alarme_esteira.py:30`, `:18`, `:41`, `:62`.)
-
-- **Não se pode afirmar que todo valor que um emissor real pode formar passa.** A fila permite diretório com espaços (`split(None, 1)`), mas os emissores concatenam `basename` sem validação. Assim `fatia:a b` é formável pelo código e recusada agora. O censo usa basenames sintéticos sem whitespace, explicitamente. Ocorrência em produção: **[nao verificado]**. (`app/core/esteira_vigia.py:119`, `:121`, `:412`, `:557`, `app/pautas/tests/test_prefixos_reservados_esteira.py:135`, `:153`.)
-
-- **Recusa pode perder o rastro da recusa:** o comando escreve stderr e retorna normalmente, mas `_pauta` captura stdout/stderr e descarta o `CompletedProcess`, sem verificar retorno nem registrar stderr. Os relatos de alarmes/zumbido registram a ação presumida, sem confirmar abertura. (`app/core/management/commands/alarme_esteira.py:34`, `app/core/esteira_vigia.py:936`, `:1215`, `:1604`.) A memória já marcou o alarme antes do envio; um alarme sem `cada_min` pode ficar deduplicado mesmo sem Pauta criada. (`app/core/esteira_vigia.py:403`, `:406`, `:412`.)
-
-- **Borda adicional de identidade textual:** chave de 472 letras passa a gramática; o `[:480]` corta o delimitador final, pois `'ESTEIRA '` mede oito caracteres. A guarda não reserva esse texto sem `:`, e o leitor procura prefixo completo que não foi persistido. O teste aceita somente até 460 letras. Trata-se de falha demonstrável pelo código; ocorrência real **[nao verificado]**. (`app/pautas/marcadores.py:31`, `app/core/management/commands/alarme_esteira.py:18`, `:62`, `app/pautas/services.py:47`, `app/pautas/tests/test_prefixos_reservados.py:279`.)
-
-- **`sem-commit:<arquivo>` é propagado como valor opaco:** dono agrupa testes; vira `quem`, motivo `dono=...`, chave de Pauta, texto de Pauta, relato e retorno. (`app/core/esteira_vigia.py:1174`, `:1205`, `:1211`, `:1212`, `:1215`, `:1219`.) JSON grava `quem`/motivo sem interpretar; lista corta motivo em 120 caracteres. (`app/core/esteira_vigia.py:1245`, `:1098`.) O parser da lista interpreta ID/prazo e deixa o restante como texto; runner e integrador usam IDs. (`app/core/quarentena_lista.py:19`, `:21`, `app/core/runner_quarentena.py:36`, `:77`, `app/core/integrador_lote.py:780`.) Persistência do relato insere a linha sem interpretar dono. (`app/core/esteira_vigia.py:895`, `:903`, `:925`.)
-
-- **Não encontrei leitor de produção que case `sem commit (` nem parser de `quarentena.jsonl`** no censo textual da cópia; a forma antiga aparece somente no mutante. A gravação identificada do JSON está em `app/core/esteira_vigia.py:1243`; mutante em `app/pautas/tests/mutar_prefixos_reservados.py:139`. Leitor externo à cópia **[nao verificado]**.
-
-- **Pauta antiga pode ficar inacessível ao resolver ESTEIRA:** `quarentena:zumbido:sem commit (...)` contém espaços, portanto o resolver atual rejeita antes da consulta; a chave nova usa outro prefixo e não encontra a antiga. (`app/pautas/marcadores.py:31`, `app/core/management/commands/alarme_esteira.py:30`, `:34`, `:18`, `app/core/esteira_vigia.py:1174`, `:1212`.) A existência dessas pautas em produção **[nao verificado]**. Não atribuir uma regressão de “fechamento automático do zumbido”: os resolvers existentes de `decidir` abrangem pausa/teto/trava/vigia, e `conferir_quarentena` remove testes da lista sem resolver Pauta de zumbido. (`app/core/esteira_vigia.py:489`, `:503`, `:529`, `:596`, `:1260`, `:1274`.)
-
-_3365 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3372 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
