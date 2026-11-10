@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 16:25** · publicado em **10/11/2026 16:26** (UTC-3)
+> Ultima resposta processada: **10/11/2026 16:57** · publicado em **10/11/2026 16:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 16:57 · sessao e439e679001b · - · - · origem=Ronald (tmux)
+
+**Achado 3: (e) NÃO PERGUNTADO.** Nenhuma `.q` solicita auditar mensagens de commit por `LEI-AKITA`/`L-030`, nem conferir `test_lei_protege_sitio` para esse pouso. O trecho mais próximo, em `preverif1.q`, é “**pouso antes do pre-requisito**”: pergunta sobre ordem/dependência do pouso, sem perguntar pelas marcações legais dos commits. Não há trecho `.r` que identifique a falta dessas marcações. A resposta apenas declara: “**Ordem efetiva das travas, liberação da vaga, pouso, smoke nas duas cascas com col677 e certificação independente do hash/base: [nao verificado]**” (`preverif1.r`, último parágrafo). Não há descarte correspondente na triagem fornecida. As linhas devem ser numeradas pelo texto do anexo; não conferi numeração. [nao verificado]
+
+**Achado 4: (e) NÃO PERGUNTADO.** Citar o conteúdo de `LEIS.md` como especificação não equivale a perguntar se a documentação deveria ser atualizada após a obra. `censo1.q` abre com “**L-030 PELA-METADE em app/docs/LEIS.md:78 e :165**”; `construtor1.q` diz “**lei CLAUDE.md secao 4 / L-030 (app/docs/LEIS.md, linha L-030 PELA-METADE)**”. Nenhum desses trechos pede conferir a veracidade final de “BARRA em 4 casos”/“PELA-METADE” ou atualizar `LEIS.md` por L-106. Não há trecho `.r` diagnosticando documentação desatualizada, nem descarte desse diagnóstico na triagem fornecida.
+
+**Ressalva para a consolidação:** a menção ao selo “VERMELHO” no achado 3 é uma alegação do opus anexado; sua execução não foi demonstrada por log nos anexos. Isso não torna o tema específico de marcação legal dos commits uma pergunta previamente feita. Não há evidência de opus anterior suficiente para sustentar classe (d). [nao verificado]
 
 ## 10/11 16:25 · sessao c29c5b84bc96 · DISPUTA-ZUMBI-1110 · censo · origem=Code
 
@@ -1093,61 +1101,4 @@ Os testes localizados não impõem a regra global pedida; alguns aceitam explici
 
 A existência de constraint ou trigger **instalado em prod** além do que consta nesta cópia é **[nao verificado]**.
 
-## 10/11 14:59 · sessao 4d8d5d0b2654 · - · - · origem=Ronald (tmux)
-
-Censo Q2, somente leitura. Separe **zero linhas `PerguntaDisputa`** de **zero perguntas vivas**: os fechamentos abaixo conservam a linha e o vínculo com a disputa; o estado é derivado de carimbos/juiz, não há coluna `status` da pergunta nesse trecho do modelo. (`app/chamados/models.py:3033`, `:3041`, `:2416`)
-
-**Remoção física e desvinculação da disputa**
-
-- Não encontrei escritor produtivo que apague `PerguntaDisputa` ou atribua `None`/outra disputa à FK `disputa`; a busca incluiu o censo AST existente, imports com alias e busca complementar por atribuições/SQL. Exaustividade para escrita dinâmica impossível de resolver estaticamente: **[nao verificado]**. O censo reconhece aliases de import em `app/core/censo_escritas.py:281` e `:285`.
-- `PerguntaDisputa.disputa` é obrigatória e `CASCADE`: excluir a própria disputa também remove suas perguntas, sem conservar uma disputa aberta. (`app/chamados/models.py:2416`)
-- `DecisaoPergunta.pergunta` usa `PROTECT`, impedindo excluir pergunta que tenha decisão relacionada. (`app/chamados/models.py:3871`)
-- `celula` e `chamado_destino` usam `SET_NULL`, mas sua nulificação conserva a pergunta e sua FK `disputa`. (`app/chamados/models.py:2414`, `:3385`)
-- `fio.reapontar_resolvedora` aceita destino `None`, valida em `:907`, atribui em `:925` e salva em `:927`, no `atomic(savepoint=False)` iniciado em `:881`. A reversão de `reatar_beco_folga_ao_limbo` passa `.first()` do destino anterior, podendo obter `None`: `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:127`. Isso desvincula a âncora do chamado, **não remove a relação disputa→pergunta**. (`app/chamados/services/fio.py:925`)
-
-**Retratação de motivo**
-
-- `DisputaSupervisao.remover_motivo` hoje conserva cada pergunta e registra retratação, depois carimba `VIA_MOTIVO_RETRATADO`; não executa o `delete` histórico referido no comentário. (`app/chamados/models.py:2046`, `:2054`, `:2056`, `:2061`)
-- O ato de retratar perguntas e salvar motivos/contexto ocorre no mesmo `atomic` (`:2025`–`:2065`). Havendo motivos restantes, retorna com disputa aberta (`:2066`); sem restantes, só depois do bloco chama `fechar` (`:2072`). Assim, exceção na última chamada pode deixar **perguntas retratadas e disputa aberta**, mas as linhas permanecem. (`app/chamados/models.py:2025`, `:2066`, `:2072`)
-- Call sites produtivos encontrados: reativação de posto remove exclusivamente `posto_desativado`; calibração de âncora remove exclusivamente `ancora_ausente`. Não retiram `batida_fora_escala_grave`. (`app/colaboradores/signals.py:77`, `app/escala/signals.py:161`)
-
-**Retratação por duplicidade**
-
-- `fio.retratar_duplicata` carimba `VIA_DUPLICATA` e motivo indicando canônica, preservando pergunta e resposta. (`app/chamados/services/fio.py:1345`, `:1359`)
-- Seu chamador é `retratar_para_canonica`, que trata N retratações no mesmo `atomic` e trava as linhas antes. (`app/chamados/services/fio.py:1336`, `:1338`, `:1341`)
-- Chamadores dessa porta: reapontamento que também data a pergunta (`fio.py:921`), migração de resolvedoras (`fio.py:2180`) e aplicação do backfill (`backfill_decisoes_pergunta.py:331`). O comando de dedup usa a mesma aplicação do backfill. (`app/chamados/services/fio.py:921`, `:2180`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:331`; `app/chamados/management/commands/dedup_perguntas_fato.py:105`)
-- A migração tem `atomic` externo e pode retratar a única pergunta viva de uma disputa sem fechar diretamente aquela disputa; continua existindo sua linha retratada. (`app/chamados/services/fio.py:2083`, `:2180`)
-- `duplicata` e `motivo_retratado` são terminais e vencem inclusive resposta prévia na leitura de vitalidade. (`app/chamados/models.py:2516`, `:2524`)
-
-**Todos os call sites produtivos diretos de carimbo/fechamento encontrados**
-
-| Sítio | Ato e relação com fecho da disputa |
-|---|---|
-| `app/chamados/models.py:3064` | `fechar_por_admin` → `admin_decidiu`; método não fecha a disputa. |
-| `app/chamados/models.py:1921` | Chama `fechar_por_admin` ao fechar disputa por desligamento/admin; pergunta e disputa fecham no mesmo `atomic` (`:1905`, `:1932`). |
-| `app/ponto/services/veredito_celula.py:189` | Fecha perguntas do dia por `admin_decidiu`, depois reconcilia chamados (`:201`), sem chamada direta para fechar disputa. Chamadores assumem `atomic` e travam primeiro (`:173`); `veredito_celula` abre o seu em `:223`. |
-| `app/chamados/services/validacao.py:289`, `:329` | Aceite de folga chama `fechar_por_admin`, em `atomic` (`:281`, `:314`); chamado do fio do dia em `:296`; recusa da declaração faz rollback (`:343`). |
-| `app/chamados/models.py:2061` | Retratação de motivo, detalhada acima. |
-| `app/chamados/services/fio.py:1359` | Retratação de duplicata, detalhada acima. |
-| `app/chamados/services/materializacao.py:924` | `paridade_recusada`: guarda exige marco no espelho; sem ele retorna sem este carimbo (`:900`–`:916`). Conserva linha. |
-| `app/chamados/services/materializacao.py:1099` | `fato_ocupado` quando recusa traduzida é `COLISAO` e ainda não materializada (`:1093`); ocorre inclusive no `finally` da unidade (`:1297`), depois de seu bloco de tentativa. Conserva linha. |
-| `app/chamados/services/materializacao.py:561` | Absorção de irmãs por ausência, via declaração ou ausência (`:549`), com carimbo+decisão no mesmo `atomic` (`:557`). Reconciliar destino e tentativa de fechar disputa vêm depois (`:581`, `:585`). |
-| `app/chamados/services/materializacao.py:1277` | Materialização de uma pergunta: declaração ou via do fato; recusa do C6 levanta `_Reprovada`, desfazendo plantio; exceções entram em erros (`:1279`, `:1283`, `:1285`). Fecho da disputa fica na cauda própria (`:1302`, `:1316`, `:1333`). |
-| `app/chamados/services/materializacao.py:1431` | S144: `juiz_aprovou` só depois de lastro verdadeiro, ignorando P em voo (`:1425`, `:1427`); não fecha disputa nesse método, que pode ser acionado pelo fecho dela. |
-| `app/chamados/reconciliador.py:405` | `sem_turno_aberto`, só se C6 já considera morta (`:397`); depois tenta fechar disputa se `pode_fechar` (`:411`). |
-| `app/chamados/reconciliador.py:595` | `celula_absolveu`, cada carimbo com seu `atomic` (`:592`); fecho de disputas é posterior (`:608`), com exceção de fecho engolida/logada (`:615`). Pode conservar disputa aberta com perguntas mortas, não sem linhas. |
-| `app/chamados/reconciliador.py:1147` | Fantasma pela lâmpada; cada carimbo+evento com `atomic` (`:1146`). Fecha disputas depois (`:1158`); resposta sem veredito barra (`:1163`), exceção de fecho é logada e adicionada às falhas (`:1173`). |
-| `app/chamados/models.py:3287` | Porta `encerrar_fantasma` → `carimbar(VIA_FANTASMA)`; não remove linha. |
-| `app/chamados/services/disputa_emissao.py:1863` | S128 carimba via do fato para destino resolvido; ignora em voo, vivas, trancadas e resposta sem testemunha (`:1837`, `:1843`, `:1847`, `:1856`). |
-| `app/chamados/services/disputa_emissao.py:1937` | S128 sem credor vivo; só carimba perguntas que C6 considera mortas (`:1925`). Fecho da disputa ocorre no mesmo ato externo se não há P em voo e `pode_fechar` (`:1961`, `:1963`); wrapper fornece atomic quando necessário (`:1796`). |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68` | Troca via para `fato_materializado` pela porta `models.py:3268`, somente carimbadas sem história e com marco aceso (`:31`, `:40`, `:41`). Cada pergunta tem atomic (`:67`); disputas fecham num laço posterior (`:80`, `:87`, `:88`). |
-
-A validação também mata a vitalidade por `validada_em`: escritor central `_carimbar_validacao` em `app/chamados/services/validacao.py:134`, `:137`; call sites em `:288`, `:320`, `:435`. O fluxo normal tem `atomic` envolvendo validação+decisão da porta (`:425`) e devolve a validação quando a materialização recusa (`:461`–`:466`); depois materializa a disputa inteira e sua cauda decide o fecho (`:469`; `app/chamados/services/materializacao.py:1316`). Não exclui a pergunta.
-
-**Mecanismo automático não é garantia atômica de fechar disputa junto com pergunta**
-
-Todo `save` de pergunta agenda o beco por `on_commit`; o callback usa `engolir`, portanto sua falha não desfaz o carimbo já confirmado. O beco só age se pai terminal e sem perguntas visíveis, e ainda consulta `pode_fechar`. (`app/chamados/signals.py:227`, `:235`, `:238`; `app/chamados/services/becos.py:29`, `:31`, `:33`, `:74`)
-
-Conclusão aplicável ao fato: os sítios acima explicam **disputa aberta com perguntas encerradas/retratadas**, mas conservam suas linhas. Atribuir qualquer um deles às sete disputas com **zero perguntas** é **[nao verificado]**.
-
-_3416 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3417 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
