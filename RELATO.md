@@ -1,7 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=1404574
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2752992
 
+MODO-COMUM-PASSADO-SEM-TURNO suite inteira 0a35b206d 21:45: Ran 14836 FAILED (failures=3) -- selo_mapa_contrato (fabrica_da_celula.py bolha nova sem @bolha, causa: juiz registrado em core/juizes.py) + 2 do diagrama derivado (ARQUITETURA.mmd/MAPA.md). Cura -> construtor Codex volta 3 (inscricao da bolha); diagrama regerado pela sessao na copia; suite de novo. Opus final so apos verde.
 MODO-COMUM: E4a-1 P3 pauta de CADASTRO sem contador e reabrindo em laco apos fechada (aval PASSADO-SEM-MARCOS) | quem pegou: opus final 1 (Codex perguntou so o lado proibido q:36, CONFORME r:165) | invariante que faltou: 'dia passado sem turno = UMA pendencia de cadastro por colab, fechada nao reabre, contador esperado 0' fora de juiz/MAPA/selo. Caso curado c3d0947ec+dbb941474; obra ESTRUTURA na frente da fila 1 apos o pouso E4a-1 (juiz pauta_cadastro_existente em core/juizes.py se medido unico, MAPA, selo AST que morde mutante).
 REESCRITA-LOCAL 21:2x (aval REESCREVER-HISTORIA-LOCAL-46d313581): so mensagem do 46d313581 (P-sete-um + linha LEI-AKITA que faltava, fecha o INCOMPLETO). O aval dizia "3 commits"; reescrever um commit refaz o hash de TODOS os descendentes = 9 em main (46d..490 -> f78b9a84f..a048bf640, inclui o merge 892 -> 3837b509e) + 3 da raia mcpst-205439 (-> 3ce604f72); arvore identica provada: git diff-tree vazio nos 12 pares e em main/raia; achado_por --conferir origin/main OK rc 0; deploy intocado (arvore igual). Reversao: logs/reversao_reescrita_46d313581_20261109_212831.txt. Ramo velho e4a-sessao-180409 guarda os hashes antigos (intocado). Push espera a trava da suite MODO-COMUM.
 E4a-1 padrao RELAVRADO (corte Ronald 09/11 21:2x): padrao=Parallel Change + Transactional Outbox (fase EXPAND do aval E4-EXPAND-CONTRACT + evento EventoCelula); sem commit novo de codigo. Termos novos L-127 Parallel Change (Expand-Contract), L-128 Clock Injection no GLOSSARIO.md/PLANO-PADROES.md com ADR curto; selo novo 0 (test_lei_akita.sh ja le o GLOSSARIO).
@@ -5779,6 +5780,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**09/11 21:46:16 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:72aa990b62 (54 car., na trilha privada)
 
 **09/11 21:02:00 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:72aa990b62 (54 car., na trilha privada)
 
