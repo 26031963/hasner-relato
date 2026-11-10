@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/11/2026 23:28:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (235.3 MB). Acoes na janela: **1337**.
+**Medido em 09/11/2026 23:34:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (235.3 MB). Acoes na janela: **1330**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1340,10 +1340,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:35:32 | Bash |  | `cd /home/ronald/saas-hasner; git grep -n "def lavrar_retrato_folha\\|class RetratoFolha" -- app \| head; cat logs/O10-D-PERMUTA-NA-TELA/lancar_censo_v1.sh; head -c 1500 logs/O10-D-PERMUTA-NA-TELA/censo_v1.q; grep -n "O10-D" app/docs/PROMPTS.md app/docs/BACKLOG.md \| head -3; sed -n 1,12p app/docs/RELATO.md` |
 | 11:35:25 | Bash |  | `cd /home/ronald/saas-hasner; wc -l logs/O10-D-PERMUTA-NA-TELA/censo_v1.r; cat logs/O10-D-PERMUTA-NA-TELA/censo_v1.r \| head -150` |
 | 11:35:21 | Bash |  | `cd /home/ronald/saas-hasner; date; cat /proc/loadavg; for p in 291956 330647 2015542 605398; do printf "%s " $p; ps -p $p -o args= \| head -c 100; echo; done; tail -3 logs/bug_par_dois_atos/mutantes_v4.log; tail -2 logs/O10-D-PERMUTA-NA-TELA/censo_v1.out 2>/dev/null; bin/trava_teste.sh --quem; ls logs/codex* -d 2>/dev/null \| head; cat logs/construtor.vaga 2>/dev/null` |
-| 11:31:11 | Bash | Record SONDA v5 triage and I-3 opening in RELATO | `cd /home/ronald/saas-hasner/app; PYTHONDONTWRITEBYTECODE=1 python3 - <<'EOF' import time hm=time.strftime('%H:%M')[:4]+'x' p='docs/RELATO.md'; s=open(p).read() a='ESPERANDO: lancar_green_mut_v4.sh \| pid=291956\n'; assert s.count(a)==1 s=s.replace(a,a+ f'SELOS-CANON-I3 {hm}: construtor OPUS volta 1 aberto (vaga de opus livre apos SONDA v5), copia nova de main 3803e6623 (logs/SELOS-CANON-I3/wt.txt) ...` |
-| 11:31:04 | Agent | construtor SELOS-CANON-I3 volta 1 | `Papel: CONSTRUTOR (opus) da obra SELOS-CANON-I3 (instrumento ETAPAS-NO-BRIEF), volta 1. Projeto /home/ronald/saas-hasner; leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 6 e 7b antes de agir. BRIEF (contem o CENSO e as ETAPAS que voce cumpre; nao reescopar): logs/SELOS-CANON-I3/brief.md Aval literal: logs/selos_canon/aval_selos_do_canon_0811.txt (bloco I-3). Contrato Codex: logs/selos_canon/cont ...` |
-| 11:30:49 | Bash | Create I-3 worktree from main | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-selos-canon-i3-$(date +%H%M%S); git worktree add -q --detach $W main && git -C $W log --oneline -1 && echo $W > logs/SELOS-CANON-I3/wt.txt; cat /proc/loadavg` |
-| 11:30:39 | Bash | Launch SONDA v5 full suite; check BUG-PAR mutants | `cd /home/ronald/saas-hasner; D=logs/auditoria_0911; cat > $D/lancar_suite_v5.sh <<'EOF' #!/bin/bash # SONDA-SEM-GRANT volta 5 (500bbdde3): suite INTEIRA na copia (SUITE-ANTES-DO-OPUS), pela trava. cd /home/ronald/saas-hasner W=/home/ronald/wt-sonda-sem-grant-075803 D=logs/auditoria_0911 bash bin/suite.sh --dir $W --espera 10800 > $D/sonda_v5_suite.log 2>&1 echo "rc=$?" >> $D/sonda_v5_suite.log EOF ...` |
-| 11:30:28 | Bash | Confirm conferir uses named green predicate | `cd /home/ronald/wt-sonda-sem-grant-075803; sed -n 465,475p bin/sombra.sh; grep -n "carimbo_ensaio_verde_de_hoje" bin/*.sh` |
-| 11:30:24 | Bash | Check conferir uses the shared carimbo parser | `cd /home/ronald/wt-sonda-sem-grant-075803; grep -n "^[a-z_]*()" bin/sombra_carimbo.sh; grep -n "sombra_carimbo\\|carimbo_[a-z_]*" bin/sombra.sh \| head -12` |
-| 11:30:20 | Bash | Inspect SONDA v5 diff sample | `cd /home/ronald/wt-sonda-sem-grant-075803; git log --oneline -1; git diff --stat b5714d37f; git diff b5714d37f -- bin/placar_code.sh \| head -60; git grep -n "sombra_stamp\\|SOMBRA_STAMP" -- bin/*.sh \| grep -v tests \| head` |
