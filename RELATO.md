@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=116334 | arquivo=/home/ronald/saas-hasner/logs/codex/MODO-COMUM-PASSADO-SEM-TURNO_20261109_210321_116334.jsonl
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=116334
 
 PAREI: ! reescrever-historia-local-46d313581 | espera Ronald -- push 892159c5f+49015265a recusado pelo selo achado_por (push_e4a1.log): o commit 46d313581 (ja dentro do merge pousado e NO AR, nao empurrado) cita 'H-C11-TRANCA (P7.1 juiz calado)' em prosa e o selo, que casa por token, o le como cura P7.1 sem ACHADO-POR. Cura so reescrevendo a mensagem (rebase local de 3 commits nao empurrados, arvore identica, deploy intocado) = historia = `!`. Alternativa sem `!`: nenhuma (o selo nao tem excecao, e curar o selo para passar o proprio push e contorno).
 lei: padrao da fase EXPAND (aval E4-EXPAND-CONTRACT = Parallel Change) e da injecao de instante da cura D9 (Clock Injection) nao existem em GLOSSARIO.md/PLANO-PADROES.md; a E4a-1 pousou nomeando Transactional Outbox (existe). Padrao novo so por corte dele; E4b/E4c seguem com o termo existente ate la.

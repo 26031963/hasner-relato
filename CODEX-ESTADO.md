@@ -1,7 +1,124 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:00** · publicado em **09/11/2026 21:03** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:08** · publicado em **09/11/2026 21:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:08 · sessao 0784c8db88ae · MODO-COMUM-PASSADO-SEM-TURNO · construtor · origem=Code
+
+Arquivos entregues:
+
+- [test_juiz_pauta_cadastro_sem_turno.py](/home/ronald/wt-codex-modo-comum-passado-sem-turno-210159/app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:194): selo AST, registro, anti-vacuidade e casos MORDE para a–d.
+- [JUIZES.md](/home/ronald/wt-codex-modo-comum-passado-sem-turno-210159/app/docs/JUIZES.md:86): linha com juiz, escritor, contador e selo.
+
+Do rascunho, corrigi:
+
+- Varredura inclui Python em `static/media/logs`; exclui testes, migrations, dependências e links simbólicos (`chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:26`).
+- Só a definição da constante recebe exceção no módulo; imports, aliases, atributos e literais são fiscalizados (`chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:96`).
+- Escopos aninhados e métodos não herdam autorização; docstrings são ignoradas (`chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:71`).
+- Ordem exige trava, guarda do juiz e escrita no mesmo bloco `atomic`, rejeitando duplicações e chamadas em blocos sem execução (`chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:155`).
+
+Comando executado para base e dois mutantes reais, restaurados em `finally`. Como Django não estava disponível, o import de `SimpleTestCase` foi substituído em memória por `unittest.TestCase`; execução com Django: [nao verificado].
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import ast
+import io
+import pathlib
+import unittest
+
+path = pathlib.Path('chamados/tests/test_juiz_pauta_cadastro_sem_turno.py')
+tree = ast.parse(path.read_text(), str(path))
+for node in tree.body:
+    if isinstance(node, ast.ImportFrom) and node.module == 'django.test':
+        node.module = 'unittest'
+        node.names = [ast.alias(name='TestCase', asname='SimpleTestCase')]
+namespace = {'__file__': str(path.resolve()), '__name__': 'selo_direto'}
+exec(compile(ast.fix_missing_locations(tree), str(path), 'exec'), namespace)
+classe = namespace['JuizPautaCadastroSemTurnoTest']
+fabrica = pathlib.Path(namespace['FABRICA'])
+original = fabrica.read_bytes()
+fonte = original.decode()
+fn = next(n for n in ast.parse(fonte).body
+          if isinstance(n, ast.FunctionDef)
+          and n.name == namespace['ESCRITOR'])
+bloco = next(n for n in fn.body if isinstance(n, ast.With))
+guarda, escrita = bloco.body[1:3]
+assert isinstance(guarda, ast.If) and isinstance(escrita, ast.Expr)
+linhas = fonte.splitlines(keepends=True)
+mutante = ''.join(
+    linhas[:guarda.lineno - 1]
+    + linhas[escrita.lineno - 1:escrita.end_lineno]
+    + linhas[guarda.lineno - 1:guarda.end_lineno]
+    + linhas[escrita.end_lineno:])
+ast.parse(mutante)
+leitor = pathlib.Path('core/views.py')
+leitor_original = leitor.read_bytes()
+intruso = (
+    b'\n\ndef _mutante_cadastro_sem_turno():\n'
+    b'    from chamados.services.fabrica_da_celula import PAUTA_SEM_TURNO\n'
+    b'    return Pauta.objects.filter(texto__startswith=PAUTA_SEM_TURNO)\n')
+
+for nome, arquivo, alterado in (
+    ('BASE', fabrica, original),
+    ('M1_ESCRITA_ANTES_DO_JUIZ', fabrica, mutante.encode()),
+    ('M2_SEGUNDO_LEITOR', leitor, leitor_original + intruso),
+):
+    antes = arquivo.read_bytes()
+    try:
+        if alterado != antes:
+            arquivo.write_bytes(alterado)
+        suite = unittest.defaultTestLoader.loadTestsFromTestCase(classe) [nao verificado]
+        saida = io.StringIO()
+        result = unittest.TextTestRunner(stream=saida).run(suite) [nao verificado]
+        print(f'=== {nome} ===', flush=True)
+        print(saida.getvalue(), end='', flush=True)
+        print(f'RC={int(not result.wasSuccessful())}', flush=True)
+        if nome == 'BASE':
+            assert result.wasSuccessful()
+        else:
+            assert len(result.failures) == 1 and not result.errors
+    finally:
+        if arquivo.read_bytes() != antes:
+            arquivo.write_bytes(antes)
+    assert arquivo.read_bytes() == antes
+assert fabrica.read_bytes() == original
+assert leitor.read_bytes() == leitor_original
+print('RESTAURACAO: fabrica e core/views.py identicos aos bytes originais')
+PY
+```
+
+Saída relevante dos testes de `chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199` e `:220`:
+
+```text
+=== BASE ===
+Ran 11 tests in 1.702s
+OK
+RC=0
+
+=== M1_ESCRITA_ANTES_DO_JUIZ ===
+AssertionError: False is not true : chamados/services/fabrica_da_celula.py::pauta_cadastro_sem_turno: esperado trava -> juiz -> escrever em atomic
+Ran 11 tests in 1.695s
+FAILED (failures=1)
+RC=1
+
+=== M2_SEGUNDO_LEITOR ===
+'core/views.py:1310::_mutante_cadastro_sem_turno le/escreve o marcador por conta propria'
+'core/views.py:1311::_mutante_cadastro_sem_turno le/escreve o marcador por conta propria'
+Ran 11 tests in 1.713s
+FAILED (failures=1)
+RC=1
+RESTAURACAO: fabrica e core/views.py identicos aos bytes originais
+```
+
+Ruff nos dois arquivos entregues (`chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:1`; `docs/JUIZES.md:86`):
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache --config ruff.toml chamados/tests/test_juiz_pauta_cadastro_sem_turno.py docs/JUIZES.md
+```
+
+```text
+All checks passed!
+```
 
 ## 09/11 21:00 · sessao c358ee63e42c · MODO-COMUM-PASSADO-SEM-TURNO · censo · origem=Code
 
@@ -830,14 +947,4 @@ O vocabulário disponível é fechado em oito atos (`chamados/models.py:3846`, `
 
 Não encontrei `Parallel Change`/`Expand-Contract` nos dois catálogos consultados; resultado da busca local, não confirmação universal **[nao verificado]**. Termos efetivamente encontrados: `Single Writer Principle` em `docs/GLOSSARIO.md:12` e `Architecture Conformance Test` em `docs/GLOSSARIO.md:15`.
 
-## 09/11 17:35 · sessao 98f00f1fa6ec · FIO-E0-V4-E4-ESCRITORES · construtor · origem=Code
-
-**E4a não está pronta:** o RED final mantém 9 falhas, incluindo identidade, fatos ausentes e registro C20. [Resultado](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_TESTES.txt:784).
-
-- [Entrega: diff, escritores/leitores, lacunas e pendências](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_ENTREGA.txt:1).
-- [Hunks textuais para a sessão](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_HUNKS_SESSAO.txt:1).
-- [Provas: 24 testes verdes e comandos dos 18 mutantes que falharam e foram restaurados](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_TESTES.txt:1). [nao verificado]
-
-Sem commit, pela proibição de escrever em `.git*`. [Registro](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_ENTREGA.txt:292). [nao verificado]
-
-_3228 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3229 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
