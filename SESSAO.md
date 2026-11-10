@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 06:26:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1183**.
+**Medido em 10/11/2026 06:31:22.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1177**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1187,9 +1187,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:32:34 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 250,300p $S/chamados/services/disputa_emissao.py; echo ----; cd /home/ronald/wt-e4a-sessao-180409 && git diff f2962ab8d 6a1fc54f7 --stat -- app/chamados/services/disputa_emissao.py app/chamados/services/fabrica_da_celula.py app/chamados/services/fio.py` |
 | 18:31:39 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 820,845p $S/chamados/services/disputa_emissao.py; echo ----; sed -n 895,912p $S/chamados/services/disputa_emissao.py; echo ----; sed -n 1225,1250p $S/chamados/services/disputa_emissao.py` |
 | 18:31:32 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 255,300p $S/chamados/services/disputa_emissao.py; echo ----; sed -n 540,562p $S/chamados/services/disputa_emissao.py; echo ---; sed -n 675,690p $S/chamados/services/disputa_emissao.py` |
-| 18:31:19 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 560,580p $S/chamados/juizes.py; echo ----; grep -n "_dentro_da_janela_viva\\|def _pergunta_materializada_de_fato\\|def pergunta_viva" $S/chamados/juizes.py \| head -20` |
-| 18:31:11 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; grep -n "def emitir_evento_celula" -A30 $S/ponto/portas/celula.py \| grep -nE "on_commit\|consumir\|def \|create\|INSERT" \| head; grep -rn "reverter_regeneracao_dia(" $S --include=*.py \| grep -v tests \| head; grep -n "def julgar_celula" -A6 $S/ponto/services/cartorio.py \| head -8` |
-| 18:31:00 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 405,445p $S/ponto/portas/celula.py; echo -----; sed -n 738,815p $S/ponto/portas/celula.py` |
-| 18:30:56 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 1340,1392p $S/chamados/reconciliador.py; echo ----; sed -n 130,175p $S/chamados/services/fabrica_da_celula.py` |
-| 18:30:40 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/FIO-E0-V4-E4-ESCRITORES/volta3/diff_produtivo.patch \| cut -c1-180` |
-| 18:30:28 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bnenjotd7.output; cat logs/FIO-E0-V4-E4-ESCRITORES/preverif_e4a1.r` |
