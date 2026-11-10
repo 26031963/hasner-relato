@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 10:21:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (254.7 MB). Acoes na janela: **810**.
+**Medido em 10/11/2026 10:26:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (254.7 MB). Acoes na janela: **805**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -815,8 +815,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:31:54 | Bash |  | `cd /home/ronald/wt-codex-fio-e0-v4-e4a-2-214514 && git diff app/chamados/management/commands/disparar_perguntas_competencia.py` |
 | 22:31:52 | Bash |  | `W=/home/ronald/wt-codex-fio-e0-v4-e4a-2-221508; R=/home/ronald/wt-codex-fio-e0-v4-e4a-2-214514; cd $R && git diff --name-only 5e298a0b0 HEAD; for f in $(cut -f2 /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/construtor2.r.inventario); do cp $W/$f $R/$f; cmp $W/$f $R/$f && echo "ok $f"; done; find $W -name __pycache__ \| head -2; git status --porcelain` |
 | 22:31:44 | Bash |  | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; cat construtor2.r.rc; cat construtor2.r.inventario; tail -c 3500 construtor2.r` |
-| 22:21:41 | Bash |  | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; cat > $S/msg_leis_protege.txt <<'EOF' MODO-COMUM-PASSADO-SEM-TURNO marco: LEIS L-127/L-128 com a coluna PROTEGE vazia (lei de conduta; o GLOSSARIO vai na coluna de onde vive) LEI-AKITA: origem=app/docs/LEIS.md (linhas L-127/L-128), testemunha=bin/tests/test_lei_protege_siti ...` |
-| 22:21:31 | Bash |  | `python3 - <<'EOF' p='docs/LEIS.md'; s=open(p).read() a="\| conduta (vocabulario) \| `app/docs/GLOSSARIO.md` \| nenhum novo" assert s.count(a)==2 s=s.replace(a,"\| conduta (vocabulario): `app/docs/GLOSSARIO.md` \| \| nenhum novo") open(p,'w').write(s) EOF cd .. && python3 bin/tests/test_lei_protege_sitio.sh 2>/dev/null; bash bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -3` |
-| 22:21:25 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 62,92p bin/tests/test_lei_protege_sitio.sh; /bin/grep -n 'conduta' app/docs/LEIS.md \| head -5 \| cut -c1-300` |
-| 22:21:23 | Bash |  | `cd /home/ronald/saas-hasner && /bin/grep -n 'L-127\\|L-128' app/docs/LEIS.md \| cut -c1-400; /bin/grep -n 'PROTEGE' bin/tests/test_lei_protege_sitio.sh \| head -20` |
-| 22:21:18 | Bash |  | `cd /home/ronald/saas-hasner && tail -12 logs/MODO-COMUM-PASSADO-SEM-TURNO/push_2f4dd4840.log; git fetch -q origin; git log --oneline -1 origin/main; git merge-base --is-ancestor 2f4dd4840 origin/main && echo NO_REMOTO` |
