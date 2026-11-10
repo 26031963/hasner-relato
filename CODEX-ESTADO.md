@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:38** · publicado em **09/11/2026 21:41** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:48** · publicado em **09/11/2026 21:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:48 · sessao a038309c1c18 · MODO-COMUM-PASSADO-SEM-TURNO · construtor · origem=Code
+
+Alterado somente [chamados/services/fabrica_da_celula.py:13](chamados/services/fabrica_da_celula.py:13): inscrição na docstring, com entradas, saídas e invariantes citando as funções. Nenhum código executável mudou.
+
+RED antes da alteração, no [selo existente](core/tests/test_selo_mapa_contrato.py:41):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest core.tests.test_selo_mapa_contrato.SeloMapaContratoTest.test_MORDE_bolha_nova_sem_contrato_e_vermelha -v
+```
+
+```text
+AssertionError: Lists differ: ['chamados/services/fabrica_da_celula.py'] != []
+FAILED (failures=1)
+```
+
+Após a alteração:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -W ignore::ResourceWarning -m unittest core.tests.test_selo_mapa_contrato -v
+```
+
+```text
+Ran 4 tests
+OK
+```
+
+[Parser real](core/mapa/contrato.py:180):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from core.mapa import contrato
+r = 'chamados/services/fabrica_da_celula.py'
+f, t = contrato.sem_contrato()
+print('arquivo_nas_faltas:', r in f)
+print('campos_faltando:', contrato.faltando(contrato.do_arquivo(r)))
+print('sem_contrato:', len(f), 'universo:', t)
+assert r not in f
+PY
+```
+
+```text
+arquivo_nas_faltas: False
+campos_faltando: []
+sem_contrato: 38 universo: 69
+```
+
+Ruff no arquivo alterado:
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache chamados/services/fabrica_da_celula.py
+```
+
+```text
+All checks passed!
+```
+
+Mutantes dos quatro campos, em memória, exercitando o [mesmo selo](core/tests/test_selo_mapa_contrato.py:41):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -W ignore::ResourceWarning - <<'PY'
+import ast, io, unittest
+from unittest.mock import patch
+from core.mapa import contrato
+
+rel = 'chamados/services/fabrica_da_celula.py'
+original = contrato._arvore
+for campo in ('bolha', 'entra', 'sai', 'invariante'):
+    arvore = original(rel)
+    arvore.body[0].value.value = ast.get_docstring(arvore).replace(
+        '@' + campo + ' ', '@removido ')
+    with patch.object(contrato, '_arvore',
+                      side_effect=lambda r: arvore if r == rel else original(r)):
+        suite = unittest.defaultTestLoader.loadTestsFromName( [nao verificado]
+            'core.tests.test_selo_mapa_contrato.SeloMapaContratoTest.'
+            'test_MORDE_bolha_nova_sem_contrato_e_vermelha')
+        resultado = unittest.TextTestRunner(stream=io.StringIO()).run(suite) [nao verificado]
+    assert len(resultado.failures) == 1 and not resultado.errors
+    assert rel in resultado.failures[0][1]
+    print('MORTO @' + campo + ': FAILED (failures=1)')
+PY
+```
+
+```text
+MORTO @bolha: FAILED (failures=1)
+MORTO @entra: FAILED (failures=1)
+MORTO @sai: FAILED (failures=1)
+MORTO @invariante: FAILED (failures=1)
+```
+
+Suite inteira: [não verificado]. [nao verificado]
 
 ## 09/11 21:38 · sessao 638745cb9017 · FIO-E0-V4-E4A-2 · censo · origem=Code
 
@@ -1089,37 +1180,4 @@ Correção mínima: retornar sem escrita quando destino e identidade efetivos n�
 
 Procedentes encontrados: reversão sem relavra anterior ao consumo; desvio de emissão para passado sem turno; reapontamento sem idempotência de estado (`app/ponto/portas/celula.py:785`; `app/chamados/services/disputa_emissao.py:288`; `app/chamados/services/fio.py:925`).
 
-## 09/11 18:25 · sessao c723709f6c87 · - · - · origem=Ronald (tmux)
-
-Complemento C — escritores R/V/C verificados por AST e leitura dos sítios, sem importar a aplicação:
-
-| Campos | Escritores persistentes |
-|---|---|
-| `resposta_colab/respondida_em` | `app/chamados/services/disputa_emissao.py:1464-1465`, save `:1505`; resposta automática `:1649-1652`; pela trilha `:1671-1673`; reabertura limpa via dict `:1590` e update `:1627-1629`; nascimento recebe campos em `app/chamados/models.py:3008-3015`; `carimbar` completa resposta em `:3127-3129`; ressuscitação zera em `:1566`. |
-| `validada_em/por` | `app/chamados/services/validacao.py:134-137`, devolução `:199-202`; resposta nova limpa em `app/chamados/services/disputa_emissao.py:1477-1479`; reabertura `:1590`, `:1627-1629`; `carimbar(resposta='validar')` em `app/chamados/models.py:3130-3133`; ressuscitação em `:1566`; nascimento `:3008-3015`. |
-| `pendencia_admin` | `app/chamados/services/materializacao.py:850-851`. |
-| `recusa_motivo` | `app/chamados/services/materializacao.py:850-851`, `:1102-1103`; via identidade em `app/chamados/models.py:3183-3185`, chamada pela colisão em `app/chamados/services/materializacao.py:1099-1100` e duplicata em `app/chamados/services/fio.py:1355`; recusa humana `app/chamados/services/validacao.py:584-590`; escape em `app/chamados/services/disputa_emissao.py:1494-1505`. |
-| `data_conferida_em/por` | `app/chamados/services/validacao.py:664-666`. |
-
-As atribuições em `app/chamados/models.py:1507-1508` pertencem a cópia de julgamento (`:1494`), e `:3159-3161` desfazem memória; não são escritores persistentes adicionais.
-
-Leitores de produção agrupados:
-
-- API: `app/api/views.py:1188-1190`, `:1202`, `:2584-2586`, `:2600`, `:2643`, `:2660`; mensageria `app/api/views_mensageria.py:567-570`.
-- Templates: `app/templates/chamados/partials/modal_fio.html:169-170`, `:184`, `:216-227`; `_pergunta_card.html:20-32`, `:42`; `_card_atendimento.html:94-100`, `:135-155`, `:176-186`, `:384-385`; `_lote_preview.html:24`.
-- Juiz/estado: `app/chamados/juizes.py:347`, `:827-828`, `:1300`, `:1323`, `:1339`, `:1447`, `:1592-1600`, `:1628`, `:1775`, `:1879-1901`, `:1949-1953`; `app/chamados/models.py:1843-1845`, `:3037-3044`, `:3344-3355`, `:3494`, `:3517-3539`, `:3920-3934`.
-- Reconciliação/emissão: `app/chamados/reconciliador.py:364`, `:630`, `:1049`, `:1082`; `app/chamados/services/disputa_emissao.py:1467-1468`, `:1616-1618`, `:1644`, `:1667`, `:1710`, `:1853`, `:1914`, `:1926`, `:1931`, `:1943`.
-- Materialização/validação: `app/chamados/services/materializacao.py:278`, `:356`, `:407`, `:432`, `:468`, `:627`, `:668-670`, `:829`, `:995`, `:1092`, `:1193`, `:1370-1371`; `app/chamados/services/validacao.py:139-147`, `:188-208`, `:236`, `:393-396`, `:573-582`, `:662`, `:732`, `:753`, `:851-866`, `:924`.
-- Tela/fio: `app/chamados/views.py:1280`, `:1416`; `app/chamados/views_cobrar.py:169`, `:176`, `:291`; `app/chamados/services/fio.py:340`, `:660`, `:1227`, `:1239`; `app/chamados/services/explicador.py:32`, `:79-90`; `app/chamados/templatetags/chamados_tags.py:128`; `app/chamados/relatorios_disputa.py:21`.
-- Histórico/indicadores: `app/chamados/services/historico.py:98-109`; `app/chamados/services/painel.py:67`, `:262-273`; `app/chamados/services/verbos.py:240-246`, `:311-321`; `app/chamados/veredito_lavrado.py:206-209`.
-- Outros caminhos: `app/chamados/canal.py:65`; `app/chamados/services/cobranca.py:229`; `furo_sem_canal.py:81`; `vigia_carimbo.py:98`; `vigia_fio.py:675`, `:783`; `pergunta_no_app.py:70`; `declaracao_texto.py:227`, `:417-419`, `:687`; `becos.py:30`; `acoes_disputa.py:95`, `:130`, `:345`, `:353`; `raiox.py:138`; `passivo_validado.py:66`.
-- Fora de chamados: `app/ponto/supra_juiz.py:545`, `:548`; `app/ponto/services/cartorio.py:1601`; `dia_do_colab.py:70`; `procedencia_batida.py:71-74`; `flip_auto.py:130-132`; `veredito_celula.py:196`; `app/colaboradores/services/calendario.py:474`; `ficha.py:171`; `app/folha/previa.py:142`.
-- Comandos/sondas: `app/chamados/management/commands/auditar_invariantes_chamados.py:536`, `:1075-1076`, `:1105-1112`, `:1572-1575`, `:1602-1603`, `:1655`, `:1766`, `:1778`; `curar_perguntas_em_limbo.py:32`, `:46`, `:69`; `encerrar_perguntas_com_fato.py:32`; `validar_classe_a.py:80`; `reabrir_orfas_enterradas.py:68`; `backfill_decisoes_pergunta.py:56`, `:102`, `:326`; `dedup_perguntas_fato.py:75`; `app/ponto/management/commands/reconciliar_grade.py:461`; `bin/censo_folha.py:28-29`; `bin/sombra_regras_pessoais.py:85`.
-
-Censo acima combina atributos AST, kwargs e leituras conferidas; exaustividade diante de acesso dinâmico adicional: [nao verificado].
-
-`recusa_motivo` tem múltiplos conteúdos preexistentes e explicitamente declarados como donos diferentes em `app/core/portas.py:385-392`; além da apresentação, `app/ponto/services/flip_auto.py:132` interpreta estrutura textual para extrair uma batida. Esse risco é legado, sem alteração desses escritores/leitores no patch fornecido.
-
-Para F: o reenvio da mesma resposta sempre muda `respondida_em` (`app/chamados/services/disputa_emissao.py:1459-1465`) e acrescenta DP (`:1508`); o próprio contrato declara essa não idempotência em `app/core/contratos_estruturais.py:563-564`. `DecisaoPergunta.registrar`, agora tocado, continua fazendo `bulk_create` incondicional (`app/chamados/models.py:3942-3945`), sem unicidade do ato nas constraints (`:3886-3897`).
-
-_3238 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3239 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
