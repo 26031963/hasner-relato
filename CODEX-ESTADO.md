@@ -1,7 +1,168 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 19:59** · publicado em **10/11/2026 19:59** (UTC-3)
+> Ultima resposta processada: **10/11/2026 20:03** · publicado em **10/11/2026 20:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 20:03 · sessao 129941409e00 · - · - · origem=Ronald (tmux)
+
+Consolidado A enviado com os sítios e o inventário contado. Pontos que precisam aparecer no resultado:
+
+- **A6 é parcial:** a divergência texto/número existe (`app/ponto/services/geofence.py:145`; `app/ponto/registro_batida.py:15`), mas o teste atual **já caracteriza** `'0'`/`'0.0'` como truthy (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:79`).
+- **A8 não comprova falha:** os dois leitores atuais delegam ao juiz (`app/templates/chamados/partials/_relatorio_geo.html:31`; `app/templates/chamados/partials/modal_fio.html:481`); a fixture sempre fornece as chaves (`app/ponto/tests/test_bo0611_05_templates_geo.py:132`). Consequência de chave ausente em execução: **[nao verificado]**.
+- **A9 é parcial:** o módulo `templates_geo` individual não inclui zero no laço (`app/ponto/tests/test_bo0611_05_templates_geo.py:178`), mas o teste do juiz já exercita zeros nos contextos (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:218`). O detector fixa zero como evidência (`app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`). RED histórico contra a base: **[nao verificado]**.
+- `anotar` **não escreve coordenadas**: sua allowlist não as contém e campos externos são recusados (`app/ponto/registro_batida.py:203`; `app/ponto/registro_batida.py:241`). `semear` pode recebê-las genericamente, mas exige banco de ensaio (`app/ponto/registro_batida.py:326`; `app/ponto/registro_batida.py:335`).
+- O leitor reflexivo do admin deve constar: `BatidaAdmin` usa `SoLeitura`, que expande todos os campos do modelo (`app/ponto/admin.py:12`; `app/core/admin.py:74`). O realtime não transporta geo: o payload explícito tem somente tipo, identificadores e timestamp (`app/ponto/realtime.py:32`).
+- **Contagem consolidada:** 35 unidades diretas em produção + 1 escritor potencial de ensaio + 11 unidades de ingresso/transporte = **47 unidades identificadas**, antes dos delegadores command/signal. A lista nominal e as linhas foram enviadas nas mensagens anteriores; não apresentar esse número como censo de todos os consumidores genéricos de `AlertaGeofence`/`ChamadoColaborador`, cujo alcance depende de incluir a expansão de A7. **[nao verificado: fechamento desse universo genérico]**
+- Casa verificável: **COMPLEMENTO de O254 / contrato batida–juiz**, `app/docs/BACKLOG.md:1458`, e BO pai `app/docs/BACKLOG.md:1873`. Os identificadores filhos pedidos não aparecem literalmente no BACKLOG desta cópia. **[nao verificado: casas registradas apenas em 6c0517eb9]**
+- Lei/juiz/padrão: L-002/L-007/L-030 (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:65`; `app/docs/LEIS.md:78`); juiz vivo `app/core/juizes.py:1201`; corte de migração e zero inválido `app/docs/CORTES.md:442`; padrão **Single Writer Principle**, `app/docs/GLOSSARIO.md:12`.
+- **perguntas de lei: 0**, para migração e coerência de tipo já cobertas pelo corte. Se a cura incluir remover a guarda de posto, há **1** pergunta adicional: “Batida sem GPS e sem posto deve gerar `AlertaGeofence.sem_gps` e chamado `gps_ausente`?” Hoje o escritor exige posto (`app/ponto/services/geofence.py:270`), e o corte proíbe alterar o veredito nessa migração (`app/docs/CORTES.md:442`).
+
+## 10/11 20:03 · sessao b76f94c08b6a · - · - · origem=Ronald (tmux)
+
+Bloco B consolidado, somente leitura.
+
+**Conferência B1–B7**
+
+| Achado | Veredito e forma |
+|---|---|
+| B1 | **confere**: `app/templates/ponto/bater_ponto_v2.html:287` faz `if(!_fotoBlob)` e retorna `false` em :290; `v2Confirmar` encerra antes do POST em :312. A API já trata selfie ausente como sinal: `app/api/views_core.py:418`, :430–434; outra casca `app/api/views.py:431`, :443. |
+| B2 | **parcial**: API usa queryset de mesmo tipo no intervalo inclusivo **±5 min**, `.first()` e truthiness `if dupla`, retornando HTTP 200 sem chamar a porta (`app/api/views_core.py:508`, :510, :514, :517; réplica `app/api/views.py:521`, :523, :527, :530). Web usa **[agora−5 min, agora]**, não ±5 min (`app/ponto/services/triagem_batida.py:662`, :663, :669–670). Não é demonstrado que cada tentativa seja um fato distinto: a idempotência é exigida em `CLAUDE.md:175`; a chave exata existe em `app/ponto/models.py:106` e `app/ponto/registro_batida.py:120`. |
+| B3 | **parcial**: não impede “chegar a registrar_batida”: chega e a **própria porta** recusa com `(None, conflito)` (`app/ponto/registro_batida.py:145`, :150–151). Janela 300 s com escala/marcos, senão 60 s (`app/ponto/registro_batida.py:21`, :30–32); ainda há exceção quando `_casa_marco_proprio` responde True (:35–49, :145). As APIs consultam a mesma janela `_janela_oposto as _jop`, queryset excluindo tipo e retratadas, e respondem 200 `ignorada_intervalo` (`app/api/views_core.py:658–678`; réplica `app/api/views.py:666–686`). A web consulta oposta em **±60 s fixos**, sem `retratada_em` no filtro (`app/ponto/services/triagem_batida.py:714–725`), portanto pode devolver id nulo quando a porta recusou no envelope de 300 s. |
+| B4 | **confere**: `tipo == 'E'`, truthiness de `context.get('turno_aberto')` e ausência de `request.POST.get('confirmar')` gravam sessão, marcam `aguardando_confirmacao=True` e fazem `return render` antes do ramo registrador (`app/ponto/views.py:316–330`; ramo em :346–350). A presença do turno é alimentada perguntando a `turno_aberto_de as _tad`, não somente pela última marcação (`app/ponto/services/triagem_batida.py:198–204`). |
+| B5 | **confere**, com complemento: login lê `getattr(colab, 'situacao', 'ativo') != 'ativo'` em `app/api/login_helpers.py:141` e retorna erro :142. Refresh também tem cópia em **ambos** os kernels: `app/api/views_core.py:173–177` e `app/api/views.py:116–120`. Logo inclui férias e qualquer outro valor diferente de ativo; a mensagem do refresh chama tudo de “desligado”. São guardas de autenticação anteriores ao endpoint de bater, não 403 internos ao kernel da batida. |
+| B6 | **confere**: `resp.ok` em `app/static/pwa.js:158` aceita o 200; lê JSON em :159 e não consulta `data.status`, apagando IndexedDB em :162. Também apaga 400 em :166–174. Online v2 faz `if(r.ok) v2Sucesso(...)` sem ler payload (`app/templates/ponto/bater_ponto_v2.html:327`). |
+| B7 | **confere**: exigência do selo modal depende da presença textual de `hxConfirmar(` (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:141–143`). Selo API só visita `If` anteriores à primeira chamada nominal `registrar_batida`, cuja condição mencione latitude/longitude/situacao e contenha `Response(status=403)` (`app/api/tests/test_l030_selo_porta.py:39–64`). Não detecta selfie JS, sessão/render, `ja_registrada` 200, recusa interna da porta, login nem refresh. Os próprios testes ainda exigem a colisão: `app/ponto/tests/test_f9d_t1_caracterizacao_ramo_quente.py:105`, :115–120. |
+
+**(a) Lei, juiz e porta**
+
+- L-030: `app/docs/LEIS.md:78`, `CLAUDE.md:140–141`; corte da obra em `app/docs/CORTES.md:440` manda censo de **toda** barreira e proíbe barrar por outro motivo.
+- **Sem juiz registrado para “esta tentativa pode ser materializada?”**, “qual identidade de reenvio?” ou “qual situação pode autenticar?”. O registro da família batida contém período/par, geofence, selfie e GPS (`app/core/juizes.py:1186–1201`), não essas perguntas. Hoje decidem os `If` e filtros acima.
+- Juízes auxiliares existentes: selfie ausente em `app/core/juizes.py:1195` → `app/ponto/registro_batida.py:80`; geometria/tipo em `app/core/juizes.py:208–209`. Selfie ausente é **cobrança**, explicitamente no corte `app/docs/CORTES.md:94`, não autorização para impedir registrar.
+- Porta canônica: `app/core/portas.py:103` → `app/ponto/registro_batida.py:94`. Web chama em `app/ponto/services/triagem_batida.py:700–713`; APIs em `app/api/views_core.py:639–654` e `app/api/views.py:647–662`.
+- `JUIZES.md` é lookup e manda prevalecer o vivo (`app/docs/JUIZES.md:10–15`); sua tabela de geometria está em :20–25.
+
+**(b) Estado e decisor**
+
+- Campo novo: **não**; escolhas novas de campo: **não**, para uma cura que apenas encaminhe o fato à porta existente. Selfie já é opcional (`app/ponto/models.py:78`); foto/GPS ausentes já seguem API (`app/api/views_core.py:417–434`, :639–654).
+- Linhas que hoje não nascem **por esses caminhos**: **sim**. Exemplos são a tentativa interceptada pelo retorno de :517, pelo render de `app/ponto/views.py:330` ou pela recusa de `app/ponto/registro_batida.py:151`. Não se deve dizer que a combinação é impossível **globalmente**: autoridade humana já pode criar a colisão (`app/ponto/registro_batida.py:150–156`).
+- Muda quem decide admissibilidade: **sim**, ao retirar o veto dos clientes/cascas/guardas para encaminhar à porta; não requer inventar juiz. A definição exata da cura do login geral permanece [nao verificado], porque o corte da batida não especifica permissões para todas as outras operações autenticadas (`app/docs/CORTES.md:440`).
+- Existência e quantidade real de batidas hoje perdidas: **depende de dado: contagem de tentativas distintas retidas em cada barreira; colisões por 60/300 s; fila descartada por status; recusas de login/refresh por situação**. O dado fornecido não contém essas contagens [nao verificado].
+
+**(c) Censo fechado de estados locais; limite do censo global**
+
+Método: grep em todos os `.py`, `.html` e `.js` da aplicação para nomes dos retornos, sessão/confirmação e store IndexedDB; AST de produção preservando `ImportFrom.asname`, incluindo `management/`; verificadas buscas específicas em `config/crons.py` e `*/signals*.py`. Não há comparação literal de `ja_registrada`/`ignorada_intervalo` em leitor runtime achado: os usos literais runtime são os seis escritores abaixo; os consumidores de sucesso leem `Response.ok`. Testes são separados, não contados como produção (`app/api/tests/test_l030_selo_porta.py:37` mostra por que a forma precisa ser distinguida do significado).
+
+**28 sítios sintáticos distintos nos três estados locais abaixo**, contados uma vez por `arquivo:linha`; `pop` conta como leitura/escrita no mesmo sítio:
+
+1. **Retornos — 8 sítios**:
+   - Escritores `ja_registrada`: `app/api/views_core.py:518`, `app/api/views.py:531`, `app/ponto/services/triagem_batida.py:670` — literal em dict de Response/JsonResponse.
+   - Escritores `ignorada_intervalo`: `app/api/views_core.py:669`, `app/api/views.py:677`, `app/ponto/services/triagem_batida.py:721` — literal em dict.
+   - Leitores genéricos de sucesso: `app/static/pwa.js:158` e `app/templates/ponto/bater_ponto_v2.html:327` — truthiness de `.ok`, sem comparação de status do payload.
+
+2. **Sessão/confirmação — 15 sítios**:
+   - Escritores: `app/ponto/views.py:319` (`session['confirmacao_pendente'] = dict`), :327 (`confirmacao_foto_b64 = ...`), :328 (`confirmacao_foto_nome = ...`), :329 (`context['aguardando_confirmacao']=True`).
+   - Leitor contextual: `app/ponto/views.py:233` — truthiness de `.get`.
+   - Leitores/deletores: `app/ponto/services/triagem_batida.py:505` (`confirmar and session.get`), :506 (`pop`), :508 e :510 (`cp.get`), :512 (`confirmar and session.get`), :513 e :514 (`pop`, último com default).
+   - Templates: `app/templates/ponto/bater_ponto_v2.html:64` (`elif ... or aguardando_confirmacao`); `app/templates/ponto/bater_ponto.html:161` (`and not aguardando_confirmacao`) e :174 (`if aguardando_confirmacao`).
+   - Formulário confirmado nasce em `app/templates/ponto/triagem/turno_confirmar.html:11` e `app/templates/ponto/bater_ponto.html:183` e é lido em `app/ponto/views.py:273`, :316; estes são **quatro sítios adicionais se incluir também o campo POST `confirmar`**, total local então **32**. O total 28 acima deliberadamente cobre estados de retorno, sessão/contexto e fila; não incorpora esse campo de entrada.
+
+3. **Fila — 5 sítios**:
+   - `app/static/pwa.js:113` — `.add` da linha.
+   - :132 — `.getAll` para envio.
+   - :162 e :172 — `.delete` por sucesso/400.
+   - :190 — `.count` para indicador.
+   - Definição do store em :54 é DDL local, separada das cinco operações sobre linhas.
+
+**Guardas/decisores adicionais que a cura toca**, separados da contagem de estados acima:
+- selfie: `app/templates/ponto/bater_ponto_v2.html:287` (nega truthiness do blob) e :312 (nega retorno da função);
+- situação/autenticação: `app/api/login_helpers.py:141`, `app/api/views_core.py:173`, `app/api/views.py:116` — comparação `!= 'ativo'`;
+- duplicidade: querysets `.first()` em `app/api/views_core.py:510`, `app/api/views.py:523`, `app/ponto/services/triagem_batida.py:663`, seguidos de truthiness;
+- colisão da porta: `app/ponto/registro_batida.py:107` (janela), :113–115 (`mesma is not None`), :120–122 (mesma chave), :139–145 (`exclude(tipo=tipo)`, `.exists()`), :150 (`not autoridade_humana`);
+- confirmação: `app/ponto/views.py:316` — conjunção tipo/truthiness/ausência de confirmar.
+
+**Todos os escritores Batida sob o instrumento existente**: cinco operações do AST `core/censo_escritas`:
+`app/ponto/registro_batida.py:152` create; :157 create; :254 save; :291 delete; :335 bulk_create. Fontes do instrumento: `app/core/censo_escritas.py:6–46`, :451, :469; porta declarada `app/core/portas.py:103`. O próprio censo tem inferência por nome e operações não atribuíveis, portanto não é prova absoluta de fluxo dinâmico (`app/core/censo_escritas.py:38–46`).
+
+**Não fechar como “28/32 leitores+escritores de Batida”**: esse é apenas o inventário dos estados locais. Novas linhas também alimentam apuração, tela, comandos, signals e dinheiro. Meu AST amplo achou **218 unidades candidatas em 128 arquivos**, incluindo aliases, mas contém metadados/constantes e não acompanha listas recebidas por parâmetro; portanto **total global de leitores de novas Batida: [nao verificado]**. Exemplos comprovados adicionais:
+- `app/ponto/signals.py:35`, :40, :49, :132, :139 — receivers de criação/remoção; `instance` e `created/raw`.
+- `app/ponto/signals.py:19`, :108 — timestamp/colaborador por parâmetro.
+- `app/ponto/turnos.py:2876` — queryset do universo apurável.
+- `app/ponto/services/fechamento.py:633`, :811 — `_bap`, alias de `batidas_apuraveis`.
+- `app/folha/export.py:499` — `batidas_apuraveis`.
+- `app/ponto/management/commands/marcar_foto_ausente_retro.py:66`, :74 — queryset e juiz da selfie.
+- `app/ponto/registro_batida.py:177–178` — chama recálculo.
+- Uso de universo por parâmetro é limite que a própria documentação admite (`CLAUDE.md:160–163`), portanto não declarar o AST candidato como censo completo.
+
+**(d) Casa**
+
+**COMPLEMENTO de BO-0611-05**, `app/docs/BACKLOG.md:1873`, pelo corte `app/docs/CORTES.md:440`; não “BO simples”: já há guardas distribuídas por JS/template, três caminhos de gravação e autenticação. Não encontrei os IDs `TEM-GPS-LEITORES` ou `RESTO-DA-CLASSE` no BACKLOG desta cópia [nao verificado: resultado negativo de grep, sem linha citável]. O usuário forneceu que foram mapeados antes em outra árvore; não transformar isso em linha inexistente nesta.
+
+A descrição do pai em `BACKLOG.md:1873` ainda diz API 403 sem coordenada e template interrompendo por GPS: **não confere no vivo desta árvore**. APIs chegam à porta com latitude/longitude (`app/api/views_core.py:639–654`; `app/api/views.py:647–662`); o requisito GPS do v2 termina em `return true` mesmo sem obter coordenadas (`app/templates/ponto/bater_ponto_v2.html:292–297`). A selfie continua barrando, conforme B1.
+
+Não encontrei motivo para classificar como RAIZ-DA-DISPUTA/E/FIO/MOTOR: estas obras têm objetos diferentes explicitados em `app/docs/BACKLOG.md:1839`, :1862–1864; a casa direta já é BO-0611-05.
+
+**(e) Padrão**
+
+`Single Writer Principle`, termo literal em `app/docs/GLOSSARIO.md:12`, com `Architecture Conformance Test` em :15 para selar a **classe** das barreiras. A cura tem de preservar idempotência e a porta, não apagar indiscriminadamente qualquer retorno de reenvio (`CLAUDE.md:175`; `app/ponto/registro_batida.py:120–122`).
+
+**(f) Perguntas de lei candidatas**
+
+`perguntas de lei: 2`
+
+1. **Qual identidade distingue um reenvio do mesmo fato de uma nova marcação do mesmo tipo em instante distinto dentro dos cinco minutos?** A lei exige zero barreira e idempotência (`app/docs/LEIS.md:78`; `CLAUDE.md:175`), mas o envelope temporal vem de decisão do código/comentário (`app/api/views_core.py:491–513`), enquanto a unicidade armazenada é por instante exato (`app/ponto/models.py:106`). Não perguntar novamente se selfie, GPS ou tipo oposto podem barrar: L-030 já responde.
+2. **Para quem tem situação diferente de ativo, a L-030 exige permitir login/refresh geral, ou garantir somente acesso à porta de registrar uma batida, conservando as outras restrições da conta?** O corte existente disciplina gravação da batida (`app/docs/CORTES.md:440`) e o corte de credencial disciplina validade/revogação (`app/docs/CORTES.md:184`); nenhum dos dois explicita essa extensão de permissões. Hoje os três `!= 'ativo'` decidem (`app/api/login_helpers.py:141`; `app/api/views_core.py:173`; `app/api/views.py:116`).
+
+## 10/11 20:01 · sessao a12c0edbce44 · - · - · origem=Ronald (tmux)
+
+## BO-0611-05-DINHEIRO-DESLIGADO-FERIAS
+
+**C1: parcial.** Os dois caminhos chegam a `registrar_batida`: `app/api/views_core.py:640` e `app/ponto/services/triagem_batida.py:701`. O primeiro já não bloqueia pela situação (`app/api/views_core.py:393`); o segundo transforma o sinal em justificativa/aprovação para revisão, continuando a gravar (`app/ponto/services/triagem_batida.py:693`). A porta cria `Batida` e dispara fechamento (`app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:160`).
+
+A função de evento calcula a competência do fato e chama o escritor sem recusa genérica por exportação (`app/ponto/services/fechamento.py:1809`, `app/ponto/services/fechamento.py:1810`), por `on_commit` (`app/ponto/services/fechamento.py:1824`). **Mas não se pode afirmar que toda batida produz dinheiro novo:** o universo exclui desligado com demissão anterior à janela ou sem data (`app/ponto/services/fechamento.py:432`, `app/ponto/services/fechamento.py:439`); a cadeia conserva guarda temporária de **09/2026** (`app/ponto/services/fechamento.py:36`), aplicada mediante exclusão dos colaboradores de empresas exportadas (`app/ponto/services/fechamento.py:560`, `app/ponto/services/fechamento.py:564`).
+
+O teste fornecido no código cobre ambos os kernels e situações, verifica uma Batida e o retorno de seu id; não afirma nenhum valor de fechamento (`app/api/tests/test_l030_batida_pela_porta.py:39`, `app/api/tests/test_l030_batida_pela_porta.py:44`, `app/api/tests/test_l030_batida_pela_porta.py:50`). Situação textual `ferias` no teste não comprova férias efetivas em `Ausencia`/agendamento (`app/api/tests/test_l030_batida_pela_porta.py:28`, `app/api/tests/test_l030_batida_pela_porta.py:52`).
+
+**(a)** Leis: L-030 manda conservar a batida (`app/docs/LEIS.md:78`); L-113 revoga a recusa de recálculo em exportada, preserva TXT anterior/trilha/DIFF de frota e altera expressamente L-092/L-052 (`app/docs/LEIS.md:153`). Logo a falta de recusa genérica não é defeito por si; a função trata exportada como carimbo `warning`, não como veto (`app/ponto/services/fechamento.py:539`, `app/ponto/services/fechamento.py:541`).
+
+Juiz registrado do valor do par: `MotorBase.calcular_periodo` (`app/core/juizes.py:1188`); efeitos e cobertura da ausência: `efeito_vigente` e `cobertura_ausencia_periodo` (`app/core/juizes.py:252`, `app/core/juizes.py:253`); férias hoje: `em_gozo_hoje` (`app/core/juizes.py:262`); entregue/trancado: `competencia_entregue` e `periodo_trancado` (`app/core/juizes.py:327`, `app/core/juizes.py:328`). A tabela anexa local chama cálculo de `motor_calculo_v2` (`app/docs/JUIZES.md:29`).
+
+**Sem juiz registrado específico para “uma batida de desligado/em férias deve produzir qual dinheiro?”** O caminho atual seleciona o universo, lê a cobertura para folha e monta o motor com a régua existente (`app/ponto/services/fechamento.py:439`, `app/ponto/services/fechamento.py:683`, `app/ponto/services/fechamento.py:735`). Não substituir essa cadeia por uma política presumida. [nao verificado]
+
+Portas: batida `registrar_batida`; evento `_fechamento_por_evento` → `recalcular_por_evento`; escritor financeiro `recalcular_fechamento_mes` (`app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:175`, `app/ponto/services/fechamento.py:1798`, `app/ponto/services/fechamento.py:448`). FM nasce por `get_or_create`, salva aberto e atualiza os demais status; `DiaPago` é reconstruído por exclusão e `bulk_create` (`app/ponto/services/fechamento.py:898`, `app/ponto/services/fechamento.py:1137`, `app/ponto/services/fechamento.py:1160`, `app/ponto/services/dia_pago.py:359`).
+
+**(b)** Cura não especificada pelo C1; não cabe inventá-la. Para o **censo solicitado**, não há alteração proposta de estado ou decisor. O estado Batida e os efeitos de fechamento já existem nesta árvore (`app/ponto/registro_batida.py:157`, `app/ponto/services/fechamento.py:1810`). Uma cura futura que passe a recusar, excluir ou mudar o valor dessas batidas pode alterar decisor/combinação de estados, mas seu escopo permanece [nao verificado].
+
+**(c)** Censo auditável de **chamadas diretas**, não um total de todos os leitores/escritores das tabelas: AST em memória de `app/**/*.py`, excluindo `tests/` e `migrations/`, resolvendo `ImportFrom`, `as` e import de módulo; grep complementar. Resultado: **5 chamadas de evento, 21 do escritor mensal, 3 do universo e 5 da competência do fato**. A cifra completa de leitores/escritores financeiros, incluindo templates/JS, permanece **[nao verificado]**; não somar essas chamadas e rotular o resultado de censo de estado.
+
+As cinco chamadas de evento:
+
+- `app/ponto/registro_batida.py:178`: evento da batida.
+- `app/ponto/portas/celula.py:458`: evento do ato de célula.
+- `app/ponto/portas/he.py:202`: decisão de HE.
+- `app/chamados/services/validacao.py:361`: folga aceita.
+- `app/chamados/services/validacao.py:446`: resposta validada.
+
+As 21 chamadas do escritor, com sua forma:
+
+- Escrita padrão: `app/folha/management/commands/simular_folha.py:123`; `app/ponto/management/commands/aplicar_09_corte_b.py:212`; `app/ponto/management/commands/celula_veredito_velho.py:149`; `app/ponto/management/commands/desvio_o68b.py:94`; `app/ponto/management/commands/diff_reclassificar_partido.py:161` e `:206`; `app/ponto/management/commands/folga_que_sumiu.py:70`; `app/ponto/management/commands/plano_b_no_dinheiro.py:110` (**alias de módulo `_fech`**); `app/ponto/management/commands/recalcular_fechamento.py:118`; `app/ponto/portas/regen_exportada.py:179`; `app/ponto/services/fechamento.py:1810`; `app/ponto/views.py:1252`.
+- Leitura `somente_leitura=True`: `app/folha/management/commands/simular_folha.py:130`; `app/folha/views.py:208` (**alias `_recalc`**); `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135`; `app/ponto/management/commands/apurar_furo_da_exportada.py:111`; `app/ponto/services/diff_frota.py:84` e `:87`; `app/ponto/services/fechamento.py:1759`.
+- Leitura de FM **com escrita de DiaPago**, `somente_leitura=True, lavrar_dias_pagos=True`: `app/ponto/management/commands/diff_calculador.py:140` (**alias `_recalc`**); `app/ponto/management/commands/lavrar_dias_pagos.py:106`.
+
+Leitores do universo: escritor mensal e duas telas (`app/ponto/services/fechamento.py:554`, `app/ponto/views.py:1078`, `app/ponto/views.py:1114`). A forma decisiva é queryset `~Q(situacao='desligado') | (Q(situacao='desligado') & data_demissao__gte=inicio_da_janela)` (`app/ponto/services/fechamento.py:432`, `app/ponto/services/fechamento.py:439`).
+
+`post_save` de Batida também recomputa turnos e publica tempo real (`app/ponto/signals.py:34`, `app/ponto/signals.py:39`); julgamento da célula passa por `cartorio.julgar_celula` (`app/ponto/signals.py:85`, `app/ponto/signals.py:93`). Não há chamada direta adicional de `recalcular_por_evento` nesses signals pelo AST/grep. [nao verificado]
+
+**Não usar como fato a promessa “cron da madrugada rega”** dos comentários de `recalcular_por_evento`: o cadastro declara expressamente que `recalcular_fechamento` **não tem cron**, por desenho (`app/config/crons.py:1130`). O comentário do command que promete recusa de exportada também está desatualizado em relação ao escritor (`app/ponto/management/commands/recalcular_fechamento.py:83`, `app/ponto/services/fechamento.py:539`).
+
+**(d)** Encaixe sugerido: **COMPLEMENTO de O-PROJECOES**, cuja descrição cobre fonte, versão e reconstrução de espelho/DiaPago/fechamento (`app/docs/BACKLOG.md:737`). Não há prova de que este C1 trate de pareamento/dia para encaixá-lo em MOTOR-LE-O-TURNO (`app/docs/BACKLOG.md:1839`). A questão distinta de custo inline já possui casa própria (`app/docs/BACKLOG.md:734`).
+
+**(e)** Padrão: **CQRS com projeções reconstruíveis** (`app/docs/GLOSSARIO.md:24`), mantendo **Single Writer Principle** (`app/docs/GLOSSARIO.md:12`).
+
+**(f)** `perguntas de lei: 0`
+
+O C1 não formula cura nem cenário financeiro sem resposta; a ausência de medição não é lacuna de lei. L-113 já responde a exportada; L-030 responde a conservação da batida (`app/docs/LEIS.md:153`, `app/docs/LEIS.md:78`).
+
+**Depende de dado:** contagem de Batidas efetivamente novas por kernel/situação factual/competência; quantas caem fora do universo, na guarda de 09 exportada, ou produzem alterações em FM/DiaPago; DIFF por campo e competência contra gravado. Nenhuma dessas contagens consta do dado fornecido. [nao verificado]
 
 ## 10/11 19:59 · sessao 10354500077f · - · - · origem=Ronald (tmux)
 
@@ -1073,44 +1234,4 @@ Auditoria adicional do replay:
 
 Execução ORM, callbacks reais e concorrência: [nao verificado].
 
-## 10/11 19:31 · sessao 675ffdb27b5f · - · - · origem=Ronald (tmux)
-
-Complemento entregue: **116 chamadas adicionais**, com aliases e formas, nas três mensagens anteriores.
-
-A união medida soma **383 sítios `(arquivo, linha, tipo)` em 148 arquivos**: 159 seletores ORM, cinco escritas, 116 chamadas às quatro portas, 32 sítios de reverso/tupla, 16 chamadas a `registrar_batida`, sete signals e 48 linhas de templates/JS. A criação já incluída no seletor não foi contada novamente. (`app/ponto/registro_batida.py:152`, `:157`, `:254`, `:291`, `:335`; demais referências no inventário entregue)
-
-O total universal de leitores transitivos permanece **[não verificado]**; **383 é o conjunto explicitamente inventariado**, sem os complementos de `bin/` que o agente principal encontrou.
-
-## 10/11 19:30 · sessao 1ac3e43926fc · - · - · origem=Ronald (tmux)
-
-**BUG-PAR-FROTA-1110 — resultado consolidado**
-
-- **Lei:** L-025, universo apurável (`app/docs/LEIS.md:76`); L-087, papel por instante/ata/DNA, sem decidir pelo tipo gravado (`app/docs/LEIS.md:119`); consumidor lê lâmpada (`CLAUDE.md:167`); juiz e escritor únicos/idempotência (`CLAUDE.md:175`).
-- **Juízes registrados:** turno (`app/core/juizes.py:208`), marcos (`app/core/juizes.py:213`), intervalo (`app/core/juizes.py:214`), completude do par (`app/core/juizes.py:240`), vitalidade C6 (`app/core/juizes.py:278`) e fechamento C7 (`app/core/juizes.py:279`). **Sem juiz registrado para elegibilidade/aplicação conjunta das duas respostas declaradas.** `par_completo` exige batidas existentes no mesmo turno e dia encerrado, portanto não responde sozinho a essa pergunta (`app/ponto/turnos.py:2190`).
-- **Quem decide hoje:** a guarda por vizinha de mesmo tipo, com exceção por furo e testemunho do marco (`app/chamados/services/materializacao.py:875`, `app/chamados/services/materializacao.py:901`). A validação executa uma pergunta antes do laço da disputa (`app/chamados/services/validacao.py:461`); o próprio laço também chama a unidade individualmente (`app/chamados/services/materializacao.py:1375`).
-- **Portas:** validação (`app/chamados/services/validacao.py:373`), materialização (`app/chamados/services/materializacao.py:1158`), carimbo (`app/chamados/models.py:3103`), identidade (`app/chamados/models.py:3168`), nascimento de Batida (`app/chamados/services/materializacao.py:927` → `app/ponto/registro_batida.py:157`).
-- **(b): cria estado SIM**, no sentido solicitado de novas linhas/combinações neste fluxo: duas materializações atualmente impedidas pela guarda individual; preservar metade validada também altera a combinação hoje desfeita pela devolução (`app/chamados/services/materializacao.py:875`, `app/chamados/services/validacao.py:199`). **Nova coluna não:** os campos existem (`app/chamados/models.py:2449`, `app/chamados/models.py:2556`, `app/chamados/models.py:2560`, `app/chamados/models.py:3393`); “estado explícito” foi superado por derivado (`app/docs/BACKLOG.md:1913`). **Muda decisor SIM**, da guarda unitária para julgamento da unidade par; autorização humana continua explícita na porta (`app/chamados/services/validacao.py:373`).
-- **Casa:** COMPLEMENTO de `BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS`, que já manda aplicar o par no mesmo ato e esperar a outra metade (`app/docs/BACKLOG.md:1912`). Não é BO simples: validação, materialização, carimbos, C6/C7 e apresentação leem o estado (`app/chamados/services/validacao.py:461`, `app/chamados/models.py:1842`, `app/templates/chamados/partials/modal_fio.html:221`).
-- **Padrão:** `Single Writer Principle` (`app/docs/GLOSSARIO.md:12`). “Unidade de trabalho” não consta nos dois vocabulários consultados [não verificado como termo permitido].
-- **Produção:** 77 colab-dias/48 colaboradores/18 na competência 11 são somente agregado fornecido [não verificado na árvore]. **Depende de dado:** lista de pares/perguntas, distribuição por empresa/competência, estado das duas metades, existência de Batida por `pergunta_origem`, tipos/marcos/horários e impacto de frota [não verificado].
-- **perguntas de lei: 0.** Identificar a mesma pausa é desenho baseado nos marcos; o mandato conjunto/metade aguardando já está escrito (`app/core/juizes.py:213`, `app/docs/BACKLOG.md:1912`).
-
-**Censo entregue ao pai:** inventário completo por estratos nas mensagens anteriores. Convenção proposta: **356 sítios**, deduplicados por instrução AST ou linha de template, para os quatro campos que representam a espera mais seus juízes/properties/portas nomeados: `154 + 133 + 24 + 9 + 1 + 8 + 27`. Os oito externos foram conferidos pelo pai; o número não inclui o estrato geral de Batida nem transforma configuração de agenda em leitor de valor [não verificado quanto ao fechamento global de Batida].
-
-O nascimento implícito precisa constar: `app/chamados/models.py:3017` grava os quatro defaults mesmo sem nomeá-los; os defaults estão em `app/chamados/models.py:2449`, `app/chamados/models.py:2557`, `app/chamados/models.py:2560`, `app/chamados/models.py:3394`. O levantamento direto de campos sozinho perderia esse escritor.
-
-## 10/11 19:29 · sessao f8ac4f4480e8 · - · - · origem=Ronald (tmux)
-
-Confirmado fora de `app/`:
-
-- `bin/sombra_regras_pessoais.py:145` inclui o contexto do chamado; **não inclui** `Advertencia.detalhe_json` no inventário JSON (`:144-158`).
-- `bin/sombra_mascara_pessoal.py:20` é **um statement escritor**, alcançando Batida e Alerta pelos dois alvos de `R.NULO` (`bin/sombra_regras_pessoais.py:75`, `:77`).
-- JSON: leitura em `bin/sombra_mascara_pessoal.py:51`/`:54`; classificação recursiva em `bin/sombra_regras_pessoais.py:36`/`:43`; dois statements persistentes em `bin/sombra_mascara_pessoal.py:62` e `:64`. `setattr` em `:57` é alteração em memória.
-- Dois leitores do selo: SQL `IS NOT NULL` em `bin/sombra_selo_pessoal.py:58` e `jsonb_path_exists(... != null)` em `:89`.
-- Apagador genérico adicional do contexto: `app/chamados/models.py:571`, guardado como ensaio em `:570`, chamado por `app/ponto/management/commands/zerar_dados_operacionais.py:84`.
-
-Pela convenção de sítios semânticos já usada: **58 leitores +14 gravações +4 apagadores =76**. São os 68 anteriores, quatro leitores e três escritores da máscara/selo, mais um apagador de chamado. As portas genéricas intermediárias já documentadas permanecem arestas transitivas, sem somar novamente o chamador que fornece o GPS.
-
-O total descreve o inventário estático identificado; completude contra reflexão, SQL construído fora dos caminhos rastreados e cascatas genéricas: **[não verificado]**.
-
-_3478 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3481 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
