@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 15:03** · publicado em **10/11/2026 15:06** (UTC-3)
+> Ultima resposta processada: **10/11/2026 15:10** · publicado em **10/11/2026 15:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 15:10 · sessao 79dcdf5b3dda · BO-0611-05 · construtor · origem=Code
+
+Corrigido o leitor: o detector agora exige latitude **e** longitude não nulas antes de converter o par ([vinculo_na_lista.py:49](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/services/vinculo_na_lista.py:49)).
+
+- **RED na base `051f45ef2`:** `TypeError` por longitude None.
+- **GREEN:** 10 testes passaram. [nao verificado]
+- **Mutante sem filtro de longitude:** voltou a vermelho, após controle verde. [nao verificado]
+
+Resultados, comandos individuais, quatro arquivos tocados e **censo completo de escritores/leitores**, incluindo templates e JS: [entrega:8](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:8), [provas:120](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:120).
+
+Com `0.0`, nenhuma exceção foi identificada no censo; os tratamentos como ausência permanecem na fila ([item 4:103](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:103)).
+
+Django com models reais, suíte completa e Ruff: **[nao verificado]**; faltam dependências locais. O RED/GREEN executado usa a função real com consultas em memória ([limites:254](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/BO-0611-05_entrega.md:254)). [nao verificado]
 
 ## 10/11 15:03 · sessao be02c9667e3c · - · - · origem=Ronald (tmux)
 
@@ -1339,25 +1353,4 @@ Nesses casos, o juiz é a função real carregada por AST e envolvida por `Mock(
 
 Limite relevante: `test_RED_selos_dos_catalogos_reais_sem_django` verifica o mecanismo de rejeição de catálogos vazios/encolhidos; não executa os cenários ORM dos catálogos de integração. Não confundir seu verde com integração Django verificada. (`app/chamados/tests/test_e4a2_matriz_memoria.py:321`, `app/chamados/tests/test_e4a2_matriz_memoria.py:340`.)
 
-## 10/11 11:51 · sessao 68011ca7a87c · - · - · origem=Ronald (tmux)
-
-A validação e a regularização podem concluir o chamado, mas o aceite completo depende de estado produzido pela própria escrita; os predicados individuais de leitura não provam esse desfecho (`app/chamados/services/validacao.py:435`; `app/chamados/services/validacao.py:463`; `app/chamados/services/materializacao.py:1233`; `app/chamados/services/materializacao.py:1277`).
-
-| Porta real | Encadeamento | Parte somente leitura / limite |
-|---|---|---|
-| Validar pergunta | `acao_validar_pergunta` → `validar_pergunta` (`app/chamados/services/acoes_disputa.py:13`; `app/chamados/services/validacao.py:373`) | Seleção, resposta, carimbo anterior e implausibilidade são conferidos antes da escrita (`app/chamados/services/validacao.py:385`; `app/chamados/services/validacao.py:393`; `app/chamados/services/validacao.py:404`). O aceite final só aparece depois de carimbar, materializar e reler (`app/chamados/services/validacao.py:435`; `app/chamados/services/validacao.py:469`; `app/chamados/services/validacao.py:490`). |
-| Validar inline | `validar_inline` → `acao_validar_pergunta` (`app/chamados/views_cobrar.py:145`; `app/chamados/views_cobrar.py:208`) | Resolve disputa aberta e perguntas vivas respondidas em leitura (`app/chamados/views_cobrar.py:160`; `app/chamados/views_cobrar.py:169`); herda a dependência de escrita da validação (`app/chamados/views_cobrar.py:208`). |
-| Validar lote | `validar_lote_classe_a` → `acao_validar_pergunta` (`app/chamados/services/validacao.py:695`; `app/chamados/services/validacao.py:746`) | `classe_do_lote(perg)` é seleção real somente leitura, mas o resultado contado vem de `refresh_from_db` posterior à ação (`app/chamados/services/validacao.py:735`; `app/chamados/services/validacao.py:752`; `app/chamados/services/validacao.py:845`). |
-| Regularizar disputa e fechar | Formulário condicionado a disputa aberta, sem `ancora_ausente` e com todas respondidas (`app/templates/chamados/partials/modal_fio.html:325`; `app/templates/chamados/partials/modal_fio.html:333`; `app/templates/chamados/partials/modal_fio.html:352`) → `acao_regularizar_disputa` (`app/chamados/services/acoes_disputa.py:118`) | Guarda de anuência usa `perguntas_vivas_de(d)` (`app/chamados/services/acoes_disputa.py:129`). Depois materializa; só então obtém `disputa_fechada` (`app/chamados/services/acoes_disputa.py:139`; `app/chamados/services/acoes_disputa.py:143`). |
-| Aceitar geofence | Formulário `autorizar_geofence` (`app/templates/chamados/partials/modal_fio.html:505`) → `acao_autorizar_geofence` (`app/chamados/services/acoes_chamado.py:165`) | Recusa terminal em leitura; escreve nota antes de chamar `transicionar('resolvido')` (`app/chamados/services/acoes_chamado.py:176`; `app/chamados/services/acoes_chamado.py:218`; `app/chamados/services/acoes_chamado.py:222`). A medição segura deve usar somente o prefixo real de `transicionar`, sem executar essa ação. |
-| Recusar geofence | Formulário `recusar_geofence` (`app/templates/chamados/partials/modal_fio.html:527`) → `acao_recusar_geofence` (`app/chamados/services/acoes_chamado.py:243`) | Recusa terminal, motivo e pertencimento da batida são lidos antes de `retratar_batida`; esta escreve antes da transição final (`app/chamados/services/acoes_chamado.py:252`; `app/chamados/services/acoes_chamado.py:254`; `app/chamados/services/acoes_chamado.py:262`; `app/chamados/services/acoes_chamado.py:269`; `app/chamados/services/acoes_chamado.py:277`). |
-
-Para medir a porta genérica, a chamada real `ch.transicionar(destino, user)` pode ser interrompida por sentinela em `_aplicar`, executando as guardas originais sem entrar no escritor: `_aplicar` é o último chamado de `transicionar` e só encaminha a `_gravar_estado` (`app/chamados/models.py:199`; `app/chamados/models.py:447`). Os destinos oferecidos na tela são `resolvido` e `fechado` (`app/templates/chamados/partials/modal_fio.html:668`; `app/templates/chamados/partials/modal_fio.html:669`).
-
-**É necessário experimentar ambos:** a guarda S122 da premissa do furo só barra `resolvido`; `fechado` tem a guarda de justificativa pendente e compartilha as guardas de disputa e perguntas ancoradas (`app/chamados/models.py:136`; `app/chamados/models.py:148`; `app/chamados/models.py:165`; `app/chamados/models.py:181`).
-
-`estado_aplicacao_pergunta(disputa, p)` é uma leitura real, mas não prova conclusão: não cobre o gate `DATA_EM_DISPUTA`, a avaliação do lastro após plantar, o carimbo C6 nem retenção por irmãs sem consumo (`app/chamados/services/materializacao.py:425`; `app/chamados/services/materializacao.py:1192`; `app/chamados/services/materializacao.py:1233`; `app/chamados/services/materializacao.py:1277`; `app/chamados/services/materializacao.py:761`).
-
-Quando ambas as transições genéricas forem recusadas e restarem somente validar/materializar/regularizar, o resultado seguro é coluna **(b)** com **`aceite nao mensuravel sem escrita`**, preservando também as recusas medidas das transições: essas ações só conhecem o aceite definitivo depois dos efeitos descritos acima (`app/chamados/services/validacao.py:490`; `app/chamados/services/materializacao.py:1376`; `app/chamados/services/materializacao.py:1378`).
-
-_3403 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3404 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
