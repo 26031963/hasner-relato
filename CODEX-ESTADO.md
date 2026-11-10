@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 18:13** · publicado em **10/11/2026 18:17** (UTC-3)
+> Ultima resposta processada: **10/11/2026 18:22** · publicado em **10/11/2026 18:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 18:22 · sessao a76dbf51bc37 · - · - · origem=Ronald (tmux)
+
+- **Novo selo morde por inspeção:** testa zeros float/int/Decimal/`0E-7`, ausentes e parciais, exige ambos os vereditos na grade e rejeita nulidade (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:31`, `:65`, `:72`, `:82`). O filtro é provado por retorno sentinela e argumentos exatos (`:97`).
+- **Mutante exigido existe:** cada leitor e cada casca têm controle verde, mutante de nulidade com coordenada válida ainda mostrando link, zero causando a mesma asserção vermelha e leitor vizinho intocado verde (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:128`). A substituição exige exatamente uma ocorrência da guarda; âncora inexistente não passa silenciosamente (`app/ponto/tests/test_bo0611_05_templates_geo.py:51`).
+- **Duas cascas são renderizadas:** `CASCAS` enumera `base.html` e `base_app.html`; o loader substitui somente a base e usa templates reais. Feed usa página de ensaio, offline usa sua página consumidora; isso não equivale a smoke de clique em produção (`app/ponto/tests/test_bo0611_05_templates_geo.py:31`, `:100`, `:107`, `:145`).
+- **Sem falha engolida pelo `subTest` nos mutantes críticos:** o novo selo e o de templates não abrem `subTest` dentro do método cuja falha é capturada; render e controles ficam fora de `assertRaises` (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:132`, `:137`; `app/ponto/tests/test_bo0611_05_templates_geo.py:190`). Nos testes puros antigos, os `subTest` são externos à asserção esperada (`app/ponto/tests/test_bo0611_05_leitores_geo.py:142`; `app/ponto/tests/test_l030_forma_js.py:88`).
+- **Offline sair de `leitores_geo` não afrouxou a cobertura funcional:** o substituto extrai a expressão real de `com_gps` por AST, testa completos/zeros/parciais/mistura, mata nulidade e exige import do juiz sem redefinição (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:170`, `:184`, `:193`, `:198`). O selo antigo explica a transferência e mantém três sítios (`app/ponto/tests/test_bo0611_05_leitores_geo.py:3`, `:23`).
+- **Contrato e API foram fortalecidos:** contrato compara o registro completo incluindo a nova autoridade; API continua provando uma escrita e coordenadas preservadas, acrescentando leitura de zero como `False` (`app/ponto/tests/test_contract_juiz_batida.py:164`; `app/api/tests/test_l030_batida_pela_porta.py:40`, `:56`).
+- **Mudança do selo modal:** deixou de exigir `naoBloquear` quando não existe chamada `hxConfirmar`; permanece exigindo-o quando existe. A nova cobertura JS proíbe confirmação antes de POST/fila, inclusive com comentário `naoBloquear` enganoso (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:135`; `app/ponto/tests/test_l030_forma_js.py:95`).
+- **Executei 14 testes puros, todos verdes**, incluindo controles/mutantes de porta, JS, leitores e detector; os testes correspondentes estão em `app/api/tests/test_l030_selo_porta.py:68`, `app/ponto/tests/test_l030_forma_js.py:71`, `app/ponto/tests/test_bo0611_05_leitores_geo.py:114`, `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:88`. Resultado desta execução não tem arquivo de log por proibição de escrita: `[nao verificado]`. Django não está instalado neste ambiente; render/POST não foram reexecutados: `[nao verificado]`.
+- **Ressalva da obra inteira:** o selo do detector exige que zero gere evidência de vínculo divergente, inclusive `0/0`; é divergência residual explicitamente codificada, anterior à volta 7, não mudança comprovada de semântica nesta volta (`app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`). Os selos analisados não estão entre os três testes listados em quarentena (`app/core/testes_em_quarentena.txt:6`).
+
+## 10/11 18:22 · sessao 14926ad172a8 · - · - · origem=Ronald (tmux)
+
+3. Os três leitores curados consultam o juiz: `_d2_feed.html:16`, `batidas_offline_pendentes.html:96`, `ponto/views.py:485`; filtro sem regra própria em `core/templatetags/hasner_filters.py:33-34`. O `load` está no próprio arquivo consumidor, então não depende da raiz: `_d2_feed.html:1`; offline:4. Todos os caminhos de produção encontrados entregam model: feed usa `list[Batida]` em `core/cell.py:9-20` e `core/views.py:1162-1171`; offline usa QuerySet de Batida em `ponto/views.py:441-446,489` e itera em template:53. Não há dict/values nesses caminhos. O filtro aceita apenas objetos com atributos; dict ou None causa AttributeError em `hasner_filters.py:34`. Não há catch na view offline ao renderizar (`ponto/views.py:488`) nem no render do feed (`core/live_cell.py:22,27-28`, `core/views.py:1171`). Framework Django instalado/propagação efetivamente executada: [nao verificado]. Se propagar, offline perde a resposta da página; feed perde a resposta do fragmento/JSON, enquanto o dashboard já aberto mostra “Erro ao carregar” no drawer (`dashboard2.html:169-174`), portanto não afirmar que sempre derruba toda a página.
+
+4. Universo de `pendentes`: todas Batidas `origem='offline_pendente', aprovada=False`, ordenadas por timestamp; nenhum teto, paginação, período, filtro explícito por empresa ou colaborador nessa view (`ponto/views.py:441-446`). Há COUNT SQL total e iteração Python completa das coordenadas (`:484-485`), depois queryset completo para render (`:489`, template:53). `sem_gps = total - com_gps` usa a mesma decisão (`:486`); cards e linhas coerentes para mesmo conjunto estável (`template:19,23,27,96-100`). Concorrrência entre consultas e volume real: [nao verificado]. Não há filtros GPS próprios na página inspecionada (`templates/ponto/batidas_offline_pendentes.html:1-127`).
+
+5. Permanecem predicados próprios do censo, por grupo:
+- Truthiness das duas: drawer `colaboradores/services/drawer.py:63`; JS dashboard `templates/core/dashboard2.html:242,287`.
+- Truthiness individual/serialização: geofence `:349-350,391-392`; painel `core/services/painel_op.py:227-228`; painel cell `colaboradores/painel_cell.py:54-55`; situacional `colaboradores/services/situacional.py:199-200`.
+- Nulidade conjunta: `chamados/views.py:692`; `ponto/services/geofence.py:52,425`; `ponto/services/vinculo_na_lista.py:49-50`; `colaboradores/views.py:53,337,356,395,2474`; `colaboradores/services/detalhe.py:22,53`; templates modal:480 e relatório:30.
+- Nulidade individual de serialização: `ponto/views.py:468-469`; `core/views.py:1024-1025`.
+- `isNaN`: `static/js/geo-colab-map.js:39`; `templates/chamados/fio_colaborador.html:313`; `templates/chamados/painel_gestao.html:583`.
+- Cópias AlertaGeofence: `ponto/models.py:263`; comando reconciliar:42; detalhe template:142; supervisor:90.
+
+Há leitores na MESMA página do feed: o clique da linha abre drawer (`_d2_feed.html:4`), usando JSON com floats/nulos (`core/views.py:1024-1025`) e novo julgamento JS (`dashboard2.html:242,287`). Para floats usuais, inclusive zero, o resultado atual coincide; dependência do juiz está ausente nesses dois sítios. Não encontrou segundo julgamento GPS na tela offline (`template:1-127`).
+
+Alimentam alerta/decisão: `geofence.vinculo_contagem` aceita zero por nulidade e calcula distância (`:52,58-61`), `vinculo_diverge` o consome (`:64-67`); `vinculo_na_lista` inclui zero e calcula centroides/distâncias/classificação (`:49-50,57,73-90`), lavra snapshot (`:112-122`) que o geofence lê por `_cadastro_em_revisao` (`geofence.py:70-83`). `reavaliar_chamados_geofence` inclui zero por nulidade (`:425`) e pode retratar chamados conforme distâncias (`:430-440`). Dinheiro diretamente a partir desses leitores: [nao verificado].
+
+BACKLOG: busca por BO-0611-05, tem_gps ou censo_geo7 no arquivo encontrou somente a linha antiga de obra/censo1 (`app/docs/BACKLOG.md:1873`), sem linha específica das divergências v7. Ausência em outros destinos: [nao verificado].
+
+8. Escritor de fato: `ponto/registro_batida.py:152-158`; sanitização `:5-18`, chamada antes da escrita `:105`. Valida via `float(v)` mas preserva valor original (`:15`); `0.0` fica intacto, vazio/nulo/não numérico vira None (`:11-17`). Semeadura também dentro da mesma porta, guardada para ensaio (`:331-335`). Encaminhadores com geo: `api/views.py:648,654-655`; `api/views_core.py:640,646-647`; `ponto/services/triagem_batida.py:701,707-708`. Campos model DecimalField sete casas (`ponto/models.py:58-59`).
+
+Resultado nomeado `tem_gps`: consumidores produção em geofence:269, filtro:34, contador view:485. Outra chave `tem_gps` é produzida com conta própria em drawer:63, lida duas vezes em `templates/colaboradores/partials/_drawer_diagnostico.html:49`; não é chamada ao juiz.
+
+Sim, leitores ainda aceitam zero:
+- Detalhe seleciona por nulidade (`colaboradores/services/detalhe.py:22,53`), emite floats (`:82-83`) e oferece link (`templates/colaboradores/detalhe.html:188`) e mapa/pino (`:231-239`).
+- `_geo_do_pino` só recusa nulos (`colaboradores/views.py:2474`), calcula distância de zero (`:2479`) e classifica (`:2486-2487`).
+- Vínculo e reavaliação descritos acima.
+- Teste NOVO da obra exige zero como amostra geográfica numérica no detector (`ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:134-139`).
+
+Juiz aceita strings não vazias como truthy, inclusive `"0.0"`; essa é inferência direta do `bool(latitude and longitude)` (`geofence.py:146`). Model carregado do banco usa DecimalField (`models.py:58-59`); tipo exato de objeto recém-criado antes de refresh pode conservar float/string recebido porque sanitização não converte (`registro_batida.py:15`). Geofence principal avalia zero numérico como sem_gps e gera alerta com coordenadas None (`geofence.py:269-278`), contextos usam truthiness individual (`:349-350,391-392`). `floatdot` converte Decimal/float/string numérica para `float` e formata seis casas com ponto (`hasner_filters.py:22-25`); string inválida retorna intacta (`:26-27`). Logo não valida presença e não resolve `"0.0"` truthy; conversão para float pode perder precisão antes das seis casas (`:25`).
 
 ## 10/11 18:13 · sessao 05b0ac66455f · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
 
@@ -875,90 +919,4 @@ O inverso também não é uma trava universal: o humano bloqueia encerramento us
 
 Não encontrei arquivo inacessível entre os caminhos rastreados; não li banco nem logs. Execução efetiva dos crons, callbacks e código em produção não é verificável nesta cópia. [não verificado]
 
-## 10/11 16:21 · sessao afd64bbd10f1 · - · - · origem=Ronald (tmux)
-
-Achado principal: o dado do anexo e esta cópia divergem. `lavrar_sem_turno_aberto` carimba em `app/chamados/reconciliador.py:405` e imediatamente consulta `p.disputa.pode_fechar()` em `app/chamados/reconciliador.py:411`, chamando `fechar()` em `app/chamados/reconciliador.py:412`. Portanto, “não se achou chamada depois do carimbo” não descreve esse corpo da cópia. A execução efetiva em produção, possíveis exceções e o código carregado pelo processo são [não verificado].
-
-**Mecanismo transversal para todas as linhas com `save`:** `PerguntaDisputa.save` apenas envolve a persistência em `atomic` (`app/chamados/models.py:3413`, `app/chamados/models.py:3422`). O `post_save` `_becos_post_save_pergunta` agenda `on_commit -> fechar_beco_da_disputa` (`app/chamados/signals.py:227`, `app/chamados/signals.py:233`, `app/chamados/signals.py:238`). Essa porta só chega a C7 se disputa aberta, nenhuma pergunta “visível” segundo seu filtro e pai em `TERMINAIS` (`app/chamados/services/becos.py:21`, `app/chamados/services/becos.py:27`, `app/chamados/services/becos.py:29`, `app/chamados/services/becos.py:31`, `app/chamados/services/becos.py:33`), além de guarda de reentrada (`app/chamados/services/becos.py:70`). A porta relê e fecha sob C7 em `app/chamados/services/becos.py:56`. Logo, uma linha sem chamada direta não equivale a “nenhum fechamento”: os saves têm essa via condicional.
-
-| Carimbador no escopo models/reconciliador | Escrita | Leitura/fechamento posterior |
-|---|---|---|
-| `lavrar_sem_turno_aberto` | Chama `carimbar(VIA_SEM_TURNO_ABERTO)` (`app/chamados/reconciliador.py:405`); save real em `app/chamados/models.py:3152` | **Sim, direto:** C7 `app/chamados/reconciliador.py:411`, `fechar` `app/chamados/reconciliador.py:412`; só exige disputa aberta e C7. Também signal Beco acima. |
-| `retratar_perguntas_absolvidas_por_celula` | `carimbar(VIA_CELULA_ABSOLVEU)` (`app/chamados/reconciliador.py:595`), save `app/chamados/models.py:3152` | **Sim, após laço:** `refresh` + aberta + C7 em `app/chamados/reconciliador.py:610` e `app/chamados/reconciliador.py:611`; `fechar` em `app/chamados/reconciliador.py:612`. Guardas de tranca/vitalidade já na seleção `app/chamados/reconciliador.py:650`, `app/chamados/reconciliador.py:661`, `app/chamados/reconciliador.py:663`. Também signal Beco. |
-| `fantasma_pela_lampada` / `encerrar_fantasma` | `p.encerrar_fantasma` (`app/chamados/reconciliador.py:1147`) -> `carimbar(VIA_FANTASMA)` (`app/chamados/models.py:3287`) -> save `app/chamados/models.py:3152` | **Sim, após laço:** pula fechada `app/chamados/reconciliador.py:1161`; barra resposta sem veredito `app/chamados/reconciliador.py:1163`; C7 `app/chamados/reconciliador.py:1170`; fecha `app/chamados/reconciliador.py:1171`. Também signal Beco. |
-| `DisputaSupervisao.fechar`, portas desligamento/admin | `q.fechar_por_admin` (`app/chamados/models.py:1921`) -> `carimbar_identidade(VIA_ADMIN_DECIDIU)` (`app/chamados/models.py:3064`), save `app/chamados/models.py:3190` | **Sim, já dentro da porta de fechamento:** grava `fechada_em` em `app/chamados/models.py:1932`, save `app/chamados/models.py:1936`. Não chama nominalmente C7: valida resposta sem veredito `app/chamados/models.py:1886`, pergunta viva `app/chamados/models.py:1896`; exceções permitem viva `app/chamados/models.py:1897`, `app/chamados/models.py:1918`. |
-| `DisputaSupervisao.remover_motivo` / retratação | `carimbar_identidade(VIA_MOTIVO_RETRATADO, manter_carimbo=True)` (`app/chamados/models.py:2061`), save `app/chamados/models.py:3190` | **Condicional direto:** se restarem motivos retorna sem fechar (`app/chamados/models.py:2066`); se nenhum, chama `self.fechar` (`app/chamados/models.py:2072`). O save de cada pergunta também dispara Beco condicional. |
-| `ChamadoColaborador.ressuscitar_perguntas` | `descarimbar_em_lote(...validada_em=None, validada_por=None, respondida_em=None)` (`app/chamados/models.py:1566`); `QuerySet.update` real `app/chamados/models.py:3264` | **Nenhum C7/fechar nesse corpo:** o caminho lido retorna perguntas à fila e reabre disputa fechada (`app/chamados/models.py:1574`, `app/chamados/models.py:1575`). Por `update`, não passa `post_save`; chama explicitamente `acordar_celulas` em `app/chamados/models.py:1568`. |
-| Porta `carimbar` (infraestrutura, não gatilho específico) | `_escrever_carimbo` atribui materializada/via (`app/chamados/models.py:3099`); opcionalmente `respondida_em` (`app/chamados/models.py:3132`) e `validada_em` (`app/chamados/models.py:3135`); save `app/chamados/models.py:3152` | **Nenhum direto no corpo** `app/chamados/models.py:3103`–`app/chamados/models.py:3157`; consulta C6 antes de persistir (`app/chamados/models.py:3139`). Tem signal Beco. Fechamento direto depende do chamador (tabela de gatilhos). |
-| Porta `carimbar_identidade` | Atualiza carimbo e via (`app/chamados/models.py:3182`, `app/chamados/models.py:3185`); save `app/chamados/models.py:3190` | **Nenhum direto no corpo** `app/chamados/models.py:3168`–`app/chamados/models.py:3191`; tem signal Beco. Exemplos de chamadores acima e nos outros arquivos do censo. |
-| Porta `descarimbar` | Carimbo nulo (`app/chamados/models.py:3208`); save opcional `app/chamados/models.py:3212` | **Nenhum direto no corpo**, `app/chamados/models.py:3203`–`app/chamados/models.py:3213`; se salvar, tem signal Beco. `salvar=False` exige analisar save no chamador. |
-| `encerrar_por_fato_no_espelho` | Apenas via `fato_materializado` (`app/chamados/models.py:3275`), save `app/chamados/models.py:3276` | **Sim pelo chamador comando**, mediante `--apply` (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:53`), que chama a porta em `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68`, filtra `fio_vivo` em `app/chamados/management/commands/encerrar_perguntas_com_fato.py:83` e chama `d.fechar` em `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`. Também signal Beco. |
-| `reabrir_fantasma` | `self.descarimbar()` (`app/chamados/models.py:3298`) | **Nenhum fecho direto:** chamador comando reabre disputa em `app/chamados/management/commands/reabrir_orfas_enterradas.py:165` e pai em `app/chamados/management/commands/reabrir_orfas_enterradas.py:172`; signal Beco permanece aplicável ao save da pergunta. |
-| `reabrir_por_competencia` | `self.descarimbar()` (`app/chamados/models.py:3322`) | **Nenhum fecho direto:** `competencia_trancada.reabrir` chama em `app/chamados/services/competencia_trancada.py:254` e reabre chamados em `app/chamados/services/competencia_trancada.py:265`; signal Beco no save da pergunta. |
-| `reabrir_por_resposta` | Só muda memória, retornando campos de `descarimbar(salvar=False)` (`app/chamados/models.py:3315`) | Persistência/fluxo pertencem aos escritores de resposta, sob censo do outro agente; por si não é escritor persistente (`app/chamados/models.py:3311`, `app/chamados/models.py:3315`). |
-| `_nascer`, reuso | Pode trocar `celula` (`app/chamados/models.py:2965`, `app/chamados/models.py:2966`) e `chamado_destino` (`app/chamados/models.py:2982`); save em `app/chamados/models.py:3006` | **Nenhum C7/fechar direto no trecho lido:** após save acorda célula antiga e retorna (`app/chamados/models.py:3007`, `app/chamados/models.py:3008`). Tem signal Beco. |
-| `_nascer`, inserção | Instância recebe `disputa`, motivo, destino, célula, conversa, `**campos` (`app/chamados/models.py:3014`); `gravar_dia_do_fato` (`app/chamados/models.py:3016`); insert (`app/chamados/models.py:3017`) | Nenhum C7/fechar direto antes de retornar (`app/chamados/models.py:3018`, `app/chamados/models.py:3031`); `post_save` Beco também roda para `created` pois o receiver não o exclui (`app/chamados/signals.py:228`, `app/chamados/signals.py:229`). |
-
-C6/C7 têm estes significados na cópia:
-
-- C7 retorna **ausência de resposta sem veredito e ausência de pergunta viva**; não exige que a disputa esteja aberta nem lê status do chamado-pai (`app/chamados/models.py:1848`, `app/chamados/models.py:1853`). A condição “aberta” é dos chamadores, e `aberta` deriva exclusivamente de `fechada_em is None` (`app/chamados/models.py:1822`, `app/chamados/models.py:1824`).
-- `respostas_sem_veredito` inclui pergunta com validada/materializada nulas e timestamp **ou** texto; exclui dia trancado (`app/chamados/models.py:1842`, `app/chamados/models.py:1846`). Assim C6 dar uma pergunta por morta não basta necessariamente para C7: essa lista é uma trava adicional (`app/chamados/models.py:1853`).
-- C6 lê validação, tranca, vias terminais, resposta, decisão da célula, marco, data/janela e lastro, nessa sequência (`app/chamados/juizes.py:1324`, `app/chamados/juizes.py:1329`, `app/chamados/juizes.py:1336`, `app/chamados/juizes.py:1341`, `app/chamados/juizes.py:1362`, `app/chamados/juizes.py:1368`, `app/chamados/juizes.py:1388`, `app/chamados/juizes.py:1406`).
-- `estado` da pergunta é propriedade de leitura, não coluna escrita (`app/chamados/models.py:3033`, `app/chamados/models.py:3041`).
-- Há campos equivalentes relevantes além dos carimbos: data, tipo de resposta, FK célula, FK destino e conversa influenciam a leitura do juiz (`app/chamados/juizes.py:828`, `app/chamados/juizes.py:832`, `app/chamados/juizes.py:835`, `app/chamados/juizes.py:334`, `app/chamados/juizes.py:647`, `app/chamados/juizes.py:688`).
-
-Signals e fluxo adicional:
-
-- `_outbox_post_save_pergunta` emite evento de célula para saves que toquem campos relevantes; não fecha diretamente (`app/chamados/signals.py:250`, `app/chamados/signals.py:255`, `app/chamados/signals.py:257`). A lista está em `app/chamados/models.py:3220`.
-- A porta de fechamento grava `fechada_em` e dispara signal para o pai (`app/chamados/models.py:1932`, `app/chamados/models.py:1936`, `app/chamados/signals.py:18`). O pai é reconciliado em `app/chamados/signals.py:42`, se existir e ainda não estiver em `ENCERRADOS` (`app/chamados/signals.py:28`, `app/chamados/signals.py:33`); falhas são engolidas em `app/chamados/signals.py:46`.
-- O signal S143, quando chamado termina, tenta resolver perguntas pelo serviço compartilhado (`app/chamados/signals.py:90`, `app/chamados/signals.py:115`) e engole falhas (`app/chamados/signals.py:116`), logo o sinal não garante que todas as perguntas/disputa fechem antes de permitir chamado terminal (`app/chamados/signals.py:111`, `app/chamados/signals.py:117`).
-- Migração 0051 grava apenas chave (`colaborador_id`, `instancia_marco`), sem campos de resposta/carimbo (`app/chamados/migrations/0051_decisao_pergunta.py:25`, `app/chamados/migrations/0051_decisao_pergunta.py:27`); a 0053 só conta colisões/recusa, sem carimbar (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:36`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:45`).
-
-Não li banco/log nem executei as funções de domínio; execução histórica e estado em produção permanecem [não verificado]. [nao verificado]
-
-## 10/11 16:06 · sessao 9e89a5dceeb9 · BO-0611-05 · construtor · origem=Code
-
-Alteradas somente as duas entradas em `core/tests/test_medida_turno_do_par.py:256-257`:
-
-```diff
-- 'derivacoes_de_dia': {('api/views.py::api_bater_ponto', 'B1'): [746],
--                       ('api/views_core.py::api_bater_ponto', 'B1'): [746],
-+ 'derivacoes_de_dia': {('api/views.py::api_bater_ponto', 'B1'): [710],
-+                       ('api/views_core.py::api_bater_ponto', 'B1'): [705],
-```
-
-Texto idêntico, incluindo indentação, nas quatro posições: base `da829e9f6:app/api/views.py:746`, base `da829e9f6:app/api/views_core.py:746`, WT `api/views.py:710` e WT `api/views_core.py:705`:
-
-```python
-                          data_turno=_tzc9.localdate(batida.timestamp).isoformat())
-```
-
-Resultados observados:
-
-- **RED antes da edição:** 1 teste, 1 falha, rc **1**, com “linhas mudaram: registrar no MESMO commit” (`core/tests/test_medida_turno_do_par.py:539`).
-- **Unittest do docstring após edição:** 35 testes, **OK**, rc **0** (`core/tests/test_medida_turno_do_par.py:20`).
-- **MUTANTE=linhas:** 1 teste, 3 falhas de asserção, rc **1**; mutante mordido (`core/tests/test_medida_turno_do_par.py:585`, `:592`).
-
-Comandos, em `app/`, usando este executor do heredoc original (`core/tests/test_medida_turno_do_par.py:20`):
-
-```bash
-rodar() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$@" <<'PY'
-import pathlib, textwrap
-p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
-code = p.read_text().split("  PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'\n", 1)[1].split('\n  PY\n', 1)[0]
-exec(compile(textwrap.dedent(code), str(p) + ':docstring', 'exec'))
-PY
-}
-
-# RED: executado antes da edição
-rodar CatracaTurnoDoParTest.test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit
-
-# Após a edição
-rodar
-
-# Mutante em memória
-MUTANTE=linhas rodar CatracaTurnoDoParTest.test_MORDE_linhas_a1_b1_publicam_ocorrencia_e_nao_def
-```
-
-_3431 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3433 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
