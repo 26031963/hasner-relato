@@ -1,7 +1,164 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 23:44** · publicado em **09/11/2026 23:44** (UTC-3)
+> Ultima resposta processada: **09/11/2026 23:49** · publicado em **09/11/2026 23:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 23:49 · sessao 9e374e71ccea · - · - · origem=Ronald (tmux)
+
+A sessão perguntou os temas dos cinco achados: leitores/rc e lista vazia em `preverif1.q:11-18`, pré-requisito em `preverif1.q:29-32`, e RED na base em `construtor1.q:4-11`. Portanto, “não perguntado” não explica esses temas. As linhas dos anexos aqui contam desde a primeira linha do conteúdo, excluindo `== anexo ... ==`.
+
+| Achado | Classificação sustentada | Trechos literais e limites |
+|---|---|---|
+| 1 | **(c)** para a cronologia concreta; condição já percebida | `.q`: “pouso antes do pre-requisito (CORTES.md:305)” (`preverif1.q:30-31`). `.r`: “A condição exige medição do FIO MUDO e C11 pousado; o registro exige medição com C11 no ar.” e “apresentar essa evidência antes de liberar pouso” (`preverif1.r`, linha física [nao verificado]). A resposta não tinha prova do horário; não é silêncio sobre o requisito. `triagem_preverif1.txt:3` encaminha o selo à **SESSÃO, `!`**, sem demonstrar descarte da cronologia. | [nao verificado]
+| 2 | **Ambiguidade entre (a) da conclusão integrada e fatos já vistos; descarte específico [nao verificado]** | `.q`: “QUEM ESCREVE e QUEM LE [...] rc [...] linhas de saida [...] Todos supoem o MESMO significado” (`preverif1.q:11-14`). `.r`: “Leitor operacional específico: [nao verificado]” para VIGIA FIO; “O pipeline também continua calculando esperados somente de `CRONS`, deixando ENCs fora desse universo” (`preverif1.r`, linhas físicas [nao verificado]). O censo também descreveu o placar raspando somente FABRICA, saúde aceitando 0/2 e pipeline CRONS versus ENC. Logo, dizer que ninguém viu esses mecanismos seria falso; porém não foi formulado o achado integrado L-062. `triagem_preverif2.txt:5` descarta **unidade mista**, não ausência de leitor/alarme. |
+| 3 | **(b)** como falha de encaminhamento/fechamento da sessão, com ressalva sobre “descarte” | `.q`: “Algum leitor de JUIZES_POR_VARREDURA quebra [...] com a tupla vazia” (`preverif1.q:15-16`). `.r`: “Vazio saudável vira ‘vigia falhou’” e “Correção mínima: emitir representação explícita do universo vazio” (`preverif1.r`, linha física [nao verificado]). Triagem literal: “3 PROCEDENTE -> SESSAO, `!` [...] le universo vazio como ‘vigia falhou’” (`triagem_preverif1.txt:4`). Isso é reconhecimento e atribuição à sessão, **não descarte literal**. O único resumo final de descarte fornecido é “Descartes da triagem: todos fila.” (`opus_final1.txt:7`); motivo individual do descarte [nao verificado]. |
+| 4 | **(c)**: prova em PROD | `.q`: censo pede quem conta a lista e leitores (`censo1.q:9,13`). `.r`: “preservar uma medição explícita do comando durante a verificação da retirada” (`preverif1.r`, linha física [nao verificado]). Triagem: “e o pos-pouso mede escritas_por_cron(['disparar_perguntas_competencia']) com o nome explicito” (`triagem_preverif1.txt:4`). A exigência foi vista e acolhida; execução em PROD não está demonstrada. | [nao verificado]
+| 5 | **(c)**: RED Django em log/base | `.q`: “Mostre o RED (rodando na base) antes da cura.” (`construtor1.q:11`, confirmar contagem física [nao verificado]). `.r`: “A bateria Django abaixo foi tentada, mas nenhum módulo iniciou: faltou Django”; “execução ORM [...] [nao verificado]” (`construtor1.r`, linhas físicas [nao verificado]). Isso distingue RED de fonte alegado de RED Django não executado. Triagem específica do RED Django em log [nao verificado]. |
+
+Cuidados na consolidação:
+
+- `triagem_preverif2.txt:7` descarta **frescor pela meia-noite do host**; não comprova descarte da medição de 06:35 anterior ao C11.
+- `triagem_preverif2.txt:5` descarta **unidade “perguntas” versus pauta**; não comprova descarte de L-062.
+- Não há suporte para **(d) NENHUM viu**: os temas e limitações aparecem nas respostas acima.
+- O achado 2 exige critério explícito: os mecanismos foram vistos; a conclusão integrada não foi registrada. Atribuir todo ele a (a) ou todo ele a (b), sem essa distinção, excede os anexos. [nao verificado]
+
+## 09/11 23:48 · sessao a8631007fb8c · O169-FECHADA · censo · origem=Code
+
+A premissa está registrada como **L-125**, e a cura da C20-O169 está presente no serviço. Porém, “nunca fecha com premissa viva” **não vale como garantia global**: existem fechamentos genéricos que alcançam cluster sem consultar sua assinatura. Além disso, o banco atual não distingue causalmente fechamento por idade de fechamento por lastro. (`app/docs/LEIS.md:146`; `app/ponto/services/cluster_espurio.py:53`; `app/chamados/models.py:727`; `app/chamados/models.py:292`)
+
+Censo estático. Execução atual da suíte, execução dos mutantes, ocorrências concretas no banco e consumidores externos ao checkout: **[nao verificado]**. [nao verificado]
+
+**1. Caminhos que encerram ou fazem desaparecer**
+
+O cluster canônico nasce como `modulo_origem='cluster_batida_espuria'`, categoria `batida_espuria`. Ele não pertence ao universo normal de furo; portanto, a guarda genérica de premissa de `reconciliar()` retorna autorização sem consultar `FATO_CLUSTER_ESPURIO`. A guarda de perguntas vivas continua podendo impedir o encerramento. (`app/ponto/services/cluster_espurio.py:11`; `app/ponto/services/cluster_espurio.py:132`; `app/ponto/services/cluster_espurio.py:135`; `app/chamados/models.py:1244`; `app/chamados/catalogo/modulos.py:235`; `app/chamados/models.py:727`; `app/chamados/models.py:685`)
+
+| Caminho | Condição e dependência temporal |
+|---|---|
+| **Serviço específico** | Seleciona todos os chamados vivos do módulo/colaborador e fecha somente os cuja célula do próprio dia demonstra premissa morta. Não recebe horizonte no seletor de fechamento. Conta apenas retorno verdadeiro de `reconciliar()`. (`app/ponto/services/cluster_espurio.py:53`; `app/ponto/services/cluster_espurio.py:66`; `app/ponto/services/cluster_espurio.py:71`; `app/ponto/services/cluster_espurio.py:76`; `app/ponto/services/cluster_espurio.py:123`) |
+| **Evento do cartório** | Com `apply_` e células julgadas, chama o serviço específico. O serviço exige colaborador ativo e escala ativa sem término; esse recorte limita quem é examinado, mas não impõe idade aos chamados examinados. (`app/ponto/services/cartorio.py:992`; `app/ponto/services/cartorio.py:1001`; `app/ponto/services/cartorio.py:1005`; `app/ponto/services/cluster_espurio.py:117`) |
+| **Detector manual** | `--apply` somente produz escrita sem `--alarme`; delega ao mesmo serviço. O cron declarado usa `--alarme`, portanto não fecha. (`app/ponto/management/commands/detectar_cluster_espurio.py:34`; `app/ponto/management/commands/detectar_cluster_espurio.py:46`; `app/config/crons.py:598`) |
+| **Transição humana: resposta livre e fio** | Gestor informa status válido; chama `transicionar()`, sem condição de idade ou assinatura cluster. Há autorização contextual e guardas de justificativa/disputa/pergunta. (`app/chamados/services/acoes_chamado.py:313`; `app/chamados/services/fio.py:711`; `app/chamados/services/fio.py:714`; `app/chamados/services/fio.py:719`; `app/chamados/models.py:135`; `app/chamados/models.py:148`) |
+| **Outras ações HTTP** | Aprovar exceção e autorizar geofence também transicionam para resolvido sem filtro de origem nesses caminhos. Exceção usa `criado_em` para montar a data da batida, não como prescrição. Recusar geofence exige batida vinculada ao contexto; o contexto normal do cluster não fornece essa ligação. (`app/chamados/views.py:426`; `app/chamados/views.py:540`; `app/chamados/services/acoes_chamado.py:36`; `app/chamados/services/acoes_chamado.py:70`; `app/chamados/services/acoes_chamado.py:222`; `app/chamados/services/acoes_chamado.py:257`; `app/chamados/services/acoes_chamado.py:277`; `app/ponto/services/cluster_espurio.py:145`) |
+| **Decisão administrativa do dia** | Busca todos os vivos por `data_turno` ou FK da célula e chama `reconciliar()`. A data seleciona o dia decidido; não há teto de idade nem consulta à assinatura cluster nesse fechamento. (`app/ponto/services/veredito_celula.py:148`; `app/ponto/services/veredito_celula.py:155`; `app/ponto/services/veredito_celula.py:201`) |
+| **Competência trancada** | Parte dos vivos da empresa, seleciona pela competência e aplica exceções; encerra pela via `competencia_trancada`, sem consultar assinatura cluster. Depende da competência/data, não de `--dias`. (`app/chamados/services/competencia_trancada.py:82`; `app/chamados/services/competencia_trancada.py:88`; `app/chamados/services/competencia_trancada.py:96`; `app/chamados/services/competencia_trancada.py:135`; `app/chamados/services/competencia_trancada.py:184`; `app/chamados/models.py:1639`) |
+| **Desligamento** | Todos os `NAO_FECHADOS` do colaborador recebem `encerrar()`, sujeito à guarda de perguntas. A data de demissão determina quando executar, sem idade do chamado. O cron efetiva demissões cuja data chegou. (`app/colaboradores/services/desligamento.py:150`; `app/colaboradores/services/desligamento.py:155`; `app/chamados/models.py:1614`; `app/chamados/models.py:1617`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`; `app/config/crons.py:440`) |
+| **Signal de disputa fechada** | Disputa existente com `fechada_em` e chamado-pai ainda não encerrado chama `reconciliar()`, sem idade. Cluster como pai nessa FK no banco: **[nao verificado]**. (`app/chamados/signals.py:28`; `app/chamados/signals.py:33`; `app/chamados/signals.py:42`) |
+| **Justificativa aprovada** | Origem viva apontada por `chamado_origem` recebe `retratar()`, sem filtro de módulo/idade nesse sítio. Cluster nessa FK: **[nao verificado]**. (`app/ponto/services/justificativa.py:33`; `app/ponto/services/justificativa.py:42`; `app/ponto/services/justificativa.py:46`) |
+| **Materialização** | Pode reconciliar destino e clones por FK/IDs, protegendo irmãs respondidas sem consumo; há também fechamento de destino quando ausência já foi decidida. Cluster nessas ligações: **[nao verificado]**. (`app/chamados/services/materializacao.py:581`; `app/chamados/services/materializacao.py:761`; `app/chamados/services/materializacao.py:771`; `app/chamados/services/materializacao.py:773`) |
+| **Regularização externa** | Chama `reg.chamado.encerrar()` por FK. O fluxo normal cria origem `regularizacao_externa`; ligação divergente com cluster: **[nao verificado]**. (`app/chamados/services/regularizacao_ext.py:201`; `app/chamados/services/regularizacao_ext.py:205`; `app/chamados/services/regularizacao_ext.py:246`) |
+| **`retratar_chamados_lei_cala` manual** | Aceita `--modulo` livre. Com cluster, seleciona vivos cujo dia é anterior a hoje e cuja classificação de falta não acusa falta; `--apply` chama `retratar()`, sem consultar assinatura cluster. Coexistência concreta dessas condições com assinatura viva: **[nao verificado]**. (`app/chamados/management/commands/retratar_chamados_lei_cala.py:24`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:33`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:40`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:45`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`) |
+| **`marcar_feriado_do_posto` manual** | Parte da fila, seleciona pelo vínculo do dia e feriado alcançado, e reconcilia ao declarar posto fechado. Carrega calendário de hoje−180 até hoje: existe dependência temporal indireta no universo consultado. Não consulta assinatura cluster nesse fechamento. (`app/colaboradores/management/commands/marcar_feriado_do_posto.py:92`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:102`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:108`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:114`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:140`) |
+
+A tranca é disparada pelo ato de fechamento do período, diretamente ou por subprocesso `encerrar_por_competencia_trancada --apply`; não é um cron por desenho. (`app/ponto/services/fechamento.py:1420`; `app/ponto/services/fechamento.py:1428`; `app/chamados/services/competencia_trancada.py:281`; `app/chamados/services/competencia_trancada.py:290`; `app/config/crons.py:1273`)
+
+Há também caminhos que **retiram da exibição sem encerrar**:
+
+| Caminho | Condição temporal |
+|---|---|
+| Arquivo individual | POST autorizado; não exige idade, embora o motivo padrão diga “Silenciado por idade (30d)”. (`app/chamados/views_arquivar.py:24`; `app/chamados/views_arquivar.py:35`; `app/chamados/views_arquivar.py:37`) |
+| Arquivo em lote | Exige `dias>=1`, seleciona por verbo/área e `criado_em < agora-dias`; silencia. (`app/chamados/views_arquivar.py:102`; `app/chamados/views_arquivar.py:125`; `app/chamados/views_arquivar.py:135`; `app/chamados/views_arquivar.py:140`) |
+| `arquivar_prescritos` | Mesmo corte de idade por criação, default 30 dias, sem véu/resgate; motivo “Prescrito por idade”. Cron declarado desligado. (`app/chamados/management/commands/arquivar_prescritos.py:32`; `app/chamados/management/commands/arquivar_prescritos.py:53`; `app/chamados/management/commands/arquivar_prescritos.py:85`; `app/config/crons.py:1450`) |
+| Competência encerrada | Vivos sem véu, dia do fato até `--corte`, sem disputa viva; silencia por dez anos. É ato manual. (`app/chamados/management/commands/arquivar_competencia_encerrada.py:100`; `app/chamados/management/commands/arquivar_competencia_encerrada.py:112`; `app/chamados/management/commands/arquivar_competencia_encerrada.py:121`; `app/chamados/management/commands/arquivar_competencia_encerrada.py:274`; `app/config/crons.py:1356`) |
+| Sem dia irrecuperável | Escopo DIA, sem dia recuperável, criação anterior à competência corrente; silencia por cinco anos. (`app/chamados/management/commands/arquivar_sem_dia_irrecuperavel.py:51`; `app/chamados/management/commands/arquivar_sem_dia_irrecuperavel.py:58`; `app/chamados/management/commands/arquivar_sem_dia_irrecuperavel.py:62`; `app/chamados/management/commands/arquivar_sem_dia_irrecuperavel.py:88`) |
+| Isentos | Todos os vivos de isento sem véu, sem corte de idade; signals acionam o serviço. (`app/chamados/services/silencio_isentos.py:24`; `app/chamados/services/silencio_isentos.py:27`; `app/chamados/services/silencio_isentos.py:43`; `app/chamados/signals.py:274`; `app/chamados/signals.py:301`) |
+
+Esses silêncios não escrevem `status_local`. O painel exclui silêncio ainda vigente; a partição de verbos também classifica silêncio vencido como histórico, fora da lista padrão. (`app/chamados/services/arquivo.py:154`; `app/chamados/services/arquivo.py:165`; `app/chamados/services/painel.py:188`; `app/chamados/services/verbos.py:18`; `app/chamados/services/verbos.py:48`)
+
+Exclusão física encontrada: reset de **todos** os chamados, condicionado a banco de ensaio e confirmação; a porta recusa produção pela flag/nome do banco. Outros apagadores de cluster em produção: **[nao verificado]**. (`app/ponto/management/commands/zerar_dados_operacionais.py:71`; `app/ponto/management/commands/zerar_dados_operacionais.py:84`; `app/chamados/models.py:563`; `app/chamados/models.py:571`; `app/ponto/registro_batida.py:326`)
+
+Nos caminhos examinados, cartório interno/grade/lastro excluem cluster pelos universos de furo; o reconciliador genérico de premissa não coleta seu fato e, portanto, conserva. (`app/ponto/services/cartorio.py:117`; `app/ponto/services/cartorio.py:1280`; `app/ponto/management/commands/reconciliar_grade.py:207`; `app/ponto/services/lastro.py:387`; `app/chamados/reconciliador.py:262`; `app/chamados/reconciliador.py:301`; `app/chamados/catalogo/premissa.py:127`)
+
+**2. Entrada de `dias`, `ref`, `hoje` e horizonte**
+
+- O comando define `--dias=14`, obtém `ref=timezone.localdate()` e passa ambos a `pendencias()` ou `reconciliar_colab()`. Seu universo de colaboradores vem de escalas ativas sem término e colaboradores ativos, opcionalmente `--colab`. (`app/ponto/management/commands/detectar_cluster_espurio.py:29`; `app/ponto/management/commands/detectar_cluster_espurio.py:35`; `app/ponto/management/commands/detectar_cluster_espurio.py:36`; `app/ponto/management/commands/detectar_cluster_espurio.py:46`; `app/ponto/management/commands/detectar_cluster_espurio.py:50`)
+- `dias_com_cluster()` consulta células entre `ref-(dias-1)` e `ref`, inclusivamente. Esse resultado alimenta achados, lista e abertura. (`app/ponto/services/cluster_espurio.py:44`; `app/ponto/services/cluster_espurio.py:46`; `app/ponto/services/cluster_espurio.py:100`; `app/ponto/services/cluster_espurio.py:107`)
+- O fechamento chama `_vivos_que_a_premissa_matou(colab)`, sem `dias`, `ref` ou `hoje`; lê todos os vivos e consulta suas próprias datas. Sem dia forte recuperável, o chamado nem entra nos candidatos. (`app/ponto/services/cluster_espurio.py:53`; `app/ponto/services/cluster_espurio.py:66`; `app/ponto/services/cluster_espurio.py:68`; `app/ponto/services/cluster_espurio.py:71`; `app/ponto/services/cluster_espurio.py:108`)
+- Assinatura presente conserva; célula/insumos ausentes conservam como `None`; medição sem assinatura permite fechar. O juiz de dia sem trabalho prevalece sobre a ausência de insumos. (`app/ponto/services/cluster_espurio.py:25`; `app/ponto/services/cluster_espurio.py:29`; `app/ponto/services/cluster_espurio.py:33`; `app/ponto/services/cluster_espurio.py:74`; `app/chamados/catalogo/premissa.py:127`)
+- `agora`/julgamento anterior participam de `na_lista`, usado na abertura; não entram em `a_fechar`. (`app/ponto/services/cluster_espurio.py:101`; `app/ponto/services/cluster_espurio.py:104`; `app/ponto/services/cluster_espurio.py:107`; `app/ponto/services/cluster_espurio.py:108`)
+
+**Resposta direta:** um dia de 15+ dias com assinatura viva não fecha pelo seletor específico. Pode encerrar por caminhos genéricos, como transição humana, desligamento ou tranca; esses caminhos não impõem uma consulta à assinatura cluster. Ocorrência concreta hoje no banco: **[nao verificado]**. (`app/ponto/services/cluster_espurio.py:74`; `app/ponto/services/cluster_espurio.py:76`; `app/chamados/services/acoes_chamado.py:315`; `app/colaboradores/services/desligamento.py:155`; `app/chamados/models.py:1639`)
+
+**3. RED da C20-O169 e mutante**
+
+O teste é `ClusterNaoFechaPorIdadeTest.test_RED_dia_de_15_dias_com_assinatura_NAO_fecha_por_idade`, em `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:74`.
+
+Ele cria chamado para **dia do fato** `hoje−15`, com ata assinada; consulta `pendencias`, executa `reconciliar_colab` e recarrega o estado. Afirma que o chamado não está em `a_fechar` e continua em `VIVOS`. Não envelhece `criado_em`. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:43`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:56`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:65`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:75`)
+
+O mutante **“incluir em `a_fechar` todo chamado cujo dia antecede `hoje-(dias-1)`”** fica vermelho na asserção que exige ausência da lista, mesmo que um gate posterior impeça a escrita. Se fechar pelo serviço, também viola a asserção de sobrevivência. Essa é uma conclusão estática; execução efetiva do mutante: **[nao verificado]**. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:59`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:76`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:77`)
+
+Limites do selo:
+
+- Mutante exclusivo no `Command.handle` não é exercitado por esse teste, que chama o serviço diretamente. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:59`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:60`; `app/ponto/management/commands/detectar_cluster_espurio.py:45`)
+- Mutante baseado na idade de `criado_em` não encontra uma criação envelhecida nessa fixture. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:43`; `app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:65`)
+- Existe contraprova: dia de 15 dias **sem** assinatura deve fechar, impedindo uma cura que conserve tudo fora do horizonte. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:80`)
+
+O pouso de 05/11 e o RED histórico de três falhas estão documentados; os logs originais não foram confirmados nesta leitura. (`app/docs/BACKLOG.md:1790`; `app/docs/RELATO.md:7243`; logs originais: **[nao verificado]**)
+
+**4. Definição de `fechados_por_idade` pela função real**
+
+**Não existe discriminador causal suficiente no fechamento atual.** `reconciliar()` grava via `sistema`; o núcleo carimba estado/data/via, e `estado_chamado` registra somente status anterior, novo e via. Um mutante que selecione pela idade e chame o mesmo gate produz esses mesmos registros. (`app/chamados/models.py:52`; `app/chamados/models.py:54`; `app/chamados/models.py:60`; `app/chamados/models.py:242`; `app/chamados/models.py:292`; `app/chamados/models.py:654`; `app/chamados/catalogo/motor.py:95`)
+
+O contador atual mede **fechamentos efetivos**, usando o retorno real de `ch.reconciliar()`. A decisão de premissa existe antes dele, mas não é persistida como motivo do fechamento. Logo, esse contador não permite separar idade de lastro retrospectivamente. (`app/ponto/services/cluster_espurio.py:74`; `app/ponto/services/cluster_espurio.py:76`; `app/ponto/services/cluster_espurio.py:123`; `app/chamados/models.py:292`)
+
+Também não basta contar encerrados fora do horizonte: o teste exige fechamento legítimo por lastro aos 15 dias. Consultar hoje a assinatura de um encerrado identifica uma inconsistência presente, mas não prova o fato existente no instante do encerramento. (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:80`; `app/ponto/services/cluster_espurio.py:15`; `app/chamados/models.py:292`)
+
+Há uma cegueira adicional para um vigia baseado somente em `pendencias`: o fechamento examina apenas `VIVOS`, enquanto `_sem_chamado` considera existente um chamado de qualquer estado. Um encerrado indevidamente pode deixar de aparecer tanto em `a_fechar` quanto em `a_abrir`. (`app/ponto/services/cluster_espurio.py:66`; `app/ponto/services/cluster_espurio.py:81`; `app/ponto/services/cluster_espurio.py:107`)
+
+Para que o número represente **causa histórica**, falta registrar no ato a decisão produzida pela autoridade real; imprimir zero apenas porque o seletor atual não usa idade não constitui medição independente contra o mutante. Essa conclusão decorre da diferença entre a decisão calculada e a trilha gravada. (`app/ponto/services/cluster_espurio.py:74`; `app/ponto/services/cluster_espurio.py:76`; `app/chamados/models.py:292`)
+
+| Campo/trilha | Escritores e leitores encontrados |
+|---|---|
+| `via_encerramento` | Núcleo escreve no terminal e limpa ao voltar a vivo; catálogo significa **quem/como encerrou**, não idade/lastro. (`app/chamados/models.py:245`; `app/chamados/models.py:249`; `app/chamados/catalogo/motor.py:86`) |
+| `admin` | Reabertura considera fato novo desde encerramento; vigia de furos reconhece decisão humana. (`app/chamados/models.py:1342`; `app/ponto/services/furos_sem_cobranca.py:78`) |
+| `cascade` | Bloqueia renascimento automático e retorno de pai de adesão. (`app/chamados/models.py:1007`; `app/chamados/services/adesao.py:90`) |
+| `competencia_trancada` | UI trata como arquivo; serviço usa para reabrir ao destrancar; resolvedor de perguntas evita interpretar como realidade regularizada. (`app/chamados/views_arquivar.py:64`; `app/chamados/views_arquivar.py:165`; `app/chamados/services/competencia_trancada.py:259`; `app/chamados/services/disputa_emissao.py:1788`; `app/chamados/services/disputa_emissao.py:1815`) |
+| Via preenchida | I16 exige via em terminal, sem verificar idade versus lastro; comando de reversão fotografa a via. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1069`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:135`) |
+| `estado_chamado` | Histórico apresenta; vigia lê transições e compara última trilha ao banco. (`app/chamados/services/historico.py:86`; `app/chamados/services/vigia_loop.py:28`; `app/chamados/services/vigia_loop.py:114`) |
+
+`motivo_fechamento` pertence à **DisputaSupervisao**, não ao chamado. A porta da disputa escreve/limpa; ide
+
+[truncado em 20000 de 25199 caracteres]
+
+## 09/11 23:46 · sessao 0dbebf065a8e · - · - · origem=Ronald (tmux)
+
+Complemento confirmado:
+
+- Os fechamentos internos do cartório em `app/ponto/services/cartorio.py:1499`, `app/ponto/services/cartorio.py:1512`, `app/ponto/services/cartorio.py:1533`, `app/ponto/services/cartorio.py:1611` e `app/ponto/services/cartorio.py:1626` **excluem cluster**: `chs` vem de `chamados_que_falam_de_batida` (`app/ponto/services/cartorio.py:1280`), que filtra `FURO_MODULES` (`app/ponto/services/cartorio.py:117`); lista/vivos derivam dele (`app/ponto/services/cartorio.py:1316`, `app/ponto/services/cartorio.py:1345`); conjunto contém somente quatro módulos sem cluster (`app/chamados/catalogo/furo_modulos.py:15`).
+- O fechamento adiado de `app/ponto/services/cartorio.py:974` vem desse mesmo universo por `_adiados_pela_lampada` (`app/ponto/services/cartorio.py:1493`, `app/ponto/services/cartorio.py:1496`).
+- `app/ponto/services/lastro.py:400` exclui cluster pelo filtro explícito `modulo_origem='batida_ausente'` (`app/ponto/services/lastro.py:387`).
+- `_retratar` pelo absolvido da célula exclui cluster: filtro `MODULOS_DE_TURNO` (`app/chamados/reconciliador.py:996`), cuja tupla só tem três módulos de turno (`app/chamados/reconciliador.py:336`).
+- `_retratar` por premissa genérica conserva cluster, pois não coleta seu fato (`app/chamados/reconciliador.py:262`, `app/chamados/reconciliador.py:290`, `app/chamados/reconciliador.py:301`, `app/chamados/catalogo/premissa.py:127`).
+- Os dois chamadores de `encerrar_com_retencao` excluem cluster: bloqueio de entrada (`app/ponto/services/justificativa.py:76`, `app/ponto/services/justificativa.py:87`) e cascata de quatro módulos de turno (`app/ponto/services/justificativa.py:55`, `app/ponto/services/justificativa.py:394`, `app/ponto/services/justificativa.py:400`).
+- A **origem da justificativa** pode alcançar qualquer módulo pelo FK: justificativa aprovada e origem viva → `retratar(ch)`; não há filtro de cluster (`app/ponto/services/justificativa.py:33`, `app/ponto/services/justificativa.py:42`, `app/ponto/services/justificativa.py:46`). Existência real de cluster nesse FK: [não verificado].
+- `reconciliar_grade` exclui cluster por `FURO_MODULES`, além de só fornecer fatos de falta/turno/intervalo (`app/ponto/management/commands/reconciliar_grade.py:207`, `app/ponto/management/commands/reconciliar_grade.py:298`).
+- Reconciliadores de geofence/vínculo não fornecem fato cluster, portanto catálogo conserva eventual cluster que chegue a eles (`app/ponto/services/geofence.py:411`, `app/ponto/management/commands/reconciliar_vinculo.py:49`, `app/chamados/catalogo/premissa.py:127`).
+- `processar_alertas_turno` fornece apenas FATO_TURNO_ABERTO antes de retratar, também conservando cluster (`app/ponto/management/commands/processar_alertas_turno.py:207`, `app/ponto/management/commands/processar_alertas_turno.py:216`, `app/chamados/catalogo/premissa.py:127`).
+
+**Novo caminho manual relevante:** `retratar_chamados_lei_cala` aceita `--modulo` livre, default batida_ausente (`app/chamados/management/commands/retratar_chamados_lei_cala.py:24`); filtra VIVOS desse módulo (`app/chamados/management/commands/retratar_chamados_lei_cala.py:33`), exige dia anterior a hoje e `classificar_falta(colab,D)[1] is None` (`app/chamados/management/commands/retratar_chamados_lei_cala.py:40`), e com `--apply` chama `retratar` sem consultar assinatura cluster (`app/chamados/management/commands/retratar_chamados_lei_cala.py:54`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`). Pode selecionar cluster com `--modulo cluster_batida_espuria`; coexistência concreta de assinatura viva e classificação sem falta: [não verificado].
+
+**Gatilho competência trancada:** sem cron por desenho (`app/config/crons.py:1273`). `trancar_periodo` chama `disparar_no_ato` quando criou/retrancou período (`app/ponto/services/fechamento.py:1411`, `app/ponto/services/fechamento.py:1420`); até limite executa `encerrar` inline, acima dispara subprocesso `encerrar_por_competencia_trancada --apply` (`app/chamados/services/competencia_trancada.py:281`, `app/chamados/services/competencia_trancada.py:290`).
+
+## 09/11 23:46 · sessao 2e2e8d3d1af2 · - · - · origem=Ronald (tmux)
+
+Complemento Q1:
+
+- **Desligamento fecha cluster por via administrativa**, sem consultar a premissa: universo todos os chamados não fechados do colaborador, `app/colaboradores/services/desligamento.py:150-155`; `encerrar()` só consulta motor e pergunta viva antes de gravar, sem gate de premissa, `app/chamados/models.py:1609-1619`. Idade do chamado não entra. Data de demissão entra no gatilho: futura fica agendada, `app/colaboradores/services/desligamento.py:39-57,82`; cron seleciona `data_demissao <= hoje`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37-40`, executa a mesma cascata em `:57`; agenda em `app/config/crons.py:440`. Entrada pela view em `app/colaboradores/views.py:1423-1434`.
+
+- **Reset apaga cluster em ensaio**: `app/ponto/management/commands/zerar_dados_operacionais.py:27` exige banco de ensaio; `:71-76` exige `--confirmar` para escrever; `:84` chama apagador de todos os chamados. Porta `app/chamados/models.py:563-571` repete guarda e executa `.all().delete()`. Guarda recusa sem `BANCO_DE_ENSAIO` ou com nome de banco `saas_hasner`, `app/ponto/registro_batida.py:316-328`. Sem idade/janela.
+
+- **`marcar_feriado_do_posto` pode tentar reconciliar cluster**: candidatos vêm de `qs_na_fila`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:102-109`; esse universo exclui silenciados pelo relógio, `app/chamados/services/painel.py:188-190`. Usa calendário carregado de hoje−180 até hoje, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:92-94`, vinculação do próprio dia e feriado em `:107-115`; tenta `reconciliar()` em `:140`. Gate real continua exigindo premissa: `app/chamados/models.py:682-683`.
+
+- **Cobertura recebe cluster, mas não fecha por esses ramos**: PK genérico em `app/ponto/services/cobertura.py:93-95` e universo genérico do dia em `:225-230`; porém condições para chamar reconciliação só passam fatos de falta/turno/intervalo, `:117-122,310-317`. Cluster usa outro fato, `app/chamados/catalogo/premissa.py:52`; ausência desse fato conserva em `:127-130`.
+
+- **Materialização por FK**: `app/chamados/services/materializacao.py:581-582` tenta reconciliar `q.chamado_destino`, sem filtro de origem nesse sítio, quando ausência não está aberta. Alcançar cluster depende da ligação; reconciliação ainda usa gate real, `app/chamados/models.py:651-654,682-683`.
+
+- **Regularização externa por FK**: `app/chamados/services/regularizacao_ext.py:201-205` chama `reg.chamado.encerrar()` sem filtro de origem. Fluxo normal cria chamado novo com origem `regularizacao_externa` e grava a FK, `:246-257`; ligação com cluster no banco **[nao verificado]**.
+
+- **POSTs genéricos de ação podem alcançar cluster**: aprovação de exceção roteia por ação+permissão, `app/chamados/views.py:426-427`, serviço só exclui encerrados `app/chamados/services/acoes_chamado.py:21-26` e transiciona resolvido em `:70`. Autorização geofence roteia por ação+gestor, `app/chamados/views.py:540-541`, só exclui encerrados em `app/chamados/services/acoes_chamado.py:176-177` e transiciona em `:222`. Recusa geofence exige uma batida pertencente ao contexto, `:257-265`, e transiciona em `:277`; contexto normal de cluster não grava `batida_id`, `app/ponto/services/cluster_espurio.py:145`. Sem fechamento por idade nesses trechos; aprovação de exceção usa data de criação para fabricar timestamp da batida em `app/chamados/services/acoes_chamado.py:35-38`.
+
+- **Excluídos do cluster normal por filtro explícito**: agenda `app/chamados/services/acoes_chamado.py:88-89`; aceite de escala `:130-131`; ausência decidida `app/ponto/services/ausencia.py:709`; pós-vínculo `app/colaboradores/services/pos_vinculo.py:36`; auditoria de órfãos `app/chamados/management/commands/auditar_chamados_orfaos.py:34-36`; entrada sincronizada `app/ponto/services/entrada_sincronizada.py:28`.
+
+- **GLPI detalhe não sincroniza fechamento local nesse caminho**: chamado local sem ticket redireciona em `app/chamados/views.py:220-222`; ramo remoto só busca ticket/followups em `:244-246` e renderiza em `:262`. Outros escritores GLPI de fechamento local não encontrados: **[nao verificado]**.
 
 ## 09/11 23:44 · sessao 0dbebf065a8e · - · - · origem=Ronald (tmux)
 
@@ -998,281 +1155,4 @@ MORTO @invariante: FAILED (failures=1)
 
 Suite inteira: [não verificado]. [nao verificado]
 
-## 09/11 21:38 · sessao 638745cb9017 · FIO-E0-V4-E4A-2 · censo · origem=Code
-
-A cópia ainda contém o FIO MUDO escritor, inclusive um dry que executa as portas e depois faz rollback. Retirar apenas `--apply` do cron não transforma o comando em leitor. A lista tem **1 juiz por varredura**; a matriz declara **19/20 verdes**, e esvaziar a lista não altera automaticamente esse numerador. (`app/chamados/management/commands/disparar_perguntas_competencia.py:270-317`; `app/config/crons.py:2032-2048`; `app/core/contratos_estruturais.py:262-270,1053-1064`)
-
-A identidade Git do HEAD, a ancestralidade da E4a-1 e a implantação em produção são **[nao verificado]**. Há evidência local de EXPAND/C11 aplicado, mas o dado fornecido não comprova uma rodada posterior à implantação com **FIO MUDO 0**. (`app/chamados/models.py:3017-3019`; `app/chamados/reconciliador.py:1384-1387`; prova da rodada: **[nao verificado]**)
-
-1. **Ramos do comando, escritas e saída**
-
-O primeiro universo, das células, apenas acumula `deixou`: células passadas da janela, com extensão até anteontem em `--comp-corrente`, excluindo ontem enquanto ainda pertence à janela do vigia de hora. Ele consulta `motivos_que_o_evento_deixou`; não chama o escritor nesse laço. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`)
-
-O **FIO MUDO** é o segundo universo: chamado vivo ligado a célula na janela, sem pergunta viva entre suas resolvedoras. Exclui parcial só lista, ausência de motivo vencido pela ata, colaborador não ativo, `_ja_perguntou` e existência de linha do fato; deduplica por colaborador/dia/motivo. O primeiro motivo elegível de cada passagem entra em `_mudos`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141-175,215-219`)
-
-| Condição | Comportamento |
-|---|---|
-| `--alarme`, inclusive combinado com `--apply` | Retorna antes do escritor. Sai 2 se houver pendência da célula ou FIO MUDO; se ambos existirem, o diagnóstico emitido é o da célula. (`app/chamados/management/commands/disparar_perguntas_competencia.py:247-260`) |
-| Sem alvos FIO MUDO | Não executa `_rodar`. Com `--apply`, ainda alarma a pendência da célula; sem chave, apenas retorna. (`app/chamados/management/commands/disparar_perguntas_competencia.py:261-264`) |
-| Com alvos e `--apply` | Executa `_rodar` em `transaction.atomic()`. Silencia push por padrão; `--com-push` dispensa esse silenciamento. Confirma a transação e só depois pode sair 2 pelo vigia da célula. (`app/chamados/management/commands/disparar_perguntas_competencia.py:289-304`) |
-| Com alvos, sem `--apply` e sem `--alarme` | Executa o mesmo `_rodar`, com push silenciado, dentro de atomic; imprime deltas e força `RuntimeError('rollback')`. Portanto há chamadas de escrita e execução de suas consequências transacionais, seguidas de rollback. (`app/chamados/management/commands/disparar_perguntas_competencia.py:306-317`) |
-
-A porta chamada é `fabrica_da_celula.perguntar(colab, dia, [motivo], origem='disparo_competencia', origem_carimbo='emissor fio mudo')`. Ela tenta desfazer carimbo sem lastro, cria/agrega disputa e gera perguntas. (`app/chamados/management/commands/disparar_perguntas_competencia.py:270-283`; `app/chamados/services/fabrica_da_celula.py:133-148`)
-
-| Efeito alcançável pela porta | O que grava e por onde |
-|---|---|
-| Descarimbar pergunta sem lastro | Relê sob trava, exige pergunta viva pelo C6, chama `descarimbar`, zera `materializada_em`, `materializada_por` e `via_resolucao`, registra trilha. Pode reabrir disputa fechada. (`app/chamados/services/relavra_via.py:219-261`; `app/chamados/models.py:3203-3212`) |
-| Reabrir disputa | Limpa `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; salva e anexa ocorrência ao chamado-pai. (`app/chamados/models.py:2163-2180`) |
-| Agregar disputa existente | Acrescenta `motivos`; atualiza contexto com data, `qtd` e `ultima_em`, pela `_abrir_ou_agregar_disputa`. (`app/chamados/services/disputa_emissao.py:535-565,662-667`) |
-| Criar disputa/pai | Abre ou reutiliza chamado `disputa_supervisao`, com contexto, urgência e SLA; pode anexar ocorrência de reuso; cria `DisputaSupervisao` e trilha `disputa_aberta`. (`app/chamados/services/disputa_emissao.py:568-599`) |
-| Criar pergunta | `gerar_perguntas_disputa` chama `PerguntaDisputa.abrir`; a inserção grava identidade/dia, célula, disputa, motivo, destino e conteúdo recebido, registra assinaturas projetadas e trilha `pergunta_emitida`. (`app/chamados/services/disputa_emissao.py:444-452`; `app/chamados/models.py:3013-3027`) |
-| Reutilizar/costurar pergunta | A porta pode trocar célula/destino, lavrar novamente e salvar; acorda a célula anterior. Pergunta nova órfã de motivo do dia pode passar por `reatar_pergunta_orfa`, com savepoint próprio. (`app/chamados/models.py:2962-2983,2997-3007`; `app/chamados/services/disputa_emissao.py:453-469`) |
-| Notificar | Disputa nova ou motivo novo pode enviar push quando não silenciado. (`app/chamados/services/disputa_emissao.py:669-687,1748-1772`) |
-
-O ramo `[LASTRO]` merece ressalva: em estado coerente e estável, uma pergunta materializada pertencente ao fato já tende a barrar `_mudos` antes de chegar ao descarimbo. Não é possível declará-lo absolutamente morto: seleção e escrita são consultas separadas, e seus filtros diferem — identidade usa coluna `colaborador` e instância; descarimbo busca por `disputa__colaborador`, motivo e dia. Ocorrência concreta de concorrência/inconsistência: **[nao verificado]**. (`app/chamados/management/commands/disparar_perguntas_competencia.py:215-219`; `app/chamados/models.py:2753-2755`; `app/chamados/services/fabrica_da_celula.py:142-144`)
-
-Se nenhum ramo escrevesse, o corpo atual ainda oferece estes diagnósticos de leitura; quais serão preservados na versão futura depende da decisão de interface. (`app/chamados/management/commands/disparar_perguntas_competencia.py:220-258`)
-
-| Texto atual | Número/recorte |
-|---|---|
-| `[EMITE] FIO MUDO: N — chamado vivo, dia ACUSADO pela lei, sem uma pergunta viva` | `len(_mudos)`, antes de `--limite`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:220-222`) |
-| `[BARRADO] desligado N … · ja tem pergunta viva N · FIO DECIDIDO N … · PARCIAL NA LISTA DO ADMIN N …` | Quatro contadores de barreiras do laço FIO MUDO. (`app/chamados/management/commands/disparar_perguntas_competencia.py:223-228`) |
-| `ALVOS POR EMPRESA E PORTA: empE fio_mudo=N · …` ou `nenhum` | Distribuição de `_mudos`, antes do limite. (`app/chamados/management/commands/disparar_perguntas_competencia.py:229-234`) |
-| `janela INI -> FIM` | Janela solicitada/calculada. (`app/chamados/management/commands/disparar_perguntas_competencia.py:239`) |
-| `FABRICA-POR-EVENTO: o julgamento deixou N pergunta(s) do caminho da celula sem emitir, em C celula(s) (esperado 0; VIGIA -- este lote nao as escreve)` | Motivos em `deixou` e pares distintos colaborador/dia. (`app/chamados/management/commands/disparar_perguntas_competencia.py:240-242`) |
-| `VIGIA: o evento deixou N pergunta(s) por emitir (esperado 0)` | Mesmo `len(deixou)`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:243`) |
-| `ALVOS: N perguntas em C colaboradores (fio mudo)` | `falta`, depois de `--limite`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:235,244-245`) |
-
-Os textos ligados à execução do escritor são `[LASTRO] N carimbo(s)…`, `APLICADO perguntas=N disputas=N chamados=N[ (push silenciado)]`, `DRY perguntas=N disputas=N chamados=N` e `(dry-run: nada gravado)`. Os três deltas vêm de contagens globais antes/depois, não de um relatório por alvo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:266-268,284-287,296-317`)
-
-Os leitores e transportadores localizados são:
-
-- **Placar:** raspa a última ocorrência de `^FABRICA-POR-EVENTO: o julgamento deixou \([0-9]*\) .*` em `logs/fio_mudo.log`; exige mtime de hoje, senão publica `?`. Expõe `perguntas_que_o_julgamento_nao_fez=N`, esperado 0, fora do TOTAL. (`bin/placar_code.sh:388-390`)
-- **Corrente/cron:** `crons corrente` fornece `log<TAB>cmd gatilho empresas teto args`; `encadeado.sh` passa `ENC_LOG` e redireciona stdout/stderr do elo para o log. Não raspa os contadores para decidir o próximo elo. (`app/core/management/commands/crons.py:37-42`; `bin/encadeado.sh:45-68,99-104`)
-- **`logs/fim`:** o runner usa o rc, criando arquivo de fim em 0 **ou 2**; o dependente verifica a existência desse arquivo. O conteúdo numérico do stdout não participa. (`bin/cron_run.sh:11-25`; `bin/encadeado.sh:81-94`)
-- **JSONL/saúde:** o runner grava `nome,emp,ini,fim,dur,exit`; `crons_quebrados` trata 0/2 como execução não quebrada, e `pipeline_placar` distingue rc 2 como alarme. Este último deriva esperados apenas de `CRONS`, enquanto disparar está em `ENCADEADOS`. (`bin/cron_run.sh:13`; `app/core/services/crons_quebrados.py:16,24-47`; `app/core/management/commands/pipeline_placar.py:38-49,60-80`; `app/config/crons.py:1521`)
-- **Testes:** há parser do prefixo `FABRICA-POR-EVENTO` e asserções sobre FIO MUDO, distribuição por empresa e dry. (`app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:91-95,152-184`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:195-203,226-232`)
-- **ESTADO:** lê `placar_estrutural.RESULTADOS`; o R6 contém uma cópia da frase `contratos_estruturais: 19/20 verdes`. Não é leitura do stdout do disparar nesse caminho. (`bin/gerar_estado.py:60-86,98-104`; `app/core/placar_estrutural.py:433-441`)
-- **Hooks:** leitor direto de `[EMITE] FIO MUDO`, `APLICADO` ou `DRY` fora dos testes: **[nao verificado]**. O documento do verificador exige auditar escritas por cron e escritas sem trilha; os hooks de compactação chamam o handoff, que raspa a frase estrutural do R6. (`.claude/agents/verificador.md:17`; `.claude/settings.json:14-30`; `bin/handoff_sessao.sh:185-208`)
-
-2. **Cron, gatilhos, conjuntos e números**
-
-A entrada é `ENC`, com `gatilho='apurar_furos_diarios'`, `args='--comp-corrente --apply'`, `log='fio_mudo.log'`, estágio `cobranca`, teto 900 e dependências explícitas de `processar_cartorio` e `apurar_furos_diarios`. (`app/config/crons.py:1521-1523`)
-
-O dependente direto por gatilho é `reconciliar_perguntas_orfas --alarme`. Depois vêm `lavrar_deslogados`, `lavrar_he_pendente` e os demais elos da corrente. O primeiro lê perguntas órfãs que o evento deveria ter encerrado; não cria a pergunta faltante do FIO MUDO. (`app/config/crons.py:1526-1527,1539-1541,1554-1556`; `app/docs/CRONS.md:39-48`; `app/ponto/management/commands/reconciliar_perguntas_orfas.py:20-36`)
-
-Não existe uma declaração Python `VIGIAS` correspondente ao nome usado no item: os vigias são uma compreensão dentro de `PAPEL_DO_CRON`. O subgrafo gerado, esse sim, chama-se `VIGIAS`. (`app/config/crons.py:2164-2169`; `app/core/management/commands/gerar_diagrama.py:393-401`)
-
-| Registro/conjunto | Hoje | Se a mudança for coerente |
-|---|---|---|
-| `JUIZES_POR_VARREDURA` | Único membro: disparar; comentário justifica permanência pelo FIO MUDO. | Tupla vazia. (`app/config/crons.py:2032-2048`) |
-| `PAPEL_DO_CRON` | Disparar recebe `juiz` da compreensão da tupla. | Precisa receber `vigia` na compreensão correspondente. Só retirar o nome elimina sua declaração de papel. (`app/config/crons.py:2164-2169,2340-2345`) |
-| Agenda | Continua em `ENCADEADOS`, com gatilho e dependências próprios. | Reclassificação de papel não exige, por si, sair da corrente. (`app/config/crons.py:1521-1527,1787-1798,2348-2357`) |
-| `juizes_por_varredura()` | **1**, derivado de todas as entradas cujo papel é `juiz`. | **0**, após retirada e reclassificação. (`app/config/crons.py:2048,2348-2357`) |
-| Diagrama do tabuleiro | Versionado com **40 vigias / 1 juiz** e nó do disparar ligado ao juiz. | A mesma reclassificação isolada produz **41 / 0**, pelo gerador que conta todas as entradas. (`app/docs/ARQUITETURA.mmd:209-219`; `app/core/management/commands/gerar_diagrama.py:242-265`) |
-
-Quem lê ou conta essa classificação:
-
-- `bin/placar_code.sh` publica `juizes_por_varredura=N`; o valor entra no TOTAL. (`bin/placar_code.sh:482-486,555-556`)
-- `vigia_loop.escritas_por_cron()` usa por padrão os juízes vivos e consulta sete dias de `LogAuditoria`, ator `sistema:<cron>`; o placar publica uma linha por cron. Retirar o nome também o retira dessa medição padrão. (`app/chamados/services/vigia_loop.py:61-99`; `bin/placar_code.sh:201-209`)
-- O selo do tabuleiro exige igualdade entre lista declarada e juízes derivados. (`app/core/tests/test_contract_tabuleiro.py:25-28`)
-- O selo de delegação percorre `JUIZES_POR_VARREDURA` e rejeita exceção cujo cron já saiu dela. (`bin/tests/test_papel_prazo_nao_deriva.sh:302-328`)
-- A matriz estrutural referencia a lista como exceção da célula chamado/juiz; o selo exige exceções vazias para aceitar verde. (`app/core/contratos_estruturais.py:262-270`; `app/core/tests/test_selo_contratos_estruturais.py:71-96`)
-
-**19/20 → 20/20 não é consequência automática da lista 1 → 0.** `verdes()` conta flags declaradas. A célula chamado/juiz ainda usa `verde=False` e referencia também `PENDENTES_CHAMADO`, já vazio. Esvaziar a lista mantendo a matriz intacta conserva **19/20**; declarar a célula verde e cumprir seus selos permitiria **20/20**. O denominador permanece 20. (`app/core/contratos_estruturais.py:40-42,62-73,262-270,1038-1064`; `app/core/juizes.py:465-466,1355`)
-
-Os leitores desse N/20 são TICKETS e a ferramenta de arquitetura; ESTADO/handoff recebem a cópia do R6, cuja igualdade com a frase do juiz é selada. (`app/core/placar_tickets.py:215-217`; `app/core/arquitetura_leitura.py:55-82`; `bin/gerar_estado.py:73-83`; `bin/handoff_sessao.sh:192-208`; `app/core/tests/test_selo_r6_frase_do_juiz.py:20-25`)
-
-3. **Cobertura dos escritores: mesma porta não prova mesmo fato**
-
-Há outro caminho executável para a fábrica: o consumidor chama `perguntar_por_eventos` depois das retratações/lastro e antes de marcar os eventos processados; relê as células **atuais das datas**, deduplicando datas do lote. Falha da fábrica mantém eventos pendentes com tentativa/erro. O consumidor está declarado a cada minuto; execução implantada: **[nao verificado]**. (`app/chamados/reconciliador.py:1384-1401`; `app/chamados/services/fabrica_da_celula.py:259-273`; `app/config/crons.py:394`)
-
-| Fato/efeito | Cobertura alternativa comprovada na cópia | Limite |
-|---|---|---|
-| Pergunta faltante de célula elegível | Cartório/evento chama `perguntar_pela_celula`, que usa o mesmo `perguntar` do lote; cobre criação/agregação, perguntas, costura e trilhas descritas acima. (`app/chamados/services/fabrica_da_celula.py:177-190`) | Exige que a data seja alcançada e passe pelas guardas da fábrica. (`app/chamados/services/fabrica_da_celula.py:85-98,259-273`) |
-| Carimbo sem lastro | Julgamento coleta carimbadas e chama a mesma porta de descarimbo. (`app/chamados/services/fabrica_da_celula.py:121-129,177-180`) | Esse passe usa `reabrir_fechada=False`; o lote usa o default `True`. Portanto a cobertura de reabertura de disputa fechada não é idêntica. (`app/chamados/services/fabrica_da_celula.py:142-144,180`; `app/chamados/services/relavra_via.py:187,233-239`) |
-| Nascimento de chamado de turno | `abrir`/`criar` emitem evento quando pertencem aos módulos de turno e têm célula resolvida. (`app/chamados/models.py:971-980,1093-1099`) | FIO MUDO aceita qualquer chamado vivo com célula; não aplica esse filtro de módulo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141`) |
-| Retorno de chamado a VIVOS | Signal emite evento antes da guarda de reentrada do cartório. (`app/chamados/signals.py:194-210`) | Emissão é best-effort com savepoint/`engolir`: pode haver retorno sem evento. Nesse caso, não há garantia desse reparo pelo consumidor. (`app/chamados/signals.py:194-207`) |
-| Mudança relevante/perda de pergunta | Save relevante acorda células; ressuscitação em lote e reuso também emitem. (`app/chamados/signals.py:241-257`; `app/chamados/models.py:1563-1568,2997-3007`) | Depende das portas/gatilhos executados; estoque já existente não é automaticamente um evento novo. (`app/chamados/management/commands/consumir_eventos_celula.py:28-31`; `app/chamados/reconciliador.py:1278-1310`) |
-| Estoque antigo | Existe `consumir_eventos_celula --semear`. (`app/chamados/management/commands/consumir_eventos_celula.py:14-15,28-30`) | É opção explícita; o ramo normal não semeia. (`app/chamados/management/commands/consumir_eventos_celula.py:28-31`) |
-| Push opcional do lote | A fábrica do evento sempre silencia push. (`app/chamados/services/fabrica_da_celula.py:188-190`) | Não cobre o modo opcional `--com-push` do disparar. (`app/chamados/management/commands/disparar_perguntas_competencia.py:289-295`) |
-
-A divergência de universo é comprovável: a fábrica barra `dia_sem_trabalho`, futuro e veredito que não acusa, e encaminha limbo entregue para Pauta DP. O FIO MUDO não consulta essas mesmas guardas: trabalha com chamado vivo, ata, teto e seus próprios filtros. Há teste que fixa célula `concorde` com FIO MUDO ainda escrevendo. (`app/chamados/services/fabrica_da_celula.py:85-98,185-190`; `app/chamados/management/commands/disparar_perguntas_competencia.py:141-175,215-219`; `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:152-159`)
-
-Assim, ficam sem **substituto integral demonstrado**: o reparo por varredura de alvo cujo evento se perdeu, de estoque não alcançado e de alvo aceito pelo FIO MUDO mas recusado pela fábrica. Existência e quantidade desses casos em produção: **[nao verificado]**. (`app/chamados/signals.py:194-207`; `app/chamados/services/fabrica_da_celula.py:85-98,185-190`; `app/chamados/management/commands/disparar_perguntas_competencia.py:141-219`)
-
-O reconciliador pode reatar **pergunta órfã existente**; isso não equivale a criar linha ausente. A criação faltante no consumidor aparece justamente pela nova chamada à fábrica. (`app/chamados/reconciliador.py:1384-1387,1432-1441,1533-1556`)
-
-CADASTRO sem turno e limbo entregue já têm escritores próprios na fábrica; **não são escritas atuais do disparar**. CADASTRO produz pauta por colaborador sob trava; limbo entregue produz pauta por dia/motivo. (`app/chamados/services/fabrica_da_celula.py:172-186,222-255,324-343`; `app/chamados/management/commands/disparar_perguntas_competencia.py:282-283`)
-
-A tranca atual também não substitui emissão faltante: encerra chamado/disputa, lê a morte da pergunta pelo C6 e roda com cartório calado. `trancar_periodo` não contém o bloco C11 do anexo; chama `disparar_no_ato` em best-effort. (`app/chamados/services/competencia_trancada.py:8-16,177-205`; `app/ponto/services/fechamento.py:1400-1429`)
-
-4. **Testes atuais, selos e situação do PARQUE** [nao verificado]
-
-Resultado de execução dos testes nesta auditoria: **[nao verificado]**. Os contratos abaixo foram identificados no fonte. [nao verificado]
-
-| Contrato atual fixado | Teste | [nao verificado]
-|---|---|
-| Célula com pendência: apply não cria pergunta, contador 1, rc 2 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:98-103` |
-| FIO MUDO: apply cria 1, contador da célula 0, rc 0 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:152-159` |
-| Retratada permite renascer; limbo pode escrever FIO MUDO e terminar rc 2 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:161-184` |
-| Parcial só lista: zero perguntas e rc 0 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:186-194` |
-| Cron e argv da corrente contêm `--apply` | `app/chamados/tests/test_selo_emissor_fio_mudo.py:215-219`; `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:19-27` |
-| Dry não deixa pergunta persistida e imprime aviso de rollback | `app/chamados/tests/test_selo_emissor_fio_mudo.py:226-232` |
-| Um ciclo `comp_corrente/apply` devolve pergunta viva ao chamado mudo | `app/chamados/tests/test_selo_emissor_fio_mudo.py:273-298` |
-| Há exatamente 1 juiz por varredura | `app/ponto/tests/test_varredura_lote_prazo.py:47-62` |
-| Hoje não conta no vigia; depois passa a contar; FIO MUDO respeita marco vencido | `app/chamados/tests/test_pergunta_do_dia_em_curso.py:125-136,422-
-
-[truncado em 20000 de 30906 caracteres]
-
-## 09/11 21:34 · sessao a72b1f524879 · - · - · origem=Ronald (tmux)
-
-Resultado da análise estática, somente leitura; execução real do cron, saldo FIO MUDO, banco e logs em produção: [nao verificado].
-
-- **A escrita do disparar é o caminho FIO MUDO.** Seleciona chamados `status_local__in=VIVOS` com célula na janela; não restringe `MODULOS_DE_TURNO`. Exclui chamado com pergunta viva, parcial só lista, colaborador não ativo, `_ja_perguntou`, fato já existente; toma o primeiro motivo pela ata ainda não visto. A seleção termina em `_mudos.append(...)`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141`, `:148`, `:154`, `:158`, `:169`, `:172`, `:215`, `:219`.)
-- **O mesmo `_rodar()` escreve com e sem `--apply`.** Com apply, confirma atomic; sem apply, executa a fábrica sob atomic e força `RuntimeError('rollback')`. `--alarme` retorna antes desse trecho. (`app/chamados/management/commands/disparar_perguntas_competencia.py:253`, `:270`, `:282`, `:289`, `:306`.)
-
-**Efeitos da porta compartilhada e cobertura alternativa**
-
-| Efeito chamado por `_rodar` | Escritor/porta real e cobertura |
-|---|---|
-| Desfazer carimbo sem lastro | `perguntar` busca perguntas materializadas do motivo/dia e chama `desfazer_carimbo_sem_lastro`. Esta relê sob trava, exige C6 vivo, chama `descarimbar`, registra evento e pode reabrir disputa. O cartório/C11 também o faz por `perguntar_pela_celula`. (`app/chamados/services/fabrica_da_celula.py:142`, `:177`; `app/chamados/services/relavra_via.py:219`, `:242`, `:246`, `:248`, `:259`.) |
-| Limpar campos do carimbo | `descarimbar` zera `via_resolucao`, `materializada_em`, `materializada_por`; recusa linha fora do fato. O `save` relevante também aciona outbox. (`app/chamados/models.py:3203`, `:3208`, `:3210`; `app/chamados/signals.py:251`.) |
-| Reabrir disputa | `reabrir_sistema` limpa `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; grava ocorrência no chamado da disputa. `perguntar_pela_celula`, no passe específico de carimbadas, usa `reabrir_fechada=False`; o `perguntar` usado pelo fio mudo deixa o default `True`. (`app/chamados/models.py:2163`, `:2173`, `:2177`, `:2180`; `app/chamados/services/fabrica_da_celula.py:180`; `app/chamados/services/relavra_via.py:187`.) |
-| Criar/agregar disputa e contexto | `perguntar` chama `criar_ou_atualizar_disputa`; esta chama `_abrir_ou_agregar_disputa`, que agrega `motivos`, faz merge do contexto com `qtd`/`ultima_em`, ou abre/reusa chamado-pai e cria disputa. É a mesma porta chamada pelo evento da célula. (`app/chamados/services/fabrica_da_celula.py:145`, `:190`; `app/chamados/services/disputa_emissao.py:535`, `:548`, `:565`, `:568`, `:587`, `:662`.) |
-| Notas e trilha de emissão | No reuso do pai anexa ocorrência; no nascimento da disputa registra `disputa_aberta`; no nascimento da pergunta registra `pergunta_emitida`. Logo retirar o cron também retira os textos com origem `disparo_competencia`, embora a emissão por célula registre sua própria origem `julgamento_celula`. (`app/chamados/services/disputa_emissao.py:584`, `:595`; `app/chamados/models.py:3020`; `app/chamados/management/commands/disparar_perguntas_competencia.py:282`; `app/chamados/services/fabrica_da_celula.py:190`.) |
-| Criar pergunta do fato | A emissão chama `PerguntaDisputa.abrir`; a porta insere com `gravar_dia_do_fato`, `save(force_insert=True)` e registra atos projetados recebidos. O cartório/C11 atravessa a mesma fábrica. (`app/chamados/services/disputa_emissao.py:444`; `app/chamados/models.py:3013`, `:3017`, `:3019`; `app/chamados/services/fabrica_da_celula.py:145`.) |
-| Costurar/reapontar pergunta existente | No reuso da identidade, `_nascer` pode atualizar `chamado_destino` e lavra, salvar e emitir evento da origem anterior. Na emissão nova, se ficar órfã e o motivo for do dia sem fechar, chama `reatar_pergunta_orfa` sob savepoint; falha fica órfã com log. Essa porta pode derivar destino, costurar histórico, lavrar pergunta morta ou emitir/reabrir `batida_ausente`, respeitando gates. (`app/chamados/models.py:2981`, `:2997`, `:3003`, `:3006`; `app/chamados/services/disputa_emissao.py:459`; `app/chamados/reconciliador.py:1533`, `:1556`, `:1619`, `:1642`, `:1655`, `:910`.) |
-| Push | Apply com `--com-push` pode enviar push para disputa nova/motivo novo; dry e apply padrão silenciam. O evento da célula sempre silencia. Assim o modo opcional `--com-push` não tem equivalente nesse evento. (`app/chamados/management/commands/disparar_perguntas_competencia.py:289`, `:307`; `app/chamados/services/disputa_emissao.py:669`, `:686`, `:1748`; `app/chamados/services/fabrica_da_celula.py:188`.) |
-
-**O ramo LASTRO parece residual, mas não deve ser chamado de morto absoluto.** Em estado coerente e estável, a pergunta materializada que poderia ser descarimbada já faz `linhas_dos_fatos(...).exists()` barrar o alvo; as linhas fora do fato que passam nesse filtro são inelegíveis ao descarimbo. Contudo seleção e escrita são consultas separadas; o filtro da identidade usa coluna `colaborador` e `instancia_marco`, enquanto a busca do descarimbo usa `disputa__colaborador` e omite instância. Concorrência ou inconsistência concreta: [nao verificado]. (`app/chamados/management/commands/disparar_perguntas_competencia.py:215`; `app/chamados/models.py:2753`; `app/chamados/services/fabrica_da_celula.py:142`; `app/chamados/services/relavra_via.py:181`; `app/chamados/models.py:2510`.)
-
-**C11 está no caminho executável da cópia.** O consumidor chama `perguntar_por_eventos` depois de retratações e lastro e antes de marcar eventos processados; falha da fábrica entra em `falhas` e mantém eventos pendentes com tentativa/erro. A fábrica deduplica datas e relê células atuais do colaborador, portanto não confia no ID antigo do evento. O cron contínuo do consumidor está declarado a cada minuto. (`app/chamados/reconciliador.py:1384`, `:1388`, `:1392`; `app/chamados/services/fabrica_da_celula.py:259`; `app/config/crons.py:394`.)
-
-**Há gatilhos para nascimento, retorno e perda de pergunta, com garantias diferentes.**
-
-- Nascimento por `ChamadoColaborador.abrir`/`criar`: insere evento para `MODULOS_DE_TURNO` com célula resolvida, no ato transacional. (`app/chamados/models.py:971`, `:977`, `:1093`.)
-- Retorno do chamado a `VIVOS`: emite antes da guarda `cartorio.em_julgamento()`, porém é **best-effort**; falha do INSERT é engolida sob savepoint e o chamado permanece reaberto. Portanto há caminho permitido de reabertura sem evento que o apply da varredura ainda poderia reparar. (`app/chamados/signals.py:188`, `:194`, `:201`, `:205`, `:210`.)
-- Alteração relevante de pergunta: o receiver emite por `CAMPOS_QUE_ACORDAM`; a falha sobe e o `save` é atomic. Ressuscitação em lote e reuso da identidade acordam células explicitamente. (`app/chamados/signals.py:251`; `app/chamados/models.py:3413`, `:1563`, `:2997`.)
-- Reapontamento acorda origem, e teste exige captura antes e evento depois do save. (`app/chamados/tests/test_e4_c20.py:117`.)
-- Estoque antigo pode ser semeado por `consumir_eventos_celula --semear`, mas isso é opção explícita, não o ramo normal do cron. Semeia chamados vivos de turno e órfãs que o evento encerraria. (`app/chamados/management/commands/consumir_eventos_celula.py:28`; `app/chamados/reconciliador.py:1278`, `:1289`, `:1302`.)
-
-**A cobertura não é o MESMO universo do fio mudo.** O evento passa por `dia_sem_trabalho`, veredito que acusa, data não futura e encaminhamento do limbo entregue à Pauta DP; o fio mudo usa motivos pela ata e seus filtros próprios, sem essas mesmas guardas explícitas. Além disso, seu universo aceita qualquer chamado vivo ligado à célula, enquanto os gatilhos de nascimento/retorno exigem módulo de turno. Retirar apply elimina a varredura reparadora desses casos; se há casos reais: [nao verificado]. (`app/chamados/services/fabrica_da_celula.py:85`, `:87`, `:93`, `:185`; `app/chamados/management/commands/disparar_perguntas_competencia.py:141`, `:158`; `app/chamados/signals.py:201`; `app/chamados/models.py:977`.)
-
-**CADASTRO e limbo entregue já têm outro escritor; não são escritas atuais do disparar.** A fábrica, no passado sem turno, abre pauta de cadastro por colaborador sob trava, com dedup de pauta viva ou fechada cobrindo aquele dia; o limbo entregue abre pauta DP por motivo/dia, deduplicando inclusive histórico feito/cancelado. O comando atual só observa motivos deixados e emite perguntas do fio mudo. (`app/chamados/services/fabrica_da_celula.py:172`, `:288`, `:324`, `:185`, `:222`, `:239`; `app/chamados/management/commands/disparar_perguntas_competencia.py:112`, `:282`.)
-
-**A TRANCA proposta não está no corpo atual.** `trancar_periodo` faz get-or-create/retranca e chama `disparar_no_ato` sob `engolir`; não contém o bloco de emissão C11 por célula do anexo. O serviço atual da tranca encerra chamados/disputas e encaminha respostas ao DP; declara que não escreve nas perguntas e roda com cartório calado. Portanto não substitui a emissão de pergunta faltante pelo fio mudo, nem garante hoje evento para recalcular a fila no ato da tranca. (`app/ponto/services/fechamento.py:1400`, `:1408`, `:1420`; `app/chamados/services/competencia_trancada.py:8`, `:30`, `:177`, `:196`, `:207`.)
-
-**O reconciliador não cria pergunta ausente por conta própria fora da fábrica.** A rotina `reconciliar_chamados_colab` retrata perguntas, reata perguntas órfãs já existentes e retrata premissa morta; criar pergunta perdida agora aparece na chamada à fábrica dentro do consumidor. Reatar uma pergunta existente não cobre um fato que não tem linha de pergunta. (`app/chamados/reconciliador.py:1432`, `:1441`, `:1533`, `:1384`.)
-
-## 09/11 21:34 · sessao bf6e4c8791c8 · - · - · origem=Ronald (tmux)
-
-**Cron, conjuntos e leitores**
-
-- Entrada efetiva da cópia: `ENC('disparar_perguntas_competencia', gatilho='apurar_furos_diarios', args='--comp-corrente --apply', log='fio_mudo.log', estagio='cobranca', teto_s=900, depende=('processar_cartorio', 'apurar_furos_diarios'))` — `app/config/crons.py:1521-1523`.
-- Dependente direto como gatilho: `reconciliar_perguntas_orfas --alarme`, log `perguntas_orfas.log`, estágio `reconciliacao`, teto 900 — `app/config/crons.py:1526-1527`. Próximo elo é `lavrar_deslogados --apply`, gatilho `reconciliar_perguntas_orfas`, dependência declarada de `apurar_furos_diarios` — `app/config/crons.py:1539-1541`.
-- `ENC` transforma dependência omitida em `(gatilho,)`; portanto reconciliar órfãs depende do disparar também no campo `depende` — `app/config/crons.py:53-54`.
-- `ENCADEADOS` continua parte do universo de crons; `todas_as_entradas()` concatena `CRONS + ENCADEADOS` — `app/config/crons.py:1787-1798`.
-- `JUIZES_POR_VARREDURA` contém somente disparar; comentário diz que permanece pelo FIO MUDO e que a célula já virou vigia — `app/config/crons.py:2032-2048`, fechamento da tupla em `2098`.
-- Não há conjunto Python chamado `VIGIAS` na declaração observada: o grupo de vigias é a compreensão dentro de `PAPEL_DO_CRON`, começando com `reconciliar_grade`; disparar recebe `juiz` pela compreensão anterior — `app/config/crons.py:2164-2169`. `PAPEIS` aceita oito valores — `app/config/crons.py:2004`.
-- Mudança correspondente: remover da tupla de juízes e inserir na compreensão de vigias; não há razão estrutural para sair de `ENCADEADOS` ou mudar `gatilho`/`depende` — evidência da independência entre agenda/papel em `app/config/crons.py:2340-2357`. Necessidade de mudar os gatilhos por negócio: **[nao verificado]**.
-- Contagem de juízes: `juizes_por_varredura()` filtra `todas_as_entradas()` por `papel(e) == 'juiz'`, não simplesmente `len(JUIZES_POR_VARREDURA)` — `app/config/crons.py:2348-2357`. Hoje 1; após reclassificação coerente, 0 — mesma função e único nome `app/config/crons.py:2048`.
-- `bin/placar_code.sh` importa a função e imprime `juizes_por_varredura=N (config/crons.py, papel juiz; esperado 0; dono=Code)` — `bin/placar_code.sh:482-486`. Esse valor entra em `TOTAL`; `?` equivale a 1 — `bin/placar_code.sh:555-556`.
-- `escritas_por_cron()` usa, por default, a lista viva de juízes; mede exclusivamente `LogAuditoria` do ator `sistema:<cron>` nos últimos sete dias — `app/chamados/services/vigia_loop.py:61-99`. Tirar disparar da lista também o retira desse universo de medição; não prova ausência de escrita — `app/chamados/services/vigia_loop.py:64-66`, `80-84`.
-- O placar publica uma linha por membro dessa medição, formato `escritas_por_cron[<nome>]=N (objetos ..., regravados ..., top3 ...; ... esperado 0 ...)` — `bin/placar_code.sh:201-209`. O verificador pede explicitamente conferir escrita sem trilha separadamente — `.claude/agents/verificador.md:17`.
-
-**Matriz: não há 20/20 automático**
-
-- Célula de chamado/juiz declara duas exceções: `config.crons.JUIZES_POR_VARREDURA` e `core.juizes.PENDENTES_CHAMADO`; não declara `verde=True`, logo usa default False — `app/core/contratos_estruturais.py:62`, `262-270`.
-- `PENDENTES['chamado']` já está vazio; alias `PENDENTES_CHAMADO` aponta para ele — `app/core/juizes.py:465-466`, `1355`.
-- A matriz tem 18 células com `verde=True`, GLOBAL está verde; portanto 19/20. A frase atual também declara 19/20 — contagem definida em `app/core/contratos_estruturais.py:1053-1064`, GLOBAL em `81-84`, frase em `app/core/placar_estrutural.py:440-441`.
-- Esvaziar a lista, sozinho, mantém **19/20**, pois `verdes()` conta flags declaradas; 20/20 exige declarar essa célula verde e cumprir os selos — `app/core/contratos_estruturais.py:1053-1055`; `app/core/tests/test_selo_contratos_estruturais.py:71-96`.
-- O denominador é calculado e continua 20, não muda pela remoção do juiz — `app/core/contratos_estruturais.py:1038-1046`.
-- Leitores do N/20: TICKETS gera tabela com `ce.verdes()` e `ce.total()` — `app/core/placar_tickets.py:215-217`; ferramenta HAIKU retorna número, teto e células faltantes — `app/core/arquitetura_leitura.py:55-82`.
-- ESTADO lê `core/placar_estrutural.py::RESULTADOS`, não stdout do disparar — `bin/gerar_estado.py:60-86`, publicação `388`. R6 contém cópia literal da frase 19/20 — `app/core/placar_estrutural.py:440-441`; selo exige igualdade dessa frase e declaradas com juiz real — `app/core/tests/test_selo_r6_frase_do_juiz.py:20-25`.
-- Handoff também lê o dado R6 e raspa `"contratos_estruturais: (\d+)/(\d+) verdes"` — `bin/handoff_sessao.sh:185-208`.
-- Afirmação de que hooks leem diretamente stdout/FIO MUDO: **[nao verificado]**. O arquivo `.claude/agents/verificador.md:17` exige auditoria do contador e escritas, mas não é parser da saída.
-
-**Transporte de stdout, rc e carimbos**
-
-- `corrente()` retorna `(cmd, gatilho, empresas, teto_s, args, caminho_do_log(log))` — `app/config/crons.py:1824-1851`.
-- `manage.py crons corrente` serializa `log<TAB>cmd gatilho empresas teto args` — `app/core/management/commands/crons.py:37-42`.
-- `bin/encadeado.sh` lê a serialização, passa `ENC_LOG`, acompanha rc e guarda pior rc — `bin/encadeado.sh:45-68`.
-- Um elo só roda depois da existência dos arquivos `logs/fim/<gatilho>.<empresa>.<dia>`; teto ausente gera rc 2 — `bin/encadeado.sh:74-94`.
-- Saída e erro do disparar são redirecionados para seu log declarado pelo envelope — `bin/encadeado.sh:99-104`.
-- `cron_run.sh` captura rc, escreve `{nome,emp,ini,fim,dur,exit}` no JSONL e cria carimbo em rc **0 ou 2**; rc 2 significa alarme de negócio, não falha de execução — `bin/cron_run.sh:11-25`.
-- Outros rc abrem pauta `cron_quebrado`; 0/2 recuperam pauta anterior — `bin/cron_run.sh:27-38`. Assim reconciliar órfãs continua recebendo gatilho mesmo com alarme 2 do disparar — `app/config/crons.py:1526`; `bin/cron_run.sh:22-25`; `bin/encadeado.sh:89`.
-- Parser direto do contador da célula: `sed '^FABRICA-POR-EVENTO: o julgamento deixou \([0-9]*\) .*'` sobre `logs/fio_mudo.log`, última ocorrência; se arquivo não mudou hoje, usa `?` — `bin/placar_code.sh:388-389`.
-- Publicação correspondente é `perguntas_que_o_julgamento_nao_fez=N`, esperado 0, fora do TOTAL — `bin/placar_code.sh:390`.
-- Parser do número `[EMITE] FIO MUDO:` fora dos testes: **[nao verificado]**. [nao verificado]
-
-**Selos e atualização de conjuntos**
-
-- Tabuleiro exige igualdade entre juízes derivados e tupla declarada — `app/core/tests/test_contract_tabuleiro.py:25-28`. Exige célula de chamado não verde enquanto tupla não vazia — `41-44`.
-- Selo do teto exige `total() == 20`, sete famílias, três contratos e exclusão de chamado/escala sem cadastro — `app/core/tests/test_selo_contratos_estruturais.py:33-49`.
-- Selos da matriz exigem teste existente e TODAS as exceções vazias para cada verde; exceção cheia proíbe verde — `app/core/tests/test_selo_contratos_estruturais.py:71-96`.
-- **Outro arquivo obrigatoriamente impactado**: a exceção de delegação do disparar no selo de host tem motivo/condição de saída explícitos; condição atual é “sai quando o fio mudo for medido e o C11 pousar” — `bin/tests/test_papel_prazo_nao_deriva.sh:302-308`. O selo falha se essa exceção continuar depois que o cron sair de `JUIZES_POR_VARREDURA` — `322-326`.
-
-**Documentação e gerador**
-
-- CRONS não chama literalmente disparar de escritor: mostra seu lugar na corrente — `app/docs/CRONS.md:39-40`; avisa que código é fonte única e documento é consulta — `7-16`. Ausência de outra descrição de escritor: **[nao verificado]**.
-- JUIZES não contém ocorrência de disparar na cópia pesquisada: descrição dele como escritor ali é **[nao verificado]**. Documento identifica a fonte viva e função de lookup — `app/docs/JUIZES.md:7-16`.
-- CLAUDE não contém ocorrência literal de disparar: descrição nominal dele como escritor é **[nao verificado]**. Regra geral é “emissão, pergunta e chamado nascem do sinal da célula”, cron de varredura é vigia, e juízes são dívida — `CLAUDE.md:166-170`. Fonte dos crons e corrente por arquivo — `236-242`.
-- ARQUITETURA mostra dependências do disparar — `app/docs/ARQUITETURA.mmd:105-106`, `131`; declara **40 vigias, 1 juiz** e nó do disparar ligado a juiz — `209-219`.
-- Gerador do tabuleiro lê todas as entradas e papel; após reclassificação produziria **41 vigias, 0 juízes**, sem nó `j_disparar...` — `app/core/management/commands/gerar_diagrama.py:233-265`.
-- **Descompasso adicional**: `bloco_vigias()` lê apenas `CRONS`, não `ENCADEADOS`; portanto disparar, mesmo reclassificado, não ganharia nó no subgrafo VIGIAS por esse gerador — `app/core/management/commands/gerar_diagrama.py:393-401`. O bloco de tabuleiro conta universo completo, mas este subgrafo exclui encadeados — mesmas linhas e `242-243`.
-- A cópia literal R6 envelheceu parcialmente em sua explicação: ainda menciona 24 juízes, apesar de a tupla atual conter 1 — `app/core/placar_estrutural.py:529-534`; `app/config/crons.py:2048`. Não implica erro na frase atual 19/20, cujo selo é separado — `app/core/tests/test_selo_r6_frase_do_juiz.py:20-25`.
-
-**Limites**
-
-- Não houve arquivo AGENTS.md encontrado no inventário da cópia; inexistência fora desse inventário: **[nao verificado]**.
-- HEAD real/ancestralidade E4a-1 e operação em produção: **[nao verificado]**; cópia não contém repositório Git acessível no cwd.
-- Nenhum dado entregue prova FIO MUDO 0 em produção nem C11 implantado; a condição de saída do selo continua exigindo ambos — `bin/tests/test_papel_prazo_nao_deriva.sh:307`; prova de atendimento: **[nao verificado]**.
-
-## 09/11 21:34 · sessao 7e8ee26731c1 · - · - · origem=Ronald (tmux)
-
-**Testes que fixam a situação atual** [nao verificado]
-
-- A célula é vigia mesmo com `apply=True`: nenhuma pergunta gravada, contador 1, rc 2. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:98-103`.
-- FIO MUDO continua escritor: `apply=True`, nasce 1 pergunta, contador da célula 0, rc 0. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:152-159`.
-- Pergunta retratada não cala o FIO MUDO: nasce outra pergunta. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:161-175`.
-- Limbo pode contar pendência da célula **e** escrever FIO MUDO antes de sair rc 2. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:177-184`.
-- Parcial sem período fica na lista do admin, zero perguntas, rc 0. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:186-194`.
-- Cron obrigatório com `--apply`: `app/chamados/tests/test_selo_emissor_fio_mudo.py:215-219`; argv encadeado também obrigatório com `--apply`: `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:19-27`.
-- Dry deixa contagem persistente de perguntas inalterada e imprime “dry-run: nada gravado”. `app/chamados/tests/test_selo_emissor_fio_mudo.py:226-232`. Porém o código executa o escritor em transação e provoca rollback; não é ausência de chamadas de escrita. `app/chamados/management/commands/disparar_perguntas_competencia.py:306-317`.
-- O selo do ciclo exige que o chamado mudo tenha pergunta viva depois de `comp_corrente=True, apply=True`. `app/chamados/tests/test_selo_emissor_fio_mudo.py:273-298`.
-- Hoje o número de juízes é fixado em **1** pelo teste. `app/ponto/tests/test_varredura_lote_prazo.py:47-62`.
-- Exceção de delegação nomeia disparar e saída “fio mudo medido e C11 pousar”; removê-lo da lista sem apagar a exceção torna o script vermelho. `bin/tests/test_papel_prazo_nao_deriva.sh:302-307`, `bin/tests/test_papel_prazo_nao_deriva.sh:322-326`.
-
-**Selos de vigia e estrutural**
-
-- O parser de teste raspa `^FABRICA-POR-EVENTO: o julgamento deixou (\d+) `. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:91-95`.
-- Limbo com pendência exige contador 1 e rc 2; folga exige 0 e rc 0; célula já perguntada exige 0 e rc 0. `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:106-124`.
-- Hoje fica fora da conta; amanhã entra e exige rc 2 sem escrever. `app/chamados/tests/test_pergunta_do_dia_em_curso.py:125-136`.
-- FIO MUDO de hoje só pergunta marco vencido. `app/chamados/tests/test_pergunta_do_dia_em_curso.py:422-438`.
-- Teto estrutural é `total()==20`; o selo **não** exige `verdes()==20`. `app/core/tests/test_selo_contratos_estruturais.py:33-49`, `app/core/tests/test_selo_contratos_estruturais.py:209-212`.
-- Verde exige todas as exceções vazias; exceção cheia impede verde. `app/core/tests/test_selo_contratos_estruturais.py:81-96`.
-- Lista e papéis derivados precisam coincidir; célula “chamado × um juiz por pergunta” não pode ficar verde com `JUIZES_POR_VARREDURA` cheio. `app/core/tests/test_contract_tabuleiro.py:25-28`, `app/core/tests/test_contract_tabuleiro.py:41-44`.
-
-**Comparação com E4A2_PARQUE fornecido**
-
-O texto do anexo não tem numeração de arquivo verificável nesta cópia [nao verificado]. O helper atual tem somente `FONTES_MUTADAS` e `fonte_real`, sem `com_hunk`. `app/chamados/tests/e4_catracas.py:1-9`.
-
-| Item anexado | Situação comprovável |
-|---|---|
-| `HunkRegistroTest...H4` | Não é um teste atual; a direção proposta contraria os selos atuais que exigem `--apply` no cron e no encadeado. `app/chamados/tests/test_selo_emissor_fio_mudo.py:215-219`; `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:19-27`. O teste atual da lista exige 1. `app/ponto/tests/test_varredura_lote_prazo.py:62`. |
-| `test_vigia_alarma_todos_e_cadastro_conta_colab_nao_dias` | Não corresponde ao vigia atual: alarme trata apenas `deixou` e FIO MUDO; não inclui CADASTRO nem sua mensagem/contador. `app/chamados/management/commands/disparar_perguntas_competencia.py:237-264`. O contador CADASTRO existe em teste separado da fábrica, com nome/número/esperado/dono. `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:51-56`. |
-| `test_varredura_nao_contem_porta_de_escrita_nem_dry_escritor` | A condição proposta não bate: `_rodar` chama `perguntar`; apply usa atomic e dry também executa `_rodar` em atomic. `app/chamados/management/commands/disparar_perguntas_competencia.py:270-317`. |
-| `test_C11_tranca_proposta_2x_eventos_e_erro_antes_dispatch` | Proposta ainda não aplicada: `trancar_periodo` atual não emite eventos nem envolve a operação em atomic; dispatch segue em `engolir`, com intenção best-effort declarada. `app/ponto/services/fechamento.py:1400-1429`. |
-| `test_hunk_A05_falha_registrar_reverte_save_e_memoria` | Proposta fora do comportamento atual: `carimbar` salva, mas não chama `DecisaoPergunta.registrar`. `app/chamados/models.py:3128-3157`. |
-| `test_A05_efeito_e_hunk_assinatura_conservam_projecao_original` + helper `carimbar` | Comparação via `com_hunk` ficou obsoleta como instrumento; helper não existe hoje. `app/chamados/tests/e4_catracas.py:1-9`. Regra atual ainda preenche resposta/validação conforme argumento, sem ato DP neste corpo. `app/chamados/models.py:3130-3157`. |
-| ORM `test_A05_efeito_puro_conserva_RV` | O arquivo atual declara explicitamente A05 fora da E4a-1. `app/chamados/tests/test_e4_expand_orm.py:1-5`. O caso de `resposta=None` condiz com o corpo atual, que só preenche RV quando `resposta` é verdadeiro; execução ORM desse caso [nao verificado]. `app/chamados/models.py:3128-3157`. |
-| `HunksTest` com A05/TRANCA/C11/A22/H2 | Harness `com_hunk` obsoleto; os testes atuais leem fontes aplicados via `fonte_real`. `app/chamados/tests/test_e4_expand.py:15-16`. C11 reversão, ressuscitação e reuso têm testes contra código real. `app/chamados/tests/test_e4_expand.py:284-349`. H2 tem teste de atomicidade e falha do evento. `app/chamados/tests/test_e4_expand.py:351-376`. |
-
-**Evidência da E4a-1 na cópia**
-
-- Testes atuais identificam explicitamente E4a-1/P1 (origem do reuso em memória), P2 (relógio propagado) e P3 (pauta CADASTRO única e contador). `app/chamados/tests/test_e4_expand.py:335-349`; `app/chamados/tests/test_e4a_relogio_injetado.py:70-87`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:1-12`.
-- O teste do lote diz expressamente que H4 pertence à E4a-2 e que o lote atual somente conta perguntas da célula. `app/chamados/tests/test_fabrica_pela_ata.py:63-68`.
-- Confirmação de commit/HEAD git [nao verificado]. Nenhum teste foi executado [nao verificado]. [nao verificado]
-
-_3254 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3258 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
