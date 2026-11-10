@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 13:35:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (259.8 MB). Acoes na janela: **549**.
+**Medido em 10/11/2026 13:41:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (259.8 MB). Acoes na janela: **545**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -555,7 +555,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:46:41 | Bash | Identify wrapper pid and test modules to run | `ps -o pid,cmd -p 633590,634191 \| cut -c1-150; cd /home/ronald/saas-hasner; W=$(cat logs/FIO-E0-V4-E4A-2/wt_construtor6.txt); M=$(cd $W/app && git grep -l -E 'motivos_a_perguntar\|perguntar_pela_celula\|nunca_bateu\|disputa_emissao\|resposta_tardia\|pergunta_no_app\|fio_mudo\|vigiar_fio_morto\|pipeline_placar' -- 'chamados/tests/*.py' 'escala/tests/*.py' 'core/tests/*.py' 'ponto/tests/*.py' \| sed ...` |
 | 01:46:33 | Bash | Launch REVERTER construtor volta 3 | `cd /home/ronald/saas-hasner; WT=/home/ronald/wt-codex-reverter-dia-sem-recalculo-$(date +%H%M%S); git worktree add --detach $WT 65719b368 >/dev/null 2>&1; git -C $WT log --oneline -1; echo $WT > logs/REVERTER-DIA-SEM-RECALCULO/wt_construtor3.txt; cd logs/REVERTER-DIA-SEM-RECALCULO; CODEX_OBRA=REVERTER-DIA-SEM-RECALCULO CODEX_PAPEL=construtor setsid nohup /home/ronald/saas-hasner/bin/codex_pergunta ...` |
 | 01:46:26 | Bash | Read construtor 6 result | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; date; cat construtor6.r.rc; head -c 5000 construtor6.r; W=$(cat wt_construtor6.txt); git -C $W status --porcelain` |
-| 01:35:56 | Bash | Find PLACAR-UNIVERSO-VAZIO section and CUSTO lines | `cd /home/ronald/saas-hasner/app; /bin/grep -n 'PLACAR-UNIVERSO-VAZIO\\|^CUSTO' docs/RELATO.md \| tail -8 \| cut -c1-200` |
-| 01:35:46 | Bash | Reread TRES-RESPOSTAS item 1 | `cat /home/ronald/saas-hasner/logs/aval_tres_respostas_1110_0040.txt \| head -c 1500` |
-| 01:35:42 | Bash | Wait for construtor volta 6 to finish | `while kill -0 4104464 2>/dev/null; do /usr/bin/sleep 20; done; date; cat /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/construtor6.r.rc` |
-| 01:35:37 | Bash | Add DUAS-RESPOSTAS row to CORTES | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/CORTES.md'; t=open(p).read().split('\n') i=[k for k,l in enumerate(t) if l.startswith('\| **TRES-RESPOSTAS**')]; assert len(i)==1 row=('\| **DUAS-RESPOSTAS** \| 2026-11-10 01:33 \| vigente (texto literal logs/aval_duas_respostas_1110_0140.txt; nenhuma lei nova) \| ' 'REVERTER-DIA-SEM-RECALCULO, FIO-E0-V4-E4A-2 \| (1) ! para pousar a VOLTA  ...` |
