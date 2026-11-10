@@ -1,7 +1,151 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 19:42** · publicado em **10/11/2026 19:43** (UTC-3)
+> Ultima resposta processada: **10/11/2026 19:49** · publicado em **10/11/2026 19:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 19:49 · sessao 88e167697efd · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+**Parei na condição explícita: o replay não reproduziu o reaponte. A cura ficou incompleta e o diff é parcial.** A reprodução preservada falha por assertion, sem erro de montagem. ([RED:62](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py:62))
+
+O caso encontrado é diferente da cadeia já triada: **no replay nasce uma pergunta**, porque ele resolve outro dia. O teste usa núcleo, resolvedor e gerador reais por AST; identidade/ORM/transação são doubles. Porta ORM real: **[nao verificado]**. ([reprodução:23](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py:23)) [nao verificado]
+
+| Passo | Resultado observado na sonda |
+|---|---|
+| Ensaio recebe `ultima_batida` de 08/07 | Reusa a pergunta de 08/07 da dona fechada. |
+| Savepoint desfeito | Desfaz também seu reaponte. |
+| Replay aplica o ato sobre o contexto antigo da dona | A data explícita de 09/07 prevalece sobre `ultima_batida`. |
+| Porta recebe 09/07 | Nasce outra pergunta; o gerador chama `reatar_pergunta_orfa` uma vez. |
+| Estado final | Uma DS, nenhum pai novo, **duas perguntas**; a original permanece sem o reaponte. |
+
+As assertions positivas registram essa sequência antes do RED final. (`chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py:57`)
+
+A precedência está no resolvedor, que lê a data por motivo antes da batida; o replay conserva essa data antiga ao fazer o merge. Intervalo pertence à família MARCO, portanto não recebe o episódio da família BATIDA. (`chamados/services/disputa_emissao.py:354`, `chamados/services/disputa_emissao.py:370`, `chamados/services/disputa_emissao.py:694`, `chamados/catalogo/motivos.py:48`, `chamados/models.py:3452`)
+
+Comando do RED preservado — resultado observado: `FAIL`, **`2 != 1`**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py
+```
+
+**O que ficou construído, sem entrega como cura concluída:** núcleo sem recursão, ensaio/savepoint/replay, causas internas, observação pelo `core.observ`, guarda do push e retirada de `Command._disputa` com lápide. (`chamados/services/disputa_emissao.py:546`, `chamados/services/disputa_emissao.py:413`, `core/observ.py:73`, `chamados/services/disputa_emissao.py:740`, `ponto/management/commands/reconciliar_grade.py:412`)
+
+As sondas de (a)–(h) estão nestes sítios; a reprodução acima demonstra que elas ainda não bastavam para cobrir D3:
+
+| Caso | Sítio |
+|---|---|
+| (a) Zero pergunta possível | `chamados/tests/test_bo_disputa_volta5_memoria.py:90` |
+| (b) Estrangeira em dona aberta | `chamados/tests/test_bo_disputa_volta5_memoria.py:103` |
+| (c) Fechada sem save/reatar; receivers ORM | `chamados/tests/test_bo_disputa_volta5_memoria.py:118`; `chamados/tests/test_bo_disputa_volta5.py:83` |
+| (d) Ciclo e limite de replay | `chamados/tests/test_bo_disputa_volta4_memoria.py:44` |
+| (e) Lote misto | `chamados/tests/test_bo_disputa_volta5_memoria.py:140` |
+| (f) Idempotência | `chamados/tests/test_bo_disputa_volta5_memoria.py:155` |
+| (g) Eleição após trava, dentro do atomic | `chamados/tests/test_bo_disputa_volta5_memoria.py:227` |
+| (h) Reentrada e demais mutantes | `chamados/tests/test_bo_disputa_volta5_memoria.py:28` |
+
+Os comandos dos mutantes entregues são os seguintes; **não reexecutei o conjunto final após a parada**, portanto seu resultado final fica **[nao verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante reentrada
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante salva_fechada
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante sem_guarda_push
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante nasce_sem_pergunta
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante eleicao_antes_trava
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante dedup_cala_replay
+```
+
+No censo, os escritores e leitores centrais ficaram assim:
+
+| Campo/retorno | Escrita e leitura |
+|---|---|
+| `DS.motivos` | Núcleo cria e agrega; gerador consulta perguntas locais. Remoções continuam no modelo. (`disputa_emissao.py:576`, `:657`, `:564`; `chamados/models.py:1961`, `:2031`) |
+| `DS.contexto`, `qtd`, `ultima_em` | Merge no emissor; resolvedor lê data e batida. (`disputa_emissao.py:525`, `:576`, `:354`, `:370`) |
+| Pai, classificação, contexto e SLA | Nascimento pelo `ChamadoColaborador.abrir`; DS guarda o pai. (`disputa_emissao.py:640`, `:657`) |
+| `DS.fechada_em` | Modelo fecha; núcleo/wrapper leem para impedir escrita na dona fechada e push. Receivers leem o valor. (`chamados/models.py:1932`; `disputa_emissao.py:576`, `:740`; `chamados/signals.py:28`, `:129`, `:153`) |
+| Pergunta: dona, dia, célula e destino | Porta insere ou reaponta a existente preservando sua dona; núcleo lê FK/motivo e criação efetiva. (`chamados/models.py:2907`, `:3006`, `:3014`; `disputa_emissao.py:413`, `:569`) |
+| Retorno nascimento/agregação | Núcleo mantém a tripla; wrapper consome também o coletor interno. (`disputa_emissao.py:546`, `:740`) |
+
+Para cada leitor de `motivos`, o efeito previsto pelo diff parcial é:
+
+| Leitor | Mudança de resultado |
+|---|---|
+| `api/foto_recebida.py:61` | Seleção acompanha a dona aberta com pergunta de foto. |
+| `colaboradores/signals.py:71` | Revalidação de posto acompanha essa dona aberta. |
+| `escala/signals.py:155` | Calibração de âncora acompanha essa dona aberta. |
+| `chamados/models.py:2031` | Remoção conserva guardas de abertura e presença do motivo. |
+| `auditar_disputas.py:88`, `:142`, `:169` | Audita/exibe motivos locais; comparação já usa perguntas locais. |
+| `auditar_invariantes_chamados.py:50` | Resolve dias dos motivos mantidos; seleção de zero perguntas continua em `:62`. |
+| `chamados/relatorios_disputa.py:52` | Rótulos passam a mostrar motivos locais. |
+| `chamados/services/acoes_disputa.py:149` | Mesmo efeito na mensagem. |
+| `chamados/services/fio.py:680` | Mesmo efeito no fio. |
+| `pauta_aparelhos_compartilhados.py:49` | Cobertura pode passar à dona ou omitir motivo recusado sem pergunta. |
+| `alertar_disputas_pendentes.py:82` | Log mostra os motivos mantidos. |
+| `templates/chamados/detalhe_local.html:301` | Exibe os motivos mantidos. |
+| `templates/chamados/partials/modal_fio.html:325` | Aviso acompanha a dona aberta com âncora. |
+| `colaboradores/services/drawer.py:75` | Sem mudança direta: usa perguntas vivas em `:78`. |
+
+Efeitos dessas mudanças nas cenas de produção: **[nao verificado]**.
+
+Arquivos tocados no diff parcial:
+
+- Produção: `chamados/services/disputa_emissao.py:257`, `core/observ.py:73`, `ponto/management/commands/reconciliar_grade.py:412`.
+- Testes BO: `test_bo_disputa_sem_pergunta.py:32`, `test_bo_disputa_sem_pergunta_memoria.py:1`, `test_bo_disputa_volta2_memoria.py:1`, `test_bo_disputa_volta3_memoria.py:1`, `test_bo_disputa_volta4_memoria.py:1`, `test_bo_disputa_volta5_memoria.py:1`, `test_bo_disputa_volta5.py:1`, `test_bo_disputa_volta5_replay_red_memoria.py:1` — todos em `chamados/tests/`. [nao verificado]
+- Selos: `chamados/tests/test_porta_chamado_e3.py:91`, `chamados/tests/test_sla_pelo_juiz.py:114`, `chamados/tests/test_porta_disputa_emissao.py:83`, `chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:133`, `core/tests/test_medida_turno_do_par.py:267`.
+
+Suite Django, PostgreSQL, receivers reais e ruff: **[nao verificado]**. Para a certificação autorizada continuam pendentes os módulos BO acima, `test_porta_disputa_emissao`, `test_disputa_s127`, `test_c7_red_minimos`, `test_invariantes_disputa`, `test_hx_disputa_muda_sem_ata` e o módulo de ordem de trava indicado no pedido. **[nao verificado]** [nao verificado]
+
+Órfãos, `_criar_pergunta_se_couber`, declaração, fábrica, smoke e auditor continuam reservados à 5b; a parada desta volta está no replay do núcleo. (`chamados/services/disputa_emissao.py:922`, `:1126`, `:711`, `:688`)
+
+## 10/11 19:44 · sessao c0b5c529908d · - · - · origem=Ronald (tmux)
+
+Complemento do censo FK concluído: **52 funções com acesso explícito** a `PerguntaDisputa.celula/celula_id`, incluindo queryset e carregamento relacionado; **6 funções adicionais de tupla/evento**, inventário enviado nas mensagens. A soma desses recortes é **58 funções**, sem afirmar fechamento de todo o grafo transitivo.
+
+Escritores persistentes identificados:
+
+- `app/chamados/models.py:2966` e `:3014`, na função `_nascer`.
+- `app/chamados/services/fio.py:1038`, persistido em `:1043`, na função `rechavear_data_evento`.
+- Escritor implícito do relacionamento: `on_delete=SET_NULL`, `app/chamados/models.py:2415`.
+
+`app/chamados/models.py:1501` atribui a FK numa cópia em memória; não é escritor persistente.
+
+Os seis caminhos complementares são `acordar_celulas`, `ressuscitar_perguntas`, `DecisaoPergunta.registrar`, `reabrir_para_correcao`, `_outbox_post_save_pergunta` e `_becos_post_save_pergunta`, com referências e formas já enviadas.
+
+Busca de `.celula/.celula_id` em templates e static retornou zero; leitores homônimos de `ChamadoColaborador`, `EventoCelula`, `CelulaDia` e funções chamadas `celula` foram separados manualmente.
+
+A união com os 117 leitores de `data_evento` ainda exige deduplicação pelo inventário do outro agente; **não somar 117+58 diretamente**.
+
+## 10/11 19:44 · sessao 62cb75685cec · - · - · origem=Ronald (tmux)
+
+Censo dos três campos de `PerguntaDisputa`: **21 funções operacionais na união**, sendo **11 escritoras/despachantes de escrita** e **10 outras leitoras**, sem duplicar quem lê e escreve. Declarações únicas: `app/chamados/models.py:2585`, `:2590`, `:2596`. `CelulaDia.julgada_em` tem outra grafia e ficou fora (`app/chamados/veredito_lavrado.py:194`).
+
+| # | Função/sítio | Forma |
+|---|---|---|
+| 1 | `veredito_lavrado.lavrar` — `app/chamados/veredito_lavrado.py:270` | Atribui `veredito_lavrado`; `julgado_em=timezone.now()` em `:272`; janela por `expira_em(data_evento, hoje)` em `:273`; `save(update_fields=...)` em `:275` |
+| 2 | `gravar_lavras_em_lote` — `app/chamados/veredito_lavrado.py:250` | `bulk_update` dos três campos via `CAMPOS_DA_LAVRA`, definido em `:237` |
+| 3 | `desfazer_lavra_em_memoria` — `app/chamados/veredito_lavrado.py:287` | Atribui os três valores da foto em memória; sem persistência em `:287`–`:289` |
+| 4 | `backfill_veredito_lavrado.Command.handle` — `app/chamados/management/commands/backfill_veredito_lavrado.py:120` | `(veredito or '') == v`; janela `!= e` em `:121`, `:135`; truthiness contra indeterminado em `:124`; atribui três campos em `:138`–`:140`; persiste pela porta em `:143`, `:146` |
+| 5 | `ChamadoColaborador._gravar_estado` — `app/chamados/models.py:308` | Import **`lavrar as _lavrar_s2`**; chama com persistência em `:312` |
+| 6 | `PerguntaDisputa._nascer` — `app/chamados/models.py:3003` | Import **`lavrar as _lv_s2`**; lavra em memória `:3004`; acrescenta os três campos a `upd` e salva em `:3005`–`:3006` |
+| 7 | `PerguntaDisputa.carimbar` — `app/chamados/models.py:3146` | Import de módulo **`veredito_lavrado as _vl`**; lê foto `:3147`, lavra com `salvar=False` `:3150`, salva `:3152`; desfaz em memória se exceção em `:3154` |
+| 8 | `fio.reapontar_resolvedora` — `app/chamados/services/fio.py:926` | Alias **`_lavrar`**, `salvar=False`; salva os três campos junto da identidade em `:927`–`:928` |
+| 9 | `fio.rechavear_data_evento` — `app/chamados/services/fio.py:1042` | Alias **`_lavrar`**, `salvar=False`; salva dia, célula e três campos em `:1043` |
+| 10 | `relavra_via.relavrar` — `app/chamados/services/relavra_via.py:124` | Foto do veredito; `lavrar(..., salvar=False)` `:126`; save dos três `:127`; compara `!= antes` `:130`; lê para auditoria `:137` |
+| 11 | `lavrar_perguntas_stale.Command.handle` — `app/chamados/management/commands/lavrar_perguntas_stale.py:60` | Lê conjunto stale pela porta de varredura; exige `--apply` em `:82`; chama `lavrar(p)` em `:89` |
+| 12 | `esta_stale` — `app/chamados/veredito_lavrado.py:224` | Truthiness negativa do veredito; `julgado_em is None`; `julgado_em > agora`; lê janela por `relogio_virou` em `:228`; comparação marco `> julgado_em` em `:232` |
+| 13 | `relogio_virou` — `app/chamados/veredito_lavrado.py:114` | Recebe os valores; `is None` para dois campos; janela `<= hoje` e data local do julgamento `< janela` em `:116` |
+| 14 | `foto_da_lavra` — `app/chamados/veredito_lavrado.py:281` | Leitura dos três atributos em tupla |
+| 15 | `raiox.pks_stale_por_varredura` — `app/chamados/services/raiox.py:34` | `values_list` dos três campos; truthiness negativa de veredito, julgamento `is None`/`> agora` em `:41`; relógio compartilhado em `:43`; marco `> julgamento` em `:46` |
+| 16 | `raiox.creditos_perguntas` — `app/chamados/services/raiox.py:135` | `.exclude(materializada_em__isnull=False, veredito_lavrado=VL_SIM)`: conjunção dentro do exclude |
+| 17 | `raiox.pergunta_sem_acao_possivel` — `app/chamados/services/raiox.py:184` | Truthiness do veredito; compara `== VL_SIM` em `:185`; vazio cai no juiz real em `:187` |
+| 18 | `CargaDaTarefa.__init__` — `app/chamados/services/tarefa_do_dia.py:351` | Copia veredito em mapa; `in ('sim','nao') and not esta_stale(...)` em `:352` |
+| 19 | `tarefa_do_dia._pela_decisao` — `app/chamados/services/tarefa_do_dia.py:141` | Consome mapa derivado da coluna: `.get(p.pk)`; `is None` em `:142`; `== 'nao'` em `:144` |
+| 20 | `auditar_invariantes_chamados.Command.handle` — `app/chamados/management/commands/auditar_invariantes_chamados.py:1167` | Pula stale; compara truthiness do veredito e `!= juiz real` em `:1173` |
+| 21 | `passivo_validado._reversao_de` — `app/chamados/services/passivo_validado.py:83` | **Leitura dinâmica `getattr(p, c, None)`**; os três nomes chegam por `CAMPOS_REVERSAO` em `:64`–`:66`; serializa foto de reversão |
+
+A programação do escritor periódico existe: **`lavrar_perguntas_stale --apply`, a cada cinco minutos**, `app/config/crons.py:390`. É invocação agendada da função nº11, não escritor adicional da coluna. `backfill_veredito_lavrado` tem registro de operação única em `app/config/crons.py:1402`; esse texto de metadados não entrou como função operacional.
+
+Não encontrei leitura direta dos três campos em templates, `static/` ou signals por grep dos nomes exatos. Nos signals lidos, o callback pós-save trabalha com disputa/portas, não com esses campos: `app/chamados/signals.py:228`, `:251`; a relavra reativa que antes seria em `ponto.signals` está descrita como retirada, e o código executado chama cartório em `app/ponto/signals.py:93`, com a retirada documentada em `:94`–`:105`.
+
+Método: AST em memória sobre Python de produção, buscando atributos, keywords ORM, strings de campos, chamadas e imports com `asname`; grep complementar em toda a árvore para os três nomes, funções canônicas e constantes de campos. Segui especificamente `CAMPOS_DA_LAVRA`, `CAMPOS_REVERSAO` e o mapa `self._lavra`, por isso entraram o escritor via `bulk_update`, o `getattr` e `_pela_decisao`. Excluí testes, migrations, declarações de campos, comentários, descrições de contratos e encaminhadores que apenas passam objetos/mapas sem consultar nem escrever seu valor. Os encaminhadores do mapa estão em `app/chamados/services/tarefa_do_dia.py:404` e `:164`; o consumidor efetivo é nº19.
 
 ## 10/11 19:42 · sessao 191095aeeb0f · - · - · origem=Ronald (tmux)
 
@@ -1117,131 +1261,4 @@ Q5 — revisão por leitura concluída; render Django e RED real contra `7547c83
 
 - **Execução local apenas sem Django:** `test_bo0611_05_leitores_geo.py` passou 4 testes, incluindo mutantes dos três leitores; `test_bo0611_05_vinculo_geo_parcial.py` passou 5 testes com `PYTHONPATH=app`, incluindo mutante sem longitude (`app/ponto/tests/test_bo0611_05_leitores_geo.py:133`, `:142`; `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:142`). Resultado não equivale a runner Django verde. [nao verificado]
 
-## 10/11 19:09 · sessao d88972d64298 · - · - · origem=Ronald (tmux)
-
-Censo e tipos:
-
-- `app/ponto/services/geofence.py:349-350` produz o par em `_occ`; `:391-392` produz o par escalar no contexto legado. Ambos usam `float(x) if x else None`: valor numérico truthy vira `float`; zero numérico vira `None`; texto `"0"` vira `0.0`. O nascimento grava também `ocorrencias: [_occ]` (`app/ponto/services/geofence.py:375-394`).
-- Ocorrência posterior entra por `anexar_ocorrencia(... contexto_novo={'ocorrencias': [_occ]})` (`app/ponto/services/geofence.py:359`), delega à porta de contexto (`app/chamados/services/nota.py:110-123`), une listas sem converter os itens e salva pela porta (`app/chamados/services/contexto.py:144-163`).
-- A cópia explícita adicional **não escreve contexto_json**: lê o par do chamado e o copia sem conversão para `Advertencia.detalhe_json` (`app/chamados/services/acoes_chamado.py:193-205`).
-- Escritor sintético da volta: fixture preserva zero e monta `float/None` por nulidade (`app/ponto/tests/test_bo0611_05_templates_geo.py:131-134`). Demais fixtures explícitas: `app/chamados/tests/test_s127_fluxo_geofence.py:26`, `app/chamados/tests/test_geofence_volta_no_fio.py:145`, `app/chamados/tests/test_geofence_validar_e_recusar.py:47`, `app/core/tests/test_smoke_chromium_fio_geofence.py:119`, `app/ponto/tests/test_geofence_catalogo_premissa.py:64`, `app/ponto/tests/test_jz1_autoridade_unica.py:194`, `app/ponto/tests/test_reconciliar_geofence.py:42-66`.
-
-Leitores do par:
-
-- Templates: guarda e atributos do modal (`app/templates/chamados/partials/modal_fio.html:481`, `:485`); guarda, texto e URL do relatório (`app/templates/chamados/partials/_relatorio_geo.html:31-33`).
-- Python: cópia para advertência acima; extração de ocorrências/legado (`app/ponto/services/geofence.py:403-406`); reconciliação filtra por `is not None` e usa distância/classificador (`app/ponto/services/geofence.py:425-432`).
-- JS indireto do modal: wrapper transfere os atributos (`app/static/js/geo-colab-map.js:97-106`), `parseFloat` lê as duas strings (`:29`) e `isNaN` decide ausência (`:39`). A nova guarda impede o botão para zero numérico; o JS mantém regra própria que aceitaria zero se recebido (`app/templates/chamados/partials/modal_fio.html:481-485`, `app/static/js/geo-colab-map.js:39`).
-- A guarda própria da reconciliação continua divergindo para zero; o diff da obra fornecido não altera essa expressão, apenas a extração do juiz no mesmo arquivo. Alteração histórica adicional nessa reconciliação: [nao verificado].
-
-Classes estruturais e proibidos:
-
-- Os dois filtros delegam ao módulo no ato da chamada; não duplicam o predicado (`app/core/templatetags/hasner_filters.py:29-41`). Juiz registrado em `app/core/juizes.py:1201`, implementação `bool(latitude and longitude)` em `app/ponto/services/geofence.py:145`, usada pelo emissor em `:269`.
-- Não há novo escritor de Batida nas mudanças fornecidas: ambas as criações ficam na porta (`app/ponto/registro_batida.py:152-159`); API encaminha o par (`app/api/views_core.py:639-654`). Geofence vem depois da gravação e sua falha é tratada (`app/api/views_core.py:766-773`).
-- O juiz novo não lê relógio, escreve ou deriva outra fonte (`app/ponto/services/geofence.py:126-145`); os filtros também não (`app/core/templatetags/hasner_filters.py:29-41`). Ordem de travas/deploy efetivamente executada: [nao verificado].
-- O risco de tipo permanece: PWA envia os componentes por FormData (`app/static/pwa.js:145-146`), sanitizador só valida com `float(v)`, preservando o valor original (`app/ponto/registro_batida.py:10-17`), enquanto o banco declara DecimalField (`app/ponto/models.py:58-59`). Assim, o objeto recém-criado pode conservar texto `"0"` truthy; o JSON vira zero float e o template passa a rejeitá-lo. Não há mudança de unidade nas novas linhas; a divergência de tipo é real no código, preexistente no sanitizador (`app/ponto/registro_batida.py:15`, `app/ponto/services/geofence.py:145`, `:391-392`, `app/templates/chamados/partials/modal_fio.html:481`).
-- O teste novo caracteriza explicitamente texto zero como aceito, enquanto float zero é rejeitado (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:79-84`). Não é correção do tipo na porta (`app/ponto/registro_batida.py:15`).
-- Outros leitores de latitude/longitude tocados pela obra mantêm nulidade própria: vínculo em três retornos (`app/colaboradores/views.py:337`, `:356`, `:395`) e detector (`app/ponto/services/vinculo_na_lista.py:49-57`). O detector inclusive tem teste exigindo zero como evidência (`app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135-140`). Esse comportamento de zero já aparece no diff/base fornecido como preexistente; incidência em produção: [nao verificado].
-- Restam barreiras anteriores: selfie no cliente (`app/templates/ponto/bater_ponto_v2.html:285-290`, `:312`) e colisão de tipo oposto na porta (`app/ponto/registro_batida.py:145-151`), respondida como `ignorada_intervalo` (`app/api/views_core.py:655-677`). A incompletude da classe está declarada em `app/docs/LEIS.md:165`.
-- O selo AST só detecta `Response` 403 em `If` anterior à porta que leia latitude/longitude/situação; não certifica qualquer barreira possível (`app/api/tests/test_l030_selo_porta.py:37-64`). O selo de modal tornou a exigência de `naoBloquear` condicional à presença de `hxConfirmar(` (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:139-143`).
-
-Achado documental forte:
-
-- O registro e corte dizem que leitores restantes entram no BACKLOG (`app/core/juizes.py:1199-1200`, `app/docs/CORTES.md:442`). Na cópia, não localizei a linha específica `BO-0611-05-TEM-GPS-LEITORES`, nem a dívida de tipo texto zero no BACKLOG; há apenas a entrada genérica BO (`app/docs/BACKLOG.md:1873`). `:1884` é outra obra. Existência dessas linhas na árvore viva/commit: [nao verificado].
-- O corte exige smoke nas duas cascas antes do front (`app/docs/CORTES.md:440`). Smoke, suite final, RED histórico, pouso e comparação física com `motor_calculo_v2.py` da base: [nao verificado]. Pelo diff fornecido, não há alteração de motor nem coordenada inventada; confirmação por Git independente: [nao verificado].
-
-## 10/11 19:05 · sessao 49d9c6780845 · - · - · origem=Ronald (tmux)
-
-Auditoria estática; não executei testes nem banco. Execução efetiva em produção e chamadas construídas dinamicamente fora da cópia: [nao verificado]. [nao verificado]
-
-**1. `app/ponto/management/commands/reconciliar_grade.py::Command._disputa`**
-
-- Corpo em `:412`; delega ao núcleo em `:424`, passando `motivos=[]`, `origem='grade'`, contexto `{'origem':'grade'}`; retorna DS em `:428`. Não há chamada a `_disputa` dentro de `Command.handle` nem dos demais métodos do comando. A emissão efetiva do handle usa `_emitir_furo`, em `:250–254`.
-- Único chamador concreto desse método encontrado no repositório: `app/chamados/tests/test_porta_chamado_e3.py::PortasDeCampoTest.test_MORDE_a_disputa_da_grade_nasce_UMA_vez` (confirmar nome da classe caso necessário), definição `:91`, chamadas `Command()._disputa(self.colab)` em `:93` e `:94`. Exige mesmo PK, uma DS aberta, pai e prazo SLA em `:95–98`.
-- Pesquisei repo inteiro, inclusive arquivos ocultos fora `.git`, por `_disputa`, referências/importações de `reconciliar_grade`, aliases dos imports encontrados e referência textual para reflexão. Não apareceu `getattr(..., '_disputa')`, apelido ou chamada produtiva desse método. A inexistência universal de reflexão arbitrária construída em execução é [nao verificado].
-- Outros selos sustentam partes do método sem chamá-lo:
-  - `app/chamados/tests/test_sla_pelo_juiz.py::OPrazo...test_MORDE_a_grade`, `:115–123`: inspeção de fonte exige delegação ao núcleo e ausência de `DS.objects.create`.
-  - `app/chamados/tests/test_porta_chamado_e3.py::OsSitiosChamamOAto.test_cada_sitio_chama_o_seu_ato`, `:101–121`: catálogo AST inclui o arquivo com `_abrir_ou_agregar_disputa`.
-  - `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py::ProvasMemoria.test_chamada_grade_motivos_vazios_conta_estrutura`, `:416–420`: chama diretamente o núcleo com lista vazia, não `Command._disputa`; espera `(I7a,I7b)=(1,0)` em doubles.
-
-**Sim, `--apply` ainda escreve.** O texto “SEM ESCRITOR” do cabeçalho descreve o uso shadow, não a impossibilidade do ramo:
-
-- `Command.add_arguments`: flag presente, `:67`; handle lê em `:76`.
-- `Command.handle`: com `apply and not o['so_retratar']`, chama `_emitir_furo`, `:250–254`.
-- `Command._emitir_furo`: `ChamadoColaborador.abrir`, `:507–520`, e `ch.reabrir()` para terminal, `:529–530`; esse caminho termina sem chamar `_disputa`, `:531–532`.
-- `Command.handle`: `if apply:` chama `chamados.reconciliador.retratar`, `:305–316`.
-- `Command._relavrar_orfa`: com apply, retira `orfa_regeneracao`, `:452–454`; no ramo de relavra renova `marcos_faltantes`/`orfa_regeneracao_curada` e retira a marca em atomic, `:472–474`, além da trilha `:475–485`.
-- Cron configurado sem apply em `app/config/crons.py:460–462`. Selo `app/chamados/tests/test_hx_um_emissor.py::UmEmissorTest.test_reconciliar_grade_sem_apply_no_cron`, `:5–9`.
-- `app/ponto/tests/test_reconciliar_grade_sombra.py::ReconciliarGradeNaoEscreveTest.test_GOLDEN_sem_apply_nao_escreve_NADA`, `:58–63`, só cobre sem apply; anti-vacuidade/placar em `:65–88`.
-
-**2. Agrupador de órfãos**
-
-Função: `app/chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos`, definição `:1130`.
-
-**(i) Nascimento em relação às perguntas**
-
-- Filtro inicial de lista do admin em `:1150–1152`; atomic `:1155`; trava do repasse `:1162`.
-- Há complemento de perguntas em DS **preexistentes**, antes do filtro/nascimento, `:1168–1188`.
-- Filtro dos chamados a converter em `:1189–1197`; seleção de DS aberta em `:1199–1201`.
-- Se nenhuma DS aberta, abre pai em `:1207–1222`, anexa ocorrência se reutilizado em `:1223–1225`, cria DS em **`:1226–1231`** com colaborador, motivos, contexto `manual_orfaos`/IDs e pai.
-- Os laços locais que perguntam vêm **depois**: intervalo `:1241–1264`; ata `:1269–1281`; episódio `:1296–1326`; sem origem `:1334–1355`; pendentes `:1373`.
-- Portanto a DS local é criada antes de saber se haverá pergunta sua; o complemento inicial em outra DS não muda essa ordem. (`:1184`, `:1226`, `:1256`)
-
-**(ii) Ramo zero perguntas**
-
-- Não testa SQL “zero perguntas”; usa `disputa.pode_fechar()` em `:1381`.
-- Se absteve por ata e poderia fechar: acende `acender_sem_ata('auto_fecho_disputa',...)`, `:1382–1384`, preservando aberta.
-- Caso contrário, se pode fechar: chama `disputa.fechar(user_sistema, resolucao=...)` em `:1385–1390`, retorna em `:1391`, antes do push `:1392–1393`. [nao verificado]
-- `app/chamados/models.py::DisputaSupervisao.pode_fechar`, `:1848–1853`: ausência de respostas sem veredito e de fio vivo.
-- `::fechar`: com zero linhas `perguntas`, deriva `motivo=FECHOU_VAZIA`, `:1895–1903`; `'vazia'` definido em `:1781`.
-- Escritas diretas da DS: `fechada_em=now`, `fechada_por=user`, `resolucao=texto`, `motivo_fechamento='vazia'`; save desses quatro campos, `:1932–1936`; evento `disputa_fechada`, `:1937–1940`. Não apaga DS/pai nem zera seus IDs/contexto/motivos.
-- O ramo de fecho **não altera diretamente os chamados órfãos**. Nos laços anteriores, `analisar()` só é chamado quando helpers retornaram criação/complemento: `:1261–1262`, `:1280–1281`, `:1323–1326`, `:1354–1355`. Dia completo faz `continue` antes disso em `:1304–1305`/`:1341–1342`.
-- Atenção: **zero perguntas locais não prova que nenhum órfão foi analisado**, porque o helper ignora a dona retornada e pode devolver `_criou=True` para reuso estrangeiro (`:940–950`).
-- Pai passa pelo receiver de DS fechada, `app/chamados/signals.py::disputa_fechada_fecha_chamado_pai`, condição `:28`, `ch.reconciliar()` `:42`, nota `:45`; efeitos completos das cascatas dependem do acervo [nao verificado].
-- Testes que caracterizam vazio fechado: `app/chamados/tests/test_hx_disputa_muda_sem_ata.py::DisputaMudaSemAtaTest.test_com_ata_e_dia_completo_fecha_como_antes`, `:63–79`; `app/chamados/tests/test_hx_disputa_muda.py::...test_sem_nada_a_perguntar_nao_fica_aberta`, `:24–33`; `::test_nao_notifica_disputa_muda`, `:44–50`.
-
-**(iii) TODOS leitores de `'vazia'` encontrados**
-
-Pesquisa repo-wide por `motivo_fechamento`, `FECHOU_VAZIA`, `disputa_vazia`:
-
-1. **Único consumidor funcional específico**: `app/chamados/services/vigia_fio.py::disputa_vazia`, `:727–734`. Conta DS com `motivo_fechamento=DisputaSupervisao.FECHOU_VAZIA`. Sem filtro de abertura/data/empresa e sem recontar perguntas. Não seleciona nem marca órfãos. Não encontrei chamador produtivo desse contador; referências executáveis encontradas são testes.
-2. `app/chamados/tests/test_c7_red_minimos.py::C7_04_DisputaVaziaTest.test_RED_vazia_fecha_com_motivo_vazia_e_o_contador_conta`, `:174–183`: exige motivo `'vazia'` e delta 1 do contador.
-3. `::test_RED_o_contador_MORDE_disputa_com_pergunta_nao_conta`, `:185–192`: DS com pergunta fecha sem incrementar contador.
-4. `app/chamados/tests/test_c7_red_minimos.py::...test_MORDE_o_update_em_lote`, `:613–616`: fonte artificial `filter(motivo_fechamento='vazia').count()`, lida pelo detector AST para provar que filter não é escrita; não executa consulta ORM.
-5. Leitores **genéricos**, sem decisão específica por `'vazia'`: `app/chamados/models.py::DisputaSupervisao.fechar`, `:1879–1883`, compara o motivo recebido para idempotência; `app/chamados/management/commands/reabrir_orfas_enterradas.py::Command.handle`, `:128–138`, serializa campo em arquivo de reversão. Não funcionam como bloqueio de reagrupamento.
-6. Registro em `bin/sombra_regras_pessoais.py:177` classifica o campo como código choices; não é consumidor decisório de `'vazia'`.
-
-**(iv) Chamadores/filtros e idempotência**
-
-Se não nascesse a DS vazia, **não há marcador externo de “este conjunto já foi tentado” no agrupador**. Os IDs são guardados no contexto da DS/pai (`:1219`, `:1229`), mas o filtro de entrada não consulta esses IDs nem `motivo_fechamento`. O filtro usa regularizabilidade e pergunta existente por destino (`:1189–1194`); a regularizabilidade vem de `motivo_fora_da_fabrica`, `:850–899`, com status/categoria/célula/pergunta materializada/turno resolvido. O dedup local `_ja_perguntou` consulta motivo/dia/conversa dentro da própria DS, `:1518–1525`.
-
-Se os chamados continuam elegíveis, sem pergunta que os exclua e são novamente fornecidos pelo chamador, podem voltar; o que ocorrerá na próxima execução real é [nao verificado]. A própria DS fechada vazia **também não é consultada como selo de tentativa** (`:1199–1201` só procura abertas).
-
-Seis chamadores produtivos diretos:
-
-- `app/chamados/services/acoes_disputa.py::acao_iniciar_disputa_orfaos`, `:210–224`: todos chamados do colaborador (`:218`) filtrados por `chamado_orfao_e_regularizavel` (`:219`), passa request_user.
-- `app/chamados/services/pergunta_no_app.py::perguntar`, `:197–217`: só itens com causa `'fabrica_nao_rodou'` (`:206–208`), busca PKs e agrupa por colaborador (`:210–212`), `notificar` recebido, default False. Universo anterior de `::medir`: status COBRANCA, módulos CALADOS_POR_ISENCAO, colaborador ativo em `:144–153`; `::retencao` decide causa em `:90–119`.
-- `app/chamados/services/cobrar_dia.py::cobrar_dia`, `:45–49`: depois do julgamento, lê `do_dia`; somente IDs cuja causa é `'fabrica_nao_rodou'`; notificar True.
-- `app/ponto/management/commands/detectar_ausencias.py::Command._abrir_chamado`, `:796–802`: todos chamados do colab em COBRANCA e regularizáveis; best-effort `:790–806`.
-- `app/ponto/management/commands/processar_alertas_turno.py::Command._abrir_chamado_critico`, `:372–385`: só quando `criado`; COBRANCA + regularizáveis; best-effort `:373–389`.
-- `app/ponto/management/commands/processar_alertas_avancados.py::Command.handle`, `:153–159`: no ramo de criação do alerta, COBRANCA + regularizáveis; best-effort `:147–163`.
-
-Reexport de compatibilidade do agrupador em `app/chamados/models.py:4093`; não é outro implementador.
-
-**(v) Retorno estrangeiro ignorado**
-
-`app/chamados/services/disputa_emissao.py::_criar_pergunta_se_couber`:
-
-- Acrescenta motivo **antes** dos vetos, `:931–932`.
-- Ausência cobre: retorna `(motivos,False)`, `:933–934`; já perguntou local: idem `:935–936`.
-- Chama `PerguntaDisputa.abrir(...)` como expressão, sem atribuir/inspecionar `(pergunta, criada)`, `:940–949`.
-- Retorna sempre `(motivos, True)` depois da chamada, `:950`.
-- `app/chamados/models.py::PerguntaDisputa._nascer` elege canônica do universo global do fato em `:2905–2921`, sem exigir a DS recebida; retorna `ex, False, dia` em `:3008`, preservando dona. Logo esse True não prova pergunta nova nem pergunta local.
-- `::_complementar_marcos_faltantes`, `:984–986`, apenas acumula esse booleano. O agrupador pode analisar o órfão e mais tarde fechar a DS local zero perguntas, sem encaminhar motivos à dona efetiva (`:1323–1326`, `:1385–1391`).
-
-## 10/11 19:05 · sessao b5dd34352e46 · BO-0611-05 · construtor · origem=Code
-
-Cura e testes escritos; comandos, alterações e pendências na [entrega](/home/ronald/wt-codex-bo-0611-05-185609/app/ponto/tests/ENTREGA_BO_0611_05_VOLTA8.txt:9). [nao verificado]
-
-Sintaxe e mutante isolado do filtro passaram ([resultado](/home/ronald/wt-codex-bo-0611-05-185609/app/ponto/tests/ENTREGA_BO_0611_05_VOLTA8.txt:125)). RED/GREEN e mutantes de render seguem **[nao verificado]** por falta de Django; certificação permanece pendente ([FALTA](/home/ronald/wt-codex-bo-0611-05-185609/app/ponto/tests/ENTREGA_BO_0611_05_VOLTA8.txt:147)).
-
-_3466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3469 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
