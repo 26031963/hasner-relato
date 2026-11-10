@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=3764900
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=316560
 PAREI: B3 FIO-E0-V4-E4A-2 (disparado 10/11 02:22 por 3 voltas Codex verificador PROCEDENTES, preverif3-5; volta 8 fcb3799cc + merge do main cb7cc874a construida, alvo de 165 modulos na fila, preverif6 recusado pelo disjuntor 02:4x) | espera Ronald: linha DESENHO ou ERRO-BOBO no topo, ou --rearma-b3; ate la a obra para e as outras seguem (REVERTER suite, O169 volta 3)
 DESENHO FIO-E0-V4-E4A-2: lei=lampada 4a pergunta=quem LE o alarme do vigia que substitui o escritor do lote (linha VIGIA FIO MUDO e rc 2 nao chegam a bin/placar_code.sh:388 ; app/core/management/commands/pipeline_placar.py:40 so itera CRONS ; app/core/services/crons_quebrados.py:17 aceita rc 2) -- resposta Ronald TRES-RESPOSTAS (1) 10/11 00:40: contador fio_mudo_alvos esperado 0 dono ESTRUTURA lido por pipeline_placar, e o pouso espera o --alarme de 10/11 as 06h3x achar ALVOS 0 app/chamados/management/commands/disparar_perguntas_competencia.py:135
 DECIDIDO PELA LEI LEI-AKITA 8 (contador == universo, rotulo diz o que a conta faz): contador nunca_bateu_sem_adesao fica numero=|pares retidos nunca_bateu| x esperado=|pares retidos presentes na C5| (prova que todo dia retido chega a C5); o TAMANHO literal da C5 (aval DUAS-RESPOSTAS item 2) sai publicado ao lado como c5_pessoas/c5_dias, informativo -- unidades diferentes nao se comparam | contestavel; reversao: trocar esperado por c5_dias no contador (volta 8 da E4a-2)

@@ -1,7 +1,136 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 02:41** · publicado em **10/11/2026 02:41** (UTC-3)
+> Ultima resposta processada: **10/11/2026 02:52** · publicado em **10/11/2026 02:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 02:52 · sessao c86210e57c9f · - · - · origem=Ronald (tmux)
+
+P1 e leitores, somente código da cópia:
+
+- **Estado estável:** todas as vias diferentes de RECONCILIAR entram em `fora_do_universo`, incluindo `''` e `None`; `colaborador_id` aplica-se às duas consultas. Assim, a soma das partes coincide com todos os encerrados **do mesmo recorte por colaborador**, em estado estável. (`app/ponto/services/cluster_espurio.py:106`, `:109`, `:110`, `:112`, `:134`; teste: `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:204`, `:221`, `:229`.)
+- **Concorrência:** a invariância não é garantida incondicionalmente: as partes vêm de dois SELECTs separados, sem snapshot comum estabelecido pelo contador. Reproduzi em memória usando a função real: um registro `legado` na primeira leitura e `sistema` na segunda produziu `universo=1`, `fora={'legado':1}`, soma=2 para um registro encerrado. Isso ocorre também com `colaborador_id=1`. Concorrência real de produção `[nao verificado]`. (`app/ponto/services/cluster_espurio.py:109`, `:112`.)
+- **NULL:** o código cobre `None`; o teste injeta esse valor explicitamente. Entretanto, o campo do modelo não declara `null=True`; ocorrência SQL NULL em produção `[nao verificado]`. (`app/ponto/services/cluster_espurio.py:110`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:214`; `app/chamados/models.py:54`.)
+- **Rótulos:** as três chaves fixas são `admin`, `cascade`, `competencia_trancada` e correspondem às constantes; legado/vazia/None recebem o texto exigido pela triagem. Não identifiquei valor concreto do módulo com rótulo errado. (`app/chamados/catalogo/motor.py:88`, `:92`, `:95`; `app/ponto/services/cluster_espurio.py:126`, `:132`.)
+- **Ressalva ao rótulo cascade:** o gate documenta “desligamento, ajuste retroativo”, portanto o texto “Cascata de desligamento” é mais estreito que o uso geral do gate. Os chamadores retroativos inspecionados filtram outros módulos, então não há demonstração de erro concreto em O169. (`app/chamados/models.py:1605`; `app/ponto/services/justificativa.py:55`, `:60`, `:394`, `:400`.)
+- **Escritor dos campos de saída:** apenas o contador constrói e retorna os dois dicionários; são dados em memória. (`app/ponto/services/cluster_espurio.py:110`, `:126`, `:132`, `:135`.)
+- **Leitor de produção:** `detectar_cluster_espurio` imprime o contador completo em JSON, portanto imprime ambos. A mensagem “universo vazio” lê exclusivamente `universo.total`; `--alarme` considera exclusivamente pendências e `numero != esperado`, sem considerar `fora_do_universo` ou `excluidos`. (`app/ponto/management/commands/detectar_cluster_espurio.py:62`, `:63`, `:64`, `:70`.)
+- **Leitores de teste:** verificam contagens, partição, presença de rótulos e rótulos desconhecidos; outro teste espera só as três exclusões fixas quando nenhum registro de via desconhecida foi alimentado. Isso é compatível com o `setdefault` atual. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:218`, `:221`, `:225`, `:227`, `:234`, `:240`, `:313`; `app/ponto/services/cluster_espurio.py:131`.)
+- Não encontrei outro consumidor do contador nem leitor que atribua significado incompatível aos campos na cópia. Os consumidores identificados são o comando e os contratos mencionados. (`app/ponto/management/commands/detectar_cluster_espurio.py:62`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:150`.)
+
+## 10/11 02:52 · sessao 3dea71adcda2 · - · - · origem=Ronald (tmux)
+
+P2 está correto para o par definido pelo juiz, com limites:
+
+- A FK reaproveitada precisa coincidir em colaborador e data; `CelulaDia` declara unicidade desse par, também na migração. Portanto, num estado estático com esquema íntegro, é a mesma linha que a consulta devolveria. (`app/ponto/services/cluster_espurio.py:117`; `app/escala/models.py:1833`; `app/escala/migrations/0030_celuladia.py:35`.)
+- **Dia divergente do contexto não aciona fallback:** `dia_do_fato` retorna primeiro a data da própria FK. Assim, a comparação de data no reaproveitamento já nasce satisfeita; isso é preexistente ao delta. (`app/chamados/juizes.py:98`; `app/ponto/services/cluster_espurio.py:113`; `app/ponto/services/cluster_espurio.py:117`.)
+- **FK de outro colaborador:** é rejeitada; fallback procura o colaborador do chamado **na data da FK**, não na data do contexto. Isso respeita o juiz atual, mas não corrige eventual vínculo com dia errado. (`app/ponto/services/cluster_espurio.py:113`; `app/ponto/services/cluster_espurio.py:117`; `app/ponto/services/cluster_espurio.py:124`; `app/chamados/juizes.py:98`.)
+- Consultas lógicas do contador: **2 + K**, sendo K o número de colaboradores com pelo menos um par não atendido pelas FKs aproveitadas. Por colaborador há no máximo uma consulta de fallback; com `colaborador_id`, no máximo três consultas no total. Não há query por chamado no juiz forte. (`app/ponto/services/cluster_espurio.py:109`; `app/ponto/services/cluster_espurio.py:112`; `app/ponto/services/cluster_espurio.py:122`; `app/chamados/juizes.py:127`.)
+- Cron real configurado para **06:24, `--alarme`, sem filtro de colaborador**; o piso declarado é 30 segundos. Aceitabilidade do custo novo no cron: **[nao verificado]**. (`app/config/crons.py:598`; `app/config/crons.py:136`.)
+
+Há uma lacuna material na cobertura de P2: removi **somente em memória** a guarda `and ch.celula.colaborador_id == par[0]`; o mutante sobreviveu aos **23 contratos**. O teste de FK usa o mesmo colaborador, enquanto o teste de colaboradores distintos usa chamados sem FK. (`app/ponto/services/cluster_espurio.py:117`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:253`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:283`.)
+
+Contraexemplo executado em memória: chamado do colab1 ligado à célula assinada do colab2; célula própria do colab1 sem assinatura no mesmo dia. Código atual retorna `numero=0` e consulta o par próprio; o mutante retorna `numero=1`, sem fallback. A guarda atual evita esse erro, mas nenhum dos 26 mutantes declarados a remove. (`app/ponto/services/cluster_espurio.py:117`; `app/ponto/services/cluster_espurio.py:125`; `app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13`.)
+
+Quanto à contagem, não identifiquei regressão determinística em estado estático íntegro: permanece a leitura por par do juiz e uma contagem por chamado. A troca altera o momento da leitura de células reaproveitadas e o número de consultas; equivalência sob alterações concorrentes e impacto real de desempenho são **[nao verificado]**. (`app/ponto/services/cluster_espurio.py:112`; `app/ponto/services/cluster_espurio.py:118`; `app/ponto/services/cluster_espurio.py:125`.)
+
+## 10/11 02:52 · sessao 5d4004847511 · - · - · origem=Ronald (tmux)
+
+Os 26 mutantes declarados mordem a fonte real: leem serviço/comando da cópia, exigem trecho único, substituem somente em memória e exigem falha de asserção, rejeitando erros de infraestrutura (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:99`, `:100`, `:103`, `:106`, `:107`). O carregador compila e executa essa fonte; ORM e funções auxiliares do comando são dublados (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:31`, `:41`, `:107`, `:112`, `:114`, `:122`).
+
+Executei os dois módulos com `PYTHONDONTWRITEBYTECODE=1`: **49 testes OK**, incluindo os 26 mutantes; nenhum listado sobreviveu. Resultado sem arquivo persistido: `[nao verificado]`. [nao verificado]
+
+Há, porém, **três mutantes adicionais sobreviventes** em memória, cada qual passando os 23 contratos sem erro/falha:
+
+- **P2: remover a guarda do colaborador da FK.** A guarda está em `app/ponto/services/cluster_espurio.py:117`. O único teste de reaproveitamento monta FK da pessoa correta (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:253`); o teste de pessoas diferentes não monta FK (`:283`). Prova específica: chamado da pessoa 1 com FK assinada da pessoa 2 e célula correta sem assinatura: original retorna 0 e consulta célula correta; mutante retorna 1 sem fallback. Execução em memória: `[nao verificado]`.
+- **P2: consultar uma vez por par, em vez de agrupar por colaborador.** A mudança cabe no laço `app/ponto/services/cluster_espurio.py:122`; o duplo registra linhas retornadas, não número de consultas (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:80`). Os testes não distinguem as duas estratégias (`:242`, `:263`). Execução em memória: `[nao verificado]`.
+- **P1: trocar os rótulos humana/cascata.** Os rótulos ficam em `app/ponto/services/cluster_espurio.py:127`; os testes verificam presença e termos genéricos dos conhecidos, sem associar texto exato à via (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:225`, `:313`, `:315`). Execução em memória: `[nao verificado]`.
+
+Não confundir: esses três **não pertencem aos 26 declarados**; demonstram lacunas além do catálogo atual (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13`).
+
+## 10/11 02:49 · sessao f4a1dda2ec83 · O169-FECHADA · construtor · origem=Code
+
+Implementei os dois procedentes. Arquivos alterados:
+
+- [cluster_espurio.py:88](/home/ronald/wt-codex-o169-fechada-024149/app/ponto/services/cluster_espurio.py:88): publica contagens e rótulos de todas as vias externas ao universo; consulta células pelos pares pedidos e reaproveita a FK carregada. O cálculo de `numero` continua usando `_leitura_da_celula`. (`ponto/services/cluster_espurio.py:109`, `:117`, `:123`, `:125`.)
+- [test_o169_cluster_encerrado_sem_lastro.py:204](/home/ronald/wt-codex-o169-fechada-024149/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:204): cobertura da soma das partes, vias desconhecidas, pares cruzados e reaproveitamento da FK.
+- [test_o169_cluster_encerrado_mutantes.py:44](/home/ronald/wt-codex-o169-fechada-024149/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:44): nove mutantes novos; o harness exige falha de asserção e rejeita erro de infraestrutura. (`ponto/tests/test_o169_cluster_encerrado_mutantes.py:106`.)
+
+Referências abaixo relativas a `app/`.
+
+| Campo lido ou produzido | Quem escreve | Quem lê |
+|---|---|---|
+| `Chamado.status_local` | Nascimento: `chamados/models.py:938`, `:971`; transições: `:228` | Contador: `ponto/services/cluster_espurio.py:106` |
+| `Chamado.via_encerramento` | Núcleo: `chamados/models.py:245`, `:249`; gates humano/reconciliar/cascade/tranca: `:450`, `:654`, `:1619`, `:1639`; backfill legado: `chamados/migrations/0039_a3_via_backfill.py:28` | Contagem e seleção: `ponto/services/cluster_espurio.py:109`, `:111` |
+| `Chamado.modulo_origem`, `colaborador_id` | Emissor: `ponto/services/cluster_espurio.py:181`; persistência: `chamados/models.py:971` | Filtros e pares: `ponto/services/cluster_espurio.py:106`, `:108`, `:113` |
+| `Chamado.celula_id` / `celula` | Nascimento: `chamados/models.py:958`; vínculo posterior: `chamados/services/vinculos.py:99` | Dia: `chamados/juizes.py:98`; reaproveitamento: `ponto/services/cluster_espurio.py:117` |
+| `contexto_json.data_turno` | Emissor: `ponto/services/cluster_espurio.py:195`; porta de contexto: `chamados/services/contexto.py:76`, `:102`, `:125`, `:161` | Juiz chamado pelo contador: `chamados/juizes.py:100`, `:114`, `:118` |
+| `CelulaDia.colaborador_id`, `data`, `trabalha` | Porta: `ponto/portas/celula.py:259`, `:272`, `:600`, `:603` | Pares: `ponto/services/cluster_espurio.py:117`, `:123`; trabalho: `chamados/juizes.py:441` |
+| `ata.orfas`, `lampadas[].acesa`, `tipo_dia`, `cobertura_parcial` | Construção: `ponto/services/cartorio.py:689`, `:704`, `:711`, `:733`; persistência: `ponto/portas/celula.py:1042` | Predicados compartilhados: `ponto/services/cluster_espurio.py:25`, `:29`, `:32`; `chamados/juizes.py:435` |
+| `nome`, `numero`, `esperado`, `dono`, `universo`, `fora_do_universo`, `excluidos` | Retorno do contador: `ponto/services/cluster_espurio.py:125`, `:126`, `:133` | Impressão integral: `ponto/management/commands/detectar_cluster_espurio.py:63`; universo vazio: `:64`; alarme: `:70`; contratos: `ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:218`, `:221` |
+
+Os três REDs executados contra a base falharam por asserção: ausência de `fora_do_universo`, **4 células lidas em vez de 2** e consulta repetida da FK. (`ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:218`, `:250`, `:261`.) Comando reproduzível, sem reescrever arquivos:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import subprocess
+import unittest
+from ponto.tests.test_o169_cluster_encerrado_sem_lastro import ClusterEncerradoSemLastroTest as C
+
+fonte = subprocess.check_output([
+    'git', 'show',
+    '39b28d8e30a5d3fc1b2519cad47f22f71c01ee22:app/ponto/services/cluster_espurio.py',
+], text=True)
+B = type('ContratoNaBase', (C,), {'fonte_servico': fonte})
+nomes = [
+    'test_RED_toda_via_fora_do_universo_contada_e_rotulada',
+    'test_RED_celulas_lidas_so_dos_pares_pedidos',
+    'test_RED_reaproveita_fk_carregada_sem_buscar_o_mesmo_par',
+]
+r = unittest.TextTestRunner(verbosity=2).run(
+    unittest.TestSuite(B(n) for n in nomes))
+raise SystemExit(not r.wasSuccessful())
+PY
+```
+
+Saída: `Ran 3 tests — FAILED (failures=3)`, rc **1**.
+
+Após a cura, os dois módulos passaram: **49 testes**, incluindo **26 mutantes mordidos**; também passaram com `PYTHONHASHSEED=1` e `2`. Os contratos estão em `ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:96`; os mutantes, em `ponto/tests/test_o169_cluster_encerrado_mutantes.py:13`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  ponto.tests.test_o169_cluster_encerrado_sem_lastro \
+  ponto.tests.test_o169_cluster_encerrado_mutantes -q
+```
+
+Saída: `Ran 49 tests — OK`, rc **0**.
+
+Executei também cada mutante individualmente. Este comando imprime e executa o comando de cada um, incluindo `legado_nao_contado`, `produto_cartesiano` e os dois de recarga da FK. (`ponto/tests/test_o169_cluster_encerrado_mutantes.py:44`, `:63`, `:70`, `:73`.)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import shlex
+import subprocess
+import sys
+from ponto.tests.test_o169_cluster_encerrado_mutantes import MUTANTES
+
+for nome in MUTANTES:
+    cmd = [sys.executable, '-m', 'unittest',
+           'ponto.tests.test_o169_cluster_encerrado_mutantes.'
+           'MutantesO169Test.test_mutante_' + nome, '-q']
+    print('PYTHONDONTWRITEBYTECODE=1 ' + shlex.join(cmd), flush=True)
+    subprocess.run(cmd, check=True)
+PY
+```
+
+Saída de cada um: `Ran 1 test — OK`, rc **0**.
+
+Ruff da aplicação inteira: `All checks passed!`, rc **0**, usando a configuração de `ruff.toml:5`.
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache .
+```
+
+Suite completa, SQL real, gates persistidos, dados de produção e certificação pelo Code/opus final: **[nao verificado]**. Os limites dos testes sem banco estão declarados em `ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:1`.
 
 ## 10/11 02:41 · sessao 51caec412156 · FIO-E0-V4-E4A-2 · construtor · origem=Code
 
@@ -590,132 +719,4 @@ Saída local: compilação em memória dos dez arquivos passou; os oito mutantes
 
 Sem acesso a banco nesta execução. Django, freezegun e ruff estão ausentes no Python disponível; `python3 -m ruff check --no-cache ...` terminou com `No module named ruff`. Suite, RED executado, rejeição dos mutantes e ruff limpo permanecem [nao verificado]. [nao verificado]
 
-## 10/11 02:04 · sessao 969c0e5df6ab · REVERTER-DIA-SEM-RECALCULO · verificador · origem=Code
-
-**Não atesto cumprimento integral do aval:** (a) e (c) estão implementadas; (b) existe no caminho bem-sucedido, mas falhas posteriores podem deixar reversões gravadas sem hash final ou sem auditoria do ato. (`app/ponto/management/commands/aplicar_col900.py:164`; `app/ponto/portas/celula.py:779`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:225`.)
-
-1. **Condições do aval e IDA**
-
-   **(a) Sim, na cópia:** há **1 chamador produtivo** de `reverter_regeneracao_dia` com `apesar_da_lavra`: o ramo manual `aplicar_col900 --reverter`. O selo varre chamadas por AST e exige exatamente esse arquivo; não encontrou automático. Sua cobertura reconhece nome simples/qualificado e keyword explícita; aliases, argumento posicional ou `**kwargs` não são cobertos pelo contador. (`app/ponto/management/commands/aplicar_col900.py:164`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:30`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:52`.)
-
-   **(b) Parcialmente garantida:** havendo alguma competência lavrada e aplicação com flag, prepara `/app/logs/reverter_col…json`, incluindo todas as competências pedidas, hashes anteriores, valores e DNA; depois acrescenta hashes finais e chama auditoria. Porém, falha no `replace` posterior deixa apenas a foto preparada, após duas chamadas à porta; falha na auditoria deixa JSON concluído sem o LogAuditoria do ato. Os próprios testes aceitam esses estados. (`app/ponto/management/commands/aplicar_col900.py:57`; `app/ponto/management/commands/aplicar_col900.py:74`; `app/ponto/management/commands/aplicar_col900.py:83`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:225`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:234`.)
-
-   **(c) Sim:** sem flag, a guarda retorna `False` antes de salvar célula, emitir evento ou chamar o rabo financeiro. Há teste sem banco e teste Django que compara célula, DiaPago e hash antes/depois. (`app/ponto/portas/celula.py:779`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:321`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:114`.)
-
-   **IDA:** o diff fornecido preserva seu ramo; na cópia, IDA e VOLTA chamam `_o_chao_do_dia_mudou`. Identidade integral com a base `65719b368`: **[nao verificado]**. (`app/ponto/management/commands/aplicar_col900.py:180`; `app/ponto/portas/celula.py:354`; `app/ponto/portas/celula.py:811`.)
-
-2. **Escritores, leitores e significados**
-
-   | Campo/fonte | Quem escreve ou produz; quem lê |
-   |---|---|
-   | JSON: identificação, dias, quem, quando, motivo, flag, competências e DNA | `_preparar_reversao` monta; `_gravar_reversao` serializa e escreve. O laço acrescenta resultados; `_concluir_reversao` acrescenta hashes finais, estado e data. (`app/ponto/management/commands/aplicar_col900.py:34`; `app/ponto/management/commands/aplicar_col900.py:62`; `app/ponto/management/commands/aplicar_col900.py:79`; `app/ponto/management/commands/aplicar_col900.py:159`; `app/ponto/management/commands/aplicar_col900.py:167`.) |
-   | Leitura do JSON de reversão | A conclusão usa o dicionário em memória, sem reabrir o arquivo. Consumidor produtivo que leia esse novo JSON para restaurar o estado: **[nao verificado]**. (`app/ponto/management/commands/aplicar_col900.py:76`; `app/ponto/management/commands/aplicar_col900.py:83`.) |
-   | LogAuditoria | Comando monta ação, objeto, descrição e payloads; `evento_kw → evento → LogAuditoria.objects.create` persiste. A tela genérica lê os registros. (`app/ponto/management/commands/aplicar_col900.py:90`; `app/core/observ.py:133`; `app/core/observ.py:142`; `app/core/views.py:705`.) |
-   | `hash_do_gravado` | Lê FechamentoMensal; o comando grava seu retorno como `hash_antes`/`hash_depois` e os copia à auditoria. O escritor financeiro continua sendo `recalcular_fechamento_mes`. (`app/ponto/portas/regen_exportada.py:62`; `app/ponto/management/commands/aplicar_col900.py:70`; `app/ponto/management/commands/aplicar_col900.py:85`; `app/ponto/services/fechamento.py:1160`.) |
-   | `valores_do_gravado` | Lê somente `CAMPOS` de `aplicar_09_corte_b`, retornando dict ou `None`; o comando grava em `valores_antes`. Não é cópia integral de FechamentoMensal nem de DiaPago. (`app/ponto/portas/regen_exportada.py:77`; `app/ponto/management/commands/aplicar_09_corte_b.py:67`; `app/ponto/management/commands/aplicar_col900.py:71`.) |
-   | `competencia_fechada_para_celula` | Juiz K9 existente: exportação vigente **ou** holerite publicado da pessoa. Alimenta `competencias[].lavrada` e a guarda da porta, via `_competencias_exportadas`. (`app/core/juizes.py:337`; `app/folha/export.py:610`; `app/ponto/management/commands/aplicar_col900.py:58`; `app/ponto/management/commands/gerar_celulas.py:173`.) |
-   | `competencia_do_fato` | Delega à janela da empresa. Fotografia e recálculo usam a data pedida; para esta chamada, é o dia da célula, sem nova classificação de turno. (`app/ponto/management/commands/aplicar_col900.py:57`; `app/ponto/services/fechamento.py:1594`; `app/ponto/services/fechamento.py:1602`; `app/ponto/services/fechamento.py:1809`.) |
-
-   **“Lavrada” não significa “trancada”:** o JSON usa K9; trancada consulta `PeriodoFechado` sem reabertura. Não encontrei leitor específico do novo JSON que imponha a segunda interpretação **[nao verificado]**. (`app/folha/export.py:589`; `app/ponto/services/fechamento.py:1464`; `app/ponto/services/fechamento.py:1473`.)
-
-   **Ator pode divergir:** JSON força fallback `sistema:aplicar_col900`; a coluna `LogAuditoria.ator` deriva separadamente de `sys.argv`. Em `call_command`/shell pode ficar nula ou identificar o comando hospedeiro. `usuario_so` identifica usuário do SO, não usuário Django. (`app/ponto/management/commands/aplicar_col900.py:64`; `app/core/observ.py:22`; `app/core/observ.py:117`.)
-
-   **Há leitor histórico com outro formato:** `janelas_de_regeneracao` espera `desde/ate` na ação `regenerar_celulas_vinculo`; a VOLTA grava `dna/revertida`, sendo ignorada por esse leitor. A proteção atual também lê `regenerada_em`, que a VOLTA atualiza. (`app/escala/services/regeneracao.py:58`; `app/ponto/portas/celula.py:792`; `app/ponto/portas/celula.py:799`; `app/escala/services/regeneracao.py:87`.)
-
-3. **Ordem, interrupção e hash posterior**
-
-   O JSON anterior passa por escrita, `flush` e `fsync` antes da porta. Não há `fsync` do diretório nessa implementação; durabilidade absoluta perante queda de energia fica **[nao verificado]**. (`app/ponto/management/commands/aplicar_col900.py:40`; `app/ponto/management/commands/aplicar_col900.py:75`; `app/ponto/management/commands/aplicar_col900.py:164`.)
-
-   **O lote não é atômico.** Em autocommit, cada dia encerra seu `atomic` antes do rabo; se um dia posterior levantar, os anteriores permanecem commitados. Até o dia que levantou pode já estar gravado, caso a saída ocorra depois desse `atomic`; seu resultado só é acrescentado após a porta retornar. (`app/ponto/management/commands/aplicar_col900.py:149`; `app/ponto/management/commands/aplicar_col900.py:164`; `app/ponto/portas/celula.py:785`; `app/ponto/portas/celula.py:811`.)
-
-   **`SystemExit` do `_preparar`: não executa o `finally`**, pois a preparação acontece antes do `try`. Uma saída dentro do laço executa o `finally`, mas sua conclusão também pode falhar. (`app/ponto/management/commands/aplicar_col900.py:146`; `app/ponto/management/commands/aplicar_col900.py:149`; `app/ponto/management/commands/aplicar_col900.py:173`.)
-
-   **Hash posterior:** sem transação externa, o `on_commit` executa imediatamente, antes de a porta retornar; nesse cenário o hash vem depois da tentativa de recálculo. Sob `atomic` externo, o callback pode continuar pendente quando o comando lê `hash_depois`. O comando não impõe uma dessas condições. (`app/ponto/portas/celula.py:411`; `app/ponto/services/fechamento.py:1807`; `app/ponto/services/fechamento.py:1824`; `app/ponto/management/commands/aplicar_col900.py:85`.)
-
-   **“Concluído” não certifica sucesso financeiro:** marca término do laço; exceções financeiras são engolidas. Também pode haver FechamentoMensal atualizado seguido de falha na lavratura de DiaPago. (`app/ponto/management/commands/aplicar_col900.py:172`; `app/ponto/services/fechamento.py:1818`; `app/ponto/services/fechamento.py:1160`; `app/ponto/services/fechamento.py:1238`.)
-
-4. **Testes: coleta, mordida e alcance** [nao verificado]
-
-   **São coletáveis:** classes `unittest.TestCase` ficam fora do `__main__`; `ponto` integra as labels, e o runner usa descoberta com poda de quarentena. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:51`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:292`; `bin/regua.sh:23`; `bin/suite.sh:102`; `app/core/runner_quarentena.py:72`.)
-
-   **O isolamento é restaurável, mas substitui a integração:** `patch.dict(sys.modules)` fica em contexto; ORM, juiz, hash, auditoria, arquivos, `fsync` e `replace` são duplos. Compila-se o comando e chama-se `handle` diretamente. Na porta extraída por AST, `atomic=nullcontext` e o dinheiro é um dicionário alterado pelo mock. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:100`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:133`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:173`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:294`.)
-
-   **Suite versus CLI:** `test_RED…` roda contra a fonte atual na suite; comparação com `--base` e campanha dos dez `--mutante` ficam exclusivamente no `__main__`. Dois mutantes locais — segundo chamador e guarda removida — rodam na suite; o contrato AST separado também contém mutantes locais. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:179`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:344`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:56`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:337`; `app/ponto/tests/test_reverter_regen_sem_banco.py:86`.)
-
-   Nos ensaios desta análise, passaram 28 testes sem banco e morreram os dez mutantes CLI; não foi criado relatório persistido **[nao verificado por arquivo de resultado]**. RED contra a base, suite Django completa e opus próprios: **[nao verificado]**. [nao verificado]
-
-   Um teste real com `call_command`, banco/arquivos isolados e commits efetivamente executados poderia verificar parser, imports, juiz, hash, JSON e LogAuditoria reais na composição inteira. Os atuais substituem esses componentes; os Django existentes chamam a porta e forçam `on_commit` imediato. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:116`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:140`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:114`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:127`.)
-
-5. **Classes de reprovação**
-
-   | Classe | Constatação |
-   |---|---|
-   | Segundo juiz | Não identificado no novo caminho: pergunta ao K9 e compartilha o rabo existente. (`app/ponto/management/commands/aplicar_col900.py:58`; `app/ponto/portas/celula.py:811`.) |
-   | Segundo escritor | Não há segundo escritor técnico de LogAuditoria: usa `evento`. O JSON tem escritor próprio no comando; não escreve célula ou dinheiro. A exigência da trilha completa, porém, permanece no chamador. (`app/core/observ.py:133`; `app/ponto/management/commands/aplicar_col900.py:34`; `app/ponto/management/commands/aplicar_col900.py:90`.) |
-   | Relógio fora da borda | Novos horários estão no comando. O rabo já lê `localdate` internamente; violação nova dessa classe: **[nao verificado]**. (`app/ponto/management/commands/aplicar_col900.py:66`; `app/ponto/management/commands/aplicar_col900.py:87`; `app/ponto/portas/celula.py:426`.) |
-   | Derivação paralela | Hash, valores e competência delegam às funções existentes. (`app/ponto/management/commands/aplicar_col900.py:53`; `app/ponto/management/commands/aplicar_col900.py:57`; `app/ponto/management/commands/aplicar_col900.py:70`.) |
-   | Selo sem mordida | Há mordida da guarda; cobertura integrada do comando continua ausente **[nao verificado]**. (`app/ponto/tests/test_reverter_exportada_sem_banco.py:321`; `app/ponto/tests/test_reverter_exportada_sem_banco.py:337`.) |
-   | Ordem de trava | VOLTA lê célula/guarda antes do `atomic`, sem `select_for_update`; falta serialização visível. Inversão concreta de locks: **[nao verificado]**. (`app/ponto/portas/celula.py:776`; `app/ponto/portas/celula.py:785`.) |
-   | Pouso antes do pré-requisito | JSON anterior precede o ato. Suite/opus anteriores ao pouso: **[nao verificado]**. (`app/ponto/management/commands/aplicar_col900.py:146`; `app/ponto/management/commands/aplicar_col900.py:164`.) |
-   | Campo com dois significados | Ressalvas concretas: ator do JSON versus coluna `ator`; `concluido` significa laço terminado, não recálculo certificado. (`app/ponto/management/commands/aplicar_col900.py:64`; `app/core/observ.py:117`; `app/ponto/management/commands/aplicar_col900.py:172`.) |
-
-6. **09/2026 com flag**
-
-   **Sim, continua barrada financeiramente nas empresas exportadas.** A flag abre a guarda da célula; o escritor financeiro não recebe essa flag e exclui os colaboradores dessas empresas pela `GUARDA_COMPETENCIA`. Isso não afirma bloqueio de toda 09 aberta. (`app/ponto/portas/celula.py:779`; `app/ponto/services/fechamento.py:36`; `app/ponto/services/fechamento.py:448`; `app/ponto/services/fechamento.py:539`; `app/ponto/services/fechamento.py:560`.)
-
-   **`test_09` está armado para provar esse caso:** monta DiaPago de 480 antes de exportar, exporta 09, reverte com flag e exige DNA restaurado, DiaPago integral preservado, hash de Fechamento igual e contador da guarda aumentado. Sua execução Django ficou **[nao verificado]**. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:61`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:133`.)
-
-   Ele não prova identidade integral do FechamentoMensal: compara o hash, que exclui identificadores, determinados carimbos e aprovação; também não prova a ordem natural de `on_commit`, substituído no teste. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:107`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:142`; `app/ponto/portas/regen_exportada.py:37`.)
-
-## 10/11 02:02 · sessao 5c12c35e05e3 · - · - · origem=Ronald (tmux)
-
-4. **Coletáveis, com limites claros.** Classes `unittest.TestCase` e métodos `test_*` estão fora do `__main__` (`app/ponto/tests/test_reverter_exportada_sem_banco.py:51,92,292`); `ponto` está nas labels (`bin/regua.sh:23`), a suite chama `manage.py test` (`bin/suite.sh:102-103`) e usa `DiscoverRunner` com poda de quarentena (`app/core/runner_quarentena.py:72-91`). A quarentena atual não inclui esses testes (`app/core/testes_em_quarentena.txt:6-8`).
-
-- `sys.modules` é substituído com contexto restaurável; arquivos, `fsync`, `replace`, ORM, juízes, hash, ator e auditoria são duplos; o comando é compilado e recebe `handle()` diretamente (`app/ponto/tests/test_reverter_exportada_sem_banco.py:100-140,173-177`). A porta real é extraída por AST, mas `atomic=nullcontext`, persistência e rabo financeiro são substituídos (`app/ponto/tests/test_reverter_exportada_sem_banco.py:294-318`).
-- O teste chamado `test_RED...` roda normalmente na suite, contra a fonte atual (`app/ponto/tests/test_reverter_exportada_sem_banco.py:179-211`). **A campanha `--base/--mutante` só roda como CLI**, sob `__main__`; não é disparada pela coleta (`app/ponto/tests/test_reverter_exportada_sem_banco.py:344-381`).
-- Dois ensaios locais de mutantes rodam dentro da suite: segundo chamador sintético e guarda removida (`app/ponto/tests/test_reverter_exportada_sem_banco.py:56-59,337-341`). O segundo comprova que a remoção deixa passar e alterar; a campanha CLI é que reaplica o teste negativo ao fonte mutado (`app/ponto/tests/test_reverter_exportada_sem_banco.py:321-341,359-360`).
-- Um Django `call_command` real, verificando banco e JSON isolado, cobriria descoberta/parser do comando, imports/modelos verdadeiros, `competencia_fechada_para_celula`, serialização, gravação efetiva de `LogAuditoria`, ator de processo e hashes reais na composição comando→porta→dinheiro. O teste atual substitui precisamente essas dependências e ignora `BaseCommand` real (`app/ponto/tests/test_reverter_exportada_sem_banco.py:116-140,173-177`). Os Django existentes testam a **porta**, com `on_commit` substituído por execução imediata; não testam `call_command`, JSON ou fechamento natural da transação (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:20-22,114-148`).
-
-**Execução observada, sem arquivo de resultado:** 28/28 testes dos dois módulos sem banco passaram. Os dez mutantes CLI falharam como esperado: `sem_pre` 9 failures; `ignora_io` 4; `sem_pos` 5 + 1 error; `hash_falso` 1; `sem_valores` 4; `sem_dna` 4; `sem_trilha` 3; `ignora_juiz` 9; `foto_em_aberta` 1; `guarda` 1. `--base 65719b368` não comprovou RED: `git show` retornou 128; fonte da base indisponível [nao verificado]. Campanha implementada em `app/ponto/tests/test_reverter_exportada_sem_banco.py:344-381`.
-
-6. **09/2026 exportada continua barrada para dinheiro com flag.** A competência permanece na guarda (`app/ponto/services/fechamento.py:36-43`); o escritor financeiro não recebe `apesar_da_lavra` (`app/ponto/services/fechamento.py:448-451,1798-1810`) e exclui colaboradores de empresas exportadas antes do cálculo/escrita (`app/ponto/services/fechamento.py:539-564`).
-
-`test_09` está armado para esse caso: primeiro monta dinheiro real de 480 antes da exportação (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:61-80`); exporta 09, aplica flag, exige DNA restaurado, DiaPago integral igual, hash de Fechamento igual e contador da guarda aumentado (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:133-148`). **Sua execução Django não foi realizada [nao verificado].**
-
-O teste não prova bloqueio de 09 aberta, pois a guarda exige exportação (`app/ponto/services/fechamento.py:560-564`), nem identidade integral do FechamentoMensal: compara seu hash, que omite identificadores/carimbos/aprovação (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:107-112,147`; `app/ponto/portas/regen_exportada.py:37-38,56-74`).
-
-## 10/11 02:02 · sessao 5639b493fe56 · - · - · origem=Ronald (tmux)
-
-- **Chamadores:** varredura AST produtiva encontrou **1 chamada total** de `reverter_regeneracao_dia`, com `apesar_da_lavra`, no comando manual; nenhum automático visível — `app/ponto/management/commands/aplicar_col900.py:164`.
-- **Selo:** sem flag, competência lavrada devolve `False` antes de escrita, evento e rabo — `app/ponto/portas/celula.py:776`, `:779`, `:785`, `:811`.
-- **IDA:** permanece no mesmo rabo compartilhado — `app/ponto/portas/celula.py:354`; o diff fornecido não altera sua implementação. Comparação integral com base `65719b368` [nao verificado], pois a cópia não fornece Git.
-- **Lote parcial:** comando não envolve o lote em transação; cada dia abre atomic próprio, encerrado antes do rabo. Em autocommit, dias anteriores ficam gravados se um posterior falhar — `app/ponto/management/commands/aplicar_col900.py:149`; `app/ponto/portas/celula.py:785`, `:809`.
-- **Hash depois:** no CLI em autocommit, `on_commit` executa o callback antes de retornar, e o hash final vem depois. Sob atomic externo, o callback pode permanecer pendente quando `_concluir_reversao` lê o hash — `app/ponto/services/fechamento.py:1807`, `:1824`; `app/ponto/management/commands/aplicar_col900.py:83`, `:175`. A configuração efetiva de produção [nao verificado].
-- **“Concluído” não garante dinheiro recalculado:** exceções do recálculo são engolidas; inclusive a lavratura de DiaPago pode falhar depois de FechamentoMensal mudar — `app/ponto/services/fechamento.py:1818`, `:1160`, `:1200`, `:1238`; o comando conclui pelo término do loop — `app/ponto/management/commands/aplicar_col900.py:172`.
-- **Competência:** rabo e fotografia usam a mesma autoridade `janela_atual`; para `date` do dia da célula, não encontrei divergência concreta. O rabo deduplica pelo fim da janela; o adaptador `competencia_do_fato` passa por `competencias_do_intervalo`, que usa o mesmo fim — `app/ponto/portas/celula.py:447`; `app/ponto/services/fechamento.py:1594`, `:1602`; `app/ponto/services/dia_pago.py:716`. Não há remapeamento para dia de turno nessa chamada; datetime é normalizado para data local — `app/ponto/services/fechamento.py:1568`.
-- **Concorrência:** VOLTA lê célula e guarda antes do atomic, sem `select_for_update`; edição humana trava dentro do atomic. Ausência de serialização visível, mas inversão nova de locks [nao verificado] — `app/ponto/portas/celula.py:776`, `:785`, `:592`.
-- **09/2026:** flag abre a célula, mas não atravessa a guarda financeira de empresa exportada. `recalcular_fechamento_mes` não recebe essa flag; exclui do universo os colaboradores das empresas exportadas na competência guardada — `app/ponto/services/fechamento.py:36`, `:448`, `:539`, `:560`. Não generalizar para 09 aberta: a condição exige exportação — `app/ponto/services/fechamento.py:561`.
-- **Juiz da lavra:** `_competencias_exportadas` enumera candidatos e consulta `competencia_fechada_para_celula`, incluindo TXT e holerite publicado, sem inventar regra nova — `app/ponto/management/commands/gerar_celulas.py:146`, `:161`, `:169`, `:173`.
-- **Relógio:** VOLTA lê `timezone.now()` dentro da porta; o rabo lê `localdate()` para decidir re-julgamento. Ambos são preexistentes ao diff v3 fornecido — `app/ponto/portas/celula.py:792`, `:426`.
-
-## 10/11 02:02 · sessao 7fb48bb09e80 · - · - · origem=Ronald (tmux)
-
-- **Juiz existente, sem clonagem:** `_preparar_reversao` pergunta a `competencia_fechada_para_celula` e usa `competencia_do_fato`; ambos são delegações, não predicados financeiros novos (`app/ponto/management/commands/aplicar_col900.py:53`, `:57`, `:58`; `app/core/juizes.py:337`; `app/ponto/services/fechamento.py:1594`, `:1602`).
-
-- **Significados distintos:** `competencias[].lavrada` do JSON recebe K9, isto é, exportação vigente **ou** holerite publicado da pessoa (`app/ponto/management/commands/aplicar_col900.py:58`, `:69`; `app/folha/export.py:610`, `:614`). Não significa período trancado: essa outra pergunta usa `PeriodoFechado.reaberto_em IS NULL` (`app/ponto/services/fechamento.py:1464`, `:1473`). O código novo não confunde os predicados, embora o nome amplo “lavrada” exija essa leitura (`app/ponto/management/commands/aplicar_col900.py:69`).
-
-- **Competência:** os dias pedidos alimentam `competencia_do_fato`; a cadeia usa a janela da empresa, não mês civil, relógio atual ou nova derivação de turno (`app/ponto/management/commands/aplicar_col900.py:57`; `app/ponto/services/fechamento.py:1594`, `:1604`; `app/ponto/services/dia_pago.py:702`, `:716`). A guarda da célula enumera competências e pergunta ao mesmo K9; sua janela delega ao mesmo motor de janelas (`app/ponto/management/commands/gerar_celulas.py:173`, `:176`; `app/folha/export.py:47`; `app/ponto/janelas.py:54`, `:60`).
-
-- **Hash:** `hash_do_gravado` lê `FechamentoMensal`, usa MD5 truncado em 12 caracteres e exclui IDs, competência, carimbos e aprovador; portanto não prova identidade integral da linha (`app/ponto/portas/regen_exportada.py:35`, `:37`, `:62`, `:70`, `:74`). O comando grava o resultado como `hash_antes`/`hash_depois`, sem calcular outro hash (`app/ponto/management/commands/aplicar_col900.py:70`, `:85`).
-
-- **Valores:** `valores_do_gravado` retorna os campos de `aplicar_09_corte_b.CAMPOS` ou `None`; não fotografa integralmente `FechamentoMensal` nem `DiaPago` (`app/ponto/portas/regen_exportada.py:77`; `app/ponto/management/commands/aplicar_09_corte_b.py:67`). O JSON os guarda em `valores_antes` (`app/ponto/management/commands/aplicar_col900.py:71`). Leitores anteriores distinguem explicitamente `None` de pagamento zero (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130`; `app/chamados/services/passivo_validado.py:174`).
-
-- **JSON:** `_preparar_reversao` monta identificação, datas, ator, motivo, flag, competências, hashes, valores e DNA; `_gravar_reversao` é seu escritor de arquivo; o laço acrescenta resultados e `_concluir_reversao` acrescenta hashes finais/estado/data (`app/ponto/management/commands/aplicar_col900.py:34`, `:62`, `:79`, `:159`, `:167`). Consumidor produtivo que carregue esse novo JSON para efetuar restauração: **[nao verificado]**. O caminho é levado à descrição e ao payload de auditoria (`app/ponto/management/commands/aplicar_col900.py:92`, `:98`).
-
-- **LogAuditoria:** o comando chama `evento_kw`, adaptador de `evento`; este faz o único `LogAuditoria.objects.create` dessa cadeia, dentro de savepoint (`app/ponto/management/commands/aplicar_col900.py:90`; `app/core/observ.py:142`, `:146`, `:133`). Há evento por célula na porta e evento por ato no comando, com informações diferentes, ambos pelo mesmo escritor técnico (`app/ponto/portas/celula.py:799`; `app/ponto/management/commands/aplicar_col900.py:90`). A tela genérica lê os registros e seus filtros (`app/core/views.py:705`).
-
-- **Ator merece ressalva:** JSON força fallback `sistema:aplicar_col900`; a coluna `LogAuditoria.ator` deriva separadamente de `sys.argv` e só reconhece processos `manage.py` (`app/ponto/management/commands/aplicar_col900.py:64`; `app/core/observ.py:22`, `:29`, `:117`). Em `call_command`, shell ou comando hospedeiro, JSON e coluna `ator` podem divergir; `usuario_so` é usuário do SO, não usuário Django (`app/ponto/management/commands/aplicar_col900.py:65`; `app/core/observ.py:118`, `:123`).
-
-- **Leitor histórico de eventos da porta:** `janelas_de_regeneracao` procura `desde`/`ate`; o evento de VOLTA usa `dna`/`revertida`, portanto aquele leitor o ignora por `KeyError` (`app/escala/services/regeneracao.py:58`; `app/ponto/portas/celula.py:804`). A reescrita atual também deixa `regenerada_em`, consumido pelo alimentador/juiz de reescrita; não depende apenas daquela janela histórica (`app/ponto/portas/celula.py:792`; `app/escala/services/regeneracao.py:72`, `:87`).
-
-_3334 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3338 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
