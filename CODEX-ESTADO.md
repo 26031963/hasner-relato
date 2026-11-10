@@ -1,7 +1,191 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 20:15** · publicado em **10/11/2026 20:15** (UTC-3)
+> Ultima resposta processada: **10/11/2026 20:20** · publicado em **10/11/2026 20:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 20:20 · sessao 81bdf4d4b274 · BO-DISPUTA-SEM-PERGUNTA · sonda · origem=Code
+
+| Contagem | Valor | Referência |
+|---|---:|---|
+| disputas_total | 7009 | [nao verificado] |
+| fechadas_vazia_total | 300 | [nao verificado] |
+| fechadas_vazia_desde_1110 | 300 | [nao verificado] |
+| fechadas_vazia_desde_0311 | 93 | [nao verificado] |
+| fechadas_vazia_colabs_distintos_desde_1110 | 107 | [nao verificado] |
+| fechadas_vazia_com_zero_pergunta_desde_1110 | 300 | [nao verificado] |
+| fechadas_vazia_no_mesmo_minuto_do_nascimento_desde_1110 | 237 | [nao verificado] |
+| abertas_total | 489 | [nao verificado] |
+| abertas_com_zero_pergunta | 8 | [nao verificado] |
+| nascidas_desde_1110 | 1387 | [nao verificado] |
+
+O trecho fornecido não contém linhas de erro nem indicação de contagens que a sonda não conseguiu fazer. [nao verificado]
+
+## 10/11 20:20 · sessao e7138677bd9d · MAPA-FILA-BO · censo · origem=Code
+
+## BO-0611-05-TEM-GPS-LEITORES (lote 4)
+
+| Achado | Conferência nesta árvore |
+|---|---|
+| A1 | **confere**. Os três sítios perguntam por nulidade, usando `.exclude(latitude=None).exclude(longitude=None).exists()`, sem chamar `tem_gps`; zero não é excluído. `app/colaboradores/views.py:337`, `app/colaboradores/views.py:356`, `app/colaboradores/views.py:395`. |
+| A2 | **parcial**. O filtro exige latitude, longitude e precisão não nulas; admite coordenada zero. Isso confere no código. “Já contava zero na base” depende de dado: quantidade de amostras zero efetivamente selecionadas; essa contagem não foi fornecida. `app/ponto/services/vinculo_na_lista.py:49`, `app/ponto/services/vinculo_na_lista.py:50`. [nao verificado: contagem na base anterior] |
+| A3 | **confere**. O JS usa truthiness conjunta, `b.latitude && b.longitude`, nos dois pontos. `app/templates/core/dashboard2.html:242`, `app/templates/core/dashboard2.html:287`. |
+| A4 | **confere**. Os escritores do contexto usam `float(coordenada) if coordenada else None`; zero numérico vira `None`, tanto na ocorrência quanto no contexto escalar. `app/ponto/services/geofence.py:349`, `app/ponto/services/geofence.py:350`, `app/ponto/services/geofence.py:391`, `app/ponto/services/geofence.py:392`. |
+| A5 | **confere**. O mapa faz `parseFloat` e rejeita `isNaN`; zero passa por essa forma. `app/static/js/geo-colab-map.js:29`, `app/static/js/geo-colab-map.js:39`. |
+| A6 | **parcial**. `tem_gps` devolve `bool(latitude and longitude)`: texto `"0"` é verdadeiro e `Decimal('0')` é falso. `_sanitiza_geo` testa `float(v)`, mas não atribui a conversão ao campo; o envio PWA usa `FormData.append`. Entretanto, **o teste atual já cobre texto zero**, caracterizando a divergência. `app/ponto/services/geofence.py:145`, `app/ponto/registro_batida.py:15`, `app/static/pwa.js:145`, `app/static/pwa.js:146`, `app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:79`. |
+| A7 | **confere**. O ramo sem GPS pergunta ao juiz, mas a criação de `AlertaGeofence(tipo='sem_gps')` está dentro de `if posto`. Isso prova a condição de nascimento do alerta, não uma obrigação de removê-la. `app/ponto/services/geofence.py:269`, `app/ponto/services/geofence.py:270`, `app/ponto/services/geofence.py:271`. |
+| A8 | **parcial**. Os leitores atuais de contexto já chamam `par_tem_gps`; a fixture fornece expressamente as duas chaves. Chave ausente não equivale ao caso testado com chave presente e `None`. A consequência de execução com chave ausente não foi demonstrada. `app/templates/chamados/partials/_relatorio_geo.html:31`, `app/templates/chamados/partials/modal_fio.html:481`, `app/ponto/tests/test_bo0611_05_templates_geo.py:132`. [nao verificado: renderização com chaves ausentes] |
+| A9 | **parcial**. O módulo `templates_geo` monta contexto por `is not None` e seu laço não contém zero; o teste do detector exige zero como evidência. Porém, o módulo atual do juiz já renderiza contextos com zero. Os testes de forma JS e de templates renderizados existem; sua presença não comprova o RED histórico contra a base. `app/ponto/tests/test_bo0611_05_templates_geo.py:132`, `app/ponto/tests/test_bo0611_05_templates_geo.py:178`, `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`, `app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:218`, `app/ponto/tests/test_l030_forma_js.py:31`, `app/ponto/tests/test_l030_templates_renderizados.py:14`. [nao verificado: RED das voltas 2–5 contra a base] |
+
+**(a) Lei, juiz e portas.** A lei é testemunha lendo a autoridade, escritor único e batida nunca barrada: L-002, L-007 e L-030; o corte específico manda consultar o mesmo juiz, conserva a semântica de zero e proíbe mudar o veredito do geofence nessa migração. `app/docs/LEIS.md:60`, `app/docs/LEIS.md:65`, `app/docs/LEIS.md:78`, `CLAUDE.md:20`, `CLAUDE.md:140`, `app/docs/CORTES.md:442`.
+
+O juiz **já está registrado**: `ponto/services/geofence.py::tem_gps`. Os filtros de template delegam a ele. O lookup `JUIZES.md` fornecido não traz essa entrada, mas determina que o registro vivo prevaleça. `app/core/juizes.py:1201`, `app/core/templatetags/hasner_filters.py:34`, `app/core/templatetags/hasner_filters.py:41`, `app/docs/JUIZES.md:10`, `app/docs/JUIZES.md:14`.
+
+A cura dos leitores toca `tem_gps` e seus consumidores; coerência de tipo na escrita toca `_sanitiza_geo`/`registrar_batida`. Se preservar coordenadas brutas no contexto, toca também o emissor e as portas de nascimento/fusão do chamado. `app/ponto/registro_batida.py:5`, `app/ponto/registro_batida.py:94`, `app/core/portas.py:103`, `app/ponto/services/geofence.py:345`, `app/chamados/models.py:1095`, `app/chamados/services/contexto.py:163`.
+
+**(b) Estado e decisor.**
+
+| Pergunta | Resposta |
+|---|---|
+| Cria campo? | **Não**: latitude/longitude nullable e tipo `sem_gps` já existem. `app/ponto/models.py:58`, `app/ponto/models.py:59`, `app/ponto/models.py:233`. |
+| Cria escolha nova de campo? | **Não**, para migração ao juiz e normalização numérica; os módulos emitidos já existem. `app/ponto/services/geofence.py:344`, `app/chamados/catalogo/modulos.py:160`, `app/chamados/catalogo/modulos.py:162`. |
+| Pode produzir estado/linhas que esses caminhos hoje não produzem? | **Sim**. Normalizar texto zero pode trocar o ramo executado e o tipo de alerta/chamado. Preservar zero bruto em A4 também muda o JSON que hoje escreve `None`. Isso é alcance por caminho; não prova que tais valores nunca existiram em todo o banco. `app/ponto/services/geofence.py:145`, `app/ponto/services/geofence.py:269`, `app/ponto/services/geofence.py:344`, `app/ponto/services/geofence.py:349`. [nao verificado: inexistência global no banco] |
+| Muda quem decide? | **Sim**: os predicados locais passam a perguntar ao juiz registrado. A normalização também pode mudar a natureza/fila do chamado: `gps_ausente` é registro; `gps_fora_geofence` vai à validação administrativa. `app/colaboradores/services/drawer.py:63`, `app/core/juizes.py:1201`, `app/chamados/catalogo/natureza.py:18`, `app/chamados/catalogo/natureza.py:29`, `app/chamados/catalogo/natureza.py:44`. |
+
+Remover a guarda de posto de A7 seria uma ampliação distinta: criaria o alerta sem posto que hoje não nasce nesse ramo; o corte atual não autoriza alterar esse veredito. `app/ponto/services/geofence.py:270`, `app/docs/CORTES.md:442`.
+
+**(c) Censo.** Foram identificadas **78 unidades**: função Python, classe de admin, template, arquivo JS ou script, deduplicados por unidade; ocorrências repetidas dentro da mesma função não aumentam o total. A união compreende par de coordenadas, cópias no JSON, booleano derivado, alertas, classificação `gps_ausente`, entrada/transporte, sombra e exclusão dos registros. Os sítios e formas são os seguintes.
+
+| Grupo | Unidades e formas |
+|---|---|
+| Python direto — **24** | `app/ponto/registro_batida.py:94` — `registrar_batida`, `create` em `:152`/`:157`; `app/ponto/registro_batida.py:331` — `semear`, construtor por `**d` e `bulk_create`, restrito a ensaio; `app/ponto/services/geofence.py:145` — juiz, truthiness; `app/ponto/services/geofence.py:269` — `verificar_geofence`, juiz, criação de alertas e ternários de contexto; `app/ponto/services/geofence.py:52` — `vinculo_contagem`, queryset `isnull=False`; `app/ponto/services/geofence.py:405` — `ocorrencias_do_chamado`, `.get`; `app/ponto/services/geofence.py:425` — `reavaliar_chamados_geofence`, `is not None`; `app/core/templatetags/hasner_filters.py:34` e `app/core/templatetags/hasner_filters.py:41` — dois filtros delegando ao juiz; `app/colaboradores/views.py:53` — exclusão de nulos; `app/colaboradores/views.py:337` — `vincular_posto`, exclusão de nulos/`.exists()`; `app/colaboradores/views.py:395` — `_render_row`, mesma forma; `app/colaboradores/views.py:2474` — `_geo_do_pino`, ausência de tupla/`is None`; `app/colaboradores/services/detalhe.py:22` — exclusão de nulos, contagem em `:53`, `float` em `:82`; `app/colaboradores/services/drawer.py:63` — `bool(latitude and longitude)`; `app/colaboradores/painel_cell.py:37` — leitura da tupla, `or ''` em `:54`; `app/colaboradores/services/situacional.py:141` — `values_list`, `or ''` em `:199`; `app/chamados/views.py:692` — queryset com alias `_BatidaGeo`; `app/core/views.py:1024` — `is not None`; `app/core/services/painel_op.py:227` — truthiness; `app/ponto/views.py:468` — serialização por `is not None` e contador pelo juiz em `:485`; `app/ponto/services/vinculo_na_lista.py:49` — filtro de nulidade e leitura em `:56`; `app/chamados/services/acoes_chamado.py:203` — `.get` e cópia para `Advertencia.detalhe_json`; `app/ponto/admin.py:12` — leitura reflexiva por `SoLeitura`, expandindo campos em `app/core/admin.py:74`. |
+| Templates/JS diretos — **12** | `app/templates/core/_d2_feed.html:16` e `app/templates/ponto/batidas_offline_pendentes.html:96` — filtro juiz; `app/templates/chamados/partials/_relatorio_geo.html:31` e `app/templates/chamados/partials/modal_fio.html:481` — filtro do par; `app/templates/colaboradores/partials/_drawer_diagnostico.html:49` — truthiness de `b.tem_gps`; `app/templates/colaboradores/detalhe.html:188` — interpolação direta no link; `app/templates/core/dashboard2.html:242` — JS `&&`, repetido em `:287`; `app/static/js/geo-colab-map.js:29` — `parseFloat`/`isNaN`; `app/templates/chamados/fio_colaborador.html:116` — interpolação, `parseFloat`/`isNaN` em `:313`; `app/templates/chamados/painel_gestao.html:583` — `isNaN`; `app/templates/colaboradores/partials/_ps_linha.html:1` — interpolação em dataset; `app/static/pwa.js:145` — `!= null` e `FormData.append`. |
+| Ingresso/transporte — **11** | `app/ponto/registro_batida.py:5` — sanitizador, valida com `float` sem converter; `app/api/views_core.py:403` e `app/api/views.py:416` — `request.data.get` e passagem à porta; `app/ponto/views.py:270` — POST `or None`, gravação na sessão em `:320`; `app/ponto/services/triagem_batida.py:507` — recuperação da sessão por truthiness; `app/ponto/services/triagem_batida.py:707` — kwargs da porta; `app/templates/ponto/bater_ponto.html:296` — aquisição e atribuição a campos; `app/templates/ponto/bater_ponto_v2.html:178` — aquisição, campos em `:105`; `app/templates/ponto/triagem/base_triagem.html:59` — aquisição; `app/templates/ponto/triagem/apto.html:223` — atribuição aos campos; `app/templates/ponto/triagem/turno_confirmar.html:12` — campos ocultos. |
+| AlertaGeofence — **11** | `app/ponto/models.py:258` — `ainda_vale`, `is None` conserva alerta; `app/ponto/admin.py:31` — filtro por tipo e campos readonly; `app/core/cell.py:15` — queryset ativo para conjunto; `app/core/views.py:199` — conjunto por batida; `app/core/views.py:407` — comparação `tipo='ponto_fora'`; `app/core/views.py:783` — conjunto por colaborador; `app/core/views.py:1167` — conjunto por batida; `app/ponto/management/commands/reconciliar_alertas_geofence.py:33` — queryset, `is None` em `:42`, `update(obsoleto_em=...)` em `:52`; `app/ponto/management/commands/testar_pwa.py:291` — ensaio, `.exists()` em `:294`; `app/ponto/management/commands/zerar_dados_operacionais.py:47` — ensaio, `count` e `delete` em `:85`; `app/templates/core/dashboard_supervisor.html:90` — truthiness da latitude do alerta. |
+| Módulo/rótulo — **9** | `app/chamados/catalogo/natureza.py:38` — `not in MODULOS_AUDITORIA`; `app/chamados/catalogo/natureza.py:44` — escolha da pilha; `app/chamados/services/desenlace.py:38` — membership/lookup; `app/chamados/services/desenlace.py:68` — comparação de pilha/lookup; `app/chamados/services/verbos.py:158` — lookup por subcategoria; `app/chamados/services/verbos.py:186` — módulo e lookups; `app/api/views.py:60` — `.get` do rótulo; `app/api/views_mensageria.py:1161` — lookup por subcategoria; `app/chamados/management/commands/auditar_invariantes_chamados.py:1068` — filtro `modulo_origem__in=MODULOS_AUDITORIA`. |
+| Template de módulo — **1** | `app/templates/chamados/detalhe_local.html:274` — comparação explícita com `gps_ausente` e inclusão do relatório. |
+| Escrita do chamado — **5** | `app/chamados/models.py:1051` — natureza do nascimento; `app/chamados/models.py:1095` — INSERT por `criar`; `app/chamados/services/nota.py:110` — delegação da fusão; `app/chamados/services/nota.py:123` — alias `_ctx`; `app/chamados/services/contexto.py:144` — união de listas, ausência por `k not in ctx` em `:155`, `save` em `:163`. |
+| Sombra — **3** | `bin/sombra_mascara_pessoal.py:12` — alias `R`, `R.NULO`/`objects.update` em `:17`/`:20`, JSON/`bulk_update` em `:44`/`:62`; `bin/sombra_regras_pessoais.py:36` — recursão, coordenada numérica vira `None`; `bin/sombra_selo_pessoal.py:55` — SQL `IS NOT NULL`, JSONPath em `:90`. |
+| Exclusão do registro — **2** | `app/ponto/registro_batida.py:291` — `apagar`, `delete`; `app/ponto/registro_batida.py:345` — `apagar_em_ensaio`, `queryset.delete`, com guarda em `:343`. |
+
+`anotar` não é escritor de coordenadas: a allowlist não contém latitude/longitude e campos externos são recusados. O escritor potencial de ensaio `semear` aceita dicionários genéricos, mas exige banco de ensaio. `app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`, `app/ponto/registro_batida.py:326`, `app/ponto/registro_batida.py:335`.
+
+Os delegadores de reavaliação também foram conferidos: command chama o serviço; signal de `Posto` chama o mesmo serviço após commit; o cron executa `reconciliar_geofence --alarme`, enquanto a reconciliação de alertas fica sob demanda. Não são novas leituras diretas de coordenadas além das unidades acima. `app/ponto/management/commands/reconciliar_geofence.py:33`, `app/ponto/signals.py:306`, `app/config/crons.py:486`, `app/config/crons.py:1452`.
+
+**Limite do fechamento:** 78 é o inventário nominal acima, não uma certificação de todos os consumidores genéricos de `ChamadoColaborador`, `PerguntaDisputa`, `FollowupChamado` e leitura dinâmica de JSON. Esse universo integral permanece **[nao verificado]**. A cópia em `Advertencia.detalhe_json` existe; outro leitor nominal dessas chaves não foi localizado. `app/chamados/services/acoes_chamado.py:197`. [nao verificado: leitura dinâmica/reflexiva desse JSON]
+
+**(d) Casa.** **COMPLEMENTO de O254 — CONTRATO-BATIDA-GANHA-LEITOR**, ligado ao BO pai; não é BO simples de um sítio. A casa está no BACKLOG e o contrato vivo aponta para o teste da família. `app/docs/BACKLOG.md:1458`, `app/docs/BACKLOG.md:1873`, `app/core/contratos_estruturais.py:375`.
+
+A descrição do BO pai ainda relata 403 sem coordenadas e interrupção por GPS: **não confere nesta árvore**. Os kernels passam as coordenadas à porta e o requisito GPS do v2 termina permitindo prosseguir. A afirmação histórica de três perguntas sem juiz na descrição de O254 também não descreve o registro atual, que lista duas. `app/docs/BACKLOG.md:1873`, `app/api/views_core.py:640`, `app/api/views.py:648`, `app/templates/ponto/bater_ponto_v2.html:292`, `app/core/juizes.py:1203`.
+
+O registro separado desse filho na árvore anterior não foi disponibilizado na cópia atual. [nao verificado: descrição anterior do filho em 6c0517eb9]
+
+**(e) Padrão.** **Single Writer Principle / juiz único**, acompanhado de **Architecture Conformance Test** para cobrar o significado da pergunta. Ambos são termos existentes. `app/docs/GLOSSARIO.md:12`, `app/docs/GLOSSARIO.md:15`.
+
+**(f)**
+
+perguntas de lei: 1
+
+1. **Batida sem GPS e sem posto deve gerar `AlertaGeofence.sem_gps` e chamado `gps_ausente`?** Hoje o escritor exige posto; o corte da migração manda conservar o veredito. Essa pergunta condiciona uma eventual cura de A7, não a migração dos leitores para o juiz existente. `app/ponto/services/geofence.py:270`, `app/ponto/services/geofence.py:344`, `app/docs/CORTES.md:442`.
+
+**Depende de dado:** contagens de zero textual/numérico por canal; batidas parciais; contextos sem chaves; batidas sem posto; divergências entre cada leitor e o juiz; alertas/chamados que mudariam de classificação. [nao verificado: contagens não fornecidas]
+
+## BO-0611-05-RESTO-DA-CLASSE (lote 4)
+
+| Achado | Conferência nesta árvore |
+|---|---|
+| B1 | **confere**. `if(!_fotoBlob)` retorna `false`, e o chamador encerra antes do POST. A API já trata foto ausente como sinal. `app/templates/ponto/bater_ponto_v2.html:287`, `app/templates/ponto/bater_ponto_v2.html:290`, `app/templates/ponto/bater_ponto_v2.html:312`, `app/api/views_core.py:418`. |
+| B2 | **parcial**. As APIs procuram mesmo tipo em intervalo inclusivo **±5 minutos**, usam `.first()` e truthiness, devolvendo `ja_registrada` antes da porta. A web usa **[agora−5 minutos, agora]**, não ±5. Isso não demonstra que cada tentativa retida seja fato distinto. `app/api/views_core.py:508`, `app/api/views_core.py:510`, `app/api/views_core.py:517`, `app/api/views.py:523`, `app/ponto/services/triagem_batida.py:662`, `app/ponto/services/triagem_batida.py:663`, `app/ponto/services/triagem_batida.py:670`. |
+| B3 | **parcial**. A tentativa chega a `registrar_batida`; a própria porta pode devolver `(None, conflito)`. A janela é 300 s com escala/marcos, senão 60 s, com exceção por marco próprio. As APIs reutilizam `_janela_oposto as _jop`; a web procura a oposta em ±60 s fixos, sem excluir retratadas, podendo não encontrar a batida que motivou uma recusa de 300 s. `app/ponto/registro_batida.py:30`, `app/ponto/registro_batida.py:145`, `app/ponto/registro_batida.py:151`, `app/api/views_core.py:658`, `app/api/views.py:666`, `app/ponto/services/triagem_batida.py:714`. |
+| B4 | **confere**. A conjunção `tipo == 'E'`, turno aberto truthy e ausência de `confirmar` grava sessão e retorna renderização antes do registro. O turno aberto é alimentado pelo juiz, com alias `_tad`. `app/ponto/views.py:316`, `app/ponto/views.py:319`, `app/ponto/views.py:329`, `app/ponto/views.py:330`, `app/ponto/services/triagem_batida.py:198`. |
+| B5 | **confere**, e há duas cópias adicionais no refresh. Login e ambos os kernels de refresh recusam `situacao != 'ativo'`; a guarda alcança férias e os demais valores diferentes de ativo. São barreiras de autenticação anteriores ao endpoint. `app/api/login_helpers.py:141`, `app/api/views_core.py:173`, `app/api/views.py:116`. |
+| B6 | **confere**. O sincronizador aceita `resp.ok`, lê o JSON e apaga a linha sem comparar `data.status`; também apaga em HTTP 400. O v2 online igualmente aceita `r.ok` sem interpretar o status do payload. `app/static/pwa.js:158`, `app/static/pwa.js:162`, `app/static/pwa.js:166`, `app/static/pwa.js:172`, `app/templates/ponto/bater_ponto_v2.html:327`. |
+| B7 | **confere**. O selo modal condiciona a exigência à presença textual de `hxConfirmar(`. O selo API procura somente `If` anteriores à primeira chamada nominal da porta, com latitude/longitude/situação na condição e `Response(status=403)`. Não cobre a classe inteira de B1–B6. Há teste que ainda exige a recusa da colisão. `app/core/tests/test_selo_modal_nao_nasce_vazio.py:141`, `app/api/tests/test_l030_selo_porta.py:39`, `app/api/tests/test_l030_selo_porta.py:48`, `app/api/tests/test_l030_selo_porta.py:60`, `app/ponto/tests/test_f9d_t1_caracterizacao_ramo_quente.py:105`, `app/ponto/tests/test_f9d_t1_caracterizacao_ramo_quente.py:120`. |
+
+**(a) Lei, juiz e porta.** L-030 manda conservar a batida; o corte da obra exige censo de toda barreira e proíbe substituí-la por outra. Selfie ausente é cobrança, não condição para nascer a batida. `app/docs/LEIS.md:78`, `CLAUDE.md:140`, `app/docs/CORTES.md:440`, `app/docs/CORTES.md:94`.
+
+**Sem juiz registrado** para admissibilidade da tentativa, identidade de reenvio ou situação autorizada a autenticar. Hoje decidem os filtros e guardas discriminados em B1–B5. O registro da família contém período/par, geofence, selfie e GPS; selfie e geometria são auxiliares existentes, não um juiz de admissibilidade. `app/core/juizes.py:1186`, `app/core/juizes.py:1195`, `app/core/juizes.py:1201`, `app/core/juizes.py:208`.
+
+A porta canônica é `registrar_batida`, declarada em `core/portas.py`, chamada pelos dois kernels e pela web. A cura da classe precisa alcançar a recusa interna da porta, além das cascas. `app/core/portas.py:103`, `app/ponto/registro_batida.py:9
+
+[truncado em 20000 de 57506 caracteres]
+
+## 10/11 20:17 · sessao f379adfa3ffe · BO-0611-05 · leitura · origem=Code
+
+1. **Portas de autenticação e chegada à batida**
+
+| Porta | `Colaborador.situacao` | `data_demissao` | `usuario.is_active` |
+|---|---|---|---|
+| PWA `/login/` | Exige exatamente `ativo`. | Não achei conferência no helper. | Delega a `authenticate()` do Django; sem teste explícito local. (`app/core/views.py:50`; `app/api/login_helpers.py:122`; `app/api/login_helpers.py:141`) |
+| App `/api/auth/login/` | Usa o mesmo helper: exige `ativo`. | Não achei conferência. | Mesma delegação ao Django. (`app/api/urls.py:60`; `app/api/views.py:209`; `app/api/login_helpers.py:122`; `app/api/login_helpers.py:141`) |
+| `/api/auth/refresh/` | Exige `ativo` quando há colaborador. | Não achei conferência. | Testa explicitamente: falso retorna 401. Também confere a versão da credencial. (`app/api/views.py:96`; `app/api/views.py:110`; `app/api/views.py:115`) |
+| JWT access já emitido | Não achei teste na classe local. | Não achei teste na classe local. | Delega a `JWTAuthentication.get_user()`; depois confere a credencial da senha. (`app/api/credencial.py:177`; `app/api/credencial.py:186`) |
+| Sessão Django existente | Não achei nova exigência de `ativo` na porta da batida. | Não achei conferência nessa porta. | Autenticação delegada ao Django; na API também há `SessionAuthentication`. (`app/ponto/views.py:241`; `app/config/settings/base.py:39`; `app/config/settings/base.py:59`) |
+| `/api/webview/token/` → `/webview/entrar/` | Emissão exige autenticação existente; consumo não revalida situação. | Não achei conferência. | Consumo não testa explicitamente: valida uso único/validade e chama `login()`. (`app/api/views.py:2995`; `app/api/views.py:3019`; `app/core/views.py:1270`; `app/core/views.py:1276`) |
+| `/api/auth/trocar-senha/` | Não achei conferência adicional. | Não achei conferência. | Exige autenticação existente e senha atual; reemite JWTs. (`app/api/views.py:2863`; `app/api/views.py:2880`; `app/api/views.py:2928`) |
+| Sessão pelo `/admin/` | Conferência interna da autenticação: não achei na árvore. | Não achei. | Implementação delegada ao Django. (`app/config/urls.py:24`; `app/core/signals.py:4`) |
+
+A implementação interna das bibliotecas para comprovar os testes de `is_active` delegados acima: **não achei**. Não considero comprovado apenas pela chamada à biblioteca. (`app/api/login_helpers.py:122`; `app/api/credencial.py:188`; [nao verificado])
+
+A PWA v2 envia a batida para `/api/ponto/bater/` com sessão/CSRF; permanece também o POST direto em `/ponto/bater/`, que chega a `registrar_batida` pela triagem. (`app/templates/ponto/bater_ponto_v2.html:322`; `app/ponto/views.py:346`; `app/ponto/services/triagem_batida.py:700`)
+
+Na API de batida, há `IsAuthenticated` e exigência de vínculo com Colaborador; não achei veto por `situacao` ou `data_demissao`. A função final `registrar_batida` também não confere esses campos nem `usuario.is_active`. (`app/api/views.py:398`; `app/api/views.py:402`; `app/ponto/registro_batida.py:94`)
+
+O kernel possui as mesmas rotas de login, refresh e batida, com as verificações correspondentes. (`app/api/urls_core.py:9`; `app/api/urls_core.py:12`; `app/api/urls_core.py:14`; `app/api/views_core.py:173`; `app/api/views_core.py:386`)
+
+2. **Desligamento: escritores e efeitos**
+
+- **Porta HTTP:** `POST colaboradores/<cid>/desligar/`, com login e permissão `editar_cadastro`, chama o juiz e o executor de desligamento. (`app/colaboradores/urls.py:52`; `app/colaboradores/views.py:1419`; `app/colaboradores/views.py:1425`; `app/colaboradores/views.py:1430`)
+- **Porta agendada:** `efetivar_desligamentos_agendados --apply` seleciona `data_demissao <= hoje`, exclui quem já está desligado e chama o mesmo executor. (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:46`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`)
+- **Agendamento futuro:** grava data, motivo e histórico; retorna antes de alterar situação, usuário ou vínculos. Portanto, preencher uma demissão futura não desativa o acesso naquele ato. (`app/colaboradores/services/desligamento.py:82`; `app/colaboradores/services/desligamento.py:85`; `app/colaboradores/services/desligamento.py:101`)
+- **Efetivação:** grava `situacao='desligado'`, data e motivo; chama `definir_acesso(..., False)`. Essa função mantém o usuário e altera somente `usuario.is_active`, com auditoria; se não houver usuário, retorna. (`app/colaboradores/services/desligamento.py:104`; `app/colaboradores/services/desligamento.py:111`; `app/core/credenciais.py:107`; `app/core/credenciais.py:113`)
+- **Tokens, sessões, bridge e FCM:** exclusão, blacklist, revogação explícita ou limpeza desses registros no desligamento: **não achei**. A operação de credencial chamada salva exclusivamente `is_active`; limpeza de FCM/dispositivos existe separadamente em `resetar_onboarding`. (`app/core/credenciais.py:114`; `app/core/credenciais.py:150`; `app/core/credenciais.py:165`; `app/core/credenciais.py:172`)
+- **Outros efeitos:** fecha vínculos; tenta fechar disputas e chamados, preservando disputas com respostas sem veredito; cria chamado `desligamento_revisao` e envia `push_dp`. Esse chamado nasce do desligamento. (`app/colaboradores/services/desligamento.py:122`; `app/colaboradores/services/desligamento.py:139`; `app/colaboradores/services/desligamento.py:154`; `app/colaboradores/services/desligamento.py:163`; `app/colaboradores/services/desligamento.py:187`)
+
+Outra porta de produção que atribua desligado/data de demissão: **não achei**. O admin de Colaborador é somente leitura. Existe a operação inversa: reativação limpa `data_demissao`, grava `ativo` e reativa o usuário. (`app/colaboradores/admin.py:47`; `app/core/admin.py:59`; `app/colaboradores/services/desligamento.py:210`; `app/colaboradores/services/desligamento.py:216`; [nao verificado])
+
+3. **Início de férias e acesso**
+
+O alinhamento pelas datas muda o `AgendamentoFerias.status`; o `save()` espelha o agendamento em ausências aprovadas por dia. Não achei, nesse fluxo, alteração do usuário, sessões, JWT ou FCM. (`app/ferias/services.py:598`; `app/ferias/services.py:604`; `app/ferias/models.py:446`; `app/ponto/services/ausencia.py:1202`)
+
+Escritor de `Colaborador.situacao='ferias'`: **não achei**; o caminho PWA também documenta a retirada desse ramo. Caso esse valor esteja no cadastro, login e refresh o recusam porque exigem exatamente `ativo`. (`app/ponto/services/triagem_batida.py:68`; `app/api/login_helpers.py:141`; `app/api/views.py:115`)
+
+A condição operacional “está de férias hoje” usa as datas do agendamento, excluindo cancelados; não exige exclusivamente `status='em_gozo'`. (`app/ferias/services.py:47`; `app/ferias/services.py:51`; `app/ferias/services.py:57`)
+
+4. **Chamados, avisos e apuração depois da batida**
+
+**Férias: existe tratamento, mas parte dele ocorre antes da gravação.** Na API, o detector chama `bloquear_se_em_ferias` antes de `registrar_batida`; o helper cria chamado DP `colaborador_em_ferias`, deduplicado por colaborador/dia, e tenta enviar `push_dp`. Ele consulta **hoje**, não a data efetiva da batida retroativa. (`app/api/views.py:427`; `app/api/views.py:648`; `app/chamados/detector_anomalias.py:113`; `app/ponto/utils.py:85`; `app/ponto/utils.py:94`; `app/ponto/utils.py:103`; `app/ponto/utils.py:127`)
+
+Depois da gravação, a API passa os motivos — incluindo `em_ferias` — à criação/atualização da disputa e chama o gerador de perguntas. Também devolve aviso ao colaborador dizendo que a batida foi registrada. A descrição do chamado anterior ainda diz “batida recusada”, divergindo desse caminho executado. (`app/api/views.py:749`; `app/chamados/services/disputa_emissao.py:662`; `app/chamados/services/disputa_emissao.py:669`; `app/api/views.py:801`; `app/ponto/services/aviso_da_batida.py:35`; `app/ponto/utils.py:112`)
+
+No POST direto da PWA, o pós-registro consulta `aviso_do_dia`; esse serviço apenas lê férias e devolve a frase, sem criar chamado. (`app/ponto/services/triagem_batida.py:764`; `app/ponto/services/aviso_da_batida.py:55`; `app/ponto/services/aviso_da_batida.py:73`)
+
+**Batida posterior à demissão:** chamado, Pauta DP, pendência ou aviso específico disparado por essa condição: **não achei**. Não há esse motivo no detector lido nem teste de demissão na porta de gravação. (`app/chamados/detector_anomalias.py:19`; `app/chamados/detector_anomalias.py:123`; `app/ponto/registro_batida.py:94`; [nao verificado])
+
+Os demais sítios relevantes do evento e da apuração são:
+
+| Sítio | Leitura/efeito |
+|---|---|
+| Signals da batida | Recomputam turnos, julgam ontem/hoje e reconciliam chamados; o registrador também pede recálculo do fechamento. (`app/ponto/signals.py:34`; `app/ponto/signals.py:108`; `app/ponto/signals.py:131`; `app/ponto/signals.py:206`; `app/ponto/registro_batida.py:160`) |
+| Cobertura e grade | Leem ausências; para folha, somente aprovadas. Férias integrais marcam o dia como ausência e limpam células/órfãs da grade. (`app/ponto/turnos.py:2516`; `app/escala/utils.py:1188`; `app/escala/utils.py:1220`; `app/escala/utils.py:1251`) |
+| Precedência | Férias precedem afastamento, atestado, feriado, folga e trabalho. (`app/ponto/precedencia.py:46`; `app/ponto/precedencia.py:396`) |
+| Classificador do dia | Quando recebe fato realizado/órfão em dia encerrado e coberto por ausência aprovada, produz `FATO_EM_AUSENCIA`; é uma condição de apuração, não garantia de chamado para qualquer batida isolada. (`app/ponto/supra_juiz.py:379`; `app/ponto/supra_juiz.py:400`) |
+| Cadastro do dia | Lê `data_demissao` para não acusar “sem vínculo em dia de trabalho” após a demissão. (`app/ponto/services/cartorio.py:1107`; `app/ponto/supra_juiz.py:193`) |
+| Leitor da célula | Dias posteriores à demissão viram `fora_vinculo`; no próprio dia, considera se houve fato. (`app/escala/services/leitor_celula.py:365`; `app/escala/services/leitor_celula.py:386`; `app/escala/services/leitor_celula.py:392`) |
+| Emissão do cartório | Exclui `situacao='desligado'` dos portões de cobrança de furo e furo parcial. (`app/ponto/services/cartorio.py:1708`; `app/ponto/services/cartorio.py:1773`) |
+
+Há ainda aviso administrativo `ferias_com_batida` na leitura da situação de férias. A Pauta DP encontrada pertence à **recusa de materialização das férias no save do agendamento**, não a um gancho pós-batida. (`app/ferias/situacao.py:269`; `app/ferias/situacao.py:283`; `app/ponto/services/ausencia.py:1215`; `app/ponto/services/ausencia.py:1245`)
+
+5. **Retenção do fechamento e exportação TXT**
+
+**Sim, existem cortes explícitos no TXT:**
+
+- **Demissão:** `data_demissao <= fim_da_janela` classifica como `fora / rescisao_modulo_proprio`, independentemente de situação ou batida. Demissão posterior ao fim não satisfaz esse corte. (`app/folha/export.py:54`; `app/folha/export.py:60`; `app/folha/export.py:858`)
+- **Férias com batida:** cruza agendamentos não cancelados com batidas apuráveis pelo dia local; havendo interseção, classifica `fora / ferias_com_batida`. Não depende de `situacao='ferias'` nem de status exclusivamente `em_gozo`. (`app/ferias/services.py:51`; `app/folha/export.py:491`; `app/folha/export.py:499`; `app/folha/export.py:868`)
+- **Aplicação:** a montagem do TXT aceita somente itens classificados como `entra`. (`app/folha/export.py:706`; `app/folha/export.py:718`)
+
+No `FechamentoMensal`, a retenção materializada está em `motivos_espelho`. Seu cálculo consulta o juiz de retenção, cuja varredura corta o fim na demissão: portanto, não audita dias posteriores; no próprio dia da demissão, falta de célula/veredito não gera a retenção `sem_celula`. (`app/ponto/models.py:451`; `app/ponto/services/fechamento.py:1066`; `app/folha/export.py:1200`; `app/folha/export.py:1229`; `app/folha/export.py:1255`)
+
+perguntas de lei: 0
 
 ## 10/11 20:15 · sessao 939d1201216d · - · - · origem=Ronald (tmux)
 
@@ -827,279 +1011,4 @@ Para o escopo mínimo, a eleição e as recusas já têm regra explícita (`app/
 
 **Linha de tabela sugerida:** `PERGUNTA-DUPLICATA-1110 | L-001/002/003/007; sem juiz registrado de identidade de pergunta; fio.retratar_para_canonica | não/não (escopo mínimo) | 23 chamadas do perímetro (19 leitura/4 delegação), não censo global | COMPLEMENTO FIO-E0-V4 E1/E4 | idempotência pela chave do fato | 0`.
 
-## 10/11 19:53 · sessao 2f5571a09655 · - · - · origem=Ronald (tmux)
-
-Para **DISPUTA-ZUMBI-1110**, a cura mínima é completar a costura dos carimbos com o juiz e a porta existentes; isso não exige estado novo nem juiz novo (`app/chamados/models.py:1848`, `app/chamados/models.py:1932`).
-
-**(a) Lei/juiz/porta.** L-002 obriga testemunhas a lerem a mesma autoridade; L-007 exige escritor canônico; CLAUDE 4b registra um juiz por pergunta e um escritor por entidade (`app/docs/LEIS.md:60`, `app/docs/LEIS.md:65`, `CLAUDE.md:175`). O corte C7 define `DisputaSupervisao.pode_fechar` como juiz único; registro vivo `_C7`, confirmado pelo lookup (`app/docs/CORTES.md:272`, `app/core/juizes.py:279`, `app/docs/JUIZES.md:57`). O juiz responde **nenhuma resposta sem veredito E nenhum fio vivo** (`app/chamados/models.py:1853`). A porta `DisputaSupervisao.fechar` grava fechamento, autor, resolução e motivo conjuntamente (`app/chamados/models.py:1932`, `app/chamados/models.py:1936`). Os carimbos existentes saem de `PerguntaDisputa.carimbar`/`carimbar_identidade` (`app/chamados/models.py:3103`, `app/chamados/models.py:3168`).
-
-**(b) Estado novo: não; muda quem decide: não**, limitado a completar chamadas ao C7/`fechar`, preservando esses contratos. Os campos e valores de fechamento já existem e a porta já os escreve; C7 já é registrado (`app/chamados/models.py:1757`, `app/chamados/models.py:1780`, `app/chamados/models.py:1932`, `app/core/juizes.py:279`). Confirmar quais combinações existem em produção depende de dado: contagem de disputas por `fechada_em × motivo_fechamento × via_resolucao das perguntas` [não verificado].
-
-**(c) Censo global de estado não acionado por (b).** Para demonstrar a costura, contei nós `ast.Call` cujo método é `carimbar`, `carimbar_identidade` ou `pode_fechar`, em `app/**/*.py`, excluindo diretórios `tests` e `migrations`; esse recorte conta **13 chamadas de carimbo em 12 funções + 12 chamadas ao C7**, sem depender do nome da variável receptora (`app/chamados/models.py:3287`, `app/chamados/services/disputa_emissao.py:1863`, `app/chamados/services/disputa_emissao.py:1937`, referências completas abaixo).
-
-O rol de carimbadores é:
-
-| Forma | Sítios |
-|---|---|
-| `.carimbar(...)`, 8 chamadas | `app/chamados/models.py:3287`; `app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:595`; `app/chamados/services/disputa_emissao.py:1863`; `app/chamados/services/disputa_emissao.py:1937`; `app/chamados/services/materializacao.py:561`; `app/chamados/services/materializacao.py:1277`; `app/chamados/services/materializacao.py:1431` |
-| `.carimbar_identidade(...)`, 5 chamadas | `app/chamados/models.py:2061`; `app/chamados/models.py:3064`; `app/chamados/services/fio.py:1359`; `app/chamados/services/materializacao.py:924`; `app/chamados/services/materializacao.py:1099` |
-
-O rol de leitores diretos de C7 é:
-
-| Forma | Sítios |
-|---|---|
-| `fechada_em is None and ...pode_fechar()` | `app/chamados/reconciliador.py:411`; `app/chamados/reconciliador.py:611`; `app/chamados/services/becos.py:56`; `app/chamados/services/disputa_emissao.py:1963`; `app/chamados/services/materializacao.py:585`; `app/chamados/services/materializacao.py:1316` |
-| `elif ...pode_fechar()` | `app/chamados/reconciliador.py:1170` |
-| ternário por bool | `app/chamados/services/becos.py:33` |
-| `if not ...pode_fechar()` | `app/chamados/services/competencia_trancada.py:153`; `app/chamados/services/competencia_trancada.py:202` |
-| atribuição e teste posterior | `app/chamados/services/disputa_emissao.py:1278`; `app/chamados/services/disputa_emissao.py:1282` |
-| `if disp and disp.pode_fechar()` | `app/ponto/services/entrada_sincronizada.py:58` |
-
-O explicador tem **1 produtor de bool e 3 leituras diretas**: importa `fio_vivo as _fio_vivo` e calcula apenas `not _fio_vivo(ps)`; os dois templates usam truthiness e `desenlace` usa truthiness de `dict.get` (`app/chamados/services/explicador.py:136`, `app/chamados/services/explicador.py:137`, `app/templates/chamados/partials/modal_fio.html:434`, `app/templates/chamados/partials/modal_fio.html:445`, `app/chamados/services/desenlace.py:63`). O transporte/cache passa por `fio.py`, sem alterar esse bool (`app/chamados/services/fio.py:312`, `app/chamados/services/fio.py:314`). **Total deste recorte: 29 sítios = 13 + 12 + 1 + 3**; não apresentar como censo global de `fechada_em` ou `materializada_em` (referências dos quatro grupos acima).
-
-**Conferência do relato.**
-
-- `lavrar_sem_turno_aberto` já consulta C7 e chama `fechar`: confirmado (`app/chamados/reconciliador.py:411`, `app/chamados/reconciliador.py:412`).
-- “Explicador sem a trava do C7”: confirmado especificamente quanto a `respostas_sem_veredito`; ele só nega `fio_vivo`, enquanto C7 exige ambos (`app/chamados/services/explicador.py:137`, `app/chamados/models.py:1853`).
-- “Fechamento só por beco”: **não confere como afirmação global**; há fechamento após carimbo fora desse recorte, por exemplo reconciliação de órfãs e materialização (`app/chamados/reconciliador.py:1170`, `app/chamados/services/materializacao.py:1316`).
-- O evento genérico após `PerguntaDisputa.save` chama a porta de becos; ela exige pai terminal e ausência de perguntas visíveis antes de consultar C7 (`app/chamados/signals.py:227`, `app/chamados/signals.py:238`, `app/chamados/services/becos.py:29`, `app/chamados/services/becos.py:31`, `app/chamados/services/becos.py:33`). O cron está agendado com `--alarme`; `--apply` continua opcional no comando (`app/config/crons.py:663`, `app/chamados/management/commands/fechar_becos_disputa.py:23`, `app/chamados/management/commands/fechar_becos_disputa.py:30`).
-- “7 carimbadores sem C7”: **não estabelecido como sete caminhos sem fechamento**. Grep direto de cada corpo não basta: `encerrar_fantasma` tem cauda C7 no reconciliador; `_materializar_uma` tem caudas compartilhadas; `remover_motivo` chama diretamente a porta de fechamento (`app/chamados/reconciliador.py:1147`, `app/chamados/reconciliador.py:1170`, `app/chamados/services/materializacao.py:1378`, `app/chamados/services/passivo_validado.py:405`, `app/chamados/models.py:2072`).
-- Os dez casos, data do carimbo e eventual recusa dependem de dado: contagem por `via_resolucao × materializada_em antes/depois de 22/10 × estado do pai × respostas_sem_veredito × C7 atual`, e trilha de tentativas/recusas [não verificado]. A autoria histórica do commit citado no anexo não foi verificada [não verificado]. [nao verificado]
-
-**(d) Casa.** **COMPLEMENTO de C7-DISPUTA-FECHA-POR-UM-JUIZ**, cuja linha manda migrar regras espalhadas e usar C6/C7; interseção com série E4 para os escritores e E3 para apresentação (`app/docs/BACKLOG.md:1468`, `app/docs/BACKLOG.md:1863`, `app/docs/BACKLOG.md:1862`). Não cabe provar “um sítio só”: o recorte acima tem múltiplas portas e leitores (referências das tabelas).
-
-**(e) Padrão.** **Single Writer Principle / juiz único**, termo literal do glossário, realizado ao fazer os chamadores e o explicador consumirem C7/porta existentes (`app/docs/GLOSSARIO.md:12`, `app/core/juizes.py:279`). Aggregate Root também existe no glossário, mas o sítio que a tabela associa a esse termo é `CelulaDia`; o defeito comprovado aqui é de consumo incompleto do juiz de fechamento (`app/docs/GLOSSARIO.md:11`, `app/chamados/services/explicador.py:137`, `app/chamados/models.py:1853`).
-
-perguntas de lei: 0
-
-O critério de fechamento e sua guarda de resposta sem veredito já estão escritos; falta de contagem histórica é pergunta de dado (`app/docs/CORTES.md:272`, `app/chamados/models.py:1853`).
-
-## 10/11 19:50 · sessao 32814039580f · MAPA-FILA-BO · censo · origem=Code
-
-São **quatro IDs únicos**; o noturno aparece duas vezes, inclusive na árvore (`app/docs/BACKLOG.md:1814`, `app/docs/BACKLOG.md:1874`). A identidade Git do HEAD informado é **[nao verificado]**: esta cópia não contém `.git`. Não consultei banco nem logs **[nao verificado por arquivo:linha]**.
-
-Nos inventários abaixo, cada linha indica o arquivo; os números após cada função são linhas desse mesmo arquivo. A contagem usa funções ou templates distintos, deduplicando múltiplas leituras na mesma função. Testes não entram como consumidores de produção; migrations executáveis entram separadamente. O levantamento foi por AST, grep e leitura dos sítios **[nao verificado por arquivo:linha quanto à execução do levantamento]**. [nao verificado]
-
-## BUG-PLANTIO-NOTURNO-MAIS-1
-
-**(a) Lei, juiz e porta.** Aplicam-se a fonte única e o escritor único — L-002 e L-007 (`app/docs/LEIS.md:60`, `app/docs/LEIS.md:65`) —, a célula como fonte do previsto (`CLAUDE.md:145`) e a escrita de batida pela porta L-030 (`app/docs/LEIS.md:78`).
-
-O juiz registrado do dia da batida é `turnos_do_colab` (`app/core/juizes.py:208`); a consulta também aponta a geometria e os marcos encadeados (`app/docs/JUIZES.md:20`, `app/docs/JUIZES.md:24`). `DiaDoTurno` apenas nomeia a resposta dessa autoridade: é `NewType`, não campo persistido nem juiz novo (`app/core/dia_do_turno.py:3`, `app/core/dia_do_turno.py:13`). Os adaptadores existentes são `dia_do_turno_da_batida` e `dia_do_turno_da_celula` (`app/ponto/turnos.py:2927`, `app/ponto/turnos.py:2939`).
-
-As portas são:
-
-- Nascimento: `PerguntaDisputa.abrir` (`app/chamados/models.py:2776`).
-- Re-chaveamento do passivo: `rechavear_data_evento` (`app/chamados/services/fio.py:979`).
-- Atribuição única de `data_evento`: `gravar_dia_do_fato` (`app/chamados/services/fio.py:800`).
-- Plantio de batida: chamada de `registrar_batida` pelo materializador (`app/chamados/services/materializacao.py:926`).
-
-**Conferência do relato.** A afirmação de que o emissor ainda grava necessariamente o dia da cobrança **não descreve o código atual**: o nascimento exige dia explícito, e o ajuste usa esse dia ou o seguinte; sem marcos, devolve o timestamp recebido (`app/chamados/models.py:2783`, `app/chamados/models.py:2787`, `app/chamados/juizes.py:324`, `app/chamados/juizes.py:329`). A conversa tem porta separada e conserva dia civil; portanto também seria incorreto afirmar que **todo** `data_evento` significa dia do turno (`app/chamados/models.py:2796`, `app/chamados/models.py:2801`).
-
-Já existem construtor, porta de re-chaveamento e command de migração nesta cópia; “ainda sem construtor” não confere para este ID (`app/chamados/models.py:2776`, `app/chamados/services/fio.py:979`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:179`). Aplicação desse passivo em produção e incidência atual de D+2 são **[nao verificado]**.
-
-**(b) Cria estado: sim, no sentido amplo de novo valor/composição por linha migrável.** Não acrescenta coluna: regrava `data_evento`, troca `celula_id`, relavra e persiste os três campos da lavra (`app/chamados/services/fio.py:1037`, `app/chamados/services/fio.py:1038`, `app/chamados/services/fio.py:1042`, `app/chamados/services/fio.py:1043`). A célula de destino precisa existir; essa porta não cria uma célula nova (`app/chamados/services/fio.py:1034`, `app/chamados/services/fio.py:1035`). A existência ou ausência dessas combinações no banco real é **[nao verificado]**.
-
-**Muda decisor: não.** O novo dia continua vindo do juiz do turno; o escritor apenas recebe e atribui a resposta (`app/chamados/services/fio.py:794`, `app/chamados/services/fio.py:984`, `app/ponto/turnos.py:2935`).
-
-**(c) Censo do estado tocado.** O recorte é `PerguntaDisputa.{data_evento, celula, veredito_lavrado, julgado_em, janela_expira_em}`, os campos efetivamente salvos pelo re-chaveamento (`app/chamados/services/fio.py:1043`).
-
-Foram inventariadas **155 funções distintas** na união dos três levantamentos: 117 de dia, 52 de FK e 21 de lavra, com sobreposição removida. Acrescentam-se duas funções executáveis da migration, dois consumidores de tupla/evento e três templates: **162 sítios de aplicação**. Há ainda três mecanismos declarados do banco: **165 sítios na contagem ampliada**, mais quatro encaminhadores discriminados abaixo. A contagem é de acessos, escritas e portas estáticas; **não é contagem de todos os chamadores transitivos dessas funções** **[nao verificado quanto a acessos dinâmicos não identificados]**.
-
-**Dia — 117 funções.** “Porta” abaixo significa fornecimento do valor para uma escrita canônica; não significa atribuição direta adicional.
-
-| Arquivo | Funções, linhas e forma |
-|---|---|
-| `app/api/views.py:1183` | `api_chamados_v2` :1183–1184: truthiness, ISO e rótulo; `api_disputa_responder` :2655: mensagem. |
-| `app/api/views_mensageria.py:568` | `_item_validar`: truthiness e ISO para JSON. |
-| `app/chamados/canal.py:65` | `perguntas_mudas_com_resposta`: filtro `isnull=False` :65, ordenação :67, chave :72, payload :79. |
-| `app/chamados/juizes.py:80` | `_dia_da_disputa` :80–81: truthiness/lista; `dias_do_fato` :214: truthiness; `_plantio_na_hora_do_slot` :271: fallback `or`; `_dia_de_turno_da_pergunta` :336: `getattr`, conversa→`None`; `_celulas_da_pergunta` :637: `getattr`; `_chave_memo_pv` :831: chave de memo; `_marco_esperado_da_grade` :1725: leitura; `_dias_das_perguntas_vivas` :2264–2268: filtro `isnull=False` e lista. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:63` | `_candidatos_i8` :63/:73/:74: truthiness e filtros de data; `_contraprova_i8bx` :148: intervalo `<=`; `_cobre_ausencia_i21` :160/:162: truthiness e argumento do juiz; `_piso_f3_antes_do_gerador` :282: `<`; `_contraprova_f3g` :298: filtro `lte` e `.exists()`; `contraprova_piso` :325/:326/:348/:361/:373: chaves, truthiness, filtro de vínculo e `.exists()`, intervalo; `handle` :892/:914/:926/:930/:957/:1665/:1708/:1778/:1779/:1804: filtros `isnull`, intervalos, `.exists()`, truthiness, igualdade ORM e argumento de juiz. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:60` | `linhas_a_criar` :60: `.only`; `_escoar` :69: chave; `admin_decidiu_sem_ato` :104: filtro `isnull`; `competencia_de` :115/:118/:120: `is None`, chave e argumento; `aplicar` :282–283: `is None`/`is not None`; `_grupos_fora` :371: `values_list`. |
-| `app/chamados/management/commands/backfill_veredito_lavrado.py:111` | `handle`: argumento de `expira_em`. |
-| `app/chamados/management/commands/dedup_perguntas_fato.py:85` | `handle` :85–86: `is not None`/`is None`. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:74` | `handle`: mensagem. |
-| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:97` | `_fonte_viva` :97/:100/:102/:109/:113/:118: leitura e comparações; `classificar` :144/:148/:158/:163: janela, payload, desigualdade e igualdade; `handle` :205/:209/:211: filtros `isnull`, `gte`, `lte`; `_veto_do_grupo` :309: `values_list`; `_escrever_reversao` :354: JSON; `_migrar` :392: `values_list`; `_descarimbados` :442/:450: `Q` por igualdade e chave; `_reverter` :481/:488: JSON e argumento de veto. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:68` | `handle` :68/:86/:91/:102/:117/:144/:145: filtro `isnull=False`, janela, mensagens e competência. |
-| `app/chamados/models.py:364` | `_vivas_entre` :364: argumento e resultado `is not False`; `_plano_pergunta_viva` :390–391: argumento/truthiness; `q_dos_fatos` :2753: `Q` igualdade; `abrir` :2789 e `abrir_conversa` :2801: portas de escrita; `_nascer` :2940/:2956/:2962: desigualdade, mensagem e captura; `linhas_do_evento` :3228: `values_list`. |
-| `app/chamados/reconciliador.py:370` | `lavrar_sem_turno_aberto` :370: leitura; `_dia_fora_do_alcance_c` :736: `getattr`/`is None`; `reemitir_chamado_do_dia` :954: porta de escrita; `_orfas_abertas` :1050: filtro `isnull`; `veredito_orfa` :1082/:1088/:1090: `is None`, `>=`, argumento de juiz; `encerrar_orfas_pela_lampada` :1152: mensagem; `semear_eventos_celula` :1303/:1305/:1307: conjuntos e igualdade ORM; `reatar_pergunta_orfa` :1557/:1567/:1642/:1655: argumento, truthiness/ISO e portas de escrita. |
-| `app/chamados/services/aviso_pendencia.py:16` | `aviso_texto_livre`: truthiness/`strftime`. |
-| `app/chamados/services/cobranca.py:83` | `checar_cobranca`: truthiness e conjunto ordenado. |
-| `app/chamados/services/competencia_trancada.py:107` | `medir` :107 e `reabrir` :252: filtros `gte/lte`; `reabrir` :256 também interpola mensagem. |
-| `app/chamados/services/declaracao_texto.py:370` | `declarar_hora_colab` :370/:377: portas de costura/nascimento; `insumos_em_regularizacao` :590: chave; `aplicar_declaracao` :667: porta de nascimento. |
-| `app/chamados/services/disputa_emissao.py:399` | `gerar_perguntas_disputa` :399/:418/:451: igualdade ORM, `exclude` e nascimento; `_criar_pergunta_se_couber` :844: nascimento; `criar_disputa_a_partir_de_chamados_orfaos` :1074: fallback `or`; `_ja_perguntou` :1415: igualdade ORM; `responder_pergunta_disputa_core` :1498/:1531: mensagem e argumento; `_resolver_perguntas_por_chamado_resolvido` :1863/:1935: argumento da autoridade de via. |
-| `app/chamados/services/explicador.py:70` | `explicar_pergunta` :70: truthiness/`strftime`; `por_que_nao_fecha` :122/:126: ordenação/truthiness. |
-| `app/chamados/services/fabrica_da_celula.py:148` | `motivos_a_perguntar` :148 e `perguntar` :170: igualdade ORM. |
-| `app/chamados/services/fio.py:87` | `data_do_fato_de` :87–88: leitura, truthiness/desigualdade; `_costura_nao_mata_o_fio` :776: competência; `gravar_dia_do_fato` :800: atribuição; `reapontar_resolvedora` :867/:934: truthiness, comparação e porta de escrita; `_colisao_ao_datar` :953: assert igualdade; `rechavear_data_evento` :1013/:1037/:1043/:1047/:1048: captura, atribuição pela porta, persistência e trilha; `rechavear_no_reuso` :1068/:1072: veto/mensagem; `reuso_sem_rechave` :1109: igualdade; `violacao_de_saida` :1133/:1136: igualdade/mensagem; `retratar_duplicata` :1362: mensagem; `q_do_horizonte` :1412: `Q(gte)`; `q_do_horizonte_ou_sem_dia` :1419: `Q(isnull)`; `_vizinhos_do_fato` :1447: argumento condicional; `chave_do_dia` :1460: tupla; `_dia_do_fato` :1495/:1497: `is not None` e construtor do tipo; `dia_do_turno_da_linha` :1630: `getattr`/fallback; `universo_do_fato` :1800: igualdade de tupla; `fecho_cruza_dias` :1854: `values_list`; `grupos_de_colisao` :1945/:1946/:1948/:1955/:1958/:1970/:1985: campos dinâmicos, `exclude`, values/order, `OuterRef`, filtro e tupla; `fora_do_indice` :2005: `isnull`; `batida_sem_origem_no_horizonte` :2024: `values_list`. |
-| `app/chamados/services/historico.py:108` | `_eventos_dos_chamados`: truthiness/`strftime`. |
-| `app/chamados/services/limbo_folgas.py:203` | `filhos_no_defeito`: igualdade ORM. |
-| `app/chamados/services/materializacao.py:279` | `_tipo_pelo_marco` :279/:282: truthiness/argumento da grade; `_ts_tipo_do_plantio` :344–345: truthiness/leitura; `_declarar_ausencia_de_pergunta` :473–474: truthiness/leitura; `_materializar_ausencia_de_resposta` :517/:533/:573: leitura, igualdade ORM e payload; `perguntas_absorvidas_por` :624: igualdade ORM; `_materializar_uma` :1265: argumento da autoridade de via. |
-| `app/chamados/services/passivo_validado.py:113` | `_dia_do_plantio` :113: fallback `or`; `_plantar_o_dia` :519–520: truthiness/conjunto. |
-| `app/chamados/services/pergunta_no_app.py:115` | `retencao`: igualdade e `any`. |
-| `app/chamados/services/relavra_via.py:103` | `via_de_hoje` :103: argumento da autoridade; `relavrar_dia` :154: igualdade ORM. |
-| `app/chamados/services/tarefa_do_dia.py:233` | `_tarefa_pura` :233: igualdade; `CargaDaTarefa.__init__` :326/:329: filtros `gte/lte` e chave. |
-| `app/chamados/services/validacao.py:269` | `_aceitar_a_folga` :269: leitura; `validar_pergunta` :446/:497/:510: recálculo, argumento e mensagem; `conferir_data_do_fato` :671: trilha JSON. |
-| `app/chamados/services/vigia_fio.py:816` | `carimbos_sem_lastro_por_dono`: argumento da competência/classificação. |
-| `app/chamados/veredito_lavrado.py:273` | `lavrar`: argumento da expiração. |
-| `app/chamados/views_cobrar.py:176` | `validar_inline` :176/:185: ordenação ORM e truthiness do payload do canal. |
-| `app/colaboradores/services/calendario.py:473` | `contexto_calendario` :473/:477: filtro `range` e chave; modelo por alias `_PD`. |
-| `app/folha/previa.py:65` | `montar_previa` :65/:67: filtro `range` e chave. |
-| `app/ponto/management/commands/mapa_divergencia.py:272` | `handle` :272–273: filtros `gte/lte`, `.only` e conjunto. |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:75` | `batidas_fora_do_turno_da_pergunta` :75/:86/:90: filtro relacionado `pergunta_origem__data_evento__isnull=False`, janela e julgamento. |
-| `app/ponto/services/dia_do_colab.py:65` | `dia_do_colab`: igualdade ORM. |
-| `app/ponto/services/veredito_celula.py:180` | `fechar_o_fio_do_dia`: igualdade ORM. |
-
-**FK — 52 funções**, incluindo carregamento ORM explícito. Homônimos de `ChamadoColaborador.celula` não foram contados como FK da pergunta; a relação examinada está declarada em `app/chamados/models.py:2414`.
-
-| Arquivo | Funções, linhas e forma |
-|---|---|
-| `app/chamados/models.py:311` | `_gravar_estado` :311 e `_ancoradas` :346: SELECT relacionado; `_universo_da_ressuscitacao` :1501: leitura/atribuição numa cópia em memória; `do_fato` :2725/:2727: SELECT; `_nascer` :2962/:2965/:2966/:3014: tupla, desigualdade, UPDATE/INSERT; `linhas_do_evento` :3228: `values_list`; `q_vivas` :3355–3358: `Q(isnull)`, `veredito__in` e negações. |
-| `app/chamados/juizes.py:82` | `_dia_da_disputa` :82–83: truthiness/FK.data; `dias_do_fato` :212/:215: prefetch/truthiness; `_celulas_da_pergunta` :636–638: `getattr`, `is None`, identidade; `_chave_memo_pv` :818/:832: `getattr`/tupla; `fato_do_marco_no_espelho` :906–907: `getattr`, `is None`/ata; `_resposta_concorda_com_a_luz` :1293: FK→DNA; `_pergunta_viva_calc` :1338–1339: `getattr`, `is not None`, veredito/admin; `alimentar_portas` :1502/:1505: filtro ID `__in`, SELECT e chave; `_dias_das_perguntas_vivas` :2266: SELECT. |
-| `app/chamados/reconciliador.py:631` | `qs_perguntas_absolviveis` :631/:637/:639/:641: `isnull=False`, `exclude` vazio/`__in`; `perguntas_absolvidas_pela_celula` :651 e `_orfas_abertas` :1051: SELECT; `encerrar_orfas_pela_lampada` :1155: auditoria; `semear_eventos_celula` :1306: truthiness do ID, FK ou fallback. |
-| `app/chamados/relatorios_disputa.py:43` | `coletar`: prefetch `perguntas__celula`. |
-| `app/colaboradores/services/calendario.py:474` | `contexto_calendario`: SELECT pelo alias `_PD`. |
-| `app/chamados/services/vigia_carimbo.py:100` | `classificar` :100/:103: filtro ID `__in` e SELECT; `censo` :131: ID na amostra. |
-| `app/chamados/services/furo_sem_canal.py:81` | `medir`: filtro ID `__in` e `values_list`. |
-| `app/chamados/services/vigia_fio.py:399` | `censo` :399/:400/:466/:486: filtro ID `__in`, SELECT e chaves; `censo_alcance` :614–616: filtro, SELECT e chave; `viva_em_disputa_fechada` :749 e `carimbos_sem_lastro_por_dono` :807: SELECT. |
-| `app/chamados/services/pergunta_no_app.py:50` | `perguntas_do_app`: SELECT. |
-| `app/chamados/services/limbo_folgas.py:204` | `filhos_no_defeito` :204 e `reatar_perguntas_ao_limbo` :239: SELECT. |
-| `app/chamados/services/declaracao_texto.py:588` | `insumos_em_regularizacao`: SELECT. |
-| `app/chamados/services/disputa_emissao.py:1422` | `_ja_perguntou` :1422 e `_resolver_perguntas_por_chamado_resolvido` :1827: SELECT. |
-| `app/chamados/services/competencia_trancada.py:108` | `medir`: SELECT. |
-| `app/chamados/services/fio.py:226` | `montar_chamados_fio` :226 e `processar_post_fio` :597: SELECT; `reapontar_resolvedora` :934: igualdade/`is not None`; `rechavear_data_evento` :1013/:1035/:1038/:1043/:1048: leitura, truthiness/`is None`, atribuição, save e auditoria. |
-| `app/chamados/services/relavra_via.py:237` | `desfazer_carimbo_sem_lastro`: SELECT. |
-| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:355` | `_escrever_reversao` :355: serialização; `_descarimbados` :448: SELECT; `_reverter` :496: desigualdade com ID salvo. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:34` | `handle`: SELECT. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:537` | `_i6_pares` :537: SELECT; `handle` :1161/:1603/:1604/:1605/:1784: SELECT, filtro `isnull=False`, `exclude` por veredito e leitura direta. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:69` | `handle`: SELECT. |
-| `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:122` | `_reverter`: SELECT. |
-| `app/chamados/management/commands/lavrar_perguntas_stale.py:88` | `handle`: SELECT. |
-| `app/chamados/management/commands/backfill_veredito_lavrado.py:101` | `handle`: SELECT. |
-
-**Lavra — 21 funções**, união dos três campos; quem lê e escreve aparece uma vez.
-
-| Sítio | Forma |
-|---|---|
-| `app/chamados/veredito_lavrado.py:270` — `lavrar` | Atribui veredito :270, julgamento :272 e expiração :273; salva :275. |
-| `app/chamados/veredito_lavrado.py:250` — `gravar_lavras_em_lote` | `bulk_update` por `CAMPOS_DA_LAVRA` :237. |
-| `app/chamados/veredito_lavrado.py:287` — `desfazer_lavra_em_memoria` | Restaura os três campos apenas em memória :287–289. |
-| `app/chamados/management/commands/backfill_veredito_lavrado.py:120` — `handle` | Comparações `==`/`!=`, truthiness :120–135; atribuições :138–140; persistência pela porta :143/:146. |
-| `app/chamados/models.py:308` — `_gravar_estado` | Import `lavrar as _lavrar_s2`; chamada :312. |
-| `app/chamados/models.py:3003` — `_nascer` | Import `lavrar as _lv_s2`; lavra em memória e save :3004–3006. |
-| `app/chamados/models.py:3146` — `carimbar` | Módulo `veredito_lavrado as _vl`; foto, lavra, save e restauração :3147–3154. |
-| `app/chamados/services/fio.py:926` — `reapontar_resolvedora` | Alias `_lavrar`, `salvar=False`; persistência conjunta :927–928. |
-| `app/chamados/services/fio.py:1042` — `rechavear_data_evento` | Alias `_lavrar`, `salvar=False`; persistência conjunta :1043. |
-| `app/chamados/services/relavra_via.py:124` — `relavrar` | Foto, lavra/save :126–127, comparação :130 e auditoria :137. |
-| `app/chamados/management/commands/lavrar_perguntas_stale.py:60` — `handle` | Seleciona stale; exige `--apply` :82; chama `lavrar` :89. |
-| `app/chamados/veredito_lavrado.py:224` — `esta_stale` | Truthiness negativa, `is None`, `> agora`; relógio :228; marco `> julgado_em` :232. |
-| `app/chamados/veredito_lavrado.py:114` — `relogio_virou` | `is None`; expiração `<= hoje` e julgamento local `< expiração` :116. |
-| `app/chamados/veredito_lavrado.py:281` — `foto_da_lavra` | Tupla dos três atributos. |
-| `app/chamados/services/raiox.py:34` — `pks_stale_por_varredura` | `values_list`; truthiness, `is None`, `> agora`, relógio e comparação de marco :41–46. |
-| `app/chamados/services/raiox.py:135` — `creditos_perguntas` | `exclude(materializada_em__isnull=False, veredito_lavrado=VL_SIM)`. |
-| `app/chamados/services/raiox.py:184` — `pergunta_sem_acao_possivel` | Truthiness; `== VL_SIM` :185; vazio chama juiz :187. |
-| `app/chamados/services/tarefa_do_dia.py:351` — `CargaDaTarefa.__init__` | Mapa do veredito; `in ('sim','nao') and not esta_stale(...)` :352. |
-| `app/chamados/services/tarefa_do_dia.py:141` — `_pela_decisao` | Leitura do mapa; `is None` :142; `== 'nao'` :144. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:1167` — `handle` | Pula stale; truthiness e desigualdade contra juiz real :1173. |
-| `app/chamados/services/passivo_validado.py:83` — `_reversao_de` | `getattr(p,c,None)`; nomes vêm de `CAMPOS_REVERSAO` :64–66. |
-
-**Complementos da contagem:**
-
-| Sítio | Forma |
-|---|---|
-| `app/chamados/migrations/0053_pergunta_unica_por_familia.py:33` — `_no_fato` | `Q(data_evento__gte=HORIZONTE_DO_FATO)`. |
-| `app/chamados/migrations/0053_pergunta_unica_por_familia.py:40` — `_guarda` | Agrupamento por dia, `Count`, filtro `n__gt=1` e contagem; modelo histórico por al
-
-[truncado em 20000 de 39636 caracteres]
-
-## 10/11 19:49 · sessao 88e167697efd · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-**Parei na condição explícita: o replay não reproduziu o reaponte. A cura ficou incompleta e o diff é parcial.** A reprodução preservada falha por assertion, sem erro de montagem. ([RED:62](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py:62))
-
-O caso encontrado é diferente da cadeia já triada: **no replay nasce uma pergunta**, porque ele resolve outro dia. O teste usa núcleo, resolvedor e gerador reais por AST; identidade/ORM/transação são doubles. Porta ORM real: **[nao verificado]**. ([reprodução:23](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py:23)) [nao verificado]
-
-| Passo | Resultado observado na sonda |
-|---|---|
-| Ensaio recebe `ultima_batida` de 08/07 | Reusa a pergunta de 08/07 da dona fechada. |
-| Savepoint desfeito | Desfaz também seu reaponte. |
-| Replay aplica o ato sobre o contexto antigo da dona | A data explícita de 09/07 prevalece sobre `ultima_batida`. |
-| Porta recebe 09/07 | Nasce outra pergunta; o gerador chama `reatar_pergunta_orfa` uma vez. |
-| Estado final | Uma DS, nenhum pai novo, **duas perguntas**; a original permanece sem o reaponte. |
-
-As assertions positivas registram essa sequência antes do RED final. (`chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py:57`)
-
-A precedência está no resolvedor, que lê a data por motivo antes da batida; o replay conserva essa data antiga ao fazer o merge. Intervalo pertence à família MARCO, portanto não recebe o episódio da família BATIDA. (`chamados/services/disputa_emissao.py:354`, `chamados/services/disputa_emissao.py:370`, `chamados/services/disputa_emissao.py:694`, `chamados/catalogo/motivos.py:48`, `chamados/models.py:3452`)
-
-Comando do RED preservado — resultado observado: `FAIL`, **`2 != 1`**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_replay_red_memoria.py
-```
-
-**O que ficou construído, sem entrega como cura concluída:** núcleo sem recursão, ensaio/savepoint/replay, causas internas, observação pelo `core.observ`, guarda do push e retirada de `Command._disputa` com lápide. (`chamados/services/disputa_emissao.py:546`, `chamados/services/disputa_emissao.py:413`, `core/observ.py:73`, `chamados/services/disputa_emissao.py:740`, `ponto/management/commands/reconciliar_grade.py:412`)
-
-As sondas de (a)–(h) estão nestes sítios; a reprodução acima demonstra que elas ainda não bastavam para cobrir D3:
-
-| Caso | Sítio |
-|---|---|
-| (a) Zero pergunta possível | `chamados/tests/test_bo_disputa_volta5_memoria.py:90` |
-| (b) Estrangeira em dona aberta | `chamados/tests/test_bo_disputa_volta5_memoria.py:103` |
-| (c) Fechada sem save/reatar; receivers ORM | `chamados/tests/test_bo_disputa_volta5_memoria.py:118`; `chamados/tests/test_bo_disputa_volta5.py:83` |
-| (d) Ciclo e limite de replay | `chamados/tests/test_bo_disputa_volta4_memoria.py:44` |
-| (e) Lote misto | `chamados/tests/test_bo_disputa_volta5_memoria.py:140` |
-| (f) Idempotência | `chamados/tests/test_bo_disputa_volta5_memoria.py:155` |
-| (g) Eleição após trava, dentro do atomic | `chamados/tests/test_bo_disputa_volta5_memoria.py:227` |
-| (h) Reentrada e demais mutantes | `chamados/tests/test_bo_disputa_volta5_memoria.py:28` |
-
-Os comandos dos mutantes entregues são os seguintes; **não reexecutei o conjunto final após a parada**, portanto seu resultado final fica **[nao verificado]**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante reentrada
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante salva_fechada
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante sem_guarda_push
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante nasce_sem_pergunta
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante eleicao_antes_trava
-PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_bo_disputa_volta5_memoria.py --mutante dedup_cala_replay
-```
-
-No censo, os escritores e leitores centrais ficaram assim:
-
-| Campo/retorno | Escrita e leitura |
-|---|---|
-| `DS.motivos` | Núcleo cria e agrega; gerador consulta perguntas locais. Remoções continuam no modelo. (`disputa_emissao.py:576`, `:657`, `:564`; `chamados/models.py:1961`, `:2031`) |
-| `DS.contexto`, `qtd`, `ultima_em` | Merge no emissor; resolvedor lê data e batida. (`disputa_emissao.py:525`, `:576`, `:354`, `:370`) |
-| Pai, classificação, contexto e SLA | Nascimento pelo `ChamadoColaborador.abrir`; DS guarda o pai. (`disputa_emissao.py:640`, `:657`) |
-| `DS.fechada_em` | Modelo fecha; núcleo/wrapper leem para impedir escrita na dona fechada e push. Receivers leem o valor. (`chamados/models.py:1932`; `disputa_emissao.py:576`, `:740`; `chamados/signals.py:28`, `:129`, `:153`) |
-| Pergunta: dona, dia, célula e destino | Porta insere ou reaponta a existente preservando sua dona; núcleo lê FK/motivo e criação efetiva. (`chamados/models.py:2907`, `:3006`, `:3014`; `disputa_emissao.py:413`, `:569`) |
-| Retorno nascimento/agregação | Núcleo mantém a tripla; wrapper consome também o coletor interno. (`disputa_emissao.py:546`, `:740`) |
-
-Para cada leitor de `motivos`, o efeito previsto pelo diff parcial é:
-
-| Leitor | Mudança de resultado |
-|---|---|
-| `api/foto_recebida.py:61` | Seleção acompanha a dona aberta com pergunta de foto. |
-| `colaboradores/signals.py:71` | Revalidação de posto acompanha essa dona aberta. |
-| `escala/signals.py:155` | Calibração de âncora acompanha essa dona aberta. |
-| `chamados/models.py:2031` | Remoção conserva guardas de abertura e presença do motivo. |
-| `auditar_disputas.py:88`, `:142`, `:169` | Audita/exibe motivos locais; comparação já usa perguntas locais. |
-| `auditar_invariantes_chamados.py:50` | Resolve dias dos motivos mantidos; seleção de zero perguntas continua em `:62`. |
-| `chamados/relatorios_disputa.py:52` | Rótulos passam a mostrar motivos locais. |
-| `chamados/services/acoes_disputa.py:149` | Mesmo efeito na mensagem. |
-| `chamados/services/fio.py:680` | Mesmo efeito no fio. |
-| `pauta_aparelhos_compartilhados.py:49` | Cobertura pode passar à dona ou omitir motivo recusado sem pergunta. |
-| `alertar_disputas_pendentes.py:82` | Log mostra os motivos mantidos. |
-| `templates/chamados/detalhe_local.html:301` | Exibe os motivos mantidos. |
-| `templates/chamados/partials/modal_fio.html:325` | Aviso acompanha a dona aberta com âncora. |
-| `colaboradores/services/drawer.py:75` | Sem mudança direta: usa perguntas vivas em `:78`. |
-
-Efeitos dessas mudanças nas cenas de produção: **[nao verificado]**.
-
-Arquivos tocados no diff parcial:
-
-- Produção: `chamados/services/disputa_emissao.py:257`, `core/observ.py:73`, `ponto/management/commands/reconciliar_grade.py:412`.
-- Testes BO: `test_bo_disputa_sem_pergunta.py:32`, `test_bo_disputa_sem_pergunta_memoria.py:1`, `test_bo_disputa_volta2_memoria.py:1`, `test_bo_disputa_volta3_memoria.py:1`, `test_bo_disputa_volta4_memoria.py:1`, `test_bo_disputa_volta5_memoria.py:1`, `test_bo_disputa_volta5.py:1`, `test_bo_disputa_volta5_replay_red_memoria.py:1` — todos em `chamados/tests/`. [nao verificado]
-- Selos: `chamados/tests/test_porta_chamado_e3.py:91`, `chamados/tests/test_sla_pelo_juiz.py:114`, `chamados/tests/test_porta_disputa_emissao.py:83`, `chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:133`, `core/tests/test_medida_turno_do_par.py:267`.
-
-Suite Django, PostgreSQL, receivers reais e ruff: **[nao verificado]**. Para a certificação autorizada continuam pendentes os módulos BO acima, `test_porta_disputa_emissao`, `test_disputa_s127`, `test_c7_red_minimos`, `test_invariantes_disputa`, `test_hx_disputa_muda_sem_ata` e o módulo de ordem de trava indicado no pedido. **[nao verificado]** [nao verificado]
-
-Órfãos, `_criar_pergunta_se_couber`, declaração, fábrica, smoke e auditor continuam reservados à 5b; a parada desta volta está no replay do núcleo. (`chamados/services/disputa_emissao.py:922`, `:1126`, `:711`, `:688`)
-
-_3488 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3491 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
