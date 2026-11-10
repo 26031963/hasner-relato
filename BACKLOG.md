@@ -1875,6 +1875,7 @@
 | LOTE-VALIDAR-REGRESSAO-0311 | fila BO bug 3 (aval 10/11 11:1x; registrar) | item 03 do v2.r do BO 06/11: regressao do validar em lote desde 03/11; medir a causa antes | atras da anterior |
 | BO-0611-07-E4B-COBRE | fila BO bug 4 (aval 10/11 11:1x; registrar) | item 07: conferir se o backfill E4b o cobre; senao complemento O261 | depende do DRY E4b |
 | BO-0611-10-TELA-DA-TROCA | depois da serie E (aval 10/11 11:1x) | item 10 = funcionalidade nova | nao construir antes do fim da E |
+| LAVRA-PREMATURA-CONCORDE | PERGUNTA DE DESENHO registrada (aval ERRATA ALVO-V9C-GUARDA 10/11 11h2x), NAO construir | veredito concorde lavrado com marco vencido faltando, turno em curso: e lavra prematura? preverif9: forma (B) faria cartorio/reconciliador perguntar em todo nao-acusador; alvo_v9d 14 vermelhos/1755 | logs/FIO-E0-V4-E4A-2/preverif9.r |
 | PLACAR-FABRICA-MTIME | fila (preverif8 P5, 10/11) | bin/placar_code.sh:390-392 compara mtime do log com a data da linha FABRICA | instrumento, pouso proprio |
 | FIO-ESTADO-CARIMBO-VELHO | fila (preverif8 P5, 10/11) | bin/fio_estado.py nao exige os campos novos em carimbo anterior ao E4a-2 | instrumento, pouso proprio |
 | CARIMBO-DIA-CIVIL-X-TURNO | fila (preverif8 P5, 10/11) | vigiar_fio_morto carimba dia civil, pipeline_placar le como dia do turno (ESMERIL-SEMANTICA) | medir antes; dono ESTRUTURA |
