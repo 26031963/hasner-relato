@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 00:32:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (239.6 MB). Acoes na janela: **1386**.
+**Medido em 10/11/2026 00:37:52.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (239.8 MB). Acoes na janela: **1394**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:36:00 | Bash | Write lei line at RELATO top | `cd /home/ronald/saas-hasner && H=$(date +%H:%M) && L="lei: FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE ($H) -- dia nunca_bateu de colab ATIVO sem nenhuma batida na vida vai ao APP ou so a LISTA do admin (C5)? Medido 10/11 00:12-00:33 em prod (sondas 1/3/4, ERROS 0): estoque 139 itens/48 celulas, 129 itens (44 cel) de 15 colabs SEM ADESAO. Hoje os sitios divergem: cartorio.py:1173-1279 (ramo adesao N ...` |
+| 00:35:43 | Bash | Confirm C5 list and nunca_bateu writers | `sed -n 175,209p escala/services/cadastro_realidade.py; sed -n 688,693p escala/services/cadastro_realidade.py; /bin/grep -n "'nunca_bateu'" ponto/services/cartorio.py \| head` |
+| 00:35:29 | Bash | Read sonda4 results | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE && grep -E "^TABELA\|^ERROS\|^ERRO \|^agora" sonda4.r \| head; echo ----; grep -vE "^col[0-9]+ 20\|^TABELA\|^ERROS\|^ERRO \|^agora" sonda4.r \| cut -c1-600 \| head -50` |
+| 00:32:56 | Bash | Wait for sonda4 result | `cd /home/ronald/saas-hasner && for i in $(seq 1 180); do [ -s logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/sonda4.r ] && break; /usr/bin/sleep 10; done; grep -E "^TABELA\|^ERROS" logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE/sonda4.r \| head` |
+| 00:32:53 | Bash | Build sonda4 calling real dono juiz and launch | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE && CELS=$(grep -E "^ col[0-9]+ e[0-9] " sonda1.r \| awk '{gsub("col","",$1); print "("$1",\x27"$3"\x27)"}' \| sort -u \| paste -sd, -) && echo "$CELS" \| tr ',' '\n' \| grep -c "'" && cat > sonda4.py <<EOF # FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE sonda 4 (LEITURA). Lei CORTES FIO-LE-O-JUIZ-OS-19: quem decide se o dia vai ...` |
+| 00:32:36 | Bash | Read InsumosDoDono loader | `sed -n 100,200p ponto/management/commands/e6_oraculo.py` |
+| 00:32:31 | Bash | Find callers of dono juiz | `git grep -n "dono_da_divergencia(" -- '*.py' ':!*/tests/*' \| head; git grep -n "class InsumosDoDono\\|def dono_do_dia\\|def dono_de" -- '*.py' ':!*/tests/*' \| head` |
+| 00:32:24 | Bash | Read dono_da_divergencia juiz | `git grep -n "def dono_da_divergencia" -- '*.py'; f=$(git grep -l "def dono_da_divergencia" -- '*.py' \| head -1); n=$(grep -n "def dono_da_divergencia" $f \| cut -d: -f1); sed -n "${n},$((n+45))p" $f` |
 | 00:32:18 | Bash | Read CORTES rows on ADESAO grouping | `sed -n '322p;326p' docs/CORTES.md \| cut -c1-1800` |
 | 00:32:16 | Bash | Search existing law on nunca_bateu/adesao | `/bin/grep -n "NUNCA-BATEU\\|nunca_bateu\\|ADESAO" docs/LEIS.md docs/CORTES.md docs/GLOSSARIO.md 2>/dev/null \| cut -c1-260 \| head -20; sed -n 1755,1770p escala/models.py` |
 | 00:32:08 | Bash | Read sonda3 results | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE && grep -E "^col\|^RAMO\|^ERROS\|^ERRO " sonda3.r \| head -25; echo ----; grep -vE "^ ?col\|^RAMO\|^ERROS\|^ERRO \|^agora\|^janela\|^N_IT\|^POR_\|^A \|^COMBO\|^TRAB\|^PERG" sonda3.r \| cut -c1-450 \| head -60` |
