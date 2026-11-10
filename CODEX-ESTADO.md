@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 18:41** · publicado em **10/11/2026 18:44** (UTC-3)
+> Ultima resposta processada: **10/11/2026 18:50** · publicado em **10/11/2026 18:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 18:50 · sessao 5c96eb64a4b6 · - · - · origem=Ronald (tmux)
+
+**Efeitos da dona fechada.** O núcleo salva `motivos`/`contexto` antes de chamar o gerador, preservando diretamente `fechada_em`; o `save` aciona os receivers mesmo sem transição de estado. (`app/chamados/services/disputa_emissao.py:575`, `:583`, `:604`, `:607`, `:609`)
+
+- O receiver tenta reconciliar o pai quando ele existe e não está em `ENCERRADOS`; pode acrescentar ocorrência de fechamento. (`app/chamados/signals.py:28`, `:33`, `:42`, `:45`)
+- Outro receiver agenda `retomar_regularizacoes_confirmadas` em `on_commit`, selecionando regularizações confirmadas sem materialização daquele colaborador. (`app/chamados/signals.py:129`, `:137`, `:144`; `app/chamados/services/regularizacao_ext.py:218`, `:221`, `:224`)
+- Outro chama `materializar_pendentes_aprovadas`, que percorre perguntas não materializadas e carimba somente as aprovadas pelo juiz e pela porta. (`app/chamados/signals.py:153`, `:163`; `app/chamados/services/materializacao.py:1418`, `:1427`, `:1431`)
+- O persistido adicional exato depende de pai, perguntas e regularizações preexistentes: [nao verificado]. O teste de reuso fechado substitui `abrir_conversa` e o push; não demonstra todos esses efeitos. (`app/chamados/tests/test_bo_disputa_sem_pergunta.py:68`, `:81`, `:82`)
+
+**Push e retorno com várias donas.** A recuperação retorna somente a primeira dona processada e a união dos motivos novos das diversas agregações. (`app/chamados/services/disputa_emissao.py:687`, `:695`, `:697`, `:698`)
+
+- Se nasceu: wrapper chama push com todos os motivos e `nova=True`. (`app/chamados/services/disputa_emissao.py:765`, `:766`)
+- Se agregou/reusou: wrapper chama primeiro `perguntar_entradas_pendentes` sobre essa única dona; depois envia push se a união `novos` não for vazia. Assim, motivos novos de outras donas podem compor o aviso associado à primeira. (`app/chamados/services/disputa_emissao.py:779`, `:780`, `:781`; `:695`, `:698`)
+- O helper de push não verifica `fechada_em`; tenta web push e FCM para o colaborador e usa URL genérica `/meu-atendimento/`, sem ID de dona no endereço. Silêncio contextual suprime ambos. Entrega real: [nao verificado]. (`app/chamados/services/disputa_emissao.py:1847`, `:1855`, `:1861`, `:1865`, `:1869`)
+- Órfãos enviam somente com `notificar`, após a tentativa de fecho automático; quando esse fecho ocorre, retornam antes do push. (`app/chamados/services/disputa_emissao.py:1376`, `:1382`, `:1383`, `:1384`)
+- A fábrica de perguntas por célula usa `push_disputa_silenciado`; ainda chama o gerador novamente depois do wrapper. (`app/chamados/services/fabrica_da_celula.py:172`, `:174`, `:217`, `:218`, `:219`)
+
+**Exceção após batida.** A API grava a batida por `registrar_batida` antes de chamar a emissão. O núcleo captura somente `_PerguntaDeOutraDisputa`; exceções do gerador atravessam o `atomic` e impedem o wrapper de chegar ao push. (`app/api/views_core.py:681`, `:794`; `app/chamados/services/disputa_emissao.py:546`, `:547`, `:650`, `:673`, `:765`)
+
+A prova ORM existente cria batida antes da emissão, exige preservação dela, igualdade das contagens de DS/Chamado/Pergunta/log e ausência de push; outro teste falha depois de criar pergunta e exige rollback. Execução ORM nesta sessão: [nao verificado]. (`app/chamados/tests/test_bo_disputa_sem_pergunta.py::test_gerador_levanta_desfaz_disputa_pai_e_pergunta_mas_preserva_batida`, linhas `32–53`; `::test_gerador_falha_apos_pergunta_desfaz_as_duas`, linhas `55–66`)
+
+Não há retry genérico nessa captura: quem/quando reemitirá **o mesmo episódio** é [nao verificado]. Existem entradas futuras condicionais: nova chamada API reexecuta detector e emissão; cartório pergunta somente pelas células julgadas naquele ato; cron de foto percorre batidas ainda sem selfie cobrável às 07:26. Isso não demonstra recuperação universal do episódio perdido. (`app/api/views_core.py:433`, `:794`; `app/ponto/services/cartorio.py:992`, `:1007`, `:1008`; `app/chamados/services/fabrica_da_celula.py:207`, `:219`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:95`, `:96`; `app/config/crons.py:686`)
+
+**Ciclo.** A cópia mantém recursão na recuperação e não contém guarda de visitadas no corpo; o teste “dona diferente” compara apenas a pergunta retornada com a DS da tentativa atual. Um ciclo A→B→A não encontra limite explícito; persistência final depende da saída/erro e dos `atomic` envolventes. Reprodução com ORM: [nao verificado]. (`app/chamados/services/disputa_emissao.py:612`, `:621`, `:676`, `:690`, `:698`)
+
+**Auditor.** I7a/I7b contam somente DS abertas com zero linhas de perguntas; pergunta morta também conta como linha e exclui a DS desses números. (`app/chamados/management/commands/auditar_invariantes_chamados.py:61`, `:63`; `app/chamados/tests/test_bo_disputa_sem_pergunta.py:100`, `:111`, `:112`)
+
+O auditor descarta motivos sem resolução/dia; portanto um motivo indeterminado mais outro dia `sem_celula` pode acabar em I7b. `bool(dias)` protege apenas o conjunto totalmente vazio. (`app/chamados/management/commands/auditar_invariantes_chamados.py:49`, `:51`, `:53`, `:69`, `:70`)
+
+A cena HX exige DS existente, zero perguntas, aberta e warning; BO a incorpora e exige `(I7a,I7b)=(0,1)`. (`app/chamados/tests/test_hx_disputa_muda_sem_ata.py:55`, `:56`, `:58`, `:59`, `:61`; `app/chamados/tests/test_bo_disputa_sem_pergunta.py:95`, `:97`, `:98`)
+
+**Limite das provas.** As suites de memória declaram que não certificam PostgreSQL, signals nem a suite Django. O arquivo de teste `test_e1_ordem_de_trava.py` citado no comentário do núcleo está AUSENTE nesta cópia; não o usar como prova executável. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:1`, `:3`; `app/chamados/services/disputa_emissao.py:553`; presença do arquivo: [nao verificado])
+
+## 10/11 18:50 · sessao 0425b48d5ffb · - · - · origem=Ronald (tmux)
+
+**Conclusão:** a substituição da exceção de controle e da reentrada cabe no serviço de emissão, sem alterar `chamados/models.py`, desde que o planejamento use a identidade completa da porta e congele cada fato antes da escrita. “Nenhuma exceção possível” não cabe: a porta mantém recusas deliberadas e transacionais. (`app/chamados/services/disputa_emissao.py:673`, `app/chamados/models.py:2840`, `app/chamados/models.py:2917`, `app/chamados/models.py:2954`, `app/chamados/models.py:2819`)
+
+| Questão | Resposta fundamentada |
+|---|---|
+| Quem responde a dona sem escrever? | `fio.universo_do_fato(colaborador_id, motivo, dia, batida_origem_id=...)`, seguido de `fio.canonica_do_grupo(linhas).disputa`; lista vazia significa nenhuma canônica naquele universo. O universo é explicitamente o mesmo usado pela porta, e a canônica prefere resposta do colaborador, depois menor PK. (`app/chamados/services/fio.py:1784`, `app/chamados/services/fio.py:1794`, `app/chamados/services/fio.py:1831`, `app/chamados/services/fio.py:1225`) |
+| `PerguntaDisputa.do_fato` basta? | Não: fornece as linhas iniciais da chave; a porta usa o fecho limitado pelo dia e elege um componente do fato. Há identidade por episódio e acervo sem episódio. (`app/chamados/models.py:2717`, `app/chamados/models.py:2900`, `app/chamados/models.py:2907`, `app/chamados/services/fio.py:1826`) |
+| `_candidata_reusavel` responde dona global? | Não: elege no universo completo, mas só devolve a canônica se pertence à disputa recebida e satisfaz a reusabilidade. Pode retornar `None` com canônica existente noutra disputa. (`app/chamados/services/declaracao_texto.py:230`, `app/chamados/services/declaracao_texto.py:250`, `app/chamados/services/declaracao_texto.py:254`) |
+| `(colaborador,motivo,dia)` sempre identifica sozinho? | Não para a família BATIDA: episódio conhecido participa da consulta; dois componentes distintos podem existir no mesmo dia. O planejamento deve levar episódio, instância e dia normalizado pela mesma autoridade da porta. (`app/chamados/models.py:2712`, `app/chamados/models.py:2866`, `app/chamados/models.py:2875`, `app/chamados/services/fio.py:1826`) |
+| O helper atual de resolução basta? | Não: retorna texto/destino/dia e recusa alguns casos, mas não consulta a canônica global; contém dedup local que retorna `None`. Outras guardas continuam no gerador: catálogo, dedup não datado, hora sem dia e conversa repetida. (`app/chamados/services/disputa_emissao.py:300`, `app/chamados/services/disputa_emissao.py:361`, `app/chamados/services/disputa_emissao.py:380`, `app/chamados/services/disputa_emissao.py:404`, `app/chamados/services/disputa_emissao.py:415`, `app/chamados/services/disputa_emissao.py:438`, `app/chamados/services/disputa_emissao.py:449`) |
+| Leitura prévia sem trava equivale à porta? | Não oferece a proteção que a porta usa: ela trava o colaborador antes do dedup; o teste de corrida exige uma única pergunta e retornos `criada=True/False` para duas entradas concorrentes. (`app/chamados/models.py:2845`, `app/chamados/tests/test_e1_identidade_corrida.py:74`, `app/chamados/tests/test_e1_identidade_corrida.py:81`) |
+| Leitura sob C no mesmo atomic resolve tudo? | Protege contra escritores que seguem a mesma trava, mas o plano precisa reproduzir a identidade completa e manter os insumos: a porta recalcula episódio/dia, pode rechavear a canônica e pode recusar. Equivalência integral numa implementação ainda inexistente: [nao verificado]. (`app/chamados/models.py:2866`, `app/chamados/models.py:2875`, `app/chamados/models.py:2940`, `app/chamados/models.py:2954`) |
+| Pergunta morta segura identidade? | “Morta” não basta como filtro: a identidade exclui especificamente `duplicata` e `motivo_retratado`; fechamento da disputa e demais vias não estão nessa exclusão. Filtrar previamente por pergunta viva ou disputa aberta divergiria da porta. (`app/chamados/models.py:2393`, `app/chamados/models.py:2754`, `app/chamados/models.py:2921`) |
+| Rechaveamento pode desaparecer do desenho? | Não: reuso com dia gravado diferente passa pela porta de rechaveamento; competência desconhecida/exportada, colisão e outras recusas continuam. O “dry” existente roda escrita real em atomic desfeito, portanto não é uma leitura pura. (`app/chamados/models.py:2940`, `app/chamados/services/fio.py:1056`, `app/chamados/services/fio.py:1068`, `app/chamados/services/fio.py:1077`) |
+
+A ordem exige **C → todas as DS necessárias → todos os Chamados necessários → todas as Perguntas necessárias**, com PK crescente por grupo, antes da escrita que possa disparar cascatas; usar apenas chamadas individuais aparentemente ordenadas não certifica a transação inteira. O topo atual inclui DS abertas, DS explicitamente pedidas, pais das abertas e Chamados vivos, mas não inclui automaticamente destino terminal de canônica fechada. No rechaveamento, `_nascer` pede tanto o destino recebido quanto o destino anterior e a pergunta. Num lote, é necessário antecipar esse universo antes da primeira Pergunta. (`app/chamados/models.py:2631`, `app/chamados/models.py:2675`, `app/chamados/models.py:2677`, `app/chamados/models.py:2679`, `app/chamados/models.py:2683`, `app/chamados/models.py:2692`, `app/chamados/models.py:2947`)
+
+Mudanças de desenho necessárias, sem código de produção:
+
+- `disputa_emissao.py::_abrir_ou_agregar_disputa`: planejar cada fato sob C, particionar pelas donas e escrever uma vez; retirar `_PerguntaDeOutraDisputa` como mecanismo de descoberta/reentrada. Hoje a descoberta ocorre depois de salvar a DS e gerar perguntas, seguida de rollback e chamada recursiva. (`app/chamados/services/disputa_emissao.py:607`, `app/chamados/services/disputa_emissao.py:609`, `app/chamados/services/disputa_emissao.py:621`, `app/chamados/services/disputa_emissao.py:673`, `app/chamados/services/disputa_emissao.py:690`)
+- `disputa_emissao.py::_resolver_pergunta_por_motivo` e `::gerar_perguntas_disputa`: separar resolução de insumos da decisão de emissão/dedup e consumir o plano congelado; recalcular a data no contexto de cada dona reproduz a condição do ciclo A↔B. Hoje a data vem do contexto da DS usada em cada entrada. (`app/chamados/services/disputa_emissao.py:335`, `app/chamados/services/disputa_emissao.py:387`, `app/chamados/services/disputa_emissao.py:434`, `app/chamados/services/disputa_emissao.py:585`, `app/chamados/services/disputa_emissao.py:690`)
+- `disputa_emissao.py::criar_ou_atualizar_disputa`: tratar o resultado de várias donas para pendentes e push; hoje o núcleo devolve somente a primeira dona e o conjunto agregado de motivos novos. (`app/chamados/services/disputa_emissao.py:695`, `app/chamados/services/disputa_emissao.py:698`, `app/chamados/services/disputa_emissao.py:779`, `app/chamados/services/disputa_emissao.py:781`)
+- `auditar_invariantes_chamados.py::_dias_da_disputa_sem_pergunta`: continuar consumindo a fonte comum de resolução caso a assinatura/resultado do helper mude; hoje lê diretamente a posição `[2]`. (`app/chamados/management/commands/auditar_invariantes_chamados.py:49`, `app/chamados/management/commands/auditar_invariantes_chamados.py:50`, `app/chamados/management/commands/auditar_invariantes_chamados.py:52`)
+- Não mudar `models.py` para contornar identidade, rechaveamento, contrato de saída ou recusas: a API pública já aceita a dona escolhida como `disputa`, preserva a FK da canônica reusada e mantém esses controles. (`app/chamados/models.py:2776`, `app/chamados/models.py:2789`, `app/chamados/models.py:3008`, `app/chamados/models.py:3014`)
+
+Os testes existentes exigem preservar: [nao verificado]
+
+| Exigência | Teste | [nao verificado]
+|---|---|
+| Canônica do fecho, não filtro local | `app/chamados/tests/test_e1_v13.py:88::test_RED_abrir_alfa_segura_a_canonica_do_fecho`; `app/chamados/tests/test_e1_v13.py:98::test_RED_candidata_reusavel_segura_a_canonica_do_fecho`. |
+| Um componente por fato, inclusive episódios/acervo | `app/chamados/tests/test_e1_v13.py:346::test_RED_porta_sem_episodio_e_um_componente`. |
+| Rechavear no mesmo ato e idempotência | `app/chamados/tests/test_e1_v15d.py:60::test_RED_R1_reuso_rechaveia_no_mesmo_ato_e_2x_e_o_mesmo_estado`. |
+| Recusa sem escrita: sem célula, colisão, competência exportada | `app/chamados/tests/test_e1_v15d.py:84::test_RED_R2_dia_novo_sem_celula_recusa_declarada_sem_escrever`; `:101::test_RED_R3_colisao_com_outra_linha_do_fato_recusa`; `:124::test_RED_R4_competencia_exportada_no_dia_velho_ou_novo_recusa`. |
+| Corrida produz uma pergunta e mesmo PK | `app/chamados/tests/test_e1_identidade_corrida.py:74::test_MORDE_duas_na_janela_nascem_UMA_pergunta`; `:81::test_MORDE_a_segunda_recebe_criada_False`. |
+| Ordem real linha a linha | `app/chamados/tests/test_e1_v15f.py:117::test_RED_reuso_com_rechave_e_costura_trava_na_ordem`; definição de violação em `app/chamados/tests/test_e1_v9.py:96`. |
+| Só `trava_na_ordem` adquire travas | `app/chamados/tests/test_e1_v7_catracas.py:387::test_zero_trava_fora_de_trava_na_ordem`. |
+| Canônica eleita sobre universo autorizado | `app/chamados/tests/test_e1_v7_catracas.py:447::test_zero_canonica_fora_do_universo`. |
+| Declaração não envia push nem chama gerador | `app/chamados/tests/test_porta_disputa_emissao.py:223::test_MORDE_a_declaracao_nao_manda_push_nem_varre_pergunta`. |
+| Urgência normal e contexto preexistente conservado na declaração | `app/chamados/tests/test_porta_disputa_emissao.py:194::test_MORDE_a_urgencia_da_declaracao_e_normal_nao_emergencia`; `:199::test_disputa_aberta_agrega_o_motivo_e_NAO_toca_o_contexto`. |
+
+Não cabe prometer ausência absoluta de exceções, usar `do_fato` sem o universo, tomar `_candidata_reusavel` como dona global, filtrar canônicas por vitalidade, nem usar `rechavear_no_reuso(dry=True)` como leitura pura. Esses atalhos conflitam com os contratos já escritos. (`app/chamados/models.py:2905`, `app/chamados/services/declaracao_texto.py:254`, `app/chamados/models.py:2754`, `app/chamados/services/fio.py:1077`)
+
+Certificação ORM, corrida efetivamente executada, SQL total, efeitos de receivers e validade de uma implementação nova permanecem [nao verificado].
 
 ## 10/11 18:41 · sessao cec9bd295d6b · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
 
@@ -906,91 +984,4 @@ Leituras Python de **entrada anterior à gravação**, separadas dos 28:
 
 As formas Python N/N1 e as sete O de nulidade diferem da forma T do geofence; os T1 consultam apenas um campo e não constituem o mesmo predicado conjunto de `geofence.py:247`.
 
-## 10/11 17:12 · sessao e2df1f633553 · - · - · origem=Ronald (tmux)
-
-Censo de escritores por AST (`3299` Python lidos, sem erro de parse) e grep; nenhum arquivo alterado. Execução de testes e persistência real em produção: [nao verificado]. [nao verificado]
-
-| Sítio | Expressão/origem | Valores especiais |
-|---|---|---|
-| `app/ponto/registro_batida.py:152` e `:157` | `Batida.objects.create(..., **campos)` | Os dois caminhos recebem `_sanitiza_geo(campos)` em `:105`. |
-| `app/ponto/registro_batida.py:11` | `if v in ('', None): campos[k] = None` | `''` e `None` viram `None`. |
-| `app/ponto/registro_batida.py:15` | `float(v)` | Só valida; não altera o valor numérico, preservando `0.0`. Não numérico vira `None` em `:16-17`. |
-| `app/api/views.py:648` | `registrar_batida(... latitude=latitude, longitude=longitude ...)` (`:654-655`) | Origem `request.data.get(...)` em `:416-417`; zero segue à porta; vazio/ausência seguem à sanitização. |
-| `app/api/views_core.py:640` | Mesmo encaminhamento (`:646-647`) | Origem `request.data.get(...)` em `:403-404`; mesma sanitização. |
-| `app/ponto/services/triagem_batida.py:701` | Mesmo encaminhamento (`:707-708`) | Origem POST em `app/ponto/views.py:270-271`: `request.POST.get(...) or None`; recuperação de sessão em `triagem_batida.py:507-510`, chamada em `:659`. String `'0'` é preservada; `''` vira `None`. |
-| `app/ponto/registro_batida.py:335` | `Batida.objects.bulk_create([Batida(**d) for d in linhas], batch_size=500)` | Caminho `semear`, guardado para banco de ensaio em `:333`; não chama `_sanitiza_geo`. Único chamador localizado: `app/ponto/management/commands/gerar_batidas_smoke_motor.py:107`; seu dict omite geo em `:182-192`, produzindo campos nulos (`app/ponto/models.py:58-59`). |
-
-Outros produtores chamam a porta **sem** latitude/longitude; quando criam uma nova Batida, os campos são nulos (`app/ponto/models.py:58-59`):
-
-- `app/ponto/views.py:1815`: saída aprovada em lote.
-- `app/ponto/services/justificativa.py:188`: saída após aprovação.
-- `app/ponto/services/justificativa.py:361`: ajuste retroativo.
-- `app/ponto/services/veredito_celula.py:322`: materialização manual.
-- `app/chamados/services/regularizacao_ext.py:77`: regularização externa.
-- `app/chamados/services/materializacao.py:927`: `disputa_s84_retro`.
-- `app/chamados/services/materializacao.py:1007`: `disputa_ancora`.
-- `app/chamados/services/acoes_chamado.py:44`: `excecao_autorizada`.
-
-O caminho de anotação não permite alterar geo: `CAMPOS_ANOTAVEIS` omite latitude/longitude em `app/ponto/registro_batida.py:203`, e o guard rejeita campos externos em `:241-243`.
-
-O teste existente caracteriza explicitamente `0.0/0.0` persistido em `app/api/tests/test_l030_batida_pela_porta.py:58`, `''/'' → None/None` em `:63`, e coordenada parcial em `:68`. Resultado de execução desses testes: [nao verificado].
-
-Expressão exata do geofence: `if not batida.latitude or not batida.longitude:` em `app/ponto/services/geofence.py:247`. Se houver posto (`:248`), cria **AlertaGeofence**, não altera Batida: `tipo='sem_gps'` em `:252`, latitude/longitude do alerta `None` em `:253-254`. O contexto do chamado normaliza cada componente separadamente: `float(batida.latitude) if batida.latitude else None` em `:327` e `:369`; equivalente de longitude em `:328` e `:370`.
-
-Não localizei função/propriedade/método booleano nomeado que seja a autoridade de “Batida tem coordenadas”; inexistência absoluta: [nao verificado]. Os candidatos concretos são:
-
-- `app/colaboradores/services/drawer.py:63`: chave de dict `'tem_gps': bool(b.latitude and b.longitude)`, não método/propriedade.
-- `app/colaboradores/views.py:337`, `:356`, `:395`: variáveis locais `tem_geo` derivadas de queryset.
-- `app/colaboradores/views.py:2454`: função classificadora `_geo_do_pino(coord, posto)`, com presença por `if not coord or coord[0] is None or coord[1] is None:` em `:2474`.
-- `app/core/juizes.py:1191`: autoridade registrada é `classificar_posicao` para “a batida esta dentro do geofence?”, não para presença de coordenadas.
-
-## 10/11 17:12 · sessao ca2040610eb0 · - · - · origem=Ronald (tmux)
-
-Censo HTML/JS direto de presença: **11 sítios** para Batida/contexto/cópia em Alerta: **N=4, T=2, T1=2, O=3, N1=0** (linhas da tabela).
-
-| arquivo:linha | expressão literal | forma | decisão |
-|---|---|---|---|
-| `app/templates/core/_d2_feed.html:16` | `b.latitude is not None and b.longitude is not None` | N | Exibe pino/link Google Maps; link em :17. |
-| `app/templates/ponto/batidas_offline_pendentes.html:96` | `batida.latitude is not None and batida.longitude is not None` | N | Exibe link Google Maps; link em :97. |
-| `app/templates/chamados/partials/modal_fio.html:480` | `chamado.modulo_origem == "gps_fora_geofence" and chamado.contexto_json.batida_lat is not None and chamado.contexto_json.batida_lon is not None` | N | Habilita bloco GPS e botão mapa do chamado; dados do botão em :484. |
-| `app/templates/chamados/partials/_relatorio_geo.html:30` | `chamado.contexto_json.batida_lat is not None and chamado.contexto_json.batida_lon is not None` | N | Exibe coordenadas e rota posto→batida; :31–32. |
-| `app/templates/core/dashboard2.html:242` | `(b.latitude && b.longitude)` | T | Define `gpsBlock`: mapa/coordenadas/link ou “Sem localizacao”; :242–246. |
-| `app/templates/core/dashboard2.html:287` | `b.latitude && b.longitude` | T | Inicializa mapa e pino do drawer; :288–301. |
-| `app/templates/colaboradores/detalhe.html:142` | `a.latitude` | T1 | Exibe link mapa da cópia em Alerta; :128, :135, :143. |
-| `app/templates/core/dashboard_supervisor.html:90` | `a.latitude` | T1 | Exibe link mapa do Alerta, senão “—”; :77, :84, :91–94. |
-| `app/static/js/geo-colab-map.js:39` | `isNaN(blat) || isNaN(blon)` | O | Dados de batida recente: informa ausência e retorna ou desenha mapa/pino; parse em :29, efeito :40–41, pino :65. Reutilizado pelo chamado via `abrirGeoBatida`, :94–106. |
-| `app/templates/chamados/fio_colaborador.html:313` | `!window.L||isNaN(blat)||isNaN(blon)` | O | Informa “Sem coordenada de GPS.” e retorna ou desenha mapa/pino; parse :301, pino :318. Mistura disponibilidade da biblioteca com validade numérica. |
-| `app/templates/chamados/painel_gestao.html:583` | `isNaN(blat) || isNaN(blon)` | O | Informa “Sem coordenada de GPS nesta batida.” e retorna ou desenha mapa/pino; parse :571, pino :592. |
-
-Os quatro N, dois T1 e três O divergem da expressão de truthiness das duas coordenadas do geofence. O significado exato para cada entrada Python/JSON precisa acompanhar tipagem/conversão: JS `isNaN(parseFloat(...))` aceita zero numérico; a origem do parse está nas linhas citadas.
-
-**Armazenamento local no navegador, antes da sincronização**, separado de Batida já gravada no banco:
-
-| arquivo:linha | expressão literal | forma | decisão |
-|---|---|---|---|
-| `app/static/pwa.js:145` | `b.latitude != null` | O pela legenda literal do pedido; equivalente JS a teste não nulo de uma coordenada | Inclui latitude no POST de sincronização. |
-| `app/static/pwa.js:146` | `b.longitude != null` | O pela legenda literal do pedido; equivalente JS a teste não nulo de uma coordenada | Inclui longitude no POST de sincronização. |
-
-`b` vem de `batidas_pendentes` do IndexedDB (`app/static/pwa.js:130–138`); essas coordenadas são guardadas em `app/static/pwa.js:116`. Se o consolidado decidir agrupar equivalentes JS `!= null` como N1, serão **dois N1 locais**, explicitando a convenção.
-
-Há consumidores de resultados já calculados, sem ler/refazer latitude/longitude; **não somar aos 11 juízos diretos**:
-
-- `app/templates/colaboradores/partials/_drawer_diagnostico.html:49`: `{% if b.tem_gps %}` aparece **duas vezes**; cor e texto `ok/sem`. Produtor é chave de dict, `'tem_gps': bool(b.latitude and b.longitude)`, em `app/colaboradores/services/drawer.py:63`; não prova método/propriedade de Batida.
-- `app/templates/colaboradores/partials/vinculo_row.html:12`: `{% if d.tem_geo %}` controla selo 📍; chave produzida em `app/colaboradores/views.py:84`.
-- `app/templates/colaboradores/partials/_ps_linha.html:16–18`: `l.geo == 'verde'` / `l.geo == 'vermelho'` / else escolhe selo; coordenadas chegam como `l.b_lat/l.b_lon` na :1. Há decisões `or ''` nos produtores Python `app/colaboradores/painel_cell.py:54–55` e `app/colaboradores/services/situacional.py:199–200`, a consolidar pelo explorador Python.
-- `app/templates/chamados/fio_colaborador.html:112`: `ultima_geo` controla bloco de última localização; histórico em :119. A escolha por coordenadas ocorre no produtor Python, não nesses testes de objetos.
-- `app/templates/colaboradores/detalhe.html:165` e :222 usam `batidas_geo`; JS :226 testa `!pontos.length`. A filtragem por coordenadas ocorre no produtor Python.
-
-**Captura antes do POST — somente listar:**
-
-- `app/templates/ponto/bater_ponto.html:293–305`: suporte/API de geolocation, captura e preenchimento; timeout em :482–487; `!lat || !gpsCapturedAt || (Date.now() - gpsCapturedAt) > 60000` em :503; `if (gps)` em :505; `!lat || !lng` em :509.
-- `app/templates/ponto/triagem/base_triagem.html:56–68`: suporte/API e captura para `.campo-lat/.campo-lng`.
-- `app/templates/ponto/triagem/apto.html:200–205`: suporte/API e captura com timeout; `!lat || !gpsCapturedAt || (Date.now() - gpsCapturedAt) > 60000` em :217; `if (gps)` em :219; `lat && lng` em :221; `gpsLat == null || gpsLng == null` em :276.
-- `app/templates/ponto/bater_ponto_v2.html:177`: `gpsLat!=null && gpsAccuracy!=null && acc>gpsAccuracy && (Date.now()-gpsCapturedAt)<120000`; suporte/API em :184–195; `gpsLat!=null` em :189; `gpsLat==null` em :204; suporte/timeout em :273–278; `gpsLat==null || gpsLng==null || !gpsCapturedAt || (Date.now()-gpsCapturedAt)>60000` em :292; `!(g && g.lat!=null)` em :294; `g && g.lat!=null` em :295.
-- `app/static/pwa.js:289–301`: `capturarGPS`, suporte/API, resultado com coordenadas ou `null`.
-- `app/static/pwa.js:394–411`: suporte/API e captura para POST `/ponto/ping-geo/`.
-- `app/templates/core/onboarding.html:264–268`: teste de suporte e chamada geolocation para permissão; callback não lê latitude/longitude nessa chamada.
-
-Excluídos das contagens Batida: testes de coordenadas **do Posto**, por exemplo `app/templates/ponto/bater_ponto_v2.html:139`, `app/templates/colaboradores/posto_form.html:103/:107/:211/:214`, `app/templates/colaboradores/postos.html:71`, `app/templates/colaboradores/partials/painel_posto.html:28`, `_postos_tabela.html:23`, `app/templates/core/painel_tv.html:154`; e testes `plat/plon` nos mapas (`geo-colab-map.js:66`, `fio_colaborador.html:319`, `painel_gestao.html:594`).
-
-_3440 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3442 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
