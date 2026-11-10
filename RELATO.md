@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2717211
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=3043528
 
 PAREI: push-mcpst-lei-akita-7ca7c2d9e | espera Ronald (!) -- push de da77395c0 cai no selo bin/tests/test_lei_akita.sh (universo origin/main..HEAD): 7ca7c2d9e (volta 3 da raia mcpst, ja MERGEADA e NO AR em 2f4dd4840) leva padrao=n/a (instrumento) e toca app/chamados/services/fabrica_da_celula.py (+20 linhas de docstring/inscricao @bolha). Cura = reescrever SO a mensagem (padrao=Single Writer Principle, o da obra) refazendo o hash de 7ca7c2d9e..da77395c0 (3 commits locais, nao empurrados), arvore identica por git diff-tree vazio, deploy intocado -- e REESCREVER HISTORIA, fora do aval 46d313581. Frase de reversao: nada aplicado; origin/main segue 8e852ec8c. Prod NAO depende do push (deploy 2f4dd4840 ja no ar). Enquanto isso: E4a-2 testes-alvo na raia.
 

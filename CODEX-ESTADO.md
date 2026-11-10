@@ -1,7 +1,220 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 22:44** · publicado em **09/11/2026 22:46** (UTC-3)
+> Ultima resposta processada: **09/11/2026 22:58** · publicado em **09/11/2026 23:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 22:58 · sessao b8554cce33ca · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Alterado somente [test_e4a2_disparar_e_vigia.py](/home/ronald/wt-codex-fio-e0-v4-e4a-2-225337/app/chamados/tests/test_e4a2_disparar_e_vigia.py:61): lista fechada SQL, execução dos callbacks dentro da captura e mutante local `on_commit` (`:61`, `:320`, `:351`).
+
+- **RED antes:** 24 falhas nos casos novos; reprodução com o coletor antigo em memória falha em `WITH … UPDATE` (`:241`, `:256`).
+- **Depois:** `Ran 3 tests — OK`, incluindo rejeição dos seis mutantes do coletor (`:264`).
+- **Não rodaram:** os três testes ORM, incluindo comando com/sem alarme e mutantes UPDATE síncrono/on_commit (`:304`, `:333`, `:351`). Execução e resultados desses caminhos: **[nao verificado]**. Django/freezegun indisponíveis no Python consultado; nenhuma instalação realizada. [nao verificado]
+
+<details>
+<summary>Diff aplicado</summary> [nao verificado]
+
+```diff
+--- a/app/chamados/tests/test_e4a2_disparar_e_vigia.py
++++ b/app/chamados/tests/test_e4a2_disparar_e_vigia.py
+@@ -10,7 +10,7 @@
+ from unittest.mock import Mock
+ 
+ from django.core.management import call_command
+-from django.db import connection
++from django.db import connection, transaction
+ from django.test import SimpleTestCase, TestCase
+ from django.test.utils import CaptureQueriesContext
+ from freezegun import freeze_time
+@@ -59,8 +59,17 @@
+ 
+ 
+ def escritas_sql(consultas):
+-    """DML de qualquer tabela; SAVEPOINT/RELEASE e leituras nao entram."""
+-    return [q['sql'] for q in consultas if re.match(r'^\s*(INSERT|UPDATE|DELETE)\b', q['sql'], re.I)]
++    """Lista fechada de leitura/controle; SQL desconhecido conta como escrita."""
++    escritas = []
++    for consulta in consultas:
++        sql = re.sub(r'\A(?:\s+|--[^\r\n]*(?:\r\n?|\n|$)|/\*.*?\*/)*', '', consulta['sql'], flags=re.S)
++        leitura = re.match(r'^(SELECT|SAVEPOINT|RELEASE\s+SAVEPOINT|ROLLBACK\s+TO\s+SAVEPOINT|SET|SHOW)\b',
++                           sql, re.I)
++        if re.match(r'^WITH\b', sql, re.I):
++            leitura = not re.search(r'\b(INSERT|UPDATE|DELETE|MERGE)\b', sql, re.I)
++        if not leitura:
++            escritas.append(consulta['sql'])
++    return escritas
+ 
+ 
+ class DispararEVigiaFonteTest(SimpleTestCase):
+@@ -219,10 +228,63 @@
+ 
+ 
+ class DispararEVigiaSQLTest(SimpleTestCase):
++    def _verificar_coletor(self, coletor):
++        leituras = [
++            'SELECT 1', ' select 1', 'SAVEPOINT "s1"', 'RELEASE SAVEPOINT "s1"',
++            'ROLLBACK TO SAVEPOINT "s1"', 'SET TIME ZONE UTC', 'SHOW TIME ZONE',
++            'release\n savepoint "s1"', 'rollback\tto\n savepoint "s1"',
++            '-- c\n /* outro */ SELECT 1', '/* c */ -- outro\r\n SHOW TIME ZONE',
++            'WITH x AS (SELECT 1) SELECT * FROM x',
++        ]
++        escritas = [
++            'INSERT INTO tabela VALUES (1)', '\n update tabela SET campo=1', '\tDELETE FROM tabela',
++            'WITH x AS (SELECT 1) UPDATE tabela SET campo=1',
++            'with x as (select 1) insert into tabela select * from x',
++            'WITH x AS (DELETE FROM tabela RETURNING *) SELECT * FROM x',
++            'WITH x AS (SELECT 1) MERGE INTO tabela USING x ON false WHEN MATCHED THEN DO NOTHING',
++            '/* c */ UPDATE tabela SET campo=1',
++            '-- c\n /* outro */ DELETE FROM tabela',
++            'TRUNCATE tabela', 'COPY tabela FROM STDIN', 'DO $$ BEGIN END $$', 'CALL rotina()',
++            'BEGIN', 'COMMIT', 'ROLLBACK', 'RELEASE outra_coisa', 'ROLLBACK TO outra_coisa', [nao verificado]
++            'SELECTED 1', 'SAVEPOINTED s1', 'RELEASE SAVEPOINTED s1',
++            'ROLLBACK TO SAVEPOINTED s1', 'SETTING x', 'SHOWCASE x',
++            '', ' -- so comentario', '/* comentario sem fim',
++        ]
++        for sql in leituras + escritas:
++            self.assertEqual(coletor([{'sql': sql}]), [sql] if sql in escritas else [], sql)
++
++    def test_MORDE_WITH_comentarios_e_SQL_desconhecido(self):
++        self._verificar_coletor(escritas_sql)
++
+     def test_coletor_reconhece_DML_e_ignora_transacao_e_leitura(self):
+         dml = ['INSERT INTO tabela VALUES (1)', '\n update tabela SET campo=1', '\tDELETE FROM tabela']
+         leituras = ['SELECT 1', 'SAVEPOINT "s1"', 'RELEASE SAVEPOINT "s1"', 'ROLLBACK TO SAVEPOINT "s1"']
+         self.assertEqual(escritas_sql([{'sql': sql} for sql in leituras + dml]), dml)
++
++    def test_mutantes_do_coletor_sao_rejeitados(self):
++        fonte = Path(__file__).read_text(encoding='utf-8')
++        no = next(n for n in ast.parse(fonte).body if isinstance(n, ast.FunctionDef) and n.name == 'escritas_sql')
++        fonte = ast.get_source_segment(fonte, no)
++        mutantes = {
++            'lista_aberta': ('if not leitura:',
++                             "if not leitura and re.match(r'^(INSERT|UPDATE|DELETE)\\b', sql, re.I):"),
++            'WITH_escritor_liberado': ("leitura = not re.search(r'\\b(INSERT|UPDATE|DELETE|MERGE)\\b', sql, re.I)",
++                                      'leitura = True'),
++            'MERGE_esquecido': ('INSERT|UPDATE|DELETE|MERGE', 'INSERT|UPDATE|DELETE'),
++            'comentarios_nao_removidos':
++                ("sql = re.sub(r'\\A(?:\\s+|--[^\\r\\n]*(?:\\r\\n?|\\n|$)|/\\*.*?\\*/)*', '', consulta['sql'], flags=re.S)",
++                 "sql = consulta['sql'].lstrip()"),
++            'prefixo_sem_fronteira': ('|SHOW)\\b', '|SHOW)'),
++            'ignora_minusculas': ('re.I', '0'),
++        }
++        self._verificar_coletor(escritas_sql)
++        for nome, (antes, depois) in mutantes.items():
++            with self.subTest(mutante=nome):
++                self.assertIn(antes, fonte)
++                ns = {'re': re}
++                exec(compile(fonte.replace(antes, depois), '<mutante_sql_%s>' % nome, 'exec'), ns)
++                with self.assertRaises(AssertionError):
++                    self._verificar_coletor(ns['escritas_sql'])
+ 
+ 
+ class DispararEVigiaBancoTest(TestCase):
+@@ -256,12 +318,13 @@
+                 opts = dict(ini=dia_celula.isoformat(), fim=self.dia.isoformat(), alarme=alarme,
+                             stdout=out, stderr=StringIO())
+                 with CaptureQueriesContext(connection) as consultas:
+-                    if alarme:
+-                        with self.assertRaises(SystemExit) as cm:
+-                            call_command('disparar_perguntas_competencia', **opts)
+-                        self.assertEqual(cm.exception.code, 2)
+-                    else:
+-                        self.assertIsNone(call_command('disparar_perguntas_competencia', **opts))
++                    with self.captureOnCommitCallbacks(execute=True):
++                        if alarme:
++                            with self.assertRaises(SystemExit) as cm:
++                                call_command('disparar_perguntas_competencia', **opts)
++                            self.assertEqual(cm.exception.code, 2)
++                        else:
++                            self.assertIsNone(call_command('disparar_perguntas_competencia', **opts))
+                 self.assertEqual(escritas_sql(consultas), [], out.getvalue())
+                 self.assertIn('VIGIA FIO MUDO: 1', out.getvalue())
+                 self.assertIn('FABRICA-POR-EVENTO: o julgamento deixou 1 ', out.getvalue())
+@@ -277,12 +340,34 @@
+             return ChamadoColaborador.objects.filter(pk=ch.pk).update(titulo='mutante')
+ 
+         with CaptureQueriesContext(connection) as consultas:
+-            self.assertEqual(mutante(), 1)
++            with self.captureOnCommitCallbacks(execute=True):
++                self.assertEqual(mutante(), 1)
+         dml = escritas_sql(consultas)
+         self.assertGreaterEqual(len(dml), 1)
+         self.assertEqual(self._contagens(), antes)
+         with self.assertRaises(AssertionError):
+             self.assertEqual(dml, [], 'o mesmo veto a DML deve rejeitar o mutante local')
++
++    def test_MORDE_o_mesmo_coletor_acusa_UPDATE_em_on_commit(self):
++        from chamados.models import ChamadoColaborador
++        from chamados.tests.test_selo_emissor_fio_mudo import EmissorPedeDoChamadoMudoTest
++        _, ch = EmissorPedeDoChamadoMudoTest._mudo(self, 'E4A2 MUTANTE ON COMMIT') [nao verificado]
++        antes = self._contagens()
++
++        def mutante():
++            transaction.on_commit(lambda: ChamadoColaborador.objects.filter(pk=ch.pk).update(titulo='mutante on_commit'))
++
++        with CaptureQueriesContext(connection) as consultas:
++            with self.captureOnCommitCallbacks(execute=True) as callbacks:
++                mutante()
++                self.assertEqual(escritas_sql(consultas), [], 'a escrita deve estar adiada ate a saida do contexto')
++        self.assertEqual(len(callbacks), 1)
++        dml = escritas_sql(consultas)
++        self.assertGreaterEqual(len(dml), 1)
++        self.assertEqual(ChamadoColaborador.objects.get(pk=ch.pk).titulo, 'mutante on_commit')
++        self.assertEqual(self._contagens(), antes)
++        with self.assertRaises(AssertionError):
++            self.assertEqual(dml, [], 'o mesmo veto a DML deve rejeitar o mutante adiado')
+```
+
+</details>
+
+Comando executado para reproduzir RED e depois os três testes puros, incluindo todos os seis mutantes (`:256`, `:264`): [nao verificado]
+
+```bash
+sql_test() {
+  MODO="$1" PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import ast
+import os
+import re
+import unittest
+from pathlib import Path
+
+p = Path('chamados/tests/test_e4a2_disparar_e_vigia.py')
+nodes = [n for n in ast.parse(p.read_text()).body
+         if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+         and n.name in ('escritas_sql', 'DispararEVigiaSQLTest')]
+ns = dict(ast=ast, re=re, Path=Path, __file__=str(p.resolve()),
+          SimpleTestCase=unittest.TestCase)
+exec(compile(ast.Module(body=nodes, type_ignores=[]), str(p), 'exec'), ns)
+cls = ns['DispararEVigiaSQLTest']
+if os.environ['MODO'] == 'red':
+    ns['escritas_sql'] = lambda qs: [q['sql'] for q in qs
+        if re.match(r'^\s*(INSERT|UPDATE|DELETE)\b', q['sql'], re.I)]
+    suite = unittest.TestSuite([cls('test_MORDE_WITH_comentarios_e_SQL_desconhecido')]) [nao verificado]
+else:
+    suite = unittest.defaultTestLoader.loadTestsFromTestCase(cls) [nao verificado]
+raise SystemExit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
+PY
+}
+sql_test red
+sql_test green
+```
+
+Saída da reprodução (`:256`, `:264`):
+
+```text
+RED:   Ran 1 test — FAILED (failures=1)
+GREEN: Ran 3 tests — OK
+```
+
+Comandos dos testes ORM pendentes, para o ambiente autorizado da suite (`:304`, `:333`, `:351`); **não executados**: [nao verificado]
+
+```bash
+teste_banco=chamados.tests.test_e4a2_disparar_e_vigia.DispararEVigiaBancoTest
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_banco.test_fio_mudo_conta_sem_escrever_com_e_sem_alarme" --verbosity 2
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_banco.test_MORDE_o_mesmo_coletor_acusa_UPDATE_sem_mudar_contagens" --verbosity 2
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_banco.test_MORDE_o_mesmo_coletor_acusa_UPDATE_em_on_commit" --verbosity 2
+```
 
 ## 09/11 22:44 · sessao 9e0b7679dda1 · FIO-E0-V4-E4A-2 · verificador · origem=Code
 
@@ -1045,30 +1258,4 @@ A medição local em memória varreu **760 arquivos em aproximadamente 1,63 s**;
 
 **Limite importante:** os mutantes passaram apenas pelo selo novo. Testes funcionais anteriores já cobrem contador, fechamento e dia posterior; não se pode concluir que a suíte inteira os aceitaria. (`app/chamados/tests/test_e4a_pauta_cadastro_contador.py:55`, `:61`, `:76`, `:84`, `:88`)
 
-## 09/11 21:12 · sessao 57bbec0b6ee6 · - · - · origem=Ronald (tmux)
-
-- **Juiz e registro — CONFORME no caminho efetivo.** A chave nova de `JUIZES['chamado']` aponta para `pauta_cadastro_existente(colaborador_id, dia=None)`; o único chamador de produção específico passa `(cel.colaborador_id, cel.data)`. O universo é cabeça, departamento DP, âncora de pessoa e prefixo do marcador. Não há outro juiz de entrega CADASTRO registrado; `dia_sem_trabalho`, `tarefa_do_dia`, `pergunta_viva` e `dia_da_pergunta_trancado` respondem outras perguntas. (`app/core/juizes.py:278`, `app/core/juizes.py:290`, `app/core/juizes.py:291`, `app/core/juizes.py:292`, `app/core/juizes.py:293`; `app/chamados/services/fabrica_da_celula.py:279`, `app/chamados/services/fabrica_da_celula.py:288`, `app/chamados/services/fabrica_da_celula.py:337`)
-
-- **Escrita/leitura dos campos.** O marcador nasce como constante em `:276`, é consumido pelo filtro em `:285` e incorporado ao texto em `:342`. O escritor específico assina TI, destina a DP, usa `ANCORA_COLAB` e `str(cel.colaborador_id)`, sem vínculo ou data na chave. A porta genérica grava esses campos em `Pauta.objects.create`; o seletor e juiz leem os mesmos valores; contador deduplica por `ancora_id`. (`app/chamados/services/fabrica_da_celula.py:276`, `app/chamados/services/fabrica_da_celula.py:284`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:339`; `app/pautas/models.py:30`; `app/pautas/services.py:180`)
-
-- **Viva/fechada e datas — CONFORME com ressalva semântica.** Viva vem da autoridade `PautaQuerySet.vivas`: não feita e não cancelada. Fechada cobre `timezone.localdate(cancelado_em or feito_em) >= dia`; sem `dia`, só viva cobre. `feito_em` é escrito por `marcar_feita` e `marcar_feita_pelo_sistema`; `cancelado_em` por `cancelar`; os três usam instantes `timezone.now()`. O juiz converte esses instantes a data local, não compara uma `date` com um instante. Fuso base São Paulo e `USE_TZ=True`; fuso ativo real do processo: `[nao verificado]`. (`app/pautas/models.py:57`, `app/pautas/models.py:64`; `app/pautas/services.py:246`, `app/pautas/services.py:247`, `app/pautas/services.py:271`, `app/pautas/services.py:272`, `app/pautas/services.py:294`; `app/chamados/services/fabrica_da_celula.py:299`, `app/chamados/services/fabrica_da_celula.py:303`, `app/chamados/services/fabrica_da_celula.py:304`; `app/config/settings/base.py:93`, `app/config/settings/base.py:95`)
-
-- **Ressalva “DP já olhou”: não demonstrada.** A docstring diz que fechamento significa “o DP já olhou”, porém cancelamento é ato do autor e dispensa leitura; `pauta_cadastro_existente` não lê `lido_em`. Isso não muda a definição operacional declarada de “entregue”, mas não autoriza afirmar que DP leu/resolveu. A cura mínima é corrigir a explicação, se “entregue” significa encaminhada; mudar o predicado exige decidir se cancelamento deveria continuar cobrindo. (`app/chamados/services/fabrica_da_celula.py:292`, `app/chamados/services/fabrica_da_celula.py:301`, `app/pautas/models.py:94`, `app/pautas/services.py:288`, `app/pautas/services.py:294`)
-
-- **Uma pendência pelo escritor específico — CONFORME estático; concorrência real `[nao verificado]`.** O escritor abre `atomic`, trava a pessoa, consulta o juiz e escreve. `trava_na_ordem` executa `SELECT FOR UPDATE` da linha de `Colaborador`; portanto dois escritores cooperantes do mesmo colab serializam antes da seleção. Não há chave por dia/vínculo. (`app/chamados/services/fabrica_da_celula.py:334`, `app/chamados/services/fabrica_da_celula.py:335`, `app/chamados/services/fabrica_da_celula.py:337`, `app/chamados/services/fabrica_da_celula.py:339`; `app/chamados/models.py:2666`)
-
-- **Brecha alcançável hoje: segunda origem pelo POST genérico — PROCEDENTE se o contrato “UMA por colab” incluir todas as entradas do produto.** Staff autorizado pode postar duas vezes o mesmo texto com marcador, `ancora_tipo=colab`, mesmo id e DP: rota existe, view recebe tudo do POST, service grava sem reservar prefixo, travar pessoa ou deduplicar. Isso cria duas cabeças vivas; contador por `distinct` continua mostrando 1. Não é segundo escritor ORM fora da porta, mas entrada alternativa que contorna o escritor específico. O selo AST não vê valores vindos do POST. Ocorrência em produção `[nao verificado]`. Cura mínima: reservar o prefixo à entrada específica na porta comum e acrescentar teste negativo da entrada humana; não basta procurar mais tokens em fonte. (`app/config/urls.py:36`; `app/pautas/urls.py:9`; `app/pautas/views.py:16`, `app/pautas/views.py:73`, `app/pautas/views.py:76`, `app/pautas/views.py:80`, `app/pautas/views.py:81`; `app/pautas/services.py:153`, `app/pautas/services.py:180`; `app/chamados/services/fabrica_da_celula.py:320`; `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:120`)
-
-- **Contador: os quatro campos existem.** `nome='cadastro_sem_turno'`, número de `ancora_id` distintos vivos, `esperado=0`, `dono='CADASTRO'`. O vigia chama o contador e imprime nome no rótulo `VFM|CADASTRO_SEM_TURNO`, número, esperado e dono. JSON contém chave/número em `censo` e esperado em `esperado`, mas não transporta dono; o dono continua na função e linha textual. `bin/fio_estado.py` lê o JSON e compara genericamente esperado versus censo; `gerar_estado.py` usa essa apresentação. (`app/chamados/services/fabrica_da_celula.py:309`, `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:321`; `app/chamados/management/commands/vigiar_fio_morto.py:98`, `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:223`, `app/chamados/management/commands/vigiar_fio_morto.py:229`; `bin/fio_estado.py:104`, `bin/fio_estado.py:125`, `bin/fio_estado.py:191`; `bin/gerar_estado.py:260`)
-
-- **Vigia do contador — CONFORME como leitor.** `vigiar_fio_morto` só chama contador/imprime/carimba; CADASTRO fica fora de `ALARMA_SEMPRE` e `ALARMA_EM_0`, portanto nem dispara `SystemExit` por essa pendência. O leitor do ESTADO mostra divergência “fora do esperado”. O aval fornecido exige contador, não exige interromper a corrente por CADASTRO. (`app/chamados/management/commands/vigiar_fio_morto.py:83`, `app/chamados/management/commands/vigiar_fio_morto.py:84`, `app/chamados/management/commands/vigiar_fio_morto.py:179`, `app/chamados/management/commands/vigiar_fio_morto.py:181`, `app/chamados/management/commands/vigiar_fio_morto.py:202`, `app/chamados/management/commands/vigiar_fio_morto.py:239`; `bin/fio_estado.py:191`)
-
-- **Fechamento/dia novo — implementação e testes existentes.** Viva cobre qualquer dia; fechada cobre até a data local inclusiva. Dia posterior cria nova pauta, mantendo só uma viva pelo escritor cooperante. Isso é coerente com nova ocorrência de cadastro faltante; autorização literal específica dessa reemissão no aval raspado `[nao verificado]`; a decisão está expressa na docstring e no selo comportamental anterior. (`app/chamados/services/fabrica_da_celula.py:292`, `app/chamados/services/fabrica_da_celula.py:295`, `app/chamados/services/fabrica_da_celula.py:304`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:67`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:90`)
-
-- **Novo selo não protege todas as obrigações positivas.** Ele exige sítios, contagens de chamadas e forma sequencial; não fixa conteúdo dos filtros, número/dono/esperado, comparação de fechamento/data local, argumentos corretos da trava/juiz ou emissão em todos os emissores. Existem testes comportamentais anteriores para dois dias/uma pauta, quatro campos, feita/cancelada, dia posterior e dia antigo; o teste isolado de ordem/duas rodadas usa dublês, não duas conexões concorrentes. Cura mínima: preservar esses testes e acrescentar concorrência real e fronteira local de meia-noite, além de identidade/argumentos do AST. (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:174`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:199`, `app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:216`; `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:51`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:55`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:58`, `app/chamados/tests/test_e4a_pauta_cadastro_contador.py:80`; `app/chamados/tests/test_e4_c20.py:65`, `app/chamados/tests/test_e4_c20.py:96`, `app/chamados/tests/test_e4_c20.py:105`)
-
-- **Leitores genéricos não são outro juiz.** A aba seleciona por destinatário e viva, serializa texto/âncora/estado; o copiloto exibe `p.texto`; API mensageria lista recebidas DP e entrega texto/âncora; `pautas_do_colab` lista pautas de pessoa/dia sem interpretar o marcador. (`app/pautas/services.py:308`, `app/pautas/services.py:322`, `app/pautas/services.py:433`; `app/pautas/views.py:40`, `app/pautas/views.py:43`; `app/templates/core/_copiloto.html:405`; `app/api/views_mensageria.py:1324`, `app/api/views_mensageria.py:1329`, `app/api/views_mensageria.py:1334`)
-
-Não executei banco, log ou testes que escrevem arquivos. Resultado de execução da suíte e correspondência independente com o commit de produção `[nao verificado]`. [nao verificado]
-
-_3250 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3251 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
