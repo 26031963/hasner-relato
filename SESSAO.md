@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 09:55:36.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (253.5 MB). Acoes na janela: **832**.
+**Medido em 10/11/2026 10:01:02.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (254.2 MB). Acoes na janela: **834**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:55:49 | Bash | Wait for construtor volta 9c to finish | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; while kill -0 889435 2>/dev/null; do /usr/bin/sleep 30; done; ls -la construtor9c.r; tail -5 construtor9c.log; cat suite_v9b.rc 2>/dev/null; date` |
+| 09:55:45 | Bash | Fix ESPERANDO pid and check construtor status | `cd /home/ronald/saas-hasner/app; sed -i '3s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=889435#' docs/RELATO.md; sed -n 3,4p docs/RELATO.md \| cut -c1-120; ls -la ../logs/FIO-E0-V4-E4A-2/construtor9c.* ; date` |
 | 09:54:45 | Bash | Record errata in RELATO, CORTES, PROMPTS, BACKLOG | `ps -p 889430,889435 -o pid,cmd \| cut -c1-110; cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') L[2]='ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=889430' assert not any('ERRATA B3-MATRIZ' in x for x in L[:15]) L.insert(3,"DECIDIDO PELA LEI ERRATA B3-MATRIZ (aval Ronald 10/11 09h5x, logs/aval_errata_b3_matriz_1110.txt): universo ...` |
 | 09:54:18 | Bash | Launch Codex construtor volta 9c | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; setsid nohup ./lanca_c9c.sh > construtor9c.log 2>&1 < /dev/null & /usr/bin/sleep 10; cat /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2/construtor9c.log \| tail -3; pgrep -f "codex_pergunta.sh --construtor.*construtor9c" \| head -1` |
 | 09:54:15 | Bash | Write construtor 9c brief and launcher, check census | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E4A-2; WT=$(cat wt_construtor9c.txt); cp ../aval_errata_b3_matriz_1110.txt .; cat > construtor9c.q <<'EOF' OBRA FIO-E0-V4-E4A-2, construtor volta 9c. Base 1a505ad69 (wt informada). Escreve SO na wt informada, em app/. A especificacao e a MATRIZ do anexo aval_b3_matriz_e4a2_1110_0835.txt com a ERRATA do anexo aval_errata_b3_matriz_1110.txt (texto literal d ...` |
