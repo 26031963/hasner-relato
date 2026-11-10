@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 15:10** · publicado em **10/11/2026 15:11** (UTC-3)
+> Ultima resposta processada: **10/11/2026 15:20** · publicado em **10/11/2026 15:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 15:20 · sessao e07786d04b22 · BO-0611-05 · construtor · origem=Code
+
+Cura aplicada nos oito sítios. Os quatro leitores Python tiveram **RED na base, GREEN na cura e mutante VERMELHO**. Os testes de HTML foram entregues, mas a renderização permanece **[nao verificado]**: o ambiente não encontra Django (`ponto/tests/test_bo0611_05_templates_geo.py:18`).
+
+Os seis arquivos de execução tocados agora exigem ambas as coordenadas não nulas:
+
+| Sítio | Arquivo:linha | RED / GREEN / mutante local |
+|---|---|---|
+| Posto, erro HTMX | [colaboradores/views.py:337](/home/ronald/wt-codex-bo-0611-05-144805/app/colaboradores/views.py:337) | rc 1 / 0 / 1 |
+| Posto, sucesso HTMX | `colaboradores/views.py:356` | rc 1 / 0 / 1 |
+| Escala | `colaboradores/views.py:395` | rc 1 / 0 / 1 |
+| Contador offline | [ponto/views.py:485](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/views.py:485) | rc 1 / 0 / 1 |
+| Feed | [templates/core/_d2_feed.html:16](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/core/_d2_feed.html:16) | [nao verificado] |
+| Lista offline | [templates/ponto/batidas_offline_pendentes.html:96](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/ponto/batidas_offline_pendentes.html:96) | [nao verificado] |
+| Relatório geo | [templates/chamados/partials/_relatorio_geo.html:30](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/chamados/partials/_relatorio_geo.html:30) | [nao verificado] |
+| Modal do fio | [templates/chamados/partials/modal_fio.html:480](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/chamados/partials/modal_fio.html:480) | [nao verificado] |
+
+Nenhum dos oito já exigia ambas. A consulta vizinha que já excluía as duas permanece como estava (`colaboradores/views.py:53`).
+
+Foram acrescentados dois módulos de teste: [nao verificado]
+
+- [test_bo0611_05_leitores_geo.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_leitores_geo.py:1): extrai e executa as quatro expressões reais por AST; o duplo aplica os filtros aos valores. Testa par completo, ambas as parciais, ausência total e mistura com completa (`:71`, `:112`). Cada mutante remove exatamente uma guarda de longitude (`:85`).
+- [test_bo0611_05_templates_geo.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_bo0611_05_templates_geo.py:1): prepara renderização Django das páginas/partials e verifica links, botão de mapa e mensagem de ausência no HTML (`:145`). Usa as duas cascas reais; a montagem em `base_app.html` é de ensaio, sem criar rota de produção (`:88`). Os mutantes alteram somente o loader em memória (`:54`, `:179`). Execução: **[nao verificado]**.
+
+Nos quatro REDs Python, latitude preenchida com longitude `None` foi contada como geo. Os quatro mutantes reproduziram essa mesma falha de asserção; os controles com par completo passaram (`ponto/tests/test_bo0611_05_leitores_geo.py:118`, `:143`).
+
+Comandos reproduzíveis por sítio, partindo de `app/`:
+
+```bash
+for s in posto_erro posto_sucesso escala offline; do
+  # RED: rc 1
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.test_bo0611_05_leitores_geo \
+    --base 8c81227e03081ecc38fcc3fdaa9f7a5fd78f84a5 --sitio "$s"
+
+  # GREEN: rc 0
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.test_bo0611_05_leitores_geo --sitio "$s"
+
+  # MUTANTE: rc 1
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.test_bo0611_05_leitores_geo --mutante "$s"
+done
+```
+
+Para cada sítio de template, os comandos abaixo estão pendentes; resultados **[nao verificado]** (`ponto/tests/test_bo0611_05_templates_geo.py:40`, `:167`):
+
+```bash
+for s in feed offline relatorio modal; do
+  BO061105_BASE=8c81227e03081ecc38fcc3fdaa9f7a5fd78f84a5 \
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    "ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_$s" \
+    --settings=config.settings_test -v 2
+
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    "ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_$s" \
+    --settings=config.settings_test -v 2
+
+  BO061105_MUTANTE="$s" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    "ponto.tests.test_bo0611_05_templates_geo.TemplatesGeoTest.test_MORDE_$s" \
+    --settings=config.settings_test -v 2
+done
+```
+
+Sobre **quem escreve e quem lê os campos**:
+
+| Campos | Escrita | Leitura e significado |
+|---|---|---|
+| `Batida.latitude` / `longitude` | Campos independentes e anuláveis (`ponto/models.py:58`). A porta sanitiza cada campo separadamente e grava `**campos`, preservando parcial (`ponto/registro_batida.py:5`, `:105`, `:152`, `:157`). | Os oito leitores estão relacionados acima. A autoridade trata ausência de qualquer coordenada como `sem_gps` (`ponto/services/geofence.py:247`). Detector e detalhe já exigem ambas (`ponto/services/vinculo_na_lista.py:49`; `colaboradores/services/detalhe.py:22`). |
+| `contexto_json.batida_lat` / `batida_lon` | Geofence copia cada coordenada separadamente para ocorrência e contexto (`ponto/services/geofence.py:327`, `:369`). A advertência transporta as duas chaves (`chamados/services/acoes_chamado.py:203`). | Relatório e modal são os leitores curados acima. A reavaliação já exclui ocorrências parciais (`ponto/services/geofence.py:383`, `:403`). |
+
+**Zero continua sendo uma diferença de significado:** o critério não nulo solicitado admite `0.0` nestes leitores; a autoridade ainda usa truthiness (`ponto/services/geofence.py:247`). Drawer e dashboard também usam truthiness, e a serialização situacional converte zero em vazio (`colaboradores/services/drawer.py:63`; `templates/core/dashboard2.html:242`; `colaboradores/services/situacional.py:199`). Esses outros sítios ficaram fora da cura.
+
+A execução conjunta terminou com **15 testes OK**, nestes quatro módulos (`ponto/tests/test_bo0611_05_leitores_geo.py:131`; `ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:119`; `api/tests/test_l030_selo_porta.py:73`; `ponto/tests/test_l030_forma_js.py:68`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  ponto.tests.test_bo0611_05_leitores_geo \
+  ponto.tests.test_bo0611_05_vinculo_geo_parcial \
+  api.tests.test_l030_selo_porta \
+  ponto.tests.test_l030_forma_js -v
+```
+
+O selo de relógio também passou seus três métodos, substituindo somente `SimpleTestCase` por `unittest.TestCase` em AST na memória; isso não equivale ao runner Django (`core/tests/test_selo_teste_sem_relogio.py:66`).
+
+Não houve inversão de testes antigos; foram acrescentadas as regressões acima. Renderizações, suíte Django completa, variante com models reais e validação em navegador/produção: **[nao verificado]**. Ruff foi tentado e retornou `No module named ruff`; lint: **[nao verificado]**. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache \
+  colaboradores/views.py ponto/views.py \
+  ponto/tests/test_bo0611_05_leitores_geo.py \
+  ponto/tests/test_bo0611_05_templates_geo.py
+```
+
+Certificação pela suíte Code e revisão opus final: **[nao verificado]**. [nao verificado]
 
 ## 10/11 15:10 · sessao 79dcdf5b3dda · BO-0611-05 · construtor · origem=Code
 
@@ -1337,20 +1430,4 @@ Item 5 — realização estática e provas presentes:
 - Banco4: exceções reais vazias (`bin/tests/test_papel_prazo_nao_deriva.sh:305`), sintética prova exceção nominal, não vazamento e não contaminação da real (`:384`–`:390`); resultado executado [nao verificado].
 - Pelo delta9e+9f fornecido, as alterações produtivas são restauração da barreira não acusadora, enquanto retidos, fronteiras, carimbo, parser e retorno não foram alterados; não há regressão estática encontrada nos bancos1–4. A barreira atual rejeita concorde incondicionalmente (`fabrica_da_celula.py:120`), conforme errata. Execução geral/produção [nao verificado].
 
-## 10/11 11:52 · sessao 0471b4770d31 · - · - · origem=Ronald (tmux)
-
-3. **O 1 vem do juiz real, com insumos controlados pela fixture.** `_motivos_do_juiz` importa e chama `motivos_a_perguntar`, sem substituí-lo; exige exatamente `['intervalo_volta']` às 13:40 antes de conferir `FIO MUDO: 1`. O contador também chama esse juiz. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:454`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:475`, `app/chamados/management/commands/disparar_perguntas_competencia.py:117`.)
-
-A fixture escolhe `furo` ou `concorde` por `update`, relê a célula, monta chamado aberto por `bulk_create` sem sinais e substitui `_ata_do_dia` por duas faltas prescritas. Portanto, prova a decisão do juiz sobre esses insumos; não prova que a lavra real produziria esse veredito/ata. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:52`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:442`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:456`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:462`.)
-
-O `concorde -> 0` próprio exige `[]` diretamente do juiz antes do comando: a reintrodução de (B) deve falhar nessa primeira asserção, pois o turno das 08–18 ainda está em curso às 13:40 e há intervalo vencido na ata fornecida. A execução Django dessa mordida está [nao verificado]. (`app/chamados/tests/test_pergunta_do_dia_em_curso.py:17`, `app/chamados/tests/test_pergunta_do_dia_em_curso.py:479`, `app/chamados/services/fabrica_da_celula.py:139`.)
-
-7. **Os três mutantes pedidos mordem com controle verde; não passam por alvo ausente.** Os alvos estão declarados e o executor exige uma única ocorrência, executa o controle antes da mutação e depois exige `AssertionError` com a mensagem pretendida. (`app/chamados/tests/test_e4a2_matriz_memoria.py:61`, `app/chamados/tests/test_e4a2_matriz_memoria.py:365`.)
-
-Executei, com `PYTHONDONTWRITEBYTECODE=1`, a suíte de memória matriz+C5: **29 testes, OK, rc 0**; também cada mutante avulso: `juiz_reintroduz_forma_b`, `juiz_libera_concorde_em_curso`, `juiz_libera_concorde_noturno`: **um teste OK, rc 0 cada**. O mecanismo que dá significado a esse resultado está em `app/chamados/tests/test_e4a2_matriz_memoria.py:372`; saída persistida em arquivo [nao verificado].
-
-Nesses casos, o juiz é a função real carregada por AST e envolvida por `Mock(wraps=...)`; `_ata_do_dia`, vitalidade, ORM, parcial e outras bordas são dublados. O `dia_encerrado=False` funciona como sentinela: o caminho correto deve nunca chamá-lo. (`app/chamados/tests/test_e4a2_matriz_memoria.py:143`, `app/chamados/tests/test_e4a2_matriz_memoria.py:154`, `app/chamados/tests/test_e4a2_matriz_memoria.py:160`, `app/chamados/tests/test_e4a2_matriz_memoria.py:188`.)
-
-Limite relevante: `test_RED_selos_dos_catalogos_reais_sem_django` verifica o mecanismo de rejeição de catálogos vazios/encolhidos; não executa os cenários ORM dos catálogos de integração. Não confundir seu verde com integração Django verificada. (`app/chamados/tests/test_e4a2_matriz_memoria.py:321`, `app/chamados/tests/test_e4a2_matriz_memoria.py:340`.)
-
-_3404 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3405 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
