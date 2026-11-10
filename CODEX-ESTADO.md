@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 15:37** · publicado em **10/11/2026 15:38** (UTC-3)
+> Ultima resposta processada: **10/11/2026 16:06** · publicado em **10/11/2026 16:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 16:06 · sessao 9e89a5dceeb9 · BO-0611-05 · construtor · origem=Code
+
+Alteradas somente as duas entradas em `core/tests/test_medida_turno_do_par.py:256-257`:
+
+```diff
+- 'derivacoes_de_dia': {('api/views.py::api_bater_ponto', 'B1'): [746],
+-                       ('api/views_core.py::api_bater_ponto', 'B1'): [746],
++ 'derivacoes_de_dia': {('api/views.py::api_bater_ponto', 'B1'): [710],
++                       ('api/views_core.py::api_bater_ponto', 'B1'): [705],
+```
+
+Texto idêntico, incluindo indentação, nas quatro posições: base `da829e9f6:app/api/views.py:746`, base `da829e9f6:app/api/views_core.py:746`, WT `api/views.py:710` e WT `api/views_core.py:705`:
+
+```python
+                          data_turno=_tzc9.localdate(batida.timestamp).isoformat())
+```
+
+Resultados observados:
+
+- **RED antes da edição:** 1 teste, 1 falha, rc **1**, com “linhas mudaram: registrar no MESMO commit” (`core/tests/test_medida_turno_do_par.py:539`).
+- **Unittest do docstring após edição:** 35 testes, **OK**, rc **0** (`core/tests/test_medida_turno_do_par.py:20`).
+- **MUTANTE=linhas:** 1 teste, 3 falhas de asserção, rc **1**; mutante mordido (`core/tests/test_medida_turno_do_par.py:585`, `:592`).
+
+Comandos, em `app/`, usando este executor do heredoc original (`core/tests/test_medida_turno_do_par.py:20`):
+
+```bash
+rodar() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$@" <<'PY'
+import pathlib, textwrap
+p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
+code = p.read_text().split("  PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'\n", 1)[1].split('\n  PY\n', 1)[0]
+exec(compile(textwrap.dedent(code), str(p) + ':docstring', 'exec'))
+PY
+}
+
+# RED: executado antes da edição
+rodar CatracaTurnoDoParTest.test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit
+
+# Após a edição
+rodar
+
+# Mutante em memória
+MUTANTE=linhas rodar CatracaTurnoDoParTest.test_MORDE_linhas_a1_b1_publicam_ocorrencia_e_nao_def
+```
 
 ## 10/11 15:37 · sessao b14693f6a721 · BO-0611-05 · construtor · origem=Code
 
@@ -1004,504 +1049,4 @@ A distribuição global por motivo está **[nao verificado]**: a saída fornece 
 | Premissa do furo não regularizada (`app/chamados/models.py:192`) | [nao verificado] |
 | Outras recusas de `models.py` | [nao verificado] |
 
-## 10/11 12:01 · sessao 5a57ae77d877 · URGENCIA-E4B · leitura · origem=Code
-
-A execução em produção, os novos totais e a identidade dos IDs com o retrato histórico permanecem **[nao verificado]**. O script usa o mesmo critério da sonda2 e exige fechamento em 1.224; se o universo corrente divergir, publica somente `ERRO_SONDA` (`app/chamados/services/painel.py:198`; `app/chamados/services/verbos.py:30`).
-
-Na tabela, **G** significa chamar `transicionar` real nos dois destinos oferecidos, interrompendo antes de `_aplicar`. Assim são executadas as guardas originais, sem entrar no escritor (`app/chamados/models.py:128`; `app/chamados/models.py:199`).
-
-| Fonte | Tela/ação | View → função real | Aceite somente leitura | Sonda chama |
-|---|---|---|---|---|
-| batida_ausente | Central → fio → Encerrar/arquivar (`app/templates/chamados/partials/modal_fio.html:650`) | `processar_post_fio` → `transicionar` (`app/chamados/services/fio.py:721`) | Prefixo real até `_aplicar` (`app/chamados/models.py:199`) | G |
-| disputa_supervisao | Mesma caixa (`app/templates/chamados/partials/modal_fio.html:650`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| chamados | Mesma caixa, quando local (`app/templates/chamados/partials/modal_fio.html:650`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| gps_fora_geofence | Mesma caixa (`app/templates/chamados/partials/modal_fio.html:650`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| turno_aberto | Mesma caixa (`app/templates/chamados/partials/modal_fio.html:650`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| sem_previsao_escala | Mesma caixa (`app/templates/chamados/partials/modal_fio.html:650`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| sem vinculo | Mesma caixa; balde significa dia indeterminado (`app/chamados/juizes.py:87`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| outras | Mesma caixa, sem filtro por módulo (`app/templates/chamados/partials/modal_fio.html:650`) | Mesma chamada (`app/chamados/services/fio.py:721`) | Mesmo prefixo (`app/chamados/models.py:128`) | G |
-| Qualquer fonte com ticket GLPI | Fio → detalhe GLPI (`app/templates/chamados/partials/modal_fio.html:680`) | `adicionar_followup` ignora `novo_status` e só envia mensagem (`app/chamados/views.py:292`; `app/chamados/views.py:303`) | Não há conclusão efetiva nesse formulário | **(b), porta faltante** |
-
-As alternativas específicas não fornecem aceite completo de conclusão antes dos efeitos abaixo; não são usadas para promover um item a **(a)**:
-
-| Fonte/alternativa | Função real e limite |
-|---|---|
-| Perguntas: validar, inline ou lote | A validação carimba antes de materializar e decide o resultado depois; as verificações iniciais não bastam (`app/chamados/services/validacao.py:404`; `app/chamados/services/validacao.py:435`; `app/chamados/services/validacao.py:490`). |
-| Disputa: regularizar | Materializa antes de conhecer o fechamento; `pode_fechar()` responde pela disputa, enquanto concluir o chamado depende do signal (`app/chamados/services/materializacao.py:1376`; `app/chamados/models.py:1848`; `app/chamados/signals.py:42`). |
-| GPS: autorizar/recusar | Escreve ocorrência ou retrata batida antes da transição final (`app/chamados/services/acoes_chamado.py:218`; `app/chamados/services/acoes_chamado.py:269`; `app/chamados/services/acoes_chamado.py:277`). |
-| sem_previsao_escala: aceitar folga | Grava o template antes de reconciliar os chamados (`app/chamados/services/limbo_folgas.py:91`; `app/chamados/services/limbo_folgas.py:101`). |
-| outras: aprovar exceção / ausência | Registra batida antes de transicionar; ausência depende de decisão/evento e reconciliação posteriores (`app/chamados/services/acoes_chamado.py:44`; `app/chamados/services/acoes_chamado.py:70`; `app/ponto/services/ausencia.py:686`). |
-
-`reconciliaria()` também não é chamada: dentro do `atomic` chega a `SELECT FOR UPDATE`, incompatível com esse envelope READ ONLY (`app/chamados/models.py:711`; `app/chamados/models.py:2666`).
-
-O juiz L-099 mora em **`app/ponto/management/commands/e6_oraculo.py:53`**, com assinatura `dono_da_divergencia(horas_do_dia, em_cadastro_x_realidade, folga_nao_definida=False, sem_vinculo_no_dia=False, sem_vinculo_em_dia_de_trabalho=False, batida_fora_de_turno=False, fase_deslocada=False)`. A sonda usa a montagem oficial `InsumosDoDono(..., sem_motor=True, cxr=...).dono(dia)`, que chama esse juiz (`app/ponto/management/commands/e6_oraculo.py:128`; `app/ponto/management/commands/e6_oraculo.py:182`).
-
-Dia ausente ou L-099 sem resposta ficam explicitamente **[nao verificado]**, contabilizados em cada linha; não são convertidos em dono ESTRUTURA. O rótulo ESTRUTURA da coluna **(b)** é o balde operacional solicitado no aval (`app/chamados/juizes.py:87`; `app/ponto/management/commands/e6_oraculo.py:193`; `aval_urgencia_revista_1110.txt:1`, anexo fornecido).
-
-```python
-# sonda3.py -- proposta; execucao e novos totais: [nao verificado].
-# Referencias da copia: app/chamados/services/painel.py:198;
-# app/chamados/services/verbos.py:30; app/chamados/models.py:128.
-import sys
-sys.dont_write_bytecode = True
-
-import contextlib
-import hashlib
-import inspect
-import io
-import json
-import logging
-from collections import Counter
-from html.parser import HTMLParser
-from pathlib import Path
-from types import SimpleNamespace
-from unittest.mock import patch
-
-from django.db import connection, connections, transaction
-from django.template import Context
-from django.template.defaulttags import IfNode
-from django.template.loader import get_template
-from django.utils import timezone
-
-EMPRESAS = (2, 3, 4)
-TOTAL_ESPERADO = 1224
-[nome] = (
-    "batida_ausente", "disputa_supervisao", "chamados",
-    "gps_fora_geofence", "turno_aberto", "sem_previsao_escala",
-    "sem vinculo", "outras",
-)
-PASSO = "inicio"
-SAIDA = []
-FALHAS_SQL = []
-ENGOLIDOS = 0
-AGORA = timezone.now()
-HOJE = timezone.localdate(AGORA)
-FONTE = (
-    "app/chamados/services/painel.py:198; "
-    "app/chamados/services/verbos.py:30; "
-    "app/templates/chamados/partials/modal_fio.html:650; "
-    "app/chamados/models.py:128; "
-    "app/ponto/management/commands/e6_oraculo.py:182"
-)
-USUARIO = SimpleNamespace(
-    is_authenticated=True, is_superuser=True, is_staff=True,
-)
-
-
-class FalhaSonda(BaseException):
-    pass
-
-
-class RollbackFinal(BaseException):
-    pass
-
-
-class AceiteAntesDaEscrita(BaseException):
-    pass
-
-
-def exigir(condicao, codigo):
-    if not condicao:
-        raise FalhaSonda(codigo)
-
-
-def emitir(tipo, fonte=FONTE, **dados):
-    SAIDA.append(dict(tipo=tipo, fonte=fonte, **dados))
-
-
-def col(pk):
-    return None if pk is None else "col%03d" % pk
-
-
-def erro_seguro(exc):
-    # Nunca publicar str(exc), SQL, parametros, nomes ou CPF.
-    cadeia, vistos = [], set()
-    atual = exc
-    while atual is not None and id(atual) not in vistos:
-        vistos.add(id(atual))
-        locais = []
-        tb = atual.__traceback__
-        while tb:
-            nome = tb.tb_frame.f_code.co_filename
-            nome = (
-                "app/" + nome.split("/app/", 1)[1]
-                if "/app/" in nome else Path(nome).name
-            )
-            locais.append("%s:%d" % (nome, tb.tb_lineno))
-            tb = tb.tb_next
-        cadeia.append(dict(
-            tipo=type(atual).__module__ + "." + type(atual).__name__,
-            codigo=atual.args[0] if isinstance(atual, FalhaSonda) else None,
-            sqlstate=getattr(atual, "sqlstate", getattr(atual, "pgcode", None)),
-            locais=locais,
-        ))
-        atual = atual.__cause__ or atual.__context__
-    return cadeia
-
-
-def sql_so_leitura(execute, sql, params, many, context):
-    # Mesma guarda de sonda2.py (anexo; linhas: [nao verificado]).
-    if context["connection"].alias != connection.alias:
-        raise FalhaSonda("OUTRA_CONEXAO")
-    s = str(sql).lstrip().upper()
-    permitido = (
-        s.startswith(("SELECT ", "WITH ", "SHOW ", "SAVEPOINT ",
-                      "RELEASE SAVEPOINT ", "ROLLBACK TO SAVEPOINT "))
-        or s.startswith("SET SEARCH_PATH")
-        or s.startswith("SET SEARCH PATH")
-    )
-    exigir(permitido, "SQL_NAO_AUTORIZADO")
-    try:
-        return execute(sql, params, many, context)
-    except Exception as exc:
-        FALHAS_SQL.append(type(exc).__name__)
-        raise FalhaSonda("ERRO_SQL") from exc
-
-
-def log_estrito(self, level, msg, args, **kwargs):
-    if level >= logging.WARNING:
-        exc = kwargs.get("exc_info")
-        if isinstance(exc, tuple) and isinstance(exc[1], BaseException):
-            raise FalhaSonda("LOG_WARNING_OU_ERRO") from exc[1]
-        raise FalhaSonda("LOG_WARNING_OU_ERRO")
-    # Nenhum handler e chamado.
-
-
-def engolido_estrito(*args, **kwargs):
-    # app/core/observ.py:73: contar em memoria, sem registrar.
-    global ENGOLIDOS
-    ENGOLIDOS += 1
-
-
-def chamada_estrita(func):
-    def chamar(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as exc:
-            raise FalhaSonda("ERRO_INTERNO_AUTORIDADE") from exc
-    return chamar
-
-
-class OpcoesDeConclusao(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.no_select = False
-        self.destinos = set()
-
-    def handle_starttag(self, tag, attrs):
-        a = dict(attrs)
-        if tag == "select":
-            self.no_select = a.get("name") == "novo_status"
-        elif tag == "option" and self.no_select:
-            v = a.get("value")
-            if v in ("resolvido", "fechado"):
-                self.destinos.add(v)
-
-    def handle_endtag(self, tag):
-        if tag == "select":
-            self.no_select = False
-
-
-def preparar_porta(Classe):
-    # Trava de versao: estes hashes sao da copia inspecionada.
-    # app/chamados/models.py:128; modal_fio.html:650.
-    exigir(
-        hashlib.sha256(
-            inspect.getsource(Classe.transicionar).encode()
-        ).hexdigest()
-        == "0e51c4fd8666653ed3face11668188ce5575f0063d55e644300f83c2afc7b507",
-        "TRANSICIONAR_DIFERE_DA_COPIA",
-    )
-    tpl = get_template("chamados/partials/modal_fio.html").template
-    exigir(
-        hashlib.sha256(tpl.source.encode()).hexdigest()
-        == "84d946ff6da7230a841228ce640c33eb4e7da823317cf8007047f3189439adcd",
-        "TEMPLATE_DIFERE_DA_COPIA",
-    )
-    nos = [
-        n for n in tpl.nodelist.get_nodes_by_type(IfNode)
-        if n.token.lineno == 650
-    ]
-    exigir(len(nos) == 1, "PORTA_DO_TEMPLATE_NAO_IDENTIFICADA")
-    return tpl, nos[0]
-
-
-def destinos_na_tela(ch, tpl, no):
-    from chamados.utils import pode_agir_chamado
-    # Renderiza o IF REAL da caixa de resposta, incluindo seu IF de permissao.
-    # Nao chama a view: abrir o modal escreve ciencia (views.py:880).
-    ctx = Context(dict(
-        chamado=ch, colaborador=ch.colaborador,
-        pode_agir_map={ch.pk: pode_agir_chamado(USUARIO, ch)},
-        modo_beneficio=False, csrf_token="NOTPROVIDED",
-    ), use_l10n=False)
-    with ctx.bind_template(tpl):
-        html = no.render(ctx)
-    parser = OpcoesDeConclusao()
-    parser.feed(html)
-    parser.close()
-    return tuple(
-        v for v in ("resolvido", "fechado")
-        if v in parser.destinos
-    )
-
-
-RECUSAS = {
-    134: "matriz/perfil recusa a transicao",
-    139: "justificativa relacionada ainda pendente",
-    156: "disputa aberta sem perguntas ou com pergunta viva",
-    168: "pergunta viva ancorada na competencia aberta",
-    192: "premissa do furo ainda nao regularizada",
-}
-
-
-def medir_transicao(ch, destino):
-    codigo_real = type(ch).transicionar.__code__
-    antes = ch.status_local
-
-    def fronteira(novo_status, *, user):
-        exigir(
-            novo_status == destino and user is USUARIO,
-            "FRONTEIRA_INESPERADA",
-        )
-        # models.py:199: parar ANTES de entrar no unico escritor _aplicar.
-        raise AceiteAntesDaEscrita()
-
-    try:
-        with patch.object(ch, "_aplicar", fronteira):
-            ch.transicionar(destino, USUARIO)
-    except AceiteAntesDaEscrita:
-        return dict(
-            destino=destino, aceita=True,
-            fonte="app/chamados/models.py:199",
-        )
-    except ValueError as exc:
-        tb = exc.__traceback__
-        while tb.tb_next is not None:
-            tb = tb.tb_next
-        # So recusas EXPLICITAS da funcao real viram (b).
-        # ValueError de uma dependencia e falha da sonda, nao uma recusa.
-        exigir(
-            tb.tb_frame.f_code is codigo_real
-            and tb.tb_lineno in RECUSAS,
-            "VALUEERROR_FORA_DAS_GUARDAS_REAIS",
-        )
-        return dict(
-            destino=destino, aceita=False,
-            motivo=RECUSAS[tb.tb_lineno],
-            fonte="app/chamados/models.py:%d" % tb.tb_lineno,
-        )
-    finally:
-        exigir(
-            ch.status_local == antes,
-            "ESTADO_EM_MEMORIA_NAO_RESTAURADO",
-        )
-    raise FalhaSonda("TRANSICAO_NAO_ATINGIU_FRONTEIRA")
-
-
-def medir_porta(ch, tpl, no):
-    destinos = destinos_na_tela(ch, tpl, no)
-    if not destinos:
-        if ch.ticket_id_glpi:
-            return False, dict(
-                motivo=(
-                    "sem porta efetiva de conclusao: "
-                    "formulario GLPI so envia followup"
-                ),
-                fonte=(
-                    "app/templates/chamados/partials/modal_fio.html:680; "
-                    "app/chamados/views.py:292; "
-                    "app/chamados/views.py:303"
-                ),
-            )
-        return False, dict(
-            motivo="formulario de conclusao ausente ou sem permissao",
-            fonte=(
-                "app/templates/chamados/partials/modal_fio.html:650; "
-                "app/chamados/utils.py:68"
-            ),
-        )
-    recusas = []
-    for destino in destinos:
-        r = medir_transicao(ch, destino)
-        if r["aceita"]:
-            return True, None
-        recusas.append(r)
-    return False, dict(
-        motivo="recusada pela funcao real",
-        recusas=recusas,
-        aceite_das_alternativas_escritoras=(
-            "aceite nao mensuravel sem escrita"
-        ),
-        fonte=(
-            "app/chamados/models.py:128; "
-            "app/chamados/services/validacao.py:435; "
-            "app/chamados/services/validacao.py:490; "
-            "app/chamados/services/materializacao.py:1376; "
-            "app/chamados/signals.py:42"
-        ),
-    )
-
-
-def executar():
-    global PASSO
-    from chamados.services import painel as P
-    from chamados.services.verbos import (
-        particionar_verbos, exige_o_admin, VERBOS_DO_ADMIN,
-    )
-    from chamados.catalogo import modulos
-    from chamados.juizes import dia_do_fato, tranca_em_lote
-    from chamados.models import ChamadoColaborador
-    from colaboradores.models import Empresa
-    from ponto.janelas import janela_atual
-    from ponto.management.commands.e6_oraculo import InsumosDoDono
-    from ponto.services.cxr_na_lista import cxr_lavrado
-
-    PASSO = "schema_role_e_transacao"
-    exigir(
-        connection.schema_name == "juliani",
-        "SCHEMA_DIFERENTE_DE_JULIANI",
-    )
-    with connection.cursor() as cur:
-        cur.execute(
-            "SELECT current_user, session_user, "
-            "current_setting('transaction_read_only'), "
-            "current_setting('transaction_isolation')"
-        )
-        role, login, leitura, isolamento = cur.fetchone()
-    exigir(role == login == "leitor", "ROLE_DIFERENTE_DE_LEITOR")
-    exigir(
-        leitura == "on" and isolamento == "repeatable read",
-        "TRANSACAO_INCORRETA",
-    )
-    exigir(
-        set(
-            Empresa.objects.filter(pk__in=EMPRESAS)
-            .values_list("pk", flat=True)
-        ) == set(EMPRESAS),
-        "EMPRESA_AUSENTE",
-    )
-    tpl, no = preparar_porta(ChamadoColaborador)
-
-    PASSO = "universo_mesma_funcao_da_sonda2"
-    conjuntos, totais_empresa = {}, {}
-    for emp in (None,) + EMPRESAS:
-        f = "" if emp is None else str(emp)
-        ctx = P.montar_contexto_painel(
-            f_status="", f_urgencia="", f_q="", f_colab="", f_empresa=f,
-            f_praca="", pagina=1, f_modo="lista",
-        )
-        vp = particionar_verbos(
-            P.qs_vivos(f_empresa=f), agora=AGORA,
-        )
-        exigir(
-            vp["contagens"] == ctx["verbos_contagens"],
-            "PARTICAO_DIVERGENTE",
-        )
-        ids = {
-            pk for pk, v in vp["mapa"].items()
-            if v in VERBOS_DO_ADMIN
-        }
-        exigir(
-            len(ids) == exige_o_admin(ctx["verbos_contagens"]),
-            "CONTADOR_DIVERGENTE",
-        )
-        conjuntos[emp] = ids
-        if emp is not None:
-            totais_empresa[emp] = len(ids)
-
-    ids = conjuntos[None]
-    exigir(
-        len(ids) == TOTAL_ESPERADO,
-        "UNIVERSO_ATUAL_DIFERENTE_DE_1224",
-    )
-    uniao = set()
-    for emp in EMPRESAS:
-        exigir(not (uniao & conjuntos[emp]), "EMPRESAS_SOBREPOSTAS")
-        uniao |= conjuntos[emp]
-    exigir(
-        uniao == ids,
-        "UNIVERSO_FORA_DAS_EMPRESAS_2_3_4",
-    )
-
-    linhas = {
-        (e, f): dict(
-            a=0, b=0, c=0, total=0, cadastro=0, batida=0,
-            l099_nao_verificado=0, exemplos_b=[],
-        )
-        for e in EMPRESAS for f in [nome]
-    }
-    cxr_do = cxr_lavrado()
-    insumos, donos = {}, {}
-    vistos = set()
-    # Propagar o erro que dia_do_fato normalmente capturaria (juizes.py:115).
-    with patch.object(
-        modulos, "data_do_chamado",
-        chamada_estrita(modulos.data_do_chamado),
-    ), tranca_em_lote():
-        qs = (
-            P.qs_vivos().prefetch_related(None)
-            .filter(pk__in=ids).select_related("celula")
-            .order_by("pk")
-        )
-        for ch in qs:
-            PASSO = "item_pk_%d" % ch.pk
-            exigir(ch.pk not in vistos, "ITEM_DUPLICADO")
-            vistos.add(ch.pk)
-            emp = ch.colaborador.empresa_id
-            exigir(
-                emp in EMPRESAS and ch.pk in conjuntos[emp],
-                "EMPRESA_DIVERGENTE",
-            )
-            if ch.celula_id:
-                exigir(
-                    ch.celula.colaborador_id == ch.colaborador_id,
-                    "CELULA_DE_OUTRO_COLABORADOR",
-                )
-            dia = dia_do_fato(ch)
-            fonte = (
-                "sem vinculo" if dia is None
-                else ch.modulo_origem
-                if ch.modulo_origem in [nome][:6]
-                else "outras"
-            )
-            dono = None
-            if dia is not None:
-                chave_dia = (ch.colaborador_id, dia)
-                if chave_dia not in donos:
-                    ini, fim = janela_atual(dia, ch.colaborador.empresa)
-                    chave = (ch.colaborador_id, ini)
-                    if chave not in insumos:
-                        insumos[chave] = InsumosDoDono(
-                            ch.colaborador, ini, fim, HOJE,
-                            agora=AGORA, sem_motor=True,
-                            cxr=cxr_do(ch.colaborador_id, ini),
-                        )
-                    donos[chave_dia] = insumos[chave].dono(dia)
-                dono = donos[chave_dia]
-            exigir(
-                dono in ("CADASTRO", "BATIDA", "ESTRUTURA", None),
-                "DONO_INVALIDO",
-            )
-            r = linhas[(emp, fonte)]
-            r["total"] += 1
-            if dono is None:
-                r["l099_nao_verificado"] += 1
-
-            # Ordem literal: (c), depois (a), depois (b).
-            if dono in ("CADASTRO", "BATIDA"):
-                r["c"] += 1
-                r["cadastro" if dono == "CADASTRO" else "batida"] += 1
-                continue
-            aceita, detalhe = medir_porta(ch, tpl, no)
-            if aceita:
-                r["a"] += 1
-            else:
-                r["b"] += 1
-                if len(r["exemplos_b"]) < 3:
-                    r["exemplos_b"].append(dict(
-               
-
-[truncado em 20000 de 25148 caracteres]
-
-_3411 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3412 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
