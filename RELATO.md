@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: nada -- pouso E4a-2 em curso pela sessao
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=1868730
+lei: tipo oposto a 60/300 s (registro_batida.py:145-151) -- a L-030 nomeia a barreira, o aval BO-0611-05 cura a classe, mas nenhuma lei diz como a apuracao trata a oposta GRAVADA a segundos da anterior (par de 1 min? retratada? sinal?); fora da volta 1, linha BO-0611-05-RESTO-DA-CLASSE no BACKLOG; o resto da classe segue
+PAREI: push-e4a2-citacao-barrado | espera Ronald -- E4a-2 POUSADA e NO AR (merge da829e9f6, deploy rc 0 14:45, 3 rotas OK; corrente le --alarme ao vivo, `manage.py crons corrente`), mas o push foi BARRADO pelo regua_tickets: o corpo do commit e13fa92e3 (volta 9c, da obra) escreve o literal da linha de log antiga entre colchetes ('Linha [BARRADO] e legenda...'), lido como fatia sem linha no TICKETS. Cura = reescrever SO a mensagem do e13fa92e3 (colchetes -> crase) e refazer as 21 da obra + merge, arvore identica (git diff-tree vazio, como REESCREVER-HISTORIA-LOCAL 09/11) -- historia e `!`. Alternativas recusadas: linha falsa no TICKETS; excecao no regex do bin/regua_tickets.sh (lista de excecao). 23 commits locais a frente do origin; log logs/FIO-E0-V4-E4A-2/push_da829e9f6.log
 DESENHO FIO-E0-V4-E4A-2 (RATIFICADA 11h5x, logs/aval_ratifica_b3_e4a2_1110.txt): lei=juiz unico pergunta=o vigia fio_mudo_alvos pergunta a fabrica_da_celula.motivos_a_perguntar e o veredito nao-acusador fica como esta (forma B recusada); o guarda segue o juiz (DEVIDA -> FIO MUDO 1, concorde -> 0) app/chamados/services/fabrica_da_celula.py:113 (o :120 do aval e o mesmo sitio no hash da obra) -- resposta Ronald ERRATA ALVO-V9C-GUARDA 10/11 11h2x (logs/aval_errata_alvo_v9c_guarda_1110.txt); disparo B3 11:49 = 3a volta procedente (preverif9 item 1, a propria forma B); voltas 9e/9f so cumprem a errata
 PRE-APROVADO (a): cancelado construtor E4b volta 1 (volta superada pelo aval URGENCIA REVISTA 11h5x: E4b sai da urgencia), obra FIO-E0-V4-E4B, log logs/URGENCIA-E4B/e4b1.log; wt descartada
 MEDIDA URGENCIA-E4B sonda4 (14:43, prod leitor, READ ONLY+rollback, aval SONDA4-MOTIVO-DO-B): (b) fechar direto recusado = 263 (= sonda3; universo 1.214, -1), soma dos baldes 263. Por motivo (particao por combinacao): :168 pergunta viva ancorada (resolvido+fechado) 139 | :156 disputa COM pergunta viva 108 | :156 disputa SEM pergunta 6 | :192 premissa do furo + :139 justificativa 8 | :168 + :139 2 | sem caixa/GLPI 0 | outras 0. emp2/3/4 = 201/56/6. Secao 10/11 14:4x. NADA construido sem aval
@@ -5868,6 +5870,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**10/11 14:48:45 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:60fb099285 (36 car., na trilha privada)
 
 **10/11 11:45:08 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:09406983ba (39 car., na trilha privada)
 
