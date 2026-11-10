@@ -1,7 +1,134 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:34** · publicado em **09/11/2026 21:36** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:38** · publicado em **09/11/2026 21:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:38 · sessao 638745cb9017 · FIO-E0-V4-E4A-2 · censo · origem=Code
+
+A cópia ainda contém o FIO MUDO escritor, inclusive um dry que executa as portas e depois faz rollback. Retirar apenas `--apply` do cron não transforma o comando em leitor. A lista tem **1 juiz por varredura**; a matriz declara **19/20 verdes**, e esvaziar a lista não altera automaticamente esse numerador. (`app/chamados/management/commands/disparar_perguntas_competencia.py:270-317`; `app/config/crons.py:2032-2048`; `app/core/contratos_estruturais.py:262-270,1053-1064`)
+
+A identidade Git do HEAD, a ancestralidade da E4a-1 e a implantação em produção são **[nao verificado]**. Há evidência local de EXPAND/C11 aplicado, mas o dado fornecido não comprova uma rodada posterior à implantação com **FIO MUDO 0**. (`app/chamados/models.py:3017-3019`; `app/chamados/reconciliador.py:1384-1387`; prova da rodada: **[nao verificado]**)
+
+1. **Ramos do comando, escritas e saída**
+
+O primeiro universo, das células, apenas acumula `deixou`: células passadas da janela, com extensão até anteontem em `--comp-corrente`, excluindo ontem enquanto ainda pertence à janela do vigia de hora. Ele consulta `motivos_que_o_evento_deixou`; não chama o escritor nesse laço. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`)
+
+O **FIO MUDO** é o segundo universo: chamado vivo ligado a célula na janela, sem pergunta viva entre suas resolvedoras. Exclui parcial só lista, ausência de motivo vencido pela ata, colaborador não ativo, `_ja_perguntou` e existência de linha do fato; deduplica por colaborador/dia/motivo. O primeiro motivo elegível de cada passagem entra em `_mudos`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141-175,215-219`)
+
+| Condição | Comportamento |
+|---|---|
+| `--alarme`, inclusive combinado com `--apply` | Retorna antes do escritor. Sai 2 se houver pendência da célula ou FIO MUDO; se ambos existirem, o diagnóstico emitido é o da célula. (`app/chamados/management/commands/disparar_perguntas_competencia.py:247-260`) |
+| Sem alvos FIO MUDO | Não executa `_rodar`. Com `--apply`, ainda alarma a pendência da célula; sem chave, apenas retorna. (`app/chamados/management/commands/disparar_perguntas_competencia.py:261-264`) |
+| Com alvos e `--apply` | Executa `_rodar` em `transaction.atomic()`. Silencia push por padrão; `--com-push` dispensa esse silenciamento. Confirma a transação e só depois pode sair 2 pelo vigia da célula. (`app/chamados/management/commands/disparar_perguntas_competencia.py:289-304`) |
+| Com alvos, sem `--apply` e sem `--alarme` | Executa o mesmo `_rodar`, com push silenciado, dentro de atomic; imprime deltas e força `RuntimeError('rollback')`. Portanto há chamadas de escrita e execução de suas consequências transacionais, seguidas de rollback. (`app/chamados/management/commands/disparar_perguntas_competencia.py:306-317`) |
+
+A porta chamada é `fabrica_da_celula.perguntar(colab, dia, [motivo], origem='disparo_competencia', origem_carimbo='emissor fio mudo')`. Ela tenta desfazer carimbo sem lastro, cria/agrega disputa e gera perguntas. (`app/chamados/management/commands/disparar_perguntas_competencia.py:270-283`; `app/chamados/services/fabrica_da_celula.py:133-148`)
+
+| Efeito alcançável pela porta | O que grava e por onde |
+|---|---|
+| Descarimbar pergunta sem lastro | Relê sob trava, exige pergunta viva pelo C6, chama `descarimbar`, zera `materializada_em`, `materializada_por` e `via_resolucao`, registra trilha. Pode reabrir disputa fechada. (`app/chamados/services/relavra_via.py:219-261`; `app/chamados/models.py:3203-3212`) |
+| Reabrir disputa | Limpa `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; salva e anexa ocorrência ao chamado-pai. (`app/chamados/models.py:2163-2180`) |
+| Agregar disputa existente | Acrescenta `motivos`; atualiza contexto com data, `qtd` e `ultima_em`, pela `_abrir_ou_agregar_disputa`. (`app/chamados/services/disputa_emissao.py:535-565,662-667`) |
+| Criar disputa/pai | Abre ou reutiliza chamado `disputa_supervisao`, com contexto, urgência e SLA; pode anexar ocorrência de reuso; cria `DisputaSupervisao` e trilha `disputa_aberta`. (`app/chamados/services/disputa_emissao.py:568-599`) |
+| Criar pergunta | `gerar_perguntas_disputa` chama `PerguntaDisputa.abrir`; a inserção grava identidade/dia, célula, disputa, motivo, destino e conteúdo recebido, registra assinaturas projetadas e trilha `pergunta_emitida`. (`app/chamados/services/disputa_emissao.py:444-452`; `app/chamados/models.py:3013-3027`) |
+| Reutilizar/costurar pergunta | A porta pode trocar célula/destino, lavrar novamente e salvar; acorda a célula anterior. Pergunta nova órfã de motivo do dia pode passar por `reatar_pergunta_orfa`, com savepoint próprio. (`app/chamados/models.py:2962-2983,2997-3007`; `app/chamados/services/disputa_emissao.py:453-469`) |
+| Notificar | Disputa nova ou motivo novo pode enviar push quando não silenciado. (`app/chamados/services/disputa_emissao.py:669-687,1748-1772`) |
+
+O ramo `[LASTRO]` merece ressalva: em estado coerente e estável, uma pergunta materializada pertencente ao fato já tende a barrar `_mudos` antes de chegar ao descarimbo. Não é possível declará-lo absolutamente morto: seleção e escrita são consultas separadas, e seus filtros diferem — identidade usa coluna `colaborador` e instância; descarimbo busca por `disputa__colaborador`, motivo e dia. Ocorrência concreta de concorrência/inconsistência: **[nao verificado]**. (`app/chamados/management/commands/disparar_perguntas_competencia.py:215-219`; `app/chamados/models.py:2753-2755`; `app/chamados/services/fabrica_da_celula.py:142-144`)
+
+Se nenhum ramo escrevesse, o corpo atual ainda oferece estes diagnósticos de leitura; quais serão preservados na versão futura depende da decisão de interface. (`app/chamados/management/commands/disparar_perguntas_competencia.py:220-258`)
+
+| Texto atual | Número/recorte |
+|---|---|
+| `[EMITE] FIO MUDO: N — chamado vivo, dia ACUSADO pela lei, sem uma pergunta viva` | `len(_mudos)`, antes de `--limite`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:220-222`) |
+| `[BARRADO] desligado N … · ja tem pergunta viva N · FIO DECIDIDO N … · PARCIAL NA LISTA DO ADMIN N …` | Quatro contadores de barreiras do laço FIO MUDO. (`app/chamados/management/commands/disparar_perguntas_competencia.py:223-228`) |
+| `ALVOS POR EMPRESA E PORTA: empE fio_mudo=N · …` ou `nenhum` | Distribuição de `_mudos`, antes do limite. (`app/chamados/management/commands/disparar_perguntas_competencia.py:229-234`) |
+| `janela INI -> FIM` | Janela solicitada/calculada. (`app/chamados/management/commands/disparar_perguntas_competencia.py:239`) |
+| `FABRICA-POR-EVENTO: o julgamento deixou N pergunta(s) do caminho da celula sem emitir, em C celula(s) (esperado 0; VIGIA -- este lote nao as escreve)` | Motivos em `deixou` e pares distintos colaborador/dia. (`app/chamados/management/commands/disparar_perguntas_competencia.py:240-242`) |
+| `VIGIA: o evento deixou N pergunta(s) por emitir (esperado 0)` | Mesmo `len(deixou)`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:243`) |
+| `ALVOS: N perguntas em C colaboradores (fio mudo)` | `falta`, depois de `--limite`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:235,244-245`) |
+
+Os textos ligados à execução do escritor são `[LASTRO] N carimbo(s)…`, `APLICADO perguntas=N disputas=N chamados=N[ (push silenciado)]`, `DRY perguntas=N disputas=N chamados=N` e `(dry-run: nada gravado)`. Os três deltas vêm de contagens globais antes/depois, não de um relatório por alvo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:266-268,284-287,296-317`)
+
+Os leitores e transportadores localizados são:
+
+- **Placar:** raspa a última ocorrência de `^FABRICA-POR-EVENTO: o julgamento deixou \([0-9]*\) .*` em `logs/fio_mudo.log`; exige mtime de hoje, senão publica `?`. Expõe `perguntas_que_o_julgamento_nao_fez=N`, esperado 0, fora do TOTAL. (`bin/placar_code.sh:388-390`)
+- **Corrente/cron:** `crons corrente` fornece `log<TAB>cmd gatilho empresas teto args`; `encadeado.sh` passa `ENC_LOG` e redireciona stdout/stderr do elo para o log. Não raspa os contadores para decidir o próximo elo. (`app/core/management/commands/crons.py:37-42`; `bin/encadeado.sh:45-68,99-104`)
+- **`logs/fim`:** o runner usa o rc, criando arquivo de fim em 0 **ou 2**; o dependente verifica a existência desse arquivo. O conteúdo numérico do stdout não participa. (`bin/cron_run.sh:11-25`; `bin/encadeado.sh:81-94`)
+- **JSONL/saúde:** o runner grava `nome,emp,ini,fim,dur,exit`; `crons_quebrados` trata 0/2 como execução não quebrada, e `pipeline_placar` distingue rc 2 como alarme. Este último deriva esperados apenas de `CRONS`, enquanto disparar está em `ENCADEADOS`. (`bin/cron_run.sh:13`; `app/core/services/crons_quebrados.py:16,24-47`; `app/core/management/commands/pipeline_placar.py:38-49,60-80`; `app/config/crons.py:1521`)
+- **Testes:** há parser do prefixo `FABRICA-POR-EVENTO` e asserções sobre FIO MUDO, distribuição por empresa e dry. (`app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:91-95,152-184`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:195-203,226-232`)
+- **ESTADO:** lê `placar_estrutural.RESULTADOS`; o R6 contém uma cópia da frase `contratos_estruturais: 19/20 verdes`. Não é leitura do stdout do disparar nesse caminho. (`bin/gerar_estado.py:60-86,98-104`; `app/core/placar_estrutural.py:433-441`)
+- **Hooks:** leitor direto de `[EMITE] FIO MUDO`, `APLICADO` ou `DRY` fora dos testes: **[nao verificado]**. O documento do verificador exige auditar escritas por cron e escritas sem trilha; os hooks de compactação chamam o handoff, que raspa a frase estrutural do R6. (`.claude/agents/verificador.md:17`; `.claude/settings.json:14-30`; `bin/handoff_sessao.sh:185-208`)
+
+2. **Cron, gatilhos, conjuntos e números**
+
+A entrada é `ENC`, com `gatilho='apurar_furos_diarios'`, `args='--comp-corrente --apply'`, `log='fio_mudo.log'`, estágio `cobranca`, teto 900 e dependências explícitas de `processar_cartorio` e `apurar_furos_diarios`. (`app/config/crons.py:1521-1523`)
+
+O dependente direto por gatilho é `reconciliar_perguntas_orfas --alarme`. Depois vêm `lavrar_deslogados`, `lavrar_he_pendente` e os demais elos da corrente. O primeiro lê perguntas órfãs que o evento deveria ter encerrado; não cria a pergunta faltante do FIO MUDO. (`app/config/crons.py:1526-1527,1539-1541,1554-1556`; `app/docs/CRONS.md:39-48`; `app/ponto/management/commands/reconciliar_perguntas_orfas.py:20-36`)
+
+Não existe uma declaração Python `VIGIAS` correspondente ao nome usado no item: os vigias são uma compreensão dentro de `PAPEL_DO_CRON`. O subgrafo gerado, esse sim, chama-se `VIGIAS`. (`app/config/crons.py:2164-2169`; `app/core/management/commands/gerar_diagrama.py:393-401`)
+
+| Registro/conjunto | Hoje | Se a mudança for coerente |
+|---|---|---|
+| `JUIZES_POR_VARREDURA` | Único membro: disparar; comentário justifica permanência pelo FIO MUDO. | Tupla vazia. (`app/config/crons.py:2032-2048`) |
+| `PAPEL_DO_CRON` | Disparar recebe `juiz` da compreensão da tupla. | Precisa receber `vigia` na compreensão correspondente. Só retirar o nome elimina sua declaração de papel. (`app/config/crons.py:2164-2169,2340-2345`) |
+| Agenda | Continua em `ENCADEADOS`, com gatilho e dependências próprios. | Reclassificação de papel não exige, por si, sair da corrente. (`app/config/crons.py:1521-1527,1787-1798,2348-2357`) |
+| `juizes_por_varredura()` | **1**, derivado de todas as entradas cujo papel é `juiz`. | **0**, após retirada e reclassificação. (`app/config/crons.py:2048,2348-2357`) |
+| Diagrama do tabuleiro | Versionado com **40 vigias / 1 juiz** e nó do disparar ligado ao juiz. | A mesma reclassificação isolada produz **41 / 0**, pelo gerador que conta todas as entradas. (`app/docs/ARQUITETURA.mmd:209-219`; `app/core/management/commands/gerar_diagrama.py:242-265`) |
+
+Quem lê ou conta essa classificação:
+
+- `bin/placar_code.sh` publica `juizes_por_varredura=N`; o valor entra no TOTAL. (`bin/placar_code.sh:482-486,555-556`)
+- `vigia_loop.escritas_por_cron()` usa por padrão os juízes vivos e consulta sete dias de `LogAuditoria`, ator `sistema:<cron>`; o placar publica uma linha por cron. Retirar o nome também o retira dessa medição padrão. (`app/chamados/services/vigia_loop.py:61-99`; `bin/placar_code.sh:201-209`)
+- O selo do tabuleiro exige igualdade entre lista declarada e juízes derivados. (`app/core/tests/test_contract_tabuleiro.py:25-28`)
+- O selo de delegação percorre `JUIZES_POR_VARREDURA` e rejeita exceção cujo cron já saiu dela. (`bin/tests/test_papel_prazo_nao_deriva.sh:302-328`)
+- A matriz estrutural referencia a lista como exceção da célula chamado/juiz; o selo exige exceções vazias para aceitar verde. (`app/core/contratos_estruturais.py:262-270`; `app/core/tests/test_selo_contratos_estruturais.py:71-96`)
+
+**19/20 → 20/20 não é consequência automática da lista 1 → 0.** `verdes()` conta flags declaradas. A célula chamado/juiz ainda usa `verde=False` e referencia também `PENDENTES_CHAMADO`, já vazio. Esvaziar a lista mantendo a matriz intacta conserva **19/20**; declarar a célula verde e cumprir seus selos permitiria **20/20**. O denominador permanece 20. (`app/core/contratos_estruturais.py:40-42,62-73,262-270,1038-1064`; `app/core/juizes.py:465-466,1355`)
+
+Os leitores desse N/20 são TICKETS e a ferramenta de arquitetura; ESTADO/handoff recebem a cópia do R6, cuja igualdade com a frase do juiz é selada. (`app/core/placar_tickets.py:215-217`; `app/core/arquitetura_leitura.py:55-82`; `bin/gerar_estado.py:73-83`; `bin/handoff_sessao.sh:192-208`; `app/core/tests/test_selo_r6_frase_do_juiz.py:20-25`)
+
+3. **Cobertura dos escritores: mesma porta não prova mesmo fato**
+
+Há outro caminho executável para a fábrica: o consumidor chama `perguntar_por_eventos` depois das retratações/lastro e antes de marcar os eventos processados; relê as células **atuais das datas**, deduplicando datas do lote. Falha da fábrica mantém eventos pendentes com tentativa/erro. O consumidor está declarado a cada minuto; execução implantada: **[nao verificado]**. (`app/chamados/reconciliador.py:1384-1401`; `app/chamados/services/fabrica_da_celula.py:259-273`; `app/config/crons.py:394`)
+
+| Fato/efeito | Cobertura alternativa comprovada na cópia | Limite |
+|---|---|---|
+| Pergunta faltante de célula elegível | Cartório/evento chama `perguntar_pela_celula`, que usa o mesmo `perguntar` do lote; cobre criação/agregação, perguntas, costura e trilhas descritas acima. (`app/chamados/services/fabrica_da_celula.py:177-190`) | Exige que a data seja alcançada e passe pelas guardas da fábrica. (`app/chamados/services/fabrica_da_celula.py:85-98,259-273`) |
+| Carimbo sem lastro | Julgamento coleta carimbadas e chama a mesma porta de descarimbo. (`app/chamados/services/fabrica_da_celula.py:121-129,177-180`) | Esse passe usa `reabrir_fechada=False`; o lote usa o default `True`. Portanto a cobertura de reabertura de disputa fechada não é idêntica. (`app/chamados/services/fabrica_da_celula.py:142-144,180`; `app/chamados/services/relavra_via.py:187,233-239`) |
+| Nascimento de chamado de turno | `abrir`/`criar` emitem evento quando pertencem aos módulos de turno e têm célula resolvida. (`app/chamados/models.py:971-980,1093-1099`) | FIO MUDO aceita qualquer chamado vivo com célula; não aplica esse filtro de módulo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141`) |
+| Retorno de chamado a VIVOS | Signal emite evento antes da guarda de reentrada do cartório. (`app/chamados/signals.py:194-210`) | Emissão é best-effort com savepoint/`engolir`: pode haver retorno sem evento. Nesse caso, não há garantia desse reparo pelo consumidor. (`app/chamados/signals.py:194-207`) |
+| Mudança relevante/perda de pergunta | Save relevante acorda células; ressuscitação em lote e reuso também emitem. (`app/chamados/signals.py:241-257`; `app/chamados/models.py:1563-1568,2997-3007`) | Depende das portas/gatilhos executados; estoque já existente não é automaticamente um evento novo. (`app/chamados/management/commands/consumir_eventos_celula.py:28-31`; `app/chamados/reconciliador.py:1278-1310`) |
+| Estoque antigo | Existe `consumir_eventos_celula --semear`. (`app/chamados/management/commands/consumir_eventos_celula.py:14-15,28-30`) | É opção explícita; o ramo normal não semeia. (`app/chamados/management/commands/consumir_eventos_celula.py:28-31`) |
+| Push opcional do lote | A fábrica do evento sempre silencia push. (`app/chamados/services/fabrica_da_celula.py:188-190`) | Não cobre o modo opcional `--com-push` do disparar. (`app/chamados/management/commands/disparar_perguntas_competencia.py:289-295`) |
+
+A divergência de universo é comprovável: a fábrica barra `dia_sem_trabalho`, futuro e veredito que não acusa, e encaminha limbo entregue para Pauta DP. O FIO MUDO não consulta essas mesmas guardas: trabalha com chamado vivo, ata, teto e seus próprios filtros. Há teste que fixa célula `concorde` com FIO MUDO ainda escrevendo. (`app/chamados/services/fabrica_da_celula.py:85-98,185-190`; `app/chamados/management/commands/disparar_perguntas_competencia.py:141-175,215-219`; `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:152-159`)
+
+Assim, ficam sem **substituto integral demonstrado**: o reparo por varredura de alvo cujo evento se perdeu, de estoque não alcançado e de alvo aceito pelo FIO MUDO mas recusado pela fábrica. Existência e quantidade desses casos em produção: **[nao verificado]**. (`app/chamados/signals.py:194-207`; `app/chamados/services/fabrica_da_celula.py:85-98,185-190`; `app/chamados/management/commands/disparar_perguntas_competencia.py:141-219`)
+
+O reconciliador pode reatar **pergunta órfã existente**; isso não equivale a criar linha ausente. A criação faltante no consumidor aparece justamente pela nova chamada à fábrica. (`app/chamados/reconciliador.py:1384-1387,1432-1441,1533-1556`)
+
+CADASTRO sem turno e limbo entregue já têm escritores próprios na fábrica; **não são escritas atuais do disparar**. CADASTRO produz pauta por colaborador sob trava; limbo entregue produz pauta por dia/motivo. (`app/chamados/services/fabrica_da_celula.py:172-186,222-255,324-343`; `app/chamados/management/commands/disparar_perguntas_competencia.py:282-283`)
+
+A tranca atual também não substitui emissão faltante: encerra chamado/disputa, lê a morte da pergunta pelo C6 e roda com cartório calado. `trancar_periodo` não contém o bloco C11 do anexo; chama `disparar_no_ato` em best-effort. (`app/chamados/services/competencia_trancada.py:8-16,177-205`; `app/ponto/services/fechamento.py:1400-1429`)
+
+4. **Testes atuais, selos e situação do PARQUE** [nao verificado]
+
+Resultado de execução dos testes nesta auditoria: **[nao verificado]**. Os contratos abaixo foram identificados no fonte. [nao verificado]
+
+| Contrato atual fixado | Teste | [nao verificado]
+|---|---|
+| Célula com pendência: apply não cria pergunta, contador 1, rc 2 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:98-103` |
+| FIO MUDO: apply cria 1, contador da célula 0, rc 0 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:152-159` |
+| Retratada permite renascer; limbo pode escrever FIO MUDO e terminar rc 2 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:161-184` |
+| Parcial só lista: zero perguntas e rc 0 | `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:186-194` |
+| Cron e argv da corrente contêm `--apply` | `app/chamados/tests/test_selo_emissor_fio_mudo.py:215-219`; `app/chamados/tests/test_jv4a_elo_encadeado_tem_log.py:19-27` |
+| Dry não deixa pergunta persistida e imprime aviso de rollback | `app/chamados/tests/test_selo_emissor_fio_mudo.py:226-232` |
+| Um ciclo `comp_corrente/apply` devolve pergunta viva ao chamado mudo | `app/chamados/tests/test_selo_emissor_fio_mudo.py:273-298` |
+| Há exatamente 1 juiz por varredura | `app/ponto/tests/test_varredura_lote_prazo.py:47-62` |
+| Hoje não conta no vigia; depois passa a contar; FIO MUDO respeita marco vencido | `app/chamados/tests/test_pergunta_do_dia_em_curso.py:125-136,422-
+
+[truncado em 20000 de 30906 caracteres]
 
 ## 09/11 21:34 · sessao a72b1f524879 · - · - · origem=Ronald (tmux)
 
@@ -995,28 +1122,4 @@ Censo acima combina atributos AST, kwargs e leituras conferidas; exaustividade d
 
 Para F: o reenvio da mesma resposta sempre muda `respondida_em` (`app/chamados/services/disputa_emissao.py:1459-1465`) e acrescenta DP (`:1508`); o próprio contrato declara essa não idempotência em `app/core/contratos_estruturais.py:563-564`. `DecisaoPergunta.registrar`, agora tocado, continua fazendo `bulk_create` incondicional (`app/chamados/models.py:3942-3945`), sem unicidade do ato nas constraints (`:3886-3897`).
 
-## 09/11 18:25 · sessao 5d56fd863bda · - · - · origem=Ronald (tmux)
-
-D9 — **PROCEDENTE bloqueante**. O caminho tocado continua lendo relógio dentro do juiz: `fio.reapontar_resolvedora` chama `_lavrar` (`app/chamados/services/fio.py:926`); `lavrar` chama `_pergunta_materializada_de_fato` (`app/chamados/veredito_lavrado.py:262`); este alcança `_dentro_da_janela_viva` (`app/chamados/juizes.py:674`, `app/chamados/juizes.py:764`), que executa `date.today()` (`app/chamados/juizes.py:575`). `lavrar` não recebe instante e só lê `timezone.now()` depois de consultar o juiz (`app/chamados/veredito_lavrado.py:254`, `app/chamados/veredito_lavrado.py:271`). Correção mínima: propagar `agora` desde a borda nesses caminhos, inclusive ao juiz da janela; conservar a semântica de dia local (`app/chamados/veredito_lavrado.py:98`).
-
-Também há caminho pelo C6: a fábrica chama `desfazer_carimbo_sem_lastro` (`app/chamados/services/fabrica_da_celula.py:172`), que chama `pergunta_viva` (`app/chamados/services/relavra_via.py:242`); seu cálculo consulta a janela sem instante (`app/chamados/juizes.py:1387`).
-
-D, selos/RED — **CONFORME quanto aos sete mutantes declarados**. Executei o runner sem escrita de bytecode: 29 testes verdes; os sete mutantes produziram RC=1. Eles alteram em memória o texto lido do código aplicado (`app/chamados/tests/e4_verificar.py:16`, `app/chamados/tests/e4_verificar.py:58`, `app/chamados/tests/e4_catracas.py:8`); os corpos são compilados desse texto (`app/chamados/tests/e4_apoio.py:8`). A reversão é descartada em memória (`app/chamados/tests/e4_verificar.py:69`).
-
-Reversão em memória dos **hunks executáveis** dos seis arquivos do anexo: 29 testes, **17 passam, 8 falham, 4 dão erro**. As docstrings novas da fábrica foram mantidas; identidade integral com o commit f2962ab8d fica **[nao verificado]**, pois não há repositório Git nesta cópia. Os 17 sobreviventes são:
-
-- Oito testes de portas fora dos hunks anexados, A07/A09/A10/A11/A12/A13-A08/A14/A15 (`app/chamados/tests/test_e4_expand.py:127`, `app/chamados/tests/test_e4_expand.py:223`).
-- Um de sintaxe (`app/chamados/tests/test_e4_expand.py:241`).
-- Um de estado canônico do chamado (`app/chamados/tests/test_e4_efeitos.py:8`).
-- Seis controles E3/C17 incluídos no runner (`app/chamados/tests/e4_verificar.py:14`).
-- Um controle E2 de bordas, que testa `esta_stale`, não a injeção no C6 (`app/chamados/tests/test_e2_tarefa_do_dia.py:1409`).
-
-Os 12 testes novos de eventos/C20 detectaram a retirada dos hunks; portanto os 17 sobreviventes não demonstram, por si, selo novo sem mordida (`app/chamados/tests/test_e4_expand.py:254`, `app/chamados/tests/test_e4_c20.py:20`). Integração ORM, concorrência e falha real PostgreSQL: **[nao verificado]**; o próprio selo declara instrumentação sem banco (`app/chamados/tests/test_e4_expand.py:1`, `app/chamados/tests/test_e4_expand_orm.py:1`).
-
-F, `DecisaoPergunta.registrar` — **PROCEDENTE pela exigência literal de replay da porta**. A porta faz `bulk_create` incondicional e emite evento em toda chamada (`app/chamados/models.py:3942`); não há identidade única do ato nas constraints, apenas checks de formato (`app/chamados/models.py:3884`). Executando o corpo extraído por AST duas vezes com a mesma linha e ORM instrumentado: duas linhas e dois eventos. O teste H2 cobre uma chamada de sucesso e outra de falha, sem replay (`app/chamados/tests/test_e4_expand.py:359`, `app/chamados/tests/test_e4_expand.py:368`). Correção mínima: identidade idempotente do ato, deduplicação sob trava/constraint correspondente, evento condicionado à criação. Evitar deduplicar indiscriminadamente texto: a sequência admite atos posteriores distintos (`app/chamados/models.py:3817`).
-
-D, juiz/escritor paralelo — não identifiquei novo clone do C6 nos hunks: a fábrica delega a porta existente e esta consulta `pergunta_viva` (`app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/relavra_via.py:242`); o registro mantém C6 na mesma autoridade (`app/core/juizes.py:278`). A escrita de DP continua na porta `registrar` (`app/chamados/models.py:3945`); censo completo dos demais escritores fica com a consolidação **[nao verificado]**.
-
-PRONTO E4a integral — **não atingido**: módulo puro retorna `contratos_estruturais: 19/20 verdes`; a única célula não verde é chamado/juiz, dependente das exceções de varredura (`app/core/contratos_estruturais.py:261`, `app/core/contratos_estruturais.py:1063`). `disparar_perguntas_competencia` segue em `JUIZES_POR_VARREDURA` pelo fio mudo (`app/config/crons.py:2044`). Isso é compatível com a divisão E4a-1/E4a-2 fornecida no anexo; não deve ser apresentado como 20/20 (`app/core/contratos_estruturais.py:264`).
-
-_3237 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3238 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
