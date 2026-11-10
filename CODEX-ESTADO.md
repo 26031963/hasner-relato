@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 02:52** · publicado em **10/11/2026 02:52** (UTC-3)
+> Ultima resposta processada: **10/11/2026 02:54** · publicado em **10/11/2026 02:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 02:54 · sessao 38d53a47ac9d · O169-FECHADA · verificador · origem=Code
+
+1. **P1: cobre todas as vias em estado estável; a igualdade não é garantida sob concorrência.** O `Counter` recebe todos os encerrados do módulo, e somente RECONCILIAR sai de `fora_do_universo`; `''` e `None` permanecem. O filtro `colaborador_id` vale para ambas as consultas: nesse caso, a igualdade compara os encerrados **daquele colaborador**. ([cluster_espurio.py:106](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:106))
+
+   As partes vêm de dois SELECTs separados. Um registro lido como `legado` no primeiro e `sistema` no segundo pode aparecer nas duas partes: soma 2 para um encerrado. O contador não estabelece uma fotografia comum; ocorrência real desse cenário: **[nao verificado]**. ([cluster_espurio.py:109](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:109), [cluster_espurio.py:112](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:112))
+
+   Os três rótulos fixos correspondem às constantes. Há duas ressalvas textuais: qualquer via adicional recebe “desconhecida (backfill)”, sem comprovar sua origem; `cascade` recebe “desligamento”, embora o gate também contemple ajuste retroativo. Registro concreto de O169 malrotulado: **[nao verificado]**. ([cluster_espurio.py:126](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:126), [motor.py:88](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/chamados/catalogo/motor.py:88), [models.py:1605](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/chamados/models.py:1605))
+
+2. **P2: a FK reaproveitada corresponde ao par escolhido pelo juiz**, em estado estável com a unicidade declarada aplicada: o código exige mesmo colaborador/data, e `CelulaDia` declara esse par único. ([cluster_espurio.py:117](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:117), [models.py:1833](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/escala/models.py:1833))
+
+   **Outro dia no JSON não aciona fallback:** `dia_do_fato` escolhe primeiro a data da própria FK. **Outro colaborador aciona fallback**, que consulta o colaborador do chamado **na data da FK**. Portanto, ele corrige a pessoa consultada; não recupera a data do contexto divergente. ([juizes.py:98](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/chamados/juizes.py:98), [cluster_espurio.py:113](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:113), [cluster_espurio.py:120](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:120))
+
+   O contador faz **2 + K consultas**, com K colaboradores que tenham pares faltantes: no máximo uma consulta adicional por colaborador; com `colaborador_id`, no máximo três no total. Isso não inclui o restante do comando. O cron está configurado para 06:24 com `--alarme`, sem filtro de colaborador; aceitabilidade do custo novo: **[nao verificado]**. ([cluster_espurio.py:109](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:109), [cluster_espurio.py:122](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:122), [crons.py:598](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/config/crons.py:598))
+
+3. **Quem escreve e lê:** o contador constrói os dois dicionários em memória. O comando imprime ambos no JSON integral; “universo vazio” considera somente `universo.total`; `--alarme` considera pendências e `numero != esperado`, **não** os dois dicionários. ([cluster_espurio.py:110](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:110), [cluster_espurio.py:126](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:126), [detectar_cluster_espurio.py:62](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/management/commands/detectar_cluster_espurio.py:62), [detectar_cluster_espurio.py:70](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/management/commands/detectar_cluster_espurio.py:70))
+
+   Os leitores de teste verificam contagens e rótulos; esperar somente três exclusões ocorre no cenário sem vias extras e é compatível com o serviço. Não identifiquei leitor com interpretação incompatível na cópia. ([test_o169_cluster_encerrado_sem_lastro.py:218](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:218), [test_o169_cluster_encerrado_sem_lastro.py:313](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:313))
+
+4. **Os 26 declarados mordem a fonte real, executada com dependências dubladas.** O harness lê e altera serviço/comando em memória, exige alvo único e falha de asserção, rejeitando erro de infraestrutura. Reexecutei: **49 testes OK, incluindo os 26 mutantes mortos**. SQL e persistência não são exercitados. ([test_o169_cluster_encerrado_mutantes.py:99](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:99), [test_o169_cluster_encerrado_sem_lastro.py:100](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:100))
+
+   **Há sobreviventes adicionais de P1/P2**, ensaiados somente em memória: remover a guarda do colaborador da FK; consultar por par em vez de agrupar por colaborador; trocar os rótulos humana/cascata. Os contratos não montam FK cruzada, registram linhas retornadas em vez de quantidade de consultas e não exigem associação exata dos rótulos conhecidos. Esses três não pertencem aos 26 declarados. ([cluster_espurio.py:117](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:117), [test_o169_cluster_encerrado_sem_lastro.py:80](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:80), [test_o169_cluster_encerrado_sem_lastro.py:253](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:253), [test_o169_cluster_encerrado_sem_lastro.py:315](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:315))
+
+5. **Não identifiquei regressão determinística de `numero` em estado estável e íntegro.** Continua selecionando encerrados por RECONCILIAR, usando o dia do juiz e contando chamados, inclusive vários do mesmo par. As outras vias ganharam contagem informativa, permanecendo fora de `numero`; o reaproveitamento da FK preserva a célula pelo par único. Equivalência durante alterações concorrentes e impacto real no cron: **[nao verificado]**. ([cluster_espurio.py:110](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:110), [cluster_espurio.py:125](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/ponto/services/cluster_espurio.py:125), [models.py:1833](/home/ronald/codex_ws/0ed50976462ab65fffc0d0b322e3d9aa5de1be52/app/escala/models.py:1833))
 
 ## 10/11 02:52 · sessao c86210e57c9f · - · - · origem=Ronald (tmux)
 
@@ -664,59 +688,4 @@ O corte `continue` impede toda célula cuja lâmpada ainda seja `nunca_bateu` de
 
 - **Segundo escritor/juiz novo nos trechos auditados: não identificado.** O disparar apenas retorna contagens e o helper lê veredito (`app/chamados/management/commands/disparar_perguntas_competencia.py:125-129`; `app/chamados/services/fabrica_da_celula.py:67-69`). O escritor de perguntas continua `perguntar`, usando as portas de disputa e geração (`app/chamados/services/fabrica_da_celula.py:140-155,197-199`). Correção integral de todas as ordens de trava e pouso efetivo após pré-requisitos [não verificado].
 
-## 10/11 02:11 · sessao a40989c19dee · FIO-E0-V4-E4A-2 · construtor · origem=Code
-
-Aplicada a cura nos quatro itens, com execução Django e certificação pendentes [nao verificado]. [nao verificado]
-
-Arquivos alterados e motivo:
-
-| Arquivo | Alteração |
-|---|---|
-| [resposta_tardia.py:45](chamados/services/resposta_tardia.py:45) | Retirado o corte; resposta consulta `_renascer_por_premissa_viva`. |
-| [fabrica_da_celula.py:67](chamados/services/fabrica_da_celula.py:67) | Helper nomeado pelo fato da lâmpada. |
-| [disputa_emissao.py:757](chamados/services/disputa_emissao.py:757), [pergunta_no_app.py:35](chamados/services/pergunta_no_app.py:35) | Causa `nunca_bateu_sem_adesao`; destino C5 na descrição. |
-| [disparar_perguntas_competencia.py:34](chamados/management/commands/disparar_perguntas_competencia.py:34) | Consulta C5 com mesmos `hoje/empresas`; desligado excluído vai ao balde RH na [linha 126](chamados/management/commands/disparar_perguntas_competencia.py:126). |
-| [test_selo_emissor_fio_mudo.py:43](chamados/tests/test_selo_emissor_fio_mudo.py:43), [test_o261_fabrica_le_a_lampada.py:117](chamados/tests/test_o261_fabrica_le_a_lampada.py:117) | Fixtures com adesão coerente e emissão do evento ausente, preservando o estoque mudo. |
-| [test_resposta_tardia.py:33](chamados/tests/test_resposta_tardia.py:33) | Fixture de furo ajustada; asserção original preservada; caso explícito `nunca_bateu` acrescentado. |
-| [test_medida_turno_do_par.py:268](core/tests/test_medida_turno_do_par.py:268) | Registro atualizado para ocorrência real `1199`. |
-| [test_e4a2_nunca_bateu.py:68](chamados/tests/test_e4a2_nunca_bateu.py:68) | Selo Django com vínculo, marcos vencidos, ata acusadora, controle positivo e mutantes. |
-
-Apagado `chamados/tests/test_e4a2_nunca_bateu_sem_banco.py`; ausência conferida por `exists=False`, sem conferência git [nao verificado].
-
-Censo dos campos e valores envolvidos:
-
-| Campo/valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| `veredito='nunca_bateu'` | Cartório calcula pela adesão em [cartorio.py:1165](ponto/services/cartorio.py:1165); modelo delega à porta em [models.py:1826](escala/models.py:1826). | Helper [fabrica_da_celula.py:69](chamados/services/fabrica_da_celula.py:69), repasse [disputa_emissao.py:758](chamados/services/disputa_emissao.py:758), contador e resposta tardia. |
-| `status_local` | `_gravar_estado`, [models.py:228](chamados/models.py:228). | Seleção do contador e [resposta_tardia.py:35](chamados/services/resposta_tardia.py:35); renascimento permanece na [porta existente:983](chamados/models.py:983). |
-| `situacao`, identidade/empresa | Porta do colaborador, [colaborador.py:55](colaboradores/services/colaborador.py:55); desligamento atribui em [desligamento.py:104](colaboradores/services/desligamento.py:104). | Novo filtro de universo em [disparar:38](chamados/management/commands/disparar_perguntas_competencia.py:38). |
-| Mapa C5 `{colab: dias}` | Autoridade [cadastro_realidade.py:180](escala/services/cadastro_realidade.py:180), incluindo retenção dos desligados. | Contador consulta na [linha 34](chamados/management/commands/disparar_perguntas_competencia.py:34). |
-| `nome/numero/esperado/dono/fora_da_c5/universo` | [Contador:46](chamados/management/commands/disparar_perguntas_competencia.py:46): `numero=|P|`, `esperado=|P∩C5|`. | Disparar [linha 193](chamados/management/commands/disparar_perguntas_competencia.py:193), vigiar [linha 210](chamados/management/commands/vigiar_fio_morto.py:210), carimbo [linha 231](chamados/management/commands/vigiar_fio_morto.py:231), placar [linha 98](core/management/commands/pipeline_placar.py:98). |
-| `barrados_desligado` → `barrados['desligado']` | [Contador:49](chamados/management/commands/disparar_perguntas_competencia.py:49), soma na [linha 126](chamados/management/commands/disparar_perguntas_competencia.py:126). | Relatório RH já existente, [linha 200](chamados/management/commands/disparar_perguntas_competencia.py:200). |
-| Causa `nunca_bateu_sem_adesao` | [disputa_emissao.py:759](chamados/services/disputa_emissao.py:759). | `retencao`, `dono`, `medir`, `do_dia` em [pergunta_no_app.py:99](chamados/services/pergunta_no_app.py:99). |
-
-Os leitores acima distinguem lâmpada de pertença: o helper lê `veredito`; a pertença é consultada à C5; o placar compara os números publicados ([fábrica:69](chamados/services/fabrica_da_celula.py:69), [contador:34](chamados/management/commands/disparar_perguntas_competencia.py:34), [placar:105](core/management/commands/pipeline_placar.py:105)). Outros pressupostos em execução: [nao verificado].
-
-O RED principal está em [test_e4a2_nunca_bateu.py:183](chamados/tests/test_e4a2_nunca_bateu.py:183):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4a2_nunca_bateu.NuncaBateuSoC5Test.test_RED_furo_emite_nunca_bateu_nao_emite_e_entrega_um_item_c5 --settings=config.settings.ci -v 2
-```
-
-Os oito mutantes estão [declarados na linha 33](chamados/tests/test_e4a2_nunca_bateu.py:33): fábrica sem corte, repasse sem corte, contador tratando nunca_bateu como alvo, esperado literal, esperado tautológico, universo ignorando C5, perda do balde RH e retorno do corte tardio. **O comando abaixo percorre cada um**, exigindo sua asserção específica no [método coletável:201](chamados/tests/test_e4a2_nunca_bateu.py:201):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4a2_nunca_bateu.NuncaBateuSoC5Test.test_mutantes_em_memoria_sao_rejeitados_pela_assercao_pretendida --settings=config.settings.ci -v 2
-```
-
-Comando da rodada solicitada, **não executado** [nao verificado]:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4a2_nunca_bateu chamados.tests.test_resposta_tardia chamados.tests.test_selo_emissor_fio_mudo chamados.tests.test_o261_fabrica_le_a_lampada core.tests.test_medida_turno_do_par core.tests.test_fio_mudo_placar --settings=config.settings.ci -v 2
-```
-
-Saída local: compilação em memória dos dez arquivos passou; os oito mutantes têm âncora única e sintaxe válida; o censo existente retornou `B1=[1199]` ([instrumento:448](core/medida_turno_do_par.py:448)). Isso não verifica a mordida Django [nao verificado].
-
-Sem acesso a banco nesta execução. Django, freezegun e ruff estão ausentes no Python disponível; `python3 -m ruff check --no-cache ...` terminou com `No module named ruff`. Suite, RED executado, rejeição dos mutantes e ruff limpo permanecem [nao verificado]. [nao verificado]
-
-_3338 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3339 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
