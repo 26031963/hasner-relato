@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 18:29** · publicado em **10/11/2026 18:34** (UTC-3)
+> Ultima resposta processada: **10/11/2026 18:36** · publicado em **10/11/2026 18:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 18:36 · sessao 40458ebcdfa0 · - · - · origem=Ronald (tmux)
+
+**Agregação estrangeira está curada para motivos novos, mas há duas ressalvas reproduzidas: motivo preexistente fica em duas DS; reentrada pode ciclar.** (`app/chamados/services/disputa_emissao.py:578`, `:612`, `:620`, `:690`)
+
+- O ensaio salva motivos/contexto e executa todo o gerador dentro do `atomic`; só depois examina as perguntas devolvidas. A exceção estrangeira desfaz essas gravações, as perguntas novas e alterações transacionais do reuso. A DS aberta preexistente e as perguntas preexistentes permanecem. (`app/chamados/services/disputa_emissao.py:547`, `:607`, `:609`, `:621`, `:673`)
+- A recuperação filtra as chaves por motivo, reentra na mesma porta para cada dona e mantém os motivos não reusados na aberta original. As chaves globais do contexto acompanham todas as donas; `contexto_nascimento` é passado inteiro, mas a reentrada seleciona uma DS existente. (`app/chamados/services/disputa_emissao.py:616`, `:620`, `:688`, `:690`, `:694`, `:575`)
+- A primeira dona estrangeira vira o retorno da função; outras donas também recebem seus motivos. Portanto o retorno não representa necessariamente todo o lote. (`app/chamados/services/disputa_emissao.py:687`, `:695`, `:698`)
+- **Duas DS.motivos:** se a aberta já possuía M antes da chamada, o rollback restaura esse M; a recuperação agrega M à dona e não remove o M antigo. Reproduzi com `Ambiente` atual e gerador real: ambas as DS terminam com `['batida_fora_escala_grave']`. A demonstração usa doubles; ocorrência real em banco [nao verificado]. (`app/chamados/services/disputa_emissao.py:578`, `:580`, `:621`, `:690`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:73`)
+- **Ciclo:** não existe conjunto de visitadas, limite nem estabilização na recursão. Dona própria encerra porque não satisfaz `pergunta.disputa_id != disputa_aberta.pk`; isso não impede A→B→A quando cada dona resolve outro dia. (`app/chamados/services/disputa_emissao.py:612`, `:621`, `:690`)
+- Reproduzi ciclo com **intervalo_saida**, sem episódio, helper/gerador/núcleo reais: A aberta tem contexto M.data=D1 e pergunta local de D2; B fechada tem contexto M.data=D2 e pergunta local de D1. Porta double estável por dia devolve a canônica de D1/B ou D2/A; `_derivar_chamado_destino` devolve `(None,None)`, sem alterar o dia intervalar. `emitir([M], contexto={})` termina em `RecursionError` após 139 chamadas com limite 160. O dedup não barra: cada DS só possui pergunta do dia oposto ao pedido. PostgreSQL [nao verificado]. (`app/chamados/services/disputa_emissao.py:334`, `:360`, `:370`, `:387`, `:434`, `:612`, `:690`)
+- A dona fechada é selecionada sem filtro de abertura e recebe apenas `motivos`/`contexto`; seu `fechada_em` e a FK da pergunta ficam preservados. Entretanto salvar DS fechada dispara receivers que não exigem alteração de `fechada_em`: S88 pode reconciliar o pai e a retomada de regularizações agenda callback. Esses efeitos não existem nos doubles da sonda. (`app/chamados/services/disputa_emissao.py:575`, `:583`, `:604`, `:607`; `app/chamados/signals.py:28`, `:42`, `:129`, `:144`)
+- Se a operação termina normalmente, os motivos novos ficam na dona ou na aberta original conforme o particionamento. Exceção posterior na recuperação desfaz sua transação; motivo novo pode terminar em nenhuma DS porque o ato inteiro falhou. Não há garantia de sucesso no ciclo. (`app/chamados/services/disputa_emissao.py:676`, `:687`, `:690`, `:698`)
+
+**Travas do núcleo/reentrada/recuperação:**
+
+- Entrada normal e reentrada passam todas as DS do colaborador, abertas e fechadas, por QuerySet lazy; recuperação agora passa o mesmo universo antes de recursar. A lacuna anterior “fechada adicional adquirida depois de Ch” foi curada para essas DS. (`app/chamados/services/disputa_emissao.py:564`, `:566`, `:681`, `:683`, `:690`)
+- Primeira tabela é **Colaborador**, depois avaliação dos IDs, depois DS por PK, depois Ch por PK, depois perguntas explicitamente pedidas. (`app/chamados/models.py:2666`, `:2671`, `:2675`, `:2688`, `:2692`)
+- Com `abertas_do_colaborador=True` e colaborador válido, `_universo` é verdadeiro; a condição em 2674 faz curto-circuito e não reitera `_pks(disputas)`. O QuerySet é avaliado em 2671, uma vez nessa chamada, entre C e D. A reentrada cria outro QuerySet sob a mesma transação, mas C já está retido; releitura adicional não é dupla avaliação do mesmo QuerySet entre duas travas. (`app/chamados/models.py:2669`, `:2671`, `:2674`; `app/chamados/services/disputa_emissao.py:564`, `:690`)
+- `emitir_perguntas=False` passa a dona explícita, se houver, e abertas; não toma todas as fechadas. Declaração tem trava externa própria antes da porta e da pergunta. (`app/chamados/services/disputa_emissao.py:556`, `:557`, `:726`; `app/chamados/services/declaracao_texto.py:348`, `:352`, `:360`, `:376`)
+- **Ressalva da ordem global completa:** todas as DS estão previamente travadas, porém Ch inclui apenas pais das DS **abertas** e Ch **VIVOS**. Destino terminal de canônica fechada não entra automaticamente. (`app/chamados/models.py:2677`, `:2679`, `:2681`, `:2683`)
+- No reuso com rechave, `_nascer` pode adquirir `ex.chamado_destino_id` terminal e a pergunta. Como o atomic novo engloba o laço inteiro do gerador, dois reusos/rechaves sucessivos podem pedir Ch terminal novo depois da P do primeiro motivo. Isso é caminho estático plausível; reprodução completa com ORM/portas reais [nao verificado]. Não afirmar ausência global de Ch após P. (`app/chamados/models.py:2940`, `:2947`, `:2949`, `:2950`; `app/chamados/services/disputa_emissao.py:403`, `:609`)
+- Reuso sem rechave costura o destino pedido por `_costura_nao_mata_o_fio`; esse destino vem do derivador de Ch vivos, já coberto pelo topo. (`app/chamados/services/disputa_emissao.py:198`, `:200`; `app/chamados/models.py:2980`; `app/chamados/services/fio.py:768`)
+- Permanecem gerações posteriores ao núcleo em pendentes e fábrica, sem participação no novo detector estrangeiro. (`app/chamados/services/disputa_emissao.py:779`, `:294`; `app/chamados/services/fabrica_da_celula.py:172`, `:174`)
+
+## 10/11 18:35 · sessao e9fc4319af12 · - · - · origem=Ronald (tmux)
+
+4. **Extração fiel no trecho mostrado do diff da obra.** O antigo bloco da base 6c `disputa_emissao.py:344–424` corresponde ao helper atual `:307–387`; as recusas por texto sem data, intervalo sem dia/duplicado e destino duplicado viraram `return None` em `:329`, `:364`, `:383`. A seleção de `_data_ev` antes do fallback continua em `:387`; o retorno inclui texto/destino/dia em `:388`. A comparação independente com o objeto Git 6c é [nao verificado].
+
+As guardas do gerador continuam fora do helper: motivo ausente do catálogo (`app/chamados/services/disputa_emissao.py:404`), dedup não datado (`:415`), hora sem dia (`:438`) e conversa repetida (`:449`). Portanto o helper não representa sozinho todas as condições de nascimento; a chamada do gerador conserva essas guardas e transforma `None` em `continue` (`:434–443`).
+
+O outro consumidor operacional é o auditor: aceita `None`, acrescenta apenas `resolvida[2]`, e elimina dia `None` (`app/chamados/management/commands/auditar_invariantes_chamados.py:49–53`). O dia é o turno/fato fornecido pelas fontes; conversas recebem dia civil posteriormente na porta `abrir_conversa` (`app/chamados/models.py:2801`), não no helper.
+
+5. **A precedência paralela dos motivos saiu; sobra o ramo próprio dos IDs.** IDs do contexto da DS prevalecem sobre os do pai; IDs não vazios causam retorno antecipado, mesmo sem registros encontrados (`app/chamados/management/commands/auditar_invariantes_chamados.py:34`, `:45`). Nesse ramo os dias vêm de `data_do_chamado`, `resolver_data_evento` com origem ou `data_evento_do_contexto` (`:37–44`). Fora dele, cada motivo chama o helper (`:49–52`).
+
+Resultados por DS aberta sem nenhuma linha de pergunta:
+
+- Dias vazios: I7a; juiz não é chamado pelo curto circuito de `bool(dias)` (`app/chamados/management/commands/auditar_invariantes_chamados.py:69`).
+- Dias mistos, um `sem_celula` e outro `lido`/`fora_vinculo`: I7a (`:69–72`).
+- Todos os dias retornados `sem_celula`, com conjunto não vazio: I7b (`:69–74`).
+- Helper `None` em todos os motivos: I7a; `None` é descartado (`:51–53`).
+- **Helper `None` em um motivo e dia `sem_celula` em outro: pode dar I7b.** O motivo recusado não deixa marca de indeterminação no conjunto (`:51–53`, `:69`). Reproduzido localmente com funções atuais e doubles; runtime/produção [nao verificado].
+
+`sem_celula` inclui ata sem lâmpadas, enquanto `fora_vinculo` tem significado distinto; o auditor reutiliza essa autoridade (`app/chamados/services/declaracao_texto.py:91–96`, `:123–126`; `app/chamados/management/commands/auditar_invariantes_chamados.py:70`).
+
+9. Campos e consumidores relevantes:
+
+| Campo | Escritores | Leitores/semântica |
+|---|---|---|
+| DS.motivos | Núcleo `app/chamados/services/disputa_emissao.py:583`, `:645`; agrupador `:1219`, `:1225`, `:1254`, `:1349`; remoção/reabertura `app/chamados/models.py:1966`, `:2063`, `:2159` | Catálogo define “cenários ativos” em `app/chamados/models.py:1743`; auditor `app/chamados/management/commands/auditar_invariantes_chamados.py:49`; relatório `app/chamados/relatorios_disputa.py:52`. |
+| DS.contexto, motivo.data, qtd, ultima_em | Núcleo `app/chamados/services/disputa_emissao.py:599–607`, `:646`; pendentes `:293–296`; outras portas `app/chamados/models.py:1967`, `:2064`, `:2104`, `:2122` | Helper texto/data `app/chamados/services/disputa_emissao.py:308`, `:335`; grade funde contexto do pai `:54–58`; auditor `app/chamados/management/commands/auditar_invariantes_chamados.py:30–34`. Helper só monta cópia local em `app/chamados/services/disputa_emissao.py:315–316`. |
+| DS.chamado / contexto_json do pai | Núcleo `app/chamados/services/disputa_emissao.py:636`, `:647`; FK aceita SET_NULL `app/chamados/models.py:1749–1752` | Grade `app/chamados/services/disputa_emissao.py:55–58`; auditor `app/chamados/management/commands/auditar_invariantes_chamados.py:31–34`; S127 `app/chamados/juizes.py:2316`. |
+| DS.fechada_em | Fecho/reaberturas `app/chamados/models.py:1932`, `:2149`, `:2173` | Núcleo seleciona aberta em `app/chamados/services/disputa_emissao.py:571` e dona sem filtro em `:575`; auditor só abertas `app/chamados/management/commands/auditar_invariantes_chamados.py:63`. |
+| Pergunta.disputa/motivo/destino/data | `_nascer` cria em `app/chamados/models.py:3014`; dia passa por `gravar_dia_do_fato` em `:3016`; reuso retorna existente em `:3008` | Detector lê dona/motivo `app/chamados/services/disputa_emissao.py:612–613`; helper dedup lê dia/motivo/via/conversa `:361–382`; auditor conta ausência de qualquer linha `app/chamados/management/commands/auditar_invariantes_chamados.py:63`. |
+
+“Sem pergunta” significa zero linhas, consistente com relatório (zero em `app/chamados/relatorios_disputa.py:12–14`; só mortas em `:18–20`), fechamento VAZIA/VEREDITO (`app/chamados/models.py:1903`) e bloqueio S127 (`app/chamados/juizes.py:2319–2320`).
+
+10. **Relógio indireto merece ressalva.** O auditor chama `cobra_marcos_da_ata` sem `hoje` (`app/chamados/management/commands/auditar_invariantes_chamados.py:37`); esse predicado lê `_tz.localdate()` (`app/chamados/services/disputa_emissao.py:838`). Já existia na volta 2, portanto não é introdução do delta v3; integra o caminho adicionado pela obra inteira. Não afirmar classificação I7 inteiramente independente do relógio.
+
+Não localizei autoridade duplicada pela extração: o helper conserva os leitores, e o auditor reutiliza `_marcos_faltantes` (`app/chamados/services/disputa_emissao.py:313`, `:354`, `:372`, `:375`; `app/chamados/management/commands/auditar_invariantes_chamados.py:70`). MAPA continua atribuindo dia do chamado a `data_do_chamado` e fechamento a `pode_fechar` (`app/docs/MAPA.md:163`, `:165`); não há divergência específica desses endereços causada pelo helper. Pouso, pré-requisito e certificação são [nao verificado].
+
+## 10/11 18:35 · sessao f6ffe75e9181 · - · - · origem=Ronald (tmux)
+
+6. O selo anterior exigia só a substring `data_pergunta=_data_fallback` dentro do gerador; isso consta no hunk fornecido de `diff_v3.patch` [nao verificado quanto ao arquivo histórico local]. O atual exige a delegação literal ao helper e exatamente duas chamadas AST a `_derivar_chamado_destino`, ambas com argumento `data_pergunta` cujo valor é `_data_fallback`. (`app/chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:138`, `:143`, `:146`, `:148`)
+
+   Para os dois sítios extraídos, a exigência de encaminhamento ficou mais estrita: o antigo podia deixar uma chamada sem data enquanto outra preservava a substring; o atual verifica ambas. Entretanto continua sendo teste estrutural: pode passar se o gerador mantiver a delegação e depois sobrescrever destino/dia com uma terceira chamada a `_derivar_chamado_destino(disputa, motivo)` sem data. O selo só inspeciona chamadas dentro do helper. (`app/chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:139`, `:143`, `:145`; desempacotamento real em `app/chamados/services/disputa_emissao.py:436`)
+
+   **Cuidado na comparação pedida:** executar literalmente o selo antigo sobre o código extraído já reprova o controle correto; logo não é uma prova pareada de “controle verde e mutante RED”. Um mutante semanticamente equivalente antes/depois da extração, morto apenas pelo antigo, não foi demonstrado nesta cópia. [nao verificado] [nao verificado]
+
+7. O delta fornecido muda somente os valores das linhas dos mesmos dois identificadores B1: `_orfao_resolvido_cross_meianoite` e `criar_disputa_a_partir_de_chamados_orfaos`; não acrescenta sítio permitido. A cópia registra `[809,810]` e `[1293]`. A catraca mantém verificações separadas da identidade e das linhas. (`app/core/tests/test_medida_turno_do_par.py:269`, `:270`, `:535`, `:541`)
+
+8. Os testes recompilam por AST os corpos lidos dos arquivos, em vez de reimplementar manualmente núcleo/gerador/auditor. Fronteiras ORM, atomic, catálogo, ata e porta de pergunta são doubles. A trava da volta 3 é extraída do método real de `PerguntaDisputa`. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:37`, `:70`, `:73`, `:89`, `:183`; `app/chamados/tests/test_bo_disputa_volta3_memoria.py:197`)
+
+   `--base` pertence à suite anterior: emissor obtido por `git show` da base 6c, acrescido do helper atual quando ausente, com auditor atual como sonda. A suite nova possui `--antes`, referindo-se a f0b; não possui `--base`. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:23`, `:29`, `:209`, `:210`, `:214`, `:473`; `app/chamados/tests/test_bo_disputa_volta3_memoria.py:26`, `:457`)
+
+   No caminho (a), a primeira exceção confronta I7a/I7b com `(0,0)` em `:295`; no emissor antigo que já concluiu núcleo antes da exceção, espera-se falha por `(1,0)`. A segunda exceção exige positivamente uma pergunta antes de levantar (`:305`); como a pergunta existente exclui a DS do contador, a assertion decisiva é a contagem direta vazia em `:312`. Execução dessas assertions contra o histórico real 6c nesta cópia: [nao verificado]. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:290`, `:295`, `:300`, `:305`, `:311`, `:312`)
+
+   A vacuidade apontada na declaração foi curada: exige retorno, DS/pai gravados, motivo/contexto/descrição e contagens positivas, além de ausência de geração. A assertion `all(...)` de travas agora tem guarda de não vazio. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:330`, `:331`, `:406`, `:408`, `:410`, `:411`, `:414`)
+
+   A paridade não passa simplesmente por ambos os geradores devolverem vazio: confronta antes o resultado com dia/pergunta esperado por cenário; três casos de recusa esperam vazio deliberadamente. O teste do selo extraído apenas inspeciona código, sem executar geração. (`app/chamados/tests/test_bo_disputa_volta3_memoria.py:380`, `:433`, `:434`, `:345`, `:355`)
+
+   Os modos de mutação exigem controle verde, pelo menos uma falha por assertion e nenhum erro de montagem. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:477`, `:481`; `app/chamados/tests/test_bo_disputa_volta3_memoria.py:462`, `:465`)
+
+Execução somente em memória nesta revisão: 23 testes verdes, abrangendo suite anterior, `Volta3Test` e selo extraído; sem banco/Git histórico. [nao verificado quanto à certificação Django/PostgreSQL] [nao verificado]
 
 ## 10/11 18:29 · sessao 1510caea65c6 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -790,49 +874,4 @@ Encontrei quatro pontos materiais:
 
 A prova AST da API é razoável para a fronteira estática solicitada: verifica ordem das chamadas e ausência de `atomic` envolvendo o registro, além de `ATOMIC_REQUESTS` nos settings. Não é prova de execução da API. `test_bo_disputa_sem_pergunta_memoria.py:374-389`.
 
-## 10/11 17:00 · sessao f212df288509 · BO-0611-05 · censo · origem=Code
-
-Numeração dos anexos: primeira linha de conteúdo = 1, contando linhas vazias.
-
-1. **(b) Falha da triagem.** O tema estava perguntado: “supoe outro significado (None x 0.0 x '', Decimal x float” (`preverif1.q:23`). O Codex viu: “geofence usa truthiness, enquanto os leitores alterados usam `is not None`; zero permanece na exclusão declarada” (`preverif1.r:37`). A triagem descartou literalmente: **“- 0.0 truthiness x is not None: fora do escopo declarado (brief volta 3); anexo ao opus.”** Motivo registrado: exclusão de escopo (`triagem_preverif1.txt:13`).
-
-2. **(c) Fora do alcance — não conta.** O achado cobra evidência do RED **executado contra a base**, não apenas mutantes ou inspeção (`opus_final1.txt:5`). A pergunta exigia: “RED/GREEN exigidos (aval): POST /api/ponto/bater/ sem coordenadas, colab ativo, nos DOIS kernels -> HOJE 403 e 0 Batida” (`construtor1.q:33`). A resposta delimitou: “POSTs reais, renderizações Django e os 100/100 relatados não foram reexecutados aqui: **[nao verificado]**” (`preverif1.r:66`). Não há trecho de resposta comprovando esse RED na base; RED executado pertence expressamente à classe (c) (`CLAUDE.md:383`).
-
-3. **(e) NÃO PERGUNTADO — falha de quem perguntou.** Não há trecho de pergunta solicitando conferir `LEI-AKITA`/`L-030` nas mensagens dos commits. O trecho próximo é “pouso antes do pre-requisito”, dentro da pergunta sobre classes de defeitos; isso pergunta por ordem do pouso, sem formular a conferência das marcações legais (`preverif1.q:24–26`; tema do achado em `opus_final1.txt:6`). Não há trecho correspondente nas `.r` fornecidas nem descarte correspondente na triagem (`triagem_preverif1.txt:1–13`). Respostas `construtor1.r`–`construtor6.r`: **[nao verificado]**, não fornecidas. [nao verificado]
-
-4. **(e) NÃO PERGUNTADO — falha de quem perguntou.** A pergunta cita “PELA-METADE em app/docs/LEIS.md:78 e :165” como contexto do aval; não pergunta se esses registros ficariam falsos após a cura (`censo1.q:1–3`). A construção também usa “L-030 PELA-METADE” como especificação (`construtor1.q:2`). Não há trecho `.q` pedindo atualização documental por L-106, trecho `.r` apontando essa desatualização ou descarte correspondente na triagem (`opus_final1.txt:7`; `triagem_preverif1.txt:1–13`).
-
-Evidência de avaliação por opus anterior, necessária para atribuir **(d)**: **[nao verificado]**, não fornecida.
-
-| achado | classe | trecho .q | trecho .r | linha da triagem |
-|---|---|---|---|---|
-| 1 — zero/nulo | **(b)** falha da triagem | “supoe outro significado (None x 0.0 x ''” — `preverif1.q:23` | “geofence usa truthiness, enquanto os leitores alterados usam `is not None`” — `preverif1.r:37` | “- 0.0 truthiness x is not None: fora do escopo declarado (brief volta 3); anexo ao opus.” — `triagem_preverif1.txt:13` |
-| 2 — RED na base | **(c)** não conta | “RED/GREEN exigidos […] HOJE 403 e 0 Batida” — `construtor1.q:33` | “POSTs reais […] não foram reexecutados aqui” — `preverif1.r:66`; não há comprovação do RED na base | Não há trecho correspondente — `triagem_preverif1.txt:1–13` |
-| 3 — marcações legais dos commits | **(e)** não perguntado | Não há trecho específico; “pouso antes do pre-requisito” — `preverif1.q:25` — não formula essa conferência | Não há trecho correspondente nas respostas fornecidas | Não há trecho correspondente — `triagem_preverif1.txt:1–13` | [nao verificado]
-| 4 — atualização de LEIS.md | **(e)** não perguntado | Não há pergunta de atualização; “PELA-METADE em app/docs/LEIS.md:78 e :165” é contexto — `censo1.q:2` | Não há trecho correspondente nas respostas fornecidas | Não há trecho correspondente — `triagem_preverif1.txt:1–13` |
-
-## 10/11 16:58 · sessao e54c7972b4a6 · - · - · origem=Ronald (tmux)
-
-Para HX :58, o dia vem do chamado órfão: o teste grava `contexto_json.data_turno`; o agrupador preserva seu ID em `DS.contexto.chamados_orfaos_ids` e no contexto do pai. O leitor exato do ramo sem origem é `data_evento_do_contexto`. ([teste](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_hx_disputa_muda_sem_ata.py:46), [IDs](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1126), [leitura](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1232)) [nao verificado]
-
-Os outros leitores já usados para decidir a abstenção são `data_do_chamado`, no ramo por ata, e `resolver_data_evento`, no ramo com batida de origem. Este último devolve o dia do turno pela autoridade `_T1`. ([por ata](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1169), [por origem](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1205), [resolver](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/escala/servico_jornada.py:474))
-
-Evite `dia_do_fato(..., fortes=False)` como substituto universal: seus últimos degraus aceitam o dia civil do instante observado. `fortes=True` encerra antes desses degraus. ([guarda](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/juizes.py:127), [significado civil](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/juizes.py:141))
-
-O reuso conserva `ex.disputa_id`, mas pode costurar destino/célula antes de retornar. Portanto, o rollback precisa abranger toda a geração, inclusive perguntas próprias emitidas anteriormente na mesma lista. ([costura e retorno](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2958))
-
-A agregação na dona exige seleção explícita: o ramo atual consulta apenas disputas abertas. Uma dona fechada deve receber o motivo sem reabertura paralela; a necessidade dessa seleção decorre do filtro atual. ([seleção](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:532))
-
-A dona fechada também deve entrar na trava antes de chamado/pergunta. A ordem declarada é Colaborador → Disputa → Chamado → Pergunta; após rollback do nascimento, reentrar na porta com a dona permite respeitá-la. ([contrato da trava](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2629))
-
-Nenhum arquivo escrito, banco ou rede acessado nesta exploração. [nao verificado]
-
-## 10/11 16:57 · sessao e439e679001b · - · - · origem=Ronald (tmux)
-
-**Achado 3: (e) NÃO PERGUNTADO.** Nenhuma `.q` solicita auditar mensagens de commit por `LEI-AKITA`/`L-030`, nem conferir `test_lei_protege_sitio` para esse pouso. O trecho mais próximo, em `preverif1.q`, é “**pouso antes do pre-requisito**”: pergunta sobre ordem/dependência do pouso, sem perguntar pelas marcações legais dos commits. Não há trecho `.r` que identifique a falta dessas marcações. A resposta apenas declara: “**Ordem efetiva das travas, liberação da vaga, pouso, smoke nas duas cascas com col677 e certificação independente do hash/base: [nao verificado]**” (`preverif1.r`, último parágrafo). Não há descarte correspondente na triagem fornecida. As linhas devem ser numeradas pelo texto do anexo; não conferi numeração. [nao verificado]
-
-**Achado 4: (e) NÃO PERGUNTADO.** Citar o conteúdo de `LEIS.md` como especificação não equivale a perguntar se a documentação deveria ser atualizada após a obra. `censo1.q` abre com “**L-030 PELA-METADE em app/docs/LEIS.md:78 e :165**”; `construtor1.q` diz “**lei CLAUDE.md secao 4 / L-030 (app/docs/LEIS.md, linha L-030 PELA-METADE)**”. Nenhum desses trechos pede conferir a veracidade final de “BARRA em 4 casos”/“PELA-METADE” ou atualizar `LEIS.md` por L-106. Não há trecho `.r` diagnosticando documentação desatualizada, nem descarte desse diagnóstico na triagem fornecida.
-
-**Ressalva para a consolidação:** a menção ao selo “VERMELHO” no achado 3 é uma alegação do opus anexado; sua execução não foi demonstrada por log nos anexos. Isso não torna o tema específico de marcação legal dos commits uma pergunta previamente feita. Não há evidência de opus anterior suficiente para sustentar classe (d). [nao verificado]
-
-_3436 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
