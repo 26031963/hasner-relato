@@ -1,7 +1,189 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 20:57** · publicado em **09/11/2026 20:57** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:00** · publicado em **09/11/2026 21:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:00 · sessao c358ee63e42c · MODO-COMUM-PASSADO-SEM-TURNO · censo · origem=Code
+
+Quem responde diretamente é **`pauta_cadastro_existente(colaborador_id, dia)`**: procura uma cabeça de Pauta com o marcador, destinada ao DP e ancorada no colaborador; aceita uma viva ou uma fechada cuja data local seja igual ou posterior a `dia`. O contador responde outra pergunta: quantos colaboradores têm essa pendência **viva**. (`app/chamados/services/fabrica_da_celula.py:284`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:301`, `app/chamados/services/fabrica_da_celula.py:320`)
+
+**1. Censo das consultas e varredura AST**
+
+Foram encontrados estes **seis sítios concretos de consulta por âncora de colaborador**:
+
+| Sítio | Seleção | Responde à pergunta investigada? |
+|---|---|---|
+| `app/chamados/services/fabrica_da_celula.py:284` | `ANCORA_COLAB`, DP, cabeça, prefixo `PAUTA_SEM_TURNO`. | Seleciona exatamente o universo investigado. |
+| `app/pautas/services.py:435` | `Q(ancora_tipo='colab', ...)`, unido às pautas de dias da pessoa, em `:436`. | Listagem geral; não interpreta o marcador. |
+| `app/ponto/services/afastado_avisa.py:62` | `'colab'`, supervisão, cabeça viva, prefixo `TEXTO[:40]`. | Outro assunto. |
+| `app/ponto/services/ausencia.py:1039` | `'colab'`, DP, viva, prefixo `[A4/SEM-DOCUMENTO]`, definido em `:1038`. | Outro assunto. |
+| `app/ponto/services/ausencia.py:1229` | `'colab'`, DP, viva, prefixo `[A1-FERIAS/AG#%s]`, definido em `:1228`. | Outro assunto. |
+| `app/ponto/services/pautas_dos_deslogados.py:65` | `ANCORA='colab'`, `DEPARTAMENTO='supervisao'`, marcador `[APP-401]`, definidos em `:26–28`. | Outro assunto. |
+
+No universo específico do marcador, todas estas operações consultam ou derivam o queryset:
+
+| Arquivo:linha | Operação |
+|---|---|
+| `app/chamados/services/fabrica_da_celula.py:283` | Escolhe `Pauta.objects.vivas()` ou `Pauta.objects.all()`. |
+| `app/chamados/services/fabrica_da_celula.py:284` | Aplica âncora, destinatário, cabeça e marcador. |
+| `app/chamados/services/fabrica_da_celula.py:297` | Filtra colaborador e executa `exists()` nas vivas. |
+| `app/chamados/services/fabrica_da_celula.py:301` | Filtra colaborador e lê os fechamentos no histórico. |
+| `app/chamados/services/fabrica_da_celula.py:315` | Obtém as vivas para o contador. |
+| `app/chamados/services/fabrica_da_celula.py:319` | Restringe pelas pessoas das empresas informadas. |
+| `app/chamados/services/fabrica_da_celula.py:320` | Conta `ancora_id` distintos. |
+
+Há ainda uma consulta genérica capaz de receber `'colab'`: `pendentes_por_ancora(tipo, ident)`. Ela conta pautas vivas de qualquer assunto, sem selecionar DP ou marcador; chamador efetivo com `'colab'`: **[nao verificado]**. (`app/pautas/services.py:334`, `app/pautas/services.py:336`)
+
+O script abaixo foi executado em memória com `python3 -B`. Ele procura candidatos por AST, resolve constantes simples e apelidos importados, inclui `Q(...)`, escritas e âncoras não resolvidas para revisão manual. Reflexão, SQL externo e valores montados exclusivamente em execução: **[nao verificado]**.
+
+```python
+import ast
+from pathlib import Path
+mark = 'CADASTRO: PASSADO SEM TURNO PREVISTO'
+count = errors = 0
+for p in sorted(Path('.').rglob('*.py')):
+    if set(p.parts) & {'tests','.venv','venv','node_modules','.git','__pycache__'}:
+        continue
+    if p.name.startswith('test_') or p.name in {'tests.py','conftest.py'}:
+        continue
+    count += 1
+    try:
+        t = ast.parse(p.read_text())
+    except (SyntaxError,UnicodeError) as e:
+        errors += 1
+        print('ERRO',p,e)
+        continue
+    env = {'ANCORA_COLAB':'colab','PAUTA_SEM_TURNO':mark}
+    for n in ast.walk(t):
+        if isinstance(n,ast.ImportFrom):
+            for a in n.names:
+                if a.name in env: env[a.asname or a.name] = env[a.name]
+                if a.name == 'Pauta' and a.asname:
+                    print(f'ALIAS {p}:{n.lineno} {a.asname}=Pauta')
+    def val(n):
+        if isinstance(n,ast.Constant): return n.value
+        if isinstance(n,ast.Name): return env.get(n.id)
+        if isinstance(n,ast.Attribute): return env.get(n.attr)
+    for _ in range(3):
+        for n in ast.walk(t):
+            if isinstance(n,ast.Assign) and val(n.value) is not None:
+                for dst in n.targets:
+                    if isinstance(dst,ast.Name): env[dst.id] = val(n.value)
+    for n in sorted(ast.walk(t),key=lambda n:getattr(n,'lineno',0)):
+        if not isinstance(n,ast.Call): continue
+        f = ast.unparse(n.func)
+        hit = any((k.arg=='ancora_tipo' and val(k.value)=='colab') or
+                  (k.arg=='texto__startswith' and isinstance(val(k.value),str)
+                   and val(k.value).startswith(mark)) for k in n.keywords)
+        dynamic = any(k.arg=='ancora_tipo' and val(k.value) is None for k in n.keywords)
+        query = isinstance(n.func,ast.Attribute) and n.func.attr in {
+            'filter','exclude','get','get_or_create','update_or_create','create'}
+        if hit or (dynamic and query):
+            args = ', '.join(k.arg+'='+ast.unparse(k.value) for k in n.keywords
+                             if k.arg in {'ancora_tipo','texto__startswith'})
+            print(f'{"ALVO" if hit else "DINAMICO"} {p}:{n.lineno} {f}({args})')
+print(f'ARQUIVOS={count} ERROS={errors}')
+```
+
+Saída:
+
+```text
+DINAMICO app/chamados/management/commands/reabrir_orfas_enterradas.py:201 Pauta.objects.filter(ancora_tipo=ANCORA_COMPETENCIA, texto__startswith=MARCADOR)
+DINAMICO app/chamados/services/fabrica_da_celula.py:233 Pauta.objects.filter(ancora_tipo=ANCORA_DIA, texto__startswith=PAUTA_LIMBO_EXPORTADA)
+ALVO app/chamados/services/fabrica_da_celula.py:284 q.filter(ancora_tipo=ANCORA_COLAB, texto__startswith=PAUTA_SEM_TURNO)
+ALVO app/chamados/services/fabrica_da_celula.py:339 escrever(ancora_tipo=ANCORA_COLAB)
+DINAMICO app/chamados/services/passivo_validado.py:163 Pauta.objects.filter(ancora_tipo=ANCORA_COMPETENCIA, texto__startswith=cabeca)
+DINAMICO app/chamados/services/passivo_validado.py:255 Pauta.objects.filter(ancora_tipo=ANCORA_COMPETENCIA, texto__startswith=cabeca)
+DINAMICO app/pautas/management/commands/pauta_pago_x_devido_exportada.py:242 Pauta.objects.nao_canceladas().filter(ancora_tipo=ancora_tipo, texto__startswith=chave + ' ')
+DINAMICO app/pautas/services.py:180 Pauta.objects.create(ancora_tipo=ancora_tipo)
+DINAMICO app/pautas/services.py:336 Pauta.objects.filter(ancora_tipo=tipo)
+ALVO app/pautas/services.py:436 Q(ancora_tipo='colab')
+ALVO app/ponto/services/afastado_avisa.py:62 Pauta.objects.filter(ancora_tipo='colab', texto__startswith=TEXTO[:40])
+ALVO app/ponto/services/afastado_avisa.py:74 escrever(ancora_tipo='colab')
+ALVO app/ponto/services/ausencia.py:1039 Pauta.objects.filter(ancora_tipo='colab', texto__startswith=marcador)
+ALVO app/ponto/services/ausencia.py:1055 escrever(ancora_tipo='colab')
+ALVO app/ponto/services/ausencia.py:1229 Pauta.objects.filter(ancora_tipo='colab', texto__startswith=marcador)
+ALVO app/ponto/services/ausencia.py:1245 escrever(ancora_tipo='colab')
+ALVO app/ponto/services/pautas_dos_deslogados.py:65 Pauta.objects.vivas().filter(ancora_tipo=ANCORA, texto__startswith=MARCADOR)
+ALVO app/ponto/services/pautas_dos_deslogados.py:77 escrever(ancora_tipo=ANCORA)
+ARQUIVOS=1197 ERROS=0
+```
+
+Os candidatos `DINAMICO` restantes foram separados assim:
+
+- `ANCORA_COMPETENCIA` e `ANCORA_DIA` correspondem a outros tipos de âncora. (`app/pautas/models.py:33`, `app/pautas/models.py:34`)
+- Os três chamadores de `_existente(...)` passam `ANCORA_COMPETENCIA`. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:183`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:202`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:222`)
+- `Pauta.objects.create(...)` é a implementação da porta de escrita, não uma consulta de entrega. (`app/pautas/services.py:153`, `app/pautas/services.py:180`)
+- `pendentes_por_ancora(...)` permanece genérica, conforme descrito acima. (`app/pautas/services.py:336`)
+
+**2. Quem escreve e quem lê o marcador**
+
+**Escritor específico encontrado: um.** `pauta_cadastro_sem_turno` chama `pautas.services.escrever`, assinando por TI, destinando ao DP e usando o colaborador como âncora. O texto começa com `PAUTA_SEM_TURNO` e registra `cel.data` como primeiro dia observado. (`app/chamados/services/fabrica_da_celula.py:333`, `app/chamados/services/fabrica_da_celula.py:339`, `app/chamados/services/fabrica_da_celula.py:341`)
+
+Seu único chamador de produção encontrado é `perguntar_pela_celula`, no ramo `venc is None`. Antes da deduplicação, o escritor abre transação e adquire a trava do colaborador. (`app/chamados/services/fabrica_da_celula.py:174`, `app/chamados/services/fabrica_da_celula.py:175`, `app/chamados/services/fabrica_da_celula.py:334`, `app/chamados/services/fabrica_da_celula.py:335`)
+
+O endpoint humano também aceita texto e âncora arbitrários do POST, mas não contém uma referência específica ao marcador. Uso dele para escrever esse marcador: **[nao verificado]**. (`app/pautas/views.py:76`, `app/pautas/views.py:80`, `app/pautas/views.py:81`)
+
+| Leitor | O que efetivamente lê |
+|---|---|
+| `app/chamados/services/fabrica_da_celula.py:284` | Interpreta o prefixo no banco. |
+| `app/chamados/services/fabrica_da_celula.py:297` e `:301` | Usa esse universo para responder “já entregue?”. |
+| `app/chamados/services/fabrica_da_celula.py:315` e `:320` | Conta colaboradores com pauta viva desse universo. |
+| `app/chamados/management/commands/vigiar_fio_morto.py:179` | Chama o contador; imprime em `:202` e inclui no carimbo em `:229`. |
+| `bin/fio_estado.py:104` | Lê o carimbo; compara genericamente `censo` e `esperado` em `:125`, exibindo divergências em `:191`. |
+| `bin/gerar_estado.py:260` | Incorpora essa apresentação ao relatório. |
+
+O vigia publica esperado zero, mas esse contador fica fora dos conjuntos que disparam seu alarme. (`app/chamados/management/commands/vigiar_fio_morto.py:83`, `app/chamados/management/commands/vigiar_fio_morto.py:98`, `app/chamados/management/commands/vigiar_fio_morto.py:181`, `app/chamados/management/commands/vigiar_fio_morto.py:202`)
+
+Há também leitores **genéricos**, que transportam ou exibem o texto sem interpretar o marcador:
+
+- Aba DP: seleção por departamento e pautas vivas; serialização de `p.texto`; apresentação no copiloto. (`app/pautas/services.py:308`, `app/pautas/services.py:322`, `app/pautas/views.py:40`, `app/templates/core/_copiloto.html:405`)
+- API de mensageria: aba padrão DP, lista recebidas e entrega o texto. O cliente e a ferramenta de mensageria repassam esses itens. (`app/api/views_mensageria.py:1324`, `app/api/views_mensageria.py:1329`, `app/api/views_mensageria.py:1334`, `mensageria/nucleo/core_client.py:431`, `mensageria/nucleo/ferramentas.py:2241`, `mensageria/nucleo/ferramentas.py:2248`)
+- Detalhe do colaborador: existe template que mostra estado e texto truncado. A alimentação efetiva do contexto `pautas_do_colab` nessa tela ficou **[nao verificado]**. (`app/templates/colaboradores/detalhe.html:113`, `app/templates/colaboradores/detalhe.html:118`, `app/templates/colaboradores/detalhe.html:119`)
+
+**3. Decisões fora de `perguntar_pela_celula`**
+
+A decisão explícita de **encaminhar esse caso ao CADASTRO** está em `perguntar_pela_celula`: exige passado, colaborador ativo, dia não dispensado por `dia_sem_trabalho`; quando `vencidos_no_instante` devolve `None`, escreve a pauta e retorna sem perguntas. (`app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/fabrica_da_celula.py:174`, `app/chamados/services/fabrica_da_celula.py:175`)
+
+O significado de `None` vem da ausência simultânea de marcos vencidos e pendentes em uma célula passada. A ausência de marcos também pode resultar de vínculo/tipo inexistente ou de horários de início/fim ausentes. (`app/chamados/services/fabrica_da_celula.py:26`, `app/chamados/services/fabrica_da_celula.py:27`, `app/ponto/services/cartorio.py:856`, `app/escala/servico_jornada.py:72`)
+
+| Componente | Caminho confirmado |
+|---|---|
+| **`disparar_perguntas_competencia` — célula** | Lê `motivos_que_o_evento_deixou`; este chama `motivos_a_perguntar`. Com `vencidos=None`, `motivos_pela_ata` retorna vazio. Não verifica nessa passagem se a pauta CADASTRO existe. (`app/chamados/management/commands/disparar_perguntas_competencia.py:112`, `app/chamados/services/fabrica_da_celula.py:213`, `app/chamados/services/fabrica_da_celula.py:112`, `app/chamados/services/fabrica_da_celula.py:38`) |
+| **Mesmo comando — fio mudo** | Bypassa `perguntar_pela_celula`: chama diretamente os helpers `vencidos_no_instante` e `motivos_pela_ata`; sem motivo, pula. O escritor posterior chama `perguntar` diretamente. Portanto cala esse caso por delegação aos helpers, sem encaminhá-lo ao CADASTRO nesse ramo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:158`, `app/chamados/management/commands/disparar_perguntas_competencia.py:160`, `app/chamados/management/commands/disparar_perguntas_competencia.py:282`) |
+| **`reconciliador` — consumidor de eventos** | Delega a `perguntar_por_eventos`, que relê as células e chama `perguntar_pela_celula`. (`app/chamados/reconciliador.py:1386`, `app/chamados/reconciliador.py:1387`, `app/chamados/services/fabrica_da_celula.py:270`, `app/chamados/services/fabrica_da_celula.py:272`) |
+| **`reconciliador.veredito_orfa`** | Usa `dia_encerrado_motivo`. Sem previsto, não afirma encerramento e devolve `None`; isso conserva a pergunta, sem significar entrega ao DP. (`app/chamados/reconciliador.py:1090`, `app/chamados/reconciliador.py:1097`, `app/chamados/reconciliador.py:1104`, `app/ponto/turnos.py:2123`) |
+| **`reconciliador.lavrar_sem_turno_aberto`** | Trata ausência de turno **aberto**; ainda exige que `pergunta_viva` seja falsa e carimba pela porta. Não consulta a pauta CADASTRO. (`app/chamados/reconciliador.py:371`, `app/chamados/reconciliador.py:397`, `app/chamados/reconciliador.py:405`) |
+| **`fio`** | A falta de previsão deixa `esperada_prevista=''` para apresentação. A disponibilidade de ação lê o predicado de `raiox`; esses ramos não comprovam entrega ao CADASTRO. (`app/chamados/services/fio.py:325`, `app/chamados/services/fio.py:331`, `app/chamados/services/fio.py:279`, `app/chamados/services/fio.py:283`) |
+| **`signals`** | Na volta a VIVOS emite evento da célula; na mudança do chamado também chama o julgamento do cartório. O cartório chama `perguntar_pela_celula`. (`app/chamados/signals.py:201`, `app/chamados/signals.py:207`, `app/chamados/signals.py:216`, `app/ponto/services/cartorio.py:1008`) |
+
+**`disputa_emissao` tem decisões próprias de emissão, sem essa guarda CADASTRO.** `_tem_base` aceita batidas como base; `_ata_do_dia` permite continuar sem célula quando não existe escala vigente; os agrupadores usam `_classificar_falta` e `_criar_pergunta_se_couber` diretamente. (`app/chamados/services/disputa_emissao.py:814`, `app/chamados/services/disputa_emissao.py:899`, `app/chamados/services/disputa_emissao.py:906`, `app/chamados/services/disputa_emissao.py:1197`, `app/chamados/services/disputa_emissao.py:1210`, `app/chamados/services/disputa_emissao.py:1232`)
+
+Essa classificação pode devolver motivo usando as batidas mesmo sem sequência prevista. Portanto, o código lido não sustenta que **todo emissor** aplica “passado sem turno → CADASTRO”. Ocorrência concreta desse desvio com dados de produção: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:802`, `app/escala/servico_jornada.py:444`, `app/escala/servico_jornada.py:446`, `app/escala/servico_jornada.py:469`)
+
+**4. Chamadores, significado de `dia` e fechamento**
+
+| Função | Todos os chamadores de produção encontrados |
+|---|---|
+| `_pautas_cadastro` | `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:301`, `app/chamados/services/fabrica_da_celula.py:315` |
+| `pauta_cadastro_existente` | `app/chamados/services/fabrica_da_celula.py:337` |
+| `contador_cadastro_sem_turno` | `app/chamados/management/commands/vigiar_fio_morto.py:179` |
+| `pauta_cadastro_sem_turno` | `app/chamados/services/fabrica_da_celula.py:175` |
+
+O único chamador de `pauta_cadastro_existente` passa **`cel.data`**. É a data da célula que ancora os marcos; o encadeamento pode avançar os marcos posteriores para o dia seguinte. Assim, `dia` não muda para a data civil da saída noturna. (`app/chamados/services/fabrica_da_celula.py:337`, `app/chamados/services/fabrica_da_celula.py:26`, `app/escala/servico_jornada.py:81`, `app/escala/servico_jornada.py:82`)
+
+O fechamento é interpretado assim:
+
+- **Viva:** `feito_em IS NULL` **e** `cancelado_em IS NULL`, pelo queryset do modelo. (`app/pautas/models.py:57`, `app/pautas/models.py:64`)
+- **Entregue com `dia`:** qualquer cabeça viva basta; senão, percorre o histórico e aceita `timezone.localdate(cancelado_em or feito_em) >= dia`. Se ambos estiverem preenchidos, prioriza cancelamento; não calcula o maior instante. (`app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:301`, `app/chamados/services/fabrica_da_celula.py:303`, `app/chamados/services/fabrica_da_celula.py:304`)
+- **Sem `dia`:** apenas pauta viva responde verdadeiro. O chamador encontrado passa `dia` explicitamente. (`app/chamados/services/fabrica_da_celula.py:299`, `app/chamados/services/fabrica_da_celula.py:337`)
+- **Contador:** não recebe dia e conta somente colaboradores distintos com pauta viva. Por isso, contador zero não implica que um dia antigo deixou de estar “entregue”. (`app/chamados/services/fabrica_da_celula.py:309`, `app/chamados/services/fabrica_da_celula.py:315`, `app/chamados/services/fabrica_da_celula.py:320`, `app/chamados/services/fabrica_da_celula.py:304`)
+
+`hoje` e a data do fechamento usam `timezone.localdate`, sem fuso explícito nessas chamadas. A configuração base declara `America/Sao_Paulo` e `USE_TZ=True`; o fuso efetivamente ativo no processo de produção ficou **[nao verificado]**. (`app/chamados/services/fabrica_da_celula.py:161`, `app/chamados/services/fabrica_da_celula.py:304`, `app/config/settings/base.py:93`, `app/config/settings/base.py:95`)
+
+Há uma diferença entre a explicação e a garantia operacional: o predicado considera **cancelamento** suficiente para entrega, embora cancelar seja ato do autor, e não exija `lido_em`. Logo, verdadeiro não comprova que alguém do DP leu ou resolveu o cadastro. (`app/chamados/services/fabrica_da_celula.py:303`, `app/chamados/services/fabrica_da_celula.py:304`, `app/pautas/services.py:288`, `app/pautas/services.py:294`)
+
+**Número final medido: 1 sítio de produção responde semanticamente “este dia já está entregue ao DP como pendência CADASTRO?” — `pauta_cadastro_existente`.** Ele contém duas consultas, viva e histórica, sobre um único construtor específico do marcador. O censo mais amplo encontrou seis consultas concretas por colaborador, discriminadas acima. (`app/chamados/services/fabrica_da_celula.py:288`, `app/chamados/services/fabrica_da_celula.py:297`, `app/chamados/services/fabrica_da_celula.py:301`, `app/chamados/services/fabrica_da_celula.py:284`, `app/pautas/services.py:435`, `app/ponto/services/afastado_avisa.py:62`, `app/ponto/services/ausencia.py:1039`, `app/ponto/services/ausencia.py:1229`, `app/ponto/services/pautas_dos_deslogados.py:65`)
 
 ## 09/11 20:57 · sessao 6838b687ee95 · - · - · origem=Ronald (tmux)
 
@@ -658,41 +840,4 @@ Não encontrei `Parallel Change`/`Expand-Contract` nos dois catálogos consultad
 
 Sem commit, pela proibição de escrever em `.git*`. [Registro](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/E4A_ENTREGA.txt:292). [nao verificado]
 
-## 09/11 17:13 · sessao af1c0c27e636 · - · - · origem=Ronald (tmux)
-
-C20 precisa destes quatro movimentos coordenados:
-
-1. O comando vira vigia puro: retirar `_rodar` e seus blocos de escrita, hoje em [disparar_perguntas_competencia.py:266](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/management/commands/disparar_perguntas_competencia.py:266), e fazer a leitura usar `motivos_que_o_evento_deixou`, cuja composição já reúne os gates da fábrica e a Pauta do limbo. [fabrica_da_celula.py:201](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/services/fabrica_da_celula.py:201)
-
-2. O consumidor passa a chamar `perguntar_pela_celula` depois do lastro. O `lote` já oferece as datas; carregar as células atuais por colaborador e `data__in={e.data for e in lote}` evita depender do identificador da célula anterior à regeneração. Reutilizar `agora` da rodada e manter as exceções dentro do bloco que deixa eventos pendentes. [reconciliador.py:1337](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/reconciliador.py:1337), [reconciliador.py:1348](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/reconciliador.py:1348), [reconciliador.py:1383](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/reconciliador.py:1383)
-
-3. As fontes precisam permanecer completas após cessar os saves das projeções: retorno do chamado a VIVOS, registro de DP e reapontamento com origem e destino devem emitir o evento no mesmo atomic. Hoje o signal de pergunta depende do save e observa somente a situação posterior; `_gravar_estado` não emite explicitamente o evento. [signals.py:237](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/signals.py:237), [models.py:294](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/models.py:294), [fio.py:922](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/services/fio.py:922)
-
-4. Passado sem marcos já tem corte: não pergunta ao colaborador; cria pendência CADASTRO, uma por colaborador, com contador. O emissor antigo ainda retorna `None` por comparação de datas e alcança `classificar_falta`. [PROMPTS.md:2004](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/PROMPTS.md:2004), [fabrica_da_celula.py:29](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/services/fabrica_da_celula.py:29), [fabrica_da_celula.py:55](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/services/fabrica_da_celula.py:55)
-
-A Pauta cabe pela porta existente `pautas.services.escrever`, usando `ANCORA_COLAB`, destinatário DP e marcador estável. Sob atomic e trava do colaborador, consultar toda a história das cabeças e escrever somente se nenhuma existir; o contador deve contar colaboradores, não dias. Essa implementação é proposta, ainda [nao verificado]. A porta e a âncora existem em [services.py:152](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/pautas/services.py:152) e [models.py:30](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/pautas/models.py:30).
-
-O risco de loop vem do consumidor reler eventos novos na mesma execução. A fábrica deve escrever apenas diante de motivos efetivamente ausentes; sua seleção já exclui identidades existentes, e o nascimento da pergunta não aciona o outbox. Uma segunda passagem deve resultar em `motivos=[]`, sem save nem relavra. [reconciliador.py:1343](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/reconciliador.py:1343), [fabrica_da_celula.py:124](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/services/fabrica_da_celula.py:124), [signals.py:239](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/chamados/signals.py:239)
-
-Hunk proibido necessário em `config/crons.py`:
-
-```diff
-@@ ENC('disparar_perguntas_competencia', ...)
--    ENC('disparar_perguntas_competencia', gatilho='apurar_furos_diarios', args='--comp-corrente --apply',
-+    ENC('disparar_perguntas_competencia', gatilho='apurar_furos_diarios', args='--comp-corrente --alarme',
-@@ JUIZES_POR_VARREDURA = (
--    # 'disparar_perguntas_competencia' FICA, e so pelo FIO MUDO: no JUIZ-VARREDURA-4 parte A o caminho da CELULA virou
--    # VIGIA (conta o que o evento `fabrica_da_celula.perguntar_pela_celula` deixou, esperado 0, SystemExit(2)); o fio
--    # mudo (chamado vivo sem pergunta viva) segue ESCREVENDO -- nao ha evento dele e a lei esta aberta (CORTES.md,
--    # PAPEL-PRAZO-DISPARAR-PERGUNTAS 27/10).
--    'disparar_perguntas_competencia',
-@@ PAPEL_DO_CRON = dict(
-     **{n: 'vigia' for n in (
-+                            'disparar_perguntas_competencia',
-```
-
-Âncoras reais: [crons.py:1521](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/config/crons.py:1521), [crons.py:2044](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/config/crons.py:2044), [crons.py:2169](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/config/crons.py:2169). Não encontrei registro desse comando em `core/juizes.py`; alteração ali para C20: [nao verificado].
-
-A condição de saída permanece literalmente “fio mudo medido + C11 pousado”. Esta exploração não comprova nenhuma dessas duas condições, nem `20/20`; o contrato estrutural consulta as exceções reais e não deve ganhar `verde=True` artificial. [CORTES.md:305](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/docs/CORTES.md:305), [contratos_estruturais.py:264](/home/ronald/wt-codex-fio-e0-v4-e4-escritores-171001/app/core/contratos_estruturais.py:264) [nao verificado]
-
-_3227 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3228 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
