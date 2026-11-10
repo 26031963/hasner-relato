@@ -1,7 +1,22 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **09/11/2026 21:15** · publicado em **09/11/2026 21:19** (UTC-3)
+> Ultima resposta processada: **09/11/2026 21:24** · publicado em **09/11/2026 21:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 09/11 21:24 · sessao 5ff88b8dbfe8 · MODO-COMUM-PASSADO-SEM-TURNO · construtor · origem=Code
+
+Arquivos entregues:
+
+- [Selo P3/P4/P6 e casos MORDE](chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:160).
+- [Fábrica: alteração somente na docstring](chamados/services/fabrica_da_celula.py:292).
+- [Executor dos mutantes, com restauração em `finally`](chamados/tests/mutantes_juiz_pauta_cadastro_sem_turno.py:112).
+- [Comandos e saídas completos](chamados/tests/evidencia_modo_comum_passado_sem_turno.txt:7).
+
+Resultado isolado: **14 testes OK**, RED contra a base com **22 falhas**, **23/23 mutantes RC=1** por asserções. [Evidência](chamados/tests/evidencia_modo_comum_passado_sem_turno.txt:765).
+
+**Ruff 0.17.4: `All checks passed!`** [Saída](chamados/tests/evidencia_modo_comum_passado_sem_turno.txt:805).
+
+Suíte Django/ORM: **[nao verificado]**, pois Django está indisponível neste ambiente. A execução isolada não substitui a certificação do Code e do opus final. [Limites](chamados/tests/evidencia_modo_comum_passado_sem_turno.txt:828).
 
 ## 09/11 21:15 · sessao d4c533f18057 · MODO-COMUM-PASSADO-SEM-TURNO · verificador · origem=Code
 
@@ -919,77 +934,4 @@ Ajustes identificados por leitura, sem executar ORM:
 
 Nos outros apps com referências explícitas, não identifiquei expectativa alterada: F3 tem vínculo/DNA (`escala/tests/test_f3_beco1_cadastro_entrou.py:54`, `:72`); `test_cods_do_ato` e `test_classificar_falta_escala` substituem a fábrica (`ponto/tests/test_cods_do_ato.py:67`, `:95`; `ponto/tests/test_classificar_falta_escala.py:24`). Exaustividade sobre caminhos indiretos de todos os signals/cartório da árvore: [nao verificado]. Resultados ORM: [nao verificado].
 
-## 09/11 18:10 · sessao 85fcb794b0e7 · - · - · origem=Ronald (tmux)
-
-Inventário dos campos/valores do diff produtivo `f2962ab8d → 46d313581`:
-
-| Campo/valor | QUEM ESCREVE | QUEM LÊ |
-|---|---|---|
-| DP `pergunta/pergunta_id`, `ato`, `ato_em`, `ato_por/id`, `ato_texto`, `ato_motivo` | `DecisaoPergunta.registrar`: `chamados/models.py:3945`; novas assinaturas de nascimento: `:3015`; conversão da projeção em linhas RESPOSTA/VALIDACAO: `:3929`, `:3933` | Correspondência para preservar legado: `chamados/models.py:3923`; histórico: `:3504`; tarefa por sequência/horizonte: `chamados/services/tarefa_do_dia.py:131`, `:337` |
-| DP fotos `respondida_original_em`, `validada_original_em`, `validada_original_por_id` e vínculos de absorção | Portas existentes, gravadas pelo mesmo executor `chamados/models.py:3945`; campos e restrições: `:3873`, `:3894` | Histórico distingue atos com foto: `chamados/models.py:3509`; tarefa lê ato final: `chamados/services/tarefa_do_dia.py:136`; constraints: `chamados/models.py:3894` |
-| Pergunta `respondida_em/resposta_colab` | Porta de resposta existente: `chamados/services/disputa_emissao.py:1464`; nascimento recebe `**campos`: `chamados/models.py:3010`; ressuscitação limpa instante via `:1566` | Nova conversão para DP: `chamados/models.py:3920`, `:3929`; C6 mantém projeção: `chamados/juizes.py:1339`; app: `chamados/services/pergunta_no_app.py:70` |
-| Pergunta `validada_em/validada_por/id` | Validação existente: `chamados/services/validacao.py:134`; resposta invalida: `chamados/services/disputa_emissao.py:1477`; ressuscitação: `chamados/models.py:1566` | Conversão para DP: `chamados/models.py:3931`; C6: `chamados/juizes.py:1323` |
-| Pergunta `materializada_em/materializada_por/id/via_resolucao` | Porta de carimbo: `chamados/models.py:3093`; limpeza por lote: `:3260`; ressuscitação usa a porta: `:1566` | C6: `chamados/juizes.py:1334`, `:1360`, `:1366`; fábrica busca candidatas com carimbo: `chamados/services/fabrica_da_celula.py:136` |
-| Pergunta `pk`, `disputa_id`, `disputa__colaborador_id`, `celula/id`, `data_evento`, `chamado_destino/id`, `conversa`, `motivo` | Nascimento conserva campos: `chamados/models.py:3010`; reuso: `:2962`, `:2978`; reapontamento: `chamados/services/fio.py:925`; data canônica: `chamados/services/fio.py:790` | Captura de origem do evento: `chamados/models.py:3224`; reuso: `:2958`; ressuscitação: `:1565`; reapontamento: `chamados/services/fio.py:924`; fábrica/dedup: `chamados/services/fabrica_da_celula.py:113`, `:116` |
-| Pergunta `veredito_lavrado/julgado_em/janela_expira_em` | Lavrador existente: `chamados/veredito_lavrado.py:270`; reuso salva os mesmos campos: `chamados/models.py:3001`; fio: `chamados/services/fio.py:927` | Validade temporal: `chamados/veredito_lavrado.py:228`; tarefa mantém seu leitor: `chamados/services/tarefa_do_dia.py:351` |
-| Chamado `status_local`, `_b5_status_antes`, `modulo_origem`, `celula_id`, `pk`, `colaborador` | Estado pela porta existente: `chamados/models.py:228`; snapshot do status persistido: `chamados/signals.py:184` | Novo evento de volta a VIVOS: `chamados/signals.py:191`, `:201`; VIVOS segue catálogo: `chamados/catalogo/motor.py:24`; julgamento seguinte: `chamados/signals.py:214` |
-| EventoCelula `celula_id/colaborador_id/data` | Escritor único: `ponto/portas/celula.py:892`; novos emissores: `chamados/models.py:1568`, `:3003`, `:3946`; `chamados/services/fio.py:929`; `chamados/signals.py:207`; reversão: `ponto/portas/celula.py:796` | Consumidor agrupa por colaborador e IDs: `chamados/reconciliador.py:1346`, `:1350`, `:1352`; fábrica lê datas do lote e relê célula atual: `chamados/services/fabrica_da_celula.py:260`, `:262` |
-| EventoCelula `processado_em/tentativas/erro` | Consumidor existente, depois da nova fábrica: `chamados/reconciliador.py:1395`, `:1401` | Seleção pendente: `chamados/reconciliador.py:1343`, `:1393`; retenção: `:1408` |
-| CelulaDia `pk/data/colaborador_id`, `trabalha`, `ata`, `veredito`, `julgada_em`; Colaborador `situacao='ativo'` | Portas existentes da célula/cartório: `ponto/portas/celula.py:900`, `:1002`; cadastro define situação: `colaboradores/models.py:323` | Fábrica mantém leitura da célula: `chamados/services/fabrica_da_celula.py:80`, `:88`, `:91`; novo encaminhamento CADASTRO: `:164`; consumidor relê atual por colaborador/data: `:262` |
-| Retorno `vencidos=None`, `set()`, pares `(tipo, HH:MM)` | Adaptador do teto: `chamados/services/fabrica_da_celula.py:26`, `:28`; a autoridade continua `cartorio.marcos_vencidos` | `None`/vazio deixam de autorizar pergunta: `chamados/services/fabrica_da_celula.py:38`; `None` passado encaminha CADASTRO: `:166`; pares limitam motivos: `:49` |
-| Pauta `ancora_tipo=ANCORA_COLAB`, `ancora_id`, `destinatario_departamento='dp'`, `pai=None`, marcador `CADASTRO: PASSADO SEM TURNO PREVISTO`, `autor_user` sistema `ti`, `remetente_informado='ti'`, `texto` | Novo chamador: `chamados/services/fabrica_da_celula.py:294`; escritor único efetivo: `pautas/services.py:180` | Guarda histórica por colaborador/cabeça/DP/marcador: `chamados/services/fabrica_da_celula.py:274`; `ANCORA_COLAB` é importado, sem literal inventado: `:273` |
-| Celula `dna/dna_anterior/trabalha/escala_geradora_id/regenerada_em/regeneracoes` | Reversão existente conserva sua escrita: `ponto/portas/celula.py:786`, `:794`; diff acrescenta somente evento `:796` | Própria reversão lê DNA anterior: `ponto/portas/celula.py:777`, `:783`; leitor de reescrita: `escala/services/regeneracao.py:84`, `:104`; fábrica continua lendo ata/célula, `chamados/services/fabrica_da_celula.py:91`, `:107` |
-
-O diff produtivo não altera escritores de cron, registro de juízes, campos de conferência, pendência administrativa ou recusa técnica; os novos testes podem compará-los, mas isso não acrescenta escrita produtiva. Evidência: `git diff f2962ab8d 46d313581 -- chamados/models.py chamados/reconciliador.py chamados/services/fabrica_da_celula.py chamados/services/fio.py chamados/signals.py ponto/portas/celula.py`; cada bloco acima referencia os fontes reais.
-
-Comando ORM principal e vizinhos diretamente relacionados às funções alteradas, para a sessão executar, sem execução aqui:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings_test \
-chamados.tests.test_e4_expand_orm \
-chamados.tests.test_e1_entradas \
-chamados.tests.test_e1_volta2 \
-chamados.tests.test_e1_v12 \
-chamados.tests.test_e1_v13_cadeia \
-chamados.tests.test_e1_v15 \
-chamados.tests.test_e1_v15b \
-chamados.tests.test_e1_v15d_um_ponto_de_escrita \
-chamados.tests.test_e1_v15f \
-chamados.tests.test_e1_v15g_portas \
-chamados.tests.test_e1_v5_ordem_trava \
-chamados.tests.test_e1_v5_portas_backfill \
-chamados.tests.test_e1_v6_horizonte \
-chamados.tests.test_e1_v9 \
-chamados.tests.test_fabrica_pela_ata \
-chamados.tests.test_fabrica_por_evento \
-chamados.tests.test_f1c4_3_emissores \
-chamados.tests.test_cobparc5_parcial_sem_periodo_so_lista \
-chamados.tests.test_pergunta_do_dia_em_curso \
-chamados.tests.test_o261_julgamento_desfaz_carimbo \
-chamados.tests.test_jv4a_disparar_vigia_da_celula \
-chamados.tests.test_c20_juiz3_outbox \
-chamados.tests.test_jv3_reconciliar_vira_vigia \
-chamados.tests.test_orfas_pelo_evento \
-chamados.tests.test_orfas_nao_morre_na_guarda_da_porta \
-chamados.tests.test_porta_reapontamento_pergunta \
-chamados.tests.test_o261e_f1_codex_v5 \
-chamados.tests.test_o261e_f1_porta_encerramento \
-chamados.tests.test_reconciliar_pergunta_a_premissa \
-chamados.tests.test_e2_celula_regenerada_reavalia \
-ponto.tests.test_porta_celula_dia \
-ponto.tests.test_hx_cartorio_ressuscita \
-ponto.tests.test_d3_impressao_cobre_insumos \
-ponto.tests.test_c3_ordem_dos_receivers_da_batida \
-ponto.tests.test_lastro_parte2_fecho_no_evento \
-ponto.tests.test_lastro_parte3_fecho_na_pergunta \
-ponto.tests.test_o_outbox_celula \
-ponto.tests.test_bug114_fechador_de_dois_dias \
-ponto.tests.test_bug115_lampada_do_marco \
-ponto.tests.test_orfas_vigia
-```
-
-Evidência de vizinhança: imports da fábrica em `chamados/tests/test_fabrica_por_evento.py:35`, `test_f1c4_3_emissores.py:76`, `test_o261_julgamento_desfaz_carimbo.py:82`; consumidor em `test_c20_juiz3_outbox.py:241`, `test_jv3_reconciliar_vira_vigia.py:141`, `ponto/tests/test_o_outbox_celula.py:165`; fio em `chamados/tests/test_porta_reapontamento_pergunta.py:271`; signal em `chamados/tests/test_reconciliar_pergunta_a_premissa.py:269` e `ponto/tests/test_d3_impressao_cobre_insumos.py:369`; reversão em `ponto/tests/test_porta_celula_dia.py:184`; ressuscitação em `chamados/tests/test_e1_v13_cadeia.py:140`.
-
-Todos os resultados ORM permanecem `[nao verificado]`.
-
-_3233 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3234 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
