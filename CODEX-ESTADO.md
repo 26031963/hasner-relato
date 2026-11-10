@@ -1,7 +1,199 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 19:32** · publicado em **10/11/2026 19:32** (UTC-3)
+> Ultima resposta processada: **10/11/2026 19:38** · publicado em **10/11/2026 19:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 19:38 · sessao e1d8c6284693 · MAPA-FILA-BO · censo · origem=Code
+
+**O requisito de “TODOS” os leitores não ficou certificado para o estado geral de `Batida`: esse fechamento permanece [não verificado].** Os números abaixo distinguem o inventário contado do total global; não apresento o primeiro como prova do segundo.
+
+Nas tabelas de censo, o caminho da primeira coluna e **cada linha** da segunda formam a referência `arquivo:linha`. Contagens são de sítios de código, não de colaboradores, registros ou autoridades.
+
+## BO-0611-05-TEM-GPS-LEITORES
+
+**(a) Lei, juiz e porta.** A lei exige que batida sem coordenadas seja gravada, sem coordenada inventada e sem criar regra nova de geo; consumidores devem consultar a mesma autoridade. A porta de nascimento continua sendo `registrar_batida`. (`app/docs/LEIS.md:78`; `app/docs/CORTES.md:440`; `CLAUDE.md:20`; `app/core/portas.py:103`)
+
+**Sem juiz registrado para “esta batida tem GPS?”.** O registro contém `classificar_posicao`, mas essa função recebe distância, precisão e raio: não recebe o par de coordenadas e não decide sua presença. Hoje essa decisão aparece, entre outros lugares, em `verificar_geofence`, por truthiness. (`app/core/juizes.py:1191`; `app/ponto/services/geofence.py:95`; `app/ponto/services/geofence.py:247`)
+
+O lookup de juízes é documental; o registro vivo é `core/juizes.py`. Portanto, chamar `geofence.py:247` de “juiz registrado” não confere. (`app/docs/JUIZES.md:10`; `app/docs/JUIZES.md:14`; `app/core/juizes.py:1186`)
+
+**(b) Cria estado: não**, considerando a cura descrita de centralizar a presença GPS e migrar leitores: latitude e longitude já são anuláveis, e o alerta `sem_gps` já nasce com ambas nulas. **Muda decisor: sim**: os predicados locais deixariam de decidir individualmente. O predicado normativo que substituiria essas decisões ainda precisa estar definido; seu resultado não pode ser presumido pela implementação atual. (`app/ponto/models.py:58`; `app/ponto/models.py:59`; `app/ponto/services/geofence.py:249`; `app/ponto/services/geofence.py:253`; `CLAUDE.md:175`)
+
+**(c) Censo identificado: 58 leitores + 14 gravações + 4 apagadores = 76 sítios**, no universo de coordenadas persistidas de `Batida`, suas cópias em `AlertaGeofence`, contexto geográfico do chamado e `Advertencia.detalhe_json`. A advertência realmente copia as coordenadas para JSON. (`app/chamados/services/acoes_chamado.py:193`; `app/chamados/services/acoes_chamado.py:203`; `app/ponto/models.py:1173`)
+
+Foram procurados atributos, argumentos ORM, strings de campos, aliases serializados e seus consumidores em Python, templates e JavaScript; pares latitude/longitude na mesma operação contam uma vez. Testes, migrations, coordenadas próprias de Posto/PingGeo/Justificativa e entradas anteriores à persistência ficaram separados. Completude contra reflexão, SQL dinâmico não rastreado e cascatas genéricas: **[não verificado]**. [nao verificado]
+
+Os **36 sítios com predicado de presença ou serialização condicionada à ausência**:
+
+| Arquivo | Linhas | Forma |
+|---|---:|---|
+| `app/colaboradores/views.py` | 53 | `exclude` das duas coordenadas |
+| `app/colaboradores/views.py` | 337, 356, 395 | `exclude(latitude=None).exists()`; somente latitude |
+| `app/colaboradores/views.py` | 2474 | `is None`, par |
+| `app/colaboradores/painel_cell.py` | 54 | par, com `or ''` |
+| `app/colaboradores/services/situacional.py` | 199 | par, com `or ''` |
+| `app/colaboradores/services/drawer.py` | 63 | `bool(latitude and longitude)` |
+| `app/colaboradores/services/detalhe.py` | 22, 53 | `exclude` das duas coordenadas |
+| `app/core/views.py` | 1024 | `is not None`, por eixo |
+| `app/ponto/views.py` | 468 | `is not None`, por eixo |
+| `app/ponto/views.py` | 485 | `latitude__isnull=False`; somente latitude |
+| `app/chamados/views.py` | 692 | `__isnull=False`, par; modelo importado com alias |
+| `app/ponto/services/vinculo_na_lista.py` | 49 | latitude não nula e precisão não nula; longitude sem filtro |
+| `app/ponto/services/geofence.py` | 52 | `__isnull=False`, par |
+| `app/ponto/services/geofence.py` | 134 | `is None`, par do alerta |
+| `app/ponto/services/geofence.py` | 247 | truthiness, par da batida |
+| `app/ponto/services/geofence.py` | 327, 369 | truthiness para converter/copiar o par |
+| `app/ponto/services/geofence.py` | 403 | `is not None`, par extraído do contexto |
+| `app/ponto/models.py` | 263 | `is None`, par do alerta |
+| `app/ponto/management/commands/reconciliar_alertas_geofence.py` | 42 | `is None`, par |
+| `app/templates/chamados/partials/modal_fio.html` | 480 | truthiness, somente latitude |
+| `app/templates/chamados/partials/_relatorio_geo.html` | 30 | truthiness, somente latitude |
+| `app/templates/ponto/batidas_offline_pendentes.html` | 96 | truthiness, somente latitude |
+| `app/templates/core/_d2_feed.html` | 16 | truthiness, somente latitude |
+| `app/templates/core/dashboard_supervisor.html` | 90 | truthiness da latitude do alerta |
+| `app/templates/colaboradores/detalhe.html` | 142 | truthiness da latitude do alerta |
+| `app/templates/core/dashboard2.html` | 242, 287 | JavaScript `lat && lon` |
+| `app/templates/colaboradores/partials/_drawer_diagnostico.html` | 49 | leitura de `b.tem_gps` |
+| `app/core/services/painel_op.py` | 227 | truthiness por eixo |
+| `app/static/js/geo-colab-map.js` | 39 | `isNaN`, par |
+| `app/templates/chamados/painel_gestao.html` | 583 | `isNaN`, par |
+| `app/templates/chamados/fio_colaborador.html` | 313 | `isNaN`, par |
+
+Os **18 transportes/apresentações**, sem outro predicado próprio de presença:
+
+| Arquivo | Linhas | Forma |
+|---|---:|---|
+| `app/colaboradores/painel_cell.py` | 37 | par em tupla |
+| `app/colaboradores/services/situacional.py` | 141 | `values_list` |
+| `app/colaboradores/services/detalhe.py` | 82 | conversão do par por `float` |
+| `app/ponto/services/geofence.py` | 275, 282, 293, 302 | cópia para alerta |
+| `app/ponto/services/geofence.py` | 383, 384 | `.get` em ocorrência/contexto legado |
+| `app/chamados/services/acoes_chamado.py` | 203 | `.get`, cópia para advertência |
+| `app/templates/chamados/fio_colaborador.html` | 116, 125 | coordenadas e atributos de dados |
+| `app/templates/colaboradores/detalhe.html` | 188 | coordenadas em link |
+| `app/templates/colaboradores/partials/_ps_linha.html` | 1 | aliases `b_lat`/`b_lon` em atributos |
+| `app/templates/colaboradores/detalhe.html` | 231, 238 | aliases `lat/lng`, centro e marcador |
+| `app/ponto/admin.py` | 34 | apresentação como campos somente leitura |
+| `app/static/js/geo-colab-map.js` | 101 | aliases `d.blat/blon` copiados ao consumidor |
+
+Os **quatro leitores externos a `app/`**:
+
+| Arquivo | Linhas | Forma |
+|---|---:|---|
+| `bin/sombra_mascara_pessoal.py` | 51, 54 | carregamento e `getattr` dos campos JSON; um bloco semântico |
+| `bin/sombra_regras_pessoais.py` | 36, 43 | percurso recursivo; número em chave geográfica vira `None` |
+| `bin/sombra_selo_pessoal.py` | 58 | SQL `IS NOT NULL` |
+| `bin/sombra_selo_pessoal.py` | 89, 90 | SQL `jsonb_path_exists`, coordenada diferente de nulo |
+
+As **14 gravações**:
+
+| Arquivo | Linhas | Forma |
+|---|---:|---|
+| `app/ponto/registro_batida.py` | 152, 157 | dois `Batida.objects.create(**campos)` |
+| `app/ponto/registro_batida.py` | 335 | `bulk_create([Batida(**d)])`, somente ensaio |
+| `app/ponto/services/geofence.py` | 249, 273, 280, 291, 298 | cinco criações de alerta; nulos ou cópia do par |
+| `app/ponto/services/geofence.py` | 337 | anexa ocorrência ao contexto |
+| `app/ponto/services/geofence.py` | 339 | cria chamado com contexto geográfico |
+| `app/chamados/services/acoes_chamado.py` | 193 | cria advertência com contexto copiado |
+| `bin/sombra_mascara_pessoal.py` | 20 | `update` dinâmico; alvos Batida/Alerta declarados no inventário |
+| `bin/sombra_mascara_pessoal.py` | 62, 64 | dois `bulk_update` dos JSONs mascarados |
+
+Os alvos dinâmicos da máscara estão declarados para Batida, Alerta e contexto do chamado; a execução exige banco da sombra. (`bin/sombra_regras_pessoais.py:75`; `bin/sombra_regras_pessoais.py:77`; `bin/sombra_regras_pessoais.py:145`; `bin/sombra_mascara_pessoal.py:10`)
+
+Os **quatro apagadores** são `batida.delete()`, o apagador de queryset de ensaio, a exclusão dos alertas de ensaio e a exclusão dos chamados de ensaio que carregam o contexto. (`app/ponto/registro_batida.py:291`; `app/ponto/registro_batida.py:345`; `app/ponto/management/commands/zerar_dados_operacionais.py:85`; `app/chamados/models.py:571`)
+
+Aliases e infraestrutura não podem desaparecer do rastreamento: `_BatidaGeo` é declarado antes do filtro; `_ChG` antes do nascimento; `_nota` encaminha a ocorrência à fusão canônica do contexto. A fusão une listas, preenche chaves e salva o contexto. (`app/chamados/views.py:691`; `app/ponto/services/geofence.py:321`; `app/ponto/services/geofence.py:336`; `app/chamados/services/nota.py:110`; `app/chamados/services/nota.py:123`; `app/chamados/services/contexto.py:147`; `app/chamados/services/contexto.py:155`; `app/chamados/services/contexto.py:163`)
+
+O `save` genérico da porta de anotação não permite alterar coordenadas: elas não pertencem a `CAMPOS_ANOTAVEIS`, e campos externos são recusados. (`app/ponto/registro_batida.py:203`; `app/ponto/registro_batida.py:241`; `app/ponto/registro_batida.py:254`)
+
+O alcance fora dos feeds confere: o detector de vínculo alimenta a lavra usada pelo geofence, e a reavaliação pode retratar chamados. Há cron de lavra, command de reconciliação e signal de Posto. (`app/ponto/services/vinculo_na_lista.py:86`; `app/ponto/services/geofence.py:286`; `app/ponto/services/geofence.py:419`; `app/config/crons.py:597`; `app/ponto/management/commands/detectar_vinculo_divergente.py:35`; `app/ponto/management/commands/detectar_vinculo_divergente.py:52`; `app/ponto/management/commands/reconciliar_geofence.py:33`; `app/ponto/signals.py:306`)
+
+**Conferência do relato.**
+
+- Agrupar `modal_fio` e `_relatorio_geo` como `is not None` **não confere**: ambos usam truthiness da latitude. (`app/templates/chamados/partials/modal_fio.html:480`; `app/templates/chamados/partials/_relatorio_geo.html:30`)
+- A decisão repetida na página do feed **confere**. (`app/templates/core/dashboard2.html:242`; `app/templates/core/dashboard2.html:287`)
+- `float(None)` é um caminho possível se latitude e precisão estiverem preenchidas e longitude estiver nula; não é ocorrência de produção demonstrada. (`app/ponto/services/vinculo_na_lista.py:49`; `app/ponto/services/vinculo_na_lista.py:56`)
+- Os totais “41 leitores” e “35 divergentes” não foram reproduzidos com a mesma unidade/universo: **[não verificado]**.
+- A exigência atribuída a `test_bo0611_05_vinculo_geo_parcial.py:135` não foi confirmada nesta cópia: **[não verificado]**.
+- **Depende de dado:** contagens de pares nulos, parciais, zeros numéricos e respectivas precisões, por origem/canal, e quantos mudariam de resultado em cada leitor: **[não verificado]**.
+
+**(d) Casa.** **COMPLEMENTO do registro de juízes da família batida/O254**, ligado ao BO pai; não há prova de sítio único para “BO simples”. O contrato de batida e a cura da classe das barreiras já têm casa registrada. (`app/docs/BACKLOG.md:1458`; `app/docs/BACKLOG.md:1873`; `app/core/juizes.py:1186`)
+
+**(e) Padrão.** **Single Source of Truth**, termo existente. (`app/docs/GLOSSARIO.md:11`)
+
+perguntas de lei: 1
+
+“Qual predicado de presença GPS deve valer para zero numérico e par parcial, preservando a proibição de regra nova de geo?” A implementação diverge; uma resposta normativa escrita para esses casos não foi localizada **[não verificado]**. (`app/docs/CORTES.md:440`; `app/ponto/services/geofence.py:247`; `app/ponto/services/geofence.py:52`; `app/ponto/services/vinculo_na_lista.py:49`)
+
+## BO-0611-05-RESTO-DA-CLASSE
+
+**(a) Lei, juiz e porta.** L-030 determina registro sem barreira de runtime e escritor canônico; L-025 determina o universo apurável; L-087 determina o papel pelo instante contra marco, sem deixar o tipo gravado decidir. (`app/docs/LEIS.md:78`; `app/docs/LEIS.md:76`; `app/docs/LEIS.md:119`)
+
+**Sem juiz registrado para “esta tentativa de chão pode nascer?”.** O registro de batida contém períodos, cálculo, geofence e selfie; as decisões de dedup/colisão continuam na porta e nas entradas. Para foto ausente há juiz registrado, cuja consequência é cobrança. (`app/core/juizes.py:1186`; `app/core/juizes.py:1195`; `app/ponto/registro_batida.py:113`; `app/ponto/registro_batida.py:145`; `app/docs/CORTES.md:94`)
+
+A porta é `registrar_batida`; suas bordas incluem as duas APIs, triagem e tela web. (`app/core/portas.py:103`; `app/ponto/registro_batida.py:94`; `app/api/views_core.py:681`; `app/api/views.py:684`; `app/ponto/services/triagem_batida.py:701`; `app/ponto/views.py:1815`)
+
+**Conferência de cada alegação do relato:**
+
+| Alegação | Conferência no código |
+|---|---|
+| Oposta em 60/300 s | Confere, com exceção quando casa com marco próprio; autoridade humana já pode gravar. (`app/ponto/registro_batida.py:21`; `app/ponto/registro_batida.py:30`; `app/ponto/registro_batida.py:145`; `app/ponto/registro_batida.py:150`; `app/ponto/registro_batida.py:152`) |
+| Mesmo tipo em 5 min/60 s | Confere. API usa ±5 min; triagem usa os cinco minutos anteriores; porta usa ±60 s e exclui retratadas. (`app/api/views_core.py:549`; `app/api/views.py:557`; `app/ponto/services/triagem_batida.py:662`; `app/ponto/registro_batida.py:106`) |
+| Selfie impeditiva | Confere nas interfaces: retorno impeditivo no v2; exibição do botão condicionada à captura no template antigo. (`app/templates/ponto/bater_ponto_v2.html:287`; `app/templates/ponto/triagem/apto.html:93`; `app/templates/ponto/triagem/apto.html:182`; `app/templates/ponto/triagem/apto.html:253`) |
+| Confirmação de turno aberto | Confere como interrupção para confirmar, não como recusa definitiva. (`app/ponto/views.py:316`; `app/ponto/views.py:329`) |
+| Onboarding/plataforma | Parcialmente confere: onboarding redireciona a tela; middleware isenta `/api/` e `/webview/`. A afirmação de bloqueio da batida nativa por esse middleware não confere nessas rotas. (`app/ponto/views.py:243`; `app/core/middleware.py:247`; `app/core/middleware.py:254`; `app/core/middleware.py:268`; `app/core/middleware.py:283`) |
+| Situação barra login/refresh | Confere para situação diferente de `ativo`; a porta de bater, porém, admite ativo e afastado. (`app/api/login_helpers.py:141`; `app/api/views_core.py:173`; `app/api/views.py:116`; `app/api/views_core.py:402`) |
+| Colisão responde 200 e fila entende sucesso | Confere. O retorno atual fica em outra linha: informa `ignorada_intervalo`/`sucesso=True`; o PWA testa `resp.ok` e apaga a pendência. (`app/api/views_core.py:709`; `app/api/views_core.py:716`; `app/api/views.py:712`; `app/static/pwa.js:158`; `app/static/pwa.js:162`) |
+| Apenas latitude permite `float(None)` | Confere como caminho possível, também exigindo precisão preenchida para passar pelo queryset de Batida. O queryset de Posto tem risco semelhante. (`app/ponto/services/vinculo_na_lista.py:47`; `app/ponto/services/vinculo_na_lista.py:49`; `app/ponto/services/vinculo_na_lista.py:56`) |
+| Falta lei geral para apurar a oposta gravada | **Não confere como afirmação geral**: universo e papel já têm lei; o juiz distingue marco sobrando até 60 s, par de 120 s e outro limite para retratação. (`app/docs/LEIS.md:76`; `app/docs/LEIS.md:119`; `app/ponto/turnos.py:85`; `app/ponto/turnos.py:99`; `app/ponto/turnos.py:104`; `app/ponto/turnos.py:114`) |
+
+Há outro desencontro: a triagem busca a oposta numa janela fixa de 60 s, sem filtro de retratada, enquanto a porta pode recusá-la por uma vizinha até 300 s. Isso permite retorno de colisão sem encontrar o `id` da oposta na recuperação da triagem. (`app/ponto/services/triagem_batida.py:715`; `app/ponto/registro_batida.py:138`; `app/ponto/registro_batida.py:141`)
+
+**(b) Cria estado: sim**, na acepção solicitada de linhas que hoje não nascem pelo fluxo de chão; não exige coluna nova. A combinação oposta já é permitida ao caminho humano, mas o automático pode terminar em `None`. Foto e geo já admitem ausência. **Muda decisor: sim**: efetivar L-030 retira das bordas os vetos de nascimento e preserva o escritor canônico. (`app/ponto/registro_batida.py:150`; `app/ponto/registro_batida.py:152`; `app/ponto/models.py:58`; `app/ponto/models.py:78`; `CLAUDE.md:140`; `app/core/portas.py:103`)
+
+**Depende de dado:** quantidade de tentativas recusadas/interrompidas por barreira, canal, colaborador e instante; colisões sem linha nova; pendências apagadas após esses retornos: **[não verificado]**.
+
+**(c) Inventário contado: 383 sítios em `app/`, mais os complementos externos abaixo.** A unidade foi `(arquivo, linha, tipo de acesso)`, resolvendo imports relativos, aliases locais e aliases de módulo. A decomposição é: 159 seletores ORM, cinco escritas, 116 chamadas às quatro portas de leitura/pareamento, 32 sítios de reverso/tupla, 16 chamadas a `registrar_batida`, sete receivers e 48 linhas de templates/JS. **O total universal transitivo de Batida permanece [não verificado].**
+
+Os **159 seletores ORM**:
+
+Legenda: `F` filtro; `X` exclude; `1` first/get; `E` exists; `V` values/values_list; `A` aggregate/annotate; `C` count; `O` order_by; `L` list/set; `S` select_related/only.
+
+| Arquivo | Linhas | Forma |
+|---|---:|---|
+| `app/api/hora_do_aparelho.py` | 173 | `all` |
+| `app/api/views.py` | 297; 559; 704; 872 | F/O/V/L; F tipo/instante/O/1; F retratada nula/instante/X tipo/O/1; get pk/colaborador |
+| `app/api/views_core.py` | 286; 551; 701; 862 | mesmas quatro formas da casca anterior |
+| `app/chamados/detector_anomalias.py` | 43 | F pk/1 |
+| `app/chamados/juizes.py` | 52; 201; 243 | F pk/S/1; F pks/S; F tipo/instante/O/1 |
+| `app/chamados/management/commands/auditar_disputas.py` | 103 | F origem/S |
+| `app/chamados/management/commands/carimbar_por_batida_coincidente.py` | 70 | F instante/retratada nula/S/L |
+| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py` | 138 | F pergunta de origem/retratada nula |
+| `app/chamados/models.py` | 3467 | F pk/colaborador/V/1 |
+| `app/chamados/reconciliador.py` | 206 | F colaborador/instante |
+| `app/chamados/services/acoes_chamado.py` | 262; 377 | F pk/colaborador/1; alias `_B`, F data/O |
+| `app/chamados/services/adesao.py` | 60, 144 | F colaboradores/retratada nula/V/distinct/L |
+| `app/chamados/services/desvio_escala.py` | 60 | F retratada nula/data/V timestamp |
+| `app/chamados/services/disputa_emissao.py` | 67; 282; 391 | aliases `_Bg`, `_B`, `_Bub`; F colaborador, pks ou pk; último usa 1 |
+| `app/chamados/services/explicador.py` | 40; 53; 132 | F instante/O/1; F/O/V timestamp-tipo/L; F/O/L |
+| `app/chamados/services/fila_por_causa.py` | 190 | F colaboradores/retratada nula/instante/O |
+| `app/chamados/services/fio.py` | 1492; 1525 | F pk/1; F pk/V colaborador/1 |
+| `app/chamados/services/limbo_folgas.py` | 35; 155 | F tipo E/data/retratada nula/V; F data/retratada nula/E |
+| `app/chamados/services/materializacao.py` | 94, 100; 634 | F instante/O/1; F perguntas de origem/retratada nula/V/L |
+| `app/chamados/services/passivo_validado.py` | 513; 527 | F colaborador/A Max pk; F colaborador/pk maior |
+| `app/chamados/services/regularizacao_ext.py` | 73 | F colaborador/instante exato/E |
+| `app/chamados/veredito_lavrado.py` | 177; 180 | F criado/V/A Max; F retratada não nula/V/A Max |
+| `app/chamados/views.py` | 692 | alias `_BatidaGeo`, F par geo não nulo/O |
+| `app/chamados/views_regularizacao.py` | 109 | get pk/colaborador |
+| `app/colaboradores/management/commands/corrigir_escala_retroativa.py` | 94 | F retratada nula/data/V/L |
+| `app/colaboradores/painel_cell.py` | 33 | F instante/O/1 |
+| `app/colaboradores/services/calendario.py` | 239 | alias `_Bat`, F retratada não nula/instante/O/L |
+| `app/colaboradores/services/detalhe.py` | 20 | F colaborador/X latitude nula/X longitude nula |
+| `app/colaboradores/services/drawer.py` | 34 | F instante/S/O/L |
+| `app/colaboradores/services/ficha.py` | 145 | F retratada nula/O/S timestamp/1 |
+| `app/colaboradores/services/pos_vinculo.py` | 38 | F colaborador/retra
+
+[truncado em 20000 de 60219 caracteres]
 
 ## 10/11 19:32 · sessao 2347880ecdab · - · - · origem=Ronald (tmux)
 
@@ -926,28 +1118,4 @@ FALTA certificação ORM/SQL pelo Code e revisão final Opus [nao verificado].
 
 Correção da linha âncora: retorno estrangeiro não é estado real nesta cópia. `abrir_conversa` sempre insere pergunta na DS recebida; o dedup canônico só roda para `conversa=False`. Portanto, sucesso da âncora persiste P local; exceção da porta desfaz pai/DS no atomic externo. Push e retorno estão dentro desse atomic. (`app/chamados/models.py:2794`, `:2801`, `:2893`, `:3008`, `:3014`, `:3017`; `app/chamados/services/disputa_emissao.py:1416`, `:1465`, `:1475`, `:1476`)
 
-## 10/11 18:50 · sessao d1cb93410c4e · - · - · origem=Ronald (tmux)
-
-Censo de nascimento: três `DisputaSupervisao.objects.create` no código de aplicação fora de testes/migrations: núcleo, órfãos e âncora; as rotas de declaração e grade delegam ao núcleo. (`app/chamados/services/disputa_emissao.py:643`, `:1217`, `:1452`, `:722`; `app/ponto/management/commands/reconciliar_grade.py:424`)
-
-| Caminho | Operação e persistido | Retorno/push | Prova | [nao verificado]
-|---|---|---|---|
-| Grade `_disputa` | Chama núcleo com `motivos=[]`, contexto `{'origem':'grade'}`; nascendo, pai e DS ficam sem P porque laço do gerador recebe lista vazia. (`app/ponto/management/commands/reconciliar_grade.py:424`; `app/chamados/services/disputa_emissao.py:643`, `:650`, `:403`) | Retorna `d`; helper não chama push. Não há caller de `_disputa` neste comando; fluxo de `handle` chama `_emitir_furo`, que cria/reabre apenas Chamado e retorna. (`app/ponto/management/commands/reconciliar_grade.py:428`, `:254`, `:488`, `:507`, `:529`, `:531`) | Memória testa núcleo diretamente: `test_bo_disputa_sem_pergunta_memoria.py::test_chamada_grade_motivos_vazios_conta_estrutura`; comando inteiro para este nascimento: AUSENTE. (`app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:421`) |
-| Órfãos — elegibilidade | Remove dias na lista do admin antes atomic; vazio retorna None. Dentro atomic trava fecho C/D/Ch/P. Pode complementar perguntas em dona preexistente e analisar Chamado antes de retornar None no segundo filtro. (`app/chamados/services/disputa_emissao.py:1141`, `:1143`, `:1153`, `:1164`, `:1175`, `:1177`, `:1179`, `:1187`) | None pode coexistir com complementos persistidos; não implica ausência de escrita. (`app/chamados/services/disputa_emissao.py:1175`, `:1188`) | Prova específica retorno None com complemento: AUSENTE [nao verificado]. |
-| Órfãos — nascimento normal | Seleciona primeira DS aberta; se ausente abre pai manual e cria DS com motivos existentes ou `['orfao_14h']`, contexto origem/IDs e FK pai. Ramo intervalo pergunta por marcos com data parseável; demais por ata, batida-origem ou contexto. (`app/chamados/services/disputa_emissao.py:1190`, `:1194`, `:1198`, `:1217`, `:1220`, `:1232`, `:1242`, `:1262`, `:1288`, `:1325`) | Ao fim pergunta pendentes, consulta `pode_fechar`; permanece aberta se não pode fechar; push se `notificar`, dentro atomic, com DS local/motivos atualizados. (`app/chamados/services/disputa_emissao.py:1364`, `:1372`, `:1383`, `:1385`) | `test_pergunta_no_app.py::test_MORDE_col709_dia_mais_velho_ganha_a_pergunta_do_marco_apagado`, `::test_duas_passadas_uma_pergunta`. (`app/chamados/tests/test_pergunta_no_app.py:89`, `:103`) |
-| Órfãos — zero P fora HX | Continua sem pergunta quando marco intervalo inválido, dia do fato ausente, falta de base, juiz sem falta ou veto ausência/fio; motivo pode entrar antes do veto. Se `pode_fechar` e não houve abstenção por ata, persiste DS FECHADA e pai; não desfaz nascimento. (`app/chamados/services/disputa_emissao.py:1244`, `:1300`, `:1327`, `:1329`, `:1332`, `:922`, `:924`, `:926`, `:1376`, `:1378`) | Retorna DS fechada antes do push. Literal “nasce com pergunta ou não nasce”: NÃO. (`app/chamados/services/disputa_emissao.py:1382`, `:1384`) | `test_hx_disputa_muda_sem_ata.py::test_com_ata_e_dia_completo_fecha_como_antes` exige zero P e DS fechada; `test_hx_disputa_muda.py::test_nao_notifica_disputa_muda` exige ausência de push. (`app/chamados/tests/test_hx_disputa_muda_sem_ata.py:63`, `:77`, `:78`; `app/chamados/tests/test_hx_disputa_muda.py:44`, `:50`) |
-| Órfãos — sem ata HX | Pai/DS já existem; `_ata_do_dia` chama `_marcos_faltantes`; estado sem_celula com escala vigente acende e recusa perguntas. Mantém DS aberta zero P, acende auto-fecho. Sem escala vigente, gate permite seguir; exceção de leitura também permite seguir. (`app/chamados/services/disputa_emissao.py:1217`, `:990`, `:995`, `:996`, `:1003`, `:1005`, `:1267`, `:1305`, `:1336`, `:1373`, `:1375`) | Se `notificar=True`, tenta push mesmo zero P; teste HX usa `notificar=False`. Literal invariante: NÃO, exceção explicitamente aprovada pelo dado do usuário. (`app/chamados/services/disputa_emissao.py:1383`; `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:55`) | `test_hx_disputa_muda_sem_ata.py::test_sem_ata_nao_fecha_e_acende` exige zero P/aberta/warning. (`app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51`, `:58`, `:59`, `:61`) |
-| Órfãos — retorno estrangeiro | `_criar_pergunta_se_couber` chama `PerguntaDisputa.abrir` e ignora `(pergunta,criada)`, devolvendo `True`; não transfere motivo nem troca DS local pela dona. Chamados podem ser analisados como se pergunta local tivesse nascido. (`app/chamados/services/disputa_emissao.py:931`, `:941`, `:1252`, `:1271`, `:1314`, `:1317`, `:1345`) | Resultado/push referem-se à DS local; pode fechar local zero P ou conservá-la conforme `pode_fechar`/HX. Literal invariante DEPENDE de outra P local. (`app/chamados/services/disputa_emissao.py:1372`, `:1373`, `:1376`, `:1384`) | Combinação específica com dona estrangeira: AUSENTE [nao verificado]. |
-| Órfãos — universo mudou | `_trava_do_repasse` recusa crescimento do conjunto; atomic desfaz tentativa; captura fora grava evento `repasse_recusado`. (`app/chamados/services/disputa_emissao.py:1097`, `:1100`, `:1108`, `:1110`, `:1387`, `:1390`) | `REPASSE_RECUSADO`; outras exceções não são capturadas nesse handler. (`app/chamados/services/disputa_emissao.py:1393`) | Provas específicas podem estar em testes de repasse; não auditadas [nao verificado]. |
-| Âncora — nova | Guarda categoria/status e P não materializada por destino; trava universo aberto; abre/reusa pai manual, cria DS com `ancora_ausente`, contexto origem/id do limbo; abre conversa `data_hora` com destino limbo, analisa limbo. (`app/chamados/services/disputa_emissao.py:1410`, `:1412`, `:1417`, `:1425`, `:1433`, `:1452`, `:1455`, `:1465`, `:1469`, `:1471`, `:1473`) | Push da DS local dentro atomic, depois retorna DS. Literal invariante SIM se P ficou nela. (`app/chamados/services/disputa_emissao.py:1475`, `:1476`) | `test_fio_ancora.py::test_01_disparo_gera_pergunta_sem_batida`, `::test_02_idempotente`. (`app/chamados/tests/test_fio_ancora.py:69`, `:78`, `:88`, `:95`) |
-| Âncora — estrangeira | Ignora retorno de `abrir_conversa`; DS/pai local persistem mesmo que conversa pertença a outra DS, salvo exceção externa. Analisa limbo e notifica pela local. (`app/chamados/services/disputa_emissao.py:1452`, `:1465`, `:1473`, `:1475`) | Retorna local; literal invariante NÃO se local sem outra P. (`app/chamados/services/disputa_emissao.py:1476`) | AUSENTE [nao verificado]. |
-| Declaração helper isolado | `disputa_para_declaracao` chama núcleo com `emitir_perguntas=False`, contexto origem, merge None. Pode persistir pai/DS sem P; não gera nem envia push. (`app/chamados/services/disputa_emissao.py:709`, `:712`, `:714`, `:722`, `:725`, `:726`) | Retorna DS local. Literal invariante NÃO no limite desse helper. (`app/chamados/services/disputa_emissao.py:727`) | `test_porta_disputa_emissao.py::test_declaracao_sem_disputa_aberta_faz_nascer_uma_com_pai_e_trilha`, `::test_MORDE_a_declaracao_nao_manda_push_nem_varre_pergunta`. (`app/chamados/tests/test_porta_disputa_emissao.py:185`, `:189`, `:223`, `:230`, `:231`) |
-| Declaração consumidores | Ambos têm atomic externo, trava antes do helper e abrem P depois. `_candidata_reusavel` só retorna canônica na própria DS; estrangeira resulta None e chamada de `abrir` pode devolvê-la. Consumidores não conferem dona nem eliminam DS local. Retornos normais de erro dentro atomic também confirmam escrita anterior. (`app/chamados/services/declaracao_texto.py:348`, `:352`, `:360`, `:250`, `:254`, `:376`, `:412`, `:421`, `:654`, `:656`, `:659`, `:666`, `:683`, `:695`) | Declaração colab retorna dicionário; admin valida depois do atomic usando `disputa=d` local. Sem push do helper. Invariante DEPENDE de P retornada pertencer a d. (`app/chamados/services/declaracao_texto.py:426`, `:696`, `:697`; `app/chamados/services/disputa_emissao.py:712`) | Helper coberto acima; combinação consumidor+canônica estrangeira: AUSENTE [nao verificado]. |
-| Fábrica | `perguntar` desfaz carimbo, chama wrapper e chama gerador novamente depois do núcleo; não é outro create direto. Julgamento envolve chamada em silêncio de push. (`app/chamados/services/fabrica_da_celula.py:169`, `:172`, `:174`, `:218`, `:219`) | `perguntar` retorna contagem de desfeitos; pós-geração pode falhar após núcleo já concluído, salvo atomic externo. (`app/chamados/services/fabrica_da_celula.py:175`) | Cobertura específica da segunda geração com falha: AUSENTE [nao verificado]. |
-| Smoke | Comando chama núcleo e gera outra vez depois; não há create DS separado. (`app/chamados/management/commands/smoke_chamados.py:99`, `:102`) | Exceção vira contador/problema no comando. (`app/chamados/management/commands/smoke_chamados.py:114`, `:116`) | É bancada do próprio comando; prova da atomicidade pós-núcleo AUSENTE [nao verificado]. |
-
-Push sempre usa `disputa.colaborador`, URL `/meu-atendimento/`, sem FK/ID da dona na URL; não consulta fechamento nem existência de P. `_PUSH_SILENCIADO` suprime antes das chamadas WebPush/FCM; exceptions são registradas e engolidas. Entrega efetiva [nao verificado]. (`app/chamados/services/disputa_emissao.py:1845`, `:1847`, `:1861`, `:1862`, `:1865`, `:1869`, `:1870`, `:1872`)
-
-O código não realiza push por dona em lote: o wrapper usa a DS única retornada pelo núcleo; nascimento manda `nova=True`; agregação chama pendentes e manda somente quando `novos` não vazio. (`app/chamados/services/disputa_emissao.py:765`, `:766`, `:779`, `:780`, `:781`)
-
-_3462 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3463 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
