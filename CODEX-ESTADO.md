@@ -1,7 +1,149 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 01:15** · publicado em **10/11/2026 01:16** (UTC-3)
+> Ultima resposta processada: **10/11/2026 01:24** · publicado em **10/11/2026 01:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 01:24 · sessao f84f7073acf7 · - · - · origem=Ronald (tmux)
+
+As quatro curas da triagem estão implementadas:
+
+| Achado | Verificação |
+|---|---|
+| Censo dependia de Git | Curado: `os.walk` enumera a árvore, exclui runtime/tests e propaga erros de diretório (`app/pautas/tests/test_prefixos_reservados_ast.py:29`, `:34`, `:42`). |
+| Selo legado exigia constante na fábrica | Curado: permite declaração/inclusão somente no catálogo e import somente na fábrica; mantém restrição de usos operacionais (`app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:160`, `:162`, `:164`, `:265`). |
+| Mutantes apenas em `__main__` | Curado: `MutantesPrefixosTest(SimpleTestCase)` chama o executor e exige mortos positivos/nenhum sobrevivente (`app/pautas/tests/test_prefixos_reservados.py:243`). |
+| Skip engolia `ImportError` de produção | Curado: `try` contém somente `import django`; imports de produção estão no `else` (`app/pautas/tests/test_prefixos_reservados.py:225`, `:239`). |
+
+Os testes são estruturalmente coletáveis: a suite inclui `pautas`, monta `app/` e executa `manage.py test`; o runner deriva de `DiscoverRunner`. Nenhum teste novo consta na lista de quarentena (`bin/regua.sh:23`; `bin/suite.sh:100`; `app/core/runner_quarentena.py:72`; `app/core/testes_em_quarentena.txt:6`).
+
+O teste de coleta verifica dinamicamente que a classe chama o executor; há mutante que remove essa chamada e mutante que amplia o `try` para produção (`app/pautas/tests/test_prefixos_reservados_ast.py:186`; `app/pautas/tests/mutar_prefixos_reservados.py:121`).
+
+Executei em modo somente leitura com `PYTHONDONTWRITEBYTECODE=1 python3 -B`: [nao verificado]
+
+- Executor: rc 0, **73 mortos, zero sobreviventes**; resultado emitido pelo executor (`app/pautas/tests/mutar_prefixos_reservados.py:227`).
+- Dois módulos `unittest`: rc 0, **19 testes, OK, um skip por Django indisponível** (`app/pautas/tests/test_prefixos_reservados.py:229`).
+
+Execução efetiva no runner Django, HTTP/banco e RED contra a base: **[nao verificado]**. O modo `--base` ainda depende de `git show`, mas fica exclusivamente no ramo CLI; não participa da execução coletada dos mutantes (`app/pautas/tests/mutar_prefixos_reservados.py:236`).
+
+O skip não esconde mais `ImportError` de `pautas.services`, models ou views. Tecnicamente, ainda captura qualquer `ImportError` produzido durante o próprio `import django`, sem conferir `erro.name`; não demonstra distinção entre pacote ausente e import interno quebrado (`app/pautas/tests/test_prefixos_reservados.py:225`). Isso não permite esconder falha de produção no runner Django já iniciado (`app/core/runner_quarentena.py:15`; `app/pautas/tests/test_prefixos_reservados.py:239`).
+
+Há mordida real: o executor exige GREEN prévio e não aceita erros de infraestrutura como morte de mutantes de porta/selo (`app/pautas/tests/mutar_prefixos_reservados.py:173`, `:189`). O selo prova origem reservada dos keywords `texto__startswith`; não prova equivalência de sufixos, igualdade escritor/leitor, preservação byte a byte, Python `startswith`, `contains` ou regex (`app/pautas/tests/test_prefixos_reservados_ast.py:144`, `:173`; `app/pautas/tests/mutar_prefixos_reservados.py:205`).
+
+Ordem preservada no escritor de cadastro: `atomic → trava → juiz → escrever`; contador reutiliza o seletor (`app/chamados/services/fabrica_da_celula.py:355`, `:356`, `:358`, `:360`, `:336`). A guarda não lê relógio (`app/pautas/services.py:46`).
+
+## 10/11 01:24 · sessao df111cff54f0 · - · - · origem=Ronald (tmux)
+
+3. **Portas humanas identificadas com texto livre estão guardadas:** criação HTTP valida antes de `sv.escrever`; resposta HTTP valida antes de `sv.responder`; suporte valida antes de responder/fechar e converte `ValidationError` em `CommandError` (`app/pautas/views.py:76`, `app/pautas/views.py:114`, `app/pautas/management/commands/suporte_hasner.py:134`, `app/pautas/management/commands/suporte_hasner.py:139`).
+
+| Categoria | Resultado e evidência |
+|---|---|
+| Compositor/formulário | Envia para `/pautas/escrever/`, cuja view guarda o texto (`app/templates/core/_copiloto.html:544`; `app/pautas/views.py:76`). |
+| Formulário de resposta | Envia para `/pautas/<id>/responder/`, cuja view guarda o texto (`app/templates/core/_copiloto.html:462`; `app/pautas/views.py:114`). |
+| Formulário de edição de texto existente | Não há rota de edição no URLconf de Pauta; ausência universal de rota dinâmica: [nao verificado] (`app/pautas/urls.py:7`). |
+| API de mensageria | A função examinada apenas lista/serializa pautas (`app/api/views_mensageria.py:1323`, `app/api/views_mensageria.py:1331`, `app/api/views_mensageria.py:1340`). |
+| Django admin / serializers / ModelForms | Registro de `Pauta` não identificado no censo da cópia; ausência universal/dinâmica: [nao verificado]. O app config não registra modelos nem possui `ready` (`app/pautas/apps.py:4`). |
+| Shell de suporte usando `suporte_hasner` | Guardado (`app/pautas/management/commands/suporte_hasner.py:134`). |
+| Shell chamando diretamente `services.escrever` ou `services.responder` | **Não passa pela guarda**: `escrever` valida destinatário/âncora/vazio e grava, sem chamar `validar_texto_humano`; `responder` apenas delega a ele (`app/pautas/services.py:170`, `app/pautas/services.py:180`, `app/pautas/services.py:197`, `app/pautas/services.py:209`). Uso efetivo desse caminho humano em produção: [nao verificado]. |
+| ORM direto pelo shell | Campo não declara validador reservado e modelo não define `clean`/`save` próprios; o caminho padrão permanece possível pelo código, uso real: [nao verificado] (`app/pautas/models.py:89`, `app/pautas/models.py:110`, `app/pautas/models.py:136`). |
+
+**Emissores de sistema acionáveis por CLI** continuam sem guarda por desenho: `alarme_arvore` e `alarme_esteira` colocam seu próprio marcador antes dos argumentos, usando o escritor comum (`app/core/management/commands/alarme_arvore.py:50`, `app/core/management/commands/alarme_arvore.py:52`; `app/core/management/commands/alarme_esteira.py:54`, `app/core/management/commands/alarme_esteira.py:56`). Outro texto humano incorporado em Pauta é resposta tardia de chamado, mas recebe prefixo fixo `[RESPOSTA-TARDIA]` antes do conteúdo (`app/chamados/services/resposta_tardia.py:58`, `app/chamados/services/resposta_tardia.py:65`).
+
+**Achado importante para pergunta 2: a cura de ESTEIRA ainda deixa formas reconhecidas passarem.** A guarda exige `ESTEIRA [^\s:]+:`; contudo, o leitor concatena qualquer `chave`, e o comando só aplica `strip`, sem impedir espaços internos ou `:` (`app/pautas/marcadores.py:30`; `app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:34`). Exemplo demonstrável: `--motivo 'a b'` produz/lê `ESTEIRA a b:`, forma que a guarda deixa passar; idem chave `a:b` produz/lê `ESTEIRA a:b:` (`app/core/management/commands/alarme_esteira.py:15`, `app/core/management/commands/alarme_esteira.py:56`; `app/pautas/marcadores.py:30`). Existência dessas chaves em produção: [nao verificado].
+
+**Classes:** escritor físico permanece `Pauta.objects.create` no serviço; resposta chama esse escritor e o registro de portas autoriza somente `pautas/services.py` (`app/pautas/services.py:197`, `app/pautas/services.py:211`; `app/core/portas.py:510`). A ordem da trava de cadastro continua `atomic → trava_na_ordem → pauta_cadastro_existente → escrever` (`app/chamados/services/fabrica_da_celula.py:355`, `app/chamados/services/fabrica_da_celula.py:356`, `app/chamados/services/fabrica_da_celula.py:358`, `app/chamados/services/fabrica_da_celula.py:360`).
+
+## 10/11 01:21 · sessao aec38e1851e1 · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · construtor · origem=Code
+
+Cura implementada: guarda sensível à caixa, `strip()` igual ao escritor e reserva ESTEIRA limitada a `ESTEIRA <token>:`. O suporte valida antes de responder e converte `ValidationError` em `CommandError` (`pautas/services.py:46`; `pautas/marcadores.py:30`; `pautas/management/commands/suporte_hasner.py:134`).
+
+Os sete arquivos alterados:
+
+- [marcadores.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/pautas/marcadores.py:30): forma ESTEIRA no catálogo único.
+- [services.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/pautas/services.py:40): remove `casefold` e consulta a forma catalogada.
+- [suporte_hasner.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/pautas/management/commands/suporte_hasner.py:134): fecha a porta humana do comando.
+- [test_prefixos_reservados.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/pautas/tests/test_prefixos_reservados.py:140): RED das formas, comando, skip restrito ao import Django e mutantes coletáveis por `SimpleTestCase`.
+- [test_prefixos_reservados_ast.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/pautas/tests/test_prefixos_reservados_ast.py:29): enumera a árvore com `os.walk`, sem Git; verifica também coleta e limites do skip.
+- [test_juiz_pauta_cadastro_sem_turno.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/chamados/tests/test_juiz_pauta_cadastro_sem_turno.py:157): admite declaração/registro no catálogo e import na fábrica; mantém usos operacionais restritos.
+- [mutar_prefixos_reservados.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-011046/app/pautas/tests/mutar_prefixos_reservados.py:74): executor compartilhado com a coleta Django e novos mutantes.
+
+O RED inicial, antes da cura, teve **68 falhas de asserção, zero erros**. O replay final contra `d2230cd…`, incluindo explicitamente `[TRANCA] x`, teve **69 falhas, zero erros** (`pautas/tests/test_prefixos_reservados.py:140`; `:161`; `pautas/tests/mutar_prefixos_reservados.py:236`).
+
+Resultados da sonda, executando os corpos reais com persistência substituída (`pautas/tests/test_prefixos_reservados.py:35`; `:79`):
+
+| Caso | Base | Atual |
+|---|---|---|
+| `Esteira de compras` | HTTP 400 | HTTP 200 |
+| `esteira x:` | HTTP 400 | HTTP 200 |
+| `ESTEIRA build:` | HTTP 400 | HTTP 400 |
+| suporte: `[TRANCA] x` | sem CommandError; 1 escrita | CommandError substituído; 0 escritas e 0 fechamentos |
+
+Comandos executados a partir de `app/`:
+
+```bash
+# Replay RED: saída testes=6 falhas=69 erros=0; rc 1 esperado [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados \
+  --base d2230cd194a41ff9c79fb0e7773fb46a6dee44d6
+
+# Depois: 19 testes descobertos; 18 passaram, 1 skip [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  pautas.tests.test_prefixos_reservados \
+  pautas.tests.test_prefixos_reservados_ast
+
+# Depois: 73 mortos; 0 sobreviventes; rc 0
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados
+```
+
+O executor imprime **o comando individual de cada um dos 73 mutantes** (`pautas/tests/mutar_prefixos_reservados.py:219`). O selo legado matou, entre outros, `legado_leitor_fora_do_dono`, que acrescenta uma leitura operacional no catálogo (`pautas/tests/mutar_prefixos_reservados.py:135`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados \
+  --mutante legado_leitor_fora_do_dono
+```
+
+Ruff retornou `All checks passed!` nos sete arquivos, com este comando:
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache \
+  pautas/marcadores.py pautas/services.py \
+  pautas/management/commands/suporte_hasner.py \
+  pautas/tests/test_prefixos_reservados.py \
+  pautas/tests/test_prefixos_reservados_ast.py \
+  pautas/tests/mutar_prefixos_reservados.py \
+  chamados/tests/test_juiz_pauta_cadastro_sem_turno.py
+```
+
+Quanto ao censo: **o escritor persistente único encontrado é `Pauta.objects.create` em `pautas/services.py:197`**, após `strip()` em `:180`. Respostas passam pelo mesmo escritor (`pautas/services.py:211`). As portas humanas validam em `pautas/views.py:76`, `:114` e `pautas/management/commands/suporte_hasner.py:134`.
+
+Na tabela abaixo, os caminhos partem de `app/`; E identifica o emissor e L o leitor:
+
+| Forma reservada | Emissor e leitor |
+|---|---|
+| LIMBO / CADASTRO sem turno | E `chamados/services/fabrica_da_celula.py:270`, `:360`; L `:254`, `:305` |
+| ORFA-ENTERRADA | E `chamados/management/commands/reabrir_orfas_enterradas.py:208`; L `:202` |
+| PASSIVO-VALIDADO / FORA | E `chamados/services/passivo_validado.py:229`, `:266`; L `:164`, `:256` |
+| TRANCA | E `chamados/services/competencia_trancada.py:234`; L `:221` |
+| ARVORE VERMELHA | E `core/management/commands/alarme_arvore.py:50`; L `:16` |
+| ESTEIRA `<token>:` | E `core/management/commands/alarme_esteira.py:54`; L `:15` |
+| CRON QUEBRADO | E `core/services/crons_quebrados.py:71`; L `:54` |
+| FERIAS: três famílias | E `ferias/management/commands/pautas_de_ferias.py:163`; L `:152` |
+| PRE-FECHAMENTO | E `folha/management/commands/pre_fechamento.py:110`; L `:92`, `:98` |
+| DIA EM ABERTO | E `pautas/management/commands/pauta_dia_em_aberto.py:139`, `:142`; L `:108` |
+| FOLGA EXPORTADA | E `pautas/management/commands/pauta_folga_nao_definida_exportada.py:134`, `:139`; L `:126` |
+| PAGO X DEVIDO | E `pautas/management/commands/pauta_pago_x_devido_exportada.py:207`, `:211`; L `:243`, `:250`, `:277` |
+| Revisão ausência / supervisão | Donos `ponto/services/vigia_ausencia.py:239` e `escala/services/fase_12x36.py:278`; E comum `pautas/semanal.py:276`; L `:199`, `:228` |
+| AFASTADO, 40 caracteres | E `ponto/services/afastado_avisa.py:72`; L `:63` |
+| HE EXPORTADA | E `ponto/services/autorizacao_he_periodo.py:244`; L `:242` |
+| COBERTURA-A-CONFIRMAR | E `ponto/services/cobertura.py:333`; L `:243` |
+| APP-401 | E `ponto/services/pautas_dos_deslogados.py:77`; L `:66` |
+| DISCORDANTE | E `ponto/services/pautas_dos_discordantes.py:177`; L `:98`, `:166` |
+| SEM-DOCUMENTO / FERIAS RECUSADA | E `ponto/services/ausencia.py:1058`, `:1248`; L `:1044`, `:1234` |
+| ESMERIL | E `ponto/services/pautas_do_esmeril.py:78`; L `:66`, `:67` |
+
+Os outros chamadores diretos encontrados emitem textos fora dessas reservas: aparelhos compartilhados e resposta tardia (`colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107`; `chamados/services/resposta_tardia.py:62`).
+
+**Nenhum dos leitores listados usa `icontains`, `iexact`, `istartswith` ou regex sem caixa para identificar essas reservas**; usam `texto__startswith` ou `str.startswith`, conforme as referências da tabela. Respostas também precisam da guarda: há leitura explícita de filhas em `pautas/management/commands/pauta_pago_x_devido_exportada.py:250`; CADASTRO restringe a cabeças em `chamados/services/fabrica_da_celula.py:304`. Collation de produção e leitores dinâmicos: **[nao verificado]**.
+
+Não rodaram integração Django, contagem real em banco, suíte completa nem A16 completo: **[nao verificado]**. O teste de zero Pauta está entregue em `pautas/tests/test_prefixos_reservados.py:287`; o skip por ausência de Django está em `:225`. Os 15 testes do selo legado passaram somente na execução isolada descrita em `pautas/tests/mutar_prefixos_reservados.py:46`. A certificação fica com Code/suíte e opus final.
 
 ## 10/11 01:15 · sessao 19d6c776708f · FIO-E0-V4-E4A-2 · verificador · origem=Code
 
@@ -810,50 +952,4 @@ ERROS 0
 
 A presença efetiva de cada célula fornecida no app ou nessa lista, seu veredito lavrado e sua condição de competência exportada são [nao verificado]: esses campos não aparecem no dado recebido.
 
-## 10/11 00:34 · sessao 665dd54f0f38 · - · - · origem=Ronald (tmux)
-
-- **Pela lei, sim, com a ressalva da exportação.** `app/docs/CORTES.md:326` determina: competência exportada nunca vai ao app; nas demais, decide o juiz de dono L-099. A mesma linha retira expressamente o atalho “agrupado sob ADESAO/LIMBO”: agrupamento não decide dono.
-- A L-099 identifica o juiz em `app/docs/LEIS.md:122`: `dono_da_divergencia`, implementado em `app/ponto/management/commands/e6_oraculo.py:53`. Os retornos efetivos estão em `:98–110`; a montagem compartilhada o chama em `:182–195`. Ausência de adesão não é argumento desse juiz (`:53–54`).
-- **Não identifiquei um sítio no fluxo da fábrica/app que leia esse dono para rotear genericamente SEM_ADESAO entre app e lista.** O endpoint usa `consulta_do_app` em `app/api/views.py:2560–2562`; a consulta separa pendentes/histórico por resposta e fechamento em `app/chamados/services/pergunta_no_app.py:69–74`. O universo vem de `q_vivas` e `pergunta_viva` em `:48–57`, sem consulta ao dono L-099. A fábrica `motivos_a_perguntar` também não o lê: corpo completo em `app/chamados/services/fabrica_da_celula.py:87–150`.
-- **Há leitores de dono em produção, respondendo outras perguntas.** A lista Cadastro x Realidade apresenta os donos C9–C12 e escolhe as ações em `app/escala/services/cadastro_realidade.py:906–928`; `_porta_pelo_dono` envia BATIDA à regularização, CADASTRO à porta cadastral, ESTRUTURA ao sistema em `:745–759`. A view serve essa lista em `app/escala/views.py:484–492`.
-- O vigia lê a lista e o dono lavrado em `app/chamados/services/vigia_fio.py:211–228`; quando o dia já está na lista com dono BATIDA/CADASTRO, classifica como `fio_do_admin` em `:313–314`. Isso classifica o contador; não é roteamento de emissão ao app (`:292–295`).
-- Consequência sustentada pela cópia: a lei exige dono como autoridade, mas os fluxos de criação/consulta examinados não o usam nessa decisão (`CORTES.md:326`; `fabrica_da_celula.py:87–150`; `pergunta_no_app.py:44–74`). Presença efetiva dos 44 SEM_ADESAO na lista ou no app, e cobertura por competência exportada: **[nao verificado]** pelo dado fornecido.
-
-## 10/11 00:34 · sessao 8b341e94a3fb · - · - · origem=Ronald (tmux)
-
-(2) A entrada do ramo responde ao fato “há primeira batida não retratada na vida?”: consulta `Batida` sem retratação e define `adesao` pela primeira (`app/ponto/services/cartorio.py:1165–1167`). Porém o efeito não é só classificatório: ele lavra a célula com `codigos=[]` (`app/ponto/services/cartorio.py:1253`), carimba (`app/ponto/services/cartorio.py:1275`) e retorna antes dos emissores normais (`app/ponto/services/cartorio.py:1279`).
-
-No evento, isso também barra a fábrica: `julgar_colab` só chama `perguntar_pela_celula` para datas presentes em `out['cods']` (`app/ponto/services/cartorio.py:996–1008`); o ramo sem adesão não registra essas datas, enquanto o ramo normal as registra (`app/ponto/services/cartorio.py:1437`). Portanto, a premissa é outra (adesão), mas há uma decisão independente com o mesmo efeito “não gerar pergunta no app”; não seria correto alegar que não interfere nessa pergunta. A própria documentação do ramo diz “carimba (registro) e nao emite” (`app/ponto/services/cartorio.py:1168–1173`).
-
-`motivos_a_perguntar` não consulta adesão; suas guardas e retorno estão em `app/chamados/services/fabrica_da_celula.py:100–150`. Assim, chamá-la diretamente não equivale ao caminho do evento: a barreira sem adesão fica no cartório, antes da chamada.
-
-(3) **Sim, existe na cópia a lista Cadastro x Realidade, assinatura C5.**
-
-- `colabs_nunca_bateu` lê células com `veredito='nunca_bateu'`, desde o início da competência anterior até ontem (`app/escala/services/cadastro_realidade.py:175–183`); para ativos não exige confirmação no retrato da folha, que só entra para desligados (`app/escala/services/cadastro_realidade.py:185–200`).
-- `_nunca_bateu` transforma isso na assinatura C5 (`app/escala/services/cadastro_realidade.py:204–209`), inserida na lista (`app/escala/services/cadastro_realidade.py:876–879`).
-- C5 é rotulada como adesão, lavra do cartório (`app/escala/services/cadastro_realidade.py:78–79`), e aponta à ação “Fazer a adesao ao app ou lancar a ausencia do dia” (`app/escala/services/cadastro_realidade.py:690–692`).
-- Há rota real (`app/escala/urls.py:14`), view com autorização `ver_escala` que chama a lista (`app/escala/views.py:475–492`) e template que mostra cada assinatura/dono/ação (`app/templates/escala/cadastro_x_realidade.html:28`).
-
-A inclusão efetiva das células do dado raspado nessa tela hoje é **[nao verificado]**, pois o dado não traz veredito lavrado, resultado da lista nem renderização.
-
-Existe também chamado de adesão para ativo com célula `nunca_bateu` (`app/chamados/services/adesao.py:32–40`), aberto na supervisão/cadastro (`app/chamados/services/adesao.py:74–86`), mas isso não substitui a evidência mais direta da lista C5.
-
-## 10/11 00:33 · sessao 66d82483ec3b · - · - · origem=Ronald (tmux)
-
-Achados na base, sem edições:
-
-- Os quatro prefixos novos são identidades reais. Afastado procura `TEXTO[:40]` e escreve `TEXTO` (`ponto/services/afastado_avisa.py:65`, `:78`); ausência sem documento compartilha `marcador` entre busca e escrita (`ponto/services/ausencia.py:1038`, `:1041`, `:1060`); férias recusadas faz o mesmo com marcador por agendamento (`:1228`, `:1231`, `:1250`); esmeril escreve `[ESMERIL %s]` e lê `[ESMERIL ` (`ponto/services/pautas_do_esmeril.py:14`, `:49`, `:64`).
-
-- O prefixo de afastado é `Bateu ponto durante afastamento. A batid`. Reservá-lo bloqueia qualquer texto humano iniciado nessa prosa; ocorrência legítima em produção é [nao verificado]. A reserva é necessária para cumprir a classe estabelecida, pois esse trecho controla a deduplicação (`ponto/services/afastado_avisa.py:62`).
-
-- Os leitores preservam prefixos exatos, sem `strip` ou `casefold`; a normalização deve ficar apenas na guarda humana. O escritor comum já aplica `strip` (`pautas/services.py:163`), e os leitores usam diretamente os marcadores (`ponto/services/afastado_avisa.py:65`, `ponto/services/ausencia.py:1041`, `:1231`, `ponto/services/pautas_do_esmeril.py:64`).
-
-- O selo AST precisa acompanhar os parâmetros de `semanal.py`: a busca semanal usa marcador mais semana (`pautas/semanal.py:199`), enquanto o fechamento usa marcador puro (`:228`). Os dois produtores reais passam `[A6/REVISAO-SEMANAL]` e `[SUP/REVISAO-SEMANAL]` (`ponto/services/vigia_ausencia.py:28`, `:239`; `escala/services/fase_12x36.py:237`, `:278`).
-
-- Há bypass por respostas humanas: `views.responder` recebe texto livre (`pautas/views.py:112`) e `services.responder` grava uma Pauta filha (`pautas/services.py:194`). Muitos leitores não excluem filhas: semanal (`pautas/semanal.py:197`, `:226`), ausência (`ponto/services/ausencia.py:1039`, `:1229`), esmeril (`ponto/services/pautas_do_esmeril.py:63`) e TRANCA (`chamados/services/competencia_trancada.py:218`). `vivas()` também não exclui filhas (`pautas/models.py:57`).
-
-- Existe leitor deliberado de filhas marcadas: `pauta_pago_x_devido_exportada` compara respostas iniciadas pela chave do sistema (`pautas/management/commands/pauta_pago_x_devido_exportada.py:248`). Portanto, acrescentar indiscriminadamente `pai__isnull=True` não resolve a classe; recomendo chamar a mesma guarda humana também em `views.responder`, preservando o escritor de sistema (`pautas/views.py:112`, `pautas/services.py:194`).
-
-Testes relacionados: `ponto/tests/test_afastado_nunca_bloqueia.py:67`, `ponto/tests/test_porta_ausencia_ferias.py:83`, `ponto/tests/test_pautas_do_esmeril.py:27`, `ponto/tests/test_a6_vigia_familia_ausencia.py:166`, `escala/tests/test_fase_12x36.py:136`. Execução desses testes: [nao verificado].
-
-_3303 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3306 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
