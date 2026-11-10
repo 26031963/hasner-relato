@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 02:58** · publicado em **10/11/2026 03:03** (UTC-3)
+> Ultima resposta processada: **10/11/2026 03:04** · publicado em **10/11/2026 03:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 03:04 · sessao d0f364fe0074 · O169-FECHADA · construtor · origem=Code
+
+Cura entregue em três arquivos:
+
+- [cluster_espurio.py:126](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:126): rótulos por via conhecida, cascata com “desligamento ou ajuste retroativo”, vazias nomeadas e desconhecida reservada às demais vias. `numero`, `esperado` e `universo` preservados.
+- [test_o169_cluster_encerrado_sem_lastro.py:233](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233): contratos de rótulo exato, FK cruzada e K consultas para K colaboradores com vários pares.
+- [test_o169_cluster_encerrado_mutantes.py:63](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:63): três mutantes exigidos e seis adicionais para os rótulos.
+
+Saída local: **61 testes OK; 35 mutantes executados individualmente, todos mordidos por asserção**. O harness rejeita erros de infraestrutura como prova. ([mutantes:131](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:131)) [nao verificado]
+
+O RED de rótulos retornou `FAILED (failures=1)` antes da cura; depois passou. Comandos dos contratos: ([contrato:233](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233)) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_o169_cluster_encerrado_sem_lastro.ClusterEncerradoSemLastroTest.test_RED_rotulo_fiel_por_via_exata -v
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_o169_cluster_encerrado_sem_lastro ponto.tests.test_o169_cluster_encerrado_mutantes -v
+```
+
+Para emitir e executar o comando de **cada mutante**, individualmente, usando a lista entregue em [MUTANTES:13](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import subprocess
+from ponto.tests.test_o169_cluster_encerrado_mutantes import MUTANTES
+
+prefixo = 'ponto.tests.test_o169_cluster_encerrado_mutantes.MutantesO169Test.test_mutante_'
+for nome in MUTANTES:
+    comando = ['python3', '-m', 'unittest', prefixo + nome, '-v']
+    print('PYTHONDONTWRITEBYTECODE=1 ' + ' '.join(comando), flush=True)
+    subprocess.run(comando, check=True)
+PY
+```
+
+Ruff sobre todo `app/`: `All checks passed!`, com as regras de [ruff.toml:4](/home/ronald/wt-codex-o169-fechada-025847/app/ruff.toml:4). Comando executado:
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache .
+```
+
+Quem escreve e quem lê os campos usados pelo contador:
+
+| Campos | Escritor | Leitor |
+|---|---|---|
+| `status_local`, `via_encerramento` | [_gravar_estado:228](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:228), [via:245](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:245); escritores por via citados em [cluster:127](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:127) | [contador:106](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:106) |
+| Chamado: `colaborador_id`, `modulo_origem`, `contexto_json`, `celula_id` | [abrir:958](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:958), [persistência:971](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:971) | [contador:106](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:106), [dia_do_fato:98](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/juizes.py:98) |
+| Célula: `colaborador_id`, `data`, `trabalha` | [geração:259](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/portas/celula.py:259), [edição:600](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/portas/celula.py:600) | [contador:117](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:117), [dia_sem_trabalho:426](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/juizes.py:426) |
+| `ata`: órfãs, lâmpadas e tipo/cobertura do dia | [ata_do_dia:704](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cartorio.py:704), [lavra:1042](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/portas/celula.py:1042) | [_leitura_da_celula:25](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:25) |
+| `nome`, `numero`, `esperado`, `dono`, `universo`, `fora_do_universo`, `excluidos` | [contador:146](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:146), em memória | [comando:63](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/management/commands/detectar_cluster_espurio.py:63); alarme lê `numero != esperado` em [comando:70](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/management/commands/detectar_cluster_espurio.py:70) |
+| `consultas_celulas`, no teste | [dublê:83](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:83), inclusive consulta vazia | [contrato:316](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:316) | [nao verificado]
+
+Não executados: banco/SQL, produção, concorrência, medição de frota/cron e certificação Code/opus. Esses resultados permanecem **[nao verificado]**.
 
 ## 10/11 02:58 · sessao b27ce983d57b · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · construtor · origem=Code
 
@@ -685,20 +737,4 @@ Mapa de escrita/leitura:
 
 O corte `continue` impede toda célula cuja lâmpada ainda seja `nunca_bateu` de chegar à inclusão em `_mudos`; fábrica e repasse também cortam antes de emitir. A pertença efetiva dos 129 itens/44 células/15 colaboradores, ou sua quantidade após relavra/renascimento, permanece [não verificado]. (`app/chamados/management/commands/disparar_perguntas_competencia.py:87`–`:89`, `:124`; `app/chamados/services/fabrica_da_celula.py:85`–`:86`, `:163`–`:164`; `app/chamados/services/disputa_emissao.py:758`–`:759`)
 
-## 10/11 02:19 · sessao 14fde6cf8cbf · - · - · origem=Ronald (tmux)
-
-- **PROCEDENTE 1 curado:** `receber()` voltou a consultar a porta `_renascer_por_premissa_viva()` para qualquer `VEREDITOS_ACUSAM`, sem corte de `nunca_bateu` (`app/chamados/services/resposta_tardia.py:45`). O teste antigo conserva HTTP 200, resposta não tardia, chamado vivo e declaração chamada; o novo caso verifica a porta real com `side_effect` (`app/chamados/tests/test_resposta_tardia.py:70`, `app/chamados/tests/test_resposta_tardia.py:93`).
-
-- **PROCEDENTE 2 curado nas fixtures examinadas:** entrada efetiva antes do signal em resposta tardia e fio mudo; adesão anterior com par fechado mantém o dia do teste de causa sem batidas (`app/chamados/tests/test_resposta_tardia.py:34`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:53`, `app/chamados/tests/test_selo_emissor_fio_mudo.py:245`, `app/chamados/tests/test_o261_fabrica_le_a_lampada.py:118`). Catraca registra `1199` (`app/core/tests/test_medida_turno_do_par.py:268`). A comparação com o delta fornecido não mostra inversão das asserções desses casos; na obra inteira há inversões intencionais da emissão do cron para zero, coerentes com sua conversão em vigia (`app/chamados/tests/test_selo_emissor_fio_mudo.py:282`).
-
-- **PROCEDENTE 4 substancialmente curado:** teste Django monta vínculo real, Batida somente para furo, marco vencido e ata acusadora; controle furo emite e `nunca_bateu` entrega zero perguntas e exatamente um par C5 (`app/chamados/tests/test_e4a2_nunca_bateu.py:74`, `app/chamados/tests/test_e4a2_nunca_bateu.py:94`, `app/chamados/tests/test_e4a2_nunca_bateu.py:110`). Repasse e contador usam chamadas reais com controles positivos (`app/chamados/tests/test_e4a2_nunca_bateu.py:119`, `app/chamados/tests/test_e4a2_nunca_bateu.py:133`).
-
-- **Os oito mutantes C5 têm controle antes da mutação e exigem `AssertionError` com mensagem específica**, dificultando aceitar erro de setup como mordida (`app/chamados/tests/test_e4a2_nunca_bateu.py:33`, `app/chamados/tests/test_e4a2_nunca_bateu.py:201`). A coleção do placar faz o mesmo para oito mutantes (`app/core/tests/test_fio_mudo_placar.py:34`, `app/core/tests/test_fio_mudo_placar.py:274`). Execução desses testes Django e de cada mutante: **[não verificado]**.
-
-- **Verificação executada sem escrita:** dez métodos puros extraídos em memória — fonte, relógio, relatório e coletor SQL — passaram, incluindo suas mutações; isso verifica os métodos das linhas indicadas e não equivale à suíte Django integral (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:75`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:162`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:221`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:265`).
-
-- **Lacunas concretas:** mutantes específicos de publicação/leitura do contador C5, presentes no arquivo removido fornecido pelo usuário, não foram repostos na coleção do placar; a coleção atual muta `fio_mudo_alvos`, embora o teste normal confira publicação/divergência C5 (`app/core/tests/test_fio_mudo_placar.py:34`, `app/core/tests/test_fio_mudo_placar.py:139`). O novo teste de desligado cobre somente o excluído da C5; não cobre sua conservação pela lavra integrada ao contador (`app/chamados/tests/test_e4a2_nunca_bateu.py:155`). Há cobertura anterior da própria C5 com lavra (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:97`).
-
-- **Vazio:** os novos controles centrais exigem emissão/alvo positivos e ata não vazia, impedindo aprovação apenas por ausência de cenário (`app/chamados/tests/test_e4a2_nunca_bateu.py:95`, `app/chamados/tests/test_e4a2_nunca_bateu.py:113`, `app/chamados/tests/test_e4a2_nunca_bateu.py:135`). O veto de DML também exige um alvo em cada caminho e verifica callbacks; seus controles demonstram UPDATE imediato e adiado sem alteração de contagens (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:305`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:334`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:352`). Resultado integral informado de 1693 testes: **[não verificado]**.
-
-_3340 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3341 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
