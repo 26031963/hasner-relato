@@ -1,7 +1,516 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 11:04** · publicado em **10/11/2026 11:09** (UTC-3)
+> Ultima resposta processada: **10/11/2026 11:13** · publicado em **10/11/2026 11:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 11:13 · sessao 9617f2b74b15 · FIO-E0-V4-E4B · leitura · origem=Code
+
+1. **A origem das 1.233 permanece [nao verificado].** As candidatas encontradas são:
+
+| Tela/contador | Autoridade do número exibido |
+|---|---|
+| **Central de Atendimento** | `painel_gestao → montar_contexto_painel`. O total da lista é `chamados_qs.count()`, depois dos filtros e exclusões; o queryset completo fica em `ctx['paginator'].object_list`. (`app/chamados/views.py:727`; `app/chamados/services/painel.py:333`; `app/chamados/services/painel.py:422`; `app/templates/chamados/partials/_lista_resumo.html:15`) |
+| Pilhas **Validar/Cobrar/Decidir** | `particionar_verbos(qs_vivos(...))`, consumido pelo contexto e pelas pílulas. (`app/chamados/services/painel.py:230`; `app/chamados/services/verbos.py:30`; `app/templates/chamados/painel_gestao.html:42`) |
+| **Central de Justificativas — Pendentes** | `fila_justificativas`: `Justificativa.objects.filter(status='pendente').count()`. **Esse card não recebe o filtro de empresa**, embora a lista receba. (`app/ponto/views.py:1717`; `app/ponto/views.py:1736`; `app/templates/ponto/fila_justificativas.html:41`) |
+
+“Central de Chamados” é um link para a mesma Central de Atendimento. Há ainda dois números próximos: o **badge da navbar**, que prefere `PlacarNavbar.badge_chamados`, e o **atalho HE**, produzido por `pendentes_na_central`. A sonda lê ambos sem tratá-los como outra Central. (`app/templates/ponto/partials/painel_justificativa.html:80`; `app/core/context_processors.py:68`; `app/chamados/views.py:762`)
+
+Se as 1.233 forem o badge lavrado, sua decomposição histórica exata permanece **[nao verificado]**: o escritor guarda o número e o contexto agregado, sem os IDs dos integrantes. A sonda distingue essa lavra da partição atual. (`app/core/management/commands/lavrar_badge_navbar.py:39`; `app/core/management/commands/lavrar_badge_navbar.py:73`; `app/core/management/commands/lavrar_badge_navbar.py:92`)
+
+2. **Classe e dono têm dimensões distintas na própria casa:**
+
+| Item | Classe | Dono | Ligação ao dia |
+|---|---|---|---|
+| Chamado | Origem: `modulo_origem → _rotulo_origem`; ação: `particionar_verbos`. (`app/chamados/services/painel.py:392`; `app/chamados/services/verbos.py:47`) | Atribuição humana: `atribuido_a_id`; pilha: `dono_do_chamado`, com insumos de `creditos_perguntas`; departamento: `departamento_do_chamado`. A sonda conserva os três. (`app/chamados/models.py:64`; `app/templates/chamados/partials/_lista_chamados.html:96`; `app/chamados/catalogo/natureza.py:41`; `app/chamados/services/raiox.py:51`; `app/chamados/utils.py:32`) | `(colaborador_id, dia_do_fato(chamado))`; a função prioriza a célula ligada. Dia não identificado fica separado, sem ser presumido fora do E4b. (`app/chamados/models.py:38`; `app/chamados/juizes.py:87`; `app/chamados/juizes.py:98`) |
+| Justificativa | `tipo/get_tipo_display`. (`app/templates/ponto/fila_justificativas.html:108`) | O pendente diz “aguardando DP”; `aprovada_por` é autor da decisão, não atribuição corrente. (`app/ponto/models.py:131`; `app/ponto/models.py:160`) | `(colaborador_id, data_turno)`; `chamado_origem` é opcional. (`app/ponto/models.py:136`; `app/ponto/models.py:144`; `app/ponto/models.py:173`) |
+
+Para **células-dia do E4b**, a sonda também consulta `InsumosDoDono.dono`, que chama o juiz real `dono_da_divergencia`, usando a alimentação lavrada de CxR. Ausência de resposta permanece `[nao verificado]`; não existe mapa classe a–e → dono. (`app/ponto/management/commands/e6_oraculo.py:182`; `app/escala/services/cadastro_realidade.py:1024`; `app/chamados/services/vigia_fio.py:99`)
+
+3. **O universo a–e é `censo_alcance`.** Todas as linhas `rota == 'sem_porta'` são preservadas independentemente do limite; `limite=0` permite obter esse conjunto completo, conferindo tamanho e classes contra os contadores reais. Inclui o caso legítimo sem FK de célula, identificado pelo par colaborador/data. (`app/chamados/services/vigia_fio.py:548`; `app/chamados/services/vigia_fio.py:628`; `app/chamados/services/vigia_fio.py:667`; `app/chamados/services/vigia_fio.py:695`)
+
+`censo` é outro universo e trunca suas listas; `classificar`, importada de `vigia_carimbo`, não fornece as classes a–e. (`app/chamados/services/vigia_fio.py:328`; `app/chamados/services/vigia_fio.py:454`; `app/chamados/services/vigia_fio.py:463`)
+
+O juiz de exportação é `folha.export.competencia_entregue`, composto com `janela_atual` por `competencia_do_dia_entregue`. **O alcance cobre a competência corrente e a anterior enquanto não entregue; não cobre todo o histórico exportado.** (`app/chamados/services/vigia_fio.py:822`; `app/folha/export.py:556`; `app/ponto/services/he_pendente_lavrado.py:220`)
+
+4. Script proposto abaixo; execução em Django/produção e resultados: **[nao verificado]**.
+
+```python
+# Proposta de sonda; execucao e resultados: [nao verificado].
+# Na pasta que contem manage.py:
+# PYTHONDONTWRITEBYTECODE=1 python manage.py tenant_command shell --schema=juliani \
+#   -c 'exec(compile(open("/tmp/sonda_e4b.py", encoding="utf-8").read(), "/tmp/sonda_e4b.py", "exec"))'
+import sys
+sys.dont_write_bytecode = True
+import contextlib
+import datetime as dt
+import io
+import json
+import logging
+from collections import Counter
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from django.db import connection, connections, transaction
+from django.test import RequestFactory
+from django.utils import timezone
+
+EMPRESAS = (2, 3, 4)
+PASSO = "inicio"
+SAIDA = []
+FALHAS_SQL = []
+AGORA = timezone.now()
+HOJE = timezone.localdate(AGORA)
+FONTE = (
+    "app/chamados/services/painel.py:198; "
+    "app/chamados/services/verbos.py:30; "
+    "app/ponto/views.py:1695; app/ponto/models.py:131; "
+    "app/chamados/catalogo/natureza.py:41; app/chamados/utils.py:32; "
+    "app/chamados/services/vigia_fio.py:542"
+)
+
+class FalhaSonda(BaseException):
+    pass
+
+class RollbackFinal(BaseException):
+    pass
+
+def exigir(condicao, codigo):
+    if not condicao:
+        raise FalhaSonda(codigo)
+
+def emitir(tipo, fonte=FONTE, **dados):
+    SAIDA.append(dict(tipo=tipo, fonte=fonte, **dados))
+
+def col(pk):
+    return None if pk is None else "col%03d" % pk
+
+def erro_seguro(exc):
+    # Sem str(exc): erros de banco/aplicacao podem conter nomes/CPF.
+    cadeia = []
+    atual = exc
+    vistos = set()
+    while atual is not None and id(atual) not in vistos:
+        vistos.add(id(atual))
+        locais = []
+        tb = atual.__traceback__
+        while tb:
+            nome = tb.tb_frame.f_code.co_filename
+            if "/app/" in nome:
+                nome = "app/" + nome.split("/app/", 1)[1]
+            else:
+                nome = Path(nome).name
+            locais.append("%s:%d" % (nome, tb.tb_lineno))
+            tb = tb.tb_next
+        cadeia.append(dict(
+            tipo=type(atual).__module__ + "." + type(atual).__name__,
+            codigo=(atual.args[0] if isinstance(atual, FalhaSonda) else None),
+            sqlstate=getattr(atual, "sqlstate", getattr(atual, "pgcode", None)),
+            locais=locais,
+        ))
+        atual = atual.__cause__ or atual.__context__
+    return cadeia
+
+def sql_so_leitura(execute, sql, params, many, context):
+    alias = context["connection"].alias
+    if alias != connection.alias:
+        raise FalhaSonda("OUTRA_CONEXAO")
+    s = str(sql).lstrip().upper()
+    permitido = (
+        s.startswith(("SELECT ", "WITH ", "SHOW ", "SAVEPOINT ",
+                      "RELEASE SAVEPOINT ", "ROLLBACK TO SAVEPOINT "))
+        or s.startswith("SET SEARCH_PATH")
+        or s.startswith("SET SEARCH PATH")
+    )
+    exigir(permitido, "SQL_NAO_AUTORIZADO")
+    try:
+        return execute(sql, params, many, context)
+    except Exception as exc:
+        FALHAS_SQL.append(type(exc).__name__)
+        raise FalhaSonda("ERRO_SQL") from exc
+
+def log_estrito(self, level, msg, args, **kwargs):
+    if level >= logging.WARNING:
+        exc = kwargs.get("exc_info")
+        if isinstance(exc, tuple) and isinstance(exc[1], BaseException):
+            raise FalhaSonda("LOG_WARNING_OU_ERRO") from exc[1]
+        raise FalhaSonda("LOG_WARNING_OU_ERRO")
+    # Nao encaminhar logs: handlers podem gravar arquivos.
+
+def engolido_estrito(*args, **kwargs):
+    causa = next((x for x in args if isinstance(x, BaseException)), None)
+    raise FalhaSonda("ERRO_INTERNO_REGISTRAR_ENGOLIDO") from causa
+
+def chamada_estrita(func):
+    def chamar(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as exc:
+            raise FalhaSonda("ERRO_INTERNO_AUTORIDADE") from exc
+    return chamar
+
+def capturar_render(request, template, context=None, *args, **kwargs):
+    exigir(template == "ponto/fila_justificativas.html", "TEMPLATE_INESPERADO")
+    return context
+
+def executar():
+    global PASSO
+    from chamados.services import painel as P
+    from chamados.services.raiox import creditos_perguntas
+    from chamados.services.verbos import (
+        particionar_verbos, exige_o_admin, VERBOS_DO_ADMIN,
+    )
+    from chamados.catalogo.natureza import dono_do_chamado
+    from chamados.catalogo import modulos
+    from chamados.utils import departamento_do_chamado
+    from chamados.juizes import dia_do_fato, tranca_em_lote
+    from chamados.services.vigia_fio import (
+        ListaDoAdmin, censo, censo_alcance, competencia_do_dia_entregue,
+        CAUSAS_ALCANCE,
+    )
+    from colaboradores.models import Colaborador, Empresa
+    from colaboradores.queries import empresas_visiveis
+    from core.context_processors import navbar_context
+    from core.models import PlacarNavbar
+    from ponto import views as PV
+    from ponto.janelas import janela_atual
+    from ponto.management.commands.e6_oraculo import InsumosDoDono
+    from ponto.services.cxr_na_lista import cxr_lavrado
+    from ponto.services.gestao_he import pendentes_na_central
+
+    PASSO = "schema_e_empresas"
+    exigir(connection.schema_name == "juliani", "SCHEMA_DIFERENTE_DE_JULIANI")
+    exigir(
+        set(Empresa.objects.filter(pk__in=EMPRESAS)
+            .values_list("pk", flat=True)) == set(EMPRESAS),
+        "EMPRESA_AUSENTE",
+    )
+    visiveis = list(empresas_visiveis())
+    emitir(
+        "ESCOPO",
+        empresas=list(EMPRESAS),
+        empresas_visiveis_pk=[e.pk for e in visiveis],
+        agora=timezone.localtime(AGORA).isoformat(),
+        hoje=HOJE.isoformat(),
+        parametros="GET vazio; adicionalmente empresa 2, 3 e 4",
+    )
+
+    # app/colaboradores/mixins.py:326; app/core/context_processors.py:42
+    req = RequestFactory().get("/")
+    req.user = SimpleNamespace(
+        is_authenticated=True, is_superuser=True, is_staff=True,
+    )
+
+    PASSO = "navbar_contador_exibido"
+    nav = navbar_context(req)
+    badge = int(str(nav["badge_chamados"]))
+    registrados = int(str(nav["badge_registrados"]))
+    foto = PlacarNavbar.objects.first()
+    emitir(
+        "NAVBAR_EXIBIDA",
+        fonte="app/core/context_processors.py:68; app/templates/base.html:173",
+        badge_chamados=badge,
+        badge_registrados=registrados,
+        lavra_pk=foto.pk if foto else None,
+        lavrado_em=(
+            timezone.localtime(foto.lavrado_em).isoformat()
+            if foto and foto.lavrado_em else None
+        ),
+        decomposicao_da_lavra=(
+            "[nao verificado]: lavra nao conserva ids dos itens"
+            if foto else "sem lavra; comparar admin_atual do tenant"
+        ),
+    )
+    emitir(
+        "LIMITE_E4B",
+        fonte="app/ponto/services/he_pendente_lavrado.py:209",
+        cobertura=(
+            "competencia corrente e anterior se nao entregue; "
+            "nao e todo o historico exportado"
+        ),
+    )
+
+    PASSO = "alcance_a_e"
+    lista = ListaDoAdmin(HOJE, EMPRESAS, agora=AGORA)
+    lista._carregar()
+    exigir(
+        lista._dias is not None and lista._colabs is not None,
+        "LISTA_ADMIN_SEM_RESPOSTA",
+    )
+    with tranca_em_lote():
+        antigo = censo(
+            EMPRESAS, hoje=HOJE, limite=sys.maxsize, lista=lista,
+        )
+        alcance = censo_alcance(
+            EMPRESAS, hoje=HOJE, limite=0, lista=lista,
+        )
+    exigir(lista.sem_resposta == 0, "LISTA_ADMIN_FALHOU")
+    exigir(
+        len(antigo["celulas_do_fio_morto"]) == antigo["fio_morto"],
+        "CENSO_ANTIGO_TRUNCADO",
+    )
+    emitir(
+        "CONTROLE_CENSO_ANTIGO",
+        fonte="app/chamados/services/vigia_fio.py:449",
+        fio_morto=antigo["fio_morto"],
+        fio_morto_cobrando=antigo["fio_morto_cobrando"],
+        celula_pk=antigo["celulas_do_fio_morto"],
+    )
+
+    mortos = [x for x in alcance["alcance_dias"] if x[4] == "sem_porta"]
+    exigir(len(mortos) == alcance["fio_morto_alcance"], "ALCANCE_TRUNCADO")
+    por_causa = Counter(x[5] for x in mortos)
+    for causa in CAUSAS_ALCANCE:
+        exigir(
+            por_causa[causa] == alcance["alcance_" + causa],
+            "CLASSES_NAO_FECHAM",
+        )
+    exigir(
+        set(por_causa) <= set(CAUSAS_ALCANCE),
+        "CLASSE_E4B_DESCONHECIDA",
+    )
+    cols = Colaborador.objects.select_related("empresa").in_bulk(
+        {x[1] for x in mortos}
+    )
+    cxr = cxr_lavrado()
+    insumos, exportacoes, universo = {}, {}, {}
+
+    for celula_pk, cid, data, competencia, rota, causa, detalhe, papel in mortos:
+        PASSO = "celula_e4b_%s_%s" % (col(cid), data)
+        exigir(cid in cols, "COLABORADOR_AUSENTE")
+        c = cols[cid]
+        exigir(c.empresa_id in EMPRESAS, "ALCANCE_FORA_DA_FROTA")
+        dia = dt.date.fromisoformat(data)
+        ini, fim = janela_atual(dia, c.empresa)
+        comp = "%02d/%d" % (fim.month, fim.year)
+        exigir(comp == competencia, "COMPETENCIA_DIVERGENTE")
+        exportada = competencia_do_dia_entregue(
+            dia, c.empresa, memo=exportacoes,
+        )
+        exigir(type(exportada) is bool, "EXPORTACAO_INDETERMINADA")
+
+        chave_insumo = (cid, ini)
+        if chave_insumo not in insumos:
+            # app/escala/services/cadastro_realidade.py:1024
+            insumos[chave_insumo] = InsumosDoDono(
+                c, ini, fim, HOJE, agora=AGORA,
+                sem_motor=True, cxr=cxr(cid, ini),
+            )
+        dono_dia = insumos[chave_insumo].dono(dia)
+        exigir(
+            dono_dia in ("ESTRUTURA", "CADASTRO", "BATIDA", None),
+            "DONO_DIA_INVALIDO",
+        )
+        na_lista = lista.dia_na_lista(cid, data)
+        chave = (cid, data)
+        exigir(chave not in universo, "DIA_E4B_DUPLICADO")
+        universo[chave] = dict(
+            celula_pk=celula_pk,
+            col=col(cid),
+            empresa_pk=c.empresa_id,
+            data=data,
+            classe_e4b=causa,
+            detalhe=detalhe,
+            papel=papel,
+            competencia=comp,
+            novembro_2026=(comp == "11/2026"),
+            exportada=exportada,
+            dono_dia=dono_dia if dono_dia else "[nao verificado]",
+            dia_na_lista=na_lista,
+            colab_na_lista=lista.colab_na_lista(cid),
+        )
+        emitir(
+            "CELULA_E4B",
+            fonte=(
+                "app/chamados/services/vigia_fio.py:699; "
+                "app/ponto/management/commands/e6_oraculo.py:182"
+            ),
+            **universo[chave],
+        )
+
+    exigir(lista.sem_resposta == 0, "LISTA_ADMIN_FALHOU")
+    emitir(
+        "UNIVERSO_E4B",
+        fonte="app/chamados/services/vigia_fio.py:628",
+        total=len(universo),
+        por_classe={k: por_causa[k] for k in CAUSAS_ALCANCE},
+        competencias=alcance["alcance_competencias"],
+        outras_rotas_omitidas=alcance["alcance_dias_omitidos"],
+    )
+    resumo_e4b = Counter(
+        (x["classe_e4b"], x["dono_dia"], x["competencia"], x["exportada"])
+        for x in universo.values()
+    )
+    for (causa, dono, comp, exp), n in sorted(resumo_e4b.items()):
+        emitir(
+            "E4B_CLASSE_DONO_COMPETENCIA",
+            classe_e4b=causa,
+            dono_dia=dono,
+            competencia=comp,
+            novembro_2026=(comp == "11/2026"),
+            exportada=exp,
+            n=n,
+        )
+    for causa in CAUSAS_ALCANCE:
+        xs = [x for x in universo.values() if x["classe_e4b"] == causa]
+        emitir(
+            "E4B_EXPORTACAO",
+            fonte="app/chamados/services/vigia_fio.py:822",
+            classe_e4b=causa,
+            total=len(xs),
+            nao_exportada=sum(not x["exportada"] for x in xs),
+            exportada=sum(x["exportada"] for x in xs),
+            novembro_2026_nao_exportada=sum(
+                x["novembro_2026"] and not x["exportada"] for x in xs
+            ),
+            novembro_2026_exportada=sum(
+                x["novembro_2026"] and x["exportada"] for x in xs
+            ),
+        )
+
+    PASSO = "atendimento_itens"
+    vivo = P.qs_vivos()
+    part = particionar_verbos(vivo, agora=AGORA)
+    resp, viva = creditos_perguntas(vivo)
+    itens_atendimento = {}
+
+    # Propaga falhas que dia_do_fato capturaria: chamados/juizes.py:115.
+    with patch.object(
+        modulos, "data_do_chamado",
+        chamada_estrita(modulos.data_do_chamado),
+    ):
+        for ch in vivo.prefetch_related(None).select_related("celula"):
+            PASSO = "dia_chamado_pk_%d" % ch.pk
+            dia = dia_do_fato(ch)
+            if ch.celula_id:
+                exigir(
+                    ch.celula.colaborador_id == ch.colaborador_id,
+                    "CELULA_DE_OUTRO_COLABORADOR",
+                )
+            itens_atendimento[ch.pk] = dict(
+                pk=ch.pk,
+                colaborador_id=ch.colaborador_id,
+                empresa_pk=ch.colaborador.empresa_id,
+                data=dia.isoformat() if dia else None,
+                celula_pk=ch.celula_id,
+                classe=ch.modulo_origem or "(sem_modulo)",
+                classe_rotulo=P._rotulo_origem(ch.modulo_origem),
+                verbo=part["mapa"][ch.pk],
+                dono_pilha=dono_do_chamado(
+                    ch.modulo_origem, ch.pk in resp, ch.pk in viva,
+                ),
+                dono_departamento=(
+                    departamento_do_chamado(ch) or "[nao verificado]"
+                ),
+                atribuido_a_pk=ch.atribuido_a_id,
+            )
+
+    def publicar_populacao(central, recorte, itens, total_fonte):
+        global PASSO
+        PASSO = "cruzamento_%s_%s" % (central, recorte)
+        exigir(len({x["pk"] for x in itens}) == len(itens), "ITEM_DUPLICADO")
+        exigir(len(itens) == total_fonte, "CONTADOR_DIFERENTE_DOS_ITENS")
+        resumo, quebra, por_e4b = Counter(), Counter(), Counter()
+        celulas = set()
+
+        for it in itens:
+            chave = (it["colaborador_id"], it["data"])
+            e4 = universo.get(chave)
+            if it["empresa_pk"] not in EMPRESAS:
+                situacao = "fora_recorte_empresas"
+            elif it["data"] is None:
+                situacao = "vinculo_indeterminado"
+            elif e4 is not None:
+                situacao = "dentro_e4b"
+                celulas.add(chave)
+            else:
+                situacao = "fora_universo_atual_e4b"
+            resumo[situacao] += 1
+            ca = e4["classe_e4b"] if e4 else None
+            comp = e4["competencia"] if e4 else None
+            exp = e4["exportada"] if e4 else None
+            chave_quebra = (
+                it["classe"], it["verbo"], it["dono_pilha"],
+                it["dono_departamento"], it["atribuido_a_pk"],
+                situacao, ca, comp, exp,
+            )
+            quebra[chave_quebra] += 1
+            if e4:
+                por_e4b[(ca, exp, comp == "11/2026")] += 1
+            seguro = {
+                k: v for k, v in it.items() if k != "colaborador_id"
+            }
+            emitir(
+                "ITEM_CENTRAL",
+                central=central,
+                recorte=recorte,
+                col=col(it["colaborador_id"]),
+                situacao=situacao,
+                classe_e4b=ca,
+                competencia_e4b=comp,
+                exportada=exp,
+                **seguro,
+            )
+
+        emitir(
+            "TOTAL_POPULACAO",
+            central=central,
+            recorte=recorte,
+            total=total_font
+
+[truncado em 20000 de 28704 caracteres]
+
+## 10/11 11:11 · sessao 92aed57ead37 · FIO-E0-V4-E4A-2 · construtor · origem=Code
+
+Cura aplicada no juiz: veredito não acusador só cala quando `dia_encerrado` confirma o fato encerrado. A consulta fica nesse ramo; o contador continua delegando ao juiz. [fabrica_da_celula.py:120](/home/ronald/wt-codex-fio-e0-v4-e4a-2-105940/app/chamados/services/fabrica_da_celula.py:120), chamados/management/commands/disparar_perguntas_competencia.py:115.
+
+Os **7 arquivos tocados** e suas provas:
+
+| Arquivo | Mudança/prova |
+|---|---|
+| chamados/services/fabrica_da_celula.py:120 | Cura pela juíza existente, sem novo corte por data. |
+| chamados/management/commands/disparar_perguntas_competencia.py:25 | Escalares recusados com `TypeError` explícito; `None` preservado. ALVOS corrigido em :215. |
+| chamados/tests/test_e4a2_matriz_memoria.py:199 | Concorde em curso conta; noturno em :203; marcos batidos em :210; escalares em :214. |
+| chamados/tests/test_e4a2_nunca_bateu.py:310 | Empresa real escalar; mínimo **11** e catálogo vazio/encolhido em :318. |
+| core/tests/test_fio_mudo_placar.py:294 | Catálogo vazio/encolhido; mínimo **12** em :301. |
+| chamados/tests/test_e4a2_disparar_e_vigia.py:235 | Catálogo vazio/encolhido; mínimo **10** e mensagem específica por mutante em :241. |
+| chamados/tests/test_pergunta_do_dia_em_curso.py:297 | Integração noturna 05:50/06:40; concorde lavrada com marcos batidos em :465. Execução Django **[não verificado]**. |
+
+Os corpos dos dois testes congelados foram preservados: chamados/tests/test_pergunta_do_dia_em_curso.py:460 e chamados/tests/test_e4a2_matriz_memoria.py:194.
+
+Executei **28 testes em memória: OK**, incluindo os selos reais dos catálogos e os testes reais de relatório carregados por AST. Entradas: chamados/tests/test_e4a2_matriz_memoria.py:314,336,358 e chamados/tests/test_e4a2_c5_memoria.py:74.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4a2_matriz_memoria chamados.tests.test_e4a2_c5_memoria -v
+```
+
+Antes da cura, os REDs reproduziram os zeros indevidos e a fronteira escalar defeituosa; os casos estão em chamados/tests/test_e4a2_matriz_memoria.py:199,203,214. Os seis mutantes novos foram rejeitados pela mensagem pretendida; catálogo em :61 e execução em :358:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria juiz_cala_concorde_em_curso
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria juiz_corta_por_data
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria juiz_ignora_encerramento
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria juiz_pergunta_sem_falta_na_ata
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria fronteira_aceita_texto_escalar
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4a2_matriz_memoria rotulo_alvos_volta_a_perguntas
+```
+
+Quanto a **quem escreve e quem lê os campos envolvidos**:
+
+| Campo | Escritor → leitor e significado |
+|---|---|
+| `cel.colaborador`, `cel.data` | Criação pela porta em ponto/portas/celula.py:259,600 → juiz em chamados/services/fabrica_da_celula.py:109,123. `data` ancora o turno, inclusive cruzando meia-noite; ponto/services/cartorio.py:831. |
+| `cel.veredito`, `cel.ata` | Lavra em ponto/portas/celula.py:1033,1035 → juiz em chamados/services/fabrica_da_celula.py:120,126,142. |
+| `cel.julgada_em` / `julgada_antes` | Carimbo escreve em ponto/portas/celula.py:1065. Cartório captura o anterior em ponto/services/cartorio.py:954 e repassa em :1008; fora desse ato, o juiz usa o persistido, chamados/services/fabrica_da_celula.py:127. |
+| `agora`, `hoje` | Borda fornece instante e data civil local em chamados/management/commands/disparar_perguntas_competencia.py:147 e chamados/management/commands/vigiar_fio_morto.py:166. A juíza recebe o instante, ponto/turnos.py:2033. |
+| `Empresa.pk` / `empresas` | Criação de Empresa em colaboradores/services/estrutura.py:14 → normalização em chamados/management/commands/disparar_perguntas_competencia.py:25 → ORM em :104 e C5 em :54. Unidade: empresa. |
+| `numero`, `esperado`, `alvos`, `fio_mudo_alvos` | Contador produz em chamados/management/commands/disparar_perguntas_competencia.py:122; vigia publica em chamados/management/commands/vigiar_fio_morto.py:233,241; placar compara em core/management/commands/pipeline_placar.py:85. |
+
+**Outros leitores alcançados:** o cartório chama `perguntar_pela_celula` em ponto/services/cartorio.py:1008; o consumidor de eventos chega pelo mesmo caminho em chamados/reconciliador.py:1387 e chamados/services/fabrica_da_celula.py:304. Ambos passam a admitir motivos vencidos de concorde ainda em curso. `motivos_que_o_evento_deixou` também recebe essa decisão e mantém a deduplicação de Pauta DP, chamados/services/fabrica_da_celula.py:245. O vigia e o placar recebem o número resultante, nas referências da tabela.
+
+O placar lê **dia civil do carimbo**, enquanto o juiz recebe **dia do turno e instante**; essa diferença permanece explícita em core/management/commands/pipeline_placar.py:86 e ponto/turnos.py:2033. A chave `fio_mudo_alvos` e o trecho `FIO MUDO: N` permanecem em chamados/management/commands/disparar_perguntas_competencia.py:122,197.
+
+Não executei a integração Django, a suíte de 165 módulos nem a suíte inteira: Django/freezegun ausentes e banco fora do escopo. **[não verificado]** Ruff foi tentado com `--no-cache`, mas o módulo está ausente; lint **[não verificado]**. Medida nova em produção e banco 6 **[não verificado]**. [nao verificado]
 
 ## 10/11 11:04 · sessao 53d91d880944 · - · - · origem=Ronald (tmux)
 
@@ -816,43 +1325,4 @@ Achados para as questões 2–3:
 
 - **Pauta antiga pode ficar inacessível ao resolver ESTEIRA:** `quarentena:zumbido:sem commit (...)` contém espaços, portanto o resolver atual rejeita antes da consulta; a chave nova usa outro prefixo e não encontra a antiga. (`app/pautas/marcadores.py:31`, `app/core/management/commands/alarme_esteira.py:30`, `:34`, `:18`, `app/core/esteira_vigia.py:1174`, `:1212`.) A existência dessas pautas em produção **[nao verificado]**. Não atribuir uma regressão de “fechamento automático do zumbido”: os resolvers existentes de `decidir` abrangem pausa/teto/trava/vigia, e `conferir_quarentena` remove testes da lista sem resolver Pauta de zumbido. (`app/core/esteira_vigia.py:489`, `:503`, `:529`, `:596`, `:1260`, `:1274`.)
 
-## 10/11 08:46 · sessao 42f15a7e4013 · - · - · origem=Ronald (tmux)
-
-Mapa dos campos:
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `fora_do_universo` | `app/ponto/services/cluster_espurio.py:109-110`, devolvido em `:148` | Serialização integral em `app/ponto/management/commands/detectar_cluster_espurio.py:63`; contratos em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:222-225`, `:254-260`. |
-| `excluidos` | `app/ponto/services/cluster_espurio.py:126-145`, devolvido em `:148` | Serialização em `app/ponto/management/commands/detectar_cluster_espurio.py:63`; contratos em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:229-247`, `:362-366`. |
-| `numero` | Soma por chamado em `app/ponto/services/cluster_espurio.py:125`, devolvido em `:146` | JSON em `app/ponto/management/commands/detectar_cluster_espurio.py:63`; decisão do alarme e mensagem em `:70-73`; contratos exemplares em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:302`, `:315`, `:348-349`. |
-| `esperado` | Constante zero em `app/ponto/services/cluster_espurio.py:146` | JSON e comparação em `app/ponto/management/commands/detectar_cluster_espurio.py:63`, `:70-73`; contratos em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:227`, `:356`; fixture sintética de valor 1 em `:416-421`. |
-
-A semântica é coerente nos leitores encontrados: `excluidos` é catálogo de motivos, inclusive sem ocorrências; `fora_do_universo` contém quantidades observadas por via; `numero` conta chamados com assinatura, preservando duplicatas do mesmo par; `esperado` é o alvo do alarme (`app/ponto/services/cluster_espurio.py:109-148`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233-247`, `:342-349`; `app/ponto/management/commands/detectar_cluster_espurio.py:70`). Não encontrei outro consumidor produtivo desse retorno na busca integral da cópia; consumidores externos são **[nao verificado]**.
-
-`None` e `''` **não quebram o `json.dumps` atual**. Executei, em memória, o serviço e o comando reais pelos helpers: `{None: 1, '': 1}` saiu como `{"null": 1, "": 1}`; o rótulo de `None` continua sob a chave textual `"null"` (`app/ponto/services/cluster_espurio.py:141-148`; `app/ponto/management/commands/detectar_cluster_espurio.py:63`; helpers em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:150-166`).
-
-Há uma limitação reproduzida: se existir também a via desconhecida literal `'null'`, ela colide no JSON com a chave Python `None`. Reproduzi fonte `{None: 2, '': 1, 'null': 3}` → JSON com duas propriedades `"null"` → `json.loads` preserva apenas `3`; os rótulos também colidem. O código admite valores desconhecidos e não normaliza as chaves (`app/ponto/services/cluster_espurio.py:110`, `:142-145`; `app/ponto/management/commands/detectar_cluster_espurio.py:63`). Ocorrência de `'null'` e leitor externo afetado: **[nao verificado]**.
-
-O cron configurado chama `--alarme`; o envelope lê o código de saída, sem interpretar esses campos JSON (`app/config/crons.py:598`; `bin/cron_run.sh:11-13`, `:22-25`). Portanto não há quebra demonstrada desse leitor existente; a colisão é uma limitação do formato de saída, condicionada a um valor que o dado fornecido não comprova.
-
-## 10/11 08:45 · sessao db4c347226f8 · - · - · origem=Ronald (tmux)
-
-Conferência dos escritores:
-
-| Via/rótulo | Escritor real e comparação |
-|---|---|
-| `TRANSICAO_HUMANA` → “Via humana” | `transicionar` valida a transição e chama `_aplicar`; este grava `EVENTO_VIA['TRANSICAO_HUMANA']`. O backfill também atribui `admin` a resolvido/fechado com respondente fora dos usuários de sistema. Rótulo compatível; não prova passagem histórica por `transicionar`. (`app/chamados/models.py:128`, `app/chamados/models.py:199`, `app/chamados/models.py:447`, `app/chamados/migrations/0039_a3_via_backfill.py:26`) |
-| `ENCERRAR` → “desligamento ou ajuste retroativo” | O gate documenta ambos e grava `EVENTO_VIA['ENCERRAR']`. Há chamadores concretos para desligamento e ajuste retroativo. (`app/chamados/models.py:1605`, `app/chamados/models.py:1619`, `app/colaboradores/services/desligamento.py:155`, `app/ponto/services/justificativa.py:400`, `app/chamados/reconciliador.py:496`) |
-| `CANCELAR` → “Cancelamento de chamado vivo…” | O gate descreve descarte administrativo/emissor aposentado; o motor permite CANCELAR apenas de aberto/em_análise/registrado. O backfill carimba `cancelado` pela condição status cancelado + via vazia, sem provar motivo histórico. (`app/chamados/models.py:773`, `app/chamados/models.py:783`, `app/chamados/models.py:788`, `app/chamados/catalogo/motor.py:116`, `app/chamados/migrations/0039_a3_via_backfill.py:25`) |
-| `SUPERAR` → “Duplicata cancelada com irmão único provado no backfill” | A migration seleciona cancelados de módulos de furo, exige irmão único do mesmo colaborador/data e grava `superado` com FK. O gate atual foi removido; o estado permanece para o acervo. Rótulo fiel ao escritor remanescente. (`app/chamados/migrations/0039_a3_via_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:20`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/models.py:794`) |
-| `VIA_LEGADO` → “Terminal sem via derivável no backfill” | Após as derivações anteriores, a migration grava `legado` nos terminais ainda com via vazia. Rótulo fiel. (`app/chamados/migrations/0039_a3_via_backfill.py:25`, `app/chamados/migrations/0039_a3_via_backfill.py:28`) |
-| Competência trancada | O serviço aplica apenas se medição declarou trancada e chama `encerrar_por_competencia_trancada`; o gate grava a constante própria pelo núcleo. (`app/chamados/services/competencia_trancada.py:167`, `app/chamados/services/competencia_trancada.py:184`, `app/chamados/models.py:1639`) |
-| `''` / `None` | São explicitamente rotulados como vazios; ocorrência persistida de `None` não está demonstrada. (`app/ponto/services/cluster_espurio.py:141`, `app/ponto/services/cluster_espurio.py:142`; ocorrência: [nao verificado]) |
-
-Nenhuma via conhecida excluída cai em “desconhecida”: as seis vias diferentes de RECONCILIAR constam nominalmente no dicionário; o fallback usa `setdefault`. RECONCILIAR pertence ao universo contado. (`app/chamados/catalogo/motor.py:88`, `app/chamados/catalogo/motor.py:93`, `app/chamados/catalogo/motor.py:95`, `app/ponto/services/cluster_espurio.py:110`, `app/ponto/services/cluster_espurio.py:111`, `app/ponto/services/cluster_espurio.py:126`, `app/ponto/services/cluster_espurio.py:144`)
-
-Ressalva de precisão: os textos descrevem classes de via; os escritores não comprovam, individualmente, ADMIN/DP, premissa administrativa ou motivo histórico de cada registro. CANCELAR recebe `motivo` livre; ENCERRAR não recebe motivo; o backfill usa heurísticas de campos. (`app/chamados/models.py:773`, `app/chamados/models.py:789`, `app/chamados/models.py:1605`, `app/chamados/migrations/0039_a3_via_backfill.py:25`, `app/chamados/migrations/0039_a3_via_backfill.py:26`)
-
-O rótulo ENCERRAR tampouco esgota todos os usos globais do gate: troca de escala encerra chamados `escala_aceite`, e regularização externa encerra seu chamado. Esses usos não demonstram exclusão incorretamente rotulada no módulo cluster: regularização cria módulo próprio; troca de escala filtra categoria. (`app/colaboradores/services/vinculo.py:384`, `app/colaboradores/services/vinculo.py:387`, `app/chamados/services/regularizacao_ext.py:205`, `app/chamados/services/regularizacao_ext.py:250`)
-
-_3363 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3365 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
