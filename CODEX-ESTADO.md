@@ -1,7 +1,126 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 10:11** · publicado em **10/11/2026 10:11** (UTC-3)
+> Ultima resposta processada: **10/11/2026 10:13** · publicado em **10/11/2026 10:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 10:13 · sessao ba7a69ea94fc · FIO-E0-V4-E4A-2 · verificador · origem=Code
+
+**A cura principal está confirmada: FIO MUDO passou a consultar o juiz único. A saída integral da obra ainda não está certificada: há catálogos de mutantes que passam vazios, e os 165 módulos, a suíte inteira e o resultado de produção com a seleção nova permanecem [nao verificado].** (`app/chamados/management/commands/disparar_perguntas_competencia.py:106`; `app/chamados/tests/test_e4a2_nunca_bateu.py:309`; `app/core/tests/test_fio_mudo_placar.py:308`)
+
+**1. MATRIZ: realização e caminhos alternativos**
+
+| Linha | ESTADO → JUIZ → OPERAÇÃO | PERSISTIDO e RETORNO | Prova |
+|---|---|---|---|
+| **(a)** | Chamado vivo, sem pergunta viva, célula `nunca_bateu`: lê `dia_nunca_bateu_sem_adesao`, encaminha o par ao contador C5. Não recalcula adesão; lê a lâmpada lavrada. `numero=|pares|`, `esperado=|pares∩C5|`, dono CADASTRO. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100`, `:102`, `:58`; `app/chamados/services/fabrica_da_celula.py:87`) | Nenhuma pergunta persistida. O ramo não lança rc 2. (`app/chamados/management/commands/disparar_perguntas_competencia.py:112`, `:208`) | Retido fora da C5 produz `(1,0)`; presente produz `(1,1)`. Teste em memória executado verde. Integração correspondente: [nao verificado]. (`app/chamados/tests/test_e4a2_matriz_memoria.py:188`; `app/chamados/tests/test_e4a2_nunca_bateu.py:218`) |
+| **(b)** | Chamado vivo, sem pergunta viva: consulta `motivos_a_perguntar(celula, hoje, agora)`, conta **todos** os motivos, deduplicados por pessoa/dia/motivo. Esperado 0, dono ESTRUTURA. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`, `:106`, `:113`) | Nenhuma pergunta/questionário persistido; o ramo não lança rc 2. (`app/chamados/management/commands/disparar_perguntas_competencia.py:111`, `:208`) | Alvo sem escrita e alvo 1 tornando placar vermelho: executados verdes em memória. (`app/chamados/tests/test_e4a2_matriz_memoria.py:200`, `:222`) |
+| **(c)** | Qualquer pergunta ligada **viva** retira o chamado dos dois contadores. Além disso, o juiz retira individualmente motivos cujo fato já tem pergunta. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100`; `app/chamados/services/fabrica_da_celula.py:145`, `:157`) | Nenhuma escrita; nenhuma contribuição desse chamado aos contadores. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100`) | Teste em memória tem controle positivo sem pergunta. O teste ORM materializa pela porta e confirma vitalidade antes de exigir zero; execução ORM [nao verificado]. (`app/chamados/tests/test_e4a2_matriz_memoria.py:205`; `app/chamados/tests/test_e4a2_nunca_bateu.py:148`) |
+| **(d)** | O contador exclui o chamado **já encerrado** pela tranca por meio de `VIVOS`; não consulta diretamente a tranca. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`) | Nenhuma escrita pelo disparar; chamado encerrado não contribui. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`) | Memória verifica exclusão por status. Integração tranca pela porta, exige status fora de VIVOS e zero nos dois contadores; execução integrada [nao verificado]. (`app/chamados/tests/test_e4a2_matriz_memoria.py:215`; `app/chamados/tests/test_e4a2_nunca_bateu.py:163`) |
+
+Os caminhos que impedem uma leitura absoluta da tabela são:
+
+- **(a):** hoje, dias anteriores ao piso e desligados ausentes da C5 não entram no número comparado. Portanto, “todo nunca_bateu vira um retido contado” seria falso; o recorte está declarado. (`app/chamados/management/commands/disparar_perguntas_competencia.py:35`, `:51`, `:56`)
+- **(b):** `concorde` é recusado pelo juiz; desligado, futuro, dia sem trabalho, parcial e fato existente também podem devolver zero. (`app/chamados/services/fabrica_da_celula.py:112`, `:114`, `:120`, `:123`, `:157`)
+- **(c):** materialização isolada não significa pergunta viva. A retratada deixa de segurar o fato e pode voltar a produzir alvo, conforme a errata. (`app/chamados/juizes.py:1325`, `:1336`; `app/chamados/models.py:2754`)
+- **(d):** existe intervalo com tranca gravada e encerramento pendente: acima de 100 ações, o encerramento segue em subprocesso; falhas também são tratadas como best-effort. Nesse intervalo, um chamado ainda vivo pode entrar. Isso limita a equivalência entre “trancado” e “fora de VIVOS”, sem transformar o item descartado pela errata em reprovação automática. (`app/ponto/services/fechamento.py:1420`; `app/chamados/services/competencia_trancada.py:45`, `:281`, `:297`)
+
+**O rc global pode ser 2 coexistindo com qualquer dessas classes:** basta `--alarme` e `deixou` não vazio. A origem é o outro vigia, FABRICA-POR-EVENTO. Os testes que isolam rc 0 de (a)/(b) dublam explicitamente esse outro resultado. (`app/chamados/management/commands/disparar_perguntas_competencia.py:208`; `app/chamados/tests/test_e4a2_nunca_bateu.py:128`)
+
+**2. Juiz único, universos e barreiras retiradas**
+
+O contador não reconstrói mais motivos pela ata nem aplica as antigas quatro barreiras para decidir ALVOS: recebe os motivos do juiz e deduplica. Permanecem as seleções anteriores à consulta: chamado vivo, janela, empresa/colaborador, ausência de pergunta viva e separação de `nunca_bateu`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`, `:94`, `:100`, `:102`, `:106`)
+
+| Caso | Universo entregue ao juiz |
+|---|---|
+| Chamado retratado/encerrado | Fora do contador quando o status está fora de VIVOS; o caminho da célula não exige chamado vivo. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`; `app/ponto/services/cartorio.py:1006`) |
+| Célula sem chamado | Não chega pelo contador; pode chegar pelo cartório e pelo consumidor de eventos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`; `app/ponto/services/cartorio.py:1008`; `app/chamados/services/fabrica_da_celula.py:299`) |
+| Desligado | Pode chegar ao juiz pelo contador, mas o próprio juiz recusa motivos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:106`; `app/chamados/services/fabrica_da_celula.py:112`) |
+| Sem adesão | O contador separa pela lâmpada antes do juiz de motivos; a fábrica também retorna antes de emitir. (`app/chamados/management/commands/disparar_perguntas_competencia.py:102`; `app/chamados/services/fabrica_da_celula.py:183`) |
+| Competência trancada | Contador depende do encerramento do chamado; `motivos_a_perguntar` não tem guarda própria de tranca. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`; `app/chamados/services/fabrica_da_celula.py:105`) |
+
+As barreiras **não são todas predicados equivalentes**:
+
+- `desligado` está no juiz; `parcial_lista` consulta o mesmo `parcial_so_lista`; `fato_ja_existe` usa `q_dos_fatos`, fonte compartilhada com `linhas_dos_fatos`. (`app/chamados/services/fabrica_da_celula.py:112`, `:123`, `:145`; `app/chamados/models.py:2743`)
+- `ja_viva` tem uma diferença importante: o contador exclui o chamado inteiro por **qualquer** pergunta ligada viva; o juiz deduplica **por motivo**. Com pergunta viva A e motivo B ainda devido, o contador não consulta o juiz, mas a célula pode pedir B. É o recorte “fio mudo”, não igualdade dos universos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100`; `app/chamados/services/fabrica_da_celula.py:154`, `:157`)
+- O parcial usa o mesmo predicado, mas o cartório entrega o julgamento anterior capturado antes do ato; o contador lê o `julgada_em` persistido. Essa distinção de instantâneo está documentada. (`app/ponto/services/cartorio.py:389`, `:954`, `:1008`; `app/chamados/services/fabrica_da_celula.py:123`)
+
+Há outra diferença de significado: os motivos devolvidos pelo juiz podem ser destinados a **Pauta DP do limbo exportado**, em vez de pergunta no aplicativo. FIO MUDO conta esses motivos diretamente; FABRICA-POR-EVENTO desconta as pautas já existentes. Logo, ALVOS não equivale universalmente a “perguntas que o escritor criaria no app”. (`app/chamados/services/fabrica_da_celula.py:214`, `:242`; `app/chamados/management/commands/disparar_perguntas_competencia.py:106`)
+
+No censo dos consumidores examinados, não apareceu leitor de produção dependente de `[BARRADO]`, `FIO DECIDIDO` ou `cfm['barrados']`; vigia e placar consomem os números do contador/carimbo. O teste do relatório agora exige ausência desses textos. (`app/chamados/management/commands/vigiar_fio_morto.py:181`, `:241`; `app/core/management/commands/pipeline_placar.py:98`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:208`)
+
+**3. ERRATA: fronteira de EMPRESA**
+
+Existe **uma implementação comum**, chamada pelos dois contadores. No fluxo aninhado ela é invocada duas vezes; não são duas normalizações independentes. A entrada direta de `contador_nunca_bateu` também passa por ela. (`app/chamados/management/commands/disparar_perguntas_competencia.py:24`, `:44`, `:79`, `:112`)
+
+Comportamentos confirmados em memória pela função real:
+
+| Entrada | Resultado |
+|---|---|
+| Lista/queryset/iterador de Empresa; lista de pks; `['12']` | Lista de inteiros: `[12]`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:28`) |
+| `None`; lista vazia | Respectivamente frota inteira e nenhuma empresa. (`app/chamados/management/commands/disparar_perguntas_competencia.py:26`, `:95`) |
+| Empresa escalar; inteiro escalar | `TypeError`: exige iterável. (`app/chamados/management/commands/disparar_perguntas_competencia.py:28`) |
+| String escalar `'12'`; `'12,13'` | Respectivamente `[1,2]` e `ValueError`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:28`) |
+| Lista contendo pk de colaborador | Aceita como inteiro de empresa; não valida o domínio lógico do pk. (`app/chamados/management/commands/disparar_perguntas_competencia.py:28`) |
+
+Chamadores concretos: o disparar usa `None`; `vigiar_fio_morto --empresa` passa lista de objetos Empresa, corrigida pela fronteira; pipeline só lê carimbo. Os testes passam objetos, pks, strings dentro de lista, iteradores e `None`. (`app/chamados/management/commands/disparar_perguntas_competencia.py:179`; `app/chamados/management/commands/vigiar_fio_morto.py:156`, `:160`, `:181`; `app/core/management/commands/pipeline_placar.py:92`; `app/chamados/tests/test_e4a2_c5_memoria.py:89`; `app/chamados/tests/test_e4a2_matriz_memoria.py:183`, `:188`)
+
+**Distinção necessária:** a C5 crua, `colabs_nunca_bateu`, não usa essa fronteira; espera pks. Seus outros chamadores continuam passando pks: tela usa conjunto, outro comando usa lista de inteiros/None. Portanto, todas as entradas dos **contadores do disparar** são protegidas; todas as chamadas C5 da árvore não passam pelo helper. (`app/escala/services/cadastro_realidade.py:177`, `:207`; `app/escala/views.py:487`; `app/folha/vigia_retido_calado.py:43`; `app/folha/management/commands/vigiar_retido_calado.py:29`)
+
+**4. Contrato de saída e banco 6**
+
+| Banco | Verificação |
+|---|---|
+| **1** | Realizado: cron com `--alarme`, papel vigia, fora dos juízes; parser rejeita `--apply`. Teste em memória verde. (`app/config/crons.py:1521`, `:2032`, `:2168`; `app/chamados/tests/test_e4a2_matriz_memoria.py:68`) |
+| **2** | Realizado no caminho contador → carimbo → placar; alvo 1 gera alarme no teste executado em memória. (`app/chamados/management/commands/vigiar_fio_morto.py:241`; `app/core/management/commands/pipeline_placar.py:135`; `app/chamados/tests/test_e4a2_matriz_memoria.py:222`) |
+| **3** | Realizado com pks de empresa e esperado por interseção C5; publicação/comparação passaram em memória. (`app/chamados/management/commands/disparar_perguntas_competencia.py:44`, `:59`; `app/chamados/tests/test_e4a2_c5_memoria.py:145`) |
+| **4** | Selo executado verde: rc 0, 12 crons prazo, zero juízes. Exceção real vazia; casos sintéticos continuam cobrando mordida e isolamento. (`bin/tests/test_papel_prazo_nao_deriva.sh:305`, `:384`, `:410`) |
+| **5** | 165 módulos e suíte inteira: **[nao verificado]**. | [nao verificado]
+
+O banco 6 anexado contém FIO MUDO/ALVOS **1, depois 0 e 0**; FABRICA-POR-EVENTO aparece separadamente com **83, 111 e 131**. Os horários 06:35 mostrados estão nos warnings, não nas linhas dessas contagens. Assim, o bloco sustenta zeros do contador antigo, mas não vincula inequivocamente cada contagem àquela hora nem ao código novo. Referências abaixo contam as linhas do bloco fornecido. (Anexo `banco6_fio_mudo_0635.txt:1`, `:3`, `:5`, `:7`, `:9`, `:11`, `:13`)
+
+**Não é possível calcular o novo número de produção.** A troca pode retirar falsos alvos como `concorde`, mas também passa a contar todos os motivos: a seleção antiga podia escolher primeiro um motivo já coberto e encerrar aquela passagem sem examinar outro devido. Os agregados anexados não mostram células/motivos para recalcular ou separar (a)/(b). (`app/chamados/tests/test_e4a2_matriz_memoria.py:164`; seleção antiga preservada em `app/chamados/tests/test_e4a2_disparar_e_vigia.py:533`, `:590`; seleção nova em `app/chamados/management/commands/disparar_perguntas_competencia.py:106`; novo total de produção **[nao verificado]**)
+
+**5. Quem escreve, quem lê e significados**
+
+| Campo/valor | Produtor → leitor |
+|---|---|
+| **rc do `--alarme`** | Disparar produz 2 por `deixou`; `cron_run` registra o exit e aceita 0/2 como conclusão; `crons_quebrados` acusa somente outros códigos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:208`; `bin/cron_run.sh:11`, `:22`, `:32`; `app/core/services/crons_quebrados.py:46`) |
+| **VIGIA FIO MUDO / ALVOS / por empresa** | Contador produz motivos distintos; relatório imprime motivos e pessoas distintas. A publicação durável usa o contador novamente pelo vigia. (`app/chamados/management/commands/disparar_perguntas_competencia.py:107`, `:187`, `:193`, `:205`; `app/chamados/management/commands/vigiar_fio_morto.py:181`) |
+| **NUNCA_BATEU** | Contador produz pares únicos e esperado pela C5; vigia imprime e grava número/esperado e diagnóstico completo. Totais C5 permanecem informativos. (`app/chamados/management/commands/disparar_perguntas_competencia.py:58`; `app/chamados/management/commands/vigiar_fio_morto.py:210`, `:233`, `:242`) |
+| **FABRICA-POR-EVENTO** | Conta motivos faltando pergunta **ou pauta**, além de células distintas. `placar_code.sh` raspa a última contagem. (`app/chamados/management/commands/disparar_perguntas_competencia.py:199`, `:202`; `bin/placar_code.sh:390`) |
+| **Carimbo** | Vigia grava atomicamente, somente em frota e antes do rc. Pipeline compara número/esperado; `fio_estado` compara genericamente todos os esperados presentes. (`app/chamados/management/commands/vigiar_fio_morto.py:118`, `:227`, `:252`; `app/core/management/commands/pipeline_placar.py:98`; `bin/fio_estado.py:125`) |
+| **Tela C5** | C5 fornece dias; apresentação cria uma assinatura por pessoa com quantidade de dias. Isso é diferente do contador de pares retidos. (`app/escala/services/cadastro_realidade.py:204`, `:208`; `app/chamados/management/commands/disparar_perguntas_competencia.py:58`) |
+
+Divergências concretas que permanecem:
+
+- **rc 2 × A5 OK:** pipeline registra rc 2 como alarme, mas a situação `ALARME` não entra na lista que determina o alarme A5. O novo alarme por carimbo entra explicitamente; são caminhos diferentes. (`app/core/management/commands/pipeline_placar.py:76`, `:124`, `:131`, `:135`, `:163`)
+- **Motivo/pauta × pergunta:** o binário continua rotulando FABRICA como `perguntas_que_o_julgamento_nao_fez`, embora a fonte inclua pauta. (`bin/placar_code.sh:392`; `app/chamados/management/commands/disparar_perguntas_competencia.py:202`)
+- **Atualidade da linha:** o binário valida mtime do arquivo, não a data da linha raspada; um arquivo atualizado hoje pode conter uma última linha FABRICA antiga. (`bin/placar_code.sh:390`, `:391`)
+- **Dia civil × turno:** o carimbo usa data civil local do instante; o universo usa `celula.data`, dia do turno. Pipeline exige o dia civil do carimbo igual ao pedido, mas sua borda usa relógio do processo. Equivalência dos fusos em produção: **[nao verificado]**. (`app/chamados/management/commands/vigiar_fio_morto.py:166`, `:230`; `app/chamados/management/commands/disparar_perguntas_competencia.py:90`; `app/core/management/commands/pipeline_placar.py:95`, `:148`)
+- **Esquema antigo:** pipeline denuncia chaves ausentes; `fio_estado` só compara esperados existentes, portanto não exige por si mesmo os novos campos num carimbo antigo. (`app/core/management/commands/pipeline_placar.py:98`, `:102`; `bin/fio_estado.py:123`)
+
+**6. Os testes mordem?** [nao verificado]
+
+**Sim nos dois módulos de memória executados:** 22 testes verdes, incluindo 26 mutantes. Cada mutante exige trecho único, controle verde anterior e falha com mensagem pretendida. Também passaram 11 testes extraídos por AST de fonte/relógio/relatório/SQL e 10 do censo de delegação; isso não constitui execução ORM. (`app/chamados/tests/test_e4a2_matriz_memoria.py:262`; `app/chamados/tests/test_e4a2_c5_memoria.py:207`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:72`; `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:442`)
+
+O RED `concorde` passou no controle e falhou diretamente com o mutante que volta à ata: **`1 != 0 : concorde rejeitado pelo juiz nao e alvo`**. O teste consulta o juiz real por AST e a tupla real de vereditos. A execução histórica sobre a base exata `1a505ad69` continua **[nao verificado]**. (`app/chamados/tests/test_e4a2_matriz_memoria.py:124`, `:143`, `:164`; mutante em `:51`)
+
+**A cura de vacuidade está incompleta:**
+
+- Matriz e C5 em memória exigem mínimo 13 e testam catálogo vazio/encolhido. (`app/chamados/tests/test_e4a2_matriz_memoria.py:256`, `:263`; `app/chamados/tests/test_e4a2_c5_memoria.py:201`, `:208`)
+- Os catálogos ORM de nunca_bateu e placar **não têm mínimo**. Seus corpos reais, executados por AST com `MUTANTES=[]`, passaram vazios. (`app/chamados/tests/test_e4a2_nunca_bateu.py:309`; `app/core/tests/test_fio_mudo_placar.py:308`)
+- O catálogo do relatório também não tem mínimo e captura qualquer `AssertionError`, sem exigir a mensagem da asserção pretendida. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:220`)
+- Com entradas presentes, os laços ORM têm controle verde e mensagem pretendida; sua execução integrada permanece **[nao verificado]**. (`app/chamados/tests/test_e4a2_nunca_bateu.py:315`, `:322`; `app/core/tests/test_fio_mudo_placar.py:313`, `:327`)
+
+A troca das fixtures `concorde→furo` preservou contagem, ausência de escrita e retorno, isolando o outro vigia; `concorde` ganhou proteção própria. A retirada dos baldes reduziu o contrato de apresentação antigo, mas os comportamentos continuam verificados no juiz/C5. Não encontrei afrouxamento funcional sem justificativa da matriz nessas alterações. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:309`; `app/chamados/tests/test_jv4a_disparar_vigia_da_celula.py:133`; `app/chamados/tests/test_e4a2_matriz_memoria.py:164`, `:176`; `app/chamados/tests/test_e4a2_nunca_bateu.py:239`)
+
+**7. Classes históricas de reprovação**
+
+- **Segundo juiz/derivação paralela de motivos:** curada neste contador. Ele delega à fábrica; a coexistência herdada dos respondedores de `_C19` continua explicitamente declarada no registro, sem migração nesta obra. (`app/chamados/management/commands/disparar_perguntas_competencia.py:106`; `app/core/juizes.py:150`)
+- **Segundo escritor fora da porta:** não permanece no disparar examinado; emissão continua pela fábrica e portas existentes. (`app/chamados/management/commands/disparar_perguntas_competencia.py:111`, `:182`, `:208`; `app/chamados/services/fabrica_da_celula.py:165`, `:172`, `:219`)
+- **Relógio fora da borda:** disparar lê um instante e o passa à vitalidade e ao juiz; o teto compara com `agora`. A antiga passagem pelo `_ja_perguntou→fio_vivo` saiu desse contador. (`app/chamados/management/commands/disparar_perguntas_competencia.py:137`, `:100`, `:106`; `app/ponto/services/cartorio.py:858`)
+- **Selo/RED sem mordida:** o RED principal morde; **a possibilidade de passar
+
+[truncado em 20000 de 20987 caracteres]
 
 ## 10/11 10:11 · sessao 9671e38735dd · - · - · origem=Ronald (tmux)
 
@@ -731,56 +850,4 @@ Resultados locais registrados:
 
 Ruff ausente ([saída](pautas/tests/prefixos_reservados_volta5.r:108)). Integração Django/HTTP/banco e suite completa: **[nao verificado]**. Certificação permanece com Code e opus final.
 
-## 10/11 03:04 · sessao d0f364fe0074 · O169-FECHADA · construtor · origem=Code
-
-Cura entregue em três arquivos:
-
-- [cluster_espurio.py:126](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:126): rótulos por via conhecida, cascata com “desligamento ou ajuste retroativo”, vazias nomeadas e desconhecida reservada às demais vias. `numero`, `esperado` e `universo` preservados.
-- [test_o169_cluster_encerrado_sem_lastro.py:233](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233): contratos de rótulo exato, FK cruzada e K consultas para K colaboradores com vários pares.
-- [test_o169_cluster_encerrado_mutantes.py:63](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:63): três mutantes exigidos e seis adicionais para os rótulos.
-
-Saída local: **61 testes OK; 35 mutantes executados individualmente, todos mordidos por asserção**. O harness rejeita erros de infraestrutura como prova. ([mutantes:131](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:131)) [nao verificado]
-
-O RED de rótulos retornou `FAILED (failures=1)` antes da cura; depois passou. Comandos dos contratos: ([contrato:233](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233)) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_o169_cluster_encerrado_sem_lastro.ClusterEncerradoSemLastroTest.test_RED_rotulo_fiel_por_via_exata -v
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_o169_cluster_encerrado_sem_lastro ponto.tests.test_o169_cluster_encerrado_mutantes -v
-```
-
-Para emitir e executar o comando de **cada mutante**, individualmente, usando a lista entregue em [MUTANTES:13](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import subprocess
-from ponto.tests.test_o169_cluster_encerrado_mutantes import MUTANTES
-
-prefixo = 'ponto.tests.test_o169_cluster_encerrado_mutantes.MutantesO169Test.test_mutante_'
-for nome in MUTANTES:
-    comando = ['python3', '-m', 'unittest', prefixo + nome, '-v']
-    print('PYTHONDONTWRITEBYTECODE=1 ' + ' '.join(comando), flush=True)
-    subprocess.run(comando, check=True)
-PY
-```
-
-Ruff sobre todo `app/`: `All checks passed!`, com as regras de [ruff.toml:4](/home/ronald/wt-codex-o169-fechada-025847/app/ruff.toml:4). Comando executado:
-
-```bash
-/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache .
-```
-
-Quem escreve e quem lê os campos usados pelo contador:
-
-| Campos | Escritor | Leitor |
-|---|---|---|
-| `status_local`, `via_encerramento` | [_gravar_estado:228](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:228), [via:245](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:245); escritores por via citados em [cluster:127](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:127) | [contador:106](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:106) |
-| Chamado: `colaborador_id`, `modulo_origem`, `contexto_json`, `celula_id` | [abrir:958](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:958), [persistência:971](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/models.py:971) | [contador:106](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:106), [dia_do_fato:98](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/juizes.py:98) |
-| Célula: `colaborador_id`, `data`, `trabalha` | [geração:259](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/portas/celula.py:259), [edição:600](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/portas/celula.py:600) | [contador:117](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:117), [dia_sem_trabalho:426](/home/ronald/wt-codex-o169-fechada-025847/app/chamados/juizes.py:426) |
-| `ata`: órfãs, lâmpadas e tipo/cobertura do dia | [ata_do_dia:704](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cartorio.py:704), [lavra:1042](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/portas/celula.py:1042) | [_leitura_da_celula:25](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:25) |
-| `nome`, `numero`, `esperado`, `dono`, `universo`, `fora_do_universo`, `excluidos` | [contador:146](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/services/cluster_espurio.py:146), em memória | [comando:63](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/management/commands/detectar_cluster_espurio.py:63); alarme lê `numero != esperado` em [comando:70](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/management/commands/detectar_cluster_espurio.py:70) |
-| `consultas_celulas`, no teste | [dublê:83](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:83), inclusive consulta vazia | [contrato:316](/home/ronald/wt-codex-o169-fechada-025847/app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:316) | [nao verificado]
-
-Não executados: banco/SQL, produção, concorrência, medição de frota/cron e certificação Code/opus. Esses resultados permanecem **[nao verificado]**.
-
-_3360 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3361 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
