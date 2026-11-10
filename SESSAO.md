@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 08:56:33.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (252.0 MB). Acoes na janela: **925**.
+**Medido em 10/11/2026 09:01:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (252.0 MB). Acoes na janela: **917**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -927,11 +927,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:01:59 | Bash |  | `cd /home/ronald/saas-hasner && N=$(date +%H%M%S) && WT=/home/ronald/wt-codex-modo-comum-passado-sem-turno-$N && git worktree add --detach $WT cb2a3cccb 2>&1 \| tail -1 && git -C $WT log --oneline -1 && D=logs/MODO-COMUM-PASSADO-SEM-TURNO && cat > $D/construtor1.q <<EOF OBRA MODO-COMUM-PASSADO-SEM-TURNO, construtor volta 1. Base cb2a3cccb (o juiz ja esta registrado em core/juizes.py familia 'chamad ...` |
 | 21:01:38 | Bash |  | `cd /home/ronald/wt-mcpst-205439 && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad && sed -i 's/padrao=n\/a (instrumento)/padrao=Single Writer Principle/' $S/msg_mcpst_base.txt && git commit -q --amend -F $S/msg_mcpst_base.txt && git log --oneline -1 && git status --porcelain \| head` |
 | 21:01:34 | Bash |  | `/bin/grep -n -i "juiz unico\\|single source\\|um juiz por\\|^##\\|^### " docs/GLOSSARIO.md \| head -40` |
-| 21:01:31 | Bash |  | `cd /home/ronald/wt-mcpst-205439/app && date '+%H:%M' && cat >> docs/CORTES.md <<'EOF' \| 09/11 21:0x \| MODO-COMUM-PASSADO-SEM-TURNO (MODO-COMUM (d) da E4a-1, aval LEI-PASSADO-SEM-MARCOS) \| corte Ronald: juiz pauta_cadastro_existente nasce -- frase ESCRITA PELO CODE sob a PARADA item 5 (CLAUDE.md 7b; AUTONOMIA-DE-CODIGO 11/10 ~12:0x). As tres MEDIDAS: (1) `chamados/services/fabrica_da_celula.py:: ...` |
-| 21:01:17 | Bash |  | `sed -n 60,63p ponto/services/afastado_avisa.py; /bin/grep -n "^TEXTO\\|^MARCADOR" ponto/services/afastado_avisa.py ponto/services/pautas_dos_deslogados.py; sed -n 1036,1040p ponto/services/ausencia.py` |
-| 21:01:11 | Bash |  | `sed -n 78,100p chamados/management/commands/vigiar_fio_morto.py; sed -n 175,232p chamados/management/commands/vigiar_fio_morto.py` |
-| 21:01:03 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 60,178p logs/MODO-COMUM-PASSADO-SEM-TURNO/censo1.r \| cut -c1-400` |
-| 20:56:51 | Bash |  | `cd /home/ronald/saas-hasner && for i in $(seq 1 50); do [ -s logs/MODO-COMUM-PASSADO-SEM-TURNO/censo1.r ] && break; /usr/bin/sleep 10; done; tail -2 logs/MODO-COMUM-PASSADO-SEM-TURNO/censo1.log; wc -l logs/MODO-COMUM-PASSADO-SEM-TURNO/censo1.r 2>&1` |
-| 20:56:46 | Bash |  | `cd /home/ronald/wt-mcpst-205439 && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad && sed "s#/app/docs/MAPA-JUIZES.md#$PWD/app/docs/MAPA-JUIZES.md#" bin/gerar_mapa_juizes.py > $S/g_mapa.py && (cd app && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 $S/g_mapa.py) && git diff --stat && git diff app/docs/MAPA-JUIZES.md \| head -20 && bash bin/tests/tes ...` |
-| 20:56:40 | Bash |  | `cd /home/ronald/wt-mcpst-205439 && /bin/grep -n "^import\\|^from\\|open(\\|write" bin/gerar_mapa_juizes.py \| head; /bin/grep -n "^import\\|^from" app/core/juizes.py \| head` |
-| 20:56:37 | Bash |  | `cd /home/ronald/wt-mcpst-205439 && sed -n 1,14p bin/gerar_mapa_juizes.py; cat /home/ronald/saas-hasner/logs/MODO-COMUM-PASSADO-SEM-TURNO/censo1.log` |
