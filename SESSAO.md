@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 05:16:22.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1296**.
+**Medido em 10/11/2026 05:21:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1293**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1303,6 +1303,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:25:33 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md';L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| FIO-E0-V4-E4-ESCRITORES \|')) c=L[i].split('\|') c[5]=" E4-EXPAND-CONTRACT 09/11: E4a EXPAND (porta grava ato mantendo projecao + porta 27 contrato 20; nenhum leitor muda) -> E4b BACKFILL C3.2-C3.9 nao exportada -> E4c LEITORES DIVERGE + selo 2 -> ...` |
 | 17:25:26 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1863,1864p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; for(i=2;i<NF;i++) print i": "substr($i,1,300)}'` |
 | 17:25:24 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; H=$(date +%H:%M) cat > $D/aval_expand_contract.txt <<'EOF' aval Ronald 09/11 E4-EXPAND-CONTRACT (substitui qualquer versao anterior de E4-EM-DOIS-POUSOS; mantem E4-BRIEF-VIVO-E-ESCOPO, E4A-LEITOR-DO-MODAL, E4A-PREVERIF-PERGUNTA-DIRETA, SERIE-E-PRONTO-E-O-FIO). UNIDADE: pergunta x fonte lida (projecao ou ato). Nenhuma lei nova. Padrao: Pa ...` |
-| 17:20:17 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; H=$(date +%H:%M) cat > $D/aval_preverif_pergunta.txt <<'EOF' aval Ronald 09/11 E4A-PREVERIF-PERGUNTA-DIRETA (complementa E4-EM-DOIS-POUSOS; nao cancela o construtor em voo). UNIDADE: escritor sem fato x leitor do campo retirado. Nenhuma lei nova. O preverif da E4a recebe 3 perguntas obrigatorias, cada uma respondida com arquivo:linha do  ...` |
-| 17:18:10 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; echo "aval_leitor_modal.txt # E4A-LEITOR-DO-MODAL: anexo obrigatorio do preverif; teste 2 (ausencia de leitores) cobre modal_fio.html:170" >> $D/anexos_preverif.txt; sed -n 1,4p app/docs/RELATO.md \| cut -c1-160; tail -3 logs/push_tudo.log \| cut -c1-200` |
-| 17:17:16 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FIO-E0-V4-E4-ESCRITORES; H=$(date +%H:%M); cat > $D/aval_leitor_modal.txt <<'EOF' aval Ronald 09/11 17:1x E4A-LEITOR-DO-MODAL (complementa E4-BRIEF-VIVO-E-ESCOPO; nao cancela o construtor em voo). UNIDADE: leitor de data_conferida_por. Adendo de censo medido na VM 17:16: escritor unico chamados/services/validacao.py:665 (P13, core/contratos_estruturais.py:691);  ...` |
