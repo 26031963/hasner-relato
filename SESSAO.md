@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 06:21:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1188**.
+**Medido em 10/11/2026 06:26:06.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **1183**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1193,8 +1193,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:30:56 | Bash |  | `S=/home/ronald/wt-e4a-sessao-180409/app; sed -n 1340,1392p $S/chamados/reconciliador.py; echo ----; sed -n 130,175p $S/chamados/services/fabrica_da_celula.py` |
 | 18:30:40 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/FIO-E0-V4-E4-ESCRITORES/volta3/diff_produtivo.patch \| cut -c1-180` |
 | 18:30:28 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bnenjotd7.output; cat logs/FIO-E0-V4-E4-ESCRITORES/preverif_e4a1.r` |
-| 18:21:45 | Bash |  | `while kill -0 2723179 2>/dev/null; do /usr/bin/sleep 20; done; date; cat /home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES/preverif_e4a1.r.rc 2>/dev/null; wc -c /home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES/preverif_e4a1.r` |
-| 18:21:44 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '4s#^E4a-1 18:4x #E4a-1 18:2x #' app/docs/RELATO.md; sed -n 4p app/docs/RELATO.md \| cut -c1-30` |
-| 18:21:41 | Bash |  | `cd /home/ronald/saas-hasner; sed -i "3s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2723179#" app/docs/RELATO.md; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read().split('\n') s.insert(3,"E4a-1 18:4x [fio_morto_alcance=377]: volta 3 ENTREGOU (construtor 1916649 rc 0, testes leem o fonte aplicado, parque em logs/FIO-E0-V4-E4-ESCRITORES/volta ...` |
-| 18:21:21 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/FIO-E0-V4-E4-ESCRITORES; setsid env CODEX_OBRA=FIO-E0-V4-E4-ESCRITORES CODEX_PAPEL=verificador bash bin/codex_pergunta.sh --anexo $L/aval_expand_contract.txt --anexo $L/aval_preverif_pergunta.txt --anexo $L/aval_leitor_modal.txt --anexo $L/decisoes_v3.txt --anexo $L/volta3/leis_dos_sitios.txt --anexo $L/volta3/diff_produtivo.patch --anexo app/docs/JUIZES.md 6a1f ...` |
-| 18:21:17 | Write |  | `/home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES/preverif_e4a1.q` |
