@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=215904
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=1541588
 
 PAREI: push-mcpst-lei-akita-7ca7c2d9e | espera Ronald (!) -- push de da77395c0 cai no selo bin/tests/test_lei_akita.sh (universo origin/main..HEAD): 7ca7c2d9e (volta 3 da raia mcpst, ja MERGEADA e NO AR em 2f4dd4840) leva padrao=n/a (instrumento) e toca app/chamados/services/fabrica_da_celula.py (+20 linhas de docstring/inscricao @bolha). Cura = reescrever SO a mensagem (padrao=Single Writer Principle, o da obra) refazendo o hash de 7ca7c2d9e..da77395c0 (3 commits locais, nao empurrados), arvore identica por git diff-tree vazio, deploy intocado -- e REESCREVER HISTORIA, fora do aval 46d313581. Frase de reversao: nada aplicado; origin/main segue 8e852ec8c. Prod NAO depende do push (deploy 2f4dd4840 ja no ar). Enquanto isso: E4a-2 testes-alvo na raia. | MESMO `!` PEDIDO PARA A RAIA e4a2-raia (nao mergeada, nao empurrada): 6c6689036 e 11f82cfec levam padrao=n/a (instrumento) e tocam app/config/crons.py (negocio pelo selo, bin/tests/test_lei_akita.sh:122-123) -- reescrever as 2 mensagens para padrao=Parallel Change ANTES do merge, arvore identica provada por tree hash (a suite inteira em curso em 11f82cfec continua certificando). Os outros 5 da raia (padrao=Parallel Change) caem hoje so porque o vocabulario se le no ALVO (:76) e a base a048bf640 nao tem a L-127; no main ele existe.
 
