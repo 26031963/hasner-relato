@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2639691
+ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh | pid=269844
 DESENHO PAUTA-SEM-TURNO-PREFIXO-RESERVADO: lei=escritor unico pergunta=a IDENTIDADE da Pauta ESTEIRA mora no texto da chave (ESMERIL-SEMANTICA pre-existente), CONGELADA (obra de instrumento fora da serie E, SERIE-E-SO; copia 78528a3ec fica, sem volta 6; furos C/D/E/F no BACKLOG) app/core/management/commands/alarme_esteira.py:34 -- resposta Ronald TRES-ITENS 10/11 09h37 (logs/aval_tres_itens_1110_0937.txt)
 DESENHO O169-FECHADA: lei=celula soberana pergunta=quem e dono dos 3 encerrados por idade pelo cron velho com assinatura viva -- dono ESTRUTURA: dia em competencia trancada relavra so a VIA para tranca com trilha, sem reabrir; nao trancada reabre PELA PORTA com trilha; 10 legado e 4 admin fora; rc 2 diario ate o pouso e o alarme certo; volta 5 SO depois do pouso da E4a-2 app/ponto/services/cluster_espurio.py:53 -- resposta Ronald TRES-ITENS 10/11 09h37 (logs/aval_tres_itens_1110_0937.txt)
 RESPONDIDA por aval TRES-ITENS 09h37: PAREI: B3 PAUTA-SEM-TURNO-PREFIXO-RESERVADO (3a volta Codex verificador PROCEDENTE, preverif3 08h50, volta 5 78528a3ec, alvo_v5 Ran 185 OK) | espera Ronald (linha DESENHO ou ERRO-BOBO)
