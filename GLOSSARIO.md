@@ -15,6 +15,8 @@ divergirem, vale o termo tecnico e a lei citada._
 | Architecture Conformance Test (armadilha: selar a FORMA e nao o SIGNIFICADO) | selo | `bin/tests/test_*.sh` (host) e `*/tests/test_selo_*.py`; selo por AST, nunca por texto |
 | Event-driven architecture | crons virando evento | `config/crons.py::JUIZES_POR_VARREDURA` (o que ainda e varredura); signals do cartorio `ponto/signals.py` |
 | Transactional Outbox | O-OUTBOX | a construir (`app/docs/PLANO-PADROES.md`) |
+| Parallel Change / Expand-Contract | EXPAND / BACKFILL / migrar leitores / CONTRACT (aval E4-EXPAND-CONTRACT; corte Ronald 09/11 21:2x, L-127) | E4a-1 (fase EXPAND): `chamados/services/fabrica_da_celula.py::pauta_cadastro_sem_turno` grava o fato novo ao lado; nenhum leitor muda de fonte ate a fase de leitores; CONTRACT so depois (E4b) |
+| Clock Injection | hoje/agora da borda (relogio lido UMA vez na borda e passado; corte Ronald 09/11 21:2x, L-128) | `chamados/services/fabrica_da_celula.py::perguntar_pela_celula(cel, hoje=, agora=)`, `chamados/services/vigia_fio.py::censo(hoje=)`; selos `chamados/tests/test_e4a_relogio_injetado.py`, `core/tests/test_selo_teste_sem_relogio.py` |
 | Strangler Fig Pattern | construir ao lado e trocar inteira | — (conduta: raia/copia, L-107; troca de motor, L-110) |
 | Shadow mode / Parallel run | sombra | `bin/sombra.sh`; settings `config/settings/sombra.py` |
 | Merge queue | comboio / pouso | — (conduta: CLAUDE.md 7b POUSO-EM-COMBOIO, L-105/L-107); `bin/deploy.sh` |

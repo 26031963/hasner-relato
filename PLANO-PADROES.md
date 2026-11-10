@@ -75,3 +75,21 @@ _(contexto/alternativas/armadilha: redacao do Code a partir do aval HORIZONTE-PA
 - **Padrao conhecido:** reconciliacao *level-triggered* (o estado se compara ao fato atual, nao ao evento nem ao relogio).
 - **Armadilha:** trocar o None (nao medido) por False (ausente) fecha por falta de medida, que e o fechamento por idade com outro nome.
 _(contexto/alternativas/armadilha: redacao do Code a partir do corte e da O169; revise.)_
+
+### L-127 — PARALLEL CHANGE (EXPAND-CONTRACT) ENTRA NO VOCABULARIO (corte literal Ronald 09/11 21:2x)
+- **Lei:** Parallel Change (Expand-Contract) entra no GLOSSARIO como padrao; vale no campo `padrao=` da linha LEI-AKITA. Nenhum selo novo (o hook do `padrao=` ja le o GLOSSARIO).
+- **Contexto:** o aval E4-EXPAND-CONTRACT (09/11) partiu a E4 em Expand / Backfill / migrar leitores / Contract para que "nenhuma tela perde dado antigo no meio do caminho"; a E4a-1 pousou na fase EXPAND sem termo do vocabulario que dissesse isso, e o `padrao=` dela ficou so com Transactional Outbox.
+- **Alternativas descartadas:** rotular a fase so como Strangler Fig (troca o sistema inteiro ao lado, nao o CAMPO com escritores e leitores em fases); deixar a fase so na prosa do commit (nao se mede).
+- **Consequencias:** obra em fases declara a fase no `padrao=`; o verificador cobra que a fase EXPAND nao mude leitor de fonte e que o CONTRACT so apague depois que nenhum leitor le o velho.
+- **Padrao conhecido:** *Parallel Change* (Sato) / *Expand-Contract*.
+- **Armadilha:** CONTRACT antes do censo fechado de leitores (um leitor esquecido le o campo apagado); e EXPAND que ja muda leitor e um corte disfarcado.
+_(contexto/alternativas/armadilha: redacao do Code a partir do corte e do aval E4-EXPAND-CONTRACT; revise.)_
+
+### L-128 — CLOCK INJECTION ENTRA NO VOCABULARIO (corte literal Ronald 09/11 21:2x)
+- **Lei:** Clock Injection entra no GLOSSARIO como padrao; vale no campo `padrao=` da linha LEI-AKITA. Nenhum selo novo.
+- **Contexto:** a E4a-1 curou "relogio lido fora da borda" (classe que ja reprovou obra) passando `hoje`/`agora` da borda ate `perguntar_pela_celula` e `desfazer_carimbo_sem_lastro` (P2 da 1a reprovacao do opus); a cura nao tinha termo do vocabulario.
+- **Alternativas descartadas:** congelar o relogio so no teste (`freeze_time` prova o teste, nao o desenho); ler `timezone.now()` em cada sitio (dois relogios no mesmo julgamento discordam na meia-noite).
+- **Consequencias:** funcao de julgamento recebe `hoje`/`agora` por parametro; o relogio se le uma vez na borda (command, view, consumidor).
+- **Padrao conhecido:** *Clock Injection* / *injected clock*.
+- **Armadilha:** default `hoje=None` que le o relogio por dentro e o relogio solto de volta; o parametro tem de chegar de quem leu a borda, e o selo cobra o caminho, nao a assinatura.
+_(contexto/alternativas/armadilha: redacao do Code a partir do corte e do P2 da E4a-1; revise.)_
