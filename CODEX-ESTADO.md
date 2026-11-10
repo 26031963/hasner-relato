@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 00:54** · publicado em **10/11/2026 00:54** (UTC-3)
+> Ultima resposta processada: **10/11/2026 00:59** · publicado em **10/11/2026 00:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 00:59 · sessao df47402d072f · - · - · origem=Ronald (tmux)
+
+- **Chamador externo:** na cópia, o chamador produtivo encontrado é `aplicar_col900 --reverter`: percorre os dias e chama a porta uma vez por dia; depois só imprime o resultado e retorna, sem segundo julgamento ou cálculo explícito (`app/ponto/management/commands/aplicar_col900.py:65`, `:77`, `:79`, `:85`). A deduplicação financeira é local a uma chamada do rabo: dicionário novo em `app/ponto/portas/celula.py:450`, preenchimento em `:456`, disparo em `:458`. Portanto N reversões bem-sucedidas na mesma competência podem produzir N recálculos; não existe deduplicação do lote nesse chamador (`app/ponto/management/commands/aplicar_col900.py:65`, `:77`).
+
+- **Rejunção:** o callback não se limita aos dias revertidos: recebe o colaborador inteiro (`app/ponto/portas/celula.py:498`); seleciona chamados vivos, de escopo DIA, com FK `celula` nula (`app/chamados/rejuncao.py:59`); resolve a data pelo catálogo e busca a célula existente (`:83`, `:88`); escreve pela porta `apontar_celula` (`:107`). Essa porta altera `celula` e `atualizado_em`, trava a ordem antes do save e preserva apontamento existente (`app/chamados/services/vinculos.py:66`, `:96`, `:98`, `:100`). Leitor do vínculo: `dia_do_fato` passa a preferir `chamado.celula.data` (`app/chamados/juizes.py:98`).
+
+- **Falta espúria e perguntas:** o outro trecho do callback recorta os dias tocados (`app/ponto/portas/celula.py:501`); o filtro admite célula/data_turno, mas a decisão consulta `dia_do_fato`, `fatos_do_dia` e `premissa_morta` (`app/chamados/services/feriado_reavaliar.py:76`, `:30`, `:33`, `:38`). O fechamento usa `reconciliar` (`:47`), cujo escritor de estado move `status_local`, `resolvido_em`, `via_encerramento`, `atualizado_em` e urgência (`app/chamados/models.py:228`, `:244`, `:246`, `:296`). Os receivers podem resolver perguntas e julgar novamente o dia (`app/chamados/signals.py:114`, `:216`). Perguntas recebem carimbo/via e, quando há resposta textual, os carimbos de resposta/validação pela porta `carimbar`; a relavra move `veredito_lavrado`, `julgado_em`, `janela_expira_em` (`app/chamados/services/disputa_emissao.py:1860`; `app/chamados/models.py:3128`, `:3130`, `:3149`). Leitores desses estados incluem `PerguntaDisputa.estado` (`app/chamados/models.py:3043`) e o coletor que seleciona perguntas não materializadas (`app/chamados/services/disputa_emissao.py:1820`).
+
+- **Humano não é garantia universal de “zero chamadas ao juiz”:** o rabo pula apenas o julgamento direto pelo filtro `_HUMANOS` (`app/ponto/portas/celula.py:427`, `:431`). Se o callback fechar uma falta espúria, o signal pode chamar o mesmo `julgar_celula` sem esse filtro (`app/chamados/services/feriado_reavaliar.py:47`; `app/chamados/signals.py:216`). O juiz preserva o veredito administrativo, mas pode atualizar a ata (`app/ponto/portas/celula.py:1003`, `:1006`, `:1008`). Os novos testes sem chamado espúrio não exercitam essa cascata (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:26`, `:99`). Dia futuro continua barrado pelo próprio cartório (`app/ponto/services/cartorio.py:1985`).
+
+- **Atomic externo:** o rabo está depois do atomic interno (`app/ponto/portas/celula.py:785`, `:811`), mas o juiz roda sincronicamente (`:434`), enquanto dinheiro e reavaliação são agendados por `on_commit` (`app/ponto/services/fechamento.py:1824`; `app/ponto/portas/celula.py:502`). A ordem de registro é juiz → dinheiro → callback do rabo; confirmação experimental da execução em transação externa: **[não verificado]**. Não se deve dizer “já commitada” apenas porque saiu do atomic interno: existe caminho do juiz por `reconciliar`, que abre `atomic(savepoint=False)` (`app/ponto/services/cartorio.py:1499`; `app/chamados/models.py:650`). Exceção nesse bloco, depois engolida pelo rabo (`app/ponto/portas/celula.py:437`), pode comprometer a transação externa; reprodução: **[não verificado]**. A gravação específica da ata/veredito tem atomic próprio (`app/ponto/portas/celula.py:904`).
+
+- **Callbacks anteriores ao dinheiro:** o próprio julgamento pode fechar disputa (`app/chamados/services/disputa_emissao.py:1960`), cujo signal agenda retomada de regularizações (`app/chamados/signals.py:134`, `:144`); saves de pergunta também agendam fechamento de beco (`:227`, `:238`). Logo o dinheiro da VOLTA não é necessariamente o primeiro callback registrado (`app/ponto/portas/celula.py:434`, `:458`). Existência desses dados e recálculos indiretos no caso concreto: **[não verificado]**.
+
+- **Exceções comuns:** julgamento direto e disparo financeiro têm `try/except` separados (`app/ponto/portas/celula.py:437`, `:459`); o callback protege rejunção e falta espúria separadamente com `engolir` (`:495`, `:499`), que captura `Exception` (`app/core/observ.py:88`). O serviço financeiro também protege execução e agendamento (`app/ponto/services/fechamento.py:1818`, `:1825`). Isso sustenta best effort para exceções previstas nessas fronteiras; não sustenta garantia absoluta contra rollback de atomic externo (`app/chamados/models.py:650`).
+
+- **Rejunção duplicada existente:** a VOLTA já emite `EventoCelula` (`app/ponto/portas/celula.py:796`), cujo consumidor também chama rejunção (`app/chamados/reconciliador.py:1364`). O novo callback acrescenta outra tentativa (`app/ponto/portas/celula.py:498`); ambas passam pelo filtro de FK nula e pela guarda da porta (`app/chamados/rejuncao.py:62`; `app/chamados/services/vinculos.py:96`). É repetição de disparo do mesmo escritor, não um segundo juiz (`app/chamados/rejuncao.py:107`).
+
+## 10/11 00:58 · sessao 68effa817189 · - · - · origem=Ronald (tmux)
+
+Achados financeiros, todos da cópia:
+
+- **Competência exportada é alcançada.** `apesar_da_lavra` apenas dispensa a guarda de restauração do DNA; não é passado para o financeiro. O rabo chama `recalcular_por_evento` com recálculo habilitado por padrão; o callback chama o escritor mensal sem trava geral por exportação. Há uma exceção concreta: **09/2026 exportada continua barrada pela `GUARDA_COMPETENCIA`**, que exclui esses colaboradores do universo antes das escritas. (`app/ponto/portas/celula.py:779`, `app/ponto/portas/celula.py:811`, `app/ponto/portas/celula.py:445`, `app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:36`, `app/ponto/services/fechamento.py:558`.)
+
+- **O motivo não acompanha a trilha específica de exportada.** A VOLTA fornece `motivo_recalculo`; o rabo encaminha como `motivo`; mas `recalcular_por_evento` não repassa `motivo_exportada` ao escritor. O aviso da competência exportada pode registrar `'(sem motivo declarado)'`; o motivo aparece somente no `info` posterior do callback. (`app/ponto/portas/celula.py:812`, `app/ponto/portas/celula.py:458`, `app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:547`, `app/ponto/services/fechamento.py:1813`.)
+
+- **N VOLTAs em lote produzem N pedidos de recálculo**, mesmo pertencendo à mesma competência: a deduplicação é um dicionário local dentro de cada execução do rabo; a VOLTA entrega sempre `{dia}`. O callback não implementa deduplicação entre chamadas. (`app/ponto/portas/celula.py:450`, `app/ponto/portas/celula.py:456`, `app/ponto/portas/celula.py:811`, `app/ponto/services/fechamento.py:1824`.)
+
+- **Futuro e humano: disparo financeiro não prova que o previsto volta a 240.** O rabo pula o juiz nesses casos, mas solicita dinheiro. O leitor da grade prefere o `minutos_previstos` já lavrado na ata; só usa o juiz do previsto quando o campo é `None`. Portanto uma ata preservada com 480 pode produzir novamente `DiaPago.minutos_previstos=480`, apesar do DNA restaurado. O teste desses casos espia o disparo financeiro, sem executar essa conta. (`app/ponto/portas/celula.py:427`, `app/ponto/portas/celula.py:431`, `app/ponto/portas/celula.py:445`, `app/escala/services/leitor_celula.py:379`, `app/escala/services/leitor_celula.py:399`, `app/escala/services/leitor_celula.py:411`, `app/ponto/services/fechamento.py:1060`, `app/ponto/services/dia_pago.py:387`.)
+
+- **O financeiro reescreve a competência inteira desse colaborador**, não apenas o dia revertido. O escritor recebe `colaborador_ids=[pk]`; produz o fechamento da janela; lavra as versões `motor` e, a partir de 10/2026, `oraculo`; cada `lavrar` apaga e recria as linhas daquela versão/competência, inclusive ajuste mensal. (`app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:621`, `app/ponto/services/fechamento.py:1201`, `app/ponto/services/fechamento.py:1265`, `app/ponto/services/fechamento.py:1277`, `app/ponto/services/dia_pago.py:348`, `app/ponto/services/dia_pago.py:359`.)
+
+Escritores e leitores:
+
+| Campos | Escritor efetivo | Leitores concretos |
+|---|---|---|
+| `FechamentoMensal`: horas trabalhadas/noturnas/extras e seus splits, folga, atraso, saída antecipada, falta, intra, turnos abertos, inconsistências, DSR, banco, minutos previstos/abonados/realizados, dias previstos/incertos, motivos/causa do espelho e carimbos | Aberto: `save`; demais status: `update` com a lista de campos. (`app/ponto/services/fechamento.py:1137`, `app/ponto/services/fechamento.py:1160`.) | GET do fechamento consulta o gravado; TXT lê os fechamentos e extrai eventos; percentual usa o previsto materializado quando há carimbo. (`app/ponto/views.py:1134`, `app/folha/export.py:711`, `app/folha/export.py:722`, `app/folha/export.py:1037`.) |
+| `DiaPago`: 15 campos de dia e dois de ajuste, `furo_apurado`, detalhe, versão e carimbos | `dia_pago.lavrar`, alimentado pelo mesmo resultado do fechamento; `delete` + `bulk_create`. (`app/ponto/services/dia_pago.py:34`, `app/ponto/services/dia_pago.py:43`, `app/ponto/services/fechamento.py:1201`, `app/ponto/services/dia_pago.py:345`, `app/ponto/services/dia_pago.py:359`.) | Calendário lê linhas por data e `rubricas_do_dia`; testemunhas do export leem versão `motor`. (`app/colaboradores/services/calendario.py:290`, `app/colaboradores/services/calendario.py:655`, `app/ponto/services/dia_pago.py:855`, `app/folha/porta_export.py:75`, `app/folha/porta_export.py:284`.) |
+
+Semântica:
+
+- **Competência usa a data do fato**, sem substituir por hoje ou pelo mês civil: callback → `competencia_do_fato` → normalização local de datetime → `competencias_do_intervalo` → `janela_atual`, cujo corte vem da empresa. (`app/ponto/services/fechamento.py:1809`, `app/ponto/services/fechamento.py:1602`, `app/ponto/services/fechamento.py:1567`, `app/ponto/services/fechamento.py:1594`, `app/ponto/services/dia_pago.py:715`, `app/ponto/janelas.py:60`.)
+
+- **Dia dos períodos usa o mapa do motor**, não necessariamente a data civil de cada entrada: o fechamento passa `resultado.dia_da_jornada`; `_dia_de` consulta esse mapa e só depois cai em `localtime(entrada).date()`. A janela de batidas inclui as pontas para capturar turnos cruzando a competência. (`app/ponto/services/fechamento.py:1217`, `app/ponto/services/dia_pago.py:126`, `app/ponto/services/fechamento.py:624`.)
+
+- Há documentação antiga que ainda descreve a data civil da entrada como regra universal, mas o código acima prioriza o mapa. Isso aparece no comentário do calendário e na docstring/modelo `DiaPago`; não prova um novo segundo significado introduzido pelo diff. (`app/colaboradores/services/calendario.py:288`, `app/ponto/models.py:298`, `app/ponto/models.py:319`, `app/ponto/services/dia_pago.py:128`.)
+
+Exceções e atomicidade financeira:
+
+- O callback financeiro engole tanto falhas de execução quanto falhas ao registrar `on_commit`; não há operação de desfazer DNA nesse caminho. (`app/ponto/services/fechamento.py:1818`, `app/ponto/services/fechamento.py:1823`.)
+- A persistência de `FechamentoMensal` ocorre antes da lavratura de `DiaPago`; falhas da lavratura são engolidas. O corpo de `lavrar` não envolve seu `delete` + `bulk_create` em um `atomic`. Assim o código permite divergência parcial em falha, conforme transação/erro concreto; ocorrência em produção é **[não verificado]**. (`app/ponto/services/fechamento.py:1144`, `app/ponto/services/fechamento.py:1160`, `app/ponto/services/fechamento.py:1201`, `app/ponto/services/fechamento.py:1238`, `app/ponto/services/dia_pago.py:135`, `app/ponto/services/dia_pago.py:359`.)
+
+Não encontrei, nesses leitores financeiros examinados, uma condição que exija “VOLTA não recalcula”: eles consomem o gravado e aceitam sua atualização pelo evento. Essa conclusão cobre os caminhos citados, não prova ausência em toda a árvore. (`app/colaboradores/services/calendario.py:290`, `app/colaboradores/services/calendario.py:655`, `app/folha/export.py:711`, `app/folha/porta_export.py:284`.)
+
+## 10/11 00:58 · sessao 1e22f8bbbcd9 · - · - · origem=Ronald (tmux)
+
+- **Mordida real no golden:** `_dia_pago()` usa `.get()` de `DiaPago` motor/tipo dia; falta de fixture falha, não passa vazia. A montagem exige previsto 480 antes da VOLTA; golden exige DNA restaurado, `dna_anterior=None`, ata 240 e DiaPago 240. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:56`, `:77`, `:88`)
+
+- **Futuro/humano:** `juiz.assert_not_called()` isolado seria negativo fraco, mas vem acompanhado de `dinheiro.assert_called_once_with(...)`, DNA restaurado e ata ainda 480. Portanto o desaparecimento completo do rabo reprova esses casos. Porém não demonstram resultado financeiro: mockam o dinheiro; a ata deliberadamente permanece 480. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:99`, `:111`, `:117`)
+
+- **RED “4 failures”:** compatível com três comportamentais mais o AST real, mas execução contra base e banco não demonstrada pelo material disponível **[não verificado]**. O exemplo `_FONTE_BASE` é apenas string reduzida; seu teste exige rejeição, portanto continua verde quando o verificador funciona. (`app/ponto/tests/test_reverter_regen_sem_banco.py:25`, `:81`, `:90`)
+
+- **AST:** executei somente leitura com `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest app.ponto.tests.test_reverter_regen_sem_banco -v`: **11 testes OK** **[não verificado por arquivo:linha; execução nesta sessão]**. Valida uma definição, uma chamada comum, ausência de escritores diretos, posição imediatamente após o `with` e argumentos exatos. (`app/ponto/tests/test_reverter_regen_sem_banco.py:54`, `:59`, `:68`, `:76`)
+
+- **Limite concreto AST:** executei mutações apenas em memória e o verificador aceitou (a) `return True` dentro do `atomic`, tornando o rabo inalcançável; (b) corpo `_o_chao_do_dia_mudou` reduzido a `pass` **[não verificado por arquivo:linha; execução nesta sessão]**. A causa está no escopo do verificador: examina chamadas e posição sintática apenas na VOLTA, sem provar fluxo nem comportamento do helper. Os comportamentais cobrem parte dessa lacuna. (`app/ponto/tests/test_reverter_regen_sem_banco.py:54`, `:59`, `:68`)
+
+- **Lacunas dos novos testes:** não há casos de exportada/`apesar_da_lavra`, sem DNA anterior, lote/dedup, exceções, callbacks de rejunção/falta espúria nem `atomic` externo. O patch de `on_commit` chama callbacks imediatamente e ignora a semântica real de commit, por isso não demonstra ordem sob transação externa. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:20`, `:74`, `:85`, `:88`, `:111`, `:117`)
+
+- **Escritor ata/veredito:** `ata_do_dia` produz tipo, lâmpadas, minutos e contagens; cartório chama `cel.lavrar_veredito(...save=False, ata=...)` e `carimbar` persiste os campos pela porta `salvar_e_emitir`, que grava célula e evento no mesmo `atomic`. (`app/ponto/services/cartorio.py:696`, `:704`, `:1813`, `:1833`; `app/ponto/portas/celula.py:1032`, `:1052`, `:1070`, `:899`)
+
+- **Leitores:** grade lê ata e dá prioridade ao previsto lavrado; somente ausência dessa chave consulta `minutos_previstos_do_dia`. Transporta veredito e ata para consumidores. `chamados.juizes.dia_sem_trabalho` lê `trabalha`/`ata.tipo_dia`, com exceção parcial; export lê veredito/protestos para retenção. (`app/escala/services/leitor_celula.py:379`, `:397`, `:399`, `:411`, `:424`, `:428`; `app/chamados/juizes.py:426`; `app/folha/export.py:1206`, `:1233`, `:1245`)
+
+- **Guardas e semântica:** rabo exclui datas futuras e `_HUMANOS=('trabalhou','faltou','justificado')`; esses são precisamente os vereditos administrativos. Mesmo excluídos, dinheiro é disparado; como grade prioriza ata, DNA restaurado não implica previsto restaurado nesses casos. O teste confirma explicitamente ata 480. (`app/ponto/portas/celula.py:426`, `:431`, `:445`, `:458`; `app/colaboradores/services/pos_vinculo.py:14`; `app/escala/models.py:1759`; `app/escala/services/leitor_celula.py:399`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:109`)
+
+- **Dia civil versus turno:** `julgar_celula` rejeita futuro; hoje exige fim de turno salvo folga/teto explícito. O batch trata passado cujo turno segue aberto e conta batidas pelo dia-turno da grade, não pela data civil da batida. Portanto o filtro `dia <= hoje` do rabo não substitui todas essas guardas do juiz. (`app/ponto/services/cartorio.py:1985`, `:1993`, `:1997`, `:1356`, `:1379`)
+
+- **Humano não significa congelamento universal da ata:** o rabo pula vereditos humanos, mas a operação `lavrar_veredito` quando chamada pelo cartório sobre `veredito_via='admin'` preserva veredito e pode atualizar ata. Portanto a promessa do teste é sobre esse gatilho direto; callbacks e outros emissores precisam ser auditados separadamente. (`app/ponto/portas/celula.py:431`, `:1002`, `:1005`, `:1008`)
 
 ## 10/11 00:54 · sessao f30997273ac9 · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · verificador · origem=Code
 
@@ -736,183 +814,4 @@ O caminho do código demonstra:
 
 Para COM_ADESAO, se a célula chega ao ramo normal com `teto_de_hoje` e há vencidos, `nunca_bateu` impede `_em_dia`; a mudança do número de vencidos também integra a impressão, fazendo o marco novo participar do rejulgamento (`app/ponto/services/cartorio.py:1324-1344`, `app/ponto/services/cartorio.py:1359-1375`). Isso depende de o chamador selecionar e invocar o julgamento da célula; causa real de não emissão na produção permanece [não verificado].
 
-## 10/11 00:24 · sessao 70d18c1fa24a · FIO-E0-V4-VIGIA-FABRICA-POR-EVENTO-CRESCE · censo · origem=Code
-
-**Há um caminho que explica a perda de retorno por vencimento, mas ele depende de o colaborador continuar sem nenhuma batida apurável na vida.** Nesse ramo, o cartório considera a célula em dia pela impressão igual, sem incluir nela o avanço dos marcos. No ramo com adesão, ocorre o contrário: `nunca_bateu` impede o pulo. A sonda não demonstra a adesão atual de cada colaborador; atribuir esse mecanismo aos 137 itens seria **[nao verificado]**. (`app/ponto/services/cartorio.py:1165-1173`, `:1207-1216`, `:1366-1375`)
-
-Uma precisão sobre o dado: o resumo fornecido registra **139/139 com `trabalha=True`**; os **135** correspondem aos itens sem evento posterior ao dia civil, e outros quatro têm evento posterior. As referências abaixo ao resumo contam as linhas do anexo textual. (`sonda1_resumo.txt:7-9`)
-
-1. **Caminhos que podem voltar à célula e respectivas guardas**
-
-| Caminho | Como deveria chegar ao julgamento/fábrica | O que impede ou limita o retorno |
-|---|---|---|
-| **Vigia de hora**, a cada dez minutos | Seleciona células de hoje e ontem, calcula vencidos e chama `julgar_celula(..., teto_de_hoje=True)`. (`app/config/crons.py:367`; `app/ponto/services/vigia_de_hora.py:114-131`) | Exige `trabalha=True`; exclui desligado/isento; ontem depende de `_ontem_em_janela`; sem vencidos pula; com batidas suficientes e sem cobrança viva pula. **Não tem guarda própria de “já julgada” ou `nunca_bateu`.** (`app/ponto/services/vigia_de_hora.py:21-23`, `:117-129`) |
-| **Cartório chamado pelo vigia — sem adesão** | Entra no ramo `adesao is None`, definido pela ausência de qualquer batida apurável na vida. (`app/ponto/services/cartorio.py:1165-1173`) | `_em_dia_nb = bool(cel.julgada_em and cel.impressao == imp0 and cel.veredito)`; se verdadeiro e sem `forcar`, pula. `imp0` **não recebe teto nem encerramento**: o simples vencimento seguinte não muda esse insumo. (`app/ponto/services/cartorio.py:1207-1216`) |
-| **Cartório chamado pelo vigia — com adesão** | Calcula teto de hoje/ontem e inclui a quantidade de vencidos na impressão. (`app/ponto/services/cartorio.py:1324-1344`, `:1359-1365`) | Pula impressão igual somente quando também `veredito != 'nunca_bateu'`. Portanto **`nunca_bateu` não bloqueia esse ramo**. (`app/ponto/services/cartorio.py:1369-1375`) |
-| **`processar_cartorio`, madrugada** | Configurado com `--apply`; seleciona todas as células passadas da empresa e chama `julgar_colab`. O SQL não exclui julgadas nem `nunca_bateu`. (`app/config/crons.py:616`; `app/ponto/management/commands/processar_cartorio.py:49-65`) | `data__lt=hoje` exclui o dia corrente; depois valem os dois pulos do cartório acima. O cron configurado não passa `--forcar`. (`app/ponto/management/commands/processar_cartorio.py:50`, `:62`, `:65`; `app/config/crons.py:616`) |
-| **Consumidor de `EventoCelula`**, a cada minuto | Para as datas dos eventos, relê as células atuais e chama `perguntar_pela_celula`; **não rejulga previamente a célula**. (`app/config/crons.py:394`; `app/chamados/reconciliador.py:1384-1387`; `app/chamados/services/fabrica_da_celula.py:279-292`) | Só lê eventos não processados e com menos de cinco tentativas. Sem evento pendente, encerra o lote. Sem falha ou adiamento específico de órfãs, marca processado, mesmo havendo marcos futuros cortados pela fábrica. (`app/chamados/reconciliador.py:1209`, `:1249`, `:1343-1345`, `:1375-1378`, `:1393-1401`) |
-| **`disparar_perguntas_competencia`**, corrente da manhã | No universo da célula, apenas chama `motivos_que_o_evento_deixou` e conta. (`app/config/crons.py:1521-1523`; `app/chamados/management/commands/disparar_perguntas_competencia.py:109-113`) | **Não fabrica nesse universo**, inclusive com `--apply`: alarma o estoque. Seu segundo universo ainda escreve, mas exige chamado vivo sem pergunta — o “fio mudo”. (`app/chamados/management/commands/disparar_perguntas_competencia.py:141-161`, `:240-251`, `:270-283`) |
-| **Eventos de batida, ausência, justificativa e chamado** | Save/delete de batida ou ausência, save de justificativa e nascimento/mudança de status de chamado podem chamar o mesmo juiz. (`app/ponto/signals.py:131-165`; `app/chamados/signals.py:187-216`) | Dependem de ocorrer uma escrita; não são disparados pelo relógio. Há guarda contra reentrada durante julgamento; chamado sem mudança de status retorna. Na porta avulsa, hoje sem `teto_de_hoje` espera o fim do turno. (`app/ponto/signals.py:90-93`; `app/chamados/signals.py:192-193`, `:210-211`; `app/ponto/services/cartorio.py:1993-1998`) |
-
-**Há ainda uma restrição anterior à fábrica direta:** `julgar_colab` só chama `perguntar_pela_celula` para datas presentes em `out['cods']` deste ato. O ramo sem adesão lavra/carimba e retorna sem registrar essa data em `cods`; o registro ocorre no ramo normal. Assim, naquele ramo, a fábrica pode ser alcançada pelo outbox da lavra, mas não por essa chamada direta. (`app/ponto/services/cartorio.py:938-944`, `:997-1008`, `:1253-1279`, `:1437`; `app/ponto/portas/celula.py:892-916`)
-
-Os outros caminhos próximos não fornecem uma revisita geral de todos os marcos de uma célula sem batidas:
-
-- **`detectar_ausencias`**, a cada cinco minutos, tenta abrir chamado; pula se já existe e seu funil veta `nunca_bateu`. Logo, não substitui o retorno marco a marco da fábrica. (`app/config/crons.py:364`; `app/ponto/management/commands/detectar_ausencias.py:424-439`, `:630-633`; `app/ponto/marcos.py:119`, `:155-162`)
-- **`reconciliar_grade`** está configurado sem `--apply`; seu emissor também consulta esse veto e só emite chamado, sem pergunta própria. (`app/config/crons.py:460-462`; `app/ponto/management/commands/reconciliar_grade.py:502-504`, `:507-532`)
-- **Alertas de turno** exigem entrada; **detector de intervalo** exige entrada e saída acesas, e sua emissão está aposentada. Esses requisitos excluem o caso de nenhuma batida no dia. (`app/ponto/management/commands/processar_alertas_turno.py:92-93`; `app/ponto/management/commands/detectar_intervalo_ausente.py:69-70`, `:149-156`)
-- **`emitir_furo_retroativo`** é passe sob ordem, não esse cron periódico, e pula colaborador sem batidas na janela. **Cobrar dia manualmente** chama o juiz com `forcar=True`, mas só para passado. (`app/config/crons.py:1396`; `app/ponto/management/commands/emitir_furo_retroativo.py:53-56`; `app/chamados/services/cobrar_dia.py:28-41`)
-- Mudança de vínculo, regeneração/reversão e queda de veto também têm chamadas ao juiz; dependem desses atos, sem agenda de vencimento de marco. (`app/colaboradores/services/pos_vinculo.py:61-72`; `app/ponto/portas/celula.py:422-434`, `:815-817`; `app/escala/regua_defesa.py:687-692`)
-
-2. **Qual guarda importa depois do primeiro julgamento**
-
-Para o caso central, não é `julgada_em` preenchida isoladamente: é a conjunção **carimbo + impressão igual + veredito preenchido**, no ramo sem adesão. O relógio dos marcos não entra na impressão desse ramo; no ramo normal, entra. (`app/ponto/services/cartorio.py:1207-1216`, `:1359-1375`)
-
-Também há uma segunda idempotência na escrita: `carimbar` retorna sem salvar quando impressão, ausência e indicadores permanecem iguais e não houve nova lavra. Mesmo chegar novamente à porta não garante movimentar `julgada_em` ou produzir evento. O outbox normal só acorda por campos lavrados de **veredito/ata**. (`app/ponto/portas/celula.py:1070-1081`, `:892-916`)
-
-O teto da fábrica tem outro papel: **corta motivos**, não agenda retorno. Além dele, a fábrica verifica dia sem trabalho/colaborador ativo, futuro, veredito que acusa, parcial na lista e identidade do fato já perguntado. `nunca_bateu` passa pelo teste de acusação porque pertence a `VEREDITOS_ACUSAM`. (`app/chamados/services/fabrica_da_celula.py:105-150`; `app/escala/models.py:1767-1768`)
-
-3. **O julgamento das 09:00 devolveu quais motivos? Quem deveria voltar?**
-
-**A lista histórica efetivamente devolvida às 09:00 é [nao verificado].** O anexo não contém o retorno daquela execução nem seu DNA/ata/dedup histórico; os exemplos mostram horários de julgamento/evento e ausência atual de perguntas. (`sonda1_resumo.txt:10`, `:12-19`)
-
-Pelo código, uma chamada à fábrica naquele instante só poderia devolver os motivos dos marcos faltantes **já vencidos há 30 minutos**. `vencidos_no_instante` chama `marcos_vencidos`; `motivos_pela_ata` exclui explicitamente cada `(tipo, hora)` fora desse conjunto. Portanto, **sim: os marcos seguintes ainda não vencidos são cortados**. (`app/ponto/services/cartorio.py:828`, `:856-859`; `app/chamados/services/fabrica_da_celula.py:35-49`, `:58-73`)
-
-O mapa é:
-
-| Marco faltante | Motivo |
-|---|---|
-| Início/E | `saida_sem_entrada` |
-| Ida do intervalo/S | `intervalo_saida` |
-| Volta do intervalo/E | `intervalo_volta` |
-| Fim/S | `orfao_14h` |
-
-Fonte: `app/chamados/services/declaracao_texto.py:42-46`.
-
-O desenho geral diz “EVENTO carimba e julga”, consumidor lê a lâmpada e cron de varredura vigia. Entretanto, a configuração declara expressamente a exceção temporal: **o vigia de hora ocupa o papel `prazo`, e “a célula ainda não agenda o próprio marco”**. O responsável implementado pelo retorno por vencimento é esse vigia, delegando ao cartório; não aparece uma agenda independente de evento “marco venceu”. (`CLAUDE.md:166-170`; `app/config/crons.py:2092-2097`, `:2127-2131`)
-
-`_marco_venceu_apagado` existe, mas apenas compara vencidos entre dois instantes e lê a ata; **não emite evento**. Os emissores do outbox registram lavra, chamado, fechamento de turno, alteração de pergunta, reversão ou semeadura. (`app/ponto/services/cartorio.py:403-423`; `app/ponto/portas/celula.py:794-796`, `:896-905`; `app/chamados/signals.py:194-207`)
-
-4. **Por que 09/11 aparece no estoque observado às 00:12 de 10/11?**
-
-O universo passa a admitir 09/11 quando `hoje` vira 10/11, pois exige `data < hoje`. Ontem só é excluído se `_ontem_em_janela(...)` devolver verdadeiro. Portanto, os 28 itens de 09/11 presentes na sonda **já passaram pelo resultado falso dessa função**; isso demonstra sua presença naquela medição, não o instante exato em que surgiram. (`app/chamados/management/commands/disparar_perguntas_competencia.py:100-113`; `sonda1_resumo.txt:1`, `:5`; instante de surgimento: **[nao verificado]**)
-
-As condições de `_ontem_em_janela` são:
-
-- Sem fim calculável: `False`. (`app/ponto/services/vigia_de_hora.py:48-50`)
-- Último marco + 30 minutos anterior à meia-noite de hoje: `False`. (`app/ponto/services/vigia_de_hora.py:51-54`)
-- Antes de fim + dois tetos: `True`; depois, depende de o dia ainda não estar encerrado em `agora - dois tetos`. (`app/ponto/services/vigia_de_hora.py:55-58`)
-
-**O vigia de hora não alcança esses mesmos itens naquele instante**, pois usa precisamente a guarda inversa: se ontem e fora dessa janela, pula. No dia seguinte, eles também saem do universo hoje/ontem do vigia. Continuam possíveis o cartório de passado e eventos/atos posteriores, sujeitos às guardas anteriores. (`app/ponto/services/vigia_de_hora.py:21-23`, `:120-121`; `app/ponto/management/commands/processar_cartorio.py:49-65`)
-
-5. **Quem escreve, quem lê e o esmeril semântico**
-
-| Campo | Escrita efetiva |
-|---|---|
-| `julgada_em` e `impressao` | `carimbar`, nas atribuições e persistência da porta; chamado pelos dois ramos do cartório. (`app/ponto/portas/celula.py:1074-1081`; `app/ponto/services/cartorio.py:1275-1277`, `:1833`) |
-| `veredito` | `lavrar_veredito`, pela porta; cartório e decisão administrativa a utilizam. Há também cópia explícita **somente em memória**, para leitura do julgamento em curso. (`app/ponto/portas/celula.py:1044-1049`, `:941-956`; `app/ponto/services/cartorio.py:1253`, `:1813`; `app/ponto/services/veredito_celula.py:351`) |
-
-O comentário que ainda chama `processar_cartorio` de escritor único descreve a organização antiga; a atribuição efetiva está na porta acima. (`app/escala/models.py:1738-1746`; `app/ponto/portas/celula.py:1074-1081`)
-
-**Leitores de `julgada_em` e da impressão comparada:**
-
-| Uso | Leitores |
-|---|---|
-| Pulo e idempotência | Cartório nos dois ramos; `carimbar`. (`app/ponto/services/cartorio.py:1210-1216`, `:1369-1375`; `app/ponto/portas/celula.py:1070-1073`) |
-| Julgamento anterior / parcial na lista | Cartório, fábrica, emissão, reconciliador, cluster, disparador e retroativo. (`app/ponto/services/cartorio.py:954`, `:1718`; `app/chamados/services/fabrica_da_celula.py:117`; `app/chamados/services/disputa_emissao.py:934-938`; `app/chamados/reconciliador.py:878-882`; `app/ponto/services/cluster_espurio.py:104`; `app/chamados/management/commands/disparar_perguntas_competencia.py:154`; `app/ponto/management/commands/emitir_furo_retroativo.py:121`) |
-| Invalidação de leitura/lavra | Veredito lavrado e fase 12×36. (`app/chamados/veredito_lavrado.py:191-194`; `app/escala/services/fase_12x36.py:188-193`) |
-| Auditoria/backfill/diagnóstico | Vigia B5, backfill B5, invariantes e diagnóstico de veredito velho; este último também lê `impressao`. (`app/ponto/management/commands/vigia_b5_ausencia.py:55`; `app/ponto/management/commands/backfill_b5_insumos.py:61`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1597`; `app/ponto/management/commands/celula_veredito_velho.py:109-110`) |
-
-**Leitores operacionais de `veredito`, agrupados pelo efeito:**
-
-- **Acusar/absolver e manter perguntas/chamados:** fábrica, juízes, modelo da pergunta, reconciliador, emissão, resposta tardia, limbo e silêncio por ausência. (`app/chamados/services/fabrica_da_celula.py:113`; `app/chamados/juizes.py:1321`, `:1372-1387`; `app/chamados/models.py:3356-3361`; `app/chamados/reconciliador.py:637-641`, `:1027-1030`; `app/chamados/services/disputa_emissao.py:769`; `app/chamados/services/resposta_tardia.py:45`; `app/chamados/services/limbo_folgas.py:194`; `app/chamados/services/silencio_ausencia.py:40-41`)
-- **Vetar cobrança:** `celula_veta_cobranca`, lido pelos emissores e serviço de furos. (`app/ponto/marcos.py:119`, `:155-162`; `app/ponto/management/commands/detectar_ausencias.py:631-633`; `app/ponto/management/commands/reconciliar_grade.py:502-504`; `app/ponto/services/furos_sem_cobranca.py:98`)
-- **Retenção, exposição e ata:** exportação, vigia de pausa, prévia, relatório da frota e leitor da célula. (`app/folha/export.py:1233-1255`; `app/folha/services/vigia_pausa.py:157`; `app/folha/previa.py:94`; `app/relatorios/dia_da_frota.py:51-60`; `app/escala/services/leitor_celula.py:424`)
-- **Adesão/cadastro/proposição:** adesão, Cadastro × Realidade, propositor e régua de defesa. (`app/chamados/services/adesao.py:34`; `app/escala/services/cadastro_realidade.py:181`, `:477`, `:618`; `app/escala/services/propositor.py:474`; `app/escala/regua_defesa.py:688`)
-- **Proteção da decisão humana:** calendário, serviço de veredito, mudanças de vínculo e portas de regeneração/reversão. (`app/colaboradores/services/calendario.py:411-416`; `app/ponto/services/veredito_celula.py:109`; `app/colaboradores/services/pos_vinculo.py:61`; `app/ponto/portas/celula.py:429`, `:816`)
-- **Vigias, pautas e censos:** vigia do fio, furo sem canal, furos sem cobrança/vetados, discordantes, ausência × veredito, diagnóstico e pautas. (`app/chamados/services/vigia_fio.py:379`; `app/chamados/services/furo_sem_canal.py:35`, `:72`; `app/ponto/services/furos_sem_cobranca.py:61`; `app/ponto/services/furos_vetados.py:61`; `app/ponto/services/pautas_dos_discordantes.py:71`; `app/ponto/services/vigia_ausencia_veredito.py:42`, `:56`; `app/ponto/services/diagnostico_escala.py:177`; `app/pautas/services.py:422`)
-
-**Sim, existem semânticas diferentes para `nunca_bateu`:**
-
-- No ramo sem adesão, qualquer veredito preenchido com impressão igual basta para considerar o julgamento atualizado; no ramo com adesão, `nunca_bateu` exige rejulgamento. (`app/ponto/services/cartorio.py:1210-1216`, `:1369-1375`)
-- No veto de emissão, `nunca_bateu` **cala cobrança**; na fábrica, nas perguntas e na retenção ele **continua acusando**, por pertencer a `VEREDITOS_ACUSAM`. (`app/ponto/marcos.py:119`, `:161-162`; `app/escala/models.py:1767-1768`; `app/chamados/services/fabrica_da_celula.py:113`; `app/folha/export.py:1233`)
-- O comentário “`nunca_bateu` = fato resolvido” ainda existe imediatamente antes da tupla que o inclui entre os que acusam. É divergência documental explícita, não prova de encerramento uniforme no código. (`app/escala/models.py:1760-1768`)
-
-## 10/11 00:23 · sessao f64053de7b9b · - · - · origem=Ronald (tmux)
-
-O censo aponta três sentidos diferentes para `nunca_bateu`:
-
-- **Ainda acusa** no vocabulário efetivo: está em `CelulaDia.VEREDITOS_ACUSAM` (`app/escala/models.py:1767-1768`).
-- **Veta cobrança de batida** no gate compartilhado: está em `VEREDITOS_QUE_VETAM` (`app/ponto/marcos.py:119`); `celula_veta_cobranca` lê `trabalha/veredito` e retorna veto (`app/ponto/marcos.py:155-162`). Os emissores obedecem em `app/ponto/management/commands/detectar_ausencias.py:631-633` e `app/ponto/management/commands/reconciliar_grade.py:502-504`.
-- **Julgamento em dia enquanto não existe adesão**: o ramo `adesao is None` calcula impressão sem teto (`app/ponto/services/cartorio.py:1173`, `1207-1209`) e pula quando há `julgada_em`, impressão igual e qualquer veredito (`1210-1216`). Quando já existe adesão, a guarda deliberadamente **exclui** `nunca_bateu` do pulo (`1366-1375`).
-
-Existe comentário contraditório dizendo `nunca_bateu = fato resolvido` em `app/escala/models.py:1761`, mas o conjunto executado abaixo inclui a palavra entre os que acusam (`1767-1768`). O comentário não demonstra execução.
-
-**Escritores efetivos**
-
-| Campo | Escritor e chamadas |
-|---|---|
-| `julgada_em`, `impressao` | `carimbar`: atribuições em `app/ponto/portas/celula.py:1074-1075`; persistência em `1081`. Chamado pelos dois ramos do cartório: `app/ponto/services/cartorio.py:1275`, `1833`. |
-| `veredito` | `lavrar_veredito`: atribuição/persistência em `app/ponto/portas/celula.py:1044-1049`. O método do modelo delega (`app/escala/models.py:1819-1828`). Chamadores: cartório (`app/ponto/services/cartorio.py:900`, `1253`, `1813`) e decisão humana (`app/ponto/services/veredito_celula.py:351`). |
-| Cópia de `veredito` em memória | `celula_como_o_julgamento_deixa`, explicitamente sem gravação (`app/ponto/portas/celula.py:941-956`). |
-
-`carimbar` também lê ambos os campos para idempotência e não grava se os insumos e a lavra não mudaram (`app/ponto/portas/celula.py:1070-1073`). Somente mudança de `veredito` ou `ata` acorda o consumidor pelo save; alteração isolada do carimbo não basta (`app/ponto/portas/celula.py:893`, `908-916`).
-
-**Leitores de `julgada_em`**
-
-- Pulo e instantâneo anterior: `app/ponto/services/cartorio.py:954`, `1210`, `1369`.
-- Cobertura parcial e fato novo: `app/ponto/services/cartorio.py:400`, `1718`; `app/chamados/services/fabrica_da_celula.py:117`; `app/chamados/services/disputa_emissao.py:934-938`; `app/chamados/reconciliador.py:878-882`; `app/ponto/services/cluster_espurio.py:104`; `app/chamados/management/commands/disparar_perguntas_competencia.py:154`; `app/ponto/management/commands/emitir_furo_retroativo.py:121`.
-- Invalidação temporal: `app/chamados/veredito_lavrado.py:191-194`; `app/escala/services/fase_12x36.py:188-193`.
-- Universo de auditoria/backfill: `app/ponto/management/commands/vigia_b5_ausencia.py:55`; `app/ponto/management/commands/backfill_b5_insumos.py:61`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1597`.
-- Diagnóstico: `app/ponto/management/commands/celula_veredito_velho.py:109`.
-
-**Leitores de `impressao` da célula**
-
-- Pulo: `app/ponto/services/cartorio.py:1210`, `1369`.
-- Idempotência: `app/ponto/portas/celula.py:1071`.
-- Diagnóstico: `app/ponto/management/commands/celula_veredito_velho.py:110`.
-
-O hash inclui o relógio quando o chamador entrega `teto` (`app/ponto/services/cartorio.py:460-464`); o ramo sem adesão não entrega esse argumento (`1207-1209`).
-
-**Leitores operacionais de `veredito`, por grupo**
-
-- Acusação/absolvição: fábrica (`app/chamados/services/fabrica_da_celula.py:113`), juiz de pergunta viva (`app/chamados/juizes.py:1372-1387`), consulta das perguntas (`app/chamados/models.py:3356-3361`), reconciliador (`app/chamados/reconciliador.py:637-641`, `1027-1030`), emissão (`app/chamados/services/disputa_emissao.py:769`), resposta tardia (`app/chamados/services/resposta_tardia.py:45`), limbo (`app/chamados/services/limbo_folgas.py:194`), silêncio por ausência (`app/chamados/services/silencio_ausencia.py:40-41`). Esses leitores usam o conjunto que inclui `nunca_bateu`; não o absolvem por essa palavra.
-- Retenção/exibição: `app/folha/export.py:1233-1255`; `app/folha/services/vigia_pausa.py:157`; `app/folha/previa.py:94`; `app/relatorios/dia_da_frota.py:51-60`; `app/escala/services/leitor_celula.py:424`; `app/pautas/services.py:422`; `app/ponto/services/diagnostico_escala.py:177`.
-- Cadastro/adesão: `app/chamados/services/adesao.py:34`; `app/escala/services/cadastro_realidade.py:181`, `477`, `618`; `app/escala/services/propositor.py:474`; `app/escala/regua_defesa.py:688`.
-- Decisão humana e proteção: `app/colaboradores/services/calendario.py:411-416`; `app/ponto/services/veredito_celula.py:109`; `app/ponto/portas/celula.py:429`, `816`; `app/colaboradores/services/pos_vinculo.py:61`.
-- Vigias: `app/chamados/services/vigia_fio.py:379`; `app/ponto/services/furos_sem_cobranca.py:61`; `app/ponto/services/furos_vetados.py:61`; `app/ponto/services/pautas_dos_discordantes.py:71`; `app/ponto/services/vigia_ausencia_veredito.py:42`.
-- O vigia de furo sem canal só seleciona `furo/cobrado`, deixando `nunca_bateu` fora desse censo, sem declará-lo resolvido (`app/chamados/services/furo_sem_canal.py:35`, `72`).
-- Auditorias: `app/chamados/management/commands/auditar_invariantes_chamados.py:198`, `377`, `1438`, `1597`, `1714`, `1802`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:58-62`; `app/ponto/management/commands/recusar_ponta_pequena.py:145`; `app/ponto/management/commands/celula_veredito_velho.py:88`, `106`.
-
-Não encontrei outro leitor executável que declare literalmente `nunca_bateu` como “resolvido”; o veto compartilhado e a guarda de impressão do ramo sem adesão são as duas traduções operacionais que impedem avanço apontadas acima (`app/ponto/marcos.py:119`, `161-162`; `app/ponto/services/cartorio.py:1210-1216`).
-
-## 10/11 00:23 · sessao 18185c182d52 · - · - · origem=Ronald (tmux)
-
-Caminhos e guardas encontrados, somente por leitura da cópia:
-
-| Caminho | Comportamento e guarda exata |
-|---|---|
-| **Vigia de hora** | Cron a cada 10 minutos, `--apply` (`app/config/crons.py:367`). Busca `trabalha=True`, datas hoje e ontem (`app/ponto/services/vigia_de_hora.py:21-23`), exclui desligado/isento (`:117-119`), ontem fora da janela (`:120-121`), sem marco vencido (`:124-126`) e lâmpadas suficientes sem cobrança viva (`:127-129`). Chama `julgar_celula(...teto_de_hoje=True)` (`:131`). **Não exclui diretamente `nunca_bateu` ou `julgada_em` preenchida.** |
-| **Cartório, ramo sem adesão** | Adesão significa primeira batida apurável **na vida**, sem filtro de data (`app/ponto/services/cartorio.py:1165-1167`); ramo começa quando `adesao is None` (`:1173`). `imp0` não recebe teto, vencidos ou encerramento (`:1207-1209`); considera em dia se `julgada_em`, impressão igual e qualquer veredito (`:1210`), e pula sem `forcar` (`:1214-1216`). O avanço dos marcos sozinho não altera essa impressão. Esse ramo também não alimenta `out['cods']`; retorna em `:1279`, enquanto a fábrica síncrona exige a data em `out['cods']` (`:997`, `:1007-1008`). |
-| **Cartório, ramo com adesão** | Teto entra na impressão (`app/ponto/services/cartorio.py:1359-1365`). A guarda **exclui `nunca_bateu` do pulo** (`:1369`); demais células em dia pulam (`:1373-1375`). Logo, “sem batida no dia” e “sem batida na vida” têm comportamentos diferentes. |
-| **Cartório diário** | Agenda 06:27, `--apply`, sem `--forcar` (`app/config/crons.py:616`). Universo passado, sem limite temporal inferior (`app/ponto/management/commands/processar_cartorio.py:49-51`, `:61-65`); limite opcional corta colaboradores (`:56-57`). Esbarra nas mesmas guardas do serviço, incluindo o ramo sem adesão. |
-| **Sinais de fatos** | Batida julga d−1 e d (`app/ponto/signals.py:108-112`, `:131-140`); ausência (`:143-152`), justificativa (`:161-165`), criação ou mudança de status de chamado (`app/chamados/signals.py:192-193`, `:208-216`). São acionamentos por escrita de fatos. O juiz não julga hoje antes do fim do turno sem `teto_de_hoje` (`app/ponto/services/cartorio.py:1993-1998`), e mantém as guardas de impressão. |
-| **Disparar perguntas da competência** | Primeiro universo **somente conta** (`app/chamados/management/commands/disparar_perguntas_competencia.py:109-113`) e alarma (`:247-251`); não chama fábrica para as células contadas. Segundo universo escreve somente para chamado vivo sem pergunta viva (`:141`, `:148-149`), pelo motivo da ata com teto (`:158-161`), chamando `perguntar` (`:271-283`). |
-| **Detectar ausências** | Cron de cinco minutos (`app/config/crons.py:364`), hoje/ontem (`app/ponto/management/commands/detectar_ausencias.py:136-138`). Exige marco vencido e dia ainda não encerrado (`:470-473`); chamado existente causa `continue` (`:424-430`). Chama `_abrir_chamado` (`:439`), cujo funil veta `nunca_bateu` (`:630-633`, `app/ponto/marcos.py:119`, `:155-162`). Pode acordar o cartório indiretamente ao criar/mudar chamado, não a cada marco seguinte. |
-| **Alertas de turno** | `processar_alertas_turno` pula sem entrada (`app/ponto/management/commands/processar_alertas_turno.py:92-93`). Avançados pula se `turno_aberto_ha` retorna `None` (`app/ponto/management/commands/processar_alertas_avancados.py:63-65`); juiz retorna `None` sem turno aberto ou sem entrada (`app/ponto/turnos.py:3190-3191`). |
-| **Detectar intervalo ausente** | Exige entrada inicial e saída final acesas (`app/ponto/management/commands/detectar_intervalo_ausente.py:69-70`); emissão aposentada, `continue` incondicional (`:149-156`). Cron usa `--alarme` (`app/config/crons.py:491`). |
-| **Reconciliar grade** | Cron sem `--apply` (`app/config/crons.py:462`); comando declara medição sem escritor (`app/ponto/management/commands/reconciliar_grade.py:3-11`). Eventual bancada emissora só cria chamado, com veto da célula (`:502-504`); caminho de pergunta eliminado (`:531-532`). |
-| **Apurar furos diários** | Lê a ata (`app/escala/services/furos_diarios.py:41-43`) e grava `FuroDiario` (`:107-109`); não rejulga nem chama fábrica. Encadeado após cartório (`app/config/crons.py:1509`). |
-| **Vigia de entrada faltante** | Apenas lê e imprime (`app/ponto/management/commands/vigia_entrada_faltante.py:23-53`, `app/ponto/services/vigia_entrada.py:78-85`). |
-| **Emitir furo retroativo** | **Sob ordem**, não cron (`app/config/crons.py:1396`). Pula sem batida na janela (`app/ponto/management/commands/emitir_furo_retroativo.py:53-56`), exige `FURO_SEM_COBRANCA` (`:111-112`), pula se há chamado (`:148-150`), e delega ao mesmo funil que veta `nunca_bateu` (`:154`; `app/ponto/marcos.py:119`, `:161-162`). |
-| **Portas administrativas/cadastro** | Cobrar dia exige passado e força julgamento (`app/chamados/services/cobrar_dia.py:28-30`, `:41`); pós-vínculo força, exceto humano (`app/colaboradores/services/pos_vinculo.py:61-72`); regeneração e reversão forçam nos dias tocados elegíveis (`app/ponto/portas/celula.py:422-434`, `:815-817`). Queda do veto seleciona somente `veredito='furo'`, deixando `nunca_bateu` fora (`app/escala/regua_defesa.py:687-688`). Não são agenda de vencimento de marco. |
-
-**Evento de marco vencido:** o cadastro declara explicitamente que a célula **ainda não agenda o próprio marco**, e atribui ao vigia o papel `prazo` (`app/config/crons.py:2092-2097`, `:2130-2131`). Isso qualifica a regra geral EVENTO/cron do `CLAUDE.md:168-170`.
-
-**Ontem às 00:12:** `disparar` inclui datas `< hoje` (`app/chamados/management/commands/disparar_perguntas_competencia.py:102`), excluindo ontem **somente** quando `_ontem_em_janela` é verdadeira (`:110-111`). O vigia usa a mesma função e exclui quando falsa (`app/ponto/services/vigia_de_hora.py:120-121`). Portanto, os itens de ontem efetivamente contados pela sonda já não estavam na janela do vigia naquele instante; não é prova de que nasceram precisamente às 00:12 [nao verificado].
-
-A janela de ontem devolve falso sem fim de turno (`app/ponto/services/vigia_de_hora.py:49-50`) ou quando `fim + teto < meia-noite` (`:53-54`); mantém até `fim + 2*teto` (`:55-56`), depois depende de `not dia_encerrado(agora - 2*teto)` (`:58`). O próprio comentário registra que, fora disso, `disparar` apenas conta/alarma e `julgada_em` não serve como corte (`:39-43`).
-
-**Limite da atribuição ao dado:** os horários e o veredito fornecidos não demonstram qual ramo de adesão cada célula executa atualmente; falta batida no dia não demonstra ausência de batida na vida [nao verificado].
-
-_3293 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3296 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
