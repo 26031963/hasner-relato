@@ -103,6 +103,7 @@ esperam migrar -- a lista so encolhe).
 | o chamado e duplicado (mesmo fato)? | `chamados/models.py::ChamadoColaborador.abrir` |
 | o chamado esta vivo? | `chamados/catalogo/motor.py::VIVOS` |
 | o dia da pergunta esta arquivado pela tranca da competencia (trancada e nao tocada pelo admin depois)? | `chamados/juizes.py::dia_da_pergunta_trancado` |
+| o dia passado sem turno previsto do colaborador ja esta entregue ao DP como pendencia de CADASTRO? | `chamados/services/fabrica_da_celula.py::pauta_cadastro_existente` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
 | pode transitar de um estado a outro? | `chamados/catalogo/motor.py::decidir` |
 | por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? | `chamados/juizes.py::porta_alcancavel_do_dia` |
@@ -164,7 +165,7 @@ esperam migrar -- a lista so encolhe).
 
 - **numero de tela sem autoridade declarada (score, faixa de horario, atraso de sincronizacao)?** -- score (produtor inteiro por conta propria, pendentes A1/C1), faixa manha/tarde/noite e atraso de sincronizacao -- pergunta de negocio de cada tela, vem na fatia dela
 
-**PENDENTES nesta familia**: 110 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 109 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `portas`
 
@@ -183,9 +184,9 @@ esperam migrar -- a lista so encolhe).
 | `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 15 | 0 | 0 |
-| `chamado` | 20 | 0 | 0 |
+| `chamado` | 21 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 12 |
-| `tela` | 11 | 1 | 110 |
+| `tela` | 11 | 1 | 109 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **93** | **5** | **246** |
+| **total** | **94** | **5** | **245** |

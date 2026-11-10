@@ -1,8 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=3867985
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=328659
 
-pergunta de escopo (aval CODE-VIVE-ATE-O-RESET item 1, LEI-AKITA 9): o pouso da E4a-2 deixa VERMELHO o selo de host bin/tests/test_papel_prazo_nao_deriva.sh -- :302-308 EXCECOES_DE_DELEGACAO nomeia disparar_perguntas_competencia e a regra do proprio selo (:300) acusa excecao de cron fora de JUIZES_POR_VARREDURA; a mordida :388 usa disparar como controle positivo. Cura = ~10 linhas em bin/ (dict vazio pela condicao de saida CORTES.md:305 cumprida + controle positivo com excecao sintetica). bin/ e proibido ao construtor e o aval so deixa a sessao fazer hunk de 1 linha: preciso de `!` para a sessao escrever essas ~10 linhas. Nao bloqueia construcao; bloqueia o pouso da E4a-2.
+pergunta de escopo (aval CODE-VIVE-ATE-O-RESET item 1, LEI-AKITA 9): o pouso da E4a-2 deixa VERMELHO o selo de host bin/tests/test_papel_prazo_nao_deriva.sh -- :302-308 EXCECOES_DE_DELEGACAO nomeia disparar_perguntas_competencia e a regra do proprio selo (:300) acusa excecao de cron fora de JUIZES_POR_VARREDURA; a mordida :388 usa disparar como controle positivo. Cura = ~10 linhas em bin/ (dict vazio pela condicao de saida CORTES.md:305 cumprida + controle positivo com excecao sintetica). bin/ e proibido ao construtor e o aval so deixa a sessao fazer hunk de 1 linha: preciso de `!` para a sessao escrever essas ~10 linhas. Mesmo `!` cobre bin/placar_code.sh:205-209 (com 0 juizes por varredura `escritas_por_cron` devolve crons={} e o placar imprime "vigia falhou"; cura = linha explicita `escritas_por_cron=0 crons julgando` quando universo vazio, ~3 linhas; preverif1 item 3). Nao bloqueia construcao; bloqueia o pouso da E4a-2.
 
 lei-NAO (aval escrito): E4a-2 NAO leva a 20/20 -- aval 1 na nota de contratos_estruturais.py:270 segura a celula chamado x juiz PARCIAL ate O168 (nada construido), O169 (lei na mesa dele, BACKLOG:1396) e LASTRO; juizes_por_varredura 1->0 sim, placar 19/20. BACKLOG FIO-E0-V4-E4A-2 corrigido.
 MODO-COMUM-PASSADO-SEM-TURNO suite inteira 0a35b206d 21:45: Ran 14836 FAILED (failures=3) -- selo_mapa_contrato (fabrica_da_celula.py bolha nova sem @bolha, causa: juiz registrado em core/juizes.py) + 2 do diagrama derivado (ARQUITETURA.mmd/MAPA.md). Cura -> construtor Codex volta 3 (inscricao da bolha); diagrama regerado pela sessao na copia; suite de novo. Opus final so apos verde.
@@ -5783,6 +5783,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**09/11 22:20 vigia da esteira** -- docs/MAPA.md modificado fora do git depois de fatia no ar (lembrete, prepush_commit, zumbido_quarentena): a cadeia commitou o diagrama e nao o MAPA -- incluir no proximo commit (python3 bin/gerar_diagrama.py e git add app/docs/MAPA.md).
 
 **09/11 21:46:16 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:72aa990b62 (54 car., na trilha privada)
 

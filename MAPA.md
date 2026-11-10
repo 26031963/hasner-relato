@@ -85,7 +85,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 | celula/precedencia | 10/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
 | ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
-| chamado | 20/0 | 0 | 0 | 0 | 0 | 3 | 11 |
+| chamado | 21/0 | 0 | 0 | 0 | 0 | 3 | 12 |
 | feriado/prazo | 6/2 | 12 | 9 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
 | tela | 11/1 | 109 + sitio novo: nao sei (sem varredor) | 67 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
@@ -154,7 +154,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 ### chamado -- fora_de_autoridade('chamado') = 0
 - pendentes: sem chamar 0 · chama e deriva 0 · nao sei 0
 - padroes proibidos: 3, varridos pelo selo da familia
-- selos: chamados/tests/test_c5_canal.py, chamados/tests/test_c5_fabrica.py, chamados/tests/test_c_miudos_1.py, chamados/tests/test_contract_juiz_chamado.py, chamados/tests/test_disputa_fim.py, chamados/tests/test_disputa_s127.py, chamados/tests/test_disputa_so_de_falta.py, chamados/tests/test_o261e_f5b_juiz_porta.py, chamados/tests/test_pergunta_no_app_causas.py, chamados/tests/test_pergunta_viva_no_guarda.py, chamados/tests/test_sla_pelo_juiz.py
+- selos: chamados/tests/test_c5_canal.py, chamados/tests/test_c5_fabrica.py, chamados/tests/test_c_miudos_1.py, chamados/tests/test_contract_juiz_chamado.py, chamados/tests/test_disputa_fim.py, chamados/tests/test_disputa_s127.py, chamados/tests/test_disputa_so_de_falta.py, chamados/tests/test_juiz_pauta_cadastro_sem_turno.py, chamados/tests/test_o261e_f5b_juiz_porta.py, chamados/tests/test_pergunta_no_app_causas.py, chamados/tests/test_pergunta_viva_no_guarda.py, chamados/tests/test_sla_pelo_juiz.py
 - perguntas:
   - o chamado esta vivo? -> `chamados/catalogo/motor.py::VIVOS` · registro 0
   - pode transitar de um estado a outro? -> `chamados/catalogo/motor.py::decidir` · registro 0
@@ -176,6 +176,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - a cobranca do dia cala porque a celula lavrada diz que o dia nao e de trabalho? -> `chamados/juizes.py::dia_sem_trabalho` · registro 0
   - quais acoes ainda sao exigiveis para cada instancia de marco do dia, de quem e por quais portas? -> `chamados/services/tarefa_do_dia.py::tarefa_do_dia` · registro 0
   - o dia da pergunta esta arquivado pela tranca da competencia (trancada e nao tocada pelo admin depois)? -> `chamados/juizes.py::dia_da_pergunta_trancado` · registro 0
+  - o dia passado sem turno previsto do colaborador ja esta entregue ao DP como pendencia de CADASTRO? -> `chamados/services/fabrica_da_celula.py::pauta_cadastro_existente` · registro 0
 
 ### feriado/prazo -- fora_de_autoridade('feriado/prazo') = 12
 - pendentes: sem chamar 9 · chama e deriva 2 · nao sei 1 · [pergunta sem juiz declarado (nao ha quem chamar): 1]
