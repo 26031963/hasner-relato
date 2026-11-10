@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 17:00** · publicado em **10/11/2026 17:02** (UTC-3)
+> Ultima resposta processada: **10/11/2026 17:05** · publicado em **10/11/2026 17:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 17:05 · sessao e54c7972b4a6 · - · - · origem=Ronald (tmux)
+
+Encontrei quatro pontos materiais:
+
+- **I7b aparece como violação.** O renderizador marca qualquer contador positivo com `VIOL` e vermelho, contrariando “número publicado sem esperado”. A descrição sozinha não altera essa classificação. `auditar_invariantes_chamados.py:74`, `:1901-1915`. [nao verificado]
+
+- **União de dias pode atribuir HX ao dia errado.** O helper reúne datas do contexto, pai e turno da batida; basta qualquer uma responder `sem_celula`. Num conflito entre dia civil D+1 e turno D, a ausência de ata em D+1 pode esconder a violação de D com ata. O teste atual cobre somente `ultima_batida`, sem conflito entre fontes. `auditar_invariantes_chamados.py:32-43`, `:69-71`; `test_bo_disputa_sem_pergunta_memoria.py:366-370`. [nao verificado]
+
+- **Vários motivos com donas diferentes vão todos para a primeira dona.** A primeira pergunta estrangeira interrompe a seleção; a recursão passa `motivos_lista` inteira à dona encontrada, e a agregação ignora os retornos seguintes do gerador. O teste cobre um único motivo. `disputa_emissao.py:555-586`, `:616-637`; `test_bo_disputa_sem_pergunta.py:68-93`. [nao verificado]
+
+- **A tentativa inicial pode adquirir D depois de Ch.** O núcleo segura chamados vivos antes de gerar. Uma canônica de disputa fechada que precise rechaveamento adquire a dona em `models.py:2947-2950`, antes de o núcleo detectar o reuso e desfazer o ensaio. A segunda tentativa trava a dona corretamente, mas isso não corrige a ordem da primeira. Os testes substituem a porta e não exercitam esse caminho. `disputa_emissao.py:543-545`, `:615-618`; `test_bo_disputa_sem_pergunta.py:81`. [nao verificado]
+
+A prova AST da API é razoável para a fronteira estática solicitada: verifica ordem das chamadas e ausência de `atomic` envolvendo o registro, além de `ATOMIC_REQUESTS` nos settings. Não é prova de execução da API. `test_bo_disputa_sem_pergunta_memoria.py:374-389`.
 
 ## 10/11 17:00 · sessao f212df288509 · BO-0611-05 · censo · origem=Code
 
@@ -995,75 +1009,4 @@ Posto fora do escopo: assimetrias em `templates/colaboradores/partials/painel_po
 
 Pela leitura estática acima, nenhum leitor de template/JS lança exceção **por causa de `0.0`**; os defeitos encontrados são apresentação de ausência por truthiness nas linhas indicadas. Comportamento real dos SDKs externos/navegador: [nao verificado].
 
-## 10/11 15:00 · sessao e5626d6a372f · BO-0611-05 · construtor · origem=Code
-
-Cura B1/B2/B3 implementada. A certificação por Code/opus, o POST com banco e o smoke nas duas cascas permanecem **[nao verificado]**.
-
-Arquivos de produção tocados:
-
-- [api/views_core.py](/home/ronald/wt-codex-bo-0611-05-144805/app/api/views_core.py:393) e [api/views.py](/home/ronald/wt-codex-bo-0611-05-144805/app/api/views.py:406): retirados os 403 por GPS/situação e a auditoria de recusa sem GPS.
-- [bater_ponto_v2.html](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/ponto/bater_ponto_v2.html:285): retiradas as três interrupções por coordenada ausente, o tratamento específico de `gps_obrigatorio` e a função morta `v2AvisoGps`.
-- [triagem/apto.html](/home/ronald/wt-codex-bo-0611-05-144805/app/templates/ponto/triagem/apto.html:275): aviso sem confirmação; o fluxo segue para a fila.
-
-Os testes invertidos/adaptados foram preservados: [nao verificado]
-
-| Arquivo tocado | Asserção resultante |
-|---|---|
-| [test_gps_obrigatorio.py](/home/ronald/wt-codex-bo-0611-05-144805/app/api/tests/test_gps_obrigatorio.py:19) | 200, uma batida com nulos e nenhuma auditoria de recusa |
-| [test_api_bater_ponto.py](/home/ronald/wt-codex-bo-0611-05-144805/app/api/tests/test_api_bater_ponto.py:62) | Desligado/férias registram |
-| [test_batida_sideeffects.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_batida_sideeffects.py:119) | Uma batida, alerta `sem_gps` e chamado existente |
-| [test_afastado_nunca_bloqueia.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_afastado_nunca_bloqueia.py:30) | Selo AST nos dois kernels |
-| [test_afastado_na_batida.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_afastado_na_batida.py:109) | Férias registra mesmo com afastamento cobrindo hoje |
-| [test_invariantes_disputa.py](/home/ronald/wt-codex-bo-0611-05-144805/app/chamados/tests/test_invariantes_disputa.py:291) | Removida a exceção que aceitava recusa por GPS |
-| [test_selo_modal_nao_nasce_vazio.py](/home/ronald/wt-codex-bo-0611-05-144805/app/core/tests/test_selo_modal_nao_nasce_vazio.py:138) | Exige `naoBloquear` quando existe chamada a `hxConfirmar` |
-
-Quatro arquivos novos:
-
-- [test_l030_selo_porta.py](/home/ronald/wt-codex-bo-0611-05-144805/app/api/tests/test_l030_selo_porta.py:73): AST, prosa não confundida com código e mutantes.
-- [test_l030_forma_js.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_l030_forma_js.py:69): forma dos ramos JS e mutantes das quatro interrupções.
-- [test_l030_batida_pela_porta.py](/home/ronald/wt-codex-bo-0611-05-144805/app/api/tests/test_l030_batida_pela_porta.py:36): POST nos dois kernels, espião delegando ao escritor real, exatamente uma batida; cobre situações, nulos, vazios, zero e coordenada parcial.
-- [test_l030_templates_renderizados.py](/home/ronald/wt-codex-bo-0611-05-144805/app/ponto/tests/test_l030_templates_renderizados.py:14): render dos dois templates compostos com cada casca real, mediante loader de teste. [nao verificado]
-
-O RED local antes da cura apresentou **quatro falhas pretendidas**, uma por kernel/template. Depois da cura, os cinco testes locais passaram, incluindo controles verdes e detecção de **14 mutantes de API e quatro de front**. Os oráculos estão em `api/tests/test_l030_selo_porta.py:70` e `ponto/tests/test_l030_forma_js.py:31`.
-
-Comando do RED na base e GREEN na cura:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  api.tests.test_l030_selo_porta.PortaSemRecusaTest.test_MORDE_os_dois_kernels \
-  ponto.tests.test_l030_forma_js.FormaGpsTest.test_MORDE_fonte_dos_dois_templates -v
-```
-
-Comando dos mutantes, cada qual com controle verde antes da mutação: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  api.tests.test_l030_selo_porta.PortaSemRecusaTest.test_mutantes_em_memoria_com_controle_verde \
-  ponto.tests.test_l030_forma_js.FormaGpsTest.test_mutantes_em_memoria_com_controle_verde -v
-```
-
-Sobre escritores e leitores:
-
-- **Latitude/longitude/accuracy:** as APIs recebem os campos e entregam à porta; `registrar_batida` sanitiza por campo e grava. O clássico já entrega nulos à mesma porta. (`api/views_core.py:403`, `api/views_core.py:640`, `api/views.py:416`, `api/views.py:648`, `ponto/registro_batida.py:5`, `ponto/registro_batida.py:157`, `ponto/services/triagem_batida.py:701`)
-- **Leitores de geo conferidos:** detalhe, fio, situacional, pino, drawer, dashboard, pendentes, relatório e cerca. Há tratamentos de nulos nesses caminhos. (`colaboradores/services/detalhe.py:22`, `chamados/views.py:692`, `colaboradores/services/situacional.py:141`, `colaboradores/painel_cell.py:37`, `colaboradores/services/drawer.py:63`, `core/views.py:1024`, `ponto/views.py:485`, `templates/chamados/partials/_relatorio_geo.html:30`, `ponto/services/geofence.py:247`)
-- **Zero não é uniformemente interpretado:** o escritor preserva coordenada `0.0`; cerca, drawer e dashboard usam truthiness e podem apresentá-la como ausência. Esses leitores ficaram fora da cura. (`ponto/registro_batida.py:8`, `ponto/services/geofence.py:247`, `colaboradores/services/drawer.py:63`, `templates/core/dashboard2.html:242`)
-- **Coordenada parcial pode passar:** a API recebe os campos separadamente. Latitude preenchida, longitude nula e accuracy preenchida podem alcançar `float(None)` no detector de vínculo. Ocorrência em produção **[nao verificado]**. (`api/views_core.py:403`, `api/views_core.py:646`, `ponto/services/vinculo_na_lista.py:49`, `ponto/services/vinculo_na_lista.py:56`)
-- **Situação:** o diff não cria fotografia histórica; o cadastro segue mutável. Desligamento/reativação escrevem a situação atual. Cartório e reconciliação de vínculo leem essa situação atual; férias são verificadas pelo juiz de hoje. (`colaboradores/services/desligamento.py:104`, `colaboradores/services/desligamento.py:210`, `ponto/services/cartorio.py:1708`, `ponto/services/geofence.py:46`, `ponto/utils.py:85`)
-- **Pós-escritor:** recomposição e fechamento por evento possuem captura de exceções; o alerta `sem_gps` continua posterior à gravação. Execução completa desses efeitos para desligado/férias **[nao verificado]**. (`ponto/signals.py:19`, `ponto/registro_batida.py:175`, `api/views_core.py:769`, `ponto/services/geofence.py:247`)
-
-Não executados: RED/GREEN HTTP com banco, renderização Django, suíte solicitada, Ruff e smoke de clique nas duas cascas. As tentativas locais de carregar os testes Django falharam por ausência de `django`; Ruff falhou com `No module named ruff`. Sintaxe AST dos 13 Python tocados e comparação do selo de relógio passaram; certificação permanece **[nao verificado]**. [nao verificado]
-
-Comando pendente para Code, na raia autorizada:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
-  api.tests.test_gps_obrigatorio api.tests.test_api_bater_ponto \
-  ponto.tests.test_afastado_nunca_bloqueia ponto.tests.test_afastado_na_batida \
-  ponto.tests.test_batida_sideeffects \
-  api.tests.test_l030_selo_porta api.tests.test_l030_batida_pela_porta \
-  ponto.tests.test_l030_forma_js ponto.tests.test_l030_templates_renderizados \
-  core.tests.test_selo_modal_nao_nasce_vazio core.tests.test_selo_teste_sem_relogio \
-  chamados.tests.test_invariantes_disputa
-```
-
-_3419 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3420 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
