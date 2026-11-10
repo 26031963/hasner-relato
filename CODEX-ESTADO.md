@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 03:16** · publicado em **10/11/2026 03:20** (UTC-3)
+> Ultima resposta processada: **10/11/2026 08:46** · publicado em **10/11/2026 08:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 08:46 · sessao 42f15a7e4013 · - · - · origem=Ronald (tmux)
+
+Mapa dos campos:
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `fora_do_universo` | `app/ponto/services/cluster_espurio.py:109-110`, devolvido em `:148` | Serialização integral em `app/ponto/management/commands/detectar_cluster_espurio.py:63`; contratos em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:222-225`, `:254-260`. |
+| `excluidos` | `app/ponto/services/cluster_espurio.py:126-145`, devolvido em `:148` | Serialização em `app/ponto/management/commands/detectar_cluster_espurio.py:63`; contratos em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:229-247`, `:362-366`. |
+| `numero` | Soma por chamado em `app/ponto/services/cluster_espurio.py:125`, devolvido em `:146` | JSON em `app/ponto/management/commands/detectar_cluster_espurio.py:63`; decisão do alarme e mensagem em `:70-73`; contratos exemplares em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:302`, `:315`, `:348-349`. |
+| `esperado` | Constante zero em `app/ponto/services/cluster_espurio.py:146` | JSON e comparação em `app/ponto/management/commands/detectar_cluster_espurio.py:63`, `:70-73`; contratos em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:227`, `:356`; fixture sintética de valor 1 em `:416-421`. |
+
+A semântica é coerente nos leitores encontrados: `excluidos` é catálogo de motivos, inclusive sem ocorrências; `fora_do_universo` contém quantidades observadas por via; `numero` conta chamados com assinatura, preservando duplicatas do mesmo par; `esperado` é o alvo do alarme (`app/ponto/services/cluster_espurio.py:109-148`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233-247`, `:342-349`; `app/ponto/management/commands/detectar_cluster_espurio.py:70`). Não encontrei outro consumidor produtivo desse retorno na busca integral da cópia; consumidores externos são **[nao verificado]**.
+
+`None` e `''` **não quebram o `json.dumps` atual**. Executei, em memória, o serviço e o comando reais pelos helpers: `{None: 1, '': 1}` saiu como `{"null": 1, "": 1}`; o rótulo de `None` continua sob a chave textual `"null"` (`app/ponto/services/cluster_espurio.py:141-148`; `app/ponto/management/commands/detectar_cluster_espurio.py:63`; helpers em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:150-166`).
+
+Há uma limitação reproduzida: se existir também a via desconhecida literal `'null'`, ela colide no JSON com a chave Python `None`. Reproduzi fonte `{None: 2, '': 1, 'null': 3}` → JSON com duas propriedades `"null"` → `json.loads` preserva apenas `3`; os rótulos também colidem. O código admite valores desconhecidos e não normaliza as chaves (`app/ponto/services/cluster_espurio.py:110`, `:142-145`; `app/ponto/management/commands/detectar_cluster_espurio.py:63`). Ocorrência de `'null'` e leitor externo afetado: **[nao verificado]**.
+
+O cron configurado chama `--alarme`; o envelope lê o código de saída, sem interpretar esses campos JSON (`app/config/crons.py:598`; `bin/cron_run.sh:11-13`, `:22-25`). Portanto não há quebra demonstrada desse leitor existente; a colisão é uma limitação do formato de saída, condicionada a um valor que o dado fornecido não comprova.
+
+## 10/11 08:45 · sessao db4c347226f8 · - · - · origem=Ronald (tmux)
+
+Conferência dos escritores:
+
+| Via/rótulo | Escritor real e comparação |
+|---|---|
+| `TRANSICAO_HUMANA` → “Via humana” | `transicionar` valida a transição e chama `_aplicar`; este grava `EVENTO_VIA['TRANSICAO_HUMANA']`. O backfill também atribui `admin` a resolvido/fechado com respondente fora dos usuários de sistema. Rótulo compatível; não prova passagem histórica por `transicionar`. (`app/chamados/models.py:128`, `app/chamados/models.py:199`, `app/chamados/models.py:447`, `app/chamados/migrations/0039_a3_via_backfill.py:26`) |
+| `ENCERRAR` → “desligamento ou ajuste retroativo” | O gate documenta ambos e grava `EVENTO_VIA['ENCERRAR']`. Há chamadores concretos para desligamento e ajuste retroativo. (`app/chamados/models.py:1605`, `app/chamados/models.py:1619`, `app/colaboradores/services/desligamento.py:155`, `app/ponto/services/justificativa.py:400`, `app/chamados/reconciliador.py:496`) |
+| `CANCELAR` → “Cancelamento de chamado vivo…” | O gate descreve descarte administrativo/emissor aposentado; o motor permite CANCELAR apenas de aberto/em_análise/registrado. O backfill carimba `cancelado` pela condição status cancelado + via vazia, sem provar motivo histórico. (`app/chamados/models.py:773`, `app/chamados/models.py:783`, `app/chamados/models.py:788`, `app/chamados/catalogo/motor.py:116`, `app/chamados/migrations/0039_a3_via_backfill.py:25`) |
+| `SUPERAR` → “Duplicata cancelada com irmão único provado no backfill” | A migration seleciona cancelados de módulos de furo, exige irmão único do mesmo colaborador/data e grava `superado` com FK. O gate atual foi removido; o estado permanece para o acervo. Rótulo fiel ao escritor remanescente. (`app/chamados/migrations/0039_a3_via_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:20`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/models.py:794`) |
+| `VIA_LEGADO` → “Terminal sem via derivável no backfill” | Após as derivações anteriores, a migration grava `legado` nos terminais ainda com via vazia. Rótulo fiel. (`app/chamados/migrations/0039_a3_via_backfill.py:25`, `app/chamados/migrations/0039_a3_via_backfill.py:28`) |
+| Competência trancada | O serviço aplica apenas se medição declarou trancada e chama `encerrar_por_competencia_trancada`; o gate grava a constante própria pelo núcleo. (`app/chamados/services/competencia_trancada.py:167`, `app/chamados/services/competencia_trancada.py:184`, `app/chamados/models.py:1639`) |
+| `''` / `None` | São explicitamente rotulados como vazios; ocorrência persistida de `None` não está demonstrada. (`app/ponto/services/cluster_espurio.py:141`, `app/ponto/services/cluster_espurio.py:142`; ocorrência: [nao verificado]) |
+
+Nenhuma via conhecida excluída cai em “desconhecida”: as seis vias diferentes de RECONCILIAR constam nominalmente no dicionário; o fallback usa `setdefault`. RECONCILIAR pertence ao universo contado. (`app/chamados/catalogo/motor.py:88`, `app/chamados/catalogo/motor.py:93`, `app/chamados/catalogo/motor.py:95`, `app/ponto/services/cluster_espurio.py:110`, `app/ponto/services/cluster_espurio.py:111`, `app/ponto/services/cluster_espurio.py:126`, `app/ponto/services/cluster_espurio.py:144`)
+
+Ressalva de precisão: os textos descrevem classes de via; os escritores não comprovam, individualmente, ADMIN/DP, premissa administrativa ou motivo histórico de cada registro. CANCELAR recebe `motivo` livre; ENCERRAR não recebe motivo; o backfill usa heurísticas de campos. (`app/chamados/models.py:773`, `app/chamados/models.py:789`, `app/chamados/models.py:1605`, `app/chamados/migrations/0039_a3_via_backfill.py:25`, `app/chamados/migrations/0039_a3_via_backfill.py:26`)
+
+O rótulo ENCERRAR tampouco esgota todos os usos globais do gate: troca de escala encerra chamados `escala_aceite`, e regularização externa encerra seu chamado. Esses usos não demonstram exclusão incorretamente rotulada no módulo cluster: regularização cria módulo próprio; troca de escala filtra categoria. (`app/colaboradores/services/vinculo.py:384`, `app/colaboradores/services/vinculo.py:387`, `app/chamados/services/regularizacao_ext.py:205`, `app/chamados/services/regularizacao_ext.py:250`)
+
+## 10/11 08:45 · sessao 2a7073c850aa · - · - · origem=Ronald (tmux)
+
+B: **os três mutantes morrem pelas asserções pretendidas**, executando a fonte real alterada apenas em memória. O carregador lê/compila a fonte; serviço e comando são carregados inteiros; juízes puros vêm da fonte real. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:31`, `:104`, `:108`, `:130`)
+
+| Mutante | Falha observada na reexecução |
+|---|---|
+| FK cruzada: remove guarda de colaborador | `1 != 0` e `0 != 1`, ambas na asserção de `numero`; a FK cruzada tem assinatura inversa à célula correta. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:63`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:299`, `:302`) |
+| Consulta por par | `9 != 3` na contagem de avaliações; a asserção anterior de `numero` passa. Há três colaboradores, três datas por colaborador e consultas vazias também são contadas. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:66`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:83`, `:307`, `:313`, `:315`, `:316`) |
+| Rótulos humana/cascata trocados | Falha na igualdade exata de `excluidos`, independentemente de ocorrências. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:74`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:233`, `:247`) |
+
+Executei `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_o169_cluster_encerrado_sem_lastro ponto.tests.test_o169_cluster_encerrado_mutantes -v`: **61 testes OK, incluindo os 35 mutantes listados; nenhum desses 35 sobreviveu**. Resultado desta execução [nao verificado por artefato persistido]; definição/coleta dos mutantes em `app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13`, `:150`.
+
+O harness exige alvo textual único, rejeita erros de infraestrutura e exige falha de asserção; nos três casos acima confirmei também a linha exata que falhou. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:135`, `:141`, `:142`)
+
+Limite: a contagem observa avaliações do dublê, inclusive resultado vazio; SQL real, banco, gates de escrita e produção permanecem [nao verificado]. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:7`, `:81`, `:158`)
 
 ## 10/11 03:16 · sessao 3f625a779cd6 · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · construtor · origem=Code
 
@@ -551,169 +606,4 @@ Há um leitor preexistente com contrato diferente: `janelas_de_regeneracao` sele
 
 - O contrato AST cobra um único rabo, proíbe chamadas diretas de juiz/dinheiro e exige o rabo imediatamente após o `atomic`; seus mutantes incluem juiz paralelo, dinheiro paralelo, duplicação e posição dentro do `atomic`. `app/ponto/tests/test_reverter_regen_sem_banco.py:60`, `app/ponto/tests/test_reverter_regen_sem_banco.py:74`, `app/ponto/tests/test_reverter_regen_sem_banco.py:99`, `app/ponto/tests/test_reverter_regen_sem_banco.py:107`, `app/ponto/tests/test_reverter_regen_sem_banco.py:115`, `app/ponto/tests/test_reverter_regen_sem_banco.py:123`.
 
-## 10/11 02:24 · sessao 7add2b45be56 · - · - · origem=Ronald (tmux)
-
-- **16 mutantes: mordida confirmada na execução em memória.** Rodei os dois módulos sem banco com `PYTHONDONTWRITEBYTECODE=1`: **36 testes, OK**, incluindo o harness que exige instalação da mutação, nenhum erro acidental, exatamente uma falha e a mensagem pretendida. `app/ponto/tests/test_reverter_exportada_sem_banco.py:391`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:447`, `app/ponto/tests/test_reverter_regen_sem_banco.py:89`.
-
-- **Não identifiquei afrouxamento indevido no delta.** `concluido → laco_terminado` corrige a promessa do estado; `quem.processo=None` corresponde ao ator devolvido pelo duplo, com outro teste cobrando ator real não nulo; falha no DEPOIS agora exige auditoria ANTES e caminho/hashes no erro; arquivo recusado conserva exigência de parada e porta não chamada. `app/ponto/tests/test_reverter_exportada_sem_banco.py:221`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:223`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:247`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:261`, `app/ponto/tests/test_reverter_exportada_sem_banco.py:280`.
-
-- **Django real verifica existência, conteúdo e resultado, mas não toda a precedência pedida.** As primeiras inspeções do JSON e da auditoria ANTES acontecem **depois de `call_command` retornar**; não há inspeção na entrada da porta. Portanto ausência total reprova, mas gravação tardia antes do retorno pode escapar. `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:155`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:159`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:168`.
-
-- **Contraexemplo estático:** deslocar a preparação para imediatamente depois da porta, antes do registro do resultado, conserva o JSON/auditoria disponíveis quando o teste os inspeciona; o comando conserva a coleção anterior de células e a porta consulta outra instância; o financeiro continua pendente no capture. Essa mutação não foi executada com Django **[nao verificado]**. `app/ponto/management/commands/aplicar_col900.py:161`, `app/ponto/management/commands/aplicar_col900.py:166`, `app/ponto/management/commands/aplicar_col900.py:184`, `app/ponto/management/commands/aplicar_col900.py:186`, `app/ponto/portas/celula.py:776`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:155`.
-
-- **A precedência efetiva é cobrada pelo teste com duplos:** `_reverter` inspeciona JSON preparado, auditoria ANTES, hashes, DNA e fsync ao entrar na porta. `app/ponto/tests/test_reverter_exportada_sem_banco.py:181`.
-
-- **Hash posterior: o Django real tem mordida substantiva.** Após executar os callbacks, exige mudança do hash e igualdade entre hash gravado no JSON e hash real atual; também exige DNA restaurado e `DiaPago=240`. Isso detecta foto do hash financeiro antigo no cenário testado. `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:175`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:179`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:192`.
-
-- **O teste Django real foi acrescentado conforme a cura formal do PROCEDENTE 4**, com `call_command`, `LOGS` temporário, auditoria real e capture natural dos callbacks; sua execução nesta revisão e o resultado informado de 74 testes permanecem **[nao verificado]**. `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:139`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:153`.
-
-## 10/11 02:20 · sessao b927768c6655 · FIO-E0-V4-E4A-2 · verificador · origem=Code
-
-**A volta 7 cura os principais defeitos da triagem, mas não realiza literalmente o contador pedido no aval e deixa um leitor externo com expectativa incompatível.** O contador publica uma interseção de chamados com C5; o relatório antigo ainda soma a causa C5 sob “esperado 0”. (`app/chamados/management/commands/disparar_perguntas_competencia.py:34-51`; `bin/placar_code.sh:317-320`)
-
-1. **PROCEDENTES da triagem**
-
-   - **1 — Curado no código, sem inverter a asserção antiga.** `resposta_tardia.receber()` aceita a tupla acusadora e consulta `_renascer_por_premissa_viva()`, sem excluir `nunca_bateu`. O teste anterior conserva resposta não tardia, chamado vivo e declaração chamada; o novo teste acompanha a porta real com `side_effect`. (`app/chamados/services/resposta_tardia.py:44-48`; `app/chamados/tests/test_resposta_tardia.py:70-83`; `app/chamados/tests/test_resposta_tardia.py:93-110`)
-   - **2 — Fixtures corrigidas nos sítios apontados.** Há entrada efetiva antes do signal nos casos de furo; o teste de causa mantém o dia sem batidas, sustentando a adesão com um par fechado anterior. A catraca registra `1199`. (`app/chamados/tests/test_resposta_tardia.py:34-40`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:53-64`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:245-254`; `app/chamados/tests/test_o261_fabrica_le_a_lampada.py:118-130`; `app/core/tests/test_medida_turno_do_par.py:268`)
-   - **Não houve inversão ou afrouxamento das asserções desses reparos de fixture no delta fornecido.** Na obra inteira, porém, houve inversões deliberadas: testes que exigiam emissão pelo cron passaram a exigir contagem, zero emissão e alarme. Isso corresponde à conversão do comando em vigia. (`app/chamados/tests/test_resposta_tardia.py:70-83`; `app/chamados/tests/test_selo_emissor_fio_mudo.py:282-301`; `app/chamados/management/commands/disparar_perguntas_competencia.py:225-228`)
-   - **3 — Nomes curados; universo curado por pessoa, com ressalvas.** O helper agora declara apenas leitura da lâmpada; a causa também nomeia o fato. Desligado sem qualquer entrada na C5 sai da comparação e entra no balde RH; `esperado` não é simplesmente copiado de `numero`. As diferenças de universo e de unidade estão nos itens seguintes. (`app/chamados/services/fabrica_da_celula.py:67-69`; `app/chamados/services/disputa_emissao.py:757-759`; `app/chamados/management/commands/disparar_perguntas_competencia.py:38-49`; `app/chamados/management/commands/disparar_perguntas_competencia.py:125-126`)
-   - **4 — Selo novo substancialmente curado.** O teste Django prepara vínculo, marco vencido e ata acusadora; exige emissão positiva para furo, zero para `nunca_bateu` e exatamente um par na C5 real. Repasse e contador também têm controles positivos. A execução Django desses selos permanece **[não verificado]**. (`app/chamados/tests/test_e4a2_nunca_bateu.py:74-100`; `app/chamados/tests/test_e4a2_nunca_bateu.py:110-142`)
-
-2. **Aval item (2): emissão atendida; contador não literal**
-
-   **Fábrica e vigia migraram.** A fábrica corta antes de pauta/emissão; o caminho da célula usa a mesma função de motivos; o fio mudo dá `continue` antes de acrescentar qualquer alvo; o repasse corta antes do atalho da ata. Cartório e consumidor de eventos chegam à fábrica protegida. (`app/chamados/services/fabrica_da_celula.py:85-86`; `app/chamados/services/fabrica_da_celula.py:163-164`; `app/chamados/services/fabrica_da_celula.py:222-225`; `app/chamados/services/fabrica_da_celula.py:279-281`; `app/chamados/management/commands/disparar_perguntas_competencia.py:87-89`; `app/chamados/services/disputa_emissao.py:757-761`; `app/ponto/services/cartorio.py:1006-1010`)
-
-   A conta efetiva é:
-
-   | Valor | O que mede |
-   |---|---|
-   | `numero` | Pares únicos `(colab,dia)` com chamado vivo no recorte do disparar, após barreira de desligados e limite temporal. |
-   | `esperado` | Quantos desses mesmos pares aparecem na C5: `len(pares & vistos)`. |
-   | `dono` | Literal `CADASTRO`. |
-
-   (`app/chamados/management/commands/disparar_perguntas_competencia.py:34-51`; `app/chamados/management/commands/disparar_perguntas_competencia.py:78-89`)
-
-   **Isso não é tamanho integral da C5.** A C5 não exige chamado e inclui células desde a competência anterior de cada empresa até ontem. Sua apresentação ainda agrega todas as datas em **uma assinatura C5 por colaborador**. Portanto o contador não mede nem todas as datas C5 nem todas as assinaturas/pessoas C5. (`app/escala/services/cadastro_realidade.py:177-209`)
-
-   Consequência: um dia C5 sem chamado, ou fora do recorte corrente do disparar, não participa de nenhum dos dois números; igualdade entre eles prova inclusão dos pares selecionados, não completude da lista C5. (`app/chamados/management/commands/disparar_perguntas_competencia.py:65-89`; `app/chamados/management/commands/disparar_perguntas_competencia.py:45-47`; `app/escala/services/cadastro_realidade.py:180-200`)
-
-   Há outra borda: **desligado com um dia conservado na C5 passa pela barreira por pessoa**, mas outro dia dele, legitimamente excluído pela lavra, pode aparecer em `fora_da_c5`. O contador testa presença do colaborador; a C5 decide retenção dia a dia. Ocorrência em produção: **[não verificado]**. (`app/chamados/management/commands/disparar_perguntas_competencia.py:38-48`; `app/escala/services/cadastro_realidade.py:195-200`)
-
-   Os **129 itens / 44 células / 15 colaboradores**, enquanto suas células conservarem `veredito='nunca_bateu'`, ficam fora de `fio_mudo_alvos` pelos caminhos auditados. A correspondência desses números com a população efetiva, e ALVOS zero em produção, são **[não verificado]**. (`app/chamados/management/commands/disparar_perguntas_competencia.py:87-89`; `app/chamados/services/fabrica_da_celula.py:85-86`)
-
-3. **Quem escreve, quem lê e qual significado**
-
-   | Campo/valor | Escritor ou produtor | Leitores e significado |
-   |---|---|---|
-   | `veredito='nunca_bateu'` | Cartório deriva o resultado no ramo sem adesão e chama `lavrar_veredito`; o modelo delega à porta canônica. | Helper/fábrica, repasse, resposta tardia e C5 leem a lâmpada. A tupla acusadora continua incluindo `nunca_bateu`. |
-   | Causa `nunca_bateu_sem_adesao` | Retorno de `motivo_fora_da_fabrica`. | `retencao`, `medir`, `do_dia`, `CAUSAS` e `dono`: motivo de retenção de **chamados**, dono `admin`. |
-   | `fio_mudo_alvos` | `contador_fio_mudo`: quantidade de tuplas selecionadas `(colab,dia,motivo)`, esperado zero, dono `ESTRUTURA`. | Disparar imprime; vigiar publica; placar compara número e esperado. |
-   | Contador `nunca_bateu_sem_adesao` | `contador_nunca_bateu`: pares únicos selecionados, interseção esperada, dono `CADASTRO`. | Disparar imprime; vigiar publica número, esperado e diagnóstico; placar compara. |
-   | `barrados['desligado']` | Ramo antigo incrementa para situação diferente de `ativo`; ramo novo soma pares únicos de desligados ausentes da C5. | Relatório do disparar imprime o agregado como barreira RH. |
-
-   Referências: veredito — `app/ponto/services/cartorio.py:1165-1173`, `app/ponto/services/cartorio.py:1237-1258`, `app/escala/models.py:1819-1828`, `app/ponto/portas/celula.py:1011-1049`, `app/escala/models.py:1768`; causa — `app/chamados/services/disputa_emissao.py:757-759`, `app/chamados/services/pergunta_no_app.py:35`, `app/chamados/services/pergunta_no_app.py:99-101`, `app/chamados/services/pergunta_no_app.py:139-194`; contadores/barreiras — `app/chamados/management/commands/disparar_perguntas_competencia.py:38-51`, `app/chamados/management/commands/disparar_perguntas_competencia.py:111-129`.
-
-   **Carimbo:** `vigiar_fio_morto` chama o contador, copia seus valores para `censo` e `esperado`, guarda o diagnóstico C5 completo e grava pela `_carimbar`. Somente a execução sem recorte de empresas publica o carimbo de frota. (`app/chamados/management/commands/vigiar_fio_morto.py:118-137`; `app/chamados/management/commands/vigiar_fio_morto.py:181-182`; `app/chamados/management/commands/vigiar_fio_morto.py:225-248`)
-
-   **Placar:** lê o carimbo, exige o mesmo dia civil e inteiros, compara `numero != esperado` e produz `NAO_MEDIDO` para ausência/forma inválida. Não recalcula C5 nem alvos. (`app/core/management/commands/pipeline_placar.py:85-107`; `app/core/management/commands/pipeline_placar.py:135-136`)
-
-   **ESMERIL semântico:** causa e contador têm o mesmo nome, mas unidades diferentes: chamados retidos versus pares únicos com recorte. Não são números intercambiáveis. O dia do fato vem da célula/catálogo; `hoje` do carimbo identifica o dia civil local da medição. A janela padrão do contador é global, enquanto a C5 usa janela por empresa. (`app/chamados/services/pergunta_no_app.py:78-84`; `app/chamados/services/pergunta_no_app.py:151-173`; `app/chamados/management/commands/disparar_perguntas_competencia.py:65-89`; `app/escala/services/cadastro_realidade.py:180-183`; `app/chamados/management/commands/vigiar_fio_morto.py:166-167`)
-
-4. **Os testes mordem?** [nao verificado]
-
-   **Os controles centrais deixaram de passar por cenário vazio:** exigem marco vencido, ata acusadora, emissão positiva da fábrica/repasse e alvo positivo do contador antes dos casos negativos. (`app/chamados/tests/test_e4a2_nunca_bateu.py:94-100`; `app/chamados/tests/test_e4a2_nunca_bateu.py:110-142`)
-
-   Os oito mutantes de `nunca_bateu` e os oito do placar executam o controle antes da mutação, exigem alvo textual único e aceitam somente `AssertionError` com mensagem pretendida. Um erro genérico de setup não satisfaz esse contrato. **A execução Django de cada mutante é [não verificado].** (`app/chamados/tests/test_e4a2_nunca_bateu.py:33-56`; `app/chamados/tests/test_e4a2_nunca_bateu.py:201-216`; `app/core/tests/test_fio_mudo_placar.py:274-302`)
-
-   Foram executados em memória dez verificadores puros de fonte, relógio, relatório e SQL, com suas mutações, sem falhas; isso não substitui os testes Django. (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:75-107`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:162-171`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:221-228`; `app/chamados/tests/test_e4a2_disparar_e_vigia.py:265-288`)
-
-   **Lacunas:** a coleção do placar não muta especificamente as duas publicações C5 nem a chamada do leitor C5; existe teste normal dessas publicações. O novo caso de desligado cobre exclusão total, sem testar o contador com retenção parcial por lavra. (`app/core/tests/test_fio_mudo_placar.py:34-45`; `app/core/tests/test_fio_mudo_placar.py:139-146`; `app/chamados/tests/test_e4a2_nunca_bateu.py:155-169`)
-
-   Resultado informado “Ran 1693, OK …”: **[não verificado]**.
-
-5. **Classes de reprovação anteriores**
-
-   - **Segundo juiz/escritor novo:** não identificado nos trechos alterados; o helper lê a lâmpada, o contador consulta a C5 real, a fábrica conserva a emissão e a resposta tardia usa a porta existente. O contador não rederiva adesão nem retenção da folha; deriva seu recorte adicional. (`app/chamados/services/fabrica_da_celula.py:67-69`; `app/chamados/services/fabrica_da_celula.py:197-199`; `app/chamados/management/commands/disparar_perguntas_competencia.py:31-47`; `app/chamados/services/resposta_tardia.py:45-48`)
-   - **Relógio fora da borda: presente, herdado.** `_ja_perguntou` não recebe `hoje`, chama `fio_vivo`, que chama `pergunta_viva` sem o dia injetado; o caminho pode chegar ao `date.today()`. A leitura direta nova usa `hoje`, mas essa segunda consulta continua divergente. (`app/chamados/management/commands/disparar_perguntas_competencia.py:90`; `app/chamados/management/commands/disparar_perguntas_competencia.py:115`; `app/chamados/services/disputa_emissao.py:1421-1422`; `app/chamados/juizes.py:1434`; `app/chamados/juizes.py:577`)
-   - **Campo com dois significados: presente nos relatórios**, pelas unidades distintas de causa e contador e pela expectativa zero do leitor externo. (`app/chamados/services/pergunta_no_app.py:170-173`; `app/chamados/management/commands/disparar_perguntas_competencia.py:46-47`; `bin/placar_code.sh:319-320`)
-   - **Ordem da tranca:** o contador novo está dentro do contexto de lote no vigiar; isso não comprova toda ordem de locks em execução concorrente, que fica **[não verificado]**. (`app/chamados/management/commands/vigiar_fio_morto.py:174-182`; `app/chamados/juizes.py:1108-1118`)
-   - **Pouso após pré-requisitos:** a dependência e a condição ALVOS zero estão registradas; atendimento operacional e pouso efetivo são **[não verificado]**. (`app/docs/BACKLOG.md:1871`)
-
-6. **Leitores fora do diff**
-
-   **Sim: `bin/placar_code.sh` precisa migrar sua expectativa.** Ele soma dinamicamente todas as causas, incluindo a nova causa C5, e publica o total como “pergunta fora do app; esperado 0”. Isso não cria `fio_mudo_alvos`, mas apresenta retenção legítima de cadastro sob uma expectativa incompatível. O comando fornecedor também mantém essa descrição antiga no cabeçalho/help. (`bin/placar_code.sh:314-320`; `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:1-2`; `app/chamados/management/commands/chamados_vivos_sem_pergunta_no_app.py:10`)
-
-   **`bin/fio_estado.py` já comporta os novos campos:** percorre genericamente o `esperado` do carimbo, compara com `censo` e mostra divergências pelo nome recebido. Ele não impõe zero próprio aos campos novos. (`bin/fio_estado.py:121-126`; `bin/fio_estado.py:191-194`)
-
-## 10/11 02:19 · sessao 9a51ecf2e292 · REVERTER-DIA-SEM-RECALCULO · construtor · origem=Code
-
-Entreguei alterações em três arquivos:
-
-- [aplicar_col900.py:35](/home/ronald/wt-codex-reverter-dia-sem-recalculo-021142/app/ponto/management/commands/aplicar_col900.py:35): auditoria do ANTES obrigatória, ator copiado do registro devolvido, `fsync` do diretório, preparação dentro do protocolo e conclusão via `on_commit`. Falhas na conclusão levantam `SystemExit` com caminho e hashes. Estados finais: `laco_terminado` ou `interrompido`.
-- [test_reverter_exportada_sem_banco.py:31](/home/ronald/wt-codex-reverter-dia-sem-recalculo-021142/app/ponto/tests/test_reverter_exportada_sem_banco.py:31): contador AST ampliado, remoção do `__main__`, REDs e mutantes coletáveis em memória.
-- [test_reverter_regen_recalcula_dinheiro.py:139](/home/ronald/wt-codex-reverter-dia-sem-recalculo-021142/app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:139): integração com `call_command`, exportação, JSON temporário, LogAuditoria/hash reais e `captureOnCommitCallbacks(execute=True)`.
-
-O escritor físico do JSON continua único: `_gravar_reversao`. A conclusão lê o dicionário em memória. (`ponto/management/commands/aplicar_col900.py:35`, `:97`)
-
-| Campos | Quem escreve/produz | Quem lê; significado |
-|---|---|---|
-| `colab`, `dias`, `quando`, `motivo`, `apesar_da_lavra` | `_preparar_reversao`, dos argumentos e relógio. (`aplicar_col900.py:68`) | Auditorias anterior/posterior. (`aplicar_col900.py:84`, `:111`) |
-| `quem.processo`, `quem.usuario_so` | Processo vem de `log.ator`; usuário SO vem de `getpass`. (`aplicar_col900.py:88`) | Auditoria posterior. Nulo é preservado, sem fallback. (`aplicar_col900.py:108`) |
-| `competencias[].mes/ano/lavrada` | Competência delegada a `competencia_do_fato`; lavrada delegada ao K9. (`aplicar_col900.py:63`, `:73`) | Conclusão usa mês/ano; K9 significa exportação vigente ou holerite publicado. (`aplicar_col900.py:100`; `folha/export.py:610`) |
-| `hash_antes`, `hash_depois`, `valores_antes` | Helpers existentes leem FechamentoMensal; comando grava os retornos. (`ponto/portas/regen_exportada.py:62`, `:77`; `aplicar_col900.py:74`, `:100`) | Auditorias e diagnóstico de falha. Valores seguem `CAMPOS`, não constituem cópia integral de DiaPago. (`aplicar_col900.py:109`, `:119`; `ponto/management/commands/aplicar_09_corte_b.py:67`) |
-| `celulas` | Fotografia de `CelulaDia.dna`. (`aplicar_col900.py:76`) | Teste integrado confere a fotografia. (`test_reverter_regen_recalcula_dinheiro.py:164`) Consumidor produtivo de restauração: **[nao verificado]**. | [nao verificado]
-| `estado`, `registrado_em` | `_concluir_reversao`. (`aplicar_col900.py:101`) | Auditoria posterior. `laco_terminado` mede término do laço; recálculo continua sujeito ao tratamento existente de falhas. (`aplicar_col900.py:113`; `ponto/services/fechamento.py:1818`) |
-| `resultados[].dia/revertido/resultado` | Laço operacional. (`aplicar_col900.py:179`, `:187`) | Auditoria posterior. (`aplicar_col900.py:113`) |
-| LogAuditoria: ação, modelo, objeto, descrição e payloads | Comando monta; `evento_kw → evento` persiste pelo escritor único. (`aplicar_col900.py:79`, `:105`; `core/observ.py:126`, `:133`) | Tela genérica consulta os registros. (`core/views.py:705`) |
-
-Permanece o leitor histórico que espera `desde/ate` na auditoria da regeneração e ignora o payload da VOLTA; está fora desta alteração. (`escala/services/regeneracao.py:58`; `ponto/portas/celula.py:799`) Outro consumidor produtivo atribuindo significado diferente ao novo JSON: **[nao verificado]**.
-
-Comandos executados e saídas locais, sem relatório persistido **[nao verificado por arquivo de resultado]**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  ponto.tests.test_reverter_exportada_sem_banco \
-  ponto.tests.test_reverter_regen_sem_banco -v
-# Ran 36 tests — OK
-```
-
-Os 16 mutantes do protocolo compartilham este comando; a campanha exige a asserção pretendida e rejeita erros acidentais. (`ponto/tests/test_reverter_exportada_sem_banco.py:404`, `:447`)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  ponto.tests.test_reverter_exportada_sem_banco.MutantesProtocoloTest -v
-```
-
-Casos: `sem_pre`, `ignora_io`, `sem_antes`, `sem_pos`, `hash_falso`, `sem_valores`, `sem_dna`, `sem_depois`, `ignora_juiz`, `foto_em_aberta`, `sem_fsync_diretorio`, `ator_forjado`, `estado_ambiguo`, `antes_do_commit`, `erro_sem_hash`, `preparar_fora_try`. (`ponto/tests/test_reverter_exportada_sem_banco.py:404`)
-
-Posicional, aliases e `**kwargs` estão no teste de segundo chamador. (`ponto/tests/test_reverter_exportada_sem_banco.py:65`)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
-  ponto.tests.test_reverter_exportada_sem_banco.ChamadorUnicoTest -v
-```
-
-RED contra a base:
-
-```bash
-GIT_OPTIONAL_LOCKS=0 git show \
-  e948e19b9c3e2a10c03cb2688210f830f0bd18dd:app/ponto/management/commands/aplicar_col900.py |
-PYTHONDONTWRITEBYTECODE=1 python3 -c '
-import sys, unittest
-from ponto.tests import test_reverter_exportada_sem_banco as t
-t.FONTE_COMANDO = sys.stdin.read()
-suite = unittest.TestSuite(t.TrilhaComandoTest(n) for n in ( [nao verificado]
-    "test_RED_json_antes_da_porta_duas_competencias_e_trilha_depois",
-    "test_preparacao_dentro_do_protocolo"))
-r = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
-sys.exit(not r.wasSuccessful())
-'
-```
-
-Saída: duas falhas esperadas — “falta auditoria ANTES da porta” e “preparacao fora do protocolo”; retorno 1. **[nao verificado por arquivo de resultado]**
-
-Ruff disponível, versão 0.17.4, retornou `All checks passed!` nos três arquivos; `git diff --check` sem saída. **[nao verificado por arquivo de resultado]**
-
-Não executei os testes Django, a suite completa ou o opus: Django/freezegun estão ausentes neste Python e não houve acesso a banco. Integração real e certificação permanecem **[nao verificado]**. [nao verificado]
-
-_3342 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3345 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
