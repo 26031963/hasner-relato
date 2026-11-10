@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 08:07:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **915**.
+**Medido em 10/11/2026 08:12:53.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (249.4 MB). Acoes na janela: **910**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -920,8 +920,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:21:17 | Bash |  | `cd /home/ronald/wt-e4a-sessao-180409/app && /bin/grep -n "fabrica_da_celula" core/tests/test_medida_turno_do_par.py \| head; /bin/grep -n "localdate\\|def pauta_cadastro_existente" chamados/services/fabrica_da_celula.py` |
 | 20:21:14 | Bash |  | `L=/home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES/volta4/suite_inteira_dbb941474.log; /bin/grep -n -A30 "^FAIL: test_a_classificar" $L \| head -50` |
 | 20:21:11 | Bash |  | `date; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bzzxtnpw4.output; cd /home/ronald/wt-e4a-sessao-180409 && git status --porcelain \| head; git log -1 --format=%h` |
-| 20:12:49 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read().split('\n') assert s[3].startswith('MODO-COMUM:') s[3]="MODO-COMUM: E4a-1 P3 pauta de CADASTRO sem contador e reabrindo em laco apos fechada (aval PASSADO-SEM-MARCOS) \| quem pegou: opus final 1 (Codex perguntou so o lado proibido q:36, CONFORME r:165) \| invariante que faltou: 'dia passado sem turno = UMA pendencia de cadastro por colab, fecha ...` |
-| 20:12:43 | Bash |  | `cd /home/ronald/saas-hasner && /bin/grep -n "MODO-COMUM\\|ESPERANDO\\|def _topo\\|linhas\[" bin/hook_stop_fila1.py \| head -30` |
-| 20:12:37 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 130,150p app/docs/PISTA.md; /bin/grep -n "MODO-COMUM" app/docs/BACKLOG.md \| head` |
-| 20:12:35 | Bash |  | `cd /home/ronald/saas-hasner && /bin/grep -rln "preverif\\|PRE-VERIFICADOR\\|papel.*verificador" bin/*.sh bin/*.py 2>/dev/null \| head; /bin/grep -n "MODO-COMUM" app/docs/PISTA.md \| head` |
-| 20:12:31 | Bash |  | `date; L=/home/ronald/saas-hasner/logs/FIO-E0-V4-E4-ESCRITORES/volta4/suite_inteira_dbb941474.log; wc -l $L; tail -c 200 $L; ps -o etime -p 469471` |
