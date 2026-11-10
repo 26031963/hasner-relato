@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 02:54** · publicado em **10/11/2026 02:57** (UTC-3)
+> Ultima resposta processada: **10/11/2026 02:58** · publicado em **10/11/2026 03:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 02:58 · sessao b27ce983d57b · PAUTA-SEM-TURNO-PREFIXO-RESERVADO · construtor · origem=Code
+
+**Parei conforme o contrato: há um ramo que produz chave inválida.** Sem SHA, `dono_do_teste` retorna `sem commit (<arquivo>)`; esse valor compõe `quarentena:zumbido:<dono>`, contendo espaços (`core/esteira_vigia.py:1174`, `core/esteira_vigia.py:1212`). Ocorrência em produção: **[nao verificado]**.
+
+As alterações ficaram **parciais**:
+
+- [marcadores.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-025046/app/pautas/marcadores.py:31): gramática única e reserva derivada.
+- [alarme_esteira.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-025046/app/core/management/commands/alarme_esteira.py:29): validação antes de consultar, escrever ou fechar.
+- [test_prefixos_reservados.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-025046/app/pautas/tests/test_prefixos_reservados.py:298): equivalência e recusas.
+- [test_prefixos_reservados_ast.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-025046/app/pautas/tests/test_prefixos_reservados_ast.py:194): selo contra regex paralela.
+- [mutar_prefixos_reservados.py](/home/ronald/wt-codex-pauta-sem-turno-prefixo-reservado-025046/app/pautas/tests/mutar_prefixos_reservados.py:103): novos mutantes e reprodução por hash.
+
+O teste de censo cobre as ações de `decidir`, mas faltam as chamadas diretas a `_pauta`; portanto os resultados abaixo **não demonstram o censo completo** (`pautas/tests/test_prefixos_reservados.py:266`; `core/esteira_vigia.py:1212`).
+
+Comandos executados e resultados parciais — RED reproduzível pelo executor, incluindo falha de equivalência (`pautas/tests/mutar_prefixos_reservados.py:261`; `pautas/tests/test_prefixos_reservados.py:313`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados --base 5b6861f6f7c9d0f5ac85dc935dac9b2235f024e4
+# 11 testes; 93 falhas; 0 erros; rc 1 [nao verificado]
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest pautas.tests.test_prefixos_reservados pautas.tests.test_prefixos_reservados_ast
+# 25 testes; OK; 1 skip [nao verificado]
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m pautas.tests.mutar_prefixos_reservados
+# 79 mortos; 0 sobreviventes
+```
+
+Cada mutante tem comando individual impresso pelo executor (`pautas/tests/mutar_prefixos_reservados.py:243`).
+
+Ruff e testes legados de alarme não iniciaram: módulos `ruff` e `django` ausentes. Ruff limpo e integração HTTP/banco: **[nao verificado]**. **Entrega interrompida, sem certificação.** [nao verificado]
 
 ## 10/11 02:54 · sessao 38d53a47ac9d · O169-FECHADA · verificador · origem=Code
 
@@ -670,22 +701,4 @@ O corte `continue` impede toda célula cuja lâmpada ainda seja `nunca_bateu` de
 
 - **Vazio:** os novos controles centrais exigem emissão/alvo positivos e ata não vazia, impedindo aprovação apenas por ausência de cenário (`app/chamados/tests/test_e4a2_nunca_bateu.py:95`, `app/chamados/tests/test_e4a2_nunca_bateu.py:113`, `app/chamados/tests/test_e4a2_nunca_bateu.py:135`). O veto de DML também exige um alvo em cada caminho e verifica callbacks; seus controles demonstram UPDATE imediato e adiado sem alteração de contagens (`app/chamados/tests/test_e4a2_disparar_e_vigia.py:305`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:334`, `app/chamados/tests/test_e4a2_disparar_e_vigia.py:352`). Resultado integral informado de 1693 testes: **[não verificado]**.
 
-## 10/11 02:18 · sessao de42b151306e · - · - · origem=Ronald (tmux)
-
-- **Aval literal do contador não realizado.** `numero` é a quantidade deduplicada de pares `(colab,dia)` provenientes de chamados vivos no recorte do disparar, limitada por início da competência anterior da empresa e ontem; `esperado` é apenas a interseção desses pares com a C5, dono `CADASTRO`. Não é tamanho integral da C5 (`app/chamados/management/commands/disparar_perguntas_competencia.py:22-48`, especialmente 34,38-47). A C5 busca células sem exigir chamado, desde a anterior por empresa até ontem (`app/escala/services/cadastro_realidade.py:177-200`). Além disso, a lista de apresentação gera **uma assinatura C5 por colaborador**, agregando suas datas no detalhe (`app/escala/services/cadastro_realidade.py:204-209`). Convém explicitar se “tamanho da lista C5” significa pessoas/assinaturas ou dias; o contador mede dias-colaborador selecionados por chamados, não qualquer dessas duas totalidades.
-
-- **Universo de desligados foi ajustado por pessoa, mas conserva uma borda problemática por dia.** O contador exclui desligado somente se `colab.pk not in c5` (`app/chamados/management/commands/disparar_perguntas_competencia.py:38-40`); a C5 real inclui/exclui **cada dia**, pela lavra de `furo_espelho` (`app/escala/services/cadastro_realidade.py:185-200`). Portanto, desligado com um dia retido na C5 pode ter outro dia legitimamente excluído pela C5 contado em `numero`, ausente em `esperado` e listado como divergência. Trata-se de consequência estática desses predicados, não ocorrência demonstrada em produção [não verificado]. O teste novo cobre desligado totalmente fora da C5, não esse caso misto (`app/chamados/tests/test_e4a2_nunca_bateu.py:145-160`).
-
-- **Sem rederivação de adesão/lavra da folha dentro do contador.** Ele pergunta à função canônica `colabs_nunca_bateu` e monta conjuntos para comparar o próprio recorte (`app/chamados/management/commands/disparar_perguntas_competencia.py:31-47`). O piso por empresa é calculado separadamente por `janela_anterior`; isso é recorte adicional do contador, não reprodução da regra de retenção da C5 (`app/chamados/management/commands/disparar_perguntas_competencia.py:41-44`).
-
-- **Os dois caminhos do disparar excluem células que ainda tenham `veredito='nunca_bateu'`.** No fio mudo, o `continue` antecede todas as adições a `_mudos` (`app/chamados/management/commands/disparar_perguntas_competencia.py:87-89,124`). No caminho da célula, o vigia delega a `motivos_a_perguntar`, que retorna vazio para esse veredito (`app/chamados/services/fabrica_da_celula.py:85-86,214-225`). Assim, por esses caminhos, aqueles fatos não viram `fio_mudo_alvos` enquanto conservarem esse veredito. Correspondência dos 129 itens/44 células/15 colaboradores com a cópia efetiva [não verificado].
-
-- **Fábrica e repasse migrados.** `perguntar_pela_celula` corta `nunca_bateu` antes de pauta e emissão (`app/chamados/services/fabrica_da_celula.py:163-164`). O helper apenas lê a lâmpada, sem afirmar pertencimento à lista (`app/chamados/services/fabrica_da_celula.py:67-69`). O repasse retorna causa `nunca_bateu_sem_adesao` antes do atalho da ata (`app/chamados/services/disputa_emissao.py:757-761`); o predicado de regularização delega a essa função (`app/chamados/services/disputa_emissao.py:790-796`) e é aplicado nos dois ramos do repasse (`app/chamados/services/disputa_emissao.py:1065-1067,1086-1088`). Os caminhos cartório e consumidor terminam na mesma fábrica (`app/ponto/services/cartorio.py:1006-1010`; `app/chamados/services/fabrica_da_celula.py:279-281`).
-
-- **Resposta tardia curada na porta existente.** A condição voltou a aceitar qualquer veredito da tupla acusadora e chama `_renascer_por_premissa_viva`, sem corte para nunca_bateu (`app/chamados/services/resposta_tardia.py:44-48`). A porta conserva situação ativa, cascade, tranca, veto e o gate de `reabrir` (`app/chamados/models.py:1004-1024`).
-
-- **Escritor de veredito e origem do fato.** O cartório lê a primeira Batida não retratada para adesão (`app/ponto/services/cartorio.py:1165-1173`); no ramo sem adesão, julga a precedência, renomeia para `nunca_bateu` quando não há cobertura integral e chama `cel.lavrar_veredito` (`app/ponto/services/cartorio.py:1237-1258`). O método do modelo delega à porta (`app/escala/models.py:1819-1828`); a porta aplica a precedência do admin e grava veredito, via, instante, protestos e ata (`app/ponto/portas/celula.py:1011-1049`). A obra acrescentou leitura desse resultado, não novo juiz de adesão (`app/chamados/services/fabrica_da_celula.py:67-69`).
-
-- **Segundo escritor/juiz novo nos trechos auditados: não identificado.** O disparar apenas retorna contagens e o helper lê veredito (`app/chamados/management/commands/disparar_perguntas_competencia.py:125-129`; `app/chamados/services/fabrica_da_celula.py:67-69`). O escritor de perguntas continua `perguntar`, usando as portas de disputa e geração (`app/chamados/services/fabrica_da_celula.py:140-155,197-199`). Correção integral de todas as ordens de trava e pouso efetivo após pré-requisitos [não verificado].
-
-_3339 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3340 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
