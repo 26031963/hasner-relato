@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 15:59:51.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (266.7 MB). Acoes na janela: **602**.
+**Medido em 10/11/2026 16:04:34.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (266.8 MB). Acoes na janela: **608**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:04:31 | Bash | Compute line-number drift standalone | `cd /home/ronald/wt-codex-bo-0611-05-144805/app; PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY' import pathlib, types p = pathlib.Path('core/tests/test_medida_turno_do_par.py') s = types.ModuleType('s'); s.__file__ = str(p.resolve()) src = p.read_text().replace('from django.test import SimpleTestCase','from unittest import TestCase as SimpleTestCase') exec(compile(src, str(p), 'exec'), s.__dict__) c ...` |
+| 16:04:22 | Bash | Read test header for standalone run | `cd /home/ronald/wt-codex-bo-0611-05-144805/app; sed -n 15,60p core/tests/test_medida_turno_do_par.py` |
+| 16:04:20 | Bash | Check censo module import | `cd /home/ronald/wt-codex-bo-0611-05-144805/app; sed -n 1,30p core/tests/test_medida_turno_do_par.py \| /bin/grep -n "import\\|_app"` |
+| 16:04:17 | Bash | Read catraca test | `cd /home/ronald/wt-codex-bo-0611-05-144805/app; sed -n 480,560p core/tests/test_medida_turno_do_par.py; /bin/grep -n "LINHAS_REGISTRADAS\s*=" -A3 core/tests/test_medida_turno_do_par.py \| head` |
+| 16:04:14 | Bash | Show the failure traceback | `cd /home/ronald/saas-hasner; L=logs/BO-0611-05/suite_v5.log; /bin/grep -n "test_CATRACA_linhas_reais_congeladas" $L \| head -3; N=$(/bin/grep -n "^FAIL: test_CATRACA" $L \| head -1 \| cut -d: -f1); sed -n "$N,$((N+40))p" $L` |
+| 16:04:11 | Bash | Read suite v5 verdict and check tree unchanged | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bn9czoje9.output; cd /home/ronald/wt-codex-bo-0611-05-144805; git rev-parse HEAD; git status --porcelain \| head` |
 | 15:44:29 | Bash | Produce final diff for opus verification | `cd /home/ronald/wt-codex-bo-0611-05-144805; B=$(git merge-base HEAD da829e9f6); echo base=$B; git diff --stat $B HEAD \| tail -25; git diff $B HEAD > /home/ronald/saas-hasner/logs/BO-0611-05/diff_final_613f850a0.patch; wc -l /home/ronald/saas-hasner/logs/BO-0611-05/diff_final_613f850a0.patch; ls /home/ronald/saas-hasner/logs/BO-0611-05/ \| head -60` |
 | 15:44:25 | Bash | Add travas audit row to BACKLOG | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='\| BO-0611-05-RESTO-DA-CLASSE \|'; i=s.index(a) row='\| AUDITORIA-TRAVAS-POS-RESET-PADRAO-NA \| fila instrumento (aval DUAS 10/11 15:4x; registrar, nao construir agora) \| test_lei_akita.sh PADRAO-NA-CURA reprova padrao=n/a em commit so de comentario/anotacao em app/ (11f82cfec, 6c6689036); mudar o selo par ...` |
 | 15:44:20 | Bash | Find backlog row format | `cd /home/ronald/saas-hasner; /bin/grep -n "BO-0611-05-RESTO-DA-CLASSE" app/docs/BACKLOG.md \| head -2; L=$(/bin/grep -n "^\| BO-0611-05-RESTO-DA-CLASSE" app/docs/BACKLOG.md \| head -1 \| cut -d: -f1); sed -n "${L}p" app/docs/BACKLOG.md \| cut -c1-400` |
