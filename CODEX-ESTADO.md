@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:48** · publicado em **11/11/2026 10:48** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:54** · publicado em **11/11/2026 10:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:54 · sessao 1623f482cb44 · - · - · origem=Ronald (tmux)
+
+Fluxo após diff, com linhas **novas** de `bin/relato.sh`:
+
+- `MAPA_RC=0; MAPA_PAR=""` em **94**; `cp` e validador em **96**; sucesso escreve `MAPA_PAR` em **97**; falha de qualquer um escreve `MAPA_RC=1` em **99**. Nenhuma outra atribuição a `MAPA_RC` no diff. Portanto validador executado vermelho não termina com rc 0; verde termina com rc 0 salvo outra falha. (`diff bin/relato.sh:94–99,155,161–162`.)
+- Todos os `exit`: base **27,28,32,35,38,42,86**, todos `1`; novos **126** (`gerar_avais`, `1`), **141** (raspagem geral, `1`), **155** (`"$MAPA_RC"`: `0` ou `1`), **161** (falha do push/echo: `1`), **162** (`"$MAPA_RC"`: `0` ou `1`). A inserção de 24 linhas deixa as primeiras sete posições intactas. (`bin/relato.sh` base citada; `diff bin/relato.sh` linhas novas citadas.)
+- Pode remover público **sem executar o validador**: fonte ausente/ilegível faz `cp` falhar, o `&&` pula Python; re-raspagem da cópia existente falha, `rm` apaga `MAPA-20.md`, `MAPA_RC` permanece `1`; etapa 4 inclui remoção rastreada. Isso não é caminho com **validador verde**. (`diff bin/relato.sh:96,99,102–109,148–152,159–162`.)
+- Não encontrei caminho interno com validador verde que entre nesse `rm`: está exclusivamente no `else` do `cp && validar`. A raspagem geral ainda pode falhar por motivos próprios e sai `1`. (`diff bin/relato.sh:96–112,127–141`.)
+
+QUEM ESCREVE / QUEM LÊ:
+
+| Valor | Escritor | Leitor |
+|---|---|---|
+| `MAPA_RC` | shell: inicializa `0`, falha fixa `1` | saídas de “nada mudou” e final |
+| `MAPA_PAR` | shell: vazio / par da foto | argumento opcional da raspagem geral |
+| `MAPA_PATH` | shell: vazio / nome após `git add` bem sucedido | mensagem e pathspec do commit | [nao verificado]
+| `$TMP/mapa20.md` | `cp` da fonte | validador; raspador pela lista de pares |
+| `logs/MAPA-20/mapa.md` | sessão, **apenas declarado em comentário**, produtor real não fornecido | `cp` |
+| `$DEST/MAPA-20.md` | `raspar_publico.py:40`, ou troca do arquivo re-raspado com `mv`; remoção com `rm` | raspador no ramo retido, teste `-f`, Git | [nao verificado]
+
+Refs: `diff bin/relato.sh:89–112,141,148–162`; `bin/raspar_publico.py:23–40`. Escritor efetivo/eventos da fonte: **[nao verificado]**. O diff não cria gerador nem gatilho para regravar a fonte em pouso/reprovação/lei: o comentário delega à sessão. (`diff bin/relato.sh:89–90`.)
+
+Classes:
+
+- **Segundo juiz:** raspagem reaproveita o juiz único de privacidade: `raspar_publico.py:15–16,31,36`, `nome_no_texto.py:59,87`; não introduz uma segunda regex de nomes.
+- **Segundo escritor:** duas rotas de atualização do público estão no mesmo publicador sob a trava já existente: `bin/relato.sh` base **27**, diff **96–112,141**; produtor da fonte fora desse bloco não fornecido.
+- **Relógio:** nenhum relógio novo de decisão no diff; `date` continua só na mensagem do commit (`base bin/relato.sh:130`, diff **159**). Timer já existente em `bin/hasner-relato.timer:5–7`; chama script por `bin/hasner-relato.service:15`.
+- **Fonte única / derivação:** `MAPA_PAR` faz publicador consumir a foto efetivamente validada (`diff bin/relato.sh:96–97,141`); censo/fonte/medidas de negócio não são computados pelo diff **[nao verificado]**.
+- **Trava:** nenhuma trava nova; `codex_estado.sh --gerar` sai antes da aquisição de lock do ramo evento, logo não autoespera na trava que `relato.sh` já segura. (`bin/relato.sh:27`; `bin/codex_estado.sh:54–56,65–66`.)
+- **Pouso/pré-requisito:** contrato MAPA-20 é apenas referenciado pelo novo comentário; não consta no texto físico desta base. Comprovação do contrato, fonte pronta, mapa publicado, selos executados e opus: **[nao verificado]**. A regra de contrato está em `CLAUDE.md:394`, suíte/opus em **377–381**. [nao verificado]
+- **Campo com dois significados:** `MAPA_RC` é resultado acumulado da etapa MAPA (cópia **ou** validação), não rc puro do Python; `MAPA_PATH` identifica artefato rastreado inclusive para remoção, não prova de publicação nova. Isso está explícito no uso (`diff bin/relato.sh:94–99,148–152`). Confundir os nomes com “validador verde”/“mapa publicado” produziria conclusões erradas.
+
+Limite preexistente útil: `set -uo pipefail` sem `-e`, `cd`, `git add` geral e `git commit` sem checagem continuam na base (`bin/relato.sh:21,120–132`), agora linhas novas **144–161**. Não são cura completa pelo novo `push || exit 1`; falha de commit seguida de push bem sucedido pode ainda terminar `0` quando mapa verde, embora exista outra falha.
+
+## 11/11 10:52 · sessao 1239d5bfa276 · - · - · origem=Ronald (tmux)
+
+Nenhum dos cinco selos vizinhos tem quebra estática causada pelo diff; execução completa dos selos ficou [nao verificado], pois eles criam arquivos e/ou acessam recursos externos. A busca equivalente a `git grep 'relato.sh' bin/tests` encontra referências nos cinco arquivos abaixo. (`bin/tests/test_codex_estado.sh:100`; `bin/tests/test_codex_estado_evento.sh:28`; `bin/tests/test_relato_publica_claude_md.sh:8`; `bin/tests/test_relato_afirma_com_prova.sh:44`; `bin/tests/test_publicacao_sem_nome.sh:6`.)
+
+1. **`test_codex_estado.sh`: não quebra.** O recorte começa na primeira ocorrência literal de `CODEX_OK=""` e termina no marcador do passo 3; só busca `exit` nesse intervalo, excluindo comentários. O bloco 2f novo fica antes do bloco 2e e de `CODEX_OK=""`, portanto seus novos comandos não entram nessa região. (`bin/tests/test_codex_estado.sh:104-111`; base `bin/relato.sh:89-98`; diff `bin/relato.sh:89-122`, linhas novas.)
+
+2. **`test_relato_publica_claude_md.sh`: não quebra.** A raspagem geral mantém o par CLAUDE; o novo raspador de MAPA retido não casa com a regex que exige continuação de linha imediatamente depois de `"$DEST"`. O teste conta apenas linhas começando na coluna 1 por `git add -A `; o novo `git add -A -- MAPA-20.md` tem indentação e não aumenta essa contagem. O pathspec do commit continua contendo CLAUDE. (`bin/tests/test_relato_publica_claude_md.sh:13-20`; diff `bin/relato.sh:104-105`, `141`, `145`, `151`, `160`, linhas novas.)
+
+3. **`test_codex_estado_evento.sh`: não quebra na costura.** Continua sem `gerar_codex_estado.py` em `relato.sh`, mantendo chamadas de `codex_estado.sh` e `relato_nomes.sh`. (`bin/tests/test_codex_estado_evento.sh:27-30`; base `bin/relato.sh:32`, `97`; diff não altera essas chamadas.)
+
+4. **`test_relato_afirma_com_prova.sh`: não quebra na costura.** Seu predicado apenas exige a presença de `relato_afirma_com_prova.py`, preservada pelo diff. (`bin/tests/test_relato_afirma_com_prova.sh:43-45`; base `bin/relato.sh:55`.)
+
+5. **`test_publicacao_sem_nome.sh`: não recorta `relato.sh`.** As referências são comentários; o universo efetivo vem de `git ls-files` do público. MAPA-20 rastreado entra automaticamente nesse universo. Resultado de privacidade em produção permanece [nao verificado]. (`bin/tests/test_publicacao_sem_nome.sh:58-72`.)
 
 ## 11/11 10:48 · sessao ff7bc3086497 · UI-PAINEL-MOSTRA-O-APP · construtor · origem=Code
 
@@ -709,108 +757,4 @@ Execução Django e ocorrência desses cenários em produção: **[nao verificad
 
 - **Média — mutante plausível sem cenário correspondente:** remover a trava explícita anterior à releitura preserva os casos sequenciais existentes, mas desfaz a correção do objeto lido depois da trava. A lista de mutantes não altera essa trava; os testes de apply usam fixtures estáveis e não instrumentam espera ou mudança de situação durante a aquisição. Sobrevivência executada: **[nao verificado]**. (`app/ponto/services/cluster_espurio.py:276`; `app/ponto/services/cluster_espurio.py:278`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:100`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:167`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:220`)
 
-## 11/11 10:17 · sessao 441b3c861fbf · - · - · origem=Ronald (tmux)
-
-Cartório: resultados comprováveis na cópia.
-
-- Cada `julgar_celula` consulta uma `CelulaDia`; pode sair por data futura, célula inexistente ou turno atual ainda aberto; cria contadores próprios e chama `julgar_colab` com uma célula. Depois aplica A2 e grava `ata.precedencia` se mudou. (`app/ponto/services/cartorio.py:1971`, `:1985`, `:1987`, `:1993`, `:1999`, `:2000`, `:2008`, `:1958`, `:1960`)
-- Cada passada do corpo carrega batidas de `[D−1,D+3)`, monta grade de dois dias para uma célula, consulta primeira batida histórica, carrega todos os chamados dos módulos de batida daquele colaborador e suas perguntas — sem filtro temporal nem de estado — e consulta ausência por célula. O pulo por impressão vem depois dessas cargas. (`app/ponto/services/cartorio.py:1118`, `:1134`, `:1137`, `:1165`, `:1280`, `:117`, `:118`, `:1317`, `:1369`, `:1373`)
-- Cadastro e encerramento são cargas adicionais preguiçosas por passada: todos os vínculos e `dias_encerrados`, que também carrega turnos quando não fornecidos. (`app/ponto/services/cartorio.py:1102`, `:1105`, `:1106`, `:1113`, `:1116`; `app/ponto/turnos.py:2147`, `:2148`, `:2150`)
-- Há segunda passada condicional: lavra → E2 do colaborador → reconciliação → `_corpo(forcar=True)` nas células reconciliadas. Emissão pode provocar outra releitura da lista inteira. Não é correto dizer “sempre três julgamentos”. (`app/ponto/services/cartorio.py:962`, `:969`, `:970`, `:974`, `:980`, `:984`, `:1036`, `:1049`)
-- Após julgamento efetivo há cluster do colaborador e fábrica por célula julgada. Isso se repete em cada `julgar_celula`, sem cache por POST demonstrado nesse código. (`app/ponto/services/cartorio.py:997`, `:1001`, `:1005`, `:1006`, `:1008`)
-- Cluster ativo consulta existência de vínculo, células de 14 dias, células dos achados para parcial, chamados vivos e suas células; pode fazer `exists` por achado. (`app/ponto/services/cluster_espurio.py:119`, `:121`, `:46`, `:102`, `:66`, `:71`, `:84`, `:107`)
-- Status do dia acrescenta processamento no mesmo save da lavra; consulta A2 adicional apenas quando o veredito é `indefinida`. Nova coluna não significa automaticamente uma query ou save adicional por item. (`app/ponto/services/cartorio.py:1813`, `:1817`; `app/ponto/status_dia.py:177`, `:181`; `app/ponto/portas/celula.py:1038`, `:1070`, `:1072`)
-- `lavrar_veredito` grava auditoria; `carimbar` combina os campos num save; `salvar_e_emitir` insere `EventoCelula` quando mudam campos que acordam o consumidor. (`app/ponto/portas/celula.py:1041`, `:1042`, `:1052`, `:1070`, `:1072`, `:903`, `:905`, `:907`, `:896`)
-- Validação agenda recálculo da competência inteira do colaborador; materialização com Batida também pode agendá-lo. Há ausência explícita de deduplicação nessa costura, mas os tempos citados no comentário não medem os POSTs fornecidos. (`app/chamados/services/validacao.py:435`, `:439`, `:445`, `:446`; `app/ponto/services/fechamento.py:1807`, `:1810`, `:1824`)
-- Recálculo alcança motor e calculador por dia da competência, inclusive regras de dobra/noturnas/intervalos. (`app/ponto/services/fechamento.py:1265`, `:1269`, `:1271`; `app/ponto/calculador/alimentacao.py:472`, `:514`, `:527`; `app/ponto/calculador/regras.py:783`, `:799`, `:824`, `:827`; `app/ponto/motor_calculo_v2.py:162`, `:164`, `:173`, `:177`)
-
-Interseções de commits com arquivos executados, conforme anexo; delta exato por hash permanece [nao verificado], pois a cópia não dispõe de histórico Git acessível. [nao verificado]
-
-- Cartório: `1222ab98c`, `59de66664` → isento na impressão (`cartorio.py:520`); `6995671cb` → `cods` próprio do ato (`:944`, `:997`, `:1079`); `b89f191ff`, `4ef817f17` → versão de regra (`:132`, `:471`); `389775e00` → instante anterior (`:951`); `399565438`, `5ec1220ad`, `fe9736178`, `f408ab32a`, `36fbac826`, `d03410912`, `356a30b62` → parcial/dispensa/emissão (`:370`, `:427`, `:1384`, `:1717`, `:1801`); `60258b809`, `9f0e75426`, `8ec526f23` → folga/versão (`:132`; `escala/utils.py:1140`); `ae0502e59`, `364ceb42e`, `4ea6ffd2b` → status na lavra (`:1813`); `3737d1027`, `69ea3f8fe`, `7b76efa7d`, `eb768cf2c`, `c1d9ee7c4`, `e046540e5`, `734dafb5a`, `38c502149`, `f059f0521` → fecho/reabertura/passadas (`:959`, `:984`, `:1418`, `:1470`, `:1494`); `b3bef4032` → insumo dia sem trabalho (`:1424`).
-- `ponto/status_dia.py`: `90a1249a0`, `a531c8d1b`, `69d8b7d89`, `5ec1220ad`, `f408ab32a`, `8b3858097`, `3a1e285aa`, `364ceb42e`, `8cea1769a`, `9d34ce228`, `4ea6ffd2b` — escritor alcançado em `:166`, `:113`; alteração efetiva desses hunks [nao verificado].
-- `ponto/turnos.py`: `90a1249a0`, `b2fba08fd`, `5ec1220ad`, `36fbac826`, `8b3858097`, `8cb8a4c55`, `41abcd1f6`, `d871bcca8`, `de1206907`, `f9be08e08` — alcançado por `dias_encerrados(:2127)` e parcial (`:2616`); alteração efetiva dos hunks [nao verificado].
-- `escala/utils.py`: `b1e3f259e`, `c1c6f565e`, `5ec1220ad`, `36fbac826`, `8ec526f23` — builders/overlays (`:2084`, `:1130`, `:1156`, `:1231`).
-- `ponto/precedencia.py`: `2204220e4`, `8ec526f23`, `364ceb42e` — A2 e folga (`:194`, `:212`, `:242`, `:259`).
-- `ponto/supra_juiz.py`: `fe9736178`, `f408ab32a`, `36fbac826`, `b3bef4032`, `d117b1201` — classificador chamado pelo cartório (`cartorio.py:1237`, `:1424`).
-- `ponto/portas/celula.py`: `4ea6ffd2b`, `3737d1027` — lavra e projeção (`:932`, `:974`).
-- `escala/models.py`: `15cb377f5`, `4ea6ffd2b` — modelo em uso; migrations correspondentes não são executadas pelo POST (`cartorio.py:1974`, `:1987`).
-- `ponto/services/cluster_espurio.py`: `9e9590eee`, `40e1bac20`, `d0d75b8f4` (`:25`, `:102`).
-- `chamados/services/fabrica_da_celula.py`: `399565438`, `17e595092`, `4236474ca`, `c5c433608`, `d0d75b8f4` (`:112`, `:123`, `:214`).
-- `chamados/services/materializacao.py`: `d8be2e408`, `5ec1220ad`, `fe9736178`, `d0d75b8f4`; alcança `leitor_celula.grade_da_celula` (`:232`, `:233`, `:281`, `:282`).
-- `escala/services/leitor_celula.py`: `72eb11be1`, `d03410912`, `b2fba08fd`, `5ec1220ad`, `fe9736178`, `36fbac826` (`:350`).
-- Motor/calculador: `03c8d106e`, `5394309c0` (`motor_calculo_v2.py:121`); `bd9fb40be` (`calculador/regras.py:783`); `f9a65d662` (`calculador/alimentacao.py:108`, `:133`, `:527`; `calculador/periodo.py:744`).
-- Pautas condicionais: `eaa414cf7`, `17e595092`, `50d1c15ce`, alcançados por fábrica (`fabrica_da_celula.py:275`, `:279`) → `pautas/services.py:153`, `:168`, `:400`, `:428`.
-- `core/juizes.py` e `core/portas.py` são registros declarativos; custo executado do POST decorrente de seus commits [nao verificado]. Chamadas de fase/cadastro_realidade no núcleo investigado [nao verificado]; verificar render final do POST.
-
-Campos da célula e leitores comprovados:
-
-| Campo | Escritor | Leitor |
-|---|---|---|
-| `ata` | `ponto/portas/celula.py:1033`, `:1083` | `ponto/services/cluster_espurio.py:27`; `escala/services/leitor_celula.py:350` |
-| `veredito`, `protestos` | `ponto/portas/celula.py:1034`, `:1035` | `folha/export.py:1233`, `:1246`, `:1254` |
-| `veredito_via` | `ponto/portas/celula.py:1036` | mesmo arquivo `:920`, `:1003` |
-| `veredito_em` | `ponto/portas/celula.py:1037` | `chamados/veredito_lavrado.py:193` |
-| `status_dia`, `status_rotulo` | `ponto/portas/celula.py:970` | `ponto/status_dia.py:287`, `:288`, `:289`; calendário `:602`, `:606` |
-| `julgada_em`, `impressao` | `ponto/portas/celula.py:1065`, `:1066` | `ponto/services/cartorio.py:1369`; `chamados/veredito_lavrado.py:194` |
-| `ausencia`, `tem_entrada`, `tem_saida`, `insumos_em` | `ponto/portas/celula.py:1067`, `:1068`, `:1069` | idempotência `:1061`, `:1062`, `:1063`; vigia `ponto/management/commands/vigia_b5_ausencia.py:71`, `:80` |
-
-A cópia inclui código posterior ao primeiro POST lento — comentários identificam alterações de 05/11 e 06/11 no outbox —, portanto custo HEAD não equivale automaticamente ao custo de 03/11. (`app/ponto/portas/celula.py:891`, `:893`; implantação real [nao verificado])
-
-## 11/11 10:16 · sessao ee78a9807660 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação, todos apenas da cópia:
-
-- **Sonda retrospectiva do tamanho do lote já tem fonte no código:** `validou_lote_tela` registra horário da auditoria, quantidade bruta de refs, validadas e recusadas; o registro ocorre depois do serviço. Existência e cobertura dessas linhas em prod são [nao verificado]. (`app/chamados/views_cobrar.py:380-385`; `app/core/models.py:295-307`; auditoria best-effort: `app/core/auditoria.py:17-28`, `app/core/observ.py:105-138`)
-- **N bruto difere de N processado:** refs são convertidas para int e deduplicadas; cada ref restante acaba validada ou recusada. Logo, `distintos_processados = validadas + recusadas`; `nao_gravados` já integra validadas e não deve ser somado novamente. (`app/chamados/services/validacao.py:713-727`, `:729-761`)
-- **Sonda sugerida, sem nomes:** extrair somente `criado_em` e os três grupos numéricos do sufixo `: N perguntas pedidas, N validadas, N recusadas`, filtrando `acao='validou_lote_tela'`; não projetar descrição, usuário ou IP. Correspondência do timestamp do access log com início/fim da requisição permanece [nao verificado]. (`app/chamados/views_cobrar.py:383-385`; `app/core/models.py:295-307`)
-
-```sql
--- Confirmar schema/tabela da instalação: [nao verificado].
-SELECT criado_em,
-       m[1]::int AS solicitados_brutos,
-       m[2]::int AS validadas,
-       m[3]::int AS recusadas,
-       m[2]::int + m[3]::int AS distintos_processados
-FROM (
-  SELECT criado_em,
-         regexp_match(
-           descricao,
-           ': ([0-9]+) perguntas pedidas, ([0-9]+) validadas, ([0-9]+) recusadas$'
-         ) AS m
-  FROM core_logauditoria
-  WHERE acao = 'validou_lote_tela'
-    AND criado_em >= TIMESTAMPTZ '2026-10-28 00:00:00-03'
-    AND criado_em <  TIMESTAMPTZ '2026-11-07 00:00:00-03'
-) a
-ORDER BY criado_em;
-```
-
-Cron e concorrência:
-
-- Há programação de `alertar_disputas_pendentes` às 08:00, `gerar_alertas` às 08:00/18:00 e `suporte_hasner` às 08:05. Há tarefas contínuas de 1, 5, 10, 15 e 30 minutos também às 16:xx. Estarem instaladas, executando e disputando recursos nesses POSTs é [nao verificado]. (`app/config/crons.py:362-398`, `:745-753`)
-- Para separar concorrência: obter apenas intervalos início/fim dos comandos, quantidades de processos ativos e contagens de sessões PostgreSQL esperando lock/IO durante o POST. A presença dessas medições existentes em prod é [nao verificado]; horário agendado sozinho não comprova execução nem contenção. (`app/config/crons.py:362-398`, `:745-753`)
-
-Campos e leitores:
-
-| Entidade/campos | Escritor | Leitor comprovado |
-|---|---|---|
-| Pergunta: `validada_em`, `validada_por` | `app/chamados/services/validacao.py:133-141` | Estado: `app/chamados/models.py:3041-3047`; vitalidade: `app/chamados/juizes.py:1325`; placar humano: `app/chamados/services/painel.py:261-273` |
-| Pergunta: `materializada_em`, `materializada_por`, `via_resolucao` | `app/chamados/models.py:3099-3101`, `:3128-3137`, `:3186-3189` | Vitalidade: `app/chamados/juizes.py:1336`, `:1362-1369`; autoria: `app/ponto/services/procedencia_batida.py:71-72` |
-| Pergunta: `pendencia_admin`, `recusa_motivo` | `app/chamados/services/materializacao.py:850-851`, `:1102-1103` | `app/templates/chamados/partials/modal_fio.html:222-226` |
-| Pergunta: `veredito_lavrado`, `julgado_em`, `janela_expira_em` | `app/chamados/veredito_lavrado.py:270-275` | `app/chamados/services/raiox.py:175-187`; validade: `app/chamados/veredito_lavrado.py:224-232` |
-| Decisão: `pergunta`, `ato`, `ato_em`, `ato_por`, `ato_texto`, `ato_motivo` | `app/chamados/services/validacao.py:139-141`; bulk: `app/chamados/models.py:3953` | Sequência: `app/chamados/models.py:3500-3516`; autores e conteúdo: `app/templates/chamados/partials/modal_fio.html:205-212` |
-| Disputa: `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` | `app/chamados/models.py:1932-1936` | Idempotência: `app/chamados/models.py:1880-1881`; fila aberta: `app/chamados/services/fio.py:131-135`; motivo: `app/chamados/services/vigia_fio.py:734` |
-| Turno: `colaborador`, `data_turno`, `entrada`, `saida`, `aberto`, `cross_meianoite`, `dt_fim_previsto` | `app/ponto/nucleo.py:48-59` | Todos: `app/ponto/management/commands/verificar_nucleo.py:30`; alertas: `app/ponto/management/commands/processar_alertas_turno.py:76-100` |
-| Colaborador: `onboarding_completo` | `app/colaboradores/signals.py:94-102` | `app/colaboradores/queries.py:48` |
-| Nota: `chamado_id`, `autor_tipo`, `autor_user`, `conteudo`, `anexo_hash`, `evento_chave`; `criado_em` automático | `app/chamados/services/nota.py:88-107`; automático: `app/chamados/models.py:1674` | Relação/autor/conteúdo/data: `app/templates/chamados/partials/modal_fio.html:461-473`; chave: `app/chamados/services/nota.py:109`; leitor de `anexo_hash` [nao verificado] |
-| Auditoria: `usuario`, `acao`, `modelo`, `objeto_id`, `descricao`, `valor_antes`, `valor_depois`, `ip`, `ator`; `criado_em` automático | `app/core/observ.py:134-138`; automático: `app/core/models.py:307` | UI: `app/templates/core/log_auditoria.html:56-74`; leitores específicos de `valor_antes`, `valor_depois`, `ator` [nao verificado] |
-
-FM: grava `atualizado_em`, `horas_trabalhadas`, `horas_noturnas`, `horas_extras`, `horas_extras_50`, `horas_extras_50_noturna`, `horas_extras_100`, `horas_extras_100_feriado`, `horas_extras_100_noturna`, `horas_folga_trabalhada`, `horas_atraso`, `horas_saida_antecipada`, `horas_falta`, `horas_intra_indenizada`, `turnos_abertos`, `inconsistencias`, `semanas_dsr_ok`, `semanas_dsr_perdido`, `horas_reflexo_dsr`, `saldo_banco_horas`, `minutos_previstos`, `dias_previstos`, `dias_incertos`, `minutos_abonados`, `minutos_realizados`, `motivos_espelho`, `causa_espelho`, `previsto_em`, `derivado_em`. Persistência por `save()` quando aberto ou `update()` dos campos calculados quando aprovado. (`app/ponto/services/fechamento.py:1143-1189`)
-
-Leitores FM: resumo do cartão lê trabalhadas/extras/atraso/antecipada/abertos/inconsistências/banco/falta/folga/previstos/abono; rubricas folha leem noturnas/HE/folga/intra; export lê `previsto_em`, realizados e abonados; retrato lê causa; contador lê derivado; indicadores leem DSR perdido. Leitores individuais restantes não foram censados integralmente [nao verificado]. (`app/relatorios/cartao_pela_celula.py:94-120`; `app/folha/export.py:420-452`, `:1037-1070`; `app/folha/retrato_folha.py:1115`; `app/ponto/services/fechamento.py:1695-1696`; `app/inteligencia/views.py:119`)
-
-DiaPago: grava `colaborador`, `mes`, `ano`, `data`, `tipo`, `detalhe`, `furo_apurado`, `versao`, `versao_motor`, `versao_dna`, `evento_origem`, `lavrado_em` e rubricas: `horas_trabalhadas`, `horas_noturnas`, `horas_extras_50`, `horas_extras_50_noturna`, `horas_extras_100`, `horas_extras_100_feriado`, `horas_extras_100_noturna`, `horas_folga_trabalhada`, `horas_atraso`, `horas_saida_antecipada`, `horas_falta`, `horas_intra_indenizada`, `minutos_abonados`, `minutos_previstos`, `minutos_realizados`, `horas_reflexo_dsr`, `saldo_banco_horas`; substitui todas as linhas de colaborador/competência/versão. (`app/ponto/services/dia_pago.py:34-44`, `:335-360`; automático: `app/ponto/models.py:380`)
-
-Leitores DiaPago: soma todas as rubricas; seleciona identidade por colaborador/versão/tipo/data; lê detalhe para hora paga; lê furo e relógio da lavra. Leitores específicos de `versao_dna` e `evento_origem` fora de reversões [nao verificado]. (`app/ponto/services/dia_pago.py:559-563`, `:855-856`, `:897-898`, `:588-589`, `:649`)
-
-_3792 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3794 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
