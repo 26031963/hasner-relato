@@ -1,7 +1,196 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 07:46** · publicado em **11/11/2026 07:46** (UTC-3)
+> Ultima resposta processada: **11/11/2026 07:51** · publicado em **11/11/2026 07:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 07:51 · sessao 926be1d0ec43 · TRAVA-SELO · verificador · origem=Code
+
+**NÃO LIBERA.** As correções pontuais funcionam, mas a descoberta ainda confunde arquivos candidatos com os testes efetivos, e o selo documental continua aceitando comandos que a porta recusaria. Isso independe da pergunta de desenho do item 6. (`bin/suite.sh:155`, `bin/suite.sh:157`; `bin/tests/test_suite_sh.sh:37`; `bin/suite.sh:60`)
+
+**1. NÃO PROCEDE o fechamento da classe; PROCEDEM curas pontuais.**
+
+Há um contraexemplo compacto nesta cópia:
+
+```text
+--only 'api chamados colaboradores comunicados core escala ferias folha holerite inteligencia pautas ponto.tests relatorios'
+```
+
+São as LABELS com apenas `ponto` substituído por `ponto.tests`. Executando somente `_suite_inteira` em memória, obtive retorno **1**, portanto “não inteira”. A diferença é `ponto.management.commands.testar_pwa`: o `find` exige sua cobertura porque seu nome começa com `test`, embora ele defina `Command(BaseCommand)` e execute métodos `t01_...` por `handle`. Pela análise estática, deixá-lo fora não retira casos de teste; igualdade da suíte no Django instalado é **[nao verificado]**. (`bin/regua.sh:23`; `bin/suite.sh:155`, `bin/suite.sh:157`; `app/ponto/management/commands/testar_pwa.py:31`, `app/ponto/management/commands/testar_pwa.py:70`, `app/ponto/management/commands/testar_pwa.py:100`)
+
+Logo, “todos os módulos encontrados” e “todos menos um” não discriminam necessariamente inteira e recorte: o módulo omitido pode não fornecer teste algum. Enumerar classes ou métodos também fica fora da comparação implementada, que exige selecionar o módulo ou um ancestral dele; uma enumeração integral concreta por classes nesta cópia é **[nao verificado]**. (`bin/suite.sh:156`; `app/ponto/management/commands/testar_pwa.py:31`)
+
+Quanto às formas perguntadas:
+
+| Forma | Resultado |
+|---|---|
+| Pasta com nome fora de `test*` | **Não é escape isoladamente:** o padrão restringe arquivos; o `find` atravessa as demais pastas. (`bin/suite.sh:158`, `bin/suite.sh:159`) |
+| Pasta sem `__init__.py` | A guarda não verifica importabilidade nem `__init__`; pode exigir arquivos que a descoberta efetiva ignore. Efeito no Django instalado: **[nao verificado]**. (`bin/suite.sh:158`; `app/core/runner_quarentena.py:76`) |
+| Pasta prunada | Os quatro nomes são excluídos pelo script, sem regra equivalente no override do runner. Se houver testes efetivos ali, um recorte que cubra apenas o restante será recusado como inteira. Ocorrência atual: **[nao verificado]**. (`bin/suite.sh:158`; `app/core/runner_quarentena.py:75`) |
+| Symlink | A busca não usa `-L`, e exige `-type f`; não representa integralmente arquivos e diretórios alcançáveis por links. Divergência concreta da suíte desta cópia: **[nao verificado]**. (`bin/suite.sh:158`, `bin/suite.sh:159`) |
+| Espaço/acento no caminho externo | O caminho está citado na busca. Nomes selecionáveis de app/módulo, porém, continuam limitados à forma ASCII. (`bin/suite.sh:104`, `bin/suite.sh:149`, `bin/suite.sh:158`) |
+| `--dir` buscando outra árvore | Não encontrei troca ordinária: a busca usa `<DIR>/app`, e o bind principal usa esse caminho canonicalizado. As sobreposições adicionais são staticfiles, caches, logs e media. (`bin/suite.sh:149`, `bin/suite.sh:194`, `bin/suite.sh:220`; `bin/arvore_do_push.sh:55`, `bin/arvore_do_push.sh:80`) |
+
+Há custo adicional até proporcional a **módulos × palavras selecionadas**, inclusive com motivo válido e em `--seco`: a classificação vem antes dessas decisões. Duração em produção: **[nao verificado]**. (`bin/suite.sh:154`, `bin/suite.sh:156`, `bin/suite.sh:163`, `bin/suite.sh:173`)
+
+As demais curas:
+
+- **PROCEDE:** `_valor` agora recusa um próximo flag como valor; EXTRA continua preservado como array; SECO ganhou representação `%q`. (`bin/suite.sh:51`, `bin/suite.sh:178`, `bin/suite.sh:223`)
+- **PROCEDE:** `RecursionError` no parse cai no regex, e `AST-FALHOU` passa ao stderr da chamada direta. (`bin/vizinhos_da_volta.py:68`, `bin/vizinhos_da_volta.py:120`, `bin/vizinhos_da_volta.py:123`; `bin/suite.sh:89`)
+- **NÃO PROCEDE fechar a classe documental:** os dois exemplos citados foram barrados, mas o juiz ainda aceita `bash bin/suite.sh --motivo "pre-opus X" --motivo "quero ver"`. Conferi o juiz em memória; o parser usa o último motivo, que a guarda recusaria. Também passa uma linha `echo` contendo o texto do comando. (`bin/tests/test_suite_sh.sh:37`; `bin/suite.sh:60`, `bin/suite.sh:163`)
+
+**2. PROCEDE a ordem antes de env-file/Docker; NÃO PROCEDE tratamento confiável da falha da busca.**
+
+A classificação ocorre antes de `teste_envfile`, da montagem e do executor Docker. O `source recursos.sh` e, com `--volta`, o helper e o arquivo de diagnóstico ocorrem antes dela. (`bin/suite.sh:39`, `bin/suite.sh:86`, `bin/suite.sh:163`, `bin/suite.sh:184`, `bin/suite.sh:197`, `bin/suite.sh:216`)
+
+O status de `find` é perdido na substituição de processo. Diretório ausente é ignorado por `continue`; busca sem resultados termina como **inteira**, pedindo motivo — não vira automaticamente “não inteira”. (`bin/suite.sh:153`, `bin/suite.sh:158`, `bin/suite.sh:161`)
+
+O retorno “não inteira” acontece quando algum resultado emitido não está coberto. Isso também pode ocorrer com uma busca incompleta ou com erro, pois não existe validação posterior de sua conclusão. Uma falha real por permissão nesta cópia é **[nao verificado]**. (`bin/suite.sh:157`, `bin/suite.sh:158`)
+
+**3. PROCEDE a razão dos três novos; NÃO PROCEDE suficiência da cobertura.**
+
+| Mutante | Discriminante correto |
+|---|---|
+| `executor_extra_junta` | `%q` distingue `--tag x --failfast` de `--tag\ x\ --failfast`; o grep exige argumentos separados. (`bin/tests/test_suite_motivo.sh:23`, `bin/tests/test_suite_motivo.sh:103`, `bin/tests/test_suite_motivo.sh:177`) |
+| `valor_aceita_flag` | Os quatro casos `flag --seco` exigem rc 2 **e** “precisa de valor”; eventual recusa posterior não satisfaz o diagnóstico. (`bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:112`, `bin/tests/test_suite_motivo.sh:178`) |
+| `descoberta_por_nome_de_app` | A enumeração completa dos três módulos deve ser inteira; o mutante não reconhece esses nomes e a libera. (`bin/tests/test_suite_motivo.sh:18`, `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:106`, `bin/tests/test_suite_motivo.sh:179`) |
+
+**Sobrevivente:** trocar `"$s".*` por `"$s"*` mantém o resultado das seleções da fixture, que não contém irmãos como `test_x` e `test_x_extra`. A mutação passaria a cobrir indevidamente o segundo pelo primeiro, podendo recusar um recorte legítimo. A comparação foi conferida em memória. (`bin/suite.sh:156`; `bin/tests/test_suite_motivo.sh:18`, `bin/tests/test_suite_motivo.sh:109`)
+
+Remover todo o prune **morre**: inclui `migrations/test_0001.py`, ausente da enumeração esperada como inteira. Trocar o `return 1` por `continue` também **morre**: os recortes passam a ser classificados como inteiros e quebram os positivos. (`bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:106`, `bin/tests/test_suite_motivo.sh:109`; `bin/suite.sh:157`, `bin/suite.sh:161`)
+
+Execução integral do selo e confirmação dos “22 mortos”: **[nao verificado]**; ele cria, escreve e remove arquivos. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:31`)
+
+**4. PROCEDE a compatibilidade dos leitores examinados.**
+
+| Testemunho | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| `_porq` / `VOLTA_PORQUE` | Wrapper fornece o caminho; `suite.sh` redireciona para ele o stderr produzido pelo helper. (`bin/volta_intermediaria.sh:32`; `bin/suite.sh:86`, `bin/suite.sh:87`; `bin/vizinhos_da_volta.py:130`) | `suite.sh` reproduz falhas/`AST-FALHOU`; wrapper conta linhas com ` <- `. Esse formato permanece. (`bin/suite.sh:88`, `bin/suite.sh:89`; `bin/volta_intermediaria.sh:34`) |
+| `trava.chamada` | Trava falsa grava `%q` por argumento. (`bin/tests/test_suite_motivo.sh:23`) | `_args` extrai labels; greps verificam sufixos. As labels admitidas não precisam de escapes, portanto esses leitores continuam compatíveis. (`bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:99`, `bin/tests/test_suite_motivo.sh:103`; `bin/suite.sh:104`) |
+| `SECO argv` | `suite.sh` imprime as mesmas expansões de seleção, paralelismo e EXTRA do executor. (`bin/suite.sh:178`, `bin/suite.sh:222`, `bin/suite.sh:223`) | O selo ainda verifica apenas o resumo anterior; não protege a nova linha `argv`. (`bin/tests/test_suite_motivo.sh:121`, `bin/tests/test_suite_motivo.sh:122`) |
+
+O wrapper passa a receber `AST-FALHOU` também em seu log principal, pois captura stderr. A régua executa os selos e lê seu status, sem interpretar esses três formatos. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:42`; `bin/regua.sh:138`, `bin/regua.sh:140`)
+
+Há um resíduo novo: se o helper falhar, o ramo sai antes de remover o temporário automático `_porq`. (`bin/suite.sh:86`, `bin/suite.sh:88`, `bin/suite.sh:90`)
+
+**5. PROCEDEM os descartes sintáticos; NÃO PROCEDEM as generalizações de fechamento.**
+
+- **Último `--only` vence:** descarte correto como fuga isolada; seleção julgada e executada usam o mesmo valor final. (`bin/suite.sh:55`, `bin/suite.sh:150`, `bin/suite.sh:222`)
+- **Assimetria de `--tag`:** existe, mas não demonstra ampliação; o valor separado é consumido e EXTRA chega citado. Efeito no runner instalado: **[nao verificado]**. (`bin/suite.sh:121`, `bin/suite.sh:124`, `bin/suite.sh:125`, `bin/suite.sh:223`)
+- **Mapa de campos:** as novas representações têm leitores compatíveis nos caminhos examinados. (`bin/suite.sh:87`, `bin/suite.sh:178`; `bin/tests/test_suite_motivo.sh:23`, `bin/tests/test_suite_motivo.sh:28`)
+- **“Descoberta curou a enumeração” e frase documental agora verdadeira:** não fecham a classe, pelo contraexemplo de `testar_pwa` e pela comparação somente entre prefixos de módulos. (`bin/suite.sh:156`; `app/ponto/management/commands/testar_pwa.py:31`; `CLAUDE.md:101`)
+- **Item 6:** não reaberto. Os defeitos acima podem ser julgados sem decidir a unidade de régua/pre-push; o delta mantém a guarda em `suite.sh`. (`bin/suite.sh:163`; `bin/regua.sh:165`, `bin/regua.sh:168`)
+
+**Fecho: NÃO LIBERA**, pela classe de descoberta ainda aberta e pelo selo documental ainda permissivo, independentemente do item 6. (`bin/suite.sh:155`, `bin/suite.sh:157`; `bin/tests/test_suite_sh.sh:37`)
+
+## 11/11 07:50 · sessao 1971b03a273e · - · - · origem=Ronald (tmux)
+
+A cura por descoberta **não fecha a classe**, pois compara nomes de arquivos, sem conferir se esses arquivos contêm casos da suíte. (`bin/suite.sh:155`, `bin/suite.sh:156`, `bin/suite.sh:157`)
+
+Contraexemplo compacto nesta cópia:
+
+```text
+--only 'api chamados colaboradores comunicados core escala ferias folha holerite inteligencia pautas ponto.tests relatorios'
+```
+
+São as LABELS, trocando apenas `ponto` por `ponto.tests`. A guarda retorna **1**, confirmado executando somente `_suite_inteira` extraída em memória; com as LABELS originais retorna **0**. A diferença é `ponto.management.commands.testar_pwa`, incluído pelo `find test*.py`, mas fora do prefixo `ponto.tests`. (`bin/regua.sh:23`, `bin/suite.sh:148`, `bin/suite.sh:155`, `bin/suite.sh:157`, `app/ponto/management/commands/testar_pwa.py:31`)
+
+Esse arquivo é comando de produção: importa `BaseCommand` e define `Command(BaseCommand)`; os seus métodos são `t01_...`, etc., chamados por `handle`, sem classes `TestCase` ou métodos `test_*`. Assim, sua exclusão não retira casos unittest pela análise estática; igualdade de casos no Django efetivamente instalado **[nao verificado]**. (`app/ponto/management/commands/testar_pwa.py:12`, `app/ponto/management/commands/testar_pwa.py:31`, `app/ponto/management/commands/testar_pwa.py:70`, `app/ponto/management/commands/testar_pwa.py:100`, `app/ponto/management/commands/testar_pwa.py:134`)
+
+Outros limites:
+
+- Enumerar todas as classes/métodos pode somar a mesma suíte, mas nunca cobre o nome mais curto do módulo na comparação implementada. Seleção integral concreta por classes nesta cópia **[nao verificado]**. (`bin/suite.sh:156`)
+- Nome da **pasta** fora de `test*.py` não é problema isolado: `find` percorre pastas sem exigir esse padrão; aplica-o somente ao arquivo. (`bin/suite.sh:158`, `bin/suite.sh:159`)
+- A guarda não verifica `__init__.py` e pode contar módulos que a descoberta real não percorre; efeito exato no Django instalado **[nao verificado]**. (`bin/suite.sh:158`, `app/requirements.txt:13`, `app/core/runner_quarentena.py:76`)
+- `migrations`, `__pycache__`, `node_modules`, `staticfiles` são excluídos explicitamente, embora isso não esteja espelhado em override do runner da cópia. Pode haver recorte falso positivo quando testes reais estejam nesses pacotes; ocorrência atual **[nao verificado]**. (`bin/suite.sh:158`, `app/core/runner_quarentena.py:72`, `app/core/runner_quarentena.py:76`)
+- `find` sem `-L` e com `-type f` não segue symlinks de arquivos/pastas; pode subcontar descoberta e chamar recorte de inteira. Ocorrência atual **[nao verificado]**. (`bin/suite.sh:158`, `bin/suite.sh:159`)
+- Caminho externo com espaço/acento está citado no cálculo da árvore e no argumento do `find`; não há quebra de palavras ali. Já os nomes selecionáveis permanecem ASCII. (`bin/suite.sh:104`, `bin/suite.sh:149`, `bin/suite.sh:155`, `bin/suite.sh:158`)
+- `--dir` escolhe `<DIR>/app` tanto para a guarda quanto para o bind principal, que canonicaliza `DIR`; não achei troca ordinária de árvore nesses caminhos. A montagem adicional sobrepõe `staticfiles` e caches/logs/media; `staticfiles` já é prunado pela guarda. (`bin/suite.sh:149`, `bin/suite.sh:194`, `bin/suite.sh:197`, `bin/suite.sh:220`, `bin/arvore_do_push.sh:55`, `bin/arvore_do_push.sh:80`, `bin/arvore_do_push.sh:81`)
+- Custo da classificação é até número de módulos × número de palavras selecionadas, inclusive com motivo válido e em `--seco`, pois `_suite_inteira` é avaliada primeiro. (`bin/suite.sh:154`, `bin/suite.sh:156`, `bin/suite.sh:163`, `bin/suite.sh:173`)
+
+O erro de `find` é ignorado pela substituição de processo; ausência de árvore é ignorada por `continue`. Erro sem resultados conduz a **inteira**, não a “não inteira”; o único retorno 1 explícito é um módulo emitido sem cobertura. Assim, falha de busca pode causar recusa falsa de recorte, mas não há conversão direta `find falhou → não inteira`. (`bin/suite.sh:153`, `bin/suite.sh:157`, `bin/suite.sh:158`, `bin/suite.sh:161`)
+
+O host tem Python 3.12 e nenhum módulo Django instalado; a cópia declara imagem Python 3.13 e Django 5.2.14. Logo não usei a stdlib do host como prova da descoberta instalada, nem executei Django ou scripts que escrevem. (`app/Dockerfile:1`, `app/requirements.txt:13`; ambiente instalado **[nao verificado]**)
+
+## 11/11 07:49 · sessao 103424a4cba2 · - · - · origem=Ronald (tmux)
+
+Os três mutantes novos têm discriminantes pela causa pretendida; a cobertura da guarda continua incompleta. (`bin/tests/test_suite_motivo.sh:102`, `bin/tests/test_suite_motivo.sh:106`, `bin/tests/test_suite_motivo.sh:112`, `bin/tests/test_suite_motivo.sh:177`)
+
+- **executor_extra_junta:** `%q` registra o vivo como `--tag x --failfast` e o mutante como `--tag\ x\ --failfast`; o grep exige três palavras. Conferi essa diferença em Bash, em memória. (`bin/tests/test_suite_motivo.sh:23`, `bin/tests/test_suite_motivo.sh:102`, `bin/tests/test_suite_motivo.sh:103`, `bin/tests/test_suite_motivo.sh:177`)
+- **valor_aceita_flag:** a função viva recusa os quatro `f --seco` com rc 2 e “precisa de valor”; a mutada aceita o argumento. Mesmo quando a guarda posterior der rc 2, faltará o diagnóstico exigido: não é morte colateral apenas por rc. Conferi a função em memória. (`bin/suite.sh:51`, `bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:112`, `bin/tests/test_suite_motivo.sh:178`)
+- **descoberta_por_nome_de_app:** a enumeração completa dos três módulos é inteira no vivo, recorte no mutante, porque os módulos não são `appA`/`appA.tests` ou `appB`/`appB.tests`; portanto o mutante deixa passar precisamente a classe que devia barrar. Conferi a função em memória com o `find` da fixture simulado. (`bin/suite.sh:156`, `bin/tests/test_suite_motivo.sh:18`, `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:106`, `bin/tests/test_suite_motivo.sh:179`)
+
+**Sobrevivente plausível demonstrado:** trocar `"$s".*` por `"$s"*`. Todas as seleções da fixture mantêm o retorno do vivo, pois não há módulos irmãos com prefixo coincidente. Com um hipotético `test_x_extra.py`, selecionar somente `test_x` passa a cobrir indevidamente o irmão e pode recusar um recorte legítimo. A comparação das seleções existentes e desse discriminante adicional foi executada somente em memória. (`bin/suite.sh:156`, `bin/tests/test_suite_motivo.sh:18`, `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:109`)
+
+Os outros dois exemplos **não sobrevivem** à cobertura atual:
+
+- Remover todo o `prune` inclui `appA/tests/migrations/test_0001.py`; a enumeração esperada como completa deixa esse arquivo descoberto fora e passa, contrariando o teste negativo. (`bin/suite.sh:158`, `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:106`)
+- Trocar `[ $cob = 0 ] || return 1` por `continue` ignora módulos descobertos sem cobertura e acaba retornando inteira para todos os recortes, quebrando os positivos. (`bin/suite.sh:157`, `bin/suite.sh:161`, `bin/tests/test_suite_motivo.sh:56`, `bin/tests/test_suite_motivo.sh:109`)
+
+Execução integral do selo e dos mutantes: **[nao verificado]**, pois o selo cria, escreve e remove arquivos. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:11`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:31`)
+
+## 11/11 07:48 · sessao 40220f0ab37e · FIO-E0-V4-E3 · verificador · origem=Code
+
+**1. PROCEDE o fechamento do sobrevivente parcial; NÃO PROCEDE considerar a matriz inteira coberta.** O marcador continua dependendo de `not _coberto_inteiro_nb and sem_trabalho`; ausência parcial não é integral, e `trabalha=False` prevalece no juiz. Os testes novos exigem o marcador justamente nessa combinação. `app/ponto/services/cartorio.py:1211`, `:1223`; `app/chamados/juizes.py:454`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:309`; `app/ponto/tests/test_x1_folga_sem_adesao.py:126`, `:141`.
+
+| Recorte | Comportamento do código atual |
+|---|---|
+| Folga + ausência parcial aprovada | Mantém marcador. `app/ponto/services/cartorio.py:1223`; `app/chamados/juizes.py:454`. |
+| Feriado + ausência parcial | Com `trabalha=False`, mantém; com `True`/`None`, a ata parcial não dispensa o trabalho pelo juiz existente. Ocorrência concreta desse segundo estado: **[nao verificado]**. `app/chamados/juizes.py:454`; `app/ponto/services/cartorio.py:1253`. |
+| Folga dentro de afastamento aprovado integral | Fica sem marcador deliberadamente, pela exceção de integralidade; não reproduz a perda indevida da parcial. `app/ponto/services/cartorio.py:1211`, `:1223`. |
+| Folga + ausência ainda não aprovada | Mantém marcador: cobrança aceita não rejeitadas, mas a grade só reconhece aprovadas para folha; `trabalha=False` mantém a dispensa. `app/ponto/turnos.py:2517`, `:2519`; `app/escala/utils.py:1188`; `app/chamados/juizes.py:456`. |
+
+Não encontrei nesses recortes outra perda do marcador **no código atual**. Entretanto, ausência ainda não aprovada permanece uma lacuna dos testes examinados, demonstrada pelo mutante da pergunta 3. `app/ponto/tests/test_x1_folga_sem_adesao.py:99`, `:116`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:131`.
+
+**2. PROCEDE a fragilidade da primeira testemunha, com uma distinção.**
+
+- Se o veredito anterior estiver vazio e o julgamento forçado escrever `concorde`, a igualdade **morde**. Se ambos permanecerem `None`, ou ambos `''`, igualdade e exclusão dos acusadores **passam**. `app/ponto/tests/test_x1_folga_sem_adesao.py:132`, `:135`, `:136`; `app/escala/models.py:1767`.
+- O C2b inteiro continua verificando ausência, hash, rejulgamento e veredito final derivado. Porém, esse último veredito é o **posterior à adesão**: não certifica sozinho que o NB inicial estava preenchido. O teste de memória exige positivamente `concorde` nessa etapa. `app/ponto/tests/test_x1_folga_sem_adesao.py:137`, `:141`, `:151`, `:160`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:316`.
+
+O `forcar=True` contorna a guarda NB. A criação da ausência anteriormente aciona o signal sem força, mas o C2b não observa diretamente sua execução nem exige um veredito inicial positivo. A segunda metade cobre explicitamente o julgamento sem força **após a adesão**. `app/ponto/services/cartorio.py:1228`; `app/ponto/signals.py:93`, `:143`, `:147`; `app/ponto/tests/test_x1_folga_sem_adesao.py:116`, `:133`, `:151`.
+
+Os caminhos ordinários sem força existem no signal, no cron e no reconciliador. Há também uma segunda passada produtiva que força condicionalmente; portanto, produção não é exclusivamente sem força. `app/ponto/signals.py:93`; `app/config/crons.py:616`; `app/ponto/management/commands/processar_cartorio.py:29`, `:65`; `app/chamados/reconciliador.py:702`; `app/ponto/services/cartorio.py:985`, `:989`.
+
+**3. PROCEDE uma lacuna com sobrevivente demonstrado sem banco; sobrevivência nos 116 ORM: NÃO SEI.**
+
+Mutante plausível na chamada do marcador: acrescentar a condição abaixo, confundindo aprovação com necessidade de registrar a fonte sem adesão. `app/ponto/services/cartorio.py:1223`.
+
+```python
+and getattr(_cob_nb, 'status', None) in (None, 'aprovada')
+```
+
+Na execução efêmera desta volta, esse mutante passou **19 testes de memória + sete pós-suite**, com zero falhas/erros. Uma testemunha adicional de folga com `aguardando_decisao` produziu `concorde` nos dois códigos, mas somente o original manteve o marcador. Resultado sem transcrição em arquivo: **[nao verificado por arquivo:linha]**. [nao verificado]
+
+A não equivalência tem fundamento no código: esse status entra em cobrança, não constitui cobertura integral aprovada na grade e não deve retirar o marcador da folga. As coberturas dos testes citados são `None` ou aprovadas. `app/ponto/turnos.py:2519`; `app/escala/utils.py:1188`; `app/ponto/services/cartorio.py:1211`, `:1223`; `app/ponto/tests/test_x1_folga_sem_adesao.py:101`, `:120`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:131`.
+
+Os exemplos mais amplos de marcador apenas na integral ou hash completamente cego ao marcador já encontram testemunhas: folga simples exige hash diferente, e C3 exige rejulgamento após batida distante. `app/ponto/tests/test_e3_nb_impressao_memoria.py:264`; `app/ponto/tests/test_x1_folga_sem_adesao.py:181`, `:185`.
+
+Dois limites adicionais: o executor fixa `BASE=7313a031…`, não `52a0022e9`; e `so_acusador` segue sempre pelo executor sem banco, mesmo sem a flag. Logo, “base RED” e essa morte não certificam, sozinhos, comparação ORM contra a base produtiva indicada. `app/ponto/tests/x1_mutantes.py:20`, `:94`, `:105`.
+
+**4. NÃO PROCEDE segundo juiz novo no adaptador; NÃO SEI certificar exaustão do diff total sem a fonte histórica da base. [nao verificado]**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `CelulaDia.veredito` | NB deriva, aplica o rename e solicita lavra; a porta grava fisicamente. O ramo normal entrega códigos à mesma porta. `app/ponto/services/cartorio.py:1238`, `:1253`, `:1256`, `:1817`; `app/ponto/portas/celula.py:923`, `:1035`. | Guardas do cartório; retenção; universo de adesão/C5; fábrica; disputa; veto; reconciliador; grade leitora/status/relatório. `app/ponto/services/cartorio.py:1224`, `:1373`; `app/folha/export.py:1241`; `app/chamados/services/adesao.py:32`; `app/escala/services/cadastro_realidade.py:181`; `app/chamados/services/fabrica_da_celula.py:89`, `:120`; `app/chamados/services/disputa_emissao.py:758`; `app/ponto/marcos.py:155`; `app/chamados/reconciliador.py:637`; `app/escala/services/leitor_celula.py:424`; `app/ponto/status_dia.py:68`; `app/relatorios/dia_da_frota.py:51`. |
+| `impressao` / `sem_adesao` | NB fornece o booleano; a função acrescenta **`sem_adesao:1` ao material do SHA256**. Não é chave persistida separadamente. A porta grava o hash; o ramo normal omite o argumento, cujo default é falso. `app/ponto/services/cartorio.py:444`, `:525`, `:527`, `:1223`, `:1368`; `app/ponto/portas/celula.py:1066`. | Guardas NB e normal e idempotência da porta. `app/ponto/services/cartorio.py:1224`, `:1373`; `app/ponto/portas/celula.py:1062`. |
+| `out['cods']` | Ramo normal escreve; releitura agrega; costura devolve ao lote. NB retorna sem escrever. `app/ponto/services/cartorio.py:1441`, `:1055`, `:1084`, `:1282`. | Fábrica e cluster usam a presença da data julgada **neste ato**; não representa todo veredito gravado. `app/ponto/services/cartorio.py:1002`, `:1006`, `:1012`. |
+| `data_civil` sintética | Ambas as espécies recebem `None`; marcos reais recebem a data local do instante. `app/chamados/services/tarefa_do_dia.py:103`, `:316`, `:331`. | Carga entrega o resultado; enriquecimento consulta ações/portas; sombra projeta rota/fila/verbos/fio. Outro consumidor direto: **[nao verificado]**. `app/chamados/services/tarefa_do_dia.py:523`, `:533`, `:545`; `app/chamados/management/commands/diff_e3_sombra.py:27`, `:44`. |
+| Retorno de `dia_sem_trabalho` | Autoridade responde pelas duas cláusulas, com exceção explícita da parcial. `app/chamados/juizes.py:454`, `:456`. | Marcador/rename, suprajuiz, tarefa, fábrica, fechamento de chamado, materialização, cluster e vigia de intervalo. `app/ponto/services/cartorio.py:1220`, `:1223`, `:1253`; `app/ponto/supra_juiz.py:496`; `app/chamados/services/tarefa_do_dia.py:207`; `app/chamados/services/fabrica_da_celula.py:112`; `app/chamados/models.py:1284`; `app/chamados/services/materializacao.py:174`; `app/ponto/services/cluster_espurio.py:25`; `app/ponto/management/commands/detectar_intervalo_ausente.py:51`. |
+
+Os significados são **distintos e compatíveis**: julgamento usa dia do turno; `data_civil` pertence ao instante do marco. A janela civil `[data−1,data+2)` corresponde às datas inclusivas de `data−1` a `data+1`; ausência usa faixa fechada; período parcial inclui ambas as horas e ancora a madrugada no início do turno. `app/ponto/services/cartorio.py:445`, `:1146`, `:1322`, `:1383`; `app/chamados/services/tarefa_do_dia.py:103`; `app/ponto/turnos.py:2540`, `:2623`, `:2630`.
+
+O adaptador apenas transporta insumos e chama a autoridade. **Não são todos os leitores que usam predicado idêntico:** `_protesta` continua parcialmente migrado, como declarado em JUIZES; trabalho previsto e dispensa de cobrança são perguntas diferentes. `app/ponto/supra_juiz.py:60`, `:71`; `app/ponto/services/cartorio.py:1423`; `app/docs/JUIZES.md:64`, `:66`, `:75`.
+
+**5. PROCEDEM os descartes somente com seus limites; PROCEDE a causa técnica do e3fix6.**
+
+- **Base versus d6:** o HEAD conserva NB e hash sem marcador para trabalho exigível. A história de pouso e o conteúdo exato de `52a0022e9` são dados fornecidos, sem comprovação independente nesta cópia. `app/ponto/services/cartorio.py:1223`, `:1253`; **[nao verificado: histórico/base]**.
+- **Relógio:** o residual permanece; anterioridade não está demonstrada pelo HEAD isolado. `app/escala/servico_jornada.py:387`, `:566`; **[nao verificado: anterioridade]**.
+- **Reconciliador:** zero candidatos no recorte informado não fecha a classe. O escritor continua carimbando perguntas e podendo fechar disputas; o teste atual exige esse carimbo. `app/chamados/reconciliador.py:595`, `:611`; `app/ponto/tests/test_x1_folga_sem_adesao.py:315`.
+- **TXT:** estoque armazenado e regeneração são provas diferentes; C4 verifica registros/contagens, sem gerar outro TXT. `app/folha/views.py:561`; `app/folha/export.py:726`, `:968`; `app/ponto/tests/test_x1_folga_sem_adesao.py:213`, `:219`.
+- **e3fix6:** forçar vence a guarda, mas NB retorna antes de escrever `cods`; a objeção ao acesso antigo procede. Diff historicamente vazio: **[nao verificado]**. `app/ponto/services/cartorio.py:1228`, `:1282`, `:1441`.
+
+O relato também ficou desatualizado ao descrever rename por conjunto acusatório e marcador em todo o ramo; o código vivo usa `sem_trabalho` e exclui integralidade. `app/docs/relato_fio_e0_v4_e3_x1.txt:11`, `:22`, `:28`; `app/ponto/services/cartorio.py:1223`, `:1253`.
+
+**Fecho: NÃO LIBERA como pré-verificação final.** Falta tornar positiva a testemunha NB inicial do C2b e cobrir o marcador com ausência ainda não aprovada. São lacunas de verificação; não demonstrei perda desse marcador no HEAD atual. `app/ponto/tests/test_x1_folga_sem_adesao.py:135`, `:136`, `:120`; `app/ponto/services/cartorio.py:1223`.
 
 ## 11/11 07:46 · sessao 44f945fbb965 · - · - · origem=Ronald (tmux)
 
@@ -673,231 +862,4 @@ A cópia delega a descoberta ao `DiscoverRunner` externo; não contém nesse tre
 
 Os selos integrais não foram executados: criam, escrevem e removem arquivos. (`bin/tests/test_suite_motivo.sh:10–21`; `bin/tests/test_suite_motivo.sh:27`; `bin/tests/test_suite_sh.sh:66–83`)
 
-## 11/11 07:22 · sessao df78ab926311 · - · - · origem=Ronald (tmux)
-
-Q5 — **NÃO PROCEDE como fidelidade integral.**
-
-- O comando canônico ganhou motivo; `-- <resto>` agora está corretamente descrito como lista fechada. (`CLAUDE.md:96`, `CLAUDE.md:100`; `bin/suite.sh:105–118`)
-- “Só número” omite `--parallel auto`, explicitamente aceito e testado. (`CLAUDE.md:100`; `bin/suite.sh:52`; `bin/tests/test_suite_motivo.sh:73`)
-- A redação “sem `--only`/`--volta` […] senão rc 2” não explicita que **ter os flags não dispensa motivo quando a seleção cobre todas as LABELS**. A implementação julga a seleção efetiva. (`CLAUDE.md:101–102`; `bin/suite.sh:127–143`)
-- `--volta` sozinho não roda todo o conjunto intermediário do aval: ruff e `test_disjuntor.sh` são executados pelo wrapper, enquanto `suite.sh --volta` resolve labels e chama o Django. Assim, o atalho documental “volta do meio = `--volta`” fica incompleto. (`CLAUDE.md:102`; `bin/volta_intermediaria.sh:23–32`; `bin/suite.sh:80`, `bin/suite.sh:193–200`)
-- Permanecem exemplos de ajuda **sem motivo e sem recorte**, como `bin/suite.sh --dir /home/x/wt-y`, `--parallel 2` e `--espera 1`; copiados literalmente, chegam à guarda de inteira e são recusados. (`bin/suite.sh:29–31`, `bin/suite.sh:137`, `bin/suite.sh:143–150`)
-- O achado de comando nu em `test_suite_sh.sh:82` é fixture negativa deliberada, não orientação viva. (`bin/tests/test_suite_sh.sh:80–92`)
-- Há relatos históricos de comandos completos sem motivo, por exemplo `RELATO-ARQUIVO.md:37800` e `RELATO.md:681`; este último também contém estado antigo em curso. O uso atual desses comandos por pessoas/processos é **[não verificado]**. (`app/docs/RELATO-ARQUIVO.md:37800`; `app/docs/RELATO.md:681`)
-- Na busca `rg -n --hidden 'suite\.sh|-- <resto>|vai cru' .claude bin` sem fixtures, a ajuda de `suite.sh` é o sítio vivo com exemplos incompletos; nenhum ensino de `<resto>` cru foi encontrado nos arquivos pesquisados **[não verificado fora do resultado dessa busca]**. [nao verificado]
-
-Q6 — **PROCEDE o erro de descarte de regua/pre-push.** [nao verificado]
-
-- A triagem diz “fora do aval” por interpretar lançador como exclusivamente `bin/suite.sh`, mas o aval fornecido declara a unidade **“chamada de suite inteira pela trava”** e não concede exceção a outros chamadores. (`triagem_v5.txt:5`; `aval_trava_menos_fila_com_selo_1111.txt:1`, anexos fornecidos)
-- A régua faz exatamente essa chamada sem motivo, com `${ONLY:-$LABELS}`. O pre-push igualmente entrega todas as LABELS à função que pega a trava; a trava só executa `"$@"`, sem guarda de motivo. (`bin/regua.sh:165–169`; `bin/pre-push.sh:142–145`, `bin/pre-push.sh:184–188`; `bin/trava_teste.sh:42`)
-- “Preexistente” e “não aninhar a trava” explicam a arquitetura anterior, mas não demonstram exceção ao aval novo; pode-se guardar motivo nesses chamadores sem aninhar locks. A ausência de motivo nesses sítios é verificável; autorização para excluí-los é **[não verificado]**. (`bin/suite.sh:17–20`; `CLAUDE.md:103–105`; `bin/regua.sh:165–169`; `bin/pre-push.sh:142–145`, `bin/pre-push.sh:184–188`)
-- A exigência específica de selo próprio do wrapper não é literal no aval; tratá-la como obrigatória exclusivamente pelo item (3) seria inferência. O selo de motivo realmente usa helper falso e não exercita o wrapper. Logo, o descarte para fila dessa exigência específica **não está demonstrado errado apenas pelo aval**, embora a lacuna permaneça. (`aval_trava_menos_fila_com_selo_1111.txt:1`; `postmortem_v4.r`, linha da classificação **(e)**; `bin/tests/test_suite_motivo.sh:20–21`, `bin/tests/test_suite_motivo.sh:28`; `bin/volta_intermediaria.sh:37–44`)
-- Já “selo de completude” versus defesa pre-opus exige distinguir teste específico de obrigação substantiva: o aval manda vizinhos e diz que **cada escape vira regra de classe**; o helper mantém categorias conhecidas excluídas sob a defesa da inteira pre-opus. Essa defesa é opção da sessão/helper, não exceção expressa no aval fornecido. (`aval_trava_menos_fila_com_selo_1111.txt:1`; `triagem_v5.txt:5`; `bin/vizinhos_da_volta.py:12–18`)
-
-Limitação: nenhuma suite/selo foi executado; os dois selos criam e removem arquivos temporários, contrariando a instrução somente leitura. (`bin/tests/test_suite_sh.sh:66–80`; `bin/tests/test_suite_motivo.sh:10–21`)
-
-## 11/11 07:19 · sessao 5e781d3bf904 · FIO-E0-V4-E4B · construtor · origem=Code
-
-A cura passa ao lote S143 uma **cópia do memo do colaborador do julgamento em curso**. Antes, E2 usava a instância original (`chamados/reconciliador.py:655`), S88 buscava outro chamado (`chamados/signals.py:32`), e S143 carregava novos colaboradores (`chamados/models.py:344`). O lote começava vazio e pagava antecipadamente a mesma leitura fria que o primeiro C6 pagaria no modo avulso. A chave continua sendo empresa/competência; não há outro import de `periodo_trancado` nesse percurso. A cura transporta a instância pelo escopo do cartório, copia seu memo antes do lote e restaura o escopo no `finally`. ([origem](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1912), [escopo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:946), [cópia](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/juizes.py:1101))
-
-O caminho de entrada é `registrar_batida` → signal da Batida → cartório → `reconciliar` → `_gravar_estado` → S143 → resolver. (`ponto/registro_batida.py:157`, `ponto/signals.py:135`, `ponto/services/cartorio.py:986`, `chamados/models.py:654`, `chamados/models.py:296`, `chamados/signals.py:115`)
-
-Os sítios que chegam à tranca nesse caminho são:
-
-| Leitor | Arquivo:linha |
-|---|---|
-| E2: C6, guarda explícita e carimbo | `chamados/reconciliador.py:661`, `:667`, `:595` |
-| Gate anterior ao save | `chamados/models.py:368` |
-| S143: alcance, S128, guarda, HX e carimbos | `chamados/services/disputa_emissao.py:1821`, `:1960`, `:1964`, `:2042`, `:1980`, `:2054` |
-| C7 e porta de fechar | `chamados/models.py:1846`, `:1853`, `:1896` |
-| C6 chamado pelos carimbos | `chamados/models.py:3139` |
-
-Todos convergem para `dia_da_pergunta_trancado` → `dias_trancados` → **único sítio direto** `periodo_trancado(*chave[1:])`. Dentro do lote, perguntas carregadas leem `dias[id(p)]`; novas instâncias leem o memo da consulta. (`chamados/juizes.py:948`, `:953`, `:1028`, `:1060`, `:1335`)
-
-Trechos funcionais do diff aplicado: [nao verificado]
-
-```diff
---- chamados/juizes.py
-+++ chamados/juizes.py
--def tranca_da_consulta(perguntas):
-+def tranca_da_consulta(perguntas, *, memo_inicial=None):
-@@
-+    if memo_inicial is not None:
-+        memo.update(memo_inicial)
-
---- chamados/services/disputa_emissao.py
-+++ chamados/services/disputa_emissao.py
-@@
-+    colab_do_ato = colaborador_deste_julgamento(chamado.colaborador_id)
-+    if colab_do_ato is not None:
-+        from functools import partial
-+        tranca_da_consulta = partial(tranca_da_consulta,
-+                                     memo_inicial=_memo_da_tranca(colab_do_ato, lote=False))
-
---- ponto/services/cartorio.py
-+++ ponto/services/cartorio.py
-@@
-+def colaborador_deste_julgamento(colaborador_id):
-+    c = getattr(_tl, 'colaborador', None)
-+    return c if em_julgamento() and c is not None and c.pk == colaborador_id else None
-@@
--    _tl_antes = (getattr(_tl, 'julgada_antes', None), getattr(_tl, 'agora', None))
-+    _tl_antes = (getattr(_tl, 'julgada_antes', None), getattr(_tl, 'agora', None),
-+                 getattr(_tl, 'colaborador', None))
-     _tl.ativo = True
-+    _tl.colaborador = c
-@@
--        _tl.julgada_antes, _tl.agora = _tl_antes
-+        _tl.julgada_antes, _tl.agora, _tl.colaborador = _tl_antes
-```
-
-O transporte fica fora dos laços e não acrescenta consulta ORM. O app mantém o memo inicial vazio por padrão. ([S143](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1917), [tranca](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/juizes.py:1097))
-
-A conta esperada, usando os números fornecidos, é:
-
-| Caso | Base | `_ancoradas` permanece | Tranca que deve sair | Esperado / teto |
-|---|---:|---:|---:|---:|
-| `_gravar_estado`, sem pergunta | 27 | +1 | 0 | 28 / 28 |
-| `reconciliar`, fecha | 59 | +1 | 0 | 60 / 60 |
-| Batida fecha 1 chamado | 211 | +2 | −1 de 214 | **213 / 213** |
-| Batida fecha 3 chamados | 265 | +4 | −1 de 270 | **269 / 269** |
-
-**Esses totais após a cura são [não verificado] no ORM.** As cargas continuam em `chamados/services/disputa_emissao.py:1937`; os tetos permanecem em `ponto/tests/test_selo_chokepoint_escrita.py:124`, `:134`, `:195`, `:211`.
-
-O [novo ensaio sem banco](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_tranca_memoria.py:59) executou os corpos reais com bordas isoladas. A origem da base falhou pela asserção esperada, `(1, 1)` em vez de `(0, 1)`; a versão alterada passou nos cinco testes. Comandos executados: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --red-origem
-# rc 1 — AssertionError esperado
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria
-# rc 0 — 5 testes [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_classe_e_memoria
-# rc 0 — 50 testes [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_base
-# rc 0 — 3 testes [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_orm_protocolo
-# rc 0 — 7 testes [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight
-# rc 0 — somente enxertos/AST
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos
-# rc 0 — 40 testes [nao verificado]
-git diff --check
-# rc 0
-```
-
-Os [seis mutantes novos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_tranca_memoria.py:148) retornaram **rc 1 por AssertionError**, cada qual com seu comando:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_fonte_s143
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_publicar_colab
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_restaurar_colab
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_copia
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante app_herda_memo
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante colab_errado
-```
-
-O selo exigiu atualizar somente as posições `[1167, 1319] → [1179, 1331]`; a igualdade, os critérios e os contadores foram preservados. (`core/tests/test_medida_turno_do_par.py:315`, `:540`) O RED ORM conserva suas duas asserções de economia de uma chamada/SELECT. (`chamados/tests/test_e4b_c4_orm.py:108`, `:110`)
-
-Para a sessão executar pela trava, **ainda [não verificado] nesta volta**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
-E4B_C4_QUERIES=head PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4b_c4_medir_queries --noinput
-```
-
-Paro com o **+2/+4 de `_ancoradas`** na pergunta de desenho do Ronald; sua carga continua explícita em `chamados/services/disputa_emissao.py:1937`. Certificação ORM/opus final: **[não verificado]**.
-
-## 11/11 07:15 · sessao 2f1b929ae023 · TRAVA-SELO · censo · origem=Code
-
-Conte as linhas dos anexos desde a primeira linha de conteúdo, excluindo `== anexo... ==`. **(b)** abaixo significa “apontado pela resposta e ainda pendente na cópia”; descarte deliberado pela sessão é **[nao verificado]**. A nota declara tratamento dos PROCEDE, mas não informa decisões específicas sobre caminho/glob. (`triagem_v4.txt:1`)
-
-| Achado final | Classificação | Pergunta e resposta que sustentam | Conferência na cópia |
-|---|---|---|---|
-| **(1) `--only "."`, `--only "/app"`, `appA/`, `appA/tests` e `'*'`** | **(a), para todas essas formas.** Tema perguntado; formas não identificadas nas respostas. | **Q:** “Há algum caminho […] que roda a suite INTEIRA […] sem motivo valido?” (`preverif_v1.q:8`). **R:** encerra a análise dessas seleções como “Corrigido para essas formas”, enumerando branco, repetição, várias linhas e `<app>.tests`; não contempla caminhos/glob. (`preverif_v3.r:5`) | A guarda compara tokens literalmente com app ou app.tests; o executor expande `${ONLY:-$LABELS}` sem aspas. (`bin/suite.sh:107–110,170`) |
-| **(1) `--only api -- <resto>`** | **(a) quanto à análise dos labels extras.** Que `<resto>` efetivamente complete a inteira é **[nao verificado]**, pois não foi especificado. | **Q:** pede expressamente considerar `"--" com labels extras`. (`preverif_v1.q:8`). **R:** para `--only X -- <outras labels>`, afirma “recusa do argparse” e “Não contar esse formato como suite executada”. (`preverif_v1.r:12`). A v3 registra o encaminhamento, mas não denuncia essa forma como fuga. (`preverif_v3.r:6`) | `EXTRA` segue cru ao executor. O selo exige aceitar recorte com `-- --failfast`; portanto, aceitar algum `<resto>` não demonstra sozinho uma fuga. (`bin/suite.sh:57,171`; `bin/tests/test_suite_motivo.sh:49`) |
-| **(3) Selo sem os casos de caminho/glob de (1)** | **(a).** A suficiência da cobertura foi perguntada; esses casos ficaram de fora da resposta. | **Q:** “O selo morde cada caso novo pela razao certa? Ha mutante plausivel que sobrevive?” (`preverif_v3.q:6`). **R:** responde “NÃO PROCEDE cobertura completa”, mas os sobreviventes que identifica são dispensa por `VOLTA` e executor ignorando recorte. (`preverif_v3.r:31,45–46`) | Os casos existentes não incluem `.`, `/app`, pastas ou glob. (`bin/tests/test_suite_motivo.sh:35–57`) |
-| **(3) Mutante que remove apenas `^` sobrevive** | **(a) para esse enfraquecimento específico.** O problema genérico de regex frouxa já havia sido visto. | **Q:** pergunta por mutantes plausíveis, citando “regex frouxa”. (`preverif_v1.q:10`). **R:** aponta falta de negativos com “espaços, caracteres indevidos e quebra de linha”; posteriormente considera pertinente a morte do mutante implementado, sem identificar a retirada isolada da âncora inicial. (`preverif_v1.r:40`; `preverif_v3.r:41`) | A regex real tem `^`; os negativos não exercitam prefixo indevido antes de um motivo válido. O mutante `regex_frouxa` altera outra combinação de propriedades da regex. (`bin/suite.sh:104`; `bin/tests/test_suite_motivo.sh:36–40,77`) |
-| **(3) Trava falsa sempre retorna zero; rc 75 não testado** | **(a) quanto à lacuna de cobertura de 75.** Descrever o zero não equivale a denunciar essa lacuna. | **Q:** “ele exercita o bin/suite.sh real?” e pergunta sobre suficiência dos mutantes. (`preverif_v1.q:10`). **R:** reconhece que “não exercita a integração real”; na v3, observa que a trava “retorna zero”, mas usa isso para denunciar falta de conferência dos argumentos, sem apontar ausência de 75. (`preverif_v1.r:33`; `preverif_v3.r:46`) | A trava falsa contém `exit 0`; a trava real pode sair com 75. A cópia acrescentou conferência dos argumentos, mantendo o retorno falso fixo. (`bin/tests/test_suite_motivo.sh:19,53,57`; `bin/trava_teste.sh:36–38`) |
-| **(3) Sem selo próprio para `volta_intermediaria.sh:37–44`** | **(e), quanto à exigência específica de selo próprio.** A correção da tabela foi perguntada. | **Q mais próxima:** “a tabela rc (0/1/75) agora fecha […]?” (`preverif_v2.q:8`). **R:** “a tabela fecha os casos pedidos quando os comandos retornam ao wrapper”. A resposta avalia o fluxo, não denuncia ausência de selo desse fluxo. (`preverif_v2.r:59`) | O trecho consolida os estados; o selo de motivo executa a suite copiada, não esse wrapper. (`bin/volta_intermediaria.sh:37–44`; `bin/tests/test_suite_motivo.sh:28`) |
-| **(3) Sem selo para “vizinhos não pode faltar”** | **(e), quanto à exigência específica desse selo.** As lacunas do algoritmo foram perguntadas. | **Q mais próxima:** pede classes de dependência ausentes e “regra de classe minima”. (`preverif_v1.q:11`). **R:** denuncia referências diretas “não AST nem fechamento transitivo”, mas não pede um selo que cobre o contrato de completude. (`preverif_v1.r:49`) | O contrato está escrito; no selo de motivo, o helper é substituído por uma saída fornecida pelo ambiente, sem exercitar a descoberta real de vizinhos. (`bin/vizinhos_da_volta.py:4`; `bin/tests/test_suite_motivo.sh:20–21`) |
-| **(5) View alcançada por URL** | **(a).** A pergunta era aberta às classes de dependência; essa classe específica não foi identificada. | **Q:** “que classes de dependencia de teste ele NAO acha […]?” (`preverif_v1.q:11`). **R:** identifica busca textual direta e ausência de fechamento transitivo, mas não identifica a ligação teste → URL → view. (`preverif_v1.r:49–59`) | O helper procura citações nos textos dos testes; não percorre a resolução de URLs. (`bin/vizinhos_da_volta.py:56–74`) |
-| **(5) Signals** | **(a).** Mesma pergunta aberta; a classe específica não foi identificada. | **Q:** “que classes de dependencia de teste ele NAO acha […]?” (`preverif_v1.q:11`). **R:** enumera relativos, inicializadores, imports dinâmicos, recursos, migrations e varredores, sem denunciar dependência por signals. (`preverif_v1.r:53–59`) | A seleção usa correspondências textuais, sem uma regra para registro e disparo de signals. (`bin/vizinhos_da_volta.py:53–74`) |
-| **(5) Templates** | **(b) no alcance já denunciado: dependências indiretas/transitivas continuam abertas.** | **Q:** cita expressamente “template”. (`preverif_v1.q:11`). **R:** pede “consumidores, herança e inclusões”; na v2 registra que “herança e dependência transitiva continuam sem resolução”; na v3 reconhece “Limites declarados no helper”. (`preverif_v1.r:57`; `preverif_v2.r:50`; `preverif_v3.r:12`) | Há busca por caminho/nome do recurso. A docstring declara que herança/inclusão transitiva não é seguida. Assim, o achado não significa ausência de todo suporte a templates. (`bin/vizinhos_da_volta.py:11–12,63–74`) |
-| **(5) Rename precisa de `--no-renames`** | **(a), no tema de preservar dependências de remoções já reaberto na v2.** O mecanismo de rename não foi identificado. | **Q:** “Para cada achado PROCEDE da volta 1, o delta fecha a classe?” (`preverif_v2.q:5`). **R anterior:** pede “preservar dependências de remoções”. (`preverif_v1.r:61`). **R da v2:** afirma “Agora preserva o caminho e procura citações”, sem examinar a perda do caminho antigo por reconhecimento de rename. (`preverif_v2.r:53`) | O comando usa `git diff --name-only` sem fixar `--no-renames`. Um rename concreto ocorrido nesta obra é **[nao verificado]**. (`bin/vizinhos_da_volta.py:21–23`) |
-| **(6) Limites incompletos na docstring** | **(b), para as omissões expressamente apontadas na v3.** | **Q:** pergunta se o delta “fecha a classe ou a declara como limite no proprio sitio”. (`preverif_v3.q:5`). **R:** sobre reexportações, efeitos transitivos de `__init__.py`, JSON e remoções: “Não fecha nem declara integralmente essas classes”. (`preverif_v3.r:13`) | A docstring declara imports montados em string e templates transitivos; não incorpora integralmente aquelas outras classes. (`bin/vizinhos_da_volta.py:11–13`) |
-| **(6) `CLAUDE.md` seção 3 continua ensinando comando recusado** | **(b), inequívoco: apontado repetidamente e pendente na cópia.** | **Q:** apresenta o comando exato e pergunta “O que acontece com quem cola isso […]?” (`preverif_v1.q:9`). **R v1:** “o comando canônico quebra, e o selo antigo não acusa”; **v2:** “Não corrigido”; **v3:** “Permanece”. (`preverif_v1.r:17`; `preverif_v2.r:6`; `preverif_v3.r:9`) | A chamada nua permanece; a guarda a recusa sem motivo. A fixture “boa” do selo antigo também permanece nua. (`CLAUDE.md:96`; `bin/suite.sh:108,114–121`; `bin/tests/test_suite_sh.sh:72–81`) |
-
-**Sobre (d):** caminho/glob constituem um ponto cego comum **documentado nas três respostas**, apesar da pergunta aberta sobre qualquer caminho para a inteira. Isso se sobrepõe a **(a)** na etapa Codex. A afirmação mais ampla “ninguém da sessão viu” é **[nao verificado]**: a nota explicitamente não informa isso. (`preverif_v1.q:8`; `preverif_v1.r:1–15`; `preverif_v2.r:12–24`; `preverif_v3.r:5–8`; `triagem_v4.txt:1`)
-
-**Sobre (c):** os defeitos estáticos acima são examináveis na cópia. Execução efetiva da inteira no Django, sobrevivência em execução integral dos selos e consequências em produção permanecem **[nao verificado]**; o runner local delega a descoberta ao Django, e os selos criam arquivos temporários. (`app/core/runner_quarentena.py:72–76`; `bin/tests/test_suite_motivo.sh:10–21`)
-
-## 11/11 07:14 · sessao d2dbcac18ea0 · FIO-E0-V4-E3 · verificador · origem=Code
-
-**1. NÃO PROCEDE o fechamento integral da classe; PROCEDE a correção em julgamento efetivo.** A renomeação agora preserva o veredito derivado quando há cobertura integral ou o juiz declara dia sem trabalho. Porém, a guarda de impressão continua antes dessa decisão. `app/ponto/services/cartorio.py:1211`, `:1228`, `:1238`, `:1253`.
-
-Para células **sem adesão, efetivamente rejulgadas e sem outras inconsistências**, a comparação com d6, reconstruída pelo delta fornecido, é:
-
-| Dia | d6 → cópia atual | O aval permite? |
-|---|---|---|
-| Folga simples | `concorde → concorde`; continua com marcador. `app/chamados/juizes.py:456`; `app/ponto/services/cartorio.py:1223`. | **Sim:** é o alvo e o RED expresso. `aval_e3_x1_folga_1111.txt:1`, `:3`. |
-| Folga com ausência aprovada **parcial** | `concorde → concorde`; `trabalha=False` prevalece também na parcial; recebe marcador. `app/chamados/juizes.py:454`; `app/ponto/services/cartorio.py:1211`, `:1223`. | **Sim:** sobreposição deve seguir a precedência existente. `aval_e3_x1_folga_1111.txt:3`; `app/escala/utils.py:1206`, `:1230`. |
-| Folga com ausência aprovada **integral** | `concorde → concorde`; sem marcador. `app/ponto/services/cartorio.py:1211`, `:1223`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:299`. | **Sim:** contraexemplo expresso de precedência. `aval_e3_x1_folga_1111.txt:3`. |
-| Feriado | Se suprime trabalho: `concorde → concorde`. Se a escala mantém trabalho: continua NB. `app/ponto/precedencia.py:376`, `:382`; `app/chamados/juizes.py:456`; `app/ponto/services/cartorio.py:1253`. | **Sim, pela classe de não exigibilidade**, conservando o trabalho exigível. `aval_e3_x1_folga_1111.txt:1`, `:5`. |
-| Trabalho com cobertura integral, inclusive INSS aprovado integral | `concorde → concorde`; a exceção de integralidade permanece. `app/ponto/services/cartorio.py:1211`, `:1253`; `app/ponto/supra_juiz.py:269`. | **Sim:** é preservação da cura BO-INSS, não nova dispensa de trabalho. `app/docs/BACKLOG.md:1064`. |
-| Trabalho justificado, em curso ou parcial sem resto | `concorde → nunca_bateu`. Os três testes agora exigem NB e hash legado. `app/ponto/tests/test_e3_nb_impressao_memoria.py:275`, `:282`, `:289`. | **Sim como correção da absolvição indevida de d6:** o aval exige conservar a dívida de trabalho. `aval_e3_x1_folga_1111.txt:3`, `:5`. |
-| Isento em dia de trabalho, sem cobertura integral | `concorde → nunca_bateu`: o classificador retorna vazio pela isenção, mas a renomeação posterior impõe NB. A retenção continua vazia pela guarda própria de isento. `app/ponto/supra_juiz.py:220`; `app/ponto/services/cartorio.py:1253`; `app/folha/export.py:1200`. | **NÃO SEI certificar autorização dessa mudança de veredito:** o aval proíbe mudar retenção de trabalho; não decide expressamente esse caso de veredito isento. `aval_e3_x1_folga_1111.txt:5`. |
-| Célula sem DNA | **Não determina um veredito único.** A grade pode obter marcos do template, e a ata continua copiando tipo/parcial; aplicam-se os casos acima. `app/escala/utils.py:98`, `:1607`; `app/ponto/services/cartorio.py:709`, `:737`. | Ausência de DNA, sozinha, **não autoriza absolvição**; o aval manda seguir a autoridade existente. `aval_e3_x1_folga_1111.txt:1`. |
-
-**O residual concreto é a passagem d6 → HEAD.** Reproduzi em memória os quatro casos — justificado, em curso, parcial sem resto e isento — primeiro com a condição antiga, depois com a atual: `concorde → concorde`, `pulados=1`, impressão igual; com `forcar=True`, tornam-se NB. A guarda impede alcançar a correção. Os testes novos começam sem carimbo, portanto não cobrem essa transição. `app/ponto/services/cartorio.py:1224`, `:1228`, `:1253`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:99`, `:275`.
-
-**Quanto à base 52a0022e9: NÃO SEI certificar a comparação exata de cada caso.** O delta permite reconstruir d6, mas não entrega a fonte integral daquela base; não atribuo a ela resultados inferidos de outra revisão. **[nao verificado: comparação exata com 52a0022e9]**.
-
-**2. NÃO PROCEDE segundo juiz ou derivação paralela pelo adaptador; há diferenças entre os fluxos.**
-
-`_insumo_nb` não fica `None`: `com_insumo_dia_sem_trabalho` sempre cria um dicionário com `trabalha` e `ata`; o adaptador chama o próprio `dia_sem_trabalho`. Chave obrigatória ausente levanta erro, sem resposta substituta. `app/ponto/supra_juiz.py:60`, `:65`, `:70`.
-
-`_ata_nb` pode ser `None` quando `_dia_nb` está vazio. Sem DNA não basta: `ata_do_dia` copia `tipo_dia` e `cobertura_parcial` independentemente dele. `app/ponto/services/cartorio.py:1218`, `:709`, `:737`.
-
-Com ata vazia, o juiz conserva apenas a cláusula soberana `trabalha is False`; `True` e `None` não viram folga. É a mesma decisão para os mesmos insumos na porta normal. `app/chamados/juizes.py:450`, `:454`, `:456`; `app/ponto/services/cartorio.py:1429`.
-
-Existe, entretanto, **diferença defensiva de fluxo**: sem dia na grade, o ramo normal pula; o NB pode classificar o dicionário vazio e renomear conforme `trabalha`. A ocorrência desse estado no carregador real não foi demonstrada; a grade examinada enumera todos os dias. `app/ponto/services/cartorio.py:1204`, `:1233`, `:1253`, `:1380`; `app/escala/utils.py:1774`, `:1801`, `:1807`. Ocorrência em produção: **[nao verificado]**.
-
-**3. NÃO PROCEDE quebra de leitor por `data_civil=None` na cópia examinada.**
-
-- **Tela/PDF:** não encontrei consumidor desse campo nas linhas sintéticas; a documentação ainda registra que os leitores não migraram. Consumidores externos à cópia: **[nao verificado]**. `app/docs/JUIZES.md:85`.
-- **Carga:** repassa o resultado; o enriquecimento posterior lê ações e portas, sem operar datas. `app/chamados/services/tarefa_do_dia.py:523`, `:532`, `:545`.
-- **Sombra:** projeta `rota`, `fila`, `verbos`, `fio` e consulta `razao`; não mostra `data_civil`. `app/chamados/management/commands/diff_e3_sombra.py:27`, `:44`, `:68`.
-- **Avulso × lote:** usam o mesmo método; testes comparam os dicionários inteiros. `app/chamados/services/tarefa_do_dia.py:568`, `:572`; `app/chamados/tests/test_e3_c8b_sem_banco.py:248`; `app/chamados/tests/test_e2_tarefa_do_dia.py:907`.
-- **Testes específicos:** exigem `None` nas duas espécies sintéticas e preservam as datas dos marcos reais. Portanto muda o conteúdo retornado dessas linhas — de dia do turno para desconhecido — sem alteração visual demonstrada. `app/chamados/tests/test_e3_pos_suite_sem_banco.py:30`, `:32`, `:42`; `app/chamados/services/tarefa_do_dia.py:103`.
-
-**4. PROCEDE a correção dos alvos; NÃO PROCEDE cobertura completa dos mutantes plausíveis.**
-
-Reproduzidos sem banco:
-
-| Mutante | Resultado e causa |
-|---|---|
-| `so_acusador` | **Morre por assertion:** trabalho justificado volta a `concorde`, mas o teste exige NB. `app/ponto/tests/x1_mutantes.py:32`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:278`. |
-| `hash_marca_todo_sem_adesao` | **Morre por assertion** nos subtestes sem cobertura e integral: altera hash que deveria permanecer legado. `app/chamados/tests/e3_pos_suite_sem_banco.py:33`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:131`, `:166`. |
-| `hash_marca_cobertura_integral` | **Morre por assertion precisamente na integral aprovada.** A cobertura fica cega somente no hash; o tipo da ata permanece visível. `app/chamados/tests/e3_pos_suite_sem_banco.py:36`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:143`, `:144`, `:166`. |
-
-As mortes acima tiveram zero erros de execução; os executores distinguem assertion de erro de infraestrutura. `app/ponto/tests/x1_mutantes.py:62`; `app/chamados/tests/e3_pos_suite_sem_banco.py:91`.
-
-**Remover `not _coberto_inteiro_nb` só da renomeação sobrevive, mas é equivalente:** integral implica ata `ausencia`/`falta` sem parcial, portanto `sem_trabalho=True` já impede renomear. `app/ponto/services/cartorio.py:1211`, `:709`, `:737`, `:1253`; `app/chamados/juizes.py:456`.
-
-**Inverter `sem_trabalho` somente no marcador morre:** viola tanto fonte de folga quanto hashes legados. `app/ponto/tests/test_e3_nb_impressao_memoria.py:264`, `:272`, `:279`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:166`.
-
-**Há sobrevivente não equivalente:** acrescentar `and not _parcial_nb` ao marcador passou os 18 testes de memória e os sete pós-suite. Folga com ausência parcial continua `concorde`, mas perde indevidamente o marcador. Os testes parciais existentes são de trabalho; o teste folga+ausência é integral. `app/ponto/services/cartorio.py:1223`; `app/chamados/juizes.py:454`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:289`, `:299`, `:315`.
-
-Essa perda pode permitir pulo após primeira batida distante, se os demais insumos continuarem iguais: o ramo normal omite o marcador e aceita impressão igual com `concorde`. Suíte integral/ORM desse mutante: **[nao verificado]**. `app/ponto/services/cartorio.py:525`, `:1362`, `:1373`, `:1377`.
-
-**5. NÃO PROCEDE suspeita de mudança de sítio: é deslocamento no delta apresentado.**
-
-A nova atribuição acrescenta uma linha antes do recorte. O registro conserva `_julgar_colab_corpo/B1`, mantém 1172 e desloca a mesma chamada `_tz.localdate(b.timestamp)` para 1322; a catraca compara os locais registrados. `app/ponto/services/cartorio.py:1220`, `:1172`, `:1322`; `app/core/tests/test_medida_turno_do_par.py:315`, `:539`.
-
-**6. Os descartes procedem somente com estes limites:**
-
-- **Relógio — PROCEDE como descarte de regressão nova**, conforme a anterioridade informada na triagem. **Não significa eliminar a ocorrência residual:** continuam o default `_tz.now()` e o chamador sem `agora`. `triagem_e3_v1.txt:5`; `app/escala/servico_jornada.py:387`, `:566`.
-- **Reconciliador — PROCEDE para o universo medido dos 174; NÃO PROCEDE como fechamento da classe.** A triagem informa zero candidatos naquele recorte. O escritor continua alcançável, pode carimbar perguntas e fechar disputas; o teste inclusive exige esse carimbo. `triagem_e3_v1.txt:6`; `app/chamados/reconciliador.py:595`, `:611`, `:1365`; `app/ponto/tests/test_x1_folga_sem_adesao.py:263`. Zero candidatos na classe inteira: **[nao verificado]**.
-- **TXT — PROCEDE para o conteúdo já armazenado; NÃO PROCEDE como prova de regeneração invariável.** Download lê a cópia gravada. Uma nova geração consulta retenção e elegibilidade atuais; C4 compara estoque após julgamento, sem gerar outro TXT. `app/folha/views.py:561`; `app/folha/models.py:186`; `app/folha/export.py:968`, `:726`; `app/ponto/tests/test_x1_folga_sem_adesao.py:164`, `:167`. Delta efetivo numa regeneração: **[nao verificado]**.
-
-_3710 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3714 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
