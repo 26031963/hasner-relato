@@ -1,7 +1,266 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 09:15** · publicado em **11/11/2026 09:18** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:19** · publicado em **11/11/2026 09:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:19 · sessao 492833d88911 · RAIZ-DA-DISPUTA · censo · origem=Code
+
+**F3/F4 têm oito decisões identificadas e uma pergunta de lei: a identidade entre BATIDA do acervo sem episódio e BATIDA com episódio.** A aplicação conjunta do par, a espera pela outra metade, o estado derivado e a autoridade C7 já têm decisão registrada; suas divergências atuais são de implementação. (`app/chamados/services/fio.py:1275`; `app/docs/BACKLOG.md:1929`, `:1930`; `app/docs/CORTES.md:272`.)
+
+Identidade Git da cópia com o hash informado: **[nao verificado]**. Estado atual de col960 e das perguntas 51522/51523: **[nao verificado; aguarda sonda]**. Os anexos F0/F1 permanecem como base, sem novo levantamento de nascimento, dona ou destino nesta entrega. **[nao verificado por arquivo:linha: referência aos anexos recebidos]**
+
+Os números fornecidos são **77 colab-dias**, **486 grupos/848 excedentes** e **18 DS com `pode_fechar=True`**; não constituem partição por causa, transição ou decisão. A ligação dos 77 e dos 18 à obra está registrada; equivalência dos 486/848 ao universo do código e distribuição de todos esses números: **[aguarda sonda]**. (`app/docs/BACKLOG.md:1882`, `:1883`; chave dos grupos: `app/chamados/services/fio.py:1923`, `:1945`, `:1976`.)
+
+O censo abaixo usa os seguintes prefixos. Cada arquivo da primeira coluna, combinado com cada número das demais colunas, constitui uma referência `arquivo:linha`.
+
+| Prefixo | Caminho |
+|---|---|
+| C | `app/chamados/` |
+| S | `app/chamados/services/` |
+| Q | `app/chamados/management/commands/` |
+| H | `app/templates/chamados/partials/` |
+| P | `app/ponto/` |
+| T | `app/chamados/tests/` |
+
+**DENTRO** significa `C/models.py` ou `S/`, conforme o perímetro pedido; **FORA** compreende juízes, reconciliador, commands, views, templates e `bin/`. Essa classificação é por localização, não uma prova de que todo método localizado em `models.py` execute pela raiz DS. (`app/chamados/models.py:1848`, `:3103`; `app/chamados/reconciliador.py:340`.)
+
+Os nomes reais e as distinções de estado são:
+
+| Pedido | Nome real / natureza |
+|---|---|
+| respondida | Coluna `PerguntaDisputa.respondida_em`; `respondida` é **propriedade**, definida por timestamp não nulo. (`C/models.py:2448`, `:3496`, `:3498`.) |
+| validada | Coluna `PerguntaDisputa.validada_em`, acompanhada de autor nas portas. (`C/models.py:2449`; `S/validacao.py:134`, `:135`.) |
+| materializada | Coluna `PerguntaDisputa.materializada_em`, acompanhada de autor; seu help text fala em batida criada, mas portas também a usam para encerramento sem plantio. (`C/models.py:3393`, `:3395`; `S/materializacao.py:924`, `:1099`.) |
+| via | Coluna `PerguntaDisputa.via_resolucao`. (`C/models.py:2561`.) |
+| pendência | Coluna `PerguntaDisputa.pendencia_admin`; não é via de encerramento. (`C/models.py:2556`, `:2558`.) |
+| recusa | Coluna `PerguntaDisputa.recusa_motivo`. (`C/models.py:2560`.) |
+| pode_fechar | **Método derivado de `DisputaSupervisao`, não coluna nem property**: ausência de resposta sem veredito **e** ausência de fio vivo. (`C/models.py:1848`, `:1853`.) |
+| estado | **Propriedade derivada da pergunta**; traduz validação, materialização, resposta e C6. (`C/models.py:3033`, `:3041`, `:3044`, `:3048`.) |
+
+O AST foi executado por `python3 -B` em stdin, com revisão dos fluxos dinâmicos; não foi gravado artefato de execução. **[nao verificado por arquivo:linha quanto à execução]** A unidade das tabelas é **uma linha por `(campo, arquivo)`**, reunindo os sítios desse arquivo. Portanto as contagens abaixo são linhas das tabelas, não funções, atribuições ou registros de produção. **[nao verificado por arquivo:linha; reproduzível pelo script ao fim]**
+
+| Campo | Linhas da tabela |
+|---|---:|
+| `respondida_em` | 33 |
+| `validada_em` | 22 |
+| `materializada_em` | 23 |
+| `via_resolucao` | 21 |
+| `pendencia_admin` | 6 |
+| `recusa_motivo` | 12 |
+| `pode_fechar`, incluindo derivações concorrentes | 11 |
+| Total | 128 |
+
+Nas tabelas, **m** é atribuição em memória; **P** é persistência associada; **W** é inserção/update ou delegação de escrita. A restauração em memória e o proxy de ressuscitação estão separados das escritas persistentes. (`C/models.py:1507`, `:1508`, `:3152`, `:3159`, `:3264`.)
+
+O levantamento de **`respondida_em`** é:
+
+| Arquivo / fronteira | Escritor ou memória | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | nascimento W3017; ressuscitação W1566; lote W3266; carimbo m3132/P3152; **só memória** m1508,3163 | 1564,1844,3045,3048,3127,3131,3348,3498,3924,3931,3932,3933 |
+| `S/disputa_emissao.py` — DENTRO | resposta m1468/P1508; correção W1630,1632; automática m1653/P1655; trilha m1674/P1676 | 1619,1670,1712,1856,1929,1946 |
+| `S/acoes_disputa.py` — DENTRO | — | 95,130 |
+| `S/becos.py` — DENTRO | — | 30 |
+| `S/cobranca.py` — DENTRO | — | 228 |
+| `S/declaracao_texto.py` — DENTRO | — | 417,419,687 |
+| `S/fio.py` — DENTRO | — | 340,660 |
+| `S/furo_sem_canal.py` — DENTRO | — | 80 |
+| `S/historico.py` — DENTRO | — | `getattr`105 |
+| `S/materializacao.py` — DENTRO | — | 669,1369 |
+| `S/painel.py` — DENTRO | — | 67 |
+| `S/passivo_validado.py` — DENTRO | — | snapshot dinâmico83 |
+| `S/pergunta_no_app.py` — DENTRO | — | 71 |
+| `S/raiox.py` — DENTRO | — | 138 |
+| `S/validacao.py` — DENTRO | — | 393,576,581,924 |
+| `S/verbos.py` — DENTRO | — | 309,312 |
+| `S/vigia_fio.py` — DENTRO | — | 675,783 |
+| `app/api/views.py` — FORA | — | 1172,1184,2568,2582,2625,2642 |
+| `app/api/views_mensageria.py` — FORA | — | 569,570 |
+| `C/juizes.py` — FORA | — | 829,1341,1449,1594,1601,1604,1949 |
+| `Q/auditar_invariantes_chamados.py` — FORA | — | 177,592,1105,1572,1602 |
+| `Q/backfill_decisoes_pergunta.py` — FORA | — | 56,60 |
+| `Q/curar_perguntas_em_limbo.py` — FORA | — | 46,69 |
+| `C/relatorios_disputa.py` — FORA | — | 21 |
+| `C/veredito_lavrado.py` — FORA | — | 206,208 |
+| `C/views.py` — FORA | — | 1280,1416 |
+| `C/views_cobrar.py` — FORA | — | 169,175 |
+| `P/management/commands/reconciliar_grade.py` — FORA | — | 460 |
+| `P/supra_juiz.py` — FORA | — | 545,548 |
+| `H/_card_atendimento.html` — FORA | — | 94,100,137,155,384,385 |
+| `H/_pergunta_card.html` — FORA | — | 24,29,32 |
+| `H/modal_fio.html` — FORA | — | 185,217,220 |
+| `bin/censo_folha.py` — FORA | — | filtros28,29 |
+
+O levantamento de **`validada_em`** é:
+
+| Arquivo / fronteira | Escritor ou memória | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | nascimento W3017; ressuscitação W1566; lote W3266; carimbo m3135/P3152; **só memória** m1507,3164 | 309,344,1564,1843,3041,3127,3134,3359,3924,3935,3936,3937 |
+| `S/disputa_emissao.py` — DENTRO | resposta nova m1480/P1508; correção W1630,1632 | 1470,1471,1620,1917 |
+| `S/validacao.py` — DENTRO | `_carimbar_validacao` m134/P137; devolução m199/P202 | 139,147,188,195,345,396,472,573,732,753 |
+| `S/acoes_disputa.py` — DENTRO | — | 345 |
+| `S/declaracao_texto.py` — DENTRO | — | 227 |
+| `S/historico.py` — DENTRO | — | `getattr`105 |
+| `S/materializacao.py` — DENTRO | — | 670,1369 |
+| `S/painel.py` — DENTRO | — | 67,270,271,272,273 |
+| `S/passivo_validado.py` — DENTRO | — | snapshot83 |
+| `S/verbos.py` — DENTRO | — | 239,246 |
+| `S/vigia_carimbo.py` — DENTRO | — | 97 |
+| `C/juizes.py` — FORA | — | 829,1325,1949 |
+| `Q/auditar_invariantes_chamados.py` — FORA | — | 205,1075,1572,1602,1765,1778 |
+| `Q/backfill_decisoes_pergunta.py` — FORA | — | 56,60,100 |
+| `Q/encerrar_perguntas_com_fato.py` — FORA | — | 31 |
+| `Q/reabrir_orfas_enterradas.py` — FORA | — | 67 |
+| `C/reconciliador.py` — FORA | — | 627,1048 |
+| `P/services/flip_auto.py` — FORA | — | 128 |
+| `P/services/procedencia_batida.py` — FORA | — | 74 |
+| `H/_pergunta_card.html` — FORA | — | 20,23,42 |
+| `H/modal_fio.html` — FORA | — | 228 |
+| `bin/censo_folha.py` — FORA | — | 29 |
+
+O levantamento de **`materializada_em`** é:
+
+| Arquivo / fronteira | Escritor ou memória | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | nascimento W3017; `_escrever_carimbo` m3099; portas P3152,3190,3212; lote W3264 | 1483,1843,1925,3043,3046,3056,3126,3182,3183,3284,3296,3313,3350,3352 |
+| `S/disputa_emissao.py` — DENTRO | — | 226,762,1070,1089,1323,1621,1823,1917 |
+| `S/fabrica_da_celula.py` — DENTRO | — | 170 |
+| `S/historico.py` — DENTRO | — | `getattr`105 |
+| `S/materializacao.py` — DENTRO | — | 434,532,623,627,632,671,1089,1093,1369,1418 |
+| `S/painel.py` — DENTRO | — | 67 |
+| `S/passivo_validado.py` — DENTRO | — | snapshot83 |
+| `S/raiox.py` — DENTRO | — | 135,175 |
+| `S/relavra_via.py` — DENTRO | — | 181,244 |
+| `S/validacao.py` — DENTRO | — | 188,190,461,472,490 |
+| `C/juizes.py` — FORA | — | 288,662,689,831,1336,1362,1368,1399,1417,1949 |
+| `Q/auditar_disputas.py` — FORA | — | 69,148 |
+| `Q/auditar_invariantes_chamados.py` — FORA | — | 470,538,587,905,955,1075,1156,1572,1602,1765 |
+| `Q/backfill_decisoes_pergunta.py` — FORA | — | 100,325 |
+| `Q/encerrar_perguntas_com_fato.py` — FORA | — | 31 |
+| `Q/migrar_data_evento_dia_do_turno.py` — FORA | — | 147 |
+| `Q/reabrir_orfas_enterradas.py` — FORA | — | 67,88,91,129,142 |
+| `C/reconciliador.py` — FORA | — | 366,627,1048,1144,1154,1500 |
+| `C/veredito_lavrado.py` — FORA | — | 202,204 |
+| `C/views.py` — FORA | — | 1257 |
+| `P/management/commands/reconciliar_fantasmas.py` — FORA | — | 211 |
+| `P/services/procedencia_batida.py` — FORA | — | 74 |
+| `P/services/veredito_celula.py` — FORA | — | 195 |
+
+O levantamento de **`via_resolucao`** é:
+
+| Arquivo / fronteira | Escritor ou memória | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | nascimento W3017; `_escrever_carimbo` m3101; portas P3152,3190,3212; lote W3264; `encerrar_por_fato_no_espelho` m3275/P3276 | 1483,1920,2054,2060,2722,2755,3055,3126,3201,3264,3273,3284,3296,3313,3320,3350,3352,3485,3491 |
+| `S/relavra_via.py` — DENTRO | **`relavrar` m125/P127** | 118,121,123,153,181,245 |
+| `S/competencia_trancada.py` — DENTRO | — | 251 |
+| `S/disputa_emissao.py` — DENTRO | — | 327,398,417,436,1927,1942,1945 |
+| `S/explicador.py` — DENTRO | — | 95 |
+| `S/fabrica_da_celula.py` — DENTRO | — | 148 |
+| `S/fio.py` — DENTRO | — | 1099,1166,1243,1350,1431,1852,1888,1910,1954 |
+| `S/materializacao.py` — DENTRO | — | 438,623,668,1089 |
+| `S/passivo_validado.py` — DENTRO | — | 83,140,141,142,515 |
+| `S/tarefa_do_dia.py` — DENTRO | — | 227,228 |
+| `C/juizes.py` — FORA | — | 662,674,830,1336,1362 |
+| `Q/auditar_invariantes_chamados.py` — FORA | — | 202,206,433,542,955,1710 |
+| `Q/backfill_decisoes_pergunta.py` — FORA | — | 100,314,330,398,504 |
+| `Q/encerrar_perguntas_com_fato.py` — FORA | — | 31,42,49,66,76 |
+| `Q/migrar_data_evento_dia_do_turno.py` — FORA | — | 70,71,72 |
+| `Q/reabrir_orfas_enterradas.py` — FORA | — | 67,129,142,160 |
+| `Q/relavrar_via_i6.py` — FORA | — | 58,59,62,66,68,88 |
+| `C/reconciliador.py` — FORA | — | 1143,1154 |
+| `P/services/cartorio.py` — FORA | — | 1610 |
+| `P/services/flip_auto.py` — FORA | — | 128 |
+| `H/_card_atendimento.html` — FORA | — | 186 |
+
+O levantamento de **`pendencia_admin`** é:
+
+| Arquivo / fronteira | Escritor | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | nascimento W3017; default2556 | — |
+| `S/materializacao.py` — DENTRO | `_materializar_resposta_hora` m850/P851 | — |
+| `S/explicador.py` — DENTRO | — | 85,90 |
+| `Q/auditar_invariantes_chamados.py` — FORA | — | 1112 |
+| `H/_card_atendimento.html` — FORA | — | 183 |
+| `H/modal_fio.html` — FORA | — | 222,225 |
+
+O levantamento de **`recusa_motivo`** é:
+
+| Arquivo / fronteira | Escritor | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | nascimento W3017; `carimbar_identidade` m3188/P3190 | — |
+| `S/disputa_emissao.py` — DENTRO | contestação m1497/P1508 | — |
+| `S/materializacao.py` — DENTRO | pendência m850/P851; recusa m1102/P1103 | refresh1089; comparação1092 |
+| `S/validacao.py` — DENTRO | recusa admin m584/P590 | 147,188,192,208,225,228,582,604 |
+| `S/explicador.py` — DENTRO | — | 90 |
+| `S/passivo_validado.py` — DENTRO | — | snapshot83 |
+| `Q/auditar_invariantes_chamados.py` — FORA | — | 535,1075,1112 |
+| `P/services/flip_auto.py` — FORA | — | regex132 |
+| `H/_card_atendimento.html` — FORA | — | 186 |
+| `H/modal_fio.html` — FORA | — | 226 |
+| `bin/sombra_mascara_pessoal.py` — FORA | `setattr`57; `bulk_update`62,64 | carregamento51; `getattr`54; comparação56 |
+| `bin/sombra_selo_pessoal.py` — FORA | — | SQL77 |
+
+A escrita externa da máscara é efetivamente da pergunta: o inventário inclui `PerguntaDisputa.recusa_motivo`; o programa exige banco `sombra`. Ela não deve ser confundida com escritor ordinário de produção, nem omitida do censo de formas de escrita. (`bin/sombra_regras_pessoais.py:85`; `bin/sombra_mascara_pessoal.py:10`, `:57`, `:62`.)
+
+O levantamento de **`pode_fechar` e decisões concorrentes de fechamento** é:
+
+| Arquivo / fronteira | Definição/derivação | Leitor |
+|---|---|---|
+| `C/models.py` — DENTRO | juiz `DisputaSupervisao.pode_fechar`1848,1853 | — |
+| `S/explicador.py` — DENTRO | bool parcial137; publicação163 | uso local138,139 |
+| `C/relatorios_disputa.py` — FORA | projeção concorrente `PRONTA_FECHAR`20 | C6 em18 |
+| `S/becos.py` — DENTRO | — | 33,56 |
+| `S/competencia_trancada.py` — DENTRO | — | 153,202 |
+| `S/desenlace.py` — DENTRO | — | `dict.get`63 |
+| `S/disputa_emissao.py` — DENTRO | — | 1278,1963 |
+| `S/materializacao.py` — DENTRO | — | 585,1316 |
+| `C/reconciliador.py` — FORA | — | 411,611,1170 |
+| `P/services/entrada_sincronizada.py` — FORA | — | 58 |
+| `H/modal_fio.html` — FORA | — | 435,446 |
+
+As indireções relevantes para interpretar essas tabelas são:
+
+| Forma | Resultado conferido |
+|---|---|
+| `update(**campos)` | `reabrir_para_correcao` monta resposta/validação nulas e texto vazio em1593; persiste diretamente em1632 ou entrega ao descarimbo em1630. (`S/disputa_emissao.py:1593`, `:1630`, `:1632`.) |
+| `update(..., **outros)` | O descarimbo escreve materialização/autor/via e aceita campos adicionais; os chamadores atuais passam resposta/validação. A guarda veta apenas o trio do carimbo em `outros`. (`C/models.py:1566`, `:3255`, `:3266`; `S/disputa_emissao.py:1593`.) |
+| `save(update_fields=lista)` | A resposta salva a lista montada em1508; carimbo salva em3152; identidade em3190; descarimbo em3212. A string na lista é mecanismo de persistência, não leitura do valor. (`S/disputa_emissao.py:1508`; `C/models.py:3152`, `:3190`, `:3212`.) |
+| `bulk_update` próximo ao domínio | `gravar_lavras_em_lote` escreve somente `veredito_lavrado`, `julgado_em`, `janela_expira_em`; não escreve os seis campos acima. (`C/veredito_lavrado.py:237`, `:250`.) |
+| `setattr` genérico | A porta de texto permite título/assunto/descrição; `core.reexibir` altera memória. Não são prova de escrita persistente desses estados. (`S/texto.py:18`, `:25`, `:33`; `app/core/reexibir.py:45`, `:49`.) |
+| `F()` | O enumerador inclui `F` como leitor de campo; escrita dos alvos por `F()` não foi identificada nos sítios classificados. Ausência universal por expressões construídas: **[nao verificado]**. |
+| SQL | A máscara/selo foram discriminados; o SQL do reconciliador aberto é advisory lock/unlock. SQL dinâmico arbitrário escrevendo os alvos: **[nao verificado]**. (`bin/sombra_selo_pessoal.py:77`; `C/reconciliador.py:1235`, `:1242`.) |
+| Signals | `update_fields` é lido como metadado de disparo; o signal emite evento e agenda beco. Não é leitura do conteúdo de cada coluna. (`C/signals.py:227`, `:238`, `:255`, `:257`.) |
+| Estado derivado | API serializa `p.estado`; explicador, fio e vigia também o consomem. São leitores indiretos dos campos/juízes já discriminados. (`app/api/views.py:2573`; `S/explicador.py:72`; `S/fio.py:614`; `S/vigia_fio.py:311`.) |
+
+As migrations ficam fora das 128 linhas de runtime:
+
+| Campo | Schema / leitura executável |
+|---|---|
+| resposta/validação | `C/migrations/0014_perguntadisputa.py:25`, `:26` |
+| materialização | `C/migrations/0016_s84_pergunta_chamado_destino.py:23` |
+| pendência | `C/migrations/0043_hx_pendencia_admin.py:15` |
+| recusa | `C/migrations/0040_a27_recusa_motivo.py:15` |
+| via | criação `C/migrations/0033_perguntadisputa_via_resolucao.py:15`; alterações em `0035_via_admin_decidiu.py:15`, `0036_a1_pergunta_celula.py:22`, `0037_a3_estado_honesto.py:31`, `0040_a27_recusa_motivo.py:20`, `0041_b2_via_legado_sem_lastro.py:15`, `0042_hx_via_ausencia_dia.py:15`, `0046_via_celula_absolveu.py:15`, `0048_via_competencia_trancada.py:14`, `0051_decisao_pergunta.py:110` |
+| via, leitura de universo | `C/migrations/0053_pergunta_unica_por_familia.py:32` |
+
+Completude contra reflexão, receivers de tipo desconhecido, SQL montado e todos os consumidores transitivos: **[nao verificado]**. O instrumento conserva uma fila de revisão dessas formas; não transforma ausência de literal em prova de ausência.
+
+A matriz seguinte descreve **comportamento da cópia**, não a execução em produção. Os testes foram inspecionados; execução da suíte nesta sessão: **[nao verificado]**. “Sem teste” significa cobertura específica não identificada nesta leitura, não ausência global certificada. **[nao verificado quanto à cobertura global]** [nao verificado]
+
+| ID / porta e entrada | Juiz consultado | Operação | Persistido | Retorno | Prova |
+|---|---|---|---|---|---|
+| **T01 responder**, entrada admissível | Guardas por tipo/opções; porta de descarimbo | Core de resposta | Texto, `respondida_em`, decisão RESPOSTA; eventual descarimbo | `(True,None)` | `S/disputa_emissao.py:1433`, `:1467`, `:1485`, `:1508`, `:1511`, `:1559`; `T/test_reresposta_invalida_validacao.py:67` |
+| **T02 responder novamente**, tinha validação | Mesmas guardas | Invalida assinatura anterior | Nova resposta; validação/autor nulos; histórico conservado | Mesmo contrato | `S/disputa_emissao.py:1470`, `:1480`, `:1511`; `T/test_reresposta_invalida_validacao.py:55` |
+| **T03 validar**, sem pergunta/resposta ou já validada; implausível sem confirmação | Filtro PK/DS; carimbos; `motivo_implausivel_validacao` | Recusa antes da escrita | Nada por esses ramos | `nao_encontrada`, `sem_resposta`, `ja_validada`, `implausivel` | `S/validacao.py:385`, `:393`, `:396`, `:404`; sem teste específico |
+| **T04 validar hora admissível** | Implausibilidade; materializador individual | Valida **uma P**, antes do laço | Validação/autor e decisão VALIDAÇÃO; efeitos da unidade | `validada` ou `ja_no_espelho` | `S/validacao.py:134`, `:139`, `:435`, `:461`, `:463`, `:515`, `:517`; `T/test_o261_recusa_fala.py:135` |
+| **T05 validar**, materialização recusada sem encerramento e com motivo | `_resposta_de_hora`; carimbo nulo; motivo | Devolve validação individual | Limpa validação/autor, mantém resposta, registra DEVOLUÇÃO; pode reabrir DS | `nao_gravou`, `devolvida=True`; repetição pode dar `None` interno | `S/validacao.py:188`, `:199`, `:205`, `:217`, `:473`, `:499`; `T/test_o261_recusa_fala.py:87`, `:148`, `:164` |
+| **T06 validar**, recusa já encerrou identidade | Devolução lê materialização | Não desfaz validação | Encerramento permanece | Devolução `False`; resultado final depende dos erros | `S/validacao.py:190`, `:490`; `T/test_o261_recusa_fala.py:190` |
+| **T07 materializar lote normal** | Fila por timestamps; unidade; C7 na cauda | Itera **uma P por vez** | Efeitos individuais; eventual fecho da DS | Dict de materializadas, reusos, pendentes, fecho e erros | `S/materializacao.py:1369`, `:1375`, `:1378`, `:1381`; `T/test_o317_passivo_pela_porta.py:188`, `:481` |
+| **T08 materializar**, dias divergem sem conferência | `fio.data_do_fato_de` | Recusa nomeada | `recusa_motivo`; nenhuma batida desse ramo | `False` | `S/materializacao.py:1191`, `:1193`, `:1213`, `:1214`; sem teste específico |
+| **T09 hora sem texto humano** | Guarda de anuência | Recusa antes de derivar horário | Motivo na P/fio | Ramo `None`; unidade `False` | `S/materializacao.py:829`, `:836`, `:841`, `:1227`; sem teste específico aberto |
+| **T10 tipo não conferido** | `entrada_de_marco`, grade/célula | Usa tipo disponível pelo motivo e registra pendência | `pendencia_admin` + motivo; pode prosseguir | Não é recusa obrigatória | `S/materializacao.py:386`, `:395`, `:397`, `:850`, `:851`; sem teste específico |
+| **T11 batida já no slot** | `_batida_existente_na_janela` | Reusa; anota origem; reconcilia | Pode alte
+
+[truncado em 20000 de 49203 caracteres]
 
 ## 11/11 09:15 · sessao 5d9a4f9c90fa · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -970,32 +1229,4 @@ C4/09 exportada e C4b/10 exigem foto NB e conservação dos registros de fechame
 
 N3 foi atualizado; comandos completos de ORM, mutantes ORM, suite e ruff estão no [relato:106](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:106). `git diff --check`: RC=0. [log:254](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:254). Certificação Code/opus e efeito N2 após consumidor: **[nao verificado]**. [nao verificado]
 
-## 11/11 08:33 · sessao 14c7f9cfa684 · BO-ADMIN-1111 · sonda · origem=Code
-
-**08 — Dono: FALTA INFORMACAO — falta individualizar o dia e demonstrar o estado do fio.** A classificação ESTRUTURA exige divergência comprovada, conforme [LEIS.md:122](app/docs/LEIS.md:122).
-
-1. **Candidato e prova dos DADOS:** a sonda informa `candidatos=1 [(62, None, 3)]`, col62. Contudo, o dia do BO é [nao verificado]: há **dois dias de trabalho sem entrada exibida**, **12/11/2026**, célula **140442**, e **14/11/2026**, célula **140444**; ambas com `trabalha=True`. Não escolho entre elas. O trecho também mostra **11/11 como folga**, célula **140441**, `trabalha=False`. Esses são valores do recorte fornecido, sem conferência externa [nao verificado].
-
-2. **Chamado, pergunta e fio vivo:** os DADOS exibem `37684 ... status_local=resolvido` e `37685 ... celula_id=140438`, correspondente a **08/11**. Não exibem perguntas de col62. Isso não comprova inexistência de chamado anterior à janela de `criado_em`, nem ausência de pergunta/fio vivo em 12 ou 14/11 [nao verificado].
-
-   **Universo do contador:** `fio_morto_de_hoje_pra_frente` é uma chave produzida por `censo()`. A função exige primeiro chamado vivo com célula, módulo de furo, célula acusadora e ausência de fio vivo; somente depois testa `data >= hoje`. Portanto, dia futuro sem entrada/chamado não entra automaticamente nesse contador ([vigia_fio.py:335](app/chamados/services/vigia_fio.py:335), [349](app/chamados/services/vigia_fio.py:349), [378](app/chamados/services/vigia_fio.py:378), [417](app/chamados/services/vigia_fio.py:417), [420](app/chamados/services/vigia_fio.py:420)). **A pertença de 12 e 14/11 ao universo permanece [nao verificado]**: faltam os vereditos integrais e os vínculos/estados de chamados e perguntas dessas células. O texto atual de `app/docs/ESTADO.md` também é [nao verificado]; o arquivo não foi localizado nesta cópia.
-
-3. **Complemento:** a conferência do universo e do leitor cabe em **FIO-E0-V4-E3-LEITORES**, aberta e incluindo `vigia_fio`; sem ID novo ([BACKLOG.md:1865](app/docs/BACKLOG.md:1865)).
-
-4. **Texto ao admin:** “Abra o calendário de col62 e informe a data exata que aparece sem entrada e sem chamado.” A ação fica no calendário ([views.py:1947](app/colaboradores/views.py:1947)).
-
-**09 — Dono: FALTA INFORMACAO — faltam nome/MIME recebidos, conteúdo do arquivo e resposta efetiva do download `.ms`.** A causa da extensão relatada é [nao verificado].
-
-1. **Candidato e prova dos DADOS:** a sonda informa `candidatos=1 [(872, None, 2)]`, col872; exibe apenas `Ausencia id=5422 | tipo=atestado | data=06/11/2026 | documento=…heic | status=aguardando_decisao`. Há **zero anexos gravados com `.ms` exibidos no recorte**; a associação desse registro ao download relatado é [nao verificado]. Não seleciono outro anexo.
-
-2. **Upload e persistência pelo código:** a API recebe `documento`, registra seu `content_type` em log e normaliza o nome antes de seguir ([api/views.py:1772](app/api/views.py:1772), [1777](app/api/views.py:1777), [1784](app/api/views.py:1784)). A normalização reconhece o conteúdo e altera somente `f.name`; não altera o MIME recebido ([ausencia.py:587](app/ponto/services/ausencia.py:587)). O documento é persistido em `FileField`, sem MIME associado nesse campo ([models.py:777](app/ponto/models.py:777)). **Nome original e `content_type` efetivamente recebidos para #5422: [nao verificado].**
-
-3. **Download pelo código:** usa o documento da referência ou do próprio registro, lê o conteúdo e, quando reconhecido, ajusta a extensão da resposta e seu `Content-Type`; entrega o arquivo aberto por `FileResponse`, sem conversão ([views.py:2115](app/ponto/views.py:2115), [2122](app/ponto/views.py:2122)). **Se o conteúdo for HEIC reconhecido**, devolve nome terminado em `.heic` e `image/heic` ([ausencia.py:582](app/ponto/services/ausencia.py:582)). Se desconhecido, o detector retorna `(None, None)` e a view preserva o basename ([ausencia.py:584](app/ponto/services/ausencia.py:584), [views.py:2124](app/ponto/views.py:2124)). **Conteúdo real e headers/nome efetivamente devolvidos para #5422: [nao verificado].**
-
-4. **Complemento:** a conferência cabe em **UI-ANEXO-AUSENCIA**, já registrada e abrangendo conteúdo, nome e HEIC; sem ID novo e sem atribuir `.ms` à falta de conversão ([BACKLOG.md:1130](app/docs/BACKLOG.md:1130)).
-
-5. **Texto ao admin:** “Em Ausências, abra o atestado de 06/11 de col872, clique em **Abrir** e **Baixar** e informe o nome completo salvo pelo navegador.” Os dois botões existem no painel ([painel_ausencia.html:84](app/templates/ponto/partials/painel_ausencia.html:84)).
-
-**Lei de desenho e censo ESTRUTURA:** não aplicados aos dois itens, pois a divergência estrutural permanece [nao verificado]; L-099 não autoriza transformar ausência de informação em causa estrutural ([LEIS.md:122](app/docs/LEIS.md:122)).
-
-_3747 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3748 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
