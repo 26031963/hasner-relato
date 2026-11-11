@@ -1,7 +1,329 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:14** · publicado em **11/11/2026 12:15** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:19** · publicado em **11/11/2026 12:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:19 · sessao ba041376f50f · - · - · origem=Ronald (tmux)
+
+Q3 — `DESTINOS` reproduz os cinco seletores e suas ordens: quatro destinos nos dois detalhes e três nos demais; o patch fornecido preserva os `value` e a ordem da base. Fontes atuais: `app/chamados/tests/test_bo_rotulo_encerrado.py:64`, `app/templates/chamados/detalhe.html:130`, `app/templates/chamados/detalhe_local.html:393`, `app/templates/chamados/fio_colaborador.html:265`, `app/templates/chamados/partials/modal_fio.html:665`, `app/templates/chamados/partials/painel_chamado_turno.html:74`. Comparação da base decorre do anexo fornecido; checkout da base `[nao verificado]`.
+
+Isso **não equivale a uma lista de transições sempre aceitas**. Os receptores locais reconhecem todo `STATUS_CHOICES` e delegam ao modelo (`app/chamados/services/acoes_chamado.py:287`, `app/chamados/services/acoes_chamado.py:313`, `app/chamados/services/fio.py:502`, `app/chamados/services/fio.py:719`). O modelo delega a decisão geométrica ao motor e aplica guardas de conteúdo (`app/chamados/models.py:119`, `app/chamados/models.py:128`, `app/chamados/models.py:135`, `app/chamados/models.py:148`, `app/chamados/models.py:181`).
+
+**Fila — “Reabrir” pode ser recusado:** o rótulo envia `aberto`; `resolvido → aberto` não pertence à matriz humana comum, embora `em_analise → aberto` pertença. [nome] tem exceção; destino igual à origem continua recusado (`app/chamados/services/verbos.py:136`, `app/chamados/catalogo/motor.py:99`, `app/chamados/catalogo/motor.py:148`, `app/chamados/catalogo/motor.py:153`).
+
+**Fila — detalhe GLPI oferece status sem aplicá-lo:** o formulário envia ao followup, cujo receptor lê somente conteúdo e envia a mensagem ao GLPI; não lê `novo_status` (`app/templates/chamados/detalhe.html:122`, `app/chamados/urls.py:12`, `app/chamados/views.py:292`, `app/chamados/views.py:304`, `app/chamados/views.py:310`).
+
+Q4 — escritores/leitores:
+
+- **Código/value:** chamadas literais dos cinco templates → `opcao_mover(status_local)` → `value=status_local`; receptores leem o código, verificam `STATUS_CHOICES`, chamam `transicionar` e finalmente `_gravar_estado` grava esse código. Nenhum desses caminhos interpreta o rótulo como código (`app/chamados/templatetags/chamados_tags.py:68`, `app/chamados/templatetags/chamados_tags.py:77`, `app/chamados/services/acoes_chamado.py:313`, `app/chamados/services/fio.py:719`, `app/chamados/models.py:199`, `app/chamados/models.py:228`, `app/chamados/models.py:447`).
+- **Rótulo da opção:** definição única em `MOVER_PARA`; `rotulo_de_movimento` lê pelo código e a tag escreve o texto HTML (`app/chamados/services/verbos.py:132`, `app/chamados/services/verbos.py:146`, `app/chamados/templatetags/chamados_tags.py:76`).
+- **Title:** definição compartilhada `ESTADO_TITLE`; lida por `rotulo_de_movimento`, `rotulo_de_linha` e `rotulo_para_pessoa`; a tag escreve o atributo, enquanto as pílulas usam `esp.1` (`app/chamados/services/verbos.py:100`, `app/chamados/services/verbos.py:146`, `app/chamados/services/verbos.py:155`, `app/chamados/services/verbos.py:166`, `app/templates/chamados/detalhe_local.html:70`).
+- **Filtro `espera`:** permanece delegado a `rotulo_para_pessoa`, que usa `ESPERA_COLAB`, onde resolvido/fechado compartilham “Encerrado”; continua nas pílulas e deixou as opções alteradas pelo patch. Isso responde à apresentação do estado atual, distinta da opção de movimento (`app/chamados/templatetags/chamados_tags.py:53`, `app/chamados/templatetags/chamados_tags.py:64`, `app/chamados/services/verbos.py:114`, `app/chamados/services/verbos.py:162`, `app/templates/chamados/detalhe.html:36`, `app/templates/chamados/detalhe_local.html:68`, `app/templates/chamados/fio_colaborador.html:188`, `app/templates/chamados/partials/modal_fio.html:102`, `app/templates/chamados/partials/painel_chamado_turno.html:18`).
+
+Q5 — não vejo **segundo juiz de transição** introduzido: o registrado continua `motor.decidir`, e a tag só consulta apresentação (`app/core/juizes.py:274`, `app/chamados/models.py:123`, `app/chamados/templatetags/chamados_tags.py:74`). `DESTINOS` congela a oferta de UI; não decide transições (`app/chamados/tests/test_bo_rotulo_encerrado.py:62`, `app/chamados/tests/test_bo_rotulo_encerrado.py:127`). Os mapas de movimento/pílula respondem a perguntas diferentes e seus consumidores permanecem separados, sem sobrecarga nova demonstrada (`app/chamados/services/verbos.py:125`, `app/chamados/services/verbos.py:140`, `app/chamados/services/verbos.py:162`).
+
+O censo não pode ficar vazio e manter verde: há mínimo de cinco arquivos e comparação exata com `DESTINOS` (`app/chamados/tests/test_bo_rotulo_encerrado.py:95`, `app/chamados/tests/test_bo_rotulo_encerrado.py:131`). Entretanto, há candidato forte a **BLOQUEIA — selo sem mordida suficiente**: manter todas as tags e acrescentar, antes de `</select>` no detalhe local, duas opções com fechamento implícito:
+
+```html
+<option value="resolvido">Encerrado
+<option value="fechado">Encerrado
+```
+
+O reconhecedor exige `</option>` e `DESTINOS` conta somente tags `opcao_mover`, logo esses acréscimos escapam à lógica estática (`app/templates/chamados/detalhe_local.html:398`, `app/chamados/tests/test_bo_rotulo_encerrado.py:23`, `app/chamados/tests/test_bo_rotulo_encerrado.py:104`, `app/chamados/tests/test_bo_rotulo_encerrado.py:111`, `app/chamados/tests/test_bo_rotulo_encerrado.py:127`). Execução da mutação e renderização em navegador `[nao verificado]`.
+
+## 11/11 12:19 · sessao e9c852c5cec4 · - · - · origem=Ronald (tmux)
+
+Censo direto da cópia: cinco seletores oferecem `status_local`, todos com `{% opcao_mover %}`, e todos entram em `DESTINOS` e nas verificações de literal/conjunto/ordem: `app/chamados/tests/test_bo_rotulo_encerrado.py:64`, `:99`, `:127`.
+
+| Controle | Destinos na ordem | Receptor e cobertura |
+|---|---|---|
+| `app/templates/chamados/detalhe.html:130` | `em_analise,resolvido,fechado,aberto` | POST para `followup` em `:122`; `app/chamados/urls.py:12` → `app/chamados/views.py:292` e `:304`, que só envia conteúdo ao GLPI. **Fila:** status exibido mas ignorado nesse caminho. |
+| `app/templates/chamados/detalhe_local.html:393` | mesmos quatro | `app/chamados/views.py:547` → `app/chamados/services/acoes_chamado.py:287`, `:313`, `:315`; testa código em `STATUS_CHOICES` e chama `transicionar`. |
+| `app/templates/chamados/fio_colaborador.html:265` | três primeiros | `app/chamados/views.py:669` → `app/chamados/services/fio.py:502`, `:709`, `:719`, `:721`; exige conteúdo e permissão contextual, depois transiciona. |
+| `app/templates/chamados/partials/modal_fio.html:665` | três primeiros | `app/chamados/views.py:953` → mesmo processador do fio. |
+| `app/templates/chamados/partials/painel_chamado_turno.html:74` | três primeiros | Form envia ao detalhe local em `:68`; mesmo receptor do detalhe local. |
+
+A cobertura percorre **todos os arquivos `.html` sob `app/templates/`**, mas só inspeciona fonte: `_html` em `app/chamados/tests/test_bo_rotulo_encerrado.py:33`, censo em `:55` e duplicidade textual em `:120`. A proibição de opções literais fora de seletores `novo_status` só percorre `templates/chamados` (`:110`). Não percorre `.js`, Python ou forms Django (`:36`); portanto não protege futuros status construídos nesses lugares (`:33`, `:52`, `:117`).
+
+Busca produtiva no repositório não encontrou outro seletor de destinos, JS que ofereça esses destinos nem choices montadas em views/forms; ausência absoluta de construção indireta: `[nao verificado]`. Os receptores encontrados leem somente o código (`acoes_chamado.py:287`; `fio.py:502`).
+
+Controles de ações com efeito sobre o estado, **fora do selo de opções**, incluindo omissões do censo da v1:
+
+| Ação | Controle e caminho |
+|---|---|
+| Aprovar/rejeitar benefício | `app/templates/colaboradores/painel_solicitacao_beneficio.html:23`, `:24`; também JS em `app/templates/colaboradores/fila_solicitacoes_beneficio.html:138`, `:139` → `app/colaboradores/views.py:2068`, `resolvido`/`fechado`. |
+| Aceitar/recusar escala | `app/templates/chamados/detalhe_local.html:163`, `:169` → `app/chamados/services/acoes_chamado.py:149`, `resolvido`. |
+| Aceitar/recusar agenda | mesmo template `:200`, `:209` → `acoes_chamado.py:108`, `resolvido`. |
+| Aprovar exceção | detalhe local `:256`; modal `:598` → `acoes_chamado.py:70`, `resolvido`. |
+| Autorizar geofence, autorizar com advertência, recusar | detalhe local `:285`, `:286`, `:287`; modal `:506`, `:517`, `:528` → `acoes_chamado.py:222`, `:277`, `resolvido`; preparação de `registrado → em_analise` em `:232`. |
+| Abrir registro de ausência | detalhe local `:233` → `app/chamados/views.py:1513`, `analisar()`. |
+| Reabrir administrativamente disputa | modal `:390` → `app/chamados/services/acoes_disputa.py:269`, `:270`, `reabrir(humano=True)`. |
+| Resgatar chamado encerrado pela tranca | `app/templates/chamados/partials/_lista_chamados.html:85` → `app/chamados/views_arquivar.py:64`, `:70`, `reabrir(humano=True)`. |
+| **Aceitar folga sugerida** | modal `:550` → `app/chamados/views.py:431` → `app/chamados/services/limbo_folgas.py:98`, `:101`, reconcilia os chamados do mesmo template. |
+| **Validar resposta / validar assim mesmo** | modal `:265`, `:281`; também detalhe local roteia em `app/chamados/views.py:483` → `app/chamados/services/acoes_disputa.py:18` → `app/chamados/services/validacao.py:295`, `:296` → `app/ponto/services/veredito_celula.py:202`, reconcilia chamados do dia. |
+| **Validar inline** | `_lista_chamados.html:82` → `app/chamados/views_cobrar.py:208`, mesma `acao_validar_pergunta`. |
+| **Validar em lote** | `app/templates/chamados/painel_gestao.html:14`, `app/templates/chamados/partials/_lote_preview.html:21`; `app/chamados/views_cobrar.py:247`, `:261`, delega ao validador de lote. |
+| **Regularizar disputa e fechar** | modal `:355` → `app/chamados/services/acoes_disputa.py:139`, materializa perguntas validadas; fio tem processamento em `app/chamados/services/fio.py:695`. Efeito exato de todo caso sobre `status_local`: `[nao verificado]`. |
+
+Filtros de estado não são controles de transição: histórico em `app/templates/relatorios/historico_chamados.html:54` oferece `aberto/em_analise/resolvido/fechado` (`:56`–`:59`), e o receptor aplica filtro em `app/relatorios/views.py:920`. O teste global também enxerga essas opções, pois reconhece qualquer `value` presente em `ESTADOS` (`app/chamados/tests/test_bo_rotulo_encerrado.py:46`), independentemente de ser filtro.
+
+## 11/11 12:19 · sessao c7e0251bc2ef · FIO-E0-V4-E4B · censo · origem=Code
+
+**O achado 1 procede quanto à interrupção dos carimbos e da varredura de fecho. Há duas correções: o status do chamado já foi salvo quando S143 recebe `{0,0}`; e uma disputa que ainda contém pergunta viva já não poderia fechar por C7.** O retorno antecipado também impede examinar outras disputas abertas do colaborador, inclusive órfãs fecháveis. (`app/chamados/models.py:296`; `app/chamados/signals.py:115`; `app/chamados/models.py:1853`; `app/chamados/services/disputa_emissao.py:1946`, `:2021`, `:2086`)
+
+**1. Censo dos chamadores e alcance da reabertura**
+
+Há cinco chamadas de produção do resolver; `models.py` apenas reexporta a função. (`app/chamados/signals.py:115`; `app/chamados/services/becos.py:54`; `app/chamados/reconciliador.py:536`, `:1648`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`; `app/chamados/models.py:4093`)
+
+| Chamador | Gatilho e estado ao entrar | Pode alcançar reabertura/ressuscitação/S2? |
+|---|---|---|
+| `app/chamados/signals.py:115` | `post_save` de chamado em `ENCERRADOS`, quando o save escreveu `status_local`. Inclui encerramento novo e save nomeando o mesmo status encerrado. (`:75`, `:85`, `:90`, `:96`, `:104`) | Sim, passa pelo resolver após o save do chamado. (`app/chamados/models.py:296`; `app/chamados/services/disputa_emissao.py:1945`) |
+| `app/chamados/services/becos.py:54` | Evento de pergunta ou command: reúne pai/destinos **já terminais**, incluindo cancelado/superado. (`:11`, `:21`, `:42`, `:46`) | Condicional. O evento exige `FECHAVEL`; uma viva na própria disputa impede essa entrada. O resolver pode encontrar perguntas de outras disputas ancoradas no mesmo chamado. (`:33`, `:74`; `app/chamados/models.py:344`; `app/chamados/services/disputa_emissao.py:1938`) |
+| `app/chamados/reconciliador.py:536` | `_retratar`: só chega depois de `ch.reconciliar()` retornar verdadeiro. Portanto entra após o encerramento feito nessa operação; o save já acionou também S143. (`:522`, `:523`, `:536`; `app/chamados/models.py:654`, `:296`) | Sim, sujeito às guardas comuns abaixo. Não é, por si, varredura de passivo já encerrado: exige uma reconciliação aceita antes. (`app/chamados/reconciliador.py:523`; `app/chamados/services/disputa_emissao.py:1945`) |
+| `app/chamados/reconciliador.py:1648` | `reatar_pergunta_orfa`: candidato histórico único vem de consulta a `ENCERRADOS`; exige reaponte aceito. É entrada explícita com chamado histórico resolvido/fechado. (`:1586`, `:1587`, `:1623`, `:1642`, `:1648`) | Sim, sujeito às guardas comuns. (`app/chamados/services/disputa_emissao.py:1945`) |
+| `app/ponto/management/commands/reconciliar_fantasmas.py:281` | Somente apply; consulta inicial contém **apenas VIVOS**. Primeiro tenta `retratar`; chama explicitamente o resolver somente se `rec=False`. O comentário menciona chamado já resolvido, mas a consulta não seleciona esse passivo. (`:153`, `:157`, `:159`, `:269`, `:273`, `:280`, `:281`) | Pode executar a porta, mas não é uma varredura inicial de chamados fechados. O cron declarado usa `--alarme`, que desliga apply. (`:153`; `app/config/crons.py:392`) |
+
+A porta comum exige pergunta sem `respondida_em`, viva pelo C6 e credor fora de `VIVOS`. Mede a carga inteira de relavra/ressuscitação, recusa competência exportada **ou indeterminada**, recusa limbo e consulta as guardas existentes de reabertura. Só então chama `credor.reabrir()`. (`app/chamados/services/disputa_emissao.py:1792`, `:1821`, `:1827`, `:1835`, `:1837`, `:1846`, `:1849`)
+
+Quando aceita, a cadeia é efetiva: `reabrir` grava o estado e chama `ressuscitar_perguntas`; a mudança de fronteira de `ENCERRADOS` permite relavra S2 das perguntas por destino; a ressuscitação limpa carimbos e pode reabrir disputas fechadas. O resolver usa `executar=True`, sem DRY próprio. (`app/chamados/models.py:1440`, `:1452`, `:273`, `:303`, `:312`, `:1562`, `:1575`; `app/chamados/services/disputa_emissao.py:1805`, `:1945`)
+
+Os gatilhos indiretos encontrados são:
+
+| Entrada | Caminho |
+|---|---|
+| Batida salva | Signal → reconciliação do colaborador → retratação e reata de órfãs. (`app/ponto/signals.py:206`, `:214`; `app/chamados/reconciliador.py:1432`, `:1464`, `:1526`) |
+| Filho deixa `VIVOS` | Signal agenda a mesma reconciliação após commit. (`app/chamados/signals.py:349`, `:366`, `:369`) |
+| Pergunta salva | Signal agenda `fechar_beco_da_disputa` após commit. (`app/chamados/signals.py:227`, `:237`, `:238`) |
+| Emissão de pergunta órfã | Emissor chama `reatar_pergunta_orfa`. (`app/chamados/services/disputa_emissao.py:459`, `:465`) |
+| Outbox de célula | Consumidor chama retratação por célula e por premissa; cron declarado a cada minuto. (`app/chamados/reconciliador.py:1368`, `:1372`; `app/config/crons.py:394`) |
+| Ação humana no detalhe/fio | Serviços transitam o chamado → núcleo salva → S143. (`app/chamados/views.py:423`; `app/chamados/services/acoes_chamado.py:70`, `:108`, `:149`, `:222`, `:277`, `:315`; `app/chamados/services/fio.py:719`; `app/chamados/models.py:450`, `:296`) |
+| Justificativa e geofence | Aprovação de justificativa e aplicação de geofence delegam a `retratar`. (`app/ponto/services/justificativa.py:46`; `app/ponto/services/geofence.py:441`) |
+| Outros commands | Alertas de turno, grade, vínculo e lei-cala delegam a `retratar`; os três últimos condicionam a escrita a apply. (`app/ponto/management/commands/processar_alertas_turno.py:216`; `app/ponto/management/commands/reconciliar_grade.py:305`, `:309`; `app/ponto/management/commands/reconciliar_vinculo.py:58`, `:68`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:54`, `:59`) |
+
+Os crons declarados de **fantasmas**, **reconciliar chamados** e **becos** usam `--alarme`; essa declaração não demonstra execução mutante do resolver. Alertas de turno têm agendamento `*/5`. Execução real desses crons: **[nao verificado]**. (`app/config/crons.py:362`, `:392`, `:395`, `:663`; `app/ponto/management/commands/reconciliar_fantasmas.py:153`; `app/chamados/management/commands/fechar_becos_disputa.py:30`, `:54`)
+
+Há ainda um chamador direto da **porta de reabertura**, sem passar pelo resolver: o backfill E4B. Ele planeja com `executar=False`, executa em `_executar_dia` e possui DRY com rollback e apply cercado. Portanto esse command não deve ser confundido com os eventos comuns. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:90`, `:135`, `:175`, `:300`, `:308`, `:353`)
+
+**ANTES versus DEPOIS:** a comparação literal com `fb9269ea9`, inclusive por chamador, fica **[nao verificado]**: o corpo dessa árvore base não está disponível no material consultado. O comentário atual declara que a base já carregava S128; o recibo descreve diferenças de escopo de `tranca_da_consulta`, mas não substitui o código antigo. (`app/chamados/services/disputa_emissao.py:1926`; `app/docs/FIO-E0-V4-E4B-c4-v14.txt:17`)
+
+Na cópia atual, a ordem comprovada é **tentar devolver alcance → eventualmente retornar `{0,0}` → somente depois viriam S128, HX-RESPOSTA-VISIVEL, HX-DISPUTA-ORFA e C7**. Atribuir precisamente a introdução de cada trecho ao diff informado permanece **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1945`, `:1947`, `:1981`, `:1998`, `:2021`, `:2086`)
+
+**2. Todos os consumidores do retorno e comportamento com `{0,0}`**
+
+| Consumidor | O que faz |
+|---|---|
+| S143 | Descarta o retorno. O status já foi salvo; a recusa não provoca rollback. (`app/chamados/signals.py:115`; `app/chamados/models.py:296`) |
+| `fechar_beco` | Descarta o retorno, relê a disputa e ainda tenta fechá-la se C7 permitir. Portanto a recusa do resolver não impede necessariamente esse fecho posterior. (`app/chamados/services/becos.py:54`, `:55`, `:56`, `:57`) |
+| `_retratar` | Descarta o retorno, anexa ocorrência de retratação e retorna `True`. (`app/chamados/reconciliador.py:536`, `:538`, `:541`) |
+| `reatar_pergunta_orfa` | Descarta o retorno e retorna `True` pelo reaponte aceito; isso não comprova carimbo nem fecho de disputa. (`app/chamados/reconciliador.py:1642`, `:1648`, `:1649`) |
+| `reconciliar_fantasmas` | **Único leitor das contagens:** com `rec=False` e `{0,0}`, calcula `mudou=False`, pula ocorrência/evento e apenas imprime. Não grava status depois desse retorno. (`app/ponto/management/commands/reconciliar_fantasmas.py:281`, `:282`, `:283`, `:306`) |
+
+O wrapper público apenas devolve o dict do corpo, sem interpretar recusa. (`app/chamados/services/disputa_emissao.py:1873`, `:1879`)
+
+Assim, **sim, o código permite conservar chamado encerrado com disputas abertas após essa recusa**. A ordem principal, porém, é “salvou status → S143 → retorno ignorado”, e não “leu zero → depois gravou fechado”. O núcleo ainda pode executar sua relavra S2 após o receiver. (`app/chamados/models.py:296`, `:303`; `app/chamados/signals.py:115`; `app/chamados/services/disputa_emissao.py:1947`)
+
+`{0,0}` também não significa ausência de escrita: a porta anexa ocorrência de recusa antes de devolvê-la. As duas contagens representam carimbos S128 e fechos; os carimbos do ramo HX de órfãs nem incrementam `perguntas_resolvidas`. (`app/chamados/services/disputa_emissao.py:1855`, `:1859`, `:1984`, `:2055`, `:2088`)
+
+O fechamento comum pode chegar à recusa: F1 exclui exportadas/indeterminadas da lista que bloquearia o fechamento; a porta de reabertura recusa precisamente essa carga. O teste existente exige que a recusa interrompa outros carimbos e fechos. Ocorrência concreta em produção: **[nao verificado]**. (`app/chamados/models.py:364`, `:365`; `app/chamados/services/disputa_emissao.py:1835`, `:1946`; `app/chamados/tests/test_e4b_classe_e_memoria.py:960`, `:970`, `:972`)
+
+A correção do contraexemplo é esta: **viva exportada + mortas na mesma disputa demonstra mortas sem carimbo; não demonstra que essa mesma disputa deveria fechar**, porque C7 já barra sua pergunta viva. O alcance adicional perdido é a varredura das demais disputas abertas do colaborador. (`app/chamados/models.py:1853`; `app/chamados/services/disputa_emissao.py:1947`, `:1981`, `:2022`, `:2086`)
+
+**3. Contadores/vigias e seus limites**
+
+| Detector | O que perceberia |
+|---|---|
+| Auditor **I2** | Pergunta sem materialização apontando a chamado terminal; exclui do alarme a respondida em disputa aberta. Detecta o resíduo com destino terminal, mas não a órfã sem destino. (`app/chamados/management/commands/auditar_invariantes_chamados.py:587`, `:591`, `:594`) |
+| Vigia de becos | Varre abertas e lista `FECHAVEL`/`BARRADA`; `--alarme` falha somente para `FECHAVEL`. Órfã sem destino e sem resposta fica fora do recorte; disputa com viva pode ser apenas listada como barrada. (`app/chamados/management/commands/fechar_becos_disputa.py:32`, `:39`, `:44`, `:67`; `app/chamados/services/becos.py:29`, `:33`) |
+| Relatório de pendências | Aberta sem nenhuma pergunta viva aparece em `PRONTA_FECHAR`; é relatório, não guarda de fechamento. (`app/chamados/relatorios_disputa.py:18`, `:20`, `:41`) |
+| `auditar_disputas` | Conta toda disputa aberta há mais de sete dias, sem identificar a causa da recusa. (`app/chamados/management/commands/auditar_disputas.py:132`, `:135`) |
+| Alerta de pendências | Seleciona abertas e alerta colaborador/supervisão; cron declarado às 08h. Não identifica especificamente “órfã causada pela recusa”. (`app/ponto/management/commands/alertar_disputas_pendentes.py:33`, `:48`, `:73`, `:103`; `app/config/crons.py:745`) |
+| `vigia_fio.censo_alcance` | Pode classificar viva sob chamado terminal, dentro dos dias retidos/competências a lavrar; não cobre universalmente órfãs mortas ou exportadas. (`app/chamados/services/vigia_fio.py:577`, `:587`, `:687`) |
+
+Portanto, **não procede dizer que não existe detector algum**; os detectores têm recortes distintos e não comprovam cobertura universal dessa recusa. Execução e resultados na frota: **[nao verificado]**. (`app/chamados/management/commands/auditar_invariantes_chamados.py:587`; `app/chamados/management/commands/fechar_becos_disputa.py:67`)
+
+**Quem escreve e quem lê os campos omitidos**
+
+O quadro abaixo identifica os escritores do caminho interrompido e os leitores funcionais relevantes; não é inventário de toda referência textual a esses campos. (`app/chamados/services/disputa_emissao.py:1981`, `:2055`, `:2087`)
+
+| Campos | Quem escreveria | Quem lê |
+|---|---|---|
+| `materializada_em`, `materializada_por`, `via_resolucao` | S128 e HX chamam `carimbar`; a atribuição canônica fica em `_escrever_carimbo`. (`app/chamados/services/disputa_emissao.py:1981`, `:2055`; `app/chamados/models.py:3097`) | C6 lê carimbo/via; estado da pergunta lê materialização; materializador seleciona materialização nula. O autor também é lido em registros de auditoria. (`app/chamados/juizes.py:1342`, `:1368`, `:1405`; `app/chamados/models.py:3046`; `app/chamados/services/materializacao.py:1372`; `app/chamados/reconciliador.py:1145`) |
+| `respondida_em`, `validada_em`, `validada_por` | `carimbar` pode preenchê-los com texto não vazio; S128 usa `resposta='validar'`, HX usa `'responder'`. (`app/chamados/models.py:3130`, `:3134`; `app/chamados/services/disputa_emissao.py:1982`, `:2055`) | C6, respostas sem veredito/C7, estado da pergunta e fila do materializador. (`app/chamados/juizes.py:1331`, `:1347`; `app/chamados/models.py:1843`, `:1853`, `:3041`; `app/chamados/services/materializacao.py:1369`) |
+| `veredito_lavrado`, `julgado_em`, `janela_expira_em` | S128 solicita relavra no mesmo save do carimbo. (`app/chamados/services/disputa_emissao.py:1982`; `app/chamados/models.py:3149`, `:3151`) | São a lavra persistida associada ao carimbo; a recusa pula essa chamada S128, mas não elimina a relavra independente do núcleo do chamado. (`app/chamados/models.py:3149`, `:303`, `:312`) |
+| `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` | O laço final chama `d.fechar`; a porta grava os quatro juntos. (`app/chamados/services/disputa_emissao.py:2087`; `app/chamados/models.py:1932`, `:1936`) | `aberta`, consulta do app, lookup do fio e relatórios leem o estado aberto; signals usam fecho/autor/resolução para cascatas; a porta lê o conjunto para idempotência; o vigia conta motivo `vazia`. (`app/chamados/models.py:1824`, `:1880`; `app/chamados/services/pergunta_no_app.py:71`; `app/chamados/services/fio.py:131`; `app/chamados/relatorios_disputa.py:41`; `app/chamados/signals.py:45`, `:136`, `:163`; `app/chamados/services/vigia_fio.py:734`) |
+
+Por fim, o item dos tetos comentados **não procede nesta cópia**: 213 e 269 são entradas ativas e são cobradas por `assertLessEqual`. Resultado de execução desses testes: **[nao verificado]**. (`app/ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`, `:292`, `:294`)
+
+## 11/11 12:17 · sessao c17d1b00836f · - · - · origem=Ronald (tmux)
+
+- **Único leitor semântico do retorno:** `app/ponto/management/commands/reconciliar_fantasmas.py:281` recebe o dict; `:282` calcula `mudou` pelas duas contagens. Com `rec=False` e `{0,0}`, pula nota e evento (`:283-305`), apenas imprime (`:306-309`). Não grava status depois desse retorno. Os demais chamadores descartam o retorno: `app/chamados/signals.py:115`, `app/chamados/services/becos.py:54`, `app/chamados/reconciliador.py:536`, `:1648`.
+
+- **Fechamento comum permanece gravado:** `_gravar_estado` salva o chamado em `app/chamados/models.py:296`; o S143 recebe o estado encerrado (`app/chamados/signals.py:96`) e ignora o retorno (`:115`). A recusa normal `{0,0}` não lança exceção nem determina rollback; após o receiver, `_gravar_estado` ainda pode relavrar S2 (`app/chamados/models.py:303-312`). Portanto a persistência do chamado terminal com disputas abertas é sustentada pelo código; não decorre de um leitor explícito dizendo “nada a fazer”.
+
+- **`{0,0}` não significa zero escrita:** o helper grava ocorrência de recusa antes de retornar (`app/chamados/services/disputa_emissao.py:1855-1859`). O laço pode reabrir uma âncora anterior antes de encontrar outra que recusa (`:1941-1947`); o `return` não desfaz isso. As contagens só incrementam carimbo S128 (`:1984`) e fechamento de disputa (`:2088`); nem carimbos HX de órfãs (`:2055`) entram em `perguntas_resolvidas`.
+
+**Vigias/contadores existentes e limites:**
+
+| Leitor | O que perceberia |
+|---|---|
+| `app/chamados/management/commands/fechar_becos_disputa.py:32-49` | Varre disputas abertas; lista FECHAVEL/BARRADA. `--alarme` dá exit 2 somente para FECHAVEL (`:67-70`). A classificação exige pai terminal e nenhuma pergunta sem resposta com destino não terminal (`app/chamados/services/becos.py:25-33`). Uma órfã sem destino e sem resposta passa fora desse recorte; viva exportada na mesma disputa pode produzir BARRADA, listada sem alarme. Cron declarado às 07:10 em `app/config/crons.py:663`. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:1601-1605` | C2 conta pergunta morta pela célula com `materializada_em`, `validada_em`, `respondida_em` nulos e veredito não acusador. Não é detector universal de órfãs e o filtro não exige disputa aberta. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:805-807` | I7 só cobre disputa aberta com pai inexistente ou cancelado; pai resolvido/fechado não entra. |
+| `app/chamados/relatorios_disputa.py:18-20` e `:40-47` | Disputa aberta sem nenhuma viva aparece em `PRONTA_FECHAR`; é relatório, não cura nem guarda. Comando `relatorio_pendencias_disputa` usa esse coletor (`app/chamados/management/commands/relatorio_pendencias_disputa.py:15`); declarado sob demanda em `app/config/crons.py:1448`. |
+| `app/chamados/management/commands/auditar_disputas.py:132-143` e `:203` | Toda disputa ainda aberta há mais de sete dias entra em `disputas_paradas_7d`; não identifica especificamente a recusa. Sob demanda: `app/config/crons.py:1450`. |
+| `app/ponto/management/commands/alertar_disputas_pendentes.py:33-35` | Toda aberta entra no alerta genérico: push colaborador (`:48-65`), agregado supervisão (`:67-70`, `:103-115`), `disputa_velha` se >7 dias (`:73-85`). Cron declarado 08:00 diário: `app/config/crons.py:745`. |
+| `app/chamados/services/vigia_fio.py:577-587` e `:687-699` | `censo_alcance` mede dias retidos em competências a lavrar; pode classificar `pergunta_viva_sob_chamado_terminal`. Não garante perceber órfã morta ou pergunta exportada fora desse universo. |
+
+Execução real dos crons: **[nao verificado]**.
+
+**Escritores dos campos omitidos pelo retorno antecipado:**
+
+- S128 chama `carimbar(resposta='validar', lavrar_veredito=True)`: `app/chamados/services/disputa_emissao.py:1981-1982`.
+- HX órfã chama `carimbar(resposta='responder')`: `app/chamados/services/disputa_emissao.py:2055`.
+- Porta canônica escreve `materializada_em`, `materializada_por_id`, `via_resolucao`: `app/chamados/models.py:3097-3101`; pode preencher `respondida_em`, `validada_em`, `validada_por` apenas com texto não vazio (`:3130-3137`). S128 também lavra `veredito_lavrado`, `julgado_em`, `janela_expira_em` (`:3149-3152`).
+- Fecho final chama `d.fechar`: `app/chamados/services/disputa_emissao.py:2086-2088`; a porta escreve `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` e evento: `app/chamados/models.py:1932-1940`.
+
+**Leitores canônicos e efeitos desses campos:**
+
+- C6: `validada_em` (`app/chamados/juizes.py:1331`), via/carimbo (`:1342`, `:1368`), resposta/carimbo (`:1347`), materialização (`:1374`, `:1405`).
+- Estado da pergunta: `app/chamados/models.py:3041-3048`; pré-filtro `q_vivas`: `:3348-3359`.
+- Respostas sem veredito e C7: `app/chamados/models.py:1842-1853`.
+- Fila do materializador: `app/chamados/services/materializacao.py:1369-1373`; S144 seleciona materialização nula (`:1418-1419`).
+- Disputa aberta: property `app/chamados/models.py:1823-1824`; apresentação app `app/chamados/services/pergunta_no_app.py:71`; lookup fio `app/chamados/services/fio.py:131-135`; relatório `app/chamados/relatorios_disputa.py:41`.
+- `fechada_em` também dispara S88 para reconciliar pai (`app/chamados/signals.py:28-42`), retomada de regularizações (`:129-144`) e S144 (`:153-162`). Ao não fechar a disputa, esses eventos não são emitidos por esse caminho.
+
+Esse último bloco é mapa dos leitores canônicos/efeitos relevantes, **não um censo literal de toda referência desses campos na árvore**.
+
+**Correção importante sobre beco:** o evento só chama `fechar_beco` quando `classificar==FECHAVEL` (`app/chamados/services/becos.py:74-78`), e FECHAVEL depende de C7 (`:33`), que exige nenhuma viva na própria disputa (`app/chamados/models.py:1853`). Logo uma viva na própria disputa não demonstra esse evento chegando ao helper: seria BARRADA. O resolver pode, contudo, carregar âncoras do chamado pertencentes a outras disputas (`app/chamados/services/disputa_emissao.py:1938`).
+
+`_C14` não é vigia de órfãs: pergunta pela competência do chamado, em `app/core/juizes.py:122`, registrada em `:286`; o I14 do auditor trata junção de célula (`app/chamados/management/commands/auditar_invariantes_chamados.py:1022`).
+
+## 11/11 12:16 · sessao 5c659c5fb6aa · - · - · origem=Ronald (tmux)
+
+Censo direto de produção: **cinco chamadas do resolver**, mais a chamada direta da porta no backfill; a exportação de `models.py` não é novo chamador. (`app/chamados/signals.py:115`; `app/chamados/services/becos.py:54`; `app/chamados/reconciliador.py:536`; `app/chamados/reconciliador.py:1648`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:135`; `app/chamados/models.py:4093`)
+
+| Chamador | Gatilho e estado da entrada | Tratamento do retorno |
+|---|---|---|
+| `app/chamados/signals.py:115` | `post_save` de Chamado; exige `ENCERRADOS`, isto é, resolvido/fechado, e save que escreveu status. Tanto pode ser transição recém-encerrada quanto save nomeando `status_local` sem mudar valor. (`signals.py:90-115`; `catalogo/motor.py:30`; `signals.py:75-87`) | Ignora retorno; `{0,0}` não levanta nem desfaz o estado salvo antes do receiver. (`signals.py:114-117`; `models.py:296`) |
+| `app/chamados/services/becos.py:54` | Reúne pai/destinos em `TERMINAIS`: inclui resolvido/fechado **e cancelado/superado**. (`becos.py:11-22`; `becos.py:42-54`; `catalogo/motor.py:30-31`) | Ignora retorno, relê disputa e fecha se C7 permite; devolve se terminou fechada. (`becos.py:54-59`) |
+| `app/chamados/reconciliador.py:536` | `_retratar`: só chega depois de `ch.reconciliar()` retornar verdadeiro; portanto encerrou pela porta antes de chamar explicitamente. O save dessa porta já dispara também o receiver S143. (`reconciliador.py:522-536`; `models.py:650-655`; `models.py:296`; `signals.py:115`) | Ignora retorno, anexa ocorrência e retorna `True`. Não há recusa de `{0,0}`. (`reconciliador.py:536-541`) |
+| `app/chamados/reconciliador.py:1648` | `reatar_pergunta_orfa`: candidato histórico único vem de consulta `status_local__in=ENCERRADOS`; reaponte deve ter aceitado antes da chamada. (`reconciliador.py:1585-1589`; `reconciliador.py:1623-1648`) | Ignora retorno e retorna `True`, mesmo que resolver retorne `{0,0}`. Isso contabiliza reata bem-sucedida, sem provar carimbo/fecho. (`reconciliador.py:1642-1649`; `reconciliador.py:1524-1527`) |
+| `app/ponto/management/commands/reconciliar_fantasmas.py:281` | Só em `--apply`, nunca `--alarme`; consulta inicial **só VIVOS**. Primeiro tenta `retratar`; só chama explicitamente resolver se `rec=False`. Não constitui varredura inicial de chamados já encerrados. (`reconciliar_fantasmas.py:153`; `reconciliar_fantasmas.py:157-160`; `reconciliar_fantasmas.py:269-281`) | Único leitor de produção das duas contagens: `{0,0}` com `rec=False` dá `mudou=False`, pula ocorrência/log `reconciliar_fantasma`, mas imprime resultado. Se `rec=True`, não lê resultado interno do resolver e `mudou=True`. (`reconciliar_fantasmas.py:281-309`) |
+
+A nova porta pode reabrir somente pergunta **sem `respondida_em`, viva pelo C6**, ancorada em chamado fora de VIVOS; exige carga de reabertura sem competência exportada/indeterminada e sem limbo, além das recusas da porta existente. Em sucesso chama `credor.reabrir()`. (`app/chamados/services/disputa_emissao.py:1821-1849`) A reabertura grava estado, pode relavrar S2 e chama `ressuscitar_perguntas()`: são efeitos efetivos, sem parâmetro dry no resolver/eventos. (`app/chamados/models.py:1442-1452`; `app/chamados/models.py:303-312`; `app/chamados/services/disputa_emissao.py:1945`)
+
+**Ressalva de becos:** o evento só chama `fechar_beco` quando `classificar(d)==FECHAVEL`, que exige `d.pode_fechar()`; C7 exige ausência de pergunta viva e resposta sem veredito **nessa disputa**. Portanto não procede afirmar que uma viva sem resposta da própria disputa leva normalmente o evento até a porta nova. (`app/chamados/services/becos.py:25-33`; `app/chamados/services/becos.py:72-78`; `app/chamados/models.py:1848-1853`) Isso não prova impossibilidade geral: o resolver examina `_ancoradas` do chamado, incluindo perguntas de outras disputas e sem filtro de disputa aberta; seu fechamento ainda varre todas abertas do colaborador. (`app/chamados/models.py:344-347`; `app/chamados/services/disputa_emissao.py:1938-1945`; `app/chamados/services/disputa_emissao.py:2021-2023`)
+
+Entradas indiretas concretas:
+
+- **Batida/evento:** `post_save Batida` chama `reconciliar_chamados_colab`, que reata órfãs e retrata premissas mortas; passa respectivamente por `:1648` e `:536`. (`app/ponto/signals.py:206-215`; `app/chamados/reconciliador.py:1432-1441`; `app/chamados/reconciliador.py:1526`; `app/chamados/reconciliador.py:1464`)
+- **Filho que sai de VIVOS:** `post_save Chamado` agenda, após commit, a mesma reconciliação do colaborador. (`app/chamados/signals.py:349-369`)
+- **Pergunta salva:** `post_save PerguntaDisputa` agenda `fechar_beco_da_disputa` após commit. (`app/chamados/signals.py:227-238`)
+- **Emissão de pergunta órfã nova:** emissor chama `reatar_pergunta_orfa`; pode chegar ao histórico encerrado de `:1648`. (`app/chamados/services/disputa_emissao.py:459-465`)
+- **Outbox/cron:** consumidor chama retratação por célula e por premissa; cron declarado a cada minuto. (`app/chamados/reconciliador.py:1368-1372`; `app/config/crons.py:394`)
+- **Humano, detalhe/fio:** ações da view chamam serviços que transitam para resolvido; resposta livre e fio permitem transição solicitada pelo gestor. Todas passam pelo núcleo que salva e pelo S143. (`app/chamados/views.py:423-427`; `app/chamados/services/acoes_chamado.py:70`; `app/chamados/services/acoes_chamado.py:108`; `app/chamados/services/acoes_chamado.py:149`; `app/chamados/services/acoes_chamado.py:222`; `app/chamados/services/acoes_chamado.py:277`; `app/chamados/services/acoes_chamado.py:315`; `app/chamados/services/fio.py:719-721`; `app/chamados/models.py:450`; `app/chamados/models.py:296`; `app/chamados/signals.py:115`)
+- **Aprovação de justificativa:** encerra origem por `retratar`, após exigir chamado vivo. (`app/ponto/services/justificativa.py:33-46`)
+- **Geofence:** reavaliação com `aplicar=True` chama `retratar`. (`app/ponto/services/geofence.py:435-443`)
+- **Commands que delegam a `retratar`:** alertas de turno `:216`, grade `:309` condicionado a apply `:305`, vínculo `:68` condicionado a apply `:58`, lei cala `:59` condicionado a apply `:54`, fantasmas `:280`. (`app/ponto/management/commands/processar_alertas_turno.py:216`; `app/ponto/management/commands/reconciliar_grade.py:305`; `app/ponto/management/commands/reconciliar_grade.py:309`; `app/ponto/management/commands/reconciliar_vinculo.py:58`; `app/ponto/management/commands/reconciliar_vinculo.py:68`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:54`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`; `app/ponto/management/commands/reconciliar_fantasmas.py:280`)
+- **Agendamentos declarados:** alertas turno `*/5`; fantasmas `*/15 --alarme`; reconciliar chamados `*/15 --alarme`; grade às 06:20 sem apply; vínculo às 06:47 `--alarme`; becos às 07:10 `--alarme`. Os crons fantasmas e becos nesses modos não executam o resolver. (`app/config/crons.py:362`; `app/config/crons.py:392`; `app/config/crons.py:395`; `app/config/crons.py:462`; `app/config/crons.py:489`; `app/config/crons.py:663`; `app/ponto/management/commands/reconciliar_fantasmas.py:153`; `app/ponto/management/commands/reconciliar_fantasmas.py:269-270`; `app/chamados/management/commands/fechar_becos_disputa.py:30`; `app/chamados/management/commands/fechar_becos_disputa.py:54-57`)
+- **Backfill direto:** planeja com `executar=False` em `ato_do_dia`; executa em `_executar_dia`; lista exportadas em leitura. Possui DRY com rollback e apply condicionado a competência corrente. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:90`; `:135`; `:175`; `:221-230`; `:353-359`)
+
+O caminho comum **pode persistir estado encerrado com `{0,0}`**, pois o save do chamado precede o receiver e a recusa retorna normalmente; o núcleo continua inclusive a possível relavra S2 depois do save. A formulação “tratam `{0,0}` como nada a fazer e **depois gravam** status fechado” não descreve a ordem principal: **status já foi gravado**, o resolver é chamado no `post_save`, e o retorno é ignorado. (`app/chamados/models.py:296-312`; `app/chamados/signals.py:114-117`; `app/chamados/services/disputa_emissao.py:1946-1947`)
+
+## 11/11 12:16 · sessao 9864d761e438 · - · - · origem=Ronald (tmux)
+
+- **Comparação literal com `fb9269ea9`: [nao verificado].** A cópia não tem `.git` e o `git cat-file` não executa como repositório. Existe somente um diff intermediário de c4-v2, cujo cabeçalho não identifica `fb9269ea9` (`app/docs/FIO-E0-V4-E4B-c4-v2.diff:1-5`). O recibo afirma que a base tinha o laço S128 e C7 fora de `tranca_da_consulta`, mas isso é documentação histórica, sem o corpo antigo disponível (`app/docs/FIO-E0-V4-E4B-c4-v14.txt:17-21`; comentário atual: `app/chamados/services/disputa_emissao.py:1926-1929`). Não afirmar que cada chamador foi introduzido/alterado pelo diff sem a base.
+
+- **Cadeia atual comprovada:** o resolver enumera `_ancoradas()` e chama `reabrir_credor_de_pergunta_viva` antes dos carimbos (`app/chamados/services/disputa_emissao.py:1937-1947`). `_ancoradas` inclui perguntas não validadas por destino ou pai sem destino, sem filtro de disputa aberta ou materialização (`app/chamados/models.py:336-347`). A cura exige pergunta sem `respondida_em`, viva pelo C6 e credor fora de VIVOS (`app/chamados/services/disputa_emissao.py:1821-1828`).
+
+- **Reabertura é condicional, com efeito real:** a cura mede toda carga de S2/ressuscitação (`app/chamados/services/disputa_emissao.py:1792-1802`), recusa exportada/indeterminada ou limbo e pergunta às guardas canônicas (`app/chamados/services/disputa_emissao.py:1835-1849`). A transição REABRIR existe somente para resolvido/fechado → em_analise (`app/chamados/catalogo/motor.py:113`). `reabrir` grava o estado e depois chama ressuscitação (`app/chamados/models.py:1440-1452`); `_gravar_estado` relavra S2 quando cruza ENCERRADOS, para perguntas por destino não validadas (`app/chamados/models.py:273`, `:303-312`). Ressuscitação limpa carimbos e pode reabrir disputas fechadas (`app/chamados/models.py:1562-1575`).
+
+- **A cura automática não equivale ao backfill DRY:** `executar=True` é o default, e o resolver não passa False (`app/chamados/services/disputa_emissao.py:1805`, `:1945`). A reabertura deixa trilhas normais: evento de estado (`app/chamados/models.py:292-296`), log de ressuscitação (`:1587-1598`), nota de disputa reaberta (`:2177-2180`) e nota da cura (`app/chamados/services/disputa_emissao.py:1850-1852`). Presença/ausência de reversão em `logs/` e execução na frota: **[nao verificado]**.
+
+- **F1 deixa passar exportada e indeterminada:** `_vivas_entre` ignora a pergunta quando `competencia_do_dia_entregue(...) is not False` (`app/chamados/models.py:364-365`). Essa autoridade retorna None para dia ausente e bool de K6 nos demais casos (`app/chamados/services/vigia_fio.py:822-844`). O tripwire usa `_vivas_entre` (`app/chamados/models.py:221-227`), enquanto a cura recusa a carga com o mesmo `is not False` (`app/chamados/services/disputa_emissao.py:1835-1844`). C6 não tem veto equivalente por competência exportada; tranca é outra condição (`app/chamados/juizes.py:1331-1343`, `:1377-1406`). Assim, o caminho de fechamento seguido de recusa está presente no código; ocorrência concreta em produção: **[nao verificado]**.
+
+- **Precisão no contraexemplo do anexo:** a pergunta viva exportada e as mortas na mesma disputa comprovam que o retorno antecipado impede carimbar as mortas (`app/chamados/services/disputa_emissao.py:1946-1947`, `:1950-1985`). Não comprovam que **essa mesma disputa** deveria fechar: C7 exige nenhuma pergunta viva e nenhuma resposta sem veredito (`app/chamados/models.py:1848-1853`). O retorno também pula o fecho de **outras** disputas abertas do colaborador, pois HX-DISPUTA-ORFA varreria todo esse universo (`app/chamados/services/disputa_emissao.py:2021-2023`, `:2069-2088`). O teste existente exige expressamente não carimbar nem fechar após recusa (`app/chamados/tests/test_e4b_classe_e_memoria.py:960-972`); execução do teste nesta análise: **[nao verificado]**.
+
+- **Achado 3 do anexo não procede na cópia:** os tetos 213 e 269 são entradas ativas em `TETOS` (`app/ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`), cobradas por `assertLessEqual` (`:292-294`). A linha 213 é comentário e 269 define `setUpTestData` (`:213`, `:269`). Resultado de execução dos tetos: **[nao verificado]**.
+
+## 11/11 12:16 · sessao 74cb46222204 · MAPA-20 · verificador · origem=Code
+
+**A cura fecha os quatro exemplos, mas não fecha as classes dos achados 1 e 2. Permanecem achados procedentes, de severidade alta:** tabela HTML adicional sem julgamento e “encerrada” renderizada a partir de entidade ou palavra dividida por tags. (`bin/mapa20_valida.py:126`, `bin/mapa20_valida.py:130`, `bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:193`)
+
+As reproduções abaixo usaram mapas derivados de `mapa()`, com E3 em `1 de 2`, alterados somente em memória. A renderização auxiliar usou CommonMark com extensão de tabelas; o renderizador efetivo da publicação é [nao verificado]. (`bin/tests/test_mapa20_valida.sh:27`, `bin/tests/test_mapa20_valida.sh:32`)
+
+**1. Formas alternativas e decisão do validador**
+
+“Passa” significa ausência de problemas sobre o mapa válido modificado; a tradução disso em rc 0 está em `bin/mapa20_valida.py:218`.
+
+| Forma examinada | Resultado e decisão | Achado / severidade |
+|---|---|---|
+| Linha sem borda esquerda colada depois da tabela | **Recusa**, pela linha seguinte não branca. (`bin/mapa20_valida.py:135`) | Caso original curado. |
+| Segunda tabela Markdown sem pipes nas bordas | **Recusa**, pelos pipes fora do bloco. (`bin/mapa20_valida.py:137`) | Caso original curado. |
+| `&#124;` / `&vert;` em célula ou como delimitadores de uma segunda “tabela” | **Passa**: divisão e guarda procuram pipe literal. Na renderização auxiliar, entidades aparecem como pipes de texto, sem criar outra tabela. (`bin/mapa20_valida.py:92`, `bin/mapa20_valida.py:137`) | Evasão estrutural não procedente nesses exemplos. |
+| `enc&#101;rrada` ou `encerrad&#97;` em célula | **Passa com X<N**: a palavra não existe contiguamente no texto examinado, mas renderiza “encerrada”. (`bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:67`) | **Procedente / alta.** |
+| Segunda `<table>…<td>E3</td><td>encerrada</td>…</table>`, após branca | **Passa**: sem pipe literal, não entra no bloco nem na checagem de encerramento. A guarda HTML proíbe apenas comentários. (`bin/mapa20_valida.py:126`, `bin/mapa20_valida.py:130`, `bin/mapa20_valida.py:193`) | **Procedente / alta**; segunda tabela no render auxiliar. Produção [nao verificado]. |
+| `<em>encerrada</em>` | **Recusa**: a palavra literal continua presente. (`bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:193`) | Evasão não procedente. |
+| `enc<em>errada</em>` | **Passa com X<N**: não há remoção das tags antes da regex; visualmente a palavra fica completa. (`bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:67`) | **Procedente / alta.** |
+| `<br>encerrada` ou `encerrada<br>` | **Recusa**, pois mantém a palavra literal. `enc<br>errada` **passa**, mas produz quebra dentro da palavra. (`bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:193`) | Palavra inteira com `<br>` adjacente: evasão não procedente. |
+| Largura zero dentro da palavra, como `encer​rada` com U+200B | **Passa com X<N**: a regex exige os caracteres contíguos. Aparência efetiva na tela é [nao verificado]. (`bin/mapa20_valida.py:56`) | Lacuna procedente; impacto visual [nao verificado]. |
+| Linha seguinte contendo somente espaços/tab | **Passa**, porque `.strip()` resulta vazio; encerrou a tabela no render auxiliar. (`bin/mapa20_valida.py:135`) | Evasão não procedente. |
+| CRLF | **Passa**: `splitlines()` separa as linhas; a leitura textual também aceita CRLF. (`bin/mapa20_valida.py:123`, `bin/mapa20_valida.py:209`) | Evasão não procedente. |
+| Pipe escapado dentro da tabela | **Recusa**, pela proibição de qualquer barra invertida. (`bin/mapa20_valida.py:145`) | Evasão não procedente. |
+| Pipe escapado fora da tabela | **Recusa**, porque a guarda não distingue `\|` de delimitador. (`bin/mapa20_valida.py:137`) | Restrição mais forte que a sintaxe Markdown. |
+| Segunda tabela em lista | **Recusa**: pipes fora do bloco; se começar com pipe indentado, a guarda de indentação decide antes. (`bin/mapa20_valida.py:128`, `bin/mapa20_valida.py:137`) | Evasão não procedente. |
+| `- item` ou `1. item` imediatamente antes da tabela canônica | **Passa**, pois falta guarda da fronteira anterior. No render auxiliar, as linhas viram continuação do parágrafo da lista: **zero tabelas**. (`bin/mapa20_valida.py:130`, `bin/mapa20_valida.py:135`) | **Procedente / média**, forma visual não assegurada. |
+| Segunda tabela toda prefixada por `>` | **Recusa**, pelos pipes fora do bloco. (`bin/mapa20_valida.py:137`) | Evasão não procedente. |
+| `> quote` imediatamente antes da tabela canônica | **Passa**; no render auxiliar, a tabela vira continuação do parágrafo da citação: **zero tabelas**. Com branca entre ambos, há tabela normal. (`bin/mapa20_valida.py:130`, `bin/mapa20_valida.py:135`) | **Procedente / média**, falta fronteira anterior. |
+| Heading setext antes da tabela ou separado depois por branca | **Passa** como conteúdo externo; palavras desse heading não são julgadas. `---`/`===` imediatamente depois da tabela **recusam** pela linha não branca. (`bin/mapa20_valida.py:135`, `bin/mapa20_valida.py:159`, `bin/mapa20_valida.py:193`) | Não cria segunda tabela nos exemplos; julgamento restrito às células. |
+
+Também passa um `<pre>` ou `<table>` aberto antes da tabela canônica, com branca antes do fechamento: no render auxiliar, os pipes ficam em HTML bruto. Isso reforça a falta de equivalência entre “bloco julgado” e “tabela mostrada”. **Procedente / média**; resultado na publicação [nao verificado]. (`bin/mapa20_valida.py:126`, `bin/mapa20_valida.py:130`, `bin/mapa20_valida.py:135`)
+
+**2. Compatibilidade com escritor e publicador** [nao verificado]
+
+**Regressão no formato fabricado pelo selo: não procedente.** `mapa()` põe pipes nas bordas, prosa sem pipes e linha vazia após a tabela. O fixture do publicador termina em EOF, também aceito: a nova regra só exige branca quando existe linha seguinte. (`bin/tests/test_mapa20_valida.sh:25`, `bin/tests/test_mapa20_valida.sh:31`, `bin/tests/test_mapa20_valida.sh:33`, `bin/tests/test_mapa20_valida.sh:128`, `bin/mapa20_valida.py:135`)
+
+**Regressão no fluxo do publicador: não procedente na leitura do código.** Ele copia o mapa, valida a cópia, seleciona essa mesma cópia para raspagem quando verde e mantém rc 1 quando vermelho, inclusive sem alterações para publicar. (`bin/relato.sh:94`, `bin/relato.sh:97`, `bin/relato.sh:98`, `bin/relato.sh:100`, `bin/relato.sh:143`, `bin/relato.sh:158`, `bin/relato.sh:165`)
+
+Compatibilidade com o escritor produtivo real é **[nao verificado]**: ele está apenas declarado como `logs/MAPA-20/montar_mapa.py`; `logs/` é ignorado. (`bin/mapa20_valida.py:10`, `.gitignore:53`)
+
+**3. Fronteira, remoção de nomes/caminhos e negação**
+
+**Falso positivo procedente / média, introduzido para sublinhados:** `nao _encerrada_`, `_nao encerrada_` e `__nao encerrada__` agora recusam. A nova fronteira encontra a palavra, mas `_NEGADA` exige `\b` antes de “nao” e somente espaços até “encerrada”; os sublinhados impedem a isenção. (`bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:68`)
+
+`nao **encerrada**`, `nao <em>encerrada</em>` e `n&#227;o encerrada` também recusam; são limitações preexistentes. `nao encerrada`, `não encerrada` e `**nao encerrada**` passam. (`bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:68`)
+
+A remoção mantém as exceções intencionais para `BO-ROTULO-ENCERRADO` e `logs/encerrada.md:10`. Porém, substitui nomes sem fronteira: `encerradaE3` vira `encerrada ` e recusa; `nao E3 encerrada` e `nao logs/estado.md encerrada` viram negação contígua e passam. O sentido afirmativo dessas últimas frases é **[nao verificado]**; não constituem prova inequívoca de evasão. (`bin/mapa20_valida.py:51`, `bin/mapa20_valida.py:61`, `bin/mapa20_valida.py:62`, `bin/mapa20_valida.py:63`, `bin/mapa20_valida.py:68`)
+
+**4. Os quatro testes mordem pelo motivo certo** [nao verificado]
+
+**Achado de teste inadequado: não procedente.** Na reconstrução anterior ao delta, feita em memória, os quatro passam; no atual, recusam pelas decisões abaixo. (`bin/tests/test_mapa20_valida.sh:62`, `bin/tests/test_mapa20_valida.sh:63`, `bin/tests/test_mapa20_valida.sh:65`, `bin/tests/test_mapa20_valida.sh:66`)
+
+| Teste | Motivo atual | [nao verificado]
+|---|---|
+| Linha sem borda colada | Linha seguinte não branca. (`bin/mapa20_valida.py:135`) |
+| Segunda tabela sem bordas | Pipe externo. (`bin/mapa20_valida.py:137`) |
+| `_encerrada_` com X<N | Afirmação de encerramento incompleto. (`bin/mapa20_valida.py:193`) |
+| `__encerrada__` com X<N | Afirmação de encerramento incompleto. (`bin/mapa20_valida.py:193`) |
+
+O primeiro também cairia na guarda de pipes externos se só a guarda de linha colada fosse retirada: ele contém pipes internos. Portanto, não isola essa guarda. (`bin/tests/test_mapa20_valida.sh:62`, `bin/mapa20_valida.py:137`)
+
+A execução integral do shell é **[nao verificado]**: ele cria temporários, arquivos e repositórios, contrariando a restrição desta revisão. (`bin/tests/test_mapa20_valida.sh:13`, `bin/tests/test_mapa20_valida.sh:37`, `bin/tests/test_mapa20_valida.sh:162`)
+
+**5. QUEM ESCREVE e QUEM LÊ**
+
+| Papel | Arquivo:linha |
+|---|---|
+| Escritor produtivo declarado: sessão / `montar_mapa.py` | Declaração em `bin/mapa20_valida.py:10`; implementação **[nao verificado]**. |
+| Escritor sintético `mapa()` e gravação do teste | `bin/tests/test_mapa20_valida.sh:32`, `bin/tests/test_mapa20_valida.sh:37`. |
+| Fixture do publicador; cópia para caminho imitado | `bin/tests/test_mapa20_valida.sh:128`, `bin/tests/test_mapa20_valida.sh:170`. |
+| Simulação de regravação concorrente | `bin/tests/test_mapa20_valida.sh:147`. |
+| Publicador: snapshot e arquivo público raspado | `bin/relato.sh:97`, `bin/relato.sh:143`, `bin/raspar_publico.py:40`. |
+| Leitor produtivo do rc do validador | `if` em `bin/relato.sh:97`; falha registrada em `bin/relato.sh:100`. |
+| Saída do validador | Impressa em `bin/mapa20_valida.py:216`; segue stdout pelo comando em `bin/relato.sh:97`, sem parser ali. |
+| Leitores de rc nos testes | `bin/tests/test_mapa20_valida.sh:38`, `bin/tests/test_mapa20_valida.sh:109`, `bin/tests/test_mapa20_valida.sh:110`; wrapper em `bin/tests/test_mapa20_valida.sh:146`. |
+| Leitores do resultado do publicador no teste | Captura saída/rc em `bin/tests/test_mapa20_valida.sh:175`, `bin/tests/test_mapa20_valida.sh:176`; comparação em `bin/tests/test_mapa20_valida.sh:184`. |
+| Chamador declarado do publicador | `bin/hasner-relato.service:15`; alerta externo ou leitor operacional da falha é **[nao verificado]**. |
 
 ## 11/11 12:14 · sessao a92c83d22358 · - · - · origem=Ronald (tmux)
 
@@ -672,433 +994,4 @@ Leitores históricos adicionais nas migrations: filtros em `app/chamados/migrati
 
 [truncado em 20000 de 24377 caracteres]
 
-## 11/11 11:54 · sessao e0331546fc34 · UI-PAINEL-MOSTRA-O-APP · construtor · origem=Code
-
-A cura permanece pendente: a captura de `setUpClass` pelo `freeze_time` herdado é hipótese **[nao verificado]**. Preservei a fixture e o assert, conforme exigido ([investigação](/home/ronald/wt-codex-ui-painel-mostra-o-app-100626/app/docs/UI-PAINEL-MOSTRA-O-APP-v2.txt:27)).
-
-Os 7 testes em memória passaram; os quatro mutantes isolados falharam por asserção. Comandos e resultados estão no [recibo](/home/ronald/wt-codex-ui-painel-mostra-o-app-100626/app/docs/UI-PAINEL-MOSTRA-O-APP-v2.txt:56). [nao verificado]
-
-Falta o caminho de um Python com Django/Freezegun para comprovar a causa ([pendência](/home/ronald/wt-codex-ui-painel-mostra-o-app-100626/app/docs/UI-PAINEL-MOSTRA-O-APP-v2.txt:120)). Não fiz commit pela proibição explícita nas REGRAS ([registro](/home/ronald/wt-codex-ui-painel-mostra-o-app-100626/app/docs/UI-PAINEL-MOSTRA-O-APP-v2.txt:3)). [nao verificado]
-
-## 11/11 11:53 · sessao 558816c733bd · - · - · origem=Ronald (tmux)
-
-O campo é `ChamadoColaborador.status_local`, com sete escolhas em `app/chamados/models.py:28` e declaração em `app/chamados/models.py:52`. O catálogo compara códigos (`aberto`, `resolvido`, `fechado` etc.), definidos em `app/chamados/catalogo/motor.py:19`, com conjuntos em `:24`, `:29`, `:30`, `:31`, `:32` e decisões em `:125`.
-
-Escritores persistidos e temporários:
-
-- Transição: `_gravar_estado`, atribuição em `app/chamados/models.py:228`, trilha em `:292`, persistência em `:296`.
-- Gates que chegam ao escritor: `_aplicar` `app/chamados/models.py:450`; `reconciliar` `:654`; `cancelar` `:788`; `analisar` `:806`; `reabrir` `:1442`; `encerrar` `:1619`; `encerrar_por_competencia_trancada` `:1639`.
-- Nascimento por `abrir`: prepara estado em `app/chamados/models.py:938`, instancia provisória em `:961`, `get_or_create` em `:971`.
-- Nascimento por `criar`: resolve estado em `app/chamados/models.py:1060`, instancia provisória em `:1070`, persiste em `:1095`.
-- Posestado só em memória: `app/chamados/models.py:356`, restaurado no `finally` em `:371`. O selo declara explicitamente essa exceção em `app/chamados/tests/test_contract_status_nucleo.py:10`.
-- Chamadores humanos de `transicionar`: `app/chamados/services/acoes_chamado.py:70,108,149,222,233,277,315`; `app/chamados/services/fio.py:721`; `app/colaboradores/views.py:2068`. Smoke operacional: `app/chamados/management/commands/smoke_chamados.py:134,147,163`.
-- Escritores históricos de dados, separados de runtime: `app/chamados/migrations/0038_a3_registrado_backfill.py:10,15`; `app/chamados/migrations/0039_a3_via_backfill.py:24,33`.
-
-Não encontrei comparação de **decisão de estado** pelos textos humanos na superfície pesquisada; decisões demonstradas usam códigos: `app/chamados/catalogo/motor.py:136,140,148,150,153`; validação de `dict(STATUS_CHOICES)` por chave em `app/chamados/services/fio.py:719` e `app/chamados/services/acoes_chamado.py:313`. O JS compara `.value` e `dataset.status` em `app/templates/chamados/painel_gestao.html:376,382`, produzido em `app/templates/chamados/partials/_lista_chamados.html:33`. Consumidores externos da API: [não verificado].
-
-Há busca/ordenação genérica pelo texto, sem decidir estado: `app/static/js/hasner-table.js:191,194,209,235,236`; a coluna local fornece código/verbo em `app/templates/chamados/partials/_lista_chamados.html:79`. Isso deve ser distinguido de comparar `"Encerrado"` para autorizar uma transição. [referências acima]
-
-Inventário compacto de leituras explícitas de `status_local` em Python de produção, incluindo atributos, `getattr`, filtros ORM e chaves de dicionários/trilha; testes, migrations e documentação foram separados. Nas linhas do próprio escritor, também aparecem leituras do estado anterior: [nao verificado]
-
-```text
-app/ponto/worklist.py:40
-app/ponto/views.py:284,395,1616
-app/ponto/signals.py:303
-app/relatorios/views.py:745,920
-app/relatorios/pdf_chamados.py:116
-app/escala/utils.py:1059
-app/api/views_core.py:309
-app/api/views.py:320,1044,1142,1146,1152,1972,1982,3127
-app/api/views_mensageria.py:417,1082
-app/chamados/reconciliador.py:246,839,936,938,997,1204,1454,1587
-app/chamados/views_cobrar.py:76
-app/chamados/rejuncao.py:61,79
-app/chamados/models.py:109,112,124,165,207,219,229,294,355,417,427,673,712,713,714,736,760,768,783,803,822,830,921,927,938,1070,1095,1219,1220,1221,1337,1342,1348,1358,1373,1374,1375,1398,1404,1440,1614,1630,1632,2683
-app/chamados/juizes.py:780,858,2017,2162,2201
-app/chamados/views.py:976,1477
-app/chamados/views_arquivar.py:121
-app/chamados/signals.py:33,70,86,87,96,184,192,201,285,293,354,358
-app/colaboradores/services/calendario.py:437,441,442,444
-app/colaboradores/services/pos_vinculo.py:36
-app/colaboradores/services/drawer.py:89
-app/colaboradores/services/vinculo.py:385
-app/colaboradores/services/desligamento.py:152,155
-app/colaboradores/services/ficha.py:163
-app/colaboradores/management/commands/corrigir_escala_retroativa.py:141
-app/ponto/services/faltas_de_hoje.py:64
-app/ponto/services/cobertura.py:114,226
-app/ponto/services/cartorio.py:473,1370,1629,1648
-app/ponto/services/justificativa.py:43,61,77,118,121
-app/ponto/services/entrada_sincronizada.py:49
-app/ponto/services/furos_sem_cobranca.py:69,70,129
-app/ponto/services/cluster_espurio.py:67,255,285,289,294
-app/ponto/services/furos_vetados.py:95
-app/ponto/services/vigia_de_hora.py:111
-app/ponto/services/geofence.py:82,355
-app/ponto/services/ausencia.py:709
-app/ponto/services/veredito_celula.py:149,155
-app/ponto/services/esmeril_espelho.py:182
-app/ponto/services/triagem_batida.py:105,290,328
-app/ponto/services/regularizacao.py:133
-app/ponto/management/commands/supra_juiz.py:189,212
-app/ponto/management/commands/escalonar_chamados_supervisao.py:45
-app/ponto/management/commands/reavaliar_ausencias_lancadas.py:30,43
-app/ponto/management/commands/processar_alertas_avancados.py:103,108,155
-app/ponto/management/commands/reconciliar_grade.py:96,207,529
-app/ponto/management/commands/reconciliar_fantasmas.py:159
-app/ponto/management/commands/emitir_furo_retroativo.py:95
-app/ponto/management/commands/reconciliar_vinculo.py:33,57
-app/ponto/management/commands/detectar_ausencias.py:152,193,258,300,348,373,404,514,672,739,743,798
-app/ponto/management/commands/emitir_turno_aberto_retroativo.py:119,123
-app/ponto/management/commands/fechar_chamados_meio_periodo.py:56
-app/ponto/management/commands/reconciliar_geofence.py:29,36
-app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:42
-app/ponto/management/commands/gerar_celulas.py:245
-app/ponto/management/commands/reavaliar_ausencias_feriado.py:42
-app/ponto/management/commands/processar_alertas_turno.py:165,179,381
-app/ponto/management/commands/detectar_intervalo_ausente.py:125
-app/ponto/management/commands/fechar_chamados_ausencia.py:28
-app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:31
-app/escala/services/regeneracao.py:170
-app/escala/services/cadastro_realidade.py:494
-app/escala/management/commands/fechar_avisos_regua_na_lista.py:34
-app/chamados/services/vigia_loop.py:34,117,120
-app/chamados/services/silencio_ausencia.py:60,125
-app/chamados/services/na_fila.py:17
-app/chamados/services/furo_sem_canal.py:83
-app/chamados/services/vigia_fio.py:335,338,607,608,618
-app/chamados/services/celula_carimbada.py:42,89,146
-app/chamados/services/abertura.py:166
-app/chamados/services/materializacao.py:778,784
-app/chamados/services/silencio_isentos.py:29
-app/chamados/services/resposta_tardia.py:35,57
-app/chamados/services/pergunta_no_app.py:151,184
-app/chamados/services/limbo_folgas.py:100,220,278,302,314
-app/chamados/services/feriado_reavaliar.py:17
-app/chamados/services/acoes_chamado.py:25,90,132,176,232,252
-app/chamados/services/verbos.py:230
-app/chamados/services/disputa_emissao.py:200,572,755,963,1109,1318,1344,1884,1910,1913
-app/chamados/services/competencia_trancada.py:88,155,183,192,193,270
-app/chamados/services/becos.py:22
-app/chamados/services/painel.py:155,189,213,214,215,217,218,224,245,303,305,307,316,379,384,465
-app/chamados/services/juizes_do_dia.py:92
-app/chamados/services/acoes_disputa.py:269
-app/chamados/services/fio.py:389,403,432,770
-app/chamados/services/historico.py:156,180
-app/chamados/services/adesao.py:89,102,143
-app/chamados/services/fila.py:126
-app/chamados/services/sla.py:37
-app/chamados/management/commands/carimbar_por_batida_coincidente.py:61,68
-app/chamados/management/commands/silenciar_chamados_isentos.py:41
-app/chamados/management/commands/disparar_perguntas_competencia.py:99
-app/chamados/management/commands/auditar_chamados_orfaos.py:36
-app/chamados/management/commands/auditar_invariantes_chamados.py:573,589,602,616,637,653,683,807,978,1015,1041,1068,1070,1072,1339,1576,1577,1607,1628
-app/chamados/management/commands/arquivar_prescritos.py:49
-app/chamados/management/commands/reabrir_orfas_enterradas.py:98,134,170,171,173,174
-app/chamados/management/commands/geofence_registrados_para_analise.py:22,36
-app/chamados/management/commands/retratar_chamados_lei_cala.py:34
-app/chamados/management/commands/reconciliar_chamados.py:59
-app/chamados/management/commands/lavrar_perguntas_stale.py:57
-app/chamados/management/commands/smoke_chamados.py:136,137,149,150
-bin/snapshot_o118_col221.py:22
-bin/r5_idempotencia_frota.py:61
-bin/censo_folha.py:30
-```
-
-Leitores de template do campo bruto e/ou display, incluindo condicionais de cor e existência de ação:
-
-```text
-app/templates/chamados/fio_colaborador.html:167,188,189,191,193,254
-app/templates/chamados/partials/painel_chamado_turno.html:18,19,21,23,65
-app/templates/chamados/partials/modal_fio.html:76,102,103,105,107,500,544,559,588,636,651
-app/templates/chamados/partials/_card_atendimento.html:13,19,20,21,23,203
-app/templates/chamados/partials/_lista_chamados.html:33,37,38,40,41,79
-app/templates/chamados/detalhe.html:36,37,39,41,117
-app/templates/chamados/detalhe_local.html:68,69,71,73,153,176,244,279,343,375
-app/templates/relatorios/historico_chamados.html:121
-app/templates/ponto/partials/painel_justificativa.html:79
-```
-
-Leitores indiretos que recebem o código por argumento e geram rótulo: `app/chamados/services/verbos.py:125,138`; filtro intermediário em `app/chamados/templatetags/chamados_tags.py:54,64`. Os demais consumidores de rótulos estão na tarefa do outro agente. [referências citadas]
-
-Selos do estado, úteis para demonstrar o limite da cura: escritor único em `app/chamados/tests/test_contract_status_nucleo.py:18` e asserção em `:33`; conjuntos canônicos em `app/chamados/tests/test_contract_status_literal.py:1`; scanner AST de escritores distingue atribuição de filtros em `bin/esmeril_chamado_censo.py:99,108,113`.
-
-## 11/11 11:53 · sessao bc1033217c1a · - · - · origem=Ronald (tmux)
-
-Censo dos rótulos de `ChamadoColaborador.status_local`, com fontes e consumidores:
-
-| Fonte | Consumidores |
-|---|---|
-| Choices do modelo: `app/chamados/models.py:28-36`; campo associado em `:52` | `app/templates/chamados/partials/_card_atendimento.html:23`; `app/templates/relatorios/historico_chamados.html:121`; `app/templates/ponto/partials/painel_justificativa.html:79`; pauta de resposta tardia em `app/chamados/services/resposta_tardia.py:63-67` |
-| `ESPERA_COLAB`: `app/chamados/services/verbos.py:114-122`; função `rotulo_para_pessoa` em `:138-142`; filtro `espera` em `app/chamados/templatetags/chamados_tags.py:54-64` | Badges: `detalhe.html:36-46`, `detalhe_local.html:68-78`, `fio_colaborador.html:188-198`, `partials/painel_chamado_turno.html:18-28`, `partials/modal_fio.html:102-112`, todos sob `app/templates/chamados/`. Seletores: `detalhe.html:132-134`, `detalhe_local.html:395-397`, `fio_colaborador.html:268-270`. Os dois estados terminais recebem “Encerrado” em `verbos.py:118-119`. |
-| `ESTADO_TITLE`: `app/chamados/services/verbos.py:100-108`; distingue “Resolvido” e “Fechado” em `:103-104` | Segundo elemento do filtro `espera`, exibido nos `title` dos badges acima; também `rotulo_de_linha` em `:125-135`. |
-| `rotulo_de_linha`: `app/chamados/services/verbos.py:125-135` | Produção do painel: `app/chamados/services/painel.py:384-394` e `:485-487`; consumo em `app/templates/chamados/partials/_lista_chamados.html:80-87` e `_lista_resumo.html:68-72`. Texto principal é verbo/“Registro”; estado fica no `title`. |
-| Dicionário próprio da API | `app/api/views.py:1143-1146`: Aberto, Em atendimento, Resolvido, Fechado; fallback devolve código cru. |
-| Literais do modal | `app/templates/chamados/partials/modal_fio.html:668-670`: “Assumir a apuração”, “Encerrar”, “Encerrar e arquivar”; títulos “Em analise”, “Resolvido”, “Fechado”. Não consulta mapa nesses elementos. |
-| Literais do painel de turno | `app/templates/chamados/partials/painel_chamado_turno.html:76-78`: mesmas três opções e títulos do modal. |
-| Literais do filtro de relatório | `app/templates/relatorios/historico_chamados.html:56-59`: Aberto, Em análise, Resolvido, Fechado. |
-| Literais de documentação humana | `app/templates/core/manual.html:207`, `:215-217`, `:219`, `:222`, `:225`, `:249-254`, `:278`, `:282-286`, `:294`. |
-
-Outros textos manuais próximos do estado: “Reabrir” nos seletores `app/templates/chamados/detalhe.html:135` e `detalhe_local.html:398`; “Este chamado está fechado” em `detalhe.html:148` e `detalhe_local.html:412`; “Resolvido em” em `detalhe.html:56`, `detalhe_local.html:88` e relatório `app/templates/relatorios/historico_chamados.html:127`. Os títulos “Em analise” escritos independentemente do estado estão em `app/templates/chamados/detalhe.html:101`, `fio_colaborador.html:225` e `partials/_relatorio_geo.html:22`.
-
-Exposição do código cru:
-
-| Sítio | Fonte |
-|---|---|
-| PDF: `app/relatorios/pdf_chamados.py:116`, renderizado em `:122-125` | `ch.status_local`, sem choices/mapa |
-| Calendário: `app/templates/colaboradores/partials/_calendario_grade.html:108` | `dia.ticket_falta.status`, produzido a partir de `_c.status_local` em `app/colaboradores/services/calendario.py:441,444` |
-| API mensageria: `app/api/views_mensageria.py:417` e `:1082` | `status_local` direto, campos `status_local` e `situacao` |
-| Histórico do chamado: `app/chamados/services/historico.py:156`; API em `app/api/views_mensageria.py:2166` | `estado` recebe `status_local` cru |
-| Eventos históricos | `app/chamados/models.py:292-294` grava descrição `status anterior -> novo via ...` com códigos; `services/historico.py:86-95` lê descrição; `:204-209` monta texto; API entrega em `views_mensageria.py:2168` |
-| Comandos humanos | Código cru em `app/chamados/management/commands/silenciar_chamados_isentos.py:39-41`; `app/ponto/management/commands/reconciliar_vinculo.py:55-57`, `reavaliar_ausencias_feriado.py:42`, `reavaliar_ausencias_lancadas.py:43`, `reconciliar_geofence.py:36`; erros em `app/chamados/management/commands/smoke_chamados.py:137,150` |
-
-GLPI tem outro domínio de estado: `app/chamados/glpi_client.py:126-133` define `STATUS_MAP` numérico; `:135-143` monta `status_label`; `:198,202` formatam listagem/detalhe; `app/templates/chamados/partials/tabela_chamados.html:40` exibe, com render da view em `app/chamados/views.py:340`.
-
-A aba agrupada escreve “Histórico/Cancelados/Encerrados” em `app/templates/chamados/painel_gestao.html:153`; não é correspondência individual de estado. “registrados” do placar está em `:191`.
-
-O JS do painel compara códigos: `app/templates/chamados/painel_gestao.html:382` usa `r.dataset.status === status`; o atributo vem de `app/templates/chamados/partials/_lista_chamados.html:33`. Renderização do consumidor externo da API/mobile: [não verificado].
-
-## 11/11 11:52 · sessao aad120ef0dda · - · - · origem=Ronald (tmux)
-
-1. **Detalhe: duas páginas produzem as opções.**
-
-| Sítio | Texto produzido |
-|---|---|
-| `app/templates/chamados/detalhe_local.html:394` | Literal “— manter atual —”. |
-| `app/templates/chamados/detalhe_local.html:395` | `"em_analise"|espera|first`. |
-| `app/templates/chamados/detalhe_local.html:396` | `"resolvido"|espera|first`. |
-| `app/templates/chamados/detalhe_local.html:397` | `"fechado"|espera|first`. |
-| `app/templates/chamados/detalhe_local.html:398` | Literal “Reabrir”, value `aberto`. |
-| `app/templates/chamados/detalhe.html:131` | Literal “— manter atual —”. |
-| `app/templates/chamados/detalhe.html:132` | `"em_analise"|espera|first`. |
-| `app/templates/chamados/detalhe.html:133` | `"resolvido"|espera|first`. |
-| `app/templates/chamados/detalhe.html:134` | `"fechado"|espera|first`. |
-| `app/templates/chamados/detalhe.html:135` | Literal “Reabrir”, value `aberto`. |
-
-O filtro delega para `rotulo_para_pessoa`, que consulta `ESPERA_COLAB`; nesse mapa, `resolvido` e `fechado` têm ambos “Encerrado”. `app/chamados/templatetags/chamados_tags.py:53`, `app/chamados/templatetags/chamados_tags.py:63`, `app/chamados/services/verbos.py:138`, `app/chamados/services/verbos.py:118`, `app/chamados/services/verbos.py:119`.
-
-A view local renderiza `detalhe_local.html` com `montar_contexto_detalhe`; o contexto entrega o chamado e permissões, sem lista de opções. `app/chamados/views.py:549`, `app/chamados/views.py:550`, `app/chamados/services/acoes_chamado.py:399`. A outra view renderiza `detalhe.html` diretamente. `app/chamados/views.py:262`. Os formulários são HTML nesses próprios templates. `app/templates/chamados/detalhe_local.html:385`, `app/templates/chamados/detalhe.html:122`. Gerador JS dessas opções: [não verificado].
-
-2. **O modal distingue por literais no template; não consulta mapa compartilhado para suas opções.**
-
-| Value | Texto | Title | Referência |
-|---|---|---|---|
-| vazio | — mover para — | — | `app/templates/chamados/partials/modal_fio.html:667` |
-| `em_analise` | Assumir a apuração | Em analise | `app/templates/chamados/partials/modal_fio.html:668` |
-| `resolvido` | Encerrar | Resolvido | `app/templates/chamados/partials/modal_fio.html:669` |
-| `fechado` | Encerrar e arquivar | Fechado | `app/templates/chamados/partials/modal_fio.html:670` |
-
-A view identifica esse componente como modal do painel e o renderiza. `app/chamados/views.py:869`, `app/chamados/views.py:870`, `app/chamados/views.py:927`. O painel lateral de turnos repete os mesmos três rótulos e titles, também à mão. `app/templates/chamados/partials/painel_chamado_turno.html:76`, `app/templates/chamados/partials/painel_chamado_turno.html:77`, `app/templates/chamados/partials/painel_chamado_turno.html:78`; renderizador em `app/chamados/views.py:347`, `app/chamados/views.py:353`.
-
-Os choices do modelo distinguem “Resolvido” e “Fechado”, mas as opções dos quatro templates acima não os leem. `app/chamados/models.py:31`, `app/chamados/models.py:32`, `app/templates/chamados/detalhe_local.html:396`, `app/templates/chamados/detalhe.html:133`, `app/templates/chamados/partials/modal_fio.html:669`, `app/templates/chamados/partials/painel_chamado_turno.html:77`.
-
-5. **Testes e leis relevantes.** [nao verificado]
-
-- `test_o137_esmeril_chamado.py` varre texto de espera escrito à mão; exclui deliberadamente “Encerrado” do padrão. `app/chamados/tests/test_o137_esmeril_chamado.py:34`, `app/chamados/tests/test_o137_esmeril_chamado.py:99`.
-- O mesmo teste exige que `espera(st)` devolva exatamente `rotulo_para_pessoa(st)` para todo estado conhecido e entradas de fallback. `app/chamados/tests/test_o137_esmeril_chamado.py:115`.
-- Fixa literalmente `Registrado|Registrado (auditoria, sem acao devida)`, `Encerrado|Superado — o fato vive em outro chamado` e `Com o DP|Aberto (aguardando primeira analise)`. `app/chamados/tests/test_o137_esmeril_chamado.py:122`.
-- Há guarda contra estado de banco visível nos templates de chamados: enumera “Resolvido”/“Fechado” e exige lista vazia de ofensores. Alterar opções para esses textos crus encontra essa guarda. `app/chamados/tests/test_ui_fatia2_taxonomia.py:25`, `app/chamados/tests/test_ui_fatia2_taxonomia.py:60`.
-- Há teste exigindo o estado “Resolvido” no `title` da fila. `app/chamados/tests/test_ui_fatia2_taxonomia.py:131`.
-- Teste existente que exija especificamente unicidade das opções `resolvido`/`fechado`: [não verificado]. [nao verificado]
-- L2 determina a mesma função para tela e ação; o selo documental citado é `holerite/tests/test_selo_badge_viaja.py::test_o_numero_aparece_na_TELA_nao_so_no_contexto`. `app/docs/LEIS-UI.md:23`, `app/docs/LEIS-UI.md:29`.
-- L7 determina texto vindo do mesmo mapa e proíbe hardcode por tela; declara **“sem selo ainda”**. `app/docs/LEIS-UI.md:77`, `app/docs/LEIS-UI.md:85`.
-
-6. **Intersecção direta entre produtores desses textos e os cinco caminhos informados: nenhuma.** Os produtores identificados são os quatro templates, `chamados_tags.py` e `services/verbos.py` acima. `app/templates/chamados/detalhe_local.html:395`, `app/templates/chamados/detalhe.html:132`, `app/templates/chamados/partials/modal_fio.html:668`, `app/templates/chamados/partials/painel_chamado_turno.html:76`, `app/chamados/templatetags/chamados_tags.py:63`, `app/chamados/services/verbos.py:114`.
-
-Há dependência de `app/chamados/juizes.py` na montagem de contexto, mas para `folha_julga_pontualidade`, sem produção desses rótulos. `app/chamados/services/acoes_chamado.py:331`, `app/chamados/views.py:926`. O caminho literal `app/ponto/cartorio.py` não foi encontrado [não verificado]; o arquivo existente é `app/ponto/services/cartorio.py` [não verificado].
-
-## 11/11 11:50 · sessao 39b2c713671a · MAPA-20 · verificador · origem=Code
-
-REPROVADO para pouso [nao verificado]
-
-Referências `base:` apontam para a cópia disponível; `diff:` usa as linhas de destino do v3, sem aplicá-lo. Identidade da cópia com o HASH informado: [nao verificado]. Execução integral dos selos e publicação real: [nao verificado].
-
-1. **Fechamento dos achados numerados da volta 2.**
-
-   | Achado da v2 | Resultado no v3 |
-   |---|---|
-   | **1 — triagem 1–5** | **Nome fecha**: universo literal correto. **Tabela permanece parcial**: fecha separador estreito, cercas, cabeçalho vazio e pontuação; ainda aceita tabela escondida em comentário HTML. **Retido fecha os defeitos apontados**, agora incluindo conferência da remoção. **Foto fecha no publicador atual**. **Selo permanece parcial**, pelos mutantes do item 4 abaixo. (`diff:bin/mapa20_valida.py:29–39,82–103,120–122`; `diff:bin/relato.sh:94–114`; `diff:bin/tests/test_mapa20_valida.sh:151–164`.) | [nao verificado]
-   | **2 — saídas e falhas** | Fecha a falha de commit seguida de sucesso aparente: agora há `|| exit 1`. São **14 comandos `exit`**, discriminados no item 3. `cd` e os `git add` continuam sem guarda de falha. (`diff:bin/relato.sh:146–164`.) | [nao verificado]
-   | **3 — parser e conformidade** | **Parcial**: exige as 12 colunas, mas ainda aceita conteúdo invisível e fonte que não fundamenta N. As recusas a `_E3_`, ausência de pipes externos e barras invertidas permanecem, agora como restrições explícitas do formato. (`diff:bin/mapa20_valida.py:10–21,82–103,110–135`.) |
-   | **4 — selo e mutantes** | Fecha o mutante específico sem reconhecimento de tils; acrescenta fiscalização textual da foto. Permanecem outros mutantes de validador, foto e instalação do retido. Recorte literalmente vazio continua impedindo verde. (`diff:bin/tests/test_mapa20_valida.sh:76–79,105–109,160–168`.) | [nao verificado]
-   | **5 — selos vizinhos** | Nenhuma quebra demonstrada nos predicados que leem `relato.sh`; execução integral [nao verificado]. (`base:bin/tests/test_codex_estado.sh:104–111`; `base:bin/tests/test_relato_publica_claude_md.sh:15–20`; demais referências no item 5.) |
-   | **6 — escritores e leitores** | A foto agora tem variável própria. O escritor efetivo da fonte e seus gatilhos continuam [nao verificado]; o comentário afirma atualização por sessão/evento, sem implementá-la nesse bloco. (`diff:bin/relato.sh:89–98`; `diff:bin/mapa20_valida.py:10`.) |
-   | **7 — classes históricas** | Persistem **selo sem mordida** e interpretação de conteúdo de outras colunas como encerramento da obra. Pré-requisitos efetivos de pouso continuam [nao verificado]. (`diff:bin/mapa20_valida.py:141–142`; `diff:bin/tests/test_mapa20_valida.sh:151–164`; `base:CLAUDE.md:377–381,394`.) | [nao verificado]
-
-2. **Complemento X-de-N: cumprimento e contraexemplos.**
-
-   Nos exemplos, **G** é o mapa completo de 12 colunas, com 18 obras, SEM DONO e seção inicial `PRONTO AUSENTE`, conforme a fixture do selo. Os contraexemplos do parser foram conferidos em memória, sem arquivos. (`diff:bin/tests/test_mapa20_valida.sh:20–39`; `diff:bin/mapa20_valida.py:80–149`.)
-
-   | Regra | Conferência |
-   |---|---|
-   | **(i) Sem X de N nem PRONTO AUSENTE → rc 1** | **Cumpre para as 18 obras**: exige o literal, N≥1 e X≤N; a regex também impede X negativo. **Não cumpre literalmente para toda linha**: SEM DONO recebe exceção e passa com `n/a (SEM DONO)`. (`diff:bin/mapa20_valida.py:43,123–140`.) |
-   | **(ii) N sem fonte citada → rc 1** | **Cumpre apenas a aparência de citação**. Ausência do padrão reprova; existência, conteúdo, autoridade e número de itens da fonte não são conferidos. (`diff:bin/mapa20_valida.py:44,132–135`.) |
-   | **(iii) Encerrada com X<N → rc 1** | **Cumpre para palavra reconhecida nas colunas após `obra`**, inclusive maiúsculas e flexões; também reprova encerramento com PRONTO AUSENTE. A varredura não distingue estado da obra de nomes, arquivos ou negações. (`diff:bin/mapa20_valida.py:48,129–142`.) |
-   | **(iv) Lista PRONTO AUSENTE no topo** | Exige seção antes da tabela e igualdade com as obras marcadas. **Parcial**: lê somente a primeira seção; uma segunda seção contraditória é ignorada. (`diff:bin/mapa20_valida.py:55–77,104–106,146–148`.) |
-
-   **Aceitos indevidamente:**
-
-   - Em G, E3 com `999 de 999`, fonte `app/docs/BACKLOG.md:1` e falta `nada` passa. A linha citada é o título do BACKLOG, não uma lista numerada de PRONTO. Também passa `a.md:0`. O código não confere N nem prova escrita de X. (`base:app/docs/BACKLOG.md:1`; `diff:bin/mapa20_valida.py:44,132–137`.)
-   - `<!--` numa linha, seguido de G e depois `-->`, passa: a tabela fica escondida no comentário. G inteiramente indentado com quatro espaços também passa como conteúdo de código Markdown. O parser veta cercas, mas aplica `strip()` às linhas e não reconhece comentários. (`diff:bin/mapa20_valida.py:82–89`.)
-   - Duas seções iniciais: primeira com `- nenhuma`, segunda com `- O168`, tabela sem ausentes. Passa, embora o documento apresente listas contraditórias. (`diff:bin/mapa20_valida.py:58–77,146–148`.)
-
-   **Recusados indevidamente como encerramento da obra:**
-
-   - E3 com `1 de 2` e `cruza com = BO-ROTULO-ENCERRADO` reprova. O nome dessa obra fica corretamente isento na própria coluna `obra`, mas dispara a regex quando citado em outra coluna. (`diff:bin/mapa20_valida.py:33,48,141–142`.)
-   - E3 com `1 de 2` e texto `nao encerrada`, ou caminho `logs/encerrada.md:10`, reprova sem afirmar encerramento de E3. (`diff:bin/mapa20_valida.py:48,141–142`.)
-
-   A exigência de falta **item a item** não é comprovada: para X<N, só há veto ao literal `nada`, além da checagem geral de célula preenchida. A gravação de `pousou fase <F>, X de N` no RELATO também não é implementada pelo novo bloco. (`diff:bin/mapa20_valida.py:120–122,136–137`; `diff:bin/relato.sh:89–114`.) [nao verificado]
-
-3. **Todos os `exit` de `relato.sh`, com seus valores.**
-
-   | Local | Valor e condição |
-   |---|---|
-   | `base:bin/relato.sh:27` | `1`: falha da trava. |
-   | `base:bin/relato.sh:28` | `1`: destino sem `.git`. |
-   | `base:bin/relato.sh:32` | `1`: falha da lista de nomes. |
-   | `base:bin/relato.sh:35` | `1`: falha do BACKLOG-TOPO. |
-   | `base:bin/relato.sh:38` | `1`: falha do ESTADO. |
-   | `base:bin/relato.sh:42` | `1`: falha da SESSAO. |
-   | `base:bin/relato.sh:86` | `1`: falha da raspagem do RELATO retido. |
-   | `diff:bin/relato.sh:110` | `1`: MAPA não raspado continua existindo após tentativa de remoção. |
-   | `diff:bin/relato.sh:128` | `1`: falha de `gerar_avais.py`. |
-   | `diff:bin/relato.sh:143` | `1`: falha da raspagem geral. |
-   | `diff:bin/relato.sh:157` | `$MAPA_RC`: `0` ou `1`, índice sem mudança. |
-   | `diff:bin/relato.sh:162` | `1`: falha do commit. | [nao verificado]
-   | `diff:bin/relato.sh:163` | `1`: falha da expressão push/echo. | [nao verificado]
-   | `diff:bin/relato.sh:164` | `$MAPA_RC`: `0` ou `1`, saída final. |
-
-   **Validador vermelho executado → rc 0:** não há esse caminho no fluxo mostrado. `MAPA_RC` começa em zero, recebe um na retenção e não é zerado depois. (`diff:bin/relato.sh:94–100,157–164`.)
-
-   **MAPA público pode sumir sem o Python reprovar:** sim, **sem executar o validador**: cópia da fonte falha, Python é pulado, raspagem do retido falha e o público é removido. Entretanto, o ciclo já está com rc 1. A remoção é incluída no commit; não há saída normal zero nesse caminho. (`diff:bin/relato.sh:97–113,151–164`.) [nao verificado]
-
-   **Foto:** no publicador atual, sim: copia o vivo para `$MAPA_FOTO`, valida essa foto e entrega o mesmo caminho ao raspador. O Python isoladamente aceita qualquer caminho recebido na CLI; ele não impõe essa propriedade. (`diff:bin/relato.sh:94–98,143`; `diff:bin/mapa20_valida.py:152–167`.) [nao verificado]
-
-   **Rc 0 não comprova toda a publicação:** se o `git add` do MAPA falhar e o índice estiver sem mudanças, a saída de “nada mudou” ainda pode retornar zero com mapa verde. Esse erro não é guardado. (`base:bin/relato.sh:21`; `diff:bin/relato.sh:151–157`.) [nao verificado]
-
-4. **O selo ainda deixa mutantes plausíveis passarem.**
-
-   A sobrevivência abaixo decorre dos cenários e predicados do selo; execução integral dos mutantes: [nao verificado].
-
-   - **Validador:** retirar `re.I` de `_ENCERRADA`. Os casos de encerramento usam minúsculas e preservam seus resultados; `ENCERRADA` com `1 de 2` passa no mutante. (`diff:bin/mapa20_valida.py:48`; `diff:bin/tests/test_mapa20_valida.sh:41,53–56`.)
-   - **Foto:** inserir `MAPA_FOTO="$RAIZ/logs/MAPA-20/mapa.md"` imediatamente antes de formar `MAPA_PAR`. Valida a foto e publica o vivo. Os sete cenários não alteram a fonte entre esses pontos; os greps exigem presença textual das referências, sem impedir reatribuição. (`diff:bin/relato.sh:97–98`; `diff:bin/tests/test_mapa20_valida.sh:151–164`.)
-   - **Higiene do retido:** retirar o `&& mv`, ajustando a continuação. O raspador falso apenas copia os mesmos bytes de `MAPA VELHO`; o selo não distingue instalar a versão raspada de conservar a original. (`diff:bin/relato.sh:105–106`; `diff:bin/tests/test_mapa20_valida.sh:115–123,127,144,153–154`.)
-   - **Falha de remoção:** retirar a guarda da linha 110 também preserva os cenários, pois nenhum injeta falha de `rm`. (`diff:bin/relato.sh:110`; `diff:bin/tests/test_mapa20_valida.sh:151–157`.)
-
-   **Recorte literalmente vazio com selo verde:** não. Os três recortes têm guardas que incrementam `FALHAS` quando falta a expressão exigida; verde exige zero. Isso comprova presença mínima, não integridade dos recortes. (`diff:bin/tests/test_mapa20_valida.sh:105–109,168–169`.) [nao verificado]
-
-5. **Selos vizinhos que leem `relato.sh`.**
-
-   Nenhuma quebra estática demonstrada nos cinco arquivos; execução integral [nao verificado].
-
-   | Selo | Conferência |
-   |---|---|
-   | `test_codex_estado.sh` | Recorta a partir de `CODEX_OK=""`, depois do novo bloco; seu veto a `exit` não captura a nova guarda. (`base:bin/tests/test_codex_estado.sh:104–111`; `diff:bin/relato.sh:110,122–124`.) |
-   | `test_relato_publica_claude_md.sh` | A regex continua selecionando a raspagem geral; CLAUDE permanece nos três pontos. O novo `git add` indentado não altera a contagem por início de linha. (`base:bin/tests/test_relato_publica_claude_md.sh:15–20`; `diff:bin/relato.sh:105–106,129–153,162`.) |
-   | `test_codex_estado_evento.sh` | Permanecem as chamadas exigidas, sem gerador CODEX inline. (`base:bin/tests/test_codex_estado_evento.sh:27–30`; `base:bin/relato.sh:32`; `diff:bin/relato.sh:123`.) |
-   | `test_relato_afirma_com_prova.sh` | A chamada exigida permanece. (`base:bin/tests/test_relato_afirma_com_prova.sh:43–45`; `base:bin/relato.sh:55–56`.) |
-   | `test_publicacao_sem_nome.sh` | O universo vem de `git ls-files`; MAPA rastreado entra automaticamente. Resultado de privacidade real [nao verificado]. (`base:bin/tests/test_publicacao_sem_nome.sh:58–73`.) |
-
-6. **Quem escreve e quem lê.**
-
-   | Campo/arquivo | Escritor | Leitor |
-   |---|---|---|
-   | `MAPA_RC` | Shell: `0` inicialmente; `1` por falha da cópia ou validação. | Saídas sem mudança e final. (`diff:bin/relato.sh:94–100,157,164`.) |
-   | `MAPA_PAR` | Shell: vazio ou par foto→público após validação verde. | Argumento opcional da raspagem geral. (`diff:bin/relato.sh:94–98,143`.) | [nao verificado]
-   | `MAPA_FOTO` | Shell define caminho; `cp` escreve os bytes; trap limpa o temporário. | Validador e raspador geral. (`base:bin/relato.sh:25`; `diff:bin/relato.sh:94–98,143`.) |
-   | `logs/MAPA-20/mapa.md` | Comentários atribuem à sessão/`montar_mapa.py`; escritor efetivo e gatilhos [nao verificado]. | `cp` do publicador. (`diff:bin/mapa20_valida.py:10`; `diff:bin/relato.sh:89–97`.) |
-   | Público `MAPA-20.md` | Raspador geral; no retido, raspador→arquivo ao lado→`mv`; falha pode removê-lo. | Raspagem do retido, Git e selo de privacidade. (`base:bin/raspar_publico.py:23–40`; `diff:bin/relato.sh:104–110,143,151–163`; `base:bin/tests/test_publicacao_sem_nome.sh:66–73`.) |
-   | `MAPA_PATH` | Shell: vazio ou nome após `git add` bem-sucedido. | Mensagem e pathspec do commit, incluindo retirada. (`diff:bin/relato.sh:150–162`.) | [nao verificado]
-
-7. **Classes históricas, uma a uma.**
-
-   | Classe | Resultado |
-   |---|---|
-   | **2º juiz** | Não há novo juiz de nomes: máscara e conferência reutilizam `nome_no_texto`. A fonte e a prova de X/N não são verificadas semanticamente. (`base:bin/raspar_publico.py:15–16,31,36`; `diff:bin/mapa20_valida.py:132–135`.) |
-   | **2º escritor fora da porta** | As novas escritas públicas estão no publicador, depois da trava existente. Escritor efetivo da fonte [nao verificado]. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:97–114,143`.) | [nao verificado]
-   | **Relógio fora da borda** | O diff não introduz relógio decisório; `date` permanece na mensagem de commit. O timer já existia. Atualização efetiva da fonte por evento [nao verificado]. (`diff:bin/relato.sh:89–90,161`; `base:bin/hasner-relato.timer:5–7`.) | [nao verificado]
-   | **Derivação paralela de fonte única** | O publicador atual valida e publica a mesma foto, pelo raspador existente. Reuso dos censos e medições reais [nao verificado]. (`diff:bin/relato.sh:94–98,143`; `base:bin/raspar_publico.py:19–40`.) | [nao verificado]
-   | **Selo sem mordida** | **Presente**, pelos mutantes específicos do item 4. (`diff:bin/tests/test_mapa20_valida.sh:53–56,115–123,151–164`.) |
-   | **Ordem de trava** | Nenhuma aquisição nova. `codex_estado.sh --gerar` retorna antes da trava do ramo evento. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:123`; `base:bin/codex_estado.sh:54–56,65–66`.) |
-   | **Pouso antes do pré-requisito** | Contrato efetivo, mapa completo no ar, suíte e opus final [nao verificado]. Comentário apontando contrato não comprova seu conteúdo; a base exige contrato e suíte antes do opus. (`diff:bin/relato.sh:93`; `base:CLAUDE.md:377–381,394`.) | [nao verificado]
-   | **Campo com dois significados** | **Presente na decisão de encerramento**: nome de dependência ou caminho é interpretado como estado da obra. `MAPA_RC` representa falha da etapa, incluindo cópia; `MAPA_PATH` inclui retirada e não prova publicação de mapa novo. (`diff:bin/mapa20_valida.py:141–142`; `diff:bin/relato.sh:94–100,150–164`.) |
-
-## 11/11 11:48 · sessao 9f78342994b3 · - · - · origem=Ronald (tmux)
-
-- **14 `exit` após o diff:** base `bin/relato.sh:27,28,32,35,38,42,86` → `1`; diff `bin/relato.sh:110,128,143,162,163` → `1`; diff `bin/relato.sh:157,164` → `$MAPA_RC`. Inicialização `0` em `diff:bin/relato.sh:94`, falha fixa `1` em `:100`; não há reset posterior, portanto validador vermelho executado não termina `0`.
-
-- **Mutante FOTO sobrevivente, por inspeção:** inserir `MAPA_FOTO="$RAIZ/logs/MAPA-20/mapa.md"` imediatamente antes de `MAPA_PAR=...` em `diff:bin/relato.sh:98`. A validação ainda usa a foto, publicação usa o vivo. Os sete cenários não alteram a fonte entre esses pontos, e os greps apenas exigem presença textual das duas referências a `$MAPA_FOTO`. (`diff:bin/tests/test_mapa20_valida.sh:151–164`.)
-
-- **Mutante de higiene sobrevivente, por inspeção:** remover o `&& mv` de `diff:bin/relato.sh:106`, ajustando a continuação da linha anterior. O stub só copia bytes idênticos e o teste espera exatamente `MAPA VELHO`; não distingue instalação da cópia raspada de preservação da cópia original. Em uso real, perde a troca do arquivo antigo pelo higienizado. (`diff:bin/tests/test_mapa20_valida.sh:115–123,127,144,153–154`.) [nao verificado]
-
-- **Outro sobrevivente:** retirar a guarda de remoção fracassada em `diff:bin/relato.sh:110`; nenhum cenário injeta falha em `rm`. (`diff:bin/tests/test_mapa20_valida.sh:151–157`.)
-
-- **Recorte literalmente vazio não dá selo verde:** os três `awk` estão em `diff:bin/tests/test_mapa20_valida.sh:105–107`; a guarda `:108–109` incrementa `FALHAS` se faltar a palavra exigida em qualquer recorte; a saída verde exige zero em `:168`. [nao verificado]
-
-- Contagem em memória confirmou **169 linhas** no teste; cabeçalho do hunk correto. Execução integral dos testes e mutantes: **[nao verificado]**. [nao verificado]
-
-## 11/11 11:47 · sessao 7f8232774c9a · FIO-E0-V4-E3 · sonda · origem=Code
-
-```text
-sonda_leitura: sonda_cel_apos_desl.py [fb90b86fb968e4b4] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-celulas_apos_desligamento_total n 4811
-trabalha_true_apos_desligamento n 2546
-colabs_distintos n 108
-trabalha_true_passado_ate_hoje n 2110
-trabalha_true_futuro n 436
-por_origem 'gerada' n 2546
-por_empresa 2 n 2092
-por_empresa 3 n 454
-por_mes_civil 2026-07 n 41
-por_mes_civil 2026-08 n 230
-por_mes_civil 2026-09 n 486
-por_mes_civil 2026-10 n 1026
-por_mes_civil 2026-11 n 642
-por_mes_civil 2026-12 n 121
-top_col col305 n 92
-top_col col946 n 75
-top_col col316 n 68
-top_col col746 n 64
-top_col col870 n 62
-top_col col393 n 61
-top_col col963 n 60
-top_col col518 n 57
-top_col col951 n 57
-top_col col417 n 51
-top_col col931 n 50
-top_col col506 n 47
-top_col col880 n 47
-top_col col666 n 43
-top_col col929 n 41
-top_col col939 n 41
-top_col col143 n 32
-top_col col437 n 32
-top_col col894 n 32
-top_col col840 n 29
-top_col col338 n 28
-top_col col370 n 28
-top_col col862 n 28
-top_col col270 n 27
-top_col col782 n 27
-top_col col846 n 26
-top_col col847 n 26
-top_col col126 n 25
-top_col col367 n 25
-top_col col408 n 25
-top_col col914 n 25
-top_col col138 n 24
-top_col col325 n 24
-top_col col400 n 24
-top_col col422 n 24
-top_col col744 n 24
-top_col col927 n 24
-top_col col432 n 23
-top_col col698 n 23
-top_col col997 n 23
-conferencia col318 n 10
-conferencia col997 n 18
-agora 2026-11-11 11:46:55
-```
-
-_3825 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3832 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
