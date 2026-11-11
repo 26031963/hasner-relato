@@ -1,7 +1,275 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 13:33** · publicado em **11/11/2026 13:35** (UTC-3)
+> Ultima resposta processada: **11/11/2026 13:41** · publicado em **11/11/2026 13:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 13:41 · sessao b08d61d550d2 · - · - · origem=Ronald (tmux)
+
+O censo não encontrou uso vivo do template apagado `bater_ponto.html`: a view renderiza V2 ou o seletor de triagem; as rotas conservam nomes `bater_ponto`/`bater_ponto_v2`, que não são referências ao arquivo removido. (`app/ponto/views.py:225`, `app/ponto/views.py:356`; `app/ponto/urls.py:11`)
+
+As referências restantes ao arquivo removido são comentário de exclusão, comentário histórico dos mutantes e ticket “MATAR”; o verificador de URLs já não o inclui. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:379`; `app/docs/TICKETS.md:693`; `app/tools/check_frontend_urls.py:25`)
+
+No front de batida, as chamadas reais a câmera/conversão estão concentradas em PWA; a outra ocorrência é onboarding, declarado como foto de referência no censo fechado. (`app/static/pwa.js:137`, `app/static/pwa.js:148`, `app/static/pwa.js:163`; `app/templates/core/onboarding.html:154`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:476`)
+
+As telas continuam interpretando a resposta para apresentação e transporte, mas não retornam recusando por foto nula: triagem libera sem stream, aguarda captura protegida e envia; offline mantém confirmar e entrega Blob/null à fila; V2 aguarda requisitos e anexa somente se houver foto. (`app/templates/ponto/triagem/apto.html:154`, `app/templates/ponto/triagem/apto.html:231`, `app/templates/ponto/triagem/apto.html:252`, `app/templates/ponto/triagem/apto.html:276`, `app/templates/ponto/triagem/apto.html:289`; `app/templates/ponto/bater_ponto_v2.html:273`, `app/templates/ponto/bater_ponto_v2.html:297`, `app/templates/ponto/bater_ponto_v2.html:305`)
+
+Persistem textos contraditórios próprios: “Tire sua selfie para liberar o ponto”, “Selfie obrigatória”, o texto de refazer e “Tire a selfie para registrar”; não constituem veto técnico, mas a linguagem de obrigatoriedade não foi centralizada. (`app/templates/ponto/triagem/apto.html:66`, `app/templates/ponto/triagem/apto.html:124`, `app/templates/ponto/triagem/apto.html:194`, `app/templates/ponto/triagem/apto.html:250`; `app/templates/ponto/bater_ponto_v2.html:100`)
+
+As duas cascas carregam o mesmo PWA e diálogo global; diferem na estrutura de navegação e outros scripts, sem outra política de câmera localizada. Os testes trocam o loader de `base.html` pela casca real, portanto verificam composição nas duas cascas; seleção real da casca e execução dos testes: [nao verificado]. (`app/templates/base.html:20`, `app/templates/base.html:385`, `app/templates/base.html:388`; `app/templates/base_app.html:20`, `app/templates/base_app.html:142`, `app/templates/base_app.html:145`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:185`)
+
+A confirmação de turno aberto continua podendo enviar formulário sem foto, fora do juiz visual da câmera; não contém captura nem fila local. (`app/templates/ponto/triagem/turno_confirmar.html:8`)
+
+Continuam riscos fora do teto da câmera: V2 não enfileira HTTP de erro resolvido, apenas rejeição de `fetch`; triagem online usa submit nativo; todos os caminhos offline dependem do escritor PWA. (`app/templates/ponto/bater_ponto_v2.html:307`, `app/templates/ponto/bater_ponto_v2.html:313`, `app/templates/ponto/bater_ponto_v2.html:316`; `app/templates/ponto/triagem/apto.html:241`, `app/templates/ponto/triagem/apto.html:289`; `app/templates/ponto/bater_ponto_v2.html:331`)
+
+## 11/11 13:41 · sessao 8bdba0451286 · PROPORCAO-POR-RISCO · verificador · origem=Code
+
+A v3 fecha vários exemplos da v2, mas ainda permite escrita com **rc 0 deduzido por leitura**. A seleção continua dependendo do nome imediato da chamada e da interseção dos nós reconhecidos com linhas adicionadas. (`bin/selo_proporcao.py:64`, `bin/selo_proporcao.py:69`, `bin/selo_proporcao.py:130`, `bin/selo_proporcao.py:132`)
+
+Não executei o selo, testes ou exemplos; os retornos abaixo são deduções. Execução efetiva, efeitos persistidos e situação em produção: **[nao verificado]**. [nao verificado]
+
+**1. Fechamento dos achados da volta 2**
+
+| Achado da v2 | Situação na v3 e cura | Caso que o morde |
+|---|---|---|
+| Continuação `()` sobre atributo antigo | **Fecha o exemplo direto:** a `Call` reconhecida cobre sua extensão inteira. (`bin/selo_proporcao.py:69`, `bin/selo_proporcao.py:132`) | `continuacao_sobre_attr_antigo`. (`bin/tests/test_selo_proporcao.sh:60`) |
+| Argumento novo em chamada escritora antiga | **Fecha quando a função é `Name`/`Attribute` reconhecido.** A chamada aninhada continua escapando, demonstrada abaixo. (`bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:71`) | `argumento_novo_em_update_antigo`, sobre preparo antigo. (`bin/tests/test_selo_proporcao.sh:16`, `bin/tests/test_selo_proporcao.sh:61`) |
+| `exec("obj.save()")` | **Fecha o literal direto**, por `OPACO`. (`bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:82`) | `exec_string`. (`bin/tests/test_selo_proporcao.sh:62`) |
+| `eval("obj.save()")` | **Fecha o literal direto**, pelo mesmo mecanismo. (`bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:71`) | `eval_string`. (`bin/tests/test_selo_proporcao.sh:63`) |
+| Decorador da v2 com `@eval(...)` | **Fecha aquele exemplo**, pois contém `eval`; não fecha decoradores em geral. (`bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:82`) | `eval_string` cobre o gatilho, mas não reproduz o decorador. (`bin/tests/test_selo_proporcao.sh:63`) |
+| Nome de método em f-string | **Fecha o exemplo:** segundo argumento de `getattr` não é `Constant`. (`bin/selo_proporcao.py:73`) | `fstring_nome`. (`bin/tests/test_selo_proporcao.sh:66`) |
+| `setattr` instala alias escritor | **Fecha o exemplo direto**, conservadoramente pelo próprio `setattr`. (`bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:71`) | `setattr_alias`; não instala nem invoca um escritor real, mas isola esse gatilho. (`bin/tests/test_selo_proporcao.sh:64`) |
+| QuerySet com método calculado | **Fecha o exemplo**, sem precisar resolver o tipo de `qs`. (`bin/selo_proporcao.py:73`) | `getattr_calculado`. (`bin/tests/test_selo_proporcao.sh:65`) |
+| Alias novo de cursor e SQL fragmentado | **Fecha aquele diff** pela referência nova a `.execute`. (`bin/selo_proporcao.py:36`, `bin/selo_proporcao.py:80`) | `cursor_execute` contém somente a referência, suficiente para provar esse mecanismo. (`bin/tests/test_selo_proporcao.sh:68`) |
+| SQL na f-string `UPDATE {tabela} SET ...` | **Fecha:** substitui expressões por ` x ` antes de procurar SQL; `.execute` também passa a ser reconhecido. (`bin/selo_proporcao.py:36`, `bin/selo_proporcao.py:76`) | `sql_fstring` isola a f-string, sem cursor. (`bin/tests/test_selo_proporcao.sh:67`) |
+| Payload `.pyw` carregado por `runpy.run_path` | **Fecha o executor apresentado**, por `run_path`; `.pyw` continua fora da análise. (`bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:124`) | `import_dinamico` testa `import_module`, **não** `run_path` nem o payload `.pyw`. (`bin/tests/test_selo_proporcao.sh:70`) |
+| Arquivo `.sql` e executor | **Fecha o exemplo:** destino `.sql` é A, e `.execute` novo também seria detectado. (`bin/selo_proporcao.py:36`, `bin/selo_proporcao.py:122`) | `arquivo_sql` prova a regra por caminho. (`bin/tests/test_selo_proporcao.sh:69`) |
+| Escritor novo em teste importado por linha antiga | **Não fecha; passou a limite declarado.** O arquivo continua excluído. (`bin/selo_proporcao.py:22`, `bin/selo_proporcao.py:124`) | Nenhum caso reproduz essa costura; `prod_importa_teste` adiciona somente o import. (`bin/tests/test_selo_proporcao.sh:49`) |
+| `import *` via reexportação antiga de teste | **Não fecha e não está explicitamente declarado no docstring.** Import de módulo comum não revela a origem reexportada. (`bin/selo_proporcao.py:22`, `bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:124`) | Sem caso correspondente. (`bin/tests/test_selo_proporcao.sh:29`, `bin/tests/test_selo_proporcao.sh:70`) |
+| Template chama método escritor | **Não fecha; limite declarado.** HTML continua excluído. (`bin/selo_proporcao.py:23`, `bin/selo_proporcao.py:124`) | `tela_pura` só muda texto; não chama método. (`bin/tests/test_selo_proporcao.sh:29`) |
+| Argumentos excedentes | **Fecha:** exige três ou quatro argumentos. (`bin/selo_proporcao.py:94`) | `arg_a_mais`. (`bin/tests/test_selo_proporcao.sh:78`) |
+| Retorno de `bash -e` não afirmado | **Fecha a ausência da asserção**, mantendo problema no preparo especial. (`bin/tests/test_selo_proporcao.sh:76`, `bin/tests/test_selo_proporcao.sh:77`) | `rc_bash_e` agora exige exatamente 1. (`bin/tests/test_selo_proporcao.sh:77`) |
+| Normalização universal de erros | **Não fecha:** wrapper permanece um `exec`, sem normalização de falhas de lançamento. (`bin/selo_proporcao.sh:4`) | Sem caso de Python ausente, execução recusada ou sinal. (`bin/tests/test_selo_proporcao.sh:71`, `bin/tests/test_selo_proporcao.sh:79`) |
+
+As curas anteriores permanecem: oito métodos ORM, espaço após ponto, alias por referência, `getattr` literal, `#` em string, signals, caminhos NUL, migration por rename, `--text` e revisão iniciada por opção. Os mecanismos estão em `bin/selo_proporcao.py:35`, `bin/selo_proporcao.py:79`, `bin/selo_proporcao.py:83`, `bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:102`, `bin/selo_proporcao.py:106`, `bin/selo_proporcao.py:118` e `bin/selo_proporcao.py:56`; os respectivos casos estão em `bin/tests/test_selo_proporcao.sh:30`, `bin/tests/test_selo_proporcao.sh:33`, `bin/tests/test_selo_proporcao.sh:35`, `bin/tests/test_selo_proporcao.sh:36`, `bin/tests/test_selo_proporcao.sh:37`, `bin/tests/test_selo_proporcao.sh:39`, `bin/tests/test_selo_proporcao.sh:44`, `bin/tests/test_selo_proporcao.sh:46`, `bin/tests/test_selo_proporcao.sh:47`, `bin/tests/test_selo_proporcao.sh:48` e `bin/tests/test_selo_proporcao.sh:73`.
+
+Continuam sem reprodução específica: `(obj.save)()`, caminho com tabulação e conteúdo falso `+++ /dev/null`; os casos próximos não têm essas formas. (`bin/tests/test_selo_proporcao.sh:33`, `bin/tests/test_selo_proporcao.sh:34`, `bin/tests/test_selo_proporcao.sh:47`, `bin/tests/test_selo_proporcao.sh:48`)
+
+Quanto ao custo dos limites:
+
+- **Helper que já grava:** está compreensível: chamada comum pode passar, e o texto atribui a detecção ao smoke. (`bin/selo_proporcao.py:22`, `bin/selo_proporcao.py:26`)
+- **Template escritor:** a exclusão está explícita, mas deveria dizer diretamente que renderizar o template pode causar escrita real não detectada; existe método `rebaixar()` que chega a `self.save()`. Renderização e objeto no contexto: **[nao verificado]**. (`bin/selo_proporcao.py:23`, `app/chamados/models.py:488`, `app/chamados/models.py:498`)
+- **Teste importado por linha antiga:** explica a exclusão técnica, mas chamar isso de “custo do aval, não fuga” omite a consequência: **escrita nova no corpo do teste pode alcançar produção com B verde**. Isso é mais amplo que apenas chamar helper que já escrevia. (`bin/selo_proporcao.py:22`, `bin/selo_proporcao.py:124`)
+- **`import *`:** falta declaração expressa sobre reexportação e seu custo. Aceitação específica desse limite pelo Ronald: **[nao verificado]**. (`bin/selo_proporcao.py:22`, `bin/selo_proporcao.py:85`)
+
+**2. Novos contraexemplos à v3**
+
+Cada diff abaixo é independente e declarado B. Os `.py` ficam fora dos caminhos especiais e de testes; os objetos mencionados precisam existir no contexto. Os **rc 0 são deduzidos** das regras de seleção; funcionamento desses contextos em produção: **[nao verificado]**. (`bin/selo_proporcao.py:118`, `bin/selo_proporcao.py:124`, `bin/selo_proporcao.py:132`, `bin/selo_proporcao.py:145`)
+
+**a) Chamada aninhada, alterando somente argumento.** Em um `ModelForm`, o exemplo muda a opção de persistência; presença desse formulário na aplicação: **[nao verificado]**.
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1,3 +1,3 @@
+ getattr(form, "save")(
+-    commit=False, [nao verificado]
++    commit=True, [nao verificado]
+ )
+```
+
+O `Call` externo cruza a linha adicionada, mas sua função é outro `Call`; `nome_chamado` devolve `None`. O `getattr` e a constante `"save"` estão inteiramente na linha antiga. **Rc 0.** (`bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:73`, `bin/selo_proporcao.py:83`, `bin/selo_proporcao.py:132`)
+
+**b) Lambda antiga passa a ser executada.**
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1,2 +1,2 @@
+ (lambda: obj.save()
+-)
++)()
+```
+
+A chamada tem `Lambda` como função; o atributo escritor permanece na linha antiga. A alteração passa a invocar a expressão que antes apenas construía a função. **Rc 0.** (`bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:79`, `bin/selo_proporcao.py:90`, `bin/selo_proporcao.py:132`)
+
+**c) Decorador passa a executar a lambda escritora.**
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1,5 +1,5 @@
+ @(
+     lambda f, acao=(lambda: obj.save()):
+-        f
++        (acao(), f)[1]
+ )
+ def tela(): pass
+```
+
+A referência `.save` está na linha antiga; a chamada nova chama `acao`, nome comum. Nem as lambdas nem a tupla são classificadas como escrita. **Rc 0.** (`bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:79`, `bin/selo_proporcao.py:90`, `bin/selo_proporcao.py:132`)
+
+**d) `__dict__` e `vars()`, com nome fragmentado.** São alternativas independentes para um contexto com `Model` e `obj` disponíveis. Disponibilidade concreta: **[nao verificado]**.
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1,0 +2 @@
++Model.__dict__["sa" + "ve"](obj)
+```
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1,0 +2 @@
++vars(Model)["sa" + "ve"](obj)
+```
+
+`__dict__`, `vars` e as constantes separadas não pertencem aos conjuntos; a função externa é um `Subscript`. **Rc 0 em ambas.** Usar `"save"` inteiro seria detectado. (`bin/selo_proporcao.py:35`, `bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:83`)
+
+**e) `operator.methodcaller`.**
+
+```diff
+--- /dev/null
++++ b/app/x/novo.py
+@@ -0,0 +1,2 @@
++import operator
++operator.methodcaller("sa" + "ve")(obj)
+```
+
+`methodcaller` não está nos conjuntos, o nome é fragmentado e a chamada externa tem outra `Call` como função. **Rc 0.** (`bin/selo_proporcao.py:35`, `bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:83`, `bin/selo_proporcao.py:85`)
+
+**f) Reflexão por `type(...)`.**
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1,0 +2 @@
++type(obj).__getattribute__(obj, "sa" + "ve")()
+```
+
+`type` e `__getattribute__` não são reconhecidos; a chamada final tem uma `Call` como função. **Rc 0.** (`bin/selo_proporcao.py:35`, `bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:65`, `bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:83`)
+
+**g) Alias de `exec` por import.**
+
+```diff
+--- /dev/null
++++ b/app/x/novo.py
+@@ -0,0 +1,2 @@
++from builtins import exec as rodar
++rodar("obj.save()")
+```
+
+O import só verifica origens de teste/signals; não aplica `OPACO` aos nomes importados. A chamada vê `rodar`, e a string `"obj.save()"` não é um nome exato nem SQL. **Rc 0.** Em contraste, `rodar = exec` seria detectado pelo `Name exec`. (`bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:83`, `bin/selo_proporcao.py:85`)
+
+**h) `.sql` renomeado para sufixo ignorado.**
+
+```diff
+diff --git a/app/x/q.sql b/app/x/q.txt
+rename from app/x/q.sql
+rename to app/x/q.txt
+```
+
+Considere `q.sql` contendo escrita e um executor antigo que só consome `q.txt` quando esse arquivo existe. A renomeação pode ativar o payload sem mudar Python; existência desse executor: **[nao verificado]**.
+
+O selo considera o destino; `.txt` é ignorado. Mesmo que Git reporte deleção e adição, a deleção é ignorada e o destino continua fora. **Rc 0.** Rename mantendo destino `.sql` dá **rc 1**, portanto não constitui escape. (`bin/selo_proporcao.py:110`, `bin/selo_proporcao.py:116`, `bin/selo_proporcao.py:122`, `bin/selo_proporcao.py:124`)
+
+**i) F-string sem SQL nas partes constantes.**
+
+```diff
+--- a/app/x/views.py
++++ b/app/x/views.py
+@@ -1 +1,2 @@
+ run = cur.execute
++run(f"{'DE' + 'LETE'} {'FR' + 'OM'} tabela")
+```
+
+A referência `.execute` é antiga; `run` não é resolvido como alias. O `JoinedStr` vira aproximadamente ` x   x  tabela`, e nenhuma constante contém SQL completo. **Rc 0.** (`bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:76`, `bin/selo_proporcao.py:83`, `bin/selo_proporcao.py:132`)
+
+**3. Falsos positivos e controles**
+
+| Código adicionado em `.py` comum | Rc B deduzido |
+|---|---|
+| `getattr(obj, "x")` | **0**: segundo argumento continua sendo `Constant`, sem nome reconhecido. (`bin/selo_proporcao.py:73`, `bin/selo_proporcao.py:83`) |
+| `getattr(obj, nome)` usado apenas para leitura | **1, novo falso positivo:** nome calculado basta. (`bin/selo_proporcao.py:73`) |
+| `motor_de_template.execute()` sem persistência | **1, novo falso positivo:** não resolve o tipo do receptor. (`bin/selo_proporcao.py:36`, `bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:80`) |
+| `texto = f"UPDATE {nome} SET rótulo"` apenas para exibição | **1, novo falso positivo:** o texto montado satisfaz a regex SQL. (`bin/selo_proporcao.py:41`, `bin/selo_proporcao.py:76`) |
+| `texto = f"update {nome}"` | **0**: não contém `SET`, e a constante `"update "` não é o nome exato `"update"`. (`bin/selo_proporcao.py:41`, `bin/selo_proporcao.py:76`, `bin/selo_proporcao.py:83`) |
+| `texto = f"update{nome}"` | **1, já ocorria na v2:** a constante exata `"update"` basta. (`bin/selo_proporcao.py:35`, `bin/selo_proporcao.py:83`) |
+| Palavra `update` em template `.html` | **0**: HTML permanece fora. (`bin/selo_proporcao.py:124`) |
+| Referência a `exec`, `eval` ou `compile` sem execução | **1:** `Name` em `OPACO` basta. (`bin/selo_proporcao.py:38`, `bin/selo_proporcao.py:82`) |
+| `.sql` contendo apenas `SELECT`, comentário ou texto | **1:** regra incondicional por caminho. (`bin/selo_proporcao.py:122`) |
+
+Pelo critério fornecido, esses falsos positivos que empurram para A não são bloqueantes; o código também declara essa direção conservadora. (`bin/selo_proporcao.py:27`)
+
+**4. Retornos**
+
+- **Argumento a mais agora dá 2**, inclusive na chamada testada com `repo extra`. (`bin/selo_proporcao.py:94`, `bin/tests/test_selo_proporcao.sh:78`)
+- **Argumentos inválidos, revisão inválida, Git não zero, parse inválido e exceções ordinárias alcançadas pela fronteira Python dão 2.** (`bin/selo_proporcao.py:46`, `bin/selo_proporcao.py:94`, `bin/selo_proporcao.py:102`, `bin/selo_proporcao.py:134`, `bin/selo_proporcao.py:152`)
+- **Não são todos os caminhos de erro:** falha ao lançar Python pode preservar 126/127; término por sinal não passa pela captura de `Exception`. Ocorrência concreta: **[nao verificado]**. O wrapper permanece sem normalização. (`bin/selo_proporcao.sh:4`, `bin/selo_proporcao.py:152`)
+- **`bash -e` recebe o rc 1 inteiro**, se o selo o produzir: `exec` preserva o retorno, e o shell externo captura a saída do shell com `-e`. O teste agora afirma exatamente 1. (`bin/selo_proporcao.sh:4`, `bin/selo_proporcao.py:143`, `bin/tests/test_selo_proporcao.sh:77`)
+- **Rc 1 continua significando classificação conservadora**, incluindo falsos positivos; não comprova escrita efetiva. (`bin/selo_proporcao.py:141`, `bin/selo_proporcao.py:143`)
+
+**5. Qualidade dos casos**
+
+| Caso ou anúncio | Avaliação |
+|---|---|
+| `so_remocao` | **Corrigido:** base contém `a = 1` e `o.save()`; `sed` só remove a segunda linha. O arquivo permanece Python válido, sem linha adicionada. (`bin/tests/test_selo_proporcao.sh:16`, `bin/tests/test_selo_proporcao.sh:51`) |
+| `apagou_migration` | **Corrigido:** migration existe na base e é realmente removida. Exercita o ramo `D`. (`bin/tests/test_selo_proporcao.sh:15`, `bin/tests/test_selo_proporcao.sh:56`, `bin/selo_proporcao.py:116`) |
+| `sql_escrita` | **Ganhou duplicidade na v3:** `.execute` e a constante SQL bastam independentemente. Não isola a regex SQL. (`bin/tests/test_selo_proporcao.sh:38`, `bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:80`, `bin/selo_proporcao.py:83`) |
+| `signal_nome` | **Duplicidade permanece:** módulo terminado em `signals` ou nome importado `post_save` bastam independentemente. (`bin/tests/test_selo_proporcao.sh:40`, `bin/selo_proporcao.py:88`) |
+| Chamadas diretas ORM | Agora podem disparar por `Attribute` e por `Call`; não isolam a nova regra de extensão. Os dois casos com chamada antiga isolam melhor essa cura. (`bin/tests/test_selo_proporcao.sh:31`, `bin/tests/test_selo_proporcao.sh:60`, `bin/tests/test_selo_proporcao.sh:61`, `bin/selo_proporcao.py:71`, `bin/selo_proporcao.py:80`) |
+| `command_alias` | Continua provando atributo genérico `.create`, sem invocar alias e sem provar mecanismo específico de command. (`bin/tests/test_selo_proporcao.sh:45`, `bin/selo_proporcao.py:80`) |
+| `prod_importa_teste` | Continua sem criar módulo escritor: prova a regra conservadora do import, não a costura produção→teste→escrita. (`bin/tests/test_selo_proporcao.sh:49`) |
+| Preparo comum | Checkout, resultado final do script, commit e mudança de HEAD são conferidos; comandos anteriores separados por `;` ainda podem falhar e ser mascarados pelo último. (`bin/tests/test_selo_proporcao.sh:22`, `bin/tests/test_selo_proporcao.sh:23`, `bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:46`) |
+| Preparo de `rc_bash_e` | **Continua sem conferência:** checkout, escrita, add e commit estão encadeados por `;`. A asserção do rc existe, mas pode julgar outra árvore se esse preparo falhar. (`bin/tests/test_selo_proporcao.sh:76`, `bin/tests/test_selo_proporcao.sh:77`) |
+| “Cada escape” e “um mecanismo por caso” | O anúncio continua mais forte que a cobertura: persistem duplicidades e ausências específicas descritas acima. (`bin/tests/test_selo_proporcao.sh:3`, `bin/tests/test_selo_proporcao.sh:4`, `bin/tests/test_selo_proporcao.sh:38`, `bin/tests/test_selo_proporcao.sh:40`) |
+
+**6. Quem escreve, chama e lê**
+
+- **Produz o veredito:** Python imprime achados e retorna 0/1/2; o wrapper executa Python. (`bin/selo_proporcao.py:137`, `bin/selo_proporcao.py:141`, `bin/selo_proporcao.py:145`, `bin/selo_proporcao.py:152`, `bin/selo_proporcao.sh:4`)
+- **Chamador concreto encontrado:** `test_selo_proporcao.sh` define `SELO`, chama sobre repositório sintético, captura `$?` e compara com o esperado. (`bin/tests/test_selo_proporcao.sh:8`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:25`, `bin/tests/test_selo_proporcao.sh:26`)
+- **Outros leitores diretos:** as verificações de argumentos/revisões e as duas verificações de propagação do rc. (`bin/tests/test_selo_proporcao.sh:71`, `bin/tests/test_selo_proporcao.sh:77`, `bin/tests/test_selo_proporcao.sh:78`, `bin/tests/test_selo_proporcao.sh:79`)
+- **Leitor indireto:** a régua chama o teste pelo glob e transforma falha do teste em rc 1 da régua. Isso testa cenários sintéticos; não classifica o diff real de pouso. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`, `bin/tests/test_selo_proporcao.sh:25`)
+- **Consumidor do pouso real:** o contrato exige que merge+deploy espere o rc; chamada operacional, leitor efetivo e registro no RELATO continuam **[nao verificado]**. (`contrato.txt:2`, `contrato.txt:3`, anexo) [nao verificado]
+- **CORTES/RELATO:** não encontrei o registro específico PROPORCAO-POR-RISCO na busca textual desses documentos; atendimento desses itens do aval: **[nao verificado]**.
+- **Pre-push:** o código declara que não roda o loop de host e chama outros selos individualmente; uso deste selo pelo hook instalado: **[nao verifi
+
+[truncado em 20000 de 21776 caracteres]
+
+## 11/11 13:40 · sessao eb2c0d0b2703 · - · - · origem=Ronald (tmux)
+
+- **Juiz do servidor = cobrança, não veto.** `selfie_ausente` retorna `origem in ('app',) and not tem_foto and decorrido_min >= prazo`; prazo PWA 0 min, APK/canal desconhecido 90 min, sobreposição só APK/desconhecido. Não lê banco nem relógio. Registro vivo identifica essa autoridade. (`app/ponto/registro_batida.py:71`, `:75`, `:80`; `app/core/juizes.py:1192`)
+
+- **Três chamadores operacionais encontrados:** API principal e API core sob `if not foto`, com `tem_foto=False, decorrido_min=0`, acrescentando motivo/contexto sem impedir escrita; retro usa canal gravado, existência `FotoBatida OR Batida.foto` e duração em minutos. (`app/api/views.py:449`, `:461`; `app/api/views_core.py:436`, `:448`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:70`, `:74`)
+
+- **As APIs usam a mesma porta com ou sem foto:** `registrar_batida` recebe campos da batida sem exigir foto; anexação ocorre depois, somente `if foto`, por `anexar_foto(...registro='criar')`. A porta cria `Batida` sem predicado de foto; seus vetos próprios são competência/colisão, além dos retornos de deduplicação. (`app/api/views.py:665`, `:781`; `app/api/views_core.py:657`, `:776`; `app/ponto/registro_batida.py:94`, `:113`, `:132`, `:145`, `:157`)
+
+- **POST triagem web:** escreve por `registrar_batida` antes de ler/anexar foto; `foto_sessao or request.FILES.get("foto")` só controla anexação. Não consulta `selfie_ausente` nesse ato; a cobrança poderá vir do retro, que lê o canal gravado e ambas as fontes de foto. Isso preserva diferença temporal entre casca web e APIs: web sem foto não cobra inline, API PWA cobra inline. (`app/ponto/services/triagem_batida.py:700`, `:748`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:74`; `app/api/views.py:461`; `app/api/views_core.py:448`)
+
+- **Escritor persistente de foto:** `anexar_foto` escreve `Batida.foto` pela porta `anotar`; pode também criar/atualizar `FotoBatida` conforme `registro`. Modelo admite foto nula. Upload separado exige foto como insumo daquela operação, sem impor foto à criação da batida. (`app/ponto/registro_batida.py:296`; `app/ponto/models.py:78`; `app/api/views.py:847`; `app/api/views_core.py:832`; `app/ponto/views.py:2895`)
+
+- **`foto_ausente` é motivo de cobrança**, não campo booleano de `Batida`: APIs e retro o entregam a `criar_ou_atualizar_disputa`; catálogo transforma em confirmação de presença; upload posterior procura disputas desse motivo, vincula por `contexto.ultima_batida.id`, apara/fecha pelas portas. (`app/api/views.py:464`, `:767`; `app/api/views_core.py:451`, `:762`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:96`; `app/chamados/catalogo/perguntas.py:93`; `app/api/foto_recebida.py:57`)
+
+- **Fila admite null e sync omite arquivo:** escritor normaliza `foto: fotoBlob || null`; leitor só faz multipart de foto se `b.foto` truthy, mantendo exigência de Blob/File quando presente. Modelo, retro e leitores de apresentação examinados tratam ausência; não encontrei exigência de foto sempre presente nesses leitores. Consumidores externos à cópia: [nao verificado]. (`app/static/pwa.js:169`, `:180`, `:214`; `app/ponto/models.py:78`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:75`; `app/core/views.py:1005`; `app/colaboradores/services/detalhe.py:87`; `app/templates/core/_d2_feed.html:6`)
+
+- **Possível bloqueante remanescente real na fila:** `registrarBatidaOffline` aguarda `obterGap()` antes de abrir/gravar `batidas_pendentes`; gap ausente/velho chama `calcularESalvarGap`, cujo `fetch('/hora/')` não tem timeout. Se esse fetch permanecer pendente, a batida não chega ao `add`, embora a captura já tenha resolvido pelo teto. Incidência em produção: [nao verificado]. O Chromium não prova persistência porque substitui `registrarBatidaOffline` por espia que resolve imediatamente. (`app/static/pwa.js:85`, `:100`, `:169`, `:175`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:116`)
+
+- **Sync não pressupõe foto:** lê fila, envia mesmo endpoint `/api/ponto/bater/`, remove após sucesso ou HTTP 400 e conserva em rede/5xx; SW delega às páginas e, sem página, notifica. Sucesso de chamada da espia não comprova esse ciclo. (`app/static/pwa.js:188`, `:214`, `:220`, `:228`, `:239`, `:384`; `app/static/sw.js:112`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:118`)
+
+- **Lacuna anterior de transporte permanece:** fila armazena timestamp corrigido, timestamp bruto, gap, precisão e instante GPS; sincronizador envia timestamp bruto, mas não envia gap, precisão nem instante GPS. Isso não é campo de foto com dois significados; é perda de insumos no transporte. (`app/static/pwa.js:171`, `:176`; `app/static/pwa.js:205`)
+
+- **Testes de servidor existentes:** sem foto cria batida e disputa, com foto não cria motivo `foto_ausente`; juiz testa limiares e retro lê ambas as fontes. Execução nesta revisão: [nao verificado]. (`app/api/tests/test_api_bater_pwa.py:64`, `:95`; `app/ponto/tests/test_selfie_ausente_juiz.py:27`, `:34`, `:103`, `:111`)
+
+## 11/11 13:36 · sessao 578de191b847 · - · - · origem=Ronald (tmux)
+
+- **Quem escreve o veredito:** Python imprime achados e devolve 1 para B com achados, 0 para restante julgado e 2 para erros tratados; o wrapper faz `exec python3`. (`bin/selo_proporcao.py:134`, `bin/selo_proporcao.py:137`, `bin/selo_proporcao.py:141`, `bin/selo_proporcao.py:145`, `bin/selo_proporcao.py:152`, `bin/selo_proporcao.sh:4`)
+- **Chamador concreto encontrado:** o teste define `SELO`, chama o wrapper para o repositório sintético, captura `$?` e compara com o esperado. (`bin/tests/test_selo_proporcao.sh:8`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:25`, `bin/tests/test_selo_proporcao.sh:26`)
+- **Leitores adicionais no teste:** argumentos/classes/revisões são comparados com 2; a chamada com `bash -e` agora tem resultado comparado explicitamente com 1, assim como a chamada direta. (`bin/tests/test_selo_proporcao.sh:71`, `bin/tests/test_selo_proporcao.sh:72`, `bin/tests/test_selo_proporcao.sh:73`, `bin/tests/test_selo_proporcao.sh:74`, `bin/tests/test_selo_proporcao.sh:77`, `bin/tests/test_selo_proporcao.sh:78`, `bin/tests/test_selo_proporcao.sh:79`)
+- **Leitor indireto:** a régua chama todos os `tests/test_*.sh`, portanto inclui este teste quando alcança o loop; falha do teste vira rc 1 da régua. O repositório julgado pelo teste é sintético, não o diff de um pouso real. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:25`)
+- **Pouso real:** não encontrei chamada operacional, captura do rc ou registro PROPORCAO em CORTES/RELATO na busca textual do código/docs da cópia, excluindo `.git`, `logs/` e `app/logs/`; integração operacional/manual **[nao verificado]**. As únicas referências literais encontradas a `selo_proporcao`/`PROPORCAO-POR-RISCO` pertencem aos três arquivos do instrumento; exaustividade frente a chamada construída dinamicamente **[nao verificado]**. [nao verificado]
+- **Pre-push:** declara que não executa o loop de host e chama individualmente outros selos; instalação efetiva e uso deste selo em produção **[nao verificado]**. (`bin/pre-push.sh:14`, `bin/pre-push.sh:15`, `bin/pre-push.sh:16`, `bin/pre-push.sh:19`, `bin/pre-push.sh:38`)
+- **Atalho da régua permanece:** `FP` considera apenas `.py`/`.html` em `app/`; `ARVORE_FP` é calculado, mas o retorno “JA VERDE” compara somente `FP` e status e ocorre antes do loop de host. Assim, mudar somente `bin/` pode conservar esse atalho, condicionado a carimbo anterior OK. (`bin/regua.sh:26`, `bin/regua.sh:33`, `bin/regua.sh:38`, `bin/regua.sh:45`, `bin/regua.sh:84`, `bin/regua.sh:86`, `bin/regua.sh:93`, `bin/regua.sh:138`)
+- **Worktree:** o próprio teste resolve seu diretório e passa o repo sintético explicitamente; execução em worktree **[nao verificado]**. O problema independente de outro teste permanece: `test_hook_nao_e_copia.sh` exige `.git/hooks/pre-push` e falha se ausente; o teste vizinho já consulta `core.hooksPath`/diretório comum. (`bin/tests/test_selo_proporcao.sh:7`, `bin/tests/test_selo_proporcao.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:21`, `bin/tests/test_hook_nao_e_copia.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:27`, `bin/tests/test_commit_so_o_declarado.sh:56`, `bin/tests/test_commit_so_o_declarado.sh:57`)
 
 ## 11/11 13:33 · sessao 3d47551f7e4d · O168 · censo · origem=Code
 
@@ -1364,135 +1632,4 @@ Se houver decisão de centralizar o validador nomeado e reutilizá-lo, os locais
 - `app/ponto/tests/test_aviso_home_office.py:11`: exige tipo nos choices.
 - Contratos adjacentes de arquitetura: `app/ponto/tests/test_contract_porta_ausencia.py:30-41,68-78`; `app/ponto/tests/test_contract_catalogo_congelado.py:42-60`; caso de cadastro adicional: `app/ponto/tests/test_o137_esmeril_ausencia_le_o_cadastro.py:82-91`.
 
-## 11/11 13:28 · sessao cb68d13e7bcf · - · - · origem=Ronald (tmux)
-
-Censo dos itens 3 e 7, somente leitura:
-
-- `classificar_dia` recebe contagens e insumos; não recebe chamados nem consulta conversa. Retorna CSF quando `tipo_dia == 'trabalho'`, previsto verdadeiro, realizado ≥ previsto, `chamados_vivos` verdadeiro e todas as células casadas. Isento retorna antes. Referências: `app/ponto/supra_juiz.py:204`, `:220`, `:463`, `:467`.
-- O comando percorre colaboradores ativos da empresa e pula quem não tem batidas na janela; carrega apenas chamados dos `FURO_MODULES`, associa pelo juiz `data_do_chamado`, separa `vivos` por `VIVOS` e conta o fio por `fio_vivo`. Referências: `app/ponto/management/commands/supra_juiz.py:110`, `:113`, `:117`, `:186`, `:190`, `:199`, `:212`, `:215`.
-- Hoje a classificação alimenta placar/alarme; a escrita lê a lavra `cobranca_indevida` e seus protestos. Ausência de lavra conta `CSF_SEM_LAVRA`; falta de código conta `CSF_LAVRA_SEM_CODIGO`; nenhum dos dois casos retrata. Referências: `app/ponto/management/commands/supra_juiz.py:223`, `:235`, `:246`, `:248`, `:249`, `:250`, `:253`.
-- A guarda roda **antes** da verificação de cobrança órfã e mesmo em dry-run. Se retorna falso, incrementa `CSF_COM_CONVERSA_PRESERVADO` e dá `continue`: não chama o retratador. Referências: `app/ponto/management/commands/supra_juiz.py:257`, `:260`, `:261`, `:262`, `:263`, `:275`.
-- `--executar`, com `T6_1_RETRATACAO_EM_SECO=False`, chama o retratador; só o retorno verdadeiro incrementa `CSF_RETRATADO`; falso conta recusa. Sem flag conta `CSF_RETRATAVEL_DRY`. Referências: `app/ponto/management/commands/supra_juiz.py:45`, `:279`, `:286`, `:288`, `:290`, `:295`.
-- `CSF_RETRATADO` é um `Counter` **local de cada execução**: criado em `:105`, escrito em `:288` e impresso por `most_common()` em `:299–300`. Ausência da linha não é emissão explícita de zero. Não há leitura operacional pelo alarme, que consulta somente `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO`. Referências: `app/ponto/management/commands/supra_juiz.py:105`, `:288`, `:299`, `:305`, `:306`.
-- Os leitores executáveis encontrados do nome literal são testes: exige presença após retratação em `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:122`; exige ausência quando a lavra não traz código em `:153`; exige ausência quando a porta recusa em `:167`. As alegações históricas nos documentos não são medição atual de produção [nao verificado].
-- O cron vivo ainda declara `supra_juiz --executar`, por empresa e dependente de `processar_cartorio`, em `app/config/crons.py:599`; a classificação de papel distingue o supra sem `--executar` como vigia em `:2342`.
-- O selo funcional do comando cobre lavra concorde sem retratação, lavra indevida com retratação, classificação local divergente sem alterar a decisão da lavra, ausência de lavra, ausência de código e recusa da porta. Referências: `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:106`, `:116`, `:124`, `:134`, `:142`, `:155`.
-
-A medição histórica **exata** pedida no item 7 não é recuperável só pelo banco desta cópia: a trilha da transição grava somente status anterior e `{status_local, via}`, sem motivo CSF ou porta chamadora (`app/chamados/models.py:292–295`). As diversas reconciliações do cartório chamam a mesma porta (`app/ponto/services/cartorio.py:1525`, `:1538`, `:1559`), cuja via persistida é `sistema`, não `reconciliacao` (`app/chamados/catalogo/motor.py:88–96`; `app/chamados/models.py:654`). O ator identifica processo/request, não pilha (`app/core/observ.py:22–32`, `:94–138`).
-
-Também não cabe reconstruir literalmente o predicado antigo usando só os vínculos e carimbos atuais: ressuscitar zera `respondida_em` (`app/chamados/models.py:1563–1566`); a relação de origem pode ficar nula (`:1750–1755`); há reapontamento de destino pela porta do fio (`app/chamados/services/fio.py:20`). A sequência de decisões preserva atos, mas o legado sem sequência tem tratamento próprio (`app/chamados/models.py:3840–3849`, `:3913–3938`).
-
-Para a sonda final, recomendo manter **dois resultados exatos como `"nao medido"`**, com essas razões, e fornecer somente um **proxy expressamente identificado**, separado:
-
-1. transições `estado_chamado` nos últimos 30 dias;
-2. ator `sistema:processar_cartorio`;
-3. origem em `COBRANCA`, destino em `TERMINAIS`, via `EVENTO_VIA['RECONCILIAR']`;
-4. chamados atuais ligados a pergunta com `respondida_em <= instante da transição`;
-5. agrupar por `empresa_id`, `modulo_origem` e, se desejado, `PerguntaDisputa.motivo`, contando IDs distintos/eventos;
-6. deixar explícito que não prova CSF, não cobre cartório acionado sob outro processo e não reconstrói associações históricas.
-
-`bin/sonda_leitura.sh` aceita um arquivo Python em `:56`, usa produção por padrão em `:93–97` e executa shell Django no schema `juliani` em `:235–240`. **Não executar o wrapper nesta sessão de nenhuma escrita:** ele cria/altera credencial, GRANTs, rede, temporários e trilha (`:126–143`, `:153–181`, `:185–193`, `:216–218`, `:248–250`). A sonda Python pode ser entregue como texto, sem criar arquivo.
-
-## 11/11 13:28 · sessao c2e43acb8731 · - · - · origem=Ronald (tmux)
-
-Comparação feita contra a cópia `../a026943099b8d88468240fd4b18491141b6810af`, por diff e AST sem docstrings.
-
-Delta dos leitores citados:
-
-| Leitor | Mudança desde a0269430 | Citação atual |
-|---|---|---|
-| `efeitos_da_ausencia` | Os dois ramos que consideravam qualquer `minutos` como parcial passaram a usar `cobre_parte_do_dia(a, parciais)`. | `app/ponto/services/efeito_ausencia.py:38,48,55` |
-| `recalcular_fechamento_mes` | Mesma troca no ramo de cobertura; retirou acumulador `_min_parcial_pagos` sem leitor. O desconhecido continua suprimindo previsto (`None != DESCONTA`). | `app/ponto/services/fechamento.py:672-673,690-701,731` |
-| `creditos_por_dia` | Só credita minutos quando o juiz confirma parcialidade, além da presença em `TIPOS_PAGOS`. | `app/ponto/services/credito_parcial.py:20-28` |
-| `dia_decidido.rotulo_de` | Quando o veredito é `ABONADO`, zera minutos apresentados se a ausência não é parcial; inclusive desconhecido, porque seu veredito continua `ABONADO`. | `app/ponto/services/dia_decidido.py:468-473,490-497` |
-| `cobertura_ausencia_periodo` | Extraiu filtro e expansão para dois novos leitores auxiliares, conservando critério; novo acesso em lote reutiliza os mesmos. | `app/ponto/turnos.py:2752-2783,3068-3081` |
-| `classificar_falta` | Recebe agora `carga` e `agora`; ausência pré-carregada pode alimentar o mesmo guarda de não parcialidade. | `app/escala/servico_jornada.py:280-295,346-352` |
-| Cartório, leitor indireto de cobertura | Ramo sem adesão passou a considerar dia sem trabalho no horizonte desde competência 2026-11; cobertura integral preserva o comportamento anterior. | `app/ponto/services/cartorio.py:267-285,1230-1245,1254-1277` |
-
-Novos auxiliares explicitamente relevantes: `_q_cobertura`, `_cobertura_pura` e `CargaDaJanela.cobertura`; desconhecido sem `data_fim` continua expandido apenas no dia inicial. `app/ponto/turnos.py:2757-2783,3068-3081`.
-
-Nenhum dos leitores de tipo citados desapareceu. Precedência, parcialidade/integral abonado, suprajuiz, grade, estado/documento, avisos, inteligência, vigias e filtros de ausência do export mantiveram a semântica do anexo; funções desses arquivos podem ter mudanças laterais, mas não no tratamento descrito de `Ausencia.tipo`. Para essa conclusão de comparação: evidência fornecida pelo diff entre as duas cópias, sem arquivo de relatório salvo [nao verificado].
-
-Comportamento atual para **ausente de `vigente()`**, necessário ao fecho:
-
-| Decisor | Resultado |
-|---|---|
-| Catálogo | `efeito_vigente` devolve `None`; código cru como rótulo. `app/ponto/catalogo/ausencias.py:293-300`. |
-| `precedencia.faixa_de` | `atestado`, inclusive literal `folga`; mapa distingue somente `folga_compensatoria` e `feriado_folga` como faixa folga. `app/ponto/precedencia.py:52-79`. |
-| `fatos_do_periodo` | Inclui não rejeitada; conserva código; ordem permite vencer feriado, folga e trabalho. `app/ponto/precedencia.py:273-279,336-339,379-408`. |
-| Cobertura | Folha exige aprovada; cobrança aceita não rejeitada; cobre intervalo fechado, ou só início se fim ausente e fora de `TIPOS_EM_ABERTO`. `app/ponto/turnos.py:2511-2520,2554-2559,2770-2783`. |
-| Parcialidade/integral | Não parcial; diferente de `falta`, explica dia inteiro; não entra no mapa integral abonado porque falta efeito `ABONA`. `app/ponto/turnos.py:2597-2602,2670-2692`. |
-| Cartório | Aprovada integral dispensa lâmpadas e escreve código cru em `dispensada`; precedência é copiada para ata. `app/ponto/services/cartorio.py:790-800,1984-1993`. |
-| Fechamento financeiro | Não abona; suprime previsto por `None != DESCONTA`. `app/ponto/services/fechamento.py:696-701,731`. |
-| Espelho/PDF, coletor de efeitos | Não inclui em justificadas nem suprimidas; exige `ABONA` ou `SUPRIME` explícitos. `app/ponto/services/efeito_ausencia.py:57-65`. |
-| Motor/calculador | Não recebe esse tipo no mapa que zera pontualidade; mapa exige `ABONA`. Código só aparece na mensagem do ramo quando a ausência chega nesse mapa. `app/ponto/turnos.py:2686-2692`; `app/ponto/motor_calculo_v2.py:1085-1105`; `app/ponto/calculador/regras.py:117-120`. |
-| Export 8792 | Fora do filtro, que usa `descontam_vigentes()`. `app/folha/export.py:87-91,138-140,179-181`. |
-| Export 8932 | Fora do conjunto vivo de abonados. `app/folha/export.py:193-205`. |
-| Veredito visual | `ABONADO`, salvo rejeitada; lançamento aberto aparece pendente. `app/ponto/services/dia_decidido.py:447-450,460-481`. |
-| Status do dia | Quando deriva natureza pela precedência, faixa atestado com efeito `None` produz `ausencia`. `app/ponto/status_dia.py:296-319`. |
-
-Cuidado no delta de export: `sai_pela_rescisao`, `classificar_export` e `competencia_entregue` mudaram, porém não são mudanças do filtro/decisão por `Ausencia.tipo`; os filtros 8792/8932 permaneceram iguais. `app/folha/export.py:54-62,169-205,556-592,810-814,859-867`.
-
-## 11/11 13:28 · sessao 13e2beea08ed · - · - · origem=Ronald (tmux)
-
-- O chamador concreto é `bin/tests/test_selo_proporcao.sh`, que define `SELO` na linha 8, chama e compara rc nas linhas 23–24; também chama nas linhas 56–59, 62 e 63. A chamada com `bash -e` não tem seu rc conferido; a comparação da linha 63 pertence a outra chamada, sem `-e`. (`bin/tests/test_selo_proporcao.sh:8`, `bin/tests/test_selo_proporcao.sh:23`, `bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:56`, `bin/tests/test_selo_proporcao.sh:62`, `bin/tests/test_selo_proporcao.sh:63`)
-
-- A régua executa esse teste pelo glob e converte qualquer falha do teste em rc 1; o teste usa repositório sintético, portanto não classifica o diff real do pouso. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:16`, `bin/tests/test_selo_proporcao.sh:23`)
-
-- Não encontrei chamada do selo pelo pouso/pre-push, nem registro de `PROPORCAO-POR-RISCO` em `CORTES.md` ou `RELATO.md`; uso manual e implantação efetiva: [nao verificado]. [nao verificado]
-
-- O achado do atalho da régua permanece: o fingerprint cobre somente `.py`/`.html` de `app/`, a decisão “JA VERDE” compara esse fingerprint e retorna antes dos testes de host; `ARVORE_FP` é calculado, mas não participa dessa condição. (`bin/regua.sh:25`, `bin/regua.sh:33`, `bin/regua.sh:45`, `bin/regua.sh:86`, `bin/regua.sh:93`, `bin/regua.sh:138`)
-
-- O achado independente de worktree permanece: `test_hook_nao_e_copia.sh` procura `.git/hooks/pre-push` diretamente e falha quando ausente; outro teste já resolve `core.hooksPath`/`git-common-dir`. (`bin/tests/test_hook_nao_e_copia.sh:21`, `bin/tests/test_hook_nao_e_copia.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:27`, `bin/tests/test_commit_so_o_declarado.sh:56`, `bin/tests/test_commit_so_o_declarado.sh:57`)
-
-- A exclusão de testes ficou parcialmente fechada. Imports adicionados em produção são marcados; porém, se o import já existia na base e o diff muda somente `test_writer.py` para escrever, o arquivo continua excluído e resulta em rc 0. O caso `prod_importa_teste` adiciona somente o import, sem criar módulo nem escrita. (`bin/selo_proporcao.py:61`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:106`, `bin/selo_proporcao.py:115`, `bin/selo_proporcao.py:119`, `bin/tests/test_selo_proporcao.sh:47`)
-
-- Falsos positivos deduzidos: `dict.update`, `set.update`, `[].delete()` e strings Python exatamente `"update"`/`"create"` produzem rc 1 com B, pois não há resolução de tipo ou contexto. Já palavra `update` em template `.html` é ignorada e produz rc 0. O código declara aceita a direção conservadora para A. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:115`, `bin/selo_proporcao.py:119`, `bin/selo_proporcao.py:19`)
-
-- Alteração apenas de comentário em migration ou `signals.py` também produz rc 1: as regras por caminho são incondicionais para arquivos não deletados, apesar de o cabeçalho dizer “NOVO ou RENOMEADO”. (`bin/selo_proporcao.py:10`, `bin/selo_proporcao.py:92`, `bin/selo_proporcao.py:94`, `bin/selo_proporcao.py:96`, `bin/selo_proporcao.py:115`)
-
-## 11/11 13:28 · sessao b162c8de5d02 · - · - · origem=Ronald (tmux)
-
-A cópia contém **12 sítios de fechamento automático normal**, mais **duas exceções automáticas nomeadas**; os 12 normais passam `motivo=None`, e `fechar` grava `vazia` sem perguntas ou `veredito` com perguntas, além do autor recebido, resolução e evento `disputa_fechada`. (`app/chamados/models.py:1903`, `app/chamados/models.py:1932`, `app/chamados/models.py:1937`.)
-
-| Porta atual | Autor passado | Resolução gravada |
-|---|---|---|
-| Ausência declarada | `user` recebido e também usado para carimbar as perguntas absorvidas | `Ausencia declarada pelo colaborador; perguntas do dia resolvidas.` (`app/chamados/services/materializacao.py:566`, `app/chamados/services/materializacao.py:591`.) |
-| Cauda de materialização | `request_user` recebido | Primeira não vazia entre `resolucao_pedida`, `disputa.resolucao`, `Regularizacao granular: {n_mat} pergunta(s) materializada(s).` (`app/chamados/services/materializacao.py:1333`, `app/chamados/services/materializacao.py:1338`.) |
-| Reconciliação sem turno aberto | `get_user_sistema()`, também autor do carimbo | `Reconciliador: sem turno aberto no dia; perguntas resolvidas.` (`app/chamados/reconciliador.py:400`, `app/chamados/reconciliador.py:405`, `app/chamados/reconciliador.py:412`.) |
-| Absolvição pela célula | `get_user_sistema()`, também autor dos carimbos | `Celula soberana julgada absolveu o(s) dia(s); perguntas resolvidas pelo reconciliador.` (`app/chamados/reconciliador.py:587`, `app/chamados/reconciliador.py:595`, `app/chamados/reconciliador.py:612`.) |
-| Órfãs pela lâmpada | `get_user_sistema()`, também autor de `encerrar_fantasma` | `Perguntas orfas encerradas no evento da celula: a lampada do proprio marco acendeu (ORFAS-ENTERRA-FURO-REAL (b)).` (`app/chamados/reconciliador.py:1142`, `app/chamados/reconciliador.py:1147`, `app/chamados/reconciliador.py:1171`.) |
-| Beco | Parâmetro `sistema`; entrada do evento fornece `get_user_sistema()` | `Nenhuma pergunta viva; chamado-pai resolvido. Beco fechado pelo varredor (HX-BECO).` (`app/chamados/services/becos.py:18`, `app/chamados/services/becos.py:57`, `app/chamados/services/becos.py:78`.) |
-| Emissão sem pergunta exigível | `get_user_sistema()` | `Fechada automaticamente: nada a perguntar ao colaborador neste dia (o juiz da jornada nao aponta marco faltante). Se o fato voltar a acusar, o cartorio reabre pelo caminho normal.` (`app/chamados/services/disputa_emissao.py:1283`, `app/chamados/services/disputa_emissao.py:1284`.) |
-| Chamado resolvido / S128 | `user` recebido; o signal de chamado fornece sistema | `Saida registrada; turno encerrado - resolvido automaticamente pelo sistema (S128).` (`app/chamados/services/disputa_emissao.py:1801`, `app/chamados/services/disputa_emissao.py:1964`, `app/chamados/signals.py:115`.) |
-| Remoção do último motivo | `ator` recebido | `resolucao` recebida; eventos concretos usam sistema e `auto_revalidacao_posto_reativado` ou `auto_revalidacao_ancora_calibrada`. (`app/chamados/models.py:2066`, `app/chamados/models.py:2072`, `app/colaboradores/signals.py:77`, `app/escala/signals.py:161`.) |
-| Entrada sincronizada | Sistema, embora a função receba `autor_user` | `Entrada registrada em {hora} (sync); orfao reconciliado, disputa dissolvida automaticamente.` (`app/ponto/services/entrada_sincronizada.py:19`, `app/ponto/services/entrada_sincronizada.py:59`.) |
-| Foto recebida | `user` recebido, também usado na validação | `Auto-fechada: foto recebida no upload separado do APK.` (`app/api/foto_recebida.py:51`, `app/api/foto_recebida.py:79`, `app/api/foto_recebida.py:80`.) |
-| Comando de acervo, somente com `--apply` | Usuário consultado pelo argumento `--por` | `BUG 117: todas as perguntas tinham o fato no espelho. Encerrada pela porta, com trilha.` (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:53`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:63`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`.) |
-
-A cauda de materialização também atende à validação e ao reparador de passivo: o primeiro entrega `autor` ao lote; o segundo chama a mesma cauda com `user`. (`app/chamados/services/validacao.py:469`, `app/chamados/services/materializacao.py:1383`, `app/chamados/services/passivo_validado.py:405`.) O comando de becos também usa a mesma porta `fechar_beco`. (`app/chamados/management/commands/fechar_becos_disputa.py:57`.)
-
-| Exceção automática | Autor / motivo |
-|---|---|
-| Competência trancada | `autor` recebido ou sistema; `motivo_fechamento='competencia_trancada'`; resolução inclui competência e empresa. Nenhuma pergunta é carimbada por esse caminho. (`app/chamados/services/competencia_trancada.py:175`, `app/chamados/services/competencia_trancada.py:178`, `app/chamados/services/competencia_trancada.py:204`.) |
-| Desligamento | `_ator` recebido ou sistema; `motivo_fechamento='desligamento'`; resolução `Colab desligado em {data_demissao} - fechamento automatico.` (`app/colaboradores/services/desligamento.py:131`, `app/colaboradores/services/desligamento.py:142`.) |
-
-`admin_encerra` é a porta explícita de encerramento administrativo com motivo obrigatório; passa autor recebido e `motivo_fechamento='admin_encerra'`. As exceções desligamento/admin também carimbam perguntas vivas e registram decisões SILÊNCIO com o autor do fechamento. (`app/chamados/models.py:1918`, `app/chamados/models.py:1924`, `app/chamados/models.py:1943`, `app/chamados/models.py:1950`.)
-
-**Ponto crítico para a F3:** autor do ato não é sempre o `materializada_por` atualmente persistido. `remover_motivo` registra o ato com `ator`, mas chama `carimbar_identidade(...manter_carimbo=True)`, que pode preservar instante e autor antigos. (`app/chamados/models.py:2056`, `app/chamados/models.py:2061`, `app/chamados/models.py:3182`.) O evento de beco perde a autoria do ato: agenda só `disputa_id` e a porta escolhe sistema. (`app/chamados/signals.py:228`, `app/chamados/signals.py:238`, `app/chamados/services/becos.py:78`.)
-
-**Perímetro concreto para conferência de sobreposição da F3:** os arquivos abaixo contêm as portas/reações atuais diretamente relevantes; que todos sejam necessariamente editados depende do desenho ainda não implementado **[nao verificado]**.
-
-- `app/chamados/models.py` — carimbos e fecho central. (`app/chamados/models.py:1855`, `app/chamados/models.py:3103`, `app/chamados/models.py:3168`.)
-- `app/chamados/signals.py` — reação sem transporte de autor e S143 com sistema. (`app/chamados/signals.py:115`, `app/chamados/signals.py:228`.)
-- `app/chamados/services/becos.py`. (`app/chamados/services/becos.py:57`.)
-- `app/chamados/services/materializacao.py`. (`app/chamados/services/materializacao.py:591`, `app/chamados/services/materializacao.py:1338`.)
-- `app/chamados/reconciliador.py`. (`app/chamados/reconciliador.py:412`, `app/chamados/reconciliador.py:612`, `app/chamados/reconciliador.py:1171`.)
-- `app/chamados/services/disputa_emissao.py`. (`app/chamados/services/disputa_emissao.py:1284`, `app/chamados/services/disputa_emissao.py:1964`.)
-- `app/ponto/services/entrada_sincronizada.py`. (`app/ponto/services/entrada_sincronizada.py:59`.)
-- `app/api/foto_recebida.py`. (`app/api/foto_recebida.py:80`.)
-- `app/chamados/management/commands/encerrar_perguntas_com_fato.py`. (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`.)
-
-Competência trancada e desligamento são fechos próprios sem exigência de um novo último carimbo no primeiro caso; incluí-los como edição obrigatória da regra F3 excederia o que o aval determina **[nao verificado]**. Seus sítios atuais estão identificados acima. (`app/chamados/services/competencia_trancada.py:178`, `app/colaboradores/services/desligamento.py:142`.)
-
-_3885 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3889 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
