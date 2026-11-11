@@ -1,7 +1,307 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:46** · publicado em **11/11/2026 12:47** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:51** · publicado em **11/11/2026 12:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:51 · sessao 63a016840d88 · BO-ROTULO-ENCERRADO · verificador · origem=Code
+
+**BLOQUEIA — a v3 fecha os exemplos anteriores nas respostas exercitadas, mas mantém escapes das duas classes: renderização em ramo não coberto e alteração por JS.** O próprio detector admite ignorar scripts sem `novo_status`; o detalhe GLPI é testado somente com erro na abertura do cliente. (`app/chamados/tests/test_bo_rotulo_encerrado.py:230`, `:305`)
+
+As referências abaixo pertencem à cópia solicitada. Execução integral do selo, GETs Django e resultado em navegador: **[nao verificado]**.
+
+**1. BLOQUEIA — os dois escapes não fecharam pela classe.**
+
+**JS sem citar o nome do controle.** Este contraexemplo pode ficar após o seletor de `app/templates/chamados/detalhe_local.html:399`:
+
+```html
+<script>
+document.querySelectorAll('select option').forEach(o => {
+  if (['resolvido', 'fechado'].includes(o.value))
+    o.textContent = 'Encerrado';
+});
+</script>
+```
+
+O HTML conferido conserva os textos corretos; o detector devolve `[]` porque esse script não contém `novo_status`. A varredura de templates e `.js` continua usando esse mesmo detector. Portanto, ampliar o censo de arquivos não elimina o escape. (`app/chamados/tests/test_bo_rotulo_encerrado.py:193`, `:235`, `:345`, `:348`, `:357`)
+
+**JS citando o controle também escapa.** Trocar a atribuição por `o['textContent'] = 'Encerrado'`, mantendo o seletor com `novo_status`, evita a regex: ela reconhece `.textContent`, mas não acesso por colchetes. O detector retornou `[]` na reprodução em memória. (`app/chamados/tests/test_bo_rotulo_encerrado.py:222`, `:237`)
+
+**Include em ramo GLPI vivo.** Contraexemplo hipotético, sem aplicá-lo à cópia: substituir cada chamada de `resolvido` e `fechado` em `app/templates/chamados/detalhe.html:133` por esta estrutura, ajustando o destino:
+
+```django
+{% if ticket %}
+  {% include "chamados/partials/_escape_virtual.html" with destino="resolvido" %}
+{% else %}
+  {% opcao_mover "resolvido" %}
+{% endif %}
+```
+
+Partial hipotético:
+
+```django
+<option value="{{ destino }}">{{ destino|espera|first }}</option>
+```
+
+Isso preserva as chamadas originais contadas por `DESTINOS`. O partial tem valor dinâmico, ignorado pelas verificações de opções literais; `espera` devolve “Encerrado” para os dois estados. (`app/chamados/tests/test_bo_rotulo_encerrado.py:50`, `:117`, `:134`; `app/chamados/services/verbos.py:118`)
+
+A fixture mantém `ticket=None`, pois lança `GLPIError` no `__enter__`; a view também tem o caminho que preenche `ticket` com `buscar_ticket`. Assim, o caminho testado conserva as opções corretas, enquanto o caminho vivo pode entregar as duas opções pelo filtro inadequado. **Esse condicional não existe atualmente no template; trata-se de escape demonstrativo do selo.** (`app/chamados/tests/test_bo_rotulo_encerrado.py:305`; `app/chamados/views.py:238`, `:245`, `:263`; `app/templates/chamados/detalhe.html:132`)
+
+Na reprodução por AST, em memória, passaram **7/7 verificações puras na base e 7/7 com o include virtual**: quatro testes estáticos e três testes dos detectores. Isso demonstra a evasão dessas verificações; selo Django integral verde: **[nao verificado]**. (`app/chamados/tests/test_bo_rotulo_encerrado.py:99`, `:103`, `:121`, `:131`, `:259`, `:266`, `:270`)
+
+**FILA — alcance adicional:** os scanners não inspecionam Python, e o parser só acompanha seletores com `name="novo_status"`. Uma oferta dinâmica construída por view/form, em outra tela não renderizada pela fixture, permanece fora dessa observação. Controle assim existente nesta cópia: **[nao verificado]**. (`app/chamados/tests/test_bo_rotulo_encerrado.py:40`, `:164`, `:310`, `:352`)
+
+Também não lê o conteúdo apontado por `script src`: coleta o corpo inline e eventos `on*`, depois percorre `app/static/**/*.js`. Há scripts externos nas telas, inclusive HTMX e Leaflet; seus conteúdos efetivamente entregues ficam **[nao verificado]**. (`app/chamados/tests/test_bo_rotulo_encerrado.py:163`, `:170`, `:179`, `:350`; `app/templates/base.html:19`; `app/templates/chamados/fio_colaborador.html:297`)
+
+**2. OK para o censo dos cinco seletores encontrados; FILA para a cobertura dos demais controles.**
+
+Os cinco seletores abaixo constam em `DESTINOS`, na inspeção estática e nos GETs. A fixture usa chamados abertos e usuário simultaneamente staff/superusuário; os POSTs não são exercitados. (`app/chamados/tests/test_bo_rotulo_encerrado.py:68`, `:131`, `:287`, `:292`, `:296`, `:327`)
+
+| Seletor | Receptor e cobertura |
+|---|---|
+| `app/templates/chamados/detalhe.html:130` | GET com GLPI indisponível. O POST segue para followup, cujo receptor ignora `novo_status`. `app/chamados/tests/test_bo_rotulo_encerrado.py:305`; `app/templates/chamados/detalhe.html:122`; `app/chamados/views.py:292`. |
+| `app/templates/chamados/detalhe_local.html:393` | GET aberto; POST delega à resposta livre. `app/chamados/views.py:547`; `app/chamados/services/acoes_chamado.py:287`. |
+| `app/templates/chamados/fio_colaborador.html:265` | GET aberto; POST usa `processar_post_fio`. `app/chamados/views.py:674`; `app/chamados/services/fio.py:502`. |
+| `app/templates/chamados/partials/modal_fio.html:665` | GET aberto; POST compartilha `processar_post_fio`. `app/chamados/views.py:953`. |
+| `app/templates/chamados/partials/painel_chamado_turno.html:74` | GET aberto; formulário envia ao detalhe local. `app/templates/chamados/partials/painel_chamado_turno.html:68`; `app/chamados/services/acoes_chamado.py:313`. |
+
+**FILA — os controles de ações abaixo alcançam mudança ou reconciliação de estado, mas seus efeitos não são cobertos pelo selo**, que verifica GET, opções e scripts. (`app/chamados/tests/test_bo_rotulo_encerrado.py:327`, `:341`)
+
+| Controle | Caminho de mudança |
+|---|---|
+| Aceitar/recusar escala | `app/templates/chamados/detalhe_local.html:163`, `:169` → `app/chamados/services/acoes_chamado.py:149`: `resolvido`. |
+| Aceitar/recusar agenda | `app/templates/chamados/detalhe_local.html:200`, `:209` → `app/chamados/services/acoes_chamado.py:108`: `resolvido`. |
+| Aprovar exceção | `app/templates/chamados/detalhe_local.html:256`; `app/templates/chamados/partials/modal_fio.html:598` → `app/chamados/services/acoes_chamado.py:70`. |
+| Autorizar geofence, advertir ou recusar | `app/templates/chamados/detalhe_local.html:285`; `app/templates/chamados/partials/modal_fio.html:506`, `:517`, `:528` → `app/chamados/services/acoes_chamado.py:222`, `:233`, `:277`. |
+| Aprovar/rejeitar benefício, inclusive botões em JS | `app/templates/colaboradores/painel_solicitacao_beneficio.html:23`; `app/templates/colaboradores/fila_solicitacoes_beneficio.html:135` → `app/colaboradores/views.py:2068`: `resolvido`/`fechado`. |
+| Abrir ausência | `app/templates/chamados/detalhe_local.html:233` → `app/chamados/views.py:1513`: `analisar()`. |
+| Reabertura administrativa de disputa | `app/templates/chamados/partials/modal_fio.html:390` → `app/chamados/services/acoes_disputa.py:270`: `reabrir(humano=True)`. |
+| Resgatar chamado | `app/templates/chamados/partials/_lista_chamados.html:85` → `app/chamados/views_arquivar.py:70`: `reabrir(humano=True)`. |
+| Aceitar folga sugerida | `app/templates/chamados/partials/modal_fio.html:550` → `app/chamados/services/limbo_folgas.py:101`: `reconciliar()`. |
+| Validar, validar apesar de implausível ou corrigir resposta | `app/templates/chamados/partials/modal_fio.html:265`, `:281`, `:303` → `app/chamados/services/acoes_disputa.py:13`, `:302`; reconciliação em `app/ponto/services/veredito_celula.py:202`. |
+| Validar inline/em lote | `app/templates/chamados/partials/_lista_chamados.html:82`; `app/templates/chamados/partials/_lote_preview.html:21` → `app/chamados/views_cobrar.py:145`, `:232`, `:372`. |
+| Regularizar disputa | `app/templates/chamados/detalhe_local.html:317`; `app/templates/chamados/partials/modal_fio.html:355` → `app/chamados/services/acoes_disputa.py:139`; reconciliação em `app/chamados/services/materializacao.py:587`, `:776`. |
+| Iniciar disputa de órfãos/pedir confirmação de âncora | `app/templates/chamados/partials/modal_fio.html:628`, `:644` → `app/chamados/services/disputa_emissao.py:1159`, `:1379`: `analisar()`. |
+| Salvar vínculo/realocar régua | `app/templates/colaboradores/partials/painel_vinculo.html:136`; `app/templates/chamados/partials/modal_fio.html:575` → `app/colaboradores/services/vinculo.py:329`; `app/colaboradores/services/pos_vinculo.py:42`. |
+| Desligar colaborador | `app/templates/colaboradores/editar.html:271` → `app/colaboradores/services/desligamento.py:155`: `encerrar()`. |
+| Regularizar retorno | `app/templates/ponto/regularizar_retorno.html:23` → `app/ponto/services/regularizacao.py:137`: `analisar()`. |
+| Confirmar regularização externa | `app/templates/chamados/meu_atendimento.html:18` → `app/chamados/views_regularizacao.py:217` → `app/chamados/services/regularizacao_ext.py:205`: `encerrar()`. |
+| Fechar/reabrir competência | `app/ponto/services/fechamento.py:1427`, `:1447` → `app/chamados/services/competencia_trancada.py:184`, `:265`. Controle HTML exato: **[nao verificado]**. |
+
+“Aplicar declaração escrita” existe no modal; seu efeito específico sobre `status_local` fica **[nao verificado]**. “Reabrir questionário” atua nas perguntas; mudança de estado nesse caminho fica **[nao verificado]**. (`app/templates/chamados/partials/modal_fio.html:140`; `app/chamados/views.py:1435`; `app/chamados/services/acoes_disputa.py:103`)
+
+Não foi encontrado outro seletor montado por JS, form/view Python ou registro administrativo; ausência absoluta de construção indireta: **[nao verificado]**. `app/chamados/admin.py` está vazio, sem linha citável **[nao verificado]**. O campo possui `choices`, o que isoladamente não demonstra formulário exposto. (`app/chamados/models.py:52`)
+
+Há ainda mecanismos automáticos fora do selo, como sinais, adesão, cartório, cobertura e feriados. Completude de todos os efeitos indiretos do repositório: **[nao verificado]**. (`app/chamados/signals.py:42`; `app/chamados/services/adesao.py:92`, `:115`; `app/ponto/services/cartorio.py:1559`; `app/ponto/services/cobertura.py:122`; `app/chamados/services/feriado_reavaliar.py:47`)
+
+**3. OK — as causas de passagem vazia perguntadas estão guardadas, se os testes forem executados.** [nao verificado]
+
+- **302/403:** falham na exigência de HTTP 200; também se exige o template esperado. (`app/chamados/tests/test_bo_rotulo_encerrado.py:318`, `:319`)
+- **Parser não encontrar o seletor:** falha em `len(sels) == 1`. (`app/chamados/tests/test_bo_rotulo_encerrado.py:332`)
+- **`subTest` sem asserção:** contém a contagem do seletor e a comparação de seus defeitos. (`app/chamados/tests/test_bo_rotulo_encerrado.py:330`, `:332`, `:333`)
+- **CNPJ invisível:** a fixture usa `11444777000161`, fora de `11222333*`; `Empresa.ativa` tem default verdadeiro. (`app/chamados/tests/test_bo_rotulo_encerrado.py:285`; `app/colaboradores/queries.py:85`; `app/colaboradores/models.py:44`)
+- **Censos vazios:** há exigência de cinco templates, cinco entradas em `DESTINOS` e pelo menos um `.js`. Isso não garante completude dos ramos nem das sintaxes JS. (`app/chamados/tests/test_bo_rotulo_encerrado.py:101`, `:328`, `:358`, `:230`)
+
+**4. OK — os contratos rastreados separam código, apresentação e filtro. Há duas desconexões de FILA.**
+
+| Valor | Quem escreve → quem lê |
+|---|---|
+| `value` | Templates passam o código à tag; ela escreve o mesmo código. Os serviços leem `novo_status`, validam `STATUS_CHOICES` e chamam `transicionar`; modelo/motor decidem e `_gravar_estado` grava. `app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/services/acoes_chamado.py:287`, `:313`; `app/chamados/services/fio.py:502`, `:719`; `app/chamados/models.py:123`, `:199`, `:228`. |
+| Rótulo da opção | `MOVER_PARA` → `rotulo_de_movimento` → texto HTML; o selo compara com o helper. Nos receptores rastreados, texto não decide a transição. `app/chamados/services/verbos.py:132`, `:146`; `app/chamados/templatetags/chamados_tags.py:76`; `app/chamados/tests/test_bo_rotulo_encerrado.py:213`; `app/chamados/services/fio.py:721`. |
+| `title` | `ESTADO_TITLE` → helper/tag → atributo HTML e comparação do selo. O mesmo mapa serve aos helpers de linha e espera. `app/chamados/services/verbos.py:100`, `:146`, `:155`, `:166`; `app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/tests/test_bo_rotulo_encerrado.py:213`. |
+| Filtro `espera` | Delega a `rotulo_para_pessoa`, que consulta `ESPERA_COLAB`; as pílulas leem texto/title da tupla. Continua devolvendo “Encerrado” para vários estados. `app/chamados/templatetags/chamados_tags.py:53`; `app/chamados/services/verbos.py:118`, `:162`; `app/templates/chamados/detalhe.html:36`. |
+| Filtro de relatório `status` | O HTML oferece códigos; a view aplica `qs.filter(status_local=f_status)`. É consulta nesse caminho. `app/templates/relatorios/historico_chamados.html:54`; `app/relatorios/views.py:920`. |
+
+**FILA — detalhe GLPI:** oferece mudança de status, mas envia ao receptor que lê apenas conteúdo e adiciona followup. O selo novo não testa esse POST. (`app/templates/chamados/detalhe.html:122`, `:130`; `app/chamados/views.py:292`, `:304`; `app/chamados/tests/test_bo_rotulo_encerrado.py:301`)
+
+**FILA — “Reabrir”:** significa destino `aberto`; o motor comum recusa `resolvido → aberto`, permitindo `em_analise` nesse caso. Há exceção para `admin_ti`. (`app/chamados/services/verbos.py:136`; `app/chamados/catalogo/motor.py:102`, `:153`)
+
+**5. Classificação das classes anteriores.**
+
+| Classe | Veredito |
+|---|---|
+| Segundo juiz duplicando juiz registrado | **OK — não demonstrado no delta.** A tag consulta apresentação; a decisão de estado permanece no motor registrado, chamado pelo modelo. `app/chamados/templatetags/chamados_tags.py:76`; `app/core/juizes.py:274`; `app/chamados/models.py:123`. |
+| Derivação paralela da fonte única | **OK — não demonstrada para os cinco seletores atuais.** Todos usam a tag/helper; `espera` mantém seu contrato próprio de acompanhamento. `app/templates/chamados/detalhe.html:132`; `app/templates/chamados/detalhe_local.html:395`; `app/templates/chamados/fio_colaborador.html:268`; `app/templates/chamados/partials/modal_fio.html:668`; `app/templates/chamados/partials/painel_chamado_turno.html:76`; `app/chamados/templatetags/chamados_tags.py:64`, `:76`. |
+| Selo sem mordida suficiente | **BLOQUEIA.** Há mordida para os exemplos e fixtures, mas os contraexemplos do item 1 continuam aceitos pelas verificações correspondentes. `app/chamados/tests/test_bo_rotulo_encerrado.py:117`, `:230`, `:305`. |
+| Relógio solto em teste novo | **FILA — indireto.** O GET do modal usa `localdate()` e competência corrente; a fixture cria timestamps automáticos, sem freeze no setup/GET. Falha temporal efetiva: **[nao verificado]**. `app/chamados/views.py:896`, `:903`; `app/chamados/models.py:67`; `app/chamados/tests/test_bo_rotulo_encerrado.py:282`, `:301`. |
+| Campo com dois significados | **OK — não demonstrado como introdução desta obra.** Código, texto e title seguem separados. As desconexões GLPI/Reabrir permanecem em **FILA** pelos contratos acima. `app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/services/acoes_chamado.py:313`; `app/chamados/views.py:292`; `app/chamados/catalogo/motor.py:102`. |
+
+## 11/11 12:51 · sessao 857f5e1ba79e · LOTE-VALIDAR-REGRESSAO-0311 · sonda · origem=Code
+
+Não executei uma nova sonda: `sonda_cliques.py` não foi localizada na cópia, e não há acesso a banco ou log conforme informado. Abaixo está a saída fornecida, integralmente, sem verificação independente. [nao verificado] [nao verificado]
+
+```text
+sonda_leitura: sonda_cliques.py [af84c9b88dc29f70] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+linhas_lidas 2684
+# dia | validou_lote_tela | ia_validou_lote | val_perg_disp | val_perg_nao_gravou | materializar_batida | vincular_pergunta_origem
+dia 2026-10-20 2 0 54 5 98 98
+dia 2026-10-21 2 0 52 7 28 28
+dia 2026-10-22 1 0 54 2 37 37
+dia 2026-10-23 0 0 76 7 55 55
+dia 2026-10-24 0 0 1 0 0 0
+dia 2026-10-25 0 0 2 0 0 0
+dia 2026-10-26 1 0 170 9 144 144
+dia 2026-10-27 0 0 73 13 37 37
+dia 2026-10-28 11 0 72 8 60 60
+dia 2026-10-29 6 0 48 6 41 41
+dia 2026-10-30 12 0 27 25 21 21
+dia 2026-10-31 0 0 1 0 0 0
+dia 2026-11-01 0 0 1 0 0 0
+dia 2026-11-02 0 0 2 0 0 0
+dia 2026-11-03 2 0 90 12 79 79
+dia 2026-11-04 0 0 1 1 0 0
+dia 2026-11-05 2 0 30 2 25 25
+dia 2026-11-06 2 0 39 3 38 38
+dia 2026-11-07 0 0 1 0 0 0
+dia 2026-11-08 0 0 1 0 0 0
+dia 2026-11-09 0 0 18 5 14 14
+dia 2026-11-10 0 0 12 3 9 9
+dia 2026-11-11 4 0 113 31 95 95
+lotes_sem_trilha_mensuravel 25
+# dia | n_lotes | pedidas_mediana/max | validadas_soma | seg_mediana/p90/max | seg_por_pergunta_mediana | lotes>30s
+lote 2026-10-20 2 7.5/9 15 13590.3/6.6/27173.9 2264.86 1 [('validou_lote_tela', 2)]
+lote 2026-10-21 2 6.5/11 13 38075.2/20257.8/55892.6 7605.02 2 [('validou_lote_tela', 2)]
+lote 2026-10-22 1 51/51 45 27362.7/27362.7/27362.7 608.06 1 [('validou_lote_tela', 1)]
+lote 2026-10-26 1 125/125 107 281077.6/281077.6/281077.6 2626.89 1 [('validou_lote_tela', 1)]
+lote 2026-10-28 11 15/47 52 16483.0/16483.0/78325.4 1498.45 3 [('validou_lote_tela', 11)]
+lote 2026-10-29 6 12.0/31 28 5711.9/34.1/11389.7 570.44 2 [('validou_lote_tela', 6)]
+lote 2026-10-30 12 29.0/33 4 2215.7/2215.7/2215.7 553.92 1 [('validou_lote_tela', 12)]
+lote 2026-11-03 2 67.0/87 55 3487.4/94.8/6880.0 345.05 2 [('validou_lote_tela', 2)]
+lote 2026-11-05 2 51.5/57 23 16.7/6.3/27.1 1.32 0 [('validou_lote_tela', 2)]
+lote 2026-11-06 2 50.5/56 21 3999.8/18.1/7981.5 798.72 1 [('validou_lote_tela', 2)]
+lote 2026-11-11 4 68.0/119 61 212158.8/6699.3/417618.2 4354.81 2 [('validou_lote_tela', 4)]
+```
+
+Nenhuma linha informa erro explícito ou universo geral vazio: a saída registra `linhas_lidas 2684`. [nao verificado]
+
+Comparação das medianas com o dia anterior que possui linha `lote`, usando 2026-10-30 como referência inicial: [nao verificado]
+
+| Dia | Mediana por lote (s) | Mediana por pergunta (s) | Verificação |
+|---|---:|---:|---|
+| 2026-11-03 | 3487.4 ↑ de 2215.7 | 345.05 ↓ de 553.92 | [nao verificado] |
+| 2026-11-04 | Sem duração informada | Sem duração informada | [nao verificado] |
+| 2026-11-05 | 16.7 ↓ de 3487.4 | 1.32 ↓ de 345.05 | [nao verificado] |
+| 2026-11-06 | 3999.8 ↑ de 16.7 | 798.72 ↑ de 1.32 | [nao verificado] |
+| 2026-11-07 | Sem duração informada | Sem duração informada | [nao verificado] |
+| 2026-11-08 | Sem duração informada | Sem duração informada | [nao verificado] |
+| 2026-11-09 | Sem duração informada | Sem duração informada | [nao verificado] |
+| 2026-11-10 | Sem duração informada | Sem duração informada | [nao verificado] |
+| 2026-11-11 | 212158.8 ↑ de 3999.8 | 4354.81 ↑ de 798.72 | [nao verificado] |
+
+## 11/11 12:49 · sessao 2efb2e12f927 · - · - · origem=Ronald (tmux)
+
+**BLOQUEIA — os exemplos nomeados fecharam; as classes continuam abertas.** O HTML entregue é conferido contra o mapa, mas só nas cinco fixtures e o detector JS depende de literal `novo_status` e de uma lista incompleta de sintaxes de escrita. `app/chamados/tests/test_bo_rotulo_encerrado.py:213`, `:230`, `:305`, `:327`.
+
+1. **Include em ramo não exercitado — BLOQUEIA.** No lugar de cada chamada de `resolvido` e `fechado` em `detalhe.html:133`, usar, preservando a chamada original no `else`:
+
+```django
+{% if ticket %}
+  {% include "chamados/partials/_escape_virtual.html" with destino="resolvido" %}
+{% else %}
+  {% opcao_mover "resolvido" %}
+{% endif %}
+```
+
+E um partial com:
+
+```django
+<option value="{{ destino }}">{{ destino|espera|first }}</option>
+```
+
+Repetir para `fechado`. A fonte mantém as tags reconhecidas, enquanto o partial dinâmico não entra em `ESTADOS` literais; a fixture força GLPIError e mantém `ticket=None`. O caminho vivo existe na view, por `buscar_ticket`. `app/chamados/tests/test_bo_rotulo_encerrado.py:50`, `:52`, `:117`, `:134`, `:305`; `app/chamados/views.py:238`, `:245`, `:263`.
+
+**Reprodução:** executei em memória, por AST, os quatro testes estáticos independentes de Django (`:99`, `:103`, `:121`, `:131`) e os três testes de mordida (`:259`, `:266`, `:270`): **7/7 verdes na base e 7/7 verdes com overlay virtual do include**. O scanner dos scripts da fonte também retornou lista vazia. Nenhum arquivo foi alterado. Compilação Django, GETs e suíte integral: **[nao verificado]**. [nao verificado]
+
+2. **JS sem nome do controle — BLOQUEIA.** Este script, anexado após o seletor de `app/templates/chamados/detalhe_local.html:399`, não altera destinos nem a fonte das opções:
+
+```js
+document.querySelectorAll('select option').forEach(o => {
+  if (['resolvido', 'fechado'].includes(o.value))
+    o.textContent = 'Encerrado';
+});
+```
+
+`escritas_em_opcao` retornou `[]` na execução em memória, por não encontrar `novo_status`. A própria docstring admite esse escape. `app/chamados/tests/test_bo_rotulo_encerrado.py:227`, `:230`, `:232`, `:235`. Execução em navegador: **[nao verificado]**.
+
+3. **JS com nome, mas outra sintaxe — BLOQUEIA.** Mesmo citando `novo_status`, os sinks `o['textContent']='Encerrado'` e `o.setAttribute('label','Encerrado')` retornaram `[]`: a regex reconhece acessos por ponto e não reconhece `setAttribute`. `app/chamados/tests/test_bo_rotulo_encerrado.py:222`, `:237`. Consequência visual em navegador: **[nao verificado]**.
+
+4. **Atributo `label` ignorado — BLOQUEIA quanto à leitura completa da option.** O parser guarda apenas `value`, `title` e conteúdo textual, ignorando `label`. HTML com `label="Encerrado"` nas duas opções e textos internos corretos produziu `defeitos_do_seletor=[]` na execução em memória. `app/chamados/tests/test_bo_rotulo_encerrado.py:168`, `:193`, `:213`. Semântica visual em navegador: **[nao verificado]**.
+
+5. **Passar vazio pelas causas perguntadas — OK.** Resposta 302/403 falha em `status_code==200`; ausência do seletor falha em `len(sels)==1`; o `subTest` contém as duas asserções. `app/chamados/tests/test_bo_rotulo_encerrado.py:318`, `:319`, `:330`, `:332`, `:333`. CNPJ fixture `11444777000161` está fora do prefixo excluído e `Empresa.ativa` tem default verdadeiro: `app/chamados/tests/test_bo_rotulo_encerrado.py:285`; `app/colaboradores/models.py:44`; `app/colaboradores/queries.py:85`.
+
+6. **Relógio solto indireto — FILA.** Não há chamada literal `now/today/localdate` no teste novo, mas a fixture cria `criado_em` por `auto_now_add`, e o GET do modal chama `janela_atual(localdate())`, sem freeze no setup ou GET. `app/chamados/models.py:67`; `app/chamados/tests/test_bo_rotulo_encerrado.py:282`, `:298`, `:301`; `app/chamados/views.py:896`, `:903`. Falha temporal efetiva desses testes: **[nao verificado]**.
+
+7. **Perfil real — FILA.** O usuário de teste é simultaneamente staff e superusuário; não demonstra o ramo de um supervisor comum. `app/chamados/tests/test_bo_rotulo_encerrado.py:287`; `app/chamados/utils.py:47`, `:57`.
+
+## 11/11 12:48 · sessao f176b06ccae6 · - · - · origem=Ronald (tmux)
+
+**Censo dos controles de escolha direta:** encontrei os cinco abaixo; todos entram em `DESTINOS`, na comparação estática e no GET da fixture aberta/superusuário. Os POSTs e os demais perfis/ramos não são exercitados pelo selo. (`app/chamados/tests/test_bo_rotulo_encerrado.py:67`, `:127`, `:282`, `:327`)
+
+| Controle | Receptor | Cobertura |
+|---|---|---|
+| `templates/chamados/detalhe.html:130` | `chamados/views.py:292` ignora `novo_status`; envia followup GLPI | GET apenas com GLPI indisponível: teste `:304` |
+| `templates/chamados/detalhe_local.html:393` | `chamados/views.py:547` → `services/acoes_chamado.py:287`, `:313` | GET aberto + fonte |
+| `templates/chamados/fio_colaborador.html:265` | `chamados/views.py:674` → `services/fio.py:502`, `:719` | GET aberto + fonte |
+| `templates/chamados/partials/modal_fio.html:665` | `chamados/views.py:953` → mesmo `processar_post_fio` | GET aberto + fonte |
+| `templates/chamados/partials/painel_chamado_turno.html:74` | POST a detalhe local, template `:68` → `acoes_chamado.py:313` | GET aberto + fonte |
+
+Os cinco destinos são montados pela tag, sem choices Python nesses caminhos; os receptores recebem o código e aceitam sua pertinência a `STATUS_CHOICES`, delegando a `transicionar`. (`app/chamados/templatetags/chamados_tags.py:74`, `app/chamados/services/acoes_chamado.py:313`, `app/chamados/services/fio.py:719`)
+
+**Ações que podem mudar status sem oferecer códigos:** nenhuma tem seu efeito funcional coberto neste selo, que apenas faz GET e verifica opções/scripts. (`app/chamados/tests/test_bo_rotulo_encerrado.py:327`, `:341`)
+
+| Ação | Controle → escrita/gate |
+|---|---|
+| Aceitar/recusar escala | `app/templates/chamados/detalhe_local.html:163`, `:169` → `app/chamados/services/acoes_chamado.py:149`, `transicionar('resolvido')` |
+| Aceitar/recusar agenda | detalhe local `:200`, `:209` → ações `:108`, `resolvido` |
+| Aprovar exceção | detalhe local `:256`, modal `:598` → ações `:70`, `resolvido` |
+| Autorizar geofence, autorizar/advertir, recusar | detalhe local `:285`, `:286`, `:287`; modal `:506`, `:517`, `:528` → ações `:222`, `:233`, `:277` (`registrado→em_analise` preparatório, depois `resolvido`) |
+| Aprovar/rejeitar benefício | `app/templates/colaboradores/painel_solicitacao_beneficio.html:23`; JS em `fila_solicitacoes_beneficio.html:135` → `app/colaboradores/views.py:2068`, `resolvido`/`fechado` |
+| Abrir ausência | detalhe local `:233` → `app/chamados/views.py:1513`, `analisar()` |
+| Reabrir disputa administrativamente | modal `:390` → `app/chamados/services/acoes_disputa.py:269`, `reabrir(humano=True)` |
+| Resgatar chamado | `app/templates/chamados/partials/_lista_chamados.html:85` → `app/chamados/views_arquivar.py:70`, `reabrir(humano=True)` |
+| Aceitar folga sugerida | modal `:550` → `app/chamados/services/limbo_folgas.py:98`, `:101`, `reconciliar()` |
+| Validar resposta; validar apesar de implausível; corrigir resposta | modal `:265`, `:281`, `:303` → `app/chamados/services/acoes_disputa.py:13`, `:302` → `services/validacao.py:373`; efeitos por materialização/reconciliação, inclusive `app/ponto/services/veredito_celula.py:202` |
+| Validar inline/lote | lista `:82`; `app/templates/chamados/partials/_lote_preview.html:21` → `app/chamados/views_cobrar.py:145`, `:232`, `:372` |
+| Regularizar disputa | detalhe local `:317`, modal `:355` → `app/chamados/services/acoes_disputa.py:139`, `materializar_perguntas_validadas_da_disputa`; reconciliação em `services/materializacao.py:587`, `:776` |
+| Aplicar declaração escrita | modal `:140`; efeito específico sobre status fica `[nao verificado]` |
+| Iniciar disputa de órfãos / pedir confirmação de âncora | modal `:628`, `:644` → `app/chamados/services/disputa_emissao.py:1159`, `:1379`, `analisar()` |
+| Salvar vínculo / realocar régua | `app/templates/colaboradores/partials/painel_vinculo.html:136`, modal `:575` → `app/colaboradores/services/vinculo.py:329`, `services/pos_vinculo.py:42`, `reconciliar()` |
+| Desligar colaborador | `app/templates/colaboradores/editar.html:271` → `app/colaboradores/services/desligamento.py:155`, `encerrar()` |
+| Regularizar retorno | `app/templates/ponto/regularizar_retorno.html:23` → `app/ponto/views.py:3153`, `app/ponto/services/regularizacao.py:137`, `analisar()` |
+| Confirmar regularização externa | `app/templates/chamados/meu_atendimento.html:18` → `app/chamados/views_regularizacao.py:216`, `:217` → `app/chamados/services/regularizacao_ext.py:205`, `reg.chamado.encerrar()` |
+| Fechar/reabrir competência | `app/ponto/services/fechamento.py:1427`, `:1447` → `app/chamados/services/competencia_trancada.py:184`, `:265`, encerramento por tranca/reabertura humana; controle HTML exato `[nao verificado]` |
+
+“Reabrir questionário” em detalhe local `:9` e modal `:368` chega a `app/chamados/views.py:1372`, que atua nas perguntas; mudança de `status_local` nesse caminho não foi demonstrada `[nao verificado]`. A outra ação homônima também apenas chama `reabrir_para_correcao(qs)`. (`app/chamados/services/acoes_disputa.py:90`, `:103`)
+
+Não encontrei outro seletor construído por JS/form/view Python ou registro administrativo de `ChamadoColaborador`; ausência absoluta de construção indireta `[nao verificado]`. `app/chamados/admin.py` está vazio, portanto não oferece linha citável `[nao verificado]`. O modelo tem `STATUS_CHOICES` no campo, mas isso sozinho não prova formulário exposto. (`app/chamados/models.py:52`)
+
+Há fluxos automáticos adicionais de emissão/reconciliação, fora do selo, por exemplo adesão, cartório, cobertura, feriado e sinais; são mecanismos de estado, sem controle explícito de seleção do rótulo. (`app/chamados/services/adesao.py:92`, `:115`; `app/ponto/services/cartorio.py:1559`; `app/ponto/services/cobertura.py:122`; `app/chamados/services/feriado_reavaliar.py:47`; `app/chamados/signals.py:42`)
+
+## 11/11 12:48 · sessao 673eae144ad1 · - · - · origem=Ronald (tmux)
+
+**OK — contrato de apresentação separado do estado.** Os cinco templates passam códigos à tag; ela escreve o mesmo código em `value`, e obtém texto/title exclusivamente de `rotulo_de_movimento`. Esse helper consulta `MOVER_PARA` e `ESTADO_TITLE`. (`app/templates/chamados/detalhe.html:132`; `app/templates/chamados/detalhe_local.html:395`; `app/templates/chamados/fio_colaborador.html:268`; `app/templates/chamados/partials/modal_fio.html:668`; `app/templates/chamados/partials/painel_chamado_turno.html:76`; `app/chamados/templatetags/chamados_tags.py:76`; `app/chamados/services/verbos.py:146`)
+
+| Valor | Escritor → leitor | Conclusão |
+|---|---|---|
+| `value` | Argumentos dos templates → tag → `POST['novo_status']` → pertinência a `STATUS_CHOICES` → `transicionar` → motor → gravação. (`app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/services/acoes_chamado.py:287`; `app/chamados/services/acoes_chamado.py:313`; `app/chamados/services/fio.py:502`; `app/chamados/services/fio.py:719`; `app/chamados/models.py:123`; `app/chamados/models.py:199`; `app/chamados/models.py:228`; `app/chamados/models.py:450`) | **OK:** nos receptores rastreados, o valor significa código de estado. (`app/chamados/models.py:124`) |
+| Rótulo de movimento | `MOVER_PARA` → helper → texto da option → comparação do selo. (`app/chamados/services/verbos.py:132`; `app/chamados/services/verbos.py:146`; `app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/tests/test_bo_rotulo_encerrado.py:213`) | **OK:** não participa da decisão de transição rastreada. (`app/chamados/services/acoes_chamado.py:315`; `app/chamados/services/fio.py:721`) |
+| `title` | `ESTADO_TITLE` → helper/tag → atributo HTML; selo compara esse atributo. O mesmo mapa alimenta apresentação de linha e espera. (`app/chamados/services/verbos.py:100`; `app/chamados/services/verbos.py:146`; `app/chamados/services/verbos.py:155`; `app/chamados/services/verbos.py:166`; `app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/tests/test_bo_rotulo_encerrado.py:213`) | **OK:** não é interpretado como comando nos receptores rastreados. (`app/chamados/services/acoes_chamado.py:287`; `app/chamados/services/fio.py:502`) |
+| Filtro `espera` | Filtro → `rotulo_para_pessoa` → `ESPERA_COLAB`; badge usa posição 0 como texto e posição 1 como title. (`app/chamados/templatetags/chamados_tags.py:53`; `app/chamados/services/verbos.py:162`; `app/templates/chamados/detalhe.html:36`) | **OK:** continua permitido apresentar “Encerrado” para vários estados nas pílulas de acompanhamento; esse mapa tem contrato distinto do movimento. (`app/chamados/services/verbos.py:113`; `app/chamados/services/verbos.py:118`) |
+| Filtro de relatório `status` | HTML escreve códigos → view aplica `qs.filter(status_local=f_status)`. (`app/templates/relatorios/historico_chamados.html:54`; `app/relatorios/views.py:920`) | **OK:** filtro de consulta, sem transição nesse trecho. (`app/relatorios/views.py:912`) |
+
+**FILA — seletor GLPI promete mudança que seu receptor ignora.** O formulário oferece `novo_status`, mas envia ao followup; `adicionar_followup` lê `conteudo` e chama GLPI, sem processar estado. (`app/templates/chamados/detalhe.html:122`; `app/templates/chamados/detalhe.html:130`; `app/chamados/views.py:292`; `app/chamados/views.py:304`; `app/chamados/views.py:310`)
+
+**FILA — “Reabrir” significa `aberto`, mas o motor comum recusa `resolvido → aberto`.** O destino permitido nesse caso é `em_analise`; existe exceção para `admin_ti`. (`app/chamados/services/verbos.py:136`; `app/chamados/catalogo/motor.py:102`; `app/chamados/catalogo/motor.py:153`)
+
+**OK — fixture não some pelo CNPJ.** Usa `11444777000161`, fora de `11222333*`; `Empresa.ativa` nasce verdadeira. O usuário é staff/superuser, aceito como gestor e autorizado pelo gate departamental. (`app/chamados/tests/test_bo_rotulo_encerrado.py:285`; `app/colaboradores/queries.py:85`; `app/colaboradores/models.py:44`; `app/chamados/tests/test_bo_rotulo_encerrado.py:286`; `app/chamados/views.py:35`; `app/chamados/utils.py:47`; `app/chamados/utils.py:57`)
+
+**BLOQUEIA — caminho GLPI vivo não exercitado pelo selo.** O mock lança no `__enter__`, portanto `ticket` fica no `None` inicial; não exercita `buscar_ticket`/`buscar_followups`. O template atual não precisa de ticket para mostrar o seletor, mas uma inclusão condicionada a ticket vivo não seria observada por esses GETs. (`app/chamados/tests/test_bo_rotulo_encerrado.py:305`; `app/chamados/views.py:238`; `app/chamados/views.py:243`; `app/templates/chamados/detalhe.html:117`; `app/templates/chamados/detalhe.html:130`)
+
+**OK — não demonstrado segundo juiz de estado no delta.** O helper novo consulta apresentação; a decisão permanece no motor registrado em `core/juizes`. O modelo delega ao mesmo motor. (`app/chamados/services/verbos.py:146`; `app/core/juizes.py:274`; `app/chamados/models.py:123`)
+
+**OK — não demonstrada derivação paralela do rótulo de movimento.** Todos os cinco seletores usam a tag, que delega ao helper; `espera` continua servindo outro contrato. (`app/chamados/templatetags/chamados_tags.py:75`; `app/chamados/templatetags/chamados_tags.py:63`; referências dos cinco templates acima)
+
+Busca em arquivos `forms.py`/`admin.py` não encontrou oferta de `status_local`, `novo_status` ou registro de `ChamadoColaborador`; `app/chamados/admin.py` está vazio. Ausência absoluta de construção indireta de controles: **[nao verificado]**.
 
 ## 11/11 12:46 · sessao c5ab17cf6348 · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
 
@@ -891,146 +1191,4 @@ Censo concluído; somente leitura.
 
 Lista completa de chamadores diretos/aliases de `chamados.juizes.dia_do_fato` em produção já enviada ao pai por mensagem, com arquivos e linhas; inclui views, modelos, reconciliador, serviços, sinais e commands.
 
-## 11/11 12:22 · sessao c0ce86a26e9d · - · - · origem=Ronald (tmux)
-
-Censo em leitura; caminhos abaixo relativos à raiz da cópia.
-
-1. Escritores de entrada/criação de `ponto.Justificativa`
-
-| Porta/escritor | Grava | Dia e vínculo | Envelope/chamado |
-|---|---|---|---|
-| `api_justificativas` | Procura pendente por `(colaborador, data_turno)`, menor id; atualiza `tipo`, `descricao`, `chamado_origem` somente se nulo; ou cria com esses campos e `status='pendente'`. `app/api/views.py:1994`, `app/api/views.py:2004` | `data_turno` ISO recebido do cliente. Cobrança por lista fixa `['turno_aberto','batida_ausente']`, `VIVOS`, mesmo colab; dia por `contexto_json.data_turno` ou, ausente, `criado_em__date` — mistura dia declarado com dia civil de criação. `app/api/views.py:1952`, `app/api/views.py:1960`, `app/api/views.py:1967` | Se não acha, chama `ChamadoColaborador.abrir` com `categoria='justificativa'`, `modulo_origem='justificativa_colab'`, `subcategoria=tipo`, descrição `tipo: descricao`, `area='dp'`, urgência normal e contexto com dia. Depois aponta inverso pela porta `vinculos.apontar_justificativa`. `app/api/views.py:1977`, `app/api/views.py:2012` |
-| `_abrir_justificativa_fluxo` web | Mesma procura de pendente; atualiza `tipo`, `descricao`, `saida_informada` se fornecida, `batida_entrada` e `chamado_origem` se nulos; ou cria com esses campos e pendente. `app/ponto/views.py:1621`, `app/ponto/views.py:1635` | Dia ISO recebido; acha entrada por `timestamp__date=data_turno` (civil). Para cobrança usa `COBRANCAS_DO_TURNO`, `VIVOS`, colab, menor pk cujo `dia_do_fato(c)==data_turno`, com célula carregada. `app/ponto/views.py:1594`, `app/ponto/views.py:1597`, `app/ponto/views.py:1612` | Sem cobrança, grava com origem nula e não há abertura explícita de envelope; havendo, aponta inverso por `apontar_justificativa`. `app/ponto/views.py:1643`, `app/ponto/views.py:1645` |
-| `regularizar_turno_orfao` | `get_or_create` por colab, batida E, dia; defaults `tipo='esqueci_saida'`, saída informada, descrição contendo motivo do colab, pendente. Se existente sem saída, atualiza saída, descrição e status. `app/ponto/services/regularizacao.py:19`, `app/ponto/services/regularizacao.py:91`, `app/ponto/services/regularizacao.py:102` | Dia civil local da batida E, `tz.localtime(batida_e.timestamp).date()`; valida turno pela geometria `turnos_do_colab`. Não grava novo `chamado_origem` nem aponta inverso. `app/ponto/services/regularizacao.py:59`, `app/ponto/services/regularizacao.py:73`, `app/ponto/services/regularizacao.py:91` | Não abre envelope; põe em análise todos os chamados vivos do colab em lista fixa de cinco módulos, **sem filtro de dia**, anexando ocorrência com os motivos. `app/ponto/services/regularizacao.py:126` |
-| `ramo_regularizar_saida`, caminho de bater ponto | `_Just.objects.update_or_create` por colab, dia, entrada; defaults `tipo='esqueci'`, saída informada, descrição montada com horário informado pelo colab, pendente. `app/ponto/services/triagem_batida.py:227`, `app/ponto/services/triagem_batida.py:258` | Dia civil local da entrada: `_ent['entrada'].date()`; a entrada do contexto vem de `timezone.localtime(_t.entrada.timestamp)`. Não grava vínculo novo. `app/ponto/services/triagem_batida.py:180`, `app/ponto/services/triagem_batida.py:260` | Não abre envelope; escala urgência dos chamados vivos `entrada_bloqueada_turno_aberto` do colab, sem filtro de dia. `app/ponto/services/triagem_batida.py:287` |
-| Cron `_abrir_justificativa_automatica` | `get_or_create` por colab e dia; defaults entrada, `esqueci_saida`, descrição automática, pendente e chamado origem. Só quando criado aponta inverso pela porta. `app/ponto/management/commands/processar_alertas_turno.py:392`, `app/ponto/management/commands/processar_alertas_turno.py:394`, `app/ponto/management/commands/processar_alertas_turno.py:409`, `app/ponto/management/commands/processar_alertas_turno.py:426` | Dia recebido de `tm.data_turno`; cobrança nasce antes, no mesmo dia, módulo `turno_aberto`, contexto `data_turno`, pela porta `abrir`. `app/ponto/management/commands/processar_alertas_turno.py:316`, `app/ponto/management/commands/processar_alertas_turno.py:324`, `app/ponto/management/commands/processar_alertas_turno.py:335` | Abre cobrança crítica, **não** envelope `justificativa_colab`; se a porta recusa cobrança, o fluxo não cria justificativa. `app/ponto/management/commands/processar_alertas_turno.py:316`, `app/ponto/management/commands/processar_alertas_turno.py:321` |
-
-2. Cascas adicionais e admin
-
-- A regularização é chamada pelo web `regularizar_retorno`, por `api/views.py::api_regularizar_turno` e pelo gêmeo em `api/views_core.py::api_regularizar_turno`. `app/ponto/views.py:3153`, `app/ponto/views.py:3215`, `app/api/views.py:2821`, `app/api/views.py:2866`, `app/api/views_core.py:1143`, `app/api/views_core.py:1188`.
-- O ramo de saída na tela de bater ponto é acionado quando `tipo=='regularizar_saida'`. `app/ponto/views.py:333`.
-- Não encontrei `api_justificativas` nem importação/uso de `Justificativa` no corpo de `api/views_core.py`; o gêmeo relacionado encontrado é o de regularização acima. Ausência global [nao verificado].
-- `JustificativaAdmin` herda diretamente de `admin.ModelAdmin`, sem `SoLeitura`, sem `readonly_fields` e sem override de persistência no bloco; portanto há também a superfície genérica do Django admin, sem lógica própria de dia, cobrança ou envelope. `app/ponto/admin.py:18`. Sua utilização efetiva em produção [nao verificado].
-- Não encontrei form Python escritor de `Justificativa`; `app/ponto/forms.py` contém `AusenciaForm`, não justificativa. `app/ponto/forms.py:41`; ausência global [nao verificado].
-
-3. Mutadores de decisão/automáticos, distintos da entrada da mensagem
-
-| Escritor | Campos/efeitos |
-|---|---|
-| `aprovar_justificativa_dp` | `batida_gerada`, status aprovada, usuário e instante de aprovação; salva; invalida fechamento e encerra origem. `app/ponto/services/justificativa.py:132`, `app/ponto/services/justificativa.py:204`, `app/ponto/services/justificativa.py:214` |
-| `rejeitar_justificativa_dp` | Status rejeitada, usuário, instante, motivo; salva e abre chamado módulo **`justificativa`**, não `justificativa_colab`, com dia em contexto. `app/ponto/services/justificativa.py:262`, `app/ponto/services/justificativa.py:283`, `app/ponto/services/justificativa.py:291` |
-| `materializar_saida_dp` | Batida gerada, saída informada, status aprovada, usuário e instante; depois fecha cascata do turno e origem. `app/ponto/services/justificativa.py:331`, `app/ponto/services/justificativa.py:380`, `app/ponto/services/justificativa.py:393`, `app/ponto/services/justificativa.py:408` |
-| `aprovar_lote_justificativas` | Grava diretamente status aprovada, usuário, instante e eventual batida gerada; encerra origem. O próprio comentário registra dívida por gravar fora da porta de aprovação. `app/ponto/views.py:1763`, `app/ponto/views.py:1796`, `app/ponto/views.py:1800`, `app/ponto/views.py:1831`, `app/ponto/views.py:1837` |
-| `rejeitar_lote_justificativas` | Grava diretamente status rejeitada, usuário, instante e motivo; manda push. `app/ponto/views.py:1859`, `app/ponto/views.py:1874` |
-| `resolver_cobranca_da_entrada` | Auto-rejeita justificativa pendente vinculada e acrescenta nota à descrição depois que a cobrança reconcilia. `app/ponto/services/entrada_sincronizada.py:19`, `app/ponto/services/entrada_sincronizada.py:31`, `app/ponto/services/entrada_sincronizada.py:37` |
-| Resolver de batida em triagem | Auto-rejeita pendente vinculada e acrescenta nota à descrição após reconciliar cobrança. `app/ponto/services/triagem_batida.py:588`, `app/ponto/services/triagem_batida.py:597`, `app/ponto/services/triagem_batida.py:603` |
-| Retratação do reconciliador | Auto-rejeita pendente vinculada, acrescentando nota à descrição, dentro do atomic da retratação. `app/chamados/reconciliador.py:522`, `app/chamados/reconciliador.py:529` |
-
-4. Modelo e efeito comum dos saves
-
-- `Justificativa` guarda pessoa, entrada, `data_turno` (DateField), tipo, `saida_informada` (DateTimeField), descrição, coordenadas, decisão, batida gerada, origem e timestamps. `app/ponto/models.py:115`, `app/ponto/models.py:136`, `app/ponto/models.py:144`, `app/ponto/models.py:149`, `app/ponto/models.py:154`, `app/ponto/models.py:159`, `app/ponto/models.py:167`, `app/ponto/models.py:173`.
-- Há unicidade por `(colaborador,data_turno,batida_entrada)` e uma pendente por `(colaborador,data_turno)`. `app/ponto/models.py:187`, `app/ponto/models.py:189`.
-- Todo `post_save` de `Justificativa`, salvo `raw`, manda julgar exatamente `instance.data_turno` no cartório; esse é efeito adicional dos saves acima, separado da abertura explícita de envelope. `app/ponto/signals.py:161`.
-- Há comando destrutivo explícito que apaga todas as justificativas; não é escritor de mensagem de colaborador. `app/ponto/management/commands/zerar_dados_operacionais.py:95`.
-
-5. Barreira do GET atual
-
-- `abrir_justificativa` redireciona qualquer GET sem uma justificativa pendente do colab para `chamados:abrir`; POST ou GET com pendência entra no fluxo. Assim, apenas mudar o href do dashboard ainda atravessaria esse redirecionamento. `app/ponto/views.py:1552`, `app/ponto/views.py:1561`, `app/ponto/views.py:1564`.
-
-## 11/11 12:22 · sessao e9c852c5cec4 · - · - · origem=Ronald (tmux)
-
-Complemento do censo, separando ofertas diretas de status e ações sobre fatos:
-
-| Controle adicional | Efeito confirmado e caminho |
-|---|---|
-| Iniciar disputa dos órfãos | `app/templates/chamados/partials/modal_fio.html:628` → `app/chamados/services/fio.py:549` → `app/chamados/services/acoes_disputa.py:222` → `app/chamados/services/disputa_emissao.py:1085` e `:1159`: `analisar()` nos chamados filhos. |
-| Pedir confirmação de âncora | modal `:644` → `acoes_disputa.py:189` → `disputa_emissao.py:1379`: `chamado_limbo.analisar()`. |
-| Aplicar declaração escrita no fio | modal `:140` → `app/chamados/views.py:478` → `app/chamados/services/declaracao_texto.py:696`: `validar_pergunta()`, que entra no caminho de materialização/reconciliação já indicado. |
-| Corroborar régua | modal `:566` → `views.py:438` → `app/escala/regua_defesa.py:662`: grava confiança/corroboracão do vínculo e acrescenta nota em `:672`; não escreve status diretamente nesse corpo. Efeitos posteriores sobre estado: `[nao verificado]`. |
-| Realocar régua | modal `:575` → `views.py:449` → `regua_defesa.py:329` → `:321`, `executar_vinculo`; este chama reconciliação posterior em `app/colaboradores/services/vinculo.py:329`, `:330`. |
-| Reabrir questionário | modal `:368`, detalhe local `:9` → `views.py:1372`/`:1420` → `app/chamados/services/acoes_disputa.py:102`, `:103` → `disputa_emissao.py:1593`, `:1632`: zera resposta/carimbos da **Pergunta**, e acorda células em `:1633`. Não é o mesmo ato de reabrir diretamente `status_local`; efeitos posteriores: `[nao verificado]`. |
-| Desligar colaborador | `app/templates/colaboradores/editar.html:271` → `app/colaboradores/views.py:1434` → `app/colaboradores/services/desligamento.py:150`, `:155`: encerra chamados pelo modelo. |
-| Salvar vínculo de escala | `app/templates/colaboradores/partials/painel_vinculo.html:136`, `:175` → `app/colaboradores/services/vinculo.py:329`, `:330` → `app/colaboradores/services/pos_vinculo.py:42`: reconcilia chamado de adesão. O ramo legado `modo=aceite` encerra chamados anteriores em `vinculo.py:387`. |
-| Regularizar retorno | `app/ponto/views.py:3153`, `:3215` → `app/ponto/services/regularizacao.py:126`, `:137`: põe chamados relacionados em análise. Rotas web/API: `app/ponto/urls.py:45`, `app/api/urls.py:106`. |
-
-Nenhuma dessas ações oferece uma lista de códigos de `status_local`; o selo se restringe a opções HTML e às tags dos cinco seletores, em `app/chamados/tests/test_bo_rotulo_encerrado.py:41`, `:52`, `:99`, `:117`, `:127`. Cobertura dessas ações pelo selo: **não**, conforme esses percursos do teste.
-
-O censo integral de todo efeito indireto de qualquer alteração de fato do sistema permanece `[nao verificado]`; o censo confirmado de controles que **oferecem estados como destinos** continua sendo os cinco seletores da primeira resposta, com as mesmas referências.
-
-## 11/11 12:22 · sessao 21dc35eb6d42 · - · - · origem=Ronald (tmux)
-
-Selos/tripwires encontrados, sem executar testes e sem escrever arquivos: [nao verificado]
-
-- **Paridade dos kernels:** `test_contract_paridade_kernels` extrai todas as funções de topo de `api/views.py` e `api/views_core.py`, compara a AST normalizada dos nomes presentes nos dois e exige igualdade; `DIVERGENCIA_CONSCIENTE` está vazio. Uma alteração somente no corpo de `api_justificativas` de um kernel seria acusada; uma função nova somente em um arquivo não entra na interseção de nomes. `app/api/tests/test_contract_paridade_kernels.py:12`, `:18`, `:25`, `:31`, `:36`.
-
-- **Não encontrei selo atual que obrigue as portas de submissão a chamar uma única função de serviço.** Essa ausência global permanece **[nao verificado]**; os selos localizados abaixo têm outros escopos. `Justificativa` não está no mapa completo `FAMILIA_DE`; entidades fora do mapa são declaradas “sem família”. Portanto o gate da família `chamado` não vigia a criação de `Justificativa` como entidade sua. `app/core/portas.py:38`, `:40`, `:87`; o gate ignora entidades cuja família não seja `chamado` em `app/chamados/tests/test_chokepoint_chamado_gate.py:320`.
-
-- **Gate do chamado:** `ALLOWLIST=()`, `TETO_POR_ENTIDADE={}` e os testes exigem zero escrita fora dos módulos registrados em `core.portas`. Uma função nova de serviço que grave diretamente `ChamadoColaborador` fora dessas portas seria acusada quando o censo conseguir atribuir a escrita à entidade; chamar `ChamadoColaborador.abrir` e a porta de vínculos preserva o caminho já registrado. `app/chamados/tests/test_chokepoint_chamado_gate.py:56`, `:312`, `:316`, `:347`, `:371`; portas de `ChamadoColaborador` em `app/core/portas.py:196` e `:217`.
-
-- **Porta de vínculo já protegida:** testes exigem que `apontar_justificativa` preencha vínculo ausente, devolva `True`, preserve o primeiro vínculo diante de segunda justificativa e devolva `False` nesse segundo apontamento; `None` é erro. Esses testes não elegem o dia nem a cobrança. `app/chamados/tests/test_porta_vinculos.py:130`, `:136`, `:172`; limite do juiz de dia declarado em `:44`.
-
-- **Deduplicação das duas portas:** os testes enviam POST web/API depois de existir a justificativa automática e exigem exatamente uma justificativa e `chamado_origem` apontando ao `turno_aberto`. Uma função nova continua sujeita a esses efeitos observáveis; o teste não impõe nome nem escritor único. `app/ponto/tests/test_justificativa_dedup.py:56`, `:65`, `:71`, `:80`.
-
-- **Cross-day web:** o teste cria chamado no dia seguinte ao `data_turno`, envia a justificativa para o dia do turno e exige vínculo com esse chamado. Ele cobre `contexto_json.data_turno`; o caso específico “dia encontrado somente pela célula/outros degraus do juiz” não aparece nesse teste. `app/ponto/tests/test_vinculo_justificativa_cross_day.py:30`, `:38`, `:44`, `:48`, `:56`.
-
-- **Unicidade física:** constraint parcial limita a uma pendente por `(colaborador,data_turno)`, além do `unique_together(colaborador,data_turno,batida_entrada)`; testes exigem `IntegrityError` para segunda pendente e permitem uma nova quando a anterior foi aprovada. `app/ponto/models.py:187`, `:189`; `app/ponto/tests/test_justificativa_pendente_unica.py:29`, `:35`.
-
-- **GET de justificativas/API e juiz de batidas:** AST exige que `api_justificativas` e `api_espelho_v2` chamem `dia_das_batidas`/`_ddb_j`; proíbe `strftime('%Y-%m-%d')` dentro de `api_justificativas`, exige a lápide de ausência de fallback e mantém `localtime` para a hora. Uma extração que retirasse essas chamadas do corpo da função seria acusada mesmo delegando a um helper. Esse selo olha `api.views`, com o gêmeo coberto separadamente pela paridade. `app/api/tests/test_o14_app_le_o_juiz_do_dia.py:27`, `:48`, `:60`, `:90`, `:100`.
-
-- **Formulário/lista web:** teste existente exige que a lista `turnos_abertos` ofereça a entrada real de um turno com intervalo, nunca a volta do intervalo; sua fixture cria uma justificativa pendente para permitir o GET. `app/ponto/tests/test_turnos_abertos_nucleo.py:46`, `:58`, `:64`, `:76`.
-
-- **Juiz do dia do chamado:** o selo AST próprio proíbe `.get('data_turno')` e `['data_turno']` fora do dono, com pendências vazias, mas sua raiz de varredura é apenas **`app/chamados/`**. Uma função nova em `ponto/services/` não é alcançada por esse selo específico. Ele também fixa os quatro degraus do juiz. `app/chamados/tests/test_contract_dia_do_fato.py:33`, `:42`, `:59`, `:83`, `:98`, `:124`. O contrato S5 chama um varredor de autoridades e tem contraprova de dia cru em `ponto/novo.py`, além de exigir uma única definição de `COBRANCA` no motor. `app/chamados/tests/test_contract_juiz_chamado.py:43`, `:49`, `:71`. Os padrões e exceções declarados estão em `app/core/juizes.py:1409` e `:1460`; não atribuir cobertura universal desses padrões sem executar suas verificações **[nao verificado]**.
-
-- **Aprovação/fechamento da origem:** AST varre produção e exige que toda função que atribui `<x>.status='aprovada'` chame `encerrar_chamado_de_origem` depois do `save` e dentro do mesmo `with ...atomic()`. Há reconhecimento explícito de três escritores: `aprovar_justificativa_dp`, `materializar_saida_dp`, `aprovar_lote_justificativas`. Uma função nova que apenas recebe/submete pendente não é acusada por esse critério; uma que também aprove passa a sê-lo. `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:47`, `:94`, `:110`, `:127`, `:145`. Limites explícitos: não vê `update(status='aprovada')`, `create(status='aprovada')` ou o admin genérico; a presença de chamada sob ramo morto pode passar. `:8`, `:12`.
-
-- **Estado/juiz novo:** P13 enumera campos de estado sancionados e acusa arquivos novos escrevendo esses campos; não é censo específico de submissão de justificativas. `app/core/tests/test_contract_escritores_estado.py:15`, `:180`, `:202`. A trava juiz novo só compara autoridades registradas em `core/juizes.py` com a base e exige frase de nascimento no `CORTES.md`; criar uma função de serviço, por si só, não corresponde ao critério do script. `bin/tests/test_juiz_novo_tem_corte.sh:27`, `:37`, `:41`; regra documental em `CLAUDE.md:74`.
-
-- **Exceções engolidas:** `_abrir_justificativa_fluxo` e `abrir_justificativa` estão nominalmente no passivo. O teste acusa views novas engolindo `Exception` e exige retirar entradas do passivo que deixem de corresponder ao código; extrair um bloco desse tipo pode afetar a verificação de “passivo podre”. `app/core/tests/test_contract_excecoes_engolidas.py:45`, `:99`, `:115`, `:121`.
-
-O teste chamado `test_contract_mensageria_le_o_juiz` vigia exclusivamente `api/views_mensageria.py` e os modelos `ChamadoColaborador`, `Batida`, `Ausencia`; o nome não o torna um selo da obra MSG-0/submissão de justificativas. `app/api/tests/test_contract_mensageria_le_o_juiz.py:49`, `:52`, `:138`.
-
-## 11/11 12:22 · sessao 979168e33aec · - · - · origem=Ronald (tmux)
-
-Sem enfraquecimento demonstrado na allowlist ou nos três mutantes E3 deslocados; há limites de cobertura nas cascas e na cor. (`app/core/tests/test_tripwire_contagem_de_pendencia.py:81`, `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:154`)
-
-- **Bloqueia o aceite integral do selo:** “renderiza as duas cascas” foi substituído por inspeção do grafo de includes, strings JavaScript e rota; o ORM renderiza apenas o partial pela view. O próprio docstring declara essa escolha. (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:83`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:5`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:98`)
-- **Fila — cor sem mordida:** o template atualmente lê a cor da origem, mas o selo AST não exige essa leitura e o ORM compara texto, números e badge da API, sem verificar o estilo do painel. Um mutante em memória com cor fixa passou os sete testes AST; execução ORM desse mutante: **[nao verificado]**. (`app/templates/colaboradores/partials/painel_colaborador.html:190`, `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:39`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:114`)
-- **AST morde os quatro mutantes fornecidos:** executei sete testes verdes; `painel_query` e `template_rotulo` produziram 1 failure cada; `api_ui_precedencia` e `api_core_precedencia`, 3 cada; todos sem errors. Os alvos e as assertivas estão em `app/colaboradores/tests/ui_painel_fontes.py:19` e `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:25`.
-- **E3 preservado:** os mutantes de disputa agora corrompem apenas `questionarios_pendentes`; a matriz existente continua exigindo 2 perguntas na mesma disputa e conferindo esse campo. O mutante de autor mudou para o local real da query; a matriz distingue um chamado do DP de dois do colaborador. O selo novo exige failure sem error para os três alvos. (`app/chamados/tests/e3_mutantes.py:23`, `app/chamados/tests/e3_mutantes.py:87`, `app/chamados/tests/test_e3_app_orm.py:41`, `app/chamados/tests/test_e3_app_orm.py:47`, `app/chamados/tests/test_e3_app_orm.py:62`, `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:154`)
-- **Tripwire preservado:** dois sítios API viram um sítio do serviço; teto cai para 25, `SEM_JUIZ` permanece 1, e continuam as verificações de sítio novo, declaração sobrando, teto e testemunhas. Executei os 18 testes com `SimpleTestCase` substituído por `unittest.TestCase` em memória: verdes; execução Django real: **[nao verificado]**. (`app/core/tests/test_tripwire_contagem_de_pendencia.py:81`, `app/core/tests/test_tripwire_contagem_de_pendencia.py:147`, `app/core/tests/test_tripwire_contagem_de_pendencia.py:370`)
-- **ORM e mutantes ORM:** execução nesta cópia **[nao verificado]**, pois `import django` retornou `ModuleNotFoundError`. O código cobre perguntas na mesma disputa, precedência sobre mensagem, chamados versus followups, vazio, origem variável, identidade dos itens e ausência de carimbo de leitura. (`app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:114`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:147`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:163`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:180`)
-
-## 11/11 12:21 · sessao 67a589fcc055 · - · - · origem=Ronald (tmux)
-
-1. Há UMA regra do badge dos três leitores exigidos: `projecao_do_app` escreve `questionarios_pendentes`, `chamados_nao_lidos` e o dicionário `{count, cor, rotulo}` em `app/chamados/services/pergunta_no_app.py:89-104`. Os leitores apenas propagam: `app/api/views.py:315-319`, `app/api/views_core.py:303-307`, `app/colaboradores/views.py:940-941` e contexto `:1006`; o template lê os campos prontos em `app/templates/colaboradores/partials/painel_colaborador.html:190-198`.
-
-   A afirmação de unicidade **global** exige ressalva: o dashboard web ativo continua contando perguntas por `len(consulta_do_app(...))` em `app/core/views.py:252-253` e decidindo texto/cor/número no template `app/templates/core/dashboard_colaborador_v2.html:78-80`; esse template é usado em `app/core/views.py:270-271`. É outra derivação preexistente, fora do diff informado. **Fila**, caso “app” inclua essa superfície; não comprova nova duplicação introduzida pela obra.
-
-   O JS de abas decide visibilidade e cores de seleção de abas, não o badge do app: `app/templates/core/_drawer_generico.html:118-145`. Código Android/iOS e seu rendering efetivo: **[nao verificado]**.
-
-2. Pelo diff fornecido, a extração preserva os três campos da resposta e a precedência: perguntas pendentes vencem mensagens não lidas; depois `None`. Hoje a regra está em `app/chamados/services/pergunta_no_app.py:90-104`; os endpoints expõem as mesmas três chaves em `app/api/views.py:358-360` e `app/api/views_core.py:346-348`. Antes/depois esperado:
-
-   - 2 perguntas, inclusive na mesma disputa, e mensagem não lida → `Responder DP`, `2`, `#f59e0b`.
-   - Nenhuma pergunta, 1 chamado vivo com nota DP não lida → `Chamados`, `1`, `#ef4444`.
-   - Nenhum dos dois → `chamados_badge=None`, contadores zero.
-
-   A implementação atual está em `app/chamados/services/pergunta_no_app.py:89-104`; comparação histórica independente do anexo **[nao verificado]**, porque esta cópia não contém `.git`. A ordem das leituras de banco mudou: o diff fazia contagem de não lidos antes da consulta C6; hoje chama C6 primeiro (`:89`), depois conta (`:91-96`). A prioridade do badge permaneceu igual (`:97-102`); igualdade sob concorrência durante essas leituras **[nao verificado]**.
-
-3. Unidades e escritores/leitores:
-
-| Campo | Escritor e significado | Leitores |
-|---|---|---|
-| `pendentes`, `historico` | `consulta_do_app`, pergunta C6 viva, separada por resposta e disputa fechada; pessoa inteira, sem corte de vínculo/mês: `app/chamados/services/pergunta_no_app.py:45-75` | projeção `:89`; `/chamados/` `app/api/views.py:992-1028`; perguntas `app/api/views.py:2530-2532`; painel `app/templates/colaboradores/partials/painel_colaborador.html:193-198` |
-| `questionarios_pendentes` | Número de **perguntas**, não de disputas: `app/chamados/services/pergunta_no_app.py:90` | dois `/me/` `app/api/views.py:318,359`, `app/api/views_core.py:306,347`; botão soma esse valor `app/templates/colaboradores/partials/painel_colaborador.html:39-40` |
-| `chamados_nao_lidos` | Número de **chamados vivos** da pessoa com ≥1 nota DP não lida, não número de notas: `app/chamados/services/pergunta_no_app.py:91-96`; `VIVOS` inclui registrado em `app/chamados/catalogo/motor.py:24` | APIs `app/api/views.py:317,358`, `app/api/views_core.py:305,346`; escolha do badge `app/chamados/services/pergunta_no_app.py:99-100` |
-| `count`, `cor`, `rotulo` | Projeção `app/chamados/services/pergunta_no_app.py:97-104`; `count` usa a unidade indicada pelo rótulo | APIs propagam `app/api/views.py:319,360`, `app/api/views_core.py:307,348`; faixa lê `app/templates/colaboradores/partials/painel_colaborador.html:190-191` |
-| `no_app` | Variável local e contexto, não coluna persistida: `app/colaboradores/views.py:941,1006` | Template `app/templates/colaboradores/partials/painel_colaborador.html:39,190-198` |
-| `chamados` do painel | Últimos **5 chamados de qualquer status**, sem filtro de não lido: `app/colaboradores/views.py:936-939,1005` | botão `app/templates/colaboradores/partials/painel_colaborador.html:39-40`; lista mostra até 5 followups por chamado `app/templates/colaboradores/partials/msgs_lista.html:1-11` |
-
-   Não há troca detectada de significado dos campos do endpoint. O botão “Mensagens” usa outra medida autorizada: últimos cinco chamados + perguntas; não deve ser confundido com o `count` da faixa (`app/colaboradores/views.py:936-939`; template `:39-40,190-191`).
-
-4. Para os insumos persistidos: notas nascem por `nota.anexar_ocorrencia`, que grava autor e conteúdo em `app/chamados/services/nota.py:75-109`; leitura do colaborador é carimbada por `marcar_lidas`, `:126-133`, chamado pelo GET `/chamados/` em `app/api/views.py:1037-1038`. O painel novo não chama essa porta; somente lê a projeção (`app/colaboradores/views.py:940-941`). Pergunta/texto e dia nascem em `PerguntaDisputa._nascer`, com escrita do dia por `gravar_dia_do_fato`, `app/chamados/models.py:2825-2828,3013-3017`; marco/identidade são derivados na inserção em `:3425-3447`. O dia exibido é o dia persistido da pergunta, não “hoje” nem mês do Espelho (`app/templates/colaboradores/partials/painel_colaborador.html:198`).
-
-5. **Fila — faixa fica desatualizada após enviar mensagem pelo próprio painel.** O form substitui apenas `#msgs-lista` (`app/templates/colaboradores/partials/painel_colaborador.html:203-205`); o POST cria/reutiliza chamado e grava nota DP (`app/chamados/views.py:973-986`), devolvendo somente a lista (`:995-1003`). Exemplo dedutível: aberto sem nada, envio cria nota → próximo `/me/` tem `Chamados,1` pela regra `app/chamados/services/pergunta_no_app.py:91-100`, enquanto a faixa permanece `nada pendente` do primeiro render (`app/templates/colaboradores/partials/painel_colaborador.html:190-191`). Reprodução em navegador **[nao verificado]**.
-
-_3853 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3858 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
