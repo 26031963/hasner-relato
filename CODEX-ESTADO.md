@@ -1,7 +1,130 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:05** · publicado em **11/11/2026 10:06** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:10** · publicado em **11/11/2026 10:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:10 · sessao 1a4869192285 · - · - · origem=Ronald (tmux)
+
+Censo direto, somente leitura; testes não executados, estado verde atual [nao verificado]. [nao verificado]
+
+**Consulta e leitores**
+
+- `consulta_do_app` deriva listas novas, preserva ordem por ID e separa `pendentes` por `respondida_em is None` **e** `disputa.fechada_em is None`; demais perguntas vivas vão ao histórico. Fonte anterior: `perguntas_do_app → q_vivas + pergunta_viva(C6)`. `app/chamados/services/pergunta_no_app.py:45`, `app/chamados/services/pergunta_no_app.py:61`, `app/chamados/models.py:3326`, `app/chamados/juizes.py:839`.
+- **7 sítios de consumo em produção**: dois badges (`app/api/views_core.py:314`, `app/api/views.py:325`), GET chamados (`app/api/views.py:1005`), GET perguntas (`app/api/views.py:2543`), dashboard (`app/core/views.py:253`), aviso de pendência (`app/chamados/services/aviso_pendencia.py:9`), cobrança (`app/chamados/services/cobranca.py:48`).
+- A consulta não contém `status_local__in=VIVOS`; esse filtro pertence à contagem de **chamados com followup DP não lido**, nos badges. `VIVOS = aberto, em_analise, registrado`, diferente de `COBRANCA`. `app/api/views_core.py:309`, `app/api/views.py:320`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`.
+
+**Escritores diretos dos campos que separam pendentes/histórico**
+
+| Campo/operação | Sítios |
+|---|---|
+| Resposta do colaborador | `responder_pergunta_disputa_core`: atribui e salva `respondida_em`. `app/chamados/services/disputa_emissao.py:1468`, `app/chamados/services/disputa_emissao.py:1508` |
+| Resposta automática | `responder_automaticamente`. `app/chamados/services/disputa_emissao.py:1653` |
+| Recuperação de carimbo pela trilha | `carimbar_resposta_pela_trilha`. `app/chamados/services/disputa_emissao.py:1674` |
+| Carimbo com resposta já textual | `PerguntaDisputa.carimbar`, quando `resposta` solicitado e texto presente. `app/chamados/models.py:3130`, `app/chamados/models.py:3152` |
+| Voltar a pendente | `reabrir_para_correcao`: monta `respondida_em=None`, executa `qs.update(**campos)` ou delega ao descarimbo em lote. `app/chamados/services/disputa_emissao.py:1593`, `app/chamados/services/disputa_emissao.py:1629` |
+| Ressuscitar perguntas | `ChamadoColaborador.ressuscitar_perguntas` delega a `descarimbar_em_lote(...respondida_em=None)`; este faz update dinâmico. `app/chamados/models.py:1566`, `app/chamados/models.py:3264` |
+| Nascimento da pergunta | `_nascer` recebe `**campos`, constrói e insere; inclui assinaturas recebidas. Campo nullable por definição. `app/chamados/models.py:2448`, `app/chamados/models.py:3014` |
+| Fechar disputa | `DisputaSupervisao.fechar`: `fechada_em=now`, seguido de save. `app/chamados/models.py:1932` |
+| Reabrir disputa | `reabrir_admin` e `reabrir_sistema`: `fechada_em=None`, seguido de save. `app/chamados/models.py:2149`, `app/chamados/models.py:2173` |
+| Nascer disputa aberta | Default nullable; criações do emissor. `app/chamados/models.py:1757`, `app/chamados/services/disputa_emissao.py:587`, `app/chamados/services/disputa_emissao.py:1123`, `app/chamados/services/disputa_emissao.py:1358` |
+
+Atribuições de `respondida_em` que **não persistem**: simulação em cópia (`_universo_da_ressuscitacao`) e restauração da memória quando carimbar recusa. `app/chamados/models.py:1508`, `app/chamados/models.py:3163`.
+
+Vitalidade C6 também depende de `validada_em`, tranca da competência, `via_resolucao`, `materializada_em`, texto da resposta, célula/ata/veredito e testemunha do fato; o conjunto de escritores transitivos de todos esses insumos não foi encerrado neste recorte [nao verificado]. As dependências aparecem em `app/chamados/juizes.py:1324`. O registro existente reconhece oito módulos-porta de `PerguntaDisputa`, incluindo modelo, emissor, materialização, fio, reconciliador, lavra, relavra e validação. `app/core/portas.py:393`.
+
+**Não lido do colaborador**
+
+- Campo real: `FollowupChamado.lido_colaborador_em`, nullable. Criar nota sem carimbo faz nascer uma fonte não lida. `app/chamados/models.py:1673`, `app/chamados/services/nota.py:88`, `app/chamados/services/nota.py:103`.
+- Escritor do carimbo: `nota.marcar_lidas`, usando mapa dinâmico `LADOS`; atualiza apenas registros ainda nulos. `app/chamados/services/nota.py:59`, `app/chamados/services/nota.py:126`.
+- **3 chamadores com lado colaborador**: GET nativo marca **todos** followups DP daquele colaborador; endpoint web de um chamado; endpoint web em lote. `app/api/views.py:1050`, `app/chamados/views.py:1135`, `app/chamados/views.py:1150`.
+- Chamador com lado DP modifica **outro campo**, `lido_dp_em`. `app/chamados/views.py:880`, `app/chamados/services/nota.py:59`.
+- Leitores em produção: dois badges; serialização nativa `novo`/contador por followup; `_nao_lido` web/contador por chamado; duas posições no card de atendimento. `app/api/views_core.py:311`, `app/api/views.py:322`, `app/api/views.py:1128`, `app/chamados/views.py:603`, `app/templates/chamados/partials/_card_atendimento.html:51`, `app/templates/chamados/partials/_card_atendimento.html:59`.
+- Outros atos que eliminam fonte: `nota.apagar_em_ensaio` apaga notas sob guarda de banco de ensaio; excluir o chamado faz cascade da FK. `app/chamados/services/nota.py:136`, `app/chamados/models.py:1668`.
+- Registro da porta de criação/leitura/apagamento: `app/core/portas.py:239`.
+
+**`status_local`: escritores que alteram entrada/saída de VIVOS**
+
+- Campo/default `'aberto'`. `app/chamados/models.py:52`.
+- **Escritor persistente de transição**: `_gravar_estado`, atribuição em `:228`, `save(update_fields=campos)` em `:296`. `app/chamados/models.py:228`, `app/chamados/models.py:296`.
+- Gates locais que delegam ao núcleo: `_aplicar`, `reconciliar`, `cancelar`, `analisar`, `reabrir`, `encerrar`, `encerrar_por_competencia_trancada`. `app/chamados/models.py:450`, `app/chamados/models.py:654`, `app/chamados/models.py:788`, `app/chamados/models.py:806`, `app/chamados/models.py:1442`, `app/chamados/models.py:1619`, `app/chamados/models.py:1639`.
+- **Nascimento idempotente**: `abrir` monta `_def['status_local']`, agrega defaults e passa ao `get_or_create`. `app/chamados/models.py:938`, `app/chamados/models.py:971`.
+- **Nascimento direto**: `criar` passa `status_local=status` ao `objects.create`. A construção anterior `_nascente` é só memória. `app/chamados/models.py:1070`, `app/chamados/models.py:1095`.
+- **Simulação sem persistência**: `_vivas_entre` aplica e restaura o status em memória. `app/chamados/models.py:356`, `app/chamados/models.py:371`.
+- Registro existente da porta de ciclo: `app/core/portas.py:218`.
+- Migrações de dados, fora do runtime: `aberto↔registrado` e `cancelado↔superado`. `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `app/chamados/migrations/0038_a3_registrado_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/migrations/0039_a3_via_backfill.py:33`.
+
+**Contratos já presentes, sem executar**
+
+- Selo AST de escritores de status permite precisamente `_gravar_estado`, `_vivas_entre`, `criar`, `abrir`; distingue memória e persistência, examina update/create/defaults/bulk/setattr/SQL e declara limites de resolução de tipos. `app/chamados/tests/test_selo_status_so_pelas_portas.py:10`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:17`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:37`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:340`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:449`.
+- Selo da nota: nenhum escritor fora da porta e idempotência do marcar lidas. `app/chamados/tests/test_porta_nota_do_fio.py:44`, `app/chamados/tests/test_porta_nota_do_fio.py:207`.
+- Matriz ORM compara endpoint de perguntas, dashboard e **ambos** kernels, incluindo dicionário completo do badge; prova que vermelho conta chamados e não followups. `app/chamados/tests/test_e3_app_orm.py:28`, `app/chamados/tests/test_e3_app_orm.py:62`.
+- Contratos de leitores: aviso/cobrança/badges mesma pendente; lista nativa pendentes + histórico; frescor após tranca/toque/reabertura. `app/chamados/tests/test_e3_v4_orm.py:20`, `app/chamados/tests/test_e3_v4_orm.py:42`, `app/chamados/tests/test_e3_v4_orm.py:101`.
+- Outros leitores de teste explícitos da consulta: `app/chamados/tests/test_esmeril2_left_join.py:19`, `app/chamados/tests/test_fio_le_o_juiz.py:267`, `app/core/tests/test_dashboard_badge.py:45`; contratos AST em `app/chamados/tests/test_contract_pergunta_viva.py:68`, `app/chamados/tests/test_pergunta_no_app.py:168`; ferramentas de mutação em `app/chamados/tests/e3_mutantes.py:23`.
+
+## 11/11 10:08 · sessao 984214e9a557 · - · - · origem=Ronald (tmux)
+
+Censo de autoridades e decisões, somente leitura:
+
+1. **Não há juiz registrado para o rótulo/count “o que o app mostra ao colaborador agora”.** O registro de chamados contém C6 `pergunta_viva`, C13 `retencao`, C15 `fio_vivo`, C19 `tarefa_do_dia`, C20 `dia_da_pergunta_trancado`, mas nenhum para o badge ou `consulta_do_app`. `app/core/juizes.py:272`, `app/core/juizes.py:278`, `app/core/juizes.py:285`, `app/core/juizes.py:287`, `app/core/juizes.py:291`, `app/core/juizes.py:292`.
+
+2. **A tabela `JUIZES.md` também não declara esse juiz.** Ela se define como lookup, aponta o registro vivo em `core/juizes.py`, declara que o código vivo manda e lista os juízes de chamados sem badge. `app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:11`, `app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:59`, `app/docs/JUIZES.md:78`.
+
+3. **Autoridade existente da seleção apresentada:** `consulta_do_app(colab)` retorna exatamente `{'pendentes': [pergunta], 'historico': [pergunta]}`; lê `perguntas_do_app(colab, em_lote=True)` e separa pendentes por `respondida_em is None and disputa.fechada_em is None`, preservando ordem por id. O serviço declara que API, badge dos dois kernels e dashboard contam a mesma lista. `app/chamados/services/pergunta_no_app.py:3`, `app/chamados/services/pergunta_no_app.py:61`, `app/chamados/services/pergunta_no_app.py:64`, `app/chamados/services/pergunta_no_app.py:69`, `app/chamados/services/pergunta_no_app.py:75`.
+
+4. **A vitalidade continua pertencendo ao C6:** `perguntas_do_app` usa `PerguntaDisputa.q_vivas()`, identidade do colaborador e `pergunta_viva`; `consulta_do_app` apenas particiona a apresentação. `app/chamados/services/pergunta_no_app.py:45`, `app/chamados/services/pergunta_no_app.py:49`, `app/chamados/services/pergunta_no_app.py:56`, `app/chamados/services/pergunta_no_app.py:58`, `app/core/juizes.py:278`.
+
+5. **`estado_app` não é este problema:** no situacional significa “sem device ativo”, “instalou, nunca bateu”, “bateu e parou” ou “ativo”; não descreve perguntas, mensagens ou badge. `app/colaboradores/services/situacional.py:191`.
+
+Decisões técnicas sugeridas para o construtor — propostas, não implementação:
+
+| Candidata | Pró e limite com evidência |
+|---|---|
+| **Wrapper de projeção junto de `consulta_do_app`, em `chamados/services/pergunta_no_app.py` — recomendação** | Mantém seleção e apresentação próximas, sem depender de uma view HTTP; pode receber `colab`, chamar uma vez `consulta_do_app`, mover para si a query não lidos e devolver listas + números + badge. A seleção já mora nesse serviço por ser o leitor do universo do app; os kernels hoje repetem query e regra. `app/chamados/services/pergunta_no_app.py:64`, `app/api/views_core.py:305`, `app/api/views_core.py:313`, `app/api/views.py:316`, `app/api/views.py:324`. |
+| Acrescentar badge à própria `consulta_do_app` | Menor número de funções, mas altera contrato de retorno e adiciona query de não lidos a todos os consumidores. Há testes de igualdade **exata** com as duas chaves e teto de nove queries; portanto é candidata mais invasiva. `app/chamados/tests/test_e3_v4_orm.py:85`, `app/chamados/tests/test_e3_v4_orm.py:91`, `app/chamados/tests/test_e3_v4_orm.py:98`. |
+| Novo módulo de apresentação em `chamados/services/` | Nome próprio separa a projeção da seleção e pode conservar o contrato atual; acrescenta arquivo e indireção. Existência/aceitação desse arquivo no escopo literal do anexo precisa ser tratada como decisão técnica de implementação, não lei nova. Base: `app/chamados/services/pergunta_no_app.py:61`; restrição de escopo do anexo: **[nao verificado]**. |
+| Helper puro que recebe duas contagens | Facilita testar prioridade/cor, mas sozinho não atende o painel sem alguém produzir a query não lidos. Para evitar query própria no painel, precisaria de outro montador, ou da função pública aceitando `colab`. Query atual: `app/api/views_core.py:305`; proibição do anexo: **[nao verificado]**. |
+| Função em `api/views_core.py` ou `api/views.py` | Permite extrair a regra no local atual, mas o painel passaria a importar camada HTTP e ainda seria preciso escolher um dos kernels como dono; os dois possuem hoje a regra. `app/api/views_core.py:313`, `app/api/views.py:324`. |
+
+**Forma recomendada do retorno do wrapper**, como proposta compatível: `{'pendentes': [...], 'historico': [...], 'questionarios_pendentes': int, 'chamados_nao_lidos': int, 'chamados_badge': {'count': int, 'cor': str, 'rotulo': str} | None}`. Não calcular novamente rótulo nem count nos leitores; `None` continua representando ausência de badge. Contrato atual dos kernels: `app/api/views_core.py:314`, `app/api/views_core.py:316`, `app/api/views_core.py:318`, `app/api/views_core.py:320`; contrato de listas: `app/chamados/services/pergunta_no_app.py:75`. O nome da função e o shape interno são decisão técnica, não comprovados como já escolhidos: **[nao verificado]**.
+
+**Cuidados concretos com os selos existentes:**
+
+- Matriz E3 testa os dois kernels, dashboard, endpoint, duas perguntas na mesma disputa e prioridade do amarelo sobre vermelho; vermelho conta chamados, não followups. `app/chamados/tests/test_e3_app_orm.py:28`, `app/chamados/tests/test_e3_app_orm.py:38`, `app/chamados/tests/test_e3_app_orm.py:43`, `app/chamados/tests/test_e3_app_orm.py:47`, `app/chamados/tests/test_e3_app_orm.py:62`.
+- Mutantes atuais procuram literalmente `len(consulta_do_app(... )['pendentes'])` nos dois kernels; a extração deve atualizar esses alvos, preservando a mordida contra contar disputas. `app/chamados/tests/e3_mutantes.py:23`, `app/chamados/tests/e3_mutantes.py:25`.
+- Contrato AST exige que `api_disputa_perguntas` continue lendo `consulta_do_app`, e que a consulta continue delegando a `perguntas_do_app`/C6. Mantendo wrapper separado e endpoints de perguntas intactos, esse contrato pode permanecer. `app/chamados/tests/test_contract_pergunta_viva.py:62`, `app/chamados/tests/test_contract_pergunta_viva.py:68`, `app/chamados/tests/test_contract_pergunta_viva.py:75`.
+- A chamada `api/views.py:1004` alimenta o agrupamento por chamado usando pendentes + histórico, depois marca notas do DP como lidas; a chamada `:2542` alimenta perguntas, histórico e `em_disputa`, sem calcular badge. Extração apenas da regra não exige alterá-las. `app/api/views.py:1004`, `app/api/views.py:1040`, `app/api/views.py:1050`, `app/api/views.py:2542`, `app/api/views.py:2571`, `app/api/views.py:2573`, `app/api/views.py:2581`.
+
+**Golden atual:** existem três perguntas por colaborador/dia sobre presença de pergunta no app, ligadas a `dia_do_colab`; não existe nesse arquivo caso do rótulo/count “agora”. `eval/golden.py:35`, `eval/golden.py:184`, `eval/golden.py:187`, `eval/oraculo.py:93`. A inclusão de uma pergunta “agora” é requisito do anexo, não execução nesta cópia: **[nao verificado]**.
+
+**Perguntas de lei: 0**, conforme o anexo que já fixa fonte, prioridade, cores existentes, contagem por pergunta e ausência de badge; a autoridade de vitalidade continua C6. `app/chamados/services/pergunta_no_app.py:61`, `app/api/views_core.py:315`, `app/api/views_core.py:317`, `app/core/juizes.py:278`; aval/“Nenhuma lei nova” do anexo: **[nao verificado]**.
+
+## 11/11 10:08 · sessao 950c845836fc · - · - · origem=Ronald (tmux)
+
+3. View/contexto/contador:
+
+- Única view encontrada renderizando o partial: `painel_colaborador(request, cid)`, protegida por login e ação `ver_cadastro`; rota `<int:cid>/painel/`. (`app/colaboradores/views.py:914`, `app/colaboradores/views.py:917`, `app/colaboradores/views.py:988`, `app/colaboradores/urls.py:48`)
+- Mensagens chegam como `chamados`: `ChamadoColaborador.objects.filter(colaborador=colab).prefetch_related('followups').order_by('-criado_em')[:5]`. O comentário diz “abertos”, mas o filtro executável não restringe status. (`app/colaboradores/views.py:936`, `app/colaboradores/views.py:937`)
+- A view passa `chamados`; não passa `consulta_do_app`, `pendentes`, `historico`, contagem de perguntas ou rótulo do app. Os outros dados explícitos são colaborador, escala, retrato/portas/legenda, total de batidas, batidas do mês, mês atual e CSRF. (`app/colaboradores/views.py:988`)
+- Badge atual da aba Mensagens é `{{ chamados|length }}`, condicionado a haver chamados; portanto conta os até cinco chamados carregados, sem distinguir leitura, perguntas ou status. (`app/templates/colaboradores/partials/painel_colaborador.html:39`, `app/colaboradores/views.py:937`)
+- Aba Mensagens contém formulário HTMX de mensagem rápida e include `msgs_lista.html`; a lista mostra assunto/data do chamado e até cinco followups por chamado, com conteúdo truncado em 80 caracteres. (`app/templates/colaboradores/partials/painel_colaborador.html:188`, `app/templates/colaboradores/partials/painel_colaborador.html:198`, `app/templates/colaboradores/partials/msgs_lista.html:4`, `app/templates/colaboradores/partials/msgs_lista.html:7`, `app/templates/colaboradores/partials/msgs_lista.html:10`)
+- Após enviar, `abrir_chamado_rapido` cria/reusa chamado `mensagem_dp` em `VIVOS`, anexa nota, envia push e devolve somente `msgs_lista.html`, com a mesma consulta limitada a cinco. O `hx-target="#msgs-lista"` não atualiza o botão da aba. (`app/chamados/views.py:973`, `app/chamados/views.py:976`, `app/chamados/views.py:986`, `app/chamados/views.py:989`, `app/chamados/views.py:997`, `app/chamados/views.py:1000`, `app/templates/colaboradores/partials/painel_colaborador.html:189`)
+
+5. Cascas e grafo:
+
+- Correção da premissa: o GET do painel usa **fetch + innerHTML**, depois `htmx.process(corpo)`; HTMX processa os controles injetados. (`app/templates/core/_drawer_generico.html:19`, `app/templates/core/_drawer_generico.html:26`, `app/templates/core/_drawer_generico.html:33`)
+- `base.html → core/_drawer_generico.html` e `base_app.html → core/_drawer_generico.html`; ambas carregam HTMX. (`app/templates/base.html:399`, `app/templates/base_app.html:154`, `app/templates/base.html:19`, `app/templates/base_app.html:19`)
+- Fluxo da lista: `colaboradores/lista.html` estende `base.html` e inclui `_lista_tabela.html`; clique da linha chama `abrirPainelColab`, que chama `abrirDrawer(..., '/colaboradores/'+cid+'/painel/', 1100)`. (`app/templates/colaboradores/lista.html:1`, `app/templates/colaboradores/lista.html:57`, `app/templates/colaboradores/partials/_lista_tabela.html:16`, `app/templates/core/_drawer_generico.html:89`, `app/templates/core/_drawer_generico.html:104`)
+- Há ramo legado `#col-painel`, também por fetch, com inserção in-place. (`app/templates/core/_drawer_generico.html:95`, `app/templates/core/_drawer_generico.html:99`)
+- Fluxo do retrato: `folha/retrato_folha.html` estende `base.html`, inclui `_retrato_lista.html`; o nome abre a mesma rota, levando `mes/ano`. A versão parcial do retrato também inclui a lista. (`app/templates/folha/retrato_folha.html:1`, `app/templates/folha/retrato_folha.html:53`, `app/templates/folha/_retrato_lista.html:61`, `app/templates/folha/_retrato_parcial.html:7`)
+- Fluxo Raio-X: barra abre drawer com `raiox_href`; `retrato_raiox` renderiza `_retrato_raiox.html`, cujas linhas abrem a mesma rota do painel com `mes/ano`. (`app/templates/folha/_retrato_barra.html:71`, `app/templates/folha/_retrato_barra.html:73`, `app/folha/views_retrato.py:510`, `app/templates/folha/_retrato_raiox.html:68`, `app/templates/folha/_retrato_raiox.html:70`)
+- O partial do painel não estende casca; inclui `_cabecalho_drawer.html`, condicionalmente `_retrato_o_que_fazer.html`, e `msgs_lista.html`. O bloco do retrato inclui `_led.html` e `_retrato_legenda.html`. (`app/templates/colaboradores/partials/painel_colaborador.html:1`, `app/templates/colaboradores/partials/painel_colaborador.html:8`, `app/templates/colaboradores/partials/painel_colaborador.html:26`, `app/templates/colaboradores/partials/painel_colaborador.html:198`, `app/templates/folha/_retrato_o_que_fazer.html:36`, `app/templates/folha/_retrato_o_que_fazer.html:71`)
+- Os hosts encontrados do painel usam `base.html` fixo; a infraestrutura de drawer existe nas duas cascas. A seleção global `base_tpl` depende de `modo_app`, mas não altera `{% extends 'base.html' %}` fixo desses hosts. (`app/templates/colaboradores/lista.html:1`, `app/templates/folha/retrato_folha.html:1`, `app/templates/base_app.html:154`, `app/core/context_processors.py:205`, `app/core/context_processors.py:210`)
+
+Selo existente/duas cascas:
+
+- Há testes do painel real via client GET, do bloco do retrato e do cabeçalho compartilhado; não constituem selo API × painel. (`app/colaboradores/tests/test_retrato_no_drawer.py:151`, `app/colaboradores/tests/test_retrato_no_drawer.py:167`, `app/colaboradores/tests/test_retrato_no_drawer.py:182`, `app/ponto/tests/test_drawer_ausencia_no_molde.py:81`)
+- A casa já tem padrão de smoke renderizando as duas cascas, com verificação dos templates realmente usados e sessão `via_app/plataforma_sessao`; esse exemplo mede o espelho, não o painel. (`app/core/tests/test_smoke_chromium.py:151`, `app/core/tests/test_smoke_chromium.py:155`, `app/core/tests/test_smoke_chromium.py:160`, `app/core/tests/test_smoke_chromium.py:172`)
+- Para o construtor: renderizar somente a resposta de `/colaboradores/<cid>/painel/` duas vezes não demonstra duas cascas, pois é partial sem extends; o selo deve medir a integração com cada casca que inclui o drawer. (`app/colaboradores/views.py:988`, `app/templates/colaboradores/partials/painel_colaborador.html:1`, `app/templates/base.html:399`, `app/templates/base_app.html:154`)
 
 ## 11/11 10:05 · sessao f575c8ee2b9b · O169-FECHADA · verificador · origem=Code
 
@@ -936,331 +1059,4 @@ Cada link abaixo contém o **comando exato**, RC e resultado:
 
 `status_aprovada_tira_marcador` exige ORM e não possui alvo sem banco. [x1_mutantes:122](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:122). Certificação Code/opus final: [nao verificado].
 
-## 11/11 09:15 · sessao 0ca26e8461ed · FIO-E0-V4-E4C · censo · origem=Code
-
-**CENSO-ANTES-DA-VAGA — FIO-E0-V4-E4C**
-
-**Campos com retirada lógica prevista:** R = `resposta_colab`, `respondida_em`; V = `validada_em`, `validada_por`; C = `materializada_em`, `materializada_por`, `via_resolucao`; F = `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`. A retirada depende do ramo: as exceções abaixo continuam lendo projeção. (`app/chamados/models.py:3844`; `app/chamados/models.py:3126`; `app/chamados/models.py:1880`; `app/docs/PROMPTS.md:2034`)
-
-**Exceções:** A03, reabertura do continente; A05, somente assinatura; A06, identidade/duplicata; A17, pendência técnica; A18, recusa técnica; A20, conferência de data. `pendencia_admin`, recusa técnica e `data_conferida_em/por` entram no inventário, mas permanecem fontes nesses ramos. `recusa_motivo` exige separação entre decisão humana, advertência e resultado técnico. (`app/docs/PROMPTS.md:2034`; `app/chamados/services/validacao.py:593`; `app/chamados/services/disputa_emissao.py:1497`; `app/chamados/services/materializacao.py:855`; `app/chamados/services/materializacao.py:1107`)
-
-**Perguntas de lei identificadas: D04 e D05, abaixo.** Não atribuí automaticamente o zero do censo de escritores ao censo de leitores: a lei exige a regra para a nova resposta, não equivalência presumida com o código anterior. (`app/docs/LEIS.md:136`)
-
-Entrega no corpo da resposta; nenhuma gravação de relatório, teste, importação da aplicação, banco ou log produtivo realizada. Evidência persistida dessa execução: **[nao verificado]**. Identidade Git do hash informado, pai da E3 e diff entre eles: **[nao verificado]** — `git log` nesta raiz retornou “not a git repository”. [nao verificado]
-
-O script ao fim foi executado por `python3 -B`, via stdin. O levantamento combina AST Python, busca sintática de templates e candidatos JS; a revisão abaixo elimina homônimos e entradas de formulário. Reflexão irrestrita, SQL montado dinamicamente, serialização implícita e consumidores externos: **[nao verificado]**.
-
-**Autoridades e códigos usados nas tabelas**
-
-| Código | Pergunta e destino existente | Registro |
-|---|---|---|
-| **T** | Ação exigível, dono e porta: `tarefa_do_dia` | `app/chamados/services/tarefa_do_dia.py:562`; `app/core/juizes.py:291`; `app/docs/JUIZES.md:78` |
-| **P** | Pergunta viva: `pergunta_viva` | `app/chamados/juizes.py:862`; `app/core/juizes.py:278` |
-| **FI** | Alguma pergunta viva na coleção: `fio_vivo` | `app/chamados/juizes.py:1488`; `app/core/juizes.py:287` |
-| **FE** | Disputa pode fechar: `DisputaSupervisao.pode_fechar` | `app/chamados/models.py:1848`; `app/core/juizes.py:279` |
-| **E** | Efeito confirmado: juiz `_pergunta_materializada_de_fato`, pela lâmpada vigente consumida por T | `app/chamados/juizes.py:662`; `app/chamados/services/tarefa_do_dia.py:119`; `app/docs/JUIZES.md:81` |
-| **TR** | Dia trancado: `dia_da_pergunta_trancado` / `dias_trancados` | `app/chamados/juizes.py:974`; `app/chamados/juizes.py:1004`; `app/core/juizes.py:292` |
-| **D01** | Texto, instante, assinatura e motivo da decisão: sequência DP; juiz específico de apresentação não registrado | `app/chamados/models.py:3840`; `app/core/juizes.py:272` |
-| **D02** | Estado histórico do continente: falta autoridade factual equivalente demonstrada; preservar A03 | `app/chamados/models.py:2126`; `app/docs/PROMPTS.md:2034` |
-| **D03** | História/procedência do processamento: DP e efeitos, sem confundir carimbo com efeito | `app/chamados/models.py:3840`; `app/chamados/services/tarefa_do_dia.py:141` |
-| **D04** | Indicadores de atividade: decisão sem juiz específico confirmado | `app/chamados/services/verbos.py:239`; `app/chamados/services/painel.py:268`; `app/core/juizes.py:272` |
-| **D05** | Rótulos de fase publicados pela API/tela: equivalência com T não estabelecida | `app/chamados/models.py:3034`; `app/api/views.py:2555` |
-| **D06** | Invalidação de cache/ETag: dependência técnica de decisões **e efeitos** | `app/chamados/services/painel.py:58`; `app/chamados/services/painel.py:67`; `app/chamados/veredito_lavrado.py:151` |
-
-Apontar para um juiz existente ainda não elimina a dependência: P recebe R/V/C pela projeção temporal; FE usa `respostas_sem_veredito`; E ainda consulta C/via; T consulta projeção para detectar passivo e conserva via de identidade. Esses corpos também precisam entrar na migração, respeitando as exceções. (`app/chamados/juizes.py:1369`; `app/chamados/juizes.py:1384`; `app/chamados/models.py:1853`; `app/chamados/juizes.py:679`; `app/chamados/services/tarefa_do_dia.py:398`; `app/chamados/services/tarefa_do_dia.py:230`)
-
-**Inventário — modelos e juízes**
-
-Nas tabelas, `def → leitura` separa a definição da ocorrência consumida. Os caminhos abreviados são: **M** = `app/chamados/models.py`; **J** = `app/chamados/juizes.py`; **S/** = `app/chamados/services/`. Cada função nomeada constitui uma unidade do censo.
-
-| Leitor | Campos / resposta atual | Destino |
-|---|---|---|
-| M:128 `ChamadoColaborador.transicionar` → M:190 | F; disputas relacionadas à transição | T/FE; continente D02 |
-| M:201 `_gravar_estado` → M:310 | V; perguntas atingidas pela reconciliação | T + D01 |
-| M:336 `_ancoradas` → M:344 | V; perguntas ancoradas pertinentes | P/T |
-| M:1468 `_universo_da_ressuscitacao` → M:1484 | C/R/via; universo que pode voltar | P/E; identidade A06 |
-| M:1512 `ressuscitar_perguntas` → M:1563, M:1564, M:1574 | R/V/F; conservação e seleção da volta | D01/D03/P; F=D02 |
-| M:1823 `DisputaSupervisao.aberta` → M:1824 | F; continente aberto | D02; dependência A03 |
-| M:1826 `respostas_sem_veredito` → M:1843 | R/V/C; impedimento de fechamento | FE, cujo corpo precisa migrar |
-| M:1848 `pode_fechar` → M:1853 | Leitura indireta de R/V/C | Permanece FE, sem segundo juiz |
-| M:1855 `fechar` → M:1879, M:1920 | F/R/C/via; idempotência e quitação | FE/E/D01; história D02/D03 |
-| M:1971 `remover_motivo` → M:2031, M:2055 | F/R/via; retratação | DP `RETRATACAO`; A06 na identidade |
-| M:2126 `reabrir_admin` → M:2138 | F; necessidade da reabertura | **A03 permanece** |
-| M:2163 `reabrir_sistema` → M:2167 | F; religar continente | T para exigibilidade; D02 para continente |
-| M:2182 `reabrir_por_colab` → M:2224 | F; gate de correção | T/D01; gesto do continente D02/A03 |
-| M:2250 `limpar_resolucao_residual` → M:2262 | F/resolução; limpeza residual | D02/D03; retirada coordenada com E4d |
-| M:2276 `DisputaSupervisao.__str__` → M:2277 | `aberta` indireta | D02 |
-| M:2629 `PerguntaDisputa.trava_na_ordem` → M:2673 | F em Q/`values_list`; universo das travas | D02; não substituir ordem de trava por T |
-| M:2697 `do_fato` → M:2724 | via; identidade | **A06 permanece** |
-| M:2746 `q_dos_fatos` → M:2755 | via em Q; identidade | **A06 permanece** |
-| M:2825 `_nascer` → M:3019 | R/V indiretos na conservação legada | D01/D03; cruza E4b |
-| M:3034 `estado` → M:3041 | R/V/C; fase exibida | **D05** |
-| M:3050 `fechar_por_admin` → M:3055 | C/via; idempotência | E/DP; identidade A06 |
-| M:3103 `carimbar` → M:3126 | C/R/V/autores; foto e assinaturas | E/D03; **A05 somente assinatura** |
-| M:3168 `carimbar_identidade` → M:3182 | C/autor; preservar carimbo | **A06 permanece** |
-| M:3193 `fora_do_fato` → M:3201 | via; terminalidade da identidade | **A06 permanece** |
-| M:3203 `descarimbar` → M:3206 | `fora_do_fato` indireto | **A06 no gate** |
-| M:3252 `descarimbar_em_lote` → M:3265 | via; excluir identidade terminal | **A06 no gate** |
-| M:3268 `encerrar_por_fato_no_espelho` → M:3273 | via/`fora_do_fato`; idempotência | E; identidade A06 |
-| M:3279 `encerrar_fantasma` → M:3284 | C/via; idempotência | E/D03 |
-| M:3289 `reabrir_fantasma` → M:3296 | C/via; reversibilidade | E/D03 |
-| M:3301 `reabrir_por_resposta` → M:3313 | C/via; reversibilidade | DP/E |
-| M:3317 `reabrir_por_competencia` → M:3320 | via; reversibilidade | TR/DP |
-| M:3326 `q_vivas` → M:3348, M:3359 | R/V/C/via em Q; pré-filtro | P, conservando superset; A06 |
-| M:3497 `respondida` → M:3498 | R; presença do carimbo | D01; ação por T |
-| M:3519 `resposta_display` → M:3521 | R; conteúdo discriminado | D01; preservar tipo/opções |
-| M:3914 `DecisaoPergunta.linhas_da_projecao_sem_linha` → M:3924 | R/V/autoria; detectar legado sem ato | **Conservação E4b**, não substituir por “nenhuma decisão” |
-
-As condições dos índices em `PerguntaDisputa.Meta` também dependem de via; são dependências de schema, não funções adicionais no total de leitores. Permanecem no ramo A06. (`app/chamados/models.py:3485`; `app/chamados/models.py:3491`; `app/docs/PROMPTS.md:2034`)
-
-| Leitor | Campos / pergunta respondida | Destino |
-|---|---|---|
-| J:282 `_retratada_com_trilha` → J:288 | C; ordem temporal da retratação | DP/D03; A06 |
-| J:341 `_slot_esperado` → J:348, J:360 | R; slot esperado | D01, mantendo interpretação do juiz |
-| J:662 `_pergunta_materializada_de_fato` → J:679, J:707 | C/via; efeito confirmado | Permanece E; retirar C derivado, preservar exceções |
-| J:821 `_chave_memo_pv` → J:852 | R/V/C/via; chave da memoização | D06; A06 na identidade |
-| J:1314 `_resposta_concorda_com_a_luz` → J:1340 | R; concordância com o fato | D01; mantém julgamento existente |
-| J:1362 `projecao_temporal_da_pergunta` → J:1369 | R/V/C/via; valores no horizonte | DP por `ato_em` + E; A06 |
-| J:1383 `_pergunta_viva_calc` → J:1384 | Consome a projeção temporal | P, migrando seu insumo |
-| J:1476 `pergunta_sem_lastro_ou_viva` → J:1480 | C; proteção de resposta regularizada | P/E |
-| J:1509 `respondida_sem_texto` → J:1512 | R; carimbo sem conteúdo | D01; conservação D03 |
-| J:1655 `perguntas_corrigiveis` → J:1657 | R; universo corrigível | T/D01 |
-| J:1662 `perguntas_respondidas_a_validar` → J:1664 | R/`q_vivas`; fila de validação | T/P/D01 |
-| J:1678 `declarou_hora` → J:1693 | R; declaração interpretável | D01 |
-| J:1830 `delta_da_resposta` → J:1840 | R; distância do marco | D01; preservar régua existente |
-| J:1936 `classificar_resposta_validacao` → J:1944 | R; classe da aprovação | D01; mantém juiz existente |
-| J:1957 `motivo_implausivel_validacao` → J:1966 | R; motivo de implausibilidade | D01; mantém juiz existente |
-| J:1980 `irmas_respondidas_sem_consumo` → J:2013 | R/V/C; declarações ainda não consumidas | DP/E |
-| J:2371 `disputa_viva_do_chamado` → J:2379 | F; relação chamado/continente | D02; ação por T/FI |
-
-**Inventário — serviços internos**
-
-| Arquivo e leitor | Leitura / o que responde | Destino |
-|---|---|---|
-| S/`tarefa_do_dia.py:164` `_tarefa_pura` → :230 | via; exclusão da identidade | **A06 permanece** |
-| S/`tarefa_do_dia.py:361` `CargaDaTarefa.__init__` → :398 | R/V indiretos; passivo sem decisão | D01/D03; **gate E4b** |
-| S/`tarefa_do_dia.py:449` `_carregar_vida` → :491 | P indireto; exposição administrativa | P/T, incluindo migração do insumo de P |
-| S/`pergunta_no_app.py:45` `perguntas_do_app` → :50 | `q_vivas`; coleção ampla do app | P |
-| S/`pergunta_no_app.py:61` `consulta_do_app` → :71 | R/F; pendentes versus histórico | T/D01; D02 no histórico do continente |
-| S/`cobranca.py:221` `_calados` → :229 | R/F/`q_vivas`; quem ainda não respondeu | T/P/D01 |
-| S/`janela_colab.py:49` `chamados_visiveis_colab` → :63 | `q_vivas`; visibilidade | P/T |
-| S/`declaracao_texto.py:216` `_resposta_validada` → :227 | V; preservar aprovação | D01 |
-| S/`declaracao_texto.py:306` `declarar_hora_colab` → :417 | R; preservar voz/instante | D01 |
-| S/`declaracao_texto.py:641` `aplicar_declaracao` → :687 | R; resposta já entregue | D01/T |
-| S/`validacao.py:127` `_carimbar_validacao` → :139 | R/V; conteúdo e instante do ato | D01; leitura dentro de escritor existente |
-| S/`validacao.py:144` `_foto_da_validacao` → :147 | V/autor/recusa/F; fotografia | D01/D03/D02; A18 técnico |
-| S/`validacao.py:163` `devolver_validacao_recusada` → :188 | R/V/C/recusa/F; devolução | DP `DEVOLUCAO`/E; A18 |
-| S/`validacao.py:234` `_e_aceite_de_folga` → :236 | R; aceite de folga | D01 |
-| S/`validacao.py:239` `_aceitar_a_folga` → :345 | V/autor por `refresh_from_db`; restauração | D01/D03 |
-| S/`validacao.py:373` `validar_pergunta` → :393, :461 | R/V/C; guardas e resultado | T/DP/E |
-| S/`validacao.py:533` `recusar_pergunta` → :573, :580 | R/V/recusa; recusabilidade e foto | DP `RECUSA`; não inferir ato de string técnica |
-| S/`validacao.py:625` `conferir_data_do_fato` → :662 | conferência; idempotência | **A20 permanece** |
-| S/`validacao.py:695` `validar_lote_classe_a` → :732 | V; evitar aprovação repetida | T/D01 |
-| S/`validacao.py:845` `classe_do_lote` → :851 | R; classe do lote | D01 |
-| S/`validacao.py:912` `fila_validar_classificada` → :924 | R; entrada na fila | T/D01 |
-| S/`materializacao.py:245` `_tipo_pelo_marco` → :279 | R; tipo do plantio | D01 |
-| S/`materializacao.py:332` `_ts_tipo_do_plantio` → :358 | R; instante e escape | D01; mantém ajuste temporal existente |
-| S/`materializacao.py:430` `estado_aplicacao_pergunta` → :437 | R/C/via; aplicação/idempotência | DP/E; A06/A18 por ramo |
-| S/`materializacao.py:467` `_declarar_ausencia_de_pergunta` → :473 | R; ausência declarada | DP + efeito Ausência |
-| S/`materializacao.py:501` `_materializar_ausencia_de_resposta` → :538, :570, :590 | R/C/F; absorção | DP `ABSORCAO`/E/FE; D02 |
-| S/`materializacao.py:608` `perguntas_absorvidas_por` → :630 | R/C/via; vínculo com ausência | DP `ABSORCAO` + Ausência |
-| S/`materializacao.py:644` `devolver_absorvidas_da_ausencia_rejeitada` → :673 | R/V/C/autores; fotografia da volta | DP/D03 + estado da Ausência |
-| S/`materializacao.py:789` `_materializar_resposta_hora` → :834 | R; declaração aplicada | D01; **A17 no resultado técnico** | [nao verificado]
-| S/`materializacao.py:983` `_materializar_resposta_data_hora` → :1000 | R; interpretação textual | D01 |
-| S/`materializacao.py:1088` `_carimbar_recusa` → :1094 | C/via/recusa; idempotência técnica | **A18/A06 permanecem** |
-| S/`materializacao.py:1163` `_materializar_uma` → :1198 | conferência; autorização diante de dois dias | **A20 permanece** |
-| S/`materializacao.py:1307` `_fechar_disputa_se_quitada` → :1321 | F/resolução; fechamento existente | FE; história D02 |
-| S/`materializacao.py:1343` `materializar_perguntas_validadas_da_disputa` → :1375 | R/V/C; fila de execução | T/DP/E |
-| S/`materializacao.py:1395` `materializar_pendentes_aprovadas` → :1424 | C; seleção pendente | T/E |
-| S/`disputa_emissao.py:34` `colaborador_em_disputa` → :41 | F; continente aberto | D02; exigibilidade por T |
-| S/`disputa_emissao.py:166` `_derivar_chamado_destino` → :228 | C; destino pertinente | P/E |
-| S/`disputa_emissao.py:300` `gerar_perguntas_disputa` → :328 | via; dedup | **A06 permanece** |
-| S/`disputa_emissao.py:474` `_abrir_ou_agregar_disputa` → :532 | F; continente reutilizável | D02/A03 |
-| S/`disputa_emissao.py:747` `motivo_fora_da_fabrica` → :762 | C; causa de retenção | P/E |
-| S/`disputa_emissao.py:945` `fecho_do_repasse` → :978 | F em Q; universo costurado | D02 |
-| S/`disputa_emissao.py:1027` `criar_disputa_a_partir_de_chamados_orfaos` → :1070, :1097 | C/F; reuso | E/P/FE; D02 |
-| S/`disputa_emissao.py:1302` `criar_disputa_ancora_de_chamado` → :1326 | C/F; âncora reutilizável | E/P; D02 |
-| S/`disputa_emissao.py:1425` `responder_pergunta_disputa_core` → :1470, :1522 | V/autor/F; invalidação anterior e contexto | DP/D03; D02 |
-| S/`disputa_emissao.py:1562` `reabrir_para_correcao` → :1619 | R/V/C/autores em `values_list`; foto anterior | DP/D03 |
-| S/`disputa_emissao.py:1638` `responder_automaticamente` → :1647 | R; preservar texto existente | D01 |
-| S/`disputa_emissao.py:1661` `carimbar_resposta_pela_trilha` → :1670 | R; texto sem instante | D01/D03, instante testemunhado |
-| S/`disputa_emissao.py:1690` `recobrar_questionario` → :1713 | R; resposta já entregue | T/D01 |
-| S/`disputa_emissao.py:1801` `_resolver_perguntas_por_chamado_resolvido` → :1825, :1856, :1927 | R/V/C/F/via; consequências do chamado | DP/P/E/FE; A06 e D02 por ramo |
-| S/`fio.py:120` `_disputa_do_chamado` → :131 | F; continente apresentado | Autoridade já citada em `app/docs/JUIZES.md:40`; D02 no insumo |
-| S/`fio.py:163` `montar_chamados_fio` → :187, :224, :340 | F/R/`aberta`/`q_vivas`; apresentação | P/T/D01; D02 e D05 |
-| S/`fio.py:485` `processar_post_fio` → :600, :633, :660 | F/R; ramo do POST | T/D01; D02 no gesto do continente |
-| S/`fio.py:1084` `reuso_sem_rechave` → :1100 | via; reuso | **A06 permanece** |
-| S/`fio.py:1152` `sem_dia_na_saida` → :1167 | via; invariante de identidade | **A06 permanece** |
-| S/`fio.py:1225` `canonica_do_grupo` → :1232 | R; escolha canônica | D01 + **A06** |
-| S/`fio.py:1236` `merito_perdedor` → :1243 | R/via; mérito da canônica | D01 + **A06** |
-| S/`fio.py:1345` `retratar_duplicata` → :1350 | via; duplicata já retratada | **A06 permanece** |
-| S/`fio.py:1422` `_no_fato` → :1433 | via; universo de identidade | **A06 permanece** |
-| S/`fio.py:1840` `fecho_cruza_dias` → :1853 | via; fecho da identidade | **A06 permanece** |
-| S/`fio.py:1878` `perguntas_sobre_batida_retratada` → :1889 | via; diagnóstico | **A06 permanece** |
-| S/`fio.py:1905` `universo_do_grupo` → :1911 | via; universo | **A06 permanece** |
-| S/`fio.py:1923` `grupos_de_colisao` → :1956 | via; colisões | **A06 permanece** |
-| S/`fabrica_da_celula.py:92` `motivos_a_perguntar` → :149 | via; dedup | **A06 permanece** |
-| S/`fabrica_da_celula.py:160` `perguntar` → :171 | C; pergunta reaproveitável | P/E |
-| S/`explicador.py:25` `_explicar_validada` → :32 | R; explicação | D01/E |
-| S/`explicador.py:68` `explicar_pergunta` → :72, :85, :90, :95 | fase/R/pendência/recusa/via | T/E/D05; **A17/A18/A06** |
-| S/`explicador.py:108` `por_que_nao_fecha` → :137 | `fio_vivo`; “pode fechar” | **FE**, não apenas FI |
-| S/`raiox.py:51` `creditos_perguntas` → :135 | C/R em SQL/tuplas; crédito do painel | P/E/T/D01 |
-| S/`raiox.py:153` `pergunta_sem_acao_possivel` → :175 | C; clique morto | E/T |
-| S/`relavra_via.py:106` `relavrar` → :118 | via; necessidade da relavra | E/L; A06 fora da derivação |
-| S/`relavra_via.py:142` `relavrar_dia` → :155 | via; seleção da relavra | E/L |
-| S/`relavra_via.py:171` `q_carimbo_desfazivel` → :181 | C/via/F; seleção reversível | P/E; A06 e D02 |
-| S/`relavra_via.py:187` `desfazer_carimbo_sem_lastro` → :244 | C/via/F; diagnóstico/foto | P/E/D03; A06 |
-| S/`passivo_validado.py:131` `_balde_da_recusa` → :140 | via; classificação do passivo | E/T; **A18/A06** |
-| S/`passivo_validado.py:474` `_plantar_o_dia` → :515 | via; aplicação do passivo | E/T; **A18/A06** |
-| S/`historico.py:69` `_eventos_dos_chamados` → :98, :105 | `getattr(p,campo)` de R/V/C; linha do tempo | **D03**, DP e efeitos, não só último ato |
-| S/`painel.py:50` `marcador_do_placar` → :67 | `Max(R/C/V)`; invalidação | **D06** |
-| S/`painel.py:198` `montar_contexto_painel` → :262 | autor de V; indicador | **D04** |
-| S/`painel.py:268` `_jan_val` → :270 | V por janela; atividade | **D04** |
-| S/`verbos.py:218` `placar_equipe` → :239 | V/autor; ações por pessoa | **D04** |
-| S/`verbos.py:253` `placar_aceite` → :311, :318 | R por `values`/dict; aceite após cobrança | **D04**, conservando definição escrita de aceite |
-| S/`fila_por_causa.py:214` `_gaveta_de` → :225 | F e respostas sem veredito; gaveta | T/FE; D02 |
-| S/`acoes_disputa.py:90` `acao_reabrir_disputa` → :95 | R; perguntas alcançadas | T/D01 |
-| S/`acoes_disputa.py:118` `acao_regularizar_disputa` → :130 | R; regularização | T/D01/FE |
-| S/`acoes_disputa.py:235` `acao_reabrir_disputa_admin` → :255 | F; escolher continente | **A03/D02** |
-| S/`acoes_disputa.py:302` `acao_corrigir_resposta` → :345 | V/F/R; correção | T/D01; D02 |
-| S/`acoes_chamado.py:327` `montar_contexto_detalhe` → :336 | F; detalhe | D02/T |
-| S/`becos.py:25` `classificar` → :27 | F/R; resposta presa em fechada | T/FE/D01; D02 |
-| S/`becos.py:36` `fechar_beco` → :56 | F e `pode_fechar` | FE; D02 |
-| S/`competencia_trancada.py:65` `medir` → :113, :151 | F e respostas sem veredito | TR/FE; D02 |
-| S/`competencia_trancada.py:163` `encerrar` → :196 | F; disputas alcançadas | TR/FE; D02 |
-| S/`competencia_trancada.py:235` `reabrir` → :251 | via; reversibilidade | TR/DP; A06 por ram
-
-[truncado em 20000 de 48601 caracteres]
-
-## 11/11 09:08 · sessao f1ecbbc31623 · FIO-E0-V4-E4B · construtor · origem=Code
-
-1. **Quem mascara a remoção é `_Desfaz`, provocando rollback do `atomic` inteiro** quando todos os dias são recusados: [backfill_fio_morto_e4b.py:349](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:349).
-
-2. **O lote misto precisa do rollback individual.** A recusa segue para o próximo dia; havendo um aceito, não ocorre `_Desfaz`: [backfill_fio_morto_e4b.py:327](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:327). Acrescentei o caso ORM exigindo vizinho persistido, P90/D90/Ch12 restaurados, foto integral restaurada entre tentativas e desaparecimento dos nascimentos recusados: [test_e4b_c4_orm.py:404](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:404). Cascata natural em produção: [nao verificado].
-
-3. **Não se aplica substituir um rollback redundante.** Mantive o enxerto `sem_rollback` e apontei-o ao novo caso: [e4b_c4_verificar.py:37](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_verificar.py:37). A morte no ORM continua [nao verificado].
-
-Entrega: [diff completo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10.patch:1) e [comandos/resultados](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:1).
-
-| Verificação | rc | Resultado |
-|---|---:|---|
-| Memória | 0 | [88 OK](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:6) |
-| REDs registrados | 0 | [40 OK](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:10) |
-| `--selos` | 0 | [40 OK](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:14) |
-| `--orm-preflight` | 0 | [8 enxertos válidos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:18) |
-| `sem_rollback`, memória | 1 | [Uma falha na assertion-alvo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:28) |
-| `rollback_roteiro_antigo` | 1 | [Assertion prevista](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:38) |
-| `rollback_falha_aceita` | 1 | [Cinco subtests falham, sem erros](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:44) |
-
-Para a sessão, os comandos exatos de **GREEN isolado**, **mutante isolado** e **roteiro ORM completo** estão no [registro:53](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:53). Certificação ORM e opus final: [nao verificado].
-
-## 11/11 09:08 · sessao 4aeaf4c941a5 · - · - · origem=Ronald (tmux)
-
-Censo externo executado por AST via `python3 -B` em stdin; sem import Django, acesso ao banco ou suíte. Prova por arquivo da execução do instrumento: [nao verificado]. O recorte abaixo exclui `app/chamados/models.py`, `app/chamados/services/`, testes e migrations; atributos, argumentos ORM e strings de `getattr`/`values`/`only` foram capturados. Não prova completude contra reflexão/SQL construído. [nao verificado]
-
-**Contagens externas do AST**, por `(arquivo, linha, forma)`:
-
-| Campo | Ocorrências | Linhas distintas |
-|---|---:|---:|
-| `respondida_em` | 35 | 33 |
-| `validada_em` | 19 | 18 |
-| `materializada_em` | 42 | 42 |
-| `via_resolucao` | 38 | 38 |
-| `pendencia_admin` | 1 | 1 |
-| `recusa_motivo` | 4 | 4 |
-| `pode_fechar` | 4 | 4 |
-
-Essas contagens excluem os complementos dinâmicos/templates abaixo e precisam ser apresentadas com essa unidade; sua execução não tem arquivo de log por restrição de só leitura. [nao verificado por arquivo:linha]
-
-**Leitores externos — referências completas do estrato direto.** `R` inclui atributo/getattr, `F` seleção ORM e `V` projeção/carregamento. Cada número pertence ao arquivo da primeira coluna.
-
-| Arquivo | Campo e linhas |
-|---|---|
-| `app/api/views.py` | `respondida_em` R:1172,1184,2568,2582,2625,2642 |
-| `app/api/views_mensageria.py` | `respondida_em` R:569,570 |
-| `app/chamados/juizes.py` | `respondida_em` R:829,1341,1449; F:1594,1601,1949; ordenação:1601 |
-| `app/chamados/juizes.py` | `validada_em` R:829,1325; F:1949 |
-| `app/chamados/juizes.py` | `materializada_em` R:288,662,689,831,1336,1362,1368,1399,1417; F:1949 |
-| `app/chamados/juizes.py` | `via_resolucao` R:662,674,830,1336,1362 |
-| `app/chamados/management/commands/auditar_disputas.py` | `materializada_em` F:69,148 |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py` | `respondida_em` R:177,592; F:1105,1572,1602 |
-| Mesmo arquivo | `validada_em` R:205; F:1075,1572,1602,1765,1778 |
-| Mesmo arquivo | `materializada_em` V:469; R:538,905; F:587,955,1075,1156,1572,1602,1765 |
-| Mesmo arquivo | `via_resolucao` R:202,206,433,542,1710; F:955 |
-| Mesmo arquivo | `recusa_motivo` F:535,1075,1112; `pendencia_admin` exclude:1112 |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py` | `respondida_em` Q/only:56; `validada_em` Q/only:56,F:100; `materializada_em` F:100,R:325; `via_resolucao` F:100,R:314,330,V:398,504 |
-| `app/chamados/management/commands/curar_perguntas_em_limbo.py` | `respondida_em` F:46,69 |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py` | `materializada_em`, `validada_em`, `via_resolucao` F:31; `via_resolucao` R:42,49,66,76 |
-| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py` | `via_resolucao` R:70,71,72; `materializada_em` R:147 |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py` | `validada_em` F:67; `materializada_em` F:67,R:88,91,129,142; `via_resolucao` F:67,R:129,142,160 |
-| `app/chamados/management/commands/relavrar_via_i6.py` | `via_resolucao` R:58,59,62,66,68,88 |
-| `app/chamados/reconciliador.py` | `materializada_em` R:366,1144,1154,F:627,1048,1500; `validada_em` F:627,1048; `via_resolucao` R:1143,1154; `pode_fechar()` chamadas:411,611,1170 |
-| `app/chamados/relatorios_disputa.py` | `respondida_em` R:21 |
-| `app/chamados/veredito_lavrado.py` | `materializada_em` F:202; `respondida_em` F:206 |
-| `app/chamados/views.py` | `materializada_em` R:1257; `respondida_em` R:1280,F:1416 |
-| `app/chamados/views_cobrar.py` | `respondida_em` R:169,F:175 |
-| `app/ponto/management/commands/reconciliar_fantasmas.py` | `materializada_em` F:211 |
-| `app/ponto/management/commands/reconciliar_grade.py` | `respondida_em` F:460 |
-| `app/ponto/services/cartorio.py` | `via_resolucao` R:1610 |
-| `app/ponto/services/entrada_sincronizada.py` | `pode_fechar()` chamada:58 |
-| `app/ponto/services/flip_auto.py` | `via_resolucao`, `validada_em` F:128; `recusa_motivo` R:132 |
-| `app/ponto/services/procedencia_batida.py` | `validada_em`, `materializada_em` R:74 |
-| `app/ponto/services/veredito_celula.py` | `materializada_em` R:195 |
-| `app/ponto/supra_juiz.py` | `respondida_em` R:545,548 |
-| `bin/censo_folha.py` | `respondida_em` F:28,29; `validada_em` F:29 |
-
-As linhas ORM indicam o início da chamada AST; argumentos multilinha podem estar nas linhas imediatamente seguintes. Exemplo conferido: `encerrar_perguntas_com_fato.py:31` inicia a seleção, com os filtros em :32 e :33.
-
-**Escritor externo dinâmico obrigatório.**
-
-| Campo | Escritor | Leitores/seleção | Escopo |
-|---|---|---|---|
-| `P.recusa_motivo` | `setattr(o,c,novo)` em `bin/sombra_mascara_pessoal.py:57`, persistido por `bulk_update` em :62 e :64 | `.only('pk',*campos)` :51; `getattr` :54; comparação :56 | `TEXTO` registra explicitamente `PerguntaDisputa.recusa_motivo` em `bin/sombra_regras_pessoais.py:85`; script exige banco `sombra` em `bin/sombra_mascara_pessoal.py:10` |
-| `P.recusa_motivo` | — | SQL `coalesce`/regex em `bin/sombra_selo_pessoal.py:77` | Itera o mesmo inventário `R.TEXTO` em :74 |
-
-Não encontrei atribuição literal externa a esses sete nomes no recorte AST. Ausência universal de escrita por `F()`, kwargs/reflexão/SQL construído: [nao verificado].
-
-**Templates, separados do AST Python.**
-
-| Arquivo | Campo | Linhas |
-|---|---|---|
-| `app/templates/chamados/partials/modal_fio.html` | `respondida_em` | 185,217,220 |
-| Mesmo arquivo | `pendencia_admin` / display | 222,225 |
-| Mesmo arquivo | `recusa_motivo` | 226 |
-| Mesmo arquivo | `validada_em` | 228 |
-| Mesmo arquivo | `chamado.explicacao.pode_fechar` | 435,446 |
-| `app/templates/chamados/partials/_card_atendimento.html` | `respondida_em` | 94,100,137,155,384,385 |
-| Mesmo arquivo | `pendencia_admin` | 183 |
-| Mesmo arquivo | `via_resolucao`, display e fallback `recusa_motivo` | 186 |
-| `app/templates/chamados/partials/_pergunta_card.html` | `validada_em` | 20,23,42 |
-| Mesmo arquivo | `respondida_em` | 24,29,32 |
-
-Inputs `name="recusa_motivo"` são ingresso de resposta, não leitura persistida: `modal_fio.html:61`, :295 e `_pergunta_card.html:114`.
-
-**Migrations, separadas.**
-
-| Campo | Definição/alteração |
-|---|---|
-| `respondida_em` | `app/chamados/migrations/0014_perguntadisputa.py:25` |
-| `validada_em` | Mesmo arquivo :26 |
-| `materializada_em` | `app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:23` |
-| `pendencia_admin` | `app/chamados/migrations/0043_hx_pendencia_admin.py:15` |
-| `recusa_motivo` | `app/chamados/migrations/0040_a27_recusa_motivo.py:15` |
-| `via_resolucao` | Criação `0033_perguntadisputa_via_resolucao.py:15`; alterações `0035_via_admin_decidiu.py:15`, `0036_a1_pergunta_celula.py:22`, `0037_a3_estado_honesto.py:31`, `0040_a27_recusa_motivo.py:20`, `0041_b2_via_legado_sem_lastro.py:15`, `0042_hx_via_ausencia_dia.py:15`, `0046_via_celula_absolveu.py:15`, `0048_via_competencia_trancada.py:14`, `0051_decisao_pergunta.py:110` |
-| `via_resolucao` leitura executável | `app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `Q` do universo do fato |
-
-`materializada_em` de `RegularizacaoExterna` na migration `0021_regularizacaoexterna_regularizacaoitembatida_and_more.py:26` é homônimo e fica fora do censo de PerguntaDisputa.
-
-**Divergências adicionais para a consolidação.**
-
-1. **Relatório também re-julga C7.** `relatorios_disputa.classificar` usa C6 e devolve `PRONTA_FECHAR` quando não há vivas, sem consultar `respostas_sem_veredito`; C7 acrescenta precisamente essa guarda. (`app/chamados/relatorios_disputa.py:18`, :20; `app/chamados/models.py:1843`, :1853.) Deve compor a mesma decisão do explicador, não apenas a tela.
-
-2. **Recusa é texto e insumo operacional.** `fila_flip_recusas` interpreta regex de `recusa_motivo` para extrair PK de Batida. A máscara transforma esse texto na sombra. Isso não demonstra defeito em produção, mas estabelece dois significados/leitores diferentes do campo. (`app/ponto/services/flip_auto.py:132`, :135; `bin/sombra_mascara_pessoal.py:57`, :62.)
-
-3. **Validação e materialização se confundem na data apresentada de procedência.** `procedencia` usa `validada_em or materializada_em` e `validada_por or materializada_por`; seu resultado é procedência da marcação, não veredito de fechamento. (`app/ponto/services/procedencia_batida.py:72`, :74.)
-
-4. **Respondida como proteção de conversa.** `pode_executar_csf` recusa a retratação por qualquer `respondida_em` preenchido nas perguntas da DS ou resolvedoras. Esse leitor responde “há conversa que exige decisão humana”, enquanto API/template apresentam resposta recebida e os seletores admin classificam fila. (`app/ponto/supra_juiz.py:539`, :545, :548; `app/api/views.py:2568`; `app/chamados/views_cobrar.py:169`.)
-
-5. **`pode_fechar` não é coluna.** É método derivado da DS, definido em `models.py:1848`, retorna a conjunção de ausência de respostas sem veredito e ausência de fio vivo em :1853. O homônimo de apresentação vem do dict `explicacao` consumido pelo template em :435/:446; não confundir sua “escrita” com persistência da DS.
-
-_3763 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3766 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
