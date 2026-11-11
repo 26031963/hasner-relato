@@ -1,6 +1,11 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=4049702
+BO ESTACIONA 02h2x (aval BO-DISPUTA-ESTACIONA-NA-RAIZ): c21 nao pousa/nao vai a opus, raia 9bba8132b preservada; c22 (construtor22.q escrito) NAO lancado; suite17 ja terminara 02:17 (Ran 15199, FAILED failures=1, rc=1) -- nada a cancelar, trava livre. RAIZ-DA-DISPUTA F0+F1 Codex leitura lancado (logs/RAIZ-DA-DISPUTA/f0f1.log). Vaga: c8b -> X1 -> E4B c4.
+VERIFICADOR-EM-FABLE (1) 02h2x: copia wt-verif-fable-021052 @82ba09c6c, bin/disjuntor.py::_pretool nega `DISJUNTOR B3 SEM-OBRA`; RED test_disjuntor.sh b3_final_sem_obra rc=1 -> GREEN rc=0, mutante final-sem-obra-passa morde, ruff limpo; preverif Codex lancado (logs/VERIFICADOR-EM-FABLE/pv1.log). Construido pela sessao: bin/ fora do alcance do construtor Codex.
+  os 6 b3_sem_obra historicos: aa6d72ae FIO-ESTADO-LE-O-ALCANCE, ac9b8b9d F1C4-3-NONE-COBRA, a0e8c4fc CLAUDE-MD-RACIONAL, a4efc841 LEI-AKITA-UNIVERSO-DO-PUSH, a316e522 CODEX-CONSTRUTOR v4, a70f1113 FIO-E0-V4-E4 (todos com ID em prosa ou em arquivo de brief, nunca `obra <ID>`).
+E4B MATRIZ 02h11: Codex leitura rc 0 (logs/FIO-E0-V4-E4B/matriz_transicoes.r, 68 KB) -- entra no brief c4.
+REMEDIDA 02h1x: 1a rodada INVALIDA (foto da sombra 10/11 03:51, antes da E4a-2; guardada .foto_velha); sombra refeita 02:10 (diverge 0, dump_de_hoje=sim); relancada.
 BO PREVERIF6 01h54: NAO LIBERA (preverif6.r): destino ainda reeleito em [ch]/avulso (disputa_emissao.py:1044/:1296/:291, models.py:2982), replay origem None, trilha dona fechada parcial, veto tecnico de autofecho novo sem lei citada, pendentes fora do nucleo. Triagem independente -> Codex (t6.log); obra passou de 3 voltas -> opus depois da triagem (CODEX 5(d)).
 E4B SUITE2 01h52: FAILED f=11 e=25 (Ran 15087) x suite1 f=12 e=14: 12 NOVOS = 11 ERROR ImportError no harness de memoria test_e4b_classe_e_memoria + 1 FAIL contrato vitalidade (carimbo cru em disputa_emissao.py); 2 sumiram (o261). Triagem + rascunho do brief c4 -> Codex leitura (ts2.log, aval CODEX-100-POUPA-CODE).
 BO c21 01h5x: rc 0, cura no PEDIDO (disputa_emissao.py; models.py intocado), 6 B023 do teste novo curados pela sessao (mecanico), raia 9bba8132b; preverif6 Codex lancado (p6.log) e suite17 na fila da trava atras da suite2 E4b (uma suite por vez).
