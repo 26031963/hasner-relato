@@ -1,7 +1,131 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 13:41** · publicado em **11/11/2026 13:41** (UTC-3)
+> Ultima resposta processada: **11/11/2026 13:45** · publicado em **11/11/2026 13:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 13:45 · sessao 08cbd3a06898 · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
+
+A cura dos bloqueios de câmera está na árvore. Permanecem uma espera sem teto antes da gravação offline e lacunas na prova dos testes. (`app/static/pwa.js:122`, `:170`, `:86`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:118`, `:94`)
+
+Executei os dois testes estáticos de GPS, ambos verdes, e o censo de câmera em memória. Não executei o Chromium: seu executor cria arquivos, perfil e diretório temporário, contrariando a regra desta revisão. Execução dos testes de navegador, smoke nas duas cascas e efeitos em produção: **[nao verificado]**. (`app/ponto/tests/test_l030_forma_js.py:72`, `:77`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:483`, `:213`, `:229`, `:232`)
+
+**1. Achados da volta 1: cura e mordida prevista**
+
+“Fechado no código” abaixo não significa teste de navegador executado nesta revisão. **[nao verificado]** [nao verificado]
+
+| Achado anterior | Situação em 618b13d98 e teste correspondente |
+|---|---|
+| Triagem offline esconde confirmar quando a câmera falha | **Fechado no código:** mostra o botão antes de abrir a câmera e conserva-o sem stream. Mutante M1 recoloca a ocultação e exige ausência de envio. (`app/templates/ponto/triagem/apto.html:252`, `:259`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:403`) |
+| Triagem online fica presa em `getUserMedia` pendente | **Fechado no código:** abertura passa pelo teto de 3 segundos; sem stream, libera a batida. Matriz inclui câmera pendente; M3 remove a liberação. (`app/static/pwa.js:145`, `:150`; `app/templates/ponto/triagem/apto.html:154`, `:164`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:51`, `:356`, `:413`) |
+| Triagem online depende exclusivamente do callback de `toBlob` | **Fechado no código:** libera controles antes da captura e aguarda a resposta limitada do PWA. Matriz inclui `toBlob` mudo e conversão lançando; teste direto verifica o teto. (`app/templates/ponto/triagem/apto.html:176`, `:177`, `:231`; `app/static/pwa.js:165`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:55`, `:56`, `:371`) |
+| Triagem offline só enfileira dentro do callback | **Fechado no código:** captura resolve primeiro; enfileiramento fica fora do callback. M4 reinsere a espera infinita pelo callback. (`app/templates/ponto/triagem/apto.html:276`, `:289`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:418`) |
+| V2 veta `_fotoBlob` nulo | **Fechado no código:** `garantirRequisitos` não retorna recusa por foto; o chamador prossegue. M2 reinsere o veto. (`app/templates/ponto/bater_ponto_v2.html:268`, `:297`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:408`) |
+| V2 fica pendente quando `toBlob` cala e `toDataURL` lança | **Fechado no código:** fallback do timer está protegido e termina em `null`. Matriz cobre essa combinação; Md remove o teto. (`app/static/pwa.js:126`, `:165`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:56`, `:371`, `:461`) |
+| Legado online/offline conserva barreiras | **Eliminado com o template**, sem renderizador vivo encontrado; M6 aparece como histórico da remoção. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/views.py:356`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:379`) |
+| Aviso centralizado, mas captura e espera duplicadas | **Corrigido para a operação da câmera:** abertura, captura, conversão e teto estão no PWA; censo fecha os produtores. Persistem textos próprios contraditórios, tratados adiante. (`app/static/pwa.js:122`, `:145`, `:156`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:476`, `:497`; `app/templates/ponto/triagem/apto.html:124`) |
+| Mutante vivo: `await` infinito em `garantirRequisitos` | **Agora tem teste específico:** Ma injeta exatamente essa espera e exige “NAO chegou” na V2 online/offline. Morte efetivamente executada: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:446`) |
+| Mutante vivo: `semSelfie → false` | A função antiga saiu; **Mb ataca o equivalente atual**, trocando `aviso` por `false` em `_respostaSelfie`. Morte efetivamente executada: **[nao verificado]**. (`app/static/pwa.js:132`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:451`) |
+| `throw` no ramo sem foto | **Agora tem teste específico:** Mc injeta a exceção e exige ausência de envio. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:456`) |
+| PWA não carregou | **Online protegido; offline não fechado:** chamadas de selfie têm guarda; o teste sem PWA cobre apenas online. A fila continua dependendo do escritor desse script. (`app/templates/ponto/triagem/apto.html:154`, `:232`, `:289`; `app/templates/ponto/bater_ponto_v2.html:273`, `:331`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:360`) |
+| `estadoPermissao` ainda tinha chamador | Definição e chamada não permanecem no fluxo atual; `garantirRequisitos` consulta diretamente captura e GPS. (`app/templates/ponto/bater_ponto_v2.html:268`) |
+| Transporte incompleto de timestamps/GPS | **Não fechado:** fila guarda timestamp corrigido, gap, precisão e instante GPS; sync transmite timestamp bruto, sem esses três últimos insumos. (`app/static/pwa.js:176`, `:179`, `:205`, `:209`) |
+
+**2. Quem decide hoje**
+
+| Sítio | Predicado e efeito |
+|---|---|
+| Juiz registrado do servidor | `origem == 'app'`, ausência de ambas as fontes de foto e `decorrido_min >= prazo`. Prazo PWA: **0 minutos**; APK/desconhecido: **90 minutos**, com sobreposição explícita para APK/desconhecido. Decide **cobrança**, não admissibilidade. (`app/core/juizes.py:1192`; `app/ponto/registro_batida.py:71`, `:80`) |
+| API principal | Sob `not foto`, consulta o juiz com `tem_foto=False`, duração zero; acrescenta motivo/contexto. Criação segue pela porta; anexação é condicional. (`app/api/views.py:436`, `:449`, `:461`, `:666`, `:781`) |
+| API core | Mesmo predicado e comportamento. (`app/api/views_core.py:423`, `:436`, `:448`, `:658`, `:776`) |
+| Retro | Consulta o juiz usando canal gravado, `FotoBatida OR Batida.foto` e duração em minutos; emite cobrança pela porta de disputa. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:74`, `:96`) |
+| POST web da triagem | Grava primeiro; `foto_sessao or request.FILES.get("foto")` controla somente anexação. Não cobra selfie inline nesse ramo. (`app/ponto/services/triagem_batida.py:701`, `:748`) |
+| PWA | Sem frame, usa foto anterior ou `null`; captura/conversão falha ou pendente termina pelo teto; ausência produz aviso. (`app/static/pwa.js:126`, `:133`, `:158`, `:165`) |
+| Triagem online | `r.stream` escolhe confirmação de selfie ou liberação sem câmera; `sel.foto` decide anexação, sem recusa por ausência. (`app/templates/ponto/triagem/apto.html:155`, `:164`, `:233`, `:241`) |
+| Triagem offline | Confirmar permanece disponível; `sel.foto` ou `null` vai ao escritor da fila. (`app/templates/ponto/triagem/apto.html:252`, `:277`, `:289`) |
+| V2 online/offline | Captura pode atualizar `_fotoBlob` e agendar aviso; não veta foto nula. Online anexa condicionalmente; offline entrega o valor à fila. (`app/templates/ponto/bater_ponto_v2.html:273`, `:275`, `:297`, `:305`, `:331`) |
+| Confirmação de turno | Formulário envia entrada sem campo de foto, captura ou fila própria. (`app/templates/ponto/triagem/turno_confirmar.html:8`) |
+| Fila e sincronizador | Escritor normaliza ausência para `null`; sincronizador omite arquivo quando `!b.foto` e envia o restante. (`app/static/pwa.js:180`, `:214`, `:215`) |
+
+**`_respostaSelfie` isoladamente não é o único juiz operacional:** ela apenas monta `{stream|foto, aviso}`. A operação central está no conjunto `_noTeto`/`abrirCameraSelfie`/`capturarSelfie`; as telas ainda controlam apresentação e transporte. Não encontrei nelas veto independente por permissão negada, câmera ocupada, câmera pendente ou conversão falha: esses resultados passam pela mesma resposta limitada. Câmera ocupada não tem cenário nominal próprio no teste; sua execução específica é **[nao verificado]**. (`app/static/pwa.js:122`, `:132`, `:145`, `:156`; `app/templates/ponto/triagem/apto.html:154`, `:255`; `app/templates/ponto/bater_ponto_v2.html:240`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:50`)
+
+A linguagem ainda decide por conta própria em alguns pontos: “Selfie obrigatória” e “Tire a selfie para registrar” contradizem o comportamento permissivo. São mensagens próprias, embora não constituam veto técnico. (`app/templates/ponto/triagem/apto.html:66`, `:124`, `:194`, `:250`; `app/templates/ponto/bater_ponto_v2.html:100`)
+
+**3. Teto, porta e clique perdido**
+
+O valor mora em `SELFIE_TETO_MS = 1500`, no PWA: captura usa **1,5 segundo**; abertura usa **3 segundos**. `_noTeto` resolve erros e expiração como valor ou `null`; ambas as operações passam depois por `_respostaSelfie`. (`app/static/pwa.js:117`, `:122`, `:150`, `:165`)
+
+Esse teto limita a selfie, não o clique inteiro: a triagem pode esperar GPS por 8 segundos, e a V2 faz duas tentativas de 10 e 12 segundos antes do envio. (`app/templates/ponto/triagem/apto.html:218`; `app/templates/ponto/bater_ponto_v2.html:279`)
+
+A batida liberada sem foto segue **pela mesma porta de sua rota normal**: triagem usa o mesmo formulário e `registrar_batida`; V2 usa `/api/ponto/bater/`; fila sincroniza nesse endpoint, cujos dois kernels chamam `registrar_batida`. Não há porta especial para “estourou o teto”. (`app/templates/ponto/triagem/apto.html:241`; `app/ponto/services/triagem_batida.py:701`; `app/templates/ponto/bater_ponto_v2.html:307`; `app/static/pwa.js:215`; `app/api/views.py:666`; `app/api/views_core.py:658`)
+
+**B1 — permanece um caminho de clique sem gravação offline:** `registrarBatidaOffline` espera `obterGap()` antes do `add`. Com gap ausente/vencido, esse caminho espera `fetch('/hora/')` sem timeout. Se a requisição ficar pendente, a selfie já terá resolvido, mas a fila ainda não terá recebido a batida. É contraexemplo condicional pelo código; incidência em produção: **[nao verificado]**. (`app/static/pwa.js:86`, `:100`, `:170`, `:175`)
+
+O teste de navegador não detecta B1: substitui o escritor por uma função que marca “fila” e resolve imediatamente. Também conserva `/hora/` respondendo na sonda, inclusive nos cenários classificados como offline. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:106`, `:118`)
+
+Há outras limitações de entrega já presentes: sem PWA não existe fila; triagem online usa submit nativo; V2 enfileira rejeição de rede, mas respostas HTTP de erro apenas mostram erro e liberam nova tentativa. Chegada real ao servidor nesses caminhos: **[nao verificado]**. (`app/templates/ponto/triagem/apto.html:241`, `:289`; `app/templates/ponto/bater_ponto_v2.html:313`, `:316`, `:331`)
+
+**4. Template apagado**
+
+Confirmo o censo estático sem referência viva a `ponto/bater_ponto.html`: a view seleciona V2 ou templates de triagem; os nomes de URL `bater_ponto`/`bater_ponto_v2` continuam sendo rotas, não referências ao arquivo removido. (`app/ponto/views.py:225`, `:356`; `app/ponto/urls.py:11`)
+
+As três referências textuais restantes são comentário de exclusão, comentário histórico do M6 e ticket “MATAR”. O verificador de URLs já o retirou da lista. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:379`; `app/docs/TICKETS.md:693`; `app/tools/check_frontend_urls.py:25`)
+
+**5. Escritores, leitores e significados**
+
+| Campo/valor | Quem escreve → quem lê |
+|---|---|
+| `{stream, aviso}` / `{foto, aviso}` | PWA produz; triagem/V2 leem para controles, aviso e transporte. Ausência é `null`; aviso é texto ou `null`. (`app/static/pwa.js:133`, `:151`, `:166`; `app/templates/ponto/triagem/apto.html:155`, `:233`; `app/templates/ponto/bater_ponto_v2.html:274`) |
+| Foto anterior/arquivo | Input da câmera do sistema escreve `_fotoBlob`; captura preserva `anterior` quando necessário; V2 envia ou enfileira. (`app/templates/ponto/bater_ponto_v2.html:252`, `:273`, `:305`, `:331`; `app/static/pwa.js:166`) |
+| `fila.foto = null` | `registrarBatidaOffline` é o escritor IndexedDB; sync lê e omite arquivo. Ausência já pertence ao contrato da fila. (`app/static/pwa.js:175`, `:180`, `:194`, `:214`) |
+| POST sem foto | Triagem/V2/sync deixam de anexar; APIs leem com `request.FILES.get`. A criação não exige foto. (`app/templates/ponto/triagem/apto.html:233`; `app/templates/ponto/bater_ponto_v2.html:305`; `app/static/pwa.js:214`; `app/api/views.py:436`, `:666`; `app/api/views_core.py:423`, `:658`) |
+| Foto em sessão | View escreve base64/nome; serviço recupera, converte e escolhe entre sessão e upload. (`app/ponto/views.py:324`; `app/ponto/services/triagem_batida.py:512`, `:748`) |
+| Foto persistente | `anexar_foto` escreve `Batida.foto` pela porta e, conforme `registro`, `FotoBatida`. Modelo aceita nulo; retro lê ambas as fontes. (`app/ponto/registro_batida.py:296`; `app/ponto/models.py:78`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:75`) |
+| `foto_ausente` | APIs/retro entregam motivo/contexto à disputa; catálogo pede confirmação de presença; upload posterior apara/fecha disputas vinculadas à batida. É **ausência cobrável**, não booleano físico da foto. (`app/api/views.py:464`; `app/api/views_core.py:451`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:96`; `app/chamados/catalogo/perguntas.py:93`; `app/api/foto_recebida.py:57`) |
+| Sync/remoção | PWA lê fila, envia e remove após sucesso ou HTTP 400; rede/5xx conservam item. SW delega às páginas; sem página, notifica. (`app/static/pwa.js:188`, `:220`, `:228`, `:239`; `app/static/sw.js:112`) |
+
+Nos leitores examinados, ausência não exige foto sempre presente. Quando a foto da fila é truthy, o multipart pressupõe Blob/File. Upload separado exige foto para **anexar**, sem transformar isso em exigência para criar batida. Consumidores externos à cópia: **[nao verificado]**. (`app/static/pwa.js:214`; `app/ponto/models.py:78`; `app/api/views.py:850`; `app/api/views_core.py:835`)
+
+**6. Checklist das classes**
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz duplicando registrado | Não identifiquei duplicação da cobrança: servidor decide prazo cobrável; PWA limita captura e devolve resultado/aviso. (`app/core/juizes.py:1192`; `app/ponto/registro_batida.py:80`; `app/static/pwa.js:122`, `:133`) |
+| Segundo escritor fora da porta | Cura usa escritor existente da fila; servidor continua criando/anexando pelas portas existentes. (`app/static/pwa.js:169`; `app/api/views.py:666`, `:784`; `app/api/views_core.py:658`, `:779`; `app/ponto/services/triagem_batida.py:701`, `:751`) |
+| Relógio fora da borda | Captura usa timer de duração; juiz servidor recebe duração. Permanecem relógios próprios de feedback e timestamp da fila, sem unificação nova nesta cura. (`app/static/pwa.js:127`, `:171`; `app/ponto/registro_batida.py:80`; `app/templates/ponto/triagem/apto.html:290`; `app/templates/ponto/bater_ponto_v2.html:332`) |
+| Derivação paralela | Câmera/conversão centralizadas; textos próprios de obrigatoriedade permanecem. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:497`; `app/templates/ponto/triagem/apto.html:124`; `app/templates/ponto/bater_ponto_v2.html:100`) |
+| Selo/RED sem mordida suficiente | **B2:** aviso “visto” é busca em `body.innerHTML`; aceita aviso somente em `title`. `_morre` executa apenas a mutação, sem exigir controle original verde no mesmo ensaio. Assim, aviso invisível pode satisfazer o oráculo e falha anterior pode aparentar matar mutante. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:94`, `:270`, `:387`, `:398`; `app/templates/ponto/bater_ponto_v2.html:249`) |
+| Campo com dois significados | `foto_ausente` mantém sentido de cobrança; `foto` mantém Blob/File/null nas bordas. Não confundir ausência física imediata com ausência vencida do APK. (`app/ponto/registro_batida.py:80`; `app/static/pwa.js:166`, `:180`, `:214`) |
+| Duas cascas | Ambas incluem PWA e diálogo comum; teste compõe cada casca real. Porém força essa composição pelo loader: não prova seleção real da casca. Os dois kernels API preservam o mesmo predicado de selfie. (`app/templates/base.html:20`, `:388`; `app/templates/base_app.html:20`, `:145`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:185`, `:333`; `app/api/views.py:461`; `app/api/views_core.py:448`) |
+
+Existe ainda uma suspeita sobre o controle “câmera ok”: a sonda fornece `MediaStream()` vazio e falsifica dimensões, enquanto `drawImage(video)` permanece real. Se esse desenho falhar, o controle perde foto antes da conversão; resultado efetivo no Chromium: **[nao verificado]**. Não uso essa suspeita como bloqueante comprovado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:75`, `:82`; `app/static/pwa.js:160`)
+
+REPROVADO — bloqueantes: **B1**, espera sem teto antes de gravar a fila, encoberta pela substituição do escritor no smoke (`app/static/pwa.js:86`, `:170`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:118`); **B2**, prova de aviso aceita atributo invisível e mutantes não exigem controle verde acoplado (`app/ponto/tests/test_selfie_nao_barra_chromium.py:94`, `:387`; `app/templates/ponto/bater_ponto_v2.html:249`).
+
+## 11/11 13:44 · sessao 530cb5ae113b · GABARITO-FABLE-SOMBRA-AJUSTE · verificador · origem=Code
+
+**BLOQUEANTE — alternativa (a).** O selo aceita uma fonte fora das previstas pelo aval. (`bin/mapa20_valida.py:73`; `aval_mapa20_pronto_x_de_n_1111.txt:1`, anexo, item 1.)
+
+1. **Critério aplicado:** a célula deve conter ao menos uma correspondência de `arquivo:linha`; todas as correspondências devem ter caminho relativo sem componente `..`, arquivo legível em UTF-8 e linha existente, ≥ 1 e não vazia. Não verifica se é uma fonte autorizada nem se contém o PRONTO da obra. (`bin/mapa20_valida.py:51`; `bin/mapa20_valida.py:73–90`.)
+
+2. **Entrada concreta aceita:** `X de N = 1 de 2`, **fonte = `bin/relato.sh:2`**, falta = `item 2: prova`. A linha citada é apenas o comentário “PUBLICA o relato e os indices…”. Essa é a entrada padrão do teste “verde”, esperado rc 0; reproduzida em memória, passou com zero problemas. A aceitação da fonte termina em `return ''`; sem problemas, o processo retorna 0. (`bin/relato.sh:2`; `bin/tests/test_mapa20_valida.sh:27`; `bin/tests/test_mapa20_valida.sh:42`; `bin/mapa20_valida.py:90`; `bin/mapa20_valida.py:225`.)
+
+3. **Leitura literal:** o aval define “N = itens numerados do PRONTO da obra (fonte: o aval da obra, app/docs/TICKETS.md ou BACKLOG, com linha citada)” e exige rc 1 “se N sem fonte citada”. O item 4 usa a fonte definida no item 1; não cabe interpretá-lo como autorização para qualquer comentário existente. O código substitui essa condição pela mera existência da referência, deixando passar a entrada acima. (`aval_mapa20_pronto_x_de_n_1111.txt:1`, anexo, itens 1 e 4; `bin/mapa20_valida.py:73–90`.)
+
+## 11/11 13:41 · sessao f25cd63cd977 · - · - · origem=Ronald (tmux)
+
+Auditoria estática dos testes, sem execução: [nao verificado]
+
+- **Ma agora tem mordida prevista:** injeta `await` infinito em `garantirRequisitos`, exercita V2 online/offline e exige “NAO chegou”. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:446`)
+- **Mb agora tem mordida prevista:** troca aviso por `false`, exercita V2 online e apto offline e exige ausência do aviso. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:451`)
+- **Demais regressões nomeadas:** M1 botão offline oculto (:403), M2 veto sem foto (:408), M3 online não libera (:413), M4 espera callback (:418), M5 texto paralelo (:424), M7 exceção no juiz (:429, :434), M8 juiz sem guarda (:441), Mc `throw` sem foto (:456), Md teto removido (:461). M6 é declarado eliminado junto com o legado (:377). Todas as referências deste item são `app/ponto/tests/test_selfie_nao_barra_chromium.py`.
+- **Duas cascas estão efetivamente compostas e exercitadas:** loader troca `base.html` pelo conteúdo da casca escolhida; matriz percorre cascas × rotas × câmeras. Mutantes usam somente `base_app.html`. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:185`, `:333`, `:356`, `:391`)
+- **Persistência não é testada pelo smoke:** a sonda substitui `registrarBatidaOffline` por função que marca alcance e retorna `Promise.resolve()`. Portanto esse verde prova chamada à fila, não escrita IndexedDB, sync ou chegada ao servidor. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:116`)
+- **Controle verde não está acoplado aos mutantes:** `_morre` só executa fonte mutada; exige alguma falha e regex. O original tem testes separados. Se o original já falhar pelo mesmo motivo, o mutante pode parecer morto sem causalidade demonstrada. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:387`, `:398`, `:356`)
+- **Oráculo de aviso aceita conteúdo invisível:** `temAviso()` procura texto em `body.innerHTML`; V2 grava o aviso em `title`. Esse atributo basta para “aviso visto” e “aviso ao liberar”, sem toast visível. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:94`, `:131`, `:163`, `:270`; `app/templates/ponto/bater_ponto_v2.html:249`)
+- **Possível falso RED que exige execução para confirmar:** câmera “ok” devolve `new MediaStream()` sem tracks; a sonda falsifica dimensões, mas deixa `drawImage(video)` real. Se o canvas rejeitar vídeo sem frame, até o controle “ok” perde foto e os mutantes podem morrer pelo motivo preexistente. Resultado no Chromium: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:75`, `:82`; `app/static/pwa.js:160`)
+- **`test_l030_*` conserva fiscalização estática de GPS:** o teste renderizado aplica o mesmo oráculo de tokens; fiscalização selfie foi retirada e apontada ao Chromium. (`app/ponto/tests/test_l030_templates_renderizados.py:14`, `:37`; `app/ponto/tests/test_l030_forma_js.py:117`)
+
+Execução efetiva de qualquer teste ou mutante: **[nao verificado]**. [nao verificado]
 
 ## 11/11 13:41 · sessao b08d61d550d2 · - · - · origem=Ronald (tmux)
 
@@ -1494,142 +1618,4 @@ Sobre rc:
 - Rc 1 significa **achado sintático com classe B**, não escrita real demonstrada; referências e strings também geram achados. `bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:115`.
 - O problema v1 de rc interno 3 desaparece: `exec` preserva diretamente o rc Python. Um chamador `bash -e` que encerre nessa chamada recebe 1; a suíte atual não verifica esse caminho. `bin/selo_proporcao.sh:4`, `bin/selo_proporcao.py:117`, `bin/tests/test_selo_proporcao.sh:62`.
 
-## 11/11 13:29 · sessao c92a7eaf4320 · - · - · origem=Ronald (tmux)
-
-Censo dos itens 1 e 5, somente leitura.
-
-- `pode_executar_csf(ch)` retorna `False` se alguma pergunta de **qualquer** disputa em `ch.disputa_origem.all()` ou de `ch.perguntas_que_resolvem.all()` possui `respondida_em is not None`. Retorna `True` nos demais casos, inclusive relações vazias. Não filtra pergunta viva, disputa aberta, texto, validação, materialização, data nem o campo `conversa`. (`app/ponto/supra_juiz.py:539`)
-- Único chamador de produção encontrado: comando supra, importação em `app/ponto/management/commands/supra_juiz.py:257` e chamada em `:261`; barrado incrementa `CSF_COM_CONVERSA_PRESERVADO` e recebe `continue`. (`app/ponto/management/commands/supra_juiz.py:261`)
-- **Outra função diretamente relacionada à mesma proteção por conversa:** `_tem_resposta_do_colab`, local ao julgamento do cartório, retorna `any((q.resposta_colab or '').strip() for q in perguntas)`. Nos dois leitores, recebe somente `perguntas_que_resolvem.all()`; não examina `disputa_origem` nem exige timestamp. Protege ressuscitação/FIO-DUP depois do bloco CSF. (`app/ponto/services/cartorio.py:1623`, `:1631`, `:1634`, `:1651`)
-- Não encontrei terceiro predicado geral de conversa de chamado, nem função `tem_interacao`, após buscas por conversa, diálogo, interação, resposta, Followup e ambas as relações. Ausência em todo o universo: **[não verificado]**; evidência positiva do registro atual são as perguntas declaradas em `app/core/juizes.py:107` e seguintes, que distinguem pergunta viva/fio/disputa, sem declarar a guarda CSF. Mensagem livre de `FollowupChamado` não entra no predicado CSF pelo corpo integral da função. (`app/ponto/supra_juiz.py:543`)
-
-Predicados relacionados, **não equivalentes**:
-
-| Função | Predicado e universo |
-|---|---|
-| `PerguntaDisputa.respondida` | `respondida_em is not None`; uma pergunta. (`app/chamados/models.py:3496`) |
-| `fio_vivo(perguntas)` | `any(pergunta_viva(p))`; coleção inteiramente definida pelo chamador, não exige resposta. (`app/chamados/juizes.py:1488`) |
-| `DisputaSupervisao.respostas_sem_veredito` | Perguntas da disputa sem validação/materialização, com timestamp **ou** texto não branco, fora de tranca salvo `ignorar_tranca`; devolve lista. (`app/chamados/models.py:1826`) |
-| `DisputaSupervisao.pode_fechar` | Ausência de respostas sem veredito e de fio vivo; disputa. (`app/chamados/models.py:1848`) |
-| `irmas_respondidas_sem_consumo(ch)` | Sem materialização/validação, timestamp presente e texto não branco. Universo de crédito: destino é `ch`, ou pai da disputa é `ch` e destino não está vivo. (`app/chamados/juizes.py:1980`, `:2012`) |
-| `retencao_da_retratacao(ch)` | Retém pelas irmãs anteriores ou justificativa alheia pendente durante outra aprovação. Não protege toda conversa histórica. (`app/chamados/reconciliador.py:437`) |
-| `disputa_viva_do_chamado(ch)` | Primeira disputa aberta diretamente ligada; retém se não tiver perguntas ou tiver fio vivo. (`app/chamados/juizes.py:2371`) |
-| `Command._disputa_viva(ch)` do arquivador | Resolve uma disputa aberta por `_disputa_do_chamado`; devolve-a se alguma pergunta for viva; erro produz sentinela conservadora. (`app/chamados/management/commands/arquivar_competencia_encerrada.py:148`) |
-| `_disputa_do_chamado(ch)` | Resolve uma disputa aberta, primeiro ligação direta, depois pergunta de destino; não mede conversa. (`app/chamados/services/fio.py:120`) |
-| `canonica_do_grupo(perguntas)` | Prioriza pergunta com texto não branco, depois menor PK; universo de perguntas do mesmo fato, não chamado. (`app/chamados/services/fio.py:1225`) |
-
-Testes e selos confirmados: [nao verificado]
-
-| Arquivo | Cobertura |
-|---|---|
-| `app/ponto/tests/test_supra_juiz_executor.py:38` | Quatro unitários: vazio; pergunta sem timestamp permite; timestamp em disputa barra; timestamp direto barra. |
-| `app/ponto/tests/test_supra_juiz_cobranca.py:19` | CSF puro: todas casadas acusa; missing/None/sem chamado vivo/real abaixo do previsto não acusam. |
-| `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:89` | Chama `--executar` real. Casos: lavra concorde preserva (`:106`); indevida retrata e conta (`:116`); lavra manda mesmo puro calado (`:124`); sem lavra conta (`:134`); sem código preserva e conta (`:142`); retorno `False` do retratador não vira `CSF_RETRATADO` (`:155`). |
-| `app/ponto/tests/test_t61_retratacao_em_seco.py:29` | Constante única, estado vigente `False` (`:40`), chamada de escrita textualmente depois da flag/trava (`:47`), placar travado visível (`:57`), texto do juiz (`:64`), grade da célula (`:76`). |
-| `app/ponto/tests/test_cartorio_so_chamado_de_batida.py:53` | Universo do cartório: módulos de batida, paridade com supra (`:63`), chamado sem dia excluído (`:74`). Não testa guarda de conversa no CSF. |
-| `app/ponto/tests/test_bug115_lampada_do_marco.py:185` | Fecho parcial pelo consumidor de evento/lastro; satisfeita fecha apesar de outro furo, marco apagado preserva (`:207`). |
-| `app/ponto/tests/test_hx_cartorio_ressuscita.py:68` | Resposta textual protege contra ressuscitação, não contra o CSF anterior. |
-
-Os testes acima não demonstram guarda CSF aplicada no cartório; cobertura específica nova será necessária **[não verificado quanto a execução futura]**. Nenhum teste foi executado nesta exploração. [nao verificado]
-
-## 11/11 13:28 · sessao ad57caedd1f2 · - · - · origem=Ronald (tmux)
-
-Não encontrei função que compare duas perguntas e responda se cobram os dois marcos da mesma pausa. O catálogo atual perde o índice da pausa, e o nascimento da pergunta rejeita instância diferente da derivada apenas do motivo. (`app/chamados/services/declaracao_texto.py:49`; `app/chamados/models.py:3438`; `app/chamados/models.py:3446`.)
-
-Varredura AST em memória: `app` e `bin`, excluídos testes, migrations e diretórios gerados; 836 arquivos, 5.369 funções, nenhum erro de parse, 25 candidatos revistos. Evidência de execução sem artefato numerado: [nao verificado]. [nao verificado]
-
-Os candidatos relevantes respondem perguntas diferentes:
-
-| Função/dado | Predicado efetivo |
-|---|---|
-| `CelulaDia.PARES_PAUSA_DNA` | Declara os pares de chaves `hii/hfi` e `hii2/hfi2`; não compara perguntas. (`app/escala/models.py:1652`.) |
-| `EscalaColaborador.pausas_do_dia` | Enumera pares completos do DNA da célula; célula sem marcos retorna vazio. (`app/escala/models.py:1197`; `app/escala/models.py:1207`.) |
-| `EscalaColaborador.intervalo_do_dia` | Retorna somente a primeira pausa encontrada pelo método anterior. (`app/escala/models.py:1163`.) |
-| `CelulaDia.chaves_do_turno` | Enumera os marcos na ordem canônica do turno. (`app/escala/models.py:1659`.) |
-| `tarefa_do_dia._posicoes` | Numera repetições da posição, inclusive `int_ida:2`. (`app/chamados/services/tarefa_do_dia.py:58`; `app/chamados/services/tarefa_do_dia.py:68`.) |
-| `tarefa_do_dia.instancias_do_turno` | Expõe instância, posição, tipo, hora, lâmpada e teto; não compara perguntas. (`app/chamados/services/tarefa_do_dia.py:92`; `app/chamados/services/tarefa_do_dia.py:102`.) |
-| `fato_do_marco_no_espelho` | Para intervalo, exige acesas todas as lâmpadas daquela posição em todas as pausas cadastradas. (`app/chamados/juizes.py:957`; `app/chamados/juizes.py:971`.) |
-| `_resposta_concorda_com_a_luz` | Com mais de uma pausa na posição, retorna `None`: não identifica qual delas a resposta cobra. (`app/chamados/juizes.py:1334`; `app/chamados/juizes.py:1336`.) |
-
-D8 permanece aberta: o comentário declara a lei aberta, e o ramo executável conserva `sem_episodio_intocada`. (`app/chamados/services/fio.py:1274`; `app/chamados/services/fio.py:1275`; `app/chamados/services/fio.py:1294`; `app/chamados/services/fio.py:1295`.)
-
-O trecho do aval “O par é LIDO dos marcos da célula do dia (saída e volta do mesmo intervalo)” responde à identidade da pausa; não fornece o critério de equivalência entre BATIDA sem episódio e BATIDA com episódio. Falta precisamente dizer quando essas linhas são o mesmo fato e se uma pode retratar a outra. Frase e alcance do anexo recebido: [nao verificado].
-
-Perímetro F4 proposto para o brief — proposta técnica, garantia de diff futuro [nao verificado]:
-
-- `app/chamados/models.py`: agrupamento DS e identidade persistida. (`app/chamados/models.py:3425`.)
-- `app/chamados/services/declaracao_texto.py`: posição e índice hoje colapsados. (`app/chamados/services/declaracao_texto.py:49`.)
-- `app/chamados/services/disputa_emissao.py`: emissão/complemento e seleção por motivo. (`app/chamados/services/disputa_emissao.py:226`; `app/chamados/services/disputa_emissao.py:1081`.)
-- `app/chamados/services/fio.py`: consulta dos vizinhos não transmite a instância, embora a chave a contenha. (`app/chamados/services/fio.py:1447`; `app/chamados/services/fio.py:1460`.)
-- `app/chamados/services/materializacao.py`: unidade individual, fonte de hora e lote. (`app/chamados/services/materializacao.py:412`; `app/chamados/services/materializacao.py:1163`; `app/chamados/services/materializacao.py:1380`.)
-- `app/chamados/services/validacao.py`: materializa uma pergunta antes do lote. (`app/chamados/services/validacao.py:461`; `app/chamados/services/validacao.py:469`.)
-- `app/chamados/juizes.py`: leitores existentes de lâmpada e concordância precisam preservar o intervalo cobrado. (`app/chamados/juizes.py:957`; `app/chamados/juizes.py:1334`.)
-- Testes existentes apropriados: `app/chamados/tests/test_e1_v5_indice.py:121`, `app/chamados/tests/test_o261_paridade_respeita_a_lampada.py:174`, `app/chamados/tests/test_validar_materializa_wiring.py:51`.
-
-A fonte da célula já contém os pares; a necessidade de alterá-la não apareceu nesta leitura. (`app/escala/models.py:1652`.)
-
-## 11/11 13:28 · sessao 67154ccb23ef · - · - · origem=Ronald (tmux)
-
-Evidências confirmadas por comparação real com a cópia `a026943099b8d88468240fd4b18491141b6810af`; nenhum arquivo foi alterado.
-
-**Delta de escritores**
-
-- `editar_ausencia_registro`: acrescentou captura do intervalo antigo e invalidação do fechamento dos intervalos antigo/novo; validação de tipo continua igual, pelo catálogo vivo. `app/ponto/services/ausencia.py:474-475,497,517-524`.
-- Materialização de disputa: retirou os minutos fixos de dia inteiro e `checar_parcial=False`; mantém a criação pela mesma porta. `app/chamados/services/materializacao.py:474,490-499,526-535`.
-- Novo command `rederivar_minutos_h06_comp11`: confere identidade incluindo `a.tipo` e chama edição com `tipo=a.tipo`, portanto passa pela validação existente. `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:142-146,169-172`.
-- Novo leitor da lista de ausências: acrescenta parcialidade e fim aberto por tipo à apresentação. `app/ponto/views.py:2233-2243`.
-- `criar_ausencia`, `Ausencia.save`, forms, catálogo, cadastro de tipos, admins, checar_ausencia, regularização e commands antigos não tiveram mudança funcional de validação de tipo; `criar` mudou apenas comentário sobre H06 e o modelo mudou help_text de minutos. Referências atuais: `app/ponto/services/ausencia.py:193-195,200-205`; `app/ponto/models.py:757-759,868-908`.
-
-**Escritores e validação**
-
-| Porta | Validação já existente / limite |
-|---|---|
-| Admin da aplicação | POST aceita o argumento cru, mas chama `criar_ausencia`; este rejeita fora do catálogo vivo. `app/ponto/views.py:2378,2415-2422`; `app/ponto/services/ausencia.py:193-195`. |
-| PWA | Validação própria pelo vivo e chamada ao produtor validado. `app/ponto/views.py:2509-2511,2536-2542`. |
-| API | Traduz somente aliases legados de atestado/luto e chama produtor validado. `app/api/views.py:1765-1768,1817-1824`. |
-| Edição HTTP | Delega a edição validada pelo vivo. `app/ponto/views.py:2794-2802`; `app/ponto/services/ausencia.py:474-475`. |
-| Form | `clean_tipo` consulta vivo; porém **nenhum código de produção instancia `AusenciaForm`**: a ocorrência de produção é sua definição. Não atribuir a ele a validação HTTP efetiva. `app/ponto/forms.py:41,60-68`. |
-| Django admin | `AusenciaAdmin` usa `SoLeitura`; add/change/delete são negados. `app/ponto/admin.py:37-47`; `app/core/admin.py:59-66`. |
-| Copiloto | Prévia valida vivo e escrita chama produtor. `app/ponto/services/checar_ausencia.py:23-24,43-48`. |
-| Veredito humano | Passa `falta` ou tipo recebido ao produtor validado. `app/ponto/services/veredito_celula.py:331-340`. |
-| Materialização | Mesmo produtor; tipo vem do mapa/argumento. `app/chamados/services/materializacao.py:474,490-499,526-535`. |
-| Férias | Literal `ferias`, pelo produtor validado. `app/ponto/services/ausencia.py:1202-1207`. |
-| Command novo | Edição validada, conservando o código carregado. `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169-172`. |
-| Command de rederivar fim | Regrava o valor carregado sem validar tipo. `app/ponto/management/commands/curar_ausencia_sem_fim.py:29-31,42-46`; `app/ponto/services/ausencia.py:1293-1297`. |
-| ORM/modelo | `save` deriva carimbo, minutos e intervalo e chama `super`; não valida catálogo nem choices. `app/ponto/models.py:868-908`. |
-
-As portas validadas aceitam **fora dos choices**, desde que no vivo; isso é deliberado e protegido por teste. `app/ponto/services/ausencia.py:361-370,387`; `app/ponto/tests/test_selo_b5f1_porta_ausencia.py:180-194`.
-
-O cadastro pode criar código `folga`: valida nome, efeito, código vazio e duplicidade, sem reserva desse código; o serviço não chama `full_clean`. Se ativo, entrará no vivo. `app/ponto/views_tipos_ausencia.py:61-66,80,89-94`; `app/ponto/services/ausencia.py:1301-1310`; `app/ponto/catalogo/ausencias.py:249-252,284-285`. Existência histórica desse cadastro e caminho efetivo da gravação fornecida: **[nao verificado]**.
-
-**Listas e autoridade**
-
-- Autoridade de validade: `TipoAusencia` ativo → `_do_banco` → `vigente` → `codigos_validos`; cache de 60 segundos; tabela vazia/erro recai na semente. `app/ponto/catalogo/ausencias.py:240-285`.
-- Choices congelados, 17 entradas: `app/ponto/models.py:661-679,749`.
-- Semente runtime, 17 entradas: `app/ponto/catalogo/ausencias.py:87-105`.
-- Outra lista `CATALOGO` no form, com regras de duração; desconhecido dessa lista recebe máximo de 30 dias, mas validade é conferida no catálogo vivo. `app/ponto/forms.py:13-29,37-38,60-68`.
-- Semente histórica da migration: `app/ponto/migrations/0052_seed_tipoausencia.py:9-37`; choices históricos mais recentes: `app/ponto/migrations/0070_alter_ausencia_tipo.py:19-22`.
-- `TIPOS_PAGOS`, bloqueantes e abertos do modelo são aliases derivados, não novas listas de validade. `app/ponto/models.py:680-689`.
-- Cadastro declara explicitamente que o admin cria novos tipos e consumidor pergunta flags, sem conhecer nome. `app/ponto/models.py:562-569`.
-
-**Pacote para brief da cura na origem**
-
-A brecha estrutural demonstrável é `Ausencia.save` sem validação; a origem efetiva do registro de produção continua **[nao verificado]**. Para uma cura estritamente de impedir **novo tipo fora do vivo** pelo caminho ORM comum, o arquivo operacional mínimo é `app/ponto/models.py:868-908`, preservando a autoridade `app/ponto/catalogo/ausencias.py:284-285`; impor choices quebraria contrato explícito. `app/ponto/tests/test_selo_b5f1_porta_ausencia.py:180-194`.
-
-Se houver decisão de centralizar o validador nomeado e reutilizá-lo, os locais de validação existentes são exclusivamente `app/ponto/catalogo/ausencias.py:284-285`, `app/ponto/services/ausencia.py:193-195,474-475`, `app/ponto/forms.py:60-68` e o novo guard do modelo em `app/ponto/models.py:868`. Não há necessidade demonstrada de editar cascatas de endpoints ou leitores para a cura de validade na origem. A aplicação da guarda a saves de registros legados exige preservar o recorte separado de cura de dado; comportamento pretendido desses saves: **[nao verificado]**.
-
-**Testes vizinhos que efetivamente enumeram catálogo/choices** [nao verificado]
-
-- `app/ponto/tests/test_catalogo_ausencias.py:10-20,39-42,56-60`: igualdade choices↔semente, efeito e partição.
-- `app/api/tests/test_api_ausencias_tipos.py:46-51`: anúncios GET limitados aos choices; este teste não cobre cadastro adicional ativo.
-- `app/ponto/tests/test_cadastro_tipo.py:14-34,43-50`: seed, vivo, inativo/fallback, proibição de validar pelos choices.
-- `app/ponto/tests/test_aus_f4_criar_pelo_juiz.py:43-54`: enumera vivo menos choices e garante aceitação; o laço pode ficar vazio.
-- `app/ponto/tests/test_selo_b5f1_porta_ausencia.py:180-194`: caso concreto fora dos choices e dentro do vivo.
-- `app/ponto/tests/test_fim_separado.py:37,58-59`: enumera semente e conjuntos.
-- `app/ponto/tests/test_rotulo_do_dia_decidido.py:86`: enumera semente para rótulo.
-- `app/ponto/tests/test_ui3_rotulo_do_espelho.py:26,47,63`: enumera semente e desconhecido.
-- `app/ponto/tests/test_rotulo_x_efeito.py:45`: fornece semente ao teste de efeitos.
-- `app/ponto/tests/test_aviso_home_office.py:11`: exige tipo nos choices.
-- Contratos adjacentes de arquitetura: `app/ponto/tests/test_contract_porta_ausencia.py:30-41,68-78`; `app/ponto/tests/test_contract_catalogo_congelado.py:42-60`; caso de cadastro adicional: `app/ponto/tests/test_o137_esmeril_ausencia_le_o_cadastro.py:82-91`.
-
-_3889 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3892 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
