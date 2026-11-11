@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 06:35** · publicado em **11/11/2026 06:38** (UTC-3)
+> Ultima resposta processada: **11/11/2026 06:40** · publicado em **11/11/2026 06:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 06:40 · sessao bc1418e2b9d3 · TRAVA-SELO · verificador · origem=Code
+
+**1. PROCEDE — há caminho para encaminhar todas as LABELS sem motivo válido.** A guarda verifica apenas se `ONLY`/`VOLTA` estão vazios; não verifica o alcance efetivo da seleção. Basta fornecer todas as labels em `--only`. (`bin/suite.sh:70`, `bin/suite.sh:142`; lista em `bin/regua.sh:23`)
+
+| Entrada | Resultado |
+|---|---|
+| Sem argumentos | Recusa rc 2, oferecendo `--only`/`--volta`. (`bin/suite.sh:70–77`) |
+| `--only ""` | Aborta na expansão `${2:?…}`, antes da guarda; execução direta retornou **rc 1**, não 2. (`bin/suite.sh:51`) |
+| `--only " "` | Passa pela guarda; a expansão sem aspas desaparece e encaminha `manage.py test` **sem labels posicionais**. A equivalência exata dessa descoberta com todas as LABELS é **[nao verificado]**. (`bin/suite.sh:70,142`; `app/core/runner_quarentena.py:72–76`) |
+| `--only` contendo todas as LABELS | Encaminha todas sem motivo. É a fuga suficiente para responder “sim”. (`bin/suite.sh:51,70,142`; `bin/regua.sh:23`) |
+| `--volta` com diff vazio válido | Produz os 24 selos globais; não cai na suite inteira nem na recusa “diff vazio”. (`bin/vizinhos_da_volta.py:17,36–39`; `bin/selos_globais_da_volta.txt:1–24`; `bin/suite.sh:85–87`) |
+| `-- <labels>` sem recorte/motivo | Recusa: `EXTRA` não participa da guarda. (`bin/suite.sh:57,70`) |
+| `--only " " -- <todas as labels>` | Passa; todas as labels chegam pelo `EXTRA`, como único bloco posicional após as opções. (`bin/suite.sh:57,70,142–143`) |
+| `--only X -- <outras labels>` | A guarda libera, mas a cópia registra recusa do argparse por duas levas posicionais. Não contar esse formato como suite executada. (`bin/suite.sh:142–143`; `app/docs/RELATO.md:1363`) |
+| `--seco` | Sem motivo/recorte recebe rc 2; com entrada autorizada imprime e sai 0 antes de executar testes. (`bin/suite.sh:70–93`) |
+| Ordem e repetição | Antes de `--`, prevalece a última atribuição; depois dele, os argumentos ficam em `EXTRA`. `--only` e `--volta` juntos são recusados, independentemente da ordem. (`bin/suite.sh:48–61,83`) |
+| Motivo com quebra de linha | Na inteira nominal, não casa com a regex ancorada e é recusado; um `ONLY` não vazio continua dispensando essa validação. (`bin/suite.sh:69–70`) |
+
+**2. PROCEDE — o comando canônico quebra, e o selo antigo não acusa.** (`CLAUDE.md:96`; `bin/tests/test_suite_sh.sh:31–58`)
+
+| Chamador/instrução | Passa a ser recusado? |
+|---|---|
+| `CLAUDE.md:96`: chamada nua | **Sim, rc 2**, antes de env-file, montagem e trava. (`bin/suite.sh:70–77,104,117,136`) |
+| `bin/volta_intermediaria.sh:32` | **Não pela guarda de motivo**: fornece `--volta`; ainda pode falhar na seleção/montagem/trava. (`bin/suite.sh:70,82–87,113–118,136`) |
+| `bin/tests/test_suite_motivo.sh:24` | As chamadas negativas são recusadas deliberadamente; positivas e `--only` devem alcançar a trava falsa. (`bin/tests/test_suite_motivo.sh:29–34`) |
+| Orientação de recorte em `app/core/placar_estrutural.py:109–110` | `--only` é admitido pela guarda; trata-se de texto publicado, não execução Python da suite. (`bin/suite.sh:70`) |
+| Receitas com apenas `--dir` | **Sim**, se coladas sem motivo/recorte: aparecem em `app/docs/RELATO-ARQUIVO.md:37800`, `app/docs/RELATO.md:681,1137,1145` e na orientação de `app/docs/PROMPTS.md:1069`/`app/docs/BACKLOG.md:1433`. (`bin/suite.sh:50,70–77`) |
+
+`regua.sh`, `pre-push.sh` e o hook versionado executam testes diretamente; esta guarda não os alcança. (`bin/regua.sh:165–169`; `bin/pre-push.sh:186–188`; `app/core/hooks/pre-push.sh:82–84`)
+
+Outros chamadores em `.claude/` ou hooks não foram localizados na busca textual; ausência de chamadas construídas dinamicamente: **[nao verificado]**.
+
+O `test_suite_sh.sh` permanece **logicamente verde**: procura strings, não executa o comando canônico. Sua fixture “boa” é justamente a chamada nua agora recusada. Verde efetivamente executado nesta revisão: **[nao verificado]**. (`bin/tests/test_suite_sh.sh:31–58,72–88`)
+
+**3. PROCEDE quanto ao arquivo real e ao mutante; NÃO PROCEDE como prova completa da guarda.** O teste copia o `suite.sh` real e o executa com recursos, labels e trava falsos. Não replica a implementação da guarda, mas também não exercita a integração real. (`bin/tests/test_suite_motivo.sh:14–24,38–39`)
+
+O `sed` corresponde à guarda atual e troca sua condição por `if false; then`; desliga efetivamente a recusa. O selo também acusa mutação que não se aplicou. (`bin/suite.sh:70`; `bin/tests/test_suite_motivo.sh:44–48`)
+
+| Mutante plausível | Cobertura |
+|---|---|
+| Guarda desligada | **Morre**: as três entradas negativas chegam à trava falsa. (`bin/tests/test_suite_motivo.sh:29–31,44–48`) |
+| Regex frouxa, como aceitar qualquer texto após `pre-opus ` | **Pode sobreviver**: faltam negativos com espaços, caracteres indevidos e quebra de linha. (`bin/tests/test_suite_motivo.sh:29–34`) |
+| Guarda depois da preparação que pode chamar Docker | **Pode sobreviver**: `teste_envfile` falso é inócuo, e o juiz observa somente rc e chegada à trava. O `teste_envfile` real pode executar Docker. (`bin/tests/test_suite_motivo.sh:17,22–34`; `bin/recursos.sh:122`) |
+| Guarda depois do `exec` final | **Morre**: seria inalcançável e a chamada nua chegaria à trava falsa. (`bin/suite.sh:136`; `bin/tests/test_suite_motivo.sh:29`) |
+| Parser aceitando `--only ""` como seleção em branco | **Pode sobreviver**: nenhum caso testa vazio ou whitespace. (`bin/tests/test_suite_motivo.sh:29–34`) |
+
+As seis expectativas atuais também foram confrontadas em memória: sobreviveram variantes com regex frouxa, guarda após `teste_envfile` e vazio convertido em espaço; isso confirma a limitação dessas expectativas, sem executar o selo original. (`bin/tests/test_suite_motivo.sh:29–34`; pontos alterados: `bin/suite.sh:51,69–78,104`)
+
+**Sim, está integrado à pasta de selos da régua**, pelo glob `tests/test_*.sh`; usa subprocessos e arquivos temporários, com a trava falsa encerrando antes do Docker. Não exige banco/Docker para seus casos atuais. (`bin/regua.sh:138–144`; `bin/tests/test_suite_motivo.sh:10–24`)
+
+**4. PROCEDE — existem lacunas de classe na descoberta.** O helper usa referências textuais diretas, não AST nem fechamento transitivo; considera apenas `.py` existentes. (`bin/vizinhos_da_volta.py:10–12,26–35`)
+
+| Classe | Limitação | Regra mínima sugerida |
+|---|---|---|
+| Import relativo/reexportação | Não resolve pacote, nível ou trânsito; o padrão relativo só aparece sob condição especial. (`bin/vizinhos_da_volta.py:25–35`) | Resolver imports no contexto do pacote e fechar dependências transitivas. |
+| `__init__.py` | Há normalização parcial do inicializador de produção; inicializador de testes não entra como obra nem produção. (`bin/vizinhos_da_volta.py:13,19–24`) | Propagar alterações do inicializador aos consumidores e ao pacote de testes correspondente. |
+| `importlib`/string | Nome completo literal pode casar; destinos montados dinamicamente não são resolvidos. (`bin/vizinhos_da_volta.py:26–35`) | Resolver destinos estáticos e ampliar conservadoramente quando indeterminados. |
+| Fixture JSON | Alterações não-Python são descartadas. (`bin/vizinhos_da_volta.py:12`) | Incluir dependências de recursos e seus consumidores. |
+| Template | Também descartado pelo filtro de extensão. (`bin/vizinhos_da_volta.py:12`) | Incluir consumidores, herança e inclusões de templates. |
+| Migration | Pode entrar como `.py`, mas não há propagação por dependência de esquema. (`bin/vizinhos_da_volta.py:12,21–35`) | Selecionar testes do app e de seus dependentes de esquema. |
+| Selo que varre diretório/AST | Não relaciona escopo varrido com diff; a lista fixa cobre somente os selos nela declarados. (`bin/vizinhos_da_volta.py:31–37`) | Declarar escopos de varredura e selecionar por interseção com arquivos tocados. |
+
+Há ainda descoberta incompleta de testes e exclusão de arquivos removidos: candidatos exigem `tests/*.py` com nome começando por `test`, e tocados precisam continuar existindo. A regra mínima é acompanhar a descoberta do executor e preservar dependências de remoções. (`bin/vizinhos_da_volta.py:12,15–16`)
+
+Para **cada classe**, o risco é excluir um teste dependente e obter volta verde com vermelho fora do recorte; ocorrência concreta nesta obra: **[nao verificado]**. [nao verificado]
+
+**5. NÃO PROCEDE que o rc final distinga os estados sem ambiguidade.** Existem 0, 1 e 75, mas **75 prevalece mesmo quando ruff ou disjuntor já estão vermelhos**. Além disso, timeout escreve tanto `VOLTA_VERMELHA` quanto `VOLTA_SEM_VEZ`. (`bin/volta_intermediaria.sh:35–39`)
+
+- **`TESTE_DOCKER`: correto** na composição: vem de `recursos.sh` e sua expansão fornece as flags ao Docker. (`bin/volta_intermediaria.sh:15,23`; `bin/recursos.sh:81–82`)
+- **`PIPESTATUS[0]`: correto** para capturar Docker/ruff imediatamente após o pipeline; falha exclusiva do `tail` não entra nesse valor. (`bin/volta_intermediaria.sh:24–25`)
+- **`VOLTA_ESPERA`: chega**, convertido em `--espera`, armazenado e repassado ao `flock -w`. (`bin/volta_intermediaria.sh:32`; `bin/suite.sh:53,136`; `bin/trava_teste.sh:27,36`)
+- **`VOLTA_PORQUE`: chega**, pelo ambiente, e determina o destino do stderr do helper. (`bin/volta_intermediaria.sh:32`; `bin/suite.sh:85`)
+
+**6. PROCEDE — escritores e leitores identificados abaixo.** (`bin/suite.sh:47–56,70–93`; `bin/vizinhos_da_volta.py:36–42`)
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| `MOTIVO` | Inicialização e parser `--motivo`; sobrescreve eventual ambiente homônimo. (`bin/suite.sh:47,54`) | Guarda, recusa e saída seca. (`bin/suite.sh:70,72,91`) |
+| `VOLTA` | Inicialização e parser; wrapper fornece `BASE`. (`bin/suite.sh:47,55`; `bin/volta_intermediaria.sh:13,32`) | Guarda, ativação do helper, argumento/erro e saída seca. (`bin/suite.sh:70,82,85–86,91`) |
+| `SECO` | Inicialização 0 e parser escreve 1. (`bin/suite.sh:47,56`) | Condição que imprime e encerra. (`bin/suite.sh:90–93`) |
+| `VOLTA_PORQUE` | Wrapper fornece o caminho no ambiente. (`bin/volta_intermediaria.sh:32`) | Suite lê o caminho e abre/trunca o destino; helper escreve justificativas no stderr; wrapper lê o arquivo para contar labels. (`bin/suite.sh:85`; `bin/vizinhos_da_volta.py:40–42`; `bin/volta_intermediaria.sh:34`) |
+| `selos_globais_da_volta.txt` | Lista literal versionada; escritor automático não identificado: **[nao verificado]**. (`bin/selos_globais_da_volta.txt:1–24`) | Helper lê o arquivo **ao lado de si próprio**, não da cópia-alvo, e acrescenta suas entradas. (`bin/vizinhos_da_volta.py:36–37`) |
+
+Sem `VOLTA_PORQUE`, a justificativa vai para `/dev/null`. O motivo aparece na recusa/saída seca; registro dele no RELATO: **[nao verificado]**. (`bin/suite.sh:72,85,91`)
+
+**7. Checklist — há reprovações de cobertura e representação de estado; as demais classes não foram demonstradas no diff.** (`bin/suite.sh:70,142`; `bin/tests/test_suite_motivo.sh:29–34`; `bin/volta_intermediaria.sh:35–39`)
+
+| Classe | Parecer |
+|---|---|
+| Segundo juiz duplicando registrado | **NÃO PROCEDE no código alterado examinado**: os novos julgamentos são de autorização/seleção de testes e consolidação do instrumento; duplicação de juiz de domínio não demonstrada. (`bin/suite.sh:69–87`; `bin/vizinhos_da_volta.py:18–37`; `bin/volta_intermediaria.sh:35–39`) |
+| Segundo escritor fora da porta | **NÃO PROCEDE no fluxo examinado**: a suite mantém montagem delegada e execução pela trava; os novos destinos são saídas do instrumento. (`bin/suite.sh:117,136`; `bin/volta_intermediaria.sh:29,32,37–41`) |
+| Relógio fora da borda | **NÃO PROCEDE como regra de domínio**: os novos `date` medem/publicam duração no wrapper de host. Estabilidade perante ajuste do relógio civil: **[nao verificado]**. (`bin/volta_intermediaria.sh:16,40`) |
+| Derivação paralela da lista integral | **NÃO PROCEDE como cópia de LABELS**: a lista integral continua lida da régua; o TXT declara um subconjunto fixo de módulos. Porém, **o selo não detecta esse TXT como repetição**: só busca determinada forma inline de `manage.py test … colaboradores … ponto`. (`bin/suite.sh:99`; `bin/vizinhos_da_volta.py:36`; `bin/tests/test_labels_fonte_unica.sh:38–46`) |
+| Selo sem mordida | **PROCEDE como cobertura insuficiente**: o novo mata o mutante declarado, mas omite as fugas identificadas; o antigo aprova textualmente o comando canônico recusado. (`bin/tests/test_suite_motivo.sh:29–34,44–48`; `bin/tests/test_suite_sh.sh:31–58,72–81`) |
+| Ordem de trava | **NÃO PROCEDE inversão demonstrada**: a recusa antecede preparação, e os testes Django continuam sob a trava; ruff roda antes dela. (`bin/suite.sh:70–77,104,136–143`; `bin/volta_intermediaria.sh:23,32`) |
+| Campo com dois significados | **PROCEDE**: `ONLY` “tem texto” é tratado como “é recorte”, embora possa representar toda a suite ou nenhum argumento; rc 75 também pode coexistir com vermelho anterior. (`bin/suite.sh:70,142`; `bin/volta_intermediaria.sh:35–39`) |
 
 ## 11/11 06:35 · sessao ac4da24cbf3b · - · - · origem=Ronald (tmux)
 
@@ -525,61 +622,4 @@ Não recomendo simplesmente usar `_ancoradas()` também como `perguntas`: a prim
 
 Além disso, o RED atual exige uma chamada à origem `_ancoradas()` (`chamados/tests/test_e4b_classe_e_memoria.py:384–388`). A alternativa conservadora é manter a consulta canônica necessária e justificar C8 ao lado dos tetos, deixando os números da base explicitamente pendentes da execução pela trava.
 
-## 11/11 04:00 · sessao 9323309d2863 · FIO-E0-V4-E3 · construtor · origem=Code
-
-Aplicadas as duas correções de teste: [X1:129](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:129) e [c8c:40](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_c8c_orm.py:40). [nao verificado]
-
-```diff
---- a/app/ponto/tests/test_x1_folga_sem_adesao.py
-+++ b/app/ponto/tests/test_x1_folga_sem_adesao.py
-@@ -128,2 +128,3 @@
-             out = self._julgar()  # proximo julgamento, SEM forcar
-+        self.assertIn('cods', out, 'C3: a folga foi pulada em vez de rejulgada apos a adesao')
-         self.assertIn(self.d, out['cods'], 'C3: perdeu rejulgamento ao perder a palavra NB')
-
---- a/app/chamados/tests/test_e3_c8c_orm.py
-+++ b/app/chamados/tests/test_e3_c8c_orm.py
-@@ -39,3 +39,8 @@
-         agora = _ts(D, 21)
-+        carga = carga_da_tarefa([self.c], D, D, agora)
-+        carga._ler_vida()
-+        self.assertIn(p.pk, [q.pk for q in carga._perg.get((self.c.pk, D), ())
-+                             if hasattr(q, 'viva_c6')],
-+                      'a pergunta fora da grade tambem precisa receber a vida do C6')
-         avulso = tarefa_do_dia(self.c, D, agora)
--        lote = carga_da_tarefa([self.c], D, D, agora).tarefa(self.c, D)
-+        lote = carga.tarefa(self.c, D)
-```
-
-`_julgar()` devolve o `out` de `julgar_celula`, após atualizar a célula (`ponto/tests/test_x1_folga_sem_adesao.py:59`). No rejulgamento normal, esse dicionário recebe `cods[data]`; quando a célula é pulada, incrementa `pulados` sem produzir essa chave (`ponto/services/cartorio.py:1436`, `:1372`, `:1914`).
-
-Escolhi **(a)** no c8c. Sim: o mutante exclui a pergunta de `candidatas`, mas ela permanece em `_perg`; sem passar pelo escritor de `viva_c6`, chega ao leitor de `:245`. O leitor de `:328` depende do ramo `fato_em_ausencia`. A nova assertion verifica a alimentação antes desses consumidores, preservando as assertions finais (`chamados/tests/e3_c8c_mutantes.py:17`; `chamados/services/tarefa_do_dia.py:487`, `:506`, `:536`, `:245`, `:328`; `chamados/tests/test_e3_c8c_orm.py:42`).
-
-| Mutante abrangido | Teste que deve cair por FAIL | [nao verificado]
-|---|---|
-| `sem_fonte_no_gancho` | `FolgaSemAdesaoTest.test_c3_primeira_batida_viva_distante_rejulga_folga` — assertion em `ponto/tests/test_x1_folga_sem_adesao.py:129` |
-| `universo_incompleto` | `C8cCargaReal.test_RED_posicao_sumiu_avulso_e_lote_reais` — assertion em `chamados/tests/test_e3_c8c_orm.py:42` |
-
-Os harnesses permanecem sem prefixo `test_`; X1 continua exigindo GREEN com 11 testes (`ponto/tests/x1_mutantes.py:79`; `chamados/tests/e3_c8c_mutantes.py:66`).
-
-Comandos individuais, **somente no ambiente isolado da sessão**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.x1_mutantes --modo mutante --mutante sem_fonte_no_gancho
-PYTHONDONTWRITEBYTECODE=1 E3_C8C_MUTANTE_ORM=universo_incompleto python3 manage.py test chamados.tests.test_e3_c8c_orm.C8cCargaReal --noinput -v 2
-```
-
-Execuções pela trava, conforme os caminhos fornecidos; conteúdo dos scripts [nao verificado]:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bash logs/FIO-E0-V4-E3/x1_rodar_mutantes.sh
-PYTHONDONTWRITEBYTECODE=1 bash logs/FIO-E0-V4-E3/c8c_rodar_mutantes_orm.sh
-```
-
-Ruff limpo **[nao verificado]**: o comando abaixo retornou `No module named ruff`. A execução dos testes ORM alterados fica pendente da sessão **[nao verificado]**. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache ponto/tests/test_x1_folga_sem_adesao.py chamados/tests/test_e3_c8c_orm.py
-```
-
-_3666 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
