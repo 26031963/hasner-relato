@@ -1,7 +1,185 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 07:38** · publicado em **11/11/2026 07:41** (UTC-3)
+> Ultima resposta processada: **11/11/2026 07:46** · publicado em **11/11/2026 07:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 07:46 · sessao 44f945fbb965 · - · - · origem=Ronald (tmux)
+
+Q4 — **NÃO PROCEDE duplicação nova de juiz; NÃO SEI certificar exaustão do diff total**, pois a cópia não fornece histórico Git verificável. [nao verificado]
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `CelulaDia.veredito` | Cartório NB calcula `derivar_veredito`, preserva-o quando `sem_trabalho` e renomeia trabalho para NB (`app/ponto/services/cartorio.py:1238`, `:1253`, `:1256`). Escrita física pela porta única (`app/ponto/portas/celula.py:1035`); método do modelo delega (`app/escala/models.py:1819`). | Guardas do cartório (`cartorio.py:1224`, `:1373`); retenção (`app/folha/export.py:1241`, `:1263`); universo adesão/C5 (`app/chamados/services/adesao.py:32`, `app/escala/services/cadastro_realidade.py:181`); fábrica (`app/chamados/services/fabrica_da_celula.py:89`, `:105`, `:120`, `:183`); disputa (`app/chamados/services/disputa_emissao.py:758`, `:772`); veto de cobrança (`app/ponto/marcos.py:119`, `:155`, `:161`); reconciliador (`app/chamados/reconciliador.py:637`); grade leitora (`app/escala/services/leitor_celula.py:424`), depois tarefa (`app/chamados/services/tarefa_do_dia.py:327`); status (`app/ponto/status_dia.py:68`); relatório (`app/relatorios/dia_da_frota.py:51`). |
+| `impressao`, `sem_adesao` | NB passa o booleano produzido pelo juiz (`cartorio.py:1218`–`:1223`); função acrescenta fragmento **`sem_adesao:1`**, e produz SHA256 (`cartorio.py:525`–`:527`). Não é chave persistida separada. Porta grava hash (`app/ponto/portas/celula.py:1066`). | Guarda NB (`cartorio.py:1224`, `:1228`), guarda normal (`:1373`, `:1377`) e idempotência da porta (`app/ponto/portas/celula.py:1062`). Normal omite argumento e usa default falso (`cartorio.py:444`, `:1362`–`:1368`). |
+| `out['cods']` | Ramo normal (`cartorio.py:1441`), releitura agrega (`:1055`), costura devolve ao lote (`:1084`–`:1089`). NB retorna sem escrever (`:1282`). | Fábrica e cluster, usando presença da **data julgada neste ato** (`cartorio.py:1002`–`:1013`). Não representa todos os vereditos gravados: NB fica fora (`:1282`). |
+| `data_civil` sintética | Ambas as espécies recebem `None` (`app/chamados/services/tarefa_do_dia.py:316`, `:331`). Marcos reais usam data local do instante do marco (`:103`). | Carga entrega dicionário (`:523`, `:533`); enriquecedor lê ações/portas (`:545`–`:554`). Sombra projeta somente rota/fila/verbos/fio (`app/chamados/management/commands/diff_e3_sombra.py:27`, `:44`). Outro consumidor direto na cópia: [nao verificado]. |
+| retorno de `dia_sem_trabalho` | Autoridade única: parcial em ata exige `trabalha is False`; demais casos aceitam `trabalha=False` ou tipo preenchido diferente de trabalho (`app/chamados/juizes.py:454`–`:456`). | Cartório marcador e renomeação (`cartorio.py:1220`, `:1223`, `:1253`), suprajuiz (`app/ponto/supra_juiz.py:496`), tarefa (`app/chamados/services/tarefa_do_dia.py:207`), fábrica (`app/chamados/services/fabrica_da_celula.py:112`, `:201`), fechamento de chamado (`app/chamados/models.py:1284`), materialização (`app/chamados/services/materializacao.py:174`), cluster (`app/ponto/services/cluster_espurio.py:25`), vigia de intervalo (`app/ponto/management/commands/detectar_intervalo_ausente.py:51`), `_celula_furada` (`app/chamados/juizes.py:494`). |
+
+Os significados são diferentes e explicitados: julgamento é por **dia do turno**, indexado por `cel.data`; `data_civil` pertence ao instante de cada marco e pode cair no dia seguinte. A janela de batidas `[data-1,data+2)` equivale ao filtro de datas civis inclusivas de `data-1` a `data+1`; a conversão entre `lt` e `lte` desconta um microssegundo. Cobertura de ausência fecha ambas as pontas; carga da tarefa também usa `[ini,fim]`. (`app/ponto/services/cartorio.py:445`, `:1135`, `:1140`, `:1322`, `:1383`; `app/ponto/turnos.py:2540`; `app/chamados/services/tarefa_do_dia.py:103`, `:517`, `:562`.)
+
+**Não se deve afirmar que todo leitor usa predicado idêntico.** `_protesta` continua lendo somente `trabalha is not False` e marcos acesos; essa migração parcial já está declarada. Também há dois efeitos deliberados de cobertura: folha exige aprovada; cobrança admite não rejeitada. (`app/ponto/services/cartorio.py:1422`–`:1423`; `app/docs/JUIZES.md:75`–`:77`; `app/ponto/turnos.py:2511`–`:2519`.)
+
+O adaptador **não é segundo juiz**: transporta `trabalha` e `ata`, exige o insumo e chama `chamados.juizes.dia_sem_trabalho`. A pergunta de trabalho **previsto** pertence a `EscalaColaborador.eh_dia_trabalho`; a de cobrança que pode calar pertence a `dia_sem_trabalho`. (`app/ponto/supra_juiz.py:60`–`:71`; `app/docs/JUIZES.md:64`–`:69`, `:103`.)
+
+A mudança de NB para palavra não acusadora pode alcançar o reconciliador: seu seletor exige palavra preenchida fora dos acusadores, depois carimba perguntas e pode fechar disputa. Isso é leitura existente da nova palavra, sem recalcular a folga; zero candidatos na classe inteira não está demonstrado. (`app/chamados/reconciliador.py:595`, `:611`–`:614`, `:637`–`:641`; [nao verificado].)
+
+## 11/11 07:46 · sessao 65b60786f4c1 · - · - · origem=Ronald (tmux)
+
+1. **PROCEDE o fechamento do mutante parcial original.** O marcador real depende de `not _coberto_inteiro_nb and sem_trabalho`, sem excluir parcial; `trabalha=False` prevalece na ausência parcial. O novo teste exige hash com marcador e a morte está no executor. `app/ponto/services/cartorio.py:1211`, `:1223`; `app/chamados/juizes.py:454`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:309`; `app/ponto/tests/x1_mutantes.py:36`.
+
+   Folga com ausência ainda aguardando conserva marcador: a grade usa apenas aprovadas, a cobertura de cobrança aceita não rejeitadas, e a célula `False` mantém `sem_trabalho=True`. `app/escala/utils.py:1188`; `app/ponto/turnos.py:2516`; `app/chamados/juizes.py:456`; `app/ponto/services/cartorio.py:1223`.
+
+   Folga sob afastamento aprovado integral fica sem marcador deliberadamente, pelo filtro de integralidade. `app/ponto/services/cartorio.py:1211`, `:1223`.
+
+   Feriado com ausência parcial depende de `cel.trabalha`: `False` conserva marcador; `True`/`None` com ata parcial resulta em `sem_trabalho=False` pelo juiz existente e recebe NB. Não é diferença criada pela guarda do marcador. Ocorrência em produção e autorização específica desse recorte: **[nao verificado]**. `app/chamados/juizes.py:454`; `app/ponto/services/cartorio.py:1253`.
+
+2. **PROCEDE a fragilidade da primeira testemunha.** As afirmações `antes == depois` e `NotIn(VEREDITOS_ACUSAM)` aceitam ambos `None` ou vazios. O teste não exige `'concorde'` nessa etapa. `app/ponto/tests/test_x1_folga_sem_adesao.py:132`, `:135`, `:136`.
+
+   Isso não torna o C2b inteiro vazio: ainda exige ausência, hash com marcador, rejulgamento sem força depois da adesão e veredito final derivado dos códigos. `app/ponto/tests/test_x1_folga_sem_adesao.py:137`, `:141`, `:151`, `:160`.
+
+   `forcar=True` evita a guarda de impressão na primeira etapa. Assim, não prova o caminho ordinário imediatamente após o signal da ausência; signal e reconciliador chamam sem forçar. A segunda etapa prova explicitamente a transição depois da adesão, sem forçar. `app/ponto/tests/test_x1_folga_sem_adesao.py:133`, `:151`; `app/ponto/services/cartorio.py:1228`; `app/ponto/signals.py:93`, `:143`; `app/chamados/reconciliador.py:702`.
+
+3. **PROCEDE um sobrevivente plausível; execução integral ORM é [nao verificado].** Mutação apenas em memória na linha 1223:
+
+   ```python
+   sem_adesao=(
+       not _coberto_inteiro_nb and sem_trabalho
+       and getattr(_cob_nb, 'status', None) in (None, 'aprovada')
+   )
+   ```
+
+   Executei os 19 testes de memória e os sete pós-suite com essa fonte: **26 passaram, zero FAIL/ERROR**. Execução efêmera, sem arquivo de transcrição: **[nao verificado por arquivo:linha]**. Os conjuntos existentes usam cobertura `None` ou aprovada; o C2b acrescenta somente aprovada. `app/ponto/tests/test_e3_nb_impressao_memoria.py:91`, `:290`, `:301`, `:311`, `:330`, `:338`, `:353`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:131`; `app/ponto/tests/test_x1_folga_sem_adesao.py:99`, `:116`.
+
+   Testemunha extra em memória, folga + `aguardando_decisao`: original deu `concorde` com marcador; mutante deu `concorde` sem marcador, hash legado. Execução efêmera: **[nao verificado por arquivo:linha]**. A não equivalência decorre do contrato real: cobrança aceita esse status e a grade não o considera cobertura integral aprovada. `app/ponto/turnos.py:2516`; `app/escala/utils.py:1188`; `app/ponto/services/cartorio.py:1195`, `:1211`, `:1223`.
+
+   Não afirmar que esse mutante passou os 116 ORM: **[nao verificado]**. [nao verificado]
+
+   Dois limites do executor também precisam aparecer: seu `BASE` é `7313a031...`, não a base produtiva informada `52a0022e9`; e `so_acusador` sempre segue a execução sem banco mesmo sem `--sem-banco`. `app/ponto/tests/x1_mutantes.py:20`, `:97`.
+
+## 11/11 07:46 · sessao 453485b0cb78 · - · - · origem=Ronald (tmux)
+
+Q2 — **PROCEDE a fragilidade da primeira testemunha do C2b.** `(None, None)` e `('', '')` passam tanto na igualdade quanto no `assertNotIn`, porque o conjunto acusatório não inclui esses valores; não há afirmação positiva de `concorde` nesse ponto. A comparação posterior com `derivar_veredito(out['cods'][d])` verifica o veredito depois da adesão, não o NB inicial. `app/ponto/tests/test_x1_folga_sem_adesao.py:132`, `:135`, `:136`, `:160`; `app/escala/models.py:1767`.
+
+O `forcar=True` vence a guarda NB e deixa de testar a chamada explícita inicial sem força. Entretanto, a criação da ausência anteriormente já aciona o signal sem força, e o teste compara o resultado produzido por ele com o rejulgamento forçado; a lacuna é não exigir resultado inicial preenchido nem observar diretamente a execução do signal. `app/ponto/tests/test_x1_folga_sem_adesao.py:116`, `:133`; `app/ponto/signals.py:93`, `:143`, `:147`; `app/ponto/services/cartorio.py:1224`, `:1228`.
+
+Caminhos produtivos sem força:
+
+- Signal de ausência: chama `julgar_celula(colab, d)`; default `forcar=False`. `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:1975`.
+- Cron: configuração passa somente `--apply`, command repassa a flag `store_true`. `app/config/crons.py:616`; `app/ponto/management/commands/processar_cartorio.py:29`, `:65`.
+- Reconciliador: quando faltam lâmpadas na ata, chama `julgar_celula(colab, dia)` sem força. `app/chamados/reconciliador.py:700`, `:702`.
+- Há também força em produção: a segunda passada condicional de `out['rejulgar']`. Portanto, “produção nunca força” seria incorreto. `app/ponto/services/cartorio.py:985`, `:989`.
+
+Q5 — **PROCEDE a triagem e3fix6 quanto à causa técnica.** A força altera a guarda, mas o ramo NB retorna antes da escrita de `out['cods']`, feita no ramo normal. O primeiro acesso antigo continuaria falhando. `app/ponto/services/cartorio.py:1228`, `:1282`, `:1441`. O receiver julgador é o de ausência em `:143`; `:275` é consumidor posterior. `app/ponto/signals.py:143`, `:147`, `:275`, `:279`.
+
+**Triagem v2: procede com os limites declarados.** O HEAD conserva NB em trabalho sem cobertura integral e deixa o hash sem marcador quando `sem_trabalho=False`. `app/ponto/services/cartorio.py:1223`, `:1253`. A reconstrução histórica da base 52a0022e9 e a afirmação de que d6 nunca pousou constam somente do dado fornecido; nesta cópia não há repositório Git para comprovação independente. **[nao verificado]**
+
+Relógio: o residual existe, pois ainda há default `_tz.now()` e chamador sem `agora`; anterioridade em relação à obra não é demonstrável pelo HEAD isolado. `app/escala/servico_jornada.py:387`, `:566`. **Anterioridade: [nao verificado].**
+
+Reconciliador: o descarte vale para o recorte informado, não para a classe inteira: continua havendo escritor de carimbo e fechamento de disputa. O teste atual inclusive exige que a pergunta receba `VIA_CELULA_ABSOLVEU`. `app/chamados/reconciliador.py:595`, `:611`, `:1365`; `app/ponto/tests/test_x1_folga_sem_adesao.py:311`, `:315`.
+
+TXT: download usa conteúdo armazenado; geração nova consulta elegibilidade corrente. C4 compara somente registros e contagens após julgamento. Portanto, preservação do estoque procede; identidade numa regeneração não foi provada. `app/folha/views.py:561`; `app/folha/export.py:714`, `:716`, `:726`, `:968`; `app/ponto/tests/test_x1_folga_sem_adesao.py:213`, `:216`, `:219`.
+
+Achado documental: o relato da obra está desatualizado: descreve rename condicionado a `VEREDITOS_ACUSAM` e marcador em todo o ramo, inclusive trabalho/integral; o código atual usa `sem_trabalho` e exclui cobertura integral do marcador. `app/docs/relato_fio_e0_v4_e3_x1.txt:11`, `:16`, `:22`, `:28`; `app/ponto/services/cartorio.py:1223`, `:1253`.
+
+## 11/11 07:42 · sessao 826204932097 · TRAVA-SELO · verificador · origem=Code
+
+**NÃO PROCEDE o fechamento integral.** As sete correções pontuais têm efeito, mas permanecem a enumeração de módulos fora da classificação, uma lacuna na preservação de argumentos pelo selo e chamadas inteiras sem motivo em régua/pre-push. (`bin/suite.sh:137`, `bin/tests/test_suite_motivo.sh:19`, `bin/regua.sh:165`, `bin/pre-push.sh:186`)
+
+A execução integral dos selos nesta auditoria é **[não verificado]**: eles criam e removem temporários. Conferi os caminhos relevantes em memória, incluindo os sete mutantes novos. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:11`, `bin/tests/test_suite_motivo.sh:15`)
+
+**1) NÃO PROCEDE como fechamento de todas as classes; PROCEDE para as correções sintáticas abaixo.**
+
+| Forma de argumento | Resultado da conferência |
+|---|---|
+| `--only ''`, apenas espaços; `--dir`, `--motivo`, `--volta` vazios ou sem valor no fim | Agora recusam com rc 2 e “precisa de valor”. (`bin/suite.sh:50`, `bin/suite.sh:53`, `bin/suite.sh:54`, `bin/suite.sh:59`, `bin/suite.sh:60`) |
+| Caminho/glob em `ONLY`, inclusive depois de label válida | Continuam recusados pela forma e pertinência; o executor permanece protegido contra glob. (`bin/suite.sh:70`, `bin/suite.sh:98`, `bin/suite.sh:100`, `bin/suite.sh:101`) |
+| Token cru vazio ou `'--failfast --reverse'` depois de `--` | Rc 2 antes do custo. (`bin/suite.sh:115`, `bin/suite.sh:116`, `bin/suite.sh:124`, `bin/suite.sh:168`) |
+| `--failfast=x`, `--reverse=1`, `--settings=x` | Recusados: `=valor` só admite nomes de `_FLAG_VALOR`. (`bin/suite.sh:109`, `bin/suite.sh:119`, `bin/suite.sh:120`) |
+| `-k`/`--tag` sem valor no fim de EXTRA | Rc 2; o ramo exige uma palavra seguinte. (`bin/suite.sh:118`, `bin/suite.sh:120`) |
+| Palavras repetidas em `ONLY` | Não substituem pertinência: todas as LABELS continuam necessárias para classificar inteira. (`bin/suite.sh:142`, `bin/suite.sh:145`) |
+| Opção superior repetida, como `--only api --only core` | Última atribuição vence; o recorte efetivo é `core`. (`bin/suite.sh:54`, `bin/suite.sh:206`) |
+| `--only=api`, `-v2`, `-kpadrao` | Continuam recusados pelas formas implementadas. Obrigatoriedade dessas formas no runner instalado: **[não verificado]**. (`bin/suite.sh:64`, `bin/suite.sh:117`, `bin/suite.sh:119`) |
+
+**A classe “enumeração de módulos que esgota a inteira” continua aberta**, inclusive quando produzida por `--volta`: a guarda reconhece somente cada app nu ou `<app>.tests`. Uma enumeração concreta que esgote a descoberta desta cópia: **[não verificado]**. (`bin/suite.sh:83`, `bin/suite.sh:137`, `bin/suite.sh:145`, `bin/suite.sh:206`)
+
+Há uma assimetria restante: `-- --tag 'dois termos'` passa, mas `-- '--tag=dois termos'` é recusado por conter espaço antes de chegar ao ramo `=valor`. Vazio também passa como valor consumido (`--tag ''`) ou embutido (`--tag=`). Isso não demonstra ampliação: EXTRA chega citado ao executor; o efeito no `DiscoverRunner` instalado é **[não verificado]**. (`bin/suite.sh:115`, `bin/suite.sh:118`, `bin/suite.sh:119`, `bin/suite.sh:207`; `app/core/runner_quarentena.py:15`, `app/core/runner_quarentena.py:76`)
+
+**Novo problema concreto de consumo:** `--only api --motivo --seco` aceita `--seco` como texto de MOTIVO, deixa `SECO=0` e ultrapassa o desvio seco. Isso perde a intenção de simulação; não é fuga demonstrada para inteira. (`bin/suite.sh:47`, `bin/suite.sh:50`, `bin/suite.sh:59`, `bin/suite.sh:149`, `bin/suite.sh:159`)
+
+O `set -f` continua antes das expansões não citadas da seleção; não antecede literalmente todas as expansões do script, pois parser e cálculo de RAIZ vêm antes. (`bin/suite.sh:35`, `bin/suite.sh:53`, `bin/suite.sh:70`, `bin/suite.sh:87`, `bin/suite.sh:206`)
+
+**2) PROCEDE o mapa abaixo; NÃO PROCEDE uma inversão dos retornos de `_valor`/`_extra_ok`.**
+
+| Campo/retorno | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| `ONLY` | Inicialização, parser, helper e filtro: `bin/suite.sh:47`, `bin/suite.sh:54`, `bin/suite.sh:83`, `bin/suite.sh:90` | Conflito, filtro, vazio, forma, classificação, seco e executor: `bin/suite.sh:81`, `bin/suite.sh:87`, `bin/suite.sh:91`, `bin/suite.sh:100`, `bin/suite.sh:142`, `bin/suite.sh:161`, `bin/suite.sh:206` |
+| `EXTRA` | Array inicial e captura citada: `bin/suite.sh:47`, `bin/suite.sh:62` | Validação, seco e executor: `bin/suite.sh:112`, `bin/suite.sh:113`, `bin/suite.sh:118`, `bin/suite.sh:162`, `bin/suite.sh:207` |
+| `MOTIVO` | `bin/suite.sh:47`, `bin/suite.sh:59` | Guarda, diagnóstico e seco: `bin/suite.sh:149`, `bin/suite.sh:151`, `bin/suite.sh:160` |
+| `VOLTA` | `bin/suite.sh:47`, `bin/suite.sh:60` | Ativação, helper, erro e seco: `bin/suite.sh:80`, `bin/suite.sh:83`, `bin/suite.sh:84`, `bin/suite.sh:160` |
+| `PARALELO` | Default e parser, após validação: `bin/suite.sh:47`, `bin/suite.sh:55`, `bin/suite.sh:56` | Seco e executor: `bin/suite.sh:162`, `bin/suite.sh:207` |
+| `ESPERA` | Array inicial e parser: `bin/suite.sh:47`, `bin/suite.sh:57`, `bin/suite.sh:58`; escalar na trava: `bin/trava_teste.sh:22`, `bin/trava_teste.sh:27` | Seco, chamada da trava e `flock`: `bin/suite.sh:162`, `bin/suite.sh:200`, `bin/trava_teste.sh:36` |
+| Retorno `_valor` | Sucesso 0; falha **encerra o processo** com 2: `bin/suite.sh:50` | Chamadores prosseguem após sucesso, sem capturar status: `bin/suite.sh:53`, `bin/suite.sh:54`, `bin/suite.sh:59`, `bin/suite.sh:60` |
+| Retorno `_extra_ok` | Erro retorna 1; conclusão normal retorna 0: `bin/suite.sh:116`, `bin/suite.sh:120`, `bin/suite.sh:123` | Chamador converte falha em saída 2: `bin/suite.sh:124` |
+| `DIR` | `bin/suite.sh:47`, `bin/suite.sh:53` | Helper, seco e montagem: `bin/suite.sh:82`, `bin/suite.sh:160`, `bin/suite.sh:176`, `bin/suite.sh:178`, `bin/suite.sh:181` |
+| `SECO` | `bin/suite.sh:47`, `bin/suite.sh:61` | `bin/suite.sh:159` |
+| `LABELS` | Literal em `bin/regua.sh:23`; derivação em `bin/suite.sh:75` | Filtro, pertinência, classificação e fallback: `bin/suite.sh:88`, `bin/suite.sh:99`, `bin/suite.sh:144`, `bin/suite.sh:206` |
+| Listas de flags | `bin/suite.sh:108`, `bin/suite.sh:109` | `_extra_ok`: `bin/suite.sh:117`, `bin/suite.sh:118`, `bin/suite.sh:119`, `bin/suite.sh:120` |
+
+As mudanças de representação são explícitas: PARALELO é texto expandido em palavras; ESPERA é array convertido em escalar pela trava; EXTRA permanece array citado, e a trava executa `"$@"`. Não encontrei nesses caminhos uma inversão de significado comprovada. (`bin/suite.sh:56`, `bin/suite.sh:58`, `bin/suite.sh:200`, `bin/suite.sh:207`; `bin/trava_teste.sh:27`, `bin/trava_teste.sh:42`)
+
+A diferença semântica relevante está em **ONLY**: a guarda reconhece inteira por nomes exatos, enquanto o executor entrega módulos ao runner. O `--seco` agora mostra os campos antes omitidos, mas fornece um resumo textual, não o comando Docker completo nem uma representação inequívoca de argv. (`bin/suite.sh:145`, `bin/suite.sh:160`, `bin/suite.sh:162`, `bin/suite.sh:175`, `bin/suite.sh:206`)
+
+**3) PROCEDE para a morte dos sete mutantes pela causa pretendida; NÃO PROCEDE como cobertura suficiente.**
+
+A conferência isolada em memória encontrou estes discriminantes, correspondentes às mutações efetivamente escritas no selo. (`bin/tests/test_suite_motivo.sh:147`, `bin/tests/test_suite_motivo.sh:148`, `bin/tests/test_suite_motivo.sh:149`, `bin/tests/test_suite_motivo.sh:150`, `bin/tests/test_suite_motivo.sh:151`, `bin/tests/test_suite_motivo.sh:152`, `bin/tests/test_suite_motivo.sh:153`)
+
+| Mutante | Causa da reprovação |
+|---|---|
+| `pattern_na_lista` | `--pattern` sozinho passa no mutante; o vivo recusa rc 2. O novo caso elimina a recusa colateral de `y`. (`bin/tests/test_suite_motivo.sh:86`, `bin/tests/test_suite_motivo.sh:87`) |
+| `k_sem_valor` | `-k padrao` passa no vivo; o mutante recusa `padrao` como palavra solta, rc 2. (`bin/tests/test_suite_motivo.sh:92`; `bin/suite.sh:120`) |
+| `igual_aceita_qualquer` | Formas proibidas com `=`, agora sozinhas, passam no mutante. (`bin/tests/test_suite_motivo.sh:86`, `bin/tests/test_suite_motivo.sh:87`) |
+| `palavra_com_espaco` | O token único `'--failfast --reverse'` volta a casar a lista e passa. (`bin/tests/test_suite_motivo.sh:90`; `bin/suite.sh:117`) |
+| `valor_vazio_cego` | Pode continuar dando rc 2 pela guarda de inteira, mas perde “precisa de valor”; o teste cobra esse stderr. (`bin/tests/test_suite_motivo.sh:82`; `bin/suite.sh:151`) |
+| `executor_sem_extra` | Continua chegando à trava, mas falta o sufixo EXTRA exigido no registro. (`bin/tests/test_suite_motivo.sh:94`, `bin/tests/test_suite_motivo.sh:95`) |
+| `executor_sem_paralelo` | Chega com `--parallel 4`, contrariando `auto` no sufixo exigido. (`bin/tests/test_suite_motivo.sh:94`, `bin/tests/test_suite_motivo.sh:95`) |
+
+**Ressalva de razão:** os novos negativos de flags e da palavra com espaço cobram rc/chegada, sem conferir stderr específico. A morte atual tem a causa certa; a mensagem da recusa não fica protegida nesses casos. (`bin/tests/test_suite_motivo.sh:87`, `bin/tests/test_suite_motivo.sh:90`)
+
+**Sobrevivente plausível concreto:** trocar somente no executor `"${EXTRA[@]}"` por `"${EXTRA[*]}"`. Vários argumentos viram um único argumento, mas a trava falsa registra `$*`: o registro continua idêntico e passa no novo grep. Confirmei essa indistinguibilidade em memória; execução integral desse mutante: **[não verificado]**. (`bin/suite.sh:207`; `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:95`)
+
+QUEM ESCREVE/QUEM LÊ do testemunho: `_roda` escreve stderr, a trava falsa escreve `trava.chamada`; os greps e `_args` leem esses arquivos. O escritor de `trava.chamada` já perde as fronteiras que o leitor precisaria conferir. (`bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:82`, `bin/tests/test_suite_motivo.sh:95`)
+
+O selo documental também continua permissivo: aceita motivo `"pre-opus X;rm"` e até uma linha comentada contendo o comando; a guarda real rejeita aquele motivo. Os selos próprios do wrapper/helper real continuam fora deste teste, que substitui o helper. (`bin/tests/test_suite_sh.sh:35`; `bin/suite.sh:139`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:28`)
+
+**4) NÃO PROCEDE redução numa execução bem-sucedida; PROCEDE a falta de visibilidade na chamada direta.**
+
+A composição é união: `poe()` só acrescenta, a AST acrescenta suas referências e o regex continua rodando integralmente. `SyntaxError` e `ValueError` retornam `None` e preservam o caminho regex. (`bin/vizinhos_da_volta.py:49`, `bin/vizinhos_da_volta.py:68`, `bin/vizinhos_da_volta.py:121`, `bin/vizinhos_da_volta.py:123`)
+
+Há uma ressalva ao fallback universal: `RecursionError` não é capturado. Um texto sintético com `import core.sub.foo` seguido de expressão muito longa reproduziu essa exceção em memória; o helper aborta antes do regex e da impressão das labels. Isso causa falha integral, rc 1 em `suite.sh`, sem `AST-FALHOU`; ocorrência na obra: **[não verificado]**. (`bin/vizinhos_da_volta.py:67`, `bin/vizinhos_da_volta.py:68`, `bin/vizinhos_da_volta.py:118`, `bin/vizinhos_da_volta.py:128`; `bin/suite.sh:83`, `bin/suite.sh:84`)
+
+`AST-FALHOU` é escrito em **stderr**. A chamada direta por `suite.sh --volta` o descarta em `/dev/null` por padrão; o wrapper preserva em `<saida>.porque`, mas não o reproduz no log principal. (`bin/vizinhos_da_volta.py:120`; `bin/suite.sh:83`; `bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`)
+
+QUEM ESCREVE/QUEM LÊ: `cita_por_ast` escreve retorno conjunto/`None`; o laço lê esse retorno para diagnóstico e inclusão; `poe` escreve `saida/porque`; o laço final lê ambos para stdout/stderr. (`bin/vizinhos_da_volta.py:69`, `bin/vizinhos_da_volta.py:87`, `bin/vizinhos_da_volta.py:118`, `bin/vizinhos_da_volta.py:119`, `bin/vizinhos_da_volta.py:121`, `bin/vizinhos_da_volta.py:49`, `bin/vizinhos_da_volta.py:128`, `bin/vizinhos_da_volta.py:130`)
+
+**5) PROCEDE para as correções documentais da v8; NÃO PROCEDE fidelidade integral.**
+
+Foram corrigidos paralelismo `N|auto`, espera, seleção de todos os apps e indicação do wrapper com ruff/disjuntor. Isso corresponde aos respectivos caminhos do código. (`CLAUDE.md:100`, `CLAUDE.md:101`, `CLAUDE.md:102`, `CLAUDE.md:103`; `bin/suite.sh:55`, `bin/suite.sh:57`; `bin/volta_intermediaria.sh:23`, `bin/volta_intermediaria.sh:29`, `bin/volta_intermediaria.sh:32`)
+
+A frase “recorte que cubra todo app das LABELS” é mais abrangente que o reconhecimento implementado, que só aceita app nu/`app.tests`; o limite de enumeração de módulos está no script, não nessa descrição. (`CLAUDE.md:101`, `CLAUDE.md:102`; `bin/suite.sh:137`, `bin/suite.sh:145`)
+
+Os exemplos incompletos da ajuda foram corrigidos. Não identifiquei outra orientação operacional atual ensinando `suite.sh` nu; ausência absoluta fora do universo pesquisado: **[não verificado]**. A chamada nua do selo é fixture negativa; o comando sem motivo no RELATO é registro histórico, não demonstração de orientação vigente. (`bin/suite.sh:29`, `bin/suite.sh:30`, `bin/suite.sh:31`; `bin/tests/test_suite_sh.sh:82`, `bin/tests/test_suite_sh.sh:98`; `app/docs/RELATO.md:681`)
+
+**6) PROCEDE que há triagem incompatível com o aval.**
+
+- **Régua/pre-push:** reconhecer o fato e colocá-lo “fora desta volta” não fecha o aval. A unidade fornecida é **chamada de suíte inteira pela trava**, e os dois fazem essa chamada sem motivo; a trava não impõe essa guarda. Evitar aninhamento não exige dispensar motivo. (`triagem_v6.txt:7`; `aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/regua.sh:165`, `bin/regua.sh:168`; `bin/pre-push.sh:142`, `bin/pre-push.sh:186`; `bin/trava_teste.sh:42`; `CLAUDE.md:104`)
+
+- **Módulos e vizinhos:** declarar limite não demonstra autorização para dispensá-lo. O aval exige vizinhos e transformação de escapes em regra de classe; a defesa “inteira pre-opus” continua sendo uma limitação declarada pelo instrumento. Fechamento dessas classes: **NÃO PROCEDE**; uma enumeração concreta equivalente à inteira: **[não verificado]**. (`triagem_v6.txt:2`; `aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/suite.sh:137`; `bin/vizinhos_da_volta.py:12`, `bin/vizinhos_da_volta.py:15`, `bin/vizinhos_da_volta.py:16`)
+
+- **Flags consumindo valores:** procede a triagem de que isso, sozinho, não provou ampliação; o executor preserva EXTRA e a descoberta é delegada. (`triagem_v6.txt:4`; `bin/suite.sh:118`, `bin/suite.sh:207`; `app/core/runner_quarentena.py:76`)
+
+- **“19 mortos, rc 0” e “AST-FALHOU visível”:** o primeiro resultado integral é **[não verificado]** nesta auditoria e não elimina o sobrevivente de fronteiras de argv; o segundo só é verdadeiro com stderr preservado. (`triagem_v6.txt:5`, `triagem_v6.txt:8`; `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:95`; `bin/suite.sh:83`)
+
+- **Selo específico do wrapper:** **NÃO SEI** que esse formato particular seja obrigação literal do aval; a cobertura do fluxo continua ausente do selo examinado. (`aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:28`)
 
 ## 11/11 07:38 · sessao a79c577f1b80 · - · - · origem=Ronald (tmux)
 
@@ -722,137 +900,4 @@ A nova atribuição acrescenta uma linha antes do recorte. O registro conserva `
 - **Reconciliador — PROCEDE para o universo medido dos 174; NÃO PROCEDE como fechamento da classe.** A triagem informa zero candidatos naquele recorte. O escritor continua alcançável, pode carimbar perguntas e fechar disputas; o teste inclusive exige esse carimbo. `triagem_e3_v1.txt:6`; `app/chamados/reconciliador.py:595`, `:611`, `:1365`; `app/ponto/tests/test_x1_folga_sem_adesao.py:263`. Zero candidatos na classe inteira: **[nao verificado]**.
 - **TXT — PROCEDE para o conteúdo já armazenado; NÃO PROCEDE como prova de regeneração invariável.** Download lê a cópia gravada. Uma nova geração consulta retenção e elegibilidade atuais; C4 compara estoque após julgamento, sem gerar outro TXT. `app/folha/views.py:561`; `app/folha/models.py:186`; `app/folha/export.py:968`, `:726`; `app/ponto/tests/test_x1_folga_sem_adesao.py:164`, `:167`. Delta efetivo numa regeneração: **[nao verificado]**.
 
-## 11/11 07:13 · sessao af2a057a1413 · - · - · origem=Ronald (tmux)
-
-**Q1 — PROCEDE parcialmente; a classe ainda tem residual de atualização.** A nova condição corrige julgamentos efetivos de trabalho justificado, em curso, parcial sem resto e isento: nesses casos, `concorde` passa a `nunca_bateu` quando não existe cobertura integral nem dia sem trabalho. Entretanto, a condição ocorre **depois** da guarda de impressão; um `concorde` gravado por d6 pode continuar pulado porque a impressão não mudou. `app/ponto/services/cartorio.py:1221-1229`, `:1233-1255`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:275-297`; `app/ponto/supra_juiz.py:220-221`.
-
-Reproduzi em memória os quatro casos usando o harness AST existente, reconstruindo somente a condição anterior documentada no delta. Todos produziram: d6 reconstruído=`concorde`; HEAD sem forçar=`concorde`, `pulados=1`, hash igual e nenhuma chamada ao classificador; HEAD forçado=`nunca_bateu`, ainda com hash igual. RC=0; não houve arquivo nem banco. O harness extrai funções reais e mantém a célula no mesmo ambiente. `app/ponto/tests/test_e3_nb_impressao_memoria.py:51-60`, `:99-101`, `:172-190`; causa produtiva em `app/ponto/services/cartorio.py:1224-1229`.
-
-Para entradas consistentes, sem fatos adicionais:
-
-| Dia sem adesão | HEAD contra d6, em julgamento efetivo | Referências |
-|---|---|---|
-| Folga com ausência parcial aprovada | Conserva `concorde`; juiz considera `trabalha=False` soberano; mantém marcador porque não há cobertura integral. | `app/chamados/juizes.py:454-456`; `app/ponto/services/cartorio.py:1211`, `:1223`, `:1253`; `app/ponto/supra_juiz.py:313-316`, `:379` |
-| Folga com ausência integral aprovada | Conserva `concorde`, sem marcador. | `app/ponto/tests/test_e3_nb_impressao_memoria.py:299-307`; `app/ponto/services/cartorio.py:1211`, `:1223` |
-| Feriado que a escala materializou como folga | Conserva resultado derivado, normalmente `concorde`; feriado que continua trabalho segue NB. | `app/escala/models.py:1367-1395`; `app/escala/utils.py:1605`, `:1801-1807`; `app/ponto/services/cartorio.py:1253-1255` |
-| Trabalho com cobertura integral | Conserva resultado derivado; a cobertura integral impede a renomeação. | `app/ponto/services/cartorio.py:1211`, `:1238`, `:1253` |
-| Trabalho dentro de INSS aprovado integral | Mesmo caso anterior se a grade trouxe ausência integral. | `app/escala/utils.py:1188-1191`, `:1220-1230`; `app/ponto/services/cartorio.py:1211`, `:1253`; `app/docs/BACKLOG.md:1064` |
-| Trabalho isento, sem cobertura integral | `concorde` em d6 → NB no HEAD efetivamente julgado; impressão conserva o mesmo marcador de isenção. | `app/ponto/supra_juiz.py:220-221`; `app/ponto/services/cartorio.py:1223`, `:1253-1255`, `:520-526` |
-| Célula sem DNA | Não constitui classe autônoma de veredito: a grade usa o template; a ata ainda conserva tipo/parcial. | `app/escala/utils.py:84-108`, `:1607`; `app/ponto/services/cartorio.py:709`, `:737-743` |
-
-A comparação exata com **52a0022e9** não foi reproduzida: a cópia não contém Git nem a fonte integral dessa revisão. A documentação descreve a intenção histórica de conservar cobertura integral e NB em trabalho corrente/futuro, mas não certifica os bytes dessa base. **[nao verificado]**; `app/docs/BACKLOG.md:1064`.
-
-**Q2 — NÃO PROCEDE segundo juiz nos caminhos produtivos examinados.** `_insumo_nb` não é `None`: o adaptador sempre devolve um dicionário contendo `trabalha` e `ata`, e o invólucro consulta exatamente `chamados.juizes.dia_sem_trabalho`; chave ausente gera `KeyError`. O classificador recebe novamente os mesmos valores, sem derivação alternativa do predicado. `app/ponto/supra_juiz.py:60-71`; `app/ponto/services/cartorio.py:1218-1220`, `:1234`.
-
-`_ata_nb` pode ser `None` se `_dia_nb` estiver vazio, mas o carregador real constrói todos os dias da janela nas duas implementações; não demonstrei esse caso pelo fluxo produtivo. O ramo normal também monta a ata deste julgamento e passa o mesmo adaptador. `app/ponto/services/cartorio.py:1218`, `:1380-1382`, `:1400-1401`, `:1428-1429`; `app/escala/utils.py:1773-1809`, `:1029-1035`.
-
-DNA ausente não causa insumo incompleto: o tipo da ata vem da grade e a parcial é copiada explicitamente; somente a formação das lâmpadas muda para o caminho por colunas. `app/ponto/services/cartorio.py:586`, `:687-709`, `:737-743`; `app/escala/utils.py:1607`.
-
-Não confundir isso com equivalência irrestrita dos vereditos: a renomeação NB de trabalho é uma diferença explícita do ramo, e o residual de impressão acima impede que toda célula antiga alcance essa decisão. `app/ponto/services/cartorio.py:1228-1229`, `:1253-1255`.
-
-## 11/11 07:13 · sessao ed2b1cec84af · TRAVA-SELO · verificador · origem=Code
-
-**O fechamento da v5 NÃO PROCEDE:** caminhos continuam passando por `EXTRA`, `set -f` chega depois de uma expansão de `--volta`, e o selo deixa mutantes plausíveis sobreviverem. (`bin/suite.sh:78`, `bin/suite.sh:91`, `bin/suite.sh:98`; `bin/tests/test_suite_motivo.sh:56`)
-
-1. **NÃO PROCEDE — o delta fecha parte das formas, mas não a classe.**
-
-   | Entrada | Resultado da guarda atual |
-   |---|---|
-   | `--only '.'`, `/app`, `./core`, `core/`, `core/tests`, globs | Recusa por forma, antes do custo. (`bin/suite.sh:89`, `bin/suite.sh:93`) |
-   | `--only 'core..tests'`, segmento inicial/final vazio | Recusa pela expressão ancorada. (`bin/suite.sh:89`) |
-   | Opções dentro de `--only`: `--tag`, `-k`, `--pattern`, `--exclude-tag`, `--reverse` | Recusa: nenhuma dessas palavras satisfaz `_eh_label`. (`bin/suite.sh:90`, `bin/suite.sh:93`) |
-   | Espaços, tabs e novas linhas entre labels | São separadores; não preservam uma “label com espaço”. A guarda examina cada palavra. (`bin/suite.sh:92`, `bin/suite.sh:117`) |
-   | Labels repetidas | Repetir um recorte passa; repetir uma seleção que cobre todas as LABELS continua exigindo motivo. (`bin/suite.sh:119`, `bin/suite.sh:120`) |
-   | `--only ''` | Falha no parser `${2:?}`, antes da guarda; não é a recusa falante de motivo. (`bin/suite.sh:51`) |
-   | `--only` contendo apenas whitespace | É seleção vazia e exige motivo. (`bin/suite.sh:117`, `bin/suite.sh:118`, `bin/suite.sh:124`) |
-   | App fora de LABELS, inclusive `tenants` | Em `--only`, recusa; na saída de `--volta`, descarta antes da validação final. (`bin/suite.sh:79`, `bin/suite.sh:90`) |
-
-   **O escape principal permanece:** `--only api -- .`, `--only api -- /app` e `--only api -- core/` passam pela guarda. `EXTRA` recusa somente palavras que **já são labels válidas das LABELS**, deixando justamente caminhos e outras formas seguirem como posicionais. Os anexos já atribuem descoberta ampla a esses caminhos; o código continua entregando-os ao executor. (`bin/suite.sh:97`, `bin/suite.sh:98`, `bin/suite.sh:181`; efeito de execução nesta cópia: **[não verificado]**)
-
-   Também passam por `EXTRA`: `tenants.tests`, app externo, segmento vazio, Unicode, palavra vazia, palavra contendo espaço/tab e glob literal. Isso comprova ausência de recusa, **não** que cada forma consiga executar testes: erro, descoberta e quantidade efetiva no Django são **[não verificado]**. `EXTRA` permanece um array citado, portanto seu glob não é expandido pelo executor. (`bin/suite.sh:90`, `bin/suite.sh:98`, `bin/suite.sh:181`)
-
-   Unicode merece ressalva: `[A-Za-z]` depende da locale, e o script não fixa `LC_ALL`. Portanto, não há garantia geral de “somente ASCII”; isso, isoladamente, não demonstra ampliação da suíte. (`bin/suite.sh:34`, `bin/suite.sh:89`, `bin/suite.sh:90`)
-
-   Opções depois de `--` continuam cruas. `--reverse` passa; `--tag x`, `-k x`, `--exclude-tag x` e `--pattern 'test*.py'` também podem passar. Entretanto, valores iguais a apps, como `--tag core`, são indevidamente tratados como posicionais e recusados. O efeito efetivo desses filtros no runner instalado é **[não verificado]**. (`bin/suite.sh:98`, `bin/suite.sh:181`)
-
-   Há outra passagem: `--only api --parallel '1 .'` acrescenta `.` por separação de palavras de `$PARALELO`, sem passar pela guarda de `ONLY` ou `EXTRA`. (`bin/suite.sh:52`, `bin/suite.sh:181`)
-
-   Quanto aos achados anteriores: a âncora de motivo ganhou caso e mutante; caminhos foram corrigidos apenas em `ONLY`; dependências indiretas foram declaradas como limites; o comando canônico continua sem motivo. (`bin/tests/test_suite_motivo.sh:60`, `bin/tests/test_suite_motivo.sh:85`; `bin/vizinhos_da_volta.py:12`; `CLAUDE.md:96`)
-
-2. **NÃO PROCEDE — `set -f` não cobre todos os sítios.**
-
-   | Variável | Quem escreve | Quem lê em `suite.sh` | [nao verificado]
-   |---|---|---|
-   | `ONLY` | Inicialização, parser, saída do helper e seleção filtrada. (`bin/suite.sh:47`, `bin/suite.sh:51`, `bin/suite.sh:74`, `bin/suite.sh:81`) | Conflito com volta, filtro preliminar, vazio, validação, classificação, saída seca e executor. (`bin/suite.sh:72`, `bin/suite.sh:78`, `bin/suite.sh:82`, `bin/suite.sh:92`, `bin/suite.sh:117`, `bin/suite.sh:136`, `bin/suite.sh:180`) |
-   | `EXTRA` | Inicialização e captura dos argumentos após `--`. (`bin/suite.sh:47`, `bin/suite.sh:57`) | Guarda e executor, ambos preservando elementos do array. (`bin/suite.sh:97`, `bin/suite.sh:181`) |
-   | `LABELS` | Fonte literal em `regua.sh`; atribuição derivada por `grep` em `suite.sh`. (`bin/regua.sh:23`, `bin/suite.sh:66`) | Filtro da volta, pertinência, classificação da suíte e fallback do executor. (`bin/suite.sh:79`, `bin/suite.sh:90`, `bin/suite.sh:119`, `bin/suite.sh:180`) |
-   | `_FORMA_LABEL` | Atribuição da regex. (`bin/suite.sh:89`) | `_eh_label`, chamado pelas guardas de `ONLY` e `EXTRA`. (`bin/suite.sh:90`, `bin/suite.sh:93`, `bin/suite.sh:98`) |
-
-   A expansão problemática ocorre em **`for _l in $ONLY` na linha 78**, antes de `set -f` na linha 91. Uma saída simulada `api*`, com diretório corrente `app/`, pode virar `api` antes da validação; o comportamento depende dos arquivos do diretório corrente. (`bin/suite.sh:78`, `bin/suite.sh:81`, `bin/suite.sh:91`)
-
-   As substituições de comando que atribuem `LABELS` e `ONLY` não fazem glob na própria atribuição. A expansão anterior ao bloqueio acontece depois, no `for`. No executor, `${ONLY:-$LABELS}` continua sem aspas: `set -f` impede glob, mas preserva separação por whitespace. (`bin/suite.sh:66`, `bin/suite.sh:74`, `bin/suite.sh:78`, `bin/suite.sh:180`)
-
-   A expansão dos argumentos ocorre antes de entrar no novo `bash` da trava; esse processo filho recebe o argv já formado. A trava executa `"$@"`, sem revalidar seleção ou motivo. (`bin/suite.sh:174`, `bin/suite.sh:180`, `bin/trava_teste.sh:42`)
-
-3. **NÃO PROCEDE — os novos exemplos ajudam, mas o selo não prova a classe nem sempre a razão.**
-
-   No código atual, os casos isolados de caminho/glob/app externo chegam à guarda de forma; `--only appA -- appB` chega à guarda de `EXTRA`; o prefixo inválido chega à guarda de motivo. (`bin/tests/test_suite_motivo.sh:56`, `bin/tests/test_suite_motivo.sh:59`, `bin/tests/test_suite_motivo.sh:60`; `bin/suite.sh:93`, `bin/suite.sh:98`, `bin/suite.sh:124`)
-
-   Porém, `_roda` aceita qualquer resultado “rc 2, sem trava, sem env-file”, sem exigir o diagnóstico específico daquela guarda. O único exame textual posterior procura `--volta` na recusa sem argumentos. (`bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:30`, `bin/tests/test_suite_motivo.sh:70`)
-
-   | Mutante plausível | Cobertura |
-   |---|---|
-   | Validar só o primeiro elemento de `ONLY` | Sobrevivência plausível: inválidos são testados isoladamente; falta `--only 'appA .'`. (`bin/tests/test_suite_motivo.sh:42`, `bin/tests/test_suite_motivo.sh:48`, `bin/tests/test_suite_motivo.sh:56`) |
-   | Remover `set -f` | Sobrevivência plausível: não há controle do cwd nem preparação de glob que expanda em label válida; expansão em palavras inválidas mantém o teste vermelho pela razão errada. (`bin/tests/test_suite_motivo.sh:26`, `bin/tests/test_suite_motivo.sh:56`) |
-   | `_eh_label` sem conferir LABELS | Detectado por `tenants.tests`. (`bin/tests/test_suite_motivo.sh:56`) |
-   | Remover guarda de `EXTRA` | Detectado por `--only appA -- appB`. (`bin/tests/test_suite_motivo.sh:59`) |
-   | Tirar a âncora inicial do motivo | Agora tem caso específico e mutante. (`bin/tests/test_suite_motivo.sh:60`, `bin/tests/test_suite_motivo.sh:85`) |
-
-   O rc 75 agora é configurável na trava falsa e cobrado no chamador. Isso não testa a consolidação de resultados de `volta_intermediaria.sh`, nem o algoritmo real de vizinhos: o helper continua substituído por stub. (`bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:61`; `bin/volta_intermediaria.sh:37`)
-
-   Execução integral do selo: **[não verificado]**. Ele cria, altera e remove arquivos, contrariando a restrição desta auditoria. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:27`)
-
-4. **NÃO PROCEDE como cobertura geral dos chamadores; logs: NÃO SEI.**
-
-   - `volta_intermediaria.sh` passa recortes por `--volta`; quando a seleção cobre todas as LABELS, a recusa sem motivo é coerente. O wrapper transforma esse rc 2 em rc 1. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:37`, `bin/volta_intermediaria.sh:43`; `bin/suite.sh:124`)
-   - `placar_estrutural.py` contém comandos como texto em `fonte`, com recortes válidos de `ponto`; nesse sítio não os executa. (`app/core/placar_estrutural.py:109`, `bin/regua.sh:23`)
-   - `regua.sh` e `bin/pre-push.sh` continuam chamando a trava diretamente e entregando a suíte inteira sem motivo. Isso é um caminho existente, expressamente mantido fora de `suite.sh`, não uma regressão introduzida pelo delta. (`bin/regua.sh:165`, `bin/regua.sh:168`, `bin/pre-push.sh:142`, `bin/pre-push.sh:186`, `bin/suite.sh:17`)
-   - A documentação canônica permanece incompatível: ensina chamada sem motivo que a guarda atual recusa. (`CLAUDE.md:96`, `bin/suite.sh:118`, `bin/suite.sh:124`)
-   - Valores de opções coincidentes com apps, como `--tag core` e `-k core`, sofrem recusa indevida pela guarda de `EXTRA`, que ignora a função sintática do argumento. (`bin/suite.sh:97`, `bin/suite.sh:98`)
-   - Lançadores e execuções reais de `logs/`, inclusive os horários do dado raspado: **[não verificado]**.
-
-5. **PROCEDE para `--no-renames`; NÃO PROCEDE para completude do LIMITE.**
-
-   `--no-renames` permite considerar origem e destino como arquivos removido/adicionado. O helper constrói padrões também para arquivos removidos; somente a inclusão direta como “obra” exige existência atual. (`bin/vizinhos_da_volta.py:26`, `bin/vizinhos_da_volta.py:54`, `bin/vizinhos_da_volta.py:58`)
-
-   O LIMITE agora declara transitividade, reexportações, URLs, signals, templates e consumidores de migrations de outro app. Isso documenta as categorias anteriores, sem implementar seu seguimento. (`bin/vizinhos_da_volta.py:12`)
-
-   Ainda faltam classes **diretas**, não declaradas:
-
-   - `from core import (\n foo,\n)` pode deixar de encontrar `core/foo.py`: o padrão restringe a parte após `import` à mesma linha. (`bin/vizinhos_da_volta.py:63`)
-   - `from .sub import foo` e `from .sub.foo import func` não são resolvidos para `core/sub/foo.py` pelo padrão relativo atual. (`bin/vizinhos_da_volta.py:66`)
-   - Caminhos com espaços ou escapados na saída do Git não são preservados: falta `-z`, e a saída é dividida por `.split()`. (`bin/vizinhos_da_volta.py:26`, `bin/vizinhos_da_volta.py:27`)
-
-   Portanto, a afirmação “o que falta é só o LIMITE DECLARADO” excede a garantia oferecida pelos padrões implementados. (`bin/vizinhos_da_volta.py:4`, `bin/vizinhos_da_volta.py:63`, `bin/vizinhos_da_volta.py:66`)
-
-## 11/11 07:12 · sessao 1534951da004 · - · - · origem=Ronald (tmux)
-
-Causa: o lote troca o dono do memo por `{}` (`chamados/juizes.py:1093`, `:1060`), enquanto E2 já leu usando o colaborador original (`chamados/reconciliador.py:654`). S88 busca outro chamado (`chamados/signals.py:32`); S143 carrega colaboradores novos e inicia mapa vazio (`chamados/services/disputa_emissao.py:1926`). Assim, o lote paga em `dias_trancados` a leitura que o modo avulso pagaria no primeiro C6, ambos terminando em `periodo_trancado` (`chamados/juizes.py:1028`).
-
-Proposta mínima: publicar/restaurar o colaborador original no escopo `_tl` de `julgar_colab` (`ponto/services/cartorio.py:936`, `:1085`); S143 fornece uma cópia do memo canônico desse colaborador ao lote, mediante parâmetro optativo de `tranca_da_consulta`. Manter default vazio para o app. O identity map S143 deve continuar vazio inicialmente: aquecê-lo faria também o modo avulso economizar, anulando a diferença exigida pelo RED. Execução ORM e economia efetiva: [não verificado].
-
-## 11/11 07:12 · sessao 0a067312bb63 · - · - · origem=Ronald (tmux)
-
-Q4 — **PROCEDE a correção dos três mutantes; NÃO PROCEDE fechamento completo da classe de testes.** [nao verificado]
-
-- `so_acusador`: executei com `--sem-banco`; RC=1, 1 teste, 1 FAIL, 0 ERROR. Morreu porque o trabalho justificado voltou a `concorde`, divergindo do NB exigido. Alvo correto em `app/ponto/tests/x1_mutantes.py:32`; assertion exata em `app/ponto/tests/test_e3_nb_impressao_memoria.py:278`. Executor distingue assertion de infraestrutura em `app/ponto/tests/x1_mutantes.py:62`.
-- `hash_marca_todo_sem_adesao`: executei; RC=1, 1 teste, 2 FAIL de subteste, 0 ERROR. Falha tanto no trabalho sem cobertura quanto na integral aprovada porque altera hash legado e deixa de pular. Alvo em `app/chamados/tests/e3_pos_suite_sem_banco.py:33`; cenários em `app/chamados/tests/test_e3_pos_suite_sem_banco.py:131`; assertion em `:166`.
-- `hash_marca_cobertura_integral`: executei; RC=1, 1 teste, 1 FAIL, 0 ERROR, precisamente no subteste `cobertura='aprovada'`. Cobertura foi deliberadamente cegada só no hash, preservando tipo da ata; o mutante introduz marcador indevido. `app/chamados/tests/e3_pos_suite_sem_banco.py:36`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:137`, `:143`, `:144`, `:166`.
-- Inverter `sem_trabalho` somente no marcador: mutação avulsa em memória morreu em 6 dos 18 testes de memória e em 1 dos 7 pós-suite. Assertions pertinentes em `app/ponto/tests/test_e3_nb_impressao_memoria.py:264`, `:272`, `:279`, `:286`, `:295`, `:333`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:166`.
-- Remover `not _coberto_inteiro_nb` só da renomeação sobreviveu aos 18+7, porém é **equivalente no código atual**, não prova lacuna: cobertura inteira implica tipo `ausencia`/`falta` sem parcial (`app/ponto/services/cartorio.py:1211`); dia preenchido gera ata com esse mesmo tipo (`:1218`, `:709`, `:737`); a dispensa preserva tipo (`:773`); então `sem_trabalho` já é True (`app/chamados/juizes.py:454`, `:456`).
-- **Sobrevivente não equivalente comprovado:** substituir o marcador por `sem_adesao=not _coberto_inteiro_nb and sem_trabalho and not _parcial_nb`. Passaram os 18 testes de memória e os 7 pós-suite, zero FAIL/ERROR. Contraexemplo adicional em memória: folga + ausência parcial aprovada → HEAD `concorde` com marcador; mutante `concorde` sem marcador. A folga parcial é sem trabalho pelo juiz (`app/chamados/juizes.py:454`), tem cobertura não integral (`app/ponto/services/cartorio.py:1205`, `:1211`) e deveria receber marcador (`:1223`).
-- O sobrevivente pode fazer perder o rejulgamento após primeira batida distante se os demais insumos permanecerem iguais: fragmento nasce em `app/ponto/services/cartorio.py:525`; ramo normal omite-o em `:1362`; guarda aceita hash igual com `concorde` e pula em `:1373`, `:1377`. O teste de folga+ausência cobre só integral (`app/ponto/tests/test_e3_nb_impressao_memoria.py:299`); testes parciais são trabalho (`:289`, `:315`). C3 ORM testa folga nua (`app/ponto/tests/test_x1_folga_sem_adesao.py:117`); C2 integral usa `forcar=True` (`:95`, `:107`).
-
-Green de memória reproduzido: 18/18, RC=0; critério em `app/ponto/tests/x1_mutantes.py:60`. Suite integral/ORM e produção: **[nao verificado]**.
-
-_3706 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3710 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
