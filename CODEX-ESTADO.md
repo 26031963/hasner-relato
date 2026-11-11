@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 06:57** · publicado em **11/11/2026 06:59** (UTC-3)
+> Ultima resposta processada: **11/11/2026 07:09** · publicado em **11/11/2026 07:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 07:09 · sessao 9e7364a57f24 · - · - · origem=Ronald (tmux)
+
+**4. NÃO PROCEDE como fechamento geral dos chamadores.** Há caminhos que continuam executando suite inteira sem motivo, e a documentação canônica continua ensinando uma chamada agora recusada (`bin/regua.sh:165`, `bin/pre-push.sh:186`, `CLAUDE.md:96`, `bin/suite.sh:124`).
+
+- `volta_intermediaria.sh` chama `suite.sh --volta` sem motivo; recorte parcial válido passa, seleção cobrindo todas as LABELS é recusada. O wrapper transforma essa recusa rc 2 em rc 1 (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:37`, `bin/volta_intermediaria.sh:43`; `bin/suite.sh:119`, `bin/suite.sh:124`).
+- `placar_estrutural.py` contém texto de comandos em `fonte`, com labels válidas de `ponto`; esses recortes passam na guarda atual. O arquivo não executa esses comandos nesse sítio (`app/core/placar_estrutural.py:109`, `bin/regua.sh:23`, `bin/suite.sh:89`, `bin/suite.sh:119`).
+- `regua.sh` e `bin/pre-push.sh` chamam a trava diretamente; a suite inteira continua sem `--motivo`, fora da guarda de `suite.sh`. A trava aceita comando arbitrário depois de `--` (`bin/regua.sh:165`, `bin/regua.sh:168`; `bin/pre-push.sh:142`, `bin/pre-push.sh:186`; `bin/trava_teste.sh:29`, `bin/trava_teste.sh:42`).
+- A cópia antiga de hook também roda arsenal inteiro diretamente por Docker e testa `tenants` com settings próprio; nenhuma guarda de motivo nesse caminho (`app/core/hooks/pre-push.sh:54`, `app/core/hooks/pre-push.sh:82`, `app/core/hooks/pre-push.sh:87`).
+- O comando canônico `bash ~/saas-hasner/bin/suite.sh` agora recebe rc 2 por seleção vazia, embora a documentação permaneça sem motivo (`CLAUDE.md:96`, `bin/suite.sh:118`, `bin/suite.sh:124`, `bin/suite.sh:131`).
+- Lançadores e execuções reais em `logs/`: **[não verificado]**. Os comandos históricos citados no RELATO que não levam motivo seriam recusados pela guarda atual, caso repetidos (`app/docs/RELATO.md:681`, `app/docs/RELATO.md:1137`; `bin/suite.sh:124`).
+
+## 11/11 07:08 · sessao 903ad71eab22 · FIO-E0-V4-E3 · construtor · origem=Code
+
+Cura escrita: o booleano do juiz alimenta o marcador e a renomeação; trabalho sem cobertura integral volta a `nunca_bateu`, independentemente do veredito derivado. A chamada a `com_insumo_dia_sem_trabalho` continua como primeiro argumento de `classificar_dia`. [cartorio.py:1220](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1220), [cartorio.py:1234](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1234), [cartorio.py:1253](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1253).
+
+Trechos funcionais do diff:
+
+```diff
++ sem_trabalho = _dia_sem_trabalho_pelo_juiz(_insumo_nb)
+- sem_adesao=not _coberto_inteiro_nb and _dia_sem_trabalho_pelo_juiz(_insumo_nb)
++ sem_adesao=not _coberto_inteiro_nb and sem_trabalho
+
+- if not _coberto_inteiro_nb and _vd_nb in cel.VEREDITOS_ACUSAM:
++ if not _coberto_inteiro_nb and not sem_trabalho:
+      _vd_nb = 'nunca_bateu'
+```
+
+As duas linhas sintéticas agora recebem `data_civil=None`; o registro da ocorrência mudou somente de 1321 para 1322. [tarefa_do_dia.py:316](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/services/tarefa_do_dia.py:316), [tarefa_do_dia.py:331](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/services/tarefa_do_dia.py:331), [test_medida_turno_do_par.py:315](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:315).
+
+Resultados locais, todos com `PYTHONDONTWRITEBYTECODE=1` e `python3 -B`:
+
+| Execução | Resultado |
+|---|---|
+| `-m unittest ponto.tests.test_e3_nb_impressao_memoria -v` | rc **0**, 18 testes | [nao verificado]
+| `-m unittest chamados.tests.test_e3_pos_suite_sem_banco -v` | rc **0**, 7 testes | [nao verificado]
+| `-m chamados.tests.e3_pos_suite_sem_banco --modo green` | rc **0**, incluindo os 35 testes de medida | [nao verificado]
+| Catraca F1C4.3 extraída por AST | rc **0**, 3 testes | [nao verificado]
+
+Fontes: [test_e3_nb_impressao_memoria.py:89](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:89), [test_e3_pos_suite_sem_banco.py:19](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_pos_suite_sem_banco.py:19), [e3_pos_suite_sem_banco.py:20](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3_pos_suite_sem_banco.py:20), [catraca F1C4.3:215](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:215).
+
+Contra `d6a86f314941e40271974d5b9e0c6bdd9d1149e1`, os três REDs de trabalho deram rc **1**, com três assertions e zero erros: justificado, turno em curso e parcial sem resto. [test_e3_nb_impressao_memoria.py:275](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:275).
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+E3_NB_BASE=d6a86f314941e40271974d5b9e0c6bdd9d1149e1 \
+python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria -v
+```
+
+Mutantes X1: **rc 1 por assertion, ERROR=0 em cada um**. Acrescentei `--sem-banco`; `so_acusador` morreu no teste de trabalho justificado. [x1_mutantes.py:23](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:23), [x1_mutantes.py:44](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:44). [nao verificado]
+
+```bash
+python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante literal_incondicional
+python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_fonte_no_gancho
+python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante so_acusador
+```
+
+Mutantes pós-suite: **rc 1 por assertion, ERROR=0 em cada nome abaixo**. Os dois alvos do hash agora encontram a expressão viva; o RED preserva o tipo do dia na ata para morder cobertura integral. [e3_pos_suite_sem_banco.py:30](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3_pos_suite_sem_banco.py:30), [test_e3_pos_suite_sem_banco.py:144](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_pos_suite_sem_banco.py:144). [nao verificado]
+
+```bash
+for mutante in \
+  C6_redundante hash_marca_todo_sem_adesao hash_marca_cobertura_integral \
+  data_civil_pergunta_usa_turno data_civil_celula_usa_turno \
+  C6_ignora_instante memo_sem_instante materializada_crua resposta_crua slot_futuro
+do
+  python3 -B -m chamados.tests.e3_pos_suite_sem_banco \
+    --modo mutante --mutante "$mutante"
+done
+```
+
+Também executei os oito mutantes do módulo de memória: **rc 1, assertion presente e nenhum ERROR em cada execução**. Este comando reproduz cada seletor registrado, mais a classificação antes da guarda. [test_e3_nb_impressao_memoria.py:25](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:25), [test_e3_nb_impressao_memoria.py:66](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:66). [nao verificado]
+
+```bash
+python3 -B - <<'PY'
+import os
+import subprocess
+import sys
+from ponto.tests.test_e3_nb_impressao_memoria import MUTANTES
+
+casos = {nome: dados[2] for nome, dados in MUTANTES.items()}
+casos['classificacao_antes_guarda'] = 'test_F3_pulada_nao_classifica_nem_carrega'
+for nome, teste in casos.items(): [nao verificado]
+    alvo = 'ponto.tests.test_e3_nb_impressao_memoria.ImpressaoNuncaBateuMemoriaTest.' + teste [nao verificado]
+    r = subprocess.run([sys.executable, '-B', '-m', 'unittest', alvo, '-v'],
+                       env=dict(os.environ, E3_NB_MUTANTE=nome))
+    print(nome, 'rc=', r.returncode)
+PY
+```
+
+Ruff: **rc 0, `All checks passed!`**, com as regras de [ruff.toml:5](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ruff.toml:5).
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache .
+```
+
+Os caminhos ORM de X1 continuam exigindo banco isolado; não os executei. [x1_mutantes.py:91](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:91). Suite integral, delta de produção e regeneração de TXT: **[nao verificado]**. [nao verificado]
 
 ## 11/11 06:57 · sessao 12eb01f6e5d4 · FIO-E0-V4-E3 · verificador · origem=Code
 
@@ -663,110 +759,4 @@ Tetos 213/269 preservados; o custo `+N _ancoradas` continua como pergunta de des
 
 O [RED ORM pareado e seu mutante](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:34) estão preparados para o Code. Execução ORM e certificação final: **[nao verificado]**.
 
-## 11/11 06:27 · sessao 8ca9ab311c9e · - · - · origem=Ronald (tmux)
-
-Escopo recomendado: `tranca_da_consulta` deve envolver o restante inteiro do resolver, até o retorno final. O laço final chama `d.pode_fechar()` mesmo quando os anteriores pulam a disputa; esse juiz recarrega perguntas e consulta C6 (`chamados/services/disputa_emissao.py:2057`, `2069`; `chamados/models.py:1848–1853`). Assim, o memo existente também atende às instâncias posteriores (`chamados/juizes.py:1060–1062`).
-
-Envolver somente S143/S128 deixa escapar essa reutilização: o contexto começa com memo vazio e o descarta na saída (`chamados/juizes.py:1093–1104`). A economia efetiva permanece [nao verificado].
-
-Para provar o delta pedido, o melhor RED pareado reutiliza `_batida_com_furos_vivos(1/3)`, com rollback e memo frio por rodada, comparando contexto real versus `nullcontext`, e `wraps` sobre `periodo_trancado` (`ponto/tests/test_selo_chokepoint_escrita.py:403–427`, `481–494`). Exigir mesmos fechamentos, redução de uma chamada ao período e redução correspondente das queries; valores finais [nao verificado].
-
-O caso existente de pergunta viva também pode servir com escopo completo: após S143/S128, `pode_fechar()` volta a ler C6 (`chamados/tests/test_e4b_c4_orm.py:172–198`; `chamados/services/disputa_emissao.py:2069`). Nele, o total economizado pode incluir leitura de Empresa; não deduzir delta total exatamente igual a um [nao verificado].
-
-Antecipar a carga S128 muda seu instante em relação à ressuscitação: `reabrir()` pode descarimbar perguntas e reabrir disputas (`chamados/models.py:1451`, `1566–1575`). A consulta ampla posterior reencontra disputas abertas (`chamados/services/disputa_emissao.py:2010–2011`), mas equivalência integral desse adiantamento [nao verificado].
-
-## 11/11 06:22 · sessao b6de4d034e52 · FIO-E0-V4-E3 · construtor · origem=Code
-
-Cura em [ponto/services/cartorio.py:1233](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1233): primeiro argumento volta à chamada direta da porta. A classificação permanece depois da guarda (`cartorio.py:1227`); o marcador conserva `_insumo_nb` (`cartorio.py:1219–1222`).
-
-```diff
-@@ -1233 +1233 @@
--                    _insumo_nb, marcos, chamados_vivos=0, chamados_total=0, cobrancas_vivas=0,
-+                    com_insumo_dia_sem_trabalho(_dia_nb, trabalha=cel.trabalha, ata=_ata_nb), marcos, chamados_vivos=0, chamados_total=0, cobrancas_vivas=0,
-```
-
-| Execução sem banco | Resultado | Testemunha |
-|---|---|---|
-| Catraca na base informada | RC 1; 1 FAIL, 0 ERROR | `ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:226` |
-| Catraca na cura | RC 0; 3 testes | mesmo arquivo:200 | [nao verificado]
-| Memória NB | RC 0; 15 testes | `ponto/tests/test_e3_nb_impressao_memoria.py:84` |
-| Pós-suite | RC 0; 5 testes | `chamados/tests/test_e3_pos_suite_sem_banco.py:19` |
-| Medida do turno | RC 0; 35 testes | `core/tests/test_medida_turno_do_par.py:478` |
-| Mutante: argumento `_insumo_nb` | RC 1; 1 FAIL, 0 ERROR | catraca:226 |
-| Mutante: argumento `_dia_nb` | RC 1; 1 FAIL, 0 ERROR | catraca:226 |
-| Mutante: classificação antes da guarda | RC 1; 1 FAIL, 0 ERROR | memória NB:236 |
-
-`LINHAS_REGISTRADAS` passou sem ajuste (`core/tests/test_medida_turno_do_par.py:539`). O alvo do marcador permanece igual (`ponto/tests/x1_mutantes.py:24`).
-
-Comandos dos testes e do mutante de antecipação: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria -v
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest chamados.tests.test_e3_pos_suite_sem_banco -v
-
-E3_NB_MUTANTE=classificacao_antes_guarda PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria.ImpressaoNuncaBateuMemoriaTest.test_F3_pulada_nao_classifica_nem_carrega -v
-```
-
-Comando da medida, conforme procedimento sem Django de `core/tests/test_medida_turno_do_par.py:20`:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import pathlib, types, unittest
-p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
-suite = types.ModuleType('suite_turno') [nao verificado]
-suite.__file__ = str(p.resolve()) [nao verificado]
-source = p.read_text().replace('from django.test import SimpleTestCase',
-                              'from unittest import TestCase as SimpleTestCase')
-exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
-unittest.main(module=suite, verbosity=2) [nao verificado]
-PY
-```
-
-Para reproduzir catraca, RED e os dois mutantes, execute o bloco abaixo com `CASO=green`, `CASO=base`, `CASO=indireto` e `CASO=sem_porta`, respectivamente. As asserções originais são extraídas de `ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:200`; as mutações ficam em memória.
-
-```bash
-CASO=green PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import ast, os, subprocess, unittest
-from pathlib import Path
-from unittest.mock import patch
-
-p = Path('ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py')
-nomes = {'DECLARADOS', '_chamadas_do_supra', 'CatracaProdutoresDoDictTest'}
-nodes = [n for n in ast.parse(p.read_text()).body
-         if getattr(n, 'name', None) in nomes or isinstance(n, ast.Assign)
-         and any(isinstance(t, ast.Name) and t.id in nomes for t in n.targets)]
-ns = {'ast': ast, 'APP': Path.cwd(), 'SimpleTestCase': unittest.TestCase}
-exec(compile(ast.Module(body=nodes, type_ignores=[]), str(p), 'exec'), ns)
-caso = os.environ['CASO']
-alvo = Path('ponto/services/cartorio.py').resolve()
-ler = Path.read_text
-fonte = ler(alvo)
-if caso == 'base':
-    fonte = subprocess.run(
-        ['git', 'show', '769ed8cfb0cecf6de81bcfb5c7441a4668b87353:app/ponto/services/cartorio.py'],
-        check=True, capture_output=True, text=True).stdout
-elif caso != 'green':
-    antes = '                    com_insumo_dia_sem_trabalho(_dia_nb, trabalha=cel.trabalha, ata=_ata_nb), marcos,'
-    depois = {'indireto': '                    _insumo_nb, marcos,',
-              'sem_porta': '                    _dia_nb, marcos,'}[caso]
-    assert fonte.count(antes) == 1
-    fonte = fonte.replace(antes, depois, 1)
-with patch.object(Path, 'read_text',
-                  lambda p, *a, **kw: fonte if p.resolve() == alvo else ler(p, *a, **kw)):
-    r = unittest.TextTestRunner(verbosity=2).run(
-        unittest.defaultTestLoader.loadTestsFromTestCase(ns['CatracaProdutoresDoDictTest']))
-print(f'CASO={caso} TESTES={r.testsRun} FAIL={len(r.failures)} ERROR={len(r.errors)}') [nao verificado]
-raise SystemExit(0 if r.wasSuccessful() else 1)
-PY
-```
-
-Ruff: comando tentou executar, retornou RC 1 com `No module named ruff`; análise **[nao verificado]**.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ruff check --no-cache ponto/services/cartorio.py
-```
-
-Suite inteira e opus final nesta volta: **[nao verificado]**. [nao verificado]
-
-_3680 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3682 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
