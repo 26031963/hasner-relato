@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 09:37** · publicado em **11/11/2026 09:40** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:55** · publicado em **11/11/2026 09:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:55 · sessao eacf68e547f2 · FIO-E0-V4-E3 · sonda · origem=Code
+
+1) Transcrição de todos os contadores e linhas `VIVA`/`CHAMADO_VIVO` fornecidos; execução em produção sem verificação independente: [nao verificado]
+
+```text
+VIVA pk 54831 col237 2026-11-07
+chamado.total n 1
+pares n 77
+pergunta.total n 1
+pergunta.via.celula_absolveu n 1
+pergunta.viva n 1
+```
+
+Não aparece linha `CHAMADO_VIVO`, nem contador `chamado.vivo` impresso na saída anexada. [nao verificado]
+
+2) Não aparece `sonda_nao_verificada` nem traceback no dado fornecido. [nao verificado]
+
+3) **Não: os recortes não são equivalentes.** O alcance possível pelo código é maior, pelos seguintes caminhos. (`app/chamados/reconciliador.py:627`, `app/chamados/reconciliador.py:608`)
+
+- **Perguntas com data ausente ou divergente.** O reconciliador seleciona pelo colaborador da disputa, exige `materializada_em` e `validada_em` nulos e célula vinculada com veredito preenchido que não acusa. Não restringe `data_evento`, `celula__data` nem competência. Assim, perguntas vinculadas às células desses dias, mas com `data_evento=NULL` ou fora dos dias listados para aquele colaborador, ficam fora da sonda e podem entrar como candidatas no reconciliador. (`app/chamados/reconciliador.py:627–642`)
+
+- **Candidata não significa pergunta efetivamente absolvida.** O gerador só entrega a pergunta quando `pergunta_viva(p)` é falsa e o dia não está trancado; o escritor ainda depende do retorno de `carimbar`. Portanto, a diferença de filtros demonstra alcance possível, sem provar que existam registros omitidos elegíveis em produção. (`app/chamados/reconciliador.py:661–672`, `app/chamados/reconciliador.py:595–597`)
+
+- **Chamado-pai sem célula no dia sondado.** Após carimbar, o escritor pode fechar a disputa; `pode_fechar()` consulta todas as perguntas dela, sem recorte de dia. O signal busca o chamado-pai pelo seu PK e tenta reconciliá-lo, sem exigir `celula__data=dia`. Um pai sem célula ou com célula fora dos dias sondados escapa da consulta de chamados da sonda, embora possa ser alcançado por esse caminho. (`app/chamados/reconciliador.py:598–614`, `app/chamados/models.py:1848–1853`, `app/chamados/signals.py:28–42`)
+
+- **Perguntas adicionais pela cascata do pai.** Se o chamado for encerrado, o signal pode chamar o resolvedor, cujo filtro usa `chamado_destino`, materialização nula e disputa aberta, sem limitar `data_evento`. Essas perguntas também podem ficar fora da sonda; a cascata aplica suas próprias guardas antes de carimbar. (`app/chamados/signals.py:96–115`, `app/chamados/services/disputa_emissao.py:1823–1827`, `app/chamados/services/disputa_emissao.py:1837–1865`)
+
+Separadamente das duas funções perguntadas, a rotina irmã `retratar_chamados_absolvidos_por_celula` também alcança chamados vivos de turno sem exigir célula vinculada: determina o dia por `dia_do_fato` e busca a célula por colaborador/data. Esse dia pode vir do contexto, da batida ou da disputa. (`app/chamados/reconciliador.py:996–1004`, `app/chamados/reconciliador.py:1023–1026`, `app/chamados/juizes.py:98–138`)
+
+Existência e quantidade de registros nessas lacunas, causa da pergunta viva e resultado de eventual reconciliação em produção: [nao verificado].
 
 ## 11/11 09:37 · sessao 2d68990e4812 · RAIZ-DA-DISPUTA · sonda · origem=Code
 
@@ -1310,74 +1341,4 @@ A view `app/ponto/views.py:3312` não recusa por `respondida_em`, `via_resolucao
 
 Não localizei uma view chamada `batida_registrar` nem botão direto equivalente no espelho; não atribuir esse nome como porta existente **[não verificado]**.
 
-## 11/11 08:54 · sessao 00b37e6c645a · FIO-E0-V4-E3 · construtor · origem=Code
-
-Corrigidos somente os dois arquivos autorizados: [goldens e comentário](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:31) e [registro de linhas](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:315).
-
-```diff
---- app/ponto/tests/test_x1_folga_sem_adesao.py
-+++ app/ponto/tests/test_x1_folga_sem_adesao.py
-@@ -31,5 +31,5 @@
--# Hashes da funcao real da base 52a0022e, com o DNA de _criar_celula.
-+# Medido com o cartorio da base 52a0022e9 (logs/FIO-E0-V4-E3/e3fix9_golden.log).
- GOLDEN_BASE = {
--    9: 'c3b1e42811726eeafe415ba8a3664e7bda8f81c8bbd7d747fb6d0dcb59001c3e',
--    10: 'c9cd4c401241f99cc08abbcb91060fd7b7f9a1243c21047382cc966e89438157',
-+    9: '9814ac9bff8c08a98803213eec0f1f90630b235ab62828c68f48d53753ff5c73',
-+    10: '8b9eae698d8d028a70ca3eb1048e1c56fbd7b375758630eb151c4a109d8bb569',
- }
---- app/core/tests/test_medida_turno_do_par.py
-+++ app/core/tests/test_medida_turno_do_par.py
-@@ -315 +315 @@
--                       ('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1'): [1172, 1322],
-+                       ('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1'): [1191, 1344],
-```
-
-O censo pelo instrumento do selo encontrou **um único item registrado** de `cartorio.py`: `derivacoes_de_dia`, `_julgar_colab_corpo`, B1. Suas ocorrências atuais são [cartorio.py:1191](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1191) e [cartorio.py:1344](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1344). A comparação integral dos registros passou pela [catraca](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:539). [nao verificado]
-
-Comandos executados em `app/`:
-
-```bash
-# rc=0; 24 testes [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria -v
-
-# rc=0; 24 testes [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo green
-
-# Cada comando abaixo: rc=1, morto por assertion, ERROR=0
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_horizonte_x1
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante horizonte_na_10
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante literal_incondicional
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_fonte_no_gancho
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante so_acusador
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante parcial_tira_marcador
-```
-
-Resultados segundo o [executor sem banco](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:77).
-
-RED da catraca antes da edição: **rc=1**. Após a edição: **rc=0**. Mutante restaurando o registro antigo somente em memória: **rc=1**, por assertion em [test_medida_turno_do_par.py:540](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:540). Comando do mutante; para GREEN, retirar `MUTANTE=registro_antigo`:
-
-```bash
-MUTANTE=registro_antigo PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import os, pathlib, types, unittest
-p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
-suite = types.ModuleType('suite_turno') [nao verificado]
-suite.__file__ = str(p.resolve()) [nao verificado]
-source = p.read_text().replace(
-    'from django.test import SimpleTestCase',
-    'from unittest import TestCase as SimpleTestCase')
-exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
-if os.environ.get('MUTANTE') == 'registro_antigo':
-    suite.LINHAS_REGISTRADAS['derivacoes_de_dia'][ [nao verificado]
-        ('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1')
-    ] = [1172, 1322]
-unittest.main(
-    module=suite, [nao verificado]
-    defaultTest='CatracaTurnoDoParTest.test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit',
-    verbosity=2)
-PY
-```
-
-A busca `rg -n 'c3b1e428|c9cd4c40' .` terminou com **rc=1**, sem ocorrências restantes; `git diff --check`, **rc=0**. ORM c4/c4b após esta edição: **[nao verificado]**, reservado à sessão conforme solicitado.
-
-_3753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3754 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
