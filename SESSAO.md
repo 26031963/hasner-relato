@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 04:45:05.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (316.5 MB). Acoes na janela: **1564**.
+**Medido em 11/11/2026 04:50:32.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (316.5 MB). Acoes na janela: **1558**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1568,9 +1568,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:50:51 | Bash | Gather obra facts for RELATO section | `cd /home/ronald/saas-hasner; ls logs/BO-0611-05/ \| tail -40; cat logs/BO-0611-05/triagem_preverif1.txt 2>/dev/null \| head -30; git -C /home/ronald/wt-codex-bo-0611-05-144805 log --oneline da829e9f6..HEAD; git -C /home/ronald/wt-codex-bo-0611-05-144805 diff --stat da829e9f6..HEAD \| tail -25` |
 | 16:50:48 | Bash | List RELATO sections and BO logs | `cd /home/ronald/saas-hasner/app/docs; /bin/grep -n '^## ' RELATO.md \| head -8; ls /home/ronald/saas-hasner/logs/BO-0611-05/ \| head -60` |
 | 16:50:43 | Bash | Check opus progress, time, RELATO top | `tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a8f0121cf08416c1a.output; echo; date +%H:%M; sed -n 1,8p /home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 16:49:30 | Bash | Write census triage and update backlog row | `cd /home/ronald/saas-hasner; cat > logs/DISPUTA-ZUMBI-1110/triagem_censo1.txt <<'EOF' TRIAGEM censo1 DISPUTA-ZUMBI-1110 (sessao, 10/11 16:5x; amostra conferida abrindo o arquivo:linha no main eac3f25dd) 1. CONTRADIZ A PREMISSA do aval: lavrar_sem_turno_aberto carimba (reconciliador.py:405) e JA pergunta pode_fechar (:411) e chama fechar (:412) -- conferido. Historia da linha: d1abb8219 (22/10, C7  ...` |
-| 16:49:14 | Bash | Confirm census claims in code and history | `cd /home/ronald/saas-hasner/app; sed -n 400,415p chamados/reconciliador.py; git log -L405,412:chamados/reconciliador.py --format='%h %ad %s' --date=short -s \| head -8; sed -n 150,165p chamados/services/explicador.py; tail -12 /home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/censo1.r` |
-| 16:49:09 | Bash | Read zumbi census result | `cd /home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110; wc -l censo1.r; cat censo1.r \| head -120` |
-| 16:49:06 | Agent | Opus final BO-0611-05 | `OBRA BO-0611-05, leitura FINAL antes do pouso (opus final unico). Somente leitura; nao edite nada, nao rode docker/suite, nao mate processos. Arvore certificada: worktree /home/ronald/wt-codex-bo-0611-05-144805 em 4ffb05150 (base da829e9f6, arvore igual ao main de origem). Suite inteira dessa arvore VERDE: logs/BO-0611-05/suite_v6.log (OK skipped=42 expected failures=41, Ran 14983, rc=0). Diff int ...` |
-| 16:48:54 | Bash | Produce final diff for verifier | `cd /home/ronald/wt-codex-bo-0611-05-144805; git diff da829e9f6 HEAD > /home/ronald/saas-hasner/logs/BO-0611-05/diff_final_4ffb05150.patch; wc -l /home/ronald/saas-hasner/logs/BO-0611-05/diff_final_4ffb05150.patch; ls /home/ronald/saas-hasner/logs/BO-0611-05/ \| /bin/grep -E "preverif\|triagem\|leis_sitio\|aval"` |
-| 16:48:49 | Bash | Read volta 6 suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bsaf98nd9.output; cd /home/ronald/wt-codex-bo-0611-05-144805; git rev-parse HEAD; cat /home/ronald/saas-hasner/logs/BO-0611-05/suite_v6.hash; git status --porcelain \| head -3; ls /home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/` |
