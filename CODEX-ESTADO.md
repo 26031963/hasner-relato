@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 11:31** · publicado em **11/11/2026 11:32** (UTC-3)
+> Ultima resposta processada: **11/11/2026 11:37** · publicado em **11/11/2026 11:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 11:37 · sessao 70d2beb073f4 · FABLE-GABARITO · leitura · origem=Code
+
+| caso | classe | arquivo do veredito opus | veredito em 1 linha | PROVA da resposta | PACOTE EXATO recebido | defeito real |
+|---|---|---|---|---|---|---|
+| TOTAL: 0 casos elegíveis | a: **0/6**; b: **0/3**; c: **0 comprovados** | — | Mínimos não atingidos | Nenhum candidato abaixo reúne pacote integral identificável e prova exigida; pacote obrigatório em `aval_gabarito_fable_1111.txt:1`. | Completude dos pacotes [nao verificado]; lacunas discriminadas em FORA. | — |
+
+FORA
+
+- **E3 08:3x horizonte** — REPROVADO; cura identificada: `2e9d534d8`, “E3 fix9 (copia): sem_adesao so do HORIZONTE_SEM_ADESAO 2026-11 em diante (opus final B1)”; prompt e diff exatos recebidos [nao verificado]. O `.raw` tem registros truncados e não permite recuperar o pacote. (`logs/FIO-E0-V4-E3/opus_final_e3_b1.txt:1-7`; `logs/FIO-E0-V4-E3/opus_final_e3.raw:1-12`.)
+- **BO-0611-05 opus_final2 0.0** — o veredito é **APROVA**, com o problema dos mapas já registrado; cura posterior `fdf9fc05b`, “BO-0611-05 volta 8: modal_fio e _relatorio_geo perguntam ao juiz tem_gps (0.0 nao desenha mapa)”; prompt/diff exatos [nao verificado]. (`logs/BO-0611-05/opus_final2.txt:2-3`.)
+- **BO-0611-05 opus_final1** — REPROVADO sobre `4ffb05150`; pacote do opus [nao verificado]: os nomes visíveis de censo não identificam sua pergunta final nem seu diff. (`logs/BO-0611-05/opus_final1.txt:1`.)
+- **BO-0611-05 opus_final3** — APROVADO sobre `fdf9fc05b`, pouso `fb9269ea9`; pacote exato [nao verificado] e janela de 48 h ainda incompleta no gitlog fornecido. (`logs/BO-0611-05/opus_final3.txt:1-4`; `gitlog_14d.txt`, commit `fb9269ea9`.)
+- **E4a-1** — REPROVADO sobre diff `f2962ab8d..629f2d244`; cura `5578212ef`, “FIO-E0-V4-E4 E4a-1: curas P1-P5 da 1a reprovacao do opus final (verificador)”; arquivo do prompt e diff salvo exatos [nao verificado]. (`logs/FIO-E0-V4-E4-ESCRITORES/opus_final_e4a1_1.txt:1-3`.)
+- **E4A-2 final1** — REPROVADO sobre `11f82cfec`; pacote final integral [nao verificado]. (`logs/FIO-E0-V4-E4A-2/opus_final1.txt:1`.)
+- **TRAVA-SELO v11** — APROVADO sobre `04ec2b8b0`, pouso `9ca563bb3`; `diff_v1.txt` e `preverif_v1.q` não demonstram o pacote final v11; tampouco há 48 h posteriores no gitlog. (`logs/TRAVA-SELO/opus_final_v11.r:1`; `gitlog_14d.txt`, commit `9ca563bb3`; pacote v11 [nao verificado].)
+- **VERIFICADOR-EM-FABLE v3** — REPROVA sobre `238cd5cdf`; cura `5ab7b0ff3`, “VERIFICADOR-EM-FABLE (1) volta 4: a negativa sem obra tem prefixo proprio B3-SEM-OBRA”; `c1.diff` e `preverif1.q` não identificam o pacote final v3. (`logs/VERIFICADOR-EM-FABLE/opus_final_v3.txt:1-2`; pacote v3 [nao verificado].)
+- **L-123-MEDIDA-EM-PY** — REPROVADO sobre `7a2e3bc5`; aparecem `diff.patch` e `v1.q`, mas sua vinculação ao pedido final e a relação completa de anexos [nao verificado]. (`logs/akmed/opus_final.txt:1`.)
+- **AUDITORIA v5** — bloqueio sobre `500bbdde3`; pergunta/diff finais e commit da cura seguinte [nao verificado]. (`logs/auditoria_0911/opus_final_v5.txt:1-2`.)
+- **C20-FIO-MUDO final v5** — REPROVA sobre `5f3ea8c2`; as três entradas reproduzem o mesmo laudo, sem demonstrar pacote final integral ou commit da cura seguinte. (`logs/c20_fiomudo/codex/opus_final_v5_achados.txt:1`; `logs/c20_fiomudo/opus_final_1d78ef7f/opus_final_v5_achados.txt:1`; `logs/c20_fiomudo/opus_final_3ee00412/opus_final_v5_achados.txt:1`; pacote/cura [nao verificado].)
+- **C20-O169** — REPROVA sobre `6afa8aa1/e76e0419`; cura `e13209863`, “O169 volta opus: L-125 CLUSTER-NAO-FECHA-POR-IDADE entra no LEIS.md + ADR (bloqueante do opus final)”; pacote final exato [nao verificado]. (`logs/c20_o169/opus_final_1.txt:1-2`.)
+- **COBPARC v4** — REPROVADO; o laudo distingue `113fd774` de `129bfeaa`, e suas duas cópias não identificam o pacote recebido integralmente. (`logs/cobparc/v4/opus_final.md:1-6`; `logs/cobparc/v4/pm/opus_final_achados.md:1-6`; pacote [nao verificado].)
+- **COBPARC v7** — REPROVADO sobre `8f21ec29`; cura `d03410912`, “[COBERTURA-PARCIAL-UM-JUIZ] v8 achados 1 e 2 (opus final v7): o leitor da ata transporta justificado; o vinculo volta a contar”; prompt/diff finais exatos [nao verificado]. (`logs/cobparc/v7/opus_final.txt:1-4`.)
+- **COBPARC v8** — REPROVADO sobre `f05713f5`, com amend `72eb11be` relatado; pacote exato e assunto do commit de cura no gitlog [nao verificado]. (`logs/cobparc/v8/opus_final.txt:1-3`.)
+- **COBPARC-FILA-RELOGIO v1** — REPROVADO sobre `69a6a682`; pergunta/diff finais e commit da volta seguinte que cite o achado [nao verificado]. (`logs/cobparc_relogio/opus_final.txt:1-3`.)
+- **COBPARC-FILA-RELOGIO v2** — REPROVADO sobre `12200105`; pacote exato e commit de cura seguinte [nao verificado]. (`logs/cobparc_relogio/opus_final.txt:10-11`.)
+- **CODEX-CONSTRUTOR inicial** — REPROVA sobre `d63b837f`; a cura aparece em `bbdbceb91`, “CODEX-CONSTRUTOR-NEGOCIO volta 4: o inventario do construtor varre o FS da copia e .git em qualquer nivel e PROIBIDO”; porém, o prompt corta o nome do anexo em `logs/codexneg/mutantes_selo`. Completar esse nome pelo veredito reconstruiria o pacote. (`logs/codexneg/opus_final_r.md:1`; `logs/codexneg/opus_final_prompt.txt:3`; identidade integral do anexo [nao verificado].)
+- **CODEX-CONSTRUTOR v4** — REPROVA sobre `9995e2a6`; cura `cf6360832`, “CODEX-CONSTRUTOR-NEGOCIO volta 5 (opus final v4 1b): todo python3 do wrapper sob -I”; prompt, diff e delta estão nomeados, mas a relação de triagens está truncada após `logs/codex`. (`logs/codexneg/opus_final_v4_r.md:1-3`; `logs/codexneg/opus_final_v4_prompt.txt:3`; pacote integral [nao verificado].)
+- **CODEX-CONSTRUTOR v5** — APROVA sobre `37880aa1`, pouso `a1d70f619`; o catálogo mostra somente a cabeça de 12 das 20 linhas do prompt, com referências truncadas: completude dos anexos [nao verificado]. (`logs/codexneg/opus_final_v5_r.md:1`; `logs/codexneg/opus_final_v5_prompt.txt:6-8`.)
+- **CONTENCAO v2/p1** — REPROVADO sobre `3a743cdd`; pacote final integral e commit da cura seguinte [nao verificado]. (`logs/contencao/v2/p1/opus_final.md:1-3`.)
+- **CRONS-INSTALL-SOB-MARCA** — APROVADO sobre `073d840f`, pouso `3ce6f52b5`; pergunta/diff exatos do opus [nao verificado]. (`logs/cronsmarca/opus_final_1.txt:1`; `gitlog_14d.txt`, commit `3ce6f52b5`.)
+- **CXR-TELA final1** — REPROVA sobre `71c91c97`; cura `bab61829f`, “CXR-TELA-LE-O-MOTOR volta 4 (opus final 1 REPROVA 71c91c97): selo C3 no caminho C11 e relogio na borda”; pacote final exato [nao verificado]. (`logs/cxr_tela/opus_final_71c91c97.md:1-4`.)
+- **CXR-TELA final2** — APROVA sobre `6a5e5ad8`, pouso `94d41ea56`; pergunta/diff finais exatos [nao verificado]. (`logs/cxr_tela/opus_final_6a5e5ad8.md:1`; `gitlog_14d.txt`, commit `94d41ea56`.)
+- **E4-CALENDARIO-L1** — REPROVADO sobre `15d4f10b`; há três perguntas nomeadas, sem identificação verificável de qual foi recebida e de todos os anexos/diffs. (`logs/e4cal/postmortem_opus/opus_final.txt:2`; pacote [nao verificado].)
+- **E-SEM-VIVA-B final sobre 97411e5c** — REPROVA; cura `3be9c5423`, “E-SEM-VIVA-B volta 4: a C5 do desligado le a LAVRA do juiz _K2 (RetratoFolha) e nao recompoe rescisao + retentor”; pacote final exato [nao verificado]. (`logs/esemvivab/opus_final_97411e5c.md:1-3`.)
+- **E-SEM-VIVA-B final sobre 1936c9d2** — APROVA, pouso `40a005457`; pergunta/diff finais exatos [nao verificado]. (`logs/esemvivab/opus_final_1936c9d2.md:1-2`; `gitlog_14d.txt`, commit `40a005457`.)
+- **F3-BECO-1 final1** — REPROVADO sobre `e2e3d901`; cura `f10f8328a`, “F3-BECO-1 retrabalho: B1+F1+F5+F6 do laudo opus_final_1 (C11 em lote, dono unico do dia)”; pacote final exato [nao verificado]. (`logs/f3_beco1/opus_final_1.txt:1-2`.)
+- **F3-BECO-1 final2** — APROVA o código sobre `59bbe2e3`, pouso `9c0fd9d3e`; pacote final exato [nao verificado]. (`logs/f3_beco1/opus_final_2.txt:1-3`; `gitlog_14d.txt`, commit `9c0fd9d3e`.)
+- **E1 final sobre afb67623** — REPROVA; cura `6e53526de`, “FIO-E0-V4-E1 volta 12 (opus final 1 REPROVA afb67623, reprova 1 de 3, PISTA-LIVRE): S143 so trava quando o save ESCREVE o status”; pacote exato [nao verificado]. (`logs/fio_e0_v4/opus_final_e1_afb67623.md:1`.)
+- **E1 final2 sobre 6695e972** — REPROVADO; pergunta/diff finais exatos [nao verificado]. (`logs/fio_e0_v4/opus_final2_e1_6695e972.md:1-2`.)
+- **E1 final3 sobre 76644dc8** — REPROVADO; cura `d73d84a92`, “FIO-E0-V4-E1 volta 15d (opus final 3 reprovou 76644dc8): o reuso de abrir re-chaveia pela porta unica”; pacote exato [nao verificado]. (`logs/fio_e0_v4/opus_final3_e1_76644dc8.md:1-3`.)
+- **E1 final4 sobre b0c4297c** — REPROVADO; pergunta/diff finais exatos [nao verificado]. (`logs/fio_e0_v4/opus_final4_e1_b0c4297c.md:1-2`.)
+- **DEPLOY-PORTAO final5** — APROVA o intervalo `a5df8ed5..c24a1914`; pacote final exato [nao verificado], e as voltas posteriores `e04870002`/`20df97548` impedem presumir aprovação limpa desse intervalo. (`logs/fio_e0_v4/opus_final_deployportao5.md:1`; `gitlog_14d.txt`, commits `e04870002`, `20df97548`.)
+- **E2 final sobre 3b853907** — REPROVADO; pergunta/diff finais exatos [nao verificado]. (`logs/fio_e0_v4/opus_final_e2.txt:1-6`.)
+- **E2 final sobre d912345b** — REPROVA; `e2_opus_final_c2833d85_d912345b.diff` está nomeado, mas pergunta final e conjunto integral dos anexos [nao verificado]. (`logs/fio_e0_v4/opus_final_e2_d912345b.md:1-3`; `logs/fio_e0_v4/e2_opus_final_c2833d85_d912345b.diff:1`.)
+- **GRADE-v5** — REPROVADO sobre `391b74dc`; pergunta/diff finais exatos [nao verificado]. (`logs/grade_folga/v5/pm/opus_final.txt:1`.)
+- **GRADE-FOLGA-JUIZ sobre abd37234** — REPROVADO; `pv/` e `v10/` contêm cópias do mesmo laudo, não dois casos; pacote final exato [nao verificado]. (`logs/grade_juiz/pv/opus_final.txt:1`; `logs/grade_juiz/v10/opus_final.txt:1`.)
+- **GRADE-FOLGA-JUIZ va** — REPROVADO sobre `d9cb0e42`; cura `60258b809`, “GRADE-FOLGA-JUIZ vb: cura dos 3 achados do opus final (prova e documento; codigo do juiz intocado)”; o brief identifica o ensaio por diretório, sem enumerar cada arquivo recebido. (`logs/grade_juiz/va/opus_final_achados.md:1-4`; `logs/grade_juiz/va/opus_final_brief.md:7`; pacote integral [nao verificado].)
+- **GRADE-FOLGA-JUIZ vb** — brief identifica `60258b80`, diff e delta, mas arquivo do veredito final vb e commit do pouso no gitlog fornecido [nao verificado]. (`logs/grade_juiz/vb/opus_final_brief.md:1-3`.)
+- **H12H06-B sobre 4e9380e5** — REPROVA; cura `90747d3a7`, “H12H06-B volta 5: editar_ausencia_registro vence a projecao do range antigo e do novo; o GRAVADO afirma a regra no DSR”; pacote final exato [nao verificado]. (`logs/h12h06b/opus_final_4e9380e5.md:1-3`.)
+- **H12H06-B-PAUTA-08 v7** — APROVADO sobre `dbabd2ad`, pouso `967d48211`; pergunta/diff finais exatos [nao verificado]. (`logs/h12h06b/pauta08/v7/opus_final_dbabd2ad.md:1`; `gitlog_14d.txt`, commit `967d48211`.)
+- **JUIZ-1 v5** — APROVADO sobre `d38e6b91`, pouso `630131b1f`; pacote final exato [nao verificado]. (`logs/jv1/opus_final_v5.txt:1`; `gitlog_14d.txt`, commit `630131b1f`.)
+- **JUIZ-1 resolução de merge** — APROVADO sobre `ed9cd506 + c4525ff4`; pergunta/diff finais exatos e correspondência com o commit de pouso [nao verificado]. (`logs/jv1/opus_final_merge.txt:1`.)
+- **LEN-VIVOS** — APROVADO sobre `f71d570e`, pouso `f9b89feaa`; pacote final exato [nao verificado]. (`logs/lenvivos/v2/opus_final.txt:1-2`; `gitlog_14d.txt`, commit `f9b89feaa`.)
+- **MOTOR-LE-O-TURNO-INSTRUMENTO final2** — APROVA sobre `bc9db924`, pouso `935c8d961`; pacote final exato [nao verificado]. (`logs/motor_turno/piloto/opus_final2.md:1`; `gitlog_14d.txt`, commit `935c8d961`.)
+- **O261-E-F2 final1** — REPROVADO sobre `7882a6e6`; cura `e9690d0c1`, “[O261-E-F2] volta 4: quem chama a porta do carimbo (selo AST), testemunha viva da classe (f) e DOSSIES:46”; pacote final exato [nao verificado]. (`logs/o261e/f2/opus_final_v1.md:1-2`.)
+- **O261-E-F2 final2** — APROVADO sobre `5c2bb8a4`; pacote final exato e commit do pouso correspondente no gitlog [nao verificado]. (`logs/o261e/f2/opus_final_v2.md:1-2`.)
+- **PADRAO-DE-CIMA final** — REPROVADO sobre `b3c0f8ec`; pergunta/diff finais exatos e commit da cura seguinte [nao verificado]. (`logs/padrao_de_cima/v6/r9/opus_final.txt:1-2`.)
+- **PAR-NAO-ADJACENTE final1** — REPROVA sobre `795cafdf`; pacote final exato e commit da volta seguinte que cite o achado [nao verificado]. (`logs/par_nao_adjacente/opus_final_1.txt:1-2`.)
+- **PAR-NAO-ADJACENTE final2** — APROVA o diff `d361dfee`; pergunta/diff salvos exatos e commit do pouso no gitlog [nao verificado]. (`logs/par_nao_adjacente/opus_final_2.txt:1`.)
+- **BUG-PLANTIO-NOTURNO-MAIS-1 final** — BLOQUEIA; o laudo nomeia `final.diff` e `f1.r`, mas não a pergunta final salva nem o pacote integral; commit avaliado [nao verificado]. (`logs/plantio_mais1/opus_final.txt:1-4`, `:11`.)
+- **SELOS-CANON-I1 final1** — REPROVA sobre `f0103befd`; cura `f56dc9628`, “SELOS-CANON-I1 volta 5 (construtor): pertenca da fila 1 pelo TOKEN da celula nas duas vias”; pacote final exato [nao verificado]. (`logs/selos_canon/i1_opus_final.md:1-2`.)
+- **SELOS-CANON-I1 final2** — REPROVA sobre `788ae3e28`; cura `d1502c4ae`, “SELOS-CANON-I1 volta 6 (construtor opus): o espelho da pertenca da fila 1”; pacote final exato [nao verificado]. (`logs/selos_canon/i1_opus_final_2.md:1-2`.)
+- **SELOS-CANON-I1 final3** — APROVADO, pouso `3803e6623`; pergunta/diff finais exatos [nao verificado]. (`logs/selos_canon/i1_opus_final_3.md:1`; `gitlog_14d.txt`, commit `3803e6623`.)
+- **SNC2 final1** — APROVA sobre `e3ef579a`, pouso `ad28270d8`; pergunta/diff finais exatos [nao verificado]. (`logs/snc2/opus_final_1.txt:1-2`; `gitlog_14d.txt`, commit `ad28270d8`.)
+- **SOMBRA (c)(1)+motor feriado** — APROVADO sobre `f40d356e+47691f0b`, pouso `0d234d122`; pacote final exato [nao verificado]. (`logs/sombra_c1/opus_final_1.txt:1`; `gitlog_14d.txt`, commit `0d234d122`.)
+- **V2-BUGS-DO-MOTOR i2 final1** — REPROVADO sobre `2cb3a055`; pergunta/diff finais exatos [nao verificado]. (`logs/v2bugs/i2/opus_final.txt:1-5`.)
+- **V2-BUGS-DO-MOTOR i2 final v6** — APROVADO sobre `a23831c3`, pouso `ffbda473e`; pergunta/diff finais exatos [nao verificado]. (`logs/v2bugs/i2/opus_final_v6.txt:1-2`; `gitlog_14d.txt`, commit `ffbda473e`.)
+- **V3-P5 final** — REPROVADO sobre `c71b1038`; pergunta/diff finais exatos [nao verificado]. (`logs/v3p5/pv/opus_final.txt:1-8`.)
+
+## 11/11 11:35 · sessao b1f0518d314b · - · - · origem=Ronald (tmux)
+
+| candidato | motivo de exclusão |
+|---|---|
+| CODEXNEG inicial | O prompt e o diff estão nomeados, mas a referência ao anexo de mutantes termina em `logs/codexneg/mutantes_selo`; a identidade completa desse anexo recebido está [nao verificado]. `logs/codexneg/opus_final_prompt.txt:3`. |
+| CODEXNEG v4 | O prompt identifica diff e delta, mas a relação de triagens termina truncada em `logs/codex`; pacote integral [nao verificado]. `logs/codexneg/opus_final_v4_prompt.txt:3`. |
+| CODEXNEG v5 | O catálogo mostra apenas 12 das 20 linhas do prompt, com referências truncadas; não permite certificar todos os anexos recebidos. `logs/codexneg/opus_final_v5_prompt.txt:6`, `:8`; completude [nao verificado]. |
+| GRADE va | Os nomes relativos `v1.r`, `v2.r`, `v1_triagem.md` são utilizáveis literalmente; porém, o ensaio é identificado por diretório, sem enumeração dos arquivos recebidos. `logs/grade_juiz/va/opus_final_brief.md:5`, `:7`; apenas `fase_C.txt` aparece em `:12`; pacote integral [nao verificado]. |
+| GRADE vb | Há prompt e diffs nomeados, mas nenhum arquivo de veredito final vb é apresentado no catálogo. `logs/grade_juiz/vb/opus_final_brief.md:1`, `:3`; arquivo do veredito [nao verificado]. |
+
+Zero desses cinco casos têm pacote e veredito integralmente certificáveis pelos recortes fornecidos; isso não afirma inexistência física dos arquivos. [nao verificado]
+
+## 11/11 11:35 · sessao be6027cf7941 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Restaurei a releitura por disputa no C7, mantendo o memo das cargas e o N1 exigindo **2 leituras**. [disputa_emissao.py:2076](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:2076)
+
+A perda ocorreu na **c4v5**; a c4v6 acrescentou a semente do E2. O memo podia divergir após reabertura do período. A cadeia completa, escritores e leitores estão no [recibo:8](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:8).
+
+Validação: RED na base, três mutantes falhando pela asserção comportamental, 94 testes de memória/protocolo e 40 selos passando. [recibo:105](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:105) [nao verificado]
+
+O comando ORM completo está no [recibo:149](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:149). ORM, tetos C8 e suite integral: **[nao verificado]**. [nao verificado]
+
+Sem commit, respeitando a proibição inicial de commit e escrita em `.git*`. [recibo:158](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:158) [nao verificado]
 
 ## 11/11 11:31 · sessao 9c6b12fbf335 · MAPA-ATE-O-20 · censo · origem=Code
 
@@ -763,74 +856,4 @@ A linha de fila deve apontar `templates/core/dashboard_colaborador_v2.html:80`: 
 
 O teste de contagem registra os dois sítios inline dos badges como exceções `MENSAGEM`. Ao mover a query, o contrato exige retirar os dois sítios antigos, declarar o sítio da projeção e reduzir o teto de acordo; sem isso haverá assertions por sítio novo e declarações obsoletas. (`core/tests/test_tripwire_contagem_de_pendencia.py:83`, `:85`, `:383`, `:390`, `:395`) Não editei arquivos nem executei banco. [nao verificado]
 
-## 11/11 10:36 · sessao a41024c8adde · - · - · origem=Ronald (tmux)
-
-- **Causas a–e:** E4B é a dona escrita de todas as cinco classes; não é necessário inventar dono por semelhança de código. O BACKLOG anexo diz literalmente “backfill do fio morto (matriz_e4 C3, classes a-e)”; a cópia confirma o escopo. Isso prova responsabilidade, não redução do baseline nem cobertura eficaz medida. (`backlog_obras.txt:1887`; `app/docs/BACKLOG.md:1875`.)
-- **Significados:** a = chamado vivo fora da fila; b = resposta carimbada sem texto; c = respondida com destino terminal; d = colaborador na lista CXR e dia fora; e = restante discriminado. O subtipo de e `pergunta_viva_sob_chamado_terminal` tem ramo próprio. (`app/chamados/services/vigia_fio.py:519`; `app/chamados/services/vigia_fio.py:538`; `app/chamados/services/vigia_fio.py:667`; `app/chamados/services/vigia_fio.py:688`.)
-- **SEM DONO:** os dados permitem dizer que nenhuma causa a–e ficou sem obra dona explícita, porque E4B nomeia todas. Não permitem dar como zero o resíduo depois das obras; redução efetiva não medida continua “nao medido”. A coluna de tamanho solicitada deve permanecer literalmente “a medir pela sessao”. (`backlog_obras.txt:1887`; impacto pós-obras: [nao verificado].)
-
-Para as linhas RAIZ, a sequência escrita é F0→F1→F2=BO-DISPUTA→F3→F4=BUG-PAR→F5 com E4d→F6→F7. Essa ordem não define por si o inventário de arquivos de cada fase. (`backlog_obras.txt:1895`; `app/docs/BACKLOG.md:1883`.)
-
-- **RAIZ F1:** sítios de destino em `app/chamados/models.py:2982`, `:3014`; `app/chamados/services/fio.py:925`; eleitores em `app/chamados/services/disputa_emissao.py:238`, `:1197`; `app/chamados/services/declaracao_texto.py:377`. F1 aparece respondida no anexo recente, precedendo c22 depois de E3/E4B; a lei antiga ainda aberta no RELATO da cópia é anterior e não deve prevalecer. (`backlog_obras.txt:1875`; `app/docs/RELATO.md:19`.)
-- **RAIZ F2:** equivale a BO-DISPUTA e utiliza a cópia c21/c22 preservada: `app/chamados/management/commands/auditar_invariantes_chamados.py`, `app/chamados/services/declaracao_texto.py`, `app/chamados/services/descarte_disputa.py`, `app/chamados/services/disputa_emissao.py`, `app/core/observ.py`, `app/ponto/management/commands/reconciliar_grade.py`. (`arquivos_obras.txt`, bloco c21/c22: [nao verificado quanto à numeração do anexo]; `backlog_obras.txt:1875`; `backlog_obras.txt:1895`.)
-- **RAIZ F3/F4:** reutilizar o mesmo censo, sem alegar divisão exaustiva entre as duas fases. Sítios centrais: `app/chamados/models.py:1853`, `:3103`; `app/chamados/services/materializacao.py:425`, `:875`, `:1158`; `app/chamados/services/validacao.py:134`, `:199`, `:461`; `app/chamados/services/disputa_emissao.py:1508`, `:1632`; `app/chamados/reconciliador.py:411`, `:611`, `:1170`; `app/chamados/services/becos.py:56`; `app/chamados/signals.py:238`; `app/chamados/services/explicador.py:137`; `app/chamados/relatorios_disputa.py:20`. Essas referências são as do `f3f4_censo.r` fornecido, não novo levantamento. (`f3f4_censo.r`: [nao verificado quanto à numeração do anexo].)
-- **RAIZ F4 especificamente:** par da pausa pela célula, perda em `app/chamados/models.py:3441`, fonte `PARES_PAUSA_DNA`; não atribuir D8 como bloqueio de F3/F4. (`backlog_obras.txt:1896`; `leis_abertas.txt`, RELATO:31.)
-- **RAIZ F5:** coordenada com E4d; o inventário fechado próprio dessa fase não foi fornecido. Pode citar a dependência da parada da projeção e preservar as seis exceções, sem inventar lista exaustiva de alterações. (`backlog_obras.txt:1895`; `app/docs/PROMPTS.md:2030`; `app/docs/PROMPTS.md:2034`.)
-- **RAIZ F6/F7:** há nome e posição na sequência; escopo, arquivos, voltas e efeito visível específicos = “nao medido”. Não converter os lotes sugeridos do censo em fases oficiais. (`backlog_obras.txt:1895`; `app/docs/BACKLOG.md:1883`.)
-- **O168:** `app/ponto/supra_juiz.py:539` e cartório do evento; retirar `--executar` depende da guarda funcionar no evento e de `CSF_RETRATADO` medido em zero. Nada disso é medida atual de fio_morto_alcance. (`backlog_obras.txt:1396`; `app/docs/BACKLOG.md:1395`; `app/ponto/services/cartorio.py:1091`.)
-- **LASTRO:** o nome abreviado agrega obras distintas; não declarar uma única etapa para todo o agregado sem ressalva. Degrau 2 toca `app/ponto/services/lastro.py:274` e depende do juiz do par; parte 2 depende de JUIZ-1 e CRONS-INSTALL; parte 3 já pousou e toca emissão/reação. (`backlog_obras.txt:1732`; `backlog_obras.txt:1761`; `backlog_obras.txt:1763`.)
-
-**C — cautela:** compartilhamento de arquivo prova cruzamento e necessidade de integração, não desmente sozinho uma ordem. O censo F3/F4 pede coordenação das testemunhas com E4c e parada com E4d, mas não fornece número que prove uma inversão obrigatória. (`f3f4_censo.r`, “Ordem sugerida”, item 5: [nao verificado quanto à numeração do anexo]; `app/docs/BACKLOG.md:1883`.)
-
-A declaração META de O169-FECHADA “4 arquivos, 0 comuns com E3/E4B” diverge da contagem bruta da cópia anexa, que lista cinco arquivos, dos quais dois de produção; a ausência de arquivos comuns com E3/E4B continua confirmada pelo inventário fornecido. Isso é divergência de contagem, não premissa de ordem desmentida. (`meta18_linha.txt:1`; `arquivos_obras.txt`, blocos E3/E4B/O169-FECHADA: [nao verificado quanto à numeração do anexo].)
-
-## 11/11 10:35 · sessao 5b642dda3528 · - · - · origem=Ronald (tmux)
-
-Furos concretos para D:
-
-- **QUEM CHAMA:** o caminho `logs/MAPA-20/mapa.md → MAPA-20.md` ainda não entra na raspagem, no staging nem no commit; acrescentar apenas o par não publica o arquivo. (`bin/relato.sh:103`, `bin/relato.sh:117`, `bin/relato.sh:121`, `bin/relato.sh:130`, `bin/relato.sh:131`)
-- **QUEM ESPERA / LIMITE:** o publicador espera o lock por até 600 s e depende da obtenção da lista de nomes e dos geradores; o contrato não declara essas dependências nem como a atualização por evento trata falha/timeout. (`bin/relato.sh:27`, `bin/relato.sh:32`, `bin/relato.sh:35`, `bin/relato.sh:38`, `bin/relato.sh:42`, `bin/relato.sh:102`)
-- **FALHA:** origem ausente é pulada com sucesso; não existe nesses dois programas validação de obras META-18 ou de células vazias. O `rc 1` prometido exige validação adicional antes da cópia. (`bin/raspar_publico.py:25`, `bin/raspar_publico.py:27`, `bin/raspar_publico.py:40`, `bin/raspar_publico.py:46`)
-- **MEDIDA:** os programas contam substituições de nomes/CPF, não obras nem cobertura de `fio_morto_alcance`/Central; o contrato não define identificação única, tratamento das obras extras ou deduplicação de impactos. Implementação dessa conferência: [nao verificado]. (`bin/raspar_publico.py:41`, `bin/raspar_publico.py:45`)
-- **FALHA DE PUBLICAÇÃO:** a atualização da linha local não prova publicação; o push pode falhar e não há retry por evento declarado no contrato. (`bin/relato.sh:132`)
-- **QUEM DESLIGA:** falta definir a operação de desligamento e o destino da página já publicada; o script não possui condição de 20/20 e o próprio precedente documenta remoção do par **e** remoção do arquivo público. (`bin/relato.sh:101`, `bin/relato.sh:103`, `bin/relato.sh:132`)
-
-Não executei os publicadores; execução, chamadas externas, estado público e comportamento da esteira em produção: [nao verificado]. [nao verificado]
-
-## 11/11 10:34 · sessao 8051d24e8124 · MAPA-ATE-O-20 · sonda · origem=Code
-
-```text
-sonda_leitura: sonda_central.py [3912ec00c599cf5c] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-central_qs_na_fila n 3634
-por_status_local 'aberto' n 2026
-por_status_local 'em_analise' n 1608
-por_categoria 'Ausencia' n 2710
-por_categoria 'disputa_supervisao' n 323
-por_categoria 'turno_aberto' n 171
-por_categoria 'auditoria_clt' n 128
-por_categoria 'Ponto' n 97
-por_categoria 'sem_previsao_escala' n 63
-por_categoria 'Outros' n 50
-por_categoria 'batida_espuria' n 25
-por_categoria 'turno_aberto_24h' n 18
-por_categoria 'ausencia' n 14
-por_categoria 'cadastro' n 12
-por_categoria 'Escala' n 5
-por_categoria 'App' n 3
-por_categoria 'Documentos' n 3
-por_categoria 'Ferias' n 3
-por_categoria 'acesso_bloqueado' n 3
-por_categoria 'Holerite' n 2
-por_categoria 'agenda_aceite' n 2
-por_categoria 'batida_fora_horario' n 1
-por_categoria 'geofence' n 1
-por_urgencia 'normal' n 1861
-por_urgencia 'urgente' n 1295
-por_urgencia 'emergencia' n 322
-por_urgencia 'critica' n 140
-por_urgencia 'consulta' n 16
-agora 2026-11-11 10:34:04
-```
-
-_3800 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3803 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
