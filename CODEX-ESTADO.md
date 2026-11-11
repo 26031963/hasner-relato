@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 06:22** · publicado em **11/11/2026 06:26** (UTC-3)
+> Ultima resposta processada: **11/11/2026 06:27** · publicado em **11/11/2026 06:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 06:27 · sessao 8ca9ab311c9e · - · - · origem=Ronald (tmux)
+
+Escopo recomendado: `tranca_da_consulta` deve envolver o restante inteiro do resolver, até o retorno final. O laço final chama `d.pode_fechar()` mesmo quando os anteriores pulam a disputa; esse juiz recarrega perguntas e consulta C6 (`chamados/services/disputa_emissao.py:2057`, `2069`; `chamados/models.py:1848–1853`). Assim, o memo existente também atende às instâncias posteriores (`chamados/juizes.py:1060–1062`).
+
+Envolver somente S143/S128 deixa escapar essa reutilização: o contexto começa com memo vazio e o descarta na saída (`chamados/juizes.py:1093–1104`). A economia efetiva permanece [nao verificado].
+
+Para provar o delta pedido, o melhor RED pareado reutiliza `_batida_com_furos_vivos(1/3)`, com rollback e memo frio por rodada, comparando contexto real versus `nullcontext`, e `wraps` sobre `periodo_trancado` (`ponto/tests/test_selo_chokepoint_escrita.py:403–427`, `481–494`). Exigir mesmos fechamentos, redução de uma chamada ao período e redução correspondente das queries; valores finais [nao verificado].
+
+O caso existente de pergunta viva também pode servir com escopo completo: após S143/S128, `pode_fechar()` volta a ler C6 (`chamados/tests/test_e4b_c4_orm.py:172–198`; `chamados/services/disputa_emissao.py:2069`). Nele, o total economizado pode incluir leitura de Empresa; não deduzir delta total exatamente igual a um [nao verificado].
+
+Antecipar a carga S128 muda seu instante em relação à ressuscitação: `reabrir()` pode descarimbar perguntas e reabrir disputas (`chamados/models.py:1451`, `1566–1575`). A consulta ampla posterior reencontra disputas abertas (`chamados/services/disputa_emissao.py:2010–2011`), mas equivalência integral desse adiantamento [nao verificado].
 
 ## 11/11 06:22 · sessao b6de4d034e52 · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -565,31 +577,4 @@ As referências aos anexos numeram o conteúdo colado, incluindo linhas vazias.
 | **5 — caso não chama `linha()`; mutante cai primeiro por exceção** | **(b), falha da triagem.** Motivo registrado: “DESCARTADO para esta obra, linha de fila; conferido em memoria pelo Codex.” (`triagem.txt:7`) | “O caso b3_sem_obra_historico e os 3 mutantes (historico-reconta, forma-invalida-vira-zero, duplicata-reconta) MORDEM de verdade?” (`preverif3.q:8`) | “`forma-invalida-vira-zero`: cai primeiro por `KeyError` em `{}`”; “apesar do comentário, esse caso não chama `linha()`”. (`preverif3.r:33`; `preverif3.r:35`) |
 | **6 — padrão Architecture Conformance Test inadequado à guarda de runtime** | **(e) pela regra da cópia; também (d) pela definição sobreposta do pedido**, conforme ressalva acima. (`CLAUDE.md:383`; `CLAUDE.md:390`; `opus_final_v3.txt:7`) | **nenhum** sobre adequação do padrão à guarda de runtime. As listas de classes perguntadas não incluem esse tema. (`preverif1.q:8`; `preverif2.q:9`; `preverif3.q:9`) | **nenhum** sobre esse tema, inclusive lateralmente. (`preverif1.r:29`; `preverif2.r:33`; `preverif2.r:37`; `preverif3.r:37`) |
 
-## 11/11 03:09 · sessao 291b543431b5 · VERIFICADOR-EM-FABLE · verificador · origem=Code
-
-APROVA
-
-1. **A negativa passa a ter regra distinta de `B3`.** `relato_negacao` captura hífens e escreve `NEGOU B3-SEM-OBRA`; a guarda retorna essa negativa antes de consultar a parada da obra (`bin/disjuntor.py:262`, `bin/disjuntor.py:279`, `bin/disjuntor.py:1845`).
-
-   Os demais leitores não precisam interpretar essa regra: `ler()` separa eventos pelo terceiro token, contando `NEGOU` como negativa e somente `DISJUNTOR` como disparo. O Stop recebe o mapa de obras paradas; `gerar_estado.py` delega a leitura e apresentação ao disjuntor. Não encontrei falsa negativa ou contagem indevida de parada introduzida pela troca nesses caminhos (`bin/disjuntor.py:1985`, `bin/disjuntor.py:1995`, `bin/disjuntor.py:2003`, `bin/hook_stop_fila1.py:1204`, `bin/gerar_estado.py:280`).
-
-2. **Existe sobreposição lexical com IDs legítimos, mas ambas as negativas são inertes no consumidor encontrado.** `B3-SEM-OBRA` e `B3-NAO-SEI` são valores diferentes, ambos aceitos por `_OBRA_ID`/`_OBRA_HIF`; portanto `obras_da_linha` pode devolver esses nomes como obras (`bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:619`, `bin/disjuntor.py:637`).
-
-   Isso não transforma nenhuma delas em obra parada ou liberação: o consumidor decisório exige também que a linha comece por `DESENHO ` ou `ERRO-BOBO `. Nem a mensagem `DISJUNTOR…` nem a linha datada `NEGOU…` satisfazem essa condição, inclusive quando a obra consultada tem exatamente um desses IDs (`bin/disjuntor.py:279`, `bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`).
-
-3. **Os retornos 5 e 6 verificam o RELATO produzido pela porta real.** `_arvore` inicializa o RELATO de mentira; `_pre` executa `disjuntor.py pretool` com essa raiz; `main_pretool` chama `relato_negacao`, que encaminha a linha a `no_relato`. Os dois `grep` verificam a presença da regra nova e a ausência da regra `B3` (`bin/tests/test_disjuntor.sh:79`, `bin/tests/test_disjuntor.sh:85`, `bin/disjuntor.py:1907`, `bin/disjuntor.py:294`, `bin/tests/test_disjuntor.sh:1474`, `bin/tests/test_disjuntor.sh:1475`).
-
-   **Ressalva precisa sobre a mordida:** o mutante `prefixo-do-disparo` já cai no retorno **1**, pela mudança do stdout; ele não chega aos retornos 5 e 6. Portanto mata a regressão, mas sozinho não demonstra a mordida dessas duas verificações (`bin/tests/test_disjuntor.sh:1471`, `bin/tests/test_disjuntor.sh:1548`). Execução integral da suíte shell: [nao verificado].
-
-4. **Não encontrei reaparecimento das classes citadas no delta.** A negativa conserva a porta única de escrita; a regra ganha prefixo próprio, enquanto o disparo conserva `DISJUNTOR B3 <obra>`; o selo consulta o RELATO resultante. Não há novo escritor nem novo reconhecedor paralelo nesse trajeto (`bin/disjuntor.py:294`, `bin/disjuntor.py:1149`, `bin/disjuntor.py:1647`, `bin/tests/test_disjuntor.sh:1474`).
-
-5. **Nenhum FILA fornecido demonstra bloqueio adicional da cura literal do item (1).**
-
-   - O número publicado deriva explicitamente de `b3_sem_obra_obs`; o histórico é contado separadamente. Não são dois significados no mesmo campo persistido (`bin/disjuntor.py:2045`, `bin/disjuntor.py:2201`, `bin/disjuntor.py:2207`).
-   - O contador cumulativo preserva ocorrências posteriores; não aplicar janela é compatível com acompanhar a meta “zero a partir daqui” do aval fornecido [nao verificado em arquivo] (`bin/disjuntor.py:2183`, `bin/disjuntor.py:2202`).
-   - A identificação ampla de “final”, o filtro pelo tipo `verificador` e a chave desligada continuam limitando a cobertura. Não cabe afirmar garantia universal para qualquer agente ou configuração (`bin/disjuntor.py:177`, `bin/disjuntor.py:840`, `bin/disjuntor.py:1842`, `bin/disjuntor.py:1897`).
-   - A falta de chamada a `linha()` no selo histórico e a morte incidental do mutante continuam fraquezas de cobertura; não demonstram apresentação incorreta no código atual (`bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1542`, `bin/disjuntor.py:2202`, `bin/disjuntor.py:2275`).
-
-O zero efetivo em produção e a identificação individual das seis obras históricas permanecem [nao verificado].
-
-_3661 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3662 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
