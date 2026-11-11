@@ -1,7 +1,138 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 01:25** · publicado em **11/11/2026 01:25** (UTC-3)
+> Ultima resposta processada: **11/11/2026 01:29** · publicado em **11/11/2026 01:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 01:29 · sessao 812549853dff · FIO-E0-V4-E4B · verificador · origem=Code
+
+**NAO LIBERA.** As curas diretas existem, mas P3/P5 não abrangem toda a cascata acionada pela reabertura; também sobreviveram mutações relevantes fora do catálogo. Referências: `app/chamados/services/disputa_emissao.py:1782`, `app/chamados/signals.py:216`, `app/ponto/services/cartorio.py:1633`, `app/chamados/tests/test_e4b_classe_e_memoria.py:538`, `app/chamados/tests/test_e4b_classe_e_memoria.py:610`.
+
+1. **P1..P6 — existência, origem e fechamento**
+
+   | Item | Verificação |
+   |---|---|
+   | **P1** | **Cura presente na porta e nos chamadores do backfill:** `hoje` chega ao C6, ao planejamento, complemento e execução. Fecha a perda de parâmetro apontada nesses caminhos. O S143 passa `None`, coerentemente com sua assinatura sem relógio. Referências: `app/chamados/services/disputa_emissao.py:1796`, `app/chamados/services/disputa_emissao.py:1812`, `app/chamados/services/disputa_emissao.py:1913`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:86`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:131`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:171`, `app/chamados/signals.py:115`. |
+   | **P2** | **Fecha a duplicação para recusa já conhecida:** não chama `reabrir()`; grava somente a nota deduplicada. Não certifica recusa que apareça na segunda consulta, dentro de `reabrir()`: nesse caminho os efeitos internos continuam possíveis e a nota E4B informa apenas `porta_nao_reabriu`. Referências: `app/chamados/services/disputa_emissao.py:1837`, `app/chamados/services/disputa_emissao.py:1840`, `app/chamados/services/disputa_emissao.py:1845`, `app/chamados/models.py:1390`. |
+   | **P3** | **Fecha a cascata direta do credor enumerado:** une não validadas da relavra S2 e IDs da autoridade de ressuscitação; inclui a própria pergunta, inclusive com âncora no pai. Recusa entregue e indeterminada. **Não fecha toda a cascata dos receivers nem a corrida com exportação**, detalhadas no item 5. Referências: `app/chamados/services/disputa_emissao.py:1788`, `app/chamados/services/disputa_emissao.py:1823`, `app/chamados/services/disputa_emissao.py:1826`, `app/chamados/models.py:309`, `app/chamados/signals.py:216`. |
+   | **P4** | **Cura restritiva presente:** usa timestamp nulo e `texto_vazio`, recusa sem limpar/carimbar o texto; evento interrompe o resolver, backfill retira o dia dos atos e imprime LIMBO. A quantidade real continua **[nao verificado]**. Referências: `app/chamados/services/disputa_emissao.py:1828`, `app/chamados/services/disputa_emissao.py:1914`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:286`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:357`. |
+   | **P5** | **Universo documentado e histórico terminal alheio retirado da antecipação.** A lista explícita segue C→D→Ch→P, mas a expansão não cobre todos os efeitos indiretos do ato. Portanto, **não fecha o achado integralmente**. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:8`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:197`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:208`. |
+   | **P6** | **Os dois sobreviventes antigos foram cobertos:** C7 isolada e pai adicional morrem por assertion. O catálogo inteiro também morreu assim; contudo, apareceram sobreviventes adicionais sobre identidade da recusa e completude dos PKs. Referências: `app/chamados/tests/test_e4b_classe_e_memoria.py:51`, `app/chamados/tests/test_e4b_classe_e_memoria.py:243`, `app/chamados/tests/test_e4b_classe_e_memoria.py:319`, `app/chamados/tests/test_e4b_classe_e_memoria.py:708`. |
+
+   **Destino versus pai:** a autoridade continua preferindo destino, independentemente do status; sem destino, usa o pai. A inclusão de `p` na carga fecha a fuga direta do pai sem destino. A respondida continua fora da porta E4B e segue pelo HX existente, cuja reabertura do pai não passa pela cerca nova. Referências: `app/chamados/services/fio.py:117`, `app/chamados/services/disputa_emissao.py:1812`, `app/chamados/services/disputa_emissao.py:1823`, `app/chamados/services/disputa_emissao.py:1974`.
+
+   **Laço exportada:** a aresta direta “S143 → E4B → reabrir credor exportado” fica cortada quando a consulta já enxerga a exportação. Isso não prova fechamento global do laço diante das cascatas e da janela concorrente do item 5; ciclo completo em ORM **[nao verificado]**. Referências: `app/chamados/services/disputa_emissao.py:1826`, `app/chamados/services/disputa_emissao.py:1840`, `app/chamados/services/disputa_emissao.py:1914`.
+
+2. **Quem escreve, quem lê e significado**
+
+   | Campo/valor | Escritores e leitores relevantes |
+   |---|---|
+   | `respondida_em` / `resposta_colab` | Resposta humana, correção, resposta automática e recuperação pela trilha escrevem o par; E4B lê. C6, projeção `estado`, HX e histórico também leem. Referências: `app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1593`, `app/chamados/services/disputa_emissao.py:1652`, `app/chamados/services/disputa_emissao.py:1674`, `app/chamados/services/disputa_emissao.py:1828`, `app/chamados/juizes.py:1341`, `app/chamados/models.py:3045`, `app/chamados/services/historico.py:99`. |
+   | Validação, materialização e via da pergunta | Validação e portas de carimbo/descarimbo escrevem; ressuscitação pode limpar validação, resposta e materialização. C6 e a enumeração E4B leem. Referências: `app/chamados/services/validacao.py:134`, `app/chamados/models.py:3103`, `app/chamados/models.py:3252`, `app/chamados/models.py:1566`, `app/chamados/juizes.py:1325`, `app/chamados/services/disputa_emissao.py:1789`. |
+   | `chamado_destino` e pai da disputa | Abertura/reuso e reaponte escrevem destino; E4B lê a âncora por `chamado_que_lista`. Raiox possui outra regra de crédito, preexistente. Referências: `app/chamados/models.py:2982`, `app/chamados/models.py:3014`, `app/chamados/services/fio.py:925`, `app/chamados/services/fio.py:117`, `app/chamados/services/raiox.py:146`. |
+   | Status, `resolvido_em`, via e urgência do credor | E4B delega a `reabrir()`→`_gravar_estado`; o núcleo limpa instante/via e restaura urgência. S143, recusa administrativa e crédito leem esses estados. Referências: `app/chamados/services/disputa_emissao.py:1840`, `app/chamados/models.py:1442`, `app/chamados/models.py:248`, `app/chamados/signals.py:96`, `app/chamados/models.py:1342`, `app/chamados/services/raiox.py:146`. |
+   | Fechamento da disputa | Ressuscitação pode chamar `reabrir_sistema`, que limpa fechamento/resolução e anota no pai. E4B filtra disputa aberta no evento; a trava lê também disputas da carga. Referências: `app/chamados/models.py:1574`, `app/chamados/models.py:2163`, `app/chamados/services/disputa_emissao.py:1908`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:202`. |
+   | Lavra da pergunta | `_gravar_estado` relavra destinos não validados; `lavrar` escreve veredito, instante e expiração. `tarefa_do_dia` lê a lavra vigente. Referências: `app/chamados/models.py:309`, `app/chamados/veredito_lavrado.py:270`, `app/chamados/services/tarefa_do_dia.py:352`. |
+   | Competência entregue | O escritor é `ExportacaoDominio.registrar`; invalidar altera vigência. E4B consulta a composição janela→K6, sem escrever TXT. Referências: `app/folha/models.py:174`, `app/folha/models.py:143`, `app/chamados/services/vigia_fio.py:822`, `app/folha/export.py:581`. |
+   | `atos`, `pids`, `res` | São dados do planejamento, consumidos pela execução e impressão; não constituem novo estado de domínio persistido. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:85`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:121`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:284`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:353`. |
+
+   **Protocolo dos motivos:** o escritor produz `credor_carrega_limbo:pk1,pk2[:credor_toca_exportada]` ou `credor_toca_exportada`; o retorno acrescenta `recusa:`. Dicionário e ordenação tornam os PKs únicos e crescentes. Referências: `app/chamados/services/disputa_emissao.py:1820`, `app/chamados/services/disputa_emissao.py:1824`, `app/chamados/services/disputa_emissao.py:1831`, `app/chamados/services/disputa_emissao.py:1851`.
+
+   O backfill é o parser numérico nominal encontrado: separa o terceiro segmento por vírgula e aplica `int`. PKs fora de ordem são aceitos e a impressão normaliza com `sorted(set(...))`; `30,31` significa dois IDs. Vírgula inicial/final ou dupla produz elemento vazio e `ValueError`; no planejamento isso acontece fora do tratamento de erro por dia. O escritor atual não produz esse formato inválido. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:89`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:282`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:333`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:358`.
+
+   S143 só reconhece prefixos; o backfill reconhece exportada também no sufixo combinado. Outros parsers externos à cópia: **[nao verificado]**. Referências: `app/chamados/services/disputa_emissao.py:1914`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:90`.
+
+   **Notas:** `anexar_ocorrencia` persiste conteúdo/autoria e a chave; `tipo` e `objeto_ref` entram no hash, não são colunas próprias. A referência E4B contém pergunta, motivo completo e `resolvido_em`; a unicidade é, portanto, por esse fato, não uma nota global por credor. Histórico/fio leem genericamente as notas; SLA considera fala do DP, não a nota de sistema. Referências: `app/chamados/services/nota.py:62`, `app/chamados/services/nota.py:88`, `app/chamados/services/disputa_emissao.py:1850`, `app/chamados/models.py:1698`, `app/chamados/services/historico.py:80`, `app/chamados/services/sla.py:21`.
+
+   **Esmeril temporal:** `hoje` é uma data; `agora`, `respondida_em` e `resolvido_em` representam instantes. `--hoje` não altera o `agora` usado pela tarefa, logo não constitui replay integral do ato. `data_evento` possui a distinção preexistente: dia do turno nas perguntas factuais e dia civil nas conversas; C6 respeita o discriminador, enquanto a cerca nova consulta diretamente essa data para competência. Equivalência de jurisdição para todas as conversas: **[nao verificado]**. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:258`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:83`, `app/chamados/juizes.py:332`, `app/chamados/services/disputa_emissao.py:1827`.
+
+3. **Predicados de limbo**
+
+   E4B coincide com `carimbar_resposta_pela_trilha`: timestamp nulo e texto não vazio após `strip()`. A autoridade existente para vazio textual é `texto_vazio`. Referências: `app/chamados/services/disputa_emissao.py:1828`, `app/chamados/services/disputa_emissao.py:1670`, `app/chamados/juizes.py:1441`.
+
+   **Não coincide exatamente com o comando histórico:** este exclui somente `resposta_colab=''`; espaços entram no conjunto medido, mas não na cerca E4B nem no carimbo pela trilha. Além disso, aquele comando exige os PKs fixos de `MEDIDAS`, não cura genericamente qualquer limbo novo. Referências: `app/chamados/management/commands/curar_perguntas_em_limbo.py:21`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:46`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:48`.
+
+   Isso não demonstra juiz novo introduzido pela cura: a composição inline reutiliza `texto_vazio`, conforme o brief; a divergência está no seletor legado. A interpretação “voz testemunhada versus resto de questionário” permanece nas portas do corte, não na E4B. Referências: `app/chamados/juizes.py:1441`, `app/chamados/services/disputa_emissao.py:1829`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:9`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`.
+
+   A impressão é `LIMBO colNN DATA perguntas=PKS`; `limbo=N` conta **dias do plano**, não perguntas distintas. Quantidade real: **[nao verificado]**. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:357`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:365`.
+
+4. **Idempotência**
+
+   Para sucesso sequencial, a segunda passagem encontra credor vivo e sai antes da nota. Para recusa conhecida e fato estável, há uma nota Followup por chave e **zero nova `reabertura_recusada` em LogAuditoria**. Isso fecha o problema original de chamar repetidamente a porta recusada. Referências: `app/chamados/services/disputa_emissao.py:1818`, `app/chamados/services/disputa_emissao.py:1840`, `app/chamados/services/nota.py:95`, `app/chamados/services/nota.py:109`.
+
+   Consultar veto/irmão por `recusa_da_reabertura()` não executa seus efeitos. Entrar em `reabrir()` pode registrar veto, auditar admin/premissa ou migrar ao irmão. Se a recusa surgir somente nessa segunda consulta, E4B não desfaz esses efeitos; esse cenário não está coberto pelo selo de recusa estável. Referências: `app/chamados/models.py:1338`, `app/chamados/models.py:1354`, `app/chamados/models.py:1391`, `app/chamados/models.py:1394`, `app/chamados/models.py:1411`, `app/chamados/tests/test_e4b_classe_e_memoria.py:538`.
+
+   Portanto, “2× = mesmo estado, uma trilha, zero duplicata” está sustentado pelos casos sequenciais dublados, **não certificado integralmente em PostgreSQL/cascatas concorrentes [nao verificado]**. Referências: `app/chamados/tests/test_e4b_classe_e_memoria.py:516`, `app/chamados/tests/test_e4b_classe_e_memoria.py:538`.
+
+5. **Universo, trava e reconferência**
+
+   O universo implementado é `sem_porta` do vigia, somado ao complemento entregue/indeterminado em `[hoje−45, hoje)`; não há corte geral de 45 dias. A competência atual entra sempre na autoridade; a anterior depende de não entregue. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:74`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:164`, `app/chamados/services/vigia_fio.py:583`, `app/ponto/services/he_pendente_lavrado.py:220`.
+
+   **A ordem explícita está correta:** C primeiro, depois D, Ch e P, cada conjunto por PK. **O universo antecipado é incompleto para a cascata:** expande perguntas somente das âncoras do lote; os demais chamados vivos são acrescentados sem expandir suas próprias cargas. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:190`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:197`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:206`, `app/chamados/models.py:2666`, `app/chamados/models.py:2675`, `app/chamados/models.py:2688`, `app/chamados/models.py:2692`.
+
+   **Contraexemplo em memória:** acrescentando outro chamado vivo `12`, com pergunta ressuscitável `90` fora do dia e disputa fechada `90`, a função real antecipou Ch12, mas omitiu P90/D90. O teste atual cobre carga da âncora principal, não essa composição. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:197`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:208`, `app/chamados/tests/test_e4b_classe_e_memoria.py:692`.
+
+   **Há caminho de escrita para a carga omitida:** reabrir salva o credor; o receiver chama o cartório; este pode ressuscitar perguntas de outro chamado vivo do dia. Havendo adiados, também chama E2 para o colaborador inteiro, cujo seletor não recorta competência/data. Assim, a cerca direta não prova “exportada nunca escrita”, nem a antecipação prova a ordem de todas as aquisições posteriores. Caminho completo em ORM: **[nao verificado]**. Referências: `app/chamados/models.py:296`, `app/chamados/signals.py:216`, `app/ponto/services/cartorio.py:1602`, `app/ponto/services/cartorio.py:1633`, `app/ponto/services/cartorio.py:970`, `app/chamados/reconciliador.py:595`, `app/chamados/reconciliador.py:627`.
+
+   **A reconferência existe**, inclusive do plano sob trava. Escritores canônicos de nascimento/reaponte compartilham C, protegendo contra essas mudanças concorrentes. Contudo, exportação não compartilha essa trava: K6 lê sem lock e `ExportacaoDominio.registrar()` faz `create()` sem C/D/Ch/P. Existe janela entre a última consulta e `reabrir()`. Ocorrência real da corrida: **[nao verificado]**. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:318`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:323`, `app/chamados/models.py:2845`, `app/chamados/services/fio.py:889`, `app/folha/export.py:581`, `app/folha/models.py:182`, `app/chamados/services/disputa_emissao.py:1840`.
+
+   Há ainda um ramo defensivo incompleto: se a porta devolver recusa nova em `_executar_dia`, ele acumula a recusa e continua os demais atos. Em memória, recusa de limbo seguida de `perguntar` chamou a fábrica. Atingibilidade desse intervalo em ORM: **[nao verificado]**. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:131`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:139`.
+
+6. **Relógio**
+
+   Não identifiquei chamada nova a `now()`/`today()` nos hunks de produção; os testes novos usam `AGORA` fixo e o B2d tocado tem `freeze_time`. Referências: `app/chamados/services/disputa_emissao.py:1796`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:258`, `app/chamados/tests/test_e4b_classe_e_memoria.py:22`, `app/chamados/tests/test_b2d_resposta_visivel.py:79`.
+
+   Permanecem relógios preexistentes fora desse repasse: C6 do evento pode chegar a `date.today()`; a autoridade de ressuscitação consulta C6 sem `hoje`; a lavra lê `timezone.now()`. Logo, P1 corrige a chamada nova, mas não transforma a cascata inteira em replay determinístico. Referências: `app/chamados/juizes.py:577`, `app/chamados/models.py:1509`, `app/chamados/veredito_lavrado.py:271`.
+
+7. **REDs, mutantes e Ruff**
+
+   Executei somente os selos em memória: **51 testes OK**, abrangendo `test_e4b_classe_e_memoria`, `test_e4_expand` e `test_e4_efeitos`; os **31 mutantes catalogados morreram por `AssertionError`**, com original verde e alvo único exigidos pelo harness. Referências: `app/chamados/tests/test_e4b_classe_e_memoria.py:708`, `app/chamados/tests/test_e4_expand.py:127`, `app/chamados/tests/test_e4_efeitos.py:8`.
+
+   Reconstruí somente em memória a pré-imagem de emissão: seu blob resultou em `d901e43c14a0d4dbe34a5e8e27e3fd8762b72fdc`, compatível com o índice antigo do patch fornecido. Os quatro REDs P1–P4 produziram **quatro falhas por assertion, zero errors**. A associação independente desse blob ao commit `345f15a87` permanece **[nao verificado]**, porque o runner depende de `git show` e esta cópia não contém repositório Git acessível. Referências dos asserts/runner: `app/chamados/tests/test_e4b_classe_e_memoria.py:493`, `app/chamados/tests/test_e4b_classe_e_memoria.py:545`, `app/chamados/tests/test_e4b_classe_e_memoria.py:558`, `app/chamados/tests/test_e4b_classe_e_memoria.py:615`, `app/chamados/tests/test_e4b_classe_e_memoria.py:736`.
+
+   **Sobreviventes adicionais comprovados em memória:**
+
+   - Trocar a referência da nota por somente `str(p.pk)` manteve os 36 testes verdes; perderia distinção entre motivos/encerramentos diferentes. O teste reinicia a fixture para cada motivo. Referências: `app/chamados/services/disputa_emissao.py:1850`, `app/chamados/tests/test_e4b_classe_e_memoria.py:538`.
+   - Emitir somente `limbo[:1]` manteve os 36 testes verdes; omite os demais PKs da nota e da lista. Os cenários atuais verificam um PK de limbo por vez. Referências: `app/chamados/services/disputa_emissao.py:1831`, `app/chamados/tests/test_e4b_classe_e_memoria.py:610`, `app/chamados/tests/test_e4b_classe_e_memoria.py:621`.
+   - Inverter a ordenação da carga também sobreviveu; falta assert de formato com múltiplos PKs. Referências: `app/chamados/services/disputa_emissao.py:1824`, `app/chamados/tests/test_e4b_classe_e_memoria.py:621`.
+
+   Os defaults ligados ao laço preservam os asserts apresentados no patch. Os quatro blobs atuais coincidiram com os índices novos fornecidos, inclusive o teste `9a2abe712…`; a reconstrução das nove correções individuais contra uma fonte anterior ao
+
+[truncado em 20000 de 23299 caracteres]
+
+## 11/11 01:26 · sessao 5118d86613c6 · - · - · origem=Ronald (tmux)
+
+P3/P5 têm cobertura direta, mas não certificam toda a cascata de `reabrir()`: a enumeração nova cobre relavra S2 e ressuscitação do credor; o `save()` desse credor também dispara o cartório. Referências: `app/chamados/services/disputa_emissao.py:1788`, `app/chamados/models.py:296`, `app/chamados/signals.py:188`.
+
+Achados:
+
+- **A trava não cobre todas as linhas potencialmente tocadas pela cascata.** `_travar_lote` expande somente as âncoras das perguntas do dia; acrescenta os demais chamados vivos sem expandir suas perguntas/disputas. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:197`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:206`.
+  
+  Em ensaio somente em memória, acrescentei outro chamado vivo `12`, da célula do lote, com pergunta ressuscitável `90` fora do dia, em disputa fechada `90`. A função real produziu:
+  ```
+  [call([7]),
+   call([7], disputas=[20], chamados=[10, 11, 12], perguntas=[30])]
+  ```
+  Portanto, incluiu o chamado e omitiu sua pergunta/disputa. O ensaio utiliza os doubles existentes e executa a função real; o caso completo em ORM permanece [nao verificado]. Referências da fixture e da enumeração: `app/chamados/tests/test_e4b_classe_e_memoria.py:164`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:197`.
+
+- **Há caminhos concretos no código para essa carga adicional ser tocada.** O cartório agrupa chamados dos `FURO_MODULES` pelo dia de `data_do_chamado`, seleciona os vivos e pode chamar `ressuscitar_perguntas()` de outro chamado vivo. Referências: `app/ponto/services/cartorio.py:117`, `app/ponto/services/cartorio.py:125`, `app/ponto/services/cartorio.py:1316`, `app/ponto/services/cartorio.py:1345`, `app/ponto/services/cartorio.py:1602`, `app/ponto/services/cartorio.py:1633`.
+
+  Uma pergunta validada é morta para o fio; a autoridade de ressuscitação avalia uma cópia sem validação/carimbo e pode devolvê-la viva. Assim, o teste de fio morto não elimina esse caminho. Referências: `app/chamados/juizes.py:1325`, `app/chamados/juizes.py:1434`, `app/chamados/models.py:1506`, `app/chamados/models.py:1509`.
+
+  Além disso, havendo adiados, o cartório chama E2 para **o colaborador inteiro**; E2 seleciona perguntas sem recorte de data/competência, carimba e pode fechar disputas. Referências: `app/ponto/services/cartorio.py:962`, `app/ponto/services/cartorio.py:970`, `app/chamados/reconciliador.py:584`, `app/chamados/reconciliador.py:595`, `app/chamados/reconciliador.py:608`, `app/chamados/reconciliador.py:627`.
+
+  Logo, a lista explicitamente ordenada C→D→Ch→P não prova a ordem de todas as aquisições posteriores nem “exportada nunca escrita” na cascata completa. Demonstração integral concorrente/ORM: [nao verificado].
+
+- **Existe janela entre conferir exportação e escrever.** A última leitura da cerca ocorre antes de `credor.reabrir()`; K6 consulta `ExportacaoDominio` sem trava. O escritor `ExportacaoDominio.registrar()` faz `exists()` e `create()` sem adquirir C/D/Ch/P. Referências: `app/chamados/services/disputa_emissao.py:1826`, `app/chamados/services/disputa_emissao.py:1840`, `app/folha/export.py:580`, `app/folha/models.py:174`, `app/folha/models.py:182`.
+
+  Portanto, a trava do colaborador bloqueia os escritores canônicos concorrentes de pergunta/reaponte, mas não serializa a exportação. Referências: `app/chamados/models.py:2845`, `app/chamados/services/fio.py:889`, `app/folha/models.py:182`. Ocorrência real dessa corrida: [nao verificado].
+
+- **A reconferência existe:** o backfill relê competência e plano sob a trava, e a porta volta a enumerar a carga. Isso fecha mudanças anteriores a essas leituras, não as cascatas posteriores descritas acima. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:318`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:323`, `app/chamados/services/disputa_emissao.py:1820`.
+
+- **O teste P5 atual não cobre o contraexemplo:** exercita a carga da âncora principal e histórico terminal alheio, sem outro chamado vivo com carga própria. Referência: `app/chamados/tests/test_e4b_classe_e_memoria.py:692`.
+
+O universo declarado corresponde à composição implementada: `sem_porta` do vigia, mais entregue/indeterminada em `[hoje−45, hoje)`; não existe corte geral de 45 dias. Referências: `app/chamados/management/commands/backfill_fio_morto_e4b.py:8`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:74`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:164`, `app/chamados/services/vigia_fio.py:583`.
+
+**NAO LIBERA P3/P5**, pela fronteira de exportação sem serialização e pela carga indireta não abrangida pela enumeração/trava; ocorrências em produção e execução completa das cascatas em ORM permanecem [nao verificado].
 
 ## 11/11 01:25 · sessao 985f431d56cb · - · - · origem=Ronald (tmux)
 
@@ -755,96 +886,4 @@ A unidade 35 inclui a condição normativa de aplicar mutantes à implementaçã
 
 A pergunta residual em si — “É permitido agregar o motivo mantendo-a fechada, ou qual saída deve valer?” — não fixa uma decisão e não entra; seu parágrafo seguinte entra como unidade 46. Não produzi numeração física dos anexos: **[nao verificado]**.
 
-## 11/11 00:57 · sessao e8000ca1facf · - · - · origem=Ronald (tmux)
-
-Censo integral solicitado:
-
-| Brief | Unidades decisórias | Com citação | Sem citação |
-|---|---:|---:|---:|
-| `orig_5a.md` | 34 | 14 | 20 |
-| `replay_5a.r` | 54 | 54 | 0 |
-
-Unidade: parágrafo normativo, item de lista ou linha de tabela normativa; continuação gráfica permanece na unidade. Em D3 contei abertura, (i) e (ii); em D7, abertura e (a)–(h). Incluí ordens explícitas dentro do CENSO. Excluí títulos, descrições puramente factuais, comandos shell e resumos/tabela final de procedência duplicados. Os anexos são transcrições do pedido, sem correspondência local de linhas conferida [nao verificado].
-
-`orig_5a.md`, unidades com citação: lei inicial; justificativa da volta 5; D2; D3(ii); D6; abertura D7; TRIAGEM; quatro escritores do CENSO que ordenam SAI/NAO tocar/so LER; leitor da canônica “so chamar”; primeiras duas decisões finais.
-
-`orig_5a.md`, unidades sem citação: D1; abertura D3; D3(i); D4; D5; testes (a)–(h); FORA DESTA VOLTA; PARE E RELATE; terceira decisão final; NAO tocar final; Rodar; PERGUNTA; ENTREGA. [nao verificado]
-
-Todas as 54 unidades decisórias de `replay_5a.r` possuem referência direta de código ou aval nomeado; enumeração completa enviada na mensagem anterior. Isso mede **presença de citação**, não autorização: o critério de push é expressamente “minha decisão de desenho”, embora cite código (`replay_5a.r`, §6; anexo transcrito). Assim, S54/N0 não sustenta que o replay evitou E1. [nao verificado]
-
-## 11/11 00:57 · sessao 313a7f40ade9 · - · - · origem=Ronald (tmux)
-
-Pelo critério solicitado, **orig_5g = 7 unidades decisórias: 1 com fonte, 6 sem; replay_5g = 50: 46 com fonte, 4 sem**. Referências abaixo são às seções dos anexos transcritos; numeração física de arquivo:linha desses anexos [nao verificado].
-
-Fonte significa citação na própria unidade de aval/lei nomeado ou `arquivo:linha`, inclusive endereço abreviado resolvível. Citar não significa validar a fonte externa [nao verificado].
-
-| # | Original 5g — âncora literal | Fonte |
-|---:|---|:---:|
-| 1 | “FollowupChamado nao tem campo tipo [...] a trilha e LogAuditoria” | N |
-| 2 | “comportamento NAO muda: dona fechada continua sem save” | N |
-| 3 | G1 “grave UMA linha por core.observ.evento” | N |
-| 4 | G2 “Contador no vigia [...] I8” | N |
-| 5 | G3 “Casos que mordem” | N |
-| 6 | G4 “PROIBIDO” — inclui endereços dos testes protegidos | S | [nao verificado]
-| 7 | “Feche com: arquivos tocados” | N |
-
-Inventário integral do replay:
-
-| # | Replay 5g — âncora/seção | Fonte |
-|---:|---|:---:|
-| 1 | D0 “Primeiro confira o patch da 14” | S |
-| 2 | D1 “Não volte à fase de ‘somente censo’” | S |
-| 3 | “Não altere as sete disputas existentes” | S |
-| 4 | D2.1 “pai, disputa e pergunta pertencem ao mesmo ato” | S |
-| 5 | D2.2 “a FK da pergunta continua apontando” | S |
-| 6 | D2.3 “congele episódio, dia do turno” | S |
-| 7 | D2.4 “retorno com criada=True [...] não autoriza análise” | S |
-| 8 | D2.5 “Agregador único de admissão” | S |
-| 9 | D2.6 “exija pergunta no contrato público” | S |
-| 10 | D3 “Sem ata [...] Com ata [...] h2” | S |
-| 11 | “Registre na RAIZ-DA-DISPUTA F1 a alternativa” | **N** |
-| 12 | “Dona fechada: mantenha o comportamento” | S |
-| 13 | “Preserve a reabertura que já ocorre” | S |
-| 14 | D4 “Preserve I7a [...] I7b” | S |
-| 15 | “declare unidade de contagem, escritor da trilha” | S |
-| 16 | D5 “Inclua pendentes na unidade transacional” | S |
-| 17 | “Complete a avaliação exigida de resolver antes” | S |
-| 18 | “A matriz deve concluir essa avaliação” | S |
-| 19 | D6 “Mantenha os critérios históricos” | S |
-| 20 | “O ato deve conservar os deltas por dona” | S |
-| 21 | “Garanta que efeitos de um ato desfeito não notifiquem” | S |
-| 22 | D7 “Confira os oito casos novos relatados pela 14” | **N** |
-| 23 | Tabela F1 “nenhum seed indevido” | S |
-| 24 | F2 “conservar identidade e dia” | S |
-| 25 | F3 “nenhuma análise decorrente do fato recusado” | S |
-| 26 | F4 “Mutante restaurando união/save próprios” | S |
-| 27 | F5 “Chamada pública sem pergunta falha” | S |
-| 28 | F6 “Mutação montada uma vez” | S |
-| 29 | F7 “Paridade histórica exige fonte histórica distinta” | S |
-| 30 | “Execute os controles e os mutantes relatados abaixo” | **N** |
-| 31 | “Acrescente provas que removam a trilha” | S |
-| 32 | “Exija ORM para o lote misto F1” | S |
-| 33 | “O alvo ORM F1 [...] deve ser executado” | **N** |
-| 34 | “Preserve os protegidos HX” | S |
-| 35 | D8 “Entregue patch revisável da 14” | S |
-| 36 | “Não libera pouso nem push agora” | S | [nao verificado]
-| 37 | “O ! de PUSH-E4A2 [...] não é autorização” | S | [nao verificado]
-| 38 | Após CENSO: “o comentário antigo [...] não deve ser tratado como estado atual” | S |
-| 39 | “A matriz final deve preencher as seis colunas” | S |
-| 40 | Matriz a “Nascer atomicamente se houver pergunta” | S |
-| 41 | Matriz b “Agregar na dona” | S |
-| 42 | Matriz c “Preservar comportamento; trilhar descarte” | S |
-| 43 | Matriz d “Roteamento sem reentrada” | S |
-| 44 | Matriz e “Desfazer emissão” | S |
-| 45 | Matriz f “Abster-se e acender luz” | S |
-| 46 | Matriz g “Não ressuscitar helper removido” | S |
-| 47 | Matriz h “Lote misto e repasse” | S |
-| 48 | Matriz h2 “Nascer e fechar vazia” | S |
-| 49 | Matriz i “Distinguir duplicação de dias legítimos” | S |
-| 50 | Matriz j “Declarar dona, motivos e momento” | S |
-
-As quatro unidades N citam apenas relato/anexo sem endereço, referência interna ou nenhum fundamento direto. A unidade 11 fala em “relato do aval”, sem identificar qual aval dentro daquele item; a unidade 22 remete aos endereços de D0, indiretamente. [nao verificado]
-
-Incluí as onze linhas da matriz final porque impõem operação/persistido exigido. Excluí fatos descritivos do CENSO, comandos shell, títulos, o resumo “Decisões do censo” e a tabela final de procedência. Se a matriz normativa também for tratada como repetição e excluída, o replay fica **39 = 35 com / 4 sem**. [nao verificado]
-
-_3581 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3583 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
