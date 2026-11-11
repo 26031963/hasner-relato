@@ -1,7 +1,114 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:13** · publicado em **11/11/2026 15:13** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:18** · publicado em **11/11/2026 15:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:18 · sessao ab98b69c3c6e · - · - · origem=Ronald (tmux)
+
+Perguntas 3, 5 e 6 — resultado da exploração, sem gravações.
+
+1. `base_main` amarra ao `main` local, não à base de pouso no remoto nem ao início registrado da obra: `bin/selo_proporcao.py:96-98`. Cenários concretos derivados do algoritmo; ocorrência real nesta cópia [nao verificado], pois não há `.git`.
+
+   - **Falso rc2 com main atrasado:** cadeia `O → M → H`; `main=O`, `origin/main=M`, raia criada de `M`, `H` só altera template. O intervalo correto para pousar sobre o remoto é `M..H`. O selo aceita que `M` seja ancestral (`:94`), mas calcula `merge-base(main,H)=O` e devolve 2 (`:96-98`).
+   - **Recorte aceito com main adiantado:** cadeia `O → C1 → C2`; `origin/main=O`, `main=C1`, raia `head=C2`; C1 da mesma obra altera `views.py`, C2 só template. Passar `base=C1` satisfaz a guarda e compara somente C1..C2 (`:100`): B/rc0, omitindo o escritor de C1. Não há leitura de `origin/main` nem identidade da obra em `:83-103`.
+   - **Worktree, isoladamente, não causa erro:** a raiz da worktree passa na comparação de `realpath` e o Git é chamado com `-C repo` (`:41-43`, `:85-87`). Uma worktree/clone com apenas `origin/main`, sem uma referência `main` resolvível, falha no `merge-base` por `git_rc`, rc2 (`:44-45`, `:96`, `:104-106`).
+   - **Raia que recebeu merge do main não recorta automaticamente:** `O→C1` na raia e `O→M` no main; merge `R=(C1,M)`, seguido de template H, com main=M. A base aceita é M e o diff M..H ainda inclui o saldo de C1 (`:96-100`). Se o mesmo C1 já estiver no main, ou se seu efeito for revertido no head, o diff de pontas não o mostra; o código examina árvores, não todos os commits (`:100-101`). Não chamar isso de perda automática causada por qualquer merge. [nao verificado]
+
+2. **Produtor da lista persistida encontrado e problema de durabilidade:**
+
+   - `app/docs/CORTES.md:3` declara arquivo gerado de `CORTES.json`.
+   - O produtor real é `bin/gerar_cortes.py:23-24`, que lê o JSON em `:31-32`, transforma cada entrada em linha em `:106-109` e **sobrescreve integralmente** o Markdown em `:114-116`.
+   - A lista hoje está em `app/docs/CORTES.md:444`.
+   - O JSON fornecido não contém `PROPORCAO-POR-RISCO` nem os marcadores; termina em `app/docs/CORTES.json:1367`. Verificação somente em memória, chamando `markdown(cortes)` com `python3 -I -B`: Markdown atual tem 1 início/1 fim; Markdown regenerado tem **0 início/0 fim**. Nenhum arquivo foi escrito.
+   - Consequência concreta condicional: executar legitimamente o gerador e incorporar o resultado apaga a lista; uma base posterior assim produz rc2 no selo, em `bin/selo_proporcao.py:50-52`. Não afeta retroativamente uma base antiga, porque a leitura é por `git show`.
+   - Autoridade humana declarada: módulos novos só por corte do Ronald, `app/docs/CORTES.md:444`; o parser não autentica autoria/corte, apenas formato e presença em base (`bin/selo_proporcao.py:49-58`).
+
+3. **Mapa de escritores/leitores relevante à pergunta 5:**
+
+   | Valor | Quem escreve/fornece | Quem lê |
+   |---|---|---|
+   | CORTES persistido | `bin/gerar_cortes.py:116`, fonte `:23`, leitura `:32`, frase `:109`; autoridade `app/docs/CORTES.md:444` | `git show base:CORTES` em `bin/selo_proporcao.py:50`; parser `:51-58`; pertinência `:64` |
+   | Lista sintética do harness | `bin/tests/test_selo_proporcao.sh:17`, valores `:22`; corrupções `:102-109`; autorização HEAD `:87-88`; disco `:119` | mesmo selo, chamado em `:42`, `:52`, `:120` |
+   | `base/head/classe/repo` | argumentos externos `bin/selo_proporcao.py:83`; chamador concreto harness `bin/tests/test_selo_proporcao.sh:42` | revisões resolvidas `bin/selo_proporcao.py:89-91`; base/head `:92-100`; classe `:116`; repo `:85` |
+   | `main` sintético | harness `bin/tests/test_selo_proporcao.sh:29`, `:51`, `:53` | `bin/selo_proporcao.py:96` |
+   | merge-base | subprocesso Git em `bin/selo_proporcao.py:96` | igualdade com base `:97` |
+   | nomes do diff | Git `diff --no-renames --no-ext-diff --name-only -z` em `bin/selo_proporcao.py:100`; ordenação/deduplicação `:101` | vazio `:102`; classificador `:108-112`; impressão `:110`, `:114-115` |
+   | rc | `bin/selo_proporcao.py:116-119`, protocolo `:129`, tradução `bin/selo_proporcao.sh:8-11` | harness `bin/tests/test_selo_proporcao.sh:42-43`, `:52`, `:113-114`; pouso humano segundo contrato anexo [nao verificado] |
+   | RELATO da medida | nenhum gravador do selo: termina imprimindo e retornando `bin/selo_proporcao.py:110-119` | integração de consumo do resultado no pouso [nao verificado] |
+
+   O harness é executado pelo laço genérico de selos do host em `bin/regua.sh:138-143`; o atalho de régua já verde retorna antes em `:84-94`. Isso testa o instrumento em repositórios sintéticos, não julga o diff real de pouso.
+
+4. **Contrato/comentários versus implementação:**
+
+   - O contrato anexado admite lista **OU** filtros; código corresponde: lista retorna antes das restrições (`bin/selo_proporcao.py:64-69`). Contudo o comentário `:13` diz “só app” e “migrations/management A sempre”, o que não vale para um item previamente listado.
+   - A frase absoluta “qualquer .md faz A” do contrato anexado tem exceção pelo algoritmo: hipotético `app/templates/nota.md` seria B (`bin/selo_proporcao.py:70-71`). `app/docs/NOTA.md`, caso efetivamente testado, é A (`bin/tests/test_selo_proporcao.sh:78`).
+   - `bin/tests/test_selo_proporcao.sh:4` ainda descreve `tests/ OU test_*.py`; implementação exige ambos (`bin/selo_proporcao.py:74`).
+   - `app/docs/CORTES.md:443` ainda descreve selo de linhas adicionadas/escrita; código julga nomes de arquivos (`bin/selo_proporcao.py:100`, `:61-76`); a linha B3 `app/docs/CORTES.md:444` já diz caminho.
+   - O contrato agora admite ausência de script de pouso e de contador, corrigindo a promessa documental; não implementa integração/medida. A busca das referências encontra chamadas concretas no harness; a saída do selo permanece stdout/rc (`bin/selo_proporcao.py:110-119`), não escreve RELATO nem contador.
+
+## 11/11 15:17 · sessao 8f4e55fbbe88 · - · - · origem=Ronald (tmux)
+
+Análise somente em memória da função `motivo_b`; não executei o harness que cria arquivos (`bin/tests/test_selo_proporcao.sh:11`, `:13`, `:17`).
+
+1. Casos novos/alterados do harness:
+
+| Caso | Guarda pretendida | Se retirada/afrouxada | Avaliação |
+|---|---|---|---|
+| `tests_ok` (`:61`) | aceitação `teste` (`selo_proporcao.py:74`) | Retirar aceitação produz rc1 | Mata. | [nao verificado]
+| `tests_helper` (`:62`) | exigir nome `test_*.py` (`:74`) | Aceitar qualquer arquivo em `tests/` produz rc0 | Mata o alargamento para pasta apenas. |
+| `test_basename` (`:63`) | exigir pasta `tests/` (`:74`) | Aceitar basename apenas produz rc0 | Mata o alargamento para nome apenas. |
+| `migration_test_nome` (`:64`) | `carregado_por_pasta` (`:68`) | Sem ela continua rc1, pois o arquivo não fica em `tests/` | Não isola; o `mkdir migrations/tests` não muda o caminho gravado. |
+| `migration_tests_dir` (`:65`) | `carregado_por_pasta` (`:68`) | Sem ela produz rc0 por `teste` | Mata. | [nao verificado]
+| `commands_test_nome` (`:66`) | `carregado_por_pasta`, braço `management` (`:68`) | Sem ela continua rc1, pois falta `tests/` | Não isola; nenhum caso novo mata a retirada só do braço `management`. |
+| `bin_tests` (`:67`) | `fora_app` (`:66`) | Sem ela continua rc1: `base.txt` não atende `teste` | Não isola. | [nao verificado]
+| `bin_tests_test_py` (`:68`) | `fora_app` (`:66`) | Sem ela produz rc0 por `teste` | Mata. | [nao verificado]
+| `templates_fora_app` (`:69`) | `fora_app` (`:66`) | Sem ela produz rc0 por `templates` | Mata. |
+| `recorte` (`:110-115`) | `base_main` (`:96-98`) | Na preparação nominal, retirar guarda dá rc0 no teste que exige2 | Mata nominalmente, mas tem falso positivo de preparo abaixo. | [nao verificado]
+
+Os resultados da tabela seguem diretamente da prioridade das condições em `bin/selo_proporcao.py:64-76`, com rc1 em `:116-118`; confirmei os dois mutantes de função em memória.
+
+2. Falsos positivos e mascaramento:
+
+- **Segundo commit do recorte pode falhar e o caso continuar verde.** `:112` não verifica `echo`, `git add`, `git commit` nem avanço do HEAD. Se `c2` não nascer, HEAD=C1: a primeira chamada retorna2 por `base == head` (`bin/selo_proporcao.py:92-93`), e a segunda retorna1 pelo `views.py` (`bin/tests/test_selo_proporcao.sh:111-114`). Assim o nome “base_recortada” passa por outra guarda.
+- **A guarda nova mascara cobertura da ancestralidade.** Desligando `GUARDA:ancestral`, `revisoes_trocadas` e `nao_ancestral` continuam rc2 pela comparação `base_main`, pois a base passada é HEADC enquanto `merge-base(main, head)` é BASE (`bin/tests/test_selo_proporcao.sh:128`, `:131-133`; `bin/selo_proporcao.py:94-98`).
+- O caso `base_igual_head` também chegaria a `base_main` se `igual` fosse removida, mas a checagem adicional do texto identifica isso (`bin/tests/test_selo_proporcao.sh:129-130`).
+- Os testes de lista continuam verificando somente rc2; mudar `main` para a base defeituosa evita que `base_main` os barre antes da leitura, mas não identifica qual validação da lista produziu o rc (`bin/tests/test_selo_proporcao.sh:45-53`).
+- `sem_repo_no_repo_do_script` ainda pode ser silenciosamente omitido se a cópia não tiver histórico Git (`bin/tests/test_selo_proporcao.sh:141-143`).
+
+3. Achados B1–B5, pela evidência que analisei:
+
+- **B1: cura os exemplos concretos.** Migrações e comandos ficam A pela guarda de pasta e, independentemente, nomes `test_*.py` fora de `tests/` deixam de ser aceitos (`bin/selo_proporcao.py:68-75`).
+- **B2: cura o helper concreto; cura parcial do problema geral.** `marca_cron15.py` não atende `test_*.py`, mas arquivo de produção chamado `test_*.py` dentro de `tests/` segue B, limite admitido pelo próprio comentário (`bin/selo_proporcao.py:25-26`, `:74-75`).
+- **B3: cura os exemplos concretos de `bin/tests/*`**, ausentes da lista fechada atual (`bin/selo_proporcao.py:64-67`; `app/docs/CORTES.md:444`).
+- **B4: cura o recorte linear do exemplo apenas relativamente ao `main` local.** Não autentica a referência `main` nem a fronteira histórica da obra (`bin/selo_proporcao.py:96-100`).
+- **B5: o delta não integra chamador nem contador.** Os únicos consumidores encontrados na busca por `selo_proporcao` são o wrapper e o harness (`bin/selo_proporcao.sh:7`; `bin/tests/test_selo_proporcao.sh:9`, `:42`). A mudança contratual fornecida corrige a descrição, declarando ambos pendentes; a ocorrência efetiva de conduta manual/RELATO fica [nao verificado].
+
+4. Divergências documentais úteis:
+
+- Cabeçalho do harness ainda diz `tests/ OU test_*.py`, enquanto o código exige ambos (`bin/tests/test_selo_proporcao.sh:4`; `bin/selo_proporcao.py:74`).
+- A linha antiga de CORTES ainda descreve selo “nas linhas adicionadas” e “escrita com B declarado = rc1”; o código julga nomes do diff e conteúdo não interfere (`app/docs/CORTES.md:443`; `bin/selo_proporcao.py:100-118`).
+- “So caminho sob app pode ser B” e “migrations/management = A sempre” têm exceção técnica pela prioridade da lista: se um caminho desses for incluído na lista da base, retorna B antes das duas guardas (`bin/selo_proporcao.py:13-17`, `:64-69`). A lista atual contém apenas dois caminhos sob `app/chamados/` (`app/docs/CORTES.md:444`).
+- O comentário “nenhum .py fora da lista passa” contradiz as aceitações de Python sob templates/static e test_*.py sob tests (`bin/selo_proporcao.py:24`, `:70-75`).
+
+A cópia disponível não contém repositório Git utilizável: `git status`, `git rev-parse HEAD` e `git log` retornaram “not a git repository”; hash e estados reais de branches não foram confirmados [nao verificado].
+
+## 11/11 15:17 · sessao ef11ff740dce · - · - · origem=Ronald (tmux)
+
+Achados concretos ainda classificados B:
+
+| Caminho permitido | Quem carrega/lê e efeito |
+|---|---|
+| `app/core/tests/test_contract_esmeril.py` | Define `VULTURE_IGNORE_NAMES` em `app/core/tests/test_contract_esmeril.py:15`. `bin/esmeril_da_copia.sh:22` extrai o valor, `:24` passa a `vulture --ignore-names` e `:27` decide LIMPO. `bin/molde_fatia/rodar.sh:20` extrai, `:21` aplica, `:22` barra esmeril sujo. B por `bin/selo_proporcao.py:74`. **Allowlist de portão permanece em arquivo B.** |
+| `app/core/tests/test_contract_tblib_no_paralelo.py` | `tblib_instalado()` definido em `app/core/tests/test_contract_tblib_no_paralelo.py:24`; importado pelo command de produção em `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`, chamado em `:18`. `bin/placar_code.sh:463` executa o command; `:465` publica o contador. B por `bin/selo_proporcao.py:74`. |
+| `app/static/pwa.js` | Carregado em `app/templates/base.html:20` e `app/templates/base_app.html:20`; registra service worker em `app/static/pwa.js:14`, grava batida offline em `:107`–`:119`, inicia sincronização em `:126`. B por `bin/selo_proporcao.py:72`. |
+| `app/static/sw.js` | URL ligada à view em `app/core/urls.py:24`; leitura e resposta JavaScript em `app/core/views.py:570`–`:576`. `_raiz_do_static()` escolhe `/app/staticfiles` se houver SW coletado, senão `/app/static`, em `app/core/views.py:528`–`:530`. B por `bin/selo_proporcao.py:72`; ramo efetivo no host [nao verificado]. |
+| `app/templates/base.html`, `base_app.html`, `ponto/espelho.html`, `colaboradores/detalhe.html`, `chamados/painel_gestao.html` | Portão declara as cinco páginas em `bin/prova_de_casca.py:21`, compila em `:49`–`:53`, lê os HTML da árvore de templates em `:30`–`:36`; chamado antes do reload por `bin/deploy.sh:295`–`:297`. B por `bin/selo_proporcao.py:70`. |
+
+O build também lê conteúdo dos cinco recursos `sw.js`, `pwa.js`, `manifest.json`, `icons/icon-192.png`, `icons/icon-512.png`: lista em `app/core/views.py:524`, leitura em `:548`–`:552`, raiz escolhida em `:528`–`:530`; os caminhos sob `app/static/` passam por `bin/selo_proporcao.py:72`.
+
+O antigo exemplo `app/core/tests/marca_cron15.py` continua importado por produção em `app/core/management/commands/crons.py:92` e afeta a aceitação do horário em `:97`, mas **agora recebe A**, pois seu basename não satisfaz `test_*.py` em `bin/selo_proporcao.py:74`.
+
+A leitura de `app/core/tests/testes_sem_relogio.txt` por `bin/placar_code.sh:458` continua, mas o `.txt` recebe A pelo mesmo teste de nome em `bin/selo_proporcao.py:74`.
 
 ## 11/11 15:13 · sessao 6f34a2441ef2 · DATA-EVENTO-CRU · leitura · origem=Code
 
@@ -709,64 +816,4 @@ A Pauta é escrita depois do receiver, ainda na transação externa: falha de es
 
 Os GREENs e roteiros fornecidos não eliminam B1 nem substituem a suíte inteira. Execução independente, ocorrência do deadlock em produção e correspondência Git integral ao hash/base: **[nao verificado]**; metadados Git nesta cópia: **não achei**. [nao verificado]
 
-## 11/11 14:44 · sessao af472d58e1b7 · - · - · origem=Ronald (tmux)
-
-Censo de `app/chamados`: **181 coordenadas leitoras de produção** (123 runtime +58 management), **143 de testes** e **2 de migrations**; total **326**. Unidade: `arquivo:linha`, deduplicando várias ocorrências na mesma linha; excluída somente `_dia_de_turno_da_pergunta` em `app/chamados/juizes.py:338`.
-
-Atribuição direta de produção: **1**, `gravar_dia_do_fato`, em `app/chamados/services/fio.py:800`. O nascimento instancia sem `data_evento` e chama esse escritor em `app/chamados/models.py:3014` e `app/chamados/models.py:3016`.
-
-Sete leitores dinâmicos adicionais, todos em `app/chamados/services/fio.py`: `1946` (exclude por chave), `1948` (values), `1949` (order_by), `1950` (dicionário serializado `g[k]`), `1958` (values_list/order_by), `1970` (filter via zip) e `2000` (filter de marco sem dia). As definições dos campos ficam em `app/chamados/services/fio.py:1373` e `app/chamados/services/fio.py:1378`; o universo exclui conversa em `app/chamados/services/fio.py:1432`.
-
-Guardas de conversa comprovadas:
-
-- `juizes.py:80,81` — excluída em `app/chamados/juizes.py:78`.
-- `juizes.py:214` — excluída em `app/chamados/juizes.py:213`.
-- `juizes.py:2327,2331` — filtro `conversa=False` em `app/chamados/juizes.py:2328`.
-- `tarefa_do_dia.py:376,380,486` — filtro `conversa=False` em `app/chamados/services/tarefa_do_dia.py:375`.
-- `pergunta_no_app.py:115` — discriminador na própria expressão, `app/chamados/services/pergunta_no_app.py:115`.
-- `fio.py:1447` — retorno antecipado em `app/chamados/services/fio.py:1445`.
-- `fio.py:1854` — filtro em `app/chamados/services/fio.py:1852`.
-- `fio.py:1955` — filtro em `app/chamados/services/fio.py:1956`.
-
-Atenção: `dia_do_turno_da_linha` lê o campo em `app/chamados/services/fio.py:1630` e **deliberadamente devolve o dia civil da conversa** em `app/chamados/services/fio.py:1631`. Esse valor diverge do `None` do juiz em `app/chamados/juizes.py:338`, embora participe do contrato de escrita. `violacao_de_saida` também alcança conversa: leituras em `app/chamados/services/fio.py:1133` e `app/chamados/services/fio.py:1136`, universo explicitamente incluindo conversa em `app/chamados/services/fio.py:1156`.
-
-As listas completas de coordenadas, funções, management, testes e ressalvas foram enviadas nas mensagens de consolidação; nenhuma escrita foi realizada. [nao verificado] [nao verificado]
-
-## 11/11 14:43 · sessao 0fe14d66a330 · - · - · origem=Ronald (tmux)
-
-**BLOQUEANTE — nova inversão entre travas de âncora e contador DP.** O laço adquire uma âncora, escreve a Pauta e só depois adquire a próxima; a escrita chama `lavrar`, cujo `UPDATE` trava o contador do departamento. Tudo permanece no `atomic` externo. (`app/chamados/services/fecho_runtime.py:115`, `app/chamados/services/fecho_runtime.py:117`, `app/chamados/services/fecho_runtime.py:122`, `app/pautas/services.py:188`, `app/pautas/services.py:352`, `app/pautas/services.py:354`, `app/chamados/services/fecho_runtime.py:142`)
-
-Contraexemplo estático: T1 tem competências A,B e segura A+contador DP; T2 tem somente B, segura B e espera contador DP; T1 solicita B e espera T2. Ordenar âncoras não impede esse ciclo, porque a trava compartilhada do contador entra entre elas. O suporte a lote com duas competências está explicitamente exercitado. Reprodução concorrente real: **[nao verificado]**. (`app/chamados/services/fecho_runtime.py:116`, `app/chamados/services/fecho_runtime.py:122`, `app/pautas/services.py:354`, `app/chamados/tests/test_e4b_c6_memoria.py:119`, `app/chamados/tests/test_e4b_c6_memoria.py:128`)
-
-Curas anteriores:
-
-- **Dia civil no agrupador: curado pela classe.** Todo agrupamento passa pelo juiz, `None` sai antes da janela; competência usa o fim da janela por corte existente. Não achei `data_evento` cru em `fecho_runtime.py`. (`app/chamados/services/fecho_runtime.py:100`, `app/chamados/services/fecho_runtime.py:107`, `app/chamados/services/fecho_runtime.py:108`, `app/chamados/services/fecho_runtime.py:111`, `app/ponto/janelas.py:60`)
-- **Duas Pautas pela mesma âncora: curado entre escritores E4B participantes**, por advisory determinístico adquirido antes de consultar, mantido na mesma transação da criação. **Não está implementado dentro de `pautas.services.escrever`**: essa porta continua fazendo `create` incondicional e não existe unicidade da entrega no modelo. Não achei outro emissor produtivo usando o marcador E4B. (`app/chamados/services/fecho_runtime.py:86`, `app/chamados/services/fecho_runtime.py:115`, `app/chamados/services/fecho_runtime.py:117`, `app/chamados/services/fecho_runtime.py:118`, `app/pautas/services.py:180`, `app/pautas/models.py:116`, `app/pautas/models.py:123`, `app/chamados/services/fecho_runtime.py:12`)
-- **Motivo truncado: curado pela classe dos motivos produzidos.** Reserva nomes, abrevia ambas as listas preservando identificadores inteiros e contagens; produtor S143 fornece exatamente os formatos esperados pelo parser. (`app/chamados/services/fecho_runtime.py:43`, `app/chamados/services/fecho_runtime.py:64`, `app/chamados/services/fecho_runtime.py:76`, `app/chamados/services/disputa_emissao.py:1840`, `app/chamados/services/disputa_emissao.py:1844`)
-
-Mapa de campos:
-
-| Valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| ContextVar do ato | Instala ato com PK do chamado e dicionário vazio; restaura token. (`app/chamados/services/fecho_runtime.py:143`, `:144`, `:148`) | Coletor compara **PK de chamado**; não usa PK de pergunta/disputa nessa comparação. (`app/chamados/services/fecho_runtime.py:18`, `:19`) |
-| Lote confirmado | Contexto cria lote, instala token e transfere perguntas depois do `yield` com saída normal; sempre restaura token. (`app/chamados/services/fecho_runtime.py:34`, `:35`, `:39`, `:40`) | Agrupador recebe somente dicionário do ato após a transição. (`app/chamados/services/fecho_runtime.py:149`, `:106`) |
-| Recusas | Coletor indexa por PK da pergunta, guardando objeto+motivo. (`app/chamados/services/fecho_runtime.py:20`) | Agrupador usa objeto para dia/empresa, transporta PK e motivo; texto interpreta formato produzido pelo S143. (`app/chamados/services/fecho_runtime.py:107`, `:110`, `:113`, `:66`) |
-| Dia/conversa | `abrir` fornece turno com `conversa=False`; `abrir_conversa` fornece dia civil com `conversa=True`. (`app/chamados/models.py:2789`, `:2801`) | Novo agrupador usa juiz discriminador. (`app/chamados/services/fecho_runtime.py:107`) |
-| Empresa/corte | Cadastro central possui corte; porta cadastral atualiza e salva. (`app/colaboradores/models.py:46`, `app/colaboradores/services/estrutura.py:17`, `:19`, `:20`) | Agrupador usa empresa da pergunta; janela lê corte efetivo. (`app/chamados/services/fecho_runtime.py:110`, `app/ponto/janelas.py:36`, `:60`) |
-| Âncora/competência | Fim da janela gera `<empresa>:AAAA-MM`; hash inclui marcador+tipo+âncora. (`app/chamados/services/fecho_runtime.py:111`, `:112`, `:86`) | Dedup usa marcador+âncora; porta serializa `ancora_id` em string; leitores gerais conservam mesmo par. (`app/chamados/services/fecho_runtime.py:118`, `app/pautas/services.py:184`, `:334`) |
-| Texto | Montador limita a representação; porta persiste até 500. (`app/chamados/services/fecho_runtime.py:76`, `:79`, `app/pautas/services.py:185`) | Payload DP entrega texto e âncora sem recalcular competência. (`app/pautas/views.py:39`, `:40`, `:41`) |
-| Destino/remetente/autor | Runtime fornece DP/TI/autor central; porta valida e persiste. (`app/chamados/services/fecho_runtime.py:122`, `:124`, `app/pautas/services.py:70`, `:157`, `:180`) | Listagem usa departamento; autor fica na trilha. (`app/pautas/services.py:308`, `app/pautas/models.py:105`) |
-| Feita/cancelada | Portas centrais atualizam esses campos. (`app/pautas/services.py:247`, `:294`) | Dedup delega a `.vivas()`, que exclui ambas. (`app/chamados/services/fecho_runtime.py:119`, `app/pautas/models.py:57`, `:64`) |
-| Status | Adaptador delega; `_gravar_estado` atribui e salva. (`app/chamados/services/fecho_runtime.py:139`, `:146`, `app/chamados/models.py:228`, `:296`) | Adaptador lê conjuntos do motor para instalar coleta. (`app/chamados/services/fecho_runtime.py:137`, `:139`) |
-
-**FILA — alcance/rastreabilidade mantidos:** encontrar Pauta viva executa `continue`, sem acrescentar recusas de outro chamado; concluída/cancelada deixa de deduplicar. A UI recebe âncora de competência mas ainda não tem rota para abri-la; isso é preexistente e não troca competência por mês civil. (`app/chamados/services/fecho_runtime.py:118`, `:120`, `app/pautas/models.py:57`, `:64`, `app/templates/core/_copiloto.html:564`, `:570`, `:572`)
-
-## 11/11 14:43 · sessao 5eb076058285 · FABLE-GABARITO · verificador · origem=Code
-
-(1) **BLOQUEANTE.** Motivo literal: “CLASSE A: o diff grava estado, dinheiro”; B exige “só muda tela ou texto e não grava nada”. O custo aceito é “rótulo ou texto pode regredir sem o selo pegar”. Alterar o valor monetário persistido ultrapassa esse custo; a regra de fila para achados de forma em B não autoriza classificar essa escrita como B. (aval_proporcao_por_risco_1111.txt:1, anexo fornecido)
-
-Entrada concreta: no mesmo arquivo, `Colab.valor_hora` retorna `self.salario / 220`; `Parcela.recalcular` executa `self.valor = self.colab.valor_hora; self.save()`. Mudar apenas `220 → 200`, com salário 2200, muda o valor gravado de 10 para 11. O consumo perde `valor_hora` porque seu receptor é `self.colab`; depois descarta os atributos gerais na comparação. (bin/selo_proporcao.py:258, bin/selo_proporcao.py:483, bin/selo_proporcao.py:524)
-
-A reprodução em memória retornou zero achados nos dois lados; sem achados, a declaração B recebe rc 0. (bin/selo_proporcao.py:557, bin/selo_proporcao.py:676, bin/selo_proporcao.py:680)
-
-_3931 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3934 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
