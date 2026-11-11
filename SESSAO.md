@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 16:18:33.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (393.0 MB). Acoes na janela: **2495**.
+**Medido em 11/11/2026 16:23:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (393.0 MB). Acoes na janela: **2496**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:22:21 | Bash | Fix mutant script and rerun | `cd /home/ronald/saas-hasner/logs/PROPORCAO; python3 - <<'PY' p='v10_mutantes.sh'; s=open(p).read() def rep(a,b): global s; assert s.count(a)==1, a; s=s.replace(a,b) rep('''for g in $(/bin/grep -o 'GUARDA:[a-z_0-9]*' "$W/bin/$P" \| cut -d: -f2); do''','''for g in $(/bin/grep -o 'GUARDA:[a-z_0-9]*' "$W/bin/$P" \| cut -d: -f2 \| /bin/grep -vx item_exato); do # elif: mutante proprio abaixo''') rep('"t ...` |
 | 16:16:52 | Bash | Write and run v10 mutants | `cd /home/ronald/saas-hasner/logs/PROPORCAO; sed -e 's/^# v9 mutantes:/# v10 mutantes (DOCS-E-PWA):/' -e 's/mutantes_v9.sh/v10_mutantes.sh/' -e 's/harness da copia (v9)/harness da copia (v10)/' -e 's/(ex. o v7)/(ex. o v9)/' -e 's/que o v7 nao/que o v9 nao/' v9_mutantes.sh > v10_mutantes.sh python3 - <<'PY' p='v10_mutantes.sh'; s=open(p).read() a='echo "MORTOS=$MORTOS VIVOS=$VIVOS"' assert s.count(a ...` |
 | 16:16:31 | Bash | Patch harness with v10 cases and run | `cd /home/ronald/wt-proporcao-131413; python3 - <<'PY' p='bin/tests/test_selo_proporcao.sh'; s=open(p).read() def rep(a,b): global s; assert s.count(a)==1, a; s=s.replace(a,b) rep("""# Selo de HOST do PROPORCAO-POR-RISCO (avais Ronald 11/11 13:1x e 14:3x, logs/PROPORCAO/aval_proporcao_*_1111.txt). # bin/selo_proporcao.sh julga CAMINHO, nao AST: CLASSE B so se TODO arquivo do diff (os dois lados de  ...` |
 | 16:16:03 | Bash | Record TRIAGEM opus reprova in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'PY' p='RELATO.md'; s=open(p).read().split('\n') s.insert(4,"TRIAGEM-OFFLINE 16:2x: opus final v5 REPROVOU 095b0e781 -- BLOQUEANTE pwa.js:55 ARMAZEM_TETO_MS=2000 sem medicao + tx.abort (:84) + db.close tardio (:72): gravacao lenta (>2 s) que daria certo vira 'Erro ao registrar' e e desfeita = trava de runtime no cliente (L-030, LEI-AKITA 3/8); harn ...` |
