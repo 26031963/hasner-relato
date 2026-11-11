@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 05:01:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (317.5 MB). Acoes na janela: **1543**.
+**Medido em 11/11/2026 05:06:33.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (317.5 MB). Acoes na janela: **1545**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:02:32 | Bash | Record mutant results in RELATO | `cd /home/ronald/saas-hasner && printf '%s\n' "$(date +%H:%M) E3 9710c1733: X1 green rc0 (11) + base/literal_incondicional/sem_fonte_no_gancho MORTO POR ASSERTION; c8c ORM controle OK + 4 mutantes FAIL por assertion, ERROR 0 (logs/FIO-E0-V4-E3/x1_mutantes_int.log, c8c_mutantes_int.log). Suite inteira em curso (suite_int2.log)." >> app/docs/RELATO.md` |
+| 05:02:27 | Bash | Read tail of c8c mutant log | `/bin/grep -E '^(===\|OK\|FAILED\|FAIL:\|ERROR:)\|^rc=' /home/ronald/saas-hasner/logs/FIO-E0-V4-E3/c8c_mutantes_int.log \| tail -6` |
 | 04:59:49 | ReadNotifications |  | `-` |
 | 04:59:47 | Bash | Check RELATO top for open questions | `cd /home/ronald/saas-hasner && /bin/grep -c . app/docs/RELATO.md; /bin/grep -n "^PAREI\\|^lei:\\|^PERGUNTA" app/docs/RELATO.md \| head` |
 | 04:59:45 | Monitor | E3 cadeia (mutantes X1/c8c + suite) e E4B c4v3 | `D=/home/ronald/saas-hasner/logs/FIO-E0-V4-E3; E=/home/ronald/saas-hasner/logs/E4B-ALCANCE; s1=0; s2=0; s3=0; s4=0 while true; do [ $s1 = 0 ] && [ -f $D/x1_mutantes.fim ] && [ $D/x1_mutantes.fim -nt $D/cadeia_pos.sh ] && { echo "X1: $(/bin/grep -E 'X1_RC\|MORTO\|NAO COMPROVADO\|^rc=' $D/x1_mutantes_int.log \| tr '\n' ' ')"; s1=1; } [ $s2 = 0 ] && [ -f $D/c8c_mutantes_orm.fim ] && [ $D/c8c_mutantes_ ...` |
