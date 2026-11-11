@@ -1,7 +1,118 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 11:37** · publicado em **11/11/2026 11:37** (UTC-3)
+> Ultima resposta processada: **11/11/2026 11:48** · publicado em **11/11/2026 11:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 11:48 · sessao 9f78342994b3 · - · - · origem=Ronald (tmux)
+
+- **14 `exit` após o diff:** base `bin/relato.sh:27,28,32,35,38,42,86` → `1`; diff `bin/relato.sh:110,128,143,162,163` → `1`; diff `bin/relato.sh:157,164` → `$MAPA_RC`. Inicialização `0` em `diff:bin/relato.sh:94`, falha fixa `1` em `:100`; não há reset posterior, portanto validador vermelho executado não termina `0`.
+
+- **Mutante FOTO sobrevivente, por inspeção:** inserir `MAPA_FOTO="$RAIZ/logs/MAPA-20/mapa.md"` imediatamente antes de `MAPA_PAR=...` em `diff:bin/relato.sh:98`. A validação ainda usa a foto, publicação usa o vivo. Os sete cenários não alteram a fonte entre esses pontos, e os greps apenas exigem presença textual das duas referências a `$MAPA_FOTO`. (`diff:bin/tests/test_mapa20_valida.sh:151–164`.)
+
+- **Mutante de higiene sobrevivente, por inspeção:** remover o `&& mv` de `diff:bin/relato.sh:106`, ajustando a continuação da linha anterior. O stub só copia bytes idênticos e o teste espera exatamente `MAPA VELHO`; não distingue instalação da cópia raspada de preservação da cópia original. Em uso real, perde a troca do arquivo antigo pelo higienizado. (`diff:bin/tests/test_mapa20_valida.sh:115–123,127,144,153–154`.) [nao verificado]
+
+- **Outro sobrevivente:** retirar a guarda de remoção fracassada em `diff:bin/relato.sh:110`; nenhum cenário injeta falha em `rm`. (`diff:bin/tests/test_mapa20_valida.sh:151–157`.)
+
+- **Recorte literalmente vazio não dá selo verde:** os três `awk` estão em `diff:bin/tests/test_mapa20_valida.sh:105–107`; a guarda `:108–109` incrementa `FALHAS` se faltar a palavra exigida em qualquer recorte; a saída verde exige zero em `:168`. [nao verificado]
+
+- Contagem em memória confirmou **169 linhas** no teste; cabeçalho do hunk correto. Execução integral dos testes e mutantes: **[nao verificado]**. [nao verificado]
+
+## 11/11 11:47 · sessao 7f8232774c9a · FIO-E0-V4-E3 · sonda · origem=Code
+
+```text
+sonda_leitura: sonda_cel_apos_desl.py [fb90b86fb968e4b4] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+celulas_apos_desligamento_total n 4811
+trabalha_true_apos_desligamento n 2546
+colabs_distintos n 108
+trabalha_true_passado_ate_hoje n 2110
+trabalha_true_futuro n 436
+por_origem 'gerada' n 2546
+por_empresa 2 n 2092
+por_empresa 3 n 454
+por_mes_civil 2026-07 n 41
+por_mes_civil 2026-08 n 230
+por_mes_civil 2026-09 n 486
+por_mes_civil 2026-10 n 1026
+por_mes_civil 2026-11 n 642
+por_mes_civil 2026-12 n 121
+top_col col305 n 92
+top_col col946 n 75
+top_col col316 n 68
+top_col col746 n 64
+top_col col870 n 62
+top_col col393 n 61
+top_col col963 n 60
+top_col col518 n 57
+top_col col951 n 57
+top_col col417 n 51
+top_col col931 n 50
+top_col col506 n 47
+top_col col880 n 47
+top_col col666 n 43
+top_col col929 n 41
+top_col col939 n 41
+top_col col143 n 32
+top_col col437 n 32
+top_col col894 n 32
+top_col col840 n 29
+top_col col338 n 28
+top_col col370 n 28
+top_col col862 n 28
+top_col col270 n 27
+top_col col782 n 27
+top_col col846 n 26
+top_col col847 n 26
+top_col col126 n 25
+top_col col367 n 25
+top_col col408 n 25
+top_col col914 n 25
+top_col col138 n 24
+top_col col325 n 24
+top_col col400 n 24
+top_col col422 n 24
+top_col col744 n 24
+top_col col927 n 24
+top_col col432 n 23
+top_col col698 n 23
+top_col col997 n 23
+conferencia col318 n 10
+conferencia col997 n 18
+agora 2026-11-11 11:46:55
+```
+
+## 11/11 11:46 · sessao 44743de30430 · - · - · origem=Ronald (tmux)
+
+Confirmado em Python em memória, sem criar arquivos:
+
+- **Tabela invisível ainda aceita:** `<!--\n` + G + `-->\n` retorna lista de problemas vazia. G inteiramente indentada com quatro espaços também passa, embora seja bloco de código Markdown. O parser só veta cercas e aplica `strip()` às linhas. (`diff:bin/mapa20_valida.py:82–89`.)
+- **Fonte inválida aceita:** `a.md:0` passa. A regex exige apenas aparência de citação; não valida linha positiva, existência nem pertencimento a aval/TICKETS/BACKLOG. (`diff:bin/mapa20_valida.py:44,134–135`.)
+- **Fonte sem extensão recusada:** `BACKLOG:10` reprova pela regex. A validade concreta dessa referência como fonte numerada permanece [nao verificado]. (`diff:bin/mapa20_valida.py:44,134–135`.)
+- **Falso vermelho de encerramento:** com `1 de 2`, células `nao encerrada` e `logs/encerrada.md:10` reprovam. A regex examina todas as células exceto o nome, sem distinguir status, negação ou caminho. O próprio nome `BO-ROTULO-ENCERRADO` fica corretamente excluído dessa busca. (`diff:bin/mapa20_valida.py:48,141–142`.)
+- **Lista duplicada/contraditória aceita:** primeira seção `## PRONTO AUSENTE` com `- nenhuma`, seguida de segunda seção com `- O168`, e tabela sem ausentes: passa. Só a primeira seção é lida. (`diff:bin/mapa20_valida.py:58–77,104,146–148`.)
+- **Mutante sobrevivente:** remover `re.I` da regex de encerramento preserva todos os casos do selo, escritos em minúsculas, mas aceita `ENCERRADA` com `1 de 2`. Sobrevivência por inspeção dos casos; suíte integral [nao verificado]. (`diff:bin/mapa20_valida.py:48`; `diff:bin/tests/test_mapa20_valida.sh:41,53–56`.) [nao verificado]
+
+Fechamentos específicos da v2: universo literal corrigido; largura do separador, cabeçalho vazio e células só com pontuação barrados; cercas de crases/tils e casos 4/3 barrados. Permanecem, por decisão do formato fixo, as recusas a `_E3_`, tabela sem pipes externos e qualquer barra invertida. (`diff:bin/mapa20_valida.py:29–39,82–103,110–122`.)
+
+## 11/11 11:44 · sessao 40e2b3668b76 · - · - · origem=Ronald (tmux)
+
+Nenhuma quebra estática dos cinco selos vizinhos foi encontrada; execução integral deles fica [nao verificado], pois criam arquivos temporários.
+
+- `test_codex_estado.sh`: recorta de `CODEX_OK=""` ao passo 3; o novo 2f termina antes disso. Portanto, o novo `exit 1` da guarda de remoção não entra no bloco proibido. (`base:bin/tests/test_codex_estado.sh:104–111`; `diff:bin/relato.sh:110,114,122–124`.)
+- `test_relato_publica_claude_md.sh`: a regex da raspagem continua selecionando a chamada geral com CLAUDE; a nova re-raspagem de MAPA tem argumento depois de `$DEST` antes da continuação, não satisfazendo o prefixo dessa regex. O novo `git add` está indentado e não aumenta o número de linhas iniciadas por `git add -A `. CLAUDE permanece no pathspec. (`base:bin/tests/test_relato_publica_claude_md.sh:15–20`; `diff:bin/relato.sh:105–106,129–143,147,153,162`.)
+- `test_codex_estado_evento.sh`: as chamadas de `codex_estado.sh` e `relato_nomes.sh` permanecem; o diff não introduz `gerar_codex_estado.py` inline. (`base:bin/tests/test_codex_estado_evento.sh:27–30`; `base:bin/relato.sh:32`; `diff:bin/relato.sh:123`.)
+- `test_relato_afirma_com_prova.sh`: a chamada exigida não foi alterada. (`base:bin/tests/test_relato_afirma_com_prova.sh:43–45`; `base:bin/relato.sh:55–56`.)
+- `test_publicacao_sem_nome.sh`: o universo continua vindo de `git ls-files` no público; MAPA rastreado é incluído automaticamente. Privacidade no público real: [nao verificado]. (`base:bin/tests/test_publicacao_sem_nome.sh:58–73`.)
+
+Classes:
+
+- **Segundo juiz:** a raspagem e sua conferência continuam usando `nome_no_texto`, sem novo predicado paralelo de nomes. (`base:bin/raspar_publico.py:15–16,31,36`; `diff:bin/relato.sh:105,129–143`.)
+- **Segundo escritor fora da porta:** as duas escritas públicas novas estão dentro do publicador, depois da trava existente; escritor efetivo da fonte e outros escritores no ambiente: [nao verificado]. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:97–114,129–143`.) [nao verificado]
+- **Relógio fora da borda:** o diff não adiciona relógio decisório; `date` continua na mensagem de commit. O timer de cinco minutos já existe. (`diff:bin/relato.sh:161`; `base:bin/hasner-relato.timer:5–7`.) [nao verificado]
+- **Ordem de trava:** nenhuma aquisição nova no diff. A rede `codex_estado.sh --gerar` retorna antes de adquirir a trava do ramo evento, evitando autoespera nesse caminho. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:123`; `base:bin/codex_estado.sh:54–56,65–66`.)
+- **Pouso antes do pré-requisito:** contrato efetivo, suíte completa e opus final: [nao verificado]. A base exige contrato antes do instrumento e suíte antes do opus; Codex não aprova sozinho o pouso. (`base:CLAUDE.md:377–381,394`; `diff:bin/relato.sh:93`.) [nao verificado]
+
+Numeração confirmada do `relato.sh` após v3: o bloco novo ocupa **89–114**; `gerar_avais` fica em **128**; raspagem geral **129–143**; `git add` MAPA **153**; saídas normais **157/164**; commit com guarda **161–162**; push com guarda **163**. (`diff:bin/relato.sh:89–164`.) [nao verificado]
 
 ## 11/11 11:37 · sessao 70d2beb073f4 · FABLE-GABARITO · leitura · origem=Code
 
@@ -762,98 +873,4 @@ Referências: **B** = base; **D** = arquivo resultante proposto pelo diff, com n
 
 6. **Classes relativas ao validador:** selo sem mordida é demonstrado pelos mutantes acima; fonte única do universo não é certificada pelo teste, que deriva a fixture do objeto sob teste; o próprio validador declara usar o universo literal do aval e o desrespeita em UI. (`diff bin/tests/test_mapa20_valida.sh:22-27,36`; diff `bin/mapa20_valida.py:7-8,18`.) A regra de pré-verificação exige conferir essas classes e reserva o pouso à leitura final subsequente. (`CLAUDE.md:372-381`.)
 
-## 11/11 10:41 · sessao 75140b8e444c · - · - · origem=Ronald (tmux)
-
-5. O selo mata remoções completas de verificações, mas usa o próprio `M.OBRAS` para gerar quase todo o oráculo; trocar `E3` por `E3-ERRADA`, mantendo 18 elementos, passa nos casos e na contagem. Os únicos alvos específicos são ausência de `RAIZ F5`, ausência de `SEM DONO`, terceira célula vazia em `E4C` e texto sem tabela. [diff:bin/tests/test_mapa20_valida.sh:19,22,25-28,36]
-
-Comprovação somente em memória: os seguintes mutantes do publicador passam os quatro checks textuais: [nao verificado]
-
-- `MAPA_RC=0` no ramo vermelho.
-- Trocar a chamada por `if false; then # mapa20_valida.py`.
-- Inicializar `MAPA_PAR` já preenchido, incondicionalmente.
-- Retirar MAPA do `git add` e do pathspec de commit. [nao verificado]
-- Encerrar com `exit 0`, preservando `exit "$MAPA_RC"` dentro de `if false`.
-
-Os predicados apenas buscam posição, substring, regex de ramo e alguma linha com `exit "$MAPA_RC"`; não executam o publicador nem exigem atribuição vermelha, caminho condicionado, staging ou saída final efetiva. [diff:bin/tests/test_mapa20_valida.sh:40-50] [nao verificado]
-
-Comentários de linha inteira são removidos, mas comentários inline permanecem: o mutante `if false; then # mapa20_valida.py` fica verde. A regex `(?<!\|\| )\bexit\b` também ignora exatamente `|| exit 1`, portanto não acusa a saída antecipada já existente na raspagem retida. [diff:bin/tests/test_mapa20_valida.sh:42,44,48-49; diff:bin/relato.sh:100] [nao verificado]
-
-6. Nenhum check textual vizinho quebra com esse diff:
-
-- CODEX: o recorte começa em `CODEX_OK=""`, depois do bloco novo; continua sem `exit`. [base:bin/tests/test_codex_estado.sh:104-113]
-- CLAUDE: regex da raspagem, `git add` e pathspec continuam satisfeitos; o mutante que remove CLAUDE continua vermelho. [base:bin/tests/test_relato_publica_claude_md.sh:15-20,29-30; diff:bin/relato.sh:132-149]
-- Evento CODEX e afirmação com prova: os nomes buscados permanecem; os `grep` aceitam comentários também. [base:bin/tests/test_codex_estado_evento.sh:28-30; base:bin/tests/test_relato_afirma_com_prova.sh:44]
-- Publicação sem nome não lê o publicador: as ocorrências de `relato.sh` são comentários; o universo vem de `git ls-files`, incluindo MAPA depois de rastreado. Verde real sem dados do repo público: [não verificado]. [base:bin/tests/test_publicacao_sem_nome.sh:58-72] [nao verificado]
-
-## 11/11 10:40 · sessao 61a4a2c2a774 · - · - · origem=Ronald (tmux)
-
-1. **Saídas/RC:** no fluxo normal de comandos do arquivo, não há caminho em que validador falhe e relato termine em 0: `MAPA_RC` começa em 0, recebe 1 no `else` e ambos os términos finais usam esse valor; os demais términos explícitos usam 1. Validador verde também não produz RC 1 sem outra falha. [diff `bin/relato.sh`:94–103,142,148–149]
-
-   Todos os `exit` após diff:
-   - RC **1**: 27 (lock), 28 (repo), 32 (nomes), 35 (backlog), 38 (estado), 42 (sessão), 86 (raspagem RELATO retido), 101 (raspagem MAPA retido), 117 (gerar avais), 132 (raspagem geral), 148 (push ou `echo` final falhando). [base `bin/relato.sh`:27–42,86; diff `bin/relato.sh`:101,117,132,148]
-   - RC **`$MAPA_RC`**: 142 (nada mudou), 149 (após publicação): 0 se verde, 1 se vermelho. [diff `bin/relato.sh`:94–98,140–149]
-   
-   Há falhas não propagadas em `cd`, `git add` e `git commit`, pois não há `set -e`; isso é outro problema, mas não transforma MAPA vermelho em RC 0. [base `bin/relato.sh`:21; diff `bin/relato.sh`:135–149]
-
-2. **Retido e parcial:** variável `DEST` recebe `DEST_RELATO` ou caminho padrão; o ramo retido passa o próprio arquivo público como origem e destino. [base `bin/relato.sh`:23; diff `bin/relato.sh`:100–101] O raspador primeiro lê tudo, mascara e confere; só então abre o destino em `'w'`, sem arquivo temporário ou rename. Erro anterior a essa abertura preserva arquivo; erro de escrita/interrupção após truncamento pode deixar arquivo vazio/parcial no checkout público; ocorrência real não demonstrada. [base `bin/raspar_publico.py`:28–40; ocorrência: não verificado] O `|| exit 1` impede o commit normal daquela execução, mas não desfaz a escrita. [diff `bin/relato.sh`:101]
-
-   CODEX-ESTADO gera e raspa em temporário, protegendo o destino contra falhas do gerador/raspador; entretanto a cópia final usa `cp` direto, que também não é substituição atômica e pode falhar durante a escrita. Portanto o comentário “nunca arquivo pela metade” é mais forte que a implementação. [base `bin/codex_estado.sh`:25–38; base `bin/relato.sh`:89–95]
-
-3. **Formato:** usa `src, dst = par.rsplit(':', 1)`: último `:` separa origem e destino. O par novo respeita o formato; `:` na origem **não quebra**. `:` no destino altera a separação. [base `bin/raspar_publico.py`:23–24; diff `bin/relato.sh`:96,101,132] `RAIZ` vem de `cd ... && pwd`, sem regra que proíba `:`; portanto o código não garante ausência desse caractere, e a construção nova continua funcionando com ele na origem. [base `bin/relato.sh`:22; base `bin/raspar_publico.py`:24]
-
-7. **Produtores/consumidores:**
-   
-   | Valor | Escreve | Lê |
-   |---|---|---|
-   | `MAPA_RC` | inicialização 0 e ramo vermelho 1 | dois exits finais |
-   | `MAPA_PAR` | inicialização vazia e ramo verde com par | expansão condicional na raspagem geral | [nao verificado]
-   | `MAPA_PATH` | vazio; recebe nome se arquivo público existe | mensagem e pathspec do commit | [nao verificado]
-   
-   [diff `bin/relato.sh`:94,96,98,132,139,142,146–149]
-
-   `logs/MAPA-20/mapa.md`: o comentário atribui regravação à sessão por evento, mas não há escritor executável no diff; a existência/produção real não é verificável nesta cópia, que não contém `logs`. O validador lê via `open(...).read()` e o raspador lê novamente na publicação. [diff `bin/relato.sh`:89–96; diff `bin/mapa20_valida.py`:63–65; base `bin/raspar_publico.py`:28; produção real: não verificado]
-
-   `MAPA-20.md` público: escreve `raspar_publico.py` tanto pelo par aprovado na raspagem geral quanto pelo par do ramo retido; lê o teste `-f`, o próprio raspador no ramo retido e o Git ao adicionar/commitar/publicar. [diff `bin/relato.sh`:96,100–101,132,139,146–148; base `bin/raspar_publico.py`:28,40]
-
-   **Janela entre validar e publicar:** lê o mapa para validar e depois torna a lê-lo para raspar; não há snapshot. O lock do publicador não demonstra que o escritor do mapa o obedece. Assim, mudança concorrente pode publicar bytes diferentes dos validados; ocorrência real não demonstrada. [base `bin/relato.sh`:27; diff `bin/relato.sh`:95–96,118–132; diff `bin/mapa20_valida.py`:65; base `bin/raspar_publico.py`:28; concorrência real: não verificado]
-
-## 11/11 10:36 · sessao 1ca6effd2852 · - · - · origem=Ronald (tmux)
-
-Há 48 IDs de primeira coluna adicionais aos 18 nomes pedidos; aliases E3/E4B/UI podem ser integrados às linhas obrigatórias. A lista completa foi enviada em duas mensagens, preservando os números de `backlog_obras.txt:852` a `backlog_obras.txt:2367`.
-
-A instrução literal também alcança obras nomeadas dentro das descrições: UI-ANEXO-AUSENCIA (`backlog_obras.txt:1131`), JUIZ-DO-PAR (`backlog_obras.txt:1732`), JUIZ-1 e CRONS-INSTALL-SOB-MARCA (`backlog_obras.txt:1761`), PLANTIO (`backlog_obras.txt:1852`), E1-FILA-V2-2-TRAVA (`backlog_obras.txt:1853`), BO-0611-05 (`backlog_obras.txt:1889`), BUG-PAR (`backlog_obras.txt:1895`), O137/ESMERIL-NO-RASTRO (`backlog_obras.txt:1899`), BO-0611-05-RESTO-DA-CLASSE (`backlog_obras.txt:1905`), O284-A (`backlog_obras.txt:1911`) e ORDEM-ATE-O-ZERO (`backlog_obras.txt:2367`). A distinção entre obra própria, alias e referência histórica precisa ser declarada; omitir silenciosamente esses nomes contraria a leitura literal. [nao verificado: critério final de identidade]
-
-E4C/E4D e RAIZ F2–F7 existem como etapas nomeadas, sem linha própria no BACKLOG anexado; não devem ser anunciadas como ausentes do BACKLOG inteiro (`backlog_obras.txt:1878`, `backlog_obras.txt:1895`). LASTRO genérico aparece na META, mas seus registros específicos são LASTRO-DEGRAU-2 e LASTRO-PARTE-2/3 (`backlog_obras.txt:1732`, `backlog_obras.txt:1761`, `backlog_obras.txt:1763`, `backlog_obras.txt:2367`).
-
-Todos os impactos de extras em `fio_morto_alcance` e na Central devem permanecer `nao medido`; nenhuma medida desses efeitos foi dada para eles. [nao verificado]
-
-## 11/11 10:36 · sessao 599f583cc054 · - · - · origem=Ronald (tmux)
-
-Censo somente leitura, na BASE `9ca563bb3`; as linhas dos arquivos alterados precisarão ser atualizadas após a cura. [nao verificado]
-
-**Quem escreve e quem lê**
-
-- `pendentes` é uma lista derivada, não um campo persistido: `consulta_do_app` escreve a lista com perguntas vivas sem `respondida_em` e com disputa sem `fechada_em`; conserva `historico` separado. A autoridade da vitalidade é `perguntas_do_app`, que chama `pergunta_viva`. (`chamados/services/pergunta_no_app.py:45`, `:61`, `:69`, `:71`, `:75`)
-- Escritores persistentes de `respondida_em`: resposta em `chamados/services/disputa_emissao.py:1468`; reabertura em `:1593`; resposta automática em `:1653`; reconstrução pela trilha em `:1674`; ressurreição em `chamados/models.py:1566`; `carimbar` em `:3132`. A atribuição `models.py:3163` desfaz estado apenas em memória. (`chamados/models.py:3159`)
-- Escritores de `DisputaSupervisao.fechada_em`: fechamento em `chamados/models.py:1932`; reaberturas em `:2149` e `:2173`.
-- Leitores diretos de `consulta_do_app` em produção: dois badges `/me/` (`api/views_core.py:313`, `api/views.py:324`), listagem de chamados (`api/views.py:1004`), perguntas da disputa (`api/views.py:2542`), dashboard (`core/views.py:252`), aviso de pendência (`chamados/services/aviso_pendencia.py:8`) e cobrança (`chamados/services/cobranca.py:47`).
-- `FollowupChamado.lido_colaborador_em` nasce nulo: campo aceita nulo e a criação não fornece carimbo. (`chamados/models.py:1673`, `chamados/services/nota.py:88`) A escrita de leitura passa por `marcar_lidas`, que resolve o nome em `LADOS` e faz `update` com instante. (`chamados/services/nota.py:59`, `:126`, `:132`) Chamadores do lado colaborador: `api/views.py:1050`, `chamados/views.py:1135`, `:1150`.
-- Leitores de `lido_colaborador_em`: badges dos kernels (`api/views_core.py:311`, `api/views.py:322`), serializador de followups (`api/views.py:1128`), contador web (`chamados/views.py:603`) e indicação “novo” do cartão (`templates/chamados/partials/_card_atendimento.html:51`, `:59`).
-- `ChamadoColaborador.status_local`: escritor de transição persistente é `_gravar_estado`, atribui e salva. (`chamados/models.py:201`, `:228`, `:296`) Nascimento também fornece status no INSERT, pela porta `criar`. (`chamados/models.py:1095`) Atribuições `:356` e `:371` simulam estado em memória. A query do badge lê `status_local__in=VIVOS`; o conjunto inclui `aberto`, `em_analise` e `registrado`. (`api/views_core.py:309`, `api/views.py:320`, `chamados/catalogo/motor.py:24`)
-
-**Outros leitores dos rótulos**
-
-O grep no código de produção, incluindo templates e JS, encontrou a regra duplicada nos dois kernels e uma terceira regra manual no dashboard, além de usos textuais de “Chamados” sem regra de badge. (`api/views_core.py:316`, `:318`, `api/views.py:327`, `:329`, `templates/core/dashboard_colaborador_v2.html:80`)
-
-A linha de fila deve apontar `templates/core/dashboard_colaborador_v2.html:80`: escolhe “Responder DP”/“Chamados” pelo número de perguntas, sem ramo vermelho; o número vem de `core/views.py:253`. Outros usos são rótulo de voltar (`templates/chamados/form_abertura.html:7`), cabeçalhos de relatório (`relatorios/views.py:1672`, `inteligencia/views.py:255`) e chave de comando (`ponto/management/commands/zerar_dados_operacionais.py:52`). O grep em `static` por ambos os literais não encontrou ocorrências. [nao verificado]
-
-**Leitores `api/views.py:1004` e `:2542`**
-
-- `api_chamados_v2`: consulta perguntas e histórico, indexa as perguntas por chamado vivo/destino e serializa a conversa. Não calcula badge. Seu GET marca followups do DP como lidos, portanto não serve para comparar o contador anterior. (`api/views.py:1003`, `:1040`, `:1044`, `:1050`)
-- `api_disputa_perguntas`: publica pendentes, histórico e o subconjunto `respondidas`; mantém `em_disputa`, IDs e opções servidas. Não calcula badge. (`api/views.py:2531`, `:2543`, `:2571`, `:2573`, `:2581`, `:2582`) Ambos devem continuar usando `consulta_do_app`; nenhuma mudança nesses leitores é necessária. (`chamados/services/pergunta_no_app.py:61`)
-
-**Contrato adicional a tratar**
-
-O teste de contagem registra os dois sítios inline dos badges como exceções `MENSAGEM`. Ao mover a query, o contrato exige retirar os dois sítios antigos, declarar o sítio da projeção e reduzir o teto de acordo; sem isso haverá assertions por sítio novo e declarações obsoletas. (`core/tests/test_tripwire_contagem_de_pendencia.py:83`, `:85`, `:383`, `:390`, `:395`) Não editei arquivos nem executei banco. [nao verificado]
-
-_3803 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3807 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
