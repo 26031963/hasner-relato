@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:28** · publicado em **11/11/2026 10:32** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:36** · publicado em **11/11/2026 10:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:36 · sessao 1ca6effd2852 · - · - · origem=Ronald (tmux)
+
+Há 48 IDs de primeira coluna adicionais aos 18 nomes pedidos; aliases E3/E4B/UI podem ser integrados às linhas obrigatórias. A lista completa foi enviada em duas mensagens, preservando os números de `backlog_obras.txt:852` a `backlog_obras.txt:2367`.
+
+A instrução literal também alcança obras nomeadas dentro das descrições: UI-ANEXO-AUSENCIA (`backlog_obras.txt:1131`), JUIZ-DO-PAR (`backlog_obras.txt:1732`), JUIZ-1 e CRONS-INSTALL-SOB-MARCA (`backlog_obras.txt:1761`), PLANTIO (`backlog_obras.txt:1852`), E1-FILA-V2-2-TRAVA (`backlog_obras.txt:1853`), BO-0611-05 (`backlog_obras.txt:1889`), BUG-PAR (`backlog_obras.txt:1895`), O137/ESMERIL-NO-RASTRO (`backlog_obras.txt:1899`), BO-0611-05-RESTO-DA-CLASSE (`backlog_obras.txt:1905`), O284-A (`backlog_obras.txt:1911`) e ORDEM-ATE-O-ZERO (`backlog_obras.txt:2367`). A distinção entre obra própria, alias e referência histórica precisa ser declarada; omitir silenciosamente esses nomes contraria a leitura literal. [nao verificado: critério final de identidade]
+
+E4C/E4D e RAIZ F2–F7 existem como etapas nomeadas, sem linha própria no BACKLOG anexado; não devem ser anunciadas como ausentes do BACKLOG inteiro (`backlog_obras.txt:1878`, `backlog_obras.txt:1895`). LASTRO genérico aparece na META, mas seus registros específicos são LASTRO-DEGRAU-2 e LASTRO-PARTE-2/3 (`backlog_obras.txt:1732`, `backlog_obras.txt:1761`, `backlog_obras.txt:1763`, `backlog_obras.txt:2367`).
+
+Todos os impactos de extras em `fio_morto_alcance` e na Central devem permanecer `nao medido`; nenhuma medida desses efeitos foi dada para eles. [nao verificado]
+
+## 11/11 10:36 · sessao 599f583cc054 · - · - · origem=Ronald (tmux)
+
+Censo somente leitura, na BASE `9ca563bb3`; as linhas dos arquivos alterados precisarão ser atualizadas após a cura. [nao verificado]
+
+**Quem escreve e quem lê**
+
+- `pendentes` é uma lista derivada, não um campo persistido: `consulta_do_app` escreve a lista com perguntas vivas sem `respondida_em` e com disputa sem `fechada_em`; conserva `historico` separado. A autoridade da vitalidade é `perguntas_do_app`, que chama `pergunta_viva`. (`chamados/services/pergunta_no_app.py:45`, `:61`, `:69`, `:71`, `:75`)
+- Escritores persistentes de `respondida_em`: resposta em `chamados/services/disputa_emissao.py:1468`; reabertura em `:1593`; resposta automática em `:1653`; reconstrução pela trilha em `:1674`; ressurreição em `chamados/models.py:1566`; `carimbar` em `:3132`. A atribuição `models.py:3163` desfaz estado apenas em memória. (`chamados/models.py:3159`)
+- Escritores de `DisputaSupervisao.fechada_em`: fechamento em `chamados/models.py:1932`; reaberturas em `:2149` e `:2173`.
+- Leitores diretos de `consulta_do_app` em produção: dois badges `/me/` (`api/views_core.py:313`, `api/views.py:324`), listagem de chamados (`api/views.py:1004`), perguntas da disputa (`api/views.py:2542`), dashboard (`core/views.py:252`), aviso de pendência (`chamados/services/aviso_pendencia.py:8`) e cobrança (`chamados/services/cobranca.py:47`).
+- `FollowupChamado.lido_colaborador_em` nasce nulo: campo aceita nulo e a criação não fornece carimbo. (`chamados/models.py:1673`, `chamados/services/nota.py:88`) A escrita de leitura passa por `marcar_lidas`, que resolve o nome em `LADOS` e faz `update` com instante. (`chamados/services/nota.py:59`, `:126`, `:132`) Chamadores do lado colaborador: `api/views.py:1050`, `chamados/views.py:1135`, `:1150`.
+- Leitores de `lido_colaborador_em`: badges dos kernels (`api/views_core.py:311`, `api/views.py:322`), serializador de followups (`api/views.py:1128`), contador web (`chamados/views.py:603`) e indicação “novo” do cartão (`templates/chamados/partials/_card_atendimento.html:51`, `:59`).
+- `ChamadoColaborador.status_local`: escritor de transição persistente é `_gravar_estado`, atribui e salva. (`chamados/models.py:201`, `:228`, `:296`) Nascimento também fornece status no INSERT, pela porta `criar`. (`chamados/models.py:1095`) Atribuições `:356` e `:371` simulam estado em memória. A query do badge lê `status_local__in=VIVOS`; o conjunto inclui `aberto`, `em_analise` e `registrado`. (`api/views_core.py:309`, `api/views.py:320`, `chamados/catalogo/motor.py:24`)
+
+**Outros leitores dos rótulos**
+
+O grep no código de produção, incluindo templates e JS, encontrou a regra duplicada nos dois kernels e uma terceira regra manual no dashboard, além de usos textuais de “Chamados” sem regra de badge. (`api/views_core.py:316`, `:318`, `api/views.py:327`, `:329`, `templates/core/dashboard_colaborador_v2.html:80`)
+
+A linha de fila deve apontar `templates/core/dashboard_colaborador_v2.html:80`: escolhe “Responder DP”/“Chamados” pelo número de perguntas, sem ramo vermelho; o número vem de `core/views.py:253`. Outros usos são rótulo de voltar (`templates/chamados/form_abertura.html:7`), cabeçalhos de relatório (`relatorios/views.py:1672`, `inteligencia/views.py:255`) e chave de comando (`ponto/management/commands/zerar_dados_operacionais.py:52`). O grep em `static` por ambos os literais não encontrou ocorrências. [nao verificado]
+
+**Leitores `api/views.py:1004` e `:2542`**
+
+- `api_chamados_v2`: consulta perguntas e histórico, indexa as perguntas por chamado vivo/destino e serializa a conversa. Não calcula badge. Seu GET marca followups do DP como lidos, portanto não serve para comparar o contador anterior. (`api/views.py:1003`, `:1040`, `:1044`, `:1050`)
+- `api_disputa_perguntas`: publica pendentes, histórico e o subconjunto `respondidas`; mantém `em_disputa`, IDs e opções servidas. Não calcula badge. (`api/views.py:2531`, `:2543`, `:2571`, `:2573`, `:2581`, `:2582`) Ambos devem continuar usando `consulta_do_app`; nenhuma mudança nesses leitores é necessária. (`chamados/services/pergunta_no_app.py:61`)
+
+**Contrato adicional a tratar**
+
+O teste de contagem registra os dois sítios inline dos badges como exceções `MENSAGEM`. Ao mover a query, o contrato exige retirar os dois sítios antigos, declarar o sítio da projeção e reduzir o teto de acordo; sem isso haverá assertions por sítio novo e declarações obsoletas. (`core/tests/test_tripwire_contagem_de_pendencia.py:83`, `:85`, `:383`, `:390`, `:395`) Não editei arquivos nem executei banco. [nao verificado]
+
+## 11/11 10:36 · sessao a41024c8adde · - · - · origem=Ronald (tmux)
+
+- **Causas a–e:** E4B é a dona escrita de todas as cinco classes; não é necessário inventar dono por semelhança de código. O BACKLOG anexo diz literalmente “backfill do fio morto (matriz_e4 C3, classes a-e)”; a cópia confirma o escopo. Isso prova responsabilidade, não redução do baseline nem cobertura eficaz medida. (`backlog_obras.txt:1887`; `app/docs/BACKLOG.md:1875`.)
+- **Significados:** a = chamado vivo fora da fila; b = resposta carimbada sem texto; c = respondida com destino terminal; d = colaborador na lista CXR e dia fora; e = restante discriminado. O subtipo de e `pergunta_viva_sob_chamado_terminal` tem ramo próprio. (`app/chamados/services/vigia_fio.py:519`; `app/chamados/services/vigia_fio.py:538`; `app/chamados/services/vigia_fio.py:667`; `app/chamados/services/vigia_fio.py:688`.)
+- **SEM DONO:** os dados permitem dizer que nenhuma causa a–e ficou sem obra dona explícita, porque E4B nomeia todas. Não permitem dar como zero o resíduo depois das obras; redução efetiva não medida continua “nao medido”. A coluna de tamanho solicitada deve permanecer literalmente “a medir pela sessao”. (`backlog_obras.txt:1887`; impacto pós-obras: [nao verificado].)
+
+Para as linhas RAIZ, a sequência escrita é F0→F1→F2=BO-DISPUTA→F3→F4=BUG-PAR→F5 com E4d→F6→F7. Essa ordem não define por si o inventário de arquivos de cada fase. (`backlog_obras.txt:1895`; `app/docs/BACKLOG.md:1883`.)
+
+- **RAIZ F1:** sítios de destino em `app/chamados/models.py:2982`, `:3014`; `app/chamados/services/fio.py:925`; eleitores em `app/chamados/services/disputa_emissao.py:238`, `:1197`; `app/chamados/services/declaracao_texto.py:377`. F1 aparece respondida no anexo recente, precedendo c22 depois de E3/E4B; a lei antiga ainda aberta no RELATO da cópia é anterior e não deve prevalecer. (`backlog_obras.txt:1875`; `app/docs/RELATO.md:19`.)
+- **RAIZ F2:** equivale a BO-DISPUTA e utiliza a cópia c21/c22 preservada: `app/chamados/management/commands/auditar_invariantes_chamados.py`, `app/chamados/services/declaracao_texto.py`, `app/chamados/services/descarte_disputa.py`, `app/chamados/services/disputa_emissao.py`, `app/core/observ.py`, `app/ponto/management/commands/reconciliar_grade.py`. (`arquivos_obras.txt`, bloco c21/c22: [nao verificado quanto à numeração do anexo]; `backlog_obras.txt:1875`; `backlog_obras.txt:1895`.)
+- **RAIZ F3/F4:** reutilizar o mesmo censo, sem alegar divisão exaustiva entre as duas fases. Sítios centrais: `app/chamados/models.py:1853`, `:3103`; `app/chamados/services/materializacao.py:425`, `:875`, `:1158`; `app/chamados/services/validacao.py:134`, `:199`, `:461`; `app/chamados/services/disputa_emissao.py:1508`, `:1632`; `app/chamados/reconciliador.py:411`, `:611`, `:1170`; `app/chamados/services/becos.py:56`; `app/chamados/signals.py:238`; `app/chamados/services/explicador.py:137`; `app/chamados/relatorios_disputa.py:20`. Essas referências são as do `f3f4_censo.r` fornecido, não novo levantamento. (`f3f4_censo.r`: [nao verificado quanto à numeração do anexo].)
+- **RAIZ F4 especificamente:** par da pausa pela célula, perda em `app/chamados/models.py:3441`, fonte `PARES_PAUSA_DNA`; não atribuir D8 como bloqueio de F3/F4. (`backlog_obras.txt:1896`; `leis_abertas.txt`, RELATO:31.)
+- **RAIZ F5:** coordenada com E4d; o inventário fechado próprio dessa fase não foi fornecido. Pode citar a dependência da parada da projeção e preservar as seis exceções, sem inventar lista exaustiva de alterações. (`backlog_obras.txt:1895`; `app/docs/PROMPTS.md:2030`; `app/docs/PROMPTS.md:2034`.)
+- **RAIZ F6/F7:** há nome e posição na sequência; escopo, arquivos, voltas e efeito visível específicos = “nao medido”. Não converter os lotes sugeridos do censo em fases oficiais. (`backlog_obras.txt:1895`; `app/docs/BACKLOG.md:1883`.)
+- **O168:** `app/ponto/supra_juiz.py:539` e cartório do evento; retirar `--executar` depende da guarda funcionar no evento e de `CSF_RETRATADO` medido em zero. Nada disso é medida atual de fio_morto_alcance. (`backlog_obras.txt:1396`; `app/docs/BACKLOG.md:1395`; `app/ponto/services/cartorio.py:1091`.)
+- **LASTRO:** o nome abreviado agrega obras distintas; não declarar uma única etapa para todo o agregado sem ressalva. Degrau 2 toca `app/ponto/services/lastro.py:274` e depende do juiz do par; parte 2 depende de JUIZ-1 e CRONS-INSTALL; parte 3 já pousou e toca emissão/reação. (`backlog_obras.txt:1732`; `backlog_obras.txt:1761`; `backlog_obras.txt:1763`.)
+
+**C — cautela:** compartilhamento de arquivo prova cruzamento e necessidade de integração, não desmente sozinho uma ordem. O censo F3/F4 pede coordenação das testemunhas com E4c e parada com E4d, mas não fornece número que prove uma inversão obrigatória. (`f3f4_censo.r`, “Ordem sugerida”, item 5: [nao verificado quanto à numeração do anexo]; `app/docs/BACKLOG.md:1883`.)
+
+A declaração META de O169-FECHADA “4 arquivos, 0 comuns com E3/E4B” diverge da contagem bruta da cópia anexa, que lista cinco arquivos, dos quais dois de produção; a ausência de arquivos comuns com E3/E4B continua confirmada pelo inventário fornecido. Isso é divergência de contagem, não premissa de ordem desmentida. (`meta18_linha.txt:1`; `arquivos_obras.txt`, blocos E3/E4B/O169-FECHADA: [nao verificado quanto à numeração do anexo].)
+
+## 11/11 10:35 · sessao 5b642dda3528 · - · - · origem=Ronald (tmux)
+
+Furos concretos para D:
+
+- **QUEM CHAMA:** o caminho `logs/MAPA-20/mapa.md → MAPA-20.md` ainda não entra na raspagem, no staging nem no commit; acrescentar apenas o par não publica o arquivo. (`bin/relato.sh:103`, `bin/relato.sh:117`, `bin/relato.sh:121`, `bin/relato.sh:130`, `bin/relato.sh:131`)
+- **QUEM ESPERA / LIMITE:** o publicador espera o lock por até 600 s e depende da obtenção da lista de nomes e dos geradores; o contrato não declara essas dependências nem como a atualização por evento trata falha/timeout. (`bin/relato.sh:27`, `bin/relato.sh:32`, `bin/relato.sh:35`, `bin/relato.sh:38`, `bin/relato.sh:42`, `bin/relato.sh:102`)
+- **FALHA:** origem ausente é pulada com sucesso; não existe nesses dois programas validação de obras META-18 ou de células vazias. O `rc 1` prometido exige validação adicional antes da cópia. (`bin/raspar_publico.py:25`, `bin/raspar_publico.py:27`, `bin/raspar_publico.py:40`, `bin/raspar_publico.py:46`)
+- **MEDIDA:** os programas contam substituições de nomes/CPF, não obras nem cobertura de `fio_morto_alcance`/Central; o contrato não define identificação única, tratamento das obras extras ou deduplicação de impactos. Implementação dessa conferência: [nao verificado]. (`bin/raspar_publico.py:41`, `bin/raspar_publico.py:45`)
+- **FALHA DE PUBLICAÇÃO:** a atualização da linha local não prova publicação; o push pode falhar e não há retry por evento declarado no contrato. (`bin/relato.sh:132`)
+- **QUEM DESLIGA:** falta definir a operação de desligamento e o destino da página já publicada; o script não possui condição de 20/20 e o próprio precedente documenta remoção do par **e** remoção do arquivo público. (`bin/relato.sh:101`, `bin/relato.sh:103`, `bin/relato.sh:132`)
+
+Não executei os publicadores; execução, chamadas externas, estado público e comportamento da esteira em produção: [nao verificado]. [nao verificado]
+
+## 11/11 10:34 · sessao 8051d24e8124 · MAPA-ATE-O-20 · sonda · origem=Code
+
+```text
+sonda_leitura: sonda_central.py [3912ec00c599cf5c] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+central_qs_na_fila n 3634
+por_status_local 'aberto' n 2026
+por_status_local 'em_analise' n 1608
+por_categoria 'Ausencia' n 2710
+por_categoria 'disputa_supervisao' n 323
+por_categoria 'turno_aberto' n 171
+por_categoria 'auditoria_clt' n 128
+por_categoria 'Ponto' n 97
+por_categoria 'sem_previsao_escala' n 63
+por_categoria 'Outros' n 50
+por_categoria 'batida_espuria' n 25
+por_categoria 'turno_aberto_24h' n 18
+por_categoria 'ausencia' n 14
+por_categoria 'cadastro' n 12
+por_categoria 'Escala' n 5
+por_categoria 'App' n 3
+por_categoria 'Documentos' n 3
+por_categoria 'Ferias' n 3
+por_categoria 'acesso_bloqueado' n 3
+por_categoria 'Holerite' n 2
+por_categoria 'agenda_aceite' n 2
+por_categoria 'batida_fora_horario' n 1
+por_categoria 'geofence' n 1
+por_urgencia 'normal' n 1861
+por_urgencia 'urgente' n 1295
+por_urgencia 'emergencia' n 322
+por_urgencia 'critica' n 140
+por_urgencia 'consulta' n 16
+agora 2026-11-11 10:34:04
+```
 
 ## 11/11 10:28 · sessao 8a5868b1f67a · RAIA-2-BO-VISIVEL · sonda · origem=Code
 
@@ -734,204 +843,4 @@ Vitalidade C6 também depende de `validada_em`, tranca da competência, `via_res
 - Contratos de leitores: aviso/cobrança/badges mesma pendente; lista nativa pendentes + histórico; frescor após tranca/toque/reabertura. `app/chamados/tests/test_e3_v4_orm.py:20`, `app/chamados/tests/test_e3_v4_orm.py:42`, `app/chamados/tests/test_e3_v4_orm.py:101`.
 - Outros leitores de teste explícitos da consulta: `app/chamados/tests/test_esmeril2_left_join.py:19`, `app/chamados/tests/test_fio_le_o_juiz.py:267`, `app/core/tests/test_dashboard_badge.py:45`; contratos AST em `app/chamados/tests/test_contract_pergunta_viva.py:68`, `app/chamados/tests/test_pergunta_no_app.py:168`; ferramentas de mutação em `app/chamados/tests/e3_mutantes.py:23`.
 
-## 11/11 10:08 · sessao 984214e9a557 · - · - · origem=Ronald (tmux)
-
-Censo de autoridades e decisões, somente leitura:
-
-1. **Não há juiz registrado para o rótulo/count “o que o app mostra ao colaborador agora”.** O registro de chamados contém C6 `pergunta_viva`, C13 `retencao`, C15 `fio_vivo`, C19 `tarefa_do_dia`, C20 `dia_da_pergunta_trancado`, mas nenhum para o badge ou `consulta_do_app`. `app/core/juizes.py:272`, `app/core/juizes.py:278`, `app/core/juizes.py:285`, `app/core/juizes.py:287`, `app/core/juizes.py:291`, `app/core/juizes.py:292`.
-
-2. **A tabela `JUIZES.md` também não declara esse juiz.** Ela se define como lookup, aponta o registro vivo em `core/juizes.py`, declara que o código vivo manda e lista os juízes de chamados sem badge. `app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:11`, `app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:59`, `app/docs/JUIZES.md:78`.
-
-3. **Autoridade existente da seleção apresentada:** `consulta_do_app(colab)` retorna exatamente `{'pendentes': [pergunta], 'historico': [pergunta]}`; lê `perguntas_do_app(colab, em_lote=True)` e separa pendentes por `respondida_em is None and disputa.fechada_em is None`, preservando ordem por id. O serviço declara que API, badge dos dois kernels e dashboard contam a mesma lista. `app/chamados/services/pergunta_no_app.py:3`, `app/chamados/services/pergunta_no_app.py:61`, `app/chamados/services/pergunta_no_app.py:64`, `app/chamados/services/pergunta_no_app.py:69`, `app/chamados/services/pergunta_no_app.py:75`.
-
-4. **A vitalidade continua pertencendo ao C6:** `perguntas_do_app` usa `PerguntaDisputa.q_vivas()`, identidade do colaborador e `pergunta_viva`; `consulta_do_app` apenas particiona a apresentação. `app/chamados/services/pergunta_no_app.py:45`, `app/chamados/services/pergunta_no_app.py:49`, `app/chamados/services/pergunta_no_app.py:56`, `app/chamados/services/pergunta_no_app.py:58`, `app/core/juizes.py:278`.
-
-5. **`estado_app` não é este problema:** no situacional significa “sem device ativo”, “instalou, nunca bateu”, “bateu e parou” ou “ativo”; não descreve perguntas, mensagens ou badge. `app/colaboradores/services/situacional.py:191`.
-
-Decisões técnicas sugeridas para o construtor — propostas, não implementação:
-
-| Candidata | Pró e limite com evidência |
-|---|---|
-| **Wrapper de projeção junto de `consulta_do_app`, em `chamados/services/pergunta_no_app.py` — recomendação** | Mantém seleção e apresentação próximas, sem depender de uma view HTTP; pode receber `colab`, chamar uma vez `consulta_do_app`, mover para si a query não lidos e devolver listas + números + badge. A seleção já mora nesse serviço por ser o leitor do universo do app; os kernels hoje repetem query e regra. `app/chamados/services/pergunta_no_app.py:64`, `app/api/views_core.py:305`, `app/api/views_core.py:313`, `app/api/views.py:316`, `app/api/views.py:324`. |
-| Acrescentar badge à própria `consulta_do_app` | Menor número de funções, mas altera contrato de retorno e adiciona query de não lidos a todos os consumidores. Há testes de igualdade **exata** com as duas chaves e teto de nove queries; portanto é candidata mais invasiva. `app/chamados/tests/test_e3_v4_orm.py:85`, `app/chamados/tests/test_e3_v4_orm.py:91`, `app/chamados/tests/test_e3_v4_orm.py:98`. |
-| Novo módulo de apresentação em `chamados/services/` | Nome próprio separa a projeção da seleção e pode conservar o contrato atual; acrescenta arquivo e indireção. Existência/aceitação desse arquivo no escopo literal do anexo precisa ser tratada como decisão técnica de implementação, não lei nova. Base: `app/chamados/services/pergunta_no_app.py:61`; restrição de escopo do anexo: **[nao verificado]**. |
-| Helper puro que recebe duas contagens | Facilita testar prioridade/cor, mas sozinho não atende o painel sem alguém produzir a query não lidos. Para evitar query própria no painel, precisaria de outro montador, ou da função pública aceitando `colab`. Query atual: `app/api/views_core.py:305`; proibição do anexo: **[nao verificado]**. |
-| Função em `api/views_core.py` ou `api/views.py` | Permite extrair a regra no local atual, mas o painel passaria a importar camada HTTP e ainda seria preciso escolher um dos kernels como dono; os dois possuem hoje a regra. `app/api/views_core.py:313`, `app/api/views.py:324`. |
-
-**Forma recomendada do retorno do wrapper**, como proposta compatível: `{'pendentes': [...], 'historico': [...], 'questionarios_pendentes': int, 'chamados_nao_lidos': int, 'chamados_badge': {'count': int, 'cor': str, 'rotulo': str} | None}`. Não calcular novamente rótulo nem count nos leitores; `None` continua representando ausência de badge. Contrato atual dos kernels: `app/api/views_core.py:314`, `app/api/views_core.py:316`, `app/api/views_core.py:318`, `app/api/views_core.py:320`; contrato de listas: `app/chamados/services/pergunta_no_app.py:75`. O nome da função e o shape interno são decisão técnica, não comprovados como já escolhidos: **[nao verificado]**.
-
-**Cuidados concretos com os selos existentes:**
-
-- Matriz E3 testa os dois kernels, dashboard, endpoint, duas perguntas na mesma disputa e prioridade do amarelo sobre vermelho; vermelho conta chamados, não followups. `app/chamados/tests/test_e3_app_orm.py:28`, `app/chamados/tests/test_e3_app_orm.py:38`, `app/chamados/tests/test_e3_app_orm.py:43`, `app/chamados/tests/test_e3_app_orm.py:47`, `app/chamados/tests/test_e3_app_orm.py:62`.
-- Mutantes atuais procuram literalmente `len(consulta_do_app(... )['pendentes'])` nos dois kernels; a extração deve atualizar esses alvos, preservando a mordida contra contar disputas. `app/chamados/tests/e3_mutantes.py:23`, `app/chamados/tests/e3_mutantes.py:25`.
-- Contrato AST exige que `api_disputa_perguntas` continue lendo `consulta_do_app`, e que a consulta continue delegando a `perguntas_do_app`/C6. Mantendo wrapper separado e endpoints de perguntas intactos, esse contrato pode permanecer. `app/chamados/tests/test_contract_pergunta_viva.py:62`, `app/chamados/tests/test_contract_pergunta_viva.py:68`, `app/chamados/tests/test_contract_pergunta_viva.py:75`.
-- A chamada `api/views.py:1004` alimenta o agrupamento por chamado usando pendentes + histórico, depois marca notas do DP como lidas; a chamada `:2542` alimenta perguntas, histórico e `em_disputa`, sem calcular badge. Extração apenas da regra não exige alterá-las. `app/api/views.py:1004`, `app/api/views.py:1040`, `app/api/views.py:1050`, `app/api/views.py:2542`, `app/api/views.py:2571`, `app/api/views.py:2573`, `app/api/views.py:2581`.
-
-**Golden atual:** existem três perguntas por colaborador/dia sobre presença de pergunta no app, ligadas a `dia_do_colab`; não existe nesse arquivo caso do rótulo/count “agora”. `eval/golden.py:35`, `eval/golden.py:184`, `eval/golden.py:187`, `eval/oraculo.py:93`. A inclusão de uma pergunta “agora” é requisito do anexo, não execução nesta cópia: **[nao verificado]**.
-
-**Perguntas de lei: 0**, conforme o anexo que já fixa fonte, prioridade, cores existentes, contagem por pergunta e ausência de badge; a autoridade de vitalidade continua C6. `app/chamados/services/pergunta_no_app.py:61`, `app/api/views_core.py:315`, `app/api/views_core.py:317`, `app/core/juizes.py:278`; aval/“Nenhuma lei nova” do anexo: **[nao verificado]**.
-
-## 11/11 10:08 · sessao 950c845836fc · - · - · origem=Ronald (tmux)
-
-3. View/contexto/contador:
-
-- Única view encontrada renderizando o partial: `painel_colaborador(request, cid)`, protegida por login e ação `ver_cadastro`; rota `<int:cid>/painel/`. (`app/colaboradores/views.py:914`, `app/colaboradores/views.py:917`, `app/colaboradores/views.py:988`, `app/colaboradores/urls.py:48`)
-- Mensagens chegam como `chamados`: `ChamadoColaborador.objects.filter(colaborador=colab).prefetch_related('followups').order_by('-criado_em')[:5]`. O comentário diz “abertos”, mas o filtro executável não restringe status. (`app/colaboradores/views.py:936`, `app/colaboradores/views.py:937`)
-- A view passa `chamados`; não passa `consulta_do_app`, `pendentes`, `historico`, contagem de perguntas ou rótulo do app. Os outros dados explícitos são colaborador, escala, retrato/portas/legenda, total de batidas, batidas do mês, mês atual e CSRF. (`app/colaboradores/views.py:988`)
-- Badge atual da aba Mensagens é `{{ chamados|length }}`, condicionado a haver chamados; portanto conta os até cinco chamados carregados, sem distinguir leitura, perguntas ou status. (`app/templates/colaboradores/partials/painel_colaborador.html:39`, `app/colaboradores/views.py:937`)
-- Aba Mensagens contém formulário HTMX de mensagem rápida e include `msgs_lista.html`; a lista mostra assunto/data do chamado e até cinco followups por chamado, com conteúdo truncado em 80 caracteres. (`app/templates/colaboradores/partials/painel_colaborador.html:188`, `app/templates/colaboradores/partials/painel_colaborador.html:198`, `app/templates/colaboradores/partials/msgs_lista.html:4`, `app/templates/colaboradores/partials/msgs_lista.html:7`, `app/templates/colaboradores/partials/msgs_lista.html:10`)
-- Após enviar, `abrir_chamado_rapido` cria/reusa chamado `mensagem_dp` em `VIVOS`, anexa nota, envia push e devolve somente `msgs_lista.html`, com a mesma consulta limitada a cinco. O `hx-target="#msgs-lista"` não atualiza o botão da aba. (`app/chamados/views.py:973`, `app/chamados/views.py:976`, `app/chamados/views.py:986`, `app/chamados/views.py:989`, `app/chamados/views.py:997`, `app/chamados/views.py:1000`, `app/templates/colaboradores/partials/painel_colaborador.html:189`)
-
-5. Cascas e grafo:
-
-- Correção da premissa: o GET do painel usa **fetch + innerHTML**, depois `htmx.process(corpo)`; HTMX processa os controles injetados. (`app/templates/core/_drawer_generico.html:19`, `app/templates/core/_drawer_generico.html:26`, `app/templates/core/_drawer_generico.html:33`)
-- `base.html → core/_drawer_generico.html` e `base_app.html → core/_drawer_generico.html`; ambas carregam HTMX. (`app/templates/base.html:399`, `app/templates/base_app.html:154`, `app/templates/base.html:19`, `app/templates/base_app.html:19`)
-- Fluxo da lista: `colaboradores/lista.html` estende `base.html` e inclui `_lista_tabela.html`; clique da linha chama `abrirPainelColab`, que chama `abrirDrawer(..., '/colaboradores/'+cid+'/painel/', 1100)`. (`app/templates/colaboradores/lista.html:1`, `app/templates/colaboradores/lista.html:57`, `app/templates/colaboradores/partials/_lista_tabela.html:16`, `app/templates/core/_drawer_generico.html:89`, `app/templates/core/_drawer_generico.html:104`)
-- Há ramo legado `#col-painel`, também por fetch, com inserção in-place. (`app/templates/core/_drawer_generico.html:95`, `app/templates/core/_drawer_generico.html:99`)
-- Fluxo do retrato: `folha/retrato_folha.html` estende `base.html`, inclui `_retrato_lista.html`; o nome abre a mesma rota, levando `mes/ano`. A versão parcial do retrato também inclui a lista. (`app/templates/folha/retrato_folha.html:1`, `app/templates/folha/retrato_folha.html:53`, `app/templates/folha/_retrato_lista.html:61`, `app/templates/folha/_retrato_parcial.html:7`)
-- Fluxo Raio-X: barra abre drawer com `raiox_href`; `retrato_raiox` renderiza `_retrato_raiox.html`, cujas linhas abrem a mesma rota do painel com `mes/ano`. (`app/templates/folha/_retrato_barra.html:71`, `app/templates/folha/_retrato_barra.html:73`, `app/folha/views_retrato.py:510`, `app/templates/folha/_retrato_raiox.html:68`, `app/templates/folha/_retrato_raiox.html:70`)
-- O partial do painel não estende casca; inclui `_cabecalho_drawer.html`, condicionalmente `_retrato_o_que_fazer.html`, e `msgs_lista.html`. O bloco do retrato inclui `_led.html` e `_retrato_legenda.html`. (`app/templates/colaboradores/partials/painel_colaborador.html:1`, `app/templates/colaboradores/partials/painel_colaborador.html:8`, `app/templates/colaboradores/partials/painel_colaborador.html:26`, `app/templates/colaboradores/partials/painel_colaborador.html:198`, `app/templates/folha/_retrato_o_que_fazer.html:36`, `app/templates/folha/_retrato_o_que_fazer.html:71`)
-- Os hosts encontrados do painel usam `base.html` fixo; a infraestrutura de drawer existe nas duas cascas. A seleção global `base_tpl` depende de `modo_app`, mas não altera `{% extends 'base.html' %}` fixo desses hosts. (`app/templates/colaboradores/lista.html:1`, `app/templates/folha/retrato_folha.html:1`, `app/templates/base_app.html:154`, `app/core/context_processors.py:205`, `app/core/context_processors.py:210`)
-
-Selo existente/duas cascas:
-
-- Há testes do painel real via client GET, do bloco do retrato e do cabeçalho compartilhado; não constituem selo API × painel. (`app/colaboradores/tests/test_retrato_no_drawer.py:151`, `app/colaboradores/tests/test_retrato_no_drawer.py:167`, `app/colaboradores/tests/test_retrato_no_drawer.py:182`, `app/ponto/tests/test_drawer_ausencia_no_molde.py:81`)
-- A casa já tem padrão de smoke renderizando as duas cascas, com verificação dos templates realmente usados e sessão `via_app/plataforma_sessao`; esse exemplo mede o espelho, não o painel. (`app/core/tests/test_smoke_chromium.py:151`, `app/core/tests/test_smoke_chromium.py:155`, `app/core/tests/test_smoke_chromium.py:160`, `app/core/tests/test_smoke_chromium.py:172`)
-- Para o construtor: renderizar somente a resposta de `/colaboradores/<cid>/painel/` duas vezes não demonstra duas cascas, pois é partial sem extends; o selo deve medir a integração com cada casca que inclui o drawer. (`app/colaboradores/views.py:988`, `app/templates/colaboradores/partials/painel_colaborador.html:1`, `app/templates/base.html:399`, `app/templates/base_app.html:154`)
-
-## 11/11 10:05 · sessao f575c8ee2b9b · O169-FECHADA · verificador · origem=Code
-
-**A volta 5 ainda não cumpre integralmente o aval:** o ramo trancado fica parado sem relavrar a via, e o apply usa uma instância carregada antes da trava. O aval exige relavra no primeiro caso; a função apenas pula essas linhas. (`app/docs/CORTES.md:435`; `app/ponto/services/cluster_espurio.py:256`; `app/ponto/services/cluster_espurio.py:264`; `app/ponto/services/cluster_espurio.py:267`)
-
-1. **Escritores e leitores dos campos.**
-
-   | Campo/valor | Quem escreve | Quem lê |
-   |---|---|---|
-   | `status_local` | O caminho novo é tratamento → `_renascer_por_premissa_viva` → `reabrir` → `_gravar_estado`. O núcleo atribui e salva; `models.py` é porta declarada. (`app/ponto/services/cluster_espurio.py:273`; `app/chamados/models.py:1019`; `app/chamados/models.py:1442`; `app/chamados/models.py:228`; `app/chamados/models.py:296`; `app/core/portas.py:218`) | Contador seleciona encerrados; relatório mostra o estado; painel conta estados; vigia compara estado persistido com auditoria. (`app/ponto/services/cluster_espurio.py:107`; `app/ponto/services/cluster_espurio.py:251`; `app/chamados/services/painel.py:213`; `app/chamados/services/vigia_loop.py:117`) |
-   | `via_encerramento` | Mesmo núcleo: terminal recebe a via; renascimento limpa para `''`. (`app/chamados/models.py:245`; `app/chamados/models.py:249`) | Contador seleciona `RECONCILIAR`; renascimento recusa cascata; desarquivamento e reabertura de competência distinguem a via de tranca. (`app/ponto/services/cluster_espurio.py:112`; `app/chamados/models.py:1007`; `app/chamados/views_arquivar.py:64`; `app/chamados/services/competencia_trancada.py:259`) |
-   | `resolvido_em` | `_gravar_estado` carimba encerramento, preserva encerrado→encerrado e limpa no renascimento. (`app/chamados/models.py:242`; `app/chamados/models.py:248`) | Guarda contra desfazer decisão administrativa sem fato novo; estatísticas de resolvidos. (`app/chamados/models.py:1342`; `app/chamados/services/fila.py:109`) |
-   | Followup/nota | Renascimento chama `nota.anexar_ocorrencia`, porta declarada de `FollowupChamado`, com tipo `renascido`. (`app/chamados/models.py:1021`; `app/chamados/services/nota.py:75`; `app/chamados/services/nota.py:103`; `app/core/portas.py:241`) | Histórico lê conteúdo e autor; detalhe/painel também consomem followups. (`app/chamados/services/historico.py:80`; `app/chamados/views.py:352`; `app/chamados/services/painel.py:362`) |
-   | `LogAuditoria`: `estado_chamado` e ação nova | Núcleo emite `estado_chamado`; tratamento emite `reabrir_legado_cluster_o169`; ambos usam o escritor `core.observ.evento`. (`app/chamados/models.py:292`; `app/ponto/services/cluster_espurio.py:218`; `app/ponto/services/cluster_espurio.py:277`; `app/core/observ.py:94`; `app/core/observ.py:134`) | Histórico e vigia leem `estado_chamado`. O teste lê especificamente a ação nova; o histórico filtra apenas suas ações declaradas. (`app/chamados/services/historico.py:44`; `app/chamados/services/historico.py:86`; `app/chamados/services/vigia_loop.py:114`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:115`) |
-   | `CelulaDia.ata` | Cartório produz a ata; persistência passa pela porta da célula, inclusive lavra e precedência. O tratamento novo apenas lê. (`app/ponto/services/cartorio.py:1811`; `app/ponto/portas/celula.py:974`; `app/ponto/portas/celula.py:1033`; `app/ponto/portas/celula.py:1076`; `app/core/portas.py:112`) | `_leitura_da_celula`, compartilhada pelo contador, abertura e fechamento, lê órfãs/lâmpadas. (`app/ponto/services/cluster_espurio.py:27`; `app/ponto/services/cluster_espurio.py:47`; `app/ponto/services/cluster_espurio.py:74`; `app/ponto/services/cluster_espurio.py:126`) |
-   | `PeriodoFechado` | `trancar_periodo` e `reabrir_periodo`, no módulo declarado. O diff não o escreve. (`app/ponto/services/fechamento.py:1408`; `app/ponto/services/fechamento.py:1437`; `app/core/portas.py:501`) | A casca do chamado consulta `competencia_trancada`; C20 consulta `periodo_trancado`. Ambos reconhecem a tranca por `reaberto_em IS NULL`; `ativo` é documental. (`app/chamados/models.py:1044`; `app/ponto/services/fechamento.py:1464`; `app/ponto/services/fechamento.py:1480`) |
-
-   **Não há segundo escritor introduzido pelo diff para esses estados:** as alterações passam pelos escritores acima. O teste que escreve diretamente `CelulaDia.ata` é preparação de fixture, não o tratamento produtivo. (`app/ponto/services/cluster_espurio.py:273`; `app/ponto/services/cluster_espurio.py:277`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:56`)
-
-   Os valores persistidos são `RECONCILIAR → 'sistema'` e tranca → `'competencia_trancada'`; `relavrar_via_tranca` é ação do relatório. (`app/chamados/catalogo/motor.py:88`; `app/chamados/catalogo/motor.py:92`; `app/chamados/catalogo/motor.py:95`; `app/ponto/services/cluster_espurio.py:219`)
-
-2. **Juízes e derivações.**
-
-   A função nova não implementa outro predicado de assinatura, universo, dia, competência ou recusa: usa contador, `dia_do_fato`, casca de tranca e `recusa_da_reabertura`. A porta continua responsável pelo veto e demais guardas. (`app/ponto/services/cluster_espurio.py:245`; `app/ponto/services/cluster_espurio.py:249`; `app/ponto/services/cluster_espurio.py:251`; `app/ponto/services/cluster_espurio.py:254`; `app/chamados/models.py:1015`)
-
-   **Há duas semânticas preexistentes que precisam permanecer explícitas:** C20, registrado como “dia trancado”, desconta toque humano posterior; `_dia_em_competencia_trancada`, usada pelo relatório e renascimento, consulta a competência trancada sem esse desconto. Portanto a coluna não significa exatamente o C20 de `JUIZES.md`. (`app/docs/JUIZES.md:86`; `app/core/juizes.py:292`; `app/chamados/juizes.py:1033`; `app/chamados/juizes.py:1041`; `app/chamados/models.py:1038`)
-
-   Também pode haver diferença entre **o dia cuja assinatura foi contada** e **a competência usada na tranca**: o primeiro usa `dia_do_fato(fortes=True)`; `competencia_do_chamado` escolhe o fato mais recente, podendo incluir ausência e perguntas vivas. Isso é reaproveitamento de autoridade existente, mas pode classificar outra competência daquela sugerida pela coluna `dia`. (`app/ponto/services/cluster_espurio.py:114`; `app/ponto/services/cluster_espurio.py:251`; `app/chamados/juizes.py:2275`; `app/chamados/juizes.py:2283`; `app/chamados/juizes.py:2290`)
-
-3. **Relógio: existe leitura decisória indireta fora da borda.**
-
-   Não há `now/today` novo diretamente no tratamento. Contudo, inclusive no DRY, há caminho alcançável: tranca → competência → perguntas vivas → C6 sem `hoje` → `_dentro_da_janela_viva` → `date.today()`. A consulta de perguntas não restringe o módulo do chamado. (`app/ponto/services/cluster_espurio.py:249`; `app/chamados/models.py:1043`; `app/chamados/juizes.py:2286`; `app/chamados/juizes.py:2264`; `app/chamados/juizes.py:2267`; `app/chamados/juizes.py:1389`; `app/chamados/juizes.py:577`)
-
-   O apply também pode alcançar esse caminho ao ressuscitar perguntas. Os carimbos automáticos de persistência são outra coisa, preexistente. A ocorrência dessas configurações nos três chamados de produção é **[nao verificado]**. (`app/chamados/models.py:1451`; `app/chamados/models.py:1509`; `app/chamados/models.py:68`; `app/chamados/models.py:1674`)
-
-4. **Travas, deadlock e TOCTOU.**
-
-   - `abrir`: `atomic → trava C → leitura → renascer`. O novo tratamento: `atomic → leitura de chamado+colaborador → trava C → contador → renascer`. Portanto não são sequências equivalentes: o objeto usado pela porta nasceu antes da trava. O contrato de `trava_na_ordem` manda reler depois. (`app/chamados/models.py:902`; `app/chamados/models.py:905`; `app/chamados/models.py:906`; `app/chamados/models.py:922`; `app/ponto/services/cluster_espurio.py:266`; `app/ponto/services/cluster_espurio.py:267`; `app/chamados/models.py:2638`)
-   - `resposta_tardia` também não possui a sequência proposta: lê estado/célula e chama renascimento diretamente; o escritor adquire as travas posteriormente. (`app/chamados/services/resposta_tardia.py:35`; `app/chamados/services/resposta_tardia.py:44`; `app/chamados/services/resposta_tardia.py:46`; `app/chamados/models.py:290`)
-   - **TOCTOU concreto:** enquanto espera C, o colaborador pode passar de ativo para desligado. A releitura do contador não filtra situação nem substitui o colaborador em cache; o renascimento pode continuar vendo `ativo`. `reabrir` só atualiza determinados campos quando detecta mudança de status, sem renovar esse colaborador. (`app/ponto/services/cluster_espurio.py:107`; `app/ponto/services/cluster_espurio.py:267`; `app/ponto/services/cluster_espurio.py:270`; `app/chamados/models.py:1005`; `app/chamados/models.py:1373`)
-   - `--esperados` valida somente a fotografia inicial. Sob trava verifica pertinência individual, não igualdade do universo inteiro; entradas desaparecidas são puladas e novas entradas não abortam. Cada linha tem sua transação, portanto falha posterior pode deixar aplicações anteriores commitadas. (`app/ponto/services/cluster_espurio.py:259`; `app/ponto/services/cluster_espurio.py:263`; `app/ponto/services/cluster_espurio.py:266`; `app/ponto/services/cluster_espurio.py:270`)
-   - Não encontrei inversão nova demonstrada nesse corpo: a leitura anterior é comum, e o núcleo adquire C→D→Chamado. Ausência universal de deadlock é **[nao verificado]**. A trava C também não torna atômica a leitura de `PeriodoFechado`, escrito antes dos ganchos que tratam chamados. (`app/ponto/services/cluster_espurio.py:267`; `app/chamados/models.py:290`; `app/chamados/models.py:2666`; `app/chamados/models.py:2675`; `app/chamados/models.py:2688`; `app/ponto/services/fechamento.py:1408`; `app/ponto/services/fechamento.py:1428`)
-
-5. **Campos com dois significados.**
-
-   - **`pks`/`numero`: coerentes nos leitores encontrados.** `numero=len(pks)`; tratamento usa os PKs e alarme usa o número. `universo.total` possui outro denominador: todos os encerrados pela via selecionada, antes de exigir assinatura. (`app/ponto/services/cluster_espurio.py:126`; `app/ponto/services/cluster_espurio.py:127`; `app/ponto/services/cluster_espurio.py:149`; `app/ponto/services/cluster_espurio.py:246`; `app/ponto/management/commands/detectar_cluster_espurio.py:100`)
-   - **`trancada`: mesma função da guarda de renascimento, em dados estáveis.** Pode ficar temporalmente velha, pois define a ação antes do apply; linhas inicialmente trancadas sequer são reavaliadas dentro dele. (`app/ponto/services/cluster_espurio.py:249`; `app/ponto/services/cluster_espurio.py:264`; `app/chamados/models.py:1009`)
-   - **`aplicado/aplicadas` contam retornos verdadeiros do renascimento**, não tentativas nem todas as escritas. Uma recusa pode escrever auditoria; a recusa por irmão vivo pode migrar perguntas e anexar nota, retornando `False`. (`app/ponto/services/cluster_espurio.py:273`; `app/ponto/services/cluster_espurio.py:282`; `app/chamados/models.py:1017`; `app/chamados/models.py:1415`; `app/chamados/models.py:1427`; `app/chamados/models.py:1436`)
-   - **`recusa` é incompleta e pode ficar desatualizada.** Consulta só guardas de `reabrir`; desligado/cascata/tranca são guardas adicionais de renascimento. Após `False`, o tratamento não atualiza o motivo. Assim, desligado pode sair `ativo=False`, `recusa=None`, `aplicado=False`. (`app/ponto/services/cluster_espurio.py:254`; `app/ponto/services/cluster_espurio.py:255`; `app/ponto/services/cluster_espurio.py:274`; `app/chamados/models.py:1005`; `app/chamados/models.py:1007`)
-
-6. **Selos e mutantes.**
-
-   Os dois harnesses exigem `errors == []` e alguma falha de asserção; erro de infraestrutura registrado em `errors` não é aceito como morte, e execução sem falha também não passa. O legado acrescenta controle da fonte intacta. Contudo, aceitam qualquer asserção falhada no caso, inclusive de fixture, sem identificar qual asserção matou. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:286`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:287`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:295`; `app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:143`; `app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:144`)
-
-   As mordidas dos oito mutantes do legado são concretas:
-
-   | Mutante | Asserção |
-   |---|---|
-   | `fechar_por_idade` | Chamado continua VIVO após cron. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:175`) |
-   | `relavrar_via_em_nao_trancada` | `aplicadas == 1`. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:109`) |
-   | `reabre_trancada` | Ação e classificação devem ser `relavrar_via_tranca, True`. **Morde o relatório; a porta real ainda barraria reabrir.** (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:132`; `app/chamados/models.py:1009`) |
-   | `reabrir_fora_da_porta` | Exige mais uma linha `estado_chamado`. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:113`) |
-   | `apply_sem_esperados` | Exige aborto para expectativa ausente/diferente. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:145`) |
-   | `dry_escreve` | Exige linha não aplicada, contador zero e foto intacta. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:95`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:98`) |
-   | `universo_proprio` | Só o chamado assinado pode entrar. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:154`) |
-   | `forca_desligado` | Exige não aplicação e foto intacta. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:164`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:166`) |
-
-   Os 36 mutantes do contador/comando também têm asserções correspondentes:
-
-   | Mutante(s) | Asserção |
-   |---|---|
-   | `contador_cego`, `recorta_por_idade` | `numero == 1`. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:173`) |
-   | `pks_divergem_do_numero` | `pks == [1]`. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:174`) |
-   | `assinatura_invertida` | Sem assinatura conta zero. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:179`) |
-   | `nao_medido_vira_assinatura` | Não medido conta zero. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:333`) |
-   | `sem_filtro_via` | Vias excluídas contam zero. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:201`) |
-   | `via_digitada` | Constante substituída por via sintética continua contando um. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:323`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:326`) |
-   | `status_errado`, `sem_filtro_modulo` | Conta exatamente `len(ENCERRADOS)`. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:209`) |
-   | `sem_filtro_colab` | Recorte do colaborador conta dois. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:352`) |
-   | `conta_dias_em_vez_de_chamados` | Três chamados contam três. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:351`) |
-   | `mistura_colaboradores` | Assinatura do outro colaborador não serve. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:340`) |
-   | `legado_nao_contado`, `vazia_nao_contada`, `nula_nao_contada`, `via_nova_nao_contada` | Igualdade integral de `fora_do_universo`. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:225`) |
-   | `rotulo_desconhecido_vazio` | Rótulos precisam estar preenchidos. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:232`) |
-   | `fora_sem_filtro_colab` | Exclusões respeitam colaborador. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:257`) |
-   | `sem_guarda_colaborador_fk` | Assinatura vem do colaborador correto. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:305`) |
-   | `consulta_por_par` | Exige `k` consultas. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:319`) |
-   | `troca_rotulos_humana_cascata`, `cascata_omite_ajuste_retroativo`, `cancelado_rotulado_desconhecido`, `superado_rotulado_desconhecido`, `legado_rotulado_desconhecido`, `vazia_rotulada_desconhecida`, `nula_rotulada_desconhecida` | Igualdade integral dos rótulos. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:250`) |
-   | `produto_cartesiano` | Só células dos pares pedidos são lidas. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:273`) |
-   | `recarrega_fk`, `reconsulta_par_da_fk` | Consulta somente o par faltante. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:284`) |
-   | `esconde_universo_vazio` | Saída precisa declarar universo vazio. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:377`) |
-   | `zero_vira_universo_vazio` | Zero achados não pode anunciar universo vazio. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:385`) |
-   | `silencia_contador` | Saída contém o número medido. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:401`) |
-   | `alarme_ignora_contador`, `apply_vence_alarme` | Exige `SystemExit`. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:391`) |
-   | `alarme_so_maior` | Divergência para menos também exige alarme. (`app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:419`; `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:422`) |
-
-   **Lacunas relevantes:** remover a trava/releitura; usar colaborador desatualizado; trocar a classificação de tranca por uma que desconta toque humano; perder assinatura ou mudar tranca entre medida/apply; falhar após o primeiro PK; ignorar `--colab` no caminho legado; adulterar `recusa`, ator ou motivo da auditoria; tornar a comparação de esperados dependente da ordem. Os cenários novos não instrumentam concorrência, o teste de comando prepara um colaborador, as verificações da trilha são parciais e os applies felizes usam um PK. (`app/ponto/services/cluster_espurio.py:249`; `app/ponto/services/cluster_espurio.py:259`; `app/ponto/services/cluster_espurio.py:268`; `app/ponto/services/cluster_espurio.py:270`; `app/ponto/management/commands/detectar_cluster_espurio.py:55`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:106`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:115`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:158`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:184`)
-
-   A execução da suíte Django do legado permanece **[nao verificado]**; as mordidas acima são demonstradas pela estrutura dos testes, não por execução contra banco. [nao verificado]
-
-7. **Existe porta que troca via de chamado já encerrado sem reabrir? Sim, em sentido geral.**
-
-   `transicionar('fechado', user)` permite `resolvido → fechado`, passa por `_aplicar` e grava via `admin`; ambos os estados pertencem a `ENCERRADOS`, sem passagem por vivo. O núcleo preserva `resolvido_em`. Portanto a frase absoluta de `PAROU_SEM_PORTA` é excessiva. (`app/chamados/catalogo/motor.py:30`; `app/chamados/catalogo/motor.py:102`; `app/chamados/models.py:128`; `app/chamados/models.py:199`; `app/chamados/models.py:450`; `app/chamados/models.py:242`; `app/ponto/services/cluster_espurio.py:220`)
-
-   **Isso não entrega a operação exigida pelo aval:** relavrar somente a via para `competencia_trancada`, preservando o encerramento. O gate dedicado recusa fora de `VIVOS`; o núcleo tecnicamente aceita escrever via terminal, mas não há no caminho examinado um gate específico dessa relavra. (`app/chamados/models.py:1630`; `app/chamados/models.py:1639`; `app/chamados/models.py:240`; `app/chamados/models.py:245`)
-
-8. **Outros defeitos materiais.**
-
-   - **Trilha obrigatória não é garantida.** `evento` é best-effort, isola e engole falhas, retornando `None`; o tratamento ignora o retorno e marca aplicação. Pode haver chamado reaberto sem a auditoria nova; `estado_chamado` usa o mesmo emissor. (`app/core/observ.py:98`; `app/core/observ.py:133`; `app/core/observ.py:139`; `app/ponto/services/cluster_espurio.py:277`; `app/ponto/services/cluster_espurio.py:282`; `app/chamados/models.py:292`)
-   - **“Nada se escreve” não é universal no apply parado/vazio.** `get_user_sistema()` roda antes de pular trancada
-
-[truncado em 20000 de 21272 caracteres]
-
-## 11/11 10:04 · sessao 0693a9df1757 · FIO-E0-V4-E4B · construtor · origem=Code
-
-O leitor **já existia nesta base**; sua ausência não explica o log fornecido. Causa histórica do `OK`: **[nao verificado]**. [test_e4_backfill.py:209](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:209)
-
-- Alinhei a fonte a `fonte_real`, preservando tupla única, unicidade e patch condicional. [test_e4_backfill.py:212](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:212)
-- Acrescentei selo que exige a assertion de entrega, sem `precondicao:`. [protocolo.py:69](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm_protocolo.py:69)
-- Memória: protocolo **12 OK**, c4v7 **19 OK**; três mutantes novos caíram por assertion, `rc=1`, sem errors. [recibo:50](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v12.txt:50)
-
-Arquivos, comandos com rc e comandos GREEN/`--orm` para a sessão estão no [recibo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v12.txt:110). ORM **[nao verificado]**.
-
-LEI-AKITA com `padrao=n/a (instrumento)` registrada. Sem commit, pela proibição inicial. [recibo:130](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v12.txt:130) [nao verificado]
-
-## 11/11 10:02 · sessao e62921812cba · FIO-E0-V4-E3 · sonda · origem=Code
-
-[nao verificado]
-```text
-sonda_leitura: sonda_col1005_base.py [94d2db28b6538739] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-PERG 56283 mat=sim via=celula_absolveu cel_ver=concorde data=2026-11-10
-PERG 56384 mat=sim via=celula_absolveu cel_ver=concorde data=2026-11-10
-GERADOR_BASE col1005 []
-gerador.n n 0
-```
-
-_3780 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3785 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
