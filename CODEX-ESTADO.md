@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:21** · publicado em **11/11/2026 10:21** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:25** · publicado em **11/11/2026 10:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:25 · sessao 8fe05992e025 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Adicionado spy no módulo vivo e assertion que detecta a entrada de `(colab, DIA)` no ato, mesmo após rollback: [teste:217](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:217). [nao verificado]
+
+Memória: 13 testes OK; `entrega_cerca_equivalente` falha pela nova assertion, com `bang:exportada` preservado. [Resultados:70](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v13.txt:70). [nao verificado]
+
+[Causa, RED, mutantes e comandos ORM no recibo v13](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v13.txt:1). ORM desta volta [nao verificado]; certificação fica com Code/suite e opus final. [nao verificado]
 
 ## 11/11 10:21 · sessao ffcb7cf7e4ff · LOTE-VALIDAR-REGRESSAO-0311 · leitura · origem=Code
 
@@ -895,36 +903,4 @@ Sem perguntas relacionadas, os caminhos diretos de agrupamento/irmão não mostr
 
 Os carimbos `auto_now/auto_now_add` devem ser citados separadamente como persistência preexistente, não confundidos com o relógio decisório do C6 — `app/chamados/models.py:68`, `app/chamados/models.py:1674`.
 
-## 11/11 10:02 · sessao a47458d8e632 · - · - · origem=Ronald (tmux)
-
-A tabela cobre os 36 nomes declarados; todas as linhas abaixo apontam para as asserções em `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py`. Os pares nome→teste são declarados em `app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:13`.
-
-| Mutante(s) | Teste / asserção que morde | [nao verificado]
-|---|---|
-| `contador_cego`, `recorta_por_idade` | `test_RED_resolvido_reconciliar_com_assinatura_conta_um`: `numero == 1` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:173`. |
-| `pks_divergem_do_numero` | Mesmo teste: `pks == [1]` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:174`. |
-| `assinatura_invertida` | `test_mesmo_encerramento_sem_assinatura_conta_zero`: `numero == 0` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:179`. |
-| `nao_medido_vira_assinatura` | `test_sem_dia_sem_celula_e_ata_nao_medida_nao_sao_assinatura`: `numero == 0` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:333`. |
-| `sem_filtro_via` | `test_tres_vias_excluidas_mesmo_com_assinatura`: `numero == 0` para cada via excluída — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:201`. |
-| `via_digitada` | `test_via_vem_da_constante_do_evento`: constante alterada para via sintética, `numero == 1` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:323`, `:326`. |
-| `status_errado`, `sem_filtro_modulo` | `test_filtro_exige_modulo_encerrados_e_via`: `numero == len(ENCERRADOS)` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:209`. |
-| `sem_filtro_colab` | `test_conta_chamados_e_respeita_colab_opcional`: filtro colab 1 deve contar 2 — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:352`. |
-| `conta_dias_em_vez_de_chamados` | Mesmo teste: três chamados devem contar 3, apesar dos pares repetidos — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:351`. |
-| `mistura_colaboradores` | `test_mesmo_dia_de_outro_colaborador_nao_prova_assinatura`: `numero == 1`; também exige 2 após assinar ambos — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:340`, `:343`. |
-| `legado_nao_contado`, `vazia_nao_contada`, `nula_nao_contada`, `via_nova_nao_contada` | `test_RED_toda_via_fora_do_universo_contada_e_rotulada`: dicionário completo `fora_do_universo == esperado` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:225`. |
-| `rotulo_desconhecido_vazio` | Mesmo teste: rótulo de cada via deve ser verdadeiro/preenchido — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:232`. |
-| `fora_sem_filtro_colab` | `test_fora_do_universo_respeita_colab_e_universo_vazio`: `{'legado': 1}` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:257`. |
-| `sem_guarda_colaborador_fk` | `test_RED_fk_cruzada_busca_colaborador_do_chamado_na_data_da_fk`: `numero == int(assinatura_correta)` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:305`. |
-| `consulta_por_par` | `test_RED_k_colaboradores_varios_pares_faltantes_k_consultas`: número de consultas deve ser `k`, não número de pares — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:319`. |
-| `troca_rotulos_humana_cascata`, `cascata_omite_ajuste_retroativo`, `cancelado_rotulado_desconhecido`, `superado_rotulado_desconhecido`, `legado_rotulado_desconhecido`, `vazia_rotulada_desconhecida`, `nula_rotulada_desconhecida` | `test_RED_rotulo_fiel_por_via_exata`: igualdade integral do dicionário `excluidos` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:250`. |
-| `produto_cartesiano` | `test_RED_celulas_lidas_so_dos_pares_pedidos`: só duas células lidas — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:273`. |
-| `recarrega_fk`, `reconsulta_par_da_fk` | `test_RED_reaproveita_fk_carregada_sem_buscar_o_mesmo_par`: lista de células consultadas exatamente `[(2, DIA)]` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:284`. |
-| `esconde_universo_vazio` | `test_universo_vazio_imprime_sempre_inclusive_apply_e_alarme`: saída contém `universo vazio` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:377`. |
-| `zero_vira_universo_vazio` | `test_zero_achados_com_universo_preenchido_nao_diz_vazio`: saída não contém `universo vazio` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:385`. |
-| `silencia_contador` | `test_dry_informa_um_sem_sair_e_sem_depender_de_escala_ativa`: saída contém `"numero": 1` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:401`. |
-| `alarme_ignora_contador`, `apply_vence_alarme` | `test_RED_alarme_com_um_sai_dois_sem_escrever_mesmo_com_apply`: precisa levantar `SystemExit` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:391`. |
-| `alarme_so_maior` | `test_alarme_compara_numero_com_esperado`: cenário `numero=0, esperado=1` precisa levantar `SystemExit` — `app/ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:419`, `:422`. |
-
-**Infraestrutura/vacuidade:** não são aceitas como morte pelo harness: alvo deve existir uma única vez, o caso roda, `errors` precisa ser vazio e `failures` precisa ser não vazio. Portanto erro de infraestrutura faz o selo ficar vermelho; ausência de falha também. O harness não distingue qual asserção falhou, mas os alvos acima têm asserções diretas sobre o comportamento mutado. (`app/ponto/tests/test_o169_cluster_encerrado_mutantes.py:137`, `:142`, `:143`, `:144`.)
-
-_3778 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3779 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
