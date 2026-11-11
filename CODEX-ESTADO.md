@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 22:42** · publicado em **10/11/2026 22:44** (UTC-3)
+> Ultima resposta processada: **10/11/2026 22:53** · publicado em **10/11/2026 22:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 22:53 · sessao 0902fbce9ab3 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Aplicadas as correções nos três testes: imports/variável mortos removidos e capturas amarradas por defaults. Arquivos tocados em [entrega:5](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5i_entrega.txt:5). [nao verificado]
+
+Todos os B023 têm chamada dentro da mesma iteração:
+
+| Fecho | Variáveis |
+|---|---|
+| 5c:126 | `filtro`, `a` |
+| 5f:87 | `filtro`, `a` |
+| 5f:147 | `filtro`, `a` |
+| 5f:149 | `ps`, `dona`, `outro_dia`, `criada`, `outra` |
+
+Prova por ocorrência e rastreamento em [entrega:11](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5i_entrega.txt:11).
+
+Os 14 `--mutante` completos pararam no controle: 5c com 3 erros; 5f com 1 falha e 3 erros, iguais à base. Cinco mutantes de 5f deram controle verde + RED limpo usando `--item`. Comandos e saídas completos em [entrega:166](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5i_entrega.txt:166) e [entrega:1316](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5i_entrega.txt:1316). [nao verificado]
+
+**Ruff zero e GREEN+RED integral: [não verificado].** Ruff está ausente; os controles encontram um módulo double ausente. Limites registrados em [entrega:33](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5i_entrega.txt:33).
 
 ## 10/11 22:42 · sessao 4744e2951238 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -989,12 +1008,4 @@ A comparação com `6c0517eb9` abaixo usa o diff fornecido: esta cópia não con
 
 [truncado em 20000 de 21968 caracteres]
 
-## 10/11 20:53 · sessao 892be02b5445 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-Cura B1–B4 entregue, com comandos, limites e pergunta h2 sem resposta no [relato](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/RELATO_BO_DISPUTA_VOLTA5B.txt:1).
-
-[Execuções locais registradas](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/RELATO_BO_DISPUTA_VOLTA5B_VERIFICACOES.txt:1): 66 testes em memória, 35 da catraca e 20 mutantes mortos. Execução ORM e tetos SQL: [nao verificado]. [nao verificado]
-
-perguntas de lei: 1
-
-_3516 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3517 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
