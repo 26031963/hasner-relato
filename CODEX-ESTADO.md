@@ -1,7 +1,161 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 00:03** · publicado em **11/11/2026 00:05** (UTC-3)
+> Ultima resposta processada: **11/11/2026 00:11** · publicado em **11/11/2026 00:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 00:11 · sessao 459709e686e8 · - · - · origem=Ronald (tmux)
+
+Conferência do dado colado: **45 dias-colaborador**, `sum(quantidade_vivas)=131`, **85 perguntas exibidas**, **46 não exibidas** em 23 linhas com `vivas={"n":4,"amostra":[duas perguntas]}`. [nao verificado]
+
+| via | ator | usuario_perfil | ip_presente | Dias com ocorrência exibida | Perguntas exibidas |
+|---|---|---|---|---:|---:|
+| sistema | sistema:apurar_furos_diarios | null | false | 18 | 36 |
+| sistema | null | `{superuser:true,staff:true,conta_de_sistema:false}` | true | 3 | 3 |
+| admin | null | `{superuser:true,staff:true,conta_de_sistema:false}` | true | 18 | 34 |
+| sistema | sistema:reconciliar_chamados | null | false | 1 | 1 |
+| sistema | sistema:detectar_ausencias | null | false | 1 | 1 |
+| sistema | null | null | false | 5 | 9 |
+| sistema | sistema:fechar_chamados_ausencia | null | false | 1 | 1 |
+
+Todas as células da tabela são provenientes exclusivamente do prompt. [nao verificado]
+
+Há 47 incidências de grupo em 45 dias distintos: `col355/2026-10-25` contém admin + reconciliar; `col900/2026-11-01` contém detectar + ator null. [nao verificado]
+
+A soma integral de `quantidade_vivas`, agrupada **pelos conjuntos de grupos exibidos no dia**, sem atribuir perguntas ocultas, é: [nao verificado]
+
+| Grupos exibidos | Dias | Soma quantidade_vivas |
+|---|---:|---:|
+| apurar | 18 | 66 |
+| sistema/null/perfil superuser/IP true | 3 | 3 |
+| admin | 17 | 39 |
+| admin + reconciliar | 1 | 2 |
+| detectar + sistema/null/perfil null/IP false | 1 | 4 |
+| sistema/null/perfil null/IP false | 4 | 16 |
+| fechar_chamados_ausencia | 1 | 1 |
+| Total | 45 | 131 |
+
+Atribuir as 46 perguntas não exibidas a grupos individuais permanece [nao verificado]. A amostra de `col900/2026-11-01` já contém dois grupos distintos; não permite repartir suas quatro perguntas. [nao verificado]
+
+Nenhuma linha diária tem classe `ERRO-NAO-MEDIDO`; as quatro linhas de resumo dessa classe têm `n=0`, `n_parcial_conhecido=0`, `integral=true`, `resultado="MEDIDO"`. [nao verificado]
+
+## 11/11 00:08 · sessao 029ce9b0e625 · FIO-E0-V4-E4B · sonda · origem=Code
+
+1) Resumo, transcrito como fornecido. A fonte é o bloco colado na mensagem, sem referência `arquivo:linha`; por isso, as transcrições e contagens recebem `[nao verificado]`.
+
+- `{"resumo": "dias", "classe": "a", "comp_anexo": "10/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "b", "comp_anexo": "10/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "indeterminado", "comp_anexo": "10/2026", "empresa_anexo": "#2", "n": 1, "n_parcial_conhecido": 1, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "10/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "a", "comp_anexo": "10/2026", "empresa_anexo": "#4", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "b", "comp_anexo": "10/2026", "empresa_anexo": "#4", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "indeterminado", "comp_anexo": "10/2026", "empresa_anexo": "#4", "n": 2, "n_parcial_conhecido": 2, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "10/2026", "empresa_anexo": "#4", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "a", "comp_anexo": "11/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "b", "comp_anexo": "11/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "indeterminado", "comp_anexo": "11/2026", "empresa_anexo": "#2", "n": 35, "n_parcial_conhecido": 35, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "11/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "a", "comp_anexo": "11/2026", "empresa_anexo": "#3", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "b", "comp_anexo": "11/2026", "empresa_anexo": "#3", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "indeterminado", "comp_anexo": "11/2026", "empresa_anexo": "#3", "n": 7, "n_parcial_conhecido": 7, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "11/2026", "empresa_anexo": "#3", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+
+2) Li integralmente até `FIM DO DADO`: **45 linhas de dia**, numeradas abaixo na ordem recebida. Há **47 combinações dia × dono exibidas**, pois os dias 10 e 25 mostram dois donos cada. Outros donos eventualmente existentes nas perguntas omitidas estão `[nao verificado]`. [nao verificado]
+
+Convenções da tabela:
+
+- `NV` significa `[nao verificado]`: o log identificado por `historico.travessia` não aparece na amostra. Não significa `null` nem `false`. `Ator/M/R` transcreve, nessa ordem, `ator_processo_presente`, `motivo_presente` e `resolucao_presente` **desse log**. [nao verificado]
+- `Q vis./dia`: perguntas efetivamente exibidas para aquele dono / `quantidade_vivas` do dia. O denominador pertence ao dia, inclusive quando há dois donos. `Logs vis./n`: quantidade de logs exibidos / quantidade informada. `Dec./Notas`: contagens de `decisoes_vinculos_atuais` / `notas`, sem multiplicar pela repetição do dono nas perguntas. [nao verificado]
+- Ações: `E` = `estado_chamado`; `N` = `nascimento_chamado`; `O` = `OUTRO-NAO-EXIBIDO`; `R` = `reconciliar_ausencia_lancada`. A coluna reúne os nomes distintos **exibidos**, inclusive nas amostras. [nao verificado]
+
+| Nº | Colaborador | Dia | Chamado dono | Status | Via | Log da travessia | Usuário desse log | Ator/M/R | Dec./Notas | Q vis./dia | Logs vis./n | Ações exibidas | Fonte |
+|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | col114 | 2026-11-03 | #36791 | resolvido | sistema | #894348 | NV | NV/NV/NV | 0/2 | 2/2 | 2/4 | N, E | [nao verificado] |
+| 2 | col114 | 2026-11-06 | #37417 | resolvido | sistema | #912715 | NV | NV/NV/NV | 0/2 | 2/2 | 2/4 | N, E | [nao verificado] |
+| 3 | col209 | 2026-10-22 | #33853 | resolvido | sistema | #750302 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 4 | col209 | 2026-10-24 | #34481 | resolvido | sistema | #762388 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 5 | col258 | 2026-10-26 | #35126 | resolvido | sistema | #783748 | NV | NV/NV/NV | 0/1 | 1/1 | 2/8 | N, O | [nao verificado] |
+| 6 | col267 | 2026-10-24 | #34447 | fechado | admin | #778802 | #846 | false/false/false | 0/2 | 2/4 | 2/4 | E, O | [nao verificado] |
+| 7 | col268 | 2026-10-22 | #33500 | resolvido | sistema | #750303 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 8 | col268 | 2026-10-24 | #34427 | resolvido | sistema | #762389 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 9 | col298 | 2026-10-21 | #33234 | resolvido | sistema | #738984 | null | true/false/false | 0/2 | 2/2 | 1/1 | E | [nao verificado] |
+| 10 | col355 | 2026-10-25 | #34762 | fechado | admin | #779377 | NV | NV/NV/NV | 0/6 | 1/2 | 2/684 | E | [nao verificado] |
+| 10 | col355 | 2026-10-25 | #8591 | resolvido | sistema | #793079 | null | true/false/false | 0/8 | 1/2 | 3/3 | E, O | [nao verificado] |
+| 11 | col427 | 2026-10-22 | #33928 | resolvido | sistema | #750307 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 12 | col427 | 2026-10-24 | #34539 | resolvido | sistema | #762392 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 13 | col427 | 2026-10-26 | #35091 | resolvido | sistema | #774741 | null | true/false/false | 0/2 | 2/4 | 2/2 | N, E | [nao verificado] |
+| 14 | col534 | 2026-10-23 | #34117 | resolvido | sistema | #758132 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 15 | col534 | 2026-10-24 | #34439 | resolvido | sistema | #762393 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 16 | col534 | 2026-10-25 | #34753 | resolvido | sistema | #766572 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 17 | col650 | 2026-10-23 | #34098 | resolvido | sistema | #758133 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 18 | col650 | 2026-10-25 | #34739 | resolvido | sistema | #766573 | null | true/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 19 | col718 | 2026-10-22 | #33930 | fechado | admin | #792218 | #846 | false/false/false | 0/2 | 2/2 | 3/3 | E, O | [nao verificado] |
+| 20 | col718 | 2026-10-24 | #34540 | fechado | admin | #792222 | #846 | false/false/false | 0/2 | 2/2 | 3/3 | E, O | [nao verificado] |
+| 21 | col718 | 2026-10-26 | #35092 | fechado | admin | #792225 | NV | NV/NV/NV | 0/2 | 2/2 | 2/5 | N, O | [nao verificado] |
+| 22 | col718 | 2026-10-28 | #35540 | fechado | admin | #792228 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | N, E | [nao verificado] |
+| 23 | col723 | 2026-10-28 | #35427 | fechado | admin | #792259 | NV | NV/NV/NV | 0/7 | 2/4 | 2/12 | N, E | [nao verificado] |
+| 24 | col865 | 2026-10-23 | #34385 | fechado | admin | #779064 | #846 | false/false/false | 0/2 | 1/1 | 2/4 | E, O | [nao verificado] |
+| 25 | col900 | 2026-11-01 | #36289 | resolvido | sistema | #837155 | null | true/false/false | 0/1 | 1/4 | 2/2 | N, E | [nao verificado] |
+| 25 | col900 | 2026-11-01 | #19808 | resolvido | sistema | #366307 | null | false/false/false | 0/2 | 1/4 | 1/1 | E | [nao verificado] |
+| 26 | col900 | 2026-11-03 | #19808 | resolvido | sistema | #366307 | null | false/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 27 | col900 | 2026-11-05 | #19808 | resolvido | sistema | #366307 | null | false/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 28 | col900 | 2026-11-07 | #19808 | resolvido | sistema | #366307 | null | false/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 29 | col900 | 2026-11-09 | #19808 | resolvido | sistema | #366307 | null | false/false/false | 0/2 | 2/4 | 1/1 | E | [nao verificado] |
+| 30 | col918 | 2026-10-25 | #34771 | fechado | admin | #785855 | #845 | false/false/false | 0/2 | 2/2 | 2/4 | E, O | [nao verificado] |
+| 31 | col921 | 2026-10-21 | #33232 | fechado | admin | #778977 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | E, O | [nao verificado] |
+| 32 | col921 | 2026-10-22 | #33882 | fechado | admin | #778980 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | E, O | [nao verificado] |
+| 33 | col921 | 2026-10-23 | #34182 | fechado | admin | #778983 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | E, O | [nao verificado] |
+| 34 | col921 | 2026-10-25 | #34815 | fechado | admin | #778986 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | E, O | [nao verificado] |
+| 35 | col921 | 2026-10-26 | #35032 | fechado | admin | #778989 | #846 | false/false/false | 0/1 | 2/2 | 2/4 | E, O | [nao verificado] |
+| 36 | col921 | 2026-10-27 | #35280 | fechado | admin | #801831 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | N, E | [nao verificado] |
+| 37 | col921 | 2026-10-28 | #35490 | fechado | admin | #801834 | #846 | false/false/false | 0/2 | 2/2 | 2/4 | N, E | [nao verificado] |
+| 38 | col921 | 2026-10-29 | #35756 | fechado | admin | #801837 | #846 | false/false/false | 0/1 | 2/2 | 2/4 | N, E | [nao verificado] |
+| 39 | col923 | 2026-10-25 | #34888 | fechado | admin | #778631 | #846 | false/false/false | 0/3 | 2/4 | 2/4 | E, O | [nao verificado] |
+| 40 | col1005 | 2026-10-28 | #35423 | resolvido | sistema | #788507 | null | true/false/false | 0/2 | 2/4 | 2/2 | N, E | [nao verificado] |
+| 41 | col1005 | 2026-10-29 | #35679 | resolvido | sistema | #797647 | null | true/false/false | 0/2 | 2/4 | 2/2 | N, E | [nao verificado] |
+| 42 | col1005 | 2026-10-30 | #35889 | resolvido | sistema | #806725 | null | true/false/false | 0/2 | 2/4 | 2/2 | N, E | [nao verificado] |
+| 43 | col42 | 2026-10-08 | #29676 | resolvido | sistema | #724326 | null | true/false/false | 0/2 | 1/1 | 1/1 | E | [nao verificado] |
+| 44 | col42 | 2026-10-15 | #31699 | resolvido | sistema | #769684 | NV | NV/NV/NV | 0/2 | 1/1 | 2/11 | O | [nao verificado] |
+| 45 | col258 | 2026-10-02 | #28094 | resolvido | sistema | #639802 | #657 | false/false/false | 0/2 | 1/1 | 2/2 | E, R | [nao verificado] |
+
+Quanto às ações específicas pedidas:
+
+| Categoria | Encontrado no conteúdo exibido | Fonte |
+|---|---|---|
+| `reconciliar_*` | Dia 45, chamado #28094: `reconciliar_ausencia_lancada`, log #639803, usuário #666, ator=false, motivo=false, resolução=false | [nao verificado] |
+| `dedup` | Nenhuma ação com esse nome/trecho exibida; conteúdo dos logs omitidos: NV | [nao verificado] |
+| `sem_dia_do_fato` | Nenhuma ação com esse nome/trecho exibida; conteúdo dos logs omitidos: NV | [nao verificado] |
+| `competencia_trancada` | Nenhuma ação com esse nome/trecho exibida; conteúdo dos logs omitidos: NV | [nao verificado] |
+| `OUTRO` | Literal `OUTRO-NAO-EXIBIDO`: dias 5, 6, 10/chamado #8591, 19, 20, 21, 24, 30, 31, 32, 33, 34, 35, 39 e 44 | [nao verificado] |
+
+No dia 5, o apoio da disputa #7547 informa `motivo="veredito"`, `resolucao_presente=true` e usuário #666. Esses são campos de `disputas_vinculos_atuais`; os campos do log de travessia #783748 permanecem NV. Nos demais apoios exibidos, a disputa tem `motivo="OUTRO-NAO-EXIBIDO"` e `resolucao_presente=false`. [nao verificado]
+
+3) Agregados usando **via do dono** × **usuário do log da travessia**. Conto cada dia uma vez dentro de cada grupo e somente as perguntas efetivamente exibidas; perguntas omitidas não recebem a classificação das amostras. [nao verificado]
+
+| Via | Usuário da travessia | Dias com ocorrência exibida | Perguntas exibidas | Fonte |
+|---|---|---:|---:|---|
+| sistema | null | 23 | 44 | [nao verificado] |
+| sistema | #pk | 1 | 1 | [nao verificado] |
+| admin | null | 0 | 0 | [nao verificado] |
+| admin | #pk | 15 | 29 | [nao verificado] |
+
+O grupo `sistema × #pk` contém #657: 1 dia e 1 pergunta. O grupo `admin × #pk` contém #846: 14 dias e 27 perguntas; e #845: 1 dia e 2 perguntas. [nao verificado]
+
+| Parcela sem classificação completa | Dias envolvidos | Perguntas | Fonte |
+|---|---:|---:|---|
+| Via sistema exibida; usuário da travessia NV | 4: dias 1, 2, 5 e 44 | 6 | [nao verificado] |
+| Via admin exibida; usuário da travessia NV | 3: dias 10, 21 e 23 | 5 | [nao verificado] |
+| Perguntas omitidas de `vivas.amostra`; via e usuário NV | 23 | 46 | [nao verificado] |
+
+A soma de `quantidade_vivas` dos 45 dias é **131 perguntas**: **85 exibidas**, sendo **74 classificáveis** na primeira tabela e **11 com usuário da travessia NV**, mais **46 omitidas**. Os totais completos por via × usuário permanecem `[nao verificado]`. [nao verificado]
+
+As contagens de dias dos grupos não são somáveis: o dia 10 aparece em `sistema × null` e em `admin × NV`. [nao verificado]
+
+4) Todas as linhas contendo `ERRO-NAO-MEDIDO` são estas quatro linhas do resumo. Nenhuma das 45 linhas de dia tem essa classe; todas exibem `erros=[]`. [nao verificado]
+
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "10/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "10/2026", "empresa_anexo": "#4", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "11/2026", "empresa_anexo": "#2", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
+- `{"resumo": "dias", "classe": "ERRO-NAO-MEDIDO", "comp_anexo": "11/2026", "empresa_anexo": "#3", "n": 0, "n_parcial_conhecido": 0, "integral": true, "resultado": "MEDIDO"}` [nao verificado]
 
 ## 11/11 00:03 · sessao cbda6a0a85db · FIO-E0-V4-E4B · sonda · origem=Code
 
@@ -873,80 +1027,4 @@ perguntas de lei: 0
 - Agregador único não está estabelecido; pendentes podem agregar fora do atomic do núcleo; novas admissões na dona estrangeira não chegam ao coletor de push. `app/chamados/services/disputa_emissao.py:1562`, `:830`, `:613`.
 - Não verificados: achados individualizados dos pareceres ausentes, histórico dos protegidos, reprodução ORM dos novos contraexemplos, efeitos externos completos das cascatas e suíte inteira. **[nao verificado]**. [nao verificado]
 
-## 10/11 22:10 · sessao 093c3c32dff7 · - · - · origem=Ronald (tmux)
-
-Travas e efeitos:
-
-- Núcleo genérico prende C antes de avaliar `donas`, depois D e Ch; conserva essas travas fora do savepoint desfeito e durante o replay. A implementação de `trava_na_ordem` adquire C/D/Ch/P por essa sequência. `app/chamados/services/disputa_emissao.py:623`, `:652`, `:701`; `app/chamados/models.py:2665`, `:2675`, `:2688`, `:2692`.
-- Órfãos adquire o fecho antes de escrever; relê sob C e recusa crescimento. O atomic externo engloba ensaio, replay e análise posterior. `app/chamados/services/disputa_emissao.py:1156`, `:1166`, `:1173`, `:1175`, `:1216`, `:1223`, `:1450`.
-- Declaração pelos dois callers conserva atomic externo e pré-trava do fato antes do novo savepoint. `_trava_do_ato` inclui donas abertas/fechadas, chamados e perguntas do fato. `app/chamados/services/declaracao_texto.py:288`, `:299`, `:301`, `:348`, `:352`, `:643`, `:645`; `app/chamados/services/disputa_emissao.py:763`.
-- **Lacuna em pendentes da varredura:** o wrapper termina o atomic do núcleo antes de chamar `perguntar_entradas_pendentes`; esse helper agora agrega/salva DS depois da porta de P, sem atomic/trava próprios. Sem atomic externo, a pergunta pode estar commitada antes da escrita de motivos/contexto, e a DS é salva sem conservar C/D. Com atomic externo, as travas do núcleo continuam cobrindo DS do colaborador. `app/chamados/services/disputa_emissao.py:623`, `:650`, `:817`, `:830`, `:310`, `:313`, `:575`. API chama diretamente: `app/api/views.py:794`; cron: `app/ponto/management/commands/marcar_foto_ausente_retro.py:94`.
-
-Replay:
-
-- Os kwargs conservam dia/texto/destino/opções, mas **não congelam todo o fato na família BATIDA**: o coletor omite `batida_origem_id`, e `_nascer` deriva novamente o episódio do contexto da disputa recebida. Trocar a local pela dona pode mudar episódio e, pelo juiz, dia/canônica. `app/chamados/services/disputa_emissao.py:500`, `:503`, `:710`; `app/chamados/models.py:2866`, `:2875`, `:3452`, `:3463`.
-- `criada=True` ou pk diferente é desfeito no núcleo/órfãos e levanta na declaração. Antes dessa guarda, insert/save e seus signals já executaram. `app/chamados/services/disputa_emissao.py:710`, `:711`, `:1453`, `:1454`, `:781`, `:782`; `app/chamados/models.py:3006`, `:3017`.
-- Os motivos usados nos caminhos de declaração/órfãos são MARCO; o derivador de episódio devolve `None` para essa família. O risco de rederivação de episódio acima se aplica ao replay genérico BATIDA. `app/chamados/catalogo/motivos.py:34`, `:35`, `:48`, `:49`; `app/chamados/models.py:3461`.
-
-Rollback e push: [nao verificado]
-
-- Signals de P agendam beco com `on_commit` e escrevem outbox síncrono no banco. Não são, por si, envio externo de push. `app/chamados/signals.py:227`, `:238`, `:250`, `:257`.
-- `_enviar_push_disputa_colab` é envio imediato, webpush e FCM; não usa `on_commit`. `app/chamados/services/disputa_emissao.py:1947`, `:1963`, `:1971`; `app/chamados/push_utils.py:40`; `app/chamados/fcm_utils.py:85`.
-- Nos blocos explicitamente desfeitos por estrangeira, não encontrei chamada direta de `_enviar_push_disputa_colab` antes de `set_rollback`. Núcleo envia no wrapper; órfãos envia após sair do savepoint; declaração não envia diretamente. `app/chamados/services/disputa_emissao.py:681`, `:838`, `:1444`, `:1461`, `:1465`, `:1486`, `:758`.
-- Há cascata síncrona real: `Chamado.abrir` → `get_or_create` → signal do cartório → possível emissor de ausência → push de supervisão e repasse. `app/chamados/models.py:971`; `app/chamados/signals.py:188`, `:214`, `:216`; `app/ponto/services/cartorio.py:1751`, `:1789`; `app/ponto/management/commands/detectar_ausencias.py:778`, `:802`. **Não reproduzi cenário completo admissível que prove push escapando especificamente do rollback por estrangeira [nao verificado].**
-- Push de complementos ocorre ainda dentro do atomic externo e antes de `pode_fechar`; falha posterior pode desfazer banco após esse envio imediato. Não há teste/reprodução desse caso nesta auditoria. `app/chamados/services/disputa_emissao.py:1216`, `:1230`, `:1465`, `:1473` [nao verificado quanto à ocorrência].
-
-Escritores/leitores e semântica:
-
-| Campo | Escritores identificados | Leitores relevantes |
-|---|---|---|
-| DS.motivos | agregador; creates do núcleo/órfãos; **âncora mantém união/save próprios**; portas de remoção/aparo/reabertura admin | admissão/push; foto recebida; fechamento/materialização/listagem | [nao verificado]
-| DS.contexto | agregador; creates; portas de anotar/renovar/aparar/remover | resolução dia/episódio, auditor I7a/b, derivação de destino |
-| DS.fechada_em | `fechar`, `reabrir_admin`, `reabrir_sistema` | eleição da aberta, guardas agregador/push, três receivers de fechamento | [nao verificado]
-| P.disputa | construtor `_nascer`; reuso devolve `ex` preservando FK | dona do agregado; eleição local/estrangeira; fallback de listagem |
-| P.chamado_destino | `_nascer` e `fio.reapontar_resolvedora`; há costura em `ChamadoColaborador` | âncora que lista, juiz de resolvedora, vida do fio, S143 |
-
-Referências da tabela: `app/chamados/services/disputa_emissao.py:558`, `:670`, `:1299`, `:1531`, `:1554`, `:1562`; `app/chamados/models.py:1961`, `:2063`, `:2100`, `:2118`, `:2149`, `:2155`, `:2173`, `:1932`, `:2982`, `:3008`, `:3014`, `:367`; `app/chamados/services/fio.py:925`, `:116`; `app/api/foto_recebida.py:63`; `app/chamados/signals.py:28`, `:129`, `:153`.
-
-**A frase “agregador único” não vale literalmente nem dentro do emissor:** a âncora continua com o segundo predicado de união e o segundo save; o gate declara duas escritas dessa função. `app/chamados/services/disputa_emissao.py:1531`, `:1562`; `app/chamados/tests/test_porta_disputa_emissao.py:83`.
-
-DS.motivos continua documentado como “cenários ativos”, enquanto o núcleo passa a admitir motivos somente com pergunta local; órfãos ainda conserva seed `orfao_14h`, e contexto pode guardar informação de motivo encaminhado para outra dona. Há diferença semântica entre essas populações; impacto completo em todos os leitores **[nao verificado]**. `app/chamados/models.py:1741`; `app/chamados/services/disputa_emissao.py:598`, `:638`, `:633`, `:1275`.
-
-## 10/11 22:09 · sessao 5fbc4ce8791f · - · - · origem=Ronald (tmux)
-
-Achados concretos:
-
-1. **Motivo pode terminar nas duas disputas abertas.** No repasse, `motivos_atualizados` recebe `['orfao_14h']` também quando A já existe com `motivos=[]`; esse seed é salvo antes de perguntar. Se a pergunta `orfao_14h` pertence a B, o helper devolve `motivos_antes`, que já contém o seed, e agrega o motivo em B. Um motivo local de intervalo mantém A com pergunta, impedindo desfazer A. Resultado: A tem `intervalo_saida` e `orfao_14h`, B tem `orfao_14h`, mas a pergunta desse motivo continua só em B. Referências: `app/chamados/services/disputa_emissao.py:1274`, `:1307`, `:980`, `:1002`, `:1007`, `:1313`, `:1349`, `:1429`, `:1444`. Confirmei em sonda inline `python3 -B`, usando as funções produtivas extraídas pelo ambiente de memória; persistência ORM desse cenário [nao verificado].
-
-2. **Replay conserva kwargs, mas não todos os insumos implícitos da identidade.** O gerador conserva motivo/texto/opções/destino/dia, omitindo `batida_origem_id`; a porta deriva essa origem do contexto da DS fornecida. No replay, a DS passa a ser a dona, cujo contexto pode conter outro episódio. Referências: `app/chamados/services/disputa_emissao.py:500`, `:504`, `:710`; `app/chamados/models.py:2866`, `:3452`, `:3463`. O resultado pode divergir: as guardas verificam `criada` ou PK diferente e desfazem o banco: emissor `:711`, órfãos `:1454`, declaração `:782`. Reprodução ORM com família BATIDA [nao verificado].
-
-3. **Replay divergente dos órfãos ainda analisa os chamados.** Depois de desfazer o replay divergente, o agrupador executa toda a lista `analisar`, independentemente de qual replay teve sucesso. Referências: `app/chamados/services/disputa_emissao.py:1454`, `:1456`, `:1459`. A declaração levanta `ValueError`; o núcleo registra `replay-divergente`, portanto as três respostas diferem: `:783`, `:715`. Consequências completas do cartório nessa divergência [nao verificado].
-
-4. **O agregador não é o único escritor em todo o módulo.** A âncora continua criando DS com motivos/contexto e salvando diretamente `disputa.motivos`; também ignora o retorno de `abrir_conversa`. Referências: `app/chamados/services/disputa_emissao.py:1554`, `:1562`, `:1567`. São sítios preservados no diff integral fornecido; atribuir essa duplicidade especificamente ao delta v11 seria [nao verificado].
-
-5. **Pendentes do wrapper ficam fora do atomic próprio do núcleo.** O núcleo retorna dentro de seu atomic; o wrapper chama pendentes depois. O helper abre P pelo atomic da porta, depois salva D no agregador sem atomic próprio. Referências: `app/chamados/services/disputa_emissao.py:623`, `:650`, `:699`, `:830`, `:831`, `:310`, `:313`, `:575`; `app/chamados/models.py:2819`. Garantia de trava externa em todos os consumidores [nao verificado].
-
-Mapa de push: [nao verificado]
-
-- Wrapper: nascimento usa admitidos; agregação usa novos de A; verifica DS aberta e, se pendentes chamou o gerador, verifica novamente. Referências: `app/chamados/services/disputa_emissao.py:699`, `:647`, `:817`, `:827`, `:832`, `:835`.
-- Admissões em B não produzem push próprio: `agregar_estrangeiras` descarta a lista de novos do agregador; helper de órfãos também não coleta B para notificação. Referências: `app/chamados/services/disputa_emissao.py:565`, `:576`, `:613`, `:1002`. Se isso viola o aval versus apenas expõe um caso não especificado: [nao verificado].
-- Órfãos: principal recebe `motivos_atualizados`; complementadas recebem união `_mot`; evita repetir a principal no coletor. Referências: `app/chamados/services/disputa_emissao.py:1257`, `:1258`, `:1228`, `:1465`, `:1484`.
-- Ensaio de órfãos desfeito não chega ao push da principal; só notifica complementos anteriores ao savepoint. Referências: `app/chamados/services/disputa_emissao.py:1278`, `:1447`, `:1461`, `:1462`.
-- Declaração não chama push nesse helper; âncora chama uma vez. Referências: `app/chamados/services/disputa_emissao.py:758`, `:785`, `:1577`.
-- O envio efetivo é síncrono, Web Push e FCM, sem `on_commit` nessa função. Referências: `app/chamados/services/disputa_emissao.py:1963`, `:1971`. Entrega externa ou duplicidade efetiva [nao verificado].
-
-Retornos:
-
-- Chamadas datadas do gerador, replay do núcleo, helper de órfãos e replay dos órfãos consomem P e criada; a primeira tentativa da declaração usa P e descarta criada. Referências: `app/chamados/services/disputa_emissao.py:502`, `:523`, `:710`, `:990`, `:1008`, `:1453`, `:773`.
-- `abrir_conversa` do gerador consome ambos; âncora descarta ambos. Referências: `app/chamados/services/disputa_emissao.py:495`, `:523`, `:1567`.
-- Os dois consumidores produtivos externos da declaração passam `pergunta`; a forma sem pergunta aparece internamente e em testes. Referências: `app/chamados/services/declaracao_texto.py:362`, `:650`; `app/chamados/services/disputa_emissao.py:764`; `app/chamados/tests/test_porta_disputa_emissao.py:175`.
-- API `disputa_para_declaracao(pergunta=None)` ainda pode criar DS sem P; isso é exercitado intencionalmente por teste. Referências: `app/chamados/services/disputa_emissao.py:747`, `:754`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:405`.
-- H2 sem estrangeira mantém fecho vazio; com estrangeira e sem P local desfaz o nascimento. Referências: `app/chamados/services/disputa_emissao.py:1444`, `:1473`, `:1479`.
-
-Lacunas de testes pertinentes: [nao verificado]
-
-- O lote misto existente usa estrangeira `intervalo_saida`, não `orfao_14h`, portanto não prova remoção do seed. Referências: `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:22`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:209`.
-- O double de identidade compara apenas motivo e dia, sem episódio; não prova a estabilidade implícita do replay BATIDA. Referências: `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:109`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:101`.
-- Nenhuma alteração de arquivo foi necessária para as sondas inline; efeitos ORM, PostgreSQL, banco/log de produção e suite inteira [nao verificado]. [nao verificado]
-
-_3530 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3532 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
