@@ -1,7 +1,99 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 06:27** · publicado em **11/11/2026 06:32** (UTC-3)
+> Ultima resposta processada: **11/11/2026 06:35** · publicado em **11/11/2026 06:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 06:35 · sessao ac4da24cbf3b · - · - · origem=Ronald (tmux)
+
+P4 — **PROCEDE: a seleção tem lacunas de classe.** O helper considera apenas `.py` existentes no diff e procura referências textuais diretas; não resolve AST, grafo transitivo ou dependências de recursos. (`bin/vizinhos_da_volta.py:10`, `bin/vizinhos_da_volta.py:12`, `bin/vizinhos_da_volta.py:26`, `bin/vizinhos_da_volta.py:31`)
+
+| Classe | Limite e regra mínima sugerida |
+|---|---|
+| Import relativo | O padrão relativo só é acrescentado quando `pkg.endswith('tests')`; não resolve pacote nem nível. Resolver `ImportFrom` em contexto e dependências transitivas. (`bin/vizinhos_da_volta.py:25`, `bin/vizinhos_da_volta.py:29`) |
+| `__init__.py` | Há normalização do inicializador de produção para pacote; portanto existe suporte parcial. O inicializador de testes não entra como obra nem produção. Propagar dependência do inicializador aos consumidores do pacote, incluindo o pacote de testes. (`bin/vizinhos_da_volta.py:13`, `bin/vizinhos_da_volta.py:19`, `bin/vizinhos_da_volta.py:21`, `bin/vizinhos_da_volta.py:24`) |
+| `importlib`/strings | Uma string contendo o módulo completo pode casar; nomes montados dinamicamente não têm resolução. Resolver destinos estáticos e usar recorte conservador do pacote quando o destino permanecer indeterminado. (`bin/vizinhos_da_volta.py:26`, `bin/vizinhos_da_volta.py:34`) |
+| Fixture JSON | Mudanças não-Python são descartadas. Incluir dependências de recursos carregados pelos testes; fallback por app consumidor. (`bin/vizinhos_da_volta.py:12`) |
+| Template | Também descartado como arquivo tocado. Incluir dependências de templates, inclusões, herança e consumidores; fallback por app. (`bin/vizinhos_da_volta.py:12`) |
+| Migration | Pode entrar como produção `.py`, mas só seleciona consumidores por citação literal. Propagar mudança de esquema aos testes do app e apps dependentes. (`bin/vizinhos_da_volta.py:12`, `bin/vizinhos_da_volta.py:21`, `bin/vizinhos_da_volta.py:26`) |
+| Selo que varre diretório/AST | A descoberta não relaciona escopo varrido com arquivos alterados. Registrar escopos de varredura e selecionar pela interseção com o diff. Alguns scanners estão cobertos pela lista fixa, mas isso não constitui regra geral. (`bin/vizinhos_da_volta.py:31`, `bin/vizinhos_da_volta.py:36`, `bin/selos_globais_da_volta.txt:23`, `bin/selos_globais_da_volta.txt:24`) |
+
+O risco de cada lacuna é excluir um teste dependente do recorte; a ocorrência concreta de volta verde com teste externo quebrado é **[nao verificado]**. A possibilidade de omissão decorre dos filtros e da procura textual. (`bin/vizinhos_da_volta.py:12`, `bin/vizinhos_da_volta.py:15`, `bin/vizinhos_da_volta.py:34`)
+
+Há mais uma classe: descoberta de testes incompleta. Os candidatos exigem arquivo diretamente em diretório chamado `tests`, nome começando com `test`; isso deixa fora outras organizações e nomes de módulos. A regra mínima é usar a descoberta compatível com o executor, antes de calcular dependências. (`bin/vizinhos_da_volta.py:15`, `bin/vizinhos_da_volta.py:16`)
+
+P7, fonte única — **NAO PROCEDE que o selo atual detecte o TXT como repetição.** Ele busca linhas contendo `manage.py test`, `colaboradores` e `ponto`, nessa ordem, em `bin/` e `app/core/hooks`; o TXT contém labels individuais, sem esse comando. (`bin/tests/test_labels_fonte_unica.sh:38`, `bin/tests/test_labels_fonte_unica.sh:39`, `bin/tests/test_labels_fonte_unica.sh:40`, `bin/selos_globais_da_volta.txt:1`)
+
+A lista integral continua sendo lida da régua; o TXT acrescenta uma seleção global manual distinta. Classificá-lo como duplicação da lista integral não é sustentado por esse fluxo. (`bin/suite.sh:99`, `bin/vizinhos_da_volta.py:36`)
+
+Scanners globais efetivamente existentes percorrem diretórios independentemente de importações: o contrato de escritores usa `os.walk`, e o de leitores de vitalidade percorre arquivos e analisa AST. Ambos constam da lista fixa. (`app/core/tests/test_contract_escritores_estado.py:188`, `app/core/tests/test_contract_escritores_estado.py:190`, `app/chamados/tests/test_contract_leitores_vitalidade.py:292`, `app/chamados/tests/test_contract_leitores_vitalidade.py:302`, `bin/selos_globais_da_volta.txt:23`, `bin/selos_globais_da_volta.txt:24`)
+
+## 11/11 06:34 · sessao 2a37b2983b12 · - · - · origem=Ronald (tmux)
+
+**5. PROCEDE parcialmente: os três resultados existem, mas 75 encobre vermelho anterior.** `VOLTA_VERMELHA` é escrito se qualquer etapa falhar; `VOLTA_SEM_VEZ` também é escrito quando a suite retorna 75. A consolidação dá prioridade a 75, mesmo se ruff ou disjuntor já falharam. Portanto “75 = apenas não conseguiu a vez” não é garantido. (`bin/volta_intermediaria.sh:35`, `bin/volta_intermediaria.sh:36`, `bin/volta_intermediaria.sh:38`, `bin/volta_intermediaria.sh:39`)
+
+- **`$TESTE_DOCKER`: correto na leitura estática.** O wrapper carrega `recursos.sh`; ali as flags são construídas e exportadas; a expansão sem aspas produz os argumentos das flags utilizadas no Docker. (`bin/volta_intermediaria.sh:15`, `bin/recursos.sh:81`, `bin/recursos.sh:82`, `bin/volta_intermediaria.sh:23`)
+- **`PIPESTATUS`: correto para capturar o Docker/ruff.** A posição zero é lida imediatamente após `docker … | tail -15`; assim recebe o código do Docker, não o do `tail`. A falha exclusiva do `tail` não é incorporada a `ruff_rc`. (`bin/volta_intermediaria.sh:24`, `bin/volta_intermediaria.sh:25`)
+- **`VOLTA_ESPERA`: chega à trava.** O wrapper transforma o ambiente, com default 3600, em `--espera`; suite armazena em `ESPERA` e repassa à trava; a trava usa em `flock -w`. (`bin/volta_intermediaria.sh:32`, `bin/suite.sh:53`, `bin/suite.sh:136`, `bin/trava_teste.sh:27`, `bin/trava_teste.sh:36`)
+- **`VOLTA_PORQUE`: chega ao suite.** O wrapper fornece a variável no ambiente da chamada e suite a usa como destino de stderr do helper. (`bin/volta_intermediaria.sh:32`, `bin/suite.sh:85`)
+- **Limite adicional:** a coleta inicial de `.py` não verifica o rc do `git diff`, embora `pipefail` esteja ativo; sem `errexit`, a atribuição pode falhar e o processamento continuar com `PY` vazio e `ruff_rc=0`. A etapa posterior do helper usa `check=True`, portanto falha de diff nessa etapa normalmente produz suite rc1, não verde. (`bin/volta_intermediaria.sh:10`, `bin/volta_intermediaria.sh:18`, `bin/volta_intermediaria.sh:21`, `bin/vizinhos_da_volta.py:10`, `bin/vizinhos_da_volta.py:11`, `bin/suite.sh:86`)
+- **Execução real e permissões de escrita dos logs:** [nao verificado].
+
+**6. Mapa de escritores e leitores.**
+
+| Valor novo | Quem escreve | Quem lê |
+|---|---|---|
+| `MOTIVO` | Inicialização vazia; parser `--motivo`. O ambiente homônimo é sobrescrito. (`bin/suite.sh:47`, `bin/suite.sh:54`) | Guarda de formato; mensagem de recusa; saída seca. (`bin/suite.sh:70`, `bin/suite.sh:72`, `bin/suite.sh:91`) |
+| `VOLTA` | Inicialização vazia; parser `--volta`. O wrapper fornece o valor posicional `BASE` como argumento. (`bin/suite.sh:47`, `bin/suite.sh:55`, `bin/volta_intermediaria.sh:13`, `bin/volta_intermediaria.sh:32`) | Guarda; ativação do recorte; argumento do helper; mensagem de falha; saída seca. (`bin/suite.sh:70`, `bin/suite.sh:82`, `bin/suite.sh:85`, `bin/suite.sh:86`, `bin/suite.sh:91`) |
+| `SECO` | Inicialização zero; parser `--seco` escreve 1. (`bin/suite.sh:47`, `bin/suite.sh:56`) | Condicional que imprime e encerra antes de labels/env-file/montagem/trava/Docker. (`bin/suite.sh:90`, `bin/suite.sh:93`, `bin/suite.sh:99`, `bin/suite.sh:104`, `bin/suite.sh:117`, `bin/suite.sh:136`) |
+| `VOLTA_PORQUE` | Wrapper define o caminho `"$OUT.porque"` no ambiente do subprocesso. Chamador externo também pode defini-lo: o consumidor lê o ambiente. (`bin/volta_intermediaria.sh:32`, `bin/suite.sh:85`) | Suite lê o caminho e abre/trunca o arquivo para stderr; helper escreve justificativas, produção tocada e total nesse stderr; wrapper lê o arquivo para contar labels. (`bin/suite.sh:85`, `bin/vizinhos_da_volta.py:40`, `bin/vizinhos_da_volta.py:41`, `bin/vizinhos_da_volta.py:42`, `bin/volta_intermediaria.sh:34`) |
+| `selos_globais_da_volta.txt` | Lista literal versionada, 24 entradas; escritor automático não identificado no fluxo analisado. (`bin/selos_globais_da_volta.txt:1`, `bin/selos_globais_da_volta.txt:24`) | Helper lê o arquivo **ao lado dele próprio**, não dentro de `wt`; acrescenta cada entrada ao conjunto de saída e à justificativa. (`bin/vizinhos_da_volta.py:36`, `bin/vizinhos_da_volta.py:37`) |
+
+`VOLTA_PORQUE` tem default `/dev/null`, portanto justificativas não são preservadas quando suite é chamado diretamente sem essa variável. (`bin/suite.sh:85`)
+
+## 11/11 06:34 · sessao 015a5f061c14 · - · - · origem=Ronald (tmux)
+
+**Pergunta 2 — PROCEDE: a documentação canônica quebra e o selo não acusa.**
+
+| Chamador/referência | Efeito da guarda |
+|---|---|
+| `CLAUDE.md:96`: `bash ~/saas-hasner/bin/suite.sh` | Recusa rc 2, oferecendo `--volta` e `--only`, antes do env-file/docker (`bin/suite.sh:69-77`). |
+| `bin/volta_intermediaria.sh:32` | Passa `--volta`, `--dir` e `--espera`; não exige motivo nessa modalidade (`bin/suite.sh:70`, `82-87`). |
+| `bin/tests/test_suite_motivo.sh:24` | Executa cópia da porta; chamadas nuas são deliberadamente recusadas e válidas/`--only` devem chegar à trava falsa (`bin/tests/test_suite_motivo.sh:29-34`). |
+| `app/core/placar_estrutural.py:109-110` | Publica instruções com `--only`; a guarda não as recusa (`bin/suite.sh:70`). É texto, não execução Python da suite (`app/core/placar_estrutural.py:109`). |
+| Exemplos de uso de `bin/suite.sh:23-32` | `--motivo` válido, `--only` e `--volta` passam pela guarda; exemplos isolados `--dir`, `--parallel`, `--espera`, `-- --failfast`, ou `--seco` sem motivo/recorte são recusados (`bin/suite.sh:50-77`, `90-94`). |
+| Receita histórica `app/docs/RELATO-ARQUIVO.md:37800` | Se colada hoje sem complemento, `--dir` sozinho é recusado (`bin/suite.sh:50`, `69-77`). |
+| Orientação histórica `app/docs/PROMPTS.md:1069` e `app/docs/BACKLOG.md:1433`: suite por `--dir` | Se usada apenas assim, é recusada pela mesma guarda (`bin/suite.sh:69-77`). |
+
+Não localizei outros chamadores executáveis de `suite.sh` em `.claude/` ou hooks; completude diante de chamadas construídas dinamicamente: **[nao verificado]**. `regua.sh` e `pre-push.sh` executam sua própria chamada, portanto esta guarda não os alcança (`bin/regua.sh:168`; `bin/pre-push.sh:186`; `app/core/hooks/pre-push.sh:82`; explicação em `CLAUDE.md:101-103`).
+
+**O selo `test_suite_sh.sh` permanece logicamente verde:** cobra apenas presença textual de `bin/suite.sh` no bloco (`bin/tests/test_suite_sh.sh:31-42`) e strings de trava, `manage.py test`, leitura de LABELS e ausência de DB_PASSWORD (`bin/tests/test_suite_sh.sh:50-58`). Seu fixture “bom” é exatamente a chamada nua que agora é recusada (`bin/tests/test_suite_sh.sh:72-81`). Não executa esse comando; verde medido nesta revisão: **[nao verificado]**. Executá-lo criaria arquivos temporários, contrariando a regra de leitura (`bin/tests/test_suite_sh.sh:63-76`).
+
+**Pergunta 7, fonte única — PROCEDE a cegueira do selo; não confundir com uma cópia literal de LABELS.**
+
+`test_labels_fonte_unica.sh` não reconhece o novo `.txt` como lista repetida: seu detector exige a expressão `manage.py test … colaboradores … ponto` (`bin/tests/test_labels_fonte_unica.sh:38-46`); o arquivo novo contém somente módulos por linha (`bin/selos_globais_da_volta.txt:1-24`). O helper lê essa lista diretamente (`bin/vizinhos_da_volta.py:36-37`), enquanto a lista de apps permanece em `bin/regua.sh:23`. A lista fixa tem autorização no anexo fornecido; classificação disso como violação ampla da fonte única, além da cegueira demonstrada do selo: **[nao verificado]**.
+
+## 11/11 06:34 · sessao e94ad08110dc · FIO-E0-V4-E4B · construtor · origem=Code
+
+Cura aplicada: um lote existente cobre S143/S128 e permanece até o retorno do C7. [Fonte](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1923). [nao verificado]
+
+Entregues o [diff](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/E4B_C4V5.patch) e o [recibo com comandos e RCs](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/E4B_C4V5_ENTREGA.txt:27):
+
+- Sem banco: grupos de 50, 16 e 40 testes, todos rc=0. [nao verificado]
+- RED sobre a base: rc=1, assertion `1 != 5`.
+- Dois mutantes novos de tranca detectados; mutante do protocolo também falhou como esperado. [Evidências](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/E4B_C4V5_ENTREGA.txt:50).
+
+Contagem esperada, **[nao verificado]**:
+
+| Caso | Queries |
+|---|---:|
+| reconciliar | 60 |
+| `_gravar_estado` sem pergunta | 28 |
+| batida, 1 chamado fecha | 213 |
+| batida, 3 chamados fecham | 269 |
+
+Tetos 213/269 preservados; o custo `+N _ancoradas` continua como pergunta de desenho no [C8](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/tests/test_selo_chokepoint_escrita.py:189).
+
+O [RED ORM pareado e seu mutante](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:34) estão preparados para o Code. Execução ORM e certificação final: **[nao verificado]**.
 
 ## 11/11 06:27 · sessao 8ca9ab311c9e · - · - · origem=Ronald (tmux)
 
@@ -490,91 +582,4 @@ Ruff limpo **[nao verificado]**: o comando abaixo retornou `No module named ruff
 PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check --no-cache ponto/tests/test_x1_folga_sem_adesao.py chamados/tests/test_e3_c8c_orm.py
 ```
 
-## 11/11 03:57 · sessao 4d4630f2ce92 · FIO-E0-V4-E4B · construtor · origem=Code
-
-C4 escrita. Execuções locais: **52 testes em memória, 40 selos e 43 ensaios individuais de mutação, rc=0**. ORM, tetos e produção continuam **[nao verificado]**; certificação fica com Code e opus. [Recibo e resultados](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4.txt:13). [nao verificado]
-
-| Item | Arquivo e entrega | RED / mutante / rc |
-|---|---|---|
-| 1 | [Harness:135](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_classe_e_memoria.py:135): atributo do pacote pai, módulos reais com sentinela, restauração e coletor | RED=1; GREEN=0; mutantes exigem assertion, rc=0 |
-| 2 | [disputa_emissao.py:1799](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1799): `_ancoradas()` por destino unida à ressuscitação | RED na base=1; `D3_volta_segunda_copia`=0 |
-| 3 | [Backfill:183](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:183): protocolo, foto integral sob C e cerca antes do commit | REDs e cinco mutantes ORM preparados; rc **[nao verificado]** | [nao verificado]
-| 4 | [foto_e4b.py:18](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:18): fora do alvo recusa mesmo com K6=False; BANG identifica competência/linha | Mutantes de alvo, exportada e indeterminada: rc=0; ORM **[nao verificado]** |
-| 5 | [disputa_emissao.py:1915](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1915): evento lê `_ancoradas()` | RED de seleção=1; mutante=0; **número de queries [nao verificado]** |
-| 6 | [Terminal:211](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_o261e_f1_porta_encerramento.py:211): fechado gravado, reabertura com nota e contraexemplo administrativo | REDs/mutante ORM: **[nao verificado]** |
-| 7 | [foto_e4b.py:60](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:60): DIFF por colaborador, nascimentos, push e dinheiro da autoridade | REDs=1; mutantes DIFF/push/dinheiro=0; ORM **[nao verificado]** | [nao verificado]
-| 8 | [Testemunhas:688](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_classe_e_memoria.py:688): mesma recusa, motivo/instante novos e limbo `31,39` | Três mutantes mortos por assertion; rc=0 |
-| 9 | [Passivo:61](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_passivo.py:61): caracterização invertida; universo e soma preservados | REDs/mutante ORM: **[nao verificado]** |
-| 10 | [Registros dos selos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4.txt:96): relógio, B2 e tratamento explícito do rollback | REDs=1; selos=0; selos mutados=1 |
-| 11 | [BACKLOG.md:1875](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/BACKLOG.md:1875): `Parallel Change / Expand-Contract`, fase BACKFILL | RED=1; positivo=0; mutante=1 |
-
-Comandos executados:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4b_classe_e_memoria chamados.tests.test_e4b_foto_memoria
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos
-```
-
-Os **43 comandos individuais**, com respectivos rc, estão no [recibo:198](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4.txt:198). Os quatro comandos de selos mutados, cada qual com rc=1 por assertion, estão no [recibo:105](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4.txt:105).
-
-TestCase ORM entregues para o Code, com execução **[nao verificado]**:
-
-- [CercaC4ORMTest](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:19): Ch12/P90/D90 fora do alvo, exportada, indeterminada, foto sob C e DIFF monetário.
-- [F1HumanoETripwireTest](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_o261e_f1_porta_encerramento.py:192): terminal, admin sem fato novo e mutante.
-- [PassivoE4bTest](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_passivo.py:24).
-- [BackfillE4bTest](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:109).
-- [RespostaVisivelTest](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_b2d_resposta_visivel.py:26).
-- [SeloChokepointEscritaTest](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/tests/test_selo_chokepoint_escrita.py:218).
-
-Nomes completos dos métodos e comandos ORM, incluindo mutantes e os quatro tetos: [recibo:111](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4.txt:111).
-
-**QUEM ESCREVE / QUEM LÊ:** [censo por campo — 249 campos declarados mais PKs](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-campos.txt:6), complementado pelo [censo de efeitos e campos temporários](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4.txt:143). Escritores/leitores não identificados estão marcados **[nao verificado]**.
-
-## 11/11 03:12 · sessao 2771d9db9c73 · - · - · origem=Ronald (tmux)
-
-Exploração somente leitura; nenhuma execução ORM.
-
-- Dinheiro online: [`ponto/services/fechamento.py:1735`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/fechamento.py:1735), `fechamento_lido(colaborador, mes, ano)`, chama o escritor existente em `somente_leitura=True`, sem salvar (`:1759`). `None` significa ausência de resposta e deve permanecer explícito (`:1747`).
-- Leitores reais: [`ponto/views.py:993`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/views.py:993), `:1480`; [`relatorios/cartao_pela_celula.py:69`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/relatorios/cartao_pela_celula.py:69).
-- DSR e faltas: fechamento recebe DSR em [`ponto/services/fechamento.py:1101`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/fechamento.py:1101), grava em `:1173–1179`. Autoridade das faltas por dia: [`folha/export.py:125`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/folha/export.py:125), já lida pelo escritor em `fechamento.py:873`.
-- DiaPago: campos monetários declarados em [`ponto/services/dia_pago.py:34`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/dia_pago.py:34); escritor `lavrar`, grava dias e ajuste em `:345–360`. Fotografar linhas completas por colaborador, incluindo ajuste/versões; não somar novamente no command. O ajuste contém DSR (`:350–358`).
-- Eventos de fechamento ficam em `on_commit`: [`ponto/services/fechamento.py:1798`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/fechamento.py:1798), `:1824`. Logo só comparar raw DiaPago/fechamento gravado dentro do DRY pode ocultar o dinheiro que mudaria após commit; incluir `fechamento_lido` antes/depois.
-- Push silenciado: [`chamados/services/disputa_emissao.py:1742`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1742), emissor retorna em `:1753–1756`. Um coletor ContextVar no próprio ramo silenciado consegue contar tentativas por colaborador/disputa, inclusive agregações, sem executar push.
-- Relógio: entrada a retirar é [`core/tests/testes_sem_relogio.txt:32`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/core/tests/testes_sem_relogio.txt:32), `test_b2d_resposta_visivel.py`. Só um método tem freeze hoje (`test_b2d_resposta_visivel.py:79`); `setUp` e demais métodos continuam sem congelamento (`:40`, `:67`, `:114`).
-- B2: registrar `chamados/management/commands/backfill_fio_morto_e4b.py::Command.handle` na lista informativa [`core/tests/test_medida_turno_do_par.py:353`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/core/tests/test_medida_turno_do_par.py:353), em ordem. Não alterar números/critérios em `:100–101`; lista é informativa, conforme `:12–15`. Há receita sem Django/banco em `:20–69`.
-- Padrão: corrigir a linha da obra em [`docs/BACKLOG.md:1875`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/BACKLOG.md:1875) para `padrao=Parallel Change / Expand-Contract, fase BACKFILL`, conforme [`docs/GLOSSARIO.md:18`](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/GLOSSARIO.md:18).
-
-## 11/11 03:12 · sessao 92fe8513932e · - · - · origem=Ronald (tmux)
-
-Leitura concluída, sem alterações nem execução ORM.
-
-- **Trava D1:** `PerguntaDisputa.trava_na_ordem` aceita a coleção de colaboradores primeiro; depois, por colaborador, `abertas_do_colaborador=True` cobre disputas abertas e chamados vivos. A disputa fechada ressuscitada fica coberta pela trava C já adquirida. (`chamados/models.py:2629`, `:2652`, `:2664`, `:1578`.)
-- **Fixture Ch12/P90/D90:** reutilizar `BaseE4b`; Ch12 vivo associado ao dia tratado, P90 ancorada nele mas com `data_evento`/célula de outro dia, D90 fechada. A cascata real chama `ressuscitar_perguntas` sem recorte de data; E2 também seleciona pelo colaborador inteiro. (`chamados/tests/test_e4_backfill.py:39`; `ponto/services/cartorio.py:1633`, `:970`; `chamados/reconciliador.py:627`.)
-- **Terminal→terminal:** teste está em `F1HumanoETripwireTest.test_i_terminal_para_terminal_passa`. Inverter o resultado final para `em_analise`; exigir a sequência de auditoria `resolvido→fechado→em_analise`, nota E4B única e pergunta sem carimbo. A auditoria anterior ao save permite comprovar que `fechado` foi gravado antes da reentrada. (`chamados/tests/test_o261e_f1_porta_encerramento.py:211`; `chamados/models.py:292`.)
-- **Contraexemplo admin:** utilizar `VIA_ADMIN`, dia explícito e `resolvido_em` posterior ao último fato; exigir `recusa:admin_sem_fato_novo`, credor terminal e nota de recusa. Fixtures existentes demonstram essa montagem. (`chamados/tests/test_reabrir_pergunta_a_premissa.py:45`, `:73`; `chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:117`; `ponto/services/cartorio.py:329`.)
-- **Tetos existentes:** reutilizar `SeloChokepointEscritaTest`, principalmente `test_gate_da_premissa_fecha_com_dia_e_celula`, `test_registrar_batida_com_1_furo_vivo_que_ela_fecha` e `test_registrar_batida_com_3_furos_vivos_que_ela_fecha`; não alterar constantes. (`ponto/tests/test_selo_chokepoint_escrita.py:218`, `:345`, `:388`, `:393`.)
-
-Resultados atuais e redução de queries: **[nao verificado]**.
-
-## 11/11 03:09 · sessao 11b3832e7d26 · VERIFICADOR-EM-FABLE · censo · origem=Code
-
-As referências aos anexos numeram o conteúdo colado, incluindo linhas vazias.
-
-**O #3 exige classificação mista:** a falsa negativa estava perguntada e não foi identificada; chave desligada e filtro de tipo foram vistos e aceitos pela triagem. (`preverif1.q:4`; `preverif1.r:9`; `preverif1.r:11`; `preverif1.r:19`; `triagem.txt:3`)
-
-**No #4, a atribuição à triagem é parcial:** pv1 apontou acúmulo sem janela e foi considerado PROCEDENTE. Depois, pv2 registrou a ressalva temporal, classificada como descritiva. A consequência específica “primeira ocorrência nova deixa vermelho para sempre” não aparece literalmente nas respostas; o código atual acrescenta observações e conta seus IDs sem filtro temporal. (`preverif1.r:3`; `triagem.txt:2`; `preverif2.r:5`; `triagem.txt:6`; `bin/disjuntor.py:2182`; `bin/disjuntor.py:2201`)
-
-**O #5 não é (c):** a ausência de `linha()` e a primeira falha por `KeyError` foram identificadas por leitura/reprodução em memória, independentemente da execução integral da suíte. (`preverif3.r:33`; `preverif3.r:35`) [nao verificado]
-
-**Há sobreposição entre (e) e (d) no pedido para o #6:** nenhum trecho pergunta ou responde sobre a adequação do padrão escolhido. Pela regra da cópia, seria **(e)**: MODO-COMUM exige que Codex **e opus** tenham deixado passar, enquanto o opus registrou esse achado. Pela definição ampliada de (d) no pedido, também caberia (d); não há desempate fornecido. (`preverif1.q:8`; `preverif2.q:9`; `preverif3.q:9`; `opus_final_v3.txt:7`; `CLAUDE.md:390`)
-
-| Achado | Classe | Trecho q | Trecho r |
-|---|---|---|---|
-| **1 — prefixo confunde negativa sem obra com B3 de obra parada** | **(a), falha do Codex.** O tema dos efeitos da negativa estava presente. O código usa o prefixo ambíguo, extrai `B3` como regra e reconhece tokens de obra na mensagem. (`bin/disjuntor.py:1646`; `bin/disjuntor.py:262`; `bin/disjuntor.py:638`) | “A negativa nova pula algum efeito que antes acontecia nessa chamada (trilha, dispara, oks do CENSO, b4)? Isso importa?” (`preverif1.q:5`) | **nenhum.** A resposta apenas afirmou: “O registro externo `NEGOU`, resposta `deny` e tentativa de registro no RELATO continuam acontecendo.” Isso não identifica a colisão semântica. (`preverif1.r:23`) |
-| **2 — mesmo nome para lista persistida e número retornado** | **(b), falha da triagem.** Motivo registrado: “FILA (nome), consumidores usam o numero.” (`triagem.txt:9`) | “Cada campo persistido (`b3_sem_obra`, `b3_sem_obra_obs`) tem agora UM significado, em todo escritor e leitor?” (`preverif3.q:4`) | “Atenção ao nome na saída: `ler()['b3_sem_obra']` continua sendo o **número derivado de observações**, não a lista histórica persistida.” (`preverif3.r:5`) |
-| **3 — reconhecimento de final; chave; tipo do agente** | **(a)** para falsa negativa por mencionar leitura final; **(b)** para chave desligada/outra grafia e cobertura restrita por tipo. Motivo da triagem: “saida declarada do instrumento, fila.” (`triagem.txt:3`) | “E existe pedido NAO-final ou final COM obra legivel que agora passa a ser negado indevidamente?”; “chave desligada”; “subagent_type com outra grafia”. (`preverif1.q:4`) | **Falsa negativa: nenhum.** A resposta disse “não aparece falsa negativa nova dentro do contrato dos parsers.” (`preverif1.r:19`) **Demais partes:** “Com a chave desligada, `main_pretool` pula a decisão”; “Outra grafia de `subagent_type` e ausência de `tool_input` também não entram na negativa nova”; “com metadata `agentType == 'verificador'`”. (`preverif1.r:11`; `preverif1.r:9`) |
-| **4 — observações acumulam sem janela nem baixa** | **(b), parcial**, pela ressalva temporal vista e tratada como descritiva; o BLOQUEIA original de pv1 foi aceito, não descartado. (`triagem.txt:2`; `triagem.txt:6`) | “O contador ‘esperado 0’ passa a contar so entradas novas, e o historico aparece separado sem sumir?” (`preverif2.q:4`) | “O escritor acrescenta IDs à lista sem remover os anteriores; o leitor retorna seu comprimento, sem janela temporal ou marco da alteração.” (`preverif1.r:3`) Depois: “Não existe comparação temporal com um marco da cura nesse caminho.” (`preverif2.r:5`) A consequência literal sobre a primeira ocorrência nova: **nenhum**. |
-| **5 — caso não chama `linha()`; mutante cai primeiro por exceção** | **(b), falha da triagem.** Motivo registrado: “DESCARTADO para esta obra, linha de fila; conferido em memoria pelo Codex.” (`triagem.txt:7`) | “O caso b3_sem_obra_historico e os 3 mutantes (historico-reconta, forma-invalida-vira-zero, duplicata-reconta) MORDEM de verdade?” (`preverif3.q:8`) | “`forma-invalida-vira-zero`: cai primeiro por `KeyError` em `{}`”; “apesar do comentário, esse caso não chama `linha()`”. (`preverif3.r:33`; `preverif3.r:35`) |
-| **6 — padrão Architecture Conformance Test inadequado à guarda de runtime** | **(e) pela regra da cópia; também (d) pela definição sobreposta do pedido**, conforme ressalva acima. (`CLAUDE.md:383`; `CLAUDE.md:390`; `opus_final_v3.txt:7`) | **nenhum** sobre adequação do padrão à guarda de runtime. As listas de classes perguntadas não incluem esse tema. (`preverif1.q:8`; `preverif2.q:9`; `preverif3.q:9`) | **nenhum** sobre esse tema, inclusive lateralmente. (`preverif1.r:29`; `preverif2.r:33`; `preverif2.r:37`; `preverif3.r:37`) |
-
-_3662 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3666 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
