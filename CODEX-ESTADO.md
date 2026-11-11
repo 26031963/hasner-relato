@@ -1,7 +1,399 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 08:54** · publicado em **11/11/2026 08:56** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:07** · publicado em **11/11/2026 09:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:07 · sessao 5a294bb62c7c · - · - · origem=Ronald (tmux)
+
+Use `E=app/chamados/services/disputa_emissao.py`, `V=app/chamados/services/validacao.py`, `MT=app/chamados/services/materializacao.py`, `T=app/chamados/tests/`. Provas abaixo foram lidas; execução dos testes [nao verificado]. [nao verificado]
+
+| Porta / entrada | Juiz consultado | Operação / persistido | Retorno | Prova |
+|---|---|---|---|---|
+| Responder; resposta vazia, escolha inválida, hora fora formato ou `OUTRO_MOTIVO` em hora | Guardas locais por `tipo_resposta`/opções | Recusa antes de salvar. `E:1433`, `:1435`, `:1445`, `:1448`, `:1451`, `:1458` | `(False, mensagem)`; contrato `E:1428` | sem teste específico aberto | [nao verificado]
+| Responder; primeira resposta admissível | Validação local do formato; `reabrir_por_resposta` para carimbo sem lastro | `resposta_colab`, `respondida_em`; `DecisaoPergunta.RESPOSTA` no mesmo atomic; eventual descarimbo pela porta. `E:1467`, `:1468`, `:1485`, `:1503`, `:1508`, `:1511` | `(ok, erro)`; `E:1428` | `T/test_reresposta_invalida_validacao.py:67` |
+| Responder novamente; tinha validação | Mesmas guardas | Limpa `validada_em/por`, preserva histórico anterior na sequência; resposta nova recebe instante próprio. `E:1470`, `:1480`, `:1511` | Mesmo contrato | `T/test_reresposta_invalida_validacao.py:55` |
+| Responder escape `FOLGA_CONTESTA` | Roteamento explícito | Grava `recusa_motivo` com a resposta; exige decisão admin, não planta nessa etapa. `E:1486`, `:1497`, `:1508` | Mesmo contrato | sem teste específico aberto | [nao verificado]
+| Responder `ESCAPES_QUE_VIRAM_AUSENCIA` | Tabela do materializador / `estado_inicial` conforme comentário | Após resposta salva, chama `_materializar_ausencia_de_resposta`. `E:1538`, `:1541` | Mesmo contrato | sem teste específico aberto | [nao verificado]
+| Validar; PK inválido, sem resposta, já validada | Filtro PK/DS; carimbos individuais | Sem gravação. `V:385`, `:389`, `:393`, `:396` | `nao_encontrada`, `sem_resposta`, `ja_validada`. `V:391`, `:394`, `:397` | sem teste comportamental específico aberto | [nao verificado]
+| Validar; implausível sem confirmação | `motivo_implausivel_validacao` | Sem gravação. `V:404`, `:405` | `implausivel`. `V:406` | sem teste específico aberto | [nao verificado]
+| Validar resposta hora admissível | Implausibilidade; unidade materializadora; depois C7 na cauda | Sob atomic/travas C→D→Ch, grava `validada_em/por` e decisão VALIDAÇÃO; roda **uma pergunta** antes do laço. `V:425`, `:431`, `:435`, `:461`, `:463`; escrita `V:134`, `:137`, `:139` | `validada` se gravou; `ja_no_espelho` se reuso. `V:515`, `:517` | `T/test_o261_recusa_fala.py:135` |
+| Validar hora; unidade recusou sem encerrar e há motivo | `_resposta_de_hora`; `materializada_em is None`; motivo preenchido | Limpa **só esta** `validada_em/por`, preserva resposta, registra DEVOLUÇÃO; pode reabrir DS, salvo `sem_reabrir`. `V:188`, `:190`, `:192`, `:199`, `:205`, `:217`, `:464` | `nao_gravou`, `devolvida=True`; repetição igual não duplica trilha. `V:473`, `:499` | `T/test_o261_recusa_fala.py:87`, `:110`, `:148`, `:164` |
+| Validar; recusa já encerrou identidade | Mesma devolução verifica materialização | Não desfaz validação quando `materializada_em` preenchida. `V:190` | Devolução `False`; retorno final depende erros. `V:191`, `:490` | `T/test_o261_recusa_fala.py:190` |
+| Materializar lote normal | Fila por carimbos; unidade; C6/C7 | Filtra resposta+validação não nulas/materialização nula; itera **individualmente**; cauda fecha se C7 permitir. `MT:1369`, `:1375`, `:1376`, `:1378`, `:1316`, `:1333` | Dict `materializadas/reusos/pendentes/disputa_fechada/erros`. `MT:1381` | `T/test_o317_passivo_pela_porta.py:188`, `:207`, `:481`, `:502` |
+| Unidade; dia diverge sem conferência | `fio.data_do_fato_de` | Não planta; grava recusa na pergunta. `MT:1191`, `:1193`, `:1213` | `False`. `MT:1214` | sem teste específico aberto | [nao verificado]
+| Unidade hora sem texto humano | Guarda de anuência por `resposta_colab.strip` | Não planta; recusa escrita. `MT:829`, `:836` | Ramo `None`; unidade `False`. `MT:841`, `:1227` | referência interna a `T/test_a27_recusa_com_dono.py` em `MT:831`; teste não aberto |
+| Unidade hora; marco indeterminado | `_tipo_pelo_marco` / `entrada_de_marco` / `grade_da_celula` | **Não recusa necessariamente**: mantém tipo pelo motivo e devolve pendência `tipo_nao_conferido`; escritor persiste pendência+motivo. `MT:386`, `:387`, `:395`, `:397`, `:400`, `:850`, `:851` | Continua até demais guardas. `MT:404`, `:414`, `:422` | sem teste específico aberto | [nao verificado]
+| Hora; batida no slot já existe | `_batida_existente_na_janela` | Reusa, emite aviso `__REUSO__`, pode trocar `pergunta_origem` por `anotar`; reconcilia destino/clones. `MT:859`, `:865`, `:866`, `:946`, `:948`, `:974` | Ramo `True`; aviso deslocado para `reusos`. `MT:975`, `:1291`, `:1295` | `T/test_o317_passivo_pela_porta.py:207` cobre controle normal; teste específico de reuso não aberto |
+| Paridade; vizinha mesmo tipo, sem furo que absolva, lâmpada `False/None` | `_vizinha_mesmo_tipo`, `_plantio_preenche_furo_na_data`, `fato_do_marco_no_espelho` | Não planta; `_carimbar_recusa` sem via terminal PARIDADE; pela validação, devolução limpa validação. `MT:875`, `:876`, `:900`, `:901`, `:913`; `V:464` | Ramo `None`; unidade `False`; validação `nao_gravou`. `MT:916`, `:1227`; `V:500` | `T/test_guarda_paridade_materializador.py:59`; `T/test_o261_paridade_respeita_a_lampada.py:174`, `:192`, `:202` |
+| Paridade; mesma guarda, lâmpada exatamente `True` | Mesmo juiz da lâmpada | **Não planta**, mas `carimbar_identidade(VIA_PARIDADE_RECUSADA)` grava encerramento. `MT:901`, `:924` | Ramo `None`, unidade `False`, embora haja escrita de estado terminal. `MT:925`, `:1227` | `T/test_o261_paridade_respeita_a_lampada.py:183`; `T/test_o317_passivo_pela_porta.py:361` |
+| Guarda paridade; furo do próprio dia | `_plantio_preenche_furo_na_data` lê célula/ata e `plantio_preenche_furo` | Pode atravessar a guarda. A véspera não integra a consulta atual. `MT:170`, `:181`, `:876` | Prossegue para porta Batida. `MT:927` | `T/test_o261_vespera_nao_absolve.py:76`, `:85` |
+| Hora elegível sem vizinha impeditiva | `registrar_batida`, lastro `_pergunta_materializada_de_fato`, C6 em `carimbar` | Cria Batida institucional, anota origem, reconcilia destino; carimba via declaração ou via fato com `resposta='validar'`, relavra. `MT:927`, `:929`, `:930`, `:948`, `:974`, `:1233`, `:1277` | Unidade `True`. `MT:1282`, `:1299` | `T/test_guarda_paridade_materializador.py:90`; `T/test_o261_recusa_fala.py:135` |
+| Batida criada/reusada, mas lastro/C6 reprova | Lastro e C6 | Exceção `_Reprovada` dentro atomic desfaz Batida/carimbo; finally grava motivo fora do savepoint. `MT:1220`, `:1233`, `:1239`, `:1277`, `:1279`, `:1283`, `:1297` | `False` e erro. `MT:1299` | `T/test_hx_materializa_depois_julga.py:30` |
+| Recusa textual classificada COLISÃO | `traduzir_recusa` | `carimbar_identidade(VIA_FATO_OCUPADO)`; motivo no mesmo save; demais códigos só alteram motivo. `MT:1091`, `:1093`, `:1099`, `:1102` | `_carimbar_recusa` não possui retorno explícito. `MT:1107` | `T/test_o261_recusa_fala.py:190` prova devolução não mexe no encerrado |
+| Reentrada durante plantio | `pergunta_em_voo` transacional | O materializador é escritor da P em voo; S143/S144 devem pulá-la. `MT:1141`, `:1144`, `:1146`, `:1150`, `:1153`, `:1425` | Contexto termina em commit/rollback/exceção. `MT:1147`, `:1149` | `T/test_pep_reentrada.py:109`, `:134`, `:141`, `:176`, `:193`, `:305` |
+
+Divergências para consolidação:
+
+1. **Unidade individual × par**. Opções atuais: pré-materializar uma pergunta na validação; depois iterar prontas individualmente; reparador também usa a unidade com fila distinta (`V:461`, `:463`, `:469`; `MT:1162`, `:1369`, `:1375`). A lei já manda par em um ato, metade espera, e estado derivado: `app/docs/BACKLOG.md:1929`, `:1930`. Não é nova pergunta de lei.
+
+2. **`validada_em` = veredito humano × preenchimento simétrico pelo carimbo**. Validador escreve assinatura humana (`V:134`, `:135`), materializador pede `carimbar(..., resposta='validar')`, que pode suprir carimbos (`MT:1273`, `:1277`). O lookup “escritor único” não prova uma única atribuição física; desenho do escritor já decidido por L-007 (`app/docs/LEIS.md:65`). Não redefinir o campo silenciosamente.
+
+3. **`materializada_em` = aplicação × encerramento sem Batida**. Paridade autorizada grava identidade e retorna `None` (`MT:924`, `:925`); COLISÃO também encerra sem plantio (`MT:1099`); caminho normal usa mesmo carimbo depois de julgar lastro (`MT:1233`, `:1277`). O enum já distingue vias; não exige campo novo (`MT:438`, `:439`; `app/docs/BACKLOG.md:1930`).
+
+4. **Leitor `estado_aplicacao_pergunta` re-julga e não acompanha toda a escrita**. Se carimbada, só separa paridade e chama o restante `aplicada`, sem lastro (`MT:434`, `:438`, `:442`). Sem carimbo exige `existente.aprovada` para `ja_satisfeita`, enquanto escritor reusa qualquer Batida encontrada (`MT:448`; `:859`, `:865`). A previsão `bloqueada_paridade` não consulta lâmpada, mas escritor consulta para decidir identidade (`MT:452`, `:453`, `:454`; `:900`, `:901`, `:924`). L-002/testemunha e célula soberana já decidem quem manda (`app/docs/LEIS.md:60`, `:71`; `CLAUDE.md:167`).
+
+5. **`pendencia_admin`/`recusa_motivo` não significam exclusivamente “espera outra metade”**. Pendência nasce também por tipo sem marco, com plantio permitido (`MT:387`, `:395`, `:397`, `:850`); recusa recebe contestação colab (`E:1497`), recusa materializador (`MT:1102`), recusa admin (`V:584`). Derivar espera só por esses campos colide com significados já existentes; estado explícito foi superado (`app/docs/BACKLOG.md:1930`).
+
+6. **Universo cru da vizinhança × apurável**. `_vizinha_mesmo_tipo` usa `Batida.objects` sem excluir `retratada_em`, e compara `Batida.tipo` (`MT:94`, `:98`, `:100`, `:104`). L-025 e L-087 já fornecem universo/papel; não é opção de lei nova (`app/docs/LEIS.md:76`, `:119`).
+
+Atribuição quantitativa dos 77 colab-dias, 486 grupos/848 excedentes e 18 DS a estas transições: **[aguarda sonda]**. Os documentos registram os agregados e vínculo à obra, mas não fornecem PKs ou partição pelas condições acima (`app/docs/BACKLOG.md:1882`, `:1883`). O caso 51522/51523 foi fornecido no prompt; estado efetivo das duas linhas **[nao verificado]**.
+
+## 11/11 09:07 · sessao e58cbb9aa56f · - · - · origem=Ronald (tmux)
+
+Recorte conferido por leitura; testes abaixo foram abertos, não executados. Resultado de execução: [nao verificado]. [nao verificado]
+
+### Matriz — reconciliador e fechamento
+
+| Porta / entrada | Juiz consultado | Operação / persistido | Retorno | Prova lida |
+|---|---|---|---|---|
+| `lavrar_sem_turno_aberto`: motivo C1, texto vazio, sem materialização, sem turno aberto naquele dia | `_tem_turno_aberto` e depois C6 `pergunta_viva`; pergunta viva barra | `p.carimbar(VIA_SEM_TURNO_ABERTO, user_sistema)`; C7 depois pode chamar `d.fechar` | `False` nas guardas/carimbo recusado; `True` após carimbo, mesmo que DS não feche | Código `app/chamados/reconciliador.py:362`, `:364`, `:366`, `:371`, `:398`, `:405`, `:411`, `:414`; testes `app/chamados/tests/test_o261_lavra_le_a_lampada.py:129`, `:148`, `:172` |
+| `retratar_perguntas_absolvidas_por_celula`: P sem validação/materialização, célula julgada que não acusa | C6; tranca excluída separadamente | Atomic por P, trava C, `carimbar(VIA_CELULA_ABSOLVEU)`; acumula DS, depois C7 e fechamento | Número de carimbos; exceções individuais são logadas e laço segue | `app/chamados/reconciliador.py:584`, `:592`, `:595`, `:611`, `:617`, seleção `:627`, juiz `:661`, tranca `:667`; `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:70`, `:75`, `:84`, `:105` |
+| `encerrar_orfas_pela_lampada`: motivos `orfao_14h`/`saida_sem_entrada`, DS aberta, sem carimbo/validação, com dia | `veredito_orfa`: texto vazio, lâmpada do próprio marco=True, C6 viva, teto temporal e `dia_encerrado_motivo` | `p.encerrar_fantasma(user)` e evento; para DS atingidas consulta respostas sem veredito, depois C7, chama fechar | Dict `encerradas`, `adiadas`, `disputas_barradas`, `linhas`; falha de fechamento pode entrar em `falhas` | `app/chamados/reconciliador.py:1040`, `:1048`, `:1082`, `:1084`, `:1086`, `:1088`, `:1090`, `:1128`, `:1147`, `:1163`, `:1170`, `:1175`; `app/chamados/tests/test_orfas_pelo_evento.py:96`, `:112`, `:124`, `:133`, `:150`, `:167` |
+| C7, leitura | `respostas_sem_veredito()` e `fio_vivo(list(perguntas))` | Nenhuma coluna `pode_fechar`; método derivado | `not respostas_sem_veredito and not fio_vivo` | `app/chamados/models.py:1848`, `:1853`; registro `app/core/juizes.py:279`; `app/docs/CORTES.md:272` |
+| Fechar normal, DS aberta, resposta sem veredito | Lista canônica: validação nula, materialização nula, timestamp ou texto de resposta; dia trancado não bloqueia | Recusa antes das escritas | `ValueError` | `app/chamados/models.py:1842`, `:1846`, `:1886`, `:1888`; `app/chamados/tests/test_c7_red_minimos.py:160`, `:377` |
+| Fechar normal, DS aberta, P viva | C6 por pergunta | Recusa | `ValueError` | `app/chamados/models.py:1895`, `:1898`; `app/chamados/tests/test_c7_red_minimos.py:132` |
+| Fechar normal, DS aberta, sem resposta sem veredito nem P viva | Mesmas duas guardas de C7, implementadas novamente no corpo de `fechar` | `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; motivo `vazia` com zero P, `veredito` com alguma P; evento | `True` | `app/chamados/models.py:1886`, `:1896`, `:1903`, `:1932`, `:1936`, `:1941`; `app/chamados/tests/test_c7_red_minimos.py:147`, `:174`, `:185` |
+| Fechar `desligamento` / `admin_encerra` | Resposta sem veredito continua vetando; exceção nomeada admite silêncio vivo | Antes do save DS, `fechar_por_admin` nas vivas, decisão SILENCIO e eventos; depois quarteteto do fechamento | `True`; `admin_encerra` exige motivo | `app/chamados/models.py:1886`, `:1918`, `:1921`, `:1924`, `:1932`, `:1943`; `app/chamados/tests/test_c7_red_minimos.py:209`, `:221`, `:234`, `:261` |
+| Fechar competência trancada | Tranca por leitura de C6/lista de respostas | Fecha DS com motivo específico; não carimba P | `True` pela porta | `app/chamados/models.py:1865`; `app/chamados/tests/test_c7_red_minimos.py:329`, `:361`, `:369`, `:377` |
+| Fechar DS já fechada, mesma entrada / entrada diferente | Idempotência por autor, resolução, motivo | Sem nova escrita na mesma entrada | `False` / `ValueError` | `app/chamados/models.py:1879`, `:1882`, `:1883`; `app/chamados/tests/test_c7_red_minimos.py:428`, `:439` |
+
+A leitura de respostas e de vivas acontece antes do atomic/trava interno do fechamento; o atomic começa em `app/chamados/models.py:1905`, após as leituras `:1886` e `:1895`. Efeito concorrente em produção: [nao verificado].
+
+### Decisões candidatas
+
+1. **Bool de fechamento com dois significados, já decidido pela lei.** O método C7 exige ausência de resposta sem veredito **e** ausência de fio vivo (`app/chamados/models.py:1853`). O explicador escreve `pode = not _fio_vivo(ps)` e publica isso sob a mesma chave `pode_fechar` (`app/chamados/services/explicador.py:137`, `:163`). Opções presentes: critério completo C7 versus critério parcial do explicador. A lei escolhe C7, sem pergunta nova: `app/docs/CORTES.md:272`, `app/docs/LEIS.md:60`, `app/core/juizes.py:279`.
+
+2. **Carimbo não equivale a batida criada, já reconhecido pelo código.** A UI distingue `materializada_em` com `VIA_PARIDADE_RECUSADA` de aplicação (`app/chamados/services/materializacao.py:434`, `:438`, `:439`), mas todo outro carimbo retorna `aplicada` imediatamente (`:442`). Opções de leitura presentes: carimbo genérico / via específica / prova do fato. A obrigação de ler a mesma autoridade já consta da L-002 e L-061 (`app/docs/LEIS.md:60`, `:95`); a classificação de todas as vias no caso vivo depende da sonda [aguarda sonda].
+
+3. **`validada_em` encerra vitalidade sem provar aplicação, e `estado` traduz outra pergunta.** C6 retorna morto imediatamente com validação (`app/chamados/juizes.py:1325`). `P.estado` retorna `VALIDADA` quando validada e não materializada, `RESOLVIDA` se ambas (`app/chamados/models.py:3041`, `:3043`). O mandato do par já exige aplicar ambas num ato e esperar a metade; estado explícito foi superado pelo derivado (`app/docs/BACKLOG.md:1929`, `:1930`). Não reabrir lei sobre “criar estado espera”; esse desenho já está decidido.
+
+4. **Acervo BATIDA sem episódio versus episódio — pergunta de lei real.** `plano_de_retratacao` declara a lei aberta para permitir identidade/retratação entre as classes (`app/chamados/services/fio.py:1274`, `:1275`). Opções existentes: preservar por `sem_episodio_intocada`; retratar somente o restante aceito pelo plano (`:1294`, `:1297`). Outras proteções não são perguntas novas: mérito do admin `:1290`, múltiplos episódios `:1292`. Pergunta: “Quando a linha BATIDA sem episódio e a linha com episódio representam o mesmo fato, autorizando uma retratar a outra?” Alcance nos 486/848 [aguarda sonda].
+
+5. **Várias caudas fecham DS; “só beco” não descreve esta cópia.** Reconciliador tem caudas C7 em `app/chamados/reconciliador.py:411`, `:611`, `:1170`. O que explica cada uma das 18 DS depende de PKs/estados e histórico, ausentes no raspado [aguarda sonda]. A lei de fechamento já foi decidida por C7 e L-007 (`app/docs/CORTES.md:272`, `app/docs/LEIS.md:65`).
+
+Número de perguntas de lei identificadas neste recorte: **1**, a de identidade do acervo sem episódio (`app/chamados/services/fio.py:1275`). Não atribuir aos 77/486/848/18 nenhuma fração sem sonda.
+
+### Funções para a sonda
+
+- `fio.grupos_de_colisao(colaborador_id=None, dia_antes_de=None, fora_do_recorte=None)` devolve `(familia, chave, pks)`; chama o universo real da porta (`app/chamados/services/fio.py:1923`, `:1976`, `:1988`).
+- `fio.universo_do_grupo(pks)` carrega linhas do fato, exclui conversa/vias fora do fato e chama `fecho_do_fato` (`app/chamados/services/fio.py:1905`, `:1910`, `:1912`).
+- `fio.canonica_do_grupo(ps)` prefere texto não vazio e depois menor PK (`app/chamados/services/fio.py:1231`, `:1232`, `:1233`).
+- `fio.plano_de_retratacao(perdedoras, canonica)` retorna `retrata` como objetos; `merito_recusado`, `episodios_unidos`, `sem_episodio_intocada` como PKs; `canonica_sem_episodio` é marcador (`app/chamados/services/fio.py:1261`, `:1277`, `:1280`, `:1290`).
+- As chaves são MARCO `(colaborador_id, data_evento, motivo, instancia_marco)` e BATIDA `(batida_origem_id, motivo)`; o fecho pode dividir uma chave BATIDA por dia. Agrupar tudo apenas por colaborador-dia não reproduz os 486 grupos do juiz (`app/chamados/services/fio.py:1372`, `:1963`, `:1976`).
+- Não há função canônica implementada de elegibilidade conjunta do par identificada no recorte; o mandato está no BACKLOG (`app/docs/BACKLOG.md:1929`). Um agrupamento diagnóstico colab-dia não deve ser apresentado como juiz do par [nao verificado: existência global fora do recorte].
+- `pergunta_viva` memoiza só em memória (`app/chamados/juizes.py:863`, `:864`), mas seus caminhos de exceção logam via `registrar_engolido` (`:1397`, `:1409`), que usa `logging.error` (`app/core/observ.py:73`, `:79`). Para uma sonda que nada grava, usar envelope SQL `SET TRANSACTION READ ONLY` em todos os aliases consultados, sem chamar portas mutadoras, e desabilitar logging durante a leitura. Não usar `rollback` como licença para executar os materializadores; eles não são leitura.
+
+Amostra positiva já aberta de leitores relevantes: lista de respostas `app/chamados/models.py:1843`, C7 `:1853`, C6 `app/chamados/juizes.py:1325`, explicador `app/chamados/services/explicador.py:137`, seleção reconciliador `app/chamados/reconciliador.py:629`.
+
+Amostra positiva já aberta de escritores relevantes: fechamento `app/chamados/models.py:1932`; delegações de carimbo `app/chamados/reconciliador.py:405`, `:595`, `:1147`; decisão de silêncio `app/chamados/models.py:1924`. Escritores físicos do carimbo devem ser completados pelo outro explorer.
+
+## 11/11 09:07 · sessao 12e26c039336 · - · - · origem=Ronald (tmux)
+
+Inventário de interfaces conferido por AST em memória (`python3 -B`, stdin), complementado pela leitura dos templates; script não importa a aplicação. Execução produtiva e consumidores externos: [nao verificado].
+
+| Arquivo / função | Leitura e pergunta respondida |
+|---|---|
+| `app/api/views.py:973 api_chamados_v2` | F em `:1025`, `:1041`: representação de disputas abertas; R em `:1170`, `:1172`: texto e instante no JSON; R em `:1184`: habilita correção. |
+| `app/api/views.py:2531 api_disputa_perguntas` | R em `:2582`: subconjunto `respondidas` compatível com APK. |
+| `app/api/views.py:2554 api_disputa_perguntas._item` | `estado` em `:2555`, R em `:2566`, `:2568`, `resposta_display` em `:2567`: estado, espera por admin, resposta e instante do item JSON. |
+| `app/api/views.py:2589 api_disputa_responder` | R em `:2625`, `:2642`: reenvio e instante devolvido após resposta. |
+| `app/api/views.py:2675 api_solicitar_correcao_disputa` | F SQL em `:2683`: correção somente em continente aberto. |
+| `app/api/views_mensageria.py:554 _item_validar` | R em `:567`, `:569`, `:570`: texto, instante e dias de espera na fila IA; chamado por `api_mensageria_validar` em `:546`. |
+| `app/api/foto_recebida.py:57 resolver_disputas_de_foto` | F SQL em `:62`: disputas de foto alcançadas pelo upload. `resolucao=` em `:80` é argumento de escrita, não leitor. |
+| `app/chamados/views.py:359 detalhe_chamado_local` | F SQL em `:471`, `:495`, `:512`, `:530`: continente/perguntas do detalhe e cards. |
+| `app/chamados/views.py:882 modal_fio_colaborador._resp_modal_full` | F SQL em `:911`: disputa carregada no modal. |
+| `app/chamados/views.py:1228 responder_pergunta_disputa` | C em `:1257`: proteção contra alteração de resposta regularizada; R em `:1280`: resposta anterior/reenvio. |
+| `app/chamados/views.py:1317 solicitar_correcao_disputa` | F SQL em `:1329`: gate de continente aberto. |
+| `app/chamados/views.py:1372 reabrir_disputa_supervisao` | R SQL em `:1416`: perguntas pendentes que, após C6, determinam recobrança versus correção. |
+| `app/chamados/views_cobrar.py:145 validar_inline` | F em `:161`, `:164`; R em `:169`, `:176`: continente, respostas disponíveis para validar e perguntas ainda aguardando colaborador. |
+| `app/chamados/views_cobrar.py:275 proposta_lote` | R em `:291`: amostra JSON da proposta de validação. |
+| `app/chamados/relatorios_disputa.py:11 classificar` | R em `:21`: `AGUARDA_COLAB` versus `AGUARDA_SUPERVISAO`, depois de selecionar vivas. |
+| `app/chamados/relatorios_disputa.py:26 coletar` | F SQL em `:41`: universo do relatório de disputas abertas. Consumidores: `app/colaboradores/views.py:2997`, `app/chamados/management/commands/relatorio_pendencias_disputa.py:15`. |
+| `app/chamados/templatetags/chamados_tags.py:107 leitura_da_resposta` | `getattr(resposta_colab)` em `:128`: evita interpretar resposta vazia; consulta o juiz de classificação em `:133`, depois produz frase em `:138`. |
+
+| Template / unidade de render | Leituras |
+|---|---|
+| `app/templates/chamados/partials/modal_fio.html` | R `:185`, `:217`, `:219`, `:220`; V `:228`; A20 instante/autor `:170`, `:171`; A17 pendência `:222`, `:225`; recusa `:226`; F histórico `:379`; indiretos `disputa.aberta` `:76`, `:326`, filtro `leitura_da_resposta` `:250`. |
+| `app/templates/chamados/partials/_card_atendimento.html` | R `:94`, `:100`, `:108`, `:135`, `:137`, `:142`, `:148`, `:155`, `:176`, `:177`, `:384`, `:385`; indiretos `viva` `:77`, `estado` `:183`, `resposta_display` `:100`, `:137`, `:177`, `:385`; A17 `:183`; via/recusa `:186`. A linha `:186` mistura vias derivadas e duplicata A06: classificação precisa ser por ramo. |
+| `app/templates/chamados/partials/_pergunta_card.html` | V `:20`, `:23`, `:42`; R `:24`, `:29`, `:32`; `resposta_display` `:31`; filtro `leitura_da_resposta` `:43`. |
+| `app/templates/chamados/partials/_lote_preview.html:24` | R: resposta na prévia de validação em lote. |
+| `app/templates/chamados/fio_colaborador.html:164` e `:169` | `disputa.aberta`: cor do continente. |
+
+Os vínculos entre render e template estão em `app/templates/chamados/detalhe_local.html:310`, `app/chamados/views.py:404`, `app/templates/chamados/meu_atendimento.html:127`, `:144`, `app/chamados/views.py:927` e `app/chamados/views_cobrar.py:362`.
+
+Nenhum consumidor JS local dos nomes de campos legados foi encontrado na busca estática; exaustividade dinâmica e APK: [nao verificado]. O aparente `p.estado` em `app/templates/core/_copiloto.html:407` pertence às pautas carregadas por `/pautas/aba/` em `:359`, não a `PerguntaDisputa`. Inputs `name="recusa_motivo"` em `app/templates/chamados/partials/modal_fio.html:61`, `:295` e `_pergunta_card.html:114` são nomes de formulário, não leituras da projeção.
+
+## 11/11 09:07 · sessao 896f3b04993a · - · - · origem=Ronald (tmux)
+
+Dependências verificadas por AST de imports, sem importar a aplicação:
+
+| Dependência | Evidência |
+|---|---|
+| `models ↔ juizes` | `app/chamados/models.py:153`; `app/chamados/juizes.py:11` |
+| `models ↔ fio` | `app/chamados/models.py:433`; `app/chamados/services/fio.py:157` |
+| `models ↔ disputa_emissao` | `app/chamados/models.py:2219`; `app/chamados/services/disputa_emissao.py:16` |
+| `juizes ↔ materializacao` | `app/chamados/juizes.py:371`; `app/chamados/services/materializacao.py:155` |
+| `fio ↔ vigia_fio` | `app/chamados/services/fio.py:774`; `app/chamados/services/vigia_fio.py:558` |
+| `models ↔ reconciliador` | `app/chamados/models.py:977`; `app/chamados/reconciliador.py:241` |
+| `declaracao_texto → validacao → disputa_emissao → declaracao_texto` | `app/chamados/services/declaracao_texto.py:648`; `app/chamados/services/validacao.py:559`; `app/chamados/services/disputa_emissao.py:859` |
+| `tarefa_do_dia → juizes/models/fio/painel/lavra` | `app/chamados/services/tarefa_do_dia.py:123`, `:124`, `:125`, `:364`, `:401` |
+| APIs/dashboard/cobrança → consulta central | `app/api/views.py:324`, `:1004`, `:2542`; `app/api/views_core.py:313`; `app/core/views.py:252`; `app/chamados/services/cobranca.py:47`; `app/chamados/services/aviso_pendencia.py:8` |
+
+A amostra de 18 arquivos forma uma componente de dependências cíclicas com 17 arquivos: `models`, `juizes`, `reconciliador`, `fio`, `materializacao`, `disputa_emissao`, `declaracao_texto`, `validacao`, `pergunta_no_app`, `veredito_lavrado`, `raiox`, `explicador`, `relavra_via`, `vigia_fio`, `fabrica_da_celula`, `painel`, `verbos`. Isso impede inventar uma ordem topológica de pousos independentes apenas pelos imports; os ciclos acima são as testemunhas. Os imports locais permitem carga tardia, mas continuam sendo dependências de execução. (`app/chamados/models.py:433`; `app/chamados/services/fio.py:304`; `app/chamados/services/ex­plicador.py:69`; `app/chamados/services/raiox.py:186`; `app/chamados/services/verbos.py:9`; `app/chamados/services/painel.py:194`; `app/chamados/services/fabrica_da_celula.py:138`; `app/chamados/services/relavra_via.py:209`)
+
+Ordem consumível pelo brief:
+
+1. Gate da E4b medida; só depois migrar fonte. A ordem escrita é E4a → E4b → E4c → E4d, com exceções explícitas. (`app/docs/PROMPTS.md:2034`; `:2054`)
+2. Núcleo de leitores/properties/querysets e a alimentação de `tarefa_do_dia`, tratado como lote coordenado quando tocar arquivos compartilhados ou ciclos acima. A consulta central ainda depende de `q_vivas`, C6 e R/F. (`app/chamados/services/pergunta_no_app.py:47`, `:50`, `:58`, `:71`)
+3. Cascas/API/dashboard/cobrança e respectivos templates/JS, consumindo as interfaces estabilizadas; todas as mudanças em `app/api/views.py` pertencem ao mesmo lote de arquivo. (`app/api/views.py:324`, `:1004`, `:2542`; `app/core/views.py:252`; `app/chamados/services/cobranca.py:47`)
+4. Auditorias, vigias e instrumentos que hoje observam projeções; separar conservação histórica da pergunta corrente, preservando diagnóstico da migração. (`app/chamados/management/commands/diff_e3_sombra.py:22`; `app/chamados/services/vigia_fio.py:803`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:44`)
+5. E4d só após o selo E4c, preservando as exceções; parar escrita não autoriza retirar fisicamente o acervo exportado. (`app/docs/PROMPTS.md:2034`; `:2026`)
+
+`backfill_fio_morto_e4b` e `foto_e4b` não foram encontrados pelos nomes nesta cópia; implementação, estrutura da foto, lista de arquivos atingidos e contrato dessas interfaces: **[nao verificado]**. O contrato operacional verificável limita o passivo a competências não exportadas e manda exportadas para lista do `!`. (`app/docs/PROMPTS.md:2026`)
+
+Não há repositório Git disponível nesta raiz: `git log` retorna “not a git repository”. Portanto identidade Git de `2e9d…`, pai da obra E3 e lista exata de arquivos do diff solicitado: **[nao verificado]**. O relato local menciona `e3fix9`, uma base e outra foto, mas isso não substitui o diff deste hash. (`app/docs/relato_fio_e0_v4_e3_x1.txt:5`; `:7`)
+
+Para o delta pós-pouso, a lista **declarada no anexo**, cuja inclusão efetiva no diff continua **[nao verificado]**, é: `app/api/views.py`, `app/chamados/services/aviso_pendencia.py`, `app/chamados/services/pergunta_no_app.py`, `app/chamados/services/tarefa_do_dia.py`, `app/chamados/services/cobranca.py`, `app/chamados/juizes.py`. As interfaces atuais existem em `app/api/views.py:1004`, `app/chamados/services/aviso_pendencia.py:8`, `app/chamados/services/pergunta_no_app.py:61`, `app/chamados/services/tarefa_do_dia.py:562`, `app/chamados/services/cobranca.py:47`, `app/chamados/juizes.py:1516`.
+
+## 11/11 09:07 · sessao 8ce0aaba136e · BO-ADMIN-1111 · sonda · origem=Code
+
+**As duas perguntas estão respondidas, sem validação e sem materialização. Existem ações de tela que aceitam esse estado; um caminho que conclua ambas com as mesmas horas e batidas permanece [não verificado].** O explicador devolveu `aguarda_validacao`, dono `admin`, para ambas. (`app/chamados/services/explicador.py:77`; sonda: `validada_em = None`, `materializada_em = None` e retornos de `explicar_pergunta`.)
+
+**1. Estado gravado — tabela solicitada em (a)**
+
+Cada valor abaixo reproduz o respectivo bloco `PerguntaDisputa pk=51522/51523` da sonda; a última coluna identifica o campo no código.
+
+| Campo | #51522 | #51523 | Código |
+|---|---|---|---|
+| Colaborador / célula | col960 / 128547 | col960 / 128547 | `app/chamados/models.py:2414`, `:2433` |
+| Motivo / instância | `intervalo_saida` / `int_ida` | `intervalo_volta` / `int_volta` | `app/chamados/models.py:2421`, `:2434` |
+| `data_evento` | 21/10/2026 | 21/10/2026 | `app/chamados/models.py:2423` |
+| `resposta_colab` | `01:00` | `02:00` | `app/chamados/models.py:2447` |
+| `respondida_em` | 08/11/2026 11:04:01 | 08/11/2026 11:04:11 | `app/chamados/models.py:2448` |
+| `validada_em` | `None` | `None` | `app/chamados/models.py:2449` |
+| `materializada_em` | `None` | `None` | `app/chamados/models.py:3393` |
+| Via — nome real: `via_resolucao` | `''` | `''` | `app/chamados/models.py:2561` |
+| `pendencia_admin` | `''` | `''` | `app/chamados/models.py:2556` |
+| `veredito_lavrado` | `nao` | `nao` | `app/chamados/models.py:2585` |
+| `julgado_em` | 11/11/2026 08:15:10 | 11/11/2026 08:15:10 | `app/chamados/models.py:2590` |
+| Disputa / destino | 5644 / 35664 | 5644 / 35664 | `app/chamados/models.py:2416`, `:3385` |
+
+O campo equivalente pedido é realmente **`recusa_motivo`**. A sonda trouxe os seguintes textos; o formato corresponde ao erro de paridade em `app/chamados/services/materializacao.py:878`, persistido pelo `finally` em `:1296` e por `_carimbar_recusa` em `:1101`.
+
+> #51522: `Pergunta #51522: batida vizinha #133794 (S 22/10 06:30) tem o mesmo tipo do plantio (S) - par quebrado; nao materializado (guarda de paridade).`
+
+> #51523: `Pergunta #51523: batida vizinha #133756 (E 21/10 18:32) tem o mesmo tipo do plantio (E) - par quebrado; nao materializado (guarda de paridade).`
+
+A disputa **5644 está aberta**, pois a sonda mostra `fechada_em = None`. Seu chamado-pai **25270** tem `status_local = 'aberto'`; o chamado-destino comum **35664** tem `status_local = 'em_analise'`, `resolvido_em = None`. (`app/chamados/models.py:1749`, `:1757`, `:52`, `:3385`; blocos correspondentes da sonda.)
+
+O `veredito_lavrado='nao'` significa **“NAO materializada de fato”** no campo da pergunta; não é prova de decisão administrativa sobre o dia. (`app/chamados/models.py:2582`; sonda: `veredito_lavrado = 'nao'`.)
+
+**2. Ramo do plantio**
+
+Para ambas, a classificação sustentada pelo estado é **recusa de paridade sem carimbo terminal**, no caminho de `_materializar_resposta_hora`. O texto gravado identifica a guarda em `app/chamados/services/materializacao.py:875` e `:878`; a sonda retorna `fato_do_marco_no_espelho(p) -> False`, que, aplicado ao código desta cópia, entra em `:901`, chama `_carimbar_recusa` em `:913` e retorna em `:916`.
+
+**Não estão carimbadas com `VIA_PARIDADE_RECUSADA`:** a sonda mostra `via_resolucao=''` e `materializada_em=None`; o carimbo dessa via ocorre somente depois daquele retorno, em `app/chamados/services/materializacao.py:924`.
+
+O motivo completo com a vizinha fica gravado porque o `finally` chama novamente `_carimbar_recusa` com o último erro. Essa função só carimba identidade quando a tradução é `COLISAO`; para `PARIDADE`, atualiza o motivo sem preencher materialização ou via. (`app/chamados/services/materializacao.py:1296`, `:1091`, `:1093`, `:1101`; classificação `PARIDADE` em `app/chamados/catalogo/recusa.py:26`.)
+
+A validação nula é compatível com o fluxo que desfaz a validação quando uma resposta de hora não foi materializada e tem recusa escrita, preservando a resposta do colab. **A chamada histórica, seu autor e seu instante não foram fornecidos: [não verificado].** (`app/chamados/services/validacao.py:190`, `:199`, `:200`; sonda: resposta preservada, validação nula, recusa preenchida.)
+
+**3. Vizinhas e resultado do juiz**
+
+| Pergunta | Vizinha indicada na recusa | Tipo | Hora local fornecida | Origem | `fato_do_marco_no_espelho` |
+|---|---:|---|---|---|---|
+| #51522 | #133794 | `S` | 22/10/2026 06:30:52 | `app` | `False` |
+| #51523 | #133756 | `E` | 21/10/2026 18:32:07 | `app` | `False` |
+
+Sustentação: blocos `Batida pk=133794/133756`, respectivos `recusa_motivo` e chamadas literais do juiz na sonda; seleção da vizinha em `app/chamados/services/materializacao.py:85`, `:94`, `:100`; correspondência dos motivos aos marcos em `app/chamados/juizes.py:887` e `:888`.
+
+O juiz real lê DNA e lâmpadas da célula e retorna `all(_vistas)`. O `False` fornecido não autoriza reconstruir a ATA completa nem atribuir erro às vizinhas. (`app/chamados/juizes.py:910`, `:927`, `:933`; ATA completa e correção factual das batidas: [não verificado].)
+
+**4. ADMIN: texto, badge, botões e portas**
+
+A sonda devolveu literalmente:
+
+| Pergunta | Estado / dono | Motivo | Ação |
+|---|---|---|---|
+| #51522 | `aguarda_validacao` / `admin` | `colaborador respondeu 01:00` | `Validar ou recusar a resposta "01:00".` |
+| #51523 | `aguarda_validacao` / `admin` | `colaborador respondeu 02:00` | `Validar ou recusar a resposta "02:00".` |
+
+Esse é o degrau `RESPONDIDA`, que retorna antes dos ramos de pendência e do juiz de materialização. (`app/chamados/models.py:3041`, `:3048`; `app/chamados/services/explicador.py:77`, `:85`, `:93`.)
+
+No detalhe, o badge previsto é **“⚠ aguardando validacao”**, seguido da resposta e do horário de envio. No modal, os campos dados não entram nos badges “Pendencia do admin” ou “Validada”; oferecem o ramo de ações sobre a resposta. (`app/templates/chamados/partials/_pergunta_card.html:24`, `:29`; `app/templates/chamados/partials/modal_fio.html:217`, `:222`, `:228`, `:239`.)
+
+A sonda também devolveu `pode_fechar=False` e **“Nao fecha: 30 aguardando sua validacao.”** Isso descreve a disputa inteira; os detalhes das demais pendências estão truncados, portanto [não verificado]. (`app/chamados/services/explicador.py:148`, `:162`; trecho fornecido de `por_que_nao_fecha`.)
+
+As ações das duas devem usar o **chamado-destino 35664**, conforme a precedência de `chamado_que_lista`. A porta confere essa mesma âncora. (`app/chamados/services/fio.py:117`, `:598`, `:635`; sonda: `chamado_destino = 35664`.)
+
+| Ação de tela | Botão e porta | Aplicação ao estado fornecido |
+|---|---|---|
+| **Validar** | Botão: `app/templates/chamados/partials/modal_fio.html:279`. View do modal: `app/chamados/views.py:869`; encaminhamento: `app/chamados/services/fio.py:585`. | **ACEITA tentar:** respondidas e não validadas passam nas guardas de `app/chamados/services/validacao.py:393` e `:396`. Executa o materializador em `:463`; se a guarda de paridade continuar satisfeita, recusa a gravação e devolve a validação em `:464`. |
+| **Rejeitar resposta** | Botão e motivo: `app/templates/chamados/partials/modal_fio.html:290`, `:295`, `:298`. Encaminhamento: `app/chamados/services/fio.py:625`, `:637`. | **ACEITA com motivo:** ambas têm resposta e validação nula. Recusa motivo vazio, pergunta validada ou já pendente em `app/chamados/services/validacao.py:562`, `:573`, `:576`. Reabre para correção em `:593`. **Move para o colab; não materializa o marco.** |
+| **Corrigir a hora pela supervisão** | Campos e botão: `app/templates/chamados/partials/modal_fio.html:300`, `:306`, `:309`, `:312`. Encaminhamento: `app/chamados/services/fio.py:639`. | **ACEITA o estado**, com HH:MM e motivo: ambas são de hora, não validadas e de disputa aberta. As recusas estão em `app/chamados/services/acoes_disputa.py:336`, `:338`, `:345`, `:347`, `:349`. Depois grava a resposta e usa a mesma validação/materialização em `:371`, `:379`; conclusão [não verificado]. |
+| **Inverter tipo da vizinha** | Clique no horário → “Inverter tipo”: `app/templates/colaboradores/partials/_calendario_grade.html:121`. View: `app/ponto/views.py:3260`. | **ACEITA os campos conhecidos da batida:** ambas são E/S e não retratadas. **RECUSA** sem permissão ou com competência fechada: `app/ponto/views.py:3263`; `app/ponto/services/flip_batida.py:15`, `:21`, `:26`. Permissão, competência e necessidade factual da inversão: [não verificado]. |
+| **Retratar a vizinha** | Clique no horário → motivo → “Não foi trabalho (retratar)”: `app/templates/colaboradores/partials/_calendario_grade.html:121`. View: `app/ponto/views.py:3274`. | **ACEITA o estado conhecido**, exigindo usuário autorizado e motivo cadastrado ativo; recusas em `app/ponto/services/retratar_humano.py:142`, `:145`, `:168`, `:170`. Motivo disponível, permissão e fato “não foi trabalho”: [não verificado]. |
+| **Resolver dia** | “Resolver dia” → “Trabalhou no horário da escala”, falta ou justificado: `app/templates/ponto/partials/_veredito_dia.html:6`, `:21`, `:22`, `:23`. View: `app/ponto/views.py:3312`. | A **view não recusa simplesmente por pergunta respondida**, mas a **tela não oferece enquanto houver pergunta viva com resposta**: `app/colaboradores/services/calendario.py:472`, `:476`, `:738`; template: `app/templates/colaboradores/partials/_calendario_grade.html:125`. Disponibilidade efetiva: [não verificado]. O serviço ainda pode recusar dia sem trabalho, sem marcos ou sem preenchimento coerente: `app/ponto/services/veredito_celula.py:242`, `:248`, `:308`. |
+| **Registrar por regularização externa** | “Adicionar batida nova”, intervalo e “Enviar ao colaborador para confirmacao”: `app/templates/chamados/regularizacao_editar.html:49`, `:57`, `:67`. Views: `app/chamados/views_regularizacao.py:42`, `:74`. | **ACEITA preparar proposta**, mas **RECUSA materializar com disputa aberta** em `app/chamados/services/regularizacao_ext.py:58`, `:61`. A sonda prova a disputa 5644 aberta; portanto não é saída de gravação enquanto esse estado permanecer. |
+
+**Retratar não prova eliminar a recusa de paridade:** a busca da vizinha usa `Batida.objects` sem filtro por `retratada_em` ou `aprovada`. (`app/chamados/services/materializacao.py:94`, `:100`.)
+
+**“Corrigir” também não garante mudar o ponto do plantio apenas trocando o texto:** para intervalo, havendo marco no chamado-destino, o materializador usa a hora desse marco. A sonda mostra `marcos_faltantes` com `01:00/S` e `02:00/E`. (`app/chamados/services/materializacao.py:407`, `:409`, `:411`.)
+
+Há ainda **“Aplicar … e validar”** para declaração em texto, mas exige proposta existente; conserva a resposta já preenchida e volta à mesma validação. Existência de proposta aplicável no caso: [não verificado]. (`app/templates/chamados/partials/modal_fio.html:143`; `app/chamados/services/declaracao_texto.py:649`, `:687`, `:696`.)
+
+**5. Recado do colab**
+
+**O texto efetivamente visto numa tentativa não veio na sonda: [não verificado].** O código permite distinguir:
+
+- **No questionário**, quando a pergunta está visível/viva, os campos fornecidos produzem “Resposta enviada” e **“Aguardando a supervisao conferir. Se precisar corrigir, e so responder de novo abaixo.”** (`app/templates/chamados/partials/_card_atendimento.html:77`, `:94`, `:99`, `:101`; sonda: `respondida_em` preenchida nas duas.)
+- **Ao reenviar HH:MM sem tocar no relógio**, a view devolve **“Escolha a hora no relogio antes de enviar.”** Isso depende de `resposta_tocou != '1'`, dado ausente: [não verificado]. (`app/chamados/views.py:1274`, `:1278`.)
+- **Na porta “Enviar hora” do chamado**, se ela selecionar estas mesmas perguntas e receber novamente `01:00`/`02:00`, a condição resposta preenchida + mesma hora devolve **“Horario ja informado; aguardando a supervisao.”** A seleção e a tentativa concretas são [não verificado]. (`app/chamados/services/declaracao_texto.py:363`, `:417`, `:418`; retorno à tela em `app/chamados/views.py:1100`.)
+- O recado **“resposta anterior ja validada… supervisao precisa refazer esse horario” não é sustentado pelo estado destas duas**, pois exige `validada_em != None`, enquanto ambas têm `None`. (`app/chamados/services/declaracao_texto.py:227`, `:378`, `:412`.)
+
+A própria visibilidade/vitalidade não fica provada apenas por `aguarda_validacao`: o estado pode retornar `RESPONDIDA` no fallback, e o juiz consulta tranca e decisão da célula, não raspadas integralmente. (`app/chamados/models.py:3048`; `app/chamados/juizes.py:1329`, `:1338`; resultado atual de `pergunta_viva`: [não verificado].)
+
+**(b) EXISTE saída pela tela?**
+
+**SIM, para movimentar a espera atual:** a porta **Rejeitar resposta** aceita o estado das duas com motivo e as devolve para correção; **Corrigir** aceita uma hora fundamentada e tenta gravá-la. **Concluir as duas mantendo as mesmas horas e batidas: [não verificado].** (`app/chamados/services/validacao.py:562`, `:573`, `:576`, `:593`; `app/chamados/services/acoes_disputa.py:334`, `:371`, `:379`.)
+
+Passo a passo comprovado pelo código, para admin autorizado e com motivo factual para pedir nova confirmação:
+
+1. Abrir o fio de **col960**, chamado **35664**, onde as perguntas se ancoram. (`app/chamados/views.py:869`; `app/chamados/services/fio.py:117`; sonda: destino 35664.)
+2. Na **#51522**, preencher o motivo e clicar **“Rejeitar resposta”**; repetir na **#51523**, se ambas precisarem de nova confirmação. (`app/templates/chamados/partials/modal_fio.html:295`, `:298`; aceitação em `app/chamados/services/validacao.py:573`, `:576`.)
+3. O efeito é devolver as perguntas ao colab para correção, não concluir o dia. (`app/chamados/services/validacao.py:593`, `:604`.)
+
+Não há prova suficiente para declarar **“TRAVA SEM SAÍDA PROVADA”**, nem para prometer conclusão por inverter/retratar vizinhas ou por “Resolver dia”; faltam os fatos e condições identificados acima: [não verificado].
+
+**(c) Texto ao admin**
+
+> Abra o atendimento de col960, chamado #35664, e confira as respostas das perguntas #51522 e #51523. Se precisar de nova confirmação, escreva o motivo em cada pergunta e clique em “Rejeitar resposta”; ela volta ao colaborador para correção. Se já tiver confirmado outra hora, preencha a hora e o motivo em “Corrigir” e confira o resultado apresentado após o envio. (`app/chamados/services/fio.py:117`; `app/templates/chamados/partials/modal_fio.html:295`, `:298`, `:306`, `:309`, `:312`; `app/chamados/services/acoes_disputa.py:381`.)
+
+## 11/11 09:06 · sessao e6e2d0dd97e2 · - · - · origem=Ronald (tmux)
+
+Mapa de autoridades confirmado, com endereços atuais da cópia:
+
+| Pergunta do leitor | Autoridade existente | Registro / consulta |
+|---|---|---|
+| Quais ações ainda são exigíveis, dono e porta por instância? | `tarefa_do_dia`, `app/chamados/services/tarefa_do_dia.py:562`; sequência em `_pela_decisao:116` | `app/core/juizes.py:291`; `app/docs/JUIZES.md:78` |
+| A pergunta está viva? | `pergunta_viva`, `app/chamados/juizes.py:862`; corpo `_pergunta_viva_calc:1383` | `app/core/juizes.py:278`; `app/core/juizes.py:729` |
+| Alguma pergunta da coleção está viva? | `fio_vivo`, `app/chamados/juizes.py:1488` | `app/core/juizes.py:287` |
+| A disputa pode fechar? | `DisputaSupervisao.pode_fechar`, `app/chamados/models.py:1848` | `app/core/juizes.py:279`; `app/docs/JUIZES.md:62` |
+| O efeito da pergunta existe? | `_pergunta_materializada_de_fato`, `app/chamados/juizes.py:662`, cuja lâmpada vigente é lida por C19 | `app/chamados/services/tarefa_do_dia.py:17`; `app/docs/JUIZES.md:81` |
+| O dia está trancado? | `dia_da_pergunta_trancado:974` / lote `dias_trancados:1004`, em `app/chamados/juizes.py` | `app/core/juizes.py:292`; `app/docs/JUIZES.md:86` |
+| Como validar a resposta? | Porta `validar_pergunta`, `app/chamados/services/validacao.py:373` | `app/docs/JUIZES.md:38`; não consta como juiz de leitura separado no bloco chamado de `app/core/juizes.py:272` |
+| Qual continente apresenta o fio? | `_disputa_do_chamado`, `app/chamados/services/fio.py:120` | `app/docs/JUIZES.md:40` |
+| Por onde se chega ao dia? | C17 `porta_alcancavel_do_dia`, `app/chamados/juizes.py:1606`; destino contratado C19, condicionado ao DIFF | `app/core/juizes.py:289`; `app/docs/PROMPTS.md:2007` |
+
+**Dependências que impedem considerar os juízes já independentes das projeções:**
+
+- C6 consome `projecao_temporal_da_pergunta`, que lê R/V/C/via: `app/chamados/juizes.py:1369`, `:1370`, `:1384`. Sua memo também usa projeções em `app/chamados/juizes.py:821`.
+- O juiz do efeito ainda lê `via_resolucao/materializada_em` no ramo sem testemunha e `materializada_em` no ramo escolha: `app/chamados/juizes.py:679`, `:707`.
+- C7 ainda depende de R/V/C por `respostas_sem_veredito`: `app/chamados/models.py:1842`, `:1853`.
+- C19 ainda lê via para identidade (exceção A06): `app/chamados/services/tarefa_do_dia.py:230`; usa a conservação legada `linhas_da_projecao_sem_linha` na carga: `:398`; recebe C6 para exposição administrativa: `:491`. Não basta apontar o consumidor para C19 e anunciar selo 2. (`app/chamados/services/tarefa_do_dia.py:245`; `app/chamados/models.py:3924`)
+
+**Correção importante no leitor do explicador:** `por_que_nao_fecha` decide `pode = not fio_vivo(ps)` em `app/chamados/services/explicador.py:137`; C7 registrado exige também `not respostas_sem_veredito()` em `app/chamados/models.py:1853`. Seu destino é C7, não apenas C15. Divergência efetiva de produção: [nao verificado].
+
+**Exceções mantidas na projeção pelo aval**, também registrado em `app/docs/PROMPTS.md:2034`:
+
+- A03 reabertura do continente: `app/chamados/models.py:2126`.
+- A05 ramo assinatura: `app/chamados/models.py:3103`; não estender a exceção a todo consumidor de C.
+- A06 identidade: `app/chamados/models.py:3168`; consumidor explícito C19 em `app/chamados/services/tarefa_do_dia.py:230`.
+- A17 pendência técnica: `app/chamados/services/materializacao.py:855`; explicação precede efeito em `app/chamados/services/explicador.py:85`.
+- A18 recusa técnica: `app/chamados/services/materializacao.py:1088`, `:1097`; não converter automaticamente a string em DP `RECUSA`.
+- A20 conferência: `app/chamados/services/validacao.py:662`, `:665`; gate de plantio em `app/chamados/services/materializacao.py:1198`. A pergunta “conferência vale após mudar o par?” está expressamente diferida pelo anexo; resposta material: [nao verificado].
+
+**DECISÕES candidatas para os leitores sem juiz específico registrado — nenhuma autoriza juiz novo:**
+
+1. **Atividade/aceite:** decidir se o indicador conserva “uma pergunta atualmente validada/respondida” ou passa a “todos os atos do período”. Hoje `placar_equipe` conta perguntas com V corrente (`app/chamados/services/verbos.py:239`), `montar_contexto_painel._jan_val` conta V corrente (`app/chamados/services/painel.py:260`, `:268`), e `placar_aceite` declara respostas posteriores à cobrança (`app/chamados/services/verbos.py:253`). A sequência conserva atos sucessivos (`app/chamados/models.py:3840`), portanto contar DP indiscriminadamente pode alterar o significado. Juiz específico para esse indicador: [nao verificado]; o bloco chamado registrado não o contém (`app/core/juizes.py:272`).
+2. **Rótulo de estado/resultado:** `PerguntaDisputa.estado` é fase por projeção, enquanto C19 é exigibilidade; não há equivalência global demonstrada. Consumidor concreto: `app/chamados/services/explicador.py:72`. Juiz específico para conservar exatamente os rótulos de fase após a retirada: [nao verificado]. A tarefa já tem razões distintas e desconhecimento (`app/chamados/services/tarefa_do_dia.py:128`, `:141`), portanto a solução pode ser apenas apresentar essas respostas, mas essa escolha precisa estar explícita no brief.
+3. **Cache/ETag:** `marcador_do_placar` agrega `Max(R,C,V)` (`app/chamados/services/painel.py:66`); substituir por máximo de DP sozinho não cobre mudanças dos efeitos. Não é pergunta de lei por si: é dependência técnica a resolver com fontes canônicas já existentes, mantendo a invalidação dos consumidores (`app/chamados/services/painel.py:58`, `:80`).
+
+Não recomendo contar automaticamente essas três DECISÕES como três perguntas de lei: a terceira é técnica; as duas primeiras podem ser resolvidas por manter os significados já documentados, mas falta verificar todos os cortes aplicáveis. Quantidade final de perguntas sem lei escrita: [nao verificado].
+
+## 11/11 09:05 · sessao 336f1ebe2ad2 · - · - · origem=Ronald (tmux)
+
+Evidências do item 4, somente pelo código lido:
+
+| Ação | Template/botão | Porta e aplicação ao estado fornecido |
+|---|---|---|
+| Validar | `app/templates/chamados/partials/modal_fio.html:279`–284; detalhe em `_pergunta_card.html:92`–97 | **Aceita tentar**: resposta presente e validação nula passam por `app/chamados/services/validacao.py:393`–407. Executa `_materializar_uma` em `:461`–466; recusa de materialização devolve a validação, portanto **aceitar o clique não prova gravar**. |
+| Rejeitar resposta | `modal_fio.html:290`–298 | **Aceita com motivo**: `validacao.py:561`–579 recusa motivo vazio, validação existente ou pergunta já pendente. Nenhuma dessas recusas corresponde às duas, desde que informado motivo. Reabre para correção em `:584`–594. **Move para o colaborador; não conclui o marco.** |
+| Corrigir | `modal_fio.html:300`–312 | **Aceita hora e motivo**: `app/chamados/services/acoes_disputa.py:334`–351 exige formato HH:MM, motivo, pergunta não validada, disputa aberta e tipo `hora`; ambas correspondem aos campos fornecidos. Registra resposta em `:370`–374 e chama validação/materialização em `:379`–383. **Conclusão depende do resultado dessa porta.** |
+| Regularizar disputa e fechar | `modal_fio.html:353`–359, condicionado a `todas_respondidas` em `:334` | **Não é escape das duas não validadas**: `acoes_disputa.py:139` chama materialização das validadas. A porta final recusa resposta sem veredito em `app/chamados/models.py:1886`–1894. A sonda diz `pode_fechar=False`, “30 aguardando sua validacao”. Exibição desse botão global, dependendo das demais perguntas: **[não verificado]**. |
+| Resolver dia | `app/templates/ponto/partials/_veredito_dia.html:6`, `:17`, `:21` | **Não oferecido enquanto houver resposta viva**: `app/colaboradores/services/calendario.py:472`–477 marca o dia com pergunta viva e resposta; `:738`–739 torna falso `pode_ultimo_recurso`. Template só inclui o botão se `resolver_dia_oferecido` em `app/templates/colaboradores/partials/_calendario_grade.html:125`–126. A view existe em `app/ponto/views.py:3312`, mas existência da view não constitui clique disponível. |
+| Registrar Batida pelo Django admin | Cadastro em `app/ponto/admin.py:12` | **Recusa inclusão/alteração/exclusão**: herda `SoLeitura`; `app/core/admin.py:59`–66 retorna `False` para as três permissões. |
+| Regularização externa | `app/chamados/views_regularizacao.py:42`, `:74`, `:154` | Pode criar proposta de lote com motivo, adicionar horas e enviar ao colaborador; não há gate pelo estado destas perguntas nessas views. **Não prova conclusão**: exige confirmação/materialização e a sonda não traz lote nem seu resultado **[não verificado]**. |
+
+Os três verbos do modal operam sob o **chamado-destino 35664**: `app/chamados/services/fio.py:116`–117 usa `chamado_destino_id` antes do chamado-container. As guardas da porta do modal conferem essa âncora em `:595`–599 para validar e `:632`–639 para rejeitar/corrigir.
+
+O detalhe exibe **“⚠ aguardando validacao”** quando respondida e não validada (`app/templates/chamados/partials/_pergunta_card.html:23`–25), seguido da resposta e horário (`:29`–32). O explicador retorna `aguarda_validacao`, dono admin e “Validar ou recusar…” no ramo `app/chamados/services/explicador.py:77`–81, exatamente como a sonda das duas. No modal, `pendencia_admin=''` não entra no badge “Pendencia do admin” (`modal_fio.html:222`–227); validação nula também não entra em “Validada” (`:228`–229).
+
+**Declaração em texto não oferece fuga comprovada:** `app/chamados/services/declaracao_texto.py:668` recusa somente pergunta já validada; em `:687`–696 conserva a resposta já existente e a valida pela mesma porta. Existência de followup/proposta aplicável não veio na sonda **[não verificado]**.
+
+Conclusão delimitada: **há cliques que movem o atendimento**, especialmente Rejeitar; **não ficou provado, com os dados fornecidos, um passo a passo que conclua as duas mantendo as mesmas horas e batidas**. Alterar horas, inverter/retratar batidas ou lançar ausência requer fato que a sonda não estabelece **[não verificado]**.
+
+## 11/11 09:04 · sessao d80e2ea10920 · - · - · origem=Ronald (tmux)
+
+**Escada do explicador.** Para ambas, `validada_em=None`, `materializada_em=None` e `respondida_em` preenchida levam a `RESPONDIDA`; isso independe de `jul­gado_em`/`veredito_lavrado` nesta propriedade (`app/chamados/models.py:3041–3048`). O explicador retorna antes das verificações de `pendencia_admin` e materialização: `aguarda_validacao`, dono `admin`, motivo `colaborador respondeu 01:00` / `02:00` e ação `Validar ou recusar a resposta "01:00".` / `"02:00".` (`app/chamados/services/explicador.py:77–93`). São os retornos literais fornecidos pela sonda.
+
+**Tela ADMIN, por template.**
+
+- No detalhe, badge `⚠ aguardando validacao`, resposta e data (`app/templates/chamados/partials/_pergunta_card.html:23–32`); com `pode_agir`, oferece validar e rejeitar com motivo (`:42`, `:92–118`). O rótulo exato da validação depende de `leitura_da_resposta`: `Validar resposta`, rótulo de `fr`, ou `Validar assim mesmo` (`:43–98`). A classificação concreta não veio na sonda: **[não verificado]**.
+- No modal, mostra `Resposta: 01:00/02:00` e envio; não entra nos ramos de pendência ou validada porque os respectivos campos estão vazios (`app/templates/chamados/partials/modal_fio.html:217–239`). Oferece validar (`:263–285`), rejeitar com motivo e corrigir hora com motivo, enquanto a disputa estiver aberta (`:289–315`). Dado: disputa 5644 `fechada_em=None`.
+- O modal também consulta `estado_aplicacao_pergunta`; pode mostrar aviso de paridade (`app/chamados/services/fio.py:334–338`; `app/templates/chamados/partials/modal_fio.html:240–247`). O cálculo consulta novamente vizinhas e propositor (`app/chamados/services/materializacao.py:444–456`); seu retorno atual não foi raspado, portanto o aviso efetivamente presente é **[não verificado]**, apesar da recusa gravada.
+- Em “detalhes do caso · trilha, sistema e celula”, o resumo literal da sonda será `Nao fecha: 30 aguardando sua validacao.` e as duas aparecem com `Sua vez:` e sua ação (`app/templates/chamados/partials/modal_fio.html:430–445`; `app/chamados/services/explicador.py:148–162`). Não atribuir as outras 28 pendências a dados não mostrados.
+
+**Recado do COLAB: distinguir duas portas.**
+
+1. **Questionário da pergunta.** O formulário está em `app/templates/chamados/partials/_card_atendimento.html:77–78`. Como já respondeu, mostra “Resposta enviada”, resposta/data e “Aguardando a supervisao conferir. Se precisar corrigir, e so responder de novo abaixo.” (`:94–102`); botão `Reenviar resposta` (`:154–155`). A view é `app/chamados/views.py:1228`, URL em `app/chamados/urls.py:17`.
+   - Primeiro exige `pergunta_viva` (`views.py:1239–1246`).
+   - A recusa “Esta resposta ja foi regularizada e virou batida oficial...” exige `materializada_em is not None` e pergunta morta (`:1257–1263`), condição que **não se aplica** aos carimbos dados.
+   - HH:MM sem `resposta_tocou=1` devolve “Escolha a hora no relogio antes de enviar.” (`:1274–1279`).
+   - Depois chama o core e devolve erro ou “Resposta registrada.” (`:1283–1287`). O core não veta por recusa de paridade, `recusa_motivo` ou resposta anterior; valida formato e grava nova resposta (`app/chamados/services/disputa_emissao.py:1432–1449`, `:1467–1508`).
+
+2. **“Enviar hora” do chamado.** View `responder_chamado_colaborador`, `app/chamados/views.py:1041`; URL `app/chamados/urls.py:42`; form `app/templates/chamados/partials/_card_atendimento.html:219`, botão `:387`, área de mensagem `:389`.
+   - O form só aparece para chamado aberto/em análise sem GLPI, de furo, **sem pergunta viva**, e sem regularização pela supervisão (`:203–219`). A presença desse formulário para estas perguntas é **[não verificado]**.
+   - A view exige vínculo/próprio chamado (`views.py:1043–1046`). A checagem tardia não intercepta `em_analise`, pois é estado vivo (`app/chamados/services/resposta_tardia.py:35–36`; `app/chamados/catalogo/motor.py:24`).
+   - `batida_ausente` está no conjunto `_FURO` (`app/chamados/catalogo/modulos.py:235–236`), passando ao ramo de declaração (`views.py:1060`).
+   - Sem toque, recusa em `views.py:1085–1088`. Com toque, chama `declarar_hora_colab` (`:1090–1093`).
+   - A declaração exige módulo, HH:MM, motivo válido quando fornecido, dia, ata e casamento com marco faltante (`app/chamados/services/declaracao_texto.py:320–344`). Escolhe a pergunta canônica do universo do fato (`:230–254`, `:363`).
+   - A recusa “Esta batida ainda nao esta no seu espelho, mesmo com a resposta anterior ja validada...” depende de `_resposta_validada`, isto é, `validada_em is not None` (`:227`, `:378`, `:412–416`): **não é sustentada pelos registros das duas**.
+   - Se a porta reusar estas mesmas perguntas e receber respectivamente `01:00` e `02:00`, cai em `respondida_em` preenchida + mesma hora e devolve **“Horario ja informado; aguardando a supervisao.”** (`:417–418`). A view devolve essa mensagem (`views.py:1100`); o JavaScript escreve “Resposta enviada” e `d.msg` (`app/templates/chamados/meu_atendimento.html:424–444`).
+
+**Limite decisivo:** a sonda não mostra tentativa HTTP nem recado observado: **[não verificado]**. Também não mostra `CelulaDia.veredito`, `veredito_via`, tranca, ata completa ou universo canônico. `aguarda_validacao` não prova `pergunta_viva=True`, porque a propriedade retorna `RESPONDIDA` mesmo no último fallback (`models.py:3048`). O juiz de vitalidade consulta tranca/célula (`app/chamados/juizes.py:1325–1340`); sem decisão explícita admin e sem tranca, `fato=False` impede concordância com a luz (`:1290–1291`) e a resposta segue viva (`:1341–1353`).
+
+## 11/11 09:04 · sessao b373ddb098f3 · - · - · origem=Ronald (tmux)
+
+Ações sobre as batidas vizinhas:
+
+| Ação | Botão/tela | Porta e aceitação |
+|---|---|---|
+| Inverter E/S | Clique no horário → **Inverter tipo**, em `app/templates/colaboradores/partials/_calendario_grade.html:121`. Exige `pode_veredito` e batida não classificada como órfã nessa apresentação. | `app/ponto/views.py:3260`, guarda POST + `regularizar_batida` em `:3263`. Serviço `app/ponto/services/flip_batida.py:10`: recusa retratada (`:15-16`), sem autor (`:19-20`), competência fechada (`:21-24`), tipo fora E/S (`:25-27`). As duas batidas passam nas condições conhecidas de tipo e retratação; permissão, competência e apresentação na tela **[não verificado]**. |
+| Retratar | Clique no horário → escolha motivo → **Não foi trabalho (retratar)**, em `app/templates/colaboradores/partials/_calendario_grade.html:121`. | `app/ponto/views.py:3274`, guarda POST + permissão em `:3277`. Serviço `app/ponto/services/retratar_humano.py:150` exige humano/permissão (`:131-147`) e motivo cadastrado ativo (`:166-171`). Não exige estado específico das perguntas nem consulta competência nesse caminho. Motivo ativo/permissão **[não verificado]**. |
+| Desfazer retratação | **↶ desfazer**, em `app/templates/colaboradores/partials/_calendario_grade.html:121`. | `app/ponto/views.py:3286`. As batidas dadas têm `retratada_em=None`, logo a porta recusa “Esta marcacao nao esta retratada”, em `app/ponto/services/retratar_humano.py:197-198`. |
+
+**Retratar não prova retirar a recusa de paridade:** `_vizinha_mesmo_tipo` consulta `Batida.objects` sem filtro por `retratada_em` ou `aprovada`, em `app/chamados/services/materializacao.py:94-104`; `Batida` não declara manager próprio em `app/ponto/models.py:8`. A retratação grava `aprovada=False` e `retratada_em`, em `app/ponto/registro_batida.py:267-281`, mas a seleção da vizinha continua enxergando esse registro pelo código citado. Não há prova fornecida de que #133794/#133756 estejam erradas ou não representem trabalho **[não verificado]**.
+
+**Resolver dia:** o botão é condicionado a `dia.resolver_dia_oferecido`, em `app/templates/colaboradores/partials/_calendario_grade.html:125-126`; oferece **Trabalhou no horário da escala**, **Não trabalhou (falta)** e **Justificado**, em `app/templates/ponto/partials/_veredito_dia.html:21-23`.
+
+A tela restringe o último recurso a dia anterior à competência atual e sem pergunta viva com resposta: `app/colaboradores/services/calendario.py:472-477`, `:738-739`; o predicado ainda exige passado/status que pede decisão em `:97-104`. Assim, não basta localizar a view para afirmar que o admin consegue clicar nessa ação para o estado dado; disponibilidade efetiva **[não verificado]**.
+
+A view `app/ponto/views.py:3312` não recusa por `respondida_em`, `via_resolucao` ou `pendencia_admin`; exige POST/permissão (`:3315`), datas/veredito válidos (`:3321-3331`) e chama o serviço (`:3340`). O serviço pode recusar ausência de trabalho previsto (`app/ponto/services/veredito_celula.py:242-243`), ausência de marcos (`:248-249`) ou nenhuma combinação coerente (`:308-310`). DNA/ata completa e resultado da simulação **[não verificado]**. Quando efetivamente bem-sucedido, fecha perguntas do dia em `:179-197` e `:345-351`, usando `PerguntaDisputa.fechar_por_admin`, em `app/chamados/models.py:3050-3064`.
+
+**Regularização externa:** existe adicionar par/batida pelo fluxo **+ Regularizar batidas** (`app/templates/chamados/fio_colaborador.html:15`) → **Criar lote e adicionar dias** (`app/templates/chamados/regularizacao_painel.html:14-18`) → **Adicionar** com opção de intervalo (`app/templates/chamados/regularizacao_editar.html:45-58`) → **Enviar ao colaborador para confirmação** (`:63-68`). A inclusão do item aceita datas/horários válidos na view `app/chamados/views_regularizacao.py:74-131`; contudo a materialização **RECUSA** disputa aberta em `app/chamados/services/regularizacao_ext.py:58-65`. Aplicação ao dado: disputa #5644 tem `fechada_em=None`; portanto esse fluxo não materializa enquanto permanecer assim — sonda, bloco `DisputaSupervisao pk=5644`.
+
+Não localizei uma view chamada `batida_registrar` nem botão direto equivalente no espelho; não atribuir esse nome como porta existente **[não verificado]**.
 
 ## 11/11 08:54 · sessao 00b37e6c645a · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -372,339 +764,4 @@ A classe já tem obra: **BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS**, complemento **BUG-
 
 Nenhum dos quatro itens exige censo de ESTRUTURA pela prova disponível: 07 e 10 descrevem comportamento existente; 11 e 12 carecem da informação indicada, conforme separação da L-099 (`app/docs/LEIS.md:122`).
 
-## 11/11 08:27 · sessao 5bbade1dc496 · - · - · origem=Ronald (tmux)
-
-- **02 — FALTA INFORMAÇÃO.** DADO: `id=149397 | timestamp=08/11 17:30:08 | tipo=E` versus célula `id=140128 ... dna={'marcos': {'hf': '05:42', 'hi': '21:30'...}} ... protestos=['FURO_PARCIAL', 'BATIDA_ORFA_FORA_TOLERANCIA'] ... ata={'orfas': ['17:30']...}`. Isso prova divergência entre fato e previsão; faltam cadastro da janela, declaração de HE, CXR lavrado e tela que marcou “espúria”. O juiz exige esses insumos: `app/ponto/management/commands/e6_oraculo.py:182-195`; não classificaria por palpite. O motor publica CXR em `app/ponto/motor_calculo_v2.py:1655-1672`, acionado quando a entrada excede o teto em `:1709-1712`. **Complemento:** `ESPURIA-E-O-QUE-E`, aberta em `app/docs/BACKLOG.md:1805`; tela em `:1815`. `DIA-SEM-TRABALHO-PORTA` (`:1813`) só cabe se comprovado dia sem previsão; as células mostradas dizem `trabalha=True`. **Admin:** conferir horário cadastrado e trabalho realizado nas datas apontadas; decisão de pagar HE depende dessa conferência. [nao verificado quanto ao clique específico]
-
-- **03 — FALTA INFORMAÇÃO sobre a trava atual.** DADO: `id=5311 | tipo=atestado | data=29/10/2026 | data_fim=30/10/2026 ... status=aprovada ... aprovada_em=09/11 08:50:45`; célula `id=141772 ... veredito=concorde ... ausencia_id=5311 ... status_dia=ausencia`; DiaPago `id=1989491 ... data=29/10/2026 ... minutos_abonados=660.0 ... furo_apurado=False`. Aprovação passa por `app/ponto/services/ausencia.py:897-918`; abono no fechamento lê o efeito em `app/ponto/services/fechamento.py:693-701`. Falta tela/competência/motivo de bloqueio: o recorte não traz FechamentoMensal desse colab. **Obra:** não há encaixe comprovado numa obra aberta só com essa evidência; não abrir ID. Linhagem existente de abono é `AUSENCIA-COBRE`, já feita (`app/docs/TICKETS.md:1221`), e `AUSENCIA-ATA-DISPENSA`, já feita (`:1035`). **Admin:** abrir 29/10 e conferir atestado aprovado; informar o motivo exibido na folha se ainda houver bloqueio. [nao verificado quanto à trava]
-
-- **05 — BATIDA, chegada posterior já resolvida; causa de rede/offline [nao verificado].** DADO: `id=150717 | timestamp=09/11 16:04:05 | tipo=S ... criado_em=10/11 06:59:56`; `id=37996 ... 09/11 — marco 16:00 (saida) sem batida ... status_local=resolvido ... resolvido_em=10/11 06:59:56 ... criado_em=09/11 16:30:09`; célula `id=129423 ... veredito=concorde ... status_dia=ok`. A abertura nomeia marcos faltantes em `app/ponto/management/commands/detectar_ausencias.py:693-711`; baixa por marco aceso em `app/ponto/services/lastro.py:390-402`, pelo juiz `:153-158`. **Obra:** nenhuma correção demonstrada; lastro já pertence à obra fechada `CONTRATO-20-LASTRO-E-ORFAS`, `app/docs/BACKLOG.md:735`; eventual recorrência comprovada cabe na linhagem `LASTRO-PARTE-2`, `:1760`, sem novo ID. **Admin:** consultar 09/11 no espelho e o chamado 37996 resolvido; o registro já chegou e o dia está regular. [sonda citada]
-
-- **06 — FALTA INFORMAÇÃO.** DADO mostra entradas isoladas em dias sem previsão: `id=145526 | timestamp=04/11 06:57:48 | tipo=E`; célula `id=132704 ... trabalha=False ... veredito=fato_sem_previsao ... ata={'orfas': ['06:57']...}`. Não mostra diária nem qual batida se pretende retirar. A porta humana existe em `app/ponto/views.py:3274-3283`, exige `regularizar_batida` e motivo; serviço em `app/ponto/services/retratar_humano.py:150-185`. **Achado de código:** `app/templates/colaboradores/partials/_calendario_grade.html:121` desenha batida órfã no ramo sem menu; “Não foi trabalho (retratar)” está no ramo `else`, das não órfãs. Isso pode explicar ausência de ação nessa tela, mas a ligação com o relato é [nao verificado]. **Complemento candidato:** `ESPURIA-TELA`, aberta em `app/docs/BACKLOG.md:1815`; porta original O6 já fechada em `:1236` e `app/docs/TICKETS.md:1256`. **Admin:** identificar data e marcação, conferir se houve trabalho e qual diária foi lançada; falta isso antes de orientar retratação. [nao verificado]
-
-**Censo:** nenhum desses quatro itens foi classificado ESTRUTURA com a evidência disponível; portanto nenhuma lei quebrada deve ser atribuída a eles. Critério: `app/docs/LEIS.md:122`.
-
-## 11/11 08:26 · sessao 7258489be938 · - · - · origem=Ronald (tmux)
-
-01/04/13 — **ESTRUTURA, mesma classe BUG-PAR**, como complemento de `BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS` e sua ampliação `BUG-PAR-FROTA-1110`, dentro de `RAIZ-DA-DISPUTA` F3/F4. A obra já cita expressamente **col960, disputa #5644**, com saída e volta validadas isoladamente produzindo recusa S-S/E-E. (`app/docs/BACKLOG.md:1929`, `app/docs/BACKLOG.md:1882`, `app/docs/BACKLOG.md:1883`)
-
-A prova da sonda é a existência das duas respostas persistidas:
-
-> id=51522 | celula_id=128547 | disputa_id=5644 | motivo=intervalo_saida [...] resposta_colab=01:00 | respondida_em=08/11 11:04:01 | recusa_motivo=Pergunta #51522: batida vizinha #133794 (S 22/10 06:30) tem o mesmo tipo do plantio (S) - par quebrado; nao materializado (guarda de paridad [...]
-
-> id=51523 | celula_id=128547 | disputa_id=5644 | motivo=intervalo_volta [...] resposta_colab=02:00 | respondida_em=08/11 11:04:11 | recusa_motivo=Pergunta #51523: batida vizinha #133756 (E 21/10 18:32) tem o mesmo tipo do plantio (E) - par quebrado; nao materializado (guarda de paridad [...]
-
-Portanto, o dado comprova **resposta recebida e plantio recusado**; não comprova falha de gravação da resposta. O código grava resposta e instante, processa as perguntas individualmente e recusa o plantio diante da vizinha do mesmo tipo. (`app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1508`, `app/chamados/services/materializacao.py:1375`, `app/chamados/services/materializacao.py:875`)
-
-A classe **disputa sem pergunta** é distinta: a obra descreve sete disputas abertas sem nenhuma pergunta; col960 possui perguntas identificadas e respondidas na sonda. (`app/docs/BACKLOG.md:1877`; trechos acima)
-
-Lei quebrada: **L-099 — O ESTRUTURAL SE SEPARA DO DADO**, pela incoerência operacional já documentada no caso. O desenho existente emprega **Aggregate Root** e **Single Writer Principle**; a unidade do par está nomeada na própria obra BUG-PAR. Não há necessidade de inventar lei ou classe. (`app/docs/LEIS.md:122`, `app/docs/GLOSSARIO.md:11`, `app/docs/GLOSSARIO.md:12`, `app/docs/BACKLOG.md:1929`)
-
-Censo dos campos envolvidos:
-
-| Campo/estado | Quem escreve | Quem lê |
-|---|---|---|
-| `resposta_colab`, `respondida_em` | `app/chamados/services/disputa_emissao.py:1467`, save `:1508` | `app/chamados/services/materializacao.py:829`, seleção `:1369`; estado `app/chamados/models.py:3041` |
-| Recusa por paridade | `app/chamados/services/materializacao.py:878`; encaminhamento `:1297`; persistência `:1102` | `app/chamados/services/materializacao.py:452`; apresentação `app/chamados/services/fio.py:335`; recado `app/templates/chamados/partials/modal_fio.html:230` |
-| `materializada_em`, `materializada_por_id`, `via_resolucao` | Atribuição central `app/chamados/models.py:3097`; porta `:3103`; chamada do materializador `app/chamados/services/materializacao.py:1277` | Estado `app/chamados/models.py:3041`; efeito na tela `app/chamados/services/materializacao.py:434` |
-| Batida de aplicação | `app/chamados/services/materializacao.py:927` chama `registrar_batida` | Verificação antes do carimbo `app/chamados/services/materializacao.py:1233` |
-
-Texto ao admin, para os três relatos: **“Abra o chamado de col960 e confira as respostas da saída e da volta do intervalo do mesmo dia, junto com o espelho; as respostas de 01:00 e 02:00 já estão registradas.”** (`app/templates/chamados/partials/modal_fio.html:217`; trechos da sonda acima)
-
-08 — **FALTA INFORMACAO**: o texto recebido termina durante o item 06, sem candidato, colNNN, dia ou linhas do item 08; identificação e ligação com os três casos são **[nao verificado]**. `app/docs/ESTADO.md` não está presente na cópia consultada, então o número de 06:48 também permanece **[nao verificado]**. O código define `fio_morto_de_hoje_pra_frente` para célula sem fio vivo cuja data seja `>= hoje`; isso é um balde temporal, não uma prova da identidade do item. (`app/chamados/services/vigia_fio.py:417`, `app/chamados/services/vigia_fio.py:420`)
-
-## 11/11 08:18 · sessao a1519926172e · FIO-E0-V4-E4B · construtor · origem=Code
-
-Cura escrita na cópia. **Os sete resultados ORM continuam [nao verificado]**; a execução fica para o Code e a certificação final para o opus.
-
-O diff altera cinco arquivos: a cerca executa callbacks permitidos antes da foto posterior, preserva a sentinela e mantém a recusa de DML fora da foto ([backfill:315](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:315)). A classificação usa identidade do código da função; nome semelhante não concede permissão ([foto:30](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:30)).
-
-`EventoCelula` entra por colaborador/data. `ContadorPauta` entra pelos destinatários; o alcance da alteração vem das pautas realmente mudadas, dos dois lados. Sem pauta correspondente, permanece indeterminado ([foto:268](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:268), [foto:114](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:114)). O import `MOD` foi removido ([ORM:17](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:17)).
-
-Diff completo:
-
-```bash
-GIT_OPTIONAL_LOCKS=0 git diff -- \
-  chamados/management/commands/backfill_fio_morto_e4b.py \
-  chamados/services/foto_e4b.py \
-  chamados/tests/test_e4b_c4_orm.py \
-  chamados/tests/test_e4b_c4v7_memoria.py \
-  chamados/tests/test_e4b_classe_e_memoria.py
-```
-
-O censo respondido antes da edição resultou neste tratamento:
-
-| Callback registrado | Escritas possíveis pelas portas chamadas | Tratamento |
-|---|---|---|
-| `_TravaDoColaborador.__call__` | Nenhuma; no-op — `trava_do_colaborador.py:22` | Neutro; preservado durante o ato |
-| `_becos_post_save_pergunta._fechar` | Perguntas/decisões/disputa, fechamento de chamado, notas, auditoria e eventos pela cascata — `signals.py:233`, `becos.py:36`, `models.py:3943` | Executado sob captura e foto |
-| `_isentos_post_save_colaborador._silenciar` | Chamado e auditoria — `signals.py:274`, `arquivo.py:170` | Executado sob captura e foto |
-| `_isentos_post_save_chamado._silenciar` | Mesma porta de silêncio — `signals.py:301`, `silencio_isentos.py:34` | Executado sob captura e foto |
-| `retoma_regularizacoes_ao_fechar_disputa._retomar` | Regularização, itens, batidas, nota/chamado e auditoria — `signals.py:133`, `regularizacao_ext.py:121` | Recusado pelo nome |
-| `_feriado_post_save._reavaliar` | Fechamento de chamados, notas/auditoria e cascata; percorre colaboradores — `signals.py:330`, `feriado_reavaliar.py:43` | Recusado pelo nome |
-| `_filho_morto_acorda_o_pai._reconciliar` | Fio e também `Justificativa` — `signals.py:363`, `reconciliador.py:529` | Recusado pelo nome |
-
-A fábrica e a reabertura podem registrar silêncio/beco pelos saves; `decisao_pergunta` emite `EventoCelula` sincronicamente; materialização pode alcançar os callbacks de fechamento. `cartorio` continua sem execução pelo backfill (`fabrica_da_celula.py:160`, `disputa_emissao.py:1849`, `models.py:3943`, `materializacao.py:1338`, `backfill_fio_morto_e4b.py:148`).
-
-Escolhi a recusa permitida pelo item 1(b) para retomada, feriado e reconciliação. Regularizações/itens não entram na foto porque a retomada não é executada; os motivos estão no censo do código ([foto:38](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:38)).
-
-Resultados sem banco:
-
-| Comando | Resultado | Fonte |
-|---|---|---|
-| `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4b_c4v7_memoria chamados.tests.test_e4b_classe_e_memoria chamados.tests.test_e4b_foto_memoria chamados.tests.test_e4b_c4_tranca_memoria -q` | **rc 0**, 79 testes | `test_e4b_c4v7_memoria.py:55`; demais módulos indicados | [nao verificado]
-| `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v7_memoria --red-base` | **rc 1**, 16 testes, 11 falhas por assertion; zero errors | `test_e4b_c4v7_memoria.py:23` | [nao verificado]
-| `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos` | **rc 0**, 40 testes | `e4b_c4_verificar.py:239` | [nao verificado]
-| `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight` | **rc 0**, sete enxertos/AST | `e4b_c4_verificar.py:79` |
-| `GIT_OPTIONAL_LOCKS=0 git diff --check` | **rc 0** | Diff dos cinco arquivos acima |
-| `PYTHONDONTWRITEBYTECODE=1 python3 -m ruff --version` | **rc 1**, `No module named ruff` | Lint completo [nao verificado] |
-
-Os REDs principais e suas assertions que mordem:
-
-| RED / mutante | Assertion |
-|---|---|
-| Desconhecido nomeado, inclusive nome forjado e segunda entrada da fila / `callback_desconhecido_livre` | [memória:172](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:172) |
-| Tabela não fotografada / `tabela_fora_livre` | [memória:186](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:186) |
-| Evento inserido/alterado aparece / `evento_omitido_da_foto` | [memória:352](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:352) |
-| Contador medido e cercado / `contador_omitido_da_foto` | [memória:362](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:362) |
-| Callback legítimo, cascata e sentinela / `callback_legitimo_recusado`, `sentinela_recusada` | [memória:207](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:207) |
-| DML de callback dentro da captura / `callback_sem_captura` | [memória:222](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:222) |
-| DRY elimina fila nova / `dry_deixa_fila` | [memória:260](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:260) |
-| Lote recusado reverte sentinela anterior ao savepoint manual / `recusa_deixa_sentinela_C` | [memória:284](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:284) |
-
-**23/23 mutantes retornaram rc 1 por assertion, sem errors.** O comando de cada um é o corpo deste loop; os enxertos estão em `test_e4b_c4v7_memoria.py:406`:
-
-```bash
-for nome in \
-  roteiro_so_emissao roteiro_so_dois_REDs comp_nao_corrente \
-  callback_livre callback_desconhecido_livre callback_na_fila \
-  sem_captura_sql sql_so_insert escrita_livre tabela_fora_livre \
-  evento_omitido_da_foto contador_omitido_da_foto callback_sem_captura \
-  callback_legitimo_recusado callback_chamado_recusado \
-  callbacks_fora_alcance_livres sentinela_recusada dry_deixa_fila \
-  recusa_deixa_sentinela_C evento_recusado_por_tabela \
-  contador_recusado_por_tabela dia_cru carimbo_online
-do
-  PYTHONDONTWRITEBYTECODE=1 python3 \
-    -m chamados.tests.test_e4b_c4v7_memoria --mutante "$nome"
-done
-```
-
-Para a sessão/Code, sem execução nesta volta:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
-```
-
-O roteiro cobre `test_e4b_c4_orm`, `test_o261e_f1_porta_encerramento`, `test_e4_passivo`, `test_e4_backfill`, `test_b2d_resposta_visivel` e `ponto.tests.test_selo_chokepoint_escrita`; depois roda `sem_cerca`, `sem_rollback`, `sem_alvo`, `foto_so_dia`, `foto_antes_C`, `tranca_sem_mapa` e `tranca_avulsa` (`e4b_c4_verificar.py:117`). Acrescentei assertions ORM para desconhecido, tabela externa e EventoCelula no DIFF ([ORM:183](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:183), [ORM:198](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:198), [ORM:218](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:218)).
-
-## 11/11 08:02 · sessao bc65f5408f95 · TRAVA-SELO · verificador · origem=Code
-
-**1. NÃO PROCEDE fechar a classe; PROCEDEM curas pontuais.** Exigir conteúdo elimina o falso módulo `testar_pwa`, mas a cobertura continua comparando apenas módulos e seus ancestrais. Selecionar todas as classes de um módulo não o cobre para essa comparação. (`bin/suite.sh:157`, `bin/suite.sh:163`; `app/ponto/management/commands/testar_pwa.py:31`)
-
-Contraexemplo estático nesta cópia: substituir `comunicados` pelas duas seleções abaixo, mantendo as demais LABELS. A guarda considera `comunicados.tests_casca_a13` descoberto e não coberto, retornando “recorte”. (`bin/regua.sh:23`; `bin/suite.sh:163`, `bin/suite.sh:164`)
-
-```text
---only 'api chamados colaboradores comunicados.tests comunicados.tests_casca_a13.CascaComunicadosA13Test core escala ferias folha holerite inteligencia pautas ponto relatorios'
-```
-
-O segundo módulo contém uma única classe `TestCase`, com quatro testes; selecionar essa classe preserva estaticamente os casos do módulo. Igualdade efetiva dos IDs produzidos pelo Django da imagem: **[nao verificado]**. (`app/comunicados/tests_casca_a13.py:11`, `app/comunicados/tests_casca_a13.py:16`, `app/comunicados/tests_casca_a13.py:33`, `app/comunicados/tests_casca_a13.py:43`, `app/comunicados/tests_casca_a13.py:51`, `app/comunicados/tests_casca_a13.py:58`)
-
-O tratamento **local** do grep está correto:
-
-| Retorno | Tratamento |
-|---|---|
-| 0 | Processa os nomes encontrados. (`bin/suite.sh:159`, `bin/suite.sh:160`) |
-| 1, inclusive app sem módulos correspondentes | Ignora a lista vazia e continua nos demais apps. (`bin/suite.sh:159`, `bin/suite.sh:161`) |
-| ≥2, inclusive arquivo ilegível | Retorna inteira antes de consumir eventual lista parcial. (`bin/suite.sh:159`) |
-
-Entretanto, isso não garante consultar erros **em todos os apps**: o primeiro módulo não coberto encerra a função antes das buscas seguintes; diretório de app ausente é pulado. Isso limita a promessa universal de falha conservadora, embora não demonstre sozinho ampliação da seleção. (`bin/suite.sh:155`, `bin/suite.sh:156`, `bin/suite.sh:164`)
-
-Há possibilidade de recorte legítimo recusado pelo universo reduzido: cobrir todos os módulos contados e deixar de fora um módulo que apenas herda testes produz “inteira”. É consequência conservadora assumida pelo próprio comentário; ocorrência concreta desse formato nesta cópia: **[nao verificado]**. (`bin/suite.sh:148`, `bin/suite.sh:167`)
-
-**2. NÃO PROCEDE a equivalência entre juiz e porta.** `echo` e motivo duplo na mesma linha foram curados, mas a duplicidade em continuação permanece: a extração conserva as duas linhas, enquanto o primeiro grep entrega ao segundo apenas a linha que contém o comando. O parser recebe os dois motivos e conserva o último. (`bin/tests/test_suite_sh.sh:26`, `bin/tests/test_suite_sh.sh:27`, `bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:60`)
-
-Assim, o juiz aprova este bloco, cuja porta recusa pela forma do último motivo. (`bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:150`, `bin/suite.sh:169`)
-
-```bash
-bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus X" \ [nao verificado]
-  --motivo "quero ver"
-```
-
-Também aprova `"pre-opus X"'!'`: falta fronteira após as aspas no regex; o shell entrega `pre-opus X!`, recusado pela guarda. No sentido contrário, motivo com aspas simples ou colocado depois de `--parallel 2` é aceito pelo parser e rejeitado pelo juiz. (`bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:56`, `bin/suite.sh:60`, `bin/suite.sh:150`)
-
-**Bloco real:** a linha atual passa pelo juiz graças à exceção explícita para `<OBRA>`. Literalmente, esse marcador não passa pela guarda; substituído por `TRAVA-SELO`, satisfaz sua forma. Isso é uma convenção documental deliberada, distinta dos escapes acima. (`CLAUDE.md:96`; `bin/tests/test_suite_sh.sh:35`, `bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:150`)
-
-**3. PROCEDEM os discriminantes dos quatro mutantes, por leitura estática; execução integral dos “26 mortos”: [nao verificado].**
-
-| Mutante | Razão correta da morte |
-|---|---|
-| `prefixo_sem_ponto` | Passa a considerar `test_x_extra` coberto por `test_x`, recusando o recorte positivo que omite o irmão. (`bin/tests/test_suite_motivo.sh:113`, `bin/tests/test_suite_motivo.sh:194`) |
-| `busca_falha_vira_recorte` | Ignora rc 2 e encontra módulos não cobertos; libera a chamada que o caso ilegível exige recusar. (`bin/tests/test_suite_motivo.sh:118`, `bin/tests/test_suite_motivo.sh:120`, `bin/tests/test_suite_motivo.sh:196`; `bin/suite.sh:164`) |
-| `nome_sem_conteudo` | Inclui `testar_algo.py`, que só define `handle`, e libera sem motivo a enumeração completa dos módulos de teste. (`bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:197`) |
-| `seco_argv_sem_extra` | Retira `--failfast` da linha argv, quebrando a comparação exata. (`bin/tests/test_suite_motivo.sh:133`, `bin/tests/test_suite_motivo.sh:137`, `bin/tests/test_suite_motivo.sh:195`) |
-
-**NÃO SEI se a execução relatada ocorreu como usuário sem privilégios. [nao verificado]** A régua herda o usuário ao chamar `bash`; o caso chmod verifica legibilidade e avisa quando não pode exercitar a asserção. Nesse caminho, o mutante de busca permanece vivo e o harness acusa `MORDE`, em vez de aprovar silenciosamente os 26. (`bin/regua.sh:140`; `bin/tests/test_suite_motivo.sh:119`, `bin/tests/test_suite_motivo.sh:179`, `bin/tests/test_suite_motivo.sh:196`)
-
-Sobrevivente plausível: trocar `[ $rc -le 1 ] || return 0` por `[ $rc -eq 0 ] || return 0`. A fixture fornece testes nos dois apps e não exercita rc 1; essa mutação preservaria os casos existentes, mas recusaria prematuramente um recorte diante de app sem módulos. Sobrevivência deduzida estaticamente; execução: **[nao verificado]**. (`bin/suite.sh:159`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:26`)
-
-**4. PROCEDE a compatibilidade dos leitores examinados, com uma regressão de transporte em `lst`.**
-
-| Campo | QUEM ESCREVE → QUEM LÊ |
-|---|---|
-| `lst` | `grep -l` separado por LF → `read -r` separado por LF; não sobrou leitor esperando NUL. (`bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:165`) |
-| `_porq` / `VOLTA_PORQUE` | Wrapper fornece caminho; suite grava stderr do helper; suite lê diagnósticos e wrapper conta ` <- `. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`; `bin/suite.sh:87`, `bin/suite.sh:88`, `bin/suite.sh:89`; `bin/vizinhos_da_volta.py:130`) |
-| Limpeza `_porq` | Temporário removido em sucesso e falha; caminho fornecido preservado. (`bin/suite.sh:88`, `bin/suite.sh:90`) |
-| SECO argv | Escritor usa as expansões do executor; novo leitor exige a linha exata. (`bin/suite.sh:184`, `bin/suite.sh:228`, `bin/suite.sh:229`; `bin/tests/test_suite_motivo.sh:137`) |
-
-A regressão: LF no caminho externo de `--dir` é aceito, mas divide cada nome em linhas e impede retirar corretamente o prefixo da árvore. Pela transformação implementada, até todas as LABELS podem parecer recorte. Existência/execução de uma cópia com esse caminho: **[nao verificado]**. (`bin/suite.sh:54`, `bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:162`, `bin/suite.sh:164`)
-
-**5. Custo: PROCEDE o descarte como impedimento; enumeração classe/método: NÃO PROCEDE.**
-
-A busca tem atalho para seleção vazia, mas continua antecedendo a decisão sobre motivo e SECO. Os 0,62 s são a medição fornecida na triagem, sem repetição independente **[nao verificado]**; o código não sustenta transformá-los em limite geral. Isso, sozinho, não demonstra defeito de segurança da guarda. (`bin/suite.sh:154`, `bin/suite.sh:169`, `bin/suite.sh:179`)
-
-Reduzir o universo por conteúdo não resolve enumeração por classe/método: uma seleção descendente do módulo continua sendo julgada “não coberta”, que é justamente o retorno permissivo. O exemplo de `CascaComunicadosA13Test` materializa essa direção da comparação. (`bin/suite.sh:163`, `bin/suite.sh:164`; `app/comunicados/tests_casca_a13.py:16`)
-
-**Fecho: NÃO LIBERA**, pela comparação de cobertura ainda aberta e pelas divergências demonstráveis entre juiz documental e parser, independentemente da pergunta de desenho separada. (`bin/suite.sh:163`, `bin/suite.sh:164`; `bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:60`)
-
-## 11/11 08:01 · sessao 41e0f2988e8c · - · - · origem=Ronald (tmux)
-
-**NÃO PROCEDE fechar a classe nem descartar enumeração por classe.** Contraexemplo estático compacto:
-
-```text
---only 'api chamados colaboradores comunicados.tests comunicados.tests_casca_a13.CascaComunicadosA13Test core escala ferias folha holerite inteligencia pautas ponto relatorios'
-```
-
-A seleção preserva as LABELS e substitui o app `comunicados` pelos seus dois módulos, representando o segundo pela sua única classe de teste; a guarda exige módulo igual à seleção ou descendente dela, portanto não reconhece `comunicados.tests_casca_a13` como coberto. Emulação em memória da busca e comparação confirmou esse primeiro módulo descoberto não coberto. (`bin/regua.sh:23`; `bin/suite.sh:157`; `bin/suite.sh:163`; `bin/suite.sh:164`; `app/comunicados/tests.py:10`; `app/comunicados/tests_casca_a13.py:16`)
-
-O segundo módulo contém uma única `TestCase`, com quatro métodos de teste; selecioná-la preserva estaticamente seus casos. Igualdade efetiva no Django instalado: **[nao verificado]**. (`app/comunicados/tests_casca_a13.py:11`; `app/comunicados/tests_casca_a13.py:16`; `app/comunicados/tests_casca_a13.py:33`; `app/comunicados/tests_casca_a13.py:43`; `app/comunicados/tests_casca_a13.py:51`; `app/comunicados/tests_casca_a13.py:58`)
-
-**PROCEDE a leitura local do rc:** 0 processa a lista; 1 permite lista vazia, cujas linhas vazias são ignoradas; ≥2 retorna inteira. Porém, “qualquer falha da busca resulta inteira” não vale em todo caminho: um módulo não coberto provoca retorno antecipado antes das buscas nos apps seguintes; app ausente também é pulado. Isso não demonstra ampliação da seleção que já omitia um módulo válido, mas limita a promessa universal de tratamento das falhas. (`bin/suite.sh:155`; `bin/suite.sh:156`; `bin/suite.sh:159`; `bin/suite.sh:161`; `bin/suite.sh:164`)
-
-Não encontrei contraexemplo concreto adicional de arquivo atual contendo apenas falso `def test`, módulo só herdando testes, symlink ou pasta descoberta sem `__init__.py`; execução integral da descoberta Django: **[nao verificado]**. [nao verificado]
-
-## 11/11 08:00 · sessao 9aba64bbf79e · - · - · origem=Ronald (tmux)
-
-**3. PROCEDEM os discriminantes dos quatro mutantes, por análise estática; execução integral dos “26 mortos” [nao verificado].**
-
-- `prefixo_sem_ponto`: a fixture contém `test_x` e `test_x_extra`; a seleção que omite o segundo deve chegar à trava. O mutante o considera coberto pelo primeiro e recusa esse recorte. (`bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:113`, `bin/tests/test_suite_motivo.sh:194`)
-- `nome_sem_conteudo`: incluir `testar_algo.py`, que só define `handle`, faz a enumeração completa dos quatro módulos parecer parcial e ser liberada sem motivo. (`bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:197`)
-- `seco_argv_sem_extra`: retirar EXTRA da linha SECO remove `--failfast`, contrariando a comparação exata. (`bin/tests/test_suite_motivo.sh:133`, `bin/tests/test_suite_motivo.sh:137`, `bin/tests/test_suite_motivo.sh:195`)
-- `busca_falha_vira_recorte`: com `test_w.py` ilegível, o vivo retorna inteira pelo rc 2; o mutante continua e encontra módulos não cobertos por `appA.tests.test_x`, retornando recorte. (`bin/tests/test_suite_motivo.sh:118`, `bin/tests/test_suite_motivo.sh:120`, `bin/tests/test_suite_motivo.sh:196`; `bin/suite.sh:159`, `bin/suite.sh:164`)
-
-**chmod 000 é condicionalmente honesto.** O teste pergunta `-r` e avisa quando o arquivo continua legível; nessa situação não executa a asserção. A régua chama o selo por `bash` sem trocar o usuário. A identidade da execução relatada em produção é **[nao verificado]**. (`bin/tests/test_suite_motivo.sh:119`; `bin/regua.sh:138`, `bin/regua.sh:140`)
-
-Se rodar com privilégios que permitam leitura, o mutante de falha da busca permanece vivo e o harness acusa `MORDE`; não há aprovação silenciosa dos 26 nesse caminho. (`bin/tests/test_suite_motivo.sh:119`, `bin/tests/test_suite_motivo.sh:179`, `bin/tests/test_suite_motivo.sh:196`, `bin/tests/test_suite_motivo.sh:204`)
-
-**Sobrevivente plausível:** trocar `[ $rc -le 1 ] || return 0` por `[ $rc -eq 0 ] || return 0`. A fixture sempre fornece módulos com teste nos dois apps, portanto não exercita rc 1; a mutação preserva rc 0/2 e passa pelos mesmos casos, mas transforma app sem módulos em recusa imediata mesmo diante de recorte legítimo em outro app. Isso é dedução estática, não execução do mutante. (`bin/suite.sh:159`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:26`, `bin/tests/test_suite_motivo.sh:118`)
-
-**4. PROCEDE a migração dos leitores examinados, com um problema novo no transporte de `lst`.**
-
-| Campo | Escritor → leitor |
-|---|---|
-| `lst` | `grep -l`, separado por LF → `while read -r`, também por LF; não ficou `read -d ''` antigo. (`bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:165`) |
-| `_porq` / `VOLTA_PORQUE` | Wrapper fornece caminho; suite grava stderr do helper; helper mantém `<label> <- <motivos>`, além de diagnósticos; suite lê `cat`/`AST-FALHOU`, wrapper conta ` <- `. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`; `bin/suite.sh:86`, `bin/suite.sh:87`, `bin/suite.sh:88`, `bin/suite.sh:89`; `bin/vizinhos_da_volta.py:120`, `bin/vizinhos_da_volta.py:130`) |
-| Limpeza `_porq` | Temporário removido em sucesso e falha; caminho fornecido preservado em ambos. (`bin/suite.sh:88`, `bin/suite.sh:90`) |
-| SECO argv | `%q` com as mesmas expansões do executor → comparação exata nova no selo. (`bin/suite.sh:184`, `bin/suite.sh:228`, `bin/suite.sh:229`; `bin/tests/test_suite_motivo.sh:137`) |
-| `trava.chamada` | `%q` por argumento → `_args` e greps; labels aceitas são ASCII pontuado, portanto extração das labels continua compatível. (`bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:33`, `bin/tests/test_suite_motivo.sh:104`, `bin/tests/test_suite_motivo.sh:108`; `bin/suite.sh:104`) |
-
-**Risco de `lst`:** LF no caminho externo de `--dir` é aceito pelo parser, mas divide cada nome emitido pelo grep em duas linhas; o leitor não consegue retirar o prefixo completo e encontra módulo “não coberto”. Assim até todas as LABELS podem ser julgadas recorte. O bind usa o caminho canonicalizado e citado. Diretório concreto com LF não foi criado: execução desse cenário **[nao verificado]**. (`bin/suite.sh:54`, `bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:162`, `bin/suite.sh:164`, `bin/suite.sh:200`, `bin/suite.sh:226`)
-
-## 11/11 07:59 · sessao 4d1543765765 · - · - · origem=Ronald (tmux)
-
-**2. NÃO PROCEDE o fechamento da classe documental.** Os casos antigos `echo` e dois motivos na mesma linha são barrados, mas o juiz continua divergindo da porta. (`bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`)
-
-Contraexemplos confirmados executando somente as funções/parser em memória, sem escrever arquivos:
-
-```bash
-bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus X"'!' [nao verificado]
-```
-
-O juiz aprova: seu regex termina nas aspas, sem exigir fronteira do argumento. O shell concatena o sufixo, entregando `pre-opus X!`; a porta recusa com rc 2. (`bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:60`, `bin/suite.sh:150`, `bin/suite.sh:169`, `bin/suite.sh:176`)
-
-```bash
-bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus X" \ [nao verificado]
-  --motivo "quero ver"
-```
-
-O juiz também aprova: a segunda linha não chega ao filtro de duplicidade, pois não casa com o primeiro grep. A extração inclui ambas por causa da continuação, e o parser conserva o último motivo, recusado pela guarda. (`bin/tests/test_suite_sh.sh:26`, `bin/tests/test_suite_sh.sh:27`, `bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:60`, `bin/suite.sh:150`, `bin/suite.sh:169`)
-
-Há falsos negativos: aspas simples no motivo; motivo depois de `--parallel 2`; ou um comentário final contendo outro `--motivo`. Os dois primeiros não casam com a forma rígida; o terceiro é contado como duplicidade textual. O parser aceita os respectivos argumentos válidos. (`bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:56`, `bin/suite.sh:60`, `bin/suite.sh:150`)
-
-**Bloco real:** a linha atual é aprovada graças à exceção explícita para `<OBRA>`. Copiada literalmente, porém, a guarda recusa esse marcador com rc 2; substituído por `TRAVA-SELO`, o motivo satisfaz a guarda. Essa exceção já é assumida no comentário do juiz, portanto convém distinguir o exemplo documental parametrizado da alegação de equivalência literal. (`CLAUDE.md:96`; `bin/tests/test_suite_sh.sh:35`, `bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:150`, `bin/suite.sh:169`, `bin/suite.sh:176`)
-
-## 11/11 07:59 · sessao 4b295e1a5bf7 · FIO-E0-V4-E3 · construtor · origem=Code
-
-Diff aplicado nos três arquivos autorizados: [nao verificado]
-
-- C2b exige `concorde`, mantendo igualdade antes/depois e exclusão dos acusadores. [teste:135](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:135) [nao verificado]
-- C2c cobre `aguardando_decisao`, marcador e rejulgamento sem força após batida distante. [teste:165](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:165) [nao verificado]
-- Executor recebeu BASE `52a0022…`, novo mutante e contagem ORM ajustada para 13. [executor:21](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:21)
-- Relato corrigido para `sem_trabalho`, exceto cobertura integral. [relato:22](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:22)
-
-Resultados sem banco, com comandos individuais registrados no [relato:161](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:161):
-
-- Memória: **RC=0**, 19 testes. [nao verificado]
-- Executor green: **RC=0**, 19 testes. [nao verificado]
-- Quatro mutantes de memória: **RC=1 cada**, um `AssertionError`, zero `ERROR`.
-
-Por leitura, o novo mutante encontra a assertion da impressão no C2c; sintaxe e alvo foram conferidos. Morte efetiva ORM e ruff: **[nao verificado]**. [análise:156](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:156)
-
-## 11/11 07:54 · sessao 55a5a29c6fd1 · FIO-E0-V4-E4B · construtor · origem=Code
-
-[Diff completo: 7 arquivos](FIO-E0-V4-E4B-c4v7.patch). A validação ORM e a certificação pelo Code/opus permanecem [nao verificado].
-
-| Item | Alteração | Assertion RED na base `dee18744a` |
-|---|---|---|
-| 1c | Apply exige competência corrente; recusa informa pedida/corrente. [origem](chamados/management/commands/backfill_fio_morto_e4b.py:221) | [teste:102](chamados/tests/test_e4b_c4v7_memoria.py:102) |
-| 1e | Dia da pergunta passa pelo juiz; conversa fica indeterminada. [origem](chamados/services/foto_e4b.py:176) | [teste:187](chamados/tests/test_e4b_c4v7_memoria.py:187) |
-| 1b | Foto online exclui somente `previsto_em`. [origem](chamados/services/foto_e4b.py:244) | [teste:198](chamados/tests/test_e4b_c4v7_memoria.py:198) |
-| 1a | Callback novo recusa/desfaz; callback recusado sai da fila. [origem](chamados/management/commands/backfill_fio_morto_e4b.py:327) | [teste:119](chamados/tests/test_e4b_c4v7_memoria.py:119), [fila:123](chamados/tests/test_e4b_c4v7_memoria.py:123) |
-| 1d | DML fora das tabelas fotografadas recusa/desfaz. [origem](chamados/management/commands/backfill_fio_morto_e4b.py:323) | [teste:132](chamados/tests/test_e4b_c4v7_memoria.py:132) |
-| 8 | Base troca todos os arquivos produtivos do diff; executa todos os REDs de memória. [origem](chamados/tests/e4b_c4_verificar.py:40) | [teste:75](chamados/tests/test_e4b_c4v7_memoria.py:75) |
-| 6 | Captura de `ns` vinculada ao argumento da lambda. | [correção:471](chamados/tests/test_e4b_classe_e_memoria.py:471) |
-
-RELATO do relógio: `fechamento_lido` não oferece parâmetro de relógio; o ramo de leitura atribui `timezone.now()` a `previsto_em`. Por isso, a exclusão ficou somente na foto online; os demais carimbos continuam comparados. [assinatura](ponto/services/fechamento.py:1735), [escritor](ponto/services/fechamento.py:1086), [ramo de leitura](ponto/services/fechamento.py:1135).
-
-Comandos executados sem banco:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4b_classe_e_memoria chamados.tests.test_e4b_c4_tranca_memoria chamados.tests.test_e4b_foto_memoria chamados.tests.test_e4b_c4_orm_protocolo chamados.tests.test_e4b_c4_base chamados.tests.test_e4b_c4v7_memoria -q
-# rc=0: 79 testes [nao verificado]
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos
-# rc=0: 40 testes [nao verificado]
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight
-# rc=0: sete enxertos conferidos; não executa ORM
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v7_memoria --red-base
-# rc=1: seis REDs, oito falhas por assertion, zero erros
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --red-base
-# rc=1: 28 testes, cinco falhas e 16 erros de APIs ausentes em b20 [nao verificado]
-```
-
-Os **16 erros da base b20 não foram contabilizados como mordidas**. A base completa inclui a ausência de `foto_e4b.py`, sem conservar corpo HEAD. [representação da ausência](chamados/tests/e4b_c4_verificar.py:51).
-
-Cada mutante abaixo retornou **rc=1 por `AssertionError`, sem erro de execução**; os alvos estão no [catálogo:220](chamados/tests/test_e4b_c4v7_memoria.py:220):
-
-```bash
-for mutante_e4b in \
-  roteiro_so_emissao roteiro_so_dois_REDs comp_nao_corrente \
-  callback_livre callback_na_fila sem_captura_sql sql_so_insert \
-  escrita_livre dia_cru carimbo_online
-do
-  PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v7_memoria --mutante "$mutante_e4b"
-done
-```
-
-Para a sessão, o roteiro ORM inclui `tranca_avulsa` e os novos testes de dois `freeze_time`, callback produtivo e EventoCelula pela porta. [QUERY](chamados/tests/e4b_c4_verificar.py:137), [relógio](chamados/tests/test_e4b_c4_orm.py:127), [callback](chamados/tests/test_e4b_c4_orm.py:149), [EventoCelula](chamados/tests/test_e4b_c4_orm.py:170):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
-```
-
-Ruff foi tentado com `python3 -m ruff check --no-cache`: **rc=1, módulo ausente**. Execução do lint, ORM, suíte inteira e amostra factual das 131: [nao verificado]. [nao verificado]
-
-_3734 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3743 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
