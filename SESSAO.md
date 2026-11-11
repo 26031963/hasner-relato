@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 03:12:55.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (314.6 MB). Acoes na janela: **1590**.
+**Medido em 11/11/2026 03:18:27.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (314.6 MB). Acoes na janela: **1594**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:13:28 | Bash | Wait for full disjuntor seal result | `cd /home/ronald/wt-verif-fable-021052; git status --porcelain; until [ -n "$(tail -c 300 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b18h2lxw6.output \| /bin/grep 'exited with code')" ]; do /usr/bin/sleep 10; done; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b18h2lxw6.output` |
+| 03:13:21 | Bash | Run only the seal case against mutant and clean | `W=/home/ronald/wt-verif-fable-021052; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/mut_hifen; rm -rf $S; mkdir -p $S/bin; cp $W/bin/*.py $W/bin/codex_pergunta.sh $S/bin/; (cd $W && cp --parents app/core/esteira_vigia.py $S); sed -i "s/m = re.match(r'DISJUNTOR (\[A-Z0-9-\]+)', motivo or '')/m = re.match(r'DISJUNTOR ([A-Z0-9]+)', motivo or '')/" $S/ ...` |
+| 03:13:12 | Bash | Find case dispatch in test_disjuntor | `W=/home/ronald/wt-verif-fable-021052; sed -n 1495,1512p $W/bin/tests/test_disjuntor.sh; /bin/grep -nE '^(if\|case\|\[) .*\$1\|^main\|^"\$1"\|^\$1' $W/bin/tests/test_disjuntor.sh \| head` |
+| 03:13:09 | Bash | Check how test_disjuntor selects cases | `W=/home/ronald/wt-verif-fable-021052; sed -n 1,40p $W/bin/tests/test_disjuntor.sh \| /bin/grep -nE '\$1\|\$2\|R=\|CASO\|uso' ; sed -n 1518,1534p $W/bin/tests/test_disjuntor.sh` |
 | 03:11:04 | Bash | Prove new mutant bites at rc 5/6 | `W=/home/ronald/wt-verif-fable-021052; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/mut_hifen; rm -rf $S; mkdir -p $S; cp -r $W/bin $S/bin; sed -i "s/m = re.match(r'DISJUNTOR (\[A-Z0-9-\]+)', motivo or '')/m = re.match(r'DISJUNTOR ([A-Z0-9]+)', motivo or '')/" $S/bin/disjuntor.py; /bin/grep -c "A-Z0-9\]+)', motivo" $S/bin/disjuntor.py; cd $W; bash  ...` |
 | 03:10:59 | Bash | Add regra-sem-hifen mutant to seal | `W=/home/ronald/wt-verif-fable-021052; cd $W; python3 - <<'EOF' p='bin/tests/test_disjuntor.sh'; s=open(p).read() a='''_mutante prefixo-do-disparo disjuntor.py "_B3_SEM_OBRA = ('DISJUNTOR B3-SEM-OBRA: " "_B3_SEM_OBRA = ('DISJUNTOR B3 SEM-OBRA: " b3_final_sem_obra\n''' assert s.count(a)==1 b=a+'''# pv4 (03h1x): o mutante acima cai no rc 1 (stdout) e nao chega aos rc 5/6; este mantem o stdout e so a  ...` |
 | 03:10:51 | Bash | Inspect relato_negacao regex and mutant block | `W=/home/ronald/wt-verif-fable-021052; cd $W; sed -n 255,270p bin/disjuntor.py; /bin/grep -n 'prefixo-do-disparo' bin/tests/test_disjuntor.sh; sed -n 1535,1560p bin/tests/test_disjuntor.sh` |
