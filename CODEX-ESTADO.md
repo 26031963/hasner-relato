@@ -1,7 +1,181 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:32** · publicado em **11/11/2026 12:31** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:32** · publicado em **11/11/2026 12:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:32 · sessao 94104672075f · PRONTO-AUSENTE-RASCUNHO · leitura · origem=Code
+
+### E4B
+1. O censo da obra precede sua abertura. -- fonte: avais_obras.txt:7: "CENSO-ANTES-DA-VAGA em toda abertura"
+2. O backfill usa a porta canônica e tem DRY como padrão. -- fonte: backlog_obras.txt:1887: "pela porta canonica, DRY default"
+3. Os atos legados são conservados por pergunta, com uma transação por unidade, idempotência e reversão anterior. -- fonte: avais_obras.txt:92: "por unidade = pergunta, uma transacao por unidade, idempotente, reversao antes"
+4. DIVERGE, com substituição expressa: pergunta viva não é encerrada pelo chamado em nenhum ramo. -- fonte: avais_obras.txt:63: "pergunta viva NAO se encerra pelo chamado, em ramo nenhum"
+5. Quando o fechamento deixa pergunta viva sem chamado vivo que a liste, a porta reabre o chamado com nota. -- fonte: avais_obras.txt:63: "o credor volta pela porta (reabrir com nota)"
+6. Antes do apply, uma amostra confirma que o C6 considera vivas as perguntas das 131 por fatos do dia, sem defeito do próprio C6. -- fonte: avais_obras.txt:63: "por fato do dia, e nao por defeito do proprio C6"
+7. O passivo dos 45 dias passa por DRY usando a mesma porta. -- fonte: avais_obras.txt:63: "Passivo dos 45 dias: DRY pela mesma porta"
+8. Classe e, limbo e ramo sem porta estão curados. -- fonte: avais_obras.txt:28: "classe e, limbo, ramo sem porta curados"
+9. O ramo segue_sem_porta tem matriz de transições anterior à construção, contendo ramo, retorno, porta devida e prova. -- fonte: avais_obras.txt:20: "ramo -> retorno -> porta devida -> prova"
+10. O backfill da competência 11 está aplicado com DIFF. -- fonte: avais_obras.txt:28: "backfill da 11 aplicado com DIFF" [nao verificado]
+11. O apply que move dinheiro da competência 11 tem reversão anterior, exportada intacta e prova de frota. -- fonte: avais_obras.txt:9: "reversao antes, exportada intacta, prova de frota"
+12. Competências exportadas ficam em lista para o `!` de Ronald. -- fonte: avais_obras.txt:92: "exportada em lista para o ! do Ronald"
+13. A competência 10 só recebe apply, relavra ou rejulgamento com `!`, ou fica listada com DIFF por colaborador. -- fonte: avais_obras.txt:23: "Nenhum apply/relavra/rejulgar na 10 sem o meu `!`"
+14. O DIFF anterior ao apply inclui DiaPago, fechamento, DSR e faltas por colaborador, sem centavo inesperado prosseguindo. -- fonte: avais_obras.txt:24: "centavo mudando fora do esperado = PARE com lei:"
+15. Antes de apply que reabra chamado, emita pergunta ou dispare push, o RELATO publica o DIFF e as quantidades que nascerão. -- fonte: avais_obras.txt:25: "contando o que nasce (chamados, perguntas, push, itens na Central)" [nao verificado]
+16. Relavra ou rejulgamento de frota ocorre fora do horário do admin. -- fonte: avais_obras.txt:25: "ate 07h ou depois das 19h"
+17. A remedida posterior à E4a-2 está no RELATO. -- fonte: avais_obras.txt:28: "remedida pos E4a-2 no RELATO"
+18. fio_morto_alcance e hoje+ medem zero na sombra em três rodadas de dias diferentes. -- fonte: avais_obras.txt:28: "fio_morto_alcance = 0 E hoje+ = 0 remedidos na sombra em 3 rodadas de dias diferentes"
+19. alarma_em_0 está armado no carimbo. -- fonte: avais_obras.txt:28: "alarma_em_0 armado no carimbo"
+20. nao ocorreu: pular opus, suite ou B3. -- fonte: avais_obras.txt:29: "pular opus, suite ou B3" [nao verificado]
+21. nao ocorreu: baixar contador por universo, filtro, exclusão ou fallback. -- fonte: avais_obras.txt:29: "baixar contador por universo, filtro, exclusao ou fallback"
+22. Colaboradores de teste e CADASTRO só saem por ato de Ronald na tela. -- fonte: avais_obras.txt:26: "nunca por codigo nem filtro" [nao verificado]
+
+N=22  
+LACUNA: o conteúdo integral de C3.2–C3.9 e da matriz de segue_sem_porta não foi fornecido [nao verificado]. DIVERGE resolvida por substituição: o aval anterior mandava encerrar a pergunta — avais_obras.txt:66: "a pergunta encerra pela porta com motivo premissa morta e trilha"; o posterior declara — avais_obras.txt:63: "substitui por inteiro E4B-CLASSE-E-PELA-LEI e E4B-CLASSE-E-ADMIN".
+
+### E4C
+1. Existe censo AST dos leitores dos campos legados, com arquivo:linha e a resposta produzida em tela, PDF ou contador. -- fonte: avais_obras.txt:81: "com o que cada um responde na tela/PDF/contador"
+2. Cada leitor tem a autoridade registrada que passará a consultar, e ausência de juiz vira decisão listada. -- fonte: avais_obras.txt:82: "sem juiz = DECISAO listada, nunca juiz novo"
+3. O censo usa a cópia da E3 indicada e atualiza somente o delta após seu pouso. -- fonte: avais_obras.txt:80: "refazer SO o delta quando a E3 pousar" [nao verificado]
+4. A ordem de troca identifica dependências de arquivo e cruzamentos com E4b/E4d. -- fonte: avais_obras.txt:83: "ordem de troca por dependencia de arquivo e o que cruza com E4b/E4d"
+5. O arquivo de censo da E4C está entregue no formato consumido pelo brief. -- fonte: avais_obras.txt:84: "logs/E4C/censo.r, no formato que o brief do construtor consome"
+6. O RELATO informa a quantidade de perguntas de lei, inclusive quando zero. -- fonte: avais_obras.txt:87: "se der 0 pergunta de lei, dizer \"0\""
+7. A publicação do censo é precedida da conferência por amostra declarada de cinco escritores e cinco leitores. -- fonte: avais_obras.txt:85: "5 escritores e 5 leitores de cada lote antes de publicar"
+8. Os leitores DIVERGE da matriz passam a ler o ato somente depois da E4b medida. -- fonte: avais_obras.txt:92: "os DIVERGE da matriz passam a ler o ato, so depois da E4b medida"
+9. O selo 2 demonstra ausência de leitura de campo abolido. -- fonte: avais_obras.txt:92: "selo 2 (nenhum leitor le campo abolido)"
+10. A03, A05 no ramo de assinatura, A06, A17, A18 e A20 conservam a projeção como fonte até existir fato equivalente. -- fonte: avais_obras.txt:92: "continuam com a projecao como fonte lida ate existir fato equivalente"
+11. Há registro de obra de fato próprio para cada exceção e da pergunta de lei da A20. -- fonte: avais_obras.txt:92: "REGISTRAR obra de fato proprio para cada um"
+12. nao ocorreu: construção, cópia de escrita ou apply durante o censo adiantado. -- fonte: avais_obras.txt:86: "construtor, copia de escrita, apply"
+13. Há opus final da obra. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=13  
+LACUNA: a matriz completa de leitores DIVERGE e seus mapeamentos de autoridade não foi fornecida [nao verificado].
+
+### RAIZ F1
+1. O brief contém F0, F1 e a resposta do aval sobre o eleitor único. -- fonte: avais_obras.txt:98: "A c22 abre com F0+F1 + esta resposta no brief"
+2. fio.gravar_destino_da_pergunta é a função única de escrita de chamado_destino, chamada por _nascer e reapontar_resolvedora. -- fonte: avais_obras.txt:98: "funcao unica fio.gravar_destino_da_pergunta"
+3. O selo AST por função falha se houver escrita de chamado_destino fora da função única. -- fonte: avais_obras.txt:98: "AST: escrita de chamado_destino fora dela = FALHA"
+4. O eleitor prioriza o chamado do fato resolvido pela pergunta, com mesmo motivo e marco. -- fonte: avais_obras.txt:98: "o chamado DO FATO que a pergunta resolve -- mesmo motivo/marco"
+5. Empates entre candidatos do mesmo fato são resolvidos pelo menor PK, deterministicamente e com idempotência. -- fonte: avais_obras.txt:98: "menor PK, deterministico e idempotente"
+6. A posição no lote do agrupador deixa de eleger o destino. -- fonte: avais_obras.txt:98: "\"Primeiro do lote do agrupador\" (disputa_emissao.py:1197) MORRE como regra"
+7. declaracao_texto lê o destino gravado sem elegê-lo. -- fonte: avais_obras.txt:98: "vira LEITOR do destino gravado (testemunha le, nao elege)"
+8. disputa_emissao.py:238 chama o eleitor único. -- fonte: avais_obras.txt:98: "disputa_emissao.py:238 vira chamador do eleitor unico"
+9. A alteração de _nascer limita-se à chamada da função única, preservando predicado e campos com prova por mutante. -- fonte: avais_obras.txt:98: "predicado e campos intocados; mutante prova"
+10. Dois pedidos do mesmo fato em ordens diferentes produzem o mesmo destino. -- fonte: avais_obras.txt:98: "dois pedidos no mesmo fato em ordens diferentes = mesmo destino"
+11. Replay com origem None não reelege o destino. -- fonte: avais_obras.txt:98: "replay com origem None nao re-elege"
+12. O tratamento da dona FECHADA segue HX-RESSUSCITA. -- fonte: avais_obras.txt:98: "dona FECHADA segue a lei HX-RESSUSCITA"
+13. A matriz F1 inclui h2(B), quem fecha órfãos sem disputa e a decisão da dona FECHADA com o número de motivo_em_dona_fechada. -- fonte: backlog_obras.txt:1895: "com o numero do contador motivo_em_dona_fechada"
+14. Há opus final da obra. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=14  
+LACUNA: o conteúdo de HX-RESSUSCITA, a matriz completa e a resposta sobre quem fecha órfãos não foram fornecidos [nao verificado].
+
+### RAIZ F2
+1. O censo antecede a cura da BO-DISPUTA-SEM-PERGUNTA. -- fonte: backlog_obras.txt:1889: "cura so com aval depois do censo"
+2. A cura contempla exceção e reuso aprovados. -- fonte: backlog_obras.txt:1889: "cura (a) excecao + (b) reuso APROVADA"
+3. Existe matriz da porta de nascimento da DisputaSupervisao cobrindo os estados a–j e avaliando resolver antes de escrever. -- fonte: backlog_obras.txt:1890: "avalia resolver-antes-de-escrever"
+4. Toda linha da matriz que viola o nascimento com pergunta recebe cura na obra ou pergunta de lei. -- fonte: backlog_obras.txt:1890: "linha que fere \"nasce com pergunta ou nao nasce\" = cura na obra ou pergunta de lei"
+5. Há invariante de disputa aberta sem pergunta, acompanhado de selo que morde. -- fonte: backlog_obras.txt:1889: "invariante em auditar_invariantes_chamados ao lado do I7"
+6. O contador COM ata tem esperado zero e dono ESTRUTURA. -- fonte: backlog_obras.txt:1889: "COM ata esperado 0 (ESTRUTURA)"
+7. O contador SEM ata é publicado sob ata/cartório. -- fonte: backlog_obras.txt:1889: "SEM ata publicado (ata/cartorio)" [nao verificado]
+8. nao ocorreu: alteração das sete disputas por shell. -- fonte: backlog_obras.txt:1889: "as 7 nao se mexem por shell"
+9. O opus final recebe a matriz anexa. -- fonte: backlog_obras.txt:1890: "opus final so com a matriz anexa"
+
+N=9  
+LACUNA: não foram fornecidos os estados a–j, os detalhes das curas de exceção/reuso nem o conteúdo de HX-ATA-NAO-SABE [nao verificado].
+
+### RAIZ F3
+1. Existe censo AST de escritores e leitores de cada campo de estado do par e da DisputaSupervisao, dentro e fora do agregado. -- fonte: avais_obras.txt:74: "cada campo de estado do par e da DisputaSupervisao"
+2. A matriz por porta contém estado, juiz, operação, persistido, retorno e prova. -- fonte: avais_obras.txt:75: "estado -> juiz -> operacao -> persistido -> retorno -> prova"
+3. A matriz cobre responder, validar, materializar, guarda de paridade, reconciliar e fechar disputa. -- fonte: avais_obras.txt:75: "Portas: responder (colab), validar (admin), materializar"
+4. As divergências semânticas estão numeradas e acompanhadas da quantidade de perguntas de lei e dos números de frota. -- fonte: avais_obras.txt:76: "DIVERGENCIAS SEMANTICAS como DECISOES numeradas"
+5. O censo identifica quais dos 77 pares, 848 duplicadas e 18 pode_fechar True cada transição explica. -- fonte: avais_obras.txt:77: "quais dos 77 pares / 848 duplicadas / 18 pode_fechar True cada transicao explica"
+6. O autor do fecho automático é o autor do ato que carimbou a última pergunta, com motivo próprio na trilha. -- fonte: avais_obras.txt:104: "o autor do ato que carimbou a ultima pergunta, com motivo proprio na trilha"
+7. O brief de construção contém censo e matriz. -- fonte: avais_obras.txt:107: "abrem construtor com censo + matriz no brief"
+8. Há opus final da obra. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=8  
+LACUNA: as condições completas que autorizam ou impedem cada fecho automático não estão enumeradas nos anexos [nao verificado].
+
+### RAIZ F4
+1. Existe censo AST dos escritores e leitores dos campos de estado do par e da DisputaSupervisao. -- fonte: avais_obras.txt:74: "CENSO POR AST de quem ESCREVE e quem LE"
+2. Existe matriz por porta com estado, juiz, operação, persistido, retorno e prova. -- fonte: avais_obras.txt:75: "estado -> juiz -> operacao -> persistido -> retorno -> prova"
+3. As transições explicam seus respectivos casos entre os 77 pares, 848 duplicadas e 18 pode_fechar True. -- fonte: avais_obras.txt:77: "quais dos 77 pares / 848 duplicadas / 18 pode_fechar True cada transicao explica"
+4. O par é lido dos marcos de saída e volta do mesmo intervalo na célula do dia. -- fonte: avais_obras.txt:102: "O par e LIDO dos marcos da celula do dia"
+5. A DisputaSupervisao agrupa perguntas pelos marcos que cada uma cobra. -- fonte: avais_obras.txt:102: "a DisputaSupervisao agrupa as perguntas pelos marcos que cada uma cobra"
+6. Sem marco de pausa na célula, não existe par e cada pergunta segue sozinha como CADASTRO. -- fonte: avais_obras.txt:103: "nao ha par; cada pergunta segue sozinha, como hoje"
+7. Se o censo encontra autoridade existente para identificar o par da pausa, a F4 lê dessa autoridade e registra arquivo:linha. -- fonte: avais_obras.txt:105: "ela e a autoridade e a F4 le dela"
+8. nao ocorreu: derivação do par em paralelo à célula. -- fonte: avais_obras.txt:105: "Proibido derivar o par em paralelo a celula"
+9. nao ocorreu: criação de juiz par_da_pausa ou registro novo em core/juizes.py. -- fonte: avais_obras.txt:106: "juiz par_da_pausa ou qualquer registro novo em core/juizes.py"
+10. nao ocorreu: gravação de “aguardando a outra metade”. -- fonte: avais_obras.txt:106: "gravar \"aguardando a outra metade\" (e derivado, so leitura)"
+11. O brief contém censo e matriz, e a obra recebe opus final. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=11  
+LACUNA: a matriz completa e o conteúdo da única lei identificada como D8 não foram fornecidos; sua menção está em backlog_obras.txt:1896: "so D8 lei" [nao verificado].
+
+### RAIZ F6
+1. O passivo é tratado em DRY. -- fonte: avais_obras.txt:10: "F6 PASSIVO: DRY"
+2. Existe DIFF da sombra por classe. -- fonte: avais_obras.txt:10: "DIFF da sombra por classe"
+3. A reversão está em logs/. -- fonte: avais_obras.txt:10: "reversao em logs/"
+4. A competência exportada está em lista para o `!` de Ronald. -- fonte: avais_obras.txt:10: "exportada em LISTA para o meu !"
+5. Das 848 duplicadas são medidos somente idade e efeito, sem apply. -- fonte: avais_obras.txt:10: "as 848 duplicadas so medir idade e efeito, sem apply"
+
+N=5  
+LACUNA: as classes, os efeitos esperados e o escopo completo da F6 além desse passivo não estão definidos nos anexos [nao verificado].
+
+### RAIZ F7
+1. Cada fase nasce acompanhada do selo F7 com esperado zero. -- fonte: avais_obras.txt:5: "F7 (selo esperado 0) nasce junto de CADA fase, nao no fim"
+
+N=1  
+LACUNA: não estão nomeados o que o selo mede, seu universo e os critérios específicos de cada fase [nao verificado].
+
+### O168
+1. O censo antecede a abertura da obra. -- fonte: avais_obras.txt:7: "O168 e LASTRO parte 3 ainda sem censo: Codex censo antes"
+2. Cartório e supra_juiz consultam um único juiz para a guarda de conversa. -- fonte: backlog_obras.txt:1396: "passa a ser chamada pelos DOIS, com UM juiz"
+3. No evento, o cartório não fecha cobrança sem furo de chamado que tenha conversa. -- fonte: backlog_obras.txt:1396: "o cartorio nao fecha cobranca sem furo de chamado que tem conversa"
+4. O `--executar` do supra só é liberado depois da guarda valer no evento e de CSF_RETRATADO ser medido em zero. -- fonte: backlog_obras.txt:1396: "com `CSF_RETRATADO` medido em ZERO"
+5. Há opus final da obra. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=5  
+LACUNA: nenhuma.
+
+### LASTRO
+1. O degrau 2 consulta o juiz _match_marcos/marco_ocupado_pela_batida para determinar o papel do marco. -- fonte: backlog_obras.txt:1732: "o degrau 2 pergunta ao JUIZ"
+2. A parte 2 contém a autópsia dos chamados #35623, #33126 e #36045. -- fonte: backlog_obras.txt:1761: "autopsia #35623/#33126/#36045"
+3. O fechamento é curado por marco via reconciliar(), e fechar_cobranca_com_lastro passa a vigia `--alarme`. -- fonte: backlog_obras.txt:1761: "cura fecho por MARCO via reconciliar() -> fechar_cobranca_com_lastro vira vigia --alarme"
+4. O pouso da parte 2 respeita as dependências JUIZ-1 e CRONS-INSTALL-SOB-MARCA. -- fonte: backlog_obras.txt:1761: "pouso tambem depende de CRONS-INSTALL-SOB-MARCA" [nao verificado]
+5. A morte da pergunta por concordância ou recusa não deixa o chamado fechável sem evento. -- fonte: backlog_obras.txt:1763: "pergunta que morre por concordancia/recusa deixa o chamado fechavel SEM evento"
+6. O censo da parte 3 antecede sua abertura. -- fonte: avais_obras.txt:7: "O168 e LASTRO parte 3 ainda sem censo: Codex censo antes"
+7. O escritor e a frota do tipo folga fora do catálogo são medidos antes da cura. -- fonte: backlog_obras.txt:1808: "Escritor e frota a medir antes de cura"
+8. Há opus final da obra. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=8  
+LACUNA: não há delimitação consolidada do PRONTO de LASTRO nem descrição da cura de folga fora do catálogo [nao verificado].
+
+### O169-FECHADA
+1. DIVERGE no nome: o contador cluster_encerrado_sem_lastro mede clusters encerrados cujo dia ainda tem assinatura viva, com esperado zero. -- fonte: avais_obras.txt:132: "`cluster_encerrado_sem_lastro` = cluster ENCERRADO cujo dia ainda tem assinatura viva"
+2. O contador usa a função real _leitura_da_celula, sem decidir pelo motivo gravado. -- fonte: avais_obras.txt:132: "contador pela FUNCAO REAL, nao por motivo gravado"
+3. O universo do contador contém encerramentos automáticos por cron, varredura ou janela. -- fonte: avais_obras.txt:132: "universo = encerramentos AUTOMATICOS (cron/varredura/janela)"
+4. Via humana, desligamento e tranca ficam fora com motivo declarado, dono ADMIN/DP e possibilidade de contestação. -- fonte: avais_obras.txt:132: "ficam FORA com motivo declarado no contador"
+5. O mutante que fecha por idade torna o teste vermelho. -- fonte: backlog_obras.txt:1940: "mutante fechar-por-idade = VERMELHO" [nao verificado]
+6. No legado trancado, a relavra altera somente a VIA para tranca e deixa trilha. -- fonte: backlog_obras.txt:1940: "trancada relavra so a VIA p/ tranca com trilha"
+7. No legado não trancado, o chamado reabre pela porta. -- fonte: backlog_obras.txt:1940: "nao trancada reabre pela porta"
+8. O rc 2 diário não é silenciado durante a espera pelo pouso da E4a-2. -- fonte: backlog_obras.txt:1940: "rc 2 diario ate la nao se silencia" [nao verificado]
+9. Há opus final da obra. -- fonte: avais_obras.txt:7: "opus final sempre"
+
+N=9  
+LACUNA: DIVERGE nominal registrada: backlog_obras.txt:1940: "contador `fechados_por_idade` (esperado 0)"; o aval determina a retirada desse nome — avais_obras.txt:132: "Nome fechados_por_idade morre". Não foi fornecida uma lista consolidada que delimite quais achados separados de O169 integram este delta [nao verificado].
+
+### UI-PAINEL-MOSTRA-O-APP
+1. O topo da aba Mensagens mostra a faixa com rótulo e número atuais do app e a lista de perguntas pendentes com texto, dia e marco. -- fonte: avais_obras.txt:117: "a lista das perguntas pendentes (texto da pergunta, dia, marco), so leitura"
+2. O contador do botão Mensagens soma as perguntas pendentes. -- fonte: avais_obras.txt:118: "contador do botao da aba Mensagens soma as perguntas pendentes"
+3. O painel consulta consulta_do_app para pendentes e histórico. -- fonte: avais_obras.txt:115: "consulta_do_app (pendentes, historico)"
+4. Uma única função fornece o rótulo aos dois leitores da API e ao painel. -- fonte: avais_obras.txt:124: "uma funcao de rotulo com 3 leitores (2 API + painel)"
+5. A contagem de mensagens não lidas também pertence à função única. -- fonte: backlog_obras.txt:1131: "a contagem de nao lidos tambem vai a funcao unica"
+6. Com duas perguntas pendentes, painel e API mostram Responder DP e número dois, e o painel lista ambas. -- fonte: avais_obras.txt:121: "painel mostra \"Responder DP, 2\" e as 2 perguntas"
+7. Com somente uma mensagem não lida, painel e API mostram Chamados e número um. -- fonte: avais_obras.txt:121: "\"Chamados, 1\" nos dois"
+8. Sem pendência, a faixa mostra nada pend
+
+[truncado em 20000 de 23818 caracteres]
 
 ## 11/11 12:32 · sessao 186f5d5b3ede · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -855,29 +1029,4 @@ Achados procedentes no código; render testado em memória com `markdown_it` Com
 
 Adicional: substituir todos os LF por VT, FF, NEL, U+2028 ou U+2029 mantém aprovação porque `splitlines()` os separa (`bin/mapa20_valida.py:123`), mas renderer local mostra zero tabelas. Interpretação do renderer de produção [nao verificado].
 
-## 11/11 12:14 · sessao caef848ee75c · - · - · origem=Ronald (tmux)
-
-Achados semânticos, todos reproduzidos em memória sem criar arquivos:
-
-- **Procedente, alta:** a cura não fecha a classe de “encerrada” renderizada. Com `1 de 2`, `encerrad&#97;`, `encerr<em>ada</em>`, `encerrad\u200ba` e `encerrad\u200da` retornam zero problemas. `_ENCERRADA` procura caracteres contíguos; `_sem_nomes_e_caminhos` apenas remove nomes/caminhos, sem interpretar HTML ou caracteres invisíveis. Referências: `bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:59`, `bin/mapa20_valida.py:67`, `bin/mapa20_valida.py:193`. A aparência exata dos caracteres invisíveis no publicador fica [nao verificado].
-
-- **Procedente, média:** a cura introduz recusas de negação legítima com ênfase por `_`: `nao _encerrada_`, `_nao encerrada_` e `__nao encerrada__` retornam `"encerrada" com 1 de 2`. A nova fronteira encontra a palavra, mas `_NEGADA` exige `\b` antes de `nao` e somente espaços depois; os sublinhados impedem a isenção. Referências: `bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:68`, `bin/mapa20_valida.py:194`.
-
-- **Procedente, média, preexistente:** `nao **encerrada**`, `nao <em>encerrada</em>` e `n&#227;o encerrada` também recusam. `nao encerrada`, `não encerrada` e `**nao encerrada**` passam. Referências: `bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:68`.
-
-- A remoção de nomes/caminhos continua preservando os casos intencionais `BO-ROTULO-ENCERRADO` e `logs/encerrada.md:10`. Referências: `bin/mapa20_valida.py:51`, `bin/mapa20_valida.py:61`, `bin/tests/test_mapa20_valida.sh:93`, `bin/tests/test_mapa20_valida.sh:95`.
-
-- A remoção ocorre sem fronteiras, podendo fabricar contexto: `nao E3 encerrada` e `nao logs/estado.md encerrada` tornam-se `nao   encerrada` e passam; `encerradaE3` torna-se `encerrada ` e recusa. Se essas entradas representam uma afirmação ou texto legítimo na produção é [nao verificado]. Referências: `bin/mapa20_valida.py:61`, `bin/mapa20_valida.py:62`, `bin/mapa20_valida.py:63`, `bin/mapa20_valida.py:68`.
-
-**Os quatro testes novos mordem pelo motivo certo; achado de teste inadequado não procedente.** Recriei o validador anterior exclusivamente em memória, removendo os dois novos bloqueios e restaurando `\bencerrad[ao]s?\b`: os quatro retornam zero problemas; no atual: [nao verificado]
-
-| Caso | Resultado atual | Decisão |
-|---|---|---|
-| Linha sem borda colada | Recusa por linha colada | `bin/tests/test_mapa20_valida.sh:62`; `bin/mapa20_valida.py:135` |
-| Segunda tabela sem bordas | Recusa por pipe fora | `bin/tests/test_mapa20_valida.sh:63`; `bin/mapa20_valida.py:137` |
-| `_encerrada_` | Recusa por encerramento com `1 de 2` | `bin/tests/test_mapa20_valida.sh:65`; `bin/mapa20_valida.py:193` |
-| `__encerrada__` | Recusa por encerramento com `1 de 2` | `bin/tests/test_mapa20_valida.sh:66`; `bin/mapa20_valida.py:193` |
-
-A primeira entrada também cairia no bloqueio de pipe externo se somente o bloqueio de linha colada fosse removido; ela contém pipes internos. Referências: `bin/tests/test_mapa20_valida.sh:62`, `bin/mapa20_valida.py:137`.
-
-_3843 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3844 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
