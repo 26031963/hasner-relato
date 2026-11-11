@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:49** · publicado em **11/11/2026 15:51** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:56** · publicado em **11/11/2026 15:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:56 · sessao 111529e65077 · UI-PAINEL-MOSTRA-O-APP · verificador · origem=Code
+
+REPROVADO
+
+1. **Bloqueante (1) curado no código; censo do diff completo [não verificado].** O template usa `pendentes_com_dia` e apresenta `dia`, com “—” para valor vazio; deixou de interpretar `p.data_evento` como dia do turno (`app/templates/colaboradores/partials/painel_colaborador.html:195–198`). O juiz retorna `None` para conversa (`app/chamados/juizes.py:334–338`).
+
+   Há outros leitores na cópia:
+   
+   - API: serialização direta de `p.data_evento` em `app/api/views.py:1153–1154`; interpolação desse campo numa mensagem de diagnóstico em `app/api/views.py:2625`.
+   - Serviço: comparação direta, excluindo conversa, em `app/chamados/services/pergunta_no_app.py:149`.
+   - Teste alterado pela v5: consulta ao juiz em `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:129–131`; leitura crua para conferir o fato e rejeitar a data civil da conversa em `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:175–178`.
+
+   Quais desses leitores foram introduzidos ou tocados pela obra inteira contra `e70a54f7e` está **[não verificado]**: o anexo contém somente o delta v5, e esta cópia não disponibiliza histórico Git.
+
+2. **Sem novo bloqueio na montagem dos pares.** A compreensão percorre exatamente `consulta['pendentes']`, preservando objetos e ordem, sem filtro, ordenação ou regra própria de dia, e chama `_dia_de_turno_da_pergunta(p)` uma vez por elemento nessa montagem (`app/chamados/services/pergunta_no_app.py:106`). A lista de pares é nova; a lista original de pendentes continua sendo devolvida pela expansão de `consulta` (`app/chamados/services/pergunta_no_app.py:107–109`).
+
+   O universo vem de C6, ordenado por ID, depois separado pelo estado de resposta e fechamento da disputa (`app/chamados/services/pergunta_no_app.py:49–58`, `:69–75`). A chamada única aqui não significa uma única chamada total ao juiz durante toda a consulta: C6 também o utiliza (`app/chamados/juizes.py:1448`).
+
+   Precisão sobre “registrado”: o registro declara C6 como `chamados/juizes.py::pergunta_viva`; `_dia_de_turno_da_pergunta` é o auxiliar existente dessa autoridade (`app/core/juizes.py:278`; `app/chamados/juizes.py:334–338`, `:1448`).
+
+3. **Escritores e leitores: mesma origem para rótulo e contagem.** A projeção é chamada pelos dois `/me/` e pela view do painel (`app/api/views.py:315–319`; `app/api/views_core.py:303–307`; `app/colaboradores/views.py:940–941`). A view passa o resultado como `no_app` ao template (`app/colaboradores/views.py:1006`).
+
+   | Chave | Quem escreve | Quem lê em execução normal |
+   |---|---|---|
+   | `pendentes` | `consulta_do_app`, `app/chamados/services/pergunta_no_app.py:69–75` | Projeção para tamanho e pares, `:91`, `:106`; condição do template, `app/templates/colaboradores/partials/painel_colaborador.html:193` |
+   | `historico` | `consulta_do_app`, `app/chamados/services/pergunta_no_app.py:69–75` | Preservado pela projeção, `:107`; sem consumo nos três leitores acima |
+   | `pendentes_com_dia` | Projeção, `app/chamados/services/pergunta_no_app.py:106–109` | Template, `app/templates/colaboradores/partials/painel_colaborador.html:195–198` |
+   | `questionarios_pendentes` | Projeção, `app/chamados/services/pergunta_no_app.py:91` | APIs, `app/api/views.py:318`, `app/api/views_core.py:306`; contador da aba, `app/templates/colaboradores/partials/painel_colaborador.html:39` |
+   | `chamados_nao_lidos` | Projeção, `app/chamados/services/pergunta_no_app.py:92–97` | Regra do badge, `:100–101`; APIs, `app/api/views.py:317`, `app/api/views_core.py:305` |
+   | `chamados_badge`, incluindo `rotulo`, `count`, `cor` | Projeção, `app/chamados/services/pergunta_no_app.py:98–103` | APIs, `app/api/views.py:319`, `app/api/views_core.py:307`; faixa, `app/templates/colaboradores/partials/painel_colaborador.html:190–191` |
+
+   Os dois `/me/` publicam os mesmos campos recebidos da projeção; `pendentes_com_dia` não entra no payload (`app/api/views.py:358–360`; `app/api/views_core.py:346–348`). O contador do **botão** soma chamados e perguntas; a **faixa** usa `badge.count` (`app/templates/colaboradores/partials/painel_colaborador.html:39–40`, `:191`).
+
+   Nos testes, existe ainda um leitor auxiliar para renderização (`app/colaboradores/tests/test_selo_situacao_e_lampada.py:118–122`) e uma sobrescrita deliberada do badge para provar propagação pelos três leitores (`app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:219–227`).
+
+4. **BLOQUEANTE — o RED ORM pelo motivo certo continua sem comprovação disponível.** Pela leitura do teste, ambos os mutantes devem falhar: template usando `p.data_evento` ou projeção entregando essa data para conversa produzirão a data civil onde a asserção exige “Dia: —”; há também rejeição explícita da data civil (`app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:166–178`).
+
+   A mordida **executada no ORM**, o verde atual e o RED sobre **as duas bases** estão **[não verificado]**. O registro existente descreve RED de memória na base `9ca563bb3` e ausência de execução ORM naquela ocasião (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:6–11`). Ele não comprova a alegada repetição v5.
+
+   A verificação disponível aqui foi de memória: sete testes verdes, e variantes dos dois defeitos morreram por asserção, sem erro. Os contratos correspondentes estão em `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:60–70`, `:74–110`; o próprio arquivo limita esse selo, sem certificação ORM (`:3–4`).
+
+5. **FILA — fechamento de escopo e relato.** Há adaptações auxiliares visíveis: alvos dos mutantes E3 apontam para a projeção (`app/chamados/tests/e3_mutantes.py:23–26`, `:87–88`), o censo declara seu contador (`app/core/tests/test_tripwire_contagem_de_pendencia.py:82–85`) e outro selo fornece `no_app` ao template (`app/colaboradores/tests/test_selo_situacao_e_lampada.py:116–122`).
+
+   A correspondência dessas alterações com o **diff completo** e com o **texto do commit**, assim como smoke do Ronald, encaixe na raia e entrega da linha HAIKU, permanece **[não verificado]**. Esses materiais não foram fornecidos; não há base para declarar que o commit os cumpriu ou omitiu. [nao verificado]
 
 ## 11/11 15:49 · sessao 09a259e1349b · DATA-EVENTO-CRU · verificador · origem=Code
 
@@ -567,27 +612,4 @@ O mapeamento não prova ausência de qualquer outra falha antiga na batida: onbo
 
 Férias: espelho usa `criar_ausencia(tipo='ferias')`, captura só domínio e registra recusas (`app/ponto/services/ausencia.py:1201–1216`); `AgendamentoFerias.save` chama sync após salvar agendamento (`app/ferias/models.py:446–451`). A criação com `ferias` inativo já era recusada no precheck; só uma mudança entre precheck/save introduz o novo VE bruto. Remarcação da view captura apenas `AgendamentoNaoRemarcavel` (`app/ferias/views.py:686–690`).
 
-## 11/11 15:36 · sessao 61e4e870505c · - · - · origem=Ronald (tmux)
-
-Fixtures preservam a mordida original na leitura estática:
-
-- **Carimbo:** continua usando `obito` legado, depois executa `save()` de aprovação/rejeição e exige `aprovada_em`; o estado pendente continua exigindo ausência do carimbo. A mudança foi na montagem da linha, sem retirar asserções. `app/ponto/tests/test_decisao_carimba.py:16-43`.
-- **Espelho:** mantém `obito` e o compara com o status lavrado pelo juiz; preserva verificações de turnos, batidas e resumo. `app/ponto/tests/test_caracterizacao_espelho.py:48-55`, `:89-101`.
-- **Fechamento:** mantém o desconhecido `atestado_medico` e exige DSR perdido igual a zero; os testes de ordem entre falta e atestado continuam presentes. `app/ponto/tests/test_fechamento_ausencia_pela_autoridade.py:57-87`.
-- **Cadastro/dropdown:** apenas acrescentam limpeza do cache ao fim; continuam exigindo admissão imediata de código novo, remoção do inativo e fallback quando a tabela está vazia. `app/ponto/tests/test_cadastro_tipo.py:11-37`; `app/ponto/tests/test_dropdown_vivo.py:16-49`.
-- **Diferença de fixture:** agora há um primeiro julgamento com `abono`, seguido de julgamento com legado. Os receivers de Ausencia não distinguem `created`, portanto o segundo `save()` executa seus consumidores; equivalência completa de todos os efeitos intermediários [não verificado]. `app/ponto/tests/test_caracterizacao_espelho.py:50-55`; `app/ponto/signals.py:143-147`, `:275-279`.
-
-O selo novo tem asserções que falhariam sem a guarda: rejeita criação direta, `objects.create`, troca de vivo para morto e troca entre mortos; também protege história, desativação posterior e código vivo fora de choices. `app/ponto/tests/test_lastro_folga_save_guarda.py:73-142`. Execução verde, RED histórico e mutantes efetivamente executados [não verificado].
-
-Lacunas relevantes:
-
-1. **Corrida:** leitura do tipo e persistência não estão protegidas pela própria guarda com lock/transação. Interleaving possível: A lê legado `folga`; B corrige para `abono`; A passa na comparação e salva novamente `folga`. Ocorrência em produção [não verificado]. `app/ponto/models.py:879-893`, `:933`.
-2. **`update_fields` não contorna:** a guarda roda antes de analisar os argumentos do `save`; até atualização apenas de descrição valida o `self.tipo` em memória e consulta o legado. Pode recusar uma alteração em memória que nem seria persistida. `app/ponto/models.py:891-893`, `:933`.
-3. **`QuerySet.update` contorna de fato:** a própria fixture demonstra a gravação do tipo morto, seguida de leitura confirmando o valor. `app/ponto/tests/test_lastro_folga_save_guarda.py:63-69`.
-4. **`raw`/bulk:** semântica de `save_base(raw=True)` e de bulk não foi confirmada no código instalado, pois Django não está disponível no host; dependência declarada é Django 5.2.14. `app/requirements.txt:13`; comportamento executado [não verificado].
-5. **Multi-db:** a guarda ignora `using` na consulta histórica. As configurações examinadas só declaram alias `default`, portanto impacto real multi-db [não verificado]. `app/ponto/models.py:883-884`; `app/config/settings/saas.py:83-93`; `app/config/settings/prod.py:9-18`.
-6. **Custo:** fora do vivo e com instância persistida, há uma consulta extra ao tipo; com cache expirado também há leitura do catálogo. O `Meta.ordering` inclui `colaborador__nome`, e a consulta histórica não remove a ordenação; SQL efetivamente emitido [não verificado]. `app/ponto/models.py:819`, `:882-884`; `app/ponto/catalogo/ausencias.py:249-252`, `:275-280`.
-
-Os novos testes não exercitam concorrência, `update_fields`, processos/tenants diferentes ou bulk/raw. `app/ponto/tests/test_lastro_folga_save_guarda.py:73-142`.
-
-_3971 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3972 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
