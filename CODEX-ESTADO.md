@@ -1,7 +1,307 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:35** · publicado em **11/11/2026 15:35** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:41** · publicado em **11/11/2026 15:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:41 · sessao 321d419c4e23 · - · - · origem=Ronald (tmux)
+
+Não identifiquei leitor real atual omitido pelas novas exclusões de chaves de dict ou `DESTINO_KW`: as chaves encontradas são payload/trilha; o literal sob `fields=` pertence ao índice. (`app/api/views.py:1165`; `app/api/views_mensageria.py:568`; `app/chamados/canal.py:79`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:354`; `app/chamados/services/materializacao.py:578`; `app/chamados/services/validacao.py:671`; `app/chamados/services/fio.py:1047`; `app/chamados/services/fio.py:1048`; `app/chamados/models.py:3483`)
+
+Há uma lacuna demonstrável na regra de destino: `M.objects.create(x=p['data_evento'])` retorna censo vazio em simulação em memória; o contexto `escrita=True` suprime a constante do subscrito lido. Ocorrência real dessa forma na árvore: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:102`; `app/chamados/tests/test_catraca_data_evento_cru.py:122`; `app/chamados/tests/test_catraca_data_evento_cru.py:139`)
+
+`fields=['data_evento']` é suprimido em qualquer chamada, inclusive eventual serialização; isso constitui limite potencial, sem leitor atual localizado nessa forma. (`app/chamados/tests/test_catraca_data_evento_cru.py:62`; `app/chamados/tests/test_catraca_data_evento_cru.py:137`; `app/chamados/tests/test_catraca_data_evento_cru.py:28`)
+
+## 11/11 15:39 · sessao 97538cdfafe8 · - · - · origem=Ronald (tmux)
+
+Correção à conclusão anterior: **não há garantia geral de C previamente adquirido pelo passivo**. `carimbar` salva Q diretamente em `app/chamados/models.py:3152`; seu `save` apenas abre atomic e executa `super().save` em `app/chamados/models.py:3422`/`:3423`. Os receivers encontrados agendam becos por `on_commit` (`app/chamados/signals.py:239`) e inserem eventos (`app/chamados/signals.py:258`; `app/chamados/models.py:3248`), sem adquirir C nesses trechos.
+
+| Candidatura | Sequências lidas | Classificação |
+|---|---|---|
+| C ↔ Q | Transição: C `app/chamados/models.py:290` → S143 → Q `app/chamados/services/disputa_emissao.py:1984` → `app/chamados/models.py:3152`. Passivo: atomic `app/chamados/services/passivo_validado.py:371` → Q `app/chamados/services/materializacao.py:1277` → regeneração `app/chamados/services/passivo_validado.py:438` → órfãs `app/ponto/portas/celula.py:289` → C `app/chamados/services/contexto.py:103`; `app/chamados/models.py:486`. | Inversão estrutural; deadlock exige a **mesma Q** elegível nos dois atos. S143 pula pergunta viva ou resposta sem lastro (`app/chamados/services/disputa_emissao.py:1964`; `:1977`). Elegibilidade simultânea **[nao verificado]**. |
+| DP ↔ FM | Passivo pode emitir DP no cartório da regeneração (`app/ponto/portas/celula.py:434`; `app/chamados/services/fabrica_da_celula.py:279`) antes do FM (`app/ponto/portas/regen_exportada.py:179`). Pago/devido: FM `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196` → DP `:207`. | C prévio não pode ser presumido globalmente. Entretanto a possibilidade de emitir DP antes de C, conservar DP e alcançar **o mesmo FM** sem bloqueio anterior depende dos dados/ramificações: **[nao verificado]**. |
+| Celula ↔ C | Passivo retém outer `app/chamados/services/passivo_validado.py:371`; regeneração retém outer `app/ponto/portas/regen_exportada.py:169`; UPDATE Celula `app/ponto/portas/celula.py:276` → órfãs/C `:289`. Oposto: C `app/chamados/models.py:290` → cartório → Celula `app/ponto/portas/celula.py:905`. | Candidatura runtime adicional; não excluir por suposta pré-trava universal de C. Compatibilidade dos ramos para os mesmos recursos **[nao verificado]**. |
+| DP ↔ Q via S2/passivo | DP durante save do Chamado → S2 posterior `app/chamados/models.py:305`/`:312`. Passivo pode Q antes de outro DP `app/chamados/services/materializacao.py:1277`; `app/chamados/services/passivo_validado.py:443`. | **Não certificar esse par:** S2 seleciona Q com `validada_em IS NULL` (`app/chamados/models.py:310`), enquanto o universo do passivo é validado (`app/chamados/services/passivo_validado.py:3`). Sobreposição da mesma Q por essas duas seleções **[nao verificado]**. |
+
+No ramo `data_hora`, `ch=None` e clones vazios permitem que a função auxiliar não reconcilie chamado algum: guarda de destino em `app/chamados/services/materializacao.py:773`, lista de clones em `:775`/`:776`, chamada auxiliar em `:1059`. O signal de Batida chama o reconciliador (`app/ponto/signals.py:215`), porém os atos dependem de candidatos e premissas; por exemplo, o laço pode apenas continuar em `app/chamados/reconciliador.py:1459`. Isso impede afirmar C obrigatório para todo plantio.
+
+## 11/11 15:38 · sessao 5e6e5744386e · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
+
+**APROVADO para o delta no caminho com `JulianiPWA`.** Os tetos de armazenamento/POST e a prova de conclusão da transação foram introduzidos; permanecem as limitações discriminadas abaixo. (`app/static/pwa.js:55`, `app/static/pwa.js:80`, `app/static/pwa.js:230`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:142`)
+
+1. **(a), (b) e (d): curados nesse caminho.** Abertura tem teto de 2 s e rejeição por bloqueio; transação tem teto, `onabort` e resolução somente em `oncomplete`; o gap tem envelope externo de 4 s. POST e corpo de erro compartilham o orçamento de 30 s. As telas capturam a rejeição da gravação e mostram erro. (`app/static/pwa.js:60`, `app/static/pwa.js:74`, `app/static/pwa.js:84`, `app/static/pwa.js:91`, `app/static/pwa.js:213`, `app/static/pwa.js:232`; `app/templates/ponto/triagem/apto.html:308`; `app/templates/ponto/bater_ponto_v2.html:329`)
+
+   Os estados residuais têm consequências diferentes:
+
+   - **Sync/indicador pendurados:** continuam com pedidos/transações fora de `_transacao`; fetch e corpos do sync também continuam sem teto. Isso pode paralisar envio/indicador, mas não desfaz a fila nem segura o retorno do escritor, que dispara o indicador sem `await`. (`app/static/pwa.js:223`, `app/static/pwa.js:248`, `app/static/pwa.js:271`, `app/static/pwa.js:277`, `app/static/pwa.js:306`)
+   - **Sync recebe HTTP 400 e conclui a exclusão:** esse caminho deixa a fila vazia com apenas `console.warn`, sem erro visível. É uma perda silenciosa ainda presente; já consta como pendência própria na cópia. (`app/static/pwa.js:284`; `app/docs/BACKLOG.md:1944`)
+   - **`tx.abort()` lança durante commit:** a promessa rejeita mesmo assim, portanto há erro visível. Porém o código não confirma rollback: pode haver gravação tardia após o erro. A ocorrência real desse estado é [nao verificado]. (`app/static/pwa.js:84`; `app/templates/ponto/bater_ponto_v2.html:329`)
+   - **Conexão chega tarde:** a abertura já rejeitou; o sucesso tardio fecha a conexão e não retoma aquele escritor. (`app/static/pwa.js:60`, `app/static/pwa.js:72`, `app/static/pwa.js:215`)
+   - **Sem `postarBatidaNoTeto`:** permanece `fetch/json` cru; uma promessa pendente deixa botão desabilitado, sem fila e sem erro. O ensaio explicitamente trata ausência de PWA como pendência própria, exigindo apenas preservar o envio online. (`app/templates/ponto/bater_ponto_v2.html:294`, `app/templates/ponto/bater_ponto_v2.html:312`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:552`)
+
+   **(d)** agora marca a fila na conclusão, desfaz linhas no aborto e exige promessa resolvida mais exatamente uma linha persistida. Commit em curso e abertura tardia não são modelados pelo falso IndexedDB. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:142`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:203`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:605`)
+
+2. **(c): permanece sem identidade original, mas isso sozinho não sustenta bloqueante no reenvio de 30 s.** Um clique online pode produzir o POST inicial e uma linha de fila; essa linha pode gerar **N retransmissões**, sem limite declarado, enquanto respostas/exclusões falharem. Quantidade de requisições não equivale à quantidade de batidas gravadas. (`app/templates/ponto/bater_ponto_v2.html:307`, `app/templates/ponto/bater_ponto_v2.html:323`; `app/static/pwa.js:256`, `app/static/pwa.js:276`, `app/static/pwa.js:295`)
+
+   A porta deduplica **mesmo colaborador/mesmo tipo, ±60 s inclusivos**, entre não retratadas. A API usa **mesmo colaborador/mesmo tipo, ±5 minutos inclusivos**, sobre `ts_efetivo`; não sobre a chegada quando existe hora válida do aparelho. (`app/ponto/registro_batida.py:106`; `app/api/views.py:519`, `app/api/views.py:539`)
+
+   Portanto, reenvio **sequencial**, primeira gravação já visível, mesmo tipo e instantes separados por até 30 s é absorvido. Garantia universal permanece [nao verificado]: o teto limita espera da resposta, não o prazo da sincronização; além disso, a dedup precede a eventual correção de tipo. Assim, identidade original fica como pergunta de desenho, sem duplicação demonstrada pelos anexos. (`app/static/pwa.js:230`, `app/static/pwa.js:244`; `app/api/views.py:539`, `app/api/views.py:582`)
+
+3. **Não encontrei nova barreira nem segundo juiz da selfie nesses caminhos.** A lei fixa escrita em `registro_batida.py`; as telas consultam o juiz central e seguem com foto nula. No servidor, `selfie_ausente` acrescenta motivo de revisão, sem recusar a batida. (`CLAUDE.md:143`; `app/static/pwa.js:170`; `app/templates/ponto/triagem/apto.html:248`, `app/templates/ponto/triagem/apto.html:275`; `app/templates/ponto/bater_ponto_v2.html:269`; `app/api/views.py:449`)
+
+4. **O instante único é a entrada do escritor, não necessariamente o primeiro clique.** `Date.now()` alimenta os dois timestamps antes das esperas; na recuperação online, o escritor só é chamado depois do POST frustrado, potencialmente 30 s depois. (`app/static/pwa.js:211`; `app/templates/ponto/bater_ponto_v2.html:293`, `app/templates/ponto/bater_ponto_v2.html:323`)
+
+   O sync envia o timestamp **cru do aparelho**, sem enviar o timestamp corrigido/gap. A API o entrega a `hora_do_aparelho`: atraso entre 0 e 48 h preserva o instante; acima de 3 minutos acrescenta trilha; futuro ou antigo demais usa `agora`. Logo, 30 s de atraso, com relógio compatível, é aceito. O teto de POST não garante sincronização dentro de 30 s. (`app/static/pwa.js:265`; `app/api/views.py:519`; `app/api/hora_do_aparelho.py:62`, `app/api/hora_do_aparelho.py:141`)
+
+5. **Nenhuma das quatro ausências de mutante demonstra, isoladamente, bloqueante de produto.** Fechamento tardio protege conexões futuras; catch interno do gap está protegido, para a fila, pelo envelope externo; catch do indicador é posterior à gravação e sem `await`; instante único está implementado, mas sem prova de regressão temporal. Os mutantes existentes cobrem outras guardas, não essas quatro. (`app/static/pwa.js:72`, `app/static/pwa.js:134`, `app/static/pwa.js:166`, `app/static/pwa.js:212`, `app/static/pwa.js:223`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:810`)
+
+6. **O template apagado não tem referência executável encontrada na cópia.** Restam comentário do guard, comentário histórico do teste e tabela documental. URLs apontam à view, que escolhe v2 ou triagem. O SW referencia `/ponto/bater/`, não o nome do template; seu ramo de navegação retorna antes do trecho que alimentaria esse cache. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:673`; `app/docs/TICKETS.md:693`; `app/ponto/urls.py:11`; `app/ponto/views.py:225`, `app/ponto/views.py:356`; `app/static/sw.js:45`, `app/static/sw.js:67`)
+
+   Há lacunas nos instrumentos alterados: o scanner não inclui apto/v2; o guard não inclui v2 e pula caminhos inexistentes. Elas não demonstram quebra causada pela exclusão. (`app/tools/check_frontend_urls.py:25`; `app/scripts/check_a_lei_batida.py:14`, `app/scripts/check_a_lei_batida.py:21`, `app/scripts/check_a_lei_batida.py:31`)
+
+Suíte verde e smoke nesta cópia: **[nao verificado]**. Não executei o ensaio Chromium porque ele cria arquivos/perfil e depois os apaga. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:344`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:360`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:372`)
+
+## 11/11 15:38 · sessao 86de3be02df9 · LASTRO-FOLGA-FORA-DO-CATALOGO · verificador · origem=Code
+
+**Veredito: BLOQUEANTES B1–B3.** A guarda consulta a autoridade existente, mas herda um cache sem isolamento por tenant, introduz uma exceção sem tradução em portas HTTP e permite reintroduzir legado numa corrida entre leitura e gravação (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/models.py:883`, `app/ponto/services/ausencia.py:418`, `app/api/views.py:1825`).
+
+**1. Quem escreve `Ausencia.tipo`**
+
+A construção e persistência estão em `criar_ausencia`; a troca do campo está em `editar_ausencia_registro`. Ambas validam pelo catálogo antes de salvar (`app/ponto/services/ausencia.py:194`, `app/ponto/services/ausencia.py:342`, `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:474`, `app/ponto/services/ausencia.py:498`, `app/ponto/services/ausencia.py:509`).
+
+| Chamador produtivo encontrado | Valor fornecido |
+|---|---|
+| Lançamento administrativo | Variável do formulário (`app/ponto/views.py:2415`) |
+| Solicitação PWA | Variável da solicitação (`app/ponto/views.py:2536`) |
+| API | Variável, após tradução dos aliases legados (`app/api/views.py:1765`, `app/api/views.py:1817`) |
+| Copiloto | Variável encaminhada ao produtor (`app/ponto/services/checar_ausencia.py:46`) |
+| Veredito da célula | Literal `falta` ou variável `tipo_ausencia` (`app/ponto/services/veredito_celula.py:332`) |
+| Materialização de declaração | `falta` ou `atestado`, pelo mapa (`app/chamados/services/materializacao.py:490`, `app/chamados/models.py:3716`) |
+| Materialização de resposta | `falta` ou `atestado`, pela tabela de escapes (`app/chamados/services/materializacao.py:526`, `app/chamados/services/materializacao.py:602`) |
+| Espelho de férias | Literal `ferias`, pelo produtor (`app/ponto/services/ausencia.py:1202`) |
+| Regularização de retorno | Literal `falta`, por `garantir_ausencia` (`app/ponto/services/regularizacao.py:118`, `app/ponto/services/ausencia.py:461`) |
+| Comando de abandono provisório | Literal `falta`, por `garantir_ausencia` (`app/ponto/management/commands/marcar_abandono_provisorio.py:76`) |
+| Edição pela UI | POST ou tipo atual, pela porta de edição (`app/ponto/views.py:2794`) |
+| Comando de rederivação H06 | Tipo atual, pela porta de edição (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`) |
+
+Os literais efetivamente produzidos pelos caminhos fixos encontrados estão semeados:
+
+| Literal | Semente |
+|---|---|
+| `falta` | Sim (`app/ponto/migrations/0052_seed_tipoausencia.py:10`) |
+| `atestado` | Sim (`app/ponto/migrations/0052_seed_tipoausencia.py:17`) |
+| `ferias` | Sim (`app/ponto/migrations/0052_seed_tipoausencia.py:23`) |
+| `declaracao`, destino do alias `atestado_acompanhante` | Sim (`app/api/views.py:1766`, `app/ponto/migrations/0052_seed_tipoausencia.py:18`) |
+| `licenca_luto`, destino do alias `obito` | Sim (`app/api/views.py:1767`, `app/ponto/migrations/0052_seed_tipoausencia.py:20`) |
+
+`atestado_medico` é traduzido para `atestado`; os aliases não são escritos literalmente pela API (`app/api/views.py:1765`). Não há incompatibilidade demonstrada entre esses literais e a semente; estarem ativos hoje em produção é **[não verificado]**.
+
+O admin de Ausência bloqueia adicionar, alterar e apagar; os receivers de Ausência consomem o fato, sem atribuir `tipo` (`app/ponto/admin.py:38`, `app/core/admin.py:59`, `app/core/admin.py:62`, `app/core/admin.py:65`, `app/ponto/signals.py:143`, `app/ponto/signals.py:275`). O `update` produtivo de cancelamento de férias altera somente status e carimbo (`app/ponto/services/ausencia.py:1281`). A cópia CSV encontrada contorna o modelo, mas pertence ao pipeline de ensaio (`bin/sombra_incremental.sh:58`, `bin/sombra_incremental.sh:62`).
+
+**O escritor histórico de #5356 permanece [não verificado].** Os testes demonstram que `QuerySet.update(tipo=...)` consegue fabricar esse legado, mas isso não identifica a origem produtiva (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`).
+
+**2. Catálogo, cache e cadastro pela UI — B1**
+
+Os leitores diretos de `codigos_validos()` são formulário, prévia do copiloto, criação, edição, composição dos tipos que exigem documento, vigia, solicitação PWA e agora a guarda do modelo (`app/ponto/forms.py:63`, `app/ponto/services/checar_ausencia.py:23`, `app/ponto/services/ausencia.py:194`, `app/ponto/services/ausencia.py:474`, `app/ponto/services/ausencia.py:804`, `app/ponto/services/vigia_ausencia.py:103`, `app/ponto/views.py:2509`, `app/ponto/models.py:879`).
+
+O cache é um único dicionário de módulo, com TTL de **60 segundos medidos por `monotonic()`**. A criação/edição pela UI salva `TipoAusencia`, cujo signal invalida esse dicionário no processo local (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:258`, `app/ponto/catalogo/ausencias.py:275`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/services/ausencia.py:1310`, `app/ponto/models.py:1260`).
+
+Consequências:
+
+- No processo invalidado, a próxima leitura consulta novamente o banco; outro processo com cache quente pode recusar o tipo recém-criado até expirar o TTL. Também pode continuar aceitando um tipo desativado nesse intervalo (`app/ponto/catalogo/ausencias.py:263`, `app/ponto/catalogo/ausencias.py:276`, `app/ponto/models.py:879`).
+- **B1:** a chave não inclui tenant/schema. Com `ponto` instalado por tenant, uma leitura no tenant B pode reutilizar o catálogo anteriormente carregado no tenant A, admitindo código alheio ou recusando código próprio (`app/config/settings/saas.py:34`, `app/config/settings/saas.py:40`, `app/config/settings/saas.py:68`, `app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:276`).
+- Tabela vazia, todos os tipos inativos **ou qualquer exceção na consulta** fazem retornar a semente congelada. Portanto, vazio não significa “nenhum código permitido”; inclusive desativar todos reabilita os códigos da semente na autoridade (`app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:252`, `app/ponto/catalogo/ausencias.py:253`, `app/ponto/catalogo/ausencias.py:278`).
+
+A guarda herda esses comportamentos de uma autoridade preexistente; ocorrência concreta entre workers/tenants de produção é **[não verificado]** (`app/ponto/models.py:878`).
+
+**3. Consulta histórica, corrida e contornos — B3**
+
+Com cache quente, código válido não exige a consulta histórica. Código fora do catálogo em instância persistida acrescenta **um SELECT por chamada de save**; cache frio acrescenta também a consulta do catálogo. Uma decisão pode chamar save duas vezes, pagando duas consultas históricas para legado (`app/ponto/models.py:879`, `app/ponto/models.py:882`, `app/ponto/catalogo/ausencias.py:249`, `app/ponto/services/ausencia.py:911`, `app/ponto/services/ausencia.py:927`). Latência e SQL efetivamente emitido são **[não verificado]**.
+
+**B3 — comparação e gravação não são atômicas.** Interleaving permitido pelo código: A consulta e encontra `folga`; B corrige para `abono`; A termina seu save completo e recoloca `folga`. A guarda não usa lock nem UPDATE condicionado ao tipo observado (`app/ponto/models.py:883`, `app/ponto/models.py:885`, `app/ponto/models.py:933`). Ocorrência produtiva é **[não verificado]**.
+
+Quanto aos contornos:
+
+- `update_fields` **não desliga** a guarda. Mesmo salvando só documento/status, ela compara o tipo em memória com o banco; pode recusar uma operação que nem escreveria `tipo`, caso outra operação já tenha corrigido o legado (`app/ponto/models.py:891`, `app/ponto/models.py:893`, `app/ponto/services/ausencia.py:835`, `app/ponto/services/ausencia.py:859`).
+- `QuerySet.update(tipo=...)` contorna a guarda, demonstrado expressamente pelas fixtures (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`).
+- O override não contém proteção em `save_base`, bulk ou SQL direto. A implementação dessas APIs Django não está demonstrada pelos arquivos examinados; confirmação de `save_base(raw=True)`/`loaddata`, `bulk_create` e `bulk_update` nesta cópia: **[não verificado]**. Não há exceção explícita para `raw` dentro da guarda (`app/ponto/models.py:868`, `app/ponto/models.py:891`).
+
+**4. Exceção HTTP e batida — B2**
+
+**B2 — a nova exceção não é traduzida consistentemente.** Na criação, somente o `ValidationError` do `full_clean` vira `AusenciaInvalida`; o save posterior limpa eventual anexo e relança a exceção original. A API captura apenas `AusenciaInvalida` (`app/ponto/services/ausencia.py:387`, `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:419`, `app/ponto/services/ausencia.py:429`, `app/api/views.py:1825`).
+
+Cenário concreto permitido: o código passa na validação inicial; outra thread desativa o tipo e invalida o cache; o save consulta o catálogo atualizado e lança o novo `ValidationError`, que escapa da API. O caminho de edição tem a mesma janela e sua view também não captura essa exceção (`app/ponto/services/ausencia.py:194`, `app/ponto/models.py:1263`, `app/ponto/models.py:887`, `app/ponto/services/ausencia.py:474`, `app/ponto/services/ausencia.py:509`, `app/ponto/views.py:2818`). Resposta 500 observada em produção: **[não verificado]**.
+
+Outros propagadores são veredito da célula, espelho de férias, mudanças de estado, decisão e anexação; nenhum deles traduz especificamente o novo erro do catálogo (`app/ponto/services/veredito_celula.py:340`, `app/ponto/services/ausencia.py:1209`, `app/ponto/services/ausencia.py:835`, `app/ponto/services/ausencia.py:927`, `app/ponto/services/ausencia.py:865`). Legado inalterado passa normalmente; a falha exige mudança concorrente ou outro desacordo entre instância e persistência (`app/ponto/models.py:885`).
+
+Lançamento e submissão web têm captura externa de `Exception`, portanto não cabe afirmar 500 indistintamente nessas telas (`app/ponto/views.py:2458`, `app/ponto/views.py:2558`).
+
+**Não foi demonstrado caminho da batida até `Ausencia.save`.** O chokepoint cria `Batida`; recompute, julgamento da célula, reconciliação e fechamento por evento têm contenção de exceções nos caminhos examinados (`app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:175`, `app/ponto/signals.py:19`, `app/ponto/signals.py:85`, `app/ponto/signals.py:131`, `app/ponto/signals.py:206`). Violação nova da lei “batida nunca barrada” por esta guarda: **[não verificado]**.
+
+**5. Segundo juiz e dois significados**
+
+A guarda é **leitora da mesma autoridade de validade**, pois chama `codigos_validos`, exatamente como criar e editar. `faixa_de` responde outra pergunta, a precedência; seu default continua sendo `atestado` para código desconhecido (`app/ponto/models.py:878`, `app/ponto/services/ausencia.py:194`, `app/ponto/services/ausencia.py:474`, `app/ponto/precedencia.py:76`).
+
+A divergência estrutural com `TIPO_CHOICES` permanece: o campo declara choices congeladas, enquanto o serviço exclui `tipo` do `full_clean` para aceitar códigos vivos adicionais. A guarda não cria essa segunda lista; o teste novo preserva explicitamente código vivo fora das choices (`app/ponto/models.py:661`, `app/ponto/models.py:749`, `app/ponto/services/ausencia.py:387`, `app/ponto/tests/test_lastro_folga_save_guarda.py:134`).
+
+**6. Fixtures e mordida**
+
+As alterações preservam as asserções originais relevantes:
+
+- Carimbo: mantém `obito` legado e exige `aprovada_em` na aprovação/rejeição (`app/ponto/tests/test_decisao_carimba.py:22`, `app/ponto/tests/test_decisao_carimba.py:32`, `app/ponto/tests/test_decisao_carimba.py:39`).
+- Espelho: mantém `obito` e compara a apresentação com o juiz do status (`app/ponto/tests/test_caracterizacao_espelho.py:53`, `app/ponto/tests/test_caracterizacao_espelho.py:89`).
+- Fechamento: mantém `atestado_medico` desconhecido e exige DSR perdido igual a zero (`app/ponto/tests/test_fechamento_ausencia_pela_autoridade.py:83`, `app/ponto/tests/test_fechamento_ausencia_pela_autoridade.py:86`).
+- Cadastro/dropdown: acrescentam cleanup de cache e mantêm admissão de novo código, retirada do inativo e fallback vazio (`app/ponto/tests/test_cadastro_tipo.py:15`, `app/ponto/tests/test_cadastro_tipo.py:23`, `app/ponto/tests/test_cadastro_tipo.py:35`, `app/ponto/tests/test_dropdown_vivo.py:21`, `app/ponto/tests/test_dropdown_vivo.py:29`, `app/ponto/tests/test_dropdown_vivo.py:34`).
+
+Há uma diferença: as fixtures agora disparam primeiro os efeitos de `abono` e depois os do legado. O segundo save executa os receivers, mas equivalência completa dos efeitos intermediários é **[não verificado]** (`app/ponto/tests/test_caracterizacao_espelho.py:50`, `app/ponto/tests/test_caracterizacao_espelho.py:55`, `app/ponto/signals.py:143`, `app/ponto/signals.py:275`).
+
+O selo novo tem asserções que detectariam remoção da guarda e quebra da preservação histórica; não cobre os cenários B1–B3. Execução verde, RED anterior e mutantes executados são **[não verificado]** (`app/ponto/tests/test_lastro_folga_save_guarda.py:73`, `app/ponto/tests/test_lastro_folga_save_guarda.py:94`, `app/ponto/tests/test_lastro_folga_save_guarda.py:102`, `app/ponto/tests/test_lastro_folga_save_guarda.py:134`).
+
+**7. Classes de reprovação**
+
+Os bloqueantes são: **B1**, cache usado pela barreira sem isolamento por tenant e sem invalidação entre processos; **B2**, exceção nova sem tradução nas portas; **B3**, leitura histórica separada da gravação, permitindo reintrodução concorrente do código fora do catálogo (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/models.py:1263`, `app/api/views.py:1825`, `app/ponto/models.py:883`, `app/ponto/models.py:933`).
+
+Não foi demonstrado segundo produtor produtivo de `tipo`; há contorno por `update` nas fixtures e duplicidade preexistente entre choices e catálogo (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`, `app/ponto/models.py:749`). O diff não acrescenta relógio, mas passa a depender do TTL preexistente na decisão de persistência (`app/ponto/models.py:878`, `app/ponto/catalogo/ausencias.py:275`). Origem de #5356, censo real da frota, suite completa e pré-requisitos de pouso permanecem **[não verificado]**.
+
+## 11/11 15:37 · sessao d270727d20b6 · - · - · origem=Ronald (tmux)
+
+Meu julgamento é **APROVADO no escopo da cura com `JulianiPWA`**, sem afirmar que todos os caminhos de rede/armazenamento ficaram limitados. A abertura rejeita no teto/bloqueio; a transação rejeita no teto/aborto; o POST e seu corpo de erro têm teto. (`app/static/pwa.js:60-74`; `app/static/pwa.js:83-94`; `app/static/pwa.js:230-241`)
+
+- **Aborto lançando durante commit:** a exceção é engolida, mas a promessa rejeita mesmo assim e a tela mostra erro. Pode restar gravação tardia, contrariando a garantia de “nenhum fantasma”; não produz clique pendente ou perda silenciosa. Ocorrência real desse estado: [nao verificado]. (`app/static/pwa.js:84-93`; `app/templates/ponto/bater_ponto_v2.html:329-331`)
+- **Conexão tardia:** a abertura já rejeitou; `onsuccess` tardio fecha a conexão. Não volta a executar a gravação daquele escritor. (`app/static/pwa.js:60-72`; `app/static/pwa.js:215-216`)
+- **Sync/indicador:** os pedidos e transações continuam fora de `_transacao`, assim como o fetch/corpos do sync. Pendência neles não desfaz a fila já gravada nem segura o retorno do escritor. Há perda silenciosa explícita se o sync recebe HTTP 400 e a exclusão completa: só há `console.warn`. (`app/static/pwa.js:223`; `app/static/pwa.js:248-253`; `app/static/pwa.js:271-310`)
+- **Exceção importante de (b):** sem `postarBatidaNoTeto`, a v2 continua fazendo `fetch` e `json` sem teto; resposta pendente deixa botão desabilitado, sem fila e sem erro. É caminho residual demonstrável pelo código. O próprio ensaio declara PWA ausente como outra fila e só exige preservar o envio online; portanto não o apresentaria como regressão nova desta cura. (`app/templates/ponto/bater_ponto_v2.html:294-295`; `app/templates/ponto/bater_ponto_v2.html:312-314`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:552-557`)
+- **(c):** um clique pode gerar POST inicial e uma linha reenviável repetidamente. Isso não equivale a múltiplas linhas no servidor: reenvio sequencial do mesmo tipo, com instantes separados por 30 s e primeira gravação visível, cabe em ±5 min da API e ±60 s da porta. Falta de identidade isolada não sustenta bloqueante nesse cenário; garantia para relógio incompatível, correção de tipo ou concorrência permanece [nao verificado]. (`app/templates/ponto/bater_ponto_v2.html:307-323`; `app/static/pwa.js:256-298`; `app/api/views.py:539-555`; `app/ponto/registro_batida.py:106-115`)
+- **(d)/mordidas:** o ensaio agora marca fila na conclusão e exige promessa resolvida/persistência, mas seu falso IDB não modela commit em curso nem fechamento tardio. Essas limitações impedem certificação universal; sozinhas não demonstram novo bloqueante de produto. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:142-153`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:195-215`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:605-616`)
+
+## 11/11 15:37 · sessao b199bd514621 · - · - · origem=Ronald (tmux)
+
+| Recurso adicional | Ordem demonstrada no código | Classificação do par |
+|---|---|---|
+| TurnoMaterializado | Passivo: atomic do par → materializador → INSERT Batida → receiver do núcleo → DELETE/INSERT TurnoMaterializado → cartório/fábrica → eventual C. (`app/chamados/services/passivo_validado.py:371`; `:427`; `:511`; `:516`; `app/chamados/services/materializacao.py:1220`; `:1007`; `app/ponto/registro_batida.py:157`; `app/ponto/signals.py:36`; `app/ponto/nucleo.py:58`; `:59`; `:81`; `app/ponto/signals.py:135`; `app/chamados/services/fabrica_da_celula.py:365`) | **Candidato TM→C contra C→TM**: aprovação de justificativa toma C antes de registrar Batida e recomputar os mesmos turnos. Compatibilidade das travas implícitas de FK e execução concorrente **[nao verificado]**. (`app/ponto/services/justificativa.py:140`; `:141`; `:129`; `:187`; `app/ponto/signals.py:36`; `app/ponto/nucleo.py:81`) |
+| Justificativa | C/D/Ch → Justificativa FOR UPDATE → eventual Batida/TM → cartório/Pauta DP → UPDATE Justificativa → UPDATE FM. (`app/ponto/services/justificativa.py:129`; `:140`; `:142`; `:187`; `:208`; `:215`; `app/ponto/services/fechamento.py:1656`) | **Inversão abstrata DP→FM contra FM→DP**, mas a aprovação e o pago/devido adquirem C antes; para mesma linha FM, o mesmo colaborador serializa os dois atos. (`app/ponto/services/justificativa.py:129`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`; `:196`; `:207`) |
+| Justificativa na materialização retroativa | Atomic → C/D/Ch → Justificativa FOR UPDATE → registrar Batida/TM → UPDATE Justificativa/cartório → UPDATE FM. (`app/ponto/services/justificativa.py:342`; `:343`; `:344`; `:361`; `:386`; `:390`; `app/ponto/services/fechamento.py:1656`) | Mesma ressalva de serialização por C para o par DP/FM. (`app/ponto/services/justificativa.py:129`; `:343`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`) |
+| Ausencia | Aprovação de intervalo: atomic → UPDATE Ausencia → cartório síncrono → possível Pauta DP → invalidar FM. A porta da ausência não adquire C antes do UPDATE. (`app/ponto/views.py:2641`; `:2643`; `app/ponto/services/ausencia.py:911`; `:835`; `app/ponto/signals.py:143`; `:147`; `app/ponto/services/ausencia.py:946`; `app/ponto/services/fechamento.py:1656`) | **Candidato DP→FM sem C**, quando a fábrica segue por limbo exportado, que escreve DP diretamente; satisfatibilidade conjunta dos guards com aprovação parcial **[nao verificado]**. (`app/chamados/services/fabrica_da_celula.py:214`; `:228`; `:231`; `:279`; `app/ponto/services/ausencia.py:924`) |
+| Ausencia em rejeição/cancelamento | A porta também invalida FM após rejeitar, mas as views lidas não envolvem o ato inteiro em atomic. (`app/ponto/views.py:2700`; `:2701`; `:2734`; `:2351`; `app/ponto/services/ausencia.py:946`) | **Não comprova retenção de DP até FM** nessas entradas. `Ausencia.save` termina em `super().save`, sem atomic próprio envolvendo a decisão inteira. (`app/ponto/models.py:868`; `:908`; `app/ponto/services/ausencia.py:835`; `:946`) |
+| Ausencia de férias | Cancelamento: Agendamento → PeriodoAquisitivo → UPDATE/DELETE Ausencia de tipo `ferias` → signals/cartório → eventual C/DP. (`app/ferias/services.py:364`; `:367`; `:402`; `:411`; `app/ponto/services/ausencia.py:1281`; `:1283`; `app/ferias/models.py:451`; `app/ponto/services/ausencia.py:1183`; `:1190`; `app/ponto/signals.py:151`) | **Não demonstrar C↔Ausencia usando escapes de resposta**: esses escapes escrevem apenas `falta`/`atestado`, não a mesma linha `ferias`. (`app/chamados/services/materializacao.py:597`; `:598`; `:599`; `app/ponto/services/ausencia.py:1183`) |
+
+No ramo ESCAPE, a trava C do `responder_pergunta_disputa_core` está em um atomic que termina antes da chamada de materialização da ausência. O caminho web lido, portanto, não comprova C retido durante esse UPDATE de Ausencia. (`app/chamados/services/disputa_emissao.py:1503`; `:1511`; `:1541`; `app/chamados/views.py:1228`; `:1283`)
+
+O recálculo FM por evento de Batida continua em `on_commit`; ele não demonstra FM síncrono depois de DP no atomic anterior. A invalidação FM das duas portas de justificativa acima é síncrona e constitui caminho distinto. (`app/ponto/registro_batida.py:175`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/justificativa.py:215`; `:390`; `app/ponto/services/fechamento.py:1656`)
+
+## 11/11 15:36 · sessao e3b00d6965c5 · - · - · origem=Ronald (tmux)
+
+Censo de escritores concluído, somente por leitura.
+
+| Sítio | `tipo` que fornece | Seed |
+|---|---|---|
+| `app/ponto/services/ausencia.py:341`, `:385`, `:418` | Variável: constrói e salva a linha nova | Validada em `:193-195` |
+| `app/ponto/services/ausencia.py:498`, `:509` | Variável: troca do tipo existente | Validada em `:473-475` |
+| `app/ponto/views.py:2415` | Variável do lançamento administrativo | Passa pelo produtor |
+| `app/ponto/views.py:2536` | Variável da solicitação PWA | Passa pelo produtor |
+| `app/api/views.py:1817` | Variável da API | Passa pelo produtor |
+| `app/ponto/services/checar_ausencia.py:46` | Variável do copiloto; chamada HTTP em `app/core/views_ia.py:985` | Passa pelo produtor |
+| `app/ponto/services/veredito_celula.py:332`, `:336` | `'falta'` ou variável `tipo_ausencia` | `'falta'`: `app/ponto/migrations/0052_seed_tipoausencia.py:10` |
+| `app/chamados/services/materializacao.py:490` | `'falta'`/`'atestado'`, mapa em `app/chamados/models.py:3716` | Seed `0052:10`, `:17` |
+| `app/chamados/services/materializacao.py:526` | `'falta'`/`'atestado'`, mapa em `:602`; consumidor `app/chamados/services/disputa_emissao.py:1541` | Seed `0052:10`, `:17` |
+| `app/ponto/services/ausencia.py:1202` | `'ferias'` | Seed `0052:23` |
+| `app/ponto/services/regularizacao.py:118` | `'falta'`, por `garantir_ausencia` | Seed `0052:10` |
+| `app/ponto/management/commands/marcar_abandono_provisorio.py:76` | `'falta'` | Seed `0052:10` |
+| `app/ponto/views.py:2794` | Edição: POST ou tipo atual | Usa `editar_ausencia_registro` |
+| `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169` | Edição: `a.tipo` atual | Usa `editar_ausencia_registro` |
+
+Os únicos literais produtores encontrados foram `falta`, `atestado` e `ferias`, todos semeados; o catálogo da seed grava `ativo=True`. `app/ponto/migrations/0052_seed_tipoausencia.py:10`, `:17`, `:23`, `:36`.
+
+A API recebe nomes legados, mas traduz antes de escrever: `atestado_medico → atestado`, `atestado_acompanhante → declaracao`, `obito → licenca_luto`; os destinos estão semeados. Isso não constitui escritor de literal desconhecido. `app/api/views.py:1765`; `app/ponto/migrations/0052_seed_tipoausencia.py:17`, `:18`, `:20`.
+
+Férias materializam pela porta: `_sync_ausencia → espelhar_ferias → criar_ausencia(tipo='ferias')`. `app/ferias/models.py:386`, `:391`; `app/ponto/services/ausencia.py:1202`.
+
+O admin de Ausencia é somente leitura, com bloqueio de adicionar/alterar/apagar; os signals de Ausencia encontrados consomem o fato. `app/ponto/admin.py:38`; `app/core/admin.py:59`, `:62`, `:65`; `app/ponto/signals.py:143`, `:275`.
+
+Há `queryset.update` produtivo de Ausencia para rejeitar férias, mas altera apenas `status`/`atualizado_em`, sem escrever `tipo`. `app/ponto/services/ausencia.py:1281`.
+
+Fora do app, `sombra_incremental.sh` copia `ponto_ausencia` incluindo `tipo`, por CSV, contornando o modelo; o destino declarado é o banco de ensaio. `bin/sombra_incremental.sh:14`, `:36`, `:57`, `:62`. A máscara genérica usa bulk, mas os campos de Ausencia declarados são `documento` e `descricao`. `bin/sombra_regras_pessoais.py:64`, `:109`.
+
+Não encontrei outro escritor produtivo/importador de `tipo` na cópia; os contratos existentes fiscalizam construção direta e escritas fora da porta, mas não foram executados nesta auditoria. `app/ponto/tests/test_contract_um_produtor_de_ausencia.py:49`, `:74`, `:88`; `app/ponto/tests/test_chokepoint_ausencia_gate.py:53`.
+
+A origem específica da escrita de #5356 permanece **[não verificado]**.
+
+## 11/11 15:36 · sessao 62b4dee2cfd9 · - · - · origem=Ronald (tmux)
+
+(4) **Há caminhos HTTP que não traduzem o novo `ValidationError`, mas o legado sem troca de tipo passa normalmente.** A guarda permite tipo existente idêntico (`app/ponto/models.py:882–889`); portanto, não é correto afirmar que decidir/cancelar qualquer ausência legada passará a dar 500.
+
+- `criar_ausencia`: traduz apenas `ValidationError` de `full_clean` (`app/ponto/services/ausencia.py:385–391`). O `save()` está depois, em `:418`; o `except Exception` limpa anexo e relança exceções diferentes da constraint conhecida (`:419–429`). API captura apenas `AusenciaInvalida` (`app/api/views.py:1817–1844`). Se o catálogo mudar/expirar entre a validação inicial e o save, o novo `ValidationError` escapa dessa API; ocorrência real [não verificado].
+- `editar_ausencia_registro`: valida vivo em `:474–475`, atribui tipo em `:498`, salva sem tradução em `:509`. A view captura somente `AusenciaInvalida`, `ValueError`, `TypeError` (`app/ponto/views.py:2818`). Mesma janela de corrida; ocorrência real [não verificado].
+- `veredito_celula`: chama produtor e captura só `AusenciaInvalida` (`app/ponto/services/veredito_celula.py:331–341`); a view chama o serviço sem catch (`app/ponto/views.py:3339–3341`).
+- Decisão/status: `mudar_estado` salva sem catch (`app/ponto/services/ausencia.py:835`), `decidir` pode salvar novamente (`:927`). Lotes aprovação/rejeição capturam apenas `DoesNotExist` (`app/ponto/views.py:2293`, `:2324`); lote cancelamento não envolve a chamada com catch (`:2351`). Reverter captura domínio, não Django VE (`:2588`); período captura domínio/ValueError/DoesNotExist (`:2674`); cancelar individual só DoesNotExist (`:2745`). **Sem troca concorrente de tipo/remoção da linha, a exceção histórica da guarda permite esses saves** (`app/ponto/models.py:882–889`).
+- Anexo: save é protegido apenas para limpeza e re-raise (`app/ponto/services/ausencia.py:859–865`); chamada da UI sem catch (`app/ponto/views.py:2151`) e reenvio da API fora do try de criação (`app/api/views.py:1848–1850`). Mesmo limite de concorrência para linha legada.
+- Lançar/submeter pela web capturam `Exception` (`app/ponto/views.py:2458`, `:2558`); não classificá-los genericamente como 500.
+- Django admin não escreve Ausência: usa `SoLeitura` (`app/ponto/admin.py:37–47`), com add/change/delete negados (`app/core/admin.py:59–66`).
+
+**Batida:** não encontrei caminho produtor de Ausência nos receivers examinados; o chokepoint cria `Batida`, não `Ausencia` (`app/ponto/registro_batida.py:152–160`). Pós-evento protegido por catch genérico (`:175–183`). Núcleo recompõe somente `TurnoMaterializado` (`app/ponto/nucleo.py:40–67`), protegido no signal (`app/ponto/signals.py:19–31`). Cartório da batida entra em `engolir` (`app/ponto/signals.py:85–93`, `:131–135`); reconciliador e adesão protegidos separadamente (`:206–237`). Realtime é protegido internamente (`app/ponto/realtime.py:22–46`). Onboarding grava `Colaborador` (`app/colaboradores/signals.py:86–102`); seu signal downstream trata silêncio de chamados, não ausência (`app/chamados/signals.py:268–279`). **Nenhuma barreira nova de Ausencia à batida demonstrada nesses caminhos.**
+
+O mapeamento não prova ausência de qualquer outra falha antiga na batida: onboarding não tem catch próprio (`app/colaboradores/signals.py:101–102`); isso não é efeito da guarda nova.
+
+Férias: espelho usa `criar_ausencia(tipo='ferias')`, captura só domínio e registra recusas (`app/ponto/services/ausencia.py:1201–1216`); `AgendamentoFerias.save` chama sync após salvar agendamento (`app/ferias/models.py:446–451`). A criação com `ferias` inativo já era recusada no precheck; só uma mudança entre precheck/save introduz o novo VE bruto. Remarcação da view captura apenas `AgendamentoNaoRemarcavel` (`app/ferias/views.py:686–690`).
+
+## 11/11 15:36 · sessao 61e4e870505c · - · - · origem=Ronald (tmux)
+
+Fixtures preservam a mordida original na leitura estática:
+
+- **Carimbo:** continua usando `obito` legado, depois executa `save()` de aprovação/rejeição e exige `aprovada_em`; o estado pendente continua exigindo ausência do carimbo. A mudança foi na montagem da linha, sem retirar asserções. `app/ponto/tests/test_decisao_carimba.py:16-43`.
+- **Espelho:** mantém `obito` e o compara com o status lavrado pelo juiz; preserva verificações de turnos, batidas e resumo. `app/ponto/tests/test_caracterizacao_espelho.py:48-55`, `:89-101`.
+- **Fechamento:** mantém o desconhecido `atestado_medico` e exige DSR perdido igual a zero; os testes de ordem entre falta e atestado continuam presentes. `app/ponto/tests/test_fechamento_ausencia_pela_autoridade.py:57-87`.
+- **Cadastro/dropdown:** apenas acrescentam limpeza do cache ao fim; continuam exigindo admissão imediata de código novo, remoção do inativo e fallback quando a tabela está vazia. `app/ponto/tests/test_cadastro_tipo.py:11-37`; `app/ponto/tests/test_dropdown_vivo.py:16-49`.
+- **Diferença de fixture:** agora há um primeiro julgamento com `abono`, seguido de julgamento com legado. Os receivers de Ausencia não distinguem `created`, portanto o segundo `save()` executa seus consumidores; equivalência completa de todos os efeitos intermediários [não verificado]. `app/ponto/tests/test_caracterizacao_espelho.py:50-55`; `app/ponto/signals.py:143-147`, `:275-279`.
+
+O selo novo tem asserções que falhariam sem a guarda: rejeita criação direta, `objects.create`, troca de vivo para morto e troca entre mortos; também protege história, desativação posterior e código vivo fora de choices. `app/ponto/tests/test_lastro_folga_save_guarda.py:73-142`. Execução verde, RED histórico e mutantes efetivamente executados [não verificado].
+
+Lacunas relevantes:
+
+1. **Corrida:** leitura do tipo e persistência não estão protegidas pela própria guarda com lock/transação. Interleaving possível: A lê legado `folga`; B corrige para `abono`; A passa na comparação e salva novamente `folga`. Ocorrência em produção [não verificado]. `app/ponto/models.py:879-893`, `:933`.
+2. **`update_fields` não contorna:** a guarda roda antes de analisar os argumentos do `save`; até atualização apenas de descrição valida o `self.tipo` em memória e consulta o legado. Pode recusar uma alteração em memória que nem seria persistida. `app/ponto/models.py:891-893`, `:933`.
+3. **`QuerySet.update` contorna de fato:** a própria fixture demonstra a gravação do tipo morto, seguida de leitura confirmando o valor. `app/ponto/tests/test_lastro_folga_save_guarda.py:63-69`.
+4. **`raw`/bulk:** semântica de `save_base(raw=True)` e de bulk não foi confirmada no código instalado, pois Django não está disponível no host; dependência declarada é Django 5.2.14. `app/requirements.txt:13`; comportamento executado [não verificado].
+5. **Multi-db:** a guarda ignora `using` na consulta histórica. As configurações examinadas só declaram alias `default`, portanto impacto real multi-db [não verificado]. `app/ponto/models.py:883-884`; `app/config/settings/saas.py:83-93`; `app/config/settings/prod.py:9-18`.
+6. **Custo:** fora do vivo e com instância persistida, há uma consulta extra ao tipo; com cache expirado também há leitura do catálogo. O `Meta.ordering` inclui `colaborador__nome`, e a consulta histórica não remove a ordenação; SQL efetivamente emitido [não verificado]. `app/ponto/models.py:819`, `:882-884`; `app/ponto/catalogo/ausencias.py:249-252`, `:275-280`.
+
+Os novos testes não exercitam concorrência, `update_fields`, processos/tenants diferentes ou bulk/raw. `app/ponto/tests/test_lastro_folga_save_guarda.py:73-142`.
+
+## 11/11 15:36 · sessao 05d6cdb86f93 · - · - · origem=Ronald (tmux)
+
+- **(d) curado no desenho do ensaio:** a marca de fila ocorre em `_fimTx`, imediatamente antes de `oncomplete`; `add` apenas anota linha provisória; `abort` desfaz essa linha; o verificador exige promessa resolvida e exatamente uma linha persistida. `tx_lento` e Mi2 detectam gravação tardia quando o aborto é retirado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:142`, `:152`, `:178`, `:203`, `:605`, `:613`, `:823`.) Execução verde nesta cópia: [nao verificado].
+
+- **Limite da prova:** o falso IndexedDB abre em 1 ms e `close()` é vazio; `abort()` só lança quando `_feito` já está verdadeiro. Portanto não prova fechamento de conexão tardia nem a situação “commit iniciado, aborto lança, `oncomplete` ainda pendente”. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:195`, `:204`, `:210`, `:215`.)
+
+- **As quatro guardas sem mutante:** os mutantes existentes cobrem abertura/teto/bloqueio, transação/teto/aborto, guarda externa do gap, POST e corpo de erro; não há mutante para as quatro guardas indicadas. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:810`, `:830`, `:842`.)  
+  - `db.close()` tardio protege futuras aberturas/versões; a abertura atual já rejeitou. (`app/static/pwa.js:60`, `:72`.)  
+  - Catch interno do gap não é indispensável à fila, pois esta envolve `obterGap()` em `_noTeto`, que absorve rejeição. (`app/static/pwa.js:134`, `:166`, `:213`.)  
+  - `.catch` do indicador ocorre depois da transação de gravação e sem `await`; sua retirada gera rejeição acessória, não desfaz a fila. (`app/static/pwa.js:216`, `:223`.)  
+  - Instante único está correto no código, alimentando ambos os timestamps, mas falta prova de regressão temporal. (`app/static/pwa.js:212`, `:214`, `:218`.)  
+  Não demonstrei bloqueante de produto **só** pela ausência desses quatro mutantes; a prova para “aborto lança durante commit” permanece ausente. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:204`; `CLAUDE.md:375`.)
+
+- **Referências ao apagado:** a busca literal encontra somente a lápide no guard, comentário histórico de teste e tabela de órfãos; nenhum desses executa render/include. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:673`; `app/docs/TICKETS.md:693`.) As URLs vivas continuam apontando à view; ela renderiza v2 ou um template da triagem. (`app/ponto/urls.py:11`; `app/ponto/urls.py:12`; `app/ponto/views.py:225`; `app/ponto/views.py:356`.)
+
+- **SW:** guarda URLs, não nomes de templates; `/ponto/bater/` permanece na lista. Para navegação, porém, o ramo `navigate` retorna antes do bloco que alimenta esse cache; é comportamento presente na cópia, não referência quebrada causada pela exclusão. (`app/static/sw.js:45`, `:50`, `:67`, `:74`.)
+
+- **Ferramentas alteradas:** `check_frontend_urls.py` lista somente pwa.js, sw.js e dashboard antigo; apto/v2 ficam fora dessa cobertura. O guard da Lei retirou o arquivo morto, mas não incluiu v2 e conserva caminhos `app/apps/ponto/views.py`, pulando arquivos inexistentes. São lacunas desses instrumentos; não provam quebra de rota nem novo bloqueio de selfie. (`app/tools/check_frontend_urls.py:25`; `app/scripts/check_a_lei_batida.py:14`, `:20`, `:21`, `:31`.)
+
+Não executei o Chromium: o próprio ensaio cria arquivos/perfil e os apaga, contrariando a regra somente leitura. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:344`, `:351`, `:360`, `:363`, `:372`.)
+
+## 11/11 15:36 · sessao 4ab2dacb6e2c · - · - · origem=Ronald (tmux)
+
+(2) Há **até um POST inicial mais uma linha de fila por clique online**; a linha pode provocar novos POSTs sem limite declarado enquanto a resposta/remoção falhar. Isso não equivale ao mesmo número de linhas `Batida`: a sincronização mantém a linha em erro e só a remove após resposta 2xx e transação de exclusão completa (`app/templates/ponto/bater_ponto_v2.html:307-331`; `app/static/pwa.js:256-298`).
+
+- O chokepoint deduplica **mesmo colaborador e mesmo tipo, ±60 s inclusivos**, entre batidas não retratadas, comparando o `timestamp` passado à porta (`app/ponto/registro_batida.py:106-115`).
+- A API deduplica **mesmo colaborador e mesmo tipo, ±5 min inclusivos**, sobre `ts_efetivo`, e responde `ja_registrada`, sem criar outra linha. Não é janela sobre horário da chegada quando o aparelho forneceu hora válida (`app/api/views.py:518-555`).
+- Portanto, **reenvio sequencial, mesmo tipo, diferença de até 30 s e primeira gravação já visível** cabe nas duas janelas. A falta de identidade original, isoladamente, não prova duplicação nesse cenário (`app/static/pwa.js:230-240`; `app/api/views.py:539-555`; `app/ponto/registro_batida.py:106-115`).
+- A garantia universal fica **[nao verificado]**: a API deduplica antes de eventualmente corrigir o tipo; a consulta usa o tipo recebido, enquanto a primeira gravação pode ter usado outro (`app/api/views.py:539-558`; `app/api/views.py:578-613`). Há também vários gatilhos de sincronização e nenhuma trava na entrada da função mostrada (`app/static/pwa.js:16`; `app/static/pwa.js:244-253`; `app/static/pwa.js:441-449`).
+- Com `tx.abort()` lançando no teto, o código rejeita mesmo assim; ele não consegue assegurar que aquela transação não concluirá posteriormente. Isso pode deixar uma linha que será reenviada apesar do erro mostrado, mas não demonstra duas linhas no servidor, devido às deduplicações acima (`app/static/pwa.js:84-93`; `app/static/pwa.js:216-223`; `app/templates/ponto/bater_ponto_v2.html:329-331`).
+
+(3) A lei copiada declara batida de chão sem barreira e escrita por `ponto/registro_batida.py` (`CLAUDE.md:143-144`). Os caminhos examinados consultam o juiz central de câmera/captura e seguem com foto nula; não encontrei segundo juiz de admissibilidade da selfie nesses caminhos (`app/static/pwa.js:170-204`; `app/templates/ponto/triagem/apto.html:248-264`; `app/templates/ponto/triagem/apto.html:275-289`; `app/templates/ponto/bater_ponto_v2.html:269-284`). No servidor, ausência de foto consulta `selfie_ausente` e acrescenta motivo, sem retorno de recusa (`app/api/views.py:449-465`; `app/ponto/registro_batida.py:80-91`). Existem barreiras anteriores de situação e colisão oposta; não são introduzidas por esse delta (`app/api/views.py:415-423`; `app/ponto/registro_batida.py:145-151`).
+
+(4) O escritor lê `Date.now()` uma vez **na entrada de `registrarBatidaOffline`**, antes do gap e do IndexedDB; grava esse instante cru em `timestamp_dispositivo` (`app/static/pwa.js:211-222`). Isso não é necessariamente o instante do primeiro clique: na v2 online, a chamada acontece depois do POST sem resposta, que pode consumir 30 s (`app/templates/ponto/bater_ponto_v2.html:293-323`; `app/static/pwa.js:230-237`).
+
+A fila envia `timestamp_dispositivo`; não envia seu `timestamp` corrigido nem o gap (`app/static/pwa.js:261-270`). O leitor é `api_bater_ponto`, que passa esse campo a `hora_do_aparelho`; sem campo, vale `agora` (`app/api/views.py:509-521`; `app/api/hora_do_aparelho.py:135-139`). A função aceita a hora do aparelho com atraso de **0 a 48 h**, usando-a como hora efetiva; acima de 3 min acrescenta trilha de offline aceito. Hora futura ou antiga demais usa `agora`, preservando a hora lida no campo do aparelho (`app/api/hora_do_aparelho.py:62-67`; `app/api/hora_do_aparelho.py:141-153`). Assim, atraso de 30 s é aceito sem descarte quando o relógio está correto (`app/api/hora_do_aparelho.py:141-146`).
 
 ## 11/11 15:35 · sessao 36452142e014 · DATA-EVENTO-CRU · verificador · origem=Code
 
@@ -281,491 +581,4 @@ Os 12 testes diretos de `_escrever_pautas` não executam transição de Chamado 
 
 Os retornos foram inferidos do código; execução dessas entradas nesta sessão [não verificado].
 
-## 11/11 15:31 · sessao acf78761590e · - · - · origem=Ronald (tmux)
-
-**Item 4: FILA.** Motivo literal: “achado [...] sobre a FORMA de testar [...] vira linha de fila, nunca volta” — anexo fornecido [não verificado em arquivo].
-
-- A divergência comprovada está no comentário “revisao head”, em `bin/tests/test_selo_proporcao.sh:91`; a implementação lê BASE em `bin/selo_proporcao.py:47` e `bin/selo_proporcao.py:91`. Os testes efetivos também preparam a lista na BASE, em `bin/tests/test_selo_proporcao.sh:44`.
-- Entrada concreta: BASE e HEAD contendo listas distintas; a chamada usa a lista da BASE, conforme `bin/selo_proporcao.py:47`.
-- Contrato que promete HEAD e MEDIDA “pousos B com rc 1”: não encontrados na cópia [não verificado]. O fluxo do selo imprime a classificação e retorna, conforme `bin/selo_proporcao.py:99`.
-- Chamador automático de pouso não encontrado [não verificado]. Isso não comprova ausência de execução manual no pouso [não verificado]. O literal “SELO no pouso” consta do aval fornecido; a exigência de integração automática não consta dele [não verificado em arquivo]. [nao verificado]
-
-## 11/11 15:25 · sessao 6dc09a5905d6 · FIO-E0-V4-E4B · verificador · origem=Code
-
-**REPROVADO.** A c8 corrige a intercalação dentro de `_escrever_pautas`, mas **B1 continua BLOQUEANTE no ato completo**: outro escritor pode tomar o contador DP durante a transição, antes das âncoras E4B. Também permanece o **BLOQUEANTE de encerramento pela suíte inteira pendente**. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fecho_runtime.py:154`; `app/chamados/services/fabrica_da_celula.py:369`; `app/pautas/services.py:354`; `app/docs/FIO-E0-V4-E4B-c8.txt:97`; `CLAUDE.md:375`)
-
-Quanto ao **item 1**, a classificação dos achados anteriores é:
-
-| Achado da c7 | Situação depois da c8 |
-|---|---|
-| **B1: âncoras intercaladas com contador DP** | **Curado só no caso do agrupador isolado; não curado pela CLASSE global — BLOQUEANTE.** Os dois laços corrigem aquele trecho, mas a transição anterior pode escrever outra Pauta DP. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:122`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fabrica_da_celula.py:369`) |
-| Dia civil de conversa virando competência | **Curado pela CLASSE desse leitor.** Usa o juiz de dia do turno, descarta `None` e consulta a janela da empresa. (`app/chamados/services/fecho_runtime.py:111`; `app/chamados/services/fecho_runtime.py:112`; `app/chamados/services/fecho_runtime.py:115`; `app/chamados/juizes.py:336`) |
-| Duplicação concorrente marcador+âncora | **Curado pela CLASSE dos participantes desse agrupador**, quanto ao dedup: advisory antecede `exists` e criação. A porta genérica não impõe essa idempotência; não achei unicidade correspondente no modelo. (`app/chamados/services/fecho_runtime.py:119`; `app/chamados/services/fecho_runtime.py:123`; `app/pautas/services.py:180`; `app/pautas/models.py:123`) |
-| Motivo limbo truncado | **Curado pela CLASSE dos formatos produzidos pelo S143.** Reserva os motivos e abrevia listas com IDs inteiros e contagens; ORM compara texto entregue à porta e persistido. (`app/chamados/services/fecho_runtime.py:64`; `app/chamados/services/fecho_runtime.py:76`; `app/chamados/tests/test_e4b_c6_orm.py:226`; `app/chamados/tests/test_e4b_c6_orm.py:228`) |
-| Coleta sobrevivendo ao rollback S143 | **Curado pela CLASSE das exceções propagadas pelo resolver ou pela saída do savepoint.** O merge acontece depois da saída normal; o token é restaurado no `finally`. (`app/chamados/signals.py:115`; `app/chamados/services/fecho_runtime.py:39`; `app/chamados/services/fecho_runtime.py:40`) |
-| Reentrega não acrescenta IDs | **Não curado — FILA.** Pauta viva causa `continue`; a nota individual permanece. (`app/chamados/services/fecho_runtime.py:123`; `app/chamados/services/fecho_runtime.py:125`; `app/chamados/services/disputa_emissao.py:1855`) |
-| Fechamento futuro fora das duas bordas | **Não curado — FILA de alcance.** `fechar()` usa transição direta; sem contexto, o coletor não entrega. (`app/chamados/models.py:454`; `app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`) |
-| Relógio fora da borda | **Não curado — FILA preexistente.** S143 passa `hoje=None`; o juiz pode executar `date.today()`. (`app/chamados/services/disputa_emissao.py:1945`; `app/chamados/juizes.py:577`) |
-| Prova concorrente e falha real de escrita da Pauta | **Não curado — FILA de prova.** O novo ensaio observa uma conexão e chama diretamente o agrupador; a falha ORM existente é injetada no resolver. Não achei ensaio de falha real de `escrever` nesses testes. (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/test_e4b_c6_orm.py:266`; `app/chamados/tests/test_e4b_c6_orm.py:273`) |
-| Leitores crus de `data_evento` no caminho completo | **Não curado — FILA preexistente.** Permanecem na recusa de exportada, em S128/HX e no gate do chamado. (`app/chamados/services/disputa_emissao.py:1836`; `app/chamados/services/disputa_emissao.py:1984`; `app/chamados/services/disputa_emissao.py:2056`; `app/chamados/models.py:364`) |
-| Lint vermelho | **Curado no código dos dois apontamentos:** import excedente removido e variável ligada ao parâmetro default. Certificação do lint pelo dado fornecido; execução independente **[nao verificado]**. (`app/chamados/tests/test_e4b_c6_memoria.py:7`; `app/chamados/tests/test_e4b_c6_memoria.py:297`) |
-| Suíte inteira | **Não curado — BLOQUEANTE de encerramento.** Não achei comprovante integral; o recibo a deixa pendente e a regra exige seu GREEN. (`app/docs/FIO-E0-V4-E4B-c8.txt:87`; `app/docs/FIO-E0-V4-E4B-c8.txt:97`; `CLAUDE.md:375`) |
-
-**O contraexemplo global de B1 está no próprio runtime.** O `atomic` externo executa a transição antes de chamar o agrupador. A gravação do chamado dispara o cartório; este pode chamar a fábrica e escrever Pauta DP de cadastro sem turno ou de limbo exportado, tomando o contador antes das âncoras E4B. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/models.py:296`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:204`; `app/chamados/services/fabrica_da_celula.py:215`; `app/pautas/services.py:354`)
-
-| Passo | T1 — colaborador X | T2 — colaborador Y da mesma empresa |
-|---|---|---|
-| 1 | Durante a transição, a fábrica escreve Pauta e toma **DP**. (`app/chamados/services/fabrica_da_celula.py:369`; `app/pautas/services.py:188`; `app/pautas/services.py:354`) | |
-| 2 | | Toma **âncora A**; tenta escrever e espera **DP**. (`app/chamados/services/fecho_runtime.py:121`; `app/chamados/services/fecho_runtime.py:127`; `app/pautas/services.py:354`) |
-| 3 | Retorna da transição, pede **A** e espera T2, mantendo DP no ato externo. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/services/fecho_runtime.py:154`; `app/chamados/services/fecho_runtime.py:121`) | Continua esperando DP. (`app/pautas/services.py:354`) |
-
-A trava de colaborador não elimina esse ciclo: X e Y podem ser distintos, enquanto a âncora usa empresa+competência e o contador é único por departamento. (`app/chamados/models.py:2666`; `app/chamados/services/fecho_runtime.py:114`; `app/chamados/services/fecho_runtime.py:116`; `app/pautas/models.py:167`)
-
-O estado necessário é permitido estruturalmente: o cartório usa o dia da célula do chamado; `_ancoradas()` não exige que as perguntas tenham esse mesmo dia. O próprio teste ancora perguntas de dois dias no mesmo chamado. Assim, a célula que provoca Pauta de cadastro pode ser diferente da pergunta viva exportada que provoca a entrega E4B. Configuração concreta e reprodução concorrente: **[nao verificado]**. (`app/chamados/juizes.py:98`; `app/chamados/models.py:344`; `app/chamados/tests/test_e4b_c6_orm.py:74`; `app/chamados/tests/test_e4b_c6_orm.py:75`; `app/chamados/services/fabrica_da_celula.py:201`)
-
-As ordens relevantes encontradas são:
-
-| Caminho | Ordem demonstrável |
-|---|---|
-| Duas bordas humanas | Ambas entram em `transicionar_com_pauta`. (`app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`) |
-| Runtime sem Pauta anterior nos receivers | **Colaborador → Disputas → Chamados → eventuais Perguntas → âncoras ordenadas → INSERT Pauta → contador DP.** (`app/chamados/models.py:2666`; `app/chamados/models.py:2675`; `app/chamados/models.py:2688`; `app/chamados/models.py:2692`; `app/chamados/services/fecho_runtime.py:120`; `app/pautas/services.py:180`; `app/pautas/services.py:188`) |
-| Runtime com emissão da fábrica | **Colaborador/Disputa/Chamado e demais escritas da transição → Pauta da fábrica → DP → âncoras E4B → Pauta E4B → DP.** Esta é a inversão bloqueante. (`app/chamados/models.py:290`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:369`; `app/chamados/services/fecho_runtime.py:154`) |
-| Cadastro sem turno isolado | **Colaborador → Pauta → DP.** (`app/chamados/services/fabrica_da_celula.py:364`; `app/chamados/services/fabrica_da_celula.py:365`; `app/chamados/services/fabrica_da_celula.py:369`) |
-| Pauta pago/devido exportada | **Colaborador → FechamentoMensal → Pauta cabeça/filhas → DP.** (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:211`) |
-| Passivo validado | **Plantio → regeneração → escrita de FechamentoMensal → Pauta DP.** A ordem integral das travas internas dessas portas fica **[nao verificado]**. (`app/chamados/services/passivo_validado.py:427`; `app/chamados/services/passivo_validado.py:438`; `app/ponto/services/fechamento.py:1160`; `app/chamados/services/passivo_validado.py:443`) |
-| Ler, fazer ou cancelar Pauta | **UPDATE Pauta → contador do destinatário.** (`app/pautas/services.py:215`; `app/pautas/services.py:218`; `app/pautas/services.py:247`; `app/pautas/services.py:251`; `app/pautas/services.py:272`; `app/pautas/services.py:276`; `app/pautas/services.py:294`; `app/pautas/services.py:297`) |
-| Lavra avulsa | Obtém/cria o contador e o atualiza; não achei aquisição de âncora E4B nesse comando. (`app/pautas/management/commands/lavrar_pautas.py:51`; `app/pautas/services.py:352`; `app/pautas/services.py:354`) |
-
-**Não achei ciclo demonstrado com FechamentoMensal.** O caminho pago/devido toma FM antes de DP; o recálculo por evento consultado usa `on_commit`, portanto não demonstra uma aquisição síncrona FM depois de DP nesse ato. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`; `app/ponto/services/fechamento.py:1824`)
-
-Nos demais pontos encontrados, a ordem **interna da porta** é INSERT Pauta→trilha→contador; a ordem integral de todas as travas herdadas de cada chamador é **[nao verificado]**. Não achei outra aquisição própria da advisory E4B nesses pontos. (`app/pautas/services.py:180`; `app/pautas/services.py:186`; `app/pautas/services.py:188`; `app/chamados/services/fecho_runtime.py:89`)
-
-- Interface, respostas e emissão semanal: `app/pautas/views.py:76`; `app/pautas/services.py:194`; `app/pautas/semanal.py:276`.
-- Emissores DP: `app/folha/management/commands/pre_fechamento.py:110`; `app/ferias/management/commands/pautas_de_ferias.py:167`; `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107`; `app/ponto/services/ausencia.py:1055`; `app/ponto/services/ausencia.py:1245`; `app/ponto/services/pautas_dos_discordantes.py:177`; `app/ponto/services/pautas_dos_deslogados.py:77`; `app/ponto/services/afastado_avisa.py:74`; `app/ponto/services/autorizacao_he_periodo.py:244`.
-- Chamados e comandos: `app/chamados/services/resposta_tardia.py:63`; `app/chamados/services/competencia_trancada.py:231`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:208`; `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:134`; `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:139`; `app/pautas/management/commands/pauta_dia_em_aberto.py:127`; `app/pautas/management/commands/pauta_dia_em_aberto.py:139`; `app/pautas/management/commands/pauta_dia_em_aberto.py:142`.
-- Outros departamentos: `app/ponto/services/pautas_do_esmeril.py:76`; `app/ponto/services/cobertura.py:333`; `app/core/services/crons_quebrados.py:71`; `app/core/management/commands/alarme_esteira.py:54`; `app/core/management/commands/alarme_arvore.py:50`.
-
-Quanto ao **item 2**, o mapa dos valores produtivos alcançados é:
-
-| Campo/valor | Quem escreve ou produz | Quem lê / significado |
-|---|---|---|
-| `_RECUSAS`, token e lote | Declaração, instalação, restauração e merge após sucesso. (`app/chamados/services/fecho_runtime.py:13`; `app/chamados/services/fecho_runtime.py:34`; `app/chamados/services/fecho_runtime.py:39`; `app/chamados/services/fecho_runtime.py:40`; `app/chamados/services/fecho_runtime.py:149`) | Coletor compara PK de chamado e indexa por PK de pergunta; agrupador recebe o lote confirmado. (`app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/fecho_runtime.py:20`; `app/chamados/services/fecho_runtime.py:154`) |
-| Motivo e IDs do limbo | S143 produz os formatos e preserva nota individual. (`app/chamados/services/disputa_emissao.py:1840`; `app/chamados/services/disputa_emissao.py:1855`) | Gate admite os prefixos; montador separa nomes e IDs. (`app/chamados/services/disputa_emissao.py:1946`; `app/chamados/services/fecho_runtime.py:66`; `app/chamados/services/fecho_runtime.py:69`) |
-| `data_evento` e `conversa` | `abrir` fornece turno/`False`; conversa fornece dia civil/`True`; atribuição central pela porta do fio. (`app/chamados/models.py:2789`; `app/chamados/models.py:2801`; `app/chamados/services/fio.py:801`) | O novo agrupador usa o discriminador pelo juiz; os leitores crus remanescentes não o fazem nesses pontos. (`app/chamados/juizes.py:336`; `app/chamados/services/fecho_runtime.py:111`; `app/chamados/services/disputa_emissao.py:1836`; `app/chamados/models.py:364`) |
-| Empresa e corte | Relação cadastral do colaborador e cadastro da empresa. (`app/colaboradores/models.py:321`; `app/colaboradores/models.py:46`; `app/colaboradores/services/estrutura.py:19`) | Runtime usa a empresa da pergunta; janela consulta o corte efetivo. (`app/chamados/services/fecho_runtime.py:114`; `app/ponto/janelas.py:50`; `app/ponto/janelas.py:63`) |
-| Competência, âncora e agrupamento | Ano/mês do **fim da janela por corte**, agrupados por texto da âncora. (`app/chamados/services/fecho_runtime.py:115`; `app/chamados/services/fecho_runtime.py:116`; `app/chamados/services/fecho_runtime.py:117`) | Ordenação, dedup, porta, chip e payload conservam esse identificador. Não achei nesses leitores interpretação como mês civil. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:123`; `app/pautas/services.py:184`; `app/pautas/services.py:336`; `app/pautas/views.py:40`) |
-| Marcador e chave advisory | Constante e SHA256 de marcador+tipo+âncora. (`app/chamados/services/fecho_runtime.py:12`; `app/chamados/services/fecho_runtime.py:86`) | PostgreSQL recebe a chave; dedup usa o marcador textual. (`app/chamados/services/fecho_runtime.py:89`; `app/chamados/services/fecho_runtime.py:124`) |
-| Texto e listas | Montador distribui o teto; porta persiste até 500 caracteres. (`app/chamados/services/fecho_runtime.py:76`; `app/chamados/services/fecho_runtime.py:79`; `app/pautas/services.py:185`) | Payload entrega texto; nota S143 guarda motivo integral. (`app/pautas/views.py:40`; `app/chamados/services/disputa_emissao.py:1855`) |
-| Destinatário DP, remetente TI e autor | Runtime fornece valores; porta resolve permissão e grava. (`app/chamados/services/fecho_runtime.py:127`; `app/pautas/services.py:49`; `app/pautas/services.py:87`; `app/pautas/services.py:180`) | Listagem usa destinatário; autoria permanece na trilha. (`app/pautas/services.py:308`; `app/pautas/models.py:105`; `app/pautas/views.py:38`) |
-| `feito_em`, `cancelado_em`, `lido_em` | Portas centrais de estado da Pauta. (`app/pautas/services.py:215`; `app/pautas/services.py:247`; `app/pautas/services.py:272`; `app/pautas/services.py:294`) | `.vivas()` controla dedup; lavra usa leitura e prazo. (`app/chamados/services/fecho_runtime.py:124`; `app/pautas/models.py:57`; `app/pautas/models.py:64`; `app/pautas/services.py:356`) |
-| Contador DP | `lavrar` escreve `nao_lidas`, `atrasadas` e `lavrado_em`. (`app/pautas/services.py:354`) | Service e view leem o lavrado. (`app/pautas/services.py:362`; `app/pautas/views.py:34`) |
-| Estado/destino/usuário do ato | Bordas transportam; escritor atribui status e usuário e salva. (`app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`; `app/chamados/models.py:228`; `app/chamados/models.py:231`; `app/chamados/models.py:296`) | Adaptador exige VIVOS→ENCERRADOS; receiver exige save de status encerrado. (`app/chamados/services/fecho_runtime.py:144`; `app/chamados/signals.py:96`; `app/chamados/signals.py:104`) |
-
-Nos valores acrescentados à prova, o wrapper produz `(sql, params, in_atomic_block)`; o gate lê chaves, índices, contagens e presença de transação. As constantes de base/caso/mutante selecionam a sobreposição usada pelo roteiro. (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/e4b_c6_verificar.py:76`; `app/chamados/tests/e4b_c6_verificar.py:90`; `app/chamados/tests/e4b_c6_verificar.py:134`; `app/chamados/tests/e4b_c6_verificar.py:230`)
-
-Quanto ao **item 3**, **o ORM mede a ordem SQL real da chamada observada**, não apenas contagem: registra a consulta, executa-a, compara as chaves exatas ordenadas e exige a última advisory antes de `exists`, INSERT de Pauta e UPDATE de contador. Travar só a primeira âncora ou inverter as âncoras presentes é detectado. (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/test_e4b_c6_orm.py:251`; `app/chamados/tests/e4b_c6_verificar.py:94`; `app/chamados/tests/e4b_c6_verificar.py:99`)
-
-Há, porém, três lacunas — **FILA de prova**, diretamente relacionadas à alegação global:
-
-- **Contador previamente travado passa:** o classificador ignora `SELECT … FOR UPDATE` sobre `pautas_contadorpauta`; só reconhece seu UPDATE. Um mutante que tome DP por SELECT antes das âncoras e mantenha os UPDATEs depois satisfaz o gate. (`app/chamados/tests/e4b_c6_verificar.py:78`; `app/chamados/tests/e4b_c6_verificar.py:84`; `app/chamados/tests/e4b_c6_verificar.py:88`)
-- **Outra chave de ordenação pode passar:** memória e ORM usam uma única empresa. Ordenar apenas pela competência coincide com a ordem completa nesses lotes; não distingue uma futura ordem diferente entre empresas. (`app/chamados/tests/test_e4b_c6_memoria.py:227`; `app/chamados/tests/test_e4b_c6_memoria.py:233`; `app/chamados/tests/test_e4b_c6_orm.py:253`; `app/chamados/tests/test_e4b_c6_orm.py:257`)
-- **Ordem diferente em outro caminho passa:** o wrapper envolve somente `_escrever_pautas`, excluindo a transição e seus receivers — precisamente o caminho do novo contraexemplo. (`app/chamados/tests/test_e4b_c6_orm.py:265`; `app/chamados/tests/test_e4b_c6_orm.py:266`; `app/chamados/services/fecho_runtime.py:151`)
-
-Além disso, o gate verifica apenas um booleano de `atomic`, sem identificar a transação nem seu tempo de vida. Não achei prova de concorrência ou de manutenção das travas até o commit nesses testes. (`app/chamados/tests/e4b_c6_verificar.py:76`; `app/chamados/tests/e4b_c6_verificar.py:95`; `app/chamados/tests/test_e4b_c6_orm.py:28`)
-
-Quanto ao **item 4**, reaparece **ordem de trava — BLOQUEANTE B1**; permanecem **relógio fora da borda e campo temporal com dois significados — FILA preexistente**; a prova de ordem global tem as lacunas acima. (`app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fabrica_da_celula.py:369`; `app/chamados/juizes.py:577`; `app/chamados/models.py:2789`; `app/chamados/models.py:2801`; `app/chamados/tests/test_e4b_c6_orm.py:266`)
-
-**Não achei segundo juiz, derivação paralela de competência ou escrita produtiva E4B fora da porta no delta.** A composição usa juiz temporal, janela existente e `escrever`. O retorno antecipado continua retirado: após a recusa seguem S128, HX e C7. (`app/chamados/services/fecho_runtime.py:104`; `app/chamados/services/fecho_runtime.py:107`; `app/chamados/services/fecho_runtime.py:127`; `app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/disputa_emissao.py:1953`; `app/chamados/services/disputa_emissao.py:2007`; `app/chamados/services/disputa_emissao.py:2089`)
-
-Nos chamadores externos indicados pelo aval, não achei instalação do coletor E4B: chamam o resolver, e registrar sem contexto não entrega Pauta E4B. Ocorrência e quantidade em produção: **[nao verificado]**. (`app/chamados/services/becos.py:54`; `app/chamados/reconciliador.py:536`; `app/chamados/reconciliador.py:1648`; `app/ponto/management/commands/reconciliar_f
-
-[truncado em 20000 de 22202 caracteres]
-
-## 11/11 15:23 · sessao 2b3ccc385b07 · - · - · origem=Ronald (tmux)
-
-B1 está curado apenas no trecho `_escrever_pautas`; **a ordem global do ato continua com inversão possível**. O helper agora adquire todas as âncoras antes da porta, mas a transição que o precede pode adquirir o contador DP por outro emissor. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:127`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fecho_runtime.py:154`)
-
-**Contraexemplo estático — BLOQUEANTE:**
-
-1. T1 inicia fechamento do colaborador X; trava C→D→Ch, grava status e dispara os receivers. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/models.py:290`; `app/chamados/models.py:296`)
-2. O receiver chama o cartório; o cartório chama a fábrica, que pode emitir Pauta DP de cadastro sem turno ou limbo exportado, adquirindo o contador DP. (`app/chamados/signals.py:209`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:2012`; `app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:204`; `app/chamados/services/fabrica_da_celula.py:215`; `app/chamados/services/fabrica_da_celula.py:369`; `app/pautas/services.py:188`; `app/pautas/services.py:354`)
-3. T2, de outro colaborador Y da mesma empresa, trava a âncora A e espera o contador DP. (`app/chamados/services/fecho_runtime.py:114`; `app/chamados/services/fecho_runtime.py:116`; `app/chamados/services/fecho_runtime.py:121`; `app/chamados/services/fecho_runtime.py:127`)
-4. T1 retorna da transição, pede A e espera T2; conserva DP na transação externa. A âncora é por empresa/competência e o contador é único por departamento, portanto X e Y podem ter travas C/D/Ch/P disjuntas e compartilhar A+DP. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/services/fecho_runtime.py:154`; `app/chamados/services/fecho_runtime.py:116`; `app/pautas/models.py:167`)
-
-O estado necessário é estruturalmente permitido: a célula do chamado fornece o dia ao cartório; as perguntas ancoradas podem ter outros dias, sem igualdade exigida pelo filtro. O próprio teste existente ancora perguntas de dois dias no mesmo chamado. Pode-se ter célula do chamado sem turno e pergunta viva exportada em outra célula. Configuração concreta e execução concorrente: **[nao verificado]**. (`app/chamados/juizes.py:98`; `app/chamados/models.py:344`; `app/chamados/tests/test_e4b_c6_orm.py:74`; `app/chamados/tests/test_e4b_c6_orm.py:75`; `app/chamados/services/fabrica_da_celula.py:201`)
-
-**Ordens encontradas:**
-
-| Caminho | Ordem relevante |
-|---|---|
-| Runtime sem emissão anterior no signal | C→D→Ch→P eventualmente→âncoras ordenadas→INSERT Pauta→trilha→contador DP. (`app/chamados/models.py:2666`; `app/chamados/models.py:2675`; `app/chamados/models.py:2688`; `app/chamados/models.py:2692`; `app/chamados/services/fecho_runtime.py:120`; `app/pautas/services.py:180`; `app/pautas/services.py:188`) |
-| Runtime com Pauta da fábrica no signal | C→D→Ch→eventuais P/célula→Pauta da fábrica→DP→âncoras E4B→Pauta E4B→DP. (`app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:369`; `app/chamados/services/fecho_runtime.py:154`) |
-| `pauta_cadastro_sem_turno` isolado | C→INSERT Pauta→DP; não adquire âncora E4B. (`app/chamados/services/fabrica_da_celula.py:364`; `app/chamados/services/fabrica_da_celula.py:365`; `app/chamados/services/fabrica_da_celula.py:369`) |
-| Pauta pago/devido exportada | C→FechamentoMensal→Pauta cabeça/filhas→DP. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:189`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`) |
-| Passivo validado | Plantio→regeneração→UPDATE FechamentoMensal→Pauta DP; possíveis travas anteriores dependem das portas de plantio/regeneração. (`app/chamados/services/passivo_validado.py:371`; `app/chamados/services/passivo_validado.py:427`; `app/chamados/services/passivo_validado.py:438`; `app/ponto/portas/regen_exportada.py:179`; `app/ponto/services/fechamento.py:1160`; `app/chamados/services/passivo_validado.py:443`) |
-| Estado de Pauta | UPDATE Pauta→trilha→contador; nenhuma âncora E4B nessa porta. (`app/pautas/services.py:215`; `app/pautas/services.py:218`; `app/pautas/services.py:247`; `app/pautas/services.py:251`; `app/pautas/services.py:272`; `app/pautas/services.py:276`; `app/pautas/services.py:294`; `app/pautas/services.py:297`) |
-| Lavra avulsa | Contador somente, sem C/D/Ch/P/FM/advisory nesse comando. (`app/pautas/management/commands/lavrar_pautas.py:42`; `app/pautas/management/commands/lavrar_pautas.py:51`; `app/pautas/services.py:352`; `app/pautas/services.py:354`) |
-
-Não achei aquisição síncrona de FechamentoMensal na cauda de `cartorio.julgar_colab`. O recalculo por evento consultado é agendado em `on_commit`, portanto essa cauda não demonstra DP→FM retidos juntos. (`app/ponto/portas/celula.py:445`; `app/ponto/portas/celula.py:458`; `app/ponto/services/fechamento.py:1807`; `app/ponto/services/fechamento.py:1824`)
-
-O teste c8 observa diretamente `_escrever_pautas`, deixando fora justamente a transição e seus receivers; por isso pode continuar verde diante dessa inversão global. (`app/chamados/tests/test_e4b_c6_orm.py:265`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fecho_runtime.py:154`)
-
-Outros pontos de chamada de `escrever`, sem aquisição própria da âncora E4B nos trechos consultados, seguem pela ordem interna INSERT Pauta→trilha→contador do destinatário. (`app/pautas/services.py:180`; `app/pautas/services.py:186`; `app/pautas/services.py:188`)
-
-- Interface e respostas: `app/pautas/views.py:76`, `app/pautas/services.py:194`, `app/pautas/management/commands/suporte_hasner.py:133`.
-- Emissores DP: `app/pautas/semanal.py:276`, `app/folha/management/commands/pre_fechamento.py:110`, `app/ferias/management/commands/pautas_de_ferias.py:167`, `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107`, `app/ponto/services/ausencia.py:1055`, `app/ponto/services/ausencia.py:1245`, `app/ponto/services/pautas_dos_discordantes.py:177`, `app/ponto/services/pautas_dos_deslogados.py:77`, `app/ponto/services/afastado_avisa.py:74`, `app/ponto/services/autorizacao_he_periodo.py:244`.
-- Outros departamentos: `app/ponto/services/pautas_do_esmeril.py:76`, `app/ponto/services/cobertura.py:333`, `app/core/services/crons_quebrados.py:71`, `app/core/management/commands/alarme_esteira.py:54`, `app/core/management/commands/alarme_arvore.py:50`.
-- Chamados/comandos: `app/chamados/services/resposta_tardia.py:63`, `app/chamados/services/competencia_trancada.py:231`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:208`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:134`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:139`, `app/pautas/management/commands/pauta_dia_em_aberto.py:127`, `app/pautas/management/commands/pauta_dia_em_aberto.py:139`, `app/pautas/management/commands/pauta_dia_em_aberto.py:142`.
-
-No censo produtivo consultado, não achei outro SQL de escrita de `ContadorPauta` além da porta central, nem outra aquisição da advisory E4B. Isso não torna a ordem global segura, porque os emissores anteriores compartilham o contador. (`app/pautas/services.py:352`; `app/pautas/services.py:354`; `app/chamados/services/fecho_runtime.py:89`; `app/chamados/services/fecho_runtime.py:121`)
-
-## 11/11 15:21 · sessao c3c87e94559f · - · - · origem=Ronald (tmux)
-
-1. **O gate ORM observa a ordem real de emissão do SQL**, pois `execute_wrapper` registra a consulta e depois chama `execute`; não é somente contagem. Ele compara os parâmetros exatos das advisory locks, na ordem esperada, exige INSERT/UPDATE/exists e põe a última advisory antes dessas operações. **Travar somente a primeira âncora ou inverter as âncoras dos lotes presentes falha.** (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/test_e4b_c6_orm.py:265`; `app/chamados/tests/e4b_c6_verificar.py:90`; `app/chamados/tests/e4b_c6_verificar.py:94`; `app/chamados/tests/e4b_c6_verificar.py:99`)
-
-2. **A prova não cobre toda aquisição da trava do contador.** O classificador reconhece `UPDATE pautas_contadorpauta`, mas ignora `SELECT ... FOR UPDATE` nesse contador. Um mutante que pretrave a linha DP por SELECT e depois execute normalmente todas as âncoras passa nesse gate; também não há observação de outros chamadores, porque o teste chama diretamente `_escrever_pautas`. (`app/chamados/tests/e4b_c6_verificar.py:78`; `app/chamados/tests/e4b_c6_verificar.py:84`; `app/chamados/tests/e4b_c6_verificar.py:88`; `app/chamados/tests/test_e4b_c6_orm.py:266`)
-
-3. **Outra chave de ordenação pode sobreviver.** Os lotes de memória usam exclusivamente empresa 2, e os lotes ORM exclusivamente `self.emp`; ordenar só pelo sufixo da competência produz exatamente a mesma sequência nesses casos, embora possa produzir outra ordem com várias empresas. A ordem produtiva atual é pelo texto completo da âncora. (`app/chamados/tests/test_e4b_c6_memoria.py:227`; `app/chamados/tests/test_e4b_c6_memoria.py:233`; `app/chamados/tests/test_e4b_c6_orm.py:253`; `app/chamados/tests/test_e4b_c6_orm.py:257`; `app/chamados/services/fecho_runtime.py:120`)
-
-4. **Confirmações locais, somente em memória:** sobrepus o módulo sem gravar arquivos e executei o teste c8 com dois mutantes adicionais: SELECT FOR UPDATE do contador antes das âncoras; ordenação somente pela competência. Ambos sobreviveram. A simulação isolada do gate também aceitou a trava antecipada do contador. Não há arquivo de saída dessas execuções: **[nao verificado]**. A razão está no classificador e nos insumos descritos acima. (`app/chamados/tests/e4b_c6_verificar.py:78`; `app/chamados/tests/test_e4b_c6_memoria.py:223`)
-
-5. **O fake não certifica banco nem rollback.** Seu `atomic` apenas incrementa/decrementa profundidade; `execute` só guarda registros; o escritor c8 emite SQL sintético e acrescenta à lista. Isso explica por que seu GREEN não elimina inversões envolvendo outras travas reais. O teste ORM executa a porta real, mas usa perguntas `SimpleNamespace`, uma conexão e chamada direta ao agrupador. (`app/chamados/tests/test_e4b_c6_memoria.py:36`; `app/chamados/tests/test_e4b_c6_memoria.py:46`; `app/chamados/tests/test_e4b_c6_memoria.py:207`; `app/chamados/tests/test_e4b_c6_orm.py:253`; `app/chamados/tests/test_e4b_c6_orm.py:266`)
-
-6. **Estar em atomic não prova a identidade nem a duração da mesma transação.** O gate só recebe um booleano; a classe ORM é `TestCase`, e o fake recebe apenas profundidade. Não achei verificação de release/commit entre fases nem ensaio com duas conexões nesses testes. (`app/chamados/tests/e4b_c6_verificar.py:76`; `app/chamados/tests/e4b_c6_verificar.py:95`; `app/chamados/tests/test_e4b_c6_orm.py:28`; `app/chamados/tests/test_e4b_c6_memoria.py:47`)
-
-7. **Não achei fixture invisível determinando o resultado dos REDs funcionais.** Viva/mortas e exportada/aberta são verificadas pelos juízes reais antes do ato; a conclusão ORM confere carimbos, estados, ausência de reabertura e Pauta persistida. A conversa é criada pela porta, mas sua recusa é injetada diretamente no agrupador: a prova é daquele leitor, não do caminho S143 completo. (`app/chamados/tests/test_e4b_c6_orm.py:78`; `app/chamados/tests/test_e4b_c6_orm.py:82`; `app/chamados/tests/test_e4b_c6_orm.py:113`; `app/chamados/tests/test_e4b_c6_orm.py:120`; `app/chamados/tests/test_e4b_c6_orm.py:175`; `app/chamados/tests/test_e4b_c6_orm.py:182`)
-
-8. **Não achei RED contado por fixture quebrada no protocolo.** Ele exige GREEN anterior, rc=1, um failure no caso e mensagem-alvo, e rejeita erro ou precondição. Os testes do protocolo usam resultados fabricados para testar esse parser; não são prova da execução dos mutantes. O `--c8` agrega os ensaios c7 e os dois c8; não agrega os ensaios c6, que o dado fornecido apresenta separadamente. (`app/chamados/tests/e4b_c6_verificar.py:242`; `app/chamados/tests/e4b_c6_verificar.py:255`; `app/chamados/tests/test_e4b_c6_protocolo.py:91`; `app/chamados/tests/e4b_c6_verificar.py:230`)
-
-9. **Execução local:** c8 memória mais protocolo: 9 OK. Ao executar os 24 testes memória/protocolo, houve um único erro por ausência de `.git`, no teste que pede `git show` da base; não é evidência de regressão produtiva nem contradiz o GREEN fornecido de outro ambiente. Saídas sem arquivo: **[nao verificado]**. Dependência está explícita. (`app/chamados/tests/e4b_c6_verificar.py:102`; `app/chamados/tests/test_e4b_c6_memoria.py:281`)
-
-## 11/11 15:20 · sessao ab3c1bbff372 · - · - · origem=Ronald (tmux)
-
-Classificação dos achados c7, excluindo conclusão global de travas delegada ao outro explorer:
-
-| Achado c7 | Situação c8 e evidência |
-|---|---|
-| Dia civil de conversa virando competência no agrupador | **Curado pela CLASSE desse leitor**: toda pergunta passa pelo juiz, `None` sai, e a competência vem da janela da empresa. (`app/chamados/services/fecho_runtime.py:111`; `app/chamados/services/fecho_runtime.py:112`; `app/chamados/services/fecho_runtime.py:115`; `app/chamados/juizes.py:336`) |
-| Duas Pautas concorrentes marcador+âncora | **Curado pela CLASSE dos participantes que passam por esse agrupador**, condicionado à ordem global de travas: advisory antes de dedup/criação, no atomic. A porta isolada continua criando e o modelo não possui unicidade marcador+âncora. (`app/chamados/services/fecho_runtime.py:119`; `app/chamados/services/fecho_runtime.py:121`; `app/chamados/services/fecho_runtime.py:123`; `app/pautas/services.py:180`; `app/pautas/models.py:123`) |
-| Motivo limbo truncado | **Curado pela CLASSE dos formatos produzidos pelo S143**: reserva nomes, abrevia listas inteiras com contagem; teste compara entrada da porta e persistido. (`app/chamados/services/disputa_emissao.py:1840`; `app/chamados/services/fecho_runtime.py:64`; `app/chamados/services/fecho_runtime.py:76`; `app/chamados/tests/test_e4b_c6_orm.py:226`; `app/chamados/tests/test_e4b_c6_orm.py:228`) |
-| Memória sobrevivendo a rollback do S143 | **Curado pela CLASSE de exceções propagadas pelo resolver ou saída do savepoint**: só incorpora o lote após os contextos saírem normalmente, restaurando token no `finally`. (`app/chamados/signals.py:115`; `app/chamados/services/fecho_runtime.py:39`; `app/chamados/services/fecho_runtime.py:40`) |
-| Reentrega não acrescenta novos IDs | **Não curado — FILA**: Pauta viva leva a `continue`; nota S143 preserva rastro individual. (`app/chamados/services/fecho_runtime.py:123`; `app/chamados/services/fecho_runtime.py:125`; `app/chamados/services/disputa_emissao.py:1855`) |
-| Fechamentos futuros fora das duas bordas sem entrega | **Não curado — FILA de alcance**: `fechar` chama transição direta; coletor ausente não entrega; só achei instalação nas duas bordas. (`app/chamados/models.py:454`; `app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`) |
-| Relógio fora da borda | **Não curado — FILA preexistente**: S143 fornece `None`; juiz pode ler relógio. (`app/chamados/services/disputa_emissao.py:1945`; `app/chamados/juizes.py:577`) |
-| Falta de prova concorrente e falha real da escrita | **Não curado — FILA de prova**: c8 observa SQL de uma conexão chamando diretamente agrupador; erro de memória é na transição e erro ORM é no resolver, não em `escrever`. (`app/chamados/tests/test_e4b_c6_orm.py:248`; `app/chamados/tests/test_e4b_c6_orm.py:263`; `app/chamados/tests/test_e4b_c6_memoria.py:113`; `app/chamados/tests/test_e4b_c6_orm.py:273`) |
-| Suíte inteira | **Não curado — BLOQUEANTE de encerramento**, pela regra vigente e dado fornecido pelo usuário; execução integral independente **[nao verificado]**. (`CLAUDE.md:375`; `app/docs/FIO-E0-V4-E4B-c8.txt:80`) |
-| Lint vermelho | Import excedente removido e variável ligada ao default do contexto; GREEN do anexo fornecido, execução própria **[nao verificado]**. (`app/chamados/tests/test_e4b_c6_memoria.py:7`; `app/chamados/tests/test_e4b_c6_memoria.py:297`) |
-
-Mapa de escritores/leitores do percurso produtivo alcançado:
-
-| Campo/valor | Produção/escrita | Leitura/significado |
-|---|---|---|
-| `_RECUSAS`, token, lote | Declaração, instalação e restauração; lote mesclado após sucesso. (`app/chamados/services/fecho_runtime.py:13`; `app/chamados/services/fecho_runtime.py:34`; `app/chamados/services/fecho_runtime.py:39`; `app/chamados/services/fecho_runtime.py:40`; `app/chamados/services/fecho_runtime.py:148`; `app/chamados/services/fecho_runtime.py:153`) | Coletor compara PK do chamado e indexa por PK da pergunta; transição entrega dicionário ao agrupador. (`app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/fecho_runtime.py:20`; `app/chamados/services/fecho_runtime.py:154`) |
-| Motivo recusa / IDs limbo | S143 produz os dois formatos e grava nota do credor. (`app/chamados/services/disputa_emissao.py:1840`; `app/chamados/services/disputa_emissao.py:1844`; `app/chamados/services/disputa_emissao.py:1855`; `app/chamados/services/disputa_emissao.py:1860`) | Coletor recebe apenas prefixos admitidos; montador interpreta nomes, lista limbo e IDs de pergunta. (`app/chamados/services/disputa_emissao.py:1946`; `app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/fecho_runtime.py:65`; `app/chamados/services/fecho_runtime.py:69`; `app/chamados/services/fecho_runtime.py:77`) |
-| `data_evento` / `conversa` | `abrir` fornece dia do turno e `False`; conversa fornece dia civil e `True`; nascimento recebe discriminador e usa atribuidor único de data. (`app/chamados/models.py:2789`; `app/chamados/models.py:2801`; `app/chamados/models.py:3014`; `app/chamados/models.py:3016`; `app/chamados/services/fio.py:801`) | Juiz retorna `None` para conversa e agrupador o usa. **Leitores crus permanecem** no teste de exportada de S143, via S128/HX e gate do chamado. (`app/chamados/juizes.py:336`; `app/chamados/services/fecho_runtime.py:111`; `app/chamados/services/disputa_emissao.py:1836`; `app/chamados/services/disputa_emissao.py:1984`; `app/chamados/services/disputa_emissao.py:2056`; `app/chamados/models.py:364`) |
-| Empresa / corte | Relação do colaborador; portas de cadastro do colaborador e empresa; corte cadastrado. (`app/colaboradores/models.py:321`; `app/colaboradores/services/colaborador.py:60`; `app/colaboradores/services/colaborador.py:76`; `app/colaboradores/models.py:46`; `app/colaboradores/services/estrutura.py:19`) | Agrupador usa empresa da pergunta; `janela_atual` consulta corte e deriva janela por corte, não mês civil. (`app/chamados/services/fecho_runtime.py:114`; `app/ponto/janelas.py:50`; `app/ponto/janelas.py:60`; `app/ponto/janelas.py:24`) |
-| Competência / âncora / marcador / chave | Agrupador usa ano/mês do fim da janela; chave SHA256 de marcador+tipo+âncora. (`app/chamados/services/fecho_runtime.py:12`; `app/chamados/services/fecho_runtime.py:86`; `app/chamados/services/fecho_runtime.py:115`; `app/chamados/services/fecho_runtime.py:116`) | Dedup usa par+marcador; porta conserva ID como texto; chip/payload conservam par. Não achei nesses leitores reinterpretação como mês civil. (`app/chamados/services/fecho_runtime.py:123`; `app/pautas/services.py:184`; `app/pautas/services.py:336`; `app/pautas/views.py:40`) |
-| Texto | Montador reserva 500 caracteres; porta persiste com teto. (`app/chamados/services/fecho_runtime.py:76`; `app/chamados/services/fecho_runtime.py:79`; `app/pautas/services.py:185`) | Payload DP entrega texto; motivo completo permanece na nota. (`app/pautas/views.py:40`; `app/chamados/services/disputa_emissao.py:1855`) |
-| DP/TI/autor | Runtime fornece DP/TI e usa `autor_sistema`; porta resolve remetente, valida e persiste. (`app/chamados/services/fecho_runtime.py:127`; `app/pautas/services.py:87`; `app/pautas/services.py:49`; `app/pautas/services.py:157`; `app/pautas/services.py:180`) | Listagem usa destinatário; autor é trilha e não viaja no payload. (`app/pautas/services.py:308`; `app/pautas/models.py:105`; `app/pautas/views.py:38`) |
-| `feito_em` / `cancelado_em` | Portas centrais de estado. (`app/pautas/services.py:247`; `app/pautas/services.py:272`; `app/pautas/services.py:294`) | Dedup usa `.vivas()`; feita/cancelada permite nova entrega. (`app/chamados/services/fecho_runtime.py:124`; `app/pautas/models.py:57`; `app/pautas/models.py:64`) |
-| Contador DP | `escrever` chama `lavrar`; esta obtém alvo e atualiza não lidas, atrasadas e instante. (`app/pautas/services.py:188`; `app/pautas/services.py:352`; `app/pautas/services.py:354`) | `nao_lidas` lê lavrado; view o usa. (`app/pautas/services.py:362`; `app/pautas/views.py:34`) |
-| `status_local`, destino e usuário | Bordas transportam; `_gravar_estado` atribui e salva. (`app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`; `app/chamados/models.py:228`; `app/chamados/models.py:231`; `app/chamados/models.py:296`) | Adaptador exige VIVOS→ENCERRADOS; receiver exige estado encerrado e save que escreveu status. (`app/chamados/services/fecho_runtime.py:144`; `app/chamados/signals.py:96`; `app/chamados/signals.py:104`) |
-
-Das classes históricas, **campo temporal com dois significados e relógio fora da borda permanecem no caminho completo**; c8 não acrescenta juiz de vitalidade, fechamento ou competência e mantém escrita pela porta. (`app/chamados/models.py:2789`; `app/chamados/models.py:2801`; `app/chamados/services/disputa_emissao.py:1836`; `app/chamados/juizes.py:577`; `app/chamados/services/fecho_runtime.py:104`; `app/chamados/services/fecho_runtime.py:107`; `app/chamados/services/fecho_runtime.py:127`)
-
-A retirada do retorno antecipado continua: após registrar recusa, seguem S128, HX e juiz C7. Não achei novo retorno anulando esses passos. (`app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/disputa_emissao.py:1953`; `app/chamados/services/disputa_emissao.py:2007`; `app/chamados/services/disputa_emissao.py:2046`; `app/chamados/services/disputa_emissao.py:2089`)
-
-Não achei emissão E4B fora do runtime nos chamadores indicados: eles chamam resolver, enquanto a coleta exige contexto instalado pelas duas bordas. Isso não constitui sonda de produção. (`app/chamados/services/becos.py:54`; `app/chamados/reconciliador.py:536`; `app/chamados/reconciliador.py:1648`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`; `app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/fecho_runtime.py:149`)
-
-Limitação de apresentação preexistente: UI não oferece rota de competência; conserva âncora e avisa ao clicar. Não é interpretação como mês civil. (`app/pautas/views.py:40`; `app/templates/core/_copiloto.html:564`; `app/templates/core/_copiloto.html:570`)
-
-## 11/11 15:20 · sessao b649f707e734 · PROPORCAO-POR-RISCO · verificador · origem=Code
-
-REPROVADO
-
-1. **Ainda há configuração de portão classificada B.** `app/core/tests/test_contract_esmeril.py:15` fornece `VULTURE_IGNORE_NAMES`; `bin/esmeril_da_copia.sh:22` lê esse valor, `:24` aplica as exceções e `:27` decide se libera. O arquivo continua B por `bin/selo_proporcao.py:74`. A mesma dependência existe em `bin/molde_fatia/rodar.sh:20-22`.
-
-2. **A lista fechada não sobrevive ao seu escritor oficial.** `CORTES.md` se declara gerado (`app/docs/CORTES.md:3`), mas a geração a partir do JSON fornecido não reproduz os marcadores presentes em `app/docs/CORTES.md:444`. O gerador monta as linhas do JSON e sobrescreve o Markdown inteiro (`bin/gerar_cortes.py:106-116`). Incorporar essa regeneração numa base futura faz o selo retornar rc 2 por lista ausente (`bin/selo_proporcao.py:50-52`).
-
-3. **A guarda prova igualdade com o `main` local, não a “obra inteira”.** Um `main` local que já contém C1 permite julgar somente C1..C2, mesmo que C1 pertença à mesma obra ainda não publicada. O selo não consulta `origin/main` nem uma fronteira registrada da obra (`bin/selo_proporcao.py:83-100`).
-
-4. **O harness ainda pode certificar cobertura que não ocorreu.** Três negativos novos continuam verdes sem a guarda pretendida; além disso, falhar o segundo commit de `recorte` pode produzir os dois rc esperados por motivos diferentes (`bin/tests/test_selo_proporcao.sh:64-67`, `:111-114`; `bin/selo_proporcao.py:68-76`, `:92-98`).
-
-A correspondência Git da cópia com o hash informado e os estados reais das branches são [nao verificado]. Não executei o harness completo, que cria arquivos e repositórios (`bin/tests/test_selo_proporcao.sh:11-17`); as contraprovas abaixo foram conferidas por leitura e avaliação somente em memória das funções citadas.
-
-**1. B1..B5**
-
-| Achado | Resultado da v7 | Evidência |
-|---|---|---|
-| **B1 — `test_*.py` em qualquer pasta** | **Cura os exemplos concretos.** Migration e management recebem A; basename sozinho também deixou de bastar. | `bin/selo_proporcao.py:68-75`. |
-| **B2 — produção sob `tests/`** | **Cura em parte.** `marca_cron15.py` agora recebe A, mas produção chamada `test_*.py` sob `tests/` continua B. Há consumidor concreto dessa forma. | `app/core/management/commands/crons.py:92`; `bin/selo_proporcao.py:74`; `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`. |
-| **B3 — dados de portão sob `bin/tests/`** | **Cura os caminhos denunciados; cura parcial da categoria.** `bin/tests/*` fica A, mas a lista de exceções do esmeril permanece em arquivo B. | `bin/selo_proporcao.py:66-67`; `app/core/tests/test_contract_esmeril.py:15`; `bin/esmeril_da_copia.sh:22-27`. |
-| **B4 — base livre/recorte** | **Cura em parte.** Fecha C1..C2 quando `main` continua na base original; não fecha recorte já absorvido pelo `main` local. | `bin/selo_proporcao.py:96-100`; `bin/tests/test_selo_proporcao.sh:110-114`. |
-| **B5 — contrato/comentário e integração inexistente** | **Cura documental parcial.** O comentário passa a dizer BASE. Não nasce chamador de pouso nem contador: as chamadas concretas continuam no harness, e o selo apenas imprime/retorna. A conduta manual prometida é [nao verificado]. | `bin/tests/test_selo_proporcao.sh:101`, `:42`, `:52`; `bin/selo_proporcao.py:110-119`. |
-
-O harness tem chamador de host pelo laço genérico da régua; isso testa repositórios sintéticos, sem substituir uma chamada sobre o intervalo real do pouso (`bin/regua.sh:138-143`; `bin/tests/test_selo_proporcao.sh:13`, `:42`).
-
-**2. Caminhos ainda B que têm consumidores efetivos**
-
-| Caminho | Quem lê/carrega |
-|---|---|
-| **`app/core/tests/test_contract_esmeril.py`** | Define a lista de exceções em `:15`; consumida pelos portões em `bin/esmeril_da_copia.sh:22-27` e `bin/molde_fatia/rodar.sh:20-22`. B por `bin/selo_proporcao.py:74`. |
-| **`app/core/tests/test_contract_tblib_no_paralelo.py`** | Define `tblib_instalado()` em `:24`; importado pelo command em `app/chamados/management/commands/tblib_ausente_na_imagem.py:17-18`. O host executa esse command e publica o contador em `bin/placar_code.sh:463-465`. B por `bin/selo_proporcao.py:74`. |
-| **`app/static/pwa.js`** | Carregado pelas duas cascas (`app/templates/base.html:20`; `app/templates/base_app.html:20`). Grava batidas offline e envia POST ao backend (`app/static/pwa.js:112-119`, `:153-157`). B por `bin/selo_proporcao.py:72`. |
-| **`app/static/sw.js`** | A rota aponta para a view em `app/core/urls.py:24`; a view lê e serve o JavaScript em `app/core/views.py:570-576`. B por `bin/selo_proporcao.py:72`. |
-| **`app/static/manifest.json`, `app/static/icons/icon-192.png`, `app/static/icons/icon-512.png`**, além de `pwa.js` e `sw.js` | Participam do identificador do build: nomes em `app/core/views.py:524-525`, leitura em `:548-552`. A seleção efetiva entre `/app/staticfiles` e `/app/static` no host é [nao verificado]; a escolha está em `:528-530`. B por `bin/selo_proporcao.py:72`. |
-| **`app/templates/base.html`, `base_app.html`, `ponto/espelho.html`, `colaboradores/detalhe.html`, `chamados/painel_gestao.html`** | O portão declara essas páginas e as compila (`bin/prova_de_casca.py:21-22`, `:49-53`); também lê os HTML da árvore (`:30-36`). O deploy chama o portão antes de recarregar (`bin/deploy.sh:295-297`). B por `bin/selo_proporcao.py:70`. |
-
-O exemplo antigo do cron continua sendo código de produção importado de `tests/`, mas **já não é B**: `marca_cron15.py` é importado em `app/core/management/commands/crons.py:92` e não satisfaz o nome exigido por `bin/selo_proporcao.py:74`.
-
-**3. Situações concretas de `base_main`**
-
-Os grafos seguintes são contraprovas do algoritmo; sua ocorrência no pouso real é [nao verificado]. A comparação responsável é `bin/selo_proporcao.py:96-98`.
-
-| Situação | Caso e resultado |
-|---|---|
-| **`main` local atrasado** | Cadeia `O → M → H`; `main=O`, `origin/main=M`, raia nasceu em M e H muda só template. Passar base=M, adequada ao destino remoto, dá **rc 2**, pois o selo calcula O. É falso relativamente ao pouso remoto; segue literalmente o contrato que escolheu `main` local (`bin/selo_proporcao.py:94-98`). |
-| **`main` local adiantado** | Cadeia `O → C1 → C2`; `origin/main=O`, `main=C1`, head=C2. C1 da mesma obra altera `views.py`; C2 só template. Base=C1 passa e o diff omite C1: **B/rc 0**, supondo lista válida (`bin/selo_proporcao.py:96-100`, `:113-119`). |
-| **Worktree** | Estar numa worktree não causa erro por si: o Git recebe sua raiz via `-C`, e a raiz é validada por `realpath`. Porém, numa cópia com apenas `origin/main`, sem referência `main` resolvível, o merge-base falha e vira **rc 2** (`bin/selo_proporcao.py:43-45`, `:85-87`, `:96`, `:104-106`). |
-| **Raia que recebeu merge de `main`** | O bifurca para C1 na raia e M no main; R mescla C1 e M; H acrescenta template. Com main=M, base=M passa e **o saldo de C1 continua no diff**. Passar a base original O dá rc 2, embora seja intervalo mais amplo, não recortado. Receber merge de main, sozinho, não esconde o escritor (`bin/selo_proporcao.py:96-100`). |
-
-Se C1 já entrou no `main` ou seu efeito foi revertido em H, o diff de pontas não mostra esse efeito. O selo examina nomes entre duas árvores, não a sequência completa de alterações da obra (`bin/selo_proporcao.py:100-101`).
-
-**4. Os casos novos mordem?**
-
-“Continua verde” abaixo significa que o harness aceita o resultado mesmo com a proteção pretendida removida; a classificação decorre de `bin/selo_proporcao.py:64-76`.
-
-| Caso no harness | Contraprova | Avaliação |
-|---|---|---|
-| `tests_ok`, `:61` | Retirar a aceitação de teste muda rc 0 para 1. | **Morde.** | [nao verificado]
-| `tests_helper`, `:62` | Aceitar qualquer arquivo em `tests/` muda rc 1 para 0. | **Morde a exigência de nome.** |
-| `test_basename`, `:63` | Aceitar basename sem pasta `tests/` muda rc 1 para 0. | **Morde a exigência de pasta.** |
-| `migration_test_nome`, `:64` | Sem `carregado_por_pasta`, continua rc 1 porque falta `tests/` no caminho do arquivo. O `mkdir` não altera isso. | **Continua verde; não isola a guarda.** | [nao verificado]
-| `migration_tests_dir`, `:65` | Sem a guarda de pasta, vira teste permitido e rc 0. | **Morde.** | [nao verificado]
-| `commands_test_nome`, `:66` | Sem a guarda de pasta, continua rc 1 porque falta `tests/`. | **Continua verde; não prova o braço `management`.** | [nao verificado]
-| `bin_tests`, `:67` | Sem `fora_app`, `base.txt` continua fora: falta nome permitido. | **Continua verde; não isola a guarda.** | [nao verificado]
-| `bin_tests_test_py`, `:68` | Sem `fora_app`, vira teste permitido e rc 0. | **Morde.** | [nao verificado]
-| `templates_fora_app`, `:69` | Sem `fora_app`, vira template permitido e rc 0. | **Morde.** |
-| `recorte`, `:110-114` | Com C2 preparado corretamente, remover `base_main` troca o primeiro rc 2 por 0. | **Morde nominalmente.** |
-
-As linhas da primeira coluna são de `bin/tests/test_selo_proporcao.sh`; os vereditos rc 1 estão em `bin/selo_proporcao.py:116-118`.
-
-Há três problemas adicionais:
-
-- **Recorte verde por outro motivo:** `:112` não verifica sucesso nem avanço de HEAD. Se C2 não nascer, HEAD=C1; a primeira chamada dá rc 2 por igualdade, e a segunda dá rc 1 por `views.py`. Os resultados esperados aparecem sem exercitar `base_main` (`bin/tests/test_selo_proporcao.sh:111-114`; `bin/selo_proporcao.py:92-93`, `:116-118`).
-- **Cobertura antiga mascarada:** retirar `ancestral` ainda deixa `revisoes_trocadas` e `nao_ancestral` com rc 2 pela guarda nova. O caso de igualdade tem conferência adicional da mensagem; aqueles dois não têm (`bin/tests/test_selo_proporcao.sh:128-133`; `bin/selo_proporcao.py:94-98`).
-- **Lista e omissão silenciosa:** mover `main` para a base defeituosa evita rejeição antecipada, mas `caso_lista` ainda confere só rc 2. O caso `sem_repo_no_repo_do_script` continua condicionado à existência de histórico, sem aviso de omissão (`bin/tests/test_selo_proporcao.sh:51-53`, `:141-143`).
-
-A mudança de `shell_bin` acrescenta preparo de diretório; não constitui prova independente de uma guarda nova (`bin/tests/test_selo_proporcao.sh:80`; `bin/selo_proporcao.py:66-76`).
-
-**5. Quem escreve e quem lê**
-
-| Valor | Escritor/fornecedor | Leitor |
-|---|---|---|
-| **Lista persistida** | Autoridade declarada: Ronald (`app/docs/CORTES.md:444`). Escritor mecânico: JSON → `markdown()` → sobrescrita de CORTES (`bin/gerar_cortes.py:23`, `:32`, `:106-116`). Quem acrescentou diretamente a linha atual é [nao verificado]. | `git show base:CORTES`, parser e pertinência (`bin/selo_proporcao.py:50-58`, `:64`). |
-| **Lista sintética** | Harness escreve e commita sua lista (`bin/tests/test_selo_proporcao.sh:17`, `:22`, `:26`); entorta bases em `:102-109`. | Mesmo selo, chamado em `:42` e `:52`. |
-| **Base, head, classe e repo** | Argumentos externos (`bin/selo_proporcao.py:83`); fornecedor concreto no harness (`bin/tests/test_selo_proporcao.sh:42`). Fornecedor efetivo no pouso é [nao verificado]. | Validação da raiz, resolução das revisões, guardas e veredito (`bin/selo_proporcao.py:85-100`, `:116`). |
-| **Referência `main` / merge-base** | No harness, `main` é criado/movido por `git branch` (`bin/tests/test_selo_proporcao.sh:29`, `:51`, `:53`). Escritor real da referência é [nao verificado]. Git calcula o merge-base (`bin/selo_proporcao.py:96`). | Igualdade com base (`bin/selo_proporcao.py:97`). |
-| **Nomes do diff** | Git produz nomes com `--no-renames --name-only -z`; Python deduplica e ordena (`bin/selo_proporcao.py:100-101`). | Guarda de vazio e classificador (`:102`, `:108-112`). Não há leitura do conteúdo para decidir classe (`:61-76`). |
-| **Resultado/rc** | Python imprime e retorna (`bin/selo_proporcao.py:110-119`), codifica o protocolo em `:129`; wrapper normaliza (`bin/selo_proporcao.sh:8-11`). | Harness confere rc (`bin/tests/test_selo_proporcao.sh:42-43`, `:113-114`); régua recebe o resultado do harness (`bin/regua.sh:140-143`). |
-| **Linha de medida no RELATO / contador** | O selo não os escreve: termina em stdout/rc (`bin/selo_proporcao.py:110-119`). Escrita manual efetiva e consumo no pouso são [nao verificado]. | Não há consumidor implementado demonstrado pelo fluxo citado; ocorrência externa [nao verificado]. |
-
-**6. Contrato e implementação**
-
-- **“Qualquer `.md` faz A” é absoluto demais.** Um caminho como `app/templates/nota.md` seria B pela guarda de templates. O caso exercitado cobre apenas `app/docs/NOTA.md` (`bin/selo_proporcao.py:70-71`; `bin/tests/test_selo_proporcao.sh:78`).
-- **“Obra inteira” excede a garantia implementada.** O código garante somente base igual ao merge-base do `main` local, seguido de diff de pontas (`bin/selo_proporcao.py:96-101`).
-- **A implementação aceita classe A e pode retornar rc 0 mesmo com arquivos FORA.** Isso está no uso do código, enquanto o contrato fornecido diz que obra A não chama (`bin/selo_proporcao.py:4`, `:80`, `:116-119`).
-- **Os comentários ainda divergem.** O harness diz `tests/ OU test_*.py`, mas o código exige ambos; CORTES ainda descreve selo em linhas adicionadas/escrita (`bin/tests/test_selo_proporcao.sh:4`; `bin/selo_proporcao.py:74`; `app/docs/CORTES.md:443`).
-- **A lista tem precedência sobre as proibições.** O contrato fornecido admite lista OU filtros, o que corresponde ao código. Porém, os comentários “só app” e “management/migrations A sempre” não são absolutos: um item previamente listado retorna antes dessas guardas (`bin/selo_proporcao.py:13-17`, `:64-69`).
-- **Os limites conhecidos estão documentados no código, mas permanece outro consumidor relevante:** produção importando teste e PWA aparecem no comentário; a configuração do esmeril consumida por `bin/` permanece B (`bin/selo_proporcao.py:25-26`; `app/core/tests/test_contract_esmeril.py:15`; `bin/esmeril_da_copia.sh:22-27`).
-
-## 11/11 15:18 · sessao ab98b69c3c6e · - · - · origem=Ronald (tmux)
-
-Perguntas 3, 5 e 6 — resultado da exploração, sem gravações.
-
-1. `base_main` amarra ao `main` local, não à base de pouso no remoto nem ao início registrado da obra: `bin/selo_proporcao.py:96-98`. Cenários concretos derivados do algoritmo; ocorrência real nesta cópia [nao verificado], pois não há `.git`.
-
-   - **Falso rc2 com main atrasado:** cadeia `O → M → H`; `main=O`, `origin/main=M`, raia criada de `M`, `H` só altera template. O intervalo correto para pousar sobre o remoto é `M..H`. O selo aceita que `M` seja ancestral (`:94`), mas calcula `merge-base(main,H)=O` e devolve 2 (`:96-98`).
-   - **Recorte aceito com main adiantado:** cadeia `O → C1 → C2`; `origin/main=O`, `main=C1`, raia `head=C2`; C1 da mesma obra altera `views.py`, C2 só template. Passar `base=C1` satisfaz a guarda e compara somente C1..C2 (`:100`): B/rc0, omitindo o escritor de C1. Não há leitura de `origin/main` nem identidade da obra em `:83-103`.
-   - **Worktree, isoladamente, não causa erro:** a raiz da worktree passa na comparação de `realpath` e o Git é chamado com `-C repo` (`:41-43`, `:85-87`). Uma worktree/clone com apenas `origin/main`, sem uma referência `main` resolvível, falha no `merge-base` por `git_rc`, rc2 (`:44-45`, `:96`, `:104-106`).
-   - **Raia que recebeu merge do main não recorta automaticamente:** `O→C1` na raia e `O→M` no main; merge `R=(C1,M)`, seguido de template H, com main=M. A base aceita é M e o diff M..H ainda inclui o saldo de C1 (`:96-100`). Se o mesmo C1 já estiver no main, ou se seu efeito for revertido no head, o diff de pontas não o mostra; o código examina árvores, não todos os commits (`:100-101`). Não chamar isso de perda automática causada por qualquer merge. [nao verificado]
-
-2. **Produtor da lista persistida encontrado e problema de durabilidade:**
-
-   - `app/docs/CORTES.md:3` declara arquivo gerado de `CORTES.json`.
-   - O produtor real é `bin/gerar_cortes.py:23-24`, que lê o JSON em `:31-32`, transforma cada entrada em linha em `:106-109` e **sobrescreve integralmente** o Markdown em `:114-116`.
-   - A lista hoje está em `app/docs/CORTES.md:444`.
-   - O JSON fornecido não contém `PROPORCAO-POR-RISCO` nem os marcadores; termina em `app/docs/CORTES.json:1367`. Verificação somente em memória, chamando `markdown(cortes)` com `python3 -I -B`: Markdown atual tem 1 início/1 fim; Markdown regenerado tem **0 início/0 fim**. Nenhum arquivo foi escrito.
-   - Consequência concreta condicional: executar legitimamente o gerador e incorporar o resultado apaga a lista; uma base posterior assim produz rc2 no selo, em `bin/selo_proporcao.py:50-52`. Não afeta retroativamente uma base antiga, porque a leitura é por `git show`.
-   - Autoridade humana declarada: módulos novos só por corte do Ronald, `app/docs/CORTES.md:444`; o parser não autentica autoria/corte, apenas formato e presença em base (`bin/selo_proporcao.py:49-58`).
-
-3. **Mapa de escritores/leitores relevante à pergunta 5:**
-
-   | Valor | Quem escreve/fornece | Quem lê |
-   |---|---|---|
-   | CORTES persistido | `bin/gerar_cortes.py:116`, fonte `:23`, leitura `:32`, frase `:109`; autoridade `app/docs/CORTES.md:444` | `git show base:CORTES` em `bin/selo_proporcao.py:50`; parser `:51-58`; pertinência `:64` |
-   | Lista sintética do harness | `bin/tests/test_selo_proporcao.sh:17`, valores `:22`; corrupções `:102-109`; autorização HEAD `:87-88`; disco `:119` | mesmo selo, chamado em `:42`, `:52`, `:120` |
-   | `base/head/classe/repo` | argumentos externos `bin/selo_proporcao.py:83`; chamador concreto harness `bin/tests/test_selo_proporcao.sh:42` | revisões resolvidas `bin/selo_proporcao.py:89-91`; base/head `:92-100`; classe `:116`; repo `:85` |
-   | `main` sintético | harness `bin/tests/test_selo_proporcao.sh:29`, `:51`, `:53` | `bin/selo_proporcao.py:96` |
-   | merge-base | subprocesso Git em `bin/selo_proporcao.py:96` | igualdade com base `:97` |
-   | nomes do diff | Git `diff --no-renames --no-ext-diff --name-only -z` em `bin/selo_proporcao.py:100`; ordenação/deduplicação `:101` | vazio `:102`; classificador `:108-112`; impressão `:110`, `:114-115` |
-   | rc | `bin/selo_proporcao.py:116-119`, protocolo `:129`, tradução `bin/selo_proporcao.sh:8-11` | harness `bin/tests/test_selo_proporcao.sh:42-43`, `:52`, `:113-114`; pouso humano segundo contrato anexo [nao verificado] |
-   | RELATO da medida | nenhum gravador do selo: termina imprimindo e retornando `bin/selo_proporcao.py:110-119` | integração de consumo do resultado no pouso [nao verificado] |
-
-   O harness é executado pelo laço genérico de selos do host em `bin/regua.sh:138-143`; o atalho de régua já verde retorna antes em `:84-94`. Isso testa o instrumento em repositórios sintéticos, não julga o diff real de pouso.
-
-4. **Contrato/comentários versus implementação:**
-
-   - O contrato anexado admite lista **OU** filtros; código corresponde: lista retorna antes das restrições (`bin/selo_proporcao.py:64-69`). Contudo o comentário `:13` diz “só app” e “migrations/management A sempre”, o que não vale para um item previamente listado.
-   - A frase absoluta “qualquer .md faz A” do contrato anexado tem exceção pelo algoritmo: hipotético `app/templates/nota.md` seria B (`bin/selo_proporcao.py:70-71`). `app/docs/NOTA.md`, caso efetivamente testado, é A (`bin/tests/test_selo_proporcao.sh:78`).
-   - `bin/tests/test_selo_proporcao.sh:4` ainda descreve `tests/ OU test_*.py`; implementação exige ambos (`bin/selo_proporcao.py:74`).
-   - `app/docs/CORTES.md:443` ainda descreve selo de linhas adicionadas/escrita; código julga nomes de arquivos (`bin/selo_proporcao.py:100`, `:61-76`); a linha B3 `app/docs/CORTES.md:444` já diz caminho.
-   - O contrato agora admite ausência de script de pouso e de contador, corrigindo a promessa documental; não implementa integração/medida. A busca das referências encontra chamadas concretas no harness; a saída do selo permanece stdout/rc (`bin/selo_proporcao.py:110-119`), não escreve RELATO nem contador.
-
-## 11/11 15:17 · sessao 8f4e55fbbe88 · - · - · origem=Ronald (tmux)
-
-Análise somente em memória da função `motivo_b`; não executei o harness que cria arquivos (`bin/tests/test_selo_proporcao.sh:11`, `:13`, `:17`).
-
-1. Casos novos/alterados do harness:
-
-| Caso | Guarda pretendida | Se retirada/afrouxada | Avaliação |
-|---|---|---|---|
-| `tests_ok` (`:61`) | aceitação `teste` (`selo_proporcao.py:74`) | Retirar aceitação produz rc1 | Mata. | [nao verificado]
-| `tests_helper` (`:62`) | exigir nome `test_*.py` (`:74`) | Aceitar qualquer arquivo em `tests/` produz rc0 | Mata o alargamento para pasta apenas. |
-| `test_basename` (`:63`) | exigir pasta `tests/` (`:74`) | Aceitar basename apenas produz rc0 | Mata o alargamento para nome apenas. |
-| `migration_test_nome` (`:64`) | `carregado_por_pasta` (`:68`) | Sem ela continua rc1, pois o arquivo não fica em `tests/` | Não isola; o `mkdir migrations/tests` não muda o caminho gravado. |
-| `migration_tests_dir` (`:65`) | `carregado_por_pasta` (`:68`) | Sem ela produz rc0 por `teste` | Mata. | [nao verificado]
-| `commands_test_nome` (`:66`) | `carregado_por_pasta`, braço `management` (`:68`) | Sem ela continua rc1, pois falta `tests/` | Não isola; nenhum caso novo mata a retirada só do braço `management`. |
-| `bin_tests` (`:67`) | `fora_app` (`:66`) | Sem ela continua rc1: `base.txt` não atende `teste` | Não isola. | [nao verificado]
-| `bin_tests_test_py` (`:68`) | `fora_app` (`:66`) | Sem ela produz rc0 por `teste` | Mata. | [nao verificado]
-| `templates_fora_app` (`:69`) | `fora_app` (`:66`) | Sem ela produz rc0 por `templates` | Mata. |
-| `recorte` (`:110-115`) | `base_main` (`:96-98`) | Na preparação nominal, retirar guarda dá rc0 no teste que exige2 | Mata nominalmente, mas tem falso positivo de preparo abaixo. | [nao verificado]
-
-Os resultados da tabela seguem diretamente da prioridade das condições em `bin/selo_proporcao.py:64-76`, com rc1 em `:116-118`; confirmei os dois mutantes de função em memória.
-
-2. Falsos positivos e mascaramento:
-
-- **Segundo commit do recorte pode falhar e o caso continuar verde.** `:112` não verifica `echo`, `git add`, `git commit` nem avanço do HEAD. Se `c2` não nascer, HEAD=C1: a primeira chamada retorna2 por `base == head` (`bin/selo_proporcao.py:92-93`), e a segunda retorna1 pelo `views.py` (`bin/tests/test_selo_proporcao.sh:111-114`). Assim o nome “base_recortada” passa por outra guarda.
-- **A guarda nova mascara cobertura da ancestralidade.** Desligando `GUARDA:ancestral`, `revisoes_trocadas` e `nao_ancestral` continuam rc2 pela comparação `base_main`, pois a base passada é HEADC enquanto `merge-base(main, head)` é BASE (`bin/tests/test_selo_proporcao.sh:128`, `:131-133`; `bin/selo_proporcao.py:94-98`).
-- O caso `base_igual_head` também chegaria a `base_main` se `igual` fosse removida, mas a checagem adicional do texto identifica isso (`bin/tests/test_selo_proporcao.sh:129-130`).
-- Os testes de lista continuam verificando somente rc2; mudar `main` para a base defeituosa evita que `base_main` os barre antes da leitura, mas não identifica qual validação da lista produziu o rc (`bin/tests/test_selo_proporcao.sh:45-53`).
-- `sem_repo_no_repo_do_script` ainda pode ser silenciosamente omitido se a cópia não tiver histórico Git (`bin/tests/test_selo_proporcao.sh:141-143`).
-
-3. Achados B1–B5, pela evidência que analisei:
-
-- **B1: cura os exemplos concretos.** Migrações e comandos ficam A pela guarda de pasta e, independentemente, nomes `test_*.py` fora de `tests/` deixam de ser aceitos (`bin/selo_proporcao.py:68-75`).
-- **B2: cura o helper concreto; cura parcial do problema geral.** `marca_cron15.py` não atende `test_*.py`, mas arquivo de produção chamado `test_*.py` dentro de `tests/` segue B, limite admitido pelo próprio comentário (`bin/selo_proporcao.py:25-26`, `:74-75`).
-- **B3: cura os exemplos concretos de `bin/tests/*`**, ausentes da lista fechada atual (`bin/selo_proporcao.py:64-67`; `app/docs/CORTES.md:444`).
-- **B4: cura o recorte linear do exemplo apenas relativamente ao `main` local.** Não autentica a referência `main` nem a fronteira histórica da obra (`bin/selo_proporcao.py:96-100`).
-- **B5: o delta não integra chamador nem contador.** Os únicos consumidores encontrados na busca por `selo_proporcao` são o wrapper e o harness (`bin/selo_proporcao.sh:7`; `bin/tests/test_selo_proporcao.sh:9`, `:42`). A mudança contratual fornecida corrige a descrição, declarando ambos pendentes; a ocorrência efetiva de conduta manual/RELATO fica [nao verificado].
-
-4. Divergências documentais úteis:
-
-- Cabeçalho do harness ainda diz `tests/ OU test_*.py`, enquanto o código exige ambos (`bin/tests/test_selo_proporcao.sh:4`; `bin/selo_proporcao.py:74`).
-- A linha antiga de CORTES ainda descreve selo “nas linhas adicionadas” e “escrita com B declarado = rc1”; o código julga nomes do diff e conteúdo não interfere (`app/docs/CORTES.md:443`; `bin/selo_proporcao.py:100-118`).
-- “So caminho sob app pode ser B” e “migrations/management = A sempre” têm exceção técnica pela prioridade da lista: se um caminho desses for incluído na lista da base, retorna B antes das duas guardas (`bin/selo_proporcao.py:13-17`, `:64-69`). A lista atual contém apenas dois caminhos sob `app/chamados/` (`app/docs/CORTES.md:444`).
-- O comentário “nenhum .py fora da lista passa” contradiz as aceitações de Python sob templates/static e test_*.py sob tests (`bin/selo_proporcao.py:24`, `:70-75`).
-
-A cópia disponível não contém repositório Git utilizável: `git status`, `git rev-parse HEAD` e `git log` retornaram “not a git repository”; hash e estados reais de branches não foram confirmados [nao verificado].
-
-## 11/11 15:17 · sessao ef11ff740dce · - · - · origem=Ronald (tmux)
-
-Achados concretos ainda classificados B:
-
-| Caminho permitido | Quem carrega/lê e efeito |
-|---|---|
-| `app/core/tests/test_contract_esmeril.py` | Define `VULTURE_IGNORE_NAMES` em `app/core/tests/test_contract_esmeril.py:15`. `bin/esmeril_da_copia.sh:22` extrai o valor, `:24` passa a `vulture --ignore-names` e `:27` decide LIMPO. `bin/molde_fatia/rodar.sh:20` extrai, `:21` aplica, `:22` barra esmeril sujo. B por `bin/selo_proporcao.py:74`. **Allowlist de portão permanece em arquivo B.** |
-| `app/core/tests/test_contract_tblib_no_paralelo.py` | `tblib_instalado()` definido em `app/core/tests/test_contract_tblib_no_paralelo.py:24`; importado pelo command de produção em `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`, chamado em `:18`. `bin/placar_code.sh:463` executa o command; `:465` publica o contador. B por `bin/selo_proporcao.py:74`. |
-| `app/static/pwa.js` | Carregado em `app/templates/base.html:20` e `app/templates/base_app.html:20`; registra service worker em `app/static/pwa.js:14`, grava batida offline em `:107`–`:119`, inicia sincronização em `:126`. B por `bin/selo_proporcao.py:72`. |
-| `app/static/sw.js` | URL ligada à view em `app/core/urls.py:24`; leitura e resposta JavaScript em `app/core/views.py:570`–`:576`. `_raiz_do_static()` escolhe `/app/staticfiles` se houver SW coletado, senão `/app/static`, em `app/core/views.py:528`–`:530`. B por `bin/selo_proporcao.py:72`; ramo efetivo no host [nao verificado]. |
-| `app/templates/base.html`, `base_app.html`, `ponto/espelho.html`, `colaboradores/detalhe.html`, `chamados/painel_gestao.html` | Portão declara as cinco páginas em `bin/prova_de_casca.py:21`, compila em `:49`–`:53`, lê os HTML da árvore de templates em `:30`–`:36`; chamado antes do reload por `bin/deploy.sh:295`–`:297`. B por `bin/selo_proporcao.py:70`. |
-
-O build também lê conteúdo dos cinco recursos `sw.js`, `pwa.js`, `manifest.json`, `icons/icon-192.png`, `icons/icon-512.png`: lista em `app/core/views.py:524`, leitura em `:548`–`:552`, raiz escolhida em `:528`–`:530`; os caminhos sob `app/static/` passam por `bin/selo_proporcao.py:72`.
-
-O antigo exemplo `app/core/tests/marca_cron15.py` continua importado por produção em `app/core/management/commands/crons.py:92` e afeta a aceitação do horário em `:97`, mas **agora recebe A**, pois seu basename não satisfaz `test_*.py` em `bin/selo_proporcao.py:74`.
-
-A leitura de `app/core/tests/testes_sem_relogio.txt` por `bin/placar_code.sh:458` continua, mas o `.txt` recebe A pelo mesmo teste de nome em `bin/selo_proporcao.py:74`.
-
-## 11/11 15:13 · sessao 6f34a2441ef2 · DATA-EVENTO-CRU · leitura · origem=Code
-
-**Veredito: ajustar o contrato antes de considerá-lo fechado.** Os pontos principais são o alcance de `mensageria/`, a identidade dos escopos e a definição de “leitura”; além disso, a cópia contém **cinco** ocorrências diretas nos templates, incompatíveis com o “+4” sem explicação adicional. (`bin/regua.sh:167`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`; `app/templates/chamados/partials/_card_atendimento.html:87`, `:90`, `:164`; `app/templates/chamados/partials/_lote_preview.html:24`; `app/templates/chamados/meu_atendimento.html:19`)
-
-1. **`arquivo::funcao -> contagem` é utilizável, mas não é estável contra refatoração.** A casa já possui uma convenção melhor descrita como `arquivo::escopo`: empilha classes e funções aninhadas e usa `<modulo>` quando não há escopo nomeado. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:91`, `:93`, `:132`)
-
-   | Edição/caso | Consequência e nome recomendado |
-   |---|---|
-   | Inserir linhas/comentários | Preserva a chave; a linha serve apenas ao diagnóstico. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`) |
-   | Renomear função, classe ou arquivo | Muda a chave: tratar como **reidentificação**, sem registrar como cura. Consequência da composição em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:132`. |
-   | Mover função para outro arquivo ou escopo | Também muda a chave: exige correspondência explícita entre origem e destino. Mesma composição em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`. |
-   | Código no nível do módulo | `arquivo::<modulo>`. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`) |
-   | Método de classe / função aninhada | `arquivo::Classe.metodo` / `arquivo::externa.interna`; usar somente o último nome perderia essa distinção. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:132`) |
-   | Lambda | Recomendo contar no escopo lexical que a contém, declarando essa agregação; é o comportamento do percurso existente, que não cria nome para lambda. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:133`) |
-
-   **A contagem mede ocorrências, não identidade dos leitores:** substituir uma ocorrência por outra dentro da mesma chave preservaria o número e escaparia dessa comparação. Limite inferido do formato do anexo; implementação da nova catraca **[não verificado]**.
-
-   Falta definir quais formas entram: há `getattr(p, 'data_evento', None)` com nome literal fora do juiz e extrações explícitas por `values_list(..., 'data_evento')`. Esses casos precisam entrar ou aparecer nominalmente nos limites; não são nomes calculados dinamicamente. (`app/chamados/juizes.py:652`, `:854`; `app/chamados/services/fio.py:1854`, `:2024`)
-
-   A exceção deve ser **somente a função indicada**, preservando os demais leitores de `juizes.py`: existe leitura direta em outra função desse mesmo arquivo. (`app/chamados/juizes.py:250`, `:271`, `:334`)
-
-2. **A label `chamados` permite varrer todo `/app`; não fornece acesso ao serviço irmão `mensageria/`.** O P13 já demonstra um teste dessa label calculando a raiz por `__file__` e percorrendo todo `APP`, inclusive outros apps. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:33`, `:144`)
-
-   - **Quem monta `LABELS`:** a fonte é `bin/regua.sh:23`; o pre-push lê essa declaração em `bin/pre-push.sh:184` e passa as labels ao runner em `:186`.
-   - **Cwd configurado:** `/app`, em `app/Dockerfile:8`; os comandos mostrados não fornecem `-w`. (`bin/pre-push.sh:143`; `bin/regua.sh:166`)
-   - **Arquivos disponíveis:** régua e pre-push montam apenas `app/` em `/app`; o archive do pre-push também extrai apenas `app`. Assim, `api/` e `templates/` ficam dentro da árvore disponível. (`bin/regua.sh:167`; `bin/pre-push.sh:144`; `bin/arvore_do_push.sh:98`; `app/config/settings/base.py:72`)
-   - **Mensageria:** possui montagem própria de `./mensageria` em `/srv`. Para incluí-la, seria necessário ampliar extração, montagem e raiz do censo; trocar a label não resolve. (`docker-compose.mensageria.yml:3`, `:14`; `bin/arvore_do_push.sh:98`)
-
-   Isso descreve a configuração da cópia; mounts e cwd de um container efetivamente executado são **[não verificado]**.
-
-3. **O regex não perde uma leitura direta apenas porque houve `with/as` ou renomeação da variável.** Nos exemplos sintéticos abaixo, a ocorrência continua escrita na atribuição ou no acesso posterior; execução como template Django **[não verificado]**:
-
-   | Forma sintética | Ocorrências de `\.data_evento\b` |
-   |---|---:|
-   | `{% with d=q.data_evento %}{{ d }}{% endwith %}` | 1 |
-   | `{% with q.data_evento as d %}{{ d }}{% endwith %}` | 1 |
-   | `{% with q as outra %}{{ outra.data_evento }}{% endwith %}` | 1 |
-   | `{{ q\|attr:"data_evento" }}` | 0 |
-
-   `|attr` é, portanto, uma lacuna sintática **se esse filtro estiver disponível**; sua disponibilidade nesta aplicação é **[não verificado]**. Filtros e tags podem esconder o acesso no Python: a casa já possui filtros que recebem a pergunta e delegam a leitura a uma função. (`app/chamados/templatetags/chamados_extras.py:15`, `:30`)
-
-   O contrato deve chamar isso de **censo de acessos diretos no markup**, retirar comentários antes de contar e declarar acessos indiretos como limite. Há helper existente para comentários de bloco/HTML, mas ele não remove `{# ... #}`. (`app/core/censo_fonte.py:125`, `:132`, `:133`)
-
-   O total Python **190** permanece **[não verificado]** sem o detector e o censo correspondentes; o subtotal direto dos templates da cópia é **5**, nos locais citados no veredito.
-
-4. **Existem varredores de `data_evento`, porém os identificados julgam escrita.** O P13 AST procura atribuições e chamadas de escrita e autoriza `fio::gravar_dia_do_fato`; o contrato de estado também registra esse campo e procura escritas. Uma catraca de leitores tem objeto distinto e pode permanecer como instrumento sem recalcular o dia. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:37`, `:97`, `:103`, `:165`; `app/core/tests/test_contract_escritores_estado.py:64`, `:179`)
-
-   Já existe reutilização do scanner P13 pelo selo E1: não convém copiar esse instrumento para reimplementar escrita. (`app/chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:33`, `:51`, `:115`)
-
-   Há uma **colisão concreta numa cura futura**: outro selo exige literalmente `data_pergunta=p.data_evento`. Migrar esse leitor ao juiz exigirá atualizar essa expectativa junto. (`app/chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:129`, `:130`)
-
-   Não identifiquei outro censo geral de leituras; ausência absoluta **[não verificado]**.
-
-5. **Os varredores de diretório relevantes impõem estas condições:**
-
-   | Selo | Efeito sobre os arquivos propostos |
-   |---|---|
-   | O20 | Enumera `test_contract_*.py`: o nome `test_catraca_…` fica fora. Se renomeado, passa pelo teto de contratos que leem texto cru. (`app/core/tests/test_o20_contrato_julga_codigo.py:164`, `:176`, `:188`, `:204`) |
-   | Relógio | Enumera `test*.py`; chamadas de relógio sem congelamento podem reprovar o novo teste. (`app/core/tests/test_selo_teste_sem_relogio.py:42`, `:53`, `:67`) |
-   | CRON15 | Parseia todo `.py` diretamente em `*/tests/`; exige sintaxe válida e mantém fechada a lista de marcas. (`app/core/tests/test_marca_cron15.py:29`, `:33`, `:35`, `:50`) |
-   | Vocabulário | Inclui testes e seu texto; aceita `.py/.html/.js/.md`, deixando o JSON fora. (`app/pautas/tests/test_contract_vocabulario.py:19`, `:20`, `:29`, `:41`) |
-   | Testes fora do Git | Cobra o `.py` versionado; as colheitas mostradas não incluem JSON. (`bin/testes_fora_do_git.sh:46`, `:49`, `:57`) |
-   | P13/escritores | Excluem `tests/` e filtram `.py`; as fixtures desse teste e seu JSON ficam fora dessas varreduras. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:147`, `:150`; `app/core/tests/test_contract_escritores_estado.py:191`, `:194`) |
-
-   Não encontrei uma enumeração geral de `tests/*.json`; garantia de ausência **[não verificado]**. O selo de labels verifica apps com testes, não a permanência desse arquivo específico; o selo de Git tampouco guarda arquivos removidos. Portanto, manter a remoção do guardião como `!` declarado é coerente, mas não prometer proteção automática por esses selos. (`bin/tests/test_labels_fonte_unica.sh:24`, `:30`, `:32`; `app/core/tests/test_selo_testes_no_git.py:42`)
-
-   A promessa de rodar “em segundos”, o caso injetado que fica vermelho e a monotonicidade contra uma edição simultânea que aumente o JSON continuam **[não verificado]** sem implementação e execução do instrumento.
-
-## 11/11 15:12 · sessao 96eb919cc168 · - · - · origem=Ronald (tmux)
-
-Para (5), não há colisão demonstrada apenas por criar os dois nomes propostos; sem implementação, colisões por conteúdo são [não verificado].
-
-- **O20:** enumera somente `*/tests/test_contract_*.py`; `test_catraca_data_evento_cru.py` fica fora desse censo. Se renomeado para `test_contract_*`, as leituras cruas passam pelo teto zero, com tratamento explícito para AST e exceções declaradas. (`app/core/tests/test_o20_contrato_julga_codigo.py:160`, `:176`, `:178`, `:188`, `:197`, `:204`)
-- **Relógio:** o novo `.py` entra porque o selo enumera `test*.py`; chamadas reais de relógio sem congelamento podem provocar vermelho. O JSON fica fora. (`app/core/tests/test_selo_teste_sem_relogio.py:32`, `:42`, `:48`, `:53`, `:67`)
-- **Marca CRON15:** enumera todos os `.py` diretamente em `*/tests/`, faz `ast.parse` sem tolerar erro, e só admite os 15 métodos marcados. O JSON é excluído pela extensão. (`app/core/tests/test_marca_cron15.py:25`, `:29`, `:32`, `:35`, `:48`)
-- **Raio de um sítio:** inclui testes, pois as exclusões são apenas migrations/node_modules/staticfiles; exige Python compilável e procura `or` com leitura de `raio_metros`. Uma fixture textual `"p.data_evento"` não satisfaz esse critério. JSON fica fora do `rglob('*.py')`. (`app/core/tests/test_selo_raio_de_um_sitio.py:44`, `:45`, `:50`, `:66`, `:73`, `:92`, `:97`)
-- **Vocabulário:** varre inclusive testes e prosa do `.py`; palavras proibidas podem colidir. Só aceita extensões `.py/.html/.js/.md`, excluindo JSON. (`app/pautas/tests/test_contract_vocabulario.py:19`, `:20`, `:29`, `:32`, `:35`, `:41`)
-- **Testes fora do Git:** cobra o novo `.py` versionado; não inclui o JSON nas duas colheitas mostradas. Esse selo não prova a existência obrigatória do novo teste: o próprio teste de comparação declara que arquivo no Git e ausente da árvore está fora de seu escopo. (`bin/testes_fora_do_git.sh:46`, `:48`, `:49`, `:57`; `app/core/tests/test_selo_testes_no_git.py:42`)
-- **P13/escritores:** não acusam fixtures dentro de `chamados/tests/`, pois excluem a pasta; JSON também é excluído pelo filtro `.py`. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:146`, `:147`, `:150`; `app/core/tests/test_contract_escritores_estado.py:190`, `:191`, `:194`)
-
-Não encontrei uma varredura geral de `tests/*.json`; afirmar que nenhuma existe em toda a árvore continua **[não verificado]**.
-
-_3949 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3960 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
