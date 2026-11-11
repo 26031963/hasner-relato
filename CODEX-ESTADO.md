@@ -1,7 +1,25 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 17:30** · publicado em **11/11/2026 17:33** (UTC-3)
+> Ultima resposta processada: **11/11/2026 20:14** · publicado em **11/11/2026 20:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 20:14 · sessao 9d3d6fd7c87c · FIO-E0-V4-E4B · construtor · origem=Code
+
+Cura implementada: fontes históricas congeladas com SHA256; Git usado apenas na conferência explícita de host ([carregador:167](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c6_verificar.py:167)).
+
+- `troca_atributo` derruba a assert sobre o código registrado ([teste:324](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c6_memoria.py:324)). [nao verificado]
+- `arvore_atual` derruba a ausência de `LOAD_FAST confirmar_recusas_do_resolver` ([teste:325](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c6_memoria.py:325)). [nao verificado]
+- `sem_restauro` derruba a restauração após erro ([teste:329](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c6_memoria.py:329)). [nao verificado]
+
+Localmente: 31 testes verdes e seis mutantes mortos por assertions. [Evidências, censo e comandos individuais](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c10_entrega.txt:20). Container/suite inteira: [nao verificado]. [nao verificado]
+
+Dentro de `/app` no container:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -m unittest chamados.tests.test_e4b_c6_memoria -v
+```
+
+Commit não executado pela proibição expressa de `git commit`/`.git`; [mensagem LEI-AKITA preparada](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c10_commit.txt:3). [nao verificado]
 
 ## 11/11 17:30 · sessao f796a81303b6 · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
 
@@ -669,54 +687,4 @@ Escritor estrutural de `CORTES.md`: `bin/gerar_cortes.py` lê `app/docs/CORTES.j
 
 Os blocos atuais estão em `CORTES.md:444-445`, mas não há correspondentes PROPORCAO/LISTA-FECHADA/EXCECAO em `CORTES.json` na cópia `[nao verificado: ausência sem linha positiva única]`; o gerador não preserva apêndices manuais, então regeneração apagaria esses blocos. Esse é o limite (c) já declarado no anexo, não um achado fora do contrato. (`bin/gerar_cortes.py:97-116`; `app/docs/CORTES.md:3`; anexo `v10_contrato.txt`, item 4(c), sem arquivo local: `[nao verificado]`.)
 
-## 11/11 16:05 · sessao 91788de74858 · PROPORCAO-POR-RISCO · verificador · origem=Code
-
-APROVADO
-
-Bloqueadores: nenhum novo demonstrado na cópia. O bloqueante 1 da v8 está curado pela guarda em `bin/selo_proporcao.py:80-81`.
-
-1. **Cura e precedência da LISTA**
-
-   `templatetags` agora é procurado em **todos os componentes de diretório**, antes dos braços `templates`, `static` e `tests`. Portanto, os dois arquivos do contraexemplo da v8 recebem `None`, tornam a obra A e produzem rc 1 quando declarada B (`bin/selo_proporcao.py:74-87`, `bin/selo_proporcao.py:123-135`).
-
-   **Sim, `app/chamados/templatetags/chamados_tags.py` continua B pela LISTA**: consta em `app/docs/CORTES.md:444`, e a consulta retorna `'lista'` antes da guarda nova (`bin/selo_proporcao.py:76-80`). A execução usa a lista da **BASE**; sua presença naquela revisão histórica é [nao verificado], pois a cópia disponibilizada não permite resolver as revisões Git.
-
-2. **Outras descobertas por pasta**
-
-   Não encontrei outro contraexemplo concreto de descoberta automática na cópia [nao verificado quanto à ausência global e à execução em produção].
-
-   - **Admin/apps:** a configuração padrão aponta para `saas`, que declara aplicativos de topo; não declara aplicativos sob `templates/static/tests` (`app/config/wsgi.py:14`, `app/config/settings/saas.py:22-53`). Caminhos como `app/core/admin.py` e `app/core/apps.py` recebem A pelas regras finais do classificador (`bin/selo_proporcao.py:82-88`).
-   - **Signals/inicialização:** os imports encontrados são explícitos, por exemplo `core.signals`, `core.cell` e `chamados.signals`; esses caminhos também recebem A (`app/core/apps.py:8-10`, `app/chamados/apps.py:8-10`, `bin/selo_proporcao.py:82-88`).
-   - **Checks, locale e fixtures:** internacionalização está ligada (`app/config/settings/base.py:92-95`). Não encontrei configuração ou caminho concreto que demonstre outra entrada automática classificada B; ausência global e comportamento interno desses carregadores nesta instalação: [nao verificado].
-   - **Templatetags em outro nível:** a guarda usa pertinência em `dirs`, sem restringir profundidade; qualquer componente `templatetags` é barrado, salvo LISTA (`bin/selo_proporcao.py:74-81`).
-   - **Limite anterior permanece:** o comando importa `core.tests.test_contract_tblib_no_paralelo`, que continua B pelo braço de teste. É o limite já declarado, com import explícito, não uma nova descoberta por pasta (`app/chamados/management/commands/tblib_ausente_na_imagem.py:17-18`, `bin/selo_proporcao.py:29-30`, `bin/selo_proporcao.py:86-87`).
-
-3. **Os casos novos mordem o braço**
-
-   Sim. Nenhum está na lista sintética, fora de `app/`, ou sob `migrations/management`; ambos dependem exclusivamente da condição nova (`bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:70-71`, `bin/selo_proporcao.py:76-85`).
-
-   | Caso | v9 | Removendo somente o braço novo |
-   |---|---|---|
-   | `tags_static_py` | Arquivos A; rc 1 | Arquivos B por `static`; rc 0 |
-   | `tags_templates_py` | Arquivo A; rc 1 | Arquivo B por `templates`; rc 0 |
-
-   Esses resultados seguem de `bin/selo_proporcao.py:80-85` e `bin/selo_proporcao.py:127-135`. Logo, **os testes passam na v9 e falham no mutante**, porque esperam rc 1 (`bin/tests/test_selo_proporcao.sh:44-45`, `bin/tests/test_selo_proporcao.sh:70-71`).
-
-   Ressalva: `tags_templates_py` não cria `templates/__init__.py`; comprova o predicado de caminho, mas sua importação recursiva efetiva pelo Django é [nao verificado] (`bin/tests/test_selo_proporcao.sh:71`).
-
-4. **Quem escreve e quem lê**
-
-   | Valor | Quem produz/escreve | Quem lê |
-   |---|---|---|
-   | Caminho `p` | `git diff`, decodificação e laço: `bin/selo_proporcao.py:112-125` | `motivo_b`: `bin/selo_proporcao.py:73-74` |
-   | `partes`, `dirs`, `nome` | Divisão/fatiamento: `bin/selo_proporcao.py:74-75` | Guarda nova e braços seguintes: `bin/selo_proporcao.py:80-87` |
-   | LISTA real | Conteúdo atual: `app/docs/CORTES.md:444`; autor da inserção [nao verificado] | `git show BASE`, parser e consulta: `bin/selo_proporcao.py:62-76`, `bin/selo_proporcao.py:111` |
-   | Arquivo `CORTES.md` | Gerador lê JSON e sobrescreve Markdown: `bin/gerar_cortes.py:23-24`, `bin/gerar_cortes.py:32`, `bin/gerar_cortes.py:116` | Selo lê versão BASE: `bin/selo_proporcao.py:62` |
-   | LISTA sintética | Função `lista`, argumento e commit: `bin/tests/test_selo_proporcao.sh:19-28` | Mesmo parser: `bin/selo_proporcao.py:62-70` |
-   | Arquivos/conteúdos novos | Scripts dos casos, executados e commitados pelo preparo: `bin/tests/test_selo_proporcao.sh:36-38`, `bin/tests/test_selo_proporcao.sh:70-71` | Selo lê **nomes**; conteúdo não entra no predicado: `bin/selo_proporcao.py:112`, `bin/selo_proporcao.py:73-88` |
-   | Motivo/`None`, `fora`, classe e rc | Classificador e agregação: `bin/selo_proporcao.py:76-88`, `bin/selo_proporcao.py:123-135` | Protocolo e wrapper: `bin/selo_proporcao.py:145`, `bin/selo_proporcao.sh:7-11` |
-   | Esperado `B 1`, rc observado e falhas | Casos, captura e contador: `bin/tests/test_selo_proporcao.sh:33`, `bin/tests/test_selo_proporcao.sh:44`, `bin/tests/test_selo_proporcao.sh:70-71` | Comparação e resultado final: `bin/tests/test_selo_proporcao.sh:45`, `bin/tests/test_selo_proporcao.sh:203-204` |
-
-   O harness completo não foi executado: cria arquivos e repositório temporário, contrariando a restrição de somente leitura (`bin/tests/test_selo_proporcao.sh:13-28`). Execução integral e identidade Git do HEAD informado: [nao verificado].
-
-_3995 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3996 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
