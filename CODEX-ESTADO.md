@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 04:06** · publicado em **11/11/2026 04:07** (UTC-3)
+> Ultima resposta processada: **11/11/2026 04:18** · publicado em **11/11/2026 04:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 04:18 · sessao a480d6252eb2 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Entreguei o [diff](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v2.diff>) e o [recibo com causas F1–F8 e comandos individuais](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v2.txt:6>).
+
+- **F1–F2:** fixture reescrita pelas portas reais, com pré-condições explícitas. [Código:56](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:56>)
+- **F3:** caracterização declarada da recusa de nascimento sem dia. [Código:206](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:206>)
+- **F4:** `1 != 0` significava reversão ausente; o teste agora exige foto integral e reversão antes do primeiro ato. [Código:145](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:145>) [nao verificado]
+- **F5–F8:** comparação estática encontrou consultas substituídas; tetos ajustados com C8 e sonda BASE/HEAD preparada. [Análise:48](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v2.txt:48>)
+
+Passaram **52 testes em memória, 40 selos e 5 testes do executor**; dois mutantes do executor caíram por assertion. [Resultados e comandos:104](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v2.txt:104>) [nao verificado]
+
+**GREEN ORM, números da base e cinco mortes ORM: [nao verificado]. Ruff limpo: [nao verificado] — ferramenta ausente.** [Pendências e comandos pela trava:130](</home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v2.txt:130>)
 
 ## 11/11 04:06 · sessao 044058884828 · - · - · origem=Ronald (tmux)
 
@@ -540,14 +553,4 @@ Também não há nesse caso fixtures de `aid` vazio ou não string, JSON quebrad
 
 Execução integral da suíte shell: **[nao verificado]**. Ela cria, altera e remove arquivos, incompatível com a restrição desta revisão. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:1508`, `bin/tests/test_disjuntor.sh:1517`)
 
-## 11/11 02:49 · sessao d65773cd15a5 · - · - · origem=Ronald (tmux)
-
-- **Escritor operacional:** `_anota_sem_obra` é o único que cria/acrescenta `b3_sem_obra_obs`: `setdefault` em `bin/disjuntor.py:2174`, inclusão em `bin/disjuntor.py:2182`, chamada por `decide_b3` em `bin/disjuntor.py:990`; persistência pela `_com_estado` em `bin/disjuntor.py:1054`, sob `flock` em `bin/disjuntor.py:351` e serialização em `bin/disjuntor.py:371`.
-- **Histórico:** nenhum escritor operacional específico remanescente foi encontrado em `bin/`; `_anota_sem_obra` apenas lê `b3_sem_obra` para dedup (`bin/disjuntor.py:2173`, `bin/disjuntor.py:2177`), e `_b3_sem_obra_hist` lê/conta seus IDs (`bin/disjuntor.py:2206`, `bin/disjuntor.py:2207`). A serialização genérica do estado continua preservando esse campo (`bin/disjuntor.py:371`).
-- **Leitores de `obs`:** dedup do escritor (`bin/disjuntor.py:2178`) e `_b3_sem_obra`, que valida e conta IDs distintos (`bin/disjuntor.py:2200`, `bin/disjuntor.py:2201`). O nome `b3_sem_obra` na saída derivada de `ler` continua sendo **número de observações novas**, enquanto a chave persistida homônima contém o histórico; os acessos estão separados, sem despacho por tipo do elemento (`bin/disjuntor.py:2044`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`).
-- **Propagação:** `gerar_estado.py` chama somente `ler` e `linha` (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`); CLI idem (`bin/disjuntor.py:2345`). Stop captura relógio e chama `julga_b3`, sem manipular os campos (`bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`); `julga_b3` delega a `decide_b3` (`bin/disjuntor.py:1075`).
-- **Testes:** leitor numérico antigo (`bin/tests/test_disjuntor.sh:430`); leitor de apresentação (`bin/tests/test_disjuntor.sh:1368`); fixtures históricas/obs válidas e inválidas (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1484`, `bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`); fixture histórica e duas chamadas do escritor, com leitura dos IDs, timestamps e preservação histórica (`bin/tests/test_disjuntor.sh:1490`, `bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1492`, `bin/tests/test_disjuntor.sh:1493`). Há também regravação genérica do estado inteiro (`bin/tests/test_disjuntor.sh:1094`, `bin/tests/test_disjuntor.sh:1098`). Caso principal, controle e três mutantes registrados (`bin/tests/test_disjuntor.sh:1498`, `bin/tests/test_disjuntor.sh:1537`, `bin/tests/test_disjuntor.sh:1538`, `bin/tests/test_disjuntor.sh:1542`).
-- **B3 antigo permanece coerente por inspeção:** cria `s1`, aciona Stop e espera `1` (`bin/tests/test_disjuntor.sh:428`, `bin/tests/test_disjuntor.sh:429`, `bin/tests/test_disjuntor.sh:431`); scanner extrai `s1` do basename e o inclui em `sem_obra` (`bin/disjuntor.py:843`, `bin/disjuntor.py:845`), escritor registra em obs (`bin/disjuntor.py:2182`), contador retorna um ID (`bin/disjuntor.py:2201`). Execução integral: [nao verificado].
-- O comentário antigo “contador == universo” continua impreciso, pois o histórico está fora desse número (`bin/tests/test_disjuntor.sh:427`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`).
-
-_3649 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3650 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
