@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:02** · publicado em **11/11/2026 15:02** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:05** · publicado em **11/11/2026 15:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:05 · sessao a0ad56da25bd · PROPORCAO-POR-RISCO · verificador · origem=Code
+
+**APROVADO no delta v6.** A leitura da lista na BASE fecha a autoautorização dentro do intervalo julgado; a confiança na base continua sendo responsabilidade externa ao selo (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:91`). Bloqueantes comprovados contra a letra B3: nenhum; B3 exige corte do Ronald, mas não exige base igual a `main` nem autenticação automática desse corte (`aval_proporcao_b3_resposta_1111.txt:1`).
+
+Todos os rc abaixo são **deduzidos por leitura**. Execução dos casos, mutantes, vínculo Git da cópia ao hash informado e uso em produção: [nao verificado].
+
+**1) Autoautorização**
+
+O ataque v5, **no mesmo diff e com a base original**, foi fechado: acrescentar escritor e `CORTES.md` à lista de head não altera a lista utilizada. Ambos ficam fora da lista original, produzindo **A/rc 1 quando declarado B**; o novo caso reproduz essa entrada (`bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:108`; `bin/tests/test_selo_proporcao.sh:78`).
+
+**Ainda existe o caminho pela escolha de uma base já ampliada.** Contraexemplo mínimo em dois commits, construído para análise; execução: [nao verificado]. [nao verificado]
+
+- **Commit P:** em `app/docs/CORTES.md:444`, inserir ``; `app/chamados/writer.py` `` imediatamente antes do marcador final.
+- **Commit H, filho de P:** acrescentar: [nao verificado]
+
+```diff
+diff --git a/app/chamados/writer.py b/app/chamados/writer.py
+new file mode 100644
+--- /dev/null
++++ b/app/chamados/writer.py
+@@ -0,0 +1,2 @@
++from chamados.models import ChamadoColaborador
++ChamadoColaborador.objects.update(status_local='fechado')
+```
+
+A chamada `bin/selo_proporcao.sh P H B <raiz>` recebe **B/rc 0 deduzido**: P é ancestral, sua lista já contém o escritor, e o diff P→H contém somente esse caminho (`bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:111`). O campo utilizado existe; efeito dessa entrada em banco: [nao verificado] (`app/chamados/models.py:52`).
+
+Isso **exclui do julgamento o commit que ampliou a lista**. Julgar desde o antecessor de P, com a lista original, inclui `CORTES.md` e o escritor e resulta em A/rc 1 declarado B (`bin/selo_proporcao.py:92`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:108`). Portanto, o contraexemplo demonstra o limite da base escolhida; não reproduz o defeito v5 para o mesmo intervalo (`bin/selo_proporcao.py:91`).
+
+**2) O que a BASE garante**
+
+| Entrada | Resultado deduzido |
+|---|---|
+| Revisão inexistente ou que não resolve para commit | **2**, na resolução (`bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:98`). |
+| Commit forjado, existente e ancestral de head | Pode ser aceito: não há verificação de procedência ou corte (`bin/selo_proporcao.py:84`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`). |
+| Base diferente de `main` | Pode ser aceita; a validação usa ancestralidade, sem comparação com `main` (`bin/selo_proporcao.py:89`). |
+| Commit anterior da própria raia já ampliou a lista | Pode produzir **B/rc 0**, conforme P→H acima (`bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:111`). |
+| `CORTES.md` ausente na base | **2**: `git show` falha e vira `NaoJulgado`; não há fallback para head ou disco (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:41`, `bin/selo_proporcao.py:98`). |
+
+O **chamador escolhe a base**, pelo primeiro argumento; o wrapper repassa os argumentos integralmente (`bin/selo_proporcao.sh:7`, `bin/selo_proporcao.py:78`). No harness, a base normal é o commit sintético inicial; nos casos de lista torta, é o commit sintético que contém a deformação (`bin/tests/test_selo_proporcao.sh:29`, `bin/tests/test_selo_proporcao.sh:47`, `bin/tests/test_selo_proporcao.sh:50`). Quem escolhe e valida a base da obra real: [nao verificado].
+
+O selo comprova resolução para commit, desigualdade, ancestralidade, lista formalmente válida e diff não vazio. **Não comprova corte do Ronald nem que o intervalo abrange a obra inteira**, cuja unidade declarada é “obra” (`bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:87`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:94`; `app/docs/CORTES.md:443`, `app/docs/CORTES.md:444`).
+
+**3) Os oito `caso_lista`**
+
+Por leitura, **nenhum dos oito foi deslocado para rc 2 por falha de preparo**: todos alteram a árvore inicial, `prepara` exige sucesso e commit novo, e o head seguinte modifica o template inicial de `<p>a</p>` para `z` (`bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:31`, `bin/tests/test_selo_proporcao.sh:46`, `bin/tests/test_selo_proporcao.sh:48`).
+
+| Caso | Motivo previsto de rc 2 |
+|---|---|
+| `sem_marcador` | Contagem dos marcadores (`bin/tests/test_selo_proporcao.sh:92`; `bin/selo_proporcao.py:48`). |
+| `lista_vazia` | Item vazio, guarda de forma (`bin/tests/test_selo_proporcao.sh:93`; `bin/selo_proporcao.py:51`, `bin/selo_proporcao.py:53`). |
+| `so_inicio` | Falta marcador final (`bin/tests/test_selo_proporcao.sh:94`; `bin/selo_proporcao.py:48`). |
+| `fim_antes` | Cardinalidade válida; fatia vazia gera item inválido (`bin/tests/test_selo_proporcao.sh:95`; `bin/selo_proporcao.py:50`, `bin/selo_proporcao.py:53`). |
+| `marcador_duplo` | Dois exemplares de cada marcador (`bin/tests/test_selo_proporcao.sh:96`; `bin/selo_proporcao.py:48`). |
+| `item_sem_crase` | Forma do item (`bin/tests/test_selo_proporcao.sh:97`; `bin/selo_proporcao.py:53`). |
+| `item_vazio` | Item vazio entre separadores (`bin/tests/test_selo_proporcao.sh:98`; `bin/selo_proporcao.py:51`, `bin/selo_proporcao.py:53`). |
+| `cortes_apagado` | Falha de `git show`, pela guarda `git_rc` (`bin/tests/test_selo_proporcao.sh:99`; `bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:41`). |
+
+Falha no preparo é registrada como falha do harness e retorna **antes de chamar o selo**; não é aceita como rc 2 esperado (`bin/tests/test_selo_proporcao.sh:46`, `bin/tests/test_selo_proporcao.sh:49`). Entretanto, a chamada descarta a saída e compara somente rc; ela **não verifica dinamicamente o motivo** (`bin/tests/test_selo_proporcao.sh:50`).
+
+**4) QUEM ESCREVE e QUEM LÊ**
+
+| Objeto | Escritor/produtor | Leitor/consumidor |
+|---|---|---|
+| Lista autorizada | Autoridade normativa: **Ronald**, por corte; quem materializou a edição atual: [nao verificado] (`app/docs/CORTES.md:444`). | `lista_fechada`, por `git show <base>:app/docs/CORTES.md`; `motivo_b` consulta pertinência exata (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:60`). |
+| Lista dos testes | `lista()` escreve o documento; `base()` fornece os itens sintéticos; os casos o deformam (`bin/tests/test_selo_proporcao.sh:17`, `bin/tests/test_selo_proporcao.sh:22`, `bin/tests/test_selo_proporcao.sh:92`). | O mesmo selo, chamado pelo harness (`bin/tests/test_selo_proporcao.sh:41`, `bin/tests/test_selo_proporcao.sh:50`). |
+| rc do selo | Python calcula 0/1/2 e emite 10/11/12; wrapper converte 10→0, 11→1 e demais→2 (`bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:111`, `bin/selo_proporcao.py:121`; `bin/selo_proporcao.sh:8`). | Harness captura e compara; régua lê o rc do **harness**, executado por glob (`bin/tests/test_selo_proporcao.sh:41`, `bin/tests/test_selo_proporcao.sh:42`, `bin/tests/test_selo_proporcao.sh:50`; `bin/regua.sh:138`, `bin/regua.sh:140`). |
+
+**Rc 0 significa julgamento concluído**, inclusive para declaração A com arquivos fora; não significa necessariamente classe B (`bin/selo_proporcao.py:105`, `bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:111`). Chamador e leitor do rc sobre a obra real: [nao verificado].
+
+**5) B3, bloqueantes e fila**
+
+O delta mantém classificação por caminho e congela a lista antes do intervalo julgado; isso é compatível com a lista fechada e a exigência de corte do Ronald. A anterioridade do commit, isoladamente, não prova esse corte (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:91`; `aval_proporcao_b3_resposta_1111.txt:1`). **Bloqueantes do delta: nenhum demonstrado por essas entradas** (`bin/tests/test_selo_proporcao.sh:78`, `bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:108`).
+
+Fila separada:
+
+- Delimitar “A obra não se autoriza” à base autorizada e ao intervalo completo; a frase atual é mais ampla que a garantia implementada (`bin/selo_proporcao.py:20`, `bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:91`; `app/docs/CORTES.md:443`).
+- Corrigir o comentário remanescente “revisao head” (`bin/tests/test_selo_proporcao.sh:91`).
+- A alegação “cada guarda [...] caso que só ela pega” continua excessiva: `marcador_duplo` duplica ambos os marcadores, sem isolá-los, e `caso_lista` só verifica rc (`bin/tests/test_selo_proporcao.sh:5`, `bin/tests/test_selo_proporcao.sh:96`, `bin/tests/test_selo_proporcao.sh:50`).
+- A cobertura da exceção Python inesperada permanece sem demonstração: os stubs substituem o interpretador e não atravessam essa fronteira (`bin/tests/test_selo_proporcao.sh:145`, `bin/tests/test_selo_proporcao.sh:148`; `bin/selo_proporcao.py:118`, `bin/selo_proporcao.py:120`).
+
+## 11/11 15:03 · sessao 23648d129730 · - · - · origem=Ronald (tmux)
+
+**Eu aprovaria a cura estrita do delta, com limite explícito.** A v6 impede que alterações posteriores à base ampliem a lista usada naquele julgamento (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:91`).
+
+O contraexemplo P→H recebe B/rc 0 se P já autoriza o escritor; isso demonstra que o selo **não comprova corte do Ronald nem que o intervalo representa a obra inteira** (`bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:111`). O chamador fornece a base; chamador real e validação externa desse início: [nao verificado] (`bin/selo_proporcao.sh:7`, `bin/selo_proporcao.py:78`).
+
+B3 exige corte do Ronald, mas não exige `main` nem autenticação automática desse corte (`app/docs/CORTES.md:444`). Portanto, classificar essa ausência isoladamente como bloqueante acrescentaria uma obrigação não expressa. A frase “A obra nao se autoriza” merece delimitação: vale para o intervalo fornecido, condicionado a uma base autorizada; sua validade incondicional não está demonstrada (`bin/selo_proporcao.py:20`, `app/docs/CORTES.md:443`).
 
 ## 11/11 15:02 · sessao 23648d129730 · - · - · origem=Ronald (tmux)
 
@@ -562,160 +651,4 @@ Consumidores JS ou código do APK para essas chaves: **[nao verificado]**. Não 
 
 Observação para contagem AST de (a): `api/views.py:1165`, `:1166` e `api/views_mensageria.py:568` contêm **dois acessos de atributo cada** (teste condicional + formatação), portanto **6 nós AST em 3 posições arquivo:linha**. O consumidor de dicionário é mais uma posição: `mensageria/nucleo/ferramentas.py:127`.
 
-## 11/11 14:37 · sessao 889902a5ad4d · MAPA-20 · verificador · origem=Code
-
-**BLOQUEANTE — a v5 ainda aceita N sem fundamento, X sem prova e declaração de encerramento referente a outra obra incompleta.** O tripwire não corrige essas falhas semânticas. (`bin/mapa20_valida.py:91–107`, `bin/mapa20_valida.py:209–228`; `bin/mapa20_montar.py:123–124`)
-
-1. **Entradas concretas que passam com rc 0**
-
-**BLOQUEANTE — N inventado e X sem prova.** `app/docs/BACKLOG.md:1` contém apenas o título do arquivo. Mesmo assim, uma linha com `1 de 1`, essa fonte e estado `encerrada` passa: o selo verifica caminho permitido e linha não vazia, sem contar PRONTO, identificar a obra ou consultar provas no RELATO. (`app/docs/BACKLOG.md:1`; `bin/mapa20_valida.py:91–107`, `bin/mapa20_valida.py:209–216`)
-
-**BLOQUEANTE — encerramento atribuído a outra obra.** E3 em `1 de 1` pode conter `E4B: encerrada`, enquanto a própria linha E4B permanece em `1 de 2`. A autorização acompanha o índice da linha E3; o selo não identifica a obra mencionada na afirmação. (`bin/mapa20_valida.py:213–214`, `bin/mapa20_valida.py:225–228`)
-
-Este gerador mostra as duas entradas completas, sem criar arquivo. Nas sondas, ambas retornaram **rc 0**; a segunda também conservou `E4B: encerrada` na renderização local de tabela. O leitor e o retorno usados são os de `bin/mapa20_valida.py:246–259`.
-
-```bash
-python3 -B - <<'PY'
-import subprocess, sys
-sys.path.insert(0, "bin")
-import mapa20_valida as V
-
-for caso in ("N_SEM_FUNDAMENTO", "OUTRA_OBRA"):
-    linhas = [
-        "## PRONTO AUSENTE", "", "- nenhuma", "", V.LEGENDA, "",
-        "| " + " | ".join(V.CABECALHO) + " |",
-        "|" + "---|" * len(V.CABECALHO),
-    ]
-    for obra in V.OBRAS:
-        c = [obra] + ["nao medido"] * 8 + [
-            "1 de 2", "app/docs/BACKLOG.md:1", "item 2"
-        ]
-        if obra == "E3":
-            c[9], c[11] = "1 de 1", "nada"
-            c[7] = ("encerrada" if caso == "N_SEM_FUNDAMENTO"
-                    else "E4B: encerrada")
-        linhas.append("| " + " | ".join(c) + " |")
-    c = [V.SEM_DONO] + ["nao medido"] * 8 + [
-        V.XN_SEM_DONO, "nao medido", "nao medido"
-    ]
-    linhas.append("| " + " | ".join(c) + " |")
-    entrada = "\n".join(linhas) + "\n"
-    r = subprocess.run(
-        [sys.executable, "-B", "bin/mapa20_valida.py", "/dev/stdin"],
-        input=entrada, text=True, capture_output=True
-    )
-    print(caso, "rc", r.returncode)
-PY
-```
-
-São contraexemplos do **selo real**. Publicação dessas entradas em produção, com os dados vivos, [não verificado].
-
-2. **Bytes publicados, corridas e retornos** [nao verificado]
-
-| Situação | Resultado da leitura |
-|---|---|
-| Caminho novo aprovado | Raspa a fotografia, julga o temporário raspado e copia esse mesmo arquivo ao destino. Regravar posteriormente o mapa vivo não altera essa entrada publicada. (`bin/relato.sh:100`, `bin/relato.sh:106–111`, `bin/relato.sh:158`) |
-| **BLOQUEANTE — mapa retido** | Regrava a cópia pública anterior após raspagem, **sem passar pelo selo**, e permite commit/push dela. Entrada concreta: mapa vivo inválido e cópia pública contendo `E3 encerrada — 1 de 2`. Esse caminho pode conservar ou republicar o texto, com rc 1 ou 2; não é o contraexemplo de rc 0 acima. (`bin/relato.sh:116–125`, `bin/relato.sh:167–180`) |
-| Raspagem nova falha ou não escreve | Falha explícita recebe 2; retorno 0 sem produzir o temporário chega ao selo como arquivo ilegível e também recebe 2. (`bin/relato.sh:106–113`; `bin/mapa20_valida.py:246–250`) |
-| Remoção falha deixando o mapa presente | Aborta antes do commit/push com 2. Não retira o que já estava publicado remotamente. (`bin/relato.sh:123–124`, `bin/relato.sh:178–179`) |
-| **FILA — fonte fora da fotografia** | O selo lê BACKLOG durante o julgamento; a publicação lê novamente o BACKLOG vivo depois. Inserir uma linha entre essas leituras desloca a referência publicada. A fotografia protege o mapa, não suas fontes. Ocorrência real [não verificado]. (`bin/mapa20_valida.py:100–105`; `bin/relato.sh:155`; `bin/raspar_publico.py:28`) |
-
-**FILA — rc 2 não vence rc 1 em todos os caminhos.**
-
-- `cp` falhando por permissão ou espaço recebe 1, como se o mapa não existisse. (`bin/relato.sh:100–101`)
-- `cmp` com erro operacional também recebe 1, como divergência de conteúdo. (`bin/relato.sh:104–105`)
-- Raspagem do retido falhando, seguida de remoção bem-sucedida, conserva o rc anterior; pode continuar sendo 1. O teste exige justamente esse resultado. (`bin/relato.sh:119–125`; `bin/tests/test_mapa20_valida.sh:309`)
-
-O valor acumulado chega aos dois finais normais: “nada mudou” e depois do push. Entretanto, as classificações acima já podem estar erradas. (`bin/relato.sh:173`, `bin/relato.sh:180`)
-
-O chamador operacional encontrado na cópia é `hasner-relato.service`, diretamente por `ExecStart`, como `oneshot`. A unit não declara tratamento distinto para 1 e 2 nem ação de recuperação; o timer apenas agenda novas execuções. Configuração efetivamente instalada e reação observada em produção [não verificado]. (`bin/hasner-relato.service:12–21`; `bin/hasner-relato.timer:5–8`)
-
-3. **Cura dos achados do opus**
-
-| Achado anterior | Veredito por classe |
-|---|---|
-| Invisíveis e homóglifos indicados | **Curado.** Alfabeto fechado recusa essas classes antes do parser. (`bin/mapa20_valida.py:78–79`, `bin/mapa20_valida.py:145–149`) |
-| `encerrada` fora da tabela | **Curado quanto às posições citadas**: título, lista, negrito e rodapé entram na varredura global. **Não curado semanticamente**: outra obra pode ser declarada encerrada dentro de uma linha completa, como no contraexemplo. (`bin/mapa20_valida.py:213–228`) |
-| `splitlines()` versus GFM | **Curado.** Há divisão somente em LF e rejeição dos demais separadores pelo alfabeto. (`bin/mapa20_valida.py:145–150`) |
-| N inventado | **Não curado — BLOQUEANTE.** Mudou a categoria de caminho permitida; ainda aceita título do BACKLOG e comentário do TICKETS. (`bin/mapa20_valida.py:91–107`; `app/docs/BACKLOG.md:1`; `app/docs/TICKETS.md:1`) |
-| Dois escritores do mapa vivo | **Cura não demonstrada.** O tripwire compara bytes, não autoria. Remoção do antigo `logs/MAPA-20/montar_mapa.py` e escritores vivos [não verificado]. O próprio código registra sua existência anterior fora do repositório. (`bin/relato.sh:104–105`; `bin/mapa20_montar.py:4–8`; `.gitignore:53`) |
-| rc 1 sem consumidor específico | **Não curado — FILA.** A unit chama o script, mas não distingue as duas classes de falha. (`bin/hasner-relato.service:12–21`) |
-| `SEM DONO` aceita encerramento | **Curado.** Apesar do `continue`, a varredura global posterior também alcança essa linha. (`bin/mapa20_valida.py:202–205`, `bin/mapa20_valida.py:225–228`) |
-| X sem prova no RELATO | **Não curado — BLOQUEANTE.** O ramo numérico compara valores e verifica a referência de N; não lê provas de itens. (`bin/mapa20_valida.py:206–216`) |
-| Testemunha LEI-AKITA ligada a `e59c25049` | Cura histórica e validade dessa testemunha [não verificado]. A declaração de escritor único no código não demonstra remoção do escritor anterior. (`bin/mapa20_montar.py:2–8`) |
-| Raspagem depois do julgamento | **Curado no caminho novo; não no caminho retido.** (`bin/relato.sh:106–120`, `bin/relato.sh:158`) |
-| Isenção de `status/encerrada.sim` | **Curado.** Caminhos não são mais removidos antes da busca; os testes agora exigem rejeição. (`bin/mapa20_valida.py:82–88`; `bin/tests/test_mapa20_valida.sh:145–152`) |
-| Ambiguidade de rc 1 | **Não curada — FILA**, pelas falhas de `cp`, `cmp` e raspagem do retido já descritas. (`bin/relato.sh:100–125`) |
-
-4. **Testes e guardas sem mordida** [nao verificado]
-
-**FILA — célula `…` passa no teste pelo motivo errado.** Esse caso fica vermelho pelo alfabeto, antes da verificação de célula vazia. Ele não testemunha a guarda de preenchimento; outros casos de pontuação ainda exercitam essa guarda. (`bin/tests/test_mapa20_valida.sh:66–67`; `bin/mapa20_valida.py:145–149`, `bin/mapa20_valida.py:198–200`)
-
-**FILA — “só escreve a saída pedida” compara apenas caminhos.** `arvore()` não captura conteúdo. Uma regravação de arquivo existente, como acrescentar espaço ao JSON, preservaria a lista de caminhos e escaparia dessa asserção. Mutante não executado [não verificado]. (`bin/tests/test_mapa20_valida.sh:354–355`, `bin/tests/test_mapa20_valida.sh:358–375`)
-
-**BLOQUEANTE — testes verdes legitimam fonte inválida.** O título do BACKLOG é a fonte padrão, e o comentário inicial de TICKETS também é aceito como verde. Portanto, a suíte incorpora o significado errado de “fonte do N”. (`bin/tests/test_mapa20_valida.sh:33`, `bin/tests/test_mapa20_valida.sh:55–60`)
-
-Os **156 casos de conteúdo** reproduzidos por stdin deram os resultados esperados, apesar dos contraexemplos novos. Isso não equivale à execução da suíte shell completa, que cria arquivos. (`bin/tests/test_mapa20_valida.sh:25–189`)
-
-5. **Quem escreve, quem lê e significado dos campos**
-
-| Estado | Escritor identificado | Leitor identificado |
-|---|---|---|
-| `logs/MAPA-20/mapa.md` | O montador escreve no `argv[0]`; chamada efetiva para o caminho vivo [não verificado]. (`bin/mapa20_montar.py:160–161`) | Fotografia e tripwire. (`bin/relato.sh:100–104`) |
-| `montador_dados.json` | A instrução atribui edição à sessão; produtor vivo [não verificado]. A fixture escreve esse JSON. (`bin/mapa20_montar.py:7–8`; `bin/tests/test_mapa20_valida.sh:351`) | `json.loads` do montador. (`bin/mapa20_montar.py:89`) |
-| `MAPA-20.md` temporário novo | Raspador. (`bin/raspar_publico.py:40`) | Selo; depois cópia ao destino. (`bin/relato.sh:109`, `bin/relato.sh:158`) |
-| `MAPA-20.md` público | Cópia do temporário aprovado ou raspagem/rename do retido. (`bin/relato.sh:119–120`, `bin/relato.sh:158`) | Raspagem de retenção e Git. (`bin/relato.sh:119`, `bin/relato.sh:168–179`) |
-| BACKLOG | Gerador preserva o bloco manual e substitui o arquivo; `backlog_estado.py` altera a célula de estado. Autor das listas históricas de PRONTO [não verificado]. (`bin/gerar_backlog.py:103–105`, `bin/gerar_backlog.py:138–140`; `bin/backlog_estado.py:58–59`) | Montador localiza chave; selo abre linha citada; publicador raspa o arquivo. (`bin/mapa20_montar.py:58–61`; `bin/mapa20_valida.py:100–105`; `bin/relato.sh:155`) |
-| TICKETS | Escritores de topo e rodapé; há também molde de inserção de linha. Autor das listas históricas de PRONTO [não verificado]. (`bin/tickets_placar.sh:82`; `bin/tickets_rodape.sh:78–79`; `bin/molde_autocura/ticket_rows.py:10–12`) | Selo abre a linha citada. (`bin/mapa20_valida.py:100–105`) |
-
-Todos os campos abaixo vêm do JSON; seu escritor operacional permanece [não verificado]. Os consumidores são:
-
-| Campo | Uso efetivo |
-|---|---|
-| `cabeca` | Prosa inicial. (`bin/mapa20_montar.py:138`) |
-| `censo`, `alias_censo` | Leitura das linhas e resolução de nomes. (`bin/mapa20_montar.py:90–105`) |
-| `ovr` | Sobrescrita por índice, inclusive identidade. (`bin/mapa20_montar.py:117–118`) |
-| `xn[obra]` | Tripla textual X/N, fonte, falta; expansão de referência BACKLOG, sem derivar N. (`bin/mapa20_montar.py:123–124`) |
-| `fonte_ausente`, `falta_ausente` | Células das obras sem `xn`. (`bin/mapa20_montar.py:127`) |
-| `rascunho.arquivo`, `alias`, `origem` | Contagem do rascunho e anotação na lista superior. (`bin/mapa20_montar.py:65–84`, `bin/mapa20_montar.py:106`, `bin/mapa20_montar.py:132`) |
-| Censo colunas 1–8 | Arquivos, cruzamentos, leis, dependência, movimentos, VISIVEL e voltas, conservados após sobrescritas. (`bin/mapa20_valida.py:53–55`; `bin/mapa20_montar.py:117–120`) |
-| Censo coluna 9 | Etapa histórica, enviada à prosa; na tabela final, coluna 9 passa a receber X/N. (`bin/mapa20_montar.py:119–124`) |
-
-**BLOQUEANTE — os consumidores não preservam a mesma identidade.** Esta entrada troca os rótulos após a canonicalização, mas continua buscando `xn` pelo nome anterior:
-
-```json
-"ovr": {
-  "E3": {"0": "E4B"},
-  "E4B": {"0": "E3"}
-}
-```
-
-Com `xn.E3 = 1 de 1` e `xn.E4B = 1 de 2`, o montador produz E4B com dados e progresso de E3, e vice-versa. A sonda em memória do montador real seguida do selo retornou **rc 0**. (`bin/mapa20_montar.py:116–124`; `bin/mapa20_valida.py:188–214`)
-
-O montador ser o **único escritor vivo** continua [não verificado]. `cmp` comprova igualdade naquela comparação; outro escritor produzindo os mesmos bytes não é identificado. (`bin/relato.sh:104–105`)
-
-6. **Classes reincidentes**
-
-| Classe | Resultado |
-|---|---|
-| Segundo escritor | Existência atual [não verificado]; unicidade não demonstrada pelo tripwire. (`bin/mapa20_montar.py:4–8`; `bin/relato.sh:104–105`) |
-| Derivação paralela de fonte única | **BLOQUEANTE:** N declarado no JSON não é derivado da lista citada; apenas o N do rascunho é contado. (`bin/mapa20_montar.py:74–84`, `bin/mapa20_montar.py:123–124`) |
-| Selo sem mordida | **BLOQUEANTE:** não exige prova de X nem fundamento quantitativo de N. (`bin/mapa20_valida.py:91–107`, `bin/mapa20_valida.py:209–216`) |
-| Relógio fora da borda | **FILA:** fonte e mapa não compartilham fotografia até a publicação. Ocorrência produtiva [não verificado]. (`bin/mapa20_valida.py:100`; `bin/relato.sh:155`) |
-| Campo com significados divergentes | **BLOQUEANTE:** `ovr[0]` muda a identidade exibida sem mudar a chave usada para selecionar progresso. (`bin/mapa20_montar.py:116–124`) |
-
-## 11/11 14:33 · sessao a6c6e22ba20e · - · - · origem=Ronald (tmux)
-
-- **BLOQUEANTE — N sem fonte válida, rc 0.** Sonda real, somente memória: todas as obras com `1 de 1`, fonte `app/docs/BACKLOG.md:1`, falta `encerrada`; demais campos `nao medido`, SEM DONO canônica, legenda e cabeçalho oficiais. Resultado: `rc 0`, zero problemas. A fonte é apenas o título do BACKLOG, não PRONTO numerado (`app/docs/BACKLOG.md:1`). O selo confere caminho permitido e linha não vazia, sem relacionar obra, lista e N (`bin/mapa20_valida.py:91-107`). O teste legitima esse título como fonte (`bin/tests/test_mapa20_valida.sh:34`).
-
-- **BLOQUEANTE — “E4B: encerrada” com E4B em 1 de 2, rc 0.** Entrada completa: E3 em `1 de 1`, coluna “arquivos que toca” com `E4B: encerrada`; E4B em `1 de 2`, falta `item 2`; outras linhas canônicas. Sonda real retornou `rc 0`, zero problemas. A permissão acompanha a linha E3, sem identificar a obra afirmada no texto (`bin/mapa20_valida.py:213-214`, `bin/mapa20_valida.py:225-228`).
-
-- **BLOQUEANTE — X não confrontado com prova.** O ramo numérico confere intervalo, fonte e igualdade X/N; não consulta RELATO nem verifica itens comprovados (`bin/mapa20_valida.py:206-216`). A primeira entrada também demonstra aceitação sem apresentar prova de item algum.
-
-- **FILA — caso sem mordida própria.** O caso `celula …` rejeita U+2026 pelo alfabeto antes da guarda de célula vazia (`bin/tests/test_mapa20_valida.sh:70`, `bin/mapa20_valida.py:146-149`). Mutante em memória que faz `_DADO.search` sempre retornar verdadeiro mantém esse caso vermelho; portanto ele não prova a guarda de `bin/mapa20_valida.py:198-200`.
-
-- **Curados:** invisíveis/homóglifos indicados, pelo alfabeto fechado (`bin/mapa20_valida.py:78-79`); separadores de `splitlines`, pelo alfabeto e divisão somente em LF (`bin/mapa20_valida.py:145-150`); “encerrada” em SEM DONO, pela varredura global posterior ao `continue` (`bin/mapa20_valida.py:202-205`, `bin/mapa20_valida.py:225-228`).
-
-Reproduzi os 156 casos de conteúdo construídos pela parte (a), usando `/dev/stdin`: todos deram o resultado esperado. A suíte permanece verde diante dos dois contraexemplos acima; construção e expectativas estão em `bin/tests/test_mapa20_valida.sh:25-189`.
-
-_3924 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3926 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
