@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lanca_e3_sombra.sh | pid=883135
+PAREI: censo-UI-PAINEL-MOSTRA-O-APP | espera Codex
+
+ESPERANDO: lanca_col1005.sh | pid=923903
 E3 SONDA v2 10:00: pelas CELULAS dos 77 pares: pergunta 1 (pk 54831, mat=sim, disputa fechada, cel fato_em_ausencia acusa), no universo do reconciliador 0, chamado de turno vivo em dia X1 0 (x1_comp11_sonda_v2.r). 54831 viva com carimbo celula_absolveu = anomalia PREEXISTENTE, nenhum escritor automatico a alcanca (reconciliador.py:629, disputa_emissao.py:1823/1916, relavra_via reabrir_fechada=False) -> linha de fila. Prova pela funcao real: julgar_colab+reconciliar_chamados_colab na sombra com a arvore E3, 15 colabs (logs/sombra/e3_x1_funcao_real.py)
 E3 SONDA (c) 09:58: pares 77, pergunta 1, VIVA 1 (pk 54831 col237 07/11, ja via=celula_absolveu), chamado 1 nao vivo (logs/FIO-E0-V4-E3/x1_comp11_sonda.r). Esperado 0 -> SEM POUSO ate a v2: recorte por data_evento nao cobre o universo do reconciliador (reconciliador.py:627-642, signals.py:28-42/96-115); v2 le pela CELULA + chamados de turno dos 15 colabs (sonda_x1_comp11_v2.py)
 B3 FIO-E0-V4-E3 RESPONDIDA por LIBERA-B3-E3-FIX11 09:33: UM opus final sobre 999a7966c se suite_pre_opus2 verde; reprovou = para com matriz de transicoes da porta (sem e3fix12); pouso so com reversao comp 11 em logs/ antes do deploy, comp 10 intocada
@@ -6059,6 +6061,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 **PERGUNTA DE LEI -- O DIA DA DEMISSAO E APURAVEL COMO FURO? A LEI ESCRITA NAO RESPONDE (10:0x).** Antes de abrir fatia nova fui atras do bug, que pela LEI-AKITA 6 vem primeiro. **NAO HA bug de universo no codigo de HOJE**, e duas leituras dizem isso: (a) `ponto/services/dia_pago.py:259-263` (O140) da linha a TODO dia de furo ainda que sem uma hora -- `_linha(d)` dentro de `for d in (_furos or ())` --, entao furo SEM linha nao existe no codigo de hoje; (b) o gravado da 09 tem **10.759 das 10.893 linhas com `furo_apurado` NULL**, que no idioma declarado na docstring de `lavrar` e `furos_do_motor=None`, *"nao perguntei"*: a 09 foi lavrada por chamador que ainda nao passava furo. E o CLAMP da borda (defeito 2 do `9632cdbd`) explica no maximo **1 dos 28**, porque 27 dos 28 dias TEM celula (`celula_trabalho_true=28`, `sem_celula=1`). Logo criar a linha que falta e **RELAVRAR a 09**, o PROIBIDO da L-092 -- nao e cura de universo, e por isso nao jumpa a fila como bug provado. O QUE SOBRA E PERGUNTA DE LEI, e eu nao a proponho (L-117): **19 dos 28 dias sao exatamente o dia da demissao, e a celula desse dia diz trabalho=True**. O seu corte de 19/10 `DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA` **nao responde**: ele e literal sobre `data_demissao` **ANTERIOR** a janela (*"sai do universo de derivacao"*), e aqui a demissao cai DENTRO da competencia. Se o dia da demissao e previsto, o furo e real e o dono e CADASTRO/BATIDA; se nao e, o motor chama furo **19 dias que nao existem** -- e ai o furo mente para todo desligado da frota, nao so na 09. A fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a linha esta no BACKLOG (`MOTOR-CHAMA-FURO-DIA-QUE-A-LAVRATURA-DA-09-NAO-COBRE`) e **nada se aplica na 09**.
 
 ## ALARMES DA ESTEIRA
+
+**11/11 10:06:32 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:9820f92941 (48 car., na trilha privada)
 
 **11/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
