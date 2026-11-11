@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:25** · publicado em **11/11/2026 10:27** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:28** · publicado em **11/11/2026 10:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:28 · sessao 8a5868b1f67a · RAIA-2-BO-VISIVEL · sonda · origem=Code
+
+```text
+sonda_leitura: sonda_lote0311.py [63cd70bd29f499d7] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+LOTE 2026-10-28 09:33:35 pedidas=47 validadas=29 recusadas=18
+LOTE 2026-10-28 09:33:57 pedidas=15 validadas=0 recusadas=15
+LOTE 2026-10-28 09:34:20 pedidas=15 validadas=0 recusadas=15
+LOTE 2026-10-28 09:34:38 pedidas=15 validadas=0 recusadas=15
+LOTE 2026-10-28 09:35:34 pedidas=15 validadas=0 recusadas=15
+LOTE 2026-10-28 09:40:34 pedidas=15 validadas=0 recusadas=15
+LOTE 2026-10-28 14:19:49 pedidas=26 validadas=11 recusadas=15
+LOTE 2026-10-28 14:20:09 pedidas=15 validadas=0 recusadas=15
+LOTE 2026-10-28 15:41:19 pedidas=29 validadas=12 recusadas=17
+LOTE 2026-10-28 16:24:03 pedidas=16 validadas=0 recusadas=16
+LOTE 2026-10-28 16:24:24 pedidas=16 validadas=0 recusadas=16
+LOTE 2026-10-29 13:27:43 pedidas=24 validadas=10 recusadas=14
+LOTE 2026-10-29 14:19:11 pedidas=31 validadas=18 recusadas=13
+LOTE 2026-10-29 14:42:19 pedidas=12 validadas=0 recusadas=12
+LOTE 2026-10-29 14:42:38 pedidas=12 validadas=0 recusadas=12
+LOTE 2026-10-29 14:43:01 pedidas=12 validadas=0 recusadas=12
+LOTE 2026-10-29 14:43:19 pedidas=12 validadas=0 recusadas=12
+LOTE 2026-10-30 08:20:15 pedidas=33 validadas=4 recusadas=29
+LOTE 2026-10-30 08:22:45 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 08:24:19 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 08:42:57 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 09:48:15 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 12:12:51 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 12:30:44 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 12:33:23 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 12:35:49 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 13:04:01 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 15:28:31 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-10-30 15:29:07 pedidas=29 validadas=0 recusadas=29
+LOTE 2026-11-03 08:06:21 pedidas=87 validadas=45 recusadas=42
+LOTE 2026-11-03 16:26:49 pedidas=47 validadas=10 recusadas=37
+LOTE 2026-11-05 08:02:56 pedidas=57 validadas=17 recusadas=40
+LOTE 2026-11-05 16:11:28 pedidas=46 validadas=6 recusadas=40
+LOTE 2026-11-06 07:59:36 pedidas=56 validadas=16 recusadas=40
+LOTE 2026-11-06 10:21:21 pedidas=45 validadas=5 recusadas=40
+LOTE 2026-11-11 08:56:00 pedidas=119 validadas=55 recusadas=64
+LOTE 2026-11-11 09:20:37 pedidas=59 validadas=0 recusadas=59
+linhas n 37
+```
 
 ## 11/11 10:25 · sessao 8fe05992e025 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -889,18 +934,4 @@ GERADOR_BASE col1005 []
 gerador.n n 0
 ```
 
-## 11/11 10:02 · sessao 021c9279df7a · - · - · origem=Ronald (tmux)
-
-Correção da conclusão sobre relógio: **não cabe afirmar ausência de leitura indireta fora da borda**. O tratamento não lê relógio diretamente, mas pode alcançar `date.today()` em um juiz herdado — `app/ponto/services/cluster_espurio.py:249`, `app/chamados/juizes.py:577`.
-
-Cadeia verificável, inclusive no DRY: `_dia_em_competencia_trancada → competencia_do_chamado → _dias_das_perguntas_vivas → pergunta_viva(p)` sem `hoje → _pergunta_viva_calc → _dentro_da_janela_viva → date.today()` — `app/chamados/models.py:1043`, `app/chamados/juizes.py:2286`, `app/chamados/juizes.py:2264`, `app/chamados/juizes.py:2267`, `app/chamados/juizes.py:839`, `app/chamados/juizes.py:856`, `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:577`.
-
-A consulta de perguntas não restringe módulo, portanto alcança chamado de cluster que tenha disputa e perguntas correspondentes; o relógio é lido se a pergunta ultrapassar os retornos anteriores do C6 — `app/chamados/juizes.py:2264`, `app/chamados/juizes.py:1325`, `app/chamados/juizes.py:1329`, `app/chamados/juizes.py:1372`, `app/chamados/juizes.py:1389`. Existência dessa configuração nos chamados de produção: [nao verificado].
-
-Outra cadeia possível no apply é `reabrir → ressuscitar_perguntas → _universo_da_ressuscitacao → pergunta_viva(_q)` sem `hoje` — `app/chamados/models.py:1451`, `app/chamados/models.py:1543`, `app/chamados/models.py:1509`.
-
-Sem perguntas relacionadas, os caminhos diretos de agrupamento/irmão não mostram relógio; o veto retorna antes do juiz para esse módulo, porque cluster não pertence ao universo declarado — `app/chamados/models.py:815`, `app/chamados/models.py:822`, `app/chamados/juizes.py:2133`, `app/chamados/juizes.py:2137`, `app/chamados/models.py:1137`, `app/ponto/services/furos_vetados.py:79`, `app/chamados/catalogo/furo_modulos.py:15`, `app/chamados/reconciliador.py:336`.
-
-Os carimbos `auto_now/auto_now_add` devem ser citados separadamente como persistência preexistente, não confundidos com o relógio decisório do C6 — `app/chamados/models.py:68`, `app/chamados/models.py:1674`.
-
-_3779 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3780 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
