@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:56** · publicado em **11/11/2026 15:56** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:59** · publicado em **11/11/2026 16:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:59 · sessao c5d9a24422ee · FIO-E0-V4-E4B · construtor · origem=Code
+
+Implementada a ordem **DP → âncoras → exists → escrever**, preservando as advisories ([fecho_runtime.py:122](chamados/services/fecho_runtime.py:122)).
+
+Resultados locais: RED na base c8 e mutantes morreram nas assertions previstas; 123 testes e Ruff verdes. Comandos, evidências e fila estão no [recibo c9](docs/FIO-E0-V4-E4B-c9.txt:33).
+
+ORM e certificação Code/opus: [nao verificado].
 
 ## 11/11 15:56 · sessao 111529e65077 · UI-PAINEL-MOSTRA-O-APP · verificador · origem=Code
 
@@ -594,22 +602,4 @@ Não encontrei outro escritor produtivo/importador de `tipo` na cópia; os contr
 
 A origem específica da escrita de #5356 permanece **[não verificado]**.
 
-## 11/11 15:36 · sessao 62b4dee2cfd9 · - · - · origem=Ronald (tmux)
-
-(4) **Há caminhos HTTP que não traduzem o novo `ValidationError`, mas o legado sem troca de tipo passa normalmente.** A guarda permite tipo existente idêntico (`app/ponto/models.py:882–889`); portanto, não é correto afirmar que decidir/cancelar qualquer ausência legada passará a dar 500.
-
-- `criar_ausencia`: traduz apenas `ValidationError` de `full_clean` (`app/ponto/services/ausencia.py:385–391`). O `save()` está depois, em `:418`; o `except Exception` limpa anexo e relança exceções diferentes da constraint conhecida (`:419–429`). API captura apenas `AusenciaInvalida` (`app/api/views.py:1817–1844`). Se o catálogo mudar/expirar entre a validação inicial e o save, o novo `ValidationError` escapa dessa API; ocorrência real [não verificado].
-- `editar_ausencia_registro`: valida vivo em `:474–475`, atribui tipo em `:498`, salva sem tradução em `:509`. A view captura somente `AusenciaInvalida`, `ValueError`, `TypeError` (`app/ponto/views.py:2818`). Mesma janela de corrida; ocorrência real [não verificado].
-- `veredito_celula`: chama produtor e captura só `AusenciaInvalida` (`app/ponto/services/veredito_celula.py:331–341`); a view chama o serviço sem catch (`app/ponto/views.py:3339–3341`).
-- Decisão/status: `mudar_estado` salva sem catch (`app/ponto/services/ausencia.py:835`), `decidir` pode salvar novamente (`:927`). Lotes aprovação/rejeição capturam apenas `DoesNotExist` (`app/ponto/views.py:2293`, `:2324`); lote cancelamento não envolve a chamada com catch (`:2351`). Reverter captura domínio, não Django VE (`:2588`); período captura domínio/ValueError/DoesNotExist (`:2674`); cancelar individual só DoesNotExist (`:2745`). **Sem troca concorrente de tipo/remoção da linha, a exceção histórica da guarda permite esses saves** (`app/ponto/models.py:882–889`).
-- Anexo: save é protegido apenas para limpeza e re-raise (`app/ponto/services/ausencia.py:859–865`); chamada da UI sem catch (`app/ponto/views.py:2151`) e reenvio da API fora do try de criação (`app/api/views.py:1848–1850`). Mesmo limite de concorrência para linha legada.
-- Lançar/submeter pela web capturam `Exception` (`app/ponto/views.py:2458`, `:2558`); não classificá-los genericamente como 500.
-- Django admin não escreve Ausência: usa `SoLeitura` (`app/ponto/admin.py:37–47`), com add/change/delete negados (`app/core/admin.py:59–66`).
-
-**Batida:** não encontrei caminho produtor de Ausência nos receivers examinados; o chokepoint cria `Batida`, não `Ausencia` (`app/ponto/registro_batida.py:152–160`). Pós-evento protegido por catch genérico (`:175–183`). Núcleo recompõe somente `TurnoMaterializado` (`app/ponto/nucleo.py:40–67`), protegido no signal (`app/ponto/signals.py:19–31`). Cartório da batida entra em `engolir` (`app/ponto/signals.py:85–93`, `:131–135`); reconciliador e adesão protegidos separadamente (`:206–237`). Realtime é protegido internamente (`app/ponto/realtime.py:22–46`). Onboarding grava `Colaborador` (`app/colaboradores/signals.py:86–102`); seu signal downstream trata silêncio de chamados, não ausência (`app/chamados/signals.py:268–279`). **Nenhuma barreira nova de Ausencia à batida demonstrada nesses caminhos.**
-
-O mapeamento não prova ausência de qualquer outra falha antiga na batida: onboarding não tem catch próprio (`app/colaboradores/signals.py:101–102`); isso não é efeito da guarda nova.
-
-Férias: espelho usa `criar_ausencia(tipo='ferias')`, captura só domínio e registra recusas (`app/ponto/services/ausencia.py:1201–1216`); `AgendamentoFerias.save` chama sync após salvar agendamento (`app/ferias/models.py:446–451`). A criação com `ferias` inativo já era recusada no precheck; só uma mudança entre precheck/save introduz o novo VE bruto. Remarcação da view captura apenas `AgendamentoNaoRemarcavel` (`app/ferias/views.py:686–690`).
-
-_3972 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3973 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
