@@ -1,7 +1,266 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 09:08** · publicado em **11/11/2026 09:13** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:15** · publicado em **11/11/2026 09:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:15 · sessao 5d9a4f9c90fa · FIO-E0-V4-E3 · construtor · origem=Code
+
+Cura aplicada somente em `chamados/tests`; os arquivos alterados e novos estão registrados em [e3fix11_execucao.txt:132](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:132). [nao verificado]
+
+O censo dos harnesses ficou assim:
+
+| Executor | Como monta o namespace | Mesmo furo? |
+|---|---|---|
+| S2/S3 | Dicionário manual; `funcao()` compila somente a função solicitada, sem copiar globais. [helper:14](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e4_apoio.py:14) | Sim; corrigido carregando a constante e o leitor reais. [teste:147](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_pos_suite_sem_banco.py:147) | [nao verificado]
+| `test_e3_nb_impressao_memoria` | Seleção fixa por AST, já incluindo função e constante. [teste:173](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:173) | Não. | [nao verificado]
+| `x1_mutantes --sem-banco` | Reutiliza o harness anterior. [executor:77](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:77) | Não. |
+| `x1_mutantes`, instalação ORM | Executa definições em `modulo.__dict__`, incluindo função e constante. [executor:100](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:100) | Não pelo código; execução ORM [nao verificado]. |
+| `e3_pos_suite_sem_banco` | Invoca o próprio S2/S3; herdava o defeito. [executor:78](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3_pos_suite_sem_banco.py:78) | Corrigido pela mesma alteração. |
+
+Os outros testes que selecionam `_julgar_colab_corpo` por AST apenas inspecionam sua estrutura: [test_o219:217](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_o219_versao_da_regra.py:217), [test_e3_isento:112](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_isento_na_impressao.py:112). [nao verificado]
+
+Com `cobertura='aprovada'`, **a expectativa original permanece**: `pulados=1`, sem rejulgamento, preservando impressão e veredito anteriores. O caso usa 07/11/2026, dentro do horizonte; porém a cobertura integral exclui o marcador X1. A impressão está deliberadamente cega à cobertura e a chamada usa `apply_=False`. Portanto, nenhuma assertion precisou ser relaxada. [teste:127](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_pos_suite_sem_banco.py:127), [cartorio:1229](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1229), [teste:169](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_pos_suite_sem_banco.py:169). A cobertura visível continua tendo seu caso separado de rejulgamento para `concorde`. [memória:414](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:414) [nao verificado]
+
+O diff da cura acrescenta estas linhas, preservando a assertion original:
+
+```diff
++                ns['HORIZONTE_SEM_ADESAO'] = literais('ponto/services/cartorio.py')['HORIZONTE_SEM_ADESAO']
++                funcao('ponto/services/cartorio.py', 'sem_adesao_no_horizonte', ns)
++                self.assertIn('sem_adesao_no_horizonte', ns.keys(),
++                              'harness deve carregar o leitor real do cartorio')
++                self.assertIn('HORIZONTE_SEM_ADESAO', ns.keys(),
++                              'harness deve carregar a declaracao lida pelo leitor')
++                leitor = ns['sem_adesao_no_horizonte']
++                # Corte default 21: 20/10 ainda e comp10; o dia do caso (07/11) e comp11.
++                self.assertFalse(leitor(dt.date(2026, 10, 20)))
++                self.assertTrue(leitor(dia))
+...
++                self.assertEqual(out['nunca_bateu'], 0)
++                self.assertEqual(cel.impressao, legado)
++                self.assertEqual(cel.veredito, 'nunca_bateu')
+```
+
+Fonte: [teste:147](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/test_e3_pos_suite_sem_banco.py:147). O novo [executor de mutantes:18](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3_namespace_mutantes.py:18) remove cada dependência ou substitui o leitor por constantes, somente em memória. [nao verificado]
+
+Cada link abaixo contém o **comando exato**, RC e resultado:
+
+| Execução | RC | Resultado |
+|---|---:|---|
+| [Suíte solicitada](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:14) | 0 | **31 OK** | [nao verificado]
+| [X1 green](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:19) | 0 | 24 OK |
+| [X1 sem_horizonte_x1](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:25) | 1 | Assertion; ERROR=0 |
+| [X1 horizonte_na_10](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:32) | 1 | Assertion; ERROR=0 |
+| [X1 literal_incondicional](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:39) | 1 | Assertion; ERROR=0 |
+| [X1 sem_fonte_no_gancho](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:46) | 1 | Assertion; ERROR=0 |
+| [X1 so_acusador](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:53) | 1 | Assertion; ERROR=0 |
+| [X1 parcial_tira_marcador](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:60) | 1 | Assertion; ERROR=0 |
+| [RED sem_leitor](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:67) | 1 | Dois subcasos por assertion |
+| [sem_declaracao](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:74) | 1 | Dois subcasos por assertion |
+| [leitor_constante_true](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:81) | 1 | Dois subcasos por assertion |
+| [leitor_constante_false](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:88) | 1 | Dois subcasos por assertion |
+| [declaracao_na_10](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:95) | 1 | Dois subcasos por assertion |
+| [Mutantes S2/S3 existentes](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:102) | 1 cada | Assertion; ERROR=0 |
+| [Pós-suite e selos](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:114) | 0 | 7+1+15+35 OK | [nao verificado]
+| [Ruff](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:121) | 127 | Indisponível |
+| [Diff check](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/tests/e3fix11_execucao.txt:129) | 0 | Sem apontamentos |
+
+`status_aprovada_tira_marcador` exige ORM e não possui alvo sem banco. [x1_mutantes:122](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:122). Certificação Code/opus final: [nao verificado].
+
+## 11/11 09:15 · sessao 0ca26e8461ed · FIO-E0-V4-E4C · censo · origem=Code
+
+**CENSO-ANTES-DA-VAGA — FIO-E0-V4-E4C**
+
+**Campos com retirada lógica prevista:** R = `resposta_colab`, `respondida_em`; V = `validada_em`, `validada_por`; C = `materializada_em`, `materializada_por`, `via_resolucao`; F = `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`. A retirada depende do ramo: as exceções abaixo continuam lendo projeção. (`app/chamados/models.py:3844`; `app/chamados/models.py:3126`; `app/chamados/models.py:1880`; `app/docs/PROMPTS.md:2034`)
+
+**Exceções:** A03, reabertura do continente; A05, somente assinatura; A06, identidade/duplicata; A17, pendência técnica; A18, recusa técnica; A20, conferência de data. `pendencia_admin`, recusa técnica e `data_conferida_em/por` entram no inventário, mas permanecem fontes nesses ramos. `recusa_motivo` exige separação entre decisão humana, advertência e resultado técnico. (`app/docs/PROMPTS.md:2034`; `app/chamados/services/validacao.py:593`; `app/chamados/services/disputa_emissao.py:1497`; `app/chamados/services/materializacao.py:855`; `app/chamados/services/materializacao.py:1107`)
+
+**Perguntas de lei identificadas: D04 e D05, abaixo.** Não atribuí automaticamente o zero do censo de escritores ao censo de leitores: a lei exige a regra para a nova resposta, não equivalência presumida com o código anterior. (`app/docs/LEIS.md:136`)
+
+Entrega no corpo da resposta; nenhuma gravação de relatório, teste, importação da aplicação, banco ou log produtivo realizada. Evidência persistida dessa execução: **[nao verificado]**. Identidade Git do hash informado, pai da E3 e diff entre eles: **[nao verificado]** — `git log` nesta raiz retornou “not a git repository”. [nao verificado]
+
+O script ao fim foi executado por `python3 -B`, via stdin. O levantamento combina AST Python, busca sintática de templates e candidatos JS; a revisão abaixo elimina homônimos e entradas de formulário. Reflexão irrestrita, SQL montado dinamicamente, serialização implícita e consumidores externos: **[nao verificado]**.
+
+**Autoridades e códigos usados nas tabelas**
+
+| Código | Pergunta e destino existente | Registro |
+|---|---|---|
+| **T** | Ação exigível, dono e porta: `tarefa_do_dia` | `app/chamados/services/tarefa_do_dia.py:562`; `app/core/juizes.py:291`; `app/docs/JUIZES.md:78` |
+| **P** | Pergunta viva: `pergunta_viva` | `app/chamados/juizes.py:862`; `app/core/juizes.py:278` |
+| **FI** | Alguma pergunta viva na coleção: `fio_vivo` | `app/chamados/juizes.py:1488`; `app/core/juizes.py:287` |
+| **FE** | Disputa pode fechar: `DisputaSupervisao.pode_fechar` | `app/chamados/models.py:1848`; `app/core/juizes.py:279` |
+| **E** | Efeito confirmado: juiz `_pergunta_materializada_de_fato`, pela lâmpada vigente consumida por T | `app/chamados/juizes.py:662`; `app/chamados/services/tarefa_do_dia.py:119`; `app/docs/JUIZES.md:81` |
+| **TR** | Dia trancado: `dia_da_pergunta_trancado` / `dias_trancados` | `app/chamados/juizes.py:974`; `app/chamados/juizes.py:1004`; `app/core/juizes.py:292` |
+| **D01** | Texto, instante, assinatura e motivo da decisão: sequência DP; juiz específico de apresentação não registrado | `app/chamados/models.py:3840`; `app/core/juizes.py:272` |
+| **D02** | Estado histórico do continente: falta autoridade factual equivalente demonstrada; preservar A03 | `app/chamados/models.py:2126`; `app/docs/PROMPTS.md:2034` |
+| **D03** | História/procedência do processamento: DP e efeitos, sem confundir carimbo com efeito | `app/chamados/models.py:3840`; `app/chamados/services/tarefa_do_dia.py:141` |
+| **D04** | Indicadores de atividade: decisão sem juiz específico confirmado | `app/chamados/services/verbos.py:239`; `app/chamados/services/painel.py:268`; `app/core/juizes.py:272` |
+| **D05** | Rótulos de fase publicados pela API/tela: equivalência com T não estabelecida | `app/chamados/models.py:3034`; `app/api/views.py:2555` |
+| **D06** | Invalidação de cache/ETag: dependência técnica de decisões **e efeitos** | `app/chamados/services/painel.py:58`; `app/chamados/services/painel.py:67`; `app/chamados/veredito_lavrado.py:151` |
+
+Apontar para um juiz existente ainda não elimina a dependência: P recebe R/V/C pela projeção temporal; FE usa `respostas_sem_veredito`; E ainda consulta C/via; T consulta projeção para detectar passivo e conserva via de identidade. Esses corpos também precisam entrar na migração, respeitando as exceções. (`app/chamados/juizes.py:1369`; `app/chamados/juizes.py:1384`; `app/chamados/models.py:1853`; `app/chamados/juizes.py:679`; `app/chamados/services/tarefa_do_dia.py:398`; `app/chamados/services/tarefa_do_dia.py:230`)
+
+**Inventário — modelos e juízes**
+
+Nas tabelas, `def → leitura` separa a definição da ocorrência consumida. Os caminhos abreviados são: **M** = `app/chamados/models.py`; **J** = `app/chamados/juizes.py`; **S/** = `app/chamados/services/`. Cada função nomeada constitui uma unidade do censo.
+
+| Leitor | Campos / resposta atual | Destino |
+|---|---|---|
+| M:128 `ChamadoColaborador.transicionar` → M:190 | F; disputas relacionadas à transição | T/FE; continente D02 |
+| M:201 `_gravar_estado` → M:310 | V; perguntas atingidas pela reconciliação | T + D01 |
+| M:336 `_ancoradas` → M:344 | V; perguntas ancoradas pertinentes | P/T |
+| M:1468 `_universo_da_ressuscitacao` → M:1484 | C/R/via; universo que pode voltar | P/E; identidade A06 |
+| M:1512 `ressuscitar_perguntas` → M:1563, M:1564, M:1574 | R/V/F; conservação e seleção da volta | D01/D03/P; F=D02 |
+| M:1823 `DisputaSupervisao.aberta` → M:1824 | F; continente aberto | D02; dependência A03 |
+| M:1826 `respostas_sem_veredito` → M:1843 | R/V/C; impedimento de fechamento | FE, cujo corpo precisa migrar |
+| M:1848 `pode_fechar` → M:1853 | Leitura indireta de R/V/C | Permanece FE, sem segundo juiz |
+| M:1855 `fechar` → M:1879, M:1920 | F/R/C/via; idempotência e quitação | FE/E/D01; história D02/D03 |
+| M:1971 `remover_motivo` → M:2031, M:2055 | F/R/via; retratação | DP `RETRATACAO`; A06 na identidade |
+| M:2126 `reabrir_admin` → M:2138 | F; necessidade da reabertura | **A03 permanece** |
+| M:2163 `reabrir_sistema` → M:2167 | F; religar continente | T para exigibilidade; D02 para continente |
+| M:2182 `reabrir_por_colab` → M:2224 | F; gate de correção | T/D01; gesto do continente D02/A03 |
+| M:2250 `limpar_resolucao_residual` → M:2262 | F/resolução; limpeza residual | D02/D03; retirada coordenada com E4d |
+| M:2276 `DisputaSupervisao.__str__` → M:2277 | `aberta` indireta | D02 |
+| M:2629 `PerguntaDisputa.trava_na_ordem` → M:2673 | F em Q/`values_list`; universo das travas | D02; não substituir ordem de trava por T |
+| M:2697 `do_fato` → M:2724 | via; identidade | **A06 permanece** |
+| M:2746 `q_dos_fatos` → M:2755 | via em Q; identidade | **A06 permanece** |
+| M:2825 `_nascer` → M:3019 | R/V indiretos na conservação legada | D01/D03; cruza E4b |
+| M:3034 `estado` → M:3041 | R/V/C; fase exibida | **D05** |
+| M:3050 `fechar_por_admin` → M:3055 | C/via; idempotência | E/DP; identidade A06 |
+| M:3103 `carimbar` → M:3126 | C/R/V/autores; foto e assinaturas | E/D03; **A05 somente assinatura** |
+| M:3168 `carimbar_identidade` → M:3182 | C/autor; preservar carimbo | **A06 permanece** |
+| M:3193 `fora_do_fato` → M:3201 | via; terminalidade da identidade | **A06 permanece** |
+| M:3203 `descarimbar` → M:3206 | `fora_do_fato` indireto | **A06 no gate** |
+| M:3252 `descarimbar_em_lote` → M:3265 | via; excluir identidade terminal | **A06 no gate** |
+| M:3268 `encerrar_por_fato_no_espelho` → M:3273 | via/`fora_do_fato`; idempotência | E; identidade A06 |
+| M:3279 `encerrar_fantasma` → M:3284 | C/via; idempotência | E/D03 |
+| M:3289 `reabrir_fantasma` → M:3296 | C/via; reversibilidade | E/D03 |
+| M:3301 `reabrir_por_resposta` → M:3313 | C/via; reversibilidade | DP/E |
+| M:3317 `reabrir_por_competencia` → M:3320 | via; reversibilidade | TR/DP |
+| M:3326 `q_vivas` → M:3348, M:3359 | R/V/C/via em Q; pré-filtro | P, conservando superset; A06 |
+| M:3497 `respondida` → M:3498 | R; presença do carimbo | D01; ação por T |
+| M:3519 `resposta_display` → M:3521 | R; conteúdo discriminado | D01; preservar tipo/opções |
+| M:3914 `DecisaoPergunta.linhas_da_projecao_sem_linha` → M:3924 | R/V/autoria; detectar legado sem ato | **Conservação E4b**, não substituir por “nenhuma decisão” |
+
+As condições dos índices em `PerguntaDisputa.Meta` também dependem de via; são dependências de schema, não funções adicionais no total de leitores. Permanecem no ramo A06. (`app/chamados/models.py:3485`; `app/chamados/models.py:3491`; `app/docs/PROMPTS.md:2034`)
+
+| Leitor | Campos / pergunta respondida | Destino |
+|---|---|---|
+| J:282 `_retratada_com_trilha` → J:288 | C; ordem temporal da retratação | DP/D03; A06 |
+| J:341 `_slot_esperado` → J:348, J:360 | R; slot esperado | D01, mantendo interpretação do juiz |
+| J:662 `_pergunta_materializada_de_fato` → J:679, J:707 | C/via; efeito confirmado | Permanece E; retirar C derivado, preservar exceções |
+| J:821 `_chave_memo_pv` → J:852 | R/V/C/via; chave da memoização | D06; A06 na identidade |
+| J:1314 `_resposta_concorda_com_a_luz` → J:1340 | R; concordância com o fato | D01; mantém julgamento existente |
+| J:1362 `projecao_temporal_da_pergunta` → J:1369 | R/V/C/via; valores no horizonte | DP por `ato_em` + E; A06 |
+| J:1383 `_pergunta_viva_calc` → J:1384 | Consome a projeção temporal | P, migrando seu insumo |
+| J:1476 `pergunta_sem_lastro_ou_viva` → J:1480 | C; proteção de resposta regularizada | P/E |
+| J:1509 `respondida_sem_texto` → J:1512 | R; carimbo sem conteúdo | D01; conservação D03 |
+| J:1655 `perguntas_corrigiveis` → J:1657 | R; universo corrigível | T/D01 |
+| J:1662 `perguntas_respondidas_a_validar` → J:1664 | R/`q_vivas`; fila de validação | T/P/D01 |
+| J:1678 `declarou_hora` → J:1693 | R; declaração interpretável | D01 |
+| J:1830 `delta_da_resposta` → J:1840 | R; distância do marco | D01; preservar régua existente |
+| J:1936 `classificar_resposta_validacao` → J:1944 | R; classe da aprovação | D01; mantém juiz existente |
+| J:1957 `motivo_implausivel_validacao` → J:1966 | R; motivo de implausibilidade | D01; mantém juiz existente |
+| J:1980 `irmas_respondidas_sem_consumo` → J:2013 | R/V/C; declarações ainda não consumidas | DP/E |
+| J:2371 `disputa_viva_do_chamado` → J:2379 | F; relação chamado/continente | D02; ação por T/FI |
+
+**Inventário — serviços internos**
+
+| Arquivo e leitor | Leitura / o que responde | Destino |
+|---|---|---|
+| S/`tarefa_do_dia.py:164` `_tarefa_pura` → :230 | via; exclusão da identidade | **A06 permanece** |
+| S/`tarefa_do_dia.py:361` `CargaDaTarefa.__init__` → :398 | R/V indiretos; passivo sem decisão | D01/D03; **gate E4b** |
+| S/`tarefa_do_dia.py:449` `_carregar_vida` → :491 | P indireto; exposição administrativa | P/T, incluindo migração do insumo de P |
+| S/`pergunta_no_app.py:45` `perguntas_do_app` → :50 | `q_vivas`; coleção ampla do app | P |
+| S/`pergunta_no_app.py:61` `consulta_do_app` → :71 | R/F; pendentes versus histórico | T/D01; D02 no histórico do continente |
+| S/`cobranca.py:221` `_calados` → :229 | R/F/`q_vivas`; quem ainda não respondeu | T/P/D01 |
+| S/`janela_colab.py:49` `chamados_visiveis_colab` → :63 | `q_vivas`; visibilidade | P/T |
+| S/`declaracao_texto.py:216` `_resposta_validada` → :227 | V; preservar aprovação | D01 |
+| S/`declaracao_texto.py:306` `declarar_hora_colab` → :417 | R; preservar voz/instante | D01 |
+| S/`declaracao_texto.py:641` `aplicar_declaracao` → :687 | R; resposta já entregue | D01/T |
+| S/`validacao.py:127` `_carimbar_validacao` → :139 | R/V; conteúdo e instante do ato | D01; leitura dentro de escritor existente |
+| S/`validacao.py:144` `_foto_da_validacao` → :147 | V/autor/recusa/F; fotografia | D01/D03/D02; A18 técnico |
+| S/`validacao.py:163` `devolver_validacao_recusada` → :188 | R/V/C/recusa/F; devolução | DP `DEVOLUCAO`/E; A18 |
+| S/`validacao.py:234` `_e_aceite_de_folga` → :236 | R; aceite de folga | D01 |
+| S/`validacao.py:239` `_aceitar_a_folga` → :345 | V/autor por `refresh_from_db`; restauração | D01/D03 |
+| S/`validacao.py:373` `validar_pergunta` → :393, :461 | R/V/C; guardas e resultado | T/DP/E |
+| S/`validacao.py:533` `recusar_pergunta` → :573, :580 | R/V/recusa; recusabilidade e foto | DP `RECUSA`; não inferir ato de string técnica |
+| S/`validacao.py:625` `conferir_data_do_fato` → :662 | conferência; idempotência | **A20 permanece** |
+| S/`validacao.py:695` `validar_lote_classe_a` → :732 | V; evitar aprovação repetida | T/D01 |
+| S/`validacao.py:845` `classe_do_lote` → :851 | R; classe do lote | D01 |
+| S/`validacao.py:912` `fila_validar_classificada` → :924 | R; entrada na fila | T/D01 |
+| S/`materializacao.py:245` `_tipo_pelo_marco` → :279 | R; tipo do plantio | D01 |
+| S/`materializacao.py:332` `_ts_tipo_do_plantio` → :358 | R; instante e escape | D01; mantém ajuste temporal existente |
+| S/`materializacao.py:430` `estado_aplicacao_pergunta` → :437 | R/C/via; aplicação/idempotência | DP/E; A06/A18 por ramo |
+| S/`materializacao.py:467` `_declarar_ausencia_de_pergunta` → :473 | R; ausência declarada | DP + efeito Ausência |
+| S/`materializacao.py:501` `_materializar_ausencia_de_resposta` → :538, :570, :590 | R/C/F; absorção | DP `ABSORCAO`/E/FE; D02 |
+| S/`materializacao.py:608` `perguntas_absorvidas_por` → :630 | R/C/via; vínculo com ausência | DP `ABSORCAO` + Ausência |
+| S/`materializacao.py:644` `devolver_absorvidas_da_ausencia_rejeitada` → :673 | R/V/C/autores; fotografia da volta | DP/D03 + estado da Ausência |
+| S/`materializacao.py:789` `_materializar_resposta_hora` → :834 | R; declaração aplicada | D01; **A17 no resultado técnico** | [nao verificado]
+| S/`materializacao.py:983` `_materializar_resposta_data_hora` → :1000 | R; interpretação textual | D01 |
+| S/`materializacao.py:1088` `_carimbar_recusa` → :1094 | C/via/recusa; idempotência técnica | **A18/A06 permanecem** |
+| S/`materializacao.py:1163` `_materializar_uma` → :1198 | conferência; autorização diante de dois dias | **A20 permanece** |
+| S/`materializacao.py:1307` `_fechar_disputa_se_quitada` → :1321 | F/resolução; fechamento existente | FE; história D02 |
+| S/`materializacao.py:1343` `materializar_perguntas_validadas_da_disputa` → :1375 | R/V/C; fila de execução | T/DP/E |
+| S/`materializacao.py:1395` `materializar_pendentes_aprovadas` → :1424 | C; seleção pendente | T/E |
+| S/`disputa_emissao.py:34` `colaborador_em_disputa` → :41 | F; continente aberto | D02; exigibilidade por T |
+| S/`disputa_emissao.py:166` `_derivar_chamado_destino` → :228 | C; destino pertinente | P/E |
+| S/`disputa_emissao.py:300` `gerar_perguntas_disputa` → :328 | via; dedup | **A06 permanece** |
+| S/`disputa_emissao.py:474` `_abrir_ou_agregar_disputa` → :532 | F; continente reutilizável | D02/A03 |
+| S/`disputa_emissao.py:747` `motivo_fora_da_fabrica` → :762 | C; causa de retenção | P/E |
+| S/`disputa_emissao.py:945` `fecho_do_repasse` → :978 | F em Q; universo costurado | D02 |
+| S/`disputa_emissao.py:1027` `criar_disputa_a_partir_de_chamados_orfaos` → :1070, :1097 | C/F; reuso | E/P/FE; D02 |
+| S/`disputa_emissao.py:1302` `criar_disputa_ancora_de_chamado` → :1326 | C/F; âncora reutilizável | E/P; D02 |
+| S/`disputa_emissao.py:1425` `responder_pergunta_disputa_core` → :1470, :1522 | V/autor/F; invalidação anterior e contexto | DP/D03; D02 |
+| S/`disputa_emissao.py:1562` `reabrir_para_correcao` → :1619 | R/V/C/autores em `values_list`; foto anterior | DP/D03 |
+| S/`disputa_emissao.py:1638` `responder_automaticamente` → :1647 | R; preservar texto existente | D01 |
+| S/`disputa_emissao.py:1661` `carimbar_resposta_pela_trilha` → :1670 | R; texto sem instante | D01/D03, instante testemunhado |
+| S/`disputa_emissao.py:1690` `recobrar_questionario` → :1713 | R; resposta já entregue | T/D01 |
+| S/`disputa_emissao.py:1801` `_resolver_perguntas_por_chamado_resolvido` → :1825, :1856, :1927 | R/V/C/F/via; consequências do chamado | DP/P/E/FE; A06 e D02 por ramo |
+| S/`fio.py:120` `_disputa_do_chamado` → :131 | F; continente apresentado | Autoridade já citada em `app/docs/JUIZES.md:40`; D02 no insumo |
+| S/`fio.py:163` `montar_chamados_fio` → :187, :224, :340 | F/R/`aberta`/`q_vivas`; apresentação | P/T/D01; D02 e D05 |
+| S/`fio.py:485` `processar_post_fio` → :600, :633, :660 | F/R; ramo do POST | T/D01; D02 no gesto do continente |
+| S/`fio.py:1084` `reuso_sem_rechave` → :1100 | via; reuso | **A06 permanece** |
+| S/`fio.py:1152` `sem_dia_na_saida` → :1167 | via; invariante de identidade | **A06 permanece** |
+| S/`fio.py:1225` `canonica_do_grupo` → :1232 | R; escolha canônica | D01 + **A06** |
+| S/`fio.py:1236` `merito_perdedor` → :1243 | R/via; mérito da canônica | D01 + **A06** |
+| S/`fio.py:1345` `retratar_duplicata` → :1350 | via; duplicata já retratada | **A06 permanece** |
+| S/`fio.py:1422` `_no_fato` → :1433 | via; universo de identidade | **A06 permanece** |
+| S/`fio.py:1840` `fecho_cruza_dias` → :1853 | via; fecho da identidade | **A06 permanece** |
+| S/`fio.py:1878` `perguntas_sobre_batida_retratada` → :1889 | via; diagnóstico | **A06 permanece** |
+| S/`fio.py:1905` `universo_do_grupo` → :1911 | via; universo | **A06 permanece** |
+| S/`fio.py:1923` `grupos_de_colisao` → :1956 | via; colisões | **A06 permanece** |
+| S/`fabrica_da_celula.py:92` `motivos_a_perguntar` → :149 | via; dedup | **A06 permanece** |
+| S/`fabrica_da_celula.py:160` `perguntar` → :171 | C; pergunta reaproveitável | P/E |
+| S/`explicador.py:25` `_explicar_validada` → :32 | R; explicação | D01/E |
+| S/`explicador.py:68` `explicar_pergunta` → :72, :85, :90, :95 | fase/R/pendência/recusa/via | T/E/D05; **A17/A18/A06** |
+| S/`explicador.py:108` `por_que_nao_fecha` → :137 | `fio_vivo`; “pode fechar” | **FE**, não apenas FI |
+| S/`raiox.py:51` `creditos_perguntas` → :135 | C/R em SQL/tuplas; crédito do painel | P/E/T/D01 |
+| S/`raiox.py:153` `pergunta_sem_acao_possivel` → :175 | C; clique morto | E/T |
+| S/`relavra_via.py:106` `relavrar` → :118 | via; necessidade da relavra | E/L; A06 fora da derivação |
+| S/`relavra_via.py:142` `relavrar_dia` → :155 | via; seleção da relavra | E/L |
+| S/`relavra_via.py:171` `q_carimbo_desfazivel` → :181 | C/via/F; seleção reversível | P/E; A06 e D02 |
+| S/`relavra_via.py:187` `desfazer_carimbo_sem_lastro` → :244 | C/via/F; diagnóstico/foto | P/E/D03; A06 |
+| S/`passivo_validado.py:131` `_balde_da_recusa` → :140 | via; classificação do passivo | E/T; **A18/A06** |
+| S/`passivo_validado.py:474` `_plantar_o_dia` → :515 | via; aplicação do passivo | E/T; **A18/A06** |
+| S/`historico.py:69` `_eventos_dos_chamados` → :98, :105 | `getattr(p,campo)` de R/V/C; linha do tempo | **D03**, DP e efeitos, não só último ato |
+| S/`painel.py:50` `marcador_do_placar` → :67 | `Max(R/C/V)`; invalidação | **D06** |
+| S/`painel.py:198` `montar_contexto_painel` → :262 | autor de V; indicador | **D04** |
+| S/`painel.py:268` `_jan_val` → :270 | V por janela; atividade | **D04** |
+| S/`verbos.py:218` `placar_equipe` → :239 | V/autor; ações por pessoa | **D04** |
+| S/`verbos.py:253` `placar_aceite` → :311, :318 | R por `values`/dict; aceite após cobrança | **D04**, conservando definição escrita de aceite |
+| S/`fila_por_causa.py:214` `_gaveta_de` → :225 | F e respostas sem veredito; gaveta | T/FE; D02 |
+| S/`acoes_disputa.py:90` `acao_reabrir_disputa` → :95 | R; perguntas alcançadas | T/D01 |
+| S/`acoes_disputa.py:118` `acao_regularizar_disputa` → :130 | R; regularização | T/D01/FE |
+| S/`acoes_disputa.py:235` `acao_reabrir_disputa_admin` → :255 | F; escolher continente | **A03/D02** |
+| S/`acoes_disputa.py:302` `acao_corrigir_resposta` → :345 | V/F/R; correção | T/D01; D02 |
+| S/`acoes_chamado.py:327` `montar_contexto_detalhe` → :336 | F; detalhe | D02/T |
+| S/`becos.py:25` `classificar` → :27 | F/R; resposta presa em fechada | T/FE/D01; D02 |
+| S/`becos.py:36` `fechar_beco` → :56 | F e `pode_fechar` | FE; D02 |
+| S/`competencia_trancada.py:65` `medir` → :113, :151 | F e respostas sem veredito | TR/FE; D02 |
+| S/`competencia_trancada.py:163` `encerrar` → :196 | F; disputas alcançadas | TR/FE; D02 |
+| S/`competencia_trancada.py:235` `reabrir` → :251 | via; reversibilidade | TR/DP; A06 por ram
+
+[truncado em 20000 de 48601 caracteres]
 
 ## 11/11 09:08 · sessao f1ecbbc31623 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -739,29 +998,4 @@ N3 foi atualizado; comandos completos de ORM, mutantes ORM, suite e ruff estão 
 
 **Lei de desenho e censo ESTRUTURA:** não aplicados aos dois itens, pois a divergência estrutural permanece [nao verificado]; L-099 não autoriza transformar ausência de informação em causa estrutural ([LEIS.md:122](app/docs/LEIS.md:122)).
 
-## 11/11 08:33 · sessao a2f9ab32bc39 · - · - · origem=Ronald (tmux)
-
-Item 08 — **FALTA INFORMACAO**: há 1 colaborador candidato (`col62`), mas o dado não individualiza o dia. Há dois dias de trabalho futuros sem batida exibida: **12/11**, célula **140442**, e **14/11**, célula **140444** (`DADOS: CelulaDia`). Não escolher entre eles. A causa da ausência de entrada é [nao verificado].
-
-- **Célula:** ambas existem e têm `trabalha=True`; `DiaPago` mostra previsto de 720 minutos e zero trabalhado (`DADOS: CelulaDia 140442/140444; DiaPago 1978122/1978123/1978139/1978140`). O veredito integral dessas células é [nao verificado].
-- **Chamado/pergunta/fio vivo:** o recorte traz `37684` resolvido e `37685` ligado à célula **140438**, de **08/11** (`DADOS: ChamadoColaborador; CelulaDia`). Não traz pergunta para `col62`; inexistência global ou vitalidade nas datas 12/14 é [nao verificado]. A seleção de chamados é por `criado_em`, portanto a lista não prova ausência de chamado anterior à janela [nao verificado].
-- **Universo do contador:** `fio_morto_de_hoje_pra_frente` é chave produzida por `censo()`, não função autônoma. A função primeiro exige chamado em `VIVOS` com célula ([vigia_fio.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/chamados/services/vigia_fio.py:335)), módulo de furo (:349), célula acusando (:378), ausência de fio vivo (:417); somente depois classifica `data >= hoje` nessa chave (:420). **Ser futuro, ter escala e não ter entrada não basta.** A pertença das duas datas ao universo não está demonstrada [nao verificado].
-- O juiz do cartório recusa data futura ([cartorio.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/ponto/services/cartorio.py:1985)); os vereditos acusatórios são declarados em [models.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/escala/models.py:1767). Não há prova de contradição estrutural nesses dois dias [nao verificado].
-- **Lei/censo:** sem ESTRUTURA demonstrada, não atribuir lei de desenho violada nem apresentar escritores/leitores como causa. L-099 separa ESTRUTURA de CADASTRO/BATIDA ([LEIS.md](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/docs/LEIS.md:122)).
-- **Complemento:** a conferência do leitor e do universo cabe em **FIO-E0-V4-E3-LEITORES**, que segue aberta e inclui `vigia_fio`; sem novo ID ([BACKLOG.md](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/docs/BACKLOG.md:1865)).
-- **Texto ao admin:** “Abra o calendário de col62 e informe a data exata que aparece acusando sem entrada e sem chamado.” A porta de resolução fica na célula do calendário ([views.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/colaboradores/views.py:1947)).
-
-`app/docs/ESTADO.md` não foi localizado nesta cópia; seu texto atual é [nao verificado].
-
-## 11/11 08:33 · sessao 9d2d38bb528a · - · - · origem=Ronald (tmux)
-
-**09 — dono: FALTA INFORMACAO** para confirmar o `.ms`: faltam nome original e `content_type` recebidos, bytes do anexo e headers/nome efetivos do download. O único candidato informado é col872, `Ausencia #5422`, `data=06/11/2026`, `tipo=atestado`, `documento=… .heic`, `status=aguardando_decisao`; esses valores de produção só constam dos DADOS [nao verificado].
-
-- **Upload:** `app/api/views.py:1772` recebe `documento`; `:1777-1782` apenas registra seu `content_type` em log; `:1784-1786` chama a normalização. `app/ponto/services/ausencia.py:587-596` detecta pelo conteúdo e altera apenas `f.name`; não grava MIME. `Ausencia.documento` é `FileField` em `app/ponto/models.py:777-781`, sem campo MIME no modelo.
-- **Persistência:** `criar_ausencia` passa o documento ao modelo (`app/ponto/services/ausencia.py:350-351`, `:385`, `:417-418`); o anexo posterior é escrito por `anexar_documento` (`:846`, `:856-859`). Entradas normalizadas incluem API inicial (`app/api/views.py:1784-1786`), API de anexo (`:3114-3120`), web de anexo (`app/ponto/views.py:2141-2151`) e web de lançamento (`:2404-2405`, `:2492-2493`).
-- **Download pelo código:** `app/ponto/views.py:2115-2129` resolve a referência, usa o basename persistido, abre o arquivo e chama `tipo_real_documento`; se reconhecido, troca a extensão no nome da resposta e define o MIME. Devolve os bytes abertos em `FileResponse`, sem conversão. HEIC reconhecido → `*.heic` e `image/heic` (`app/ponto/services/ausencia.py:582-583`); PDF/JPG/PNG → respectivos pares (`:556-578`); desconhecido → `(None,None)` (`:584`) e basename preservado (`app/ponto/views.py:2124-2129`). Resposta real `.ms` [nao verificado].
-- **Lei e censo ESTRUTURA:** não aplicáveis como classificação comprovada. Se surgir divergência de leitores, referência canônica existente: **TESTEMUNHA LE, NAO RECALCULA**, `CLAUDE.md:20-22`; o leitor `Ausencia.tipo_real` também usa o detector (`app/ponto/models.py:844-854`).
-- **Complemento:** cabe registrar a conferência do contrato de entrada/download em **UI-ANEXO-AUSENCIA**, já registrada e contendo a parte de HEIC/original/conversão, sem novo ID (`app/docs/BACKLOG.md:1130`). A linha histórica documenta bloqueio de conversão; disponibilidade atual de decodificador [nao verificado].
-- **Texto ao admin:** “Em Ausências, abra o atestado de 06/11 de col872, clique **Abrir** e **Baixar** e informe o nome completo salvo pelo navegador.” Botões: `app/templates/ponto/partials/painel_ausencia.html:84-85`.
-
-_3745 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3747 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
