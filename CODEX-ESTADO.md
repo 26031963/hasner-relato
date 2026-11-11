@@ -1,7 +1,159 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 07:54** · publicado em **11/11/2026 07:57** (UTC-3)
+> Ultima resposta processada: **11/11/2026 08:02** · publicado em **11/11/2026 08:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 08:02 · sessao bc65f5408f95 · TRAVA-SELO · verificador · origem=Code
+
+**1. NÃO PROCEDE fechar a classe; PROCEDEM curas pontuais.** Exigir conteúdo elimina o falso módulo `testar_pwa`, mas a cobertura continua comparando apenas módulos e seus ancestrais. Selecionar todas as classes de um módulo não o cobre para essa comparação. (`bin/suite.sh:157`, `bin/suite.sh:163`; `app/ponto/management/commands/testar_pwa.py:31`)
+
+Contraexemplo estático nesta cópia: substituir `comunicados` pelas duas seleções abaixo, mantendo as demais LABELS. A guarda considera `comunicados.tests_casca_a13` descoberto e não coberto, retornando “recorte”. (`bin/regua.sh:23`; `bin/suite.sh:163`, `bin/suite.sh:164`)
+
+```text
+--only 'api chamados colaboradores comunicados.tests comunicados.tests_casca_a13.CascaComunicadosA13Test core escala ferias folha holerite inteligencia pautas ponto relatorios'
+```
+
+O segundo módulo contém uma única classe `TestCase`, com quatro testes; selecionar essa classe preserva estaticamente os casos do módulo. Igualdade efetiva dos IDs produzidos pelo Django da imagem: **[nao verificado]**. (`app/comunicados/tests_casca_a13.py:11`, `app/comunicados/tests_casca_a13.py:16`, `app/comunicados/tests_casca_a13.py:33`, `app/comunicados/tests_casca_a13.py:43`, `app/comunicados/tests_casca_a13.py:51`, `app/comunicados/tests_casca_a13.py:58`)
+
+O tratamento **local** do grep está correto:
+
+| Retorno | Tratamento |
+|---|---|
+| 0 | Processa os nomes encontrados. (`bin/suite.sh:159`, `bin/suite.sh:160`) |
+| 1, inclusive app sem módulos correspondentes | Ignora a lista vazia e continua nos demais apps. (`bin/suite.sh:159`, `bin/suite.sh:161`) |
+| ≥2, inclusive arquivo ilegível | Retorna inteira antes de consumir eventual lista parcial. (`bin/suite.sh:159`) |
+
+Entretanto, isso não garante consultar erros **em todos os apps**: o primeiro módulo não coberto encerra a função antes das buscas seguintes; diretório de app ausente é pulado. Isso limita a promessa universal de falha conservadora, embora não demonstre sozinho ampliação da seleção. (`bin/suite.sh:155`, `bin/suite.sh:156`, `bin/suite.sh:164`)
+
+Há possibilidade de recorte legítimo recusado pelo universo reduzido: cobrir todos os módulos contados e deixar de fora um módulo que apenas herda testes produz “inteira”. É consequência conservadora assumida pelo próprio comentário; ocorrência concreta desse formato nesta cópia: **[nao verificado]**. (`bin/suite.sh:148`, `bin/suite.sh:167`)
+
+**2. NÃO PROCEDE a equivalência entre juiz e porta.** `echo` e motivo duplo na mesma linha foram curados, mas a duplicidade em continuação permanece: a extração conserva as duas linhas, enquanto o primeiro grep entrega ao segundo apenas a linha que contém o comando. O parser recebe os dois motivos e conserva o último. (`bin/tests/test_suite_sh.sh:26`, `bin/tests/test_suite_sh.sh:27`, `bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:60`)
+
+Assim, o juiz aprova este bloco, cuja porta recusa pela forma do último motivo. (`bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:150`, `bin/suite.sh:169`)
+
+```bash
+bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus X" \ [nao verificado]
+  --motivo "quero ver"
+```
+
+Também aprova `"pre-opus X"'!'`: falta fronteira após as aspas no regex; o shell entrega `pre-opus X!`, recusado pela guarda. No sentido contrário, motivo com aspas simples ou colocado depois de `--parallel 2` é aceito pelo parser e rejeitado pelo juiz. (`bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:56`, `bin/suite.sh:60`, `bin/suite.sh:150`)
+
+**Bloco real:** a linha atual passa pelo juiz graças à exceção explícita para `<OBRA>`. Literalmente, esse marcador não passa pela guarda; substituído por `TRAVA-SELO`, satisfaz sua forma. Isso é uma convenção documental deliberada, distinta dos escapes acima. (`CLAUDE.md:96`; `bin/tests/test_suite_sh.sh:35`, `bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:150`)
+
+**3. PROCEDEM os discriminantes dos quatro mutantes, por leitura estática; execução integral dos “26 mortos”: [nao verificado].**
+
+| Mutante | Razão correta da morte |
+|---|---|
+| `prefixo_sem_ponto` | Passa a considerar `test_x_extra` coberto por `test_x`, recusando o recorte positivo que omite o irmão. (`bin/tests/test_suite_motivo.sh:113`, `bin/tests/test_suite_motivo.sh:194`) |
+| `busca_falha_vira_recorte` | Ignora rc 2 e encontra módulos não cobertos; libera a chamada que o caso ilegível exige recusar. (`bin/tests/test_suite_motivo.sh:118`, `bin/tests/test_suite_motivo.sh:120`, `bin/tests/test_suite_motivo.sh:196`; `bin/suite.sh:164`) |
+| `nome_sem_conteudo` | Inclui `testar_algo.py`, que só define `handle`, e libera sem motivo a enumeração completa dos módulos de teste. (`bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:197`) |
+| `seco_argv_sem_extra` | Retira `--failfast` da linha argv, quebrando a comparação exata. (`bin/tests/test_suite_motivo.sh:133`, `bin/tests/test_suite_motivo.sh:137`, `bin/tests/test_suite_motivo.sh:195`) |
+
+**NÃO SEI se a execução relatada ocorreu como usuário sem privilégios. [nao verificado]** A régua herda o usuário ao chamar `bash`; o caso chmod verifica legibilidade e avisa quando não pode exercitar a asserção. Nesse caminho, o mutante de busca permanece vivo e o harness acusa `MORDE`, em vez de aprovar silenciosamente os 26. (`bin/regua.sh:140`; `bin/tests/test_suite_motivo.sh:119`, `bin/tests/test_suite_motivo.sh:179`, `bin/tests/test_suite_motivo.sh:196`)
+
+Sobrevivente plausível: trocar `[ $rc -le 1 ] || return 0` por `[ $rc -eq 0 ] || return 0`. A fixture fornece testes nos dois apps e não exercita rc 1; essa mutação preservaria os casos existentes, mas recusaria prematuramente um recorte diante de app sem módulos. Sobrevivência deduzida estaticamente; execução: **[nao verificado]**. (`bin/suite.sh:159`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:26`)
+
+**4. PROCEDE a compatibilidade dos leitores examinados, com uma regressão de transporte em `lst`.**
+
+| Campo | QUEM ESCREVE → QUEM LÊ |
+|---|---|
+| `lst` | `grep -l` separado por LF → `read -r` separado por LF; não sobrou leitor esperando NUL. (`bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:165`) |
+| `_porq` / `VOLTA_PORQUE` | Wrapper fornece caminho; suite grava stderr do helper; suite lê diagnósticos e wrapper conta ` <- `. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`; `bin/suite.sh:87`, `bin/suite.sh:88`, `bin/suite.sh:89`; `bin/vizinhos_da_volta.py:130`) |
+| Limpeza `_porq` | Temporário removido em sucesso e falha; caminho fornecido preservado. (`bin/suite.sh:88`, `bin/suite.sh:90`) |
+| SECO argv | Escritor usa as expansões do executor; novo leitor exige a linha exata. (`bin/suite.sh:184`, `bin/suite.sh:228`, `bin/suite.sh:229`; `bin/tests/test_suite_motivo.sh:137`) |
+
+A regressão: LF no caminho externo de `--dir` é aceito, mas divide cada nome em linhas e impede retirar corretamente o prefixo da árvore. Pela transformação implementada, até todas as LABELS podem parecer recorte. Existência/execução de uma cópia com esse caminho: **[nao verificado]**. (`bin/suite.sh:54`, `bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:162`, `bin/suite.sh:164`)
+
+**5. Custo: PROCEDE o descarte como impedimento; enumeração classe/método: NÃO PROCEDE.**
+
+A busca tem atalho para seleção vazia, mas continua antecedendo a decisão sobre motivo e SECO. Os 0,62 s são a medição fornecida na triagem, sem repetição independente **[nao verificado]**; o código não sustenta transformá-los em limite geral. Isso, sozinho, não demonstra defeito de segurança da guarda. (`bin/suite.sh:154`, `bin/suite.sh:169`, `bin/suite.sh:179`)
+
+Reduzir o universo por conteúdo não resolve enumeração por classe/método: uma seleção descendente do módulo continua sendo julgada “não coberta”, que é justamente o retorno permissivo. O exemplo de `CascaComunicadosA13Test` materializa essa direção da comparação. (`bin/suite.sh:163`, `bin/suite.sh:164`; `app/comunicados/tests_casca_a13.py:16`)
+
+**Fecho: NÃO LIBERA**, pela comparação de cobertura ainda aberta e pelas divergências demonstráveis entre juiz documental e parser, independentemente da pergunta de desenho separada. (`bin/suite.sh:163`, `bin/suite.sh:164`; `bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:60`)
+
+## 11/11 08:01 · sessao 41e0f2988e8c · - · - · origem=Ronald (tmux)
+
+**NÃO PROCEDE fechar a classe nem descartar enumeração por classe.** Contraexemplo estático compacto:
+
+```text
+--only 'api chamados colaboradores comunicados.tests comunicados.tests_casca_a13.CascaComunicadosA13Test core escala ferias folha holerite inteligencia pautas ponto relatorios'
+```
+
+A seleção preserva as LABELS e substitui o app `comunicados` pelos seus dois módulos, representando o segundo pela sua única classe de teste; a guarda exige módulo igual à seleção ou descendente dela, portanto não reconhece `comunicados.tests_casca_a13` como coberto. Emulação em memória da busca e comparação confirmou esse primeiro módulo descoberto não coberto. (`bin/regua.sh:23`; `bin/suite.sh:157`; `bin/suite.sh:163`; `bin/suite.sh:164`; `app/comunicados/tests.py:10`; `app/comunicados/tests_casca_a13.py:16`)
+
+O segundo módulo contém uma única `TestCase`, com quatro métodos de teste; selecioná-la preserva estaticamente seus casos. Igualdade efetiva no Django instalado: **[nao verificado]**. (`app/comunicados/tests_casca_a13.py:11`; `app/comunicados/tests_casca_a13.py:16`; `app/comunicados/tests_casca_a13.py:33`; `app/comunicados/tests_casca_a13.py:43`; `app/comunicados/tests_casca_a13.py:51`; `app/comunicados/tests_casca_a13.py:58`)
+
+**PROCEDE a leitura local do rc:** 0 processa a lista; 1 permite lista vazia, cujas linhas vazias são ignoradas; ≥2 retorna inteira. Porém, “qualquer falha da busca resulta inteira” não vale em todo caminho: um módulo não coberto provoca retorno antecipado antes das buscas nos apps seguintes; app ausente também é pulado. Isso não demonstra ampliação da seleção que já omitia um módulo válido, mas limita a promessa universal de tratamento das falhas. (`bin/suite.sh:155`; `bin/suite.sh:156`; `bin/suite.sh:159`; `bin/suite.sh:161`; `bin/suite.sh:164`)
+
+Não encontrei contraexemplo concreto adicional de arquivo atual contendo apenas falso `def test`, módulo só herdando testes, symlink ou pasta descoberta sem `__init__.py`; execução integral da descoberta Django: **[nao verificado]**. [nao verificado]
+
+## 11/11 08:00 · sessao 9aba64bbf79e · - · - · origem=Ronald (tmux)
+
+**3. PROCEDEM os discriminantes dos quatro mutantes, por análise estática; execução integral dos “26 mortos” [nao verificado].**
+
+- `prefixo_sem_ponto`: a fixture contém `test_x` e `test_x_extra`; a seleção que omite o segundo deve chegar à trava. O mutante o considera coberto pelo primeiro e recusa esse recorte. (`bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:113`, `bin/tests/test_suite_motivo.sh:194`)
+- `nome_sem_conteudo`: incluir `testar_algo.py`, que só define `handle`, faz a enumeração completa dos quatro módulos parecer parcial e ser liberada sem motivo. (`bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:197`)
+- `seco_argv_sem_extra`: retirar EXTRA da linha SECO remove `--failfast`, contrariando a comparação exata. (`bin/tests/test_suite_motivo.sh:133`, `bin/tests/test_suite_motivo.sh:137`, `bin/tests/test_suite_motivo.sh:195`)
+- `busca_falha_vira_recorte`: com `test_w.py` ilegível, o vivo retorna inteira pelo rc 2; o mutante continua e encontra módulos não cobertos por `appA.tests.test_x`, retornando recorte. (`bin/tests/test_suite_motivo.sh:118`, `bin/tests/test_suite_motivo.sh:120`, `bin/tests/test_suite_motivo.sh:196`; `bin/suite.sh:159`, `bin/suite.sh:164`)
+
+**chmod 000 é condicionalmente honesto.** O teste pergunta `-r` e avisa quando o arquivo continua legível; nessa situação não executa a asserção. A régua chama o selo por `bash` sem trocar o usuário. A identidade da execução relatada em produção é **[nao verificado]**. (`bin/tests/test_suite_motivo.sh:119`; `bin/regua.sh:138`, `bin/regua.sh:140`)
+
+Se rodar com privilégios que permitam leitura, o mutante de falha da busca permanece vivo e o harness acusa `MORDE`; não há aprovação silenciosa dos 26 nesse caminho. (`bin/tests/test_suite_motivo.sh:119`, `bin/tests/test_suite_motivo.sh:179`, `bin/tests/test_suite_motivo.sh:196`, `bin/tests/test_suite_motivo.sh:204`)
+
+**Sobrevivente plausível:** trocar `[ $rc -le 1 ] || return 0` por `[ $rc -eq 0 ] || return 0`. A fixture sempre fornece módulos com teste nos dois apps, portanto não exercita rc 1; a mutação preserva rc 0/2 e passa pelos mesmos casos, mas transforma app sem módulos em recusa imediata mesmo diante de recorte legítimo em outro app. Isso é dedução estática, não execução do mutante. (`bin/suite.sh:159`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:26`, `bin/tests/test_suite_motivo.sh:118`)
+
+**4. PROCEDE a migração dos leitores examinados, com um problema novo no transporte de `lst`.**
+
+| Campo | Escritor → leitor |
+|---|---|
+| `lst` | `grep -l`, separado por LF → `while read -r`, também por LF; não ficou `read -d ''` antigo. (`bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:165`) |
+| `_porq` / `VOLTA_PORQUE` | Wrapper fornece caminho; suite grava stderr do helper; helper mantém `<label> <- <motivos>`, além de diagnósticos; suite lê `cat`/`AST-FALHOU`, wrapper conta ` <- `. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`; `bin/suite.sh:86`, `bin/suite.sh:87`, `bin/suite.sh:88`, `bin/suite.sh:89`; `bin/vizinhos_da_volta.py:120`, `bin/vizinhos_da_volta.py:130`) |
+| Limpeza `_porq` | Temporário removido em sucesso e falha; caminho fornecido preservado em ambos. (`bin/suite.sh:88`, `bin/suite.sh:90`) |
+| SECO argv | `%q` com as mesmas expansões do executor → comparação exata nova no selo. (`bin/suite.sh:184`, `bin/suite.sh:228`, `bin/suite.sh:229`; `bin/tests/test_suite_motivo.sh:137`) |
+| `trava.chamada` | `%q` por argumento → `_args` e greps; labels aceitas são ASCII pontuado, portanto extração das labels continua compatível. (`bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:33`, `bin/tests/test_suite_motivo.sh:104`, `bin/tests/test_suite_motivo.sh:108`; `bin/suite.sh:104`) |
+
+**Risco de `lst`:** LF no caminho externo de `--dir` é aceito pelo parser, mas divide cada nome emitido pelo grep em duas linhas; o leitor não consegue retirar o prefixo completo e encontra módulo “não coberto”. Assim até todas as LABELS podem ser julgadas recorte. O bind usa o caminho canonicalizado e citado. Diretório concreto com LF não foi criado: execução desse cenário **[nao verificado]**. (`bin/suite.sh:54`, `bin/suite.sh:157`, `bin/suite.sh:160`, `bin/suite.sh:162`, `bin/suite.sh:164`, `bin/suite.sh:200`, `bin/suite.sh:226`)
+
+## 11/11 07:59 · sessao 4d1543765765 · - · - · origem=Ronald (tmux)
+
+**2. NÃO PROCEDE o fechamento da classe documental.** Os casos antigos `echo` e dois motivos na mesma linha são barrados, mas o juiz continua divergindo da porta. (`bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`)
+
+Contraexemplos confirmados executando somente as funções/parser em memória, sem escrever arquivos:
+
+```bash
+bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus X"'!' [nao verificado]
+```
+
+O juiz aprova: seu regex termina nas aspas, sem exigir fronteira do argumento. O shell concatena o sufixo, entregando `pre-opus X!`; a porta recusa com rc 2. (`bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:60`, `bin/suite.sh:150`, `bin/suite.sh:169`, `bin/suite.sh:176`)
+
+```bash
+bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus X" \ [nao verificado]
+  --motivo "quero ver"
+```
+
+O juiz também aprova: a segunda linha não chega ao filtro de duplicidade, pois não casa com o primeiro grep. A extração inclui ambas por causa da continuação, e o parser conserva o último motivo, recusado pela guarda. (`bin/tests/test_suite_sh.sh:26`, `bin/tests/test_suite_sh.sh:27`, `bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:60`, `bin/suite.sh:150`, `bin/suite.sh:169`)
+
+Há falsos negativos: aspas simples no motivo; motivo depois de `--parallel 2`; ou um comentário final contendo outro `--motivo`. Os dois primeiros não casam com a forma rígida; o terceiro é contado como duplicidade textual. O parser aceita os respectivos argumentos válidos. (`bin/tests/test_suite_sh.sh:39`, `bin/tests/test_suite_sh.sh:40`; `bin/suite.sh:56`, `bin/suite.sh:60`, `bin/suite.sh:150`)
+
+**Bloco real:** a linha atual é aprovada graças à exceção explícita para `<OBRA>`. Copiada literalmente, porém, a guarda recusa esse marcador com rc 2; substituído por `TRAVA-SELO`, o motivo satisfaz a guarda. Essa exceção já é assumida no comentário do juiz, portanto convém distinguir o exemplo documental parametrizado da alegação de equivalência literal. (`CLAUDE.md:96`; `bin/tests/test_suite_sh.sh:35`, `bin/tests/test_suite_sh.sh:39`; `bin/suite.sh:150`, `bin/suite.sh:169`, `bin/suite.sh:176`)
+
+## 11/11 07:59 · sessao 4b295e1a5bf7 · FIO-E0-V4-E3 · construtor · origem=Code
+
+Diff aplicado nos três arquivos autorizados: [nao verificado]
+
+- C2b exige `concorde`, mantendo igualdade antes/depois e exclusão dos acusadores. [teste:135](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:135) [nao verificado]
+- C2c cobre `aguardando_decisao`, marcador e rejulgamento sem força após batida distante. [teste:165](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:165) [nao verificado]
+- Executor recebeu BASE `52a0022…`, novo mutante e contagem ORM ajustada para 13. [executor:21](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:21)
+- Relato corrigido para `sem_trabalho`, exceto cobertura integral. [relato:22](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:22)
+
+Resultados sem banco, com comandos individuais registrados no [relato:161](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:161):
+
+- Memória: **RC=0**, 19 testes. [nao verificado]
+- Executor green: **RC=0**, 19 testes. [nao verificado]
+- Quatro mutantes de memória: **RC=1 cada**, um `AssertionError`, zero `ERROR`.
+
+Por leitura, o novo mutante encontra a assertion da impressão no C2c; sintaxe e alvo foram conferidos. Morte efetiva ORM e ruff: **[nao verificado]**. [análise:156](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:156)
 
 ## 11/11 07:54 · sessao 55a5a29c6fd1 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -686,221 +838,4 @@ Mapa do formato novo:
 - `previstos`: alimentado por `_enviar_push_disputa_colab` sob contexto (`disputa_emissao.py:1760`, `:1763`); backfill corta tentativa desfeita (`backfill:305`, `:311`), filtra por colaborador (`:317`) e publica via relato (`foto_e4b.py:72`).
 - Datas mantêm autoridades: batida pelo dia do turno (`foto_e4b.py:154`), ausência por `dias_da_ausencia` (`:158`), competência pelo fim da janela (`:108`, `:109`), instante de reversão pelo `agora` da borda (`backfill:215`, `:271`). O campo com dois sentidos encontrado é `previsto_em` do objeto online tratado como mudança persistida, achado 1.
 
-## 11/11 07:33 · sessao 64dd4b872ec3 · - · - · origem=Ronald (tmux)
-
-Mapa do memo/thread-local e conclusões:
-
-- `_tl.colaborador` tem escritor em `app/ponto/services/cartorio.py:949`, restauração em `:1097` e leitor único produtivo `colaborador_deste_julgamento` em `:96-97`; S143 consome esse leitor em `app/chamados/services/disputa_emissao.py:1917`. O significado é instância do colaborador do ato; a igualdade de PK impede usar outro colaborador (`cartorio.py:97`).
-- `_tl.ativo` também é escrito por `calado` (`cartorio.py:105-110`). Portanto “em julgamento” abrange supressão de signals; não significa necessariamente execução de `julgar_colab` (`cartorio.py:101-104`). Em execução normal, `julgar_colab` restaura o colaborador anterior, geralmente `None` (`cartorio.py:946-949`, `:1097`).
-- `_memo_da_tranca` escolhe, nesta ordem: consulta ativa, lote quando permitido, request ou instância (`app/chamados/juizes.py:1060-1070`). Assim `lote=False` não ignora consulta ativa, e “memo do colaborador” pode efetivamente ser memo do request/consulta (`:1060-1069`).
-- Empresa é escrita no memo por `dias_trancados` (`juizes.py:1015-1023`); tranca por empresa/competência é escrita e lida em `:1025-1032`; usuário sistema e toque positivo são escritos em `:1181-1190`, lidos em `:1173-1187`. Toque usa PK do colaborador/data/instante na chave; não achei colisão entre colaboradores (`:1174`).
-- O `partial` recebe referência ao memo (`disputa_emissao.py:1919-1921`); a cópia efetiva acontece ao entrar no contexto (`juizes.py:1101-1104`). É cópia rasa: valores Empresa/PeriodoFechado continuam sendo referências aos objetos (`juizes.py:1018-1029`, `:1102`).
-- `tranca_da_consulta` calcula pelo juiz existente `dias_trancados`, guarda resultado por identidade da pergunta e restaura o contexto com token no `finally` (`juizes.py:1106-1110`, `:948-954`). Não achei segundo juiz: C6/C20 estão registrados em `app/core/juizes.py:278`, `:292`; a função apenas alimenta C20 (`juizes.py:1107`). `colaborador_deste_julgamento` fornece metadado, não julgamento de domínio (`cartorio.py:90-97`).
-- Fora de julgamento ou para outra PK, S143 recebe `None` e abre consulta fria; não lê colaborador errado por esse caminho (`cartorio.py:97`, `disputa_emissao.py:1917-1921`, `juizes.py:1097`). S143 também roda por receiver e por chamadores avulsos (`app/chamados/signals.py:111-115`, `disputa_emissao.py:1863-1879`).
-- Não achei escritor de tranca/toque dentro da nova cura S143: ela chama `Chamado.reabrir`, que altera estado e ressuscita perguntas (`disputa_emissao.py:1849`, `app/chamados/models.py:1442`, `:1451`). Mudança concorrente da tranca continua possível pelo código: os escritores salvam `PeriodoFechado` antes de eventual trabalho de fila, sem trava C nessa escrita (`app/ponto/services/fechamento.py:1408-1428`, `:1437-1448`).
-- Risco verificável de foto velha: uma entrada `('tranca', empresa, mês, ano): None` copiada evita consultar novamente `periodo_trancado`, mesmo se este já mudou (`juizes.py:1025-1030`, `:1102`). Probe somente em memória confirmou snapshot `False/0 consultas` contra consulta fresca `True/1 consulta`; ocorrência em produção [nao verificado]. Não achei invalidação produtiva de `_tranca_memo`; seu armazenamento é `juizes.py:1070`.
-- Aninhamento de `julgar_colab`: restaura colaborador, mas força `_tl.ativo=False`; o julgamento exterior deixa de fornecer colaborador após o interior (`cartorio.py:946-949`, `:1097-1098`, `:97`). Esse defeito do ativo já aparece no trecho anterior do diff; caminho produtivo aninhado não achei. O teste novo exercita exceção, não julgamento aninhado (`app/chamados/tests/test_e4b_c4_tranca_memoria.py:119-144`).
-- Semântica suspeita fora do memo: conversa escreve dia civil (`models.py:2794-2802`), e o juiz de dia do turno retorna `None` para ela (`juizes.py:332-336`); a nova foto usa `p.data_evento` indistintamente (`app/chamados/services/foto_e4b.py:128`). `_ancoradas` não exclui conversa (`models.py:344-346`), e a cerca da cura também usa data crua (`disputa_emissao.py:1835-1836`). Há atribuição de competência de fato a campo que também representa dia civil; impacto produtivo específico [nao verificado].
-- Executei os cinco testes de memória: OK; os seis mutantes catalogados morreram por AssertionError, sem errors. Fontes dos alvos e enxertos: `test_e4b_c4_tranca_memoria.py:59-144`, `:147-166`. Mutação adicional `memo.update(memo_inicial) → pass` também morreu no assert `:81`; portanto “memo_inicial ignorado”, “memo não copiado” e “colaborador não restaurado” têm mordida de memória (`:81`, `:91-101`, `:143`, `:154-159`). Integração ORM dessas propriedades [nao verificado]. [nao verificado]
-
-## 11/11 07:32 · sessao a5f07e75a644 · - · - · origem=Ronald (tmux)
-
-- **Não dá para afirmar “cada RED morde a base”.** `--red-base` carrega somente `disputa_emissao.py` de b20 e executa somente D3/evento; RED da tranca usa outra origem (`ca42...`); a sonda de queries usa MAIN `fb926...`, conservando os demais arquivos HEAD. (`app/chamados/tests/e4b_c4_verificar.py:141`, `app/chamados/tests/test_e4b_c4_tranca_memoria.py:22`, `app/chamados/tests/test_e4b_c4_tranca_memoria.py:175`, `app/chamados/tests/e4b_c4_base.py:9`, `app/chamados/tests/e4b_c4_medir_queries.py:3`).
-
-- **Os três mutantes óbvios citados são pegos.** Executei os seis mutantes de tranca e um extra `memo.update(memo_inicial) -> pass`: todos morreram com uma assertion, zero errors. `sem_copia` acusa aquecimento da fonte; `sem_restaurar_colab` acusa falta de restauração; ignorar `memo_inicial` acusa leitura avulsa extra. As assertions estão em `app/chamados/tests/test_e4b_c4_tranca_memoria.py:59`, `:83`, `:120`; catálogo em `:148`. Resultado da execução desta sessão, sem artefato persistido: [nao verificado].
-
-- **Lacuna de aninhamento:** o teste de `julgar_colab` começa com `_tl.ativo=False`; verifica colaborador externo restaurado e leitura fora do ato, mas não entra em julgamento externo ativo nem prova que o retorno de julgamento interno preserva esse estado ativo. (`app/chamados/tests/test_e4b_c4_tranca_memoria.py:32`, `:120`, `:145`). Também não achei teste de alteração da fonte do memo no meio do ato; [nao verificado].
-
-- **Teto global mede caminho real:** registra batida, exige 1/3 chamados fechados e captura SQL do registro real; não é proxy. O teste da tranca compara o mesmo caminho real HEAD × avulso, com rollback, métrica de `periodo_trancado`, SQL total e `on_commit`. (`app/ponto/tests/test_selo_chokepoint_escrita.py:406`, `:428`, `:435`, `app/chamados/tests/test_e4b_c4_orm.py:61`, `:105`).
-
-- **RED do mapa é isolamento de componente:** explicitamente substitui `tranca_da_consulta` por `nullcontext`; prova economia do mapa nesse cenário modificado, não economia adicional do mapa com a tranca HEAD ativa. (`app/chamados/tests/test_e4b_c4_orm.py:259`, `:265`, `:297`, `:307`).
-
-- **O anexo informado não prova morte de `tranca_avulsa`.** O executor atual a exige depois dos cinco mutantes ORM e do mapa; a ausência desse resultado não pode ser preenchida por `rc=0` de protocolo simulado. (`app/chamados/tests/e4b_c4_verificar.py:106`, `app/chamados/tests/test_e4b_c4_orm_protocolo.py:73`; anexo `c4v6_orm_resumo.txt`: [nao verificado]).
-
-- **Foto/cerca ORM é adversarial declarado:** o hook chama a porta real de ressuscitação depois da fábrica; não certifica cascata natural completa. O teste exige que o hook realmente executou e que P90/D90 ressuscitaram antes do rollback. (`app/chamados/tests/test_e4b_c4_orm.py:3`, `:226`, `:237`).
-
-- **Relógio:** não achei teste novo solto no escopo verificado. Classes ORM congeladas e B2d agora congelado inteiro; selo estático distingue relógio sem argumento e conversão `localtime(x)`. (`app/chamados/tests/test_e4b_c4_orm.py:24`, `:125`, `app/chamados/tests/test_b2d_resposta_visivel.py:25`, `app/core/tests/test_selo_teste_sem_relogio.py:32`, `:76`).
-
-- Executei **71 testes de memória OK** e **40 selos OK**, com `PYTHONDONTWRITEBYTECODE=1`; nenhum ORM/banco foi executado. Resultado sem arquivo de saída persistido: [nao verificado]. O executor ORM é subconjunto explícito, portanto nem ele nem os 130 informados equivalem à suíte inteira. (`app/chamados/tests/e4b_c4_verificar.py:74`).
-
-- Recibos não são prova atual: o primeiro declara ausência de certificação ORM; o v2 ainda fala de números/tetos e fixtures de voltas anteriores. (`app/docs/FIO-E0-V4-E4B-c4.txt:3`, `app/docs/FIO-E0-V4-E4B-c4-v2.txt:90`, `:183`).
-
-## 11/11 07:27 · sessao 3b06430316b1 · FIO-E0-V4-E3 · construtor · origem=Code
-
-Diff entregue:
-
-- [Teste ORM C2b](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:115): exige parcial real na grade, precedência, marcador e rejulgamento sem forçar após batida distante. [nao verificado]
-- [Caso sem banco](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:309): assertion da impressão mata o novo mutante.
-- [Executor](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:36): mutante registrado; contagens green ajustadas para 19 em memória e 12 ORM.
-
-Comandos executados e RC ([critério do executor](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:62)):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo green
-# rc=0; 19 testes, FAIL=0, ERROR=0 [nao verificado]
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante parcial_tira_marcador
-# rc=1; FAIL=1, ERROR=0; assertion da impressão
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante literal_incondicional
-# rc=1; FAIL=1, ERROR=0
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_fonte_no_gancho
-# rc=1; FAIL=1, ERROR=0
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante so_acusador
-# rc=1; FAIL=1, ERROR=0
-```
-
-Ruff nos três arquivos: rc=0, `All checks passed!`:
-
-```bash
-/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache ponto/tests/test_x1_folga_sem_adesao.py ponto/tests/test_e3_nb_impressao_memoria.py ponto/tests/x1_mutantes.py
-```
-
-[Catraca das linhas registradas](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:539): rc=0 pelo executor em memória documentado no arquivo; registro mantido.
-
-ORM green e morte do mutante pelo teste ORM: **[nao verificado]**, reservados à sessão com banco isolado: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --modo green
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --modo mutante --mutante parcial_tira_marcador
-```
-
-## 11/11 07:25 · sessao f637d95c917c · TRAVA-SELO · verificador · origem=Code
-
-**O fechamento integral NÃO PROCEDE.** Os escapes anteriores por caminhos/globs e por `--parallel '1 .'` foram tratados, mas permanecem lacunas nos selos, na documentação e na cobertura dos chamadores. A própria guarda declara não reconhecer uma enumeração de módulos equivalente à suíte inteira. (`bin/suite.sh:52`, `bin/suite.sh:67`, `bin/suite.sh:95`, `bin/suite.sh:131`; `bin/tests/test_suite_motivo.sh:66`; `CLAUDE.md:100`; `bin/regua.sh:165`)
-
-1. **NÃO PROCEDE como fechamento de todas as classes; PROCEDE para os escapes sintáticos anteriores.**
-
-   | Classe/entrada | Conferência na cópia |
-   |---|---|
-   | `--only '.'`, `/app`, pastas, glob, segmento vazio, app fora de LABELS | A forma ancorada e a pertinência a LABELS recusam essas palavras antes do custo. (`bin/suite.sh:95`, `bin/suite.sh:96`, `bin/suite.sh:98`) |
-   | Inválido após label válida: `--only 'api .'` | Todas as palavras passam pela guarda; não valida apenas a primeira. (`bin/suite.sh:97`, `bin/suite.sh:98`) |
-   | Glob produzido por `--volta` | Não expande no cwd: `set -f` antecede o filtro. Uma saída sem nenhuma label aproveitável termina com rc 1. (`bin/suite.sh:67`, `bin/suite.sh:84`, `bin/suite.sh:88`) |
-   | `--only api -- .`, `/app`, outro app | A lista fechada recusa posicionais depois de `--`. (`bin/suite.sh:105`, `bin/suite.sh:111`, `bin/suite.sh:114`, `bin/suite.sh:118`) |
-   | `--parallel '1 .'`; `--espera x` | Recusa rc 2 no parser. Paralelismo aceita inteiro positivo ou `auto`; espera aceita dígitos, incluindo zero. (`bin/suite.sh:52`, `bin/suite.sh:54`) |
-   | `-- -v 2`, `--tag x`, `--tag core`, `--exclude-tag=x`, `-k padrao`; `--parallel auto` | Passam pelas guardas com recorte parcial; a coincidência do valor com um app deixou de causar recusa. (`bin/suite.sh:52`, `bin/suite.sh:112`, `bin/suite.sh:113`) |
-   | `-- --failfast=x` | Recusado corretamente: a forma `--x=v` consulta apenas `_FLAG_VALOR`. (`bin/suite.sh:113`, `bin/suite.sh:114`) |
-   | Todas as LABELS, inclusive repetidas ou como `<app>.tests`, em `--only` ou saída de `--volta` | A guarda exige motivo pela seleção efetiva. (`bin/suite.sh:80`, `bin/suite.sh:136`, `bin/suite.sh:139`, `bin/suite.sh:143`) |
-
-   **Limites remanescentes:**
-
-   - Uma lista de módulos que esgote a inteira continua fora da classificação. Isso também vale para módulos provenientes de `--volta`, pois ambos alimentam `ONLY`. Qual lista concreta esgota os testes desta cópia: **[não verificado]**. (`bin/suite.sh:80`, `bin/suite.sh:131`, `bin/suite.sh:139`)
-   - `--only ''` ainda termina pelo `${2:?}` — observei rc 1 na chamada seca — sem a recusa falante rc 2. (`bin/suite.sh:51`)
-   - A lista de flags usa busca por substring: um único argumento `'--failfast --reverse'` pode casar com `_FLAG_SO`. Ele permanece **um argumento** no executor; ampliação efetiva por essa forma: **[não verificado]**. (`bin/suite.sh:105`, `bin/suite.sh:111`, `bin/suite.sh:200`)
-   - `-v2` e `-kpadrao` são recusados pela lista. Que sejam formas exigíveis no runner instalado, para classificá-las como recusas indevidas: **[não verificado]**. (`bin/suite.sh:111`, `bin/suite.sh:113`, `bin/suite.sh:114`)
-
-   Quanto aos demais achados anteriores: `-z --no-renames`, import entre parênteses e relativo em subpacote foram implementados; URL, signal, transitividade e reexportação foram **declarados como limites**, sem implementação de seguimento. (`bin/vizinhos_da_volta.py:13`, `bin/vizinhos_da_volta.py:14`, `bin/vizinhos_da_volta.py:15`, `bin/vizinhos_da_volta.py:16`, `bin/vizinhos_da_volta.py:27`, `bin/vizinhos_da_volta.py:55`, `bin/vizinhos_da_volta.py:70`)
-
-   **Ainda há dependência direta omitida fora do limite declarado:** para `core/sub/foo.py`, as formas Python válidas `import core . sub . foo` e `from core . sub import foo` não casam com os padrões atuais. Conferi a sintaxe e o não casamento em memória; ocorrência desses imports nesta obra: **[não verificado]**. (`bin/vizinhos_da_volta.py:64`, `bin/vizinhos_da_volta.py:66`, `bin/vizinhos_da_volta.py:70`)
-
-2. **PROCEDE para anteceder splitting/glob de seleção; NÃO PROCEDE literalmente para “toda expansão”.**
-
-   Mapa dos campos de `suite.sh`, incluindo os demais controles tocados pelo delta: [nao verificado]
-
-   | Campo | QUEM ESCREVE | QUEM LÊ |
-   |---|---|---|
-   | `ONLY` | Inicialização, parser, helper e seleção filtrada: `bin/suite.sh:47`, `:51`, `:80`, `:87` | Conflito, filtro, vazio, validação, classificação, seco e executor: `bin/suite.sh:78`, `:84`, `:88`, `:97`, `:136`, `:155`, `:199` |
-   | `EXTRA` | Inicialização e captura citada após `--`: `bin/suite.sh:47`, `:59` | `_extra_ok` e executor: `bin/suite.sh:109`, `:110`, `:112`, `:113`, `:200` |
-   | `MOTIVO` | `bin/suite.sh:47`, `:56` | Guarda, diagnóstico e seco: `bin/suite.sh:143`, `:145`, `:154` |
-   | `VOLTA` | `bin/suite.sh:47`, `:57` | Ativação, helper, diagnóstico e seco: `bin/suite.sh:77`, `:80`, `:81`, `:154` |
-   | `LABELS` | Fonte literal: `bin/regua.sh:23`; derivação: `bin/suite.sh:72` | Filtro, pertinência, classificação e fallback: `bin/suite.sh:85`, `:96`, `:138`, `:139`, `:199` |
-   | `_FORMA_LABEL` | `bin/suite.sh:95` | `_eh_label`, chamado na guarda: `bin/suite.sh:96`, `:98` |
-   | `_FLAG_SO` | `bin/suite.sh:105` | Pertinência e diagnóstico: `bin/suite.sh:111`, `:114` |
-   | `_FLAG_VALOR` | `bin/suite.sh:106` | Consumo, forma com `=` e diagnóstico: `bin/suite.sh:112`, `:113`, `:114` |
-   | `PARALELO` | Inicialização e parser: `bin/suite.sh:47`, `:53`; validação em `:52` | Executor: `bin/suite.sh:200` |
-   | `ESPERA` | Inicialização e parser: `bin/suite.sh:47`, `:55`; validação em `:54` | Chamada da trava: `bin/suite.sh:193`; parser/flock: `bin/trava_teste.sh:27`, `:36` |
-   | `DIR` | `bin/suite.sh:47`, `:50` | Helper, seco e montagem: `bin/suite.sh:79`, `:154`, `:169`, `:170`, `:171`, `:174` |
-   | `SECO` | `bin/suite.sh:47`, `:58` | Desvio seco: `bin/suite.sh:153` |
-
-   Antes de `set -f; LC_ALL=C`, há expansões no parser e no subshell que calcula `RAIZ`; elas usam aspas, atribuições ou `[[ ]]`, sem splitting/glob das palavras de seleção. (`bin/suite.sh:35`, `bin/suite.sh:49`, `bin/suite.sh:51`, `bin/suite.sh:52`, `bin/suite.sh:59`, `bin/suite.sh:67`)
-
-   O `source recursos.sh` também antecede a proteção, mas nesta cópia só faz atribuições/exports e define funções; o guard de arquivo executado impede chamar as funções operacionais durante o source. (`bin/suite.sh:39`; `bin/recursos.sh:40`, `bin/recursos.sh:81`, `bin/recursos.sh:105`, `bin/recursos.sh:140`, `bin/recursos.sh:149`, `bin/recursos.sh:178`, `bin/recursos.sh:191`)
-
-   As expansões não citadas de `ONLY` começam depois da proteção. No executor, `${ONLY:-$LABELS}` e `$PARALELO` continuam sem aspas; `EXTRA` permanece array citado. A trava recebe o argv já expandido e executa `"$@"`. (`bin/suite.sh:67`, `bin/suite.sh:84`, `bin/suite.sh:97`, `bin/suite.sh:199`, `bin/suite.sh:200`; `bin/trava_teste.sh:42`)
-
-   **O seco não mostra o comando completo:** passa pelas guardas e imprime motivo, volta, diretório e labels; omite EXTRA, paralelismo e espera. (`bin/suite.sh:118`, `bin/suite.sh:143`, `bin/suite.sh:153`, `bin/suite.sh:154`, `bin/suite.sh:155`, `bin/suite.sh:156`)
-
-3. **PROCEDE que a flag consome label/caminho; NÃO SEI sobre ampliação efetiva no runner instalado.**
-
-   `-- -k .` e `-- --tag /app` são aceitos porque o ramo exige apenas existir a próxima palavra. Esses valores não passam pela guarda de posicionais. (`bin/suite.sh:112`)
-
-   Isso, sozinho, **não demonstra fuga**: o shell entrega `-k` e `.` como elementos distintos, preservados, e não reapresenta `.` como label por expansão. A descoberta efetiva é delegada ao `DiscoverRunner` externo; quantidade executada nesses exemplos: **[não verificado]**. (`bin/suite.sh:200`; `app/core/runner_quarentena.py:15`, `app/core/runner_quarentena.py:72`, `app/core/runner_quarentena.py:76`)
-
-4. **NÃO PROCEDE que os selos mordam cada classe pela razão certa.**
-
-   Há melhoria: caminhos/globs de `ONLY` exigem o diagnóstico específico; existem casos mistos, cwd preparado, âncora de motivo e rc 75. (`bin/tests/test_suite_motivo.sh:57`, `bin/tests/test_suite_motivo.sh:58`, `bin/tests/test_suite_motivo.sh:62`, `bin/tests/test_suite_motivo.sh:64`, `bin/tests/test_suite_motivo.sh:75`, `bin/tests/test_suite_motivo.sh:76`)
-
-   Persistem estes sobreviventes plausíveis:
-
-   | Mutante/lacuna | Por que o selo pode continuar verde | [nao verificado]
-   |---|---|
-   | Acrescentar `--pattern` a `_FLAG_SO` | O negativo testa `--pattern y`: passa a primeira palavra e recusa `y`, mantendo rc 2 e o diagnóstico genérico procurado. (`bin/tests/test_suite_motivo.sh:66`, `:67`; `bin/suite.sh:111`, `:114`) |
-   | Tratar `-k` como flag simples, acrescentando-o a `_FLAG_SO` | O positivo não usa `-k`; cobre `-v`, `--tag`, `--exclude-tag=x` e `--failfast`. (`bin/suite.sh:111`, `:112`; `bin/tests/test_suite_motivo.sh:70`) |
-   | Aceitar `--x=v` também para `_FLAG_SO` | Falta negativo como `--failfast=x`; `--exclude-tag=x` continua passando. (`bin/suite.sh:113`; `bin/tests/test_suite_motivo.sh:66`, `:70`, `:74`) |
-   | Executor descartar EXTRA ou ignorar `--parallel auto` | Os positivos cobram chegada à trava, sem conferir esses argumentos; `_args` extrai apenas labels, e a trava falsa registra `$*`, perdendo fronteiras. (`bin/tests/test_suite_motivo.sh:19`, `:24`, `:70`, `:73`) |
-
-   Os ramos dos três primeiros mutantes foram conferidos em memória; sobrevivência à execução **integral** do selo: **[não verificado]**. Os selos completos escrevem e removem arquivos temporários. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:27`)
-
-   O caso “todas as LABELS depois de `--`” também recusa primeiro em EXTRA; não prova a classificação de inteira pela razão anunciada. (`bin/tests/test_suite_motivo.sh:43`; `bin/suite.sh:118`, `bin/suite.sh:143`)
-
-   Em `test_suite_sh.sh`, a fixture nua agora é negativa, mas o juiz continua sendo dois greps. Ele aceita, por exemplo, `bash …/bin/suite.sh # --motivo "pre-opus X"` ou motivo sem obra; a guarda real recusaria ambos. (`bin/tests/test_suite_sh.sh:34`, `bin/tests/test_suite_sh.sh:35`, `bin/tests/test_suite_sh.sh:80`; `bin/suite.sh:133`, `bin/suite.sh:143`)
-
-   Os selos próprios do wrapper e da descoberta real de vizinhos continuam ausentes deste teste: ele executa a suite copiada e substitui o helper. (`bin/tests/test_suite_motivo.sh:20`, `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:28`)
-
-5. **NÃO PROCEDE como fidelidade integral da documentação.**
-
-   O comando canônico ganhou motivo e a descrição de EXTRA deixou de ensinar repasse cru. Porém:
-
-   - “Só número” contradiz `--parallel auto`. (`CLAUDE.md:96`, `CLAUDE.md:100`; `bin/suite.sh:52`)
-   - A redação deve explicitar que `--only`/`--volta` cobrindo todas as LABELS também exigem motivo. (`CLAUDE.md:101`, `CLAUDE.md:102`; `bin/suite.sh:139`, `bin/suite.sh:143`)
-   - “Volta do meio = `--volta`” omite ruff e disjuntor: quem os executa é `volta_intermediaria.sh`. (`CLAUDE.md:102`; `bin/volta_intermediaria.sh:23`, `bin/volta_intermediaria.sh:29`, `bin/volta_intermediaria.sh:32`)
-   - A descrição de rc 75 corresponde à trava; a recusa de inteira é rc 2, mas não se pode generalizar esse rc a todo erro de argumento, como `--only ''`. (`CLAUDE.md:102`, `CLAUDE.md:103`; `bin/trava_teste.sh:36`, `bin/trava_teste.sh:38`; `bin/suite.sh:51`, `bin/suite.sh:150`)
-
-   A busca em `app/docs`, `bin/` e `.claude/` encontrou **orientações vivas incompletas na própria ajuda**: `suite.sh --dir …`, `--parallel 2` e `--espera 1`, sem recorte/motivo, são recusadas se copiadas literalmente. A chamada nua do selo é fixture negativa; há também comandos antigos em relatos, cujo uso atual é **[não verificado]**. (`bin/suite.sh:29`, `bin/suite.sh:30`, `bin/suite.sh:31`, `bin/suite.sh:143`; `bin/tests/test_suite_sh.sh:80`, `bin/tests/test_suite_sh.sh:91`; `app/docs/RELATO.md:681`)
-
-   Não encontrei outra orientação viva de EXTRA cru nessa busca; ausência fora dos arquivos pesquisados: **[não verificado]**.
-
-6. **PROCEDE o erro de descarte de régua/pre-push; NÃO SEI quanto à obrigação de um selo próprio específico.** [nao verificado]
-
-   A triagem restringe o aval a `bin/suite.sh`, mas o aval define a unidade como **“chamada de suite inteira pela trava”**. Régua e pre-push fazem precisamente essa chamada sem guarda de motivo; a trava apenas executa o comando recebido. Ser preexistente não constitui exceção expressa no aval fornecido. (`triagem_v5.txt:5`; `aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/regua.sh:165`, `bin/regua.sh:168`; `bin/pre-push.sh:142`, `bin/pre-push.sh:186`, `bin/pre-push.sh:187`; `bin/trava_teste.sh:42`)
-
-   Para o **selo próprio de `volta_intermediaria.sh`**, o aval não impõe literalmente esse formato de teste. O descarte para fila não está demonstrado errado apenas por essa exigência específica; a cobertura do fluxo continua pendente. (`aval_trava_menos_fila_com_selo_1111.txt:1`; `triagem_v5.txt:5`; `bin/tests/test_suite_motivo.sh:28`; `bin/volta_intermediaria.sh:37`, `bin/volta_intermediaria.sh:43`, `bin/volta_intermediaria.sh:44`)
-
-   Para **vizinhos**, declarar limites e invocar a inteira pre-opus não demonstra fechamento das classes já conhecidas: o aval exige vizinhos e transformação de escapes em regras de classe. A defesa pre-opus está escrita no helper/triagem, sem exceção correspondente no aval dado. (`aval_trava_menos_fila_com_selo_1111.txt:1`; `triagem_v5.txt:5`; `bin/vizinhos_da_volta.py:12`, `bin/vizinhos_da_volta.py:15`, `bin/vizinhos_da_volta.py:16`, `bin/vizinhos_da_volta.py:18`)
-
-## 11/11 07:22 · sessao 559aedadd68b · - · - · origem=Ronald (tmux)
-
-**Q1 — NÃO PROCEDE como fechamento completo.** As formas caminho/glob e a injeção por `--parallel '1 .'` estão barradas; continua declarado que a enumeração de módulos cobrindo a inteira não é reconhecida, inclusive quando vem de `--volta`. (`bin/suite.sh:52`, `bin/suite.sh:67`, `bin/suite.sh:84`, `bin/suite.sh:95`, `bin/suite.sh:98`, `bin/suite.sh:130`, `bin/suite.sh:131`)
-
-A whitelist usa pertinência por substring: um único argumento `'--failfast --reverse'` é aceito por conter trecho contíguo da lista. Isso não demonstra ampliação: o executor preserva esse elemento inteiro. (`bin/suite.sh:105`, `bin/suite.sh:111`, `bin/suite.sh:200`) O comportamento efetivo desse argumento no Django é **[não verificado]**.
-
-**Q2 — PROCEDE para antecedência às expansões sujeitas a splitting/glob; não literalmente a toda expansão.** O parser já expande argumentos antes de `set -f`, mas usa aspas, atribuições e `[[ ]]`. A primeira expansão não citada da seleção acontece depois da proteção. (`bin/suite.sh:49`, `bin/suite.sh:67`, `bin/suite.sh:84`, `bin/suite.sh:97`)
-
-O `source` anterior não chama as funções que contêm expansões não citadas: o guard de execução distingue arquivo executado de arquivo sourceado. O subshell anterior calcula a raiz usando caminho citado. (`bin/suite.sh:35`, `bin/suite.sh:39`; `bin/recursos.sh:140`, `bin/recursos.sh:149`, `bin/recursos.sh:178`, `bin/recursos.sh:191`)
-
-O comentário “LC_ALL sem export […] não para os filhos” não é universal: se `LC_ALL` já foi importada com atributo export, a atribuição preserva esse atributo; efeito sobre esta seleção: **[não verificado]**. (`bin/suite.sh:66`, `bin/suite.sh:67`)
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| ONLY | `suite.sh:47,51,80,87` | `suite.sh:78,84,88,97,136,155,199` | [nao verificado]
-| EXTRA | `suite.sh:47,59` | `suite.sh:109–113,200` | [nao verificado]
-| MOTIVO | `suite.sh:47,56` | `suite.sh:143,145,154` | [nao verificado]
-| VOLTA | `suite.sh:47,57` | `suite.sh:77,80–81,154` | [nao verificado]
-| LABELS | Fonte `regua.sh:23`; derivação `suite.sh:72` | `suite.sh:85,96,138–139,199` | [nao verificado]
-| _FORMA_LABEL | `suite.sh:95` | `_eh_label`, `suite.sh:96`, chamado em `suite.sh:98` | [nao verificado]
-| _FLAG_SO | `suite.sh:105` | `suite.sh:111,114` | [nao verificado]
-| _FLAG_VALOR | `suite.sh:106` | `suite.sh:112–114` | [nao verificado]
-| PARALELO | `suite.sh:47,53`, validado em `suite.sh:52` | `suite.sh:200` | [nao verificado]
-| ESPERA | `suite.sh:47,55`, validado em `suite.sh:54` | `suite.sh:193`; `trava_teste.sh:27,36` | [nao verificado]
-
-O executor expande `${ONLY:-$LABELS}` e `$PARALELO` sem aspas; preserva `EXTRA` citado. A trava recebe esse argv já formado e executa `"$@"`. (`bin/suite.sh:199`, `bin/suite.sh:200`; `bin/trava_teste.sh:42`)
-
-O modo seco passa pelas guardas, imprime motivo/volta/diretório e labels, mas não imprime `EXTRA`, `PARALELO`, `ESPERA` ou o argv completo. (`bin/suite.sh:143`, `bin/suite.sh:153`, `bin/suite.sh:154`, `bin/suite.sh:155`, `bin/suite.sh:156`)
-
-**Q3 — PROCEDE que consome; NÃO SEI sobre ampliação efetiva no runner instalado.** `-- -k .` e `-- --tag /app` passam porque a guarda de flag de valor exige somente a existência da próxima palavra. Esses valores continuam elementos do array citado; não ganham condição de posicional por expansão do shell. (`bin/suite.sh:112`, `bin/suite.sh:200`)
-
-A cópia delega a descoberta ao `DiscoverRunner` externo; não contém nesse trecho a implementação que permitiria medir a seleção efetiva. Portanto, os exemplos não sustentam afirmar fuga para a inteira. (`app/core/runner_quarentena.py:15`, `app/core/runner_quarentena.py:72`, `app/core/runner_quarentena.py:76`) Quantidade de testes executada: **[não verificado]**.
-
-_3715 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3720 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
