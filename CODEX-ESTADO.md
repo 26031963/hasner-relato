@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 00:34** · publicado em **11/11/2026 00:36** (UTC-3)
+> Ultima resposta processada: **11/11/2026 00:42** · publicado em **11/11/2026 00:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 00:42 · sessao 5981f3736190 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Diff na wt e [entrega com censo, achados e comandos](/home/ronald/wt-codex-fio-e0-v4-e4b-001921/app/E4B_ALCANCE_ENTREGA.txt:1).
+
+[RED reproduzido contra a base; 50 testes em memória passaram e 12 mutantes foram detectados](/home/ronald/wt-codex-fio-e0-v4-e4b-001921/app/E4B_ALCANCE_ENTREGA.txt:64). [nao verificado]
+
+[Sem apply; integração ORM e amostra factual das 131 permanecem **[nao verificado]**](/home/ronald/wt-codex-fio-e0-v4-e4b-001921/app/E4B_ALCANCE_ENTREGA.txt:234). [Risco condicional de ciclo em exportada documentado, sem contorno](/home/ronald/wt-codex-fio-e0-v4-e4b-001921/app/E4B_ALCANCE_ENTREGA.txt:210).
 
 ## 11/11 00:34 · sessao 0781bba2b610 · - · - · origem=Ronald (tmux)
 
@@ -1037,12 +1045,4 @@ Cura K3 aplicada: seed preservado na nova/vazia, exceto quando `orfao_14h` do at
 
 Suíte ORM e certificação final: **[nao verificado]**, reservadas ao Code e opus. [nao verificado]
 
-## 10/11 23:38 · sessao 808c2ef83d03 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-[Entrega K1–K5 e arquivos tocados](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:1), com [comandos e saídas integrais](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_saidas.txt:8).
-
-147 testes em memória passaram; 37 mutantes produziram RED com controle verde ([registro](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:5)). [nao verificado]
-
-K3 permanece ACHADO. ORM e ruff=0: **[nao verificado]**, por ausência de Django e ruff ([limites](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:9)).
-
-_3542 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3543 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
