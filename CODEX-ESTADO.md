@@ -1,7 +1,92 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 08:02** · publicado em **11/11/2026 08:03** (UTC-3)
+> Ultima resposta processada: **11/11/2026 08:18** · publicado em **11/11/2026 08:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 08:18 · sessao a1519926172e · FIO-E0-V4-E4B · construtor · origem=Code
+
+Cura escrita na cópia. **Os sete resultados ORM continuam [nao verificado]**; a execução fica para o Code e a certificação final para o opus.
+
+O diff altera cinco arquivos: a cerca executa callbacks permitidos antes da foto posterior, preserva a sentinela e mantém a recusa de DML fora da foto ([backfill:315](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:315)). A classificação usa identidade do código da função; nome semelhante não concede permissão ([foto:30](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:30)).
+
+`EventoCelula` entra por colaborador/data. `ContadorPauta` entra pelos destinatários; o alcance da alteração vem das pautas realmente mudadas, dos dois lados. Sem pauta correspondente, permanece indeterminado ([foto:268](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:268), [foto:114](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:114)). O import `MOD` foi removido ([ORM:17](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:17)).
+
+Diff completo:
+
+```bash
+GIT_OPTIONAL_LOCKS=0 git diff -- \
+  chamados/management/commands/backfill_fio_morto_e4b.py \
+  chamados/services/foto_e4b.py \
+  chamados/tests/test_e4b_c4_orm.py \
+  chamados/tests/test_e4b_c4v7_memoria.py \
+  chamados/tests/test_e4b_classe_e_memoria.py
+```
+
+O censo respondido antes da edição resultou neste tratamento:
+
+| Callback registrado | Escritas possíveis pelas portas chamadas | Tratamento |
+|---|---|---|
+| `_TravaDoColaborador.__call__` | Nenhuma; no-op — `trava_do_colaborador.py:22` | Neutro; preservado durante o ato |
+| `_becos_post_save_pergunta._fechar` | Perguntas/decisões/disputa, fechamento de chamado, notas, auditoria e eventos pela cascata — `signals.py:233`, `becos.py:36`, `models.py:3943` | Executado sob captura e foto |
+| `_isentos_post_save_colaborador._silenciar` | Chamado e auditoria — `signals.py:274`, `arquivo.py:170` | Executado sob captura e foto |
+| `_isentos_post_save_chamado._silenciar` | Mesma porta de silêncio — `signals.py:301`, `silencio_isentos.py:34` | Executado sob captura e foto |
+| `retoma_regularizacoes_ao_fechar_disputa._retomar` | Regularização, itens, batidas, nota/chamado e auditoria — `signals.py:133`, `regularizacao_ext.py:121` | Recusado pelo nome |
+| `_feriado_post_save._reavaliar` | Fechamento de chamados, notas/auditoria e cascata; percorre colaboradores — `signals.py:330`, `feriado_reavaliar.py:43` | Recusado pelo nome |
+| `_filho_morto_acorda_o_pai._reconciliar` | Fio e também `Justificativa` — `signals.py:363`, `reconciliador.py:529` | Recusado pelo nome |
+
+A fábrica e a reabertura podem registrar silêncio/beco pelos saves; `decisao_pergunta` emite `EventoCelula` sincronicamente; materialização pode alcançar os callbacks de fechamento. `cartorio` continua sem execução pelo backfill (`fabrica_da_celula.py:160`, `disputa_emissao.py:1849`, `models.py:3943`, `materializacao.py:1338`, `backfill_fio_morto_e4b.py:148`).
+
+Escolhi a recusa permitida pelo item 1(b) para retomada, feriado e reconciliação. Regularizações/itens não entram na foto porque a retomada não é executada; os motivos estão no censo do código ([foto:38](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/foto_e4b.py:38)).
+
+Resultados sem banco:
+
+| Comando | Resultado | Fonte |
+|---|---|---|
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4b_c4v7_memoria chamados.tests.test_e4b_classe_e_memoria chamados.tests.test_e4b_foto_memoria chamados.tests.test_e4b_c4_tranca_memoria -q` | **rc 0**, 79 testes | `test_e4b_c4v7_memoria.py:55`; demais módulos indicados | [nao verificado]
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v7_memoria --red-base` | **rc 1**, 16 testes, 11 falhas por assertion; zero errors | `test_e4b_c4v7_memoria.py:23` | [nao verificado]
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos` | **rc 0**, 40 testes | `e4b_c4_verificar.py:239` | [nao verificado]
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight` | **rc 0**, sete enxertos/AST | `e4b_c4_verificar.py:79` |
+| `GIT_OPTIONAL_LOCKS=0 git diff --check` | **rc 0** | Diff dos cinco arquivos acima |
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m ruff --version` | **rc 1**, `No module named ruff` | Lint completo [nao verificado] |
+
+Os REDs principais e suas assertions que mordem:
+
+| RED / mutante | Assertion |
+|---|---|
+| Desconhecido nomeado, inclusive nome forjado e segunda entrada da fila / `callback_desconhecido_livre` | [memória:172](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:172) |
+| Tabela não fotografada / `tabela_fora_livre` | [memória:186](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:186) |
+| Evento inserido/alterado aparece / `evento_omitido_da_foto` | [memória:352](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:352) |
+| Contador medido e cercado / `contador_omitido_da_foto` | [memória:362](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:362) |
+| Callback legítimo, cascata e sentinela / `callback_legitimo_recusado`, `sentinela_recusada` | [memória:207](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:207) |
+| DML de callback dentro da captura / `callback_sem_captura` | [memória:222](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:222) |
+| DRY elimina fila nova / `dry_deixa_fila` | [memória:260](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:260) |
+| Lote recusado reverte sentinela anterior ao savepoint manual / `recusa_deixa_sentinela_C` | [memória:284](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v7_memoria.py:284) |
+
+**23/23 mutantes retornaram rc 1 por assertion, sem errors.** O comando de cada um é o corpo deste loop; os enxertos estão em `test_e4b_c4v7_memoria.py:406`:
+
+```bash
+for nome in \
+  roteiro_so_emissao roteiro_so_dois_REDs comp_nao_corrente \
+  callback_livre callback_desconhecido_livre callback_na_fila \
+  sem_captura_sql sql_so_insert escrita_livre tabela_fora_livre \
+  evento_omitido_da_foto contador_omitido_da_foto callback_sem_captura \
+  callback_legitimo_recusado callback_chamado_recusado \
+  callbacks_fora_alcance_livres sentinela_recusada dry_deixa_fila \
+  recusa_deixa_sentinela_C evento_recusado_por_tabela \
+  contador_recusado_por_tabela dia_cru carimbo_online
+do
+  PYTHONDONTWRITEBYTECODE=1 python3 \
+    -m chamados.tests.test_e4b_c4v7_memoria --mutante "$nome"
+done
+```
+
+Para a sessão/Code, sem execução nesta volta:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
+```
+
+O roteiro cobre `test_e4b_c4_orm`, `test_o261e_f1_porta_encerramento`, `test_e4_passivo`, `test_e4_backfill`, `test_b2d_resposta_visivel` e `ponto.tests.test_selo_chokepoint_escrita`; depois roda `sem_cerca`, `sem_rollback`, `sem_alvo`, `foto_so_dia`, `foto_antes_C`, `tranca_sem_mapa` e `tranca_avulsa` (`e4b_c4_verificar.py:117`). Acrescentei assertions ORM para desconhecido, tabela externa e EventoCelula no DIFF ([ORM:183](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:183), [ORM:198](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:198), [ORM:218](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:218)).
 
 ## 11/11 08:02 · sessao bc65f5408f95 · TRAVA-SELO · verificador · origem=Code
 
@@ -798,44 +883,4 @@ Ruff: rc=1, `No module named ruff`; Ruff limpo: **[nao verificado]**.
 
 A cura exclusivamente no teste exige rever a primeira afirmação que depende de `out['cods']`, preservando a verificação do veredito por outra testemunha; isso ultrapassa a troca autorizada e a exigência de manter essa afirmação (`ponto/tests/test_x1_folga_sem_adesao.py:132`).
 
-## 11/11 07:33 · sessao 010796d81078 · - · - · origem=Ronald (tmux)
-
-Achados do backfill/foto, por severidade:
-
-1. **Alta — relógio da leitura vira falsa escrita e bloqueia cura.** `fechamento_lido` usa `recalcular_fechamento_mes(... somente_leitura=True, retornar_objeto=True)`; a conta atribui `previsto_em = timezone.now()` antes do ramo de leitura devolver o objeto. A foto inclui esse campo transitório em `campos`, e `mudancas` compara todos os campos. Logo duas leituras sem alteração monetária produzem delta. Como a foto percorre competências de todo o histórico, um `dinheiro_online:10/2026` pode cancelar um ato da 11 por `fora_da_competencia_alvo`; se for exportada, também entra na cerca. Fontes: `app/ponto/services/fechamento.py:1086`, `:1128`, `:1135`, `:1759`; `app/chamados/services/foto_e4b.py:15`, `:108`, `:142`, `:160`, `:190`, `:194`, `:32`.
-   
-   Prova determinística sem Django/arquivos realizada com corpos reais extraídos por AST: antes/depois com horas_falta=8 e DSR=1 idênticos, só `previsto_em` t versus t+1μs, retornou `campos_alterados=['previsto_em']` e `cerca(...,'11/2026')=[('dinheiro_online:10/2026','fora_da_competencia_alvo')]`. Integração ORM com relógio solto: [nao verificado]. Os novos ensaios ORM congelam o relógio: `app/chamados/tests/test_e4b_c4_orm.py:24`, `:125`.
-
-2. **Alta — o estado final de APPLY pode nascer depois da foto/cerca/DIFF.** O backfill materializa a disputa inteira; ao quitá-la fecha a disputa. O signal agenda `retomar_regularizacoes_confirmadas` em `on_commit`, que percorre todas as regularizações confirmadas do colaborador, sem filtro pela competência alvo, podendo criar/corrigir batidas nas datas dos itens e marcar regularizações materializadas. Isso roda depois de foto, cerca e DIFF final; DRY descarta os callbacks. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:145`, `:147`, `:297`, `:308`, `:314`, `:319`; `app/chamados/services/materializacao.py:1375`, `:1378`, `:1333`; `app/chamados/signals.py:129`, `:132`, `:137`, `:144`; `app/chamados/services/regularizacao_ext.py:218`, `:221`, `:224`, `:166`, `:188`, `:197`.
-   
-   Há ainda fechamento monetário agendado pela criação de batida, depois da foto do gravado: `app/ponto/registro_batida.py:157`, `:160`, `:175`; `app/ponto/services/fechamento.py:1807`, `:1810`, `:1824`. O dinheiro online tenta antecipar o cálculo, mas não observa essas futuras escritas reais nem seu resultado: `app/chamados/services/foto_e4b.py:188`, `:192`.
-
-   A ordem `with transaction.atomic(), push_disputa_silenciado(...)` também restaura o silêncio antes de sair do atomic e disparar seus callbacks; previsão/silêncio desses efeitos posteriores não ficam cobertos pelo bloco. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:263`; `app/chamados/services/disputa_emissao.py:1749`, `:1753`. Push concreto nessa cascata: [nao verificado].
-
-3. **Alta — “não entregue” substitui “aberta”, e comp10 não tem proteção própria.** Executáveis dependem de `competencia_do_dia_entregue(...) is False`; a cerca aceita a mesma competência alvo com `entregue=False`. Não achei guarda especial de 10/2026 nem exigência de `!`, nem pergunta a `periodo_trancado`/`competencia_fechada_para_celula` no comando/cerca. Assim `--competencia 10/2026 --aplicar` é aceito se K6 falso, exatamente a hipótese que o aval diz não bastar. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:210`, `:213`, `:240`, `:244`, `:246`, `:283`; `app/chamados/services/foto_e4b.py:30`, `:32`, `:34`; K6 só responde existência de TXT vigente: `app/folha/export.py:556`, `:580`, `:586`. O recibo admite que `!` ficou condição operacional externa: `app/docs/FIO-E0-V4-E4B-c4.txt:60`, `:65`, `:190`.
-
-4. **Média/alta — foto/reversão “integral” omite escritas alcançadas.** Não captura `EventoCelula`, embora ressuscitar perguntas chame `acordar_celulas` e o save de pergunta também emita evento; portanto novas linhas da outbox não aparecem no delta/nascimentos/reversão. Fontes: enumeração da foto `app/chamados/services/foto_e4b.py:142` a `:187`; emissão `app/chamados/models.py:1566`, `:1568`, `:3413`; `app/chamados/signals.py:251`, `:257`; escritor `app/ponto/portas/celula.py:887`, `:896`; campos e consumidor `app/escala/models.py:1845`, `:1848`, `:1857`.
-   
-   Fábrica pode escrever pauta, cuja porta também cria/atualiza `ContadorPauta`; foto captura Pauta mas não contador. Auditoria da foto só inclui seis modelos, excluindo inclusive modelo Pauta. Fontes: `app/chamados/services/fabrica_da_celula.py:204`, `:214`, `:215`, `:354`, `:369`; `app/pautas/services.py:180`, `:186`, `:188`, `:351`, `:352`, `:354`; `app/chamados/services/foto_e4b.py:163`, `:173`, `:175`, `:186`. Regularizações e itens do achado 2 também não estão na enumeração da foto: `app/chamados/services/foto_e4b.py:84`, `:90`, `:142`.
-
-5. **Média — rechecagem K6 não serializa a entrega.** Trava cobre C/D/Ch/P, mas o escritor `ExportacaoDominio.registrar` usa `exists/create` sem essa trava; `invalidar` também não trava C. A entrega pode ocorrer depois da última leitura K6 da foto posterior e antes do commit. Fontes: `app/chamados/models.py:2665`, `:2675`, `:2688`, `:2692`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:283`, `:297`, `:308`; `app/folha/export.py:580`; `app/folha/models.py:151`, `:162`, `:174`, `:178`, `:182`. Corrida efetivamente reproduzida: [nao verificado]; recibo reconhece a pendência em `app/docs/FIO-E0-V4-E4B-c4.txt:190`.
-
-Aspectos corretos demonstráveis por leitura:
-
-- Ordem inicial C por PK de todo lote, depois universo aberto por colaborador; protocolo trava disputas abertas, pais delas e chamados vivos. Portas adicionais travam perguntas e disputas fechadas ao ressuscitar. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:183`, `:186`, `:187`, `:189`; `app/chamados/models.py:2640`, `:2675`, `:2688`, `:1562`. Universo inicial não é literalmente todas as linhas da foto nem todos os terminais/fechados que a porta pode escrever: mesmas fontes.
-- Foto nasce sob atomic/C, após refresh de colaborador; reversão grava e relê JSON antes do primeiro ato. Reversão é fotografia para compensação, não achei executor de reversão neste comando. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:56`, `:59`, `:61`, `:63`, `:263`, `:264`, `:266`, `:267`, `:270`, `:275`, `:277`, `:295`.
-- Reconfere entrega e plano sob trava; limbo/exportada abortam savepoint; cerca usa ambos lados do delta, recusando fora do alvo/indeterminado/exportado. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:283`, `:288`, `:290`, `:292`, `:302`, `:306`; `app/chamados/services/foto_e4b.py:22`, `:30`, `:32`, `:34`.
-- DIFF por colaborador contém nascimentos por identidade, tentativas de push e campos numéricos de DiaPago, fechamento gravado e online; não refaz soma monetária. Fontes: `app/chamados/services/foto_e4b.py:39`, `:50`, `:60`, `:68`, `:71`, `:72`, `:192`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:317`, `:351`, `:355`.
-- Não achei mecanismo de comparar esse DIFF com expectativa de dinheiro, publicar previamente no RELATO ou exigir essa publicação antes de APPLY; execução operacional dessas condições: [nao verificado]. O DIFF impresso no mesmo APPLY vem depois da saída do atomic: `app/chamados/management/commands/backfill_fio_morto_e4b.py:263`, `:320`, `:351`, `:355`.
-- Não introduziu exclusão por col950/col969/CADASTRO no comando; universo vem do vigia e lista complementar, e antes/depois continuam medidos pelo mesmo vigia. Fontes: `app/chamados/management/commands/backfill_fio_morto_e4b.py:76`, `:78`, `:153`, `:222`, `:223`, `:318`, `:365`.
-- Provas de idempotência cobrem fixture específica de fábrica e classe e com mesma nota/âncora; não certificam todos os efeitos posteriores ou tabelas omitidas. Fontes: `app/chamados/tests/test_e4_backfill.py:141`, `:145`, `:154`, `:157`; `app/chamados/tests/test_e4_passivo.py:61`, `:75`, `:78`, `:80`.
-
-Mapa do formato novo:
-
-- `foto[chave].campos`: escritor é leitura dos campos concretos do ORM (`foto_e4b.py:124`), leitor `mudancas` (`:15`), `nascimentos` (`:44`), `relato` (`:69`), JSON reversão (`backfill:273`).
-- `foto[chave].alcance[{dia,comp,entregue}]`: escritor `alcance/mensal` (`foto_e4b.py:102`, `:108`, `:111`, `:115`, `:118`); leitores cerca (`:26`, `:29`), relato (`:78`), BANG-LINHA (`backfill:345`, `:346`).
-- `delta`: escritor `mudancas` (`foto_e4b.py:12`), leitores cerca (`:21`), nascimentos (`:43`), relato (`:73`) e backfill (`:300`, `:345`).
-- `previstos`: alimentado por `_enviar_push_disputa_colab` sob contexto (`disputa_emissao.py:1760`, `:1763`); backfill corta tentativa desfeita (`backfill:305`, `:311`), filtra por colaborador (`:317`) e publica via relato (`foto_e4b.py:72`).
-- Datas mantêm autoridades: batida pelo dia do turno (`foto_e4b.py:154`), ausência por `dias_da_ausencia` (`:158`), competência pelo fim da janela (`:108`, `:109`), instante de reversão pelo `agora` da borda (`backfill:215`, `:271`). O campo com dois sentidos encontrado é `previsto_em` do objeto online tratado como mudança persistida, achado 1.
-
-_3720 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3721 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

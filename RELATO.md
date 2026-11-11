@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=2069432
+ESPERANDO: c4v8_rodar_orm.sh | pid=3192351
+E4B c4v8 (copia c2162edda): construtor rc 0 08:18; sem banco memoria rc 0 (79), --red-base rc 1 (11 assertion), selos rc 0 (40), 23/23 mutantes de memoria rc 1; ruff verde (sessao). ORM pela trava (logs/E4B-ALCANCE/c4v8_orm.log), atras da suite pre-opus E3.
+AUDITORIA-DE-TRAVAS 08:2x (aval TRAVA-SELO-REARME-E-UNIDADE item 2): vigia_arvore.sh medido em logs/vigia_arvore.log -- 152 suites de 19/09 a 26/09, ultima 26/09 09:37, depois PAUSADO toda hora (esteira.pausada): hoje 0 suites/dia, 0 min de trava. Linha no BACKLOG; reguas de corte a medir. Selo espera_processo vermelho no main: registrado, nao trava (item 3).
 ERRO-BOBO TRAVA-SELO: libera B3 por aval Ronald 08:1x TRAVA-SELO-REARME-E-UNIDADE (logs/TRAVA-SELO/aval_rearme_e_unidade_1111.txt): implementacao incompleta da regra, nenhuma lei/juiz faltando; UM verificador final sobre a v11 04ec2b8b0; reprovou -> estaciona com o nucleo como conduta e as bordas vao a AUDITORIA-DE-TRAVAS, sem v12.
 RETOMA-AUTO 08:14 (pids 2937221 e 486693): nenhum dos dois e o ESPERANDO do topo -- o topo aponta pid 2069432 (construtor E4B c4v8), VIVO; suite pre-opus E3 viva na trava (suite:2153006 desde 08:04:59). Aviso de pid velho, nada a publicar; fila segue.
 E3 e3fix8 commitada na copia dff49b2b0 (x1 base RED + 5 mutantes mortos por assertion, x1_mutantes_int7.log). Voltas Codex > 3 (CODEX 5d): sem preverif v4, sobe ao opus depois da suite. SUITE pre-opus FIO-E0-V4-E3 08:05 pela trava (logs/FIO-E0-V4-E3/suite_pre_opus.sh, --dir copia).
