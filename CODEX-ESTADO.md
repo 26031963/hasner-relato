@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 05:00** · publicado em **11/11/2026 05:01** (UTC-3)
+> Ultima resposta processada: **11/11/2026 05:10** · publicado em **11/11/2026 05:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 05:10 · sessao 7f992e0a1aee · FIO-E0-V4-E4B · construtor · origem=Code
+
+Entregues o [diff](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.diff:1) e o [recibo com comandos de cada teste e mutante](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.txt:124). [nao verificado]
+
+- **Fixture:** julho ficava abaixo do piso automático. A entrada passou para 21/09, competência 10, mantendo as precondições fortes. [Rastro da causa](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.txt:7). [nao verificado]
+- **S143:** mantido `+1` justificado por chamado; fundir perderia validadas do S128. Os dois laços agora compartilham o mapa canônico do colaborador. [Justificativa por sítio](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.txt:53).
+- **Sonda:** modo base usa o arquivo inteiro do main `fb9269ea9`, incluindo reexports em memória. [Implementação](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_base.py:9).
+
+Observado localmente: 59+2 testes de memória e 40 selos passaram; os mutantes novos caíram nas assertions indicadas. [Registro](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.txt:124). [nao verificado]
+
+Tetos `60/28/213/269` são **deduzidos, a remedir**. GREEN ORM, mortes ORM e opus: **[não verificado]**. [Comandos pela trava](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.txt:162).
 
 ## 11/11 05:00 · sessao c34bbb0cd360 · - · - · origem=Ronald (tmux)
 
@@ -489,36 +501,4 @@ Os escritores persistentes continuam nas portas existentes de resposta, validaç
 
 AST dos 12 arquivos tocados e `git diff --check`: **rc=0**. Schema da tarefa preservado pelo selo existente. (chamados/tests/test_e3_c8b_sem_banco.py:81) Suite inteira, resultados ORM, impacto produtivo e aprovação final: **[nao verificado]**.
 
-## 11/11 02:52 · sessao d7f2c3787aa4 · FIO-E0-V4-E3 · sonda · origem=Code
-
-1. **174 pares, 15 colaboradores e soma geral de candidatas = 0**, conforme o anexo fornecido. [nao verificado]
-
-| Colaborador | Soma de candidatas |
-|---|---:|
-| col144 | 0 [nao verificado] |
-| col209 | 0 [nao verificado] |
-| col237 | 0 [nao verificado] |
-| col268 | 0 [nao verificado] |
-| col312 | 0 [nao verificado] |
-| col348 | 0 [nao verificado] |
-| col427 | 0 [nao verificado] |
-| col574 | 0 [nao verificado] |
-| col650 | 0 [nao verificado] |
-| col969 | 0 [nao verificado] |
-| col1005 | 0 [nao verificado] |
-| col1009 | 0 [nao verificado] |
-| col1018 | 0 [nao verificado] |
-| col1019 | 0 [nao verificado] |
-| col1027 | 0 [nao verificado] |
-
-O único `perg_total=1` está em col237, com zero candidatas; o anexo não identifica qual condição a exclui. [nao verificado]
-
-2. **Não há caminho alternativo de seleção para carimbar essas perguntas sem FK de célula.** O escritor percorre `perguntas_absolvidas_pela_celula` e carimba somente as perguntas recebidas desse gerador (`app/chamados/reconciliador.py:584`, `:595`). O gerador parte de `qs_perguntas_absolviveis` (`app/chamados/reconciliador.py:651`), que exige colaborador da disputa, ambos os carimbos nulos e **`celula__isnull=False`** (`app/chamados/reconciliador.py:627-631`). Compartilhar disputa não substitui esse vínculo (`app/chamados/reconciliador.py:627-642`).
-
-3. **Sim, o universo descrito pela sonda é suficiente para essa pergunta:** ela conta perguntas cuja própria célula pertence ao colab/dia e aplica os dois filtros de nulidade; o resultado informado é zero. A implementação da sonda não foi aberta. [nao verificado]
-
-Essa contagem é um **superconjunto** do queryset efetivo: além desses requisitos, o código exige veredito da célula não nulo, não vazio e fora de `VEREDITOS_ACUSAM`; depois, o gerador ainda consulta o juiz e a tranca (`app/chamados/reconciliador.py:637-641`, `:661-668`). Portanto, zero nesse superconjunto implica zero selecionáveis nesses pares por essa via (`app/chamados/reconciliador.py:627-642`).
-
-Uma pergunta ligada à célula de **outro dia** não integra o recorte desses 174 pares só por compartilhar disputa. [nao verificado] O escritor roda por colaborador e pode selecionar outros dias, mas julga a célula vinculada à própria pergunta (`app/chamados/reconciliador.py:628`, `:637-641`, `:651`).
-
-_3655 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3656 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
