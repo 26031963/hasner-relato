@@ -1,7 +1,149 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:46** · publicado em **11/11/2026 15:46** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:49** · publicado em **11/11/2026 15:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:49 · sessao 09a259e1349b · DATA-EVENTO-CRU · verificador · origem=Code
+
+**Veredito: BLOQUEANTE — a sobrecontagem pode encobrir um leitor novo no mesmo escopo.** Reproduzido em memória, preservando a escrita e o retorno da função. (`app/chamados/services/fio.py:800`; `app/chamados/services/fio.py:801`; `app/chamados/tests/test_catraca_data_evento_cru.py:189`)
+
+1. **Bloqueantes 3 e 5 da v2 e censo.**
+
+   **3:** os quatro repasses de escrita foram corrigidos pela inclusão de `reapontar_resolvedora` em `ESCRITA`. O quinto caso, `return 'data_evento'`, continua contado e foi declarado sobrecontagem admitida. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:24`; `app/chamados/services/fio.py:801`)
+
+   **5:** corrigido. `M.objects.create(x=p['data_evento'])` agora conta **1**, pois o subscrito `Load` restaura a contagem da chave mesmo dentro da escrita. (`app/chamados/tests/test_catraca_data_evento_cru.py:119`; `app/chamados/tests/test_catraca_data_evento_cru.py:123`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`)
+
+   Recalculei **212 ocorrências em 118 escopos: 207 Python + 5 templates**, com igualdade integral ao JSON. As únicas alterações frente à v2 reconstituída pelo delta são estas. (`app/chamados/tests/test_catraca_data_evento_cru.py:164`; `app/chamados/tests/catraca_data_evento_cru.json:2`)
+
+   | Chave | v2 → v3 | Referência |
+   |---|---:|---|
+   | `chamados/reconciliador.py::reatar_pergunta_orfa` | 5 → 3 | `app/chamados/tests/catraca_data_evento_cru.json:47`; `app/chamados/reconciliador.py:1642`; `app/chamados/reconciliador.py:1655` |
+   | `chamados/reconciliador.py::reemitir_chamado_do_dia` | 1 → ausente | `app/chamados/reconciliador.py:954`; `app/chamados/tests/test_catraca_data_evento_cru.py:64` |
+   | `chamados/services/declaracao_texto.py::declarar_hora_colab` | 1 → ausente | `app/chamados/services/declaracao_texto.py:370`; `app/chamados/tests/test_catraca_data_evento_cru.py:64` |
+
+2. **As duas portas novas escondem leitura real atual? Não encontrei.** Os quatro `data_evento=` de `reapontar_resolvedora` são pedidos de datação; a porta grava pelo escritor e salva. `rechavear_data_evento` recebe `novo_dia`, grava e salva. As leituras diretas existentes nas implementações continuam contadas. (`app/chamados/services/fio.py:876`; `app/chamados/services/fio.py:879`; `app/chamados/services/fio.py:927`; `app/chamados/services/fio.py:1037`; `app/chamados/services/fio.py:1043`; `app/chamados/services/fio.py:867`; `app/chamados/services/fio.py:934`; `app/chamados/services/fio.py:1013`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`)
+
+3. **Bloqueante: a sobrecontagem não é estável contra compensação.** Em memória, substituí somente o retorno de `gravar_dia_do_fato` por:
+
+   ```python
+   return {'data_evento': linha.data_evento}.popitem()[0]
+   ```
+
+   O retorno permanece `'data_evento'`, a atribuição permanece efetiva e surge **uma leitura real direta**. Entretanto, o escopo fica **1 → 1**, o censo completo permanece **212/118**, igual ao JSON, e `test_so_desce` passa alimentado com esse censo mutante. O literal antes contado vira chave de dict excluída; o atributo novo ocupa sua contagem. (`app/chamados/services/fio.py:800`; `app/chamados/services/fio.py:801`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`; `app/chamados/tests/test_catraca_data_evento_cru.py:108`; `app/chamados/tests/test_catraca_data_evento_cru.py:110`; `app/chamados/tests/test_catraca_data_evento_cru.py:189`)
+
+   Isso demonstra um **primeiro leitor real financiado por rótulo sobrecontado**, sem reflexão, lambda, alias ou dois saltos. O limite documentado de trocar leitor por leitor não cobre essa distinção. (`app/chamados/services/fio.py:791`; `app/chamados/tests/test_catraca_data_evento_cru.py:24`; `app/chamados/tests/test_catraca_data_evento_cru.py:37`)
+
+4. **As duas formas novas mordem seus mutantes.** Retirar `reapontar_resolvedora` de `ESCRITA` faz surgir `escreve: 1` indevido e falha o teste. Remover o tratamento de subscrito `Load` reduz `escreve_lendo` de **3 para 2** e também falha. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:119`; `app/chamados/tests/test_catraca_data_evento_cru.py:227`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`; `app/chamados/tests/test_catraca_data_evento_cru.py:237`)
+
+**FILA:** retirar apenas `rechavear_data_evento` de `ESCRITA` sobrevive a `test_MORDE_cada_forma`; falta uma forma correspondente na fixture. É lacuna de cobertura, sem leitor real omitido demonstrado. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:219`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`)
+
+Os quatro métodos sem escrita passaram em memória com base `unittest`; o método que cria temporários não foi executado. Suíte Django: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:185`; `app/chamados/tests/test_catraca_data_evento_cru.py:198`; `app/chamados/tests/test_catraca_data_evento_cru.py:203`; `app/chamados/tests/test_catraca_data_evento_cru.py:240`; `app/chamados/tests/test_catraca_data_evento_cru.py:245`)
+
+## 11/11 15:48 · sessao bc8105267297 · - · - · origem=Ronald (tmux)
+
+**Item (3): não é estável contra leitor novo invisível.** Há reprodução em memória preservando o retorno de `gravar_dia_do_fato`: substituir `return 'data_evento'` por `return {'data_evento': linha.data_evento}.popitem()[0]`. O retorno continua `'data_evento'`, a leitura direta ocorre uma vez, mas o mapa completo permanece idêntico: escopo **1→1**. O literal original contado é substituído por chave de dict excluída e atributo lido contado. (`app/chamados/services/fio.py:800`; `app/chamados/services/fio.py:801`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`; `app/chamados/tests/test_catraca_data_evento_cru.py:108`; `app/chamados/tests/test_catraca_data_evento_cru.py:110`)
+
+Isso demonstra **leitor novo invisível**, sem reflexão, lambda, alias ou leitura indireta: antes havia somente o nome devolvido para escrita; depois há uma leitura real adicional. A comparação exclusivamente numérica aceita o resultado, pois nenhuma chave ou contagem muda. O limite declarado fala em trocar um leitor por outro; aqui um rótulo sobrecontado financia o primeiro leitor real desse escopo. (`app/chamados/services/fio.py:791`; `app/chamados/tests/test_catraca_data_evento_cru.py:24`; `app/chamados/tests/test_catraca_data_evento_cru.py:37`; `app/chamados/tests/test_catraca_data_evento_cru.py:189`)
+
+As quatro sobrecontagens atuais são nomes de escrita/parâmetros, e inserir isoladamente uma leitura em cada escopo produz **1→2**, portanto morde. Isso não elimina a reprodução compensada acima. (`app/chamados/services/fio.py:801`; `app/chamados/models.py:3221`; `app/chamados/signals.py:255`; `app/escala/management/commands/hub_smoke.py:35`; `app/escala/management/commands/hub_smoke.py:40`; `app/escala/management/commands/hub_smoke.py:51`; `app/chamados/tests/test_catraca_data_evento_cru.py:190`)
+
+Segunda reprodução independente: em `hub_smoke.handle`, montar `SIMPLES` como lista sem o literal, recolocá-lo por `SIMPLES.append('data_evento')`, e acrescentar `PerguntaDisputa.objects.filter(data_evento__isnull=True).exists()`. A pertinência dos parâmetros é preservada, surge filtro real e o mapa inteiro continua igual, **1→1**, porque `append` suprime o destino. (`app/escala/management/commands/hub_smoke.py:35`; `app/escala/management/commands/hub_smoke.py:41`; `app/chamados/tests/test_catraca_data_evento_cru.py:63`; `app/chamados/tests/test_catraca_data_evento_cru.py:134`; `app/chamados/tests/test_catraca_data_evento_cru.py:138`)
+
+## 11/11 15:47 · sessao 3cddfded21d6 · LASTRO-FOLGA-FORA-DO-CATALOGO · verificador · origem=Code
+
+**APROVADO nesta pré-verificação da c2.** B2 foi curado; B1 e B3 têm correções efetivas e resíduos preexistentes cuja triagem procede. Isso não certifica pouso: RED/GREEN executados, suite inteira desta árvore e opus final permanecem **[nao verificado]** (`app/ponto/catalogo/ausencias.py:284`, `app/ponto/models.py:881`, `app/ponto/services/ausencia.py:429`, `app/ponto/services/ausencia.py:523`, `CLAUDE.md:377`).
+
+**(1) B1–B3**
+
+| Bloqueante anterior | Situação | Fundamentação |
+|---|---|---|
+| **B1 — cache** | **Parcialmente curado; isolamento curado.** | Cada leitura obtém o schema atual e usa sua própria entrada. Propagação entre processos continua limitada ao TTL de 60 s e à invalidação local; essa parcela já pertencia à autoridade consultada pelas portas (`app/ponto/catalogo/ausencias.py:262`, `app/ponto/catalogo/ausencias.py:265`, `app/ponto/catalogo/ausencias.py:272`, `app/ponto/catalogo/ausencias.py:284`, `app/ponto/services/ausencia.py:202`, `app/ponto/services/ausencia.py:486`). |
+| **B2 — exceção nas portas** | **Curado.** | Criação e edição traduzem especificamente `ValidationError.code == 'tipo_fora_do_catalogo'` para `AusenciaInvalida(codigo='tipo_invalido')`; a API captura essa classe e responde 400 (`app/ponto/services/ausencia.py:135`, `app/ponto/services/ausencia.py:429`, `app/ponto/services/ausencia.py:523`, `app/api/views.py:1825`, `app/api/views.py:1835`). |
+| **B3 — escrita parcial/corrida** | **Parcialmente curado; veto indevido curado.** | `update_fields` sem `tipo` retorna antes de consultar o catálogo. O SELECT histórico continua separado do save completo, portanto a corrida permanece possível (`app/ponto/models.py:881`, `app/ponto/models.py:888`, `app/ponto/models.py:938`). |
+
+**Os motivos de triagem procedem.** TTL, invalidação local e fallback por tabela vazia/exceção continuam na autoridade existente; as duas portas já a consultavam. O save completo também permanece: a guarda não criou o lost update genérico. Reclassifico esses resíduos da resposta anterior como limitações preexistentes, sem sustentarem bloqueante novo desta volta (`app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:252`, `app/ponto/catalogo/ausencias.py:253`, `app/ponto/catalogo/ausencias.py:288`, `app/ponto/services/ausencia.py:202`, `app/ponto/services/ausencia.py:486`, `app/ponto/models.py:938`).
+
+**(2) Leitores, invalidação e troca de schema**
+
+Os consumidores encontrados das respostas cacheadas são:
+
+| Entrada | Quem lê |
+|---|---|
+| `vigente()` diretamente | Declaração de texto e atestados em lote (`app/chamados/services/declaracao_texto.py:179`, `app/ponto/services/atestados_lote.py:28`). |
+| `codigos_validos()` | Formulário, guarda, prévia, criação, edição, exigência de documento, vigia e PWA (`app/ponto/forms.py:63`, `app/ponto/models.py:884`, `app/ponto/services/checar_ausencia.py:23`, `app/ponto/services/ausencia.py:202`, `app/ponto/services/ausencia.py:486`, `app/ponto/services/ausencia.py:822`, `app/ponto/services/vigia_ausencia.py:103`, `app/ponto/views.py:2509`). |
+| `efeito_vigente()` | Modelo, dia decidido, status, serviço de ausência e diagnóstico (`app/ponto/models.py:842`, `app/ponto/services/dia_decidido.py:468`, `app/ponto/status_dia.py:311`, `app/ponto/services/ausencia.py:629`, `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:49`). |
+| `rotulo_vigente()` / `rotulo_curto()` | Prévia, portas, PWA, dia decidido e calendário (`app/ponto/services/checar_ausencia.py:40`, `app/ponto/services/ausencia.py:445`, `app/ponto/services/ausencia.py:505`, `app/ponto/views.py:2550`, `app/ponto/services/dia_decidido.py:215`, `app/colaboradores/services/calendario.py:675`, `app/ponto/catalogo/ausencias.py:175`). |
+| Choices vivas/agrupadas | API, intake, drawer, colaboradores, telas de ausência e relatórios (`app/api/views.py:1864`, `app/core/intake.py:369`, `app/colaboradores/services/drawer.py:138`, `app/colaboradores/views.py:1959`, `app/ponto/views.py:2085`, `app/ponto/views.py:2248`, `app/ponto/views.py:2462`, `app/ponto/views.py:2561`, `app/relatorios/views.py:242`). |
+| `parciais_vigentes()` | Portas, telas, API, turnos, escala, materialização, fechamento, crédito, coletor de efeito e vigias (`app/ponto/services/ausencia.py:214`, `app/ponto/services/ausencia.py:492`, `app/ponto/views.py:2086`, `app/ponto/views.py:2237`, `app/api/views.py:1881`, `app/ponto/turnos.py:2599`, `app/ponto/turnos.py:2687`, `app/escala/utils.py:1187`, `app/chamados/services/materializacao.py:81`, `app/ponto/services/fechamento.py:692`, `app/ponto/services/credito_parcial.py:24`, `app/ponto/services/efeito_ausencia.py:38`, `app/ponto/services/vigia_ausencia_veredito.py:49`). |
+| Abonam/descontam e proxies `TIPOS_*` | Exportação, inteligência, precedência, documentos, alertas, aviso da batida, vigia e filtros de telas/relatórios (`app/folha/export.py:140`, `app/folha/export.py:181`, `app/folha/export.py:198`, `app/inteligencia/resumo.py:43`, `app/inteligencia/management/commands/calcular_scores.py:14`, `app/inteligencia/management/commands/gerar_alertas.py:58`, `app/ponto/precedencia.py:131`, `app/ponto/services/ausencia.py:646`, `app/ponto/services/alertas_ausencia.py:50`, `app/ponto/services/aviso_da_batida.py:79`, `app/ponto/services/vigia_ausencia.py:95`, `app/ponto/views.py:2198`, `app/ponto/views.py:2201`, `app/relatorios/views.py:282`). |
+
+Não encontrei dependência externa do formato antigo `{'t','v'}`: definição, limpeza, consulta e gravação de `_CACHE` estão no próprio módulo. Os proxies chamam novamente suas funções a cada operação; os aliases do modelo preservam esses proxies (`app/ponto/catalogo/ausencias.py:261`, `app/ponto/catalogo/ausencias.py:272`, `app/ponto/catalogo/ausencias.py:285`, `app/ponto/catalogo/ausencias.py:289`, `app/ponto/catalogo/ausencias.py:412`, `app/ponto/catalogo/ausencias.py:415`, `app/ponto/catalogo/ausencias.py:464`, `app/ponto/models.py:683`, `app/ponto/models.py:689`).
+
+O chamador produtivo encontrado de `invalidar_cache()` é o receiver de `post_save`/`post_delete` de `TipoAusencia`; a UI chega por `gravar_tipo_ausencia`. Os testes também invalidam explicitamente, sem acessar o formato interno (`app/ponto/models.py:1265`, `app/ponto/models.py:1268`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/services/ausencia.py:1326`, `app/ponto/services/ausencia.py:1328`, `app/ponto/tests/test_cadastro_tipo.py:12`).
+
+**Sim, há troca de schema dentro do mesmo comando/chamada:** o runner percorre tenants com `schema_context`, e o bootstrap entra em `tenant_context`. A chave é recalculada em cada `vigente()`, portanto A→B→A seleciona entradas distintas. `'public'` também é distinto de `None`; este significa ausência do atributo, tornando impreciso o comentário que aproxima control-plane de `None` (`app/tenants/cron.py:23`, `app/tenants/cron.py:25`, `app/tenants/bootstrap.py:19`, `app/ponto/catalogo/ausencias.py:260`, `app/ponto/catalogo/ausencias.py:267`, `app/ponto/catalogo/ausencias.py:284`).
+
+O cron configura `tenant_command`; execução integrada real desse pacote e desses contextos nesta avaliação: **[nao verificado]** (`app/config/crons.py:21`).
+
+**(3) Traduções, anexo, transação e outros saves**
+
+Outra `ValidationError` do save **não é engolida**: o filtro exige classe e código exatos; criação relança os demais erros e edição usa `raise`. A validação de fim anterior ao início, por exemplo, continua subindo inteira (`app/ponto/services/ausencia.py:135`, `app/ponto/services/ausencia.py:433`, `app/ponto/services/ausencia.py:441`, `app/ponto/services/ausencia.py:523`, `app/ponto/models.py:926`).
+
+Na criação, o save está dentro do `atomic` interno; limpeza e tradução acontecem depois de sair dele, com a limpeza primeiro. **A recusa real da guarda não chega a gravar upload**, pois ocorre antes de `super().save`; nome inalterado faz o cleanup retornar `False`. Logo, “anexo morre” não é consequência necessária dessa recusa. O helper tenta apagar arquivo com nome alterado e contém falha de exclusão (`app/ponto/services/ausencia.py:423`, `app/ponto/services/ausencia.py:425`, `app/ponto/services/ausencia.py:428`, `app/ponto/services/ausencia.py:432`, `app/ponto/models.py:898`, `app/ponto/models.py:938`, `app/ponto/services/ausencia.py:122`, `app/ponto/services/ausencia.py:125`, `app/ponto/services/ausencia.py:127`).
+
+A edição não introduz transação própria; conserva a transação do chamador quando existente. A tradução envolve seu save, antes da invalidação do fechamento (`app/ponto/services/ausencia.py:521`, `app/ponto/services/ausencia.py:530`, `app/ponto/services/ausencia.py:542`).
+
+Fora dessas duas portas, os saves encontrados são rejulgamento de prazo, estado, anexo, carimbos/período e reabertura. Todos usam `update_fields` sem `tipo`, evitando a nova recusa do catálogo nesses caminhos (`app/ponto/services/ausencia.py:570`, `app/ponto/services/ausencia.py:853`, `app/ponto/services/ausencia.py:877`, `app/ponto/services/ausencia.py:945`, `app/ponto/services/ausencia.py:1148`, `app/ponto/services/ausencia.py:1158`, `app/ponto/services/ausencia.py:1166`, `app/ponto/models.py:881`).
+
+A exceção restante é `rederivar_fim`: faz save completo e pode devolver a exceção crua diante de desacordo com o gravado. Seu chamador encontrado é o comando `curar_ausencia_sem_fim`, sem captura; não foi identificado novo propagador HTTP por esse caminho (`app/ponto/services/ausencia.py:1314`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:46`). O admin bloqueia escrita, e os receivers de Ausência encaminham o fato sem atribuir `tipo` (`app/ponto/admin.py:38`, `app/core/admin.py:59`, `app/core/admin.py:62`, `app/core/admin.py:65`, `app/ponto/signals.py:143`, `app/ponto/signals.py:275`).
+
+**(4) `update_fields`**
+
+Não encontrei chamador produtivo de `Ausencia.save` passando `update_fields` posicionalmente. O override, contudo, só lê `kwargs`: essa forma permanece uma lacuna latente da assinatura, sem caminho produtivo demonstrado. `tipo` é `CharField`, sem o alias de FK `tipo_id` (`app/ponto/models.py:749`, `app/ponto/models.py:896`, `app/ponto/models.py:898`).
+
+Não encontrei caminho produtivo que altere `tipo` esperando persistir por lista que o omite: a edição atribui o campo e faz save completo; os saves parciais encontrados escrevem outros campos (`app/ponto/services/ausencia.py:510`, `app/ponto/services/ausencia.py:522`, `app/ponto/services/ausencia.py:853`, `app/ponto/services/ausencia.py:945`, `app/ponto/services/ausencia.py:1158`).
+
+**(5) Classes de reprovação e mordida**
+
+- **Segundo juiz:** a guarda consulta a mesma `codigos_validos()` das portas. `faixa_de()` continua respondendo precedência, outra pergunta (`app/ponto/models.py:883`, `app/ponto/services/ausencia.py:202`, `app/ponto/services/ausencia.py:486`, `app/ponto/precedencia.py:76`).
+- **Segundo escritor:** não foi identificado escritor produtivo adicional de `tipo`; a porta declarada continua sendo o serviço. O contorno por `update(tipo=...)` está explícito na fixture; execução da catraca estrutural: **[nao verificado]** (`app/core/portas.py:486`, `app/ponto/services/ausencia.py:510`, `app/ponto/tests/test_lastro_folga_save_guarda.py:67`, `app/ponto/tests/test_chokepoint_ausencia_gate.py:53`).
+- **Relógio:** a guarda não acrescenta relógio próprio; usa a autoridade com TTL centralizado preexistente (`app/ponto/models.py:881`, `app/ponto/catalogo/ausencias.py:262`, `app/ponto/catalogo/ausencias.py:283`).
+- **Dois significados:** choices congeladas continuam distintas da validade viva; a criação exclui `tipo` do `full_clean`, e o teste preserva código vivo fora das choices (`app/ponto/models.py:749`, `app/ponto/services/ausencia.py:395`, `app/ponto/tests/test_lastro_folga_save_guarda.py:134`).
+
+Os cinco testes novos **têm mordida lógica**, com estes limites: [nao verificado]
+
+| Teste | O que detecta / limite | [nao verificado]
+|---|---|
+| Cache A→B | Reprova cache global compartilhado; usa mocks, sem troca real de schema (`app/ponto/tests/test_lastro_folga_save_guarda.py:157`). |
+| Tradução da criação | Exige classe/código e nenhuma linha gravada; força a recusa por mock (`app/ponto/tests/test_lastro_folga_save_guarda.py:169`, `app/ponto/tests/test_lastro_folga_save_guarda.py:175`). |
+| Tradução da edição | Exige classe/código; não verifica estado persistido após a recusa (`app/ponto/tests/test_lastro_folga_save_guarda.py:189`). |
+| Parcial sem `tipo` | Detecta veto indevido e verifica tipo preservado; não prova literalmente ausência de consulta ao catálogo (`app/ponto/tests/test_lastro_folga_save_guarda.py:203`). |
+| Parcial com `tipo` | Detecta retirada da guarda e verifica tipo preservado; aceita qualquer `ValidationError` (`app/ponto/tests/test_lastro_folga_save_guarda.py:215`). |
+
+RED, GREEN e mutantes efetivamente executados: **[nao verificado]**.
+
+Há uma **contradição documental relevante**: a docstring afirma que `folga` nunca esteve no catálogo vivo de produção, mas o relato posterior registra que estava cadastrada e distingue fora das choices de fora do catálogo. O teste continua válido como cenário local porque verifica sua pré-condição; a alegação histórica não está sustentada (`app/ponto/tests/test_lastro_folga_save_guarda.py:3`, `app/ponto/tests/test_lastro_folga_save_guarda.py:48`, `app/docs/RELATO.md:7368`, `app/docs/RELATO.md:7369`).
+
+Quanto ao pré-requisito, o BACKLOG exige medir escritor/frota, mas há registro posterior de censo, sonda e conferência: não cabe declarar descumprimento apenas pela linha ainda aberta. Artefatos originais, escritor histórico exato e cumprimento dos requisitos finais de pouso permanecem **[nao verificado]** (`app/docs/BACKLOG.md:1807`, `app/docs/RELATO.md:7368`, `CLAUDE.md:377`).
+
+## 11/11 15:47 · sessao 682710215ca8 · - · - · origem=Ronald (tmux)
+
+As duas formas novas mordem os respectivos mutantes:
+
+- Tirar `reapontar_resolvedora` de `ESCRITA` faz surgir `z.py::escreve: 1`, contrariando o esperado: teste vermelho. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:227`; `app/chamados/tests/test_catraca_data_evento_cru.py:237`)
+- Remover o tratamento de subscrito `Load` faz `escreve_lendo` cair de **3 para 2**: teste vermelho. A forma mínima `M.objects.create(x=p['data_evento'])` agora conta **1**. (`app/chamados/tests/test_catraca_data_evento_cru.py:119`; `app/chamados/tests/test_catraca_data_evento_cru.py:123`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`; `app/chamados/tests/test_catraca_data_evento_cru.py:238`)
+
+Executei em memória com `python3 -B` e substituição de `SimpleTestCase` por `unittest.TestCase`; passaram `test_so_desce`, `test_o_juiz_existe_e_le`, `test_MORDE_cada_forma` e `test_MORDE_template_sem_comentario`. Suíte Django: **[nao verificado]**. O teste que cria temporários não foi executado. (`app/chamados/tests/test_catraca_data_evento_cru.py:185`; `app/chamados/tests/test_catraca_data_evento_cru.py:198`; `app/chamados/tests/test_catraca_data_evento_cru.py:203`; `app/chamados/tests/test_catraca_data_evento_cru.py:240`; `app/chamados/tests/test_catraca_data_evento_cru.py:245`)
+
+**FILA:** remover somente `rechavear_data_evento` de `ESCRITA` sobrevive a `test_MORDE_cada_forma`; a fixture acrescenta `reapontar`, sem exercício de `rechavear`. Isso demonstra lacuna de cobertura, sem demonstrar leitor real omitido. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:219`; `app/chamados/tests/test_catraca_data_evento_cru.py:227`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`)
+
+## 11/11 15:46 · sessao dff7b4a6fb6d · - · - · origem=Ronald (tmux)
+
+Não encontrei leitura real omitida pelas duas portas novas. `ESCRITA` suprime os destinos, enquanto atributos lidos e chamadas internas continuam contados. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`; `app/chamados/tests/test_catraca_data_evento_cru.py:137`)
+
+- `reapontar_resolvedora`: os quatro `data_evento=` são pedidos de datação; a porta passa o pedido ao juiz, grava pelo escritor e salva. Não são constantes usadas para selecionar/ordenar o campo. (`app/chamados/reconciliador.py:954`; `app/chamados/reconciliador.py:1642`; `app/chamados/reconciliador.py:1655`; `app/chamados/services/declaracao_texto.py:370`; `app/chamados/services/fio.py:876`; `app/chamados/services/fio.py:879`; `app/chamados/services/fio.py:927`)
+- `rechavear_data_evento`: recebe valores de dia, grava `novo_dia` e salva; seus chamadores não passam a constante do campo para filtro/ordenação. (`app/chamados/services/fio.py:1074`; `app/chamados/services/fio.py:1078`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:400`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:492`; `app/chamados/services/fio.py:1037`; `app/chamados/services/fio.py:1043`)
+- As leituras reais presentes nas implementações — `p.data_evento` — permanecem visíveis ao ramo `Attribute/Load` do varredor. (`app/chamados/services/fio.py:867`; `app/chamados/services/fio.py:934`; `app/chamados/services/fio.py:1013`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`)
 
 ## 11/11 15:46 · sessao 2985e584509f · - · - · origem=Ronald (tmux)
 
@@ -448,151 +590,4 @@ Lacunas relevantes:
 
 Os novos testes não exercitam concorrência, `update_fields`, processos/tenants diferentes ou bulk/raw. `app/ponto/tests/test_lastro_folga_save_guarda.py:73-142`.
 
-## 11/11 15:36 · sessao 05d6cdb86f93 · - · - · origem=Ronald (tmux)
-
-- **(d) curado no desenho do ensaio:** a marca de fila ocorre em `_fimTx`, imediatamente antes de `oncomplete`; `add` apenas anota linha provisória; `abort` desfaz essa linha; o verificador exige promessa resolvida e exatamente uma linha persistida. `tx_lento` e Mi2 detectam gravação tardia quando o aborto é retirado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:142`, `:152`, `:178`, `:203`, `:605`, `:613`, `:823`.) Execução verde nesta cópia: [nao verificado].
-
-- **Limite da prova:** o falso IndexedDB abre em 1 ms e `close()` é vazio; `abort()` só lança quando `_feito` já está verdadeiro. Portanto não prova fechamento de conexão tardia nem a situação “commit iniciado, aborto lança, `oncomplete` ainda pendente”. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:195`, `:204`, `:210`, `:215`.)
-
-- **As quatro guardas sem mutante:** os mutantes existentes cobrem abertura/teto/bloqueio, transação/teto/aborto, guarda externa do gap, POST e corpo de erro; não há mutante para as quatro guardas indicadas. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:810`, `:830`, `:842`.)  
-  - `db.close()` tardio protege futuras aberturas/versões; a abertura atual já rejeitou. (`app/static/pwa.js:60`, `:72`.)  
-  - Catch interno do gap não é indispensável à fila, pois esta envolve `obterGap()` em `_noTeto`, que absorve rejeição. (`app/static/pwa.js:134`, `:166`, `:213`.)  
-  - `.catch` do indicador ocorre depois da transação de gravação e sem `await`; sua retirada gera rejeição acessória, não desfaz a fila. (`app/static/pwa.js:216`, `:223`.)  
-  - Instante único está correto no código, alimentando ambos os timestamps, mas falta prova de regressão temporal. (`app/static/pwa.js:212`, `:214`, `:218`.)  
-  Não demonstrei bloqueante de produto **só** pela ausência desses quatro mutantes; a prova para “aborto lança durante commit” permanece ausente. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:204`; `CLAUDE.md:375`.)
-
-- **Referências ao apagado:** a busca literal encontra somente a lápide no guard, comentário histórico de teste e tabela de órfãos; nenhum desses executa render/include. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:673`; `app/docs/TICKETS.md:693`.) As URLs vivas continuam apontando à view; ela renderiza v2 ou um template da triagem. (`app/ponto/urls.py:11`; `app/ponto/urls.py:12`; `app/ponto/views.py:225`; `app/ponto/views.py:356`.)
-
-- **SW:** guarda URLs, não nomes de templates; `/ponto/bater/` permanece na lista. Para navegação, porém, o ramo `navigate` retorna antes do bloco que alimenta esse cache; é comportamento presente na cópia, não referência quebrada causada pela exclusão. (`app/static/sw.js:45`, `:50`, `:67`, `:74`.)
-
-- **Ferramentas alteradas:** `check_frontend_urls.py` lista somente pwa.js, sw.js e dashboard antigo; apto/v2 ficam fora dessa cobertura. O guard da Lei retirou o arquivo morto, mas não incluiu v2 e conserva caminhos `app/apps/ponto/views.py`, pulando arquivos inexistentes. São lacunas desses instrumentos; não provam quebra de rota nem novo bloqueio de selfie. (`app/tools/check_frontend_urls.py:25`; `app/scripts/check_a_lei_batida.py:14`, `:20`, `:21`, `:31`.)
-
-Não executei o Chromium: o próprio ensaio cria arquivos/perfil e os apaga, contrariando a regra somente leitura. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:344`, `:351`, `:360`, `:363`, `:372`.)
-
-## 11/11 15:36 · sessao 4ab2dacb6e2c · - · - · origem=Ronald (tmux)
-
-(2) Há **até um POST inicial mais uma linha de fila por clique online**; a linha pode provocar novos POSTs sem limite declarado enquanto a resposta/remoção falhar. Isso não equivale ao mesmo número de linhas `Batida`: a sincronização mantém a linha em erro e só a remove após resposta 2xx e transação de exclusão completa (`app/templates/ponto/bater_ponto_v2.html:307-331`; `app/static/pwa.js:256-298`).
-
-- O chokepoint deduplica **mesmo colaborador e mesmo tipo, ±60 s inclusivos**, entre batidas não retratadas, comparando o `timestamp` passado à porta (`app/ponto/registro_batida.py:106-115`).
-- A API deduplica **mesmo colaborador e mesmo tipo, ±5 min inclusivos**, sobre `ts_efetivo`, e responde `ja_registrada`, sem criar outra linha. Não é janela sobre horário da chegada quando o aparelho forneceu hora válida (`app/api/views.py:518-555`).
-- Portanto, **reenvio sequencial, mesmo tipo, diferença de até 30 s e primeira gravação já visível** cabe nas duas janelas. A falta de identidade original, isoladamente, não prova duplicação nesse cenário (`app/static/pwa.js:230-240`; `app/api/views.py:539-555`; `app/ponto/registro_batida.py:106-115`).
-- A garantia universal fica **[nao verificado]**: a API deduplica antes de eventualmente corrigir o tipo; a consulta usa o tipo recebido, enquanto a primeira gravação pode ter usado outro (`app/api/views.py:539-558`; `app/api/views.py:578-613`). Há também vários gatilhos de sincronização e nenhuma trava na entrada da função mostrada (`app/static/pwa.js:16`; `app/static/pwa.js:244-253`; `app/static/pwa.js:441-449`).
-- Com `tx.abort()` lançando no teto, o código rejeita mesmo assim; ele não consegue assegurar que aquela transação não concluirá posteriormente. Isso pode deixar uma linha que será reenviada apesar do erro mostrado, mas não demonstra duas linhas no servidor, devido às deduplicações acima (`app/static/pwa.js:84-93`; `app/static/pwa.js:216-223`; `app/templates/ponto/bater_ponto_v2.html:329-331`).
-
-(3) A lei copiada declara batida de chão sem barreira e escrita por `ponto/registro_batida.py` (`CLAUDE.md:143-144`). Os caminhos examinados consultam o juiz central de câmera/captura e seguem com foto nula; não encontrei segundo juiz de admissibilidade da selfie nesses caminhos (`app/static/pwa.js:170-204`; `app/templates/ponto/triagem/apto.html:248-264`; `app/templates/ponto/triagem/apto.html:275-289`; `app/templates/ponto/bater_ponto_v2.html:269-284`). No servidor, ausência de foto consulta `selfie_ausente` e acrescenta motivo, sem retorno de recusa (`app/api/views.py:449-465`; `app/ponto/registro_batida.py:80-91`). Existem barreiras anteriores de situação e colisão oposta; não são introduzidas por esse delta (`app/api/views.py:415-423`; `app/ponto/registro_batida.py:145-151`).
-
-(4) O escritor lê `Date.now()` uma vez **na entrada de `registrarBatidaOffline`**, antes do gap e do IndexedDB; grava esse instante cru em `timestamp_dispositivo` (`app/static/pwa.js:211-222`). Isso não é necessariamente o instante do primeiro clique: na v2 online, a chamada acontece depois do POST sem resposta, que pode consumir 30 s (`app/templates/ponto/bater_ponto_v2.html:293-323`; `app/static/pwa.js:230-237`).
-
-A fila envia `timestamp_dispositivo`; não envia seu `timestamp` corrigido nem o gap (`app/static/pwa.js:261-270`). O leitor é `api_bater_ponto`, que passa esse campo a `hora_do_aparelho`; sem campo, vale `agora` (`app/api/views.py:509-521`; `app/api/hora_do_aparelho.py:135-139`). A função aceita a hora do aparelho com atraso de **0 a 48 h**, usando-a como hora efetiva; acima de 3 min acrescenta trilha de offline aceito. Hora futura ou antiga demais usa `agora`, preservando a hora lida no campo do aparelho (`app/api/hora_do_aparelho.py:62-67`; `app/api/hora_do_aparelho.py:141-153`). Assim, atraso de 30 s é aceito sem descarte quando o relógio está correto (`app/api/hora_do_aparelho.py:141-146`).
-
-## 11/11 15:35 · sessao 36452142e014 · DATA-EVENTO-CRU · verificador · origem=Code
-
-**Veredito: bloqueantes — há leitores reais fora do censo e ocorrências de escrita/schema registradas como leitores.** (`app/ponto/management/commands/vigia_plantio_overnight.py:75`; `app/chamados/models.py:2789`; `app/chamados/models.py:3486`)
-
-1. **O selo MORDE nas formas reconhecidas, mantendo o JSON fixo.** Chave nova, aumento em escopo existente e redução sem baixar a allowlist ficam vermelhos; desaparecimento também exige baixa. Isso vale para Python e templates. Confirmei esses cinco cenários em memória usando a comparação existente. (`app/chamados/tests/test_catraca_data_evento_cru.py:133`)
-
-   O teste denominado `test_MORDE_leitor_novo_no_censo` prova descoberta, mas não executa a comparação que reprova o leitor novo. Não executei esse caso, pois cria e apaga arquivos temporários. (`app/chamados/tests/test_catraca_data_evento_cru.py:178`)
-
-   A catraca compara apenas com o JSON atual: aumentar código **e** allowlist juntos pode passar; não há comparação com o baseline anterior. Substituir uma leitura por outra no mesmo escopo também preserva a contagem, limite já declarado. (`app/chamados/tests/test_catraca_data_evento_cru.py:134`; `app/chamados/tests/test_catraca_data_evento_cru.py:26`)
-
-2. **Falsos negativos.** O varredor reconhece `getattr` literal, `values/values_list/only('data_evento')`, `F/OuterRef('data_evento')`, `filter(data_evento__...)`, `annotate(d=F(...))`, subscrito literal e `.get('data_evento')`. Um `{% with d=p.data_evento %}` também entra. (`app/chamados/tests/test_catraca_data_evento_cru.py:82`; `app/chamados/tests/test_catraca_data_evento_cru.py:174`)
-
-   Escapam nomes calculados, argumentos expandidos por `*`/`**`, campos declarados em listas/tuplas, `source='data_evento'`, serialização genérica e template `|attr`. A detecção depende de atributo, subscrito literal, argumento posicional literal ou keyword que comece pelo campo. (`app/chamados/tests/test_catraca_data_evento_cru.py:23`; `app/chamados/tests/test_catraca_data_evento_cru.py:82`)
-
-   **Leituras verdadeiras omitidas hoje:**
-
-   - `pergunta_origem__data_evento__isnull=False` lê o campo pela relação, mas não casa com a regex ancorada em `data_evento`. (`app/ponto/management/commands/vigia_plantio_overnight.py:75`; `app/chamados/tests/test_catraca_data_evento_cru.py:50`)
-   - A chave da família marco contém `data_evento`, usado por `values(*chave)`, `order_by(*chave)`, `g[k]` e `filter(**dict(...))`; essas ocorrências escapam. (`app/chamados/services/fio.py:1373`; `app/chamados/services/fio.py:1948`; `app/chamados/services/fio.py:1949`; `app/chamados/services/fio.py:1950`; `app/chamados/services/fio.py:1970`)
-   - O lookup dinâmico de nulidade também escapa. (`app/chamados/services/fio.py:1378`; `app/chamados/services/fio.py:1946`)
-   - Fora de `app/`, mensageria lê o valor serializado com `i.get('data_evento')`; essa exclusão está declarada. (`mensageria/nucleo/ferramentas.py:127`; `app/chamados/tests/test_catraca_data_evento_cru.py:25`)
-
-   Existência atual de serializer ou template `|attr` lendo esse campo: **[nao verificado]**.
-
-3. **Falsos positivos.** Atribuição simples e `create(data_evento=...)` são excluídos; uma leitura no lado direito continua contando. (`app/chamados/tests/test_catraca_data_evento_cru.py:48`; `app/chamados/tests/test_catraca_data_evento_cru.py:82`)
-
-   Contudo, qualquer outra chamada com keyword `data_evento=` conta. Assim, `abrir` e `abrir_conversa` entram apenas por encaminharem o valor ao escritor, sem ler campo de pergunta. (`app/chamados/tests/test_catraca_data_evento_cru.py:96`; `app/chamados/models.py:2789`; `app/chamados/models.py:2801`)
-
-   Os dois `Q` internos às declarações de índices também contam, apesar da exclusão de `UniqueConstraint`: a recursão visita seus filhos. A allowlist registra essas duas ocorrências em `PerguntaDisputa.Meta`. (`app/chamados/tests/test_catraca_data_evento_cru.py:99`; `app/chamados/models.py:3486`; `app/chamados/models.py:3492`; `app/chamados/tests/catraca_data_evento_cru.json:39`)
-
-   Não há resolução de modelo: um atributo homônimo de outro objeto seria contado igualmente. Outro modelo concreto afetado hoje: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:82`)
-
-4. **Juiz excluído pelo nome exato.** A exclusão é `out.pop(JUIZ, 0)`. Renomeá-lo faz surgir chave nova e deixa a contagem do juiz isento em zero, reprovando também a prova de existência; não passa vazio. (`app/chamados/tests/test_catraca_data_evento_cru.py:44`; `app/chamados/tests/test_catraca_data_evento_cru.py:127`; `app/chamados/tests/test_catraca_data_evento_cru.py:146`)
-
-5. **JSON e contratos.** O leitor é `test_so_desce`; a mensagem exige baixa manual. Escritor automatizado/autoria histórica: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:134`; `app/chamados/tests/test_catraca_data_evento_cru.py:143`)
-
-   Não há colisão nos enumeradores examinados: O20 seleciona `test_contract_*.py`; P13 exclui `tests/` e exige `.py`; o selo de relógio seleciona `test*.py`, excluindo o JSON. Ausência universal de colisões na suite: **[nao verificado]**. (`app/core/tests/test_o20_contrato_julga_codigo.py:164`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:147`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:150`; `app/core/tests/test_selo_teste_sem_relogio.py:53`)
-
-   O JSON soma **217 ocorrências em 120 chaves: 212 Python + 5 templates**, coincidindo com o censo implementado. Publicação desse total no BACKLOG/ESTADO: **[nao verificado]**. (`app/chamados/tests/catraca_data_evento_cru.json:2`; `app/chamados/tests/catraca_data_evento_cru.json:119`)
-
-6. **Classes anteriores de reprovação.** Há mordida efetiva na comparação, porém cobertura incompleta nas formas acima. Os arquivos novos implementam contagem e comparação, sem introduzir juiz do dia, leitura de relógio ou derivação paralela do dia. Execução da suite Django/pre-push neste hash: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:68`; `app/chamados/tests/test_catraca_data_evento_cru.py:112`; `app/chamados/tests/test_catraca_data_evento_cru.py:133`)
-
-**Bloqueantes para aprovação:** incluir os leitores reais omitidos e retirar os repasses de escrita/schema do censo, recalibrando a allowlist. (`app/ponto/management/commands/vigia_plantio_overnight.py:75`; `app/chamados/services/fio.py:1948`; `app/chamados/models.py:2789`; `app/chamados/models.py:3486`)
-
-## 11/11 15:34 · sessao 97538cdfafe8 · - · - · origem=Ronald (tmux)
-
-Inventário estático de `select_for_update`: **23 sites fora de testes/migrations; 18 com alcance por código até Pauta DP**, dos quais **16 têm borda produtiva identificada e 2 pertencem às portas editar/trocar usadas só pelos testes encontrados**. Contagem por AST de `Call(Attribute(..., 'select_for_update'))`; inclui as linhas enumeradas abaixo. A execução do censo não deixou arquivo de saída: **[nao verificado]**. [nao verificado]
-
-| Recurso / função | Sites de aquisição | Ordem e alcance até DP |
-|---|---|---|
-| Colaborador, Disputa, Chamado, Pergunta — `PerguntaDisputa.trava_na_ordem` | `app/chamados/models.py:2666`, `:2675`, `:2688`, `:2692` | **C → D → Ch → P**, cada conjunto por PK; `_gravar_estado` pede universo antes de salvar, e o save acorda cartório/fábrica. `app/chamados/models.py:290`; `app/chamados/models.py:296`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`. |
-| FechamentoMensal — command pago/devido | `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196` | Atomic `:189` → C `:193` → FM `:196` → Pauta cabeça `:207` → DP → filhas `:211` → DP. |
-| Justificativa — aprovação/rejeição/materialização | `app/ponto/services/justificativa.py:142`, `:277`, `:344`; `app/ponto/views.py:1794` | **C/D/Ch antes da Justificativa**, pelos pedidos `:141`, `:276`, `:343` e view `:1793`; depois save de J → signal cartório → fábrica → DP. `app/ponto/services/justificativa.py:208`; `app/ponto/services/justificativa.py:287`; `app/ponto/signals.py:165`; `app/ponto/services/cartorio.py:1020`. |
-| AgendamentoFerias e PeriodoAquisitivo — `_travar_agendamento` | `app/ferias/services.py:364`, `:367` | Ag → PA → Ausencia por UPDATE/DELETE/INSERT → cartório ou pauta de férias recusadas → DP. `_trocar_janela`: atomic `:433`, locks `:434`, exclusão `:445`, save `:450`; sync em `app/ferias/models.py:449` e `:451`; pauta direta em `app/ponto/services/ausencia.py:1216` e `:1245`. |
-| AgendamentoFerias — alinhamento por data | `app/ferias/services.py:600` | Atomic `:599` → Ag → save de status `:604` → sync Ausencia `app/ferias/models.py:451` → cartório/DP, ou pauta de recusa `app/ponto/services/ausencia.py:1245`. |
-| SolicitacaoFerias — view avaliar | `app/ferias/views.py:740` | Atomic `:739` → Solicitação → aprovação `:753` → criação/save Agendamento `app/ferias/services.py:503` → sync Ausencia `app/ferias/models.py:451` → DP; depois UPDATE PA `app/ferias/services.py:506`. |
-| DecisaoHE — decisão/período | `app/ponto/portas/he.py:174`, `:555` | Prévia atomic `app/ponto/services/autorizacao_he_periodo.py:321` ou confirmação `:343` → `_ato` → `autorizar_em_lote` `:277` → HE `app/ponto/portas/he.py:555` → decisão HE `:562`/`:174` → pauta DP `app/ponto/services/autorizacao_he_periodo.py:300`/`:244`. |
-| Ausencia — rederivação H06 | `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138` (chamada continua em `:139`) | Atomic `:137` → Ausencia → editar `:169` → save `app/ponto/services/ausencia.py:509` → signal `app/ponto/signals.py:147` → cartório/fábrica/DP. |
-| CelulaDia — editar dia | `app/ponto/portas/celula.py:593` | Atomic `:592` → Celula → órfãs `:626` → `app/ponto/management/commands/gerar_celulas.py:255` → contexto `app/chamados/services/contexto.py:103` → C/Ch `app/chamados/models.py:486`. Julgamento/DP vem após saída desse atomic, em `app/ponto/portas/celula.py:627` e `:434`; fica na mesma transação quando herda o atomic de trocar `:652`. Chamador encontrado: `app/ponto/portas/celula.py:675`; bordas externas encontradas só testes, por exemplo `app/ponto/tests/test_o10b_editar_dia_troca.py:116`. |
-| Ausencia — trocar plantão | `app/ponto/portas/celula.py:657` | Atomic `:652` → Ausencias por PK `:657` → células por colaborador/data `:673` → editar `:675` → C/Ch por órfãs → julgamento → DP. Uso identificado só em teste, por exemplo `app/ponto/tests/test_o10b_editar_dia_troca.py:116`; chamador produtivo **[nao verificado]**. |
-
-**Cinco sites excluídos do alcance DP no mesmo atomic lido:**
-
-| Sites | Razão |
-|---|---|
-| `app/ponto/portas/he.py:318`, `:445` | Recusar ponta/revogar têm os commands próprios como chamadores encontrados; não alcançam a pauta do ato de período. Chamadas: `app/ponto/management/commands/recusar_ponta_pequena.py:170`; `app/ponto/management/commands/lavrar_he_pendente.py:59`. |
-| `app/core/services/aplicacao_convencao.py:115` | O atomic cadastra/altera AplicacaoConvencao e grava trilha; retorna em `:124`/`:134`. Não foi encontrado receiver que leve esse model ao cartório; alcance indireto **[nao verificado]**. |
-| `app/holerite/management/commands/processar_lote_holerite.py:54`, `:124` | Atomics cuidam de estado do lote; chamada ao motor fica fora deles, em `:89`. Alcance de DP dentro desses dois atomics **[nao verificado]**. |
-
-| Advisory | Aquisição / duração |
-|---|---|
-| Âncora E4B | `app/chamados/services/fecho_runtime.py:89`: `pg_advisory_xact_lock`, dentro atomic `:119`; todas as âncoras ordenadas em `:120`, antes de escrever `:127`. |
-| Vigia de hora | `app/ponto/services/vigia_de_hora.py:99`: `pg_try_advisory_lock`, sessão; falha retorna em `:100`/`:101`; julgamento em `:131`, unlock em `:136`. Não é aquisição bloqueante; não há atomic amplo em `rodar`. |
-| Consumidor de eventos | `app/chamados/reconciliador.py:1235`: `pg_try_advisory_lock`, sessão; libera em `:1242`. O consumidor usa atos separados por chamado, sem atomic de lote, conforme implementação/chamadas `:1364`, `:1365`, `:1368`; delimitação descrita em `:1325`/`:1326`. |
-
-**Escritas que também precisam entrar na sequência, embora não sejam `select_for_update`:**
-
-- `Pauta INSERT → trilha → Contador.get_or_create → Contador UPDATE`: `app/pautas/services.py:180`, `:186`, `:188`, `:352`, `:354`. `lavrar` **não tem decorador atomic** em `:344`; chamado avulso em autocommit não conserva DP entre alvos; comportamento efetivo do banco **[nao verificado]**.
-- Pauta existente UPDATE → trilha → DP: ler `app/pautas/services.py:215`/`:218`; fazer `:247`/`:251`; fazer pelo sistema `:272`/`:276`; cancelar `:294`/`:297`.
-- Cartório escreve Celula antes de chamar a fábrica: `app/ponto/services/cartorio.py:1845` → `app/ponto/portas/celula.py:1072` → atomic/save `:904`/`:905`; depois fábrica `app/ponto/services/cartorio.py:1020`. Na lavra do cartório, o argumento é `save=False` em `app/ponto/services/cartorio.py:1825`, portanto citar somente `celula.py:1040` não prova o UPDATE desse caminho.
-- Núcleo de Batida: signal `app/ponto/signals.py:36` → `app/ponto/nucleo.py:57` → DELETE de TurnoMaterializado `:58`/`:81` → bulk INSERT `:59`; o cartório posterior do mesmo save vem em `app/ponto/signals.py:135`.
-- Invalidar FM é **síncrono**: `app/ponto/services/fechamento.py:1656`. Exemplo DP pode precedê-lo: aprovação `app/ponto/services/justificativa.py:208` → signal/cartório/fábrica → DP → `invalidar_fechamento` `:215`. O recálculo, separadamente, é `on_commit` em `app/ponto/services/fechamento.py:1824`.
-- Passivo: atomic do par `app/chamados/services/passivo_validado.py:371` → plantio `:428` → regeneração exportada `:438` → outer da porta `app/ponto/portas/regen_exportada.py:169` → regeneração `:174` → FM `:179` → DiaPago `:188` → Pauta passivo `app/chamados/services/passivo_validado.py:443`. A regeneração pode acionar cartório/fábrica antes do FM por `app/ponto/portas/celula.py:354`/`:434`.
-- Matrícula sem número pede C do maior matriculado em `app/colaboradores/models.py:436`; seu atomic `:429` termina antes do `super().save` `:439`, salvo atomic herdado. Alcance DP naquele atomic isolado **[nao verificado]**.
-
-**Pares e limites:**
-
-| Par | Avaliação estática |
-|---|---|
-| DP → âncora / âncora → DP | Inversão demonstrada no runtime pelo ato externo: transição antes do agrupador `app/chamados/services/fecho_runtime.py:151`/`:154`; fábrica DP `app/chamados/services/fabrica_da_celula.py:369` ou `:279`; agrupador âncora `app/chamados/services/fecho_runtime.py:121` → DP `:127`/`app/pautas/services.py:354`. Recursos compartilháveis entre colaboradores diferentes pela âncora empresa/competência `app/chamados/services/fecho_runtime.py:116` e contador por departamento `app/pautas/services.py:352`. |
-| C → Celula / Celula → C | Oposto efetivo de transição: C `app/chamados/models.py:2666` → cartório `app/chamados/signals.py:217` → Celula `app/ponto/portas/celula.py:905`. Inverso em trocar: outer `app/ponto/portas/celula.py:652` → Celula `:593` → órfãs `:626` → C `app/chamados/models.py:486`. Código permite o par para mesmos C/Celula; chamador de trocar encontrado só testes `app/ponto/tests/test_o10b_editar_dia_troca.py:116`. Runtime concorrente **[nao verificado]**. |
-| DP → FM / FM → DP | Há as duas ordens **de classes**: aprovação J `app/ponto/services/justificativa.py:208`/`:215` e pago/devido `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`/`:207`. **Não certificar deadlock desse par:** aprovação já toma C em `app/ponto/services/justificativa.py:141`/`:129`, e pago toma o mesmo C antes do FM em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`. Para o mesmo FM, esse C serializa os dois caminhos; outro ato sem esse serializador **[nao verificado]**. |
-| Regeneração Celula → C contra transição C → Celula | Regeneração tem UPDATE Celula `app/ponto/portas/celula.py:276` antes de órfãs/C `:289`; entretanto cartório vem depois do atomic local `:354`. A porta exportada conserva ambos no outer `app/ponto/portas/regen_exportada.py:169`/`:174`, mas seu único chamador produtivo encontrado é passivo `app/chamados/services/passivo_validado.py:438`, cujo plantio já carimba pela porta em `app/chamados/services/materializacao.py:1277` antes da regeneração. Não certificar aquisição nova de C nem ciclo runtime sem resolver essa pré-trava. |
-| Justificativa → C / C → Justificativa | Não demonstrado no código lido: as quatro bordas pedem C/D/Ch antes de J (`app/ponto/services/justificativa.py:141`, `:276`, `:343`; `app/ponto/views.py:1793`). |
-
-Correção ao meu informe intermediário: `rejeitar_ausencias_de_ferias` usa UPDATE sem signal (`app/ponto/services/ausencia.py:1281`), portanto o alcance cartório/DP do cancelamento-admin vem do save posterior do Agendamento (`app/ferias/services.py:417` → `app/ferias/models.py:451`), que remove Ausencias e dispara `post_delete` (`app/ponto/services/ausencia.py:1190`; `app/ponto/signals.py:152`).
-
-## 11/11 15:34 · sessao b65421d650d3 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação:
-
-- **Falso negativo atual, sem reflexão:** `Batida.objects.filter(pergunta_origem__data_evento__isnull=False)` consulta o campo de `PerguntaDisputa`, mas o prefixo relacional impede casar com `^data_evento...$`. O vínculo de `pergunta_origem` é `PerguntaDisputa`. — `app/ponto/management/commands/vigia_plantio_overnight.py:73-75`; `app/ponto/models.py:41`; `app/chamados/tests/test_catraca_data_evento_cru.py:50,97`.
-- **Leituras dinâmicas atuais omitidas:** a chave da família MARCO inclui `'data_evento'`; `grupos_de_colisao` a usa em `values(*chave)`, `order_by(*chave)`, `g[k]` e `filter(**dict(zip(chave,ch)))`. Nenhuma dessas ocorrências casa com os predicados de constantes diretas do varredor. O queryset vem de `PerguntaDisputa`. — `app/chamados/services/fio.py:1373,1430-1433,1945,1948-1950,1970`; varredor `app/chamados/tests/test_catraca_data_evento_cru.py:64-65,84-98`.
-- **Filtros dinâmicos atuais omitidos:** `_NULO_FORA_DO_INDICE['marco']` é `'data_evento__isnull'`; seus usos em `exclude(**{...})` e `filter(**{...})` ficam fora. — `app/chamados/services/fio.py:1378,1946,2000`; varredor `app/chamados/tests/test_catraca_data_evento_cru.py:96-98`.
-- `getattr(p,'data_evento')`, `values/values_list/only('data_evento')`, `F/OuterRef('data_evento')`, `filter(data_evento__...)`, `annotate(d=F('data_evento'))`, `d['data_evento']` e até `d.get('data_evento')` **são vistos**: constantes posicionais de quaisquer chamadas não excluídas entram. — `app/chamados/tests/test_catraca_data_evento_cru.py:82-98`.
-- `fields=['data_evento']`, `source='data_evento'`, constantes em tuplas/listas passadas por `*`, argumentos por `**`, `getattr(p,nome)` e `|attr` **não são vistos**; presença atual de serializers ou templates `|attr` de `PerguntaDisputa`: **[nao verificado]**. Os limites de reflexão/serialização/`|attr` já estão declarados. — `app/chamados/tests/test_catraca_data_evento_cru.py:23-25,64-65,89-98,105-109`.
-- `{% with d=q.data_evento %}` **é visto**, inclusive no teste sintético. — `app/chamados/tests/test_catraca_data_evento_cru.py:174-176`.
-- Fora de `app/`, existe consumo do valor serializado: `mensageria/nucleo/ferramentas.py:127` lê `i.get('data_evento')`; a API fornece o campo de `p` em `app/api/views_mensageria.py:568`. Esse serviço está explicitamente fora do censo. — `app/chamados/tests/test_catraca_data_evento_cru.py:25,41,112`; transporte `mensageria/nucleo/core_client.py:42-55`.
-- A única declaração de campo modelo encontrada é `PerguntaDisputa.data_evento`; **não há evidência para afirmar segundo modelo existente**. O comentário diz “UM modelo”, sem dizer “outro”. — `app/chamados/models.py:2406,2423`; `app/chamados/tests/test_catraca_data_evento_cru.py:26`. Outro modelo hoje: **[nao verificado]**.
-- Os `getattr` dinâmicos de histórico e reversão não demonstram leitores omitidos de `data_evento`: suas listas não incluem o campo. — `app/chamados/services/historico.py:98-105`; `app/chamados/services/passivo_validado.py:64-66,83`.
-
-_3966 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3971 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
