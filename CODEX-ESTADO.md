@@ -1,7 +1,234 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:36** · publicado em **11/11/2026 10:38** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:43** · publicado em **11/11/2026 10:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:43 · sessao e683c1d88894 · MAPA-20 · verificador · origem=Code
+
+REPROVADO para pouso. Há divergência do aval, falsos verdes no validador e mutantes do publicador que escapam ao selo. (Diff: `bin/mapa20_valida.py:18,33–59`; `bin/tests/test_mapa20_valida.sh:42–50`.)
+
+Referências: **B** = base; **D** = arquivo resultante proposto pelo diff, com numeração pós-diff; **A** = anexo `aval_mapa_ate_o_20_1111.txt:1`.
+
+1. **RC e todos os `exit`.** No fluxo implementado, validador vermelho **não termina em rc 0**: o `else` grava `MAPA_RC=1`, preservado até as duas saídas finais. Validador verde **não causa rc 1 sem outra falha**. (D `bin/relato.sh:94–103,142,148–149`.)
+
+   | Linha de `relato.sh` após diff | Valor do `exit` | Gatilho |
+   |---|---:|---|
+   | 27 | 1 | Falha de lock |
+   | 28 | 1 | Destino sem `.git` |
+   | 32 | 1 | Falha na lista de nomes |
+   | 35 | 1 | Falha em BACKLOG-TOPO |
+   | 38 | 1 | Falha em ESTADO |
+   | 42 | 1 | Falha em SESSAO |
+   | 86 | 1 | Falha raspando RELATO retido |
+   | 101 | 1 | Falha raspando MAPA retido |
+   | 117 | 1 | Falha em gerar avais |
+   | 132 | 1 | Falha na raspagem geral |
+   | 142 | `$MAPA_RC` | Nada mudou |
+   | 148 | 1 | Falha no `git push` ou no `echo` associado | [nao verificado]
+   | 149 | `$MAPA_RC` | Final após publicação |
+
+   Fontes da tabela: B `bin/relato.sh:27–42,86`; D `bin/relato.sh:101,117,132,140–149`.
+
+   Ressalva: `cd`, `git add` e `git commit` continuam sem tratamento obrigatório de erro; não há `set -e`. Isso permite outros falsos sucessos, mas não zera o `MAPA_RC` vermelho. (B `bin/relato.sh:21`; D `bin/relato.sh:135–149`.)
+
+2. **Ramo retido: escrita parcial possível e isolamento incompleto.** `DEST` recebe `DEST_RELATO` ou `/home/ronald/hasner-relato`. O ramo retido passa `$DEST/MAPA-20.md` como origem e, efetivamente, como destino do raspador. (B `bin/relato.sh:23`; D `bin/relato.sh:100–101`.)
+
+   `raspar_publico.py` lê o conteúdo inteiro, mascara e confere; depois abre o destino com `'w'`. Falha antes dessa abertura preserva o arquivo; erro/interrupção durante a escrita pode deixá-lo truncado ou parcial no checkout público. Não há temporário nem substituição atômica. Ocorrência real: **[nao verificado]**. (B `bin/raspar_publico.py:28–40`.)
+
+   O `|| exit 1` interrompe também a publicação do restante e não desfaz eventual truncamento. Portanto, “o resto segue” não vale quando essa raspagem falha. Num ciclo posterior, a cópia parcial pode ser re-raspada e incluída pelo teste de existência, sem validação estrutural da cópia pública. (D `bin/relato.sh:99–101,139,146–148`.)
+
+   Comparação com 2e: CODEX-ESTADO gera e raspa em temporário antes de copiar, protegendo o destino de falhas dessas duas etapas. Entretanto, a cópia final é `cp` direto: também não garante atomicidade contra falha durante a cópia. O comentário “nunca arquivo pela metade” excede essa garantia. (B `bin/relato.sh:89–97`; B `bin/codex_estado.sh:25–38`.)
+
+   Há ainda intervalo entre validar e publicar: o validador lê a origem, e a raspagem geral a lê novamente. Sem snapshot, alteração concorrente pode publicar bytes diferentes dos validados; adesão do escritor ao lock e ocorrência real: **[nao verificado]**. (D `bin/relato.sh:95–96,118–132`; D `bin/mapa20_valida.py:65`; B `bin/raspar_publico.py:28`; B `bin/relato.sh:27`.)
+
+3. **Argumento `origem:destino`: o par novo está correto.** O raspador usa `par.rsplit(':', 1)`: o **último** `:` separa origem de destino. Assim, `:` na origem não quebra o argumento; `:` no destino muda a interpretação. (B `bin/raspar_publico.py:23–24`.)
+
+   Os dois pares novos respeitam esse formato. `RAIZ` vem de `pwd`, sem restrição que proíba `:`; mesmo contendo esse caractere, ele permanece na parte da origem. Caminho real de produção: **[nao verificado]**. (B `bin/relato.sh:22`; D `bin/relato.sh:96,101`; B `bin/raspar_publico.py:24`.)
+
+4. **Validador: falsos aceites, falsas recusas e universo divergente.** Para os exemplos expressamente perguntados:
+
+   | Caso | Comportamento |
+   |---|---|
+   | Obra somente citada em prosa | Recusa: não satisfaz presença |
+   | Obra somente na segunda tabela, após outra tabela | Recusa: examina apenas a primeira |
+   | Célula de dados contendo somente espaços | Recusa |
+   | Célula `-` | Aceita |
+   | Linha inteira de separador | Ignora; não substitui uma obra |
+
+   Fontes: D `bin/mapa20_valida.py:28–40,49–59`. Portanto, prosa, segunda tabela e espaços não são todos falsos aceites.
+
+   **Contraexemplos aceitos indevidamente**, tomando uma tabela completa para `OBRAS + SEM DONO`:
+
+   - Uma única coluna, contendo apenas as identidades: nenhuma coluna de conteúdo é exigida. (D `bin/mapa20_valida.py:48–59`; A.)
+   - Cabeçalho com uma coluna e dados com três: a largura do cabeçalho é descartada antes da comparação. (D `bin/mapa20_valida.py:40,54–56`.)
+   - Linhas `|E3|||`, e equivalentes para todas as identidades: `strip('|')` remove as colunas vazias finais. (D `bin/mapa20_valida.py:33–34,51–56`.)
+   - Tabela inteira dentro de bloco cercado por crases; tabela sem separador; obras duplicadas. O parser não reconhece cercas, não exige separador e não acusa duplicação. (D `bin/mapa20_valida.py:30–40,49–50`.)
+   - `-` em coluna que deveria trazer medição ou `nao medido`: só se testa vazio, não a declaração exigida pelo aval. (D `bin/mapa20_valida.py:51–59`; A.)
+
+   **Recusas indevidas:** mapa completo na segunda tabela; tabela Markdown sem pipes externos; uma célula `x\|y.py:1`, cujo pipe escapado cria coluna artificial; mapa usando `UI-PAINEL`, literalmente autorizado. (D `bin/mapa20_valida.py:18,32–40,54–59`; A.)
+
+   Comparação nome a nome:
+
+   | Aval | `OBRAS` |
+   |---|---|
+   | E3 | E3 |
+   | E4B | E4B |
+   | E4C | E4C |
+   | E4D | E4D |
+   | RAIZ F1 | RAIZ F1 |
+   | RAIZ F2 | RAIZ F2 |
+   | RAIZ F3 | RAIZ F3 |
+   | RAIZ F4 | RAIZ F4 |
+   | RAIZ F5 | RAIZ F5 |
+   | RAIZ F6 | RAIZ F6 |
+   | RAIZ F7 | RAIZ F7 |
+   | O168 | O168 |
+   | LASTRO | LASTRO |
+   | O169-FECHADA | O169-FECHADA |
+   | **UI-PAINEL** | **UI-PAINEL-MOSTRA-O-APP — diverge** |
+   | BO-ROTULO-ENCERRADO | BO-ROTULO-ENCERRADO |
+   | TRIAGEM-OFFLINE-SEM-CAMERA | TRIAGEM-OFFLINE-SEM-CAMERA |
+   | LOTE-VALIDAR-REGRESSAO-0311 | LOTE-VALIDAR-REGRESSAO-0311 |
+
+   Fontes da comparação: A; D `bin/mapa20_valida.py:14–18`. Há 18 elementos, mas contar 18 não resolve a identidade errada.
+
+5. **O selo tem mordida parcial; não certifica as garantias anunciadas.**
+
+   | Caso MORDE | Mutante plausível que passa |
+   |---|---|
+   | `falta_obra` | Trocar `E3` por `INVENTADA`, mantendo 18: a fixture segue `M.OBRAS` |
+   | `sem_dono` | Conferir apenas quantidade mínima de linhas, em lugar das identidades: retirar SEM DONO reduz a quantidade, mas uma duplicata poderia substituí-lo |
+   | `celula_vazia` | Conferir vazios somente em E4C |
+   | `sem_tabela` | Conferir presença somente de RAIZ F5 e SEM DONO, preservando a rejeição inicial de texto sem tabela; todas as outras obras deixam de ser protegidas |
+
+   A fixture usa o próprio universo do validador; os únicos alvos pontuais são RAIZ F5 e E4C. Os mutantes de universo, presença restrita e vazio restrito passaram os casos em memória. (D `bin/tests/test_mapa20_valida.sh:19,22–28,36`; D `bin/mapa20_valida.py:45–59`.)
+
+   Os checks de ligação também ficaram verdes, em memória, com estes mutantes de `relato.sh`:
+
+   - `MAPA_RC=0` no `else`;
+   - `if false; then # mapa20_valida.py`;
+   - `MAPA_PAR` preenchido incondicionalmente;
+   - retirada de MAPA do `git add` e do pathspec do commit; [nao verificado]
+   - saída final `exit 0`, conservando `exit "$MAPA_RC"` dentro de `if false`.
+
+   Esses checks apenas procuram texto/regex; não executam o publicador nem provam o fluxo das variáveis. (D `bin/tests/test_mapa20_valida.sh:40–50`.)
+
+   **Comentário pode satisfazer a ligação:** só comentários de linha inteira são removidos; o nome em comentário inline satisfaz `find('mapa20_valida.py')`. A regex do ramo também ignora exatamente `|| exit 1`, incluindo a saída antecipada existente na raspagem retida. (D `bin/tests/test_mapa20_valida.sh:42–49`; D `bin/relato.sh:101`.)
+
+6. **Selos vizinhos: nenhuma quebra textual identificada pelo diff.**
+
+   - `test_codex_estado.sh`: o recorte começa em `CODEX_OK=""`, depois do bloco novo; permanece sem `exit`. (B `bin/tests/test_codex_estado.sh:104–113`; D `bin/relato.sh:111–113`.)
+   - `test_relato_publica_claude_md.sh`: o par CLAUDE, o `git add` e o pathspec permanecem reconhecíveis. Seu mutante continua retirando CLAUDE e ficando vermelho. (B `bin/tests/test_relato_publica_claude_md.sh:15–20,29–30`; D `bin/relato.sh:132,136,147`.)
+   - `test_codex_estado_evento.sh` e `test_relato_afirma_com_prova.sh`: os nomes procurados permanecem. Esses `grep` também aceitam comentários; `codex_estado.sh` já aparece em comentário da base. (B `bin/tests/test_codex_estado_evento.sh:28–30`; B `bin/tests/test_relato_afirma_com_prova.sh:44`; B `bin/relato.sh:93`.)
+   - `test_publicacao_sem_nome.sh`: as menções ao publicador são comentários; o universo verificado vem de `git ls-files`, incluindo MAPA quando rastreado. Resultado sobre o repo público real: **[nao verificado]**. (B `bin/tests/test_publicacao_sem_nome.sh:58–72`.)
+
+   Verde das suítes completas: **[nao verificado]**. [nao verificado]
+
+7. **QUEM ESCREVE e QUEM LÊ.**
+
+   | Valor | Quem escreve | Quem lê |
+   |---|---|---|
+   | `MAPA_RC` | Inicialização 0; `else` grava 1 | Saídas por nada alterado e final |
+   | `MAPA_PAR` | Inicialização vazia; ramo verde grava o par | Expansão na raspagem geral | [nao verificado]
+   | `MAPA_PATH` | Inicialização vazia; teste de existência grava o nome | Mensagem e pathspec do commit | [nao verificado]
+
+   Fontes: D `bin/relato.sh:94,96,98,132,139,142,146–149`.
+
+   `logs/MAPA-20/mapa.md`: o comentário atribui regravação à sessão por evento; não há produtor executável apresentado no diff. Escritor real: **[nao verificado]**. Leitores demonstrados: validador e, depois, raspador. (D `bin/relato.sh:89–96,132`; D `bin/mapa20_valida.py:63–65`; B `bin/raspar_publico.py:28`.)
+
+   `$DEST/MAPA-20.md`: `raspar_publico.py` escreve tanto na publicação aprovada quanto na re-raspagem retida. Leem o arquivo o teste de existência, o próprio raspador no ramo retido e o Git para staging/commit. Leitura efetiva por usuários on-line: **[nao verificado]**. (D `bin/relato.sh:96,100–101,132,139,146–148`; B `bin/raspar_publico.py:28,40`.)
+
+8. **Classes de reprovação, uma a uma.**
+
+   | Classe | Conferência |
+   |---|---|
+   | **2º juiz duplicando registrado** | Duplicação de juiz de negócio não demonstrada. A privacidade continua consultando o módulo único `nome_no_texto`. (B `bin/raspar_publico.py:15–16,31–36`.) |
+   | **2º escritor fora da porta** | As duas rotas MAPA usam o mesmo raspador; a falha demonstrada é escrita direta não atômica. Exclusividade e disciplina do produtor do mapa: **[nao verificado]**. (D `bin/relato.sh:96,101,132`; B `bin/raspar_publico.py:40`.) |
+   | **Relógio fora da borda** | Nenhuma nova leitura temporal no validador. O `date` da mensagem de commit já existia na base. (D `bin/mapa20_valida.py:12–77`; B `bin/relato.sh:130`; D `bin/relato.sh:146`.) |
+   | **Derivação paralela de fonte única** | O universo copiado diverge do aval em UI; o teste deriva sua expectativa da própria cópia. Não há derivação numérica de negócio nesse validador. (A; D `bin/mapa20_valida.py:14–18,43–60`; D `bin/tests/test_mapa20_valida.sh:22,36`.) |
+   | **Selo sem mordida** | Procedente como cobertura insuficiente: mutantes de universo, validação e publicação sobrevivem, conforme item 5. (D `bin/tests/test_mapa20_valida.sh:19–36,42–50`.) |
+   | **Ordem de trava** | O bloco MAPA executa sob o lock já adquirido. A chamada CODEX `--gerar` retorna antes do lock do caminho de evento; não nasce reaquisição nesse caminho. Trava do escritor do mapa: **[nao verificado]**. (B `bin/relato.sh:27`; D `bin/relato.sh:95–112`; B `bin/codex_estado.sh:54–66`.) |
+   | **Pouso antes do pré-requisito** | Contrato efetivamente publicado, suite integral verde e opus final: **[nao verificado]**. São requisitos registrados, e a menção ao contrato no comentário não os demonstra. (B `CLAUDE.md:377–381,394`; D `bin/relato.sh:93`.) |
+   | **Campo com dois significados** | `MAPA_RC` representa o resultado do validador; `MAPA_PAR`, a inclusão aprovada; `MAPA_PATH`, somente existência local. Este último não comprova validação nem atualização: inclui também a cópia retida. (D `bin/relato.sh:94–101,132,139,142–149`.) |
+
+## 11/11 10:42 · sessao b9ef413725f4 · - · - · origem=Ronald (tmux)
+
+1. **Divergência do universo:** o aval pede `UI-PAINEL`; o validador exige `UI-PAINEL-MOSTRA-O-APP`. Os demais nomes coincidem: `E3`, `E4B`, `E4C`, `E4D`; `RAIZ F1`, `RAIZ F2`, `RAIZ F3`, `RAIZ F4`, `RAIZ F5`, `RAIZ F6`, `RAIZ F7`; `O168`, `LASTRO`, `O169-FECHADA`; `BO-ROTULO-ENCERRADO`, `TRIAGEM-OFFLINE-SEM-CAMERA`, `LOTE-VALIDAR-REGRESSAO-0311`. Uma tabela com os nomes literais do aval recebe rc 1 pela divergência de UI. (`aval_mapa_ate_o_20_1111.txt:1`, anexo; diff `bin/mapa20_valida.py:15-18,57-59`.)
+
+2. **Os exemplos sugeridos não são todos falsos aceites:** obra somente na prosa não satisfaz presença; obra somente na segunda tabela também não; célula contendo espaços é recusada; célula `-` passa; linha inteira de separador é ignorada e não substitui obra. Reproduzido em memória: respectivos rc `1,1,1,0`; inserir separador entre linhas válidas preserva rc 0. (`diff bin/mapa20_valida.py:30-40,49-59,73`.)
+
+3. **Falsos aceites reproduzidos, rc 0:**
+   - Tabela com todas as identidades e **uma coluna apenas**; nenhuma coluna exigida pelo aval é cobrada. (`diff bin/mapa20_valida.py:48-59`; aval anexo:1.)
+   - Cabeçalho com uma coluna e dados com três: somente larguras das linhas de dados são comparadas. (`diff bin/mapa20_valida.py:40,54-56`.)
+   - Linhas `|E3|||`, repetindo o padrão para todas as obras e `SEM DONO`: `strip('|')` elimina as colunas vazias finais. (`diff bin/mapa20_valida.py:34,51-56`.)
+   - Conteúdo completo dentro de bloco de código cercado por crases; tabela sem separador; linhas duplicadas: o parser não distingue contexto de código, não exige separador e sobrescreve a identidade no dicionário. (`diff bin/mapa20_valida.py:30-40,49-50`.)
+   - `-` nas colunas de medição também passa: o validador verifica presença textual, sem conferir medição ou declaração `nao medido`. (`diff bin/mapa20_valida.py:51-59`; aval anexo:1.)
+
+4. **Falsas recusas reproduzidas, rc 1:** mapa completo na segunda tabela após tabela alheia; tabela Markdown sem pipes externos; uma célula com pipe escapado `x\|y.py:1`, por produzir largura adicional; mapa com `UI-PAINEL` literal do aval. (`diff bin/mapa20_valida.py:18,32-40,54-59`; aval anexo:1.)
+
+5. **Mutantes executados em memória passam os cinco casos do selo novo**, com sequência `verde=0`, `MORDE_falta_obra=1`, `MORDE_sem_dono=1`, `MORDE_celula_vazia=1`, `MORDE_sem_tabela=1`: [nao verificado]
+   - Trocar `E3` por `INVENTADA` em `OBRAS`, conservando tamanho 18: o teste fabrica sua expectativa a partir da própria lista mutada. (`diff bin/tests/test_mapa20_valida.sh:22-27,36`.)
+   - Conservar `OBRAS`, mas conferir presença apenas de `RAIZ F5` e `SEM DONO`: a única obra retirada pelo teste é F5. (`diff bin/tests/test_mapa20_valida.sh:25-26`.)
+   - Conferir células vazias somente em `E4C`: o único vazio testado está nessa obra. (`diff bin/tests/test_mapa20_valida.sh:19,27`.)
+
+   A verificação de arquivo ausente continua verde nesses mutantes, porque a captura de `OSError` permanece intacta. (`diff bin/mapa20_valida.py:64-68`; diff `bin/tests/test_mapa20_valida.sh:35`.)
+
+6. **Classes relativas ao validador:** selo sem mordida é demonstrado pelos mutantes acima; fonte única do universo não é certificada pelo teste, que deriva a fixture do objeto sob teste; o próprio validador declara usar o universo literal do aval e o desrespeita em UI. (`diff bin/tests/test_mapa20_valida.sh:22-27,36`; diff `bin/mapa20_valida.py:7-8,18`.) A regra de pré-verificação exige conferir essas classes e reserva o pouso à leitura final subsequente. (`CLAUDE.md:372-381`.)
+
+## 11/11 10:41 · sessao 75140b8e444c · - · - · origem=Ronald (tmux)
+
+5. O selo mata remoções completas de verificações, mas usa o próprio `M.OBRAS` para gerar quase todo o oráculo; trocar `E3` por `E3-ERRADA`, mantendo 18 elementos, passa nos casos e na contagem. Os únicos alvos específicos são ausência de `RAIZ F5`, ausência de `SEM DONO`, terceira célula vazia em `E4C` e texto sem tabela. [diff:bin/tests/test_mapa20_valida.sh:19,22,25-28,36]
+
+Comprovação somente em memória: os seguintes mutantes do publicador passam os quatro checks textuais: [nao verificado]
+
+- `MAPA_RC=0` no ramo vermelho.
+- Trocar a chamada por `if false; then # mapa20_valida.py`.
+- Inicializar `MAPA_PAR` já preenchido, incondicionalmente.
+- Retirar MAPA do `git add` e do pathspec de commit. [nao verificado]
+- Encerrar com `exit 0`, preservando `exit "$MAPA_RC"` dentro de `if false`.
+
+Os predicados apenas buscam posição, substring, regex de ramo e alguma linha com `exit "$MAPA_RC"`; não executam o publicador nem exigem atribuição vermelha, caminho condicionado, staging ou saída final efetiva. [diff:bin/tests/test_mapa20_valida.sh:40-50] [nao verificado]
+
+Comentários de linha inteira são removidos, mas comentários inline permanecem: o mutante `if false; then # mapa20_valida.py` fica verde. A regex `(?<!\|\| )\bexit\b` também ignora exatamente `|| exit 1`, portanto não acusa a saída antecipada já existente na raspagem retida. [diff:bin/tests/test_mapa20_valida.sh:42,44,48-49; diff:bin/relato.sh:100] [nao verificado]
+
+6. Nenhum check textual vizinho quebra com esse diff:
+
+- CODEX: o recorte começa em `CODEX_OK=""`, depois do bloco novo; continua sem `exit`. [base:bin/tests/test_codex_estado.sh:104-113]
+- CLAUDE: regex da raspagem, `git add` e pathspec continuam satisfeitos; o mutante que remove CLAUDE continua vermelho. [base:bin/tests/test_relato_publica_claude_md.sh:15-20,29-30; diff:bin/relato.sh:132-149]
+- Evento CODEX e afirmação com prova: os nomes buscados permanecem; os `grep` aceitam comentários também. [base:bin/tests/test_codex_estado_evento.sh:28-30; base:bin/tests/test_relato_afirma_com_prova.sh:44]
+- Publicação sem nome não lê o publicador: as ocorrências de `relato.sh` são comentários; o universo vem de `git ls-files`, incluindo MAPA depois de rastreado. Verde real sem dados do repo público: [não verificado]. [base:bin/tests/test_publicacao_sem_nome.sh:58-72] [nao verificado]
+
+## 11/11 10:40 · sessao 61a4a2c2a774 · - · - · origem=Ronald (tmux)
+
+1. **Saídas/RC:** no fluxo normal de comandos do arquivo, não há caminho em que validador falhe e relato termine em 0: `MAPA_RC` começa em 0, recebe 1 no `else` e ambos os términos finais usam esse valor; os demais términos explícitos usam 1. Validador verde também não produz RC 1 sem outra falha. [diff `bin/relato.sh`:94–103,142,148–149]
+
+   Todos os `exit` após diff:
+   - RC **1**: 27 (lock), 28 (repo), 32 (nomes), 35 (backlog), 38 (estado), 42 (sessão), 86 (raspagem RELATO retido), 101 (raspagem MAPA retido), 117 (gerar avais), 132 (raspagem geral), 148 (push ou `echo` final falhando). [base `bin/relato.sh`:27–42,86; diff `bin/relato.sh`:101,117,132,148]
+   - RC **`$MAPA_RC`**: 142 (nada mudou), 149 (após publicação): 0 se verde, 1 se vermelho. [diff `bin/relato.sh`:94–98,140–149]
+   
+   Há falhas não propagadas em `cd`, `git add` e `git commit`, pois não há `set -e`; isso é outro problema, mas não transforma MAPA vermelho em RC 0. [base `bin/relato.sh`:21; diff `bin/relato.sh`:135–149]
+
+2. **Retido e parcial:** variável `DEST` recebe `DEST_RELATO` ou caminho padrão; o ramo retido passa o próprio arquivo público como origem e destino. [base `bin/relato.sh`:23; diff `bin/relato.sh`:100–101] O raspador primeiro lê tudo, mascara e confere; só então abre o destino em `'w'`, sem arquivo temporário ou rename. Erro anterior a essa abertura preserva arquivo; erro de escrita/interrupção após truncamento pode deixar arquivo vazio/parcial no checkout público; ocorrência real não demonstrada. [base `bin/raspar_publico.py`:28–40; ocorrência: não verificado] O `|| exit 1` impede o commit normal daquela execução, mas não desfaz a escrita. [diff `bin/relato.sh`:101]
+
+   CODEX-ESTADO gera e raspa em temporário, protegendo o destino contra falhas do gerador/raspador; entretanto a cópia final usa `cp` direto, que também não é substituição atômica e pode falhar durante a escrita. Portanto o comentário “nunca arquivo pela metade” é mais forte que a implementação. [base `bin/codex_estado.sh`:25–38; base `bin/relato.sh`:89–95]
+
+3. **Formato:** usa `src, dst = par.rsplit(':', 1)`: último `:` separa origem e destino. O par novo respeita o formato; `:` na origem **não quebra**. `:` no destino altera a separação. [base `bin/raspar_publico.py`:23–24; diff `bin/relato.sh`:96,101,132] `RAIZ` vem de `cd ... && pwd`, sem regra que proíba `:`; portanto o código não garante ausência desse caractere, e a construção nova continua funcionando com ele na origem. [base `bin/relato.sh`:22; base `bin/raspar_publico.py`:24]
+
+7. **Produtores/consumidores:**
+   
+   | Valor | Escreve | Lê |
+   |---|---|---|
+   | `MAPA_RC` | inicialização 0 e ramo vermelho 1 | dois exits finais |
+   | `MAPA_PAR` | inicialização vazia e ramo verde com par | expansão condicional na raspagem geral | [nao verificado]
+   | `MAPA_PATH` | vazio; recebe nome se arquivo público existe | mensagem e pathspec do commit | [nao verificado]
+   
+   [diff `bin/relato.sh`:94,96,98,132,139,142,146–149]
+
+   `logs/MAPA-20/mapa.md`: o comentário atribui regravação à sessão por evento, mas não há escritor executável no diff; a existência/produção real não é verificável nesta cópia, que não contém `logs`. O validador lê via `open(...).read()` e o raspador lê novamente na publicação. [diff `bin/relato.sh`:89–96; diff `bin/mapa20_valida.py`:63–65; base `bin/raspar_publico.py`:28; produção real: não verificado]
+
+   `MAPA-20.md` público: escreve `raspar_publico.py` tanto pelo par aprovado na raspagem geral quanto pelo par do ramo retido; lê o teste `-f`, o próprio raspador no ramo retido e o Git ao adicionar/commitar/publicar. [diff `bin/relato.sh`:96,100–101,132,139,146–148; base `bin/raspar_publico.py`:28,40]
+
+   **Janela entre validar e publicar:** lê o mapa para validar e depois torna a lê-lo para raspar; não há snapshot. O lock do publicador não demonstra que o escritor do mapa o obedece. Assim, mudança concorrente pode publicar bytes diferentes dos validados; ocorrência real não demonstrada. [base `bin/relato.sh`:27; diff `bin/relato.sh`:95–96,118–132; diff `bin/mapa20_valida.py`:65; base `bin/raspar_publico.py`:28; concorrência real: não verificado]
 
 ## 11/11 10:36 · sessao 1ca6effd2852 · - · - · origem=Ronald (tmux)
 
@@ -566,281 +793,4 @@ Um merge posterior da c22 pode mudar o valor escolhido para destino e, por conse
 
 A trava de paralelismo local é por **arquivo em comum**, suficiente mesmo sem dependência de interface nova; não exige provar conflito de hunks. (`CLAUDE.md:309`, `:310`, `:311`.)
 
-## 11/11 10:14 · sessao e7ab94268b20 · - · - · origem=Ronald (tmux)
-
-O par já existe como **dado da célula**: `CelulaDia.PARES_PAUSA_DNA` declara `(hii,hfi)` e `(hii2,hfi2)`; `marcos_presentes()` fornece as chaves efetivamente presentes e sua ordem. Não exige mudar essa autoridade para F4 lê-la. (`app/escala/models.py:1652`, `app/escala/models.py:1659`, `app/escala/models.py:1672`, `app/escala/models.py:1679`.)
-
-`EscalaColaborador.pausas_do_dia()` fornece todos os pares declarados no DNA; célula existente sem marcos devolve `()`. `intervalo_do_dia()` é só o leitor da primeira pausa. O fallback para template ocorre quando não há célula; logo, a F4 literal “pela célula” precisa considerar essa diferença ao escolher como consumir a autoridade. (`app/escala/models.py:1163`, `app/escala/models.py:1166`, `app/escala/models.py:1197`, `app/escala/models.py:1202`, `app/escala/models.py:1208`.)
-
-A enumeração AST em memória encontrou consumidores desses pares, mas não identificou função que recebe duas perguntas e responde “mesma pausa”. Completude contra lógica construída/reflexão e execução do enumerador como evidência `arquivo:linha`: [nao verificado]. Exemplos conferidos de funções existentes que **não** respondem isso:
-
-- `fato_do_marco_no_espelho(p)` agrega **todas** as pausas do dia com AND para um motivo; não distingue duas perguntas de pausas diferentes. (`app/chamados/juizes.py:892`, `app/chamados/juizes.py:911`, `app/chamados/juizes.py:919`, `app/chamados/juizes.py:933`.)
-- `_resposta_concorda_com_a_luz(p)` devolve `None` quando duas pausas compartilham o motivo. (`app/chamados/juizes.py:1276`, `app/chamados/juizes.py:1296`, `app/chamados/juizes.py:1298`.)
-- `instancias_do_turno()`/`_posicoes()` já separam a segunda repetição como `int_ida:2`, mas são projeções por posição, sem casamento entre duas perguntas. (`app/chamados/services/tarefa_do_dia.py:57`, `app/chamados/services/tarefa_do_dia.py:65`, `app/chamados/services/tarefa_do_dia.py:67`, `app/chamados/services/tarefa_do_dia.py:91`.)
-
-O gargalo de identidade merece constar no brief: o catálogo de pergunta só deriva `int_ida/int_volta`, e comenta expressamente que os emissores não carregam índice da pausa. O nascimento veta `instancia_marco` diferente da derivação do motivo. Portanto, usar `instancia_marco` como “hii/hfi” ou “int_ida:2” sem alterar o contrato introduziria incompatibilidade **já com a cópia atual**, independentemente de c22. (`app/chamados/services/declaracao_texto.py:45`, `app/chamados/services/declaracao_texto.py:49`, `app/chamados/services/declaracao_texto.py:55`, `app/chamados/models.py:3437`, `app/chamados/models.py:3441`, `app/chamados/models.py:3446`.)
-
-Sobre arquivos da cura efetiva:
-
-| Arquivo / sítio | Motivo concreto |
-|---|---|
-| `app/chamados/models.py:3034` | Estado da pergunta hoje diz VALIDADA antes de consultar C6; candidato para estado derivado de espera. Agrupamento na DS exigido pelo aval: implementação futura [nao verificado]. |
-| `app/chamados/services/materializacao.py:1158`, `:1220`, `:1375` | Unidade e atomic são por pergunta; o lote itera individualmente. O par num ato precisa atuar nessa fronteira. |
-| `app/chamados/services/validacao.py:435`, `:461`, `:463`, `:469` | Valida uma e materializa essa uma antes do lote; precisa respeitar a espera/unidade nova. |
-| `app/chamados/services/passivo_validado.py:514`, `:516` | Reparador chama a unidade individual diretamente; precisa migrar ou estar coberto por mudança na própria unidade. |
-| `app/chamados/services/declaracao_texto.py:49`, `app/chamados/models.py:3441` | Só são mudanças obrigatórias se a implementação ampliar a identidade para distinguir duas pausas; escolha desse desenho [nao verificado]. |
-| `app/chamados/juizes.py:919`, `:1296` | Precisam entrar na análise de impacto se a pergunta passar a identificar uma pausa específica; suas leituras atuais agregam/abstêm diante de duas pausas. Mudança efetiva necessária para a implementação escolhida [nao verificado]. |
-
-Não é correto pôr `escala/models.py`, `escala/servico_jornada.py`, `ponto/turnos.py` ou `ponto/services/cartorio.py` no diff só porque são autoridades/chamadores. O dado do par já está em `escala/models.py:1652`; o materializador já consome autoridades de turno e plantio. Necessidade de alteração nesses outros arquivos: [nao verificado]. (`app/chamados/services/materializacao.py:421`, `app/chamados/services/materializacao.py:1222`, `app/chamados/services/passivo_validado.py:506`.)
-
-Há dependência **de leitura do valor existente de destino** no materializador: lê `p.chamado_destino`, usa-o para tipo e para substituir a hora do intervalo pelos `marcos_faltantes`. Isso não demonstra pré-requisito da função nova de F1 ou do eleitor de c22; demonstra que mudanças na eleição do destino podem mudar o marco consumido pelo plantio. (`app/chamados/services/materializacao.py:339`, `app/chamados/services/materializacao.py:386`, `app/chamados/services/materializacao.py:408`, `app/chamados/services/materializacao.py:409`; autoridade do casamento por motivo: `app/chamados/juizes.py:524`, `app/chamados/juizes.py:534`, `app/chamados/juizes.py:536`.)
-
-F4 não deve usar `chamado_destino` como identidade do par: o par está nas chaves do DNA, enquanto destino é FK de chamado e os marcos consumidos por ele vêm de contexto do chamado. Essa separação é inferência de desenho sustentada pelos sítios; patch futuro: [nao verificado]. (`app/escala/models.py:1652`, `app/chamados/models.py:3385`, `app/chamados/juizes.py:534`.)
-
-## 11/11 10:13 · sessao 6563a0ff60ea · - · - · origem=Ronald (tmux)
-
-A cura F3 tem estes sítios demonstráveis; o diff final e a escolha entre centralizar o disparo na porta ou no evento são [nao verificado].
-
-| Arquivo | Sítios relevantes para F3 |
-|---|---|
-| `app/chamados/models.py` | C7 completo em `:1848`, `:1853`; porta de fecho recebe usuário em `:1855` e persiste autor/motivo/resolução com evento em `:1932`, `:1933`, `:1934`, `:1935`, `:1936`, `:1937`, `:1940`; escritor do carimbo e autor em `:3097`, `:3099`, `:3100`; portas persistem em `:3152`, `:3190`. |
-| `app/chamados/signals.py` | Evento da pergunta recebe a instância em `:228`, mas passa somente `disputa_id` ao consumidor em `:231`, `:237`; dispara depois do commit em `:238`. |
-| `app/chamados/services/becos.py` | Recorte exige pai terminal em `:29`, `:31`; consulta C7 em `:33`; fecha com usuário recebido em `:57`; entrada do evento substitui autoria por usuário sistema em `:78`. |
-| `app/chamados/services/materializacao.py` | Cauda consulta C7 em `:1316` e fecha com `request_user` em `:1333`; lote chama essa cauda em `:1378`. |
-| `app/chamados/reconciliador.py` | Caudas existentes consultam C7/fecham em `:411`, `:412`, `:611`, `:612`, `:1170`, `:1171`; carimbam antes em `:405`, `:595`, `:1147`. |
-| `app/chamados/services/disputa_emissao.py` | Agrupador fecha em `:1284`; resolvedor fecha em `:1963`, `:1964`, com guarda de pergunta em voo em `:1961`. |
-| `app/chamados/services/explicador.py` | Deriva `pode_fechar` apenas de `fio_vivo` em `:136`, `:137`, publica em `:163`; diverge do C7 completo em `app/chamados/models.py:1853`. |
-| `app/chamados/relatorios_disputa.py` | Publica `PRONTA_FECHAR` pela ausência de vivas em `:18`, `:19`, `:20`; não consulta `respostas_sem_veredito`, exigido pelo C7 em `app/chamados/models.py:1853`. |
-
-O autor do último ato de carimbo pode ser preservado pelo argumento da porta (`app/chamados/models.py:3125`, `:3185`) e já tem campo próprio (`app/chamados/models.py:3100`, `:3397`). Eleger o autor por “maior timestamp encontrado” não está demonstrado como implementação correta: `manter_carimbo` preserva instante e autor anteriores ao trocar a via (`app/chamados/models.py:3182`, `:3183`).
-
-F1 não cria o campo consumido por F3: `chamado_destino` já existe e significa chamado resolvido pela pergunta (`app/chamados/models.py:3385`, `:3391`); autoria de carimbo é outro campo (`app/chamados/models.py:3397`). A cura F3 lê destino em travas/recorte já existentes (`app/chamados/models.py:1911`; `app/chamados/services/becos.py:30`); dependência obrigatória da nova função proposta por F1 permanece [nao verificado].
-
-Para interseção por arquivo do núcleo F3 acima: E3 contém `app/chamados/services/materializacao.py`; E4B contém `app/chamados/services/disputa_emissao.py`; c21 contém `app/chamados/services/disputa_emissao.py` — pertencimento às listas fornecidas: [nao verificado por arquivo:linha, dado textual recebido]. Os sítios F3 desses dois arquivos são `app/chamados/services/materializacao.py:1316`, `:1333` e `app/chamados/services/disputa_emissao.py:1284`, `:1964`.
-
-A catraca de endereços também registra materialização/explicador/emissão em `app/core/tests/test_medida_turno_do_par.py:267`, `:268`, `:269`, `:270`; necessidade de modificá-la depende do deslocamento efetivo dessas ocorrências, ainda [nao verificado].
-
-## 11/11 10:12 · sessao 88613664e51b · UI-PAINEL-MOSTRA-O-APP · censo · origem=Code
-
-Censo estático da cópia, somente leitura. Identidade do HEAD/hash informado: **[nao verificado]** — a cópia não contém metadados Git. Execução dos testes, situação em produção e smoke: **[nao verificado]**. [nao verificado]
-
-1. **Regra do rótulo: duas cópias completas e uma variante no template.**
-
-   | Local | Leitura/escrita |
-   |---|---|
-   | `app/api/views_core.py:307` | Conta chamados não lidos no recorte `VIVOS`. |
-   | `app/api/views_core.py:314` | Conta perguntas de `consulta_do_app()['pendentes']`. |
-   | `app/api/views_core.py:315` | Escreve a regra completa: pendentes → `{count, cor: '#f59e0b', rotulo: 'Responder DP'}`; senão não lidos → vermelho `'#ef4444'`, `"Chamados"`; senão `None`. |
-   | `app/api/views_core.py:359` | Expõe os dois contadores e `chamados_badge` na resposta. |
-   | `app/api/views.py:318` | Repete a consulta de não lidos. |
-   | `app/api/views.py:325` | Repete contagem e regra completa. |
-   | `app/api/views.py:370` | Expõe os mesmos três campos. |
-   | `app/core/views.py:253` | Lê pendentes para o dashboard web. |
-   | `app/templates/core/dashboard_colaborador_v2.html:78` | Variante: pendentes mudam destino do link, badge amarelo/count e texto `"Responder DP"`; sem pendentes escreve `"Chamados"`, sem ramo vermelho de não lidos. |
-   | `app/templates/core/dashboard_colaborador.html:90` | Template anterior lê `chamados_nao_lidos` e mostra “novo(s)”; não contém a regra completa. |
-
-   Portanto, **duas cópias da decisão ternária da API**; contando qualquer escrita manual da escolha `"Responder DP"/"Chamados"`, há também a variante do dashboard. (`app/api/views_core.py:315`; `app/api/views.py:326`; `app/templates/core/dashboard_colaborador_v2.html:80`)
-
-   Os dois kernels têm rotas próprias para `/me/`; nenhum deles pode ser tratado como cópia morta. (`app/api/urls.py:64`; `app/api/urls_core.py:5`; `app/api/urls_core.py:13`)
-
-   Leitores de teste da regra: contrato do badge da API, matriz dos dois kernels e testes do dashboard; os mutantes também dependem dos trechos literais atuais nos dois kernels. (`app/api/tests/test_api_me_badge.py:54`; `app/chamados/tests/test_e3_app_orm.py:28`; `app/core/tests/test_dashboard_badge.py:52`; `app/chamados/tests/e3_mutantes.py:23`)
-
-   A busca textual incluiu templates e `static/js`; outras implementações JavaScript dessa regra não foram encontradas. Ausência absoluta de implementação equivalente com outros nomes: **[nao verificado]**.
-
-2. **Fontes, leitores e escritores dos contadores.**
-
-   **Pendentes de `consulta_do_app`:** são listas derivadas, não um contador persistido. A função lê perguntas vivas e separa como pendente cada pergunta com `respondida_em is None` **e** disputa com `fechada_em is None`; as demais vivas ficam no histórico, em ordem por ID. (`app/chamados/services/pergunta_no_app.py:45`; `app/chamados/services/pergunta_no_app.py:61`)
-
-   Há **sete sítios de consumo em produção**:
-
-   | Consumidor | Referência |
-   |---|---|
-   | Badge do kernel core | `app/api/views_core.py:314` |
-   | Badge do kernel UI | `app/api/views.py:325` |
-   | GET de chamados nativos | `app/api/views.py:1005` |
-   | GET de perguntas da disputa | `app/api/views.py:2543` |
-   | Dashboard web | `app/core/views.py:253` |
-   | Aviso de questionário ainda pendente | `app/chamados/services/aviso_pendencia.py:9` |
-   | Cobrança | `app/chamados/services/cobranca.py:48` |
-
-   Os dois últimos alimentam, respectivamente, `aviso_texto_livre` e as operações de cobrança; continuam usando a mesma lista. (`app/chamados/services/aviso_pendencia.py:12`; `app/chamados/services/cobranca.py:82`; `app/chamados/services/cobranca.py:163`)
-
-   Escritores diretos dos campos que separam pendentes/histórico:
-
-   | Ato | Escritor |
-   |---|---|
-   | Nascimento da pergunta | Campo nullable; `_nascer` constrói com `**campos` e insere. (`app/chamados/models.py:2448`; `app/chamados/models.py:3014`) |
-   | Resposta do colaborador | `responder_pergunta_disputa_core` atribui e salva `respondida_em`. (`app/chamados/services/disputa_emissao.py:1468`; `app/chamados/services/disputa_emissao.py:1508`) |
-   | Resposta automática | `responder_automaticamente`. (`app/chamados/services/disputa_emissao.py:1653`) |
-   | Recuperação pela trilha | `carimbar_resposta_pela_trilha`. (`app/chamados/services/disputa_emissao.py:1674`) |
-   | Carimbo com resposta textual | `PerguntaDisputa.carimbar`. (`app/chamados/models.py:3130`; `app/chamados/models.py:3152`) |
-   | Reabertura para correção | Monta `respondida_em=None` e atualiza diretamente ou pelo descarimbo em lote. (`app/chamados/services/disputa_emissao.py:1593`; `app/chamados/services/disputa_emissao.py:1629`) |
-   | Ressuscitação | Delega `respondida_em=None` a `descarimbar_em_lote`. (`app/chamados/models.py:1566`; `app/chamados/models.py:3264`) |
-   | Nascimento da disputa aberta | Campo nullable e criações do emissor. (`app/chamados/models.py:1757`; `app/chamados/services/disputa_emissao.py:587`; `app/chamados/services/disputa_emissao.py:1123`; `app/chamados/services/disputa_emissao.py:1358`) |
-   | Fechamento da disputa | `DisputaSupervisao.fechar` carimba `fechada_em`. (`app/chamados/models.py:1932`) |
-   | Reabertura da disputa | `reabrir_admin` e `reabrir_sistema` zeram `fechada_em`. (`app/chamados/models.py:2149`; `app/chamados/models.py:2173`) |
-
-   As atribuições em simulação de ressuscitação e restauração após recusa de carimbo são apenas em memória. (`app/chamados/models.py:1508`; `app/chamados/models.py:3163`)
-
-   **Limite do censo:** a vitalidade anterior à partição também depende de C6, célula/ata/veredito, validação, materialização, resposta e tranca da competência. O fechamento transitivo de **todos** os escritores desses insumos é **[nao verificado]**; não seria correto reduzir a fonte somente aos dois campos acima. (`app/chamados/models.py:3326`; `app/chamados/juizes.py:1324`; `app/core/portas.py:393`)
-
-   **Não lido:** o campo efetivo é `FollowupChamado.lido_colaborador_em`, nullable; não é `lido_dp_em`. (`app/chamados/models.py:1672`; `app/chamados/models.py:1673`)
-
-   - **Leitores:** os dois badges; serialização nativa de `novo`/`nao_lidos`; predicado web `_nao_lido`; duas posições no card de atendimento. (`app/api/views_core.py:311`; `app/api/views.py:322`; `app/api/views.py:1128`; `app/chamados/views.py:603`; `app/templates/chamados/partials/_card_atendimento.html:51`; `app/templates/chamados/partials/_card_atendimento.html:59`)
-   - **Escritor do carimbo:** `nota.marcar_lidas`, via mapa dinâmico `LADOS`, atualizando somente nulos. (`app/chamados/services/nota.py:59`; `app/chamados/services/nota.py:126`)
-   - **Três chamadores para o lado colaborador:** GET nativo de chamados, endpoint web de um chamado e endpoint web em lote. (`app/api/views.py:1050`; `app/chamados/views.py:1135`; `app/chamados/views.py:1150`)
-   - **Nascimento não lido:** `nota.anexar_ocorrencia` cria a nota sem preencher o carimbo; a porta está registrada em `core/portas`. (`app/chamados/services/nota.py:88`; `app/chamados/services/nota.py:103`; `app/core/portas.py:241`)
-   - **Remoção da fonte:** apagar notas em ensaio ou excluir o chamado por cascade elimina followups. (`app/chamados/services/nota.py:136`; `app/chamados/models.py:1668`)
-
-   O vermelho conta **chamados distintos com pelo menos um followup DP não lido**, não quantidade de followups. A serialização nativa tem outro contador, por followup. (`app/api/views.py:318`; `app/api/views.py:1128`; `app/chamados/tests/test_e3_app_orm.py:62`)
-
-   **`status_local` no recorte da contagem:** `VIVOS = ('aberto', 'em_analise', 'registrado')`; `registrado` entra nesse badge. `COBRANCA` é outro conjunto. A própria `consulta_do_app` não contém esse filtro de chamados. (`app/chamados/catalogo/motor.py:24`; `app/chamados/catalogo/motor.py:29`; `app/api/views_core.py:309`; `app/api/views.py:320`; `app/chamados/services/pergunta_no_app.py:69`)
-
-   Escritores de status que podem alterar entrada/saída desse recorte:
-
-   - Default de nascimento: `aberto`; nascimentos pelas portas `abrir` e `criar`. (`app/chamados/models.py:52`; `app/chamados/models.py:938`; `app/chamados/models.py:971`; `app/chamados/models.py:1095`)
-   - Transição persistente: `_gravar_estado`, atribuição seguida de `save(update_fields=campos)`. (`app/chamados/models.py:228`; `app/chamados/models.py:296`)
-   - Gates que delegam a essa escrita: `_aplicar`, `reconciliar`, `cancelar`, `analisar`, `reabrir`, `encerrar`, `encerrar_por_competencia_trancada`. (`app/chamados/models.py:450`; `app/chamados/models.py:654`; `app/chamados/models.py:788`; `app/chamados/models.py:806`; `app/chamados/models.py:1442`; `app/chamados/models.py:1619`; `app/chamados/models.py:1639`)
-   - `_vivas_entre` troca/restaura status somente em memória. (`app/chamados/models.py:356`; `app/chamados/models.py:371`)
-   - Migrações de dados alteram `aberto↔registrado` e `cancelado↔superado`, fora do runtime normal. (`app/chamados/migrations/0038_a3_registrado_backfill.py:10`; `app/chamados/migrations/0038_a3_registrado_backfill.py:15`; `app/chamados/migrations/0039_a3_via_backfill.py:24`; `app/chamados/migrations/0039_a3_via_backfill.py:33`)
-
-   Existem selos de escritores de status e da porta de notas; sua aprovação nesta cópia é **[nao verificado]**. (`app/chamados/tests/test_selo_status_so_pelas_portas.py:37`; `app/chamados/tests/test_selo_status_so_pelas_portas.py:449`; `app/chamados/tests/test_porta_nota_do_fio.py:44`; `app/chamados/tests/test_porta_nota_do_fio.py:207`)
-
-3. **View do painel, contexto atual e contador de Mensagens.**
-
-   A view é `painel_colaborador(request, cid)`, com login e permissão `ver_cadastro`; renderiza diretamente o partial indicado. (`app/colaboradores/views.py:914`; `app/colaboradores/views.py:917`; `app/colaboradores/views.py:988`; `app/colaboradores/urls.py:48`)
-
-   Para mensagens, ela passa apenas `chamados`: últimos cinco chamados do colaborador, ordenados por criação, com followups prefetched. Apesar do comentário “abertos”, **não há filtro de status**. Não passa perguntas, histórico, rótulo nem contagem de pendentes. (`app/colaboradores/views.py:936`; `app/colaboradores/views.py:937`; `app/colaboradores/views.py:988`)
-
-   Os demais dados explícitos são colaborador, escala, bloco/portas/legenda do retrato, batidas, mês e CSRF. (`app/colaboradores/views.py:988`)
-
-   O contador do botão é hoje **`{{ chamados|length }}`**, portanto entre zero e cinco chamados carregados; não mede perguntas nem mensagens não lidas. (`app/templates/colaboradores/partials/painel_colaborador.html:39`; `app/colaboradores/views.py:937`)
-
-   A aba contém formulário HTMX e `msgs_lista.html`; a lista mostra os chamados e até cinco followups por chamado, truncados. O envio atualiza somente `#msgs-lista`, não o botão da aba. (`app/templates/colaboradores/partials/painel_colaborador.html:188`; `app/templates/colaboradores/partials/painel_colaborador.html:198`; `app/templates/colaboradores/partials/msgs_lista.html:4`; `app/templates/colaboradores/partials/msgs_lista.html:7`; `app/chamados/views.py:997`)
-
-4. **As chamadas em `api/views.py:1004` e `:2542`.**
-
-   - **`:1004`, `api_chamados_v2`:** consulta pendentes e histórico, agrupa perguntas por chamado, usa destino vivo ou chamado pai, serializa a conversa e **marca followups do DP como lidos**. Não calcula o badge ternário. (`app/api/views.py:973`; `app/api/views.py:1004`; `app/api/views.py:1040`; `app/api/views.py:1044`; `app/api/views.py:1050`; `app/api/views.py:1155`)
-   - **`:2542`, `api_disputa_perguntas`:** serve pendentes, histórico, subconjunto `respondidas`, `em_disputa` e IDs de ancoragem. Não calcula rótulo/cor/count do badge. (`app/api/views.py:2531`; `app/api/views.py:2542`; `app/api/views.py:2571`; `app/api/views.py:2573`)
-
-   **Extrair somente a regra para uma função separada não exige mudar essas duas chamadas.** Preservar `consulta_do_app` mantém seus contratos atuais; há teste AST exigindo essa delegação. (`app/chamados/services/pergunta_no_app.py:61`; `app/chamados/tests/test_contract_pergunta_viva.py:68`)
-
-   O selo deve comparar o painel com **`/me/`**; chamar antes o GET de chamados pode consumir o estado não lido e alterar o resultado seguinte. (`app/api/urls.py:64`; `app/api/views.py:318`; `app/api/views.py:1050`)
-
-5. **Cascas e grafo de carregamento.**
-
-   A premissa precisa de um ajuste: o GET do painel entra por **`fetch → innerHTML → htmx.process`**, e não por `hx-get`; HTMX passa a processar os controles do conteúdo injetado. (`app/templates/core/_drawer_generico.html:19`; `app/templates/core/_drawer_generico.html:26`; `app/templates/core/_drawer_generico.html:33`)
-
-   | Caminho | Evidência |
-   |---|---|
-   | `base.html → core/_drawer_generico.html` | `app/templates/base.html:399` |
-   | `base_app.html → core/_drawer_generico.html` | `app/templates/base_app.html:154` |
-   | Lista: `colaboradores/lista.html → _lista_tabela.html → abrirPainelColab → abrirDrawer → /colaboradores/<cid>/painel/` | `app/templates/colaboradores/lista.html:1`; `app/templates/colaboradores/lista.html:57`; `app/templates/colaboradores/partials/_lista_tabela.html:16`; `app/templates/core/_drawer_generico.html:89`; `app/templates/core/_drawer_generico.html:104` |
-   | Retrato: `folha/retrato_folha.html → _retrato_lista.html → mesma rota`, com mês/ano | `app/templates/folha/retrato_folha.html:1`; `app/templates/folha/retrato_folha.html:53`; `app/templates/folha/_retrato_lista.html:61` |
-   | Retrato parcial → mesma lista | `app/templates/folha/_retrato_parcial.html:7` |
-   | Raio-X → `_retrato_raiox.html` → mesma rota | `app/templates/folha/_retrato_barra.html:73`; `app/folha/views_retrato.py:510`; `app/templates/folha/_retrato_raiox.html:68` |
-   | Painel → `_cabecalho_drawer.html`, condicional `_retrato_o_que_fazer.html`, `msgs_lista.html` | `app/templates/colaboradores/partials/painel_colaborador.html:8`; `app/templates/colaboradores/partials/painel_colaborador.html:26`; `app/templates/colaboradores/partials/painel_colaborador.html:198` |
-   | Bloco do retrato → `_led.html`, `_retrato_legenda.html` | `app/templates/folha/_retrato_o_que_fazer.html:36`; `app/templates/folha/_retrato_o_que_fazer.html:71` |
-
-   O partial não estende casca. Os hosts encontrados usam `base.html` fixo; ambas as cascas oferecem a infraestrutura do drawer. A variável global `base_tpl` não substitui esses `extends` fixos. (`app/templates/colaboradores/partials/painel_colaborador.html:1`; `app/templates/colaboradores/lista.html:1`; `app/templates/folha/retrato_folha.html:1`; `app/core/context_processors.py:205`; `app/templates/base_app.html:154`)
-
-   Consequência para o selo: pedir o partial duas vezes não demonstra as duas cascas; é necessário renderizar a integração com cada uma. Já existe exemplo de smoke que verifica os templates efetivamente usados nas duas cascas. (`app/colaboradores/views.py:988`; `app/core/tests/test_smoke_chromium.py:151`; `app/core/tests/test_smoke_chromium.py:172`)
-
-6. **Juiz existente e autoridade da leitura.**
-
-   Não há entrada específica para o rótulo/count “o que o app mostra agora” no registro de chamados nem no lookup documental; há autoridades próximas para vitalidade, retenção, fio e tarefa do dia. (`app/core/juizes.py:272`; `app/core/juizes.py:278`; `app/core/juizes.py:285`; `app/core/juizes.py:287`; `app/core/juizes.py:291`; `app/docs/JUIZES.md:59`)
-
-   **`consulta_do_app` já é a autoridade única da seleção pendentes/histórico apresentada nesses consumidores; ainda não é autoridade do badge inteiro.** Ela delega vitalidade ao C6, enquanto a decisão de badge continua nos dois kernels. (`app/chamados/services/pergunta_no_app.py:3`; `app/chamados/services/pergunta_no_app.py:45`; `app/chamados/services/pergunta_no_app.py:61`; `app/api/views_core.py:315`; `app/api/views.py:326`)
-
-   O nome `estado_app` encontrado no situacional mede adesão/uso do app, não esse rótulo de mensagens/perguntas. (`app/colaboradores/services/situacional.py:191`)
-
-7. **Decisões técnicas para o construtor, sem lei nova.**
-
-   | Candidata | Pró e consequência |
-   |---|---|
-   | **Função de projeção ao lado de `consulta_do_app`, no mesmo serviço — recomendação** | Reúne lista, consulta de não lidos e decisão do badge, sem fazer o painel importar uma view HTTP. Preserva a consulta existente. (`app/chamados/services/pergunta_no_app.py:61`; `app/api/views_core.py:307`; `app/api/views.py:318`) |
-   | Acrescentar tudo à própria `consulta_do_app` | Menos funções, mas muda o retorno e acrescenta consulta a todos os consumidores; há igualdade exata do dicionário e exigência de nove queries em cenário existente. (`app/chamados/tests/test_e3_v4_orm.py:85`; `app/chamados/tests/test_e3_v4_orm.py:91`; `app/chamados/tests/test_e3_v4_orm.py:98`) |
-   | Novo módulo em `chamados/services/` | Dá nome próprio à projeção e preserva a seleção; acrescenta arquivo/indireção. Admissibilidade desse arquivo no escopo literal: **[nao verificado]**, pois o limite vem do anexo. |
-   | Helper puro recebendo duas contagens | Centraliza prioridade/cor, mas sozinho deixa a produção da consulta de não lidos nos leitores; precisaria de um montador compartilhado para o painel. (`app/api/views_core.py:307`; `app/api/views_core.py:315`) |
-   | Helper dentro de uma view da API | Extração local simples, mas cria dependência do painel em camada HTTP e escolhe um kernel como dono. (`app/api/views_core.py:273`; `app/api/views.py:284`; `app/colaboradores/views.py:915`) |
-
-   **Retorno sugerido da projeção:** listas `pendentes`/`historico`, inteiros `questionarios_pendentes`/`chamados_nao_lidos` e `chamados_badge` no formato atual `{count, cor, rotulo} | None`. Assim os três leitores recebem dados prontos; a decisão não reaparece no template. É proposta técnica, apoiada nos contratos existentes. (`app/chamados/services/pergunta_no_app.py:75`; `app/api/views_core.py:314`; `app/api/views_core.py:359`)
-
-   Para a lista visual, os campos já existem: texto `pergunta`, dia `data_evento`, marco `instancia_marco` e motivo. Usar esses dados evita reconstruir identidade a partir do texto. (`app/chamados/models.py:2421`; `app/chamados/models.py:2423`; `app/chamados/models.py:2434`)
-
-   O contador solicitado da aba é uma soma de apresentação sobre o contador atual; não deve ser confundido com o count do badge, que aplica prioridade entre pendentes e não lidos. A soma está fixada no anexo **[nao verificado]**; as duas medidas atuais estão em `app/templates/colaboradores/partials/painel_colaborador.html:39` e `app/api/views_core.py:315`.
-
-   Há quatro cuidados concretos para a construção:
-
-   - Atualizar os dois kernels de forma equivalente: existe contrato de paridade AST. (`app/api/tests/test_contract_paridade_kernels.py:25`)
-   - Preservar a mordida dos mutantes que hoje procuram expressões literais nos kernels; a extração muda seus alvos. (`app/chamados/tests/e3_mutantes.py:23`)
-   - Acrescentar o selo painel × API e integração das duas cascas; a matriz atual compara endpoint, dashboard e kernels, não este painel. (`app/chamados/tests/test_e3_app_orm.py:28`; `app/colaboradores/tests/test_retrato_no_drawer.py:151`; `app/core/tests/test_smoke_chromium.py:151`)
-   - Tratar explicitamente a variante do dashboard no relatório de escopo: ela é outra escrita manual do rótulo, embora não seja a terceira cópia da regra completa. (`app/templates/core/dashboard_colaborador_v2.html:78`)
-
-   O golden atual contém perguntas sobre presença de pergunta no app por colaborador/dia; o caso novo de rótulo/count “agora” permanece requisito do anexo, **[nao verificado]** como implementação. (`eval/golden.py:35`; `eval/golden.py:184`; `eval/golden.py:187`)
-
-8. **Perguntas de lei: N = 0.**
-
-   O anexo fixa fonte, prioridade, apresentação, ausência de badge e proibições, além de declarar “Nenhuma lei nova”: **[nao verificado]** como registro em arquivo desta cópia. As escolhas restantes são técnicas; seleção, vitalidade e regra atual já têm fontes identificadas. (`app/chamados/services/pergunta_no_app.py:61`; `app/core/juize
-
-[truncado em 20000 de 20039 caracteres]
-
-## 11/11 10:10 · sessao 1a4869192285 · - · - · origem=Ronald (tmux)
-
-Censo direto, somente leitura; testes não executados, estado verde atual [nao verificado]. [nao verificado]
-
-**Consulta e leitores**
-
-- `consulta_do_app` deriva listas novas, preserva ordem por ID e separa `pendentes` por `respondida_em is None` **e** `disputa.fechada_em is None`; demais perguntas vivas vão ao histórico. Fonte anterior: `perguntas_do_app → q_vivas + pergunta_viva(C6)`. `app/chamados/services/pergunta_no_app.py:45`, `app/chamados/services/pergunta_no_app.py:61`, `app/chamados/models.py:3326`, `app/chamados/juizes.py:839`.
-- **7 sítios de consumo em produção**: dois badges (`app/api/views_core.py:314`, `app/api/views.py:325`), GET chamados (`app/api/views.py:1005`), GET perguntas (`app/api/views.py:2543`), dashboard (`app/core/views.py:253`), aviso de pendência (`app/chamados/services/aviso_pendencia.py:9`), cobrança (`app/chamados/services/cobranca.py:48`).
-- A consulta não contém `status_local__in=VIVOS`; esse filtro pertence à contagem de **chamados com followup DP não lido**, nos badges. `VIVOS = aberto, em_analise, registrado`, diferente de `COBRANCA`. `app/api/views_core.py:309`, `app/api/views.py:320`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`.
-
-**Escritores diretos dos campos que separam pendentes/histórico**
-
-| Campo/operação | Sítios |
-|---|---|
-| Resposta do colaborador | `responder_pergunta_disputa_core`: atribui e salva `respondida_em`. `app/chamados/services/disputa_emissao.py:1468`, `app/chamados/services/disputa_emissao.py:1508` |
-| Resposta automática | `responder_automaticamente`. `app/chamados/services/disputa_emissao.py:1653` |
-| Recuperação de carimbo pela trilha | `carimbar_resposta_pela_trilha`. `app/chamados/services/disputa_emissao.py:1674` |
-| Carimbo com resposta já textual | `PerguntaDisputa.carimbar`, quando `resposta` solicitado e texto presente. `app/chamados/models.py:3130`, `app/chamados/models.py:3152` |
-| Voltar a pendente | `reabrir_para_correcao`: monta `respondida_em=None`, executa `qs.update(**campos)` ou delega ao descarimbo em lote. `app/chamados/services/disputa_emissao.py:1593`, `app/chamados/services/disputa_emissao.py:1629` |
-| Ressuscitar perguntas | `ChamadoColaborador.ressuscitar_perguntas` delega a `descarimbar_em_lote(...respondida_em=None)`; este faz update dinâmico. `app/chamados/models.py:1566`, `app/chamados/models.py:3264` |
-| Nascimento da pergunta | `_nascer` recebe `**campos`, constrói e insere; inclui assinaturas recebidas. Campo nullable por definição. `app/chamados/models.py:2448`, `app/chamados/models.py:3014` |
-| Fechar disputa | `DisputaSupervisao.fechar`: `fechada_em=now`, seguido de save. `app/chamados/models.py:1932` |
-| Reabrir disputa | `reabrir_admin` e `reabrir_sistema`: `fechada_em=None`, seguido de save. `app/chamados/models.py:2149`, `app/chamados/models.py:2173` |
-| Nascer disputa aberta | Default nullable; criações do emissor. `app/chamados/models.py:1757`, `app/chamados/services/disputa_emissao.py:587`, `app/chamados/services/disputa_emissao.py:1123`, `app/chamados/services/disputa_emissao.py:1358` |
-
-Atribuições de `respondida_em` que **não persistem**: simulação em cópia (`_universo_da_ressuscitacao`) e restauração da memória quando carimbar recusa. `app/chamados/models.py:1508`, `app/chamados/models.py:3163`.
-
-Vitalidade C6 também depende de `validada_em`, tranca da competência, `via_resolucao`, `materializada_em`, texto da resposta, célula/ata/veredito e testemunha do fato; o conjunto de escritores transitivos de todos esses insumos não foi encerrado neste recorte [nao verificado]. As dependências aparecem em `app/chamados/juizes.py:1324`. O registro existente reconhece oito módulos-porta de `PerguntaDisputa`, incluindo modelo, emissor, materialização, fio, reconciliador, lavra, relavra e validação. `app/core/portas.py:393`.
-
-**Não lido do colaborador**
-
-- Campo real: `FollowupChamado.lido_colaborador_em`, nullable. Criar nota sem carimbo faz nascer uma fonte não lida. `app/chamados/models.py:1673`, `app/chamados/services/nota.py:88`, `app/chamados/services/nota.py:103`.
-- Escritor do carimbo: `nota.marcar_lidas`, usando mapa dinâmico `LADOS`; atualiza apenas registros ainda nulos. `app/chamados/services/nota.py:59`, `app/chamados/services/nota.py:126`.
-- **3 chamadores com lado colaborador**: GET nativo marca **todos** followups DP daquele colaborador; endpoint web de um chamado; endpoint web em lote. `app/api/views.py:1050`, `app/chamados/views.py:1135`, `app/chamados/views.py:1150`.
-- Chamador com lado DP modifica **outro campo**, `lido_dp_em`. `app/chamados/views.py:880`, `app/chamados/services/nota.py:59`.
-- Leitores em produção: dois badges; serialização nativa `novo`/contador por followup; `_nao_lido` web/contador por chamado; duas posições no card de atendimento. `app/api/views_core.py:311`, `app/api/views.py:322`, `app/api/views.py:1128`, `app/chamados/views.py:603`, `app/templates/chamados/partials/_card_atendimento.html:51`, `app/templates/chamados/partials/_card_atendimento.html:59`.
-- Outros atos que eliminam fonte: `nota.apagar_em_ensaio` apaga notas sob guarda de banco de ensaio; excluir o chamado faz cascade da FK. `app/chamados/services/nota.py:136`, `app/chamados/models.py:1668`.
-- Registro da porta de criação/leitura/apagamento: `app/core/portas.py:239`.
-
-**`status_local`: escritores que alteram entrada/saída de VIVOS**
-
-- Campo/default `'aberto'`. `app/chamados/models.py:52`.
-- **Escritor persistente de transição**: `_gravar_estado`, atribuição em `:228`, `save(update_fields=campos)` em `:296`. `app/chamados/models.py:228`, `app/chamados/models.py:296`.
-- Gates locais que delegam ao núcleo: `_aplicar`, `reconciliar`, `cancelar`, `analisar`, `reabrir`, `encerrar`, `encerrar_por_competencia_trancada`. `app/chamados/models.py:450`, `app/chamados/models.py:654`, `app/chamados/models.py:788`, `app/chamados/models.py:806`, `app/chamados/models.py:1442`, `app/chamados/models.py:1619`, `app/chamados/models.py:1639`.
-- **Nascimento idempotente**: `abrir` monta `_def['status_local']`, agrega defaults e passa ao `get_or_create`. `app/chamados/models.py:938`, `app/chamados/models.py:971`.
-- **Nascimento direto**: `criar` passa `status_local=status` ao `objects.create`. A construção anterior `_nascente` é só memória. `app/chamados/models.py:1070`, `app/chamados/models.py:1095`.
-- **Simulação sem persistência**: `_vivas_entre` aplica e restaura o status em memória. `app/chamados/models.py:356`, `app/chamados/models.py:371`.
-- Registro existente da porta de ciclo: `app/core/portas.py:218`.
-- Migrações de dados, fora do runtime: `aberto↔registrado` e `cancelado↔superado`. `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `app/chamados/migrations/0038_a3_registrado_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/migrations/0039_a3_via_backfill.py:33`.
-
-**Contratos já presentes, sem executar**
-
-- Selo AST de escritores de status permite precisamente `_gravar_estado`, `_vivas_entre`, `criar`, `abrir`; distingue memória e persistência, examina update/create/defaults/bulk/setattr/SQL e declara limites de resolução de tipos. `app/chamados/tests/test_selo_status_so_pelas_portas.py:10`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:17`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:37`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:340`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:449`.
-- Selo da nota: nenhum escritor fora da porta e idempotência do marcar lidas. `app/chamados/tests/test_porta_nota_do_fio.py:44`, `app/chamados/tests/test_porta_nota_do_fio.py:207`.
-- Matriz ORM compara endpoint de perguntas, dashboard e **ambos** kernels, incluindo dicionário completo do badge; prova que vermelho conta chamados e não followups. `app/chamados/tests/test_e3_app_orm.py:28`, `app/chamados/tests/test_e3_app_orm.py:62`.
-- Contratos de leitores: aviso/cobrança/badges mesma pendente; lista nativa pendentes + histórico; frescor após tranca/toque/reabertura. `app/chamados/tests/test_e3_v4_orm.py:20`, `app/chamados/tests/test_e3_v4_orm.py:42`, `app/chamados/tests/test_e3_v4_orm.py:101`.
-- Outros leitores de teste explícitos da consulta: `app/chamados/tests/test_esmeril2_left_join.py:19`, `app/chamados/tests/test_fio_le_o_juiz.py:267`, `app/core/tests/test_dashboard_badge.py:45`; contratos AST em `app/chamados/tests/test_contract_pergunta_viva.py:68`, `app/chamados/tests/test_pergunta_no_app.py:168`; ferramentas de mutação em `app/chamados/tests/e3_mutantes.py:23`.
-
-_3785 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3789 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
