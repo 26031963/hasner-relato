@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 17:05** · publicado em **11/11/2026 17:06** (UTC-3)
+> Ultima resposta processada: **11/11/2026 17:28** · publicado em **11/11/2026 17:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 17:28 · sessao c3afbe28a431 · - · - · origem=Ronald (tmux)
+
+- **O atraso agora existe no mundo simulado:** `tx_lento` adia a conclusão em 15.000 ms; `open_bloqueado_libera` emite `onblocked` e só abre 15.000 ms depois. O escritor executado é o real; o wrapper apenas conta chamadas e devolve sua promessa. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:161`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:213`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:309`)
+
+- **Abortar/rejeitar no teto e esconder o aviso são regressões diretamente cobertas:** Mg/Mh/Mi/Mi2 restauram rejeição/aborto; Mo/Mo2 retiram emissão/passagem do aviso; Mp impede sua remoção. O controle precisa estar verde no mesmo lote e a morte precisa casar a mensagem esperada. Execução verde nesta cópia: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:639`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:1003`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:1028`)
+
+- **Mutante natural vivo: remover `req.onerror` de `abrirDB`.** O falso `open` nunca lança nem dispara `onerror`; os mundos de abertura cobrem pendência, bloqueio e liberação, mas não erro definitivo de abertura. Assim, a remoção desse handler não altera seus observáveis; com esse evento, o código mutado ficaria pendente. Ocorrência em produção: **[nao verificado]**. (`app/static/pwa.js:82`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:209`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:676`)
+
+- **Mutante vivo de conexão fechada:** trocar o sucesso de abertura por `e.target.result.close(); fim(true,e.target.result)` passa pelo falso, porque `close()` é vazio e `transaction()` não verifica fechamento. Portanto, o instrumento não protege a cura do fechamento tardio da v5. Efeito desse mutante no navegador real: **[nao verificado]**. (`app/static/pwa.js:81`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:226`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:236`)
+
+- **A prova temporal ainda é parcial:** os julgadores de sucesso lento não comparam término da promessa/sucesso visual com `fila_ms`; a propriedade compara estados finais e omite tempos. Entretanto, resolver incondicionalmente no `req.onsuccess` seria detectado pelos mundos de aborto/erro/pendência e pelo sucesso lento sem aviso/reclique protegido; não é correto dizer que esse mutante simples passaria. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:489`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:705`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:828`)
+
+- **“Persistidas” não é uma leitura de durabilidade nativa:** o falso já põe a linha no mapa durante `add`; `persistidas()` conta esse mapa. Os cenários de aborto/erro removem a linha, e `marca('fila')` só acontece na conclusão, mas o mundo pendente conserva uma linha provisória no mapa e seu julgador não exige `persistidas == 0`. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:166`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:173`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:195`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:267`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`)
+
+- **Quota é simulação específica:** `tx_erro` faz rollback e dispara somente `tx.onerror` com `QuotaExceededError`; não exercita erro real de pedido, erro de abertura ou comportamento posterior do navegador. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:154`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:166`)
+
+- **A alegação anterior “ArmazemEPostTest toca banco” não está comprovada por esta leitura:** herda de `SimpleTestCase`, renderiza com `SimpleNamespace`/`AnonymousUser` e usa IDB em memória; efeitos de importação/renderização e execução completa permanecem **[nao verificado]**. O ensaio certamente escreve HTML/JS/perfil temporários e depois apaga, por isso não foi executado sob a regra somente leitura. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:385`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:398`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:414`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:426`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:579`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:781`)
+
+## 11/11 17:27 · sessao 2f63bfab402a · - · - · origem=Ronald (tmux)
+
+- **Abertura lenta ou conexão depois de 2 s:** `abrirDB` apenas chama aviso; continua aguardando e aceita `onsuccess` tardio. Não fecha a conexão. (`app/static/pwa.js:71`, `app/static/pwa.js:81`)
+- **`onblocked`:** avisa imediatamente, continua aguardando; não rejeita. (`app/static/pwa.js:83`)
+- **Transação >2 s:** avisa e espera; `oncomplete` resolve, `onabort`/`onerror` rejeitam. Nenhum timer dessa transação chama `abort`. (`app/static/pwa.js:95`, `app/static/pwa.js:99`, `app/static/pwa.js:100`, `app/static/pwa.js:101`)
+- **Quota:** se `add` lança, cai no catch; se chega como erro da transação, cai em `tx.onerror`. Ambos rejeitam, removem aviso e entregam erro ao template. Quota real nesta cópia: **[nao verificado]**. (`app/static/pwa.js:98`, `app/static/pwa.js:100`, `app/static/pwa.js:102`, `app/static/pwa.js:283`)
+- **Sem evento definitivo:** promessa permanece pendente indefinidamente; aviso fica e a guarda do clique impede outro escritor. Isso está explicitamente assumido no contrato novo; não é sucesso nem rejeição. (`app/static/pwa.js:262`, `app/templates/ponto/triagem/apto.html:269`, `app/templates/ponto/bater_ponto_v2.html:294`)
+- **Quem escreve:** aviso vem de `pwa.js`; sucesso/erro vêm dos templates após o `await`. No erro, apto destrava a guarda e v2 retira `disabled`; no sucesso escondem controles. Portanto o botão **não volta clicável em todos os desfechos**. (`app/static/pwa.js:250`, `app/templates/ponto/triagem/apto.html:294`, `app/templates/ponto/triagem/apto.html:308`, `app/templates/ponto/bater_ponto_v2.html:339`, `app/templates/ponto/bater_ponto_v2.html:342`)
+
+**Ressalva importante:** o comentário equipara `error` a rollback definitivo, mas o código rejeita no `tx.onerror`, sem esperar `tx.onabort`. Portanto rollback confirmado não decorre dessa implementação. Um evento `error` seguido de `complete` deixaria a promessa rejeitada por causa da guarda `feito`; ocorrência disso no IndexedDB real com os chamadores atuais: **[nao verificado]**. Não encontrei evidência suficiente para transformar essa possibilidade em bloqueante de produto. (`app/static/pwa.js:51`, `app/static/pwa.js:94`, `app/static/pwa.js:100`, `app/static/pwa.js:101`)
+
+**Tetos restantes:** config rejeita após 2 s sem abortar a operação; gap completo devolve fallback após 4 s; `/hora/` aborta fetch após 2 s; POST aborta fetch após 30 s e provoca fallback para fila. Nenhum desses timers aborta a escrita IndexedDB da batida. (`app/static/pwa.js:116`, `app/static/pwa.js:125`, `app/static/pwa.js:142`, `app/static/pwa.js:152`, `app/static/pwa.js:271`, `app/static/pwa.js:299`)
+
+**Falso erro residual no caminho online:** abortar a espera do POST não confirma ausência de gravação no servidor. Se o servidor já gravou e a tentativa subsequente de fila falha, v2 mostra erro apesar da eventual gravação no servidor; ocorrência real **[nao verificado]**. Esse caminho conserva a pendência de identidade do clique. (`app/static/pwa.js:299`, `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:330`)
+
+**Conclusão da subauditoria:** o bloqueante específico da v5 — timer que abortava escrita lenta — está removido no código. Não encontrei nova regressão demonstrada nesse delta; espera infinita com aviso permanece deliberadamente presente. (`app/static/pwa.js:95`, `app/static/pwa.js:99`, `app/static/pwa.js:262`)
+
+## 11/11 17:27 · sessao fe2a4a6bd194 · - · - · origem=Ronald (tmux)
+
+Chamadores e contratos:
+
+- `apto.html` aguarda `registrarBatidaOffline` e ignora seu retorno; só depois escreve “salva no celular”; a rejeição mostra erro e libera `_confirmandoOffline`. Não exige booleano nem prazo de rejeição. (`app/templates/ponto/triagem/apto.html:289`, `app/templates/ponto/triagem/apto.html:294`, `app/templates/ponto/triagem/apto.html:308`)
+- V2 chama o escritor na recuperação do POST e no ramo offline; também ignora retorno e escreve sucesso após o `await`; os catches liberam botão e `_enviando`. Sucesso esconde o botão; promessa pendente mantém a guarda. (`app/templates/ponto/bater_ponto_v2.html:294`, `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:326`, `app/templates/ponto/bater_ponto_v2.html:329`, `app/templates/ponto/bater_ponto_v2.html:336`, `app/templates/ponto/bater_ponto_v2.html:339`, `app/templates/ponto/bater_ponto_v2.html:342`)
+- As duas cascas carregam `pwa.js`. Os acessos de produção encontrados ao escritor estão nessas duas telas. (`app/templates/base.html:20`, `app/templates/base_app.html:20`, `app/templates/ponto/triagem/apto.html:289`, `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:336`)
+- SW não abre IndexedDB: o evento `sync` manda `SYNC_BATIDAS` às páginas; o listener de `pwa.js` chama `sincronizarBatidas`. O SW não espera confirmação da sincronização. (`app/static/sw.js:112`, `app/static/sw.js:116`, `app/static/sw.js:119`, `app/static/pwa.js:16`)
+- Sync e indicador usam `abrirDB()` sem callback de aviso. Antes recebiam a rejeição pelo teto; agora podem aguardar indefinidamente e silenciosamente. Isso não segura o retorno do escritor, que dispara o indicador sem `await`. (`app/static/pwa.js:71`, `app/static/pwa.js:286`, `app/static/pwa.js:310`, `app/static/pwa.js:368`)
+- Sync/indicador são disparados na carga e em eventos online/offline; sync também dispara o indicador ao terminar. As chamadas não consomem booleano ou mensagem. (`app/static/pwa.js:363`, `app/static/pwa.js:504`, `app/static/pwa.js:505`, `app/static/pwa.js:511`, `app/static/pwa.js:512`, `app/static/pwa.js:513`)
+
+Escritores e leitores:
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| Fila `batidas_pendentes`; `id` | `abrirDB` cria store com `id` automático; escritor faz `add`. (`app/static/pwa.js:76`, `app/static/pwa.js:77`, `app/static/pwa.js:276`) | Sync faz `getAll`, exclui por `id`; indicador conta. (`app/static/pwa.js:313`, `app/static/pwa.js:343`, `app/static/pwa.js:353`, `app/static/pwa.js:371`) |
+| `config.chave/valor` | `salvarConfig` faz `put`. (`app/static/pwa.js:114`) | `lerConfig` faz `get` e devolve `valor`. (`app/static/pwa.js:123`, `app/static/pwa.js:127`) |
+| `ntp_gap` | `calcularESalvarGap`, diferença entre hora do servidor e aparelho com meia latência. (`app/static/pwa.js:155`, `app/static/pwa.js:156`, `app/static/pwa.js:157`, `app/static/pwa.js:158`) | Recuperação de erro e `obterGap`. (`app/static/pwa.js:162`, `app/static/pwa.js:170`) |
+| `ntp_calculado_em` | `Date.now()` depois de salvar gap. (`app/static/pwa.js:159`) | `obterGap` aplica validade de 30 minutos. (`app/static/pwa.js:167`, `app/static/pwa.js:168`) |
+| Instante, `timestamp`, `timestamp_dispositivo`, `timestamp_gap_ms` | Escritor lê `Date.now()` uma vez; calcula timestamp corrigido e guarda ambos os instantes e gap. (`app/static/pwa.js:270`, `app/static/pwa.js:272`, `app/static/pwa.js:277`, `app/static/pwa.js:278`, `app/static/pwa.js:279`) | Sync ordena pelo corrigido, mas envia somente o cru do aparelho. (`app/static/pwa.js:318`, `app/static/pwa.js:328`) |
+| `tipo`, latitude, longitude, foto | Parâmetros das telas → `add`. (`app/templates/ponto/triagem/apto.html:289`, `app/templates/ponto/bater_ponto_v2.html:336`, `app/static/pwa.js:277`, `app/static/pwa.js:279`, `app/static/pwa.js:281`) | Sync coloca no `FormData`. (`app/static/pwa.js:325`, `app/static/pwa.js:326`, `app/static/pwa.js:327`, `app/static/pwa.js:333`) |
+| `gps_accuracy`, `gps_captured_at` | Escritor guarda parâmetros. (`app/static/pwa.js:280`) | Não seguem no FormData desse sync; nenhum leitor de produção encontrado nesse caminho. (`app/static/pwa.js:324`, `app/static/pwa.js:333`) |
+
+A rota do sync é `/api/ponto/bater/`, ligada a `views.api_bater_ponto`; a API lê o timestamp cru, aplica `hora_do_aparelho`, e entrega o efetivo e o cru ao chokepoint. O gap e o timestamp corrigido locais não decidem a hora no servidor nesse caminho. (`app/static/pwa.js:334`, `app/api/urls.py:67`, `app/api/views.py:519`, `app/api/views.py:520`, `app/api/views.py:666`, `app/api/views.py:678`)
+
+`hora_do_aparelho` preserva a hora quando o atraso está entre zero e 48 horas; futuro/antigo demais passam pelo ramo de substituição por `agora`. (`app/api/hora_do_aparelho.py:62`, `app/api/hora_do_aparelho.py:141`, `app/api/hora_do_aparelho.py:142`, `app/api/hora_do_aparelho.py:146`, `app/api/hora_do_aparelho.py:148`)
+
+`JulianiPWA.agora` ainda aguarda `obterGap` diretamente; a exportação existe, mas nenhum chamador de produção foi encontrado pela busca na cópia. (`app/static/pwa.js:487`, `app/static/pwa.js:488`, `app/static/pwa.js:501`)
+
+Lei:
+
+- A lei declara batida de chão sem bloqueio em runtime e escrita única em `registro_batida.py`. O delta não altera esse arquivo nem os POSTs das telas. (`CLAUDE.md:143`, `CLAUDE.md:144`; delta fornecido pelo usuário)
+- A admissibilidade da câmera continua centralizada em `abrirCameraSelfie`/`capturarSelfie`; falta de foto devolve aviso e valor nulo. As telas passam foto nula ao escritor. Não há segundo juiz da falta de selfie introduzido pelo delta. (`app/static/pwa.js:198`, `app/static/pwa.js:211`, `app/static/pwa.js:222`, `app/static/pwa.js:232`, `app/templates/ponto/triagem/apto.html:275`, `app/templates/ponto/triagem/apto.html:277`, `app/templates/ponto/bater_ponto_v2.html:274`, `app/templates/ponto/bater_ponto_v2.html:275`)
+- No servidor, `selfie_ausente` é o juiz da cobrança da ausência; a API acrescenta motivo de anomalia, sem retorno de recusa nesse ramo. (`app/ponto/registro_batida.py:80`, `app/ponto/registro_batida.py:91`, `app/api/views.py:459`, `app/api/views.py:461`, `app/api/views.py:464`)
+
+Pendências v5 intactas:
+
+- `DataTransfer`/`File`/atribuição de arquivos continuam fora do `try` que protege a captura na triagem online; uma exceção impede chegar ao submit, com o botão já desabilitado. (`app/templates/ponto/triagem/apto.html:212`, `app/templates/ponto/triagem/apto.html:230`, `app/templates/ponto/triagem/apto.html:234`, `app/templates/ponto/triagem/apto.html:236`, `app/templates/ponto/triagem/apto.html:241`)
+- HTTP 400 do sync ainda exclui a fila com apenas `console.warn`; a pendência está registrada como aberta. (`app/static/pwa.js:347`, `app/static/pwa.js:350`, `app/static/pwa.js:353`, `app/docs/BACKLOG.md:1944`)
+- V2 sem `postarBatidaNoTeto` continua usando `fetch`/`json` sem teto. (`app/templates/ponto/bater_ponto_v2.html:312`, `app/templates/ponto/bater_ponto_v2.html:313`, `app/templates/ponto/bater_ponto_v2.html:314`)
+- Identidade do clique permanece declarada como obra separada, sem identificador persistido no registro da fila. (`app/static/pwa.js:265`, `app/static/pwa.js:266`, `app/static/pwa.js:276`, `app/static/pwa.js:282`)
+- TICKETS ainda lista o template apagado como “MATAR”; scanner de URLs não inclui apto/v2; guard de lei não inclui v2 e ignora caminhos inexistentes. (`app/docs/TICKETS.md:693`, `app/tools/check_frontend_urls.py:25`, `app/scripts/check_a_lei_batida.py:14`, `app/scripts/check_a_lei_batida.py:21`, `app/scripts/check_a_lei_batida.py:31`)
 
 ## 11/11 17:05 · sessao 19ef5920d01b · PROPORCAO-POR-RISCO · verificador · origem=Code
 
@@ -553,93 +631,4 @@ Não encontrei outro bloqueante concreto de descoberta automática no material e
 - Não apareceram `.py` sob `app/**/templates/` ou `app/**/static/`, nem caminhos `fixtures/` ou `locale/` no inventário pesquisado; ausência global e configuração efetivamente usada em produção: [nao verificado].
 - Não há código vendorizado do Django para confirmar nesta cópia a semântica interna de autodiscover de admin, apps, checks, locale ou fixtures [nao verificado].
 
-## 11/11 15:59 · sessao c5d9a24422ee · FIO-E0-V4-E4B · construtor · origem=Code
-
-Implementada a ordem **DP → âncoras → exists → escrever**, preservando as advisories ([fecho_runtime.py:122](chamados/services/fecho_runtime.py:122)).
-
-Resultados locais: RED na base c8 e mutantes morreram nas assertions previstas; 123 testes e Ruff verdes. Comandos, evidências e fila estão no [recibo c9](docs/FIO-E0-V4-E4B-c9.txt:33).
-
-ORM e certificação Code/opus: [nao verificado].
-
-## 11/11 15:56 · sessao 111529e65077 · UI-PAINEL-MOSTRA-O-APP · verificador · origem=Code
-
-REPROVADO
-
-1. **Bloqueante (1) curado no código; censo do diff completo [não verificado].** O template usa `pendentes_com_dia` e apresenta `dia`, com “—” para valor vazio; deixou de interpretar `p.data_evento` como dia do turno (`app/templates/colaboradores/partials/painel_colaborador.html:195–198`). O juiz retorna `None` para conversa (`app/chamados/juizes.py:334–338`).
-
-   Há outros leitores na cópia:
-   
-   - API: serialização direta de `p.data_evento` em `app/api/views.py:1153–1154`; interpolação desse campo numa mensagem de diagnóstico em `app/api/views.py:2625`.
-   - Serviço: comparação direta, excluindo conversa, em `app/chamados/services/pergunta_no_app.py:149`.
-   - Teste alterado pela v5: consulta ao juiz em `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:129–131`; leitura crua para conferir o fato e rejeitar a data civil da conversa em `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:175–178`.
-
-   Quais desses leitores foram introduzidos ou tocados pela obra inteira contra `e70a54f7e` está **[não verificado]**: o anexo contém somente o delta v5, e esta cópia não disponibiliza histórico Git.
-
-2. **Sem novo bloqueio na montagem dos pares.** A compreensão percorre exatamente `consulta['pendentes']`, preservando objetos e ordem, sem filtro, ordenação ou regra própria de dia, e chama `_dia_de_turno_da_pergunta(p)` uma vez por elemento nessa montagem (`app/chamados/services/pergunta_no_app.py:106`). A lista de pares é nova; a lista original de pendentes continua sendo devolvida pela expansão de `consulta` (`app/chamados/services/pergunta_no_app.py:107–109`).
-
-   O universo vem de C6, ordenado por ID, depois separado pelo estado de resposta e fechamento da disputa (`app/chamados/services/pergunta_no_app.py:49–58`, `:69–75`). A chamada única aqui não significa uma única chamada total ao juiz durante toda a consulta: C6 também o utiliza (`app/chamados/juizes.py:1448`).
-
-   Precisão sobre “registrado”: o registro declara C6 como `chamados/juizes.py::pergunta_viva`; `_dia_de_turno_da_pergunta` é o auxiliar existente dessa autoridade (`app/core/juizes.py:278`; `app/chamados/juizes.py:334–338`, `:1448`).
-
-3. **Escritores e leitores: mesma origem para rótulo e contagem.** A projeção é chamada pelos dois `/me/` e pela view do painel (`app/api/views.py:315–319`; `app/api/views_core.py:303–307`; `app/colaboradores/views.py:940–941`). A view passa o resultado como `no_app` ao template (`app/colaboradores/views.py:1006`).
-
-   | Chave | Quem escreve | Quem lê em execução normal |
-   |---|---|---|
-   | `pendentes` | `consulta_do_app`, `app/chamados/services/pergunta_no_app.py:69–75` | Projeção para tamanho e pares, `:91`, `:106`; condição do template, `app/templates/colaboradores/partials/painel_colaborador.html:193` |
-   | `historico` | `consulta_do_app`, `app/chamados/services/pergunta_no_app.py:69–75` | Preservado pela projeção, `:107`; sem consumo nos três leitores acima |
-   | `pendentes_com_dia` | Projeção, `app/chamados/services/pergunta_no_app.py:106–109` | Template, `app/templates/colaboradores/partials/painel_colaborador.html:195–198` |
-   | `questionarios_pendentes` | Projeção, `app/chamados/services/pergunta_no_app.py:91` | APIs, `app/api/views.py:318`, `app/api/views_core.py:306`; contador da aba, `app/templates/colaboradores/partials/painel_colaborador.html:39` |
-   | `chamados_nao_lidos` | Projeção, `app/chamados/services/pergunta_no_app.py:92–97` | Regra do badge, `:100–101`; APIs, `app/api/views.py:317`, `app/api/views_core.py:305` |
-   | `chamados_badge`, incluindo `rotulo`, `count`, `cor` | Projeção, `app/chamados/services/pergunta_no_app.py:98–103` | APIs, `app/api/views.py:319`, `app/api/views_core.py:307`; faixa, `app/templates/colaboradores/partials/painel_colaborador.html:190–191` |
-
-   Os dois `/me/` publicam os mesmos campos recebidos da projeção; `pendentes_com_dia` não entra no payload (`app/api/views.py:358–360`; `app/api/views_core.py:346–348`). O contador do **botão** soma chamados e perguntas; a **faixa** usa `badge.count` (`app/templates/colaboradores/partials/painel_colaborador.html:39–40`, `:191`).
-
-   Nos testes, existe ainda um leitor auxiliar para renderização (`app/colaboradores/tests/test_selo_situacao_e_lampada.py:118–122`) e uma sobrescrita deliberada do badge para provar propagação pelos três leitores (`app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:219–227`).
-
-4. **BLOQUEANTE — o RED ORM pelo motivo certo continua sem comprovação disponível.** Pela leitura do teste, ambos os mutantes devem falhar: template usando `p.data_evento` ou projeção entregando essa data para conversa produzirão a data civil onde a asserção exige “Dia: —”; há também rejeição explícita da data civil (`app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:166–178`).
-
-   A mordida **executada no ORM**, o verde atual e o RED sobre **as duas bases** estão **[não verificado]**. O registro existente descreve RED de memória na base `9ca563bb3` e ausência de execução ORM naquela ocasião (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:6–11`). Ele não comprova a alegada repetição v5.
-
-   A verificação disponível aqui foi de memória: sete testes verdes, e variantes dos dois defeitos morreram por asserção, sem erro. Os contratos correspondentes estão em `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:60–70`, `:74–110`; o próprio arquivo limita esse selo, sem certificação ORM (`:3–4`).
-
-5. **FILA — fechamento de escopo e relato.** Há adaptações auxiliares visíveis: alvos dos mutantes E3 apontam para a projeção (`app/chamados/tests/e3_mutantes.py:23–26`, `:87–88`), o censo declara seu contador (`app/core/tests/test_tripwire_contagem_de_pendencia.py:82–85`) e outro selo fornece `no_app` ao template (`app/colaboradores/tests/test_selo_situacao_e_lampada.py:116–122`).
-
-   A correspondência dessas alterações com o **diff completo** e com o **texto do commit**, assim como smoke do Ronald, encaixe na raia e entrega da linha HAIKU, permanece **[não verificado]**. Esses materiais não foram fornecidos; não há base para declarar que o commit os cumpriu ou omitiu. [nao verificado]
-
-## 11/11 15:49 · sessao 09a259e1349b · DATA-EVENTO-CRU · verificador · origem=Code
-
-**Veredito: BLOQUEANTE — a sobrecontagem pode encobrir um leitor novo no mesmo escopo.** Reproduzido em memória, preservando a escrita e o retorno da função. (`app/chamados/services/fio.py:800`; `app/chamados/services/fio.py:801`; `app/chamados/tests/test_catraca_data_evento_cru.py:189`)
-
-1. **Bloqueantes 3 e 5 da v2 e censo.**
-
-   **3:** os quatro repasses de escrita foram corrigidos pela inclusão de `reapontar_resolvedora` em `ESCRITA`. O quinto caso, `return 'data_evento'`, continua contado e foi declarado sobrecontagem admitida. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:24`; `app/chamados/services/fio.py:801`)
-
-   **5:** corrigido. `M.objects.create(x=p['data_evento'])` agora conta **1**, pois o subscrito `Load` restaura a contagem da chave mesmo dentro da escrita. (`app/chamados/tests/test_catraca_data_evento_cru.py:119`; `app/chamados/tests/test_catraca_data_evento_cru.py:123`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`)
-
-   Recalculei **212 ocorrências em 118 escopos: 207 Python + 5 templates**, com igualdade integral ao JSON. As únicas alterações frente à v2 reconstituída pelo delta são estas. (`app/chamados/tests/test_catraca_data_evento_cru.py:164`; `app/chamados/tests/catraca_data_evento_cru.json:2`)
-
-   | Chave | v2 → v3 | Referência |
-   |---|---:|---|
-   | `chamados/reconciliador.py::reatar_pergunta_orfa` | 5 → 3 | `app/chamados/tests/catraca_data_evento_cru.json:47`; `app/chamados/reconciliador.py:1642`; `app/chamados/reconciliador.py:1655` |
-   | `chamados/reconciliador.py::reemitir_chamado_do_dia` | 1 → ausente | `app/chamados/reconciliador.py:954`; `app/chamados/tests/test_catraca_data_evento_cru.py:64` |
-   | `chamados/services/declaracao_texto.py::declarar_hora_colab` | 1 → ausente | `app/chamados/services/declaracao_texto.py:370`; `app/chamados/tests/test_catraca_data_evento_cru.py:64` |
-
-2. **As duas portas novas escondem leitura real atual? Não encontrei.** Os quatro `data_evento=` de `reapontar_resolvedora` são pedidos de datação; a porta grava pelo escritor e salva. `rechavear_data_evento` recebe `novo_dia`, grava e salva. As leituras diretas existentes nas implementações continuam contadas. (`app/chamados/services/fio.py:876`; `app/chamados/services/fio.py:879`; `app/chamados/services/fio.py:927`; `app/chamados/services/fio.py:1037`; `app/chamados/services/fio.py:1043`; `app/chamados/services/fio.py:867`; `app/chamados/services/fio.py:934`; `app/chamados/services/fio.py:1013`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`)
-
-3. **Bloqueante: a sobrecontagem não é estável contra compensação.** Em memória, substituí somente o retorno de `gravar_dia_do_fato` por:
-
-   ```python
-   return {'data_evento': linha.data_evento}.popitem()[0]
-   ```
-
-   O retorno permanece `'data_evento'`, a atribuição permanece efetiva e surge **uma leitura real direta**. Entretanto, o escopo fica **1 → 1**, o censo completo permanece **212/118**, igual ao JSON, e `test_so_desce` passa alimentado com esse censo mutante. O literal antes contado vira chave de dict excluída; o atributo novo ocupa sua contagem. (`app/chamados/services/fio.py:800`; `app/chamados/services/fio.py:801`; `app/chamados/tests/test_catraca_data_evento_cru.py:104`; `app/chamados/tests/test_catraca_data_evento_cru.py:108`; `app/chamados/tests/test_catraca_data_evento_cru.py:110`; `app/chamados/tests/test_catraca_data_evento_cru.py:189`)
-
-   Isso demonstra um **primeiro leitor real financiado por rótulo sobrecontado**, sem reflexão, lambda, alias ou dois saltos. O limite documentado de trocar leitor por leitor não cobre essa distinção. (`app/chamados/services/fio.py:791`; `app/chamados/tests/test_catraca_data_evento_cru.py:24`; `app/chamados/tests/test_catraca_data_evento_cru.py:37`)
-
-4. **As duas formas novas mordem seus mutantes.** Retirar `reapontar_resolvedora` de `ESCRITA` faz surgir `escreve: 1` indevido e falha o teste. Remover o tratamento de subscrito `Load` reduz `escreve_lendo` de **3 para 2** e também falha. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:119`; `app/chamados/tests/test_catraca_data_evento_cru.py:227`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`; `app/chamados/tests/test_catraca_data_evento_cru.py:237`)
-
-**FILA:** retirar apenas `rechavear_data_evento` de `ESCRITA` sobrevive a `test_MORDE_cada_forma`; falta uma forma correspondente na fixture. É lacuna de cobertura, sem leitor real omitido demonstrado. (`app/chamados/tests/test_catraca_data_evento_cru.py:64`; `app/chamados/tests/test_catraca_data_evento_cru.py:219`; `app/chamados/tests/test_catraca_data_evento_cru.py:235`)
-
-Os quatro métodos sem escrita passaram em memória com base `unittest`; o método que cria temporários não foi executado. Suíte Django: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:185`; `app/chamados/tests/test_catraca_data_evento_cru.py:198`; `app/chamados/tests/test_catraca_data_evento_cru.py:203`; `app/chamados/tests/test_catraca_data_evento_cru.py:240`; `app/chamados/tests/test_catraca_data_evento_cru.py:245`)
-
-_3990 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3993 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
