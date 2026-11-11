@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=869415
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=3737487
 VERIFICADOR-EM-FABLE (1) NO AR 03h47: push 4377684ae (pre-push Ran 15043 OK skipped=42; control-plane 22 OK); deploy 03h2x rc 0 sem ensaio (motivo gravado: so bin/). MARCO FECHADO. Copia wt-verif-fable-021052 removida (tudo commitado).
 E3 integracao 03h2x: copia combinada /home/ronald/wt-codex-fio-e0-v4-e3-032042 = c8c 6b8898fdc + X1 (cherry-pick limpo, HEAD ed0343896). c8c ORM pela trava (c8c_mutantes_orm.log): controle 4/4 OK; 3 mutantes mortos por assertion; universo_incompleto NAO COMPROVADO (AttributeError viva_c6). Brief construtor_e3int.q (so testes: os 2 mutantes que morrem por excecao), lanca sozinho quando o c4 da E4B soltar a vaga (espera_c4_lanca_e3int.sh). Depois: mutantes de novo, suite INTEIRA da copia, pre-verificador Codex, opus final.
 VERIFICADOR-EM-FABLE (1) POUSA 03h2x: opus final v5 APROVA 60c56e3f9 (obra lida), 0 bloqueio; FILA: nome ler()['b3_sem_obra'] x _obs, _FINAL_RE largo, _obs sem janela/baixa, caso historico sem linha(), forma-invalida morre por KeyError. Os 6 historicos sao de 31/10-09/11, nao das ultimas 24 h (aval dizia 24 h). Item (2) fable no verificador.md fica para 18h. CUSTO: 5 voltas Codex (4 pv + 1 censo), 2 opus.

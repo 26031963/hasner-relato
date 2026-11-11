@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 03:56:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (315.1 MB). Acoes na janela: **1549**.
+**Medido em 11/11/2026 04:01:24.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (315.2 MB). Acoes na janela: **1555**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:01:03 | Bash | Write c4 volta 2 brief, launcher and waiter | `cd /home/ronald/saas-hasner/logs/E4B-ALCANCE; ls ../../PLANO_PISCADA.md && cat > construtor_c4v2.q <<'EOF' # FIO-E0-V4-E4B c4 volta 2 -- construtor, copia /home/ronald/wt-codex-fio-e0-v4-e4b-005824, HEAD 54568b381 (c4 commitada como WIP), base b20a37f3e MAPA: fila 1 ORDEM-ATE-O-ZERO item (2) E4b. A sessao rodou o ORM da c4 pela trava (anexo c4_orm.log, 04:00): GREEN Ran 109, FAILED 8. Mutantes ORM ...` |
+| 03:58:22 | Bash | Wait for c4 ORM run and print log | `until [ -f /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4_orm.fim ]; do /usr/bin/sleep 15; done; cat /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4_orm.log` |
+| 03:58:19 | Bash | Commit c4 WIP and launch ORM tests plus mutants | `W=/home/ronald/wt-codex-fio-e0-v4-e4b-005824; cd $W && git add -A app && git commit -q -m "FIO-E0-V4-E4B c4 (WIP na raia): cerca do backfill, foto sob C, DIFF por colaborador com dinheiro da autoridade" && git log --oneline -1; git status --porcelain \| head -3 cd /home/ronald/saas-hasner; D=logs/E4B-ALCANCE; cat > $D/c4_rodar_orm.sh <<'EOF' #!/usr/bin/env bash # sessao: ORM da c4 (GREEN dos TestC ...` |
+| 03:58:04 | Bash | Inspect allowlist/backlog edits and ORM commands | `W=/home/ronald/wt-codex-fio-e0-v4-e4b-005824; cd $W; git diff app/core/tests/testes_sem_relogio.txt app/docs/BACKLOG.md \| head -30; sed -n 105,142p app/docs/FIO-E0-V4-E4B-c4.txt` |
+| 03:58:00 | Bash | Update ESPERANDO pid and read c4 result | `cd /home/ronald/saas-hasner; sed -i "3s/pid=[0-9]*/pid=3737487/" app/docs/RELATO.md; cat logs/E4B-ALCANCE/construtor_c4.r; git -C /home/ronald/wt-codex-fio-e0-v4-e4b-005824 diff --stat \| tail -3` |
+| 03:57:25 | Bash | Read c4 result and confirm e3int launched | `cd /home/ronald/saas-hasner/logs; cat E4B-ALCANCE/c4.log \| tail -4; cat E4B-ALCANCE/construtor_c4.r.rc E4B-ALCANCE/construtor_c4.r.inventario 2>/dev/null; wc -c E4B-ALCANCE/construtor_c4.r; /usr/bin/sleep 30; ps -eo pid,etime,cmd \| /bin/grep '[c]odex_pergunta.sh --construtor' \| cut -c1-60; tail -2 FIO-E0-V4-E3/e3int.log 2>/dev/null` |
 | 03:48:22 | Bash | Wait for E4B c4 construtor to finish | `until [ -f /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4.fim ]; do /usr/bin/sleep 20; done; date +%H:%M; tail -3 /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4.log` |
 | 03:48:19 | Bash | Log push, remove landed worktree, check c4 | `cd /home/ronald/saas-hasner; sed -i "3a VERIFICADOR-EM-FABLE (1) NO AR 03h47: push 4377684ae (pre-push Ran 15043 OK skipped=42; control-plane 22 OK); deploy 03h2x rc 0 sem ensaio (motivo gravado: so bin/). MARCO FECHADO. Copia wt-verif-fable-021052 removida (tudo commitado)." app/docs/RELATO.md; git -C /home/ronald/wt-verif-fable-021052 status --porcelain \| head -3; git worktree remove /home/rona ...` |
 | 03:48:11 | Bash | Read push verdict and remote state | `cd /home/ronald/saas-hasner; tail -12 logs/VERIFICADOR-EM-FABLE/push.log; git fetch -q origin; git log --oneline origin/main -2; git status -sb \| head -1` |
