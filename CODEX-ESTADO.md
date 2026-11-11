@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 09:19** · publicado em **11/11/2026 09:24** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:26** · publicado em **11/11/2026 09:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:26 · sessao d8f1db422342 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Corrigi a fixture em [test_e4b_c4_orm.py:375](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:375). **GREEN ORM e morte ORM de `sem_rollback` continuam [nao verificado].**
+
+1. **A deficiência demonstrada é a falta de protesto cobrável na fixture.** A lavra sem `codigos` grava `protestos=[]` (`ponto/portas/celula.py:1011`); o c2 recusa criar o chamado sem esse protesto (`chamados/reconciliador.py:867`). A assertion exige pergunta pendente **com destino**, portanto sua falha não demonstra ausência de qualquer pergunta (`chamados/tests/test_e4b_c4_orm.py:429`).
+
+   O aviso é impresso em `chamados/services/declaracao_texto.py:71`, chamado pela abstenção em `chamados/services/disputa_emissao.py:911`. O aviso fornecido nomeia 21/09, dia de P90; o vizinho é 02/09 (`chamados/tests/test_e4b_c4_orm.py:21`, `chamados/tests/test_e4_backfill.py:28`). Pelo ponto alcançado na falha fornecida, as checagens de vizinho resolvido e ausência de rollback integral já haviam passado (`chamados/tests/test_e4b_c4_orm.py:426`).
+
+2. **A fixture agora lavra `FURO_PARCIAL` e verifica protesto persistido e ata legível**, incluindo a entrada apagada (`chamados/tests/test_e4b_c4_orm.py:375`). Permanecem a precondição de persistência e a assertion-alvo de P90 (`chamados/tests/test_e4b_c4_orm.py:429`, `chamados/tests/test_e4b_c4_orm.py:434`).
+
+3. **Defeito de produção perdendo escrita aceita: [nao verificado].** A correção ficou nos testes. O novo ensaio executa a chamada extraída da fixture, a lavra real e o corpo inteiro do c2; suas bordas simuladas não demonstram persistência ou sinais ORM ([test_e4b_c4v11_memoria.py:1](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4v11_memoria.py:1)). [nao verificado]
+
+Diff central:
+
+```diff
+-        cel_vizinha.lavrar_veredito(via='cartorio', veredito='furo', ata=self.cel.ata)
++        cel_vizinha.lavrar_veredito(via='cartorio', veredito='furo',
++                                   codigos=['FURO_PARCIAL'], ata=self.cel.ata)
+```
+
+O diff também acrescenta as precondições em `test_e4b_c4_orm.py:377`, o novo RED com três mutantes em `test_e4b_c4v11_memoria.py:31` e sua inclusão no roteiro em [e4b_c4_verificar.py:68](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_verificar.py:68).
+
+Resultados locais observados:
+
+| Verificação | rc | Resultado / referência |
+|---|---:|---|
+| RED antes da correção | 1 | Assertion de destino; `test_e4b_c4v11_memoria.py:114` |
+| Memória completa após alterações | 0 | 90 testes; comando abaixo | [nao verificado]
+| `--selos` | 0 | 40 testes; `e4b_c4_verificar.py:238` | [nao verificado]
+| `--orm-preflight` | 0 | 8 enxertos; `e4b_c4_verificar.py:78` |
+| `sem_protestos` | 1 | Assertion de destino; `test_e4b_c4v11_memoria.py:114` |
+| `protesto_nao_cobravel` | 1 | Mesma assertion; `test_e4b_c4v11_memoria.py:114` |
+| `roteiro_sem_fixture` | 1 | Assertion de inclusão; `test_e4b_c4v11_memoria.py:52` |
+| `sem_rollback`, memória | 1 | Assertion-alvo de P90; `test_e4b_c4v10_memoria.py:89` |
+| 24 mutantes c4v7 | 1 cada | `AssertionError`, sem erros; catálogo em `test_e4b_c4v7_memoria.py:441` |
+| GREEN / mutantes ORM | — | [nao verificado] |
+
+Comandos reproduzíveis:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  chamados.tests.test_e4b_classe_e_memoria \
+  chamados.tests.test_e4b_c4_tranca_memoria \
+  chamados.tests.test_e4b_c4v7_memoria \
+  chamados.tests.test_e4b_c4v10_memoria \
+  chamados.tests.test_e4b_c4v11_memoria \
+  chamados.tests.test_e4b_c4_base \
+  chamados.tests.test_e4b_c4_orm_protocolo -q
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v11_memoria --mutante sem_protestos
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v11_memoria --mutante protesto_nao_cobravel
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v11_memoria --mutante roteiro_sem_fixture
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v10_memoria --mutante sem_rollback
+```
+
+Para a sessão executar o ORM, primeiro o GREEN isolado, depois `sem_rollback` e o roteiro completo. A assertion esperada do mutante permanece em `chamados/tests/test_e4b_c4_orm.py:435`; os resultados abaixo são [nao verificado].
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4b_c4_orm.CercaC4ORMTest.test_RED_lote_misto_desfaz_recusado_enquanto_vizinho_pousa --noinput
+
+E4B_C4_MUTANTE=sem_rollback PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4b_c4_orm.CercaC4ORMTest.test_RED_lote_misto_desfaz_recusado_enquanto_vizinho_pousa --noinput
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
+```
 
 ## 11/11 09:19 · sessao 492833d88911 · RAIZ-DA-DISPUTA · censo · origem=Code
 
@@ -1201,32 +1269,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
 
 4. A docstring diz expressamente que código em `bin/tests/` “conta igual” (`bin/censo_codigo_py.py:40`, `:41`). O censo continua implementando essa abrangência, pois ignora apenas `__pycache__` (`bin/censo_codigo_py.py:43`). O selo agora aplica uma segunda regra ao resultado e elimina `bin/tests/` (`bin/selo_espera_por_processo.sh:48`). A frase ficou incompatível com o universo final do selo, mas permanece verdadeira para a saída bruta do censo (`bin/censo_codigo_py.py:43`, `:48`; `bin/selo_espera_por_processo.sh:45`, `:48`). A precedência temporal do aval é dada pelo usuário, sem arquivo local correspondente [não verificado].
 
-## 11/11 08:42 · sessao cb191a43d778 · FIO-E0-V4-E3 · construtor · origem=Code
-
-Cura escrita: marcador e exceção ao `nunca_bateu` ficam limitados à comp 11/2026 em diante pelo mesmo corte. [cartorio.py:1241](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1241).
-
-Entrega: [diff completo](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/fio_e0_v4_e3_e3fix9.diff:1), [log das execuções](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:1).
-
-- **(a)** O isento recebe `regra=versao_para`, calculada pela competência de `janela_atual`, e entra com `regra >= 4`. Uma v5 mudaria `regra:4` para `regra:5` em toda célula de comp 11+, alterando o hash e provocando rejulgamento da frota. [cartorio.py:248](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:248), [cartorio.py:489](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:489), [cartorio.py:538](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:538).
-- **(b)** Foi declarado `HORIZONTE_SEM_ADESAO='2026-11'`, com recusa dura de formato no import. O leitor usa o fim de `janela_atual`; não houve bump. [cartorio.py:270](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:270).
-- **(c)** Somente NB passa `sem_adesao` em produção; o ramo normal omite o argumento. [cartorio.py:1245](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1245), [cartorio.py:1384](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1384).
-- **N4:** classifico a projeção temporal como auxiliar: devolve cinco valores; `_pergunta_viva_calc` aplica a decisão de domínio. [juizes.py:1362](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/juizes.py:1362), [juizes.py:1383](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/juizes.py:1383).
-
-Resultados locais, com comandos e tracebacks no [log](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:4):
-
-| Execução | RC | Resultado |
-|---|---:|---|
-| RED antes da cura | 1 | 2 FAIL, 0 ERROR |
-| `test_e3_nb_impressao_memoria` | 0 | 24 testes OK | [nao verificado]
-| `x1_mutantes --modo green --sem-banco` | 0 | 24 testes OK | [nao verificado]
-| `sem_horizonte_x1` | 1 | Morreu nas comps 09 e 10 |
-| `horizonte_na_10` | 1 | Morreu na comp 10 |
-| Quatro mutantes anteriores sem banco | 1 cada | Mortos por assertion |
-
-Os REDs históricos mordem no `assertEqual` do hash em [memória:284](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:284). Os demais mordem nas assertions **269, 271, 341 e 381**, discriminadas com o comando de cada um no [relato:146](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:146).
-
-C4/09 exportada e C4b/10 exigem foto NB e conservação dos registros de fechamento/exportação; a assertion ORM está em [teste:283](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:283). Execução ORM: **[nao verificado]**. [nao verificado]
-
-N3 foi atualizado; comandos completos de ORM, mutantes ORM, suite e ruff estão no [relato:106](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:106). `git diff --check`: RC=0. [log:254](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:254). Certificação Code/opus e efeito N2 após consumidor: **[nao verificado]**. [nao verificado]
-
-_3748 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3749 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
