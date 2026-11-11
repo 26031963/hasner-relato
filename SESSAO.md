@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 03:45:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (315.1 MB). Acoes na janela: **1546**.
+**Medido em 11/11/2026 03:51:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (315.1 MB). Acoes na janela: **1549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:48:22 | Bash | Wait for E4B c4 construtor to finish | `until [ -f /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4.fim ]; do /usr/bin/sleep 20; done; date +%H:%M; tail -3 /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4.log` |
+| 03:48:19 | Bash | Log push, remove landed worktree, check c4 | `cd /home/ronald/saas-hasner; sed -i "3a VERIFICADOR-EM-FABLE (1) NO AR 03h47: push 4377684ae (pre-push Ran 15043 OK skipped=42; control-plane 22 OK); deploy 03h2x rc 0 sem ensaio (motivo gravado: so bin/). MARCO FECHADO. Copia wt-verif-fable-021052 removida (tudo commitado)." app/docs/RELATO.md; git -C /home/ronald/wt-verif-fable-021052 status --porcelain \| head -3; git worktree remove /home/rona ...` |
+| 03:48:11 | Bash | Read push verdict and remote state | `cd /home/ronald/saas-hasner; tail -12 logs/VERIFICADOR-EM-FABLE/push.log; git fetch -q origin; git log --oneline origin/main -2; git status -sb \| head -1` |
 | 03:45:01 | TaskStop |  | `-` |
 | 03:44:59 | ToolSearch |  | `-` |
 | 03:34:55 | Bash | Wait again for push or c4 flag | `until [ -f /home/ronald/saas-hasner/logs/VERIFICADOR-EM-FABLE/push.fim ] \|\| [ -f /home/ronald/saas-hasner/logs/E4B-ALCANCE/c4.fim ]; do /usr/bin/sleep 20; done; date +%H:%M` |
