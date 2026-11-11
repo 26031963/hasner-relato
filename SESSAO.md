@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 01:36:29.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (305.3 MB). Acoes na janela: **1411**.
+**Medido em 11/11/2026 01:41:36.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (306.1 MB). Acoes na janela: **1422**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:38:42 | Bash | Check ESPERANDO proof and live processes | `cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as H; print(H._esperando_com_prova()[:2])"; date +%H:%M; ps -p 3385955,3491173,2654842 -o pid,etime,cmd \| cut -c1-120` |
+| 01:37:48 | Bash | Wait for suite2 or c21 to finish | `L=/home/ronald/saas-hasner/logs; until [ -e $L/E4B-ALCANCE/suite2.fim ] \|\| [ -e $L/BO-DISPUTA-SEM-PERGUNTA/c21.fim ]; do /usr/bin/sleep 30; done; date +%H:%M; ls $L/E4B-ALCANCE/suite2.fim $L/BO-DISPUTA-SEM-PERGUNTA/c21.fim 2>/dev/null` |
+| 01:37:42 | Bash | Register E3 items in BACKLOG and PROMPTS | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; s=open(p).read().split('\n') i=next(k for k,l in enumerate(s) if l.startswith('\| E4B-D3-ARQUIVAR-PRESCRITOS')) novas=[ '\| E3-X1-FOLGA-NAO-E-SEM-COBERTURA \| fila 1 (aval 11/11 01h3x; padrao=juiz unico): ramo adesao=None do cartorio passa pelo derivar_veredito; 11 colabs na classe (censo x1_censo.r). PARADO em `lei:` col348 ( ...` |
+| 01:37:31 | Bash | Read E3 BACKLOG row | `cd /home/ronald/saas-hasner/app/docs; sed -n 1865,1867p BACKLOG.md \| cut -c1-900` |
+| 01:37:29 | Bash | Check PROMPTS and BACKLOG formats | `cd /home/ronald/saas-hasner/app/docs; tail -3 PROMPTS.md \| cut -c1-250; /bin/grep -n 'E3-TROCA-PELO-DIFF\\|FIO-E0-V4-E3' BACKLOG.md \| head -5 \| cut -c1-250` |
+| 01:37:26 | Bash | Write X1 census and lei line in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read().split('\n') assert s[2].startswith('ESPERANDO:') lei=('lei: E3 X1 col348 -- o aval E3-X1 manda PARAR com `lei:` se o censo mostrar folga por escala errada "(ex.: vinculo todo folga)": col348 tem ' 'vinculo 306 INTERMITENTE (mrv sdf 06:30-18:30, desde 21/07) com 61 celulas na janela 21/09-20/11, TODAS trabalha=F ...` |
+| 01:37:06 | Bash | Read the E3-X1 aval verbatim | `cat /home/ronald/saas-hasner/logs/FIO-E0-V4-E3/aval_e3_x1_folga_1111.txt` |
+| 01:36:56 | Bash | Read cartorio adesao=None branch and rejulga hook | `cd /home/ronald/wt-codex-fio-e0-v4-e3-010719/app; sed -n 1160,1175p ponto/services/cartorio.py; echo ...; sed -n 1200,1256p ponto/services/cartorio.py; echo ...; sed -n 1360,1378p ponto/services/cartorio.py` |
+| 01:36:34 | Bash | Read rest of X1 census | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E3; sed -n 120,220p x1_censo.r` |
+| 01:36:32 | Bash | Read X1 census result | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E3; tail -3 x1.log; wc -c x1_censo.r; cat x1_censo.r \| head -120` |
+| 01:36:29 | Bash | Confirm c8b chain is alive | `ps -eo pid,args \| /bin/grep '[e]ncadeia_c8b.sh$' ; ls /home/ronald/saas-hasner/logs/FIO-E0-V4-E3/x1.fim 2>&1` |
 | 01:36:24 | Bash | Remove stale fim and start c8b chain | `cd /home/ronald/saas-hasner/logs; rm BO-DISPUTA-SEM-PERGUNTA/c21.fim; pgrep -f "wt-codex-bo-disputa" >/dev/null && echo c21vivo; cd FIO-E0-V4-E3 && setsid nohup ./encadeia_c8b.sh >/dev/null 2>&1 < /dev/null & disown; /usr/bin/sleep 2; pgrep -af encadeia_c8b \| head -2` |
 | 01:36:21 | Bash | Prepare c8b chain, check stale c21.fim | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E3; cat > encadeia_c8b.sh <<'EOF' #!/bin/bash until [ -e /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA/c21.fim ]; do /usr/bin/sleep 30; done bash /home/ronald/saas-hasner/logs/FIO-E0-V4-E3/lanca_c8b.sh EOF chmod +x encadeia_c8b.sh; rm -f /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA/c21.fim.x; ls /home/ronald/saas-hasner/logs/BO-DISPUTA-SE ...` |
 | 01:36:16 | Bash | Append chamados/juizes laws to leis_sitio | `cd /home/ronald/saas-hasner/logs/FIO-E0-V4-E3; { echo; echo "## chamados/juizes.py (grep LEIS/DOSSIES/CORTES, sessao 01h4x)"; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/leis_cj.txt; } >> leis_sitio.txt; cut -c1-200 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/leis_cj.txt` |
