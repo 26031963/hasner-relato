@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 23:38** · publicado em **10/11/2026 23:43** (UTC-3)
+> Ultima resposta processada: **10/11/2026 23:47** · publicado em **10/11/2026 23:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 23:47 · sessao b1b98eda2f6e · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Cura K3 aplicada: seed preservado na nova/vazia, exceto quando `orfao_14h` do ato é estrangeiro ([fonte](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/services/disputa_emissao.py:1451)). [nao verificado]
+
+- [Entrega com censo e comandos](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5k_entrega.txt:1).
+- [Diff completo](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5k.diff:1).
+- 114 testes de memória verdes; RED anterior e mutantes documentados nas [saídas](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5k_saidas.txt:1). [nao verificado]
+
+Suíte ORM e certificação final: **[nao verificado]**, reservadas ao Code e opus. [nao verificado]
 
 ## 10/11 23:38 · sessao 808c2ef83d03 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -829,53 +839,4 @@ A pergunta GPS do mapa.r não deve ser reaberta: o corte atual é explícito, in
 
 Identidade de commit e atribuição exata de cada hunk a pouso pós-11h: **[nao verificado]**, pois esta cópia não fornece metadados Git verificáveis. [nao verificado]
 
-## 10/11 21:30 · sessao 724cd7299560 · - · - · origem=Ronald (tmux)
-
-Conferência das **26 portas** abaixo. “Compatível” significa que o corpo atual sustenta a descrição do censo; identidade textual com a base e autoria/data dos deltas são **[nao verificado]** sem árvore-base/Git.
-
-| Porta | Censo → HEAD | Semântica conferida |
-|---|---|---|
-| `ChamadoColaborador._gravar_estado` | `app/chamados/models.py:201` → **:201** | Compatível: estado/via/autor, urgência e consequências nas perguntas. `app/chamados/models.py:228`, `:245`, `:292`, `:309`. |
-| `DisputaSupervisao.fechar` | `app/chamados/models.py:1852` → **:1855** | Compatível: fechamento F; exceções carimbam mudas e registram DP `SILENCIO`; zero perguntas usa `vazia`. `app/chamados/models.py:1903`, `:1921`, `:1924`, `:1932`. |
-| `reabrir_admin` | `app/chamados/models.py:2123` → **:2126** | Compatível: limpa F/resolução/motivo; conta reabertura e agrega motivo opcional. `app/chamados/models.py:2149`, `:2153`, `:2161`. |
-| `reabrir_sistema` | `app/chamados/models.py:2160` → **:2163** | Compatível: limpa F/resolução/motivo, idempotência por aberta; nota do sistema. `app/chamados/models.py:2167`, `:2173`, `:2180`. |
-| `PerguntaDisputa.carimbar` | `app/chamados/models.py:3092` → **:3103** | Compatível: C; completa R/V condicionalmente; julga com C6, restaura memória se recusa; L opcional. **Não chama DP no ramo de assinatura**. `app/chamados/models.py:3130`, `:3139`, `:3149`, `:3152`. |
-| `carimbar_identidade` | `app/chamados/models.py:3157` → **:3168** | Compatível: C sem C6, conserva instante/autor quando solicitado; recusa no mesmo save. `app/chamados/models.py:3182`, `:3187`, `:3190`. |
-| `descarimbar` | `app/chamados/models.py:3192` → **:3203** | Compatível: limpa os três C; `salvar=False` apenas memória; fora do fato recusa. `app/chamados/models.py:3206`, `:3208`, `:3211`. |
-| `descarimbar_em_lote` | `app/chamados/models.py:3241` → **:3252** | Compatível: exige donos travados, exclui fora do fato, C + `outros`. `app/chamados/models.py:3258`, `:3264`. |
-| `encerrar_por_fato_no_espelho` | `app/chamados/models.py:3257` → **:3268** | Compatível: só troca via, sem fabricar efeito. `app/chamados/models.py:3273`, `:3275`. |
-| `_carimbar_validacao` | `app/chamados/services/validacao.py:127` → **:127** | Compatível: V e DP `VALIDACAO` no mesmo instante/atomic; preserva projeção anterior sem linha. `app/chamados/services/validacao.py:133`, `:134`, `:139`. |
-| `devolver_validacao_recusada` | `app/chamados/services/validacao.py:163` → **:163** | Compatível: limpa V, conserva resposta, DP `DEVOLUCAO`; contexto de continente recarregado. `app/chamados/services/validacao.py:188`, `:199`, `:205`, `:214`. |
-| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1422` → **:1425** | Compatível: R, limpa V, delega C, advertência de escape, DP `RESPOSTA`; trava C antes de persistir. `app/chamados/services/disputa_emissao.py:1467`, `:1480`, `:1485`, `:1497`, `:1506`, `:1511`. |
-| `reabrir_para_correcao` | `app/chamados/services/disputa_emissao.py:1559` → **:1562** | Compatível: limpa R/V; C opcional; foto em DP `REABERTURA`/`RECUSA`; **não escreve F**. `app/chamados/services/disputa_emissao.py:1593`, `:1615`, `:1629`, `:1632`. |
-| `responder_automaticamente` | `app/chamados/services/disputa_emissao.py:1635` → **:1638** | Compatível: texto normalizado existente é no-op; R e DP no instante recebido. `app/chamados/services/disputa_emissao.py:1647`, `:1652`, `:1656`. |
-| `carimbar_resposta_pela_trilha` | `app/chamados/services/disputa_emissao.py:1658` → **:1661** | Compatível: exige texto sem carimbo; conserva instante testemunhado em R/DP. `app/chamados/services/disputa_emissao.py:1670`, `:1674`, `:1677`. |
-| `relavrar` | `app/chamados/services/relavra_via.py:106` → **:106** | Compatível: via derivada e L. `app/chamados/services/relavra_via.py:118`, `:126`. |
-| `_materializar_resposta_hora` | `app/chamados/services/materializacao.py:784` → **:784** | Compatível: pendência/recusa continuam escrita semântica própria; efeito/carimbo delegados. `app/chamados/services/materializacao.py:850`, `:851`, `:924`, `:927`. |
-| `_carimbar_recusa` | `app/chamados/services/materializacao.py:1083` → **:1083** | Compatível: recusa técnica; colisão delega identidade, demais salvam string; nota técnica, sem DP `RECUSA` humana. `app/chamados/services/materializacao.py:1093`, `:1099`, `:1102`, `:1107`. |
-| `recusar_pergunta` | `app/chamados/services/validacao.py:533` → **:533** | Compatível: recusa humana exige motivo e R; limpa via reabertura com `ato='recusa'`. `app/chamados/services/validacao.py:561`, `:576`, `:590`, `:593`. |
-| `conferir_data_do_fato` | `app/chamados/services/validacao.py:625` → **:625** | Compatível: juiz de divergência, sinalizadores de conferência e auditoria com dois dias/justificativa; não gera DP de conferência. `app/chamados/services/validacao.py:658`, `:664`, `:667`. |
-| `ChamadoColaborador.abrir` | `app/chamados/models.py:833` → **:833** | Compatível: nascimento/reuso do chamado pela porta; estado canônico preservado. `app/chamados/models.py:833`. |
-| `ChamadoColaborador.criar` | `app/chamados/models.py:1054` → **:1054** | Compatível: nascimento de chamado pela porta. `app/chamados/models.py:1054`. |
-| `_abrir_ou_agregar_disputa` | `app/chamados/services/disputa_emissao.py:474` → **:474** | Corpo HEAD é anterior à cura BO anexada: nascimento/agregação; núcleo atual retorna DS antes da geração do wrapper. `app/chamados/services/disputa_emissao.py:603`, `:634`, `:665`. |
-| `criar_disputa_a_partir_de_chamados_orfaos` | `app/chamados/services/disputa_emissao.py:1024` → **:1027** | Descrição de nascimento aberto/contexto continua aplicável; cura futura matriz não é HEAD. `app/chamados/services/disputa_emissao.py:1027`. |
-| `criar_disputa_ancora_de_chamado` | `app/chamados/services/disputa_emissao.py:1299` → **:1302** | Nascimento/âncora continua nesta porta. `app/chamados/services/disputa_emissao.py:1302`. |
-| `PerguntaDisputa._nascer` | `app/chamados/models.py:2822` → **:2825** | **Descrição do censo incompleta:** além de identidade/defaults/reuso/L, nascimento com R/V recebidos conserva assinaturas em DP no mesmo atomic: `DecisaoPergunta.registrar(linhas_da_projecao_sem_linha([p]))`. `app/chamados/models.py:3014`, `:3017`, **:3018–3019**. |
-
-Delta dos executores e juízes que importa ao backfill:
-
-| Item | HEAD / consequência |
-|---|---|
-| DP canônica | Censo `models.py:3932` → **`app/chamados/models.py:3943`**; **brief já aponta corretamente :3943**. Lote vazio retorna antes do atomic; lote não vazio faz `bulk_create` e acorda células. **Não deduplica por si**: seleção canônica antes continua necessária. `app/chamados/models.py:3947`, `:3951`, `:3953`, `:3954`. |
-| Imutabilidade DP | `save` antigo :3892 → **`app/chamados/models.py:3903`**; reescrita recusa; delete também recusa. `app/chamados/models.py:3904`, `:3908`. |
-| Correspondência legado | Antiga :3903 → **`app/chamados/models.py:3914`**; correspondência continua `(pergunta, ato, instante)`, inclui dedup no próprio lote, conserva V por autor. `app/chamados/models.py:3927`, `:3931`, `:3935`. |
-| Pergunta save | Antiga :3402 → **`app/chamados/models.py:3413`**. |
-| D3: “tem resposta” | Distinções permanecem: timestamp em **`app/chamados/models.py:3497`**; SQL timestamp + texto não vazio literal em **:3348**; C6 timestamp + `.strip()` em **`app/chamados/juizes.py:1341`**; tarefa usa DP e passivo sem linha em **`app/chamados/services/tarefa_do_dia.py:127`**, **:132**. |
-| D4: validação ≠ efeito | Rótulo por V/M agora **`app/chamados/models.py:3034`**, condições **:3041**; C6 V mata em **`app/chamados/juizes.py:1325`**; DP `VALIDACAO` exige lavra vigente e distingue materializar/rejulgar/encerrar em **`app/chamados/services/tarefa_do_dia.py:140`**. |
-| D5/D6 | Dia do turno para fato, civil para conversa continuam explícitos em **`app/chamados/juizes.py:332`**; instante de plantio com cadeia e envelope inclusivo continua em **`app/chamados/juizes.py:296`**, **:324**, **:326**. |
-| **D9 precisa atualizar** | Já há injeção `hoje`: **`app/chamados/juizes.py:569`**, **:839**, **:1324**. Memo inclui `hoje` em **:852**; cálculo o propaga em **:856**, **:1389**, **:1406**. `date.today()` fica **fallback**, em **:577**. Portanto “C6 conserva date.today que --agora não controla” precisa qualificar o chamador: sem `hoje`, conserva; com `hoje`, usa o dia fornecido. |
-| D9 — bordas preservadas | Janela inclusiva em **`app/chamados/juizes.py:603`**; lavra expira `<=` por dia local e julgamento local anterior à borda em **`app/chamados/veredito_lavrado.py:116`**. O instrumento ainda imprime literalmente o limite do fallback em **`app/chamados/management/commands/diff_e3_sombra.py:105`**. |
-
-Não atribuir automaticamente `EXPAND` do nascimento ou injeção de `hoje` aos pousos posteriores às 11h: essa cronologia é **[nao verificado]**; a linha de DP do próprio brief já coincide com HEAD.
-
-_3523 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3524 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
