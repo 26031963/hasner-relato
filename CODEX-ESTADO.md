@@ -1,7 +1,130 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 02:03** · publicado em **11/11/2026 02:03** (UTC-3)
+> Ultima resposta processada: **11/11/2026 02:05** · publicado em **11/11/2026 02:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 02:05 · sessao 168b267eaf81 · - · - · origem=Ronald (tmux)
+
+Revisão somente leitura: dois pontos concretos merecem correção.
+
+1. **Residual A/S alcança P com `trabalha=False`.** `dia_sem_trabalho` retorna verdadeiro nesse caso, mesmo com cobertura parcial; o residual aceita `indefinida` e gera `validar/admin`. Confirmei essa saída em memória. O teste P novo fixa `dia_sem_trabalho=False` e não cobre essa variação. A exclusão já possui autoridade em `cartorio.py::parcial_so_lista`. (`chamados/juizes.py:445`, `chamados/services/tarefa_do_dia.py:319`, `chamados/tests/test_e3_c8b_sem_banco.py:129`, `ponto/services/cartorio.py:398`)
+
+2. **Guarda exportada pode suprimir tarefas anteriores à cura.** Qualquer pergunta em marco aceso entra em `pares_admin`, inclusive morta pelo C6. Se K6 disser exportada, o retorno antecipado elimina todas as instâncias, inclusive outro marco apagado que antes exigia `perguntar/sistema`. Isso excede “guardar somente as exposições novas”. (`chamados/services/tarefa_do_dia.py:457`, `chamados/services/tarefa_do_dia.py:464`, `chamados/services/tarefa_do_dia.py:203`)
+
+K6 mantém seu predicado: a carga usa `anotar_vigencia` e a mesma combinação `so_vigentes`/`invalidada_em`. A nova entrada é opcional e preserva as chamadas anteriores. (`folha/export.py:556`, `folha/export.py:583`, `chamados/services/tarefa_do_dia.py:429`)
+
+Os dois alertas anteriores sobre `instancia_marco` precisam desta ressalva:
+
+- Nascimento regular recusa instância diferente da derivada; portanto a forma não-marco com instância explícita divergente depende de acervo ou escrita que contorne a porta [nao verificado]. (`chamados/models.py:3437`)
+- Duas perguntas da mesma identidade são impedidas para marcos desde 21/09; antes desse horizonte, escolher apenas `ps[-1]` pode ocultar uma viva anterior. Ocorrência nos dados anexados: [nao verificado]. (`chamados/models.py:2403`, `chamados/models.py:3482`, `chamados/services/tarefa_do_dia.py:263`)
+
+Nenhuma quebra adicional observada nos campos do dict: as chaves permanecem existentes e o agregador continua lendo `acoes`, `de`, `porta`, `celula_id`, `nao_sei`. Resultado dos testes completos dos leitores: [nao verificado]. (`chamados/services/tarefa_do_dia.py:425`)
+
+## 11/11 02:04 · sessao 035cb0e9da4c · - · - · origem=Ronald (tmux)
+
+Dois pontos concretos para corrigir:
+
+1. `CargaDaVida.turnos` executa o pareamento da janela larga apenas para carregar `_bats`. Uma falha em DNA de outro dia pode interromper a subjanela válida que o avulso julgaria. Carregar as batidas diretamente com os filtros da base evita essa mudança de entrada e o processamento descartado. (`chamados/services/carga_pergunta_viva.py:163`, `ponto/turnos.py:3032`, `escala/utils.py:19`, `escala/utils.py:107`)
+
+2. A leitura das testemunhas constrói até três ramos SQL por pergunta. A quantidade de queries é constante, mas a árvore SQL cresce linearmente; o limite concreto do banco não foi executado. [nao verificado] Um envelope mínimo/máximo de timestamps mais `pergunta_origem_id__in` preserva os filtros posteriores e mantém a consulta pequena. (`chamados/services/carga_pergunta_viva.py:107`, `chamados/services/carga_pergunta_viva.py:129`, `chamados/services/carga_pergunta_viva.py:133`)
+
+Nos trechos revistos, a passagem de carga conserva as comparações e a ordem dos degraus do C6; ela substitui fontes de insumos. (`chamados/juizes.py:1338`, `chamados/juizes.py:1408`, `chamados/juizes.py:1421`)
+
+Não identifiquei N+1 residual adicional no caminho alimentado. A confirmação por SQL permanece [nao verificado].
+
+## 11/11 02:04 · sessao b2180b461e03 · - · - · origem=Ronald (tmux)
+
+Todos os caminhos abaixo foram lidos; nenhum teste foi executado. A execução dos testes e a participação dos ramos nos 82 dias são [nao verificado]. [nao verificado]
+
+Use `DE = app/chamados/services/disputa_emissao.py`, `M = app/chamados/models.py`, `R = app/chamados/reconciliador.py`, `F = app/chamados/services/fabrica_da_celula.py`.
+
+O retorno público perde informação em três níveis: `PerguntaDisputa.abrir` devolve `(p, criada)`; `gerar_perguntas_disputa` devolve `[p]` tanto para nascimento quanto para reuso; `perguntar` devolve somente o número de carimbos desfeitos; `perguntar_pela_celula` devolve os motivos pedidos. (M:2791; DE:444–471; F:175; F:220)
+
+| Ramo | Entrada/condição | Retorno e persistência | Prova |
+|---|---|---|---|
+| Disputa existente, motivo novo — DE:535/540 | Disputa aberta do colab; motivo ainda ausente | `_abrir_ou_agregar_disputa → (d,False,sorted(novos))`; agrega motivo e funde contexto; `criar_ou_atualizar_disputa → d` | `app/chamados/tests/test_regressao_etapa7.py:254` exercita agregação, mas motivo de exemplo é `gps_ausente` |
+| Disputa existente, motivo repetido — DE:535/537 | Disputa aberta contendo motivo | `(d,False,[])`; contexto ainda recebe data, `qtd`, `ultima_em`; gera perguntas novamente, chama pendentes; retorna `d` | `app/chamados/tests/test_regressao_etapa7.py:236` |
+| Disputa nova, pai novo — DE:568/587 | Nenhuma disputa aberta; porta de chamado cria pai | `(d,True,list(motivos))`; nasce pai, disputa e tentativa de perguntas; retorna `d` em DE:672 | `app/chamados/tests/test_regressao_etapa7.py:221` |
+| Disputa nova, pai reusado — DE:584 | Sem disputa aberta, chamado-pai vivo já existente | Mesma tripla; anexa ocorrência ao pai, cria disputa; retorno público `d` | Sem teste específico localizado | [nao verificado]
+| Auditoria do nascimento da disputa falha — DE:595/600 | Exceção no registro da trilha após criação | Exceção engolida; disputa/pai continuam; mesma tripla | Sem teste específico localizado | [nao verificado]
+| Intervalo repetido — DE:398 | Pergunta mesma disputa/motivo/dia, fora `VIAS_FORA_DO_FATO` | Singleton gera `[]`; não insere nem reata | `app/chamados/tests/test_emissao_costura_intervalo.py:65` |
+| Entrada/saída repetida com destino derivado — DE:417 | Pergunta mesma disputa/motivo/`_data_ev` | Singleton gera `[]`; não insere nem reata | `app/chamados/tests/test_regressao_etapa7.py:236` cobre idempotência; ramo específico [nao verificado] |
+| Destino não derivado e pergunta legada NULL — DE:238/417 | Zero ou múltiplos candidatos; `_data_ev=None`; pergunta existente `data_evento=None`, `conversa=False`, fora vias excluídas | Derivador `(None,None)`; dedup consulta NULL **antes** do fallback ISO e gera `[]`, apesar de dia válido | Sem teste específico localizado | [nao verificado]
+| Nascimento com destino único — DE:245/444 | Um candidato do mesmo colab/dia; não há linha do fato | `abrir → (p,True)`; pergunta datada/célula/destino; gerador `[p]` | `app/chamados/tests/test_fonte_destino.py:34`; intervalo: `app/chamados/tests/test_emissao_costura_intervalo.py:50` |
+| Nascimento sem destino — DE:238/444 | Zero ou múltiplos candidatos após desempate | `abrir → (p,True)` com destino NULL; tenta reatar, depois gerador `[p]` | Dois candidatos: `app/chamados/tests/test_fonte_destino.py:44`; data divergente: `:53` |
+| Reuso sem mudança — M:2922/3008 | Canônica existente; célula/destino já iguais ou destino pedido NULL | `abrir → (ex,False)`; preserva disputa, resposta, validação/carimbo; gerador `[ex]`; **não chama reatar**, pois DE:459 exige `_criada` | `app/chamados/tests/test_e4_expand_orm.py:236` prova conservação; `app/chamados/tests/test_e1_v15.py:44` prova idempotência genérica |
+| Reuso muda célula — M:2965/2997 | Canônica localizada, célula atual diferente da célula do fato | `(ex,False)`; grava célula e lavra; acorda célula antiga; gerador `[ex]` | `app/chamados/tests/test_e4_expand.py:326` verifica trecho real isolado |
+| Reuso muda destino autorizado — M:2968/2981 | Novo destino válido e `_costura_nao_mata_o_fio=True` | `(ex,False)`; grava destino + lavra, acorda origem; gerador `[ex]` | `app/chamados/tests/test_e1_v15.py:90` usa episódio BATIDA, caracteriza porta genérica |
+| Reuso recusa destino terminal — M:2980/2984 | Destino ficou terminal; pergunta C6 viva em competência não entregue | `(ex,False)` igualmente; destino fica anterior; pode gravar mudança de célula e trilha `costura_recusada`; gerador `[ex]` | `app/chamados/tests/test_e1_v15d.py:60` caracteriza porta genérica |
+| Reuso recusa costura por identidade — M:2972/2974 | `resolvedora_valida=False` | Levanta `ResolvedoraCruzada`; atomic da porta desfaz | `app/chamados/tests/test_e1_v15f.py:334` é injeção adversarial, não cenário normal da fábrica |
+| Contrato de saída falha — M:2820/2821 | Saída da porta viola dia gravado | Exceção de `contrato_de_saida`; atomic desfaz | `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:251`, `:262`, `:272` são mutantes/injeções |
+| Auditoria do nascimento da pergunta falha — M:3023/3028 | Exceção na trilha após inserção | Engolida; pergunta continua inserida; `(p,True)` e `[p]` | Sem teste específico localizado | [nao verificado]
+| Reatar levanta exceção — DE:462/466 | Qualquer falha em `reatar_pergunta_orfa` | Savepoint do reatar desfaz; inserção anterior permanece; gerador `[p]`, pergunta possivelmente órfã | Sem teste específico localizado | [nao verificado]
+| Push silenciado — DE:1753 | Chamado pelo bloco F:218 | Retorno `None`; nenhum push; disputa/pergunta permanecem | Comportamento de código; teste específico de push da fábrica não localizado | [nao verificado]
+
+O reuso é alcançável também na segunda chamada do gerador: `criar_ou_atualizar_disputa` já gera em DE:670/682; `perguntar` chama novamente em F:174. A primeira pergunta pode excluir o candidato do derivador por DE:226–229; a segunda consulta dedup por NULL, chega à porta e reusa a pergunta datada. Portanto “gerador retornou `[p]`” não prova inserção. (F:172–174; DE:226–229; DE:417–424; M:3008)
+
+O reuso de pergunta em disputa fechada conserva a disputa antiga: o ramo não atribui `ex.disputa`. Isso é comportamento demonstrado pelo corpo, mas atribuí-lo aos 82 dias é [nao verificado]. (M:2922–3008)
+
+| Ramo de `reatar_pergunta_orfa` | Retorno exato/estado | Prova |
+|---|---|---|
+| R:1569 — nenhuma data | `False`; não costura | Inalcançável pergunta nova normal da fábrica: ela fornece ISO válido em F:172 |
+| R:1619 — c1 lavrou | `True`; pergunta carimbada; disputa pode fechar | `app/chamados/tests/test_o261_lavra_le_a_lampada.py:148` |
+| R:1621 — c2 emitiu e reatou | `True`; chamado nasce/reusa/renasce e recebe pergunta | `app/chamados/tests/test_emissao_reata_orfa.py:48`, `:57` |
+| R:1623 — HIST vazio após c1/c2 recusarem ou HIST múltiplo | `False`; conserva pergunta órfã | Sem teste específico de múltiplo localizado | [nao verificado]
+| R:1643 — costura histórica recusada | `False`; conserva pergunta | Sem teste específico localizado | [nao verificado]
+| R:1649 — HIST costurado e S128 chamado | `True`; costura no histórico; resolver pode materializar | `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:235` |
+| R:1656 — costura no vivo derivado recusada | `False`; conserva pergunta | Sem teste específico localizado | [nao verificado]
+| R:1659 — costura no vivo derivado aceita | `True`; destino gravado | `app/chamados/tests/test_fonte_destino.py:34` caracteriza derivação; chamada reatar específica [nao verificado] |
+
+Todos esses retornos viram o mesmo `[p]` no gerador; o booleano serve apenas para decidir `refresh_from_db`. (DE:464–471)
+
+| Saída de `lavrar_sem_turno_aberto` | Retorno/estado | Prova |
+|---|---|---|
+| R:362 — intervalo fora de `MOTIVOS_C1` | `False`; nada escreve | `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:174` cobre intervalo passando ao c2 |
+| R:364 — resposta não vazia | `False`; nada escreve | Pergunta nova da fábrica não nasce respondida; ocorrência concorrente [nao verificado] |
+| R:366 — já materializada | `False`; nada escreve | Pergunta nova normal não vem materializada; ocorrência concorrente [nao verificado] |
+| R:371 — núcleo tem turno aberto | `False`; nada escreve | Sem teste direto localizado | [nao verificado]
+| R:398 — C6 viva | `False`; nada escreve | `app/chamados/tests/test_o261_lavra_le_a_lampada.py:129` |
+| R:405 — porta carimbar recusa | `False`; não aplica carimbo | Sem teste direto localizado | [nao verificado]
+| R:414 — carimbo aceito | `True`; via `sem_turno_aberto`; se R:411, fecha disputa | `app/chamados/tests/test_o261_lavra_le_a_lampada.py:148` |
+
+| Saída de `reemitir_chamado_do_dia` | Retorno/estado | Prova |
+|---|---|---|
+| R:808 — motivo fora grupo DIA | `False`; nada | Inalcançável pelos quatro motivos da fábrica: grupo em M:3700 |
+| R:812 — sem dia | `False`; nada | Inalcançável pergunta nova normal: F:172 |
+| R:820 — colab inativo | `False`; nada | `app/chamados/tests/test_emissao_reata_orfa.py:67`; fábrica já guarda ativo, logo requer mudança após guarda ou chamada genérica |
+| R:832 — dia inválido | `False`; nada | Inalcançável pergunta nova normal: F:172 |
+| R:840 — sem chamado vivo e abaixo piso | `False`; pergunta permanece sem destino | `app/chamados/tests/test_emissao_reemite_c2.py:44`, `:79`; costura no vivo abaixo piso permitida em `:92` |
+| R:850 — isento | `False`; pergunta permanece | Sem teste direto fábrica localizado | [nao verificado]
+| R:855 — ausência cobre | `False`; pergunta permanece | Sem teste direto fábrica localizado | [nao verificado]
+| R:869 — sem chamado vivo e sem protesto cobrável | `False`; pergunta permanece | `app/chamados/tests/test_emissao_reata_orfa.py:89` |
+| R:882 — parcial só lista | `False`; pergunta permanece | Sem teste direto fábrica localizado | [nao verificado]
+| R:887 — veto célula | `False`; pergunta permanece | Sem teste direto fábrica localizado | [nao verificado]
+| R:903 — veto régua | `False`; pergunta permanece | `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:186`, `:200` |
+| R:906 — motor recusa | Estruturalmente impossível: `decidir(ESTADO_NASCENTE,'EMITIR')` sempre permitido | `app/chamados/catalogo/motor.py:130–132` |
+| R:908 — intervalo fora alcance C6/K6/C7 | `False`; pergunta permanece | Morta `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:226`; entregue `:299`; trancada `:257` |
+| R:933 — `ChamadoColaborador.abrir → None` | `False`; pergunta não costurada | `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:160` |
+| R:936 — chamado devolvido terminal | `False`; pergunta não costurada | Sem teste específico localizado | [nao verificado]
+| R:955 — reapontar recusa | `False`; **chamado já pode ter nascido** em R:910; pergunta não costurada | Sem teste específico localizado | [nao verificado]
+| R:958 — costura aceita | `True`; chamado recebe pergunta | `app/chamados/tests/test_emissao_reata_orfa.py:48`; intervalo `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:174` |
+
+`perguntar_entradas_pendentes` também é alcançável em disputa existente: o merge preserva os campos antigos do motivo, inclusive `entradas_pendentes`; ele pode emitir perguntas para outros dias além da célula sob reparo. (DE:551–559; DE:685; DE:277–297)
+
+| Ramo pendentes | Saída/estado | Prova |
+|---|---|---|
+| Sem entradas/PKs válidos ou juiz não fornece dia — DE:277–285 | `[]`; nada emite | `app/chamados/tests/test_hx_entradas_pendentes.py:59`, `:64` |
+| Juiz `classificar_falta` cala — DE:289 | `[]` para singleton; não altera contexto | `app/chamados/tests/test_hx_entradas_pendentes.py:43` |
+| Juiz acusa, gerador não acumula perguntas — DE:294/295 | `[]`; contexto mudado só em memória, não salvo por esta função | Sem teste específico localizado | [nao verificado]
+| Juiz acusa, gerador acumula — DE:295 | Lista das perguntas acumuladas; salva contexto, mesmo que lista contenha reusadas | `app/chamados/tests/test_hx_entradas_pendentes.py:33`, `:50` |
+
+Os quatro motivos normais estão em `declaracao_texto.py:42–46`, todos catalogados como `hora` em `catalogo/perguntas.py:48–58,124–134`. `classificar_falta` dos pendentes só retorna entrada/saída em `escala/servico_jornada.py:445–471`. Assim, estes ramos genéricos não pertencem ao caminho normal da fábrica: catálogo ausente DE:315; não datado DE:325; texto sem data DE:346–366; intervalo sem fallback DE:398; hora sem dia DE:425; conversa DE:431–441. Os ISO válidos vêm de F:172 e DE:292. Não os promover a defeitos dos 82 sem entrada concreta.
+
+As exceções de episódio BATIDA também não são saídas normais do pedido da fábrica: `batida_origem_do_nascimento` retorna `None` para família MARCO em M:3460–3462; o dia do marco vem diretamente da célula em `fio.py:1638–1640`. Os testes de `gps_ausente`/episódio/rechaveamento são provas da porta genérica, não prova de alcance por esses quatro motivos. O fecho também exclui canônica sobre batida retratada em `fio.py:1734–1736`. [nao verificado]
+
+Defeito de código demonstrável neste subfluxo: dedup de DE:417 usa `_data_ev=None` quando o derivador não acha destino, embora `_data_fallback` tenha dia válido; linha legada NULL pode calar fato de outro dia. Cura pode ficar em `disputa_emissao.py`, usando a identidade/dia efetivo da porta, sem editar arquivos proibidos. A existência dessas linhas nos 82 dias é [nao verificado]. (DE:238–244; DE:417–424)
+
+Reuso de canônica e veto do c2 não devem ser classificados automaticamente como defeitos: respectivamente preservam identidade e respeitam piso/ausência/régua/célula; a porta devida precisa ser resolvida pelas leis e pela sequência do dia. Uma lista `[p]` não certifica alcance, e `[]` não certifica dia dispensado. (M:2776–2781; R:770–786; DE:470–471; F:175,220)
 
 ## 11/11 02:03 · sessao d9f5b575c39a · - · - · origem=Ronald (tmux)
 
@@ -711,204 +834,4 @@ Apenas alimentar ausências resolve a leitura instrumentada da testemunha, mas d
 
 Nenhum arquivo escrito nesta exploração. [nao verificado por diff próprio]
 
-## 11/11 01:45 · sessao 3066302ca157 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-Cura implementada. [Entrega C21](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/BO_DISPUTA_ENTREGA_C21.txt:6) contém censo, vereditos 3–6, REDs, mutantes e comandos.
-
-Passaram [122 testes de memória](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/BO_DISPUTA_ENTREGA_C21.txt:153) e [35 da catraca](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/BO_DISPUTA_ENTREGA_C21.txt:161). [nao verificado]
-
-Protegido ORM e suíte Django inteira: [nao verificado]. [nao verificado]
-
-## 11/11 01:34 · sessao f3f0a41e4168 · FIO-E0-V4-E3 · sonda · origem=Code
-
-**`lei: PARE` antes da cura:** `col348` tem **61 células `trabalha=False` e nenhuma `True`**, condição expressamente incluída no aval. Isso não prova escala cadastrada errada: o código do ciclo intermitente retorna `False` por desenho. `col574` sai como **CADASTRO**, pois o dado informa `situacao="desligado"`. [não verificado — COLAB col348/col574 e aval fornecidos]; `app/escala/models.py:820-823`.
-
-**Outro impedimento técnico encontrado:** trocar a folga para `concorde` perde a garantia específica de rejulgamento quando chegar a adesão: o gancho atual depende da **palavra** `nunca_bateu`. `app/ponto/services/cartorio.py:1366-1375`.
-
-Os valores da sombra abaixo são transcritos do dado fornecido, sem confirmação independente; por isso cada linha recebe `[não verificado]`. As referências `app/...:linha` são da cópia consultada. [não verificado — origem do dado fornecido]
-
-**1. Censo dos 15**
-
-`ativo:null` não significa inativo: o script usa `getattr(c, 'ativo', None)`, enquanto o cadastro declara `situacao`. O modelo não declara campo `ativo` para o colaborador. `app/colaboradores/models.py:283-380`; [não verificado — script fornecido].
-
-**Zero batidas vivas implica adesão `None` pelo cálculo atual do cartório**, que procura a primeira batida com `retratada_em IS NULL`. Para quem tem batidas vivas, o censo permite afirmar existência de adesão, mas não sua data. `app/ponto/services/cartorio.py:1165-1173`.
-
-| Colab | Situação / ativo | Admissão | Demissão | Isento | Batidas total/vivas → adesão | Fonte |
-|---|---|---|---|---|---|---|
-| col144 | ativo / null | 2023-04-19 | None | false | 0/0 → None | [não verificado] |
-| col209 | ativo / null | 2018-06-16 | None | false | 0/0 → None | [não verificado] |
-| col237 | ativo / null | 2024-02-05 | None | false | 82/82 → existe; data não medida | [não verificado] |
-| col268 | ativo / null | 2024-08-21 | None | false | 0/0 → None | [não verificado] |
-| col312 | ativo / null | 2025-02-13 | None | false | 0/0 → None | [não verificado] |
-| col348 | ativo / null | 2025-05-10 | None | false | 62/58 → existe; data não medida | [não verificado] |
-| col427 | ativo / null | 2025-10-14 | None | false | 0/0 → None | [não verificado] |
-| col574 | desligado / null | 2026-03-12 | 2027-07-06 | false | 0/0 → None | [não verificado] |
-| col650 | ativo / null | 2025-09-26 | None | false | 0/0 → None | [não verificado] |
-| col969 | ativo / null | 2024-02-07 | None | false | 0/0 → None | [não verificado] |
-| col1005 | ativo / null | 2026-10-27 | None | false | 0/0 → None | [não verificado] |
-| col1009 | ativo / null | 2026-11-01 | None | false | 0/0 → None | [não verificado] |
-| col1018 | ativo / null | 2026-11-04 | None | false | 0/0 → None | [não verificado] |
-| col1019 | ativo / null | 2026-11-03 | None | false | 0/0 → None | [não verificado] |
-| col1027 | ativo / null | 2026-11-04 | None | false | 0/0 → None | [não verificado] |
-
-Nos vínculos, `∞` representa o `"None"` fornecido. A coluna final identifica **cobertura por vigência**, não comprova qual vínculo a célula nomeia: o script não entrega `escala_geradora_id`. O juiz prioriza a geradora e pode devolver `None` se ela estiver fora da vigência, mesmo existindo outro candidato. `app/escala/alimentacao.py:269-286`.
-
-| Colab | Vínculos: pk; tipo; início→fim; ativa; posto | Cobre todas as datas X1 por vigência | Fonte |
-|---|---|---|---|
-| col144 | 118; 12x36 07–19; 2026-04-01→2026-06-23; false; 22<br>844; 12x36 flexível (só horas); 2026-06-24→∞; true; 22 | **844** | [não verificado] |
-| col209 | 178; 12x36 13–21; 2026-07-21→∞; true; 422 | **178** | [não verificado] |
-| col237 | 204; 12x36 07–19; 2026-07-21→∞; true; 487 | **204** | [não verificado] |
-| col268 | 234; 12x36 07:30–17:30; 2026-07-21→∞; true; 508 | **234** | [não verificado] |
-| col312 | 274; 12x36 flexível (só horas); 2026-07-21→∞; true; 437 | **274** | [não verificado] |
-| col348 | 306; mrv sdf · intermitente · 06:30–18:30; 2026-07-21→∞; true; 467 | **306** | [não verificado] |
-| col427 | 366; 12x36 19–07; 2026-07-21→∞; true; 448 | **366** | [não verificado] |
-| col574 | 489; 6x1 Seg/Ter/Qua/Qui/Sex/Dom 07–15:20; 2024-01-01→2027-07-06; false; 1 | **489**, embora inativo | [não verificado] |
-| col650 | 695; 12x36 07:30–17:30; 2026-07-21→∞; true; 449<br>1075; mesmo tipo; **2026-08-26→2026-07-20**; false; 449 | **695**; 1075 tem intervalo invertido | [não verificado] |
-| col969 | 1367; 5x2 Seg–Sex 08–17; 2026-09-21→2026-10-17; false; 655<br>1434; TESTE12X36 · 12x36 07–19; 2026-10-18→∞; true; 655 | **1367**: X1 é 26–27/09 e 03–04/10 | [não verificado] |
-| col1005 | 1471; 6x1 08:30–17:30; 2026-10-27→∞; true; 657 | **1471** | [não verificado] |
-| col1009 | 1501; 6x1prochet · 6x1 Seg–Sab 07–16; 2026-11-01→∞; true; 454 | **1501** | [não verificado] |
-| col1018 | 1517; 6x1 Seg–Sab 07–16; 2026-11-04→∞; true; 649 | **1517** | [não verificado] |
-| col1019 | 1518; 12x36 06–18; 2026-11-03→∞; true; 454 | **1518** | [não verificado] |
-| col1027 | 1527; 12x36 06–18; 2026-11-04→∞; true; 649 | **1527** | [não verificado] |
-
-Um vínculo inativo **com data final** pode cobrir suas datas históricas; `ativa=false` isoladamente não significa SEM VÍNCULO. `app/escala/alimentacao.py:189-216`.
-
-Na próxima tabela, cada distribuição é `veredito:quantidade`; `NB=nunca_bateu`. Os números abrangem **21/09–20/11**, não apenas X1. A retenção usa `HOJE=10/11` no script. [não verificado — script fornecido]
-
-| Colab | Células | `trabalha=False` × veredito | `trabalha=True` × veredito | TRABALHO retido com NB | X1 | Fonte |
-|---|---:|---|---|---:|---:|---|
-| col144 | 61 | None:6; NB:25 | None:5; NB:25 | 25 | 25 | [não verificado] |
-| col209 | 61 | None:6; NB:25 | None:5; NB:25 | 25 | 25 | [não verificado] |
-| col237 | 61 | None:5; concorde:24; fato_em_ausencia:1 | None:6; cobrado:1; concorde:24 | 0 | 1 | [não verificado] |
-| col268 | 61 | None:6; NB:25 | None:5; NB:25 | 25 | 25 | [não verificado] |
-| col312 | 61 | None:6; NB:25 | None:5; NB:25 | 25 | 25 | [não verificado] |
-| col348 | 61 | None:11; concorde:41; furo:9 | **nenhuma** | 0 | 4 | [não verificado] |
-| col427 | 61 | None:6; NB:25 | None:5; concorde:6; NB:19 | 19 | 24 | [não verificado] |
-| col574 | 61 | None:1; NB:7 | None:10; NB:43 | 43 | 7 | [não verificado] |
-| col650 | 61 | None:5; NB:25 | None:6; NB:25 | 25 | 25 | [não verificado] |
-| col969 | 61 | None:21; NB:4 | None:24; NB:12 | 12 | 4 | [não verificado] |
-| col1005 | 25 | None:2; NB:1 | None:9; NB:13 | 13 | 1 | [não verificado] |
-| col1009 | 20 | None:2; concorde:2; NB:1 | None:9; concorde:4; NB:2 | 2 | 1 | [não verificado] |
-| col1018 | 17 | None:2; NB:1 | None:9; NB:5 | 5 | 1 | [não verificado] |
-| col1019 | 18 | None:6; NB:3 | None:5; NB:4 | 4 | 3 | [não verificado] |
-| col1027 | 17 | None:5; NB:3 | None:6; NB:3 | 3 | 3 | [não verificado] |
-
-Somam **226 dias de TRABALHO retidos com NB**, antes das exclusões cadastrais. Não são 226 dias X1. [não verificado — soma dos COLAB fornecidos]
-
-**2. Classificação pela condição do aval**
-
-“Entra” abaixo significa que **os campos disponíveis não mostram impedimento cadastral**, sujeito à lacuna da geradora e à identificação de teste. A parada global por `col348` continua valendo. [não verificado — aplicação do aval ao dado fornecido] [nao verificado]
-
-| Colab | Classificação | Critério e campo | Fonte |
-|---|---|---|---|
-| col144 | **(iii) entra** | `situacao=ativo`, adesão None; vínculo 844 cobre X1; 30 células True, 25 trabalhos NB retidos | [não verificado] |
-| col209 | **(iii) entra** | ativo, adesão None; vínculo 178; 30 True, 25 trabalhos NB retidos | [não verificado] |
-| col237 | **(iii) sem exclusão cadastral demonstrada**, mas sem alvo NB atual demonstrado | ativo, vínculo 204; `batidas_vivas=82`; **nenhuma célula NB** na janela | [não verificado] |
-| col268 | **(iii) entra** | ativo, adesão None; vínculo 234; 30 True, 25 trabalhos NB retidos | [não verificado] |
-| col312 | **(iii) entra** | ativo, adesão None; vínculo 274; 30 True, 25 trabalhos NB retidos | [não verificado] |
-| col348 | **(ii) PARE** | `trab_x_veredito` contém somente False; tipo informado intermitente | [não verificado] |
-| col427 | **(iii) entra** | ativo, adesão None; vínculo 366; 30 True, 19 trabalhos NB retidos | [não verificado] |
-| col574 | **(i) CADASTRO — fora da cura** | `situacao=desligado`; a demissão futura informada não autoriza ignorar esse campo | [não verificado] |
-| col650 | **(iii) entra pelo vínculo 695** | ativo, adesão None; 31 True, 25 trabalhos NB retidos; vínculo 1075 invertido merece lista cadastral separada | [não verificado] |
-| col969 | **TESTE não comprovado; classificação pendente** | `tipo` contém TESTE12X36, empresa 1/posto 655; porém o vínculo que cobre X1 é o 1367, 5x2 | [não verificado] | [nao verificado]
-| col1005 | **(iii) entra** | ativo, adesão None; vínculo 1471; 22 True, 13 trabalhos NB retidos | [não verificado] |
-| col1009 | **(iii) entra** | ativo, adesão None; vínculo 1501; 15 True, 2 trabalhos NB retidos | [não verificado] |
-| col1018 | **(iii) entra** | ativo, adesão None; vínculo 1517; 14 True, 5 trabalhos NB retidos | [não verificado] |
-| col1019 | **(iii) entra** | ativo, adesão None; vínculo 1518; 9 True, 4 trabalhos NB retidos | [não verificado] |
-| col1027 | **(iii) entra** | ativo, adesão None; vínculo 1527; 9 True, 3 trabalhos NB retidos | [não verificado] |
-
-**Não há SEM VÍNCULO demonstrado pelos intervalos fornecidos**; a autoridade efetiva por célula permanece não medida pela ausência da geradora no relatório. [não verificado — vínculos fornecidos]; `app/escala/alimentacao.py:269-286`.
-
-Sobre TESTE: [nao verificado]
-
-- O colaborador não tem flag `teste`; `situacao` admite ativo, afastado, férias e desligado. `app/colaboradores/models.py:283-380`.
-- Existe critério de **empresa de diagnóstico na UI**: CNPJ iniciado por `11222333`. Isso não é uma classificação universal usada pelo export. `app/colaboradores/queries.py:78-87`.
-- O raspado fornece apenas IDs de empresa/posto, sem CNPJ, nomes ou praça; portanto **empresa 1/posto 655 não comprovam teste**. [não verificado — campos fornecidos] [nao verificado]
-- `TESTE12X36` sugere cadastro de teste **[inferência]**, mas é rótulo de escala; apelido não define sua regra. `app/escala/models.py:111-114`; `app/escala/models.py:420-428`; [não verificado — tipo de col969 fornecido].
-- “Flexível (só horas)” em col144/col312 não comprova isenção: o juiz de isenção lê exclusivamente `isento_ponto`. `app/escala/models.py:425-428`; `app/core/constants.py:13-18`.
-
-**3. X1 com ausência**
-
-O resultado fornecido é **1 dia: col237, 2026-11-07**; os outros 14 colaboradores têm zero. A data é identificável porque esse colaborador tem somente essa data em `DADOS`. [não verificado — COLAB col237 e script fornecidos]
-
-Isso demonstra somente **`CelulaDia.ausencia_id` preenchido** em uma célula X1. O script não consulta aprovação, tipo, período nem integralidade da ausência; portanto “ausência aprovada sobreposta” está **[não verificado]**. O campo é uma FK lavrada na célula. `app/escala/models.py:1792-1798`; [não verificado — expressão `x1_com_ausencia` do script].
-
-**4. Leitores e efeito de NB → `concorde`**
-
-A mudança sai do conjunto acusatório porque NB pertence a `VEREDITOS_ACUSAM` e `concorde` não pertence. Os efeitos abaixo são condicionais à execução de cada leitor; não provam que perguntas/chamados já tenham sido alterados na sombra. `app/escala/models.py:1767-1768`; [não verificado — execução na sombra].
-
-| Leitor | Efeito para a folga que passar a `concorde` | Arquivo:linha |
-|---|---|---|
-| Retenção do export, `motivos_retencao_celula` | O dia deixa de reter por `espelho_nunca_bateu`; também não entra no ramo de veredito ausente | `app/folha/export.py:1233-1256` |
-| Vigia de isenção por pausa | Sai do universo acusatório contado como isento pela pausa | `app/folha/services/vigia_pausa.py:155-157` |
-| Lista C5, `colabs_nunca_bateu` | O dia sai da lista; o colaborador permanece se tiver outros dias NB elegíveis | `app/escala/services/cadastro_realidade.py:181-200` |
-| Universo de adesão | O dia deixa de alimentar `dias/prev/fur`; trabalhos NB restantes continuam no universo | `app/chamados/services/adesao.py:32-40` |
-| Predicado `dia_nunca_bateu_sem_adesao` | Passa a retornar falso | `app/chamados/services/fabrica_da_celula.py:87-89` |
-| `motivos_a_perguntar` | Sai do retorno exclusivo NB; folga continua sem pergunta por `dia_sem_trabalho`, e `concorde` também não acusa | `app/chamados/services/fabrica_da_celula.py:105-121` |
-| `perguntar_pela_celula` | Cai a saída antecipada NB; folga não passa na condição de cadastro sem turno | `app/chamados/services/fabrica_da_celula.py:183-202` |
-| `motivo_fora_da_fabrica` | Some a causa `celula_nunca_bateu`; nos demais ramos pode aparecer `pergunta_do_chamado_ja_encerrada` | `app/chamados/services/disputa_emissao.py:758-773` |
-| `_resposta_concorda_com_a_luz` | Pode reconhecer concordância, depois das demais verificações de resposta/batida | `app/chamados/juizes.py:1319-1321` |
-| `_pergunta_viva_calc` — C6 | Some a sustentação pelo veredito acusador; a pergunta pode deixar de ser viva, respeitadas as outras precedências | `app/chamados/juizes.py:1374-1385` |
-| `PerguntaDisputa.q_vivas` | Sai de `_celula_acusa` e pode entrar em `_celula_absolve`; resposta e ata provisória ainda interferem | `app/chamados/models.py:3340-3358` |
-| Candidatas a perguntas absolvidas | Passam a poder entrar no universo; C6 e tranca ainda são consultados antes do resultado | `app/chamados/reconciliador.py:641-667` |
-| `_absolvido_pela_celula` | Pode permitir retratação do chamado, sem marcos pendentes e respeitando proteção da resposta | `app/chamados/reconciliador.py:990-1029` |
-| Filhos que seguram pai de limbo | Filho absolvido deixa de segurar o pai por esse caminho | `app/chamados/services/limbo_folgas.py:191-195` |
-| Silêncio por ausência, `_premissa_morre` | Se a premissa do catálogo morreu, o veredito deixa de impedir o encerramento | `app/chamados/services/silencio_ausencia.py:28-41` |
-| Recebimento de resposta tardia | Deixa de tentar renascer o chamado pelo ramo de célula acusadora; segue o tratamento tardio | `app/chamados/services/resposta_tardia.py:45-59` |
-| Vigia de fio morto | O dia sai das células `acesas` desse universo | `app/chamados/services/vigia_fio.py:331`; `app/chamados/services/vigia_fio.py:378-379` |
-| Contador de fio mudo/sem adesão | Deixa de alimentar `_dias_sem_adesao`; folga/concorde não ganha motivo de pergunta por essa troca | `app/chamados/management/commands/disparar_perguntas_competencia.py:111-121` |
-| Veto de cobrança por marco | **Continua vetando por FOLGA**, antes da leitura do conjunto que contém NB | `app/ponto/marcos.py:119`; `app/ponto/marcos.py:155-162` |
-| Vigia ausência × veredito | Sai do universo acusatório comparado com ausência integral aprovada | `app/ponto/services/vigia_ausencia_veredito.py:41-57` |
-| Ausência sem efeito na célula | Deixa de incrementar `nunca_bateu`; ainda pode contar `sem_efeito` por lâmpada apagada | `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:36`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:58-63` |
-| Relatório dia da frota | **Sem mudança para False**: conta folga e continua antes de testar ACUSAM | `app/relatorios/dia_da_frota.py:47-55` |
-| Status da lavra / acusação da parcial | Folga simples sem batida já recebe `folga`; com ausência parcial, retirar NB pode alterar a classificação de irregularidade | `app/ponto/status_dia.py:68-70`; `app/ponto/status_dia.py:104-110`; `app/ponto/status_dia.py:139-162` |
-
-As auditorias também leem o conjunto, sem realizar cura automaticamente:
-
-| Auditoria | Efeito | Arquivo:linha |
-|---|---|---|
-| Contraprova F1t | Se o item continuar no piso indevidamente, passa a apontar célula que não acusa | `app/chamados/management/commands/auditar_invariantes_chamados.py:198` |
-| Contraprova do piso | Folga já fica fora pelo `not c.trabalha` | `app/chamados/management/commands/auditar_invariantes_chamados.py:377` |
-| Recorte A4 | Folga continua no piso correspondente por `not trabalha` | `app/chamados/management/commands/auditar_invariantes_chamados.py:1447` |
-| C2/C3 | Pode entrar na medição de pergunta morta pela célula ou cobrança viva em célula concorde, conforme os demais filtros | `app/chamados/management/commands/auditar_invariantes_chamados.py:1601-1606` |
-| Piso F1t | `concorde` deixa de satisfazer a condição acusatória | `app/chamados/management/commands/auditar_invariantes_chamados.py:1698-1713` |
-
-Leitores derivados relevantes:
-
-- Cadastro × Realidade formata a C5; não possui outra regra para NB. `app/escala/services/cadastro_realidade.py:204-207`; `app/escala/services/cadastro_realidade.py:878`.
-- `vigia_retido_calado` usa os **colaboradores** da C5 para roteamento. Havendo trabalho NB restante, a pessoa pode continuar roteada; trocar a célula isoladamente não reescreve o retrato já lavrado. `app/folha/vigia_retido_calado.py:33-48`.
-- `vigiar_fio_morto` publica o contador composto, e o pipeline o acompanha com dono CADASTRO. `app/chamados/management/commands/vigiar_fio_morto.py:182`; `app/chamados/management/commands/vigiar_fio_morto.py:241`; `app/core/management/commands/pipeline_placar.py:136`.
-- O placar publica o contador de NB em dia coberto. `bin/placar_code.sh:419`.
-
-Não confundir com outros campos homônimos: o `nunca_bateu` dos rankings de furos é calculado por batidas/previstos/furos; `subcategoria='nunca_bateu'` em pós-vínculo é leitura de chamado. `app/escala/services/furos_diarios.py:211-242`; `app/escala/services/furos_diarios.py:283`; `app/escala/services/furos_diarios.py:334`; `app/colaboradores/services/pos_vinculo.py:36`.
-
-**O gancho HX-CARTORIO-NB-REJULGA**
-
-**Não há garantia de que a folga convertida continue sendo rejulgada somente porque a adesão chegou.** O funcionamento atual é:
-
-1. A primeira batida viva escolhe entre ramo sem adesão e ramo normal. `app/ponto/services/cartorio.py:1165-1173`.
-2. Sem adesão, qualquer veredito preenchido pode ser considerado em dia se a impressão coincidir. `app/ponto/services/cartorio.py:1207-1216`.
-3. Com adesão, a exceção é literalmente `cel.veredito != 'nunca_bateu'`: NB impede o pulo; `concorde` permite o pulo. `app/ponto/services/cartorio.py:1369-1375`.
-4. A impressão não contém adesão global; contém os demais insumos do julgamento. Uma batida próxima, outro insumo alterado ou `forcar` pode provocar rejulgamento, mas adesão distante, sozinha, não o garante. `app/ponto/services/cartorio.py:443-522`; `app/ponto/services/cartorio.py:1318-1319`; `app/ponto/services/cartorio.py:1359-1375`.
-
-Portanto, o comentário de `1242-1250` corresponde ao mecanismo implementado: **depende da palavra, no ramo normal; não de uma memória persistida de que a célula passou pelo ramo sem adesão**. O teste existente cobre NB com primeira batida três dias depois; não comprova preservação para folga `concorde`. `app/ponto/services/cartorio.py:1242-1252`; `app/ponto/tests/test_cartorio_nb_readesao.py:11-23`.
-
-A precedência já é chamada no ramo sem adesão, mas seu resultado é sobrescrito para NB quando não há cobertura integral. A porta atual resolve o literal antes do derivador em `923`, não na antiga referência `564` do aval. `app/ponto/services/cartorio.py:1237-1253`; `app/ponto/portas/celula.py:919-925`.
-
-**5. Limites e discrepâncias do instrumento**
-
-- **Nenhuma das 15 linhas fornecidas contém `ERRO`; o encerramento informa `n=15` e `rc_sombra=0`.** Isso não elimina limitações semânticas dos campos. [não verificado — saída fornecida]
-- **`x1_dias` conta a lista estática `DADOS`**, sem conferir se cada célula continua False/NB/retida. A soma é 174, mas col237 tem 1 X1 e col348 tem 4 X1 apesar de ambos terem **zero NB em toda a janela**. Logo, o censo não confirma “174 folgas atualmente retidas por NB”. [não verificado — script e COLAB fornecidos]
-- A distribuição contém **169 células False/NB na janela inteira**; esse número não é a interseção com X1. Por exemplo, col427 tem 25 False/
-
-[truncado em 20000 de 21593 caracteres]
-
-## 11/11 01:33 · sessao a555301a0a81 · FIO-E0-V4-E3 · construtor · origem=Code
-
-**PARE: a cura não foi aplicada.** O C6 ainda pode consultar ausências por pergunta; não consegui garantir carga constante sem alterar sua alimentação no arquivo proibido. A testemunha executável está em [test_e3_tarefa_admin_sem_banco.py:148](/home/ronald/wt-codex-fio-e0-v4-e3-010719/app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:148). [nao verificado]
-
-Os dois REDs falharam por assertion: receberam `fio='nada'`, esperando `admin`, sob hipótese explícita de última resposta textual E1. Não houve GREEN nem mutantes da cura. [Resultados e comandos](/home/ronald/wt-codex-fio-e0-v4-e3-010719/app/E3_TAREFA_ENTREGA.txt:181).
-
-O [relatório entregue](/home/ronald/wt-codex-fio-e0-v4-e3-010719/app/E3_TAREFA_ENTREGA.txt:1) contém o censo, as saídas condicionais e os limites. Os testes ORM interromperam por falta de Django; seu resultado permanece **[nao verificado]**. [nao verificado]
-
-_3606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3609 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
