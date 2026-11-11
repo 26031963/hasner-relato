@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 16:05** · publicado em **11/11/2026 16:07** (UTC-3)
+> Ultima resposta processada: **11/11/2026 16:39** · publicado em **11/11/2026 16:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 16:39 · sessao 07260de7f099 · - · - · origem=Ronald (tmux)
+
+A cobertura nova é útil, mas não demonstra que cada caso depende do braço novo:
+
+- `doc_md` e `doc_md_cortes` deixam de passar se o matcher curinga for desligado; os negativos cobrem subpasta, extensão, caixa e pasta diferente. A fixture contém apenas `app/docs/*.md`, portanto não exercita padrões com prefixo ou vários `*` (`bin/tests/test_selo_proporcao.sh:27`, `:87–93`; implementação `bin/selo_proporcao.py:98–107`).
+- `pwa_excecao_e_lista` prova EXCECAO antes da LISTA porque a fixture também lista o PWA; `sw_excecao`, mistura com B, apagado e rename exercitam exceção antes de static (`bin/tests/test_selo_proporcao.sh:27`, `:94–98`; `bin/selo_proporcao.py:113–124`).
+- `pwa_outra_pasta` é controle nominal: passa mesmo removendo a exceção. `pwa_declarada_A` também passa sem exceção, pois só verifica rc 0 e uma declaração A recebe rc 0 tanto para classificação real A quanto B (`bin/tests/test_selo_proporcao.sh:49`, `:99–100`; `bin/selo_proporcao.py:168–174`).
+- O caso chamado `pwa_renomeado` realmente renomeia `sw.js`, não `pwa.js` (`bin/tests/test_selo_proporcao.sh:98`).
+- Os novos casos de bloco usam LISTA válida e verificam rc 2 **e motivo**, evitando que ausência de outro bloco esconda a guarda pretendida (`bin/tests/test_selo_proporcao.sh:51–59`, `:134–144`).
+- Falta `?` na pasta: há `*` na pasta, `[` na pasta, e `?` no nome. Remover apenas a proibição de `?` na pasta não é coberto por esses casos (`bin/tests/test_selo_proporcao.sh:141–144`; guarda `bin/selo_proporcao.py:90`).
+- Não há caso independente de EXCECAO alterada só no HEAD/disco: os testes correspondentes adulteram apenas LISTA; os testes de bloco alteram BASE e o HEAD herda esse conteúdo. Ler somente a EXCECAO do HEAD pode sobreviver por essa ausência — inferência estática (`bin/tests/test_selo_proporcao.sh:51–58`, `:109–110`, `:162–166`).
+- A exceção da fixture só contém caminhos static, embora a função aceite uma exceção alternativa; não há exercício nominal sob templates/tests (`bin/tests/test_selo_proporcao.sh:18–28`; precedência implementada em `bin/selo_proporcao.py:113–125`).
+
+Não executei o harness porque ele cria e remove arquivos (`bin/tests/test_selo_proporcao.sh:14–32`). A execução alegada de 53/53 mutantes e 32 RED permanece `[nao verificado]`; os arquivos de resultados não constam da cópia disponível `[nao verificado]`.
+
+## 11/11 16:38 · sessao be19b9bab978 · - · - · origem=Ronald (tmux)
+
+Na cópia, o SW tem fonte nominal correta na EXCECAO; o caminho efetivamente aberto depende do runtime. (`app/docs/CORTES.md:445`; `app/core/views.py:528-530`.)
+
+- As duas cascas carregam `pwa.js`, que registra `/sw.js` com escopo `/`. (`app/templates/base.html:20`; `app/templates/base_app.html:20`; `app/static/pwa.js:14`.)
+- A URL raiz inclui `core.urls`; `/sw.js` chama `views.service_worker`. (`app/config/urls.py:39`; `app/core/urls.py:24`.)
+- A view não renderiza template: abre `sw.js`, substitui `__BUILD_ID__` e responde JavaScript. (`app/core/views.py:570-573`.)
+- `_raiz_do_static()` prefere `/app/staticfiles/sw.js` quando existe; caso contrário usa `/app/static/sw.js`. A fonte versionada é `app/static/sw.js`, incluída nominalmente em `CORTES.md`. Conteúdo e ramo efetivamente servido em produção: `[nao verificado]`. (`app/core/views.py:528-530`; `app/docs/CORTES.md:445`.)
+- A configuração registra `BASE_DIR/static` como fonte de static e `BASE_DIR/staticfiles` como destino coletado; `staticfiles/` é ignorado pelo Git. (`app/config/settings/base.py:98-99`; `.gitignore:13`.)
+- Mesmo um caminho de diff literal `app/staticfiles/sw.js` seria A pelo restante das regras: não tem componente `static`, não está na LISTA e cai no retorno final. Portanto, a diferença entre caminho fonte e coletado não demonstra B indevido. (`bin/selo_proporcao.py:98-107`; `bin/selo_proporcao.py:110-127`.)
+- O código confirma escrita offline no PWA: `registrarBatidaOffline` abre transação de escrita e adiciona batida; sincronização remove itens enviados. O SW delega sincronização à página por mensagem, ou pede ao usuário para abrir o app. (`app/static/pwa.js:107-113`; `app/static/pwa.js:161-172`; `app/static/sw.js:112-127`.)
+
+Escritor estrutural de `CORTES.md`: `bin/gerar_cortes.py` lê `app/docs/CORTES.json`, transforma cada `frase` em linha Markdown e reescreve o destino inteiro; a execução normal chama esse escritor. (`bin/gerar_cortes.py:23-24`; `bin/gerar_cortes.py:31-32`; `bin/gerar_cortes.py:106-109`; `bin/gerar_cortes.py:114-116`; `bin/gerar_cortes.py:142-152`.)
+
+Os blocos atuais estão em `CORTES.md:444-445`, mas não há correspondentes PROPORCAO/LISTA-FECHADA/EXCECAO em `CORTES.json` na cópia `[nao verificado: ausência sem linha positiva única]`; o gerador não preserva apêndices manuais, então regeneração apagaria esses blocos. Esse é o limite (c) já declarado no anexo, não um achado fora do contrato. (`bin/gerar_cortes.py:97-116`; `app/docs/CORTES.md:3`; anexo `v10_contrato.txt`, item 4(c), sem arquivo local: `[nao verificado]`.)
 
 ## 11/11 16:05 · sessao 91788de74858 · PROPORCAO-POR-RISCO · verificador · origem=Code
 
@@ -498,142 +529,4 @@ Correção à conclusão anterior: **não há garantia geral de C previamente ad
 
 No ramo `data_hora`, `ch=None` e clones vazios permitem que a função auxiliar não reconcilie chamado algum: guarda de destino em `app/chamados/services/materializacao.py:773`, lista de clones em `:775`/`:776`, chamada auxiliar em `:1059`. O signal de Batida chama o reconciliador (`app/ponto/signals.py:215`), porém os atos dependem de candidatos e premissas; por exemplo, o laço pode apenas continuar em `app/chamados/reconciliador.py:1459`. Isso impede afirmar C obrigatório para todo plantio.
 
-## 11/11 15:38 · sessao 5e6e5744386e · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
-
-**APROVADO para o delta no caminho com `JulianiPWA`.** Os tetos de armazenamento/POST e a prova de conclusão da transação foram introduzidos; permanecem as limitações discriminadas abaixo. (`app/static/pwa.js:55`, `app/static/pwa.js:80`, `app/static/pwa.js:230`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:142`)
-
-1. **(a), (b) e (d): curados nesse caminho.** Abertura tem teto de 2 s e rejeição por bloqueio; transação tem teto, `onabort` e resolução somente em `oncomplete`; o gap tem envelope externo de 4 s. POST e corpo de erro compartilham o orçamento de 30 s. As telas capturam a rejeição da gravação e mostram erro. (`app/static/pwa.js:60`, `app/static/pwa.js:74`, `app/static/pwa.js:84`, `app/static/pwa.js:91`, `app/static/pwa.js:213`, `app/static/pwa.js:232`; `app/templates/ponto/triagem/apto.html:308`; `app/templates/ponto/bater_ponto_v2.html:329`)
-
-   Os estados residuais têm consequências diferentes:
-
-   - **Sync/indicador pendurados:** continuam com pedidos/transações fora de `_transacao`; fetch e corpos do sync também continuam sem teto. Isso pode paralisar envio/indicador, mas não desfaz a fila nem segura o retorno do escritor, que dispara o indicador sem `await`. (`app/static/pwa.js:223`, `app/static/pwa.js:248`, `app/static/pwa.js:271`, `app/static/pwa.js:277`, `app/static/pwa.js:306`)
-   - **Sync recebe HTTP 400 e conclui a exclusão:** esse caminho deixa a fila vazia com apenas `console.warn`, sem erro visível. É uma perda silenciosa ainda presente; já consta como pendência própria na cópia. (`app/static/pwa.js:284`; `app/docs/BACKLOG.md:1944`)
-   - **`tx.abort()` lança durante commit:** a promessa rejeita mesmo assim, portanto há erro visível. Porém o código não confirma rollback: pode haver gravação tardia após o erro. A ocorrência real desse estado é [nao verificado]. (`app/static/pwa.js:84`; `app/templates/ponto/bater_ponto_v2.html:329`)
-   - **Conexão chega tarde:** a abertura já rejeitou; o sucesso tardio fecha a conexão e não retoma aquele escritor. (`app/static/pwa.js:60`, `app/static/pwa.js:72`, `app/static/pwa.js:215`)
-   - **Sem `postarBatidaNoTeto`:** permanece `fetch/json` cru; uma promessa pendente deixa botão desabilitado, sem fila e sem erro. O ensaio explicitamente trata ausência de PWA como pendência própria, exigindo apenas preservar o envio online. (`app/templates/ponto/bater_ponto_v2.html:294`, `app/templates/ponto/bater_ponto_v2.html:312`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:552`)
-
-   **(d)** agora marca a fila na conclusão, desfaz linhas no aborto e exige promessa resolvida mais exatamente uma linha persistida. Commit em curso e abertura tardia não são modelados pelo falso IndexedDB. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:142`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:203`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:605`)
-
-2. **(c): permanece sem identidade original, mas isso sozinho não sustenta bloqueante no reenvio de 30 s.** Um clique online pode produzir o POST inicial e uma linha de fila; essa linha pode gerar **N retransmissões**, sem limite declarado, enquanto respostas/exclusões falharem. Quantidade de requisições não equivale à quantidade de batidas gravadas. (`app/templates/ponto/bater_ponto_v2.html:307`, `app/templates/ponto/bater_ponto_v2.html:323`; `app/static/pwa.js:256`, `app/static/pwa.js:276`, `app/static/pwa.js:295`)
-
-   A porta deduplica **mesmo colaborador/mesmo tipo, ±60 s inclusivos**, entre não retratadas. A API usa **mesmo colaborador/mesmo tipo, ±5 minutos inclusivos**, sobre `ts_efetivo`; não sobre a chegada quando existe hora válida do aparelho. (`app/ponto/registro_batida.py:106`; `app/api/views.py:519`, `app/api/views.py:539`)
-
-   Portanto, reenvio **sequencial**, primeira gravação já visível, mesmo tipo e instantes separados por até 30 s é absorvido. Garantia universal permanece [nao verificado]: o teto limita espera da resposta, não o prazo da sincronização; além disso, a dedup precede a eventual correção de tipo. Assim, identidade original fica como pergunta de desenho, sem duplicação demonstrada pelos anexos. (`app/static/pwa.js:230`, `app/static/pwa.js:244`; `app/api/views.py:539`, `app/api/views.py:582`)
-
-3. **Não encontrei nova barreira nem segundo juiz da selfie nesses caminhos.** A lei fixa escrita em `registro_batida.py`; as telas consultam o juiz central e seguem com foto nula. No servidor, `selfie_ausente` acrescenta motivo de revisão, sem recusar a batida. (`CLAUDE.md:143`; `app/static/pwa.js:170`; `app/templates/ponto/triagem/apto.html:248`, `app/templates/ponto/triagem/apto.html:275`; `app/templates/ponto/bater_ponto_v2.html:269`; `app/api/views.py:449`)
-
-4. **O instante único é a entrada do escritor, não necessariamente o primeiro clique.** `Date.now()` alimenta os dois timestamps antes das esperas; na recuperação online, o escritor só é chamado depois do POST frustrado, potencialmente 30 s depois. (`app/static/pwa.js:211`; `app/templates/ponto/bater_ponto_v2.html:293`, `app/templates/ponto/bater_ponto_v2.html:323`)
-
-   O sync envia o timestamp **cru do aparelho**, sem enviar o timestamp corrigido/gap. A API o entrega a `hora_do_aparelho`: atraso entre 0 e 48 h preserva o instante; acima de 3 minutos acrescenta trilha; futuro ou antigo demais usa `agora`. Logo, 30 s de atraso, com relógio compatível, é aceito. O teto de POST não garante sincronização dentro de 30 s. (`app/static/pwa.js:265`; `app/api/views.py:519`; `app/api/hora_do_aparelho.py:62`, `app/api/hora_do_aparelho.py:141`)
-
-5. **Nenhuma das quatro ausências de mutante demonstra, isoladamente, bloqueante de produto.** Fechamento tardio protege conexões futuras; catch interno do gap está protegido, para a fila, pelo envelope externo; catch do indicador é posterior à gravação e sem `await`; instante único está implementado, mas sem prova de regressão temporal. Os mutantes existentes cobrem outras guardas, não essas quatro. (`app/static/pwa.js:72`, `app/static/pwa.js:134`, `app/static/pwa.js:166`, `app/static/pwa.js:212`, `app/static/pwa.js:223`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:810`)
-
-6. **O template apagado não tem referência executável encontrada na cópia.** Restam comentário do guard, comentário histórico do teste e tabela documental. URLs apontam à view, que escolhe v2 ou triagem. O SW referencia `/ponto/bater/`, não o nome do template; seu ramo de navegação retorna antes do trecho que alimentaria esse cache. (`app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:673`; `app/docs/TICKETS.md:693`; `app/ponto/urls.py:11`; `app/ponto/views.py:225`, `app/ponto/views.py:356`; `app/static/sw.js:45`, `app/static/sw.js:67`)
-
-   Há lacunas nos instrumentos alterados: o scanner não inclui apto/v2; o guard não inclui v2 e pula caminhos inexistentes. Elas não demonstram quebra causada pela exclusão. (`app/tools/check_frontend_urls.py:25`; `app/scripts/check_a_lei_batida.py:14`, `app/scripts/check_a_lei_batida.py:21`, `app/scripts/check_a_lei_batida.py:31`)
-
-Suíte verde e smoke nesta cópia: **[nao verificado]**. Não executei o ensaio Chromium porque ele cria arquivos/perfil e depois os apaga. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:344`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:360`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:372`)
-
-## 11/11 15:38 · sessao 86de3be02df9 · LASTRO-FOLGA-FORA-DO-CATALOGO · verificador · origem=Code
-
-**Veredito: BLOQUEANTES B1–B3.** A guarda consulta a autoridade existente, mas herda um cache sem isolamento por tenant, introduz uma exceção sem tradução em portas HTTP e permite reintroduzir legado numa corrida entre leitura e gravação (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/models.py:883`, `app/ponto/services/ausencia.py:418`, `app/api/views.py:1825`).
-
-**1. Quem escreve `Ausencia.tipo`**
-
-A construção e persistência estão em `criar_ausencia`; a troca do campo está em `editar_ausencia_registro`. Ambas validam pelo catálogo antes de salvar (`app/ponto/services/ausencia.py:194`, `app/ponto/services/ausencia.py:342`, `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:474`, `app/ponto/services/ausencia.py:498`, `app/ponto/services/ausencia.py:509`).
-
-| Chamador produtivo encontrado | Valor fornecido |
-|---|---|
-| Lançamento administrativo | Variável do formulário (`app/ponto/views.py:2415`) |
-| Solicitação PWA | Variável da solicitação (`app/ponto/views.py:2536`) |
-| API | Variável, após tradução dos aliases legados (`app/api/views.py:1765`, `app/api/views.py:1817`) |
-| Copiloto | Variável encaminhada ao produtor (`app/ponto/services/checar_ausencia.py:46`) |
-| Veredito da célula | Literal `falta` ou variável `tipo_ausencia` (`app/ponto/services/veredito_celula.py:332`) |
-| Materialização de declaração | `falta` ou `atestado`, pelo mapa (`app/chamados/services/materializacao.py:490`, `app/chamados/models.py:3716`) |
-| Materialização de resposta | `falta` ou `atestado`, pela tabela de escapes (`app/chamados/services/materializacao.py:526`, `app/chamados/services/materializacao.py:602`) |
-| Espelho de férias | Literal `ferias`, pelo produtor (`app/ponto/services/ausencia.py:1202`) |
-| Regularização de retorno | Literal `falta`, por `garantir_ausencia` (`app/ponto/services/regularizacao.py:118`, `app/ponto/services/ausencia.py:461`) |
-| Comando de abandono provisório | Literal `falta`, por `garantir_ausencia` (`app/ponto/management/commands/marcar_abandono_provisorio.py:76`) |
-| Edição pela UI | POST ou tipo atual, pela porta de edição (`app/ponto/views.py:2794`) |
-| Comando de rederivação H06 | Tipo atual, pela porta de edição (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`) |
-
-Os literais efetivamente produzidos pelos caminhos fixos encontrados estão semeados:
-
-| Literal | Semente |
-|---|---|
-| `falta` | Sim (`app/ponto/migrations/0052_seed_tipoausencia.py:10`) |
-| `atestado` | Sim (`app/ponto/migrations/0052_seed_tipoausencia.py:17`) |
-| `ferias` | Sim (`app/ponto/migrations/0052_seed_tipoausencia.py:23`) |
-| `declaracao`, destino do alias `atestado_acompanhante` | Sim (`app/api/views.py:1766`, `app/ponto/migrations/0052_seed_tipoausencia.py:18`) |
-| `licenca_luto`, destino do alias `obito` | Sim (`app/api/views.py:1767`, `app/ponto/migrations/0052_seed_tipoausencia.py:20`) |
-
-`atestado_medico` é traduzido para `atestado`; os aliases não são escritos literalmente pela API (`app/api/views.py:1765`). Não há incompatibilidade demonstrada entre esses literais e a semente; estarem ativos hoje em produção é **[não verificado]**.
-
-O admin de Ausência bloqueia adicionar, alterar e apagar; os receivers de Ausência consomem o fato, sem atribuir `tipo` (`app/ponto/admin.py:38`, `app/core/admin.py:59`, `app/core/admin.py:62`, `app/core/admin.py:65`, `app/ponto/signals.py:143`, `app/ponto/signals.py:275`). O `update` produtivo de cancelamento de férias altera somente status e carimbo (`app/ponto/services/ausencia.py:1281`). A cópia CSV encontrada contorna o modelo, mas pertence ao pipeline de ensaio (`bin/sombra_incremental.sh:58`, `bin/sombra_incremental.sh:62`).
-
-**O escritor histórico de #5356 permanece [não verificado].** Os testes demonstram que `QuerySet.update(tipo=...)` consegue fabricar esse legado, mas isso não identifica a origem produtiva (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`).
-
-**2. Catálogo, cache e cadastro pela UI — B1**
-
-Os leitores diretos de `codigos_validos()` são formulário, prévia do copiloto, criação, edição, composição dos tipos que exigem documento, vigia, solicitação PWA e agora a guarda do modelo (`app/ponto/forms.py:63`, `app/ponto/services/checar_ausencia.py:23`, `app/ponto/services/ausencia.py:194`, `app/ponto/services/ausencia.py:474`, `app/ponto/services/ausencia.py:804`, `app/ponto/services/vigia_ausencia.py:103`, `app/ponto/views.py:2509`, `app/ponto/models.py:879`).
-
-O cache é um único dicionário de módulo, com TTL de **60 segundos medidos por `monotonic()`**. A criação/edição pela UI salva `TipoAusencia`, cujo signal invalida esse dicionário no processo local (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:258`, `app/ponto/catalogo/ausencias.py:275`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/services/ausencia.py:1310`, `app/ponto/models.py:1260`).
-
-Consequências:
-
-- No processo invalidado, a próxima leitura consulta novamente o banco; outro processo com cache quente pode recusar o tipo recém-criado até expirar o TTL. Também pode continuar aceitando um tipo desativado nesse intervalo (`app/ponto/catalogo/ausencias.py:263`, `app/ponto/catalogo/ausencias.py:276`, `app/ponto/models.py:879`).
-- **B1:** a chave não inclui tenant/schema. Com `ponto` instalado por tenant, uma leitura no tenant B pode reutilizar o catálogo anteriormente carregado no tenant A, admitindo código alheio ou recusando código próprio (`app/config/settings/saas.py:34`, `app/config/settings/saas.py:40`, `app/config/settings/saas.py:68`, `app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:276`).
-- Tabela vazia, todos os tipos inativos **ou qualquer exceção na consulta** fazem retornar a semente congelada. Portanto, vazio não significa “nenhum código permitido”; inclusive desativar todos reabilita os códigos da semente na autoridade (`app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:252`, `app/ponto/catalogo/ausencias.py:253`, `app/ponto/catalogo/ausencias.py:278`).
-
-A guarda herda esses comportamentos de uma autoridade preexistente; ocorrência concreta entre workers/tenants de produção é **[não verificado]** (`app/ponto/models.py:878`).
-
-**3. Consulta histórica, corrida e contornos — B3**
-
-Com cache quente, código válido não exige a consulta histórica. Código fora do catálogo em instância persistida acrescenta **um SELECT por chamada de save**; cache frio acrescenta também a consulta do catálogo. Uma decisão pode chamar save duas vezes, pagando duas consultas históricas para legado (`app/ponto/models.py:879`, `app/ponto/models.py:882`, `app/ponto/catalogo/ausencias.py:249`, `app/ponto/services/ausencia.py:911`, `app/ponto/services/ausencia.py:927`). Latência e SQL efetivamente emitido são **[não verificado]**.
-
-**B3 — comparação e gravação não são atômicas.** Interleaving permitido pelo código: A consulta e encontra `folga`; B corrige para `abono`; A termina seu save completo e recoloca `folga`. A guarda não usa lock nem UPDATE condicionado ao tipo observado (`app/ponto/models.py:883`, `app/ponto/models.py:885`, `app/ponto/models.py:933`). Ocorrência produtiva é **[não verificado]**.
-
-Quanto aos contornos:
-
-- `update_fields` **não desliga** a guarda. Mesmo salvando só documento/status, ela compara o tipo em memória com o banco; pode recusar uma operação que nem escreveria `tipo`, caso outra operação já tenha corrigido o legado (`app/ponto/models.py:891`, `app/ponto/models.py:893`, `app/ponto/services/ausencia.py:835`, `app/ponto/services/ausencia.py:859`).
-- `QuerySet.update(tipo=...)` contorna a guarda, demonstrado expressamente pelas fixtures (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`).
-- O override não contém proteção em `save_base`, bulk ou SQL direto. A implementação dessas APIs Django não está demonstrada pelos arquivos examinados; confirmação de `save_base(raw=True)`/`loaddata`, `bulk_create` e `bulk_update` nesta cópia: **[não verificado]**. Não há exceção explícita para `raw` dentro da guarda (`app/ponto/models.py:868`, `app/ponto/models.py:891`).
-
-**4. Exceção HTTP e batida — B2**
-
-**B2 — a nova exceção não é traduzida consistentemente.** Na criação, somente o `ValidationError` do `full_clean` vira `AusenciaInvalida`; o save posterior limpa eventual anexo e relança a exceção original. A API captura apenas `AusenciaInvalida` (`app/ponto/services/ausencia.py:387`, `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:419`, `app/ponto/services/ausencia.py:429`, `app/api/views.py:1825`).
-
-Cenário concreto permitido: o código passa na validação inicial; outra thread desativa o tipo e invalida o cache; o save consulta o catálogo atualizado e lança o novo `ValidationError`, que escapa da API. O caminho de edição tem a mesma janela e sua view também não captura essa exceção (`app/ponto/services/ausencia.py:194`, `app/ponto/models.py:1263`, `app/ponto/models.py:887`, `app/ponto/services/ausencia.py:474`, `app/ponto/services/ausencia.py:509`, `app/ponto/views.py:2818`). Resposta 500 observada em produção: **[não verificado]**.
-
-Outros propagadores são veredito da célula, espelho de férias, mudanças de estado, decisão e anexação; nenhum deles traduz especificamente o novo erro do catálogo (`app/ponto/services/veredito_celula.py:340`, `app/ponto/services/ausencia.py:1209`, `app/ponto/services/ausencia.py:835`, `app/ponto/services/ausencia.py:927`, `app/ponto/services/ausencia.py:865`). Legado inalterado passa normalmente; a falha exige mudança concorrente ou outro desacordo entre instância e persistência (`app/ponto/models.py:885`).
-
-Lançamento e submissão web têm captura externa de `Exception`, portanto não cabe afirmar 500 indistintamente nessas telas (`app/ponto/views.py:2458`, `app/ponto/views.py:2558`).
-
-**Não foi demonstrado caminho da batida até `Ausencia.save`.** O chokepoint cria `Batida`; recompute, julgamento da célula, reconciliação e fechamento por evento têm contenção de exceções nos caminhos examinados (`app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:175`, `app/ponto/signals.py:19`, `app/ponto/signals.py:85`, `app/ponto/signals.py:131`, `app/ponto/signals.py:206`). Violação nova da lei “batida nunca barrada” por esta guarda: **[não verificado]**.
-
-**5. Segundo juiz e dois significados**
-
-A guarda é **leitora da mesma autoridade de validade**, pois chama `codigos_validos`, exatamente como criar e editar. `faixa_de` responde outra pergunta, a precedência; seu default continua sendo `atestado` para código desconhecido (`app/ponto/models.py:878`, `app/ponto/services/ausencia.py:194`, `app/ponto/services/ausencia.py:474`, `app/ponto/precedencia.py:76`).
-
-A divergência estrutural com `TIPO_CHOICES` permanece: o campo declara choices congeladas, enquanto o serviço exclui `tipo` do `full_clean` para aceitar códigos vivos adicionais. A guarda não cria essa segunda lista; o teste novo preserva explicitamente código vivo fora das choices (`app/ponto/models.py:661`, `app/ponto/models.py:749`, `app/ponto/services/ausencia.py:387`, `app/ponto/tests/test_lastro_folga_save_guarda.py:134`).
-
-**6. Fixtures e mordida**
-
-As alterações preservam as asserções originais relevantes:
-
-- Carimbo: mantém `obito` legado e exige `aprovada_em` na aprovação/rejeição (`app/ponto/tests/test_decisao_carimba.py:22`, `app/ponto/tests/test_decisao_carimba.py:32`, `app/ponto/tests/test_decisao_carimba.py:39`).
-- Espelho: mantém `obito` e compara a apresentação com o juiz do status (`app/ponto/tests/test_caracterizacao_espelho.py:53`, `app/ponto/tests/test_caracterizacao_espelho.py:89`).
-- Fechamento: mantém `atestado_medico` desconhecido e exige DSR perdido igual a zero (`app/ponto/tests/test_fechamento_ausencia_pela_autoridade.py:83`, `app/ponto/tests/test_fechamento_ausencia_pela_autoridade.py:86`).
-- Cadastro/dropdown: acrescentam cleanup de cache e mantêm admissão de novo código, retirada do inativo e fallback vazio (`app/ponto/tests/test_cadastro_tipo.py:15`, `app/ponto/tests/test_cadastro_tipo.py:23`, `app/ponto/tests/test_cadastro_tipo.py:35`, `app/ponto/tests/test_dropdown_vivo.py:21`, `app/ponto/tests/test_dropdown_vivo.py:29`, `app/ponto/tests/test_dropdown_vivo.py:34`).
-
-Há uma diferença: as fixtures agora disparam primeiro os efeitos de `abono` e depois os do legado. O segundo save executa os receivers, mas equivalência completa dos efeitos intermediários é **[não verificado]** (`app/ponto/tests/test_caracterizacao_espelho.py:50`, `app/ponto/tests/test_caracterizacao_espelho.py:55`, `app/ponto/signals.py:143`, `app/ponto/signals.py:275`).
-
-O selo novo tem asserções que detectariam remoção da guarda e quebra da preservação histórica; não cobre os cenários B1–B3. Execução verde, RED anterior e mutantes executados são **[não verificado]** (`app/ponto/tests/test_lastro_folga_save_guarda.py:73`, `app/ponto/tests/test_lastro_folga_save_guarda.py:94`, `app/ponto/tests/test_lastro_folga_save_guarda.py:102`, `app/ponto/tests/test_lastro_folga_save_guarda.py:134`).
-
-**7. Classes de reprovação**
-
-Os bloqueantes são: **B1**, cache usado pela barreira sem isolamento por tenant e sem invalidação entre processos; **B2**, exceção nova sem tradução nas portas; **B3**, leitura histórica separada da gravação, permitindo reintrodução concorrente do código fora do catálogo (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/models.py:1263`, `app/api/views.py:1825`, `app/ponto/models.py:883`, `app/ponto/models.py:933`).
-
-Não foi demonstrado segundo produtor produtivo de `tipo`; há contorno por `update` nas fixtures e duplicidade preexistente entre choices e catálogo (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`, `app/ponto/models.py:749`). O diff não acrescenta relógio, mas passa a depender do TTL preexistente na decisão de persistência (`app/ponto/models.py:878`, `app/ponto/catalogo/ausencias.py:275`). Origem de #5356, censo real da frota, suite completa e pré-requisitos de pouso permanecem **[não verificado]**.
-
-_3976 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3978 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
