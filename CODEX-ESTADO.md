@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 02:32** · publicado em **11/11/2026 02:36** (UTC-3)
+> Ultima resposta processada: **11/11/2026 02:42** · publicado em **11/11/2026 02:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 02:42 · sessao 5dde95c07157 · FIO-E0-V4-E3 · construtor · origem=Code
+
+**lei: PARE — C6(i).** O consumidor tem um caminho que pode carimbar perguntas já gravadas e fechar a disputa após a absolvição da célula. Quantidade afetada nos dias X1: **[não verificado]**. [reconciliador.py:595](/home/ronald/wt-codex-fio-e0-v4-e3-022700/app/chamados/reconciliador.py:595), [reconciliador.py:610](/home/ronald/wt-codex-fio-e0-v4-e3-022700/app/chamados/reconciliador.py:610).
+
+A cura foi preparada usando `VEREDITOS_ACUSAM` e a fonte `sem_adesao` na impressão. O teste de preservação agora alcança também o reconciliador. [cartorio.py:1248](/home/ronald/wt-codex-fio-e0-v4-e3-022700/app/ponto/services/cartorio.py:1248), [teste C6:255](/home/ronald/wt-codex-fio-e0-v4-e3-022700/app/ponto/tests/test_x1_folga_sem_adesao.py:255). [nao verificado]
+
+Inventário, censo, leitores, **11 testes ORM**, dois mutantes e comandos estão no [relato](/home/ronald/wt-codex-fio-e0-v4-e3-022700/app/docs/relato_fio_e0_v4_e3_x1.txt:1). RED/GREEN, morte dos mutantes, ruff e suite permanecem **[não verificado]**: banco/rede proibidos nesta volta e dependências ausentes. [nao verificado]
+
+## 11/11 02:42 · sessao 7b6d61289e98 · VERIFICADOR-EM-FABLE · verificador · origem=Code
+
+**BLOQUEIA o delta:** a correção aritmética funciona para o estado válido, mas introduz discriminação histórica pelo tipo do elemento e permite zero falso para conteúdo estruturalmente inválido. (`bin/disjuntor.py:2172`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`)
+
+1. **FILA — o mecanismo cumulativo da volta 1 foi corrigido, com ressalva temporal.** Strings persistidas deixam de entrar no “esperado 0”; dicionários entram. O histórico positivo aparece separado na linha, sem remover as strings da lista. Assim, `["aa6","ac9"]` resulta em contador `0`, histórico `2`. (`bin/disjuntor.py:2176`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`, `bin/disjuntor.py:2259`, `bin/tests/test_disjuntor.sh:1483`)
+
+   Isso distingue **registros já persistidos de registros acrescentados pelo novo escritor**, não a data real da chamada: um transcript antigo ainda não registrado receberá dicionário e contará como novo. Não existe comparação temporal com um marco da cura nesse caminho. Os seis históricos e suas obras efetivamente identificadas no RELATO: **[nao verificado]**. (`bin/disjuntor.py:976`, `bin/disjuntor.py:990`, `bin/disjuntor.py:2172`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2182`)
+
+2. **FILA — escritores e leitores encontrados em `bin/`; nenhuma suposição residual de string nas operações sobre a lista.**
+   
+   - **Escritor operacional:** `decide_b3._fn` chama `_anota_sem_obra`; este lê os IDs existentes e acrescenta dicionários. A persistência continua pela mesma porta `_com_estado`, sob `flock`, com serialização do estado inteiro. (`bin/disjuntor.py:990`, `bin/disjuntor.py:2172`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:351`, `bin/disjuntor.py:366`, `bin/disjuntor.py:371`)
+   - **Leitores dos elementos:** o próprio escritor, para deduplicação; `_b3_sem_obra`, para contar dicionários; `_b3_sem_obra_hist`, para contar strings. O `in` opera sobre `vistos`, já normalizado para IDs. Esses sítios não fazem `join` nem `sort` dos elementos mistos. (`bin/disjuntor.py:2172`, `bin/disjuntor.py:2174`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`)
+   - **Propagação:** `ler` entrega dois números; `linha` os formata; `gerar_estado.py` chama essas duas funções, sem manipular a lista; a CLI `--linha` faz o mesmo. (`bin/disjuntor.py:2044`, `bin/disjuntor.py:2259`, `bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`, `bin/disjuntor.py:2330`)
+   - **Testes:** o B3 antigo lê o número; `_xlinha` lê a apresentação completa; o caso novo escreve a fixture histórica, chama ambos os contadores e manipula uma lista pelo escritor. Ele está no conjunto principal, no controle sem mutação e no mutante. (`bin/tests/test_disjuntor.sh:430`, `bin/tests/test_disjuntor.sh:1368`, `bin/tests/test_disjuntor.sh:1481`, `bin/tests/test_disjuntor.sh:1482`, `bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1492`, `bin/tests/test_disjuntor.sh:1531`, `bin/tests/test_disjuntor.sh:1532`)
+   - **JSON genérico:** `ler_estado` apenas decodifica; `_com_estado` serializa; o teste que relê e regrava o estado inteiro preserva a lista sem interpretar seus elementos. Não há conversão implícita para strings nesses caminhos. (`bin/disjuntor.py:393`, `bin/disjuntor.py:371`, `bin/tests/test_disjuntor.sh:1094`, `bin/tests/test_disjuntor.sh:1098`)
+
+   Ficaram comentários com “contador == universo”, agora imprecisos para o contador isolado, que exclui o histórico. (`bin/disjuntor.py:646`, `bin/tests/test_disjuntor.sh:427`, `bin/disjuntor.py:2182`)
+
+3. **FILA — `ts` é o instante da primeira observação registrada, pelo relógio civil do processo.** No PreToolUse, `time.time()` é capturado antes da avaliação e passado até `decide_b3`; no Stop, vem de `_disjuntor_contido`. O escritor copia esse valor, sem consultar outro relógio. Portanto, não representa o horário original do transcript nem o marco da cura. (`bin/disjuntor.py:1894`, `bin/disjuntor.py:1897`, `bin/disjuntor.py:1846`, `bin/disjuntor.py:1777`, `bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`, `bin/disjuntor.py:2176`)
+
+   Existe o fallback anterior `time.time()` dentro de `decide_b3` quando `agora=None`; a porta Codex chega sem transcript, portanto sem novos IDs para acrescentar por essa varredura. Os leitores novos ignoram `ts`: não há consumidor atribuindo outro significado temporal a ele. (`bin/disjuntor.py:975`, `bin/disjuntor.py:1137`, `bin/disjuntor.py:836`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`)
+
+4. **FILA — chamadas repetidas não acrescentam novamente o mesmo ID; duplicatas preexistentes não são saneadas.** O conjunto `vistos` reúne IDs de strings e dicionários e é atualizado a cada inclusão; a transição persistente ocorre sob a trava. Duas chamadas preservam o primeiro `ts`. (`bin/disjuntor.py:2172`, `bin/disjuntor.py:2175`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:351`, `bin/disjuntor.py:366`)
+
+   Se já houver `"n1"` e `{"aid":"n1","ts":100}`, permanece um em cada contador; dois dicionários do mesmo ID contam `2`. O leitor conta elementos, não IDs únicos. O escritor novo não produz essas duplicatas a partir de estado válido. (`bin/disjuntor.py:2174`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`)
+
+   **BLOQUEIA — “ilegível nunca vira 0” só vale para parte das falhas.** JSON quebrado ou raiz não objeto gera `None`; porém `{"b3_sem_obra":[42]}` retorna `0` nos dois contadores, e `[{}]` conta como uma ocorrência nova. Falta validar coleção e registros antes de filtrar tipos. Além disso, histórico `None` desaparece da apresentação, pois a condição de exibição testa apenas valor verdadeiro. (`bin/disjuntor.py:396`, `bin/disjuntor.py:398`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`, `bin/disjuntor.py:2259`)
+
+5. **FILA — o mutante morde de verdade, dentro do alcance declarado.** A âncora retira somente `if isinstance(e, dict)` do contador. Reproduzindo essa substituição em memória, a fixture passa de `0 2` para `2 2`, derrubando a primeira expectativa do caso. O controle sem mutação está registrado. (`bin/tests/test_disjuntor.sh:1532`, `bin/disjuntor.py:2182`, `bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1531`)
+
+   O caso também verifica histórico revisto e repetição do novo ID **na mesma chamada**. Não verifica segunda chamada, `ts`, apresentação por `linha` nem estrutura inválida. (`bin/tests/test_disjuntor.sh:1482`, `bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`)
+
+   O B3 antigo continua coerente: cria transcript `s1`, aciona Stop e espera o número `1`; o novo escritor registra esse ID como dicionário, que o contador inclui. Execução integral desse caso: **[nao verificado]**. (`bin/tests/test_disjuntor.sh:428`, `bin/tests/test_disjuntor.sh:429`, `bin/tests/test_disjuntor.sh:431`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2182`)
+
+6. **BLOQUEIA — há dois significados implícitos no mesmo campo persistido.** O tipo do elemento passou a decidir sua época: string significa histórico; dicionário significa posterior à cura. Isso está explicitamente documentado e governa os dois leitores, mesmo sem divergência entre eles. (`bin/disjuntor.py:2169`, `bin/disjuntor.py:2170`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2190`)
+
+   **Alternativa:** separar histórico e novas ocorrências em campos explícitos, migrados pela mesma `_com_estado`; deduplicar IDs entre ambos; validar os formatos; nomear o instante `ts_observado`; exibir falha de leitura histórica como “nao sei”. Isso substitui a discriminação atual por tipo e corrige o silêncio na apresentação. (`bin/disjuntor.py:335`, `bin/disjuntor.py:2172`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2259`)
+
+   **FILA — as outras classes não reaparecem como defeito novo demonstrado:** a escrita operacional permanece na mesma porta, o escritor recebe o relógio e o mutante derruba sua expectativa específica. (`bin/disjuntor.py:990`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:2176`, `bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1532`)
+
+A suíte shell integral permanece **[nao verificado]**: cria e remove arquivos, incompatíveis com a restrição desta revisão. As reproduções descritas foram em memória e não comprovam produção. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:51`)
 
 ## 11/11 02:32 · sessao 79a6f5449c81 · FIO-E0-V4-E3 · verificador · origem=Code
 
@@ -1022,33 +1072,4 @@ Os auxiliares de cadastro também têm saídas próprias, consumidas pelo juiz/c
 
 [truncado em 20000 de 66776 caracteres]
 
-## 11/11 02:05 · sessao 168b267eaf81 · - · - · origem=Ronald (tmux)
-
-Revisão somente leitura: dois pontos concretos merecem correção.
-
-1. **Residual A/S alcança P com `trabalha=False`.** `dia_sem_trabalho` retorna verdadeiro nesse caso, mesmo com cobertura parcial; o residual aceita `indefinida` e gera `validar/admin`. Confirmei essa saída em memória. O teste P novo fixa `dia_sem_trabalho=False` e não cobre essa variação. A exclusão já possui autoridade em `cartorio.py::parcial_so_lista`. (`chamados/juizes.py:445`, `chamados/services/tarefa_do_dia.py:319`, `chamados/tests/test_e3_c8b_sem_banco.py:129`, `ponto/services/cartorio.py:398`)
-
-2. **Guarda exportada pode suprimir tarefas anteriores à cura.** Qualquer pergunta em marco aceso entra em `pares_admin`, inclusive morta pelo C6. Se K6 disser exportada, o retorno antecipado elimina todas as instâncias, inclusive outro marco apagado que antes exigia `perguntar/sistema`. Isso excede “guardar somente as exposições novas”. (`chamados/services/tarefa_do_dia.py:457`, `chamados/services/tarefa_do_dia.py:464`, `chamados/services/tarefa_do_dia.py:203`)
-
-K6 mantém seu predicado: a carga usa `anotar_vigencia` e a mesma combinação `so_vigentes`/`invalidada_em`. A nova entrada é opcional e preserva as chamadas anteriores. (`folha/export.py:556`, `folha/export.py:583`, `chamados/services/tarefa_do_dia.py:429`)
-
-Os dois alertas anteriores sobre `instancia_marco` precisam desta ressalva:
-
-- Nascimento regular recusa instância diferente da derivada; portanto a forma não-marco com instância explícita divergente depende de acervo ou escrita que contorne a porta [nao verificado]. (`chamados/models.py:3437`)
-- Duas perguntas da mesma identidade são impedidas para marcos desde 21/09; antes desse horizonte, escolher apenas `ps[-1]` pode ocultar uma viva anterior. Ocorrência nos dados anexados: [nao verificado]. (`chamados/models.py:2403`, `chamados/models.py:3482`, `chamados/services/tarefa_do_dia.py:263`)
-
-Nenhuma quebra adicional observada nos campos do dict: as chaves permanecem existentes e o agregador continua lendo `acoes`, `de`, `porta`, `celula_id`, `nao_sei`. Resultado dos testes completos dos leitores: [nao verificado]. (`chamados/services/tarefa_do_dia.py:425`)
-
-## 11/11 02:04 · sessao 035cb0e9da4c · - · - · origem=Ronald (tmux)
-
-Dois pontos concretos para corrigir:
-
-1. `CargaDaVida.turnos` executa o pareamento da janela larga apenas para carregar `_bats`. Uma falha em DNA de outro dia pode interromper a subjanela válida que o avulso julgaria. Carregar as batidas diretamente com os filtros da base evita essa mudança de entrada e o processamento descartado. (`chamados/services/carga_pergunta_viva.py:163`, `ponto/turnos.py:3032`, `escala/utils.py:19`, `escala/utils.py:107`)
-
-2. A leitura das testemunhas constrói até três ramos SQL por pergunta. A quantidade de queries é constante, mas a árvore SQL cresce linearmente; o limite concreto do banco não foi executado. [nao verificado] Um envelope mínimo/máximo de timestamps mais `pergunta_origem_id__in` preserva os filtros posteriores e mantém a consulta pequena. (`chamados/services/carga_pergunta_viva.py:107`, `chamados/services/carga_pergunta_viva.py:129`, `chamados/services/carga_pergunta_viva.py:133`)
-
-Nos trechos revistos, a passagem de carga conserva as comparações e a ordem dos degraus do C6; ela substitui fontes de insumos. (`chamados/juizes.py:1338`, `chamados/juizes.py:1408`, `chamados/juizes.py:1421`)
-
-Não identifiquei N+1 residual adicional no caminho alimentado. A confirmação por SQL permanece [nao verificado].
-
-_3627 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3629 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
