@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 02:50** · publicado em **11/11/2026 02:51** (UTC-3)
+> Ultima resposta processada: **11/11/2026 02:52** · publicado em **11/11/2026 02:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 02:52 · sessao d7f2c3787aa4 · FIO-E0-V4-E3 · sonda · origem=Code
+
+1. **174 pares, 15 colaboradores e soma geral de candidatas = 0**, conforme o anexo fornecido. [nao verificado]
+
+| Colaborador | Soma de candidatas |
+|---|---:|
+| col144 | 0 [nao verificado] |
+| col209 | 0 [nao verificado] |
+| col237 | 0 [nao verificado] |
+| col268 | 0 [nao verificado] |
+| col312 | 0 [nao verificado] |
+| col348 | 0 [nao verificado] |
+| col427 | 0 [nao verificado] |
+| col574 | 0 [nao verificado] |
+| col650 | 0 [nao verificado] |
+| col969 | 0 [nao verificado] |
+| col1005 | 0 [nao verificado] |
+| col1009 | 0 [nao verificado] |
+| col1018 | 0 [nao verificado] |
+| col1019 | 0 [nao verificado] |
+| col1027 | 0 [nao verificado] |
+
+O único `perg_total=1` está em col237, com zero candidatas; o anexo não identifica qual condição a exclui. [nao verificado]
+
+2. **Não há caminho alternativo de seleção para carimbar essas perguntas sem FK de célula.** O escritor percorre `perguntas_absolvidas_pela_celula` e carimba somente as perguntas recebidas desse gerador (`app/chamados/reconciliador.py:584`, `:595`). O gerador parte de `qs_perguntas_absolviveis` (`app/chamados/reconciliador.py:651`), que exige colaborador da disputa, ambos os carimbos nulos e **`celula__isnull=False`** (`app/chamados/reconciliador.py:627-631`). Compartilhar disputa não substitui esse vínculo (`app/chamados/reconciliador.py:627-642`).
+
+3. **Sim, o universo descrito pela sonda é suficiente para essa pergunta:** ela conta perguntas cuja própria célula pertence ao colab/dia e aplica os dois filtros de nulidade; o resultado informado é zero. A implementação da sonda não foi aberta. [nao verificado]
+
+Essa contagem é um **superconjunto** do queryset efetivo: além desses requisitos, o código exige veredito da célula não nulo, não vazio e fora de `VEREDITOS_ACUSAM`; depois, o gerador ainda consulta o juiz e a tranca (`app/chamados/reconciliador.py:637-641`, `:661-668`). Portanto, zero nesse superconjunto implica zero selecionáveis nesses pares por essa via (`app/chamados/reconciliador.py:627-642`).
+
+Uma pergunta ligada à célula de **outro dia** não integra o recorte desses 174 pares só por compartilhar disputa. [nao verificado] O escritor roda por colaborador e pode selecionar outros dias, mas julga a célula vinculada à própria pergunta (`app/chamados/reconciliador.py:628`, `:637-641`, `:651`).
+
+## 11/11 02:52 · sessao 62e1af2f76c7 · - · - · origem=Ronald (tmux)
+
+Censo produtivo do CF na base:
+
+- `chamados/juizes.py:690,781,1414`.
+- `chamados/services/disputa_emissao.py:288,806`; wrapper de `:806` chamado em `:1200,1237` e reexportado em `chamados/models.py:4093`.
+- `chamados/management/commands/retratar_chamados_lei_cala.py:45`.
+- `chamados/management/commands/auditar_invariantes_chamados.py:1683,1709,1804`.
+- `ponto/management/commands/reconciliar_grade.py:243`.
+- `ponto/marcos.py:171`.
+- `escala/servico_jornada.py:554`.
+
+Hits em API e reconciliador são comentários, sem chamadas diretas. Chamadas dinâmicas sem identificador literal: [nao verificado].
+
+A divergência da geradora estrangeira vem da alimentação: avulso entrega diretamente `celula.escala_geradora` ao juiz (`escala/servico_jornada.py:55-58`); lote mantém vínculos somente no balde do proprietário (`ponto/turnos.py:2990-2991`). `_cand` já inclui geradoras pedidas por `mais` (`ponto/turnos.py:2986-2987`), porém o carregador plural coloca a estrangeira no balde `e.colaborador_id` (`escala/alimentacao.py:155-159`). Assim, existe linha carregada suficiente para corrigir sem N+1.
+
+Proposta: fazer `CargaDaVida.vinculo` chamar `escala_vigente` com alimentação opcional dos vínculos já lidos; o corpo comum resolve a geradora por PK, usando índice composto de `_cand` e `_vinculos`, e usa os candidatos do próprio colaborador quando não existe geradora. A seleção continua exclusivamente em `vinculo_do_dia` (`escala/alimentacao.py:267-289`).
+
+Impossibilidade pelo cadastro não está demonstrada. Geração usual vincula a célula ao proprietário do vínculo (`ponto/portas/celula.py:259-260,855-856`), mas reversão copia diretamente `dna_anterior['vinculo_id']` para a FK (`ponto/portas/celula.py:789-791`). Ocorrência produtiva: [nao verificado].
+
+Leitores adicionais dos carimbos pela carga:
+
+- Passivo: `DecisaoPergunta.linhas_da_projecao_sem_linha` lê `respondida_em`, texto, `validada_em`, `validada_por_id` (`chamados/models.py:3924,3931-3938`), chamado em `chamados/services/tarefa_do_dia.py:394`.
+- Lavra: `esta_stale` lê `julgado_em` e `janela_expira_em` (`chamados/veredito_lavrado.py:224,228`), chamado em `tarefa_do_dia.py:399`.
+- Identidade da tarefa lê `via_resolucao` (`tarefa_do_dia.py:230-231`).
+- C6 lê validação, resposta, materialização e via (`chamados/juizes.py:1346,1357,1362,1383,1389,1421`).
+- Auxiliares de materialização leem materialização/via (`chamados/juizes.py:288,671,683,699`).
+- Slot e concordância leem texto (`chamados/juizes.py:354,1323`; `chamados/services/materializacao.py:279,358,411`).
+
+Escritores: validação real (`chamados/services/validacao.py:134-141`); resposta (`chamados/services/disputa_emissao.py:1462-1468`), resposta automática (`:1652-1657`); carimbo de materialização/via (`chamados/models.py:3099-3101`).
+
+Nenhuma escrita ou execução ORM foi feita nesta exploração.
+
+## 11/11 02:52 · sessao 62dfbb574916 · - · - · origem=Ronald (tmux)
+
+Use `_Base`, que já é `TestCase` ORM real e fornece cadastro, vínculo, colaborador, admin, célula, pergunta e decisão; os construtores reais são `carga_da_tarefa` e `tarefa_do_dia`. (`chamados/tests/test_e2_tarefa_do_dia.py:75`, `:102`, `:124`, `:133`; `chamados/services/tarefa_do_dia.py:546`, `:551`)
+
+- **RED 1:** célula com DNA `{'marcos': {'hi': '08:00', 'hf': '18:00'}}`, lâmpadas somente E08/S18 e pergunta antiga `intervalo_saida`. Faça chamadas independentes pelo avulso e por `carga_da_tarefa([self.c], D, D, agora).tarefa(self.c,D)`. A pergunta continua no universo `_perg`, mas sua posição sumiu da grade; compare o dict inteiro e a exposição administrativa após decisão RESPOSTA. (`chamados/tests/test_e2_tarefa_do_dia.py:102`, `:124`, `:133`; `chamados/services/tarefa_do_dia.py:373`, `:465`)
+- **RED 2:** pergunta textual, célula `trabalha=False`/`tipo_dia='folga'`; resposta real em T1 por `responder_pergunta_disputa_core`; dict inteiro em T1; validação real em T2 por `validar_pergunta`; nova carga e mesmo `agora=T1`; dict deve permanecer inteiro igual. (`chamados/services/disputa_emissao.py:1425`, `:1467`, `:1512`; `chamados/services/validacao.py:373`, `:435`)
+- A validação textual completa pode retornar `nao_gravou`: texto não tem ramo materializador; o carimbo e a decisão VALIDACAO permanecem, pois a devolução é específica de resposta HORA. Exija no RED que `validada_em == T2` e que a linha VALIDACAO tenha T2; não exija `res['ok']`. (`chamados/services/materializacao.py:1226`, `:1244`; `chamados/services/validacao.py:457`, `:469`, `:496`)
+- O escritor menor `_carimbar_validacao` também grava carimbo+linha reais, já usado diretamente por teste existente; a porta completa acima cobre mais do contrato pedido. (`chamados/services/validacao.py:127`; `chamados/tests/test_e1_entradas.py:95`)
+- **RED 4:** depois de criar a célula de `self.c`, troque sua FK para `self.ec2` por ORM e compare `escala_vigente(self.c,D)` com `carga_da_vida(carga_real, perguntas).vinculo(self.c,D)`, sem substituir `escala_vigente`. O avulso entrega a geradora nomeada diretamente. (`escala/servico_jornada.py:55`; `chamados/services/carga_pergunta_viva.py:157`)
+- A geração normal usa `colaborador_id=ec.colaborador_id`; edição usa o vínculo resolvido para `_cid`. Isso não prova impossibilidade por todos os escritores; classifique essa impossibilidade como `[nao verificado]`. (`ponto/portas/celula.py:259`, `:603`)
+
+Nenhum arquivo escrito e nenhum ORM executado. [nao verificado]
 
 ## 11/11 02:50 · sessao 3ce02936cad3 · VERIFICADOR-EM-FABLE · verificador · origem=Code
 
@@ -794,84 +872,4 @@ O escritor `reabrir_sistema` não toma trava/atomic próprios, salva o reset em 
 
 O único chamador direto de `reabrir_admin` é `app/chamados/services/acoes_disputa.py:259`: HTTP fio/modal→`processar_post_fio:581`→`acao_reabrir_disputa_admin:235`; a casca não abre atomic envolvendo reabrir+pergunta. Depois da gravação em `models.py:2161`, chama `PerguntaDisputa.abrir_conversa` em `acoes_disputa.py:263`. Atomic externo de todas as portas HTTP que chegam nessa casca: [nao verificado].
 
-## 11/11 02:25 · sessao 166caaf2105c · - · - · origem=Ronald (tmux)
-
-- **FILA — O9a cobre ID inválido, não cauda inválida.** O regex extrai `oid='O9a', cauda=None`; `_obra_lida` rejeita no primeiro `fullmatch`, sem avaliar o ramo de cauda. Para exercitar esse ramo, usar ID válido com cauda capturada inválida, como `obra O9 noturno-foo`, mais controle `obra O9 NOTURNO-FOO`. A comparação entre contador e topo já inclui ambas, mas a nova unidade não inclui esse par. (`bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:169`, `bin/disjuntor.py:619`; `bin/tests/test_disjuntor.sh:1472`, `bin/tests/test_disjuntor.sh:743`)
-
-- **FILA — o mutante morde no fluxo isolado; resultado integral não verificado.** A mutação remove exatamente a guarda; sem ela, `ob=None` pula `_nega_b3` e segue ao B4. Em execução em memória com dependências de I/O substituídas, os dois primeiros prompts mudaram de negativa para passagem, derrubando a primeira expectativa do caso. A unidade shell devolve `1` se faltar a mensagem; o harness acusa falha se o caso mutado passar. (`bin/disjuntor.py:1845`, `bin/disjuntor.py:1849`, `bin/disjuntor.py:1860`; `bin/tests/test_disjuntor.sh:1471`, `bin/tests/test_disjuntor.sh:1499`, `bin/tests/test_disjuntor.sh:1518`)
-
-- **FILA — controles presentes e positivos.** Há passagem com obra legível e passagem não final; `_passa` exige stdout vazio e nenhuma `FALHA` nova. Há também controle da cópia sem mutação, incluindo explicitamente a nova unidade. (`bin/tests/test_disjuntor.sh:98`, `bin/tests/test_disjuntor.sh:1473`, `bin/tests/test_disjuntor.sh:1474`, `bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1517`)
-
-- **FILA — alcance do selo é restrito.** As negativas verificam texto com `grep`, não decodificam `permissionDecision`; o emissor real escreve `deny`. A nova unidade cobre o payload canônico `Agent/verificador`, com prompt string e `tool_input`, sem ensaiar as outras portas listadas na pergunta. (`bin/tests/test_disjuntor.sh:322`, `bin/tests/test_disjuntor.sh:323`, `bin/tests/test_disjuntor.sh:1471`; `bin/disjuntor.py:1774`)
-
-- **FILA — escritor do contador tem controle anterior de alcançabilidade.** O caso B3 injeta diretamente um transcript de verificador final sem obra, roda Stop e exige `b3_sem_obra=1`; portanto a suíte conserva uma prova de leitura de ocorrência externa à nova porta. Isso não prova sua frequência ou presença em produção. (`bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:428`, `bin/tests/test_disjuntor.sh:429`, `bin/tests/test_disjuntor.sh:431`)
-
-A suíte shell integral não foi executada: ela cria e remove arquivos temporários, incompatível com somente leitura. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:51`)
-
-## 11/11 02:24 · sessao b0a72e4a8b1a · FIO-E0-V4-E3 · construtor · origem=Code
-
-Diff B+A/S e entrega: [E3_TAREFA_ENTREGA.txt](/home/ronald/wt-codex-fio-e0-v4-e3-010719/app/E3_TAREFA_ENTREGA.txt:1).
-
-32 testes em memória verdes e 14 mutantes mortos por assertion. [Evidências](/home/ronald/wt-codex-fio-e0-v4-e3-010719/app/E3_TAREFA_ENTREGA.txt:257). [nao verificado]
-
-Suíte ORM bloqueada por ausência de `django`; certificação e medição dos 232 dias seguem **[nao verificado]**. [Limites](/home/ronald/wt-codex-fio-e0-v4-e3-010719/app/E3_TAREFA_ENTREGA.txt:284). [nao verificado]
-
-## 11/11 02:22 · sessao 764012eeb554 · - · - · origem=Ronald (tmux)
-
-F0 de destino/dona — conferido em leitura.
-
-| Sítio main | Natureza | Valor/regra | Transação/travas |
-|---|---|---|---|
-| `models.py:3014`, persistência `:3017`, `PerguntaDisputa._nascer` | Nascimento de `P.disputa` e `P.chamado_destino` | Disputa e destino recebidos pelo chamador; dia/célula resolvidos previamente. | `_sob_contrato`, atomic `:2819`; `_nascer`, atomic `:2841`, trava C `:2845`; implementação `select_for_update` C/D/Ch/P `:2666/:2675/:2688/:2692`. |
-| `models.py:2982`, save `:3006`, `_nascer` | Reuso: troca destino; preserva dona, retorno `:3008` | Canônica do universo do fato `:2907/:2921`; destino solicitado, se não nulo/diferente `:2968`, aceito por `resolvedora_valida` `:2972` e `_costura_nao_mata_o_fio` `:2980`. | Mesmo atomic; Ch travado pela costura `fio.py:768`; D/Ch/P explicitamente pré-travados no rechaveamento `models.py:2947`. |
-| `fio.py:925`, save `:927`, `reapontar_resolvedora` | Troca destino, inclusive `None` | Destino do chamador; juízes `:907/:909`; `None` permitido por `juizes.py:2176`. | Atomic `fio.py:881`, C `:889`, Ch via `:768`; D/Ch/P adicionais quando colisão `:904`. |
-| `fio.py:779/:783`, `_costura_nao_mata_o_fio` | Só memória | Destino pós-estado para consultar `pergunta_viva`; restauração no `finally`. | Não persiste essas atribuições. `fio.py:778`. |
-| `models.py:367`, `_vivas_entre` | Só memória | Reassocia a mesma PK, guarda `:366`; consulta o juiz `:368`. | Não salva a pergunta nesse método. `models.py:349`. |
-| `models.py:2876`, `_nascer` | Proxy de identidade, só memória | `cls(disputa=...)` passado a `dia_do_turno_da_linha`. | Não salva o proxy. `models.py:2875`. |
-| `models.py:3387` | Efeito de exclusão | `SET_NULL` em `P.chamado_destino`; não elege substituto. | Política ORM da FK, definida em `:3385`. |
-| `models.py:2418` | Efeito de exclusão | Excluir dona elimina P por `CASCADE`; não muda sua dona. | FK definida em `:2416`. |
-
-O nome real do destino é **`PerguntaDisputa.chamado_destino`**; não existe um segundo campo de destino distinto dessa FK na definição inspecionada. Dona é `PerguntaDisputa.disputa`, campo separado. `models.py:2416`, `models.py:3385`.
-
-Há dois sumidouros genéricos a declarar:
-
-- `PerguntaDisputa.descarimbar_em_lote`, `models.py:3252`, aceita `**outros`, proíbe apenas campos do carimbo em `:3255` e expande em `update` `:3266`. **Os chamadores atuais não passam destino/dona**: ressuscitação passa apenas validação/resposta em `models.py:1566`; correção passa o dicionário de resposta/validação de `disputa_emissao.py:1593` em `:1630`.
-- `PerguntaDisputa.save`, `models.py:3413`, encaminha `*args, **kwargs` a `super().save` `:3423`, dentro de atomic `:3422`. O full save produtivo identificado da P é a inserção `models.py:3017`; demais saves inspecionados restringem campos. Generalização para chamadas não identificadas: [nao verificado].
-
-`abrir(**campos)` não tem allowlist: `models.py:2776` → `:2789` → `_sob_contrato(**kw)` `:2806/:2820` → expansão no construtor `:3014`. `_sob_contrato` cobra o contrato de saída `:2821`, não os nomes dos kwargs. Não encontrei chamador produtivo passando `disputa_id` ou `chamado_destino_id` nessa expansão; efeito de fornecer simultaneamente FK objeto e `_id`, dependente da implementação Django ausente da cópia: [nao verificado].
-
-Chamadores completos de `reapontar_resolvedora`:
-
-| Chamador | Eleição e cadeia confirmada |
-|---|---|
-| `models.py:437`, `_gate_pergunta_viva` | Sobrevivente eleito por C8 `models.py:390`; C8 prefere `-criado_em,-pk`, `juizes.py:2101`. Chega por `reconciliar` `models.py:650/:685`, `cancelar` `:786`, `encerrar` `:1617`, `encerrar_por_competencia_trancada` `:1637`. Cadeia de **todos** consumidores dessas portas até cada HTTP/cron: [nao verificado]. |
-| `reconciliador.py:954`, `reemitir_chamado_do_dia` | Resultado de `ChamadoColaborador.abrir`, `:910`; exige VIVOS `:936`. Chamado por `reatar_pergunta_orfa`, `:1621`. |
-| `reconciliador.py:1642`, `reatar_pergunta_orfa` | Histórico único, `len(hist)==1` em `:1623`. |
-| `reconciliador.py:1655`, `reatar_pergunta_orfa` | Candidato de `_derivar_chamado_destino`, `:1556`. |
-| `declaracao_texto.py:370`, `declarar_hora_colab` | `ch` recebido, apenas candidata local órfã `:363/:364`; atomic `:348`, trava `:352`, conjunto C/D/Ch/P `:299/:301`. HTTP `chamados/views.py:1090`. |
-| `limbo_folgas.py:244`, `reatar_perguntas_ao_limbo` | Pai recebido; origem command `reatar_beco_folga_ao_limbo.py:110`, atomic `:99`, C+pai `:104`. Pai LIMBO mais recente: `limbo_folgas.py:220/:221`, filtrado pela fila no command `:59/:105`. |
-| `limbo_folgas.py:282`, `agrupar_furo` | Pai recebido; atomic `:270`, trava C/abertas/furo/pai `:274`. Consumidores `detectar_ausencias.py:761`, cron `config/crons.py:364`, e `agrupar_furos_sob_limbo` `:331` ← `apurar_furos_diarios.py:19`, encadeado `config/crons.py:1509`. Pai do lote: último PK crescente, `limbo_folgas.py:308/:309`. |
-| `fio.py:2174`, `_migrar_sob_trava` | `novo` recebido, só quando P é canônica `:2165`; universo/canônica/plano `:2151/:2155/:2158`. `migrar_resolvedoras_vivas`, atomic `:2083`, C/D/Ch/P `:2095`; chamado por `Chamado.reabrir`, `models.py:1415`, irmão eleito em `:1354`; juiz maximiza estágio e PK `juizes.py:2145/:2147`. |
-| `reatar_beco_folga_ao_limbo.py:127`, `_reverter` | `destino_antes` lido do JSON `:118/:127`, podendo resultar `None`; sem atomic externo próprio nesse método. A porta abre atomic `fio.py:881`. |
-
-Os três sítios do reconciliador chegam pela emissão `disputa_emissao.py:464` ou `reconciliar_chamados_colab` `reconciliador.py:1433/:1526`: batida via signal `ponto/signals.py:207/:215`; filho morto via signal `chamados/signals.py:350/:368`, `on_commit` `:369`. O cron `reconciliar_chamados` não deve ser apresentado como escritor atual dessa reata só pela prosa antiga: o código/documentação viva declara-o vigia, `reconciliador.py:1539/:1540`.
-
-Pedidos de nascimento/reuso com destino:
-
-| Sítio | Eleição |
-|---|---|
-| `disputa_emissao.py:439/:444` | Gerador recebe destino de `_derivar_chamado_destino`, `:409/:411`; chamada conversa `:441`, datada `:450`. Derivador filtra VIVOS `:198`, motivos `:212`, exclui candidato já com P não materializada `:226`; empate pelo turno `:237`, entrada única `:153` ou estágio mais avançado `:161`; exige resultado único `:238/:245`, senão `None` `:244`. |
-| `disputa_emissao.py:837`, `_criar_pergunta_se_couber` | Destino do chamador `:843`; B oferece o próprio intervalo `:1154`; grupo oferece primeiro da ordem recebida `:1197`; complemento/ata oferecem chamado recebido `:1176`. |
-| `declaracao_texto.py:376/:666` | Próprio chamado do colaborador/admin `:377/:667`. |
-| `disputa_emissao.py:1371` | Próprio chamado LIMBO `:1377`. |
-| `acoes_disputa.py:263` | Conversa administrativa, sem destino explícito; default `None`, `models.py:2794`. |
-
-**Diferença relevante para F1:** pedido `None` no reuso de `_nascer` preserva destino atual, `models.py:2968`; em `reapontar_resolvedora`, pode descosturar gravando `None`, `fio.py:925`, com permissão explícita do juiz `juizes.py:2176/:2177`.
-
-Os nomes importados de `chamados.models` que parecem escritores locais são reexports do emissor, enumerados em `models.py:4091/:4094`; devem ser resolvidos pelo censo. `reapontar_resolvedora` tem os nove sítios acima, importados diretamente de `fio` ou chamada interna no próprio módulo. `models.py:433`, `reconciliador.py:791/:1550`, `declaracao_texto.py:369`, `limbo_folgas.py:236/:268`, command `:117`.
-
-O selo existente não prova função única: allowlist por **arquivo** em `core/tests/test_contract_escritores_estado.py:61`, lista parcial de apps `:13`, regex limitada a atribuição/update `:182/:183`, exclusão de migrations/testes `:191`.
-
-No contrato futuro, desancorar/reversão, nascimento, reuso e reata precisam continuar distinguíveis; uma função única de atribuição pode recebê-los, sem impor silenciosamente uma eleição de intervalo sobre LIMBO ou reversão. Referências das operações: `models.py:3014/:2982`, `fio.py:925`, command de reversão `:127`. A função proposta `fio.gravar_destino_da_pergunta` **não existe hoje**: proposta [nao verificado]; há precedente explícito para separar atribuição da persistência em `fio.gravar_dia_do_fato`, `fio.py:790/:800`.
-
-_3633 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3636 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
