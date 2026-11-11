@@ -1,7 +1,58 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 04:37** · publicado em **11/11/2026 04:39** (UTC-3)
+> Ultima resposta processada: **11/11/2026 05:00** · publicado em **11/11/2026 05:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 05:00 · sessao c34bbb0cd360 · - · - · origem=Ronald (tmux)
+
+A fusão fiel não cabe na porta atual:
+
+- Main `fb9269ea9:app/chamados/services/disputa_emissao.py:1823` já consulta perguntas com destino no chamado, `materializada_em=NULL` e disputa aberta; inclui validadas.
+- `_ancoradas` retorna `list`, exclui validadas e inclui outros universos (`chamados/models.py:336`, `:344`). Não fornece QuerySet para `union`.
+- Perder validadas altera comportamento: C6 dá morta (`chamados/juizes.py:1325`), mas `carimbar` pode escrever materialização/via e salvar (`chamados/models.py:3126`, `:3152`). Também altera disputas candidatas (`chamados/services/disputa_emissao.py:1977`, `:2000`).
+- Buscar complemento de validadas ou usar prefetch conserva duas cargas. Portanto permanece justificável **+1 por S143**, sem duplicar o predicado canônico (`chamados/models.py:344`).
+
+Há reutilização canônica possível da tranca:
+
+```python
+colab = chamado._state.fields_cache.get('colaborador')
+mapa = {chamado.colaborador_id: colab} if colab is not None else {}
+```
+
+Passar `mapa` aos **dois** `um_colaborador_por_identidade` evita criar donos separados do memo; a função aceita mapa sem consultar banco (`chamados/juizes.py:1121`, `:1134`). Seed apenas da FK quente evita adicionar consulta em chamados sem perguntas. Memo da tranca pertence ao request/instância (`chamados/juizes.py:1054`).
+
+Antes de reconciliar na batida, cartório chama E2 (`ponto/services/cartorio.py:969`, `:974`), que usa C6 e tranca sobre o `colab` recebido (`chamados/reconciliador.py:650`, `:654`, `:661`). Contudo a consulta de chamados não aquece explicitamente `ch.colaborador` com essa mesma instância (`ponto/services/cartorio.py:117`). Compartilhar mapa entre os dois laços remove sua duplicação; aproveitamento do memo anterior e redução exata são **[não verificado]**.
+
+Tetos previstos se cair o único `+1 periodo_trancado`: **60/28/213/269 [não verificado]**. Permanecem incrementos main→head **+1/+1/+2/+4**, compatíveis com os sítios S143 do `delta_main_head.txt` fornecido.
+
+Ao ajustar assinatura do identity map nas chamadas, atualizar o double `lambda ps: ps` (`chamados/tests/test_e4b_classe_e_memoria.py:291`) para aceitar `mapa=None`; caso contrário a suíte de memória falha antes da assertion-alvo.
+
+## 11/11 04:59 · sessao 919502c461f8 · - · - · origem=Ronald (tmux)
+
+Causa da fixture: julho pertence à competência 07, abaixo do piso automático `2026-09`; `forcar=True` apenas força julgamento e não equivale a `toque=True`. O cartório cala a emissão do chamado, enquanto a fábrica ainda emite a pergunta (`ponto/services/cartorio.py:270`, `:312`, `:1687`, `:1695`, `:1707`, `:1773`, `:1008`).
+
+Caminho real:
+
+- `registrar_batida` cria a batida (`ponto/registro_batida.py:170`).
+- O signal julga o dia anterior e o próprio dia (`ponto/signals.py:108`, `:131`).
+- `julgar_celula` chama `julgar_colab`, que chama a fábrica (`ponto/services/cartorio.py:2000`, `:1008`).
+- A fábrica chama o emissor (`chamados/services/fabrica_da_celula.py:172`).
+- O emissor deriva o destino; zero candidatos retorna `(None, None)` (`chamados/services/disputa_emissao.py:411`, `:238`).
+- O reatamento automático também não salva julho: passa por `reatar_pergunta_orfa` e pelo c2, que barra nascimento abaixo do mesmo piso (`chamados/services/disputa_emissao.py:459`; `chamados/reconciliador.py:1621`, `:828`, `:840`).
+
+Entrada coerente proposta: construir o segundo fio em **21/09/2026**, competência **10/2026**, mantendo o alvo do backfill em 09/2026. Essa data continua passada no freeze de 25/09, fica fora do alvo e dentro do horizonte automático. Adaptar a exportação e a expectativa BANG para 10/2026 (`chamados/tests/test_e4_backfill.py:28`, `:49`; `ponto/services/cartorio.py:320`).
+
+Isso preserva a precondição forte e evita criar ou alterar diretamente chamado, pergunta, veredito ou carimbo históricos. Alcance efetivo e execução ORM com essa entrada: [não verificado].
+
+## 11/11 04:57 · sessao 18b1b34d5d9d · FIO-E0-V4-E3 · construtor · origem=Code
+
+Entregues o [diff](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite.diff:1) e o [relato S1–S7, com causas, cura e censo](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_pos_suite.md:7).
+
+Verificação local: [46 testes sem banco verdes](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_vizinhos.txt:2), [selos AST verdes](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_green.txt:12), [mutantes mortos](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_pos_suite.md:35) e [Ruff limpo](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_ruff.txt:1). [nao verificado]
+
+[Comandos de RED, mutantes e labels ORM](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_comandos.txt:1).
+
+ORM, 11 testes X1, suíte inteira e opus final: **[não verificado]**. [nao verificado]
 
 ## 11/11 04:37 · sessao e7d57b8fb5e2 · - · - · origem=Ronald (tmux)
 
@@ -470,92 +521,4 @@ Essa contagem é um **superconjunto** do queryset efetivo: além desses requisit
 
 Uma pergunta ligada à célula de **outro dia** não integra o recorte desses 174 pares só por compartilhar disputa. [nao verificado] O escritor roda por colaborador e pode selecionar outros dias, mas julga a célula vinculada à própria pergunta (`app/chamados/reconciliador.py:628`, `:637-641`, `:651`).
 
-## 11/11 02:52 · sessao 62e1af2f76c7 · - · - · origem=Ronald (tmux)
-
-Censo produtivo do CF na base:
-
-- `chamados/juizes.py:690,781,1414`.
-- `chamados/services/disputa_emissao.py:288,806`; wrapper de `:806` chamado em `:1200,1237` e reexportado em `chamados/models.py:4093`.
-- `chamados/management/commands/retratar_chamados_lei_cala.py:45`.
-- `chamados/management/commands/auditar_invariantes_chamados.py:1683,1709,1804`.
-- `ponto/management/commands/reconciliar_grade.py:243`.
-- `ponto/marcos.py:171`.
-- `escala/servico_jornada.py:554`.
-
-Hits em API e reconciliador são comentários, sem chamadas diretas. Chamadas dinâmicas sem identificador literal: [nao verificado].
-
-A divergência da geradora estrangeira vem da alimentação: avulso entrega diretamente `celula.escala_geradora` ao juiz (`escala/servico_jornada.py:55-58`); lote mantém vínculos somente no balde do proprietário (`ponto/turnos.py:2990-2991`). `_cand` já inclui geradoras pedidas por `mais` (`ponto/turnos.py:2986-2987`), porém o carregador plural coloca a estrangeira no balde `e.colaborador_id` (`escala/alimentacao.py:155-159`). Assim, existe linha carregada suficiente para corrigir sem N+1.
-
-Proposta: fazer `CargaDaVida.vinculo` chamar `escala_vigente` com alimentação opcional dos vínculos já lidos; o corpo comum resolve a geradora por PK, usando índice composto de `_cand` e `_vinculos`, e usa os candidatos do próprio colaborador quando não existe geradora. A seleção continua exclusivamente em `vinculo_do_dia` (`escala/alimentacao.py:267-289`).
-
-Impossibilidade pelo cadastro não está demonstrada. Geração usual vincula a célula ao proprietário do vínculo (`ponto/portas/celula.py:259-260,855-856`), mas reversão copia diretamente `dna_anterior['vinculo_id']` para a FK (`ponto/portas/celula.py:789-791`). Ocorrência produtiva: [nao verificado].
-
-Leitores adicionais dos carimbos pela carga:
-
-- Passivo: `DecisaoPergunta.linhas_da_projecao_sem_linha` lê `respondida_em`, texto, `validada_em`, `validada_por_id` (`chamados/models.py:3924,3931-3938`), chamado em `chamados/services/tarefa_do_dia.py:394`.
-- Lavra: `esta_stale` lê `julgado_em` e `janela_expira_em` (`chamados/veredito_lavrado.py:224,228`), chamado em `tarefa_do_dia.py:399`.
-- Identidade da tarefa lê `via_resolucao` (`tarefa_do_dia.py:230-231`).
-- C6 lê validação, resposta, materialização e via (`chamados/juizes.py:1346,1357,1362,1383,1389,1421`).
-- Auxiliares de materialização leem materialização/via (`chamados/juizes.py:288,671,683,699`).
-- Slot e concordância leem texto (`chamados/juizes.py:354,1323`; `chamados/services/materializacao.py:279,358,411`).
-
-Escritores: validação real (`chamados/services/validacao.py:134-141`); resposta (`chamados/services/disputa_emissao.py:1462-1468`), resposta automática (`:1652-1657`); carimbo de materialização/via (`chamados/models.py:3099-3101`).
-
-Nenhuma escrita ou execução ORM foi feita nesta exploração.
-
-## 11/11 02:52 · sessao 62dfbb574916 · - · - · origem=Ronald (tmux)
-
-Use `_Base`, que já é `TestCase` ORM real e fornece cadastro, vínculo, colaborador, admin, célula, pergunta e decisão; os construtores reais são `carga_da_tarefa` e `tarefa_do_dia`. (`chamados/tests/test_e2_tarefa_do_dia.py:75`, `:102`, `:124`, `:133`; `chamados/services/tarefa_do_dia.py:546`, `:551`)
-
-- **RED 1:** célula com DNA `{'marcos': {'hi': '08:00', 'hf': '18:00'}}`, lâmpadas somente E08/S18 e pergunta antiga `intervalo_saida`. Faça chamadas independentes pelo avulso e por `carga_da_tarefa([self.c], D, D, agora).tarefa(self.c,D)`. A pergunta continua no universo `_perg`, mas sua posição sumiu da grade; compare o dict inteiro e a exposição administrativa após decisão RESPOSTA. (`chamados/tests/test_e2_tarefa_do_dia.py:102`, `:124`, `:133`; `chamados/services/tarefa_do_dia.py:373`, `:465`)
-- **RED 2:** pergunta textual, célula `trabalha=False`/`tipo_dia='folga'`; resposta real em T1 por `responder_pergunta_disputa_core`; dict inteiro em T1; validação real em T2 por `validar_pergunta`; nova carga e mesmo `agora=T1`; dict deve permanecer inteiro igual. (`chamados/services/disputa_emissao.py:1425`, `:1467`, `:1512`; `chamados/services/validacao.py:373`, `:435`)
-- A validação textual completa pode retornar `nao_gravou`: texto não tem ramo materializador; o carimbo e a decisão VALIDACAO permanecem, pois a devolução é específica de resposta HORA. Exija no RED que `validada_em == T2` e que a linha VALIDACAO tenha T2; não exija `res['ok']`. (`chamados/services/materializacao.py:1226`, `:1244`; `chamados/services/validacao.py:457`, `:469`, `:496`)
-- O escritor menor `_carimbar_validacao` também grava carimbo+linha reais, já usado diretamente por teste existente; a porta completa acima cobre mais do contrato pedido. (`chamados/services/validacao.py:127`; `chamados/tests/test_e1_entradas.py:95`)
-- **RED 4:** depois de criar a célula de `self.c`, troque sua FK para `self.ec2` por ORM e compare `escala_vigente(self.c,D)` com `carga_da_vida(carga_real, perguntas).vinculo(self.c,D)`, sem substituir `escala_vigente`. O avulso entrega a geradora nomeada diretamente. (`escala/servico_jornada.py:55`; `chamados/services/carga_pergunta_viva.py:157`)
-- A geração normal usa `colaborador_id=ec.colaborador_id`; edição usa o vínculo resolvido para `_cid`. Isso não prova impossibilidade por todos os escritores; classifique essa impossibilidade como `[nao verificado]`. (`ponto/portas/celula.py:259`, `:603`)
-
-Nenhum arquivo escrito e nenhum ORM executado. [nao verificado]
-
-## 11/11 02:50 · sessao 3ce02936cad3 · VERIFICADOR-EM-FABLE · verificador · origem=Code
-
-APROVA
-
-1. **#6 fechado no delta.** O campo persistido `b3_sem_obra` é histórico de IDs string; `b3_sem_obra_obs` contém observações com `aid` e `ts_observado`. O campo determina o significado; o tipo serve para validar. Não encontrei escritor operacional remanescente que acrescente histórico. (`bin/disjuntor.py:2173`, `bin/disjuntor.py:2174`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`)
-
-   Atenção ao nome na saída: `ler()['b3_sem_obra']` continua sendo o **número derivado de observações**, não a lista histórica persistida. Os consumidores usam esse número. (`bin/disjuntor.py:2044`, `bin/tests/test_disjuntor.sh:430`)
-
-2. **#4 fechado no delta.** Cada contador valida integralmente seu respectivo campo: não lista, elemento de outro tipo, dict sem `aid` string e `aid` vazio resultam em `None`. JSON quebrado ou raiz não objeto também chegam como `None`; a apresentação mostra “nao sei” nos dois lugares. Histórico só desaparece quando vale zero. (`bin/disjuntor.py:396`, `bin/disjuntor.py:398`, `bin/disjuntor.py:2190`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`, `bin/disjuntor.py:2274`)
-
-   Reproduzi essas formas em memória, inclusive a apresentação. O zero restante é contratual para arquivo/campo ausente ou lista vazia; não encontrei caminho desses leitores que converta conteúdo ilegível em zero. A validação é independente: histórico inválido não torna uma observação ausente inválida. (`bin/disjuntor.py:394`, `bin/disjuntor.py:2189`, `bin/disjuntor.py:2201`, `bin/disjuntor.py:2207`)
-
-3. **Escritores e leitores encontrados em `bin/`:**
-
-   | Sítio | Papel |
-   |---|---|
-   | `_anota_sem_obra` | Lê histórico e observações para dedup; cria/acrescenta somente observações. (`bin/disjuntor.py:2173`, `bin/disjuntor.py:2178`, `bin/disjuntor.py:2182`) |
-   | `decide_b3` / `_com_estado` | Chama o escritor e persiste o estado inteiro sob trava, preservando o histórico. (`bin/disjuntor.py:990`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:351`, `bin/disjuntor.py:371`) |
-   | `_b3_sem_obra` / `_b3_sem_obra_hist` | Validam e contam IDs distintos dos respectivos campos. (`bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`) |
-   | `ler` / `linha` / CLI | Propagam os dois números e apresentam o resultado. (`bin/disjuntor.py:2044`, `bin/disjuntor.py:2274`, `bin/disjuntor.py:2345`) |
-   | `gerar_estado.py` | Usa `ler` e `linha`, sem derivação própria desses campos. (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`) |
-   | `hook_stop_fila1.py` | Aciona `julga_b3`, que delega a `decide_b3`; não manipula os campos diretamente. (`bin/hook_stop_fila1.py:1204`, `bin/disjuntor.py:1075`) |
-   | Testes | Leem número/apresentação; escrevem fixtures dos dois campos; exercitam o escritor e verificam histórico, IDs e tempos. Há também regravação genérica do estado inteiro. (`bin/tests/test_disjuntor.sh:430`, `bin/tests/test_disjuntor.sh:1368`, `bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1490`, `bin/tests/test_disjuntor.sh:1493`, `bin/tests/test_disjuntor.sh:1098`) |
-
-   **B3 antigo segue coerente por inspeção:** cria `s1`, aciona Stop e espera `1`; o scanner extrai esse ID, o escritor registra em observações e o contador conta um ID distinto. Execução integral desse caso: **[nao verificado]**. (`bin/tests/test_disjuntor.sh:428`, `bin/tests/test_disjuntor.sh:429`, `bin/tests/test_disjuntor.sh:431`, `bin/disjuntor.py:843`, `bin/disjuntor.py:845`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2201`)
-
-4. **Pode perder a anotação, mas há sinal no ESTADO.** Com observações não lista, o helper retorna sem registrar a ocorrência e sem aviso próprio; o campo permanece inválido, seu contador retorna `None` e a linha mostra “nao sei”. Falta aviso imediato dessa ocorrência; não há silêncio global nem zero falso. (`bin/disjuntor.py:2175`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2274`)
-
-   O dedup suprime igualdade exata de ID: um ID diferente entra; um ID presente no histórico é intencionalmente suprimido. Reuso/colisão real de IDs: **[nao verificado]**. (`bin/disjuntor.py:2177`, `bin/disjuntor.py:2178`, `bin/disjuntor.py:2180`)
-
-5. **Os três mutantes mordem nas reproduções em memória; as âncoras são únicas.** O controle reproduziu as expectativas do caso. (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1494`, `bin/tests/test_disjuntor.sh:1515`, `bin/tests/test_disjuntor.sh:1538`, `bin/tests/test_disjuntor.sh:1542`)
-
-   - `historico-reconta`: acrescenta `aa6` às observações e derruba a expectativa do escritor. (`bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1494`, `bin/tests/test_disjuntor.sh:1538`)
-   - `duplicata-reconta`: produz `2 1`, contrariando `1 1`. (`bin/tests/test_disjuntor.sh:1484`, `bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1542`)
-   - `forma-invalida-vira-zero`: cai primeiro por `KeyError` em `{}`; isolando a fixture seguinte, produz `0 0` em vez de `None None`. Portanto morde, embora a primeira mordida seja por exceção. (`bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1539`, `bin/disjuntor.py:2201`)
-
-   **FILA — lacuna do selo:** apesar do comentário, esse caso não chama `linha()`; também não contém fixtures de `aid` vazio/não string nem retorno antecipado do escritor. A correção desses caminhos foi conferida separadamente em memória. (`bin/tests/test_disjuntor.sh:1480`, `bin/tests/test_disjuntor.sh:1482`, `bin/tests/test_disjuntor.sh:1491`, `bin/disjuntor.py:2175`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2274`)
-
-6. **Nenhuma das classes citadas reaparece como defeito novo demonstrado.** A escrita permanece na mesma porta sob trava; o helper copia o relógio recebido; os consumidores reutilizam os contadores; os mutantes derrubam expectativas; época deixou de depender do tipo. O fallback interno `time.time()` continua presente e não foi introduzido neste delta. (`bin/disjuntor.py:351`, `bin/disjuntor.py:366`, `bin/disjuntor.py:975`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`, `bin/gerar_estado.py:281`, `bin/tests/test_disjuntor.sh:1538`)
-
-Suíte shell integral: **[nao verificado]**, pois cria, altera e remove arquivos. Estado efetivo de produção e identificação das obras históricas no RELATO: **[nao verificado]**. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:1517`)
-
-_3652 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3655 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
