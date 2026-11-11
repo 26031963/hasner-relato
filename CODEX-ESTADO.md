@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 05:10** · publicado em **11/11/2026 05:11** (UTC-3)
+> Ultima resposta processada: **11/11/2026 05:40** · publicado em **11/11/2026 05:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 05:40 · sessao 0e7c4b4de1ab · - · - · origem=Ronald (tmux)
+
+A cura com `dia_sem_trabalho` mantém F1/F2/F3 e a classe de folga, mas **estreita o gancho de adesão distante**: trabalho justificado, turno em curso e parcial sem resto também podem receber `concorde` pela classificação atual sem serem dia sem trabalho. Nesses casos o marcador anterior era verdadeiro; o juiz puro responderia falso (`ponto/supra_juiz.py:204`, `ponto/supra_juiz.py:369`, `chamados/juizes.py:441`).
+
+Há colisão entre os argumentos já presentes no hash: X1 cria trabalho e folga com o mesmo DNA, sem batida/cobertura e na mesma regra; B5 exige impressão legada no trabalho, enquanto X1 exige fonte distinta na folga (`ponto/tests/test_x1_folga_sem_adesao.py:56`, `ponto/tests/test_x1_folga_sem_adesao.py:134`, `ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py:129`). Portanto um marcador exclusivamente desses argumentos não distingue os dois.
+
+Preservar a classificação ampla sem queries exigiria expor carga e grade anterior à isenção: os vínculos já existem em `rows`, as células em `_cels_gr`, e a isenção é aplicada posteriormente (`escala/utils.py:1296`, `escala/utils.py:1308`, `escala/utils.py:1850`). Apenas passar `isento_ponto=False` não elimina o efeito prévio da isenção sobre as células da grade (`escala/utils.py:855`).
+
+Não escrevi arquivos; resultados ORM e contagem real de queries: [nao verificado].
 
 ## 11/11 05:10 · sessao 7f992e0a1aee · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -402,103 +412,4 @@ O zero efetivo de produção e a identificação individual das seis obras hist�
 
 Falsa negativa adicional decorrente da troca de prefixo nos leitores examinados: não encontrada pelos caminhos citados; consumidores externos à cópia e efeitos em produção: [nao verificado].
 
-## 11/11 03:03 · sessao a8910a847d4e · FIO-E0-V4-E3 · construtor · origem=Code
-
-Diff c8c escrito para revisão. ORM, suite inteira e certificação pelo opus: **[nao verificado]**. Em `juizes.py`, a alteração apenas transporta `agora` nas três chamadas alimentadas do CF; a comparação AST preservou o restante do predicado. (chamados/juizes.py:692,783,1416)
-
-Por item:
-
-| Item | Cura | RED e mutante |
-|---|---|---|
-| 1 | Alimenta todas as perguntas dos dias elegíveis, incluindo posições desaparecidas. Sem default para `viva_c6`. (chamados/services/tarefa_do_dia.py:492) | ORM: `test_RED_posicao_sumiu_avulso_e_lote_reais`. Sem banco: `test_RED_posicao_ausente_e_alimentada`. Mutante `universo_incompleto`, **rc=1**. (chamados/tests/test_e3_c8c_orm.py:35; chamados/tests/test_e3_c8c_sem_banco.py:40) |
-| 2 | Foto privada recorta resposta, validação e materialização posteriores ao horizonte; o construtor entrega essa foto aos leitores. (chamados/services/tarefa_do_dia.py:338,402) | ORM: `test_RED_T1_inteiro_antes_depois_validacao_real_T2`. Mutantes `validacao_futura`, `materializacao_futura`, `resposta_futura`: **rc=1 cada**. (chamados/tests/test_e3_c8c_orm.py:46; chamados/tests/test_e3_c8c_sem_banco.py:121) |
-| 3 | CF exige `agora` quando recebe carga. Avulso conserva a leitura do relógio no teto. (escala/servico_jornada.py:292,387) | ORM: `test_RED_CF_agora_12_independe_do_relogio_ambiente`. Sem banco também verifica o comportamento avulso às 12h/20h. Mutante `relogio_ambiente`, **rc=1**. (chamados/tests/test_e3_c8c_orm.py:76; chamados/tests/test_e3_c8c_sem_banco.py:66) |
-| 4 | A carga chama o mesmo `escala_vigente`, alimentado pelo índice de vínculos próprios **e geradoras carregadas**. (chamados/services/carga_pergunta_viva.py:89,162; escala/servico_jornada.py:55) | ORM: `test_RED_geradora_de_outro_colaborador_carga_e_avulso`. Mutante `geradora_so_proprio`, **rc=1**. (chamados/tests/test_e3_c8c_orm.py:63; chamados/tests/test_e3_c8c_sem_banco.py:15) |
-| 5 | B5-j segue helpers `self/cls` da mesma classe; comentário corrigido. Teto permanece 8. (ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:132,191; ponto/turnos.py:3015) | `test_MORDE_carregador_extraido_da_classe`. Mutantes `selo_nao_segue_helper` e `batidas_cruas_no_helper`: **rc=1 cada**. (ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:195; chamados/tests/e3_c8c_mutantes.py:39) |
-| 6 | K6 levanta `ValueError` para linha de outra tripla. (folha/export.py:584) | `test_RED_K6_recusa_outra_tripla`, cobrindo empresa/mês/ano e `registro`. Mutante `tripla_alheia`, **rc=1**, seis assertions. (chamados/tests/test_e3_c8c_sem_banco.py:91) |
-| 8a | Exposição administrativa no ramo dispensado fica restrita ao dia sem trabalho; lâmpada acesa de trabalho responde primeiro. Teste E2 preservado. (chamados/services/tarefa_do_dia.py:263; chamados/tests/test_e2_tarefa_do_dia.py:873) | `test_RED_lampada_acesa_antes_da_pergunta`. Mutante `acesa_expoe_admin`, **rc=1**. (chamados/tests/test_e3_c8c_sem_banco.py:32) |
-| 8b | `local.date()` saiu do slot; usa `dia_do_turno_da_celula`. Calendário da alimentação reutiliza `_hoje`. Cat raca e registros preservados. (chamados/services/carga_pergunta_viva.py:135; chamados/services/tarefa_do_dia.py:504) | Cat raca existente: **35 testes, rc=0**. Mutante `dia_derivado_do_slot`, **rc=1**. (core/tests/test_medida_turno_do_par.py:478; chamados/tests/test_e3_c8c_sem_banco.py:151) |
-| 8c | Removidos `datetime/timedelta` e `JUIZES` mortos. (chamados/tests/e3_c8b_apoio.py:8; chamados/tests/test_e3_c8b_sem_banco.py:14) | Ruff: **rc=1**, módulo ausente; lint **[nao verificado]**. |
-
-A impossibilidade da geradora estrangeira por todos os escritores de cadastro permanece **[nao verificado]**. A reversão copia `dna_anterior['vinculo_id']`; a paridade foi corrigida independentemente disso. (ponto/portas/celula.py:789)
-
-Execuções locais, todas sem banco:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v chamados.tests.test_e3_tarefa_admin_sem_banco chamados.tests.test_e3_c8b_sem_banco chamados.tests.test_e3_c8c_sem_banco
-# rc=0 — 41 testes [nao verificado]
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_c8b_mutantes
-# rc=0 — agregado dos 14 mutantes anteriores
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_c8c_mutantes
-# rc=0 — agregado dos 11 novos mutantes
-```
-
-Os REDs iniciais sem banco deram **rc=1 por assertion**, antes das curas; a catraca inicial deu **rc=1, seis falhas**. Os selos B5-j e turno passaram posteriormente com **7 e 35 testes**, usando adaptação em memória apenas de `SimpleTestCase` para `unittest.TestCase`. (chamados/tests/test_e3_c8c_sem_banco.py:15; ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:194; core/tests/test_medida_turno_do_par.py:478)
-
-Comando individual de cada mutante abaixo: todos foram executados e retornaram **rc=1, FAIL>0, ERROR=0**. Definições e executor: chamados/tests/e3_c8c_mutantes.py:16,79.
-
-```bash
-mutar() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_c8c_mutantes --mutante "$1"
-}
-mutar universo_incompleto
-mutar validacao_futura
-mutar materializacao_futura
-mutar resposta_futura
-mutar relogio_ambiente
-mutar geradora_so_proprio
-mutar selo_nao_segue_helper
-mutar batidas_cruas_no_helper
-mutar tripla_alheia
-mutar acesa_expoe_admin
-mutar dia_derivado_do_slot
-```
-
-Os quatro TestCase ORM estão em [test_e3_c8c_orm.py:9](/home/ronald/wt-codex-fio-e0-v4-e3-024128/app/chamados/tests/test_e3_c8c_orm.py:9), herdando o cadastro ORM existente, sem `__new__`. Para a sessão executar:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal
-```
-
-Mutantes ORM preparados, com **rc ainda [nao verificado]**; ativação somente em memória. (chamados/tests/e3_c8c_mutantes.py:54)
-
-```bash
-E3_C8C_MUTANTE_ORM=universo_incompleto PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_posicao_sumiu_avulso_e_lote_reais
-
-E3_C8C_MUTANTE_ORM=sem_foto_na_carga PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_T1_inteiro_antes_depois_validacao_real_T2
-
-E3_C8C_MUTANTE_ORM=relogio_ambiente PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_CF_agora_12_independe_do_relogio_ambiente
-
-E3_C8C_MUTANTE_ORM=geradora_so_proprio PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_geradora_de_outro_colaborador_carga_e_avulso
-```
-
-Censo produtivo dos chamadores CF, incluindo aliases:
-
-- chamados/juizes.py:690,781,1414.
-- chamados/services/disputa_emissao.py:288,806; wrapper lido em :1200,1237 e reexportado por chamados/models.py:4093.
-- chamados/management/commands/retratar_chamados_lei_cala.py:45.
-- chamados/management/commands/auditar_invariantes_chamados.py:1683,1709,1804.
-- ponto/management/commands/reconciliar_grade.py:243.
-- ponto/marcos.py:171.
-- escala/servico_jornada.py:566.
-
-Chamadas dinâmicas sem identificador literal: **[nao verificado]**.
-
-Escritores e leitores dos valores transitórios tocados:
-
-| Valor | Quem escreve/alimenta | Quem lê |
-|---|---|---|
-| Foto da pergunta | `_pergunta_no_instante`. (chamados/services/tarefa_do_dia.py:338) | Construtor, passivo, lavra e tarefa. (mesmo arquivo:402,421,426,538) |
-| `viva_c6` | Retorno do C6 na carga. (chamados/services/tarefa_do_dia.py:506) | Exposição e residual. (mesmo arquivo:245,328) |
-| `CargaDaVida.agora` / kwarg CF `agora` | Carga recebe `tarefa.agora`; C6 encaminha nas três chamadas. (chamados/services/carga_pergunta_viva.py:88; chamados/juizes.py:692,783,1416) | Guarda obrigatória e teto CF. (escala/servico_jornada.py:292,387) |
-| `_escalas_c6` / `escalas_por_id` | Índice dos vínculos e candidatos carregados. (chamados/services/carga_pergunta_viva.py:89,162) | Carregador comum `escala_vigente`. (escala/servico_jornada.py:55,58,64) |
-
-Além do C6, os carimbos são lidos pelo passivo E1, pela validade da lavra, pela identidade da tarefa, pelo slot e pela concordância com a luz. (chamados/models.py:3924,3931,3936; chamados/veredito_lavrado.py:224,228; chamados/services/tarefa_do_dia.py:230; chamados/services/materializacao.py:279,358,411; chamados/juizes.py:1323)
-
-Os escritores persistentes continuam nas portas existentes de resposta, validação e materialização. (chamados/services/disputa_emissao.py:1467,1652; chamados/services/validacao.py:134; chamados/models.py:3097)
-
-AST dos 12 arquivos tocados e `git diff --check`: **rc=0**. Schema da tarefa preservado pelo selo existente. (chamados/tests/test_e3_c8b_sem_banco.py:81) Suite inteira, resultados ORM, impacto produtivo e aprovação final: **[nao verificado]**.
-
-_3656 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3657 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
