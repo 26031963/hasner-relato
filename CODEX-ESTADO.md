@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 13:49** · publicado em **11/11/2026 13:51** (UTC-3)
+> Ultima resposta processada: **11/11/2026 13:53** · publicado em **11/11/2026 13:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 13:53 · sessao cf07b64d85a6 · FIO-E0-V4-E4B · verificador · origem=Code
+
+**REPROVADO.** Há dois bloqueantes: a idempotência não cobre fechamentos concorrentes da mesma competência, e o novo escritor interpreta o dia civil de uma conversa como competência de fato. (`app/chamados/services/fecho_runtime.py:30`, `app/chamados/services/fecho_runtime.py:35`, `app/pautas/models.py:123`, `app/chamados/models.py:2794`)
+
+1. **Mudanças de produção e cumprimento do aval**
+
+| Arquivo | Mudança, evento e avaliação |
+|---|---|
+| `disputa_emissao.py` | No S143, substitui o retorno antecipado pela coleta da recusa. Isso libera os passos seguintes também nos chamadores compartilhados. Cumpre a retirada do retorno exigida pelo aval. (`app/chamados/services/disputa_emissao.py:1945`, `app/chamados/services/disputa_emissao.py:1950`) |
+| `fecho_runtime.py` | Acrescenta coletor em memória, agrupamento por competência, consulta de Pauta existente e escrita depois da transição, dentro do mesmo `atomic`. Cumpre o encaixe nas bordas; tem os dois bloqueantes indicados acima. (`app/chamados/services/fecho_runtime.py:14`, `app/chamados/services/fecho_runtime.py:21`, `app/chamados/services/fecho_runtime.py:66`) |
+| `acoes_chamado.py` | A resposta livre do gestor passa a chamar o adaptador, conservando a transição existente. (`app/chamados/services/acoes_chamado.py:313`, `app/chamados/services/acoes_chamado.py:316`) |
+| `fio.py` | A resposta rápida do DP passa pelo mesmo adaptador após registrar a mensagem. (`app/chamados/services/fio.py:718`, `app/chamados/services/fio.py:722`) |
+
+S128 continua lendo C6, tranca e testemunha da resposta; a porta `carimbar` reaplica C6 antes de persistir. HX-RESPOSTA-VISIVEL continua lendo `irmas_respondidas_sem_consumo` e chamando `reabrir`; HX-DISPUTA-ORFA continua lendo C6 e usando `carimbar`. Não achei veto novo de exportada/limbo nesses passos. (`app/chamados/services/disputa_emissao.py:1964`, `app/chamados/services/disputa_emissao.py:1968`, `app/chamados/services/disputa_emissao.py:1977`, `app/chamados/services/disputa_emissao.py:2007`, `app/chamados/services/disputa_emissao.py:2046`, `app/chamados/models.py:3139`)
+
+C7 continua pelo próprio `pode_fechar`, com consulta fresca da tranca. Ele julga a **disputa**, enquanto a transição julga o **chamado**: a disputa mista pode permanecer aberta e o chamado fechar. O teste exige precisamente essa distinção. (`app/chamados/services/disputa_emissao.py:2079`, `app/chamados/services/disputa_emissao.py:2089`, `app/chamados/models.py:1848`, `app/chamados/tests/test_e4b_c6_orm.py:114`)
+
+A trava do chamado permanece: a competência entregue continua fora de `_vivas_entre`. A nova Pauta usa exclusivamente `pautas.services.escrever`, destinatário `dp`, remetente `ti` e âncora de competência; o motivo limbo vem da recusa original. (`app/chamados/models.py:364`, `app/chamados/services/fecho_runtime.py:42`, `app/chamados/services/fecho_runtime.py:46`)
+
+Não achei backfill, lista persistente nova ou escrita em `PENDENTES_RONALD` no módulo acrescentado. O contexto só é instalado no adaptador das duas bordas; repetir transição de chamado já encerrado não instala coleta. A correspondência integral da cópia ao commit/base permanece **[nao verificado]**, pois não achei metadados Git nesta cópia. (`app/chamados/services/fecho_runtime.py:11`, `app/chamados/services/fecho_runtime.py:63`, `app/chamados/services/fecho_runtime.py:68`)
+
+2. **Quem escreve, quem lê e significado dos campos**
+
+| Campo/valor | Escritor ou produtor | Leitor e significado |
+|---|---|---|
+| `_RECUSAS`, token | Declaração com `default=None`; instalação no início do ato e restauração em `finally`. (`app/chamados/services/fecho_runtime.py:11`, `:68`, `:72`) | `registrar_recusa` lê o contexto; fora dele não coleta. (`app/chamados/services/fecho_runtime.py:16`) |
+| `ato['chamado']` | Recebe `chamado.pk`. (`app/chamados/services/fecho_runtime.py:67`) | É comparado ao PK do chamado que disparou o resolver; não é PK de disputa. (`app/chamados/services/fecho_runtime.py:17`) |
+| `ato['perguntas']` | `registrar_recusa` escreve `{pergunta.pk: (objeto, motivo)}`; nova coleta do mesmo PK sobrescreve a anterior. (`app/chamados/services/fecho_runtime.py:18`) | `_escrever_pautas` percorre os valores após a transição. (`app/chamados/services/fecho_runtime.py:28`, `:73`) |
+| `res`/`motivo` | S143 produz `recusa:credor_toca_exportada` ou `recusa:credor_carrega_limbo:<PKs>[:credor_toca_exportada]`. (`app/chamados/services/disputa_emissao.py:1835`, `:1840`, `:1860`) | O resolver reconhece os prefixos; o escritor remove apenas `recusa:` para compor o texto. (`app/chamados/services/disputa_emissao.py:1946`, `app/chamados/services/fecho_runtime.py:42`) |
+| `p.pk`, `p.disputa` | Nascimento da pergunta por `_nascer`, com disputa e inserção. (`app/chamados/models.py:3014`, `:3017`) | Identificam pergunta e relação usada para chegar ao colaborador/empresa. (`app/chamados/services/fecho_runtime.py:29`, `:32`) |
+| `p.data_evento` | Atribuição central em `gravar_dia_do_fato`; `abrir` recebe dia do turno, `abrir_conversa` fornece dia civil. (`app/chamados/services/fio.py:791`, `:801`, `app/chamados/models.py:2776`, `:2801`) | O novo escritor lê cru, sem `conversa`; aqui está a colisão de significados. (`app/chamados/services/fecho_runtime.py:30`) |
+| Empresa e corte | Empresa vem da relação do colaborador; corte é cadastro de `Empresa`, escrito na manutenção cadastral. (`app/colaboradores/models.py:321`, `:46`, `app/colaboradores/views.py:523`) | `janela_atual` lê o corte por `corte_da_empresa`; o runtime usa a empresa da disputa. (`app/ponto/janelas.py:36`, `:60`, `app/chamados/services/fecho_runtime.py:29`) |
+| Competência, `fim.year/month` | `janela_atual(data_evento, empresa)` fornece a janela; o runtime usa seu fim. (`app/chamados/services/fecho_runtime.py:30`) | Forma `<empresa>:<AAAA-MM>`; para perguntas de fato, é competência por corte, não mês civil. (`app/chamados/services/fecho_runtime.py:31`, `app/ponto/janelas.py:24`) |
+| `MARCADOR`, `ancora_tipo`, `ancora_id` | Constante local e composição da âncora; persistência pela porta. (`app/chamados/services/fecho_runtime.py:10`, `:31`, `app/pautas/services.py:184`) | Deduplicação por marcador+âncora em Pautas vivas; leitores gerais usam âncora para localizar Pautas. (`app/chamados/services/fecho_runtime.py:35`, `app/pautas/services.py:334`) |
+| Texto, destinatário, remetente, autor | Runtime monta texto e passa `dp`, `ti`, `autor_sistema('ti')`; `escrever` valida e persiste. (`app/chamados/services/fecho_runtime.py:43`, `:46`, `app/pautas/services.py:157`, `:180`) | Aba DP filtra destinatário; payload entrega texto e âncora. Autor é informação de trilha. (`app/pautas/services.py:308`, `app/pautas/views.py:39`, `app/pautas/models.py:105`) |
+| `feito_em`, `cancelado_em` | Portas de estado de Pauta; `marcar_feita` escreve o primeiro. (`app/pautas/services.py:233`, `:247`) | `.vivas()` significa não feita e não cancelada; portanto uma Pauta feita não impede outra entrega posterior. (`app/pautas/models.py:57`, `:64`, `app/chamados/services/fecho_runtime.py:36`) |
+| `status_local`, `novo_status`, usuário | As bordas fornecem destino/usuário; `transicionar` delega ao escritor `_gravar_estado`, que salva status e campos associados. (`app/chamados/services/acoes_chamado.py:316`, `app/chamados/models.py:199`, `:228`, `:296`) | Adaptador lê `VIVOS→ENCERRADOS`; motor define os conjuntos; signal lê o status salvo. (`app/chamados/services/fecho_runtime.py:63`, `app/chamados/catalogo/motor.py:24`, `:30`, `app/chamados/signals.py:96`) |
+
+**Não achei troca de PK de chamado por PK de disputa** nessa composição: a âncora do fio devolve chamado, o coletor guarda chamado, e a âncora da Pauta guarda empresa+competência. (`app/chamados/services/fio.py:117`, `app/chamados/services/fecho_runtime.py:67`, `app/pautas/models.py:34`)
+
+**Achei dia civil tratado como dia de fato.** O discriminador já existe: `_dia_de_turno_da_pergunta` devolve `None` para conversa; o novo escritor não o considera. Os leitores crus anteriores estão declarados em censo, mas isso não elimina o novo uso incorreto. (`app/chamados/juizes.py:332`, `app/chamados/services/fecho_runtime.py:30`, `app/chamados/services/fio.py:1389`)
+
+A deduplicação também não agrega novas recusas ao texto existente: encontrou marcador+âncora viva, executa `continue`. Portanto entrega posterior de outro chamado da mesma competência não acrescenta seus identificadores à Pauta existente. Isso segue a deduplicação escolhida, mas limita a rastreabilidade por chamado. (`app/chamados/services/fecho_runtime.py:35`, `app/chamados/services/fecho_runtime.py:37`)
+
+3. **Fechamentos fora das duas bordas**
+
+Fora do contexto, a recusa continua deixando nota no credor, mas sua coleta para Pauta é no-op. A diferença c6 nesses caminhos é liberar S128/HX/C7 após a recusa; não acrescentar entrega DP. (`app/chamados/services/disputa_emissao.py:1855`, `app/chamados/services/disputa_emissao.py:1950`, `app/chamados/services/fecho_runtime.py:17`)
+
+| Caminho | Efeito depois da cura |
+|---|---|
+| S143 por save de status | Continua condicionado a status encerrado e escrita da coluna; executa resolver em savepoint. Sem contexto, nenhuma Pauta E4B. (`app/chamados/signals.py:96`, `:104`, `:114`, `app/chamados/services/fecho_runtime.py:17`) |
+| `becos.fechar_beco` | Trabalha com chamados já terminais, chama resolver e depois C7; pode realizar limpezas antes interrompidas. Não instala coletor. (`app/chamados/services/becos.py:43`, `:54`, `:55`) |
+| Reconciliador `_retratar` | Após retenção e reconciliação permitirem, chama resolver e segue para nota; ignora seu retorno. (`app/chamados/reconciliador.py:518`, `:523`, `:536`, `:538`) |
+| Reconciliador/costura | Após reaponte aceito para candidato resolvido, chama resolver e retorna `True`. (`app/chamados/reconciliador.py:1642`, `:1648`, `:1649`) |
+| `reconciliar_fantasmas` | No apply, pode chamar resolver diretamente; contagens e evento podem agora refletir limpezas antes suprimidas. (`app/ponto/management/commands/reconciliar_fantasmas.py:269`, `:281`, `:282`, `:288`) |
+| Outros atos humanos | Exceção, agenda, escala, geofence e benefício continuam usando transição direta; `fechar()` também. (`app/chamados/services/acoes_chamado.py:70`, `:108`, `:149`, `:222`, `:277`, `app/colaboradores/views.py:2068`, `app/chamados/models.py:454`) |
+| Signals e cascatas | Disputa fechada reconcilia chamado; desligamento/vínculo usam portas existentes, sem coletor E4B. (`app/chamados/signals.py:42`, `app/colaboradores/services/desligamento.py:155`, `app/colaboradores/services/vinculo.py:387`, `app/chamados/models.py:1619`) |
+| Commands/cron | Meio período usa `fechar`; becos usa sua porta. O cron de becos está configurado como alarme. (`app/ponto/management/commands/fechar_chamados_meio_periodo.py:109`, `app/chamados/management/commands/fechar_becos_disputa.py:57`, `app/config/crons.py:663`) |
+| API | Não achei fechamento direto de chamado no endpoint consultado: seu POST anexa nota. Há fechamento indireto por disputa/regularização. (`app/api/views.py:988`, `app/api/foto_recebida.py:80`, `app/chamados/services/regularizacao_ext.py:205`) |
+| Django admin | Registro de `ChamadoColaborador` no Django admin: **não achei**. [nao verificado: ausência por pesquisa textual] |
+
+**Sim, permanece possível fechar com viva exportada sem entrega E4B:** usar `ch.fechar(admin)` no cenário c6 passa pela transição e pelo S143, mas não instala coletor; a exportada fica fora da F1. Isso é lacuna de alcance anterior, preservada pela delimitação às duas bordas, não nova supressão de uma entrega existente. Reprodução ORM dessa variante: **[nao verificado]**. (`app/chamados/models.py:454`, `app/chamados/models.py:364`, `app/chamados/signals.py:115`, `app/chamados/services/fecho_runtime.py:17`)
+
+O teste de passivo não cobre todos esses fechamentos futuros: planta o chamado já fechado por SQL e só depois chama save/resolver/beco. (`app/chamados/tests/test_e4b_c6_orm.py:160`, `app/chamados/tests/test_e4b_c6_orm.py:163`)
+
+4. **Atomicidade e ordem**
+
+- **Se `escrever` levantar exceção:** ela sai do adaptador e desfaz a transição no banco, porque ambas estão no `atomic` externo. Não fica chamado fechado por esse ato com a Pauta falhada. (`app/chamados/services/fecho_runtime.py:66`, `app/chamados/services/fecho_runtime.py:70`, `app/chamados/services/fecho_runtime.py:73`)
+- **Se a transição levantar exceção:** o `finally` restaura o contexto e a escrita de Pauta não é alcançada. (`app/chamados/services/fecho_runtime.py:69`, `app/chamados/services/fecho_runtime.py:72`)
+- **Limite dessa garantia:** erro interno do S143 é engolido pelo signal. Antes da coleta, pode deixar o chamado fechado sem entrega; depois da coleta, pode desfazer as limpezas e ainda permitir Pauta, pois o dicionário em memória não participa do rollback. Esses cenários de falha não foram demonstrados no ORM fornecido. (`app/chamados/signals.py:114`, `app/chamados/signals.py:116`, `app/chamados/services/fecho_runtime.py:18`, `app/chamados/services/fecho_runtime.py:73`)
+- **Concorrência:** não há garantia de uma Pauta por marcador+âncora. A consulta e a criação são separadas; o modelo tem índice de âncora, mas não unicidade dessa entrega. Atualizar o contador depois da criação não revalida a existência. (`app/chamados/services/fecho_runtime.py:35`, `app/pautas/services.py:180`, `app/pautas/models.py:116`, `app/pautas/models.py:123`, `app/pautas/services.py:188`)
+
+5. **Classes de reprovação e força das provas**
+
+Não achei segundo juiz nem segundo escritor de Pauta fora da porta. A competência por corte usa `janela_atual`; o defeito temporal é o **insumo civil da conversa**, não uma fórmula nova de mês. (`app/chamados/services/disputa_emissao.py:1964`, `app/chamados/services/disputa_emissao.py:2089`, `app/chamados/services/fecho_runtime.py:25`, `app/chamados/services/fecho_runtime.py:46`)
+
+Não achei leitura nova de relógio no módulo c6. Entretanto continua existindo relógio dentro do C6, fora da borda: S143 passa `hoje=None` e `_dentro_da_janela_viva` pode usar `date.today()`. É comportamento preexistente, não corrigido nesta volta. (`app/chamados/services/disputa_emissao.py:1945`, `app/chamados/juizes.py:577`)
+
+Não achei inversão nova da ordem Colaborador→Disputa→Chamado→Pergunta. A trava existente ocorre antes do save; porém ela não serializa colaboradores distintos pela âncora empresa+competência da Pauta. (`app/chamados/models.py:289`, `app/chamados/models.py:2666`, `app/chamados/models.py:2675`, `app/chamados/models.py:2688`)
+
+Os dois mutantes c6 têm mordida direta: retorno antecipado impede o carimbo da morta; `sem_pauta` elimina a entrega. O protocolo rejeita erro, precondição quebrada, sobrevivência e assertion de outro alvo. (`app/chamados/tests/e4b_c6_verificar.py:24`, `app/chamados/tests/e4b_c6_verificar.py:27`, `app/chamados/tests/e4b_c6_verificar.py:114`, `app/chamados/tests/test_e4b_c6_protocolo.py:39`)
+
+O dado anexado demonstra GREEN 383, as quatro mortes c6 declaradas e oito mortes c4; não demonstra suíte inteira. No recorte c6, os dois ensaios da **base** não aparecem explicitamente certificados. Suíte inteira e execução independente nesta cópia: **[nao verificado]**. (`anexo c6_orm.log:2`; roteiro exigido em `app/chamados/tests/e4b_c6_verificar.py:109`)
+
+Não achei teste c6 de concorrência, falha real de escrita da Pauta ou conversa. Os testes existentes exercitam reentrega serial e erro dentro da transição em memória. Logo seus verdes não fecham os bloqueantes encontrados. (`app/chamados/tests/test_e4b_c6_orm.py:136`, `app/chamados/tests/test_e4b_c6_memoria.py:82`, `app/chamados/tests/test_e4b_c6_memoria.py:93`)
+
+6. **Contraexemplos concretos**
+
+- **Duplicação concorrente — bloqueante.** Empresa 2, competência `2026-09`, dois chamados de colaboradores distintos, ambos com recusa exportada e nenhuma Pauta existente. A e B observam `exists=False`; A cria/commita; B continua sem reler e cria outra. Resultado permitido: **duas Pautas vivas com o mesmo marcador e âncora**. As travas por colaborador não impedem essa intercalação. Reprodução concorrente ORM: **[nao verificado]**. (`app/chamados/services/fecho_runtime.py:35`, `app/chamados/services/fecho_runtime.py:46`, `app/chamados/models.py:2666`, `app/pautas/models.py:123`)
+
+- **Competência da conversa — bloqueante.** Empresa com corte 24; conversa `ancora_ausente` criada em 23/09, destino A e pai B distinto, sem resposta/carimbo/célula; depois competência 09 entregue. Essa combinação nasce pela porta existente. Ao fechar A, S127 não encontra disputa com pai A e F1 exclui a pergunta pela data civil entregue; C6 conserva a conversa viva. O runtime escreve Pauta `empresa:2026-09`, atribuindo competência de fato à conversa que não possui dia de turno. Ocorrência no dado de produção: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1339`, `app/chamados/services/disputa_emissao.py:1371`, `app/chamados/juizes.py:2322`, `app/chamados/models.py:364`, `app/chamados/juizes.py:336`, `app/chamados/juizes.py:1405`, `app/chamados/services/fecho_runtime.py:30`)
+
+- **Motivo truncado — defeito adicional.** Vinte perguntas recusadas e motivo limbo contendo quarenta PKs de seis dígitos excedem o campo: limitar vinte IDs não limita a lista dentro do motivo. A porta grava apenas os primeiros 500 caracteres, podendo perder PKs e o sufixo `credor_toca_exportada`. O código permite essa perda; ocorrência em produção: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1840`, `app/chamados/services/fecho_runtime.py:39`, `app/chamados/services/fecho_runtime.py:42`, `app/pautas/services.py:185`)
+
+**Veredito final: REPROVADO**, pelos bloqueantes de idempotência concorrente e interpretação do dia civil da conversa; a suíte inteira também permanece pendente de comprovação. (`app/chamados/services/fecho_runtime.py:30`, `app/chamados/services/fecho_runtime.py:35`; suíte inteira **[nao verificado]**)
 
 ## 11/11 13:49 · sessao 23a023a5f323 · - · - · origem=Ronald (tmux)
 
@@ -1561,29 +1657,4 @@ Ordem de dependência proposta, sem implementar:
 
 Lista candidata de arquivos da cura, sujeita à escolha do escritor: `logs/MAPA-20/montar_mapa.py`, `logs/MAPA-20/mapa.md`, `bin/mapa20_valida.py`, `bin/relato.sh`, `bin/tests/test_mapa20_valida.sh`, `bin/hasner-relato.service`. Os dois primeiros não estão disponíveis: [nao verificado]. Uma lista fechada incondicional antes de decidir o escritor seria [nao verificado].
 
-## 11/11 13:29 · sessao a8335eaf93cf · - · - · origem=Ronald (tmux)
-
-Transições verificadas na cópia:
-
-| Juiz/operação | Resultado público previsto pelo código | rc | Prova existente |
-|---|---|---|---|
-| Foto e validador: `bin/relato.sh:97` | Aceito: foto entra no par de raspagem, depois no `git add`, commit e push (`bin/relato.sh:98`, `bin/relato.sh:143`, `bin/relato.sh:153`, `bin/relato.sh:163`, `bin/relato.sh:164`). | 0 se resto concluir; falha posterior também retorna 1 (`bin/relato.sh:164`, `bin/relato.sh:165`). | `verde_novo`, `verde_so_mapa`: `bin/tests/test_mapa20_valida.sh:196`, `bin/tests/test_mapa20_valida.sh:197`. |
-| Mapa recusado/ausente: `bin/relato.sh:100` | Novo mapa excluído; antigo, se existir, é raspado e renomeado; resto segue (`bin/relato.sh:102`, `bin/relato.sh:105`, `bin/relato.sh:106`). | 1 mesmo com publicação do restante ou nenhuma mudança (`bin/relato.sh:158`, `bin/relato.sh:165`). | `vermelho_resto`, `vermelho_nada`, `ausente`: `bin/tests/test_mapa20_valida.sh:198`, `bin/tests/test_mapa20_valida.sh:199`, `bin/tests/test_mapa20_valida.sh:200`. |
-| Raspagem/rename do retido falha: `bin/relato.sh:105` | Apaga cópia local antiga e adiciona remoção ao commit, caso consiga removê-la (`bin/relato.sh:109`, `bin/relato.sh:152`, `bin/relato.sh:153`). | 1; resto segue se remoção concluir (`bin/relato.sh:110`, `bin/relato.sh:165`). | `raspa_falha`: `bin/tests/test_mapa20_valida.sh:201`. |
-| Remoção também falha: `bin/relato.sh:110` | Interrompe antes do commit/push; remoto conserva estado anterior (`bin/relato.sh:110`, `bin/relato.sh:163`, `bin/relato.sh:164`). | 1 (`bin/relato.sh:110`). | `rm_falha`: `bin/tests/test_mapa20_valida.sh:204`. |
-| Escritor altera vivo depois do selo: `bin/tests/test_mapa20_valida.sh:154` | Publicação usa foto já capturada (`bin/relato.sh:97`, `bin/relato.sh:98`). | 0 no caso sintético (`bin/tests/test_mapa20_valida.sh:203`). | `regravado`: `bin/tests/test_mapa20_valida.sh:149`, `bin/tests/test_mapa20_valida.sh:203`. |
-| Commit falha: `bin/relato.sh:163` | Não alcança push (`bin/relato.sh:163`, `bin/relato.sh:164`). | 1 (`bin/relato.sh:163`). | `commit_falha`: `bin/tests/test_mapa20_valida.sh:202`. |
-| Push falha: `bin/relato.sh:164` | Atualização no remoto não demonstrada [nao verificado]. | 1 (`bin/relato.sh:164`). | **SEM PROVA específica**: lista dos nove casos em `bin/tests/test_mapa20_valida.sh:196` até `bin/tests/test_mapa20_valida.sh:204`. |
-
-**Buraco entre julgamento e publicação:** o raspador transforma texto em `bin/raspar_publico.py:31`, confere somente nomes/CPF em `bin/raspar_publico.py:36`, grava em `bin/raspar_publico.py:40`; a chamada acontece depois do julgamento (`bin/relato.sh:97`, `bin/relato.sh:129`). Não há julgamento de conformidade MAPA-20 desses bytes depois da transformação antes do commit (`bin/relato.sh:143`, `bin/relato.sh:163`). O teste usa raspador falso que prefixa `RASPADO:` e compara esse texto, sem validar novamente o resultado (`bin/tests/test_mapa20_valida.sh:158`, `bin/tests/test_mapa20_valida.sh:166`, `bin/tests/test_mapa20_valida.sh:189`). A consequência concreta da raspagem real no mapa vivo depende dos nomes e do mapa, ausentes [nao verificado].
-
-**Leitores do rc:**
-
-- `hasner-relato.service` entrega a execução ao systemd por `ExecStart`, com `Type=oneshot` (`bin/hasner-relato.service:13`, `bin/hasner-relato.service:15`). O arquivo não configura ação específica para MAPA retido, `OnFailure`, `Restart` ou discriminação de rc; termina em comentários depois da afinidade (`bin/hasner-relato.service:19`, `bin/hasner-relato.service:21`). Estado efetivo da unit instalada/monitoramento externo [nao verificado].
-- `hasner-relato.timer` fornece agendamento periódico; não lê nem discrimina o rc (`bin/hasner-relato.timer:5`, `bin/hasner-relato.timer:6`, `bin/hasner-relato.timer:8`).
-- O teste executa **recortes**, captura `$?`, lê e compara o resultado (`bin/tests/test_mapa20_valida.sh:138`, `bin/tests/test_mapa20_valida.sh:182`, `bin/tests/test_mapa20_valida.sh:183`, `bin/tests/test_mapa20_valida.sh:187`, `bin/tests/test_mapa20_valida.sh:191`).
-- Outros chamadores produtivos, aliases, units instaladas ou pessoas lendo o rc [nao verificado]. Os demais arquivos encontrados mencionam o publicador ou verificam sua costura; exemplo: teste apenas procura a chamada ao checador em `bin/tests/test_relato_afirma_com_prova.sh:44`; ele não lê o rc do publicador.
-
-**Ambiguidade:** rc 1 representa tanto publicação parcial bem-sucedida com MAPA retido (`bin/relato.sh:100`, `bin/relato.sh:165`) quanto interrupções antes de publicar (`bin/relato.sh:28`, `bin/relato.sh:32`, `bin/relato.sh:110`, `bin/relato.sh:163`) ou falha de push (`bin/relato.sh:164`). O rc sozinho não distingue esses resultados (`bin/relato.sh:158`, `bin/relato.sh:165`).
-
-_3895 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3896 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

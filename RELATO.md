@@ -1,7 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lanca_preverif_c6.sh | pid=1993528
+ESPERANDO: codex_pergunta.sh | pid=2610345
 DESENHO FIO-E0-V4-E4B: lei=juiz unico pergunta=a recusa de reabrir o credor (exportada/limbo) interrompe S128/HX/C7 ou cada passo decide pelo proprio juiz? app/chamados/services/disputa_emissao.py:1946
+E4B c6 13:5x: preverif Codex REPROVOU 75bea7d9c, 2 bloqueantes conferidos no arquivo:linha -- fecho_runtime.py:30 le data_evento cru (conversa = dia civil; juiz chamados/juizes.py::_dia_de_turno_da_pergunta ignorado) e :35/:46 check-then-act sem trava (2 Pautas vivas mesma ancora); +texto >500 corta motivo e coleta fora do rollback do savepoint S143. Construtor c7 aberto (logs/E4B-ALCANCE/construtor_c7.q), 4 itens por classe.
 DECIDIDO PELA LEI ACELERA item 1 (intersecao > 0 = nao abre): O168 espera o pouso da E4B -- censo logs/O168/censo_v1.r (perguntas de lei 0) reserva cartorio.py, chamados/juizes.py e config/crons.py, os tres no diff da E4B contra fb9269ea9 | contestavel
 MAPA-20 13:3x: Fable cego REPROVOU ffa417a10 com 7 (placar FABLE-GABARITO 1 de 5): 4 iguais ao opus, "N inventado" rebaixado a fila (conta perdido), 3 extras procedentes conferidos -- B6 por mutacao (:140 e :142 `if False` = selo VERDE), B2 enfase intrapalavra (:58), B3 token de caminho (:52). Matriz Codex chegou (logs/MAPA-20/matriz_v1.r): 2o escritor do mapa e o eixo. Reconstrucao pela matriz depois do PROPORCAO
 UI-PAINEL 13:3x: suite v3 FAILED 1 (test_CATRACA_linhas_reais_congeladas): api_bater_ponto 728->716 e 723->710 pelo api_me encurtado, medido pelo censo real; registrado em 2ca185e0e, suite v4 na fila da trava (logs/UI-PAINEL/suite_v4.log)
