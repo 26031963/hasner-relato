@@ -1,7 +1,136 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 02:05** · publicado em **11/11/2026 02:08** (UTC-3)
+> Ultima resposta processada: **11/11/2026 02:13** · publicado em **11/11/2026 02:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 02:13 · sessao abd8f65a40e6 · FIO-E0-V4-E4B · sonda · origem=Code
+
+1. **FOTO_SOMBRA:** `2026-11-11 02:03:21.722000-03:00`, com `hoje=2026-11-11`: é posterior ao pouso informado da E4a-2, em 10/11 às 14:5x local. [nao verificado] [nao verificado]
+
+**Porém, a sonda apresentou erro; não concluo os números da remedida**, conforme sua regra. A saída fornecida registra `SemLavra: ENSAIO SEM A LAVRA DE PROD`, com marcador `esmeril_lavra_de_prod` **AUSENTE** e lavra carregada `78b94bfb197d278e3f538ab46c3a747a`. [nao verificado]
+
+O código confirma que essa guarda levanta `SemLavra` quando o marcador não corresponde à lavra carregada. `ListaDoAdmin` captura a exceção e continua sem resposta da lista; portanto, `rc_sombra=0` não basta para validar a medição. [esmeril_espelho.py:266](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/ponto/services/esmeril_espelho.py:266), [vigia_fio.py:219](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:219)
+
+2–5. **Contadores, decomposições, conferência da soma, comparação com o DRY e conclusão sobre “hoje pra frente”: não concluídos devido ao erro.** A condição de remedida válida pós E4a-2 permanece [nao verificado].
+
+As chaves que contam “hoje pra frente” são `CENSO_ALCANCE['alcance_de_hoje_pra_frente']` e `CENSO_VIVO['fio_morto_de_hoje_pra_frente']`. [vigia_fio.py:648](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:648), [vigia_fio.py:420](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:420)
+
+## 11/11 02:11 · sessao bcaec9e8255c · FIO-E0-V4-E4B · leitura · origem=Code
+
+**lei:** identidade histórica não basta para provar porta alcançável; a lei exige pergunta viva ou ação nomeada do admin quando a pendência permanece. As ações exigíveis devem vir de C19, por instância e após decisões/efeitos. (`app/docs/CORTES.md:253`; `app/docs/CORTES.md:263`; `app/docs/CORTES.md:426`; `app/docs/JUIZES.md:78–85`)
+
+**O retorno atual não permite construir essa certidão.** `perguntar_pela_celula` devolve motivos; `perguntar` devolve quantidade de carimbos desfeitos; o gerador mistura perguntas inseridas e reusadas. O backfill descarta esses retornos e decide `segue_sem_porta` pelo recenso. (`app/chamados/services/fabrica_da_celula.py:175`; `app/chamados/services/fabrica_da_celula.py:220`; `app/chamados/services/disputa_emissao.py:470–471`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:137–143`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:343–348`)
+
+Os 82 dias e sua distribuição são o dado fornecido. **A associação de qualquer desses dias aos ramos abaixo é [nao verificado].** Os testes foram inspecionados; execução e resultado atual da suíte são **[nao verificado]**. [nao verificado]
+
+Para tornar a matriz legível, as referências abreviadas abaixo significam estes arquivos:
+
+| Sigla | Arquivo |
+|---|---|
+| F | `app/chamados/services/fabrica_da_celula.py` |
+| E | `app/chamados/services/disputa_emissao.py` |
+| PD | `app/chamados/models.py` |
+| R | `app/chamados/reconciliador.py` |
+| M | `app/chamados/services/materializacao.py` |
+| RV | `app/chamados/services/relavra_via.py` |
+| T | `app/chamados/services/tarefa_do_dia.py` |
+| B | `app/chamados/management/commands/backfill_fio_morto_e4b.py` |
+| DT | `app/chamados/services/declaracao_texto.py` |
+| C | `app/docs/CORTES.md` |
+| J | `app/docs/JUIZES.md` |
+| L | `app/docs/LEIS.md` |
+
+Na coluna PROVA, nomes de testes são relativos a `app/chamados/tests/`. **“Sem teste” significa sem teste específico localizado nesta leitura; a inexistência absoluta é [nao verificado].** [nao verificado]
+
+As portas legais usadas nas células são:
+
+| Código | Porta devida |
+|---|---|
+| **P** | Pergunta viva e alcançável ao colaborador, quando C19 exige responder/perguntar. A identidade histórica sozinha não basta. (`C:253`; `C:426`; `J:78–85`) |
+| **A** | Ação nomeada do admin, incluindo validação, decisão ou correção de cadastro. (`C:253`; `J:78–82`; `L:122`) |
+| **N** | Nenhuma pergunta/decisão exigível para aquele marco naquele instante: dispensa, marco ainda não vencido ou efeito/decisão encerrando a obrigação. (`J:64–84`; `L:100`; `T:180–210`; `T:241–260`; `T:140–154`) |
+| **U** | Porta devida indeterminada: deve permanecer `nao_sei`, sem transformar ausência de informação em dispensa. (`J:83–84`; `C:426`) |
+
+**Matriz da seleção e das saídas da fábrica.** Cada retorno abaixo é o retorno da função indicada; a coluna de distinção informa também o que chega a `perguntar_pela_celula`. (`F:35–220`)
+
+| Ramo — condição | Entrada que o alcança | Retorno exato | Estado gravado / nascimento | PORTA DEVIDA | Retorno distingue? | PROVA |
+|---|---|---|---|---|---|---|
+| V1 — `F:47–48` | Sem marcos vencidos **nem pendentes**; dia passado | `vencidos_no_instante → None` | Leitura; nada nasce | **A: CADASTRO/DP**, sem pergunta ao colab. (`C:428`; `J:91`) | Distingue falta de turno de conjunto vazio; a saída externa será `[]` | `test_e4_c20.py:20` |
+| V2 — `F:47–48` | Sem marcos; hoje ou futuro | `set()` | Nada nasce | **N**, nenhum marco exigível. (`L:100`; `F:41–43`) | Não distingue ausência de turno de nenhum vencimento | `test_e4_c20.py:20` cobre o passado; hoje/futuro: sem teste específico | [nao verificado]
+| V3 — `F:49` | Há vencidos ou pendentes | `set(venc)` | Nada nasce | **P/A/N**, segundo marco, decisão e efeito. (`J:78–84`) | Expõe os vencidos; não expõe causa dos excluídos | `test_fabrica_por_evento.py:45`; `test_pergunta_do_dia_em_curso.py:504` |
+| F01 — `F:183–184` | `cel.veredito == 'nunca_bateu'` | `[]` | Não cria pergunta nem pauta de falta de turno | **A: lista C5**, zero pergunta. (`C:433`) | **Não** | `test_e4a2_nunca_bateu.py:185–192`; `:289` |
+| F02 — `F:201–205`, escritor `F:367–373` | Passado, ativo, não dispensado; V1; nenhuma pauta reconhecida | `pauta_cadastro_sem_turno → True`; externa `[]` | Cria uma cabeça de pauta DP por colaborador | **A: DP/CADASTRO**. (`C:428`; `J:91`) | Booleano distingue criação; fábrica o descarta | `test_e4_c20.py:64`; `test_e4a_pauta_cadastro_contador.py:51` |
+| F03 — `F:327–328`, `F:367–368` | Mesmo caso; pauta de cadastro viva | Juiz `True`; escritor `False`; externa `[]` | Não repete pauta | **A já entregue ao DP**; leitura efetiva pelo DP não é provada. (`C:428`; `F:321–323`) | Externa **não** distingue de F02 | `test_e4a_pauta_cadastro_contador.py:51` |
+| F04 — `F:331–335`, `F:367–368` | Pauta feita/cancelada em data local ≥ dia consultado | Juiz `True`; escritor `False`; externa `[]` | Não reabre pauta do dia velho | Encaminhamento anterior satisfaz a regra de entrega. (`C:428`) | **Não** na externa | `test_e4a_pauta_cadastro_contador.py:80`; `:90` |
+| F05 — `F:334–336`, `F:369–373` | Só há pauta encerrada antes do novo dia sem turno | Juiz `False`; escritor `True`; externa `[]` | Cria pauta nova para a persistência posterior do problema | **A: DP/CADASTRO**. (`C:428`) | **Não** na externa | `test_e4a_pauta_cadastro_contador.py:58`; `:67`; `:88` |
+| F06 — `F:105–106` | Chamada de `motivos_a_perguntar` sobre `nunca_bateu` | `[]` | Leitura; nada nasce | **A: C5**, sem pergunta. (`C:433`) | **Não** | `test_e4a2_nunca_bateu.py:185–192` |
+| F07 — `F:112–113` | Juiz `dia_sem_trabalho(cel)` verdadeiro | `[]` | Não emite | **N** para cobrança do marco; parcial com resto tem exceção própria. (`J:64–72`) | **Não** | `test_f1c4_3_emissores.py:83`; `:89` |
+| F08 — `F:112–113` | Situação atual do colab diferente de `ativo` | `[]` | Não emite | Não estabelece dispensa de toda decisão histórica; C19 pesa vínculo/fato e pode exigir ação admin. (`T:168–182`; `J:78–84`) Lei específica que dispense tudo só pela situação atual: **[nao verificado]** | **Não** | Sem teste específico desta guarda da fábrica | [nao verificado]
+| F09 — `F:114–115` | Dia futuro | `[]` | Não emite | **N** por teto temporal. (`L:100`; `F:8–11`) | **Não** | `test_pergunta_do_dia_em_curso.py:95` |
+| F10 — `F:120–121` | Veredito preenchido fora de `VEREDITOS_ACUSAM` | `[]` | Não emite | **N** para nova pergunta; guarda inclusive admin deve ficar. (`C:438`) | **Não** | `test_fabrica_por_evento.py:52`; `test_pergunta_do_dia_em_curso.py:479` |
+| F11 — `F:123–125`; cartório `:398–399` | Parcial com `periodo_parcial='sem_periodo'` | `[]` | Não cria pergunta/pai/push | **A: CADASTRO**, lista do admin. (`C:319`) | **Não** | `test_cobparc5_parcial_sem_periodo_so_lista.py:157` | [nao verificado]
+| F12 — `F:123–125`; cartório `:400` | Parcial, julgamento anterior e nenhum fato novo | `[]` | Não cria pergunta/pai/push | **A: lista admin** pela mudança de regra sem fato novo. (`C:323`) | **Não** | `test_cobparc5_parcial_sem_periodo_so_lista.py:160`; `:222` | [nao verificado]
+| F13 — `F:58–61` | `motivos_pela_ata` recebe `None` | `[]` | Não consulta ata nem emite | Falta de turno passado vai ao DP; não autoriza pergunta por data. (`C:428`; `F:55–60`) | **Não** na externa | `test_e4_c20.py:20` |
+| F14 — `F:58–61` | Recebe conjunto vazio: nenhum marco venceu | `[]` | Não consulta ata nem emite | **N agora**, teto por instante. (`L:100`) | Não distingue de F13 | `test_fabrica_por_evento.py:45` |
+| F15 — `E:897–901` → `F:65–66` | Exceção lendo marcos/ata | `_ata_do_dia → (True,None)`; motivos `[]` | Nenhuma pergunta; registra falha engolida | **U**, não prova dispensa. (`J:83–84`) | **Não**; vira o mesmo `[]` | Sem teste | [nao verificado]
+| F16 — `E:902–910` → `F:65–66` | Leitor diz `sem_celula`; sem escala vigente | `(True,None)`; motivos `[]` | Nenhuma pergunta | **U**; se o teto já mostrou falta de turno passado, F02–F05 interceptam antes. (`J:83–84`; `F:201–205`) | **Não** | Sem teste específico da fábrica | [nao verificado]
+| F17 — `E:902–912` → `F:65–66` | `sem_celula`, escala vigente | `(False,None)`; motivos `[]` | Não cria pergunta; acende aviso de ata | **U**, aguarda ata/lâmpadas. (`J:83–84`; `E:887–890`) | **Não** | `test_fabrica_pela_ata.py:62` usa stub; não prova o corpo de `_ata_do_dia` |
+| F18 — `DT:104–105` | Leitor declara isento | `(fora_vinculo,[])`; `_ata_do_dia → (True,[])`; motivos `[]` | Nada nasce | **N**. (`T:183–189`; `J:78–84`) | **Não** | Sem teste específico desse percurso | [nao verificado]
+| F19 — `DT:112–115` | Dia fora do vínculo, sem contribuição elegível da véspera | Faltantes `[]`; motivos `[]` | Nada nasce | **N** pelo vínculo/fato lido. (`T:168–182`; `J:78–84`) | **Não** | Sem teste específico desse percurso | [nao verificado]
+| F20 — `DT:119–120` | Dia conhecido sem trabalho e sem parcial cobrando resto | Faltantes `[]`; motivos `[]` | Nada nasce | **N**. (`J:64–72`) | **Não** | `test_f1c4_3_emissores.py:89` caracteriza dispensa |
+| F21 — `DT:121–127` | Ata agregada ou sem pares válidos E/S com hora | Estado `sem_celula`; cai em F16/F17 | Nenhuma pergunta | **U**, ata sem lâmpadas não equivale a dia quitado. (`J:83–84`) | **Não** | `test_fabrica_pela_ata.py:62` é prova do bloqueio externo |
+| F22 — `DT:131–132` | Nenhuma célula do leitor tem `missing` verdadeiro | Faltantes `[]`; motivos `[]` | Nada nasce | **N** se lâmpadas provam cumprimento; **U** se indeterminadas. (`J:78–84`; `DT:91–94`) | Não separa cumprido de desconhecido | `test_fabrica_pela_ata.py:49` cobre sem faltantes |
+| F23 — `F:69–70` | Faltante existe, mas seu tipo/hora não está nos vencidos | Não acrescenta motivo; pode resultar `[]` | Nada nasce para esse marco | **N agora** se ainda não venceu; **U** se incompatibilidade de insumos. (`L:100`; `J:83–84`) | **Não** | `test_fabrica_por_evento.py:45` cobre não vencido |
+| F24 — `F:71` | Faltante da véspera, `f[0] != dia` | Não acrescenta motivo; pode resultar `[]` | Não emite por esta célula | Porta do **dia do turno correspondente**, não determinada por esta saída. (`T:212–215`; `J:78–84`) | **Não** | `test_fabrica_pela_ata.py:53` |
+| F25 — `F:71–73` | Posição/tipo sem mapeamento | Não acrescenta motivo; pode resultar `[]` | Nada nasce para o marco | **U** se há marco devido sem identidade; C19 não deve inventá-la. (`T:269–275`; `J:83–84`) | **Não** | Sem teste específico | [nao verificado]
+| F26 — `F:72–73` | Dois faltantes mapeiam para o mesmo motivo | Acrescenta o motivo uma vez | Ainda só leitura | Exigibilidade é por **instância**, inclusive segunda pausa. (`C:426`; `T:269–275`) | Lista perde multiplicidade de instâncias | `test_fabrica_pela_ata.py:53` cobre mapa; segunda instância: sem teste específico da emissão | [nao verificado]
+| F27 — `F:145–157` | Todos os motivos têm linha no domínio do fato | `motivos_a_perguntar → []`; externa `[]` | Não chama `perguntar`; não exige C6 viva, fila ou disputa aberta para dedup | **P/A/N segundo decisão/efeito**, nunca decidido só pela existência histórica. (`C:253`; `C:426`; `PD:2753–2755`) | **Não** | `test_fabrica_por_evento.py:34` cobre repetição normal; dedup morto sem porta: sem teste | [nao verificado]
+| F28 — `F:155–156`, `F:208–209` | Linha deduplicada tem carimbo elegível | Externa continua `[]` se nenhum motivo novo | Pode desfazer carimbo; detalhado abaixo | **P/A** se a obrigação voltou; preservar fechamento quando exigido. (`C:253`; `F:195–198`) | **Não**, quantidade é descartada | `test_o261_julgamento_desfaz_carimbo.py:92` |
+| F29 — `F:214–216`, `F:277–285` | Limbo `trabalha=None`, motivos presentes, competência entregue, motivos ainda não pautados | Escritor retorna lista `novos`; externa `[]` | Cria pauta DP ancorada no dia; zero pergunta ao colab | **A: DP**, encaminhamento específico do limbo entregue. (`F:210–213`; `L:122`) Corte correspondente em LEIS/CORTES/JUIZES: **[nao verificado]** | **Não** na externa | `test_f1c4_3_emissores.py:199` |
+| F30 — `F:262–265`, `F:278–285` | Mesmo caso; todos os motivos em pauta viva/feita/cancelada | Escritor `[]`; externa `[]` | Não repete pauta | Encaminhamento DP anterior; não reabre fechamento humano. (`F:259–261`; `L:122`) | Não distingue de F29 | `test_f1c4_3_emissores.py:218`; `:227`; `:243` |
+| F31 — `F:217–220` | Há motivos, limbo não encaminhado ao DP | `ms`, lista de motivos solicitados | Chama escritor; pode criar, reusar, recusar costura ou não gerar pergunta nos ramos internos | **P/A** conforme C19; a lista não prova cumprimento. (`C:426`; `J:78–84`) | Distingue somente motivos pedidos | `test_fabrica_por_evento.py:34`; `test_f1c4_3_emissores.py:207`; `:212` |
+| F32 — `F:228–229` | `limbo_vai_a_pauta`: sem motivos | `False` | Leitura | Não determina porta. (`J:78–84`) | Não distingue dos demais `False` | `test_f1c4_3_emissores.py:218` cobre segunda passada |
+| F33 — `F:228–229` | `trabalha is not None` | `False` | Leitura | Trabalho entregue segue podendo perguntar. (`C:438`; `F:210–213`) | **Não** | `test_f1c4_3_emissores.py:212` |
+| F34 — `F:230–231` | Limbo com motivos; entrega falsa ou indeterminada | `bool(entrega)`, portanto `False` nos dois | Segue para emissão | Falsa e desconhecida não são a mesma autorização no backfill. (`B:286–287`; `B:318–322`) | **Não** | Aberta: `test_f1c4_3_emissores.py:207`; entrega indeterminada: sem teste | [nao verificado]
+| F35 — `F:242–245` | Vigia; limbo entregue | `motivos_sem_pauta_do_limbo(cel,devidos)` | Só lê; não cria pauta | **A: DP** para motivos ausentes. (`F:235–241`; `L:122`) | Lista não distingue dispensa de pauta já existente | `test_f1c4_3_emissores.py:218` |
+| F36 — `F:242–245` | Vigia; fora do limbo entregue | `devidos` | Só lê | Exigibilidade pelos mesmos guardas da fábrica. (`F:238–241`; `C:426`) | Mesmas perdas de `motivos_a_perguntar` | `test_fabrica_por_evento.py:76` |
+| F37 — `F:299–302` | Eventos sem célula atual para as datas | `0` | Nada emite | **U** quanto ao dia sem célula. (`J:83–84`) | Não distingue de células que devolveram listas vazias | Sem teste específico | [nao verificado]
+| F38 — `F:299–302` | Células atuais encontradas | `sum(len(perguntar_pela_celula(...)))` | Efeitos dos ramos anteriores; soma **motivos**, não inserções | Não certifica P/A/N. (`F:179`; `F:220`) | **Não** | `test_e4_c20.py:42` |
+
+Os auxiliares de cadastro também têm saídas próprias, consumidas pelo juiz/contador; não são prova de que uma pergunta nasceu. (`F:308–351`)
+
+| Ramo — condição | Entrada | Retorno exato | Estado gravado | PORTA DEVIDA | Distingue? | PROVA |
+|---|---|---|---|---|---|---|
+| F39 — `F:312` | `_pautas_cadastro(vivas=True)` | QuerySet de cabeças DP com marcador, usando `Pauta.objects.vivas()` | Nenhum | Seleção para **A/DP**. (`C:428`) | Distingue pelo argumento, não por resultado certificado | `test_juiz_pauta_cadastro_sem_turno.py:241` |
+| F40 — `F:312` | `vivas=False` | QuerySet do histórico de cabeças com marcador | Nenhum | Permite reconhecer entrega anterior. (`C:428`) | Sim, consulta histórico | `test_e4a_pauta_cadastro_contador.py:80` |
+| F41 — `F:329–330` | Sem pauta viva, consulta com `dia=None` | `False` | Nenhum | Não prova ausência de encaminhamento histórico para um dia. (`F:321–325`) | Distingue do `True`; não informa motivo | `test_e4a_pauta_cadastro_contador.py:58` |
+| F42 — `F:346–351` | Contador com ou sem filtro de empresas | `{'nome':'cadastro_sem_turno','numero':<colabs distintos com pauta viva>,'esperado':0,'dono':'CADASTRO'}` | Nenhum nesta função | Lâmpada de **A/CADASTRO**, não juiz de pendência. (`F:340–344`; `L:122`) | Número agregado, sem ramo/dia | `test_e4a_pauta_cadastro_contador.py:74` |
+
+**Matriz do descarimbo chamado pela fábrica.** O retorno de `perguntar` é exclusivamente a soma dos resultados desse descarimbo; emissão não incrementa esse inteiro. (`F:167–175`)
+
+| Ramo — condição | Entrada | Retorno exato | Estado gravado | PORTA DEVIDA | Distingue? | PROVA |
+|---|---|---|---|---|---|---|
+| RV1 — `RV:238–241` | Pergunta não encontrada/elegível após releitura travada | Não incrementa `n`; função retorna `n` | Nada nessa pergunta | Decisão/identidade preservada; exigibilidade por C19. (`J:78–84`; `RV:177–178`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:117`; `:152` |
+| RV2 — `RV:238–241` | Julgamento passou `reabrir_fechada=False`; disputa fechou | Não incrementa `n` | Não reabre disputa nem limpa carimbo | A viva em disputa fechada mantém tratamento do admin, sem reabrir por esta porta. (`F:195–198`; `C:253`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:139`; `:165` | [nao verificado]
+| RV3 — `RV:242–243` | C6 diz morta: carimbo tem lastro | Não incrementa `n` | Preserva carimbo | **N** quanto a ressuscitar essa pergunta. (`RV:65–68`; `J:78–84`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:106` |
+| RV4 — `RV:246–247` | `descarimbar()` recusa | Não incrementa `n` | Preserva carimbo | Não ressuscita identidade fora do fato. (`RV:163–168`; `PD:2753–2755`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:117` caracteriza identidade |
+| RV5 — `RV:244–262` | Elegível, C6 viva, porta aceita | Incrementa `n`; retorno `int n` | Limpa materialização/via; preserva resposta/validação; grava evento | **P/A** segundo resposta/decisão vigente. (`C:253`; `J:78–84`; `RV:206–207`) | Conta mudanças, não identifica perguntas/portas | `test_o261_julgamento_desfaz_carimbo.py:92` |
+| RV6 — `RV:260–261` | Mesmo sucesso, disputa fechada e chamada permite reabri-la | Mesmo incremento | Também chama `reabrir_sistema` | **P/A**; continente acompanha a pergunta ressuscitada. (`RV:69–71`; `C:253`) | Não separa de RV5 | Sem teste específico desta entrada pela fábrica | [nao verificado]
+
+**Matriz da emissão interna.** A fábrica chama o gerador dentro de `criar_ou_atualizar_disputa` e depois novamente em `perguntar`. Uma lista `[p]` pode conter pergunta reusada. (`F:172–174`; `E:669–688`; `E:444–471`)
+
+| Ramo — condição | Entrada | Retorno exato | Estado gravado / nascimento | PORTA DEVIDA | Distingue? | PROVA |
+|---|---|---|---|---|---|---|
+| E01 — `E:535–566` | Disputa aberta; motivo novo | Núcleo `(d,False,sorted(novos))`; público `d` | Agrega motivos/contexto; tenta gerar perguntas | **P/A** conforme dia/decisão. (`C:426`; `J:78–84`) | Público não distingue nascimento/agregação | `test_regressao_etapa7.py:254` caracteriza núcleo com outro motivo |
+| E02 — `E:535–566` | Disputa aberta; motivo já presente | Núcleo `(d,False,[])`; público `d` | Atualiza contexto, inclusive contador/data; tenta emissão outra vez | **P/A/N** por fato do dia, não por motivo já agregado. (`E:674–681`; `C:426`) | **Não** no público | `test_regressao_etapa7.py:236` |
+| E03 — `E:568–603` | Sem disputa aberta; pai novo | `(d,True,list(motivos))`; público `d` | Nasce chamado-pai e disputa; tenta perguntas | **P/A** quando devida. (`C:253`; `C:426`) | **Não** no público | `test_regressao_etapa7.py:221` |
+| E04 — `E:584–592` | Sem disputa aberta; chamado-pai vivo reusável | Mesma tripla de E03 | Reusa pai, anexa ocorrência, cria disputa | **P/A** quando devida. (`C:253`; `C:426`) | Não distingue pai novo de reusado | Sem teste | [nao verificado]
+| E05 — `E:595–603` | Falha de auditoria após nascimento da disputa | Mesma tripla; exceção engolida | Disputa/pai permanecem | Porta humana continua exigível conforme dia. (`C:253`; `J:78–84`) | **Não** | Sem teste | [nao verificado]
+| E06 — `E:398–401` | Intervalo com pergunta mesma disputa/motivo/dia, fora vias excluídas | Gerador singleton `[]` | Não insere nem reata | **P/A/N** conforme a pergunta existente; dedup não prova vida. (`C:253`; `C:426`) | **Não** | `test_emissao_costura_intervalo.py:65` |
+| E07 — `E:417–420` | Entrada/saída com pergunta na mesma disputa e `_data_ev` derivada | Gerador singleton `[]` | Não insere nem reata | **P/A/N** conforme decisão/efeito. (`J:78–84`) | **Não** | `test_regressao_etapa7.py:236` cobre idempotência; ramo específico: sem teste | [nao verificado]
+| E08 — `E:238–244` | Derivador termina com zero candidatos | `(None,None)` | Não esc
+
+[truncado em 20000 de 66776 caracteres]
 
 ## 11/11 02:05 · sessao 168b267eaf81 · - · - · origem=Ronald (tmux)
 
@@ -794,44 +923,4 @@ Para os cenários já existentes — só ch sem intervalo externo, só intervalo
 
 **Bloqueio de desenho preservado:** seleção corrigida em chamadores específicos continua permitindo recostura divergente pela mesma porta; o contraexemplo `[ch]` com intervalo externo basta para negar cura universal. (`app/chamados/services/disputa_emissao.py:1044`, `:1296`; `app/chamados/models.py:2982`, `:3006`.)
 
-## 11/11 01:49 · sessao 6cedf4aad9ed · - · - · origem=Ronald (tmux)
-
-**Catraca: curada e preserva os mesmos sítios.** Os novos números apontam às extrações `de = _tz.localtime(t.entrada.timestamp).date()`, `ds = _tz.localtime(t.saida.timestamp).date()` e `data_entrada = _tz.localtime(batida_origem.timestamp).date()`; são deslocamentos das expressões existentes, não troca pelo helper `_marcos_de_intervalo`. (`app/chamados/services/disputa_emissao.py:928`, `:929`, `:1445`; `app/core/tests/test_medida_turno_do_par.py:268`, `:269`; anexo `diff_c21.patch` [nao verificado quanto ao histórico Git, ausente na cópia].)
-
-O detector B1 reconhece `.date()` sem argumentos sobre operando marcado; `fromisoformat`/`dia_do_turno_da_celula` não substituem esses três sítios no censo. A assertion compara todas as linhas efetivas, mantendo identidade/critério na catraca separada. (`app/core/medida_turno_do_par.py:217`, `:225`; `app/core/tests/test_medida_turno_do_par.py:534`, `:540`.)
-
-Executei somente em memória, com `PYTHONDONTWRITEBYTECODE=1 python3 -B`: [nao verificado]
-
-| Execução | Resultado observado | Sítio |
-|---|---|---|
-| Catraca carregada trocando apenas `SimpleTestCase` por `unittest.TestCase` | **35 testes OK** | `app/core/tests/test_medida_turno_do_par.py:540` |
-| Mutante do registro recolocando `[885,886]` e `[1393]` | **1 failure, zero errors** | `app/core/tests/test_medida_turno_do_par.py:541` |
-| Controle c21 | **6 testes OK** | `app/chamados/tests/test_bo_disputa_volta5m_memoria.py:197` |
-| Sete mutantes c21 | **3, 4, 1, 2, 1, 4, 1 failures; zero errors** | `app/chamados/tests/test_bo_disputa_volta5m_memoria.py:28`, `:214`, `:218` |
-| Quatro mutantes c20 | **5, 5, 1, 1 failures; zero errors** | `app/chamados/tests/test_bo_disputa_volta5l_memoria.py:157`, `:162` |
-| Antigos `nasce_sem_pergunta` / `replay_insere` | **1 failure cada, zero errors** | `app/chamados/tests/test_bo_disputa_volta5_memoria.py:112`, `:224`, `:415` |
-| Regressão dos 16 scripts memória presentes | **16 processos rc=0** | Entrada ilustrativa `app/chamados/tests/test_bo_disputa_volta5m_memoria.py:207`; contagem agregada sem arquivo persistido [nao verificado] |
-
-**Os mutantes mordem por assertion.** C21 compila e monta antes do runner, exige exatamente um sítio mutado e rejeita resultado com errors ou sem failures; não transforma falha de montagem em RED. (`app/chamados/tests/test_bo_disputa_volta5m_memoria.py:68`, `:214`, `:215`, `:218`.)
-
-**Segunda falha da suite16: parcial, não certificada como curada.** O protegido exige a P local destinada ao `intervalo.pk`, e isso continua intocado; os ensaios em memória passam pelo destino, incluindo retorno simulado do signal/cartório, ambas as ordens, dona fechada e replay. A execução real do protegido ORM nesta árvore continua **[nao verificado]**. (`app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:157`; `app/chamados/tests/test_bo_disputa_volta5m_memoria.py:82`, `:98`; `app/chamados/tests/test_bo_disputa_volta5l_memoria.py:81`, `:87`, `:109`.)
-
-**Limite decisivo:** os próprios testes declaram ORM, signals/cartório, ata e fechamento como doubles; os resultados acima não tornam verde a suíte inteira nem certificam concorrência. (`app/chamados/tests/test_bo_disputa_volta5m_memoria.py:6`, `:7`.)
-
-## 11/11 01:49 · sessao 035cb0e9da4c · - · - · origem=Ronald (tmux)
-
-Não encontrei bloqueio de lei que obrigue mudar o predicado. A alimentação completa exige alcançar mais dependências que a ausência da testemunha. (`chamados/juizes.py:1393`, `chamados/juizes.py:1406`)
-
-Plano viável:
-
-- Acrescentar `carga=None` ao C6 e propagar aos auxiliares. Sem carga, conservar exatamente as chamadas atuais. Com carga, trocar somente as fontes dos insumos. (`chamados/juizes.py:839`, `chamados/juizes.py:1324`)
-- Alimentar `classificar_falta` com célula, todas as ausências relevantes, vínculo e turnos das duas janelas que ela consulta: D..D e D−1..D+1. A última pertence a `_turno_noturno_completo`. (`escala/servico_jornada.py:293`, `escala/servico_jornada.py:334`, `escala/servico_jornada.py:344`, `escala/servico_jornada.py:241`, `escala/servico_jornada.py:383`)
-- Para os turnos, pré-carregar batidas/células/vínculos e chamar `_turnos_do_colab_puro` na janela exata de cada chamada. Recortar turnos já pareados de uma janela larga não preserva necessariamente o resultado. (`ponto/turnos.py:1918`, `ponto/turnos.py:1938`, `ponto/turnos.py:1970`)
-- O conjunto completo dos vínculos pode alimentar `vinculo_do_dia`: o próprio juiz verifica vigência e escolhe a geradora; não é preciso copiar o filtro do carregador. Preservar a ordem em possíveis empates. (`escala/alimentacao.py:267`, `escala/alimentacao.py:279`, `escala/alimentacao.py:282`)
-- Alimentar também a materialização: slot, plantadas, batida na janela, trilha de retratação e turnos de completude. O slot tipo `hora` chega à derivação única do plantio, que precisa receber grade/vínculo/marcos carregados. (`chamados/juizes.py:738`, `chamados/juizes.py:740`, `chamados/juizes.py:802`, `chamados/juizes.py:282`, `chamados/juizes.py:363`, `chamados/services/materializacao.py:371`, `chamados/services/materializacao.py:386`, `chamados/services/materializacao.py:421`)
-
-Apenas alimentar ausências resolve a leitura instrumentada da testemunha, mas deixa os demais caminhos capazes de consultar por pergunta. Não sustentaria o contrato geral de custo constante. (`escala/servico_jornada.py:334`, `escala/servico_jornada.py:344`, `chamados/juizes.py:740`)
-
-Nenhum arquivo escrito nesta exploração. [nao verificado por diff próprio]
-
-_3609 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
