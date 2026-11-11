@@ -1,7 +1,145 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 02:52** · publicado em **11/11/2026 02:56** (UTC-3)
+> Ultima resposta processada: **11/11/2026 03:07** · publicado em **11/11/2026 03:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 03:07 · sessao 3e4f7f5604cf · - · - · origem=Ronald (tmux)
+
+1. `relato_negacao` extrai a regra inteira por `[A-Z0-9-]+`; portanto grava `NEGOU B3-SEM-OBRA`, distinto de `NEGOU B3` e `NEGOU B3-NAO-SEI` (`bin/disjuntor.py:262`, `bin/disjuntor.py:279`, `bin/disjuntor.py:1094`, `bin/disjuntor.py:1647`).
+
+2. **Há colisão lexical com a gramática de ID**, porque ambos os nomes satisfazem `_OBRA_ID` e `_OBRA_HIF`, sem reserva desses nomes; eles continuam distintos entre si (`bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:619`). `obras_da_linha` aceita ambos como tokens de obra (`bin/disjuntor.py:637`, `bin/disjuntor.py:640`).
+
+3. **Ambos são inertes no consumidor decisório existente:** `linhas_libera_b3` consulta o conjunto, mas só acrescenta uma liberação se a linha começar por `DESENHO ` ou `ERRO-BOBO `; nenhuma negativa `DISJUNTOR ...` nem linha `**... disjuntor (NEGOU ...)` satisfaz isso (`bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:747`, `bin/disjuntor.py:748`, `bin/disjuntor.py:751`). A referência decisória a `obras_da_linha` encontrada é essa chamada; os demais usos localizados são documentação e testes (`bin/disjuntor.py:735`, `bin/tests/test_disjuntor.sh:746`, `bin/tests/test_disjuntor.sh:1668`, `bin/tests/test_disjuntor.sh:1669`).
+
+4. Reproduzi somente em memória, compilando as constantes e funções do AST da cópia: as negativas dão respectivamente `{'B3-SEM-OBRA'}` e `{'B3-NAO-SEI', 'OBRA-X'}`; `linhas_libera_b3` devolve `[]` para ambas, inclusive quando a obra consultada é literalmente um desses dois nomes. O resultado decorre dos reconhecedores e das exigências de prefixo acima (`bin/disjuntor.py:157`, `bin/disjuntor.py:174`, `bin/disjuntor.py:619`, `bin/disjuntor.py:631`, `bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`).
+
+5. O delta mantém a porta única de escrita: a negativa chama `relato_negacao`, que monta a linha e chama `ev.no_relato`; não introduz segundo escritor ou derivação paralela nesse trajeto (`bin/disjuntor.py:1907`, `bin/disjuntor.py:279`, `bin/disjuntor.py:292`, `bin/disjuntor.py:294`). A ambiguidade entre negativa sem obra e disparo `DISJUNTOR B3 <obra>` é removida na constante, enquanto a mensagem efetiva de parada conserva o formato anterior (`bin/disjuntor.py:1647`, `bin/disjuntor.py:1149`).
+
+## 11/11 03:07 · sessao b01916492971 · - · - · origem=Ronald (tmux)
+
+Nenhum FILA fornecido demonstra bloqueio novo do item (1) neste delta; a porta do agente `verificador` final exige `_obra_de(prompt)` e nega ausência em `bin/disjuntor.py:1842-1845`.
+
+- **FILA 2:** há tradução explícita entre lista persistida e número publicado: `_b3_sem_obra` lê `b3_sem_obra_obs` e deduplica `aid` (`bin/disjuntor.py:2198-2202`); `ler()` publica esse resultado em `b3_sem_obra` (`bin/disjuntor.py:2045`); histórico é contado separadamente (`bin/disjuntor.py:2205-2208`). Não demonstra campo com dois significados na mesma camada.
+- **FILA 3:** os limites permanecem: `_FINAL_RE` admite leitura/final na mesma linha sem identificar intenção (`bin/disjuntor.py:177-179`); a porta restringe-se a `subagent_type == 'verificador'` (`bin/disjuntor.py:1842`); o coletor restringe-se a `agentType == 'verificador'` (`bin/disjuntor.py:840`). Portanto uma garantia irrestrita sobre qualquer agente/modelo seria falsa; são limitações existentes fora do delta fornecido [nao verificado quanto ao histórico Git].
+- **Chave:** a dispensa é expressa na arquitetura (`bin/disjuntor.py:35`); `main_pretool()` deixa de chamar `pretool()` quando desligado (`bin/disjuntor.py:1896-1900`). Não constitui nova fuga criada pelo delta.
+- **FILA 4:** o contador é cumulativo: só acrescenta IDs novos (`bin/disjuntor.py:2178-2183`), e o leitor não aplica janela (`bin/disjuntor.py:2201-2202`). Isso é compatível com “esperado 0 a partir daqui” do aval fornecido [nao verificado em arquivo]; uma ocorrência posterior deixa corretamente registrado que a meta foi violada.
+- **FILA 5:** o selo histórico não chama `linha()` (`bin/tests/test_disjuntor.sh:1484-1498`), e o mutante remove validação de elementos (`bin/tests/test_disjuntor.sh:1542-1544`), permitindo morte incidental por `e['aid']` (`bin/disjuntor.py:2202`). É fraqueza do selo existente; a apresentação atual seleciona contador e histórico separadamente (`bin/disjuntor.py:2271-2275`).
+- **FILA 6:** o rótulo mencionado só consta do anexo fornecido [nao verificado]; não demonstra falha funcional da guarda, localizada em `bin/disjuntor.py:1842-1845`.
+
+O zero efetivo de produção e a identificação individual das seis obras históricas não estão demonstrados pelos dados fornecidos [nao verificado]. Não executei a suite, que cria e remove arquivos (`bin/tests/test_disjuntor.sh:39-41`, `bin/tests/test_disjuntor.sh:50-55`).
+
+## 11/11 03:07 · sessao 63b7724082f8 · - · - · origem=Ronald (tmux)
+
+1. A regra muda corretamente para `B3-SEM-OBRA`: o extrator aceita hífens e publica a regra integral no RELATO (`bin/disjuntor.py:262`, `bin/disjuntor.py:279`). A negativa continua passando por `trilha('NEGOU', neg)` e `relato_negacao`, sem chamar disparo (`bin/disjuntor.py:1904`, `bin/disjuntor.py:1907`).
+
+2. `ler()` distingue o evento pelo terceiro token da trilha; `NEGOU` incrementa negativas e somente `DISJUNTOR` incrementa disparos (`bin/disjuntor.py:1984`, `bin/disjuntor.py:1995`, `bin/disjuntor.py:2003`). Portanto a negativa nova não entra como disparo `B3`; o disparo verdadeiro permanece anunciado pela transição do estado com detalhe `B3 <obra>` (`bin/disjuntor.py:1012`, `bin/disjuntor.py:1043`).
+
+3. Há colisão **lexical** com IDs legítimos: `B3-SEM-OBRA` e `B3-NAO-SEI` satisfazem `_OBRA_ID`/`_OBRA_HIF`, pois não há reserva desses nomes (`bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:619`). `obras_da_linha` consequentemente aceita os tokens das duas regras (`bin/disjuntor.py:637`). Entretanto, seu consumidor encontrado exige além da obra o prefixo `DESENHO ` ou `ERRO-BOBO `; nenhuma negativa satisfaz isso (`bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`). **Ambas são inertes nesse consumidor**, mesmo que a obra real tenha exatamente um desses IDs (`bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`).
+
+4. O Stop usa diretamente o mapa retornado por `julga_b3`: só produz `mensagem_b3(obra)` para as obras desse mapa; a mensagem de incerteza é separada (`bin/hook_stop_fila1.py:1204`, `bin/hook_stop_fila1.py:1206`, `bin/hook_stop_fila1.py:1208`). `gerar_estado.py` delega a leitura e a composição a `disjuntor.ler`/`linha`, sem extrator paralelo (`bin/gerar_estado.py:280`).
+
+5. O delta não introduz outro escritor: `relato_negacao` segue chamando `_no_relato().no_relato` (`bin/disjuntor.py:292`, `bin/disjuntor.py:294`). A guarda continua devolvendo a negativa antes de consultar o estado B3 quando `_obra_de` não reconhece o ID (`bin/disjuntor.py:1842`, `bin/disjuntor.py:1845`, `bin/disjuntor.py:1847`).
+
+Falsa negativa adicional decorrente da troca de prefixo nos leitores examinados: não encontrada pelos caminhos citados; consumidores externos à cópia e efeitos em produção: [nao verificado].
+
+## 11/11 03:03 · sessao a8910a847d4e · FIO-E0-V4-E3 · construtor · origem=Code
+
+Diff c8c escrito para revisão. ORM, suite inteira e certificação pelo opus: **[nao verificado]**. Em `juizes.py`, a alteração apenas transporta `agora` nas três chamadas alimentadas do CF; a comparação AST preservou o restante do predicado. (chamados/juizes.py:692,783,1416)
+
+Por item:
+
+| Item | Cura | RED e mutante |
+|---|---|---|
+| 1 | Alimenta todas as perguntas dos dias elegíveis, incluindo posições desaparecidas. Sem default para `viva_c6`. (chamados/services/tarefa_do_dia.py:492) | ORM: `test_RED_posicao_sumiu_avulso_e_lote_reais`. Sem banco: `test_RED_posicao_ausente_e_alimentada`. Mutante `universo_incompleto`, **rc=1**. (chamados/tests/test_e3_c8c_orm.py:35; chamados/tests/test_e3_c8c_sem_banco.py:40) |
+| 2 | Foto privada recorta resposta, validação e materialização posteriores ao horizonte; o construtor entrega essa foto aos leitores. (chamados/services/tarefa_do_dia.py:338,402) | ORM: `test_RED_T1_inteiro_antes_depois_validacao_real_T2`. Mutantes `validacao_futura`, `materializacao_futura`, `resposta_futura`: **rc=1 cada**. (chamados/tests/test_e3_c8c_orm.py:46; chamados/tests/test_e3_c8c_sem_banco.py:121) |
+| 3 | CF exige `agora` quando recebe carga. Avulso conserva a leitura do relógio no teto. (escala/servico_jornada.py:292,387) | ORM: `test_RED_CF_agora_12_independe_do_relogio_ambiente`. Sem banco também verifica o comportamento avulso às 12h/20h. Mutante `relogio_ambiente`, **rc=1**. (chamados/tests/test_e3_c8c_orm.py:76; chamados/tests/test_e3_c8c_sem_banco.py:66) |
+| 4 | A carga chama o mesmo `escala_vigente`, alimentado pelo índice de vínculos próprios **e geradoras carregadas**. (chamados/services/carga_pergunta_viva.py:89,162; escala/servico_jornada.py:55) | ORM: `test_RED_geradora_de_outro_colaborador_carga_e_avulso`. Mutante `geradora_so_proprio`, **rc=1**. (chamados/tests/test_e3_c8c_orm.py:63; chamados/tests/test_e3_c8c_sem_banco.py:15) |
+| 5 | B5-j segue helpers `self/cls` da mesma classe; comentário corrigido. Teto permanece 8. (ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:132,191; ponto/turnos.py:3015) | `test_MORDE_carregador_extraido_da_classe`. Mutantes `selo_nao_segue_helper` e `batidas_cruas_no_helper`: **rc=1 cada**. (ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:195; chamados/tests/e3_c8c_mutantes.py:39) |
+| 6 | K6 levanta `ValueError` para linha de outra tripla. (folha/export.py:584) | `test_RED_K6_recusa_outra_tripla`, cobrindo empresa/mês/ano e `registro`. Mutante `tripla_alheia`, **rc=1**, seis assertions. (chamados/tests/test_e3_c8c_sem_banco.py:91) |
+| 8a | Exposição administrativa no ramo dispensado fica restrita ao dia sem trabalho; lâmpada acesa de trabalho responde primeiro. Teste E2 preservado. (chamados/services/tarefa_do_dia.py:263; chamados/tests/test_e2_tarefa_do_dia.py:873) | `test_RED_lampada_acesa_antes_da_pergunta`. Mutante `acesa_expoe_admin`, **rc=1**. (chamados/tests/test_e3_c8c_sem_banco.py:32) |
+| 8b | `local.date()` saiu do slot; usa `dia_do_turno_da_celula`. Calendário da alimentação reutiliza `_hoje`. Cat raca e registros preservados. (chamados/services/carga_pergunta_viva.py:135; chamados/services/tarefa_do_dia.py:504) | Cat raca existente: **35 testes, rc=0**. Mutante `dia_derivado_do_slot`, **rc=1**. (core/tests/test_medida_turno_do_par.py:478; chamados/tests/test_e3_c8c_sem_banco.py:151) |
+| 8c | Removidos `datetime/timedelta` e `JUIZES` mortos. (chamados/tests/e3_c8b_apoio.py:8; chamados/tests/test_e3_c8b_sem_banco.py:14) | Ruff: **rc=1**, módulo ausente; lint **[nao verificado]**. |
+
+A impossibilidade da geradora estrangeira por todos os escritores de cadastro permanece **[nao verificado]**. A reversão copia `dna_anterior['vinculo_id']`; a paridade foi corrigida independentemente disso. (ponto/portas/celula.py:789)
+
+Execuções locais, todas sem banco:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v chamados.tests.test_e3_tarefa_admin_sem_banco chamados.tests.test_e3_c8b_sem_banco chamados.tests.test_e3_c8c_sem_banco
+# rc=0 — 41 testes [nao verificado]
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_c8b_mutantes
+# rc=0 — agregado dos 14 mutantes anteriores
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_c8c_mutantes
+# rc=0 — agregado dos 11 novos mutantes
+```
+
+Os REDs iniciais sem banco deram **rc=1 por assertion**, antes das curas; a catraca inicial deu **rc=1, seis falhas**. Os selos B5-j e turno passaram posteriormente com **7 e 35 testes**, usando adaptação em memória apenas de `SimpleTestCase` para `unittest.TestCase`. (chamados/tests/test_e3_c8c_sem_banco.py:15; ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:194; core/tests/test_medida_turno_do_par.py:478)
+
+Comando individual de cada mutante abaixo: todos foram executados e retornaram **rc=1, FAIL>0, ERROR=0**. Definições e executor: chamados/tests/e3_c8c_mutantes.py:16,79.
+
+```bash
+mutar() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_c8c_mutantes --mutante "$1"
+}
+mutar universo_incompleto
+mutar validacao_futura
+mutar materializacao_futura
+mutar resposta_futura
+mutar relogio_ambiente
+mutar geradora_so_proprio
+mutar selo_nao_segue_helper
+mutar batidas_cruas_no_helper
+mutar tripla_alheia
+mutar acesa_expoe_admin
+mutar dia_derivado_do_slot
+```
+
+Os quatro TestCase ORM estão em [test_e3_c8c_orm.py:9](/home/ronald/wt-codex-fio-e0-v4-e3-024128/app/chamados/tests/test_e3_c8c_orm.py:9), herdando o cadastro ORM existente, sem `__new__`. Para a sessão executar:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal
+```
+
+Mutantes ORM preparados, com **rc ainda [nao verificado]**; ativação somente em memória. (chamados/tests/e3_c8c_mutantes.py:54)
+
+```bash
+E3_C8C_MUTANTE_ORM=universo_incompleto PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_posicao_sumiu_avulso_e_lote_reais
+
+E3_C8C_MUTANTE_ORM=sem_foto_na_carga PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_T1_inteiro_antes_depois_validacao_real_T2
+
+E3_C8C_MUTANTE_ORM=relogio_ambiente PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_CF_agora_12_independe_do_relogio_ambiente
+
+E3_C8C_MUTANTE_ORM=geradora_so_proprio PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only chamados.tests.test_e3_c8c_orm.C8cCargaReal.test_RED_geradora_de_outro_colaborador_carga_e_avulso
+```
+
+Censo produtivo dos chamadores CF, incluindo aliases:
+
+- chamados/juizes.py:690,781,1414.
+- chamados/services/disputa_emissao.py:288,806; wrapper lido em :1200,1237 e reexportado por chamados/models.py:4093.
+- chamados/management/commands/retratar_chamados_lei_cala.py:45.
+- chamados/management/commands/auditar_invariantes_chamados.py:1683,1709,1804.
+- ponto/management/commands/reconciliar_grade.py:243.
+- ponto/marcos.py:171.
+- escala/servico_jornada.py:566.
+
+Chamadas dinâmicas sem identificador literal: **[nao verificado]**.
+
+Escritores e leitores dos valores transitórios tocados:
+
+| Valor | Quem escreve/alimenta | Quem lê |
+|---|---|---|
+| Foto da pergunta | `_pergunta_no_instante`. (chamados/services/tarefa_do_dia.py:338) | Construtor, passivo, lavra e tarefa. (mesmo arquivo:402,421,426,538) |
+| `viva_c6` | Retorno do C6 na carga. (chamados/services/tarefa_do_dia.py:506) | Exposição e residual. (mesmo arquivo:245,328) |
+| `CargaDaVida.agora` / kwarg CF `agora` | Carga recebe `tarefa.agora`; C6 encaminha nas três chamadas. (chamados/services/carga_pergunta_viva.py:88; chamados/juizes.py:692,783,1416) | Guarda obrigatória e teto CF. (escala/servico_jornada.py:292,387) |
+| `_escalas_c6` / `escalas_por_id` | Índice dos vínculos e candidatos carregados. (chamados/services/carga_pergunta_viva.py:89,162) | Carregador comum `escala_vigente`. (escala/servico_jornada.py:55,58,64) |
+
+Além do C6, os carimbos são lidos pelo passivo E1, pela validade da lavra, pela identidade da tarefa, pelo slot e pela concordância com a luz. (chamados/models.py:3924,3931,3936; chamados/veredito_lavrado.py:224,228; chamados/services/tarefa_do_dia.py:230; chamados/services/materializacao.py:279,358,411; chamados/juizes.py:1323)
+
+Os escritores persistentes continuam nas portas existentes de resposta, validação e materialização. (chamados/services/disputa_emissao.py:1467,1652; chamados/services/validacao.py:134; chamados/models.py:3097)
+
+AST dos 12 arquivos tocados e `git diff --check`: **rc=0**. Schema da tarefa preservado pelo selo existente. (chamados/tests/test_e3_c8b_sem_banco.py:81) Suite inteira, resultados ORM, impacto produtivo e aprovação final: **[nao verificado]**.
 
 ## 11/11 02:52 · sessao d7f2c3787aa4 · FIO-E0-V4-E3 · sonda · origem=Code
 
@@ -770,106 +908,4 @@ A classificação atual imprime `alcance_a=2`, `alcance_b=0`, `alcance_c=16`, `a
 
 As chaves que contam hoje+ são `alc['alcance_de_hoje_pra_frente']` e `viv['fio_morto_de_hoje_pra_frente']`, incrementadas nos respectivos ramos de data maior ou igual a hoje. [vigia_fio.py:648](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:648) [vigia_fio.py:420](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:420)
 
-## 11/11 02:27 · sessao b9969e85d8f2 · VERIFICADOR-EM-FABLE · verificador · origem=Code
-
-**BLOQUEIA a promessa de “contador 0 a partir daqui”: o contador continua acumulando histórico, sem marco da cura. A negativa está implementada para o pedido canônico `Agent/verificador` reconhecido como final.** (`bin/disjuntor.py:990`, `bin/disjuntor.py:2173`, `bin/disjuntor.py:1844`)
-
-1. **BLOQUEIA — contador histórico não mede “a partir daqui”.** O escritor acrescenta IDs à lista sem remover os anteriores; o leitor retorna seu comprimento, sem janela temporal ou marco da alteração. Portanto, histórico já persistido permanece positivo depois da cura. É preciso distinguir histórico e ocorrências posteriores à cura para sustentar essa promessa. (`bin/disjuntor.py:990`, `bin/disjuntor.py:993`, `bin/disjuntor.py:2173`, `bin/disjuntor.py:2239`) Os seis mencionados no anexo estarem efetivamente nessa lista: **[nao verificado]**.
-
-2. **FILA — quem escreve, quem lê e alcançabilidade do contador.** O escritor lógico é `decide_b3._fn`, alimentado por `_reprovacoes_finais`; a persistência passa por `_com_estado`. O leitor direto é `_b3_sem_obra`; `ler` e `linha` propagam o valor até `gerar_estado.py`. O teste B3 também lê esse campo. (`bin/disjuntor.py:976`, `bin/disjuntor.py:990`, `bin/disjuntor.py:1057`, `bin/disjuntor.py:372`, `bin/disjuntor.py:2173`, `bin/disjuntor.py:2047`, `bin/disjuntor.py:2242`, `bin/gerar_estado.py:281`, `bin/tests/test_disjuntor.sh:430`)
-
-   A chamada negada não alcança esse escritor, mas outro final **com obra** chega à varredura por `_nega_b3`; o Stop também a aciona. Assim, o zero não fica impossível de falsificar por construção. Há controle anterior que injeta um transcript final sem obra e exige contador 1, além do mutante `B-sem-contador`. (`bin/disjuntor.py:1847`, `bin/disjuntor.py:1849`, `bin/disjuntor.py:1780`, `bin/disjuntor.py:1087`, `bin/hook_stop_fila1.py:1204`, `bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:431`, `bin/tests/test_disjuntor.sh:1597`)
-
-   A cobertura, porém, é dos transcripts da sessão fornecida, com metadata `agentType == 'verificador'`; não constitui censo global de aberturas. Sem obra, conta mesmo sem veredito concluído. (`bin/disjuntor.py:433`, `bin/disjuntor.py:836`, `bin/disjuntor.py:840`, `bin/disjuntor.py:844`)
-
-3. **FILA — existem saídas da guarda; abertura real por todas elas não está demonstrada.** Com a chave desligada, `main_pretool` pula a decisão: é uma exceção explícita do instrumento. Outra grafia de `subagent_type` e ausência de `tool_input` também não entram na negativa nova. O lançador aceitar esses payloads e abrir o agente é **[nao verificado]**. (`bin/disjuntor.py:35`, `bin/disjuntor.py:1899`, `bin/disjuntor.py:1902`, `bin/disjuntor.py:1842`, `bin/disjuntor.py:1844`)
-
-   Prompt não textual não escapa automaticamente: há conversão por `str`; se o resultado for reconhecido como final sem obra, recebe a negativa. A aceitação desse formato pela ferramenta real é **[nao verificado]**. (`bin/disjuntor.py:1843`, `bin/disjuntor.py:597`, `bin/disjuntor.py:1847`)
-
-   `_pretool`/`pretool` não engolem suas exceções; `main_pretool` nega quando `_ramo_b3` reconhece o ramo. Já a guarda anterior aos imports protege apenas Agent detectado como abertura com cópia; um verificador sem `wt-` não recebe essa mesma proteção. Falha concreta de import e comportamento do lançador diante dela: **[nao verificado]**. (`bin/disjuntor.py:1807`, `bin/disjuntor.py:1924`, `bin/disjuntor.py:1931`, `bin/disjuntor.py:82`, `bin/disjuntor.py:97`)
-
-   Uma abertura que não atravesse esse hook não encontra essa negativa. A configuração copiada aponta para `/home/ronald/saas-hasner/bin/disjuntor.py`; configuração ativa e correspondência desse caminho com o hash entregue: **[nao verificado]**. (`.claude/settings.json:62`, `.claude/settings.json:68`, `bin/disjuntor.py:1847`)
-
-4. **FILA — não aparece falsa negativa nova dentro do contrato dos parsers.** Pedido não final pula a guarda; final com `_obra_de(prompt)` válido segue para a decisão B3 existente. Ambos têm controles positivos no caso novo. “Obra legível” aqui exige as âncoras de `_obra_de`: apenas colocar um ID válido nu, como `LEITURA FINAL OBRA-N`, não basta. (`bin/disjuntor.py:169`, `bin/disjuntor.py:170`, `bin/disjuntor.py:602`, `bin/disjuntor.py:1844`, `bin/disjuntor.py:1849`, `bin/tests/test_disjuntor.sh:1473`, `bin/tests/test_disjuntor.sh:1474`)
-
-5. **FILA — ordem preservada; há efeitos posteriores deliberadamente pulados.** B1 continua antes. O ramo `codex_decide` também permanece antes textualmente, mas é separado: para `Agent`, `cmd` é vazio, portanto essa mesma chamada não executaria a decisão Codex. (`bin/disjuntor.py:1818`, `bin/disjuntor.py:1823`, `bin/disjuntor.py:1828`, `bin/disjuntor.py:1836`)
-
-   A negativa nova pula B4 e suas atualizações/disparos. Não pula uma varredura B3 anteriormente executada nessa chamada: sem obra, o código anterior já evitava `_nega_b3`. Também não perde aprovação do CENSO, pois `verificador` pertence a `SO_LEITURA`. O registro externo `NEGOU`, resposta `deny` e tentativa de registro no RELATO continuam acontecendo. Isso altera qual motivo aparece e adia a manutenção do B4, sem liberar o pedido negado. (`bin/disjuntor.py:1847`, `bin/disjuntor.py:1849`, `bin/disjuntor.py:151`, `bin/disjuntor.py:1853`, `bin/disjuntor.py:1860`, `bin/disjuntor.py:1862`, `bin/disjuntor.py:1868`, `bin/disjuntor.py:1906`, `bin/disjuntor.py:1909`)
-
-6. **FILA — o mutante morde a guarda; `O9a` não cobre cauda inválida.** A mutação retira exatamente a nova negativa, fazendo o primeiro pedido alcançar a passagem pelo B4 e derrubar a expectativa do caso. Há controle da cópia sem mutação e controles positivos que exigem stdout vazio e nenhuma `FALHA` nova. (`bin/tests/test_disjuntor.sh:1518`, `bin/tests/test_disjuntor.sh:1471`, `bin/disjuntor.py:1849`, `bin/disjuntor.py:1860`, `bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1517`, `bin/tests/test_disjuntor.sh:98`)
-
-   `O9a` é capturado como **ID** inválido, com cauda ausente; falha no primeiro `fullmatch`. Para cobrir a segunda condição, falta no caso novo um par como `O9 noturno-foo` negado e `O9 NOTURNO-FOO` aceito. O par aparece no teste anterior de concordância entre leitores. (`bin/disjuntor.py:157`, `bin/disjuntor.py:164`, `bin/disjuntor.py:619`, `bin/tests/test_disjuntor.sh:1472`, `bin/tests/test_disjuntor.sh:743`, `bin/tests/test_disjuntor.sh:744`)
-
-7. **FILA — as demais classes citadas não reaparecem no trecho novo.** Não nasce segundo juiz B3: a guarda reutiliza `_obra_de` → `_obra_lida`, compartilhado com `obras_da_linha`. Existe validação distinta do CENSO para pasta/trilha, fora dessa decisão. (`bin/disjuntor.py:1845`, `bin/disjuntor.py:607`, `bin/disjuntor.py:638`, `bin/disjuntor.py:158`, `bin/disjuntor.py:1711`)
-
-   Não há relógio novo na guarda; o instante continua vindo da borda. `'*'` significa “pertence ao ramo B3, sem obra” em `_ramo_b3`; `None` significa ausência de obra em `_obra_de` ou ausência do ramo em `_ramo_b3`. O consumidor atual respeita essa diferença e não aceita `'*'` como ID. (`bin/disjuntor.py:1897`, `bin/disjuntor.py:1900`, `bin/disjuntor.py:1844`, `bin/disjuntor.py:1789`, `bin/disjuntor.py:1794`, `bin/disjuntor.py:1799`, `bin/disjuntor.py:1925`)
-
-A suíte shell integral permanece **[nao verificado]**: seus helpers criam e removem arquivos, incompatíveis com somente leitura. As sondas foram feitas apenas em memória, com I/O substituído; não comprovam operação em produção. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:51`)
-
-## 11/11 02:25 · sessao 4fb254e5076a · - · - · origem=Ronald (tmux)
-
-- **FILA — alcance depende da porta e da classificação.** A negativa nova só roda para `tool_name == 'Agent'`, `subagent_type == 'verificador'` literal e prompt reconhecido como final; outra grafia ou `tool_input` ausente não entra nesse ramo (`bin/disjuntor.py:1841–1847`). Isso demonstra ausência da negativa específica; o lançador aceitar tais payloads e abrir o agente é **[nao verificado]**. A chave desligada pula `pretool` por desenho (`bin/disjuntor.py:1898–1902`); a chave é definida como desligamento geral (`bin/disjuntor.py:34–38`, `209–211`).
-
-- **FILA — exceção dentro do hook reconhecido fecha; falha de import tem outra cobertura.** `_pretool` e `pretool` não engolem exceção (`bin/disjuntor.py:1804–1811`, `1814–1875`); `main_pretool` usa `_ramo_b3` e responde `deny` no ramo reconhecido, inclusive sem obra via `'*'` (`bin/disjuntor.py:1788–1801`, `1924–1932`). Antes dos imports, entretanto, `_guarda_import` protege apenas Agent com cópia detectada; Agent verificador com prompt sem `wt-` não satisfaz o detector (`bin/disjuntor.py:65–84`, `87–105`). Falha concreta de import e comportamento do lançador perante essa falha: **[nao verificado]**.
-
-- **FILA — prompt não textual não é escape automático.** Ambos os classificadores convertem `prompt` por `str(...)` (`bin/disjuntor.py:1793–1794`, `1843–1845`); se o resultado contém final reconhecido sem obra, a negativa continua funcionando (`bin/disjuntor.py:597–599`, `1844–1847`). A aceitação desses valores pela ferramenta real é **[nao verificado]**. Há diferenças possíveis de representação na leitura posterior: `_veredito_e_obra` usa `json.dumps` quando o conteúdo não é string (`bin/disjuntor.py:651–655`), portanto uniformidade completa entre representações não está selada pelo caso novo (`bin/tests/test_disjuntor.sh:1471–1474`).
-
-- **FILA — cobertura efetiva de todas as aberturas não demonstrada.** A cópia configura `PreToolUse` com matcher vazio e comando absoluto `/home/ronald/saas-hasner/bin/disjuntor.py pretool` (`.claude/settings.json:62–68`). O código só chama `main_pretool` na opção `pretool` (`bin/disjuntor.py:2309–2311`); uma abertura que não passe por esse hook não encontra essa negativa. Configuração ativa, correspondência do caminho absoluto ao hash entregue e existência de aberturas alternativas reais: **[nao verificado]**.
-
-- **FILA — não há segundo juiz novo de obra nesse diff.** A porta chama `_obra_de`, que consulta `_obra_lida`; a leitura de obras nas linhas usa o mesmo validador (`bin/disjuntor.py:602–620`, `631–640`, `1845–1847`). Existe validação distinta para IDs do CENSO, explicitamente voltada a pasta/trilha e ao wrapper (`bin/disjuntor.py:158–162`, `1602–1607`, `1711–1714`), além do token da célula com fallback ao reconhecedor compartilhado (`bin/disjuntor.py:1656–1671`). Isso não equivale a novo predicado B3 duplicado (`bin/disjuntor.py:1845–1847`).
-
-- **FILA — relógio e troca de modelo ficam fora do item (1).** A negativa nova não testa horário (`bin/disjuntor.py:1844–1847`); o instante do hook é lido em `main_pretool` e passado adiante (`bin/disjuntor.py:1897–1900`). O agente segue com `model: inherit` na cópia (`.claude/agents/verificador.md:5`). Reset efetivamente conferido, troca posterior para Fable, fallback por limite e medição de três dias: **[nao verificado]**, pois o dado fornecido contém instruções para essas etapas, sem evidência de execução.
-
-Não executei a suíte que cria árvores e mutantes: os próprios helpers escrevem arquivos temporários (`bin/tests/test_disjuntor.sh:69–79`, `1488–1497`).
-
-## 11/11 02:25 · sessao b70755730f06 · - · - · origem=Ronald (tmux)
-
-1. **BLOQUEIA — “esperado 0 a partir daqui” não corresponde ao contador existente.** O escritor mantém uma lista acumulada de IDs, acrescentando somente os ainda ausentes; o leitor devolve `len(lista)`, sem corte temporal, marco da mudança ou expiração. Portanto um histórico já persistido permanece positivo após a cura. Os “6 em 24 h” estarem nessa lista é **[nao verificado]**. (`bin/disjuntor.py:990`, `bin/disjuntor.py:993`, `bin/disjuntor.py:2173`, `bin/disjuntor.py:2239`)
-
-2. **FILA — mapa completo de escrita/leitura.** Escritor lógico: `decide_b3._fn`, que incorpora `sem_obra`; persistência por `_com_estado`, sob trava e substituição do arquivo. Leitor direto: `_b3_sem_obra`; propagação por `ler` e `linha`; apresentação por `gerar_estado.py`. (`bin/disjuntor.py:976`, `bin/disjuntor.py:990`, `bin/disjuntor.py:1057`, `bin/disjuntor.py:335`, `bin/disjuntor.py:369`, `bin/disjuntor.py:372`, `bin/disjuntor.py:2171`, `bin/disjuntor.py:2047`, `bin/disjuntor.py:2242`, `bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`)
-
-3. **FILA — o escritor permanece alcançável; zero não fica impossível de falsificar por construção.** A chamada negada retorna antes da varredura, mas outra chamada final com obra legível alcança `_nega_b3` → `estado_b3` → `julga_b3` → `decide_b3`; o Stop também chama `julga_b3`. Assim transcripts históricos ou de chamadas que escaparam ainda podem aumentar a lista. (`bin/disjuntor.py:1846`, `bin/disjuntor.py:1849`, `bin/disjuntor.py:1780`, `bin/disjuntor.py:1087`, `bin/disjuntor.py:1078`, `bin/hook_stop_fila1.py:1204`)
-
-4. **FILA — cobertura do contador tem limites próprios.** A fonte examina apenas `subagents` do `transcript_path` fornecido, exige `agentType == 'verificador'` e conta final sem obra mesmo sem veredito concluído. Não prova universo global de chamadas nem janela de 24 h. Há teste anterior que injeta transcript sem obra, aciona Stop e exige contador 1. (`bin/disjuntor.py:433`, `bin/disjuntor.py:834`, `bin/disjuntor.py:840`, `bin/disjuntor.py:844`, `bin/disjuntor.py:655`, `bin/tests/test_disjuntor.sh:427`, `bin/tests/test_disjuntor.sh:431`)
-
-5. **FILA — `'*'` e `None` têm contratos diferentes, respeitados pelos consumidores atuais.** `_obra_de(None reconhecido)` retorna `None`; `_ramo_b3` retorna `'*'` para chamada pertencente ao ramo B3 sem obra, reservando `None` para fora do ramo. Seu consumidor testa a presença do ramo e nega na exceção; a nova regra consulta diretamente `_obra_de`, portanto não aceita `'*'` como obra. (`bin/disjuntor.py:602`, `bin/disjuntor.py:610`, `bin/disjuntor.py:1789`, `bin/disjuntor.py:1794`, `bin/disjuntor.py:1799`, `bin/disjuntor.py:1924`, `bin/disjuntor.py:1925`, `bin/disjuntor.py:1845`)
-
-Sonda executada somente em memória confirmou: após acumular `s1`, varredura posterior vazia com instante futuro mantém contador 1; `_obra_de` devolve `None` e `_ramo_b3` devolve `'*'` para o mesmo final sem obra. A semântica exercitada está em `bin/disjuntor.py:990`, `bin/disjuntor.py:2173` e `bin/disjuntor.py:1794`; suíte integral **[nao verificado]**.
-
-## 11/11 02:25 · sessao c781d947d859 · - · - · origem=Ronald (tmux)
-
-Correção das contagens preliminares: são **15 chamadores diretos de `DisputaSupervisao.fechar`, 5 de `reabrir_sistema` e 1 de `reabrir_admin`** na varredura AST de `.método(...)` em produção; chamadas construídas dinamicamente fora dessa forma: [nao verificado]. Os endereços conferidos seguem abaixo.
-
-| Chamada direta de `fechar` | Cadeia até a porta | Atomic externo ao método `fechar` |
-|---|---|---|
-| `app/api/foto_recebida.py:80`, `resolver_disputas_de_foto` | HTTP `api_upload_foto` em `api/views.py:847`→`:869`; cópia `api/views_core.py:832`→`:854`. | Helper não abre atomic (`foto_recebida.py:57`); atomic do HTTP: [nao verificado]. |
-| `app/chamados/reconciliador.py:412`, `lavrar_sem_turno_aberto` | `reatar_pergunta_orfa` chama `lavrar` em `reconciliador.py:1619`; `reconciliar_perguntas_orfas_colab`→`reconciliar_chamados_colab:1433`; signal Batida `app/ponto/signals.py:207`→`:215`; signal filho `app/chamados/signals.py:350`→`:368`. | `lavrar_sem_turno_aberto` não abre atomic (`reconciliador.py:340`); depende da porta que disparou signal; [nao verificado] para todos os percursos. |
-| `reconciliador.py:612`, `retratar_perguntas_absolvidas_por_celula` | Mesmo signal Batida→`reconciliar_chamados_colab:1432`; signal filho→mesma função; consumidor de evento `reconciliador.py:1365`; cartório `app/ponto/services/cartorio.py:969`→`:970`. | Atomic `reconciliador.py:592` acaba antes do fechamento `:612`; consumidor declara ausência de atomic envolvendo o colaborador em `:1366`. O método `fechar` abre o seu próprio atomic (`models.py:1905`). |
-| `reconciliador.py:1171`, `encerrar_orfas_pela_lampada` | `consumir_eventos_celula:1375`→comando `app/chamados/management/commands/consumir_eventos_celula.py:31`→cron `app/config/crons.py:394`. | Atomic de cada P em `reconciliador.py:1146` termina antes do fechamento `:1171`; sem atomic geral do consumidor (`:1366`). |
-| `app/chamados/models.py:1950`, `admin_encerra` | Não encontrei chamador produtivo de `admin_encerra`; só a definição em `models.py:1943`; cadeia HTTP/cron/signal: [nao verificado]. | Sem atomic próprio em `admin_encerra`; delega a `fechar` (`models.py:1950`). |
-| `models.py:2072`, `remover_motivo` | Signal Posto `app/colaboradores/signals.py:77`; signal Escala `app/escala/signals.py:161`. | Atomic próprio `models.py:2025` **termina antes** de `self.fechar` em `:2072`; locks desse atomic só continuam se havia atomic externo. Atomic externo dos dois signals: [nao verificado]. |
-| `app/colaboradores/services/desligamento.py:142`, `executar_desligamento` | HTTP `app/colaboradores/views.py:1434`; comando `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`; cron `app/config/crons.py:440`. | Dentro do atomic do ato `desligamento.py:103`. |
-| `app/ponto/services/entrada_sincronizada.py:59`, `resolver_cobranca_da_entrada` | HTTP `api_bater_ponto` em `app/api/views.py:400`→`:803`; cópia `views_core.py:387`→`:798`. | Helper não abre atomic (`entrada_sincronizada.py:19`); atomic do HTTP no ponto da chamada: [nao verificado]. |
-| `app/chamados/services/materializacao.py:586`, `_materializar_ausencia_de_resposta` | Resposta HTTP HTML `app/chamados/views.py:1283` e REST `app/api/views.py:2632`→`disputa_emissao.responder_pergunta_disputa_core:1541`→helper. | Atomic do núcleo da resposta `disputa_emissao.py:1503` termina antes de chamar o helper em `:1541`; helper não abre atomic abrangente em `materializacao.py:496`. Atomic maior da casca: [nao verificado]. |
-| `materializacao.py:1333`, `_fechar_disputa_se_quitada` | `materializar_perguntas_validadas_da_disputa:1378`→HTTP `acoes_disputa.acao_regularizar_disputa:139`, `fio.processar_post_fio:670`, ou `validacao.validar_pergunta:469`; também passivo `passivo_validado.py:405`. | `_fechar_disputa_se_quitada` não abre atomic (`materializacao.py:1302`). Validação chama o materializador **depois** do atomic da validação (`validacao.py:425`, `:469`); passivo envolve a cauda em atomic (`passivo_validado.py:404`). |
-| `app/chamados/services/disputa_emissao.py:1284`, `criar_disputa_a_partir_de_chamados_orfaos` | HTTP `acoes_disputa.acao_iniciar_disputa_orfaos:222`; comandos `app/ponto/management/commands/processar_alertas_turno.py:385`, `processar_alertas_avancados.py:159`, `detectar_ausencias.py:802`; registros de cron `app/config/crons.py:362`, `:363`, `:364`. | Dentro do atomic do agrupador (`disputa_emissao.py:1052`) após `_trava_do_repasse` (`:1060`). |
-| `disputa_emissao.py:1964`, `_resolver_perguntas_por_chamado_resolvido` | Wrapper `resolver_perguntas_por_chamado_resolvido:1798`; receiver S143, `becos.fechar_beco`, reconciliador, comando `reconciliar_fantasmas`, portas admin são declarados no corpo do wrapper (`disputa_emissao.py:1786`); execução de todos esses percursos: [nao verificado]. | Wrapper usa atomic se não havia um; se já havia, conserva o externo; trava universo antes do corpo (`disputa_emissao.py:1796`, `:1797`). |
-| `app/chamados/services/competencia_trancada.py:204`, `encerrar` | `disparar_no_ato:282` ou processo do comando `:290`; ato de trancar em `app/ponto/services/fechamento.py:1428`; comando manual `app/chamados/management/commands/encerrar_por_competencia_trancada.py:20`. | Atomic por DS em `competencia_trancada.py:197`. |
-| `app/chamados/services/becos.py:57`, `fechar_beco` | Signal post_save P `app/chamados/signals.py:228`→`on_commit:238`→`fechar_beco_da_disputa:237`→`becos.py:78`; também comando `fechar_becos_disputa.py:57`, cron `app/config/crons.py:663`. | Atomic próprio em `becos.py:41`, ordem universo C→D→Ch em `:51`, antes dos resolvers e do fechamento. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88`, `Command.handle` | Porta management command `handle:27`; registro de cron desse comando: [nao verificado]. | Atomic explícito em `:87`. |
-
-Todos chegam ao mesmo escritor persistente: `fechar` atribui/salva em `app/chamados/models.py:1932`/`:1936`; o atomic interno e sua chamada à ordem são `:1905`/`:1910`.
-
-| Chamada direta de `reabrir_sistema` | Cadeia até a porta | Atomic externo ao escritor |
-|---|---|---|
-| `app/chamados/models.py:1575` | `ChamadoColaborador.ressuscitar_perguntas:1512`; chamadores diretos: `ChamadoColaborador.reabrir:1451`, HTTP `app/chamados/views_arquivar.py:86`, cartório `app/ponto/services/cartorio.py:1633`. | Atomic `models.py:1557`, ordem completa `:1562`, incluindo DS/P envolvidas. |
-| `app/chamados/services/materializacao.py:686` | `devolver_absorvidas_da_ausencia_rejeitada:639`; signal `app/ponto/signals.py:276`→`_consumidor_ausencia:279`→`on_commit:272`→`:262`. | Atomic próprio `materializacao.py:675`; ordem C→D→Ch→P `:679`. |
-| `app/chamados/services/validacao.py:218` | `devolver_validacao_recusada:163` chamado por `validar_pergunta:464`→cascas HTTP de validação, incluindo fio `app/chamados/services/fio.py:609`. | No percurso `validar_pergunta`, chamada ocorre dentro do atomic `validacao.py:425`, ordem `:431`. O helper isolado não possui atomic abrangendo a reabertura; atomic `:201` cobre só descarimbo da validação. |
-| `app/chamados/services/relavra_via.py:261` | `desfazer_carimbo_sem_lastro:187`; fábrica `app/chamados/services/fabrica_da_celula.py:169`, `:209`; cartório chama fábrica em `app/ponto/services/cartorio.py:1008`; signal Chamado chama cartório em `app/chamados/signals.py:216`; cron cartório registrado `app/config/crons.py:616`. | Atomic por P em `relavra_via.py:219`; ordem C→D→P `:230`. A fábrica do julgamento passa `reabrir_fechada=False` em `fabrica_da_celula.py:209`, portanto esse percurso específico não reabre fechada. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:165` | Management command `handle:53`; cron automático desse comando: [nao verificado]. | Atomic em `:146`; chamada condicional após reler fechamento em `:164`. |
-
-O escritor `reabrir_sistema` não toma trava/atomic próprios, salva o reset em `models.py:2177` e retorna True em `:2181`; a garantia transacional é a dos chamadores acima.
-
-O único chamador direto de `reabrir_admin` é `app/chamados/services/acoes_disputa.py:259`: HTTP fio/modal→`processar_post_fio:581`→`acao_reabrir_disputa_admin:235`; a casca não abre atomic envolvendo reabrir+pergunta. Depois da gravação em `models.py:2161`, chama `PerguntaDisputa.abrir_conversa` em `acoes_disputa.py:263`. Atomic externo de todas as portas HTTP que chegam nessa casca: [nao verificado].
-
-_3636 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3640 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
