@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 01:07** · publicado em **11/11/2026 01:08** (UTC-3)
+> Ultima resposta processada: **11/11/2026 01:19** · publicado em **11/11/2026 01:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 01:19 · sessao 26d759465242 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Volta 3 escrita. [Entrega com P1–P6, censo e comandos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/E4B_ALCANCE_ENTREGA.txt:10).
+
+- **51 testes OK; 31 mutantes mortos; quatro REDs falham na volta 1.** [Resultados](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/E4B_ALCANCE_ENTREGA.txt:126). [nao verificado]
+- C20 falhou por Django ausente. [Registro](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/E4B_ALCANCE_ENTREGA.txt:141).
+- Permanece a pendência herdada da fotografia de reversão da cascata. [Detalhes](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/E4B_ALCANCE_ENTREGA.txt:384).
+
+Backfill real não executado; ORM, suite inteira e certificação: **[nao verificado]**. [nao verificado]
 
 ## 11/11 01:07 · sessao 37bca8857cf8 · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
 
@@ -1056,131 +1066,4 @@ Censo dos caminhos relevantes ao nascimento e aos campos envolvidos nesta cura; 
 
 [truncado em 20000 de 28756 caracteres]
 
-## 11/11 00:51 · sessao 2d03e935d302 · BRIEF-COM-PROCEDENCIA · leitura · origem=Code
-
-**BRIEF — próxima volta do construtor Codex — BO-DISPUTA-SEM-PERGUNTA**
-
-**D0. Base e objetivo.** Trabalhe sobre a raia informada `e70f2e7ee` mais as mudanças ainda não commitadas descritas em `construtor14.r`. O anexo relata correções que a cópia ainda permite observar como defeitos: episódio implícito, seed de órfãos, análise após replay divergente, escrita própria da âncora e declaração pública sem pergunta. Primeiro confira o patch da 14; não declare essas curas certificadas apenas pelo relato. Aplicação e execução dos bytes finais: **[nao verificado]**. Referências da cópia: `app/chamados/services/disputa_emissao.py:500`, `:1275`, `:1459`, `:1562`, `:747`.
-
-**D1. Escopo autorizado e limites.** A cura dos caminhos de exceção do gerador e pergunta estrangeira está aprovada pelo anexo `aval_duas_respostas_push_bo_1110.txt`, item 2; o aval das 22:16 resolve h2 e dona fechada e determina fechamento no escopo c11, sem nova lei. Não volte à fase de “somente censo”, nem reabra essas duas perguntas. Autorizações recebidas nos anexos: **[nao verificado]**.
-
-Não altere as sete disputas existentes por shell, não execute reparo em produção e não misture esta obra com BO-0611-05 ou PUSH-E4A2. As sete ocorrências são o dado histórico recebido, não uma medição atual desta sessão. Fonte: `aval.txt`, “as 7 existentes nao se mexem por shell”; `aval_duas_respostas_push_bo_1110.txt`, separação dos itens 1 e 2: **[nao verificado]**. [nao verificado]
-
-**D2. Contrato de saída que deve ficar provado.**
-
-1. **Nascimento estrutural:** pai, disputa e pergunta pertencem ao mesmo ato transacional; exceção propagada desfaz o conjunto, preservando a batida anteriormente gravada. O teste deve testemunhar positivamente a inserção da pergunta antes de provocar a exceção. Referências: `app/chamados/services/disputa_emissao.py:623`, `:653`, `:670`, `:674`; lacuna da testemunha ORM em `app/chamados/tests/test_bo_disputa_sem_pergunta.py:55`.
-
-2. **Pergunta estrangeira:** a FK da pergunta continua apontando para sua dona canônica; o motivo segue para essa dona. Ensaio local sem pergunta local não deixa nova disputa nem novo pai. Lote misto conserva somente os motivos efetivamente admitidos na local, sem seed estrangeiro. Não imponha exclusividade global por nome de motivo: perguntas locais do mesmo motivo em dias distintos podem justificar presença nas duas disputas. Referências: `app/chamados/models.py:3008`; `app/chamados/services/disputa_emissao.py:598`, `:606`, `:681`, `:1007`, `:1275`; `app/chamados/tests/test_bo_disputa_volta4_memoria.py:36`.
-
-3. **Identidade conservada:** congele episódio, dia do turno, destino, opções e demais argumentos do fato antes de trocar a disputa recebida pela dona. Prove também o caso de episódio ausente: passar `None` não basta para impedir derivação pelo contexto da dona, pois a porta usa `campos.get(...) or derivador(...)`. Referências: `app/chamados/services/disputa_emissao.py:500`; `app/chamados/models.py:2866`, `:2875`.
-
-4. **Divergência:** retorno com `criada=True` ou PK diferente da esperada não autoriza análise/cartório, agregação ou push daquele fato. Desfaça seus efeitos e preserve os efeitos válidos independentes previstos pelo contrato. A análise incondicional dos órfãos precisa desaparecer; a cura correspondente é relatada pela 14, ainda sem certificação nesta cópia. Referências: `app/chamados/services/disputa_emissao.py:1453`, `:1454`, `:1459`; `app/chamados/tests/test_bo_disputa_volta5_memoria.py:194`, `:221`; `construtor14.r`: **[nao verificado]**.
-
-5. **Agregador único de admissão:** núcleo, órfãos, pendentes, declaração e âncora usam a mesma decisão de agregação. Elimine a união/save próprios da âncora e ajuste o censo para a estrutura resultante. Atualizar a lista permitida do gate, sozinho, não prova unicidade. Isso não exige fundir nesta volta todos os nascimentos nem as portas distintas de remoção e reabertura. Referências: `app/chamados/services/disputa_emissao.py:558`, `:1531`, `:1562`; `app/chamados/tests/test_porta_disputa_emissao.py:52`, `:83`, `:128`; `app/chamados/models.py:1971`, `:2126`.
-
-6. **Declaração pública:** exija pergunta no contrato público antes de qualquer nascimento. Preserve os dois consumidores reais, sua costura e a ausência de push próprio. Atualize montagens de teste que usavam a chamada pública sem pergunta; não preserve um bypass produtivo para acomodá-las. Referências: `app/chamados/services/disputa_emissao.py:723`, `:734`, `:747`; `app/chamados/services/declaracao_texto.py:362`, `:650`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:397`.
-
-**D3. Exceções já decididas: preservar, instrumentar e encaminhar.**
-
-- **Sem ata:** continua nascendo aberta, sem pergunta e sem fechamento; preserve o aviso e publique I7b. **Com ata e nada a perguntar — h2:** continua nascendo e fechando vazia. Não aplique “não nasce” a h2 nesta obra. Referências: `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51`, `:58`, `:59`, `:63`, `:75`, `:78`; decisão explícita no anexo `aval_duas_leis_1110.txt`, item 1: **[nao verificado]**.
-- Registre na RAIZ-DA-DISPUTA F1 a alternativa “h2 não nasce” junto da responsabilidade por fechar os chamados órfãos sem disputa. Leve os números recebidos — 300 vazias, 237 no mesmo minuto — como relato do aval; conteúdo da `sonda_h2.r`, não fornecido integralmente, e confirmação independente desses números: **[nao verificado]**.
-- **Dona fechada:** mantenha o comportamento desta obra; acrescente trilha do motivo descartado e contador `motivo_em_dona_fechada`, esperado zero, com alarme e caso que morde. Não escolha reabertura, nova disputa ou Pauta. Encaminhe essa decisão à RAIZ F1 com o número efetivamente obtido; número atual: **[nao verificado]**. Fonte decisória: `aval_duas_leis_1110.txt`, item 2: **[nao verificado]**; ramo hoje silencioso em `app/chamados/services/disputa_emissao.py:563`.
-- Preserve a reabertura que já ocorre pela ressuscitação/cartório, inclusive a nota quando há chamado-pai. Ela não autoriza o agregador a reabrir a dona por conta própria nem agrega automaticamente o motivo antes descartado. Referências: `app/chamados/models.py:1574`, `:2173`, `:2177`, `:2178`; `app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:102`, `:133`, `:188`.
-
-**D4. Contadores com escritor e leitor.** Preserve I7a como disputa **aberta sem nenhuma linha de pergunta**, esperado zero, dono ESTRUTURA; I7b publica a abstinência por falta de ata como INFO. Pergunta morta ainda é linha. Dia indeterminável não prova falta de ata; conjunto misto com algum dia com ata pertence à classificação estrutural. Referências: `app/chamados/management/commands/auditar_invariantes_chamados.py:62`, `:64`, `:68`, `:73`, `:74`, `:81`.
-
-Para `motivo_em_dona_fechada`, declare unidade de contagem, escritor da trilha e consulta do vigia. A informação precisa sobreviver ao fim do processo; outro WARNING ou contador apenas em memória não satisfaz o aval. Reutilizar a trilha persistente existente é minha orientação de implementação; `core.observ.evento` grava `LogAuditoria`, mas é best-effort e seu retorno precisa ser considerado na prova. Referências: `app/core/observ.py:73`, `:100`, `:104`, `:140`, `:145`; exigência do novo contador no anexo das duas leis: **[nao verificado]**.
-
-**D5. Fronteira transacional e desenho.** Inclua pendentes na unidade transacional do ato: hoje o wrapper pode chamá-los depois do atomic do núcleo, e o helper abre pergunta antes de agregar motivo/contexto. Preserve a batida fora do rollback da emissão e a ordem C → D → Ch → P, inclusive donas fechadas e o fecho alcançado pelas cascatas. Referências: `app/chamados/services/disputa_emissao.py:300`, `:311`, `:313`, `:623`, `:650`, `:830`, `:1167`, `:1173`, `:1178`; `app/chamados/models.py:2819`.
-
-Complete a avaliação exigida de **resolver antes de escrever**, sem reentrada nem guarda de visitadas. Há juízes reutilizáveis para dia, universo e eleição canônica; isso indica cabimento sem mudar `models.py`, mas a integração ainda precisa ser demonstrada. Não substitua a eleição por consulta própria de `(motivo, dia)` ou por `.first()`/`.last()`. Referências: `app/chamados/services/fio.py:1608`, `:1784`, `:1225`; `app/chamados/models.py:2900`, `:2907`, `:2921`. Cabimento integrado: **[nao verificado]**.
-
-A matriz deve concluir essa avaliação: se couber, cumpra a passagem de leitura das donas seguida de uma passada de escrita, conforme o aval; se houver impedimento concreto, registre-o com prova. As correções da 14 sobre identidade, admissão e efeitos continuam obrigatórias em qualquer desenho. Fonte: `aval_matriz_antes_do_opus_1110.txt`, item 3: **[nao verificado]**.
-
-**D6. Push ao colaborador: preserve critérios e prove destinatário e momento.** Mantenha os critérios históricos descritos pelo opus: nascimento com seus motivos persistidos, agregação com os novos motivos, órfãos com `motivos_atualizados`. Não troque tudo por perguntas criadas/localmente retornadas. Motivo repetido em outro dia não ganha push pelo wrapper apenas por ter pergunta nova; órfãos conserva seu critério próprio. Referências: `app/chamados/services/disputa_emissao.py:832`, `:838`, `:1484`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:252`; `app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:162`, `:173`; histórico descrito em `opus5d.txt`, item 3: **[nao verificado]**.
-
-O ato deve conservar os deltas por dona, hoje descartados no encaminhamento estrangeiro, para que a matriz mostre explicitamente o destinatário e o critério aplicável. Minha decisão é aplicar o critério de agregação do wrapper à dona resultante quando houver novos motivos e ela permanecer aberta; isso não autoriza notificações adicionais indiscriminadas nos demais caminhos. Referências do defeito: `app/chamados/services/disputa_emissao.py:613`, `:614`, `:720`, `:823`, `:832`.
-
-Garanta que efeitos de um ato desfeito não notifiquem. Minha orientação é entregar as notificações após confirmação da transação, mantendo os critérios de conteúdo acima e testando o estado persistido quando houver cascata. Há envio imediato dentro do atomic dos órfãos; vazamento externo efetivamente ocorrido: **[nao verificado]**. Referências: `app/chamados/services/disputa_emissao.py:1215`, `:1230`, `:1465`, `:1963`, `:1971`. Declaração continua sem push próprio: `app/chamados/services/disputa_emissao.py:734`.
-
-**D7. Testes e mutantes exigidos.** Confira os oito casos novos relatados pela 14 e seus bytes finais. O arquivo `test_bo_disputa_volta5f_memoria.py` e seus resultados são evidência do anexo, ainda **[nao verificado]** nesta cópia; os defeitos anteriores estão nos endereços de D0. [nao verificado]
-
-| Selo | Exigência |
-|---|---|
-| F1 | Local aberta com `motivos=[]`, `orfao_14h` estrangeiro e outro motivo local; nenhum seed indevido. Cobrir também ausência/recusa sem admissão de motivo. Contraexemplo: `app/chamados/services/disputa_emissao.py:980`, `:1007`, `:1275`. |
-| F2 | Dois episódios distintos e contexto divergente da dona; conservar identidade e dia, incluindo ausência de episódio. `app/chamados/models.py:2866`; prova atual incompleta em `app/chamados/tests/test_bo_disputa_volta5_memoria.py:158`. |
-| F3 | Retorno criado e PK divergente nos órfãos; nenhuma análise decorrente do fato recusado. `app/chamados/services/disputa_emissao.py:1454`, `:1459`. |
-| F4 | Mutante restaurando união/save próprios da âncora precisa falhar. `app/chamados/services/disputa_emissao.py:1531`, `:1562`. |
-| F5 | Chamada pública sem pergunta falha antes de escrita; ambos os consumidores reais continuam funcionando. `app/chamados/services/disputa_emissao.py:747`; `app/chamados/services/declaracao_texto.py:362`, `:650`. |
-| F6 | Mutação montada uma vez, sítio pretendido validado e assertion comportamental no alvo. Falha de montagem não conta como mutante morto. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:81`, `:104`, `:401`. |
-| F7 | A prova com a fonte atual duas vezes se chama repetibilidade. Paridade histórica exige fonte histórica distinta. `app/chamados/tests/test_bo_disputa_volta3_memoria.py:236`, `:245`, `:246`. |
-
-Execute os controles e os mutantes relatados abaixo; se o desenho eliminar replay, adapte a montagem preservando a mordida contra segunda emissão e efeitos de retorno divergente. A lista vem de `construtor14.r`; resultado final: **[nao verificado]**.
-
-```bash
-red5f() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5f_memoria.py "$@"
-}
-
-red5f --item F1 --mutante seed_local
-red5f --item F1 --mutante ausencia_admite_motivo
-red5f --item F2 --mutante episodio_da_dona
-red5f --item F3 --mutante analisa_divergente
-red5f --item F4 --mutante ancora_save_proprio
-red5f --item F5 --mutante publica_sem_pergunta
-red5f --item F6
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py --mutante nasce_sem_pergunta
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py --mutante replay_insere
-red5f --item F7 --mutante alega_paridade
-```
-
-Acrescente provas que removam a trilha e a inclusão no contador de dona fechada; cada remoção deve ser detectada. Prove zero em controle sem descarte e um no cenário de descarte. Para I7a/I7b, injete defeito estrutural e exija um em I7a; no cenário protegido sem ata, exija I7a=0 e I7b=1. Fontes: anexos `aval_duas_leis_1110.txt`, item 2, e `aval_duas_respostas_push_bo_1110.txt`, item 2: **[nao verificado]**; instrumentos em `app/chamados/management/commands/auditar_invariantes_chamados.py:73`.
-
-Exija ORM para o lote misto F1, transação dos pendentes, receivers reais, ressuscitação com nota e entrega/cancelamento das notificações. Os doubles não certificam essas integrações. Preserve a fixture já corrigida — batidas, chamado, célula por último — e suas assertions sobre a ata real. Referências: `app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:32`, `:51`, `:53`, `:56`, `:64`; `app/chamados/signals.py:216`, `:238`, `:257`.
-
-O alvo ORM F1 relatado pela 14 deve ser executado pelo ambiente de testes autorizado, nunca em produção; presença e execução desse alvo: **[nao verificado]**. [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_bo_disputa_volta5b_orfaos.OrfaosVolta5bTest.test_RED_F1_lote_misto_local_vazia_nao_ganha_seed_estrangeiro
-```
-
-Preserve os protegidos HX, PERGUNTA-NO-APP, reuso do pai/nota e releitura após gerador/pendentes, além das famílias BO de memória e ORM afetadas. Não reduza assertions para obter verde. Referências: `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58`, `:63`; `app/chamados/tests/test_hx_disputa_muda.py:24`, `:44`; `app/chamados/tests/test_pergunta_no_app.py:89`, `:103`; `app/chamados/tests/test_3b_reuso_746.py:23`; `app/chamados/tests/test_bo_disputa_volta8_memoria.py:162`, `:205`.
-
-**D8. Pronto, pouso e push git.** Entregue patch revisável da 14 mais os resíduos desta volta, matriz completa, contrato numerado, censo atualizado e evidência dos controles/mutantes nos mesmos bytes finais. Separe resultados de memória, ORM e produção; suíte inteira, integridade histórica dos protegidos e paridade com `6c0517eb9` permanecem **[nao verificado]** enquanto não houver prova correspondente. A comparação disponível usa a mesma fonte: `app/chamados/tests/test_bo_disputa_volta3_memoria.py:245`.
-
-**Não libera pouso nem push agora.** Submeta ao preverificador; o opus final recebe a matriz e os achados anteriores com estado e prova, inclusive as decisões das duas leis. A exigência de matriz antes do opus vem de `aval_matriz_antes_do_opus_1110.txt`, item 4: **[nao verificado]**. A liberação atual é decisão minha diante dos contratos e provas pendentes acima. [nao verificado]
-
-O `!` de PUSH-E4A2 autoriza aquela reescrita e seus 23 commits; não é autorização de push deste BO. Autorização específica para push/deploy desta obra: **[nao verificado]**. Fonte: `aval_duas_respostas_push_bo_1110.txt`, item 1: **[nao verificado]**. [nao verificado]
-
-**CENSO**
-
-Os endereços abaixo descrevem a cópia; os efeitos posteriores do patch 14 precisam de conferência. Certificação do patch final: **[nao verificado]**.
-
-| Estado/campo | Escritores identificados | Leitores/efeitos identificados |
-|---|---|---|
-| Nascimento de DS | Núcleo `app/chamados/services/disputa_emissao.py:670`; órfãos `:1299`; âncora `:1554` | Wrapper `:817`; HX/h2 `:1444`, `:1474`, `:1477`; âncora `:1575`, `:1577` |
-| Admissão de motivos/contexto | Agregador `app/chamados/services/disputa_emissao.py:569`, `:572`, `:575`; escrita própria da âncora `:1562` | Admissão local `:598`; push `:832`, `:1484`; episódio `app/chamados/models.py:3463` |
-| Remoção/contexto específico | `app/chamados/models.py:1966`, `:2063`, `:2104`, `:2122` | Foto `app/api/foto_recebida.py:63`; resolução `app/chamados/services/disputa_emissao.py:344`; auditor `app/chamados/management/commands/auditar_invariantes_chamados.py:31` |
-| Fechamento/reabertura | `app/chamados/models.py:1932`, `:2149`, `:2173`; reabertura admin pode adicionar motivo em `:2159` | Agregador `app/chamados/services/disputa_emissao.py:563`; S127 `app/chamados/juizes.py:2316`; app `app/api/views.py:1059` |
-| Dona de P | Nascimento `app/chamados/models.py:3014`; reuso preserva dona em `:3008` | Roteamento `app/chamados/services/disputa_emissao.py:606`; app `app/api/views.py:1063` |
-| Destino de P | Reuso `app/chamados/models.py:2982`; costura `app/chamados/services/fio.py:925` | Autorização `app/chamados/services/fio.py:598`; escolha do card `app/api/views.py:1061` |
-| Trilha/contadores | Porta persistente `app/core/observ.py:100`, `:140`; ramo fechado hoje retorna em `app/chamados/services/disputa_emissao.py:563` | I7a/I7b `app/chamados/management/commands/auditar_invariantes_chamados.py:73`; novo leitor de descarte: **[nao verificado]** |
-
-O desligamento chama a porta de fechamento; o comentário antigo que o descreve como escritor bulk não deve ser tratado como estado atual. Referência: `app/colaboradores/services/desligamento.py:132`, `:142`. Commit introdutor do bug original e exaustividade sobre formas dinâmicas de escrita: **[nao verificado]**.
-
-A matriz final deve preencher as seis colunas abaixo com o persistido real e o teste executado, sem promover esta especificação a resultado de teste. Exigência: `aval_matriz_antes_do_opus_1110.txt`, item 2: **[nao verificado]**. [nao verificado]
-
-| Estado | Juiz | Operação exigida | Persistido exigido | Retorno | Prova/endereço |
-|---|---|---|---|---|---|
-| a. Fato novo | Resolvedor/porta | Nascer atomicamente se houver pergunta | Pai+DS+P ou nenhum | DS ou ausência | `app/chamados/services/disputa_emissao.py:674`, `:681` |
-| b. Canônica em outra aberta | Identidade canônica | Agregar na dona | P mantém dona; sem nascimento local vazio | Dona informada ao ato | `app/chamados/models.py:3008`; `app/chamados/services/disputa_emissao.py:613` |
-| c. Canônica em fechada | Porta + aval das duas leis | Preservar comportamento; trilhar descarte | Sem reabertura nova pelo agregador | Recusa observável | `app/chamados/services/disputa_emissao.py:563`; contador final **[nao verificado]** |
-| d. Ciclo A↔B | Identidade de cada fato | Roteamento sem reentrada | Sem nascimento vazio nem duplicação indevida | Donas reais | `app/chamados/tests/test_bo_disputa_volta4_memoria.py:36` |
-| e. Exceção após batida | Transação | Desfazer emissão | Batida preservada | Exceção tratada pela borda existente | `app/chamados/tests/test_bo_disputa_sem_pergunta.py:32`, `:55` |
-| f. Sem ata | Juiz da ata | Abster-se e acender luz | DS aberta, zero P | DS | `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58`, `:59` |
-| g. Grade | Censo atual | Não ressuscitar helper removido | Sem nascimento por esse helper | Não aplicável ao helper removido | `app/ponto/management/commands/reconciliar_grade.py:412` |
-| h. Órfãos | Ata/classificação/porta | Lote misto e repasse | Motivos locais corretos; costura válida | DS/None/recusa declarada | `app/chamados/services/disputa_emissao.py:1195`, `:1444` 
-
-[truncado em 20000 de 24224 caracteres]
-
-_3574 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3575 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
