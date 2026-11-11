@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:59** · publicado em **11/11/2026 13:03** (UTC-3)
+> Ultima resposta processada: **11/11/2026 13:19** · publicado em **11/11/2026 13:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 13:19 · sessao 93579e5840e6 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos derivados de `bin/selo_proporcao.sh` e simulados em memória com o script original e função `git` que fornece o diff, sem escrever arquivos:
+
+- **ALTA — ORM direto escapa:** `+obj. save()`, `+M.objects. create(a=1)`, `+M.objects. update(a=1)`, `+obj. delete()`, `+M.objects. bulk_create([])` são Python válido (`ast.parse`) e deram rc 0. A regex exige ponto imediatamente seguido do nome. Aplica-se também a `bulk_update`, `get_or_create`, `update_or_create`. `bin/selo_proporcao.sh:22`.
+- **ALTA — continuação/alias/getattr:** deram rc 0 os diffs `+obj.save\` seguido de `+()`, `+write = obj.save` seguido de `+write()`, `+getattr(obj, "save")()` e `+(obj.save)()`. `bin/selo_proporcao.sh:22`, `bin/selo_proporcao.sh:27`.
+- **ALTA — `#` dentro de string oculta escrita na mesma linha:** `+label = "#"; obj.save()` deu rc 0 porque corta no primeiro `#`, sem análise léxica. `bin/selo_proporcao.sh:36`.
+- **ALTA — cabeçalho forjado no conteúdo:** este diff cria Python válido e deu rc 0:
+
+```diff
++++ b/app/writer.py
+@@ -0,0 +1,4 @@
++DOC = """
++++ /dev/null
++"""
++obj.save()
+```
+
+O conteúdo real da segunda linha é `++ /dev/null` dentro de uma string. O parser considera a linha do patch um cabeçalho, põe `arq=None` e ignora a escrita. `bin/selo_proporcao.sh:28`, `bin/selo_proporcao.sh:29`, `bin/selo_proporcao.sh:32`.
+
+- **ALTA — caminhos:** `+++ b/app/writer other.py<TAB>` e `+++ "b/app/caf\303\251.py"` seguidos de `+obj.save()` deram rc 0: o caminho fica com TAB ou aspas finais e falha em `.endswith(".py")`. Git real `diff --no-index` sobre memfds, com prefixos contendo espaço/Unicode, confirmou esses formatos de cabeçalho; não houve arquivos criados. `bin/selo_proporcao.sh:29`, `bin/selo_proporcao.sh:35`.
+- **ALTA — migration por rename:** patch com `similarity index 100%`, `rename from app/operation.py`, `rename to app/migrations/0002_operation.py` e sem hunks deu rc 0. A regra migration só roda após encontrar linha adicionada sob `+++`. `bin/selo_proporcao.sh:28`, `bin/selo_proporcao.sh:32`, `bin/selo_proporcao.sh:34`. A geração real desse rename nesta cópia está [nao verificado], pois não há `.git`.
+- **ALTA — binário:** patch `Binary files /dev/null and b/app/writer.py differ` deu rc 0 e lista zero arquivos. Para demonstrar escrita executável, usar arquivo Python textual marcado `-diff` por `.gitattributes`; NUL num `.py` não demonstra execução Python válida. Efeito real de `.gitattributes` no repo está [nao verificado]. `bin/selo_proporcao.sh:28`, `bin/selo_proporcao.sh:32`.
+- **ALTA — modo do diff por argumento:** `BASE=--name-only`, `HEAD_=HEAD` entra como opção, pois não há validação de revisão nem separador de opções. `--name-only` sobrepõe `-U0`, produz nomes sem patch; o parser aceita isso como zero escrita. Git real `--no-index -U0 --name-only` confirmou saída só de nomes; execução completa em repo está [nao verificado]. `bin/selo_proporcao.sh:19`, `bin/selo_proporcao.sh:28`, `bin/selo_proporcao.sh:48`. **Não usar `--stat` como exemplo:** ele preserva o patch quando combinado com `-U0`. `diff.noprefix=true` sozinho também não basta para escapar.
+- **ALTA — signal/command:** `+ps.connect(write_handler)` em `.py` fora de `signals.py`, com alias `ps` já existente, deu rc 0; `management/commands/w.py` com `+write = obj.save` / `+write()` também deu rc 0. Não há regra especial para management, apenas ORM/SQL/SIG; signal reconhece lista finita de nomes e `@receiver`. `bin/selo_proporcao.sh:24`, `bin/selo_proporcao.sh:37`, `bin/selo_proporcao.sh:40`.
+
+Todos os rc 0 acima passam pela saída final `bin/selo_proporcao.sh:48`; os testes foram do parser e encadeamento originais, com diff sintético, não de commits existentes.
+
+## 11/11 13:17 · sessao fb12153ec901 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos derivados da cópia; a suíte de host não foi executada porque cria e apaga diretórios temporários (`bin/tests/test_selo_proporcao.sh:9`).
+
+- **Média — exclusões de teste não têm provas independentes.** `fixture_teste` usa simultaneamente diretório `tests/` e nome `test_a.py`; remover qualquer uma das duas condições de exclusão preservaria seu rc esperado. O caso deveria ser separado para provar ambas (`bin/tests/test_selo_proporcao.sh:37`; `bin/selo_proporcao.sh:25`).
+- **Média — teste de signals tem detecção redundante.** `signal_receiver` contém `@receiver` e `post_save`; uma alternativa da regex pode deixar de funcionar e o caso continuar vermelho por causa da outra (`bin/tests/test_selo_proporcao.sh:31`; `bin/selo_proporcao.sh:24`).
+- **Média — command_escreve não prova comportamento específico de commands.** Sua linha contém `.delete()`, detectável em qualquer arquivo `.py`; o scanner não consulta `management/commands/`. O caso testa a detecção genérica de ORM e não cobre comando que grava por outra forma (`bin/tests/test_selo_proporcao.sh:33`; `bin/selo_proporcao.sh:22`; `bin/selo_proporcao.sh:35`; `bin/selo_proporcao.sh:37`).
+- **Média — cobertura anunciada excede os casos.** `orm_bulk` exercita somente `bulk_create`; `orm_goc` somente `update_or_create`. Não há casos independentes para `bulk_update` ou `get_or_create` na lista, embora ambos estejam na regex (`bin/tests/test_selo_proporcao.sh:27`; `bin/tests/test_selo_proporcao.sh:28`; `bin/selo_proporcao.sh:22`).
+- **Média — falhas de preparação não interrompem necessariamente o host.** O script ativa `-u` e `pipefail`, mas não `-e`; checkout, alteração, add e commit não têm tratamento individual de erro, e commits vazios são permitidos. Assim, o rc aferido pode não corresponder à alteração pretendida se uma preparação falhar; ocorrência real nesta cópia: [nao verificado] (`bin/tests/test_selo_proporcao.sh:5`; `bin/tests/test_selo_proporcao.sh:17`; `bin/tests/test_selo_proporcao.sh:18`; `bin/tests/test_selo_proporcao.sh:19`).
+
+Sobre rc:
+
+- **Não há evidência de falso verde causado pelo pipe interno ou por Python rc 1/2.** `pipefail` está ativo; o rc do pipeline é capturado, e qualquer resultado diferente de 0 ou 3 vira rc 2. Git não zero também vira rc 2 (`bin/selo_proporcao.sh:15`; `bin/selo_proporcao.sh:19`; `bin/selo_proporcao.sh:20`; `bin/selo_proporcao.sh:46`; `bin/selo_proporcao.sh:51`).
+- Simulei em memória, sem arquivos: Python rc 1 → selo rc 2; Python rc 2 → selo rc 2; Git rc 1 → selo rc 2; Python rc 3 → B rc 1/A rc 0. Um produtor grande com consumidor que termina sem ler produziu SIGPIPE 141, convertido para rc 2, coerente com os ramos citados (`bin/selo_proporcao.sh:15`; `bin/selo_proporcao.sh:46`; `bin/selo_proporcao.sh:49`; `bin/selo_proporcao.sh:51`).
+- **Saída vazia com Git rc 0 é aceita.** Não há exigência de cabeçalho, arquivo ou hunk: zero achados leva a rc 0. Isso é correto para diff realmente vazio, mas permite falso verde quando o Git entrega outro formato ou omite conteúdo. O defeito é a confiança no conteúdo/formato recebido, não o `pipefail` (`bin/selo_proporcao.sh:19`; `bin/selo_proporcao.sh:26`; `bin/selo_proporcao.sh:28`; `bin/selo_proporcao.sh:44`; `bin/selo_proporcao.sh:48`).
+
+## 11/11 13:17 · sessao 3b39b337b028 · - · - · origem=Ronald (tmux)
+
+- **ALTA — o selo da obra não virou portão automático.** O consumidor nominal é o teste, que chama o selo com `BASE`, `HEAD`, classe e repositório sintéticos; isso verifica o instrumento, não classifica a obra real (`bin/tests/test_selo_proporcao.sh:9`, `bin/tests/test_selo_proporcao.sh:19`). O próprio pre-push informa que não executa a pasta `bin/tests`, chamando apenas selos específicos (`bin/pre-push.sh:13`, `bin/pre-push.sh:16`, `bin/pre-push.sh:19`, `bin/pre-push.sh:38`). A execução manual no pouso e sua observância em produção são **[nao verificado]**.
+
+- **MÉDIA — o teste entra automaticamente na régua, mas pode ser pulado pelo carimbo.** A régua executa `tests/test_*.sh` e aborta antes da suite se algum retornar erro (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`). Contudo, seu atalho “JA VERDE” compara somente a impressão digital de `.py`/`.html` sob `app/` e retorna antes desse loop; uma mudança somente em `bin/` não altera essa impressão (`bin/regua.sh:25`, `bin/regua.sh:33`, `bin/regua.sh:84`, `bin/regua.sh:93`). Embora calcule `ARVORE_FP`, a condição do atalho não o compara (`bin/regua.sh:45`, `bin/regua.sh:86`).
+
+- **MÉDIA — a pasta inteira já contém quebra em worktree.** `test_hook_nao_e_copia.sh` resolve o hook como `$RAIZ/.git/hooks/pre-push` e retorna 1 se esse caminho não for arquivo (`bin/tests/test_hook_nao_e_copia.sh:21`, `bin/tests/test_hook_nao_e_copia.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:27`). A própria cópia documenta que `.git` em worktree é arquivo e mostra a solução por `--git-common-dir` em outro selo (`bin/tests/test_commit_so_o_declarado.sh:52`, `bin/tests/test_commit_so_o_declarado.sh:57`). Portanto, o loop completo pode falhar por esse selo anterior, independentemente de proporção (`bin/regua.sh:138`, `bin/regua.sh:143`).
+
+- **O teste novo isolado não contém essa suposição de `.git` como diretório.** Resolve o executável relativamente ao próprio arquivo e fornece explicitamente o repositório temporário ao selo (`bin/tests/test_selo_proporcao.sh:6`, `bin/tests/test_selo_proporcao.sh:7`, `bin/tests/test_selo_proporcao.sh:19`). Ainda assim, não limpa variáveis `GIT_*` herdadas antes dos comandos Git; essa precaução existe em outro teste da cópia (`bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:14`, `bin/tests/test_lei_akita.sh:69`). Falha efetiva sob ambiente Git herdado é **[nao verificado]**.
+
+Não executei os selos porque criam e removem arquivos temporários (`bin/tests/test_selo_proporcao.sh:9`). Resultado real da pasta e instalação atual dos hooks: **[nao verificado]**.
 
 ## 11/11 12:59 · sessao daf646968a80 · FIO-E0-V4-E4B · censo · origem=Code
 
@@ -935,237 +991,4 @@ LACUNA: DIVERGE nominal registrada: backlog_obras.txt:1940: "contador `fechados_
 
 [truncado em 20000 de 23818 caracteres]
 
-## 11/11 12:32 · sessao 186f5d5b3ede · FIO-E0-V4-E4B · construtor · origem=Code
-
-**PARE no item 2, conforme sua condição.** A recusa S143 grava chamado e pergunta no fio, sem competência; esse destino não atende aos três dados exigidos ([disputa_emissao.py:1854](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1854)).
-
-Há outra lacuna: C7 impede fechar a **disputa** com pergunta viva, mas não devolve ao estado aberto o chamado já encerrado ([models.py:1848](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/models.py:1848), [signals.py:96](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/signals.py:96)).
-
-O [recibo c5](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c5.txt:1) contém os quatro juízes, escritores/leitores, chamadores e comandos ORM. Registra 17 testes em memória e 40 selos passando; ORM não executado. Cura, RED e mutante novos não foram construídos por causa do PARE; sem commit ([recibo:131](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c5.txt:131)). [nao verificado]
-
-Perguntas ao Ronald:
-
-- Qual destino existente deve receber chamado, pergunta e competência da recusa?
-- “Chamado continua ABERTO” significa `ChamadoColaborador` ou a disputa? Se for o chamado, qual porta existente deve impedir seu encerramento, já que a guarda atual exclui exportada ([models.py:364](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/models.py:364))?
-
-## 11/11 12:26 · sessao 191db1405fa4 · APP-MENSAGENS-MSG-0 · censo · origem=Code
-
-Censo estático da cópia fornecida, sem alterações. Resultados de testes, funcionamento em execução e confirmação independente dos números de produção: **[nao verificado]**. [nao verificado]
-
-1. **Escritores de justificativa**
-
-O modelo é `ponto.Justificativa`: colaborador, entrada, `data_turno`, tipo, saída informada, descrição, coordenadas, decisão, batida gerada e `chamado_origem`. Os dois vínculos são distintos: a justificativa guarda `chamado_origem`; o chamado guarda `justificativa_relacionada`. (`app/ponto/models.py:136`, `app/ponto/models.py:144`, `app/ponto/models.py:149`, `app/ponto/models.py:154`, `app/ponto/models.py:159`, `app/ponto/models.py:167`, `app/ponto/models.py:173`; `app/chamados/services/vinculos.py:81`)
-
-| Escritor | O que grava | Critério de dia e cobrança | Abertura de chamado/envelope |
-|---|---|---|---|
-| API: `api_justificativas` | Procura a primeira pendente por colaborador/dia; atualiza `tipo`, `descricao` e origem se nula, ou cria com esses campos e `status='pendente'`. (`app/api/views.py:1994`, `app/api/views.py:1997`, `app/api/views.py:2004`) | Dia ISO recebido. Busca mesmo colaborador, módulos **literais** `turno_aberto`/`batida_ausente`, estados `VIVOS`; compara JSON `data_turno` ou, quando ausente, **dia civil da criação**. Não chama `dia_do_fato` nessa seleção. (`app/api/views.py:1952`, `app/api/views.py:1960`, `app/api/views.py:1967`) | Sem cobrança encontrada, chama `ChamadoColaborador.abrir` para `justificativa_colab`; depois aponta o vínculo inverso pela porta de vínculos. (`app/api/views.py:1977`, `app/api/views.py:2012`) |
-| Web: `_abrir_justificativa_fluxo` | Procura a primeira pendente por colaborador/dia; atualiza tipo/descrição, saída se fornecida, entrada/origem se nulas; ou cria esses campos e pendente. (`app/ponto/views.py:1621`, `app/ponto/views.py:1624`, `app/ponto/views.py:1635`) | Dia ISO recebido. Entrada por `timestamp__date` — dia civil. Cobrança por `COBRANCAS_DO_TURNO`, `VIVOS`, mesmo colaborador, menor PK cujo **`dia_do_fato(c)`** coincide. (`app/ponto/views.py:1594`, `app/ponto/views.py:1597`, `app/ponto/views.py:1612`) | Com cobrança, grava origem e aponta o inverso. Sem cobrança, grava origem nula; esse corpo não abre envelope. (`app/ponto/views.py:1643`, `app/ponto/views.py:1645`) |
-| Serviço: `regularizar_turno_orfao` | `get_or_create` por colaborador/entrada/dia; defaults `esqueci_saida`, saída, descrição com motivo e pendente. Se existente sem saída, atualiza saída/descrição/status. (`app/ponto/services/regularizacao.py:91`, `app/ponto/services/regularizacao.py:102`) | **Dia civil local da entrada**; valida o turno por `turnos_do_colab`. Não acrescenta ponteiros de justificativa/cobrança. (`app/ponto/services/regularizacao.py:59`, `app/ponto/services/regularizacao.py:73`, `app/ponto/services/regularizacao.py:91`) | Não abre envelope. Põe em análise chamados vivos de cinco módulos do colaborador, **sem recorte de dia**, e anexa ocorrência com seus motivos. (`app/ponto/services/regularizacao.py:126`, `app/ponto/services/regularizacao.py:136`) |
-| Serviço da tela de ponto: `ramo_regularizar_saida` | `update_or_create` por colaborador/dia/entrada; defaults `esqueci`, saída informada, descrição automática contendo o horário informado e pendente. (`app/ponto/services/triagem_batida.py:227`, `app/ponto/services/triagem_batida.py:258`) | **Dia civil local da entrada**, `_ent['entrada'].date()`. Não acrescenta vínculo de justificativa. (`app/ponto/services/triagem_batida.py:180`, `app/ponto/services/triagem_batida.py:260`) | Não abre envelope; escala urgência de chamados vivos `entrada_bloqueada_turno_aberto` do colaborador, sem filtro de dia. (`app/ponto/services/triagem_batida.py:287`) |
-| Command: `_abrir_justificativa_automatica` | `get_or_create` por colaborador/dia; defaults entrada, `esqueci_saida`, descrição do sistema, pendente e origem. Só aponta o inverso quando criou a justificativa. (`app/ponto/management/commands/processar_alertas_turno.py:392`, `app/ponto/management/commands/processar_alertas_turno.py:394`, `app/ponto/management/commands/processar_alertas_turno.py:409`) | Recebe **`tm.data_turno`**, o dia do turno materializado. (`app/ponto/management/commands/processar_alertas_turno.py:316`, `app/ponto/management/commands/processar_alertas_turno.py:321`) | Abre antes a cobrança crítica; se a abertura for recusada, não cria justificativa. Não é nascimento de `justificativa_colab`. (`app/ponto/management/commands/processar_alertas_turno.py:316`, `app/ponto/management/commands/processar_alertas_turno.py:324`, `app/ponto/management/commands/processar_alertas_turno.py:335`) |
-
-A regularização por serviço tem três cascas: web `regularizar_retorno`, API normal e API core. O outro ramo é chamado por `bater_ponto` quando `tipo=='regularizar_saida'`. (`app/ponto/views.py:3215`, `app/api/views.py:2866`, `app/api/views_core.py:1188`; `app/ponto/views.py:333`)
-
-`views_core.py` existe e tem `api_regularizar_turno`; não foi localizado ali um gêmeo `api_justificativas`. O URLconf core publica regularização, mas não justificativas. (`app/api/views_core.py:1143`; `app/api/urls_core.py:7`, `app/api/urls_core.py:19`; ausência de outro escritor: **[nao verificado]**)
-
-Há também a superfície genérica do Django admin: `JustificativaAdmin` herda de `admin.ModelAdmin`, sem o mixin `SoLeitura` usado em outros modelos desse arquivo; não contém lógica própria de escolha do dia, cobrança ou envelope. Uso efetivo dessa superfície: **[nao verificado]**. (`app/ponto/admin.py:12`, `app/ponto/admin.py:18`)
-
-O formulário web lê diretamente `request.POST`; não foi localizado um form Python escritor de justificativa. `ponto/forms.py` contém `AusenciaForm`. (`app/ponto/views.py:1589`; `app/ponto/forms.py:41`; ausência global: **[nao verificado]**)
-
-Os demais escritores encontrados alteram justificativas já existentes:
-
-| Escritor | Mutação |
-|---|---|
-| `aprovar_justificativa_dp` | Batida gerada, status aprovada, usuário/instante; encerra origem. (`app/ponto/services/justificativa.py:204`, `app/ponto/services/justificativa.py:214`) |
-| `rejeitar_justificativa_dp` | Status rejeitada, usuário/instante/motivo; abre chamado módulo **`justificativa`**, diferente do envelope `justificativa_colab`. (`app/ponto/services/justificativa.py:283`, `app/ponto/services/justificativa.py:291`) |
-| `materializar_saida_dp` | Batida gerada, saída informada, aprovação, usuário/instante; fecha cascata e origem. (`app/ponto/services/justificativa.py:380`, `app/ponto/services/justificativa.py:393`, `app/ponto/services/justificativa.py:408`) |
-| `aprovar_lote_justificativas` | Aprovação direta, usuário/instante, eventual batida gerada; encerra origem. (`app/ponto/views.py:1796`, `app/ponto/views.py:1831`, `app/ponto/views.py:1837`) |
-| `rejeitar_lote_justificativas` | Rejeição direta, usuário/instante/motivo. (`app/ponto/views.py:1874`) |
-| Entrada sincronizada | Auto-rejeita pendente vinculada e acrescenta nota à descrição após reconciliação. (`app/ponto/services/entrada_sincronizada.py:31`, `app/ponto/services/entrada_sincronizada.py:37`) |
-| Triagem de batida | Auto-rejeita pendente vinculada e acrescenta nota à descrição após reconciliação. (`app/ponto/services/triagem_batida.py:597`, `app/ponto/services/triagem_batida.py:603`) |
-| Reconciliador de chamados | Auto-rejeita pendente vinculada e acrescenta nota à descrição dentro da retratação. (`app/chamados/reconciliador.py:522`, `app/chamados/reconciliador.py:529`) |
-
-Essas decisões operam sobre a justificativa/vínculo já escolhido; o efeito comum dos `save()` é o signal mandar julgar `instance.data_turno` no cartório. Isso é separado da abertura explícita do envelope. (`app/ponto/signals.py:161`)
-
-2. **Juiz do dia e fonte das cobranças**
-
-- **`dia_do_fato(chamado, fortes=False) -> date | None`**: primeiro célula ligada; depois chave declarada no catálogo ou `data_turno` legado; depois batida, disputa e timestamps fracos. `fortes=True` encerra antes desses últimos degraus. (`app/chamados/juizes.py:87`, `app/chamados/juizes.py:98`, `app/chamados/juizes.py:113`, `app/chamados/juizes.py:127`, `app/chamados/juizes.py:129`, `app/chamados/juizes.py:133`, `app/chamados/juizes.py:138`)
-- **`data_do_chamado(modulo_origem, contexto_json)`** devolve o valor bruto da chave declarada, ou `None`; não devolve necessariamente um objeto `date`. (`app/chamados/catalogo/modulos.py:219`)
-- **`dias_do_fato(chamados)`** devolve mapa `{chamado_id: date | None}`. O corpo do lote lê `data_turno` diretamente nesse degrau, enquanto o singular consulta também a chave do catálogo; equivalência integral entre ambos: **[nao verificado]**. (`app/chamados/juizes.py:171`, `app/chamados/juizes.py:187`; `app/chamados/juizes.py:113`)
-- **`COBRANCAS_DO_TURNO`** é uma constante, não função: `('turno_aberto', 'batida_ausente')`. O consumidor de seleção localizado é a web; a API mantém sua lista literal. (`app/chamados/catalogo/modulos.py:83`; `app/ponto/views.py:1616`; `app/api/views.py:1971`)
-- **`VIVOS`** contém `aberto`, `em_analise`, `registrado`; **`COBRANCA`** contém somente os dois primeiros. As seleções de justificativa usam `VIVOS`. (`app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`; `app/api/views.py:1972`; `app/ponto/views.py:1616`)
-
-**Já existe `cobranca_viva_do_dia(colaborador, modulo_origem, dia, *, excluir=None)`.** Aceita módulo único ou coleção; retorna o chamado vivo mais novo, por `-criado_em,-pk`, ou `None`; confirma o dia com `dia_do_fato(..., fortes=True)`. Entretanto, primeiro restringe candidatos a JSON `data_turno=D` ou `celula.data=D`: outros degraus do juiz, isoladamente, não fazem um candidato atravessar esse pré-filtro. (`app/chamados/juizes.py:2151`, `app/chamados/juizes.py:2161`, `app/chamados/juizes.py:2163`, `app/chamados/juizes.py:2167`)
-
-Seus consumidores encontrados são reatamento de perguntas, gate do fechamento, triagem, entrada sincronizada e cartório. (`app/chamados/models.py:390`, `app/chamados/models.py:748`; `app/ponto/services/triagem_batida.py:589`; `app/ponto/services/entrada_sincronizada.py:28`; `app/ponto/services/cartorio.py:1641`)
-
-Além da seleção web, o censo de chamadas diretas/aliases de **`dia_do_fato`** encontrou:
-
-- Chamados: `app/chamados/canal.py:45`; `app/chamados/juizes.py:2167`, `app/chamados/juizes.py:2343`; `app/chamados/models.py:185`, `app/chamados/models.py:731`, `app/chamados/models.py:1140`, `app/chamados/models.py:1234`, `app/chamados/models.py:1269`, `app/chamados/models.py:1345`; `app/chamados/reconciliador.py:139`, `app/chamados/reconciliador.py:200`, `app/chamados/reconciliador.py:286`, `app/chamados/reconciliador.py:1023`, `app/chamados/reconciliador.py:1290`; `app/chamados/signals.py:214`.
-- Serviços de chamados: `app/chamados/services/acoes_chamado.py:370`; `app/chamados/services/adesao.py:106`; `app/chamados/services/celula_carimbada.py:57`, `app/chamados/services/celula_carimbada.py:92`, `app/chamados/services/celula_carimbada.py:151`; `app/chamados/services/competencia_trancada.py:261`; `app/chamados/services/declaracao_texto.py:199`, `app/chamados/services/declaracao_texto.py:330`, `app/chamados/services/declaracao_texto.py:461`, `app/chamados/services/declaracao_texto.py:571`, `app/chamados/services/declaracao_texto.py:606`; `app/chamados/services/disputa_emissao.py:231`, `app/chamados/services/disputa_emissao.py:781`; `app/chamados/services/feriado_reavaliar.py:30`; `app/chamados/services/fio.py:86`; `app/chamados/services/limbo_folgas.py:196`, `app/chamados/services/limbo_folgas.py:317`; `app/chamados/services/resposta_tardia.py:41`; `app/chamados/services/silencio_ausencia.py:62`; `app/chamados/services/vigia_loop.py:49`.
-- Commands de chamados: `app/chamados/management/commands/arquivar_sem_dia_irrecuperavel.py:62`; `app/chamados/management/commands/auditar_invariantes_chamados.py:235`, `app/chamados/management/commands/auditar_invariantes_chamados.py:623`, `app/chamados/management/commands/auditar_invariantes_chamados.py:641`, `app/chamados/management/commands/auditar_invariantes_chamados.py:656`, `app/chamados/management/commands/auditar_invariantes_chamados.py:979`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1345`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:40`.
-- Outros domínios: `app/colaboradores/services/calendario.py:439`; `app/escala/services/regeneracao.py:138`; `app/ponto/worklist.py:51`; `app/ponto/services/cluster_espurio.py:68`, `app/ponto/services/cluster_espurio.py:114`, `app/ponto/services/cluster_espurio.py:255`; `app/ponto/services/esmeril_espelho.py:183`; `app/ponto/services/faltas_de_hoje.py:65`; `app/ponto/services/furos_vetados.py:101`; `app/ponto/services/lastro.py:244`, `app/ponto/services/lastro.py:390`.
-- Commands de ponto: `app/ponto/management/commands/detectar_intervalo_ausente.py:128`; `app/ponto/management/commands/emitir_furo_retroativo.py:84`; `app/ponto/management/commands/fechar_chamados_meio_periodo.py:64`; `app/ponto/management/commands/mapa_divergencia.py:242`; `app/ponto/management/commands/reconciliar_fantasmas.py:179`; `app/ponto/management/commands/reconciliar_grade.py:373`.
-
-3. **Envelope `justificativa_colab`**
-
-O nascimento explícito encontrado é o POST da API quando sua busca não acha cobrança. A abertura usa colaborador, categoria `justificativa`, módulo `justificativa_colab` e `VIVOS`; assunto, título, descrição, área DP, subcategoria, urgência e contexto com dia entram em `defaults`. **O dia não faz parte do lookup dessa abertura.** (`app/api/views.py:1977`, `app/api/views.py:1983`, `app/api/views.py:1990`)
-
-A porta é `ChamadoColaborador.abrir`, com criação/obtenção e resolução de célula no nascimento. O catálogo declara o envelope com chave de data `None`, escopo `NENHUM`, dono `colab`; o juiz ainda pode ler seu `data_turno` legado. (`app/chamados/models.py:833`, `app/chamados/models.py:952`, `app/chamados/models.py:971`, `app/chamados/models.py:1224`; `app/chamados/catalogo/modulos.py:190`; `app/chamados/juizes.py:117`)
-
-A API grava os dois sentidos do vínculo, mas preserva origem já preenchida; a porta inversa também preserva o primeiro apontamento e retorna `False` se já houver justificativa. Ela não escolhe dia nem cobrança. (`app/api/views.py:2000`, `app/api/views.py:2010`, `app/api/views.py:2014`; `app/chamados/services/vinculos.py:54`, `app/chamados/services/vinculos.py:81`)
-
-Leitores encontrados:
-
-- Painel identifica explicitamente o módulo como `origem_destaque`; a lista mostra a pílula “Justificativa”. (`app/chamados/services/painel.py:393`, `app/chamados/services/painel.py:489`; `app/templates/chamados/partials/_lista_chamados.html:62`)
-- Painel de justificativa lê origem e followups, e seu template mostra o número da origem. (`app/ponto/views.py:1683`; `app/templates/ponto/partials/painel_justificativa.html:128`)
-- O sistema registra ocorrências pela origem; aprovação encerra/retrata a origem; justificativa pendente bloqueia fechamento e aprovada pode regularizar a premissa. (`app/chamados/utils.py:2`; `app/ponto/services/justificativa.py:33`; `app/chamados/models.py:136`, `app/chamados/models.py:1266`)
-- O reconciliador lê o vínculo para retenção e auto-rejeição na retratação. (`app/chamados/reconciliador.py:451`, `app/chamados/reconciliador.py:529`)
-- O envelope fica fora dos dois módulos classificados como solicitação; a separação de abas usa esse juiz. (`app/chamados/rotulos.py:26`, `app/chamados/rotulos.py:36`; `app/chamados/views.py:612`)
-
-4. **Ícones, destino e formulário**
-
-| Elemento | Situação atual |
-|---|---|
-| Dashboard antigo | “Justificar Ponto” aponta para `chamados:abrir`. (`app/templates/core/dashboard_colaborador.html:97`, `app/templates/core/dashboard_colaborador.html:103`) |
-| Dashboard v2 | “Justificar” aponta para `chamados:abrir`. A view do dashboard seleciona v2 como padrão. (`app/templates/core/dashboard_colaborador_v2.html:82`; `app/core/views.py:270`) |
-| Destino atual | `/chamados/abrir/` → `abrir_chamado`. O fluxo próprio do colaborador recebe assunto/descrição/categoria, sem selecionar dia, e chama `abrir_chamado_local`. (`app/config/urls.py:28`; `app/chamados/urls.py:10`; `app/chamados/views.py:167`, `app/chamados/views.py:196`) |
-| Persistência desse texto livre | Cria `ChamadoColaborador` com descrição e classificação; seu contexto contém identificação e pendência GLPI, sem dia do fato nesse corpo. (`app/chamados/services/abertura.py:19`, `app/chamados/services/abertura.py:47`, `app/chamados/services/abertura.py:58`) |
-| Formulário de justificativa | `/ponto/justificativa/abrir/`, nome `ponto:abrir_justificativa`, view `abrir_justificativa`, template `ponto/justificativa_form.html`. (`app/config/urls.py:29`; `app/ponto/urls.py:37`; `app/ponto/views.py:1552`, `app/ponto/views.py:1654`) |
-
-**Existe uma barreira adicional ao href:** GET sem qualquer justificativa pendente do colaborador redireciona para `chamados:abrir`; POST e GET com pendência chegam ao fluxo. (`app/ponto/views.py:1561`, `app/ponto/views.py:1564`)
-
-Hoje a lista vem de `turnos_do_colab`, janela de dois dias e entrada nas últimas 48 horas, somente turnos abertos com entrada. O `<select name="data_turno">` usa a data do timestamp de entrada; sem turnos, o template nem apresenta o formulário. **Não é uma lista de dias obtida das cobranças vivas.** (`app/ponto/views.py:1581`; `app/templates/ponto/justificativa_form.html:16`, `app/templates/ponto/justificativa_form.html:27`)
-
-O formulário recebe tipo, saída informada e descrição; seu POST segue para a mesma URL. (`app/templates/ponto/justificativa_form.html:22`, `app/templates/ponto/justificativa_form.html:37`, `app/templates/ponto/justificativa_form.html:53`, `app/templates/ponto/justificativa_form.html:60`)
-
-5. **Arquivos envolvidos e interseções**
-
-A interseção funcional direta do pedido está nos arquivos abaixo; isto identifica os sítios existentes, não um diff futuro fechado. (`app/api/views.py:1941`; `app/ponto/views.py:1552`, `app/ponto/views.py:1568`; `app/templates/ponto/justificativa_form.html:27`; `app/templates/core/dashboard_colaborador.html:97`; `app/templates/core/dashboard_colaborador_v2.html:82`)
-
-- `app/api/views.py`.
-- `app/ponto/views.py`, incluindo a barreira de GET.
-- `app/templates/ponto/justificativa_form.html`.
-- `app/templates/core/dashboard_colaborador.html`.
-- `app/templates/core/dashboard_colaborador_v2.html`.
-- Camada de serviço de justificativa: já existe `app/ponto/services/justificativa.py`, dedicada hoje às decisões/materialização; arquivo e nome da função de submissão futura: **[nao verificado]**. (`app/ponto/services/justificativa.py:132`, `app/ponto/services/justificativa.py:262`, `app/ponto/services/justificativa.py:331`)
-- Testes dos contratos afetados, identificados no item 6; arquivos novos específicos da MSG-0: **[nao verificado]**. [nao verificado]
-
-`api/views_core.py` entra no censo pelo gêmeo da regularização, mas alteração nele por causa de um gêmeo de `api_justificativas` não foi estabelecida. (`app/api/views_core.py:1143`; `app/api/urls_core.py:19`; necessidade de alteração: **[nao verificado]**)
-
-Quanto aos arquivos destacados no pedido: os ícones e o formulário estão nos templates acima; o formulário estende `base_tpl`. Não há interseção direta estabelecida com `apto*.html`, `bater_ponto_v2.html` ou os templates de chamados enumerados; o conjunto final de arquivos alterados permanece **[nao verificado]**. (`app/templates/ponto/justificativa_form.html:1`; `app/templates/core/dashboard_colaborador.html:97`; `app/templates/core/dashboard_colaborador_v2.html:82`)
-
-Há, porém, interseção **de fluxo** com bater ponto: ele chama `ramo_regularizar_saida`, outro escritor encontrado, em `triagem_batida.py`. Isso não demonstra necessidade de alterar seu template. (`app/ponto/views.py:333`; `app/ponto/services/triagem_batida.py:227`)
-
-O PWA localizado nesta cópia está em **`app/static/pwa.js`**; correspondência com o caminho citado `static/js/pwa.js`: **[nao verificado]**. (`app/static/pwa.js:1`)
-
-
-[truncado em 20000 de 25289 caracteres]
-
-## 11/11 12:24 · sessao 7109902a2bb3 · BO-ROTULO-ENCERRADO · verificador · origem=Code
-
-**BLOQUEIA — os exemplos da volta 1 foram fechados, mas a classe continua aberta.** O selo inspeciona fonte HTML; não observa o texto final após includes, renderização de variáveis ou JS. A comparação de duplicidade continua limitada a cada arquivo isolado. ([teste:41](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:41), [teste:120](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:120))
-
-**1. Fechamento dos bloqueios da volta 1**
-
-| Escape anterior | Situação nesta cópia |
-|---|---|
-| Aspas simples | Fechado para opções literais reconhecidas: `_ATTR` aceita aspas duplas, simples e valor sem aspas. `app/chamados/tests/test_bo_rotulo_encerrado.py:21`. |
-| Partial sem `<select>` | Fechado para `<option>` literal com código conhecido em `.html` sob `templates/chamados`, independentemente de ter seletor. Valor dinâmico ainda escapa. Mesmo teste:110 e :113. | [nao verificado]
-| Outro nome de controle | A proibição anterior agora independe do nome, dentro de `templates/chamados`; a comparação global também reconhece opções de outros controles. Porém o censo e `DESTINOS` continuam restritos a `name=novo_status`. Mesmo teste:46, :57 e :110. | [nao verificado]
-| Arquivo fora de `templates/chamados` | A comparação de textos passou a percorrer todo `app/templates`, mas separadamente por arquivo; a proibição geral de opções manuais continua restrita a `chamados`. Mesmo teste:110 e :120. | [nao verificado]
-| Remover, acrescentar ou reordenar destinos | Fechado para as chamadas literais reconhecidas nos cinco seletores: comparação exata com `DESTINOS`. Mesmo teste:127. | [nao verificado]
-
-Um contraexemplo conserva **exatamente os destinos atuais**, alterando apenas seus textos. Inserido imediatamente depois do seletor de [detalhe_local.html:399](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/templates/chamados/detalhe_local.html:399):
-
-```html
-<script>
-document.querySelectorAll('select[name="novo_status"] option').forEach(function(o) {
-  if (['resolvido', 'fechado'].includes(o.value))
-    o.textContent = 'Encerrado';
-});
-</script>
-```
-
-O varredor continua lendo as quatro tags originais e seus textos em `MOVER_PARA`; não interpreta essa alteração por JS. O teste final apenas compila os templates. ([teste:48](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:48), [teste:130](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:130), [teste:134](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:134))
-
-Também reproduzi o escape de partial **dentro de chamados**: manter as tags e acrescentar dois includes, passando `destino="resolvido"` e `destino="fechado"`, de um partial com:
-
-```django
-{% load chamados_tags %}
-<option value="{{ destino }}">{{ destino|espera|first }}</option>
-```
-
-O selo ignora o `value` dinâmico porque ele não pertence literalmente a `ESTADOS`; o filtro existente devolve “Encerrado” para ambos os códigos. ([teste:46](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:46), [teste:113](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:113), [verbos.py:114](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/services/verbos.py:114))
-
-**Verificação:** executei em memória, via AST, os seis métodos independentes de Django: **6/6 passaram na base, com o JS e com o partial dinâmico**. Não alterei os testes extraídos. Os dois métodos dependentes de Django, a suíte integral e a renderização em navegador ficam `[nao verificado]`; Django está indisponível neste ambiente `[nao verificado]`. Métodos exercitados: `app/chamados/tests/test_bo_rotulo_encerrado.py:75`, :80, :95, :99, :117 e :127.
-
-**2. Censo e cobertura**
-
-O selo percorre **todos os arquivos terminados em `.html` sob `app/templates/`**. Não percorre arquivos `.js`, Python, forms ou templates com outra extensão; também não renderiza includes. ([teste:17](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:17), [teste:33](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:33), [teste:134](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/chamados/tests/test_bo_rotulo_encerrado.py:134))
-
-Estes são os cinco controles encontrados que **oferecem códigos de estado como destinos**, todos cobertos estaticamente por `DESTINOS` e pela proibição de opções manuais (`app/chamados/tests/test_bo_rotulo_encerrado.py:64`, :99 e :127):
-
-| Controle | Destinos, na ordem, após o placeholder vazio |
-|---|---|
-| [detalhe.html:130](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/templates/chamados/detalhe.html:130) | `em_analise`, `resolvido`, `fechado`, `aberto` |
-| [detalhe_local.html:393](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/templates/chamados/detalhe_local.html:393) | `em_analise`, `resolvido`, `fechado`, `aberto` |
-| [fio_colaborador.html:265](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/templates/chamados/fio_colaborador.html:265) | `em_analise`, `resolvido`, `fechado` |
-| [modal_fio.html:665](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/templates/chamados/partials/modal_fio.html:665) | `em_analise`, `resolvido`, `fechado` |
-| [painel_chamado_turno.html:74](/home/ronald/codex_ws/c6d9cb734ebf09e73efc4d5930153cb769273169/app/templates/chamados/partials/painel_chamado_turno.html:74) | `em_analise`, `resolvido`, `fechado` |
-
-Não encontrei oferta adicional de destinos montada por JS, view Python ou form Django; ausência absoluta de construção indireta: `[nao verificado]`. Os receptores encontrados recebem diretamente o código do POST: `app/chamados/services/acoes_chamado.py:287` e `app/chamados/services/fio.py:502`.
-
-Há também ações que alcançam mudanças de estado. **Nenhuma é coberta pelo selo como controle de ação**, pois ele reconhece opções e os cinco seletores (`app/chamados/tests/test_bo_rotulo_encerrado.py:41`, :52 e :127):
-
-| Ação/controle | Efeito e referências |
-|---|---|
-| Aprovar/rejeitar benefício, inclusive botões construídos por JS | `resolvido`/`fechado`: `app/templates/colaboradores/painel_solicitacao_beneficio.html:23`; `app/templates/colaboradores/fila_solicitacoes_beneficio.html:138`; `app/colaboradores/views.py:2068`. |
-| Aceitar/recusar escala ou agenda | `resolvido`: `app/templates/chamados/detalhe_local.html:163` e :200; `app/chamados/services/acoes_chamado.py:149` e :108. |
-| Aprovar exceção | `resolvido`: detalhe local:256; modal:598; `app/chamados/services/acoes_chamado.py:70`. |
-| Autorizar geofence, com/sem advertência, ou recusar | `resolvido`, com preparação de `registrado` para análise: detalhe local:285; modal:506; `app/chamados/services/acoes_chamado.py:222`, :233 e :277. |
-| Abrir registro de ausência | `analisar()`: detalhe local:233; `app/chamados/views.py:1513`. |
-| Reabertura administrativa de disputa; resgatar chamado encerrado pela tranca | `reabrir(humano=True)`: modal:390; `app/chamados/services/acoes_disputa.py:269`; `app/templates/chamados/partials/_lista_chamados.html:85`; `app/chamados/views_arquivar.py:70`. |
-| Aceitar folga sugerida | Reconcilia chamados do template: modal:550; `app/chamados/services/limbo_folgas.py:98`. |
-| Validar resposta, validar assim mesmo, inline, lote e aplicar declaração escrita | Caminhos de validação/materialização/reconciliação: modal:140, :265 e :281; `_lista_chamados.html:82`; `app/templates/chamados/partials/_lote_preview.html:21`; `app/chamados/services/validacao.py:295`; `app/ponto/services/veredito_celula.py:202`. |
-| Regularizar disputa e fechar | Materializa perguntas validadas: modal:355; `app/chamados/services/acoes_disputa.py:139`. Resultado de cada caso sobre `status_local`: `[nao verificado]`. |
-| Iniciar disputa dos órfãos; pedir confirmação de âncora | `analisar()`: modal:628 e :644; `app/chamados/services/disputa_emissao.py:1159` e :1379. |
-| Desligar colaborador | Encerra chamados: `app/templates/colaboradores/editar.html:271`; `app/colaboradores/services/desligamento.py:150`. |
-| Salvar vínculo; realocar régua | Reconciliação posterior: `app/templates/colaboradores/partials/painel_vinculo.html:136`; modal:575; `app/colaboradores/services/vinculo.py:329`; `app/colaboradores/services/pos_vinculo.py:42`. |
-| Regularizar retorno | Põe chamados em análise: `app/ponto/views.py:3153`; `app/ponto/services/regularizacao.py:126`. |
-
-O histórico oferece um **filtro**, cujo receptor aplica `qs.filter`, sem transição (`app/templates/relatorios/historico_chamados.html:54`; `app/relatorios/views.py:920`). “Reabrir questionário” altera respostas/carimbos da pergunta; seus efeitos posteriores sobre `status_local` ficam `[nao verificado]` (`app/chamados/services/disputa_emissao.py:1593` e :1632). Censo integral de todo efeito indireto de alterações cadastrais e de fatos: `[nao verificado]`.
-
-**3. `DESTINOS`, receptores e preservação da base**
-
-**Conjunto, ordem e `value` foram preservados pelo diff fornecido** nos cinco seletores; conferem com a tabela acima e com `DESTINOS`. Checkout independente da base: `[nao verificado]`. Fontes atuais: `app/chamados/tests/test_bo_rotulo_encerrado.py:64` e os cinco seletores citados.
-
-Isso não significa que cada destino oferecido seja aceito em qualquer situação:
-
-- Detalhe local e painel de turno chegam à resposta livre; fio e modal compartilham `processar_post_fio`. Ambos verificam pertinência a `STATUS_CHOICES` e delegam a `transicionar`, sem consultar `DESTINOS` (`app/chamados/views.py:547`, :674 e :953; `app/templates/chamados/partials/painel_chamado_turno.html:68`; `app/chamados/services/acoes_chamado.py:313`; `app/chamados/services/fio.py:719`).
-- O motor decide por origem/perfil e recusa destino igual à origem. Para perfil comum: `aberto → em_analise/resolvido/fechado`; `em_analise → resolvido/fechado/aberto`; `resolvido → fechado/em_analise`; `registrado → em_analise/fechado`. Há exceção para `admin_ti` e terminais absolutos (`app/chamados/catalogo/motor.py:99` e :139).
-- O modelo ainda aplica guardas de justificativa, disputa, perguntas e regularização do furo (`app/chamados/models.py:135`, :148 e :181).
-
-**FILA — detalhe GLPI oferece status sem aplicá-lo:** o formulário envia ao followup; esse receptor lê conteúdo e envia a mensagem ao GLPI, ignorando `novo_status` (`app/templates/chamados/detalhe.html:122`; `app/chamados/urls.py:12`; `app/chamados/views.py:292` e :304).
-
-**FILA — “Reabrir” pode ser recusado:** envia `aberto`; `resolvido → aberto` é recusado para perfil comum. Essa desconexão já existia no diff da base fornecido (`app/chamados/services/verbos.py:136`; `app/chamados/catalogo/motor.py:102` e :153).
-
-**4. Quem escreve e quem lê**
-
-| Valor | Escritor → leitores |
-|---|---|
-| Código/`value` | Argumentos literais dos cinco templates → tag escreve o mesmo código → POST → serviços → `transicionar` → `_aplicar` → `_gravar_estado`. `app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/services/acoes_chamado.py:287` e :315; `app/chamados/services/fio.py:502` e :721; `app/chamados/models.py:199`, :228 e :450. |
-| Texto da opção | `MOVER_PARA` → `rotulo_de_movimento` → tag → texto HTML. `app/chamados/services/verbos.py:132` e :146; `app/chamados/templatetags/chamados_tags.py:76`. |
-| `title` | `ESTADO_TITLE` → helper/tag; também alimenta rótulo da linha e da pessoa. `app/chamados/services/verbos.py:100`, :146, :155 e :166; `app/chamados/templatetags/chamados_tags.py:77`. |
-| Filtro `espera` | Delega a `rotulo_para_pessoa`, que lê `ESPERA_COLAB`; permanece nas pílulas de estado atual. `app/chamados/templatetags/chamados_tags.py:53`; `app/chamados/services/verbos.py:162`; `app/templates/chamados/detalhe_local.html:68`. |
-
-Nos receptores rastreados, decisão e gravação usam **códigos**, sem interpretar texto ou tooltip. O compartilhamento de “Encerrado” permanece na apresentação para a pessoa; as opções de movimento agora usam o mapa específico (`app/chamados/services/acoes_chamado.py:313`; `app/chamados/services/fio.py:719`; `app/chamados/services/verbos.py:114` e :132).
-
-**5. Classes anteriores**
-
-- **BLOQUEIA — selo com mordida insuficiente:** permanece pelos contraexemplos do item 1. Porém **não passa vazio**: exige pelo menos cinco arquivos e igualdade exata com `DESTINOS` (`app/chamados/tests/test_bo_rotulo_encerrado.py:95` e :131).
-- **Segundo juiz duplicando o registrado:** não demonstrado no delta. A autoridade continua `motor.decidir`; a tag consulta apresentação, e `DESTINOS` é usado nos testes (`app/core/juizes.py:274`; `app/chamados/models.py:123`; `app/chamados/templatetags/chamados_tags.py:74`; `app/chamados/tests/test_bo_rotulo_encerrado.py:127`).
-- **Derivação paralela da mesma fonte:** não demonstrada no delta. Os cinco seletores consultam o helper único; movimento e espera têm consumidores distintos (`app/chamados/services/verbos.py:140` e :162; seletores do item 2).
-- **Campo com dois significados:** não demonstrado como introdução desta obra. Código, texto e `title` continuam separados; permanecem os dois achados de fila do item 3 (`app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/services/acoes_chamado.py:313`).
-
-_3860 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3863 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
