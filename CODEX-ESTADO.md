@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:51** · publicado em **11/11/2026 12:52** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:53** · publicado em **11/11/2026 12:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:53 · sessao cb3c2382aea3 · LOTE-VALIDAR-REGRESSAO-0311 · sonda · origem=Code
+
+Não executei a sonda no banco: sem acesso a banco/log, execução e transação READ ONLY permanecem [nao verificado]. Reproduzo integralmente a saída fornecida. [nao verificado] [nao verificado]
+
+```text
+sonda_leitura: sonda_cliques.py [952087b30c6501fc] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+linhas_lidas 2684
+# dia | validou_lote_tela | ia_validou_lote | val_perg_disp | val_perg_nao_gravou | materializar_batida | vincular_pergunta_origem
+dia 2026-10-20 2 0 54 5 98 98
+dia 2026-10-21 2 0 52 7 28 28
+dia 2026-10-22 1 0 54 2 37 37
+dia 2026-10-23 0 0 76 7 55 55
+dia 2026-10-24 0 0 1 0 0 0
+dia 2026-10-25 0 0 2 0 0 0
+dia 2026-10-26 1 0 170 9 144 144
+dia 2026-10-27 0 0 73 13 37 37
+dia 2026-10-28 11 0 72 8 60 60
+dia 2026-10-29 6 0 48 6 41 41
+dia 2026-10-30 12 0 27 25 21 21
+dia 2026-10-31 0 0 1 0 0 0
+dia 2026-11-01 0 0 1 0 0 0
+dia 2026-11-02 0 0 2 0 0 0
+dia 2026-11-03 2 0 90 12 79 79
+dia 2026-11-04 0 0 1 1 0 0
+dia 2026-11-05 2 0 30 2 25 25
+dia 2026-11-06 2 0 39 3 38 38
+dia 2026-11-07 0 0 1 0 0 0
+dia 2026-11-08 0 0 1 0 0 0
+dia 2026-11-09 0 0 18 5 14 14
+dia 2026-11-10 0 0 12 3 9 9
+dia 2026-11-11 4 0 113 31 95 95
+lotes_sem_trilha_mensuravel 25
+# dia | n_lotes | pedidas_mediana/max | validadas_soma | seg_mediana/p90/max | seg_por_pergunta_mediana | lotes>30s
+lote 2026-10-20 2 7.5/9 15 6.3/6.6/6.6 0.83 0 cadeia/val+rec=[(10, 9), (6, 6)] seg=[6.6, 6.0]
+lote 2026-10-21 2 6.5/11 13 5.7/10.0/10.0 0.75 0 cadeia/val+rec=[(12, 11), (2, 2)] seg=[10.0, 1.3]
+lote 2026-10-22 1 51/51 45 74.0/74.0/74.0 1.57 1 cadeia/val+rec=[(47, 51)] seg=[74.0]
+lote 2026-10-26 1 125/125 107 145.5/145.5/145.5 1.3 1 cadeia/val+rec=[(112, 125)] seg=[145.5]
+lote 2026-10-28 11 15/47 52 17.5/46.6/46.6 1.34 1 cadeia/val+rec=[(35, 47), (0, 15), (0, 15), (0, 15), (0, 15), (0, 15), (11, 26), (0, 15), (13, 29), (0, 16), (0, 16)] seg=[46.6, None, None, None, None, None, 14.9, None, 17.5, None, None]
+lote 2026-10-29 6 12.0/31 28 28.7/34.1/34.1 1.92 1 cadeia/val+rec=[(12, 24), (18, 31), (0, 12), (0, 12), (0, 12), (0, 12)] seg=[23.2, 34.1, None, None, None, None]
+lote 2026-10-30 12 29.0/33 4 19.7/19.7/19.7 0.98 0 cadeia/val+rec=[(20, 33), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29), (0, 29)] seg=[19.7, None, None, None, None, None, None, None, None, None, None, None]
+lote 2026-11-03 2 67.0/87 55 53.9/94.8/94.8 1.54 1 cadeia/val+rec=[(53, 87), (10, 47)] seg=[94.8, 12.9]
+lote 2026-11-05 2 51.5/57 23 16.7/27.1/27.1 1.28 0 cadeia/val+rec=[(18, 57), (6, 46)] seg=[27.1, 6.3]
+lote 2026-11-06 2 50.5/56 21 12.3/18.1/18.1 1.19 0 cadeia/val+rec=[(17, 56), (5, 45)] seg=[18.1, 6.6]
+lote 2026-11-11 4 68.0/119 61 65.5/122.7/122.7 1.42 1 cadeia/val+rec=[(74, 119), (1, 59), (7, 68), (0, 68)] seg=[122.7, None, 8.3, None]
+```
+
+1. A saída não contém mensagem explícita de erro de execução nem indica universo vazio: informa `linhas_lidas 2684`. Informa também `lotes_sem_trilha_mensuravel 25`. [nao verificado] Há contagens positivas de `val_perg_nao_gravou`; no código, essa ação registra validação com ponto não gravado e retorno `ok: False`. [validacao.py:490](/home/ronald/codex_ws/e70a54f7e1050568237459da72cae78de0763d08/app/chamados/services/validacao.py:490) A causa de cada ocorrência em produção é [nao verificado].
+
+2. Comparação por lote, na ordem fornecida; repetições consecutivas estão indicadas por `×`. [nao verificado]
+
+| Dia | Comparações cadeia versus val+rec | Iguais | Diferentes | Evidência |
+|---|---|---:|---:|---|
+| 2026-10-20 | 10≠9; 6=6 | 1 | 1 | [nao verificado] |
+| 2026-10-21 | 12≠11; 2=2 | 1 | 1 | [nao verificado] |
+| 2026-10-22 | 47≠51 | 0 | 1 | [nao verificado] |
+| 2026-10-26 | 112≠125 | 0 | 1 | [nao verificado] |
+| 2026-10-28 | 35≠47; 5×(0≠15); 11≠26; 0≠15; 13≠29; 2×(0≠16) | 0 | 11 | [nao verificado] |
+| 2026-10-29 | 12≠24; 18≠31; 4×(0≠12) | 0 | 6 | [nao verificado] |
+| 2026-10-30 | 20≠33; 11×(0≠29) | 0 | 12 | [nao verificado] |
+| 2026-11-03 | 53≠87; 10≠47 | 0 | 2 | [nao verificado] |
+| 2026-11-05 | 18≠57; 6≠46 | 0 | 2 | [nao verificado] |
+| 2026-11-06 | 17≠56; 5≠45 | 0 | 2 | [nao verificado] |
+| 2026-11-11 | 74≠119; 1≠59; 7≠68; 0≠68 | 0 | 4 | [nao verificado] |
+| **Total** | **45 lotes listados** | **2** | **43** | [nao verificado] |
+
+3. Durações apenas dos lotes confiáveis pelo critério solicitado; segundos por pergunta = duração ÷ (validadas + recusadas). [nao verificado]
+
+| Período | Dia | Lote na lista do dia | Perguntas | Duração do lote | Duração por pergunta | Evidência |
+|---|---|---:|---:|---:|---:|---|
+| Antes de 2026-11-03 | 2026-10-20 | 2º | 6 | 6,0 s | 1,00 s | [nao verificado] |
+| Antes de 2026-11-03 | 2026-10-21 | 2º | 2 | 1,3 s | 0,65 s | [nao verificado] |
+
+Nos demais dias com linha `lote`, não há lote confiável pelo critério. A partir de **2026-11-03**, nenhum dos **10 lotes listados** tem cadeia igual a validadas + recusadas; portanto, não há duração confiável por lote ou por pergunta para comparar com o período anterior. [nao verificado]
 
 ## 11/11 12:51 · sessao 63a016840d88 · BO-ROTULO-ENCERRADO · verificador · origem=Code
 
@@ -1173,22 +1248,4 @@ Além do bloqueio do selo e das filas já apontadas:
 - **Fila — entrega Haiku não demonstrada.** O golden contém pergunta histórica por dia, outro contrato; a pergunta nova e seu leitor da projeção são **[nao verificado]**. (`eval/golden.py:35-37`)
 - Smoke de clique do Ronald, encaixe na fila 2/RELATO e comprovação independente do hash/base: **[nao verificado]**.
 
-## 11/11 12:22 · sessao fbcbddda6571 · - · - · origem=Ronald (tmux)
-
-Censo concluído; somente leitura.
-
-- **Juiz:** `dia_do_fato(chamado, fortes=False) -> date | None`, escada célula → chave declarada no catálogo/`data_turno` → batida → disputa sem conversas → timestamps fracos; `fortes=True` encerra antes da batida. `app/chamados/juizes.py:87`, `:98`, `:113`, `:127`, `:129`, `:133`, `:138`.
-- **Fonte dos módulos:** `COBRANCAS_DO_TURNO = ('turno_aberto', 'batida_ausente')`; único consumidor de produção encontrado: seleção da web. `app/chamados/catalogo/modulos.py:83`; `app/ponto/views.py:1616`.
-- **Função já existente:** `cobranca_viva_do_dia(colaborador, modulo_origem, dia, *, excluir=None) -> ChamadoColaborador | None`; módulos string ou coleção, `VIVOS`, mais novo por `-criado_em,-pk`, confirmação por `dia_do_fato(fortes=True)`. O pré-filtro só admite JSON `data_turno` ou célula naquela data. `app/chamados/juizes.py:2151`, `:2161`, `:2163`, `:2167`.
-- **Consumidores dessa função:** reatar perguntas e gate do fechamento (`app/chamados/models.py:390`, `:748`); triagem (`app/ponto/services/triagem_batida.py:589`); entrada sincronizada (`app/ponto/services/entrada_sincronizada.py:28`); cartório (`app/ponto/services/cartorio.py:1641`).
-- **Estados:** `VIVOS` inclui `registrado`; `COBRANCA` contém apenas `aberto,em_analise`. `app/chamados/catalogo/motor.py:24`, `:29`.
-- **Envelope:** único nascimento literal de produção encontrado em `api_justificativas`, quando falta chamado de turno: `ChamadoColaborador.abrir`, categoria `justificativa`, módulo `justificativa_colab`, `area='dp'`, subcategoria tipo, contexto com dia. Dia está em `defaults`, não no lookup. `app/api/views.py:1977`, `:1981`, `:1983`, `:1990`.
-- **Catálogo do envelope:** chave de data `None`, escopo `NENHUM`, dono `colab`; mesmo assim o juiz admite o legado `data_turno` presente no contexto. `app/chamados/catalogo/modulos.py:190`; `app/chamados/juizes.py:117`.
-- **Ponteiros:** API grava `Justificativa.chamado_origem` e usa `vinculos.apontar_justificativa` para `ChamadoColaborador.justificativa_relacionada`; esta porta preserva primeiro ponteiro. `app/api/views.py:2000`, `:2010`, `:2014`; `app/chamados/services/vinculos.py:81`.
-- **Leitores explícitos do módulo:** painel marca `origem_destaque`; lista mostra pílula “Justificativa”. `app/chamados/services/painel.py:393`, `:489`; `app/templates/chamados/partials/_lista_chamados.html:62`.
-- **Leitores genéricos:** ocorrências do sistema pela origem (`app/chamados/utils.py:2`); painel lê origem/followups (`app/ponto/views.py:1683`); template mostra origem (`app/templates/ponto/partials/painel_justificativa.html:128`); aprovação retrata origem (`app/ponto/services/justificativa.py:33`); pendência bloqueia fecho (`app/chamados/models.py:136`); aprovada regulariza premissa (`app/chamados/models.py:1266`); reconciliador retém justificativa alheia e auto-rejeita pendente na retratação (`app/chamados/reconciliador.py:451`, `:529`).
-- **Classificação de aba:** envelope não pertence aos módulos de solicitação (`chamados`, `app_colaborador`); a view o separa para pendências pelo juiz. `app/chamados/rotulos.py:26`, `:36`; `app/chamados/views.py:612`.
-
-Lista completa de chamadores diretos/aliases de `chamados.juizes.dia_do_fato` em produção já enviada ao pai por mensagem, com arquivos e linhas; inclui views, modelos, reconciliador, serviços, sinais e commands.
-
-_3858 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3859 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
