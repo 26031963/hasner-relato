@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 01:34** · publicado em **11/11/2026 01:36** (UTC-3)
+> Ultima resposta processada: **11/11/2026 01:45** · publicado em **11/11/2026 01:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 01:45 · sessao 3066302ca157 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Cura implementada. [Entrega C21](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/BO_DISPUTA_ENTREGA_C21.txt:6) contém censo, vereditos 3–6, REDs, mutantes e comandos.
+
+Passaram [122 testes de memória](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/BO_DISPUTA_ENTREGA_C21.txt:153) e [35 da catraca](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/BO_DISPUTA_ENTREGA_C21.txt:161). [nao verificado]
+
+Protegido ORM e suíte Django inteira: [nao verificado]. [nao verificado]
 
 ## 11/11 01:34 · sessao f3f0a41e4168 · FIO-E0-V4-E3 · sonda · origem=Code
 
@@ -951,30 +959,4 @@ Não encontrei necessidade de nova lei para esses quatro dias: há regras escrit
 
 - LEI-C17-UM-JUIZ decide a favor da tarefa nos quatro campos divergentes anteriores e exige DIFF antes da troca; ela não declara que toda saída atual da tarefa já satisfaz todas as regras. O contrato do juiz é responder ações ainda exigíveis após decisões e efeitos. (`app/docs/RELATO.md:244`; `app/docs/PROMPTS.md:2007`; `app/docs/CORTES.md:426`.)
 
-## 11/11 01:02 · sessao d87f9eac0e8c · - · - · origem=Ronald (tmux)
-
-O caminho do vigia é único para todos os dias: `censo_alcance → dias_que_seguram → classificar_export + motivos_retencao_celula(com_dias=True) → dias.setdefault((colab, data), competência)`. O vigia exige retenção da folha, e não existência de pergunta ou chamado vivo. (`app/chamados/services/vigia_fio.py:581-587`; `app/folha/fora_da_folha.py:118-137`; `app/folha/fora_da_folha.py:95-99`)
-
-Com célula existente, há **dois ramos possíveis de entrada**: veredito acusador que não passa pelas isenções de retenção; ou célula sem veredito, `trabalha is not None`, passada e fora do dia de demissão. A sonda não expõe veredito nem `trabalha`, portanto o ramo individual entre esses dois permanece [nao verificado]. (`app/folha/export.py:1233-1256`)
-
-Antes de contar morto, o vigia procura porta; separa hoje/futuro; e procura decisão pendente, ausência aberta, folga contestada validada ou dia na mesa do admin. Só depois escolhe causa e incrementa `fio_morto_alcance`. (`app/chamados/services/vigia_fio.py:635-660`; `app/chamados/services/vigia_fio.py:304-315`; `app/chamados/services/vigia_fio.py:695-699`)
-
-| Causa | Condição efetiva e referência |
-|---|---|
-| a | Chamado vivo da célula ou âncora viva fora da fila; como a porta já falhou, é vivo sem porta alcançável. (`app/chamados/services/vigia_fio.py:663-670`) |
-| b | Pergunta viva respondida sem texto. (`app/chamados/services/vigia_fio.py:671-674`) |
-| c | Pergunta viva respondida, com âncora terminal; vem depois de excluir resposta vazia. (`app/chamados/services/vigia_fio.py:673-676`) |
-| d | Nenhuma pergunta viva, dia ausente da lista CxR, colaborador presente nela; existência de célula e ausência de chamado vivo decorrem dos ramos anteriores. (`app/chamados/services/vigia_fio.py:667-678`) |
-| e | Restante, discriminado por detalhe: sem célula, dia na lista com outro dono, sem pergunta viva, pergunta sob terminal, sem âncora, fora do app ou outra. (`app/chamados/services/vigia_fio.py:667-694`) |
-
-A causa **d não atribui dono CADASTRO nem prova que nada é exigível**: seu rótulo efetivo é `colab_na_lista_cxr_dia_fora`, e o teste só combina presença do colaborador com ausência do dia. (`app/chamados/services/vigia_fio.py:538-539`; `app/chamados/services/vigia_fio.py:677-678`)
-
-A “lista” vem de `ListaDoAdmin`, que chama `escala.services.cadastro_realidade.lista`, deriva os dias com `dias_na_lista` e separadamente extrai colaboradores das linhas por posto. Só assinaturas com `data` representam dias; assinatura do vínculo não prova presença daquele dia. (`app/chamados/services/vigia_fio.py:205-218`; `app/chamados/services/vigia_fio.py:230-251`; `app/escala/services/cadastro_realidade.py:1044-1064`)
-
-Para a classificação, os dois dias de causa **c** merecem exame próprio: a lei C6 mantém resposta com texto viva para decisão do admin, salvo decisão explícita dele sobre o dia ou concordância com a luz nos termos do juiz; esse ramo precede a absolvição pelo veredito. Portanto `dia_sem_trabalho` sozinho não permite classificá-los T. (`app/chamados/juizes.py:1341-1353`; `app/chamados/juizes.py:1372-1387`)
-
-A tarefa, entretanto, pula cada instância por `dia_sem_trabalho` ou `lampada is True` **antes** de procurar a pergunta e sua decisão. Isso explica como pode devolver nada apesar de C6 viva, sem demonstrar por si só qual autoridade está correta naquele caso. (`app/chamados/services/tarefa_do_dia.py:241-246`; `app/chamados/services/tarefa_do_dia.py:268-283`)
-
-`marcos_pendentes=[]` informa apenas ausência de lâmpada marcada `pendente` na ata; não informa ausência de acusação, ausência de trabalho ou ausência de obrigação. (`app/ponto/services/lastro.py:138-150`)
-
-_3588 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3589 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
