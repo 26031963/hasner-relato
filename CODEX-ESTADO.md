@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:53** · publicado em **11/11/2026 12:58** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:59** · publicado em **11/11/2026 13:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:59 · sessao daf646968a80 · FIO-E0-V4-E4B · censo · origem=Code
+
+| achado | classe | trecho da pergunta | trecho da resposta | linha de triagem | observação |
+|---|---|---|---|---|---|
+| **1. Recusa S143 impede S128, HX e fecho C7** (`opus_final_achados.txt:2`) | **(a)** | “Ha caminho que escapa (evento S143 x backfill, credor = destino x pai, recusa ja conhecida x nova)?” (`preverif2.q:7`) | “**Cura restritiva presente:** […] evento interrompe o resolver” (`preverif2.r:10`). | Sem descarte correspondente nas triagens fornecidas (`triagem_preverif2.txt:1`; `triagem_c4_v1.txt:1`). | O Codex descreveu a interrupção, mas não identificou a regressão sobre as demais perguntas. O retorno antecede S128, HX-RESPOSTA-VISIVEL, HX-DISPUTA-ORFA e C7 (`app/chamados/services/disputa_emissao.py:1946`, `:1950`, `:1986`, `:2009`, `:2086`). |
+| **2. Eventos sobre chamados já resolvidos podem reabrir passivo da competência aberta** (`opus_final_achados.txt:3`) | **(a)** | “Idempotencia: rodar 2x o evento ou o backfill = mesmo estado, 1 linha de trilha, 0 duplicata? Laco reabre->fecha->reabre […] existe hoje na arvore?” (`preverif1.q:12`). | “A aresta direta ‘S143 → E4B → reabrir credor exportado’ fica cortada quando a consulta já enxerga a exportação” (`preverif2.r:16`). | Sem descarte correspondente; o descarte sobre “corrida com ExportacaoDominio” trata de entrega concorrente (`triagem_c4_v1.txt:10`). | A resposta examinou o corte para **exportadas**, sem identificar a reativação do passivo **aberto** por esses chamadores. Há chamadas sobre terminais e caminho para `reabrir()`/ressuscitação (`app/chamados/services/becos.py:43`, `:54`; `app/chamados/reconciliador.py:1646`; `app/chamados/services/disputa_emissao.py:1849`; `app/chamados/models.py:1451`). Ocorrência efetiva após deploy e prova de frota: **[nao verificado]**. |
+| **3. Tetos 213/269 supostamente comentados** (`opus_final_achados.txt:4`) | **não procede — sem classificação** | — | — | — | O próprio achado veio “[nao verificado]”. Os valores **213** e **269** são entradas ativas de `TETOS`; `_cobrar` consulta o teto e executa `assertLessEqual` (`app/ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`, `:292`, `:293`). |
+
+falhas do Codex (classe a) = 2.
 
 ## 11/11 12:53 · sessao cb3c2382aea3 · LOTE-VALIDAR-REGRESSAO-0311 · sonda · origem=Code
 
@@ -1158,94 +1168,4 @@ Nos receptores rastreados, decisão e gravação usam **códigos**, sem interpre
 - **Derivação paralela da mesma fonte:** não demonstrada no delta. Os cinco seletores consultam o helper único; movimento e espera têm consumidores distintos (`app/chamados/services/verbos.py:140` e :162; seletores do item 2).
 - **Campo com dois significados:** não demonstrado como introdução desta obra. Código, texto e `title` continuam separados; permanecem os dois achados de fila do item 3 (`app/chamados/templatetags/chamados_tags.py:77`; `app/chamados/services/acoes_chamado.py:313`).
 
-## 11/11 12:23 · sessao f33dea6f2c6b · UI-PAINEL-MOSTRA-O-APP · verificador · origem=Code
-
-**Parecer: bloqueia declarar PRONTO pelo selo exigido.** Os testes conferem as duas cascas por grafo de includes e texto JavaScript; o ORM renderiza somente o partial. Isso não cumpre literalmente “renderiza as duas cascas”. A execução ORM e seus mutantes permanece **[nao verificado]**. (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:83`; `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:5,94`)
-
-**1. Existe uma função única?**
-
-**Sim, para os três leitores pedidos; não globalmente para toda superfície do colaborador.** A decisão completa do badge está em `projecao_do_app`: pergunta pendente vence mensagem não lida; a função escolhe `count`, `cor`, `rotulo` ou `None`. (`app/chamados/services/pergunta_no_app.py:89-104`)
-
-| Sítio | Decide ou lê? |
-|---|---|
-| `app/chamados/services/pergunta_no_app.py:90-102` | **Decide** os dois números e o badge. |
-| `app/api/views.py:315-319,358-360` | Lê e propaga a projeção. |
-| `app/api/views_core.py:303-307,346-348` | Lê e propaga a projeção. |
-| `app/colaboradores/views.py:940-941,1006` | Lê e entrega `no_app` ao template. |
-| `app/templates/colaboradores/partials/painel_colaborador.html:190-198` | Lê cor/rótulo/número e as perguntas prontas. |
-| `app/templates/colaboradores/partials/painel_colaborador.html:39-40` | Calcula **outro número**, autorizado pelo aval: chamados exibidos + perguntas pendentes. |
-| `app/templates/core/_drawer_generico.html:118-145` | Decide visibilidade e seleção das abas; não decide o badge. |
-| `app/core/views.py:252-253` | Conta perguntas diretamente pela `consulta_do_app`. |
-| `app/templates/core/dashboard_colaborador_v2.html:78-80` | **Decide sozinho** texto, cores e badge de perguntas do dashboard web. |
-
-**Fila — derivação paralela preexistente:** o dashboard web ativo continua com sua própria apresentação “Responder DP/Chamados”; portanto, “uma função para todo o app” seria uma afirmação excessiva. Essa superfície é usada por `core.views`, mas não foi alterada pelo diff fornecido. (`app/core/views.py:270-271`; `app/templates/core/dashboard_colaborador_v2.html:78-80`)
-
-**2. Antes/depois dos dois kernels**
-
-Pelo diff fornecido, **não houve mudança das três chaves, dos valores para um mesmo estado ou da precedência do badge**. Os dois kernels continuam expondo `chamados_nao_lidos`, `questionarios_pendentes` e `chamados_badge`. (`app/api/views.py:358-360`; `app/api/views_core.py:346-348`; `app/chamados/services/pergunta_no_app.py:90-104`)
-
-| Estado | Antes → depois, conforme o diff |
-|---|---|
-| P perguntas pendentes, inclusive com mensagens não lidas | `Responder DP`, `count=P`, `#f59e0b` |
-| Zero perguntas; C chamados vivos com nota DP não lida | `Chamados`, `count=C`, `#ef4444` |
-| Nenhum dos dois | `chamados_badge=None`; contadores zero |
-
-A regra atual que sustenta os três casos está em `app/chamados/services/pergunta_no_app.py:97-102`; a comparação histórica independente do anexo é **[nao verificado]**.
-
-**Mudou a ordem das consultas, não a precedência:** antes o diff mostrava a contagem de não lidos primeiro; agora C6 é consultado antes da contagem. Igualdade das respostas durante alterações concorrentes é **[nao verificado]**. (`app/chamados/services/pergunta_no_app.py:89-96`)
-
-O que o Android/iOS efetivamente desenha e a ausência de alterações em seus fontes são **[nao verificado]**; o contrato dos endpoints acima está preservado na extração mostrada.
-
-**3. O painel monta universo próprio?**
-
-**O novo aviso não.** A porta é:
-
-`painel_colaborador → projecao_do_app → consulta_do_app → perguntas_do_app → q_vivas/pergunta_viva`.
-
-Ela reaproveita C6 e separa pendentes/histórico sem novo predicado no painel. (`app/colaboradores/views.py:940-941`; `app/chamados/services/pergunta_no_app.py:47-58,69-75,89`)
-
-A query de não lidos também passou para essa mesma projeção, compartilhada pelos dois endpoints e pelo painel. (`app/chamados/services/pergunta_no_app.py:91-96`)
-
-**Existe uma query local antiga**, dos últimos cinco chamados da pessoa, de qualquer status. Ela alimenta a lista e a parcela antiga do contador da aba; não determina a faixa “No app dele agora”. (`app/colaboradores/views.py:937-939,1005-1006`; `app/templates/colaboradores/partials/painel_colaborador.html:39,190-191`)
-
-**4. Quem escreve, quem lê e qual a unidade?**
-
-| Campo/valor | Escritor e significado | Leitores |
-|---|---|---|
-| `pendentes` / `historico` | `consulta_do_app`; perguntas C6 vivas, separadas por resposta e fechamento da disputa. (`app/chamados/services/pergunta_no_app.py:69-75`) | Projeção e lista do painel. (`app/chamados/services/pergunta_no_app.py:89`; `app/templates/colaboradores/partials/painel_colaborador.html:193-198`) |
-| `questionarios_pendentes` | Projeção; **quantidade de perguntas**, não disputas. (`app/chamados/services/pergunta_no_app.py:90`) | Dois `/me/` e soma do botão. (`app/api/views.py:318,359`; `app/api/views_core.py:306,347`; template do painel:39) |
-| `chamados_nao_lidos` | Projeção; **quantidade de chamados vivos com pelo menos uma nota DP não lida**, não quantidade de notas. (`app/chamados/services/pergunta_no_app.py:91-96`) | Dois `/me/` e escolha do badge. (`app/api/views.py:317,358`; `app/api/views_core.py:305,346`; serviço:99-100) |
-| `count`, `cor`, `rotulo` | Exclusivamente a projeção para os três leitores pedidos. (`app/chamados/services/pergunta_no_app.py:97-104`) | APIs propagam; faixa apresenta diretamente. (`app/api/views.py:319,360`; `app/api/views_core.py:307,348`; template do painel:190-191) |
-| `no_app` | Variável/contexto transitório, produzido pela view; não é coluna persistida. (`app/colaboradores/views.py:941,1006`) | Template do painel:39,190-198. |
-| `chamados` / `total_mensagens` | View seleciona até cinco chamados; template soma perguntas. (`app/colaboradores/views.py:937-939`; template do painel:39-40) | Botão e lista antiga. (`app/templates/colaboradores/partials/msgs_lista.html:1-11`) |
-
-Os universos são por **pessoa**, sem filtro local de vínculo ou do mês do Espelho; as perguntas continuam submetidas à vitalidade C6. O dia apresentado é `p.data_evento`. (`app/chamados/services/pergunta_no_app.py:49-58,91-96`; `app/templates/colaboradores/partials/painel_colaborador.html:198`)
-
-Nos insumos persistidos, notas nascem por `nota.anexar_ocorrencia`; o carimbo de leitura é escrito por `nota.marcar_lidas`. O painel novo apenas consulta. (`app/chamados/services/nota.py:75-109,126-133`; `app/colaboradores/views.py:940-941`)
-
-Texto/dia da pergunta passam pelo nascimento; marco é derivado/validado na inserção. O diff não acrescenta escritores desses campos. (`app/chamados/models.py:2825-2828,3013-3017,3425-3447`)
-
-**Não encontrei leitor alterado supondo outra unidade.** `count` tem unidade condicionada ao rótulo, como antes; o contador do botão tem outra medida, expressamente pedida pelo aval. Não é evidência de corrupção semântica nova. (`app/chamados/services/pergunta_no_app.py:98-100`; `app/templates/colaboradores/partials/painel_colaborador.html:39-40`)
-
-**5. Os selos mordem?**
-
-- **Memória: sim, nos mutantes fornecidos.** Nesta revisão, foram 7/7 verdes; `painel_query` e `template_rotulo` morreram com uma falha cada; as duas inversões de precedência morreram com três falhas cada, sem erros. Alvos/assertivas: `app/colaboradores/tests/ui_painel_fontes.py:19-35`; `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:25-172`.
-- **ORM: tem casos pertinentes, mas execução e morte dos mutantes ORM estão [nao verificado].** O código cobre duas perguntas na mesma disputa, precedência, chamados versus notas, vazio, origem variável e preservação do carimbo de leitura. (`app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:114-192`)
-- **Bloqueia — duas cascas sem renderização.** O teste estático segue includes e procura strings; o ORM chama a view do partial. Nenhum deles renderiza `base.html` e `base_app.html`. (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:83-105`; `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:94-101`)
-- **E3 não perdeu os casos pelo deslocamento.** Os mutantes agora alteram o escalar; a matriz existente exige esse escalar e duas perguntas na mesma disputa. O autor errado passou para a query real e continua discriminado. (`app/chamados/tests/e3_mutantes.py:23-26,87-88`; `app/chamados/tests/test_e3_app_orm.py:41-50,62-74`)
-- **Tripwire não foi afrouxado pelo diff:** duas entradas API viraram uma entrada do serviço; teto caiu de 26 para 25, mantendo `SEM_JUIZ=1` e as verificações de sítio novo, declaração sobrando e testemunhas. (`app/core/tests/test_tripwire_contagem_de_pendencia.py:81-85,147-148,370-399`)
-- **Fila — cor sem mordida:** cor fixa no template sobrevive aos sete testes em memória; o ORM também não compara o estilo do painel. O código atual, contudo, lê a cor correta da origem. (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:39-47`; `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:114-145`; `app/templates/colaboradores/partials/painel_colaborador.html:190`)
-
-**6. Classes recorrentes e demais achados**
-
-**Não identifiquei segundo juiz registrado nem segundo escritor persistente introduzido.** A projeção reaproveita C6, registrado em `core/juizes.py`, e monta somente dados de apresentação. (`app/core/juizes.py:278`; `app/chamados/services/pergunta_no_app.py:47-104`; `app/docs/JUIZES.md:10-14`)
-
-**Relógio:** a função nova não lê relógio; existe fallback herdado `date.today()` no caminho dos juízes. Esse trecho não foi alterado pelo diff fornecido. (`app/chamados/services/pergunta_no_app.py:78-104`; `app/chamados/juizes.py:569-577`)
-
-Além do bloqueio do selo e das filas já apontadas:
-
-- **Fila — faixa desatualiza após envio pelo próprio painel.** O POST grava nota DP, mas devolve somente a lista; o form troca apenas `#msgs-lista`. A faixa e o contador permanecem com o primeiro render. Reprodução em navegador: **[nao verificado]**. (`app/chamados/views.py:973-986,995-1003`; `app/templates/colaboradores/partials/painel_colaborador.html:190-205`)
-- **Fila — entrega Haiku não demonstrada.** O golden contém pergunta histórica por dia, outro contrato; a pergunta nova e seu leitor da projeção são **[nao verificado]**. (`eval/golden.py:35-37`)
-- Smoke de clique do Ronald, encaixe na fila 2/RELATO e comprovação independente do hash/base: **[nao verificado]**.
-
-_3859 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3860 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
