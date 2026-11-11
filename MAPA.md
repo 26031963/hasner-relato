@@ -90,7 +90,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
 | tela | 11/1 | 109 + sitio novo: nao sei (sem varredor) | 67 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
 | portas | 1/0 | 124 + sitio novo: nao sei (sem varredor) | 0 | 0 | 124 + sitio novo: nao sei (sem varredor) | 0 | 25 |
-| batida | 4/2 | 0 + sitio novo: nao sei (sem varredor) | 0 | 0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 2 |
+| batida | 5/2 | 0 + sitio novo: nao sei (sem varredor) | 0 | 0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 2 |
 | escala | 2/0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 0 | 0 + sitio novo: nao sei (sem varredor) | 0 | 1 |
 
 ### celula/precedencia -- fora_de_autoridade('celula/precedencia') = 0
@@ -243,6 +243,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - quantas horas este PAR (turno) vale? -> `ponto/motor_calculo_v2.py::MotorBase.calcular_periodo` · registro 0
   - a batida esta dentro do geofence? -> `ponto/services/geofence.py::classificar_posicao` · registro 0
   - a foto da batida esta ausente? -> `ponto/registro_batida.py::selfie_ausente` · registro 0
+  - a batida tem GPS? -> `ponto/services/geofence.py::tem_gps` · registro 0
   - [SEM JUIZ] a batida e espuria (cluster)? · registro 0
   - [SEM JUIZ] o par e relampago? · registro 0
 

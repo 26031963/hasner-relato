@@ -16,6 +16,7 @@ esperam migrar -- a lista so encolhe).
 | pergunta | juiz (dono) |
 |---|---|
 | a batida esta dentro do geofence? | `ponto/services/geofence.py::classificar_posicao` |
+| a batida tem GPS? | `ponto/services/geofence.py::tem_gps` |
 | a foto da batida esta ausente? | `ponto/registro_batida.py::selfie_ausente` |
 | quantas horas este PAR (turno) vale? | `ponto/motor_calculo_v2.py::MotorBase.calcular_periodo` |
 | que periodos e que intervalo teve este dia? | `ponto/juiz_batida.py::periodos_do_dia` |
@@ -179,7 +180,7 @@ esperam migrar -- a lista so encolhe).
 
 | familia | juizes | sem juiz | pendentes |
 |---|---|---|---|
-| `batida` | 4 | 2 | 0 |
+| `batida` | 5 | 2 | 0 |
 | `turno/marcos` | 15 | 0 | 0 |
 | `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
@@ -189,4 +190,4 @@ esperam migrar -- a lista so encolhe).
 | `feriado/prazo` | 6 | 2 | 12 |
 | `tela` | 11 | 1 | 109 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **94** | **5** | **245** |
+| **total** | **95** | **5** | **245** |
