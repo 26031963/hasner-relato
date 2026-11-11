@@ -1,7 +1,295 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 20:33** · publicado em **11/11/2026 20:33** (UTC-3)
+> Ultima resposta processada: **11/11/2026 20:35** · publicado em **11/11/2026 20:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 20:35 · sessao 3e51f6e3629d · CASO-0711-HJ003 · sonda · origem=Code
+
+**A regra atual é “disputa aberta mais recente do colaborador”, sem filtro pelo dia da pergunta.** Isso permite que uma disputa aberta em um dia receba perguntas de outros dias. A eleição usa `.first()` sobre a ordenação `-aberta_em`. (`app/chamados/services/disputa_emissao.py:531`; `app/chamados/models.py:1804`.)
+
+**A sonda confirma a ligação 7279 → 33492, mas não identifica o chamador histórico que inseriu cada pergunta.** Esses valores são dado fornecido, sem verificação independente: **[nao verificado]**. A cópia também não contém metadados Git; identidade criptográfica com HEAD/PROD: **[nao verificado]**.
+
+Referências abreviadas:
+
+| Sigla | Arquivo |
+|---|---|
+| M | [app/chamados/models.py](/home/ronald/codex_ws/df2be6b12d7cd47a5b9ce0fda766382308c2c5b8/app/chamados/models.py) |
+| E | [app/chamados/services/disputa_emissao.py](/home/ronald/codex_ws/df2be6b12d7cd47a5b9ce0fda766382308c2c5b8/app/chamados/services/disputa_emissao.py) |
+| F | [app/chamados/services/fio.py](/home/ronald/codex_ws/df2be6b12d7cd47a5b9ce0fda766382308c2c5b8/app/chamados/services/fio.py) |
+| J | [app/chamados/juizes.py](/home/ronald/codex_ws/df2be6b12d7cd47a5b9ce0fda766382308c2c5b8/app/chamados/juizes.py) |
+| MT | [app/chamados/services/materializacao.py](/home/ronald/codex_ws/df2be6b12d7cd47a5b9ce0fda766382308c2c5b8/app/chamados/services/materializacao.py) |
+
+**1) F0 DELTA — escritores encontrados.**
+
+A tabela separa atribuição e persistência; construtor, proxy e pedido a uma porta não são automaticamente escritores persistentes. Exemplos concretos: inserção real em `M:3017`, proxy em `M:2876`, simulação restaurada em `F:779`/`F:783`.
+
+| Sítio | Campos e operação persistente | Comparação com `f0f1.r` |
+|---|---|---|
+| `PerguntaDisputa._nascer` | Insere `P.disputa` e `P.chamado_destino`: construtor `M:3014`, save `M:3017`. | Mesmo endereço. |
+| `_nascer`, reuso | Troca `P.chamado_destino`: atribuição `M:2982`, save com lista dinâmica `M:3006`. Retorna a pergunta existente, preservando sua dona: `M:3008`. | Mesmo endereço. |
+| `reapontar_resolvedora` | Troca `P.chamado_destino`, inclusive para `None`: `F:925`, save `F:927`. | Mesmo endereço. |
+| `_abrir_ou_agregar_disputa` | Insere DS e sua FK `chamado`: `E:587`, valor em `E:591`. | Mesmo endereço. |
+| `criar_disputa_a_partir_de_chamados_orfaos` | Insere DS e sua FK `chamado`: `E:1123`, valor em `E:1127`. | Mesmo endereço. |
+| `criar_disputa_ancora_de_chamado` | Insere DS e sua FK `chamado`: `E:1358`, valor em `E:1362`. | Mesmo endereço. |
+| Nascimentos da DS acima | `aberta_em` pelo ORM, `auto_now_add=True`; fechamento inicialmente nulo; resolução e motivo vazios. (`M:1756`; `M:1757`; `M:1773`; `M:1793`.) | Nascimentos já listados; o script anterior não pesquisava todos esses campos. Comparação do script anexado: **[nao verificado]**. |
+| `DisputaSupervisao.fechar` | `fechada_em=now`, `resolucao=argumento`, `motivo_fechamento=motivo`: `M:1932`, `M:1934`, `M:1935`; save `M:1936`. | Mesmo endereço. |
+| `reabrir_admin` | Limpa os três campos: `M:2149`, `M:2151`, `M:2152`; save `M:2161`. | Mesmo endereço. |
+| `reabrir_sistema` | Limpa os três campos: `M:2173`, `M:2175`, `M:2176`; save `M:2177`. | Mesmo endereço. |
+| **`limpar_resolucao_residual`** | **Escreve `resolucao=''`: `M:2265`, save `M:2266`; somente aberta com texto residual: `M:2262`.** | **Sítio adicional ao inventário anterior. Ser código acrescentado depois das 02h: [nao verificado].** |
+
+**Delta demonstrável:** o inventário anterior omitiu `limpar_resolucao_residual`; os escritores principais que ele enumerou continuam nos mesmos endereços da tabela. Nenhum deles desapareceu ou mudou de endereço. A classificação temporal “criado/movido/removido desde as 02h” exige a árvore anterior, ausente: **[nao verificado]**. (`M:2265`; demais endereços acima.)
+
+Há deslocamentos em **chamadas**, sem mudança do escritor final: os fechamentos em materialização aparecem agora em `MT:591` e `MT:1338`, e a reabertura em `MT:691`; no anexo eram `586`, `1333` e `686`, respectivamente. Endereços anteriores: **[nao verificado]**; atuais conferidos: `MT:591`, `MT:1338`, `MT:691`.
+
+Os efeitos e escapes também pertencem ao censo:
+
+| Forma | Classificação conferida |
+|---|---|
+| `M:367` | Memória: reassocia instância do mesmo chamado após conferir o PK em `M:366`. |
+| `M:2876` | Proxy para o juiz do dia; inserção real ocorre em `M:3014`/`M:3017`. |
+| `F:779`, `F:783` | Simula destino e restaura no `finally`; não persiste essas atribuições. |
+| Exclusão de chamado | Pode zerar `DS.chamado` e `P.chamado_destino` por `SET_NULL`. (`M:1751`; `M:3387`.) |
+| Exclusão da DS | Elimina P por `CASCADE`; não transfere sua dona. (`M:2418`.) |
+| `**campos` do nascimento | Expansão chega ao construtor; não existe restrição geral de nomes nessa assinatura. (`M:2776`; `M:2789`; `M:2820`; `M:3014`.) |
+| `descarimbar_em_lote(**outros)` | Capacidade genérica latente: a guarda proíbe somente campos do carimbo; o update recebe os demais. (`M:3255`; `M:3264`.) Os chamadores nominais atuais passam campos de resposta/validação. (`M:1566`; `E:1593`; `E:1630`.) |
+| `PerguntaDisputa.save` | Persistência genérica por `super().save`, dentro de atomic; não elege uma dona ou destino. (`M:3413`; `M:3422`; `M:3423`.) |
+| `regularizacao_ext.py:256` | `reg.chamado` pertence a outra entidade. (`app/chamados/services/regularizacao_ext.py:256`.) |
+| Migration `0051`, update | Escreve `colaborador_id`; lê `disputa_id` no `OuterRef`. (`app/chamados/migrations/0051_decisao_pergunta.py:25`.) |
+
+As migrations pertinentes definem os campos, sem constituírem eleições adicionais de runtime: DS em `app/chamados/migrations/0013_disputasupervisao.py:23`; dona em `app/chamados/migrations/0014_perguntadisputa.py:27`; destino em `app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:18`; motivo do fechamento em `app/chamados/migrations/0049_disputa_motivo_fechamento.py:14`.
+
+O script abaixo enumera candidatos e mantém fila explícita para receptores desconhecidos, expansões, dicionários, reflexão e SQL. A tabela acima é a classificação após leitura dos corpos. Ausência universal de escrita por reflexão ou SQL montado dinamicamente: **[nao verificado]**.
+
+```python
+import ast
+import sys
+from collections import Counter
+from pathlib import Path
+
+FIELDS = {
+    "disputa", "disputa_id", "chamado_destino", "chamado_destino_id",
+    "aberta_em", "fechada_em", "resolucao", "motivo_fechamento",
+    "chamado", "chamado_id",
+}
+MODELS = {"PerguntaDisputa", "DisputaSupervisao"}
+OPS = {"create", "get_or_create", "update_or_create",
+       "update", "bulk_create", "bulk_update", "save"}
+PORTAS = {"cls", "abrir", "abrir_conversa", "_sob_contrato", "_nascer"}
+rows, queue, errors = [], [], []
+
+def strings(node):
+    return {n.value for n in ast.walk(node)
+            if isinstance(n, ast.Constant) and isinstance(n.value, str)}
+
+for path in sorted(Path(".").rglob("*.py")):
+    if (set(path.parts) & {".git", "__pycache__", "node_modules", "tests"}
+            or path.name == "tests.py"
+            or path.name.startswith(("test_", "tests_"))):
+        continue
+    try:
+        tree = ast.parse(path.read_text(encoding="utf8"), str(path))
+    except (SyntaxError, UnicodeError, OSError) as exc:
+        errors.append((str(path), str(exc)))
+        continue
+    parents = {c: n for n in ast.walk(tree) for c in ast.iter_child_nodes(n)}
+    aliases = {a.asname or a.name: a.name
+               for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)
+               for a in n.names}
+
+    def owners(node):
+        result = []
+        while node in parents:
+            node = parents[node]
+            if isinstance(node, (ast.ClassDef, ast.FunctionDef,
+                                 ast.AsyncFunctionDef)):
+                result.append(node.name)
+        return result[::-1]
+
+    def emit(node, kind, pending=False):
+        section = "migration" if "migrations" in path.parts else "runtime"
+        (queue if pending else rows).append(
+            f"{path}:{node.lineno}|{section}|{'.'.join(owners(node))}|{kind}")
+
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Attribute)
+                and isinstance(node.ctx, ast.Store) and node.attr in FIELDS):
+            emit(node, "ATR " + ast.unparse(node))
+        if (isinstance(node, ast.Assign)
+                and isinstance(parents.get(node), ast.ClassDef)
+                and parents[node].name in MODELS):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id in FIELDS:
+                    emit(node, "SCHEMA " + target.id)
+        if isinstance(node, (ast.Dict, ast.Subscript)) and strings(node) & FIELDS:
+            emit(node, "REVER dict/subscript", True)
+        if not isinstance(node, ast.Call):
+            continue
+        end = getattr(node.func, "attr", getattr(node.func, "id", ""))
+        end = aliases.get(end, end)
+        root = ast.unparse(node.func).split(".")[0]
+        root = aliases.get(root, root)
+        direct = {k.arg for k in node.keywords} & FIELDS
+        known = False
+        if (end in {"CreateModel", "AddField", "AlterField"}
+                and strings(node) & (FIELDS | {
+                    "perguntadisputa", "disputasupervisao"})):
+            emit(node, "SCHEMA migration " + end)
+        if direct and end in OPS | PORTAS | MODELS:
+            emit(node, "KW " + ",".join(sorted(direct)))
+            known = True
+        if root in MODELS and end in {
+                "create", "get_or_create", "update_or_create"}:
+            emit(node, "[nome]/defaults " + root)
+            known = True
+        if end in OPS and strings(node) & FIELDS:
+            emit(node, "REVER lista/expressao " + end)
+            known = True
+        if end in OPS | PORTAS | MODELS:
+            if not known or any(k.arg is None for k in node.keywords):
+                emit(node, "REVER receptor/kwargs " +
+                     ast.unparse(node.func), True)
+        if end in {"setattr", "execute", "executemany",
+                   "raw", "RawSQL", "RunSQL"}:
+            emit(node, "REVER reflexao/SQL " + end, True)
+        if end in {"reapontar_resolvedora", "descarimbar_em_lote"}:
+            emit(node, "DELEGACAO " + end)
+
+for row in sorted(set(rows)):
+    print(row)
+print("FILA:", dict(Counter(
+    r.rsplit("|", 1)[-1].split()[1] for r in queue)))
+if "--fila" in sys.argv:
+    print("\n".join(sorted(set(queue))))
+for path, error in errors:
+    print("ERRO:", path, error)
+if errors:
+    raise SystemExit(2)
+```
+
+O selo existente permite arquivos, não funções escritoras: destino admite `models.py` e `fio.py`; sua detecção usa regex de atribuição/update e exclui migrations. Portanto, sozinho não prova Single Writer por função. (`app/core/tests/test_contract_escritores_estado.py:61`; `:179`; `:191`.)
+
+**2) Caso-prova 7279 — cada pergunta e sua eleição.**
+
+As seis perguntas vinculadas à 7279 no dado fornecido são estas; a atribuição histórica individual a agrupador, fábrica, declaração ou API permanece **[nao verificado]**. O escritor normal atual de `P.disputa` é o construtor em `M:3014`, persistido em `M:3017`; reuso preserva a dona em `M:3008`.
+
+| Pergunta | `data_evento` fornecida | `chamado_destino_id` fornecido | Sítio atual que insere a dona; autoria histórica |
+|---|---|---|---|
+| 47210 | 22/10/2026 | 33491 | `M:3014` → `M:3017`; histórico **[nao verificado]**. |
+| 51727 | **29/10/2026** | 35801 | `M:3014` → `M:3017`; histórico **[nao verificado]**. |
+| 51823 | 30/10/2026 | `None` | `M:3014` → `M:3017`; histórico **[nao verificado]**. |
+| 52340 | 31/10/2026 | `None` | `M:3014` → `M:3017`; histórico **[nao verificado]**. |
+| 53458 | 02/11/2026 | 36718 | `M:3014` → `M:3017`; histórico **[nao verificado]**. |
+| 53628 | 03/11/2026 | 36809 | `M:3014` → `M:3017`; histórico **[nao verificado]**. |
+
+As outras perguntas mostradas pela sonda pertencem a outras disputas: 47199 → 7272; 49408 → 7431. Dado fornecido: **[nao verificado]**.
+
+Os caminhos atuais que podem entregar perguntas à dona são:
+
+| Caminho | Eleição da DS e chegada ao escritor |
+|---|---|
+| Emissão comum/fábrica | Núcleo seleciona aberta em `E:531`; wrapper gera perguntas também no reuso em `E:682`; pedido de nascimento em `E:444`. A fábrica chega pelo wrapper em `app/chamados/services/fabrica_da_celula.py:172`. |
+| Agrupamento de órfãos | Seleciona aberta em `E:1096`; pedidos passam por `_criar_pergunta_se_couber`, `E:837`. |
+| Declaração do colaborador | Obtém DS em `app/chamados/services/declaracao_texto.py:360`; abre P em `:376`; seleção delegada ao núcleo em `E:627`. |
+| Declaração administrativa | Obtém DS em `app/chamados/services/declaracao_texto.py:659`; abre P em `:666`; mesmo núcleo em `E:627`. |
+| Âncora | Seleciona aberta em `E:1332`; abre conversa em `E:1371`. |
+| Complemento de P existente | Pode usar diretamente a dona da pergunta encontrada, em vez da aberta global. (`E:1070`; `E:1073`; `E:1081`.) |
+
+Nos três seletores de abertura, a expressão é:
+
+```python
+DisputaSupervisao.objects.filter(
+    colaborador=colaborador, fechada_em__isnull=True,
+).first()
+```
+
+Ela mora em `E:531`, `E:1096` e `E:1332`; a ordenação é `M:1804`. Portanto, é **`.first()` da mais recente aberta do colaborador**, sem condição sobre `data_evento`; não é eleição por dia. O helper leitor `colaborador_em_disputa` repete essa consulta em `E:40`.
+
+**Se 7279 era a mais recente aberta no instante da emissão, esses caminhos a elegiam mesmo para outro dia.** O estado completo naquele instante e o caminho percorrido por cada PK: **[nao verificado]**. A possibilidade vem dos seletores acima; perguntas de dia novo são solicitadas também no reuso em `E:682`.
+
+**3) Chamado 33492 ↔ disputa 7279.**
+
+Pelo dado fornecido, **sim**: `7279.chamado_id=33492` e a consulta inversa devolveu `[7279]`; ambos são **[nao verificado]** independentemente. O modelo confirma FK nullable com `SET_NULL` e reversa `disputa_origem`; não existe unicidade nessa definição. (`M:1749`.)
+
+Quem grava a ligação:
+
+| Nascimento | Quem obtém o chamado e grava a FK |
+|---|---|
+| Núcleo | Obtém por `ChamadoColaborador.abrir` em `E:568`; grava em `E:591`. |
+| Agrupador | Obtém o pai em `E:1104`; grava em `E:1127`. |
+| Âncora | Obtém o pai em `E:1339`; grava em `E:1362`. |
+
+Os ramos de reuso mantêm o chamado-pai e a abertura; alteram motivos/contexto. (`E:541`; `E:562`; `E:565`; `E:1131`; `E:1366`.) A assinatura de 33492 é compatível com o agrupador, mas atribuir seu nascimento histórico a esse caminho é **[nao verificado]**.
+
+A apresentação combina dois leitores:
+
+- `chamado_que_lista` escolhe `P.chamado_destino_id`; quando nulo, usa `DS.chamado_id`. (`F:116`; `F:117`.)
+- O modal mostra **`Chamado.criado_em`**; o card também agrupa por essa data. (`app/templates/chamados/partials/modal_fio.html:86`; `app/templates/chamados/partials/_card_atendimento.html:5`.)
+
+Aplicando essa regra às FKs fornecidas, **51823 e 52340 seriam listadas no pai 33492**, enquanto as outras quatro têm os destinos próprios indicados na tabela. A execução efetiva da tela: **[nao verificado]**. Regra: `F:117`, `F:240`, `F:243`.
+
+Isso permite “chamado criado em 22/10 contendo pergunta de 30/10/31/10”: a data do cabeçalho é a criação do chamado, e as perguntas têm suas próprias datas. O catálogo declara os containers de disputa sem chave de dia. (`M:67`; `app/templates/chamados/partials/modal_fio.html:86`; `app/chamados/catalogo/modulos.py:144`; `:146`; `:223`.)
+
+Quanto ao **`em_analise`**, a agregação não renova o pai por dia. Enquanto a DS está aberta, o receiver de fechamento do pai retorna; depois do fechamento, tenta `ch.reconciliar()`, que ainda pode recusar. (`E:531`; `E:566`; `app/chamados/signals.py:28`; `:42`.) O ato específico que deixou 33492 em análise e eventuais tentativas de encerramento são **[nao verificado]**.
+
+**4) Fechamento — condição, chamadores e limite da prova.**
+
+C7 exige simultaneamente:
+
+```python
+not self.respostas_sem_veredito()
+and not fio_vivo(list(self.perguntas.all()))
+```
+
+Esse é o corpo de `pode_fechar`, em `M:1853`. A porta `fechar` recusa primeiro respostas sem veredito (`M:1886`), depois perguntas vivas no fechamento ordinário (`M:1895`); a escrita ocorre em `M:1932`.
+
+| Pergunta | Bloqueio por resposta sem veredito, aplicando `M:1843` ao dado |
+|---|---|
+| 47210 | Não entra: validação/materialização preenchidas no dado. **[nao verificado]** |
+| **51727** | **Entra se não houver tranca aplicável:** resposta registrada, validação e materialização nulas. **[nao verificado]** |
+| 51823 | Não entra: materialização preenchida no dado. **[nao verificado]** |
+| 52340 | Não entra: materialização preenchida no dado. **[nao verificado]** |
+| 53458 | Não entra: validação/materialização preenchidas no dado. **[nao verificado]** |
+| 53628 | Não entra: materialização preenchida no dado. **[nao verificado]** |
+
+**51727 fornece o bloqueio concreto condicionado à tranca:** basta o timestamp da resposta; não é necessário conhecer seu texto para essa lista. (`M:1843`; `M:1844`; `M:1846`.) A sonda não trouxe a tranca nem os toques posteriores usados pelo juiz; por isso, o retorno efetivo de `pode_fechar(7279)` é **[nao verificado]**. (`J:974`; `J:991`.)
+
+Materialização preenchida também não prova, sozinha, ausência de pergunta viva: C6 consulta via, marco, célula e teto. A vitalidade exata das perguntas sem validação não pode ser reconstruída integralmente com o dado entregue. (`J:1396`; `J:1428`; `J:1432`; `J:1445`; resultado concreto: **[nao verificado]**.)
+
+Chamadas diretas encontradas à porta `DisputaSupervisao.fechar`:
+
+| Contexto | Sítio atual |
+|---|---|
+| Foto recebida | `app/api/foto_recebida.py:80` |
+| Reconciliador: sem turno aberto | `app/chamados/reconciliador.py:412` |
+| Reconciliador: absolvição pela célula | `app/chamados/reconciliador.py:612` |
+| Reconciliador: evento da célula | `app/chamados/reconciliador.py:1171` |
+| Porta administrativa com motivo | `M:1950` |
+| Remoção do último motivo | `M:2072` |
+| Desligamento | `app/colaboradores/services/desligamento.py:142` |
+| Entrada sincronizada | `app/ponto/services/entrada_sincronizada.py:59` |
+| Materialização de ausência | `MT:591` |
+| Materialização: disputa quitada | `MT:1338` |
+| Autofecho do agrupador | `E:1284` |
+| Resolução por chamado resolvido | `E:1964` |
+| Competência trancada | `app/chamados/services/competencia_trancada.py:204` |
+| Resolução de becos | `app/chamados/services/becos.py:57` |
+| Comando de perguntas com fato | `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88` |
+
+O juiz também é consultado separadamente na classificação de becos e no planejamento da competência trancada. (`app/chamados/services/becos.py:33`; `app/chamados/services/competencia_trancada.py:153`.)
+
+**“Nunca fechou” não está provado pelo snapshot.** Ele informa aberta no instante fornecido: **[nao verificado]**. `reabrir_sistema` limpa fechamento sem consumir o contador administrativo, portanto os contadores zerados não excluem fechamento seguido de reabertura automática. (`M:2163`; `M:2173`; `M:2177`.) Quais chamadores executaram ou recusaram para 7279: **[nao verificado]**.
+
+Os escritores e leitores dos campos usados no diagnóstico ficam assim; os leitores são os relevantes às respostas, sem pretensão de cobrir todas as telas:
+
+| Campo | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| `P.disputa` | Nascimento `M:3014`/`M:3017`; escape genérico `M:3264`. | Identidade `M:3430`; roteamento `F:116`. |
+| `P.chamado_destino` | Nascimento `M:3014`; reuso `M:2982`/`M:3006`; reaponte `F:925`/`F:927`; FK `M:3387`. | Apresentação `F:117`; reuso `M:2968`; simulação do juiz `F:778`. |
+| `DS.aberta_em` | ORM nos três nascimentos; definição `M:1756`. | Ordenação da eleição `M:1804`; ordenação de cores `M:1819`. |
+| `DS.fechada_em` | Nascimento `M:1757`; fechar `M:1932`; reabrir `M:2149`, `M:2173`. | Aberta `M:1824`; seletores `E:532`, `E:1097`, `E:1333`; signal `app/chamados/signals.py:28`. |
+| `DS.resolucao` | Fechar `M:1934`; reabrir `M:2151`, `M:2175`; limpeza `M:2265`. | Idemp
+
+[truncado em 20000 de 21940 caracteres]
 
 ## 11/11 20:33 · sessao cb17498e4229 · CASO-0711-HJ003 · censo · origem=Code
 
@@ -1225,22 +1513,4 @@ O cron está configurado para **06:27**, com `--apply`; sua execução efetiva n
 
 Os horários dos campos são o `agora` recebido pelo escritor; **o instante físico dos UPDATEs e sua autoria operacional nessa janela são [nao verificado]** (`app/ponto/portas/celula.py:1037`, `app/ponto/portas/celula.py:1065`).
 
-## 11/11 17:28 · sessao c3afbe28a431 · - · - · origem=Ronald (tmux)
-
-- **O atraso agora existe no mundo simulado:** `tx_lento` adia a conclusão em 15.000 ms; `open_bloqueado_libera` emite `onblocked` e só abre 15.000 ms depois. O escritor executado é o real; o wrapper apenas conta chamadas e devolve sua promessa. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:161`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:213`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:309`)
-
-- **Abortar/rejeitar no teto e esconder o aviso são regressões diretamente cobertas:** Mg/Mh/Mi/Mi2 restauram rejeição/aborto; Mo/Mo2 retiram emissão/passagem do aviso; Mp impede sua remoção. O controle precisa estar verde no mesmo lote e a morte precisa casar a mensagem esperada. Execução verde nesta cópia: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:639`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:1003`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:1028`)
-
-- **Mutante natural vivo: remover `req.onerror` de `abrirDB`.** O falso `open` nunca lança nem dispara `onerror`; os mundos de abertura cobrem pendência, bloqueio e liberação, mas não erro definitivo de abertura. Assim, a remoção desse handler não altera seus observáveis; com esse evento, o código mutado ficaria pendente. Ocorrência em produção: **[nao verificado]**. (`app/static/pwa.js:82`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:209`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:676`)
-
-- **Mutante vivo de conexão fechada:** trocar o sucesso de abertura por `e.target.result.close(); fim(true,e.target.result)` passa pelo falso, porque `close()` é vazio e `transaction()` não verifica fechamento. Portanto, o instrumento não protege a cura do fechamento tardio da v5. Efeito desse mutante no navegador real: **[nao verificado]**. (`app/static/pwa.js:81`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:226`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:236`)
-
-- **A prova temporal ainda é parcial:** os julgadores de sucesso lento não comparam término da promessa/sucesso visual com `fila_ms`; a propriedade compara estados finais e omite tempos. Entretanto, resolver incondicionalmente no `req.onsuccess` seria detectado pelos mundos de aborto/erro/pendência e pelo sucesso lento sem aviso/reclique protegido; não é correto dizer que esse mutante simples passaria. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:489`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:705`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:828`)
-
-- **“Persistidas” não é uma leitura de durabilidade nativa:** o falso já põe a linha no mapa durante `add`; `persistidas()` conta esse mapa. Os cenários de aborto/erro removem a linha, e `marca('fila')` só acontece na conclusão, mas o mundo pendente conserva uma linha provisória no mapa e seu julgador não exige `persistidas == 0`. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:166`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:173`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:195`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:267`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`)
-
-- **Quota é simulação específica:** `tx_erro` faz rollback e dispara somente `tx.onerror` com `QuotaExceededError`; não exercita erro real de pedido, erro de abertura ou comportamento posterior do navegador. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:154`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:166`)
-
-- **A alegação anterior “ArmazemEPostTest toca banco” não está comprovada por esta leitura:** herda de `SimpleTestCase`, renderiza com `SimpleNamespace`/`AnonymousUser` e usa IDB em memória; efeitos de importação/renderização e execução completa permanecem **[nao verificado]**. O ensaio certamente escreve HTML/JS/perfil temporários e depois apaga, por isso não foi executado sob a regra somente leitura. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:385`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:398`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:414`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:426`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:579`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:781`)
-
-_4012 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4013 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
