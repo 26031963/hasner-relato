@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 09:26** · publicado em **11/11/2026 09:29** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:35** · publicado em **11/11/2026 09:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:35 · sessao ad850049a991 · - · - · origem=Ronald (tmux)
+
+A sonda inline não tem arquivo local disponível; os números abaixo vêm apenas do anexo, portanto sua proveniência por `arquivo:linha` é **[nao verificado]**. Os leitores citados foram conferidos na cópia.
+
+| Contador / saída | O que efetivamente mede / limite |
+|---|---|
+| `D01.colab_dia_candidato=7057` | Chaves `(colaborador_id,data_evento)` com pelo menos uma pergunta de cada posição, após exclusão de conversa/fora do fato e conferência `instancia_marco == instancia_do_motivo`. A posição vem de `app/chamados/services/declaracao_texto.py:55`. Não certifica intervalo específico; duas pausas ainda compartilham posição/motivo, limitação declarada em `:49`. |
+| `D01.falta_lado=2777` | Chaves candidatas que não têm ambos os lados. Não são necessariamente pausas incompletas da célula; é ausência de perguntas em uma posição. **[nao verificado por arquivo:linha: lógica da sonda inline]** |
+| `D01.multiplas_linhas_na_posicao=31` | Colab-dias com ambos os lados e cardinalidade diferente de um em pelo menos um lado. Incluídos nos 7057 e excluídos do teste de metade validada. Não conta duplicatas retratáveis ou quantidade de intervalos. **[nao verificado por arquivo:linha: sonda inline]** | [nao verificado]
+| `D01.metade_validada_outra_viva=94` | Colab-dias com exatamente uma pergunta por posição e `(validada(a) ∧ C6(b)) ∨ (validada(b) ∧ C6(a))`. C6 vem de `app/chamados/juizes.py:839`; validada retorna morta em `:1325`. Não demonstra 94 pares reais da mesma pausa, nem histórico de espera, devolução ou recusa. |
+| `D02.validada_sem_lastro=1181` | Perguntas com validação e `_pergunta_materializada_de_fato is False`. Esse leitor admite encerramentos por identidade e outras testemunhas, e não significa exclusivamente existência de batida nova: `app/chamados/juizes.py:647`, `:662`, `:688`, `:734`. Não prova 1181 validações inválidas. |
+| `D03.carimbo_sem_lastro=4291` | Materialização timestamp presente e leitor de lastro `False`; mesma ressalva acima. |
+| `D03.aplicacao.*` | Só perguntas `tipo_resposta='hora'` e texto não vazio. Retornos: aplicada 5641; aplicável 322; bloqueada_paridade 182; inválida 327; já_satisfeita 76; recusada_paridade 322. `app/chamados/services/materializacao.py:432`, `:434`, `:438`, `:442`, `:444`, `:448`, `:452`, `:457`. Não são retornos de execução da porta. |
+| `D03.aplicada_sem_lastro=779` | Interseção de estado de aplicação `aplicada` e lastro `False`. O estado `aplicada` decorre do carimbo para qualquer via que não seja paridade: `app/chamados/services/materializacao.py:434`, `:438`, `:442`. Não equivale a 779 plantios malsucedidos. |
+| `T11.reuso_no_slot=3700`; `D03.reuso_nao_aprovado=102` | Entre perguntas hora/texto com slot derivável, encontro do leitor de reuso; 102 encontram batida não aprovada. Uso real no escritor em `app/chamados/services/materializacao.py:859`, `:865`; UI requer aprovação em `:448`. Não demonstra 3700 reusos históricos. |
+| `D05.pendencia_com_carimbo=79` | Campo de pendência não vazio e timestamp de materialização. Pendência pode coexistir com prosseguimento do plantio: `app/chamados/services/materializacao.py:845`, `:850`, `:852`. |
+| `D05.recusa_com_lastro=5970` | Texto atual de recusa não vazio com lastro `True`. Não demonstra contradição ou recusa atual impeditiva, porque é texto remanescente e lastro de leitura atual. **[nao verificado por arquivo:linha: conjunção da sonda]** |
+| `D05.codigo.*` | Classificação do texto atual de recusa por primeiro padrão textual correspondente; `OUTRO` é fallback. `app/chamados/catalogo/recusa.py:77`, `:81`, `:88`. Contagens: ABRE_TURNO 2; COLISAO 27; COMPETENCIA_APROVADA 41; DATA_EM_DISPUTA 33; NAO_GERA_BATIDA 53; OUTRO 5868; PARIDADE 418. Não é enumeração de atos históricos nem causas exclusivas dos 94 colab-dias. |
+| `D07.vizinha_retratada=15` | Para hora/texto com slot derivável, o leitor retorna vizinha do mesmo tipo cuja `retratada_em` está preenchida. Busca anterior/posterior sem filtro de retratação: `app/chamados/services/materializacao.py:94`, `:98`, `:100`, `:104`. Não exige que a guarda bloqueie; nem que não haja reuso; não prova 15 recusas causadas por retratadas. |
+| `T18.absolvivel=1` | Quantidade produzida por `perguntas_absolvidas_pela_celula` nos colaboradores alcançados pela lista de perguntas. O leitor aplica C6 e exclui dia trancado: `app/chamados/reconciliador.py:645`, `:661`, `:667`, `:672`. Não é fechamento executado ou DS fechável. |
+| `T19.encerra=1` | Órfãs no universo `materializada=None`, `validada=None`, DS aberta, motivos específicos e dia presente, cujo veredito atual é ENCERRA: `app/chamados/reconciliador.py:1044`, `:1048`, `:1082`, `:1084`, `:1086`, `:1090`, `:1092`. Não é carimbo executado. |
+| `T20.DS_abertas=486`; `T20.C7_true=23` | DS com `fechada_em=None`; dentre elas, C7 retorna `True`. C7 exige ausência de resposta sem veredito e fio vivo: `app/chamados/models.py:1842`, `:1848`, `:1853`. Não explica por que não fecharam nem identifica as antigas 18. |
+| Caso | Existem exatamente as duas perguntas pedidas, ambas col960, segundo `caso_51522_51523 n2` e `caso.col960_confere n1`. Não foram impressos timestamps, C6, DS, data, marco ou intervalo delas. Estado e pertencimento a 94/486/23/grupos continuam **[nao verificado]**. |
+
+**D08 não foi medido na saída disponibilizada.** Não há `D08.grupo`, `D08.grupos`, `D08.excedentes` nem baldes. As assinaturas do inline são compatíveis com a cópia: `app/chamados/services/fio.py:1225`, `:1259`, `:1905`, `:1923`. `grupos_de_colisao` começa com lista vazia e pode devolvê-la (`:1942`, `:1993`); o `Counter` inline só toca D08 dentro do laço. Assim, ausência de chaves não demonstra falha e não autoriza preencher o censo como zero. Os 486 DS abertas não são evidência dos 486 grupos antigos.
+
+Não aparece `sonda_nao_verificada` ou `nao_verificado.*` no dado. T20, T18/T19 e caso presentes tornam indevida a afirmação de aborto no laço D08 para o inline exatamente mostrado. Qual script exato produziu a saída e por que D08 está ausente: **[nao verificado]**.
+
+**Limite dos próprios leitores:** `_plantio_preenche_furo_na_data` engole exceção e retorna `False` (`app/chamados/services/materializacao.py:184`); o gerador de absolvíveis captura exceção e ignora pergunta (`app/chamados/reconciliador.py:669`). Portanto ausência de `nao_verificado.*` externo não certifica inexistência de falhas internas. Logs não fornecidos: **[nao verificado]**.
+
+**Divergências C7:** explicador calcula somente `not fio_vivo` (`app/chamados/services/explicador.py:137`); relatório publica PRONTA_FECHAR se não houver vivas (`app/chamados/relatorios_disputa.py:18`, `:20`). Nenhum número de divergências foi impresso. Não convertê-lo em zero sem esclarecer a instrumentação/saída.
+
+## 11/11 09:35 · sessao 9ad8f4f4c039 · - · - · origem=Ronald (tmux)
+
+Não localizei no AST um predicado que receba **duas `PerguntaDisputa` e responda se pertencem à mesma pausa**. A ausência universal por reflexão, código gerado ou chamadas dinâmicas permanece **[nao verificado]**. A inspeção executada em memória percorreu 838 arquivos Python de runtime em `app/` e `bin/`, com 5.422 funções e nenhum erro de parse; essa execução não tem artefato `arquivo:linha` **[nao verificado por arquivo:linha]**.
+
+O par dos marcos já está representado na própria célula: `CelulaDia.PARES_PAUSA_DNA` contém `('hii','hfi')` e `('hii2','hfi2')`; a entidade atribui S/E e fornece a ordem canônica. Isso identifica **marcos**, sem comparar perguntas. (`app/escala/models.py:1652`, `:1654`, `:1659`, `:1672`.)
+
+| Leitor existente | O que responde |
+|---|---|
+| `EscalaColaborador.pausas_do_dia` | Todas as pausas do DNA da célula; célula existente sem marcos devolve `()`. Template somente quando falta célula. (`app/escala/models.py:1166`, `:1189`, `:1197`, `:1202`, `:1208`.) |
+| `intervalo_do_dia` | Somente a primeira pausa retornada pela irmã acima. (`app/escala/models.py:1163`.) |
+| `grade_da_celula` / `_celulas_da_ata` | Marcos e lâmpadas lavrados do dia; expõe tipo/hora, preservando ordem. (`app/escala/services/leitor_celula.py:114`, `:122`, `:148`, `:350`.) |
+| `posicao_do_marco` | Primeiro=`inicio`, último=`fim`, intermediário S=`int_ida`, E=`int_volta`. Não identifica sozinho qual intervalo. (`app/chamados/services/declaracao_texto.py:75`, `:79`, `:83`.) |
+| `_marcos_faltantes` | Lê a grade e retorna `(dia,pos,tipo,hora)` dos marcos faltantes. Não devolve índice da pausa. (`app/chamados/services/declaracao_texto.py:100`, `:121`, `:130`, `:139`.) |
+| `tarefa_do_dia._posicoes` | Enumera repetições em memória: `int_ida`, `int_ida:2`, `int_volta`, `int_volta:2`. (`app/chamados/services/tarefa_do_dia.py:57`, `:65`, `:67`.) |
+| `instancias_do_turno` | Publica instância, posição, tipo, hora, lâmpada e data civil a partir do dia do leitor único. (`app/chamados/services/tarefa_do_dia.py:91`, `:96`, `:101`.) |
+| `_pos_da_pergunta` | Lê `instancia_marco`, com alternativa pelo motivo; não compara duas perguntas. (`app/chamados/services/tarefa_do_dia.py:106`.) |
+| `pausas_dna_periodo` / `pausas_de_celulas` | Leitores em lote das pausas pelas chaves da própria entidade. (`app/escala/utils.py:27`, `:57`, `:111`, `:141`.) |
+
+Há um impedimento concreto à persistência do índice já produzido pela tarefa: o nascimento da pergunta deriva `instancia_marco` somente do motivo e **rejeita valor diferente**, como `int_ida:2`. O próprio comentário reconhece a separação de duas pausas como pendente. (`app/chamados/models.py:3425`, `:3437`, `:3440`, `:3441`, `:3445`.) A tabela motivo→posição também documenta que duas pausas caem no mesmo motivo; `_complementar_marcos_faltantes` consome os marcos, mas descarta `_hora` ao criar a pergunta. (`app/chamados/services/declaracao_texto.py:48`, `:55`; `app/chamados/services/disputa_emissao.py:873`, `:881`.)
+
+Os produtores/escritores relacionados são:
+
+- `montar_dna` produz `hii/hfi` e o segundo par pelas chaves de `PARES_PAUSA_DNA`; `montar_lampadas` produz as lâmpadas com `chave`, tipo, hora e instante. (`app/ponto/management/commands/gerar_celulas.py:73`, `:81`, `:92`, `:94`, `:36`, `:60`, `:68`.)
+- A porta da célula persiste geração, regeneração, edição humana e reversão. (`app/ponto/portas/celula.py:816`, `:857`, `:110`, `:256`, `:272`, `:534`, `:591`, `:604`, `:740`, `:786`.)
+- `PerguntaDisputa.save` chama `_chave_de_identidade` na inserção; esta escreve a posição simples em `instancia_marco`. (`app/chamados/models.py:3413`, `:3420`, `:3425`, `:3440`.)
+
+Portanto, existem a autoridade dos pares de marcos e leitores de posições/instâncias; a ligação persistida **pergunta→marco específico da pausa** ainda perde o índice nos sítios acima. Não se deve chamar `_posicoes` de juiz “estas duas perguntas são o mesmo par”: seu contrato é enumerar os marcos da ata. (`app/chamados/services/tarefa_do_dia.py:57`, `:67`; `app/chamados/models.py:3437`, `:3445`.)
+
+## 11/11 09:34 · sessao b113ca5b5451 · - · - · origem=Ronald (tmux)
+
+Após o aval, **D1–D7 não têm pergunta de lei pendente; continuam com trabalho técnico de implementação/verificação. D8 mantém a pergunta de lei sobre identidade BATIDA do acervo versus BATIDA com episódio.** O novo aval resolve especificamente a identidade da pausa pela célula; não responde à identidade de D8. (`app/chamados/services/fio.py:1274`, `app/chamados/services/fio.py:1275`; conteúdo do aval recebido: **[nao verificado por arquivo:linha]**.)
+
+| D | Situação após aval | Lei escrita versus decisão técnica; evidência |
+|---|---|---|
+| **D1** | **Decisão fechada; implementação aberta.** Aplicar o par no mesmo ato, esperar a outra metade em estado derivado; identificar saída/volta do mesmo intervalo pelos marcos da célula. Sem marcos, cada pergunta segue sozinha. | O ato conjunto está em `app/docs/BACKLOG.md:1929`; estado explícito foi superado pelo derivado em `app/docs/BACKLOG.md:1930`. Fonte única de previsto: S133/L-024, `app/docs/LEIS.md:75`; testemunha lê a autoridade: `CLAUDE.md:20`; cadastro não se cura por código: L-099, `app/docs/LEIS.md:122`. O complemento específico do novo aval está apenas no texto recebido: **[nao verificado por arquivo:linha]**. Hoje a validação ainda materializa uma P (`app/chamados/services/validacao.py:461`, `:463`) e o lote itera individualmente (`app/chamados/services/materializacao.py:1375`, `:1376`). |
+| **D2** | **Sem pergunta nova; harmonização técnica aberta.** Preservar diferença entre resposta humana, projeção suprida e reversão. | Escritor canônico e trilha são L-007 (`app/docs/LEIS.md:65`). Nova resposta limpa validação (`app/chamados/services/disputa_emissao.py:1468`, `:1480`); devolução também limpa, registrando DEVOLUÇÃO (`app/chamados/services/validacao.py:199`, `:205`); carimbo pode suprir resposta/validação (`app/chamados/models.py:3132`, `:3135`). Como compatibilizar essas portas é decisão técnica sob a lei escrita. |
+| **D3** | **Sem pergunta nova; significado e leitores técnicos abertos.** Carimbo terminal não prova plantio. | Testemunhas leem autoridade (`CLAUDE.md:20`; `app/docs/LEIS.md:60`). Há encerramento por identidade sem criar batida (`app/chamados/services/materializacao.py:924`, `:1099`), enquanto o leitor de aplicação chama quase todo carimbo de “aplicada” (`app/chamados/services/materializacao.py:434`, `:438`, `:442`) e histórico o descreve como fato registrado (`app/chamados/services/historico.py:103`, `:104`). Adequação dessas testemunhas é técnica. |
+| **D4** | **Sem pergunta nova; convergência técnica aberta.** | Um escritor canônico e exceção com trilha: L-007 (`app/docs/LEIS.md:65`; `CLAUDE.md:32`). Existem atribuição comum (`app/chamados/models.py:3101`), descarimbo em lote (`:3266`), troca isolada (`:3275`, `:3276`) e relavra (`app/chamados/services/relavra_via.py:125`, `:127`). Organizar as portas existentes sob a obrigação já escrita é técnico. |
+| **D5** | **Sem pergunta nova; consumidores técnicos abertos.** Não tratar pendência/recusa como “aguarda metade”. | Estado explícito foi superado (`app/docs/BACKLOG.md:1930`); fonte e escritor únicos são lei (`CLAUDE.md:20`, `:32`). Pendência grava motivo (`app/chamados/services/materializacao.py:850`, `:851`); contestação humana também grava motivo (`app/chamados/services/disputa_emissao.py:1497`); COLISÃO pode encerrar identidade (`app/chamados/services/materializacao.py:1093`, `:1099`). Separar esses usos é técnico. |
+| **D6** | **Autoridade fechada; migração e causalidade histórica abertas.** | C7 é juiz único por corte expresso (`app/docs/CORTES.md:272`), registrado em `app/core/juizes.py:279`; sua regra completa está em `app/chamados/models.py:1853`. Explicador só consulta fio vivo (`app/chamados/services/explicador.py:137`), relatório publica PRONTA_FECHAR sem vivas (`app/chamados/relatorios_disputa.py:18`, `:20`). Migrá-los é técnico. Autor automático = autor do último ato com motivo próprio é decisão técnica explícita no novo aval: **[nao verificado por arquivo:linha]**. Razão histórica de cada DS continuar aberta: **[nao verificado]**. |
+| **D7** | **Lei fechada; avaliação/correção técnica aberta.** | Universo apurável exclui retratada: L-025 (`app/docs/LEIS.md:76`); papel vem do marco, não do tipo gravado: L-087 (`app/docs/LEIS.md:119`). A guarda atual lê `Batida.objects` e compara `.tipo` (`app/chamados/services/materializacao.py:94`, `:98`, `:100`, `:104`). Isso não autoriza remover a guarda sem definir/testar comportamento pela autoridade existente; solução é técnica. |
+| **D8** | **Pergunta de lei ainda aberta.** Quando BATIDA do acervo sem episódio representa o mesmo fato de BATIDA com episódio, permitindo retratação entre ambas? | O código declara literalmente a lei aberta e conserva o acervo (`app/chamados/services/fio.py:1274`, `:1275`, `:1294`, `:1295`). O plano também protege mérito (`:1290`, `:1291`) e episódios distintos (`:1287`, `:1292`, `:1293`). O novo aval sobre pares da pausa não responde a essa identidade: **[nao verificado por arquivo:linha quanto ao alcance do anexo]**. |
+
+Referências dos agregados antigos:
+
+- **77 colab-dias**, 48 colabs e 18 na competência 11 estão registrados em `app/docs/BACKLOG.md:1882`.
+- **18 DS com pode_fechar=True**, 77 pares e 848 duplicadas aparecem na descrição da raiz em `app/docs/BACKLOG.md:1883`.
+- **486 grupos/848 excedentes em disputa aberta** estão registrados em `app/docs/BACKLOG.md:1887`.
+
+Essas linhas documentam a medição anterior; não demonstram equivalência entre seu universo e o da sonda recebida. (`app/docs/BACKLOG.md:1882`, `:1883`, `:1887`; equivalência dos universos: **[nao verificado]**.)
 
 ## 11/11 09:26 · sessao d8f1db422342 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -1224,49 +1307,4 @@ A busca `rg -n 'c3b1e428|c9cd4c40' .` terminou com **rc=1**, sem ocorrências re
 
 6. **Fila, preexistente — confirmado o crash Python aceito.** Na linha 46, `PIPESTATUS[0]` corresponde ao `python3` imediatamente anterior. A guarda aceita tanto 0 quanto 1; um `ImportError` antes de imprimir resultados deixa zero linhas Python, oculta o traceback e segue. Se não houver outros achados, o selo termina verde. Isso decorre das linhas anteriores ao diff e fica fora da cura. (`bin/censo_codigo_py.py:34`, `:47`, `:48`; `bin/selo_espera_por_processo.sh:45`, `:46`, `:47`, `:58`, `:72`)
 
-## 11/11 08:49 · sessao 125b7766f91b · FIO-E0-V4-E4B · construtor · origem=Code
-
-Diagnóstico confirmado: o ED nascia no hook dentro do atomic e era desfeito pelo rollback integral. Referências conferidas no [recibo:290](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:290).
-
-A cura prepara o ED fora do lote e libera sua visibilidade K6 após a reversão relida. Preserva BANG, estado, FM e hash/conteúdo; acrescenta os asserts diretos de ausência de escrita em ED/FM ([teste:172](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:172), [asserts:226](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:226)). [nao verificado]
-
-Entrega: [diff integral](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9.diff:1) e [comandos/RCs individuais](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:4).
-
-- Memória: 19 testes, **rc=0**; protocolo: 8, **rc=0** ([recibo:4](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:4)). [nao verificado]
-- 24 mutantes de memória + 5 do protocolo: **rc=1 por AssertionError** ([recibo:270](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:270)).
-- `ato_ignora_entrega` morde em **`test_e4b_c4v7_memoria.py:306`**, no assert `-> bang:exportada` ([RED registrado:26](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:26)).
-- Selos: 40 testes, **rc=0**; `git diff --check`: **rc=0** ([recibo:282](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:282)). [nao verificado]
-
-ORM **[não verificado]**, reservado à sessão/Code; os comandos isolados estão no [recibo:275](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v9_resultados.txt:275). Roteiro completo:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
-```
-
-## 11/11 08:49 · sessao e66882487277 · - · - · origem=Ronald (tmux)
-
-- **Régua:** consome rc e diagnóstico; falha grava `REGUA_STATUS=FALHOU` antes do atalho “JA VERDE”. O loop de testes é separado. Não depende de ocorrências em `bin/tests/`. (`bin/regua.sh:70-93`, `bin/regua.sh:138-145`)
-- **Pre-push:** não chama diretamente esse selo nem o loop completo de `bin/tests/`; isso é explícito no comentário. Usa carimbo/hash da régua para decidir pular o arsenal; o arsenal invoca `manage.py test`. (`bin/pre-push.sh:14-15`, `bin/pre-push.sh:52-70`, `bin/pre-push.sh:184-188`)
-- **Placar Code:** raspa somente número/`?`, usa `?` quando falta saída, converte `?` em 1 e soma no `TOTAL`. Nenhuma expectativa por caminhos de `bin/tests/`. (`bin/placar_code.sh:164-170`, `bin/placar_code.sh:558`)
-- **Teste do próprio selo:** exige uma ocorrência de código sintético em scratch, identifica `codigo.sh`, exclui comentário e exige zero quando resta apenas comentário. Não espera ocorrência no diretório dos testes. (`bin/tests/test_selo_espera_processo_morde.sh:16-40`)
-- **Outro consumidor do censo Python:** CPUSET chama diretamente o censo genérico; seu universo permanece inalterado pela alteração local no selo de espera, e ele próprio filtra `tests/`. (`bin/tests/test_cpuset_de_teste.sh:26-30`)
-- **ESTADO:** o gerador compõe seções e publica os placares estrutural e espelho-verdade; esses leem outras autoridades, sem consumo direto do selo/contador de espera. A publicação chama esse gerador. (`bin/gerar_estado.py:73`, `bin/gerar_estado.py:140`, `bin/gerar_estado.py:304-389`, `bin/relato.sh:38`)
-- **Teste do placar:** há uma string do parser de `espera_por_processo` na lista de programas `sed` permitidos; ela preserva formato, sem exigir ocorrências em `bin/tests/`. (`bin/tests/test_placar_conta_o_retido_do_lastro.sh:498-500`)
-- **Documentação:** L-078 identifica selo, régua e teste como guardas; não estabelece dependência de ocorrências em `bin/tests/`. (`app/docs/LEIS.md:105`)
-
-## 11/11 08:48 · sessao 6069dfb20f02 · - · - · origem=Ronald (tmux)
-
-1. Todas as **8 linhas com o literal** `pgrep` em `bin/tests/`:
-   - Comentários: `bin/tests/test_handoff_sessao.sh:30`; `bin/tests/test_trava_teste.sh:44`, `:46`, `:49`, `:73`, `:74`, `:75`.
-   - Entrada de teste: `bin/tests/test_disjuntor.sh:568`. `_plc` monta JSON contendo o comando (`bin/tests/test_disjuntor.sh:519`); `_prec` entrega esse JSON por stdin ao `disjuntor.py pretool` (`bin/tests/test_disjuntor.sh:520`). A linha testa uma menção ao wrapper por filtro de processo, conforme o comentário do próprio caso (`bin/tests/test_disjuntor.sh:559`). Não é chamada real de `pgrep` (`bin/tests/test_disjuntor.sh:568`).
-
-2. Usos do nome montado em partes:
-   - `bin/tests/test_handoff_sessao.sh:24`: padrão de busca; `grep -q "$_PAD"` inspeciona o código do handoff e reprova se encontrar a ferramenta (`bin/tests/test_handoff_sessao.sh:118`).
-   - `bin/tests/test_trava_teste.sh:13`: padrão de filtro (`bin/tests/test_trava_teste.sh:14`, `:53`); também vira entrada de fixture via `printf`, jamais execução da ferramenta (`bin/tests/test_trava_teste.sh:78`, `:79`).
-   - `bin/tests/test_selo_espera_processo_morde.sh:11`: gera comentário e código de fixture (`bin/tests/test_selo_espera_processo_morde.sh:16`, `:17`). O selo recebe essa pasta como scratch e apenas varre seu conteúdo (`bin/tests/test_selo_espera_processo_morde.sh:19`; `bin/selo_espera_por_processo.sh:60`).
-
-3. Portanto, as ocorrências identificadas em `bin/tests/` são comentários, padrões ou entradas de teste; nenhuma delas executa espera real por processo (`bin/tests/test_disjuntor.sh:519`, `:520`, `:568`; `bin/tests/test_handoff_sessao.sh:118`; `bin/tests/test_trava_teste.sh:53`, `:78`; `bin/tests/test_selo_espera_processo_morde.sh:17`, `:19`).
-
-4. A docstring diz expressamente que código em `bin/tests/` “conta igual” (`bin/censo_codigo_py.py:40`, `:41`). O censo continua implementando essa abrangência, pois ignora apenas `__pycache__` (`bin/censo_codigo_py.py:43`). O selo agora aplica uma segunda regra ao resultado e elimina `bin/tests/` (`bin/selo_espera_por_processo.sh:48`). A frase ficou incompatível com o universo final do selo, mas permanece verdadeira para a saída bruta do censo (`bin/censo_codigo_py.py:43`, `:48`; `bin/selo_espera_por_processo.sh:45`, `:48`). A precedência temporal do aval é dada pelo usuário, sem arquivo local correspondente [não verificado].
-
-_3749 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3752 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
