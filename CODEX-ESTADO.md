@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 02:42** · publicado em **11/11/2026 02:46** (UTC-3)
+> Ultima resposta processada: **11/11/2026 02:50** · publicado em **11/11/2026 02:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 02:50 · sessao 3ce02936cad3 · VERIFICADOR-EM-FABLE · verificador · origem=Code
+
+APROVA
+
+1. **#6 fechado no delta.** O campo persistido `b3_sem_obra` é histórico de IDs string; `b3_sem_obra_obs` contém observações com `aid` e `ts_observado`. O campo determina o significado; o tipo serve para validar. Não encontrei escritor operacional remanescente que acrescente histórico. (`bin/disjuntor.py:2173`, `bin/disjuntor.py:2174`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`)
+
+   Atenção ao nome na saída: `ler()['b3_sem_obra']` continua sendo o **número derivado de observações**, não a lista histórica persistida. Os consumidores usam esse número. (`bin/disjuntor.py:2044`, `bin/tests/test_disjuntor.sh:430`)
+
+2. **#4 fechado no delta.** Cada contador valida integralmente seu respectivo campo: não lista, elemento de outro tipo, dict sem `aid` string e `aid` vazio resultam em `None`. JSON quebrado ou raiz não objeto também chegam como `None`; a apresentação mostra “nao sei” nos dois lugares. Histórico só desaparece quando vale zero. (`bin/disjuntor.py:396`, `bin/disjuntor.py:398`, `bin/disjuntor.py:2190`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`, `bin/disjuntor.py:2274`)
+
+   Reproduzi essas formas em memória, inclusive a apresentação. O zero restante é contratual para arquivo/campo ausente ou lista vazia; não encontrei caminho desses leitores que converta conteúdo ilegível em zero. A validação é independente: histórico inválido não torna uma observação ausente inválida. (`bin/disjuntor.py:394`, `bin/disjuntor.py:2189`, `bin/disjuntor.py:2201`, `bin/disjuntor.py:2207`)
+
+3. **Escritores e leitores encontrados em `bin/`:**
+
+   | Sítio | Papel |
+   |---|---|
+   | `_anota_sem_obra` | Lê histórico e observações para dedup; cria/acrescenta somente observações. (`bin/disjuntor.py:2173`, `bin/disjuntor.py:2178`, `bin/disjuntor.py:2182`) |
+   | `decide_b3` / `_com_estado` | Chama o escritor e persiste o estado inteiro sob trava, preservando o histórico. (`bin/disjuntor.py:990`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:351`, `bin/disjuntor.py:371`) |
+   | `_b3_sem_obra` / `_b3_sem_obra_hist` | Validam e contam IDs distintos dos respectivos campos. (`bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`) |
+   | `ler` / `linha` / CLI | Propagam os dois números e apresentam o resultado. (`bin/disjuntor.py:2044`, `bin/disjuntor.py:2274`, `bin/disjuntor.py:2345`) |
+   | `gerar_estado.py` | Usa `ler` e `linha`, sem derivação própria desses campos. (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`) |
+   | `hook_stop_fila1.py` | Aciona `julga_b3`, que delega a `decide_b3`; não manipula os campos diretamente. (`bin/hook_stop_fila1.py:1204`, `bin/disjuntor.py:1075`) |
+   | Testes | Leem número/apresentação; escrevem fixtures dos dois campos; exercitam o escritor e verificam histórico, IDs e tempos. Há também regravação genérica do estado inteiro. (`bin/tests/test_disjuntor.sh:430`, `bin/tests/test_disjuntor.sh:1368`, `bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1490`, `bin/tests/test_disjuntor.sh:1493`, `bin/tests/test_disjuntor.sh:1098`) |
+
+   **B3 antigo segue coerente por inspeção:** cria `s1`, aciona Stop e espera `1`; o scanner extrai esse ID, o escritor registra em observações e o contador conta um ID distinto. Execução integral desse caso: **[nao verificado]**. (`bin/tests/test_disjuntor.sh:428`, `bin/tests/test_disjuntor.sh:429`, `bin/tests/test_disjuntor.sh:431`, `bin/disjuntor.py:843`, `bin/disjuntor.py:845`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2201`)
+
+4. **Pode perder a anotação, mas há sinal no ESTADO.** Com observações não lista, o helper retorna sem registrar a ocorrência e sem aviso próprio; o campo permanece inválido, seu contador retorna `None` e a linha mostra “nao sei”. Falta aviso imediato dessa ocorrência; não há silêncio global nem zero falso. (`bin/disjuntor.py:2175`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2274`)
+
+   O dedup suprime igualdade exata de ID: um ID diferente entra; um ID presente no histórico é intencionalmente suprimido. Reuso/colisão real de IDs: **[nao verificado]**. (`bin/disjuntor.py:2177`, `bin/disjuntor.py:2178`, `bin/disjuntor.py:2180`)
+
+5. **Os três mutantes mordem nas reproduções em memória; as âncoras são únicas.** O controle reproduziu as expectativas do caso. (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1494`, `bin/tests/test_disjuntor.sh:1515`, `bin/tests/test_disjuntor.sh:1538`, `bin/tests/test_disjuntor.sh:1542`)
+
+   - `historico-reconta`: acrescenta `aa6` às observações e derruba a expectativa do escritor. (`bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1494`, `bin/tests/test_disjuntor.sh:1538`)
+   - `duplicata-reconta`: produz `2 1`, contrariando `1 1`. (`bin/tests/test_disjuntor.sh:1484`, `bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1542`)
+   - `forma-invalida-vira-zero`: cai primeiro por `KeyError` em `{}`; isolando a fixture seguinte, produz `0 0` em vez de `None None`. Portanto morde, embora a primeira mordida seja por exceção. (`bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1539`, `bin/disjuntor.py:2201`)
+
+   **FILA — lacuna do selo:** apesar do comentário, esse caso não chama `linha()`; também não contém fixtures de `aid` vazio/não string nem retorno antecipado do escritor. A correção desses caminhos foi conferida separadamente em memória. (`bin/tests/test_disjuntor.sh:1480`, `bin/tests/test_disjuntor.sh:1482`, `bin/tests/test_disjuntor.sh:1491`, `bin/disjuntor.py:2175`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2274`)
+
+6. **Nenhuma das classes citadas reaparece como defeito novo demonstrado.** A escrita permanece na mesma porta sob trava; o helper copia o relógio recebido; os consumidores reutilizam os contadores; os mutantes derrubam expectativas; época deixou de depender do tipo. O fallback interno `time.time()` continua presente e não foi introduzido neste delta. (`bin/disjuntor.py:351`, `bin/disjuntor.py:366`, `bin/disjuntor.py:975`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:2182`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`, `bin/gerar_estado.py:281`, `bin/tests/test_disjuntor.sh:1538`)
+
+Suíte shell integral: **[nao verificado]**, pois cria, altera e remove arquivos. Estado efetivo de produção e identificação das obras históricas no RELATO: **[nao verificado]**. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:1517`)
+
+## 11/11 02:49 · sessao 902d7db0efa9 · - · - · origem=Ronald (tmux)
+
+#4 e #6 fecham no escopo do delta: os contadores validam a coleção inteira e cada elemento, retornam `None` para forma inválida e contam IDs distintos; os campos separam histórico de observações, sem usar tipo para decidir época. (`bin/disjuntor.py:2185`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`)
+
+- Reproduzi por AST em memória: `None`, `0`, `False`, string, dict, `[42]`, `[{}]`, `aid=None`, inteiro ou vazio retornam `None` no respectivo contador. Estado ausente/campo ausente é a exceção expressamente definida como vazio; estado ilegível levanta erro convertido em `None`. (`bin/disjuntor.py:389`, `bin/disjuntor.py:394`, `bin/disjuntor.py:398`, `bin/disjuntor.py:2186`, `bin/disjuntor.py:2189`, `bin/disjuntor.py:2190`)
+- `linha` mostra `nao sei` tanto no contador principal quanto no histórico; o histórico só é omitido quando igual a zero. (`bin/disjuntor.py:2274`)
+- Com `obs` não lista, a ocorrência realmente não é anotada e o helper não emite aviso nem retorna erro; entretanto o campo continua inválido e o ESTADO sinaliza `nao sei`. Portanto, falta um aviso imediato nessa transição, mas não ocorre zero falso nem silêncio na apresentação. (`bin/disjuntor.py:2175`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2274`)
+- Dedup compara IDs exatos: um ID diferente dos históricos entra; um ID já no histórico é suprimido intencionalmente. Reuso/colisão real de ID: [nao verificado]. (`bin/disjuntor.py:2177`, `bin/disjuntor.py:2178`, `bin/disjuntor.py:2180`)
+- Campos legados contendo dicts da volta 2 ficam inválidos no leitor histórico; o escritor ignora esses dicts na dedup histórica e pode reobservá-los no campo novo. Existência desse estado em produção: [nao verificado]. (`bin/disjuntor.py:2177`, `bin/disjuntor.py:2206`)
+- Escrita operacional permanece na porta: callback chama helper; `_com_estado` executa callback sob trava e persiste estado inteiro. Nenhum relógio novo aparece no helper: ele copia `agora` para `ts_observado`; fallback interno de relógio já existia. (`bin/disjuntor.py:351`, `bin/disjuntor.py:366`, `bin/disjuntor.py:371`, `bin/disjuntor.py:975`, `bin/disjuntor.py:990`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:2182`)
+- Os relógios dos hooks chegam pela borda PreToolUse e Stop. (`bin/disjuntor.py:1894`, `bin/disjuntor.py:1897`, `bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`)
+
+## 11/11 02:49 · sessao 1fd278970062 · - · - · origem=Ronald (tmux)
+
+Os três mutantes mordem nas reproduções em memória; cada âncora aparece exatamente uma vez na cópia. A infraestrutura exige âncora única e considera falha do caso uma mordida. (`bin/tests/test_disjuntor.sh:1515`, `bin/tests/test_disjuntor.sh:1519`, `bin/tests/test_disjuntor.sh:1538`, `bin/tests/test_disjuntor.sh:1542`)
+
+| Variante | Resultado observado em memória | Expectativa atingida |
+|---|---|---|
+| Controle | `(0,2)`, `(1,1)`, `(None,None)`, `(None,None)`; escritor mantém histórico e produz `['n1','n2']`, tempos `[100.0,200.0]` | Todas as expectativas do caso. (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1494`) |
+| `historico-reconta` | Escritor produz `['aa6','n1','n2']`, tempos `[100.0,100.0,200.0]` | Derruba a expectativa do escritor. (`bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1494`, `bin/tests/test_disjuntor.sh:1538`) |
+| `duplicata-reconta` | `(2,1)` em vez de `(1,1)` | Derruba a fixture duplicada. (`bin/tests/test_disjuntor.sh:1484`, `bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1542`) |
+| `forma-invalida-vira-zero` | Primeiro falha com `KeyError` no registro `{}`; isolando a fixture não lista, produz `(0,0)` | A primeira mordida acontece por exceção; a fixture seguinte também demonstraria o zero falso nominal. (`bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1539`, `bin/disjuntor.py:2201`) |
+
+O caso cobre histórico sem recontagem, duplicatas persistidas, duas chamadas do escritor, preservação do histórico e do primeiro tempo observado. Ele **não testa apresentação por `linha()`**, apesar do comentário afirmar isso: `_q` chama somente os dois contadores, e o trecho seguinte chama somente o escritor. (`bin/tests/test_disjuntor.sh:1480`, `bin/tests/test_disjuntor.sh:1482`, `bin/tests/test_disjuntor.sh:1491`)
+
+Também não há nesse caso fixtures de `aid` vazio ou não string, JSON quebrado, raiz não objeto ou retorno antecipado do escritor com observações não lista. (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1490`)
+
+Execução integral da suíte shell: **[nao verificado]**. Ela cria, altera e remove arquivos, incompatível com a restrição desta revisão. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:1508`, `bin/tests/test_disjuntor.sh:1517`)
+
+## 11/11 02:49 · sessao d65773cd15a5 · - · - · origem=Ronald (tmux)
+
+- **Escritor operacional:** `_anota_sem_obra` é o único que cria/acrescenta `b3_sem_obra_obs`: `setdefault` em `bin/disjuntor.py:2174`, inclusão em `bin/disjuntor.py:2182`, chamada por `decide_b3` em `bin/disjuntor.py:990`; persistência pela `_com_estado` em `bin/disjuntor.py:1054`, sob `flock` em `bin/disjuntor.py:351` e serialização em `bin/disjuntor.py:371`.
+- **Histórico:** nenhum escritor operacional específico remanescente foi encontrado em `bin/`; `_anota_sem_obra` apenas lê `b3_sem_obra` para dedup (`bin/disjuntor.py:2173`, `bin/disjuntor.py:2177`), e `_b3_sem_obra_hist` lê/conta seus IDs (`bin/disjuntor.py:2206`, `bin/disjuntor.py:2207`). A serialização genérica do estado continua preservando esse campo (`bin/disjuntor.py:371`).
+- **Leitores de `obs`:** dedup do escritor (`bin/disjuntor.py:2178`) e `_b3_sem_obra`, que valida e conta IDs distintos (`bin/disjuntor.py:2200`, `bin/disjuntor.py:2201`). O nome `b3_sem_obra` na saída derivada de `ler` continua sendo **número de observações novas**, enquanto a chave persistida homônima contém o histórico; os acessos estão separados, sem despacho por tipo do elemento (`bin/disjuntor.py:2044`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`).
+- **Propagação:** `gerar_estado.py` chama somente `ler` e `linha` (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`); CLI idem (`bin/disjuntor.py:2345`). Stop captura relógio e chama `julga_b3`, sem manipular os campos (`bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`); `julga_b3` delega a `decide_b3` (`bin/disjuntor.py:1075`).
+- **Testes:** leitor numérico antigo (`bin/tests/test_disjuntor.sh:430`); leitor de apresentação (`bin/tests/test_disjuntor.sh:1368`); fixtures históricas/obs válidas e inválidas (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1484`, `bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`); fixture histórica e duas chamadas do escritor, com leitura dos IDs, timestamps e preservação histórica (`bin/tests/test_disjuntor.sh:1490`, `bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1492`, `bin/tests/test_disjuntor.sh:1493`). Há também regravação genérica do estado inteiro (`bin/tests/test_disjuntor.sh:1094`, `bin/tests/test_disjuntor.sh:1098`). Caso principal, controle e três mutantes registrados (`bin/tests/test_disjuntor.sh:1498`, `bin/tests/test_disjuntor.sh:1537`, `bin/tests/test_disjuntor.sh:1538`, `bin/tests/test_disjuntor.sh:1542`).
+- **B3 antigo permanece coerente por inspeção:** cria `s1`, aciona Stop e espera `1` (`bin/tests/test_disjuntor.sh:428`, `bin/tests/test_disjuntor.sh:429`, `bin/tests/test_disjuntor.sh:431`); scanner extrai `s1` do basename e o inclui em `sem_obra` (`bin/disjuntor.py:843`, `bin/disjuntor.py:845`), escritor registra em obs (`bin/disjuntor.py:2182`), contador retorna um ID (`bin/disjuntor.py:2201`). Execução integral: [nao verificado].
+- O comentário antigo “contador == universo” continua impreciso, pois o histórico está fora desse número (`bin/tests/test_disjuntor.sh:427`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`).
 
 ## 11/11 02:42 · sessao 5dde95c07157 · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -793,283 +874,4 @@ O selo existente não prova função única: allowlist por **arquivo** em `core/
 
 No contrato futuro, desancorar/reversão, nascimento, reuso e reata precisam continuar distinguíveis; uma função única de atribuição pode recebê-los, sem impor silenciosamente uma eleição de intervalo sobre LIMBO ou reversão. Referências das operações: `models.py:3014/:2982`, `fio.py:925`, command de reversão `:127`. A função proposta `fio.gravar_destino_da_pergunta` **não existe hoje**: proposta [nao verificado]; há precedente explícito para separar atribuição da persistência em `fio.gravar_dia_do_fato`, `fio.py:790/:800`.
 
-## 11/11 02:22 · sessao c5bbaf0c48c1 · - · - · origem=Ronald (tmux)
-
-Leitura concluída nos arquivos indicados; nenhum teste foi executado e efeitos ORM concorrentes/produção continuam [nao verificado]. [nao verificado]
-
-**Ponto crítico para a consolidação:** os pareceres c20/c21 descrevem uma árvore diferente do main. No main, a DS nasce no atomic do núcleo, mas a geração das perguntas ocorre depois de seu retorno; o delta coloca emissão, ensaio e replay dentro dele. `app/chamados/services/disputa_emissao.py:521`, `:587`, `:603`, `:662`, `:670`, `:682`.
-
-### F1 — emissão/agregação no main
-
-Abreviações abaixo: `DE=app/chamados/services/disputa_emissao.py`; `DT=app/chamados/services/declaracao_texto.py`. Os números são da cópia aberta.
-
-| Partida | Juiz | Operação/persistência | Retorno | Prova aberta |
-|---|---|---|---|---|
-| Sem DS aberta; sem P local | **SEM JUIZ** de “precisa nascer com P”: o núcleo só procura DS aberta. `DE:531` | `_abrir_ou_agregar_disputa`, `DE:474`: cria/reusa pai `:568`, cria DS com motivos/contexto/pai `:587`; atomic `:521`, trava universo por `trava_na_ordem` `:530`. | `(disputa, True, motivos_lista)`, `DE:603`. A geração não participa desse atomic autônomo: `:670`. **Pode chegar aberta sem P viva**, porque gerador pode recusar `:315`, `:430` e wrapper retorna `:672`. | `app/chamados/tests/test_porta_disputa_emissao.py:185`; o teste da declaração chama só o núcleo, sem gerar P `:174`, `:223`. |
-| DS aberta; motivo novo/repetido; P qualquer | **SEM JUIZ** de admissão via P: união dos motivos do pedido, `DE:536` | Núcleo une motivos `:541`; merge contexto e contador `:548`, `:557`, `:562`; save `:565`. | `(mesma DS, False, novos)`, `:566`. Wrapper depois gera P `:682`, pendentes `:685`, push só novos `:686`. **Continua aberta sem P viva se nada nascer**. | `app/chamados/tests/test_porta_disputa_emissao.py:199`, `:211`. |
-| DS aberta/recém-criada; pedido datado; sem canônica | Catálogo `DE:314`, resolução dia `:345` etc.; para destino `_derivar_chamado_destino`, `:166`. | Gerador pede `PerguntaDisputa.abrir(disputa=..., chamado_destino=_ch_dest, data_evento=...)`, `DE:444`. Novo destino vem do derivador, `:409`, `:411`. | Lista contém P nova **ou reusada**; booleano não altera `criadas.append(p)`, `:470`. | `app/chamados/tests/test_emissao_costura_intervalo.py:50`, `:58`, `:65`. |
-| DS aberta; pedido não datado sem dia | Dedup do gerador `DE:325`, `:436`; hora sem dia recusa `:425`. | Para tipo não hora abre conversa `:439`, destino `_ch_dest`, `:441`. | Lista P ou vazia, `:471`. | Prova específica dessa combinação: **sem teste** nesta leitura. | [nao verificado]
-| DS A sem P do fato; canônica do fato pertence a B | A eleição de P é delegada à porta `abrir`, `DE:444`/`:837`; emissão não decide dona nem examina retorno da passagem comum. | `_criar_pergunta_se_couber` soma motivo em A **antes** das guardas `:828`, ignora `(p, criada)` de `abrir` `:837`, devolve `True` `:847`; agrupador pode analisar chamado `:1159`, `:1223`, `:1252` e salvar motivos em A `:1255`. **Não há replay explícito nem rollback do nascimento A no main; chega aberta sem P viva se `pode_fechar` não fechar ou veto HX atuar.** | `(motivos, True)`, `DE:847`, depois DS `:1291`. Encaminhamento de motivo para B nesta função: ausente no corpo `:823–847`. | Teste dessa transição estrangeira ponta a ponta: **sem teste** nesta leitura. | [nao verificado]
-| DS A aberta; entrada pendente é de outro dia | `dia_do_turno_da_batida`, `DE:283`; classificador canônico `_cf`, `:288`. | `perguntar_entradas_pendentes` injeta data em `DS.contexto`, `:293`, gera P `:294`; salva contexto se lista retornada não vazia `:296`. Não tem atomic/trava próprios no corpo `:257–297`. | Lista de P, `:297`; wrapper chama depois do núcleo `:685`. | `app/chamados/tests/test_hx_entradas_pendentes.py:33`, `:43`, `:50`, `:64`. |
-| Sem DS aberta; órfãos elegíveis; P não nasce por **ata ausente** | `_ata_do_dia`, `DE:887`: com escala vigente e `sem_celula`, False `:902`, `:908`, `:912`; autofecho tem veto local adicional `:1279`. | Agrupador atomic `:1052`, `_trava_do_repasse` `:1059`; cria DS `:1123`; seed `orfao_14h` `:1101`; marca abstenção `:1173`/`:1211`/`:1242`; mantém DS e acende WARNING `:1281`. **Chegada aberta sem pergunta viva.** | DS, `:1291`. | `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51`, asserts zero P e aberta `:58–61`. |
-| Sem DS aberta; órfãos elegíveis; ata disponível e dia completo | Classificador `DE:1200`/`:1237`; `DS.pode_fechar`, `:1278`. | DS nasce `:1123`, loops podem dar continue `:1202`, `:1239`; pendentes tentadas antes `:1270`; `fechar` `:1284`. | DS fechada, `:1288`; não envia push principal. | `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:63`, asserts `:77–79`; `test_hx_disputa_muda.py:24`, `:44`. |
-| Sem DS aberta; órfão sem data/base ou classificador None antes de ler ata | Guarda local `DE:1233`, `:1235`, `:1238` / `:1201`; **SEM JUIZ de ata consultado nesse ramo**. | Continue antes de `_ata_do_dia` `:1240` / `:1209`; DS já existe `:1123`; se sem P e `pode_fechar=True`, fecha `:1284`. | DS fechada `:1288`. Afirmação de ata lida nesse caso é **[nao verificado]**. | `app/chamados/tests/test_hx_disputa_muda.py:24` exercita classificador None; não prova universalmente ata. Sem teste específico falta data/base nesta leitura. |
-| Órfãos só já cobertos por P/complemento, ou fora de elegibilidade | `chamado_orfao_e_regularizavel`, `DE:1066`, filtro por carimbo `:1089`; `_ata_do_dia`, `:1077`. | Complementa dona da primeira P por destino, `:1070`, `:1073`; salva seus motivos diretamente `:1083`, `:1084`; sem sobreviventes não nasce principal. | `None`, `:1094`. | Teste específico dessa combinação: **sem teste** nesta leitura. | [nao verificado]
-| Conjunto muda sob trava do repasse | `_trava_do_repasse`, `DE:993`: trava C primeiro `:1004`, relê `:1005`, trava C→D→Ch→P `:1010`, recusa crescimento `:1015`. | Atomic do repasse desfaz; fora dele grava evento recusa `:1293`, `:1296`. | `REPASSE_RECUSADO`, `:1299`; não confundir com None. | `app/chamados/tests/test_e1_fila_v2_2_integracao.py:269`, `:272`, `:275`; asserts sem D/P novas `:266`. |
-| Âncora viva sem P da âncora | Guardas categoria/ENCERRADOS, `DE:1316`, `:1318`; dedup por motivo/destino/materializada, `:1323`. | Atomic `:1322`; trava universo `:1331`; cria DS `:1358` ou une motivos `:1366`; abre conversa destino `chamado_limbo`, `:1371`, `:1377`; analisa `:1379`. | DS `:1382`; guardas/dedup retornam None `:1317`, `:1319`, `:1328`. | `app/chamados/tests/test_fio_ancora.py:69`, `:88`, destino assert `:80`. |
-
-**Duas eleições no main:** o derivador exige único candidato após filtro de dia e desempate por turno/estágio (`DE:198`, `:226`, `:231`, `:237`, `:238`), enquanto o agrupador por episódio pede o **primeiro na ordem herdada do chamador** (`DE:1197`); B pede cada intervalo `_chi` (`:1154`) e sem origem pede o `ch` corrente (`:1247`). A declaração pede o chamado do ato (`DT:377`, `:667`). São decisões de insumo anteriores aos escritores, e não uma eleição única do destino. `DE:166`, `DT:376`.
-
-### Declaração: fronteira e retorno no main
-
-- Colaborador: HTTP `app/chamados/urls.py:42` → `views.responder_chamado_colaborador` `app/chamados/views.py:1041` → `declarar_hora_colab` `:1090` → atomic `DT:348` → `_trava_do_ato` `:352` → núcleo `:360` → candidata `:363` → reata órfã com **ch do ato** `:370`, ou abre com **ch do ato** `:376`, `:377`. Retorno final `{'ok': True, 'estado':'declarada', 'pergunta_id':...}`, `DT:426`; pode retornar por carimbo/erro depois de emitir DS/P, `:418`, `:421`.
-- Admin: HTTP detalhe local `app/chamados/urls.py:14` → `views.detalhe_chamado_local` `app/chamados/views.py:359`, ação apply `:478–480` → `aplicar_declaracao`, atomic `DT:654`, trava `:656`, núcleo `:659`, candidata `:662`, abrir `:666–667`; validação ocorre **depois do atomic local**, `:696`; retorno mapeia resultado de validar `:697`.
-- A candidata é a canônica do universo do fato, mas só retorna se pertence à DS recém-obtida e é reusável. Não move `P.disputa`; estrangeira vira `None` e chama `abrir`. `DT:250`, `:253`, `:254`, `:376`, `:666`.
-- `_trava_do_ato` trava C primeiro e universo do fato, depois DS abertas/fechadas do fato, chamado do ato/destinos e P. `DT:299–303`.
-
-### Cadeias produtivas verificadas
-
-- API: `app/api/urls.py:67` → `app/api/views.py:400`, nascimento da anomalia/contexto última batida `:770` → helper importado por reexport de models `:775–778`; clone HTTP core `app/api/urls_core.py:5`, `:14` → `app/api/views_core.py:387`, `:771`. Reexport comum: `app/chamados/models.py:4093`.
-- PWA: `app/ponto/urls.py:11` → `app/ponto/views.py:259–260` → `app/ponto/services/triagem_batida.py:34`, `:734`.
-- Signal/célula: `Chamado.analisar` `app/chamados/models.py:800` → `post_save` `app/chamados/signals.py:187–188`, `:216` → cartório chama fábrica `app/ponto/services/cartorio.py:996`, `:1008` → `perguntar_pela_celula`, `app/chamados/services/fabrica_da_celula.py:178`, `:219` → `perguntar` `:160`, `:172`, `:174`. Execução real da cascata nesta leitura: [nao verificado].
-- Cron foto: `app/config/crons.py:686` → `app/ponto/management/commands/marcar_foto_ausente_retro.py:96`.
-- Cron repasse: `app/config/crons.py:362`, `:363`, `:364` → `processar_alertas_turno.py:385`, `processar_alertas_avancados.py:159`, `detectar_ausencias.py:802`, todos em `app/ponto/management/commands/`.
-- Manual fio/modal: `app/chamados/urls.py:21`, `:39` → ação processada em `app/chamados/services/fio.py:549–551` → `acoes_disputa.acao_iniciar_disputa_orfaos`, `app/chamados/services/acoes_disputa.py:210`, `:222`; confirmação âncora delega em `fio.py:521–524` → `acoes_disputa.py:189`.
-- Cobrar dia: `app/chamados/urls.py:32` → serviço `app/chamados/services/cobrar_dia.py:16`, `:49`; passivo `app/chamados/services/pergunta_no_app.py:197`, `:212`.
-- Helper grade sem perguntas: `app/ponto/management/commands/reconciliar_grade.py:412`, `:424` pede núcleo com motivos `[]`; nenhum chamador desse helper foi encontrado na busca, mas alcançabilidade completa por reflexão é [nao verificado].
-
-### Delta c21 — somente o que muda, conferido contra main e texto do diff
-
-As referências **c21** abaixo são endereços virtuais apresentados pelo anexo; não existem como árvore raia nesta cópia. Identidade Git da raia é [nao verificado].
-
-| Mudança | Main aberto | Delta fornecido |
-|---|---|---|
-| Gerador move a preparação da pergunta para `_resolver_pergunta_por_motivo` e `_gerar_perguntas_com_causas`; conserva args, inclusive origem `None`; pedido de destino passa por novo `_destino_do_intervalo`. | `DE:300`, `:345`, `:444` | `raia_c21_delta.diff`, hunk `@@ -326...`, novo `DE c21:542–546`. |
-| Nova eleição avulsa para intervalo: VIVOS, regularizáveis, marco explícito do mesmo motivo/dia, **menor PK**; fallback destino recebido. | Não existe entre `DE:254` e `:257`. | `raia_c21_delta.diff`, hunk `@@ -254...`, `_destino_do_intervalo`; c21 `:291–294`. |
-| Nova eleição no agrupador: fotografia por chamado do lote; `setdefault` guarda **primeiro do lote**; `_criar_pergunta_se_couber` sobrescreve pedido somente havendo chave. | B escolhe `_chi` `DE:1154`, grupo primeiro `:1197`; sem índice. | Mesmo anexo, hunks `@@ -1057...` e `@@ -821...`; c21 `:1296–1299`, `:1044`. |
-| Chamadas abrir/reapontar das duas declarações saem de DT e passam a `_pergunta_para_declaracao`; colab mantém costurar=True, admin default False. | `DT:370`, `:376`, `:666`. | Hunks `@@ -357...`, `@@ -656...`, novo helper `DE c21:819–849`. |
-| Nascimento DS do núcleo deixa de confirmar vazio: geração entra no savepoint; sem motivos locais admitidos desfaz nascimento; kwargs canônicos são repetidos na dona. | DS `DE:587` e perguntas só `:670`; sem replay explícito. | Hunk `@@ -467...`, `_abrir_ou_agregar_disputa`; c21 `:679`, `:709`, `:737`, `:766`. |
-| Repasse recebe savepoint do nascimento, coleta estrangeiras, adia analisar, desfaz principal nova sem nenhuma P e repete porta na dona; analisa só destinos confirmados e não recusados. | `DE:1123`, retorno `abrir` ignorado `:837`, análise imediata `:1159`, `:1223`, `:1252`. | Hunk `@@ -1098...`; c21 `:1524`, `:1534`, `:1545–1547`. |
-| Agregação DS motivos/contexto passa ao helper `_agregar_motivos_na_dona`; fechada não é salva, agenda trilha após commit; nascimentos permanecem três. | saves `DE:565`, `:1084`, `:1132`, `:1161`, `:1256`, `:1367`; context pendentes `:296`. | Hunk `@@ -467...`, helper; novo `descarte_disputa.py:4`, `:37`; hunk âncora `@@ -1363...`. | [nao verificado]
-| Amplia veto local de autofecho além de `_absteve_por_ata`. | `DE:1279`. | Hunk `@@ -1276...`: `_insumo_incompleto`/`ato['insumo_incompleto']`; c21 `:1562`. Não é escritor persistente, mas altera juiz da transição. |
-| Remove helper grade que pedia núcleo com `[]`. | `app/ponto/management/commands/reconciliar_grade.py:412–428`. | Hunk `@@ -409...`. |
-| Não altera os escritores persistentes de destino/canônica em models/fio, nem `P.disputa`, nem seus juízes de costura. | `app/chamados/models.py:2982`, `:3006`, `:3014`; `app/chamados/services/fio.py:925`, `:927`. | Esses arquivos não aparecem como alvos do diff fornecido. Aplicação efetiva em Git: [nao verificado]. |
-
-**Replay explícito é delta, não main:** não atribuir `DE c21:766`/`:1534` a F1 main. O defeito da origem `None` vem de código comum em `app/chamados/models.py:2866`, mas o ensaio/rollback/replay que o amplifica é acrescentado no diff; sem executar ORM, o efeito concreto continua [nao verificado].
-
-### Leitores/escritores auxiliares necessários a esta parte
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `DS.motivos` | `DE:541`, `:589`, `:1083`, `:1125`, `:1131`, `:1160`, `:1255`, `:1360`, `:1366`. | Núcleo união `:536`; seed `:1100`; complementos `:1081`; push `:1290`; pendentes `:1270`. | [nao verificado]
-| `DS.contexto` | `DE:293` + save `:296`; `:562` + save `:565`; nascimentos `:590`, `:1126`, `:1361`. | Gerador `:345`, `:372`; derivador `:191`; pendentes `:273`; merge `:544`. |
-| `P.chamado_destino` | Pedidos `DE:441`, `:450`, `:843`, `:1377`; `DT:370`, `:377`, `:667`; persistência pertence aos models/fio acima. | Derivação dedup `DE:227`; repasse complemento/filtro `:1070`, `:1090`; âncora dedup `:1324`; declaração órfã `DT:364`. |
-| `P.disputa` | Pedidos de nascimento `DE:440`, `:445`, `:838`, `:1372`, `DT:376`, `:666`; main não reatribui a dona nesses corpos. | `_candidata_reusavel`, `DT:254`; complemento lê dona `DE:1073`. |
-| `P.data_evento` | Pedido `DE:451`, `:844`, `DT:377`, `:667`; atribuidor persistente fora deste escopo. | Dedup `DE:398`, `:418`, `:1415`; complemento fallback `:1074`; eleição candidata `DT:250`. |
-| `DS.fechada_em` | Fecha por delegação `DE:1284`; default/nascimento pelo model fora desta parte. | Seleção de aberta `DE:41`, `:532`, `:1097`, `:1333`. |
-| `Ch.contexto_json` | Nascimento pai `DE:580`, `:1116`, `:1351`. | Origem/dia `DE:145`, `:1232`; B marcos explícitos `:1143`; filtro partial-admin `:930`. |
-| `Ch.categoria`/`status_local` | Escritores pertencem às portas de Chamado, fora desta parte. | Derivador `DE:200`, `:203`; B `:1138`; âncora `:1316`, `:1318`. |
-| `P.materializada_em` | Escritores fora desta parte. | Filtros de derivação/repasse/âncora `DE:228`, `:1070`, `:1090`, `:1326`. |
-
-
-## 11/11 02:21 · sessao c781d947d859 · - · - · origem=Ronald (tmux)
-
-Conferi os trechos abaixo em leitura; testes citados foram abertos, não executados. Resultado de execução: [nao verificado]. [nao verificado]
-
-**F0 — estado real de DisputaSupervisao**
-
-Não existe coluna `status` em `DisputaSupervisao`: o estado aberto é `fechada_em is None`, exposto por `aberta`; o motivo do fechamento é outra coluna. (`app/chamados/models.py:1757`, `:1793`, `:1823`.)
-
-| Sítio | Valor escrito/persistência | Atomic/travas e eleição |
-|---|---|---|
-| `_abrir_ou_agregar_disputa` | `create` deixa `fechada_em=NULL`, `fechada_por=NULL`, `resolucao=''`, `motivo_fechamento=''`. (`app/chamados/services/disputa_emissao.py:587`; defaults em `app/chamados/models.py:1757`, `:1766`, `:1773`, `:1794`.) | Atomic próprio `:521`; `trava_na_ordem` antes da seleção da aberta; seleção `.first()` herda ordering `-aberta_em`, portanto aberta mais recente. (`disputa_emissao.py:529`, `:531`; `models.py:1804`.) |
-| `criar_disputa_a_partir_de_chamados_orfaos` | Segundo nascimento, mesmos defaults de estado. (`disputa_emissao.py:1123`.) | Atomic do agrupador e `_trava_do_repasse`; seleciona aberta `.first()` herdando `-aberta_em`. (`disputa_emissao.py:1059`, `:1060`, `:1096`; `models.py:1804`.) |
-| `criar_disputa_ancora_de_chamado` | Terceiro nascimento, mesmos defaults de estado. (`disputa_emissao.py:1358`.) | Atomic e trava do universo antes da seleção da aberta. (`disputa_emissao.py:1323`, `:1331`, `:1332`.) |
-| `DisputaSupervisao.fechar` | `fechada_em=now`, `fechada_por=user`, `resolucao=argumento or ''`, `motivo_fechamento=motivo`. (`models.py:1932`, `:1936`.) | Atomic `:1905`; ordem C→D→Ch via `trava_na_ordem` `:1910`. Julgamento **antes** desse atomic: resposta sem veredito `:1886`; vivas `:1895`; motivo normal=`vazia` se zero P, senão `veredito` `:1903`. Exceções admitidas: `desligamento`, `admin_encerra`, `competencia_trancada`. (`models.py:1780`, `:1792`, `:1876`.) |
-| `DisputaSupervisao.reabrir_admin` | `fechada_em=None`, `fechada_por=None`, `resolucao=''`, `motivo_fechamento=''`, contador admin +1; motivo novo append se pedido. (`models.py:2149`, `:2153`, `:2159`, `:2161`.) | Sem atomic/trava próprios; guarda fechada, limite 2, user. (`models.py:2138`.) Chamador HTTP direto: `acoes_disputa.acao_reabrir_disputa_admin:259`; corpo não abre atomic. (`app/chamados/services/acoes_disputa.py:235`, `:259`.) |
-| `DisputaSupervisao.reabrir_sistema` | Mesmo reset dos quatro campos, sem contador. (`models.py:2173`, `:2177`.) | Sem atomic/trava próprios; aberta retorna False; fechada salva e retorna True. (`models.py:2167`, `:2181`.) Atomic/trava depende do chamador: ressurreição `models.py:1557`, `:1562`, `:1575`; rejeição de ausência `materializacao.py:675`, `:679`, `:686`; validação `validacao.py:425`, `:431`, `:218`. |
-
-Defaults de schema, não atos de runtime: migration cria `fechada_em NULL` e `resolucao=''`; migration adiciona `motivo_fechamento=''` com os cinco valores. (`app/chamados/migrations/0013_disputasupervisao.py:24`, `:25`; `app/chamados/migrations/0049_disputa_motivo_fechamento.py:15`.)
-
-Os leitores decisórios desses campos incluem `aberta`, seleção da aberta no emissor, recusa da fechada, receivers de fechamento e contador de vazias. (`models.py:1824`; `disputa_emissao.py:532`; `models.py:1879`; `app/chamados/signals.py:28`, `:129`, `:153`; `app/chamados/services/vigia_fio.py:734`.)
-
-**F1 — transições confirmadas no main**
-
-`P.status` também é derivado: validada com materialização→resolvida; validada sem materialização→validada; viva com/sem resposta→respondida/pendente; materializada→resolvida. Vitalidade é decidida por `pergunta_viva`, não pela FK da disputa fechada. (`app/chamados/models.py:3033`, `:3041`, `:3044`, `:3046`.)
-
-| Partida | Juiz → operação | Persistido / retorno | Prova aberta |
-|---|---|---|---|
-| DS aberta × zero P × destino qualquer | `pode_fechar:1848`/`fechar:1897` → `fechar:1855` | DS fechada, motivo `vazia`; `True`. (`models.py:1903`, `:1932`, `:1941`.) | `app/chamados/tests/test_c7_red_minimos.py:174` |
-| DS aberta × P sem vivas e sem resposta sem veredito | Mesmo juiz → mesmo escritor | DS fechada, motivo `veredito`; `True`. (`models.py:1853`, `:1903`, `:1935`.) | `test_c7_red_minimos.py:147` |
-| DS aberta × P muda viva | `fechar:1896` → recusa normal | Nada escrito; `ValueError`. (`models.py:1898`.) | `test_c7_red_minimos.py:132` |
-| DS aberta × resposta sem veredito | `respostas_sem_veredito:1826` → recusa de `fechar` | Nada escrito, mesmo em exceção de desligamento; `ValueError`. (`models.py:1886`.) | `test_c7_red_minimos.py:160`, `:234` |
-| DS aberta × muda viva × admin com motivo | `admin_encerra:1947` → `fechar:1950` | P carimbada `admin_decidiu`, DS fechada `admin_encerra`; True. (`models.py:1918`, `:1921`, `:1935`.) | `test_c7_red_minimos.py:250`, `:261` |
-| DS aberta × muda viva × desligamento | Chamador declara exceção → `fechar` | P `admin_decidiu`, DS `desligamento`. (`app/colaboradores/services/desligamento.py:142`; `models.py:1918`.) | `test_c7_red_minimos.py:209`, `:221` |
-| DS aberta × P morta por tranca | `pode_fechar` em `competencia_trancada.encerrar:202` → `fechar:204` | DS `competencia_trancada`; P não carimbada. (`app/chamados/services/competencia_trancada.py:198`, `:204`.) | `test_c7_red_minimos.py:329` |
-| DS já fechada × mesma entrada | Guardas `fechar:1879` | Sem escrita, False. (`models.py:1882`.) | `test_c7_red_minimos.py:428` |
-| DS já fechada × outra entrada | Guardas `fechar:1880` | Sem escrita, ValueError. (`models.py:1883`.) | `test_c7_red_minimos.py:439` |
-| DS fechada × qualquer P | Guardas admin `models.py:2138` → `reabrir_admin:2149` | **ABERTA SEM PERGUNTA VIVA possível na porta isolada**; reset quatro campos, contador +1, None implícito. Não exige P viva. (`models.py:2138`, `:2161`.) | `app/chamados/tests/test_disputa_transicoes.py:131`; integração casca `test_reabrir_disputa_admin_sem_aberta.py:22` |
-| DS fechada × qualquer P | `SEM JUIZ` de vitalidade em `reabrir_sistema:2163` → mesmo | **ABERTA SEM PERGUNTA VIVA possível na porta isolada**; reset campos e True; chamadores normalmente a invocam por P religada. (`models.py:2167`, `:2173`.) | Teste isolado exato: sem teste localizado. | [nao verificado]
-| DS aberta × P respondida corrigível | `perguntas_corrigiveis`, limite em `models.py:2223` → `reabrir_para_correcao:1562` | Zera resposta, respondida/validada/autor; contador colab+1; `{ok:True,estado:'reaberta',usadas}`. (`disputa_emissao.py:1593`, `:1632`; `models.py:2237`, `:2239`, `:2248`.) | `test_porta_disputa_ciclo.py:283`, repetição `:297`, limite `:311`, fechada `:322` |
-| DS qualquer × P respondida não validada × admin recusa com motivo | Guardas `validacao.recusar_pergunta:561` → `reabrir_para_correcao:593` | Recusa escrita; resposta/assinaturas zeradas; `{ok:True,estado:'recusada'}`. DS não reabre por esse método. (`validacao.py:584`, `:588`, `:621`.) | `test_porta_validacao_pergunta.py:224`, `:258`, `:274` |
-| DS qualquer × P respondida × nova resposta | Validação tipo `disputa_emissao.py:1433` → `responder_pergunta_disputa_core:1467` | Nova resposta e timestamp; desfaz validação prévia; se via sem lastro, limpa carimbo; `(True,None)`. DS não é diretamente reaberta. (`disputa_emissao.py:1480`, `:1485`, `:1508`, `:1559`; `models.py:3313`.) | Prova específica resposta→DS fechada mantida: sem teste localizado. | [nao verificado]
-| DS qualquer × P respondida válida | `motivo_implausivel_validacao:404` → `_carimbar_validacao:435` e materialização | Carimba validação/autor; sucesso `validada` ou `ja_no_espelho`; falha pode devolver validação. (`validacao.py:134`, `:137`, `:461`, `:515`, `:517`.) | Cobertura específica de cada ramo: [nao verificado]. |
-| DS fechada × P HORA sem materialização e recusa escrita | `_resposta_de_hora:190` → `devolver_validacao_recusada:199` | Validação/autor NULL, resposta preservada; DS reabre se `reabrir=True`; True/None/False conforme mudança/caso. (`validacao.py:199`, `:218`, `:221`, `:231`.) | Sem teste aberto específico. | [nao verificado]
-| DS fechada × P carimbada, sem texto, marco não provado aceso e candidata C6 | `_universo_da_ressuscitacao` → `ressuscitar_perguntas:1543` | Descarimba trio + validação/autor/respondida; reabre DS; retorna n. FK `disputa` e destino preservados. (`models.py:1566`, `:1575`.) | `test_porta_pergunta_identidade.py:301`, `:319`, exclui com texto `:331` |
-| DS aberta/fechada × P via fantasma | Chamador decide lampada/C6/competência → `reabrir_fantasma:3289` | Trio NULL/NULL/''; True/False. (`models.py:3296`, `:3298`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:165` reabre DS.) | `test_porta_pergunta_identidade.py:242`, `:257` |
-| DS qualquer × P via competência antiga | `SEM JUIZ` local, via específica → `reabrir_por_competencia:3317` | Limpa trio; mantém resposta; True/False. (`models.py:3320`, `:3322`.) | `test_porta_pergunta_identidade.py:223`, `:266` |
-| DS aberta × zero P × sem ata no agrupador | `_ata_do_dia` + `_absteve_por_ata` → branch `disputa_emissao.py:1279` | **ABERTA SEM PERGUNTA VIVA**, WARNING; retorna DS. (`disputa_emissao.py:1279`, `:1281`, `:1299`.) | `test_hx_disputa_muda_sem_ata.py:51`, asserts `:58`, `:59` |
-| DS aberta × zero P × ata completa | `pode_fechar:1278` → `fechar:1284` | Fecha vazia, retorna DS. (`disputa_emissao.py:1284`, `:1290`.) | `test_hx_disputa_muda_sem_ata.py:63`, asserts `:77`, `:78` |
-
-**Reuso/ressurreição de identidade e origem None**
-
-O main não possui o protocolo novo de ensaio→rollback→replay do emissor c21; as funções atuais são `_abrir_ou_agregar_disputa:474`, `disputa_para_declaracao:606`, `gerar_perguntas_disputa:300`. O protocolo apresentado está no delta recebido, não nesses corpos do main. (`app/chamados/services/disputa_emissao.py:300`, `:474`, `:606`.)
-
-No main, repetição de `abrir` recalcula `_bo = campos.get('batida_origem_id') or derivador(disputa,motivo)`; portanto `None` explícito e ausência da chave têm o mesmo efeito. Com dona diferente, o contexto consultado pode ser diferente; a própria docstring declara que contexto aponta outra anomalia depois de merge. (`models.py:2866`, `:3456`, `:3463`.)
-
-O lookup elege P canônica por `universo_do_fato`/`canonica_do_grupo`; reuso conserva `P.disputa`, pode alterar `P.chamado_destino`, devolve `(ex,False,dia)`. (`models.py:2907`, `:2921`, `:2982`, `:3008`.) Não há transferência de dona nesse reuso: a FK escrita na inserção é a recebida e a devolução estrangeira não a sobrescreve. (`models.py:3014`, `:3008`.)
-
-Na inserção o save ainda deriva batida se `None`; a divergência entre chave procurada e chave efetivamente inserida com insumo None deve ser tratada separadamente do replay futuro. (`models.py:3448`, `:3449`, `:2866`.) Contraexemplo ORM exato com replay estrangeiro: [nao verificado].
-
-**Travas e cadeias úteis**
-
-`trava_na_ordem` realiza de verdade `select_for_update` C `models.py:2666`, D `:2675`, Ch `:2688`, P `:2692`; só trava P explicitamente quando há `perguntas=`. (`models.py:2691`.)
-
-A reabertura admin vem de HTTP `processar_post_fio:581`→`acoes_disputa.acao_reabrir_disputa_admin:259`→model, seguida de `abrir_conversa:263`; a conversa tem destino default None e pode falhar depois de a DS já ter sido reaberta porque a casca não envolve o conjunto em atomic. (`app/chamados/services/fio.py:581`; `app/chamados/services/acoes_disputa.py:259`, `:263`; atomic externo HTTP: [nao verificado].)
-
-Reabertura colab tem duas cascas: HTML `views.py:1334`, REST `api/views.py:2691`; ambas filtram DS aberta antes e delegam ao método. (`app/chamados/views.py:1328`; `app/api/views.py:2682`.)
-
-Validação de P viva em DS fechada possui porta deliberada com `sem_reabrir=True`: `processar_post_fio` verifica vitalidade e chama a casca passando esse valor. Assim a devolução recusada pode manter DS fechada sem mudar a pergunta de dona. (`app/chamados/services/fio.py:600`, `:605`, `:609`; `app/chamados/services/validacao.py:215`.)
-
-O selo existente de DS é mais fraco que o censo solicitado: considera atributo e kwargs diretos em update/create/get_or_create/update_or_create/bulk_create; exclui migrations e não cobre `**kwargs`, `bulk_update`, SQL, setattr ou listas dinâmicas. (`app/chamados/tests/test_c7_red_minimos.py:579`, `:581`, `:583`, `:597`.)
-
-## 11/11 02:13 · sessao abd8f65a40e6 · FIO-E0-V4-E4B · sonda · origem=Code
-
-1. **FOTO_SOMBRA:** `2026-11-11 02:03:21.722000-03:00`, com `hoje=2026-11-11`: é posterior ao pouso informado da E4a-2, em 10/11 às 14:5x local. [nao verificado] [nao verificado]
-
-**Porém, a sonda apresentou erro; não concluo os números da remedida**, conforme sua regra. A saída fornecida registra `SemLavra: ENSAIO SEM A LAVRA DE PROD`, com marcador `esmeril_lavra_de_prod` **AUSENTE** e lavra carregada `78b94bfb197d278e3f538ab46c3a747a`. [nao verificado]
-
-O código confirma que essa guarda levanta `SemLavra` quando o marcador não corresponde à lavra carregada. `ListaDoAdmin` captura a exceção e continua sem resposta da lista; portanto, `rc_sombra=0` não basta para validar a medição. [esmeril_espelho.py:266](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/ponto/services/esmeril_espelho.py:266), [vigia_fio.py:219](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:219)
-
-2–5. **Contadores, decomposições, conferência da soma, comparação com o DRY e conclusão sobre “hoje pra frente”: não concluídos devido ao erro.** A condição de remedida válida pós E4a-2 permanece [nao verificado].
-
-As chaves que contam “hoje pra frente” são `CENSO_ALCANCE['alcance_de_hoje_pra_frente']` e `CENSO_VIVO['fio_morto_de_hoje_pra_frente']`. [vigia_fio.py:648](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:648), [vigia_fio.py:420](/home/ronald/codex_ws/52a0022e962812517db4e305d09ac6668ebbf4fc/app/chamados/services/vigia_fio.py:420)
-
-## 11/11 02:11 · sessao bcaec9e8255c · FIO-E0-V4-E4B · leitura · origem=Code
-
-**lei:** identidade histórica não basta para provar porta alcançável; a lei exige pergunta viva ou ação nomeada do admin quando a pendência permanece. As ações exigíveis devem vir de C19, por instância e após decisões/efeitos. (`app/docs/CORTES.md:253`; `app/docs/CORTES.md:263`; `app/docs/CORTES.md:426`; `app/docs/JUIZES.md:78–85`)
-
-**O retorno atual não permite construir essa certidão.** `perguntar_pela_celula` devolve motivos; `perguntar` devolve quantidade de carimbos desfeitos; o gerador mistura perguntas inseridas e reusadas. O backfill descarta esses retornos e decide `segue_sem_porta` pelo recenso. (`app/chamados/services/fabrica_da_celula.py:175`; `app/chamados/services/fabrica_da_celula.py:220`; `app/chamados/services/disputa_emissao.py:470–471`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:137–143`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:343–348`)
-
-Os 82 dias e sua distribuição são o dado fornecido. **A associação de qualquer desses dias aos ramos abaixo é [nao verificado].** Os testes foram inspecionados; execução e resultado atual da suíte são **[nao verificado]**. [nao verificado]
-
-Para tornar a matriz legível, as referências abreviadas abaixo significam estes arquivos:
-
-| Sigla | Arquivo |
-|---|---|
-| F | `app/chamados/services/fabrica_da_celula.py` |
-| E | `app/chamados/services/disputa_emissao.py` |
-| PD | `app/chamados/models.py` |
-| R | `app/chamados/reconciliador.py` |
-| M | `app/chamados/services/materializacao.py` |
-| RV | `app/chamados/services/relavra_via.py` |
-| T | `app/chamados/services/tarefa_do_dia.py` |
-| B | `app/chamados/management/commands/backfill_fio_morto_e4b.py` |
-| DT | `app/chamados/services/declaracao_texto.py` |
-| C | `app/docs/CORTES.md` |
-| J | `app/docs/JUIZES.md` |
-| L | `app/docs/LEIS.md` |
-
-Na coluna PROVA, nomes de testes são relativos a `app/chamados/tests/`. **“Sem teste” significa sem teste específico localizado nesta leitura; a inexistência absoluta é [nao verificado].** [nao verificado]
-
-As portas legais usadas nas células são:
-
-| Código | Porta devida |
-|---|---|
-| **P** | Pergunta viva e alcançável ao colaborador, quando C19 exige responder/perguntar. A identidade histórica sozinha não basta. (`C:253`; `C:426`; `J:78–85`) |
-| **A** | Ação nomeada do admin, incluindo validação, decisão ou correção de cadastro. (`C:253`; `J:78–82`; `L:122`) |
-| **N** | Nenhuma pergunta/decisão exigível para aquele marco naquele instante: dispensa, marco ainda não vencido ou efeito/decisão encerrando a obrigação. (`J:64–84`; `L:100`; `T:180–210`; `T:241–260`; `T:140–154`) |
-| **U** | Porta devida indeterminada: deve permanecer `nao_sei`, sem transformar ausência de informação em dispensa. (`J:83–84`; `C:426`) |
-
-**Matriz da seleção e das saídas da fábrica.** Cada retorno abaixo é o retorno da função indicada; a coluna de distinção informa também o que chega a `perguntar_pela_celula`. (`F:35–220`)
-
-| Ramo — condição | Entrada que o alcança | Retorno exato | Estado gravado / nascimento | PORTA DEVIDA | Retorno distingue? | PROVA |
-|---|---|---|---|---|---|---|
-| V1 — `F:47–48` | Sem marcos vencidos **nem pendentes**; dia passado | `vencidos_no_instante → None` | Leitura; nada nasce | **A: CADASTRO/DP**, sem pergunta ao colab. (`C:428`; `J:91`) | Distingue falta de turno de conjunto vazio; a saída externa será `[]` | `test_e4_c20.py:20` |
-| V2 — `F:47–48` | Sem marcos; hoje ou futuro | `set()` | Nada nasce | **N**, nenhum marco exigível. (`L:100`; `F:41–43`) | Não distingue ausência de turno de nenhum vencimento | `test_e4_c20.py:20` cobre o passado; hoje/futuro: sem teste específico | [nao verificado]
-| V3 — `F:49` | Há vencidos ou pendentes | `set(venc)` | Nada nasce | **P/A/N**, segundo marco, decisão e efeito. (`J:78–84`) | Expõe os vencidos; não expõe causa dos excluídos | `test_fabrica_por_evento.py:45`; `test_pergunta_do_dia_em_curso.py:504` |
-| F01 — `F:183–184` | `cel.veredito == 'nunca_bateu'` | `[]` | Não cria pergunta nem pauta de falta de turno | **A: lista C5**, zero pergunta. (`C:433`) | **Não** | `test_e4a2_nunca_bateu.py:185–192`; `:289` |
-| F02 — `F:201–205`, escritor `F:367–373` | Passado, ativo, não dispensado; V1; nenhuma pauta reconhecida | `pauta_cadastro_sem_turno → True`; externa `[]` | Cria uma cabeça de pauta DP por colaborador | **A: DP/CADASTRO**. (`C:428`; `J:91`) | Booleano distingue criação; fábrica o descarta | `test_e4_c20.py:64`; `test_e4a_pauta_cadastro_contador.py:51` |
-| F03 — `F:327–328`, `F:367–368` | Mesmo caso; pauta de cadastro viva | Juiz `True`; escritor `False`; externa `[]` | Não repete pauta | **A já entregue ao DP**; leitura efetiva pelo DP não é provada. (`C:428`; `F:321–323`) | Externa **não** distingue de F02 | `test_e4a_pauta_cadastro_contador.py:51` |
-| F04 — `F:331–335`, `F:367–368` | Pauta feita/cancelada em data local ≥ dia consultado | Juiz `True`; escritor `False`; externa `[]` | Não reabre pauta do dia velho | Encaminhamento anterior satisfaz a regra de entrega. (`C:428`) | **Não** na externa | `test_e4a_pauta_cadastro_contador.py:80`; `:90` |
-| F05 — `F:334–336`, `F:369–373` | Só há pauta encerrada antes do novo dia sem turno | Juiz `False`; escritor `True`; externa `[]` | Cria pauta nova para a persistência posterior do problema | **A: DP/CADASTRO**. (`C:428`) | **Não** na externa | `test_e4a_pauta_cadastro_contador.py:58`; `:67`; `:88` |
-| F06 — `F:105–106` | Chamada de `motivos_a_perguntar` sobre `nunca_bateu` | `[]` | Leitura; nada nasce | **A: C5**, sem pergunta. (`C:433`) | **Não** | `test_e4a2_nunca_bateu.py:185–192` |
-| F07 — `F:112–113` | Juiz `dia_sem_trabalho(cel)` verdadeiro | `[]` | Não emite | **N** para cobrança do marco; parcial com resto tem exceção própria. (`J:64–72`) | **Não** | `test_f1c4_3_emissores.py:83`; `:89` |
-| F08 — `F:112–113` | Situação atual do colab diferente de `ativo` | `[]` | Não emite | Não estabelece dispensa de toda decisão histórica; C19 pesa vínculo/fato e pode exigir ação admin. (`T:168–182`; `J:78–84`) Lei específica que dispense tudo só pela situação atual: **[nao verificado]** | **Não** | Sem teste específico desta guarda da fábrica | [nao verificado]
-| F09 — `F:114–115` | Dia futuro | `[]` | Não emite | **N** por teto temporal. (`L:100`; `F:8–11`) | **Não** | `test_pergunta_do_dia_em_curso.py:95` |
-| F10 — `F:120–121` | Veredito preenchido fora de `VEREDITOS_ACUSAM` | `[]` | Não emite | **N** para nova pergunta; guarda inclusive admin deve ficar. (`C:438`) | **Não** | `test_fabrica_por_evento.py:52`; `test_pergunta_do_dia_em_curso.py:479` |
-| F11 — `F:123–125`; cartório `:398–399` | Parcial com `periodo_parcial='sem_periodo'` | `[]` | Não cria pergunta/pai/push | **A: CADASTRO**, lista do admin. (`C:319`) | **Não** | `test_cobparc5_parcial_sem_periodo_so_lista.py:157` | [nao verificado]
-| F12 — `F:123–125`; cartório `:400` | Parcial, julgamento anterior e nenhum fato novo | `[]` | Não cria pergunta/pai/push | **A: lista admin** pela mudança de regra sem fato novo. (`C:323`) | **Não** | `test_cobparc5_parcial_sem_periodo_so_lista.py:160`; `:222` | [nao verificado]
-| F13 — `F:58–61` | `motivos_pela_ata` recebe `None` | `[]` | Não consulta ata nem emite | Falta de turno passado vai ao DP; não autoriza pergunta por data. (`C:428`; `F:55–60`) | **Não** na externa | `test_e4_c20.py:20` |
-| F14 — `F:58–61` | Recebe conjunto vazio: nenhum marco venceu | `[]` | Não consulta ata nem emite | **N agora**, teto por instante. (`L:100`) | Não distingue de F13 | `test_fabrica_por_evento.py:45` |
-| F15 — `E:897–901` → `F:65–66` | Exceção lendo marcos/ata | `_ata_do_dia → (True,None)`; motivos `[]` | Nenhuma pergunta; registra falha engolida | **U**, não prova dispensa. (`J:83–84`) | **Não**; vira o mesmo `[]` | Sem teste | [nao verificado]
-| F16 — `E:902–910` → `F:65–66` | Leitor diz `sem_celula`; sem escala vigente | `(True,None)`; motivos `[]` | Nenhuma pergunta | **U**; se o teto já mostrou falta de turno passado, F02–F05 interceptam antes. (`J:83–84`; `F:201–205`) | **Não** | Sem teste específico da fábrica | [nao verificado]
-| F17 — `E:902–912` → `F:65–66` | `sem_celula`, escala vigente | `(False,None)`; motivos `[]` | Não cria pergunta; acende aviso de ata | **U**, aguarda ata/lâmpadas. (`J:83–84`; `E:887–890`) | **Não** | `test_fabrica_pela_ata.py:62` usa stub; não prova o corpo de `_ata_do_dia` |
-| F18 — `DT:104–105` | Leitor declara isento | `(fora_vinculo,[])`; `_ata_do_dia → (True,[])`; motivos `[]` | Nada nasce | **N**. (`T:183–189`; `J:78–84`) | **Não** | Sem teste específico desse percurso | [nao verificado]
-| F19 — `DT:112–115` | Dia fora do vínculo, sem contribuição elegível da véspera | Faltantes `[]`; motivos `[]` | Nada nasce | **N** pelo vínculo/fato lido. (`T:168–182`; `J:78–84`) | **Não** | Sem teste específico desse percurso | [nao verificado]
-| F20 — `DT:119–120` | Dia conhecido sem trabalho e sem parcial cobrando resto | Faltantes `[]`; motivos `[]` | Nada nasce | **N**. (`J:64–72`) | **Não** | `test_f1c4_3_emissores.py:89` caracteriza dispensa |
-| F21 — `DT:121–127` | Ata agregada ou sem pares válidos E/S com hora | Estado `sem_celula`; cai em F16/F17 | Nenhuma pergunta | **U**, ata sem lâmpadas não equivale a dia quitado. (`J:83–84`) | **Não** | `test_fabrica_pela_ata.py:62` é prova do bloqueio externo |
-| F22 — `DT:131–132` | Nenhuma célula do leitor tem `missing` verdadeiro | Faltantes `[]`; motivos `[]` | Nada nasce | **N** se lâmpadas provam cumprimento; **U** se indeterminadas. (`J:78–84`; `DT:91–94`) | Não separa cumprido de desconhecido | `test_fabrica_pela_ata.py:49` cobre sem faltantes |
-| F23 — `F:69–70` | Faltante existe, mas seu tipo/hora não está nos vencidos | Não acrescenta motivo; pode resultar `[]` | Nada nasce para esse marco | **N agora** se ainda não venceu; **U** se incompatibilidade de insumos. (`L:100`; `J:83–84`) | **Não** | `test_fabrica_por_evento.py:45` cobre não vencido |
-| F24 — `F:71` | Faltante da véspera, `f[0] != dia` | Não acrescenta motivo; pode resultar `[]` | Não emite por esta célula | Porta do **dia do turno correspondente**, não determinada por esta saída. (`T:212–215`; `J:78–84`) | **Não** | `test_fabrica_pela_ata.py:53` |
-| F25 — `F:71–73` | Posição/tipo sem mapeamento | Não acrescenta motivo; pode resultar `[]` | Nada nasce para o marco | **U** se há marco devido sem identidade; C19 não deve inventá-la. (`T:269–275`; `J:83–84`) | **Não** | Sem teste específico | [nao verificado]
-| F26 — `F:72–73` | Dois faltantes mapeiam para o mesmo motivo | Acrescenta o motivo uma vez | Ainda só leitura | Exigibilidade é por **instância**, inclusive segunda pausa. (`C:426`; `T:269–275`) | Lista perde multiplicidade de instâncias | `test_fabrica_pela_ata.py:53` cobre mapa; segunda instância: sem teste específico da emissão | [nao verificado]
-| F27 — `F:145–157` | Todos os motivos têm linha no domínio do fato | `motivos_a_perguntar → []`; externa `[]` | Não chama `perguntar`; não exige C6 viva, fila ou disputa aberta para dedup | **P/A/N segundo decisão/efeito**, nunca decidido só pela existência histórica. (`C:253`; `C:426`; `PD:2753–2755`) | **Não** | `test_fabrica_por_evento.py:34` cobre repetição normal; dedup morto sem porta: sem teste | [nao verificado]
-| F28 — `F:155–156`, `F:208–209` | Linha deduplicada tem carimbo elegível | Externa continua `[]` se nenhum motivo novo | Pode desfazer carimbo; detalhado abaixo | **P/A** se a obrigação voltou; preservar fechamento quando exigido. (`C:253`; `F:195–198`) | **Não**, quantidade é descartada | `test_o261_julgamento_desfaz_carimbo.py:92` |
-| F29 — `F:214–216`, `F:277–285` | Limbo `trabalha=None`, motivos presentes, competência entregue, motivos ainda não pautados | Escritor retorna lista `novos`; externa `[]` | Cria pauta DP ancorada no dia; zero pergunta ao colab | **A: DP**, encaminhamento específico do limbo entregue. (`F:210–213`; `L:122`) Corte correspondente em LEIS/CORTES/JUIZES: **[nao verificado]** | **Não** na externa | `test_f1c4_3_emissores.py:199` |
-| F30 — `F:262–265`, `F:278–285` | Mesmo caso; todos os motivos em pauta viva/feita/cancelada | Escritor `[]`; externa `[]` | Não repete pauta | Encaminhamento DP anterior; não reabre fechamento humano. (`F:259–261`; `L:122`) | Não distingue de F29 | `test_f1c4_3_emissores.py:218`; `:227`; `:243` |
-| F31 — `F:217–220` | Há motivos, limbo não encaminhado ao DP | `ms`, lista de motivos solicitados | Chama escritor; pode criar, reusar, recusar costura ou não gerar pergunta nos ramos internos | **P/A** conforme C19; a lista não prova cumprimento. (`C:426`; `J:78–84`) | Distingue somente motivos pedidos | `test_fabrica_por_evento.py:34`; `test_f1c4_3_emissores.py:207`; `:212` |
-| F32 — `F:228–229` | `limbo_vai_a_pauta`: sem motivos | `False` | Leitura | Não determina porta. (`J:78–84`) | Não distingue dos demais `False` | `test_f1c4_3_emissores.py:218` cobre segunda passada |
-| F33 — `F:228–229` | `trabalha is not None` | `False` | Leitura | Trabalho entregue segue podendo perguntar. (`C:438`; `F:210–213`) | **Não** | `test_f1c4_3_emissores.py:212` |
-| F34 — `F:230–231` | Limbo com motivos; entrega falsa ou indeterminada | `bool(entrega)`, portanto `False` nos dois | Segue para emissão | Falsa e desconhecida não são a mesma autorização no backfill. (`B:286–287`; `B:318–322`) | **Não** | Aberta: `test_f1c4_3_emissores.py:207`; entrega indeterminada: sem teste | [nao verificado]
-| F35 — `F:242–245` | Vigia; limbo entregue | `motivos_sem_pauta_do_limbo(cel,devidos)` | Só lê; não cria pauta | **A: DP** para motivos ausentes. (`F:235–241`; `L:122`) | Lista não distingue dispensa de pauta já existente | `test_f1c4_3_emissores.py:218` |
-| F36 — `F:242–245` | Vigia; fora do limbo entregue | `devidos` | Só lê | Exigibilidade pelos mesmos guardas da fábrica. (`F:238–241`; `C:426`) | Mesmas perdas de `motivos_a_perguntar` | `test_fabrica_por_evento.py:76` |
-| F37 — `F:299–302` | Eventos sem célula atual para as datas | `0` | Nada emite | **U** quanto ao dia sem célula. (`J:83–84`) | Não distingue de células que devolveram listas vazias | Sem teste específico | [nao verificado]
-| F38 — `F:299–302` | Células atuais encontradas | `sum(len(perguntar_pela_celula(...)))` | Efeitos dos ramos anteriores; soma **motivos**, não inserções | Não certifica P/A/N. (`F:179`; `F:220`) | **Não** | `test_e4_c20.py:42` |
-
-Os auxiliares de cadastro também têm saídas próprias, consumidas pelo juiz/contador; não são prova de que uma pergunta nasceu. (`F:308–351`)
-
-| Ramo — condição | Entrada | Retorno exato | Estado gravado | PORTA DEVIDA | Distingue? | PROVA |
-|---|---|---|---|---|---|---|
-| F39 — `F:312` | `_pautas_cadastro(vivas=True)` | QuerySet de cabeças DP com marcador, usando `Pauta.objects.vivas()` | Nenhum | Seleção para **A/DP**. (`C:428`) | Distingue pelo argumento, não por resultado certificado | `test_juiz_pauta_cadastro_sem_turno.py:241` |
-| F40 — `F:312` | `vivas=False` | QuerySet do histórico de cabeças com marcador | Nenhum | Permite reconhecer entrega anterior. (`C:428`) | Sim, consulta histórico | `test_e4a_pauta_cadastro_contador.py:80` |
-| F41 — `F:329–330` | Sem pauta viva, consulta com `dia=None` | `False` | Nenhum | Não prova ausência de encaminhamento histórico para um dia. (`F:321–325`) | Distingue do `True`; não informa motivo | `test_e4a_pauta_cadastro_contador.py:58` |
-| F42 — `F:346–351` | Contador com ou sem filtro de empresas | `{'nome':'cadastro_sem_turno','numero':<colabs distintos com pauta viva>,'esperado':0,'dono':'CADASTRO'}` | Nenhum nesta função | Lâmpada de **A/CADASTRO**, não juiz de pendência. (`F:340–344`; `L:122`) | Número agregado, sem ramo/dia | `test_e4a_pauta_cadastro_contador.py:74` |
-
-**Matriz do descarimbo chamado pela fábrica.** O retorno de `perguntar` é exclusivamente a soma dos resultados desse descarimbo; emissão não incrementa esse inteiro. (`F:167–175`)
-
-| Ramo — condição | Entrada | Retorno exato | Estado gravado | PORTA DEVIDA | Distingue? | PROVA |
-|---|---|---|---|---|---|---|
-| RV1 — `RV:238–241` | Pergunta não encontrada/elegível após releitura travada | Não incrementa `n`; função retorna `n` | Nada nessa pergunta | Decisão/identidade preservada; exigibilidade por C19. (`J:78–84`; `RV:177–178`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:117`; `:152` |
-| RV2 — `RV:238–241` | Julgamento passou `reabrir_fechada=False`; disputa fechou | Não incrementa `n` | Não reabre disputa nem limpa carimbo | A viva em disputa fechada mantém tratamento do admin, sem reabrir por esta porta. (`F:195–198`; `C:253`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:139`; `:165` | [nao verificado]
-| RV3 — `RV:242–243` | C6 diz morta: carimbo tem lastro | Não incrementa `n` | Preserva carimbo | **N** quanto a ressuscitar essa pergunta. (`RV:65–68`; `J:78–84`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:106` |
-| RV4 — `RV:246–247` | `descarimbar()` recusa | Não incrementa `n` | Preserva carimbo | Não ressuscita identidade fora do fato. (`RV:163–168`; `PD:2753–2755`) | **Não** | `test_o261_julgamento_desfaz_carimbo.py:117` caracteriza identidade |
-| RV5 — `RV:244–262` | Elegível, C6 viva, porta aceita | Incrementa `n`; retorno `int n` | Limpa materialização/via; preserva resposta/validação; grava evento | **P/A** segundo resposta/decisão vigente. (`C:253`; `J:78–84`; `RV:206–207`) | Conta mudanças, não identifica perguntas/portas | `test_o261_julgamento_desfaz_carimbo.py:92` |
-| RV6 — `RV:260–261` | Mesmo sucesso, disputa fechada e chamada permite reabri-la | Mesmo incremento | Também chama `reabrir_sistema` | **P/A**; continente acompanha a pergunta ressuscitada. (`RV:69–71`; `C:253`) | Não separa de RV5 | Sem teste específico desta entrada pela fábrica | [nao verificado]
-
-**Matriz da emissão interna.** A fábrica chama o gerador dentro de `criar_ou_atualizar_disputa` e depois novamente em `perguntar`. Uma lista `[p]` pode conter pergunta reusada. (`F:172–174`; `E:669–688`; `E:444–471`)
-
-| Ramo — condição | Entrada | Retorno exato | Estado gravado / nascimento | PORTA DEVIDA | Distingue? | PROVA |
-|---|---|---|---|---|---|---|
-| E01 — `E:535–566` | Disputa aberta; motivo novo | Núcleo `(d,False,sorted(novos))`; público `d` | Agrega motivos/contexto; tenta gerar perguntas | **P/A** conforme dia/decisão. (`C:426`; `J:78–84`) | Público não distingue nascimento/agregação | `test_regressao_etapa7.py:254` caracteriza núcleo com outro motivo |
-| E02 — `E:535–566` | Disputa aberta; motivo já presente | Núcleo `(d,False,[])`; público `d` | Atualiza contexto, inclusive contador/data; tenta emissão outra vez | **P/A/N** por fato do dia, não por motivo já agregado. (`E:674–681`; `C:426`) | **Não** no público | `test_regressao_etapa7.py:236` |
-| E03 — `E:568–603` | Sem disputa aberta; pai novo | `(d,True,list(motivos))`; público `d` | Nasce chamado-pai e disputa; tenta perguntas | **P/A** quando devida. (`C:253`; `C:426`) | **Não** no público | `test_regressao_etapa7.py:221` |
-| E04 — `E:584–592` | Sem disputa aberta; chamado-pai vivo reusável | Mesma tripla de E03 | Reusa pai, anexa ocorrência, cria disputa | **P/A** quando devida. (`C:253`; `C:426`) | Não distingue pai novo de reusado | Sem teste | [nao verificado]
-| E05 — `E:595–603` | Falha de auditoria após nascimento da disputa | Mesma tripla; exceção engolida | Disputa/pai permanecem | Porta humana continua exigível conforme dia. (`C:253`; `J:78–84`) | **Não** | Sem teste | [nao verificado]
-| E06 — `E:398–401` | Intervalo com pergunta mesma disputa/motivo/dia, fora vias excluídas | Gerador singleton `[]` | Não insere nem reata | **P/A/N** conforme a pergunta existente; dedup não prova vida. (`C:253`; `C:426`) | **Não** | `test_emissao_costura_intervalo.py:65` |
-| E07 — `E:417–420` | Entrada/saída com pergunta na mesma disputa e `_data_ev` derivada | Gerador singleton `[]` | Não insere nem reata | **P/A/N** conforme decisão/efeito. (`J:78–84`) | **Não** | `test_regressao_etapa7.py:236` cobre idempotência; ramo específico: sem teste | [nao verificado]
-| E08 — `E:238–244` | Derivador termina com zero candidatos | `(None,None)` | Não esc
-
-[truncado em 20000 de 66776 caracteres]
-
-_3629 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3633 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
