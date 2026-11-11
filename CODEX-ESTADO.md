@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 14:30** · publicado em **11/11/2026 14:30** (UTC-3)
+> Ultima resposta processada: **11/11/2026 14:33** · publicado em **11/11/2026 14:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 14:33 · sessao a6c6e22ba20e · - · - · origem=Ronald (tmux)
+
+- **BLOQUEANTE — N sem fonte válida, rc 0.** Sonda real, somente memória: todas as obras com `1 de 1`, fonte `app/docs/BACKLOG.md:1`, falta `encerrada`; demais campos `nao medido`, SEM DONO canônica, legenda e cabeçalho oficiais. Resultado: `rc 0`, zero problemas. A fonte é apenas o título do BACKLOG, não PRONTO numerado (`app/docs/BACKLOG.md:1`). O selo confere caminho permitido e linha não vazia, sem relacionar obra, lista e N (`bin/mapa20_valida.py:91-107`). O teste legitima esse título como fonte (`bin/tests/test_mapa20_valida.sh:34`).
+
+- **BLOQUEANTE — “E4B: encerrada” com E4B em 1 de 2, rc 0.** Entrada completa: E3 em `1 de 1`, coluna “arquivos que toca” com `E4B: encerrada`; E4B em `1 de 2`, falta `item 2`; outras linhas canônicas. Sonda real retornou `rc 0`, zero problemas. A permissão acompanha a linha E3, sem identificar a obra afirmada no texto (`bin/mapa20_valida.py:213-214`, `bin/mapa20_valida.py:225-228`).
+
+- **BLOQUEANTE — X não confrontado com prova.** O ramo numérico confere intervalo, fonte e igualdade X/N; não consulta RELATO nem verifica itens comprovados (`bin/mapa20_valida.py:206-216`). A primeira entrada também demonstra aceitação sem apresentar prova de item algum.
+
+- **FILA — caso sem mordida própria.** O caso `celula …` rejeita U+2026 pelo alfabeto antes da guarda de célula vazia (`bin/tests/test_mapa20_valida.sh:70`, `bin/mapa20_valida.py:146-149`). Mutante em memória que faz `_DADO.search` sempre retornar verdadeiro mantém esse caso vermelho; portanto ele não prova a guarda de `bin/mapa20_valida.py:198-200`.
+
+- **Curados:** invisíveis/homóglifos indicados, pelo alfabeto fechado (`bin/mapa20_valida.py:78-79`); separadores de `splitlines`, pelo alfabeto e divisão somente em LF (`bin/mapa20_valida.py:145-150`); “encerrada” em SEM DONO, pela varredura global posterior ao `continue` (`bin/mapa20_valida.py:202-205`, `bin/mapa20_valida.py:225-228`).
+
+Reproduzi os 156 casos de conteúdo construídos pela parte (a), usando `/dev/stdin`: todos deram o resultado esperado. A suíte permanece verde diante dos dois contraexemplos acima; construção e expectativas estão em `bin/tests/test_mapa20_valida.sh:25-189`.
+
+## 11/11 14:33 · sessao 2a97dd5b67c4 · - · - · origem=Ronald (tmux)
+
+BLOQUEANTE — N continua sem derivação da lista de PRONTO: o N aprovado vem da string `d['xn'][nome]`, copiada em `bin/mapa20_montar.py:123-124`. A contagem em `bin/mapa20_montar.py:74-84` aplica-se apenas ao RASCUNHO. O selo aceita caminho permitido + linha não vazia, sem verificar obra, lista numerada ou quantidade (`bin/mapa20_valida.py:91-107`). `app/docs/BACKLOG.md:1` é título; `app/docs/TICKETS.md:1` é comentário. Ambos são aceitos como fontes verdes por `bin/tests/test_mapa20_valida.sh:31` e `bin/tests/test_mapa20_valida.sh:66`. X não lê provas do RELATO: sua única utilização efetiva é comparação aritmética (`bin/mapa20_valida.py:209-215`).
+
+BLOQUEANTE — `ovr` pode trocar a identidade da obra depois da canonicalização: `bin/mapa20_montar.py:116-118`. O `xn` continua escolhido pelo nome anterior (`bin/mapa20_montar.py:123-124`). Sonda em memória confirmou zero problemas para:
+
+```json
+"ovr": {
+  "E3": {"0": "E4B"},
+  "E4B": {"0": "E3"}
+}
+```
+
+Com censo E3=`dado E3`, E4B=`dado E4B`, `xn.E3=["1 de 1","app/docs/BACKLOG.md:1","nada"]` e `xn.E4B=["1 de 2","app/docs/BACKLOG.md:1","item 2"]`, o montador produz E4B com dados/progresso de E3 e vice-versa; `problemas()` retorna `[]` (`bin/mapa20_montar.py:110`, `bin/mapa20_montar.py:117`, `bin/mapa20_montar.py:124`; execução somente em memória).
+
+FILA — teste “só escreve saída pedida” compara exclusivamente nomes de arquivos: `arvore()` em `bin/tests/test_mapa20_valida.sh:354-355`, captura em `:358`, comparação em `:374`. Mutante concreto após `bin/mapa20_montar.py:152`:
+
+```python
+open(os.path.join(RAIZ, DADOS), 'a', encoding='utf-8').write(' ')
+```
+
+Modifica JSON existente, preserva JSON válido, saída e lista de caminhos; essa asserção não morde. Mutante não executado [não verificado].
+
+Rastreio de estado:
+
+| Estado/campo | Escritor | Leitor |
+|---|---|---|
+| `logs/MAPA-20/mapa.md` | Montador grava o `argv[0]` arbitrário, `bin/mapa20_montar.py:160-161`; chamada real para caminho vivo [não verificado] | Foto em `bin/relato.sh:100`; comparação em `:104` |
+| `montador_dados.json` | “Sessão edita” é instrução em `bin/mapa20_montar.py:7-8`; escritor real [não verificado]. Teste escreve em `bin/tests/test_mapa20_valida.sh:351` | JSON em `bin/mapa20_montar.py:89` |
+| `cabeca` | JSON acima | `bin/mapa20_montar.py:138` |
+| `censo` | Prod [não verificado]; fixture `bin/tests/test_mapa20_valida.sh:341` | `bin/mapa20_montar.py:90`, `:93-103` |
+| `alias_censo` | JSON | `bin/mapa20_montar.py:104-105`, `:135` |
+| `ovr` | JSON | Índices arbitrários em `bin/mapa20_montar.py:117-118` |
+| Censo colunas 0–8 | Censo, sobrescritas JSON | Nome em `bin/mapa20_montar.py:116`; demais conservadas por `:120` |
+| Censo coluna 9 | Censo/`ovr["9"]` | Etapa em `bin/mapa20_montar.py:119`; removida em `:120` |
+| Saída coluna 9 | `xn[0]` | Montador `bin/mapa20_montar.py:124`; selo `bin/mapa20_valida.py:201` |
+| `xn` = XdeN/fonte/falta | JSON | Copiado em `bin/mapa20_montar.py:123-124`; selo `bin/mapa20_valida.py:206-218` |
+| `fonte_ausente`, `falta_ausente` | JSON | `bin/mapa20_montar.py:127` |
+| `rascunho.arquivo/alias/origem` | Prod [não verificado]; fixture `bin/tests/test_mapa20_valida.sh:342-348` | `bin/mapa20_montar.py:106`, `:132` |
+| BACKLOG | Gerador `bin/gerar_backlog.py:138-140`, preservando bloco manual `:103-105`; estado em `bin/backlog_estado.py:58-59` | Localiza chave em `bin/mapa20_montar.py:58-61`; fonte em `bin/mapa20_valida.py:100-105`; publicador `bin/relato.sh:155` |
+| TICKETS | Topo `bin/tickets_placar.sh:82`; rodapé `bin/tickets_rodape.sh:78-79`; template de linha `bin/molde_autocura/ticket_rows.py:10-12`; autores históricos das listas PRONTO [não verificado] | Fonte em `bin/mapa20_valida.py:100-105`; placa `bin/tickets_placar.sh:64`; contrato `bin/regua_tickets.sh:78` |
+| `MAPA-20.md` público | Raspador `bin/raspar_publico.py:40`; regravação retido `bin/relato.sh:119-120`; cópia julgada `:158` | Selo `bin/relato.sh:109`; Git `:168`, `:178` |
+
+Segundo escritor antigo efetivamente removido: [não verificado]. `logs/` não existe nesta cópia; é ignorado em `.gitignore:53`. O código apenas relata a existência anterior em `bin/mapa20_montar.py:4-5`. O tripwire detecta diferença de bytes (`bin/relato.sh:104-105`), não autoria: outro escritor que produza bytes iguais não é identificado por essa comparação.
+
+Classes presentes: derivação paralela N declarado/N contado (`bin/mapa20_montar.py:80`, `:124`), selo sem prova de X/N (`bin/mapa20_valida.py:91-107`, `:209-215`) e identidade com dois consumidores divergentes por `ovr[0]` (`bin/mapa20_montar.py:118`, `:124`). Segundo escritor real e relógio produtivo [não verificado].
+
+## 11/11 14:32 · sessao 0396d9139208 · - · - · origem=Ronald (tmux)
+
+Achados do publicador, por leitura do código; execução em produção [não verificado]. [nao verificado]
+
+- **BLOQUEANTE — bytes publicados sem julgamento no caminho retido.** O caminho novo raspa, julga e copia o mesmo temporário (`bin/relato.sh:106`, `:109`, `:111`, `:158`). Porém, quando retido, o documento público anterior passa apenas pela raspagem e por `mv`, sem selo (`bin/relato.sh:116`, `:119`, `:120`), e entra no commit/push (`bin/relato.sh:167`, `:168`, `:178`, `:179`). Entrada concreta: mapa vivo inválido e `DEST/MAPA-20.md` contendo `E3 encerrada — 1 de 2`; o segundo permanece/republica com rc 1, sem julgamento. O teste aceita até `MAPA VELHO`, sem tabela (`bin/tests/test_mapa20_valida.sh:275`, `:306`, `:307`).
+
+- **FILA — classificação rc 1/2 ainda ambígua.** Falha operacional de `cp`, como EACCES/ENOSPC, vira rc 1 (`bin/relato.sh:100`, `:101`); erro operacional de `cmp` também vira rc 1 (`bin/relato.sh:104`, `:105`). Raspagem do retido falha, remoção funciona e conserva rc 1 (`bin/relato.sh:119`, `:123`, `:125`, `:180`), embora a declaração prometa rc 2 para falha de raspagem e precedência de 2 (`bin/relato.sh:96`, `:97`). O teste explicitamente legitima esse último caso: `raspa_falha … esperado 1` (`bin/tests/test_mapa20_valida.sh:309`).
+
+- **FILA — rc chega, mas não há tratamento específico no chamador da cópia.** O retorno acumulado aparece tanto sem alteração quanto após push (`bin/relato.sh:173`, `:180`); falha de remoção que deixa o mapa presente aborta antes do push com 2 (`bin/relato.sh:123`, `:124`). A unit chama diretamente o script, como oneshot (`bin/hasner-relato.service:13`, `:15`); não declara diferenciação de 1 versus 2, alerta ou leitor que execute reação (`bin/hasner-relato.service:12`). O timer volta periodicamente (`bin/hasner-relato.timer:5`, `:6`); unit/timer vivos [não verificado].
+
+- **FILA — fontes não compartilham a fotografia do mapa.** O selo abre a fonte citada durante julgamento (`bin/mapa20_valida.py:100`, `:101`); depois o publicador manda raspar novamente o BACKLOG vivo (`bin/relato.sh:155`; leitura em `bin/raspar_publico.py:28`). Entrada temporal concreta: inserir uma linha no BACKLOG entre esses passos muda a linha publicada, preservando a citação anteriormente aprovada. Ocorrência real [não verificado].
+
+- **Curado no caminho novo:** regravar o mapa vivo depois do selo não muda o temporário publicado (`bin/relato.sh:100`, `:109`, `:158`); há teste que regrava a origem após o selo e cobra publicação da fotografia (`bin/tests/test_mapa20_valida.sh:244`, `:245`, `:311`). Raspador que retorna 0 sem escrever deixa o arquivo de julgamento ausente, conduzindo a rc 2 (`bin/relato.sh:109`, `:113`; `bin/tests/test_mapa20_valida.sh:262`, `:263`, `:317`). Raspagem que estraga a célula é julgada e retida (`bin/tests/test_mapa20_valida.sh:268`, `:269`, `:318`).
+
+- **Limite da corrida:** o lock de publicação é comum ao produtor de CODEX-ESTADO no caminho de evento (`bin/relato.sh:27`; `bin/codex_estado.sh:65`, `:66`). Isso não fotografa BACKLOG/fontes e não verifica novamente o destino entre `cp`, `git add` e `git commit` (`bin/relato.sh:158`, `:168`, `:178`); outro escritor concreto do MAPA-20 público [não verificado].
 
 ## 11/11 14:30 · sessao c243052975dc · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
 
@@ -772,576 +849,4 @@ Pelo critério fornecido, esses falsos positivos que empurram para A não são b
 - **Atalho da régua permanece:** `FP` considera apenas `.py`/`.html` em `app/`; `ARVORE_FP` é calculado, mas o retorno “JA VERDE” compara somente `FP` e status e ocorre antes do loop de host. Assim, mudar somente `bin/` pode conservar esse atalho, condicionado a carimbo anterior OK. (`bin/regua.sh:26`, `bin/regua.sh:33`, `bin/regua.sh:38`, `bin/regua.sh:45`, `bin/regua.sh:84`, `bin/regua.sh:86`, `bin/regua.sh:93`, `bin/regua.sh:138`)
 - **Worktree:** o próprio teste resolve seu diretório e passa o repo sintético explicitamente; execução em worktree **[nao verificado]**. O problema independente de outro teste permanece: `test_hook_nao_e_copia.sh` exige `.git/hooks/pre-push` e falha se ausente; o teste vizinho já consulta `core.hooksPath`/diretório comum. (`bin/tests/test_selo_proporcao.sh:7`, `bin/tests/test_selo_proporcao.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:21`, `bin/tests/test_hook_nao_e_copia.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:27`, `bin/tests/test_commit_so_o_declarado.sh:56`, `bin/tests/test_commit_so_o_declarado.sh:57`)
 
-## 11/11 13:33 · sessao 3d47551f7e4d · O168 · censo · origem=Code
-
-O buraco está confirmado na cópia: o supra consulta `pode_executar_csf`; o cartório reconcilia sem essa guarda, inclusive antes do bloco que protege respostas textuais. A retirada do `--executar` continua condicionada à guarda no evento e à prova de `CSF_RETRATADO=0`. (`app/ponto/management/commands/supra_juiz.py:261`; `app/ponto/services/cartorio.py:1525`; `app/ponto/services/cartorio.py:1559`; `app/ponto/services/cartorio.py:1623`; `app/docs/BACKLOG.md:1395`.)
-
-O raspado fornecido não contém a medição atual nem resultados de testes: **produção atual, zero e aprovação da suíte [nao verificado]**. [nao verificado]
-
-1. **Guarda e predicados de conversa**
-
-`pode_executar_csf(ch)` permite executar exatamente quando **nenhuma** pergunta das duas relações abaixo tem `respondida_em is not None`:
-
-- Todas as perguntas de **todas** as disputas em `ch.disputa_origem.all()`.
-- Todas as perguntas de `ch.perguntas_que_resolvem.all()`.
-
-Relações vazias permitem executar. Não exige texto, pergunta viva, disputa aberta, validação, materialização, data ou `PerguntaDisputa.conversa=True`; também não consulta mensagens de `FollowupChamado`. (`app/ponto/supra_juiz.py:539`.)
-
-O único chamador de produção encontrado dessa função é o comando supra; a importação está em `:257` e a chamada em `:261`. (`app/ponto/management/commands/supra_juiz.py:257`.)
-
-Há outra implementação de proteção por resposta no cartório:
-
-| Função | Predicado | Universo e uso |
-|---|---|---|
-| `pode_executar_csf(ch)` | Ausência de qualquer `respondida_em != None`. | Duas relações completas acima; protege o retratador do supra. (`app/ponto/supra_juiz.py:543`; `app/ponto/management/commands/supra_juiz.py:261`.) |
-| `_tem_resposta_do_colab(perguntas)` | `any((q.resposta_colab or '').strip() for q in perguntas)`. | Nos dois leitores recebe somente `perguntas_que_resolvem`; protege FIO-DUP/ressuscitação, depois dos fechamentos CSF. Ignora timestamp e `disputa_origem`. (`app/ponto/services/cartorio.py:1623`; `:1631`; `:1634`; `:1651`.) |
-
-Os seguintes predicados relacionados **não respondem à mesma pergunta com o mesmo universo**:
-
-| Função | Predicado e universo |
-|---|---|
-| `PerguntaDisputa.respondida` | Timestamp presente; uma pergunta. (`app/chamados/models.py:3496`.) |
-| `fio_vivo(perguntas)` | Alguma pergunta viva segundo `pergunta_viva`; coleção fornecida pelo chamador. (`app/chamados/juizes.py:1488`.) |
-| `DisputaSupervisao.respostas_sem_veredito` | Perguntas da disputa sem validação/materialização, com timestamp **ou** texto, fora da tranca salvo opção explícita. (`app/chamados/models.py:1826`; `:1842`.) |
-| `DisputaSupervisao.pode_fechar` | Nenhuma resposta sem veredito e nenhum fio vivo; uma disputa. (`app/chamados/models.py:1848`.) |
-| `irmas_respondidas_sem_consumo(ch)` | Timestamp e texto presentes, sem validação/materialização. Crédito ao destino `ch`, ou ao pai `ch` quando o destino não está vivo. (`app/chamados/juizes.py:2012`.) |
-| `retencao_da_retratacao(ch)` | Irmãs anteriores ou justificativa alheia pendente durante outra aprovação. Não protege toda resposta histórica. (`app/chamados/reconciliador.py:437`.) |
-| `disputa_viva_do_chamado(ch)` | Primeira disputa direta aberta sem perguntas ou com fio vivo. (`app/chamados/juizes.py:2371`.) |
-| Arquivador `Command._disputa_viva(ch)` | Uma disputa aberta resolvida pelo fio, com alguma pergunta viva; erro retorna sentinela conservadora. (`app/chamados/management/commands/arquivar_competencia_encerrada.py:148`.) |
-| `_disputa_do_chamado(ch)` | Localiza uma disputa aberta, primeiro direta, depois por pergunta de destino; não mede resposta. (`app/chamados/services/fio.py:120`.) |
-| `canonica_do_grupo(perguntas)` | Prioriza texto não branco e depois menor PK; universo de perguntas do mesmo fato. (`app/chamados/services/fio.py:1225`.) |
-
-O registro vivo distingue pergunta viva, disputa, fio e outras autoridades; não declara `pode_executar_csf` como autoridade da família chamado nesse bloco. (`app/core/juizes.py:272`.) Ausência de qualquer outro respondedor indireto ou dinâmico em toda a árvore: [nao verificado].
-
-2. **EVENTO: portas do cartório**
-
-A entrada por batida chama `_julgar_dias`; `julgar_celula` entrega o julgamento a `julgar_colab`. (`app/ponto/signals.py:132`; `app/ponto/services/cartorio.py:1997`; `:2026`.)
-
-O cartório usa a ata deste julgamento. Seu `_protesta` exige `cel.trabalha is not False` e `marcos_acesos(...) is not True`; `classificar_dia` recebe `len(_protestam)`, não simplesmente todos os chamados vivos. Por isso proteger somente o `if COBRANCA_SEM_FURO` deixa de fora o fechamento por marco que pode ocorrer antes. (`app/ponto/services/cartorio.py:1422`; `:1444`; `:1450`; `:1525`.)
-
-Os seis sítios diretos de reconciliação são:
-
-| Porta | Quando fecha | Guarda de conversa hoje |
-|---|---|---|
-| Adiados após lavra → E2 | Reconcilia o lote adiado porque havia fio vivo. | Não consulta `pode_executar_csf`. (`app/ponto/services/cartorio.py:987`; `:993`; `:998`.) |
-| RECONCILIA-MARCO | Não protesta: marcos acesos ou `trabalha=False`, descontados os adiados. | Não consulta a guarda. (`app/ponto/services/cartorio.py:1519`; `:1525`.) |
-| MARCO-INEXISTENTE | Marcos cobrados deixaram de existir na ata atual. | Não consulta a guarda; anexa nota própria. (`app/ponto/services/cartorio.py:1536`; `:1538`; `:1542`.) |
-| RECONCILIA por código | `COBRANCA_SEM_FURO` **ou** `COBRANCA_EM_DIA_SEM_TRABALHO`. | Não consulta a guarda. (`app/ponto/services/cartorio.py:1551`; `:1559`.) |
-| FIO-DUP | Todas as perguntas diretas têm via duplicata. | Guarda textual local, diferente da do supra. (`app/ponto/services/cartorio.py:1634`; `:1636`; `:1637`.) |
-| FIO-DUP-C8 | Fecha outros duplicados apoiados no sobrevivente escolhido pelo gate. | Mesma guarda textual local. (`app/ponto/services/cartorio.py:1647`; `:1651`; `:1652`.) |
-
-As quatro primeiras não têm guarda de conversa no chamador; todas passam pelas guardas gerais de premissa e pergunta viva em `reconciliar`, que são predicados diferentes. (`app/chamados/models.py:651`; `:682`; `:685`.)
-
-Também existem estes caminhos indiretos; não devem ser confundidos automaticamente com o motivo CSF:
-
-- **E2 → disputa → pai:** o cartório carimba perguntas, E2 fecha disputas e o signal reconcilia o chamado-pai. (`app/ponto/services/cartorio.py:993`; `app/chamados/reconciliador.py:595`; `:611`; `app/chamados/signals.py:42`.)
-- **Cluster:** o cartório chama `cluster_espurio.reconciliar_colab`, que usa a mesma porta para outro motivo. (`app/ponto/services/cartorio.py:1028`; `app/ponto/services/cluster_espurio.py:189`.)
-- **Pai acordado após fecho:** o signal pode agendar `reconciliar_chamados_colab`, que executa E2, órfãs e premissa morta. (`app/chamados/signals.py:350`; `:368`; `:369`; `app/chamados/reconciliador.py:1432`; `:1433`; `:1441`.)
-- **Lavra → EventoCelula → consumidor:** pode retratar por absolvição da célula, premissa morta ou lastro. Nenhum desses caminhos consulta hoje a guarda do supra. (`app/ponto/portas/celula.py:796`; `:896`; `app/chamados/reconciliador.py:1368`; `:1372`; `:1383`; `app/ponto/services/lastro.py:400`.)
-
-3. **VARREDURA, barrados e contador**
-
-`classificar_dia` não recebe objetos de chamado nem consulta conversa. O CSF puro exige:
-
-`tipo_dia == 'trabalho' and prev and real >= prev and chamados_vivos and todas_casadas`
-
-`Todas_casadas` exige células não vazias e número de casadas igual ao total. (`app/ponto/supra_juiz.py:204`; `:463`; `:467`.)
-
-O comando seleciona colaboradores ativos da empresa, pula quem não possui batidas na janela e carrega chamados dos `FURO_MODULES`, associados ao dia pelo juiz do catálogo. (`app/ponto/management/commands/supra_juiz.py:110`; `:113`; `:117`; `:186`; `:199`.)
-
-Hoje há duas decisões distintas:
-
-- A classificação local alimenta placar, exemplos e alarme.
-- A escrita obedece à **lavra** `cobranca_indevida` e aos códigos dos protestos; sem lavra conta `CSF_SEM_LAVRA`, sem código conta `CSF_LAVRA_SEM_CODIGO`, sem retratar. (`app/ponto/management/commands/supra_juiz.py:239`; `:246`; `:248`; `:250`; `:253`.)
-
-A guarda roda antes da cobrança órfã e também em dry-run. Chamado barrado soma `CSF_COM_CONVERSA_PRESERVADO` e recebe `continue`; não chega a `retratar`. (`app/ponto/management/commands/supra_juiz.py:261`; `:263`; `:275`.)
-
-Com `--executar` e trava T6.1 desligada, chama o retratador. Retorno verdadeiro soma `CSF_RETRATADO`; falso soma `CSF_RETRATACAO_RECUSADA`; sem flag soma `CSF_RETRATAVEL_DRY`. (`app/ponto/management/commands/supra_juiz.py:45`; `:279`; `:286`; `:288`; `:290`; `:295`.)
-
-| Operação sobre `CSF_RETRATADO` | Local |
-|---|---|
-| Nasce como chave possível de `Counter` local, por execução. | `app/ponto/management/commands/supra_juiz.py:105` |
-| Única escrita do contador encontrada: incremento após retorno verdadeiro. | `app/ponto/management/commands/supra_juiz.py:288` |
-| Leitura para stdout por `most_common()`. Chave não incrementada não gera linha explícita de zero. | `app/ponto/management/commands/supra_juiz.py:299` |
-| Testes leem presença/ausência da chave. | `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:122`; `:153`; `:167` |
-
-O alarme A6 não lê esse contador: consulta `FURO_SEM_COBRANCA` e `COBRANCA_SEM_FURO`. O cron ainda contém `supra_juiz --executar`, dependente do cartório. (`app/ponto/management/commands/supra_juiz.py:305`; `app/config/crons.py:599`.)
-
-4. **Porta comum e alcance das alternativas, sem escolher**
-
-O caminho comum é:
-
-`cartório → reconciliar`  
-`supra → retratar → _retratar → reconciliar`  
-`reconciliar → _decisao_do_fechamento → _gravar_estado`
-
-(`app/ponto/services/cartorio.py:1559`; `app/ponto/management/commands/supra_juiz.py:286`; `app/chamados/reconciliador.py:544`; `:523`; `app/chamados/models.py:651`; `:654`.)
-
-`_gravar_estado` escreve status, carimbo de resolução, via e urgência. A reconciliação usa via **`sistema`**, não uma via exclusiva de CSF ou cartório. (`app/chamados/models.py:201`; `:228`; `:242`; `:654`; `app/chamados/catalogo/motor.py:95`.)
-
-**Dentro da decisão da porta:** `_decisao_do_fechamento` é compartilhada por `reconciliar(registrar=True)` e `reconciliaria(registrar=False)`. Uma guarda ali mantém ato e previsão juntos, mas, se incondicional, muda toda reconciliação. (`app/chamados/models.py:651`; `:661`; `:663`.)
-
-**Nos dois caminhos:** preserva os demais usos da porta, mas cartório representa vários sítios e efeitos indiretos, não somente `:1559`; precisa impedir que o mesmo chamado protegido feche por marco, adiado, signal ou consumidor. (`app/ponto/services/cartorio.py:998`; `:1525`; `:1559`; `app/chamados/signals.py:42`; `app/chamados/reconciliador.py:1368`.)
-
-Censo dos demais chamadores **diretos** de `reconciliar`, fora do cartório:
-
-| Arquivo | Função e sítios |
-|---|---|
-| `app/chamados/signals.py` | `disputa_fechada_fecha_chamado_pai`:42 |
-| `app/chamados/reconciliador.py` | `_retratar`:523 |
-| `app/chamados/services/adesao.py` | `sincronizar_adesao`:115,150 |
-| `app/chamados/services/feriado_reavaliar.py` | `encerrar`:47 |
-| `app/chamados/services/limbo_folgas.py` | `aceitar_sugestao`:101; `agrupar_furo`:283,286 |
-| `app/chamados/services/silencio_ausencia.py` | `reconciliar_por_ausencia`:101 |
-| `app/chamados/services/materializacao.py` | `_materializar_ausencia_de_resposta`:587; `_reconciliar_destino_e_clones/_fecha`:776 |
-| `app/chamados/management/commands/auditar_chamados_orfaos.py` | `handle`:67 |
-| `app/colaboradores/services/pos_vinculo.py` | `fechar_adesao_com_batida`:42 |
-| `app/colaboradores/management/commands/marcar_feriado_do_posto.py` | `_marcar`:140 |
-| `app/ponto/services/triagem_batida.py` | `_autoresolve_f2_f4`:597 |
-| `app/ponto/services/veredito_celula.py` | `fechar_o_fio_do_dia`:202 |
-| `app/ponto/services/ausencia.py` | `fechar_chamado_da_ausencia`:694 |
-| `app/ponto/services/cluster_espurio.py` | `reconciliar_colab`:189 |
-| `app/ponto/services/entrada_sincronizada.py` | `resolver_cobranca_da_entrada`:31 |
-| `app/ponto/services/cobertura.py` | `designar_cobertura`:122; `declarar_cobertura_passada`:317 |
-| `app/ponto/services/lastro.py` | `fechar_pelo_marco_colab`:400 |
-| `app/ponto/management/commands/detectar_intervalo_ausente.py` | `handle`:138 |
-| `app/ponto/management/commands/curar_residuo_bug115.py` | `_ata_sem_furo`:151 |
-| `app/ponto/management/commands/detectar_ausencias.py` | `handle`:158; `_fechar_por_afastamento`:824; `_fechar_por_cobertura`:834; `_fechar_chamado`:845 |
-
-A mudança dentro de `_decisao_do_fechamento` afeta também estes leitores de previsão: lastro, vigia de reconciliação e dry/alarme de intervalo. (`app/ponto/services/lastro.py:318`; `app/chamados/management/commands/reconciliar_chamados.py:79`; `app/ponto/management/commands/detectar_intervalo_ausente.py:138`.)
-
-Uma guarda somente em `retratar` não alcança o cartório direto. Além do supra, esse wrapper atende justificativa, geofence, grade, fantasmas, vínculo, alertas de turno e retratação por lei; `_retratar` tem ainda entradas internas de absolvição e premissa morta. (`app/ponto/services/justificativa.py:46`; `app/ponto/services/geofence.py:441`; `app/ponto/management/commands/reconciliar_grade.py:309`; `app/ponto/management/commands/reconciliar_fantasmas.py:280`; `app/ponto/management/commands/reconciliar_vinculo.py:68`; `app/ponto/management/commands/processar_alertas_turno.py:216`; `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`; `app/chamados/reconciliador.py:1004`; `:1464`.)
-
-Uma guarda indiscriminada em `_gravar_estado` alcançaria também transição humana, cancelamento, análise, reabertura, cascade e tranca. `encerrar()` é outra porta; não é a chamada direta usada pelo CSF desses dois caminhos. (`app/chamados/models.py:450`; `:788`; `:806`; `:1442`; `:1619`; `:1639`; `app/chamados/reconciliador.py:523`.)
-
-5. **Testes e selos existentes** [nao verificado]
-
-| Cobertura | Referências |
-|---|---|
-| Guarda CSF: vazio, sem timestamp, resposta na disputa e resposta direta. | `app/ponto/tests/test_supra_juiz_executor.py:38` |
-| Classificação CSF: todas casadas; missing, `None`, sem vivo e realizado insuficiente. | `app/ponto/tests/test_supra_juiz_cobranca.py:19` |
-| `--executar` real: lavra concorde preserva; indevida retrata; lavra prevalece sobre classificação local; ausência de lavra/código; recusa não conta como retratação. | `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py:89`; `:106`; `:116`; `:124`; `:134`; `:142`; `:155` |
-| T6.1: constante única, valor vigente, flag/trava, placar travado e texto delegado ao juiz. | `app/ponto/tests/test_t61_retratacao_em_seco.py:29`; `:40`; `:47`; `:57`; `:64` |
-| Cartório: CSF na passada pura, fechamento aplicado e fio não ressuscitado. | `app/ponto/tests/test_o261_cobrado_le_o_fio.py:393`; `:412`; `:416`; `:420` |
-| Batida real → cartório → E2 → encerramento sem pergunta viva pendurada em terminal. | `app/chamados/tests/test_o261e_f1_porta_encerramento.py:358`; `:390` |
-| Porta geral: recusa pergunta viva; permite reata; dry sem escrita. | `app/chamados/tests/test_o261e_f1_porta_encerramento.py:82`; `:94`; `:135`; `:143`; `:152` |
-| Consumidor/lastro: marco satisfeito fecha apesar de outro furo; marco apagado permanece vivo. | `app/ponto/tests/test_bug115_lampada_do_marco.py:185`; `:207` |
-| Universo cartório/supra e exclusão de chamado sem dia. | `app/ponto/tests/test_cartorio_so_chamado_de_batida.py:53`; `:63`; `:74` |
-| Texto protege contra ressuscitação; não demonstra proteção CSF. | `app/ponto/tests/test_hx_cartorio_ressuscita.py:68` |
-| Custo do caminho real e da guarda, com chamados fechando ou permanecendo. | `app/ponto/tests/test_selo_chokepoint_escrita.py:387`; `:392`; `:422`; `:427`; `:432` |
-
-Esses casos não constituem prova executada da guarda CSF no evento; execução e resultado nesta cópia [nao verificado].
-
-6. **Lista fechada para conferência de arquivos em comum**
-
-Sem escolher entre guarda na porta e nos caminhos, uma lista única exata de alterações futuras seria presumir a implementação. Abaixo está a **união fechada de reserva proposta** para as duas alternativas, incluindo instrumentação e testes; não é um diff realizado. Alterações futuras [nao verificado]. [nao verificado]
-
-| Arquivo reservado | Razão e sítio atual |
-|---|---|
-| `app/chamados/juizes.py` | Destino possível do predicado compartilhado; juízes de leitura já residem aqui. (`:1980`; `:2021`.) |
-| `app/core/juizes.py` | Registrar o endereço da autoridade existente. (`:272`.) |
-| `app/ponto/supra_juiz.py` | Extrair/reexportar a guarda. (`:539`.) |
-| `app/ponto/management/commands/supra_juiz.py` | Consumir autoridade e tornar a medição explícita. (`:257`; `:288`; `:299`.) |
-| `app/ponto/services/cartorio.py` | Caminhos diretos e observabilidade do evento. (`:998`; `:1525`; `:1559`.) |
-| `app/chamados/models.py` | Alternativa de guarda na decisão comum e contexto da trilha. (`:663`; `:292`.) |
-| `app/chamados/reconciliador.py` | Retratador, E2 e consumidor pós-lavra na alternativa por caminhos. (`:503`; `:549`; `:1368`.) |
-| `app/chamados/signals.py` | Fechamento indireto do pai na alternativa por caminhos. (`:42`.) |
-| `app/ponto/services/lastro.py` | Fechamento pelo consumidor na alternativa por caminhos. (`:400`.) |
-| `app/config/crons.py` | Segunda etapa: retirar execução somente depois da prova exigida. (`:599`; `app/docs/BACKLOG.md:1395`.) |
-| `app/ponto/tests/test_supra_juiz_executor.py` | Matriz exata do predicado. (`:38`.) |
-| `app/ponto/tests/test_lenvivos_retratador_le_a_lavra.py` | Integração do comando e contador. (`:89`; `:155`.) |
-| `app/ponto/tests/test_o261_cobrado_le_o_fio.py` | CSF no cartório. (`:393`.) |
-| `app/chamados/tests/test_o261e_f1_porta_encerramento.py` | Porta comum, dry e evento real. (`:152`; `:358`.) |
-| `app/ponto/tests/test_bug115_lampada_do_marco.py` | Fechamento alternativo por marco/consumidor. (`:185`.) |
-| `app/ponto/tests/test_hx_cartorio_ressuscita.py` | Diferença entre texto e timestamp no bloco do fio. (`:68`.) |
-| `app/ponto/tests/test_selo_chokepoint_escrita.py` | Custo da guarda no caminho quente. (`:432`.) |
-| `app/docs/JUIZES.md` | Ponteiro documental da autoridade movida. (`:10`.) |
-
-Arquivos das outras obras — E4B c6, TRIAGEM, UI-PAINEL e BO-ROTULO — não vieram no dado; interseção e liberação para abrir construtor [nao verificado].
-
-7. **Sonda somente leitura**
-
-A medição histórica **exata** solicitada não é recuperável pelo esquema mostrado: a trilha grava status anterior, status novo e via, sem motivo CSF ou sítio chamador; o ator identifica processo/request, não a pilha. Além disso, relações e timestamps atuais podem ter mudado: ressuscitação limpa `respondida_em`. (`app/chamados/models.py:292`; `app/core/observ.py:22`; `:94`; `app/chamados/models.py:1563`.)
-
-`CSF_RETRATADO` também não possui valor atual persistido: é contador local impresso pelo comando. Portanto a sonda mantém ambos os resultados exatos como **“nao medido”** e entrega separadamente o que o banco permite: um **proxy** de reconciliações atribuídas ao processo `processar_cartorio`, com a guarda barrando hoje e timestamps anteriores ao fecho nas relações atuais. Isso não identifica todos os eventos do cartório nem prova motivo CSF. (`app/ponto/management/commands/supra_juiz.py:105`; `:288`; `:299`; `app/core/observ.py:31`; `app/chamados/models.py:292`.)
-
-O agrupamento abaixo usa **motivo da pergunta**, não motivo do fechamento; um evento com motivos diferentes entra em mais de um grupo. Os campos vêm de `PerguntaDisputa` e da trilha; a avaliação atual chama o predicado real. (`app/chamados/models.py:2432`; `app/core/models.py:298`; `:300`; `:307`; `app/ponto/supra_juiz.py:539`.)
-
-Código para fornecer ao `bin/sonda_leitura.sh <arquivo.py>`; produção é o padrão e o wrapper executa shell Django no schema configurado. Não foi executado em produção [nao verificado]. (`bin/sonda_leitura.sh:56`; `:93`; `:235`.)
-
-```python
-import json
-
-resultado = {
-    "CSF_CARTORIO_30D_POR_EMPRESA_E_MOTIVO": "nao medido",
-    "CSF_RETRATADO": "nao medido",
-    "proxy": "nao medido",
-}
-tr
-
-[truncado em 20000 de 25069 caracteres]
-
-## 11/11 13:32 · sessao fadf31a99bdf · MAPA-20 · censo · origem=Code
-
-A premissa de escritor único é contradita pelo anexo: ele relata geração pelo montador e edição externa por `PRONTO-AUSENTE-RASCUNHO`. O código continua usando essa exclusividade como fundamento do parser (`opus_final_ffa_achados.txt:6`; `bin/mapa20_valida.py:10`).
-
-As referências aos anexos abaixo contam as linhas do texto fornecido: cada aval ocupa a linha 1; no opus, o cabeçalho é a linha 1 e os cinco bloqueantes ocupam as linhas 2–6. A identidade Git da cópia, o mapa vivo, o montador e o estado publicado estão [nao verificado]. [nao verificado]
-
-**1. Escritores**
-
-| Escritor/caminho | Evidência e limite |
-|---|---|
-| `logs/MAPA-20/montar_mapa.py` | Declarado como produtor em `bin/mapa20_valida.py:10` e `bin/mapa20_valida.py:128`. Implementação e linha que grava o mapa: [nao verificado]. |
-| Edição externa `PRONTO-AUSENTE-RASCUNHO` | Segundo escritor informado pelo anexo; comando, arquivo executor e linha da gravação: [nao verificado] (`opus_final_ffa_achados.txt:6`). |
-| Outro script de produção | [nao verificado]. |
-| Escritores das fixtures | Regravação em `bin/tests/test_mapa20_valida.sh:154`, cópia verde em `:177` e escrita vermelha em `:178`; todos no repositório temporário criado em `:146`. |
-| Publicador | Lê o mapa e escreve uma foto temporária; essa operação não regrava o mapa de origem (`bin/relato.sh:94`, `bin/relato.sh:97`). |
-
-Portanto, “único escritor = montador” não está provado: é premissa do código, contrariada pelo dado fornecido (`bin/mapa20_valida.py:10`; `opus_final_ffa_achados.txt:6`).
-
-A lei exige **“1 escritor canonico + tripwire”** (`CLAUDE.md:32`). Os dois avais determinam regravação por evento e julgamento no publicador, mas não nomeiam um escritor exclusivo; escolher montador, edição manual ou outro por Ronald seria [nao verificado] (`aval_mapa_ate_o_20_1111.txt:1`, item 3; `aval_mapa20_pronto_x_de_n_1111.txt:1`, item 4). [nao verificado]
-
-**2. Matriz da porta**
-
-Convenções de publicação:
-
-- **A — aceita:** foto selecionada, raspada, adicionada ao Git e enviada; rc final 0 se as etapas seguintes concluírem (`bin/relato.sh:97`, `:98`, `:143`, `:153`, `:164`, `:165`).
-- **R — retém:** candidato excluído; cópia anterior, se houver, é raspada novamente; resto segue; rc final 1 (`bin/relato.sh:100`, `:102`, `:105`, `:158`, `:165`).
-- Os pares de rc abaixo são **validador → publicador**, supondo sucesso das etapas posteriores. Falhas posteriores também podem produzir rc 1 (`bin/mapa20_valida.py:225`; `bin/relato.sh:143`, `:163`, `:164`).
-
-| Estado de entrada | Juiz → operação | Publicação | rc | Prova que morde / lacuna |
-|---|---|---|---|---|
-| Tabela sintaticamente válida | Cabeçalho, estrutura, células, X/N e universo (`bin/mapa20_valida.py:154`, `:166`, `:178`, `:190`, `:202`) | A | 0→0 | Verde em `bin/tests/test_mapa20_valida.sh:42`; igualdade X=N em `:43`. Não prova a verdade de X nem de N (`bin/mapa20_valida.py:190`, `:192`). |
-| Obra ausente ou coluna vazia | Acumula problema (`bin/mapa20_valida.py:178`, `:202`) | R | 1→1 | Cada obra e SEM DONO: `bin/tests/test_mapa20_valida.sh:45`, `:46`, `:47`. |
-| “encerrada” em célula, X<N | `_afirma_encerrada` e comparação de completude (`bin/mapa20_valida.py:68`, `:200`) | R | 1→1 | `bin/tests/test_mapa20_valida.sh:55`; PRONTO AUSENTE encerrada em `:56`; ênfase em `:65`, `:66`. |
-| “encerrada” fora da tabela: ATX, setext, negrito ou lista, separados da tabela | **SEM juiz de estado:** só percorre células do bloco (`bin/mapa20_valida.py:147`, `:166`, `:200`) | A | 0→0 | **SEM PROVA** dessas quatro formas. Os casos `bin/tests/test_mapa20_valida.sh:62` e `:63` tratam outras tabelas, não essa prosa. |
-| Invisível da categoria Cf, como U+200B | Recusa global por categoria Unicode (`bin/mapa20_valida.py:132`) | R | 1→1 | `bin/tests/test_mapa20_valida.sh:71`. |
-| Combinantes U+034F/U+FE00 ou homóglifo cirílico em “encerrada” | **SEM juiz dessas classes:** filtro só Cf; reconhecimento literal do estado (`bin/mapa20_valida.py:58`, `:132`) | A | 0→0 | **SEM PROVA** dessas classes; o teste vizinho cobre somente U+200B (`bin/tests/test_mapa20_valida.sh:71`). |
-| FF, FS ou U+2028 entre E3 e E4B, sem LF | `splitlines()` cria duas linhas para o juiz; **SEM juiz da divergência com GFM** (`bin/mapa20_valida.py:125`) | A | 0→0 | **SEM PROVA**; contracaso descrito em `opus_final_ffa_achados.txt:4`. |
-| N com fonte alheia a aval/TICKETS/BACKLOG | `_fonte_ruim` confere existência, raiz e linha não vazia; não confere elegibilidade, vínculo à obra ou contagem (`bin/mapa20_valida.py:73`, `:78`, `:88`) | A | 0→0 | **SEM PROVA da regra de fonte.** O verde usa o comentário `bin/relato.sh:2` como fonte (`bin/tests/test_mapa20_valida.sh:27`, `:42`). |
-| SEM DONO com `n/a (SEM DONO)` | Confere literal e executa `continue` (`bin/mapa20_valida.py:182`, `:185`) | A | 0→0 | Presença/vazias em `bin/tests/test_mapa20_valida.sh:45`; rejeição de X/N em `:72`. |
-| SEM DONO com “encerrada” | **SEM juiz de encerramento:** sai antes da guarda (`bin/mapa20_valida.py:185`, `:200`) | A | 0→0 | **SEM PROVA** desse estado; `bin/tests/test_mapa20_valida.sh:72` testa outro conteúdo. |
-| RASCUNHO como título/prosa antes de tabela válida | **SEM juiz específico:** prosa sem pipes não entra na avaliação de estado (`bin/mapa20_valida.py:137`, `:144`, `:166`) | A | 0→0 | **SEM PROVA** específica. Se substituir X/N por `RASCUNHO`, é recusado pela gramática (`bin/mapa20_valida.py:198`). Motivo do rc 1 do mapa vivo: [nao verificado]. |
-| Legenda literal de `montar_mapa.py:103` | Literal e implementação: [nao verificado] | [nao verificado] | [nao verificado] | **SEM PROVA** específica; exigência de preservá-la consta de `opus_final_ffa_achados.txt:3`. |
-| X declarado sem prova escrita no RELATO | **SEM juiz de lastro:** compara inteiros e verifica somente a citação de N (`bin/mapa20_valida.py:190`, `:192`) | A | 0→0 | **SEM PROVA** de correspondência item→prova; fixture usa falta genérica em `bin/tests/test_mapa20_valida.sh:27`. |
-| `status/encerrada.sim` em célula | Token removido como caminho antes da busca por estado (`bin/mapa20_valida.py:52`, `:65`) | A | 0→0 | **SEM PROVA** desse literal. Há teste de `logs/encerrada.md:10` em `bin/tests/test_mapa20_valida.sh:102`; correspondência ao `test:414` do opus: [nao verificado]. |
-
-Os 105 casos existentes de conteúdo foram avaliados em memória contra `problemas()`, sem divergências das expectativas codificadas; isso cobre as fixtures de `bin/tests/test_mapa20_valida.sh:42` até `:114`, não execução integral do shell, publicação ou render. O shell cria arquivos e repositórios, portanto não foi executado nesta leitura (`bin/tests/test_mapa20_valida.sh:13`, `:37`, `:169`).
-
-**Transições depois do julgamento**
-
-| Entrada/decisão | Operação → resultado previsto | rc ao chamador | Prova |
-|---|---|---|---|
-| Candidato aprovado | Raspa, adiciona, commita e envia (`bin/relato.sh:143`, `:153`, `:163`, `:164`) | 0 (`bin/relato.sh:165`) | `bin/tests/test_mapa20_valida.sh:196`, `:197`. |
-| Candidato recusado ou ausente | Conserva conteúdo anterior após nova raspagem; restante pode publicar (`bin/relato.sh:100`, `:105`) | 1, inclusive sem mudanças (`bin/relato.sh:158`, `:165`) | `bin/tests/test_mapa20_valida.sh:198`, `:199`, `:200`. |
-| Raspagem/rename do retido falha | Remove cópia local; remoção entra no commit (`bin/relato.sh:109`, `:152`, `:153`) | 1 (`bin/relato.sh:165`) | `bin/tests/test_mapa20_valida.sh:201`. |
-| Remoção também falha | Interrompe antes do commit/push (`bin/relato.sh:110`) | 1 | `bin/tests/test_mapa20_valida.sh:204`. |
-| Vivo muda depois da foto | Publica foto anterior à regravação (`bin/relato.sh:97`, `:98`) | 0 no cenário testado | `bin/tests/test_mapa20_valida.sh:154`, `:203`. |
-| Raspagem transforma candidato aprovado | Texto alterado passa só pela conferência de privacidade; **SEM novo julgamento MAPA-20** (`bin/raspar_publico.py:31`, `:36`, `:40`; `bin/relato.sh:143`) | Pode terminar 0 (`bin/relato.sh:165`) | **SEM PROVA de conformidade após raspagem**; raspador falso apenas prefixa texto (`bin/tests/test_mapa20_valida.sh:166`, `:189`). |
-| Commit falha | Interrompe antes do push (`bin/relato.sh:163`) | 1 | `bin/tests/test_mapa20_valida.sh:202`. |
-| Push falha | Retorna falha; estado remoto resultante: [nao verificado] (`bin/relato.sh:164`) | 1 | **SEM PROVA específica** entre os casos de `bin/tests/test_mapa20_valida.sh:196`–`:204`. |
-
-**3. GFM e confronto com o aval nas lacunas**
-
-As referências literais de lei são:
-
-- **A3:** “o publicador sai rc 1 se faltar no mapa alguma obra […] ou se uma linha tiver coluna vazia sem ‘nao medido’” (`aval_mapa_ate_o_20_1111.txt:1`, item 3). [nao verificado]
-- **B1:** “N = itens numerados do PRONTO da obra”, com fonte no aval da obra, TICKETS ou BACKLOG; “X = itens com prova escrita no RELATO” (`aval_mapa20_pronto_x_de_n_1111.txt:1`, item 1).
-- **B3/B4:** “‘encerrada’ so com X == N”; “rc 1 […] se aparecer ‘encerrada’ com X < N” (`aval_mapa20_pronto_x_de_n_1111.txt:1`, itens 3–4).
-
-| Lacuna | O que chega ao leitor GFM / confronto |
-|---|---|
-| Encerrada fora da tabela | O anexo relata título ATX/setext e negrito exibindo a afirmação que o juiz ignora; lista também fica fora do percurso das células. Com obra X<N, contraria B3/B4 (`opus_final_ffa_achados.txt:3`; `bin/mapa20_valida.py:166`, `:200`). Render remoto: [nao verificado]. |
-| Mn e homóglifo | A grafia modificada passa com 1 de 2; aparência exata depende do render/fonte [nao verificado]. Se apresenta “encerrada” ao leitor, contorna B3/B4 (`opus_final_ffa_achados.txt:2`; `bin/mapa20_valida.py:58`, `:132`). |
-| FF/FS/U+2028 | Segundo o anexo, GFM não faz a mesma quebra e E4B perde sua linha visível; contraria A3, apesar da presença lógica para Python (`opus_final_ffa_achados.txt:4`; `bin/mapa20_valida.py:125`). |
-| Fonte imprópria ou N inventado | A tabela pode exibir X/N e uma citação existente que não fundamenta N; contraria B1. O próprio verde legitima esse caso (`bin/tests/test_mapa20_valida.sh:27`, `:42`; `bin/mapa20_valida.py:73`). |
-| X sem prova | A tabela exibe “resultados provados” sem conferência do lastro; aceitar X inventado contraria B1. Que X do mapa vivo está nessa situação: [nao verificado] (`bin/mapa20_valida.py:190`, `:192`). |
-| SEM DONO encerrada | O texto “encerrada” pode coexistir com `n/a (SEM DONO)`; o código não demonstrou X=N. Os avais não fornecem autorização literal dessa exceção de encerramento (`bin/mapa20_valida.py:182`, `:185`; `aval_mapa20_pronto_x_de_n_1111.txt:1`, item 3). |
-| RASCUNHO | Um prefixo separado aparece junto da tabela; o rótulo sozinho não é proibido pelos avais nem dispensa A3/B1/B4. O defeito concreto do mapa vivo não foi fornecido: [nao verificado] (`bin/mapa20_valida.py:137`, `:166`; `aval_mapa20_pronto_x_de_n_1111.txt:1`). |
-| Legenda literal | Conteúdo e render: [nao verificado]. Não cabe inventar a legenda nem rejeitar toda ocorrência de “encerrada” indiscriminadamente; o anexo exige que a legenda passe (`opus_final_ffa_achados.txt:3`). |
-| Caminho `status/encerrada.sim` | O texto do caminho permanece no documento, embora seja apagado da análise de estado. Um nome de arquivo isolado não prova afirmação de encerramento; uso enganoso no mapa vivo: [nao verificado] (`bin/mapa20_valida.py:52`, `:65`). |
-| Transformação pela raspagem | O leitor recebe os bytes transformados, sem selo MAPA-20 posterior. Violação concreta de A3/B4 pelo raspado vivo: [nao verificado] (`bin/raspar_publico.py:31`, `:40`; `bin/relato.sh:143`). |
-| Retenção e falha de push | O resultado visível depende da cópia anterior e do remoto; ambos [nao verificado]. Rc 1 não demonstra atualização nem conformidade da página anterior (`bin/relato.sh:105`, `:158`, `:164`, `:165`). |
-
-**4. Ordem de cura por dependência e perímetro fechado**
-
-Esta é uma proposta de desenho, sem aplicar mudanças; a cura na origem e a testemunha lendo a mesma autoridade são exigências existentes (`CLAUDE.md:17`, `:20`).
-
-1. **Definir o escritor canônico e seu tripwire.** O juiz não pode apoiar sua abrangência numa exclusividade apenas declarada (`CLAUDE.md:32`; `bin/mapa20_valida.py:10`).
-2. **Ancorar N e X nas autoridades do aval.** Existência de linha não substitui lista numerada vinculada à obra; igualdade numérica não substitui prova de X (`aval_mapa20_pronto_x_de_n_1111.txt:1`, item 1; `bin/mapa20_valida.py:73`, `:190`).
-3. **Ancorar o julgamento no documento que o leitor recebe.** Cobrir conteúdo visível fora da tabela, classes Unicode e separação de linhas, preservando a legenda literal quando disponível (`bin/mapa20_valida.py:125`, `:132`, `:166`; `opus_final_ffa_achados.txt:3`).
-4. **Ancorar a publicação nos bytes finais julgados.** A raspagem muda texto depois do selo; o mesmo juiz MAPA-20 precisa alcançar esse resultado antes de sua publicação (`bin/relato.sh:97`, `:143`; `bin/raspar_publico.py:31`).
-5. **Ancorar o tratamento operacional no resultado da porta.** Preservar o rc 1 exigido pelo aval, distinguindo retenção, publicação parcial e falha operacional para o consumidor (`aval_mapa20_pronto_x_de_n_1111.txt:1`, item 4; `bin/relato.sh:100`, `:110`, `:164`; `bin/hasner-relato.service:15`).
-6. **Fazer os testes morderem cada transição e os bytes finais.** Os atuais testes de publicação substituem o raspador real (`CLAUDE.md:28`; `bin/tests/test_mapa20_valida.sh:158`, `:166`).
-
-Perímetro fechado proposto para revisão:
-
-| Arquivo | Papel |
-|---|---|
-| `logs/MAPA-20/montar_mapa.py` | Produtor referido pelo juiz; implementação e escolha como escritor canônico [nao verificado] (`bin/mapa20_valida.py:10`). |
-| `logs/MAPA-20/mapa.md` | Artefato de entrada; conteúdo vivo [nao verificado] (`bin/relato.sh:97`). |
-| `bin/mapa20_valida.py` | Juiz único de conformidade (`bin/mapa20_valida.py:124`). |
-| `bin/relato.sh` | Foto, raspagem, retenção, Git e rc (`bin/relato.sh:94`, `:105`, `:143`, `:153`, `:165`). |
-| `bin/tests/test_mapa20_valida.sh` | Regressões do juiz e das transições (`bin/tests/test_mapa20_valida.sh:42`, `:138`, `:196`). |
-| `bin/hasner-relato.service` | Consumidor operacional da execução (`bin/hasner-relato.service:15`). |
-
-O raspador e seu juiz de privacidade são dependências lidas; a proposta acima resolve a ordem no publicador, sem propor mudança na regra de privacidade (`bin/raspar_publico.py:16`, `:31`; `bin/relato.sh:143`). Fechamento executável desse perímetro antes de conhecer o produtor e a legenda: [nao verificado].
-
-**5. Quem lê o rc**
-
-| Consumidor | Leitura efetiva |
-|---|---|
-| systemd, via `hasner-relato.service` | Recebe a saída do processo `ExecStart`, declarado `oneshot`; o arquivo não configura tratamento específico de retenção ou discriminação de resultados (`bin/hasner-relato.service:13`, `:15`, `:19`, `:21`). Unit instalada e alertas externos: [nao verificado]. |
-| `hasner-relato.timer` | Agenda execuções; não contém leitura ou classificação do rc (`bin/hasner-relato.timer:5`, `:6`, `:8`). |
-| Teste do publicador | Executa recortes, captura `$?`, lê e compara rc com conteúdo do remoto sintético (`bin/tests/test_mapa20_valida.sh:138`, `:182`, `:183`, `:187`, `:191`). |
-| Outros chamadores produtivos, aliases ou monitoramento | [nao verificado]. |
-
-Logo, “sem leitor” deve ser qualificado: há o consumidor do processo pelo serviço e há o teste; **tratamento que interprete a retenção do MAPA-20** não aparece na unit fornecida (`bin/hasner-relato.service:15`; `bin/tests/test_mapa20_valida.sh:191`).
-
-Rc 1 é ambíguo: representa retenção com restante publicado, nenhuma mudança, interrupção antes de publicar ou falha de push (`bin/relato.sh:100`, `:110`, `:158`, `:164`, `:165`).
-
-Pergunta de lei pendente: **quem Ronald designa como único escritor canônico do mapa?** A obrigação de unicidade existe; a nomeação não consta dos dois avais fornecidos (`CLAUDE.md:32`; `aval_mapa_ate_o_20_1111.txt:1`; `aval_mapa20_pronto_x_de_n_1111.txt:1`).
-
-perguntas de lei: 1
-
-## 11/11 13:32 · sessao c24a41a8a57f · PROPORCAO-POR-RISCO · verificador · origem=Code
-
-A v2 fecha os exemplos literais de grafia e cabeçalho da v1, mas mantém falsos verdes por seleção dos nós do AST e pela exclusão de testes. (`bin/selo_proporcao.py:54`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:106`)
-
-Todos os rc abaixo são **deduzidos por leitura**, sem executar selo ou suíte. Execução dos exemplos, efeitos em produção, banco e logs: **[nao verificado]**. [nao verificado]
-
-1. **Fechamento dos achados da v1**
-
-| Achado v1 | Situação na v2 / cura | Caso que o morde |
-|---|---|---|
-| Oito métodos ORM com espaço depois do ponto | **Fecha o exemplo.** Compara `Attribute.attr` com os oito nomes, independentemente da grafia. (`bin/selo_proporcao.py:28`, `bin/selo_proporcao.py:55`) | Oito `orm_$m`, mais `espaco_no_ponto`. (`bin/tests/test_selo_proporcao.sh:28`, `bin/tests/test_selo_proporcao.sh:31`) |
-| Quebra antes de `()` | **Fecha quando o atributo também é adicionado. Não fecha continuação isolada**, demonstrada adiante. (`bin/selo_proporcao.py:106`) | `quebra_de_linha` adiciona o arquivo inteiro; não cobre atributo antigo. (`bin/tests/test_selo_proporcao.sh:32`) |
-| Alias `gravar = obj.save; gravar()` | **Fecha o exemplo:** a referência ao atributo basta. (`bin/selo_proporcao.py:55`) | `alias` contém somente a atribuição; prova reconhecimento da referência. (`bin/tests/test_selo_proporcao.sh:33`) |
-| `getattr(obj, "save")()` | **Fecha a string literal exata.** (`bin/selo_proporcao.py:59`) | `getattr_string`. (`bin/tests/test_selo_proporcao.sh:34`) |
-| `(obj.save)()` | **Fecha pelo atributo.** (`bin/selo_proporcao.py:55`) | Sem caso específico; os casos próximos não reproduzem essa forma. (`bin/tests/test_selo_proporcao.sh:31`, `bin/tests/test_selo_proporcao.sh:32`) |
-| `#` dentro de string | **Fecha:** analisa o fonte pelo AST, sem truncar no `#`. (`bin/selo_proporcao.py:101`) | `cerquilha_string`. (`bin/tests/test_selo_proporcao.sh:35`) |
-| Signal por alias e `getattr` | **Fecha o exemplo v1 pelo `.connect`**, mesmo com nome de signal calculado. (`bin/selo_proporcao.py:30`, `bin/selo_proporcao.py:55`) | `signal_connect` isola esse gatilho; não reproduz o exemplo inteiro. (`bin/tests/test_selo_proporcao.sh:39`) |
-| Command que escreve por alias | **Fecha o exemplo pela referência `.create`.** Continua sem regra específica de command. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:91`) | `command_alias`; não contém invocação do alias. (`bin/tests/test_selo_proporcao.sh:43`) |
-| Migration por rename sem linhas adicionadas | **Fecha:** lê destino pelo protocolo NUL e aplica regra por caminho. (`bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:86`, `bin/selo_proporcao.py:94`) | `migration_rename`. (`bin/tests/test_selo_proporcao.sh:42`) |
-| `.py` escondido como binário/`-diff` | **Fecha o exemplo:** fonte por `git show`, diff com `--text`. (`bin/selo_proporcao.py:46`, `bin/selo_proporcao.py:100`) | `binario_attr`. (`bin/tests/test_selo_proporcao.sh:44`) |
-| Caminho com espaço/tabulação ou Unicode escapado | **Fecha a dependência do cabeçalho textual:** caminhos NUL e `surrogateescape`. (`bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:89`) | `caminho_espaco` e `caminho_unicode`; falta caso específico com tabulação. (`bin/tests/test_selo_proporcao.sh:45`, `bin/tests/test_selo_proporcao.sh:46`) |
-| `+++ /dev/null` dentro do conteúdo | **Fecha:** caminho não vem mais de `+++`. (`bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:100`) | Sem caso correspondente na lista. (`bin/tests/test_selo_proporcao.sh:27`, `bin/tests/test_selo_proporcao.sh:55`) |
-| Revisão interpretada como opção Git | **Fecha:** rejeita `-` inicial e resolve ambos os commits antes do diff. (`bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:80`) | `opcao_como_revisao`. (`bin/tests/test_selo_proporcao.sh:58`) |
-| Produção importa módulo excluído de teste | **Parcial:** import estático adicionado é marcado; import antigo, dinâmico ou reexportado continua permitindo fuga. (`bin/selo_proporcao.py:61`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:106`) | `prod_importa_teste` testa apenas o import, sem criar módulo escritor; não cobre `tests.writer` separadamente. (`bin/tests/test_selo_proporcao.sh:47`) |
-
-Os achados v1 sobre isolamento/preparo dos testes estão detalhados no item 5; os de rc, consumidores, atalho da régua e worktree, nos itens 4 e 6. (`bin/tests/test_selo_proporcao.sh:20`, `bin/tests/test_selo_proporcao.sh:38`, `bin/regua.sh:86`, `bin/tests/test_hook_nao_e_copia.sh:21`)
-
-2. **Escapes da v2**
-
-A expressão precisa é “nenhum **nó reconhecido como escrita** cruza a linha adicionada”: `Call`, `Expr`, `FunctionDef` e `Lambda` podem cruzá-la, mas não são candidatos em `nome_de_escrita`. (`bin/selo_proporcao.py:54`, `bin/selo_proporcao.py:66`, `bin/selo_proporcao.py:104`)
-
-Nos fragmentos abaixo, cada caso é independente e declarado B; os `.py` ficam fora de `tests/`, `migrations/` e `signals.py`, salvo indicação explícita. Essas condições determinam a seleção feita pelo selo. (`bin/selo_proporcao.py:94`, `bin/selo_proporcao.py:98`)
-
-**a) Continuação adicionada transforma referência antiga em chamada — rc 0.** O `Attribute` continua inteiramente na linha antiga; o `Call` novo não é reconhecido. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:106`, `bin/selo_proporcao.py:119`)
-
-```diff
---- a/app/x/views.py
-+++ b/app/x/views.py
-@@ -1,2 +1,3 @@
- (obj.save
-+()
- )
-```
-
-**b) `exec` e `eval` com escrita literal no código encapsulado — rc 0 em cada alternativa.** A string `"obj.save()"` não é exatamente `"save"` nem SQL; não existe análise recursiva desse código. (`bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:66`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1 @@
-+exec("obj.save()")
-```
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1 @@
-+eval("obj.save()")
-```
-
-**c) Decorador com código encapsulado — rc 0.** A expressão avaliada produz um decorador que chama `save`; para o selo, continua sendo uma constante não reconhecida. Compartilha o mecanismo de `eval`, não é uma exclusão geral de decoradores. (`bin/selo_proporcao.py:54`, `bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1,2 @@
-+@eval("lambda f: (obj.save(), f)[1]")
-+def f(): pass
-```
-
-**d) F-string formando nome de método — rc 0.** Os fragmentos constantes são `"sa"` e `"ve"`; o selo não calcula o resultado da expressão. (`bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:66`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1 @@
-+getattr(obj, f"sa{'ve'}")()
-```
-
-**e) `setattr` instala um alias escritor — rc 0.** Nem `"acao"`, `"sa"`, `"ve"` nem o atributo `.acao` pertencem aos conjuntos reconhecidos. (`bin/selo_proporcao.py:28`, `bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1,2 @@
-+setattr(obj, "acao", getattr(obj, "sa" + "ve"))
-+obj.acao()
-```
-
-**f) QuerySet por variável e método calculado — rc 0.** Não há resolução do método calculado nem do tipo de `qs`. (`bin/selo_proporcao.py:54`, `bin/selo_proporcao.py:66`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1,2 @@
-+qs = M.objects.all()
-+getattr(qs, "up" + "date")(ativo=False)
-```
-
-**g) Cursor por alias e SQL fragmentado — rc 0.** `.execute` não é reconhecido e nenhuma constante isolada satisfaz a regex SQL. (`bin/selo_proporcao.py:28`, `bin/selo_proporcao.py:31`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1,3 @@
-+cur = connection.cursor()
-+run = cur.execute
-+run("DE" + "LETE FROM tabela")
-```
-
-**h) SQL em f-string — rc 0.** `"UPDATE "` e `" SET ativo=0"` ficam em constantes separadas; nenhuma contém o padrão completo exigido. (`bin/selo_proporcao.py:31`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/novo.py
-@@ -0,0 +1 @@
-+cur.execute(f"UPDATE {tabela} SET ativo=0")
-```
-
-**i) Python com outro sufixo e carregamento explícito — rc 0.** O payload é descartado pelo sufixo; o carregador não contém nome reconhecido como escrita. (`bin/selo_proporcao.py:54`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/payload.pyw
-@@ -0,0 +1,2 @@
-+from app.x.models import M
-+M.objects.create()
---- /dev/null
-+++ b/app/x/carregar.py
-@@ -0,0 +1,2 @@
-+import runpy
-+runpy.run_path("app/x/payload.pyw")
-```
-
-**j) `.sql` com executor adicionado — rc 0.** O SQL fica fora dos `.py`; no executor, a constante é apenas um caminho. (`bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:119`)
-
-```diff
---- /dev/null
-+++ b/app/x/gravar.sql
-@@ -0,0 +1 @@
-+DELETE FROM tabela;
---- /dev/null
-+++ b/app/x/executar.py
-@@ -0,0 +1,3 @@
-+from pathlib import Path
-+with connection.cursor() as cur:
-+    cur.execute(Path("app/x/gravar.sql").read_text())
-```
-
-**k) Import antigo de teste, com escritor novo no módulo excluído — rc 0.** Pressupondo que produção já importe `gravar`, alterar somente o corpo abaixo é ignorado. A escrita é adicionada agora; não se trata apenas de chamar helper que já escrevia. (`bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:106`, `bin/selo_proporcao.py:119`)
-
-```diff
---- a/app/x/test_writer.py
-+++ b/app/x/test_writer.py
-@@ -1,2 +1,2 @@
- def gravar(obj):
--    pass
-+    obj.save()
-```
-
-**l) `import *` por reexportação — rc 0.** Se `app/x/__init__.py` já reexporta `gravar` de `.tests.fixt`, o import novo não menciona teste e o arquivo escritor é excluído. `import *` sozinho não oculta escrita adicionada em um `.py` comum; aqui a fuga combina reexportação e exclusão. (`bin/selo_proporcao.py:61`, `bin/selo_proporcao.py:63`, `bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:119`)
-
-```diff
---- a/app/x/tests/fixt.py
-+++ b/app/x/tests/fixt.py
-@@ -1,2 +1,2 @@
- def gravar(obj):
--    pass
-+    obj.save()
---- /dev/null
-+++ b/app/x/usar.py
-@@ -0,0 +1,2 @@
-+from app.x import *
-+gravar(obj)
-```
-
-**m) Template chama método escritor — rc 0 do selo.** O `.html` é ignorado; o método existente `rebaixar()` pode chegar a `self.save()`. Renderização efetiva, objeto no contexto e efeito persistido: **[nao verificado]**. Esse caso de helper já existente está no limite declarado do instrumento. (`bin/selo_proporcao.py:19`, `bin/selo_proporcao.py:98`, `app/chamados/models.py:488`, `app/chamados/models.py:498`)
-
-```diff
---- a/app/templates/chamados/fio_colaborador.html
-+++ b/app/templates/chamados/fio_colaborador.html
-@@ -175,0 +176 @@
-+{{ chamado.rebaixar }}
-```
-
-Não são escapes, isoladamente: `qs.update(...)`, `f"{obj.save()}"` e referência nova `run = cur.execute` acompanhada de `"DELETE FROM tabela"` dão **rc 1** pelos atributos ou pela constante SQL. Decorador que contenha diretamente atributo novo `.save` também é reconhecido. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:103`, `bin/selo_proporcao.py:117`)
-
-3. **Falsos positivos**
-
-| Exemplo adicionado | Rc B deduzido / motivo |
-|---|---|
-| Palavra `update` em template `.html` | **0**; o arquivo é ignorado. Não é falso positivo da v2. (`bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:119`) |
-| `rotulo = "update"` ou docstring exatamente `"create"` em `.py` | **1**; constante exata, sem exigir chamada. (`bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:117`) |
-| `d.update(...)`, com `d` sendo dict | **1**; não resolve tipo. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:117`) |
-| `s.update(...)`, com `s` sendo set | **1**, pelo mesmo atributo. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:117`) |
-| `[].delete()` | **1**; aceita sintaxe, sem verificar existência do método. (`bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:101`, `bin/selo_proporcao.py:117`) |
-| Import de teste usado somente para leitura | **1**; o import basta. (`bin/selo_proporcao.py:61`, `bin/selo_proporcao.py:117`) |
-| Alterar só comentário em migration ou `signals.py` | **1**; a regra por caminho é incondicional para arquivo não deletado, embora o cabeçalho diga “NOVO ou RENOMEADO”. (`bin/selo_proporcao.py:10`, `bin/selo_proporcao.py:92`, `bin/selo_proporcao.py:94`, `bin/selo_proporcao.py:96`) |
-
-**Aceitos na direção conservadora para A**, conforme a orientação fornecida; o código declara expressamente esse custo. Portanto, esses falsos positivos não constituem bloqueante por si. (`bin/selo_proporcao.py:19`)
-
-4. **Retornos**
-
-- **Erros ordinários tratados dão 2:** argumentos insuficientes/classe inválida, revisão inválida, Git não zero, parse inválido e demais `Exception` dentro da fronteira de `main`. (`bin/selo_proporcao.py:34`, `bin/selo_proporcao.py:70`, `bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:124`)
-- **Nem todo caminho de erro dá 2:** o wrapper faz somente `exec`; Python ausente pode devolver 127, execução recusada 126, e sinais não são normalizados. Ocorrência nesse ambiente: **[nao verificado]**. (`bin/selo_proporcao.sh:4`)
-- **Argumentos excedentes não são rejeitados:** `base head B repo lixo` ignora `lixo`; com diff inócuo pode devolver 0. (`bin/selo_proporcao.py:70`, `bin/selo_proporcao.py:73`, `bin/selo_proporcao.py:74`, `bin/selo_proporcao.py:119`)
-- **Rc 1 não prova escrita real:** significa `achados && classe B`, incluindo os falsos positivos acima. (`bin/selo_proporcao.py:115`, `bin/selo_proporcao.py:117`)
-- **O defeito interno de rc 3 da v1 está fechado:** não há mais pipeline intermediário; `exec` preserva o retorno Python. Um chamador `bash -e` recebe 1 e encerra nessa chamada. O teste atual não confere esse cenário. (`bin/selo_proporcao.sh:4`, `bin/selo_proporcao.py:117`, `bin/tests/test_selo_proporcao.sh:62`)
-- Encadear externamente com `| cat` ainda pode esconder o rc se o chamador não usar `pipefail`; esse uso hoje é **[nao verificado]**.
-
-5. **Qualidade dos casos**
-
-| Caso/achado v1 | Avaliação v2 |
-|---|---|
-| `signal_receiver` tinha dois gatilhos | **Corrigido nesse caso:** agora só `@receiver`. Porém `signal_nome` introduz outra duplicidade: módulo terminado em `signals` **ou** nome importado `post_save` bastam independentemente. (`bin/tests/test_selo_proporcao.sh:37`, `bin/tests/test_selo_proporcao.sh:38`, `bin/selo_proporcao.py:64`) |
-| Fixture tinha duas exclusões | **Corrigido:** diretório e nome estão separados. (`bin/tests/test_selo_proporcao.sh:51`, `bin/tests/test_selo_proporcao.sh:52`) |
-| Faltavam `bulk_update` e `get_or_create` | **Corrigido:** casos separados no laço dos oito métodos. (`bin/tests/test_selo_proporcao.sh:28`) |
-| Command não provava tratamento próprio | **Permanece:** `command_alias` passa pela regra genérica de atributo; não prova mecanismo específico de command. (`bin/tests/test_selo_proporcao.sh:43`, `bin/selo_proporcao.py:55`) |
-| Preparo podia julgar outro diff | **Melhorou, mas parcialmente:** checkout, resultado global, commit e HEAD são conferidos; scripts internos com `;` ainda podem mascarar falha anterior. O bloco especial de rc também não confere seu preparo. (`bin/tests/test_selo_proporcao.sh:20`, `bin/tests/test_selo_proporcao.sh:21`, `bin/tests/test_selo_proporcao.sh:22`, `bin/tests/test_selo_proporcao.sh:44`, `bin/tests/test_selo_proporcao.sh:61`) |
-| `apagou_migration` | **Nome não corresponde ao preparo:** apenas cria `velho2.py`; não exercita exclusão de migration nem o ramo `D`. (`bin/tests/test_selo_proporcao.sh:54`, `bin/selo_proporcao.py:92`) |
-| `bash -e` | **Não prova o anunciado:** descarta o rc dessa chamada; a comparação seguinte usa outro shell, sem `-e`. (`bin/tests/test_selo_proporcao.sh:62`, `bin/tests/test_selo_proporcao.sh:63`) |
-| `prod_importa_teste` | Prova classificação conservadora de import; não cria módulo escritor nem demonstra a costura produção→teste→escrita. (`bin/tests/test_selo_proporcao.sh:47`) |
-| `so_remocao` | Remove escrita e adiciona `pass`; não é diff exclusivamente de remoção. (`bin/tests/test_selo_proporcao.sh:49`) |
-
-A afirmação do comentário de que “cada escape” virou caso excede a cobertura: faltam, entre outros, falso `+++`, parênteses envolvendo método e continuação adicionada sobre atributo antigo. (`bin/tests/test_selo_proporcao.sh:4`, `bin/tests/test_selo_proporcao.sh:31`, `bin/tests/test_selo_proporcao.sh:32`, `bin/tests/test_selo_proporcao.sh:55`)
-
-6. **QUEM ESCREVE, QUEM CHAMA e QUEM LÊ**
-
-- **Quem produz o veredito:** Python imprime achados e devolve 0/1/2; o shell apenas o executa. (`bin/selo_proporcao.py:111`, `bin/selo_proporcao.py:115`, `bin/selo_proporcao.py:129`, `bin/selo_proporcao.sh:4`)
-- **Chamador concreto encontrado:** `test_selo_proporcao.sh`, via `SELO`; lê e compara rc nos casos e nos argumentos. A chamada com `bash -e` descarta o resultado. (`bin/tests/test_selo_proporcao.sh:8`, `bin/tests/test_selo_proporcao.sh:23`, `bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:56`, `bin/tests/test_selo_proporcao.sh:62`, `bin/tests/test_selo_proporcao.sh:63`)
-- **Leitor indireto:** a régua executa o teste pelo glob e converte falha do teste em rc 1. Isso verifica um repositório sintético, não classifica o diff real do pouso. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:23`)
-- **Pouso real:** o contrato fornecido exige chamada antes do merge, mas não identifiquei essa integração na cópia; chamada manual, leitor operacional do rc e registro no RELATO: **[nao verificado]**. (`contrato.txt:2`, `contrato.txt:3`, anexos) [nao verificado]
-- **Pre-push:** chama testes específicos, e o próprio código registra que não executa o loop de host. Integração deste selo no hook efetivamente instalado: **[nao verificado]**. (`bin/pre-push.sh:14`, `bin/pre-push.sh:16`, `bin/pre-push.sh:19`, `bin/pre-push.sh:38`)
-- **Atalho da régua da v1 permanece:** fingerprint só de `.py`/`.html` de `app/`; o “JA VERDE” retorna antes dos testes de host sem comparar `ARVORE_FP`. (`bin/regua.sh:33`, `bin/regua.sh:45`, `bin/regua.sh:86`, `bin/regua.sh:93`, `bin/regua.sh:138`)
-- **Worktree:** o teste deste selo resolve seu caminho e passa repo sintético explicitamente; execução em worktree: **[nao verificado]**. A quebra independente da pasta inteira permanece: outro teste exige `.git/hooks/pre-push`, enquanto um vizinho já resolve o diretório comum. (`bin/tests/test_selo_proporcao.sh:7`, `bin/tests/test_selo_proporcao.sh:23`, `bin/tests/test_hook_nao_e_copia.sh:21`, `bin/tests/test_hook_nao_e_copia.sh:27`, `bin/tests/test_commit_so_o_declarado.sh:56`, `bin/tests/test_commit_so_o_declarado.sh:57`)
-
-Este veredito trata do instrumento. O aval manda encaminhar achados de forma para fila, sem reabrir voltas das obras B abrangidas pela autorização. (`aval_proporcao_por_risco_1111.txt:1`, anexo, itens 2 e 5)
-
-**REPROVADO — bloqueantes do instrumento: falsos verdes por continuação e código dinâmico (`bin/selo_proporcao.py:54`, `bin/selo_proporcao.py:106`); exclusão de testes ainda escapável (`bin/selo_proporcao.py:98`); cobertura anunciada não demonstrada (`bin/tests/test_selo_proporcao.sh:54`, `bin/tests/test_selo_proporcao.sh:62`); normalização universal de erros incompleta (`bin/selo_proporcao.sh:4`); consumidor do pouso real [nao verificado].**
-
-_3902 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3905 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
