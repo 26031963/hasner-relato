@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 00:31:21.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (296.9 MB). Acoes na janela: **1100**.
+**Medido em 11/11/2026 00:36:08.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (296.9 MB). Acoes na janela: **1104**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:36:06 | Bash | Find triage of the persisting failure | `cd /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA; /bin/grep -n -i "RED_F1\\|lote_misto_local_vazia" -r . \| /bin/grep -v "suite1[45].log" \| head; ls -t \| head -20` |
+| 00:36:03 | Bash | Compare with suite14 failures | `cd /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA; ls suite14*; /bin/grep -h "^FAIL:\\|^ERROR:" suite14.log \| sort \| uniq -c \| head -40` |
+| 00:35:58 | Bash | Read failing test | `cd /home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app; sed -n 120,170p chamados/tests/test_bo_disputa_volta5b_orfaos.py; git log --oneline -5 -- chamados/tests/test_bo_disputa_volta5b_orfaos.py` |
+| 00:35:55 | Bash | Read suite15 failure | `cd /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA; /bin/grep -n -A40 "^FAIL:" suite15.log \| head -80` |
 | 00:25:37 | Bash | Verify hook ESPERANDO proof | `cd /home/ronald/saas-hasner/bin && python3 -c "import hook_stop_fila1 as H; print(H._esperando_com_prova()[:2])"` |
 | 00:25:34 | Bash | Record C6 result; check construtor and suite | `cd /home/ronald/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' - 00:26 E4B-ALCANCE condicao C6 FECHADA (sonda Codex logs/FIO-E0-V4-E4B/sonda_c6.r, rc 0; conferido pela sessao em chamados/juizes.py:1372-1375): 131/131 vivas em 45 dias-colab sobem pelo degrau CELULA ACUSA (veredito em VEREDITOS_ACUSAM: furo/nunca_bateu/discordante/indefinida) = FATO DO DIA; defeito do C6 = 0. Grupos: A 38 dias/120 ( ...` |
 | 00:25:27 | Bash | Find ALCANCE lines in RELATO | `cd /home/ronald/saas-hasner; /bin/grep -n "sonda v3\\|SONDA-V3\\|E4B-ALCANCE\\|E4b ALCANCE" app/docs/RELATO.md \| head` |

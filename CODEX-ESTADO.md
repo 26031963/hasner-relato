@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 00:24** · publicado em **11/11/2026 00:26** (UTC-3)
+> Ultima resposta processada: **11/11/2026 00:34** · publicado em **11/11/2026 00:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 00:34 · sessao 0781bba2b610 · - · - · origem=Ronald (tmux)
+
+A versão atual restringe o S143 à âncora do próprio fechamento e antecipa o lote completo do backfill (`chamados/services/disputa_emissao.py:1962`; `chamados/management/commands/backfill_fio_morto_e4b.py:171`).
+
+Restam dois pontos concretos:
+
+1. O wrapper S143 trava perguntas apenas das disputas abertas (`chamados/services/disputa_emissao.py:1840`). A nova reabertura pode ressuscitar outra pergunta materializada do mesmo chamado em disputa fechada (`chamados/models.py:1483`), adquirindo essa disputa em `:1562` depois das perguntas já travadas pelo wrapper em `disputa_emissao.py:1843`. Cenário: pergunta viva na disputa aberta + pergunta sem texto materializada numa disputa fechada, ambas com o destino que está sendo reaberto. Existe precedente permitindo reabertura da disputa fechada sob C (`chamados/models.py:1570`); equivalência com o contrato global/ausência de inversão [nao verificado].
+
+2. O teste novo define VIVOS divergente do catálogo (`chamados/tests/test_e4b_classe_e_memoria.py:23` versus `chamados/catalogo/motor.py:24`): inclui `aguardando_colaborador` e omite `registrado`. Deve consumir a fonte única.
+
+Recusas são registradas pela nova nota com tipo próprio e chave por pergunta/motivo/resolução; a cura não tenta outro credor (`chamados/services/disputa_emissao.py:1810`). Exportadas ficam fora de executáveis e são revalidadas antes da execução (`chamados/management/commands/backfill_fio_morto_e4b.py:246`, `:248`, `:292`). Esses resultados são leitura de código, sem certificação de execução [nao verificado].
 
 ## 11/11 00:24 · sessao c91463548885 · FIO-E0-V4-E4B · sonda · origem=Code
 
@@ -1033,16 +1045,4 @@ Suíte ORM e certificação final: **[nao verificado]**, reservadas ao Code e op
 
 K3 permanece ACHADO. ORM e ruff=0: **[nao verificado]**, por ausência de Django e ruff ([limites](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:9)).
 
-## 10/11 23:24 · sessao fd6adff78494 · - · - · origem=Ronald (tmux)
-
-K4: `27 != 28` compara **PKs**, não contagens (`chamados/tests/test_bo_disputa_volta5b_orfaos.py:138`). A porta seleciona a primeira disputa aberta (`chamados/services/disputa_emissao.py:1290`), ordenada por `-aberta_em` (`chamados/models.py:1804`). O campo usa `auto_now_add=True`; não há evidência de defeito no patch de relógio (`chamados/models.py:1756`).
-
-A local vazia nasce antes dos chamados (`chamados/tests/test_bo_disputa_volta5b_orfaos.py:130`). Criar chamados aciona o cartório (`chamados/signals.py:188`); um encerramento aciona S143 (`chamados/signals.py:91`), cujo resolver varre todas as disputas abertas e fecha as vazias (`chamados/services/disputa_emissao.py:2130`, `chamados/services/disputa_emissao.py:2178`). **Qual chamado efetivamente provocou esse caminho no traceback: [nao verificado].** Correção defensável da fixture: criar a local vazia por último e verificar, antes da chamada, que continua aberta, sem motivos/perguntas e posterior à dona; preservar todas as asserções finais.
-
-K5: o repasse chama `ch.analisar()` (`chamados/services/disputa_emissao.py:1492`, `chamados/services/disputa_emissao.py:1496`), acordando o cartório; ele ressuscita perguntas (`ponto/services/cartorio.py:1633`), cuja porta reabre a dona (`chamados/models.py:1573`). A reabertura limpa somente `fechada_em`, `fechada_por`, `resolucao` e `motivo_fechamento`, anotando o chamado quando existe (`chamados/models.py:2173`). O teste deve exigir essa transformação exata e preservar os demais campos.
-
-Na segunda passada do replay, a dona já aberta pode ser selecionada, receber o motivo e ser retornada com push; exigir novamente `None` e nenhum push conflita com esse caminho (`chamados/services/disputa_emissao.py:1290`, `chamados/services/disputa_emissao.py:1453`, `chamados/services/disputa_emissao.py:1516`). Separar as expectativas da primeira passagem das da segunda.
-
-O `SystemExit(2)` do auditor é um alarme deliberado quando F1/F2 são positivos; o teste deve capturá-lo, exigir código 2 e continuar verificando I23 (`chamados/management/commands/auditar_invariantes_chamados.py:1942`).
-
-_3541 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3542 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
