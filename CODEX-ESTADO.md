@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 06:46** · publicado em **11/11/2026 06:48** (UTC-3)
+> Ultima resposta processada: **11/11/2026 06:53** · publicado em **11/11/2026 06:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 06:53 · sessao e32ab3974910 · - · - · origem=Ronald (tmux)
+
+**2. PROCEDE para os casos medidos; NÃO PROCEDE cobertura completa.** O juiz distingue rc, chegada à trava e custo antes de recusa, mas não executa nem valida os argumentos encaminhados ao Django. (`bin/tests/test_suite_motivo.sh:19,24–27`)
+
+| Caso novo | Mutação isolada que detecta |
+|---|---|
+| `-- --tag x` | Restaurar interpretação dos valores de `EXTRA` como seleção: retorna `0 sim`, contrariando `2 nao`. (`bin/tests/test_suite_motivo.sh:40`; `bin/suite.sh:95–98`) |
+| Todas com repetição | Mutante de contagem deixa passar três palavras para dois apps. (`bin/tests/test_suite_motivo.sh:41,67`) |
+| `appA.tests appB` | Retirar a alternativa `"$a.tests"` deixa passar. (`bin/tests/test_suite_motivo.sh:42`; `bin/suite.sh:98`) |
+| Duas linhas | Voltar ao `read -r -a`, sem `-d ''`, lê apenas `appA` e deixa passar. (`bin/tests/test_suite_motivo.sh:43`; `bin/suite.sh:95`) |
+| Dois módulos, esperado positivo | Detecta tanto contagem quanto normalização excessiva de qualquer módulo para seu app. (`bin/tests/test_suite_motivo.sh:44,67`; `bin/suite.sh:95–98`) |
+
+Os confrontos acima foram executados apenas com trechos e mutações em memória; a execução integral do selo permanece **[nao verificado]**, pois ele cria/copia/remove arquivos. (`bin/tests/test_suite_motivo.sh:10–24`)
+
+**Os cinco mutantes declarados morrem por razões pertinentes:** ausência da guarda pelos negativos; presença de flag por branco/todas; contagem por repetição e pelo positivo com módulos; regex frouxa pelos motivos com conteúdo adicional; guarda após custo pelo marcador de `teste_envfile`. (`bin/tests/test_suite_motivo.sh:31–48,65–72,17,26`)
+
+A precedência do mutante de contagem não causa recusa de `ONLY=""` com motivo válido: `&&` e `||` associam à esquerda e o motivo ainda participa da condição; no confronto em memória, esse caso retornou `0 sim`. (`bin/tests/test_suite_motivo.sh:46–47,67`; precedência da linguagem: **[nao verificado]**)
+
+**Há sobreviventes plausíveis:**
+
+- Restaurar `[ -n "$VOLTA" ] && return 1` no início de `_suite_inteira`: nenhuma chamada do juiz usa `--volta`, portanto passa e reabre a exceção para helper que devolva todas as labels. (`bin/suite.sh:71–76,93–102`; `bin/tests/test_suite_motivo.sh:31–48`)
+- Trocar `${ONLY:-$LABELS}` por `$LABELS` no executor: os recortes passam a executar a inteira; a trava falsa apenas grava o marcador e retorna zero, enquanto o juiz não examina seu argv. (`bin/suite.sh:158`; `bin/tests/test_suite_motivo.sh:19,24–27,44–48`)
+
+**O achado do comando canônico continua PROCEDE:** a documentação mantém a chamada nua, recusada pela guarda; o selo antigo aprova presença textual de `bin/suite.sh` e mantém uma fixture nua como positiva, sem declaração local desse limite. (`CLAUDE.md:96`; `bin/suite.sh:95–109`; `bin/tests/test_suite_sh.sh:31–32,72–81`)
+
+## 11/11 06:53 · sessao a8546779729d · - · - · origem=Ronald (tmux)
+
+**Q1 — NÃO PROCEDE fechamento integral; NÃO PROCEDE fuga nova nos exemplos de ordem/read.** (`bin/suite.sh:71–110`)
+
+- `--volta` que retorna todas as labels agora encontra a guarda já com `ONLY` preenchido e recebe rc 2 sem motivo; falha do helper, mesmo imprimindo labels, resulta rc 1 por `pipefail`. (`bin/suite.sh:34,74–76,95–109`)
+- `--seco --volta` executa o helper e a guarda antes do seco; helper falho encerra rc 1, seleção inteira sem motivo encerra rc 2, seleção parcial chega ao seco. (`bin/suite.sh:71–76,102–115`)
+- Tab isolado, labels separadas por tab e labels em várias linhas são separados pelo `IFS` explícito; vazio é inteira. Confrontei os trechos em memória sob Bash 5.2.21: todos os casos vazios/inteiros recusaram rc 2, sem erro de array vazio. Para outras versões específicas do Bash 5: **[nao verificado]**. (`bin/suite.sh:34,94–98,102–109`)
+- Os argumentos depois de `--` deixaram de constituir recorte: sem `ONLY`, a guarda vê seleção vazia. Isso fecha a fuga antiga de `-- --tag x`, `-k padrao` e `--exclude-tag x`. (`bin/suite.sh:57,95–98,158–159`)
+- `app.tests` agora vale como cobertura do app; a soma de módulos permanece explicitamente admitida como limite no próprio sítio. (`bin/suite.sh:89–98`)
+- Permanece fuga de seleção por flags **dentro de ONLY**: `--only '--tag x'` contém palavras para a guarda, mas chega ao comando somente como flags/valor, sem labels. Confrontei a liberação da guarda em memória; conjunto efetivamente executado pelo Django: **[nao verificado]**. Esse comportamento já era possível antes do delta, portanto não é fuga nova da troca de ordem. (`bin/suite.sh:51,95–98,158–159`; comparação antiga: anexo `preverif_v2.r`, sem arquivo local **[nao verificado]**)
+- `--only ""` continua abortando na expansão obrigatória do parser. (`bin/suite.sh:51`)
+- O comando canônico nu continua na documentação e a fixture boa continua aprovando-o por simples referência textual à porta: achado antigo permanece. (`CLAUDE.md:96`; `bin/tests/test_suite_sh.sh:31–32,72–81`)
+
+**Q1 — descoberta: correções parciais e limites parciais.** (`bin/vizinhos_da_volta.py:11–12,26–36,51–72`)
+
+- Retirada do filtro fecha o contraexemplo anterior de `pkg/tests/sub/__init__.py` citado por `from .sub import algo`, porque a regex relativa agora se aplica a qualquer candidato. (`bin/vizinhos_da_volta.py:52–60,68–72`)
+- Não fecha a classe inteira de relativos: tocado `pkg/foo/bar.py` e consumidor `from ..foo.bar import x` não casam com `pkg.foo.bar`, caminho, `from pkg.foo import bar`, nem com o relativo que exige pontos imediatamente seguidos de `bar`; ocorrência concreta na obra: **[nao verificado]**. (`bin/vizinhos_da_volta.py:52–60`)
+- Não há fechamento transitivo de imports/reexportações; o laço confronta diretamente cada candidato com os padrões dos caminhos tocados. O limite declarado cobre imports montados em string e templates transitivos, mas não declara expressamente toda essa classe Python. (`bin/vizinhos_da_volta.py:11–12,45–72`)
+- `tests.py` foi incluído, mas arquivos `app/<app>/test_*.py` continuam fora tanto da obra direta quanto dos candidatos. Há caminhos concretos como `app/ferias/test_cadastro_idempotente.py`; conteúdo não inspecionado: **[nao verificado]**. (`bin/vizinhos_da_volta.py:26–28,35–36`)
+- O vermelho prevalecendo sobre rc 75 permanece corrigido. (`bin/volta_intermediaria.sh:37–44`)
+
+**Q2 — lacunas úteis para a consolidação.** (`bin/tests/test_suite_motivo.sh:14–19,29–49`)
+
+O selo não inclui helper na fixture, não chama `--volta`, não chama `--seco` e não cobre tab em `ONLY`; os casos novos existentes estão nas linhas 40–44. Um mutante que restaure a dispensa de guarda quando `VOLTA` está preenchido sobreviveria ao juiz atual, porque nenhuma chamada do juiz preenche `VOLTA`. (`bin/tests/test_suite_motivo.sh:14–19,29–49`; `bin/suite.sh:102`)
+
+Outro sobrevivente plausível: trocar o `IFS` explícito por separação que exclua tab e preserve espaço/newline. Os testes existentes usam espaço e newline; `ONLY=$'appA\tappB'` passaria a virar uma única palavra para a guarda, enquanto o comando continuaria separando por tab. (`bin/tests/test_suite_motivo.sh:31–48`; `bin/suite.sh:95,158`)
+
+## 11/11 06:53 · sessao a73c06899c99 · - · - · origem=Ronald (tmux)
+
+**P3 — NÃO PROCEDE invalidade por faltar pacote `tests/`, nem duplicata textual.** `tests.py` vira `<app>.tests`, pela remoção de `.py` e troca de `/` por `.`, e não `<app>.tests.tests`; o exemplo `comunicados.tests` corresponde ao módulo que define `ComunicadoContratoTests`. Candidatos e saída são conjuntos. (`bin/vizinhos_da_volta.py:26–36,37–42,75–76`; `app/comunicados/tests.py:4–10`)
+
+**NÃO SEI sobre aceitação completa pelo executor.** A suite fixa `--settings=config.settings.ci`; o runner local herda `DiscoverRunner` e delega `build_suite` ao Django, cuja implementação não está na cópia. (`bin/suite.sh:158–159`; `app/config/settings/ci.py:40`; `app/core/runner_quarentena.py:15,72–76`; implementação externa: **[nao verificado]**)
+
+**Há risco novo concreto de selecionar testes de outra configuração.** Como todos os `tests.py` entram, tocar `app/chamados/models.py` seleciona `tenants.tests`, pois este importa `chamados.models`; reproduzi a seleção em memória substituindo apenas o resultado do `git diff`. `tenants.tests` depende de `FastTenantTestCase`, mas `ci` usa `base`, cuja lista de apps não contém `tenants`/`django_tenants`; esses apps pertencem à configuração `saas`. Erro efetivo no executor: **[nao verificado]**. (`bin/vizinhos_da_volta.py:35–36,54–57,68–72`; `app/tenants/tests.py:1–2,5,19,104`; `app/config/settings/ci.py:1`; `app/config/settings/base.py:8–30`; `app/config/settings/saas.py:22–24`)
+
+**Sobreposição de escopo continua possível:** migration acrescenta o app inteiro e a descoberta pode acrescentar módulos do mesmo app; o conjunto elimina igualdade de strings, não essa sobreposição. Duplicação efetiva de casos depende do Django: **[nao verificado]**. (`bin/vizinhos_da_volta.py:40–50,68–74`; `app/core/runner_quarentena.py:75–76`)
+
+Fechamento dos achados v2 do helper:
+
+| Classe | Conclusão |
+|---|---|
+| Filtro de relativo / `pkg/tests/sub/__init__.py` com consumidor `from .sub import algo` | **Corrige o contraexemplo apontado:** normaliza `__init__`, produz o nome `sub` e aplica a regex relativa a todos os candidatos. A ampliação pode trazer sobras por homônimos, conforme comentário explícito. (`bin/vizinhos_da_volta.py:52–60,68–72`) |
+| Reexportações e dependências Python transitivas | **Não fecha e não declara esse limite.** Os padrões nascem somente dos arquivos tocados; selecionar um teste não cria padrões para dependências intermediárias. O limite textual menciona import montado em string e templates transitivos, não reexportações Python. (`bin/vizinhos_da_volta.py:11–13,45–72`) |
+| `__init__.py`, em geral | **Parcial:** normalização e filtro corrigidos; permanece a busca textual direta, sem propagação geral dos efeitos de inicialização. (`bin/vizinhos_da_volta.py:45–60,68–72`) |
+| Imports dinâmicos | **Limite declarado no sítio**, com exemplo real de import montado por f-string na cópia. (`bin/vizinhos_da_volta.py:11–12`; `app/ponto/tests/test_detectores_isencao.py:7–18`) |
+| JSON/templates | Busca direta por caminho/basename permanece; **herança/inclusão transitiva de template é limite declarado**. Dependência transitiva de JSON não recebe declaração equivalente. (`bin/vizinhos_da_volta.py:11–12,61–66,68–72`) |
+| Migration entre apps | Continua puxando apenas o primeiro componente do caminho, sem interpretar dependências entre apps. O comentário explicita “app inteiro” e “esquema não se segue por texto”, mas não apresenta defesa para consumidores em outros apps. (`bin/vizinhos_da_volta.py:9,49–50`) |
+| Selos que varrem diretório/AST | **Corrige o caso nominal**, incluindo o varredor de templates; **não fecha a classe automaticamente**, pois a fonte continua uma lista fixa. (`bin/selos_globais_da_volta.txt:25`; `app/core/tests/test_contract_template_bem_formado.py:40,76–86`; `bin/vizinhos_da_volta.py:73–74`) |
+| Remoções | Continua preservando o caminho para procurar citações; o arquivo removido não entra como obra por causa de `exists()`. Transitividade continua ausente e não está declarada para dependências Python. (`bin/vizinhos_da_volta.py:21–23,47–48,51–72`) |
+| Descoberta fora de `tests/` | **Corrige `tests.py`, mas não toda a classe:** continuam fora `test_*.py` e `tests_disponibilidade.py` na raiz do app. Há exemplos reais com `TestCase` e imports de produção em `ferias`. (`bin/vizinhos_da_volta.py:26–36`; `app/ferias/test_services_leitura.py:5–13`; `app/ferias/tests_disponibilidade.py:7–14`) |
+
+Colisão concreta entre um `tests.py` e uma pasta irmã `tests/` não foi encontrada na leitura dos três `tests.py` da cópia; essa ausência não dispõe de referência `arquivo:linha`: **[nao verificado]**.
 
 ## 11/11 06:46 · sessao f28b56e2711d · TRAVA-SELO · verificador · origem=Code
 
@@ -657,55 +735,4 @@ Observado localmente: 59+2 testes de memória e 40 selos passaram; os mutantes n
 
 Tetos `60/28/213/269` são **deduzidos, a remedir**. GREEN ORM, mortes ORM e opus: **[não verificado]**. [Comandos pela trava](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v3.txt:162).
 
-## 11/11 05:00 · sessao c34bbb0cd360 · - · - · origem=Ronald (tmux)
-
-A fusão fiel não cabe na porta atual:
-
-- Main `fb9269ea9:app/chamados/services/disputa_emissao.py:1823` já consulta perguntas com destino no chamado, `materializada_em=NULL` e disputa aberta; inclui validadas.
-- `_ancoradas` retorna `list`, exclui validadas e inclui outros universos (`chamados/models.py:336`, `:344`). Não fornece QuerySet para `union`.
-- Perder validadas altera comportamento: C6 dá morta (`chamados/juizes.py:1325`), mas `carimbar` pode escrever materialização/via e salvar (`chamados/models.py:3126`, `:3152`). Também altera disputas candidatas (`chamados/services/disputa_emissao.py:1977`, `:2000`).
-- Buscar complemento de validadas ou usar prefetch conserva duas cargas. Portanto permanece justificável **+1 por S143**, sem duplicar o predicado canônico (`chamados/models.py:344`).
-
-Há reutilização canônica possível da tranca:
-
-```python
-colab = chamado._state.fields_cache.get('colaborador')
-mapa = {chamado.colaborador_id: colab} if colab is not None else {}
-```
-
-Passar `mapa` aos **dois** `um_colaborador_por_identidade` evita criar donos separados do memo; a função aceita mapa sem consultar banco (`chamados/juizes.py:1121`, `:1134`). Seed apenas da FK quente evita adicionar consulta em chamados sem perguntas. Memo da tranca pertence ao request/instância (`chamados/juizes.py:1054`).
-
-Antes de reconciliar na batida, cartório chama E2 (`ponto/services/cartorio.py:969`, `:974`), que usa C6 e tranca sobre o `colab` recebido (`chamados/reconciliador.py:650`, `:654`, `:661`). Contudo a consulta de chamados não aquece explicitamente `ch.colaborador` com essa mesma instância (`ponto/services/cartorio.py:117`). Compartilhar mapa entre os dois laços remove sua duplicação; aproveitamento do memo anterior e redução exata são **[não verificado]**.
-
-Tetos previstos se cair o único `+1 periodo_trancado`: **60/28/213/269 [não verificado]**. Permanecem incrementos main→head **+1/+1/+2/+4**, compatíveis com os sítios S143 do `delta_main_head.txt` fornecido.
-
-Ao ajustar assinatura do identity map nas chamadas, atualizar o double `lambda ps: ps` (`chamados/tests/test_e4b_classe_e_memoria.py:291`) para aceitar `mapa=None`; caso contrário a suíte de memória falha antes da assertion-alvo.
-
-## 11/11 04:59 · sessao 919502c461f8 · - · - · origem=Ronald (tmux)
-
-Causa da fixture: julho pertence à competência 07, abaixo do piso automático `2026-09`; `forcar=True` apenas força julgamento e não equivale a `toque=True`. O cartório cala a emissão do chamado, enquanto a fábrica ainda emite a pergunta (`ponto/services/cartorio.py:270`, `:312`, `:1687`, `:1695`, `:1707`, `:1773`, `:1008`).
-
-Caminho real:
-
-- `registrar_batida` cria a batida (`ponto/registro_batida.py:170`).
-- O signal julga o dia anterior e o próprio dia (`ponto/signals.py:108`, `:131`).
-- `julgar_celula` chama `julgar_colab`, que chama a fábrica (`ponto/services/cartorio.py:2000`, `:1008`).
-- A fábrica chama o emissor (`chamados/services/fabrica_da_celula.py:172`).
-- O emissor deriva o destino; zero candidatos retorna `(None, None)` (`chamados/services/disputa_emissao.py:411`, `:238`).
-- O reatamento automático também não salva julho: passa por `reatar_pergunta_orfa` e pelo c2, que barra nascimento abaixo do mesmo piso (`chamados/services/disputa_emissao.py:459`; `chamados/reconciliador.py:1621`, `:828`, `:840`).
-
-Entrada coerente proposta: construir o segundo fio em **21/09/2026**, competência **10/2026**, mantendo o alvo do backfill em 09/2026. Essa data continua passada no freeze de 25/09, fica fora do alvo e dentro do horizonte automático. Adaptar a exportação e a expectativa BANG para 10/2026 (`chamados/tests/test_e4_backfill.py:28`, `:49`; `ponto/services/cartorio.py:320`).
-
-Isso preserva a precondição forte e evita criar ou alterar diretamente chamado, pergunta, veredito ou carimbo históricos. Alcance efetivo e execução ORM com essa entrada: [não verificado].
-
-## 11/11 04:57 · sessao 18b1b34d5d9d · FIO-E0-V4-E3 · construtor · origem=Code
-
-Entregues o [diff](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite.diff:1) e o [relato S1–S7, com causas, cura e censo](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_pos_suite.md:7).
-
-Verificação local: [46 testes sem banco verdes](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_vizinhos.txt:2), [selos AST verdes](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_green.txt:12), [mutantes mortos](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_pos_suite.md:35) e [Ruff limpo](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_ruff.txt:1). [nao verificado]
-
-[Comandos de RED, mutantes e labels ORM](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/e3_pos_suite_comandos.txt:1).
-
-ORM, 11 testes X1, suíte inteira e opus final: **[não verificado]**. [nao verificado]
-
-_3672 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3675 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
