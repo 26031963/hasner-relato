@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=1811212
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2017830
 
 lei: E4b sem_porta_de_sistema (23:0x, DRY sombra lavra 10/11): classe e = pergunta VIVA sob chamado FECHADO, ato responder/colaborador, sem porta de sistema (reatar_pergunta_orfa so pega orfa). comp 11 = 42 dias, comp 10 = 3 dias (logs/e4b_dry_11.out, e4b_dry_10.out, linha LEI-FALTA). Falta a lei de quem reata ou encerra essa pergunta; a E4b segue o resto sem ela. RESPONDIDA por aval E4B-CLASSE-E-PELA-LEI 23:4x: (a) chamado fechado por lastro -> pergunta encerra pela porta; (b) sem lastro -> chamado reabre (L-125); sonda Codex dos 45 em curso (logs/FIO-E0-V4-E4B/leitura_classe_e.q).
 lei: BO-DISPUTA dona FECHADA (21:2x; leitura opus 5(d), logs/BO-DISPUTA-SEM-PERGUNTA/opus5d.txt item 7): o aval DUAS RESPOSTAS diz "o motivo vai a disputa dona" sem excecao; com a dona FECHADA _agregar_motivos_na_dona (disputa_emissao.py:544) nao salva e o motivo se perde. FIO-EXPORTADA-X-O44 cobre "sem reabrir e sem push", nao motivo. Ate a resposta fica como esta; a obra segue (volta c11). RESPONDIDA por aval BO-DISPUTA-DUAS-LEIS 22:16: nao muda comportamento; trilha + contador motivo_em_dona_fechada nesta obra (volta c15), decisao na RAIZ-DA-DISPUTA F1.
@@ -7651,3 +7651,4 @@ E4B-NA-VAGA 21:27: aval registrado (PROMPTS, BACKLOG FIO-E0-V4-E4B). Preparo pre
 - 23:49 PRE-APROVADO push: aval PUSH-BO-0611-05-JA; 11 commits (ahead 11/behind 0), 8 portoes do topo do pre-push verdes; bin/push.sh pid 1147789, log logs/push_bo0611_05.log. Smoke a,b,d segue devido.
 - 23:5x GPS-ESTADO-NA-TELA registrada na fila BO (BACKLOG), depois do BO-DISPUTA e da E4b.
 - 00:00 E4B LEITURA CLASSE E (logs/FIO-E0-V4-E4B/leitura_classe_e.r): o banco NAO grava qual ato/prova levou o chamado a terminal (estado_chamado guarda so status/via; via=admin tem backfill 0039_a3:26 e fechar_chamados_meio_periodo.py:103 assina como superuser). Separar (a)/(b) pode deixar indeterminados; a sonda imprime a evidencia por dia. Portas existem: F1 models.py:319, carimbar models.py:3050, reabrir models.py:1318. Sonda de leitura em prod (READ ONLY + bloqueio de escrita) pid 1811212.
+- 00:0x SONDA CLASSE E v1 (logs/FIO-E0-V4-E4B/sonda_classe_e_v1.r): saida TRUNCADA em 20 de 45 dias; nos 20, 0 a / 0 b / 20 indeterminado; 21 donos: 17 via sistema com ator de processo e usuario null, 4 via admin usuario #846; motivo/resolucao ausentes no log dos 21, decisoes 0. Refeita com saida compacta (resumo primeiro), pid 2017830.

@@ -1,7 +1,70 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 23:59** · publicado em **11/11/2026 00:00** (UTC-3)
+> Ultima resposta processada: **11/11/2026 00:03** · publicado em **11/11/2026 00:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 00:03 · sessao cbda6a0a85db · FIO-E0-V4-E4B · sonda · origem=Code
+
+O dado termina no meio do registro `col718 / 2026-10-26`; não contém o resumo consolidado da sonda. Abaixo, as recontagens são **parciais**, limitadas aos registros completos. As referências ao texto colado levam `[nao verificado]` por não haver arquivo:linha disponível. [nao verificado]
+
+**(1) Classe × competência × empresa**
+
+A contagem consolidada “como a sonda imprimiu” não aparece no trecho. As classes `a` e `b` não estão exibidas; suas contagens não podem ser transcritas como zero. [nao verificado]
+
+| Classe | comp_anexo | empresa_anexo | Dias-colab completos recontados | Perguntas em `vivas` | Referência |
+|---|---|---|---:|---:|---|
+| indeterminado | 11/2026 | #2 | 18 | 61 | [nao verificado] |
+| indeterminado | 11/2026 | #3 | 2 | 4 | [nao verificado] |
+| **Total parcial** | 11/2026 | — | **20** | **65** | [nao verificado] |
+
+**(2) Indeterminados: via e evidência impressa**
+
+Nos registros completos, as 65 perguntas apontam para 21 chamados donos distintos; o dia de `col355 / 2026-10-25` contém dois donos, um por `admin` e outro por `sistema`. [nao verificado]
+
+| Via do dono (`dono_terminal.via`) | Donos distintos | Perguntas | Referência |
+|---|---:|---:|---|
+| sistema | 17 | 56 | [nao verificado] |
+| admin | 4 | 9 | [nao verificado] |
+
+Para o `estado_chamado` indicado por `historico.travessia`, a distribuição do ator impresso é: [nao verificado]
+
+| Via | `usuario` no log | `ator_processo_presente` | Donos distintos | Perguntas | Referência |
+|---|---|---|---:|---:|---|
+| sistema | null | true | 16 | 55 | [nao verificado] |
+| sistema | #657 | false | 1 | 1 | [nao verificado] |
+| admin | #846 | false | 4 | 9 | [nao verificado] |
+
+O caso `sistema / usuario #657` é o chamado `#35126`, pergunta `#50429`, travessia `#783748`. Os quatro donos por `admin / usuario #846` são `#34447`, `#34762`, `#33930` e `#34540`, com travessias `#778802`, `#779377`, `#792218` e `#792222`, respectivamente. [nao verificado]
+
+| Evidência | Distribuição nos registros completos | Referência |
+|---|---|---|
+| `estado_chamado` da travessia terminal | Presente nos 21 donos, associados às 65 perguntas; todos com `motivo_presente:false` e `resolucao_presente:false` nesse log | [nao verificado] |
+| Decisões nos vínculos atuais | `decisoes_vinculos_atuais:[]` nos 21 donos | [nao verificado] |
+| Notas | 51 IDs distintos, distribuídos pelos 21 donos; todas com `texto_presente:true`, sem conteúdo textual exibido | [nao verificado] |
+| `reconciliar_ausencia_lancada` | Um log explícito: `#783753`, chamado `#35126`, usuário `#666`, ausência `#5211`; associado à pergunta `#50429` | [nao verificado] |
+| Disputa com resolução presente | No apoio de `#35126`: disputa `#7547`, usuário `#666`, motivo `veredito`, `resolucao_presente:true` | [nao verificado] |
+| `reconciliar_feriado`, dedup, `sem_dia_do_fato` | Nenhuma ocorrência explicitamente identificada com esses nomes; há ações `OUTRO-NAO-EXIBIDO` | [nao verificado] |
+| `competencia_trancada` | Nenhuma ocorrência explicitamente identificada; o estado da competência não foi exibido | [nao verificado] |
+
+A duração efetiva da pergunta viva não foi impressa. O código descreve `data_evento` como data do evento: [app/chamados/models.py:2423](/home/ronald/codex_ws/fb9269ea9a60bb7748c777764d6e3d57a6b54402/app/chamados/models.py:2423). A tabela seguinte calcula somente **11/11/2026 − `data_evento`**, para as perguntas listadas em `vivas`; não comprova tempo contínuo de vida. [nao verificado]
+
+| `data_evento` | Dias até 11/11/2026 | Dias-colab completos | Perguntas | Referência |
+|---|---:|---:|---:|---|
+| 2026-10-21 | 21 | 1 | 2 | [nao verificado] |
+| 2026-10-22 | 20 | 4 | 14 | [nao verificado] |
+| 2026-10-23 | 19 | 2 | 8 | [nao verificado] |
+| 2026-10-24 | 18 | 6 | 22 | [nao verificado] |
+| 2026-10-25 | 17 | 3 | 10 | [nao verificado] |
+| 2026-10-26 | 16 | 2 | 5 | [nao verificado] |
+| 2026-11-03 | 8 | 1 | 2 | [nao verificado] |
+| 2026-11-06 | 5 | 1 | 2 | [nao verificado] |
+| **Total parcial** | — | **20** | **65** | [nao verificado] |
+
+Separadamente, o registro truncado mostra `col718 / 2026-10-26`, competência `11/2026`, empresa `#2`, classe `indeterminado`, pergunta `#50647`, dono `#35092`, status `fechado`, via `admin`, `usuario_gravado:#846` e travessia `#792225`. A diferença desde `data_evento` é 16 dias. O restante das perguntas, das evidências e `quantidade_vivas` desse registro não está disponível; ele foi excluído das tabelas anteriores. [nao verificado]
+
+**(3) ERRO-NAO-MEDIDO**
+
+Nenhuma linha `ERRO-NAO-MEDIDO` aparece no trecho fornecido. Os 20 registros completos exibem `erros:[]`; o registro truncado também exibe `erros:[]` antes do corte. Isso não informa o conteúdo da parte ausente. [nao verificado]
 
 ## 10/11 23:59 · sessao a8e3ccca6aa3 · FIO-E0-V4-E4B · leitura · origem=Code
 
@@ -886,34 +949,4 @@ Lacunas de testes pertinentes: [nao verificado]
 - O double de identidade compara apenas motivo e dia, sem episódio; não prova a estabilidade implícita do replay BATIDA. Referências: `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:109`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:101`.
 - Nenhuma alteração de arquivo foi necessária para as sondas inline; efeitos ORM, PostgreSQL, banco/log de produção e suite inteira [nao verificado]. [nao verificado]
 
-## 10/11 22:08 · sessao cabc2df259bf · - · - · origem=Ronald (tmux)
-
-Achados prioritários:
-
-- **Selo quebrado:** `nasce_sem_pergunta` e `replay_insere` varrem o arquivo inteiro, mas exigem exatamente uma alteração. Hoje encontram respectivamente cinco e dois sítios; abortam por montagem antes de demonstrar assertion RED. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:66`, `app/chamados/tests/test_bo_disputa_volta5_memoria.py:81`; sítios em `app/chamados/services/disputa_emissao.py:682`, `:776`, `:778`, `:1446`, `:1448` e `:711`, `:1454`.
-- **Paridade sobre a própria versão:** o teste anuncia gerador BASE versus atual, mas instancia `AmbienteVolta3()` nas duas repetições; a comparação final demonstra repetibilidade da fonte atual. As assertions de dia esperado continuam úteis. `app/chamados/tests/test_bo_disputa_volta3_memoria.py:236`, `:245`, `:246`, `:289`, `:292`, `:300`.
-- **5e testa o assert, não a integração:** chama diretamente `reabrir_sistema`, com `save`/`refresh_from_db` simulados; os mutantes removem assertions do teste. Não certifica que `analisar()`/cartório efetivamente reabre a dona. `app/chamados/tests/test_bo_disputa_volta5e_memoria.py:30`, `:46`, `:49`, `:59`, `:70`, `:74`.
-- **Declaração sem cobertura do ramo candidata/costura:** `_candidata_reusavel` sempre retorna `None`, trava é `Mock` e `PerguntaDisputa.abrir` é double. A cobertura não prova `disputa_emissao.py:765-771`, ordem real de travas nem efeitos dos receivers. `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:77`, `:89`, `:95`, `:97`.
-- **Divergência nova sem selo específico:** os testes 5c demonstram replay bem sucedido e rollback inicial, mas não forçam pergunta criada/PK diferente no replay de declaração ou órfãos; o teste adversarial existente exerce o replay do núcleo. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:194`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:118`, `:192`; portas `app/chamados/services/disputa_emissao.py:781`, `:1453`.
-- **Possível vacuidade no ORM “depois da pergunta”:** chama o gerador e levanta sem afirmar que alguma pergunta nasceu antes. A irmã memória contém essa assertion positiva. `app/chamados/tests/test_bo_disputa_sem_pergunta.py:58`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:301`.
-
-Cobertura útil existente:
-
-| Família | O que morde | Limite |
-|---|---|---|
-| Sem pergunta | Exceção antes/depois da escrita, preservação da batida, separação I7a/I7b e pergunta morta como linha. `test_bo_disputa_sem_pergunta_memoria.py:286`, `:296`, `:329`, `:355`, `:376` | Atomic/ORM/signals simulados. `test_bo_disputa_sem_pergunta_memoria.py:50` |
-| Volta2 | Consulta lazy após C, dona fechada antes de Ch e ausência de trava repetida. `test_bo_disputa_volta2_memoria.py:143` | Conta eventos dos doubles; não SQL/concorrência PostgreSQL. `test_bo_disputa_volta2_memoria.py:1` |
-| Volta3/4 | Ordem inicial, dias mistos/indeterminados, ciclos sem reentrada e argumentos conservados. `test_bo_disputa_volta3_memoria.py:156`; `test_bo_disputa_volta4_memoria.py:20`, `:45`, `:106` | Porta de pergunta simulada. `test_bo_disputa_volta4_memoria.py:31`, `:63` |
-| Volta5 | Motivo somente na dona, rollback por divergência, idempotência, push e AST sem reentrada. `test_bo_disputa_volta5_memoria.py:121`, `:194`, `:270`, `:334` | Dois mutantes quebrados acima; cenário de dona aberta escondida é artificial e explicitamente declarado. `test_bo_disputa_volta5_memoria.py:233` | [nao verificado]
-| 5b | Reuso estrangeiro, push por critério base, sem ata, h2 desfeito, criadas reais/pendentes. `test_bo_disputa_volta5b_orfaos_memoria.py:152`, `:185`, `:223`, `:239`, `:258` | Double de `analisar()` só muda status; não executa cartório. `test_bo_disputa_volta5b_orfaos_memoria.py:120` | [nao verificado]
-| 5c | Dois callers da declaração, saídas normais/recusa, rollback, pendentes estrangeiros, agregador e critérios opostos de push. `test_bo_disputa_volta5c_memoria.py:118`, `:149`, `:176`, `:237`, `:252`, `:262` | Limites da declaração acima. | [nao verificado]
-| Gate | Censo real por função confrontado em igualdade exata com `ATOS_EMISSAO`. `test_porta_disputa_emissao.py:105`, `:118`, `:128`; reutilizado em `test_bo_disputa_volta5c_memoria.py:283` | Conta sítios/escritores; não prova semântica de motivos/contexto. `test_porta_disputa_emissao.py:122` |
-| 5e | Assert rejeita dona fechada mesmo com nota antiga e reabertura sem nota. `test_bo_disputa_volta5e_memoria.py:50`, `:84`, `:88` | Não prova integração. |
-
-Os protegidos contêm os asserts solicitados: sem ata continua sem pergunta/aberta; com ata completa fecha; muda não notifica; pergunta antiga aponta ao dia correto; duas passadas conservam uma pergunta. `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58`, `:63`; `app/chamados/tests/test_hx_disputa_muda.py:24`, `:44`; `app/chamados/tests/test_pergunta_no_app.py:89`, `:103`. Permanecerem **historicamente intocados**: [nao verificado], pois não há `.git`/base disponível.
-
-Executei previamente 82 testes de memória em nove módulos, todos verdes, com `PYTHONDONTWRITEBYTECODE=1 python3 -B`; não executei ORM nem suite inteira. Evidência em arquivo/log da execução: [nao verificado]. Após receber a regra ` .claude/agents/verificador.md:7`, limitei os próximos comandos a leitura/AST; não executei os mutantes.
-
-`opus5d.txt`, `preverif3.r`, `matriz2.r` e briefs não foram encontrados na cópia; conteúdo/achados individualizados: [nao verificado].
-
-_3529 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3530 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
