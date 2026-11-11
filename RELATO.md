@@ -7919,3 +7919,12 @@ CONTRATO TRAVA-MENOS-FILA-COM-SELO (instrumento, 5 linhas):
 PROPORCAO v6 15:01: preverif Codex v5 REPROVOU procedente (obra punha CORTES.md + escritor na propria lista -> B rc0); cura lista lida da BASE, 9b8493e4f; RED v6_red.txt rc0->esperado1, GREEN 43+22+2; preverif v6 lancado (preverif_v6.fim)
 BO-ROTULO 15:03: opus final APROVADO 0 bloq (112893 tok/318 s; logs/FABLE-GABARITO/borotulo_opus.r); Fable cego linha 4 rodando; depois SMOKE Ronald 2 cascas + pouso. Fila do opus: seletor GLPI detalhe.html:122 nao age (L4, toca estado: fora do aval)
 PROPORCAO v6 15:05: preverif Codex v6 APROVADO (limite: selo confia na base dada; chamador real tem de passar main -- fila); opus final v6 lancado (logs/PROPORCAO/opus_v6_prompt.txt)
+DATA-EVENTO-CRU 15:09: censo v2 rc0 -- 190 leitores Python operacionais + 4 templates + 2 chaves JSON fora do juiz (amostra 3/3: fio.py:87, juizes.py:338, _card_atendimento.html:87); BACKLOG:1914 com o numero; catraca = instrumento, CONTRATO antes
+CONTRATO-DE-INSTRUMENTO DATA-EVENTO-CRU-CATRACA (15:1x):
+1. quem chama: a suite (teste Django chamados/tests/test_catraca_data_evento_cru.py, label chamados), logo pre-push e regua; zero cron.
+2. quem espera: ninguem; roda em segundos dentro da suite. Allowlist = app/chamados/tests/catraca_data_evento_cru.json, chave arquivo::funcao -> contagem (linha muda com edicao, funcao nao).
+3. falha/limite: VERMELHO se aparece arquivo::funcao novo ou contagem SOBE; desceu = VERMELHO pedindo baixar o json no mesmo commit (so desce). Cego a reflexao/getattr dinamico e serializacao generica (declarado no selo); templates por regex `\.data_evento\b`, mesma regra.
+4. medida: total da allowlist no ESTADO (comeca 190+4 = censo v2), caso que MORDE (leitor novo injetado em copia temporaria -> vermelho).
+5. quem desliga: so corte Ronald; apagar o json ou o teste = VERMELHO no selo de labels/contratos? nao -- fica declarado: o teste e o unico guardiao, remove-lo e `!`.
+FABLE-GABARITO linha 4 15:10: BO-ROTULO opus APROVADO 0 bloq (112893/318s) x Fable APROVADO 0 bloq (139154/407s) -> 0 perda; placar 3 perdas em 4 linhas
+BO-ROTULO 15:10: escada B completa (RED/GREEN, suite 15226 OK, preverif, opus+Fable APROVADO). FALTA so SMOKE Ronald nas 2 cascas (as 5 telas estendem base.html; base_app nao serve nenhuma) -> pouso com VISIVEL + L-113; 3 linhas de fila no BACKLOG

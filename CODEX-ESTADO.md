@@ -1,7 +1,293 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:05** · publicado em **11/11/2026 15:07** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:13** · publicado em **11/11/2026 15:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:13 · sessao 6f34a2441ef2 · DATA-EVENTO-CRU · leitura · origem=Code
+
+**Veredito: ajustar o contrato antes de considerá-lo fechado.** Os pontos principais são o alcance de `mensageria/`, a identidade dos escopos e a definição de “leitura”; além disso, a cópia contém **cinco** ocorrências diretas nos templates, incompatíveis com o “+4” sem explicação adicional. (`bin/regua.sh:167`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`; `app/templates/chamados/partials/_card_atendimento.html:87`, `:90`, `:164`; `app/templates/chamados/partials/_lote_preview.html:24`; `app/templates/chamados/meu_atendimento.html:19`)
+
+1. **`arquivo::funcao -> contagem` é utilizável, mas não é estável contra refatoração.** A casa já possui uma convenção melhor descrita como `arquivo::escopo`: empilha classes e funções aninhadas e usa `<modulo>` quando não há escopo nomeado. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:91`, `:93`, `:132`)
+
+   | Edição/caso | Consequência e nome recomendado |
+   |---|---|
+   | Inserir linhas/comentários | Preserva a chave; a linha serve apenas ao diagnóstico. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`) |
+   | Renomear função, classe ou arquivo | Muda a chave: tratar como **reidentificação**, sem registrar como cura. Consequência da composição em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:132`. |
+   | Mover função para outro arquivo ou escopo | Também muda a chave: exige correspondência explícita entre origem e destino. Mesma composição em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`. |
+   | Código no nível do módulo | `arquivo::<modulo>`. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:132`) |
+   | Método de classe / função aninhada | `arquivo::Classe.metodo` / `arquivo::externa.interna`; usar somente o último nome perderia essa distinção. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:132`) |
+   | Lambda | Recomendo contar no escopo lexical que a contém, declarando essa agregação; é o comportamento do percurso existente, que não cria nome para lambda. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:93`, `:133`) |
+
+   **A contagem mede ocorrências, não identidade dos leitores:** substituir uma ocorrência por outra dentro da mesma chave preservaria o número e escaparia dessa comparação. Limite inferido do formato do anexo; implementação da nova catraca **[não verificado]**.
+
+   Falta definir quais formas entram: há `getattr(p, 'data_evento', None)` com nome literal fora do juiz e extrações explícitas por `values_list(..., 'data_evento')`. Esses casos precisam entrar ou aparecer nominalmente nos limites; não são nomes calculados dinamicamente. (`app/chamados/juizes.py:652`, `:854`; `app/chamados/services/fio.py:1854`, `:2024`)
+
+   A exceção deve ser **somente a função indicada**, preservando os demais leitores de `juizes.py`: existe leitura direta em outra função desse mesmo arquivo. (`app/chamados/juizes.py:250`, `:271`, `:334`)
+
+2. **A label `chamados` permite varrer todo `/app`; não fornece acesso ao serviço irmão `mensageria/`.** O P13 já demonstra um teste dessa label calculando a raiz por `__file__` e percorrendo todo `APP`, inclusive outros apps. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:33`, `:144`)
+
+   - **Quem monta `LABELS`:** a fonte é `bin/regua.sh:23`; o pre-push lê essa declaração em `bin/pre-push.sh:184` e passa as labels ao runner em `:186`.
+   - **Cwd configurado:** `/app`, em `app/Dockerfile:8`; os comandos mostrados não fornecem `-w`. (`bin/pre-push.sh:143`; `bin/regua.sh:166`)
+   - **Arquivos disponíveis:** régua e pre-push montam apenas `app/` em `/app`; o archive do pre-push também extrai apenas `app`. Assim, `api/` e `templates/` ficam dentro da árvore disponível. (`bin/regua.sh:167`; `bin/pre-push.sh:144`; `bin/arvore_do_push.sh:98`; `app/config/settings/base.py:72`)
+   - **Mensageria:** possui montagem própria de `./mensageria` em `/srv`. Para incluí-la, seria necessário ampliar extração, montagem e raiz do censo; trocar a label não resolve. (`docker-compose.mensageria.yml:3`, `:14`; `bin/arvore_do_push.sh:98`)
+
+   Isso descreve a configuração da cópia; mounts e cwd de um container efetivamente executado são **[não verificado]**.
+
+3. **O regex não perde uma leitura direta apenas porque houve `with/as` ou renomeação da variável.** Nos exemplos sintéticos abaixo, a ocorrência continua escrita na atribuição ou no acesso posterior; execução como template Django **[não verificado]**:
+
+   | Forma sintética | Ocorrências de `\.data_evento\b` |
+   |---|---:|
+   | `{% with d=q.data_evento %}{{ d }}{% endwith %}` | 1 |
+   | `{% with q.data_evento as d %}{{ d }}{% endwith %}` | 1 |
+   | `{% with q as outra %}{{ outra.data_evento }}{% endwith %}` | 1 |
+   | `{{ q\|attr:"data_evento" }}` | 0 |
+
+   `|attr` é, portanto, uma lacuna sintática **se esse filtro estiver disponível**; sua disponibilidade nesta aplicação é **[não verificado]**. Filtros e tags podem esconder o acesso no Python: a casa já possui filtros que recebem a pergunta e delegam a leitura a uma função. (`app/chamados/templatetags/chamados_extras.py:15`, `:30`)
+
+   O contrato deve chamar isso de **censo de acessos diretos no markup**, retirar comentários antes de contar e declarar acessos indiretos como limite. Há helper existente para comentários de bloco/HTML, mas ele não remove `{# ... #}`. (`app/core/censo_fonte.py:125`, `:132`, `:133`)
+
+   O total Python **190** permanece **[não verificado]** sem o detector e o censo correspondentes; o subtotal direto dos templates da cópia é **5**, nos locais citados no veredito.
+
+4. **Existem varredores de `data_evento`, porém os identificados julgam escrita.** O P13 AST procura atribuições e chamadas de escrita e autoriza `fio::gravar_dia_do_fato`; o contrato de estado também registra esse campo e procura escritas. Uma catraca de leitores tem objeto distinto e pode permanecer como instrumento sem recalcular o dia. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:37`, `:97`, `:103`, `:165`; `app/core/tests/test_contract_escritores_estado.py:64`, `:179`)
+
+   Já existe reutilização do scanner P13 pelo selo E1: não convém copiar esse instrumento para reimplementar escrita. (`app/chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:33`, `:51`, `:115`)
+
+   Há uma **colisão concreta numa cura futura**: outro selo exige literalmente `data_pergunta=p.data_evento`. Migrar esse leitor ao juiz exigirá atualizar essa expectativa junto. (`app/chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:129`, `:130`)
+
+   Não identifiquei outro censo geral de leituras; ausência absoluta **[não verificado]**.
+
+5. **Os varredores de diretório relevantes impõem estas condições:**
+
+   | Selo | Efeito sobre os arquivos propostos |
+   |---|---|
+   | O20 | Enumera `test_contract_*.py`: o nome `test_catraca_…` fica fora. Se renomeado, passa pelo teto de contratos que leem texto cru. (`app/core/tests/test_o20_contrato_julga_codigo.py:164`, `:176`, `:188`, `:204`) |
+   | Relógio | Enumera `test*.py`; chamadas de relógio sem congelamento podem reprovar o novo teste. (`app/core/tests/test_selo_teste_sem_relogio.py:42`, `:53`, `:67`) |
+   | CRON15 | Parseia todo `.py` diretamente em `*/tests/`; exige sintaxe válida e mantém fechada a lista de marcas. (`app/core/tests/test_marca_cron15.py:29`, `:33`, `:35`, `:50`) |
+   | Vocabulário | Inclui testes e seu texto; aceita `.py/.html/.js/.md`, deixando o JSON fora. (`app/pautas/tests/test_contract_vocabulario.py:19`, `:20`, `:29`, `:41`) |
+   | Testes fora do Git | Cobra o `.py` versionado; as colheitas mostradas não incluem JSON. (`bin/testes_fora_do_git.sh:46`, `:49`, `:57`) |
+   | P13/escritores | Excluem `tests/` e filtram `.py`; as fixtures desse teste e seu JSON ficam fora dessas varreduras. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:147`, `:150`; `app/core/tests/test_contract_escritores_estado.py:191`, `:194`) |
+
+   Não encontrei uma enumeração geral de `tests/*.json`; garantia de ausência **[não verificado]**. O selo de labels verifica apps com testes, não a permanência desse arquivo específico; o selo de Git tampouco guarda arquivos removidos. Portanto, manter a remoção do guardião como `!` declarado é coerente, mas não prometer proteção automática por esses selos. (`bin/tests/test_labels_fonte_unica.sh:24`, `:30`, `:32`; `app/core/tests/test_selo_testes_no_git.py:42`)
+
+   A promessa de rodar “em segundos”, o caso injetado que fica vermelho e a monotonicidade contra uma edição simultânea que aumente o JSON continuam **[não verificado]** sem implementação e execução do instrumento.
+
+## 11/11 15:12 · sessao 96eb919cc168 · - · - · origem=Ronald (tmux)
+
+Para (5), não há colisão demonstrada apenas por criar os dois nomes propostos; sem implementação, colisões por conteúdo são [não verificado].
+
+- **O20:** enumera somente `*/tests/test_contract_*.py`; `test_catraca_data_evento_cru.py` fica fora desse censo. Se renomeado para `test_contract_*`, as leituras cruas passam pelo teto zero, com tratamento explícito para AST e exceções declaradas. (`app/core/tests/test_o20_contrato_julga_codigo.py:160`, `:176`, `:178`, `:188`, `:197`, `:204`)
+- **Relógio:** o novo `.py` entra porque o selo enumera `test*.py`; chamadas reais de relógio sem congelamento podem provocar vermelho. O JSON fica fora. (`app/core/tests/test_selo_teste_sem_relogio.py:32`, `:42`, `:48`, `:53`, `:67`)
+- **Marca CRON15:** enumera todos os `.py` diretamente em `*/tests/`, faz `ast.parse` sem tolerar erro, e só admite os 15 métodos marcados. O JSON é excluído pela extensão. (`app/core/tests/test_marca_cron15.py:25`, `:29`, `:32`, `:35`, `:48`)
+- **Raio de um sítio:** inclui testes, pois as exclusões são apenas migrations/node_modules/staticfiles; exige Python compilável e procura `or` com leitura de `raio_metros`. Uma fixture textual `"p.data_evento"` não satisfaz esse critério. JSON fica fora do `rglob('*.py')`. (`app/core/tests/test_selo_raio_de_um_sitio.py:44`, `:45`, `:50`, `:66`, `:73`, `:92`, `:97`)
+- **Vocabulário:** varre inclusive testes e prosa do `.py`; palavras proibidas podem colidir. Só aceita extensões `.py/.html/.js/.md`, excluindo JSON. (`app/pautas/tests/test_contract_vocabulario.py:19`, `:20`, `:29`, `:32`, `:35`, `:41`)
+- **Testes fora do Git:** cobra o novo `.py` versionado; não inclui o JSON nas duas colheitas mostradas. Esse selo não prova a existência obrigatória do novo teste: o próprio teste de comparação declara que arquivo no Git e ausente da árvore está fora de seu escopo. (`bin/testes_fora_do_git.sh:46`, `:48`, `:49`, `:57`; `app/core/tests/test_selo_testes_no_git.py:42`)
+- **P13/escritores:** não acusam fixtures dentro de `chamados/tests/`, pois excluem a pasta; JSON também é excluído pelo filtro `.py`. (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:146`, `:147`, `:150`; `app/core/tests/test_contract_escritores_estado.py:190`, `:191`, `:194`)
+
+Não encontrei uma varredura geral de `tests/*.json`; afirmar que nenhuma existe em toda a árvore continua **[não verificado]**.
+
+## 11/11 15:10 · sessao 26eb251345fa · - · - · origem=Ronald (tmux)
+
+A label `chamados` pode conter um teste que leia todo `/app`; ela seleciona testes, enquanto o alcance da varredura depende do código do teste. Há precedente: o selo P13 calcula a raiz de `app/` por `__file__` e executa `os.walk(APP)`, atravessando os outros apps. `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:33,144-155`.
+
+| Ponto | Evidência |
+|---|---|
+| Fonte única das labels, incluindo `api` e `chamados` | `bin/regua.sh:23` |
+| Pre-push monta `LABELS` lendo essa fonte | `bin/pre-push.sh:184-185` |
+| Pre-push passa labels ao runner Django | `bin/pre-push.sh:186-188` |
+| Régua passa `${ONLY:-$LABELS}` ao runner | `bin/regua.sh:168-169` |
+| Régua monta somente `~/saas-hasner/app` em `/app` | `bin/regua.sh:14,166-167` |
+| Pre-push monta somente `$ARVORE_PUSH/app` em `/app` | `bin/pre-push.sh:142-145` |
+| Cópia do pre-push extrai apenas `app` do commit | `bin/arvore_do_push.sh:98` |
+| Cwd previsto para a imagem core: `/app` | `app/Dockerfile:8` |
+| Templates são de `BASE_DIR / 'templates'`, sendo `BASE_DIR` a raiz de `app` | `app/config/settings/base.py:4,70-74` |
+| `mensageria/` é outro serviço, construído de `./mensageria`, montado em `/srv` | `docker-compose.mensageria.yml:3,13-14` |
+| Cwd desse outro serviço é `/srv` | `mensageria/Dockerfile:2` |
+
+**Conclusão para o contrato:** uma varredura da raiz `/app` alcança `api/` e `templates/`; não alcança o diretório irmão `mensageria/`, pois ele não é extraído nem montado no container de teste core. `bin/arvore_do_push.sh:98`; `bin/pre-push.sh:144`; `bin/regua.sh:167`; `docker-compose.mensageria.yml:13-14`.
+
+Se “todo o app” inclui o serviço irmão `mensageria/`, o contrato precisa declarar esse limite ou mudar a extração/montagem e a raiz da varredura; trocar apenas a label não fornece os arquivos ausentes. `bin/arvore_do_push.sh:98`; `bin/pre-push.sh:144,186-188`.
+
+O selo de labels cobra apps Django com testes sob `app/*/`, identificados por `apps.py`; ele não prova cobertura do serviço irmão. `bin/tests/test_labels_fonte_unica.sh:24-35`.
+
+Cwd e mounts efetivos da imagem/container em execução: **[não verificado]**; as referências acima descrevem a configuração da cópia.
+
+## 11/11 15:10 · sessao 397f44057cf9 · - · - · origem=Ronald (tmux)
+
+Não encontrei catraca geral de **leituras** de `data_evento`; ausência absoluta fica [não verificado]. Os instrumentos próximos têm objetos distintos:
+
+- **P13 AST controla escrita:** detector em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:78`, percurso de produção em `:144`, exclusões em `:147`, único ponto autorizado em `:37` e reprovação em `:165`.
+- **P13 de estado também controla escrita**, por regex, em seis apps: `app/core/tests/test_contract_escritores_estado.py:12`, `:13`, `:64`, `:179`, `:186`. Cobra novos escritores e entradas mortas em `:203` e `:212`.
+- **E1 15d2 reutiliza P13**, inclusive seu censo; já há sobreposição consciente de verificações de escrita: `app/chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:33`, `:51`, `:115`. Uma catraca de leitores não responde à mesma pergunta desses instrumentos. [inferência: referências anteriores]
+- **Dia do fato** varre a chave `data_turno` em `.get`/subscript, não `data_evento`: `app/chamados/tests/test_contract_dia_do_fato.py:35`, `:59`. **Vitalidade** varre `materializada_em`/`validada_em`: `app/chamados/tests/test_contract_leitores_vitalidade.py:14`, `:305`.
+
+Há uma colisão concreta ao **curar dívida depois**: o selo exige literalmente `data_pergunta=p.data_evento` no reconciliador. Migrar esse leitor ao juiz exigirá ajustar o selo correspondente, preservando seu caso comportamental: `app/chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:122`, `:129`, `:130`.
+
+## 11/11 15:08 · sessao 88a351155ddf · DATA-EVENTO-CRU · censo · origem=Code
+
+O censo da cópia resulta em **341 locais leitores Python: 190 operacionais, 149 em testes e 2 em migração**. A unidade é o par único `arquivo:linha`; acessos repetidos na mesma linha contam uma vez. A relação integral está abaixo, incluindo expansões ORM como `values(*chave)` (`app/chamados/services/fio.py:1948`) e consumo de chave serializada (`mensageria/nucleo/ferramentas.py:127`).
+
+O juiz retorna **`None` para conversa**, independentemente do dia civil gravado (`app/chamados/juizes.py:338`). Nos quadros, **S** significa “sim, o cru pode fornecer o dia civil onde o juiz fornece `None`”; **N**, “não, há exclusão/tratamento de conversa”; **NA**, “não se aplica à pergunta sobre dia do fato”. **S\*** significa “sim se conversa alcançar esse ramo”; a ocorrência concreta permanece [nao verificado].
+
+A identidade da cópia com o HEAD solicitado está [nao verificado]: não há metadados Git disponíveis. Execução e impacto em produção estão [nao verificado].
+
+**(a) Python — leitores operacionais: 190 locais.**
+
+Nas tabelas, `arquivo:1,2` enumera dois locais: `arquivo:1` e `arquivo:2`.
+
+| Arquivo:linhas | Função | Uso do valor | Conversa |
+|---|---|---|---|
+| `app/api/views.py:1165,1166` | `api_chamados_v2` | Repassa ISO e rótulo de dia | S |
+| `app/api/views.py:2637` | `api_disputa_responder` | Repassa dia em auditoria | S |
+| `app/api/views_mensageria.py:568` | `_item_validar` | Repassa ISO na fila | S |
+| `app/chamados/canal.py:65,67,72,79` | `perguntas_mudas_com_resposta` | Filtra não nulo; ordena; associa resposta por dia; repassa | S |
+| `app/chamados/juizes.py:80,81` | `_dia_da_disputa` | Reúne dias para escolher o menor; conversa excluída em `:78` | N |
+| `app/chamados/juizes.py:214` | `dias_do_fato` | Reúne dias; conversa excluída em `:213` | N |
+| `app/chamados/juizes.py:271` | `_plantio_na_hora_do_slot` | Ancora comparação de plantio em D/D+1 | S* |
+| `app/chamados/juizes.py:652` | `_celulas_da_pergunta` | Confere dia da célula contra pergunta | S* |
+| `app/chamados/juizes.py:854` | `_chave_memo_pv` | Compõe chave de invalidação do memo | NA |
+| `app/chamados/juizes.py:1788` | `_marco_esperado_da_grade` | Consulta grade pelo dia cru | S* |
+| `app/chamados/juizes.py:2327,2331` | `_dias_das_perguntas_vivas` | Filtra/reúne dias; `conversa=False` em `:2328` | N |
+| `app/chamados/models.py:364` | `ChamadoColaborador._vivas_entre` | Consulta competência entregue | S |
+| `app/chamados/models.py:390,391` | `ChamadoColaborador._plano_pergunta_viva` | Busca cobrança sobrevivente no dia | S |
+| `app/chamados/models.py:2753` | `PerguntaDisputa.q_dos_fatos` | Predicado ORM por dia; exclui conversa em `:2754` | N |
+| `app/chamados/models.py:2940,2956,2962` | `PerguntaDisputa._nascer` | Compara rechaveamento; relata recusa; captura estado anterior; ramo `not conversa` em `:2893` | N |
+| `app/chamados/models.py:3228` | `PerguntaDisputa.linhas_do_evento` | Projeta dia para acordar células | S |
+| `app/chamados/reconciliador.py:370` | `lavrar_sem_turno_aberto` | Consulta turno aberto pelo dia | S* |
+| `app/chamados/reconciliador.py:736` | `_dia_fora_do_alcance_c` | Testa presença de data para o alcance | S |
+| `app/chamados/reconciliador.py:1050` | `_orfas_abertas` | Filtra data não nula | S |
+| `app/chamados/reconciliador.py:1082,1088,1090` | `veredito_orfa` | Testa data; compara com hoje; consulta encerramento do dia | S* |
+| `app/chamados/reconciliador.py:1152` | `encerrar_orfas_pela_lampada` | Repassa dia em auditoria | S* |
+| `app/chamados/reconciliador.py:1303,1305,1307` | `semear_eventos_celula` | Deduplica e localiza célula por dia | S* |
+| `app/chamados/reconciliador.py:1557,1567` | `reatar_pergunta_orfa` | Deriva destino e pesquisa histórico pelo dia | S* |
+| `app/chamados/services/aviso_pendencia.py:16` | `aviso_texto_livre` | Exibe dias cobrados na mensagem | S |
+| `app/chamados/services/carga_pergunta_viva.py:135` | `CargaDaVida.__init__` | Monta janela de testemunhas D/D+1 | S* |
+| `app/chamados/services/carga_pergunta_viva.py:147` | `CargaDaVida.trancada` | Consulta par colaborador/dia trancado | S* |
+| `app/chamados/services/cobranca.py:83` | `checar_cobranca` | Reúne/ordena dias das pendências | S |
+| `app/chamados/services/competencia_trancada.py:107` | `medir` | Filtra perguntas pela competência | S |
+| `app/chamados/services/competencia_trancada.py:252,256` | `reabrir` | Filtra competência; repassa dia na auditoria | S |
+| `app/chamados/services/declaracao_texto.py:590` | `insumos_em_regularizacao` | Agrupa por motivo/dia; origem `linhas_dos_fatos` em `:587` | N |
+| `app/chamados/services/disputa_emissao.py:399,418` | `gerar_perguntas_disputa` | Filtra pergunta existente pelo dia, com `conversa=False` | N |
+| `app/chamados/services/disputa_emissao.py:1074` | `criar_disputa_a_partir_de_chamados_orfaos` | Usa dia da pergunta como fallback do contexto | S* |
+| `app/chamados/services/disputa_emissao.py:1415` | `_ja_perguntou` | Filtra motivo/dia com `conversa=False` | N |
+| `app/chamados/services/disputa_emissao.py:1498,1531` | `responder_pergunta_disputa_core` | Repassa dia em recusa/auditoria | S |
+| `app/chamados/services/disputa_emissao.py:1863,1935` | `_resolver_perguntas_por_chamado_resolvido` | Entrega dia a `via_pelo_fato` | S* |
+| `app/chamados/services/explicador.py:70` | `explicar_pergunta` | Exibe dia na explicação | S |
+| `app/chamados/services/explicador.py:122,126` | `por_que_nao_fecha` | Ordena por dia; monta janela de batidas | S |
+| `app/chamados/services/fabrica_da_celula.py:148` | `motivos_a_perguntar` | Filtra dia com `conversa=False` | N |
+| `app/chamados/services/fabrica_da_celula.py:170` | `perguntar` | Filtra dia com `conversa=False` | N |
+| `app/chamados/services/fio.py:87` | `data_do_fato_de` | Retorna cru como fato e compara com dia do chamado | S |
+| `app/chamados/services/fio.py:776` | `_costura_nao_mata_o_fio` | Consulta competência pelo cru | S |
+| `app/chamados/services/fio.py:867,934` | `reapontar_resolvedora` | Testa necessidade de datar; compara célula anterior/posterior | S |
+| `app/chamados/services/fio.py:953` | `_colisao_ao_datar` | Confere estado gravado contra data pedida | NA |
+| `app/chamados/services/fio.py:1013` | `rechavear_data_evento` | Captura dia anterior; conversa recusada em `:1018` | N |
+| `app/chamados/services/fio.py:1068,1072` | `rechavear_no_reuso` | Consulta veto de competência; relata dia anterior | S* |
+| `app/chamados/services/fio.py:1109` | `reuso_sem_rechave` | Compara gravado com juiz do turno; universo `conversa=False` em `:1099` | N |
+| `app/chamados/services/fio.py:1133,1136` | `violacao_de_saida` | Confere valor persistido contra valor entregue ao escritor | NA |
+| `app/chamados/services/fio.py:1362` | `retratar_duplicata` | Repassa dia na justificativa | S* |
+| `app/chamados/services/fio.py:1412` | `q_do_horizonte` | Filtra horizonte com `conversa=False` | N |
+| `app/chamados/services/fio.py:1419` | `q_do_horizonte_ou_sem_dia` | Acrescenta teste de data nula ao horizonte | S |
+| `app/chamados/services/fio.py:1447` | `_vizinhos_do_fato` | Consulta identidade pelo dia; conversa retorna vazio em `:1445` | N |
+| `app/chamados/services/fio.py:1460` | `chave_do_dia` | Compõe identidade com o cru | S* |
+| `app/chamados/services/fio.py:1495,1497` | `_dia_do_fato` | Usa cru no ramo de instância de marco | S* |
+| `app/chamados/services/fio.py:1630` | `dia_do_turno_da_linha` | Fallback do escritor; conserva dia civil da conversa em `:1632` | S — contrato de escrita |
+| `app/chamados/services/fio.py:1800` | `universo_do_fato` | Compara identidade; exige `not p.conversa` em `:1801` | N |
+| `app/chamados/services/fio.py:1854` | `fecho_cruza_dias` | Projeta dia para agrupar; universo exclui conversa em `:1852` | N |
+| `app/chamados/services/fio.py:1946,1948,1949,1950,1955,1958,1970,1985` | `grupos_de_colisao` | Filtra nulo; agrupa/ordena por chave; lê dict de `values`; correlaciona `OuterRef`; filtra/recorta grupos | N — `_no_fato` exclui conversa em `:1433` |
+| `app/chamados/services/fio.py:2000,2005` | `fora_do_indice` | Conta perguntas sem dia pelo ORM | N — mesma origem `_no_fato` |
+| `app/chamados/services/fio.py:2024` | `batida_sem_origem_no_horizonte` | Projeta dia para distinguir horizonte/acervo | N — mesma origem `_no_fato` |
+| `app/chamados/services/historico.py:108` | `_eventos_dos_chamados` | Exibe dia na narrativa do histórico | S |
+| `app/chamados/services/limbo_folgas.py:203` | `filhos_no_defeito` | Filtra dia com `conversa=False` | N |
+| `app/chamados/services/materializacao.py:280,283,284` | `_tipo_pelo_marco` | Consulta grade pelo dia cru | S* |
+| `app/chamados/services/materializacao.py:346,347` | `_ts_tipo_do_plantio` | Usa cru como data-base do plantio | S* |
+| `app/chamados/services/materializacao.py:478,479` | `_declarar_ausencia_de_pergunta` | Usa cru como dia da ausência | S* |
+| `app/chamados/services/materializacao.py:522,538` | `_materializar_ausencia_de_resposta` | Cria ausência no dia; filtra perguntas irmãs | S* |
+| `app/chamados/services/materializacao.py:629` | `perguntas_absorvidas_por` | Filtra perguntas pelo dia da ausência | S* |
+| `app/chamados/services/materializacao.py:1270` | `_materializar_uma` | Entrega dia a `via_pelo_fato` | S* |
+| `app/chamados/services/passivo_validado.py:113` | `_dia_do_plantio` | Retorna cru ou dia local do instante | S* |
+| `app/chamados/services/passivo_validado.py:519,520` | `_plantar_o_dia` | Acrescenta dia cru ao conjunto afetado | S* |
+| `app/chamados/services/pergunta_no_app.py:115` | `retencao` | Testa dia, mas exige `not conversa` no mesmo predicado | N |
+| `app/chamados/services/relavra_via.py:103` | `via_de_hoje` | Entrega dia ao juiz da via; conversa excluída em `:101` | N |
+| `app/chamados/services/relavra_via.py:154` | `relavrar_dia` | Filtra dia com `conversa=False` | N |
+| `app/chamados/services/tarefa_do_dia.py:236` | `_tarefa_pura` | Seleciona perguntas do dia | N no carregador operacional, que exclui conversa em `:375` |
+| `app/chamados/services/tarefa_do_dia.py:376,380` | `CargaDaTarefa.__init__` | Filtra janela e agrupa por dia; `conversa=False` em `:375` | N |
+| `app/chamados/services/tarefa_do_dia.py:486` | `CargaDaTarefa._ler_vida` | Exclui pares exportados pelo dia | N — mesmo carregamento |
+| `app/chamados/services/validacao.py:269` | `_aceitar_a_folga` | Usa cru como dia a declarar | S* |
+| `app/chamados/services/validacao.py:446` | `validar_pergunta` | Dispara recálculo pelo dia cru | S* |
+| `app/chamados/services/validacao.py:497,510` | `validar_pergunta` | Repassa dia na auditoria | S |
+| `app/chamados/services/vigia_fio.py:816` | `carimbos_sem_lastro_por_dono` | Classifica competência entregue pelo cru | S |
+| `app/chamados/veredito_lavrado.py:273` | `lavrar` | Calcula expiração da janela pelo cru | S |
+| `app/chamados/views_cobrar.py:176,185` | `validar_inline` | Ordena perguntas por dia; lê chave serializada do canal | S |
+| `app/colaboradores/services/calendario.py:473,477` | `contexto_calendario` | Filtra intervalo e indexa pergunta viva por dia | S |
+| `app/folha/previa.py:65,67` | `montar_previa` | Filtra competência e agrupa perguntas por dia | S |
+| `app/ponto/management/commands/mapa_divergencia.py:272,273` | `Command.handle` | Filtra/projeta dias; conta furo coberto por pergunta | S |
+| `app/ponto/management/commands/vigia_plantio_overnight.py:75,86,90` | `batidas_fora_do_turno_da_pergunta` | Filtra FK; monta janela; compara turno com cru | S* |
+| `app/ponto/services/dia_do_colab.py:65` | `dia_do_colab` | Filtra perguntas para o relato do dia | S |
+| `app/ponto/services/veredito_celula.py:180` | `fechar_o_fio_do_dia` | Filtra dia com `conversa=False` | N |
+| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` | Lê JSON e renomeia para `data_do_caso` | S |
+
+Os comandos operacionais completam os 190 locais:
+
+| Arquivo:linhas | Função | Uso | Conversa |
+|---|---|---|---|
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:63,73,74` | `_candidatos_i8` | Pesquisa chamados pelo dia | S* |
+| Mesmo arquivo`:148` | `_contraprova_i8bx` | Confere competência exportada | S* |
+| Mesmo arquivo`:160,162` | `_cobre_ausencia_i21` | Consulta cobertura de ausência | S |
+| Mesmo arquivo`:282` | `_piso_f3_antes_do_gerador` | Compara dia com primeira célula | S |
+| Mesmo arquivo`:298` | `_contraprova_f3g` | Pesquisa célula até o dia cru | S |
+| Mesmo arquivo`:325,326,348,361,373` | `contraprova_piso` | Agrupa por dia; consulta célula, vínculo e competência | S |
+| Mesmo arquivo`:892` | `Command.handle`, I8b | Filtra data não nula | S |
+| Mesmo arquivo`:914,926,930` | `Command.handle`, I8b | Confere competência/célula após recusa da resolvedora | N para conversa aceita pela resolvedora (`app/chamados/juizes.py:2251`) |
+| Mesmo arquivo`:957` | `Command.handle`, I10 | Conta data nula | S |
+| Mesmo arquivo`:1665,1708` | `Command.handle`, F1 | Escolhe dia e consulta perguntas desse dia | S |
+| Mesmo arquivo`:1778,1779,1804` | `Command.handle`, F3 | Filtra passado e consulta lei do dia | S |
+| `app/chamados/management/commands/backfill_decisoes_pergunta.py:60,69` | `linhas_a_criar`, `_escoar` | Carrega/lê cru; conversa vai a balde sem competência em `:73` | N no resultado |
+| Mesmo arquivo`:104` | `admin_decidiu_sem_ato` | Filtra nulo/horizonte com discriminação de conversa | N |
+| Mesmo arquivo`:115,118,120` | `competencia_de` | Calcula competência pelo cru | S* |
+| Mesmo arquivo`:282,283` | `aplicar` | Conta perdedoras sem dia/abaixo do horizonte | N — universo do fato |
+| Mesmo arquivo`:371` | `_grupos_fora` | Projeta dia para o recorte dos grupos | N — universo do fato |
+| `app/chamados/management/commands/backfill_veredito_lavrado.py:111` | `Command.handle` | Calcula expiração pelo cru | S |
+| `app/chamados/management/commands/dedup_perguntas_fato.py:85,86` | `Command.handle` | Conta perdedoras com/sem dia | N — grupos do fato |
+| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:74` | `Command.handle` | Repassa dia na justificativa | S* |
+| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:97` | `_fonte_viva` | Compara fonte/turno com dia gravado | N no comando: `conversa=False` em `:206` |
+| Mesmo arquivo`:144,148,158,163` | `classificar` | Monta janela; captura/compara dia anterior | N no mesmo universo |
+| Mesmo arquivo`:205,209,211` | `Command.handle` | Filtra não nulo e intervalo | N — `:206` |
+| Mesmo arquivo`:309` | `Command._veto_do_grupo` | Projeta dias para veto de competência | S* |
+| Mesmo arquivo`:392` | `Command._migrar` | Relê dia persistido | N no universo migrado |
+| Mesmo arquivo`:442,450` | `Command._descarimbados` | Busca perguntas dos dias antigo/novo e captura dia | S |
+| Mesmo arquivo`:481,488` | `Command._reverter` | Lê JSON de reversão e consulta veto; exclui conversa em `:477` | N |
+| `app/chamados/management/commands/reabrir_orfas_enterradas.py:68,86,91,102,117,144,145` | `Command.handle` | Filtra não nulo; calcula competência; relata dias | S* |
+
+**Testes: 149 locais leitores.** Todos abaixo verificam campo persistido, snapshots, resultado serializado ou filtros de fixtures; a divergência operacional é **NA**. A função exata de cada linha também é emitida por `--details` no script. Como referência explícita do tratamento civil de conversa: `app/chamados/tests/test_e1_v15.py:79`.
+
+Para compactar os nomes de função, `T:` abaixo significa o prefixo literal `test_`.
+
+| Arquivo:linhas | Função — correspondência das linhas |
+|---|---|
+| `app/chamados/tests/test_a2_batida_sem_linha.py:32,33` | `T:MORDE_batida_sem_linha_nao_inventa_dia_pelo_timestamp` |
+| `app/chamados/tests/test_a2_data_evento_batida.py:27,38,51,56` | `27,38 T:pergunta_de_batida_nasce_datada_e_dedupa`; `51 T:batida_23h30_local_data_do_dia_local_nao_utc`; `56 T:contexto_sem_ultima_batida_nasce_conversa` |
+| `app/chamados/tests/test_b2_data_conversa.py:23,24` | `T:conversa_nasce_sempre_e_datada` |
+| `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:127` | `_emitido` |
+| `app/chamados/tests/test_data_do_fato_divergente.py:197` | `T:GOLDEN_conferir_carimba_e_deixa_trilha` |
+| `app/chamados/tests/test_declaracao_texto.py:114` | `T:porta_colab_sem_texto_livre` |
+| `app/chamados/tests/test_e1_identidade_corrida.py:77` | `T:MORDE_duas_na_janela_nascem_UMA_pergunta` |
+| `app/chamados/tests/test_e1_v13.py:67` | `_estado_das_linhas` |
+| `app/chamados/tests/test_e1_v13d_exportada_fora.py:223,224,225,244,246,253,269,270,271,300,404` | `223–225 T:RED_a_linha_da_exportada_fica_fora_contada_e_as_outras_migram`; `244,246 T:RED_materializada_exportada_nao_freia_as_abertas_pelo_descarimbo`; `253 T:RED_o_dry_lista_a_exportada_e_nao_escreve`; `269–271 T:RED_o_GRUPO_sai_inteiro_a_linha_aberta_do_fato_da_exportada_nao_migra`; `300 T:MORDE_virou_exportada_entre_a_classificacao_e_a_linha`; `404 T:RED_reversao_passa_pelo_mesmo_veto` |
+| `app/chamados/tests/test_e1_v15.py:31,59,73,79,102,134` | `31 _estado`; `59 T:RED_nasce_no_dia_do_juiz_com_a_celula_dele`; `73 T:pedido_que_o_juiz_confirma_grava_o_pedido`; `79 T:conversa_grava_o_dia_civil`; `102 T:RED_reuso_costura_no_chamado_do_dia_do_turno`; `134 T:RED_datar_grava_o_dia_do_juiz` |
+| `app/chamados/tests/test_e1_v15b.py:45,90,106` | `45 _estado`; `90 T:RED_3a_episodio_retratado_recusa_as_duas_chamadas_sem_escrever`; `106 T:RED_datar_episodio_retratado_recusa_sem_gravar` |
+| `app/chamados/tests/test_e1_v15c2_descarimbo_efeito.py:58,59,71,78,87` | `58,59 T:RED_passivo_da_linha_FORA_nao_freia_o_apply`; `71 T:MORDE_a_carimbo_vivo_no_dia_NOVO_da_linha_que_migra_e_PAREI`; `78 viva`; `87 T:MORDE_b_delta_do_universo_maior_que_zero_e_PAREI` |
+| `app/chamados/tests/test_e1_v15d.py:39,74` | `39 _estado`; `74 T:RED_R1_reuso_rechaveia_no_mesmo_ato_e_2x_e_o_mesmo_estado` |
+| `app/chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:200,212,214,218,231,307,313,318,328` | `200 T:RED_N_nascer_grava_o_dia_do_juiz_pelo_ponto`; `212,214,218 T:RED_U_reuso_grava_o_dia_do_juiz_pelo_ponto`; `231 T:RED_C_costura_grava_o_dia_do_juiz_pelo_ponto`; `307,313,318 T:RED_Z_reuso_de_linha_sem_dia_recusa_declarado_sem_escrita`; `328 T:RED_K_contador_ve_a_linha_sem_dia` |
+| `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:245,289,291,435,436,444,445,455,457,466,467,469,484` | `245 _estado`; `289,291 T:o_caminho_certo_cumpre_o_contrato`; `435,436 _cen_nascer`; `444,445 _cen_reuso`; `455,457 _cen_nula`; `466,467,469 _cen_outro_episodio`; `484 _cen_noturno` |
+| `app/chamados/tests/test_e1_v15f.py:69,83,127,170,246,247,259,266,268,277` | `69 _conversa`; `83 T:RED_o_apply_nao_move_a_conversa`; `127 T:RED_reuso_com_rechave_e_costura_trava_na_ordem`; `170 grava`; `246,247 T:G7_colisao_no_apply_a_segunda_recusa`; `259 porta`; `266,268 T:G8_escrita_parcial_no_grupo_desfaz_o_grupo_inteiro`; `277 _estado` |
+| `app/chamados/tests/test_e1_v15g.py:52,94,207` | `52 _estado`; `94 T:contra_exemplo_destino_do_mesmo_colaborador_segue`; `207 T:A5_real_linha_do_episodio_gravada_em_D0_o_juiz_decide_e_reusa` |
+| `app/chamados/tests/test_e1_v15g_portas.py:39,106,151,372` | `39 _estado`; `106 T:contra_exemplo_a_linha_de_fato_segue_re_chaveando`; `151 T:contra_exemplo_costurar_a_conversa_sem_datar_segue`; `372 T:DECLARA_a_conversa_viva_do_velho_segue_o_chamado_sem_tocar_o_fato` |
+| `app/chamados/tests/test_e1_v15h.py:109` | `T:RED_ramo_que_data_recusa_e_nao_data` |
+| `app/chamados/tests/test_e1_v5_indice.py:65` | `T:MORDE_marco_duas_cruas_na_janela_dao_UMA_linha` |
+| `app/chamados/tests/test_e1_v5_portas_backfill.py:69,80,114,129,147,193` | `69 T:reapontar_que_data_para_fato_existente_recusa`; `80 T:rechavear_para_fato_existente_recusa`; `114 T:p_canonica_retrata_a_outra_viva_e_e_datada`; `129 T:MORDE_outra_encerrada_recusa_e_nada_se_desfaz`; `147 T:MORDE_destino_recusado_DEPOIS_da_colisao_nao_retrata_ninguem`; `193 _dup_cru` |
+| `app/chamados/tests/test_e1_v6_horizonte.py:97,454` | `97 T:RED_o_banco_nao_indexa_o_acervo_abaixo_do_horizonte`; `454 T:RED_conversa_do_episodio_retratado_nao_nasce_duas_vezes` |
+| `app/chamados/tests/test_e1_v8.py:148` |
+
+[truncado em 20000 de 39862 caracteres]
 
 ## 11/11 15:05 · sessao a0ad56da25bd · PROPORCAO-POR-RISCO · verificador · origem=Code
 
@@ -483,172 +769,4 @@ Entrada concreta: no mesmo arquivo, `Colab.valor_hora` retorna `self.salario / 2
 
 A reprodução em memória retornou zero achados nos dois lados; sem achados, a declaração B recebe rc 0. (bin/selo_proporcao.py:557, bin/selo_proporcao.py:676, bin/selo_proporcao.py:680)
 
-## 11/11 14:43 · sessao 03b6d7f3c138 · - · - · origem=Ronald (tmux)
-
-- **BLOQUEANTE — ordem de trava nova permite deadlock.** O laço adquire uma âncora, escreve a Pauta e só então pede a próxima (`app/chamados/services/fecho_runtime.py:116`, `:117`, `:122`). A porta atualiza o mesmo contador DP e conserva essa trava até o commit (`app/pautas/services.py:188`, `:352`, `:354`; `app/chamados/services/fecho_runtime.py:142`). Intercalação permitida: A possui âncoras `[a,b]`, segura `a` e contador DP; B possui `[b,c]`, segura `b` e espera contador DP; A espera `b`. Ordenar cada lote não remove o ciclo. Reprodução em duas conexões: **[nao verificado]**.
-
-- **Dia civil do novo agrupador: curado pela CLASSE.** `fecho_runtime.py` delega ao juiz existente e exclui `None` antes da janela, sem substituição por data civil (`app/chamados/services/fecho_runtime.py:100`, `:107`, `:108`, `:111`; `app/chamados/juizes.py:332`, `:336`).
-
-- **“Nenhum `data_evento` cru no caminho S143”: NÃO. FILA preexistente.** O cálculo da recusa de exportada continua lendo `q.data_evento` (`app/chamados/services/disputa_emissao.py:1835`, `:1836`); S128 e HX passam o atributo cru ao juiz da via (`app/chamados/services/disputa_emissao.py:1984`, `:2056`). O gate do chamado também usa a data crua (`app/chamados/models.py:364`, `:390`). A fila para esses significados já está declarada (`app/chamados/services/fio.py:1398`, `:1404`, `:1406`).
-
-- **Coleta revertida: curada pela CLASSE para exceções propagadas e falhas levantadas ao sair do savepoint.** O `post_save` do chamado exige status encerrado e escrita do status (`app/chamados/signals.py:90`, `:96`, `:104`). O contexto coletor envolve o `atomic`, portanto recebe a saída dele antes de publicar; restaura o ContextVar sempre e faz o merge somente após sucesso (`app/chamados/signals.py:115`; `app/chamados/services/fecho_runtime.py:35`, `:39`, `:40`). O receiver conserva best-effort, capturando exceções depois dos contextos (`app/chamados/signals.py:117`). Falhas de carimbo/save propagam (`app/chamados/models.py:3138`, `:3142`, `:3148`, `:3156`). **Não achei caminho concreto** com rollback silencioso de todo o savepoint S143 e publicação do lote; cobertura desse cenário **[nao verificado]**.
-
-- **Relógio fora da borda: não curado, FILA preexistente.** S143 fornece `hoje=None`, e C6 pode consultar `date.today()` (`app/chamados/services/disputa_emissao.py:1943`, `:1945`; `app/chamados/juizes.py:577`). Há ainda leituras de instante para carimbos, anteriores ao delta (`app/chamados/services/disputa_emissao.py:1984`, `:2041`).
-
-- **Alcance restrito permanece.** Só as duas bordas humanas instalam o adaptador (`app/chamados/services/acoes_chamado.py:315`, `:316`; `app/chamados/services/fio.py:721`, `:722`). Fora de contexto, o coletor não faz nada (`app/chamados/services/fecho_runtime.py:13`, `:19`). `fechar()` continua chamando a transição diretamente (`app/chamados/models.py:452`, `:454`); becos, reconciliador e fantasmas continuam chamando o resolver sem instalar o ato (`app/chamados/services/becos.py:54`; `app/chamados/reconciliador.py:536`, `:1648`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`). O teste de passivo planta o chamado já encerrado por SQL; não prova todos os fechamentos humanos futuros (`app/chamados/tests/test_e4b_c6_orm.py:161`, `:162`, `:165`).
-
-- **Não achei juiz novo ou escritor paralelo no delta produtivo.** Vitalidade, tranca, HX e fechamento de disputa continuam nas autoridades existentes (`app/chamados/services/disputa_emissao.py:1964`, `:1968`, `:2007`, `:2046`, `:2089`); a persistência de Pauta continua exclusivamente pela porta (`app/chamados/services/fecho_runtime.py:122`; `app/pautas/services.py:180`).
-
-## 11/11 14:43 · sessao 68bad0c49046 · - · - · origem=Ronald (tmux)
-
-Censo externo a `app/chamados`, com unidade **arquivo:linha única**:
-
-- **16 leitores de produção**, zero escritor direto.
-- **6 leitores em testes**, **36 escritores diretos em testes**, mais **1 dict destinado a create** e **2 fixtures SimpleNamespace**. [nao verificado]
-- **Zero colisão com outro modelo encontrada**; única definição de campo em classe: `app/chamados/models.py:2423` (`PerguntaDisputa`).
-- Não há `AGENTS.md` na cópia [nao verificado por arquivo:linha; busca `rg --files` sem resultado].
-
-| Local | Função | Uso | Conversa |
-|---|---|---|---|
-| `app/api/views.py:1165` | `api_chamados_v2` | ISO em resposta JSON | sim |
-| `app/api/views.py:1166` | `api_chamados_v2` | Rótulo de data em JSON; comentário chama de dia do fato em `:1160` | sim |
-| `app/api/views.py:2637` | `api_disputa_responder` | Repassa a mensagem de log | não se aplica |
-| `app/api/views_mensageria.py:568` | `_item_validar` | ISO em JSON | sim |
-| `app/colaboradores/services/calendario.py:473` | `contexto_calendario` | Filtra intervalo; import com alias `_PD` em `:469` | sim |
-| `app/colaboradores/services/calendario.py:477` | `contexto_calendario` | Indexa pergunta viva por dia | sim |
-| `app/folha/previa.py:65` | `montar_previa` | Filtra competência | sim |
-| `app/folha/previa.py:67` | `montar_previa` | Agrupa material por dia; consumido em `:95` | sim |
-| `app/ponto/management/commands/mapa_divergencia.py:272` | `Command.handle` | Dois filtros de limite e `.only('data_evento')` | sim |
-| `app/ponto/management/commands/mapa_divergencia.py:273` | `Command.handle` | Marca cobertura do furo por data | sim |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:75` | `batidas_fora_do_turno_da_pergunta` | Filtra relação por data não nula | sim se conversa alcançar o universo; ocorrência real [nao verificado] |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:86` | mesma | Determina janela pela data declarada | idem |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:90` | mesma | Compara data declarada ao turno real | idem |
-| `app/ponto/services/dia_do_colab.py:65` | `dia_do_colab` | Filtra perguntas do retrato diário | sim |
-| `app/ponto/services/veredito_celula.py:180` | `fechar_o_fio_do_dia` | Filtra dia **com `conversa=False`** | não se aplica |
-| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` | Consome JSON: `i.get('data_evento')` → `data_do_caso` | sim |
-
-A relação de batida com pergunta está declarada em `app/ponto/models.py:40`. Os leitores de `vigia_plantio_overnight` não excluem conversa explicitamente (`app/ponto/management/commands/vigia_plantio_overnight.py:73`).
-
-Leitores em testes: [nao verificado]
-
-- `app/escala/tests/test_f3_beco1_cadastro_entrou.py:90`: `_perguntas_no_passado`, filtro `data_evento__lt`.
-- `app/escala/tests/test_f3_beco1_cadastro_entrou.py:129`, `:133`, `:135`: `test_RED_caso_107_folga_em_01_09_rejulga_22_e_27_09_e_poupa_a_exportada`, filtros por dia para conferir emissão/preservação.
-- `app/ponto/tests/test_bateria_lavratura.py:1194`: `test_O222_o_furo_ja_sai_cobrado_na_PRIMEIRA_passada`, filtro por dia e contagem.
-- `app/ponto/tests/test_cobparc_marco_no_periodo.py:386`: `_perguntas_vivas`, filtro por dia.
-
-Escritores em testes, **36 linhas**: [nao verificado]
-
-```text
-app/api/tests/test_api_mensageria_validar.py:85
-app/api/tests/test_atestado_na_resposta.py:34
-app/api/tests/test_falta_na_resposta.py:41
-app/colaboradores/tests/test_calendario_ultimo_recurso_le_o_c6.py:36
-app/colaboradores/tests/test_desligar_guards.py:102
-app/colaboradores/tests/test_desligar_guards.py:108
-app/core/tests/test_ia_cobrar.py:94
-app/core/tests/test_selo_performance.py:321
-app/core/tests/test_selo_placar_lavrado.py:55
-app/escala/tests/test_cobranca_orfa_regeneracao.py:342
-app/escala/tests/test_f3_beco1_folga_na_lista.py:53
-app/escala/tests/test_f3_beco1_folga_na_lista.py:146
-app/escala/tests/test_f3_beco1_folga_na_lista.py:188
-app/ponto/tests/test_bug114_fechador_de_dois_dias.py:238
-app/ponto/tests/test_cobparc_v4_procedentes.py:230
-app/ponto/tests/test_cxr_tela_le_o_motor.py:363
-app/ponto/tests/test_declarar_dia.py:174
-app/ponto/tests/test_fechar3_troca_escala_gate.py:202
-app/ponto/tests/test_fechar3_troca_escala_gate.py:252
-app/ponto/tests/test_fechar3_troca_escala_gate.py:301
-app/ponto/tests/test_fio_resolve_cron.py:67
-app/ponto/tests/test_justificativa_encerra_origem.py:312
-app/ponto/tests/test_justificativa_encerra_origem.py:354
-app/ponto/tests/test_justificativa_encerra_origem.py:515
-app/ponto/tests/test_justificativa_encerra_origem.py:556
-app/ponto/tests/test_jz1_autoridade_unica.py:36
-app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:83
-app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:60
-app/ponto/tests/test_orfas_vigia.py:66
-app/ponto/tests/test_procedencia_batida.py:66
-app/ponto/tests/test_procedencia_batida.py:79
-app/ponto/tests/test_procedencia_batida.py:124
-app/ponto/tests/test_reconciliar_fantasmas.py:84
-app/ponto/tests/test_selo_chokepoint_escrita.py:271
-app/ponto/tests/test_selo_chokepoint_escrita.py:306
-app/ponto/tests/test_x1_folga_sem_adesao.py:384
-```
-
-`app/api/tests/test_api_mensageria_validar.py:85` é `Store`; sua persistência está em `:86` com `save(update_fields=['data_evento'])`. Os outros 35 são kwargs em `create`/`abrir`.
-
-Escritores auxiliares:
-
-- `app/ponto/tests/test_vassoura_orfas_resposta.py:63`: `VassouraOrfasNaoEnterraRespostaTest._perg`, `dict(data_evento=...)`; consumido por `PerguntaDisputa.objects.create(**kw)` em `:66`.
-- `app/escala/tests/test_signal_ancora.py:144`: `RebaseE2LeitoresTest._confere_avulso`, fixture `NS(conversa=True, data_evento=...)`.
-- `app/escala/tests/test_signal_ancora.py:381`: `RebaseE2ContratoRelogioTest._confere_backfill`, fixture `NS(data_evento=...)`.
-
-As strings de testes que contêm código mutante/documentação, como `app/escala/tests/test_signal_ancora.py:158`, não são leitura AST executável do atributo e devem ficar fora da allowlist de leitores.
-
-## 11/11 14:43 · sessao a7d7fc29f2f0 · - · - · origem=Ronald (tmux)
-
-Auditoria das provas, sem executar testes nem acessar banco: [nao verificado]
-
-- **Não achei falso verde demonstrável nos quatro RED c7.** Há limites relevantes: o lock ORM é ensaiado serialmente, na mesma conexão, e o segundo chamado/colaborador é `SimpleNamespace`; prova a ordem SQL `lock→exists` e a reentrega, sem demonstrar concorrência entre duas conexões. **FILA de comprovação**, sem concluir que a trava está errada. (`app/chamados/tests/test_e4b_c6_orm.py:187`, `app/chamados/tests/test_e4b_c6_orm.py:196`, `app/chamados/tests/test_e4b_c6_orm.py:203`, `app/chamados/tests/test_e4b_c6_orm.py:208`, `app/chamados/tests/test_e4b_c6_orm.py:210`)
-
-- **O fake de memória aceita a escrita imediatamente:** apenas acrescenta os argumentos à lista; `atomic` somente controla profundidade, sem desfazer objetos ou escritas. Portanto os verdes de memória não certificam a porta nem rollback real. Isso está compensado parcialmente pelas provas ORM, não ocultado por elas. (`app/chamados/tests/test_e4b_c6_memoria.py:36`, `app/chamados/tests/test_e4b_c6_memoria.py:62`, `app/chamados/tests/test_e4b_c6_memoria.py:65`)
-
-- **Texto não passa só pelo truncamento da porta:** o ORM envolve `escrever` com `wraps`, verifica o comprimento do argumento anterior à porta e exige igualdade com o texto persistido. O ensaio de memória exige contagens exatas de perguntas/limbo, além dos dois motivos preservados. (`app/chamados/tests/test_e4b_c6_orm.py:224`, `app/chamados/tests/test_e4b_c6_orm.py:226`, `app/chamados/tests/test_e4b_c6_orm.py:228`, `app/chamados/tests/test_e4b_c6_memoria.py:191`, `app/chamados/tests/test_e4b_c6_memoria.py:199`)
-
-- **Rollback ORM tem mordida material:** o resolver substituto coleta, faz `UPDATE` real e levanta exceção; depois o teste exige chamado fechado, `UPDATE` revertido e nenhuma Pauta. A captura best-effort da exceção não basta para fazê-lo passar. (`app/chamados/tests/test_e4b_c6_orm.py:237`, `app/chamados/tests/test_e4b_c6_orm.py:246`, `app/chamados/tests/test_e4b_c6_orm.py:249`, `app/chamados/tests/test_e4b_c6_orm.py:250`, `app/chamados/tests/test_e4b_c6_orm.py:251`)
-
-- **Saída do savepoint também tem controle**, porém somente em memória: exige que a nova coleta ainda não esteja no pai durante a saída, simula erro nessa saída e preserva lote anterior. O fechamento da variável `falha` é consumido dentro da própria iteração; não achei execução adiada que produzisse o falso verde sugerido pelo B023. (`app/chamados/tests/test_e4b_c6_memoria.py:260`, `app/chamados/tests/test_e4b_c6_memoria.py:264`, `app/chamados/tests/test_e4b_c6_memoria.py:268`, `app/chamados/tests/test_e4b_c6_memoria.py:272`, `app/chamados/tests/test_e4b_c6_memoria.py:275`)
-
-- **Conversa:** o ORM cria a conversa pela porta e certifica `conversa=True` e dia civil preenchido; entretanto injeta o motivo de recusa e chama o agrupador diretamente. Demonstra a cura do agrupador, não uma execução integral de S143 para conversa. A memória acrescenta o caso de pergunta factual sem data. (`app/chamados/tests/test_e4b_c6_orm.py:174`, `app/chamados/tests/test_e4b_c6_orm.py:178`, `app/chamados/tests/test_e4b_c6_orm.py:182`, `app/chamados/tests/test_e4b_c6_memoria.py:165`)
-
-- **Não achei fixture invisível de “viva/morta” no cenário ORM:** as precondições consultam C6 e entrega antes do fechamento; o caso usa corte 24 e datas do mesmo mês civil em competências diferentes. A prova de memória do corte substitui o fake de janela pelo derivador real. (`app/chamados/tests/test_e4b_c6_orm.py:23`, `app/chamados/tests/test_e4b_c6_orm.py:24`, `app/chamados/tests/test_e4b_c6_orm.py:78`, `app/chamados/tests/test_e4b_c6_orm.py:82`, `app/chamados/tests/test_e4b_c6_memoria.py:119`, `app/chamados/tests/test_e4b_c6_memoria.py:124`)
-
-- **Gate de mutantes tem mordida:** exige GREEN anterior; depois exige rc=1, um teste, um failure, nome do caso, `AssertionError` e mensagem-alvo, rejeitando erro/precondição. A instrumentação altera `__code__` do objeto receiver registrado e o restaura em `finally`, com controle explícito no erro. (`app/chamados/tests/e4b_c6_verificar.py:187`, `app/chamados/tests/e4b_c6_verificar.py:199`, `app/chamados/tests/e4b_c6_verificar.py:75`, `app/chamados/tests/e4b_c6_verificar.py:94`, `app/chamados/tests/e4b_c6_verificar.py:117`, `app/chamados/tests/test_e4b_c6_memoria.py:237`)
-
-- **Limites restantes:** não achei nesses testes ensaio de falha real de `pautas.services.escrever`; o erro antigo exercitado ocorre durante `transicionar`. O teste de passivo continua plantando o chamado já encerrado e não cobre todos os fechamentos futuros fora das duas bordas. (`app/chamados/tests/test_e4b_c6_memoria.py:108`, `app/chamados/tests/test_e4b_c6_memoria.py:113`, `app/chamados/tests/test_e4b_c6_orm.py:157`, `app/chamados/tests/test_e4b_c6_orm.py:162`)
-
-- O dado fornecido informa GREEN 398 e 91 e sucesso dos roteiros; não demonstra suíte inteira nem concorrência real em duas conexões. **[nao verificado]** [nao verificado]
-
-## 11/11 14:41 · sessao b077e75a6436 · FABLE-GABARITO · verificador · origem=Code
-
-1. **FILA.** O aval determina literalmente: “achado do Codex sobre a FORMA de testar (como o selo poderia ser enganado) vira linha de fila, nunca volta”. O salto perdido é um escape da detecção; isso não torna B a obra que grava. (`aval_proporcao_por_risco_1111.txt:1`, anexo fornecido, itens 1–2)
-
-   Entrada concreta: no mesmo módulo, `h()` retorna `1`, `g()` retorna `h()`, e `f(obj)` faz `obj.valor = g(); obj.save()`. Alterar somente o retorno de `h()` para `2` passa B: o consumo procura interseção direta com unidades já marcadas como escritoras, sem propagar pelo intermediário. (`bin/selo_proporcao.py:516-529`; `bin/selo_proporcao.py:676-680`)
-
-2. **BLOQUEANTE quanto à atribuição de “custo aceito no aval”.** O custo literal autorizado é “rotulo ou texto pode regredir sem o selo pegar; quem pega e o meu smoke”; B exige que o diff “nao grava nada”. Chamar escrita entre módulos de custo autorizado amplia esse aval. (`aval_proporcao_por_risco_1111.txt:1`, anexo fornecido, itens 1–2 e frase final)
-
-   Entrada concreta: `leitura.py` muda `h(): return 1` para `return 2`; outro módulo mantém `obj.valor = leitura.h(); obj.save()`. Esse escape está expressamente documentado na cópia, que também declara que o aval **só aceitou rótulo/texto**. A redação alegada no contrato e no commit está **[nao verificado]**. (`bin/selo_proporcao.py:33-37`; `bin/selo_proporcao.py:641-646`)
-
-## 11/11 14:40 · sessao 57d93ad8e30c · - · - · origem=Ronald (tmux)
-
-(b) **4 leituras comprovadas em 2 templates**, mais **1 expressão com variável não vinculada**:
-
-| Local | Origem/contexto | Uso | Diverge para conversa |
-|---|---|---|---|
-| `app/templates/chamados/partials/_card_atendimento.html:87` | `p` no laço `chamado.perguntas_disputa` (`:77`); perguntas carregadas por `montar_chamados_fio`, `app/chamados/services/fio.py:225`, agrupadas `:243`, anexadas `:253`; view `app/chamados/views.py:569`, contexto `:639`, `:640`; includes `app/templates/chamados/meu_atendimento.html:127`, `:144` | Testa presença para mostrar cabeçalho “Estamos falando do dia” (`_card_atendimento.html:89`) | **sim**: conversa possui data civil; juiz retorna `None`, `app/chamados/juizes.py:338` |
-| `app/templates/chamados/partials/_card_atendimento.html:90` | Mesmo contexto | Exibe como dia de referência/fato sob aquele cabeçalho | **sim**, `app/chamados/juizes.py:338` |
-| `app/templates/chamados/partials/_card_atendimento.html:164` | Mesmo contexto | Exibe dia na confirmação JS de opção “Não trabalhou nesse dia?” (`:160`) | **sim**, se pergunta de conversa alcançar esse ramo; ocorrência concreta em produção **[nao verificado]** |
-| `app/templates/chamados/partials/_lote_preview.html:24` | `x.pergunta` de `linhas`; view `app/chamados/views_cobrar.py::lote_preview:361`, `:363`; serviço `app/chamados/services/validacao.py::fila_validar_classificada:921`, `:923` coloca instâncias de pergunta no dicionário | Exibe dia na prévia de validação | **sim**, se conversa alcançar classe A; alcance concreto **[nao verificado]**; juiz `app/chamados/juizes.py:338` |
-
-A expressão `app/templates/chamados/meu_atendimento.html:19` usa `p.data_evento` fora de um laço de perguntas; seu formulário está no laço de `reg`, iniciado `:10`. O contexto de `meu_atendimento` não fornece `p` (`app/chamados/views.py:633–652`). Portanto, **não é leitura comprovada de PerguntaDisputa**; divergência **não se aplica**. Há cinco expressões `.data_evento` executáveis ao todo, mas quatro com origem comprovada.
-
-`app/templates/chamados/partials/modal_fio.html:161` contém somente comentário; não integra leitores.
-
-(c) **2 produtores de chave JSON `data_evento`, em 2 endpoints; 1 chave derivada `data_evento_label`; 1 consumidor explícito encontrado na cópia**:
-
-| Local | Função/rota | Uso | Diverge para conversa |
-|---|---|---|---|
-| `app/api/views.py:1165` | `api_chamados_v2`, rota `app/api/urls.py:73` | Serializa `p.data_evento` em ISO ou `None`; perguntas pertencem a `perguntas_por_chamado`, `app/api/views.py:1040`, `:1046`, `:1174`; resposta `:1189` | **sim** no valor transmitido, juiz `app/chamados/juizes.py:338`; exibição pelo APK **[nao verificado]** |
-| `app/api/views.py:1166` | Mesmo endpoint; chave derivada `data_evento_label` | Formata o mesmo valor como `%d/%m/%Y`; resposta `:1189` | **sim**, juiz `app/chamados/juizes.py:338`; exibição pelo APK **[nao verificado]** |
-| `app/api/views_mensageria.py:568` | `_item_validar`; usado por `api_mensageria_validar`, `:546`; rota `app/api/urls.py:12`; resposta `views_mensageria.py:549` | Serializa ISO ou `''`; só repassa | **sim** no valor transmitido, juiz `app/chamados/juizes.py:338` |
-| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` (`:98`) | Lê `i.get('data_evento')`, renomeia para `data_do_caso`, repassa ao contexto; recebe payload `:107`, percorre itens `:129` | **sim** no valor repassado; uso final pela IA **[nao verificado]** |
-
-O consumidor HTTP da mensageria chama `/api/mensageria/validar/` em `mensageria/nucleo/core_client.py:50` e devolve JSON integral em `:55`. As outras chamadas à fila em `mensageria/nucleo/ferramentas.py:190` e `:1529` usam classe/referências/contagens, sem ler a chave (respectivamente `:194–205` e `:1532–1543`).
-
-Consumidores JS ou código do APK para essas chaves: **[nao verificado]**. Não apareceu literal `data_evento` nos arquivos JS/TS/JSX/TSX/Vue/Dart/Kotlin/Swift pesquisados **[nao verificado]**.
-
-Observação para contagem AST de (a): `api/views.py:1165`, `:1166` e `api/views_mensageria.py:568` contêm **dois acessos de atributo cada** (teste condicional + formatação), portanto **6 nós AST em 3 posições arquivo:linha**. O consumidor de dicionário é mais uma posição: `mensageria/nucleo/ferramentas.py:127`.
-
-_3926 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3931 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
