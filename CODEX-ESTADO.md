@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 23:24** · publicado em **10/11/2026 23:26** (UTC-3)
+> Ultima resposta processada: **10/11/2026 23:38** · publicado em **10/11/2026 23:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 23:38 · sessao 808c2ef83d03 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+[Entrega K1–K5 e arquivos tocados](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:1), com [comandos e saídas integrais](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_saidas.txt:8).
+
+147 testes em memória passaram; 37 mutantes produziram RED com controle verde ([registro](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:5)). [nao verificado]
+
+K3 permanece ACHADO. ORM e ruff=0: **[nao verificado]**, por ausência de Django e ruff ([limites](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5j_entrega.txt:9)).
 
 ## 10/11 23:24 · sessao fd6adff78494 · - · - · origem=Ronald (tmux)
 
@@ -870,38 +878,4 @@ Delta dos executores e juízes que importa ao backfill:
 
 Não atribuir automaticamente `EXPAND` do nascimento ou injeção de `hoje` aos pousos posteriores às 11h: essa cronologia é **[nao verificado]**; a linha de DP do próprio brief já coincide com HEAD.
 
-## 10/11 21:30 · sessao 8b2dc0981577 · - · - · origem=Ronald (tmux)
-
-O patch `diff_obra_v10.patch` não está disponível na cópia nem no texto recebido; seus hunks e a lista exata de arquivos tocados permanecem **[nao verificado]**. As matrizes1/2 descrevem uma implementação não presente nesta árvore: aqui o núcleo está em `app/chamados/services/disputa_emissao.py:474`, a geração continua posterior ao núcleo no wrapper em `app/chamados/services/disputa_emissao.py:670`, e não há redirecionamento recursivo nesse núcleo (`app/chamados/services/disputa_emissao.py:521`, `app/chamados/services/disputa_emissao.py:603`).
-
-**Item 2 — cruzamentos de código previstos pelas matrizes**
-
-“Escrita” abaixo significa editar o arquivo-fonte. Chamar uma porta que escreve no banco é uso da porta, sem edição do arquivo que a implementa. O comando E4b ainda não existe nesta cópia **[nao verificado quanto à implementação futura]**.
-
-| Arquivo previsto na cura BO-DISPUTA | Cruzamento necessário da E4b | Comportamento que a E4b precisa conferir/preservar |
-|---|---|---|
-| `app/chamados/services/fabrica_da_celula.py` | **LEITURA + chamada de porta**, sem edição necessária demonstrada: `perguntar_pela_celula` está em `:178`; chama `perguntar` em `:219`; esta chama wrapper e gerador em `:172` e `:174`. | A fábrica usa dia da célula, respeita teto pelo instante, pode abrir pauta sem pergunta e devolve **motivos**, não prova de perguntas criadas (`:201`, `:204`, `:207`, `:215`, `:220`). BO pretende retirar a segunda geração; E4b não pode depender de duas tentativas nem contar `ms` como efeito consumado (`:172`, `:174`, `:220`). |
-| `app/chamados/services/disputa_emissao.py` | **LEITURA transitiva obrigatória** pela fábrica: núcleo `:474`, wrapper `:634`, gerador `:300`, pendentes `:257`. Outras portas dependem da classificação: órfãos `:1027`; âncora `:1302`. | Não supor que retornar DS significa pergunta própria criada: o núcleo cria DS em `:587` e retorna em `:603`, enquanto a geração ocorre depois, em `:670` ou `:682`. A geração admite ausência de dia e `continue` (`:425`, `:430`) e pode devolver reuso da porta (`:444`, `:470`). A E4b precisa observar resultado real e dona efetiva, sem implementar por conta própria o planejamento que BO pretende corrigir. |
-| `app/chamados/services/disputa_emissao.py` | **LEITURA/chamada condicional de porta histórica**, sem edição necessária: `carimbar_resposta_pela_trilha :1661`; resposta `:1425`; correção `:1562`. | Resposta nova conserva legado antes de sobrescrever (`:1466`) e registra DP com o mesmo instante (`:1462`, `:1511`). A reconstrução da E4b deve continuar distinguindo ato testemunhado de resposta nova; não usar o core de resposta para inventar história (`:1462`, `:1466`, `:1511`). |
-| `app/chamados/services/declaracao_texto.py` | **LEITURA transitiva**, sem necessidade demonstrada de chamar `declarar_hora_colab :306` ou `aplicar_declaracao :641` para o backfill. A fábrica lê mapeamento em `fabrica_da_celula.py:62`; o emissor lê marcos/abstenção em `disputa_emissao.py:859`, `:864`, `:895`. | `_marcos_faltantes :86` e a abstenção existente precisam conservar o significado do dia/ata. Não presumir que `_candidata_reusavel :230` resolve dona global: ela retorna `None` quando a canônica pertence a outra DS (`:250`, `:254`). Os consumidores ainda abrem depois do nascimento da DS (`:360`, `:376`, `:659`, `:666`); BO pretende corrigir justamente essa composição. |
-| `app/ponto/management/commands/reconciliar_grade.py` | **Nenhuma edição nem chamada exigida pela E4b**; possível leitura de precedente **[nao verificado]**. Sítio previsto pela matriz: `_disputa :412`. | O helper chama núcleo com `motivos=[]` (`:424`, `:425`). Não é alternativa para a fábrica nem prova de pergunta faltante criada. |
-| `app/chamados/management/commands/smoke_chamados.py` | **Nenhuma edição nem chamada exigida pela E4b**; possível leitura de precedente **[nao verificado]**. Sítio previsto: `_bloco_a_motivos :82`. | O smoke chama núcleo em `:99` e gerador novamente em `:102`; seu mecanismo não deve ser copiado pelo backfill. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py` | **Nenhuma edição nem chamada exigida pela E4b**; possível leitura de diagnóstico **[nao verificado]**. | A cópia começa diretamente pelo piso I6 (`:14`, `:29`); o helper I7 `_dias_da_disputa_sem_pergunta` descrito nas matrizes não existe aqui **[nao verificado quanto ao futuro BO]**. O censo E4b deve usar o vigia contratado, não importar um helper futuro dessa auditoria. |
-
-**Dependências comuns que as matrizes mandam preservar, sem demonstrar edição pela BO**
-
-| Arquivo | E4b lê/chama e implicação |
-|---|---|
-| `app/chamados/models.py` | DP `registrar :3943` faz `bulk_create :3953`, sem deduplicação nessa operação; correspondência legada está em `:3927`, `:3931`, `:3935`. BO declara manter a porta da pergunta; edição por BO **[nao verificado]**. E4b deve selecionar sob trava e conservar a identidade completa, sem deduplicar só por existência de algum ato. |
-| `app/chamados/services/fio.py` | Universo `:1784`, canônica `:1225`, dia da linha `:1608`, recusas `:1572` e `:1591`. A canônica prefere texto normalizado, depois menor PK (`:1231`, `:1232`, `:1233`); isso é distinto de `respondida_em`. Edição por BO **[nao verificado]**. |
-| `app/chamados/reconciliador.py` | Religação `reatar_pergunta_orfa :1533` chama o derivador do emissor (`:1556`) e pode reemitir chamado (`:1621`). Usa data da pergunta (`:1557`), não simplesmente o último contexto da DS. Edição por BO **[nao verificado]**. |
-| `app/chamados/services/materializacao.py` | Unidade `:1158`, ausência declarada `:462`, batida pela porta em `:927`/`:1007`. A unidade não possui barreira de exportada (`:1166`, `:1167`, `:1215`); a E4b deve fornecer sua própria seleção/revalidação contratada. Edição por BO **[nao verificado]**. |
-| `app/chamados/signals.py` | Save de DS fechada pode reconciliar pai (`:28`, `:42`), agendar regularização no commit (`:129`, `:144`) e materializar pendentes sincronamente (`:153`, `:163`). Não supor que save só de motivos/contexto seja sem efeito: essas guardas não inspecionam `update_fields`. Edição por BO **[nao verificado]**. |
-
-**DRY e integração:** rollback de banco não basta para impedir push disparado imediatamente pelo wrapper (`app/chamados/services/disputa_emissao.py:671`, `:687`, `:1767`). O caminho contratado da fábrica já silencia push (`app/chamados/services/fabrica_da_celula.py:218`); a guarda está em `app/chamados/services/disputa_emissao.py:1753`. A E4b deve preservar esse caminho e recontar os efeitos reais, incluindo cascatas síncronas; efeitos dependentes do acervo e execução dos callbacks permanecem **[nao verificado]**.
-
-**Conclusão para consolidação:** não há necessidade demonstrada de a E4b **editar** qualquer dos arquivos previstos pelas matrizes BO; ela pode escrever somente seu comando novo e os dois selos pedidos **[nao verificado quanto à implementação futura e ao patch ausente]**. Há dependência de leitura/chamada da fábrica e do emissor alterados pela BO, portanto a compatibilidade precisa ser reconferida após seu pouso (`app/chamados/services/fabrica_da_celula.py:172`, `:174`, `:219`).
-
-**cruzamento de escrita com BO-DISPUTA: 0**, no escopo proposto do brief; confirmação contra `diff_obra_v10.patch`: **[nao verificado]**.
-
-_3522 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3523 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
