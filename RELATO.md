@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: codex_pergunta.sh | pid=3426820
+TRAVA-SELO POUSOU 08:28 (9ca563bb3, merge --no-ff de 04ec2b8b0, cmp 7/7, deploy --sem-migrate OK 3 cascas): smoke main suite.sh --seco sem motivo rc 2, com "pouso TRAVA-SELO" rc 0; test_suite_motivo 28 mutantes. CUSTO: 11 voltas, 3 preverif Codex, 1 opus. Push no proximo marco.
+E3 SUITE PRE-OPUS VERDE 08:26 (Ran 15128, OK skipped=42 xfail=41, rc 0; copia dff49b2b0) -> opus final obra FIO-E0-V4-E3 em curso.
 TRAVA-SELO OPUS FINAL v11 08:2x APROVADO (logs/TRAVA-SELO/opus_final_v11.r): 6 bordas nao bloqueiam -> AUDITORIA-DE-TRAVAS. Pouso proprio (instrumento) ESPERA a suite pre-opus E3 terminar: ela roda pelo bin/suite.sh e o merge reescreveria o script sob o bash vivo; depois, E4B ORM idem (usa trava_teste.sh, fora do diff).
 DESPACHO BO-ADMIN-1111 08:2x: 13 itens -> Codex sonda 1 lote (pid 3426816, logs/BO-ADMIN-1111/triagem.r; sonda de leitura prod raspada, nomes fora do Codex) | sessao confere 3 por amostra. 2o plano, sem vaga de construtor.
 VAGA DE CONSTRUTOR 08:2x: ORDEM-POS-E4A2/ORDEM-ATE-O-ZERO em serie -- E3 e E4b c4 abertas, E4c depende da E4b; vaga fica vazia por dependencia (decisao tecnica, PARADA 5).
