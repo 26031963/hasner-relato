@@ -1,6 +1,9 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=4049702
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2369303
+E3 c8b 02h24: rc 0, raia wt-codex-fio-e0-v4-e3-010719 @7313a031c (WIP); 32 testes em memoria + 14 mutantes; entrega logs/FIO-E0-V4-E3/E3_TAREFA_ENTREGA_c8b.txt; suite inteira lancada 02:25 (suite_c8b.log) + preverif Codex (pv_c8b.log). Nao certificado ate suite+preverif+opus.
+E3 X1 02h27: construtor Codex na copia wt-codex-fio-e0-v4-e3-022700 sobre c8b (construtor_x1.q; RED ORM R1+C1..C6; C3 = HX-CARTORIO-NB-REJULGA obrigatorio; C6 = chamado de adesao, leitor do literal em chamados/services/adesao.py:34, intocado ou PARE).
+REMEDIDA 02h2x: 2a rodada parou em SemLavra (sombra refeita sem a lavra de prod; numeros NAO concluidos, remedida.r.semlavra); `bin/sombra.sh --lavra` rc 0 (md5 78b94bfb, data_ref_prod 2026-11-10); 3a rodada lancada.
 BO ESTACIONA 02h2x (aval BO-DISPUTA-ESTACIONA-NA-RAIZ): c21 nao pousa/nao vai a opus, raia 9bba8132b preservada; c22 (construtor22.q escrito) NAO lancado; suite17 ja terminara 02:17 (Ran 15199, FAILED failures=1, rc=1) -- nada a cancelar, trava livre. RAIZ-DA-DISPUTA F0+F1 Codex leitura lancado (logs/RAIZ-DA-DISPUTA/f0f1.log). Vaga: c8b -> X1 -> E4B c4.
 VERIFICADOR-EM-FABLE (1) 02h2x: copia wt-verif-fable-021052 @82ba09c6c, bin/disjuntor.py::_pretool nega `DISJUNTOR B3 SEM-OBRA`; RED test_disjuntor.sh b3_final_sem_obra rc=1 -> GREEN rc=0, mutante final-sem-obra-passa morde, ruff limpo; preverif Codex lancado (logs/VERIFICADOR-EM-FABLE/pv1.log). Construido pela sessao: bin/ fora do alcance do construtor Codex.
   os 6 b3_sem_obra historicos: aa6d72ae FIO-ESTADO-LE-O-ALCANCE, ac9b8b9d F1C4-3-NONE-COBRA, a0e8c4fc CLAUDE-MD-RACIONAL, a4efc841 LEI-AKITA-UNIVERSO-DO-PUSH, a316e522 CODEX-CONSTRUTOR v4, a70f1113 FIO-E0-V4-E4 (todos com ID em prosa ou em arquivo de brief, nunca `obra <ID>`).
