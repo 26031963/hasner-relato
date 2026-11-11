@@ -1,7 +1,49 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 07:25** · publicado em **11/11/2026 07:26** (UTC-3)
+> Ultima resposta processada: **11/11/2026 07:27** · publicado em **11/11/2026 07:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 07:27 · sessao 3b06430316b1 · FIO-E0-V4-E3 · construtor · origem=Code
+
+Diff entregue:
+
+- [Teste ORM C2b](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:115): exige parcial real na grade, precedência, marcador e rejulgamento sem forçar após batida distante. [nao verificado]
+- [Caso sem banco](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:309): assertion da impressão mata o novo mutante.
+- [Executor](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:36): mutante registrado; contagens green ajustadas para 19 em memória e 12 ORM.
+
+Comandos executados e RC ([critério do executor](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:62)):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo green
+# rc=0; 19 testes, FAIL=0, ERROR=0 [nao verificado]
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante parcial_tira_marcador
+# rc=1; FAIL=1, ERROR=0; assertion da impressão
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante literal_incondicional
+# rc=1; FAIL=1, ERROR=0
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_fonte_no_gancho
+# rc=1; FAIL=1, ERROR=0
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante so_acusador
+# rc=1; FAIL=1, ERROR=0
+```
+
+Ruff nos três arquivos: rc=0, `All checks passed!`:
+
+```bash
+/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache ponto/tests/test_x1_folga_sem_adesao.py ponto/tests/test_e3_nb_impressao_memoria.py ponto/tests/x1_mutantes.py
+```
+
+[Catraca das linhas registradas](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:539): rc=0 pelo executor em memória documentado no arquivo; registro mantido.
+
+ORM green e morte do mutante pelo teste ORM: **[nao verificado]**, reservados à sessão com banco isolado: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --modo green
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --modo mutante --mutante parcial_tira_marcador
+```
 
 ## 11/11 07:25 · sessao f637d95c917c · TRAVA-SELO · verificador · origem=Code
 
@@ -824,30 +866,4 @@ Relógio, calendário, vigia e autocura mantêm leituras próprias da régua, in
 
 Mensagem do commit, motivos de descarte e resultados efetivos em produção: **[nao verificado]**. [nao verificado]
 
-## 11/11 06:54 · sessao 2c2d11d5be1a · - · - · origem=Ronald (tmux)
-
-- **Relógio fora da borda: PROCEDE pelo critério literal de sítio produtivo mudado.** `classificar_falta` mantém `_tz.now()` quando o avulso não fornece `agora`; o lote exige instante explícito. Leitor externo continua chamando sem instante. `app/escala/servico_jornada.py:292`, `app/escala/servico_jornada.py:387`, `app/escala/servico_jornada.py:566`. O novo caminho da tarefa fornece `self.agora`. `app/chamados/services/tarefa_do_dia.py:491`.
-
-- **Segundo juiz / segundo escritor: NÃO PROCEDE nos sítios examinados.** C6 continua registrado em `core/juizes.py:278`; a carga chama esse juiz em `tarefa_do_dia.py:491`. A projeção apenas calcula variáveis locais e retorna tupla, sem alterar os campos da pergunta. `app/chamados/juizes.py:1369`, `app/chamados/juizes.py:1380`. A tarefa escreve somente `viva_c6` transitório e substitui a FK do colaborador em memória. `app/chamados/services/tarefa_do_dia.py:480`, `app/chamados/services/tarefa_do_dia.py:491`.
-
-- **Derivação paralela de grade/slot/turnos: NÃO PROCEDE no código examinado.** A carga delega a `grade_da_celula`, `escala_vigente`, `_turnos_do_colab_puro`, `_slot_esperado` e `_batida_existente_na_janela`. `app/chamados/services/carga_pergunta_viva.py:119`, `app/chamados/services/carga_pergunta_viva.py:156`, `app/chamados/services/carga_pergunta_viva.py:162`, `app/chamados/services/carga_pergunta_viva.py:181`, `app/chamados/services/carga_pergunta_viva.py:190`. As batidas do pareamento continuam passando por `batidas_apuraveis`. `app/ponto/turnos.py:3017`.
-
-- **Campo temporal com dois significados: não encontrei nova confusão demonstrável.** A projeção usa instante inclusivo: somente carimbos `> agora` são ocultados. `app/chamados/juizes.py:1372`, `app/chamados/juizes.py:1374`, `app/chamados/juizes.py:1376`. O recorte de batidas é `[lo, hi)`, enquanto o dia da carga é intervalo fechado; são eixos e contratos explícitos. `app/chamados/services/carga_pergunta_viva.py:175`, `app/chamados/services/carga_pergunta_viva.py:178`, `app/chamados/services/tarefa_do_dia.py:342`. A carga conserva deliberadamente identidade, ata, cobertura, fila e tranca atuais; não promete fotografia histórica integral. `app/chamados/services/tarefa_do_dia.py:354`.
-
-Censo dos valores projetados:
-
-| Valor | Escritor existente | Novos leitores |
-|---|---|---|
-| `validada_em` | `app/chamados/services/validacao.py:134`; também porta `carimbar` em `app/chamados/models.py:3135` | Projeção: `app/chamados/juizes.py:1369`; C6: `app/chamados/juizes.py:1384` |
-| `respondida_em`, `resposta_colab` | `app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1468`; resposta automática: `app/chamados/services/disputa_emissao.py:1652`; trilha: `app/chamados/services/disputa_emissao.py:1674` | Projeção: `app/chamados/juizes.py:1369`; C6: `app/chamados/juizes.py:1401`; slot: `app/chamados/juizes.py:347` |
-| `materializada_em`, `via_resolucao` | `app/chamados/models.py:3097`; portas de gravação: `app/chamados/models.py:3129`, `app/chamados/models.py:3152`, `app/chamados/models.py:3252` | Projeção: `app/chamados/juizes.py:1370`; C6: `app/chamados/juizes.py:1396`, `app/chamados/juizes.py:1422`, `app/chamados/juizes.py:1460` |
-| `agora` | Recebido na tarefa, guardado na carga e transferido à carga C6: `app/chamados/services/tarefa_do_dia.py:562`, `app/chamados/services/tarefa_do_dia.py:367`, `app/chamados/services/carga_pergunta_viva.py:88` | C6, slot e CF: `app/chamados/juizes.py:883`, `app/chamados/juizes.py:347`, `app/escala/servico_jornada.py:387` |
-| `viva_c6` | `app/chamados/services/tarefa_do_dia.py:491` | `app/chamados/services/tarefa_do_dia.py:244`, `app/chamados/services/tarefa_do_dia.py:328` |
-
-Leitores fora do diff continuam usando campos atuais: estado e propriedade `viva` do modelo, porta do carimbo, reconciliador e exposição no app. Não recebem uma pergunta com carimbos reescritos pela projeção. `app/chamados/models.py:3041`, `app/chamados/models.py:3139`, `app/chamados/models.py:3375`, `app/chamados/reconciliador.py:661`, `app/chamados/services/pergunta_no_app.py:58`.
-
-O auxiliar de testemunha ainda lê carimbo/via crus, mas o novo C6 somente o alcança após verificar que a materialização projetada existe; não encontrei bypass concreto de carimbo futuro nesse caminho. `app/chamados/juizes.py:679`, `app/chamados/juizes.py:707`, `app/chamados/juizes.py:1460`, `app/chamados/juizes.py:1467`.
-
-Executei os 14 testes sem banco de `test_e3_c8c_sem_banco` e `test_e3_pos_suite_sem_banco`: passaram; transcrição em arquivo inexistente, portanto resultado externo `[nao verificado]`. Os casos exercitam os contratos temporais e a passagem de instante. `app/chamados/tests/test_e3_c8c_sem_banco.py:70`, `app/chamados/tests/test_e3_c8c_sem_banco.py:123`, `app/chamados/tests/test_e3_pos_suite_sem_banco.py:43`.
-
-_3697 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3698 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
