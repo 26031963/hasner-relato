@@ -1,7 +1,138 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 09:07** · publicado em **11/11/2026 09:07** (UTC-3)
+> Ultima resposta processada: **11/11/2026 09:08** · publicado em **11/11/2026 09:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 09:08 · sessao f1ecbbc31623 · FIO-E0-V4-E4B · construtor · origem=Code
+
+1. **Quem mascara a remoção é `_Desfaz`, provocando rollback do `atomic` inteiro** quando todos os dias são recusados: [backfill_fio_morto_e4b.py:349](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:349).
+
+2. **O lote misto precisa do rollback individual.** A recusa segue para o próximo dia; havendo um aceito, não ocorre `_Desfaz`: [backfill_fio_morto_e4b.py:327](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/management/commands/backfill_fio_morto_e4b.py:327). Acrescentei o caso ORM exigindo vizinho persistido, P90/D90/Ch12 restaurados, foto integral restaurada entre tentativas e desaparecimento dos nascimentos recusados: [test_e4b_c4_orm.py:404](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:404). Cascata natural em produção: [nao verificado].
+
+3. **Não se aplica substituir um rollback redundante.** Mantive o enxerto `sem_rollback` e apontei-o ao novo caso: [e4b_c4_verificar.py:37](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_verificar.py:37). A morte no ORM continua [nao verificado].
+
+Entrega: [diff completo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10.patch:1) e [comandos/resultados](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:1).
+
+| Verificação | rc | Resultado |
+|---|---:|---|
+| Memória | 0 | [88 OK](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:6) |
+| REDs registrados | 0 | [40 OK](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:10) |
+| `--selos` | 0 | [40 OK](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:14) |
+| `--orm-preflight` | 0 | [8 enxertos válidos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:18) |
+| `sem_rollback`, memória | 1 | [Uma falha na assertion-alvo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:28) |
+| `rollback_roteiro_antigo` | 1 | [Assertion prevista](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:38) |
+| `rollback_falha_aceita` | 1 | [Cinco subtests falham, sem erros](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:44) |
+
+Para a sessão, os comandos exatos de **GREEN isolado**, **mutante isolado** e **roteiro ORM completo** estão no [registro:53](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4v10_resultados.txt:53). Certificação ORM e opus final: [nao verificado].
+
+## 11/11 09:08 · sessao 4aeaf4c941a5 · - · - · origem=Ronald (tmux)
+
+Censo externo executado por AST via `python3 -B` em stdin; sem import Django, acesso ao banco ou suíte. Prova por arquivo da execução do instrumento: [nao verificado]. O recorte abaixo exclui `app/chamados/models.py`, `app/chamados/services/`, testes e migrations; atributos, argumentos ORM e strings de `getattr`/`values`/`only` foram capturados. Não prova completude contra reflexão/SQL construído. [nao verificado]
+
+**Contagens externas do AST**, por `(arquivo, linha, forma)`:
+
+| Campo | Ocorrências | Linhas distintas |
+|---|---:|---:|
+| `respondida_em` | 35 | 33 |
+| `validada_em` | 19 | 18 |
+| `materializada_em` | 42 | 42 |
+| `via_resolucao` | 38 | 38 |
+| `pendencia_admin` | 1 | 1 |
+| `recusa_motivo` | 4 | 4 |
+| `pode_fechar` | 4 | 4 |
+
+Essas contagens excluem os complementos dinâmicos/templates abaixo e precisam ser apresentadas com essa unidade; sua execução não tem arquivo de log por restrição de só leitura. [nao verificado por arquivo:linha]
+
+**Leitores externos — referências completas do estrato direto.** `R` inclui atributo/getattr, `F` seleção ORM e `V` projeção/carregamento. Cada número pertence ao arquivo da primeira coluna.
+
+| Arquivo | Campo e linhas |
+|---|---|
+| `app/api/views.py` | `respondida_em` R:1172,1184,2568,2582,2625,2642 |
+| `app/api/views_mensageria.py` | `respondida_em` R:569,570 |
+| `app/chamados/juizes.py` | `respondida_em` R:829,1341,1449; F:1594,1601,1949; ordenação:1601 |
+| `app/chamados/juizes.py` | `validada_em` R:829,1325; F:1949 |
+| `app/chamados/juizes.py` | `materializada_em` R:288,662,689,831,1336,1362,1368,1399,1417; F:1949 |
+| `app/chamados/juizes.py` | `via_resolucao` R:662,674,830,1336,1362 |
+| `app/chamados/management/commands/auditar_disputas.py` | `materializada_em` F:69,148 |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py` | `respondida_em` R:177,592; F:1105,1572,1602 |
+| Mesmo arquivo | `validada_em` R:205; F:1075,1572,1602,1765,1778 |
+| Mesmo arquivo | `materializada_em` V:469; R:538,905; F:587,955,1075,1156,1572,1602,1765 |
+| Mesmo arquivo | `via_resolucao` R:202,206,433,542,1710; F:955 |
+| Mesmo arquivo | `recusa_motivo` F:535,1075,1112; `pendencia_admin` exclude:1112 |
+| `app/chamados/management/commands/backfill_decisoes_pergunta.py` | `respondida_em` Q/only:56; `validada_em` Q/only:56,F:100; `materializada_em` F:100,R:325; `via_resolucao` F:100,R:314,330,V:398,504 |
+| `app/chamados/management/commands/curar_perguntas_em_limbo.py` | `respondida_em` F:46,69 |
+| `app/chamados/management/commands/encerrar_perguntas_com_fato.py` | `materializada_em`, `validada_em`, `via_resolucao` F:31; `via_resolucao` R:42,49,66,76 |
+| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py` | `via_resolucao` R:70,71,72; `materializada_em` R:147 |
+| `app/chamados/management/commands/reabrir_orfas_enterradas.py` | `validada_em` F:67; `materializada_em` F:67,R:88,91,129,142; `via_resolucao` F:67,R:129,142,160 |
+| `app/chamados/management/commands/relavrar_via_i6.py` | `via_resolucao` R:58,59,62,66,68,88 |
+| `app/chamados/reconciliador.py` | `materializada_em` R:366,1144,1154,F:627,1048,1500; `validada_em` F:627,1048; `via_resolucao` R:1143,1154; `pode_fechar()` chamadas:411,611,1170 |
+| `app/chamados/relatorios_disputa.py` | `respondida_em` R:21 |
+| `app/chamados/veredito_lavrado.py` | `materializada_em` F:202; `respondida_em` F:206 |
+| `app/chamados/views.py` | `materializada_em` R:1257; `respondida_em` R:1280,F:1416 |
+| `app/chamados/views_cobrar.py` | `respondida_em` R:169,F:175 |
+| `app/ponto/management/commands/reconciliar_fantasmas.py` | `materializada_em` F:211 |
+| `app/ponto/management/commands/reconciliar_grade.py` | `respondida_em` F:460 |
+| `app/ponto/services/cartorio.py` | `via_resolucao` R:1610 |
+| `app/ponto/services/entrada_sincronizada.py` | `pode_fechar()` chamada:58 |
+| `app/ponto/services/flip_auto.py` | `via_resolucao`, `validada_em` F:128; `recusa_motivo` R:132 |
+| `app/ponto/services/procedencia_batida.py` | `validada_em`, `materializada_em` R:74 |
+| `app/ponto/services/veredito_celula.py` | `materializada_em` R:195 |
+| `app/ponto/supra_juiz.py` | `respondida_em` R:545,548 |
+| `bin/censo_folha.py` | `respondida_em` F:28,29; `validada_em` F:29 |
+
+As linhas ORM indicam o início da chamada AST; argumentos multilinha podem estar nas linhas imediatamente seguintes. Exemplo conferido: `encerrar_perguntas_com_fato.py:31` inicia a seleção, com os filtros em :32 e :33.
+
+**Escritor externo dinâmico obrigatório.**
+
+| Campo | Escritor | Leitores/seleção | Escopo |
+|---|---|---|---|
+| `P.recusa_motivo` | `setattr(o,c,novo)` em `bin/sombra_mascara_pessoal.py:57`, persistido por `bulk_update` em :62 e :64 | `.only('pk',*campos)` :51; `getattr` :54; comparação :56 | `TEXTO` registra explicitamente `PerguntaDisputa.recusa_motivo` em `bin/sombra_regras_pessoais.py:85`; script exige banco `sombra` em `bin/sombra_mascara_pessoal.py:10` |
+| `P.recusa_motivo` | — | SQL `coalesce`/regex em `bin/sombra_selo_pessoal.py:77` | Itera o mesmo inventário `R.TEXTO` em :74 |
+
+Não encontrei atribuição literal externa a esses sete nomes no recorte AST. Ausência universal de escrita por `F()`, kwargs/reflexão/SQL construído: [nao verificado].
+
+**Templates, separados do AST Python.**
+
+| Arquivo | Campo | Linhas |
+|---|---|---|
+| `app/templates/chamados/partials/modal_fio.html` | `respondida_em` | 185,217,220 |
+| Mesmo arquivo | `pendencia_admin` / display | 222,225 |
+| Mesmo arquivo | `recusa_motivo` | 226 |
+| Mesmo arquivo | `validada_em` | 228 |
+| Mesmo arquivo | `chamado.explicacao.pode_fechar` | 435,446 |
+| `app/templates/chamados/partials/_card_atendimento.html` | `respondida_em` | 94,100,137,155,384,385 |
+| Mesmo arquivo | `pendencia_admin` | 183 |
+| Mesmo arquivo | `via_resolucao`, display e fallback `recusa_motivo` | 186 |
+| `app/templates/chamados/partials/_pergunta_card.html` | `validada_em` | 20,23,42 |
+| Mesmo arquivo | `respondida_em` | 24,29,32 |
+
+Inputs `name="recusa_motivo"` são ingresso de resposta, não leitura persistida: `modal_fio.html:61`, :295 e `_pergunta_card.html:114`.
+
+**Migrations, separadas.**
+
+| Campo | Definição/alteração |
+|---|---|
+| `respondida_em` | `app/chamados/migrations/0014_perguntadisputa.py:25` |
+| `validada_em` | Mesmo arquivo :26 |
+| `materializada_em` | `app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:23` |
+| `pendencia_admin` | `app/chamados/migrations/0043_hx_pendencia_admin.py:15` |
+| `recusa_motivo` | `app/chamados/migrations/0040_a27_recusa_motivo.py:15` |
+| `via_resolucao` | Criação `0033_perguntadisputa_via_resolucao.py:15`; alterações `0035_via_admin_decidiu.py:15`, `0036_a1_pergunta_celula.py:22`, `0037_a3_estado_honesto.py:31`, `0040_a27_recusa_motivo.py:20`, `0041_b2_via_legado_sem_lastro.py:15`, `0042_hx_via_ausencia_dia.py:15`, `0046_via_celula_absolveu.py:15`, `0048_via_competencia_trancada.py:14`, `0051_decisao_pergunta.py:110` |
+| `via_resolucao` leitura executável | `app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `Q` do universo do fato |
+
+`materializada_em` de `RegularizacaoExterna` na migration `0021_regularizacaoexterna_regularizacaoitembatida_and_more.py:26` é homônimo e fica fora do censo de PerguntaDisputa.
+
+**Divergências adicionais para a consolidação.**
+
+1. **Relatório também re-julga C7.** `relatorios_disputa.classificar` usa C6 e devolve `PRONTA_FECHAR` quando não há vivas, sem consultar `respostas_sem_veredito`; C7 acrescenta precisamente essa guarda. (`app/chamados/relatorios_disputa.py:18`, :20; `app/chamados/models.py:1843`, :1853.) Deve compor a mesma decisão do explicador, não apenas a tela.
+
+2. **Recusa é texto e insumo operacional.** `fila_flip_recusas` interpreta regex de `recusa_motivo` para extrair PK de Batida. A máscara transforma esse texto na sombra. Isso não demonstra defeito em produção, mas estabelece dois significados/leitores diferentes do campo. (`app/ponto/services/flip_auto.py:132`, :135; `bin/sombra_mascara_pessoal.py:57`, :62.)
+
+3. **Validação e materialização se confundem na data apresentada de procedência.** `procedencia` usa `validada_em or materializada_em` e `validada_por or materializada_por`; seu resultado é procedência da marcação, não veredito de fechamento. (`app/ponto/services/procedencia_batida.py:72`, :74.)
+
+4. **Respondida como proteção de conversa.** `pode_executar_csf` recusa a retratação por qualquer `respondida_em` preenchido nas perguntas da DS ou resolvedoras. Esse leitor responde “há conversa que exige decisão humana”, enquanto API/template apresentam resposta recebida e os seletores admin classificam fila. (`app/ponto/supra_juiz.py:539`, :545, :548; `app/api/views.py:2568`; `app/chamados/views_cobrar.py:169`.)
+
+5. **`pode_fechar` não é coluna.** É método derivado da DS, definido em `models.py:1848`, retorna a conjunção de ausência de respostas sem veredito e ausência de fio vivo em :1853. O homônimo de apresentação vem do dict `explicacao` consumido pelo template em :435/:446; não confundir sua “escrita” com persistência da DS.
 
 ## 11/11 09:07 · sessao 5a294bb62c7c · - · - · origem=Ronald (tmux)
 
@@ -633,135 +764,4 @@ Item 08 — **FALTA INFORMACAO**: há 1 colaborador candidato (`col62`), mas o d
 - **Complemento:** cabe registrar a conferência do contrato de entrada/download em **UI-ANEXO-AUSENCIA**, já registrada e contendo a parte de HEIC/original/conversão, sem novo ID (`app/docs/BACKLOG.md:1130`). A linha histórica documenta bloqueio de conversão; disponibilidade atual de decodificador [nao verificado].
 - **Texto ao admin:** “Em Ausências, abra o atestado de 06/11 de col872, clique **Abrir** e **Baixar** e informe o nome completo salvo pelo navegador.” Botões: `app/templates/ponto/partials/painel_ausencia.html:84-85`.
 
-## 11/11 08:29 · sessao 40b0bd3a1e53 · BO-ADMIN-1111 · sonda · origem=Code
-
-**01/04/13 pertencem à classe BUG-PAR já aberta.** A sonda mostra respostas recebidas e recusa de aplicação do intervalo; a obra cita expressamente col960/disputa 5644. Não é o caso “disputa sem pergunta”, pois existem perguntas respondidas. (`app/docs/BACKLOG.md:1929`, `app/docs/BACKLOG.md:1877`; trechos D1 abaixo.)
-
-A classificação segue **L-099 — O ESTRUTURAL SE SEPARA DO DADO**. O juiz citado no pedido está nesta cópia em `app/ponto/management/commands/e6_oraculo.py`, com critérios em `:98` e montagem dos insumos em `:182`; não se pode completar seus insumos por palpite. (`app/docs/LEIS.md:122`.)
-
-O texto recebido termina durante o item 06. Identificação, candidatos e registros dos itens 08/09, assim como o valor “3 às 06:48” do ESTADO, ficam **[nao verificado]**.
-
-**Provas da sonda.** Os trechos abaixo foram copiados de DADOS; `[…]` indica somente campos omitidos.
-
-**D1 — col960, itens 01/04/13:**
-
-```text
-candidatos=1 [(960, None, 2)]
-id=51522 | celula_id=128547 | disputa_id=5644 | motivo=intervalo_saida
-[…] resposta_colab=01:00 | respondida_em=08/11 11:04:01
-| recusa_motivo=Pergunta #51522: batida vizinha #133794
-(S 22/10 06:30) tem o mesmo tipo do plantio (S) - par quebrado;
-nao materializado (guarda de paridad
-
-id=51523 | celula_id=128547 | disputa_id=5644 | motivo=intervalo_volta
-[…] resposta_colab=02:00 | respondida_em=08/11 11:04:11
-| recusa_motivo=Pergunta #51523: batida vizinha #133756
-(E 21/10 18:32) tem o mesmo tipo do plantio (E) - par quebrado;
-nao materializado (guarda de paridad
-```
-
-**D2 — col129, item 02:**
-
-```text
-candidatos=1 [(129, None, 3)]
-id=149397 | timestamp=08/11 17:30:08 | tipo=E | sequencia=1
-
-id=140128 | data=08/11/2026 | trabalha=True | origem=gerada
-| escala_geradora_id=853
-| dna={'marcos': {'hf': '05:42', 'hi': '21:30', 'hfi': None, 'hii': None},
-[…] protestos=['FURO_PARCIAL', 'BATIDA_ORFA_FORA_TOLERANCIA']
-| ata={'orfas': ['17:30'], 'n_orfas': 1,
-```
-
-**D3 — col33, item 03:**
-
-```text
-candidatos=1 [(33, None, 4)]
-id=5311 | tipo=atestado | data=29/10/2026 | data_fim=30/10/2026
-[…] status=aprovada
-[…] aprovada_em=09/11 08:50:45
-
-id=141772 | data=29/10/2026
-[…] veredito=concorde
-[…] ausencia_id=5311
-[…] status_dia=ausencia | status_rotulo=Ausencia registrada — o dia tem abono proprio
-
-id=1989491 | mes=11 | ano=2026 | data=29/10/2026
-[…] minutos_abonados=660.0 | minutos_previstos=660.0
-| minutos_realizados=0.0 | furo_apurado=False
-```
-
-**D5 — col51, item 05:**
-
-```text
-candidatos=1 [(51, None, 4)]
-id=150717 | timestamp=09/11 16:04:05 | tipo=S
-[…] criado_em=10/11 06:59:56
-
-id=37996
-[…] 09/11 — marco 16:00 (saida) sem batida
-[…] status_local=resolvido | via_encerramento=sistema
-[…] resolvido_em=10/11 06:59:56
-[…] criado_em=09/11 16:30:09
-
-id=129423 | data=09/11/2026
-[…] veredito=concorde
-[…] status_dia=ok
-```
-
-**D6 — col49, item 06:**
-
-```text
-candidatos=1 [(49, None, 3)]
-id=145526 | timestamp=04/11 06:57:48 | tipo=E | sequencia=1
-
-id=132704 | data=04/11/2026 | trabalha=False
-[…] veredito=fato_sem_previsao
-[…] protestos=['FATO_SEM_PREVISAO']
-| ata={'orfas': ['06:57'], 'n_orfas': 1,
-[…] status_dia=folga_trabalhada
-```
-
-**Censo compartilhado dos ESTRUTURA 01/04/13.** O caminho envolvido grava a resposta, tenta materializar cada pergunta separadamente e recusa diante da vizinha do mesmo tipo. A lei quebrada é **L-099**, na exigência de coerência; os nomes canônicos do desenho da obra são **Aggregate Root / fonte única** e **Single Writer Principle / escritor único**, com o par como unidade já nomeada no BUG-PAR. (`app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/materializacao.py:1375`, `app/chamados/services/materializacao.py:875`, `app/docs/LEIS.md:122`, `app/docs/GLOSSARIO.md:11`, `app/docs/GLOSSARIO.md:12`, `app/docs/BACKLOG.md:1929`.)
-
-| Campo/estado envolvido | Quem escreve | Quem lê |
-|---|---|---|
-| `resposta_colab`, `respondida_em` | `app/chamados/services/disputa_emissao.py:1467`; persistência `:1508` | `app/chamados/services/materializacao.py:432`; seleção para aplicação `:1369` |
-| Recusa de paridade / `recusa_motivo` | Produção da recusa em `app/chamados/services/materializacao.py:878`; encaminhamento `:1297`; persistência `:1102` | `app/templates/chamados/partials/modal_fio.html:226`; explicação de bloqueio derivada em `app/chamados/services/materializacao.py:452` |
-| `materializada_em`, autor e `via_resolucao` | Atribuição central em `app/chamados/models.py:3097`; chamada da porta em `app/chamados/services/materializacao.py:1277` | `app/chamados/services/materializacao.py:434`; seleção das ainda não aplicadas `:1369` |
-| Batida resultante da aplicação | `app/chamados/services/materializacao.py:927` chama `registrar_batida` | Verificação de batida existente em `app/chamados/services/materializacao.py:447`; apresentação do efeito via `app/chamados/services/fio.py:335` e `app/templates/chamados/partials/modal_fio.html:230` |
-
-A classe já tem obra: **BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS**, complemento **BUG-PAR-FROTA-1110**, dentro de **RAIZ-DA-DISPUTA F3/F4**. (`app/docs/BACKLOG.md:1929`, `app/docs/BACKLOG.md:1882`, `app/docs/BACKLOG.md:1883`.)
-
-**Quadro único dos 13 itens.** Nos itens 07/10, “DECISAO DO ADMIN” indica orientação de uso das telas existentes, sem falha estrutural demonstrada pelos formulários e condições examinados. (`app/api/views_core.py:315`, `app/templates/colaboradores/partials/painel_vinculo.html:112`, `app/templates/colaboradores/partials/painel_vinculo.html:136`.)
-
-| Item / pessoa | Dono e conclusão sustentada | Código e sonda | Obra / complemento | Texto ao admin |
-|---|---|---|---|---|
-| **01 — col960** | **ESTRUTURA.** Resposta recebida; aplicação recusada pela guarda de paridade. Mesma classe BUG-PAR. **Lei: L-099.** | **D1**; gravação em `app/chamados/services/disputa_emissao.py:1467`; aplicação individual em `app/chamados/services/materializacao.py:1375`; recusa em `:875`. | **COMPLEMENTO de BUG-PAR**, já identificado com col960/disputa 5644; RAIZ F3/F4. `app/docs/BACKLOG.md:1929`, `:1882`, `:1883`. | “Abra o chamado e confira saída e volta do intervalo do mesmo dia com o espelho; as respostas já estão registradas.” **D1**; `app/templates/chamados/partials/modal_fio.html:217`. |
-| **02 — col129** | **FALTA INFORMACAO.** Há entrada às 17:30 contra previsão às 21:30; isso não decide se o cadastro ou o fato está errado. Faltam horário pretendido nas datas, janela de HE, CXR do motor e marcação concreta de “espúria”. | **D2**; o dono depende dos insumos em `app/ponto/management/commands/e6_oraculo.py:182`; CXR é publicado pelo motor em `app/ponto/motor_calculo_v2.py:1655`. Causa do rótulo **[nao verificado]**. | Candidato: **ESPURIA-E-O-QUE-E**, com apresentação em **ESPURIA-TELA**. Encaixe causal ainda **[nao verificado]**. `app/docs/BACKLOG.md:1805`, `:1815`. | “Confira nas datas apontadas o horário cadastrado e o trabalho realizado antes de decidir as horas extras.” **D2**; `app/ponto/management/commands/e6_oraculo.py:182`. |
-| **03 — col33** | **FALTA INFORMACAO sobre a trava atual.** O atestado está aprovado, o dia está em ausência e há 660 minutos abonados. Faltam tela, competência e mensagem de bloqueio. | **D3**; aprovação em `app/ponto/services/ausencia.py:897`; efeito de abono no fechamento em `app/ponto/services/fechamento.py:693`. Trava causada pelo atestado **[nao verificado]**. | Não há encaixe em obra aberta comprovado. A linhagem **AUSENCIA-COBRE** consta feita em `app/docs/TICKETS.md:1221`; não sustenta atribuir nova falha. | “Confira o atestado aprovado de 29/10. Se a folha ainda bloquear, informe a competência e o recado exibido.” **D3**; aprovação `app/ponto/services/ausencia.py:897`. |
-| **04 — col960** | **ESTRUTURA**, compartilhando a prova do 01: resposta persistida e plantio recusado. **Lei: L-099.** | **D1**; `app/chamados/services/materializacao.py:875`, `:1375`; `app/docs/LEIS.md:122`. | **COMPLEMENTO de BUG-PAR / BUG-PAR-FROTA-1110 / RAIZ F3/F4**. `app/docs/BACKLOG.md:1929`, `:1882`, `:1883`. | “No chamado, confira as duas respostas do intervalo e os horários do espelho do mesmo dia.” **D1**; `app/templates/chamados/partials/modal_fio.html:217`. |
-| **05 — col51** | **BATIDA — chegada posterior, já resolvida.** A saída de 09/11 chegou em 10/11, no instante da resolução. Rede/offline como causa **[nao verificado]**. | **D5**; baixa condicionada aos marcos cobrados acesos em `app/ponto/management/commands/detectar_ausencias.py:403`. Não há chamado ainda aberto nesse registro. **D5**. | Correção estrutural não demonstrada. Lastro consta na obra fechada em `app/docs/BACKLOG.md:735`; recorrência comprovada pode ser examinada na linhagem **LASTRO-PARTE-2**, `:1760`. | “Consulte 09/11 no espelho e o chamado 37996: o registro chegou, o chamado está resolvido e o dia está regular.” **D5**. |
-| **06 — col49** | **FALTA INFORMACAO.** Existem entradas isoladas em dias sem previsão, mas faltam a data/batida do relato e o lançamento da diária. Relação da diária com a marcação **[nao verificado]**. | **D6**. Existe retratação humana, com permissão e motivo, em `app/ponto/views.py:3274` e `app/ponto/services/retratar_humano.py:150`. O calendário omite o menu no ramo de batida órfã: `app/templates/colaboradores/partials/_calendario_grade.html:121`; ligação com a tela relatada **[nao verificado]**. | **ESPURIA-TELA** é candidato condicionado à identificação da tela; `app/docs/BACKLOG.md:1815`. A porta original de retratação já consta fechada em `app/docs/TICKETS.md:1256`. | “Identifique a data e a marcação e confira a diária lançada e se houve trabalho antes de decidir a regularização.” **D6**; motivo obrigatório em `app/ponto/services/retratar_humano.py:153`. |
-| **07 — tela** | **DECISAO DO ADMIN — orientação de uso.** Na API, pendentes > 0 → **Responder DP**; senão mensagem do DP não lida em chamado vivo → **Chamados**; senão badge vazio. Na PWA, o cartão usa pendentes → **Responder DP**, senão **Chamados**. | `app/api/views_core.py:307`, `:315`; `app/templates/core/dashboard_colaborador_v2.html:80`. Pendente = pergunta viva, sem resposta e com disputa aberta: `app/chamados/services/pergunta_no_app.py:45`, `:71`. Sonda não se aplica. | Linhagem **FIO-E0-V4-E3-LEITORES**, `app/docs/BACKLOG.md:1865`; necessidade de complemento por divergência concreta **[nao verificado]**. | “Abra Responder DP para responder às perguntas pendentes; use Chamados para consultar o atendimento.” `app/templates/core/dashboard_colaborador_v2.html:78`, `:80`. |
-| **08 — colNNN [nao verificado]** | **FALTA INFORMACAO.** Faltam candidato, pessoa, dia, célula e registros do chamado/pergunta. Pertencer aos três casos de 06:48 **[nao verificado]**. | O código conta célula sem fio vivo com `data >= hoje` em `fio_morto_de_hoje_pra_frente`; isso não identifica a pessoa. `app/chamados/services/vigia_fio.py:417`, `:420`. Trecho da sonda e valor do ESTADO **[nao verificado]**. | Candidato: **FIO-E0-V4-E4B**, `app/docs/BACKLOG.md:1875`; cobertura deste item **[nao verificado]**. | “Informe a data e o que aparece no espelho desse dia para conferir a cobrança.” Identificação e situação desse dia **[nao verificado]**. |
-| **09 — colNNN [nao verificado]** | **FALTA INFORMACAO.** Faltam registro do anexo, nome/MIME do upload, bytes identificadores, rota usada e cabeçalhos/nome do download. Origem de `.ms` **[nao verificado]**. | Upload da API lê `content_type` e normaliza o nome: `app/api/views.py:1772`, `:1781`, `:1784`. PDF/JPEG/PNG/HEIC são reconhecidos pelo conteúdo; desconhecido retorna sem tipo: `app/ponto/services/ausencia.py:556`, `:563`. Download corrige extensão e MIME quando reconhecidos: `app/ponto/views.py:2118`. Sonda **[nao verificado]**. | Candidato: **UI-ANEXO-AUSENCIA**, `app/docs/BACKLOG.md:1130`; enquadramento do `.ms` depende da prova faltante. **[nao verificado]**. | “No painel da ausência, use Baixar e informe qual nome o arquivo recebeu.” `app/templates/ponto/partials/painel_ausencia.html:85`. |
-| **10 — tela** | **DECISAO DO ADMIN — formulários distintos.** “Salvar posto” salva posto; “Salvar” no bloco da escala envia o vínculo da escala. A própria tela orienta vincular posto primeiro. | `app/templates/colaboradores/partials/painel_vinculo.html:112`, `:124`, `:129`, `:136`, `:175`. Escritas em `app/colaboradores/views.py:322` e `:409`. Sonda não se aplica. | Não há complemento causal demonstrado pelos dois botões. PORT-35/36/38 tratam verificação dessas portas em `app/docs/BACKLOG.md:2158`; defeito deste relato **[nao verificado]**. | “Salve o posto no primeiro bloco; depois escolha a escala, confira as datas e salve no bloco da escala.” `app/templates/colaboradores/partials/painel_vinculo.html:124`, `:133`, `:175`. |
-| **11 — tela/regra** | **FALTA INFORMACAO sobre o cadastro vigente e a regra aplicável.** Existe cadastro genérico de tipos; **não há quota anual nos campos, formulário ou leitor examinados**. Tipo acompanhante cadastrado hoje e concessões já usadas **[nao verificado]**. | `app/ponto/models.py:562`, `:577`; `app/ponto/views_tipos_ausencia.py:67`; `app/ponto/catalogo/ausencias.py:240`. O legado `atestado_acompanhante` é mapeado para `declaracao` em `app/api/views.py:1765`. Regra automática específica “1 por ano” **[nao verificado]**. | O124 trata consumo do cadastro, já fechado: `app/docs/BACKLOG.md:1208`, `app/docs/TICKETS.md:240`. Obra aberta específica de quota anual **[nao verificado]**. | “Confira o tipo em Tipos de ausência e o histórico do colaborador antes de decidir o lançamento.” Cadastro em `app/ponto/models.py:562`; regra anual aplicável **[nao verificado]**. |
-| **12 — tela** | **FALTA INFORMACAO para explicar a recusa concreta.** Faltam usuário, grupos, setores/competências, chamado e rota. Hoje há guarda de entrada do gestor e guarda contextual pelo departamento do chamado. | Entrada: `app/chamados/views.py:24`, `:35`, `:662`. Resposta rápida: `app/chamados/services/fio.py:708`. Dono do departamento e autorização: `app/chamados/utils.py:32`, `:47`, `:52`. Gestor geral passa; sem competências declaradas há permissão legada; demais exigem competência/perfil correspondente. `app/chamados/utils.py:57`. | Linhagem **RBAC-ESCRITA-POR-PAPEL**, aberta em `app/docs/BACKLOG.md:1741`; **AGIR-POR-DONO** consta feito em `app/docs/TICKETS.md:1167`. Relação com a recusa específica **[nao verificado]**. | “Confira o departamento responsável no chamado e encaminhe a resposta a quem já tem acesso a esse departamento.” `app/chamados/services/fio.py:714`; `app/chamados/utils.py:32`. |
-| **13 — col960** | **ESTRUTURA**, mesma prova e mesma classe dos itens 01/04. **Lei: L-099.** | **D1**; `app/chamados/services/disputa_emissao.py:1467`; `app/chamados/services/materializacao.py:875`, `:1375`; `app/docs/LEIS.md:122`. | **COMPLEMENTO de BUG-PAR / BUG-PAR-FROTA-1110 / RAIZ F3/F4**. `app/docs/BACKLOG.md:1929`, `:1882`, `:1883`. | “Confira no chamado as duas respostas do intervalo junto com o espelho do mesmo dia; elas já estão registradas.” **D1**; `app/templates/chamados/partials/modal_fio.html:217`. |
-| **Soma = 13** | **ESTRUTURA 3 + BATIDA 1 + DECISAO DO ADMIN 2 + FALTA INFORMACAO 7.** Contagem das linhas acima. | **01 a 13, sem novo ID atribuído.** | **Censo dos três ESTRUTURA compartilhado acima.** | — |
-
-## 11/11 08:27 · sessao e04bd2b59315 · - · - · origem=Ronald (tmux)
-
-**07 — DECISAO DO ADMIN (consulta sobre o rótulo).** Na API, `Responder DP` tem prioridade quando há perguntas pendentes; sem elas, mensagens do DP não lidas em chamados vivos produzem `Chamados`; sem ambos, o badge é `None` (`app/api/views.py:317-331`; cópia em `app/api/views_core.py:305-320`). Pergunta pendente significa pergunta viva, sem `respondida_em` e com disputa aberta (`app/chamados/services/pergunta_no_app.py:45-75`). Na PWA, o cartão mostra `Responder DP` com pendências e `Chamados` sem elas (`app/templates/core/dashboard_colaborador_v2.html:80`; `app/core/views.py:252-253`). **Admin:** “Abra Responder DP para responder às perguntas pendentes; Chamados permite consultar o atendimento.” Obras relacionadas: `FIO-E0-V4-E3-LEITORES`, ainda aberta (`app/docs/BACKLOG.md:1865`); nenhuma divergência concreta entre leitores foi demonstrada [nao verificado]. Sonda: item exclusivamente de código, conforme pedido; não há trecho de DADOS.
-
-**10 — DECISAO DO ADMIN (uso dos formulários).** São formulários distintos: `Salvar posto` envia a `vincular_posto` (`app/templates/colaboradores/partials/painel_vinculo.html:112-125`), e `Salvar` da escala envia a `vincular_escala` (`app/templates/colaboradores/partials/painel_vinculo.html:136-180`). O posto é gravado por `salvar_inteiro(..., 'posto')` (`app/colaboradores/views.py:322-329`); a escala passa por `julgar_vinculo` e `executar_vinculo` (`app/colaboradores/views.py:409-423`). A tela orienta posto primeiro (`app/templates/colaboradores/partials/painel_vinculo.html:129-133`) e também tem `Salvar folgas` (`app/templates/colaboradores/partials/painel_vinculo.html:191-205`). **Admin:** “Salve o posto no primeiro bloco; depois escolha a escala, confira as datas e salve no bloco da escala.” Dois botões, por si, não demonstram quebra estrutural [nao verificado]. Obras próximas: PORT-35/36/38, ainda livres, tratam smoke dessas portas (`app/docs/BACKLOG.md:2158-2161`); BO2910-ESTRUTURA inclui outro defeito de `vincular_posto`, sem provar relação com os dois botões (`app/docs/BACKLOG.md:1039`). Não cabe inventar complemento causal [nao verificado]. Sonda: exclusivamente código.
-
-**11 — FALTA INFORMACAO: falta demonstrar a regra aplicável e o cadastro atual em produção.** Existe cadastro genérico de tipos de ausência (`app/ponto/models.py:562-569`), mas seus campos não incluem limite anual (`app/ponto/models.py:577-609`); o formulário também não recebe quota anual (`app/ponto/views_tipos_ausencia.py:67-81`), e o leitor consome efeito, nome, documento, bloqueio, parcial, fim e médico (`app/ponto/catalogo/ausencias.py:240-252`). A porta de lançamento valida tipo, período, parcialidade, documento e sobreposição; não foi encontrada regra específica de acompanhante uma vez por ano nos caminhos examinados (`app/ponto/services/ausencia.py:193-209`; `app/ponto/services/checar_ausencia.py:15-40`). Existência atual do tipo e concessões já usadas: [nao verificado]. **Admin:** “Confira o tipo em Tipos de ausência e o histórico do colaborador antes de decidir o lançamento.” Obra relacionada O124 já fechada, sobre consumo da flag médico, sem regra anual (`app/docs/BACKLOG.md:1208`; `app/docs/TICKETS.md:240`). Obra aberta específica para quota anual: [nao verificado]. Sonda: exclusivamente código.
-
-**12 — FALTA INFORMACAO: faltam usuário/perfis/setores e chamado/rota concretos.** O fio administrativo exige `_is_gestor`, que aceita `is_staff` ou grupos `dp_rh`, `gestor`, `admin_ti` (`app/chamados/views.py:24`; `app/chamados/views.py:35-38`; `app/chamados/views.py:659-674`); o modal aplica a mesma entrada (`app/chamados/views.py:868-874`). A resposta rápida ainda passa por `pode_agir_chamado` (`app/chamados/services/fio.py:708-718`). O departamento vem do dono do módulo ou da área da solicitação (`app/chamados/utils.py:24-44`); gestor geral age em tudo, usuário sem competências declaradas segue autorizado pelo legado, e os demais precisam da competência/perfil correspondente (`app/chamados/utils.py:47-72`). Competências vêm dos setores ativos (`app/colaboradores/mixins.py:126-151`). **Admin:** “Confira o departamento responsável indicado no chamado; a resposta deve ser registrada por quem já tem acesso a esse departamento.” A recusa específica do supervisor não está demonstrada [nao verificado]. Complemento, se houver necessidade comprovada: `RBAC-ESCRITA-POR-PAPEL` aberta (`app/docs/BACKLOG.md:1741`); comportamento AGIR-POR-DONO já registrado como feito (`app/docs/TICKETS.md:1167`). Sonda: exclusivamente código.
-
-Nenhum dos quatro itens exige censo de ESTRUTURA pela prova disponível: 07 e 10 descrevem comportamento existente; 11 e 12 carecem da informação indicada, conforme separação da L-099 (`app/docs/LEIS.md:122`).
-
-_3743 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3745 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
