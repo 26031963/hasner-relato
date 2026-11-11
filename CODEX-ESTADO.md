@@ -1,7 +1,130 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:54** · publicado em **11/11/2026 10:53** (UTC-3)
+> Ultima resposta processada: **11/11/2026 10:57** · publicado em **11/11/2026 10:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 10:57 · sessao 5a702a9c8f16 · MAPA-20 · verificador · origem=Code
+
+REPROVADO para pouso [nao verificado]
+
+Referências `diff:arquivo:linha` usam as linhas de destino do patch fornecido; `base:arquivo:linha`, a cópia disponível. A identidade Git dessa cópia com o HASH informado ficou [nao verificado].
+
+1. **Triagem 1–5: três correções fecham o achado; duas permanecem parciais.**
+
+   | Achado | Conferência |
+   |---|---|
+   | **1 — nome da obra** | **Fecha.** `UI-PAINEL` foi corrigido e as 18 obras correspondem nominalmente ao aval. (`diff:bin/mapa20_valida.py:19–24`; `aval_mapa_ate_o_20_1111.txt:1`, item 1.) |
+   | **2 — tabela torta** | **Parcial.** Há checagem de largura das linhas, duplicatas e células vazias, mas continuam passando separador com largura errada e tabela ainda dentro de cerca; exemplos no item 3. (`diff:bin/mapa20_valida.py:47–52,64–67,82–94`.) |
+   | **3 — retido não atômico/saída antecipada** | **Fecha os dois defeitos indicados.** A re-raspagem escreve ao lado, troca por `mv`, e a falha segue para os passos seguintes com `MAPA_RC=1`. O `rm` é tentado, mas seu sucesso não é conferido. (`diff:bin/relato.sh:99–112`.) |
+   | **4 — falta de foto** | **Fecha no código.** O validador lê `$TMP/mapa20.md`, e esse mesmo arquivo é a origem entregue ao raspador; regravar a fonte depois não troca o documento deste ciclo. (`diff:bin/relato.sh:96–97,141`.) |
+   | **5 — selo por texto/mutantes** | **Parcial.** Agora há execução de cenários, mas sobrevivem mutantes plausíveis; exemplos no item 4. A alegação de “12 mortos” não veio acompanhada dos mutantes/resultados: [nao verificado]. (`diff:bin/tests/test_mapa20_valida.sh:54–109`.) |
+
+2. **Todos os `exit` de `relato.sh` após o diff: 12 comandos.**
+
+   | Local | Valor e condição |
+   |---|---|
+   | `base:bin/relato.sh:27` | `1`: falha da trava. |
+   | `base:bin/relato.sh:28` | `1`: destino sem `.git`. |
+   | `base:bin/relato.sh:32` | `1`: falha da lista de nomes. |
+   | `base:bin/relato.sh:35` | `1`: falha do BACKLOG-TOPO. |
+   | `base:bin/relato.sh:38` | `1`: falha do ESTADO. |
+   | `base:bin/relato.sh:42` | `1`: falha da SESSAO. |
+   | `base:bin/relato.sh:86` | `1`: falha da raspagem do RELATO retido. |
+   | `diff:bin/relato.sh:126` | `1`: falha de `gerar_avais.py`. |
+   | `diff:bin/relato.sh:141` | `1`: falha da raspagem geral. |
+   | `diff:bin/relato.sh:155` | `$MAPA_RC`, portanto `0` ou `1`: índice sem mudança. |
+   | `diff:bin/relato.sh:161` | `1`: falha da expressão `git push && echo`. | [nao verificado]
+   | `diff:bin/relato.sh:162` | `$MAPA_RC`, portanto `0` ou `1`: saída final. |
+
+   **Validador executado vermelho → rc final 0:** não há esse caminho no fluxo mostrado. O ramo fixa `MAPA_RC=1`, nenhuma atribuição posterior o zera, e ambas as saídas normais o devolvem. **Validador verde → rc 1 sem outra falha:** também não há; as saídas posteriores com `1` dependem de outra falha. (`diff:bin/relato.sh:94–99,126,141,155,161–162`.) [nao verificado]
+
+   **O público pode perder MAPA-20 sem o validador falhar:** sim, **sem ele executar**. Fonte ausente/ilegível → `cp` falha → o `&&` pula Python → re-raspagem do público falha → `rm` → remoção rastreada entra no commit. O ciclo sai `1`; isso não constitui validador verde. (`diff:bin/relato.sh:96–108,149–162`.) [nao verificado]
+
+   Continua possível falha de `git commit` seguida de push bem-sucedido terminar `0` com mapa verde; existe outra falha nesse caso. A ausência de conferência de `cd`/commit já era anterior, conforme o descarte 6, e não foi curada pelo diff. (`base:bin/relato.sh:21,120–132`; `diff:bin/relato.sh:144–162`; `triagem_v1.txt:7`.) [nao verificado]
+
+3. **Validador: universo correto, parser ainda insuficiente.**
+
+   Nome a nome, a tupla contém: **E3, E4B, E4C, E4D; RAIZ F1, F2, F3, F4, F5, F6, F7; O168; LASTRO; O169-FECHADA; UI-PAINEL; BO-ROTULO-ENCERRADO; TRIAGEM-OFFLINE-SEM-CAMERA; LOTE-VALIDAR-REGRESSAO-0311**. São as 18 do aval; `SEM DONO` é exigido separadamente. (`diff:bin/mapa20_valida.py:19–25,92–94`; `aval_mapa_ate_o_20_1111.txt:1`, itens 1–2.)
+
+   Nos exemplos seguintes, **G** significa uma tabela completa com cabeçalho de três colunas, separador de três colunas e as 19 linhas obrigatórias preenchidas. Essa forma passa no próprio selo. (`diff:bin/tests/test_mapa20_valida.sh:20–29`.)
+
+   **Aceita indevidamente:**
+
+   - **Separador estreito:** em G, substituir somente o separador por `|---|---|` continua verde. O código confere o conteúdo das células do separador, mas não sua quantidade contra o cabeçalho. (`diff:bin/mapa20_valida.py:64–67`.) [nao verificado]
+   - **Tabela dentro de cerca:** quatro crases de abertura, depois três crases, depois G e finalmente quatro crases. Continua verde, embora as três crases intermediárias não encerrem a cerca de quatro. O mesmo ocorre com quatro/três tils. O parser guarda só o caractere da cerca. (`diff:bin/mapa20_valida.py:47–52`.) [nao verificado]
+   - **Fechamento com texto:** uma linha de três crases seguida de `python` também é tratada como fechamento. (`diff:bin/mapa20_valida.py:47–52`.)
+   - **Cabeçalho vazio:** `| | | |`, separador normal e as 19 linhas preenchidas passam; o cabeçalho só tem sua quantidade de colunas examinada. (`diff:bin/mapa20_valida.py:79–89`.)
+   - **Pontuação sem dado:** `…`, `!!!` e `___` passam. O filtro reconhece apenas o conjunto restrito `-?.–— `, além da retirada de asteriscos/crases; `...` reprova, mas `…` passa. (`diff:bin/mapa20_valida.py:27,70–71`.)
+
+   **Recusa indevidamente formas de apresentação equivalentes:**
+
+   - G sem os pipes externos: retorna `mapa sem tabela`, porque só coleta linhas iniciadas por `|`. (`diff:bin/mapa20_valida.py:58–63`.)
+   - Obra escrita `_E3_`: acusa E3 ausente, enquanto `**E3**` é normalizado. A limpeza trata asteriscos/crases, mas não underscores. (`diff:bin/mapa20_valida.py:30–31,92–94`.)
+
+   **Escape:** `a\|b` funciona como uma célula. Entretanto, a substituição é cega: na linha `| E3 | caminho\\| nao medido |`, com **duas barras reais**, funde as duas últimas células e acusa largura 2 contra 3; não examina a paridade das barras. (`diff:bin/mapa20_valida.py:34–39,87–88`.)
+
+   **Limite de conformidade:** uma tabela de apenas `obra | dado`, com todas as linhas dizendo `nao medido`, também passa. Isso satisfaz o mínimo implementado, mas não comprova as colunas específicas, a medição ou o tamanho de SEM DONO exigidos pelo aval. (`diff:bin/mapa20_valida.py:79–94`; `aval_mapa_ate_o_20_1111.txt:1`, itens 1–2.)
+
+4. **O selo não fica verde com recorte literalmente vazio, mas ainda deixa regressões passarem.** [nao verificado]
+
+   Os três `awk` dependem de prefixos textuais dos marcadores. Se um recorte ficar vazio, as guardas por `mapa20_valida.py`, `raspar_publico.py` e `git push` incrementam `FALHAS`; portanto, a hipótese específica “bloco vazio e selo verde” está barrada. As guardas, porém, não comprovam os limites exatos dos recortes. (`diff:bin/tests/test_mapa20_valida.sh:54–58,112`.) [nao verificado]
+
+   **Mutante plausível que passa:** retirar `|~{3,}` da regex de cercas do validador. A parte (a) só testa cerca de crases; os seis cenários da parte (b) também não usam tils. O mutante preserva esses resultados e aceita G inteiramente cercado por `~~~`. (`diff:bin/mapa20_valida.py:47`; `diff:bin/tests/test_mapa20_valida.sh:29–49,83–109`.)
+
+   **Outro mutante sobrevivente:** validar e publicar diretamente `logs/MAPA-20/mapa.md`, deixando a foto sem uso. Os seis cenários não alteram a fonte entre validação e raspagem; assim, não distinguem esse mutante da correção do achado 4. (`diff:bin/relato.sh:96–97`; `diff:bin/tests/test_mapa20_valida.sh:83–109`.)
+
+   A reprodução em memória dos 48 textos da parte (a) não encontrou divergências; o caso ausente é tratado com rc 1. Execução integral do selo, incluindo seus repositórios temporários: [nao verificado]. (`diff:bin/tests/test_mapa20_valida.sh:29–49`; `diff:bin/mapa20_valida.py:99–104`.)
+
+5. **Selos vizinhos: nenhuma quebra demonstrada nas verificações que leem `relato.sh`.**
+
+   - **`test_codex_estado`:** o recorte começa em `CODEX_OK=""`, depois do novo 2f, e termina no passo 3. Os novos comandos não entram na região examinada por `exit`. (`base:bin/tests/test_codex_estado.sh:104–111`; `diff:bin/relato.sh:89–122`.)
+   - **`test_relato_publica_claude_md`:** mantém o par CLAUDE e o pathspec. O novo `git add` de MAPA está indentado e não aumenta a contagem de linhas iniciadas na coluna 1 por `git add -A `. (`base:bin/tests/test_relato_publica_claude_md.sh:13–20`; `diff:bin/relato.sh:141,145,151,160`.)
+   - **`test_codex_estado_evento`:** continuam as chamadas de `codex_estado.sh` e `relato_nomes.sh`, sem introduzir `gerar_codex_estado.py` inline. (`base:bin/tests/test_codex_estado_evento.sh:27–30`; `base:bin/relato.sh:32,97`.)
+   - **`test_relato_afirma_com_prova`:** a chamada exigida permanece. (`base:bin/tests/test_relato_afirma_com_prova.sh:43–45`; `base:bin/relato.sh:55`.)
+   - **`test_publicacao_sem_nome`:** o universo vem de `git ls-files` do público; MAPA rastreado entra automaticamente. Não depende de um recorte do script. (`base:bin/tests/test_publicacao_sem_nome.sh:58–72`.)
+
+   Execução completa desses cinco selos e resultado de privacidade em produção: [nao verificado].
+
+6. **Quem escreve e quem lê.**
+
+   | Campo/arquivo | Escritor | Leitor |
+   |---|---|---|
+   | `MAPA_RC` | Shell: inicializa `0`; falha de cópia **ou** validação fixa `1`. | Saídas sem mudança e final. (`diff:bin/relato.sh:94–99,155,162`.) |
+   | `MAPA_PAR` | Shell: vazio ou par foto→público. | Argumento opcional do raspador geral. (`diff:bin/relato.sh:94,97,141`.) |
+   | `MAPA_PATH` | Shell: vazio ou nome após `git add` bem-sucedido. | Mensagem e pathspec do commit. (`diff:bin/relato.sh:149–160`.) | [nao verificado]
+   | `$TMP/mapa20.md` | `cp` da fonte; limpeza pelo trap. | Validador e raspador geral. (`diff:bin/relato.sh:96–97,141`; `base:bin/relato.sh:25`.) |
+   | `logs/MAPA-20/mapa.md` | “Sessão por evento” está declarado no comentário; escritor efetivo e gatilhos: [nao verificado]. | `cp`. (`diff:bin/relato.sh:89–96`.) |
+   | Público `MAPA-20.md` | Raspador geral; no retido, raspador→arquivo ao lado→`mv`; falha tenta `rm`. | Re-raspagem do retido e Git para inclusão/remoção/publicação. (`base:bin/raspar_publico.py:23–40`; `diff:bin/relato.sh:102–108,141,150–161`.) |
+
+7. **Classes históricas, uma a uma.**
+
+   | Classe | Resultado |
+   |---|---|
+   | **2º juiz** | Não surge segundo juiz de nomes: raspagem reutiliza `nome_no_texto`. A lista independente no teste serve de fixture contra troca de obra. (`base:bin/raspar_publico.py:15–16,31,36`; `diff:bin/tests/test_mapa20_valida.sh:3–4,20–22`.) | [nao verificado]
+   | **2º escritor fora da porta** | Os dois caminhos de escrita pública estão no mesmo publicador, sob a trava existente. Escritor efetivo da fonte: [nao verificado]. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:96–112,141`.) | [nao verificado]
+   | **Relógio fora da borda** | Nenhum relógio de decisão novo; o `date` permanece na mensagem de commit. O timer de publicação já existe. (`base:bin/relato.sh:130`; `diff:bin/relato.sh:159`; `base:bin/hasner-relato.timer:5–7`.) | [nao verificado]
+   | **Derivação paralela de fonte única** | O publicador consome a foto validada e conserva o raspador existente. Reuso dos censos e medidas pela função real: [nao verificado]. (`diff:bin/relato.sh:96–97,141`; `aval_mapa_ate_o_20_1111.txt:1`, item 1.) | [nao verificado]
+   | **Selo sem mordida** | **Presente:** cercas de tils e a propriedade da foto admitem os mutantes descritos no item 4. (`diff:bin/tests/test_mapa20_valida.sh:29–49,83–109`.) |
+   | **Ordem de trava** | Não aparece nova aquisição. A chamada `codex_estado.sh --gerar` retorna antes da trava do ramo evento, evitando autoespera nessa costura. (`base:bin/relato.sh:27,97`; `base:bin/codex_estado.sh:54–56,65–66`.) |
+   | **Pouso antes do pré-requisito** | O comentário referencia contrato, mas contrato efetivo, mapa completo/publicado, suíte e opus desta volta: [nao verificado]. Esses requisitos constam do aval e das regras da base. (`diff:bin/relato.sh:93`; `aval_mapa_ate_o_20_1111.txt:1`; `base:CLAUDE.md:377–381,394`.) | [nao verificado]
+   | **Campo com dois significados** | `MAPA_RC` significa falha da etapa MAPA, não rc puro do Python; `MAPA_PATH` também representa remoção, não prova de mapa novo publicado. O fluxo é coerente com esses usos, mas nenhum deles comprova “validador executou” ou “mapa novo está no ar”. (`diff:bin/relato.sh:94–99,148–162`.) | [nao verificado]
+
+## 11/11 10:55 · sessao f8e3618b4d7e · - · - · origem=Ronald (tmux)
+
+Contraexemplos confirmados em memória, sem criar arquivos:
+
+- **Aceita tabela torta**: cabeçalho de três colunas com separador de duas; retorna `P=[]`, pois só verifica o conteúdo das células do separador, sem comparar sua largura. Também aceita `|- - -|- - -|- - -|`. (`diff bin/mapa20_valida.py:64-67`)
+- **Aceita tabela ainda cercada**: abertura de quatro crases, fechamento de três e mapa completo; idem com quatro/três tils. Também considera ` ```python ` fechamento. Guarda somente o caractere, sem comprimento nem condição sobre texto restante. (`diff bin/mapa20_valida.py:47-52`)
+- **Aceita pontuação sem dado**: células `!!!`, `___`, `…`; o conjunto só contempla `-?.–— ` e a limpeza adicional de asteriscos/crases. (`diff bin/mapa20_valida.py:27`, `:70-71`)
+- **Aceita cabeçalho vazio** `| | | |` e mapa de somente duas colunas com todas as 19 linhas. Isso satisfaz o mínimo implementado, mas não comprova as colunas exigidas pelo aval. (`diff bin/mapa20_valida.py:79-89`; `aval_mapa_ate_o_20_1111.txt:item 1`)
+- **Recusa tabela sem pipes externos**, produzindo `mapa sem tabela`. (`diff bin/mapa20_valida.py:58-63`)
+- **Recusa `_E3_`**, embora aceite `**E3**`; sua normalização não remove underscores. (`diff bin/mapa20_valida.py:30-31`, `:92-94`)
+- **Recusa separador precedido por duas barras reais**: na linha `| E3 | caminho\\| nao medido |`, funde as duas últimas células e acusa `linha E3: 2 coluna(s), o cabecalho tem 3`. Não considera a paridade das barras anteriores ao pipe. (`diff bin/mapa20_valida.py:38-39`, `:87-88`)
+- **Pipe simples escapado funciona**: `a\|b` permanece uma célula e o mapa completo fica verde. (`diff bin/mapa20_valida.py:34-39`)
+
+A tupla corresponde nominalmente às 18 obras do aval, incluindo `UI-PAINEL`; `SEM DONO` é exigido separadamente. (`diff bin/mapa20_valida.py:19-25`, `:92`; `aval_mapa_ate_o_20_1111.txt:item 1-2`)
+
+Reproduzi os 48 mapas da fixture: nenhuma divergência; o caso adicional de arquivo ausente gera a exceção capturada com retorno 1. Um mutante que remove apenas `|~{3,}` da regex de cercas continua acertando esses 49 casos e aceita um mapa inteiramente entre `~~~`. A fixture testa exclusivamente a cerca de três crases. (`diff bin/mapa20_valida.py:47`, `:99-104`; `diff bin/tests/test_mapa20_valida.sh:29-49`)
 
 ## 11/11 10:54 · sessao 1623f482cb44 · - · - · origem=Ronald (tmux)
 
@@ -731,30 +854,4 @@ Quanto às perguntas 2–5:
 
 Execução Django e ocorrência desses cenários em produção: **[nao verificado]**.
 
-## 11/11 10:18 · sessao a8715dbb8cc7 · - · - · origem=Ronald (tmux)
-
-- **Curado — alto:** instância e colaborador usados pelo apply agora são carregados após trava C; leitura anterior conserva somente `cid`, usado também para revalidar pertencimento ao universo. O relatório continua sendo fotografia anterior à trava. (`app/ponto/services/cluster_espurio.py:250`; `app/ponto/services/cluster_espurio.py:273`; `app/ponto/services/cluster_espurio.py:276`; `app/ponto/services/cluster_espurio.py:278`; `app/ponto/services/cluster_espurio.py:280`)
-
-- **Curado — alto, para a ação legado:** reabertura, nota, ressuscitação e `reabrir_legado_cluster_o169` ficam dentro do mesmo atomic; `evento=None` lança `_SemTrilha` dentro e só é capturado após sair dele, desfazendo a linha. Falha de commit ou outra exceção propaga; não chega ao incremento. (`app/ponto/services/cluster_espurio.py:275`; `app/ponto/services/cluster_espurio.py:284`; `app/ponto/services/cluster_espurio.py:288`; `app/ponto/services/cluster_espurio.py:294`; `app/ponto/services/cluster_espurio.py:295`; `app/ponto/services/cluster_espurio.py:298`; `app/chamados/models.py:1022`; `app/chamados/models.py:1451`)
-
-- **Residual — médio:** `estado_chamado` permanece best-effort com retorno ignorado; falha seletiva nessa ação pode deixar reabertura e ação legado gravadas sem a linha de estado. Não é defeito novo. (`app/chamados/models.py:292`; `app/chamados/models.py:296`; `app/core/observ.py:105`; `app/core/observ.py:133`; `app/core/observ.py:139`)
-
-- **Escritor canônico preservado:** tratamento chama renascimento → `reabrir` → `_gravar_estado`, que escreve `status_local`, limpa `resolvido_em`/via e salva; ambas auditorias usam `evento` → `LogAuditoria.objects.create`. Não há escrita nova direta desses campos. (`app/ponto/services/cluster_espurio.py:284`; `app/ponto/services/cluster_espurio.py:288`; `app/chamados/models.py:1019`; `app/chamados/models.py:1442`; `app/chamados/models.py:228`; `app/chamados/models.py:248`; `app/chamados/models.py:249`; `app/chamados/models.py:296`; `app/core/observ.py:134`)
-
-- **Leitores:** contador lê estado/via antes e depois da trava; relatório lê estado/via e executa `recusa_da_reabertura` antes dela; `recusa_da_reabertura` inclui leitura de `resolvido_em` no ramo administrativo. Histórico/vigia leem `estado_chamado`, não a ação legado. (`app/ponto/services/cluster_espurio.py:107`; `app/ponto/services/cluster_espurio.py:110`; `app/ponto/services/cluster_espurio.py:253`; `app/ponto/services/cluster_espurio.py:256`; `app/ponto/services/cluster_espurio.py:280`; `app/chamados/models.py:1342`; `app/chamados/services/historico.py:44`; `app/chamados/services/historico.py:86`; `app/chamados/services/vigia_loop.py:114`)
-
-- **Sem defeito novo demonstrado de exceção, `parado`, contador ou idempotência:** somente `_SemTrilha` é capturada e ganha motivo explícito; linhas trancadas são puladas, portanto seu `parado` não é sobrescrito; recusas/saída do universo/trilha ausente fazem `continue` antes do incremento. Reabertura bem-sucedida sai do filtro de encerrados; rollback conserva elegibilidade para nova tentativa. (`app/ponto/services/cluster_espurio.py:258`; `app/ponto/services/cluster_espurio.py:269`; `app/ponto/services/cluster_espurio.py:280`; `app/ponto/services/cluster_espurio.py:284`; `app/ponto/services/cluster_espurio.py:295`; `app/ponto/services/cluster_espurio.py:298`; `app/ponto/services/cluster_espurio.py:107`; `app/chamados/models.py:1363`)
-
-- **Parcialmente curado — baixo:** vazio/todas trancadas agora evitam criar usuário sistema; havendo linha `REABRIR`, `get_user_sistema` permanece fora do atomic e pode criar usuário mesmo quando a porta recusa ou a trilha causa rollback. (`app/ponto/services/cluster_espurio.py:269`; `app/ponto/services/cluster_espurio.py:271`; `app/ponto/services/cluster_espurio.py:275`; `app/core/utils.py:18`)
-
-## 11/11 10:17 · sessao 44d9bf1f107a · - · - · origem=Ronald (tmux)
-
-- **Curado por inspeção; execução [nao verificado].** O teste compara estado, via, `resolvido_em`, followups e quantidade de auditorias antes/depois; detecta persistência da reabertura quando a trilha retorna `None`. O import local permite o patch alcançar o tratamento e o núcleo. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:75`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:138`; `app/ponto/services/cluster_espurio.py:244`; `app/chamados/models.py:255`)
-
-- **Baixa — mordida do mutante menos específica que o nome.** `reabre_sem_trilha` elimina o `raise`; o teste falha primeiro em `aplicadas == 0`, antes de verificar a foto persistida. O harness aceita qualquer falha de asserção do caso, embora rejeite erros e tenha controle intacto. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:143`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:145`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:246`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:299`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:308`)
-
-- **Média — cobertura parcial da falha de auditoria.** O patch retorna `None` para todas as ações, inclusive `estado_chamado`; falta cenário seletivo em que o núcleo grava a auditoria e somente `reabrir_legado_cluster_o169` falha. A foto atual verifica a contagem total após rollback, mas a execução com auditoria real já inserida não é exercitada nesse caso. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:78`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:141`; `app/chamados/models.py:292`; `app/ponto/services/cluster_espurio.py:288`)
-
-- **Média — mutante plausível sem cenário correspondente:** remover a trava explícita anterior à releitura preserva os casos sequenciais existentes, mas desfaz a correção do objeto lido depois da trava. A lista de mutantes não altera essa trava; os testes de apply usam fixtures estáveis e não instrumentam espera ou mudança de situação durante a aquisição. Sobrevivência executada: **[nao verificado]**. (`app/ponto/services/cluster_espurio.py:276`; `app/ponto/services/cluster_espurio.py:278`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:100`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:167`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:220`)
-
-_3794 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3796 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
