@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 14:33** · publicado em **11/11/2026 14:35** (UTC-3)
+> Ultima resposta processada: **11/11/2026 14:40** · publicado em **11/11/2026 14:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 14:40 · sessao 57d93ad8e30c · - · - · origem=Ronald (tmux)
+
+(b) **4 leituras comprovadas em 2 templates**, mais **1 expressão com variável não vinculada**:
+
+| Local | Origem/contexto | Uso | Diverge para conversa |
+|---|---|---|---|
+| `app/templates/chamados/partials/_card_atendimento.html:87` | `p` no laço `chamado.perguntas_disputa` (`:77`); perguntas carregadas por `montar_chamados_fio`, `app/chamados/services/fio.py:225`, agrupadas `:243`, anexadas `:253`; view `app/chamados/views.py:569`, contexto `:639`, `:640`; includes `app/templates/chamados/meu_atendimento.html:127`, `:144` | Testa presença para mostrar cabeçalho “Estamos falando do dia” (`_card_atendimento.html:89`) | **sim**: conversa possui data civil; juiz retorna `None`, `app/chamados/juizes.py:338` |
+| `app/templates/chamados/partials/_card_atendimento.html:90` | Mesmo contexto | Exibe como dia de referência/fato sob aquele cabeçalho | **sim**, `app/chamados/juizes.py:338` |
+| `app/templates/chamados/partials/_card_atendimento.html:164` | Mesmo contexto | Exibe dia na confirmação JS de opção “Não trabalhou nesse dia?” (`:160`) | **sim**, se pergunta de conversa alcançar esse ramo; ocorrência concreta em produção **[nao verificado]** |
+| `app/templates/chamados/partials/_lote_preview.html:24` | `x.pergunta` de `linhas`; view `app/chamados/views_cobrar.py::lote_preview:361`, `:363`; serviço `app/chamados/services/validacao.py::fila_validar_classificada:921`, `:923` coloca instâncias de pergunta no dicionário | Exibe dia na prévia de validação | **sim**, se conversa alcançar classe A; alcance concreto **[nao verificado]**; juiz `app/chamados/juizes.py:338` |
+
+A expressão `app/templates/chamados/meu_atendimento.html:19` usa `p.data_evento` fora de um laço de perguntas; seu formulário está no laço de `reg`, iniciado `:10`. O contexto de `meu_atendimento` não fornece `p` (`app/chamados/views.py:633–652`). Portanto, **não é leitura comprovada de PerguntaDisputa**; divergência **não se aplica**. Há cinco expressões `.data_evento` executáveis ao todo, mas quatro com origem comprovada.
+
+`app/templates/chamados/partials/modal_fio.html:161` contém somente comentário; não integra leitores.
+
+(c) **2 produtores de chave JSON `data_evento`, em 2 endpoints; 1 chave derivada `data_evento_label`; 1 consumidor explícito encontrado na cópia**:
+
+| Local | Função/rota | Uso | Diverge para conversa |
+|---|---|---|---|
+| `app/api/views.py:1165` | `api_chamados_v2`, rota `app/api/urls.py:73` | Serializa `p.data_evento` em ISO ou `None`; perguntas pertencem a `perguntas_por_chamado`, `app/api/views.py:1040`, `:1046`, `:1174`; resposta `:1189` | **sim** no valor transmitido, juiz `app/chamados/juizes.py:338`; exibição pelo APK **[nao verificado]** |
+| `app/api/views.py:1166` | Mesmo endpoint; chave derivada `data_evento_label` | Formata o mesmo valor como `%d/%m/%Y`; resposta `:1189` | **sim**, juiz `app/chamados/juizes.py:338`; exibição pelo APK **[nao verificado]** |
+| `app/api/views_mensageria.py:568` | `_item_validar`; usado por `api_mensageria_validar`, `:546`; rota `app/api/urls.py:12`; resposta `views_mensageria.py:549` | Serializa ISO ou `''`; só repassa | **sim** no valor transmitido, juiz `app/chamados/juizes.py:338` |
+| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` (`:98`) | Lê `i.get('data_evento')`, renomeia para `data_do_caso`, repassa ao contexto; recebe payload `:107`, percorre itens `:129` | **sim** no valor repassado; uso final pela IA **[nao verificado]** |
+
+O consumidor HTTP da mensageria chama `/api/mensageria/validar/` em `mensageria/nucleo/core_client.py:50` e devolve JSON integral em `:55`. As outras chamadas à fila em `mensageria/nucleo/ferramentas.py:190` e `:1529` usam classe/referências/contagens, sem ler a chave (respectivamente `:194–205` e `:1532–1543`).
+
+Consumidores JS ou código do APK para essas chaves: **[nao verificado]**. Não apareceu literal `data_evento` nos arquivos JS/TS/JSX/TSX/Vue/Dart/Kotlin/Swift pesquisados **[nao verificado]**.
+
+Observação para contagem AST de (a): `api/views.py:1165`, `:1166` e `api/views_mensageria.py:568` contêm **dois acessos de atributo cada** (teste condicional + formatação), portanto **6 nós AST em 3 posições arquivo:linha**. O consumidor de dicionário é mais uma posição: `mensageria/nucleo/ferramentas.py:127`.
+
+## 11/11 14:37 · sessao 889902a5ad4d · MAPA-20 · verificador · origem=Code
+
+**BLOQUEANTE — a v5 ainda aceita N sem fundamento, X sem prova e declaração de encerramento referente a outra obra incompleta.** O tripwire não corrige essas falhas semânticas. (`bin/mapa20_valida.py:91–107`, `bin/mapa20_valida.py:209–228`; `bin/mapa20_montar.py:123–124`)
+
+1. **Entradas concretas que passam com rc 0**
+
+**BLOQUEANTE — N inventado e X sem prova.** `app/docs/BACKLOG.md:1` contém apenas o título do arquivo. Mesmo assim, uma linha com `1 de 1`, essa fonte e estado `encerrada` passa: o selo verifica caminho permitido e linha não vazia, sem contar PRONTO, identificar a obra ou consultar provas no RELATO. (`app/docs/BACKLOG.md:1`; `bin/mapa20_valida.py:91–107`, `bin/mapa20_valida.py:209–216`)
+
+**BLOQUEANTE — encerramento atribuído a outra obra.** E3 em `1 de 1` pode conter `E4B: encerrada`, enquanto a própria linha E4B permanece em `1 de 2`. A autorização acompanha o índice da linha E3; o selo não identifica a obra mencionada na afirmação. (`bin/mapa20_valida.py:213–214`, `bin/mapa20_valida.py:225–228`)
+
+Este gerador mostra as duas entradas completas, sem criar arquivo. Nas sondas, ambas retornaram **rc 0**; a segunda também conservou `E4B: encerrada` na renderização local de tabela. O leitor e o retorno usados são os de `bin/mapa20_valida.py:246–259`.
+
+```bash
+python3 -B - <<'PY'
+import subprocess, sys
+sys.path.insert(0, "bin")
+import mapa20_valida as V
+
+for caso in ("N_SEM_FUNDAMENTO", "OUTRA_OBRA"):
+    linhas = [
+        "## PRONTO AUSENTE", "", "- nenhuma", "", V.LEGENDA, "",
+        "| " + " | ".join(V.CABECALHO) + " |",
+        "|" + "---|" * len(V.CABECALHO),
+    ]
+    for obra in V.OBRAS:
+        c = [obra] + ["nao medido"] * 8 + [
+            "1 de 2", "app/docs/BACKLOG.md:1", "item 2"
+        ]
+        if obra == "E3":
+            c[9], c[11] = "1 de 1", "nada"
+            c[7] = ("encerrada" if caso == "N_SEM_FUNDAMENTO"
+                    else "E4B: encerrada")
+        linhas.append("| " + " | ".join(c) + " |")
+    c = [V.SEM_DONO] + ["nao medido"] * 8 + [
+        V.XN_SEM_DONO, "nao medido", "nao medido"
+    ]
+    linhas.append("| " + " | ".join(c) + " |")
+    entrada = "\n".join(linhas) + "\n"
+    r = subprocess.run(
+        [sys.executable, "-B", "bin/mapa20_valida.py", "/dev/stdin"],
+        input=entrada, text=True, capture_output=True
+    )
+    print(caso, "rc", r.returncode)
+PY
+```
+
+São contraexemplos do **selo real**. Publicação dessas entradas em produção, com os dados vivos, [não verificado].
+
+2. **Bytes publicados, corridas e retornos** [nao verificado]
+
+| Situação | Resultado da leitura |
+|---|---|
+| Caminho novo aprovado | Raspa a fotografia, julga o temporário raspado e copia esse mesmo arquivo ao destino. Regravar posteriormente o mapa vivo não altera essa entrada publicada. (`bin/relato.sh:100`, `bin/relato.sh:106–111`, `bin/relato.sh:158`) |
+| **BLOQUEANTE — mapa retido** | Regrava a cópia pública anterior após raspagem, **sem passar pelo selo**, e permite commit/push dela. Entrada concreta: mapa vivo inválido e cópia pública contendo `E3 encerrada — 1 de 2`. Esse caminho pode conservar ou republicar o texto, com rc 1 ou 2; não é o contraexemplo de rc 0 acima. (`bin/relato.sh:116–125`, `bin/relato.sh:167–180`) |
+| Raspagem nova falha ou não escreve | Falha explícita recebe 2; retorno 0 sem produzir o temporário chega ao selo como arquivo ilegível e também recebe 2. (`bin/relato.sh:106–113`; `bin/mapa20_valida.py:246–250`) |
+| Remoção falha deixando o mapa presente | Aborta antes do commit/push com 2. Não retira o que já estava publicado remotamente. (`bin/relato.sh:123–124`, `bin/relato.sh:178–179`) |
+| **FILA — fonte fora da fotografia** | O selo lê BACKLOG durante o julgamento; a publicação lê novamente o BACKLOG vivo depois. Inserir uma linha entre essas leituras desloca a referência publicada. A fotografia protege o mapa, não suas fontes. Ocorrência real [não verificado]. (`bin/mapa20_valida.py:100–105`; `bin/relato.sh:155`; `bin/raspar_publico.py:28`) |
+
+**FILA — rc 2 não vence rc 1 em todos os caminhos.**
+
+- `cp` falhando por permissão ou espaço recebe 1, como se o mapa não existisse. (`bin/relato.sh:100–101`)
+- `cmp` com erro operacional também recebe 1, como divergência de conteúdo. (`bin/relato.sh:104–105`)
+- Raspagem do retido falhando, seguida de remoção bem-sucedida, conserva o rc anterior; pode continuar sendo 1. O teste exige justamente esse resultado. (`bin/relato.sh:119–125`; `bin/tests/test_mapa20_valida.sh:309`)
+
+O valor acumulado chega aos dois finais normais: “nada mudou” e depois do push. Entretanto, as classificações acima já podem estar erradas. (`bin/relato.sh:173`, `bin/relato.sh:180`)
+
+O chamador operacional encontrado na cópia é `hasner-relato.service`, diretamente por `ExecStart`, como `oneshot`. A unit não declara tratamento distinto para 1 e 2 nem ação de recuperação; o timer apenas agenda novas execuções. Configuração efetivamente instalada e reação observada em produção [não verificado]. (`bin/hasner-relato.service:12–21`; `bin/hasner-relato.timer:5–8`)
+
+3. **Cura dos achados do opus**
+
+| Achado anterior | Veredito por classe |
+|---|---|
+| Invisíveis e homóglifos indicados | **Curado.** Alfabeto fechado recusa essas classes antes do parser. (`bin/mapa20_valida.py:78–79`, `bin/mapa20_valida.py:145–149`) |
+| `encerrada` fora da tabela | **Curado quanto às posições citadas**: título, lista, negrito e rodapé entram na varredura global. **Não curado semanticamente**: outra obra pode ser declarada encerrada dentro de uma linha completa, como no contraexemplo. (`bin/mapa20_valida.py:213–228`) |
+| `splitlines()` versus GFM | **Curado.** Há divisão somente em LF e rejeição dos demais separadores pelo alfabeto. (`bin/mapa20_valida.py:145–150`) |
+| N inventado | **Não curado — BLOQUEANTE.** Mudou a categoria de caminho permitida; ainda aceita título do BACKLOG e comentário do TICKETS. (`bin/mapa20_valida.py:91–107`; `app/docs/BACKLOG.md:1`; `app/docs/TICKETS.md:1`) |
+| Dois escritores do mapa vivo | **Cura não demonstrada.** O tripwire compara bytes, não autoria. Remoção do antigo `logs/MAPA-20/montar_mapa.py` e escritores vivos [não verificado]. O próprio código registra sua existência anterior fora do repositório. (`bin/relato.sh:104–105`; `bin/mapa20_montar.py:4–8`; `.gitignore:53`) |
+| rc 1 sem consumidor específico | **Não curado — FILA.** A unit chama o script, mas não distingue as duas classes de falha. (`bin/hasner-relato.service:12–21`) |
+| `SEM DONO` aceita encerramento | **Curado.** Apesar do `continue`, a varredura global posterior também alcança essa linha. (`bin/mapa20_valida.py:202–205`, `bin/mapa20_valida.py:225–228`) |
+| X sem prova no RELATO | **Não curado — BLOQUEANTE.** O ramo numérico compara valores e verifica a referência de N; não lê provas de itens. (`bin/mapa20_valida.py:206–216`) |
+| Testemunha LEI-AKITA ligada a `e59c25049` | Cura histórica e validade dessa testemunha [não verificado]. A declaração de escritor único no código não demonstra remoção do escritor anterior. (`bin/mapa20_montar.py:2–8`) |
+| Raspagem depois do julgamento | **Curado no caminho novo; não no caminho retido.** (`bin/relato.sh:106–120`, `bin/relato.sh:158`) |
+| Isenção de `status/encerrada.sim` | **Curado.** Caminhos não são mais removidos antes da busca; os testes agora exigem rejeição. (`bin/mapa20_valida.py:82–88`; `bin/tests/test_mapa20_valida.sh:145–152`) |
+| Ambiguidade de rc 1 | **Não curada — FILA**, pelas falhas de `cp`, `cmp` e raspagem do retido já descritas. (`bin/relato.sh:100–125`) |
+
+4. **Testes e guardas sem mordida** [nao verificado]
+
+**FILA — célula `…` passa no teste pelo motivo errado.** Esse caso fica vermelho pelo alfabeto, antes da verificação de célula vazia. Ele não testemunha a guarda de preenchimento; outros casos de pontuação ainda exercitam essa guarda. (`bin/tests/test_mapa20_valida.sh:66–67`; `bin/mapa20_valida.py:145–149`, `bin/mapa20_valida.py:198–200`)
+
+**FILA — “só escreve a saída pedida” compara apenas caminhos.** `arvore()` não captura conteúdo. Uma regravação de arquivo existente, como acrescentar espaço ao JSON, preservaria a lista de caminhos e escaparia dessa asserção. Mutante não executado [não verificado]. (`bin/tests/test_mapa20_valida.sh:354–355`, `bin/tests/test_mapa20_valida.sh:358–375`)
+
+**BLOQUEANTE — testes verdes legitimam fonte inválida.** O título do BACKLOG é a fonte padrão, e o comentário inicial de TICKETS também é aceito como verde. Portanto, a suíte incorpora o significado errado de “fonte do N”. (`bin/tests/test_mapa20_valida.sh:33`, `bin/tests/test_mapa20_valida.sh:55–60`)
+
+Os **156 casos de conteúdo** reproduzidos por stdin deram os resultados esperados, apesar dos contraexemplos novos. Isso não equivale à execução da suíte shell completa, que cria arquivos. (`bin/tests/test_mapa20_valida.sh:25–189`)
+
+5. **Quem escreve, quem lê e significado dos campos**
+
+| Estado | Escritor identificado | Leitor identificado |
+|---|---|---|
+| `logs/MAPA-20/mapa.md` | O montador escreve no `argv[0]`; chamada efetiva para o caminho vivo [não verificado]. (`bin/mapa20_montar.py:160–161`) | Fotografia e tripwire. (`bin/relato.sh:100–104`) |
+| `montador_dados.json` | A instrução atribui edição à sessão; produtor vivo [não verificado]. A fixture escreve esse JSON. (`bin/mapa20_montar.py:7–8`; `bin/tests/test_mapa20_valida.sh:351`) | `json.loads` do montador. (`bin/mapa20_montar.py:89`) |
+| `MAPA-20.md` temporário novo | Raspador. (`bin/raspar_publico.py:40`) | Selo; depois cópia ao destino. (`bin/relato.sh:109`, `bin/relato.sh:158`) |
+| `MAPA-20.md` público | Cópia do temporário aprovado ou raspagem/rename do retido. (`bin/relato.sh:119–120`, `bin/relato.sh:158`) | Raspagem de retenção e Git. (`bin/relato.sh:119`, `bin/relato.sh:168–179`) |
+| BACKLOG | Gerador preserva o bloco manual e substitui o arquivo; `backlog_estado.py` altera a célula de estado. Autor das listas históricas de PRONTO [não verificado]. (`bin/gerar_backlog.py:103–105`, `bin/gerar_backlog.py:138–140`; `bin/backlog_estado.py:58–59`) | Montador localiza chave; selo abre linha citada; publicador raspa o arquivo. (`bin/mapa20_montar.py:58–61`; `bin/mapa20_valida.py:100–105`; `bin/relato.sh:155`) |
+| TICKETS | Escritores de topo e rodapé; há também molde de inserção de linha. Autor das listas históricas de PRONTO [não verificado]. (`bin/tickets_placar.sh:82`; `bin/tickets_rodape.sh:78–79`; `bin/molde_autocura/ticket_rows.py:10–12`) | Selo abre a linha citada. (`bin/mapa20_valida.py:100–105`) |
+
+Todos os campos abaixo vêm do JSON; seu escritor operacional permanece [não verificado]. Os consumidores são:
+
+| Campo | Uso efetivo |
+|---|---|
+| `cabeca` | Prosa inicial. (`bin/mapa20_montar.py:138`) |
+| `censo`, `alias_censo` | Leitura das linhas e resolução de nomes. (`bin/mapa20_montar.py:90–105`) |
+| `ovr` | Sobrescrita por índice, inclusive identidade. (`bin/mapa20_montar.py:117–118`) |
+| `xn[obra]` | Tripla textual X/N, fonte, falta; expansão de referência BACKLOG, sem derivar N. (`bin/mapa20_montar.py:123–124`) |
+| `fonte_ausente`, `falta_ausente` | Células das obras sem `xn`. (`bin/mapa20_montar.py:127`) |
+| `rascunho.arquivo`, `alias`, `origem` | Contagem do rascunho e anotação na lista superior. (`bin/mapa20_montar.py:65–84`, `bin/mapa20_montar.py:106`, `bin/mapa20_montar.py:132`) |
+| Censo colunas 1–8 | Arquivos, cruzamentos, leis, dependência, movimentos, VISIVEL e voltas, conservados após sobrescritas. (`bin/mapa20_valida.py:53–55`; `bin/mapa20_montar.py:117–120`) |
+| Censo coluna 9 | Etapa histórica, enviada à prosa; na tabela final, coluna 9 passa a receber X/N. (`bin/mapa20_montar.py:119–124`) |
+
+**BLOQUEANTE — os consumidores não preservam a mesma identidade.** Esta entrada troca os rótulos após a canonicalização, mas continua buscando `xn` pelo nome anterior:
+
+```json
+"ovr": {
+  "E3": {"0": "E4B"},
+  "E4B": {"0": "E3"}
+}
+```
+
+Com `xn.E3 = 1 de 1` e `xn.E4B = 1 de 2`, o montador produz E4B com dados e progresso de E3, e vice-versa. A sonda em memória do montador real seguida do selo retornou **rc 0**. (`bin/mapa20_montar.py:116–124`; `bin/mapa20_valida.py:188–214`)
+
+O montador ser o **único escritor vivo** continua [não verificado]. `cmp` comprova igualdade naquela comparação; outro escritor produzindo os mesmos bytes não é identificado. (`bin/relato.sh:104–105`)
+
+6. **Classes reincidentes**
+
+| Classe | Resultado |
+|---|---|
+| Segundo escritor | Existência atual [não verificado]; unicidade não demonstrada pelo tripwire. (`bin/mapa20_montar.py:4–8`; `bin/relato.sh:104–105`) |
+| Derivação paralela de fonte única | **BLOQUEANTE:** N declarado no JSON não é derivado da lista citada; apenas o N do rascunho é contado. (`bin/mapa20_montar.py:74–84`, `bin/mapa20_montar.py:123–124`) |
+| Selo sem mordida | **BLOQUEANTE:** não exige prova de X nem fundamento quantitativo de N. (`bin/mapa20_valida.py:91–107`, `bin/mapa20_valida.py:209–216`) |
+| Relógio fora da borda | **FILA:** fonte e mapa não compartilham fotografia até a publicação. Ocorrência produtiva [não verificado]. (`bin/mapa20_valida.py:100`; `bin/relato.sh:155`) |
+| Campo com significados divergentes | **BLOQUEANTE:** `ovr[0]` muda a identidade exibida sem mudar a chave usada para selecionar progresso. (`bin/mapa20_montar.py:116–124`) |
 
 ## 11/11 14:33 · sessao a6c6e22ba20e · - · - · origem=Ronald (tmux)
 
@@ -814,39 +986,4 @@ Pelo critério fornecido, esses falsos positivos que empurram para A não são b
 
 [truncado em 20000 de 21776 caracteres]
 
-## 11/11 13:40 · sessao eb2c0d0b2703 · - · - · origem=Ronald (tmux)
-
-- **Juiz do servidor = cobrança, não veto.** `selfie_ausente` retorna `origem in ('app',) and not tem_foto and decorrido_min >= prazo`; prazo PWA 0 min, APK/canal desconhecido 90 min, sobreposição só APK/desconhecido. Não lê banco nem relógio. Registro vivo identifica essa autoridade. (`app/ponto/registro_batida.py:71`, `:75`, `:80`; `app/core/juizes.py:1192`)
-
-- **Três chamadores operacionais encontrados:** API principal e API core sob `if not foto`, com `tem_foto=False, decorrido_min=0`, acrescentando motivo/contexto sem impedir escrita; retro usa canal gravado, existência `FotoBatida OR Batida.foto` e duração em minutos. (`app/api/views.py:449`, `:461`; `app/api/views_core.py:436`, `:448`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:70`, `:74`)
-
-- **As APIs usam a mesma porta com ou sem foto:** `registrar_batida` recebe campos da batida sem exigir foto; anexação ocorre depois, somente `if foto`, por `anexar_foto(...registro='criar')`. A porta cria `Batida` sem predicado de foto; seus vetos próprios são competência/colisão, além dos retornos de deduplicação. (`app/api/views.py:665`, `:781`; `app/api/views_core.py:657`, `:776`; `app/ponto/registro_batida.py:94`, `:113`, `:132`, `:145`, `:157`)
-
-- **POST triagem web:** escreve por `registrar_batida` antes de ler/anexar foto; `foto_sessao or request.FILES.get("foto")` só controla anexação. Não consulta `selfie_ausente` nesse ato; a cobrança poderá vir do retro, que lê o canal gravado e ambas as fontes de foto. Isso preserva diferença temporal entre casca web e APIs: web sem foto não cobra inline, API PWA cobra inline. (`app/ponto/services/triagem_batida.py:700`, `:748`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:74`; `app/api/views.py:461`; `app/api/views_core.py:448`)
-
-- **Escritor persistente de foto:** `anexar_foto` escreve `Batida.foto` pela porta `anotar`; pode também criar/atualizar `FotoBatida` conforme `registro`. Modelo admite foto nula. Upload separado exige foto como insumo daquela operação, sem impor foto à criação da batida. (`app/ponto/registro_batida.py:296`; `app/ponto/models.py:78`; `app/api/views.py:847`; `app/api/views_core.py:832`; `app/ponto/views.py:2895`)
-
-- **`foto_ausente` é motivo de cobrança**, não campo booleano de `Batida`: APIs e retro o entregam a `criar_ou_atualizar_disputa`; catálogo transforma em confirmação de presença; upload posterior procura disputas desse motivo, vincula por `contexto.ultima_batida.id`, apara/fecha pelas portas. (`app/api/views.py:464`, `:767`; `app/api/views_core.py:451`, `:762`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:96`; `app/chamados/catalogo/perguntas.py:93`; `app/api/foto_recebida.py:57`)
-
-- **Fila admite null e sync omite arquivo:** escritor normaliza `foto: fotoBlob || null`; leitor só faz multipart de foto se `b.foto` truthy, mantendo exigência de Blob/File quando presente. Modelo, retro e leitores de apresentação examinados tratam ausência; não encontrei exigência de foto sempre presente nesses leitores. Consumidores externos à cópia: [nao verificado]. (`app/static/pwa.js:169`, `:180`, `:214`; `app/ponto/models.py:78`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:75`; `app/core/views.py:1005`; `app/colaboradores/services/detalhe.py:87`; `app/templates/core/_d2_feed.html:6`)
-
-- **Possível bloqueante remanescente real na fila:** `registrarBatidaOffline` aguarda `obterGap()` antes de abrir/gravar `batidas_pendentes`; gap ausente/velho chama `calcularESalvarGap`, cujo `fetch('/hora/')` não tem timeout. Se esse fetch permanecer pendente, a batida não chega ao `add`, embora a captura já tenha resolvido pelo teto. Incidência em produção: [nao verificado]. O Chromium não prova persistência porque substitui `registrarBatidaOffline` por espia que resolve imediatamente. (`app/static/pwa.js:85`, `:100`, `:169`, `:175`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:116`)
-
-- **Sync não pressupõe foto:** lê fila, envia mesmo endpoint `/api/ponto/bater/`, remove após sucesso ou HTTP 400 e conserva em rede/5xx; SW delega às páginas e, sem página, notifica. Sucesso de chamada da espia não comprova esse ciclo. (`app/static/pwa.js:188`, `:214`, `:220`, `:228`, `:239`, `:384`; `app/static/sw.js:112`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:118`)
-
-- **Lacuna anterior de transporte permanece:** fila armazena timestamp corrigido, timestamp bruto, gap, precisão e instante GPS; sincronizador envia timestamp bruto, mas não envia gap, precisão nem instante GPS. Isso não é campo de foto com dois significados; é perda de insumos no transporte. (`app/static/pwa.js:171`, `:176`; `app/static/pwa.js:205`)
-
-- **Testes de servidor existentes:** sem foto cria batida e disputa, com foto não cria motivo `foto_ausente`; juiz testa limiares e retro lê ambas as fontes. Execução nesta revisão: [nao verificado]. (`app/api/tests/test_api_bater_pwa.py:64`, `:95`; `app/ponto/tests/test_selfie_ausente_juiz.py:27`, `:34`, `:103`, `:111`)
-
-## 11/11 13:36 · sessao 578de191b847 · - · - · origem=Ronald (tmux)
-
-- **Quem escreve o veredito:** Python imprime achados e devolve 1 para B com achados, 0 para restante julgado e 2 para erros tratados; o wrapper faz `exec python3`. (`bin/selo_proporcao.py:134`, `bin/selo_proporcao.py:137`, `bin/selo_proporcao.py:141`, `bin/selo_proporcao.py:145`, `bin/selo_proporcao.py:152`, `bin/selo_proporcao.sh:4`)
-- **Chamador concreto encontrado:** o teste define `SELO`, chama o wrapper para o repositório sintético, captura `$?` e compara com o esperado. (`bin/tests/test_selo_proporcao.sh:8`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:25`, `bin/tests/test_selo_proporcao.sh:26`)
-- **Leitores adicionais no teste:** argumentos/classes/revisões são comparados com 2; a chamada com `bash -e` agora tem resultado comparado explicitamente com 1, assim como a chamada direta. (`bin/tests/test_selo_proporcao.sh:71`, `bin/tests/test_selo_proporcao.sh:72`, `bin/tests/test_selo_proporcao.sh:73`, `bin/tests/test_selo_proporcao.sh:74`, `bin/tests/test_selo_proporcao.sh:77`, `bin/tests/test_selo_proporcao.sh:78`, `bin/tests/test_selo_proporcao.sh:79`)
-- **Leitor indireto:** a régua chama todos os `tests/test_*.sh`, portanto inclui este teste quando alcança o loop; falha do teste vira rc 1 da régua. O repositório julgado pelo teste é sintético, não o diff de um pouso real. (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`, `bin/tests/test_selo_proporcao.sh:10`, `bin/tests/test_selo_proporcao.sh:25`)
-- **Pouso real:** não encontrei chamada operacional, captura do rc ou registro PROPORCAO em CORTES/RELATO na busca textual do código/docs da cópia, excluindo `.git`, `logs/` e `app/logs/`; integração operacional/manual **[nao verificado]**. As únicas referências literais encontradas a `selo_proporcao`/`PROPORCAO-POR-RISCO` pertencem aos três arquivos do instrumento; exaustividade frente a chamada construída dinamicamente **[nao verificado]**. [nao verificado]
-- **Pre-push:** declara que não executa o loop de host e chama individualmente outros selos; instalação efetiva e uso deste selo em produção **[nao verificado]**. (`bin/pre-push.sh:14`, `bin/pre-push.sh:15`, `bin/pre-push.sh:16`, `bin/pre-push.sh:19`, `bin/pre-push.sh:38`)
-- **Atalho da régua permanece:** `FP` considera apenas `.py`/`.html` em `app/`; `ARVORE_FP` é calculado, mas o retorno “JA VERDE” compara somente `FP` e status e ocorre antes do loop de host. Assim, mudar somente `bin/` pode conservar esse atalho, condicionado a carimbo anterior OK. (`bin/regua.sh:26`, `bin/regua.sh:33`, `bin/regua.sh:38`, `bin/regua.sh:45`, `bin/regua.sh:84`, `bin/regua.sh:86`, `bin/regua.sh:93`, `bin/regua.sh:138`)
-- **Worktree:** o próprio teste resolve seu diretório e passa o repo sintético explicitamente; execução em worktree **[nao verificado]**. O problema independente de outro teste permanece: `test_hook_nao_e_copia.sh` exige `.git/hooks/pre-push` e falha se ausente; o teste vizinho já consulta `core.hooksPath`/diretório comum. (`bin/tests/test_selo_proporcao.sh:7`, `bin/tests/test_selo_proporcao.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:21`, `bin/tests/test_hook_nao_e_copia.sh:25`, `bin/tests/test_hook_nao_e_copia.sh:27`, `bin/tests/test_commit_so_o_declarado.sh:56`, `bin/tests/test_commit_so_o_declarado.sh:57`)
-
-_3905 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3907 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
