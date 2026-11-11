@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 07:51** · publicado em **11/11/2026 07:52** (UTC-3)
+> Ultima resposta processada: **11/11/2026 07:54** · publicado em **11/11/2026 07:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 07:54 · sessao 55a5a29c6fd1 · FIO-E0-V4-E4B · construtor · origem=Code
+
+[Diff completo: 7 arquivos](FIO-E0-V4-E4B-c4v7.patch). A validação ORM e a certificação pelo Code/opus permanecem [nao verificado].
+
+| Item | Alteração | Assertion RED na base `dee18744a` |
+|---|---|---|
+| 1c | Apply exige competência corrente; recusa informa pedida/corrente. [origem](chamados/management/commands/backfill_fio_morto_e4b.py:221) | [teste:102](chamados/tests/test_e4b_c4v7_memoria.py:102) |
+| 1e | Dia da pergunta passa pelo juiz; conversa fica indeterminada. [origem](chamados/services/foto_e4b.py:176) | [teste:187](chamados/tests/test_e4b_c4v7_memoria.py:187) |
+| 1b | Foto online exclui somente `previsto_em`. [origem](chamados/services/foto_e4b.py:244) | [teste:198](chamados/tests/test_e4b_c4v7_memoria.py:198) |
+| 1a | Callback novo recusa/desfaz; callback recusado sai da fila. [origem](chamados/management/commands/backfill_fio_morto_e4b.py:327) | [teste:119](chamados/tests/test_e4b_c4v7_memoria.py:119), [fila:123](chamados/tests/test_e4b_c4v7_memoria.py:123) |
+| 1d | DML fora das tabelas fotografadas recusa/desfaz. [origem](chamados/management/commands/backfill_fio_morto_e4b.py:323) | [teste:132](chamados/tests/test_e4b_c4v7_memoria.py:132) |
+| 8 | Base troca todos os arquivos produtivos do diff; executa todos os REDs de memória. [origem](chamados/tests/e4b_c4_verificar.py:40) | [teste:75](chamados/tests/test_e4b_c4v7_memoria.py:75) |
+| 6 | Captura de `ns` vinculada ao argumento da lambda. | [correção:471](chamados/tests/test_e4b_classe_e_memoria.py:471) |
+
+RELATO do relógio: `fechamento_lido` não oferece parâmetro de relógio; o ramo de leitura atribui `timezone.now()` a `previsto_em`. Por isso, a exclusão ficou somente na foto online; os demais carimbos continuam comparados. [assinatura](ponto/services/fechamento.py:1735), [escritor](ponto/services/fechamento.py:1086), [ramo de leitura](ponto/services/fechamento.py:1135).
+
+Comandos executados sem banco:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4b_classe_e_memoria chamados.tests.test_e4b_c4_tranca_memoria chamados.tests.test_e4b_foto_memoria chamados.tests.test_e4b_c4_orm_protocolo chamados.tests.test_e4b_c4_base chamados.tests.test_e4b_c4v7_memoria -q
+# rc=0: 79 testes [nao verificado]
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos
+# rc=0: 40 testes [nao verificado]
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight
+# rc=0: sete enxertos conferidos; não executa ORM
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v7_memoria --red-base
+# rc=1: seis REDs, oito falhas por assertion, zero erros
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --red-base
+# rc=1: 28 testes, cinco falhas e 16 erros de APIs ausentes em b20 [nao verificado]
+```
+
+Os **16 erros da base b20 não foram contabilizados como mordidas**. A base completa inclui a ausência de `foto_e4b.py`, sem conservar corpo HEAD. [representação da ausência](chamados/tests/e4b_c4_verificar.py:51).
+
+Cada mutante abaixo retornou **rc=1 por `AssertionError`, sem erro de execução**; os alvos estão no [catálogo:220](chamados/tests/test_e4b_c4v7_memoria.py:220):
+
+```bash
+for mutante_e4b in \
+  roteiro_so_emissao roteiro_so_dois_REDs comp_nao_corrente \
+  callback_livre callback_na_fila sem_captura_sql sql_so_insert \
+  escrita_livre dia_cru carimbo_online
+do
+  PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4v7_memoria --mutante "$mutante_e4b"
+done
+```
+
+Para a sessão, o roteiro ORM inclui `tranca_avulsa` e os novos testes de dois `freeze_time`, callback produtivo e EventoCelula pela porta. [QUERY](chamados/tests/e4b_c4_verificar.py:137), [relógio](chamados/tests/test_e4b_c4_orm.py:127), [callback](chamados/tests/test_e4b_c4_orm.py:149), [EventoCelula](chamados/tests/test_e4b_c4_orm.py:170):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
+```
+
+Ruff foi tentado com `python3 -m ruff check --no-cache`: **rc=1, módulo ausente**. Execução do lint, ORM, suíte inteira e amostra factual das 131: [nao verificado]. [nao verificado]
 
 ## 11/11 07:51 · sessao 926be1d0ec43 · TRAVA-SELO · verificador · origem=Code
 
@@ -846,20 +903,4 @@ O modo seco passa pelas guardas, imprime motivo/volta/diretório e labels, mas n
 
 A cópia delega a descoberta ao `DiscoverRunner` externo; não contém nesse trecho a implementação que permitiria medir a seleção efetiva. Portanto, os exemplos não sustentam afirmar fuga para a inteira. (`app/core/runner_quarentena.py:15`, `app/core/runner_quarentena.py:72`, `app/core/runner_quarentena.py:76`) Quantidade de testes executada: **[não verificado]**.
 
-## 11/11 07:22 · sessao bec9acda611b · - · - · origem=Ronald (tmux)
-
-**Q4 — NÃO PROCEDE como cobertura completa.** Há melhoria real, mas permanecem recusas pela razão errada e mutantes plausíveis sobreviventes. (`bin/tests/test_suite_motivo.sh:57–79`; `bin/tests/test_suite_sh.sh:31–35`)
-
-- Caminhos/globs em `ONLY` agora exigem diagnóstico `nao e label`; há seleção mista inválida e cwd preparado para detectar ausência de `set -f`. (`bin/tests/test_suite_motivo.sh:57–64`)
-- O caso `--only ' ' -- --failfast appA appB` recusa na guarda de EXTRA antes de alcançar a classificação da inteira; portanto não prova essa classificação pela razão anunciada. (`bin/tests/test_suite_motivo.sh:43`; `bin/suite.sh:118`; `bin/suite.sh:143`)
-- Negativos de EXTRA sempre acrescentam `y` e cobram apenas diagnóstico genérico. Mutante que acrescenta `--pattern` a `_FLAG_SO` aceita a primeira palavra, recusa `y`, mantém rc 2 e o mesmo texto procurado: o caso continua verde pela palavra errada. (`bin/tests/test_suite_motivo.sh:66–68`; `bin/suite.sh:105`; `bin/suite.sh:111–114`)
-- **Flag de valor tratada como simples:** acrescentar `-k` a `_FLAG_SO`, preservando `_FLAG_VALOR`, muda `-- -k .` de aceito para recusado; nenhum teste usa `-k` como flag válida. O positivo combinado cobre apenas `-v`, `--tag`, `--exclude-tag=x` e `--failfast`. Sobrevivência integral: **[não verificado]**; esses ramos foram conferidos em memória. (`bin/suite.sh:105–113`; `bin/tests/test_suite_motivo.sh:70`)
-- **`--x=v` para flag simples:** ampliar a pertinência do ramo de `=` para `_FLAG_SO` permite `--failfast=x`. Falta negativo dessa forma; o positivo `--exclude-tag=x` continua passando. Sobrevivência integral: **[não verificado]**; ramo confirmado em memória. (`bin/suite.sh:113`; `bin/tests/test_suite_motivo.sh:66–74`)
-- O positivo de flags só exige chegada à trava falsa; não confere que EXTRA e PARALELO chegaram intactos. A trava falsa registra `$*`, perdendo fronteiras dos argumentos, e `_args` extrai somente labels anteriores a `--settings`. (`bin/tests/test_suite_motivo.sh:19`; `bin/tests/test_suite_motivo.sh:24`; `bin/tests/test_suite_motivo.sh:70–73`)
-- Âncora do motivo, rc 75, executor ignorando recorte, primeira palavra e falta de `set -f` têm casos/mutantes dedicados; o helper de vizinhos permanece substituído. (`bin/tests/test_suite_motivo.sh:20–21`; `bin/tests/test_suite_motivo.sh:75–79`; `bin/tests/test_suite_motivo.sh:96–128`)
-
-**Selo da documentação:** a fixture nua agora é coberta, mas o juiz procura duas substrings, sem provar que o motivo é argumento efetivo nem validar a obra. Ele aceita `bash .../bin/suite.sh # --motivo "pre-opus X"` e `bash .../bin/suite.sh --motivo "pre-opus "`; a guarda real recusa ambos. (`bin/tests/test_suite_sh.sh:34–35`; `bin/tests/test_suite_sh.sh:80–92`; `bin/suite.sh:133`; `bin/suite.sh:143`)
-
-Os selos integrais não foram executados: criam, escrevem e removem arquivos. (`bin/tests/test_suite_motivo.sh:10–21`; `bin/tests/test_suite_motivo.sh:27`; `bin/tests/test_suite_sh.sh:66–83`)
-
-_3714 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3715 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
