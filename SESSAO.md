@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 04:07:11.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (316.0 MB). Acoes na janela: **1547**.
+**Medido em 11/11/2026 04:12:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (316.0 MB). Acoes na janela: **1546**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1556,4 +1556,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:18:42 | Bash | Locate carimbador and juiz C7 | `cd /home/ronald/saas-hasner/app; git grep -n "def lavrar_sem_turno_aberto\\|lavrar_sem_turno_aberto(" \| head; sed -n 1835,1850p chamados/models.py` |
 | 16:18:40 | Bash | Update backlog row and PROMPTS, locate cited sites | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read().split('\n') i=next(k for k,l in enumerate(s) if l.startswith('\| DISPUTA-ZUMBI-1110 \|')) s[i]='\| DISPUTA-ZUMBI-1110 \| fila BO atras do BO-DISPUTA-SEM-PERGUNTA (aval MEDIDA-DISPUTAS-1110 + REGISTRAR 16:17; padrao=Aggregate Root) \| 18 abertas com pode_fechar()=True (models.py:1845), em 10 a ultima pergunta r ...` |
 | 16:18:34 | Bash | Save aval, find existing backlog row and censo pattern | `cd /home/ronald/saas-hasner; cat > logs/aval_registrar_disputa_zumbi_1110.txt <<'EOF' aval Ronald: REGISTRAR DISPUTA-ZUMBI-1110 (medido pelo chat 16:17, so leitura, /tmp/z14.py e /tmp/zumbi.py): 18 disputas abertas com pode_fechar()=True (juiz C7, models.py:1845), a mais antiga de setembro; em 10 a ultima pergunta foi resolvida por via sem_turno_aberto (reconciliador.py:340 lavrar_sem_turno_aberto ...` |
-| 16:07:12 | Bash | Point ESPERANDO at the push process | `cd /home/ronald/saas-hasner; sed -i '3s\|^ESPERANDO: .*\|ESPERANDO: /home/ronald/saas-hasner/logs/PUSH-E4A2-PADRAO/lanca_push.sh \\| pid=2310173\|' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as H; print(H._esperando_com_prova())"` |
