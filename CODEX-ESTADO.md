@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 13:53** · publicado em **11/11/2026 13:57** (UTC-3)
+> Ultima resposta processada: **11/11/2026 14:10** · publicado em **11/11/2026 14:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 14:10 · sessao a833efdfbdac · FIO-E0-V4-E4B · construtor · origem=Code
+
+Quatro correções implementadas: dia pelo juiz existente, trava por âncora, texto limitado e coleta confirmada após savepoint. [Recibo completo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c7.txt:20).
+
+Observado em memória: quatro REDs na c6, seis mutantes detectados e 21 testes OK. [Resultados e comandos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c7.txt:115). [nao verificado]
+
+ORM não executado; comandos no recibo. Certificação Code/opus e concorrência real: [nao verificado].
 
 ## 11/11 13:53 · sessao cf07b64d85a6 · FIO-E0-V4-E4B · verificador · origem=Code
 
@@ -1627,34 +1635,4 @@ Detalhes adicionais relevantes:
 - `status/encerrada.sim` é removido como caminho e passa com X<N (`bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:65`). O caso local existente é `logs/encerrada.md:10`, em `bin/tests/test_mapa20_valida.sh:102`; o `test:414` citado no opus não corresponde à numeração desta cópia [nao verificado].
 - Numeração local a usar: `splitlines()` em `bin/mapa20_valida.py:125`; Cf em `bin/mapa20_valida.py:132`; fonte em `bin/mapa20_valida.py:73`; SEM DONO `continue` em `bin/mapa20_valida.py:185`; guarda encerrada em `bin/mapa20_valida.py:200`.
 
-## 11/11 13:29 · sessao 3e14c3367581 · - · - · origem=Ronald (tmux)
-
-Escritores comprováveis:
-
-| Origem | Evidência |
-|---|---|
-| `montar_mapa.py` | Atribuído como escritor pelo próprio validador; implementação e linha de gravação ausentes da cópia: [nao verificado]. (`bin/mapa20_valida.py:10`, `bin/mapa20_valida.py:128`) |
-| Edição pela sessão `PRONTO-AUSENTE-RASCUNHO` | Informada no item 5 do anexo `opus_final_ffa_achados.txt`; comando, autoria individual e linha da gravação: [nao verificado]. |
-| Outro escritor de produção | [nao verificado]. |
-| Fixture de regravação | Grava `REGRAVADO` no mapa do repositório temporário de teste. (`bin/tests/test_mapa20_valida.sh:146`, `bin/tests/test_mapa20_valida.sh:154`) |
-| Fixtures verde/vermelha | Copiam ou escrevem mapa no repositório temporário de teste. (`bin/tests/test_mapa20_valida.sh:177`, `bin/tests/test_mapa20_valida.sh:178`) |
-
-O publicador lê o mapa vivo e faz uma foto; essa operação não escreve no mapa vivo. (`bin/relato.sh:97`)
-
-A premissa de escritor único é contradita pelo dado fornecido, que relata montador e edição externa; confirmação independente na cópia: [nao verificado]. O comentário que fundamenta a forma rígida continua afirmando exclusividade do montador. (`bin/mapa20_valida.py:10`)
-
-Nos dois avais fornecidos, há obrigação de regravar por evento e de julgar na publicação, mas nenhuma escolha literal de escritor exclusivo; concluir que a lei escolheu o montador seria [nao verificado]. A pergunta de lei é: **quem fica como único escritor autorizado do mapa?** A escolha não deve ser feita pelo censo. (`bin/relato.sh:90`, `bin/mapa20_valida.py:10`; avais fornecidos, item 3 do primeiro e item 4 do complemento.)
-
-A legenda de `montar_mapa.py:103` é mencionada no anexo, mas seu literal não foi fornecido e o arquivo está ausente; conteúdo, aceitação e teste específico: [nao verificado]. [nao verificado]
-
-Ordem de dependência proposta, sem implementar:
-
-1. Escolher o escritor autorizado e sua forma de saída; o juiz atual fundamenta a forma nessa escolha. (`bin/mapa20_valida.py:10`)
-2. Ancorar o juiz no literal dos avais, cobrindo conteúdo visível fora da tabela, caracteres, separadores, fonte de N e estados especiais; hoje o conteúdo julgado restringe-se ao bloco da tabela e `SEM DONO` sai antes da checagem de encerramento. (`bin/mapa20_valida.py:125`, `bin/mapa20_valida.py:132`, `bin/mapa20_valida.py:166`, `bin/mapa20_valida.py:182`, `bin/mapa20_valida.py:200`)
-3. Ancorar a publicação no artefato final julgado; hoje a raspagem ocorre depois da validação. (`bin/relato.sh:97`, `bin/relato.sh:127`)
-4. Ancorar o chamador num resultado distinguível; o serviço apenas declara `ExecStart` e o publicador usa rc 1 tanto para retenção quanto para falhas. (`bin/hasner-relato.service:15`, `bin/relato.sh:100`, `bin/relato.sh:110`)
-5. Fazer os testes morderem essas transições; os atuais testes de publicação usam raspador substituto. (`bin/tests/test_mapa20_valida.sh:158`, `bin/tests/test_mapa20_valida.sh:162`)
-
-Lista candidata de arquivos da cura, sujeita à escolha do escritor: `logs/MAPA-20/montar_mapa.py`, `logs/MAPA-20/mapa.md`, `bin/mapa20_valida.py`, `bin/relato.sh`, `bin/tests/test_mapa20_valida.sh`, `bin/hasner-relato.service`. Os dois primeiros não estão disponíveis: [nao verificado]. Uma lista fechada incondicional antes de decidir o escritor seria [nao verificado].
-
-_3896 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3897 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
