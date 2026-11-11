@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 08:33** · publicado em **11/11/2026 08:35** (UTC-3)
+> Ultima resposta processada: **11/11/2026 08:42** · publicado em **11/11/2026 08:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 08:42 · sessao cb191a43d778 · FIO-E0-V4-E3 · construtor · origem=Code
+
+Cura escrita: marcador e exceção ao `nunca_bateu` ficam limitados à comp 11/2026 em diante pelo mesmo corte. [cartorio.py:1241](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1241).
+
+Entrega: [diff completo](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/fio_e0_v4_e3_e3fix9.diff:1), [log das execuções](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:1).
+
+- **(a)** O isento recebe `regra=versao_para`, calculada pela competência de `janela_atual`, e entra com `regra >= 4`. Uma v5 mudaria `regra:4` para `regra:5` em toda célula de comp 11+, alterando o hash e provocando rejulgamento da frota. [cartorio.py:248](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:248), [cartorio.py:489](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:489), [cartorio.py:538](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:538).
+- **(b)** Foi declarado `HORIZONTE_SEM_ADESAO='2026-11'`, com recusa dura de formato no import. O leitor usa o fim de `janela_atual`; não houve bump. [cartorio.py:270](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:270).
+- **(c)** Somente NB passa `sem_adesao` em produção; o ramo normal omite o argumento. [cartorio.py:1245](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1245), [cartorio.py:1384](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1384).
+- **N4:** classifico a projeção temporal como auxiliar: devolve cinco valores; `_pergunta_viva_calc` aplica a decisão de domínio. [juizes.py:1362](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/juizes.py:1362), [juizes.py:1383](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/chamados/juizes.py:1383).
+
+Resultados locais, com comandos e tracebacks no [log](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:4):
+
+| Execução | RC | Resultado |
+|---|---:|---|
+| RED antes da cura | 1 | 2 FAIL, 0 ERROR |
+| `test_e3_nb_impressao_memoria` | 0 | 24 testes OK | [nao verificado]
+| `x1_mutantes --modo green --sem-banco` | 0 | 24 testes OK | [nao verificado]
+| `sem_horizonte_x1` | 1 | Morreu nas comps 09 e 10 |
+| `horizonte_na_10` | 1 | Morreu na comp 10 |
+| Quatro mutantes anteriores sem banco | 1 cada | Mortos por assertion |
+
+Os REDs históricos mordem no `assertEqual` do hash em [memória:284](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:284). Os demais mordem nas assertions **269, 271, 341 e 381**, discriminadas com o comando de cada um no [relato:146](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:146).
+
+C4/09 exportada e C4b/10 exigem foto NB e conservação dos registros de fechamento/exportação; a assertion ORM está em [teste:283](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:283). Execução ORM: **[nao verificado]**. [nao verificado]
+
+N3 foi atualizado; comandos completos de ORM, mutantes ORM, suite e ruff estão no [relato:106](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_x1.txt:106). `git diff --check`: RC=0. [log:254](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/docs/relato_fio_e0_v4_e3_e3fix9_execucao.txt:254). Certificação Code/opus e efeito N2 após consumidor: **[nao verificado]**. [nao verificado]
 
 ## 11/11 08:33 · sessao 14c7f9cfa684 · BO-ADMIN-1111 · sonda · origem=Code
 
@@ -731,37 +759,4 @@ O adaptador **não é segundo juiz**: transporta `trabalha` e `ata`, exige o ins
 
 A mudança de NB para palavra não acusadora pode alcançar o reconciliador: seu seletor exige palavra preenchida fora dos acusadores, depois carimba perguntas e pode fechar disputa. Isso é leitura existente da nova palavra, sem recalcular a folga; zero candidatos na classe inteira não está demonstrado. (`app/chamados/reconciliador.py:595`, `:611`–`:614`, `:637`–`:641`; [nao verificado].)
 
-## 11/11 07:46 · sessao 65b60786f4c1 · - · - · origem=Ronald (tmux)
-
-1. **PROCEDE o fechamento do mutante parcial original.** O marcador real depende de `not _coberto_inteiro_nb and sem_trabalho`, sem excluir parcial; `trabalha=False` prevalece na ausência parcial. O novo teste exige hash com marcador e a morte está no executor. `app/ponto/services/cartorio.py:1211`, `:1223`; `app/chamados/juizes.py:454`; `app/ponto/tests/test_e3_nb_impressao_memoria.py:309`; `app/ponto/tests/x1_mutantes.py:36`.
-
-   Folga com ausência ainda aguardando conserva marcador: a grade usa apenas aprovadas, a cobertura de cobrança aceita não rejeitadas, e a célula `False` mantém `sem_trabalho=True`. `app/escala/utils.py:1188`; `app/ponto/turnos.py:2516`; `app/chamados/juizes.py:456`; `app/ponto/services/cartorio.py:1223`.
-
-   Folga sob afastamento aprovado integral fica sem marcador deliberadamente, pelo filtro de integralidade. `app/ponto/services/cartorio.py:1211`, `:1223`.
-
-   Feriado com ausência parcial depende de `cel.trabalha`: `False` conserva marcador; `True`/`None` com ata parcial resulta em `sem_trabalho=False` pelo juiz existente e recebe NB. Não é diferença criada pela guarda do marcador. Ocorrência em produção e autorização específica desse recorte: **[nao verificado]**. `app/chamados/juizes.py:454`; `app/ponto/services/cartorio.py:1253`.
-
-2. **PROCEDE a fragilidade da primeira testemunha.** As afirmações `antes == depois` e `NotIn(VEREDITOS_ACUSAM)` aceitam ambos `None` ou vazios. O teste não exige `'concorde'` nessa etapa. `app/ponto/tests/test_x1_folga_sem_adesao.py:132`, `:135`, `:136`.
-
-   Isso não torna o C2b inteiro vazio: ainda exige ausência, hash com marcador, rejulgamento sem força depois da adesão e veredito final derivado dos códigos. `app/ponto/tests/test_x1_folga_sem_adesao.py:137`, `:141`, `:151`, `:160`.
-
-   `forcar=True` evita a guarda de impressão na primeira etapa. Assim, não prova o caminho ordinário imediatamente após o signal da ausência; signal e reconciliador chamam sem forçar. A segunda etapa prova explicitamente a transição depois da adesão, sem forçar. `app/ponto/tests/test_x1_folga_sem_adesao.py:133`, `:151`; `app/ponto/services/cartorio.py:1228`; `app/ponto/signals.py:93`, `:143`; `app/chamados/reconciliador.py:702`.
-
-3. **PROCEDE um sobrevivente plausível; execução integral ORM é [nao verificado].** Mutação apenas em memória na linha 1223:
-
-   ```python
-   sem_adesao=(
-       not _coberto_inteiro_nb and sem_trabalho
-       and getattr(_cob_nb, 'status', None) in (None, 'aprovada')
-   )
-   ```
-
-   Executei os 19 testes de memória e os sete pós-suite com essa fonte: **26 passaram, zero FAIL/ERROR**. Execução efêmera, sem arquivo de transcrição: **[nao verificado por arquivo:linha]**. Os conjuntos existentes usam cobertura `None` ou aprovada; o C2b acrescenta somente aprovada. `app/ponto/tests/test_e3_nb_impressao_memoria.py:91`, `:290`, `:301`, `:311`, `:330`, `:338`, `:353`; `app/chamados/tests/test_e3_pos_suite_sem_banco.py:131`; `app/ponto/tests/test_x1_folga_sem_adesao.py:99`, `:116`.
-
-   Testemunha extra em memória, folga + `aguardando_decisao`: original deu `concorde` com marcador; mutante deu `concorde` sem marcador, hash legado. Execução efêmera: **[nao verificado por arquivo:linha]**. A não equivalência decorre do contrato real: cobrança aceita esse status e a grade não o considera cobertura integral aprovada. `app/ponto/turnos.py:2516`; `app/escala/utils.py:1188`; `app/ponto/services/cartorio.py:1195`, `:1211`, `:1223`.
-
-   Não afirmar que esse mutante passou os 116 ORM: **[nao verificado]**. [nao verificado]
-
-   Dois limites do executor também precisam aparecer: seu `BASE` é `7313a031...`, não a base produtiva informada `52a0022e9`; e `so_acusador` sempre segue a execução sem banco mesmo sem `--sem-banco`. `app/ponto/tests/x1_mutantes.py:20`, `:97`.
-
-_3728 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3729 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
