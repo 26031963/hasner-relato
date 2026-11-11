@@ -1,7 +1,137 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 22:10** · publicado em **10/11/2026 22:12** (UTC-3)
+> Ultima resposta processada: **10/11/2026 22:12** · publicado em **10/11/2026 22:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 22:12 · sessao ef42db15fa9d · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
+
+**Não há base para liberar: permanecem duplicação de motivo no repasse, replay com insumo implícito variável e selos de mutação quebrados.** Referências: [disputa_emissao.py:1275](/home/ronald/codex_ws/e70f2e7eecfdf93c543b68a61b90f6764bafc649/app/chamados/services/disputa_emissao.py:1275), [models.py:2866](/home/ronald/codex_ws/e70f2e7eecfdf93c543b68a61b90f6764bafc649/app/chamados/models.py:2866), [test_bo_disputa_volta5_memoria.py:81](/home/ronald/codex_ws/e70f2e7eecfdf93c543b68a61b90f6764bafc649/app/chamados/tests/test_bo_disputa_volta5_memoria.py:81).
+
+1. **Estado dos achados anteriores.**
+
+   `opus5d.txt`, `preverif3.r`, `matriz2.r` e os três briefs não estão no material textual efetivamente recebido nem foram encontrados na cópia. Não consigo enumerar seus achados e atribuir honestamente “curado/parcial/igual” a cada um. Conteúdo e confronto individual: **[nao verificado]**.
+
+   Quanto aos problemas identificáveis no pedido e nos patches:
+
+   | Problema | Estado atual verificável |
+   |---|---|
+   | Exceção do gerador deixar nascimento incompleto | **Curado no núcleo:** criação do pai, DS e perguntas ficam sob atomic; a exceção propagada desfaz o conjunto. `app/chamados/services/disputa_emissao.py:623`, `:653`, `:670`, `:674`. |
+   | Pergunta estrangeira deixar nova DS sem pergunta | **Parcial:** núcleo e declaração desfazem o ensaio; órfãos também desfazem quando só houve estrangeiras. Persistem os problemas de motivos e replay descritos abaixo. `app/chamados/services/disputa_emissao.py:681`, `:774`, `:1444`. |
+   | Dois escritores de agregação | **Parcial:** o helper reúne as escritas alteradas, mas a âncora conserva união e save próprios. `app/chamados/services/disputa_emissao.py:558`, `:1531`, `:1562`. |
+   | Luz HX sem leitor | **Curado no instrumento:** I7a conta o defeito estrutural; I7b publica a abstinência por falta de ata como INFO. Medição atual de produção: **[nao verificado]**. `app/chamados/management/commands/auditar_invariantes_chamados.py:57`, `:73`, `:82`. |
+   | Dona fechada | **Pergunta de lei aberta no reuso genérico:** o agregador não a salva; a ressuscitação pelo cartório continua podendo reabri-la pela lei existente. `app/chamados/services/disputa_emissao.py:563`; `app/chamados/models.py:1574`. |
+
+2. **Retornos, dona dos motivos e nascimento sem pergunta.**
+
+   Há seis chamadas datadas a `PerguntaDisputa.abrir`. Cinco consomem pergunta e indicador de criação; a primeira tentativa da declaração descarta `criada` em `_`, embora confira a dona da pergunta. Portanto, literalmente, **não são todos os retornos `(p, criada)` integralmente lidos**. `app/chamados/services/disputa_emissao.py:502`, `:710`, `:773`, `:781`, `:990`, `:1453`.
+
+   No núcleo, os motivos admitidos em A vêm das perguntas locais; os estrangeiros são encaminhados a B. Se A já possui pergunta local do mesmo motivo em outro dia, o motivo pode legitimamente aparecer nas duas listas: o próprio teste de ciclo exige esse estado. `app/chamados/services/disputa_emissao.py:598`, `:638`, `:648`; `app/chamados/tests/test_bo_disputa_volta4_memoria.py:36`.
+
+   **Existe também duplicação indevida no repasse:** A aberta com `motivos=[]` recebe o seed `orfao_14h`. Num lote com intervalo local e pergunta `orfao_14h` estrangeira em B aberta, o helper retorna `motivos_antes`, que já contém o seed. A conserva `orfao_14h` sem possuir essa pergunta, B recebe o motivo, e a pergunta local de intervalo impede o rollback. Isso independe da pergunta de lei sobre dona fechada. `app/chamados/services/disputa_emissao.py:1274`, `:1275`, `:980`, `:1002`, `:1007`, `:1335`, `:1349`, `:1429`, `:1444`.
+
+   Para dona aberta, os caminhos regulares conferidos encaminham o motivo; não demonstram exclusividade global nem removem cópias preexistentes. O contador também não detecta o caso acima, porque exige DS sem **nenhuma** pergunta. `app/chamados/services/disputa_emissao.py:566`, `:613`; `app/chamados/management/commands/auditar_invariantes_chamados.py:62`.
+
+   Nos dois consumidores produtivos da declaração, os argumentos da pergunta agora entram no helper transacional. A estrangeira desfaz a agregação/nascimento local e repete a porta na dona. `app/chamados/services/declaracao_texto.py:362`, `:650`; `app/chamados/services/disputa_emissao.py:763`, `:777`, `:781`.
+
+   Entretanto, a API pública ainda aceita `pergunta=None` e pode gravar DS aberta sem pergunta fora de HX/h2. Não encontrei consumidor produtivo externo dessa forma; ela é usada internamente e expressamente exercitada pelos testes. `app/chamados/services/disputa_emissao.py:747`, `:750`, `:754`, `:764`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:397`.
+
+   O h2 só estrangeiro agora desfaz o nascimento. Com ata completa e nenhuma estrangeira, permanece o nascimento seguido de fechamento vazio; sem ata, permanece aberta e acende a luz. `app/chamados/services/disputa_emissao.py:1444`, `:1474`, `:1477`; `app/chamados/models.py:1903`.
+
+3. **Push: momento, disputa e motivos.** [nao verificado]
+
+   | Caminho | Comportamento atual |
+   |---|---|
+   | Nascimento pelo wrapper | Envia para a DS resultante, com motivos admitidos; exige que continue aberta. `app/chamados/services/disputa_emissao.py:699`, `:827`, `:838`. |
+   | Agregação pelo wrapper | Envia os novos motivos de A; motivo repetido com pergunta de outro dia não notifica. `app/chamados/services/disputa_emissao.py:647`, `:832`, `:838`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:252`. |
+   | Encaminhamento para B | **Não transporta os novos motivos de B para o push:** o retorno do agregador é usado apenas para verificar dona aberta. `app/chamados/services/disputa_emissao.py:565`, `:613`, `:817`, `:832`. |
+   | Órfãos, principal | Envia `motivos_atualizados`, inclusive na repetição do mesmo ato e no caso HX sem pergunta. `app/chamados/services/disputa_emissao.py:1484`; `app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:154`, `:162`. |
+   | Complementos antes do filtro | Agrupa motivos por dona; exclui a principal para evitar repetir sua notificação nesse coletor. `app/chamados/services/disputa_emissao.py:1226`, `:1257`, `:1465`. |
+   | Declaração | Não há envio direto nesse helper. `app/chamados/services/disputa_emissao.py:758`. |
+   | Âncora | Envia `ancora_ausente` para a local após analisar o chamado. `app/chamados/services/disputa_emissao.py:1575`, `:1577`. |
+
+   Assim, o wrapper mantém nascimento=admitidos e agregação=novos **da local**; órfãos mantém `motivos_atualizados`. A admissão nova na dona estrangeira não recebe tratamento equivalente de notificação. Aprovação específica dessa omissão e comparação histórica executável com `6c0517eb9`: **[nao verificado]**. `app/chamados/services/disputa_emissao.py:613`, `:832`, `:1002`, `:1486`.
+
+   Não encontrei envio direto da principal antes do rollback dos ensaios estrangeiros. O repasse desfeito retorna antes do push principal; os complementos notificados nesse ramo são anteriores ao savepoint interno. `app/chamados/services/disputa_emissao.py:1278`, `:1447`, `:1461`, `:1462`.
+
+   Isso **não prova ausência de push por cascata**: o cartório é síncrono e há emissores indiretos. Cenário completo que comprove push escapando especificamente desse rollback: **[nao verificado]**. `app/chamados/signals.py:188`, `:216`; `app/ponto/management/commands/detectar_ausencias.py:778`, `:802`.
+
+   O envio é imediato, sem `on_commit`. Portanto, uma falha depois da notificação dos complementos pode desfazer o atomic externo após o envio. Ocorrência concreta: **[nao verificado]**. `app/chamados/services/disputa_emissao.py:1230`, `:1465`, `:1473`, `:1963`, `:1971`.
+
+4. **Savepoints e replay.**
+
+   Núcleo, órfãos e declaração repetem a porta com os argumentos conservados, trocando a disputa pela dona. As guardas verificam criação ou PK diferente; núcleo e órfãos desfazem o replay divergente, enquanto declaração levanta `ValueError`. `app/chamados/services/disputa_emissao.py:710`, `:711`, `:781`, `:782`, `:1453`, `:1454`.
+
+   **Argumentos iguais não significam todos os insumos iguais:** no replay genérico BATIDA, o coletor não conserva `batida_origem_id`; `_nascer` volta a derivá-la do contexto da disputa recebida. O contexto da dona pode apontar outro episódio e alterar a identidade/dia procurados. Reprodução ORM desse caso: **[nao verificado]**. `app/chamados/services/disputa_emissao.py:500`, `:504`; `app/chamados/models.py:2866`, `:2875`, `:3463`.
+
+   Esse risco de episódio não se aplica da mesma forma aos motivos MARCO usados na declaração/repasse: o derivador retorna `None` para essa família. `app/chamados/models.py:3461`; `app/chamados/catalogo/motivos.py:34`, `:48`.
+
+   **Órfãos continua analisando todos os chamados mesmo se o replay divergir.** A análise não está condicionada ao sucesso do replay correspondente; pode chamar o cartório depois de a costura ter sido desfeita. `app/chamados/services/disputa_emissao.py:1454`, `:1456`, `:1459`; `app/chamados/signals.py:216`.
+
+   Os signals já executaram antes de a porta devolver o resultado: o callback de beco é registrado com `on_commit`, e o outbox síncrono escreve no banco. Esses mecanismos não demonstram, por si, vazamento externo; os testes de memória não certificam o comportamento transacional real desses receivers. `app/chamados/models.py:3006`, `:3017`; `app/chamados/signals.py:238`, `:257`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:50`.
+
+5. **Agregador, segundo predicado e censo AST.**
+
+   `_agregar_motivos_na_dona` é o ponto comum das agregações modificadas, mas **não é o único escritor de motivos/contexto do emissor**. A âncora conserva outro predicado de união, criação própria e atribuição/save direto de motivos. `app/chamados/services/disputa_emissao.py:558`, `:1531`, `:1554`, `:1562`.
+
+   `ATOS_EMISSAO` corresponde ao censo executado pelo gate, mas declara explicitamente duas escritas da âncora. Logo, gate verde não demonstra agregador único. `app/chamados/tests/test_porta_disputa_emissao.py:83`, `:105`, `:118`, `:128`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:283`.
+
+6. **Ordem C → D → Ch → P.**
+
+   No núcleo, as donas são consulta lazy, avaliada depois de C; as travas externas permanecem durante o rollback interno e o replay. `app/chamados/services/disputa_emissao.py:623`, `:625`, `:627`, `:653`, `:701`; `app/chamados/models.py:2665`, `:2675`, `:2688`, `:2692`.
+
+   No repasse, o fecho é travado antes das escritas, relido sob C e recusado se crescer; ensaio, replay e análise permanecem no atomic externo. `app/chamados/services/disputa_emissao.py:1156`, `:1167`, `:1173`, `:1178`, `:1215`.
+
+   Nos dois consumidores da declaração, o atomic externo e `_trava_do_ato` antecedem o novo savepoint; a pré-trava inclui donas abertas/fechadas, chamados e perguntas do fato. `app/chamados/services/declaracao_texto.py:299`, `:301`, `:348`, `:352`, `:643`, `:645`.
+
+   **A garantia não cobre autonomamente pendentes do wrapper:** ele chama `perguntar_entradas_pendentes` depois de sair do atomic do núcleo. O helper abre P e depois salva DS, sem atomic/trava próprios. Sem transação externa, P pode estar commitada antes da agregação de motivos/contexto; com transação externa, as travas anteriores permanecem. Não é prova de inversão simultânea de locks, mas é uma fronteira sem a atomicidade anunciada. `app/chamados/services/disputa_emissao.py:650`, `:830`, `:310`, `:313`, `:575`; `app/chamados/models.py:2819`.
+
+7. **Testes e mordida.** [nao verificado]
+
+   | Família | O que verifica / o que não prova |
+   |---|---|
+   | `sem_pergunta` | Rollback, preservação da batida e I7a/I7b. O ORM “depois da pergunta” não afirma que P nasceu antes de levantar; a irmã memória possui essa testemunha positiva. `app/chamados/tests/test_bo_disputa_sem_pergunta.py:58`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:301`. |
+   | Volta2 | Consulta depois de C, dona fechada antes de Ch e trava repetida; mede doubles, não concorrência PostgreSQL. `app/chamados/tests/test_bo_disputa_volta2_memoria.py:143`, `:150`. |
+   | Volta3/4 | Dias, ciclos e replay conservado. A “paridade BASE versus atual” executa a fonte atual duas vezes: prova repetibilidade, não paridade histórica. `app/chamados/tests/test_bo_disputa_volta3_memoria.py:236`, `:245`, `:300`; `app/chamados/tests/test_bo_disputa_volta4_memoria.py:20`, `:45`. |
+   | Volta5 | Possui cenário adversarial de replay criado/PK diferente no núcleo. Porém `nasce_sem_pergunta` encontra cinco sítios e `replay_insere` encontra dois; ambos exigem um e abortam na montagem. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:66`, `:73`, `:77`, `:81`, `:194`. |
+   | 5b | Reuso, critérios de push, HX e h2; a memória simula `analisar` só como mudança de status, sem cartório. `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:120`, `:152`, `:185`, `:258`. |
+   | 5c | Exercita ambos os consumidores da declaração e agregação estrangeira. Não cobre candidata/costura real, pois candidata sempre retorna `None`, trava é Mock e a porta é double. O lote misto usa `intervalo_saida`, deixando passar o seed `orfao_14h`. `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:77`, `:89`, `:95`, `:209`; `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:22`. |
+   | 5e | Demonstra que os asserts rejeitam dona fechada e ausência de nota. Chama a reabertura diretamente, com save/refresh simulados, e muta asserts do teste; não prova a integração cartório→ressuscitação. `app/chamados/tests/test_bo_disputa_volta5e_memoria.py:30`, `:49`, `:59`, `:72`, `:84`. |
+   | Ajuste E1 | O mutante desliga `_trava_do_repasse` no agrupador real; não certifica todos os novos replays. `app/chamados/tests/test_e1_fila_v2_2_integracao.py:211`. |
+   | Reuso 746 | Agora usa motivo com insumo de pergunta disponível; conserva asserts de reuso do pai/nota, mas deixa de exercitar o antigo caso `orfao_14h` sem insumo. `app/chamados/tests/test_3b_reuso_746.py:23`, `:28`, `:31`. |
+
+   Os asserts protegidos estão presentes nos endereços indicados. Permanecerem **historicamente intocados** não pode ser certificado sem a base comparável. `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58`, `:63`; `app/chamados/tests/test_hx_disputa_muda.py:24`, `:44`; `app/chamados/tests/test_pergunta_no_app.py:89`, `:103`. Integridade histórica: **[nao verificado]**.
+
+   Os 683 testes ORM são informação recebida, não certificação desta leitura. Suíte inteira verde: **[nao verificado]**. [nao verificado]
+
+8. **Quem escreve, quem lê e semântica.**
+
+   | Campo | Escritores e leitores confirmados |
+   |---|---|
+   | `DS.motivos` | Escrevem agregador, nascimentos, âncora, aparo/remoção e reabertura administrativa. Leem admissão, push e resolução de motivos. `app/chamados/services/disputa_emissao.py:558`, `:670`, `:1299`, `:1562`; `app/chamados/models.py:1966`, `:2063`, `:2159`; `app/api/foto_recebida.py:63`. |
+   | `DS.contexto` | Escrevem agregador/nascimentos e portas de contexto/aparo/remoção. Leem resolvedor de pergunta, derivador de episódio e auditor. `app/chamados/services/disputa_emissao.py:572`, `:670`; `app/chamados/models.py:1967`, `:2064`, `:2100`, `:2118`, `:3463`; `app/chamados/management/commands/auditar_invariantes_chamados.py:31`. |
+   | `DS.fechada_em` | Escrevem fechamento e reaberturas admin/sistema. Leem eleição, agregador, push, receivers e app. `app/chamados/models.py:1932`, `:2149`, `:2173`; `app/chamados/services/disputa_emissao.py:563`, `:630`, `:827`; `app/chamados/signals.py:28`; `app/api/views.py:1059`. |
+   | `P.disputa` | Nasce no construtor; reuso retorna a canônica preservando a FK. Leem roteamento do motivo, autorização e fallback de listagem. `app/chamados/models.py:3008`, `:3014`; `app/chamados/services/disputa_emissao.py:606`; `app/chamados/services/fio.py:598`; `app/api/views.py:1063`. |
+   | `P.chamado_destino` | Escrevem nascimento, reuso e costura; leem juiz da resolvedora e seleção do card. `app/chamados/models.py:2982`, `:3014`; `app/chamados/services/fio.py:925`; `app/api/views.py:1061`. |
+
+   Há tensão semântica verificável: `motivos` é documentado como cenários ativos; o núcleo admite pelo vínculo com pergunta local, enquanto órfãos conserva o seed sem essa pergunta. Além disso, contexto da DS é usado para derivar identidade BATIDA, embora seja atualizado ao longo dos atos. `app/chamados/models.py:1741`, `:3455`; `app/chamados/services/disputa_emissao.py:598`, `:1275`.
+
+   Esse mapa não certifica censo exaustivo de todos os leitores nem ausência de outras premissas divergentes. **ESMERIL-SEMANTICA completo: [nao verificado].**
+
+9. **Classes de reprovação e proibidos.**
+
+   Permanecem segundo escritor/predicado na âncora, insumo de identidade rederivado no replay, selo sem mordida em dois mutantes e fronteira transacional incompleta nos pendentes. `app/chamados/services/disputa_emissao.py:1531`, `:1562`, `:500`, `:830`; `app/chamados/models.py:2866`; `app/chamados/tests/test_bo_disputa_volta5_memoria.py:81`.
+
+   O cartório continua sendo chamado pela análise; a ressuscitação continua usando a lei HX existente. A falta de ata continua impedindo fechamento e mantendo o aviso, agora acompanhado do contador. `app/chamados/signals.py:216`; `app/chamados/models.py:1574`; `app/chamados/services/disputa_emissao.py:1474`; `app/chamados/management/commands/auditar_invariantes_chamados.py:74`.
+
+   Alteração das sete disputas existentes, execução em produção, identidade criptográfica da cópia, aprovação de critérios adicionais pelos briefs ausentes e ausência de qualquer outra lei nova: **[nao verificado]**.
+
+**NAO LIBERA. Achados que permanecem:**
+
+- Motivo `orfao_14h` pode ficar indevidamente nas duas disputas abertas no lote misto. `app/chamados/services/disputa_emissao.py:1275`, `:1007`, `:1429`.
+- Replay genérico conserva kwargs, mas rederiva episódio pela dona; órfãos ainda analisa chamados após replay divergente. `app/chamados/services/disputa_emissao.py:500`, `:1459`; `app/chamados/models.py:2866`.
+- Dois mutantes abortam por montagem, e a suposta comparação com a base compara a versão atual consigo mesma. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:81`; `app/chamados/tests/test_bo_disputa_volta3_memoria.py:245`.
+- Agregador único não está estabelecido; pendentes podem agregar fora do atomic do núcleo; novas admissões na dona estrangeira não chegam ao coletor de push. `app/chamados/services/disputa_emissao.py:1562`, `:830`, `:613`.
+- Não verificados: achados individualizados dos pareceres ausentes, histórico dos protegidos, reprodução ORM dos novos contraexemplos, efeitos externos completos das cascatas e suíte inteira. **[nao verificado]**. [nao verificado]
 
 ## 10/11 22:10 · sessao 093c3c32dff7 · - · - · origem=Ronald (tmux)
 
@@ -864,73 +994,4 @@ A porta real recebe os quatro horários congelados, `origem='app'`, canal PWA, s
 
 **Número impossível:** não encontrei contradição estática que demonstre número **afirmado** impossível. Os 10 h de D1/D2 têm percurso de produção compatível: dias órfãos fora da vigência são somados às trabalhadas, e D3 fica fora do universo pela demissão anterior à janela. (`app/ponto/services/fechamento.py:792`, `:838`, `:902`, `:431`) Reproduzir numericamente cada tabela nesta árvore permanece **[nao verificado]**. As antigas respostas 200 dos casos desligados continuam armazenadas em MEDIDO, mas já não são expectativas executadas nesses casos. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:328`, `:665`)
 
-## 10/11 20:37 · sessao a613d79df0b4 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-Delta aplicado em cinco arquivos: [nao verificado]
-
-- **Item 1:** `core/tests/test_medida_turno_do_par.py::LINHAS_REGISTRADAS`: somente duas entradas mudaram: `_orfao_resolvido_cross_meianoite`, `[809, 810] → [815, 816]`; `criar_disputa_a_partir_de_chamados_orfaos`, `[1293] → [1299]`. [Registro](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/core/tests/test_medida_turno_do_par.py:267)
-- **Item 2:** `chamados/tests/test_bo_disputa_volta5.py::test_RED_d2_aberta_com_outros_motivos_e_canonica_em_fechada_duas_vezes`: `primeiro_estado` definido antes do laço; a comparação da segunda repetição permanece. [Código](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5.py:198)
-- **Item 3:** `chamados/services/disputa_emissao.py::perguntar_entradas_pendentes` registra explicitamente a chamada ao gerador; `::criar_ou_atualizar_disputa` usa esse sinal para decidir a segunda releitura. [Escritor do sinal](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:294), [leitor e comentário corrigido](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:779)
-
-Não provei que todas as cascatas sejam impossíveis quando o gerador devolve vazio. A cadeia concreta de fechamento passa por `reatar_pergunta_orfa` → `lavrar_sem_turno_aberto` → `p.disputa.fechar`; portanto, a dispensa agora depende da ausência de chamada, não do retorno vazio. [Gerador](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:497), [lavra](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/reconciliador.py:1619), [fechamento](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/reconciliador.py:411)
-
-O RED novo executa pendentes real, simula fechamento por outra instância no gerador e retorno vazio, e exige **zero push**. O mutante que restaura a decisão da c8 falha justamente por emitir push. [Teste e mutantes](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta8_memoria.py:183) [nao verificado]
-
-Mantidos **149/223**, com comentários atualizados em `ponto/tests/test_selo_chokepoint_escrita.py::TETOS`. Previsão: delta zero, pois a fábrica fornece data sem entradas pendentes. Nascimento pula pendentes; agregação sem chamada ao gerador conserva uma releitura. Medida ORM e identificação dos ramos efetivamente percorridos em cada cenário: **[nao verificado]**. [Fábrica](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/fabrica_da_celula.py:172), [tetos](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/ponto/tests/test_selo_chokepoint_escrita.py:186)
-
-Controles locais passaram: volta8 **8**, volta5 **15**, sem_pergunta **14** e catraca **35** testes. Os sete mutantes da volta8, `sem_guarda_push` e o registro com linhas antigas morreram por asserção. [Runner c9](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta8_memoria.py:258), [runner volta5](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5_memoria.py:382), [catraca](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/core/tests/test_medida_turno_do_par.py:540) [nao verificado]
-
-Comandos de memória e de cada mutante:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta8_memoria.py
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_sem_pergunta_memoria.py
-
-for mutante_c9 in \
-  reconsulta_sem_pendentes ignora_fecho_gerador ignora_fecho_pendentes \
-  estrangeira_em_a salva_fechada_d2 omite_sinal_gerador_vazio \
-  retorno_vazio_dispensa_releitura
-do
-  PYTHONDONTWRITEBYTECODE=1 python3 -B \
-    chamados/tests/test_bo_disputa_volta8_memoria.py --mutante "$mutante_c9" || exit 1
-done
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B \
-  chamados/tests/test_bo_disputa_volta5_memoria.py --mutante sem_guarda_push
-```
-
-Catraca completa e mutante das linhas antigas, sem Django/banco:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-from pathlib import Path
-from types import ModuleType
-import unittest
-
-p = Path('core/tests/test_medida_turno_do_par.py').resolve()
-suite = ModuleType('suite_turno') [nao verificado]
-suite.__file__ = str(p) [nao verificado]
-source = p.read_text().replace(
-    'from django.test import SimpleTestCase',
-    'from unittest import TestCase as SimpleTestCase')
-exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
-runner = unittest.TextTestRunner(verbosity=2)
-if not runner.run(unittest.defaultTestLoader.loadTestsFromModule(suite)).wasSuccessful(): [nao verificado]
-    raise SystemExit(1)
-
-linhas = suite.LINHAS_REGISTRADAS['derivacoes_de_dia'] [nao verificado]
-linhas[('chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite', 'B1')] = [809, 810]
-linhas[('chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos', 'B1')] = [1293]
-resultado = runner.run(unittest.TestSuite([
-    suite.CatracaTurnoDoParTest( [nao verificado]
-        'test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit')]))
-if resultado.errors or len(resultado.failures) != 1:
-    raise SystemExit('mutante nao morreu por assertion')
-print('MUTANTE MORTO: linhas antigas')
-PY
-```
-
-Ruff indisponível no ambiente; lint, testes com banco, medidas ORM e certificação pela suite/opus ficam **[nao verificado]**. [nao verificado]
-
-_3512 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3513 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
