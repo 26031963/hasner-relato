@@ -1,7 +1,101 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 06:04** · publicado em **11/11/2026 06:06** (UTC-3)
+> Ultima resposta processada: **11/11/2026 06:22** · publicado em **11/11/2026 06:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 06:22 · sessao b6de4d034e52 · FIO-E0-V4-E3 · construtor · origem=Code
+
+Cura em [ponto/services/cartorio.py:1233](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1233): primeiro argumento volta à chamada direta da porta. A classificação permanece depois da guarda (`cartorio.py:1227`); o marcador conserva `_insumo_nb` (`cartorio.py:1219–1222`).
+
+```diff
+@@ -1233 +1233 @@
+-                    _insumo_nb, marcos, chamados_vivos=0, chamados_total=0, cobrancas_vivas=0,
++                    com_insumo_dia_sem_trabalho(_dia_nb, trabalha=cel.trabalha, ata=_ata_nb), marcos, chamados_vivos=0, chamados_total=0, cobrancas_vivas=0,
+```
+
+| Execução sem banco | Resultado | Testemunha |
+|---|---|---|
+| Catraca na base informada | RC 1; 1 FAIL, 0 ERROR | `ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:226` |
+| Catraca na cura | RC 0; 3 testes | mesmo arquivo:200 | [nao verificado]
+| Memória NB | RC 0; 15 testes | `ponto/tests/test_e3_nb_impressao_memoria.py:84` |
+| Pós-suite | RC 0; 5 testes | `chamados/tests/test_e3_pos_suite_sem_banco.py:19` |
+| Medida do turno | RC 0; 35 testes | `core/tests/test_medida_turno_do_par.py:478` |
+| Mutante: argumento `_insumo_nb` | RC 1; 1 FAIL, 0 ERROR | catraca:226 |
+| Mutante: argumento `_dia_nb` | RC 1; 1 FAIL, 0 ERROR | catraca:226 |
+| Mutante: classificação antes da guarda | RC 1; 1 FAIL, 0 ERROR | memória NB:236 |
+
+`LINHAS_REGISTRADAS` passou sem ajuste (`core/tests/test_medida_turno_do_par.py:539`). O alvo do marcador permanece igual (`ponto/tests/x1_mutantes.py:24`).
+
+Comandos dos testes e do mutante de antecipação: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria -v
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest chamados.tests.test_e3_pos_suite_sem_banco -v
+
+E3_NB_MUTANTE=classificacao_antes_guarda PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria.ImpressaoNuncaBateuMemoriaTest.test_F3_pulada_nao_classifica_nem_carrega -v
+```
+
+Comando da medida, conforme procedimento sem Django de `core/tests/test_medida_turno_do_par.py:20`:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import pathlib, types, unittest
+p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
+suite = types.ModuleType('suite_turno') [nao verificado]
+suite.__file__ = str(p.resolve()) [nao verificado]
+source = p.read_text().replace('from django.test import SimpleTestCase',
+                              'from unittest import TestCase as SimpleTestCase')
+exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
+unittest.main(module=suite, verbosity=2) [nao verificado]
+PY
+```
+
+Para reproduzir catraca, RED e os dois mutantes, execute o bloco abaixo com `CASO=green`, `CASO=base`, `CASO=indireto` e `CASO=sem_porta`, respectivamente. As asserções originais são extraídas de `ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:200`; as mutações ficam em memória.
+
+```bash
+CASO=green PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import ast, os, subprocess, unittest
+from pathlib import Path
+from unittest.mock import patch
+
+p = Path('ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py')
+nomes = {'DECLARADOS', '_chamadas_do_supra', 'CatracaProdutoresDoDictTest'}
+nodes = [n for n in ast.parse(p.read_text()).body
+         if getattr(n, 'name', None) in nomes or isinstance(n, ast.Assign)
+         and any(isinstance(t, ast.Name) and t.id in nomes for t in n.targets)]
+ns = {'ast': ast, 'APP': Path.cwd(), 'SimpleTestCase': unittest.TestCase}
+exec(compile(ast.Module(body=nodes, type_ignores=[]), str(p), 'exec'), ns)
+caso = os.environ['CASO']
+alvo = Path('ponto/services/cartorio.py').resolve()
+ler = Path.read_text
+fonte = ler(alvo)
+if caso == 'base':
+    fonte = subprocess.run(
+        ['git', 'show', '769ed8cfb0cecf6de81bcfb5c7441a4668b87353:app/ponto/services/cartorio.py'],
+        check=True, capture_output=True, text=True).stdout
+elif caso != 'green':
+    antes = '                    com_insumo_dia_sem_trabalho(_dia_nb, trabalha=cel.trabalha, ata=_ata_nb), marcos,'
+    depois = {'indireto': '                    _insumo_nb, marcos,',
+              'sem_porta': '                    _dia_nb, marcos,'}[caso]
+    assert fonte.count(antes) == 1
+    fonte = fonte.replace(antes, depois, 1)
+with patch.object(Path, 'read_text',
+                  lambda p, *a, **kw: fonte if p.resolve() == alvo else ler(p, *a, **kw)):
+    r = unittest.TextTestRunner(verbosity=2).run(
+        unittest.defaultTestLoader.loadTestsFromTestCase(ns['CatracaProdutoresDoDictTest']))
+print(f'CASO={caso} TESTES={r.testsRun} FAIL={len(r.failures)} ERROR={len(r.errors)}') [nao verificado]
+raise SystemExit(0 if r.wasSuccessful() else 1)
+PY
+```
+
+Ruff: comando tentou executar, retornou RC 1 com `No module named ruff`; análise **[nao verificado]**.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ruff check --no-cache ponto/services/cartorio.py
+```
+
+Suite inteira e opus final nesta volta: **[nao verificado]**. [nao verificado]
 
 ## 11/11 06:04 · sessao cd87c28e1945 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -498,52 +592,4 @@ APROVA
 
 O zero efetivo em produção e a identificação individual das seis obras históricas permanecem [nao verificado].
 
-## 11/11 03:08 · sessao 12066ae415d0 · FIO-E0-V4-E3 · construtor · origem=Code
-
-Ajustado apenas C6(i), mantendo as três guardas anteriores. O teste compara todas as colunas dos chamados e exige o carimbo da pergunta; se o pai mudar, falha com seu número. [teste:252–264](ponto/tests/test_x1_folga_sem_adesao.py:252)
-
-Carimbo existente: `via_resolucao='celula_absolveu'`, pela chamada em [reconciliador.py:595](chamados/reconciliador.py:595); campos persistidos pela porta em [models.py:3128](chamados/models.py:3128).
-
-```diff
--        # C6(i): conferir tambem o escritor que o consumidor chama apos a lavra.
--        # So comparar o retorno de julgar deixaria esse caminho fora da prova.
-+        # DECIDIDO (volta 3, secao 4a): celula soberana; consumidor le, nao re-julga.
-+        # Estoque 0 "desses dias": carimbo preexistente fica fora desta cura.
-         from chamados.reconciliador import reconciliar_chamados_colab
-         reconciliar_chamados_colab(self.colab)
--        self.assertEqual(self._estoque(), antes,
--                         'C6(i): reconciliador alterou pergunta/chamado ja gravado')
-+        self.assertEqual(self._estoque()[0], antes[0],
-+                         f'C6(i): PARE chamado-pai #{pai.pk} alterado pelo reconciliador')
-+        pergunta = PerguntaDisputa.objects.get(pk=antes[1][0]['id'])
-+        self.assertEqual(pergunta.via_resolucao, PerguntaDisputa.VIA_CELULA_ABSOLVEU)
-+        self.assertIsNotNone(pergunta.materializada_em)
-+        self.assertIsNotNone(pergunta.materializada_por_id)
-```
-
-Continuam definidos **11 testes**; GREEN mantém essa exigência em [x1_mutantes.py:79](ponto/tests/x1_mutantes.py:79). ORM, RED e morte dos mutantes **[não verificado]**: banco proibido nesta volta. Comandos para a sessão autorizada:
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-export DJANGO_SETTINGS_MODULE=config.settings.ci
-
-# GREEN: arquivo inteiro, 11 testes; esperado rc 0 [nao verificado]
-python3 -m ponto.tests.x1_mutantes --modo green
-
-# RED da base; esperado rc 1 por assertion R1
-python3 -m ponto.tests.x1_mutantes --modo base
-
-# Mutantes; esperado rc 1 por assertion
-python3 -m ponto.tests.x1_mutantes --modo mutante --mutante literal_incondicional
-python3 -m ponto.tests.x1_mutantes --modo mutante --mutante sem_fonte_no_gancho
-```
-
-Expectativas do executor: [x1_mutantes.py:78](ponto/tests/x1_mutantes.py:78).
-
-Ruff nos dois arquivos: **`All checks passed!`, rc 0**, com o comando abaixo; certificação Code/opus **[não verificado]**.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache ponto/tests/test_x1_folga_sem_adesao.py ponto/tests/x1_mutantes.py
-```
-
-_3660 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3661 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
