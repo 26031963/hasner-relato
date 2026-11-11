@@ -1,7 +1,12 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=1409168
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=2636881
 lei: E3 X1 -- 174 dias de FOLGA (trabalha=False, 15 colabs) retem a folha porque o ramo nunca_bateu do cartorio (cartorio.py:1252-1254, BO-INSS-NUNCA-BATEU "nunca_bateu so quando nao ha cobertura") renomeia o juiz para nunca_bateu sem cobertura; folga conta como "sem cobertura"? dono_da_divergencia diz ESTRUTURA. Mudar o que retem e regra fora do pedido (`!`). A E3 segue a V (15) e a X2 (26).
+lei: E3 V15 A+S -- 5 dias (trabalha=True, dono ESTRUTURA) retem a folha sem fio: A=3 (col177 08/11, col292 28/10, col889 25/10; veredito fato_em_ausencia, 0 pergunta, 0 chamado): GRUPO-D manda o emissor dar fio, mas nenhuma regra escrita diz QUAL pergunta resolve FATO_EM_AUSENCIA (a fabrica devolve [] em dia_sem_trabalho, fabrica_da_celula.py:112); S=2 (col292 22/10, col354 30/10): perguntas mortas pelo C6 e o veredito acusa, sem regra de quem age. Falta: a especie do fio de FATO_EM_AUSENCIA e o ator do residual. A esteira segue (c8 cura so a classe B).
+
+E3 V15 LIDO 01h2x (Codex leitura, logs/FIO-E0-V4-E3/v15_dono.r): A=3 emissor (GRUPO-D; especie da emissao para FATO_EM_AUSENCIA sem regra), B=2 resposta viva (tarefa encerra em dia_sem_trabalho antes da pergunta; cabe no dict: validar/admin), P=8 parcial sem periodo (CORTES COBERTURA-PARCIAL-PERIODO: lista do admin como CADASTRO), S=2 perguntas mortas sem regra de encaminhamento. c8 reescrito so para B (casos_b.out) e LANCADO (pid 2788879, wt-codex-fio-e0-v4-e3-010719 @52a0022e9). A e S: lei pendente abaixo; P: lista do admin.
+
+E4B c3 01h2x: commit raia b20a37f3e (backfill +70, disputa_emissao +50, teste +342); ruff 9 achados no teste novo curados pela sessao (B008/B023/F841, mecanico); preverif2 Codex lancado (logs/E4B-ALCANCE/preverif2.r); suite da arvore apos a suite16 do BO.
 
 DESENHO BO-DISPUTA-SEM-PERGUNTA: libera B3 por aval Ronald de 11/11 00h4x (logs/BO-DISPUTA-SEM-PERGUNTA/aval_libera_b3_1111.txt) lei=escritor unico pergunta=motivo encaminhado a dona FECHADA, quem grava e onde fica: porta que agrega motivos na disputa app/chamados/services/disputa_emissao.py:541; respondido pelo aval BO-DISPUTA-DUAS-LEIS de 10/11 22h16 (trilha + contador I23, RAIZ-DA-DISPUTA F1)
 
