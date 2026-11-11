@@ -1,7 +1,13 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 20:14** · publicado em **11/11/2026 20:17** (UTC-3)
+> Ultima resposta processada: **11/11/2026 20:19** · publicado em **11/11/2026 20:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 20:19 · sessao 1afb4ce14cf2 · LASTRO-FOLGA-FORA-DO-CATALOGO · censo · origem=Code
+
+B1: a | pergunta: “(5) Segundo juiz? Ja existe autoridade de "tipo valido" (criar_ausencia :193-195, precedencia.faixa_de, TIPO_CHOICES) -- a guarda e LEITORA da mesma autoridade ou deriva em paralelo?” preverif_25ce.q:7 | resposta: “`faixa_de` responde outra pergunta, a precedência; seu default continua sendo `atestado` para código desconhecido” preverif_25ce.r:78 | motivo: reconheceu o default, mas não identificou o problema de faixa para tipo ativo fora do mapa. O tema estava ao alcance: `folga` estava cadastrada (app/docs/RELATO.md:7369), passa pela guarda (app/ponto/models.py:884), mas falta no mapa e recebe `atestado` (app/ponto/precedencia.py:52–64, app/ponto/precedencia.py:79). Sem trecho de triagem descartando esse achado.
+
+B2: c | pergunta: “selo/RED sem mordida (os 5 testes novos da classe VoltaC2PreverifCodex mordem?)” preverif_c2.q:9 | resposta: “Isso não certifica pouso: RED/GREEN executados, suite inteira desta árvore e opus final permanecem **[nao verificado]**” preverif_c2.r:1 | motivo: a resposta delimitou a execução do RED como não verificada; a falha por fixture é informada pelo opus (opus_c2c_achados.txt:2), mas o conteúdo de `c2_red.log:53–98` não foi fornecido [nao verificado]. [nao verificado]
 
 ## 11/11 20:14 · sessao 9d3d6fd7c87c · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -671,20 +677,4 @@ A cobertura nova é útil, mas não demonstra que cada caso depende do braço no
 
 Não executei o harness porque ele cria e remove arquivos (`bin/tests/test_selo_proporcao.sh:14–32`). A execução alegada de 53/53 mutantes e 32 RED permanece `[nao verificado]`; os arquivos de resultados não constam da cópia disponível `[nao verificado]`.
 
-## 11/11 16:38 · sessao be19b9bab978 · - · - · origem=Ronald (tmux)
-
-Na cópia, o SW tem fonte nominal correta na EXCECAO; o caminho efetivamente aberto depende do runtime. (`app/docs/CORTES.md:445`; `app/core/views.py:528-530`.)
-
-- As duas cascas carregam `pwa.js`, que registra `/sw.js` com escopo `/`. (`app/templates/base.html:20`; `app/templates/base_app.html:20`; `app/static/pwa.js:14`.)
-- A URL raiz inclui `core.urls`; `/sw.js` chama `views.service_worker`. (`app/config/urls.py:39`; `app/core/urls.py:24`.)
-- A view não renderiza template: abre `sw.js`, substitui `__BUILD_ID__` e responde JavaScript. (`app/core/views.py:570-573`.)
-- `_raiz_do_static()` prefere `/app/staticfiles/sw.js` quando existe; caso contrário usa `/app/static/sw.js`. A fonte versionada é `app/static/sw.js`, incluída nominalmente em `CORTES.md`. Conteúdo e ramo efetivamente servido em produção: `[nao verificado]`. (`app/core/views.py:528-530`; `app/docs/CORTES.md:445`.)
-- A configuração registra `BASE_DIR/static` como fonte de static e `BASE_DIR/staticfiles` como destino coletado; `staticfiles/` é ignorado pelo Git. (`app/config/settings/base.py:98-99`; `.gitignore:13`.)
-- Mesmo um caminho de diff literal `app/staticfiles/sw.js` seria A pelo restante das regras: não tem componente `static`, não está na LISTA e cai no retorno final. Portanto, a diferença entre caminho fonte e coletado não demonstra B indevido. (`bin/selo_proporcao.py:98-107`; `bin/selo_proporcao.py:110-127`.)
-- O código confirma escrita offline no PWA: `registrarBatidaOffline` abre transação de escrita e adiciona batida; sincronização remove itens enviados. O SW delega sincronização à página por mensagem, ou pede ao usuário para abrir o app. (`app/static/pwa.js:107-113`; `app/static/pwa.js:161-172`; `app/static/sw.js:112-127`.)
-
-Escritor estrutural de `CORTES.md`: `bin/gerar_cortes.py` lê `app/docs/CORTES.json`, transforma cada `frase` em linha Markdown e reescreve o destino inteiro; a execução normal chama esse escritor. (`bin/gerar_cortes.py:23-24`; `bin/gerar_cortes.py:31-32`; `bin/gerar_cortes.py:106-109`; `bin/gerar_cortes.py:114-116`; `bin/gerar_cortes.py:142-152`.)
-
-Os blocos atuais estão em `CORTES.md:444-445`, mas não há correspondentes PROPORCAO/LISTA-FECHADA/EXCECAO em `CORTES.json` na cópia `[nao verificado: ausência sem linha positiva única]`; o gerador não preserva apêndices manuais, então regeneração apagaria esses blocos. Esse é o limite (c) já declarado no anexo, não um achado fora do contrato. (`bin/gerar_cortes.py:97-116`; `app/docs/CORTES.md:3`; anexo `v10_contrato.txt`, item 4(c), sem arquivo local: `[nao verificado]`.)
-
-_3996 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3997 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
