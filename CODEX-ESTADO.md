@@ -1,7 +1,77 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 08:50** · publicado em **11/11/2026 08:51** (UTC-3)
+> Ultima resposta processada: **11/11/2026 08:54** · publicado em **11/11/2026 08:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 08:54 · sessao 00b37e6c645a · FIO-E0-V4-E3 · construtor · origem=Code
+
+Corrigidos somente os dois arquivos autorizados: [goldens e comentário](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_x1_folga_sem_adesao.py:31) e [registro de linhas](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:315).
+
+```diff
+--- app/ponto/tests/test_x1_folga_sem_adesao.py
++++ app/ponto/tests/test_x1_folga_sem_adesao.py
+@@ -31,5 +31,5 @@
+-# Hashes da funcao real da base 52a0022e, com o DNA de _criar_celula.
++# Medido com o cartorio da base 52a0022e9 (logs/FIO-E0-V4-E3/e3fix9_golden.log).
+ GOLDEN_BASE = {
+-    9: 'c3b1e42811726eeafe415ba8a3664e7bda8f81c8bbd7d747fb6d0dcb59001c3e',
+-    10: 'c9cd4c401241f99cc08abbcb91060fd7b7f9a1243c21047382cc966e89438157',
++    9: '9814ac9bff8c08a98803213eec0f1f90630b235ab62828c68f48d53753ff5c73',
++    10: '8b9eae698d8d028a70ca3eb1048e1c56fbd7b375758630eb151c4a109d8bb569',
+ }
+--- app/core/tests/test_medida_turno_do_par.py
++++ app/core/tests/test_medida_turno_do_par.py
+@@ -315 +315 @@
+-                       ('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1'): [1172, 1322],
++                       ('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1'): [1191, 1344],
+```
+
+O censo pelo instrumento do selo encontrou **um único item registrado** de `cartorio.py`: `derivacoes_de_dia`, `_julgar_colab_corpo`, B1. Suas ocorrências atuais são [cartorio.py:1191](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1191) e [cartorio.py:1344](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1344). A comparação integral dos registros passou pela [catraca](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:539). [nao verificado]
+
+Comandos executados em `app/`:
+
+```bash
+# rc=0; 24 testes [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria -v
+
+# rc=0; 24 testes [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo green
+
+# Cada comando abaixo: rc=1, morto por assertion, ERROR=0
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_horizonte_x1
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante horizonte_na_10
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante literal_incondicional
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante sem_fonte_no_gancho
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante so_acusador
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.x1_mutantes --sem-banco --modo mutante --mutante parcial_tira_marcador
+```
+
+Resultados segundo o [executor sem banco](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/x1_mutantes.py:77).
+
+RED da catraca antes da edição: **rc=1**. Após a edição: **rc=0**. Mutante restaurando o registro antigo somente em memória: **rc=1**, por assertion em [test_medida_turno_do_par.py:540](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/core/tests/test_medida_turno_do_par.py:540). Comando do mutante; para GREEN, retirar `MUTANTE=registro_antigo`:
+
+```bash
+MUTANTE=registro_antigo PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import os, pathlib, types, unittest
+p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
+suite = types.ModuleType('suite_turno') [nao verificado]
+suite.__file__ = str(p.resolve()) [nao verificado]
+source = p.read_text().replace(
+    'from django.test import SimpleTestCase',
+    'from unittest import TestCase as SimpleTestCase')
+exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
+if os.environ.get('MUTANTE') == 'registro_antigo':
+    suite.LINHAS_REGISTRADAS['derivacoes_de_dia'][ [nao verificado]
+        ('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1')
+    ] = [1172, 1322]
+unittest.main(
+    module=suite, [nao verificado]
+    defaultTest='CatracaTurnoDoParTest.test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit',
+    verbosity=2)
+PY
+```
+
+A busca `rg -n 'c3b1e428|c9cd4c40' .` terminou com **rc=1**, sem ocorrências restantes; `git diff --check`, **rc=0**. ORM c4/c4b após esta edição: **[nao verificado]**, reservado à sessão conforme solicitado.
 
 ## 11/11 08:50 · sessao eb804156157f · SELO-ESPERA · verificador · origem=Code
 
@@ -637,83 +707,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
 
 Ruff foi tentado com `python3 -m ruff check --no-cache`: **rc=1, módulo ausente**. Execução do lint, ORM, suíte inteira e amostra factual das 131: [nao verificado]. [nao verificado]
 
-## 11/11 07:51 · sessao 926be1d0ec43 · TRAVA-SELO · verificador · origem=Code
-
-**NÃO LIBERA.** As correções pontuais funcionam, mas a descoberta ainda confunde arquivos candidatos com os testes efetivos, e o selo documental continua aceitando comandos que a porta recusaria. Isso independe da pergunta de desenho do item 6. (`bin/suite.sh:155`, `bin/suite.sh:157`; `bin/tests/test_suite_sh.sh:37`; `bin/suite.sh:60`)
-
-**1. NÃO PROCEDE o fechamento da classe; PROCEDEM curas pontuais.**
-
-Há um contraexemplo compacto nesta cópia:
-
-```text
---only 'api chamados colaboradores comunicados core escala ferias folha holerite inteligencia pautas ponto.tests relatorios'
-```
-
-São as LABELS com apenas `ponto` substituído por `ponto.tests`. Executando somente `_suite_inteira` em memória, obtive retorno **1**, portanto “não inteira”. A diferença é `ponto.management.commands.testar_pwa`: o `find` exige sua cobertura porque seu nome começa com `test`, embora ele defina `Command(BaseCommand)` e execute métodos `t01_...` por `handle`. Pela análise estática, deixá-lo fora não retira casos de teste; igualdade da suíte no Django instalado é **[nao verificado]**. (`bin/regua.sh:23`; `bin/suite.sh:155`, `bin/suite.sh:157`; `app/ponto/management/commands/testar_pwa.py:31`, `app/ponto/management/commands/testar_pwa.py:70`, `app/ponto/management/commands/testar_pwa.py:100`)
-
-Logo, “todos os módulos encontrados” e “todos menos um” não discriminam necessariamente inteira e recorte: o módulo omitido pode não fornecer teste algum. Enumerar classes ou métodos também fica fora da comparação implementada, que exige selecionar o módulo ou um ancestral dele; uma enumeração integral concreta por classes nesta cópia é **[nao verificado]**. (`bin/suite.sh:156`; `app/ponto/management/commands/testar_pwa.py:31`)
-
-Quanto às formas perguntadas:
-
-| Forma | Resultado |
-|---|---|
-| Pasta com nome fora de `test*` | **Não é escape isoladamente:** o padrão restringe arquivos; o `find` atravessa as demais pastas. (`bin/suite.sh:158`, `bin/suite.sh:159`) |
-| Pasta sem `__init__.py` | A guarda não verifica importabilidade nem `__init__`; pode exigir arquivos que a descoberta efetiva ignore. Efeito no Django instalado: **[nao verificado]**. (`bin/suite.sh:158`; `app/core/runner_quarentena.py:76`) |
-| Pasta prunada | Os quatro nomes são excluídos pelo script, sem regra equivalente no override do runner. Se houver testes efetivos ali, um recorte que cubra apenas o restante será recusado como inteira. Ocorrência atual: **[nao verificado]**. (`bin/suite.sh:158`; `app/core/runner_quarentena.py:75`) |
-| Symlink | A busca não usa `-L`, e exige `-type f`; não representa integralmente arquivos e diretórios alcançáveis por links. Divergência concreta da suíte desta cópia: **[nao verificado]**. (`bin/suite.sh:158`, `bin/suite.sh:159`) |
-| Espaço/acento no caminho externo | O caminho está citado na busca. Nomes selecionáveis de app/módulo, porém, continuam limitados à forma ASCII. (`bin/suite.sh:104`, `bin/suite.sh:149`, `bin/suite.sh:158`) |
-| `--dir` buscando outra árvore | Não encontrei troca ordinária: a busca usa `<DIR>/app`, e o bind principal usa esse caminho canonicalizado. As sobreposições adicionais são staticfiles, caches, logs e media. (`bin/suite.sh:149`, `bin/suite.sh:194`, `bin/suite.sh:220`; `bin/arvore_do_push.sh:55`, `bin/arvore_do_push.sh:80`) |
-
-Há custo adicional até proporcional a **módulos × palavras selecionadas**, inclusive com motivo válido e em `--seco`: a classificação vem antes dessas decisões. Duração em produção: **[nao verificado]**. (`bin/suite.sh:154`, `bin/suite.sh:156`, `bin/suite.sh:163`, `bin/suite.sh:173`)
-
-As demais curas:
-
-- **PROCEDE:** `_valor` agora recusa um próximo flag como valor; EXTRA continua preservado como array; SECO ganhou representação `%q`. (`bin/suite.sh:51`, `bin/suite.sh:178`, `bin/suite.sh:223`)
-- **PROCEDE:** `RecursionError` no parse cai no regex, e `AST-FALHOU` passa ao stderr da chamada direta. (`bin/vizinhos_da_volta.py:68`, `bin/vizinhos_da_volta.py:120`, `bin/vizinhos_da_volta.py:123`; `bin/suite.sh:89`)
-- **NÃO PROCEDE fechar a classe documental:** os dois exemplos citados foram barrados, mas o juiz ainda aceita `bash bin/suite.sh --motivo "pre-opus X" --motivo "quero ver"`. Conferi o juiz em memória; o parser usa o último motivo, que a guarda recusaria. Também passa uma linha `echo` contendo o texto do comando. (`bin/tests/test_suite_sh.sh:37`; `bin/suite.sh:60`, `bin/suite.sh:163`)
-
-**2. PROCEDE a ordem antes de env-file/Docker; NÃO PROCEDE tratamento confiável da falha da busca.**
-
-A classificação ocorre antes de `teste_envfile`, da montagem e do executor Docker. O `source recursos.sh` e, com `--volta`, o helper e o arquivo de diagnóstico ocorrem antes dela. (`bin/suite.sh:39`, `bin/suite.sh:86`, `bin/suite.sh:163`, `bin/suite.sh:184`, `bin/suite.sh:197`, `bin/suite.sh:216`)
-
-O status de `find` é perdido na substituição de processo. Diretório ausente é ignorado por `continue`; busca sem resultados termina como **inteira**, pedindo motivo — não vira automaticamente “não inteira”. (`bin/suite.sh:153`, `bin/suite.sh:158`, `bin/suite.sh:161`)
-
-O retorno “não inteira” acontece quando algum resultado emitido não está coberto. Isso também pode ocorrer com uma busca incompleta ou com erro, pois não existe validação posterior de sua conclusão. Uma falha real por permissão nesta cópia é **[nao verificado]**. (`bin/suite.sh:157`, `bin/suite.sh:158`)
-
-**3. PROCEDE a razão dos três novos; NÃO PROCEDE suficiência da cobertura.**
-
-| Mutante | Discriminante correto |
-|---|---|
-| `executor_extra_junta` | `%q` distingue `--tag x --failfast` de `--tag\ x\ --failfast`; o grep exige argumentos separados. (`bin/tests/test_suite_motivo.sh:23`, `bin/tests/test_suite_motivo.sh:103`, `bin/tests/test_suite_motivo.sh:177`) |
-| `valor_aceita_flag` | Os quatro casos `flag --seco` exigem rc 2 **e** “precisa de valor”; eventual recusa posterior não satisfaz o diagnóstico. (`bin/tests/test_suite_motivo.sh:111`, `bin/tests/test_suite_motivo.sh:112`, `bin/tests/test_suite_motivo.sh:178`) |
-| `descoberta_por_nome_de_app` | A enumeração completa dos três módulos deve ser inteira; o mutante não reconhece esses nomes e a libera. (`bin/tests/test_suite_motivo.sh:18`, `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:106`, `bin/tests/test_suite_motivo.sh:179`) |
-
-**Sobrevivente:** trocar `"$s".*` por `"$s"*` mantém o resultado das seleções da fixture, que não contém irmãos como `test_x` e `test_x_extra`. A mutação passaria a cobrir indevidamente o segundo pelo primeiro, podendo recusar um recorte legítimo. A comparação foi conferida em memória. (`bin/suite.sh:156`; `bin/tests/test_suite_motivo.sh:18`, `bin/tests/test_suite_motivo.sh:109`)
-
-Remover todo o prune **morre**: inclui `migrations/test_0001.py`, ausente da enumeração esperada como inteira. Trocar o `return 1` por `continue` também **morre**: os recortes passam a ser classificados como inteiros e quebram os positivos. (`bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:106`, `bin/tests/test_suite_motivo.sh:109`; `bin/suite.sh:157`, `bin/suite.sh:161`)
-
-Execução integral do selo e confirmação dos “22 mortos”: **[nao verificado]**; ele cria, escreve e remove arquivos. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:31`)
-
-**4. PROCEDE a compatibilidade dos leitores examinados.**
-
-| Testemunho | QUEM ESCREVE | QUEM LÊ |
-|---|---|---|
-| `_porq` / `VOLTA_PORQUE` | Wrapper fornece o caminho; `suite.sh` redireciona para ele o stderr produzido pelo helper. (`bin/volta_intermediaria.sh:32`; `bin/suite.sh:86`, `bin/suite.sh:87`; `bin/vizinhos_da_volta.py:130`) | `suite.sh` reproduz falhas/`AST-FALHOU`; wrapper conta linhas com ` <- `. Esse formato permanece. (`bin/suite.sh:88`, `bin/suite.sh:89`; `bin/volta_intermediaria.sh:34`) |
-| `trava.chamada` | Trava falsa grava `%q` por argumento. (`bin/tests/test_suite_motivo.sh:23`) | `_args` extrai labels; greps verificam sufixos. As labels admitidas não precisam de escapes, portanto esses leitores continuam compatíveis. (`bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:99`, `bin/tests/test_suite_motivo.sh:103`; `bin/suite.sh:104`) |
-| `SECO argv` | `suite.sh` imprime as mesmas expansões de seleção, paralelismo e EXTRA do executor. (`bin/suite.sh:178`, `bin/suite.sh:222`, `bin/suite.sh:223`) | O selo ainda verifica apenas o resumo anterior; não protege a nova linha `argv`. (`bin/tests/test_suite_motivo.sh:121`, `bin/tests/test_suite_motivo.sh:122`) |
-
-O wrapper passa a receber `AST-FALHOU` também em seu log principal, pois captura stderr. A régua executa os selos e lê seu status, sem interpretar esses três formatos. (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:42`; `bin/regua.sh:138`, `bin/regua.sh:140`)
-
-Há um resíduo novo: se o helper falhar, o ramo sai antes de remover o temporário automático `_porq`. (`bin/suite.sh:86`, `bin/suite.sh:88`, `bin/suite.sh:90`)
-
-**5. PROCEDEM os descartes sintáticos; NÃO PROCEDEM as generalizações de fechamento.**
-
-- **Último `--only` vence:** descarte correto como fuga isolada; seleção julgada e executada usam o mesmo valor final. (`bin/suite.sh:55`, `bin/suite.sh:150`, `bin/suite.sh:222`)
-- **Assimetria de `--tag`:** existe, mas não demonstra ampliação; o valor separado é consumido e EXTRA chega citado. Efeito no runner instalado: **[nao verificado]**. (`bin/suite.sh:121`, `bin/suite.sh:124`, `bin/suite.sh:125`, `bin/suite.sh:223`)
-- **Mapa de campos:** as novas representações têm leitores compatíveis nos caminhos examinados. (`bin/suite.sh:87`, `bin/suite.sh:178`; `bin/tests/test_suite_motivo.sh:23`, `bin/tests/test_suite_motivo.sh:28`)
-- **“Descoberta curou a enumeração” e frase documental agora verdadeira:** não fecham a classe, pelo contraexemplo de `testar_pwa` e pela comparação somente entre prefixos de módulos. (`bin/suite.sh:156`; `app/ponto/management/commands/testar_pwa.py:31`; `CLAUDE.md:101`)
-- **Item 6:** não reaberto. Os defeitos acima podem ser julgados sem decidir a unidade de régua/pre-push; o delta mantém a guarda em `suite.sh`. (`bin/suite.sh:163`; `bin/regua.sh:165`, `bin/regua.sh:168`)
-
-**Fecho: NÃO LIBERA**, pela classe de descoberta ainda aberta e pelo selo documental ainda permissivo, independentemente do item 6. (`bin/suite.sh:155`, `bin/suite.sh:157`; `bin/tests/test_suite_sh.sh:37`)
-
-_3733 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3734 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
