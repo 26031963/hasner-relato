@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:23** · publicado em **11/11/2026 15:24** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:25** · publicado em **11/11/2026 15:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:25 · sessao 6dc09a5905d6 · FIO-E0-V4-E4B · verificador · origem=Code
+
+**REPROVADO.** A c8 corrige a intercalação dentro de `_escrever_pautas`, mas **B1 continua BLOQUEANTE no ato completo**: outro escritor pode tomar o contador DP durante a transição, antes das âncoras E4B. Também permanece o **BLOQUEANTE de encerramento pela suíte inteira pendente**. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fecho_runtime.py:154`; `app/chamados/services/fabrica_da_celula.py:369`; `app/pautas/services.py:354`; `app/docs/FIO-E0-V4-E4B-c8.txt:97`; `CLAUDE.md:375`)
+
+Quanto ao **item 1**, a classificação dos achados anteriores é:
+
+| Achado da c7 | Situação depois da c8 |
+|---|---|
+| **B1: âncoras intercaladas com contador DP** | **Curado só no caso do agrupador isolado; não curado pela CLASSE global — BLOQUEANTE.** Os dois laços corrigem aquele trecho, mas a transição anterior pode escrever outra Pauta DP. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:122`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fabrica_da_celula.py:369`) |
+| Dia civil de conversa virando competência | **Curado pela CLASSE desse leitor.** Usa o juiz de dia do turno, descarta `None` e consulta a janela da empresa. (`app/chamados/services/fecho_runtime.py:111`; `app/chamados/services/fecho_runtime.py:112`; `app/chamados/services/fecho_runtime.py:115`; `app/chamados/juizes.py:336`) |
+| Duplicação concorrente marcador+âncora | **Curado pela CLASSE dos participantes desse agrupador**, quanto ao dedup: advisory antecede `exists` e criação. A porta genérica não impõe essa idempotência; não achei unicidade correspondente no modelo. (`app/chamados/services/fecho_runtime.py:119`; `app/chamados/services/fecho_runtime.py:123`; `app/pautas/services.py:180`; `app/pautas/models.py:123`) |
+| Motivo limbo truncado | **Curado pela CLASSE dos formatos produzidos pelo S143.** Reserva os motivos e abrevia listas com IDs inteiros e contagens; ORM compara texto entregue à porta e persistido. (`app/chamados/services/fecho_runtime.py:64`; `app/chamados/services/fecho_runtime.py:76`; `app/chamados/tests/test_e4b_c6_orm.py:226`; `app/chamados/tests/test_e4b_c6_orm.py:228`) |
+| Coleta sobrevivendo ao rollback S143 | **Curado pela CLASSE das exceções propagadas pelo resolver ou pela saída do savepoint.** O merge acontece depois da saída normal; o token é restaurado no `finally`. (`app/chamados/signals.py:115`; `app/chamados/services/fecho_runtime.py:39`; `app/chamados/services/fecho_runtime.py:40`) |
+| Reentrega não acrescenta IDs | **Não curado — FILA.** Pauta viva causa `continue`; a nota individual permanece. (`app/chamados/services/fecho_runtime.py:123`; `app/chamados/services/fecho_runtime.py:125`; `app/chamados/services/disputa_emissao.py:1855`) |
+| Fechamento futuro fora das duas bordas | **Não curado — FILA de alcance.** `fechar()` usa transição direta; sem contexto, o coletor não entrega. (`app/chamados/models.py:454`; `app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`) |
+| Relógio fora da borda | **Não curado — FILA preexistente.** S143 passa `hoje=None`; o juiz pode executar `date.today()`. (`app/chamados/services/disputa_emissao.py:1945`; `app/chamados/juizes.py:577`) |
+| Prova concorrente e falha real de escrita da Pauta | **Não curado — FILA de prova.** O novo ensaio observa uma conexão e chama diretamente o agrupador; a falha ORM existente é injetada no resolver. Não achei ensaio de falha real de `escrever` nesses testes. (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/test_e4b_c6_orm.py:266`; `app/chamados/tests/test_e4b_c6_orm.py:273`) |
+| Leitores crus de `data_evento` no caminho completo | **Não curado — FILA preexistente.** Permanecem na recusa de exportada, em S128/HX e no gate do chamado. (`app/chamados/services/disputa_emissao.py:1836`; `app/chamados/services/disputa_emissao.py:1984`; `app/chamados/services/disputa_emissao.py:2056`; `app/chamados/models.py:364`) |
+| Lint vermelho | **Curado no código dos dois apontamentos:** import excedente removido e variável ligada ao parâmetro default. Certificação do lint pelo dado fornecido; execução independente **[nao verificado]**. (`app/chamados/tests/test_e4b_c6_memoria.py:7`; `app/chamados/tests/test_e4b_c6_memoria.py:297`) |
+| Suíte inteira | **Não curado — BLOQUEANTE de encerramento.** Não achei comprovante integral; o recibo a deixa pendente e a regra exige seu GREEN. (`app/docs/FIO-E0-V4-E4B-c8.txt:87`; `app/docs/FIO-E0-V4-E4B-c8.txt:97`; `CLAUDE.md:375`) |
+
+**O contraexemplo global de B1 está no próprio runtime.** O `atomic` externo executa a transição antes de chamar o agrupador. A gravação do chamado dispara o cartório; este pode chamar a fábrica e escrever Pauta DP de cadastro sem turno ou de limbo exportado, tomando o contador antes das âncoras E4B. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/services/fecho_runtime.py:151`; `app/chamados/models.py:296`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:204`; `app/chamados/services/fabrica_da_celula.py:215`; `app/pautas/services.py:354`)
+
+| Passo | T1 — colaborador X | T2 — colaborador Y da mesma empresa |
+|---|---|---|
+| 1 | Durante a transição, a fábrica escreve Pauta e toma **DP**. (`app/chamados/services/fabrica_da_celula.py:369`; `app/pautas/services.py:188`; `app/pautas/services.py:354`) | |
+| 2 | | Toma **âncora A**; tenta escrever e espera **DP**. (`app/chamados/services/fecho_runtime.py:121`; `app/chamados/services/fecho_runtime.py:127`; `app/pautas/services.py:354`) |
+| 3 | Retorna da transição, pede **A** e espera T2, mantendo DP no ato externo. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/services/fecho_runtime.py:154`; `app/chamados/services/fecho_runtime.py:121`) | Continua esperando DP. (`app/pautas/services.py:354`) |
+
+A trava de colaborador não elimina esse ciclo: X e Y podem ser distintos, enquanto a âncora usa empresa+competência e o contador é único por departamento. (`app/chamados/models.py:2666`; `app/chamados/services/fecho_runtime.py:114`; `app/chamados/services/fecho_runtime.py:116`; `app/pautas/models.py:167`)
+
+O estado necessário é permitido estruturalmente: o cartório usa o dia da célula do chamado; `_ancoradas()` não exige que as perguntas tenham esse mesmo dia. O próprio teste ancora perguntas de dois dias no mesmo chamado. Assim, a célula que provoca Pauta de cadastro pode ser diferente da pergunta viva exportada que provoca a entrega E4B. Configuração concreta e reprodução concorrente: **[nao verificado]**. (`app/chamados/juizes.py:98`; `app/chamados/models.py:344`; `app/chamados/tests/test_e4b_c6_orm.py:74`; `app/chamados/tests/test_e4b_c6_orm.py:75`; `app/chamados/services/fabrica_da_celula.py:201`)
+
+As ordens relevantes encontradas são:
+
+| Caminho | Ordem demonstrável |
+|---|---|
+| Duas bordas humanas | Ambas entram em `transicionar_com_pauta`. (`app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`) |
+| Runtime sem Pauta anterior nos receivers | **Colaborador → Disputas → Chamados → eventuais Perguntas → âncoras ordenadas → INSERT Pauta → contador DP.** (`app/chamados/models.py:2666`; `app/chamados/models.py:2675`; `app/chamados/models.py:2688`; `app/chamados/models.py:2692`; `app/chamados/services/fecho_runtime.py:120`; `app/pautas/services.py:180`; `app/pautas/services.py:188`) |
+| Runtime com emissão da fábrica | **Colaborador/Disputa/Chamado e demais escritas da transição → Pauta da fábrica → DP → âncoras E4B → Pauta E4B → DP.** Esta é a inversão bloqueante. (`app/chamados/models.py:290`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:369`; `app/chamados/services/fecho_runtime.py:154`) |
+| Cadastro sem turno isolado | **Colaborador → Pauta → DP.** (`app/chamados/services/fabrica_da_celula.py:364`; `app/chamados/services/fabrica_da_celula.py:365`; `app/chamados/services/fabrica_da_celula.py:369`) |
+| Pauta pago/devido exportada | **Colaborador → FechamentoMensal → Pauta cabeça/filhas → DP.** (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:211`) |
+| Passivo validado | **Plantio → regeneração → escrita de FechamentoMensal → Pauta DP.** A ordem integral das travas internas dessas portas fica **[nao verificado]**. (`app/chamados/services/passivo_validado.py:427`; `app/chamados/services/passivo_validado.py:438`; `app/ponto/services/fechamento.py:1160`; `app/chamados/services/passivo_validado.py:443`) |
+| Ler, fazer ou cancelar Pauta | **UPDATE Pauta → contador do destinatário.** (`app/pautas/services.py:215`; `app/pautas/services.py:218`; `app/pautas/services.py:247`; `app/pautas/services.py:251`; `app/pautas/services.py:272`; `app/pautas/services.py:276`; `app/pautas/services.py:294`; `app/pautas/services.py:297`) |
+| Lavra avulsa | Obtém/cria o contador e o atualiza; não achei aquisição de âncora E4B nesse comando. (`app/pautas/management/commands/lavrar_pautas.py:51`; `app/pautas/services.py:352`; `app/pautas/services.py:354`) |
+
+**Não achei ciclo demonstrado com FechamentoMensal.** O caminho pago/devido toma FM antes de DP; o recálculo por evento consultado usa `on_commit`, portanto não demonstra uma aquisição síncrona FM depois de DP nesse ato. (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`; `app/ponto/services/fechamento.py:1824`)
+
+Nos demais pontos encontrados, a ordem **interna da porta** é INSERT Pauta→trilha→contador; a ordem integral de todas as travas herdadas de cada chamador é **[nao verificado]**. Não achei outra aquisição própria da advisory E4B nesses pontos. (`app/pautas/services.py:180`; `app/pautas/services.py:186`; `app/pautas/services.py:188`; `app/chamados/services/fecho_runtime.py:89`)
+
+- Interface, respostas e emissão semanal: `app/pautas/views.py:76`; `app/pautas/services.py:194`; `app/pautas/semanal.py:276`.
+- Emissores DP: `app/folha/management/commands/pre_fechamento.py:110`; `app/ferias/management/commands/pautas_de_ferias.py:167`; `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107`; `app/ponto/services/ausencia.py:1055`; `app/ponto/services/ausencia.py:1245`; `app/ponto/services/pautas_dos_discordantes.py:177`; `app/ponto/services/pautas_dos_deslogados.py:77`; `app/ponto/services/afastado_avisa.py:74`; `app/ponto/services/autorizacao_he_periodo.py:244`.
+- Chamados e comandos: `app/chamados/services/resposta_tardia.py:63`; `app/chamados/services/competencia_trancada.py:231`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:208`; `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:134`; `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:139`; `app/pautas/management/commands/pauta_dia_em_aberto.py:127`; `app/pautas/management/commands/pauta_dia_em_aberto.py:139`; `app/pautas/management/commands/pauta_dia_em_aberto.py:142`.
+- Outros departamentos: `app/ponto/services/pautas_do_esmeril.py:76`; `app/ponto/services/cobertura.py:333`; `app/core/services/crons_quebrados.py:71`; `app/core/management/commands/alarme_esteira.py:54`; `app/core/management/commands/alarme_arvore.py:50`.
+
+Quanto ao **item 2**, o mapa dos valores produtivos alcançados é:
+
+| Campo/valor | Quem escreve ou produz | Quem lê / significado |
+|---|---|---|
+| `_RECUSAS`, token e lote | Declaração, instalação, restauração e merge após sucesso. (`app/chamados/services/fecho_runtime.py:13`; `app/chamados/services/fecho_runtime.py:34`; `app/chamados/services/fecho_runtime.py:39`; `app/chamados/services/fecho_runtime.py:40`; `app/chamados/services/fecho_runtime.py:149`) | Coletor compara PK de chamado e indexa por PK de pergunta; agrupador recebe o lote confirmado. (`app/chamados/services/fecho_runtime.py:19`; `app/chamados/services/fecho_runtime.py:20`; `app/chamados/services/fecho_runtime.py:154`) |
+| Motivo e IDs do limbo | S143 produz os formatos e preserva nota individual. (`app/chamados/services/disputa_emissao.py:1840`; `app/chamados/services/disputa_emissao.py:1855`) | Gate admite os prefixos; montador separa nomes e IDs. (`app/chamados/services/disputa_emissao.py:1946`; `app/chamados/services/fecho_runtime.py:66`; `app/chamados/services/fecho_runtime.py:69`) |
+| `data_evento` e `conversa` | `abrir` fornece turno/`False`; conversa fornece dia civil/`True`; atribuição central pela porta do fio. (`app/chamados/models.py:2789`; `app/chamados/models.py:2801`; `app/chamados/services/fio.py:801`) | O novo agrupador usa o discriminador pelo juiz; os leitores crus remanescentes não o fazem nesses pontos. (`app/chamados/juizes.py:336`; `app/chamados/services/fecho_runtime.py:111`; `app/chamados/services/disputa_emissao.py:1836`; `app/chamados/models.py:364`) |
+| Empresa e corte | Relação cadastral do colaborador e cadastro da empresa. (`app/colaboradores/models.py:321`; `app/colaboradores/models.py:46`; `app/colaboradores/services/estrutura.py:19`) | Runtime usa a empresa da pergunta; janela consulta o corte efetivo. (`app/chamados/services/fecho_runtime.py:114`; `app/ponto/janelas.py:50`; `app/ponto/janelas.py:63`) |
+| Competência, âncora e agrupamento | Ano/mês do **fim da janela por corte**, agrupados por texto da âncora. (`app/chamados/services/fecho_runtime.py:115`; `app/chamados/services/fecho_runtime.py:116`; `app/chamados/services/fecho_runtime.py:117`) | Ordenação, dedup, porta, chip e payload conservam esse identificador. Não achei nesses leitores interpretação como mês civil. (`app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:123`; `app/pautas/services.py:184`; `app/pautas/services.py:336`; `app/pautas/views.py:40`) |
+| Marcador e chave advisory | Constante e SHA256 de marcador+tipo+âncora. (`app/chamados/services/fecho_runtime.py:12`; `app/chamados/services/fecho_runtime.py:86`) | PostgreSQL recebe a chave; dedup usa o marcador textual. (`app/chamados/services/fecho_runtime.py:89`; `app/chamados/services/fecho_runtime.py:124`) |
+| Texto e listas | Montador distribui o teto; porta persiste até 500 caracteres. (`app/chamados/services/fecho_runtime.py:76`; `app/chamados/services/fecho_runtime.py:79`; `app/pautas/services.py:185`) | Payload entrega texto; nota S143 guarda motivo integral. (`app/pautas/views.py:40`; `app/chamados/services/disputa_emissao.py:1855`) |
+| Destinatário DP, remetente TI e autor | Runtime fornece valores; porta resolve permissão e grava. (`app/chamados/services/fecho_runtime.py:127`; `app/pautas/services.py:49`; `app/pautas/services.py:87`; `app/pautas/services.py:180`) | Listagem usa destinatário; autoria permanece na trilha. (`app/pautas/services.py:308`; `app/pautas/models.py:105`; `app/pautas/views.py:38`) |
+| `feito_em`, `cancelado_em`, `lido_em` | Portas centrais de estado da Pauta. (`app/pautas/services.py:215`; `app/pautas/services.py:247`; `app/pautas/services.py:272`; `app/pautas/services.py:294`) | `.vivas()` controla dedup; lavra usa leitura e prazo. (`app/chamados/services/fecho_runtime.py:124`; `app/pautas/models.py:57`; `app/pautas/models.py:64`; `app/pautas/services.py:356`) |
+| Contador DP | `lavrar` escreve `nao_lidas`, `atrasadas` e `lavrado_em`. (`app/pautas/services.py:354`) | Service e view leem o lavrado. (`app/pautas/services.py:362`; `app/pautas/views.py:34`) |
+| Estado/destino/usuário do ato | Bordas transportam; escritor atribui status e usuário e salva. (`app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`; `app/chamados/models.py:228`; `app/chamados/models.py:231`; `app/chamados/models.py:296`) | Adaptador exige VIVOS→ENCERRADOS; receiver exige save de status encerrado. (`app/chamados/services/fecho_runtime.py:144`; `app/chamados/signals.py:96`; `app/chamados/signals.py:104`) |
+
+Nos valores acrescentados à prova, o wrapper produz `(sql, params, in_atomic_block)`; o gate lê chaves, índices, contagens e presença de transação. As constantes de base/caso/mutante selecionam a sobreposição usada pelo roteiro. (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/e4b_c6_verificar.py:76`; `app/chamados/tests/e4b_c6_verificar.py:90`; `app/chamados/tests/e4b_c6_verificar.py:134`; `app/chamados/tests/e4b_c6_verificar.py:230`)
+
+Quanto ao **item 3**, **o ORM mede a ordem SQL real da chamada observada**, não apenas contagem: registra a consulta, executa-a, compara as chaves exatas ordenadas e exige a última advisory antes de `exists`, INSERT de Pauta e UPDATE de contador. Travar só a primeira âncora ou inverter as âncoras presentes é detectado. (`app/chamados/tests/test_e4b_c6_orm.py:249`; `app/chamados/tests/test_e4b_c6_orm.py:251`; `app/chamados/tests/e4b_c6_verificar.py:94`; `app/chamados/tests/e4b_c6_verificar.py:99`)
+
+Há, porém, três lacunas — **FILA de prova**, diretamente relacionadas à alegação global:
+
+- **Contador previamente travado passa:** o classificador ignora `SELECT … FOR UPDATE` sobre `pautas_contadorpauta`; só reconhece seu UPDATE. Um mutante que tome DP por SELECT antes das âncoras e mantenha os UPDATEs depois satisfaz o gate. (`app/chamados/tests/e4b_c6_verificar.py:78`; `app/chamados/tests/e4b_c6_verificar.py:84`; `app/chamados/tests/e4b_c6_verificar.py:88`)
+- **Outra chave de ordenação pode passar:** memória e ORM usam uma única empresa. Ordenar apenas pela competência coincide com a ordem completa nesses lotes; não distingue uma futura ordem diferente entre empresas. (`app/chamados/tests/test_e4b_c6_memoria.py:227`; `app/chamados/tests/test_e4b_c6_memoria.py:233`; `app/chamados/tests/test_e4b_c6_orm.py:253`; `app/chamados/tests/test_e4b_c6_orm.py:257`)
+- **Ordem diferente em outro caminho passa:** o wrapper envolve somente `_escrever_pautas`, excluindo a transição e seus receivers — precisamente o caminho do novo contraexemplo. (`app/chamados/tests/test_e4b_c6_orm.py:265`; `app/chamados/tests/test_e4b_c6_orm.py:266`; `app/chamados/services/fecho_runtime.py:151`)
+
+Além disso, o gate verifica apenas um booleano de `atomic`, sem identificar a transação nem seu tempo de vida. Não achei prova de concorrência ou de manutenção das travas até o commit nesses testes. (`app/chamados/tests/e4b_c6_verificar.py:76`; `app/chamados/tests/e4b_c6_verificar.py:95`; `app/chamados/tests/test_e4b_c6_orm.py:28`)
+
+Quanto ao **item 4**, reaparece **ordem de trava — BLOQUEANTE B1**; permanecem **relógio fora da borda e campo temporal com dois significados — FILA preexistente**; a prova de ordem global tem as lacunas acima. (`app/chamados/services/fecho_runtime.py:151`; `app/chamados/services/fabrica_da_celula.py:369`; `app/chamados/juizes.py:577`; `app/chamados/models.py:2789`; `app/chamados/models.py:2801`; `app/chamados/tests/test_e4b_c6_orm.py:266`)
+
+**Não achei segundo juiz, derivação paralela de competência ou escrita produtiva E4B fora da porta no delta.** A composição usa juiz temporal, janela existente e `escrever`. O retorno antecipado continua retirado: após a recusa seguem S128, HX e C7. (`app/chamados/services/fecho_runtime.py:104`; `app/chamados/services/fecho_runtime.py:107`; `app/chamados/services/fecho_runtime.py:127`; `app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/disputa_emissao.py:1953`; `app/chamados/services/disputa_emissao.py:2007`; `app/chamados/services/disputa_emissao.py:2089`)
+
+Nos chamadores externos indicados pelo aval, não achei instalação do coletor E4B: chamam o resolver, e registrar sem contexto não entrega Pauta E4B. Ocorrência e quantidade em produção: **[nao verificado]**. (`app/chamados/services/becos.py:54`; `app/chamados/reconciliador.py:536`; `app/chamados/reconciliador.py:1648`; `app/ponto/management/commands/reconciliar_f
+
+[truncado em 20000 de 22202 caracteres]
 
 ## 11/11 15:23 · sessao 2b3ccc385b07 · - · - · origem=Ronald (tmux)
 
@@ -869,44 +960,4 @@ Não encontrei acesso a `data_evento` em arquivos JS/TS/TSX/Dart da cópia por v
 
 Para a allowlist (a), incluir também o leitor de chave serializada **`mensageria/nucleo/ferramentas.py:127`**. As chaves em `mensageria/nucleo/tests/test_ferramenta_validar.py:18`, `:24` e `mensageria/nucleo/tests/test_proposta_lote.py:24` são construção de fixtures de resposta, não leitura do modelo.
 
-## 11/11 14:57 · sessao 029825b73c6b · - · - · origem=Ronald (tmux)
-
-Achado bloqueante: a obra consegue se autodeclarar B adicionando **também o próprio CORTES.md à lista**. A leitura vem de head (`bin/selo_proporcao.py:46`), o parser admite qualquer caminho craseado (`bin/selo_proporcao.py:49`), e `motivo_b` aceita a lista antes de qualquer classificação (`bin/selo_proporcao.py:59`). O teste `lista_se_autoriza` acrescenta somente `views.py`, deixando CORTES fora; portanto não morde este escape (`bin/tests/test_selo_proporcao.sh:69`).
-
-Diff mínimo textual, **rc previsto 0, sem executar** (`bin/selo_proporcao.py:107`):
-
-```diff
---- a/app/docs/CORTES.md
-+++ b/app/docs/CORTES.md
-@@ linha 444, antes de FIM-LISTA-FECHADA-PROPORCAO-B:
-+; `app/chamados/writer.py`; `app/docs/CORTES.md`
---- /dev/null
-+++ b/app/chamados/writer.py
-@@
-+from chamados.models import ChamadoColaborador; ChamadoColaborador.objects.update(status_local='fechado')
-```
-
-Aqui a obra muda a autorização em seu próprio diff; isso contraria “modulo novo na lista so por corte do Ronald” (`app/docs/CORTES.md:444`). A afirmação “A obra nao se autoriza” é falsa para esse caso (`bin/selo_proporcao.py:19`). O campo persistido existe (`app/chamados/models.py:52`). Execução efetiva do writer: [nao verificado].
-
-Escapes **aceitos pelo critério de caminho**, com rc previsto 0 e sem execução:
-
-| Diff mínimo | Escrita e caminho | Aval |
-|---|---|---|
-| Em `particionar_verbos`, acrescentar `vivo_qs.update(status_local='fechado')` antes da linha atual 34 | Queryset recebido pela função (`app/chamados/services/verbos.py:30`); consumidor real no painel (`app/chamados/services/painel.py:230`); módulo listado (`app/docs/CORTES.md:444`), aceito por `bin/selo_proporcao.py:59`. | ACEITA pelo caminho; não é defeito de AST. |
-| Em `area_label`, acrescentar `chamado.status_local='fechado'; chamado.save(update_fields=['status_local'])` antes do return | Filtro recebe chamado (`app/chamados/templatetags/chamados_tags.py:34`), consumido em template (`app/templates/chamados/detalhe_local.html:56`); módulo listado (`app/docs/CORTES.md:444`). | ACEITA pelo caminho. |
-| Trocar `tipo, timestamp: tsCorrigido` por `tipo: 'saida', timestamp: tsCorrigido` | Grava batida em IndexedDB (`app/static/pwa.js:112`); conteúdo enviado por POST depois (`app/static/pwa.js:144`, `app/static/pwa.js:153`); static aceito (`bin/selo_proporcao.py:63`). | ACEITA pelo caminho. |
-| Acrescentar writer na função `tblib_instalado`, por exemplo import do modelo e `.objects.update(...)` | Helper vive sob tests (`app/core/tests/test_contract_tblib_no_paralelo.py:24`) e é chamado por management command de produção (`app/chamados/management/commands/tblib_ausente_na_imagem.py:17`); tests aceito (`bin/selo_proporcao.py:65`). | ACEITA pelo caminho. |
-
-O texto B3 diz “CLASSE B so se TODO arquivo do diff estiver em templates/, static/, arquivo de teste, ou numa LISTA FECHADA” e “O selo checa CAMINHO, nao AST”; não ordena inspecionar esses conteúdos (`app/docs/CORTES.md:444`; literal completo no anexo fornecido [nao verificado no filesystem]).
-
-QUEM CHAMA / QUEM LÊ:
-
-- O harness define `SELO` em `bin/tests/test_selo_proporcao.sh:9`, chama e captura rc em `bin/tests/test_selo_proporcao.sh:41`, compara em `bin/tests/test_selo_proporcao.sh:42`; outras chamadas estão em `:95`, `:99`, `:105`, `:124`, `:134`, `:139`, `:141`.
-- O harness tem chamador real: `bin/regua.sh:138` percorre `tests/test_*.sh`, executa em `bin/regua.sh:140` e recusa em `bin/regua.sh:143`.
-- Essa cadeia verifica repositórios sintéticos (`bin/tests/test_selo_proporcao.sh:11`, `bin/tests/test_selo_proporcao.sh:13`). Chamador automatizado do selo sobre base/head **da obra real** não foi localizado na cópia; uso humano/prod [nao verificado]. O pre-push explica que o loop de host não roda ali (`bin/pre-push.sh:15`).
-- A documentação exige docs no mesmo commit (`CLAUDE.md:333`); isso torna a obra A se o `.md` estiver fora dos conjuntos, conforme `bin/selo_proporcao.py:70` e `bin/selo_proporcao.py:107`. A primeira frase literal do B3 (“TODO arquivo”) sustenta isso; “qualquer outro .py” não constitui permissão para outros sufixos (`app/docs/CORTES.md:444`).
-- O cabeçalho chama de “literal” a paráfrase “qualquer outro arquivo”, enquanto B3 escreve “qualquer outro .py” (`bin/selo_proporcao.py:10`, `app/docs/CORTES.md:444`); a consequência para `.md` continua derivável do “TODO”.
-- O cabeçalho atribui ao smoke/fila os writers em caminhos permitidos (`bin/selo_proporcao.py:21`); essa atribuição específica não consta do B3 fornecido [nao verificado no filesystem]. B3 autoriza o critério por caminho; não declara expressamente que smoke detectará esses writers.
-- Não há contrato PROPORCAO no RELATO da cópia; a única ocorrência de “proporcao” encontrada ali é assunto antigo (`app/docs/RELATO.md:3378`). Existência do contrato v5 no RELATO/prod: [nao verificado].
-
-_3938 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3939 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
