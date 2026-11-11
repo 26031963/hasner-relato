@@ -1,7 +1,118 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 07:15** · publicado em **11/11/2026 07:15** (UTC-3)
+> Ultima resposta processada: **11/11/2026 07:19** · publicado em **11/11/2026 07:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 07:19 · sessao 5e781d3bf904 · FIO-E0-V4-E4B · construtor · origem=Code
+
+A cura passa ao lote S143 uma **cópia do memo do colaborador do julgamento em curso**. Antes, E2 usava a instância original (`chamados/reconciliador.py:655`), S88 buscava outro chamado (`chamados/signals.py:32`), e S143 carregava novos colaboradores (`chamados/models.py:344`). O lote começava vazio e pagava antecipadamente a mesma leitura fria que o primeiro C6 pagaria no modo avulso. A chave continua sendo empresa/competência; não há outro import de `periodo_trancado` nesse percurso. A cura transporta a instância pelo escopo do cartório, copia seu memo antes do lote e restaura o escopo no `finally`. ([origem](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1912), [escopo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:946), [cópia](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/juizes.py:1101))
+
+O caminho de entrada é `registrar_batida` → signal da Batida → cartório → `reconciliar` → `_gravar_estado` → S143 → resolver. (`ponto/registro_batida.py:157`, `ponto/signals.py:135`, `ponto/services/cartorio.py:986`, `chamados/models.py:654`, `chamados/models.py:296`, `chamados/signals.py:115`)
+
+Os sítios que chegam à tranca nesse caminho são:
+
+| Leitor | Arquivo:linha |
+|---|---|
+| E2: C6, guarda explícita e carimbo | `chamados/reconciliador.py:661`, `:667`, `:595` |
+| Gate anterior ao save | `chamados/models.py:368` |
+| S143: alcance, S128, guarda, HX e carimbos | `chamados/services/disputa_emissao.py:1821`, `:1960`, `:1964`, `:2042`, `:1980`, `:2054` |
+| C7 e porta de fechar | `chamados/models.py:1846`, `:1853`, `:1896` |
+| C6 chamado pelos carimbos | `chamados/models.py:3139` |
+
+Todos convergem para `dia_da_pergunta_trancado` → `dias_trancados` → **único sítio direto** `periodo_trancado(*chave[1:])`. Dentro do lote, perguntas carregadas leem `dias[id(p)]`; novas instâncias leem o memo da consulta. (`chamados/juizes.py:948`, `:953`, `:1028`, `:1060`, `:1335`)
+
+Trechos funcionais do diff aplicado: [nao verificado]
+
+```diff
+--- chamados/juizes.py
++++ chamados/juizes.py
+-def tranca_da_consulta(perguntas):
++def tranca_da_consulta(perguntas, *, memo_inicial=None):
+@@
++    if memo_inicial is not None:
++        memo.update(memo_inicial)
+
+--- chamados/services/disputa_emissao.py
++++ chamados/services/disputa_emissao.py
+@@
++    colab_do_ato = colaborador_deste_julgamento(chamado.colaborador_id)
++    if colab_do_ato is not None:
++        from functools import partial
++        tranca_da_consulta = partial(tranca_da_consulta,
++                                     memo_inicial=_memo_da_tranca(colab_do_ato, lote=False))
+
+--- ponto/services/cartorio.py
++++ ponto/services/cartorio.py
+@@
++def colaborador_deste_julgamento(colaborador_id):
++    c = getattr(_tl, 'colaborador', None)
++    return c if em_julgamento() and c is not None and c.pk == colaborador_id else None
+@@
+-    _tl_antes = (getattr(_tl, 'julgada_antes', None), getattr(_tl, 'agora', None))
++    _tl_antes = (getattr(_tl, 'julgada_antes', None), getattr(_tl, 'agora', None),
++                 getattr(_tl, 'colaborador', None))
+     _tl.ativo = True
++    _tl.colaborador = c
+@@
+-        _tl.julgada_antes, _tl.agora = _tl_antes
++        _tl.julgada_antes, _tl.agora, _tl.colaborador = _tl_antes
+```
+
+O transporte fica fora dos laços e não acrescenta consulta ORM. O app mantém o memo inicial vazio por padrão. ([S143](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1917), [tranca](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/juizes.py:1097))
+
+A conta esperada, usando os números fornecidos, é:
+
+| Caso | Base | `_ancoradas` permanece | Tranca que deve sair | Esperado / teto |
+|---|---:|---:|---:|---:|
+| `_gravar_estado`, sem pergunta | 27 | +1 | 0 | 28 / 28 |
+| `reconciliar`, fecha | 59 | +1 | 0 | 60 / 60 |
+| Batida fecha 1 chamado | 211 | +2 | −1 de 214 | **213 / 213** |
+| Batida fecha 3 chamados | 265 | +4 | −1 de 270 | **269 / 269** |
+
+**Esses totais após a cura são [não verificado] no ORM.** As cargas continuam em `chamados/services/disputa_emissao.py:1937`; os tetos permanecem em `ponto/tests/test_selo_chokepoint_escrita.py:124`, `:134`, `:195`, `:211`.
+
+O [novo ensaio sem banco](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_tranca_memoria.py:59) executou os corpos reais com bordas isoladas. A origem da base falhou pela asserção esperada, `(1, 1)` em vez de `(0, 1)`; a versão alterada passou nos cinco testes. Comandos executados: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --red-origem
+# rc 1 — AssertionError esperado
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria
+# rc 0 — 5 testes [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_classe_e_memoria
+# rc 0 — 50 testes [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_base
+# rc 0 — 3 testes [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_orm_protocolo
+# rc 0 — 7 testes [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm-preflight
+# rc 0 — somente enxertos/AST
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --selos
+# rc 0 — 40 testes [nao verificado]
+git diff --check
+# rc 0
+```
+
+Os [seis mutantes novos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_tranca_memoria.py:148) retornaram **rc 1 por AssertionError**, cada qual com seu comando:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_fonte_s143
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_publicar_colab
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_restaurar_colab
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante sem_copia
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante app_herda_memo
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.test_e4b_c4_tranca_memoria --mutante colab_errado
+```
+
+O selo exigiu atualizar somente as posições `[1167, 1319] → [1179, 1331]`; a igualdade, os critérios e os contadores foram preservados. (`core/tests/test_medida_turno_do_par.py:315`, `:540`) O RED ORM conserva suas duas asserções de economia de uma chamada/SELECT. (`chamados/tests/test_e4b_c4_orm.py:108`, `:110`)
+
+Para a sessão executar pela trava, **ainda [não verificado] nesta volta**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4b_c4_verificar --orm
+E4B_C4_QUERIES=head PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4b_c4_medir_queries --noinput
+```
+
+Paro com o **+2/+4 de `_ancoradas`** na pergunta de desenho do Ronald; sua carga continua explícita em `chamados/services/disputa_emissao.py:1937`. Certificação ORM/opus final: **[não verificado]**.
 
 ## 11/11 07:15 · sessao 2f1b929ae023 · TRAVA-SELO · censo · origem=Code
 
@@ -670,30 +781,4 @@ O selo não inclui helper na fixture, não chama `--volta`, não chama `--seco` 
 
 Outro sobrevivente plausível: trocar o `IFS` explícito por separação que exclua tab e preserve espaço/newline. Os testes existentes usam espaço e newline; `ONLY=$'appA\tappB'` passaria a virar uma única palavra para a guarda, enquanto o comando continuaria separando por tab. (`bin/tests/test_suite_motivo.sh:31–48`; `bin/suite.sh:95,158`)
 
-## 11/11 06:53 · sessao a73c06899c99 · - · - · origem=Ronald (tmux)
-
-**P3 — NÃO PROCEDE invalidade por faltar pacote `tests/`, nem duplicata textual.** `tests.py` vira `<app>.tests`, pela remoção de `.py` e troca de `/` por `.`, e não `<app>.tests.tests`; o exemplo `comunicados.tests` corresponde ao módulo que define `ComunicadoContratoTests`. Candidatos e saída são conjuntos. (`bin/vizinhos_da_volta.py:26–36,37–42,75–76`; `app/comunicados/tests.py:4–10`)
-
-**NÃO SEI sobre aceitação completa pelo executor.** A suite fixa `--settings=config.settings.ci`; o runner local herda `DiscoverRunner` e delega `build_suite` ao Django, cuja implementação não está na cópia. (`bin/suite.sh:158–159`; `app/config/settings/ci.py:40`; `app/core/runner_quarentena.py:15,72–76`; implementação externa: **[nao verificado]**)
-
-**Há risco novo concreto de selecionar testes de outra configuração.** Como todos os `tests.py` entram, tocar `app/chamados/models.py` seleciona `tenants.tests`, pois este importa `chamados.models`; reproduzi a seleção em memória substituindo apenas o resultado do `git diff`. `tenants.tests` depende de `FastTenantTestCase`, mas `ci` usa `base`, cuja lista de apps não contém `tenants`/`django_tenants`; esses apps pertencem à configuração `saas`. Erro efetivo no executor: **[nao verificado]**. (`bin/vizinhos_da_volta.py:35–36,54–57,68–72`; `app/tenants/tests.py:1–2,5,19,104`; `app/config/settings/ci.py:1`; `app/config/settings/base.py:8–30`; `app/config/settings/saas.py:22–24`)
-
-**Sobreposição de escopo continua possível:** migration acrescenta o app inteiro e a descoberta pode acrescentar módulos do mesmo app; o conjunto elimina igualdade de strings, não essa sobreposição. Duplicação efetiva de casos depende do Django: **[nao verificado]**. (`bin/vizinhos_da_volta.py:40–50,68–74`; `app/core/runner_quarentena.py:75–76`)
-
-Fechamento dos achados v2 do helper:
-
-| Classe | Conclusão |
-|---|---|
-| Filtro de relativo / `pkg/tests/sub/__init__.py` com consumidor `from .sub import algo` | **Corrige o contraexemplo apontado:** normaliza `__init__`, produz o nome `sub` e aplica a regex relativa a todos os candidatos. A ampliação pode trazer sobras por homônimos, conforme comentário explícito. (`bin/vizinhos_da_volta.py:52–60,68–72`) |
-| Reexportações e dependências Python transitivas | **Não fecha e não declara esse limite.** Os padrões nascem somente dos arquivos tocados; selecionar um teste não cria padrões para dependências intermediárias. O limite textual menciona import montado em string e templates transitivos, não reexportações Python. (`bin/vizinhos_da_volta.py:11–13,45–72`) |
-| `__init__.py`, em geral | **Parcial:** normalização e filtro corrigidos; permanece a busca textual direta, sem propagação geral dos efeitos de inicialização. (`bin/vizinhos_da_volta.py:45–60,68–72`) |
-| Imports dinâmicos | **Limite declarado no sítio**, com exemplo real de import montado por f-string na cópia. (`bin/vizinhos_da_volta.py:11–12`; `app/ponto/tests/test_detectores_isencao.py:7–18`) |
-| JSON/templates | Busca direta por caminho/basename permanece; **herança/inclusão transitiva de template é limite declarado**. Dependência transitiva de JSON não recebe declaração equivalente. (`bin/vizinhos_da_volta.py:11–12,61–66,68–72`) |
-| Migration entre apps | Continua puxando apenas o primeiro componente do caminho, sem interpretar dependências entre apps. O comentário explicita “app inteiro” e “esquema não se segue por texto”, mas não apresenta defesa para consumidores em outros apps. (`bin/vizinhos_da_volta.py:9,49–50`) |
-| Selos que varrem diretório/AST | **Corrige o caso nominal**, incluindo o varredor de templates; **não fecha a classe automaticamente**, pois a fonte continua uma lista fixa. (`bin/selos_globais_da_volta.txt:25`; `app/core/tests/test_contract_template_bem_formado.py:40,76–86`; `bin/vizinhos_da_volta.py:73–74`) |
-| Remoções | Continua preservando o caminho para procurar citações; o arquivo removido não entra como obra por causa de `exists()`. Transitividade continua ausente e não está declarada para dependências Python. (`bin/vizinhos_da_volta.py:21–23,47–48,51–72`) |
-| Descoberta fora de `tests/` | **Corrige `tests.py`, mas não toda a classe:** continuam fora `test_*.py` e `tests_disponibilidade.py` na raiz do app. Há exemplos reais com `TestCase` e imports de produção em `ferias`. (`bin/vizinhos_da_volta.py:26–36`; `app/ferias/test_services_leitura.py:5–13`; `app/ferias/tests_disponibilidade.py:7–14`) |
-
-Colisão concreta entre um `tests.py` e uma pasta irmã `tests/` não foi encontrada na leitura dos três `tests.py` da cópia; essa ausência não dispõe de referência `arquivo:linha`: **[nao verificado]**.
-
-_3692 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3693 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
