@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:26** · publicado em **11/11/2026 12:26** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:32** · publicado em **11/11/2026 12:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:32 · sessao 186f5d5b3ede · FIO-E0-V4-E4B · construtor · origem=Code
+
+**PARE no item 2, conforme sua condição.** A recusa S143 grava chamado e pergunta no fio, sem competência; esse destino não atende aos três dados exigidos ([disputa_emissao.py:1854](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1854)).
+
+Há outra lacuna: C7 impede fechar a **disputa** com pergunta viva, mas não devolve ao estado aberto o chamado já encerrado ([models.py:1848](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/models.py:1848), [signals.py:96](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/signals.py:96)).
+
+O [recibo c5](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c5.txt:1) contém os quatro juízes, escritores/leitores, chamadores e comandos ORM. Registra 17 testes em memória e 40 selos passando; ORM não executado. Cura, RED e mutante novos não foram construídos por causa do PARE; sem commit ([recibo:131](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c5.txt:131)). [nao verificado]
+
+Perguntas ao Ronald:
+
+- Qual destino existente deve receber chamado, pergunta e competência da recusa?
+- “Chamado continua ABERTO” significa `ChamadoColaborador` ou a disputa? Se for o chamado, qual porta existente deve impedir seu encerramento, já que a guarda atual exclui exportada ([models.py:364](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/models.py:364))?
 
 ## 11/11 12:26 · sessao 191db1405fa4 · APP-MENSAGENS-MSG-0 · censo · origem=Code
 
@@ -867,28 +880,4 @@ Achados semânticos, todos reproduzidos em memória sem criar arquivos:
 
 A primeira entrada também cairia no bloqueio de pipe externo se somente o bloqueio de linha colada fosse removido; ela contém pipes internos. Referências: `bin/tests/test_mapa20_valida.sh:62`, `bin/mapa20_valida.py:137`.
 
-## 11/11 12:13 · sessao 88846b740303 · - · - · origem=Ronald (tmux)
-
-Compatibilidade da cura: **achado de regressão no formato fabricado pelo selo não procedente**. `mapa()` monta tabela com pipes nas bordas, prosa sem pipes fora dela e linha vazia depois dela; portanto não viola novas regras. `bin/tests/test_mapa20_valida.sh:25`, `:31`, `:32`, `:33`; decisões em `bin/mapa20_valida.py:135` e `:137`. O fixture adicional do publicador termina a tabela em EOF, também permitido, pois a condição exige existir linha seguinte. `bin/tests/test_mapa20_valida.sh:128`; `bin/mapa20_valida.py:135`.
-
-No publicador, **regressão do fluxo não procedente**: o script copia `logs/MAPA-20/mapa.md` para snapshot e julga essa cópia; rc zero seleciona o par para publicação; falha fixa `MAPA_RC=1`, segue com o resto e devolve esse rc, inclusive quando nada mudou. `bin/relato.sh:94`, `:97`, `:98`, `:100`, `:143`, `:158`, `:165`. O raspador só transforma o snapshot depois do selo e escreve o destino público. `bin/relato.sh:143`; `bin/raspar_publico.py:28`, `:31`, `:40`. Resultado efetivo após raspagem: [nao verificado].
-
-Quem escreve:
-
-- Escritor produtivo é **declarado** como sessão, usando `logs/MAPA-20/montar_mapa.py`; implementação não está comprovada na cópia. `bin/mapa20_valida.py:10`; [nao verificado]. `logs/` está ignorado. `.gitignore:53`.
-- Gerador sintético `mapa()`: `bin/tests/test_mapa20_valida.sh:32`; grava texto de teste em `:37`.
-- Fixture sintético do publicador: `bin/tests/test_mapa20_valida.sh:128`; cópia para o caminho imitado em `:170`; fixture vermelho em `:171`.
-- Wrapper sintético que simula regravação concorrente: `bin/tests/test_mapa20_valida.sh:147`.
-- Publicador escreve snapshot por `cp`: `bin/relato.sh:97`; escreve `MAPA-20.md` através de `bin/raspar_publico.py:40`, selecionado em `bin/relato.sh:98` e `:143`.
-
-Quem lê rc/saída:
-
-- **Produção:** `bin/relato.sh:97` lê rc do validador pelo `if`; não faz parsing de sua saída, que segue stdout. `bin/relato.sh:97`, `:101`.
-- **Teste do validador:** `bin/tests/test_mapa20_valida.sh:38` captura saída e retorna somente rc; `:109` compara rc esperado; `:110` verifica arquivo ausente; `:115` devolve falha.
-- **Wrapper sintético:** `bin/tests/test_mapa20_valida.sh:146` lê rc e `:148` o repassa.
-- **Teste do publicador:** `bin/tests/test_mapa20_valida.sh:175` captura saída do fluxo; `:176` guarda rc; `:180` lê esse rc; `:184` compara; `:185` exibe saída se falhar.
-- **Chamador declarado do publicador:** unit executa `relato.sh`. `bin/hasner-relato.service:15`. Essa unit não declara `OnFailure`; tratamento/alerta externo e instalação viva: [nao verificado].
-
-Severidade: nenhuma regressão demonstrada no formato sintético ou no fluxo; compatibilidade com o escritor produtivo real permanece [nao verificado]. `bin/tests/test_mapa20_valida.sh:33`; `bin/relato.sh:97`; `bin/mapa20_valida.py:10`.
-
-_3842 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3843 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
