@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+ESPERANDO: /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA/lanca_c16.sh | pid=840676
+
 ESPERANDO: /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA/lanca_c15.sh | pid=156100
 lei: BO-DISPUTA dona FECHADA (21:2x; leitura opus 5(d), logs/BO-DISPUTA-SEM-PERGUNTA/opus5d.txt item 7): o aval DUAS RESPOSTAS diz "o motivo vai a disputa dona" sem excecao; com a dona FECHADA _agregar_motivos_na_dona (disputa_emissao.py:544) nao salva e o motivo se perde. FIO-EXPORTADA-X-O44 cobre "sem reabrir e sem push", nao motivo. Ate a resposta fica como esta; a obra segue (volta c11). RESPONDIDA por aval BO-DISPUTA-DUAS-LEIS 22:16: nao muda comportamento; trilha + contador motivo_em_dona_fechada nesta obra (volta c15), decisao na RAIZ-DA-DISPUTA F1.
 E4B censo delta (21:33): Codex censo sobre fb9269ea9, cruzamento de escrita com BO-DISPUTA 0, perguntas de lei 0, amostra 3/3 conferida; delta anexado a logs/FIO-E0-V4-E4B/brief_construtor.md; construtor Claude abre so apos o push do BO-0611-05 (smoke col677 do Ronald).
@@ -12,6 +14,7 @@ BO-DISPUTA preverif4 (22:12): NAO LIBERA. Procedentes conferidos a arquivo:linha
 BO-DISPUTA c14 (22:1x): Codex construtor em /home/ronald/wt-codex-bo-disputa-sem-pergunta-221357 (cópia de e70f2e7ee; a raia segue com a suite13), brief_volta5f.md, F1-F7.
 BO-DISPUTA aval DUAS-LEIS (22:16): h2 = (A), (B) e dona FECHADA registrados na RAIZ-DA-DISPUTA F1 (BACKLOG). Trilha LogAuditoria 'motivo_em_dona_fechada' + I8 no auditar_invariantes_chamados (esperado 0) = volta c15, brief_volta5g.md pronto; abre quando a c14 voltar (1 construtor Codex por vez). Decisao tecnica: trilha em LogAuditoria por core.observ.evento, porque FollowupChamado nao tem campo tipo.
 BO-DISPUTA c14 (22:23, rc 0): commit d94c9b3f2 na copia 221357 (disputa_emissao.py +29/-15 e 9 testes; 8 REDs de memoria com mutante). Conferido no diff: seed so no nascimento sem pergunta, ausencia nao admite motivo (:988), batida_origem_id conservada (:501), analisar so confirmados (:1474), ancora pelo agregador (:1577), forma publica exige pergunta (:724). ORM ainda nao rodou. c15 (trilha + I8) lancada sobre d94c9b3f2.
+BO-DISPUTA c15 (22:34, rc 0): commit dc91ff1e0 na copia 221357. Trilha unica chamados/services/descarte_disputa.py (on_commit, dedup dona+motivo+pergunta, engolir) chamada do agregador; vigia conta a trilha. Achado da sessao no diff: o contador nasceu com id I8, que ja e o fio solto (:946) -- erro do meu brief c15. c16 (lanca_c16.sh, pid 840676) = id I23 + ruff na origem + chave HOJE do semselo5; CENSO fechado pelo disjuntor.
 E4b construtor Claude (22:28): aberto na copia /home/ronald/wt-e4b-222751 (fb9269ea9), SO DRY, sem esperar o push do BO-0611-05 (aval E4B-SOLTA-DO-PUSH 22:2x). Cruzamento de escrita com BO-DISPUTA = 0 (27 arquivos da raia x command novo + test_e4_backfill/test_e4_passivo). Teto 2 do LIBERA-ATE-O-RESET: E4b Claude + BO-DISPUTA c15 Codex. Brief logs/FIO-E0-V4-E4B/brief_construtor.md com matriz1/2, mapa e censo_delta anexos.
 BO-DISPUTA suite13 (e70f2e7ee, informativa): Ran 15063, FAILED (failures=5), rc=1. Os 5 sao de FORMA: ruff_zero (2 F401 em declaracao_texto.py:316/:635 + 3 em testes de memoria), semselo5 x2 (sitio ativa=True mudou de funcao: gerar_perguntas_disputa -> _gerar_perguntas_com_causas, mesma consulta), diagrama x2 (ARQUITETURA.mmd). Volta c16 = brief_volta5h.md (ruff na origem + chave do HOJE), diagrama pela sessao; abre quando a c15 voltar.
 SMOKE AGORA BO-0611-05 (21:1x): NO AR, merge fb9269ea9 (pais 6c0517eb9 + 7a0a157ce), deploy --sem-migrate rc 0, tres cascas e tres rotas provadas (logs/BO-0611-05/deploy_pouso.log). Ronald: smoke col677 em https://juliani.hasner.com.br pelos SMOKE-[nome] abaixo. Push NAO saiu: espera o smoke. Falhou -> git revert -m 1 fb9269ea9 + bin/deploy.sh com trilha.
@@ -5924,6 +5927,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 
 ## ALARMES DA ESTEIRA
+
+**10/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
+**10/11 22:35:38 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:7ea848f5ae (49 car., na trilha privada)
 
 **10/11 21:25:29 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:7ea848f5ae (49 car., na trilha privada)
 
