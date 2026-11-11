@@ -1,7 +1,187 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 23:54** · publicado em **10/11/2026 23:54** (UTC-3)
+> Ultima resposta processada: **10/11/2026 23:59** · publicado em **11/11/2026 00:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 23:59 · sessao a8e3ccca6aa3 · FIO-E0-V4-E4B · leitura · origem=Code
+
+**Não é possível separar os 45 em a/b com o anexo fornecido.** Ele identifica dias, mas não informa chamados, autores ou atos de fechamento. Distribuição efetiva em produção: **[não verificado]**. Além disso, `via_encerramento='admin'` não comprova decisão real: houve backfill desse valor apenas pela presença de um usuário não sistêmico. `app/chamados/migrations/0039_a3_via_backfill.py:14`, `app/chamados/migrations/0039_a3_via_backfill.py:26`.
+
+**1. Caminhos para estado terminal**
+
+Terminal compreende `resolvido`, `fechado`, `cancelado` e `superado`; a investigação precisa cobrir os quatro. `app/chamados/catalogo/motor.py:30`.
+
+Nos gates de transição abaixo, o ritual comum escreve `status_local`, `via_encerramento`, `resolvido_em`, `atualizado_em` e rebaixa a urgência preservando a original. Escreve `respondido_por` somente quando `set_user=True`. `app/chamados/models.py:228`, `app/chamados/models.py:233`, `app/chamados/models.py:459`.
+
+A auditoria comum é `LogAuditoria.acao='estado_chamado'`, com antes `{status_local}` e depois `{status_local, via}`. O usuário pode vir do argumento/request; fora de request existe o ator de processo `sistema:<comando>`. A gravação da auditoria é best-effort. `app/chamados/models.py:292`, `app/core/observ.py:94`, `app/core/observ.py:108`.
+
+| Entrada | Escrita específica | Lastro ou limite |
+|---|---|---|
+| `transicionar → _aplicar` | Destino humano; via `admin`; substitui `respondido_por`. | Pode acompanhar decisão real, mas também mera mudança de status sem texto. `app/chamados/models.py:128`, `app/chamados/models.py:447`, `app/chamados/services/acoes_chamado.py:283`, `app/chamados/services/acoes_chamado.py:313`. |
+| `fechar(user, novo_status, resolucao)` | Delega a `transicionar`; resolução opcional vira nota no fio depois da transição. | Não exige resolução preenchida. `app/chamados/models.py:452`. |
+| `reconciliar` | `resolvido`, via `sistema`; preserva o usuário anteriormente gravado. | Hoje consulta as guardas da premissa e da pergunta viva. Permite também agrupamento, dedup e fechamento sem dia identificável, este último com trilha específica. `app/chamados/models.py:641`, `app/chamados/models.py:682`, `app/chamados/models.py:717`, `app/chamados/models.py:732`, `app/chamados/models.py:738`, `app/chamados/models.py:750`. |
+| `cancelar(motivo, user)` | `cancelado`, via `cancelado`; troca usuário somente se fornecido; motivo opcional vira nota. | Descarte administrativo/emissor aposentado; a porta não demonstra por si uma premissa factual morta. `app/chamados/models.py:773`, `app/chamados/models.py:788`. |
+| `encerrar` | `fechado`, via `cascade`; preserva usuário. | Não consulta a guarda da premissa usada por `reconciliar`; consulta a guarda de pergunta viva. A prova substantiva depende do chamador. `app/chamados/models.py:1605`, `app/chamados/models.py:1617`. |
+| `encerrar_por_competencia_trancada` | `fechado`, via `competencia_trancada`; serviço acrescenta nota e evento com competência/empresa. | O código denomina isso lastro de tranca efetiva, mas esclarece que não é resolução pela realidade. Não equivale a simples idade/janela. `app/chamados/models.py:1622`, `app/chamados/services/competencia_trancada.py:3`, `app/chamados/services/competencia_trancada.py:12`, `app/chamados/services/competencia_trancada.py:184`. |
+| Migração 0039 | Cancelado com irmão único vira `superado`, via `superado`, `superado_por_id`. | Escrita histórica direta; esse trecho não grava ator, log nem timestamp. A porta corrente `superar()` foi removida. `app/chamados/migrations/0039_a3_via_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/models.py:794`. |
+
+Há ainda **nascimento admitido com status terminal**, fora do ritual de transição: `criar(status=...)` aceita status explícito; `abrir(defaults=...)` permite sobrescrever o status inicial. Ambos deixam `nascimento_chamado`, não necessariamente uma travessia vivo→terminal. `app/chamados/models.py:1054`, `app/chamados/models.py:1063`, `app/chamados/models.py:1095`, `app/chamados/models.py:938`, `app/chamados/models.py:971`, `app/chamados/models.py:1218`. O chamador explícito encontrado de `criar(status=...)` é o smoke, limitado a banco de teste e com rollback. `app/chamados/management/commands/smoke_chamados.py:31`, `app/chamados/management/commands/smoke_chamados.py:39`, `app/chamados/management/commands/smoke_chamados.py:123`.
+
+Os chamadores encontrados dos gates terminais são:
+
+- **Transição humana:** aprovação de exceção, aceite/recusa de agenda e escala, autorização/recusa de geofence e resposta livre com mudança opcional de status. `app/chamados/services/acoes_chamado.py:70`, `app/chamados/services/acoes_chamado.py:108`, `app/chamados/services/acoes_chamado.py:149`, `app/chamados/services/acoes_chamado.py:222`, `app/chamados/services/acoes_chamado.py:277`, `app/chamados/services/acoes_chamado.py:315`. Também resposta pelo fio e decisão de benefício. `app/chamados/services/fio.py:721`, `app/colaboradores/views.py:2068`.
+- **Fechamento assinado automaticamente como admin:** comando de meio período escolhe o primeiro superuser e chama `fechar`. É mais uma razão para não interpretar `via=admin` como identidade do agente real. `app/ponto/management/commands/fechar_chamados_meio_periodo.py:103`, `app/ponto/management/commands/fechar_chamados_meio_periodo.py:109`.
+- **Cascade:** desligamento, substituição de aceite antigo, regularização externa e fecho com retenção usado pela justificativa. `app/colaboradores/services/desligamento.py:155`, `app/colaboradores/services/vinculo.py:387`, `app/chamados/services/regularizacao_ext.py:205`, `app/chamados/reconciliador.py:485`, `app/ponto/services/justificativa.py:87`, `app/ponto/services/justificativa.py:400`.
+- **Cancelamento:** avisos de régua e revisão de vínculo transferidos para a lista Cadastro x Realidade. `app/escala/management/commands/fechar_avisos_regua_na_lista.py:47`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57`.
+- **Reconciliação por disputa/retratacão/materialização:** signal da disputa, reconciliador, materialização de ausência/pergunta, adesão, pós-vínculo e agrupamento/folga. `app/chamados/signals.py:42`, `app/chamados/reconciliador.py:523`, `app/chamados/services/materializacao.py:582`, `app/chamados/services/materializacao.py:771`, `app/chamados/services/adesao.py:115`, `app/chamados/services/adesao.py:150`, `app/colaboradores/services/pos_vinculo.py:42`, `app/chamados/services/limbo_folgas.py:101`, `app/chamados/services/limbo_folgas.py:283`, `app/chamados/services/limbo_folgas.py:286`.
+- **Reconciliação por fatos do dia:** feriado/folga, ausência decidida/aprovada, cobertura, cluster, marcos acesos, entrada sincronizada, triagem e decisão administrativa da célula. `app/chamados/services/feriado_reavaliar.py:47`, `app/chamados/services/silencio_ausencia.py:101`, `app/ponto/services/ausencia.py:694`, `app/ponto/services/cobertura.py:122`, `app/ponto/services/cobertura.py:317`, `app/ponto/services/cluster_espurio.py:124`, `app/ponto/services/lastro.py:400`, `app/ponto/services/entrada_sincronizada.py:31`, `app/ponto/services/triagem_batida.py:597`, `app/ponto/services/veredito_celula.py:202`.
+- **Cartório:** reconciliações nas passadas de lavra, marcos satisfeitos/inexistentes, ausência de protesto e duplicidade do fio. `app/ponto/services/cartorio.py:974`, `app/ponto/services/cartorio.py:1499`, `app/ponto/services/cartorio.py:1512`, `app/ponto/services/cartorio.py:1533`, `app/ponto/services/cartorio.py:1611`, `app/ponto/services/cartorio.py:1626`.
+- **Comandos adicionais:** auditoria de órfãos, feriado do posto, intervalo ausente, cura BUG115 e detecção de ausências por premissa/afastamento/cobertura/batida. `app/chamados/management/commands/auditar_chamados_orfaos.py:67`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:140`, `app/ponto/management/commands/detectar_intervalo_ausente.py:138`, `app/ponto/management/commands/curar_residuo_bug115.py:151`, `app/ponto/management/commands/detectar_ausencias.py:158`, `app/ponto/management/commands/detectar_ausencias.py:824`, `app/ponto/management/commands/detectar_ausencias.py:834`, `app/ponto/management/commands/detectar_ausencias.py:845`.
+
+**Fechamento por idade antigo:** há lápide expressa da expiração de disputa parada por 30 dias, revogada pela C7. O cron de prescrição corrente somente silencia, sem terminalizar. `app/chamados/management/commands/arquivar_competencia_encerrada.py:30`, `app/chamados/management/commands/arquivar_competencia_encerrada.py:61`, `app/chamados/management/commands/arquivar_prescritos.py:6`, `app/chamados/management/commands/arquivar_prescritos.py:94`. O cluster também documenta a antiga confusão “fora da janela = premissa falsa”; hoje consulta a célula do próprio dia, sem limite etário para fechar. `app/ponto/services/cluster_espurio.py:53`. Campos e trilhas exatos das versões removidas: **[não verificado]**.
+
+**2. O que o banco permite distinguir retrospectivamente**
+
+O chamado possui `status_local`, `via_encerramento`, `respondido_por`, `resolvido_em`, `atualizado_em` e `superado_por`. `fechada_por`, `motivo_fechamento` e `resolucao` pertencem à **Disputa**, não ao chamado. `app/chamados/models.py:52`, `app/chamados/models.py:58`, `app/chamados/models.py:1766`, `app/chamados/models.py:1773`, `app/chamados/models.py:1793`.
+
+| Evidência gravada | O que permite concluir |
+|---|---|
+| Via `admin`, usuário preenchido | Identifica uma via/atribuição, sem provar decisão substantiva; pode ser backfill ou comando assinado por superuser. `app/chamados/migrations/0039_a3_via_backfill.py:26`, `app/ponto/management/commands/fechar_chamados_meio_periodo.py:103`. |
+| Via `sistema`, `cascade`, `cancelado`, `legado` | Não identifica, sozinha, a prova que autorizou o fechamento. O evento genérico guarda somente estado/via. `app/chamados/catalogo/motor.py:86`, `app/chamados/models.py:292`. |
+| `respondido_por` | Pode ser resíduo de ato/ciclo anterior, pois os fechamentos automáticos não o substituem. `app/chamados/models.py:230`, `app/chamados/models.py:654`, `app/chamados/models.py:1619`, `app/chamados/models.py:1639`. |
+| `resolvido_em` | Marca a saída de vivo, mas `resolvido→fechado` preserva esse instante e sobrescreve a via. A última linha terminal pode não ser quem matou a vida. `app/chamados/models.py:242`. |
+| `fechamento_por_dedup` | Prova que foi invocada a sobrevivência de outra cobrança; traz dia e chamado sobrevivente. Não demonstra premissa factual morta. `app/chamados/models.py:750`. |
+| `fechamento_sem_dia_do_fato` | Declara que a guarda da premissa não conseguiu julgar. Não prova, sozinho, nem lastro nem inexistência de outro ato. `app/chamados/models.py:732`. |
+| `reconciliar_feriado` / `reconciliar_ausencia_lancada` | Evidência específica com dia e, no segundo caso, ausência identificada; precisa ser atribuída ao ciclo correto. `app/chamados/services/feriado_reavaliar.py:52`, `app/chamados/services/silencio_ausencia.py:108`. |
+| Disputa `admin_encerra`, resolução, autor, `disputa_fechada` e decisões das perguntas | Registram ato explícito sobre a disputa/perguntas. O fechamento do chamado-pai é outro passo, tentado pelo signal. `app/chamados/models.py:1918`, `app/chamados/models.py:1932`, `app/chamados/models.py:1943`, `app/chamados/signals.py:42`. |
+| `DecisaoPergunta` | Registra ato, instante, autor e motivo sobre a pergunta; não possui vínculo explícito com o evento que terminalizou determinado ciclo do chamado. `app/chamados/models.py:3839`, `app/chamados/models.py:3871`. |
+| Nota do fio | Guarda conteúdo/autor/instante, mas não persiste o parâmetro `tipo` nem `objeto_ref` como campos recuperáveis. `app/chamados/models.py:1668`, `app/chamados/models.py:1688`, `app/chamados/services/nota.py:87`, `app/chamados/services/nota.py:95`. |
+| Ausência de auditoria/decisão | Não prova ausência de ato: a auditoria é best-effort e existe legado anterior à sequência de decisões. `app/core/observ.py:94`, `app/chamados/models.py:3913`. |
+
+Portanto, a investigação deve localizar a **travessia vivo→terminal do ciclo corrente**, conferir sua cadeia com o estado do banco e procurar a prova substantiva correspondente. Sem prova positiva de fechamento por idade/ausência de lastro, não é correto transformar lacuna de trilha em classe **b**. Sem vínculo suficiente entre decisão/prova e fechamento, permanece **indeterminado**. `app/chamados/models.py:242`, `app/chamados/models.py:292`, `app/core/observ.py:98`.
+
+**3. Portas existentes**
+
+- **O261-E F1 existe como guarda do encerramento do chamado.** Busca perguntas ancoradas, consulta C6 no pós-estado e restringe o alcance à competência reconhecida como aberta. No sistema, reata todas a uma cobrança sobrevivente válida ou recusa; na transição humana, recusa. Há tripwire no núcleo e guarda equivalente na costura. `app/chamados/models.py:319`, `app/chamados/models.py:374`, `app/chamados/models.py:410`, `app/chamados/models.py:148`, `app/chamados/models.py:208`, `app/chamados/services/fio.py:745`. O BACKLOG distingue F1 da porta F2 de `materializada_em`. `app/docs/BACKLOG.md:874`.
+- **O encerramento gravado da pergunta passa por F2:** `carimbar` aplica os campos em memória, consulta C6 e somente grava se a pergunta morrer; `carimbar_identidade` trata as vias de identidade. `fechar_por_admin` usa `admin_decidiu`. `app/chamados/models.py:3050`, `app/chamados/models.py:3097`, `app/chamados/models.py:3103`, `app/chamados/models.py:3168`.
+- **Não há via genérica denominada `premissa_morta`.** Há vias distintas como `celula_absolveu`, `chamado_encerrado`, `admin_decidiu` e `motivo_retratado`; não cabe escolher uma delas apenas pelo rótulo do aval. `app/chamados/models.py:2525`.
+- **Outros escritores dos campos da pergunta:** limpeza por `descarimbar`/`descarimbar_em_lote`; troca isolada da via por `encerrar_por_fato_no_espelho`; e `relavra_via.relavrar`. `app/chamados/models.py:3203`, `app/chamados/models.py:3251`, `app/chamados/models.py:3268`, `app/chamados/services/relavra_via.py:106`.
+- **A reabertura do chamado existe:** `reabrir` consulta `recusa_da_reabertura`, grava `em_analise`, limpa via/instante pelo núcleo e chama `ressuscitar_perguntas`. Há recusas por veto, admin sem fato novo, premissa regularizada, agrupamento, irmão vivo e transição impossível. `app/chamados/models.py:1318`, `app/chamados/models.py:1362`, `app/chamados/models.py:1439`.
+- **L-125 é a lei da família cluster, não uma API especial de reabertura.** Ela exige leitura da célula do próprio dia para fechar; ausência de célula/insumos não vira premissa falsa. `app/docs/LEIS.md:146`, `app/ponto/services/cluster_espurio.py:15`, `app/ponto/services/cluster_espurio.py:53`. Além de `reabrir`, `analisar` e as transições humanas escrevem os mesmos campos de estado pelo núcleo; nascimentos e migração 0039 são as exceções descritas acima. `app/chamados/models.py:800`, `app/chamados/models.py:447`, `app/chamados/models.py:1095`, `app/chamados/migrations/0039_a3_via_backfill.py:24`.
+
+A guarda atual de reabertura pode tratar `via='admin'` como impedimento sem procurar um ato substantivo registrado. Logo, ela também não serve como juiz histórico de a/b. `app/chamados/models.py:1342`.
+
+**4. Classe e e relação com o DRY**
+
+Não localizei `backfill_fio_morto_e4b` nesta árvore. Sua implementação e sua chamada exata: **[não verificado]**. A obra consta pelo nome no BACKLOG. `app/docs/BACKLOG.md:1875`.
+
+O sítio disponível que produz o detalhe `pergunta_viva_sob_chamado_terminal` é `vigia_fio.censo_alcance`:
+
+1. Obtém os dias retidos por empresa/competência e encontra a célula por `(colaborador_id, data)`. `app/chamados/services/vigia_fio.py:581`, `app/chamados/services/vigia_fio.py:593`.
+2. Chama `alimentar_portas`; suas vivas vêm de **todas** as perguntas da célula, passando pelo juiz `pergunta_viva`, com mapa de identidade do colaborador. `app/chamados/services/vigia_fio.py:603`, `app/chamados/juizes.py:1501`.
+3. Resolve a âncora por `chamado_que_lista(p)`: destino, senão chamado da disputa; consulta o status dessas âncoras. `app/chamados/services/fio.py:116`, `app/chamados/services/vigia_fio.py:617`.
+4. Somente depois das precedências anteriores atribui classe e e o detalhe terminal. Uma pergunta respondida sob terminal pode cair antes em **c**; “viva sob terminal” isoladamente não reproduz toda a classificação do censo. `app/chamados/services/vigia_fio.py:667`, `app/chamados/services/vigia_fio.py:675`, `app/chamados/services/vigia_fio.py:687`.
+
+**5. Sonda de leitura**
+
+O script abaixo mede as perguntas pelo **mesmo C6 e pela mesma consulta da alimentação disponível**, e resolve o dono pela mesma função do fio. Não reexecuta o universo inteiro nem afirma reproduzir a seleção do comando ausente. `app/chamados/juizes.py:1501`, `app/chamados/services/fio.py:116`. Execução no tenant: **[não verificado]**.
+
+**Limitação deliberada:** esta sonda não inventa um juiz retrospectivo a/b. Ela imprime as evidências e deixa a classificação como `indeterminado`, indicando o campo/lacuna que impediu a conclusão. Os baldes a/b contam classificações comprovadas pela sonda, não presumem que o universo real tenha zero casos. O predicado faltante é: **“qual ato/prova substantiva autorizou a travessia vivo→terminal deste ciclo?”** O evento genérico existente não registra essa relação. `app/chamados/models.py:292`, `app/chamados/models.py:3871`.
+
+As competências/empresas do resumo são as do anexo; a empresa atual é impressa separadamente. A lista fornecida e sua correspondência atual no banco: **[não verificado]**.
+
+```python
+# Colar no manage.py shell JA no schema do tenant.
+# Lista: anexo classe_e_45.txt fornecido; banco [nao verificado].
+# C6/consulta: app/chamados/juizes.py:1501.
+# Ancora: app/chamados/services/fio.py:116.
+# Trilha: app/chamados/models.py:292.
+# Limite historico: migrations/0039_a3_via_backfill.py:26.
+
+import json
+import logging
+from collections import Counter
+from contextlib import ExitStack
+from datetime import date
+
+from django.db import connection, connections, transaction
+from django.contrib.auth import get_user_model
+from django.db.models import Q
+from django.utils import timezone
+
+from chamados.models import (
+    ChamadoColaborador, PerguntaDisputa, DisputaSupervisao,
+    DecisaoPergunta, FollowupChamado,
+)
+from chamados.catalogo.motor import (
+    ESTADOS, VIVOS, TERMINAIS, VIAS_ENCERRAMENTO,
+)
+from chamados.juizes import (
+    pergunta_viva, um_colaborador_por_identidade, tranca_em_lote,
+)
+from chamados.services.fio import chamado_que_lista
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia
+from core.observ import engolidos
+
+DADOS = """
+114 2026-11-03 11/2026 3
+114 2026-11-06 11/2026 3
+209 2026-10-22 11/2026 2
+209 2026-10-24 11/2026 2
+258 2026-10-26 11/2026 2
+267 2026-10-24 11/2026 2
+268 2026-10-22 11/2026 2
+268 2026-10-24 11/2026 2
+298 2026-10-21 11/2026 2
+355 2026-10-25 11/2026 2
+427 2026-10-22 11/2026 2
+427 2026-10-24 11/2026 2
+427 2026-10-26 11/2026 2
+534 2026-10-23 11/2026 2
+534 2026-10-24 11/2026 2
+534 2026-10-25 11/2026 2
+650 2026-10-23 11/2026 2
+650 2026-10-25 11/2026 2
+718 2026-10-22 11/2026 2
+718 2026-10-24 11/2026 2
+718 2026-10-26 11/2026 2
+718 2026-10-28 11/2026 2
+723 2026-10-28 11/2026 2
+865 2026-10-23 11/2026 2
+900 2026-11-01 11/2026 3
+900 2026-11-03 11/2026 3
+900 2026-11-05 11/2026 3
+900 2026-11-07 11/2026 3
+900 2026-11-09 11/2026 3
+918 2026-10-25 11/2026 2
+921 2026-10-21 11/2026 2
+921 2026-10-22 11/2026 2
+921 2026-10-23 11/2026 2
+921 2026-10-25 11/2026 2
+921 2026-10-26 11/2026 2
+921 2026-10-27 11/2026 2
+921 2026-10-28 11/2026 2
+921 2026-10-29 11/2026 2
+923 2026-10-25 11/2026 2
+1005 2026-10-28 11/2026 2
+1005 2026-10-29 11/2026 2
+1005 2026-10-30 11/2026 2
+42 2026-10-08 10/2026 4
+42 2026-10-15 10/2026 4
+258 2026-10-02 10/2026 2
+"""
+
+itens = [x.split() for x in DADOS.splitlines() if x.strip()]
+saida = []
+bloqueios = [0]
+ERRO = "ERRO-NAO-MEDIDO"
+
+ACOES = {
+    "nascimento_chamado", "estado_chamado",
+    "fechament
+
+[truncado em 20000 de 32480 caracteres]
 
 ## 10/11 23:54 · sessao bf810b28509c · - · - · origem=Ronald (tmux)
 
@@ -736,29 +916,4 @@ Executei previamente 82 testes de memória em nove módulos, todos verdes, com `
 
 `opus5d.txt`, `preverif3.r`, `matriz2.r` e briefs não foram encontrados na cópia; conteúdo/achados individualizados: [nao verificado].
 
-## 10/11 22:03 · sessao 38fa1f071ca0 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-Arquivos tocados, somente testes: [nao verificado]
-
-- [test_bo_disputa_volta5b_orfaos.py:102](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:102): E1/E2 exigem dona reaberta e nota quando houver chamado; preservam costura, push e ausência de nascimento local. [nao verificado]
-- [test_bo_disputa_volta5e_memoria.py:1](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5e_memoria.py:1): prova sem banco, RED e mutantes dos novos asserts.
-
-E3: não encontrei outro ORM com essa exigência depois de `analisar`. As expectativas restantes cobrem emissão/replay ([volta5.py:170](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5.py:170), [sem_pergunta.py:83](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_sem_pergunta.py:83)).
-
-Execução local: controle **4/4**, dois RED com **rc 1**, dois mutantes mortos por assertion; comandos do [runner:98](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/tests/test_bo_disputa_volta5e_memoria.py:98):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5e_memoria.py
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5e_memoria.py --red sem_reabertura
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5e_memoria.py --red sem_nota
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5e_memoria.py --mutante ignora_reabertura
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5e_memoria.py --mutante ignora_nota
-```
-
-**Motivo não chega à dona reaberta: sim, por leitura do código.** O agregador retorna `None` enquanto ela está fechada ([disputa_emissao.py:562](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:562)), antes de `analisar` ([disputa_emissao.py:1458](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/services/disputa_emissao.py:1458)); a reabertura não agrega motivos ([models.py:2173](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/chamados/models.py:2173)).
-
-Execução ORM/cartório e certificação pela suite/opus: [nao verificado]. [nao verificado]
-
-perguntas de lei: 0
-
-_3528 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3529 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
