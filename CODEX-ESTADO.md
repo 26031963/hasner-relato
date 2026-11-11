@@ -1,7 +1,265 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 12:10** · publicado em **11/11/2026 12:10** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:14** · publicado em **11/11/2026 12:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:14 · sessao a92c83d22358 · - · - · origem=Ronald (tmux)
+
+Achados procedentes no código; render testado em memória com `markdown_it` CommonMark + extensão table, renderer de produção [nao verificado].
+
+| Variante sobre mapa válido | Validador | Render local / decisão |
+|---|---|---|
+| `&#124;` ou `&vert;` em célula | Passa | Mostra pipe literal na mesma célula; não cria coluna. `_celulas` divide só `|` literal: `bin/mapa20_valida.py:92`. |
+| Segunda “tabela” usando apenas entidades como delimitadores | Passa | Renderiza parágrafo com pipes, sem segunda tabela; não é evasão estrutural observada. `bin/mapa20_valida.py:137`. |
+| Segunda `<table><tr><td>E3</td><td>encerrada</td>…</tr></table>` após branca | **Passa** | Renderiza segunda tabela HTML. Guarda HTML só rejeita comentário, `bin/mapa20_valida.py:126`; coleta só linhas começadas por pipe, `:130`; julga encerrada só nas células coletadas, `:193`. **Alta/bloqueante.** |
+| `enc&#101;rrada` em célula com 1 de 2 | **Passa** | Mostra `encerrada`; regex avalia bytes sem decodificar entidades: `bin/mapa20_valida.py:56`, `:67`, `:193`. **Alta/bloqueante.** |
+| `<em>encerrada</em>` | Recusa | Palavra literal ainda casa: `bin/mapa20_valida.py:56`, `:193`. |
+| `enc<em>errada</em>` | **Passa** | Leitor vê palavra encerrada com trecho em itálico; regex não remove tags: `bin/mapa20_valida.py:56`, `:67`. **Alta/bloqueante.** |
+| `encerrada<br>` | Recusa | Palavra literal presente: `bin/mapa20_valida.py:56`, `:193`. |
+| `encer\u200brada` | Passa | Mantém caractere invisível na saída; aparência efetiva depende de fonte/layout [nao verificado]. Regex exige palavra contígua: `bin/mapa20_valida.py:56`. |
+| Branca com espaços/tab após tabela | Passa | `.strip()` considera branca e renderer encerra tabela: `bin/mapa20_valida.py:135`. |
+| CRLF | Passa | `splitlines()` e leitura textual normalizam fronteiras: `bin/mapa20_valida.py:123`, `:209`. |
+| `a\|b` dentro da tabela | Recusa | Proibição de qualquer barra invertida: `bin/mapa20_valida.py:145`. |
+| Segunda tabela em lista, com pipes | Recusa | Pipe fora do bloco: `bin/mapa20_valida.py:137`; linhas canônicas indentadas caem antes em `:128`. |
+| Segunda tabela com todas as linhas prefixadas por `>` | Recusa | Pipes fora: `bin/mapa20_valida.py:137`. |
+| `> quote\n` imediatamente antes do cabeçalho canônico | **Passa** | **ZERO tabelas** no render local: todas as linhas canônicas viram continuação lazy do parágrafo do blockquote. Só há guarda de fronteira depois, `bin/mapa20_valida.py:135`; nenhuma antes, `:130`. **Média, forma fixa não assegurada.** |
+| `- item\n` ou `1. item\n` imediatamente antes do cabeçalho | **Passa** | **ZERO tabelas**, continuação lazy da lista; mesmo defeito de fronteira anterior, `bin/mapa20_valida.py:130`, `:135`. **Média.** |
+| Lista/blockquote seguidos de branca e tabela canônica em coluna zero | Passa | Uma tabela normal, sem evasão observada: `bin/mapa20_valida.py:130`. |
+| Heading setext `titulo\n---\n` antes da tabela | Passa | Heading normal e uma tabela; não é evasão observada: `bin/mapa20_valida.py:130`. |
+| `===` ou `---` imediatamente depois da tabela | Recusa | Qualquer linha seguinte não branca, embora `---` renderize como `<hr>` fora da tabela: `bin/mapa20_valida.py:135`. |
+| Heading setext `encerrada\n---` separado por branca | Passa | Palavra fora da tabela fica sem julgamento; `bin/mapa20_valida.py:159`, `:193` só inspecionam bloco. |
+| `<table>\n` antes da tabela e `\n\n</table>` depois | **Passa** | Zero tokens de tabela Markdown; pipes são HTML bruto. Também ocorre com `<pre>`, `<div>` e `<em>` em linha própria. Comentários são o único HTML vedado, `bin/mapa20_valida.py:126`; branca antes do fechamento satisfaz `:135`. **Média/alta conforme contrato de visibilidade.** |
+
+Adicional: substituir todos os LF por VT, FF, NEL, U+2028 ou U+2029 mantém aprovação porque `splitlines()` os separa (`bin/mapa20_valida.py:123`), mas renderer local mostra zero tabelas. Interpretação do renderer de produção [nao verificado].
+
+## 11/11 12:14 · sessao caef848ee75c · - · - · origem=Ronald (tmux)
+
+Achados semânticos, todos reproduzidos em memória sem criar arquivos:
+
+- **Procedente, alta:** a cura não fecha a classe de “encerrada” renderizada. Com `1 de 2`, `encerrad&#97;`, `encerr<em>ada</em>`, `encerrad\u200ba` e `encerrad\u200da` retornam zero problemas. `_ENCERRADA` procura caracteres contíguos; `_sem_nomes_e_caminhos` apenas remove nomes/caminhos, sem interpretar HTML ou caracteres invisíveis. Referências: `bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:59`, `bin/mapa20_valida.py:67`, `bin/mapa20_valida.py:193`. A aparência exata dos caracteres invisíveis no publicador fica [nao verificado].
+
+- **Procedente, média:** a cura introduz recusas de negação legítima com ênfase por `_`: `nao _encerrada_`, `_nao encerrada_` e `__nao encerrada__` retornam `"encerrada" com 1 de 2`. A nova fronteira encontra a palavra, mas `_NEGADA` exige `\b` antes de `nao` e somente espaços depois; os sublinhados impedem a isenção. Referências: `bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:56`, `bin/mapa20_valida.py:68`, `bin/mapa20_valida.py:194`.
+
+- **Procedente, média, preexistente:** `nao **encerrada**`, `nao <em>encerrada</em>` e `n&#227;o encerrada` também recusam. `nao encerrada`, `não encerrada` e `**nao encerrada**` passam. Referências: `bin/mapa20_valida.py:52`, `bin/mapa20_valida.py:68`.
+
+- A remoção de nomes/caminhos continua preservando os casos intencionais `BO-ROTULO-ENCERRADO` e `logs/encerrada.md:10`. Referências: `bin/mapa20_valida.py:51`, `bin/mapa20_valida.py:61`, `bin/tests/test_mapa20_valida.sh:93`, `bin/tests/test_mapa20_valida.sh:95`.
+
+- A remoção ocorre sem fronteiras, podendo fabricar contexto: `nao E3 encerrada` e `nao logs/estado.md encerrada` tornam-se `nao   encerrada` e passam; `encerradaE3` torna-se `encerrada ` e recusa. Se essas entradas representam uma afirmação ou texto legítimo na produção é [nao verificado]. Referências: `bin/mapa20_valida.py:61`, `bin/mapa20_valida.py:62`, `bin/mapa20_valida.py:63`, `bin/mapa20_valida.py:68`.
+
+**Os quatro testes novos mordem pelo motivo certo; achado de teste inadequado não procedente.** Recriei o validador anterior exclusivamente em memória, removendo os dois novos bloqueios e restaurando `\bencerrad[ao]s?\b`: os quatro retornam zero problemas; no atual: [nao verificado]
+
+| Caso | Resultado atual | Decisão |
+|---|---|---|
+| Linha sem borda colada | Recusa por linha colada | `bin/tests/test_mapa20_valida.sh:62`; `bin/mapa20_valida.py:135` |
+| Segunda tabela sem bordas | Recusa por pipe fora | `bin/tests/test_mapa20_valida.sh:63`; `bin/mapa20_valida.py:137` |
+| `_encerrada_` | Recusa por encerramento com `1 de 2` | `bin/tests/test_mapa20_valida.sh:65`; `bin/mapa20_valida.py:193` |
+| `__encerrada__` | Recusa por encerramento com `1 de 2` | `bin/tests/test_mapa20_valida.sh:66`; `bin/mapa20_valida.py:193` |
+
+A primeira entrada também cairia no bloqueio de pipe externo se somente o bloqueio de linha colada fosse removido; ela contém pipes internos. Referências: `bin/tests/test_mapa20_valida.sh:62`, `bin/mapa20_valida.py:137`.
+
+## 11/11 12:13 · sessao 88846b740303 · - · - · origem=Ronald (tmux)
+
+Compatibilidade da cura: **achado de regressão no formato fabricado pelo selo não procedente**. `mapa()` monta tabela com pipes nas bordas, prosa sem pipes fora dela e linha vazia depois dela; portanto não viola novas regras. `bin/tests/test_mapa20_valida.sh:25`, `:31`, `:32`, `:33`; decisões em `bin/mapa20_valida.py:135` e `:137`. O fixture adicional do publicador termina a tabela em EOF, também permitido, pois a condição exige existir linha seguinte. `bin/tests/test_mapa20_valida.sh:128`; `bin/mapa20_valida.py:135`.
+
+No publicador, **regressão do fluxo não procedente**: o script copia `logs/MAPA-20/mapa.md` para snapshot e julga essa cópia; rc zero seleciona o par para publicação; falha fixa `MAPA_RC=1`, segue com o resto e devolve esse rc, inclusive quando nada mudou. `bin/relato.sh:94`, `:97`, `:98`, `:100`, `:143`, `:158`, `:165`. O raspador só transforma o snapshot depois do selo e escreve o destino público. `bin/relato.sh:143`; `bin/raspar_publico.py:28`, `:31`, `:40`. Resultado efetivo após raspagem: [nao verificado].
+
+Quem escreve:
+
+- Escritor produtivo é **declarado** como sessão, usando `logs/MAPA-20/montar_mapa.py`; implementação não está comprovada na cópia. `bin/mapa20_valida.py:10`; [nao verificado]. `logs/` está ignorado. `.gitignore:53`.
+- Gerador sintético `mapa()`: `bin/tests/test_mapa20_valida.sh:32`; grava texto de teste em `:37`.
+- Fixture sintético do publicador: `bin/tests/test_mapa20_valida.sh:128`; cópia para o caminho imitado em `:170`; fixture vermelho em `:171`.
+- Wrapper sintético que simula regravação concorrente: `bin/tests/test_mapa20_valida.sh:147`.
+- Publicador escreve snapshot por `cp`: `bin/relato.sh:97`; escreve `MAPA-20.md` através de `bin/raspar_publico.py:40`, selecionado em `bin/relato.sh:98` e `:143`.
+
+Quem lê rc/saída:
+
+- **Produção:** `bin/relato.sh:97` lê rc do validador pelo `if`; não faz parsing de sua saída, que segue stdout. `bin/relato.sh:97`, `:101`.
+- **Teste do validador:** `bin/tests/test_mapa20_valida.sh:38` captura saída e retorna somente rc; `:109` compara rc esperado; `:110` verifica arquivo ausente; `:115` devolve falha.
+- **Wrapper sintético:** `bin/tests/test_mapa20_valida.sh:146` lê rc e `:148` o repassa.
+- **Teste do publicador:** `bin/tests/test_mapa20_valida.sh:175` captura saída do fluxo; `:176` guarda rc; `:180` lê esse rc; `:184` compara; `:185` exibe saída se falhar.
+- **Chamador declarado do publicador:** unit executa `relato.sh`. `bin/hasner-relato.service:15`. Essa unit não declara `OnFailure`; tratamento/alerta externo e instalação viva: [nao verificado].
+
+Severidade: nenhuma regressão demonstrada no formato sintético ou no fluxo; compatibilidade com o escritor produtivo real permanece [nao verificado]. `bin/tests/test_mapa20_valida.sh:33`; `bin/relato.sh:97`; `bin/mapa20_valida.py:10`.
+
+## 11/11 12:12 · sessao c4149a800b40 · TRIAGEM-OFFLINE-SEM-CAMERA · censo · origem=Code
+
+**Pela lei do sistema, NÃO: falta de selfie não deve impedir a batida. A cópia contém respostas contraditórias:** `apto` online libera; `apto` offline esconde a confirmação; v2 recusa explicitamente sem foto. (`CLAUDE.md:143-144`; `app/templates/ponto/triagem/apto.html:156-163`; `app/templates/ponto/triagem/apto.html:253-256`; `app/templates/ponto/bater_ponto_v2.html:285-290`.)
+
+Inspeção somente leitura; não executei testes, banco ou logs. Identidade Git independente do hash informado e ocorrência concreta em produção: **[nao verificado]**. O anexo fornecido relata batida perdida; quantidade, usuários atingidos e frequência: **[nao verificado]**. [nao verificado]
+
+**1. Censo dos sítios**
+
+As rotas atuais selecionam triagem ou v2; `bater_ponto.html` permanece no censo como código existente, mas não é o template selecionado nessa view. (`app/ponto/urls.py:11-12`; `app/ponto/views.py:225-235`; `app/ponto/views.py:356-358`.)
+
+| Sítio | Caminho | Resposta | Como |
+|---|---|---|---|
+| `apto`: abertura de câmera | Online | **Libera na falha**, inclusive permissão negada | O `catch` informa revisão e mostra `bloco-botoes`. Não diferencia causas. (`app/templates/ponto/triagem/apto.html:149-163`.) |
+| `apto`: foto não capturada | Antes da escolha online/offline | **Bloqueia pela apresentação inicial** | Botões começam em `hidden`; ficam acessíveis pela confirmação ou pelo `catch`. (`app/templates/ponto/triagem/apto.html:93`; `app/templates/ponto/triagem/apto.html:156-185`.) |
+| `apto`: conversão da foto | Online | **Libera com blob nulo**, se o callback ocorrer | Atribui o resultado sem validá-lo e mostra os botões. Não há proteção local para falha de desenho/conversão nem timeout do callback. (`app/templates/ponto/triagem/apto.html:167-186`.) |
+| `apto`: refazer | Ambos, antes do envio | **Volta a esconder** | Zera foto, esconde os botões e tenta câmera novamente; uma rejeição volta ao `catch` permissivo. (`app/templates/ponto/triagem/apto.html:189-195`.) |
+| `apto`: envio | Online | **Libera sem foto** | Anexa somente se `_fotoBlob` existir e submete o formulário. (`app/templates/ponto/triagem/apto.html:228-235`.) |
+| `apto`: segunda câmera | Offline | **Bloqueia na rejeição** | Depois de desabilitar o botão principal, abre câmera offline; o `catch` esconde `btn-capturar-off`, pede supervisor e zera stream. (`app/templates/ponto/triagem/apto.html:210-212`; `app/templates/ponto/triagem/apto.html:236-256`.) |
+| `apto`: confirmar sem stream | Offline | **Não tem veto por stream nulo** | Continua para `canvas.toBlob` e fila; o impedimento do clique está no ramo anterior. (`app/templates/ponto/triagem/apto.html:261-282`.) |
+| `bater_ponto`: câmera inicial | Antes de online/offline | **Bloqueia implicitamente se continuar sem foto** | Botões nascem escondidos; o `catch` oferece câmera do sistema e telemetria, sem liberá-los. (`app/templates/ponto/bater_ponto.html:246`; `app/templates/ponto/bater_ponto.html:343-378`.) |
+| `bater_ponto`: câmera do sistema | Ambos | **Bloqueia se cancelar** | Sem arquivo retorna; com arquivo libera somente no `FileReader.onload`. (`app/templates/ponto/bater_ponto.html:384-403`.) |
+| `bater_ponto`: conversão | Ambos | **Libera em null, exceção ou timeout de `toBlob`** | Tenta dataURL e libera mesmo sem blob; salvaguarda de 1.500 ms. Entretanto, `drawImage`/`toDataURL` anteriores estão fora desse `try`. (`app/templates/ponto/bater_ponto.html:414-467`.) |
+| `bater_ponto`: refazer | Ambos | **Volta a esconder** | Zera foto e reabre a câmera inicial. (`app/templates/ponto/bater_ponto.html:470-477`.) |
+| `bater_ponto`: envio alcançado | Online/rede falha | **Libera sem foto** | Foto é condicional; falha de HTTP/rede enfileira `_fotoBlob`, inclusive nulo. (`app/templates/ponto/bater_ponto.html:519-543`.) |
+| `bater_ponto`: segunda câmera | Offline | **Mantém confirmação disponível** | Mostra botão antes de pedir câmera; o `catch` apenas altera o texto. (`app/templates/ponto/bater_ponto.html:564-581`.) |
+| `bater_ponto`: confirmação offline | Offline | **Sem veto explícito por foto/stream ausente** | Faz `toBlob` incondicional e passa o resultado à fila. Não protege o próprio `toBlob` com timeout ou `try`. (`app/templates/ponto/bater_ponto.html:584-610`.) |
+| `bater_ponto`: confirmação de turno | Online | **Formulário sem requisito de selfie** | Envia confirmação/GPS sem campo de foto nessa etapa. (`app/templates/ponto/bater_ponto.html:174-196`.) |
+| v2: câmera/fallback | V2 online/offline | **Fallback não libera sozinho** | Distingue `NotAllowedError`; oferece input do sistema. Seleção vazia retorna. (`app/templates/ponto/bater_ponto_v2.html:235-252`.) |
+| v2: captura vazia/conversão | V2 online/offline | **Segue até a guarda de foto** | Sem vídeo pronto retorna foto anterior ou null; conversão tenta dataURL em null, exceção e timeout de 1.500 ms. (`app/templates/ponto/bater_ponto_v2.html:256-267`.) |
+| v2: admissibilidade | **V2 online e offline** | **Bloqueia explicitamente** | Sem `_fotoBlob`, consulta permissão, mostra aviso e retorna false. O chamador retorna **antes** de escolher rede, POST ou fila. (`app/templates/ponto/bater_ponto_v2.html:285-290`; `app/templates/ponto/bater_ponto_v2.html:307-346`.) |
+| Onboarding: etapa selfie | Configuração | **Etapa normal exige foto** | Falha oferece câmera do sistema; seleção vazia e `salvarFoto` sem blob retornam. Captura não trata null/timeout. (`app/templates/core/onboarding.html:152-200`; `app/templates/core/onboarding.html:212-213`.) |
+| Onboarding: saída alternativa | Configuração/acesso | **Permite concluir sem selfie** | “Configurar depois” chama concluir; backend lista faltas, mas grava completo e responde `ok=True`. A view de bater ponto redireciona quem ainda não concluiu. (`app/templates/core/onboarding.html:120-125`; `app/core/views.py:479-489`; `app/ponto/views.py:243-244`.) |
+| Enfileirador PWA | Offline/falha de envio | **Aceita sem foto** | Grava `fotoBlob || null`. (`app/static/pwa.js:107-122`.) |
+| Sincronizador PWA | Retorno da rede | **Envia sem foto** | Só acrescenta arquivo quando presente. (`app/static/pwa.js:143-156`.) |
+| Service worker | Offline/sync | **Não julga selfie** | Ignora não-GET; no sync delega às janelas ou notifica para abrir o app. (`app/static/sw.js:35-36`; `app/static/sw.js:112-129`.) |
+| View web | Online triagem | **Aceita ausência de foto** | Registra primeiro; anexa somente quando existe foto. (`app/ponto/services/triagem_batida.py:700-713`; `app/ponto/services/triagem_batida.py:748-751`.) |
+| API, duas cópias | V2/sync/app | **Aceita e sinaliza ausência** | Acrescenta `foto_ausente`; registro e anexação são separados. (`app/api/views.py:449-465`; `app/api/views_core.py:436-452`; `app/api/views_core.py:658-672`; `app/api/views_core.py:776-782`.) |
+| Endpoints de anexação | Depois da batida | **Exigem foto para anexar** | Operam sobre batida existente; não são portas de criação da batida. (`app/api/views.py:847-859`; `app/api/views_core.py:832-844`; `app/ponto/views.py:2895-2905`.) |
+| Endpoint offline antigo | Legado | **410, independentemente da selfie** | Foi aposentado em favor da API atual. (`app/ponto/views.py:419-428`.) |
+
+Não há timeout próprio de **`getUserMedia`** nos ramos examinados; os 1.500 ms protegem conversão de imagem. Quando a promessa de câmera permanece pendente, não existe liberação alternativa temporizada nesses trechos; comportamento concreto no dispositivo: **[nao verificado]**. (`app/templates/ponto/triagem/apto.html:149-164`; `app/templates/ponto/triagem/apto.html:242-257`; `app/templates/ponto/bater_ponto.html:343-378`; `app/templates/ponto/bater_ponto_v2.html:235-267`; `app/templates/core/onboarding.html:152-162`.)
+
+**2. `confirmarFotoOffline`, fila e servidor**
+
+Com `_streamOffline === null`, `confirmarFotoOffline()` **não retorna por esse motivo**. O stream só condiciona parar as tracks. O desenho depende da visibilidade do vídeo; depois chama `canvas.toBlob` e enfileira seu resultado sem exigir foto. Também não reaproveita `_fotoBlob` da captura anterior. (`app/templates/ponto/triagem/apto.html:261-282`.)
+
+Portanto, chamar essa função por outro meio pode alcançar a fila mesmo sem stream. Isso **não comprova selfie capturada**: o canvas pode não ter recebido frame nessa chamada; conteúdo efetivamente produzido pelo navegador: **[nao verificado]**. (`app/templates/ponto/triagem/apto.html:266-282`.)
+
+A fila localizada é IndexedDB `juliani-offline`, store `batidas_pendentes`; aceita `foto:null`. Não foi localizada fila de batida em `localStorage` ou em `app/static/js`; implementação adicional: **[nao verificado]**. (`app/static/pwa.js:48-60`; `app/static/pwa.js:107-122`.)
+
+O sync envia para `/api/ponto/bater/`, omitindo foto ausente. Sucesso remove a entrada; HTTP 400 também remove; rede/5xx preservam para retentativa. O SW não faz essa gravação diretamente. (`app/static/pwa.js:143-179`; `app/static/sw.js:112-129`.)
+
+O chokepoint `registrar_batida(colaborador, timestamp, tipo, origem, ...)` **não exige foto nem permissão de câmera**; o modelo declara selfie opcional. Entretanto, isso não significa aceitação incondicional por outros motivos: há deduplicação e recusa por colisão de tipo oposto, além da guarda de competência para fato que não seja de chão. (`app/ponto/registro_batida.py:94-161`; `app/ponto/models.py:78`.)
+
+**3. Fonte única e carregamento comum**
+
+Não identifiquei autoridade consultada pelos fronts para **“selfie é impeditiva?”**. As decisões estão locais e contraditórias. Existe `selfie_ausente()`, mas sua pergunta é **cobrança da ausência**, por canal/prazo, e seus consumidores são backend; não é admissibilidade da captura. (`app/templates/ponto/triagem/apto.html:161-163`; `app/templates/ponto/triagem/apto.html:253-256`; `app/templates/ponto/bater_ponto_v2.html:285-290`; `app/ponto/registro_batida.py:64-91`; `app/core/juizes.py:1192-1195`.)
+
+| Tela | Herança e scripts próprios |
+|---|---|
+| `apto` | Estende `base_triagem`, que estende `base.html`; acrescenta JS inline por `extra_js`. (`app/templates/ponto/triagem/apto.html:1`; `app/templates/ponto/triagem/base_triagem.html:1`; `app/templates/ponto/triagem/base_triagem.html:25-76`.) |
+| `bater_ponto` | Estende `base.html`; lógica própria inline. (`app/templates/ponto/bater_ponto.html:1`; `app/templates/ponto/bater_ponto.html:285`.) |
+| v2 | Estende `base.html`; acrescenta `/static/leaflet/leaflet.js` e lógica inline. (`app/templates/ponto/bater_ponto_v2.html:1`; `app/templates/ponto/bater_ponto_v2.html:135-137`.) |
+| Onboarding | Documento independente, JS inline. (`app/templates/core/onboarding.html:1`; `app/templates/core/onboarding.html:115-330`.) |
+
+Scripts herdados pelas três telas via `base.html`: `pwa.js`; `js/hasner-ui.js?v=hx3`; `hasner-table.js`; `hasner-filter.js?v=ta5`; `fita-mes.js?v=1`; `geo-colab-map.js`; `popover-acao.js`. Também carrega htmx externo. (`app/templates/base.html:19-20`; `app/templates/base.html:83-88`; `app/templates/base.html:440`.)
+
+Includes da base: `_nudge_app_android` condicional, `includes/icons`, `_icone_pauta`, `_dialogo`, `_js_cobranca`, `_drawer_generico`, `_copiloto`; este também inclui `_icone_pauta`. (`app/templates/base.html:92-93`; `app/templates/base.html:290`; `app/templates/base.html:388-399`; `app/templates/base.html:432`; `app/templates/core/_copiloto.html:34`.)
+
+Na outra casca, `base_app.html`, estão `pwa.js`, `hasner-ui`, `hasner-table`, `geo-colab-map`, `popover-acao` e htmx; includes `icons`, `_dialogo`, `_drawer_generico`. O teste de templates compõe apto/v2 com ambas as cascas. (`app/templates/base_app.html:19-20`; `app/templates/base_app.html:77-85`; `app/templates/base_app.html:145-154`; `app/templates/base_app.html:194`; `app/ponto/tests/test_l030_templates_renderizados.py:14-37`.)
+
+**Inferência de localização:** o menor módulo existente ligado à batida e já carregado nas três telas é **`app/static/pwa.js`**, também presente nas duas cascas. É candidato para hospedar a resposta compartilhada sem acrescentar uma regra de domínio. (`app/templates/base.html:20`; `app/templates/base_app.html:20`; `app/static/pwa.js:305-318`.)
+
+**4. Quem escreve e quem lê os sinais**
+
+| Dado/sinal | Escritor | Leitor/efeito |
+|---|---|---|
+| Falha de câmera no `apto` | Escreve apenas texto/DOM; não envia causa específica. (`app/templates/ponto/triagem/apto.html:156-163`; `app/templates/ponto/triagem/apto.html:228-235`.) | Não há leitor de causa por batida nesse fluxo; a foto simplesmente pode faltar. (`app/ponto/services/triagem_batida.py:748-751`.) |
+| Diagnóstico de câmera do `bater_ponto` | Envia erro, modo e user agent para `/api/diag/cam/`. (`app/templates/ponto/bater_ponto.html:367-375`.) | Endpoint escreve logger e responde `logged`; não associa sinal ao modelo da batida. Logs concretos: **[nao verificado]**. (`app/api/views.py:2647-2669`.) |
+| Foto ausente na fila | `registrarBatidaOffline` grava `foto:null`; não grava motivo da ausência. (`app/static/pwa.js:113-119`.) | Sync lê `b.foto` e omite arquivo ausente. (`app/static/pwa.js:138-152`.) |
+| `liveness_status/detail` | Sync sempre envia `indisponivel` / `PWA web sem liveness`. (`app/static/pwa.js:148-151`.) | APIs convertem em motivo/contexto `liveness_indisponivel`; não distingue câmera negada de outras causas. (`app/api/views.py:491-507`; `app/api/views_core.py:478-494`.) |
+| `canal` | Derivado por `canal_da_batida(device_id)`; gravado nas APIs e no web. (`app/ponto/registro_batida.py:53-61`; `app/api/views_core.py:658-662`; `app/api/views.py:666-670`; `app/ponto/services/triagem_batida.py:700-705`.) | `selfie_ausente`/retro usam canal para prazo; modelo guarda o campo. (`app/ponto/registro_batida.py:75-91`; `app/ponto/models.py:55`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:73-77`.) |
+| `foto_ausente` no ato | As duas APIs acrescentam motivo/contexto pela resposta de `selfie_ausente`. (`app/api/views.py:449-465`; `app/api/views_core.py:436-452`.) | API encaminha à emissão de disputa; persistência em `DisputaSupervisao.motivos/contexto`, geração de perguntas pelo serviço. (`app/api/views_core.py:763-774`; `app/chamados/models.py:1741-1747`; `app/chamados/services/disputa_emissao.py:634-685`.) |
+| Foto efetivamente anexada | `anexar_foto`: escreve `Batida.foto` e, conforme modalidade, `FotoBatida`. (`app/ponto/registro_batida.py:296-311`.) | Retro lê **as duas fontes**; feed exibe foto ou ícone substituto. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:66-77`; `app/templates/core/_d2_feed.html:6-7`.) |
+| `foto_ausente` retroativo | Comando consulta juiz e em `--apply` emite disputa. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:73-104`.) | Catálogo pergunta confirmação de presença; upload posterior lê motivo/última batida e apara ou fecha disputa. (`app/chamados/catalogo/perguntas.py:93-98`; `app/api/foto_recebida.py:57-80`.) |
+| Permissão de câmera do onboarding | Front envia `{camera:true}`; backend grava `camera_concedida_em`. (`app/templates/core/onboarding.html:226-230`; `app/core/views.py:1085-1090`.) | `etapas_pendentes` e concluir onboarding leem esse campo de **Colaborador**, não de Batida. (`app/colaboradores/models.py:376`; `app/colaboradores/models.py:405-413`; `app/core/views.py:481-486`.) |
+
+**Offline e online da triagem não gravam o mesmo sinal no ato.** O offline, ao sincronizar pela API, produz `foto_ausente` e liveness indisponível; o web registra sem foto, mas sua aprovação/justificativa considera horário/situação, sem consultar o juiz de selfie. A varredura posterior pode cobrar a ausência, sem recuperar a causa “câmera indisponível”. (`app/static/pwa.js:148-153`; `app/api/views_core.py:436-452`; `app/ponto/services/triagem_batida.py:685-713`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:73-104`.)
+
+Não há campo específico `camera_indisponivel`/`sem_selfie` em `Batida`; os sinais citados vivem na ausência das fotos e nos motivos/contexto da disputa. (`app/ponto/models.py:8-112`; `app/chamados/models.py:1727-1747`.)
+
+**5. Testes e selos existentes** [nao verificado]
+
+Resultados atuais de execução: **[nao verificado]**. A tabela descreve o que o código dos testes verifica. [nao verificado]
+
+| Teste/selo | Cobertura e capacidade de detectar regressão | [nao verificado]
+|---|---|
+| `test_api_bater_pwa` | Sem foto exige 200, Batida e `foto_ausente`; com foto exige ausência desse motivo. **Detectaria rejeição backend**, não bloqueio de clique. (`app/api/tests/test_api_bater_pwa.py:64-76`; `app/api/tests/test_api_bater_pwa.py:95-105`.) |
+| `test_batida_offline` | Payload sem foto espera registro pela API e disputa; não exercita câmera/IndexedDB/clique. (`app/ponto/tests/test_batida_offline.py:49-76`; `app/ponto/tests/test_batida_offline.py:119-128`.) |
+| `test_selfie_ausente_juiz` | Verifica canal/prazo e consulta ao juiz nas duas APIs. (`app/ponto/tests/test_selfie_ausente_juiz.py:27-47`; `app/ponto/tests/test_selfie_ausente_juiz.py:130-140`.) |
+| `test_l030_forma_js` | Verifica barreiras de **GPS**; filtra condições por variáveis GPS. No apto, mede o trecho depois de `toBlob`. **Não detecta** o botão escondido no catch nem a guarda de foto da v2. (`app/ponto/tests/test_l030_forma_js.py:31-68`.) |
+| `test_l030_templates_renderizados` | Aplica o mesmo oráculo a apto/v2 nas duas cascas; mantém a limitação anterior. (`app/ponto/tests/test_l030_templates_renderizados.py:14-37`.) |
+| `check_a_lei_batida.py` | Procura assinaturas estreitas em apto/bater; foto+return na mesma linha. **Não enumera v2 nem procura botão escondido.** Checks de view apontam `app/apps/ponto/views.py`; arquivo ausente é pulado. (`app/scripts/check_a_lei_batida.py:13-35`.) |
+| `node_check.sh` | Só sintaxe de JS estático próprio; `<script>` inline fica fora. **Não detecta essa regressão de comportamento.** (`bin/node_check.sh:11-20`; `bin/node_check.sh:33-37`.) |
+| Smoke Chromium geral | Abre espelho nas duas cascas, verifica overlay/console; não registra batida nem exercita câmera. (`app/core/tests/test_smoke_chromium.py:151-189`.) |
+| Teste do SW | Verifica fallback de rede/cache/Response, não selfie. (`app/core/tests/test_sw_offline_fallback.py:60-101`.) |
+| Smoke de clique sem câmera nas duas cascas | Existência/cobertura específica: **[nao verificado]**. |
+
+**6. Arquivos candidatos para conferir interseção**
+
+Lista inferida dos pontos de decisão e cobertura; não representa alteração realizada. (`app/templates/ponto/triagem/apto.html:253-256`; `app/templates/ponto/bater_ponto_v2.html:285-290`; `app/scripts/check_a_lei_batida.py:13-30`.)
+
+| Escopo | Arquivos candidatos e fundamento |
+|---|---|
+| Resposta compartilhada e migração dos fronts | `app/static/pwa.js`; `app/templates/ponto/triagem/apto.html`; `app/templates/ponto/bater_ponto_v2.html`; `app/templates/ponto/bater_ponto.html`. Já concentram fila e decisões locais. (`app/static/pwa.js:107`; `app/templates/ponto/triagem/apto.html:156-282`; `app/templates/ponto/bater_ponto_v2.html:285-346`; `app/templates/ponto/bater_ponto.html:343-610`.) |
+| Proteção contra retorno do bloqueio | `app/scripts/check_a_lei_batida.py`; família `test_l030_forma_js`/`test_l030_templates_renderizados`; smoke de clique a acrescentar em arquivo ainda **[nao verificado]**. (`app/scripts/check_a_lei_batida.py:13-35`; `app/ponto/tests/test_l030_forma_js.py:31-68`; `app/ponto/tests/test_l030_templates_renderizados.py:14-37`.) |
+| Se o escopo incluir uniformizar o sinal no ato | `app/ponto/services/triagem_batida.py`, `app/api/views.py`, `app/api/views_core.py`, com referência à cobrança existente em `app/ponto/registro_batida.py`. Essa diferença é separada do botão offline. (`app/ponto/services/triagem_batida.py:685-751`; `app/api/views.py:449-465`; `app/api/views_core.py:436-452`; `app/ponto/registro_batida.py:64-91`.) |
+| Se houver mudança de carregamento | `app/templates/base.html` e `app/templates/base_app.html`; `pwa.js` já está carregado em ambas. (`app/templates/base.html:20`; `app/templates/base_app.html:20`.) |
+| Onboarding, se incluído na cl
+
+[truncado em 20000 de 20621 caracteres]
+
+## 11/11 12:11 · sessao 4cfb93cca4fc · BO-ROTULO-ENCERRADO · verificador · origem=Code
+
+**Bloqueia: o selo permite reintroduzir os dois estados com o mesmo texto visível.** A correção atual centraliza os rótulos, mas os testes deixam escapar opções com aspas simples e opções vindas de partials. ([test_bo_rotulo_encerrado.py:20](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:20), [test_bo_rotulo_encerrado.py:65](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:65))
+
+1. **Censo dos controles.** Não encontrei seletor de destino remanescente com opções de estado manuais ou lendo `espera`. Os cinco encontrados usam a tag:
+
+   | Seletor | Valores, na ordem atual |
+   |---|---|
+   | [detalhe.html:130](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe.html:130) | `""`, `em_analise`, `resolvido`, `fechado`, `aberto` |
+   | [detalhe_local.html:393](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:393) | `""`, `em_analise`, `resolvido`, `fechado`, `aberto` |
+   | [fio_colaborador.html:265](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/fio_colaborador.html:265) | `""`, `em_analise`, `resolvido`, `fechado` |
+   | [modal_fio.html:665](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/modal_fio.html:665) | `""`, `em_analise`, `resolvido`, `fechado` |
+   | [painel_chamado_turno.html:74](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/painel_chamado_turno.html:74) | `""`, `em_analise`, `resolvido`, `fechado` |
+
+   Há controles manuais de **ações** que alcançam mudança de estado, sem oferecer opções de destino pelo mapa:
+
+   | Controle manual | Onde / escritor |
+   |---|---|
+   | Aprovar/rejeitar benefício | [painel_solicitacao_beneficio.html:23](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/colaboradores/painel_solicitacao_beneficio.html:23), também construído por JS em [fila_solicitacoes_beneficio.html:138](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/colaboradores/fila_solicitacoes_beneficio.html:138); escolhe `resolvido`/`fechado` em [views.py:2068](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/colaboradores/views.py:2068). |
+   | Aceitar/recusar escala e agenda | [detalhe_local.html:163](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:163), [detalhe_local.html:200](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:200); concluem em `resolvido` em [acoes_chamado.py:149](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:149) e [acoes_chamado.py:108](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:108). |
+   | Aprovar exceção | [detalhe_local.html:256](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:256), [modal_fio.html:598](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/modal_fio.html:598); `resolvido` em [acoes_chamado.py:70](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:70). |
+   | Autorizar geofence, com/sem advertência, ou recusar | [detalhe_local.html:285](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:285), [modal_fio.html:506](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/modal_fio.html:506); `resolvido` em [acoes_chamado.py:222](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:222) e [acoes_chamado.py:277](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:277). |
+   | Abrir registro de ausência | [detalhe_local.html:233](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:233); chama `analisar()` em [views.py:1513](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views.py:1513). |
+   | Reabertura administrativa; resgatar | [modal_fio.html:390](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/modal_fio.html:390) oferece **motivos** e reabre em [acoes_disputa.py:269](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_disputa.py:269); [botão resgatar:85](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/_lista_chamados.html:85) pode reabrir pelo caso da tranca em [views_arquivar.py:64](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views_arquivar.py:64). |
+
+   O seletor manual fora de chamados, no histórico, é filtro: seu receptor aplica `qs.filter`, sem transição. ([historico_chamados.html:54](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/relatorios/historico_chamados.html:54), [relatorios/views.py:920](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/relatorios/views.py:920))
+
+2. **Quem escreve e quem lê; dois achados de fila.**
+
+   - **`value`:** a tag escreve exatamente o código recebido, separado do texto e do `title`. Os argumentos vêm das chamadas literais da tabela acima. ([chamados_tags.py:76](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/templatetags/chamados_tags.py:76))
+   - **Local e painel de turno:** chegam a `detalhe_chamado_local`, que delega à resposta livre; o serviço exige gestor e código pertencente a `STATUS_CHOICES`, depois chama `transicionar`. ([views.py:547](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views.py:547), [acoes_chamado.py:287](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:287), [acoes_chamado.py:313](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/acoes_chamado.py:313))
+   - **Fio e modal:** delegam ao mesmo `processar_post_fio`; ele lê o código, exige chamado/conteúdo e permissão contextual, verifica `STATUS_CHOICES` e chama `transicionar`. ([views.py:669](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views.py:669), [views.py:953](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views.py:953), [fio.py:502](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/fio.py:502), [fio.py:709](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/fio.py:709))
+   - **Fila — detalhe GLPI sem efeito de status:** envia `novo_status` para `followup`, mas `adicionar_followup` só lê conteúdo e envia a mensagem ao GLPI; nenhum dos quatro destinos é aplicado nesse caminho. ([detalhe.html:122](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe.html:122), [urls.py:12](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/urls.py:12), [views.py:292](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views.py:292), [views.py:304](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/views.py:304))
+   - **Fila — “Reabrir” pode ser recusado:** envia `aberto`; os receptores locais passam esse código ao modelo, mas `resolvido → aberto` é recusado para quem não é `admin_ti`. A matriz permite `em_analise → aberto`. ([verbos.py:136](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:136), [motor.py:99](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/catalogo/motor.py:99), [motor.py:153](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/catalogo/motor.py:153))
+
+   `MOVER_PARA` tem definição única e é lido por `rotulo_de_movimento`; `ESTADO_TITLE` também alimenta `rotulo_de_linha` e `rotulo_para_pessoa`. A tag só monta HTML; seus leitores são os cinco templates e os testes. Não encontrei comparação do texto visível nos receptores: eles comparam códigos. ([verbos.py:100](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:100), [verbos.py:132](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:132), [verbos.py:146](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:146), [verbos.py:155](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:155), [verbos.py:166](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:166))
+
+   A decisão e gravação continuam por `transicionar → decidir → _aplicar → _gravar_estado`, incluindo as guardas adicionais do modelo. ([models.py:123](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/models.py:123), [models.py:128](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/models.py:128), [models.py:199](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/models.py:199), [models.py:450](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/models.py:450))
+
+3. **O diff fornecido preserva conjunto, ordem e `value`.** Os dois detalhes conservam quatro destinos; os demais, três, nas ordens da tabela. A tag escreve o próprio argumento como `value`. ([detalhe.html:132](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe.html:132), [detalhe_local.html:395](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe_local.html:395), [modal_fio.html:668](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/partials/modal_fio.html:668), [chamados_tags.py:77](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/templatetags/chamados_tags.py:77))
+
+   **Fila — essa preservação não está protegida pelo selo:** adicionar `opcao_mover "aberto"` ao modal, remover/reordenar tags ou trocar argumentos por outros válidos passa pelas verificações existentes. Elas não comparam as opções de cada seletor com seu conjunto anterior. ([test_bo_rotulo_encerrado.py:43](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:43), [test_bo_rotulo_encerrado.py:62](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:62))
+
+4. **KeyError: nenhum caminho dinâmico encontrado na cópia.** O acesso indexado pode levantar, mas o único chamador produtivo Python é a tag; suas 18 chamadas nos cinco templates são literais cobertos pelo mapa. Ocorrência em produção: `[nao verificado]`. ([verbos.py:146](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:146), [chamados_tags.py:76](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/templatetags/chamados_tags.py:76), chamadas na tabela do item 1)
+
+5. **Bloqueia — selo insuficiente para impedir a reincidência.** Executei o varredor extraído do teste, em memória, substituindo apenas as duas tags do detalhe por: [nao verificado]
+
+   ```html
+   <option value='resolvido'>Encerrado</option>
+   <option value='fechado'>Encerrado</option>
+   ```
+
+   O resultado continuou **cinco arquivos, `ruins=[]`**: `_OPTION` só reconhece aspas duplas e basta restar outra `opcao_mover` no seletor. Os testes de mapa/tag isolada não observam essa alteração; o teste dos templates apenas compila. Execução integral da suíte após mutação: `[nao verificado]`. ([detalhe.html:133](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/templates/chamados/detalhe.html:133), [test_bo_rotulo_encerrado.py:20](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:20), [teste:49](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:49), [teste:69](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:69), [teste:73](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:73))
+
+   Também escapam `name` com aspas simples, outro nome de controle e arquivos fora de `templates/chamados`. Um include com opções manuais passa mantendo uma tag no pai: o varredor não expande includes e o partial sem `<select>` fica invisível. **Mudar apenas a ordem dos atributos não escapa**: `title="..." value="resolvido"` foi detectado. ([teste:17](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:17), [teste:19](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:19), [teste:20](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:20), [teste:32](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/tests/test_bo_rotulo_encerrado.py:32))
+
+6. **Classes anteriores:** está presente **selo sem mordida suficiente**, conforme item 5. Não encontrei segundo juiz de transição nem derivação paralela introduzidos: a autoridade registrada segue `motor.decidir`; o novo helper responde à apresentação das opções. Também não há sobrecarga nova demonstrada de código/texto/title, que permanecem separados; a desconexão “Reabrir”/`aberto` fica no achado de fila do item 2. ([core/juizes.py:274](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/core/juizes.py:274), [verbos.py:140](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/services/verbos.py:140), [chamados_tags.py:77](/home/ronald/codex_ws/2da7f77ae241c78797abd3c854749546151168d5/app/chamados/templatetags/chamados_tags.py:77))
 
 ## 11/11 12:10 · sessao 9288c5b22025 · - · - · origem=Ronald (tmux)
 
@@ -843,130 +1101,4 @@ conferencia col997 n 18
 agora 2026-11-11 11:46:55
 ```
 
-## 11/11 11:46 · sessao 44743de30430 · - · - · origem=Ronald (tmux)
-
-Confirmado em Python em memória, sem criar arquivos:
-
-- **Tabela invisível ainda aceita:** `<!--\n` + G + `-->\n` retorna lista de problemas vazia. G inteiramente indentada com quatro espaços também passa, embora seja bloco de código Markdown. O parser só veta cercas e aplica `strip()` às linhas. (`diff:bin/mapa20_valida.py:82–89`.)
-- **Fonte inválida aceita:** `a.md:0` passa. A regex exige apenas aparência de citação; não valida linha positiva, existência nem pertencimento a aval/TICKETS/BACKLOG. (`diff:bin/mapa20_valida.py:44,134–135`.)
-- **Fonte sem extensão recusada:** `BACKLOG:10` reprova pela regex. A validade concreta dessa referência como fonte numerada permanece [nao verificado]. (`diff:bin/mapa20_valida.py:44,134–135`.)
-- **Falso vermelho de encerramento:** com `1 de 2`, células `nao encerrada` e `logs/encerrada.md:10` reprovam. A regex examina todas as células exceto o nome, sem distinguir status, negação ou caminho. O próprio nome `BO-ROTULO-ENCERRADO` fica corretamente excluído dessa busca. (`diff:bin/mapa20_valida.py:48,141–142`.)
-- **Lista duplicada/contraditória aceita:** primeira seção `## PRONTO AUSENTE` com `- nenhuma`, seguida de segunda seção com `- O168`, e tabela sem ausentes: passa. Só a primeira seção é lida. (`diff:bin/mapa20_valida.py:58–77,104,146–148`.)
-- **Mutante sobrevivente:** remover `re.I` da regex de encerramento preserva todos os casos do selo, escritos em minúsculas, mas aceita `ENCERRADA` com `1 de 2`. Sobrevivência por inspeção dos casos; suíte integral [nao verificado]. (`diff:bin/mapa20_valida.py:48`; `diff:bin/tests/test_mapa20_valida.sh:41,53–56`.) [nao verificado]
-
-Fechamentos específicos da v2: universo literal corrigido; largura do separador, cabeçalho vazio e células só com pontuação barrados; cercas de crases/tils e casos 4/3 barrados. Permanecem, por decisão do formato fixo, as recusas a `_E3_`, tabela sem pipes externos e qualquer barra invertida. (`diff:bin/mapa20_valida.py:29–39,82–103,110–122`.)
-
-## 11/11 11:44 · sessao 40e2b3668b76 · - · - · origem=Ronald (tmux)
-
-Nenhuma quebra estática dos cinco selos vizinhos foi encontrada; execução integral deles fica [nao verificado], pois criam arquivos temporários.
-
-- `test_codex_estado.sh`: recorta de `CODEX_OK=""` ao passo 3; o novo 2f termina antes disso. Portanto, o novo `exit 1` da guarda de remoção não entra no bloco proibido. (`base:bin/tests/test_codex_estado.sh:104–111`; `diff:bin/relato.sh:110,114,122–124`.)
-- `test_relato_publica_claude_md.sh`: a regex da raspagem continua selecionando a chamada geral com CLAUDE; a nova re-raspagem de MAPA tem argumento depois de `$DEST` antes da continuação, não satisfazendo o prefixo dessa regex. O novo `git add` está indentado e não aumenta o número de linhas iniciadas por `git add -A `. CLAUDE permanece no pathspec. (`base:bin/tests/test_relato_publica_claude_md.sh:15–20`; `diff:bin/relato.sh:105–106,129–143,147,153,162`.)
-- `test_codex_estado_evento.sh`: as chamadas de `codex_estado.sh` e `relato_nomes.sh` permanecem; o diff não introduz `gerar_codex_estado.py` inline. (`base:bin/tests/test_codex_estado_evento.sh:27–30`; `base:bin/relato.sh:32`; `diff:bin/relato.sh:123`.)
-- `test_relato_afirma_com_prova.sh`: a chamada exigida não foi alterada. (`base:bin/tests/test_relato_afirma_com_prova.sh:43–45`; `base:bin/relato.sh:55–56`.)
-- `test_publicacao_sem_nome.sh`: o universo continua vindo de `git ls-files` no público; MAPA rastreado é incluído automaticamente. Privacidade no público real: [nao verificado]. (`base:bin/tests/test_publicacao_sem_nome.sh:58–73`.)
-
-Classes:
-
-- **Segundo juiz:** a raspagem e sua conferência continuam usando `nome_no_texto`, sem novo predicado paralelo de nomes. (`base:bin/raspar_publico.py:15–16,31,36`; `diff:bin/relato.sh:105,129–143`.)
-- **Segundo escritor fora da porta:** as duas escritas públicas novas estão dentro do publicador, depois da trava existente; escritor efetivo da fonte e outros escritores no ambiente: [nao verificado]. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:97–114,129–143`.) [nao verificado]
-- **Relógio fora da borda:** o diff não adiciona relógio decisório; `date` continua na mensagem de commit. O timer de cinco minutos já existe. (`diff:bin/relato.sh:161`; `base:bin/hasner-relato.timer:5–7`.) [nao verificado]
-- **Ordem de trava:** nenhuma aquisição nova no diff. A rede `codex_estado.sh --gerar` retorna antes de adquirir a trava do ramo evento, evitando autoespera nesse caminho. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:123`; `base:bin/codex_estado.sh:54–56,65–66`.)
-- **Pouso antes do pré-requisito:** contrato efetivo, suíte completa e opus final: [nao verificado]. A base exige contrato antes do instrumento e suíte antes do opus; Codex não aprova sozinho o pouso. (`base:CLAUDE.md:377–381,394`; `diff:bin/relato.sh:93`.) [nao verificado]
-
-Numeração confirmada do `relato.sh` após v3: o bloco novo ocupa **89–114**; `gerar_avais` fica em **128**; raspagem geral **129–143**; `git add` MAPA **153**; saídas normais **157/164**; commit com guarda **161–162**; push com guarda **163**. (`diff:bin/relato.sh:89–164`.) [nao verificado]
-
-## 11/11 11:37 · sessao 70d2beb073f4 · FABLE-GABARITO · leitura · origem=Code
-
-| caso | classe | arquivo do veredito opus | veredito em 1 linha | PROVA da resposta | PACOTE EXATO recebido | defeito real |
-|---|---|---|---|---|---|---|
-| TOTAL: 0 casos elegíveis | a: **0/6**; b: **0/3**; c: **0 comprovados** | — | Mínimos não atingidos | Nenhum candidato abaixo reúne pacote integral identificável e prova exigida; pacote obrigatório em `aval_gabarito_fable_1111.txt:1`. | Completude dos pacotes [nao verificado]; lacunas discriminadas em FORA. | — |
-
-FORA
-
-- **E3 08:3x horizonte** — REPROVADO; cura identificada: `2e9d534d8`, “E3 fix9 (copia): sem_adesao so do HORIZONTE_SEM_ADESAO 2026-11 em diante (opus final B1)”; prompt e diff exatos recebidos [nao verificado]. O `.raw` tem registros truncados e não permite recuperar o pacote. (`logs/FIO-E0-V4-E3/opus_final_e3_b1.txt:1-7`; `logs/FIO-E0-V4-E3/opus_final_e3.raw:1-12`.)
-- **BO-0611-05 opus_final2 0.0** — o veredito é **APROVA**, com o problema dos mapas já registrado; cura posterior `fdf9fc05b`, “BO-0611-05 volta 8: modal_fio e _relatorio_geo perguntam ao juiz tem_gps (0.0 nao desenha mapa)”; prompt/diff exatos [nao verificado]. (`logs/BO-0611-05/opus_final2.txt:2-3`.)
-- **BO-0611-05 opus_final1** — REPROVADO sobre `4ffb05150`; pacote do opus [nao verificado]: os nomes visíveis de censo não identificam sua pergunta final nem seu diff. (`logs/BO-0611-05/opus_final1.txt:1`.)
-- **BO-0611-05 opus_final3** — APROVADO sobre `fdf9fc05b`, pouso `fb9269ea9`; pacote exato [nao verificado] e janela de 48 h ainda incompleta no gitlog fornecido. (`logs/BO-0611-05/opus_final3.txt:1-4`; `gitlog_14d.txt`, commit `fb9269ea9`.)
-- **E4a-1** — REPROVADO sobre diff `f2962ab8d..629f2d244`; cura `5578212ef`, “FIO-E0-V4-E4 E4a-1: curas P1-P5 da 1a reprovacao do opus final (verificador)”; arquivo do prompt e diff salvo exatos [nao verificado]. (`logs/FIO-E0-V4-E4-ESCRITORES/opus_final_e4a1_1.txt:1-3`.)
-- **E4A-2 final1** — REPROVADO sobre `11f82cfec`; pacote final integral [nao verificado]. (`logs/FIO-E0-V4-E4A-2/opus_final1.txt:1`.)
-- **TRAVA-SELO v11** — APROVADO sobre `04ec2b8b0`, pouso `9ca563bb3`; `diff_v1.txt` e `preverif_v1.q` não demonstram o pacote final v11; tampouco há 48 h posteriores no gitlog. (`logs/TRAVA-SELO/opus_final_v11.r:1`; `gitlog_14d.txt`, commit `9ca563bb3`; pacote v11 [nao verificado].)
-- **VERIFICADOR-EM-FABLE v3** — REPROVA sobre `238cd5cdf`; cura `5ab7b0ff3`, “VERIFICADOR-EM-FABLE (1) volta 4: a negativa sem obra tem prefixo proprio B3-SEM-OBRA”; `c1.diff` e `preverif1.q` não identificam o pacote final v3. (`logs/VERIFICADOR-EM-FABLE/opus_final_v3.txt:1-2`; pacote v3 [nao verificado].)
-- **L-123-MEDIDA-EM-PY** — REPROVADO sobre `7a2e3bc5`; aparecem `diff.patch` e `v1.q`, mas sua vinculação ao pedido final e a relação completa de anexos [nao verificado]. (`logs/akmed/opus_final.txt:1`.)
-- **AUDITORIA v5** — bloqueio sobre `500bbdde3`; pergunta/diff finais e commit da cura seguinte [nao verificado]. (`logs/auditoria_0911/opus_final_v5.txt:1-2`.)
-- **C20-FIO-MUDO final v5** — REPROVA sobre `5f3ea8c2`; as três entradas reproduzem o mesmo laudo, sem demonstrar pacote final integral ou commit da cura seguinte. (`logs/c20_fiomudo/codex/opus_final_v5_achados.txt:1`; `logs/c20_fiomudo/opus_final_1d78ef7f/opus_final_v5_achados.txt:1`; `logs/c20_fiomudo/opus_final_3ee00412/opus_final_v5_achados.txt:1`; pacote/cura [nao verificado].)
-- **C20-O169** — REPROVA sobre `6afa8aa1/e76e0419`; cura `e13209863`, “O169 volta opus: L-125 CLUSTER-NAO-FECHA-POR-IDADE entra no LEIS.md + ADR (bloqueante do opus final)”; pacote final exato [nao verificado]. (`logs/c20_o169/opus_final_1.txt:1-2`.)
-- **COBPARC v4** — REPROVADO; o laudo distingue `113fd774` de `129bfeaa`, e suas duas cópias não identificam o pacote recebido integralmente. (`logs/cobparc/v4/opus_final.md:1-6`; `logs/cobparc/v4/pm/opus_final_achados.md:1-6`; pacote [nao verificado].)
-- **COBPARC v7** — REPROVADO sobre `8f21ec29`; cura `d03410912`, “[COBERTURA-PARCIAL-UM-JUIZ] v8 achados 1 e 2 (opus final v7): o leitor da ata transporta justificado; o vinculo volta a contar”; prompt/diff finais exatos [nao verificado]. (`logs/cobparc/v7/opus_final.txt:1-4`.)
-- **COBPARC v8** — REPROVADO sobre `f05713f5`, com amend `72eb11be` relatado; pacote exato e assunto do commit de cura no gitlog [nao verificado]. (`logs/cobparc/v8/opus_final.txt:1-3`.)
-- **COBPARC-FILA-RELOGIO v1** — REPROVADO sobre `69a6a682`; pergunta/diff finais e commit da volta seguinte que cite o achado [nao verificado]. (`logs/cobparc_relogio/opus_final.txt:1-3`.)
-- **COBPARC-FILA-RELOGIO v2** — REPROVADO sobre `12200105`; pacote exato e commit de cura seguinte [nao verificado]. (`logs/cobparc_relogio/opus_final.txt:10-11`.)
-- **CODEX-CONSTRUTOR inicial** — REPROVA sobre `d63b837f`; a cura aparece em `bbdbceb91`, “CODEX-CONSTRUTOR-NEGOCIO volta 4: o inventario do construtor varre o FS da copia e .git em qualquer nivel e PROIBIDO”; porém, o prompt corta o nome do anexo em `logs/codexneg/mutantes_selo`. Completar esse nome pelo veredito reconstruiria o pacote. (`logs/codexneg/opus_final_r.md:1`; `logs/codexneg/opus_final_prompt.txt:3`; identidade integral do anexo [nao verificado].)
-- **CODEX-CONSTRUTOR v4** — REPROVA sobre `9995e2a6`; cura `cf6360832`, “CODEX-CONSTRUTOR-NEGOCIO volta 5 (opus final v4 1b): todo python3 do wrapper sob -I”; prompt, diff e delta estão nomeados, mas a relação de triagens está truncada após `logs/codex`. (`logs/codexneg/opus_final_v4_r.md:1-3`; `logs/codexneg/opus_final_v4_prompt.txt:3`; pacote integral [nao verificado].)
-- **CODEX-CONSTRUTOR v5** — APROVA sobre `37880aa1`, pouso `a1d70f619`; o catálogo mostra somente a cabeça de 12 das 20 linhas do prompt, com referências truncadas: completude dos anexos [nao verificado]. (`logs/codexneg/opus_final_v5_r.md:1`; `logs/codexneg/opus_final_v5_prompt.txt:6-8`.)
-- **CONTENCAO v2/p1** — REPROVADO sobre `3a743cdd`; pacote final integral e commit da cura seguinte [nao verificado]. (`logs/contencao/v2/p1/opus_final.md:1-3`.)
-- **CRONS-INSTALL-SOB-MARCA** — APROVADO sobre `073d840f`, pouso `3ce6f52b5`; pergunta/diff exatos do opus [nao verificado]. (`logs/cronsmarca/opus_final_1.txt:1`; `gitlog_14d.txt`, commit `3ce6f52b5`.)
-- **CXR-TELA final1** — REPROVA sobre `71c91c97`; cura `bab61829f`, “CXR-TELA-LE-O-MOTOR volta 4 (opus final 1 REPROVA 71c91c97): selo C3 no caminho C11 e relogio na borda”; pacote final exato [nao verificado]. (`logs/cxr_tela/opus_final_71c91c97.md:1-4`.)
-- **CXR-TELA final2** — APROVA sobre `6a5e5ad8`, pouso `94d41ea56`; pergunta/diff finais exatos [nao verificado]. (`logs/cxr_tela/opus_final_6a5e5ad8.md:1`; `gitlog_14d.txt`, commit `94d41ea56`.)
-- **E4-CALENDARIO-L1** — REPROVADO sobre `15d4f10b`; há três perguntas nomeadas, sem identificação verificável de qual foi recebida e de todos os anexos/diffs. (`logs/e4cal/postmortem_opus/opus_final.txt:2`; pacote [nao verificado].)
-- **E-SEM-VIVA-B final sobre 97411e5c** — REPROVA; cura `3be9c5423`, “E-SEM-VIVA-B volta 4: a C5 do desligado le a LAVRA do juiz _K2 (RetratoFolha) e nao recompoe rescisao + retentor”; pacote final exato [nao verificado]. (`logs/esemvivab/opus_final_97411e5c.md:1-3`.)
-- **E-SEM-VIVA-B final sobre 1936c9d2** — APROVA, pouso `40a005457`; pergunta/diff finais exatos [nao verificado]. (`logs/esemvivab/opus_final_1936c9d2.md:1-2`; `gitlog_14d.txt`, commit `40a005457`.)
-- **F3-BECO-1 final1** — REPROVADO sobre `e2e3d901`; cura `f10f8328a`, “F3-BECO-1 retrabalho: B1+F1+F5+F6 do laudo opus_final_1 (C11 em lote, dono unico do dia)”; pacote final exato [nao verificado]. (`logs/f3_beco1/opus_final_1.txt:1-2`.)
-- **F3-BECO-1 final2** — APROVA o código sobre `59bbe2e3`, pouso `9c0fd9d3e`; pacote final exato [nao verificado]. (`logs/f3_beco1/opus_final_2.txt:1-3`; `gitlog_14d.txt`, commit `9c0fd9d3e`.)
-- **E1 final sobre afb67623** — REPROVA; cura `6e53526de`, “FIO-E0-V4-E1 volta 12 (opus final 1 REPROVA afb67623, reprova 1 de 3, PISTA-LIVRE): S143 so trava quando o save ESCREVE o status”; pacote exato [nao verificado]. (`logs/fio_e0_v4/opus_final_e1_afb67623.md:1`.)
-- **E1 final2 sobre 6695e972** — REPROVADO; pergunta/diff finais exatos [nao verificado]. (`logs/fio_e0_v4/opus_final2_e1_6695e972.md:1-2`.)
-- **E1 final3 sobre 76644dc8** — REPROVADO; cura `d73d84a92`, “FIO-E0-V4-E1 volta 15d (opus final 3 reprovou 76644dc8): o reuso de abrir re-chaveia pela porta unica”; pacote exato [nao verificado]. (`logs/fio_e0_v4/opus_final3_e1_76644dc8.md:1-3`.)
-- **E1 final4 sobre b0c4297c** — REPROVADO; pergunta/diff finais exatos [nao verificado]. (`logs/fio_e0_v4/opus_final4_e1_b0c4297c.md:1-2`.)
-- **DEPLOY-PORTAO final5** — APROVA o intervalo `a5df8ed5..c24a1914`; pacote final exato [nao verificado], e as voltas posteriores `e04870002`/`20df97548` impedem presumir aprovação limpa desse intervalo. (`logs/fio_e0_v4/opus_final_deployportao5.md:1`; `gitlog_14d.txt`, commits `e04870002`, `20df97548`.)
-- **E2 final sobre 3b853907** — REPROVADO; pergunta/diff finais exatos [nao verificado]. (`logs/fio_e0_v4/opus_final_e2.txt:1-6`.)
-- **E2 final sobre d912345b** — REPROVA; `e2_opus_final_c2833d85_d912345b.diff` está nomeado, mas pergunta final e conjunto integral dos anexos [nao verificado]. (`logs/fio_e0_v4/opus_final_e2_d912345b.md:1-3`; `logs/fio_e0_v4/e2_opus_final_c2833d85_d912345b.diff:1`.)
-- **GRADE-v5** — REPROVADO sobre `391b74dc`; pergunta/diff finais exatos [nao verificado]. (`logs/grade_folga/v5/pm/opus_final.txt:1`.)
-- **GRADE-FOLGA-JUIZ sobre abd37234** — REPROVADO; `pv/` e `v10/` contêm cópias do mesmo laudo, não dois casos; pacote final exato [nao verificado]. (`logs/grade_juiz/pv/opus_final.txt:1`; `logs/grade_juiz/v10/opus_final.txt:1`.)
-- **GRADE-FOLGA-JUIZ va** — REPROVADO sobre `d9cb0e42`; cura `60258b809`, “GRADE-FOLGA-JUIZ vb: cura dos 3 achados do opus final (prova e documento; codigo do juiz intocado)”; o brief identifica o ensaio por diretório, sem enumerar cada arquivo recebido. (`logs/grade_juiz/va/opus_final_achados.md:1-4`; `logs/grade_juiz/va/opus_final_brief.md:7`; pacote integral [nao verificado].)
-- **GRADE-FOLGA-JUIZ vb** — brief identifica `60258b80`, diff e delta, mas arquivo do veredito final vb e commit do pouso no gitlog fornecido [nao verificado]. (`logs/grade_juiz/vb/opus_final_brief.md:1-3`.)
-- **H12H06-B sobre 4e9380e5** — REPROVA; cura `90747d3a7`, “H12H06-B volta 5: editar_ausencia_registro vence a projecao do range antigo e do novo; o GRAVADO afirma a regra no DSR”; pacote final exato [nao verificado]. (`logs/h12h06b/opus_final_4e9380e5.md:1-3`.)
-- **H12H06-B-PAUTA-08 v7** — APROVADO sobre `dbabd2ad`, pouso `967d48211`; pergunta/diff finais exatos [nao verificado]. (`logs/h12h06b/pauta08/v7/opus_final_dbabd2ad.md:1`; `gitlog_14d.txt`, commit `967d48211`.)
-- **JUIZ-1 v5** — APROVADO sobre `d38e6b91`, pouso `630131b1f`; pacote final exato [nao verificado]. (`logs/jv1/opus_final_v5.txt:1`; `gitlog_14d.txt`, commit `630131b1f`.)
-- **JUIZ-1 resolução de merge** — APROVADO sobre `ed9cd506 + c4525ff4`; pergunta/diff finais exatos e correspondência com o commit de pouso [nao verificado]. (`logs/jv1/opus_final_merge.txt:1`.)
-- **LEN-VIVOS** — APROVADO sobre `f71d570e`, pouso `f9b89feaa`; pacote final exato [nao verificado]. (`logs/lenvivos/v2/opus_final.txt:1-2`; `gitlog_14d.txt`, commit `f9b89feaa`.)
-- **MOTOR-LE-O-TURNO-INSTRUMENTO final2** — APROVA sobre `bc9db924`, pouso `935c8d961`; pacote final exato [nao verificado]. (`logs/motor_turno/piloto/opus_final2.md:1`; `gitlog_14d.txt`, commit `935c8d961`.)
-- **O261-E-F2 final1** — REPROVADO sobre `7882a6e6`; cura `e9690d0c1`, “[O261-E-F2] volta 4: quem chama a porta do carimbo (selo AST), testemunha viva da classe (f) e DOSSIES:46”; pacote final exato [nao verificado]. (`logs/o261e/f2/opus_final_v1.md:1-2`.)
-- **O261-E-F2 final2** — APROVADO sobre `5c2bb8a4`; pacote final exato e commit do pouso correspondente no gitlog [nao verificado]. (`logs/o261e/f2/opus_final_v2.md:1-2`.)
-- **PADRAO-DE-CIMA final** — REPROVADO sobre `b3c0f8ec`; pergunta/diff finais exatos e commit da cura seguinte [nao verificado]. (`logs/padrao_de_cima/v6/r9/opus_final.txt:1-2`.)
-- **PAR-NAO-ADJACENTE final1** — REPROVA sobre `795cafdf`; pacote final exato e commit da volta seguinte que cite o achado [nao verificado]. (`logs/par_nao_adjacente/opus_final_1.txt:1-2`.)
-- **PAR-NAO-ADJACENTE final2** — APROVA o diff `d361dfee`; pergunta/diff salvos exatos e commit do pouso no gitlog [nao verificado]. (`logs/par_nao_adjacente/opus_final_2.txt:1`.)
-- **BUG-PLANTIO-NOTURNO-MAIS-1 final** — BLOQUEIA; o laudo nomeia `final.diff` e `f1.r`, mas não a pergunta final salva nem o pacote integral; commit avaliado [nao verificado]. (`logs/plantio_mais1/opus_final.txt:1-4`, `:11`.)
-- **SELOS-CANON-I1 final1** — REPROVA sobre `f0103befd`; cura `f56dc9628`, “SELOS-CANON-I1 volta 5 (construtor): pertenca da fila 1 pelo TOKEN da celula nas duas vias”; pacote final exato [nao verificado]. (`logs/selos_canon/i1_opus_final.md:1-2`.)
-- **SELOS-CANON-I1 final2** — REPROVA sobre `788ae3e28`; cura `d1502c4ae`, “SELOS-CANON-I1 volta 6 (construtor opus): o espelho da pertenca da fila 1”; pacote final exato [nao verificado]. (`logs/selos_canon/i1_opus_final_2.md:1-2`.)
-- **SELOS-CANON-I1 final3** — APROVADO, pouso `3803e6623`; pergunta/diff finais exatos [nao verificado]. (`logs/selos_canon/i1_opus_final_3.md:1`; `gitlog_14d.txt`, commit `3803e6623`.)
-- **SNC2 final1** — APROVA sobre `e3ef579a`, pouso `ad28270d8`; pergunta/diff finais exatos [nao verificado]. (`logs/snc2/opus_final_1.txt:1-2`; `gitlog_14d.txt`, commit `ad28270d8`.)
-- **SOMBRA (c)(1)+motor feriado** — APROVADO sobre `f40d356e+47691f0b`, pouso `0d234d122`; pacote final exato [nao verificado]. (`logs/sombra_c1/opus_final_1.txt:1`; `gitlog_14d.txt`, commit `0d234d122`.)
-- **V2-BUGS-DO-MOTOR i2 final1** — REPROVADO sobre `2cb3a055`; pergunta/diff finais exatos [nao verificado]. (`logs/v2bugs/i2/opus_final.txt:1-5`.)
-- **V2-BUGS-DO-MOTOR i2 final v6** — APROVADO sobre `a23831c3`, pouso `ffbda473e`; pergunta/diff finais exatos [nao verificado]. (`logs/v2bugs/i2/opus_final_v6.txt:1-2`; `gitlog_14d.txt`, commit `ffbda473e`.)
-- **V3-P5 final** — REPROVADO sobre `c71b1038`; pergunta/diff finais exatos [nao verificado]. (`logs/v3p5/pv/opus_final.txt:1-8`.)
-
-## 11/11 11:35 · sessao b1f0518d314b · - · - · origem=Ronald (tmux)
-
-| candidato | motivo de exclusão |
-|---|---|
-| CODEXNEG inicial | O prompt e o diff estão nomeados, mas a referência ao anexo de mutantes termina em `logs/codexneg/mutantes_selo`; a identidade completa desse anexo recebido está [nao verificado]. `logs/codexneg/opus_final_prompt.txt:3`. |
-| CODEXNEG v4 | O prompt identifica diff e delta, mas a relação de triagens termina truncada em `logs/codex`; pacote integral [nao verificado]. `logs/codexneg/opus_final_v4_prompt.txt:3`. |
-| CODEXNEG v5 | O catálogo mostra apenas 12 das 20 linhas do prompt, com referências truncadas; não permite certificar todos os anexos recebidos. `logs/codexneg/opus_final_v5_prompt.txt:6`, `:8`; completude [nao verificado]. |
-| GRADE va | Os nomes relativos `v1.r`, `v2.r`, `v1_triagem.md` são utilizáveis literalmente; porém, o ensaio é identificado por diretório, sem enumeração dos arquivos recebidos. `logs/grade_juiz/va/opus_final_brief.md:5`, `:7`; apenas `fase_C.txt` aparece em `:12`; pacote integral [nao verificado]. |
-| GRADE vb | Há prompt e diffs nomeados, mas nenhum arquivo de veredito final vb é apresentado no catálogo. `logs/grade_juiz/vb/opus_final_brief.md:1`, `:3`; arquivo do veredito [nao verificado]. |
-
-Zero desses cinco casos têm pacote e veredito integralmente certificáveis pelos recortes fornecidos; isso não afirma inexistência física dos arquivos. [nao verificado]
-
-## 11/11 11:35 · sessao be6027cf7941 · FIO-E0-V4-E4B · construtor · origem=Code
-
-Restaurei a releitura por disputa no C7, mantendo o memo das cargas e o N1 exigindo **2 leituras**. [disputa_emissao.py:2076](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:2076)
-
-A perda ocorreu na **c4v5**; a c4v6 acrescentou a semente do E2. O memo podia divergir após reabertura do período. A cadeia completa, escritores e leitores estão no [recibo:8](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:8).
-
-Validação: RED na base, três mutantes falhando pela asserção comportamental, 94 testes de memória/protocolo e 40 selos passando. [recibo:105](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:105) [nao verificado]
-
-O comando ORM completo está no [recibo:149](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:149). ORM, tetos C8 e suite integral: **[nao verificado]**. [nao verificado]
-
-Sem commit, respeitando a proibição inicial de commit e escrita em `.git*`. [recibo:158](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:158) [nao verificado]
-
-_3820 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3825 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
