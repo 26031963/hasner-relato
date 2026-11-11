@@ -1,7 +1,247 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 20:37** · publicado em **10/11/2026 20:41** (UTC-3)
+> Ultima resposta processada: **10/11/2026 20:55** · publicado em **10/11/2026 20:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 20:55 · sessao ce13aba8754d · BO-0611-05 · verificador · origem=Code
+
+A retirada do bloqueio sem GPS está presente; os bloqueios por situação foram preservados antes da cobrança de afastamento e da porta de registro. Os dois kernels têm o mesmo código executável nesse trecho. (`app/api/views_core.py:402`, `app/api/views_core.py:435`, `app/api/views_core.py:658`; `app/api/views.py:415`, `app/api/views.py:448`, `app/api/views.py:666`)
+
+A comparação com `6c0517eb9` abaixo usa o diff fornecido: esta cópia não contém histórico Git para conferir a base e a identidade do hash independentemente. **[nao verificado]**
+
+1. **Recusas antes de `registrar_batida`**
+
+   | Recusa atual | Core | UI | O que lê |
+   |---|---|---|---|
+   | 404, `Colaborador não encontrado.` | `app/api/views_core.py:391` | `app/api/views.py:404` | Acesso a `request.user.colaborador`; qualquer exceção nesse acesso cai no 404. |
+   | 403, situação não permitida | `app/api/views_core.py:410` | `app/api/views.py:423` | `colab.situacao`; permite somente `ativo` e `afastado`. Escolhe mensagem/código para `desligado`, `ferias` ou outro valor. |
+   | 400, `Tipo inválido.` | `app/api/views_core.py:426` | `app/api/views.py:439` | `request.data['tipo']`, obtido por `.get`; permite somente `E` e `S`. |
+
+   Pelo diff da obra, os três retornos acima mantiveram posição, condição e texto da base. Saiu somente a guarda `if not latitude or not longitude`, com seu log `batida_recusada_sem_gps` e resposta `gps_obrigatorio`: na base fornecida, core condição em `app/api/views_core.py:440`, retorno em `:454`; UI condição em `app/api/views.py:449`, retorno em `:462`. O lugar passou a conter o comentário de encaminhamento à porta. (`app/api/views_core.py:435`; `app/api/views.py:448`; conferência independente da base **[nao verificado]**)
+
+   Não houve deslocamento da guarda de situação em relação à cobrança: ela continua antes de `afastado_na_batida`. A volta 9 restaurou esse bloco em relação à volta 8; em relação à base fornecida, preservou-o. (`app/api/views_core.py:402`, `:411`; `app/api/views.py:415`, `:424`; comparação histórica independente **[nao verificado]**)
+
+   Há também retorno antecipado `ja_registrada`, mas sem status de erro: ele não pertence ao conjunto solicitado de recusas ≥400. A colisão `ignorada_intervalo` acontece depois da chamada à porta. (`app/api/views_core.py:535`, `:658`, `:686`; `app/api/views.py:548`, `:666`)
+
+   A proteção `IsAuthenticated` envolve as duas views; a tabela inventaria os retornos explícitos dentro delas, não as respostas produzidas pela autenticação do framework. (`app/api/views_core.py:385`; `app/api/views.py:398`)
+
+2. **Ordem dos efeitos**
+
+   | Ponto de saída | O que ocorreu antes |
+   |---|---|
+   | 404 | Tentativa de obter o colaborador; nenhum caminho de cobrança ou registro foi chamado pelo corpo da view. (`app/api/views_core.py:388`; `app/api/views.py:401`) |
+   | 403 por situação | Obtenção do colaborador e leitura de situação; ainda não houve leitura do payload, cobrança de afastamento, detector de anomalias ou registro. (`app/api/views_core.py:402`, `:411`, `:419`; `app/api/views.py:415`, `:424`, `:432`) |
+   | 400 por tipo | Já houve consulta ao juiz de afastamento e, quando positiva, tentativa de cobrar a supervisão; depois são lidos tipo, coordenadas, precisão e foto. (`app/api/views_core.py:411`, `:419`, `:425`; `app/api/views.py:424`, `:432`, `:438`) |
+
+   A cobrança pode escrever **antes do 400**: procura Pauta viva; pode obter/criar o usuário sistema; cria Pauta, grava trilha e atualiza contador. Falha na cobrança é registrada e engolida. (`app/ponto/services/afastado_avisa.py:62`, `:71`, `:74`, `:80`; `app/core/utils.py:18`; `app/pautas/services.py:180`, `:186`, `:188`, `:352`; `app/core/observ.py:134`)
+
+   Portanto, `situacao='ativo'` também pode gerar essa cobrança se uma ausência de afastamento cobrir o dia; `situacao='afastado'` sem ausência gera a divergência declarada. Coordenadas não participam dessa decisão. (`app/ponto/services/afastado_avisa.py:38`, `:41`; `app/ponto/turnos.py:2715`)
+
+   Para tipo válido:
+
+   | Situação | Com coordenadas | Sem coordenadas |
+   |---|---|---|
+   | `ativo` / `afastado` | Seguem cobrança, detector, demais preparações e porta. (`app/api/views_core.py:411`, `:433`, `:658`) | Agora seguem o mesmo percurso; o geofence é chamado depois da escrita. (`app/api/views_core.py:435`, `:658`, `:788`) |
+   | `desligado` / `ferias` / outro | 403 antes desses efeitos. (`app/api/views_core.py:402`) | Mesmo 403; GPS nem é lido antes dele. (`app/api/views_core.py:410`, `:420`) |
+
+   Pela base fornecida, a diferença está em `ativo`/`afastado` sem GPS: antes, cobrança e detector já tinham rodado; depois vinha o log da tentativa recusada e o 403. Agora esse log saiu e o fluxo continua. As demais ordens acima permaneceram. (`app/api/views_core.py:411`, `:433`, `:435`; `app/core/auditoria.py:22`; comparação histórica independente **[nao verificado]**)
+
+3. **Quem escreve e quem lê**
+
+   **Latitude/longitude da Batida:** as views capturam e encaminham; a porta sanitiza vazio/inválido para `None` e cria a Batida. Não inventa a coordenada faltante nem converte zero em uma coordenada alternativa. (`app/api/views_core.py:420`, `:664`; `app/api/views.py:433`, `:672`; `app/ponto/registro_batida.py:5`, `:105`, `:152`, `:157`)
+
+   As escritas de coordenadas no geofence são de **AlertaGeofence**, não uma segunda escrita da Batida. O contexto do chamado também recebe cópias das coordenadas. (`app/ponto/services/geofence.py:271`, `:297`, `:304`, `:349`, `:391`)
+
+   | Leitor afetado | Regra atual |
+   |---|---|
+   | Geofence | Consulta `tem_gps`, cujo resultado é `bool(latitude and longitude)`. (`app/ponto/services/geofence.py:145`, `:269`) |
+   | Feed e offline | Filtro delega ao juiz. (`app/core/templatetags/hasner_filters.py:34`; `app/templates/core/_d2_feed.html:16`; `app/templates/ponto/batidas_offline_pendentes.html:96`) |
+   | Relatório e modal | `par_tem_gps` delega ao mesmo juiz. (`app/core/templatetags/hasner_filters.py:41`; `app/templates/chamados/partials/_relatorio_geo.html:31`; `app/templates/chamados/partials/modal_fio.html:481`) |
+   | Contador offline | Conta pares aprovados pelo juiz. (`app/ponto/views.py:485`) |
+   | Três consultas de vínculo | Exigem não nulidade das duas coordenadas; **aceitam zero**, divergindo do juiz. (`app/colaboradores/views.py:337`, `:356`, `:395`) |
+   | Detector de vínculo | Exige não nulidade e precisão; **aceita zero** como amostra. (`app/ponto/services/vinculo_na_lista.py:49`, `:56`; `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`) |
+
+   Restam também regra própria no JS do dashboard, rejeição apenas de NaN no mapa e conversão individual de zero para `None` no emissor do contexto. São comportamentos diferentes entre si; não são consultas ao juiz. (`app/templates/core/dashboard2.html:242`, `:287`; `app/static/js/geo-colab-map.js:39`; `app/ponto/services/geofence.py:349`, `:391`)
+
+   Esses remanescentes estão expressamente fora da migração desta volta no corte registrado; sua inscrição efetiva na fila externa não está disponível nesta cópia. (`app/docs/CORTES.md:442`; registro externo **[nao verificado]**)
+
+   **Situação:** os kernels leem para barrar; o detector de vínculo exclui desligados e seleciona colegas ativos. Essas funções não escrevem situação. (`app/api/views_core.py:402`, `:407`; `app/api/views.py:415`, `:420`; `app/ponto/services/vinculo_na_lista.py:71`, `:83`, `:152`)
+
+   Considerando os arquivos tocados inteiros, há escritores anteriores: cadastro cria `ativo`; lançamento de afastamento escreve `afastado`, ambos pela porta de Colaborador. O reversor escreve a volta para ativo pela mesma porta. (`app/colaboradores/views.py:1182`, `:1205`; `app/ponto/views.py:2435`; `app/colaboradores/services/colaborador.py:55`, `:91`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`)
+
+   Outros leitores nesses arquivos incluem refresh/me, universo de vínculo/geo e filtros de telas. (`app/api/views_core.py:173`, `:344`; `app/api/views.py:116`, `:355`; `app/ponto/services/geofence.py:46`; `app/ponto/views.py:376`, `:1119`, `:2225`, `:2373`; `app/colaboradores/views.py:206`, `:602`, `:1043`, `:1414`, `:1748`, `:2610`)
+
+   Nos testes novos, a situação é preparada na criação do colaborador ou por UPDATE explícito para férias/desligado; isso é fixture, não escritor novo de produção. (`app/api/tests/test_l030_batida_pela_porta.py:33`; `app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:518`, `:679`, `:756`)
+
+4. **Mordida dos testes da porta** [nao verificado]
+
+   O analisador AST reconhece somente `if` cuja condição leia os campos nominais procurados e contenha `return Response` com status literal 403 ou `HTTP_403_FORBIDDEN`, antes da primeira chamada nominal `registrar_batida`. Não acompanha aliases nem chamadas auxiliares. (`app/api/tests/test_l030_selo_porta.py:30`, `:50`, `:66`)
+
+   | Teste | Pega | Não pega | [nao verificado]
+   |---|---|---|
+   | `PortaSemRecusaTest.test_MORDE_os_dois_kernels` | Guarda GPS reconhecida, inclusive `return` dentro de `try`. | Outro campo, status 400/422, helper, alias `sem_gps`, recusa por exceção; `raise` no `if` com resposta em `except` separado. (`app/api/tests/test_l030_selo_porta.py:104`, `:50`, `:66`) |
+   | `PortaSemRecusaTest.test_mutantes_em_memoria_com_controle_verde` | Cinco formas: nomes diretos, `.get`, subscrito, `getattr`, condição mista situação/GPS. | Não executa os ramos mutados; não prova alcançabilidade nem formas não enumeradas. (`app/api/tests/test_l030_selo_porta.py:109`) |
+   | `PortaSemRecusaTest.test_prosa_nao_e_barreira` | Evita falso positivo de comentário/docstring. | Não testa comportamento da produção; esse não é seu objeto. (`app/api/tests/test_l030_selo_porta.py:122`) |
+   | `BarreiraDeSituacaoDeclaradaTest.test_MORDE_exatamente_uma_guarda_declarada_em_cada_kernel` | Guarda reconhecida removida/duplicada ou expressão/conjunto alterado. | Segunda recusa em helper, outro status ou exceção; ordem frente à cobrança; semântica do corpo. Mover a única guarda para helper reprova por ausência; acrescentar helper mantendo-a pode escapar. (`app/api/tests/test_l030_selo_porta.py:136`, `:160`) |
+   | `…test_MORDE_os_codigos_da_barreira_sao_os_tres_da_base` | Falta de literal esperado ou presença de `colab_afastado`. | Associação código/situação trocada; mensagens erradas; código novo fora do conjunto comparado; literais preservados sem uso. (`app/api/tests/test_l030_selo_porta.py:165`) |
+   | `BarreiraDeSituacaoDeclaradaTest.test_mutantes_em_memoria_com_controle_verde` | Quatro guardas adicionais, conjunto menor/maior e remoção. | Mesmos limites do analisador; não executa produção mutada. (`app/api/tests/test_l030_selo_porta.py:176`) |
+
+   O teste dos códigos pode continuar verde com os literais numa docstring ou em código morto dentro da guarda: ele coleta constantes de string, não respostas efetivas. Já o selo GPS não fica verde simplesmente porque perdeu a porta: existe uma asserção exigindo encontrá-la. (`app/api/tests/test_l030_selo_porta.py:170`, `:70`)
+
+   | Teste HTTP de `BatidaPelaPortaTest` | Pega | Não pega | [nao verificado]
+   |---|---|---|
+   | Sem coordenadas, ativo/afastado | Recusa que atinja essas fixtures, por return/helper/try/exceção; fallback; porta ausente/duplicada; persistência errada. | Recusa condicionada a campos, horários ou cadastros não exercitados; ordem de Pauta/log. (`app/api/tests/test_l030_batida_pela_porta.py:47`, `:59`) |
+   | Desligado/férias/outro barrados | Status/código errado, porta chamada ou Batida gravada, com e sem GPS. | Helper equivalente; Pauta/log indevidamente anteriores ao 403; outras situações não ensaiadas. (`app/api/tests/test_l030_batida_pela_porta.py:65`) |
+   | Zero numérico | Zero barrado/reescrito e juiz passando a aceitá-lo. | Zero textual ou somente uma coordenada zero. (`app/api/tests/test_l030_batida_pela_porta.py:78`) |
+   | Campos vazios | Recusa, conversão antecipada ou persistência diferente de nulos. | Outros inválidos; apesar do nome “formulário”, envia JSON. (`app/api/tests/test_l030_batida_pela_porta.py:44`, `:88`) |
+   | Coordenada parcial | Latitude isolada barrada/modificada ou longitude inventada. | Longitude isolada; resultado posterior do geofence. (`app/api/tests/test_l030_batida_pela_porta.py:93`) |
+
+   Os caminhos aceitos usam `wraps` na função real e conferem chamada, banco e ID; não passam por um mock que fabrica sucesso. A autenticação é forçada, portanto login/refresh ficam fora. (`app/api/tests/test_l030_batida_pela_porta.py:40`, `:42`, `:49`)
+
+   Nesta revisão, os seis testes AST passaram sem banco; os testes HTTP não foram reexecutados. O OK de `api ponto` foi informado pelo solicitante, sem log disponível para conferência independente. (`app/api/tests/test_l030_selo_porta.py:99`, `:133`; execução HTTP e log dos módulos **[nao verificado]**)
+
+5. **Bateria férias/desligado**
+
+   | Caso/teste | Caminho e afirmação atual | [nao verificado]
+   |---|---|
+   | Relógio congelado | Só afirma a data congelada. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:691`) |
+   | “Controle paga…” | Só compara constantes `MEDIDO`; isoladamente não demonstra que produção alcança dinheiro. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:694`) |
+   | C0 | API, tabela inteira: janela ligada, 8 h e 120 min pendentes; desligada, 10 h e HE50 de 2 h. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:704`, `:82`, `:118`, `:663`) |
+   | F1 | Ausência de férias com situação **ativo**, pela API; tabela inteira. Ligada: 8 h; desligada: 10 h, HE50 de 2 h e reflexo DSR de 12 h; sete dias/56 h de abono. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:711`, `:156`, `:193`, `:209`, `:216`) |
+   | F2 | Ausência de férias com situação **ativo**, folga, pela API; tabela inteira. Ligada: pendência de 600 min e sem pagamento do dia; desligada: 10 h de folga trabalhada; oito dias/64 h de abono. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:721`, `:239`, `:246`, `:276`, `:292`) |
+   | F1s/F2s | Situação alterada para férias: primeiro 403/zero Batida nos dois kernels; depois porta real, comparando APURACAO de F1/F2 e idempotência. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:731`, `:740`, `:567`, `:665`) |
+   | D1 | Célula preservada após desligamento por UPDATE; API barra, depois porta real. APURACAO espera 10 h, célula concorde/600 min, sem HE. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:749`, `:311`, `:322`) |
+   | D2 | Desligado dentro da competência, sem célula; API barra, depois porta real. APURACAO espera 10 h em DiaPago/fechamento. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:762`, `:373`, `:384`) |
+   | D3 | Demissão anterior à competência; API barra, depois porta real. Quatro batidas/600 min de relógio, sem DiaPago ou fechamento. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:769`, `:428`, `:434`, `:440`) |
+
+   As quatro classes cobrem os dois kernels e janela ligada/desligada. O plantio usa `registrar_batida` real; a apuração chama cartório, fechamento e espelho reais. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:576`, `:593`, `:603`, `:778`)
+
+   **Deixaram de ser confrontados com MEDIDO:** `porta` e valores de `admin` para D1/D2/D3; também não são confrontados para as variantes F1s/F2s. F1/F2 ativos continuam conferindo esses valores. O `admin` ainda participa da idempotência entre duas apurações, mas isso não afirma seus valores históricos. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:52`, `:656`, `:663`, `:665`, `:674`)
+
+   O 403 da bateria exige código e zero Batida, mas não exige porta sem chamadas nem ausência de outros efeitos. `_numeros` omite zeros/nulos; o resumo omite valores falsy. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:567`, `:480`, `:635`)
+
+   Não encontrei número **atualmente afirmado** demonstravelmente impossível por análise estática: D1/D2 têm percurso compatível nos dias órfãos do fechamento. Reproduzir cada número nesta árvore permanece **[nao verificado]**. Os antigos HTTP 200 dos desligados continuam na tabela, mas não são mais expectativas executadas nesses casos. (`app/ponto/services/fechamento.py:838`, `:902`; `app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:328`, `:665`)
+
+6. **Sobras e textos contraditórios**
+
+   - “Única exceção… desligado” é falso: férias e outro valor também barram. É comentário restaurado da base fornecida, não prova de retirada esquecida. (`app/api/views_core.py:431`, `:402`; `app/api/views.py:444`, `:415`)
+   - O cabeçalho de homologação diz afastado bloqueado, contrariando o próprio teste que exige 200; a descrição “férias bate” também é imprecisa para o caso que prepara situação férias e exige recusa. (`app/api/tests/test_api_bater_ponto.py:6`, `:28`, `:67`, `:84`, `:88`)
+   - Textos amplos “férias nunca recusa” precisam distinguir **ausência de férias** de **situação férias**. Não demonstram ramo restante que libere a situação barrada: há testes de ausência com cadastro ativo e de chamada direta à porta. (`app/ponto/tests/test_batida_sideeffects.py:173`; `app/ponto/services/aviso_da_batida.py:7`; `app/ponto/tests/test_ferias_dia21.py:38`; `app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:712`)
+   - LEIS está coerente com os 403 mantidos. MAPA e MAPA-JUIZES registram `tem_gps`; o lookup JUIZES ainda não o inclui. (`app/docs/LEIS.md:78`, `:165`; `app/docs/MAPA.md:246`; `app/docs/MAPA-JUIZES.md:19`; `app/docs/JUIZES.md:19`)
+   - Não encontrei sobra executável da liberação de desligado/férias nos kernels; ambos têm a guarda restaurada. Exaustividade semântica de todo texto da árvore **[nao verificado]**. (`app/api/views_core.py:402`; `app/api/views.py:415`)
+
+7. **Catraca de linhas**
+
+   Bate: UI registrada **728**, ocorrência real **728**; core registrada **723**, ocorrência real **723**. O teste específico de igualdade da catraca também passou em memória. (`app/core/tests/test_medida_turno_do_par.py:256`, `:257`, `:539`; `app/api/views.py:728`; `app/api/views_core.py:723`)
+
+8. **Classes que já reprovaram obra**
+
+   | Classe | Resultado |
+   |---|---|
+   | Segundo juiz | Os leitores migrados delegam; os leitores próprios remanescentes estão discriminados no item 3 e adiados pelo corte. (`app/core/templatetags/hasner_filters.py:34`, `:41`; `app/docs/CORTES.md:442`) |
+   | Segundo escritor | O censo executado encontrou zero escritas **atribuíveis** da família Batida fora da porta; isso conserva os limites de atribuição do próprio censo. (`app/core/censo_escritas.py:6`, `:43`; `app/ponto/tests/test_chokepoint_batida_gate.py:26`) |
+   | Relógio fora da borda | Ainda existem leituras internas: `date.today()` no afastamento e relógio no detector. Não são introduções mostradas pelo diff fornecido. (`app/ponto/turnos.py:2730`; `app/chamados/detector_anomalias.py:73`; `app/ponto/utils_turno_orfao.py:22`) |
+   | Derivação paralela | Permanece nos leitores de coordenada discriminados; não apareceu nos novos filtros delegadores. (`app/colaboradores/views.py:337`; `app/core/templatetags/hasner_filters.py:34`) |
+   | Selo/RED sem mordida | Há mordida para formas e fixtures enumeradas; não há cobertura universal de recusa. O “anti-vacuidade” da bateria só lê constantes. (`app/api/tests/test_l030_selo_porta.py:66`; `app/api/tests/test_l030_batida_pela_porta.py:59`; `app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:694`) |
+   | Ordem de trava | Situação continua antes da cobrança; os testes HTTP não selam ausência de Pauta/log antes do 403. (`app/api/views_core.py:402`, `:411`; `app/api/tests/test_l030_batida_pela_porta.py:73`) |
+   | Pouso antes de pré-requisito | A regra exige suite inteira verde e depois verificação final. Só os módulos foram informados como OK; cumprimento final **[nao verificado]**. (`CLAUDE.md:374`) | [nao verificado]
+   | Campo com dois significados | Ausência de férias e `situacao='ferias'` têm efeitos distintos; a bateria agora o
+
+[truncado em 20000 de 21968 caracteres]
+
+## 10/11 20:53 · sessao 892be02b5445 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Cura B1–B4 entregue, com comandos, limites e pergunta h2 sem resposta no [relato](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/RELATO_BO_DISPUTA_VOLTA5B.txt:1).
+
+[Execuções locais registradas](/home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app/RELATO_BO_DISPUTA_VOLTA5B_VERIFICACOES.txt:1): 66 testes em memória, 35 da catraca e 20 mutantes mortos. Execução ORM e tetos SQL: [nao verificado]. [nao verificado]
+
+perguntas de lei: 1
+
+## 10/11 20:52 · sessao 67fdd29f7bf8 · - · - · origem=Ronald (tmux)
+
+Itens 3, 6, 8 e 9 — achados e censo:
+
+- Juiz único implementado: `app/ponto/services/geofence.py:126` define `tem_gps`; `:145` devolve `bool(latitude and longitude)`; `:269` é o consumidor no geofence. O registro vivo contém a autoridade em `app/core/juizes.py:1201`, com corte em `app/docs/CORTES.md:442`.
+- Leitores migrados delegam: `app/core/templatetags/hasner_filters.py:34` e `:41`; templates `app/templates/core/_d2_feed.html:16`, `app/templates/ponto/batidas_offline_pendentes.html:96`, `app/templates/chamados/partials/_relatorio_geo.html:31`, `app/templates/chamados/partials/modal_fio.html:481`; contador em `app/ponto/views.py:485`.
+- Permanecem leitores com regra própria: nulidade em `app/colaboradores/views.py:337`, `:356`, `:395` e `app/ponto/services/vinculo_na_lista.py:49`; também `app/ponto/services/geofence.py:52`. Aceitam zero numérico onde `tem_gps` nega. A autorização de manter leitores do censo fora da migração está documentada em `app/docs/CORTES.md:442`; a presença efetiva deles no BACKLOG externo é `[nao verificado]`.
+- `app/ponto/services/geofence.py:349`, `:350`, `:391`, `:392` transformam cada zero em `None` ao formar contexto. `app/templates/core/dashboard2.html:242` e `:287` repetem truthiness; `app/static/js/geo-colab-map.js:39` só rejeita NaN, aceitando zero. São dívidas existentes, não alterações demonstradas no diff fornecido.
+- Um teste novo fixa explicitamente zero como amostra numérica no detector: `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:135`–`:140`. Isso diverge do juiz, mas o ramo de produção correspondente já aceitava zero pelo filtro de nulidade; o diff fornecido acrescenta apenas a exigência de longitude. Não atribuir introdução dessa regra à obra.
+- Escritor de `Batida.latitude/longitude`: `app/ponto/registro_batida.py:105` sanitiza e `:152`/`:157` criam com `**campos`; a sanitização converte vazio/inválido em `None`, preservando zero em `:5`–`:18`. Kernels só capturam e encaminham: `app/api/views_core.py:420`, `:421`, `:664`, `:665`; `app/api/views.py:433`, `:434`, `:672`, `:673`. Escritas do geofence em `:275`, `:297`, `:304`, `:315`, `:324` são de **AlertaGeofence**, não Batida.
+- Situação, nas funções alteradas: kernels leem em `app/api/views_core.py:402`, `:407`, `:408` e `app/api/views.py:415`, `:420`, `:421`; detector lê em `app/ponto/services/vinculo_na_lista.py:71`, `:83`, `:152`. Nenhuma dessas funções escreve situação.
+- Situação, considerando arquivos inteiros tocados: `app/colaboradores/views.py:1182` cria colaborador com `situacao='ativo'` em `:1205`, pela porta `app/colaboradores/services/colaborador.py:91`–`:93`; `app/ponto/views.py:2435` escreve afastado pela porta `app/colaboradores/services/colaborador.py:55`–`:61`. A bateria escreve férias diretamente por UPDATE em `app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:679` e desligado em `:758`; são preparação de teste.
+- Leitores adicionais de situação nos arquivos tocados: refresh/me em `app/api/views_core.py:173`, `:344`, `app/api/views.py:116`, `:355`; geofence em `app/ponto/services/geofence.py:46`; filtros e contadores em `app/ponto/views.py:376`, `:1119`, `:1120`, `:1121`, `:2225`, `:2373`; lista/cadastro/vínculo em `app/colaboradores/views.py:33`, `:62`, `:66`, `:206`, `:602`, `:619`, `:884`, `:1043`, `:1045`, `:1414`, `:1448`, `:1540`, `:1689`, `:1748`, `:1770`, `:1831`, `:2610`, `:2846`, `:2856`, `:2896`, `:2912`.
+
+Sobras:
+
+- Comentário **falso, restaurado da base**: “Única exceção … desligado” em `app/api/views_core.py:431` e `app/api/views.py:444`; férias e outro valor também barram em `:402`/`:415`.
+- Cabeçalhos antigos dizem afastado bloqueado em `app/api/tests/test_api_bater_ponto.py:6` e `:28`, contrariando o próprio teste `:67`–`:75`. `:84`–`:85` diz genericamente que férias bate, embora esse caso específico use situação férias e espere recusa em `:86`–`:90`.
+- Textos amplos “nunca recusa” permanecem em `app/ponto/tests/test_batida_sideeffects.py:173`, `app/ponto/services/aviso_da_batida.py:7` e `app/ponto/tests/test_gate_ferias_vira_aviso.py:7`. Não demonstram remoção esquecida: férias como ausência com cadastro ativo continuam entrando (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:712`, `:722`); a porta direta também aceita (`app/ponto/tests/test_ferias_dia21.py:38`–`:42`).
+- `app/docs/LEIS.md:78` e `:165` estão coerentes com as barreiras mantidas.
+- `app/docs/JUIZES.md:19`–`:121` continua sem `tem_gps`, embora `app/docs/MAPA-JUIZES.md:19` e `app/docs/MAPA.md:246` já o registrem. O opus fornecido já condicionava corrigir esse lookup no pouso.
+- MAPA-DA-FILA-BO e `logs/MAPA-FILA-BO/mapa.r` não estão disponíveis nesta cópia: registro do complemento `[nao verificado]`. `app/docs/BACKLOG.md:1873` ainda descreve a obra original em censo; isso não prova ausência do registro externo.
+
+Proibidos: não observei introdução de fallback, nova recusa, mudança do classificador ou aceitação de zero no juiz; o comportamento visível é encaminhar coordenadas à porta e consultar o mesmo predicado (`app/api/views_core.py:664`, `app/api/views.py:672`, `app/ponto/services/geofence.py:145`, `:269`, `:292`). A integridade de `motor_calculo_v2.py` contra a base depende do diff fornecido, pois esta cópia não contém `.git`: comparação independente `[nao verificado]`.
+
+## 10/11 20:52 · sessao 96e8efe466d2 · - · - · origem=Ronald (tmux)
+
+Item 4 — leitura estática e execução sem banco:
+
+| Teste | O que morde | O que não morde | [nao verificado]
+|---|---|---|
+| `PortaSemRecusaTest.test_MORDE_os_dois_kernels` | `if` anterior à porta que lê `latitude`/`longitude` e contém `return Response(...,status=403)`; inclusive dentro de `try`. | Outro campo, status400/422, status em variável, alias `sem_gps`, função auxiliar, `raise PermissionDenied`, ou return no `except` separado do `if`. O detector só reconhece essas formas nominais. (`app/api/tests/test_l030_selo_porta.py:50-79`, `:104-107`) |
+| `PortaSemRecusaTest.test_mutantes_em_memoria_com_controle_verde` | Cinco mutantes AST por kernel: nomes diretos, `.get`, subscrito, `getattr`, condição mista férias/GPS. | Não executa a view mutada; prova a sensibilidade do analisador a essas cinco formas, sem provar alcançabilidade dos ramos. (`app/api/tests/test_l030_selo_porta.py:109-120`) |
+| `PortaSemRecusaTest.test_prosa_nao_e_barreira` | Evita falso positivo em docstring/comentário do exemplo. | Não verifica produção nem comportamento de recusa. Não é vacuidade: seu objeto declarado é distinguir prosa de AST executável. (`app/api/tests/test_l030_selo_porta.py:122-130`) |
+| `BarreiraDeSituacaoDeclaradaTest.test_MORDE_exatamente_uma_guarda_declarada_em_cada_kernel` | Remoção da guarda reconhecida, segunda guarda reconhecida ou mudança da expressão canônica/conjunto. | Segunda recusa escondida em helper, alias, exceção, status diferente; ordem relativa a cobrança/pauta; semântica do corpo. Mover toda a guarda para auxiliar faz faltar a guarda e reprova; acrescentar auxiliar mantendo a guarda pode escapar. (`app/api/tests/test_l030_selo_porta.py:66-90`, `:136-163`) |
+| `...test_MORDE_os_codigos_da_barreira_sao_os_tres_da_base` | Ausência de qualquer um dos três literais esperados e presença de `colab_afastado` na guarda. | Troca da associação código/situação, mensagem errada, código novo fora do pequeno conjunto comparado, literais esperados conservados em código morto. Verifica conjunto de strings, não saída real. (`app/api/tests/test_l030_selo_porta.py:165-174`) |
+| `BarreiraDeSituacaoDeclaradaTest.test_mutantes_em_memoria_com_controle_verde` | Quatro segundas guardas diretas, conjunto menor/maior, guarda removida. | Os mesmos escapes do detector; não executa os mutantes de produção. (`app/api/tests/test_l030_selo_porta.py:176-194`) |
+| `BatidaPelaPortaTest.test_MORDE_sem_coordenadas_ativo_e_afastado_gravam_nos_dois_kernels` | Reintroduzir recusa que atinja ativo/afastado sem GPS, seja por return, helper, try ou exceção; fallback/coordenada alterada antes da porta; porta não chamada/duplicada; ausência ou duplicação da batida. | Condições de recusa que não incidam na fixture — aparelho, valores adicionais, foto presente, outro horário etc.; efeitos anteriores como Pauta/log. (`app/api/tests/test_l030_batida_pela_porta.py:31-63`) |
+| `...test_MORDE_desligado_ferias_e_outro_seguem_barrados_antes_da_porta_nos_dois_kernels` | Remover barreira, trocar status/código, chamar porta antes de recusar, gravar Batida, com e sem GPS, nas três situações. | Mover a recusa para helper conservando resultados; criar Pauta/log antes do403; nova barreira para outra situação/fixture. (`app/api/tests/test_l030_batida_pela_porta.py:65-76`) |
+| `...test_MORDE_zero_numerico_chega_intacto_ao_escritor` | Barrar/reescrever zero, perder persistência, juiz considerar zero válido. | Zero textual, só uma coordenada zero, outras combinações/condições não exercitadas. (`app/api/tests/test_l030_batida_pela_porta.py:78-86`) |
+| `...test_MORDE_campos_vazios_do_formulario_sao_sanitizados_pela_porta` | Barrar vazios, convertê-los antes da porta, não gravá-los como `None`. | Outros valores inválidos e regras para outros formatos de request; envia JSON apesar do nome “formulário”. (`app/api/tests/test_l030_batida_pela_porta.py:44`, `:47-55`, `:88-91`) |
+| `...test_caracteriza_coordenada_parcial_sem_inventar_a_outra` | Barrar latitude isolada ou inventar longitude; modificar latitude antes da porta. | Longitude isolada e geofence posterior; testa só ativo e uma orientação do par. (`app/api/tests/test_l030_batida_pela_porta.py:93-96`) |
+
+Os cinco testes HTTP usam `wraps=registrar_batida`, POST real e checam persistência/ID nos caminhos aceitos; não passam por “mock que fabricou batida”. A autenticação é forçada, então login/refresh e middleware de autenticação não são cobertos. (`app/api/tests/test_l030_batida_pela_porta.py:39-56`)
+
+O selo AST pode dar verde com barreira real escondida: demonstrei em memória os escapes acima. O próprio algoritmo explica a limitação: não acompanha fluxo entre funções nem aliases e só busca retorno403 dentro de guarda `if` cuja condição leia campo nominal. (`app/api/tests/test_l030_selo_porta.py:50-79`)
+
+Executado: seis testes AST, `OK`, rc0; não executei os testes HTTP com banco nesta tarefa. `[nao verificado: execução HTTP nesta revisão]` (`app/api/tests/test_l030_selo_porta.py:99`, `:133`)
+
+Item 7 — bate:
+
+- `api/views.py`: registrada728, ocorrência real728. (`app/core/tests/test_medida_turno_do_par.py:256`; `app/api/views.py:728`)
+- `api/views_core.py`: registrada723, ocorrência real723. (`app/core/tests/test_medida_turno_do_par.py:257`; `app/api/views_core.py:723`)
+- Executei em memória o teste específico de igualdade de linhas da árvore inteira: um teste, `OK`, rc0. A asserção compara todo `LINHAS_REGISTRADAS` com o censo real. (`app/core/tests/test_medida_turno_do_par.py:20-28`, `:539-543`)
+
+Item 8 — limite legado adicional: selo modal verifica apenas presença textual de `naoBloquear` quando encontra `hxConfirmar(`; comentário com a palavra já satisfaz essa parcela. Não demonstra que o fluxo efetivamente segue quando modal falha. (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:135-143`)
+
+## 10/11 20:52 · sessao efb82ef2f5e2 · - · - · origem=Ronald (tmux)
+
+Item 5 — auditoria estática, sem banco e sem executar a bateria.
+
+O arquivo declara caracterização do efeito de retirar as barreiras, não uma regra de pagamento; a tabela veio da volta 8 e os casos barrados agora usam a função real de registro. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:3`, `:11`, `:576`)
+
+| Teste | Caminho e afirmações atuais | [nao verificado]
+|---|---|
+| `test_relogio_congelado` | Só verifica a data congelada; nenhuma batida ou cálculo. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:691`) |
+| `test_MORDE_o_controle_paga_e_os_casos_nao_sao_o_controle` | Só compara constantes da própria tabela: C0 ligado = 8 h/120 min pendentes; desligado = 10 h/2 h HE50; casos diferentes do controle; flags históricas de idempotência verdadeiras. Não chama produção e sozinho não prova que a fixture alcança dinheiro. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:694`) |
+| C0 | Ativo, sem ausência, célula de trabalho; quatro POSTs pela API e comparação integral com MEDIDO. Espera 8 h e pendência de 120 min com janela ligada; 10 h/HE50 2 h com janela desligada. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:704`, `:661`, `:82`, `:118`) |
+| F1 | Ausência de férias lançada mantendo `situacao='ativo'`; célula existe; quatro POSTs pela API e tabela integral. Espera `fato_em_ausencia`, 8 h com janela ligada; 10 h/HE50 2 h e reflexo DSR 12 h com janela desligada; sete dias/56 h de abono. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:711`, `:156`, `:193`, `:209`, `:216`) |
+| F2 | Mesmo cadastro ativo com ausência de férias, mas célula de folga; API e tabela integral. Ligada: pagamento do dia ausente, pendência `dia=600`; desligada: 10 h de folga trabalhada; oito dias/64 h de abono. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:721`, `:239`, `:246`, `:276`, `:292`) |
+| F1s | F1 com `situacao='ferias'` por UPDATE: primeiro quatro respostas 403/`colab_ferias` e zero batidas em **cada** kernel; depois quatro registros pela porta real; compara APURACAO de F1 e idempotência. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:731`, `:676`, `:567`, `:665`) |
+| F2s | Idem para folga, comparando APURACAO de F2. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:740`, `:665`) |
+| D1 | Gera célula enquanto ativo; encerra vínculo e muda situação por UPDATE, preservando célula; API 403/zero, depois porta real. Espera célula concorde/600 min, DiaPago e fechamento com 10 h, sem HE nem pendência. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:749`, `:311`, `:322`) |
+| D2 | Já nasce desligado, demissão dentro da competência; não tem célula no dia; API 403/zero, depois porta real. Espera DiaPago e fechamento com 10 h, célula e retenção ausentes. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:762`, `:373`, `:384`) |
+| D3 | Demissão anterior à competência; sem célula; API 403/zero, depois porta real. Espera quatro batidas, relógio de 600 min no espelho, mas sem DiaPago/fechamento e zero trabalhadas. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:769`, `:428`, `:434`, `:440`) |
+
+As quatro classes executam esses testes nos dois kernels e nas duas configurações da janela; os casos barrados ainda percorrem os dois kernels internamente, independentemente da classe. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:778`, `:786`, `:567`)
+
+A porta real recebe os quatro horários congelados, `origem='app'`, canal PWA, sequência real e coordenadas nulas, e o teste exige quatro registros sem conflito. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:576`) A apuração chama cartório, fechamento e espelho reais; não há mock do motor nesse percurso. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:593`, `:603`)
+
+**O que deixou de ser afirmado:** para D1/D2/D3, nenhum teste compara com MEDIDO os valores históricos de `porta` e `admin`: HTTP 200, disputa, motivos, contagens de alertas/perguntas/chamados/Pauta etc. F1/F2 ainda comparam esses valores pela API; F1s/F2s não os comparam para a situação férias. A exclusão é explícita e delimitada por APURACAO. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:52`, `:661`, `:665`, `:674`) Entretanto, `admin` ainda participa da comparação **entre as duas apurações**, porque `idempotente = um == dois` compara todo o dicionário medido. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:656`, `:673`)
+
+**Limites dos testes:** `force_authenticate` contorna o login; o 403 verifica código e zero Batida, mas não verifica que a porta ficou sem chamadas nem que outros efeitos ficaram ausentes. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:547`, `:567`) `_numeros` omite zeros e nulos, e `resumo` omite valores falsy; nessas saídas, não distinguem zero de `None`. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:480`, `:635`)
+
+**Número impossível:** não encontrei contradição estática que demonstre número **afirmado** impossível. Os 10 h de D1/D2 têm percurso de produção compatível: dias órfãos fora da vigência são somados às trabalhadas, e D3 fica fora do universo pela demissão anterior à janela. (`app/ponto/services/fechamento.py:792`, `:838`, `:902`, `:431`) Reproduzir numericamente cada tabela nesta árvore permanece **[nao verificado]**. As antigas respostas 200 dos casos desligados continuam armazenadas em MEDIDO, mas já não são expectativas executadas nesses casos. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:328`, `:665`)
 
 ## 10/11 20:37 · sessao a613d79df0b4 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -840,243 +1080,4 @@ O C1 não formula cura nem cenário financeiro sem resposta; a ausência de medi
 
 **Depende de dado:** contagem de Batidas efetivamente novas por kernel/situação factual/competência; quantas caem fora do universo, na guarda de 09 exportada, ou produzem alterações em FM/DiaPago; DIFF por campo e competência contra gravado. Nenhuma dessas contagens consta do dado fornecido. [nao verificado]
 
-## 10/11 19:59 · sessao 10354500077f · - · - · origem=Ronald (tmux)
-
-Leitura concluída, sem editar arquivos.
-
-- **F2 confere:** trava e seleção de aberta antecedem os ramos; havendo qualquer aberta, inclusive duas incoerentes, o código entra em agregação e retorna antes do nascimento. Assim, no ramo de nascimento, a única aberta criada pelo próprio ensaio não pode ser dona estrangeira. (`chamados/services/disputa_emissao.py:613`, `:615`, `:618`, `:636`, `:656`)
-- **F3 confere quanto à FK da dona:** o reuso escreve célula, destino e relavratura da pergunta existente; retorna a mesma dona. A inserção usa `disputa=disputa`. Ressalva literal: `disputa` também participa das **leituras** de identidade/episódio anteriores; não entra exclusivamente na inserção como insumo de leitura. (`chamados/models.py:2866`, `:2875`, `:2965`, `:2982`, `:3003`, `:3008`, `:3014`)
-- **R2, pai desfeito:** `_derivar_chamado_destino` exclui `categoria='disputa_supervisao'`; o pai criado pelo ensaio tem precisamente essa categoria. Portanto, esse pai não pode ser destino devolvido pelo derivador; não é necessário substituir esse destino por `None` nesse cenário. (`chamados/services/disputa_emissao.py:198`, `:201`, `:640`, `:642`)
-
-O resolvedor ainda pode derivar episódio BATIDA do contexto da dona dentro da porta. A guarda de mesmo PK e `criada=False` deve desfazer qualquer resultado divergente. Intervalo pertence à família MARCO e não recebe esse episódio. (`chamados/models.py:2866`, `:3452`, `:3460`; `chamados/services/declaracao_texto.py:42`)
-
-Na **cópia atual**, agregação simples escolhe **D+1**: o merge começa pelo contexto guardado, recebe somente `ultima_batida` e preserva `motivo.data`; o resolvedor consome essa data antes do fallback pela batida. O comportamento antecede o delta solicitado. A base histórica `6c0517eb9` não foi consultada: **[nao verificado]**. (`chamados/services/disputa_emissao.py:530`, `:531`, `:541`, `:619`, `:623`, `:328`, `:354`, `:358`, `:361`, `:370`)
-
-| Campo | Escritores e leitores relevantes |
-|---|---|
-| `DS.motivos` | Núcleo cria/agrega; modelo poda e reabre acrescentando motivo. Núcleo admite pela existência de perguntas locais. (`chamados/services/disputa_emissao.py:564`, `:576`, `:595`, `:656`; `chamados/models.py:1961`, `:2031`, `:2063`, `:2156`) |
-| `DS.contexto`, `qtd`, `ultima_em` | Merge escreve metadados; persistência grava contexto. Resolvedor lê data/batida; derivador lê data; porta BATIDA lê episódio. Busca de acessos específicos encontrou leitura de `qtd` no próprio merge e teste API; nenhum consumidor específico de `ultima_em` nessa busca. (`chamados/services/disputa_emissao.py:191`, `:355`, `:370`, `:530`, `:538`, `:539`, `:588`; `chamados/models.py:3463`; `api/tests/test_api_bater_pwa.py:91`) |
-| `DS.fechada_em` | Modelo fecha/reabre; núcleo e wrapper distinguem aberta/fechada; os três receivers verificam valor, sem exigir transição. (`chamados/models.py:1932`, `:2149`; `chamados/services/disputa_emissao.py:578`, `:598`, `:616`, `:778`; `chamados/signals.py:28`, `:129`, `:153`) |
-| Pergunta: PK/FK, dia, célula, destino | Porta elege pergunta e distingue reuso/inserção; reuso conserva dona. Escritas de dia também passam pelas portas de fio. (`chamados/models.py:2907`, `:2921`, `:2940`, `:2965`, `:2982`, `:3008`, `:3014`; `chamados/services/fio.py:790`, `:804`, `:979`) |
-| `criada` e pergunta devolvida | Gerador separa pergunta retornada de realmente criada; wrapper só notifica motivos de perguntas realmente criadas e locais. (`chamados/services/disputa_emissao.py:484`, `:499`, `:510`, `:511`, `:514`, `:783`) |
-
-Impacto leitor a leitor da política de motivos locais:
-
-| Leitor | Consequência |
-|---|---|
-| `api/foto_recebida.py:63`, `:70` | Seleção acompanha a dona aberta, mas ainda exige `contexto.ultima_batida.id` correspondente; transferência só de motivo não garante passar essa guarda. (`:67`, `:68`, `:73`) |
-| `colaboradores/signals.py:74` | Remoção de `posto_desativado` acompanha a dona aberta selecionada. (`:71`, `:77`) |
-| `escala/signals.py:158` | Remoção de `ancora_ausente` acompanha a dona aberta selecionada. (`:155`, `:161`) |
-| `chamados/models.py:1997` | É documentação; guardas executáveis verificam fechamento e motivo presente. (`:2031`, `:2033`, `:2036`) |
-| `auditar_disputas.py:88` | Auditoria passa a exigir contexto dos motivos mantidos. (`:89`, `:91`) |
-| `auditar_disputas.py:142` | Exibe a lista mantida. |
-| `auditar_disputas.py:169` | Compara lista com perguntas locais; a interpretação já corresponde ao pertencimento local, com exceção contextual para emissão impossível. (`:182`, `:188`, `:191`) |
-| `auditar_invariantes_chamados.py:50` | Resolve dias dos motivos mantidos; I7 continua selecionando abertas sem nenhuma linha de pergunta. (`:51`, `:62`, `:63`) |
-| `chamados/relatorios_disputa.py:52` | Exibe rótulos dos motivos mantidos. |
-| `chamados/services/acoes_disputa.py:149` | Mensagem usa os motivos mantidos. |
-| `chamados/services/fio.py:680` | Mensagem usa os motivos mantidos. |
-| `colaboradores/management/commands/pauta_aparelhos_compartilhados.py:49` | Cobertura pode mudar; também exige contexto com motivo/prefixo, que não acompanha a transferência somente de motivos. (`:52`, `:53`, `:55`) |
-| `ponto/management/commands/alertar_disputas_pendentes.py:82` | Log usa lista mantida. |
-| `templates/chamados/detalhe_local.html:301` | Exibe lista mantida. |
-| `templates/chamados/partials/modal_fio.html:326` | Aviso depende da presença local de âncora. |
-| `colaboradores/services/drawer.py:75` | Comentário descreve agregado que não poda; execução usa perguntas vivas, sem leitura direta da lista. (`:77`, `:78`) |
-
-Para o **delta de replay com dona fechada**, esses leitores não devem mudar por escrita em motivos/contexto da dona, pois a decisão é persistir nada nela. A alteração da pergunta pode ter efeitos próprios pelos leitores da pergunta; execução desses efeitos permanece **[nao verificado]**. (`chamados/services/disputa_emissao.py:578`; `chamados/models.py:3006`, `:3007`)
-
-## 10/11 19:56 · sessao 51de6528d488 · MAPA-FILA-BO · censo · origem=Code
-
-O vínculo desta cópia ao hash informado não pôde ser conferido por Git: a árvore disponível não tem repositório Git reconhecido. [não verificado]
-
-Em **(b)**, “não cria estado” significa que a cura usa campos, valores e combinações já admitidos pelas portas existentes; a ocorrência efetiva dessas combinações em produção continua [não verificado]. Distingo mudança do decisor de apresentação da mudança do juiz de negócio, conforme a separação entre autoridade e escritor registrada em `app/core/juizes.py:3`.
-
-## DISPUTA-ZUMBI-1110
-
-**(a) Lei, juiz e porta.** Aplicam-se **L-002**, testemunha lê a mesma autoridade, e **L-007**, escritor único com trilha (`app/docs/LEIS.md:60`, `app/docs/LEIS.md:65`). O corte C7 declara **`DisputaSupervisao.pode_fechar`**, registrado no código e no lookup (`app/docs/CORTES.md:272`, `app/core/juizes.py:279`, `app/docs/JUIZES.md:57`).
-
-C7 exige **nenhuma resposta sem veredito e nenhum fio vivo**; a porta canônica é **`DisputaSupervisao.fechar`**, que grava conjuntamente fechamento, autor, resolução e motivo (`app/chamados/models.py:1853`, `app/chamados/models.py:1932`). Os carimbos das perguntas passam por `carimbar` e `carimbar_identidade` (`app/chamados/models.py:3103`, `app/chamados/models.py:3168`).
-
-**Conferência do relato:**
-
-- **Confere:** `lavrar_sem_turno_aberto` já consulta C7 e chama `fechar` (`app/chamados/reconciliador.py:411`, `app/chamados/reconciliador.py:412`).
-- **Confere:** o explicador calcula “pode fechar” somente por `not _fio_vivo(ps)`, omitindo a guarda adicional de respostas sem veredito de C7 (`app/chamados/services/explicador.py:136`, `app/chamados/services/explicador.py:137`, `app/chamados/models.py:1853`).
-- **“Fechamento só por beco” não confere globalmente:** existem caudas de fechamento na reconciliação e na materialização (`app/chamados/reconciliador.py:1170`, `app/chamados/services/materializacao.py:1316`).
-- **“7 carimbadores sem C7” não está demonstrado como sete caminhos sem fechamento:** `encerrar_fantasma` alcança C7 pelo reconciliador; materialização tem caudas compartilhadas; `remover_motivo` chama diretamente `fechar` (`app/chamados/reconciliador.py:1147`, `app/chamados/reconciliador.py:1170`, `app/chamados/services/materializacao.py:1378`, `app/chamados/services/passivo_validado.py:405`, `app/chamados/models.py:2072`).
-
-**(b) Cria estado: não. Muda quem decide: sim, no explicador.** Os campos e motivos de fechamento já existem, e a porta já produz a combinação fechada/resolução/motivo (`app/chamados/models.py:1757`, `app/chamados/models.py:1773`, `app/chamados/models.py:1780`, `app/chamados/models.py:1932`). Porém o bool apresentado deixaria de ser decidido pela negação local de `fio_vivo` e passaria a consumir C7; o juiz legal de fechamento permaneceria o existente (`app/chamados/services/explicador.py:137`, `app/chamados/models.py:1853`).
-
-**(c) Censo do bool cujo decisor muda: 7 ocorrências = 1 escritor + 6 leitores.**
-
-| Papel e forma | Sítio |
-|---|---|
-| Escritor: atribuição `pode = not _fio_vivo(ps)` | `app/chamados/services/explicador.py:137` |
-| Leitor: condição de ternário | `app/chamados/services/explicador.py:138` |
-| Leitor: truthiness no `if` | `app/chamados/services/explicador.py:139` |
-| Leitor: exportação na chave `pode_fechar` | `app/chamados/services/explicador.py:163` |
-| Leitor: truthiness de `dict.get` | `app/chamados/services/desenlace.py:63` |
-| Leitor: truthiness em template, cor | `app/templates/chamados/partials/modal_fio.html:434` |
-| Leitor: truthiness em template, mensagem | `app/templates/chamados/partials/modal_fio.html:445` |
-
-O transporte preserva o dict: cache, atribuição a `ch.explicacao` e passagem ao alias `desenlace as _desen`; não o contei novamente como decisão (`app/chamados/services/fio.py:312`, `app/chamados/services/fio.py:314`, `app/chamados/services/fio.py:386`, `app/chamados/services/fio.py:403`).
-
-Método: grep global de `pode_fechar`, `por_que_nao_fecha` e transportes de `explicacao`, seguido dos imports, aliases e usos locais de `pode`; as sete ocorrências estão enumeradas acima. Não apareceram consumidores adicionais em commands, crons, signals ou JS de `static/` para esse bool calculado. [não verificado por referência negativa arquivo:linha]
-
-**Censo complementar da costura**, separado dos sete acima: AST de chamadas de método encontrou **13 chamadas de carimbo em 12 funções e 12 chamadas diretas a C7**; a unidade é `ast.Call`, independentemente do nome do receptor:
-
-| Forma | Sítios |
-|---|---|
-| `.carimbar(...)`: 8 | `app/chamados/models.py:3287`; `app/chamados/reconciliador.py:405`; `app/chamados/reconciliador.py:595`; `app/chamados/services/disputa_emissao.py:1863`; `app/chamados/services/disputa_emissao.py:1937`; `app/chamados/services/materializacao.py:561`; `app/chamados/services/materializacao.py:1277`; `app/chamados/services/materializacao.py:1431` |
-| `.carimbar_identidade(...)`: 5 | `app/chamados/models.py:2061`; `app/chamados/models.py:3064`; `app/chamados/services/fio.py:1359`; `app/chamados/services/materializacao.py:924`; `app/chamados/services/materializacao.py:1099` |
-| `fechada_em is None and …pode_fechar()`: 6 | `app/chamados/reconciliador.py:411`; `app/chamados/reconciliador.py:611`; `app/chamados/services/becos.py:56`; `app/chamados/services/disputa_emissao.py:1963`; `app/chamados/services/materializacao.py:585`; `app/chamados/services/materializacao.py:1316` |
-| `elif …pode_fechar()` | `app/chamados/reconciliador.py:1170` |
-| Ternário sobre C7 | `app/chamados/services/becos.py:33` |
-| `if not …pode_fechar()`: 2 | `app/chamados/services/competencia_trancada.py:153`; `app/chamados/services/competencia_trancada.py:202` |
-| Atribuição seguida de truthiness | `app/chamados/services/disputa_emissao.py:1278`, `app/chamados/services/disputa_emissao.py:1282` |
-| `if disp and disp.pode_fechar()` | `app/ponto/services/entrada_sincronizada.py:58` |
-
-O signal genérico de salvamento da pergunta agenda a porta de becos após o commit; esse classificador exige pai resolvido e ausência de perguntas visíveis antes de consultar C7 (`app/chamados/signals.py:227`, `app/chamados/signals.py:238`, `app/chamados/services/becos.py:29`, `app/chamados/services/becos.py:31`, `app/chamados/services/becos.py:33`). O cron correspondente usa `--alarme`; isso não equivale a um fechamento automático geral (`app/config/crons.py:663`).
-
-**(d) Casa:** **COMPLEMENTO de C7-DISPUTA-FECHA-POR-UM-JUIZ**, com interseção na série E3/E4; a casa já manda migrar decisões espalhadas para C6/C7 (`app/docs/BACKLOG.md:1468`, `app/docs/BACKLOG.md:1862`, `app/docs/BACKLOG.md:1863`). Os múltiplos sítios enumerados impedem classificá-lo como BO de sítio único.
-
-**(e) Padrão:** **Single Writer Principle / juiz único**, termo existente, realizado ao retirar a decisão paralela do explicador e consumir C7 (`app/docs/GLOSSARIO.md:12`, `app/chamados/services/explicador.py:137`, `app/core/juizes.py:279`).
-
-**Depende de dado:** contagem dos dez casos por instante do carimbo antes/depois de 22/10, via, estado do pai, respostas sem veredito e resultado atual de C7; também contagem de tentativas de fechamento recusadas. A atribuição histórica ao commit indicado no anexo não foi conferida. [não verificado] [nao verificado]
-
-perguntas de lei: 0
-
-O critério de fechamento e a guarda de resposta sem veredito já estão escritos; a separação histórica dos dez casos é pergunta de dado (`app/docs/CORTES.md:272`, `app/chamados/models.py:1853`).
-
-## PERGUNTA-DUPLICATA-1110
-
-**(a) Lei, juiz e porta.** Aplicam-se **L-001/L-002/L-003/L-007**: origem, autoridade comum, medição pela função real e escritor com trilha; a idempotência integra o contrato estrutural (`app/docs/LEIS.md:59`, `app/docs/LEIS.md:60`, `app/docs/LEIS.md:61`, `app/docs/LEIS.md:65`, `CLAUDE.md:175`).
-
-**Sem juiz registrado para eleger a pergunta canônica.** C8 pergunta pela duplicidade de **chamado** e aponta para `ChamadoColaborador.abrir`; não registra a eleição de `PerguntaDisputa` (`app/core/juizes.py:114`, `app/core/juizes.py:280`). O lookup de fio aponta para `_disputa_do_chamado`, outra pergunta (`app/docs/JUIZES.md:40`).
-
-Quem decide hoje:
-
-- **Identidade:** MARCO por colaborador/dia/motivo/instância; BATIDA por episódio/motivo (`app/chamados/services/fio.py:1372`).
-- **Canônica:** menor pk com resposta textual não vazia; na ausência dela, menor pk (`app/chamados/services/fio.py:1225`, `app/chamados/services/fio.py:1232`).
-- **Retratabilidade:** `plano_de_retratacao` preserva mérito, episódios distintos e acervo sem episódio (`app/chamados/services/fio.py:1259`, `app/chamados/services/fio.py:1287`, `app/chamados/services/fio.py:1290`, `app/chamados/services/fio.py:1294`).
-- **Porta/escritor:** `retratar_para_canonica` → `retratar_duplicata` → `carimbar_identidade`; a gravação física ocorre no modelo (`app/chamados/services/fio.py:1319`, `app/chamados/services/fio.py:1345`, `app/chamados/services/fio.py:1359`, `app/chamados/models.py:3190`).
-
-**Conferência do relato.** Os **486 grupos/848 excedentes** são dados fornecidos sem chave de agrupamento nem pks; sua equivalência a duplicatas segundo o código não está demonstrada. [não verificado] O agrupador exclui conversa e vias fora do fato, distingue famílias e aplica horizonte; o plano também conserva perdedoras não retratáveis (`app/chamados/services/fio.py:1431`, `app/chamados/services/fio.py:1945`, `app/chamados/services/fio.py:1949`, `app/chamados/services/fio.py:1290`).
-
-“Disputa aberta” não basta para demonstrar inflação: o app primeiro consulta `q_vivas`, confirma C6 e só depois classifica pendência por resposta ausente e disputa aberta (`app/chamados/services/pergunta_no_app.py:50`, `app/chamados/services/pergunta_no_app.py:58`, `app/chamados/services/pergunta_no_app.py:71`).
-
-Há ainda uma limitação na proposta de “medir idade”: a pergunta dispõe de data do fato e carimbos posteriores, mas não de carimbo próprio de nascimento; essa ausência está registrada em **O326** (`app/chamados/models.py:2423`, `app/chamados/models.py:2448`, `app/chamados/models.py:2449`, `app/docs/BACKLOG.md:1633`). Idade exata de criação não pode ser inferida desses outros carimbos. [não verificado]
-
-**(b) Cria estado: não. Muda quem decide: não**, no escopo de medir pelo universo existente e retratar apenas os excedentes aceitos pela porta atual. `duplicata` já é valor existente, e a porta já grava via/carimbo/autor/motivo; o nascimento também consulta a eleição existente pelo alias `_canonica` (`app/chamados/models.py:2495`, `app/chamados/models.py:3182`, `app/chamados/models.py:3186`, `app/chamados/models.py:3190`, `app/chamados/models.py:2905`, `app/chamados/models.py:2921`).
-
-Adicionar nascimento próprio ou fato novo de identidade ampliaria esse escopo: são obras já separadas, **O326** e **FATO-A06** (`app/docs/BACKLOG.md:1633`, `app/docs/BACKLOG.md:1867`).
-
-**(c) A condição de censo global dos campos não é acionada por não/não.** Como inventário complementar, contei por AST o perímetro de cinco símbolos — `canonica_do_grupo`, `plano_de_retratacao`, `grupos_de_colisao`, `retratar_para_canonica`, `retratar_duplicata` — resolvendo imports com `as`, inclusive `_canonica`. São **23 chamadas: 19 leituras de decisão e 4 delegações de escrita**, enumeradas abaixo:
-
-| Arquivo | Sítios e forma |
-|---|---|
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py` | `:276` eleição; `:290` plano/truthiness das categorias em `:295`; `:331` escrita; `:393` eleição após `len>=2` em `:392`; `:396` leitura `['retrata']`; `:485` grupos; `:506` eleição/comparação de pk em `:507`; `:510` plano/`len` em `:512`. |
-| `app/chamados/management/commands/dedup_perguntas_fato.py` | `:58` grupos; `:76` eleição; `:81` plano, leitura `['retrata']` em `:88` e truthiness em `:89`. |
-| `app/chamados/models.py` | `:2921` eleição pelo alias `_canonica`, condicionada à lista; `is not None` em `:2922`. |
-| `app/chamados/services/declaracao_texto.py` | `:253` eleição/comparação de disputa e `_reusavel` em `:254`; `:275` eleição após truthiness da lista em `:271`. |
-| `app/chamados/services/fio.py` | `:921` escrita condicionada à lista em `:920`; `:956` eleição/comparação de pk em `:957`; `:967` plano/`any` em `:968`; `:1340` plano; `:1341` escrita em compreensão com truthiness; `:1832` eleição condicionada às sementes em `:1833`; `:2155` eleição/comparação de pk em `:2165`; `:2158` plano/truthiness em `:2166`; `:2180` escrita/leitura `['retratadas']`. |
-
-A unidade é chamada dos cinco símbolos, excluindo testes/migrations; o save físico subsequente não foi somado novamente (`app/chamados/services/fio.py:1359`, `app/chamados/models.py:3190`). Nenhuma referência adicional desses cinco símbolos apareceu em templates, signals ou JS; isso não constitui censo global dos campos. [não verificado por referência negativa arquivo:linha] A menção ao backfill em crons é declaração de papel de ato único (`app/config/crons.py:780`, `app/config/crons.py:783`).
-
-**(d) Casa:** **COMPLEMENTO de FIO-E0-V4 E1**, articulado à E4; o fato próprio de duplicata/identidade fica depois da E4d (`app/docs/BACKLOG.md:1848`, `app/docs/BACKLOG.md:1863`, `app/docs/BACKLOG.md:1867`). Há um resíduo específico sobre episódio retratado, mas não se pode atribuir os 486 grupos a ele sem dados (`app/docs/BACKLOG.md:786`). [não verificado quanto ao alcance]
-
-**(e) Padrão:** **idempotência pela chave do fato**, termo existente; a cura deve consumir a identidade compartilhada pelo nascimento e pelo dedup (`app/docs/GLOSSARIO.md:29`, `app/chamados/models.py:2905`, `app/chamados/services/fio.py:1372`).
-
-**Depende de dado:** reclassificação dos 486 grupos pela chave real; quantidades retratáveis, recusadas por mérito, episódios unidos e acervo sem episódio; distribuição por horizonte/competência; quantos excedentes passam por C6 e entram efetivamente nos contadores. Os 848 não demonstram, isoladamente, inflação. [não verificado]
-
-perguntas de lei: 1
-
-**Quando uma linha BATIDA do acervo sem episódio e uma linha com episódio podem representar o mesmo fato, permitindo que uma retrate a outra?** O código declara essa lei aberta e hoje conserva ambas (`app/chamados/services/fio.py:1274`, `app/chamados/services/fio.py:1275`, `app/chamados/services/fio.py:1294`). Não foi localizada resposta posterior nas leis/cortes pesquisados. [não verificado quanto à ausência global] Depende de dado: quantos grupos fornecidos pertencem a essa classe. [não verificado]
-
-## BO-ROTULO-ENCERRADO
-
-**(a) Lei, juiz e porta.** Aplicam-se **L-002**, testemunha lê a autoridade; **LEIS-UI L2**, tela e ação consultam a mesma função; **L7** trata especificamente de ajuda proveniente do mapa do domínio, não estabelece literalmente “um rótulo por estado” (`app/docs/LEIS.md:60`, `app/docs/LEIS-UI.md:23`, `app/docs/LEIS-UI.md:77`).
-
-**Sem juiz registrado para o texto das ações do seletor.** O registro chamado não contém essa pergunta; hoje os textos são decididos por dois blocos literais de template (`app/core/juizes.py:272`, `app/core/juizes.py:293`, `app/templates/chamados/partials/modal_fio.html:667`, `app/templates/chamados/partials/painel_chamado_turno.html:76`).
-
-Para espera do colaborador, decide `rotulo_para_pessoa`, através do filtro `espera`; para transição de negócio, o juiz registrado é `motor.decidir`, acessado por `transicionar`/`pode_transicionar`, com escritor `_gravar_estado` (`app/chamados/services/verbos.py:138`, `app/chamados/templatetags/chamados_tags.py:63`, `app/core/juizes.py:274`, `app/docs/JUIZES.md:37`, `app/chamados/models.py:119`, `app/chamados/models.py:128`, `app/chamados/models.py:201`).
-
-**Conferência do relato:**
-
-- **Confere:** os dois detalhes usam `espera|first` e mostram “Encerrado” para `resolvido` e `fechado`, conforme o mapa (`app/templates/chamados/detalhe.html:133`, `app/templates/chamados/detalhe.html:134`, `app/templates/chamados/detalhe_local.html:396`, `app/templates/chamados/detalhe_local.html:397`, `app/chamados/services/verbos.py:118`, `app/chamados/services/verbos.py:119`).
-- O defeito também alcança **um terceiro seletor**, no fio do colaborador (`app/templates/chamados/fio_colaborador.html:269`, `app/templates/chamados/fio_colaborador.html:270`).
-- **Confere:** o modal distingue “Encerrar” de “Encerrar e arquivar” (`app/templates/chamados/partials/modal_fio.html:668`, `app/templates/chamados/partials/modal_fio.html:669`).
-- **Não existe a fonte comum pressuposta pela cura descrita:** o modal contém literais, repetidos no painel do turno. Seu comentário distingue explicitamente verbo da ação e valor enviado à view (`app/templates/chamados/partials/modal_fio.html:660`, `app/templates/chamados/partials/modal_fio.html:667`, `app/templates/chamados/partials/painel_chamado_turno.html:76`).
-
-**(b) Cria estado: não. Muda quem decide: sim, na apresentação.** Os valores enviados já existem; a cura centralizaria quem fornece o texto, preservando os `value` e a decisão de negócio (`app/chamados/models.py:31`, `app/chamados/models.py:32`, `app/templates/chamados/detalhe_local.html:396`, `app/templates/chamados/detalhe_local.html:397`). O servidor recebe `novo_status` e chama a mesma porta, que consulta o motor (`app/chamados/services/acoes_chamado.py:287`, `app/chamados/services/acoes_chamado.py:315`, `app/chamados/models.py:123`).
-
-**(c) Censo do texto de espera/seletor: 13 sítios = 3 definidores/renderizadores + 10 leitores.** A unidade é função ou bloco de template; opções irmãs contam como um bloco.
-
-| Papel | Sítio | Forma |
-|---|---|---|
-| Definidor | `app/chamados/services/verbos.py:114` | Dict `ESPERA_COLAB`, comparação por chave de estado |
-| Definidor/renderizador | `app/templates/chamados/partials/modal_fio.html:667` | Texto literal das opções |
-| Definidor/renderizador | `app/templates/chamados/partials/painel_chamado_turno.html:76` | Texto literal das opções |
-| Leitor | `app/chamados/services/verbos.py:138` | Truthiness/normalização em `:140`, `.get` em `:141` |
-| Leitor | `app/chamados/templatetags/chamados_tags.py:53` | Filtro registrado, import e delegação em `:63`/`:64` |
-| Leitor | `app/templates/chamados/detalhe.html:36` | `espera`, leitura da tupla no badge |
-| Leitor | `app/templates/chamados/detalhe_local.html:68` | `espera`, leitura da tupla no badge |
-| Leitor | `app/templates/chamados/fio_colaborador.html:188` | `espera`, leitura da tupla no badge |
-| Leitor | `app/templates/chamados/partials/painel_chamado_turno.html:18` | `espera`, leitura da tupla no badge |
-| Leitor | `app/templates/chamados/partials/modal_fio.html:101` | `espera`, leitura da tupla no badge |
-| Leitor | `app/templates/chamados/detalhe.html:132` | Constantes → `espera|first`, opções |
-| Leitor | `app/templates/chamados/detalhe_local.html:395` | Constantes → `espera|first`, opções |
-| Leitor | `app/templates/chamados/fio_colaborador.html:268` | Constantes → `espera|first`, opções |
-
-Método: grep de símbolos/filtro/opções em Python, HTML e JS, mais AST dos Python com imports apelidados. O carregamento do mapa e a chamada da função estão em `app/chamados/services/verbos.py:141` e `app/chamados/templatetags/chamados_tags.py:64`. Não apareceram outros aliases, leitores em commands/crons/signals ou leituras textuais desses seletores no JS. [não verificado por referência negativa arquivo:linha]
-
-`rotulo_de_linha` responde outra pergunta — palavra da fila administrativa — e não foi contado como fornecedor do texto desses seletores (`app/chamados/services/verbos.py:96`, `app/chamados/services/verbos.py:125`).
-
-**(d) Casa:** **COMPLEMENTO de O137 — ESMERIL-NO-RASTRO**, classe “testemunha recalcula/rótulo não migrou”; a ligação está explicitada no filtro e no teste dessa família (`app/docs/BACKLOG.md:1363`, `app/chamados/templatetags/chamados_tags.py:55`, `app/chamados/tests/test_o137_esmeril_chamado.py:11`). Não é BO de sítio único: são três seletores e dois blocos literais de referência, enumerados em (c).
-
-**(e) Padrão:** **Single Source of Truth / fonte única**, termo existente, aplicado ao vocabulário das ações; VERBO e ESPERA cont
-
-[truncado em 20000 de 22188 caracteres]
-
-## 10/11 19:54 · sessao 2f5571a09655 · - · - · origem=Ronald (tmux)
-
-Confirmo **estado novo: não / muda decisor local: sim**: o explicador decide hoje por `not _fio_vivo(ps)`; a cura faria esse bool consumir C7, que também exige ausência de respostas sem veredito (`app/chamados/services/explicador.py:136`, `app/chamados/services/explicador.py:137`, `app/chamados/models.py:1853`).
-
-Para contar **todas as ocorrências semânticas do bool**, use **7 = 1 escritor + 6 leitores**:
-
-| Papel/forma | Sítio |
-|---|---|
-| Escritor: atribuição de `pode` | `app/chamados/services/explicador.py:137` |
-| Leitor interno: condição do ternário | `app/chamados/services/explicador.py:138` |
-| Leitor interno: truthiness no `if` | `app/chamados/services/explicador.py:139` |
-| Leitor interno: valor exportado na chave `pode_fechar` | `app/chamados/services/explicador.py:163` |
-| Leitor externo: `dict.get`, truthiness | `app/chamados/services/desenlace.py:63` |
-| Leitor externo: truthiness em template | `app/templates/chamados/partials/modal_fio.html:434` |
-| Leitor externo: truthiness em template | `app/templates/chamados/partials/modal_fio.html:445` |
-
-A contagem **4** seria somente **1 produtor + 3 consumidores externos**, omitindo as leituras locais; prefiro **7** para atender literalmente ao censo (`app/chamados/services/explicador.py:137`, `app/chamados/services/explicador.py:138`, `app/chamados/services/explicador.py:139`, `app/chamados/services/explicador.py:163`).
-
-O transporte não cria decisão: o retorno entra no cache e depois em `ch.explicacao`; o alias `desenlace as _desen` recebe o mesmo dict (`app/chamados/services/fio.py:312`, `app/chamados/services/fio.py:314`, `app/chamados/services/fio.py:386`, `app/chamados/services/fio.py:403`, `app/chamados/services/fio.py:404`). Os caminhos completo e parcial passam listas com explicação ao modal (`app/chamados/views.py:889`, `app/chamados/views.py:927`, `app/chamados/services/fio.py:446`, `app/chamados/services/fio.py:495`).
-
-Grep global de `pode_fechar`, `por_que_nao_fecha`, `.explicacao` e `explicacao=`, excluindo testes/migrations, seguido dos aliases e transportes acima, não revelou outros consumidores do bool; a busca específica em `app/static/**/*.js` retornou zero ocorrências [não verificado por arquivo:linha negativo]. Os 25 sítios de chamadas de carimbo/C7 constituem outro recorte e não devem ser somados ao total **7** de (c) (`app/chamados/services/explicador.py:137`, `app/chamados/models.py:1853`).
-
-## 10/11 19:54 · sessao 235eacb48a70 · - · - · origem=Ronald (tmux)
-
-Confirmado: **não cria estado / sim, troca quem fornece o rótulo**, preservando o juiz da transição (`app/chamados/models.py:123`; `app/chamados/services/acoes_chamado.py:315`).
-
-Os **13 sítios** abrangem o texto visível de espera e dos seletores. Os dois blocos literais contam uma vez cada, como definidor/renderizador (`app/templates/chamados/partials/modal_fio.html:667`; `app/templates/chamados/partials/painel_chamado_turno.html:76`). `rotulo_de_linha` responde outra pergunta — palavra da fila do administrador — e não fornece texto aos seletores (`app/chamados/services/verbos.py:125`).
-
-Grep de JS estático e embutido não encontrou leitura textual desses seletores. Os candidatos examinados leem outros controles: `select[name=escape]` e `data-doc` (`app/templates/chamados/meu_atendimento.html:373`), ou `para-colab-tipo` e `data-pedeDia` (`app/templates/chamados/form_abertura.html:237`). O servidor recebe o `value` pelo nome `novo_status` (`app/chamados/services/acoes_chamado.py:287`). A negativa global, sem artefato gravado da busca, deve carregar **[não verificado]** no relatório.
-
-## 10/11 19:53 · sessao 67ea159aafa1 · - · - · origem=Ronald (tmux)
-
-Correção de **(f)**: para o item amplo, use:
-
-perguntas de lei: 1
-
-**“Quando uma linha BATIDA do acervo sem episódio e uma linha com episódio podem representar o mesmo fato, permitindo que uma retrate a outra?”** O código declara expressamente essa lei aberta em `app/chamados/services/fio.py:1274` e `:1275`; hoje preserva ambas, pelo ramo `sem_episodio_intocada` (`:1294`).
-
-Busquei `sem_episodio_intocada`, `canonica_sem_episodio`, “sem episódio”, “acervo” combinado com “episódio/retrata/identidade” em LEIS, CORTES, CLAUDE e docs. Não encontrei corte que responda essa pergunta; a ausência global de resposta escrita é **[não verificado]**, mas a declaração explícita de pendência está no código (`app/chamados/services/fio.py:1275`).
-
-**Alcance:** depende de dado: quantos dos 486 grupos/848 excedentes contêm essa combinação. O anexo não fornece chave nem pks **[não verificado]**. Essa pergunta não impede medir ou retratar os grupos que o plano já aceita em `app/chamados/services/fio.py:1297`; impede chamar toda perdedora de excedente curável sem classificar as recusas (`:1280`, `:1294`).
-
-O N=0 anterior era válido somente para o subconjunto já aceito pela porta, não para todo o item genérico.
-
-_3493 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3498 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
