@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 14:47** · publicado em **11/11/2026 14:52** (UTC-3)
+> Ultima resposta processada: **11/11/2026 14:57** · publicado em **11/11/2026 14:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 14:57 · sessao 7361ac4aef50 · - · - · origem=Ronald (tmux)
+
+(b) Templates: **5 ocorrências sintáticas em 5 linhas/3 arquivos; 4 leitores com origem demonstrada em PerguntaDisputa e 1 referência sem vínculo de contexto demonstrado**. A relação completa é:
+
+| Arquivo:linha | Contexto e origem | Uso | Diverge para conversa? |
+|---|---|---|---|
+| `app/templates/chamados/partials/_card_atendimento.html:87` | `p` do laço `chamado.perguntas_disputa` em `:77`; `meu_atendimento` chama `montar_chamados_fio` (`app/chamados/views.py:569`), que consulta PerguntaDisputa (`app/chamados/services/fio.py:225`), agrupa (`:243`) e anexa a `ch.perguntas_disputa` (`:253`); os includes vêm de `app/templates/chamados/meu_atendimento.html:127` e `:144` | Testa existência para exibir cabeçalho do dia | **Sim**, havendo conversa com data: o cru habilita o cabeçalho; juiz retorna None (`app/chamados/juizes.py:338`) |
+| `app/templates/chamados/partials/_card_atendimento.html:90` | Mesmo contexto acima | Exibe “Estamos falando do dia” (`:89`) formatando o cru | **Sim**, civil exibido no lugar do dia do fato; juiz None (`app/chamados/juizes.py:338`) |
+| `app/templates/chamados/partials/_card_atendimento.html:164` | Mesmo contexto; ramo `p.tipo_resposta == 'hora' and p.opcoes` (`:158`) | Exibe dia na confirmação JS inline | **Sim se conversa alcançar esse ramo**; nenhuma exclusão `conversa` nesse ramo (`:158`); ocorrência real em produção [nao verificado] |
+| `app/templates/chamados/partials/_lote_preview.html:24` | `x` de `linhas`; `lote_preview` passa classe A (`app/chamados/views_cobrar.py:363`); `fila_validar_classificada` insere `{'pergunta': p}` (`app/chamados/services/validacao.py:923`); `p` vem de `perguntas_respondidas_a_validar` (`:921`), cujo queryset é PerguntaDisputa (`app/chamados/juizes.py:1664`) | Exibe dia na coluna “Dia” (`_lote_preview.html:23`) | **Sim se conversa alcançar classe A**; classe usa resposta/marco e não exclui `conversa` explicitamente (`app/chamados/services/validacao.py:845`, `:877`); ocorrência real [nao verificado] |
+| `app/templates/chamados/meu_atendimento.html:19` | Bloco `for reg in regularizacoes_pendentes` (`:10`); não há laço de `p` ali; view fornece `regularizacoes_pendentes`, mas não `p`/`opt` (`app/chamados/views.py:633`, `:647`, `:651`) | Tentativa de exibir dia em confirmação | **Não se aplica** como leitor demonstrado de PerguntaDisputa; associação de `p` [nao verificado] |
+
+A menção `data_evento` em `app/templates/chamados/partials/modal_fio.html:161` é comentário, sem acesso de variável nessa linha. O local citado no anexo não corresponde a leitor cru na cópia: `app/templates/colaboradores/partials/painel_colaborador.html:198` contém include de `msgs_lista.html`.
+
+(c) Serialização/API: **2 endpoints, 2 chaves exatas `data_evento` + 1 chave derivada `data_evento_label` = 3 posições de emissão**, em 3 linhas:
+
+| Arquivo:linha | Função / caminho | Uso | Diverge para conversa? |
+|---|---|---|---|
+| `app/api/views.py:1165` | `api_chamados_v2` (`:973`), rota `app/api/urls.py:73` | Repassa cru em ISO ou None, dentro de `chamados[].perguntas_disputa[]` (`views.py:1155`) | **Sim no valor transmitido**: conversa com cru preenchido transmite ISO; juiz None (`juizes.py:338`). Exibição pelo app nativo [nao verificado] |
+| `app/api/views.py:1166` | Mesmo endpoint | Repassa cru formatado `dd/mm/aaaa` em `data_evento_label` | **Sim no valor transmitido**; consumo do app nativo [nao verificado] |
+| `app/api/views_mensageria.py:568` | `_item_validar` (`:554`) chamado por `api_mensageria_validar` (`:546`), retornado como JSON (`:549`); rota `app/api/urls.py:12` | Repassa cru ISO ou string vazia | **Sim no valor transmitido**; juiz None (`juizes.py:338`) |
+| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` (`:98`); chama cliente (`:107`); cliente lê `/api/mensageria/validar/` (`mensageria/nucleo/core_client.py:50`) e retorna JSON (`:55`) | Consome `i.get('data_evento')`, renomeia para `data_do_caso` em casos enviados ao copiloto (`ferramentas.py:116`, `:137`) | **Sim no valor repassado**, se item de conversa; interpretação do copiloto [nao verificado] |
+
+Não encontrei acesso a `data_evento` em arquivos JS/TS/TSX/Dart da cópia por varredura textual [nao verificado quanto a código externo/cliente nativo]. O JS inline de templates é o de `_card_atendimento.html:164` e `meu_atendimento.html:19`, já contado em (b).
+
+Para a allowlist (a), incluir também o leitor de chave serializada **`mensageria/nucleo/ferramentas.py:127`**. As chaves em `mensageria/nucleo/tests/test_ferramenta_validar.py:18`, `:24` e `mensageria/nucleo/tests/test_proposta_lote.py:24` são construção de fixtures de resposta, não leitura do modelo.
+
+## 11/11 14:57 · sessao 029825b73c6b · - · - · origem=Ronald (tmux)
+
+Achado bloqueante: a obra consegue se autodeclarar B adicionando **também o próprio CORTES.md à lista**. A leitura vem de head (`bin/selo_proporcao.py:46`), o parser admite qualquer caminho craseado (`bin/selo_proporcao.py:49`), e `motivo_b` aceita a lista antes de qualquer classificação (`bin/selo_proporcao.py:59`). O teste `lista_se_autoriza` acrescenta somente `views.py`, deixando CORTES fora; portanto não morde este escape (`bin/tests/test_selo_proporcao.sh:69`).
+
+Diff mínimo textual, **rc previsto 0, sem executar** (`bin/selo_proporcao.py:107`):
+
+```diff
+--- a/app/docs/CORTES.md
++++ b/app/docs/CORTES.md
+@@ linha 444, antes de FIM-LISTA-FECHADA-PROPORCAO-B:
++; `app/chamados/writer.py`; `app/docs/CORTES.md`
+--- /dev/null
++++ b/app/chamados/writer.py
+@@
++from chamados.models import ChamadoColaborador; ChamadoColaborador.objects.update(status_local='fechado')
+```
+
+Aqui a obra muda a autorização em seu próprio diff; isso contraria “modulo novo na lista so por corte do Ronald” (`app/docs/CORTES.md:444`). A afirmação “A obra nao se autoriza” é falsa para esse caso (`bin/selo_proporcao.py:19`). O campo persistido existe (`app/chamados/models.py:52`). Execução efetiva do writer: [nao verificado].
+
+Escapes **aceitos pelo critério de caminho**, com rc previsto 0 e sem execução:
+
+| Diff mínimo | Escrita e caminho | Aval |
+|---|---|---|
+| Em `particionar_verbos`, acrescentar `vivo_qs.update(status_local='fechado')` antes da linha atual 34 | Queryset recebido pela função (`app/chamados/services/verbos.py:30`); consumidor real no painel (`app/chamados/services/painel.py:230`); módulo listado (`app/docs/CORTES.md:444`), aceito por `bin/selo_proporcao.py:59`. | ACEITA pelo caminho; não é defeito de AST. |
+| Em `area_label`, acrescentar `chamado.status_local='fechado'; chamado.save(update_fields=['status_local'])` antes do return | Filtro recebe chamado (`app/chamados/templatetags/chamados_tags.py:34`), consumido em template (`app/templates/chamados/detalhe_local.html:56`); módulo listado (`app/docs/CORTES.md:444`). | ACEITA pelo caminho. |
+| Trocar `tipo, timestamp: tsCorrigido` por `tipo: 'saida', timestamp: tsCorrigido` | Grava batida em IndexedDB (`app/static/pwa.js:112`); conteúdo enviado por POST depois (`app/static/pwa.js:144`, `app/static/pwa.js:153`); static aceito (`bin/selo_proporcao.py:63`). | ACEITA pelo caminho. |
+| Acrescentar writer na função `tblib_instalado`, por exemplo import do modelo e `.objects.update(...)` | Helper vive sob tests (`app/core/tests/test_contract_tblib_no_paralelo.py:24`) e é chamado por management command de produção (`app/chamados/management/commands/tblib_ausente_na_imagem.py:17`); tests aceito (`bin/selo_proporcao.py:65`). | ACEITA pelo caminho. |
+
+O texto B3 diz “CLASSE B so se TODO arquivo do diff estiver em templates/, static/, arquivo de teste, ou numa LISTA FECHADA” e “O selo checa CAMINHO, nao AST”; não ordena inspecionar esses conteúdos (`app/docs/CORTES.md:444`; literal completo no anexo fornecido [nao verificado no filesystem]).
+
+QUEM CHAMA / QUEM LÊ:
+
+- O harness define `SELO` em `bin/tests/test_selo_proporcao.sh:9`, chama e captura rc em `bin/tests/test_selo_proporcao.sh:41`, compara em `bin/tests/test_selo_proporcao.sh:42`; outras chamadas estão em `:95`, `:99`, `:105`, `:124`, `:134`, `:139`, `:141`.
+- O harness tem chamador real: `bin/regua.sh:138` percorre `tests/test_*.sh`, executa em `bin/regua.sh:140` e recusa em `bin/regua.sh:143`.
+- Essa cadeia verifica repositórios sintéticos (`bin/tests/test_selo_proporcao.sh:11`, `bin/tests/test_selo_proporcao.sh:13`). Chamador automatizado do selo sobre base/head **da obra real** não foi localizado na cópia; uso humano/prod [nao verificado]. O pre-push explica que o loop de host não roda ali (`bin/pre-push.sh:15`).
+- A documentação exige docs no mesmo commit (`CLAUDE.md:333`); isso torna a obra A se o `.md` estiver fora dos conjuntos, conforme `bin/selo_proporcao.py:70` e `bin/selo_proporcao.py:107`. A primeira frase literal do B3 (“TODO arquivo”) sustenta isso; “qualquer outro .py” não constitui permissão para outros sufixos (`app/docs/CORTES.md:444`).
+- O cabeçalho chama de “literal” a paráfrase “qualquer outro arquivo”, enquanto B3 escreve “qualquer outro .py” (`bin/selo_proporcao.py:10`, `app/docs/CORTES.md:444`); a consequência para `.md` continua derivável do “TODO”.
+- O cabeçalho atribui ao smoke/fila os writers em caminhos permitidos (`bin/selo_proporcao.py:21`); essa atribuição específica não consta do B3 fornecido [nao verificado no filesystem]. B3 autoriza o critério por caminho; não declara expressamente que smoke detectará esses writers.
+- Não há contrato PROPORCAO no RELATO da cópia; a única ocorrência de “proporcao” encontrada ali é assunto antigo (`app/docs/RELATO.md:3378`). Existência do contrato v5 no RELATO/prod: [nao verificado].
+
+## 11/11 14:56 · sessao 2b46e4366f87 · - · - · origem=Ronald (tmux)
+
+Achados por leitura; execução dos rc e dos mutantes [nao verificado].
+
+- **Autoautorização passa:** acrescentar à lista head tanto `app/docs/CORTES.md` quanto `app/x/views.py`, e mudar `views.py` para gravar. O parser aceita qualquer item entre crases; os dois arquivos ficam na lista e `fora=[]`, portanto rc previsto **0**. O caso `lista_se_autoriza` acrescenta somente `views.py`, deixando CORTES fora; não prova a defesa contra a alteração conjunta. Isso contradiz a promessa “A obra nao se autoriza”. (`bin/selo_proporcao.py:19`, `:52`, `:54`, `:59`, `:102`, `:110`; `bin/tests/test_selo_proporcao.sh:69`.)
+
+- **Mutante sobrevivente de rc:** em `bin/selo_proporcao.py:119`, trocar `rc = 2` por `rc = 0`. Os erros dos testes entram nos retornos explícitos de argumentos ou em `NaoJulgado`; nenhum caso provoca exceção inesperada na fronteira Python. Os stubs substituem o interpretador, portanto não passam por esse bloco. Sobrevivência prevista por leitura, execução [nao verificado]. (`bin/selo_proporcao.py:74`, `:95`, `:117`; `bin/tests/test_selo_proporcao.sh:83`, `:122`, `:136`.)
+
+- **Mutante sobrevivente de marcador:** em `bin/selo_proporcao.py:47`, remover somente `texto.count(INICIO) != 1 or`. O caso `marcador_duplo` duplica ambos os marcadores; a checagem restante continua rejeitando. A ausência de início ainda termina em `ValueError`, normalizado para rc 2. Não há caso duplicando somente o início. O mutante simétrico, removendo somente a contagem do fim, também tem sobrevivência prevista. (`bin/selo_proporcao.py:47`, `:49`, `:117`; `bin/tests/test_selo_proporcao.sh:83`, `:85`, `:87`.)
+
+- **Dois gatilhos:** `marcador_duplo` mistura as duas violações de cardinalidade; `misto_b` usa `tests/test_b.py`, elegível simultaneamente por diretório e basename. Neste segundo caso existem controles separados: `tests_dir` usa `fixt.py`, e `test_basename` fica fora de `tests/`. (`bin/tests/test_selo_proporcao.sh:50`, `:51`, `:54`, `:87`.)
+
+- **Nome versus mecanismo:** `migration` prova que um `.py` fora dos conjuntos recebe rc 1; não existe guarda específica de migration na v5. `apagou_fora` cobre exclusão pelo mesmo mecanismo genérico. (`bin/tests/test_selo_proporcao.sh:63`, `:65`; `bin/selo_proporcao.py:57`, `:91`, `:107`.)
+
+- **Repo errado:** subdiretório e diretório sem Git recebem rc previsto 2. Uma raiz Git válida de outro repositório não é identificada como “errada”: se resolver as revisões e satisfizer as demais condições, o selo julga aquele repo e pode devolver 0/1. Não há comparação com identidade esperada do projeto. (`bin/selo_proporcao.py:77`, `:79`, `:84`, `:90`; `bin/tests/test_selo_proporcao.sh:119`, `:121`.)
+
+- **rc:** o único retorno lógico 1 exige `classe == 'B' and fora`; argumentos, igualdade, não ancestralidade, lista inválida e diff vazio dão 2. `GIT_*` é filtrado nas chamadas Git. O wrapper traduz 10→0, 11→1 e todo outro código→2; o teste do chamador com `bash -e` exige rc 1. (`bin/selo_proporcao.py:38`, `:74`, `:86`, `:88`, `:93`, `:97`, `:107`, `:120`; `bin/selo_proporcao.sh:8`; `bin/tests/test_selo_proporcao.sh:134`.)
+
+## 11/11 14:53 · sessao 1c94fdcaac33 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Travas separadas em duas fases: [fecho_runtime.py:119](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/fecho_runtime.py:119).
+
+RED c7 e mutante mordem; Ruff verde e 118 testes em memória passaram. Comandos, resultados e fila no [recibo c8](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c8.txt:23). [nao verificado]
+
+ORM, suíte integral e certificação Code/opus: [nao verificado]. [nao verificado]
 
 ## 11/11 14:47 · sessao d4ad4297d1f3 · GABARITO-FABLE-SOMBRA-AJUSTE · verificador · origem=Code
 
@@ -640,91 +733,4 @@ Além dos dois tetos descritos no item 3, os contratos relevantes são:
 
 *Referências aos anexos contam linhas desde a primeira linha do conteúdo fornecido.*
 
-## 11/11 14:25 · sessao 0be98c4a67e3 · - · - · origem=Ronald (tmux)
-
-**Servidor, timestamps e reenvio**
-
-- **PROCEDE: POST online pode ficar indefinidamente antes da fila.** V2 espera `fetch` sem teto; só entra na fila no `catch`. Resposta pendente não executa o `catch`, e `_enviando`/botão permanecem bloqueados. HTTP de erro vai para `r.json()`, também sem teto, e depois retorna sem enfileirar. (`app/templates/ponto/bater_ponto_v2.html:294`, `app/templates/ponto/bater_ponto_v2.html:308`, `app/templates/ponto/bater_ponto_v2.html:314`, `app/templates/ponto/bater_ponto_v2.html:317`)
-- **Se POST recebido terminar em rejeição no cliente**, V2 enfileira; se apenas permanecer pendente, não enfileira. A fila calcula novo instante depois de `obterGap`; o POST inicial não carrega instante nem identificador estável do evento: o formulário tem tipo/coordenadas/foto e o envio só acrescenta precisão/foto. Portanto, a mesma tentativa não preserva uma chave de idempotência de ponta a ponta. (`app/templates/ponto/bater_ponto_v2.html:102`, `app/templates/ponto/bater_ponto_v2.html:304`, `app/templates/ponto/bater_ponto_v2.html:319`, `app/static/pwa.js:182`)
-- **Não é correto dizer “sempre duplica” ou “nunca duplica”.** O dedup API procura `(colaborador, tipo)` com timestamp em ±5 minutos do instante efetivo e retorna `ja_registrada`; as duas cascas fazem isso. É proximidade temporal, não igualdade por ID do clique. Se a nova hora cair fora da janela — por demora antes de rejeitar ou relógio bruto desencontrado — essa primeira barreira não identifica a mesma tentativa. Incidência real: **[nao verificado]**. (`app/api/views.py:539`, `app/api/views.py:541`, `app/api/views.py:549`, `app/api/views_core.py:526`, `app/api/views_core.py:528`; `app/static/pwa.js:183`, `app/static/pwa.js:189`)
-- A porta oferece mais duas barreiras: mesmo colaborador/tipo não retratado em ±60 s; depois igualdade exata `(colaborador, timestamp)`, inclusive outro tipo ou retratada. Colisão de tipo oposto usa 60 ou 300 s, salvo marco próprio; a constraint do modelo é `(colaborador, timestamp)`. Nenhuma dessas chaves é o ID do clique original. (`app/ponto/registro_batida.py:21`, `app/ponto/registro_batida.py:106`, `app/ponto/registro_batida.py:113`, `app/ponto/registro_batida.py:120`, `app/ponto/registro_batida.py:138`, `app/ponto/models.py:106`)
-
-**Gap, unidades e leitores**
-
-- `HORA_TETO_MS` é duração de espera em milissegundos, escrita uma vez em 2000 e lida na chamada `_noTeto` que engloba fetch **e** `json()`. Não é o offset `timestamp_gap_ms`. (`app/static/pwa.js:88`, `app/static/pwa.js:93`, `app/static/pwa.js:97`, `app/static/pwa.js:98`)
-- `SELFIE_TETO_MS` é duração base de 1500 ms; abertura lê multiplicada por dois, captura lê diretamente. O mecanismo `_noTeto` resolve timeout/erro, sem depender de o abort encerrar a promise original. (`app/static/pwa.js:129`, `app/static/pwa.js:134`, `app/static/pwa.js:138`, `app/static/pwa.js:140`, `app/static/pwa.js:162`, `app/static/pwa.js:177`)
-- No teto da hora **não se grava um novo gap**: cai no `catch` e lê `ntp_gap || 0`. A fórmula corrigida permanece `Date.now()+gap`; assim, não surge conversão nova de unidade/fuso, mas uma espera de até 2 s antes da leitura do instante desloca a hora gravada frente à rejeição imediata sem rede. Não se preserva a hora do clique antes da espera. (`app/static/pwa.js:99`, `app/static/pwa.js:104`, `app/static/pwa.js:108`, `app/static/pwa.js:182`, `app/static/pwa.js:183`)
-- Escritor dos configs: `calcularESalvarGap`, via `salvarConfig`, grava `ntp_gap` como diferença de epoch-ms e `ntp_calculado_em` como epoch-ms local. Leitores: `obterGap` decide validade de 30 min e recupera offset; fallback da própria medição recupera o offset. (`app/static/pwa.js:63`, `app/static/pwa.js:101`, `app/static/pwa.js:103`, `app/static/pwa.js:104`, `app/static/pwa.js:105`, `app/static/pwa.js:108`, `app/static/pwa.js:112`)
-- **PROCEDE, transporte continua incompleto.** Fila grava timestamp ISO corrigido, timestamp ISO bruto, gap-ms, precisão e instante GPS; sync usa `b.timestamp` só para ordenação e transmite apenas tipo/coordenadas/timestamp bruto/foto/liveness, omitindo corrigido/gap/precisão/instante GPS. (`app/static/pwa.js:188`, `app/static/pwa.js:189`, `app/static/pwa.js:190`, `app/static/pwa.js:191`, `app/static/pwa.js:211`, `app/static/pwa.js:217`, `app/static/pwa.js:226`)
-- API de sincronização efetivamente usada é `/api/ponto/bater/`, roteada para `api_bater_ponto`; endpoint antigo retorna 410. As duas cascas passam somente `timestamp_dispositivo` para `hora_do_aparelho` e gravam `ts_efetivo`/`ts_aparelho`, sem aplicar gap da fila. (`app/static/pwa.js:227`, `app/api/urls.py:67`, `app/ponto/views.py:419`, `app/ponto/views.py:426`, `app/api/views.py:518`, `app/api/views.py:666`, `app/api/views.py:678`, `app/api/views_core.py:505`, `app/api/views_core.py:658`, `app/api/views_core.py:670`)
-- `hora_do_aparelho` aceita ISO e epoch em segundos/ms, torna naive aware, aceita hora até 48 h no passado e usa chegada para futuro/antiga demais. Isso opera sobre **timestamp bruto**, não pressupõe unidade/fuso de `timestamp_gap_ms`. (`app/api/hora_do_aparelho.py:72`, `app/api/hora_do_aparelho.py:79`, `app/api/hora_do_aparelho.py:85`, `app/api/hora_do_aparelho.py:116`, `app/api/hora_do_aparelho.py:141`, `app/api/hora_do_aparelho.py:153`)
-- Modelo define gap como milissegundos; tela mostra `ms` e compara com ±300000; JSON de detalhes entrega `gap_ms` sem conversão. As leituras API encontradas de `timestamp_gap_ms` são de **ping geo**, comparando ±300000 para aviso de skew; não são o kernel de bater/sincronizar e não aplicam fuso ao gap. (`app/ponto/models.py:76`, `app/templates/ponto/batidas_offline_pendentes.html:77`, `app/templates/ponto/batidas_offline_pendentes.html:79`, `app/templates/ponto/batidas_offline_pendentes.html:80`, `app/core/views.py:1022`, `app/api/views.py:2327`, `app/api/views.py:2340`, `app/api/views.py:2371`, `app/api/views_core.py:874`, `app/api/views_core.py:905`)
-
-**Autoridades e derivação**
-
-- Juiz registrado de selfie decide **ausência cobrável**, recebendo origem/canal/foto/duração; PWA = 0 min, APK/desconhecido = 90 min. Isso não é o timeout de câmera nem veto à gravação. As duas APIs consultam esse juiz sob foto ausente e depois chamam a porta de registro; foto é anexada condicionalmente. (`app/core/juizes.py:1192`, `app/core/juizes.py:1195`, `app/ponto/registro_batida.py:72`, `app/ponto/registro_batida.py:75`, `app/ponto/registro_batida.py:80`, `app/api/views.py:449`, `app/api/views.py:461`, `app/api/views.py:666`, `app/api/views.py:781`; `app/api/views_core.py:436`, `app/api/views_core.py:448`, `app/api/views_core.py:658`)
-- Juiz GPS registrado considera zero/par parcial sem GPS e é consultado pelo geofence depois da gravação; adquirir coordenadas ou medir frescura no front é outra pergunta. (`app/core/juizes.py:1196`, `app/core/juizes.py:1201`, `app/ponto/services/geofence.py:126`, `app/ponto/services/geofence.py:145`, `app/ponto/services/geofence.py:269`, `app/api/views.py:789`)
-- **Derivação paralela já existente:** V2 calcula distância e `dentro = d <= POSTO.raio` para badge próprio apesar do juiz registrado `classificar_posicao`. Esse trecho não é introduzido pelo delta fornecido; não confundir com a cura do timeout. (`app/templates/ponto/bater_ponto_v2.html:199`, `app/templates/ponto/bater_ponto_v2.html:217`, `app/templates/ponto/bater_ponto_v2.html:218`, `app/core/juizes.py:1191`)
-- Textos contraditórios continuam: V2 exige verbalmente “Tire a selfie para registrar”, embora `garantirRequisitos` só avise e continue com foto ausente. (`app/templates/ponto/bater_ponto_v2.html:100`, `app/templates/ponto/bater_ponto_v2.html:269`, `app/templates/ponto/bater_ponto_v2.html:276`)
-
-## 11/11 14:25 · sessao f9c39a062fdf · - · - · origem=Ronald (tmux)
-
-- **Textos contraditórios: NÃO fechado.** Triagem mantém “Tire sua selfie para liberar o ponto”, “Selfie obrigatória” e “Selfie obrigatoria — registre o ponto”; V2 mantém “Tire a selfie para registrar”, apesar de a fila aceitar foto nula. (`app/templates/ponto/triagem/apto.html:66`, `:124`, `:194`, `:250`; `app/templates/ponto/bater_ponto_v2.html:100`; `app/static/pwa.js:192`)
-
-- **PWA ausente offline: NÃO fechado.** As duas telas dependem de `JulianiPWA.registrarBatidaOffline`; ausência do objeto cai no erro e exige nova tentativa, sem gravação alternativa. O teste sem PWA continua restrito ao online. (`app/templates/ponto/triagem/apto.html:289`, `:308`; `app/templates/ponto/bater_ponto_v2.html:319`, `:325`, `:332`, `:338`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:465`)
-
-- **Legado eliminado: mantido.** A seleção de template retorna triagem ou V2; o comentário do verificador registra a exclusão de `ponto/bater_ponto.html`. O nome textual permanece no ticket histórico. (`app/ponto/views.py:225`, `:356`; `app/scripts/check_a_lei_batida.py:20`; `app/docs/TICKETS.md:693`)
-
-- **`estadoPermissao`: não participa do fluxo examinado.** `garantirRequisitos` chama diretamente a captura central e as tentativas limitadas de GPS. (`app/templates/ponto/bater_ponto_v2.html:269`, `:274`, `:279`)
-
-- **Teto da hora tem declaração única, significado de duração em milissegundos e um consumidor operacional:** `calcularESalvarGap` passa `HORA_TETO_MS` a `_noTeto`, envolvendo fetch e leitura do corpo. A V2 e a casca de triagem conservam literais independentes de 2000 ms para relógios de apresentação; eles não leem a constante e não calculam o gap persistido. Há parametrização paralela, mas são saídas distintas; não constitui, por si, duplicação do juiz registrado de selfie/GPS. (`app/static/pwa.js:88`, `:93`, `:98`, `:103`; `app/templates/ponto/bater_ponto_v2.html:160`, `:167`, `:169`; `app/templates/ponto/triagem/base_triagem.html:38`, `:41`, `:46`; `app/core/juizes.py:1195`, `:1201`)
-
-- **`SELFIE_TETO_MS` é uma duração base, não um teto absoluto único para toda operação:** há uma declaração de 1500 ms; captura lê diretamente e abertura lê multiplicado por dois. Essa diferença é explícita no código e no oráculo. (`app/static/pwa.js:129`, `:162`, `:177`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:359`)
-
-- **O fallback no teto não grava gap novo.** Sucesso escreve `ntp_gap` e `ntp_calculado_em`; timeout apenas lê o gap anterior ou devolve zero. Sem medição válida anterior, cada nova obtenção continua elegível à consulta, pois o fallback não renova `ntp_calculado_em`. (`app/static/pwa.js:104`, `:105`, `:108`, `:113`)
-
-- **Timestamp não é o instante do clique.** O escritor espera `obterGap()` e somente depois lê `Date.now()` para `timestamp`; lê outro relógio para `timestamp_dispositivo`. Assim, para o mesmo gap, uma `/hora/` pendurada faz o timestamp refletir a espera de aproximadamente dois segundos, enquanto rejeição imediata segue antes. O comentário “caminho de hoje sem rede” descreve o valor do fallback, não identidade temporal das duas execuções. (`app/static/pwa.js:86`, `:98`, `:108`, `:182`, `:183`, `:189`)
-
-- **Os testes novos não verificam esse valor temporal.** `falhas_da_fila` julga chegada, duração até `add` e presença de foto; não compara `timestamp`, `timestamp_dispositivo`, gap nem instante do clique. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:484`, `:490`, `:493`)
-
-- **Autoridade servidor continua distinta:** `selfie_ausente` recebe dados e duração, sem ler relógio; decide cobrança vencida conforme canal, não admissibilidade do clique. `_respostaSelfie` produz foto/stream e aviso para as telas. Não há duplicação desse predicado pelo delta examinado. (`app/ponto/registro_batida.py:67`, `:72`, `:80`, `:86`; `app/static/pwa.js:144`; `app/core/juizes.py:1193`)
-
-- **Aviso da V2 agora usa o mesmo valor produzido pelo PWA:** `_respostaSelfie` escreve `aviso`; `abrirCamera` o lê em `span.textContent`; o ramo de captura também o lê no toast. Foto anterior é escrita pelo input e passada à captura central. (`app/static/pwa.js:145`, `:178`; `app/templates/ponto/bater_ponto_v2.html:250`, `:255`, `:274`, `:276`)
-
-- **Duas cascas incluem PWA**, porém o teste força a casca pelo loader, não demonstra a seleção real de casca em requisição de produção. (`app/templates/base.html:20`; `app/templates/base_app.html:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:255`, `:258`)
-
-Execução do navegador, smoke real, hash do arquivo em produção e efeitos em produção: **[nao verificado]**.
-
-## 11/11 14:25 · sessao 7fb9cd9072df · - · - · origem=Ronald (tmux)
-
-**B1 e B2: a nova prova tem mordida para os defeitos específicos, por inspeção; execução e morte efetiva dos mutantes são [nao verificado].** O executor escreve página, script e perfil temporários, portanto não o executei sob a restrição de somente leitura. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:279`, `:286`, `:295`, `:298`)
-
-- **FilaRealTest / Me — PROCEDE a correção da lacuna anterior.** A sonda já não substitui `registrarBatidaOffline`: chama o escritor real e observa o `add` em `batidas_pendentes`; exercita `/hora/` normal, fetch pendurado e corpo pendurado. Me troca o teto por `1e9` e exige ausência de chegada à fila, tanto diretamente quanto nas duas telas offline. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:146`, `:151`, `:214`, `:437`, `:477`, `:501`, `:610`)
-
-- **O stub que ignora abort fortalece a pergunta do teto**, porque `/hora/` permanece pendurada mesmo após `ctl.abort()`: o controle depende da resolução de `_noTeto`, e o mutante perde essa resolução dentro dos 15 segundos do ensaio. O corpo pendurado também está dentro do trabalho limitado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:113`, `:116`, `:119`, `:439`; `app/static/pwa.js:93`, `:97`, `:98`, `:139`)
-
-- **Mf — PROCEDE a correção do aviso invisível.** O oráculo consulta `body.innerText`, enquanto o mutante substitui o `appendChild` visível por `title`. A câmera rejeitada precisa mostrar o aviso **antes de liberar o clique**; por isso o toast posterior de `garantirRequisitos` não salva o mutante. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:100`, `:190`, `:342`, `:621`; `app/templates/ponto/bater_ponto_v2.html:250`, `:277`)
-
-- **`_Base.par` — PROCEDE a correção do controle desacoplado.** Controle e mutante entram no mesmo `roda`; controle com qualquer falha ou sem cenário reprova; resultados “sonda não devolveu veredito” e “juiz sem veredito” são retirados das mortes. Os chamadores exigem mortes e padrão específico. “Mesmo lote” significa execuções Chromium separadas, cada qual com seu perfil temporário, submetidas ao mesmo executor paralelo. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:450`, `:451`, `:453`, `:455`, `:547`, `:548`, `:279`, `:298`, `:318`)
-
-**Limitações concretas:**
-
-- **“FilaReal” não prova persistência real nem conclusão do escritor.** O fake grava em objeto JS e marca sucesso dentro do `add`; `tx.oncomplete` vem depois. O oráculo verifica chegada, tempo e foto, mas não exige “fila resolveu”, embora o escritor real espere `tx.oncomplete`. Um cenário poderia passar tendo alcançado o fake `add` e ficando pendurado antes da conclusão da promessa. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:135`, `:150`, `:151`, `:215`, `:484`; `app/static/pwa.js:194`)
-
-- **O fake encobre abertura bloqueada e falhas de armazenamento.** Seu `open` sempre chama sucesso após 1 ms; não modela upgrade bloqueado, quota, aborto ou rollback. O `abrirDB` real espera somente `onsuccess`/`onerror`, sem `onblocked` nem teto; `obterGap` já o espera antes da pergunta HTTP. Assim, a declaração ampla “do chamado ao add a espera é limitada” excede a prova e o código. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:160`, `:173`, `:473`; `app/static/pwa.js:48`, `:58`, `:59`, `:74`, `:113`, `:182`)
-
-- **O caso V2 online cobre rejeição imediata, não POST pendurado ou resposta perdida.** O stub só retorna rejeição imediata ou resposta 200 imediata; não há cenário de servidor que recebe e deixa a resposta pendente. O `fetch` real anterior à fila não tem teto. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:107`, `:109`, `:111`, `:506`; `app/templates/ponto/bater_ponto_v2.html:308`, `:319`)
-
-- **O relógio do ensaio é virtual e o armazenamento é substituído justamente para acompanhá-lo.** Isso prova os timers JS exercitados nesse modelo; tempo real, suspensão da aba e durabilidade IndexedDB são [nao verificado]. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:126`, `:177`, `:299`)
-
-- **Controle de câmera “ok”: ressalva ainda existente, resultado [nao verificado].** A sonda fornece `MediaStream()` vazio e falsifica dimensões; mantém `drawImage(video)` real. Uma falha nesse desenho poderia impedir alcançar `toBlob`; com `_Base.par`, porém, isso torna o controle vermelho e impede declarar o mutante morto. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:80`, `:87`, `:89`, `:452`; `app/static/pwa.js:172`)
-
-## 11/11 14:10 · sessao a833efdfbdac · FIO-E0-V4-E4B · construtor · origem=Code
-
-Quatro correções implementadas: dia pelo juiz existente, trava por âncora, texto limitado e coleta confirmada após savepoint. [Recibo completo](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c7.txt:20).
-
-Observado em memória: quatro REDs na c6, seis mutantes detectados e 21 testes OK. [Resultados e comandos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c7.txt:115). [nao verificado]
-
-ORM não executado; comandos no recibo. Certificação Code/opus e concorrência real: [nao verificado].
-
-_3916 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3920 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
