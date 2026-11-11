@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: codex_pergunta.sh | pid=2069432
+E3 e3fix8 commitada na copia dff49b2b0 (x1 base RED + 5 mutantes mortos por assertion, x1_mutantes_int7.log). Voltas Codex > 3 (CODEX 5d): sem preverif v4, sobe ao opus depois da suite. SUITE pre-opus FIO-E0-V4-E3 08:05 pela trava (logs/FIO-E0-V4-E3/suite_pre_opus.sh, --dir copia).
+TRAVA-SELO v11 08:1x -> copia 04ec2b8b0 (classe cobre o modulo; motivo unico no bloco e aspa fecha; appC sem modulo + mutante app_vazio_vira_inteira; --dir sem LF). RED contra v10 nos dois selos; verde 28 mutantes. Voltas > 3 e B3 PARADA: estacionada ate o rearme, sem preverif nova.
 E4B c4v7 ORM 08:01 VERMELHO (logs/E4B-ALCANCE/c4v7_orm.log, Ran 141 FAILED failures=7): a cerca recusa efeito de porta legitima (bang:efeito_pos_commit em fabrica/reabrir_credor; escrita_fora_da_foto:escala_eventocelula em decisao_pergunta). Commit WIP na copia 5a9081ed1. Volta c4v8 08:05 (construtor_c4v8.q: callback classificado pela funcao registrada contra o censo dos receivers, tabelas das portas na foto, guarda da classe fica; F401) pid 2069432.
 E3 ORM7 08:02 GREEN (e3_orm7.log Ran 117 OK); x1_mutantes_int7 rodando pela trava.
 TRAVA-SELO PREVERIF v9 08:02 NAO LIBERA (logs/TRAVA-SELO/preverif_v9.r: modulo enumerado por suas classes conta como recorte; juiz aceita --motivo duplo em continuacao e "..."'!'; mutante rc<=1 -> rc==0 sobrevive sem app vazio; LF no --dir). B3 PARADA: obra estacionada ate o rearme, v11 so com vaga.
