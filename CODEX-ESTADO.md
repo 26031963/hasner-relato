@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:59** · publicado em **11/11/2026 16:02** (UTC-3)
+> Ultima resposta processada: **11/11/2026 16:05** · publicado em **11/11/2026 16:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 16:05 · sessao 91788de74858 · PROPORCAO-POR-RISCO · verificador · origem=Code
+
+APROVADO
+
+Bloqueadores: nenhum novo demonstrado na cópia. O bloqueante 1 da v8 está curado pela guarda em `bin/selo_proporcao.py:80-81`.
+
+1. **Cura e precedência da LISTA**
+
+   `templatetags` agora é procurado em **todos os componentes de diretório**, antes dos braços `templates`, `static` e `tests`. Portanto, os dois arquivos do contraexemplo da v8 recebem `None`, tornam a obra A e produzem rc 1 quando declarada B (`bin/selo_proporcao.py:74-87`, `bin/selo_proporcao.py:123-135`).
+
+   **Sim, `app/chamados/templatetags/chamados_tags.py` continua B pela LISTA**: consta em `app/docs/CORTES.md:444`, e a consulta retorna `'lista'` antes da guarda nova (`bin/selo_proporcao.py:76-80`). A execução usa a lista da **BASE**; sua presença naquela revisão histórica é [nao verificado], pois a cópia disponibilizada não permite resolver as revisões Git.
+
+2. **Outras descobertas por pasta**
+
+   Não encontrei outro contraexemplo concreto de descoberta automática na cópia [nao verificado quanto à ausência global e à execução em produção].
+
+   - **Admin/apps:** a configuração padrão aponta para `saas`, que declara aplicativos de topo; não declara aplicativos sob `templates/static/tests` (`app/config/wsgi.py:14`, `app/config/settings/saas.py:22-53`). Caminhos como `app/core/admin.py` e `app/core/apps.py` recebem A pelas regras finais do classificador (`bin/selo_proporcao.py:82-88`).
+   - **Signals/inicialização:** os imports encontrados são explícitos, por exemplo `core.signals`, `core.cell` e `chamados.signals`; esses caminhos também recebem A (`app/core/apps.py:8-10`, `app/chamados/apps.py:8-10`, `bin/selo_proporcao.py:82-88`).
+   - **Checks, locale e fixtures:** internacionalização está ligada (`app/config/settings/base.py:92-95`). Não encontrei configuração ou caminho concreto que demonstre outra entrada automática classificada B; ausência global e comportamento interno desses carregadores nesta instalação: [nao verificado].
+   - **Templatetags em outro nível:** a guarda usa pertinência em `dirs`, sem restringir profundidade; qualquer componente `templatetags` é barrado, salvo LISTA (`bin/selo_proporcao.py:74-81`).
+   - **Limite anterior permanece:** o comando importa `core.tests.test_contract_tblib_no_paralelo`, que continua B pelo braço de teste. É o limite já declarado, com import explícito, não uma nova descoberta por pasta (`app/chamados/management/commands/tblib_ausente_na_imagem.py:17-18`, `bin/selo_proporcao.py:29-30`, `bin/selo_proporcao.py:86-87`).
+
+3. **Os casos novos mordem o braço**
+
+   Sim. Nenhum está na lista sintética, fora de `app/`, ou sob `migrations/management`; ambos dependem exclusivamente da condição nova (`bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:70-71`, `bin/selo_proporcao.py:76-85`).
+
+   | Caso | v9 | Removendo somente o braço novo |
+   |---|---|---|
+   | `tags_static_py` | Arquivos A; rc 1 | Arquivos B por `static`; rc 0 |
+   | `tags_templates_py` | Arquivo A; rc 1 | Arquivo B por `templates`; rc 0 |
+
+   Esses resultados seguem de `bin/selo_proporcao.py:80-85` e `bin/selo_proporcao.py:127-135`. Logo, **os testes passam na v9 e falham no mutante**, porque esperam rc 1 (`bin/tests/test_selo_proporcao.sh:44-45`, `bin/tests/test_selo_proporcao.sh:70-71`).
+
+   Ressalva: `tags_templates_py` não cria `templates/__init__.py`; comprova o predicado de caminho, mas sua importação recursiva efetiva pelo Django é [nao verificado] (`bin/tests/test_selo_proporcao.sh:71`).
+
+4. **Quem escreve e quem lê**
+
+   | Valor | Quem produz/escreve | Quem lê |
+   |---|---|---|
+   | Caminho `p` | `git diff`, decodificação e laço: `bin/selo_proporcao.py:112-125` | `motivo_b`: `bin/selo_proporcao.py:73-74` |
+   | `partes`, `dirs`, `nome` | Divisão/fatiamento: `bin/selo_proporcao.py:74-75` | Guarda nova e braços seguintes: `bin/selo_proporcao.py:80-87` |
+   | LISTA real | Conteúdo atual: `app/docs/CORTES.md:444`; autor da inserção [nao verificado] | `git show BASE`, parser e consulta: `bin/selo_proporcao.py:62-76`, `bin/selo_proporcao.py:111` |
+   | Arquivo `CORTES.md` | Gerador lê JSON e sobrescreve Markdown: `bin/gerar_cortes.py:23-24`, `bin/gerar_cortes.py:32`, `bin/gerar_cortes.py:116` | Selo lê versão BASE: `bin/selo_proporcao.py:62` |
+   | LISTA sintética | Função `lista`, argumento e commit: `bin/tests/test_selo_proporcao.sh:19-28` | Mesmo parser: `bin/selo_proporcao.py:62-70` |
+   | Arquivos/conteúdos novos | Scripts dos casos, executados e commitados pelo preparo: `bin/tests/test_selo_proporcao.sh:36-38`, `bin/tests/test_selo_proporcao.sh:70-71` | Selo lê **nomes**; conteúdo não entra no predicado: `bin/selo_proporcao.py:112`, `bin/selo_proporcao.py:73-88` |
+   | Motivo/`None`, `fora`, classe e rc | Classificador e agregação: `bin/selo_proporcao.py:76-88`, `bin/selo_proporcao.py:123-135` | Protocolo e wrapper: `bin/selo_proporcao.py:145`, `bin/selo_proporcao.sh:7-11` |
+   | Esperado `B 1`, rc observado e falhas | Casos, captura e contador: `bin/tests/test_selo_proporcao.sh:33`, `bin/tests/test_selo_proporcao.sh:44`, `bin/tests/test_selo_proporcao.sh:70-71` | Comparação e resultado final: `bin/tests/test_selo_proporcao.sh:45`, `bin/tests/test_selo_proporcao.sh:203-204` |
+
+   O harness completo não foi executado: cria arquivos e repositório temporário, contrariando a restrição de somente leitura (`bin/tests/test_selo_proporcao.sh:13-28`). Execução integral e identidade Git do HEAD informado: [nao verificado].
+
+## 11/11 16:04 · sessao bb6c2e8c42d3 · - · - · origem=Ronald (tmux)
+
+Os dois casos isolam o braço novo; nenhum recebe rc 1 por outra guarda: pertencem a `app/`, não contêm `migrations`/`management` e não estão na lista sintética (`bin/tests/test_selo_proporcao.sh:24`, `:70-71`; `bin/selo_proporcao.py:76-85`).
+
+Verificação somente em memória da função `motivo_b`, removendo exclusivamente `or 'templatetags' in dirs`:
+
+| Arquivo sintético | v9 | Sem braço |
+|---|---|---|
+| `app/x/templatetags/static/__init__.py` | `None` | `static` |
+| `app/x/templatetags/static/carga.py` | `None` | `static` |
+| `app/x/templatetags/templates/carga.py` | `None` | `templates` |
+
+Os resultados decorrem de `bin/selo_proporcao.py:80-85`. Com v9, ambos os **testes** passam porque o selo retorna 1, esperado pelo harness; sem o braço, os **arquivos** passam como B/rc 0 e os testes falham (`bin/tests/test_selo_proporcao.sh:44-45`, `:70-71`; `bin/selo_proporcao.py:127-135`).
+
+`tags_templates_py` não cria `templates/__init__.py`, ao contrário do caso static; portanto é caso do predicado de caminho, sem demonstração suficiente de importação recursiva efetiva pelo Django (`bin/tests/test_selo_proporcao.sh:70-71`). Importação efetiva desse exemplo: [nao verificado].
+
+A lista mantém precedência: `app/chamados/templatetags/chamados_tags.py` aparece em `app/docs/CORTES.md:444`; `motivo_b` devolve `'lista'` antes da guarda de templatetags (`bin/selo_proporcao.py:76-80`). A lista usada numa execução real é a revisão BASE, não necessariamente o arquivo atual (`bin/selo_proporcao.py:62`, `:111`).
+
+Cadeia de escritores e leitores:
+
+| Valor | Quem escreve/produz | Quem lê |
+|---|---|---|
+| Caminhos alterados `p` | Git diff, `bin/selo_proporcao.py:112`; decodificação `:117` | Laço `:124-125`; `motivo_b` `:74` |
+| `partes`, `dirs`, `nome` | Split/fatiamento, `bin/selo_proporcao.py:74-75` | Guarda nova `:80`; regras `:82-87` |
+| Lista real | Conteúdo em `app/docs/CORTES.md:444`; autor da inserção [nao verificado] | `git show BASE`, `bin/selo_proporcao.py:62`; parser `:63-70`; consulta `:76` |
+| Arquivo `CORTES.md` | Gerador sobrescreve em `bin/gerar_cortes.py:116`, fonte JSON `:23`, lida em `:32` | Selo lê versão BASE em `bin/selo_proporcao.py:62` |
+| Lista sintética | `bin/tests/test_selo_proporcao.sh:19`, argumento `:24`, commit `:28` | Mesmo parser do selo, `bin/selo_proporcao.py:62-70` |
+| Arquivos e bytes dos novos casos | Scripts `bin/tests/test_selo_proporcao.sh:70-71`, executados por `:36`, versionados `:37-38` | Selo lê somente nomes, `bin/selo_proporcao.py:112`; conteúdo não entra no predicado `:73-88` |
+| `m`/`None` | `bin/selo_proporcao.py:77-88` | Impressão/acumulação `:125-128` |
+| `fora`, `real`, rc | `bin/selo_proporcao.py:123-135` | Protocolo `:145`; wrapper `bin/selo_proporcao.sh:7-11`; harness `bin/tests/test_selo_proporcao.sh:44-45` |
+| Esperado `B 1` e nomes dos casos | `bin/tests/test_selo_proporcao.sh:70-71` | Argumentos do `caso` `:41-45` |
+| Contador de falhas | `bin/tests/test_selo_proporcao.sh:33` | Resultado final `:203-204` |
+
+O harness completo não foi executado: cria diretório temporário, repositório e arquivos (`bin/tests/test_selo_proporcao.sh:13-28`), incompatíveis com a exigência de somente leitura.
+
+## 11/11 16:04 · sessao bf5e6ffaae43 · - · - · origem=Ronald (tmux)
+
+Não encontrei outro bloqueante concreto de descoberta automática no material examinado [nao verificado].
+
+- A configuração padrão aponta para `config.settings.saas`; ela herda `base` e monta os aplicativos de nomes de topo, sem aplicativos declarados sob `templates/static/tests`: `app/config/wsgi.py:14`, `app/manage.py:9`, `app/config/settings/saas.py:10`, `app/config/settings/saas.py:22`, `app/config/settings/saas.py:34`, `app/config/settings/saas.py:53`.
+- Os imports de inicialização encontrados são explícitos: `signals`, `cell`, `painel_cell`, `calculadores`; seus caminhos não recebem B pelas regras automáticas: `app/core/apps.py:8`, `app/chamados/apps.py:8`, `app/colaboradores/apps.py:7`, `app/ponto/apps.py:7`, `app/escala/apps.py:8`, `app/inteligencia/apps.py:7`, `bin/selo_proporcao.py:82`.
+- Templates e estáticos têm descoberta configurada, já contemplada pela letra do contrato: `app/config/settings/base.py:70`, `app/config/settings/base.py:97`; internacionalização está ligada: `app/config/settings/base.py:92`.
+- O import de código B de teste por comando permanece o limite declarado de tblib: escritor da chamada em `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`, uso do valor em `app/chamados/management/commands/tblib_ausente_na_imagem.py:18`.
+- `crons` importa `core.tests.marca_cron15`, cujo nome não satisfaz `test_*.py`: `app/core/management/commands/crons.py:92`, `bin/selo_proporcao.py:86`.
+- Não apareceram `.py` sob `app/**/templates/` ou `app/**/static/`, nem caminhos `fixtures/` ou `locale/` no inventário pesquisado; ausência global e configuração efetivamente usada em produção: [nao verificado].
+- Não há código vendorizado do Django para confirmar nesta cópia a semântica interna de autodiscover de admin, apps, checks, locale ou fixtures [nao verificado].
 
 ## 11/11 15:59 · sessao c5d9a24422ee · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -539,67 +636,4 @@ Os bloqueantes são: **B1**, cache usado pela barreira sem isolamento por tenant
 
 Não foi demonstrado segundo produtor produtivo de `tipo`; há contorno por `update` nas fixtures e duplicidade preexistente entre choices e catálogo (`app/ponto/tests/test_lastro_folga_save_guarda.py:67`, `app/ponto/models.py:749`). O diff não acrescenta relógio, mas passa a depender do TTL preexistente na decisão de persistência (`app/ponto/models.py:878`, `app/ponto/catalogo/ausencias.py:275`). Origem de #5356, censo real da frota, suite completa e pré-requisitos de pouso permanecem **[não verificado]**.
 
-## 11/11 15:37 · sessao d270727d20b6 · - · - · origem=Ronald (tmux)
-
-Meu julgamento é **APROVADO no escopo da cura com `JulianiPWA`**, sem afirmar que todos os caminhos de rede/armazenamento ficaram limitados. A abertura rejeita no teto/bloqueio; a transação rejeita no teto/aborto; o POST e seu corpo de erro têm teto. (`app/static/pwa.js:60-74`; `app/static/pwa.js:83-94`; `app/static/pwa.js:230-241`)
-
-- **Aborto lançando durante commit:** a exceção é engolida, mas a promessa rejeita mesmo assim e a tela mostra erro. Pode restar gravação tardia, contrariando a garantia de “nenhum fantasma”; não produz clique pendente ou perda silenciosa. Ocorrência real desse estado: [nao verificado]. (`app/static/pwa.js:84-93`; `app/templates/ponto/bater_ponto_v2.html:329-331`)
-- **Conexão tardia:** a abertura já rejeitou; `onsuccess` tardio fecha a conexão. Não volta a executar a gravação daquele escritor. (`app/static/pwa.js:60-72`; `app/static/pwa.js:215-216`)
-- **Sync/indicador:** os pedidos e transações continuam fora de `_transacao`, assim como o fetch/corpos do sync. Pendência neles não desfaz a fila já gravada nem segura o retorno do escritor. Há perda silenciosa explícita se o sync recebe HTTP 400 e a exclusão completa: só há `console.warn`. (`app/static/pwa.js:223`; `app/static/pwa.js:248-253`; `app/static/pwa.js:271-310`)
-- **Exceção importante de (b):** sem `postarBatidaNoTeto`, a v2 continua fazendo `fetch` e `json` sem teto; resposta pendente deixa botão desabilitado, sem fila e sem erro. É caminho residual demonstrável pelo código. O próprio ensaio declara PWA ausente como outra fila e só exige preservar o envio online; portanto não o apresentaria como regressão nova desta cura. (`app/templates/ponto/bater_ponto_v2.html:294-295`; `app/templates/ponto/bater_ponto_v2.html:312-314`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:552-557`)
-- **(c):** um clique pode gerar POST inicial e uma linha reenviável repetidamente. Isso não equivale a múltiplas linhas no servidor: reenvio sequencial do mesmo tipo, com instantes separados por 30 s e primeira gravação visível, cabe em ±5 min da API e ±60 s da porta. Falta de identidade isolada não sustenta bloqueante nesse cenário; garantia para relógio incompatível, correção de tipo ou concorrência permanece [nao verificado]. (`app/templates/ponto/bater_ponto_v2.html:307-323`; `app/static/pwa.js:256-298`; `app/api/views.py:539-555`; `app/ponto/registro_batida.py:106-115`)
-- **(d)/mordidas:** o ensaio agora marca fila na conclusão e exige promessa resolvida/persistência, mas seu falso IDB não modela commit em curso nem fechamento tardio. Essas limitações impedem certificação universal; sozinhas não demonstram novo bloqueante de produto. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:142-153`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:195-215`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:605-616`)
-
-## 11/11 15:37 · sessao b199bd514621 · - · - · origem=Ronald (tmux)
-
-| Recurso adicional | Ordem demonstrada no código | Classificação do par |
-|---|---|---|
-| TurnoMaterializado | Passivo: atomic do par → materializador → INSERT Batida → receiver do núcleo → DELETE/INSERT TurnoMaterializado → cartório/fábrica → eventual C. (`app/chamados/services/passivo_validado.py:371`; `:427`; `:511`; `:516`; `app/chamados/services/materializacao.py:1220`; `:1007`; `app/ponto/registro_batida.py:157`; `app/ponto/signals.py:36`; `app/ponto/nucleo.py:58`; `:59`; `:81`; `app/ponto/signals.py:135`; `app/chamados/services/fabrica_da_celula.py:365`) | **Candidato TM→C contra C→TM**: aprovação de justificativa toma C antes de registrar Batida e recomputar os mesmos turnos. Compatibilidade das travas implícitas de FK e execução concorrente **[nao verificado]**. (`app/ponto/services/justificativa.py:140`; `:141`; `:129`; `:187`; `app/ponto/signals.py:36`; `app/ponto/nucleo.py:81`) |
-| Justificativa | C/D/Ch → Justificativa FOR UPDATE → eventual Batida/TM → cartório/Pauta DP → UPDATE Justificativa → UPDATE FM. (`app/ponto/services/justificativa.py:129`; `:140`; `:142`; `:187`; `:208`; `:215`; `app/ponto/services/fechamento.py:1656`) | **Inversão abstrata DP→FM contra FM→DP**, mas a aprovação e o pago/devido adquirem C antes; para mesma linha FM, o mesmo colaborador serializa os dois atos. (`app/ponto/services/justificativa.py:129`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`; `:196`; `:207`) |
-| Justificativa na materialização retroativa | Atomic → C/D/Ch → Justificativa FOR UPDATE → registrar Batida/TM → UPDATE Justificativa/cartório → UPDATE FM. (`app/ponto/services/justificativa.py:342`; `:343`; `:344`; `:361`; `:386`; `:390`; `app/ponto/services/fechamento.py:1656`) | Mesma ressalva de serialização por C para o par DP/FM. (`app/ponto/services/justificativa.py:129`; `:343`; `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`) |
-| Ausencia | Aprovação de intervalo: atomic → UPDATE Ausencia → cartório síncrono → possível Pauta DP → invalidar FM. A porta da ausência não adquire C antes do UPDATE. (`app/ponto/views.py:2641`; `:2643`; `app/ponto/services/ausencia.py:911`; `:835`; `app/ponto/signals.py:143`; `:147`; `app/ponto/services/ausencia.py:946`; `app/ponto/services/fechamento.py:1656`) | **Candidato DP→FM sem C**, quando a fábrica segue por limbo exportado, que escreve DP diretamente; satisfatibilidade conjunta dos guards com aprovação parcial **[nao verificado]**. (`app/chamados/services/fabrica_da_celula.py:214`; `:228`; `:231`; `:279`; `app/ponto/services/ausencia.py:924`) |
-| Ausencia em rejeição/cancelamento | A porta também invalida FM após rejeitar, mas as views lidas não envolvem o ato inteiro em atomic. (`app/ponto/views.py:2700`; `:2701`; `:2734`; `:2351`; `app/ponto/services/ausencia.py:946`) | **Não comprova retenção de DP até FM** nessas entradas. `Ausencia.save` termina em `super().save`, sem atomic próprio envolvendo a decisão inteira. (`app/ponto/models.py:868`; `:908`; `app/ponto/services/ausencia.py:835`; `:946`) |
-| Ausencia de férias | Cancelamento: Agendamento → PeriodoAquisitivo → UPDATE/DELETE Ausencia de tipo `ferias` → signals/cartório → eventual C/DP. (`app/ferias/services.py:364`; `:367`; `:402`; `:411`; `app/ponto/services/ausencia.py:1281`; `:1283`; `app/ferias/models.py:451`; `app/ponto/services/ausencia.py:1183`; `:1190`; `app/ponto/signals.py:151`) | **Não demonstrar C↔Ausencia usando escapes de resposta**: esses escapes escrevem apenas `falta`/`atestado`, não a mesma linha `ferias`. (`app/chamados/services/materializacao.py:597`; `:598`; `:599`; `app/ponto/services/ausencia.py:1183`) |
-
-No ramo ESCAPE, a trava C do `responder_pergunta_disputa_core` está em um atomic que termina antes da chamada de materialização da ausência. O caminho web lido, portanto, não comprova C retido durante esse UPDATE de Ausencia. (`app/chamados/services/disputa_emissao.py:1503`; `:1511`; `:1541`; `app/chamados/views.py:1228`; `:1283`)
-
-O recálculo FM por evento de Batida continua em `on_commit`; ele não demonstra FM síncrono depois de DP no atomic anterior. A invalidação FM das duas portas de justificativa acima é síncrona e constitui caminho distinto. (`app/ponto/registro_batida.py:175`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/justificativa.py:215`; `:390`; `app/ponto/services/fechamento.py:1656`)
-
-## 11/11 15:36 · sessao e3b00d6965c5 · - · - · origem=Ronald (tmux)
-
-Censo de escritores concluído, somente por leitura.
-
-| Sítio | `tipo` que fornece | Seed |
-|---|---|---|
-| `app/ponto/services/ausencia.py:341`, `:385`, `:418` | Variável: constrói e salva a linha nova | Validada em `:193-195` |
-| `app/ponto/services/ausencia.py:498`, `:509` | Variável: troca do tipo existente | Validada em `:473-475` |
-| `app/ponto/views.py:2415` | Variável do lançamento administrativo | Passa pelo produtor |
-| `app/ponto/views.py:2536` | Variável da solicitação PWA | Passa pelo produtor |
-| `app/api/views.py:1817` | Variável da API | Passa pelo produtor |
-| `app/ponto/services/checar_ausencia.py:46` | Variável do copiloto; chamada HTTP em `app/core/views_ia.py:985` | Passa pelo produtor |
-| `app/ponto/services/veredito_celula.py:332`, `:336` | `'falta'` ou variável `tipo_ausencia` | `'falta'`: `app/ponto/migrations/0052_seed_tipoausencia.py:10` |
-| `app/chamados/services/materializacao.py:490` | `'falta'`/`'atestado'`, mapa em `app/chamados/models.py:3716` | Seed `0052:10`, `:17` |
-| `app/chamados/services/materializacao.py:526` | `'falta'`/`'atestado'`, mapa em `:602`; consumidor `app/chamados/services/disputa_emissao.py:1541` | Seed `0052:10`, `:17` |
-| `app/ponto/services/ausencia.py:1202` | `'ferias'` | Seed `0052:23` |
-| `app/ponto/services/regularizacao.py:118` | `'falta'`, por `garantir_ausencia` | Seed `0052:10` |
-| `app/ponto/management/commands/marcar_abandono_provisorio.py:76` | `'falta'` | Seed `0052:10` |
-| `app/ponto/views.py:2794` | Edição: POST ou tipo atual | Usa `editar_ausencia_registro` |
-| `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169` | Edição: `a.tipo` atual | Usa `editar_ausencia_registro` |
-
-Os únicos literais produtores encontrados foram `falta`, `atestado` e `ferias`, todos semeados; o catálogo da seed grava `ativo=True`. `app/ponto/migrations/0052_seed_tipoausencia.py:10`, `:17`, `:23`, `:36`.
-
-A API recebe nomes legados, mas traduz antes de escrever: `atestado_medico → atestado`, `atestado_acompanhante → declaracao`, `obito → licenca_luto`; os destinos estão semeados. Isso não constitui escritor de literal desconhecido. `app/api/views.py:1765`; `app/ponto/migrations/0052_seed_tipoausencia.py:17`, `:18`, `:20`.
-
-Férias materializam pela porta: `_sync_ausencia → espelhar_ferias → criar_ausencia(tipo='ferias')`. `app/ferias/models.py:386`, `:391`; `app/ponto/services/ausencia.py:1202`.
-
-O admin de Ausencia é somente leitura, com bloqueio de adicionar/alterar/apagar; os signals de Ausencia encontrados consomem o fato. `app/ponto/admin.py:38`; `app/core/admin.py:59`, `:62`, `:65`; `app/ponto/signals.py:143`, `:275`.
-
-Há `queryset.update` produtivo de Ausencia para rejeitar férias, mas altera apenas `status`/`atualizado_em`, sem escrever `tipo`. `app/ponto/services/ausencia.py:1281`.
-
-Fora do app, `sombra_incremental.sh` copia `ponto_ausencia` incluindo `tipo`, por CSV, contornando o modelo; o destino declarado é o banco de ensaio. `bin/sombra_incremental.sh:14`, `:36`, `:57`, `:62`. A máscara genérica usa bulk, mas os campos de Ausencia declarados são `documento` e `descricao`. `bin/sombra_regras_pessoais.py:64`, `:109`.
-
-Não encontrei outro escritor produtivo/importador de `tipo` na cópia; os contratos existentes fiscalizam construção direta e escritas fora da porta, mas não foram executados nesta auditoria. `app/ponto/tests/test_contract_um_produtor_de_ausencia.py:49`, `:74`, `:88`; `app/ponto/tests/test_chokepoint_ausencia_gate.py:53`.
-
-A origem específica da escrita de #5356 permanece **[não verificado]**.
-
-_3973 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3976 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
