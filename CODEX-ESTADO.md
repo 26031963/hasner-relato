@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 05:40** · publicado em **11/11/2026 05:44** (UTC-3)
+> Ultima resposta processada: **11/11/2026 05:50** · publicado em **11/11/2026 05:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 05:50 · sessao 4cfcfad110c6 · FIO-E0-V4-E3 · construtor · origem=Code
+
+Candidata implementada em cinco arquivos. **20 testes sem banco + 35 da medida passaram; sete mutantes morreram por asserção; Ruff limpo.** ORM, contagem SQL após a cura e certificação final: **[nao verificado]**. [nao verificado]
+
+- **F1/F2:** o marcador deixou de consultar `_vd_nb`. Agora consulta o juiz existente de dia sem trabalho; `isento` continua entrando exclusivamente pela parte com horizonte `regra >= 4`. A classificação e `derivar_veredito` permanecem responsáveis pela lavra. [cartorio.py:1217](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1217), [cartorio.py:1232](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/services/cartorio.py:1232).
+- **F3:** classificação, cadastro e carga de turnos ficaram depois da guarda, dentro de `apply_`. A impressão consulta somente a ata em memória e o juiz puro; isso elimina o ciclo impressão → classificação → impressão. `ponto/services/cartorio.py:1218`, `:1227`, `:1231`.
+- **Registro:** somente a ocorrência movida passou de `1319` para `1321`. `core/tests/test_medida_turno_do_par.py:315`.
+- **S2/S3:** adaptei o carregamento AST para fornecer os helpers reais novos; a asserção do hash legado e da cobertura cega permanece. `chamados/tests/test_e3_pos_suite_sem_banco.py:94`, `:139`.
+- **X1:** atualizei somente o alvo textual de `sem_fonte_no_gancho`. `ponto/tests/x1_mutantes.py:24`.
+
+Adotei “insumo já carregado pelo marcador” como o insumo de dia sem trabalho que o marcador anterior representava indiretamente. **A fonte agora distingue dia sem trabalho, em vez de todo veredito não acusador.** A equivalência do gancho distante para trabalho justificado, turno em curso e parcial sem resto fica **[nao verificado]**; o veredito continua passando pelo classificador e por `derivar_veredito`. `ponto/services/cartorio.py:1222`, `:1232`.
+
+A hipótese causal procede no HEAD recebido: o veredito alimentava o marcador antes da guarda. A atribuição estática das seis queries adicionais é:
+
+| Sítio | Queries inferidas |
+|---|---:|
+| Cadastro dos vínculos — `ponto/services/cartorio.py:1111` | 1 |
+| Vínculos de `dias_encerrados` — `ponto/turnos.py:2149` | 1 |
+| Batidas de `turnos_do_colab` — `ponto/turnos.py:1915` | 1 |
+| Candidatos a vínculo — `escala/alimentacao.py:148` | 1 |
+| Escala para ler a ata — `ponto/turnos.py:1559` | 1 |
+| DNA da janela — `escala/utils.py:100` | 1 |
+
+Isso é **inferência do código, não captura SQL**. `ata_do_dia`, `classificar_dia` e `derivar_veredito` são puros nesses sítios. `ponto/services/cartorio.py:701`, `ponto/supra_juiz.py:204`, `escala/models.py:1624`. Main=59 e HEAD recebido=65 vêm do raspado **[nao verificado nesta volta]**; resultado SQL após a cura: **[nao verificado]**. O teto 59 permanece em `ponto/tests/test_selo_chokepoint_escrita.py:118`.
+
+O diff completo pode ser obtido sem escrita:
+
+```bash
+git diff -- ponto/services/cartorio.py ponto/tests/x1_mutantes.py core/tests/test_medida_turno_do_par.py chamados/tests/test_e3_pos_suite_sem_banco.py
+git diff --no-index -- /dev/null ponto/tests/test_e3_nb_impressao_memoria.py
+```
+
+Os REDs e mutantes estão em [test_e3_nb_impressao_memoria.py:25](/home/ronald/wt-codex-fio-e0-v4-e3-032042/app/ponto/tests/test_e3_nb_impressao_memoria.py:25). Executei: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest \
+  ponto.tests.test_e3_nb_impressao_memoria \
+  chamados.tests.test_e3_pos_suite_sem_banco -v
+```
+
+Resultado: 20 testes, RC=0. A execução da medida usa o procedimento sem Django documentado em `core/tests/test_medida_turno_do_par.py:20`; resultado: 35 testes, RC=0.
+
+Comandos individuais reproduzíveis; base e mutantes abaixo retornaram RC=1 por asserção, sem ERROR:
+
+```bash
+E3_NB_TEST=ponto.tests.test_e3_nb_impressao_memoria.ImpressaoNuncaBateuMemoriaTest
+
+PYTHONDONTWRITEBYTECODE=1 E3_NB_BASE=9710c1733f2b2e18f9a397b525875d631d94c5f0 python3 -B -m unittest \
+  "$E3_NB_TEST.test_F1_costura_do_isento_e_unica" \
+  "$E3_NB_TEST.test_F2_comp09_nao_rejulga" \
+  "$E3_NB_TEST.test_F3_pulada_nao_classifica_nem_carrega"
+
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=isento_no_marcador python3 -B -m unittest "$E3_NB_TEST.test_F1_costura_do_isento_e_unica"
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=sem_fonte python3 -B -m unittest "$E3_NB_TEST.test_folga_vai_pelo_juiz_e_guarda_a_fonte"
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=literal_incondicional python3 -B -m unittest "$E3_NB_TEST.test_folga_vai_pelo_juiz_e_guarda_a_fonte"
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=sem_isento python3 -B -m unittest "$E3_NB_TEST.test_isento_no_horizonte_rejulga"
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=sem_horizonte python3 -B -m unittest "$E3_NB_TEST.test_F2_comp09_nao_rejulga"
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=cobertura_cega python3 -B -m unittest "$E3_NB_TEST.test_B5u_cobertura_visivel_rejulga"
+PYTHONDONTWRITEBYTECODE=1 E3_NB_MUTANTE=classificacao_antes_guarda python3 -B -m unittest "$E3_NB_TEST.test_F3_pulada_nao_classifica_nem_carrega"
+```
+
+Labels ORM exatos para a sessão, **não executados aqui [nao verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
+  ponto.tests.test_e3_isento_na_impressao.RamoNuncaBateu.test_a_costura_MORDE \
+  ponto.tests.test_e3_isento_na_impressao.RamoNuncaBateu09.test_isento_comp_09_nao_rejulga \
+  ponto.tests.test_selo_chokepoint_escrita.SeloChokepointEscritaTest.test_gate_da_premissa_fecha_com_dia_e_celula
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
+  ponto.tests.test_e3_isento_na_impressao \
+  ponto.tests.test_selo_b5u_nunca_bateu_ve_ausencia \
+  ponto.tests.test_x1_folga_sem_adesao \
+  ponto.tests.test_selo_chokepoint_escrita \
+  core.tests.test_medida_turno_do_par
+```
+
+X1 completo, base e dois mutantes ORM, **[nao verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 -B -m ponto.tests.x1_mutantes --modo green
+PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 -B -m ponto.tests.x1_mutantes --modo base
+PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 -B -m ponto.tests.x1_mutantes --modo mutante --mutante literal_incondicional
+PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 -B -m ponto.tests.x1_mutantes --modo mutante --mutante sem_fonte_no_gancho
+```
+
+Censo: os chamadores de produção de `impressao_insumos` continuam sendo os dois ramos do cartório, com reexportação pelo command. `ponto/services/cartorio.py:1220`, `:1361`; `ponto/management/commands/processar_cartorio.py:20`. `_vd_nb` é consumido localmente pela renomeação, lavra e fatos do status; `sem_adesao` é consumido pelo hash. `ponto/services/cartorio.py:525`, `:1252`, `:1255`, `:1260`.
+
+Os demais leitores são testes; o censo integral, incluindo menções documentais, é reproduzível com: [nao verificado]
+
+```bash
+rg -n '\bimpressao_insumos\b|\b_vd_nb\b|sem_adesao=' \
+  --glob '*.py' --glob '!**/migrations/**'
+```
+
+Ruff passou nos cinco arquivos alterados com `check --no-cache`; `git diff --check` também passou. A certificação da cura permanece com a suite e o opus final **[nao verificado]**. [nao verificado]
 
 ## 11/11 05:40 · sessao 0e7c4b4de1ab · - · - · origem=Ronald (tmux)
 
@@ -398,18 +495,4 @@ Nenhum FILA fornecido demonstra bloqueio novo do item (1) neste delta; a porta d
 
 O zero efetivo de produção e a identificação individual das seis obras históricas não estão demonstrados pelos dados fornecidos [nao verificado]. Não executei a suite, que cria e remove arquivos (`bin/tests/test_disjuntor.sh:39-41`, `bin/tests/test_disjuntor.sh:50-55`).
 
-## 11/11 03:07 · sessao 63b7724082f8 · - · - · origem=Ronald (tmux)
-
-1. A regra muda corretamente para `B3-SEM-OBRA`: o extrator aceita hífens e publica a regra integral no RELATO (`bin/disjuntor.py:262`, `bin/disjuntor.py:279`). A negativa continua passando por `trilha('NEGOU', neg)` e `relato_negacao`, sem chamar disparo (`bin/disjuntor.py:1904`, `bin/disjuntor.py:1907`).
-
-2. `ler()` distingue o evento pelo terceiro token da trilha; `NEGOU` incrementa negativas e somente `DISJUNTOR` incrementa disparos (`bin/disjuntor.py:1984`, `bin/disjuntor.py:1995`, `bin/disjuntor.py:2003`). Portanto a negativa nova não entra como disparo `B3`; o disparo verdadeiro permanece anunciado pela transição do estado com detalhe `B3 <obra>` (`bin/disjuntor.py:1012`, `bin/disjuntor.py:1043`).
-
-3. Há colisão **lexical** com IDs legítimos: `B3-SEM-OBRA` e `B3-NAO-SEI` satisfazem `_OBRA_ID`/`_OBRA_HIF`, pois não há reserva desses nomes (`bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:619`). `obras_da_linha` consequentemente aceita os tokens das duas regras (`bin/disjuntor.py:637`). Entretanto, seu consumidor encontrado exige além da obra o prefixo `DESENHO ` ou `ERRO-BOBO `; nenhuma negativa satisfaz isso (`bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`). **Ambas são inertes nesse consumidor**, mesmo que a obra real tenha exatamente um desses IDs (`bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`).
-
-4. O Stop usa diretamente o mapa retornado por `julga_b3`: só produz `mensagem_b3(obra)` para as obras desse mapa; a mensagem de incerteza é separada (`bin/hook_stop_fila1.py:1204`, `bin/hook_stop_fila1.py:1206`, `bin/hook_stop_fila1.py:1208`). `gerar_estado.py` delega a leitura e a composição a `disjuntor.ler`/`linha`, sem extrator paralelo (`bin/gerar_estado.py:280`).
-
-5. O delta não introduz outro escritor: `relato_negacao` segue chamando `_no_relato().no_relato` (`bin/disjuntor.py:292`, `bin/disjuntor.py:294`). A guarda continua devolvendo a negativa antes de consultar o estado B3 quando `_obra_de` não reconhece o ID (`bin/disjuntor.py:1842`, `bin/disjuntor.py:1845`, `bin/disjuntor.py:1847`).
-
-Falsa negativa adicional decorrente da troca de prefixo nos leitores examinados: não encontrada pelos caminhos citados; consumidores externos à cópia e efeitos em produção: [nao verificado].
-
-_3657 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3658 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
