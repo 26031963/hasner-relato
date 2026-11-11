@@ -1,7 +1,140 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 00:11** · publicado em **11/11/2026 00:11** (UTC-3)
+> Ultima resposta processada: **11/11/2026 00:14** · publicado em **11/11/2026 00:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 00:14 · sessao 8af21c2e7cb6 · FIO-E0-V4-E4B · sonda · origem=Code
+
+Li integralmente o bloco fornecido: **45 linhas de dia**, conforme esperado; soma de `quantidade_vivas` = **131**. Há **43 chamados donos distintos exibidos**. Todas as linhas diárias têm classe `indeterminado` e `erros:[]`. [nao verificado]
+
+O resumo confere: `10/2026/#2=1`, `10/2026/#4=2`, `11/2026/#2=35`, `11/2026/#3=7`; classes `a` e `b` com zero. Das 131 perguntas, **85 estão exibidas e 46 foram omitidas das amostras**. [nao verificado]
+
+Abaixo, o status está transcrito como `depois_status` de `travessia_log`; `acoes_distintas` preserva integralmente a representação recebida, inclusive objetos `n/amostra`. A fonte é o texto colado, sem arquivo:linha, indicada em cada JSON como `[nao verificado]`. [nao verificado]
+
+```jsonl
+{"col":"col114","dia":"2026-11-03","quantidade_vivas":2,"donos":[{"chamado":"#36791","travessia_log":{"log":"#894348","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":4,"amostra":["estado_chamado@sistema:apurar_furos_diarios","estado_chamado@sistema:processar_alertas_turno"]}}],"fonte":"[nao verificado]"}
+{"col":"col114","dia":"2026-11-06","quantidade_vivas":2,"donos":[{"chamado":"#37417","travessia_log":{"log":"#912715","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":4,"amostra":["estado_chamado@sistema:apurar_furos_diarios","estado_chamado@sistema:processar_alertas_turno"]}}],"fonte":"[nao verificado]"}
+{"col":"col209","dia":"2026-10-22","quantidade_vivas":4,"donos":[{"chamado":"#33853","travessia_log":{"log":"#750302","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col209","dia":"2026-10-24","quantidade_vivas":4,"donos":[{"chamado":"#34481","travessia_log":{"log":"#762388","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col258","dia":"2026-10-26","quantidade_vivas":1,"donos":[{"chamado":"#35126","travessia_log":{"log":"#783748","depois_status":"resolvido","via":"sistema","usuario":"#657","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":6,"amostra":["estado_chamado@None","levantar_silencio_ausencia@None"]}}],"fonte":"[nao verificado]"}
+{"col":"col267","dia":"2026-10-24","quantidade_vivas":4,"donos":[{"chamado":"#34447","travessia_log":{"log":"#778802","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col268","dia":"2026-10-22","quantidade_vivas":4,"donos":[{"chamado":"#33500","travessia_log":{"log":"#750303","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col268","dia":"2026-10-24","quantidade_vivas":4,"donos":[{"chamado":"#34427","travessia_log":{"log":"#762389","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col298","dia":"2026-10-21","quantidade_vivas":2,"donos":[{"chamado":"#33234","travessia_log":{"log":"#738984","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col355","dia":"2026-10-25","quantidade_vivas":2,"donos":[{"chamado":"#34762","travessia_log":{"log":"#779377","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":6,"amostra":["estado_chamado@None","estado_chamado@sistema:vigia_de_hora"]}},{"chamado":"#8591","travessia_log":{"log":"#793079","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:reconciliar_chamados","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["chamado_escalonado_dp@sistema:escalonar_chamados_supervisao","estado_chamado@sistema:reabrir_orfas_enterradas","estado_chamado@sistema:reconciliar_chamados"]}],"fonte":"[nao verificado]"}
+{"col":"col427","dia":"2026-10-22","quantidade_vivas":4,"donos":[{"chamado":"#33928","travessia_log":{"log":"#750307","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col427","dia":"2026-10-24","quantidade_vivas":4,"donos":[{"chamado":"#34539","travessia_log":{"log":"#762392","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col427","dia":"2026-10-26","quantidade_vivas":4,"donos":[{"chamado":"#35091","travessia_log":{"log":"#774741","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios","nascimento_chamado@sistema:detectar_ausencias"]}],"fonte":"[nao verificado]"}
+{"col":"col534","dia":"2026-10-23","quantidade_vivas":4,"donos":[{"chamado":"#34117","travessia_log":{"log":"#758132","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col534","dia":"2026-10-24","quantidade_vivas":4,"donos":[{"chamado":"#34439","travessia_log":{"log":"#762393","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col534","dia":"2026-10-25","quantidade_vivas":4,"donos":[{"chamado":"#34753","travessia_log":{"log":"#766572","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col650","dia":"2026-10-23","quantidade_vivas":4,"donos":[{"chamado":"#34098","travessia_log":{"log":"#758133","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col650","dia":"2026-10-25","quantidade_vivas":4,"donos":[{"chamado":"#34739","travessia_log":{"log":"#766573","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:apurar_furos_diarios","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:apurar_furos_diarios"]}],"fonte":"[nao verificado]"}
+{"col":"col718","dia":"2026-10-22","quantidade_vivas":2,"donos":[{"chamado":"#33930","travessia_log":{"log":"#792218","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col718","dia":"2026-10-24","quantidade_vivas":2,"donos":[{"chamado":"#34540","travessia_log":{"log":"#792222","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col718","dia":"2026-10-26","quantidade_vivas":2,"donos":[{"chamado":"#35092","travessia_log":{"log":"#792225","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":5,"amostra":["estado_chamado@None","nascimento_chamado@sistema:detectar_ausencias"]}}],"fonte":"[nao verificado]"}
+{"col":"col718","dia":"2026-10-28","quantidade_vivas":2,"donos":[{"chamado":"#35540","travessia_log":{"log":"#792228","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":4,"amostra":["estado_chamado@None","nascimento_chamado@sistema:detectar_ausencias"]}}],"fonte":"[nao verificado]"}
+{"col":"col723","dia":"2026-10-28","quantidade_vivas":4,"donos":[{"chamado":"#35427","travessia_log":{"log":"#792259","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":7,"amostra":["estado_chamado@None","estado_chamado@sistema:processar_cartorio"]}}],"fonte":"[nao verificado]"}
+{"col":"col865","dia":"2026-10-23","quantidade_vivas":1,"donos":[{"chamado":"#34385","travessia_log":{"log":"#779064","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col900","dia":"2026-11-01","quantidade_vivas":4,"donos":[{"chamado":"#36289","travessia_log":{"log":"#837155","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:detectar_ausencias","acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@sistema:detectar_ausencias","nascimento_chamado@sistema:detectar_ausencias"]},{"chamado":"#19808","travessia_log":{"log":"#366307","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":null,"acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None"]}],"fonte":"[nao verificado]"}
+{"col":"col900","dia":"2026-11-03","quantidade_vivas":4,"donos":[{"chamado":"#19808","travessia_log":{"log":"#366307","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":null,"acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None"]}],"fonte":"[nao verificado]"}
+{"col":"col900","dia":"2026-11-05","quantidade_vivas":4,"donos":[{"chamado":"#19808","travessia_log":{"log":"#366307","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":null,"acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None"]}],"fonte":"[nao verificado]"}
+{"col":"col900","dia":"2026-11-07","quantidade_vivas":4,"donos":[{"chamado":"#19808","travessia_log":{"log":"#366307","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":null,"acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None"]}],"fonte":"[nao verificado]"}
+{"col":"col900","dia":"2026-11-09","quantidade_vivas":4,"donos":[{"chamado":"#19808","travessia_log":{"log":"#366307","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":null,"acao_bruta":"estado_chamado","ip_presente":false,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None"]}],"fonte":"[nao verificado]"}
+{"col":"col918","dia":"2026-10-25","quantidade_vivas":2,"donos":[{"chamado":"#34771","travessia_log":{"log":"#785855","depois_status":"fechado","via":"admin","usuario":"#845","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-21","quantidade_vivas":2,"donos":[{"chamado":"#33232","travessia_log":{"log":"#778977","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-22","quantidade_vivas":2,"donos":[{"chamado":"#33882","travessia_log":{"log":"#778980","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-23","quantidade_vivas":2,"donos":[{"chamado":"#34182","travessia_log":{"log":"#778983","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-25","quantidade_vivas":2,"donos":[{"chamado":"#34815","travessia_log":{"log":"#778986","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-26","quantidade_vivas":2,"donos":[{"chamado":"#35032","travessia_log":{"log":"#778989","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-27","quantidade_vivas":2,"donos":[{"chamado":"#35280","travessia_log":{"log":"#801831","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":4,"amostra":["estado_chamado@None","nascimento_chamado@sistema:detectar_ausencias"]}}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-28","quantidade_vivas":2,"donos":[{"chamado":"#35490","travessia_log":{"log":"#801834","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":4,"amostra":["estado_chamado@None","nascimento_chamado@sistema:vigia_de_hora"]}}],"fonte":"[nao verificado]"}
+{"col":"col921","dia":"2026-10-29","quantidade_vivas":2,"donos":[{"chamado":"#35756","travessia_log":{"log":"#801837","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":{"n":4,"amostra":["estado_chamado@None","nascimento_chamado@sistema:vigia_de_hora"]}}],"fonte":"[nao verificado]"}
+{"col":"col923","dia":"2026-10-25","quantidade_vivas":4,"donos":[{"chamado":"#34888","travessia_log":{"log":"#778631","depois_status":"fechado","via":"admin","usuario":"#846","usuario_perfil":{"superuser":true,"staff":true,"conta_de_sistema":false},"ator":null,"acao_bruta":"estado_chamado","ip_presente":true,"motivo_presente":false,"resolucao_presente":false},"acoes_distintas":["estado_chamado@None","reabertura_recusada@None","reabertura_recusada@sistema:processar_cartorio"]}],"fonte":"[nao verificado]"}
+{"col":"col1005","dia":"2026-10-28","quantidade_vivas":4,"donos":[{"chamado":"#35423","travessia_log":{"log":"#788507","depois_status":"resolvido","via":"sistema","usuario":null,"usuario_perfil":null,"ator":"sistema:
+
+[truncado em 20000 de 24941 caracteres]
+
+## 11/11 00:11 · sessao da9cc878c659 · - · - · origem=Ronald (tmux)
+
+Conferência integral do texto colado: **45 linhas de dia**, **131 perguntas em `quantidade_vivas`**; 5 dias com quantidade 1, 17 com quantidade 2 e 23 com quantidade 4. Há 43 donos distintos visíveis e 47 ocorrências de dono por dia. [nao verificado]
+
+| # | col | dia | quantidade_vivas | donos visíveis |
+|---:|---|---|---:|---|
+| 1 | col114 | 2026-11-03 | 2 | #36791 |
+| 2 | col114 | 2026-11-06 | 2 | #37417 |
+| 3 | col209 | 2026-10-22 | 4 | #33853 |
+| 4 | col209 | 2026-10-24 | 4 | #34481 |
+| 5 | col258 | 2026-10-26 | 1 | #35126 |
+| 6 | col267 | 2026-10-24 | 4 | #34447 |
+| 7 | col268 | 2026-10-22 | 4 | #33500 |
+| 8 | col268 | 2026-10-24 | 4 | #34427 |
+| 9 | col298 | 2026-10-21 | 2 | #33234 |
+| 10 | col355 | 2026-10-25 | 2 | #34762, #8591 |
+| 11 | col427 | 2026-10-22 | 4 | #33928 |
+| 12 | col427 | 2026-10-24 | 4 | #34539 |
+| 13 | col427 | 2026-10-26 | 4 | #35091 |
+| 14 | col534 | 2026-10-23 | 4 | #34117 |
+| 15 | col534 | 2026-10-24 | 4 | #34439 |
+| 16 | col534 | 2026-10-25 | 4 | #34753 |
+| 17 | col650 | 2026-10-23 | 4 | #34098 |
+| 18 | col650 | 2026-10-25 | 4 | #34739 |
+| 19 | col718 | 2026-10-22 | 2 | #33930 |
+| 20 | col718 | 2026-10-24 | 2 | #34540 |
+| 21 | col718 | 2026-10-26 | 2 | #35092 |
+| 22 | col718 | 2026-10-28 | 2 | #35540 |
+| 23 | col723 | 2026-10-28 | 4 | #35427 |
+| 24 | col865 | 2026-10-23 | 1 | #34385 |
+| 25 | col900 | 2026-11-01 | 4 | #36289, #19808 |
+| 26 | col900 | 2026-11-03 | 4 | #19808 |
+| 27 | col900 | 2026-11-05 | 4 | #19808 |
+| 28 | col900 | 2026-11-07 | 4 | #19808 |
+| 29 | col900 | 2026-11-09 | 4 | #19808 |
+| 30 | col918 | 2026-10-25 | 2 | #34771 |
+| 31 | col921 | 2026-10-21 | 2 | #33232 |
+| 32 | col921 | 2026-10-22 | 2 | #33882 |
+| 33 | col921 | 2026-10-23 | 2 | #34182 |
+| 34 | col921 | 2026-10-25 | 2 | #34815 |
+| 35 | col921 | 2026-10-26 | 2 | #35032 |
+| 36 | col921 | 2026-10-27 | 2 | #35280 |
+| 37 | col921 | 2026-10-28 | 2 | #35490 |
+| 38 | col921 | 2026-10-29 | 2 | #35756 |
+| 39 | col923 | 2026-10-25 | 4 | #34888 |
+| 40 | col1005 | 2026-10-28 | 4 | #35423 |
+| 41 | col1005 | 2026-10-29 | 4 | #35679 |
+| 42 | col1005 | 2026-10-30 | 4 | #35889 |
+| 43 | col42 | 2026-10-08 | 1 | #29676 |
+| 44 | col42 | 2026-10-15 | 1 | #31699 |
+| 45 | col258 | 2026-10-02 | 1 | #28094 |
+
+Toda a tabela provém do prompt, sem arquivo:linha: [nao verificado].
+
+O resumo confere: `10/2026/#2=1`, `10/2026/#4=2`, `11/2026/#2=35`, `11/2026/#3=7`; soma 45. Todas essas contagens estão em `indeterminado`; `a` e `b` têm zero. [nao verificado]
+
+Nenhuma linha de dia tem classe `ERRO-NAO-MEDIDO`; todas exibem `erros:[]`. As quatro linhas de resumo dessa classe são: [nao verificado]
+
+```json
+{"resumo":"dias","classe":"ERRO-NAO-MEDIDO","comp_anexo":"10/2026","empresa_anexo":"#2","n":0,"n_parcial_conhecido":0,"integral":true,"resultado":"MEDIDO"}
+{"resumo":"dias","classe":"ERRO-NAO-MEDIDO","comp_anexo":"10/2026","empresa_anexo":"#4","n":0,"n_parcial_conhecido":0,"integral":true,"resultado":"MEDIDO"}
+{"resumo":"dias","classe":"ERRO-NAO-MEDIDO","comp_anexo":"11/2026","empresa_anexo":"#2","n":0,"n_parcial_conhecido":0,"integral":true,"resultado":"MEDIDO"}
+{"resumo":"dias","classe":"ERRO-NAO-MEDIDO","comp_anexo":"11/2026","empresa_anexo":"#3","n":0,"n_parcial_conhecido":0,"integral":true,"resultado":"MEDIDO"}
+```
+
+Limite para agregação: 23 linhas usam `vivas:{"n":4,"amostra":[duas perguntas]}`. São 85 perguntas explicitamente exibidas e **46 perguntas omitidas**, cujos donos e grupos não podem ser atribuídos pela saída. [nao verificado]
+
+| via | ator | perfil (superuser,staff,conta_de_sistema) | IP | dias com grupo visível | perguntas exibidas |
+|---|---|---|---|---:|---:|
+| sistema | sistema:apurar_furos_diarios | null | false | 18 | 36 |
+| admin | null | true,true,false | true | 18 | 34 |
+| sistema | null | true,true,false | true | 3 | 3 |
+| sistema | sistema:reconciliar_chamados | null | false | 1 | 1 |
+| sistema | sistema:detectar_ausencias | null | false | 1 | 1 |
+| sistema | null | null | false | 5 | 9 |
+| sistema | sistema:fechar_chamados_ausencia | null | false | 1 | 1 |
+
+Tabela de conferência baseada exclusivamente no prompt: [nao verificado].
+
+A soma de `quantidade_vivas` das linhas que **contêm** cada grupo visível, sem repartir o dia entre donos, é respectivamente **66, 41, 3, 2, 4, 20, 1**. Esses valores se sobrepõem: col355/2026-10-25 contém admin e reconciliar; col900/2026-11-01 contém detectar e ator null. Não representam uma partição das 131 perguntas. [nao verificado]
 
 ## 11/11 00:11 · sessao 459709e686e8 · - · - · origem=Ronald (tmux)
 
@@ -843,188 +976,4 @@ Resultados observados e comandos de cada RED/mutante:
 
 [perguntas de lei: 0](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/tests/bo_disputa_volta5g_entrega.txt:109)
 
-## 10/11 22:23 · sessao be870e2c21a5 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-Cura implementada em [disputa_emissao.py:502](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/services/disputa_emissao.py:502): episódio explícito no replay, motivos locais sem seed estrangeiro, análise condicionada ao replay confirmado, âncora pelo agregador e declaração pública com pergunta obrigatória (`:724`, `:1279`, `:1474`, `:1577`).
-
-Arquivos tocados, além do emissor:
-
-- `chamados/tests/test_bo_disputa_volta5f_memoria.py:80` — REDs e mutantes novos.
-- `chamados/tests/test_bo_disputa_volta5_memoria.py:68` — montagem única e execução do alvo.
-- `chamados/tests/test_bo_disputa_volta3_memoria.py:234` — repetibilidade, sem alegar comparação histórica.
-- `chamados/tests/test_bo_disputa_volta5b_orfaos.py:126` — RED ORM do lote misto.
-- `chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:183` — expectativa sem seed indevido.
-- `chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:400`
-- `chamados/tests/test_bo_disputa_sem_pergunta.py:70`
-- `chamados/tests/test_porta_disputa_emissao.py:86`
-- `chamados/tests/test_sla_pelo_juiz.py:133`
-
-Os oito testes novos passaram em memória; cada mutante abaixo produziu falha por assertion no alvo. Referências: `chamados/tests/test_bo_disputa_volta5f_memoria.py:80`, `:101`, `:111`, `:135`, `:165`, `:181`, `:187`, `:204`.
-
-Comandos dos REDs com seus mutantes; cada comando exige primeiro controle verde: [nao verificado]
-
-```bash
-red5f() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5f_memoria.py "$@"
-}
-
-# F1
-red5f --item F1 --mutante seed_local
-red5f --item F1 --mutante ausencia_admite_motivo
-# F2
-red5f --item F2 --mutante episodio_da_dona
-# F3
-red5f --item F3 --mutante analisa_divergente
-# F4
-red5f --item F4 --mutante ancora_save_proprio
-# F5
-red5f --item F5 --mutante publica_sem_pergunta
-# F6
-red5f --item F6
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py --mutante nasce_sem_pergunta
-PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py --mutante replay_insere
-# F7
-red5f --item F7 --mutante alega_paridade
-```
-
-F1 ORM escrito em `chamados/tests/test_bo_disputa_volta5b_orfaos.py:126`. Comando reservado ao Code; execução ORM/banco: **[nao verificado]**.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_bo_disputa_volta5b_orfaos.OrfaosVolta5bTest.test_RED_F1_lote_misto_local_vazia_nao_ganha_seed_estrangeiro
-```
-
-Certificação pelo Code e pelo opus final: **[nao verificado]**.
-
-perguntas de lei: 0
-
-## 10/11 22:12 · sessao ef42db15fa9d · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
-
-**Não há base para liberar: permanecem duplicação de motivo no repasse, replay com insumo implícito variável e selos de mutação quebrados.** Referências: [disputa_emissao.py:1275](/home/ronald/codex_ws/e70f2e7eecfdf93c543b68a61b90f6764bafc649/app/chamados/services/disputa_emissao.py:1275), [models.py:2866](/home/ronald/codex_ws/e70f2e7eecfdf93c543b68a61b90f6764bafc649/app/chamados/models.py:2866), [test_bo_disputa_volta5_memoria.py:81](/home/ronald/codex_ws/e70f2e7eecfdf93c543b68a61b90f6764bafc649/app/chamados/tests/test_bo_disputa_volta5_memoria.py:81).
-
-1. **Estado dos achados anteriores.**
-
-   `opus5d.txt`, `preverif3.r`, `matriz2.r` e os três briefs não estão no material textual efetivamente recebido nem foram encontrados na cópia. Não consigo enumerar seus achados e atribuir honestamente “curado/parcial/igual” a cada um. Conteúdo e confronto individual: **[nao verificado]**.
-
-   Quanto aos problemas identificáveis no pedido e nos patches:
-
-   | Problema | Estado atual verificável |
-   |---|---|
-   | Exceção do gerador deixar nascimento incompleto | **Curado no núcleo:** criação do pai, DS e perguntas ficam sob atomic; a exceção propagada desfaz o conjunto. `app/chamados/services/disputa_emissao.py:623`, `:653`, `:670`, `:674`. |
-   | Pergunta estrangeira deixar nova DS sem pergunta | **Parcial:** núcleo e declaração desfazem o ensaio; órfãos também desfazem quando só houve estrangeiras. Persistem os problemas de motivos e replay descritos abaixo. `app/chamados/services/disputa_emissao.py:681`, `:774`, `:1444`. |
-   | Dois escritores de agregação | **Parcial:** o helper reúne as escritas alteradas, mas a âncora conserva união e save próprios. `app/chamados/services/disputa_emissao.py:558`, `:1531`, `:1562`. |
-   | Luz HX sem leitor | **Curado no instrumento:** I7a conta o defeito estrutural; I7b publica a abstinência por falta de ata como INFO. Medição atual de produção: **[nao verificado]**. `app/chamados/management/commands/auditar_invariantes_chamados.py:57`, `:73`, `:82`. |
-   | Dona fechada | **Pergunta de lei aberta no reuso genérico:** o agregador não a salva; a ressuscitação pelo cartório continua podendo reabri-la pela lei existente. `app/chamados/services/disputa_emissao.py:563`; `app/chamados/models.py:1574`. |
-
-2. **Retornos, dona dos motivos e nascimento sem pergunta.**
-
-   Há seis chamadas datadas a `PerguntaDisputa.abrir`. Cinco consomem pergunta e indicador de criação; a primeira tentativa da declaração descarta `criada` em `_`, embora confira a dona da pergunta. Portanto, literalmente, **não são todos os retornos `(p, criada)` integralmente lidos**. `app/chamados/services/disputa_emissao.py:502`, `:710`, `:773`, `:781`, `:990`, `:1453`.
-
-   No núcleo, os motivos admitidos em A vêm das perguntas locais; os estrangeiros são encaminhados a B. Se A já possui pergunta local do mesmo motivo em outro dia, o motivo pode legitimamente aparecer nas duas listas: o próprio teste de ciclo exige esse estado. `app/chamados/services/disputa_emissao.py:598`, `:638`, `:648`; `app/chamados/tests/test_bo_disputa_volta4_memoria.py:36`.
-
-   **Existe também duplicação indevida no repasse:** A aberta com `motivos=[]` recebe o seed `orfao_14h`. Num lote com intervalo local e pergunta `orfao_14h` estrangeira em B aberta, o helper retorna `motivos_antes`, que já contém o seed. A conserva `orfao_14h` sem possuir essa pergunta, B recebe o motivo, e a pergunta local de intervalo impede o rollback. Isso independe da pergunta de lei sobre dona fechada. `app/chamados/services/disputa_emissao.py:1274`, `:1275`, `:980`, `:1002`, `:1007`, `:1335`, `:1349`, `:1429`, `:1444`.
-
-   Para dona aberta, os caminhos regulares conferidos encaminham o motivo; não demonstram exclusividade global nem removem cópias preexistentes. O contador também não detecta o caso acima, porque exige DS sem **nenhuma** pergunta. `app/chamados/services/disputa_emissao.py:566`, `:613`; `app/chamados/management/commands/auditar_invariantes_chamados.py:62`.
-
-   Nos dois consumidores produtivos da declaração, os argumentos da pergunta agora entram no helper transacional. A estrangeira desfaz a agregação/nascimento local e repete a porta na dona. `app/chamados/services/declaracao_texto.py:362`, `:650`; `app/chamados/services/disputa_emissao.py:763`, `:777`, `:781`.
-
-   Entretanto, a API pública ainda aceita `pergunta=None` e pode gravar DS aberta sem pergunta fora de HX/h2. Não encontrei consumidor produtivo externo dessa forma; ela é usada internamente e expressamente exercitada pelos testes. `app/chamados/services/disputa_emissao.py:747`, `:750`, `:754`, `:764`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:397`.
-
-   O h2 só estrangeiro agora desfaz o nascimento. Com ata completa e nenhuma estrangeira, permanece o nascimento seguido de fechamento vazio; sem ata, permanece aberta e acende a luz. `app/chamados/services/disputa_emissao.py:1444`, `:1474`, `:1477`; `app/chamados/models.py:1903`.
-
-3. **Push: momento, disputa e motivos.** [nao verificado]
-
-   | Caminho | Comportamento atual |
-   |---|---|
-   | Nascimento pelo wrapper | Envia para a DS resultante, com motivos admitidos; exige que continue aberta. `app/chamados/services/disputa_emissao.py:699`, `:827`, `:838`. |
-   | Agregação pelo wrapper | Envia os novos motivos de A; motivo repetido com pergunta de outro dia não notifica. `app/chamados/services/disputa_emissao.py:647`, `:832`, `:838`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:252`. |
-   | Encaminhamento para B | **Não transporta os novos motivos de B para o push:** o retorno do agregador é usado apenas para verificar dona aberta. `app/chamados/services/disputa_emissao.py:565`, `:613`, `:817`, `:832`. |
-   | Órfãos, principal | Envia `motivos_atualizados`, inclusive na repetição do mesmo ato e no caso HX sem pergunta. `app/chamados/services/disputa_emissao.py:1484`; `app/chamados/tests/test_bo_disputa_volta5b_orfaos.py:154`, `:162`. |
-   | Complementos antes do filtro | Agrupa motivos por dona; exclui a principal para evitar repetir sua notificação nesse coletor. `app/chamados/services/disputa_emissao.py:1226`, `:1257`, `:1465`. |
-   | Declaração | Não há envio direto nesse helper. `app/chamados/services/disputa_emissao.py:758`. |
-   | Âncora | Envia `ancora_ausente` para a local após analisar o chamado. `app/chamados/services/disputa_emissao.py:1575`, `:1577`. |
-
-   Assim, o wrapper mantém nascimento=admitidos e agregação=novos **da local**; órfãos mantém `motivos_atualizados`. A admissão nova na dona estrangeira não recebe tratamento equivalente de notificação. Aprovação específica dessa omissão e comparação histórica executável com `6c0517eb9`: **[nao verificado]**. `app/chamados/services/disputa_emissao.py:613`, `:832`, `:1002`, `:1486`.
-
-   Não encontrei envio direto da principal antes do rollback dos ensaios estrangeiros. O repasse desfeito retorna antes do push principal; os complementos notificados nesse ramo são anteriores ao savepoint interno. `app/chamados/services/disputa_emissao.py:1278`, `:1447`, `:1461`, `:1462`.
-
-   Isso **não prova ausência de push por cascata**: o cartório é síncrono e há emissores indiretos. Cenário completo que comprove push escapando especificamente desse rollback: **[nao verificado]**. `app/chamados/signals.py:188`, `:216`; `app/ponto/management/commands/detectar_ausencias.py:778`, `:802`.
-
-   O envio é imediato, sem `on_commit`. Portanto, uma falha depois da notificação dos complementos pode desfazer o atomic externo após o envio. Ocorrência concreta: **[nao verificado]**. `app/chamados/services/disputa_emissao.py:1230`, `:1465`, `:1473`, `:1963`, `:1971`.
-
-4. **Savepoints e replay.**
-
-   Núcleo, órfãos e declaração repetem a porta com os argumentos conservados, trocando a disputa pela dona. As guardas verificam criação ou PK diferente; núcleo e órfãos desfazem o replay divergente, enquanto declaração levanta `ValueError`. `app/chamados/services/disputa_emissao.py:710`, `:711`, `:781`, `:782`, `:1453`, `:1454`.
-
-   **Argumentos iguais não significam todos os insumos iguais:** no replay genérico BATIDA, o coletor não conserva `batida_origem_id`; `_nascer` volta a derivá-la do contexto da disputa recebida. O contexto da dona pode apontar outro episódio e alterar a identidade/dia procurados. Reprodução ORM desse caso: **[nao verificado]**. `app/chamados/services/disputa_emissao.py:500`, `:504`; `app/chamados/models.py:2866`, `:2875`, `:3463`.
-
-   Esse risco de episódio não se aplica da mesma forma aos motivos MARCO usados na declaração/repasse: o derivador retorna `None` para essa família. `app/chamados/models.py:3461`; `app/chamados/catalogo/motivos.py:34`, `:48`.
-
-   **Órfãos continua analisando todos os chamados mesmo se o replay divergir.** A análise não está condicionada ao sucesso do replay correspondente; pode chamar o cartório depois de a costura ter sido desfeita. `app/chamados/services/disputa_emissao.py:1454`, `:1456`, `:1459`; `app/chamados/signals.py:216`.
-
-   Os signals já executaram antes de a porta devolver o resultado: o callback de beco é registrado com `on_commit`, e o outbox síncrono escreve no banco. Esses mecanismos não demonstram, por si, vazamento externo; os testes de memória não certificam o comportamento transacional real desses receivers. `app/chamados/models.py:3006`, `:3017`; `app/chamados/signals.py:238`, `:257`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:50`.
-
-5. **Agregador, segundo predicado e censo AST.**
-
-   `_agregar_motivos_na_dona` é o ponto comum das agregações modificadas, mas **não é o único escritor de motivos/contexto do emissor**. A âncora conserva outro predicado de união, criação própria e atribuição/save direto de motivos. `app/chamados/services/disputa_emissao.py:558`, `:1531`, `:1554`, `:1562`.
-
-   `ATOS_EMISSAO` corresponde ao censo executado pelo gate, mas declara explicitamente duas escritas da âncora. Logo, gate verde não demonstra agregador único. `app/chamados/tests/test_porta_disputa_emissao.py:83`, `:105`, `:118`, `:128`; `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:283`.
-
-6. **Ordem C → D → Ch → P.**
-
-   No núcleo, as donas são consulta lazy, avaliada depois de C; as travas externas permanecem durante o rollback interno e o replay. `app/chamados/services/disputa_emissao.py:623`, `:625`, `:627`, `:653`, `:701`; `app/chamados/models.py:2665`, `:2675`, `:2688`, `:2692`.
-
-   No repasse, o fecho é travado antes das escritas, relido sob C e recusado se crescer; ensaio, replay e análise permanecem no atomic externo. `app/chamados/services/disputa_emissao.py:1156`, `:1167`, `:1173`, `:1178`, `:1215`.
-
-   Nos dois consumidores da declaração, o atomic externo e `_trava_do_ato` antecedem o novo savepoint; a pré-trava inclui donas abertas/fechadas, chamados e perguntas do fato. `app/chamados/services/declaracao_texto.py:299`, `:301`, `:348`, `:352`, `:643`, `:645`.
-
-   **A garantia não cobre autonomamente pendentes do wrapper:** ele chama `perguntar_entradas_pendentes` depois de sair do atomic do núcleo. O helper abre P e depois salva DS, sem atomic/trava próprios. Sem transação externa, P pode estar commitada antes da agregação de motivos/contexto; com transação externa, as travas anteriores permanecem. Não é prova de inversão simultânea de locks, mas é uma fronteira sem a atomicidade anunciada. `app/chamados/services/disputa_emissao.py:650`, `:830`, `:310`, `:313`, `:575`; `app/chamados/models.py:2819`.
-
-7. **Testes e mordida.** [nao verificado]
-
-   | Família | O que verifica / o que não prova |
-   |---|---|
-   | `sem_pergunta` | Rollback, preservação da batida e I7a/I7b. O ORM “depois da pergunta” não afirma que P nasceu antes de levantar; a irmã memória possui essa testemunha positiva. `app/chamados/tests/test_bo_disputa_sem_pergunta.py:58`; `app/chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:301`. |
-   | Volta2 | Consulta depois de C, dona fechada antes de Ch e trava repetida; mede doubles, não concorrência PostgreSQL. `app/chamados/tests/test_bo_disputa_volta2_memoria.py:143`, `:150`. |
-   | Volta3/4 | Dias, ciclos e replay conservado. A “paridade BASE versus atual” executa a fonte atual duas vezes: prova repetibilidade, não paridade histórica. `app/chamados/tests/test_bo_disputa_volta3_memoria.py:236`, `:245`, `:300`; `app/chamados/tests/test_bo_disputa_volta4_memoria.py:20`, `:45`. |
-   | Volta5 | Possui cenário adversarial de replay criado/PK diferente no núcleo. Porém `nasce_sem_pergunta` encontra cinco sítios e `replay_insere` encontra dois; ambos exigem um e abortam na montagem. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:66`, `:73`, `:77`, `:81`, `:194`. |
-   | 5b | Reuso, critérios de push, HX e h2; a memória simula `analisar` só como mudança de status, sem cartório. `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:120`, `:152`, `:185`, `:258`. |
-   | 5c | Exercita ambos os consumidores da declaração e agregação estrangeira. Não cobre candidata/costura real, pois candidata sempre retorna `None`, trava é Mock e a porta é double. O lote misto usa `intervalo_saida`, deixando passar o seed `orfao_14h`. `app/chamados/tests/test_bo_disputa_volta5c_memoria.py:77`, `:89`, `:95`, `:209`; `app/chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:22`. |
-   | 5e | Demonstra que os asserts rejeitam dona fechada e ausência de nota. Chama a reabertura diretamente, com save/refresh simulados, e muta asserts do teste; não prova a integração cartório→ressuscitação. `app/chamados/tests/test_bo_disputa_volta5e_memoria.py:30`, `:49`, `:59`, `:72`, `:84`. |
-   | Ajuste E1 | O mutante desliga `_trava_do_repasse` no agrupador real; não certifica todos os novos replays. `app/chamados/tests/test_e1_fila_v2_2_integracao.py:211`. |
-   | Reuso 746 | Agora usa motivo com insumo de pergunta disponível; conserva asserts de reuso do pai/nota, mas deixa de exercitar o antigo caso `orfao_14h` sem insumo. `app/chamados/tests/test_3b_reuso_746.py:23`, `:28`, `:31`. |
-
-   Os asserts protegidos estão presentes nos endereços indicados. Permanecerem **historicamente intocados** não pode ser certificado sem a base comparável. `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:58`, `:63`; `app/chamados/tests/test_hx_disputa_muda.py:24`, `:44`; `app/chamados/tests/test_pergunta_no_app.py:89`, `:103`. Integridade histórica: **[nao verificado]**.
-
-   Os 683 testes ORM são informação recebida, não certificação desta leitura. Suíte inteira verde: **[nao verificado]**. [nao verificado]
-
-8. **Quem escreve, quem lê e semântica.**
-
-   | Campo | Escritores e leitores confirmados |
-   |---|---|
-   | `DS.motivos` | Escrevem agregador, nascimentos, âncora, aparo/remoção e reabertura administrativa. Leem admissão, push e resolução de motivos. `app/chamados/services/disputa_emissao.py:558`, `:670`, `:1299`, `:1562`; `app/chamados/models.py:1966`, `:2063`, `:2159`; `app/api/foto_recebida.py:63`. |
-   | `DS.contexto` | Escrevem agregador/nascimentos e portas de contexto/aparo/remoção. Leem resolvedor de pergunta, derivador de episódio e auditor. `app/chamados/services/disputa_emissao.py:572`, `:670`; `app/chamados/models.py:1967`, `:2064`, `:2100`, `:2118`, `:3463`; `app/chamados/management/commands/auditar_invariantes_chamados.py:31`. |
-   | `DS.fechada_em` | Escrevem fechamento e reaberturas admin/sistema. Leem eleição, agregador, push, receivers e app. `app/chamados/models.py:1932`, `:2149`, `:2173`; `app/chamados/services/disputa_emissao.py:563`, `:630`, `:827`; `app/chamados/signals.py:28`; `app/api/views.py:1059`. |
-   | `P.disputa` | Nasce no construtor; reuso retorna a canônica preservando a FK. Leem roteamento do motivo, autorização e fallback de listagem. `app/chamados/models.py:3008`, `:3014`; `app/chamados/services/disputa_emissao.py:606`; `app/chamados/services/fio.py:598`; `app/api/views.py:1063`. |
-   | `P.chamado_destino` | Escrevem nascimento, reuso e costura; leem juiz da resolvedora e seleção do card. `app/chamados/models.py:2982`, `:3014`; `app/chamados/services/fio.py:925`; `app/api/views.py:1061`. |
-
-   Há tensão semântica verificável: `motivos` é documentado como cenários ativos; o núcleo admite pelo vínculo com pergunta local, enquanto órfãos conserva o seed sem essa pergunta. Além disso, contexto da DS é usado para derivar identidade BATIDA, embora seja atualizado ao longo dos atos. `app/chamados/models.py:1741`, `:3455`; `app/chamados/services/disputa_emissao.py:598`, `:1275`.
-
-   Esse mapa não certifica censo exaustivo de todos os leitores nem ausência de outras premissas divergentes. **ESMERIL-SEMANTICA completo: [nao verificado].**
-
-9. **Classes de reprovação e proibidos.**
-
-   Permanecem segundo escritor/predicado na âncora, insumo de identidade rederivado no replay, selo sem mordida em dois mutantes e fronteira transacional incompleta nos pendentes. `app/chamados/services/disputa_emissao.py:1531`, `:1562`, `:500`, `:830`; `app/chamados/models.py:2866`; `app/chamados/tests/test_bo_disputa_volta5_memoria.py:81`.
-
-   O cartório continua sendo chamado pela análise; a ressuscitação continua usando a lei HX existente. A falta de ata continua impedindo fechamento e mantendo o aviso, agora acompanhado do contador. `app/chamados/signals.py:216`; `app/chamados/models.py:1574`; `app/chamados/services/disputa_emissao.py:1474`; `app/chamados/management/commands/auditar_invariantes_chamados.py:74`.
-
-   Alteração das sete disputas existentes, execução em produção, identidade criptográfica da cópia, aprovação de critérios adicionais pelos briefs ausentes e ausência de qualquer outra lei nova: **[nao verificado]**.
-
-**NAO LIBERA. Achados que permanecem:**
-
-- Motivo `orfao_14h` pode ficar indevidamente nas duas disputas abertas no lote misto. `app/chamados/services/disputa_emissao.py:1275`, `:1007`, `:1429`.
-- Replay genérico conserva kwargs, mas rederiva episódio pela dona; órfãos ainda analisa chamados após replay divergente. `app/chamados/services/disputa_emissao.py:500`, `:1459`; `app/chamados/models.py:2866`.
-- Dois mutantes abortam por montagem, e a suposta comparação com a base compara a versão atual consigo mesma. `app/chamados/tests/test_bo_disputa_volta5_memoria.py:81`; `app/chamados/tests/test_bo_disputa_volta3_memoria.py:245`.
-- Agregador único não está estabelecido; pendentes podem agregar fora do atomic do núcleo; novas admissões na dona estrangeira não chegam ao coletor de push. `app/chamados/services/disputa_emissao.py:1562`, `:830`, `:613`.
-- Não verificados: achados individualizados dos pareceres ausentes, histórico dos protegidos, reprodução ORM dos novos contraexemplos, efeitos externos completos das cascatas e suíte inteira. **[nao verificado]**. [nao verificado]
-
-_3532 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3534 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
