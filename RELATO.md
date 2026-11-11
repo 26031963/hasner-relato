@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=4049702
+BO PREVERIF6 01h54: NAO LIBERA (preverif6.r): destino ainda reeleito em [ch]/avulso (disputa_emissao.py:1044/:1296/:291, models.py:2982), replay origem None, trilha dona fechada parcial, veto tecnico de autofecho novo sem lei citada, pendentes fora do nucleo. Triagem independente -> Codex (t6.log); obra passou de 3 voltas -> opus depois da triagem (CODEX 5(d)).
+E4B SUITE2 01h52: FAILED f=11 e=25 (Ran 15087) x suite1 f=12 e=14: 12 NOVOS = 11 ERROR ImportError no harness de memoria test_e4b_classe_e_memoria + 1 FAIL contrato vitalidade (carimbo cru em disputa_emissao.py); 2 sumiram (o261). Triagem + rascunho do brief c4 -> Codex leitura (ts2.log, aval CODEX-100-POUPA-CODE).
 BO c21 01h5x: rc 0, cura no PEDIDO (disputa_emissao.py; models.py intocado), 6 B023 do teste novo curados pela sessao (mecanico), raia 9bba8132b; preverif6 Codex lancado (p6.log) e suite17 na fila da trava atras da suite2 E4b (uma suite por vez).
 E3 X1+V15 01h4x: brief c8b ganhou ADENDO V15 A+S (casos_v15.out anexo; condicao: predicado do C6 intocado, senao linha propria apos X1); X1 construtor entra apos c8b com os 11 (vaga unica); CADASTRO col574/col969/vinc 1075 na E3-CADASTRO-ADMIN; INTERMITENTE-SEM-CONVOCACAO registrada.
 CODEX-100-POUPA-CODE 01h4x (logs/aval_codex_100_poupa_code_1111.txt): daqui ao reset do Code, triagem de suite falhada e redacao de brief tambem vao ao Codex (CODEX_PAPEL=leitura/censo); Code fica com integrar, amostra arquivo:linha, pouso, push, deploy, opus final. Vaga (1 construtor) e disjuntores iguais.
