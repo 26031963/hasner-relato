@@ -1,7 +1,251 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 11:54** · publicado em **11/11/2026 11:54** (UTC-3)
+> Ultima resposta processada: **11/11/2026 11:57** · publicado em **11/11/2026 11:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 11:57 · sessao 0adb21eb0cd2 · BO-ROTULO-ENCERRADO · censo · origem=Code
+
+A duplicação está no código: `resolvido` e `fechado` recebem “Encerrado” em `ESPERA_COLAB`. **O modal distingue as opções por literais no template; não consulta uma fonte compartilhada para esses textos.** (`app/chamados/services/verbos.py:118`, `app/chamados/services/verbos.py:119`, `app/templates/chamados/partials/modal_fio.html:669`, `app/templates/chamados/partials/modal_fio.html:670`)
+
+**1. Onde o detalhe monta as opções**
+
+A página local é renderizada por `detalhe_chamado_local`, com contexto de `montar_contexto_detalhe`; a outra página é renderizada por `detalhe_chamado`. Os formulários e as opções estão nos próprios templates. (`app/chamados/views.py:549`, `app/chamados/views.py:550`, `app/chamados/services/acoes_chamado.py:399`, `app/chamados/views.py:262`, `app/templates/chamados/detalhe_local.html:385`, `app/templates/chamados/detalhe.html:122`)
+
+| Opção/value | Detalhe local | Outro detalhe | Fonte do texto |
+|---|---|---|---|
+| vazio | `app/templates/chamados/detalhe_local.html:394` | `app/templates/chamados/detalhe.html:131` | Literal “— manter atual —” |
+| `em_analise` | `app/templates/chamados/detalhe_local.html:395` | `app/templates/chamados/detalhe.html:132` | `"em_analise"\|espera\|first` |
+| `resolvido` | `app/templates/chamados/detalhe_local.html:396` | `app/templates/chamados/detalhe.html:133` | `"resolvido"\|espera\|first` |
+| `fechado` | `app/templates/chamados/detalhe_local.html:397` | `app/templates/chamados/detalhe.html:134` | `"fechado"\|espera\|first` |
+| `aberto` | `app/templates/chamados/detalhe_local.html:398` | `app/templates/chamados/detalhe.html:135` | Literal “Reabrir” |
+
+A cadeia que produz o texto é `espera` → `rotulo_para_pessoa` → `ESPERA_COLAB`. A função devolve `(texto, title)`; `first` escolhe o texto de espera, que coincide para os dois estados. (`app/chamados/templatetags/chamados_tags.py:63`, `app/chamados/templatetags/chamados_tags.py:64`, `app/chamados/services/verbos.py:138`, `app/chamados/services/verbos.py:141`, `app/chamados/services/verbos.py:118`, `app/chamados/services/verbos.py:119`)
+
+Há um terceiro seletor com a mesma cadeia no fio do colaborador: placeholder literal em `app/templates/chamados/fio_colaborador.html:267`; `em_analise`, `resolvido` e `fechado` em `app/templates/chamados/fio_colaborador.html:268`, `app/templates/chamados/fio_colaborador.html:269`, `app/templates/chamados/fio_colaborador.html:270`.
+
+Participação de form Python ou JS na produção desses textos: [não verificado]. A produção demonstrada acima ocorre nas expressões das próprias `<option>`.
+
+**2. Fonte do modal do painel**
+
+A view identifica e renderiza o modal em `app/chamados/views.py:869`, `app/chamados/views.py:870`, `app/chamados/views.py:927`.
+
+| Value | Texto visível | `title` | Fonte |
+|---|---|---|---|
+| vazio | — mover para — | — | Literal, `app/templates/chamados/partials/modal_fio.html:667` |
+| `em_analise` | Assumir a apuração | Em analise | Literal, `app/templates/chamados/partials/modal_fio.html:668` |
+| `resolvido` | Encerrar | Resolvido | Literal, `app/templates/chamados/partials/modal_fio.html:669` |
+| `fechado` | Encerrar e arquivar | Fechado | Literal, `app/templates/chamados/partials/modal_fio.html:670` |
+
+Portanto, **a fonte atual das opções do modal é o próprio template**. O painel de turno repete os três textos e títulos à mão. (`app/templates/chamados/partials/modal_fio.html:668`, `app/templates/chamados/partials/modal_fio.html:669`, `app/templates/chamados/partials/modal_fio.html:670`, `app/templates/chamados/partials/painel_chamado_turno.html:76`, `app/templates/chamados/partials/painel_chamado_turno.html:77`, `app/templates/chamados/partials/painel_chamado_turno.html:78`)
+
+Existem fontes que distinguem os **nomes dos estados**, mas aquelas opções não as consultam: choices do modelo, “Resolvido”/“Fechado”, e `ESTADO_TITLE`, também “Resolvido”/“Fechado”. (`app/chamados/models.py:31`, `app/chamados/models.py:32`, `app/chamados/services/verbos.py:103`, `app/chamados/services/verbos.py:104`)
+
+**3. Censo dos leitores que apresentam estado ao humano**
+
+| Leitor/saída | Fonte |
+|---|---|
+| Badge do detalhe | `espera`: texto e tooltip em `app/templates/chamados/detalhe.html:36`, `app/templates/chamados/detalhe.html:38` |
+| Badge do detalhe local | `espera`: `app/templates/chamados/detalhe_local.html:68`, `app/templates/chamados/detalhe_local.html:70` |
+| Badge do fio do colaborador | `espera`: `app/templates/chamados/fio_colaborador.html:188`, `app/templates/chamados/fio_colaborador.html:190` |
+| Badge do painel de turno | `espera`: `app/templates/chamados/partials/painel_chamado_turno.html:18`, `app/templates/chamados/partials/painel_chamado_turno.html:20` |
+| Badge do modal | `espera`: `app/templates/chamados/partials/modal_fio.html:102`, `app/templates/chamados/partials/modal_fio.html:104` |
+| Seletores dos dois detalhes e do fio | `ESPERA_COLAB`, pela cadeia do item 1 |
+| Seletor do modal | Literais: `app/templates/chamados/partials/modal_fio.html:668`, `app/templates/chamados/partials/modal_fio.html:669`, `app/templates/chamados/partials/modal_fio.html:670` |
+| Seletor do painel de turno | Literais: `app/templates/chamados/partials/painel_chamado_turno.html:76`, `app/templates/chamados/partials/painel_chamado_turno.html:77`, `app/templates/chamados/partials/painel_chamado_turno.html:78` |
+| Lista detalhada do painel | `rotulo_de_linha`; produção em `app/chamados/services/painel.py:384`, `app/chamados/services/painel.py:388`, `app/chamados/services/painel.py:394`; consumo em `app/templates/chamados/partials/_lista_chamados.html:80`, `app/templates/chamados/partials/_lista_chamados.html:81`, `app/templates/chamados/partials/_lista_chamados.html:87` |
+| Lista resumida do painel | Mesma função; produção em `app/chamados/services/painel.py:485`, `app/chamados/services/painel.py:487`; consumo em `app/templates/chamados/partials/_lista_resumo.html:68`, `app/templates/chamados/partials/_lista_resumo.html:69`, `app/templates/chamados/partials/_lista_resumo.html:72` |
+| Card de atendimento | Choices, via `get_status_local_display`: `app/templates/chamados/partials/_card_atendimento.html:23` |
+| Histórico de chamados | Choices, via `get_status_local_display`: `app/templates/relatorios/historico_chamados.html:121` |
+| Painel da justificativa | Choices, via `get_status_local_display`: `app/templates/ponto/partials/painel_justificativa.html:79` |
+| Pauta de resposta tardia | Choices, via `get_status_local_display().lower()`: `app/chamados/services/resposta_tardia.py:63`, `app/chamados/services/resposta_tardia.py:67` |
+| API de atendimento | Dicionário próprio em `app/api/views.py:1143`, `app/api/views.py:1144`, `app/api/views.py:1145`; fallback para código cru em `app/api/views.py:1146` |
+| Filtro do relatório histórico | Literais “Aberto”, “Em análise”, “Resolvido”, “Fechado”: `app/templates/relatorios/historico_chamados.html:56`, `app/templates/relatorios/historico_chamados.html:57`, `app/templates/relatorios/historico_chamados.html:58`, `app/templates/relatorios/historico_chamados.html:59` |
+| Manual servido ao humano | Literais em `app/templates/core/manual.html:207`, `app/templates/core/manual.html:215`, `app/templates/core/manual.html:216`, `app/templates/core/manual.html:217`, `app/templates/core/manual.html:219`, `app/templates/core/manual.html:222`, `app/templates/core/manual.html:225`, `app/templates/core/manual.html:249`, `app/templates/core/manual.html:250`, `app/templates/core/manual.html:251`, `app/templates/core/manual.html:252`, `app/templates/core/manual.html:254`, `app/templates/core/manual.html:278`, `app/templates/core/manual.html:282`, `app/templates/core/manual.html:283`, `app/templates/core/manual.html:284`, `app/templates/core/manual.html:285`, `app/templates/core/manual.html:286`, `app/templates/core/manual.html:294` |
+
+Nos badges, `esp.0` vem de `ESPERA_COLAB` e `esp.1` de `ESTADO_TITLE`. Na lista administrativa, o texto principal é o verbo ou “Registro”; o estado distinguido fica no tooltip. (`app/chamados/services/verbos.py:131`, `app/chamados/services/verbos.py:133`, `app/chamados/services/verbos.py:135`, `app/chamados/services/verbos.py:141`, `app/chamados/services/verbos.py:142`)
+
+Também há exposições do **código cru**, sem tradução:
+
+| Saída | Referências |
+|---|---|
+| PDF dos chamados | Lê `ch.status_local` em `app/relatorios/pdf_chamados.py:116`; imprime em `app/relatorios/pdf_chamados.py:122`, `app/relatorios/pdf_chamados.py:125` |
+| Tooltip do chamado no calendário | Produtores em `app/colaboradores/services/calendario.py:441`, `app/colaboradores/services/calendario.py:444`; consumidor em `app/templates/colaboradores/partials/_calendario_grade.html:108` |
+| API mensageria | Campos crus em `app/api/views_mensageria.py:417`, `app/api/views_mensageria.py:1082` |
+| Estado no histórico/API | `app/chamados/services/historico.py:156` → `app/api/views_mensageria.py:2166` |
+| Texto das transições no histórico | Descrição com códigos gravada em `app/chamados/models.py:292`, `app/chamados/models.py:293`; lida em `app/chamados/services/historico.py:92`; textualizada em `app/chamados/services/historico.py:208`; entregue em `app/api/views_mensageria.py:2168` |
+| Saídas operacionais | `app/chamados/management/commands/silenciar_chamados_isentos.py:41`, `app/ponto/management/commands/reconciliar_vinculo.py:57`, `app/ponto/management/commands/reavaliar_ausencias_feriado.py:42`, `app/ponto/management/commands/reavaliar_ausencias_lancadas.py:43`, `app/ponto/management/commands/reconciliar_geofence.py:36` |
+| Erros do smoke | `app/chamados/management/commands/smoke_chamados.py:137`, `app/chamados/management/commands/smoke_chamados.py:150` |
+
+O domínio GLPI tem seu próprio `STATUS_MAP` numérico; `_formatar_ticket` produz `status_label`, exibido na tabela de tickets. (`app/chamados/glpi_client.py:126`, `app/chamados/glpi_client.py:137`, `app/chamados/glpi_client.py:142`, `app/templates/chamados/partials/tabela_chamados.html:40`)
+
+Outros textos manuais associados ao estado:
+
+- “Reabrir”: `app/templates/chamados/detalhe.html:135`, `app/templates/chamados/detalhe_local.html:398`.
+- “Este chamado está fechado”: `app/templates/chamados/detalhe.html:148`, `app/templates/chamados/detalhe_local.html:412`.
+- Datas “Resolvido em”/“Resolvido”: `app/templates/chamados/detalhe.html:56`, `app/templates/chamados/detalhe_local.html:88`, `app/templates/relatorios/historico_chamados.html:127`.
+- Títulos literais “Em analise”: `app/templates/chamados/detalhe.html:101`, `app/templates/chamados/fio_colaborador.html:225`, `app/templates/chamados/partials/_relatorio_geo.html:22`.
+- Agrupamentos “Histórico/Cancelados/Encerrados” e “registrados”, sem correspondência individual de estado: `app/templates/chamados/painel_gestao.html:153`, `app/templates/chamados/painel_gestao.html:191`.
+
+Renderização dos consumidores externos da API, inclusive aplicativo nativo: [não verificado].
+
+**4. Campo, escritores, leitores e comparações**
+
+O campo é `ChamadoColaborador.status_local`, ligado aos sete `STATUS_CHOICES`. Os códigos e conjuntos usados pelas decisões ficam no catálogo. (`app/chamados/models.py:28`, `app/chamados/models.py:52`, `app/chamados/catalogo/motor.py:19`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`, `app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`, `app/chamados/catalogo/motor.py:32`)
+
+| Escritor/porta | Local |
+|---|---|
+| Escrita de transição: `_gravar_estado` | Atribuição em `app/chamados/models.py:228`; trilha em `app/chamados/models.py:292`; persistência em `app/chamados/models.py:296` |
+| `_aplicar` | Chama o escritor em `app/chamados/models.py:450` |
+| `reconciliar` | `app/chamados/models.py:654` |
+| `cancelar` | `app/chamados/models.py:788` |
+| `analisar` | `app/chamados/models.py:806` |
+| `reabrir` | `app/chamados/models.py:1442` |
+| `encerrar` | `app/chamados/models.py:1619` |
+| `encerrar_por_competencia_trancada` | `app/chamados/models.py:1639` |
+| Nascimento por `abrir` | Estado preparado em `app/chamados/models.py:938`; `get_or_create` em `app/chamados/models.py:971` |
+| Nascimento por `criar` | Estado resolvido em `app/chamados/models.py:1060`; `create` em `app/chamados/models.py:1095` |
+| Simulação em memória | Atribuição temporária em `app/chamados/models.py:356`; restauração no `finally` em `app/chamados/models.py:371` |
+| Backfills históricos | `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `app/chamados/migrations/0038_a3_registrado_backfill.py:15`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/migrations/0039_a3_via_backfill.py:33` |
+
+Chamadores humanos de `transicionar`: `app/chamados/services/acoes_chamado.py:70`, `app/chamados/services/acoes_chamado.py:108`, `app/chamados/services/acoes_chamado.py:149`, `app/chamados/services/acoes_chamado.py:222`, `app/chamados/services/acoes_chamado.py:233`, `app/chamados/services/acoes_chamado.py:277`, `app/chamados/services/acoes_chamado.py:315`, `app/chamados/services/fio.py:721`, `app/colaboradores/views.py:2068`. Chamadas do smoke: `app/chamados/management/commands/smoke_chamados.py:134`, `app/chamados/management/commands/smoke_chamados.py:147`, `app/chamados/management/commands/smoke_chamados.py:163`.
+
+Inventário dos demais arquivos com leituras diretas do campo em Python de produção, incluindo filtros ORM, atributos e serialização; as linhas identificam os sítios:
+
+```text
+app/api/views_core.py:309
+app/api/views.py:320,1044,1142,1146,1152,1972,1982,3127
+app/api/views_mensageria.py:417,1082
+
+app/chamados/models.py:109,112,124,165,207,219,355,417,427,673,712,713,714,736,760,768,783,803,822,830,921,927,1219,1220,1221,1337,1342,1348,1358,1373,1374,1375,1398,1404,1440,1614,1630,1632,2683
+app/chamados/juizes.py:780,858,2017,2162,2201
+app/chamados/reconciliador.py:246,839,936,938,997,1204,1454,1587
+app/chamados/rejuncao.py:61,79
+app/chamados/signals.py:33,70,86,87,96,184,192,201,285,293,354,358
+app/chamados/views.py:976,1477
+app/chamados/views_cobrar.py:76
+app/chamados/views_arquivar.py:121
+
+app/chamados/services/abertura.py:166
+app/chamados/services/acoes_chamado.py:25,90,132,176,232,252
+app/chamados/services/acoes_disputa.py:269
+app/chamados/services/adesao.py:89,102,143
+app/chamados/services/becos.py:22
+app/chamados/services/celula_carimbada.py:42,89,146
+app/chamados/services/competencia_trancada.py:88,155,183,192,193,270
+app/chamados/services/disputa_emissao.py:200,572,755,963,1109,1318,1344,1884,1910,1913
+app/chamados/services/feriado_reavaliar.py:17
+app/chamados/services/fila.py:126
+app/chamados/services/fio.py:389,403,432,770
+app/chamados/services/furo_sem_canal.py:83
+app/chamados/services/historico.py:156,180
+app/chamados/services/juizes_do_dia.py:92
+app/chamados/services/limbo_folgas.py:100,220,278,302,314
+app/chamados/services/materializacao.py:778,784
+app/chamados/services/na_fila.py:17
+app/chamados/services/painel.py:155,189,213,214,215,217,218,224,245,303,305,307,316,379,384,465
+app/chamados/services/pergunta_no_app.py:151,184
+app/chamados/services/resposta_tardia.py:35,57
+app/chamados/services/silencio_ausencia.py:60,125
+app/chamados/services/silencio_isentos.py:29
+app/chamados/services/sla.py:37
+app/chamados/services/verbos.py:230
+app/chamados/services/vigia_fio.py:335,338,607,608,618
+app/chamados/services/vigia_loop.py:34,117,120
+
+app/colaboradores/services/calendario.py:437,441,442,444
+app/colaboradores/services/desligamento.py:152,155
+app/colaboradores/services/drawer.py:89
+app/colaboradores/services/ficha.py:163
+app/colaboradores/services/pos_vinculo.py:36
+app/colaboradores/services/vinculo.py:385
+app/colaboradores/management/commands/corrigir_escala_retroativa.py:141
+
+app/escala/utils.py:1059
+app/escala/services/cadastro_realidade.py:494
+app/escala/services/regeneracao.py:170
+app/escala/management/commands/fechar_avisos_regua_na_lista.py:34
+
+app/ponto/signals.py:303
+app/ponto/views.py:284,395,1616
+app/ponto/worklist.py:40
+app/ponto/services/ausencia.py:709
+app/ponto/services/cartorio.py:473,1370,1629,1648
+app/ponto/services/cluster_espurio.py:67,255,285,289,294
+app/ponto/services/cobertura.py:114,226
+app/ponto/services/entrada_sincronizada.py:49
+app/ponto/services/esmeril_espelho.py:182
+app/ponto/services/faltas_de_hoje.py:64
+app/ponto/services/furos_sem_cobranca.py:69,70,129
+app/ponto/services/furos_vetados.py:95
+app/ponto/services/geofence.py:82,355
+app/ponto/services/justificativa.py:43,61,77,118,121
+app/ponto/services/regularizacao.py:133
+app/ponto/services/triagem_batida.py:105,290,328
+app/ponto/services/veredito_celula.py:149,155
+app/ponto/services/vigia_de_hora.py:111
+
+app/relatorios/views.py:745,920
+app/relatorios/pdf_chamados.py:116
+```
+
+Leitores em comandos e scripts operacionais:
+
+```text
+app/chamados/management/commands/arquivar_prescritos.py:49
+app/chamados/management/commands/auditar_chamados_orfaos.py:36
+app/chamados/management/commands/auditar_invariantes_chamados.py:573,589,602,616,637,653,683,807,978,1015,1041,1068,1070,1072,1339,1576,1577,1607,1628
+app/chamados/management/commands/carimbar_por_batida_coincidente.py:61,68
+app/chamados/management/commands/disparar_perguntas_competencia.py:99
+app/chamados/management/commands/geofence_registrados_para_analise.py:22,36
+app/chamados/management/commands/lavrar_perguntas_stale.py:57
+app/chamados/management/commands/reabrir_orfas_enterradas.py:98,134,170,171,173,174
+app/chamados/management/commands/reconciliar_chamados.py:59
+app/chamados/management/commands/retratar_chamados_lei_cala.py:34
+app/chamados/management/commands/silenciar_chamados_isentos.py:41
+app/chamados/management/commands/smoke_chamados.py:136,137,149,150
+
+app/ponto/management/commands/detectar_ausencias.py:152,193,258,300,348,373,404,514,672,739,743,798
+app/ponto/management/commands/detectar_intervalo_ausente.py:125
+app/ponto/management/commands/emitir_furo_retroativo.py:95
+app/ponto/management/commands/emitir_turno_aberto_retroativo.py:119,123
+app/ponto/management/commands/escalonar_chamados_supervisao.py:45
+app/ponto/management/commands/fechar_chamados_ausencia.py:28
+app/ponto/management/commands/fechar_chamados_meio_periodo.py:56
+app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:42
+app/ponto/management/commands/gerar_celulas.py:245
+app/ponto/management/commands/processar_alertas_avancados.py:103,108,155
+app/ponto/management/commands/processar_alertas_turno.py:165,179,381
+app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:31
+app/ponto/management/commands/reavaliar_ausencias_feriado.py:42
+app/ponto/management/commands/reavaliar_ausencias_lancadas.py:30,43
+app/ponto/management/commands/reconciliar_fantasmas.py:159
+app/ponto/management/commands/reconciliar_geofence.py:29,36
+app/ponto/management/commands/reconciliar_grade.py:96,207,529
+app/ponto/management/commands/reconciliar_vinculo.py:33,57
+app/ponto/management/commands/supra_juiz.py:189,212
+
+bin/censo_folha.py:30
+bin/r5_idempotencia_frota.py:61
+bin/snapshot_o118_col221.py:22
+```
+
+Leitores nos templates, incluindo condicionais de cor e existência de ação:
+
+```text
+app/templates/chamados/detalhe.html:36,37,39,41,117
+app/templates/chamados/detalhe_local.html:68,69,71,73,153,176,244,279,343,375
+app/templates/chamados/fio_colaborador.html:167,188,189,191,193,254
+app/templates/chamados/partials/_card_atendimento.html:13,19,20,21,23,203
+app/templates/chamados/partials/_lista_chamados.html:33,37,38,40,41,79
+app/templates/chamados/partials/modal_fio.html:76,102,103,105,107,500,544,559,588,636,651
+app/templates/chamados/partials/painel_chamado_turno.html:18,19,21,23,65
+app/templates/ponto/partials/painel_justificativa.html:79
+app/templates/relatorios/historico_chamados.html:121
+```
+
+Leitores históricos adicionais nas migrations: filtros em `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:5`, `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:14`, `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:6`, `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:1
+
+[truncado em 20000 de 24377 caracteres]
 
 ## 11/11 11:54 · sessao e0331546fc34 · UI-PAINEL-MOSTRA-O-APP · construtor · origem=Code
 
@@ -875,18 +1119,4 @@ Classes:
 
 Limite preexistente útil: `set -uo pipefail` sem `-e`, `cd`, `git add` geral e `git commit` sem checagem continuam na base (`bin/relato.sh:21,120–132`), agora linhas novas **144–161**. Não são cura completa pelo novo `push || exit 1`; falha de commit seguida de push bem sucedido pode ainda terminar `0` quando mapa verde, embora exista outra falha.
 
-## 11/11 10:52 · sessao 1239d5bfa276 · - · - · origem=Ronald (tmux)
-
-Nenhum dos cinco selos vizinhos tem quebra estática causada pelo diff; execução completa dos selos ficou [nao verificado], pois eles criam arquivos e/ou acessam recursos externos. A busca equivalente a `git grep 'relato.sh' bin/tests` encontra referências nos cinco arquivos abaixo. (`bin/tests/test_codex_estado.sh:100`; `bin/tests/test_codex_estado_evento.sh:28`; `bin/tests/test_relato_publica_claude_md.sh:8`; `bin/tests/test_relato_afirma_com_prova.sh:44`; `bin/tests/test_publicacao_sem_nome.sh:6`.)
-
-1. **`test_codex_estado.sh`: não quebra.** O recorte começa na primeira ocorrência literal de `CODEX_OK=""` e termina no marcador do passo 3; só busca `exit` nesse intervalo, excluindo comentários. O bloco 2f novo fica antes do bloco 2e e de `CODEX_OK=""`, portanto seus novos comandos não entram nessa região. (`bin/tests/test_codex_estado.sh:104-111`; base `bin/relato.sh:89-98`; diff `bin/relato.sh:89-122`, linhas novas.)
-
-2. **`test_relato_publica_claude_md.sh`: não quebra.** A raspagem geral mantém o par CLAUDE; o novo raspador de MAPA retido não casa com a regex que exige continuação de linha imediatamente depois de `"$DEST"`. O teste conta apenas linhas começando na coluna 1 por `git add -A `; o novo `git add -A -- MAPA-20.md` tem indentação e não aumenta essa contagem. O pathspec do commit continua contendo CLAUDE. (`bin/tests/test_relato_publica_claude_md.sh:13-20`; diff `bin/relato.sh:104-105`, `141`, `145`, `151`, `160`, linhas novas.)
-
-3. **`test_codex_estado_evento.sh`: não quebra na costura.** Continua sem `gerar_codex_estado.py` em `relato.sh`, mantendo chamadas de `codex_estado.sh` e `relato_nomes.sh`. (`bin/tests/test_codex_estado_evento.sh:27-30`; base `bin/relato.sh:32`, `97`; diff não altera essas chamadas.)
-
-4. **`test_relato_afirma_com_prova.sh`: não quebra na costura.** Seu predicado apenas exige a presença de `relato_afirma_com_prova.py`, preservada pelo diff. (`bin/tests/test_relato_afirma_com_prova.sh:43-45`; base `bin/relato.sh:55`.)
-
-5. **`test_publicacao_sem_nome.sh`: não recorta `relato.sh`.** As referências são comentários; o universo efetivo vem de `git ls-files` do público. MAPA-20 rastreado entra automaticamente nesse universo. Resultado de privacidade em produção permanece [nao verificado]. (`bin/tests/test_publicacao_sem_nome.sh:58-72`.)
-
-_3812 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3813 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
