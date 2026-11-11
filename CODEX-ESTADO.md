@@ -1,7 +1,174 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 11:57** · publicado em **11/11/2026 11:59** (UTC-3)
+> Ultima resposta processada: **11/11/2026 12:10** · publicado em **11/11/2026 12:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 12:10 · sessao 9288c5b22025 · - · - · origem=Ronald (tmux)
+
+Backend / sinais / testes, somente leitura: [nao verificado]
+
+- **Servidor aceita batida sem selfie.** A porta web grava antes de olhar foto e só anexa quando há arquivo: `app/ponto/services/triagem_batida.py:700`, `app/ponto/services/triagem_batida.py:748`. As duas APIs leem foto opcional, transformam ausência em motivo de revisão e seguem para `registrar_batida`: `app/api/views.py:436`, `app/api/views.py:449`, `app/api/views.py:666`; `app/api/views_core.py:423`, `app/api/views_core.py:436`, `app/api/views_core.py:658`. O modelo permite foto vazia/nula: `app/ponto/models.py:78`.
+
+- **Chokepoint não exige câmera/foto.** Seus argumentos obrigatórios são colaborador, timestamp, tipo e origem; os demais vêm em `**campos`; cria `Batida` sem exigir foto: `app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`. Ele possui dedup e recusa por colisão tipo-oposto, questões distintas de selfie: `app/ponto/registro_batida.py:113`, `app/ponto/registro_batida.py:145`. A lei está em `CLAUDE.md:143`.
+
+- **O juiz existente é de cobrança, não de admissibilidade.** `selfie_ausente` decide se foto ausente já é cobrável, com PWA no ato e APK após 90 minutos: `app/ponto/registro_batida.py:64`, `app/ponto/registro_batida.py:71`, `app/ponto/registro_batida.py:80`. Registro formal da pergunta “a foto da batida está ausente?” em `app/core/juizes.py:1192`. As duas APIs e o retro o consultam: `app/api/views.py:461`, `app/api/views_core.py:448`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:74`. A porta web não faz essa consulta; grava e anexa condicionalmente: `app/ponto/services/triagem_batida.py:700`, `app/ponto/services/triagem_batida.py:748`.
+
+- **Sinais não são iguais online web e offline sincronizado.** O catch online de apto apenas escreve aviso e mostra botões, sem acrescentar flag ao formulário; submit só inclui foto se existir: `app/templates/ponto/triagem/apto.html:156`, `app/templates/ponto/triagem/apto.html:228`. O serviço web determina `aprovada`/`justificativa` por fora de horário e `sinal_acesso`, sem considerar câmera ou foto ausente: `app/ponto/services/triagem_batida.py:685`, `app/ponto/services/triagem_batida.py:693`, `app/ponto/services/triagem_batida.py:710`. A API acrescenta `foto_ausente` e contexto `tipo_batida`; `liveness_status=indisponivel` acrescenta `liveness_indisponivel` e `motivo_cliente` vindo de `liveness_detail`: `app/api/views.py:464`, `app/api/views.py:501`; casca core: `app/api/views_core.py:451`, `app/api/views_core.py:488`.
+
+- **Modelo dos sinais:** `Batida` possui `canal`, `foto`, `justificativa` e `aprovada`, sem campo específico de falha da câmera ou `liveness_status`: `app/ponto/models.py:8`, `app/ponto/models.py:55`, `app/ponto/models.py:56`, `app/ponto/models.py:63`, `app/ponto/models.py:78`. `foto_ausente`/`liveness_indisponivel` são motivos de `DisputaSupervisao`, armazenados em JSON de `motivos`/`contexto`: `app/chamados/models.py:1727`, `app/chamados/models.py:1730`, `app/chamados/models.py:1741`, `app/chamados/models.py:1745`. Assim, foto ausente não registra a causa “câmera indisponível”; o retro só conhece origem/canal/presença/tempo: `app/ponto/management/commands/marcar_foto_ausente_retro.py:66`.
+
+- **Escritores/consumidores posteriores:** APIs associam `ultima_batida` e chamam a fábrica de disputa: `app/api/views.py:767`, `app/api/views_core.py:762`. A fábrica agrega/grava motivos e contexto, ou cria a disputa: `app/chamados/services/disputa_emissao.py:535`, `app/chamados/services/disputa_emissao.py:562`, `app/chamados/services/disputa_emissao.py:587`; gera perguntas: `app/chamados/services/disputa_emissao.py:669`. O leitor obtém pergunta pelo motivo e texto pelo contexto: `app/chamados/services/disputa_emissao.py:309`, `app/chamados/services/disputa_emissao.py:344`; definições de perguntas de foto e liveness em `app/chamados/catalogo/perguntas.py:94`, `app/chamados/catalogo/perguntas.py:112`. Retro lê tanto `FotoBatida` quanto `Batida.foto` e escreve cobrança `foto_ausente`: `app/ponto/management/commands/marcar_foto_ausente_retro.py:70`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:95`.
+
+- **Fotos recebidas depois:** porta `anexar_foto` escreve `Batida.foto` e, conforme modo, `FotoBatida`: `app/ponto/registro_batida.py:296`. Upload API exige foto para anexar a batida já existente, não para registrar a batida: `app/api/views_core.py:832`, `app/api/views.py:847`. Upload chama resolução das disputas de foto: `app/api/views_core.py:853`, `app/api/views.py:868`. Esse leitor filtra motivo, confere `ultima_batida.id`, apara motivo ou fecha disputa: `app/api/foto_recebida.py:57`, `app/api/foto_recebida.py:61`, `app/api/foto_recebida.py:67`, `app/api/foto_recebida.py:70`. Anexo web também só exige arquivo para anexar: `app/ponto/views.py:2895`.
+
+- **Telemetria separada:** `api_diag_cam` recebe erro/modo/user-agent e escreve logger, sem associar sinal à batida: `app/api/views.py:2647`, `app/api/views.py:2655`, `app/api/views.py:2666`.
+
+- **Rotas:** fila atual usa `/api/ponto/bater/`, com duas cascas de URLs: `app/api/urls.py:67`, `app/api/urls_core.py:14`. A rota antiga `/ponto/batida-offline/` existe, mas sempre responde 410: `app/ponto/urls.py:13`, `app/ponto/views.py:417`.
+
+- **Testes relevantes, presença inspecionada, execução [nao verificado]:** `test_pwa_sem_foto_cria_batida_e_disputa` cobra HTTP 200, uma Batida e motivo `foto_ausente`; morderia bloqueio de servidor, não bloqueio do botão: `app/api/tests/test_api_bater_pwa.py:64`. A bateria offline também envia payload sem foto e cobra gravação: `app/ponto/tests/test_batida_offline.py:49`, `app/ponto/tests/test_batida_offline.py:68`. Z9 envia “camera bloqueada” e exige 200 + `liveness_indisponivel`: `app/api/tests/test_api_bater_ponto.py:185`. Testes do juiz cobrem PWA imediato, APK antes/depois do prazo, foto presente e origem não aparelho: `app/ponto/tests/test_selfie_ausente_juiz.py:27`. Teste de consumidores exige chamada ao juiz nos dois kernels: `app/ponto/tests/test_selfie_ausente_juiz.py:130`. Retro tem casos para marcação, foto recebida e prazo ainda aberto: `app/ponto/tests/test_bug126_selfie_invisivel.py:65`, `app/ponto/tests/test_bug126_selfie_invisivel.py:74`, `app/ponto/tests/test_bug126_selfie_invisivel.py:84`. O selo L030 cobre guardas GPS retornando 403, não foto/câmera nem JS: `app/api/tests/test_l030_selo_porta.py:3`, `app/api/tests/test_l030_selo_porta.py:18`, `app/api/tests/test_l030_selo_porta.py:83`.
+
+## 11/11 12:10 · sessao b98828b87a03 · - · - · origem=Ronald (tmux)
+
+Censo dos outros fronts, somente leitura.
+
+| Sítio | Caminho | Resposta sem câmera/foto | Como |
+|---|---|---|---|
+| `app/templates/ponto/bater_ponto.html:246` | normal online/offline, antes de escolher E/S | **Bloqueia implicitamente** enquanto não liberar captura | `bloco-botoes` nasce `display:none`; `abrirCameraPre()` tenta câmera e, no catch, apenas oferece câmera do sistema, sem liberar botões (`:343-378`). Negação de permissão entra nesse mesmo catch (`:362`). |
+| `app/templates/ponto/bater_ponto.html:384` | fallback do sistema | **Bloqueia** se cancelar/nenhum arquivo | `if (!file) return` (`:385-386`); libera botões somente após `FileReader.onload`, quando `_fotoBlob=file` (`:392-401`). |
+| `app/templates/ponto/bater_ponto.html:407` | captura prévia | **Libera** se `toBlob` der null, lançar ou ficar sem callback | Tenta converter dataURL e libera botões mesmo sem blob (`:423-456`); salvaguarda de 1.500 ms também libera (`:458-467`). Porém `drawImage` e `toDataURL` ocorrem antes do `try` (`:414-417`), sem tratamento nessa função. |
+| `app/templates/ponto/bater_ponto.html:470` | refazer | **Volta a bloquear** | Zera `_fotoBlob`, esconde botões e reabre câmera (`:471-477`); se nova câmera falhar, cai no fallback bloqueante descrito acima (`:362-378`). |
+| `app/templates/ponto/bater_ponto.html:492` | envio online | **Libera sem foto**, se handler alcançado | Nenhum guard de `_fotoBlob`; anexa somente se existir (`:519-531`). Falha HTTP/rede cai na fila com `_fotoBlob`, inclusive null (`:540-543`). |
+| `app/templates/ponto/bater_ponto.html:558` | offline, depois de escolher E/S | **Não bloqueia deliberadamente no catch** | Abre segunda câmera; mostra botão antes da solicitação (`:564-572`); catch apenas muda status para “Camera indisponivel” (`:579-581`). |
+| `app/templates/ponto/bater_ponto.html:584` | confirmar offline sem stream | **Não retorna por falta de stream** | Só desenha se vídeo visível; faz `canvas.toBlob` incondicionalmente e enfileira o blob recebido, mesmo null (`:587-597`). Não possui fallback/timeout/try em volta de `toBlob` (`:594-610`); garantir comportamento em falha do canvas exige runtime **[nao verificado]**. Canvas nunca capturado pode produzir imagem vazia: inferência do desenho condicional e `toBlob` incondicional (`:587-597`), conteúdo real **[nao verificado]**. |
+| `app/templates/ponto/bater_ponto.html:174` | confirmação de turno aberto | **Libera sem selfie nesse formulário** | POST com tipo/confirmar/latitude/longitude e botão submit, sem campo foto ou guarda de câmera (`:180-196`). |
+| `app/templates/ponto/bater_ponto_v2.html:235` | v2 câmera, ambos caminhos | **Oferece fallback; não resolve admissibilidade** | Catch diferencia `NotAllowedError`, informa câmera negada/indisponível e abre input do sistema (`:241-247`); seleção vazia retorna (`:250-252`). |
+| `app/templates/ponto/bater_ponto_v2.html:256` | v2 captura vazia/erro/timeout | **Continua até a guarda bloqueante** | Sem vídeo pronto resolve blob existente ou null (`:259`); `toBlob` null tenta dataURL (`:265`); catch e timeout de 1.500 ms tentam dataURL (`:266-267`). |
+| `app/templates/ponto/bater_ponto_v2.html:285` | **v2 online e offline** | **Bloqueia explicitamente sem foto** | `garantirRequisitos` consulta permissão de câmera, mostra toast e retorna false quando `_fotoBlob` ausente (`:286-290`). `v2Confirmar` reabilita botão e retorna (`:307-312`) **antes** do teste `navigator.onLine` (`:315`); portanto não alcança POST online (`:322`) nem filas de fallback/offline (`:333`, `:346`). |
+| `app/templates/core/onboarding.html:152` | onboarding, sem registro de batida próprio | **Etapa normal exige foto, mas permite configurar depois** | Catch troca para câmera do sistema (`:156-161`); seleção vazia retorna (`:168-169`); `salvarFoto` retorna sem blob (`:212-213`); captura `toBlob` não trata null/timeout (`:184-200`). Botão “Configurar depois” chama concluir e recarrega (`:120-125`). Backend computa faltas selfie/GPS/câmera (`app/core/views.py:479-486`) mas grava onboarding completo e responde ok mesmo com faltas (`:488-489`). |
+
+Não há timeout explícito de **getUserMedia** nessas funções; os 1.500 ms são de conversão de imagem, e os demais timeouts próximos são de relógio/GPS (`app/templates/ponto/bater_ponto.html:343`, `:458`, `:480`; `app/templates/ponto/bater_ponto_v2.html:235`, `:267`, `:271`; `app/templates/core/onboarding.html:152`, `:263`). Comportamento do navegador quando a promessa nunca resolve **[nao verificado]**.
+
+Scripts e includes:
+
+- `bater_ponto.html` e `bater_ponto_v2.html` estendem `base.html` (`app/templates/ponto/bater_ponto.html:1`; `app/templates/ponto/bater_ponto_v2.html:1`). `apto.html` estende `base_triagem.html`, que estende `base.html` (`app/templates/ponto/triagem/apto.html:1`; `app/templates/ponto/triagem/base_triagem.html:1`).
+- As três carregam `/static/pwa.js` defer (`app/templates/base.html:20`), `/static/js/hasner-ui.js?v=hx3` (`:83`), `hasner-table.js` (`:84`), `hasner-filter.js?v=ta5` (`:85`), `fita-mes.js?v=1` (`:86`), `geo-colab-map.js` (`:88`) e `popover-acao.js` (`:440`). Externo comum: htmx 1.9.10 do unpkg (`:19`).
+- Só v2 acrescenta `/static/leaflet/leaflet.js` sob condição colaborador/sem sucesso (`app/templates/ponto/bater_ponto_v2.html:135-136`).
+- Includes comuns da base: `core/_nudge_app_android.html`, condicional (`app/templates/base.html:92`); `includes/icons.html` (`:93`); `core/_icone_pauta.html` (`:290`); `core/_dialogo.html` (`:388`); `chamados/partials/_js_cobranca.html` (`:393`); `core/_drawer_generico.html` (`:399`); `core/_copiloto.html` (`:432`), este também inclui `_icone_pauta` (`app/templates/core/_copiloto.html:34`).
+- A base de triagem acrescenta JS inline de relógio/GPS e bloco `extra_js`; nenhum `script src` adicional (`app/templates/ponto/triagem/base_triagem.html:25-76`).
+- Onboarding é HTML independente com script inline, sem herança/includes/scripts externos (`app/templates/core/onboarding.html:1`, `:115`, `:330-332`).
+
+Não identifiquei função/constante/endpoint comum consultado pelos três fronts para “selfie é impeditiva?”; a decisão hoje está nos ramos locais contraditórios acima (`app/templates/ponto/bater_ponto.html:362`, `:423`, `:492`; `app/templates/ponto/bater_ponto_v2.html:285`; `app/templates/ponto/triagem/apto.html:161`). Como **inferência de localização**, `app/static/pwa.js`, já carregado na base (`app/templates/base.html:20`) e chamado pelas telas para registrar (`app/templates/ponto/bater_ponto.html:543`; `app/templates/ponto/bater_ponto_v2.html:333`), é o menor módulo existente diretamente relacionado à batida que pode hospedar a resposta comum.
+
+Sinais de câmera no onboarding são do **Colaborador**, não da Batida: front envia `{camera:true}` após salvar foto (`app/templates/core/onboarding.html:226-230`); backend grava `camera_concedida_em` (`app/core/views.py:1085-1090`); campo/modelo e leitura das etapas pendentes (`app/colaboradores/models.py:376`, `:405-413`). No catch de `bater_ponto` há telemetria `/api/diag/cam/` com erro/modo/user_agent (`app/templates/ponto/bater_ponto.html:367-377`); não vi sinal específico por batida sendo enviado nesse trecho (`:375`, `:530-543`).
+
+Guarda existente relevante: `check_a_lei_batida.py` procura regex de guard de foto e frases em apto/bater (`app/scripts/check_a_lei_batida.py:13-23`); **não enumera v2**, não procura o `display:none` do catch e só encontra guard `_fotoBlob`/return na mesma linha (`:14-15`, `:20-21`). Seus checks de view apontam `app/apps/ponto/views.py` (`:24-29`) e arquivos ausentes são silenciosamente pulados (`:34-35`). Assim, esta guarda não morde os bloqueios observados do catch de `bater_ponto` ou da v2 (`app/templates/ponto/bater_ponto.html:362-378`; `app/templates/ponto/bater_ponto_v2.html:285-290`).
+
+## 11/11 12:09 · sessao 56dd18a89d3f · - · - · origem=Ronald (tmux)
+
+Fila e sincronização:
+
+- A fila é IndexedDB `juliani-offline`, versão 2, store `batidas_pendentes`; nenhuma fila de batida em `localStorage` foi encontrada no escopo pesquisado. A implementação localizada está em `app/static/pwa.js:48-60`; outros enfileiradores [nao verificado].
+- `registrarBatidaOffline()` aceita foto ausente: grava `foto: fotoBlob || null`, sem validação impeditiva da selfie. Guarda tipo, timestamps/gap, coordenadas/GPS e foto; não guarda flag de erro de câmera. `app/static/pwa.js:107-122`.
+- A sincronização envia `foto` somente quando existe; usa POST multipart `/api/ponto/bater/`; acrescenta sempre `liveness_status=indisponivel` e `liveness_detail=PWA web sem liveness`. Isso informa ausência de liveness do PWA, sem distinguir câmera negada/indisponível/foto não capturada. `app/static/pwa.js:143-156`.
+- Sucesso remove a entrada; HTTP 400 também remove definitivamente; erro de rede/5xx preserva para retentativa. `app/static/pwa.js:158-179`.
+- `window.JulianiPWA` expõe o enfileirador; sincroniza no evento `online` e ao iniciar estando online. `app/static/pwa.js:305-328`.
+- O SW ignora POST/PUT/PATCH/DELETE; não enfileira nem decide selfie. No evento `sync-batidas`, avisa janelas abertas para executarem a sincronização; sem janela, notifica para abrir o app. `app/static/sw.js:35-36`, `app/static/sw.js:112-129`.
+- O fallback do SW trata resposta GET de rede/cache, sem requisito de câmera ou foto. `app/static/sw.js:29-30`, `app/static/sw.js:45-85`.
+
+Falha específica offline:
+
+- `apto.html` associa o botão a `confirmarFotoOffline`; no catch esconde o botão e põe `_streamOffline=null`, impedindo o clique normal de chegar à fila. `app/templates/ponto/triagem/apto.html:242-256`.
+- Dentro de `confirmarFotoOffline`, `_streamOffline=null` não provoca retorno: só condiciona `getTracks().stop()`. A captura depende de `video.style.display`; `canvas.toBlob` continua e repassa o resultado à fila sem validar foto. Se o botão for chamado por outro meio, isso não comprova selfie válida: pode enviar conteúdo do canvas; resultado concreto do navegador [nao verificado]. `app/templates/ponto/triagem/apto.html:261-282`.
+- V2 bloqueia antes da escolha online/offline: `garantirRequisitos()` retorna `false` sem `_fotoBlob`; o chamador volta antes tanto do fetch quanto da fila. `app/templates/ponto/bater_ponto_v2.html:285-290`, `app/templates/ponto/bater_ponto_v2.html:307-346`.
+
+Selos/testes, apenas inspecionados; resultados atuais [nao verificado]: [nao verificado]
+
+| Teste/selo | O que prova / limite | [nao verificado]
+|---|---|
+| `app/api/tests/test_api_bater_pwa.py:64-76` | Sem foto espera HTTP 200, Batida criada e disputa `foto_ausente`; morderia rejeição backend nesse caso. |
+| `app/api/tests/test_api_bater_pwa.py:95-105` | Com foto espera 200 e ausência do motivo `foto_ausente`. |
+| `app/ponto/tests/test_batida_offline.py:49-76` | Payload sem foto para `/api/ponto/bater/` espera 200 e Batida persistida. |
+| `app/ponto/tests/test_batida_offline.py:119-128` | Espera disputa na batida sem foto/liveness. |
+| `app/ponto/tests/test_selfie_ausente_juiz.py:27-47` | Cobra ausência por canal/prazo; não exercita captura ou clique. |
+| `app/ponto/tests/test_selfie_ausente_juiz.py:130-140` | Confere consulta ao juiz nas duas cópias API. |
+| `app/ponto/tests/test_l030_forma_js.py:31-55` | Selo de ausência de barreira GPS: filtra condições com `gpsLat/gpsLng/lat/lng`; no apto mede prefixo somente depois de `toBlob`. Não cobre catch que esconde o botão nem a barreira `_fotoBlob` de v2. |
+| `app/ponto/tests/test_l030_templates_renderizados.py:14-37` | Renderiza apto/v2 nas duas cascas e aplica aquele mesmo oráculo GPS. |
+| `bin/node_check.sh:11-20`, `bin/node_check.sh:33-37` | Apenas sintaxe dos JS estáticos próprios; inline de templates fica fora. Chamado pela régua em `bin/regua.sh:146-149`. |
+| `app/core/tests/test_smoke_chromium.py:151-162`, `app/core/tests/test_smoke_chromium.py:172-189` | Abre `/ponto/espelho/` nas duas cascas e mede overlay/console; não captura câmera nem registra batida. |
+| `app/core/tests/test_sw_offline_fallback.py:60-65`, `app/core/tests/test_sw_offline_fallback.py:79-101` | Mede Response/rede/cache do SW; não admite/rejeita selfie. |
+| `app/core/tests/test_selo_modal_nao_nasce_vazio.py:135-143` | Guarda saída livre quando modal falha; não cobre câmera. |
+| Smoke de clique específico sem câmera nas duas cascas | [nao verificado] |
+
+O comando legado `testar_pwa` contém ensaio sem foto em `/ponto/batida-offline/`, mas não executa captura/click e sua expectativa “>48h rejeitada” está explícita; não tratar como prova do enfileirador atual, que envia para `/api/ponto/bater/`. `app/ponto/management/commands/testar_pwa.py:235-271`, `app/static/pwa.js:153`.
+
+## 11/11 12:08 · sessao 555fd569cc38 · - · - · origem=Ronald (tmux)
+
+Complemento do censo:
+
+- **Resgatar** é controle manual que pode mudar estado: botão em `app/templates/chamados/partials/_lista_chamados.html:85`; quando o encerramento veio da competência trancada, chama `ch.reabrir(humano=True)` em `app/chamados/views_arquivar.py:64`. Não é seletor de destinos.
+- **Abrir registro e validar** também muda estado: `app/templates/chamados/detalhe_local.html:233` → `ir_para_ausencia()` → `chamado.analisar()` em `app/chamados/views.py:1513`.
+- **Atribuir/Assumir** não muda `status_local` nesse caminho: `app/chamados/views.py:1029` chama `assumir_responsavel`, que grava responsável e instante em `app/chamados/services/vinculos.py:131`.
+- **Reabertura administrativa** oferece motivos manuais, por outro nome de select: `app/templates/chamados/partials/modal_fio.html:390` e `:393`; o receptor reabre chamado encerrado em `app/chamados/services/acoes_disputa.py:269`. As opções representam motivos, não destinos de estado.
+- **Geofence** tem controles manuais nos dois locais: `app/templates/chamados/detalhe_local.html:285` e `app/templates/chamados/partials/modal_fio.html:506`. Autorizar, autorizar com advertência e recusar convergem para `resolvido` em `app/chamados/services/acoes_chamado.py:222` e `:277`.
+
+Esses controles entram no censo amplo pedido, mas seus rótulos manuais não provam repetição do defeito “dois estados distintos com o mesmo texto”; são ações sobre o fato, com destinos fixados nos receptores acima.
+
+`app/api/views.py:1143` é mapa manual de **exibição** (`status_display`), entregue na resposta GET em `app/api/views.py:1189`. O POST dessa API recebe `chamado_id` e `conteudo` e anexa ocorrência, sem receber estado (`app/api/views.py:982`).
+
+Não achei registro/formulário de `ChamadoColaborador` nos arquivos `*admin*`/`*forms*`; `app/chamados/admin.py` está vazio. Existência de controle no Django admin publicado: `[nao verificado]`.
+
+## 11/11 12:08 · sessao 1e67159c4f30 · - · - · origem=Ronald (tmux)
+
+- **Bloqueia — selo permite reproduzir o defeito.** Em memória, substituí somente as tags de `resolvido` e `fechado` de `app/templates/chamados/detalhe.html:133` e `:134` por `<option value='resolvido'>Encerrado</option>` e `<option value='fechado'>Encerrado</option>`. O scanner real retornou cinco arquivos e `ruins=[]`: `_OPTION` reconhece apenas aspas duplas, e basta restar alguma ocorrência de `opcao_mover` no seletor. Âncoras: `app/chamados/tests/test_bo_rotulo_encerrado.py:19`, `:20`, `:58`, `:65`, `:69`. Executei o scanner em memória; execução da suíte Django completa: **[nao verificado]**. Os testes restantes consultam o mapa ou renderizam duas tags isoladas; o teste dos templates apenas chama `get_template`, sem verificar suas opções renderizadas (`:38`, `:43`, `:49`, `:73`).
+
+- **Bloqueia — censo incompleto e includes não expandidos.** O universo limita-se a `templates/chamados` e a `name="novo_status"` com essa grafia; outro nome, aspas simples no `name` e controles fora desse diretório escapam (`app/chamados/tests/test_bo_rotulo_encerrado.py:17`, `:19`, `:26`). Um seletor contendo uma tag válida e um `{% include %}` com duas opções literais passa: o pai satisfaz a busca textual e o partial sem `<select>` não entra no censo (`:32`, `:65`, `:69`). A ordem dos atributos, isoladamente, **não** é fuga: `<option title="x" value="resolvido">` foi detectado pelo regex de `:20`.
+
+- **Fila — selo não protege conjunto, ordem ou `value`.** Remover, repetir, reordenar tags ou trocar seu argumento por outro estado válido não encontra comparação com o conjunto anterior; o teste valida apenas que as chaves do mapa pertencem ao modelo e que não há opções literais reconhecidas (`app/chamados/tests/test_bo_rotulo_encerrado.py:43`, `:62`). A tag devolve exatamente o argumento como `value` (`app/chamados/templatetags/chamados_tags.py:77`).
+
+- **Classes da pergunta 6:** selo sem mordida está presente nos casos acima. Não encontrei no trecho alterado outro juiz de transição: o registrado continua sendo `decidir` (`app/core/juizes.py:274`; `app/chamados/catalogo/motor.py:125`). O novo mapa responde à apresentação das opções (`app/chamados/services/verbos.py:132`, `:140`); o rótulo da pessoa permanece uma pergunta separada (`:162`). Duplicação de juiz registrado, derivação paralela ou campo com dois significados introduzidos pelo diff: **não demonstrados nesses caminhos**, com essas mesmas âncoras.
+
+## 11/11 12:07 · sessao 80139f191a2c · - · - · origem=Ronald (tmux)
+
+Achados e contratos rastreados, sem escrita de arquivos.
+
+- **FILA — seletor sem efeito no detalhe GLPI, preexistente ao diff.** O formulário de `app/templates/chamados/detalhe.html:122` envia `novo_status` (`:130`–`:135`) para `chamados:followup`; a rota aponta a `adicionar_followup` (`app/chamados/urls.py:12`). Essa view lê apenas `conteudo` (`app/chamados/views.py:292`), chama `glpi.adicionar_followup` (`:304`) e retorna (`:310`), sem ler/aplicar `novo_status`. Portanto, nesse caminho, nenhum dos quatro valores muda `status_local`; efeito observado em produção `[nao verificado]`.
+
+- **FILA — “Reabrir” não corresponde a toda reabertura tecnicamente permitida, preexistente ao diff.** Os detalhes enviam `aberto` sob “Reabrir” (`app/templates/chamados/detalhe_local.html:398`; `app/chamados/services/verbos.py:136`). O motor aceita `em_analise → aberto`, mas a matriz de `resolvido` só admite `fechado` e `em_analise` (`app/chamados/catalogo/motor.py:99`–`:106`), rejeitando `resolvido → aberto` para perfis diferentes de `admin_ti` (`:153`–`:155`). Superusuário vira `admin_ti` (`app/colaboradores/mixins.py:163`–`:164`). A regra não foi introduzida pelo diff fornecido `[nao verificado: classificação histórica na árvore sem git; comparação com anexo confirma value/label anterior iguais]`.
+
+**Quem escreve/lê:**
+
+| Item | Escritor | Leitores / efeito |
+|---|---|---|
+| `value` | `opcao_mover` escreve exatamente `status_local`, escapado por `format_html` (`app/chamados/templatetags/chamados_tags.py:74`–`:78`); argumentos literais nas cinco telas. | As views recebem códigos, nunca texto visível: local via `acao_resposta_livre`, fio/modal via `processar_post_fio`; GLPI ignora, conforme achado. |
+| `novo_status`, detalhe local/painel turno | Formulários em `app/templates/chamados/detalhe_local.html:385` e `app/templates/chamados/partials/painel_chamado_turno.html:68`. | `detalhe_chamado_local` delega (`app/chamados/views.py:547`); serviço lê POST (`app/chamados/services/acoes_chamado.py:287`), exige gestor e pertencimento a `STATUS_CHOICES` (`:313`), chama `transicionar` (`:315`) e captura `ValueError` (`:320`). |
+| `novo_status`, fio/modal | Controles em `app/templates/chamados/fio_colaborador.html:265` e `app/templates/chamados/partials/modal_fio.html:665`. | Views delegam ao mesmo serviço (`app/chamados/views.py:669`–`:674`, `:951`–`:954`); leitura em `app/chamados/services/fio.py:502`; ramo exige `chamado_id` **e conteúdo** (`:709`), RBAC (`:714`), código em `STATUS_CHOICES` (`:719`), `transicionar` (`:721`) e captura `ValueError` (`:722`). |
+| Estados recebidos | `STATUS_CHOICES`: sete códigos (`app/chamados/models.py:28`–`:36`). | Pertencimento à lista é só filtro inicial; `transicionar` consulta perfil e juiz (`:130`–`:134`). Motor rejeita desconhecidos, terminais absolutos, destinos cancelado/superado, estado igual e transições fora da matriz (`app/chamados/catalogo/motor.py:139`–`:156`). Guardas de conteúdo permanecem (`app/chamados/models.py:136`, `:148`, `:181`). |
+| Estado persistido | `transicionar → _aplicar` (`app/chamados/models.py:199`), `_aplicar → _gravar_estado` (`:447`–`:450`). | Atribuição a `self.status_local` em `:228`; persistência em `:296`. Nenhum rótulo participa da decisão. |
+| `MOVER_PARA` | Definição única em `app/chamados/services/verbos.py:132`–`:137`. | Leitor produtivo único: `rotulo_de_movimento` (`:146`); testes também leem (`app/chamados/tests/test_bo_rotulo_encerrado.py:39`, `:45`–`:47`). |
+| `ESTADO_TITLE` | Definição em `app/chamados/services/verbos.py:100`–`:108`. | `rotulo_de_movimento` (`:146`), `rotulo_de_linha` (`:155`), `rotulo_para_pessoa` (`:166`); testes (`app/chamados/tests/test_bo_rotulo_encerrado.py:47`). |
+| `opcao_mover` | Tag registrada em `app/chamados/templatetags/chamados_tags.py:67`–`:78`. | Detalhe `:132`–`:135`, detalhe_local `:395`–`:398`, fio `:268`–`:270`, modal `:668`–`:670`, painel turno `:76`–`:78`, todos sob `app/templates/chamados/`. |
+
+**KeyError:** nenhum chamador produtivo encontrado passa variável dinâmica. O único chamador Python produtivo é `app/chamados/templatetags/chamados_tags.py:76`; os 18 argumentos da tag são literais pertencentes aos mapas, nas linhas citadas acima. O acesso indexado pode lançar para outro código (`app/chamados/services/verbos.py:146`); ocorrência em produção `[nao verificado]`.
+
+**Juiz duplicado / derivação paralela / semântica dupla:** o helper novo só escolhe apresentação (`app/chamados/services/verbos.py:140`–`:146`); não responde à pergunta de transição registrada em `app/core/juizes.py:108`, cuja autoridade continua `motor.decidir` (`:274`), chamada pelo modelo (`app/chamados/models.py:123`–`:125`). Texto, title e código permanecem separados na tag (`app/chamados/templatetags/chamados_tags.py:76`–`:78`); receptores comparam códigos (`app/chamados/services/acoes_chamado.py:313`, `app/chamados/services/fio.py:719`). Não encontrei leitor que compare o texto da opção. O uso de “arquivar” para `fechado` pode ser confundido com o véu de silêncio, cujo contrato preserva estado (`app/chamados/models.py:87`–`:92`), mas a expressão já estava no modal no diff anexo `[nao verificado: origem histórica fora do anexo]`; não é nova sobrecarga de campo pelo diff.
+
+## 11/11 12:07 · sessao 555fd569cc38 · - · - · origem=Ronald (tmux)
+
+Censo global não encontrou seletor de destino restante com opções manuais ou `espera`: os cinco usam `opcao_mover` em `app/templates/chamados/detalhe.html:130`, `detalhe_local.html:393`, `fio_colaborador.html:265`, `partials/modal_fio.html:665` e `partials/painel_chamado_turno.html:74`.
+
+As leituras restantes de `espera` nesses arquivos são pílulas de exibição, fora dos seletores: `app/templates/chamados/detalhe.html:36`, `detalhe_local.html:68`, `fio_colaborador.html:188`, `partials/modal_fio.html:102`, `partials/painel_chamado_turno.html:18`.
+
+Existe seletor manual fora de chamados, mas filtra relatório: `app/templates/relatorios/historico_chamados.html:54`; seu receptor usa `qs.filter(status_local=f_status)`, sem transição (`app/relatorios/views.py:919`).
+
+Há outros controles manuais que alteram estado como consequência de ações de domínio:
+
+- Aprovar/rejeitar benefício: botões em `app/templates/colaboradores/painel_solicitacao_beneficio.html:23` e JS em `app/templates/colaboradores/fila_solicitacoes_beneficio.html:138`; receptor escolhe `resolvido`/`fechado` em `app/colaboradores/views.py:2068`.
+- Aceitar/recusar escala: controles em `app/templates/chamados/detalhe_local.html:163` e `:169`; ambos concluem em `resolvido` (`app/chamados/services/acoes_chamado.py:149`).
+- Aceitar/recusar agenda: controles em `app/templates/chamados/detalhe_local.html:200` e `:209`; ambos concluem em `resolvido` (`app/chamados/services/acoes_chamado.py:108`).
+- Aprovar exceção: `app/templates/chamados/detalhe_local.html:256`, `app/templates/chamados/partials/modal_fio.html:598`; conclusão `resolvido` em `app/chamados/services/acoes_chamado.py:70`.
+- Autorizar/recusar geofence: recusa em `app/templates/chamados/partials/modal_fio.html:528`; os serviços concluem em `resolvido` (`app/chamados/services/acoes_chamado.py:222`, `:277`).
+
+Esses controles usam ações e textos próprios, sem oferecer dois destinos com o mesmo rótulo; não constituem repetição atual do defeito do seletor (`app/colaboradores/views.py:2068`; `app/chamados/services/acoes_chamado.py:108`, `:149`).
 
 ## 11/11 11:57 · sessao 0adb21eb0cd2 · BO-ROTULO-ENCERRADO · censo · origem=Code
 
@@ -802,321 +969,4 @@ O comando ORM completo está no [recibo:149](/home/ronald/wt-codex-fio-e0-v4-e4b
 
 Sem commit, respeitando a proibição inicial de commit e escrita em `.git*`. [recibo:158](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v14.txt:158) [nao verificado]
 
-## 11/11 11:31 · sessao 9c6b12fbf335 · MAPA-ATE-O-20 · censo · origem=Code
-
-**E3-LEITORES: 1 de 10; troca do vigia pendente.** A linha 635 ainda chama `porta_alcancavel_do_dia`; isso corresponde ao **item 4** do PRONTO de E3-TROCA-PELO-DIFF. (`app/chamados/services/vigia_fio.py:635`; `avais_obras.txt:55`, bloco `=== ../FIO-E0-V4-E3/aval_e3_troca_pelo_diff_1111.txt`)
-
-Nos anexos, contei linhas preservando os brancos: `avais_obras.txt:1` começa no primeiro `===`; `relato_topo.txt:1`, no título `# RELATO`. Abaixo, `BACKLOG.md`, `TICKETS.md` e `RELATO.md` significam os arquivos em `app/docs/`. A identidade Git da cópia com o HASH informado é **[não verificado]**.
-
-A busca de PRONTO abrangeu os avais fornecidos, `app/docs/TICKETS.md` e `app/docs/BACKLOG.md`. Resultados únicos em prosa foram aceitos explicitamente; enumerações de decisões, fases ou ordem não viraram listas de PRONTO. (`avais_obras.txt:138`; fontes específicas abaixo)
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **E3 — LEITORES** | **1 de 10** | `avais_obras.txt:55`, bloco `=== ../FIO-E0-V4-E3/aval_e3_troca_pelo_diff_1111.txt` | **2. Classes V/T/X com número:** V=15, T=0, X=217, discriminado em X1–X4. (`RELATO.md:62`, `RELATO.md:63`, `RELATO.md:64`, `RELATO.md:65`, `RELATO.md:66`) | **1. Sonda com soma 230:** medida foi **232**; divergência explicada, sem contar cumprimento literal. (`RELATO.md:74`)<br>**3. V curada ou zero:** falta prova posterior à cura cobrindo os 15 V; a decomposição anterior é A3/B2/P8/S2. (`RELATO.md:53`; conclusão integral **[não verificado]**)<br>**4. Três chamadores lendo só tarefa_do_dia:** falta a troca; vigia ainda consulta a porta antiga. (`app/chamados/services/vigia_fio.py:635`)<br>**5. Cinco respondedores mortos com certidão:** seguem declarados vivos. (`RELATO.md:99`)<br>**6. Catraca e paridade verdes:** falta prova depois da troca. **[não verificado]**<br>**7. DIFF do alcance antes/depois, por classe:** falta essa medição depois da troca. **[não verificado]**<br>**8. Suíte inteira OK:** há prova da fase `999a7966c`, sem a troca concluída. (`relato_topo.txt:28`; `app/chamados/services/vigia_fio.py:635`)<br>**9. Opus final aprova:** aprovação da mesma fase, sem prova da obra LEITORES completa. (`relato_topo.txt:27`)<br>**10. Pouso:** pousou a fase; falta pouso com os resultados da troca comprovados. (`relato_topo.txt:7`; `avais_obras.txt:138`) |
-| **E3 — sublista X1, separada** | **6 de 7 — não somados aos 10** | `avais_obras.txt:37`, bloco `=== ../FIO-E0-V4-E3/aval_e3_x1_folga_1111.txt` | **1. Censo dos 15:** sonda identificada, n=15, rc=0. (`RELATO.md:41`)<br>**2. Cura no ramo:** alteração do cartório descrita na aprovação. (`relato_topo.txt:27`)<br>**3. RED/GREEN + mutante:** base morta, GREEN 14 OK, mutantes X1 7/7. (`relato_topo.txt:31`)<br>**5. Suíte inteira OK:** Ran 15134, rc=0. (`relato_topo.txt:28`)<br>**6. Opus final:** aprovado. (`relato_topo.txt:27`)<br>**7. Pouso:** merge e deploy rc=0 registrados. (`relato_topo.txt:7`) | **4. DIFF da sombra por colaborador e zero trabalho mudando:** falta a discriminação completa. O topo apresenta agregados; o aval dos 35 dias posteriores ao desligamento resolve o corte, mas não apresenta o DIFF completo exigido. (`relato_topo.txt:18`, `relato_topo.txt:21`; `avais_obras.txt:44`) |
-
-Há conflito documental na E3: ORDEM-ATE-O-ZERO referencia **“6 resultados”** de E3-TROCA-PELO-DIFF, mas o próprio aval enumera **10**. Não há seis itens transcritos naquela referência para construir outra contagem. A sublista X1 enumera sete resultados próprios. (`avais_obras.txt:28`, bloco `=== ../FIO-E0-V4-E3/aval_ordem_ate_o_zero_1111.txt`; `avais_obras.txt:55`; `avais_obras.txt:37`)
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **E4B** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1866`, `BACKLOG.md:1875`; `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt`; busca também em `TICKETS.md` | Há GREEN e mutantes da c4, mas a suíte seguinte ficou vermelha; não fornecem N da obra. (`relato_topo.txt:9`, `relato_topo.txt:4`) | Formalizar a lista: o BACKLOG reúne A24, C3, três rodadas e `alarma_em_0` sem numerá-los como PRONTO. O aval ainda exige classe e, limbo, ramo sem porta e backfill da 11 com DIFF; não converti esse conjunto em N. (`BACKLOG.md:1866`; `avais_obras.txt:28`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **E4C** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1866`; `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt`; busca também em `TICKETS.md` | Censo identificado, com amostra 10/10 conferida; prova de preparação, sem contar migração concluída. (`relato_topo.txt:36`) | A prosa reúne **migração dos DIVERGE para o ato** e **selo 2**, sem numeração de PRONTO. Falta lista e prova desses resultados; D04/D05 seguem registradas. O PRONTO do censo conjunto é outra entrega, também não numerada. (`BACKLOG.md:1866`; `relato_topo.txt:36`; `avais_obras.txt:87`, bloco `=== ../E4C/aval_censo_adiantado_1111.txt`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **E4D** | **0 de 1 — resultado único em prosa** | `BACKLOG.md:1866`; `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt` | Nenhum resultado de CONTRACT comprovado. **[não verificado]** | **1. Parar de escrever a projeção:** falta registro no RELATO de commit/sonda que prove a interrupção da escrita. Retirada física e migration estão separadamente registradas, fora deste resultado. (`BACKLOG.md:1866`, `BACKLOG.md:1867`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F1** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:98`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_raiz_f1_um_eleitor_1111.txt`; busca também em `TICKETS.md` | Censo `f0f1.r`, rc=0, identifica três sítios persistentes e três eleitores divergentes. (`RELATO.md:19`) | Os números (1)–(4) do aval organizam decisões/instruções, sem lista de PRONTO. Falta essa lista e prova da implementação do escritor/eleitor único; o censo não a demonstra. (`avais_obras.txt:98`; `RELATO.md:19`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F2** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1883`, `BACKLOG.md:1877`; busca nos avais e em `TICKETS.md` | Há registro de c21 estacionada, c22 não lançada e suíte17 vermelha. (`RELATO.md:27`) | F2=BO-DISPUTA reúne cura, invariante, selo e contadores em prosa. Falta lista numerada e prova de cumprimento de cada resultado; não transformei as fases em itens de PRONTO. (`BACKLOG.md:1883`, `BACKLOG.md:1877`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F3** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:87`, bloco `=== ../E4C/aval_censo_adiantado_1111.txt`; `avais_obras.txt:104`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_f4_par_pela_celula_1111.txt`; busca também em `TICKETS.md` | Censo e sonda conjuntos estão registrados. (`relato_topo.txt:37`, `relato_topo.txt:38`) | Falta PRONTO específico da fase. O aval define autor do fecho automático; o topo registra dependência por arquivo comum, sem prova de cura pousada. (`avais_obras.txt:104`; `relato_topo.txt:11`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F4** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:102`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_f4_par_pela_celula_1111.txt`; busca também em `TICKETS.md` | A sonda identifica perda do par e a fonte `PARES_PAUSA_DNA`; isso prova o diagnóstico. (`relato_topo.txt:38`) | Falta lista de PRONTO e prova da leitura do par pela célula implementada. O aval define autoridade e proibições, sem enumerar resultados de conclusão. (`avais_obras.txt:102`, `avais_obras.txt:106`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F5** | **0 de 1 — herdado de E4D** | Equivalência E4d=F5: `BACKLOG.md:1756`; resultado: `BACKLOG.md:1866`, `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt` | Nenhum resultado de CONTRACT comprovado. **[não verificado]** | **1. Parar de escrever a projeção:** falta prova escrita no RELATO. É o mesmo resultado da E4D, sem lista própria adicional nem soma entre obras. (`BACKLOG.md:1756`, `BACKLOG.md:1866`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F6** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1883`; `avais_obras.txt:10`, bloco `=== ../META-18/aval_meta18_duas_raias_1111.txt`; busca também em `TICKETS.md` | Conclusão dos resultados: **[não verificado]** | A prosa exige DRY, DIFF por classe, reversão, lista de exportadas e medição de idade/efeito das duplicadas. São vários resultados sem numeração; faltam lista e provas correspondentes. (`avais_obras.txt:10`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **RAIZ F7** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:5`, bloco `=== ../META-18/aval_meta18_duas_raias_1111.txt`; busca também em `TICKETS.md` | Selo F7 verde: **[não verificado]** | “Selo esperado 0” nasce com cada fase, mas essa referência não identifica uma lista de resultados nem a condição concreta medida pelo selo. Falta definição de PRONTO e prova identificável. (`avais_obras.txt:5`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **O168** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1395`; busca nos avais e em `TICKETS.md` | Censo/sonda registrados; `CSF_RETRATADO_30d` consta **não mensurável, null**, sem prova de zero. (`RELATO.md:903`) | A prosa reúne guarda compartilhada, aplicação no evento, retirada posterior do `--executar` e `CSF_RETRATADO=0`. Falta lista numerada e prova desses resultados; “nada construído” está registrado. (`BACKLOG.md:1395`; `RELATO.md:173`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **LASTRO** | **PRONTO AUSENTE para a obra inteira** | `BACKLOG.md:1731`, `BACKLOG.md:1760`, `BACKLOG.md:1762`, `BACKLOG.md:1807`; busca nos avais e em `TICKETS.md` | Parte 2: deploy rc=0 e `sem_evento=0`. (`RELATO.md:863`)<br>Parte 3: pouso registrado. (`RELATO.md:799`) | Falta lista de PRONTO da LASTRO inteira. Partes 2/3 e FOLGA-FORA-DO-CATALOGO têm registros separados; não somei suas entregas para fabricar N. (`BACKLOG.md:1760`, `BACKLOG.md:1762`, `BACKLOG.md:1807`) | [nao verificado]
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **O169-FECHADA** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1921`; `avais_obras.txt:132`, bloco `=== ../O169-FECHADA/aval_tres_respostas_1110_0040.txt`; busca também em `TICKETS.md` | Suíte v5 verde; GREEN/mutantes registrados; merge/deploy, APPLY 3 e DRY seguinte vazio. (`relato_topo.txt:8`, `relato_topo.txt:12`, `relato_topo.txt:6`) | Falta lista numerada que permita N. O `(3)` do aval é a terceira decisão de um aval misto; não é uma lista de três resultados da O169. O nome vigente do contador é `cluster_encerrado_sem_lastro`. (`avais_obras.txt:132`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **UI-PAINEL** | **PRONTO AUSENTE — quatro resultados declarados, não numerados** | `avais_obras.txt:124`, bloco `=== ../UI-PAINEL/aval_ui_painel_raspado.txt`; busca também em `TICKETS.md`/`BACKLOG.md` | O GREEN falhou em quatro testes; mutantes não medidos porque caíram nas mesmas falhas. (`relato_topo.txt:5`) | O PRONTO lista, sem números: **faixa na aba Mensagens; contador do botão; função única com três leitores; selo API×painel verde com mutante morto**. Falta numeração e prova de cada resultado. A enumeração MUDA cobre somente 1–3, sem incluir o selo; não a completei por inferência. (`avais_obras.txt:117`, `avais_obras.txt:118`, `avais_obras.txt:119`, `avais_obras.txt:124`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **BO-ROTULO-ENCERRADO** | **0 de 1 — resultado único em prosa** | `BACKLOG.md:1884` | Há mapeamento da fonte do modal e dos leitores; não prova da troca concluída. (`RELATO.md:7699`) | **1. Rótulo lido da mesma fonte do modal, sem mudar estado:** falta prova escrita da alteração e do comportamento do seletor para resolvido/fechado. (`BACKLOG.md:1884`; conclusão **[não verificado]**) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **TRIAGEM-OFFLINE-SEM-CAMERA** | **PRONTO AUSENTE — não numerada** | `avais_obras.txt:95`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_raia2_bo_visivel_1111.txt`; contexto em `BACKLOG.md:1889`; busca também em `TICKETS.md`/`BACKLOG.md` | Consta na fila depois de BO-ROTULO. (`relato_topo.txt:17`) | Falta lista de PRONTO. O aval exige juiz único de selfie impeditiva e smoke nas duas cascas; conclusão desses resultados e preservação da batida offline sem câmera: **[não verificado]**. (`avais_obras.txt:95`) |
-
-| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
-|---|---|---|---|---|
-| **LOTE-VALIDAR-REGRESSAO-0311** | **PRONTO AUSENTE** | `BACKLOG.md:1892`; `avais_obras.txt:95`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_raia2_bo_visivel_1111.txt`; busca também em `TICKETS.md` | Medição citada: custo por referência estável, crescimento pelo tamanho do lote e reoferta de recusados; nenhuma cura pontual, retorno a LOTE-VALIDAR-VIRA-JOB. Prova identificada: `sonda_lote0311.r`. (`relato_topo.txt:10`) | Falta lista de resultados de conclusão. “Medir a causa antes” é precondição; a medição realizada não autoriza inventar N nem declarar a obra encerrada. (`BACKLOG.md:1892`; `avais_obras.txt:95`, `avais_obras.txt:138`) |
-
-**Obras PRONTO AUSENTE:**
-
-- **E4B e E4C** — prosa com múltiplos resultados, sem lista numerada. (`BACKLOG.md:1866`)
-- **RAIZ F1, F2, F3, F4, F6 e F7** — sem lista específica de PRONTO nas fontes examinadas. (`BACKLOG.md:1883`; `avais_obras.txt:98`, `avais_obras.txt:87`, `avais_obras.txt:102`, `avais_obras.txt:10`, `avais_obras.txt:5`)
-- **O168**. (`BACKLOG.md:1395`)
-- **LASTRO**. (`BACKLOG.md:1760`, `BACKLOG.md:1762`, `BACKLOG.md:1807`)
-- **O169-FECHADA**. (`BACKLOG.md:1921`; `avais_obras.txt:132`)
-- **UI-PAINEL** — quatro resultados declarados, não numerados. (`avais_obras.txt:124`)
-- **TRIAGEM-OFFLINE-SEM-CAMERA**. (`avais_obras.txt:95`)
-- **LOTE-VALIDAR-REGRESSAO-0311**. (`BACKLOG.md:1892`; `avais_obras.txt:95`)
-
-## 11/11 11:28 · sessao b11c41e475b0 · - · - · origem=Ronald (tmux)
-
-Censo concluído só por leitura dos três documentos do HEAD e anexos do prompt. As linhas do BACKLOG do anexo estão deslocadas em relação à cópia; usar abaixo as linhas reais do HEAD.
-
-| Obra | Lista de PRONTO encontrada | Fonte HEAD | Prova escrita disponível / falta |
-|---|---|---|---|
-| O168 | Não há lista numerada. A prosa reúne vários resultados: guarda compartilhada, valer no evento, retirada posterior do `--executar`, `CSF_RETRATADO=0`; portanto não converter em N=1. | BACKLOG.md:1395; BACKLOG.md:1960 | RELATO.md:903 registra censo/sonda: guarda só no supra; `CSF_RETRATADO_30d` não mensurável, `null`, não zero. RELATO.md:173 diz nada construído. Falta lista formal de PRONTO e provas dos resultados. |
-| LASTRO | Não há lista única numerada de PRONTO para a obra inteira. Há partes e complementos separados; não somar. | BACKLOG.md:1731; BACKLOG.md:1760; BACKLOG.md:1762; BACKLOG.md:1807 | Fase 2: construção, RED/GREEN, mutantes, sombra e suíte em RELATO.md:860; opus em :861; pouso em :862; deploy e `sem_evento=0` em :863. Parte 3 pousou, opus e suíte verdes em RELATO.md:799. Essas provas não dão N da LASTRO inteira. Folga fora do catálogo ainda foi encaminhada a censo em RELATO.md:7353. | [nao verificado]
-| O169-FECHADA | Não há lista numerada de PRONTO. BACKLOG tem contador + mutante + reparo do legado; múltiplos resultados sem N. O `(3)` do aval TRES RESPOSTAS é a terceira decisão de um aval misto, não três itens PRONTO da obra. | BACKLOG.md:1921 | Anexo `relato_topo.txt`, linha “O169-FECHADA NO AR 10:57”: merge `ca978f65d`, deploy rc0, DRY 3, APPLY 3, DRY seguinte vazio. Suíte v5 e mutantes também no topo. Falta N autorizado; não escrever X de N com base no pouso. Nome antigo `fechados_por_idade` do BACKLOG foi substituído por `cluster_encerrado_sem_lastro` no aval anexado; mudança explicada em RELATO.md:194. |
-| UI-PAINEL | Aval traz **“PRONTO (4 resultados)”**, mas os quatro estão separados por `;`, **sem numeração**: faixa; contador; função única com três leitores; selo API/painel verde com mutante morto. Pela exigência literal do usuário, informar **“não numerada, quatro resultados declarados”**, sem inventar N a partir dela. `MUDA` numera somente 1–3 e não cobre o selo. | Não há ocorrência específica em TICKETS/BACKLOG HEAD; fonte é bloco `=== ../UI-PAINEL/aval_ui_painel_raspado.txt` do anexo. | `relato_topo.txt`, linha “UI-PAINEL v1 ORM 10:55”: quatro falhas no GREEN; mutantes não medidos porque caem nas mesmas falhas. Não prova nenhum dos quatro resultados finalizados. Construção iniciada não basta. |
-| BO-ROTULO-ENCERRADO | Nenhuma lista numerada. **Candidato à exceção N=1**: “cura = rótulo lido da mesma fonte do modal, sem mexer em estado” é um único resultado observável, embora não venha rotulado PRONTO. Se aceitar prosa de escopo como lista singular, usar **0 de 1**, sem somar outras exigências. | BACKLOG.md:1884 | RELATO.md:7699 só registra mapa, fonte modal e 13 leitores/escritores; não comprova troca. Topo põe a obra depois do pouso O169. Falta prova de que seletor lê a mesma fonte do modal e distingue resolvido/fechado. | [nao verificado]
-| TRIAGEM-OFFLINE-SEM-CAMERA | Sem lista numerada. Aval exige juiz único online/offline/v2 e smoke nas duas cascas: vários resultados, não N=1. | Entrada específica só no anexo; BACKLOG.md:1889 contém “selfie impeditiva” dentro do resto da classe, sem PRONTO. | Topo a mantém na fila depois de BO-ROTULO. Não há prova escrita de cura/smoke. Falta lista e prova de admissibilidade única, batida preservada offline sem câmera e smoke das duas cascas. |
-| LOTE-VALIDAR-REGRESSAO-0311 | Sem lista numerada de PRONTO. BACKLOG “medir a causa antes” é precondição; aval RAIA2 determina conduta condicional, não enumera resultados de conclusão. | BACKLOG.md:1892 | Medição comprovada no topo, linha “LOTE-VALIDAR-REGRESSAO-0311 MEDIDA 10:3x”, com `logs/RAIA-2-BO-VISIVEL/sonda_lote0311.r`: custo por referência estável; aumento pelo lote e reoferta de recusados; nenhuma cura pontual; volta à LOTE-VALIDAR-VIRA-JOB. RELATO.md:7695 era o estado anterior: causa por medir. Não transformar essa medição em X de N sem lista. |
-
-Busquei todas as ocorrências dos nomes e dos termos `PRONTO`/`resultados` em `app/docs/TICKETS.md` (1323 linhas), `app/docs/BACKLOG.md` (2339 linhas) e `app/docs/RELATO.md` (7726 linhas); não localizei outra lista numerada para essas sete obras.
-
-Recomendação estrita para a consolidação: PRONTO AUSENTE para O168, LASTRO, O169-FECHADA, UI-PAINEL, TRIAGEM e LOTE; BO-ROTULO pode ser **0 de 1** apenas pela exceção expressa de resultado único, com fonte BACKLOG.md:1884.
-
-## 11/11 11:28 · sessao c7cd088f0fd1 · - · - · origem=Ronald (tmux)
-
-E3-LEITORES: **1 de 10**, em leitura estrita da lista E3-TROCA-PELO-DIFF. Só o item 2 tem prova completa inequívoca: V=15, T=0, X=217, discriminados em `app/docs/RELATO.md:62–66`.
-
-- Item 1: aval exige soma 230; medida foi 232. Divergência explicada em `app/docs/RELATO.md:74`, mas não conto cumprimento literal.
-- Item 3: falta medida pós-cura demonstrando solução dos 15 V. A decomposição A3/B2/P8/S2 está em `app/docs/RELATO.md:53`; a entrada de A/S no c8b está em `app/docs/RELATO.md:35` e `:38`; entrega c8c genérica em `:9` não demonstra o resultado dos 15.
-- Item 4: falta trocar os três chamadores. Confirmado no código: `app/chamados/services/vigia_fio.py:635` ainda chama `porta_alcancavel_do_dia`.
-- Item 5: falta certidão dos cinco respondedores. Sua sobrevivência está declarada em `app/docs/RELATO.md:238`.
-- Item 6: falta prova da catraca “respondedores=1” e paridade após troca.
-- Item 7: falta DIFF de alcance antes/depois da troca por classe.
-- Itens 8–10: suite, opus e pouso do topo vivo demonstram a fase c8+X1, não o fechamento da obra LEITORES com a troca concluída. [nao verificado]
-
-E3-X1 tem **lista separada de 7 itens**, sem somar ao N=10. Recomendo **6 de 7**:
-
-1. Censo dos 15: `app/docs/RELATO.md:41`.
-2. Cura no ramo: relato_topo, linha do opus final 999a7966c.
-3. RED/GREEN e mutantes: relato_topo, linha e3fix11 ORM 09:21.
-4. **Falta** DIFF completo por colaborador, demonstrando zero dia de trabalho exigível mudando. O topo dá agregados e os 35 pós-desligamento; o aval libera esses 35, mas não substitui a discriminação exigida.
-5. Suite inteira: relato_topo, linha suite pre-opus 09:46. [nao verificado]
-6. Opus final: relato_topo, linha opus final 09:54.
-7. Pouso: relato_topo, linha FIO-E0-V4-E3 NO AR 11:0x. [nao verificado]
-
-E4B: **PRONTO AUSENTE**. `app/docs/BACKLOG.md:1866` traz prosa composta — A24, C3, três rodadas, alarma — sem lista numerada. `:1875` descreve backfill, sem fornecer lista de PRONTO. Não há lista pertinente em TICKETS.
-
-E4C: **PRONTO AUSENTE**. `app/docs/BACKLOG.md:1866` traz dois resultados em prosa: migração dos DIVERGE e selo 2. O aval do censo adiantado é entrega conjunta de censo, não PRONTO da migração.
-
-E4D: **0 de 1**, caso se aplique a exceção de resultado único em prosa: parar de escrever a projeção, `app/docs/BACKLOG.md:1866` e aval E4-EXPAND-CONTRACT. Não há prova escrita de conclusão do CONTRACT no RELATO fornecido.
-
-A referência HEAD correta de E3-LEITORES é `app/docs/BACKLOG.md:1865`; as linhas do anexo backlog_obras não correspondem à numeração da cópia.
-
-## 11/11 11:28 · sessao 0cccfd47af33 · - · - · origem=Ronald (tmux)
-
-Censo RAIZ concluído, sem escrita. As linhas abaixo são do HEAD da cópia; diferem do anexo `backlog_obras.txt`. (`app/docs/BACKLOG.md:1883`)
-
-| Fase | PRONTO encontrado | Prova / limite |
-|---|---|---|
-| RAIZ F1 | **PRONTO AUSENTE** específico. A sequência chama F1 de “matriz”, sem lista de resultados. O aval UM-ELEITOR enumera decisões de implementação, não PRONTO. (`app/docs/BACKLOG.md:1883`; anexo `aval_raiz_f1_um_eleitor_1111.txt`) | Existe censo `f0f1.r`, rc 0, com 3 sítios persistentes e 3 eleitores divergentes; isso prova o censo, não a implementação do escritor/eleitor único. (`app/docs/RELATO.md:19`) |
-| RAIZ F2 | **PRONTO AUSENTE** específico. F2 é BO-DISPUTA; sua linha mistura cura, invariante, selo e contadores em prosa, sem lista PRONTO numerada. (`app/docs/BACKLOG.md:1883`; `app/docs/BACKLOG.md:1877`) | c21 estacionada, c22 não lançada; suite17 terminou vermelha. (`app/docs/RELATO.md:27`) |
-| RAIZ F3 | **PRONTO AUSENTE** de produto. Há o censo conjunto F3/F4 no anexo; seu PRONTO é entrega de leitura, não encerramento da fase. (`app/docs/BACKLOG.md:1883`; anexo `aval_censo_adiantado_1111.txt`) | O topo fornecido relata censo, sonda e bloqueio por arquivo comum; não relata cura pousada. (anexo `relato_topo.txt`, linhas a numerar pelo pai) |
-| RAIZ F4 | **PRONTO AUSENTE** de produto. O aval PAR-PELA-CELULA define autoridade e proibições; não enumera PRONTO. A linha BUG-PAR descreve ato do par, RED e DRY em prosa. (`app/docs/BACKLOG.md:1929`; anexo `aval_f4_par_pela_celula_1111.txt`) | Censo/sonda do topo provam descoberta da fonte `PARES_PAUSA_DNA`, não implementação. (anexo `relato_topo.txt`, linhas a numerar) |
-| RAIZ F5 | **Sem lista própria.** Pode herdar **N=1** de E4d, se aplicado o critério de resultado único em prosa: “parar de escrever a projeção”. A equivalência E4d = F5 está explícita. (`app/docs/BACKLOG.md:1756`; `app/docs/BACKLOG.md:1866`) | **X=0**: nenhuma prova escrita de contract concluído encontrada no RELATO; o topo mantém E4c dependente da E4b. (anexo `relato_topo.txt`, linhas a numerar) |
-| RAIZ F6 | **PRONTO AUSENTE** numerado. O aval META descreve vários resultados sem numeração: DRY, DIFF por classe, reversão, lista de exportadas e medição das duplicadas; não cabe transformar tudo em um item. (`app/docs/BACKLOG.md:1883`; anexo `aval_meta18_duas_raias_1111.txt`) | Não há prova de conclusão desses resultados no RELATO pesquisado. [não verificado] |
-| RAIZ F7 | **PRONTO AUSENTE** específico. “Selo esperado 0 nasce com cada fase” não fornece lista nem define, nessa frase, a condição medida. (`app/docs/BACKLOG.md:1883`; anexo `aval_meta18_duas_raias_1111.txt`) | Não há prova citada de selo RAIZ F7 verde no material fornecido. [não verificado] |
-
-Fontes locais pesquisadas integralmente: `app/docs/TICKETS.md` (1323 linhas), `app/docs/BACKLOG.md` (2339 linhas), `app/docs/RELATO.md` (7726 linhas). `TICKETS.md` não tem entradas RAIZ-DA-DISPUTA, BO-DISPUTA-SEM-PERGUNTA, BUG-PAR ou DISPUTA-ZUMBI. [não verificado — resultado negativo da busca]
-
-Atenção para não converter a ordem F0→F7 em sete itens de PRONTO: ela descreve fases da obra. (`app/docs/BACKLOG.md:1883`)
-
-## 11/11 10:57 · sessao 5a702a9c8f16 · MAPA-20 · verificador · origem=Code
-
-REPROVADO para pouso [nao verificado]
-
-Referências `diff:arquivo:linha` usam as linhas de destino do patch fornecido; `base:arquivo:linha`, a cópia disponível. A identidade Git dessa cópia com o HASH informado ficou [nao verificado].
-
-1. **Triagem 1–5: três correções fecham o achado; duas permanecem parciais.**
-
-   | Achado | Conferência |
-   |---|---|
-   | **1 — nome da obra** | **Fecha.** `UI-PAINEL` foi corrigido e as 18 obras correspondem nominalmente ao aval. (`diff:bin/mapa20_valida.py:19–24`; `aval_mapa_ate_o_20_1111.txt:1`, item 1.) |
-   | **2 — tabela torta** | **Parcial.** Há checagem de largura das linhas, duplicatas e células vazias, mas continuam passando separador com largura errada e tabela ainda dentro de cerca; exemplos no item 3. (`diff:bin/mapa20_valida.py:47–52,64–67,82–94`.) |
-   | **3 — retido não atômico/saída antecipada** | **Fecha os dois defeitos indicados.** A re-raspagem escreve ao lado, troca por `mv`, e a falha segue para os passos seguintes com `MAPA_RC=1`. O `rm` é tentado, mas seu sucesso não é conferido. (`diff:bin/relato.sh:99–112`.) |
-   | **4 — falta de foto** | **Fecha no código.** O validador lê `$TMP/mapa20.md`, e esse mesmo arquivo é a origem entregue ao raspador; regravar a fonte depois não troca o documento deste ciclo. (`diff:bin/relato.sh:96–97,141`.) |
-   | **5 — selo por texto/mutantes** | **Parcial.** Agora há execução de cenários, mas sobrevivem mutantes plausíveis; exemplos no item 4. A alegação de “12 mortos” não veio acompanhada dos mutantes/resultados: [nao verificado]. (`diff:bin/tests/test_mapa20_valida.sh:54–109`.) |
-
-2. **Todos os `exit` de `relato.sh` após o diff: 12 comandos.**
-
-   | Local | Valor e condição |
-   |---|---|
-   | `base:bin/relato.sh:27` | `1`: falha da trava. |
-   | `base:bin/relato.sh:28` | `1`: destino sem `.git`. |
-   | `base:bin/relato.sh:32` | `1`: falha da lista de nomes. |
-   | `base:bin/relato.sh:35` | `1`: falha do BACKLOG-TOPO. |
-   | `base:bin/relato.sh:38` | `1`: falha do ESTADO. |
-   | `base:bin/relato.sh:42` | `1`: falha da SESSAO. |
-   | `base:bin/relato.sh:86` | `1`: falha da raspagem do RELATO retido. |
-   | `diff:bin/relato.sh:126` | `1`: falha de `gerar_avais.py`. |
-   | `diff:bin/relato.sh:141` | `1`: falha da raspagem geral. |
-   | `diff:bin/relato.sh:155` | `$MAPA_RC`, portanto `0` ou `1`: índice sem mudança. |
-   | `diff:bin/relato.sh:161` | `1`: falha da expressão `git push && echo`. | [nao verificado]
-   | `diff:bin/relato.sh:162` | `$MAPA_RC`, portanto `0` ou `1`: saída final. |
-
-   **Validador executado vermelho → rc final 0:** não há esse caminho no fluxo mostrado. O ramo fixa `MAPA_RC=1`, nenhuma atribuição posterior o zera, e ambas as saídas normais o devolvem. **Validador verde → rc 1 sem outra falha:** também não há; as saídas posteriores com `1` dependem de outra falha. (`diff:bin/relato.sh:94–99,126,141,155,161–162`.) [nao verificado]
-
-   **O público pode perder MAPA-20 sem o validador falhar:** sim, **sem ele executar**. Fonte ausente/ilegível → `cp` falha → o `&&` pula Python → re-raspagem do público falha → `rm` → remoção rastreada entra no commit. O ciclo sai `1`; isso não constitui validador verde. (`diff:bin/relato.sh:96–108,149–162`.) [nao verificado]
-
-   Continua possível falha de `git commit` seguida de push bem-sucedido terminar `0` com mapa verde; existe outra falha nesse caso. A ausência de conferência de `cd`/commit já era anterior, conforme o descarte 6, e não foi curada pelo diff. (`base:bin/relato.sh:21,120–132`; `diff:bin/relato.sh:144–162`; `triagem_v1.txt:7`.) [nao verificado]
-
-3. **Validador: universo correto, parser ainda insuficiente.**
-
-   Nome a nome, a tupla contém: **E3, E4B, E4C, E4D; RAIZ F1, F2, F3, F4, F5, F6, F7; O168; LASTRO; O169-FECHADA; UI-PAINEL; BO-ROTULO-ENCERRADO; TRIAGEM-OFFLINE-SEM-CAMERA; LOTE-VALIDAR-REGRESSAO-0311**. São as 18 do aval; `SEM DONO` é exigido separadamente. (`diff:bin/mapa20_valida.py:19–25,92–94`; `aval_mapa_ate_o_20_1111.txt:1`, itens 1–2.)
-
-   Nos exemplos seguintes, **G** significa uma tabela completa com cabeçalho de três colunas, separador de três colunas e as 19 linhas obrigatórias preenchidas. Essa forma passa no próprio selo. (`diff:bin/tests/test_mapa20_valida.sh:20–29`.)
-
-   **Aceita indevidamente:**
-
-   - **Separador estreito:** em G, substituir somente o separador por `|---|---|` continua verde. O código confere o conteúdo das células do separador, mas não sua quantidade contra o cabeçalho. (`diff:bin/mapa20_valida.py:64–67`.) [nao verificado]
-   - **Tabela dentro de cerca:** quatro crases de abertura, depois três crases, depois G e finalmente quatro crases. Continua verde, embora as três crases intermediárias não encerrem a cerca de quatro. O mesmo ocorre com quatro/três tils. O parser guarda só o caractere da cerca. (`diff:bin/mapa20_valida.py:47–52`.) [nao verificado]
-   - **Fechamento com texto:** uma linha de três crases seguida de `python` também é tratada como fechamento. (`diff:bin/mapa20_valida.py:47–52`.)
-   - **Cabeçalho vazio:** `| | | |`, separador normal e as 19 linhas preenchidas passam; o cabeçalho só tem sua quantidade de colunas examinada. (`diff:bin/mapa20_valida.py:79–89`.)
-   - **Pontuação sem dado:** `…`, `!!!` e `___` passam. O filtro reconhece apenas o conjunto restrito `-?.–— `, além da retirada de asteriscos/crases; `...` reprova, mas `…` passa. (`diff:bin/mapa20_valida.py:27,70–71`.)
-
-   **Recusa indevidamente formas de apresentação equivalentes:**
-
-   - G sem os pipes externos: retorna `mapa sem tabela`, porque só coleta linhas iniciadas por `|`. (`diff:bin/mapa20_valida.py:58–63`.)
-   - Obra escrita `_E3_`: acusa E3 ausente, enquanto `**E3**` é normalizado. A limpeza trata asteriscos/crases, mas não underscores. (`diff:bin/mapa20_valida.py:30–31,92–94`.)
-
-   **Escape:** `a\|b` funciona como uma célula. Entretanto, a substituição é cega: na linha `| E3 | caminho\\| nao medido |`, com **duas barras reais**, funde as duas últimas células e acusa largura 2 contra 3; não examina a paridade das barras. (`diff:bin/mapa20_valida.py:34–39,87–88`.)
-
-   **Limite de conformidade:** uma tabela de apenas `obra | dado`, com todas as linhas dizendo `nao medido`, também passa. Isso satisfaz o mínimo implementado, mas não comprova as colunas específicas, a medição ou o tamanho de SEM DONO exigidos pelo aval. (`diff:bin/mapa20_valida.py:79–94`; `aval_mapa_ate_o_20_1111.txt:1`, itens 1–2.)
-
-4. **O selo não fica verde com recorte literalmente vazio, mas ainda deixa regressões passarem.** [nao verificado]
-
-   Os três `awk` dependem de prefixos textuais dos marcadores. Se um recorte ficar vazio, as guardas por `mapa20_valida.py`, `raspar_publico.py` e `git push` incrementam `FALHAS`; portanto, a hipótese específica “bloco vazio e selo verde” está barrada. As guardas, porém, não comprovam os limites exatos dos recortes. (`diff:bin/tests/test_mapa20_valida.sh:54–58,112`.) [nao verificado]
-
-   **Mutante plausível que passa:** retirar `|~{3,}` da regex de cercas do validador. A parte (a) só testa cerca de crases; os seis cenários da parte (b) também não usam tils. O mutante preserva esses resultados e aceita G inteiramente cercado por `~~~`. (`diff:bin/mapa20_valida.py:47`; `diff:bin/tests/test_mapa20_valida.sh:29–49,83–109`.)
-
-   **Outro mutante sobrevivente:** validar e publicar diretamente `logs/MAPA-20/mapa.md`, deixando a foto sem uso. Os seis cenários não alteram a fonte entre validação e raspagem; assim, não distinguem esse mutante da correção do achado 4. (`diff:bin/relato.sh:96–97`; `diff:bin/tests/test_mapa20_valida.sh:83–109`.)
-
-   A reprodução em memória dos 48 textos da parte (a) não encontrou divergências; o caso ausente é tratado com rc 1. Execução integral do selo, incluindo seus repositórios temporários: [nao verificado]. (`diff:bin/tests/test_mapa20_valida.sh:29–49`; `diff:bin/mapa20_valida.py:99–104`.)
-
-5. **Selos vizinhos: nenhuma quebra demonstrada nas verificações que leem `relato.sh`.**
-
-   - **`test_codex_estado`:** o recorte começa em `CODEX_OK=""`, depois do novo 2f, e termina no passo 3. Os novos comandos não entram na região examinada por `exit`. (`base:bin/tests/test_codex_estado.sh:104–111`; `diff:bin/relato.sh:89–122`.)
-   - **`test_relato_publica_claude_md`:** mantém o par CLAUDE e o pathspec. O novo `git add` de MAPA está indentado e não aumenta a contagem de linhas iniciadas na coluna 1 por `git add -A `. (`base:bin/tests/test_relato_publica_claude_md.sh:13–20`; `diff:bin/relato.sh:141,145,151,160`.)
-   - **`test_codex_estado_evento`:** continuam as chamadas de `codex_estado.sh` e `relato_nomes.sh`, sem introduzir `gerar_codex_estado.py` inline. (`base:bin/tests/test_codex_estado_evento.sh:27–30`; `base:bin/relato.sh:32,97`.)
-   - **`test_relato_afirma_com_prova`:** a chamada exigida permanece. (`base:bin/tests/test_relato_afirma_com_prova.sh:43–45`; `base:bin/relato.sh:55`.)
-   - **`test_publicacao_sem_nome`:** o universo vem de `git ls-files` do público; MAPA rastreado entra automaticamente. Não depende de um recorte do script. (`base:bin/tests/test_publicacao_sem_nome.sh:58–72`.)
-
-   Execução completa desses cinco selos e resultado de privacidade em produção: [nao verificado].
-
-6. **Quem escreve e quem lê.**
-
-   | Campo/arquivo | Escritor | Leitor |
-   |---|---|---|
-   | `MAPA_RC` | Shell: inicializa `0`; falha de cópia **ou** validação fixa `1`. | Saídas sem mudança e final. (`diff:bin/relato.sh:94–99,155,162`.) |
-   | `MAPA_PAR` | Shell: vazio ou par foto→público. | Argumento opcional do raspador geral. (`diff:bin/relato.sh:94,97,141`.) |
-   | `MAPA_PATH` | Shell: vazio ou nome após `git add` bem-sucedido. | Mensagem e pathspec do commit. (`diff:bin/relato.sh:149–160`.) | [nao verificado]
-   | `$TMP/mapa20.md` | `cp` da fonte; limpeza pelo trap. | Validador e raspador geral. (`diff:bin/relato.sh:96–97,141`; `base:bin/relato.sh:25`.) |
-   | `logs/MAPA-20/mapa.md` | “Sessão por evento” está declarado no comentário; escritor efetivo e gatilhos: [nao verificado]. | `cp`. (`diff:bin/relato.sh:89–96`.) |
-   | Público `MAPA-20.md` | Raspador geral; no retido, raspador→arquivo ao lado→`mv`; falha tenta `rm`. | Re-raspagem do retido e Git para inclusão/remoção/publicação. (`base:bin/raspar_publico.py:23–40`; `diff:bin/relato.sh:102–108,141,150–161`.) |
-
-7. **Classes históricas, uma a uma.**
-
-   | Classe | Resultado |
-   |---|---|
-   | **2º juiz** | Não surge segundo juiz de nomes: raspagem reutiliza `nome_no_texto`. A lista independente no teste serve de fixture contra troca de obra. (`base:bin/raspar_publico.py:15–16,31,36`; `diff:bin/tests/test_mapa20_valida.sh:3–4,20–22`.) | [nao verificado]
-   | **2º escritor fora da porta** | Os dois caminhos de escrita pública estão no mesmo publicador, sob a trava existente. Escritor efetivo da fonte: [nao verificado]. (`base:bin/relato.sh:27`; `diff:bin/relato.sh:96–112,141`.) | [nao verificado]
-   | **Relógio fora da borda** | Nenhum relógio de decisão novo; o `date` permanece na mensagem de commit. O timer de publicação já existe. (`base:bin/relato.sh:130`; `diff:bin/relato.sh:159`; `base:bin/hasner-relato.timer:5–7`.) | [nao verificado]
-   | **Derivação paralela de fonte única** | O publicador consome a foto validada e conserva o raspador existente. Reuso dos censos e medidas pela função real: [nao verificado]. (`diff:bin/relato.sh:96–97,141`; `aval_mapa_ate_o_20_1111.txt:1`, item 1.) | [nao verificado]
-   | **Selo sem mordida** | **Presente:** cercas de tils e a propriedade da foto admitem os mutantes descritos no item 4. (`diff:bin/tests/test_mapa20_valida.sh:29–49,83–109`.) |
-   | **Ordem de trava** | Não aparece nova aquisição. A chamada `codex_estado.sh --gerar` retorna antes da trava do ramo evento, evitando autoespera nessa costura. (`base:bin/relato.sh:27,97`; `base:bin/codex_estado.sh:54–56,65–66`.) |
-   | **Pouso antes do pré-requisito** | O comentário referencia contrato, mas contrato efetivo, mapa completo/publicado, suíte e opus desta volta: [nao verificado]. Esses requisitos constam do aval e das regras da base. (`diff:bin/relato.sh:93`; `aval_mapa_ate_o_20_1111.txt:1`; `base:CLAUDE.md:377–381,394`.) | [nao verificado]
-   | **Campo com dois significados** | `MAPA_RC` significa falha da etapa MAPA, não rc puro do Python; `MAPA_PATH` também representa remoção, não prova de mapa novo publicado. O fluxo é coerente com esses usos, mas nenhum deles comprova “validador executou” ou “mapa novo está no ar”. (`diff:bin/relato.sh:94–99,148–162`.) | [nao verificado]
-
-## 11/11 10:55 · sessao f8e3618b4d7e · - · - · origem=Ronald (tmux)
-
-Contraexemplos confirmados em memória, sem criar arquivos:
-
-- **Aceita tabela torta**: cabeçalho de três colunas com separador de duas; retorna `P=[]`, pois só verifica o conteúdo das células do separador, sem comparar sua largura. Também aceita `|- - -|- - -|- - -|`. (`diff bin/mapa20_valida.py:64-67`)
-- **Aceita tabela ainda cercada**: abertura de quatro crases, fechamento de três e mapa completo; idem com quatro/três tils. Também considera ` ```python ` fechamento. Guarda somente o caractere, sem comprimento nem condição sobre texto restante. (`diff bin/mapa20_valida.py:47-52`)
-- **Aceita pontuação sem dado**: células `!!!`, `___`, `…`; o conjunto só contempla `-?.–— ` e a limpeza adicional de asteriscos/crases. (`diff bin/mapa20_valida.py:27`, `:70-71`)
-- **Aceita cabeçalho vazio** `| | | |` e mapa de somente duas colunas com todas as 19 linhas. Isso satisfaz o mínimo implementado, mas não comprova as colunas exigidas pelo aval. (`diff bin/mapa20_valida.py:79-89`; `aval_mapa_ate_o_20_1111.txt:item 1`)
-- **Recusa tabela sem pipes externos**, produzindo `mapa sem tabela`. (`diff bin/mapa20_valida.py:58-63`)
-- **Recusa `_E3_`**, embora aceite `**E3**`; sua normalização não remove underscores. (`diff bin/mapa20_valida.py:30-31`, `:92-94`)
-- **Recusa separador precedido por duas barras reais**: na linha `| E3 | caminho\\| nao medido |`, funde as duas últimas células e acusa `linha E3: 2 coluna(s), o cabecalho tem 3`. Não considera a paridade das barras anteriores ao pipe. (`diff bin/mapa20_valida.py:38-39`, `:87-88`)
-- **Pipe simples escapado funciona**: `a\|b` permanece uma célula e o mapa completo fica verde. (`diff bin/mapa20_valida.py:34-39`)
-
-A tupla corresponde nominalmente às 18 obras do aval, incluindo `UI-PAINEL`; `SEM DONO` é exigido separadamente. (`diff bin/mapa20_valida.py:19-25`, `:92`; `aval_mapa_ate_o_20_1111.txt:item 1-2`)
-
-Reproduzi os 48 mapas da fixture: nenhuma divergência; o caso adicional de arquivo ausente gera a exceção capturada com retorno 1. Um mutante que remove apenas `|~{3,}` da regex de cercas continua acertando esses 49 casos e aceita um mapa inteiramente entre `~~~`. A fixture testa exclusivamente a cerca de três crases. (`diff bin/mapa20_valida.py:47`, `:99-104`; `diff bin/tests/test_mapa20_valida.sh:29-49`)
-
-## 11/11 10:54 · sessao 1623f482cb44 · - · - · origem=Ronald (tmux)
-
-Fluxo após diff, com linhas **novas** de `bin/relato.sh`:
-
-- `MAPA_RC=0; MAPA_PAR=""` em **94**; `cp` e validador em **96**; sucesso escreve `MAPA_PAR` em **97**; falha de qualquer um escreve `MAPA_RC=1` em **99**. Nenhuma outra atribuição a `MAPA_RC` no diff. Portanto validador executado vermelho não termina com rc 0; verde termina com rc 0 salvo outra falha. (`diff bin/relato.sh:94–99,155,161–162`.)
-- Todos os `exit`: base **27,28,32,35,38,42,86**, todos `1`; novos **126** (`gerar_avais`, `1`), **141** (raspagem geral, `1`), **155** (`"$MAPA_RC"`: `0` ou `1`), **161** (falha do push/echo: `1`), **162** (`"$MAPA_RC"`: `0` ou `1`). A inserção de 24 linhas deixa as primeiras sete posições intactas. (`bin/relato.sh` base citada; `diff bin/relato.sh` linhas novas citadas.)
-- Pode remover público **sem executar o validador**: fonte ausente/ilegível faz `cp` falhar, o `&&` pula Python; re-raspagem da cópia existente falha, `rm` apaga `MAPA-20.md`, `MAPA_RC` permanece `1`; etapa 4 inclui remoção rastreada. Isso não é caminho com **validador verde**. (`diff bin/relato.sh:96,99,102–109,148–152,159–162`.)
-- Não encontrei caminho interno com validador verde que entre nesse `rm`: está exclusivamente no `else` do `cp && validar`. A raspagem geral ainda pode falhar por motivos próprios e sai `1`. (`diff bin/relato.sh:96–112,127–141`.)
-
-QUEM ESCREVE / QUEM LÊ:
-
-| Valor | Escritor | Leitor |
-|---|---|---|
-| `MAPA_RC` | shell: inicializa `0`, falha fixa `1` | saídas de “nada mudou” e final |
-| `MAPA_PAR` | shell: vazio / par da foto | argumento opcional da raspagem geral |
-| `MAPA_PATH` | shell: vazio / nome após `git add` bem sucedido | mensagem e pathspec do commit | [nao verificado]
-| `$TMP/mapa20.md` | `cp` da fonte | validador; raspador pela lista de pares |
-| `logs/MAPA-20/mapa.md` | sessão, **apenas declarado em comentário**, produtor real não fornecido | `cp` |
-| `$DEST/MAPA-20.md` | `raspar_publico.py:40`, ou troca do arquivo re-raspado com `mv`; remoção com `rm` | raspador no ramo retido, teste `-f`, Git | [nao verificado]
-
-Refs: `diff bin/relato.sh:89–112,141,148–162`; `bin/raspar_publico.py:23–40`. Escritor efetivo/eventos da fonte: **[nao verificado]**. O diff não cria gerador nem gatilho para regravar a fonte em pouso/reprovação/lei: o comentário delega à sessão. (`diff bin/relato.sh:89–90`.)
-
-Classes:
-
-- **Segundo juiz:** raspagem reaproveita o juiz único de privacidade: `raspar_publico.py:15–16,31,36`, `nome_no_texto.py:59,87`; não introduz uma segunda regex de nomes.
-- **Segundo escritor:** duas rotas de atualização do público estão no mesmo publicador sob a trava já existente: `bin/relato.sh` base **27**, diff **96–112,141**; produtor da fonte fora desse bloco não fornecido.
-- **Relógio:** nenhum relógio novo de decisão no diff; `date` continua só na mensagem do commit (`base bin/relato.sh:130`, diff **159**). Timer já existente em `bin/hasner-relato.timer:5–7`; chama script por `bin/hasner-relato.service:15`.
-- **Fonte única / derivação:** `MAPA_PAR` faz publicador consumir a foto efetivamente validada (`diff bin/relato.sh:96–97,141`); censo/fonte/medidas de negócio não são computados pelo diff **[nao verificado]**.
-- **Trava:** nenhuma trava nova; `codex_estado.sh --gerar` sai antes da aquisição de lock do ramo evento, logo não autoespera na trava que `relato.sh` já segura. (`bin/relato.sh:27`; `bin/codex_estado.sh:54–56,65–66`.)
-- **Pouso/pré-requisito:** contrato MAPA-20 é apenas referenciado pelo novo comentário; não consta no texto físico desta base. Comprovação do contrato, fonte pronta, mapa publicado, selos executados e opus: **[nao verificado]**. A regra de contrato está em `CLAUDE.md:394`, suíte/opus em **377–381**. [nao verificado]
-- **Campo com dois significados:** `MAPA_RC` é resultado acumulado da etapa MAPA (cópia **ou** validação), não rc puro do Python; `MAPA_PATH` identifica artefato rastreado inclusive para remoção, não prova de publicação nova. Isso está explícito no uso (`diff bin/relato.sh:94–99,148–152`). Confundir os nomes com “validador verde”/“mapa publicado” produziria conclusões erradas.
-
-Limite preexistente útil: `set -uo pipefail` sem `-e`, `cd`, `git add` geral e `git commit` sem checagem continuam na base (`bin/relato.sh:21,120–132`), agora linhas novas **144–161**. Não são cura completa pelo novo `push || exit 1`; falha de commit seguida de push bem sucedido pode ainda terminar `0` quando mapa verde, embora exista outra falha.
-
-_3813 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3820 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
