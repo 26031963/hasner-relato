@@ -1,7 +1,142 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 17:28** · publicado em **11/11/2026 17:28** (UTC-3)
+> Ultima resposta processada: **11/11/2026 17:30** · publicado em **11/11/2026 17:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 17:30 · sessao f796a81303b6 · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
+
+**APROVADO para o delta v6 do armazém:** o teto deixou de rejeitar, abortar ou fechar a conexão tardia; a conclusão da escrita permanece vinculada a `oncomplete`. Corrijo meu parecer v5: tratar o aborto temporizado como cura foi incorreto. (`app/static/pwa.js:71`, `app/static/pwa.js:81`, `app/static/pwa.js:95`, `app/static/pwa.js:99`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:672`)
+
+**1. Desfechos do IndexedDB e quem os escreve**
+
+| Estado | Comportamento do escritor e da tela |
+|---|---|
+| Abertura lenta | Após 2 s, `abrirDB` aciona o aviso; continua esperando. Se abrir, prossegue para a transação. (`app/static/pwa.js:71`, `app/static/pwa.js:81`, `app/static/pwa.js:275`) |
+| `onblocked` | Aciona o aviso imediatamente, sem rejeitar. Pode prosseguir quando chegar `onsuccess`. (`app/static/pwa.js:81`, `app/static/pwa.js:83`) |
+| Transação acima do teto | Mostra aviso e continua esperando; o timer não aborta nem resolve. (`app/static/pwa.js:95`, `app/static/pwa.js:99`) |
+| `oncomplete` | Resolve a escrita; o `finally` remove o aviso; os templates apresentam sucesso. (`app/static/pwa.js:99`, `app/static/pwa.js:284`; `app/templates/ponto/triagem/apto.html:294`; `app/templates/ponto/bater_ponto_v2.html:339`) |
+| `onabort` | Rejeita, remove o aviso e entrega o erro ao template. (`app/static/pwa.js:101`, `app/static/pwa.js:284`) |
+| `onerror` | Rejeita imediatamente, sem aguardar `onabort`; remove o aviso e entrega o erro ao template. Portanto, esse retorno não comprova, sozinho, rollback concluído. (`app/static/pwa.js:100`, `app/static/pwa.js:101`, `app/static/pwa.js:284`) |
+| Conexão aberta depois do teto | É aceita; não existe mais fechamento pelo atraso. (`app/static/pwa.js:71`, `app/static/pwa.js:81`) |
+| Erro de abertura | `req.onerror` rejeita e chega ao mesmo tratamento visual de erro. (`app/static/pwa.js:82`, `app/static/pwa.js:284`) |
+| Quota | Se aparecer como exceção síncrona ou erro da transação, rejeita. Quota real nesta cópia: **[nao verificado]**. (`app/static/pwa.js:98`, `app/static/pwa.js:100`, `app/static/pwa.js:102`) |
+| Nenhum evento definitivo | A promessa permanece pendente indefinidamente, com aviso persistente. (`app/static/pwa.js:71`, `app/static/pwa.js:95`, `app/static/pwa.js:262`) |
+
+O **aviso** tem emissor em `pwa.js`: cria o elemento, escreve o texto e o remove. O **sucesso/erro** é escrito pelos templates depois do `await`: triagem escreve “salva no celular” ou “Erro ao registrar”; v2 escreve sucesso ou o erro correspondente ao ramo. (`app/static/pwa.js:239`, `app/static/pwa.js:250`, `app/static/pwa.js:253`; `app/templates/ponto/triagem/apto.html:289`, `app/templates/ponto/triagem/apto.html:294`, `app/templates/ponto/triagem/apto.html:308`; `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:330`, `app/templates/ponto/bater_ponto_v2.html:342`)
+
+**O botão não volta clicável em todos os desfechos.** No erro, triagem libera `_confirmandoOffline` e v2 remove `disabled`/libera `_enviando`. No sucesso, escondem os controles; triagem programa redirecionamento. Enquanto pendente, as guardas continuam impedindo outro escritor, mesmo com o botão visualmente presente na triagem. (`app/templates/ponto/triagem/apto.html:269`, `app/templates/ponto/triagem/apto.html:297`, `app/templates/ponto/triagem/apto.html:306`, `app/templates/ponto/triagem/apto.html:308`; `app/templates/ponto/bater_ponto_v2.html:294`, `app/templates/ponto/bater_ponto_v2.html:331`, `app/templates/ponto/bater_ponto_v2.html:341`)
+
+No escritor isolado, não encontrei caminho demonstrado que anuncie sucesso sem `oncomplete`, nem o antigo erro provocado apenas por demora. Um `error` seguido de `complete` manteria a promessa rejeitada pela guarda `feito`; ocorrência desse encadeamento no IndexedDB real com estes chamadores: **[nao verificado]**. (`app/static/pwa.js:94`, `app/static/pwa.js:99`, `app/static/pwa.js:100`)
+
+No caminho online, permanece outra incerteza: o POST pode ter gravado antes de a espera expirar; se a fila subsequente falhar, v2 apresenta erro. O código não confirma rollback no servidor; ocorrência real: **[nao verificado]**. (`app/static/pwa.js:299`; `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:330`)
+
+**2. Tetos: números, origem e poder de decisão**
+
+| Teto | Origem declarada e efeito |
+|---|---|
+| `ARMAZEM_TETO_MS = 2000` | Número reconhecido pelo teste como sem medição; agora decide somente o aviso. (`app/static/pwa.js:58`, `app/static/pwa.js:71`, `app/static/pwa.js:95`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:838`) |
+| `HORA_TETO_MS = 2000` | O comentário remete ao relógio da v2. Aborta a consulta `/hora/`; nas operações de config, produz rejeição externa após o prazo, sem abortar a transação subjacente. (`app/static/pwa.js:111`, `app/static/pwa.js:120`, `app/static/pwa.js:133`, `app/static/pwa.js:135`, `app/static/pwa.js:152`) |
+| `GAP_TETO_MS = 4000` | Derivado de `2 * HORA_TETO_MS`, preservando o valor numérico anterior. Decide abandonar a espera pelo gap e usar zero; também limita a espera do gap na carga. (`app/static/pwa.js:139`, `app/static/pwa.js:142`, `app/static/pwa.js:271`, `app/static/pwa.js:511`) |
+| `SELFIE_TETO_MS = 1500`; abertura = 3000 | Limites declarados do juiz. Decidem retornar foto/stream ausente e aviso; a abertura tardia ainda pode ligar o vídeo. Medição justificadora desses números: **[nao verificado]**. (`app/static/pwa.js:183`, `app/static/pwa.js:209`, `app/static/pwa.js:216`, `app/static/pwa.js:231`) |
+| `BATIDA_POST_TETO_MS = 30000` | Justificado no comentário pelo timeout da casca. Aborta o fetch e provoca recuperação pela fila; limita também a espera pelo corpo de erro. (`app/static/pwa.js:291`, `app/static/pwa.js:293`, `app/static/pwa.js:299`, `app/static/pwa.js:303`; `app/templates/ponto/bater_ponto_v2.html:321`) |
+
+**Nenhum desses tetos aborta a escrita IndexedDB da batida.** Ainda existem decisões temporizadas sobre config, gap, câmera e POST. A transação de config pode continuar e gravar depois de seu chamador receber rejeição. (`app/static/pwa.js:95`, `app/static/pwa.js:112`, `app/static/pwa.js:114`, `app/static/pwa.js:116`, `app/static/pwa.js:271`, `app/static/pwa.js:299`)
+
+A justificativa dos 30 s merece precisão: `CLAUDE.md` associa esse timeout ao `saas_ui`, mas declara `/api/ponto` roteado ao core. A aplicabilidade desse prazo ao endpoint efetivo permanece **[nao verificado]**. (`CLAUDE.md:89`; `app/static/pwa.js:291`)
+
+Fora desses limites, os caminhos de GPS conservam esperas de 8 s na triagem/PWA e 10 s + 12 s na confirmação v2; terminada a tentativa, o fluxo prossegue. (`app/static/pwa.js:481`; `app/templates/ponto/triagem/apto.html:218`; `app/templates/ponto/bater_ponto_v2.html:280`, `app/templates/ponto/bater_ponto_v2.html:281`)
+
+**3. Chamadores, contratos, escritores e leitores**
+
+Os três chamados de produção encontrados ao escritor são triagem offline, v2 após falha do POST e v2 offline. Todos aguardam a promessa e ignoram seu valor: nenhum exige booleano, texto de erro ou rejeição obrigatória no teto. O escritor resolve sem retorno explícito. (`app/templates/ponto/triagem/apto.html:289`; `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:336`; `app/static/pwa.js:286`)
+
+`abrirDB` atende escritor, config, sync e indicador. `_transacao` atende config e escrita da fila; sync/indicador continuam com transações próprias. Estes últimos chamam a abertura sem callback de aviso: podem esperar silenciosamente, mas não seguram a conclusão do escritor, que dispara o indicador sem `await`. (`app/static/pwa.js:113`, `app/static/pwa.js:123`, `app/static/pwa.js:275`, `app/static/pwa.js:286`, `app/static/pwa.js:310`, `app/static/pwa.js:368`)
+
+`obterGap` é chamado pelo escritor e por `JulianiPWA.agora`; chama `lerConfig` e, quando necessário, `calcularESalvarGap`. Este último também roda na carga e chama `salvarConfig`. (`app/static/pwa.js:158`, `app/static/pwa.js:159`, `app/static/pwa.js:166`, `app/static/pwa.js:271`, `app/static/pwa.js:488`, `app/static/pwa.js:511`)
+
+Sync/indicador são disparados na carga e nos eventos de conectividade; sync também dispara o indicador ao terminar. O SW apenas envia `SYNC_BATIDAS` às páginas, cujo listener chama sync; não recebe confirmação de conclusão. (`app/static/pwa.js:16`, `app/static/pwa.js:363`, `app/static/pwa.js:504`, `app/static/pwa.js:505`, `app/static/pwa.js:512`; `app/static/sw.js:116`, `app/static/sw.js:119`)
+
+| Valor/campo | Quem escreve → quem lê |
+|---|---|
+| Fila e `id` | `abrirDB` cria store com chave automática; escritor faz `add` → sync lê/exclui por `id`; indicador conta. (`app/static/pwa.js:77`, `app/static/pwa.js:276`, `app/static/pwa.js:313`, `app/static/pwa.js:343`, `app/static/pwa.js:353`, `app/static/pwa.js:371`) |
+| `config.chave/valor` | `salvarConfig.put` → `lerConfig.get`, que devolve `valor`. (`app/static/pwa.js:114`, `app/static/pwa.js:123`, `app/static/pwa.js:127`) |
+| `ntp_gap` | Diferença calculada com hora do servidor e meia latência → recuperação de erro e `obterGap`. (`app/static/pwa.js:155`, `app/static/pwa.js:158`, `app/static/pwa.js:162`, `app/static/pwa.js:170`) |
+| `ntp_calculado_em` | `Date.now()` após salvar gap → `obterGap`, com validade de 30 min. (`app/static/pwa.js:159`, `app/static/pwa.js:167`, `app/static/pwa.js:168`) |
+| Instante, `timestamp`, `timestamp_dispositivo`, `timestamp_gap_ms` | Escritor captura um instante e grava corrigido, cru e gap → sync ordena pelo corrigido, mas envia somente o cru. (`app/static/pwa.js:270`, `app/static/pwa.js:277`, `app/static/pwa.js:279`, `app/static/pwa.js:318`, `app/static/pwa.js:328`) |
+| Tipo, coordenadas, foto | Parâmetros das telas → fila → `FormData` do sync. (`app/static/pwa.js:277`, `app/static/pwa.js:281`, `app/static/pwa.js:325`, `app/static/pwa.js:333`) |
+| `gps_accuracy`, `gps_captured_at` | Escritor guarda; não seguem no `FormData` desse sync. (`app/static/pwa.js:280`, `app/static/pwa.js:324`, `app/static/pwa.js:334`) |
+
+A API lê o timestamp cru, aplica `hora_do_aparelho` e entrega instante efetivo e cru ao chokepoint. Portanto, o gap local não determina a hora gravada nesse caminho. (`app/api/views.py:519`, `app/api/views.py:666`, `app/api/views.py:678`)
+
+O instante capturado continua sendo o da **entrada no escritor**, depois das esperas anteriores da tela; na recuperação online, depois do POST frustrado. A hora exibida no feedback é lida ainda depois da gravação. (`app/static/pwa.js:270`; `app/templates/ponto/bater_ponto_v2.html:323`, `app/templates/ponto/bater_ponto_v2.html:324`; `app/templates/ponto/triagem/apto.html:290`)
+
+**4. Lei e juiz**
+
+O delta remove a barreira temporal da fila e mantém a admissibilidade da câmera centralizada: ausência devolve aviso e foto nula, que os templates encaminham. Não encontrei segundo juiz da falta de selfie introduzido nessa mudança. (`CLAUDE.md:143`; `app/static/pwa.js:198`, `app/static/pwa.js:232`, `app/static/pwa.js:276`; `app/templates/ponto/triagem/apto.html:275`; `app/templates/ponto/bater_ponto_v2.html:274`)
+
+No servidor, `selfie_ausente` decide a cobrança da ausência; esse ramo acrescenta motivo de anomalia, sem recusar a batida. A escrita segue para `registrar_batida`. Isso não certifica cumprimento universal da L-030: a própria documentação registra outras barreiras residuais. (`app/ponto/registro_batida.py:80`; `app/api/views.py:461`, `app/api/views.py:464`, `app/api/views.py:666`; `app/docs/LEIS.md:78`)
+
+**5. Força e limites do teste** [nao verificado]
+
+O atraso agora existe no falso IDB: transação lenta conclui após mais 15 s; abertura bloqueada libera após 15 s. O wrapper chama o escritor real e devolve sua promessa. O reclique ocorre em 12 s, e o caso lento verifica que caiu antes do término do escritor. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:161`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:216`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:309`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:510`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:689`)
+
+Os casos distinguem falha, demora que termina e pendência; os mutantes restauram rejeição/aborto no teto ou retiram emissão/remoção do aviso. A propriedade troca 2000 por 10 e `1e9`, comparando desfechos finais. O controle precisa passar no mesmo lote do mutante. **Resultado executado nesta cópia: [nao verificado].** (`app/ponto/tests/test_selfie_nao_barra_chromium.py:489`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:639`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:845`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:1028`)
+
+Há lacunas concretas:
+
+- **Remover `abrirDB.req.onerror` é indistinguível nesses mundos:** o falso `open` nunca emite erro definitivo nem lança. (`app/static/pwa.js:82`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:209`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:676`)
+- **Fechar a conexão antes de entregá-la também é indistinguível para o falso:** `close()` é vazio e `transaction()` não verifica fechamento. Isso deixa sem proteção específica a cura do fechamento tardio. (`app/static/pwa.js:81`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:226`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:236`)
+- **A prova temporal é parcial:** os julgadores não comparam o instante do sucesso/término da promessa com `fila_ms`; a propriedade compara estados finais. Porém resolver incondicionalmente no sucesso do pedido seria detectado pelos mundos de aborto/erro/pendência; não afirmo que esse mutante simples passaria. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:489`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:705`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:833`)
+- **“Persistidas” não mede durabilidade nativa:** `add` já põe a linha no mapa; o contador lê esse mapa. O falso de quota força rollback antes de emitir somente `onerror`. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:166`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:195`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:267`)
+
+Essas são limitações da certificação, sem regressão correspondente demonstrada no código atual. Execução dos mutantes adicionais: **[nao verificado]**.
+
+**6. Pendências da v5**
+
+| Item | Situação na cópia |
+|---|---|
+| Aborto/rejeição por demora e fechamento tardio | Removidos do escritor; cobertura de fechamento ainda limitada pelo falso. (`app/static/pwa.js:81`, `app/static/pwa.js:95`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:236`) |
+| Identidade do clique | Continua separada; a linha da fila não contém identificador original do clique. (`app/static/pwa.js:265`, `app/static/pwa.js:276`) |
+| `DataTransfer` fora do `try` | Continua: uma exceção impede alcançar o submit, depois de desabilitar o botão. Ocorrência real: **[nao verificado]**. (`app/templates/ponto/triagem/apto.html:212`, `app/templates/ponto/triagem/apto.html:234`, `app/templates/ponto/triagem/apto.html:241`) |
+| HTTP 400 no sync | Continua excluindo a fila com apenas `console.warn`. (`app/static/pwa.js:347`, `app/static/pwa.js:350`, `app/static/pwa.js:353`) |
+| Fetch v2 sem PWA | Continua sem teto para fetch/corpo. (`app/templates/ponto/bater_ponto_v2.html:313`, `app/templates/ponto/bater_ponto_v2.html:314`) |
+| Sync/indicador pendentes | Continuam com transações próprias sem proteção de aborto; abertura agora pode esperar sem aviso. (`app/static/pwa.js:310`, `app/static/pwa.js:312`, `app/static/pwa.js:368`, `app/static/pwa.js:370`) |
+| TICKETS desatualizado e lacunas dos scanners | Permanecem. (`app/docs/TICKETS.md:693`; `app/tools/check_frontend_urls.py:25`; `app/scripts/check_a_lei_batida.py:14`, `app/scripts/check_a_lei_batida.py:31`) |
+| “ArmazemEPostTest toca banco” | A alegação não se sustenta nesta leitura: herda `SimpleTestCase` e usa contexto sintético. Execução completa: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:385`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:579`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:781`) |
+
+Suíte verde e smoke das duas cascas: **[nao verificado]**. Não executei o Chromium: o ensaio cria HTML/JS/perfil temporários e depois os apaga, contrariando a regra de somente leitura. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:398`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:405`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:417`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:426`)
+
+## 11/11 17:29 · sessao c9a8c795d59f · PONTAS-SOLTAS-1725 · sonda · origem=Code
+
+Não reexecutei a sonda. O envelope executa e raspa o resultado **antes** de entregá-lo ao Codex (`bin/codex_pergunta.sh:311`, `bin/codex_pergunta.sh:318`). Segue integralmente o dado recebido, com a única alteração solicitada: IDs como `colNNN`. Autenticidade por nova execução: [nao verificado].
+
+```text
+sonda_leitura: sonda_comp09_cel.py [0185702789f8352c] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+campo julgada_em linhas 7 colabs 3
+  via cartorio 7
+  min 11:10 6
+  min 11:16 1
+  amostra [(col899, datetime.date(2026, 8, 23), 'concorde', 'cartorio'), (col824, datetime.date(2026, 9, 3), 'furo', 'cartorio'), (col824, datetime.date(2026, 9, 5), 'furo', 'cartorio'), (col824, datetime.date(2026, 9, 13), 'furo', 'cartorio'), (col824, datetime.date(2026, 9, 18), 'fato_sem_previsao', 'cartorio'), (col824, datetime.date(2026, 9, 19), 'furo', 'cartorio'), (col909, datetime.date(2026, 8, 30), 'concorde', 'cartorio')]
+campo veredito_em linhas 1 colabs 1
+  via cartorio 1
+  min 11:16 1
+  amostra [(col909, datetime.date(2026, 8, 30), 'concorde', 'cartorio')]
+fim
+```
+
+**Sim, segundo o dado fornecido**, há campos com horários dentro da janela consultada: `julgada_em` em **7 linhas**, de 3 colaboradores, todas com `veredito_via='cartorio'` — 6 às **11:10** e 1 às **11:16**. `veredito_em` aparece em **1 linha**, às **11:16**, também via `cartorio`; essa célula já integra as sete anteriores. Portanto, são **7 células distintas**, não oito. Fonte: dado fornecido; consulta e filtros do script [nao verificado].
+
+Pelo código, os escritores são:
+
+- **`julgada_em`:** `carimbar`, que atribui `agora` e persiste os campos (`app/ponto/portas/celula.py:1065`, `app/ponto/portas/celula.py:1072`).
+- **`veredito_em`:** `lavrar_veredito`, que atribui `agora or timezone.now()` (`app/ponto/portas/celula.py:1037`). O serviço do cartório chama essa porta com `via='cartorio'`, `save=False`, e persiste a lavra junto do carimbo (`app/ponto/services/cartorio.py:1839`, `app/ponto/services/cartorio.py:1859`).
+
+**Qual execução produziu essas sete linhas: [nao verificado].** `via='cartorio'` não identifica o disparador: o comando chama `julgar_colab`, enquanto chamadas de signals chegam ao mesmo serviço por `julgar_celula` (`app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/signals.py:93`, `app/chamados/signals.py:216`, `app/ponto/services/cartorio.py:2026`).
+
+O cron está configurado para **06:27**, com `--apply`; sua execução efetiva nessa data/janela é [nao verificado] (`app/config/crons.py:616`). O comando captura **um único `agora` antes do lote** e o passa aos julgamentos; uma execução iniciada às 11:18–11:19, seguindo esse código, não atribui 11:10 ou 11:16 a esses campos (`app/ponto/management/commands/processar_cartorio.py:39`, `app/ponto/management/commands/processar_cartorio.py:65`). A execução manual mencionada e seus efeitos concretos são [nao verificado].
+
+Os horários dos campos são o `agora` recebido pelo escritor; **o instante físico dos UPDATEs e sua autoria operacional nessa janela são [nao verificado]** (`app/ponto/portas/celula.py:1037`, `app/ponto/portas/celula.py:1065`).
 
 ## 11/11 17:28 · sessao c3afbe28a431 · - · - · origem=Ronald (tmux)
 
@@ -584,51 +719,4 @@ Bloqueadores: nenhum novo demonstrado na cópia. O bloqueante 1 da v8 está cura
 
    O harness completo não foi executado: cria arquivos e repositório temporário, contrariando a restrição de somente leitura (`bin/tests/test_selo_proporcao.sh:13-28`). Execução integral e identidade Git do HEAD informado: [nao verificado].
 
-## 11/11 16:04 · sessao bb6c2e8c42d3 · - · - · origem=Ronald (tmux)
-
-Os dois casos isolam o braço novo; nenhum recebe rc 1 por outra guarda: pertencem a `app/`, não contêm `migrations`/`management` e não estão na lista sintética (`bin/tests/test_selo_proporcao.sh:24`, `:70-71`; `bin/selo_proporcao.py:76-85`).
-
-Verificação somente em memória da função `motivo_b`, removendo exclusivamente `or 'templatetags' in dirs`:
-
-| Arquivo sintético | v9 | Sem braço |
-|---|---|---|
-| `app/x/templatetags/static/__init__.py` | `None` | `static` |
-| `app/x/templatetags/static/carga.py` | `None` | `static` |
-| `app/x/templatetags/templates/carga.py` | `None` | `templates` |
-
-Os resultados decorrem de `bin/selo_proporcao.py:80-85`. Com v9, ambos os **testes** passam porque o selo retorna 1, esperado pelo harness; sem o braço, os **arquivos** passam como B/rc 0 e os testes falham (`bin/tests/test_selo_proporcao.sh:44-45`, `:70-71`; `bin/selo_proporcao.py:127-135`).
-
-`tags_templates_py` não cria `templates/__init__.py`, ao contrário do caso static; portanto é caso do predicado de caminho, sem demonstração suficiente de importação recursiva efetiva pelo Django (`bin/tests/test_selo_proporcao.sh:70-71`). Importação efetiva desse exemplo: [nao verificado].
-
-A lista mantém precedência: `app/chamados/templatetags/chamados_tags.py` aparece em `app/docs/CORTES.md:444`; `motivo_b` devolve `'lista'` antes da guarda de templatetags (`bin/selo_proporcao.py:76-80`). A lista usada numa execução real é a revisão BASE, não necessariamente o arquivo atual (`bin/selo_proporcao.py:62`, `:111`).
-
-Cadeia de escritores e leitores:
-
-| Valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| Caminhos alterados `p` | Git diff, `bin/selo_proporcao.py:112`; decodificação `:117` | Laço `:124-125`; `motivo_b` `:74` |
-| `partes`, `dirs`, `nome` | Split/fatiamento, `bin/selo_proporcao.py:74-75` | Guarda nova `:80`; regras `:82-87` |
-| Lista real | Conteúdo em `app/docs/CORTES.md:444`; autor da inserção [nao verificado] | `git show BASE`, `bin/selo_proporcao.py:62`; parser `:63-70`; consulta `:76` |
-| Arquivo `CORTES.md` | Gerador sobrescreve em `bin/gerar_cortes.py:116`, fonte JSON `:23`, lida em `:32` | Selo lê versão BASE em `bin/selo_proporcao.py:62` |
-| Lista sintética | `bin/tests/test_selo_proporcao.sh:19`, argumento `:24`, commit `:28` | Mesmo parser do selo, `bin/selo_proporcao.py:62-70` |
-| Arquivos e bytes dos novos casos | Scripts `bin/tests/test_selo_proporcao.sh:70-71`, executados por `:36`, versionados `:37-38` | Selo lê somente nomes, `bin/selo_proporcao.py:112`; conteúdo não entra no predicado `:73-88` |
-| `m`/`None` | `bin/selo_proporcao.py:77-88` | Impressão/acumulação `:125-128` |
-| `fora`, `real`, rc | `bin/selo_proporcao.py:123-135` | Protocolo `:145`; wrapper `bin/selo_proporcao.sh:7-11`; harness `bin/tests/test_selo_proporcao.sh:44-45` |
-| Esperado `B 1` e nomes dos casos | `bin/tests/test_selo_proporcao.sh:70-71` | Argumentos do `caso` `:41-45` |
-| Contador de falhas | `bin/tests/test_selo_proporcao.sh:33` | Resultado final `:203-204` |
-
-O harness completo não foi executado: cria diretório temporário, repositório e arquivos (`bin/tests/test_selo_proporcao.sh:13-28`), incompatíveis com a exigência de somente leitura.
-
-## 11/11 16:04 · sessao bf5e6ffaae43 · - · - · origem=Ronald (tmux)
-
-Não encontrei outro bloqueante concreto de descoberta automática no material examinado [nao verificado].
-
-- A configuração padrão aponta para `config.settings.saas`; ela herda `base` e monta os aplicativos de nomes de topo, sem aplicativos declarados sob `templates/static/tests`: `app/config/wsgi.py:14`, `app/manage.py:9`, `app/config/settings/saas.py:10`, `app/config/settings/saas.py:22`, `app/config/settings/saas.py:34`, `app/config/settings/saas.py:53`.
-- Os imports de inicialização encontrados são explícitos: `signals`, `cell`, `painel_cell`, `calculadores`; seus caminhos não recebem B pelas regras automáticas: `app/core/apps.py:8`, `app/chamados/apps.py:8`, `app/colaboradores/apps.py:7`, `app/ponto/apps.py:7`, `app/escala/apps.py:8`, `app/inteligencia/apps.py:7`, `bin/selo_proporcao.py:82`.
-- Templates e estáticos têm descoberta configurada, já contemplada pela letra do contrato: `app/config/settings/base.py:70`, `app/config/settings/base.py:97`; internacionalização está ligada: `app/config/settings/base.py:92`.
-- O import de código B de teste por comando permanece o limite declarado de tblib: escritor da chamada em `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`, uso do valor em `app/chamados/management/commands/tblib_ausente_na_imagem.py:18`.
-- `crons` importa `core.tests.marca_cron15`, cujo nome não satisfaz `test_*.py`: `app/core/management/commands/crons.py:92`, `bin/selo_proporcao.py:86`.
-- Não apareceram `.py` sob `app/**/templates/` ou `app/**/static/`, nem caminhos `fixtures/` ou `locale/` no inventário pesquisado; ausência global e configuração efetivamente usada em produção: [nao verificado].
-- Não há código vendorizado do Django para confirmar nesta cópia a semântica interna de autodiscover de admin, apps, checks, locale ou fixtures [nao verificado].
-
-_3993 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3995 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
