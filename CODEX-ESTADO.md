@@ -1,7 +1,167 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 10:57** · publicado em **11/11/2026 10:59** (UTC-3)
+> Ultima resposta processada: **11/11/2026 11:31** · publicado em **11/11/2026 11:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 11:31 · sessao 9c6b12fbf335 · MAPA-ATE-O-20 · censo · origem=Code
+
+**E3-LEITORES: 1 de 10; troca do vigia pendente.** A linha 635 ainda chama `porta_alcancavel_do_dia`; isso corresponde ao **item 4** do PRONTO de E3-TROCA-PELO-DIFF. (`app/chamados/services/vigia_fio.py:635`; `avais_obras.txt:55`, bloco `=== ../FIO-E0-V4-E3/aval_e3_troca_pelo_diff_1111.txt`)
+
+Nos anexos, contei linhas preservando os brancos: `avais_obras.txt:1` começa no primeiro `===`; `relato_topo.txt:1`, no título `# RELATO`. Abaixo, `BACKLOG.md`, `TICKETS.md` e `RELATO.md` significam os arquivos em `app/docs/`. A identidade Git da cópia com o HASH informado é **[não verificado]**.
+
+A busca de PRONTO abrangeu os avais fornecidos, `app/docs/TICKETS.md` e `app/docs/BACKLOG.md`. Resultados únicos em prosa foram aceitos explicitamente; enumerações de decisões, fases ou ordem não viraram listas de PRONTO. (`avais_obras.txt:138`; fontes específicas abaixo)
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **E3 — LEITORES** | **1 de 10** | `avais_obras.txt:55`, bloco `=== ../FIO-E0-V4-E3/aval_e3_troca_pelo_diff_1111.txt` | **2. Classes V/T/X com número:** V=15, T=0, X=217, discriminado em X1–X4. (`RELATO.md:62`, `RELATO.md:63`, `RELATO.md:64`, `RELATO.md:65`, `RELATO.md:66`) | **1. Sonda com soma 230:** medida foi **232**; divergência explicada, sem contar cumprimento literal. (`RELATO.md:74`)<br>**3. V curada ou zero:** falta prova posterior à cura cobrindo os 15 V; a decomposição anterior é A3/B2/P8/S2. (`RELATO.md:53`; conclusão integral **[não verificado]**)<br>**4. Três chamadores lendo só tarefa_do_dia:** falta a troca; vigia ainda consulta a porta antiga. (`app/chamados/services/vigia_fio.py:635`)<br>**5. Cinco respondedores mortos com certidão:** seguem declarados vivos. (`RELATO.md:99`)<br>**6. Catraca e paridade verdes:** falta prova depois da troca. **[não verificado]**<br>**7. DIFF do alcance antes/depois, por classe:** falta essa medição depois da troca. **[não verificado]**<br>**8. Suíte inteira OK:** há prova da fase `999a7966c`, sem a troca concluída. (`relato_topo.txt:28`; `app/chamados/services/vigia_fio.py:635`)<br>**9. Opus final aprova:** aprovação da mesma fase, sem prova da obra LEITORES completa. (`relato_topo.txt:27`)<br>**10. Pouso:** pousou a fase; falta pouso com os resultados da troca comprovados. (`relato_topo.txt:7`; `avais_obras.txt:138`) |
+| **E3 — sublista X1, separada** | **6 de 7 — não somados aos 10** | `avais_obras.txt:37`, bloco `=== ../FIO-E0-V4-E3/aval_e3_x1_folga_1111.txt` | **1. Censo dos 15:** sonda identificada, n=15, rc=0. (`RELATO.md:41`)<br>**2. Cura no ramo:** alteração do cartório descrita na aprovação. (`relato_topo.txt:27`)<br>**3. RED/GREEN + mutante:** base morta, GREEN 14 OK, mutantes X1 7/7. (`relato_topo.txt:31`)<br>**5. Suíte inteira OK:** Ran 15134, rc=0. (`relato_topo.txt:28`)<br>**6. Opus final:** aprovado. (`relato_topo.txt:27`)<br>**7. Pouso:** merge e deploy rc=0 registrados. (`relato_topo.txt:7`) | **4. DIFF da sombra por colaborador e zero trabalho mudando:** falta a discriminação completa. O topo apresenta agregados; o aval dos 35 dias posteriores ao desligamento resolve o corte, mas não apresenta o DIFF completo exigido. (`relato_topo.txt:18`, `relato_topo.txt:21`; `avais_obras.txt:44`) |
+
+Há conflito documental na E3: ORDEM-ATE-O-ZERO referencia **“6 resultados”** de E3-TROCA-PELO-DIFF, mas o próprio aval enumera **10**. Não há seis itens transcritos naquela referência para construir outra contagem. A sublista X1 enumera sete resultados próprios. (`avais_obras.txt:28`, bloco `=== ../FIO-E0-V4-E3/aval_ordem_ate_o_zero_1111.txt`; `avais_obras.txt:55`; `avais_obras.txt:37`)
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **E4B** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1866`, `BACKLOG.md:1875`; `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt`; busca também em `TICKETS.md` | Há GREEN e mutantes da c4, mas a suíte seguinte ficou vermelha; não fornecem N da obra. (`relato_topo.txt:9`, `relato_topo.txt:4`) | Formalizar a lista: o BACKLOG reúne A24, C3, três rodadas e `alarma_em_0` sem numerá-los como PRONTO. O aval ainda exige classe e, limbo, ramo sem porta e backfill da 11 com DIFF; não converti esse conjunto em N. (`BACKLOG.md:1866`; `avais_obras.txt:28`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **E4C** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1866`; `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt`; busca também em `TICKETS.md` | Censo identificado, com amostra 10/10 conferida; prova de preparação, sem contar migração concluída. (`relato_topo.txt:36`) | A prosa reúne **migração dos DIVERGE para o ato** e **selo 2**, sem numeração de PRONTO. Falta lista e prova desses resultados; D04/D05 seguem registradas. O PRONTO do censo conjunto é outra entrega, também não numerada. (`BACKLOG.md:1866`; `relato_topo.txt:36`; `avais_obras.txt:87`, bloco `=== ../E4C/aval_censo_adiantado_1111.txt`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **E4D** | **0 de 1 — resultado único em prosa** | `BACKLOG.md:1866`; `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt` | Nenhum resultado de CONTRACT comprovado. **[não verificado]** | **1. Parar de escrever a projeção:** falta registro no RELATO de commit/sonda que prove a interrupção da escrita. Retirada física e migration estão separadamente registradas, fora deste resultado. (`BACKLOG.md:1866`, `BACKLOG.md:1867`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F1** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:98`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_raiz_f1_um_eleitor_1111.txt`; busca também em `TICKETS.md` | Censo `f0f1.r`, rc=0, identifica três sítios persistentes e três eleitores divergentes. (`RELATO.md:19`) | Os números (1)–(4) do aval organizam decisões/instruções, sem lista de PRONTO. Falta essa lista e prova da implementação do escritor/eleitor único; o censo não a demonstra. (`avais_obras.txt:98`; `RELATO.md:19`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F2** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1883`, `BACKLOG.md:1877`; busca nos avais e em `TICKETS.md` | Há registro de c21 estacionada, c22 não lançada e suíte17 vermelha. (`RELATO.md:27`) | F2=BO-DISPUTA reúne cura, invariante, selo e contadores em prosa. Falta lista numerada e prova de cumprimento de cada resultado; não transformei as fases em itens de PRONTO. (`BACKLOG.md:1883`, `BACKLOG.md:1877`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F3** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:87`, bloco `=== ../E4C/aval_censo_adiantado_1111.txt`; `avais_obras.txt:104`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_f4_par_pela_celula_1111.txt`; busca também em `TICKETS.md` | Censo e sonda conjuntos estão registrados. (`relato_topo.txt:37`, `relato_topo.txt:38`) | Falta PRONTO específico da fase. O aval define autor do fecho automático; o topo registra dependência por arquivo comum, sem prova de cura pousada. (`avais_obras.txt:104`; `relato_topo.txt:11`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F4** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:102`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_f4_par_pela_celula_1111.txt`; busca também em `TICKETS.md` | A sonda identifica perda do par e a fonte `PARES_PAUSA_DNA`; isso prova o diagnóstico. (`relato_topo.txt:38`) | Falta lista de PRONTO e prova da leitura do par pela célula implementada. O aval define autoridade e proibições, sem enumerar resultados de conclusão. (`avais_obras.txt:102`, `avais_obras.txt:106`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F5** | **0 de 1 — herdado de E4D** | Equivalência E4d=F5: `BACKLOG.md:1756`; resultado: `BACKLOG.md:1866`, `avais_obras.txt:92`, bloco `=== ../E4C/aval_expand_contract.txt` | Nenhum resultado de CONTRACT comprovado. **[não verificado]** | **1. Parar de escrever a projeção:** falta prova escrita no RELATO. É o mesmo resultado da E4D, sem lista própria adicional nem soma entre obras. (`BACKLOG.md:1756`, `BACKLOG.md:1866`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F6** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1883`; `avais_obras.txt:10`, bloco `=== ../META-18/aval_meta18_duas_raias_1111.txt`; busca também em `TICKETS.md` | Conclusão dos resultados: **[não verificado]** | A prosa exige DRY, DIFF por classe, reversão, lista de exportadas e medição de idade/efeito das duplicadas. São vários resultados sem numeração; faltam lista e provas correspondentes. (`avais_obras.txt:10`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **RAIZ F7** | **PRONTO AUSENTE** | `BACKLOG.md:1883`; `avais_obras.txt:5`, bloco `=== ../META-18/aval_meta18_duas_raias_1111.txt`; busca também em `TICKETS.md` | Selo F7 verde: **[não verificado]** | “Selo esperado 0” nasce com cada fase, mas essa referência não identifica uma lista de resultados nem a condição concreta medida pelo selo. Falta definição de PRONTO e prova identificável. (`avais_obras.txt:5`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **O168** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1395`; busca nos avais e em `TICKETS.md` | Censo/sonda registrados; `CSF_RETRATADO_30d` consta **não mensurável, null**, sem prova de zero. (`RELATO.md:903`) | A prosa reúne guarda compartilhada, aplicação no evento, retirada posterior do `--executar` e `CSF_RETRATADO=0`. Falta lista numerada e prova desses resultados; “nada construído” está registrado. (`BACKLOG.md:1395`; `RELATO.md:173`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **LASTRO** | **PRONTO AUSENTE para a obra inteira** | `BACKLOG.md:1731`, `BACKLOG.md:1760`, `BACKLOG.md:1762`, `BACKLOG.md:1807`; busca nos avais e em `TICKETS.md` | Parte 2: deploy rc=0 e `sem_evento=0`. (`RELATO.md:863`)<br>Parte 3: pouso registrado. (`RELATO.md:799`) | Falta lista de PRONTO da LASTRO inteira. Partes 2/3 e FOLGA-FORA-DO-CATALOGO têm registros separados; não somei suas entregas para fabricar N. (`BACKLOG.md:1760`, `BACKLOG.md:1762`, `BACKLOG.md:1807`) | [nao verificado]
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **O169-FECHADA** | **PRONTO AUSENTE — não numerada** | `BACKLOG.md:1921`; `avais_obras.txt:132`, bloco `=== ../O169-FECHADA/aval_tres_respostas_1110_0040.txt`; busca também em `TICKETS.md` | Suíte v5 verde; GREEN/mutantes registrados; merge/deploy, APPLY 3 e DRY seguinte vazio. (`relato_topo.txt:8`, `relato_topo.txt:12`, `relato_topo.txt:6`) | Falta lista numerada que permita N. O `(3)` do aval é a terceira decisão de um aval misto; não é uma lista de três resultados da O169. O nome vigente do contador é `cluster_encerrado_sem_lastro`. (`avais_obras.txt:132`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **UI-PAINEL** | **PRONTO AUSENTE — quatro resultados declarados, não numerados** | `avais_obras.txt:124`, bloco `=== ../UI-PAINEL/aval_ui_painel_raspado.txt`; busca também em `TICKETS.md`/`BACKLOG.md` | O GREEN falhou em quatro testes; mutantes não medidos porque caíram nas mesmas falhas. (`relato_topo.txt:5`) | O PRONTO lista, sem números: **faixa na aba Mensagens; contador do botão; função única com três leitores; selo API×painel verde com mutante morto**. Falta numeração e prova de cada resultado. A enumeração MUDA cobre somente 1–3, sem incluir o selo; não a completei por inferência. (`avais_obras.txt:117`, `avais_obras.txt:118`, `avais_obras.txt:119`, `avais_obras.txt:124`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **BO-ROTULO-ENCERRADO** | **0 de 1 — resultado único em prosa** | `BACKLOG.md:1884` | Há mapeamento da fonte do modal e dos leitores; não prova da troca concluída. (`RELATO.md:7699`) | **1. Rótulo lido da mesma fonte do modal, sem mudar estado:** falta prova escrita da alteração e do comportamento do seletor para resolvido/fechado. (`BACKLOG.md:1884`; conclusão **[não verificado]**) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **TRIAGEM-OFFLINE-SEM-CAMERA** | **PRONTO AUSENTE — não numerada** | `avais_obras.txt:95`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_raia2_bo_visivel_1111.txt`; contexto em `BACKLOG.md:1889`; busca também em `TICKETS.md`/`BACKLOG.md` | Consta na fila depois de BO-ROTULO. (`relato_topo.txt:17`) | Falta lista de PRONTO. O aval exige juiz único de selfie impeditiva e smoke nas duas cascas; conclusão desses resultados e preservação da batida offline sem câmera: **[não verificado]**. (`avais_obras.txt:95`) |
+
+| obra | X de N (ou PRONTO AUSENTE) | fonte do N (arquivo:linha) | itens provados (com prova:linha) | o que falta, item a item |
+|---|---|---|---|---|
+| **LOTE-VALIDAR-REGRESSAO-0311** | **PRONTO AUSENTE** | `BACKLOG.md:1892`; `avais_obras.txt:95`, bloco `=== ../RAIA-2-BO-VISIVEL/aval_raia2_bo_visivel_1111.txt`; busca também em `TICKETS.md` | Medição citada: custo por referência estável, crescimento pelo tamanho do lote e reoferta de recusados; nenhuma cura pontual, retorno a LOTE-VALIDAR-VIRA-JOB. Prova identificada: `sonda_lote0311.r`. (`relato_topo.txt:10`) | Falta lista de resultados de conclusão. “Medir a causa antes” é precondição; a medição realizada não autoriza inventar N nem declarar a obra encerrada. (`BACKLOG.md:1892`; `avais_obras.txt:95`, `avais_obras.txt:138`) |
+
+**Obras PRONTO AUSENTE:**
+
+- **E4B e E4C** — prosa com múltiplos resultados, sem lista numerada. (`BACKLOG.md:1866`)
+- **RAIZ F1, F2, F3, F4, F6 e F7** — sem lista específica de PRONTO nas fontes examinadas. (`BACKLOG.md:1883`; `avais_obras.txt:98`, `avais_obras.txt:87`, `avais_obras.txt:102`, `avais_obras.txt:10`, `avais_obras.txt:5`)
+- **O168**. (`BACKLOG.md:1395`)
+- **LASTRO**. (`BACKLOG.md:1760`, `BACKLOG.md:1762`, `BACKLOG.md:1807`)
+- **O169-FECHADA**. (`BACKLOG.md:1921`; `avais_obras.txt:132`)
+- **UI-PAINEL** — quatro resultados declarados, não numerados. (`avais_obras.txt:124`)
+- **TRIAGEM-OFFLINE-SEM-CAMERA**. (`avais_obras.txt:95`)
+- **LOTE-VALIDAR-REGRESSAO-0311**. (`BACKLOG.md:1892`; `avais_obras.txt:95`)
+
+## 11/11 11:28 · sessao b11c41e475b0 · - · - · origem=Ronald (tmux)
+
+Censo concluído só por leitura dos três documentos do HEAD e anexos do prompt. As linhas do BACKLOG do anexo estão deslocadas em relação à cópia; usar abaixo as linhas reais do HEAD.
+
+| Obra | Lista de PRONTO encontrada | Fonte HEAD | Prova escrita disponível / falta |
+|---|---|---|---|
+| O168 | Não há lista numerada. A prosa reúne vários resultados: guarda compartilhada, valer no evento, retirada posterior do `--executar`, `CSF_RETRATADO=0`; portanto não converter em N=1. | BACKLOG.md:1395; BACKLOG.md:1960 | RELATO.md:903 registra censo/sonda: guarda só no supra; `CSF_RETRATADO_30d` não mensurável, `null`, não zero. RELATO.md:173 diz nada construído. Falta lista formal de PRONTO e provas dos resultados. |
+| LASTRO | Não há lista única numerada de PRONTO para a obra inteira. Há partes e complementos separados; não somar. | BACKLOG.md:1731; BACKLOG.md:1760; BACKLOG.md:1762; BACKLOG.md:1807 | Fase 2: construção, RED/GREEN, mutantes, sombra e suíte em RELATO.md:860; opus em :861; pouso em :862; deploy e `sem_evento=0` em :863. Parte 3 pousou, opus e suíte verdes em RELATO.md:799. Essas provas não dão N da LASTRO inteira. Folga fora do catálogo ainda foi encaminhada a censo em RELATO.md:7353. | [nao verificado]
+| O169-FECHADA | Não há lista numerada de PRONTO. BACKLOG tem contador + mutante + reparo do legado; múltiplos resultados sem N. O `(3)` do aval TRES RESPOSTAS é a terceira decisão de um aval misto, não três itens PRONTO da obra. | BACKLOG.md:1921 | Anexo `relato_topo.txt`, linha “O169-FECHADA NO AR 10:57”: merge `ca978f65d`, deploy rc0, DRY 3, APPLY 3, DRY seguinte vazio. Suíte v5 e mutantes também no topo. Falta N autorizado; não escrever X de N com base no pouso. Nome antigo `fechados_por_idade` do BACKLOG foi substituído por `cluster_encerrado_sem_lastro` no aval anexado; mudança explicada em RELATO.md:194. |
+| UI-PAINEL | Aval traz **“PRONTO (4 resultados)”**, mas os quatro estão separados por `;`, **sem numeração**: faixa; contador; função única com três leitores; selo API/painel verde com mutante morto. Pela exigência literal do usuário, informar **“não numerada, quatro resultados declarados”**, sem inventar N a partir dela. `MUDA` numera somente 1–3 e não cobre o selo. | Não há ocorrência específica em TICKETS/BACKLOG HEAD; fonte é bloco `=== ../UI-PAINEL/aval_ui_painel_raspado.txt` do anexo. | `relato_topo.txt`, linha “UI-PAINEL v1 ORM 10:55”: quatro falhas no GREEN; mutantes não medidos porque caem nas mesmas falhas. Não prova nenhum dos quatro resultados finalizados. Construção iniciada não basta. |
+| BO-ROTULO-ENCERRADO | Nenhuma lista numerada. **Candidato à exceção N=1**: “cura = rótulo lido da mesma fonte do modal, sem mexer em estado” é um único resultado observável, embora não venha rotulado PRONTO. Se aceitar prosa de escopo como lista singular, usar **0 de 1**, sem somar outras exigências. | BACKLOG.md:1884 | RELATO.md:7699 só registra mapa, fonte modal e 13 leitores/escritores; não comprova troca. Topo põe a obra depois do pouso O169. Falta prova de que seletor lê a mesma fonte do modal e distingue resolvido/fechado. | [nao verificado]
+| TRIAGEM-OFFLINE-SEM-CAMERA | Sem lista numerada. Aval exige juiz único online/offline/v2 e smoke nas duas cascas: vários resultados, não N=1. | Entrada específica só no anexo; BACKLOG.md:1889 contém “selfie impeditiva” dentro do resto da classe, sem PRONTO. | Topo a mantém na fila depois de BO-ROTULO. Não há prova escrita de cura/smoke. Falta lista e prova de admissibilidade única, batida preservada offline sem câmera e smoke das duas cascas. |
+| LOTE-VALIDAR-REGRESSAO-0311 | Sem lista numerada de PRONTO. BACKLOG “medir a causa antes” é precondição; aval RAIA2 determina conduta condicional, não enumera resultados de conclusão. | BACKLOG.md:1892 | Medição comprovada no topo, linha “LOTE-VALIDAR-REGRESSAO-0311 MEDIDA 10:3x”, com `logs/RAIA-2-BO-VISIVEL/sonda_lote0311.r`: custo por referência estável; aumento pelo lote e reoferta de recusados; nenhuma cura pontual; volta à LOTE-VALIDAR-VIRA-JOB. RELATO.md:7695 era o estado anterior: causa por medir. Não transformar essa medição em X de N sem lista. |
+
+Busquei todas as ocorrências dos nomes e dos termos `PRONTO`/`resultados` em `app/docs/TICKETS.md` (1323 linhas), `app/docs/BACKLOG.md` (2339 linhas) e `app/docs/RELATO.md` (7726 linhas); não localizei outra lista numerada para essas sete obras.
+
+Recomendação estrita para a consolidação: PRONTO AUSENTE para O168, LASTRO, O169-FECHADA, UI-PAINEL, TRIAGEM e LOTE; BO-ROTULO pode ser **0 de 1** apenas pela exceção expressa de resultado único, com fonte BACKLOG.md:1884.
+
+## 11/11 11:28 · sessao c7cd088f0fd1 · - · - · origem=Ronald (tmux)
+
+E3-LEITORES: **1 de 10**, em leitura estrita da lista E3-TROCA-PELO-DIFF. Só o item 2 tem prova completa inequívoca: V=15, T=0, X=217, discriminados em `app/docs/RELATO.md:62–66`.
+
+- Item 1: aval exige soma 230; medida foi 232. Divergência explicada em `app/docs/RELATO.md:74`, mas não conto cumprimento literal.
+- Item 3: falta medida pós-cura demonstrando solução dos 15 V. A decomposição A3/B2/P8/S2 está em `app/docs/RELATO.md:53`; a entrada de A/S no c8b está em `app/docs/RELATO.md:35` e `:38`; entrega c8c genérica em `:9` não demonstra o resultado dos 15.
+- Item 4: falta trocar os três chamadores. Confirmado no código: `app/chamados/services/vigia_fio.py:635` ainda chama `porta_alcancavel_do_dia`.
+- Item 5: falta certidão dos cinco respondedores. Sua sobrevivência está declarada em `app/docs/RELATO.md:238`.
+- Item 6: falta prova da catraca “respondedores=1” e paridade após troca.
+- Item 7: falta DIFF de alcance antes/depois da troca por classe.
+- Itens 8–10: suite, opus e pouso do topo vivo demonstram a fase c8+X1, não o fechamento da obra LEITORES com a troca concluída. [nao verificado]
+
+E3-X1 tem **lista separada de 7 itens**, sem somar ao N=10. Recomendo **6 de 7**:
+
+1. Censo dos 15: `app/docs/RELATO.md:41`.
+2. Cura no ramo: relato_topo, linha do opus final 999a7966c.
+3. RED/GREEN e mutantes: relato_topo, linha e3fix11 ORM 09:21.
+4. **Falta** DIFF completo por colaborador, demonstrando zero dia de trabalho exigível mudando. O topo dá agregados e os 35 pós-desligamento; o aval libera esses 35, mas não substitui a discriminação exigida.
+5. Suite inteira: relato_topo, linha suite pre-opus 09:46. [nao verificado]
+6. Opus final: relato_topo, linha opus final 09:54.
+7. Pouso: relato_topo, linha FIO-E0-V4-E3 NO AR 11:0x. [nao verificado]
+
+E4B: **PRONTO AUSENTE**. `app/docs/BACKLOG.md:1866` traz prosa composta — A24, C3, três rodadas, alarma — sem lista numerada. `:1875` descreve backfill, sem fornecer lista de PRONTO. Não há lista pertinente em TICKETS.
+
+E4C: **PRONTO AUSENTE**. `app/docs/BACKLOG.md:1866` traz dois resultados em prosa: migração dos DIVERGE e selo 2. O aval do censo adiantado é entrega conjunta de censo, não PRONTO da migração.
+
+E4D: **0 de 1**, caso se aplique a exceção de resultado único em prosa: parar de escrever a projeção, `app/docs/BACKLOG.md:1866` e aval E4-EXPAND-CONTRACT. Não há prova escrita de conclusão do CONTRACT no RELATO fornecido.
+
+A referência HEAD correta de E3-LEITORES é `app/docs/BACKLOG.md:1865`; as linhas do anexo backlog_obras não correspondem à numeração da cópia.
+
+## 11/11 11:28 · sessao 0cccfd47af33 · - · - · origem=Ronald (tmux)
+
+Censo RAIZ concluído, sem escrita. As linhas abaixo são do HEAD da cópia; diferem do anexo `backlog_obras.txt`. (`app/docs/BACKLOG.md:1883`)
+
+| Fase | PRONTO encontrado | Prova / limite |
+|---|---|---|
+| RAIZ F1 | **PRONTO AUSENTE** específico. A sequência chama F1 de “matriz”, sem lista de resultados. O aval UM-ELEITOR enumera decisões de implementação, não PRONTO. (`app/docs/BACKLOG.md:1883`; anexo `aval_raiz_f1_um_eleitor_1111.txt`) | Existe censo `f0f1.r`, rc 0, com 3 sítios persistentes e 3 eleitores divergentes; isso prova o censo, não a implementação do escritor/eleitor único. (`app/docs/RELATO.md:19`) |
+| RAIZ F2 | **PRONTO AUSENTE** específico. F2 é BO-DISPUTA; sua linha mistura cura, invariante, selo e contadores em prosa, sem lista PRONTO numerada. (`app/docs/BACKLOG.md:1883`; `app/docs/BACKLOG.md:1877`) | c21 estacionada, c22 não lançada; suite17 terminou vermelha. (`app/docs/RELATO.md:27`) |
+| RAIZ F3 | **PRONTO AUSENTE** de produto. Há o censo conjunto F3/F4 no anexo; seu PRONTO é entrega de leitura, não encerramento da fase. (`app/docs/BACKLOG.md:1883`; anexo `aval_censo_adiantado_1111.txt`) | O topo fornecido relata censo, sonda e bloqueio por arquivo comum; não relata cura pousada. (anexo `relato_topo.txt`, linhas a numerar pelo pai) |
+| RAIZ F4 | **PRONTO AUSENTE** de produto. O aval PAR-PELA-CELULA define autoridade e proibições; não enumera PRONTO. A linha BUG-PAR descreve ato do par, RED e DRY em prosa. (`app/docs/BACKLOG.md:1929`; anexo `aval_f4_par_pela_celula_1111.txt`) | Censo/sonda do topo provam descoberta da fonte `PARES_PAUSA_DNA`, não implementação. (anexo `relato_topo.txt`, linhas a numerar) |
+| RAIZ F5 | **Sem lista própria.** Pode herdar **N=1** de E4d, se aplicado o critério de resultado único em prosa: “parar de escrever a projeção”. A equivalência E4d = F5 está explícita. (`app/docs/BACKLOG.md:1756`; `app/docs/BACKLOG.md:1866`) | **X=0**: nenhuma prova escrita de contract concluído encontrada no RELATO; o topo mantém E4c dependente da E4b. (anexo `relato_topo.txt`, linhas a numerar) |
+| RAIZ F6 | **PRONTO AUSENTE** numerado. O aval META descreve vários resultados sem numeração: DRY, DIFF por classe, reversão, lista de exportadas e medição das duplicadas; não cabe transformar tudo em um item. (`app/docs/BACKLOG.md:1883`; anexo `aval_meta18_duas_raias_1111.txt`) | Não há prova de conclusão desses resultados no RELATO pesquisado. [não verificado] |
+| RAIZ F7 | **PRONTO AUSENTE** específico. “Selo esperado 0 nasce com cada fase” não fornece lista nem define, nessa frase, a condição medida. (`app/docs/BACKLOG.md:1883`; anexo `aval_meta18_duas_raias_1111.txt`) | Não há prova citada de selo RAIZ F7 verde no material fornecido. [não verificado] |
+
+Fontes locais pesquisadas integralmente: `app/docs/TICKETS.md` (1323 linhas), `app/docs/BACKLOG.md` (2339 linhas), `app/docs/RELATO.md` (7726 linhas). `TICKETS.md` não tem entradas RAIZ-DA-DISPUTA, BO-DISPUTA-SEM-PERGUNTA, BUG-PAR ou DISPUTA-ZUMBI. [não verificado — resultado negativo da busca]
+
+Atenção para não converter a ordem F0→F7 em sete itens de PRONTO: ela descreve fases da obra. (`app/docs/BACKLOG.md:1883`)
 
 ## 11/11 10:57 · sessao 5a702a9c8f16 · MAPA-20 · verificador · origem=Code
 
@@ -673,185 +833,4 @@ por_urgencia 'consulta' n 16
 agora 2026-11-11 10:34:04
 ```
 
-## 11/11 10:28 · sessao 8a5868b1f67a · RAIA-2-BO-VISIVEL · sonda · origem=Code
-
-```text
-sonda_leitura: sonda_lote0311.py [63cd70bd29f499d7] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-LOTE 2026-10-28 09:33:35 pedidas=47 validadas=29 recusadas=18
-LOTE 2026-10-28 09:33:57 pedidas=15 validadas=0 recusadas=15
-LOTE 2026-10-28 09:34:20 pedidas=15 validadas=0 recusadas=15
-LOTE 2026-10-28 09:34:38 pedidas=15 validadas=0 recusadas=15
-LOTE 2026-10-28 09:35:34 pedidas=15 validadas=0 recusadas=15
-LOTE 2026-10-28 09:40:34 pedidas=15 validadas=0 recusadas=15
-LOTE 2026-10-28 14:19:49 pedidas=26 validadas=11 recusadas=15
-LOTE 2026-10-28 14:20:09 pedidas=15 validadas=0 recusadas=15
-LOTE 2026-10-28 15:41:19 pedidas=29 validadas=12 recusadas=17
-LOTE 2026-10-28 16:24:03 pedidas=16 validadas=0 recusadas=16
-LOTE 2026-10-28 16:24:24 pedidas=16 validadas=0 recusadas=16
-LOTE 2026-10-29 13:27:43 pedidas=24 validadas=10 recusadas=14
-LOTE 2026-10-29 14:19:11 pedidas=31 validadas=18 recusadas=13
-LOTE 2026-10-29 14:42:19 pedidas=12 validadas=0 recusadas=12
-LOTE 2026-10-29 14:42:38 pedidas=12 validadas=0 recusadas=12
-LOTE 2026-10-29 14:43:01 pedidas=12 validadas=0 recusadas=12
-LOTE 2026-10-29 14:43:19 pedidas=12 validadas=0 recusadas=12
-LOTE 2026-10-30 08:20:15 pedidas=33 validadas=4 recusadas=29
-LOTE 2026-10-30 08:22:45 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 08:24:19 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 08:42:57 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 09:48:15 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 12:12:51 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 12:30:44 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 12:33:23 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 12:35:49 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 13:04:01 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 15:28:31 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-10-30 15:29:07 pedidas=29 validadas=0 recusadas=29
-LOTE 2026-11-03 08:06:21 pedidas=87 validadas=45 recusadas=42
-LOTE 2026-11-03 16:26:49 pedidas=47 validadas=10 recusadas=37
-LOTE 2026-11-05 08:02:56 pedidas=57 validadas=17 recusadas=40
-LOTE 2026-11-05 16:11:28 pedidas=46 validadas=6 recusadas=40
-LOTE 2026-11-06 07:59:36 pedidas=56 validadas=16 recusadas=40
-LOTE 2026-11-06 10:21:21 pedidas=45 validadas=5 recusadas=40
-LOTE 2026-11-11 08:56:00 pedidas=119 validadas=55 recusadas=64
-LOTE 2026-11-11 09:20:37 pedidas=59 validadas=0 recusadas=59
-linhas n 37
-```
-
-## 11/11 10:25 · sessao 8fe05992e025 · FIO-E0-V4-E4B · construtor · origem=Code
-
-Adicionado spy no módulo vivo e assertion que detecta a entrada de `(colab, DIA)` no ato, mesmo após rollback: [teste:217](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4_backfill.py:217). [nao verificado]
-
-Memória: 13 testes OK; `entrega_cerca_equivalente` falha pela nova assertion, com `bang:exportada` preservado. [Resultados:70](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v13.txt:70). [nao verificado]
-
-[Causa, RED, mutantes e comandos ORM no recibo v13](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c4-v13.txt:1). ORM desta volta [nao verificado]; certificação fica com Code/suite e opus final. [nao verificado]
-
-## 11/11 10:21 · sessao ffcb7cf7e4ff · LOTE-VALIDAR-REGRESSAO-0311 · leitura · origem=Code
-
-**Classificação: (c), indeterminado sem sonda.** Há multiplicações de trabalho comprováveis no caminho atual, mas faltam quantidade e composição dos lotes, execução concorrente e comparação das revisões efetivamente implantadas para atribuir a regressão a uma causa pontual. A primeira sonda pode aproveitar a auditoria que a própria view grava com as contagens do lote. (`app/chamados/views_cobrar.py:383`; `app/chamados/services/validacao.py:727`; implantação e medições faltantes: [nao verificado])
-
-Uso “código atual” para a cópia fornecida. Ela contém alterações identificadas como posteriores ao primeiro POST lento, incluindo 05/11 e 06/11; portanto, seu custo inteiro não pode ser atribuído ao intervalo 30/10–03/11. (`app/ponto/portas/celula.py:891`; `app/chamados/signals.py:242`) Os diffs históricos por hash não puderam ser conferidos nesta cópia: [nao verificado].
-
-**1. Caminho do POST e custo visível**
-
-A rota chega a `validar_lote_tela`, verifica permissão e método, recebe `refs`, executa o lote, registra auditoria e renderiza o resultado. O HTTP 200 também pode apresentar recusa; não comprova materialização de todos os itens. (`app/chamados/urls.py:37`; `app/chamados/views_cobrar.py:376`; `app/chamados/views_cobrar.py:380`; `app/chamados/views_cobrar.py:386`; `app/templates/chamados/partials/_lote_preview.html:7`)
-
-| Etapa | Chamada e trabalho |
-|---|---|
-| Seleção do lote | Converte referências para inteiros, deduplica em uma lista, faz **um SELECT inicial** das perguntas com suas disputas e percorre as referências **serialmente**. A deduplicação usa busca na própria lista, podendo exigir trabalho quadrático na quantidade de referências. (`app/chamados/services/validacao.py:713`; `app/chamados/services/validacao.py:719`; `app/chamados/services/validacao.py:724`; `app/chamados/services/validacao.py:727`) |
-| Reclassificação por item | `classe_do_lote` resolve delta, resolve slot novamente e consulta existência de batida apurável em ±60 minutos. Só a classe A segue para validação. (`app/chamados/services/validacao.py:735`; `app/chamados/services/validacao.py:864`; `app/chamados/services/validacao.py:872`; `app/chamados/services/validacao.py:875`) |
-| Entrada na validação | `acao_validar_pergunta` chama `validar_pergunta`, que busca novamente a pergunta, verifica resposta, validação anterior e implausibilidade. (`app/chamados/services/validacao.py:746`; `app/chamados/services/acoes_disputa.py:19`; `app/chamados/services/validacao.py:389`; `app/chamados/services/validacao.py:404`) |
-| Carimbo | Dentro de transação, trava colaborador/disputas/chamados, grava `validada_em/por` e registra a decisão. A gravação da pergunta dispara seus receivers. (`app/chamados/services/validacao.py:425`; `app/chamados/services/validacao.py:431`; `app/chamados/services/validacao.py:435`; `app/chamados/services/validacao.py:137`; `app/chamados/services/validacao.py:139`) |
-| Recálculo por validação | Agenda `recalcular_por_evento`, que chama o recálculo da **competência daquele colaborador**. (`app/chamados/services/validacao.py:446`; `app/ponto/services/fechamento.py:1809`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`) |
-| Materialização da pergunta | Para resposta de hora ainda não materializada, chama `_materializar_uma`; depois verifica se precisa desfazer a validação recusada. (`app/chamados/services/validacao.py:461`; `app/chamados/services/validacao.py:463`; `app/chamados/services/validacao.py:464`) |
-| Trabalho sobre irmãs | **A cada item**, chama a materialização da disputa: consulta todas as irmãs respondidas, validadas e não materializadas; tenta cada uma e verifica fechamento da disputa. (`app/chamados/services/validacao.py:469`; `app/chamados/services/materializacao.py:1369`; `app/chamados/services/materializacao.py:1375`; `app/chamados/services/materializacao.py:1378`) |
-| Retorno | Atualiza a pergunta do banco, registra resultado e atualiza novamente a instância mantida pelo lote. (`app/chamados/services/validacao.py:472`; `app/chamados/services/validacao.py:479`; `app/chamados/services/validacao.py:752`) |
-
-O POST recebe referências explícitas; a classificação da **fila global** pertence à contagem/prévia. Não há chamada dessa classificação global no corpo da view do POST. (`app/chamados/views_cobrar.py:348`; `app/chamados/views_cobrar.py:361`; `app/chamados/views_cobrar.py:380`)
-
-No ramo de hora, `_materializar_uma` verifica a data do fato, abre transação, calcula o plantio, busca batida existente, verifica paridade e pode criar a batida. Depois reconcilia destino/clones, verifica lastro e carimba a pergunta pela porta que consulta o C6 e relavra seu veredito. (`app/chamados/services/materializacao.py:1192`; `app/chamados/services/materializacao.py:1220`; `app/chamados/services/materializacao.py:846`; `app/chamados/services/materializacao.py:859`; `app/chamados/services/materializacao.py:875`; `app/chamados/services/materializacao.py:927`; `app/chamados/services/materializacao.py:974`; `app/chamados/services/materializacao.py:1233`; `app/chamados/services/materializacao.py:1277`; `app/chamados/models.py:3139`; `app/chamados/models.py:3150`)
-
-**Multiplicação importante:** quando cria uma batida e precisa ligar sua origem, há um INSERT de `Batida` e depois outro `save()` da mesma batida para preencher `pergunta_origem`. Esse segundo save dispara novamente os receivers que não filtram os campos alterados. (`app/ponto/registro_batida.py:157`; `app/chamados/services/materializacao.py:946`; `app/chamados/services/materializacao.py:948`; `app/ponto/registro_batida.py:254`; `app/ponto/signals.py:34`; `app/ponto/signals.py:131`; `app/ponto/signals.py:206`)
-
-Os receivers relevantes são:
-
-| Objeto salvo | Receiver → chamadas e efeitos |
-|---|---|
-| `Batida`, em cada save | `_nucleo_post_save_batida` → recomposição de turnos entre D−2 e D+1 → reconstrução das linhas, DELETE do recorte e `bulk_create`. (`app/ponto/signals.py:34`; `app/ponto/signals.py:26`; `app/ponto/nucleo.py:47`; `app/ponto/nucleo.py:58`; `app/ponto/nucleo.py:59`) |
-| `Batida`, somente criação | Publicação de tempo real; onboarding pode ser marcado se ainda incompleto e houver login. (`app/ponto/signals.py:39`; `app/ponto/signals.py:42`; `app/ponto/signals.py:45`; `app/colaboradores/signals.py:94`; `app/colaboradores/signals.py:102`) |
-| `Batida`, em cada save | `_cartorio_post_save_batida` → julgamento de D−1 e D, salvo guarda de reentrada. (`app/ponto/signals.py:131`; `app/ponto/signals.py:135`; `app/ponto/signals.py:112`; `app/ponto/signals.py:90`; `app/ponto/signals.py:93`) |
-| `Batida`, em cada save | Reconciliação dos chamados do colaborador e tentativa de fechar adesão. (`app/ponto/signals.py:206`; `app/ponto/signals.py:215`; `app/ponto/signals.py:234`) |
-| `PerguntaDisputa` | Beco em `on_commit` → relê disputa e perguntas, classifica e pode resolver perguntas/fechar disputa. (`app/chamados/signals.py:227`; `app/chamados/signals.py:238`; `app/chamados/services/becos.py:72`; `app/chamados/services/becos.py:29`; `app/chamados/services/becos.py:54`; `app/chamados/services/becos.py:57`) |
-| `PerguntaDisputa`, código atual | Outbox síncrono se o save toca campos relevantes → consulta linhas/células → INSERT de evento. (`app/chamados/signals.py:250`; `app/chamados/signals.py:255`; `app/chamados/signals.py:257`; `app/chamados/models.py:3228`; `app/chamados/models.py:3248`) |
-| `ChamadoColaborador`, pre-save | Consulta o estado anterior. (`app/chamados/signals.py:178`; `app/chamados/signals.py:184`) |
-| `ChamadoColaborador`, post-save | Rebaixa urgência; resolve perguntas se o estado foi gravado como encerrado; julga a célula se houve mudança de estado e não estiver em julgamento. (`app/chamados/signals.py:53`; `app/chamados/signals.py:72`; `app/chamados/signals.py:90`; `app/chamados/signals.py:104`; `app/chamados/signals.py:115`; `app/chamados/signals.py:187`; `app/chamados/signals.py:216`) |
-| `ChamadoColaborador`, condicionado | Silêncio de isento ao nascer/voltar a vivo; reconciliação do pai quando um filho deixa de ser vivo. (`app/chamados/signals.py:282`; `app/chamados/signals.py:293`; `app/chamados/signals.py:305`; `app/chamados/signals.py:349`; `app/chamados/signals.py:357`; `app/chamados/signals.py:368`) |
-| `DisputaSupervisao` fechada | S88 reconcilia o pai e anexa nota; S144 percorre perguntas não materializadas e carimba as aprovadas; callback retoma regularizações confirmadas do colaborador. (`app/chamados/signals.py:18`; `app/chamados/signals.py:42`; `app/chamados/signals.py:45`; `app/chamados/signals.py:147`; `app/chamados/signals.py:163`; `app/chamados/services/materializacao.py:1418`; `app/chamados/signals.py:137`; `app/chamados/services/regularizacao_ext.py:218`; `app/chamados/services/regularizacao_ext.py:224`) |
-
-Portanto, **no ramo de plantio novo + vínculo de origem**, o código solicita dois recomputes de turnos, quatro julgamentos de célula antes das guardas, duas reconciliações do colaborador e duas verificações de adesão. Agenda ainda dois recálculos mensais: um pela validação e outro pela criação da batida. Isso não significa quatro lavras efetivas: guardas e impressão podem pular trabalho. (`app/ponto/signals.py:26`; `app/ponto/signals.py:112`; `app/ponto/signals.py:135`; `app/ponto/signals.py:215`; `app/ponto/signals.py:234`; `app/chamados/services/validacao.py:446`; `app/ponto/registro_batida.py:160`; `app/ponto/services/cartorio.py:1369`)
-
-O `on_commit` usado aqui registra callbacks que chamam diretamente recálculo/fechamento; essas chamadas não demonstram envio a um job. Tempo efetivamente gasto nesses callbacks nos POSTs históricos: [nao verificado]. (`app/ponto/services/fechamento.py:1807`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`; `app/chamados/signals.py:132`; `app/chamados/signals.py:144`)
-
-Dentro de **cada julgamento**:
-
-- `julgar_celula` consulta a célula, aplica limites temporais e chama `julgar_colab` com uma célula; depois consulta A2 e pode gravar `ata.precedencia`. (`app/ponto/services/cartorio.py:1987`; `app/ponto/services/cartorio.py:1993`; `app/ponto/services/cartorio.py:2000`; `app/ponto/services/cartorio.py:1959`; `app/ponto/services/cartorio.py:1960`; `app/ponto/services/cartorio.py:2008`)
-- O corpo carrega batidas da janela, monta grade, consulta a primeira batida histórica e carrega chamados dos módulos pertinentes **com suas perguntas, sem filtro temporal ou de estado nesse carregador**. O teste de impressão vem depois. (`app/ponto/services/cartorio.py:1118`; `app/ponto/services/cartorio.py:1134`; `app/ponto/services/cartorio.py:1137`; `app/ponto/services/cartorio.py:1165`; `app/ponto/services/cartorio.py:117`; `app/ponto/services/cartorio.py:118`; `app/ponto/services/cartorio.py:1280`; `app/ponto/services/cartorio.py:1369`)
-- Havendo adiados, executa E2 do colaborador, reconcilia chamados e pode fazer segunda passada forçada; emissão também pode provocar releitura. (`app/ponto/services/cartorio.py:962`; `app/ponto/services/cartorio.py:970`; `app/ponto/services/cartorio.py:974`; `app/ponto/services/cartorio.py:984`; `app/ponto/services/cartorio.py:1036`; `app/ponto/services/cartorio.py:1049`)
-- Havendo células julgadas, executa cluster do colaborador e fábrica por célula; a fábrica pode alcançar pautas. (`app/ponto/services/cartorio.py:1001`; `app/ponto/services/cartorio.py:1005`; `app/ponto/services/cartorio.py:1008`; `app/chamados/services/fabrica_da_celula.py:214`; `app/chamados/services/fabrica_da_celula.py:279`)
-- Status e rótulo entram no mesmo save da lavra. A consulta adicional a A2 em `fatos_do_status` é condicionada ao veredito `indefinida`; não cabe atribuir uma nova query ou save a todo item apenas pela existência das colunas. (`app/ponto/status_dia.py:177`; `app/ponto/status_dia.py:181`; `app/ponto/services/cartorio.py:1813`; `app/ponto/portas/celula.py:1038`; `app/ponto/portas/celula.py:1072`)
-
-**Total exato de SQL, julgamentos concluídos, lavras e segundos por item em produção: [nao verificado].** Os números históricos escritos em comentários, como “122 ms”, não medem estes lotes. (`app/chamados/services/validacao.py:439`)
-
-**2. Commits do anexo que alcançam arquivos desse caminho** [nao verificado]
-
-A tabela cruza os arquivos declarados no anexo com o caminho acima. **“Tocou arquivo” não comprova “mudou função executada”. Para cada hash abaixo, o acréscimo histórico exato por item/POST permanece [nao verificado] sem diff.** A última coluna identifica o trabalho atual a conferir, sem tratá-lo como acréscimo comprovado daquele hash.
-
-| Hashes do anexo | Arquivo alcançado / trabalho atual |
-|---|---|
-| `f059f0521` | Validação e cartório; encadeamento lavra → E2 → reconciliação → segunda passada condicionada. (`app/chamados/services/validacao.py:469`; `app/ponto/services/cartorio.py:962`; `app/ponto/services/cartorio.py:984`) |
-| `22c2c2890`, `479b3aeeb`, `b3fc3919d`, `4f0476aa5`, `734dafb5a`, `38c502149`, `4150b482e` | Modelos/fio: fechamento consulta perguntas ancoradas, julga vivas, pode reapontar e relavrar perguntas. Custo por chamado afetado e respectivas perguntas. (`app/chamados/models.py:344`; `app/chamados/models.py:390`; `app/chamados/models.py:437`; `app/chamados/models.py:309`; `app/chamados/services/fio.py:909`) |
-| `e046540e5`, `c1d9ee7c4`, `eb768cf2c`, `7b76efa7d`, `69ea3f8fe`, `3737d1027` | Cartório/modelos/reconciliador: absolvição, gates, projeção da célula deste julgamento e passadas condicionais. (`app/ponto/services/cartorio.py:959`; `app/ponto/services/cartorio.py:970`; `app/ponto/services/cartorio.py:984`; `app/ponto/portas/celula.py:932`) |
-| `2692b5c50`, `587e5f175`, `d8be2e408`, `424ba425b`, `9e053c0e6` | Modelos e portas de pergunta; carimbo consulta C6 e pode relavrar antes do save. Alteração de comentário/assinatura versus execução por hash: [nao verificado]. (`app/chamados/models.py:3103`; `app/chamados/models.py:3139`; `app/chamados/models.py:3150`; `app/chamados/models.py:3152`) |
-| `4ea6ffd2b`, `364ceb42e`, `ae0502e59` | Status na lavra; processamento do status e A2 condicionado a `indefinida`, no save combinado. (`app/ponto/services/cartorio.py:1813`; `app/ponto/services/cartorio.py:1817`; `app/ponto/status_dia.py:177`; `app/ponto/portas/celula.py:1072`) |
-| `9d34ce228`, `8cea1769a`, `3a1e285aa`, `8b3858097`, `69d8b7d89`, `a531c8d1b`, `90a1249a0`, `5ec1220ad`, `f408ab32a` | Tocam `status_dia.py`, também usado pelo escritor; títulos sobre D4/calendário não bastam para excluir o arquivo. Hunk executado e custo novo: [nao verificado]. (`app/ponto/status_dia.py:113`; `app/ponto/status_dia.py:166`; `app/ponto/services/cartorio.py:1817`) |
-| `15cb377f5` | Modelo de célula no caminho. A migration não é chamada pelo POST; efeito de índice/esquema instalado: [nao verificado]. (`app/ponto/services/cartorio.py:1974`; `app/ponto/services/cartorio.py:1987`) |
-| `8ec526f23`, `9f0e75426`, `60258b809`, `2204220e4` | Cartório/grade/precedência: consulta ao juiz da folga e impressão/versionamento. (`app/escala/utils.py:1140`; `app/ponto/precedencia.py:194`; `app/ponto/services/cartorio.py:471`; `app/ponto/services/cartorio.py:1369`) |
-| `36fbac826`, `f408ab32a`, `fe9736178`, `5ec1220ad`, `399565438`, `389775e00`, `d03410912`, `356a30b62` | Cobertura parcial, dispensa por marco, instante anterior e portões de emissão/lista. Podem alterar quais ramos e lavras acontecem; quantidade real afetada: [nao verificado]. (`app/ponto/services/cartorio.py:370`; `app/ponto/services/cartorio.py:427`; `app/ponto/services/cartorio.py:951`; `app/ponto/services/cartorio.py:1717`; `app/ponto/services/cartorio.py:1801`) |
-| `4ef817f17`, `b89f191ff` | Versão de regra/impressão: mudança de impressão pode impedir o pulo e causar rejulgamento. Delta de cada hash: [nao verificado]. (`app/ponto/services/cartorio.py:132`; `app/ponto/services/cartorio.py:471`; `app/ponto/services/cartorio.py:1369`) |
-| `59de66664`, `1222ab98c` | Isento na impressão, com horizonte/versionamento. Pode invalidar impressão para os casos elegíveis; incidência no lote: [nao verificado]. (`app/ponto/services/cartorio.py:520`; `app/ponto/services/cartorio.py:1362`; `app/ponto/services/cartorio.py:1369`) |
-| `6995671cb` | `cods` próprio do ato, usado para decidir fábrica/cluster. O código atual restringe esses consumidores ao resultado do ato; não demonstra acréscimo universal. (`app/ponto/services/cartorio.py:944`; `app/ponto/services/cartorio.py:997`; `app/ponto/services/cartorio.py:1001`; `app/ponto/services/cartorio.py:1008`) |
-| `d0d75b8f4`, `c5c433608`, `4236474ca`, `17e595092`, `399565438` | Fábrica da célula: decisão de perguntar, parcial só lista e encaminhamento de limbo exportado para pauta. (`app/chamados/services/fabrica_da_celula.py:112`; `app/chamados/services/fabrica_da_celula.py:123`; `app/chamados/services/fabrica_da_celula.py:214`; `app/chamados/services/fabrica_da_celula.py:275`) |
-| `40e1bac20`, `9e9590eee`, `d0d75b8f4` | Cluster chamado pelo julgamento; leitura de células/achados e filtro de parcial. (`app/ponto/services/cartorio.py:1005`; `app/ponto/services/cluster_espurio.py:46`; `app/ponto/services/cluster_espurio.py:102`) |
-| `387558b71` | `disputa_emissao.py`, alcançado pelos encerramentos e respectivos receivers; mudança específica executada neste ramo: [nao verificado]. (`app/chamados/signals.py:115`; `app/chamados/services/disputa_emissao.py:925`) |
-| `72eb11be1`, `d03410912`, `b2fba08fd`, `5ec1220ad`, `fe9736178`, `36fbac826` | Leitor da célula/grade, chamado também pela materialização. (`app/chamados/services/materializacao.py:232`; `app/chamados/services/materializacao.py:281`; `app/escala/services/leitor_celula.py:350`) |
-| `b1e3f259e`, `c1c6f565e`, `5ec1220ad`, `36fbac826`, `8ec526f23` | Builders/overlays da grade. (`app/escala/utils.py:1130`; `app/escala/utils.py:1156`; `app/escala/utils.py:1231`; `app/escala/utils.py:2084`) |
-| `d117b1201`, `b3bef4032`, `36fbac826`, `f408ab32a`, `fe9736178` | Classificador em `supra_juiz.py`, chamado pelo cartório. (`app/ponto/services/cartorio.py:1237`; `app/ponto/services/cartorio.py:1424`) |
-| `f9be08e08`, `de1206907`, `d871bcca8`, `41abcd1f6`, `8cb8a4c55`, `8b3858097`, `36fbac826`, `5ec1220ad`, `b2fba08fd`, `90a1249a0` | `turnos.py` no caminho de encerramento/grade/parcial. Hunk efetivamente alcançado por cada alteração: [nao verificado]. (`app/ponto/services/cartorio.py:1116`; `app/ponto/turnos.py:2127`; `app/ponto/turnos.py:2616`) |
-| `03c8d106e`, `5394309c0` | Motor: processamento de intervalos/noturnas por período no recálculo. (`app/ponto/motor_calculo_v2.py:121`; `app/ponto/motor_calculo_v2.py:162`; `app/ponto/motor_calculo_v2.py:173`) |
-| `bd9fb40be`, `f9a65d662` | Calculador: dobra/noturnas/pontualidade e intervalos, alcançados por dia da competência recalculada. (`app/ponto/services/fechamento.py:1267`; `app/ponto/services/fechamento.py:1271`; `app/ponto/calculador/alimentacao.py:472`; `app/ponto/calculador/alimentacao.py:527`; `app/ponto/calculador/regras.py:783`; `app/ponto/calculador/regras.py:824`) |
-| `eaa414cf7`, `50d1c15ce`, `17e595092` | Pautas, alcançadas condicionalmente pela fábrica; montagem de contexto/link. (`app/chamados/services/fabrica_da_celula.py:279`; `app/pautas/services.py:153`; `app/pautas/services.py:400`) |
-| `fc9beecea`, `74123bb1d`, `971374506`, `b621e0c7b`, `794ee000b`, `7f3cc8757`, `68821bbd7`, `01ae542e2`, `1ea81aebc`, `cc62d1683` | `vigia_fio.py` é alcançado condicionalmente pela consulta de competência na costura. Isso **não demonstra execução do censo F5** alterado nesses commits. (`app/chamados/services/fio.py:774`; `app/chamados/services/fio.py:776`) |
-| `543d2e524`, `68821bbd7`, `366e07d4f`, `a625b893e`, `1ea81aebc`, `cc62d1683`, `8fef4d216`, `a30153c7f`, `9651ef38e` | Tocam `chamados/juizes.py`, arquivo executado pelo POST. Custo adicional das funções especificamente alteradas: [nao verificado]. (`app/chamados/services/validacao.py:864`; `app/chamados/models.py:3139`) |
-| `15136c126` | Toca `fio.py`, mas alteração de proposta/modal não prova 
-
-[truncado em 20000 de 38148 caracteres]
-
-## 11/11 10:19 · sessao 1aa4f63738d0 · O169-FECHADA · verificador · origem=Code
-
-**O delta cura a instância anterior à trava e a reabertura sem trilha do legado. Não identifiquei defeito novo demonstrável nos quatro pontos pedidos.** (`app/ponto/services/cluster_espurio.py:278`; `app/ponto/services/cluster_espurio.py:294`; `app/ponto/services/cluster_espurio.py:295`; `app/ponto/services/cluster_espurio.py:298`)
-
-Da rodada 1, mantendo a numeração:
-
-1. **Escritores/leitores — já regular; preservado.** Continua renascimento → `reabrir` → `_gravar_estado`; a auditoria continua pelo escritor `evento`. Nenhuma escrita direta nova dos três campos. (`app/ponto/services/cluster_espurio.py:284`; `app/chamados/models.py:1019`; `app/chamados/models.py:1442`; `app/core/observ.py:134`)
-
-2. **Juízes — sem defeito novo; concordo com a triagem.** Relatório e renascimento consultam a mesma casca de tranca. A diferença entre dia contado e competência permanece preexistente. (`app/ponto/services/cluster_espurio.py:251`; `app/chamados/models.py:1009`; `app/chamados/models.py:1043`; `app/chamados/juizes.py:2275`)
-
-3. **Relógio — não curado, mas descartado como defeito deste delta.** Concordo: permanece dentro do caminho preexistente competência → perguntas vivas → janela. (`app/chamados/juizes.py:2286`; `app/chamados/juizes.py:2267`; `app/chamados/juizes.py:577`)
-
-4. **Trava/TOCTOU — curado o achado material, severidade alta.** Chamado e colaborador agora nascem depois da trava C; o contador é reconsultado sob ela. `esperados` continua validando a fotografia inicial; concordo em não exigir atomicidade global das linhas. (`app/ponto/services/cluster_espurio.py:261`; `app/ponto/services/cluster_espurio.py:275`; `app/ponto/services/cluster_espurio.py:276`; `app/ponto/services/cluster_espurio.py:278`; `app/ponto/services/cluster_espurio.py:280`)
-
-5. **Campos do relatório — parcialmente curado, baixa.** Agora há `parado` para saída do universo e recusa. Porém `recusa`, `ativo` e classificação continuam sendo a fotografia anterior à trava; não são atualizados pelo apply. `aplicadas` continua contando sucessos, não todas as escritas possíveis de uma recusa. (`app/ponto/services/cluster_espurio.py:256`; `app/ponto/services/cluster_espurio.py:257`; `app/ponto/services/cluster_espurio.py:281`; `app/ponto/services/cluster_espurio.py:285`; `app/chamados/models.py:1427`; `app/chamados/models.py:1436`)
-
-6. **Testes/mutantes — parcialmente curado, média.** A falha de trilha ganhou cenário e mutante; a correção da releitura após trava continua sem cenário concorrente correspondente nos testes do legado. (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:138`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:246`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:100`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:167`)
-
-7. **Porta de relavra — curada a afirmação excessiva.** O texto agora distingue transição via `admin` de relavra para `competencia_trancada`; o gate dedicado continua recusando encerrados. Concordo com manter esse ramo PARADO nesta triagem. (`app/ponto/services/cluster_espurio.py:220`; `app/ponto/services/cluster_espurio.py:269`; `app/chamados/models.py:1630`; `app/chamados/models.py:1639`)
-
-8. **Outros materiais — parcialmente curado.**
-   - **Alta, curado:** ausência da trilha específica agora provoca rollback. **Média, residual:** falha seletiva de `estado_chamado` continua ignorada pelo núcleo. (`app/ponto/services/cluster_espurio.py:293`; `app/ponto/services/cluster_espurio.py:294`; `app/chamados/models.py:292`; `app/core/observ.py:139`)
-   - **Baixa, parcialmente curado:** vazio/todas trancadas evitam criar usuário; existindo `REABRIR`, `get_or_create` ainda ocorre fora do atomic, mesmo que a linha depois recue. (`app/ponto/services/cluster_espurio.py:269`; `app/ponto/services/cluster_espurio.py:272`; `app/ponto/services/cluster_espurio.py:275`; `app/core/utils.py:18`)
-   - **Proveniência parcialmente curada:** a auditoria passou a declarar RECONCILIAR, coerente com o contador; a docstring ainda equipara esse universo a fechamento por idade. (`app/ponto/services/cluster_espurio.py:93`; `app/ponto/services/cluster_espurio.py:228`; `app/ponto/services/cluster_espurio.py:289`)
-   - **Relavra não implementada:** permanece a diferença para o aval integral, aceita como parada nesta triagem. (`app/docs/CORTES.md:435`; `app/ponto/services/cluster_espurio.py:234`; `app/ponto/services/cluster_espurio.py:269`)
-
-Quanto às perguntas 2–5:
-
-- **2 — Quem escreve e lê.** `_gravar_estado` escreve `status_local`, limpa `via_encerramento`/`resolvido_em` e salva; `evento` escreve `LogAuditoria`. Antes da trava, contador e relatório leem estado/via, e `recusa_da_reabertura` pode ler `resolvido_em`. Depois da trava, o apply relê chamado/colaborador e universo. Histórico/vigia consomem `estado_chamado`; o teste consulta a ação do legado. Portanto **há leituras anteriores à trava**, mas a instância usada pela porta foi corrigida. (`app/chamados/models.py:228`; `app/chamados/models.py:248`; `app/chamados/models.py:296`; `app/core/observ.py:134`; `app/ponto/services/cluster_espurio.py:107`; `app/ponto/services/cluster_espurio.py:253`; `app/chamados/models.py:1342`; `app/ponto/services/cluster_espurio.py:278`; `app/chamados/services/historico.py:44`; `app/chamados/services/vigia_loop.py:114`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:115`)
-
-- **3 — Mesma transação: sim, por linha.** Reabertura e ação `reabrir_legado_cluster_o169` estão dentro do mesmo atomic. `None` levanta `_SemTrilha` dentro dele e é capturado fora; outra exceção propaga. Não há separação de commit demonstrada entre essas duas escritas. Pode persistir reabertura **sem `estado_chamado`**, se somente essa emissão falhar e a emissão do legado funcionar. Recusas também podem gravar outras auditorias sem reabrir, comportamento preexistente. (`app/ponto/services/cluster_espurio.py:275`; `app/ponto/services/cluster_espurio.py:284`; `app/ponto/services/cluster_espurio.py:288`; `app/ponto/services/cluster_espurio.py:294`; `app/ponto/services/cluster_espurio.py:295`; `app/chamados/models.py:292`; `app/chamados/models.py:1396`)
-
-- **4 — Teste e mutante mordem, por inspeção.** O patch alcança o import local; a foto inclui estado/via/carimbo/notas/logs. Porém o mutante morre primeiro em `aplicadas == 0`, antes da foto: sua morte isolada não comprova rollback. Falta falha seletiva apenas da ação legado, pois o patch desliga todas as emissões. Mutante plausível sem cenário correspondente: remover a trava explícita anterior à releitura; os casos sequenciais não exercitam a espera que causava o defeito. Sobrevivência executada: **[nao verificado]**. (`app/ponto/services/cluster_espurio.py:244`; `app/ponto/services/cluster_espurio.py:276`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:75`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:141`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:143`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:145`; `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:246`)
-
-- **5 — Sem defeito novo demonstrado.** Só `_SemTrilha` é capturada; trancadas pulam antes de qualquer sobrescrita de `parado`; recusas/falhas continuam antes do incremento. Sucesso sai do universo de encerrados; rollback permite tentar novamente. (`app/ponto/services/cluster_espurio.py:269`; `app/ponto/services/cluster_espurio.py:282`; `app/ponto/services/cluster_espurio.py:286`; `app/ponto/services/cluster_espurio.py:295`; `app/ponto/services/cluster_espurio.py:298`; `app/ponto/services/cluster_espurio.py:107`; `app/chamados/models.py:248`)
-
-Execução Django e ocorrência desses cenários em produção: **[nao verificado]**.
-
-_3796 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3800 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
