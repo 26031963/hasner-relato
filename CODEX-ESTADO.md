@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 08:29** · publicado em **11/11/2026 08:30** (UTC-3)
+> Ultima resposta processada: **11/11/2026 08:33** · publicado em **11/11/2026 08:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 08:33 · sessao 14c7f9cfa684 · BO-ADMIN-1111 · sonda · origem=Code
+
+**08 — Dono: FALTA INFORMACAO — falta individualizar o dia e demonstrar o estado do fio.** A classificação ESTRUTURA exige divergência comprovada, conforme [LEIS.md:122](app/docs/LEIS.md:122).
+
+1. **Candidato e prova dos DADOS:** a sonda informa `candidatos=1 [(62, None, 3)]`, col62. Contudo, o dia do BO é [nao verificado]: há **dois dias de trabalho sem entrada exibida**, **12/11/2026**, célula **140442**, e **14/11/2026**, célula **140444**; ambas com `trabalha=True`. Não escolho entre elas. O trecho também mostra **11/11 como folga**, célula **140441**, `trabalha=False`. Esses são valores do recorte fornecido, sem conferência externa [nao verificado].
+
+2. **Chamado, pergunta e fio vivo:** os DADOS exibem `37684 ... status_local=resolvido` e `37685 ... celula_id=140438`, correspondente a **08/11**. Não exibem perguntas de col62. Isso não comprova inexistência de chamado anterior à janela de `criado_em`, nem ausência de pergunta/fio vivo em 12 ou 14/11 [nao verificado].
+
+   **Universo do contador:** `fio_morto_de_hoje_pra_frente` é uma chave produzida por `censo()`. A função exige primeiro chamado vivo com célula, módulo de furo, célula acusadora e ausência de fio vivo; somente depois testa `data >= hoje`. Portanto, dia futuro sem entrada/chamado não entra automaticamente nesse contador ([vigia_fio.py:335](app/chamados/services/vigia_fio.py:335), [349](app/chamados/services/vigia_fio.py:349), [378](app/chamados/services/vigia_fio.py:378), [417](app/chamados/services/vigia_fio.py:417), [420](app/chamados/services/vigia_fio.py:420)). **A pertença de 12 e 14/11 ao universo permanece [nao verificado]**: faltam os vereditos integrais e os vínculos/estados de chamados e perguntas dessas células. O texto atual de `app/docs/ESTADO.md` também é [nao verificado]; o arquivo não foi localizado nesta cópia.
+
+3. **Complemento:** a conferência do universo e do leitor cabe em **FIO-E0-V4-E3-LEITORES**, aberta e incluindo `vigia_fio`; sem ID novo ([BACKLOG.md:1865](app/docs/BACKLOG.md:1865)).
+
+4. **Texto ao admin:** “Abra o calendário de col62 e informe a data exata que aparece sem entrada e sem chamado.” A ação fica no calendário ([views.py:1947](app/colaboradores/views.py:1947)).
+
+**09 — Dono: FALTA INFORMACAO — faltam nome/MIME recebidos, conteúdo do arquivo e resposta efetiva do download `.ms`.** A causa da extensão relatada é [nao verificado].
+
+1. **Candidato e prova dos DADOS:** a sonda informa `candidatos=1 [(872, None, 2)]`, col872; exibe apenas `Ausencia id=5422 | tipo=atestado | data=06/11/2026 | documento=…heic | status=aguardando_decisao`. Há **zero anexos gravados com `.ms` exibidos no recorte**; a associação desse registro ao download relatado é [nao verificado]. Não seleciono outro anexo.
+
+2. **Upload e persistência pelo código:** a API recebe `documento`, registra seu `content_type` em log e normaliza o nome antes de seguir ([api/views.py:1772](app/api/views.py:1772), [1777](app/api/views.py:1777), [1784](app/api/views.py:1784)). A normalização reconhece o conteúdo e altera somente `f.name`; não altera o MIME recebido ([ausencia.py:587](app/ponto/services/ausencia.py:587)). O documento é persistido em `FileField`, sem MIME associado nesse campo ([models.py:777](app/ponto/models.py:777)). **Nome original e `content_type` efetivamente recebidos para #5422: [nao verificado].**
+
+3. **Download pelo código:** usa o documento da referência ou do próprio registro, lê o conteúdo e, quando reconhecido, ajusta a extensão da resposta e seu `Content-Type`; entrega o arquivo aberto por `FileResponse`, sem conversão ([views.py:2115](app/ponto/views.py:2115), [2122](app/ponto/views.py:2122)). **Se o conteúdo for HEIC reconhecido**, devolve nome terminado em `.heic` e `image/heic` ([ausencia.py:582](app/ponto/services/ausencia.py:582)). Se desconhecido, o detector retorna `(None, None)` e a view preserva o basename ([ausencia.py:584](app/ponto/services/ausencia.py:584), [views.py:2124](app/ponto/views.py:2124)). **Conteúdo real e headers/nome efetivamente devolvidos para #5422: [nao verificado].**
+
+4. **Complemento:** a conferência cabe em **UI-ANEXO-AUSENCIA**, já registrada e abrangendo conteúdo, nome e HEIC; sem ID novo e sem atribuir `.ms` à falta de conversão ([BACKLOG.md:1130](app/docs/BACKLOG.md:1130)).
+
+5. **Texto ao admin:** “Em Ausências, abra o atestado de 06/11 de col872, clique em **Abrir** e **Baixar** e informe o nome completo salvo pelo navegador.” Os dois botões existem no painel ([painel_ausencia.html:84](app/templates/ponto/partials/painel_ausencia.html:84)).
+
+**Lei de desenho e censo ESTRUTURA:** não aplicados aos dois itens, pois a divergência estrutural permanece [nao verificado]; L-099 não autoriza transformar ausência de informação em causa estrutural ([LEIS.md:122](app/docs/LEIS.md:122)).
+
+## 11/11 08:33 · sessao a2f9ab32bc39 · - · - · origem=Ronald (tmux)
+
+Item 08 — **FALTA INFORMACAO**: há 1 colaborador candidato (`col62`), mas o dado não individualiza o dia. Há dois dias de trabalho futuros sem batida exibida: **12/11**, célula **140442**, e **14/11**, célula **140444** (`DADOS: CelulaDia`). Não escolher entre eles. A causa da ausência de entrada é [nao verificado].
+
+- **Célula:** ambas existem e têm `trabalha=True`; `DiaPago` mostra previsto de 720 minutos e zero trabalhado (`DADOS: CelulaDia 140442/140444; DiaPago 1978122/1978123/1978139/1978140`). O veredito integral dessas células é [nao verificado].
+- **Chamado/pergunta/fio vivo:** o recorte traz `37684` resolvido e `37685` ligado à célula **140438**, de **08/11** (`DADOS: ChamadoColaborador; CelulaDia`). Não traz pergunta para `col62`; inexistência global ou vitalidade nas datas 12/14 é [nao verificado]. A seleção de chamados é por `criado_em`, portanto a lista não prova ausência de chamado anterior à janela [nao verificado].
+- **Universo do contador:** `fio_morto_de_hoje_pra_frente` é chave produzida por `censo()`, não função autônoma. A função primeiro exige chamado em `VIVOS` com célula ([vigia_fio.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/chamados/services/vigia_fio.py:335)), módulo de furo (:349), célula acusando (:378), ausência de fio vivo (:417); somente depois classifica `data >= hoje` nessa chave (:420). **Ser futuro, ter escala e não ter entrada não basta.** A pertença das duas datas ao universo não está demonstrada [nao verificado].
+- O juiz do cartório recusa data futura ([cartorio.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/ponto/services/cartorio.py:1985)); os vereditos acusatórios são declarados em [models.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/escala/models.py:1767). Não há prova de contradição estrutural nesses dois dias [nao verificado].
+- **Lei/censo:** sem ESTRUTURA demonstrada, não atribuir lei de desenho violada nem apresentar escritores/leitores como causa. L-099 separa ESTRUTURA de CADASTRO/BATIDA ([LEIS.md](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/docs/LEIS.md:122)).
+- **Complemento:** a conferência do leitor e do universo cabe em **FIO-E0-V4-E3-LEITORES**, que segue aberta e inclui `vigia_fio`; sem novo ID ([BACKLOG.md](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/docs/BACKLOG.md:1865)).
+- **Texto ao admin:** “Abra o calendário de col62 e informe a data exata que aparece acusando sem entrada e sem chamado.” A porta de resolução fica na célula do calendário ([views.py](/home/ronald/codex_ws/d0e71018b45e104698b8aa111e6fb148ce6751e8/app/colaboradores/views.py:1947)).
+
+`app/docs/ESTADO.md` não foi localizado nesta cópia; seu texto atual é [nao verificado].
+
+## 11/11 08:33 · sessao 9d2d38bb528a · - · - · origem=Ronald (tmux)
+
+**09 — dono: FALTA INFORMACAO** para confirmar o `.ms`: faltam nome original e `content_type` recebidos, bytes do anexo e headers/nome efetivos do download. O único candidato informado é col872, `Ausencia #5422`, `data=06/11/2026`, `tipo=atestado`, `documento=… .heic`, `status=aguardando_decisao`; esses valores de produção só constam dos DADOS [nao verificado].
+
+- **Upload:** `app/api/views.py:1772` recebe `documento`; `:1777-1782` apenas registra seu `content_type` em log; `:1784-1786` chama a normalização. `app/ponto/services/ausencia.py:587-596` detecta pelo conteúdo e altera apenas `f.name`; não grava MIME. `Ausencia.documento` é `FileField` em `app/ponto/models.py:777-781`, sem campo MIME no modelo.
+- **Persistência:** `criar_ausencia` passa o documento ao modelo (`app/ponto/services/ausencia.py:350-351`, `:385`, `:417-418`); o anexo posterior é escrito por `anexar_documento` (`:846`, `:856-859`). Entradas normalizadas incluem API inicial (`app/api/views.py:1784-1786`), API de anexo (`:3114-3120`), web de anexo (`app/ponto/views.py:2141-2151`) e web de lançamento (`:2404-2405`, `:2492-2493`).
+- **Download pelo código:** `app/ponto/views.py:2115-2129` resolve a referência, usa o basename persistido, abre o arquivo e chama `tipo_real_documento`; se reconhecido, troca a extensão no nome da resposta e define o MIME. Devolve os bytes abertos em `FileResponse`, sem conversão. HEIC reconhecido → `*.heic` e `image/heic` (`app/ponto/services/ausencia.py:582-583`); PDF/JPG/PNG → respectivos pares (`:556-578`); desconhecido → `(None,None)` (`:584`) e basename preservado (`app/ponto/views.py:2124-2129`). Resposta real `.ms` [nao verificado].
+- **Lei e censo ESTRUTURA:** não aplicáveis como classificação comprovada. Se surgir divergência de leitores, referência canônica existente: **TESTEMUNHA LE, NAO RECALCULA**, `CLAUDE.md:20-22`; o leitor `Ausencia.tipo_real` também usa o detector (`app/ponto/models.py:844-854`).
+- **Complemento:** cabe registrar a conferência do contrato de entrada/download em **UI-ANEXO-AUSENCIA**, já registrada e contendo a parte de HEIC/original/conversão, sem novo ID (`app/docs/BACKLOG.md:1130`). A linha histórica documenta bloqueio de conversão; disponibilidade atual de decodificador [nao verificado].
+- **Texto ao admin:** “Em Ausências, abra o atestado de 06/11 de col872, clique **Abrir** e **Baixar** e informe o nome completo salvo pelo navegador.” Botões: `app/templates/ponto/partials/painel_ausencia.html:84-85`.
 
 ## 11/11 08:29 · sessao 40b0bd3a1e53 · BO-ADMIN-1111 · sonda · origem=Code
 
@@ -711,167 +764,4 @@ A mudança de NB para palavra não acusadora pode alcançar o reconciliador: seu
 
    Dois limites do executor também precisam aparecer: seu `BASE` é `7313a031...`, não a base produtiva informada `52a0022e9`; e `so_acusador` sempre segue a execução sem banco mesmo sem `--sem-banco`. `app/ponto/tests/x1_mutantes.py:20`, `:97`.
 
-## 11/11 07:46 · sessao 453485b0cb78 · - · - · origem=Ronald (tmux)
-
-Q2 — **PROCEDE a fragilidade da primeira testemunha do C2b.** `(None, None)` e `('', '')` passam tanto na igualdade quanto no `assertNotIn`, porque o conjunto acusatório não inclui esses valores; não há afirmação positiva de `concorde` nesse ponto. A comparação posterior com `derivar_veredito(out['cods'][d])` verifica o veredito depois da adesão, não o NB inicial. `app/ponto/tests/test_x1_folga_sem_adesao.py:132`, `:135`, `:136`, `:160`; `app/escala/models.py:1767`.
-
-O `forcar=True` vence a guarda NB e deixa de testar a chamada explícita inicial sem força. Entretanto, a criação da ausência anteriormente já aciona o signal sem força, e o teste compara o resultado produzido por ele com o rejulgamento forçado; a lacuna é não exigir resultado inicial preenchido nem observar diretamente a execução do signal. `app/ponto/tests/test_x1_folga_sem_adesao.py:116`, `:133`; `app/ponto/signals.py:93`, `:143`, `:147`; `app/ponto/services/cartorio.py:1224`, `:1228`.
-
-Caminhos produtivos sem força:
-
-- Signal de ausência: chama `julgar_celula(colab, d)`; default `forcar=False`. `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:1975`.
-- Cron: configuração passa somente `--apply`, command repassa a flag `store_true`. `app/config/crons.py:616`; `app/ponto/management/commands/processar_cartorio.py:29`, `:65`.
-- Reconciliador: quando faltam lâmpadas na ata, chama `julgar_celula(colab, dia)` sem força. `app/chamados/reconciliador.py:700`, `:702`.
-- Há também força em produção: a segunda passada condicional de `out['rejulgar']`. Portanto, “produção nunca força” seria incorreto. `app/ponto/services/cartorio.py:985`, `:989`.
-
-Q5 — **PROCEDE a triagem e3fix6 quanto à causa técnica.** A força altera a guarda, mas o ramo NB retorna antes da escrita de `out['cods']`, feita no ramo normal. O primeiro acesso antigo continuaria falhando. `app/ponto/services/cartorio.py:1228`, `:1282`, `:1441`. O receiver julgador é o de ausência em `:143`; `:275` é consumidor posterior. `app/ponto/signals.py:143`, `:147`, `:275`, `:279`.
-
-**Triagem v2: procede com os limites declarados.** O HEAD conserva NB em trabalho sem cobertura integral e deixa o hash sem marcador quando `sem_trabalho=False`. `app/ponto/services/cartorio.py:1223`, `:1253`. A reconstrução histórica da base 52a0022e9 e a afirmação de que d6 nunca pousou constam somente do dado fornecido; nesta cópia não há repositório Git para comprovação independente. **[nao verificado]**
-
-Relógio: o residual existe, pois ainda há default `_tz.now()` e chamador sem `agora`; anterioridade em relação à obra não é demonstrável pelo HEAD isolado. `app/escala/servico_jornada.py:387`, `:566`. **Anterioridade: [nao verificado].**
-
-Reconciliador: o descarte vale para o recorte informado, não para a classe inteira: continua havendo escritor de carimbo e fechamento de disputa. O teste atual inclusive exige que a pergunta receba `VIA_CELULA_ABSOLVEU`. `app/chamados/reconciliador.py:595`, `:611`, `:1365`; `app/ponto/tests/test_x1_folga_sem_adesao.py:311`, `:315`.
-
-TXT: download usa conteúdo armazenado; geração nova consulta elegibilidade corrente. C4 compara somente registros e contagens após julgamento. Portanto, preservação do estoque procede; identidade numa regeneração não foi provada. `app/folha/views.py:561`; `app/folha/export.py:714`, `:716`, `:726`, `:968`; `app/ponto/tests/test_x1_folga_sem_adesao.py:213`, `:216`, `:219`.
-
-Achado documental: o relato da obra está desatualizado: descreve rename condicionado a `VEREDITOS_ACUSAM` e marcador em todo o ramo, inclusive trabalho/integral; o código atual usa `sem_trabalho` e exclui cobertura integral do marcador. `app/docs/relato_fio_e0_v4_e3_x1.txt:11`, `:16`, `:22`, `:28`; `app/ponto/services/cartorio.py:1223`, `:1253`.
-
-## 11/11 07:42 · sessao 826204932097 · TRAVA-SELO · verificador · origem=Code
-
-**NÃO PROCEDE o fechamento integral.** As sete correções pontuais têm efeito, mas permanecem a enumeração de módulos fora da classificação, uma lacuna na preservação de argumentos pelo selo e chamadas inteiras sem motivo em régua/pre-push. (`bin/suite.sh:137`, `bin/tests/test_suite_motivo.sh:19`, `bin/regua.sh:165`, `bin/pre-push.sh:186`)
-
-A execução integral dos selos nesta auditoria é **[não verificado]**: eles criam e removem temporários. Conferi os caminhos relevantes em memória, incluindo os sete mutantes novos. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:11`, `bin/tests/test_suite_motivo.sh:15`)
-
-**1) NÃO PROCEDE como fechamento de todas as classes; PROCEDE para as correções sintáticas abaixo.**
-
-| Forma de argumento | Resultado da conferência |
-|---|---|
-| `--only ''`, apenas espaços; `--dir`, `--motivo`, `--volta` vazios ou sem valor no fim | Agora recusam com rc 2 e “precisa de valor”. (`bin/suite.sh:50`, `bin/suite.sh:53`, `bin/suite.sh:54`, `bin/suite.sh:59`, `bin/suite.sh:60`) |
-| Caminho/glob em `ONLY`, inclusive depois de label válida | Continuam recusados pela forma e pertinência; o executor permanece protegido contra glob. (`bin/suite.sh:70`, `bin/suite.sh:98`, `bin/suite.sh:100`, `bin/suite.sh:101`) |
-| Token cru vazio ou `'--failfast --reverse'` depois de `--` | Rc 2 antes do custo. (`bin/suite.sh:115`, `bin/suite.sh:116`, `bin/suite.sh:124`, `bin/suite.sh:168`) |
-| `--failfast=x`, `--reverse=1`, `--settings=x` | Recusados: `=valor` só admite nomes de `_FLAG_VALOR`. (`bin/suite.sh:109`, `bin/suite.sh:119`, `bin/suite.sh:120`) |
-| `-k`/`--tag` sem valor no fim de EXTRA | Rc 2; o ramo exige uma palavra seguinte. (`bin/suite.sh:118`, `bin/suite.sh:120`) |
-| Palavras repetidas em `ONLY` | Não substituem pertinência: todas as LABELS continuam necessárias para classificar inteira. (`bin/suite.sh:142`, `bin/suite.sh:145`) |
-| Opção superior repetida, como `--only api --only core` | Última atribuição vence; o recorte efetivo é `core`. (`bin/suite.sh:54`, `bin/suite.sh:206`) |
-| `--only=api`, `-v2`, `-kpadrao` | Continuam recusados pelas formas implementadas. Obrigatoriedade dessas formas no runner instalado: **[não verificado]**. (`bin/suite.sh:64`, `bin/suite.sh:117`, `bin/suite.sh:119`) |
-
-**A classe “enumeração de módulos que esgota a inteira” continua aberta**, inclusive quando produzida por `--volta`: a guarda reconhece somente cada app nu ou `<app>.tests`. Uma enumeração concreta que esgote a descoberta desta cópia: **[não verificado]**. (`bin/suite.sh:83`, `bin/suite.sh:137`, `bin/suite.sh:145`, `bin/suite.sh:206`)
-
-Há uma assimetria restante: `-- --tag 'dois termos'` passa, mas `-- '--tag=dois termos'` é recusado por conter espaço antes de chegar ao ramo `=valor`. Vazio também passa como valor consumido (`--tag ''`) ou embutido (`--tag=`). Isso não demonstra ampliação: EXTRA chega citado ao executor; o efeito no `DiscoverRunner` instalado é **[não verificado]**. (`bin/suite.sh:115`, `bin/suite.sh:118`, `bin/suite.sh:119`, `bin/suite.sh:207`; `app/core/runner_quarentena.py:15`, `app/core/runner_quarentena.py:76`)
-
-**Novo problema concreto de consumo:** `--only api --motivo --seco` aceita `--seco` como texto de MOTIVO, deixa `SECO=0` e ultrapassa o desvio seco. Isso perde a intenção de simulação; não é fuga demonstrada para inteira. (`bin/suite.sh:47`, `bin/suite.sh:50`, `bin/suite.sh:59`, `bin/suite.sh:149`, `bin/suite.sh:159`)
-
-O `set -f` continua antes das expansões não citadas da seleção; não antecede literalmente todas as expansões do script, pois parser e cálculo de RAIZ vêm antes. (`bin/suite.sh:35`, `bin/suite.sh:53`, `bin/suite.sh:70`, `bin/suite.sh:87`, `bin/suite.sh:206`)
-
-**2) PROCEDE o mapa abaixo; NÃO PROCEDE uma inversão dos retornos de `_valor`/`_extra_ok`.**
-
-| Campo/retorno | QUEM ESCREVE | QUEM LÊ |
-|---|---|---|
-| `ONLY` | Inicialização, parser, helper e filtro: `bin/suite.sh:47`, `bin/suite.sh:54`, `bin/suite.sh:83`, `bin/suite.sh:90` | Conflito, filtro, vazio, forma, classificação, seco e executor: `bin/suite.sh:81`, `bin/suite.sh:87`, `bin/suite.sh:91`, `bin/suite.sh:100`, `bin/suite.sh:142`, `bin/suite.sh:161`, `bin/suite.sh:206` |
-| `EXTRA` | Array inicial e captura citada: `bin/suite.sh:47`, `bin/suite.sh:62` | Validação, seco e executor: `bin/suite.sh:112`, `bin/suite.sh:113`, `bin/suite.sh:118`, `bin/suite.sh:162`, `bin/suite.sh:207` |
-| `MOTIVO` | `bin/suite.sh:47`, `bin/suite.sh:59` | Guarda, diagnóstico e seco: `bin/suite.sh:149`, `bin/suite.sh:151`, `bin/suite.sh:160` |
-| `VOLTA` | `bin/suite.sh:47`, `bin/suite.sh:60` | Ativação, helper, erro e seco: `bin/suite.sh:80`, `bin/suite.sh:83`, `bin/suite.sh:84`, `bin/suite.sh:160` |
-| `PARALELO` | Default e parser, após validação: `bin/suite.sh:47`, `bin/suite.sh:55`, `bin/suite.sh:56` | Seco e executor: `bin/suite.sh:162`, `bin/suite.sh:207` |
-| `ESPERA` | Array inicial e parser: `bin/suite.sh:47`, `bin/suite.sh:57`, `bin/suite.sh:58`; escalar na trava: `bin/trava_teste.sh:22`, `bin/trava_teste.sh:27` | Seco, chamada da trava e `flock`: `bin/suite.sh:162`, `bin/suite.sh:200`, `bin/trava_teste.sh:36` |
-| Retorno `_valor` | Sucesso 0; falha **encerra o processo** com 2: `bin/suite.sh:50` | Chamadores prosseguem após sucesso, sem capturar status: `bin/suite.sh:53`, `bin/suite.sh:54`, `bin/suite.sh:59`, `bin/suite.sh:60` |
-| Retorno `_extra_ok` | Erro retorna 1; conclusão normal retorna 0: `bin/suite.sh:116`, `bin/suite.sh:120`, `bin/suite.sh:123` | Chamador converte falha em saída 2: `bin/suite.sh:124` |
-| `DIR` | `bin/suite.sh:47`, `bin/suite.sh:53` | Helper, seco e montagem: `bin/suite.sh:82`, `bin/suite.sh:160`, `bin/suite.sh:176`, `bin/suite.sh:178`, `bin/suite.sh:181` |
-| `SECO` | `bin/suite.sh:47`, `bin/suite.sh:61` | `bin/suite.sh:159` |
-| `LABELS` | Literal em `bin/regua.sh:23`; derivação em `bin/suite.sh:75` | Filtro, pertinência, classificação e fallback: `bin/suite.sh:88`, `bin/suite.sh:99`, `bin/suite.sh:144`, `bin/suite.sh:206` |
-| Listas de flags | `bin/suite.sh:108`, `bin/suite.sh:109` | `_extra_ok`: `bin/suite.sh:117`, `bin/suite.sh:118`, `bin/suite.sh:119`, `bin/suite.sh:120` |
-
-As mudanças de representação são explícitas: PARALELO é texto expandido em palavras; ESPERA é array convertido em escalar pela trava; EXTRA permanece array citado, e a trava executa `"$@"`. Não encontrei nesses caminhos uma inversão de significado comprovada. (`bin/suite.sh:56`, `bin/suite.sh:58`, `bin/suite.sh:200`, `bin/suite.sh:207`; `bin/trava_teste.sh:27`, `bin/trava_teste.sh:42`)
-
-A diferença semântica relevante está em **ONLY**: a guarda reconhece inteira por nomes exatos, enquanto o executor entrega módulos ao runner. O `--seco` agora mostra os campos antes omitidos, mas fornece um resumo textual, não o comando Docker completo nem uma representação inequívoca de argv. (`bin/suite.sh:145`, `bin/suite.sh:160`, `bin/suite.sh:162`, `bin/suite.sh:175`, `bin/suite.sh:206`)
-
-**3) PROCEDE para a morte dos sete mutantes pela causa pretendida; NÃO PROCEDE como cobertura suficiente.**
-
-A conferência isolada em memória encontrou estes discriminantes, correspondentes às mutações efetivamente escritas no selo. (`bin/tests/test_suite_motivo.sh:147`, `bin/tests/test_suite_motivo.sh:148`, `bin/tests/test_suite_motivo.sh:149`, `bin/tests/test_suite_motivo.sh:150`, `bin/tests/test_suite_motivo.sh:151`, `bin/tests/test_suite_motivo.sh:152`, `bin/tests/test_suite_motivo.sh:153`)
-
-| Mutante | Causa da reprovação |
-|---|---|
-| `pattern_na_lista` | `--pattern` sozinho passa no mutante; o vivo recusa rc 2. O novo caso elimina a recusa colateral de `y`. (`bin/tests/test_suite_motivo.sh:86`, `bin/tests/test_suite_motivo.sh:87`) |
-| `k_sem_valor` | `-k padrao` passa no vivo; o mutante recusa `padrao` como palavra solta, rc 2. (`bin/tests/test_suite_motivo.sh:92`; `bin/suite.sh:120`) |
-| `igual_aceita_qualquer` | Formas proibidas com `=`, agora sozinhas, passam no mutante. (`bin/tests/test_suite_motivo.sh:86`, `bin/tests/test_suite_motivo.sh:87`) |
-| `palavra_com_espaco` | O token único `'--failfast --reverse'` volta a casar a lista e passa. (`bin/tests/test_suite_motivo.sh:90`; `bin/suite.sh:117`) |
-| `valor_vazio_cego` | Pode continuar dando rc 2 pela guarda de inteira, mas perde “precisa de valor”; o teste cobra esse stderr. (`bin/tests/test_suite_motivo.sh:82`; `bin/suite.sh:151`) |
-| `executor_sem_extra` | Continua chegando à trava, mas falta o sufixo EXTRA exigido no registro. (`bin/tests/test_suite_motivo.sh:94`, `bin/tests/test_suite_motivo.sh:95`) |
-| `executor_sem_paralelo` | Chega com `--parallel 4`, contrariando `auto` no sufixo exigido. (`bin/tests/test_suite_motivo.sh:94`, `bin/tests/test_suite_motivo.sh:95`) |
-
-**Ressalva de razão:** os novos negativos de flags e da palavra com espaço cobram rc/chegada, sem conferir stderr específico. A morte atual tem a causa certa; a mensagem da recusa não fica protegida nesses casos. (`bin/tests/test_suite_motivo.sh:87`, `bin/tests/test_suite_motivo.sh:90`)
-
-**Sobrevivente plausível concreto:** trocar somente no executor `"${EXTRA[@]}"` por `"${EXTRA[*]}"`. Vários argumentos viram um único argumento, mas a trava falsa registra `$*`: o registro continua idêntico e passa no novo grep. Confirmei essa indistinguibilidade em memória; execução integral desse mutante: **[não verificado]**. (`bin/suite.sh:207`; `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:95`)
-
-QUEM ESCREVE/QUEM LÊ do testemunho: `_roda` escreve stderr, a trava falsa escreve `trava.chamada`; os greps e `_args` leem esses arquivos. O escritor de `trava.chamada` já perde as fronteiras que o leitor precisaria conferir. (`bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:24`, `bin/tests/test_suite_motivo.sh:28`, `bin/tests/test_suite_motivo.sh:82`, `bin/tests/test_suite_motivo.sh:95`)
-
-O selo documental também continua permissivo: aceita motivo `"pre-opus X;rm"` e até uma linha comentada contendo o comando; a guarda real rejeita aquele motivo. Os selos próprios do wrapper/helper real continuam fora deste teste, que substitui o helper. (`bin/tests/test_suite_sh.sh:35`; `bin/suite.sh:139`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:28`)
-
-**4) NÃO PROCEDE redução numa execução bem-sucedida; PROCEDE a falta de visibilidade na chamada direta.**
-
-A composição é união: `poe()` só acrescenta, a AST acrescenta suas referências e o regex continua rodando integralmente. `SyntaxError` e `ValueError` retornam `None` e preservam o caminho regex. (`bin/vizinhos_da_volta.py:49`, `bin/vizinhos_da_volta.py:68`, `bin/vizinhos_da_volta.py:121`, `bin/vizinhos_da_volta.py:123`)
-
-Há uma ressalva ao fallback universal: `RecursionError` não é capturado. Um texto sintético com `import core.sub.foo` seguido de expressão muito longa reproduziu essa exceção em memória; o helper aborta antes do regex e da impressão das labels. Isso causa falha integral, rc 1 em `suite.sh`, sem `AST-FALHOU`; ocorrência na obra: **[não verificado]**. (`bin/vizinhos_da_volta.py:67`, `bin/vizinhos_da_volta.py:68`, `bin/vizinhos_da_volta.py:118`, `bin/vizinhos_da_volta.py:128`; `bin/suite.sh:83`, `bin/suite.sh:84`)
-
-`AST-FALHOU` é escrito em **stderr**. A chamada direta por `suite.sh --volta` o descarta em `/dev/null` por padrão; o wrapper preserva em `<saida>.porque`, mas não o reproduz no log principal. (`bin/vizinhos_da_volta.py:120`; `bin/suite.sh:83`; `bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`)
-
-QUEM ESCREVE/QUEM LÊ: `cita_por_ast` escreve retorno conjunto/`None`; o laço lê esse retorno para diagnóstico e inclusão; `poe` escreve `saida/porque`; o laço final lê ambos para stdout/stderr. (`bin/vizinhos_da_volta.py:69`, `bin/vizinhos_da_volta.py:87`, `bin/vizinhos_da_volta.py:118`, `bin/vizinhos_da_volta.py:119`, `bin/vizinhos_da_volta.py:121`, `bin/vizinhos_da_volta.py:49`, `bin/vizinhos_da_volta.py:128`, `bin/vizinhos_da_volta.py:130`)
-
-**5) PROCEDE para as correções documentais da v8; NÃO PROCEDE fidelidade integral.**
-
-Foram corrigidos paralelismo `N|auto`, espera, seleção de todos os apps e indicação do wrapper com ruff/disjuntor. Isso corresponde aos respectivos caminhos do código. (`CLAUDE.md:100`, `CLAUDE.md:101`, `CLAUDE.md:102`, `CLAUDE.md:103`; `bin/suite.sh:55`, `bin/suite.sh:57`; `bin/volta_intermediaria.sh:23`, `bin/volta_intermediaria.sh:29`, `bin/volta_intermediaria.sh:32`)
-
-A frase “recorte que cubra todo app das LABELS” é mais abrangente que o reconhecimento implementado, que só aceita app nu/`app.tests`; o limite de enumeração de módulos está no script, não nessa descrição. (`CLAUDE.md:101`, `CLAUDE.md:102`; `bin/suite.sh:137`, `bin/suite.sh:145`)
-
-Os exemplos incompletos da ajuda foram corrigidos. Não identifiquei outra orientação operacional atual ensinando `suite.sh` nu; ausência absoluta fora do universo pesquisado: **[não verificado]**. A chamada nua do selo é fixture negativa; o comando sem motivo no RELATO é registro histórico, não demonstração de orientação vigente. (`bin/suite.sh:29`, `bin/suite.sh:30`, `bin/suite.sh:31`; `bin/tests/test_suite_sh.sh:82`, `bin/tests/test_suite_sh.sh:98`; `app/docs/RELATO.md:681`)
-
-**6) PROCEDE que há triagem incompatível com o aval.**
-
-- **Régua/pre-push:** reconhecer o fato e colocá-lo “fora desta volta” não fecha o aval. A unidade fornecida é **chamada de suíte inteira pela trava**, e os dois fazem essa chamada sem motivo; a trava não impõe essa guarda. Evitar aninhamento não exige dispensar motivo. (`triagem_v6.txt:7`; `aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/regua.sh:165`, `bin/regua.sh:168`; `bin/pre-push.sh:142`, `bin/pre-push.sh:186`; `bin/trava_teste.sh:42`; `CLAUDE.md:104`)
-
-- **Módulos e vizinhos:** declarar limite não demonstra autorização para dispensá-lo. O aval exige vizinhos e transformação de escapes em regra de classe; a defesa “inteira pre-opus” continua sendo uma limitação declarada pelo instrumento. Fechamento dessas classes: **NÃO PROCEDE**; uma enumeração concreta equivalente à inteira: **[não verificado]**. (`triagem_v6.txt:2`; `aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/suite.sh:137`; `bin/vizinhos_da_volta.py:12`, `bin/vizinhos_da_volta.py:15`, `bin/vizinhos_da_volta.py:16`)
-
-- **Flags consumindo valores:** procede a triagem de que isso, sozinho, não provou ampliação; o executor preserva EXTRA e a descoberta é delegada. (`triagem_v6.txt:4`; `bin/suite.sh:118`, `bin/suite.sh:207`; `app/core/runner_quarentena.py:76`)
-
-- **“19 mortos, rc 0” e “AST-FALHOU visível”:** o primeiro resultado integral é **[não verificado]** nesta auditoria e não elimina o sobrevivente de fronteiras de argv; o segundo só é verdadeiro com stderr preservado. (`triagem_v6.txt:5`, `triagem_v6.txt:8`; `bin/tests/test_suite_motivo.sh:19`, `bin/tests/test_suite_motivo.sh:95`; `bin/suite.sh:83`)
-
-- **Selo específico do wrapper:** **NÃO SEI** que esse formato particular seja obrigação literal do aval; a cobertura do fluxo continua ausente do selo examinado. (`aval_trava_menos_fila_com_selo_1111.txt:1`; `bin/tests/test_suite_motivo.sh:21`, `bin/tests/test_suite_motivo.sh:28`)
-
-## 11/11 07:38 · sessao a79c577f1b80 · - · - · origem=Ronald (tmux)
-
-Não achei escape sintático concreto adicional além da enumeração de módulos já declarada como limite; a guarda só reconhece os nomes exatos `app`/`app.tests`, enquanto o executor aceita qualquer label pontuada válida. (`bin/suite.sh:98`, `bin/suite.sh:136`, `bin/suite.sh:145`, `bin/suite.sh:206`)
-
-Conferência em memória de trechos literais do parser, guardas e seco, sem executar helper, recursos, envfile ou trava:
-
-| Entrada | Resultado | Fonte |
-|---|---|---|
-| `--only ''`, `--only ' \t\n'`, flag sem valor no fim | rc 2, “precisa de valor” para os quatro campos de `_valor` | `bin/suite.sh:50`, `bin/suite.sh:53`, `bin/suite.sh:54`, `bin/suite.sh:59`, `bin/suite.sh:60` |
-| `--only=api` | rc 2, argumento desconhecido; o parser superior só implementa valor separado | `bin/suite.sh:52`, `bin/suite.sh:64` |
-| `--only api --only core --seco` | rc 0, seleção final `core`: última atribuição vence | `bin/suite.sh:54`, `bin/suite.sh:161` |
-| `--only 'api api' --seco` | rc 0; a repetição não satisfaz os demais apps na classificação | `bin/suite.sh:142`, `bin/suite.sh:145` |
-| `--only api --seco -- -k` | rc 2, “não é flag permitida” | `bin/suite.sh:118`, `bin/suite.sh:120` |
-| `--only api --seco -- --failfast --failfast` | rc 0 | `bin/suite.sh:117` |
-| `--only api --seco -- --tag ''` | rc 0, valor vazio preservado | `bin/suite.sh:118`, `bin/suite.sh:162` |
-| `--only api --seco -- --tag=` | rc 0 | `bin/suite.sh:119` |
-| `--only api --seco -- -k 'dois termos'` | rc 0: a palavra consumida como valor não é inspecionada | `bin/suite.sh:118` |
-| `--only api --seco -- '--tag=dois termos'` | rc 2, “tem espaço”: a inspeção acontece antes da identificação da forma `=valor` | `bin/suite.sh:115`, `bin/suite.sh:119` |
-
-Há assimetria comprovada entre valor separado e `=valor` quando contém espaço; se essa recusa é indevida no runner instalado: **[não verificado]**. A seleção efetivamente descoberta pelo Django também permanece externa à cópia: a classe local delega `build_suite` ao `DiscoverRunner`. (`bin/suite.sh:115`, `bin/suite.sh:118`, `bin/suite.sh:119`; `app/core/runner_quarentena.py:15`, `app/core/runner_quarentena.py:75`, `app/core/runner_quarentena.py:76`)
-
-`_valor` só garante existência e conteúdo não composto exclusivamente de espaços: uma palavra começando por `--` pode ser consumida como valor. Por exemplo, `--dir --seco` atribui literalmente `--seco` a `DIR`; isso não constitui escape demonstrado para suíte inteira. (`bin/suite.sh:50`, `bin/suite.sh:53`)
-
-| Campo | QUEM ESCREVE | QUEM LÊ |
-|---|---|---|
-| `ONLY` | inicialização `:47`; parser `:54`; helper `:83`; filtro `:90` | conflito `:81`; filtro `:87`; vazio `:91`; guarda de forma `:100`; classificação `:142`; seco `:161`; executor `:206`, todos de `bin/suite.sh` |
-| `EXTRA` | `bin/suite.sh:47`, `bin/suite.sh:62` | `_extra_ok` em `bin/suite.sh:112`, `bin/suite.sh:113`, `bin/suite.sh:118`; seco `bin/suite.sh:162`; executor citado `bin/suite.sh:207` |
-| `MOTIVO` | `bin/suite.sh:47`, `bin/suite.sh:59` | guarda `bin/suite.sh:149`; diagnóstico `bin/suite.sh:151`; seco `bin/suite.sh:160` |
-| `VOLTA` | `bin/suite.sh:47`, `bin/suite.sh:60` | ativação `bin/suite.sh:80`; helper/redireção `bin/suite.sh:83`; erro `bin/suite.sh:84`; seco `bin/suite.sh:160` |
-| `PARALELO` | `bin/suite.sh:47`, `bin/suite.sh:56`; validado em `bin/suite.sh:55` | seco `bin/suite.sh:162`; executor expande em duas palavras `bin/suite.sh:207` |
-| `ESPERA` | array `bin/suite.sh:47`, `bin/suite.sh:58`; validado em `bin/suite.sh:57` | seco achata para texto `bin/suite.sh:162`; trava recebe array `bin/suite.sh:200`; trava reescreve escalar em `bin/trava_teste.sh:22`, `bin/trava_teste.sh:27`; `flock` lê em `bin/trava_teste.sh:36` |
-| retorno `_valor` | sucesso 0 dos testes; falha termina o processo com 2 | chamadores superiores prosseguem após sucesso; não capturam retorno explicitamente. (`bin/suite.sh:50`, `bin/suite.sh:53`, `bin/suite.sh:54`, `bin/suite.sh:59`, `bin/suite.sh:60`) |
-| retorno `_extra_ok` | retorno 1 explícito nos erros; conclusão normal retorna 0 | `bin/suite.sh:116`, `bin/suite.sh:120`, `bin/suite.sh:123`; o leitor converte 1 para saída 2 em `bin/suite.sh:124` |
-
-Não há inversão comprovada de significado nesses retornos: `_valor` aborta; `_extra_ok` devolve falha booleana que o chamador transforma em rc 2. (`bin/suite.sh:50`, `bin/suite.sh:116`, `bin/suite.sh:120`, `bin/suite.sh:124`)
-
-O seco agora mostra paralelo, espera e extra, mas não representa integralmente o comando Docker: monta um resumo textual e sai antes da montagem; além disso, `printf '[%s]' "${EXTRA[@]}"` imprime `[]` até para array sem elementos. (`bin/suite.sh:159`, `bin/suite.sh:162`, `bin/suite.sh:163`, `bin/suite.sh:175`, `bin/suite.sh:200`)
-
-_3725 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3728 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

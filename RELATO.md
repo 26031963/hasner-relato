@@ -1,6 +1,9 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=3426820
+ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh | pid=3978486
+E3 OPUS FINAL 08:3x REPROVADO, B1 conferido pela sessao (cartorio.py:525 sem_adesao SEM horizonte x isento :519 regra>=4; processar_cartorio.py:48 fila = toda celula passada): na 1a rodada pos-deploy toda folga sem adesao de toda comp viraria concorde, contra L-124 e o aval (relavra so comp 11). Cura mais RESTRITIVA (PARADA 5): horizonte '2026-11'. Construtor e3fix9 pid 3978486 (logs/FIO-E0-V4-E3/construtor_e3fix9.q). N1-N4 nao bloqueiam (opus_final_e3_b1.txt). Pouso exige reversao comp 11 em logs/ ANTES do deploy (DINHEIRO 1a).
+E4B c4v8 ORM 08:28: Ran 153 FAILED errors=1 (era 7); erro unico test_e4_backfill.py:184 ED DoesNotExist = simulacao: ED criado dentro do atomic do lote, desfeito pelo _Desfaz (backfill:349). c4v9 (so teste + mutante ato_ignora_entrega) na fila de construtor atras do e3fix9 (lanca_c4v9.sh pid 4012731).
+BO-ADMIN-1111 TRIADO 08:3x: 13/13 com dono (logs/BO-ADMIN-1111/quadro.txt) -- ESTRUTURA 3 (01/04/13 col960 = COMPLEMENTO BUG-PAR/RAIZ F3-F4, sem classe nova) + BATIDA 1 (05) + DECISAO DO ADMIN 2 (07, 10) + FALTA INFORMACAO 7 (02, 03, 06, 08, 09, 11, 12, cada um dizendo qual). 2 voltas Codex (a 1a cortada em 300 KB no item 06; delta 08/09). Amostra sessao 07/10/12 PROCEDE.
 TRAVA-SELO POUSOU 08:28 (9ca563bb3, merge --no-ff de 04ec2b8b0, cmp 7/7, deploy --sem-migrate OK 3 cascas): smoke main suite.sh --seco sem motivo rc 2, com "pouso TRAVA-SELO" rc 0; test_suite_motivo 28 mutantes. CUSTO: 11 voltas, 3 preverif Codex, 1 opus. Push no proximo marco.
 E3 SUITE PRE-OPUS VERDE 08:26 (Ran 15128, OK skipped=42 xfail=41, rc 0; copia dff49b2b0) -> opus final obra FIO-E0-V4-E3 em curso.
 TRAVA-SELO OPUS FINAL v11 08:2x APROVADO (logs/TRAVA-SELO/opus_final_v11.r): 6 bordas nao bloqueiam -> AUDITORIA-DE-TRAVAS. Pouso proprio (instrumento) ESPERA a suite pre-opus E3 terminar: ela roda pelo bin/suite.sh e o merge reescreveria o script sob o bash vivo; depois, E4B ORM idem (usa trava_teste.sh, fora do diff).
