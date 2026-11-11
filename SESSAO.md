@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 05:11:52.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (317.7 MB). Acoes na janela: **1550**.
+**Medido em 11/11/2026 05:17:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (317.7 MB). Acoes na janela: **1552**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:12:02 | Monitor | suite E3 (suite_int2) e ORM c4v3 | `D=/home/ronald/saas-hasner/logs/FIO-E0-V4-E3; E=/home/ronald/saas-hasner/logs/E4B-ALCANCE; s3=0; s4=0 while true; do [ $s3 = 0 ] && [ -f $D/cadeia_pos.fim ] && { echo "SUITE E3: $(/bin/grep -E '^Ran ' $D/suite_int2.log \| tail -1) $(/bin/grep -E '^(OK\|FAILED)($\| \()' $D/suite_int2.log \| tail -1) $(tail -1 $D/suite_int2.log)"; s3=1; } [ $s4 = 0 ] && [ -f $E/c4v3_orm.fim ] && { echo "C4V3 ORM: $( ...` |
+| 05:11:57 | Bash | Fix ESPERANDO line and log c4v3 | `cd /home/ronald/saas-hasner && sed -i "3s#.*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3526386#" app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && printf '%s\n' "$(date +%H:%M) E4B c4v3 Codex rc 0: fixture para comp10 (julho ficava abaixo do PISO_EMISSAO 2026-09); +1 _ancoradas por S143 mantido com C8 (fundir perde validadas do S128; RED test_RED_S128_conserva_validada_pend ...` |
 | 05:11:52 | Bash | Check c4v3 ORM runner state | `cd /home/ronald/saas-hasner/logs/E4B-ALCANCE; cat c4v3_rodar.out; tail -5 c4v3_orm.log; ls -la c4v3_orm.fim 2>&1; ps -eo pid,args \| /bin/grep '[c]4v3_rodar'` |
 | 05:11:47 | Bash | Find running suite processes | `ps -eo pid,etime,args \| /bin/grep -E 'suite\|trava_teste\|manage.py test' \| /bin/grep -v grep \| cut -c1-160; tail -3 /home/ronald/saas-hasner/logs/FIO-E0-V4-E3/suite_int2.log` |
 | 05:11:45 | Bash | Locate suite process | `ps -eo pid,args \| /bin/grep 'suite.sh --dir' \| /bin/grep -v grep \| cut -c1-120` |
