@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 04:18** · publicado em **11/11/2026 04:18** (UTC-3)
+> Ultima resposta processada: **11/11/2026 04:37** · publicado em **11/11/2026 04:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 04:37 · sessao e7d57b8fb5e2 · - · - · origem=Ronald (tmux)
+
+Causa S2/S3: o commit `6c1fae937` acrescentou `sem_adesao:1` ao hash de todo o ramo sem adesão (`ponto/services/cartorio.py:522–526`, `:1212–1214`). O B5-u constrói deliberadamente a impressão anterior sem esse marcador (`ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py:129`): isso rompe a idempotência em `:142` e faz o mutante cego relavrar em `:185`.
+
+Cura sugerida: calcular `_ata_nb`, `_cods_nb` e `_vd_nb` antes da impressão; acrescentar o marcador somente quando:
+
+```python
+sem_adesao=not _coberto_inteiro_nb and _vd_nb not in cel.VEREDITOS_ACUSAM
+```
+
+Assim a seleção usa `derivar_veredito`, já chamado em `ponto/services/cartorio.py:1248`, sem predicado próprio de folga. Trabalho acusador e cobertura integral conservam a impressão anterior; folga absolvida sem cobertura conserva o marcador necessário ao C3 (`ponto/tests/test_x1_folga_sem_adesao.py:116–146`).
+
+Não basta selecionar todo veredito não acusador: ausência aprovada também ficaria marcada, e o B5-u cego continuaria divergindo. Usar o veredito persistido também falha: a primeira lavra mudaria vazio para `concorde`, rompendo C5 (`ponto/tests/test_x1_folga_sem_adesao.py:172–190`).
+
+Atualizar somente a âncora textual de `sem_fonte_no_gancho` no executor de mutantes para a expressão nova; conservar o teste C3 (`ponto/tests/x1_mutantes.py:23–26`).
+
+Nenhum arquivo alterado; execução ORM e resultado da sugestão [não verificado].
+
+## 11/11 04:37 · sessao 6804993530b2 · - · - · origem=Ronald (tmux)
+
+S1 nasceu antes do c8c: o histórico do teste aponta `ddf5980ac`/`dc0ecbdeb`; o c8c `6b8898fdc` ampliou o universo para todas as perguntas elegíveis (`chamados/services/tarefa_do_dia.py:492–506`). O selo exige zero chamadas ao C6 e uma leitura do painel naquele cenário (`chamados/tests/test_e3_portas_tarefa.py:118–126`).
+
+A cura mínima é decidir **por dia** se existe consumidor de `viva_c6`:
+
+- Dia sem trabalho: precisa, porque `expor_admin` é chamado pelos marcos dispensados (`tarefa_do_dia.py:260–268`) e A/S consulta todas as perguntas (`:327–328`).
+- Motivo fora do mapa ou posição ausente da grade: precisa (`:314–319`).
+- Trabalho com todas as perguntas dentro da grade: dispensa C6; esse é o cenário S1 (`chamados/tests/e3_fixtures.py:41–48`, `:65–72`).
+
+Quando precisar, preservar **todas as perguntas daquele dia**, evitando restaurar o filtro individual que o c8c curou. A posição ausente precisa continuar recebendo vida (`chamados/tests/test_e3_c8c_sem_banco.py:40–64`; `test_e3_c8c_orm.py:35–49`).
+
+Não usar `q_vivas` como C6 exato: seu contrato é continência, explicitamente não igualdade (`chamados/models.py:3336–3345`). O painel só entrega verbo/fila (`chamados/juizes.py:1475–1493`); seu crédito usa esse pré-filtro generoso (`chamados/services/raiox.py:74`).
+
+Para S4–S6, o recorte deve devolver valores dentro de `juizes.py`, consumidos como locais por `_pergunta_viva_calc`, sem copiar nem atribuir campos de PerguntaDisputa. Os pontos são `juizes.py:1346`, `:1357`, `:1362`, `:1383`, `:1389`, `:1421`. Materialização futura deve resultar em ausência de carimbo efetivo antes de alcançar o juiz do lastro (`:1421–1429`). Atenção: `_resposta_concorda_com_a_luz` lê resposta (`:1323`) e a carga pré-calcula slots usando a pergunta (`chamados/services/carga_pergunta_viva.py:119`); resposta futura não pode vazar por esses caminhos.
 
 ## 11/11 04:18 · sessao a480d6252eb2 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -524,33 +558,4 @@ APROVA
 
 Suíte shell integral: **[nao verificado]**, pois cria, altera e remove arquivos. Estado efetivo de produção e identificação das obras históricas no RELATO: **[nao verificado]**. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:1517`)
 
-## 11/11 02:49 · sessao 902d7db0efa9 · - · - · origem=Ronald (tmux)
-
-#4 e #6 fecham no escopo do delta: os contadores validam a coleção inteira e cada elemento, retornam `None` para forma inválida e contam IDs distintos; os campos separam histórico de observações, sem usar tipo para decidir época. (`bin/disjuntor.py:2185`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2200`, `bin/disjuntor.py:2206`)
-
-- Reproduzi por AST em memória: `None`, `0`, `False`, string, dict, `[42]`, `[{}]`, `aid=None`, inteiro ou vazio retornam `None` no respectivo contador. Estado ausente/campo ausente é a exceção expressamente definida como vazio; estado ilegível levanta erro convertido em `None`. (`bin/disjuntor.py:389`, `bin/disjuntor.py:394`, `bin/disjuntor.py:398`, `bin/disjuntor.py:2186`, `bin/disjuntor.py:2189`, `bin/disjuntor.py:2190`)
-- `linha` mostra `nao sei` tanto no contador principal quanto no histórico; o histórico só é omitido quando igual a zero. (`bin/disjuntor.py:2274`)
-- Com `obs` não lista, a ocorrência realmente não é anotada e o helper não emite aviso nem retorna erro; entretanto o campo continua inválido e o ESTADO sinaliza `nao sei`. Portanto, falta um aviso imediato nessa transição, mas não ocorre zero falso nem silêncio na apresentação. (`bin/disjuntor.py:2175`, `bin/disjuntor.py:2176`, `bin/disjuntor.py:2192`, `bin/disjuntor.py:2274`)
-- Dedup compara IDs exatos: um ID diferente dos históricos entra; um ID já no histórico é suprimido intencionalmente. Reuso/colisão real de ID: [nao verificado]. (`bin/disjuntor.py:2177`, `bin/disjuntor.py:2178`, `bin/disjuntor.py:2180`)
-- Campos legados contendo dicts da volta 2 ficam inválidos no leitor histórico; o escritor ignora esses dicts na dedup histórica e pode reobservá-los no campo novo. Existência desse estado em produção: [nao verificado]. (`bin/disjuntor.py:2177`, `bin/disjuntor.py:2206`)
-- Escrita operacional permanece na porta: callback chama helper; `_com_estado` executa callback sob trava e persiste estado inteiro. Nenhum relógio novo aparece no helper: ele copia `agora` para `ts_observado`; fallback interno de relógio já existia. (`bin/disjuntor.py:351`, `bin/disjuntor.py:366`, `bin/disjuntor.py:371`, `bin/disjuntor.py:975`, `bin/disjuntor.py:990`, `bin/disjuntor.py:1054`, `bin/disjuntor.py:2182`)
-- Os relógios dos hooks chegam pela borda PreToolUse e Stop. (`bin/disjuntor.py:1894`, `bin/disjuntor.py:1897`, `bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`)
-
-## 11/11 02:49 · sessao 1fd278970062 · - · - · origem=Ronald (tmux)
-
-Os três mutantes mordem nas reproduções em memória; cada âncora aparece exatamente uma vez na cópia. A infraestrutura exige âncora única e considera falha do caso uma mordida. (`bin/tests/test_disjuntor.sh:1515`, `bin/tests/test_disjuntor.sh:1519`, `bin/tests/test_disjuntor.sh:1538`, `bin/tests/test_disjuntor.sh:1542`)
-
-| Variante | Resultado observado em memória | Expectativa atingida |
-|---|---|---|
-| Controle | `(0,2)`, `(1,1)`, `(None,None)`, `(None,None)`; escritor mantém histórico e produz `['n1','n2']`, tempos `[100.0,200.0]` | Todas as expectativas do caso. (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1494`) |
-| `historico-reconta` | Escritor produz `['aa6','n1','n2']`, tempos `[100.0,100.0,200.0]` | Derruba a expectativa do escritor. (`bin/tests/test_disjuntor.sh:1491`, `bin/tests/test_disjuntor.sh:1494`, `bin/tests/test_disjuntor.sh:1538`) |
-| `duplicata-reconta` | `(2,1)` em vez de `(1,1)` | Derruba a fixture duplicada. (`bin/tests/test_disjuntor.sh:1484`, `bin/tests/test_disjuntor.sh:1485`, `bin/tests/test_disjuntor.sh:1542`) |
-| `forma-invalida-vira-zero` | Primeiro falha com `KeyError` no registro `{}`; isolando a fixture não lista, produz `(0,0)` | A primeira mordida acontece por exceção; a fixture seguinte também demonstraria o zero falso nominal. (`bin/tests/test_disjuntor.sh:1486`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1539`, `bin/disjuntor.py:2201`) |
-
-O caso cobre histórico sem recontagem, duplicatas persistidas, duas chamadas do escritor, preservação do histórico e do primeiro tempo observado. Ele **não testa apresentação por `linha()`**, apesar do comentário afirmar isso: `_q` chama somente os dois contadores, e o trecho seguinte chama somente o escritor. (`bin/tests/test_disjuntor.sh:1480`, `bin/tests/test_disjuntor.sh:1482`, `bin/tests/test_disjuntor.sh:1491`)
-
-Também não há nesse caso fixtures de `aid` vazio ou não string, JSON quebrado, raiz não objeto ou retorno antecipado do escritor com observações não lista. (`bin/tests/test_disjuntor.sh:1483`, `bin/tests/test_disjuntor.sh:1487`, `bin/tests/test_disjuntor.sh:1490`)
-
-Execução integral da suíte shell: **[nao verificado]**. Ela cria, altera e remove arquivos, incompatível com a restrição desta revisão. (`bin/tests/test_disjuntor.sh:39`, `bin/tests/test_disjuntor.sh:41`, `bin/tests/test_disjuntor.sh:1508`, `bin/tests/test_disjuntor.sh:1517`)
-
-_3650 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3652 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
