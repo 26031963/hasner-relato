@@ -93,11 +93,14 @@ Detalhe operacional (cpuset, containers, sombra, merge, reciclagem, com as lapid
 - Apps Django: api chamados colaboradores comunicados core escala ferias folha holerite inteligencia pautas ponto relatorios tenants. A autoridade de `Empresa` e `colaboradores.models`.
 
 ## 3. TESTES - COMANDO CANONICO
-bash ~/saas-hasner/bin/suite.sh
+bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus <OBRA>"
 A FORMA DEIXOU DE SER PROSA E VIROU ARQUIVO (O182, corte pela lei existente 04/10 05:5x). (historia: LAPIDES.md#lap-03) Agora `bin/suite.sh` compoe recursos + `teste_envfile` + LABELS lido da regua + montagem +
 trava, e nao ha como rodar a suite inteira destravada sem escrever um comando novo A MAO.
 `--only "ponto core"` recorta (e SEGUE pela trava, de proposito), `--dir <copia>` roda contra COPIA,
-`--parallel N` e `--espera N` repassam, `-- <resto>` vai cru ao `manage.py test`. **rc 75 = a vez nao
+`--parallel N|auto` e `--espera <segundos>` repassam, `-- <resto>` leva so flag da lista fechada de `bin/suite.sh`.
+INTEIRA SO COM MOTIVO (aval TRAVA-MENOS-FILA-COM-SELO 11/11): sem `--only`/`--volta`, ou com um recorte que cubra todo app
+das LABELS, `--motivo "pre-opus <OBRA>"` ou `--motivo "pouso <OBRA>"`, senao rc 2; volta do meio = `bin/volta_intermediaria.sh`
+(`--volta <base>`: obra + vizinhos + selos globais, mais ruff e `test_disjuntor.sh`). Selo: `bin/tests/test_suite_motivo.sh`. **rc 75 = a vez nao
 chegou, NAO e vermelho.** `bin/regua.sh` e `bin/pre-push.sh` seguem com a chamada propria porque JA
 pegam a trava (`pre-push.sh:130`) e a regua tem carimbo em volta dela: aninhar seria esperar por si
 mesmo. Selo: `bin/tests/test_suite_sh.sh` (recorta este bloco pela ESTRUTURA -- do titulo ate a

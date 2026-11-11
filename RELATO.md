@@ -1,6 +1,9 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: c4v8_rodar_orm.sh | pid=3192351
+ESPERANDO: codex_pergunta.sh | pid=3426820
+TRAVA-SELO OPUS FINAL v11 08:2x APROVADO (logs/TRAVA-SELO/opus_final_v11.r): 6 bordas nao bloqueiam -> AUDITORIA-DE-TRAVAS. Pouso proprio (instrumento) ESPERA a suite pre-opus E3 terminar: ela roda pelo bin/suite.sh e o merge reescreveria o script sob o bash vivo; depois, E4B ORM idem (usa trava_teste.sh, fora do diff).
+DESPACHO BO-ADMIN-1111 08:2x: 13 itens -> Codex sonda 1 lote (pid 3426816, logs/BO-ADMIN-1111/triagem.r; sonda de leitura prod raspada, nomes fora do Codex) | sessao confere 3 por amostra. 2o plano, sem vaga de construtor.
+VAGA DE CONSTRUTOR 08:2x: ORDEM-POS-E4A2/ORDEM-ATE-O-ZERO em serie -- E3 e E4b c4 abertas, E4c depende da E4b; vaga fica vazia por dependencia (decisao tecnica, PARADA 5).
 E4B c4v8 (copia c2162edda): construtor rc 0 08:18; sem banco memoria rc 0 (79), --red-base rc 1 (11 assertion), selos rc 0 (40), 23/23 mutantes de memoria rc 1; ruff verde (sessao). ORM pela trava (logs/E4B-ALCANCE/c4v8_orm.log), atras da suite pre-opus E3.
 AUDITORIA-DE-TRAVAS 08:2x (aval TRAVA-SELO-REARME-E-UNIDADE item 2): vigia_arvore.sh medido em logs/vigia_arvore.log -- 152 suites de 19/09 a 26/09, ultima 26/09 09:37, depois PAUSADO toda hora (esteira.pausada): hoje 0 suites/dia, 0 min de trava. Linha no BACKLOG; reguas de corte a medir. Selo espera_processo vermelho no main: registrado, nao trava (item 3).
 ERRO-BOBO TRAVA-SELO: libera B3 por aval Ronald 08:1x TRAVA-SELO-REARME-E-UNIDADE (logs/TRAVA-SELO/aval_rearme_e_unidade_1111.txt): implementacao incompleta da regra, nenhuma lei/juiz faltando; UM verificador final sobre a v11 04ec2b8b0; reprovou -> estaciona com o nucleo como conduta e as bordas vao a AUDITORIA-DE-TRAVAS, sem v12.
