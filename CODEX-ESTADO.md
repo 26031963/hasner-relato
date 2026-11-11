@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 05:50** · publicado em **11/11/2026 05:55** (UTC-3)
+> Ultima resposta processada: **11/11/2026 06:04** · publicado em **11/11/2026 06:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 06:04 · sessao cd87c28e1945 · FIO-E0-V4-E4B · construtor · origem=Code
+
+Corrigi o enxerto dos mutantes, mas **o item 1 permanece incompleto**: não cortei o custo por S143 nem aumentei os tetos para encobri-lo. A pendência está registrada junto aos números. [test_selo_chokepoint_escrita.py:183](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/tests/test_selo_chokepoint_escrita.py:183)
+
+Por sítio:
+
+| Sítio | Delta: 1 / 3 chamados | Resultado |
+|---|---:|---|
+| `um_colaborador_por_identidade` | 0 / 0 diretamente | Troca instâncias; não consulta. [juizes.py:1121](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/juizes.py:1121) |
+| `trava_na_ordem` no wrapper | 0 / 0 adicional | Há uma chamada por entrada; as linhas diferentes da base/head não representam duplicação. [disputa_emissao.py:1878](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1878) |
+| Nova carga `_ancoradas` | +2 / +4 | Continua uma consulta por S143. Sua lista não substitui S128: os universos diferem quanto a validadas, carimbadas e disputa fechada. [models.py:344](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/models.py:344), [disputa_emissao.py:1904](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/disputa_emissao.py:1904) |
+| Residual | +1 / +1 | Atribuição à cadeia C6→tranca **[nao verificado]**. Acrescentei pareamento por função à sonda. [e4b_c4_medir_queries.py:58](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_medir_queries.py:58) |
+
+`sem_cerca` e `sem_rollback` copiavam os globais antes da instalação do spy. O corpo mutado chamava `_executar_dia` antigo, sem executar a cascata adversarial instalada depois. Agora o enxerto conserva os globais vivos; mantive `call_count == 1` e as precondições de ressuscitação. [e4b_c4_base.py:12](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_base.py:12), [test_e4b_c4_orm.py:57](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:57), [test_e4b_c4_orm.py:133](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:133)
+
+O mapa economizou **zero no chokepoint fornecido: 214/214**. Preparei outro ensaio, com pergunta viva nos dois laços e teto pareado medido durante o teste. Ele exige diferença antes de aceitar a morte do mutante; isso ainda não prova economia em `registrar_batida`. Execução ORM **[nao verificado]**. [test_e4b_c4_orm.py:156](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm.py:156) [nao verificado]
+
+O RED do spy passou; `globais_copiados` morreu na assertion-alvo. O protocolo passou; `mapa_falha_aceita` morreu por aceitar resultado sem diferença comprovada. [test_e4b_c4_base.py:17](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_base.py:17), [test_e4b_c4_orm_protocolo.py:77](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c4_orm_protocolo.py:77) [nao verificado]
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+
+git diff -- .
+
+python3 -m chamados.tests.test_e4b_c4_base
+python3 -m chamados.tests.test_e4b_c4_base --mutante globais_copiados
+
+python3 -m chamados.tests.test_e4b_c4_orm_protocolo
+python3 -m chamados.tests.test_e4b_c4_orm_protocolo --mutante mapa_falha_aceita
+```
+
+Comandos ORM para a sessão; o executor mantém GREEN como condição para contar mutantes. [e4b_c4_verificar.py:67](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c4_verificar.py:67)
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+
+python3 -m chamados.tests.e4b_c4_verificar --orm
+
+c4_orm=chamados.tests.test_e4b_c4_orm.CercaC4ORMTest
+
+for c4_mutante in sem_cerca sem_rollback sem_alvo; do
+  E4B_C4_MUTANTE="$c4_mutante" python3 manage.py test \
+    "$c4_orm.test_RED_Ch12_P90_D90_fora_da_competencia_K6_false_desfaz" --noinput
+done
+
+for c4_mutante in foto_so_dia foto_antes_C; do
+  E4B_C4_MUTANTE="$c4_mutante" python3 manage.py test \
+    "$c4_orm.test_RED_foto_inteira_sob_C_e_reversao_antes_do_primeiro_ato" --noinput
+done
+
+E4B_C4_QUERY_MUTANTE=tranca_sem_mapa python3 manage.py test \
+  "$c4_orm.test_RED_mapa_comum_economiza_query_entre_dois_selects" --noinput
+
+for c4_modo in base head; do
+  E4B_C4_QUERIES="$c4_modo" python3 manage.py test \
+    chamados.tests.e4b_c4_medir_queries.MedidaQueries.test_gate_da_premissa_fecha_com_dia_e_celula \
+    chamados.tests.e4b_c4_medir_queries.MedidaQueries.test_gravar_estado_sem_pergunta \
+    chamados.tests.e4b_c4_medir_queries.MedidaQueries.test_registrar_batida_com_1_furo_vivo_que_ela_fecha \
+    chamados.tests.e4b_c4_medir_queries.MedidaQueries.test_registrar_batida_com_3_furos_vivos_que_ela_fecha \
+    --noinput
+done
+```
+
+## 11/11 06:02 · sessao 70e72c812f20 · - · - · origem=Ronald (tmux)
+
+Não achei corte seguro das cargas `_ancoradas` com as restrições atuais:
+
+- A API devolve uma `list` já avaliada, sem validadas e incluindo carimbadas/disputas fechadas; S128 tem universo diferente. Fundir perde casos; complemento mantém duas consultas. `chamados/models.py:336`, `chamados/services/disputa_emissao.py:1904`.
+- A carga anterior do gate não chega ao serviço: `_f1_ancoradas` é limpa antes do `save` que dispara S143. `chamados/models.py:216`, `chamados/models.py:296`.
+- O identity map não consulta diretamente; o custo pode vir do consumidor C6 e do memo por instância fora de request. `chamados/juizes.py:1134`, `chamados/juizes.py:1054`.
+- O wrapper contém uma chamada de trava por entrada, seguida de uma chamada do corpo. O receiver contém uma chamada do wrapper. `chamados/services/disputa_emissao.py:1878`, `chamados/signals.py:115`.
+
+Existe consulta por pergunta viva em `reabrir_credor_de_pergunta_viva`: recarrega o credor em `chamados/services/disputa_emissao.py:1826`. Passar o credor já conhecido poderia cortá-la, mas conservar essa instância entre perguntas exige provar frescor diante de reentrada por outro objeto; o próprio modelo documenta esse risco. `chamados/models.py:274`. Não recomendo esse corte sem RED adversarial.
+
+Atribuir o residual +1 exclusivamente à tranca continua [nao verificado]. A cadeia nova alcança a tranca antes de julgar carimbo/célula, mas isso sozinho não demonstra o delta SQL observado. `chamados/services/disputa_emissao.py:1821`, `chamados/juizes.py:1329`.
 
 ## 11/11 05:50 · sessao 4cfcfad110c6 · FIO-E0-V4-E3 · construtor · origem=Code
 
@@ -470,29 +546,4 @@ Ruff nos dois arquivos: **`All checks passed!`, rc 0**, com o comando abaixo; ce
 PYTHONDONTWRITEBYTECODE=1 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ruffpkg/bin/ruff check --no-cache ponto/tests/test_x1_folga_sem_adesao.py ponto/tests/x1_mutantes.py
 ```
 
-## 11/11 03:07 · sessao 3e4f7f5604cf · - · - · origem=Ronald (tmux)
-
-1. `relato_negacao` extrai a regra inteira por `[A-Z0-9-]+`; portanto grava `NEGOU B3-SEM-OBRA`, distinto de `NEGOU B3` e `NEGOU B3-NAO-SEI` (`bin/disjuntor.py:262`, `bin/disjuntor.py:279`, `bin/disjuntor.py:1094`, `bin/disjuntor.py:1647`).
-
-2. **Há colisão lexical com a gramática de ID**, porque ambos os nomes satisfazem `_OBRA_ID` e `_OBRA_HIF`, sem reserva desses nomes; eles continuam distintos entre si (`bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:619`). `obras_da_linha` aceita ambos como tokens de obra (`bin/disjuntor.py:637`, `bin/disjuntor.py:640`).
-
-3. **Ambos são inertes no consumidor decisório existente:** `linhas_libera_b3` consulta o conjunto, mas só acrescenta uma liberação se a linha começar por `DESENHO ` ou `ERRO-BOBO `; nenhuma negativa `DISJUNTOR ...` nem linha `**... disjuntor (NEGOU ...)` satisfaz isso (`bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:747`, `bin/disjuntor.py:748`, `bin/disjuntor.py:751`). A referência decisória a `obras_da_linha` encontrada é essa chamada; os demais usos localizados são documentação e testes (`bin/disjuntor.py:735`, `bin/tests/test_disjuntor.sh:746`, `bin/tests/test_disjuntor.sh:1668`, `bin/tests/test_disjuntor.sh:1669`).
-
-4. Reproduzi somente em memória, compilando as constantes e funções do AST da cópia: as negativas dão respectivamente `{'B3-SEM-OBRA'}` e `{'B3-NAO-SEI', 'OBRA-X'}`; `linhas_libera_b3` devolve `[]` para ambas, inclusive quando a obra consultada é literalmente um desses dois nomes. O resultado decorre dos reconhecedores e das exigências de prefixo acima (`bin/disjuntor.py:157`, `bin/disjuntor.py:174`, `bin/disjuntor.py:619`, `bin/disjuntor.py:631`, `bin/disjuntor.py:735`, `bin/disjuntor.py:737`, `bin/disjuntor.py:748`).
-
-5. O delta mantém a porta única de escrita: a negativa chama `relato_negacao`, que monta a linha e chama `ev.no_relato`; não introduz segundo escritor ou derivação paralela nesse trajeto (`bin/disjuntor.py:1907`, `bin/disjuntor.py:279`, `bin/disjuntor.py:292`, `bin/disjuntor.py:294`). A ambiguidade entre negativa sem obra e disparo `DISJUNTOR B3 <obra>` é removida na constante, enquanto a mensagem efetiva de parada conserva o formato anterior (`bin/disjuntor.py:1647`, `bin/disjuntor.py:1149`).
-
-## 11/11 03:07 · sessao b01916492971 · - · - · origem=Ronald (tmux)
-
-Nenhum FILA fornecido demonstra bloqueio novo do item (1) neste delta; a porta do agente `verificador` final exige `_obra_de(prompt)` e nega ausência em `bin/disjuntor.py:1842-1845`.
-
-- **FILA 2:** há tradução explícita entre lista persistida e número publicado: `_b3_sem_obra` lê `b3_sem_obra_obs` e deduplica `aid` (`bin/disjuntor.py:2198-2202`); `ler()` publica esse resultado em `b3_sem_obra` (`bin/disjuntor.py:2045`); histórico é contado separadamente (`bin/disjuntor.py:2205-2208`). Não demonstra campo com dois significados na mesma camada.
-- **FILA 3:** os limites permanecem: `_FINAL_RE` admite leitura/final na mesma linha sem identificar intenção (`bin/disjuntor.py:177-179`); a porta restringe-se a `subagent_type == 'verificador'` (`bin/disjuntor.py:1842`); o coletor restringe-se a `agentType == 'verificador'` (`bin/disjuntor.py:840`). Portanto uma garantia irrestrita sobre qualquer agente/modelo seria falsa; são limitações existentes fora do delta fornecido [nao verificado quanto ao histórico Git].
-- **Chave:** a dispensa é expressa na arquitetura (`bin/disjuntor.py:35`); `main_pretool()` deixa de chamar `pretool()` quando desligado (`bin/disjuntor.py:1896-1900`). Não constitui nova fuga criada pelo delta.
-- **FILA 4:** o contador é cumulativo: só acrescenta IDs novos (`bin/disjuntor.py:2178-2183`), e o leitor não aplica janela (`bin/disjuntor.py:2201-2202`). Isso é compatível com “esperado 0 a partir daqui” do aval fornecido [nao verificado em arquivo]; uma ocorrência posterior deixa corretamente registrado que a meta foi violada.
-- **FILA 5:** o selo histórico não chama `linha()` (`bin/tests/test_disjuntor.sh:1484-1498`), e o mutante remove validação de elementos (`bin/tests/test_disjuntor.sh:1542-1544`), permitindo morte incidental por `e['aid']` (`bin/disjuntor.py:2202`). É fraqueza do selo existente; a apresentação atual seleciona contador e histórico separadamente (`bin/disjuntor.py:2271-2275`).
-- **FILA 6:** o rótulo mencionado só consta do anexo fornecido [nao verificado]; não demonstra falha funcional da guarda, localizada em `bin/disjuntor.py:1842-1845`.
-
-O zero efetivo de produção e a identificação individual das seis obras históricas não estão demonstrados pelos dados fornecidos [nao verificado]. Não executei a suite, que cria e remove arquivos (`bin/tests/test_disjuntor.sh:39-41`, `bin/tests/test_disjuntor.sh:50-55`).
-
-_3658 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3660 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
