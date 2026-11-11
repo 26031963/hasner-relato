@@ -1,7 +1,294 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 15:25** · publicado em **11/11/2026 15:29** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:35** · publicado em **11/11/2026 15:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:35 · sessao 36452142e014 · DATA-EVENTO-CRU · verificador · origem=Code
+
+**Veredito: bloqueantes — há leitores reais fora do censo e ocorrências de escrita/schema registradas como leitores.** (`app/ponto/management/commands/vigia_plantio_overnight.py:75`; `app/chamados/models.py:2789`; `app/chamados/models.py:3486`)
+
+1. **O selo MORDE nas formas reconhecidas, mantendo o JSON fixo.** Chave nova, aumento em escopo existente e redução sem baixar a allowlist ficam vermelhos; desaparecimento também exige baixa. Isso vale para Python e templates. Confirmei esses cinco cenários em memória usando a comparação existente. (`app/chamados/tests/test_catraca_data_evento_cru.py:133`)
+
+   O teste denominado `test_MORDE_leitor_novo_no_censo` prova descoberta, mas não executa a comparação que reprova o leitor novo. Não executei esse caso, pois cria e apaga arquivos temporários. (`app/chamados/tests/test_catraca_data_evento_cru.py:178`)
+
+   A catraca compara apenas com o JSON atual: aumentar código **e** allowlist juntos pode passar; não há comparação com o baseline anterior. Substituir uma leitura por outra no mesmo escopo também preserva a contagem, limite já declarado. (`app/chamados/tests/test_catraca_data_evento_cru.py:134`; `app/chamados/tests/test_catraca_data_evento_cru.py:26`)
+
+2. **Falsos negativos.** O varredor reconhece `getattr` literal, `values/values_list/only('data_evento')`, `F/OuterRef('data_evento')`, `filter(data_evento__...)`, `annotate(d=F(...))`, subscrito literal e `.get('data_evento')`. Um `{% with d=p.data_evento %}` também entra. (`app/chamados/tests/test_catraca_data_evento_cru.py:82`; `app/chamados/tests/test_catraca_data_evento_cru.py:174`)
+
+   Escapam nomes calculados, argumentos expandidos por `*`/`**`, campos declarados em listas/tuplas, `source='data_evento'`, serialização genérica e template `|attr`. A detecção depende de atributo, subscrito literal, argumento posicional literal ou keyword que comece pelo campo. (`app/chamados/tests/test_catraca_data_evento_cru.py:23`; `app/chamados/tests/test_catraca_data_evento_cru.py:82`)
+
+   **Leituras verdadeiras omitidas hoje:**
+
+   - `pergunta_origem__data_evento__isnull=False` lê o campo pela relação, mas não casa com a regex ancorada em `data_evento`. (`app/ponto/management/commands/vigia_plantio_overnight.py:75`; `app/chamados/tests/test_catraca_data_evento_cru.py:50`)
+   - A chave da família marco contém `data_evento`, usado por `values(*chave)`, `order_by(*chave)`, `g[k]` e `filter(**dict(...))`; essas ocorrências escapam. (`app/chamados/services/fio.py:1373`; `app/chamados/services/fio.py:1948`; `app/chamados/services/fio.py:1949`; `app/chamados/services/fio.py:1950`; `app/chamados/services/fio.py:1970`)
+   - O lookup dinâmico de nulidade também escapa. (`app/chamados/services/fio.py:1378`; `app/chamados/services/fio.py:1946`)
+   - Fora de `app/`, mensageria lê o valor serializado com `i.get('data_evento')`; essa exclusão está declarada. (`mensageria/nucleo/ferramentas.py:127`; `app/chamados/tests/test_catraca_data_evento_cru.py:25`)
+
+   Existência atual de serializer ou template `|attr` lendo esse campo: **[nao verificado]**.
+
+3. **Falsos positivos.** Atribuição simples e `create(data_evento=...)` são excluídos; uma leitura no lado direito continua contando. (`app/chamados/tests/test_catraca_data_evento_cru.py:48`; `app/chamados/tests/test_catraca_data_evento_cru.py:82`)
+
+   Contudo, qualquer outra chamada com keyword `data_evento=` conta. Assim, `abrir` e `abrir_conversa` entram apenas por encaminharem o valor ao escritor, sem ler campo de pergunta. (`app/chamados/tests/test_catraca_data_evento_cru.py:96`; `app/chamados/models.py:2789`; `app/chamados/models.py:2801`)
+
+   Os dois `Q` internos às declarações de índices também contam, apesar da exclusão de `UniqueConstraint`: a recursão visita seus filhos. A allowlist registra essas duas ocorrências em `PerguntaDisputa.Meta`. (`app/chamados/tests/test_catraca_data_evento_cru.py:99`; `app/chamados/models.py:3486`; `app/chamados/models.py:3492`; `app/chamados/tests/catraca_data_evento_cru.json:39`)
+
+   Não há resolução de modelo: um atributo homônimo de outro objeto seria contado igualmente. Outro modelo concreto afetado hoje: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:82`)
+
+4. **Juiz excluído pelo nome exato.** A exclusão é `out.pop(JUIZ, 0)`. Renomeá-lo faz surgir chave nova e deixa a contagem do juiz isento em zero, reprovando também a prova de existência; não passa vazio. (`app/chamados/tests/test_catraca_data_evento_cru.py:44`; `app/chamados/tests/test_catraca_data_evento_cru.py:127`; `app/chamados/tests/test_catraca_data_evento_cru.py:146`)
+
+5. **JSON e contratos.** O leitor é `test_so_desce`; a mensagem exige baixa manual. Escritor automatizado/autoria histórica: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:134`; `app/chamados/tests/test_catraca_data_evento_cru.py:143`)
+
+   Não há colisão nos enumeradores examinados: O20 seleciona `test_contract_*.py`; P13 exclui `tests/` e exige `.py`; o selo de relógio seleciona `test*.py`, excluindo o JSON. Ausência universal de colisões na suite: **[nao verificado]**. (`app/core/tests/test_o20_contrato_julga_codigo.py:164`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:147`; `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:150`; `app/core/tests/test_selo_teste_sem_relogio.py:53`)
+
+   O JSON soma **217 ocorrências em 120 chaves: 212 Python + 5 templates**, coincidindo com o censo implementado. Publicação desse total no BACKLOG/ESTADO: **[nao verificado]**. (`app/chamados/tests/catraca_data_evento_cru.json:2`; `app/chamados/tests/catraca_data_evento_cru.json:119`)
+
+6. **Classes anteriores de reprovação.** Há mordida efetiva na comparação, porém cobertura incompleta nas formas acima. Os arquivos novos implementam contagem e comparação, sem introduzir juiz do dia, leitura de relógio ou derivação paralela do dia. Execução da suite Django/pre-push neste hash: **[nao verificado]**. (`app/chamados/tests/test_catraca_data_evento_cru.py:68`; `app/chamados/tests/test_catraca_data_evento_cru.py:112`; `app/chamados/tests/test_catraca_data_evento_cru.py:133`)
+
+**Bloqueantes para aprovação:** incluir os leitores reais omitidos e retirar os repasses de escrita/schema do censo, recalibrando a allowlist. (`app/ponto/management/commands/vigia_plantio_overnight.py:75`; `app/chamados/services/fio.py:1948`; `app/chamados/models.py:2789`; `app/chamados/models.py:3486`)
+
+## 11/11 15:34 · sessao 97538cdfafe8 · - · - · origem=Ronald (tmux)
+
+Inventário estático de `select_for_update`: **23 sites fora de testes/migrations; 18 com alcance por código até Pauta DP**, dos quais **16 têm borda produtiva identificada e 2 pertencem às portas editar/trocar usadas só pelos testes encontrados**. Contagem por AST de `Call(Attribute(..., 'select_for_update'))`; inclui as linhas enumeradas abaixo. A execução do censo não deixou arquivo de saída: **[nao verificado]**. [nao verificado]
+
+| Recurso / função | Sites de aquisição | Ordem e alcance até DP |
+|---|---|---|
+| Colaborador, Disputa, Chamado, Pergunta — `PerguntaDisputa.trava_na_ordem` | `app/chamados/models.py:2666`, `:2675`, `:2688`, `:2692` | **C → D → Ch → P**, cada conjunto por PK; `_gravar_estado` pede universo antes de salvar, e o save acorda cartório/fábrica. `app/chamados/models.py:290`; `app/chamados/models.py:296`; `app/chamados/signals.py:217`; `app/ponto/services/cartorio.py:1020`. |
+| FechamentoMensal — command pago/devido | `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196` | Atomic `:189` → C `:193` → FM `:196` → Pauta cabeça `:207` → DP → filhas `:211` → DP. |
+| Justificativa — aprovação/rejeição/materialização | `app/ponto/services/justificativa.py:142`, `:277`, `:344`; `app/ponto/views.py:1794` | **C/D/Ch antes da Justificativa**, pelos pedidos `:141`, `:276`, `:343` e view `:1793`; depois save de J → signal cartório → fábrica → DP. `app/ponto/services/justificativa.py:208`; `app/ponto/services/justificativa.py:287`; `app/ponto/signals.py:165`; `app/ponto/services/cartorio.py:1020`. |
+| AgendamentoFerias e PeriodoAquisitivo — `_travar_agendamento` | `app/ferias/services.py:364`, `:367` | Ag → PA → Ausencia por UPDATE/DELETE/INSERT → cartório ou pauta de férias recusadas → DP. `_trocar_janela`: atomic `:433`, locks `:434`, exclusão `:445`, save `:450`; sync em `app/ferias/models.py:449` e `:451`; pauta direta em `app/ponto/services/ausencia.py:1216` e `:1245`. |
+| AgendamentoFerias — alinhamento por data | `app/ferias/services.py:600` | Atomic `:599` → Ag → save de status `:604` → sync Ausencia `app/ferias/models.py:451` → cartório/DP, ou pauta de recusa `app/ponto/services/ausencia.py:1245`. |
+| SolicitacaoFerias — view avaliar | `app/ferias/views.py:740` | Atomic `:739` → Solicitação → aprovação `:753` → criação/save Agendamento `app/ferias/services.py:503` → sync Ausencia `app/ferias/models.py:451` → DP; depois UPDATE PA `app/ferias/services.py:506`. |
+| DecisaoHE — decisão/período | `app/ponto/portas/he.py:174`, `:555` | Prévia atomic `app/ponto/services/autorizacao_he_periodo.py:321` ou confirmação `:343` → `_ato` → `autorizar_em_lote` `:277` → HE `app/ponto/portas/he.py:555` → decisão HE `:562`/`:174` → pauta DP `app/ponto/services/autorizacao_he_periodo.py:300`/`:244`. |
+| Ausencia — rederivação H06 | `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138` (chamada continua em `:139`) | Atomic `:137` → Ausencia → editar `:169` → save `app/ponto/services/ausencia.py:509` → signal `app/ponto/signals.py:147` → cartório/fábrica/DP. |
+| CelulaDia — editar dia | `app/ponto/portas/celula.py:593` | Atomic `:592` → Celula → órfãs `:626` → `app/ponto/management/commands/gerar_celulas.py:255` → contexto `app/chamados/services/contexto.py:103` → C/Ch `app/chamados/models.py:486`. Julgamento/DP vem após saída desse atomic, em `app/ponto/portas/celula.py:627` e `:434`; fica na mesma transação quando herda o atomic de trocar `:652`. Chamador encontrado: `app/ponto/portas/celula.py:675`; bordas externas encontradas só testes, por exemplo `app/ponto/tests/test_o10b_editar_dia_troca.py:116`. |
+| Ausencia — trocar plantão | `app/ponto/portas/celula.py:657` | Atomic `:652` → Ausencias por PK `:657` → células por colaborador/data `:673` → editar `:675` → C/Ch por órfãs → julgamento → DP. Uso identificado só em teste, por exemplo `app/ponto/tests/test_o10b_editar_dia_troca.py:116`; chamador produtivo **[nao verificado]**. |
+
+**Cinco sites excluídos do alcance DP no mesmo atomic lido:**
+
+| Sites | Razão |
+|---|---|
+| `app/ponto/portas/he.py:318`, `:445` | Recusar ponta/revogar têm os commands próprios como chamadores encontrados; não alcançam a pauta do ato de período. Chamadas: `app/ponto/management/commands/recusar_ponta_pequena.py:170`; `app/ponto/management/commands/lavrar_he_pendente.py:59`. |
+| `app/core/services/aplicacao_convencao.py:115` | O atomic cadastra/altera AplicacaoConvencao e grava trilha; retorna em `:124`/`:134`. Não foi encontrado receiver que leve esse model ao cartório; alcance indireto **[nao verificado]**. |
+| `app/holerite/management/commands/processar_lote_holerite.py:54`, `:124` | Atomics cuidam de estado do lote; chamada ao motor fica fora deles, em `:89`. Alcance de DP dentro desses dois atomics **[nao verificado]**. |
+
+| Advisory | Aquisição / duração |
+|---|---|
+| Âncora E4B | `app/chamados/services/fecho_runtime.py:89`: `pg_advisory_xact_lock`, dentro atomic `:119`; todas as âncoras ordenadas em `:120`, antes de escrever `:127`. |
+| Vigia de hora | `app/ponto/services/vigia_de_hora.py:99`: `pg_try_advisory_lock`, sessão; falha retorna em `:100`/`:101`; julgamento em `:131`, unlock em `:136`. Não é aquisição bloqueante; não há atomic amplo em `rodar`. |
+| Consumidor de eventos | `app/chamados/reconciliador.py:1235`: `pg_try_advisory_lock`, sessão; libera em `:1242`. O consumidor usa atos separados por chamado, sem atomic de lote, conforme implementação/chamadas `:1364`, `:1365`, `:1368`; delimitação descrita em `:1325`/`:1326`. |
+
+**Escritas que também precisam entrar na sequência, embora não sejam `select_for_update`:**
+
+- `Pauta INSERT → trilha → Contador.get_or_create → Contador UPDATE`: `app/pautas/services.py:180`, `:186`, `:188`, `:352`, `:354`. `lavrar` **não tem decorador atomic** em `:344`; chamado avulso em autocommit não conserva DP entre alvos; comportamento efetivo do banco **[nao verificado]**.
+- Pauta existente UPDATE → trilha → DP: ler `app/pautas/services.py:215`/`:218`; fazer `:247`/`:251`; fazer pelo sistema `:272`/`:276`; cancelar `:294`/`:297`.
+- Cartório escreve Celula antes de chamar a fábrica: `app/ponto/services/cartorio.py:1845` → `app/ponto/portas/celula.py:1072` → atomic/save `:904`/`:905`; depois fábrica `app/ponto/services/cartorio.py:1020`. Na lavra do cartório, o argumento é `save=False` em `app/ponto/services/cartorio.py:1825`, portanto citar somente `celula.py:1040` não prova o UPDATE desse caminho.
+- Núcleo de Batida: signal `app/ponto/signals.py:36` → `app/ponto/nucleo.py:57` → DELETE de TurnoMaterializado `:58`/`:81` → bulk INSERT `:59`; o cartório posterior do mesmo save vem em `app/ponto/signals.py:135`.
+- Invalidar FM é **síncrono**: `app/ponto/services/fechamento.py:1656`. Exemplo DP pode precedê-lo: aprovação `app/ponto/services/justificativa.py:208` → signal/cartório/fábrica → DP → `invalidar_fechamento` `:215`. O recálculo, separadamente, é `on_commit` em `app/ponto/services/fechamento.py:1824`.
+- Passivo: atomic do par `app/chamados/services/passivo_validado.py:371` → plantio `:428` → regeneração exportada `:438` → outer da porta `app/ponto/portas/regen_exportada.py:169` → regeneração `:174` → FM `:179` → DiaPago `:188` → Pauta passivo `app/chamados/services/passivo_validado.py:443`. A regeneração pode acionar cartório/fábrica antes do FM por `app/ponto/portas/celula.py:354`/`:434`.
+- Matrícula sem número pede C do maior matriculado em `app/colaboradores/models.py:436`; seu atomic `:429` termina antes do `super().save` `:439`, salvo atomic herdado. Alcance DP naquele atomic isolado **[nao verificado]**.
+
+**Pares e limites:**
+
+| Par | Avaliação estática |
+|---|---|
+| DP → âncora / âncora → DP | Inversão demonstrada no runtime pelo ato externo: transição antes do agrupador `app/chamados/services/fecho_runtime.py:151`/`:154`; fábrica DP `app/chamados/services/fabrica_da_celula.py:369` ou `:279`; agrupador âncora `app/chamados/services/fecho_runtime.py:121` → DP `:127`/`app/pautas/services.py:354`. Recursos compartilháveis entre colaboradores diferentes pela âncora empresa/competência `app/chamados/services/fecho_runtime.py:116` e contador por departamento `app/pautas/services.py:352`. |
+| C → Celula / Celula → C | Oposto efetivo de transição: C `app/chamados/models.py:2666` → cartório `app/chamados/signals.py:217` → Celula `app/ponto/portas/celula.py:905`. Inverso em trocar: outer `app/ponto/portas/celula.py:652` → Celula `:593` → órfãs `:626` → C `app/chamados/models.py:486`. Código permite o par para mesmos C/Celula; chamador de trocar encontrado só testes `app/ponto/tests/test_o10b_editar_dia_troca.py:116`. Runtime concorrente **[nao verificado]**. |
+| DP → FM / FM → DP | Há as duas ordens **de classes**: aprovação J `app/ponto/services/justificativa.py:208`/`:215` e pago/devido `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`/`:207`. **Não certificar deadlock desse par:** aprovação já toma C em `app/ponto/services/justificativa.py:141`/`:129`, e pago toma o mesmo C antes do FM em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`. Para o mesmo FM, esse C serializa os dois caminhos; outro ato sem esse serializador **[nao verificado]**. |
+| Regeneração Celula → C contra transição C → Celula | Regeneração tem UPDATE Celula `app/ponto/portas/celula.py:276` antes de órfãs/C `:289`; entretanto cartório vem depois do atomic local `:354`. A porta exportada conserva ambos no outer `app/ponto/portas/regen_exportada.py:169`/`:174`, mas seu único chamador produtivo encontrado é passivo `app/chamados/services/passivo_validado.py:438`, cujo plantio já carimba pela porta em `app/chamados/services/materializacao.py:1277` antes da regeneração. Não certificar aquisição nova de C nem ciclo runtime sem resolver essa pré-trava. |
+| Justificativa → C / C → Justificativa | Não demonstrado no código lido: as quatro bordas pedem C/D/Ch antes de J (`app/ponto/services/justificativa.py:141`, `:276`, `:343`; `app/ponto/views.py:1793`). |
+
+Correção ao meu informe intermediário: `rejeitar_ausencias_de_ferias` usa UPDATE sem signal (`app/ponto/services/ausencia.py:1281`), portanto o alcance cartório/DP do cancelamento-admin vem do save posterior do Agendamento (`app/ferias/services.py:417` → `app/ferias/models.py:451`), que remove Ausencias e dispara `post_delete` (`app/ponto/services/ausencia.py:1190`; `app/ponto/signals.py:152`).
+
+## 11/11 15:34 · sessao b65421d650d3 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+- **Falso negativo atual, sem reflexão:** `Batida.objects.filter(pergunta_origem__data_evento__isnull=False)` consulta o campo de `PerguntaDisputa`, mas o prefixo relacional impede casar com `^data_evento...$`. O vínculo de `pergunta_origem` é `PerguntaDisputa`. — `app/ponto/management/commands/vigia_plantio_overnight.py:73-75`; `app/ponto/models.py:41`; `app/chamados/tests/test_catraca_data_evento_cru.py:50,97`.
+- **Leituras dinâmicas atuais omitidas:** a chave da família MARCO inclui `'data_evento'`; `grupos_de_colisao` a usa em `values(*chave)`, `order_by(*chave)`, `g[k]` e `filter(**dict(zip(chave,ch)))`. Nenhuma dessas ocorrências casa com os predicados de constantes diretas do varredor. O queryset vem de `PerguntaDisputa`. — `app/chamados/services/fio.py:1373,1430-1433,1945,1948-1950,1970`; varredor `app/chamados/tests/test_catraca_data_evento_cru.py:64-65,84-98`.
+- **Filtros dinâmicos atuais omitidos:** `_NULO_FORA_DO_INDICE['marco']` é `'data_evento__isnull'`; seus usos em `exclude(**{...})` e `filter(**{...})` ficam fora. — `app/chamados/services/fio.py:1378,1946,2000`; varredor `app/chamados/tests/test_catraca_data_evento_cru.py:96-98`.
+- `getattr(p,'data_evento')`, `values/values_list/only('data_evento')`, `F/OuterRef('data_evento')`, `filter(data_evento__...)`, `annotate(d=F('data_evento'))`, `d['data_evento']` e até `d.get('data_evento')` **são vistos**: constantes posicionais de quaisquer chamadas não excluídas entram. — `app/chamados/tests/test_catraca_data_evento_cru.py:82-98`.
+- `fields=['data_evento']`, `source='data_evento'`, constantes em tuplas/listas passadas por `*`, argumentos por `**`, `getattr(p,nome)` e `|attr` **não são vistos**; presença atual de serializers ou templates `|attr` de `PerguntaDisputa`: **[nao verificado]**. Os limites de reflexão/serialização/`|attr` já estão declarados. — `app/chamados/tests/test_catraca_data_evento_cru.py:23-25,64-65,89-98,105-109`.
+- `{% with d=q.data_evento %}` **é visto**, inclusive no teste sintético. — `app/chamados/tests/test_catraca_data_evento_cru.py:174-176`.
+- Fora de `app/`, existe consumo do valor serializado: `mensageria/nucleo/ferramentas.py:127` lê `i.get('data_evento')`; a API fornece o campo de `p` em `app/api/views_mensageria.py:568`. Esse serviço está explicitamente fora do censo. — `app/chamados/tests/test_catraca_data_evento_cru.py:25,41,112`; transporte `mensageria/nucleo/core_client.py:42-55`.
+- A única declaração de campo modelo encontrada é `PerguntaDisputa.data_evento`; **não há evidência para afirmar segundo modelo existente**. O comentário diz “UM modelo”, sem dizer “outro”. — `app/chamados/models.py:2406,2423`; `app/chamados/tests/test_catraca_data_evento_cru.py:26`. Outro modelo hoje: **[nao verificado]**.
+- Os `getattr` dinâmicos de histórico e reversão não demonstram leitores omitidos de `data_evento`: suas listas não incluem o campo. — `app/chamados/services/historico.py:98-105`; `app/chamados/services/passivo_validado.py:64-66,83`.
+
+## 11/11 15:34 · sessao 5bcb028b7dc6 · - · - · origem=Ronald (tmux)
+
+- O JSON é lido apenas por `test_so_desce`, via `open(..., encoding='utf-8')` e `json.load`; não há escritor automatizado demonstrado. A baixa depende da alteração manual exigida pela mensagem do teste. `app/chamados/tests/test_catraca_data_evento_cru.py:42`, `:134`, `:135`, `:143`. Autoria histórica do arquivo: [nao verificado].
+
+- Soma conferida em memória: **217 ocorrências / 120 chaves**, sendo **212 Python + 5 templates**, diferente de “190+4” do contrato fornecido. Fonte: `app/chamados/tests/catraca_data_evento_cru.json:2` até `:121`; os três templates somam 1+3+1 em `:119`, `:120`, `:121`. Não encontrei publicação do contador em BACKLOG/ESTADO: [nao verificado].
+
+- **Sem colisão demonstrada nos enumeradores examinados**: O20 considera somente `test_contract_*.py`, portanto nem o novo `test_catraca_...py` nem o JSON entram nesse censo (`app/core/tests/test_o20_contrato_julga_codigo.py:160`, `:164`); seu outro varredor exige `.py` (`:88`, `:92`). P13 exclui `tests/` e exige `.py` (`app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:146`, `:147`, `:150`). O selo de relógio considera somente arquivos `test*.py`, podendo examinar o novo teste, mas não o JSON (`app/core/tests/test_selo_teste_sem_relogio.py:50`, `:53`). O vocabulário inclui testes, mas suas extensões são `.py/.html/.js/.md`, excluindo JSON (`app/pautas/tests/test_contract_vocabulario.py:20`, `:29`, `:32`). Ausência universal de colisões na suite executada: [nao verificado].
+
+- A integração declarada está no código: `chamados` integra `LABELS` (`bin/regua.sh:23`), executadas pela régua (`:165`, `:168`) e pelo arsenal do pre-push, que deriva a mesma lista (`bin/pre-push.sh:184`, `:186`, `:187`). Hook instalado e execução real nesta cópia: [nao verificado].
+
+- **Excluir o teste não fica protegido por esses selos**: labels exige apenas que o app com *algum* teste esteja na lista (`bin/tests/test_labels_fonte_unica.sh:24`, `:30`, `:32`); testes fora do git compara testes presentes na árvore com os rastreados, sem exigir a existência desta catraca específica (`bin/testes_fora_do_git.sh:46`, `:48`, `:49`; `app/core/selos_no_git.py:26`). Excluir só o JSON, mantendo a catraca, causa falha de abertura (`app/chamados/tests/test_catraca_data_evento_cru.py:134`).
+
+- O diff fornecido acrescenta instrumento e censo, sem juiz de domínio ou leitura de relógio; a catraca mede sintaxe (`app/chamados/tests/test_catraca_data_evento_cru.py:67`, `:112`, `:133`). O caso de mordida cria arquivos temporários (`:181`, `:184`, `:186`, `:188`); não o executei por respeito à regra de leitura. Regra paralela do dia introduzida por esses dois arquivos: não demonstrada (`:43`, `:127`, `:149`).
+
+## 11/11 15:33 · sessao 363ba840fe9f · - · - · origem=Ronald (tmux)
+
+- **Morde nas formas reconhecidas:** chaves novas, aumentos e quedas falham separadamente; queda ou desaparecimento exige ajustar JSON (`app/chamados/tests/test_catraca_data_evento_cru.py:137–144`). O censo atual coincide exatamente com JSON: 120 chaves, 217 ocorrências, sendo 212 Python + 5 templates; juiz excluído tem 1 ocorrência (`app/chamados/tests/test_catraca_data_evento_cru.py:112–128`; `app/chamados/tests/catraca_data_evento_cru.json:2–121`).
+- **Juiz protegido por nome exato:** exclusão via `out.pop(JUIZ, 0)`; renomear gera leitor novo e faz a prova de existência falhar; não passa vazio (`app/chamados/tests/test_catraca_data_evento_cru.py:44`, `:127`, `:137`, `:146–149`).
+- **FP concreto:** qualquer keyword `data_evento=` em chamada não listada como escrita conta, mesmo quando apenas entrega o dia a uma porta escritora (`app/chamados/tests/test_catraca_data_evento_cru.py:48–49`, `:92–98`). Casos atuais: `_sob_contrato` (`app/chamados/models.py:2789`, `:2801`); `reapontar_resolvedora` (`app/chamados/reconciliador.py:954`, `:1642`, `:1655`; `app/chamados/services/declaracao_texto.py:370`); `abrir` (`app/chamados/services/declaracao_texto.py:377`, `:667`; `app/chamados/services/disputa_emissao.py:451`, `:844`).
+- **FP concreto em schema:** embora `UniqueConstraint` seja excluído, a recursão visita os `Q(data_evento__gte=...)` internos, registrando duas ocorrências como leitores na chave `PerguntaDisputa.Meta` (`app/chamados/models.py:3486`, `:3492`; `app/chamados/tests/catraca_data_evento_cru.json:39`; `app/chamados/tests/test_catraca_data_evento_cru.py:99`).
+- **Escrita simples não conta:** exige contexto `Load`; `create(data_evento=...)` está na exclusão; leitura real no RHS continua contando (`app/chamados/tests/test_catraca_data_evento_cru.py:48`, `:82–99`). O escritor existente é excluído corretamente (`app/chamados/services/fio.py:800`).
+- **FN adicional:** `p.data_evento += 1` também lê o valor anterior, mas AST usa contexto `Store`, e o varredor não o registra (`app/chamados/tests/test_catraca_data_evento_cru.py:82`).
+- **Sem resolução de modelo:** atributo/keyword/subscrito são reconhecidos por grafia; campo homônimo de outro objeto contaria igualmente (`app/chamados/tests/test_catraca_data_evento_cru.py:82–98`).
+- **Prova chamada MORDE é parcial:** teste temporário prova descoberta de uma chave Python e um template; não chama a comparação que deve reprovar, nem injeta aumento no mesmo escopo (`app/chamados/tests/test_catraca_data_evento_cru.py:178–191`). A comparação efetiva, entretanto, implementa os três vermelhos (`:137–144`).
+- **Observação de integridade:** comparação só usa JSON presente; não compara ao JSON de commit anterior. Aumentar JSON junto com código pode passar (`app/chamados/tests/test_catraca_data_evento_cru.py:134–139`).
+
+## 11/11 15:33 · sessao d323d1ac48ed · - · - · origem=Ronald (tmux)
+
+Censo por AST de todos os 3.323 `.py` sob `app/`, sem falha de parse, resolvendo `from pautas.services import escrever as ...`, `from pautas import services as _ps/sv`, import relativo da view e chamadas internas da porta: **33 callsites produtivos `escrever`**, **22 callsites em testes**, **6 callsites produtivos `lavrar`**, **1 em teste**. Resultado da execução em memória, sem arquivo de saída: **[nao verificado]**. A unidade é callsite AST, não função nem frequência runtime. O alias produtivo `_ps` está em `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:157`; o relativo `sv`, em `app/pautas/views.py:12`.
+
+Os 33 sites produtivos de `escrever` se dividem em **18 DP literais + 4 por constante DP + 3 destinatários dinâmicos que podem ser DP + 8 excluídos por destino diferente**. A contagem pode ser reconstruída pela tabela abaixo, onde há uma referência por callsite.
+
+Legenda `P→D`: `INSERT Pauta` → trilha → `ContadorPauta.get_or_create`/`UPDATE`, dentro do atomic da porta (`app/pautas/services.py:152`, `app/pautas/services.py:180`, `app/pautas/services.py:186`, `app/pautas/services.py:188`, `app/pautas/services.py:352`, `app/pautas/services.py:354`). O `UPDATE` é a aquisição de linha do contador; o código não usa `select_for_update` nele (`app/pautas/services.py:354`).
+
+| Emissor/site(s) DP | Chamador produtivo / ordem demonstrada |
+|---|---|
+| `fecho_runtime._escrever_pautas`, 1 literal (`app/chamados/services/fecho_runtime.py:127`) | Wrapper atomic: transição antes do agrupador (`app/chamados/services/fecho_runtime.py:147`, `app/chamados/services/fecho_runtime.py:151`, `app/chamados/services/fecho_runtime.py:154`); agrupador toma todas as advisories ordenadas, depois `P→D` (`app/chamados/services/fecho_runtime.py:119`, `app/chamados/services/fecho_runtime.py:120`, `app/chamados/services/fecho_runtime.py:127`). |
+| `pauta_dp_do_limbo_exportado`, 1 literal (`app/chamados/services/fabrica_da_celula.py:279`) | Fábrica a chama no julgamento (`app/chamados/services/fabrica_da_celula.py:215`); própria função lê dedup e chama `P→D`, sem atomic externo próprio (`app/chamados/services/fabrica_da_celula.py:277`, `app/chamados/services/fabrica_da_celula.py:279`). Locks herdados do cartório/transição permanecem no atomic do chamador (`app/chamados/services/fecho_runtime.py:147`). |
+| `pauta_cadastro_sem_turno`, 1 literal (`app/chamados/services/fabrica_da_celula.py:369`) | Fábrica chama em `:204`; atomic próprio `:364` → `PerguntaDisputa.trava_na_ordem(colab)` `:365` → dedup `:367` → `P→D` `:369` (`app/chamados/services/fabrica_da_celula.py:204`, `app/chamados/services/fabrica_da_celula.py:364`, `app/chamados/services/fabrica_da_celula.py:365`, `app/chamados/services/fabrica_da_celula.py:367`, `app/chamados/services/fabrica_da_celula.py:369`). |
+| `pre_fechamento._pauta`, 1 literal (`app/folha/management/commands/pre_fechamento.py:110`) | Cron declarado (`app/config/crons.py:406`). Fecha Pautas antigas por portas individuais antes de escrever a nova; não há atomic envolvendo o conjunto nesse corpo (`app/folha/management/commands/pre_fechamento.py:85`, `app/folha/management/commands/pre_fechamento.py:96`, `app/folha/management/commands/pre_fechamento.py:101`, `app/folha/management/commands/pre_fechamento.py:110`). Cada fechamento `UPDATE Pauta→D`; nova `P→D` (`app/pautas/services.py:272`, `app/pautas/services.py:276`, `app/pautas/services.py:180`, `app/pautas/services.py:188`). |
+| `pautas_de_ferias._pauta`, 1 literal (`app/ferias/management/commands/pautas_de_ferias.py:167`) | Cron declarado (`app/config/crons.py:711`); leitura dedup → `P→D`, sem outra trava própria no corpo (`app/ferias/management/commands/pautas_de_ferias.py:145`, `app/ferias/management/commands/pautas_de_ferias.py:154`, `app/ferias/management/commands/pautas_de_ferias.py:167`). |
+| `_pauta_de_vencido`, 1 literal (`app/ponto/services/ausencia.py:1055`) | Command chama escalonador (`app/ponto/management/commands/escalonar_documentos_ausencia.py:25`, `app/ponto/management/commands/escalonar_documentos_ausencia.py:26`); ele muda Ausência e chama Pauta (`app/ponto/services/ausencia.py:1002`, `app/ponto/services/ausencia.py:1005`); emissor lê dedup e faz `P→D` (`app/ponto/services/ausencia.py:1039`, `app/ponto/services/ausencia.py:1055`). Atomic herdado de execução externa além dessas portas: [nao verificado]. |
+| `_pauta_de_ferias_recusada`, 1 literal (`app/ponto/services/ausencia.py:1245`) | `AgendamentoFerias.save` salva agendamento, sincroniza espelho (`app/ferias/models.py:449`, `app/ferias/models.py:451`, `app/ferias/models.py:392`); espelho tenta criar Ausências, coleta recusas e escreve Pauta (`app/ponto/services/ausencia.py:1202`, `app/ponto/services/ausencia.py:1209`, `app/ponto/services/ausencia.py:1216`). Nas portas de alteração: `Agendamento FOR UPDATE→PA FOR UPDATE→Ausências→P→D` (`app/ferias/services.py:364`, `app/ferias/services.py:367`, `app/ferias/services.py:445`, `app/ferias/services.py:450`). No agendamento novo/histórico, `P→D→UPDATE PA` (`app/ferias/services.py:298`, `app/ferias/services.py:302`, `app/ferias/services.py:321`, `app/ferias/services.py:326`). |
+| `pautas_dos_discordantes.sincronizar`, 1 constante DP (`app/ponto/services/pautas_dos_discordantes.py:38`, `app/ponto/services/pautas_dos_discordantes.py:177`) | Command importa/chama serviço (`app/ponto/management/commands/pautas_discordantes.py:114`). Abre primeiro, fecha depois, sem atomic envolvendo ambos no serviço (`app/ponto/services/pautas_dos_discordantes.py:173`, `app/ponto/services/pautas_dos_discordantes.py:175`, `app/ponto/services/pautas_dos_discordantes.py:182`). Assim, cada abertura é `P→D`; cada fechamento `UPDATE Pauta→D` (`app/pautas/services.py:180`, `app/pautas/services.py:188`, `app/pautas/services.py:272`, `app/pautas/services.py:276`). |
+| HE `_linha_para_o_dp`, 1 literal (`app/ponto/services/autorizacao_he_periodo.py:244`) | Views importam serviço (`app/ponto/views.py:696`, `app/ponto/views.py:734`); prévia/confirmar envolvem atomic (`app/ponto/services/autorizacao_he_periodo.py:321`, `app/ponto/services/autorizacao_he_periodo.py:343`). `_ato` autoriza lote antes da Pauta (`app/ponto/services/autorizacao_he_periodo.py:277`, `app/ponto/services/autorizacao_he_periodo.py:299`): `DecisaoHE FOR UPDATE` em cada dia, ordem de entrada (`app/ponto/portas/he.py:546`, `app/ponto/portas/he.py:548`, `app/ponto/portas/he.py:555`), retrava em `decidir_he` (`app/ponto/portas/he.py:174`), depois `P→D` (`app/ponto/services/autorizacao_he_periodo.py:244`). Recálculo agendado em on_commit, não demonstra FM síncrono depois de DP (`app/ponto/portas/he.py:191`, `app/ponto/portas/he.py:202`). |
+| Passivo `_pauta_da_competencia`, 2 constantes DP; `pauta_de_quem_saiu`, 1 constante DP (`app/chamados/services/passivo_validado.py:49`, `app/chamados/services/passivo_validado.py:229`, `app/chamados/services/passivo_validado.py:233`, `app/chamados/services/passivo_validado.py:266`) | Command chama reparar (`app/chamados/management/commands/materializar_passivo_validado.py:68`). Atomic por par `:371` → plantio `:427/:428` → regeneração exportada `:438` → Pauta cabeça/filhas ou sem movimento `:443/:450` (`app/chamados/services/passivo_validado.py:371`, `app/chamados/services/passivo_validado.py:427`, `app/chamados/services/passivo_validado.py:428`, `app/chamados/services/passivo_validado.py:438`, `app/chamados/services/passivo_validado.py:443`, `app/chamados/services/passivo_validado.py:450`). Regeneração chama recálculo FM e retrato DPago antes do retorno (`app/ponto/portas/regen_exportada.py:169`, `app/ponto/portas/regen_exportada.py:174`, `app/ponto/portas/regen_exportada.py:179`, `app/ponto/portas/regen_exportada.py:188`); sequência integral dos locks internos do plantio/regeneração: [nao verificado] nesta subpesquisa. |
+| `resposta_tardia.receber`, 1 literal (`app/chamados/services/resposta_tardia.py:63`) | View importa serviço (`app/chamados/views.py:1050`). Ramo tardio anexa nota, registra log, então `P→D`; não declara atomic próprio (`app/chamados/services/resposta_tardia.py:31`, `app/chamados/services/resposta_tardia.py:53`, `app/chamados/services/resposta_tardia.py:55`, `app/chamados/services/resposta_tardia.py:63`). |
+| `competencia_trancada._pauta_do_dp`, 1 literal (`app/chamados/services/competencia_trancada.py:231`) | Disparo síncrono chama `encerrar` (`app/chamados/services/competencia_trancada.py:281`, `app/chamados/services/competencia_trancada.py:282`); `encerrar` usa atomics separados por chamado e disputa (`app/chamados/services/competencia_trancada.py:182`, `app/chamados/services/competencia_trancada.py:197`), depois escreve Pauta fora desses blocos (`app/chamados/services/competencia_trancada.py:207`, `app/chamados/services/competencia_trancada.py:208`). Herança de atomic do disparador de tranca: [nao verificado]. |
+| `reabrir_orfas_enterradas._pautas`, 1 literal (`app/chamados/management/commands/reabrir_orfas_enterradas.py:208`) | Command de runtime; atomics das reaberturas encerram em cada iteração (`app/chamados/management/commands/reabrir_orfas_enterradas.py:146`); chamada `_pautas` depois do laço (`app/chamados/management/commands/reabrir_orfas_enterradas.py:178`): dedup → `P→D` (`app/chamados/management/commands/reabrir_orfas_enterradas.py:201`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:208`). |
+| `pauta_folga_nao_definida_exportada`, 2 literais (`app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:134`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:139`) | Command envolve cabeça/filhas em atomic (`app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:133`): `P cabeça→D→P filhas→D`, sem advisory E4B nesses sites (`app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:134`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:139`). |
+| `pauta_dia_em_aberto`, 3 literais (`app/pautas/management/commands/pauta_dia_em_aberto.py:127`, `app/pautas/management/commands/pauta_dia_em_aberto.py:139`, `app/pautas/management/commands/pauta_dia_em_aberto.py:142`) | Command chama a porta por filha/cabeça, sem atomic de conjunto no corpo (`app/pautas/management/commands/pauta_dia_em_aberto.py:76`, `app/pautas/management/commands/pauta_dia_em_aberto.py:126`, `app/pautas/management/commands/pauta_dia_em_aberto.py:139`, `app/pautas/management/commands/pauta_dia_em_aberto.py:141`): cada chamada `P→D`. |
+| `pauta_pago_x_devido_exportada`, 2 literais, alias `_ps` (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:157`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:211`) | Atomic (`:189`) → `PerguntaDisputa.trava_na_ordem(colab)` (`:193`) → FM `FOR UPDATE` (`:196`) → `P cabeça→D→P filhas→D` (`:207/:211`) (`app/pautas/management/commands/pauta_pago_x_devido_exportada.py:189`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:193`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:196`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:207`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:211`). |
+| View genérica, 1 dinâmico (`app/pautas/views.py:76`, `app/pautas/views.py:78`) | Endpoint POST → `P→D` quando POST informa DP; não declara atomic próprio (`app/pautas/views.py:70`, `app/pautas/views.py:72`, `app/pautas/views.py:76`). |
+| Responder, 1 dinâmico (`app/pautas/services.py:194`, `app/pautas/services.py:196`) | View chama `responder` (`app/pautas/views.py:112`); DP ocorre se remetente da Pauta original for DP e `autor_user_id` ausente (`app/pautas/services.py:196`, `app/pautas/services.py:197`); `P resposta→D`, referência ao pai (`app/pautas/services.py:200`, `app/pautas/services.py:180`, `app/pautas/services.py:188`). Estado concreto com autoria ausente: [nao verificado]. |
+| Semanal, 1 dinâmico (`app/pautas/semanal.py:276`) | Chamador de ausência fornece DP (`app/ponto/services/vigia_ausencia.py:239`); command importa revisão (`app/ponto/management/commands/vigiar_familia_ausencia.py:23`). Sem atomic de conjunto (`app/pautas/semanal.py:202`); ramo zerado fecha Pautas por portas individuais (`app/pautas/semanal.py:226`, `app/pautas/semanal.py:229`), ramo aceso escreve `P→D` (`app/pautas/semanal.py:235`, `app/pautas/semanal.py:276`). |
+
+Os **8 excluídos**:
+
+| Callsite | Destino lido |
+|---|---|
+| `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:107` | `supervisao`, constante `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:24` |
+| `app/ponto/services/pautas_dos_deslogados.py:77` | `supervisao`, constante `app/ponto/services/pautas_dos_deslogados.py:27` |
+| `app/ponto/services/cobertura.py:333` | `supervisao`, literal `app/ponto/services/cobertura.py:333` |
+| `app/ponto/services/afastado_avisa.py:74` | `supervisao`, literal `app/ponto/services/afastado_avisa.py:74` |
+| `app/ponto/services/pautas_do_esmeril.py:76` | `supervisao`, literal `app/ponto/services/pautas_do_esmeril.py:76` |
+| `app/core/services/crons_quebrados.py:71` | `ti`, literal `app/core/services/crons_quebrados.py:71` |
+| `app/core/management/commands/alarme_esteira.py:54` | `ti`, literal `app/core/management/commands/alarme_esteira.py:54` |
+| `app/core/management/commands/alarme_arvore.py:50` | `ti`, literal `app/core/management/commands/alarme_arvore.py:50` |
+
+`lavrar` tem **5 sites internos**: após escrever (`app/pautas/services.py:188`), marcar lida (`app/pautas/services.py:218`), marcar feita (`app/pautas/services.py:251`), feita pelo sistema (`app/pautas/services.py:276`), cancelar (`app/pautas/services.py:297`). Nos quatro últimos, a ordem é `UPDATE Pauta→trilha→D` (`app/pautas/services.py:215`, `app/pautas/services.py:247`, `app/pautas/services.py:272`, `app/pautas/services.py:294`). O **6º é o command avulso**, que não envolve todas as lavras num atomic próprio: `app/pautas/management/commands/lavrar_pautas.py:34`, `app/pautas/management/commands/lavrar_pautas.py:36`, `app/pautas/management/commands/lavrar_pautas.py:51`; `lavrar` também não tem decorador atomic (`app/pautas/services.py:344`). Logo não carregar o contador DP de uma iteração até a seguinte sem demonstrar um atomic externo: [nao verificado].
+
+Par adicional estrutural encontrado, além de DP↔âncora E4B:
+
+| Caminho A | Caminho B | Alcance/limite |
+|---|---|---|
+| **DP→PeriodoAquisitivo**: `registrar_gozo_historico` atomic → `ag.save()` → espelho com recusa → Pauta DP → `alvo.save()` (`app/ferias/services.py:277`, `app/ferias/services.py:298`, `app/ferias/models.py:449`, `app/ferias/models.py:451`, `app/ponto/services/ausencia.py:1216`, `app/ponto/services/ausencia.py:1245`, `app/ferias/services.py:302`). `executar_agendamento` produz a mesma ordem (`app/ferias/services.py:315`, `app/ferias/services.py:321`, `app/ferias/services.py:326`). | **PeriodoAquisitivo→DP**: `_trocar_janela` atomic → trava AG → trava PA → save AG → espelho → Pauta DP (`app/ferias/services.py:433`, `app/ferias/services.py:364`, `app/ferias/services.py:367`, `app/ferias/services.py:450`, `app/ferias/models.py:451`, `app/ponto/services/ausencia.py:1245`). | Chamadores runtime: histórico `app/ferias/views.py:211`; agendar `app/ferias/views.py:299`, `app/ferias/views.py:636`; corrigir datas `app/ferias/views.py:503`. **Inversão no grafo condicional; ciclo concreto [nao verificado]**: o guard anterior do agendamento pode recusar (`app/ferias/models.py:435`), enquanto a Pauta exige recusa posterior de `criar_ausencia` (`app/ponto/services/ausencia.py:1202`, `app/ponto/services/ausencia.py:1209`). Não conferi constraints SQL/FKs efetivamente implantadas nem fixture concorrente que atravesse ambos os guards: [nao verificado]. |
+
+Não transformar esse último candidato em “deadlock demonstrado”: só o ramo condicional e as duas ordens estão no código; satisfação conjunta e concorrência real ficam **[nao verificado]**.
+
+## 11/11 15:32 · sessao ed15150ab293 · FABLE-GABARITO · verificador · origem=Code
+
+1. **BLOQUEANTE.** Entrada: alterar `PRAZO` em `app/core/tests/marca_cron15.py:24`, declarando B. Esse valor participa da decisão do cron de produção (`app/core/management/commands/crons.py:92`, `:97`). O selo aceita o diretório `tests` indiscriminadamente (`bin/selo_proporcao.py:66`) e libera B (`bin/selo_proporcao.py:105`, `:111`). Motivo literal: **“arquivo de teste”**, **“qualquer outro .py no diff = classe A”** e **“A fuga entre modulos NAO entra no custo aceito”**; regras registradas em `app/docs/CORTES.md:444`. A fuga concreta alcança produção.
+
+2. **BLOQUEANTE.** Entrada: acrescentar `## FEITO: exemplo` à allowlist `bin/tests/afirma_sem_prova_base.txt`, declarando B. O portão lê esse arquivo e desconsidera afirmações nele presentes (`bin/relato_afirma_com_prova.py:54`, `:77`, `:97`). O selo libera seu caminho pela mesma exceção indiscriminada (`bin/selo_proporcao.py:66`, `:111`). Motivo literal: **“CLASSE B so se TODO arquivo do diff”** pertencer às categorias autorizadas; a categoria é **“arquivo de teste”**, não qualquer conteúdo de `bin/tests/` (`app/docs/CORTES.md:444`). Aqui muda uma permissão efetivamente consumida pelo portão.
+
+3. **FILA.** Entrada: C0 → C1 altera `app/x/views.py`; C1 → C2 altera `app/templates/x/a.html`. Com base C1, o selo recebe somente o template; com C0, recebe também o `.py` e exige A (`bin/selo_proporcao.py:78`, `:89`, `:92`, `:108`). Isso demonstra possibilidade de enganar pelo recorte da entrada. Motivo literal do aval original: **“achado do Codex sobre a FORMA de testar (como o selo poderia ser enganado) vira linha de fila, nunca volta”**; regra registrada em `app/docs/CORTES.md:443`. Obrigação específica de usar `merge-base(main, HEAD)` nos avais: **[nao verificado]**.
+
+4. **FILA, nos limites comprovados.** Entrada: BASE e HEAD com listas diferentes; o código lê a BASE (`bin/selo_proporcao.py:47`, `:91`), enquanto um comentário promete HEAD (`bin/tests/test_selo_proporcao.sh:91`). Os testes efetivos também usam BASE (`bin/tests/test_selo_proporcao.sh:44`). Aplica-se o literal **“achado […] sobre a FORMA de testar […] vira linha de fila”**, registrado em `app/docs/CORTES.md:443`. Contrato e promessa específica da MEDIDA na cópia: **[nao verificado]**. Chamador automático de pouso não localizado; execução manual no pouso: **[nao verificado]**. Portanto, não está demonstrado descumprimento do literal **“SELO no pouso”** (`app/docs/CORTES.md:443`).
+
+Reprodução dos rc nesta sessão: **[nao verificado]**; os resultados descritos são compatíveis com os ramos citados do código.
+
+## 11/11 15:32 · sessao b199bd514621 · - · - · origem=Ronald (tmux)
+
+**Matriz humana: 20 arestas distintas permitidas**, sendo 10 pela tabela comum e outras 10 pelo privilégio `admin_ti`; `cancelado` e `superado` não podem ser origem nem destino de transição humana. (`app/chamados/catalogo/motor.py:99`; `app/chamados/catalogo/motor.py:142`; `app/chamados/catalogo/motor.py:145`; `app/chamados/catalogo/motor.py:150`; `app/chamados/catalogo/motor.py:153`)
+
+Notação das sequências:
+
+- **E**: `atomic E4B → C → D abertas → Ch vivos/pais/alvo → UPDATE Ch → receivers → relavra S2 → âncoras ordenadas → INSERT Pauta E4B → contador DP → fim atomic E4B`. Os receivers e a relavra podem acrescentar escritas opcionais descritas abaixo. (`app/chamados/services/fecho_runtime.py:147`; `app/chamados/models.py:290`; `app/chamados/models.py:296`; `app/chamados/models.py:307`; `app/chamados/services/fecho_runtime.py:120`; `app/chamados/services/fecho_runtime.py:127`)
+- **N**: `atomic _gravar_estado → C → D abertas → Ch vivos/pais/alvo → UPDATE Ch → receivers → eventual relavra S2 → fim atomic _gravar_estado`; este ramo não chama o agrupador E4B. (`app/chamados/services/fecho_runtime.py:144`; `app/chamados/services/fecho_runtime.py:145`; `app/chamados/models.py:280`; `app/chamados/models.py:290`; `app/chamados/models.py:296`; `app/chamados/models.py:303`)
+- **C/D/Ch/P** são as linhas de Colaborador, Disputa, Chamado e Pergunta; cada conjunto explícito é adquirido em PK crescente. (`app/chamados/models.py:2666`; `app/chamados/models.py:2675`; `app/chamados/models.py:2688`; `app/chamados/models.py:2692`)
+
+| De → para | Perfil pela porta | Sequência | DP antes da âncora E4B |
+|---|---|---|---|
+| aberto → em_analise | Comum (`motor.py:100`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior nesse ramo (`fecho_runtime.py:145`) |
+| aberto → resolvido | Comum (`motor.py:100`) | E (`fecho_runtime.py:147`) | Pode, pela fábrica (`fabrica_da_celula.py:204`; `:215`; `:369`) |
+| aberto → fechado | Comum (`motor.py:100`) | E (`fecho_runtime.py:147`) | Pode (`fabrica_da_celula.py:204`; `:215`; `:369`) |
+| aberto → registrado | admin_ti (`motor.py:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| em_analise → aberto | Comum (`motor.py:101`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| em_analise → resolvido | Comum (`motor.py:101`) | E (`fecho_runtime.py:147`) | Pode (`fabrica_da_celula.py:204`; `:215`; `:369`) |
+| em_analise → fechado | Comum (`motor.py:101`) | E (`fecho_runtime.py:147`) | Pode (`fabrica_da_celula.py:204`; `:215`; `:369`) |
+| em_analise → registrado | admin_ti (`motor.py:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| resolvido → aberto | admin_ti (`motor.py:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| resolvido → em_analise | Comum (`motor.py:102`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| resolvido → fechado | Comum (`motor.py:102`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| resolvido → registrado | admin_ti (`motor.py:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| fechado → aberto | admin_ti (`motor.py:150`; `:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| fechado → em_analise | admin_ti (`motor.py:150`; `:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| fechado → resolvido | admin_ti (`motor.py:150`; `:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| fechado → registrado | admin_ti (`motor.py:150`; `:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| registrado → aberto | admin_ti (`motor.py:153`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| registrado → em_analise | Comum (`motor.py:105`) | N (`fecho_runtime.py:144`; `models.py:280`) | Sem âncora posterior (`fecho_runtime.py:145`) |
+| registrado → resolvido | admin_ti (`motor.py:153`) | E (`fecho_runtime.py:147`) | Pode (`fabrica_da_celula.py:204`; `:215`; `:369`) |
+| registrado → fechado | Comum (`motor.py:105`) | E (`fecho_runtime.py:147`) | Pode (`fabrica_da_celula.py:204`; `:215`; `:369`) |
+
+Na tabela, `motor.py` significa `app/chamados/catalogo/motor.py`, `models.py` significa `app/chamados/models.py` e os nomes dos serviços pertencem a `app/chamados/services/`. As arestas dependem dos guards da porta: decisão de perfil, justificativa pendente, disputa viva, pergunta viva em competência aberta e premissa regularizada para `resolvido`. (`app/chamados/models.py:132`; `app/chamados/models.py:136`; `app/chamados/models.py:148`; `app/chamados/models.py:165`; `app/chamados/models.py:181`)
+
+As 20 arestas têm chamador runtime pelos dois serviços: detalhe local e resposta rápida no fio/modal; ocorrência concreta em produção **[nao verificado]**. (`app/chamados/services/acoes_chamado.py:313`; `app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:719`; `app/chamados/services/fio.py:722`; `app/chamados/views.py:547`; `app/chamados/views.py:674`; `app/chamados/views.py:954`; `app/chamados/urls.py:14`; `app/chamados/urls.py:21`; `app/chamados/urls.py:39`)
+
+| Subcaminho síncrono dos receivers | Ordem e escritas |
+|---|---|
+| S143, apenas destino encerrado | Retoma C/D/Ch pela porta, tenta devolver alcance antes dos carimbos, grava perguntas mortas, pode reabrir pai e fechar disputas. (`app/chamados/signals.py:96`; `:115`; `app/chamados/services/disputa_emissao.py:1878`; `:1945`; `:1984`; `:2009`; `:2058`; `:2090`) |
+| Carimbo de pergunta | `UPDATE Pergunta`, dentro de `PerguntaDisputa.save` e seu atomic; o receiver pode inserir EventoCelula. (`app/chamados/models.py:3152`; `:3422`; `:3423`; `app/chamados/signals.py:258`; `app/ponto/portas/celula.py:896`) |
+| Fecho de disputa | Reaquisição C/D/Ch, `UPDATE Disputa`, S88 pode reconciliar o pai; S144 carimba pendentes já aprovadas pelo lastro. (`app/chamados/models.py:1910`; `:1936`; `app/chamados/signals.py:42`; `:164`; `app/chamados/services/materializacao.py:1418`; `:1427`) |
+| Cartório do chamado | Roda se o status mudou e não há julgamento reentrante; deriva dia pelo juiz e chama `julgar_celula`. (`app/chamados/signals.py:193`; `:211`; `:215`; `:217`) |
+| Lavra da célula | `UPDATE CelulaDia → INSERT EventoCelula`; a lavra do modelo delega à porta. (`app/escala/models.py:1826`; `app/ponto/portas/celula.py:904`; `:905`; `:907`; `:896`) |
+| Fábrica após a lavra | Cartório chama fábrica das células julgadas; cadastro sem turno toma C e escreve DP; limbo exportado escreve DP diretamente, herdando as travas do ato. (`app/ponto/services/cartorio.py:1020`; `app/chamados/services/fabrica_da_celula.py:204`; `:215`; `:279`; `:364`; `:365`; `:369`) |
+| Relavra S2 após o save | Pode `UPDATE Pergunta` depois do cartório e, portanto, depois de uma Pauta da fábrica. (`app/chamados/models.py:296`; `:307`; `:312`; `app/chamados/veredito_lavrado.py:275`) |
+| Eventos pós-commit | Beco de disputa e silêncio de isento são callbacks `on_commit`; não integram a sequência anterior ao commit do atomic E4B. (`app/chamados/signals.py:239`; `:280`) |
+
+As condições da emissão antecipada são explícitas: célula passada de colaborador ativo, dia não dispensado e teto sem turno para cadastro; para limbo, motivos existentes, `trabalha=None` e competência entregue. Os guards e a célula concreta que satisfazem cada combinação em produção são **[nao verificado]**. (`app/chamados/services/fabrica_da_celula.py:201`; `:203`; `:204`; `:228`; `:231`)
+
+| Transição indireta | Chamador síncrono alcançável e ordem |
+|---|---|
+| aberto → resolvido; em_analise → resolvido; registrado → resolvido | `RECONCILIAR` pelo S88, cartório ou cluster; C/D/Ch antes do UPDATE do estado e seus receivers. (`app/chamados/catalogo/motor.py:111`; `app/chamados/signals.py:42`; `app/ponto/services/cartorio.py:986`; `:1511`; `:1524`; `:1545`; `:1623`; `:1638`; `app/ponto/services/cluster_espurio.py:124`; `app/chamados/models.py:650`; `:654`; `:711`) |
+| resolvido → em_analise; fechado → em_analise | `REABRIR` no S143 ou no renascimento por emissão; `_gravar_estado` seguido de ressuscitação C/D/Ch/P, UPDATE perguntas e possível reabertura de disputa. (`app/chamados/catalogo/motor.py:113`; `app/chamados/services/disputa_emissao.py:1849`; `:2009`; `app/chamados/models.py:921`; `:1019`; `:1442`; `:1451`; `:1562`; `:1566`; `:1575`) |
+| aberto → em_analise; registrado → em_analise | `ANALISAR` pelo repasse do emissor do cartório; C/D/Ch/P do conjunto no topo do repasse, depois `_gravar_estado`. (`app/chamados/catalogo/motor.py:112`; `app/ponto/services/cartorio.py:1763`; `:1801`; `app/ponto/management/commands/detectar_ausencias.py:802`; `app/chamados/services/disputa_emissao.py:1059`; `:1085`; `:1159`; `:1178`; `:1223`; `:1252`; `app/chamados/models.py:806`) |
+| inexistente → aberto | Emissão de chamado pela fábrica, cluster ou emissor do cartório; C antes do dedup e INSERT. (`app/chamados/catalogo/motor.py:131`; `app/chamados/models.py:902`; `:905`; `:935`; `:971`; `app/chamados/services/disputa_emissao.py:568`; `app/ponto/services/cluster_espurio.py:130`; `app/ponto/management/commands/detectar_ausencias.py:693`) |
+| inexistente → registrado | Existe no catálogo de nascimento; alcance concreto desse destino pelos emissores deste recorte **[nao verificado]**. (`app/chamados/catalogo/motor.py:133`; `app/chamados/models.py:935`) |
+| `ENCERRAR` / `CANCELAR` | Existem no catálogo e no modelo; caminho síncrono saindo desses receivers até essas portas **[nao verificado]**. (`app/chamados/catalogo/motor.py:114`; `:116`; `app/chamados/models.py:773`; `:1612`) |
+
+**Censo dos três nomes:** 17 chamadas AST, contando apelidos de `from ... import ...`, acessos qualificados e excluindo strings de mutantes; execução sem artefato persistido **[nao verificado]**. Os callsites lidos são:
+
+| Função | Produção | Teste | [nao verificado]
+|---|---|---|
+| `transicionar_com_pauta` — 3 | 2: `app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722` | 1: `app/chamados/tests/test_e4b_c6_memoria.py:75` |
+| `_escrever_pautas` — 13 | 1: `app/chamados/services/fecho_runtime.py:154` | 12: memória `:128`, `:129`, `:163`, `:168`, `:189`, `:231`; ORM `:138`, `:182`, `:208`, `:209`, `:225`, `:266`, nos arquivos `app/chamados/tests/test_e4b_c6_memoria.py` e `app/chamados/tests/test_e4b_c6_orm.py` |
+| `_travar_ancora` — 1 | 1: `app/chamados/services/fecho_runtime.py:121` | 0 encontrados **[nao verificado]** |
+
+Os 12 testes diretos de `_escrever_pautas` não executam transição de Chamado nessa chamada; o teste de memória do adaptador executa a transição simulada para `fechado`. (`app/chamados/tests/test_e4b_c6_memoria.py:75`; `:128`; `:163`; `:231`; `app/chamados/tests/test_e4b_c6_orm.py:138`; `:182`; `:208`; `:225`; `:266`)
+
+## 11/11 15:31 · sessao a139ee4f6b1c · - · - · origem=Ronald (tmux)
+
+(1) **BLOQUEANTE.** A exceção aceita qualquer diretório `tests` ([bin/selo_proporcao.py:66](bin/selo_proporcao.py:66)), mas esse módulo participa do caminho de produção: import em [app/core/management/commands/crons.py:92](app/core/management/commands/crons.py:92), decisão pelo prazo em [app/core/management/commands/crons.py:97](app/core/management/commands/crons.py:97). Entrada concreta: alterar `PRAZO` ([app/core/tests/marca_cron15.py:24](app/core/tests/marca_cron15.py:24)). O caminho recebe B e retorna 0 ([bin/selo_proporcao.py:105](bin/selo_proporcao.py:105), [bin/selo_proporcao.py:111](bin/selo_proporcao.py:111)). Contraria “qualquer outro .py no diff = classe A” e “A fuga entre modulos NAO entra no custo aceito” [não verificado: transcrição fornecida].
+
+(3) **FILA**, pelos elementos fornecidos. A base é argumento explícito ([bin/selo_proporcao.py:78](bin/selo_proporcao.py:78)); exige ancestralidade ([bin/selo_proporcao.py:89](bin/selo_proporcao.py:89)) e calcula exatamente esse intervalo ([bin/selo_proporcao.py:92](bin/selo_proporcao.py:92)). Entrada concreta: C0 → C1 altera `.py` fora da lista → C2 altera template; base=C1 inclui apenas template, classificado B ([bin/selo_proporcao.py:62](bin/selo_proporcao.py:62)). Os avais não prescrevem main/merge-base; enquadramento literal: “FORMA de testar (como o selo poderia ser enganado) vira linha de fila, nunca volta” [não verificado: transcrição fornecida]. Vincular a base ao diff completo da obra é pendência; impor especificamente merge-base seria requisito adicional [não verificado].
+
+Os retornos foram inferidos do código; execução dessas entradas nesta sessão [não verificado].
+
+## 11/11 15:31 · sessao acf78761590e · - · - · origem=Ronald (tmux)
+
+**Item 4: FILA.** Motivo literal: “achado [...] sobre a FORMA de testar [...] vira linha de fila, nunca volta” — anexo fornecido [não verificado em arquivo].
+
+- A divergência comprovada está no comentário “revisao head”, em `bin/tests/test_selo_proporcao.sh:91`; a implementação lê BASE em `bin/selo_proporcao.py:47` e `bin/selo_proporcao.py:91`. Os testes efetivos também preparam a lista na BASE, em `bin/tests/test_selo_proporcao.sh:44`.
+- Entrada concreta: BASE e HEAD contendo listas distintas; a chamada usa a lista da BASE, conforme `bin/selo_proporcao.py:47`.
+- Contrato que promete HEAD e MEDIDA “pousos B com rc 1”: não encontrados na cópia [não verificado]. O fluxo do selo imprime a classificação e retorna, conforme `bin/selo_proporcao.py:99`.
+- Chamador automático de pouso não encontrado [não verificado]. Isso não comprova ausência de execução manual no pouso [não verificado]. O literal “SELO no pouso” consta do aval fornecido; a exigência de integração automática não consta dele [não verificado em arquivo]. [nao verificado]
 
 ## 11/11 15:25 · sessao 6dc09a5905d6 · FIO-E0-V4-E4B · verificador · origem=Code
 
@@ -481,483 +768,4 @@ Para (5), não há colisão demonstrada apenas por criar os dois nomes propostos
 
 Não encontrei uma varredura geral de `tests/*.json`; afirmar que nenhuma existe em toda a árvore continua **[não verificado]**.
 
-## 11/11 15:10 · sessao 26eb251345fa · - · - · origem=Ronald (tmux)
-
-A label `chamados` pode conter um teste que leia todo `/app`; ela seleciona testes, enquanto o alcance da varredura depende do código do teste. Há precedente: o selo P13 calcula a raiz de `app/` por `__file__` e executa `os.walk(APP)`, atravessando os outros apps. `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:33,144-155`.
-
-| Ponto | Evidência |
-|---|---|
-| Fonte única das labels, incluindo `api` e `chamados` | `bin/regua.sh:23` |
-| Pre-push monta `LABELS` lendo essa fonte | `bin/pre-push.sh:184-185` |
-| Pre-push passa labels ao runner Django | `bin/pre-push.sh:186-188` |
-| Régua passa `${ONLY:-$LABELS}` ao runner | `bin/regua.sh:168-169` |
-| Régua monta somente `~/saas-hasner/app` em `/app` | `bin/regua.sh:14,166-167` |
-| Pre-push monta somente `$ARVORE_PUSH/app` em `/app` | `bin/pre-push.sh:142-145` |
-| Cópia do pre-push extrai apenas `app` do commit | `bin/arvore_do_push.sh:98` |
-| Cwd previsto para a imagem core: `/app` | `app/Dockerfile:8` |
-| Templates são de `BASE_DIR / 'templates'`, sendo `BASE_DIR` a raiz de `app` | `app/config/settings/base.py:4,70-74` |
-| `mensageria/` é outro serviço, construído de `./mensageria`, montado em `/srv` | `docker-compose.mensageria.yml:3,13-14` |
-| Cwd desse outro serviço é `/srv` | `mensageria/Dockerfile:2` |
-
-**Conclusão para o contrato:** uma varredura da raiz `/app` alcança `api/` e `templates/`; não alcança o diretório irmão `mensageria/`, pois ele não é extraído nem montado no container de teste core. `bin/arvore_do_push.sh:98`; `bin/pre-push.sh:144`; `bin/regua.sh:167`; `docker-compose.mensageria.yml:13-14`.
-
-Se “todo o app” inclui o serviço irmão `mensageria/`, o contrato precisa declarar esse limite ou mudar a extração/montagem e a raiz da varredura; trocar apenas a label não fornece os arquivos ausentes. `bin/arvore_do_push.sh:98`; `bin/pre-push.sh:144,186-188`.
-
-O selo de labels cobra apps Django com testes sob `app/*/`, identificados por `apps.py`; ele não prova cobertura do serviço irmão. `bin/tests/test_labels_fonte_unica.sh:24-35`.
-
-Cwd e mounts efetivos da imagem/container em execução: **[não verificado]**; as referências acima descrevem a configuração da cópia.
-
-## 11/11 15:10 · sessao 397f44057cf9 · - · - · origem=Ronald (tmux)
-
-Não encontrei catraca geral de **leituras** de `data_evento`; ausência absoluta fica [não verificado]. Os instrumentos próximos têm objetos distintos:
-
-- **P13 AST controla escrita:** detector em `app/chamados/tests/test_selo_p13_data_evento_porta_unica.py:78`, percurso de produção em `:144`, exclusões em `:147`, único ponto autorizado em `:37` e reprovação em `:165`.
-- **P13 de estado também controla escrita**, por regex, em seis apps: `app/core/tests/test_contract_escritores_estado.py:12`, `:13`, `:64`, `:179`, `:186`. Cobra novos escritores e entradas mortas em `:203` e `:212`.
-- **E1 15d2 reutiliza P13**, inclusive seu censo; já há sobreposição consciente de verificações de escrita: `app/chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:33`, `:51`, `:115`. Uma catraca de leitores não responde à mesma pergunta desses instrumentos. [inferência: referências anteriores]
-- **Dia do fato** varre a chave `data_turno` em `.get`/subscript, não `data_evento`: `app/chamados/tests/test_contract_dia_do_fato.py:35`, `:59`. **Vitalidade** varre `materializada_em`/`validada_em`: `app/chamados/tests/test_contract_leitores_vitalidade.py:14`, `:305`.
-
-Há uma colisão concreta ao **curar dívida depois**: o selo exige literalmente `data_pergunta=p.data_evento` no reconciliador. Migrar esse leitor ao juiz exigirá ajustar o selo correspondente, preservando seu caso comportamental: `app/chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:122`, `:129`, `:130`.
-
-## 11/11 15:08 · sessao 88a351155ddf · DATA-EVENTO-CRU · censo · origem=Code
-
-O censo da cópia resulta em **341 locais leitores Python: 190 operacionais, 149 em testes e 2 em migração**. A unidade é o par único `arquivo:linha`; acessos repetidos na mesma linha contam uma vez. A relação integral está abaixo, incluindo expansões ORM como `values(*chave)` (`app/chamados/services/fio.py:1948`) e consumo de chave serializada (`mensageria/nucleo/ferramentas.py:127`).
-
-O juiz retorna **`None` para conversa**, independentemente do dia civil gravado (`app/chamados/juizes.py:338`). Nos quadros, **S** significa “sim, o cru pode fornecer o dia civil onde o juiz fornece `None`”; **N**, “não, há exclusão/tratamento de conversa”; **NA**, “não se aplica à pergunta sobre dia do fato”. **S\*** significa “sim se conversa alcançar esse ramo”; a ocorrência concreta permanece [nao verificado].
-
-A identidade da cópia com o HEAD solicitado está [nao verificado]: não há metadados Git disponíveis. Execução e impacto em produção estão [nao verificado].
-
-**(a) Python — leitores operacionais: 190 locais.**
-
-Nas tabelas, `arquivo:1,2` enumera dois locais: `arquivo:1` e `arquivo:2`.
-
-| Arquivo:linhas | Função | Uso do valor | Conversa |
-|---|---|---|---|
-| `app/api/views.py:1165,1166` | `api_chamados_v2` | Repassa ISO e rótulo de dia | S |
-| `app/api/views.py:2637` | `api_disputa_responder` | Repassa dia em auditoria | S |
-| `app/api/views_mensageria.py:568` | `_item_validar` | Repassa ISO na fila | S |
-| `app/chamados/canal.py:65,67,72,79` | `perguntas_mudas_com_resposta` | Filtra não nulo; ordena; associa resposta por dia; repassa | S |
-| `app/chamados/juizes.py:80,81` | `_dia_da_disputa` | Reúne dias para escolher o menor; conversa excluída em `:78` | N |
-| `app/chamados/juizes.py:214` | `dias_do_fato` | Reúne dias; conversa excluída em `:213` | N |
-| `app/chamados/juizes.py:271` | `_plantio_na_hora_do_slot` | Ancora comparação de plantio em D/D+1 | S* |
-| `app/chamados/juizes.py:652` | `_celulas_da_pergunta` | Confere dia da célula contra pergunta | S* |
-| `app/chamados/juizes.py:854` | `_chave_memo_pv` | Compõe chave de invalidação do memo | NA |
-| `app/chamados/juizes.py:1788` | `_marco_esperado_da_grade` | Consulta grade pelo dia cru | S* |
-| `app/chamados/juizes.py:2327,2331` | `_dias_das_perguntas_vivas` | Filtra/reúne dias; `conversa=False` em `:2328` | N |
-| `app/chamados/models.py:364` | `ChamadoColaborador._vivas_entre` | Consulta competência entregue | S |
-| `app/chamados/models.py:390,391` | `ChamadoColaborador._plano_pergunta_viva` | Busca cobrança sobrevivente no dia | S |
-| `app/chamados/models.py:2753` | `PerguntaDisputa.q_dos_fatos` | Predicado ORM por dia; exclui conversa em `:2754` | N |
-| `app/chamados/models.py:2940,2956,2962` | `PerguntaDisputa._nascer` | Compara rechaveamento; relata recusa; captura estado anterior; ramo `not conversa` em `:2893` | N |
-| `app/chamados/models.py:3228` | `PerguntaDisputa.linhas_do_evento` | Projeta dia para acordar células | S |
-| `app/chamados/reconciliador.py:370` | `lavrar_sem_turno_aberto` | Consulta turno aberto pelo dia | S* |
-| `app/chamados/reconciliador.py:736` | `_dia_fora_do_alcance_c` | Testa presença de data para o alcance | S |
-| `app/chamados/reconciliador.py:1050` | `_orfas_abertas` | Filtra data não nula | S |
-| `app/chamados/reconciliador.py:1082,1088,1090` | `veredito_orfa` | Testa data; compara com hoje; consulta encerramento do dia | S* |
-| `app/chamados/reconciliador.py:1152` | `encerrar_orfas_pela_lampada` | Repassa dia em auditoria | S* |
-| `app/chamados/reconciliador.py:1303,1305,1307` | `semear_eventos_celula` | Deduplica e localiza célula por dia | S* |
-| `app/chamados/reconciliador.py:1557,1567` | `reatar_pergunta_orfa` | Deriva destino e pesquisa histórico pelo dia | S* |
-| `app/chamados/services/aviso_pendencia.py:16` | `aviso_texto_livre` | Exibe dias cobrados na mensagem | S |
-| `app/chamados/services/carga_pergunta_viva.py:135` | `CargaDaVida.__init__` | Monta janela de testemunhas D/D+1 | S* |
-| `app/chamados/services/carga_pergunta_viva.py:147` | `CargaDaVida.trancada` | Consulta par colaborador/dia trancado | S* |
-| `app/chamados/services/cobranca.py:83` | `checar_cobranca` | Reúne/ordena dias das pendências | S |
-| `app/chamados/services/competencia_trancada.py:107` | `medir` | Filtra perguntas pela competência | S |
-| `app/chamados/services/competencia_trancada.py:252,256` | `reabrir` | Filtra competência; repassa dia na auditoria | S |
-| `app/chamados/services/declaracao_texto.py:590` | `insumos_em_regularizacao` | Agrupa por motivo/dia; origem `linhas_dos_fatos` em `:587` | N |
-| `app/chamados/services/disputa_emissao.py:399,418` | `gerar_perguntas_disputa` | Filtra pergunta existente pelo dia, com `conversa=False` | N |
-| `app/chamados/services/disputa_emissao.py:1074` | `criar_disputa_a_partir_de_chamados_orfaos` | Usa dia da pergunta como fallback do contexto | S* |
-| `app/chamados/services/disputa_emissao.py:1415` | `_ja_perguntou` | Filtra motivo/dia com `conversa=False` | N |
-| `app/chamados/services/disputa_emissao.py:1498,1531` | `responder_pergunta_disputa_core` | Repassa dia em recusa/auditoria | S |
-| `app/chamados/services/disputa_emissao.py:1863,1935` | `_resolver_perguntas_por_chamado_resolvido` | Entrega dia a `via_pelo_fato` | S* |
-| `app/chamados/services/explicador.py:70` | `explicar_pergunta` | Exibe dia na explicação | S |
-| `app/chamados/services/explicador.py:122,126` | `por_que_nao_fecha` | Ordena por dia; monta janela de batidas | S |
-| `app/chamados/services/fabrica_da_celula.py:148` | `motivos_a_perguntar` | Filtra dia com `conversa=False` | N |
-| `app/chamados/services/fabrica_da_celula.py:170` | `perguntar` | Filtra dia com `conversa=False` | N |
-| `app/chamados/services/fio.py:87` | `data_do_fato_de` | Retorna cru como fato e compara com dia do chamado | S |
-| `app/chamados/services/fio.py:776` | `_costura_nao_mata_o_fio` | Consulta competência pelo cru | S |
-| `app/chamados/services/fio.py:867,934` | `reapontar_resolvedora` | Testa necessidade de datar; compara célula anterior/posterior | S |
-| `app/chamados/services/fio.py:953` | `_colisao_ao_datar` | Confere estado gravado contra data pedida | NA |
-| `app/chamados/services/fio.py:1013` | `rechavear_data_evento` | Captura dia anterior; conversa recusada em `:1018` | N |
-| `app/chamados/services/fio.py:1068,1072` | `rechavear_no_reuso` | Consulta veto de competência; relata dia anterior | S* |
-| `app/chamados/services/fio.py:1109` | `reuso_sem_rechave` | Compara gravado com juiz do turno; universo `conversa=False` em `:1099` | N |
-| `app/chamados/services/fio.py:1133,1136` | `violacao_de_saida` | Confere valor persistido contra valor entregue ao escritor | NA |
-| `app/chamados/services/fio.py:1362` | `retratar_duplicata` | Repassa dia na justificativa | S* |
-| `app/chamados/services/fio.py:1412` | `q_do_horizonte` | Filtra horizonte com `conversa=False` | N |
-| `app/chamados/services/fio.py:1419` | `q_do_horizonte_ou_sem_dia` | Acrescenta teste de data nula ao horizonte | S |
-| `app/chamados/services/fio.py:1447` | `_vizinhos_do_fato` | Consulta identidade pelo dia; conversa retorna vazio em `:1445` | N |
-| `app/chamados/services/fio.py:1460` | `chave_do_dia` | Compõe identidade com o cru | S* |
-| `app/chamados/services/fio.py:1495,1497` | `_dia_do_fato` | Usa cru no ramo de instância de marco | S* |
-| `app/chamados/services/fio.py:1630` | `dia_do_turno_da_linha` | Fallback do escritor; conserva dia civil da conversa em `:1632` | S — contrato de escrita |
-| `app/chamados/services/fio.py:1800` | `universo_do_fato` | Compara identidade; exige `not p.conversa` em `:1801` | N |
-| `app/chamados/services/fio.py:1854` | `fecho_cruza_dias` | Projeta dia para agrupar; universo exclui conversa em `:1852` | N |
-| `app/chamados/services/fio.py:1946,1948,1949,1950,1955,1958,1970,1985` | `grupos_de_colisao` | Filtra nulo; agrupa/ordena por chave; lê dict de `values`; correlaciona `OuterRef`; filtra/recorta grupos | N — `_no_fato` exclui conversa em `:1433` |
-| `app/chamados/services/fio.py:2000,2005` | `fora_do_indice` | Conta perguntas sem dia pelo ORM | N — mesma origem `_no_fato` |
-| `app/chamados/services/fio.py:2024` | `batida_sem_origem_no_horizonte` | Projeta dia para distinguir horizonte/acervo | N — mesma origem `_no_fato` |
-| `app/chamados/services/historico.py:108` | `_eventos_dos_chamados` | Exibe dia na narrativa do histórico | S |
-| `app/chamados/services/limbo_folgas.py:203` | `filhos_no_defeito` | Filtra dia com `conversa=False` | N |
-| `app/chamados/services/materializacao.py:280,283,284` | `_tipo_pelo_marco` | Consulta grade pelo dia cru | S* |
-| `app/chamados/services/materializacao.py:346,347` | `_ts_tipo_do_plantio` | Usa cru como data-base do plantio | S* |
-| `app/chamados/services/materializacao.py:478,479` | `_declarar_ausencia_de_pergunta` | Usa cru como dia da ausência | S* |
-| `app/chamados/services/materializacao.py:522,538` | `_materializar_ausencia_de_resposta` | Cria ausência no dia; filtra perguntas irmãs | S* |
-| `app/chamados/services/materializacao.py:629` | `perguntas_absorvidas_por` | Filtra perguntas pelo dia da ausência | S* |
-| `app/chamados/services/materializacao.py:1270` | `_materializar_uma` | Entrega dia a `via_pelo_fato` | S* |
-| `app/chamados/services/passivo_validado.py:113` | `_dia_do_plantio` | Retorna cru ou dia local do instante | S* |
-| `app/chamados/services/passivo_validado.py:519,520` | `_plantar_o_dia` | Acrescenta dia cru ao conjunto afetado | S* |
-| `app/chamados/services/pergunta_no_app.py:115` | `retencao` | Testa dia, mas exige `not conversa` no mesmo predicado | N |
-| `app/chamados/services/relavra_via.py:103` | `via_de_hoje` | Entrega dia ao juiz da via; conversa excluída em `:101` | N |
-| `app/chamados/services/relavra_via.py:154` | `relavrar_dia` | Filtra dia com `conversa=False` | N |
-| `app/chamados/services/tarefa_do_dia.py:236` | `_tarefa_pura` | Seleciona perguntas do dia | N no carregador operacional, que exclui conversa em `:375` |
-| `app/chamados/services/tarefa_do_dia.py:376,380` | `CargaDaTarefa.__init__` | Filtra janela e agrupa por dia; `conversa=False` em `:375` | N |
-| `app/chamados/services/tarefa_do_dia.py:486` | `CargaDaTarefa._ler_vida` | Exclui pares exportados pelo dia | N — mesmo carregamento |
-| `app/chamados/services/validacao.py:269` | `_aceitar_a_folga` | Usa cru como dia a declarar | S* |
-| `app/chamados/services/validacao.py:446` | `validar_pergunta` | Dispara recálculo pelo dia cru | S* |
-| `app/chamados/services/validacao.py:497,510` | `validar_pergunta` | Repassa dia na auditoria | S |
-| `app/chamados/services/vigia_fio.py:816` | `carimbos_sem_lastro_por_dono` | Classifica competência entregue pelo cru | S |
-| `app/chamados/veredito_lavrado.py:273` | `lavrar` | Calcula expiração da janela pelo cru | S |
-| `app/chamados/views_cobrar.py:176,185` | `validar_inline` | Ordena perguntas por dia; lê chave serializada do canal | S |
-| `app/colaboradores/services/calendario.py:473,477` | `contexto_calendario` | Filtra intervalo e indexa pergunta viva por dia | S |
-| `app/folha/previa.py:65,67` | `montar_previa` | Filtra competência e agrupa perguntas por dia | S |
-| `app/ponto/management/commands/mapa_divergencia.py:272,273` | `Command.handle` | Filtra/projeta dias; conta furo coberto por pergunta | S |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:75,86,90` | `batidas_fora_do_turno_da_pergunta` | Filtra FK; monta janela; compara turno com cru | S* |
-| `app/ponto/services/dia_do_colab.py:65` | `dia_do_colab` | Filtra perguntas para o relato do dia | S |
-| `app/ponto/services/veredito_celula.py:180` | `fechar_o_fio_do_dia` | Filtra dia com `conversa=False` | N |
-| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` | Lê JSON e renomeia para `data_do_caso` | S |
-
-Os comandos operacionais completam os 190 locais:
-
-| Arquivo:linhas | Função | Uso | Conversa |
-|---|---|---|---|
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:63,73,74` | `_candidatos_i8` | Pesquisa chamados pelo dia | S* |
-| Mesmo arquivo`:148` | `_contraprova_i8bx` | Confere competência exportada | S* |
-| Mesmo arquivo`:160,162` | `_cobre_ausencia_i21` | Consulta cobertura de ausência | S |
-| Mesmo arquivo`:282` | `_piso_f3_antes_do_gerador` | Compara dia com primeira célula | S |
-| Mesmo arquivo`:298` | `_contraprova_f3g` | Pesquisa célula até o dia cru | S |
-| Mesmo arquivo`:325,326,348,361,373` | `contraprova_piso` | Agrupa por dia; consulta célula, vínculo e competência | S |
-| Mesmo arquivo`:892` | `Command.handle`, I8b | Filtra data não nula | S |
-| Mesmo arquivo`:914,926,930` | `Command.handle`, I8b | Confere competência/célula após recusa da resolvedora | N para conversa aceita pela resolvedora (`app/chamados/juizes.py:2251`) |
-| Mesmo arquivo`:957` | `Command.handle`, I10 | Conta data nula | S |
-| Mesmo arquivo`:1665,1708` | `Command.handle`, F1 | Escolhe dia e consulta perguntas desse dia | S |
-| Mesmo arquivo`:1778,1779,1804` | `Command.handle`, F3 | Filtra passado e consulta lei do dia | S |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:60,69` | `linhas_a_criar`, `_escoar` | Carrega/lê cru; conversa vai a balde sem competência em `:73` | N no resultado |
-| Mesmo arquivo`:104` | `admin_decidiu_sem_ato` | Filtra nulo/horizonte com discriminação de conversa | N |
-| Mesmo arquivo`:115,118,120` | `competencia_de` | Calcula competência pelo cru | S* |
-| Mesmo arquivo`:282,283` | `aplicar` | Conta perdedoras sem dia/abaixo do horizonte | N — universo do fato |
-| Mesmo arquivo`:371` | `_grupos_fora` | Projeta dia para o recorte dos grupos | N — universo do fato |
-| `app/chamados/management/commands/backfill_veredito_lavrado.py:111` | `Command.handle` | Calcula expiração pelo cru | S |
-| `app/chamados/management/commands/dedup_perguntas_fato.py:85,86` | `Command.handle` | Conta perdedoras com/sem dia | N — grupos do fato |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:74` | `Command.handle` | Repassa dia na justificativa | S* |
-| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:97` | `_fonte_viva` | Compara fonte/turno com dia gravado | N no comando: `conversa=False` em `:206` |
-| Mesmo arquivo`:144,148,158,163` | `classificar` | Monta janela; captura/compara dia anterior | N no mesmo universo |
-| Mesmo arquivo`:205,209,211` | `Command.handle` | Filtra não nulo e intervalo | N — `:206` |
-| Mesmo arquivo`:309` | `Command._veto_do_grupo` | Projeta dias para veto de competência | S* |
-| Mesmo arquivo`:392` | `Command._migrar` | Relê dia persistido | N no universo migrado |
-| Mesmo arquivo`:442,450` | `Command._descarimbados` | Busca perguntas dos dias antigo/novo e captura dia | S |
-| Mesmo arquivo`:481,488` | `Command._reverter` | Lê JSON de reversão e consulta veto; exclui conversa em `:477` | N |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:68,86,91,102,117,144,145` | `Command.handle` | Filtra não nulo; calcula competência; relata dias | S* |
-
-**Testes: 149 locais leitores.** Todos abaixo verificam campo persistido, snapshots, resultado serializado ou filtros de fixtures; a divergência operacional é **NA**. A função exata de cada linha também é emitida por `--details` no script. Como referência explícita do tratamento civil de conversa: `app/chamados/tests/test_e1_v15.py:79`.
-
-Para compactar os nomes de função, `T:` abaixo significa o prefixo literal `test_`.
-
-| Arquivo:linhas | Função — correspondência das linhas |
-|---|---|
-| `app/chamados/tests/test_a2_batida_sem_linha.py:32,33` | `T:MORDE_batida_sem_linha_nao_inventa_dia_pelo_timestamp` |
-| `app/chamados/tests/test_a2_data_evento_batida.py:27,38,51,56` | `27,38 T:pergunta_de_batida_nasce_datada_e_dedupa`; `51 T:batida_23h30_local_data_do_dia_local_nao_utc`; `56 T:contexto_sem_ultima_batida_nasce_conversa` |
-| `app/chamados/tests/test_b2_data_conversa.py:23,24` | `T:conversa_nasce_sempre_e_datada` |
-| `app/chamados/tests/test_cobparc5_parcial_sem_periodo_so_lista.py:127` | `_emitido` |
-| `app/chamados/tests/test_data_do_fato_divergente.py:197` | `T:GOLDEN_conferir_carimba_e_deixa_trilha` |
-| `app/chamados/tests/test_declaracao_texto.py:114` | `T:porta_colab_sem_texto_livre` |
-| `app/chamados/tests/test_e1_identidade_corrida.py:77` | `T:MORDE_duas_na_janela_nascem_UMA_pergunta` |
-| `app/chamados/tests/test_e1_v13.py:67` | `_estado_das_linhas` |
-| `app/chamados/tests/test_e1_v13d_exportada_fora.py:223,224,225,244,246,253,269,270,271,300,404` | `223–225 T:RED_a_linha_da_exportada_fica_fora_contada_e_as_outras_migram`; `244,246 T:RED_materializada_exportada_nao_freia_as_abertas_pelo_descarimbo`; `253 T:RED_o_dry_lista_a_exportada_e_nao_escreve`; `269–271 T:RED_o_GRUPO_sai_inteiro_a_linha_aberta_do_fato_da_exportada_nao_migra`; `300 T:MORDE_virou_exportada_entre_a_classificacao_e_a_linha`; `404 T:RED_reversao_passa_pelo_mesmo_veto` |
-| `app/chamados/tests/test_e1_v15.py:31,59,73,79,102,134` | `31 _estado`; `59 T:RED_nasce_no_dia_do_juiz_com_a_celula_dele`; `73 T:pedido_que_o_juiz_confirma_grava_o_pedido`; `79 T:conversa_grava_o_dia_civil`; `102 T:RED_reuso_costura_no_chamado_do_dia_do_turno`; `134 T:RED_datar_grava_o_dia_do_juiz` |
-| `app/chamados/tests/test_e1_v15b.py:45,90,106` | `45 _estado`; `90 T:RED_3a_episodio_retratado_recusa_as_duas_chamadas_sem_escrever`; `106 T:RED_datar_episodio_retratado_recusa_sem_gravar` |
-| `app/chamados/tests/test_e1_v15c2_descarimbo_efeito.py:58,59,71,78,87` | `58,59 T:RED_passivo_da_linha_FORA_nao_freia_o_apply`; `71 T:MORDE_a_carimbo_vivo_no_dia_NOVO_da_linha_que_migra_e_PAREI`; `78 viva`; `87 T:MORDE_b_delta_do_universo_maior_que_zero_e_PAREI` |
-| `app/chamados/tests/test_e1_v15d.py:39,74` | `39 _estado`; `74 T:RED_R1_reuso_rechaveia_no_mesmo_ato_e_2x_e_o_mesmo_estado` |
-| `app/chamados/tests/test_e1_v15d_um_ponto_de_escrita.py:200,212,214,218,231,307,313,318,328` | `200 T:RED_N_nascer_grava_o_dia_do_juiz_pelo_ponto`; `212,214,218 T:RED_U_reuso_grava_o_dia_do_juiz_pelo_ponto`; `231 T:RED_C_costura_grava_o_dia_do_juiz_pelo_ponto`; `307,313,318 T:RED_Z_reuso_de_linha_sem_dia_recusa_declarado_sem_escrita`; `328 T:RED_K_contador_ve_a_linha_sem_dia` |
-| `app/chamados/tests/test_e1_v15e_contrato_de_saida.py:245,289,291,435,436,444,445,455,457,466,467,469,484` | `245 _estado`; `289,291 T:o_caminho_certo_cumpre_o_contrato`; `435,436 _cen_nascer`; `444,445 _cen_reuso`; `455,457 _cen_nula`; `466,467,469 _cen_outro_episodio`; `484 _cen_noturno` |
-| `app/chamados/tests/test_e1_v15f.py:69,83,127,170,246,247,259,266,268,277` | `69 _conversa`; `83 T:RED_o_apply_nao_move_a_conversa`; `127 T:RED_reuso_com_rechave_e_costura_trava_na_ordem`; `170 grava`; `246,247 T:G7_colisao_no_apply_a_segunda_recusa`; `259 porta`; `266,268 T:G8_escrita_parcial_no_grupo_desfaz_o_grupo_inteiro`; `277 _estado` |
-| `app/chamados/tests/test_e1_v15g.py:52,94,207` | `52 _estado`; `94 T:contra_exemplo_destino_do_mesmo_colaborador_segue`; `207 T:A5_real_linha_do_episodio_gravada_em_D0_o_juiz_decide_e_reusa` |
-| `app/chamados/tests/test_e1_v15g_portas.py:39,106,151,372` | `39 _estado`; `106 T:contra_exemplo_a_linha_de_fato_segue_re_chaveando`; `151 T:contra_exemplo_costurar_a_conversa_sem_datar_segue`; `372 T:DECLARA_a_conversa_viva_do_velho_segue_o_chamado_sem_tocar_o_fato` |
-| `app/chamados/tests/test_e1_v15h.py:109` | `T:RED_ramo_que_data_recusa_e_nao_data` |
-| `app/chamados/tests/test_e1_v5_indice.py:65` | `T:MORDE_marco_duas_cruas_na_janela_dao_UMA_linha` |
-| `app/chamados/tests/test_e1_v5_portas_backfill.py:69,80,114,129,147,193` | `69 T:reapontar_que_data_para_fato_existente_recusa`; `80 T:rechavear_para_fato_existente_recusa`; `114 T:p_canonica_retrata_a_outra_viva_e_e_datada`; `129 T:MORDE_outra_encerrada_recusa_e_nada_se_desfaz`; `147 T:MORDE_destino_recusado_DEPOIS_da_colisao_nao_retrata_ninguem`; `193 _dup_cru` |
-| `app/chamados/tests/test_e1_v6_horizonte.py:97,454` | `97 T:RED_o_banco_nao_indexa_o_acervo_abaixo_do_horizonte`; `454 T:RED_conversa_do_episodio_retratado_nao_nasce_duas_vezes` |
-| `app/chamados/tests/test_e1_v8.py:148` |
-
-[truncado em 20000 de 39862 caracteres]
-
-## 11/11 15:05 · sessao a0ad56da25bd · PROPORCAO-POR-RISCO · verificador · origem=Code
-
-**APROVADO no delta v6.** A leitura da lista na BASE fecha a autoautorização dentro do intervalo julgado; a confiança na base continua sendo responsabilidade externa ao selo (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:91`). Bloqueantes comprovados contra a letra B3: nenhum; B3 exige corte do Ronald, mas não exige base igual a `main` nem autenticação automática desse corte (`aval_proporcao_b3_resposta_1111.txt:1`).
-
-Todos os rc abaixo são **deduzidos por leitura**. Execução dos casos, mutantes, vínculo Git da cópia ao hash informado e uso em produção: [nao verificado].
-
-**1) Autoautorização**
-
-O ataque v5, **no mesmo diff e com a base original**, foi fechado: acrescentar escritor e `CORTES.md` à lista de head não altera a lista utilizada. Ambos ficam fora da lista original, produzindo **A/rc 1 quando declarado B**; o novo caso reproduz essa entrada (`bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:108`; `bin/tests/test_selo_proporcao.sh:78`).
-
-**Ainda existe o caminho pela escolha de uma base já ampliada.** Contraexemplo mínimo em dois commits, construído para análise; execução: [nao verificado]. [nao verificado]
-
-- **Commit P:** em `app/docs/CORTES.md:444`, inserir ``; `app/chamados/writer.py` `` imediatamente antes do marcador final.
-- **Commit H, filho de P:** acrescentar: [nao verificado]
-
-```diff
-diff --git a/app/chamados/writer.py b/app/chamados/writer.py
-new file mode 100644
---- /dev/null
-+++ b/app/chamados/writer.py
-@@ -0,0 +1,2 @@
-+from chamados.models import ChamadoColaborador
-+ChamadoColaborador.objects.update(status_local='fechado')
-```
-
-A chamada `bin/selo_proporcao.sh P H B <raiz>` recebe **B/rc 0 deduzido**: P é ancestral, sua lista já contém o escritor, e o diff P→H contém somente esse caminho (`bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:111`). O campo utilizado existe; efeito dessa entrada em banco: [nao verificado] (`app/chamados/models.py:52`).
-
-Isso **exclui do julgamento o commit que ampliou a lista**. Julgar desde o antecessor de P, com a lista original, inclui `CORTES.md` e o escritor e resulta em A/rc 1 declarado B (`bin/selo_proporcao.py:92`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:108`). Portanto, o contraexemplo demonstra o limite da base escolhida; não reproduz o defeito v5 para o mesmo intervalo (`bin/selo_proporcao.py:91`).
-
-**2) O que a BASE garante**
-
-| Entrada | Resultado deduzido |
-|---|---|
-| Revisão inexistente ou que não resolve para commit | **2**, na resolução (`bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:98`). |
-| Commit forjado, existente e ancestral de head | Pode ser aceito: não há verificação de procedência ou corte (`bin/selo_proporcao.py:84`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`). |
-| Base diferente de `main` | Pode ser aceita; a validação usa ancestralidade, sem comparação com `main` (`bin/selo_proporcao.py:89`). |
-| Commit anterior da própria raia já ampliou a lista | Pode produzir **B/rc 0**, conforme P→H acima (`bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:111`). |
-| `CORTES.md` ausente na base | **2**: `git show` falha e vira `NaoJulgado`; não há fallback para head ou disco (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:41`, `bin/selo_proporcao.py:98`). |
-
-O **chamador escolhe a base**, pelo primeiro argumento; o wrapper repassa os argumentos integralmente (`bin/selo_proporcao.sh:7`, `bin/selo_proporcao.py:78`). No harness, a base normal é o commit sintético inicial; nos casos de lista torta, é o commit sintético que contém a deformação (`bin/tests/test_selo_proporcao.sh:29`, `bin/tests/test_selo_proporcao.sh:47`, `bin/tests/test_selo_proporcao.sh:50`). Quem escolhe e valida a base da obra real: [nao verificado].
-
-O selo comprova resolução para commit, desigualdade, ancestralidade, lista formalmente válida e diff não vazio. **Não comprova corte do Ronald nem que o intervalo abrange a obra inteira**, cuja unidade declarada é “obra” (`bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:87`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:94`; `app/docs/CORTES.md:443`, `app/docs/CORTES.md:444`).
-
-**3) Os oito `caso_lista`**
-
-Por leitura, **nenhum dos oito foi deslocado para rc 2 por falha de preparo**: todos alteram a árvore inicial, `prepara` exige sucesso e commit novo, e o head seguinte modifica o template inicial de `<p>a</p>` para `z` (`bin/tests/test_selo_proporcao.sh:24`, `bin/tests/test_selo_proporcao.sh:31`, `bin/tests/test_selo_proporcao.sh:46`, `bin/tests/test_selo_proporcao.sh:48`).
-
-| Caso | Motivo previsto de rc 2 |
-|---|---|
-| `sem_marcador` | Contagem dos marcadores (`bin/tests/test_selo_proporcao.sh:92`; `bin/selo_proporcao.py:48`). |
-| `lista_vazia` | Item vazio, guarda de forma (`bin/tests/test_selo_proporcao.sh:93`; `bin/selo_proporcao.py:51`, `bin/selo_proporcao.py:53`). |
-| `so_inicio` | Falta marcador final (`bin/tests/test_selo_proporcao.sh:94`; `bin/selo_proporcao.py:48`). |
-| `fim_antes` | Cardinalidade válida; fatia vazia gera item inválido (`bin/tests/test_selo_proporcao.sh:95`; `bin/selo_proporcao.py:50`, `bin/selo_proporcao.py:53`). |
-| `marcador_duplo` | Dois exemplares de cada marcador (`bin/tests/test_selo_proporcao.sh:96`; `bin/selo_proporcao.py:48`). |
-| `item_sem_crase` | Forma do item (`bin/tests/test_selo_proporcao.sh:97`; `bin/selo_proporcao.py:53`). |
-| `item_vazio` | Item vazio entre separadores (`bin/tests/test_selo_proporcao.sh:98`; `bin/selo_proporcao.py:51`, `bin/selo_proporcao.py:53`). |
-| `cortes_apagado` | Falha de `git show`, pela guarda `git_rc` (`bin/tests/test_selo_proporcao.sh:99`; `bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:41`). |
-
-Falha no preparo é registrada como falha do harness e retorna **antes de chamar o selo**; não é aceita como rc 2 esperado (`bin/tests/test_selo_proporcao.sh:46`, `bin/tests/test_selo_proporcao.sh:49`). Entretanto, a chamada descarta a saída e compara somente rc; ela **não verifica dinamicamente o motivo** (`bin/tests/test_selo_proporcao.sh:50`).
-
-**4) QUEM ESCREVE e QUEM LÊ**
-
-| Objeto | Escritor/produtor | Leitor/consumidor |
-|---|---|---|
-| Lista autorizada | Autoridade normativa: **Ronald**, por corte; quem materializou a edição atual: [nao verificado] (`app/docs/CORTES.md:444`). | `lista_fechada`, por `git show <base>:app/docs/CORTES.md`; `motivo_b` consulta pertinência exata (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:60`). |
-| Lista dos testes | `lista()` escreve o documento; `base()` fornece os itens sintéticos; os casos o deformam (`bin/tests/test_selo_proporcao.sh:17`, `bin/tests/test_selo_proporcao.sh:22`, `bin/tests/test_selo_proporcao.sh:92`). | O mesmo selo, chamado pelo harness (`bin/tests/test_selo_proporcao.sh:41`, `bin/tests/test_selo_proporcao.sh:50`). |
-| rc do selo | Python calcula 0/1/2 e emite 10/11/12; wrapper converte 10→0, 11→1 e demais→2 (`bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:111`, `bin/selo_proporcao.py:121`; `bin/selo_proporcao.sh:8`). | Harness captura e compara; régua lê o rc do **harness**, executado por glob (`bin/tests/test_selo_proporcao.sh:41`, `bin/tests/test_selo_proporcao.sh:42`, `bin/tests/test_selo_proporcao.sh:50`; `bin/regua.sh:138`, `bin/regua.sh:140`). |
-
-**Rc 0 significa julgamento concluído**, inclusive para declaração A com arquivos fora; não significa necessariamente classe B (`bin/selo_proporcao.py:105`, `bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:111`). Chamador e leitor do rc sobre a obra real: [nao verificado].
-
-**5) B3, bloqueantes e fila**
-
-O delta mantém classificação por caminho e congela a lista antes do intervalo julgado; isso é compatível com a lista fechada e a exigência de corte do Ronald. A anterioridade do commit, isoladamente, não prova esse corte (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:91`; `aval_proporcao_b3_resposta_1111.txt:1`). **Bloqueantes do delta: nenhum demonstrado por essas entradas** (`bin/tests/test_selo_proporcao.sh:78`, `bin/selo_proporcao.py:91`, `bin/selo_proporcao.py:108`).
-
-Fila separada:
-
-- Delimitar “A obra não se autoriza” à base autorizada e ao intervalo completo; a frase atual é mais ampla que a garantia implementada (`bin/selo_proporcao.py:20`, `bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:91`; `app/docs/CORTES.md:443`).
-- Corrigir o comentário remanescente “revisao head” (`bin/tests/test_selo_proporcao.sh:91`).
-- A alegação “cada guarda [...] caso que só ela pega” continua excessiva: `marcador_duplo` duplica ambos os marcadores, sem isolá-los, e `caso_lista` só verifica rc (`bin/tests/test_selo_proporcao.sh:5`, `bin/tests/test_selo_proporcao.sh:96`, `bin/tests/test_selo_proporcao.sh:50`).
-- A cobertura da exceção Python inesperada permanece sem demonstração: os stubs substituem o interpretador e não atravessam essa fronteira (`bin/tests/test_selo_proporcao.sh:145`, `bin/tests/test_selo_proporcao.sh:148`; `bin/selo_proporcao.py:118`, `bin/selo_proporcao.py:120`).
-
-## 11/11 15:03 · sessao 23648d129730 · - · - · origem=Ronald (tmux)
-
-**Eu aprovaria a cura estrita do delta, com limite explícito.** A v6 impede que alterações posteriores à base ampliem a lista usada naquele julgamento (`bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:91`).
-
-O contraexemplo P→H recebe B/rc 0 se P já autoriza o escritor; isso demonstra que o selo **não comprova corte do Ronald nem que o intervalo representa a obra inteira** (`bin/selo_proporcao.py:60`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:111`). O chamador fornece a base; chamador real e validação externa desse início: [nao verificado] (`bin/selo_proporcao.sh:7`, `bin/selo_proporcao.py:78`).
-
-B3 exige corte do Ronald, mas não exige `main` nem autenticação automática desse corte (`app/docs/CORTES.md:444`). Portanto, classificar essa ausência isoladamente como bloqueante acrescentaria uma obrigação não expressa. A frase “A obra nao se autoriza” merece delimitação: vale para o intervalo fornecido, condicionado a uma base autorizada; sua validade incondicional não está demonstrada (`bin/selo_proporcao.py:20`, `app/docs/CORTES.md:443`).
-
-## 11/11 15:02 · sessao 23648d129730 · - · - · origem=Ronald (tmux)
-
-- **Autoridade normativa da lista:** módulo novo só por corte do Ronald; lista atual contém `app/chamados/services/verbos.py` e `app/chamados/templatetags/chamados_tags.py` (`app/docs/CORTES.md:444`). Quem materializou essa edição: [nao verificado].
-- **Escritor automatizado localizado:** helper `lista()` do harness escreve `app/docs/CORTES.md` sintético; `base()` fornece os dois módulos sintéticos (`bin/tests/test_selo_proporcao.sh:15`, `bin/tests/test_selo_proporcao.sh:17`, `bin/tests/test_selo_proporcao.sh:22`). Os casos alteram esse documento sintético, inclusive autoautorização e listas tortas (`bin/tests/test_selo_proporcao.sh:77`, `bin/tests/test_selo_proporcao.sh:78`, `bin/tests/test_selo_proporcao.sh:92`).
-- **Leitor:** `lista_fechada(repo, base)` faz `git show <base>:app/docs/CORTES.md`; valida apenas cardinalidade dos marcadores e forma dos itens (`bin/selo_proporcao.py:46`, `bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:48`, `bin/selo_proporcao.py:53`). Não há conferência de autor, corte, identidade de `main` ou origem confiável na sequência de validação (`bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:84`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`).
-- **Quem escolhe base:** o chamador entrega o primeiro argumento; wrapper apenas repassa `"$@"`, e Python o recebe como `base` (`bin/selo_proporcao.sh:7`, `bin/selo_proporcao.py:78`). No harness, `BASE` é o commit inicial sintético; `caso_lista` escolhe como `b` o commit sintético com a lista torta (`bin/tests/test_selo_proporcao.sh:29`, `bin/tests/test_selo_proporcao.sh:47`, `bin/tests/test_selo_proporcao.sh:50`). Pessoa/processo que escolhe a base da obra real: [nao verificado].
-- **Garantia efetiva sobre base:** precisa resolver para commit, ser diferente de head e ancestral dele; diff deve ser não vazio; lista precisa existir e ser formalmente válida (`bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:87`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:94`, `bin/selo_proporcao.py:47`). Base anterior da própria raia com lista ampliada satisfaz esses controles; não prova corte do Ronald nem que o intervalo corresponde à obra inteira (`bin/selo_proporcao.py:84`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`, `app/docs/CORTES.md:443`, `app/docs/CORTES.md:444`).
-- **Quem escreve rc:** Python decide 0/1/2 e emite protocolo privado 10/11/12; wrapper traduz 10→0, 11→1, demais→2 (`bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:111`, `bin/selo_proporcao.py:120`, `bin/selo_proporcao.py:121`, `bin/selo_proporcao.sh:8`).
-- **Quem lê rc:** `caso()` captura e compara, `caso_lista()` exige 2 e `rcde()` devolve o rc capturado (`bin/tests/test_selo_proporcao.sh:41`, `bin/tests/test_selo_proporcao.sh:42`, `bin/tests/test_selo_proporcao.sh:50`, `bin/tests/test_selo_proporcao.sh:108`). A régua executa o harness por glob e recusa se ele falhar (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`). Isso verifica repos sintéticos criados pelo harness (`bin/tests/test_selo_proporcao.sh:11`, `bin/tests/test_selo_proporcao.sh:13`). Leitor do rc do selo sobre base/head reais: [nao verificado].
-- **Prosa obsoleta:** comentário ainda diz “revisao head” imediatamente antes dos oito casos movidos para base (`bin/tests/test_selo_proporcao.sh:91`).
-
-## 11/11 15:01 · sessao 08292a1b6f3e · - · - · origem=Ronald (tmux)
-
-Testes e migrações: **151 locais leitores únicos, 154 nós AST**, com lista e funções já enviadas. A migração filtra `conversa=False`; os testes verificam campos, snapshots e filtros de fixtures. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `app/chamados/tests/test_e1_v15.py:79`)
-
-Escritas/entradas de fixtures: **420 locais**, mais **3 dicts de fixtures JSON externos**, total **423**. Há sobreposição leitor/escritor em `app/chamados/tests/test_e1_v5_portas_backfill.py:193`.
-
-`Pergunta` em `test_e4_expand` é um mock derivado de `SimpleNamespace`, incluído como provável interface de PerguntaDisputa. (`app/chamados/tests/test_e4_expand.py:12`, `app/chamados/tests/test_e4_expand.py:62`, `app/chamados/tests/test_e4_expand.py:160`)
-
-Leitor externo relevante: `fila_de_validacao` transforma `i.get('data_evento')` em `data_do_caso`. (`mensageria/nucleo/ferramentas.py:127`)
-
-Outro modelo Django com campo `data_evento`: não encontrado pela varredura AST; a declaração identificada é PerguntaDisputa. (`app/chamados/models.py:2423`)
-
-## 11/11 14:59 · sessao 59a166002cbf · PROPORCAO-POR-RISCO · verificador · origem=Code
-
-**Há um bloqueante: a lista pode autorizar a alteração de si própria e de um escritor no mesmo diff, produzindo B/rc 0.** A pertinência à lista precede qualquer outra classificação (`bin/selo_proporcao.py:46`, `:52`, `:59`, `:107`).
-
-Os rc abaixo são deduzidos por leitura. Resultados de execução, testes e mutantes: [nao verificado]. Referências aos anexos usam as linhas fornecidas no enunciado. [nao verificado]
-
-1. **Bloqueantes dos dois vereditos v4**
-
-| Bloqueante | Situação na v5 | Cura e teste que a cobre | [nao verificado]
-|---|---|---|
-| Opus B1 — property/outro receptor e método consumido antes de escrita | Deixa de exigir análise de consumo: arquivo fora dos conjuntos implica A; arquivo já autorizado passa pelo caminho. Isso corresponde à substituição por CAMINHO da B3 (`aval_proporcao_b3_resposta_1111.txt:1`). | Classificação em `bin/selo_proporcao.py:57`, `:107`; caso `py_fora`, `bin/tests/test_selo_proporcao.sh:58`. Não há reprodução específica da property nesse teste. |
-| Opus B2 — dois saltos | Mesmo tratamento: quantidade de saltos deixou de ser critério (`aval_proporcao_b3_resposta_1111.txt:1`; `bin/selo_proporcao.py:57`). | `py_fora` cobre a recusa genérica por caminho, não os dois saltos: `bin/tests/test_selo_proporcao.sh:58`. |
-| Opus B3 — atribuir fuga entre módulos ao “custo aceito” | A atribuição antiga foi corrigida: cabeçalho e contrato dizem expressamente que essa fuga **não** integra o custo aceito (`bin/selo_proporcao.py:20`; `v5_contrato.txt:1`). | `py_fora` e `py_fora_com_b` cobrem arquivos externos aos conjuntos (`bin/tests/test_selo_proporcao.sh:58`, `:59`). Fidelidade da prosa não é verificada pelo harness, que compara rc (`:41`, `:42`). |
-| Fable BL1 — repo implícito, igualdade e diff vazio verdes | Fechado no código: repo obrigatório, raiz conferida, igualdade e diff vazio recusados (`bin/selo_proporcao.py:74`, `:80`, `:86`, `:93`). | `sem_repo`, `sem_repo_no_repo_do_script`, `repo_subdir`, `repo_nao_git`, `base_igual_head`, `diff_vazio` (`bin/tests/test_selo_proporcao.sh:104`, `:111`, `:114`, `:116`, `:119`, `:121`). O controle no repo do script é condicional à existência das revisões (`:116`). |
-| Fable BL2 — revisões invertidas e exclusões ignoradas | Fechado pelo controle de ancestralidade e pela classificação de todos os nomes, incluindo exclusões; não se lê mais apenas o conteúdo novo (`bin/selo_proporcao.py:88`, `:91`, `:99`). | `revisoes_trocadas`, `nao_ancestral`, `apagou_fora` e renames nos dois sentidos (`bin/tests/test_selo_proporcao.sh:65`, `:66`, `:67`, `:103`, `:108`). Não há caso específico de migration apagada na v5. |
-
-2. **Escapes: separar os aceitos por CAMINHO do defeito da lista**
-
-Nas condições válidas de argumentos, revisões e lista, cada diff abaixo recebe **rc 0 declarado B**: o conteúdo não é inspecionado (`bin/selo_proporcao.py:90`, `:91`, `:100`, `:107`).
-
-| Arquivo e diff mínimo descrito | Escrita alcançada | Texto literal da B3 |
-|---|---|---|
-| `app/chamados/services/verbos.py`: inserir `vivo_qs.update(status_local='fechado')` antes da linha 34. | A função recebe o queryset e é chamada pelo painel (`app/chamados/services/verbos.py:30`; `app/chamados/services/painel.py:230`); o campo persistido existe (`app/chamados/models.py:52`). | **ACEITA pelo caminho já listado**, sem análise de AST (`app/docs/CORTES.md:444`; `bin/selo_proporcao.py:59`). |
-| `app/chamados/templatetags/chamados_tags.py`: antes do retorno de `area_label`, inserir `chamado.status_local='fechado'; chamado.save(update_fields=['status_local'])`. | O filtro recebe o chamado e tem consumidor no template (`app/chamados/templatetags/chamados_tags.py:34`; `app/templates/chamados/detalhe_local.html:56`). | **ACEITA pelo caminho já listado** (`app/docs/CORTES.md:444`; `bin/selo_proporcao.py:59`). |
-| `app/static/pwa.js`: trocar `tipo, timestamp: tsCorrigido` por `tipo: 'saida', timestamp: tsCorrigido`. | Altera a batida gravada em IndexedDB e posteriormente enviada por POST (`app/static/pwa.js:112`, `:114`, `:144`, `:153`). | **ACEITA por `static/`** (`bin/selo_proporcao.py:63`; `aval_proporcao_b3_resposta_1111.txt:1`). |
-| `app/templates/chamados/partials/_js_cobranca.html`: substituir a chamada de confirmação da linha 60 por `_go();`. | Antecipa o POST de cobrança à confirmação; a view pode registrar a ocorrência após envio bem-sucedido (`app/templates/chamados/partials/_js_cobranca.html:51`, `:60`; `app/chamados/views_cobrar.py:54`). | **ACEITA por `templates/`** (`bin/selo_proporcao.py:61`; `aval_proporcao_b3_resposta_1111.txt:1`). |
-| `app/core/tests/test_contract_tblib_no_paralelo.py`: inserir no início de `tblib_instalado` o import de `ChamadoColaborador` e `ChamadoColaborador.objects.update(status_local='fechado')`. | Há consumidor em management command, apesar da localização do helper em testes (`app/core/tests/test_contract_tblib_no_paralelo.py:24`; `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`). | **ACEITA pela identificação de teste por caminho/nome** (`bin/selo_proporcao.py:65`, `:68`; `aval_proporcao_b3_resposta_1111.txt:1`). |
-
-Esses exemplos não exigem perseguir reflexão, alias ou saltos: a B3 determina “O selo checa CAMINHO, nao AST” (`aval_proporcao_b3_resposta_1111.txt:1`). Efeito efetivamente observado em produção: [nao verificado].
-
-**O escape da autoautorização é diferente e é defeito do selo.** Diff mínimo descrito:
-
-- Na lista de `app/docs/CORTES.md:444`, acrescentar, antes do marcador final: ``; `app/chamados/writer.py`; `app/docs/CORTES.md` ``.
-- Acrescentar `app/chamados/writer.py` com:
-
-```python
-from chamados.models import ChamadoColaborador
-ChamadoColaborador.objects.update(status_local='fechado')
-```
-
-O parser aceita ambos os itens; tanto o novo escritor quanto o documento alterado pertencem à lista lida de head. Portanto `fora=[]` e o rc previsto é **0**, mesmo declarado B (`bin/selo_proporcao.py:46`, `:52`, `:54`, `:59`, `:104`, `:110`).
-
-Isso contraria “entra modulo novo so por corte meu” e a própria promessa “A obra nao se autoriza” (`aval_proporcao_b3_resposta_1111.txt:1`; `bin/selo_proporcao.py:19`). O caso `lista_se_autoriza` acrescenta somente o módulo; deixa `CORTES.md` fora e não morde esse escape (`bin/tests/test_selo_proporcao.sh:69`).
-
-3. **Quem escreve e quem lê a lista**
-
-A autorização para entrada de módulo novo pertence a Ronald; a lista presente na cópia contém `app/chamados/services/verbos.py` e `app/chamados/templatetags/chamados_tags.py` (`app/docs/CORTES.md:444`). Quem materializou essa edição e sua inclusão efetiva no hash informado: [nao verificado].
-
-O leitor é `lista_fechada`: usa `git show <head>:app/docs/CORTES.md`, exige os dois marcadores únicos e verifica apenas a forma craseada dos itens. Não verifica autor, corte, extensão `.py` nem identidade da linha B3 (`bin/selo_proporcao.py:45`, `:47`, `:52`, `:54`).
-
-Acrescentar **somente** o módulo deixa `CORTES.md` fora dos conjuntos e resulta em rc 1; acrescentar também `CORTES.md` permite a autoautorização descrita acima (`bin/tests/test_selo_proporcao.sh:69`; `bin/selo_proporcao.py:59`, `:107`).
-
-4. **Retornos**
-
-| Condição | Resultado deduzido |
-|---|---|
-| Declaração B com algum arquivo fora | **1**; é a única condição de retorno lógico 1 (`bin/selo_proporcao.py:107`). |
-| Declaração A, com julgamento válido | **0**, inclusive com arquivos fora (`bin/selo_proporcao.py:107`, `:110`). |
-| Argumentos inválidos; repo sem Git ou que não seja raiz; revisão inválida | **2** (`bin/selo_proporcao.py:74`, `:79`, `:80`, `:84`, `:97`). |
-| `base==head`; base não ancestral; commits distintos com diff vazio | **2** (`bin/selo_proporcao.py:86`, `:88`, `:93`). |
-| Lista ausente, vazia ou malformada | **2** (`bin/selo_proporcao.py:46`, `:47`, `:52`, `:97`). |
-| Exceção inesperada na implementação Python | **2**, pela fronteira externa (`bin/selo_proporcao.py:117`, `:119`). |
-| `GIT_*` herdado | Removido do ambiente de cada subprocesso Git; o harness também o limpa antes de criar seus repos (`bin/selo_proporcao.py:38`; `bin/tests/test_selo_proporcao.sh:6`, `:131`). |
-
-“Repo errado” precisa de distinção: um subdiretório ou diretório sem Git dá 2; **outra raiz Git válida**, contendo as revisões fornecidas, será julgada normalmente. Não há comparação com uma identidade esperada do projeto (`bin/selo_proporcao.py:77`, `:79`, `:84`).
-
-O wrapper preserva os resultados públicos **0/1/2**, traduzindo **10→0, 11→1 e qualquer outro código→2**. Não repassa arbitrariamente o código bruto do Python (`bin/selo_proporcao.sh:7`, `:8`, `:9`, `:10`, `:11`). O harness exige rc 1 também sob `bash -e` (`bin/tests/test_selo_proporcao.sh:134`).
-
-5. **Testes com mecanismos sobrepostos e mutantes** [nao verificado]
-
-- `marcador_duplo` duplica **os dois marcadores**. Remover só a checagem de cardinalidade de início em `bin/selo_proporcao.py:47` deixa a checagem de fim rejeitando o caso; o mutante simétrico também escapa dessa prova. Ausência do marcador ainda acaba em exceção normalizada para 2 (`bin/tests/test_selo_proporcao.sh:83`, `:85`, `:87`; `bin/selo_proporcao.py:49`, `:117`). Sobrevivência por execução: [nao verificado].
-- `misto_b` usa `tests/test_b.py`, elegível por diretório **e** basename. Há controles separados: `tests_dir` usa `fixt.py`, enquanto `test_basename` fica fora de `tests/` (`bin/tests/test_selo_proporcao.sh:50`, `:51`, `:54`).
-- `migration` prova apenas a classificação genérica de `.py` fora dos conjuntos; não existe mecanismo específico de migration na v5. `apagou_fora` cobre exclusão pelo mesmo mecanismo (`bin/tests/test_selo_proporcao.sh:63`, `:65`; `bin/selo_proporcao.py:57`, `:91`).
-- O preparo de `git_dir_herdado` cria no outro repo um único commit e lista inválida. Prova resistência ao desvio que causaria erro; não compara dois diffs válidos, um A e outro B, como sugere o comentário (`bin/tests/test_selo_proporcao.sh:128`, `:129`, `:130`, `:131`).
-
-**O problema de cobertura do antigo F2 permanece:** o mutante mínimo `bin/selo_proporcao.py:119`, `rc = 2` → `rc = 0`, tem sobrevivência dedutível. Os casos normais de erro exercitam argumentos e `NaoJulgado`; os stubs substituem o interpretador e não atravessam essa fronteira Python (`bin/selo_proporcao.py:76`, `:95`, `:117`; `bin/tests/test_selo_proporcao.sh:83`, `:122`, `:136`). Execução do mutante: [nao verificado].
-
-A exigência de **um** marcador de cada tipo e de normalizar **qualquer** exceção, portanto, não fica individualmente demonstrada pela afirmação “cada guarda [...] tem caso que so ela pega” (`bin/tests/test_selo_proporcao.sh:5`; `bin/selo_proporcao.py:47`, `:117`).
-
-6. **QUEM CHAMA, QUEM LÊ e atribuições ao aval**
-
-O chamador concreto do selo localizado é o harness: define `SELO`, chama, captura e compara o rc (`bin/tests/test_selo_proporcao.sh:9`, `:41`, `:42`). O harness tem chamador por glob: `bin/regua.sh` executa `tests/test_*.sh` e recusa a régua se algum falhar (`bin/regua.sh:138`, `:140`, `:143`).
-
-Essa cadeia julga repositórios **sintéticos**, criados pelo teste (`bin/tests/test_selo_proporcao.sh:11`, `:13`). Chamador e leitor de rc sobre base/head da obra real: [nao verificado]. O contrato atribui essa responsabilidade ao pouso B, mas isso é declaração de conduta (`v5_contrato.txt:2`, `:3`).
-
-Quanto aos demais registros v4:
-
-- A exclusão antes ignorada agora entra na classificação por nomes; o teste específico de migration apagada foi substituído pela cobertura genérica de exclusão (`bin/selo_proporcao.py:91`; `bin/tests/test_selo_proporcao.sh:65`).
-- O wrapper agora usa `-B`; remoção e situação de versionamento do antigo `bin/__pycache__`: [nao verificado] (`bin/selo_proporcao.sh:7`).
-- A frase e a lista constam da cópia (`app/docs/CORTES.md:443`, `:444`). Contrato PROPORCAO no RELATO e commit dessas alterações: [nao verificado].
-
-O cabeçalho chama de “literal” a paráfrase **“qualquer outro arquivo”**; o aval diz **“Qualquer outro .py”**. A consequência para outros arquivos continua derivável da condição anterior sobre **TODO arquivo**, mas a paráfrase não é citação literal (`bin/selo_proporcao.py:10`, `:11`; `aval_proporcao_b3_resposta_1111.txt:1`).
-
-Atribuir os escritores escondidos ao smoke/fila também vai além do que a B3 afirma expressamente. O aval original exige smoke de clique para B; não promete que esse smoke detectará esses escritores (`bin/selo_proporcao.py:21`; `v5_contrato.txt:4`; `aval_proporcao_por_risco_1111.txt:1`). Essa capacidade do smoke: [nao verificado].
-
-7. **`.md` fora dos conjuntos é A pelo texto literal**
-
-A frase decisiva é: **“CLASSE B so se TODO arquivo do diff estiver em templates/, static/, arquivo de teste, ou numa LISTA FECHADA de modulos de leitura declarada no CORTES.md”** (`aval_proporcao_b3_resposta_1111.txt:1`). [nao verificado]
-
-Logo, `.md` fora desses conjuntos é **A**; a frase seguinte sobre `.py` não concede exceção aos documentos. A implementação e `doc_md` seguem essa leitura (`bin/selo_proporcao.py:70`, `:107`; `bin/tests/test_selo_proporcao.sh:60`).
-
-L-106 exige docs no mesmo commit do marco; quando esses documentos ficam fora dos conjuntos, o diff completo recebe A (`CLAUDE.md:332`, `:333`; `bin/selo_proporcao.py:99`, `:104`). A afirmação contratual “qualquer .md [...] faz a obra A” é ampla demais: um `.md` sob `templates/` ou `static/` passa pelo caminho, e o defeito demonstrado permite listar o próprio `CORTES.md` (`v5_contrato.txt:4`; `bin/selo_proporcao.py:59`, `:61`, `:63`).
-
-REPROVADO — bloqueante: autoautorização da obra ao incluir o próprio `CORTES.md` e um escritor na lista de head, obtendo B/rc 0 (`bin/selo_proporcao.py:46`, `:52`, `:59`, `:110`).
-
-## 11/11 14:57 · sessao 6e228e64f5a4 · - · - · origem=Ronald (tmux)
-
-Recorte: Python fora de `app/chamados/**`, sem testes/migrações. **16 linhas leitoras, 21 nós de leitura; 0 escritores; 0 colisões com outro modelo encontradas** nas referências abaixo. “Sim” compara o valor civil não nulo à resposta `None` do juiz para conversa; ocorrência concreta em produção permanece [nao verificado]. Juiz: `app/chamados/juizes.py:334`, `app/chamados/juizes.py:338`.
-
-| Arquivo:linha | Função | Uso | Conversa diverge? |
-|---|---|---|---|
-| `app/api/views.py:1165` | `api_chamados_v2` | Serializa ISO em `perguntas_disputa[].data_evento`; dois acessos no ternário. | Sim, só repassa |
-| `app/api/views.py:1166` | `api_chamados_v2` | Formata `data_evento_label`; dois acessos no ternário. | Sim |
-| `app/api/views.py:2637` | `api_disputa_responder` | Insere valor cru em mensagem de auditoria `dia=%s`. | Sim, só repassa |
-| `app/api/views_mensageria.py:568` | `_item_validar` | Serializa ISO na fila de validação; dois acessos no ternário. | Sim, só repassa |
-| `app/colaboradores/services/calendario.py:473` | `contexto_calendario` | Filtra intervalo de perguntas para indexação de pergunta viva por dia. | Sim |
-| `app/colaboradores/services/calendario.py:477` | `contexto_calendario` | Indexa `_perg_viva` pelo dia cru; usado na disponibilidade de “Resolver dia”. | Sim |
-| `app/folha/previa.py:65` | `montar_previa` | Filtra perguntas pela competência. | Sim |
-| `app/folha/previa.py:67` | `montar_previa` | Agrupa material da prévia por dia cru. | Sim |
-| `app/ponto/management/commands/mapa_divergencia.py:272` | `Command.handle` | Dois filtros `gte/lte` e projeção `only('data_evento')`: três nós. | Sim |
-| `app/ponto/management/commands/mapa_divergencia.py:273` | `Command.handle` | Constrói conjunto de dias para contador de furos cobertos por pergunta. | Sim |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:75` | `batidas_fora_do_turno_da_pergunta` | Lookup `pergunta_origem__data_evento__isnull=False`. | Sim se conversa alcançar o universo; ocorrência [nao verificado] |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:86` | mesma | Usa data crua para ampliar janela de busca dos turnos. | Mesma condição |
-| `app/ponto/management/commands/vigia_plantio_overnight.py:90` | mesma | Compara com dia das batidas e apresenta diferença. | Mesma condição |
-| `app/ponto/services/dia_do_colab.py:65` | `dia_do_colab` | Filtra perguntas para `perguntas_deste_dia`. | Sim |
-| `app/ponto/services/veredito_celula.py:180` | `fechar_o_fio_do_dia` | Filtra perguntas do dia para fechamento; contém `conversa=False`. | Não se aplica: conversa excluída |
-| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` | Lê chave serializada com `i.get('data_evento')`, renomeando para `data_do_caso`. | Sim, só repassa |
-
-Proveniência e limites:
-
-- A API v2 percorre `consulta['pendentes'] + consulta['historico']`, sem discriminar conversa nessa montagem: `app/api/views.py:1040`. `consulta_do_app` separa apenas por resposta/disputa: `app/chamados/services/pergunta_no_app.py:69`.
-- A fila da mensageria vem de `perguntas_respondidas_a_validar`, sem exclusão de conversa: `app/api/views_mensageria.py:540`, `app/chamados/juizes.py:1664`. O cliente lê `/api/mensageria/validar/` e retorna JSON: `mensageria/nucleo/core_client.py:49`, `mensageria/nucleo/core_client.py:55`. Consumo: `mensageria/nucleo/ferramentas.py:107`, `mensageria/nucleo/ferramentas.py:129`.
-- No vigia, o filtro exige `tipo_resposta='hora'`, mas não `conversa=False`: `app/ponto/management/commands/vigia_plantio_overnight.py:74`. A relação `Batida.pergunta_origem` aponta para `PerguntaDisputa`, portanto não é colisão de modelo: `app/ponto/models.py:40`, `app/ponto/models.py:41`.
-- `app/escala/management/commands/hub_smoke.py:35` e `app/escala/management/commands/hub_smoke.py:51` são nomes de parâmetros usados por introspecção, sem acesso ao campo de modelo.
-- O censo anterior documenta explicitamente o problema da prévia e de `dia_do_colab`: `app/chamados/services/fio.py:1398`, `app/chamados/services/fio.py:1399`.
-
-## 11/11 14:57 · sessao 7361ac4aef50 · - · - · origem=Ronald (tmux)
-
-(b) Templates: **5 ocorrências sintáticas em 5 linhas/3 arquivos; 4 leitores com origem demonstrada em PerguntaDisputa e 1 referência sem vínculo de contexto demonstrado**. A relação completa é:
-
-| Arquivo:linha | Contexto e origem | Uso | Diverge para conversa? |
-|---|---|---|---|
-| `app/templates/chamados/partials/_card_atendimento.html:87` | `p` do laço `chamado.perguntas_disputa` em `:77`; `meu_atendimento` chama `montar_chamados_fio` (`app/chamados/views.py:569`), que consulta PerguntaDisputa (`app/chamados/services/fio.py:225`), agrupa (`:243`) e anexa a `ch.perguntas_disputa` (`:253`); os includes vêm de `app/templates/chamados/meu_atendimento.html:127` e `:144` | Testa existência para exibir cabeçalho do dia | **Sim**, havendo conversa com data: o cru habilita o cabeçalho; juiz retorna None (`app/chamados/juizes.py:338`) |
-| `app/templates/chamados/partials/_card_atendimento.html:90` | Mesmo contexto acima | Exibe “Estamos falando do dia” (`:89`) formatando o cru | **Sim**, civil exibido no lugar do dia do fato; juiz None (`app/chamados/juizes.py:338`) |
-| `app/templates/chamados/partials/_card_atendimento.html:164` | Mesmo contexto; ramo `p.tipo_resposta == 'hora' and p.opcoes` (`:158`) | Exibe dia na confirmação JS inline | **Sim se conversa alcançar esse ramo**; nenhuma exclusão `conversa` nesse ramo (`:158`); ocorrência real em produção [nao verificado] |
-| `app/templates/chamados/partials/_lote_preview.html:24` | `x` de `linhas`; `lote_preview` passa classe A (`app/chamados/views_cobrar.py:363`); `fila_validar_classificada` insere `{'pergunta': p}` (`app/chamados/services/validacao.py:923`); `p` vem de `perguntas_respondidas_a_validar` (`:921`), cujo queryset é PerguntaDisputa (`app/chamados/juizes.py:1664`) | Exibe dia na coluna “Dia” (`_lote_preview.html:23`) | **Sim se conversa alcançar classe A**; classe usa resposta/marco e não exclui `conversa` explicitamente (`app/chamados/services/validacao.py:845`, `:877`); ocorrência real [nao verificado] |
-| `app/templates/chamados/meu_atendimento.html:19` | Bloco `for reg in regularizacoes_pendentes` (`:10`); não há laço de `p` ali; view fornece `regularizacoes_pendentes`, mas não `p`/`opt` (`app/chamados/views.py:633`, `:647`, `:651`) | Tentativa de exibir dia em confirmação | **Não se aplica** como leitor demonstrado de PerguntaDisputa; associação de `p` [nao verificado] |
-
-A menção `data_evento` em `app/templates/chamados/partials/modal_fio.html:161` é comentário, sem acesso de variável nessa linha. O local citado no anexo não corresponde a leitor cru na cópia: `app/templates/colaboradores/partials/painel_colaborador.html:198` contém include de `msgs_lista.html`.
-
-(c) Serialização/API: **2 endpoints, 2 chaves exatas `data_evento` + 1 chave derivada `data_evento_label` = 3 posições de emissão**, em 3 linhas:
-
-| Arquivo:linha | Função / caminho | Uso | Diverge para conversa? |
-|---|---|---|---|
-| `app/api/views.py:1165` | `api_chamados_v2` (`:973`), rota `app/api/urls.py:73` | Repassa cru em ISO ou None, dentro de `chamados[].perguntas_disputa[]` (`views.py:1155`) | **Sim no valor transmitido**: conversa com cru preenchido transmite ISO; juiz None (`juizes.py:338`). Exibição pelo app nativo [nao verificado] |
-| `app/api/views.py:1166` | Mesmo endpoint | Repassa cru formatado `dd/mm/aaaa` em `data_evento_label` | **Sim no valor transmitido**; consumo do app nativo [nao verificado] |
-| `app/api/views_mensageria.py:568` | `_item_validar` (`:554`) chamado por `api_mensageria_validar` (`:546`), retornado como JSON (`:549`); rota `app/api/urls.py:12` | Repassa cru ISO ou string vazia | **Sim no valor transmitido**; juiz None (`juizes.py:338`) |
-| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` (`:98`); chama cliente (`:107`); cliente lê `/api/mensageria/validar/` (`mensageria/nucleo/core_client.py:50`) e retorna JSON (`:55`) | Consome `i.get('data_evento')`, renomeia para `data_do_caso` em casos enviados ao copiloto (`ferramentas.py:116`, `:137`) | **Sim no valor repassado**, se item de conversa; interpretação do copiloto [nao verificado] |
-
-Não encontrei acesso a `data_evento` em arquivos JS/TS/TSX/Dart da cópia por varredura textual [nao verificado quanto a código externo/cliente nativo]. O JS inline de templates é o de `_card_atendimento.html:164` e `meu_atendimento.html:19`, já contado em (b).
-
-Para a allowlist (a), incluir também o leitor de chave serializada **`mensageria/nucleo/ferramentas.py:127`**. As chaves em `mensageria/nucleo/tests/test_ferramenta_validar.py:18`, `:24` e `mensageria/nucleo/tests/test_proposta_lote.py:24` são construção de fixtures de resposta, não leitura do modelo.
-
-_3939 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3949 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
