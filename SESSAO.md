@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/11/2026 22:17:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (290.4 MB). Acoes na janela: **1053**.
+**Medido em 10/11/2026 22:23:13.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (290.4 MB). Acoes na janela: **1055**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:20:31 | Bash | Save aval, PROMPTS line and BACKLOG row | `cd /home/ronald/saas-hasner; cat > logs/aval_triagem_offline_sem_camera_1110.txt <<'EOF' aval Ronald 10/11 22:20: TRIAGEM-OFFLINE-SEM-CAMERA (REGISTRAR, bug provado). Complemento de BO-0611-05-RESTO-DA-CLASSE: templates/ponto/triagem/apto.html:252-256, offline + getUserMedia falho esconde btn-capturar-off e a batida nao entra na fila; online (:159-161) libera. Mesma pergunta, duas respostas: juiz  ...` |
+| 22:20:21 | Bash | Locate backlog rows and confirm cited template lines | `cd /home/ronald/saas-hasner; date +%H:%M; /bin/grep -n '^\| BO-0611-05-RESTO-DA-CLASSE\\|^\| FIO-E0-V4-E4B' app/docs/BACKLOG.md \| cut -c1-200; sed -n 155,162p app/templates/ponto/triagem/apto.html; sed -n 250,257p app/templates/ponto/triagem/apto.html` |
 | 22:17:15 | Bash | Write c15 brief and log decision in RELATO | `cd /home/ronald/saas-hasner/logs/BO-DISPUTA-SEM-PERGUNTA; cat > brief_volta5g.md <<'EOF' # BO-DISPUTA-SEM-PERGUNTA, construtor volta 5g (c15), base = commit da c14 (hash no cabecalho) Aval: BO-DISPUTA-DUAS-LEIS (anexo aval_duas_leis_1110.txt), item (2). padrao=Aggregate Root (a decisao, que NAO e desta obra) + fitness function (o contador). MAPA: mapa.r sem linha desta obra (aberta antes do aval M ...` |
 | 22:16:54 | Bash | Inspect core.observ.evento writer | `cd /home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app; /bin/grep -n '^def evento' -A25 core/observ.py \| head -40` |
 | 22:16:50 | Bash | Inspect LogAuditoria fields and writer | `cd /home/ronald/wt-codex-bo-disputa-sem-pergunta-165646/app; sed -n 285,330p core/models.py; git grep -n 'def registrar_auditoria\\|def auditar(' -- '*.py' \| /bin/grep -v tests/ \| head -5` |

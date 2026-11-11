@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **10/11/2026 22:12** · publicado em **10/11/2026 22:17** (UTC-3)
+> Ultima resposta processada: **10/11/2026 22:23** · publicado em **10/11/2026 22:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 10/11 22:23 · sessao be870e2c21a5 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Cura implementada em [disputa_emissao.py:502](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/chamados/services/disputa_emissao.py:502): episódio explícito no replay, motivos locais sem seed estrangeiro, análise condicionada ao replay confirmado, âncora pelo agregador e declaração pública com pergunta obrigatória (`:724`, `:1279`, `:1474`, `:1577`).
+
+Arquivos tocados, além do emissor:
+
+- `chamados/tests/test_bo_disputa_volta5f_memoria.py:80` — REDs e mutantes novos.
+- `chamados/tests/test_bo_disputa_volta5_memoria.py:68` — montagem única e execução do alvo.
+- `chamados/tests/test_bo_disputa_volta3_memoria.py:234` — repetibilidade, sem alegar comparação histórica.
+- `chamados/tests/test_bo_disputa_volta5b_orfaos.py:126` — RED ORM do lote misto.
+- `chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:183` — expectativa sem seed indevido.
+- `chamados/tests/test_bo_disputa_sem_pergunta_memoria.py:400`
+- `chamados/tests/test_bo_disputa_sem_pergunta.py:70`
+- `chamados/tests/test_porta_disputa_emissao.py:86`
+- `chamados/tests/test_sla_pelo_juiz.py:133`
+
+Os oito testes novos passaram em memória; cada mutante abaixo produziu falha por assertion no alvo. Referências: `chamados/tests/test_bo_disputa_volta5f_memoria.py:80`, `:101`, `:111`, `:135`, `:165`, `:181`, `:187`, `:204`.
+
+Comandos dos REDs com seus mutantes; cada comando exige primeiro controle verde: [nao verificado]
+
+```bash
+red5f() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5f_memoria.py "$@"
+}
+
+# F1
+red5f --item F1 --mutante seed_local
+red5f --item F1 --mutante ausencia_admite_motivo
+# F2
+red5f --item F2 --mutante episodio_da_dona
+# F3
+red5f --item F3 --mutante analisa_divergente
+# F4
+red5f --item F4 --mutante ancora_save_proprio
+# F5
+red5f --item F5 --mutante publica_sem_pergunta
+# F6
+red5f --item F6
+PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py --mutante nasce_sem_pergunta
+PYTHONDONTWRITEBYTECODE=1 python3 -B chamados/tests/test_bo_disputa_volta5_memoria.py --mutante replay_insere
+# F7
+red5f --item F7 --mutante alega_paridade
+```
+
+F1 ORM escrito em `chamados/tests/test_bo_disputa_volta5b_orfaos.py:126`. Comando reservado ao Code; execução ORM/banco: **[nao verificado]**.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_bo_disputa_volta5b_orfaos.OrfaosVolta5bTest.test_RED_F1_lote_misto_local_vazia_nao_ganha_seed_estrangeiro
+```
+
+Certificação pelo Code e pelo opus final: **[nao verificado]**.
+
+perguntas de lei: 0
 
 ## 10/11 22:12 · sessao ef42db15fa9d · BO-DISPUTA-SEM-PERGUNTA · verificador · origem=Code
 
@@ -965,33 +1019,4 @@ Item 7 — bate:
 
 Item 8 — limite legado adicional: selo modal verifica apenas presença textual de `naoBloquear` quando encontra `hxConfirmar(`; comentário com a palavra já satisfaz essa parcela. Não demonstra que o fluxo efetivamente segue quando modal falha. (`app/core/tests/test_selo_modal_nao_nasce_vazio.py:135-143`)
 
-## 10/11 20:52 · sessao efb82ef2f5e2 · - · - · origem=Ronald (tmux)
-
-Item 5 — auditoria estática, sem banco e sem executar a bateria.
-
-O arquivo declara caracterização do efeito de retirar as barreiras, não uma regra de pagamento; a tabela veio da volta 8 e os casos barrados agora usam a função real de registro. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:3`, `:11`, `:576`)
-
-| Teste | Caminho e afirmações atuais | [nao verificado]
-|---|---|
-| `test_relogio_congelado` | Só verifica a data congelada; nenhuma batida ou cálculo. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:691`) |
-| `test_MORDE_o_controle_paga_e_os_casos_nao_sao_o_controle` | Só compara constantes da própria tabela: C0 ligado = 8 h/120 min pendentes; desligado = 10 h/2 h HE50; casos diferentes do controle; flags históricas de idempotência verdadeiras. Não chama produção e sozinho não prova que a fixture alcança dinheiro. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:694`) |
-| C0 | Ativo, sem ausência, célula de trabalho; quatro POSTs pela API e comparação integral com MEDIDO. Espera 8 h e pendência de 120 min com janela ligada; 10 h/HE50 2 h com janela desligada. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:704`, `:661`, `:82`, `:118`) |
-| F1 | Ausência de férias lançada mantendo `situacao='ativo'`; célula existe; quatro POSTs pela API e tabela integral. Espera `fato_em_ausencia`, 8 h com janela ligada; 10 h/HE50 2 h e reflexo DSR 12 h com janela desligada; sete dias/56 h de abono. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:711`, `:156`, `:193`, `:209`, `:216`) |
-| F2 | Mesmo cadastro ativo com ausência de férias, mas célula de folga; API e tabela integral. Ligada: pagamento do dia ausente, pendência `dia=600`; desligada: 10 h de folga trabalhada; oito dias/64 h de abono. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:721`, `:239`, `:246`, `:276`, `:292`) |
-| F1s | F1 com `situacao='ferias'` por UPDATE: primeiro quatro respostas 403/`colab_ferias` e zero batidas em **cada** kernel; depois quatro registros pela porta real; compara APURACAO de F1 e idempotência. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:731`, `:676`, `:567`, `:665`) |
-| F2s | Idem para folga, comparando APURACAO de F2. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:740`, `:665`) |
-| D1 | Gera célula enquanto ativo; encerra vínculo e muda situação por UPDATE, preservando célula; API 403/zero, depois porta real. Espera célula concorde/600 min, DiaPago e fechamento com 10 h, sem HE nem pendência. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:749`, `:311`, `:322`) |
-| D2 | Já nasce desligado, demissão dentro da competência; não tem célula no dia; API 403/zero, depois porta real. Espera DiaPago e fechamento com 10 h, célula e retenção ausentes. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:762`, `:373`, `:384`) |
-| D3 | Demissão anterior à competência; sem célula; API 403/zero, depois porta real. Espera quatro batidas, relógio de 600 min no espelho, mas sem DiaPago/fechamento e zero trabalhadas. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:769`, `:428`, `:434`, `:440`) |
-
-As quatro classes executam esses testes nos dois kernels e nas duas configurações da janela; os casos barrados ainda percorrem os dois kernels internamente, independentemente da classe. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:778`, `:786`, `:567`)
-
-A porta real recebe os quatro horários congelados, `origem='app'`, canal PWA, sequência real e coordenadas nulas, e o teste exige quatro registros sem conflito. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:576`) A apuração chama cartório, fechamento e espelho reais; não há mock do motor nesse percurso. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:593`, `:603`)
-
-**O que deixou de ser afirmado:** para D1/D2/D3, nenhum teste compara com MEDIDO os valores históricos de `porta` e `admin`: HTTP 200, disputa, motivos, contagens de alertas/perguntas/chamados/Pauta etc. F1/F2 ainda comparam esses valores pela API; F1s/F2s não os comparam para a situação férias. A exclusão é explícita e delimitada por APURACAO. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:52`, `:661`, `:665`, `:674`) Entretanto, `admin` ainda participa da comparação **entre as duas apurações**, porque `idempotente = um == dois` compara todo o dicionário medido. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:656`, `:673`)
-
-**Limites dos testes:** `force_authenticate` contorna o login; o 403 verifica código e zero Batida, mas não verifica que a porta ficou sem chamadas nem que outros efeitos ficaram ausentes. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:547`, `:567`) `_numeros` omite zeros e nulos, e `resumo` omite valores falsy; nessas saídas, não distinguem zero de `None`. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:480`, `:635`)
-
-**Número impossível:** não encontrei contradição estática que demonstre número **afirmado** impossível. Os 10 h de D1/D2 têm percurso de produção compatível: dias órfãos fora da vigência são somados às trabalhadas, e D3 fica fora do universo pela demissão anterior à janela. (`app/ponto/services/fechamento.py:792`, `:838`, `:902`, `:431`) Reproduzir numericamente cada tabela nesta árvore permanece **[nao verificado]**. As antigas respostas 200 dos casos desligados continuam armazenadas em MEDIDO, mas já não são expectativas executadas nesses casos. (`app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:328`, `:665`)
-
-_3513 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
