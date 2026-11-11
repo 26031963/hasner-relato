@@ -7916,3 +7916,5 @@ CONTRATO TRAVA-MENOS-FILA-COM-SELO (instrumento, 5 linhas):
 - MEDIDA: por pouso B, linha no RELATO com classe + arquivos do diff + rc do selo; contador "pousos B com rc 1" (esperado 0 depois da reclassificacao).
 - QUEM DESLIGA: o Ronald (corte); o selo nao tem bypass nem allowlist.
 - APLICADO JA (item 5): BO-ROTULO-ENCERRADO = B (v4 termina -> opus final direto, achados de forma v2-v4 vao a fila); UI-PAINEL = B se o selo passar no diff; TRIAGEM tela B / captura+fila offline A; APP-MENSAGENS MSG-0 = A.
+PROPORCAO v6 15:01: preverif Codex v5 REPROVOU procedente (obra punha CORTES.md + escritor na propria lista -> B rc0); cura lista lida da BASE, 9b8493e4f; RED v6_red.txt rc0->esperado1, GREEN 43+22+2; preverif v6 lancado (preverif_v6.fim)
+BO-ROTULO 15:03: opus final APROVADO 0 bloq (112893 tok/318 s; logs/FABLE-GABARITO/borotulo_opus.r); Fable cego linha 4 rodando; depois SMOKE Ronald 2 cascas + pouso. Fila do opus: seletor GLPI detalhe.html:122 nao age (L4, toca estado: fora do aval)

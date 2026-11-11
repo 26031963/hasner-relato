@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 14:57** · publicado em **11/11/2026 14:57** (UTC-3)
+> Ultima resposta processada: **11/11/2026 15:02** · publicado em **11/11/2026 15:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 15:02 · sessao 23648d129730 · - · - · origem=Ronald (tmux)
+
+- **Autoridade normativa da lista:** módulo novo só por corte do Ronald; lista atual contém `app/chamados/services/verbos.py` e `app/chamados/templatetags/chamados_tags.py` (`app/docs/CORTES.md:444`). Quem materializou essa edição: [nao verificado].
+- **Escritor automatizado localizado:** helper `lista()` do harness escreve `app/docs/CORTES.md` sintético; `base()` fornece os dois módulos sintéticos (`bin/tests/test_selo_proporcao.sh:15`, `bin/tests/test_selo_proporcao.sh:17`, `bin/tests/test_selo_proporcao.sh:22`). Os casos alteram esse documento sintético, inclusive autoautorização e listas tortas (`bin/tests/test_selo_proporcao.sh:77`, `bin/tests/test_selo_proporcao.sh:78`, `bin/tests/test_selo_proporcao.sh:92`).
+- **Leitor:** `lista_fechada(repo, base)` faz `git show <base>:app/docs/CORTES.md`; valida apenas cardinalidade dos marcadores e forma dos itens (`bin/selo_proporcao.py:46`, `bin/selo_proporcao.py:47`, `bin/selo_proporcao.py:48`, `bin/selo_proporcao.py:53`). Não há conferência de autor, corte, identidade de `main` ou origem confiável na sequência de validação (`bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:84`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`).
+- **Quem escolhe base:** o chamador entrega o primeiro argumento; wrapper apenas repassa `"$@"`, e Python o recebe como `base` (`bin/selo_proporcao.sh:7`, `bin/selo_proporcao.py:78`). No harness, `BASE` é o commit inicial sintético; `caso_lista` escolhe como `b` o commit sintético com a lista torta (`bin/tests/test_selo_proporcao.sh:29`, `bin/tests/test_selo_proporcao.sh:47`, `bin/tests/test_selo_proporcao.sh:50`). Pessoa/processo que escolhe a base da obra real: [nao verificado].
+- **Garantia efetiva sobre base:** precisa resolver para commit, ser diferente de head e ancestral dele; diff deve ser não vazio; lista precisa existir e ser formalmente válida (`bin/selo_proporcao.py:85`, `bin/selo_proporcao.py:87`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:94`, `bin/selo_proporcao.py:47`). Base anterior da própria raia com lista ampliada satisfaz esses controles; não prova corte do Ronald nem que o intervalo corresponde à obra inteira (`bin/selo_proporcao.py:84`, `bin/selo_proporcao.py:89`, `bin/selo_proporcao.py:91`, `app/docs/CORTES.md:443`, `app/docs/CORTES.md:444`).
+- **Quem escreve rc:** Python decide 0/1/2 e emite protocolo privado 10/11/12; wrapper traduz 10→0, 11→1, demais→2 (`bin/selo_proporcao.py:98`, `bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:111`, `bin/selo_proporcao.py:120`, `bin/selo_proporcao.py:121`, `bin/selo_proporcao.sh:8`).
+- **Quem lê rc:** `caso()` captura e compara, `caso_lista()` exige 2 e `rcde()` devolve o rc capturado (`bin/tests/test_selo_proporcao.sh:41`, `bin/tests/test_selo_proporcao.sh:42`, `bin/tests/test_selo_proporcao.sh:50`, `bin/tests/test_selo_proporcao.sh:108`). A régua executa o harness por glob e recusa se ele falhar (`bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`). Isso verifica repos sintéticos criados pelo harness (`bin/tests/test_selo_proporcao.sh:11`, `bin/tests/test_selo_proporcao.sh:13`). Leitor do rc do selo sobre base/head reais: [nao verificado].
+- **Prosa obsoleta:** comentário ainda diz “revisao head” imediatamente antes dos oito casos movidos para base (`bin/tests/test_selo_proporcao.sh:91`).
+
+## 11/11 15:01 · sessao 08292a1b6f3e · - · - · origem=Ronald (tmux)
+
+Testes e migrações: **151 locais leitores únicos, 154 nós AST**, com lista e funções já enviadas. A migração filtra `conversa=False`; os testes verificam campos, snapshots e filtros de fixtures. (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `app/chamados/tests/test_e1_v15.py:79`)
+
+Escritas/entradas de fixtures: **420 locais**, mais **3 dicts de fixtures JSON externos**, total **423**. Há sobreposição leitor/escritor em `app/chamados/tests/test_e1_v5_portas_backfill.py:193`.
+
+`Pergunta` em `test_e4_expand` é um mock derivado de `SimpleNamespace`, incluído como provável interface de PerguntaDisputa. (`app/chamados/tests/test_e4_expand.py:12`, `app/chamados/tests/test_e4_expand.py:62`, `app/chamados/tests/test_e4_expand.py:160`)
+
+Leitor externo relevante: `fila_de_validacao` transforma `i.get('data_evento')` em `data_do_caso`. (`mensageria/nucleo/ferramentas.py:127`)
+
+Outro modelo Django com campo `data_evento`: não encontrado pela varredura AST; a declaração identificada é PerguntaDisputa. (`app/chamados/models.py:2423`)
+
+## 11/11 14:59 · sessao 59a166002cbf · PROPORCAO-POR-RISCO · verificador · origem=Code
+
+**Há um bloqueante: a lista pode autorizar a alteração de si própria e de um escritor no mesmo diff, produzindo B/rc 0.** A pertinência à lista precede qualquer outra classificação (`bin/selo_proporcao.py:46`, `:52`, `:59`, `:107`).
+
+Os rc abaixo são deduzidos por leitura. Resultados de execução, testes e mutantes: [nao verificado]. Referências aos anexos usam as linhas fornecidas no enunciado. [nao verificado]
+
+1. **Bloqueantes dos dois vereditos v4**
+
+| Bloqueante | Situação na v5 | Cura e teste que a cobre | [nao verificado]
+|---|---|---|
+| Opus B1 — property/outro receptor e método consumido antes de escrita | Deixa de exigir análise de consumo: arquivo fora dos conjuntos implica A; arquivo já autorizado passa pelo caminho. Isso corresponde à substituição por CAMINHO da B3 (`aval_proporcao_b3_resposta_1111.txt:1`). | Classificação em `bin/selo_proporcao.py:57`, `:107`; caso `py_fora`, `bin/tests/test_selo_proporcao.sh:58`. Não há reprodução específica da property nesse teste. |
+| Opus B2 — dois saltos | Mesmo tratamento: quantidade de saltos deixou de ser critério (`aval_proporcao_b3_resposta_1111.txt:1`; `bin/selo_proporcao.py:57`). | `py_fora` cobre a recusa genérica por caminho, não os dois saltos: `bin/tests/test_selo_proporcao.sh:58`. |
+| Opus B3 — atribuir fuga entre módulos ao “custo aceito” | A atribuição antiga foi corrigida: cabeçalho e contrato dizem expressamente que essa fuga **não** integra o custo aceito (`bin/selo_proporcao.py:20`; `v5_contrato.txt:1`). | `py_fora` e `py_fora_com_b` cobrem arquivos externos aos conjuntos (`bin/tests/test_selo_proporcao.sh:58`, `:59`). Fidelidade da prosa não é verificada pelo harness, que compara rc (`:41`, `:42`). |
+| Fable BL1 — repo implícito, igualdade e diff vazio verdes | Fechado no código: repo obrigatório, raiz conferida, igualdade e diff vazio recusados (`bin/selo_proporcao.py:74`, `:80`, `:86`, `:93`). | `sem_repo`, `sem_repo_no_repo_do_script`, `repo_subdir`, `repo_nao_git`, `base_igual_head`, `diff_vazio` (`bin/tests/test_selo_proporcao.sh:104`, `:111`, `:114`, `:116`, `:119`, `:121`). O controle no repo do script é condicional à existência das revisões (`:116`). |
+| Fable BL2 — revisões invertidas e exclusões ignoradas | Fechado pelo controle de ancestralidade e pela classificação de todos os nomes, incluindo exclusões; não se lê mais apenas o conteúdo novo (`bin/selo_proporcao.py:88`, `:91`, `:99`). | `revisoes_trocadas`, `nao_ancestral`, `apagou_fora` e renames nos dois sentidos (`bin/tests/test_selo_proporcao.sh:65`, `:66`, `:67`, `:103`, `:108`). Não há caso específico de migration apagada na v5. |
+
+2. **Escapes: separar os aceitos por CAMINHO do defeito da lista**
+
+Nas condições válidas de argumentos, revisões e lista, cada diff abaixo recebe **rc 0 declarado B**: o conteúdo não é inspecionado (`bin/selo_proporcao.py:90`, `:91`, `:100`, `:107`).
+
+| Arquivo e diff mínimo descrito | Escrita alcançada | Texto literal da B3 |
+|---|---|---|
+| `app/chamados/services/verbos.py`: inserir `vivo_qs.update(status_local='fechado')` antes da linha 34. | A função recebe o queryset e é chamada pelo painel (`app/chamados/services/verbos.py:30`; `app/chamados/services/painel.py:230`); o campo persistido existe (`app/chamados/models.py:52`). | **ACEITA pelo caminho já listado**, sem análise de AST (`app/docs/CORTES.md:444`; `bin/selo_proporcao.py:59`). |
+| `app/chamados/templatetags/chamados_tags.py`: antes do retorno de `area_label`, inserir `chamado.status_local='fechado'; chamado.save(update_fields=['status_local'])`. | O filtro recebe o chamado e tem consumidor no template (`app/chamados/templatetags/chamados_tags.py:34`; `app/templates/chamados/detalhe_local.html:56`). | **ACEITA pelo caminho já listado** (`app/docs/CORTES.md:444`; `bin/selo_proporcao.py:59`). |
+| `app/static/pwa.js`: trocar `tipo, timestamp: tsCorrigido` por `tipo: 'saida', timestamp: tsCorrigido`. | Altera a batida gravada em IndexedDB e posteriormente enviada por POST (`app/static/pwa.js:112`, `:114`, `:144`, `:153`). | **ACEITA por `static/`** (`bin/selo_proporcao.py:63`; `aval_proporcao_b3_resposta_1111.txt:1`). |
+| `app/templates/chamados/partials/_js_cobranca.html`: substituir a chamada de confirmação da linha 60 por `_go();`. | Antecipa o POST de cobrança à confirmação; a view pode registrar a ocorrência após envio bem-sucedido (`app/templates/chamados/partials/_js_cobranca.html:51`, `:60`; `app/chamados/views_cobrar.py:54`). | **ACEITA por `templates/`** (`bin/selo_proporcao.py:61`; `aval_proporcao_b3_resposta_1111.txt:1`). |
+| `app/core/tests/test_contract_tblib_no_paralelo.py`: inserir no início de `tblib_instalado` o import de `ChamadoColaborador` e `ChamadoColaborador.objects.update(status_local='fechado')`. | Há consumidor em management command, apesar da localização do helper em testes (`app/core/tests/test_contract_tblib_no_paralelo.py:24`; `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`). | **ACEITA pela identificação de teste por caminho/nome** (`bin/selo_proporcao.py:65`, `:68`; `aval_proporcao_b3_resposta_1111.txt:1`). |
+
+Esses exemplos não exigem perseguir reflexão, alias ou saltos: a B3 determina “O selo checa CAMINHO, nao AST” (`aval_proporcao_b3_resposta_1111.txt:1`). Efeito efetivamente observado em produção: [nao verificado].
+
+**O escape da autoautorização é diferente e é defeito do selo.** Diff mínimo descrito:
+
+- Na lista de `app/docs/CORTES.md:444`, acrescentar, antes do marcador final: ``; `app/chamados/writer.py`; `app/docs/CORTES.md` ``.
+- Acrescentar `app/chamados/writer.py` com:
+
+```python
+from chamados.models import ChamadoColaborador
+ChamadoColaborador.objects.update(status_local='fechado')
+```
+
+O parser aceita ambos os itens; tanto o novo escritor quanto o documento alterado pertencem à lista lida de head. Portanto `fora=[]` e o rc previsto é **0**, mesmo declarado B (`bin/selo_proporcao.py:46`, `:52`, `:54`, `:59`, `:104`, `:110`).
+
+Isso contraria “entra modulo novo so por corte meu” e a própria promessa “A obra nao se autoriza” (`aval_proporcao_b3_resposta_1111.txt:1`; `bin/selo_proporcao.py:19`). O caso `lista_se_autoriza` acrescenta somente o módulo; deixa `CORTES.md` fora e não morde esse escape (`bin/tests/test_selo_proporcao.sh:69`).
+
+3. **Quem escreve e quem lê a lista**
+
+A autorização para entrada de módulo novo pertence a Ronald; a lista presente na cópia contém `app/chamados/services/verbos.py` e `app/chamados/templatetags/chamados_tags.py` (`app/docs/CORTES.md:444`). Quem materializou essa edição e sua inclusão efetiva no hash informado: [nao verificado].
+
+O leitor é `lista_fechada`: usa `git show <head>:app/docs/CORTES.md`, exige os dois marcadores únicos e verifica apenas a forma craseada dos itens. Não verifica autor, corte, extensão `.py` nem identidade da linha B3 (`bin/selo_proporcao.py:45`, `:47`, `:52`, `:54`).
+
+Acrescentar **somente** o módulo deixa `CORTES.md` fora dos conjuntos e resulta em rc 1; acrescentar também `CORTES.md` permite a autoautorização descrita acima (`bin/tests/test_selo_proporcao.sh:69`; `bin/selo_proporcao.py:59`, `:107`).
+
+4. **Retornos**
+
+| Condição | Resultado deduzido |
+|---|---|
+| Declaração B com algum arquivo fora | **1**; é a única condição de retorno lógico 1 (`bin/selo_proporcao.py:107`). |
+| Declaração A, com julgamento válido | **0**, inclusive com arquivos fora (`bin/selo_proporcao.py:107`, `:110`). |
+| Argumentos inválidos; repo sem Git ou que não seja raiz; revisão inválida | **2** (`bin/selo_proporcao.py:74`, `:79`, `:80`, `:84`, `:97`). |
+| `base==head`; base não ancestral; commits distintos com diff vazio | **2** (`bin/selo_proporcao.py:86`, `:88`, `:93`). |
+| Lista ausente, vazia ou malformada | **2** (`bin/selo_proporcao.py:46`, `:47`, `:52`, `:97`). |
+| Exceção inesperada na implementação Python | **2**, pela fronteira externa (`bin/selo_proporcao.py:117`, `:119`). |
+| `GIT_*` herdado | Removido do ambiente de cada subprocesso Git; o harness também o limpa antes de criar seus repos (`bin/selo_proporcao.py:38`; `bin/tests/test_selo_proporcao.sh:6`, `:131`). |
+
+“Repo errado” precisa de distinção: um subdiretório ou diretório sem Git dá 2; **outra raiz Git válida**, contendo as revisões fornecidas, será julgada normalmente. Não há comparação com uma identidade esperada do projeto (`bin/selo_proporcao.py:77`, `:79`, `:84`).
+
+O wrapper preserva os resultados públicos **0/1/2**, traduzindo **10→0, 11→1 e qualquer outro código→2**. Não repassa arbitrariamente o código bruto do Python (`bin/selo_proporcao.sh:7`, `:8`, `:9`, `:10`, `:11`). O harness exige rc 1 também sob `bash -e` (`bin/tests/test_selo_proporcao.sh:134`).
+
+5. **Testes com mecanismos sobrepostos e mutantes** [nao verificado]
+
+- `marcador_duplo` duplica **os dois marcadores**. Remover só a checagem de cardinalidade de início em `bin/selo_proporcao.py:47` deixa a checagem de fim rejeitando o caso; o mutante simétrico também escapa dessa prova. Ausência do marcador ainda acaba em exceção normalizada para 2 (`bin/tests/test_selo_proporcao.sh:83`, `:85`, `:87`; `bin/selo_proporcao.py:49`, `:117`). Sobrevivência por execução: [nao verificado].
+- `misto_b` usa `tests/test_b.py`, elegível por diretório **e** basename. Há controles separados: `tests_dir` usa `fixt.py`, enquanto `test_basename` fica fora de `tests/` (`bin/tests/test_selo_proporcao.sh:50`, `:51`, `:54`).
+- `migration` prova apenas a classificação genérica de `.py` fora dos conjuntos; não existe mecanismo específico de migration na v5. `apagou_fora` cobre exclusão pelo mesmo mecanismo (`bin/tests/test_selo_proporcao.sh:63`, `:65`; `bin/selo_proporcao.py:57`, `:91`).
+- O preparo de `git_dir_herdado` cria no outro repo um único commit e lista inválida. Prova resistência ao desvio que causaria erro; não compara dois diffs válidos, um A e outro B, como sugere o comentário (`bin/tests/test_selo_proporcao.sh:128`, `:129`, `:130`, `:131`).
+
+**O problema de cobertura do antigo F2 permanece:** o mutante mínimo `bin/selo_proporcao.py:119`, `rc = 2` → `rc = 0`, tem sobrevivência dedutível. Os casos normais de erro exercitam argumentos e `NaoJulgado`; os stubs substituem o interpretador e não atravessam essa fronteira Python (`bin/selo_proporcao.py:76`, `:95`, `:117`; `bin/tests/test_selo_proporcao.sh:83`, `:122`, `:136`). Execução do mutante: [nao verificado].
+
+A exigência de **um** marcador de cada tipo e de normalizar **qualquer** exceção, portanto, não fica individualmente demonstrada pela afirmação “cada guarda [...] tem caso que so ela pega” (`bin/tests/test_selo_proporcao.sh:5`; `bin/selo_proporcao.py:47`, `:117`).
+
+6. **QUEM CHAMA, QUEM LÊ e atribuições ao aval**
+
+O chamador concreto do selo localizado é o harness: define `SELO`, chama, captura e compara o rc (`bin/tests/test_selo_proporcao.sh:9`, `:41`, `:42`). O harness tem chamador por glob: `bin/regua.sh` executa `tests/test_*.sh` e recusa a régua se algum falhar (`bin/regua.sh:138`, `:140`, `:143`).
+
+Essa cadeia julga repositórios **sintéticos**, criados pelo teste (`bin/tests/test_selo_proporcao.sh:11`, `:13`). Chamador e leitor de rc sobre base/head da obra real: [nao verificado]. O contrato atribui essa responsabilidade ao pouso B, mas isso é declaração de conduta (`v5_contrato.txt:2`, `:3`).
+
+Quanto aos demais registros v4:
+
+- A exclusão antes ignorada agora entra na classificação por nomes; o teste específico de migration apagada foi substituído pela cobertura genérica de exclusão (`bin/selo_proporcao.py:91`; `bin/tests/test_selo_proporcao.sh:65`).
+- O wrapper agora usa `-B`; remoção e situação de versionamento do antigo `bin/__pycache__`: [nao verificado] (`bin/selo_proporcao.sh:7`).
+- A frase e a lista constam da cópia (`app/docs/CORTES.md:443`, `:444`). Contrato PROPORCAO no RELATO e commit dessas alterações: [nao verificado].
+
+O cabeçalho chama de “literal” a paráfrase **“qualquer outro arquivo”**; o aval diz **“Qualquer outro .py”**. A consequência para outros arquivos continua derivável da condição anterior sobre **TODO arquivo**, mas a paráfrase não é citação literal (`bin/selo_proporcao.py:10`, `:11`; `aval_proporcao_b3_resposta_1111.txt:1`).
+
+Atribuir os escritores escondidos ao smoke/fila também vai além do que a B3 afirma expressamente. O aval original exige smoke de clique para B; não promete que esse smoke detectará esses escritores (`bin/selo_proporcao.py:21`; `v5_contrato.txt:4`; `aval_proporcao_por_risco_1111.txt:1`). Essa capacidade do smoke: [nao verificado].
+
+7. **`.md` fora dos conjuntos é A pelo texto literal**
+
+A frase decisiva é: **“CLASSE B so se TODO arquivo do diff estiver em templates/, static/, arquivo de teste, ou numa LISTA FECHADA de modulos de leitura declarada no CORTES.md”** (`aval_proporcao_b3_resposta_1111.txt:1`). [nao verificado]
+
+Logo, `.md` fora desses conjuntos é **A**; a frase seguinte sobre `.py` não concede exceção aos documentos. A implementação e `doc_md` seguem essa leitura (`bin/selo_proporcao.py:70`, `:107`; `bin/tests/test_selo_proporcao.sh:60`).
+
+L-106 exige docs no mesmo commit do marco; quando esses documentos ficam fora dos conjuntos, o diff completo recebe A (`CLAUDE.md:332`, `:333`; `bin/selo_proporcao.py:99`, `:104`). A afirmação contratual “qualquer .md [...] faz a obra A” é ampla demais: um `.md` sob `templates/` ou `static/` passa pelo caminho, e o defeito demonstrado permite listar o próprio `CORTES.md` (`v5_contrato.txt:4`; `bin/selo_proporcao.py:59`, `:61`, `:63`).
+
+REPROVADO — bloqueante: autoautorização da obra ao incluir o próprio `CORTES.md` e um escritor na lista de head, obtendo B/rc 0 (`bin/selo_proporcao.py:46`, `:52`, `:59`, `:110`).
+
+## 11/11 14:57 · sessao 6e228e64f5a4 · - · - · origem=Ronald (tmux)
+
+Recorte: Python fora de `app/chamados/**`, sem testes/migrações. **16 linhas leitoras, 21 nós de leitura; 0 escritores; 0 colisões com outro modelo encontradas** nas referências abaixo. “Sim” compara o valor civil não nulo à resposta `None` do juiz para conversa; ocorrência concreta em produção permanece [nao verificado]. Juiz: `app/chamados/juizes.py:334`, `app/chamados/juizes.py:338`.
+
+| Arquivo:linha | Função | Uso | Conversa diverge? |
+|---|---|---|---|
+| `app/api/views.py:1165` | `api_chamados_v2` | Serializa ISO em `perguntas_disputa[].data_evento`; dois acessos no ternário. | Sim, só repassa |
+| `app/api/views.py:1166` | `api_chamados_v2` | Formata `data_evento_label`; dois acessos no ternário. | Sim |
+| `app/api/views.py:2637` | `api_disputa_responder` | Insere valor cru em mensagem de auditoria `dia=%s`. | Sim, só repassa |
+| `app/api/views_mensageria.py:568` | `_item_validar` | Serializa ISO na fila de validação; dois acessos no ternário. | Sim, só repassa |
+| `app/colaboradores/services/calendario.py:473` | `contexto_calendario` | Filtra intervalo de perguntas para indexação de pergunta viva por dia. | Sim |
+| `app/colaboradores/services/calendario.py:477` | `contexto_calendario` | Indexa `_perg_viva` pelo dia cru; usado na disponibilidade de “Resolver dia”. | Sim |
+| `app/folha/previa.py:65` | `montar_previa` | Filtra perguntas pela competência. | Sim |
+| `app/folha/previa.py:67` | `montar_previa` | Agrupa material da prévia por dia cru. | Sim |
+| `app/ponto/management/commands/mapa_divergencia.py:272` | `Command.handle` | Dois filtros `gte/lte` e projeção `only('data_evento')`: três nós. | Sim |
+| `app/ponto/management/commands/mapa_divergencia.py:273` | `Command.handle` | Constrói conjunto de dias para contador de furos cobertos por pergunta. | Sim |
+| `app/ponto/management/commands/vigia_plantio_overnight.py:75` | `batidas_fora_do_turno_da_pergunta` | Lookup `pergunta_origem__data_evento__isnull=False`. | Sim se conversa alcançar o universo; ocorrência [nao verificado] |
+| `app/ponto/management/commands/vigia_plantio_overnight.py:86` | mesma | Usa data crua para ampliar janela de busca dos turnos. | Mesma condição |
+| `app/ponto/management/commands/vigia_plantio_overnight.py:90` | mesma | Compara com dia das batidas e apresenta diferença. | Mesma condição |
+| `app/ponto/services/dia_do_colab.py:65` | `dia_do_colab` | Filtra perguntas para `perguntas_deste_dia`. | Sim |
+| `app/ponto/services/veredito_celula.py:180` | `fechar_o_fio_do_dia` | Filtra perguntas do dia para fechamento; contém `conversa=False`. | Não se aplica: conversa excluída |
+| `mensageria/nucleo/ferramentas.py:127` | `fila_de_validacao` | Lê chave serializada com `i.get('data_evento')`, renomeando para `data_do_caso`. | Sim, só repassa |
+
+Proveniência e limites:
+
+- A API v2 percorre `consulta['pendentes'] + consulta['historico']`, sem discriminar conversa nessa montagem: `app/api/views.py:1040`. `consulta_do_app` separa apenas por resposta/disputa: `app/chamados/services/pergunta_no_app.py:69`.
+- A fila da mensageria vem de `perguntas_respondidas_a_validar`, sem exclusão de conversa: `app/api/views_mensageria.py:540`, `app/chamados/juizes.py:1664`. O cliente lê `/api/mensageria/validar/` e retorna JSON: `mensageria/nucleo/core_client.py:49`, `mensageria/nucleo/core_client.py:55`. Consumo: `mensageria/nucleo/ferramentas.py:107`, `mensageria/nucleo/ferramentas.py:129`.
+- No vigia, o filtro exige `tipo_resposta='hora'`, mas não `conversa=False`: `app/ponto/management/commands/vigia_plantio_overnight.py:74`. A relação `Batida.pergunta_origem` aponta para `PerguntaDisputa`, portanto não é colisão de modelo: `app/ponto/models.py:40`, `app/ponto/models.py:41`.
+- `app/escala/management/commands/hub_smoke.py:35` e `app/escala/management/commands/hub_smoke.py:51` são nomes de parâmetros usados por introspecção, sem acesso ao campo de modelo.
+- O censo anterior documenta explicitamente o problema da prévia e de `dia_do_colab`: `app/chamados/services/fio.py:1398`, `app/chamados/services/fio.py:1399`.
 
 ## 11/11 14:57 · sessao 7361ac4aef50 · - · - · origem=Ronald (tmux)
 
@@ -559,178 +718,4 @@ O montador ser o **único escritor vivo** continua [não verificado]. `cmp` comp
 
 Reproduzi os 156 casos de conteúdo construídos pela parte (a), usando `/dev/stdin`: todos deram o resultado esperado. A suíte permanece verde diante dos dois contraexemplos acima; construção e expectativas estão em `bin/tests/test_mapa20_valida.sh:25-189`.
 
-## 11/11 14:33 · sessao 2a97dd5b67c4 · - · - · origem=Ronald (tmux)
-
-BLOQUEANTE — N continua sem derivação da lista de PRONTO: o N aprovado vem da string `d['xn'][nome]`, copiada em `bin/mapa20_montar.py:123-124`. A contagem em `bin/mapa20_montar.py:74-84` aplica-se apenas ao RASCUNHO. O selo aceita caminho permitido + linha não vazia, sem verificar obra, lista numerada ou quantidade (`bin/mapa20_valida.py:91-107`). `app/docs/BACKLOG.md:1` é título; `app/docs/TICKETS.md:1` é comentário. Ambos são aceitos como fontes verdes por `bin/tests/test_mapa20_valida.sh:31` e `bin/tests/test_mapa20_valida.sh:66`. X não lê provas do RELATO: sua única utilização efetiva é comparação aritmética (`bin/mapa20_valida.py:209-215`).
-
-BLOQUEANTE — `ovr` pode trocar a identidade da obra depois da canonicalização: `bin/mapa20_montar.py:116-118`. O `xn` continua escolhido pelo nome anterior (`bin/mapa20_montar.py:123-124`). Sonda em memória confirmou zero problemas para:
-
-```json
-"ovr": {
-  "E3": {"0": "E4B"},
-  "E4B": {"0": "E3"}
-}
-```
-
-Com censo E3=`dado E3`, E4B=`dado E4B`, `xn.E3=["1 de 1","app/docs/BACKLOG.md:1","nada"]` e `xn.E4B=["1 de 2","app/docs/BACKLOG.md:1","item 2"]`, o montador produz E4B com dados/progresso de E3 e vice-versa; `problemas()` retorna `[]` (`bin/mapa20_montar.py:110`, `bin/mapa20_montar.py:117`, `bin/mapa20_montar.py:124`; execução somente em memória).
-
-FILA — teste “só escreve saída pedida” compara exclusivamente nomes de arquivos: `arvore()` em `bin/tests/test_mapa20_valida.sh:354-355`, captura em `:358`, comparação em `:374`. Mutante concreto após `bin/mapa20_montar.py:152`:
-
-```python
-open(os.path.join(RAIZ, DADOS), 'a', encoding='utf-8').write(' ')
-```
-
-Modifica JSON existente, preserva JSON válido, saída e lista de caminhos; essa asserção não morde. Mutante não executado [não verificado].
-
-Rastreio de estado:
-
-| Estado/campo | Escritor | Leitor |
-|---|---|---|
-| `logs/MAPA-20/mapa.md` | Montador grava o `argv[0]` arbitrário, `bin/mapa20_montar.py:160-161`; chamada real para caminho vivo [não verificado] | Foto em `bin/relato.sh:100`; comparação em `:104` |
-| `montador_dados.json` | “Sessão edita” é instrução em `bin/mapa20_montar.py:7-8`; escritor real [não verificado]. Teste escreve em `bin/tests/test_mapa20_valida.sh:351` | JSON em `bin/mapa20_montar.py:89` |
-| `cabeca` | JSON acima | `bin/mapa20_montar.py:138` |
-| `censo` | Prod [não verificado]; fixture `bin/tests/test_mapa20_valida.sh:341` | `bin/mapa20_montar.py:90`, `:93-103` |
-| `alias_censo` | JSON | `bin/mapa20_montar.py:104-105`, `:135` |
-| `ovr` | JSON | Índices arbitrários em `bin/mapa20_montar.py:117-118` |
-| Censo colunas 0–8 | Censo, sobrescritas JSON | Nome em `bin/mapa20_montar.py:116`; demais conservadas por `:120` |
-| Censo coluna 9 | Censo/`ovr["9"]` | Etapa em `bin/mapa20_montar.py:119`; removida em `:120` |
-| Saída coluna 9 | `xn[0]` | Montador `bin/mapa20_montar.py:124`; selo `bin/mapa20_valida.py:201` |
-| `xn` = XdeN/fonte/falta | JSON | Copiado em `bin/mapa20_montar.py:123-124`; selo `bin/mapa20_valida.py:206-218` |
-| `fonte_ausente`, `falta_ausente` | JSON | `bin/mapa20_montar.py:127` |
-| `rascunho.arquivo/alias/origem` | Prod [não verificado]; fixture `bin/tests/test_mapa20_valida.sh:342-348` | `bin/mapa20_montar.py:106`, `:132` |
-| BACKLOG | Gerador `bin/gerar_backlog.py:138-140`, preservando bloco manual `:103-105`; estado em `bin/backlog_estado.py:58-59` | Localiza chave em `bin/mapa20_montar.py:58-61`; fonte em `bin/mapa20_valida.py:100-105`; publicador `bin/relato.sh:155` |
-| TICKETS | Topo `bin/tickets_placar.sh:82`; rodapé `bin/tickets_rodape.sh:78-79`; template de linha `bin/molde_autocura/ticket_rows.py:10-12`; autores históricos das listas PRONTO [não verificado] | Fonte em `bin/mapa20_valida.py:100-105`; placa `bin/tickets_placar.sh:64`; contrato `bin/regua_tickets.sh:78` |
-| `MAPA-20.md` público | Raspador `bin/raspar_publico.py:40`; regravação retido `bin/relato.sh:119-120`; cópia julgada `:158` | Selo `bin/relato.sh:109`; Git `:168`, `:178` |
-
-Segundo escritor antigo efetivamente removido: [não verificado]. `logs/` não existe nesta cópia; é ignorado em `.gitignore:53`. O código apenas relata a existência anterior em `bin/mapa20_montar.py:4-5`. O tripwire detecta diferença de bytes (`bin/relato.sh:104-105`), não autoria: outro escritor que produza bytes iguais não é identificado por essa comparação.
-
-Classes presentes: derivação paralela N declarado/N contado (`bin/mapa20_montar.py:80`, `:124`), selo sem prova de X/N (`bin/mapa20_valida.py:91-107`, `:209-215`) e identidade com dois consumidores divergentes por `ovr[0]` (`bin/mapa20_montar.py:118`, `:124`). Segundo escritor real e relógio produtivo [não verificado].
-
-## 11/11 14:32 · sessao 0396d9139208 · - · - · origem=Ronald (tmux)
-
-Achados do publicador, por leitura do código; execução em produção [não verificado]. [nao verificado]
-
-- **BLOQUEANTE — bytes publicados sem julgamento no caminho retido.** O caminho novo raspa, julga e copia o mesmo temporário (`bin/relato.sh:106`, `:109`, `:111`, `:158`). Porém, quando retido, o documento público anterior passa apenas pela raspagem e por `mv`, sem selo (`bin/relato.sh:116`, `:119`, `:120`), e entra no commit/push (`bin/relato.sh:167`, `:168`, `:178`, `:179`). Entrada concreta: mapa vivo inválido e `DEST/MAPA-20.md` contendo `E3 encerrada — 1 de 2`; o segundo permanece/republica com rc 1, sem julgamento. O teste aceita até `MAPA VELHO`, sem tabela (`bin/tests/test_mapa20_valida.sh:275`, `:306`, `:307`).
-
-- **FILA — classificação rc 1/2 ainda ambígua.** Falha operacional de `cp`, como EACCES/ENOSPC, vira rc 1 (`bin/relato.sh:100`, `:101`); erro operacional de `cmp` também vira rc 1 (`bin/relato.sh:104`, `:105`). Raspagem do retido falha, remoção funciona e conserva rc 1 (`bin/relato.sh:119`, `:123`, `:125`, `:180`), embora a declaração prometa rc 2 para falha de raspagem e precedência de 2 (`bin/relato.sh:96`, `:97`). O teste explicitamente legitima esse último caso: `raspa_falha … esperado 1` (`bin/tests/test_mapa20_valida.sh:309`).
-
-- **FILA — rc chega, mas não há tratamento específico no chamador da cópia.** O retorno acumulado aparece tanto sem alteração quanto após push (`bin/relato.sh:173`, `:180`); falha de remoção que deixa o mapa presente aborta antes do push com 2 (`bin/relato.sh:123`, `:124`). A unit chama diretamente o script, como oneshot (`bin/hasner-relato.service:13`, `:15`); não declara diferenciação de 1 versus 2, alerta ou leitor que execute reação (`bin/hasner-relato.service:12`). O timer volta periodicamente (`bin/hasner-relato.timer:5`, `:6`); unit/timer vivos [não verificado].
-
-- **FILA — fontes não compartilham a fotografia do mapa.** O selo abre a fonte citada durante julgamento (`bin/mapa20_valida.py:100`, `:101`); depois o publicador manda raspar novamente o BACKLOG vivo (`bin/relato.sh:155`; leitura em `bin/raspar_publico.py:28`). Entrada temporal concreta: inserir uma linha no BACKLOG entre esses passos muda a linha publicada, preservando a citação anteriormente aprovada. Ocorrência real [não verificado].
-
-- **Curado no caminho novo:** regravar o mapa vivo depois do selo não muda o temporário publicado (`bin/relato.sh:100`, `:109`, `:158`); há teste que regrava a origem após o selo e cobra publicação da fotografia (`bin/tests/test_mapa20_valida.sh:244`, `:245`, `:311`). Raspador que retorna 0 sem escrever deixa o arquivo de julgamento ausente, conduzindo a rc 2 (`bin/relato.sh:109`, `:113`; `bin/tests/test_mapa20_valida.sh:262`, `:263`, `:317`). Raspagem que estraga a célula é julgada e retida (`bin/tests/test_mapa20_valida.sh:268`, `:269`, `:318`).
-
-- **Limite da corrida:** o lock de publicação é comum ao produtor de CODEX-ESTADO no caminho de evento (`bin/relato.sh:27`; `bin/codex_estado.sh:65`, `:66`). Isso não fotografa BACKLOG/fontes e não verifica novamente o destino entre `cp`, `git add` e `git commit` (`bin/relato.sh:158`, `:168`, `:178`); outro escritor concreto do MAPA-20 público [não verificado].
-
-## 11/11 14:30 · sessao c243052975dc · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
-
-**NÃO PROCEDE declarar o caminho inteiro fechado.** A cura limita `/hora/` e corrige a prova do aviso/controle dos mutantes; permanecem esperas anteriores à fila e ausência de uma identidade estável para o reenvio. (`app/static/pwa.js:93`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:100`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:450`, `app/templates/ponto/bater_ponto_v2.html:308`, `app/static/pwa.js:48`)
-
-Chromium, mortes efetivamente executadas, smoke e efeitos em produção: **[nao verificado]**. Não executei o navegador: seu executor cria arquivos e perfil temporários. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:279`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:286`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:295`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:298`)
-
-1. **Fechamento de cada achado da volta 2, por inspeção.**
-
-Na tabela, o veredito qualifica **o fechamento** do achado.
-
-| Achado da volta 2 | Veredito, cura e teste correspondente | [nao verificado]
-|---|---|
-| Triagem offline escondia confirmar quando a câmera falhava | **PROCEDE.** Botão mostrado antes da abertura e preservado sem stream; M1 reinjeta a ocultação. (`app/templates/ponto/triagem/apto.html:252`, `app/templates/ponto/triagem/apto.html:262`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:550`) |
-| Triagem online presa em câmera pendente | **PROCEDE.** Abertura limitada, seguida da liberação sem stream; matriz inclui câmera pendente, M3 retira a liberação e Md retira o teto. (`app/static/pwa.js:159`, `app/static/pwa.js:162`; `app/templates/ponto/triagem/apto.html:164`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:55`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:560`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:626`) |
-| Triagem online dependia exclusivamente de `toBlob` | **PROCEDE.** Captura central limitada, aguardada antes do submit; matriz e teste direto cobrem callback mudo/conversão falha. (`app/templates/ponto/triagem/apto.html:177`, `app/templates/ponto/triagem/apto.html:231`; `app/static/pwa.js:177`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:59`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:516`) |
-| Triagem offline enfileirava somente dentro do callback | **PROCEDE.** Captura termina antes da chamada independente ao escritor; M4 reinjeta callback sem teto. (`app/templates/ponto/triagem/apto.html:276`, `app/templates/ponto/triagem/apto.html:289`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:565`) |
-| V2 vetava foto nula | **PROCEDE.** Requisitos avisam e prosseguem; M2 reinjeta o veto. (`app/templates/ponto/bater_ponto_v2.html:269`, `app/templates/ponto/bater_ponto_v2.html:298`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:555`) |
-| V2 pendurava com `toBlob` mudo e `toDataURL` lançando | **PROCEDE.** Exceção do fallback é absorvida pelo teto; cenário específico e Md cobrem o contrato. (`app/static/pwa.js:138`, `app/static/pwa.js:177`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:60`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:626`) |
-| Barreiras no template legado | **PROCEDE por eliminação.** Seleção atual usa V2/triagem; M6 permanece apenas como histórico, sem ensaio comportamental próprio. (`app/ponto/views.py:356`, `app/scripts/check_a_lei_batida.py:20`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:524`) |
-| Captura/espera duplicadas nas telas | **PROCEDE para a operação da câmera.** A operação fica no PWA; censo exige lista fechada de produtores. Os textos próprios continuam, abaixo. (`app/static/pwa.js:157`, `app/static/pwa.js:168`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:641`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:661`) |
-| Mutante com `await` infinito em requisitos | **PROCEDE quanto à prova prevista.** Ma injeta exatamente a espera; agora passa por controle acoplado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:595`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:545`) |
-| Mutante sem aviso | **PROCEDE quanto à prova prevista.** Mb troca o aviso por `false` e exige sua falta na tela. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:600`) |
-| `throw` no ramo sem foto | **PROCEDE quanto à prova prevista.** Mc reinjeta a exceção e exige ausência de envio. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:605`) |
-| PWA não carregou | **NÃO PROCEDE o fechamento offline.** Ambas as telas dependem do escritor ausente; mostram erro sem gravação alternativa. O teste sem PWA continua somente online. (`app/templates/ponto/triagem/apto.html:289`, `app/templates/ponto/triagem/apto.html:308`; `app/templates/ponto/bater_ponto_v2.html:332`, `app/templates/ponto/bater_ponto_v2.html:338`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:465`) |
-| `estadoPermissao` ainda participava do fluxo | **PROCEDE a retirada do fluxo examinado.** Requisitos consultam captura e GPS diretamente. (`app/templates/ponto/bater_ponto_v2.html:269`, `app/templates/ponto/bater_ponto_v2.html:274`, `app/templates/ponto/bater_ponto_v2.html:279`) |
-| Transporte incompleto de timestamp/GPS | **NÃO PROCEDE.** Sync continua omitindo timestamp corrigido, gap, precisão e instante GPS. (`app/static/pwa.js:188`, `app/static/pwa.js:191`, `app/static/pwa.js:217`, `app/static/pwa.js:226`) |
-| Textos de obrigatoriedade contraditórios | **NÃO PROCEDE.** Permanecem na triagem e na V2; os testes procuram o aviso, sem proibir essas mensagens contraditórias. (`app/templates/ponto/triagem/apto.html:66`, `app/templates/ponto/triagem/apto.html:124`, `app/templates/ponto/triagem/apto.html:194`, `app/templates/ponto/triagem/apto.html:250`; `app/templates/ponto/bater_ponto_v2.html:100`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:338`) |
-| B1: `/hora/` pendurada antes do `add` | **PROCEDE o fechamento específico da espera HTTP/corpo.** `_noTeto` envolve ambos; FilaRealTest e Me exercitam a fila pelo escritor real. **Não fecha a espera total**, pois IndexedDB permanece sem teto. (`app/static/pwa.js:93`, `app/static/pwa.js:97`, `app/static/pwa.js:113`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:501`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:610`) |
-| B2: aviso invisível em atributo | **PROCEDE.** V2 acrescenta texto; oráculo usa `innerText`; Mf recoloca somente `title`. (`app/templates/ponto/bater_ponto_v2.html:250`; `app/ponto/tests/test_selfie_nao_barra_chromium.py:100`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:621`) |
-| B2: mutante morto sem controle verde acoplado | **PROCEDE.** `par` junta controle/mutante, exige controle verde/não vazio e exclui sonda sem veredito das mortes. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:450`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:451`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:453`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:455`) |
-
-2. **PROCEDE a existência de caminhos sem teto antes da gravação.**
-
-| Caminho | O que acontece antes da fila |
-|---|---|
-| Triagem online | Clique desabilita botão → GPS com timer de 8 s → selfie limitada → espera de 400 ms → submit nativo. Esse ramo **não possui fallback para a fila** se o envio falhar ou ficar pendente. (`app/templates/ponto/triagem/apto.html:212`, `app/templates/ponto/triagem/apto.html:218`, `app/templates/ponto/triagem/apto.html:231`, `app/templates/ponto/triagem/apto.html:240`, `app/templates/ponto/triagem/apto.html:241`) |
-| Triagem offline | Primeiro clique abre confirmação; segundo clique → captura limitada → escritor da fila. Falha de câmera não impede essa chamada; falha do escritor mostra erro, sem gravação alternativa. (`app/templates/ponto/triagem/apto.html:243`, `app/templates/ponto/triagem/apto.html:252`, `app/templates/ponto/triagem/apto.html:276`, `app/templates/ponto/triagem/apto.html:289`, `app/templates/ponto/triagem/apto.html:308`) |
-| V2 offline | Clique → selfie limitada → GPS com tentativas de 10 e 12 s → escritor. Esses timers de GPS são próprios, além do teto de selfie/hora. (`app/templates/ponto/bater_ponto_v2.html:262`, `app/templates/ponto/bater_ponto_v2.html:274`, `app/templates/ponto/bater_ponto_v2.html:280`, `app/templates/ponto/bater_ponto_v2.html:281`, `app/templates/ponto/bater_ponto_v2.html:332`) |
-| V2 online | Após requisitos, espera `fetch` **sem teto**. Somente rejeição chega ao fallback da fila. HTTP de erro espera `r.json()` também sem teto e, depois, retorna sem enfileirar. (`app/templates/ponto/bater_ponto_v2.html:298`, `app/templates/ponto/bater_ponto_v2.html:308`, `app/templates/ponto/bater_ponto_v2.html:314`, `app/templates/ponto/bater_ponto_v2.html:316`, `app/templates/ponto/bater_ponto_v2.html:319`) |
-| Escritor PWA | `obterGap` → leitura de config → possível medição limitada → leitura/gravação de config → nova abertura do banco → `add` → `tx.oncomplete`. O teto HTTP não engloba essas operações de armazenamento. (`app/static/pwa.js:104`, `app/static/pwa.js:108`, `app/static/pwa.js:113`, `app/static/pwa.js:182`, `app/static/pwa.js:184`, `app/static/pwa.js:194`) |
-
-**`abrirDB` continua sendo uma promessa potencialmente pendente:** resolve em `onsuccess`, rejeita em `onerror`; não possui `onblocked`, teto ou fechamento das conexões abertas. Se a abertura não chegar a nenhum desses dois eventos, `obterGap` já fica esperando antes de alcançar o teto HTTP. A transação da fila também não possui teto nem tratamento explícito de `onabort`. Ocorrência real dessas condições: **[nao verificado]**. (`app/static/pwa.js:48`, `app/static/pwa.js:58`, `app/static/pwa.js:59`, `app/static/pwa.js:74`, `app/static/pwa.js:113`, `app/static/pwa.js:185`, `app/static/pwa.js:195`)
-
-**POST recebido, resposta perdida:**
-
-- Se o `fetch` permanecer pendente, **não entra na fila**; o botão permanece desabilitado. (`app/templates/ponto/bater_ponto_v2.html:294`, `app/templates/ponto/bater_ponto_v2.html:295`, `app/templates/ponto/bater_ponto_v2.html:308`, `app/templates/ponto/bater_ponto_v2.html:317`)
-- Se acabar rejeitando, **tenta entrar na fila**, com timestamp produzido naquele momento. O POST inicial não leva timestamp nem ID estável do clique. (`app/templates/ponto/bater_ponto_v2.html:102`, `app/templates/ponto/bater_ponto_v2.html:304`, `app/templates/ponto/bater_ponto_v2.html:319`; `app/static/pwa.js:182`, `app/static/pwa.js:189`)
-- **Não procede “sempre duplica” nem “nunca duplica”.** As APIs deduplicam por **colaborador + tipo + timestamp efetivo em ±5 minutos**. A porta acrescenta mesmo tipo em ±60 segundos e igualdade exata **colaborador + timestamp**; essa última também é a constraint do modelo. Nenhuma é chave do clique original. (`app/api/views.py:539`, `app/api/views.py:542`, `app/api/views_core.py:526`, `app/api/views_core.py:529`; `app/ponto/registro_batida.py:106`, `app/ponto/registro_batida.py:113`, `app/ponto/registro_batida.py:120`; `app/ponto/models.py:106`)
-
-Logo, demora antes da rejeição ou relógio desencontrado pode colocar o novo instante fora dessas janelas; o mesmo evento deixa de ser identificado pelo dedup. Duplicação observada em produção: **[nao verificado]**. (`app/static/pwa.js:183`, `app/static/pwa.js:189`; `app/api/views.py:539`; `app/ponto/registro_batida.py:120`)
-
-3. **NÃO PROCEDE confundir os tetos com o gap; PROCEDE a diferença no instante gravado.**
-
-| Valor | Significado, escritor e leitores |
-|---|---|
-| `HORA_TETO_MS` | Duração de **2000 ms**, declarada uma vez; `calcularESalvarGap` a passa para `_noTeto`, abrangendo fetch e corpo. (`app/static/pwa.js:88`, `app/static/pwa.js:93`, `app/static/pwa.js:97`, `app/static/pwa.js:98`) |
-| `SELFIE_TETO_MS` | Duração **base de 1500 ms**, declarada uma vez; captura lê diretamente e abertura lê multiplicada por dois. Portanto, não é um único teto absoluto para as duas operações. (`app/static/pwa.js:129`, `app/static/pwa.js:162`, `app/static/pwa.js:177`) |
-| `timestamp_gap_ms` / `ntp_gap` | Offset assinado em milissegundos: servidor menos estimativa do relógio local. Não é duração de espera nem horário com fuso. (`app/static/pwa.js:101`, `app/static/pwa.js:102`, `app/static/pwa.js:103`, `app/static/pwa.js:190`; `app/ponto/models.py:76`) |
-
-**No teto não se guarda um novo gap:** o código lê o anterior ou usa zero; também não renova `ntp_calculado_em`. Esse é o mesmo fallback da rejeição imediata de rede. Entretanto, `Date.now()` da batida só é lido **depois** dessa espera: `/hora/` pendurada desloca o instante amostrado pelo tempo esperado, aproximadamente 2 s no modelo dos timers. Não há identidade com o instante do clique nem com a execução que rejeitou imediatamente. (`app/static/pwa.js:98`, `app/static/pwa.js:104`, `app/static/pwa.js:105`, `app/static/pwa.js:108`, `app/static/pwa.js:182`, `app/static/pwa.js:183`)
-
-**NÃO PROCEDE atribuir outra unidade/fuso ao servidor nesse caminho:** o sincronizador sequer transmite o gap ou o timestamp corrigido. Usa `b.timestamp` para ordenar e envia `timestamp_dispositivo` bruto. A API usada é `/api/ponto/bater/`; ambas as cascas entregam esse bruto a `hora_do_aparelho`. O endpoint offline antigo retorna 410. (`app/static/pwa.js:211`, `app/static/pwa.js:221`, `app/static/pwa.js:227`; `app/api/views.py:518`, `app/api/views_core.py:505`; `app/ponto/views.py:419`, `app/ponto/views.py:426`)
-
-`hora_do_aparelho` aceita ISO ou epoch segundos/ms e decide entre instante bruto e chegada. Os leitores encontrados de `timestamp_gap_ms` mantêm milissegundos: modelo, tela e alerta de skew do **ping geo**, sem aplicação de fuso ao offset. O problema aqui é **transporte omitido**, não conversão nova de unidade. (`app/api/hora_do_aparelho.py:79`, `app/api/hora_do_aparelho.py:116`, `app/api/hora_do_aparelho.py:141`, `app/api/hora_do_aparelho.py:153`; `app/ponto/models.py:76`; `app/templates/ponto/batidas_offline_pendentes.html:79`, `app/templates/ponto/batidas_offline_pendentes.html:80`; `app/api/views.py:2340`, `app/api/views.py:2371`)
-
-4. **PROCEDE a mordida específica dos novos testes; NÃO PROCEDE tratá-los como prova de persistência real.** [nao verificado]
-
-| Prova | Avaliação |
-|---|---|
-| FilaRealTest | Usa o escritor real e testa hora normal, fetch pendente e corpo pendente. Corrige a substituição que escondia B1. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:214`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:437`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:477`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:501`) |
-| Me | `1e9` impede o teto dentro dos 15 s do ensaio; exige ausência de fila diretamente e nas duas telas offline, com controle verde acoplado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:439`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:610`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:616`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:618`) |
-| Stub que ignora abort | Não dá passagem indevida: obriga `_noTeto` a resolver independentemente do abort. A promise HTTP original pode continuar pendente sem segurar o chamador limitado. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:116`; `app/static/pwa.js:138`, `app/static/pwa.js:140`) |
-| Mf | `title` não satisfaz `innerText`. Para câmera rejeitada, o aviso precisa estar presente antes do clique; o toast posterior não salva o mutante. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:100`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:190`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:342`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:621`) |
-| `_Base.par` | Controle e mutante são processos separados submetidos ao mesmo lote; controle vermelho impede declarar morte, e sonda sem veredito é filtrada. Promessa pendente **com veredito da sonda** continua sendo falha válida. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:298`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:318`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:351`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:450`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:455`) |
-
-**Há um caso que o selo aceita sem provar a conclusão:** o fake marca fila dentro do `add`, antes de `tx.oncomplete`; `falhas_da_fila` não exige “fila resolveu”. Um escritor pendurado depois desse `add` satisfaria o oráculo, embora a função real ainda estivesse aguardando conclusão. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:135`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:151`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:215`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:484`; `app/static/pwa.js:194`)
-
-O fake sempre abre com sucesso e não reproduz bloqueio, aborto ou rollback; os timers rodam em tempo virtual. O caso online novo injeta rejeição imediata, sem representar POST pendurado ou servidor que gravou antes da rejeição. Persistência nativa e comportamento em tempo real: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:109`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:160`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:173`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:299`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:506`)
-
-A ressalva do frame “ok” permanece: stream vazio, dimensões falsificadas e `drawImage` real. Se isso falhar, agora o controle vermelho impede uma falsa morte; sucesso efetivo desse controle: **[nao verificado]**. (`app/ponto/tests/test_selfie_nao_barra_chromium.py:80`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:87`, `app/ponto/tests/test_selfie_nao_barra_chromium.py:452`; `app/static/pwa.js:172`)
-
-5. **Escritores, leitores e autoridades.**
-
-Além dos dois tetos descritos no item 3, os contratos relevantes são:
-
-| Campo/valor | Quem escreve → quem lê |
-|---|---|
-| `/hora/`: `hora`, `data`, `timestamp` | `hora_servidor` produz strings de apresentação e ISO com offset → PWA usa timestamp para epoch-ms; relógios das telas usam hora/data. (`app/core/views.py:14`, `app/core/views.py:20`; `app/static/pwa.js:102`; `app/templates/ponto/bater_ponto_v2.html:169`; `app/templates/ponto/triagem/base_triagem.html:46`) |
-| `t0`, `t1`, `medida`, `latencia`, `gap` | Medição PWA captura relógios/corpo e deriva um offset → grava config e devolve ao escritor. (`app/static/pwa.js:94`, `app/static/pwa.js:96`, `app/static/pwa.js:97`, `app/static/pwa.js:101`, `app/static/pwa.js:104`, `app/static/pwa.js:182`) |
-| `ntp_gap`, `ntp_calculado_em` | `calcularESalvarGap`, via `salvarConfig`, escreve → `obterGap` lê validade de 30 min; fallback lê gap anterior. (`app/static/pwa.js:67`, `app/static/pwa.js:104`, `app/static/pwa.js:105`, `app/static/pwa.js:108`, `app/static/pwa.js:113`) |
-| `{stream, aviso}` / `{foto, aviso}` | Operação central e `_respostaSelfie` produzem → triagem/V2 leem controles, foto e aviso. (`app/static/pwa.js:145`, `app/static/pwa.js:163`, `app/static/pwa.js:178`; `app/templates/ponto/triagem/apto.html:155`, `app/templates/ponto/triagem/apto.html:233`; `app/templates/ponto/bater_ponto_v2.html:250`, `app/templates/ponto/bater_ponto_v2.html:275`) |
-| `_fotoBlob` / foto anterior | Input V2 e captura escrevem → captura preserva anterior; POST/fila transportam; sync anexa somente se presente. (`app/templates/ponto/bater_ponto_v2.html:255`, `app/templates/ponto/bater_ponto_v2.html:274`, `app/templates/ponto/bater_ponto_v2.html:306`, `app/templates/ponto/bater_ponto_v2.html:332`; `app/static/pwa.js:178`, `app/static/pwa.js:226`) |
-| Registro IndexedDB | `registrarBatidaOffline` escreve tipo, horários, gap, coordenadas, precisão, instante GPS e foto → sync lê; horário corrigido apenas ordena, e três metadados não são transportados. (`app/static/pwa.js:187`, `app/static/pwa.js:211`, `app/static/pwa.js:217`, `app/static/pwa.js:226`) |
-| `id` da fila | IndexedDB gera por autoincremento → sync usa para apagar localmente; não vira ID enviado ao servidor. (`app/static/pwa.js:54`, `app/static/pwa.js:217`, `app/static/pwa.js:236`) |
-| `C.hora`, `C.post`, `C.fim` | Construtor de cenário escreve → fetch fake seleciona resposta/rejeição e timer emite veredito. (`app/ponto/tests/test_se
-
-[truncado em 20000 de 24229 caracteres]
-
-## 11/11 14:29 · sessao 9ba71d54c610 · GABARITO-FABLE-SOMBRA-AJUSTE · verificador · origem=Code
-
-**BLOQUEANTE — alternativa (a), pela leitura literal de que o RED deve evidenciar o defeito pelo selo definido no aval.** O aval exige painel renderizado × API para o mesmo colaborador; a PROPORCAO mantém “RED e GREEN”; a LEI-AKITA 5 determina: “Cura sem teste vermelho evidenciado nao existe”. (`aval_ui_painel_raspado.txt:10–11`; `aval_proporcao_por_risco_1111.txt:1`, item 2; `CLAUDE.md:28–29`). [nao verificado]
-
-- **Não há evidência fornecida do ORM vermelho pelo defeito da obra antes da cura.** A docstring registra cinco falhas **em memória**, mas declara que esse selo não certifica ORM e que o “RED visual/ORM antes da cura NAO [foi] executado nesta copia”. (`app/colaboradores/tests/test_ui_painel_mostra_o_app.py:3–11`).
-- O único log ORM mostra quatro falhas por **“fixture invisivel”**, inclusive com mutante. No código, essa asserção está no `setUp`, antes da instalação do mutante e da renderização; o comentário atribui a ela os quatro RED v1. Isso evidencia falha de preparação, não ausência do rótulo/lista. (`v1_orm_falhas.txt:13–31`; `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:58–61`, `:93–105`).
-- A L-006 explicita o precedente: “RED que nao se le nao vale como evidencia (LEI-AKITA 5)”, com reconstrução contra o código anterior. (`app/docs/LEIS.md:64`).
-- O corpo do commit `984ec6938` ficou **[não verificado]**: `git log` não pôde consultá-lo nesta cópia sem repositório Git. **[não verificado]**
-
-**A alternativa (b) não cabe nessa leitura:** a fila cobre “como o selo poderia ser enganado”; aqui falta comprovar o RED obrigatório do selo contratado. O vermelho em memória não o substitui, conforme a própria docstring. (`aval_proporcao_por_risco_1111.txt:1`, item 2; `app/colaboradores/tests/test_ui_painel_mostra_o_app.py:3–4`).
-
-*Referências aos anexos contam linhas desde a primeira linha do conteúdo fornecido.*
-
-_3920 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3924 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
