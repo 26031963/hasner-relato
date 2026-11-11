@@ -1,7 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite_pre_opus2.sh | pid=2641415
+ESPERANDO: c4v11_rodar_orm.sh | pid=2979199
 B3 FIO-E0-V4-E3 RESPONDIDA por LIBERA-B3-E3-FIX11 09:33: UM opus final sobre 999a7966c se suite_pre_opus2 verde; reprovou = para com matriz de transicoes da porta (sem e3fix12); pouso so com reversao comp 11 em logs/ antes do deploy, comp 10 intocada
+E3 suite pre-opus 09:46: VERDE na arvore 999a7966c (logs/FIO-E0-V4-E3/suite_pre_opus2.log: OK skipped=42 expected failures=41, Ran 15134, rc 0, 09:45); copia limpa; main andou so em bin/CLAUDE.md/docs desde a base 52a0022e9. UM opus final (verificador) lancado; reprovou = para com matriz de transicoes da porta
 META-18 09:16: pousos de produto 0 de 14, raia 1 em FIO-E0-V4-E3 (e3fix11 commit 999a7966c na copia, ORM+memoria+mutantes namespace rodando) e E4B c4v11 na fila do construtor, raia 2 em O169-FECHADA volta 5 (agente opus, copia nova do main 9ca563bb3), reprovacoes do dia 1 (SELO-ESPERA v1, PARADA)
 E3 e3fix11 09:21: copia 999a7966c; ORM 09:20 (logs/FIO-E0-V4-E3/e3fix11_orm.log): ruff 0, memoria Ran 31 OK, ORM Ran 123 OK, X1 base MORTO, green 14 OK, mutantes X1 7/7 + namespace 5/5 rc 1 por assertion. Suite inteira pre-opus rodando (suite_pre_opus2.log); opus final so com "libera B3"
 UI-PAINEL 09:45: ABERTA -- janela do aval (raia 2 O169 v5 esperando a trava da suite). Copia nova do main 9ca563bb3 (/home/ronald/wt-codex-ui-painel-094510), construtor Codex v1 lancado (logs/UI-PAINEL/lanca_v1.sh), aval raspado sem nome. DESPACHO UI-PAINEL: construir -> Codex | ORM/mutantes -> sessao pela trava | golden.py -> sessao (fora de app/) | opus final
