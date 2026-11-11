@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 13:45** · publicado em **11/11/2026 13:46** (UTC-3)
+> Ultima resposta processada: **11/11/2026 13:49** · publicado em **11/11/2026 13:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 13:49 · sessao 23a023a5f323 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+- A mudança no resolver retira apenas o retorno antecipado e entrega a recusa ao coletor; S128, HX e C7 continuam nos juízes existentes. C6/C7/tranca estão registrados, sem autoridade paralela acrescentada. (`app/chamados/services/disputa_emissao.py:1945-1950`, `:1964`, `:1968`, `:1977`, `:2007`, `:2046`, `:2089`; `app/core/juizes.py:278-279`, `:292`)
+
+- A porta de carimbo reaplica C6 após aplicar os campos em memória e desfaz se a pergunta continuar viva; HX resposta conserva a porta `reabrir` e suas recusas. (`app/chamados/models.py:3128-3145`, `:1390`; `app/chamados/services/disputa_emissao.py:2007-2009`)
+
+- A ordem de trava continua Colaborador → Disputa → Chamado → Pergunta; o escritor de estado trava antes de salvar e o resolver reutiliza o mesmo protocolo. Não achei alteração dessa ordem no trecho c6. (`app/chamados/models.py:280-296`, `:2665-2693`; `app/chamados/services/disputa_emissao.py:1877-1879`)
+
+- Não achei leitura nova de relógio no runtime: `janela_atual` recebe `p.data_evento`; o relógio de fallback C6 já existia. `janela_atual(None)` falha em `data.day`, sem substituir por hoje. (`app/chamados/services/fecho_runtime.py:30`; `app/chamados/juizes.py:577`; `app/ponto/janelas.py:24-27`)
+
+- Há limitação de atomicidade das limpezas: S143 tem savepoint próprio e engole exceções. Uma recusa coletada antes de erro posterior permanece na ContextVar, embora as limpezas S128/HX/C7 daquele savepoint sejam desfeitas; a borda ainda pode escrever sua Pauta. Não implica chamado sem Pauta, mas impede equiparar “Pauta escrita” a “limpezas concluídas”. (`app/chamados/signals.py:106-117`; `app/chamados/services/fecho_runtime.py:18`, `:70-73`)
+
+- **Novo leitor incorreto do campo com dois significados:** `abrir` grava dia do turno; `abrir_conversa` grava dia civil, e o juiz declara conversa sem competência de fato. O novo escritor usa `data_evento` cru sem distinguir `conversa`, materializando competência civil como competência de fato. (`app/chamados/models.py:2783-2802`; `app/chamados/juizes.py:332-336`; `app/chamados/services/fecho_runtime.py:29-31`)
+
+Contraexemplo estrutural alcançável:
+
+1. Empresa corte 24; em 23/09 criar conversa `ancora_ausente` com destino A e pai B distinto pela porta existente; depois entregar competência 09. A porta constrói precisamente pai B e destino A. (`app/chamados/services/disputa_emissao.py:1338-1362`, `:1371-1377`; `app/chamados/models.py:2801`)
+2. Admin fecha A: S127 procura disputa cujo **pai** seja A, e F1 exclui a pergunta pelo mês entregue calculado sobre sua data civil; escolher `fechado` também evita a guarda S122 específica de `resolvido`. (`app/chamados/juizes.py:2322-2324`; `app/chamados/models.py:364`, `:181`)
+3. A conversa sem resposta/carimbo/célula continua viva: seu dia do turno é `None`, portanto C6 não entra na janela viva e termina em `True`. (`app/chamados/juizes.py:336`, `:1394-1406`)
+4. S143 recusa pela competência civil e o novo runtime escreve Pauta 09, embora a conversa não tenha competência de fato. Existência desse caso na produção fornecida: [nao verificado]. (`app/chamados/services/disputa_emissao.py:1835-1844`; `app/chamados/services/fecho_runtime.py:29-48`; `app/chamados/juizes.py:333-335`)
+
+Os leitores crus preexistentes estão declarados em censo; isso distingue dívida anterior do **novo escritor** c6, ausente daquele censo. (`app/chamados/services/fio.py:1389-1410`)
+
+## 11/11 13:49 · sessao 16d6a2088751 · - · - · origem=Ronald (tmux)
+
+Censo de fechamento fora das duas bordas, somente leitura:
+
+- **A mudança no resolver alcança todos os chamadores.** A recusa agora registra em memória e prossegue para os passos seguintes, em vez de devolver `{0,0}`; S128, HX e C7 continuam em `app/chamados/services/disputa_emissao.py:1950`, `:1964`, `:2007`, `:2046`, `:2089`. Fora de coletor, o registro é no-op (`app/chamados/services/fecho_runtime.py:11`, `:16`, `:17`).
+
+- **Somente duas entradas produtivas instalam o coletor:** resposta livre do detalhe e resposta rápida do fio (`app/chamados/services/acoes_chamado.py:316`; `app/chamados/services/fio.py:722`). O único `.set()` está em `app/chamados/services/fecho_runtime.py:68`, o reset em `:72`, e a escrita depois da transição em `:73`. Outra entrada produtiva desse coletor: **não achei** [nao verificado: pesquisa textual não prova chamadas dinâmicas].
+
+- **S143 por qualquer save de status encerrado:** aceita apenas `ENCERRADOS`, exclui raw, exige que o save tenha escrito status, executa resolver dentro de savepoint e engole exceções (`app/chamados/signals.py:96`, `:104`, `:114`, `:115`, `:116`). `.update()` não emite esse evento (`app/chamados/signals.py:95`). Sem coletor humano não nasce Pauta E4B (`app/chamados/services/fecho_runtime.py:17`).
+
+- **Becos:** não fecha o chamado; trabalha com pais/destinos já terminais, trava a ordem, chama resolver e só então relê C7 e fecha disputa (`app/chamados/services/becos.py:43`, `:46`, `:51`, `:54`, `:55`, `:56`, `:57`). Após cura, recusa deixa de suprimir limpezas posteriores; não instala coletor (`app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/becos.py:54`; `app/chamados/services/fecho_runtime.py:17`).
+
+- **Reconciliador `_retratar`:** retenção pode impedir; depois `reconciliar()` precisa devolver True; segue rejeição automática da justificativa pendente, resolver explícito e nota (`app/chamados/reconciliador.py:518`, `:523`, `:529`, `:532`, `:536`, `:538`). Retorno do resolver é ignorado (`:536`). Não passa a escrever Pauta E4B (`app/chamados/services/fecho_runtime.py:17`).
+
+- **Reconciliador/costura:** reaponte ao candidato histórico precisa ser aceito; depois chama resolver do chamado já resolvido e retorna True (`app/chamados/reconciliador.py:1642`, `:1643`, `:1648`, `:1649`). Agora pode executar as limpezas após a recusa; sem coletor, nenhuma entrega E4B (`app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/fecho_runtime.py:17`).
+
+- **`reconciliar_fantasmas`:** só aplica após opção aplicar; tenta `retratar`; se este devolver falso, chama resolver diretamente; contagens, nota e evento dependem do resultado (`app/ponto/management/commands/reconciliar_fantasmas.py:269`, `:280`, `:281`, `:282`, `:286`, `:288`). Pode passar a contar/carimbar/fechar disputas que antes o return impedia; não passa a entregar Pauta E4B (`app/chamados/services/disputa_emissao.py:1950`, `:2092`; `app/chamados/services/fecho_runtime.py:17`).
+
+- **Outros fechamentos humanos continuam diretos:** aprovação de exceção (`app/chamados/services/acoes_chamado.py:70`), agenda (`:108`), escala (`:149`), autorização geofence (`:222`), recusa geofence (`:277`) e avaliação de benefício (`app/colaboradores/views.py:2068`). A porta `ChamadoColaborador.fechar` também chama diretamente `transicionar` (`app/chamados/models.py:454`). Nenhum desses instala coletor E4B (`app/chamados/services/fecho_runtime.py:68`, únicos consumidores em `app/chamados/services/acoes_chamado.py:316` e `app/chamados/services/fio.py:722`).
+
+- **Signals fechadores:** disputa fechada tenta `ch.reconciliar()` antes da nota (`app/chamados/signals.py:28`, `:42`, `:45`); evento de batida chama reconciliador de chamados (`app/ponto/signals.py:214`, `:215`). O gate sistêmico decide premissa e pergunta viva e escreve pela porta de estado (`app/chamados/models.py:682`, `:685`, `:654`). Sem borda humana, não há entrega E4B (`app/chamados/services/fecho_runtime.py:17`).
+
+- **Cascade e ajuste de vínculo:** desligamento percorre `NAO_FECHADOS` e usa `encerrar()` (`app/colaboradores/services/desligamento.py:150`, `:155`); troca de escala encerra chamados anteriores (`app/colaboradores/services/vinculo.py:384`, `:387`). `encerrar()` conserva gate de pergunta viva e escritor central (`app/chamados/models.py:1617`, `:1619`).
+
+- **Commands/cron:** comando de meio período usa `ch.fechar()` no apply (`app/ponto/management/commands/fechar_chamados_meio_periodo.py:94`, `:109`); comando de becos usa `fechar_beco()` no apply (`app/chamados/management/commands/fechar_becos_disputa.py:54`, `:57`). Cron de becos está configurado `--alarme` (`app/config/crons.py:663`); comando de ausência com `--alarme` apenas relata e retorna (`app/ponto/management/commands/fechar_chamados_ausencia.py:35`, `:40`), e apply delega à porta existente (`:44`; `app/ponto/services/ausencia.py:694`). Nenhuma dessas entradas ganha coletor E4B (`app/chamados/services/fecho_runtime.py:68`).
+
+- **API:** fechamento direto de `ChamadoColaborador` em `app/api` **não achei** [nao verificado: pesquisa textual]. `api_chamados_v2` POST apenas anexa nota (`app/api/views.py:988`, `:990`); upload separado de foto pode fechar disputa (`app/api/foto_recebida.py:80`), cujo signal tenta reconciliar chamado-pai (`app/chamados/signals.py:42`). Resposta de regularização chama materializador (`app/api/views.py:3000`), que pode encerrar chamado pela porta (`app/chamados/services/regularizacao_ext.py:205`).
+
+- **Django admin:** `app/chamados/admin.py` está vazio [nao verificado: não há linha citável]; registro de `ChamadoColaborador` no Django admin **não achei** [nao verificado: pesquisa textual global].
+
+**Pode haver novo fechamento sem entrega da viva exportada fora das duas bordas.** A exclusão da exportada da F1 é explícita (`app/chamados/models.py:364`); `fechar`, `encerrar` e `reconciliar` não instalam coletor (`app/chamados/models.py:454`, `:1619`, `:654`). Assim, no cenário c6, chamar diretamente `ch.fechar(admin)` fecha sem Pauta E4B: transição → save → S143 → recusa → coletor ausente (`app/chamados/models.py:454`, `:296`; `app/chamados/signals.py:115`; `app/chamados/services/disputa_emissao.py:1950`; `app/chamados/services/fecho_runtime.py:17`). Execução desse variante: [nao verificado]. A ausência de entrega por essas entradas é anterior; não identifiquei nova supressão de entrega que já existisse [nao verificado: análise estática].
+
+O teste de “passivo” c6 não cobre esse fechamento novo: planta o chamado já fechado por SQL antes de emitir o save/resolver/beco (`app/chamados/tests/test_e4b_c6_orm.py:160`, `:163`, `:164`, `:165`). Ele prova que passivo não recebe Pauta (`:166`), sem certificar todos os fechamentos futuros fora das bordas.
+
+## 11/11 13:49 · sessao 6255d01866f6 · - · - · origem=Ronald (tmux)
+
+- Os RED c6 mordem diretamente a cura: `retorno_antecipado` recoloca o retorno no lugar da coleta; `sem_pauta` elimina a chamada do escritor. As assertions correspondentes exigem morta carimbada e Pauta presente. O protocolo exige processo `rc=1`, exatamente um failure, caso e mensagem esperados e ausência de falha de precondição. (`app/chamados/tests/e4b_c6_verificar.py:24`, `:27`, `:114`; `app/chamados/tests/test_e4b_c6_orm.py:111`, `:122`)
+
+- A sobreposição da base troca integralmente os três módulos produtivos preexistentes; `sobrepor_modulo` restaura globais e troca aliases já importados. Não achei atalho que deixe o adaptador c6 nas bordas da base. (`app/chamados/tests/e4b_c6_verificar.py:54`; `app/chamados/tests/e4b_c4_base.py:28`, `:35`, `:39`)
+
+- O RED ORM usa C6/K6 reais como precondição, porta real de transição nas duas telas e spy de `reabrir` que delega ao método real. Confere carimbos, C7, chamado fechado, zero reabertura, Pauta com âncora e motivo, e exportação/FM inalterados. (`app/chamados/tests/test_e4b_c6_orm.py:76`, `:80`, `:86`, `:106`, `:111`, `:124`, `:131`)
+
+- Limbo é exercitado pela irmã com texto sem `respondida_em`, com viva exportada no mesmo credor; o teste exige `credor_carrega_limbo:<pk>` no texto. Não prova limbo sem viva exportada nem pergunta sem data. (`app/chamados/tests/test_e4b_c6_orm.py:73`, `:82`, `:127`, `:147`; comportamento desses outros cenários [nao verificado])
+
+- Não achei teste c6 com escrita real da Pauta falhando, rollback ORM desse erro ou concorrência. O teste de erro em memória falha dentro da transição e só confere restauração do ContextVar/ausência da chamada ao escritor; a idempotência exercitada é sequencial. (`app/chamados/tests/test_e4b_c6_memoria.py:61`, `:82`; `app/chamados/tests/test_e4b_c6_orm.py:136`)
+
+- **Bloqueante de idempotência concorrente:** dois chamados de colaboradores diferentes na mesma empresa/competência podem ambos observar `exists=False`; depois cada um chama `escrever`, que faz `Pauta.objects.create`. Não há releitura nem exclusão mútua pela âncora. A trava do resolver é por colaborador; os constraints de Pauta só validam destinatário. Resultado permitido: duas Pautas vivas com mesmo marcador e âncora. Reprodução efetiva [nao verificado]. (`app/chamados/services/fecho_runtime.py:35`, `:46`; `app/pautas/services.py:180`; `app/chamados/services/disputa_emissao.py:1878`; `app/pautas/models.py:123`)
+
+- A atualização comum do contador ocorre depois da criação da Pauta e não corrige essa corrida; eventual espera pela linha do contador não reexecuta o teste de existência. (`app/pautas/services.py:180`, `:188`, `:352`, `:354`)
+
+- Competência usa a autoridade existente: `janela_atual(p.data_evento, empresa)` e ano/mês do fim da janela, mesma composição já usada por `competencia_do_dia_entregue`. O corte vem do cadastro da empresa. Não achei derivação nova por mês civil. (`app/chamados/services/fecho_runtime.py:29`; `app/chamados/services/vigia_fio.py:822`, `:838`; `app/ponto/janelas.py:24`, `:36`, `:60`)
+
+- A âncora `competencia` significa empresa+competência. A leitura do DP filtra o departamento; o payload leva texto e âncora. “Viva” significa não feita e não cancelada; portanto marcar feita permite uma entrega posterior criar outra Pauta. (`app/pautas/models.py:34`, `:57`; `app/pautas/services.py:304`, `:322`; `app/pautas/views.py:39`; `app/chamados/services/fecho_runtime.py:35`)
+
+- O texto pode exceder 500 caracteres: só os IDs das perguntas têm limite de vinte, enquanto os motivos carregam listas de limbo sem teto; a porta corta `texto[:500]`. Possível truncamento de IDs/motivos é consequência do código, mas não achei RED desse tamanho. (`app/chamados/services/fecho_runtime.py:39`, `:42`; `app/chamados/services/disputa_emissao.py:1840`; `app/pautas/services.py:185`)
+
+- O recorte anexado demonstra GREEN 383 e quatro mortes c6 — dois mutantes × dois motivos —, além das oito mortes c4. Não mostra os dois rótulos de morte c6 da base nem a execução integral da suíte; esses resultados permanecem [nao verificado]. Os runners locais são explicitamente recortados por labels. (`app/chamados/tests/e4b_c6_verificar.py:97`, `:109`; `app/chamados/tests/e4b_c4_verificar.py:124`; execução: `c6_orm.log` anexado [nao verificado quanto a linhas não fornecidas])
 
 ## 11/11 13:45 · sessao 08cbd3a06898 · TRIAGEM-OFFLINE-SEM-CAMERA · verificador · origem=Code
 
@@ -1503,119 +1586,4 @@ Transições verificadas na cópia:
 
 **Ambiguidade:** rc 1 representa tanto publicação parcial bem-sucedida com MAPA retido (`bin/relato.sh:100`, `bin/relato.sh:165`) quanto interrupções antes de publicar (`bin/relato.sh:28`, `bin/relato.sh:32`, `bin/relato.sh:110`, `bin/relato.sh:163`) ou falha de push (`bin/relato.sh:164`). O rc sozinho não distingue esses resultados (`bin/relato.sh:158`, `bin/relato.sh:165`).
 
-## 11/11 13:29 · sessao d5f84499206c · - · - · origem=Ronald (tmux)
-
-Não é possível certificar uma lista futura **FECHADA** apenas pelo código atual: escolher onde pôr a reação da raiz, como transportar o autor e como preservar a instância da pausa são decisões de implementação ainda não materializadas em diff. [nao verificado]
-
-Para um brief com perímetro conservador **proposto**, os arquivos concretos são:
-
-| F3 — produção | Razão verificável |
-|---|---|
-| `app/chamados/models.py` | Porta de fecho e trilha; carimbo normal e identidade. `:1855`, `:1932`, `:3103`, `:3168`. |
-| `app/chamados/signals.py` | Beco agenda fecho sem transportar autor; S143 resolve com usuário sistema. `:228`, `:237`, `:115`. |
-| `app/chamados/services/becos.py` | Fecha com parâmetro `sistema`; entrada de evento fornece usuário sistema. `:57`, `:78`. |
-| `app/chamados/services/materializacao.py` | Caudas atuais fecham diretamente; necessidade de compatibilidade/idempotência com reação nova da raiz. `:591`, `:1307`, `:1338`. |
-| `app/chamados/reconciliador.py` | Três caudas diretas de fecho. `:412`, `:612`, `:1171`. |
-| `app/chamados/services/disputa_emissao.py` | Fechos diretos de disputa muda e S128. `:1284`, `:1964`. |
-| `app/api/foto_recebida.py` | Valida perguntas antes de chamar `d.fechar`, que pode encontrar disputa já fechada pela reação nova. `:79`, `:80`. |
-| `app/ponto/services/entrada_sincronizada.py` | Fecho direto com sistema. `:59`. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py` | Cauda direta depois de carimbar perguntas. `:88`. |
-| `app/chamados/services/explicador.py` | Ainda responde fechamento por `not fio_vivo`, sem a outra cláusula C7. `:137`. |
-| `app/chamados/relatorios_disputa.py` | Ainda emite `PRONTA_FECHAR` apenas por ausência de vivas. `:18`, `:20`. |
-
-F3 — testes existentes adequados para concentrar mudanças: `app/chamados/tests/test_c7_red_minimos.py:147` (`:428` idempotência, `:574` escritor único), `app/chamados/tests/test_varredura_becos_evento_pergunta.py:47` (`:70` hoje exige pai resolvido), `app/chamados/tests/test_o261e_f2_porta_carimbo.py:611`. A alteração futura desses testes é proposta, não fato executado. [nao verificado]
-
-| F4 — produção | Razão verificável |
-|---|---|
-| `app/chamados/models.py` | Identidade rejeita `instancia_marco` diferente da posição simples derivada do motivo; consultas também derivam posição só pelo motivo. `:3441`, `:3446`, `:2753`. |
-| `app/chamados/services/declaracao_texto.py` | Declara perda do índice das pausas; faltantes retornam posição simples e lote agrupa por motivo/dia. `:49`, `:139`, `:582`, `:590`. |
-| `app/chamados/services/disputa_emissao.py` | Emissores materializam perguntas dos marcos faltantes. `:823`, `:837`, `:850`, `:875`. |
-| `app/chamados/services/fabrica_da_celula.py` | Dedup e emissão atuais operam por motivo/dia. `:145`, `:154`, `:170`, `:172`, `:174`. |
-| `app/chamados/services/materializacao.py` | Unidade e lote são individuais; ponto de composição do ato conjunto. `:1163`, `:1225`, `:1381`. |
-| `app/chamados/services/validacao.py` | Valida uma pergunta e chama unidade individual antes do lote. `:435`, `:461`, `:463`, `:469`. |
-| `app/chamados/services/passivo_validado.py` | Importa e chama unidade individual; não pode deixar caminho alternativo furar unidade do par. `:39`, `:514`, `:516`. |
-| `app/chamados/juizes.py` | Leitor de fato do marco ainda verifica todas as pausas para motivos de intervalo; precisa conferir instância efetivamente cobrada. `:930`, `:949`, `:965`. |
-| `app/chamados/services/fio.py` | Identidade da família MARCO inclui instância; leitura e migração devem continuar coerentes com seu significado ampliado. `:1373`, `:1460`, `:1495`. |
-
-F4 — testes existentes onde cabe concentrar a mudança: `app/chamados/tests/test_emissao_costura_intervalo.py:50` (`:65` dedup), `app/chamados/tests/test_guarda_paridade_materializador.py:59`, `app/chamados/tests/test_plantio_intervalo_overnight.py:27`, `app/chamados/tests/test_porta_validacao_pergunta.py:224`. Alterações futuras são propostas. [nao verificado]
-
-Dependências de leitura que **não precisam ser declaradas como edição só por serem consumidas**: `app/escala/models.py:1652` fornece pares DNA; `app/escala/services/leitor_celula.py:114` fornece grade; `app/chamados/services/tarefa_do_dia.py:58` e `:92` já enumeram instâncias, e `:109` já aceita instância persistida. Necessidade futura de editá-las: [nao verificado].
-
-Interseção do perímetro conservador proposto F3/F4: `app/chamados/models.py`, `app/chamados/services/materializacao.py`, `app/chamados/services/disputa_emissao.py`. Portanto, nesse perímetro, F3 e F4 não são disjuntas. A propriedade de serem futuras edições continua [nao verificado].
-
-## 11/11 13:29 · sessao 19e32ec7963c · - · - · origem=Ronald (tmux)
-
-Base disponível em `../a026943099b8d88468240fd4b18491141b6810af`; comparação por AST realizada sem importar a aplicação nem executar testes. [nao verificado: identificação do hash sem metadados Git]
-
-Delta pertinente confirmado:
-
-- `editar_ausencia_registro` passou a invalidar o fechamento entre os limites antigo e novo depois do `save`; validação de tipo continua igual. `app/ponto/services/ausencia.py:473-475,496-524`.
-- Materialização de ausência retirou minutos fixos e `checar_parcial=False`; as duas chamadas continuam pela criação validada. `app/chamados/services/materializacao.py:474-498,526-534`.
-- `cobertura_ausencia_periodo` delega aos novos `_q_cobertura` e `_cobertura_pura`; desconhecido sem fim continua restrito à data inicial. `app/ponto/turnos.py:2752-2783`.
-- `lista_ausencias` ganhou decisões pelo catálogo/parcialidade para apresentação. `app/ponto/views.py:2234-2245`.
-- Nenhum escritor ou leitor citado desapareceu; exclusões encontradas (`data_saida_esperada`, `_fim_turno_encadeado`) não eram decisões citadas por `Ausencia.tipo`. [nao verificado: constatação negativa da comparação]
-
-Testes que enumeram tipos/catálogos: [nao verificado]
-
-| Arquivo | Evidência |
-|---|---|
-| `app/ponto/tests/test_catalogo_ausencias.py` | `:10-20,36-42,56-60` |
-| `app/ponto/tests/test_cadastro_tipo.py` | `:14-34,40-50` |
-| `app/ponto/tests/test_selo_b5f1_porta_ausencia.py` | `:180-194`: exige aceitar tipo vivo fora dos choices |
-| `app/api/tests/test_api_ausencias_tipos.py` | `:46-51`: ainda confere GET contra choices |
-| `app/ponto/tests/test_aus_f4_criar_pelo_juiz.py` | `:43-54`: enumera válidos fora dos choices |
-| `app/ponto/tests/test_fim_separado.py` | `:34-42,55-60` |
-| `app/ponto/tests/test_contract_rotulo_x_efeito.py` | `:34-37,69-75` |
-| `app/ponto/tests/test_rotulo_x_efeito.py` | `:47-64` |
-| `app/ponto/tests/test_rotulo_do_dia_decidido.py` | `:84-92` |
-| `app/ponto/tests/test_contract_espelho_sem_emoji.py` | `:271-282` |
-| `app/ponto/tests/test_ui3_rotulo_do_espelho.py` | `:25-30,46-64` |
-| `app/ponto/tests/test_conjuntos_vivos.py` | `:14-45`: efeitos e exclusões da rubrica |
-| `app/ponto/tests/test_catalogo_vivo.py` | `:30-50`: cadastro novo/inativo nos conjuntos |
-
-Esses enumeradores já existiam na base; não foram encontrados novos enumeradores de catálogo entre as adições. [nao verificado: constatação negativa da comparação]
-
-A cura não deve converter a validação para `TIPO_CHOICES`: isso quebraria contrato explícito de aceitação do cadastro vivo. `app/ponto/tests/test_selo_b5f1_porta_ausencia.py:180-194`; `app/ponto/tests/test_cadastro_tipo.py:43-50`.
-
-A L-099 já separa estrutura de cadastro/batida e determina destino de admin para os últimos; não exige uma nova pergunta de lei para essa separação. `app/docs/LEIS.md:122`. A regra de origem e de cadastro já existe em `CLAUDE.md:17-27,32-44`.
-
-## 11/11 13:29 · sessao 6eda4fef642f · - · - · origem=Ronald (tmux)
-
-Auditoria estática; não executei selo nem suíte. [nao verificado] [nao verificado]
-
-| Achado v1 | Cura v2 e caso |
-|---|---|
-| Oito métodos ORM | `Attribute.attr` independe de espaçamento; os oito nomes estão no conjunto. `bin/selo_proporcao.py:28`, `bin/selo_proporcao.py:55`. Casos independentes no laço: `bin/tests/test_selo_proporcao.sh:28`. |
-| Espaço depois do ponto | Curado pelo AST; caso `espaco_no_ponto`. `bin/selo_proporcao.py:55`, `bin/tests/test_selo_proporcao.sh:31`. |
-| Quebra antes de `()` | O exemplo v1 é curado; caso `quebra_de_linha` cria ambas as linhas, portanto não prova continuação isolada adicionada. `bin/selo_proporcao.py:106`, `bin/tests/test_selo_proporcao.sh:32`. |
-| Alias | Referência ao atributo agora basta; caso `alias`, sem invocação. `bin/selo_proporcao.py:55`, `bin/tests/test_selo_proporcao.sh:33`. |
-| `getattr(obj,"save")()` | String exata reconhecida; caso `getattr_string`. `bin/selo_proporcao.py:59`, `bin/tests/test_selo_proporcao.sh:34`. |
-| `(obj.save)()` | Reconhecido pelo mesmo `Attribute`; não há caso específico. `bin/selo_proporcao.py:55`, `bin/tests/test_selo_proporcao.sh:31`. |
-| `#` em string | AST evita truncamento; `cerquilha_string`. `bin/selo_proporcao.py:101`, `bin/tests/test_selo_proporcao.sh:35`. |
-| Signal por alias/getattr | O `.connect` do exemplo v1 é reconhecido; caso isolado `signal_connect`, sem reproduzir exatamente o exemplo. `bin/selo_proporcao.py:30`, `bin/selo_proporcao.py:55`, `bin/tests/test_selo_proporcao.sh:39`. |
-| Command por alias | A referência `M.objects.create` é reconhecida; `command_alias` contém apenas a referência, sem chamada. Não existe regra específica de command. `bin/selo_proporcao.py:55`, `bin/tests/test_selo_proporcao.sh:43`. |
-| Migration por rename | Lista `--name-status -z -M` lê destino e regra independe de linhas adicionadas; `migration_rename`. `bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:86`, `bin/selo_proporcao.py:94`, `bin/tests/test_selo_proporcao.sh:42`. |
-| Binário/`-diff` | Fonte vem de `git show`; linhas usam `--text`; `binario_attr`. `bin/selo_proporcao.py:46`, `bin/selo_proporcao.py:100`, `bin/tests/test_selo_proporcao.sh:44`. |
-| Caminho com espaço/Unicode | NUL e `surrogateescape` removem dependência dos cabeçalhos; respectivos casos. Não há caso específico com tabulação. `bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:89`, `bin/tests/test_selo_proporcao.sh:45`, `bin/tests/test_selo_proporcao.sh:46`. |
-| Falso cabeçalho `+++` no conteúdo | Parser não lê cabeçalhos de caminho; cura no código, sem caso correspondente. `bin/selo_proporcao.py:82`, `bin/selo_proporcao.py:100`, `bin/tests/test_selo_proporcao.sh:27`. |
-| Revisão interpretada como opção | Rejeita prefixo `-` e resolve commits antes do diff; `opcao_como_revisao`. `bin/selo_proporcao.py:78`, `bin/selo_proporcao.py:80`, `bin/tests/test_selo_proporcao.sh:58`. |
-| Importação de módulo de teste em produção | Import estático reconhecido; `prod_importa_teste` cobre `test_writer`, sem caso independente para importação de `tests.writer`. Cura limitada a `Import`/`ImportFrom`; carregamento dinâmico fica fora. `bin/selo_proporcao.py:61`, `bin/selo_proporcao.py:63`, `bin/tests/test_selo_proporcao.sh:47`. |
-
-Persistem problemas nos testes: [nao verificado]
-
-- `signal_nome` possui dois gatilhos independentes no mesmo `ImportFrom`: módulo terminando em `signals` e alias `post_save`; remover qualquer um mantém rc 1. `bin/tests/test_selo_proporcao.sh:38`, `bin/selo_proporcao.py:64`.
-- `apagou_migration` não apaga migration: cria `app/x/velho2.py`; não testa o ramo `st == 'D'`. `bin/tests/test_selo_proporcao.sh:54`, `bin/selo_proporcao.py:92`.
-- O bloco de `bash -e` não verifica `$?`; em seguida, o único rc comparado vem de `bash -c` sem `-e`. Regressão no cenário anunciado pode passar. `bin/tests/test_selo_proporcao.sh:62`, `bin/tests/test_selo_proporcao.sh:63`.
-- A função verifica checkout, resultado global do preparo, commit sem `--allow-empty` e HEAD diferente; melhorou a preparação v1. Porém `bash -c "$4"` executa scripts internos sem `-e`, e comandos separados por `;` podem esconder falha anterior. O preparo especial de `bash -e` também ignora falhas de checkout/add/commit. `bin/tests/test_selo_proporcao.sh:20`, `bin/tests/test_selo_proporcao.sh:21`, `bin/tests/test_selo_proporcao.sh:22`, `bin/tests/test_selo_proporcao.sh:44`, `bin/tests/test_selo_proporcao.sh:61`.
-- `so_remocao` substitui uma chamada por `pass`; cobre remoção da escrita com adição inócua, não patch exclusivamente de remoção. `bin/tests/test_selo_proporcao.sh:49`.
-- As exclusões de fixture agora estão isoladas corretamente; também foram acrescentados `bulk_update` e `get_or_create`. `bin/tests/test_selo_proporcao.sh:28`, `bin/tests/test_selo_proporcao.sh:51`, `bin/tests/test_selo_proporcao.sh:52`.
-
-Sobre rc:
-
-- Erros ordinários dentro de `main`, incluindo git, revisão e parse, viram 2; a fronteira adicional captura outras `Exception`. `bin/selo_proporcao.py:34`, `bin/selo_proporcao.py:70`, `bin/selo_proporcao.py:108`, `bin/selo_proporcao.py:124`.
-- Não é universal: o wrapper apenas executa Python, sem normalizar falha de inicialização/execução; Python ausente pode produzir 127, não executável 126, e sinais também escapam. Ocorrência real desses ambientes: [nao verificado]. `bin/selo_proporcao.sh:4`.
-- Argumentos excedentes são aceitos e ignorados: só existe limite mínimo, e somente quatro posições são consumidas. Uma chamada `base head B repo lixo` pode produzir 0 para diff inócuo. `bin/selo_proporcao.py:70`, `bin/selo_proporcao.py:73`, `bin/selo_proporcao.py:74`, `bin/selo_proporcao.py:119`.
-- Rc 1 significa **achado sintático com classe B**, não escrita real demonstrada; referências e strings também geram achados. `bin/selo_proporcao.py:55`, `bin/selo_proporcao.py:59`, `bin/selo_proporcao.py:115`.
-- O problema v1 de rc interno 3 desaparece: `exec` preserva diretamente o rc Python. Um chamador `bash -e` que encerre nessa chamada recebe 1; a suíte atual não verifica esse caminho. `bin/selo_proporcao.sh:4`, `bin/selo_proporcao.py:117`, `bin/tests/test_selo_proporcao.sh:62`.
-
-_3892 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_3895 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
