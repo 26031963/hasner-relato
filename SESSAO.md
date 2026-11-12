@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 04:27:36.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (424.9 MB). Acoes na janela: **1094**.
+**Medido em 12/11/2026 04:32:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (424.9 MB). Acoes na janela: **1093**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1103,4 +1103,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:34:27 | Bash | Write contract and commit v10 | `cd /home/ronald/saas-hasner/logs/PROPORCAO; cat > v10_contrato.txt <<'EOF' PROPORCAO-POR-RISCO v10 (aval DOCS-E-PWA 11/11 16:0x) -- contrato e limites declarados 1. QUEM CHAMA: bin/selo_proporcao.sh <base> <head> <A\|B> <repo> no pouso (ainda sem chamador automatico: opus v8 fila). 2. CRITERIO: EXCECAO-A (nominal, sem curinga) -> A antes de tudo; LISTA (exato, ou `*` so no ultimo segmento, mesma p ...` |
 | 16:34:08 | Bash | Add DOCS-E-PWA rows to both CORTES.md | `for C in /home/ronald/wt-proporcao-131413/app/docs/CORTES.md /home/ronald/saas-hasner/app/docs/CORTES.md; do python3 - "$C" <<'PY' import sys p=sys.argv[1]; s=open(p).read() a="`app/chamados/templatetags/chamados_tags.py` FIM-LISTA-FECHADA-PROPORCAO-B" assert s.count(a)==1, p s=s.replace(a,"`app/chamados/templatetags/chamados_tags.py`; `app/docs/*.md` FIM-LISTA-FECHADA-PROPORCAO-B (item `app/docs/ ...` |
 | 16:33:55 | Bash | RED: v10 harness against v9 selo | `cd /home/ronald/wt-proporcao-131413; T=$(mktemp -d); mkdir -p $T/bin/tests; git show HEAD:bin/selo_proporcao.py > $T/bin/selo_proporcao.py; git show HEAD:bin/selo_proporcao.sh > $T/bin/selo_proporcao.sh; chmod +x $T/bin/selo_proporcao.sh; cp bin/tests/test_selo_proporcao.sh $T/bin/tests/; bash $T/bin/tests/test_selo_proporcao.sh > /home/ronald/saas-hasner/logs/PROPORCAO/v10_red_contra_v9.txt 2>&1; ...` |
-| 16:28:08 | Bash | Sharpen marker messages, rerun mutants | `cd /home/ronald/wt-proporcao-131413; f=bin/tests/test_selo_proporcao.sh; for c in sem_marcador so_inicio marcador_duplo inicio_apos_fim fim_duplo; do sed -i "s/^\(caso_lista $c *\)'marcadores'/\1'marcadores LISTA-FECHADA'/" $f; done; /bin/grep -c "'marcadores LISTA-FECHADA'" $f python3 - <<'PY' p='bin/tests/test_selo_proporcao.sh'; s=open(p).read() a="caso_lista excecao_curinga" assert s.count(a)= ...` |
