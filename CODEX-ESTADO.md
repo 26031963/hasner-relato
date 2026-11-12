@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 22:47** · publicado em **11/11/2026 22:49** (UTC-3)
+> Ultima resposta processada: **11/11/2026 22:53** · publicado em **11/11/2026 22:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 22:53 · sessao 0524c0e7b362 · FIO-E0-V4-E4B · censo · origem=Code
+
+[resposta retida: senha_atribuida -- nao se publica credencial nem caminho de segredo]
+
+## 11/11 22:50 · sessao f576ee34ec90 · LASTRO-FAIXA-SEM-DEFAULT · censo · origem=Code
+
+Não reexecutei a sonda; reproduzo integralmente o JSON raspado fornecido, sem validação independente em banco ou logs. [nao verificado]
+
+```json
+{
+  "celulas_cobertas_sem_ata": 3,
+  "celulas_por_tipo_e_ata_tipo_dia": {
+    "folga|ausencia": 9,
+    "troca_de_plantao|ausencia": 12
+  },
+  "dias_cobertos_folga_comp11": 24,
+  "parcial_por_tipo_e_ata_tipo_dia": {},
+  "tipos_inativos_com_ausencias": {
+    "troca_de_posto": 0
+  }
+}
+```
+
+**(a)** No recorte solicitado da comp 11, o consolidado fornecido indica **24 células cobertas**: **21 com ata `ausencia`** (9 de `folga` + 12 de `troca_de_plantao`), **0 com ata `folga`**, **0 com outro `tipo_dia`** e **3 sem ata**. O mapa de parciais está vazio: **0 com `cobertura_parcial` no resultado fornecido**. [nao verificado]
+
+**(b)** Nenhum tipo inativo aparece com contagem positiva de ausências; a única entrada fornecida é **`troca_de_posto`: 0**. [nao verificado]
+
+**(c)** **A mudança isolada da grade de `ausencia` para `folga` não provoca relavratura de uma ata já carimbada e com veredito.** O próprio comentário declara que `tipo_dia` da grade não integra a impressão; com impressão igual e `forcar=False`, o código incrementa `pulados` e executa `continue`. [app/ponto/services/cartorio.py:190](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:190), [app/ponto/services/cartorio.py:1395](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:1395)
+
+O mecanismo de atualização por mudança de regra é:
+
+- `REGRA_VERSOES` declara `((1, '2026-09'), (2, '2026-10'), (3, '2026-10'), (4, '2026-10'))`; `versao_para` escolhe a maior versão cujo horizonte alcança a competência — portanto, **4 para a comp 11**. [app/ponto/services/cartorio.py:132](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:132), [app/ponto/services/cartorio.py:248](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:248)
+- A versão entra na impressão como `regra:N`. Uma nova versão aplicável muda esse insumo; `forcar=True` também permite atravessar o pulo por impressão igual. [app/ponto/services/cartorio.py:489](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:489), [app/ponto/services/cartorio.py:1399](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:1399)
+- Quando há julgamento e `apply_=True`, a ata recebe `tipo_dia` do dia da grade, passa por `lavrar_veredito` e é carimbada com a impressão. [app/ponto/services/cartorio.py:728](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:728), [app/ponto/services/cartorio.py:1836](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cartorio.py:1836)
+
+O JSON não informa a impressão nem a versão gravada nessas 21 células; sua elegibilidade individual para rejulgamento permanece [nao verificado].
 
 ## 11/11 22:47 · sessao 041b3efca22e · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
 
@@ -762,148 +799,4 @@ A justificativa “HERDADO, nao regressao” pertence ao **ciclo C↔Cel**; atri
 
 Contagem por classe, nos oito itens acima: **(a) 2 | (b) 3 | (c) 1 | (d) 0 | (e) 2.**
 
-## 11/11 21:53 · sessao 60e1f9eb6616 · - · - · origem=Ronald (tmux)
-
-Inventário direto de chamadas humanas e gates de mudança de estado, somente leitura. Caminho humano de todas as cascatas de fato abaixo: `[nao verificado]` onde não há chamador de borda indicado.
-
-### Fechamentos pedidos diretamente por humano
-
-| Caminho / porta | Escritor de status | Coletor | Prova S143 + Pauta |
-|---|---|---|---|
-| Detalhe → aprovar exceção | `app/chamados/views.py:426` → `app/chamados/services/acoes_chamado.py:70`, `resolvido` | Não | SEM PROVA |
-| Detalhe → aceitar/recusar agenda | `app/chamados/views.py:460` → `app/chamados/services/acoes_chamado.py:108`, `resolvido` | Não | SEM PROVA |
-| Detalhe → aceitar/recusar escala | `app/chamados/views.py:463` → `app/chamados/services/acoes_chamado.py:149`, `resolvido` | Não | SEM PROVA |
-| Detalhe e fio → autorizar geofence, com/sem advertência | `app/chamados/views.py:540`; `app/chamados/services/fio.py:533` → `app/chamados/services/acoes_chamado.py:222`, `resolvido` | Não | SEM PROVA S143/Pauta; fluxo normal `app/chamados/tests/test_s127_fluxo_geofence.py:31`, `:38` |
-| Detalhe e fio → recusar geofence | `app/chamados/views.py:543`; `app/chamados/services/fio.py:544` → `app/chamados/services/acoes_chamado.py:277`, `resolvido` | Não | SEM PROVA S143/Pauta; retratação/fecho normal `app/chamados/tests/test_geofence_validar_e_recusar.py:87` |
-| Avaliar benefício | `app/colaboradores/views.py:2046` → `:2068`, `resolvido` se aprovar, `fechado` senão | Não | SEM PROVA |
-| Detalhe → resposta livre / dropdown | `app/chamados/views.py:547` → `app/chamados/services/acoes_chamado.py:316` | Sim | `app/chamados/tests/test_e4b_c6_orm.py:90`, `:100`, `:148`, `:151` |
-| Fio → resposta rápida com conteúdo / dropdown | `app/chamados/services/fio.py:708`, `:719`, `:722` | Sim | `app/chamados/tests/test_e4b_c6_orm.py:96`, `:156` |
-| Command `fechar_chamados_meio_periodo --apply` | `app/ponto/management/commands/fechar_chamados_meio_periodo.py:94`, `:109` → `app/chamados/models.py:454`, `fechado` | Não | SEM PROVA S143/Pauta |
-
-Os chamadores do coletor usam import local em `app/chamados/services/acoes_chamado.py:315` e `app/chamados/services/fio.py:721`; o coletor chama `transicionar` em `app/chamados/services/fecho_runtime.py:150` e `:156`. A outra chamada interna é `Chamado.fechar` em `app/chamados/models.py:454`.
-
-`smoke_chamados` contém chamadas `transicionar` em `app/chamados/management/commands/smoke_chamados.py:134`, `:147`, `:163`, porém recusa banco cujo nome não contém `test` (`:30`) e reverte o atomic ao fim (`:39`); portanto não é caminho produtivo de persistência.
-
-### Outras mudanças humanas diretas
-
-| Caminho | Gate / mudança | Prova específica de S143/Pauta |
-|---|---|---|
-| Geofence antes da decisão, quando `registrado` | `app/chamados/services/acoes_chamado.py:229`, `:233`: `em_analise` | Fora do fecho; fluxo registrado dos três botões em `app/chamados/tests/test_geofence_validar_e_recusar.py:121` |
-| Abrir registro de ausência | `app/chamados/views.py:1494`, `:1513` → `analisar`: `em_analise` | Não fecha; nota em `:1516` |
-| Desarquivar encerrado por tranca | `app/chamados/views_arquivar.py:64`, `:70` → `reabrir(humano=True)`: `em_analise` | SEM PROVA S143/Pauta |
-| Reabrir disputa como admin | `app/chamados/services/fio.py:581` → `app/chamados/services/acoes_disputa.py:259`, `:270` → `reabrir(humano=True)` | SEM PROVA S143/Pauta |
-| Reabrir competência / devolver fila | `app/ponto/services/fechamento.py:1447` → `app/chamados/services/competencia_trancada.py:265` → `reabrir(humano=True)` | SEM PROVA S143/Pauta |
-| Substituir aceite antigo de escala ao aplicar vínculo | `app/colaboradores/services/vinculo.py:384`, `:387` → `encerrar`: `fechado` | SEM PROVA S143/Pauta |
-| Confirmar regularização externa | `app/chamados/services/regularizacao_ext.py:197`, `:205` → `encerrar`: `fechado` | SEM PROVA S143/Pauta |
-| Desligamento | `app/colaboradores/services/desligamento.py:139`, `:142`, `:155` → disputa fecha; pai reconcilia; restantes encerram | `app/chamados/tests/test_o261e_f1_porta_encerramento.py:272` |
-
-Arquivar comum não altera `status_local`; a porta declara e executa silêncio em `app/chamados/views_arquivar.py:24`, `:37`. O `admin_encerra` da **Disputa** existe em `app/chamados/models.py:1943`, mas seu chamador produtivo não foi encontrado: `[nao verificado]`. Não foi localizado registro `ModelAdmin` de Chamado; como ausência sem linha demonstrativa, `[nao verificado]`. API não possui chamada direta a `Chamado.transicionar` localizada; há fechamento de **Disputa** no upload de foto (`app/api/foto_recebida.py:80`) e o signal reconcilia pai (`app/chamados/signals.py:18`, `:42`).
-
-### Censo global por gate, incluindo cascatas e commands
-
-Todos os destinos são decididos no motor: `app/chamados/catalogo/motor.py:99` (humana), `:111` (`RECONCILIAR`), `:112` (`ANALISAR`), `:113` (`REABRIR`), `:114` (`ENCERRAR`), `:116` (`CANCELAR`).
-
-- **`reconciliar` → resolvido**, gate `app/chamados/models.py:641`, escrita `:654`. Chamadores produtivos: `app/chamados/signals.py:42`; `app/chamados/services/adesao.py:115`, `:150`; `app/chamados/services/feriado_reavaliar.py:47`; `app/chamados/services/limbo_folgas.py:101`, `:283`, `:286`; `app/chamados/services/materializacao.py:582`, `:771`; `app/chamados/reconciliador.py:523`; `app/chamados/services/silencio_ausencia.py:101`; `app/ponto/services/cartorio.py:986`, `:1511`, `:1524`, `:1545`, `:1623`, `:1638`; `app/ponto/services/cobertura.py:122`, `:317`; `app/ponto/services/lastro.py:400`; `app/ponto/services/veredito_celula.py:202`; `app/ponto/services/ausencia.py:694`; `app/ponto/services/triagem_batida.py:597`; `app/ponto/services/entrada_sincronizada.py:31`; `app/ponto/services/cluster_espurio.py:124`; `app/colaboradores/services/pos_vinculo.py:42`. Commands: `app/chamados/management/commands/auditar_chamados_orfaos.py:67`; `app/ponto/management/commands/detectar_intervalo_ausente.py:138`; `app/ponto/management/commands/curar_residuo_bug115.py:151`; `app/ponto/management/commands/detectar_ausencias.py:158`, `:824`, `:834`, `:845`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:140`.
-- **`reabrir` → em_analise**, gate `app/chamados/models.py:1362`, escrita `:1442`. Chamadores: `app/chamados/views_arquivar.py:70`; `app/chamados/services/acoes_disputa.py:270`; `app/chamados/services/competencia_trancada.py:265`; `app/chamados/services/adesao.py:92`; `app/chamados/services/disputa_emissao.py:1849`, `:2009`; `app/chamados/models.py:1019` (renascimento por premissa). Commands: `app/chamados/management/commands/reabrir_orfas_enterradas.py:172`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49`; `app/ponto/management/commands/detectar_ausencias.py:301`; `app/ponto/management/commands/reconciliar_grade.py:530`.
-- **`analisar` → em_analise**, gate `app/chamados/models.py:800`, escrita `:806`. Chamadores: `app/chamados/views.py:1513`; `app/chamados/services/disputa_emissao.py:1085`, `:1159`, `:1178`, `:1223`, `:1252`, `:1379`; `app/ponto/services/regularizacao.py:137`; command `app/chamados/management/commands/geofence_registrados_para_analise.py:32` (só aplica após `:27`).
-- **`encerrar` → fechado**, gate `app/chamados/models.py:1605`, escrita `:1619`. Chamadores: `app/chamados/reconciliador.py:496`; `app/chamados/services/regularizacao_ext.py:205`; `app/colaboradores/services/desligamento.py:155`; `app/colaboradores/services/vinculo.py:387`.
-- **`cancelar` → cancelado**, gate `app/chamados/models.py:773`, escrita `:788`. Commands: `app/escala/management/commands/fechar_avisos_regua_na_lista.py:47`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57`.
-- **`encerrar_por_competencia_trancada` → fechado**, gate `app/chamados/models.py:1622`, escrita `:1639`; chamador `app/chamados/services/competencia_trancada.py:184`; dispara no ato de trancar em `app/ponto/services/fechamento.py:1427` ou command `app/chamados/management/commands/encerrar_por_competencia_trancada.py:20`.
-
-### Fatores da matriz A
-
-Os estados pedidos não são classes disjuntas: destino/container é uma dimensão, exportada/aberta é outra, limbo é outra; o motivo limbo prevalece sobre exportada quando coexistem (`app/chamados/services/disputa_emissao.py:1835`, `:1839`, `:1841`).
-
-- Listagem = destino deste chamado OU, **sem destino**, pai da disputa deste chamado (`app/chamados/models.py:344`). Pai com destino em outro chamado não pertence à lista desse pai (`:345`).
-- Toda transição humana passa pelo motor e guards de justificativa, disputa, vivas ancoradas e furo (`app/chamados/models.py:123`, `:135`, `:153`, `:165`, `:181`). A guarda de disputa pai é própria e antecede a guarda de destino (`:153`).
-- Guarda humana de viva na aberta recusa antes de S143 (`app/chamados/models.py:165`); prova do gate por destino e estado preservado em `app/chamados/tests/test_o261e_f1_porta_encerramento.py:193`.
-- A guarda de ancoradas usa competência entregue **is False** e viva no pós-estado; exportada e dia indecidível ficam fora (`app/chamados/models.py:319`, `:327`, `:349`).
-- Aceito o fecho, status/campos/trilha saem pelo núcleo (`app/chamados/models.py:228`, `:229`, `:292`, `:296`); via humana é `admin` (`app/chamados/catalogo/motor.py:95`).
-- S143 roda para save que escreve estado encerrado e preserva fecho se seu savepoint falhar (`app/chamados/signals.py:90`, `:96`, `:104`, `:115`, `:117`).
-- Recusa exportada/limbo escreve nota no credor (`app/chamados/services/disputa_emissao.py:1855`) e só se coleta no contexto do chamado atual (`app/chamados/services/fecho_runtime.py:18`); sem coletor, não há Pauta dessa entrega (`:19`).
-- Com coletor, existe Pauta por competência datável, exceto conversa/sem dia e competência já com marcador vivo (`app/chamados/services/fecho_runtime.py:114`, `:128`, `:132`).
-- Ausência de listagem não impede S128 sobre outras perguntas de destino nem toda cascata de disputa; o universo S128 é separado (`app/chamados/services/disputa_emissao.py:1904`, `:1938`).
-- “Abriu/reabriu após fecho” pode acontecer em terminal→terminal: prova atual acaba em `em_analise`, com trilhas `fechado`, `em_analise` (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:211`, `:222`, `:225`). Reconciliador posterior e flap: SEM PROVA.
-
-### Categorias dos caminhos sem coletor
-
-| Caminho | Nascimento normal | Pode excluir ancoragem pelo código? |
-|---|---|---|
-| Aprovar exceção | `batida_fora_horario` / `horario_nao_previsto`, `app/ponto/services/triagem_batida.py:336` | Não: ação não guarda categoria (`app/chamados/services/acoes_chamado.py:21`, `:25`); a view só exige papel (`app/chamados/views.py:426`). |
-| Agenda | `agenda_aceite` / `proposta`, módulo `agenda_dia`, `app/colaboradores/views.py:2363` | Criador não cria pergunta; derivador por mapa a exclui (`app/chamados/services/disputa_emissao.py:211`; mapa `app/chamados/models.py:3664`). Ação guarda categoria (`app/chamados/services/acoes_chamado.py:88`). Banco legado: não sei pelo código. |
-| Escala | `escala_aceite` / `mudanca`, `app/colaboradores/services/vinculo.py:393` | Mesma situação do mapa; ação guarda categoria (`app/chamados/services/acoes_chamado.py:130`). Banco legado: não sei pelo código. |
-| Autorizar/recusar geofence | Normal `auditoria_clt` / `gps_fora_geofence`, `app/ponto/services/geofence.py:361` | Ações não guardam categoria (`app/chamados/services/acoes_chamado.py:165`, `:243`); não se pode excluir categorias outras. |
-| Benefício | Módulo `beneficio`, categoria omitida, `app/colaboradores/views.py:1978` | Avaliação lê FK `sol.chamado_origem` sem guarda de categoria (`app/colaboradores/views.py:2066`); banco só responde qual FK efetiva. |
-| Meio período | Command filtra módulos `intervalo_pendente`, `batida_fora_escala_leve` (`app/ponto/management/commands/fechar_chamados_meio_periodo.py:30`, `:56`) | Não filtra categoria; categorias existentes dos alvos: não sei pelo código. |
-| Substituição de aceite de escala | Filtra categoria `escala_aceite`, `app/colaboradores/services/vinculo.py:384` | Criador normal acima; relações existentes: não sei pelo código. |
-| Desligamento | Fecha chamados `NAO_FECHADOS` de qualquer categoria (`app/colaboradores/services/desligamento.py:150`) | Não exclui ancoragem; o próprio código prevê resposta viva que segura chamado (`:147`). |
-| Regularização externa | Fecha `reg.chamado` por FK (`app/chamados/services/regularizacao_ext.py:201`) | Categoria/ancoragem dessa FK: não sei pelo código. |
-| Commands/cascatas genéricas | Gates sem whitelist de categoria (`app/chamados/models.py:641`, `:773`, `:1605`) | Não existe exclusão geral por categoria nesses gates. |
-
-A porta genérica de pergunta aceita `chamado_destino` (`app/chamados/models.py:2776`, `:2794`); `resolvedora_valida` permite conversa, sem dia e módulo não-DIA (`app/chamados/juizes.py:2197`, `:2207`, `:2211`). Portanto exclusão do derivador automático **não prova impossibilidade de ancoragem** pela porta genérica.
-
-Os três nascimentos produtivos de disputa localizados escolhem pai `disputa_supervisao`: núcleo comum (`app/chamados/services/disputa_emissao.py:568`, `:587`), agrupador manual (`:1105`, `:1123`) e âncora ausente (`:1340`, `:1358`). Isso demonstra o nascimento desses caminhos; não demonstra categoria de toda FK histórica em produção.
-
-## 11/11 21:51 · sessao b3dfb46b440f · - · - · origem=Ronald (tmux)
-
-PORTA B — matriz fatorada, somente leitura. Não executei testes; resultados de execução nesta sessão são `[nao verificado]`. [nao verificado]
-
-**Juiz e relógio**
-
-- O juiz registrado de “competência de hoje” é `ponto/janelas.py::janela_atual`: `app/docs/JUIZES.md:98`, `app/core/juizes.py:179`, `app/core/juizes.py:329`. A função responde à janela que contém a **data recebida**, respeitando o corte da empresa: `app/ponto/janelas.py:36`, `app/ponto/janelas.py:60`.
-- O backfill pergunta a esse juiz, porém com `hoje` derivado de `--hoje`; o instante real `agora` é capturado separadamente: `app/chamados/management/commands/backfill_fio_morto_e4b.py:218`, `:219`, `:226`.
-- “Entregue” é outra pergunta: K6 aponta a `folha/export.py::competencia_entregue`, cujo predicado é ExportacaoDominio vigente e não invalidada; pagamento externo não é um campo consultado: `app/core/juizes.py:177`, `:327`; `app/folha/export.py:580`.
-- Dentro do ato, há revalidação de entrega, não de competência corrente: `app/chamados/management/commands/backfill_fio_morto_e4b.py:299`. A composição chamada resolve a competência **do dia do plano**, depois consulta K6: `app/chamados/services/vigia_fio.py:834`.
-- A cerca não conhece relógio nem competência de hoje: confere alcance determinado, `comp == alvo` e `entregue is False`: `app/chamados/services/foto_e4b.py:145`.
-
-**Forma exata das combinações**
-
-Sejam `R(e)` a competência de `janela_atual(agora.date(), e)`, `A(e)` a competência de `janela_atual(hoje, e)` e `C` a competência pedida. A guarda permite continuar se, e somente se, `C == A(e)` para **cada empresa visível selecionada**; basta uma divergência para recusar o comando antes do censo: `app/chamados/management/commands/backfill_fio_morto_e4b.py:221`. Essa condição combina-se com a tabela de entrega e a tabela de empresa abaixo; assim cobre o produto de argv × estado × empresa sem assumir cortes de PROD `[nao verificado]`.
-
-| `--hoje` | `--competencia`, relativa ao relógio real | Resultado da guarda de corrente | Prova existente |
-|---|---|---|---|
-| Ausente | Corrente `C=R(e)` para todas as empresas selecionadas | Passa; `hoje=agora.date()`: `backfill_fio_morto_e4b.py:219`, `:226` | Há teste com corrente simulada, mas o helper sempre fornece uma string `hoje`: `test_e4b_classe_e_memoria.py:646`; caso argv realmente ausente: **SEM PROVA** | [nao verificado]
-| Ausente | Anterior | Recusa quando diferente de `R(e)`: `backfill_fio_morto_e4b.py:228` | RED testa `10/2026` contra corrente simulada `11/2026`: `test_e4b_c4v7_memoria.py:131` |
-| Ausente | Exportada | “Exportada” não determina corrente; se `C != R(e)`, recusa; se igual, passa para entrega: `backfill_fio_morto_e4b.py:228`, `:253` | Exportada simulada corrente sai BANG sem porta: `test_e4b_classe_e_memoria.py:701`; argv ausente + janela real: **SEM PROVA** |
-| Ausente | Paga fora do sistema | Rótulo não lido; se `C != R(e)`, recusa; se igual, passa para entrega: `backfill_fio_morto_e4b.py:228`, `:253`; `folha/export.py:580` | **SEM PROVA** específica de pagamento externo |
-| Passado | Corrente real | Passa somente se o passado ainda cai em `C=A(e)` para todas; caso contrário recusa: `backfill_fio_morto_e4b.py:226` | **SEM PROVA** com janela real e passado |
-| Passado | Anterior real | **Passa** se argv retrocede à janela dessa anterior; depois aplica o filtro de entrega: `backfill_fio_morto_e4b.py:219`, `:226`, `:257` | Teste existente exige aplicação de comp09 com agora 25/09 e argv 15/09: `test_e4_backfill.py:97`, `:109`, `:142`; ele prova a aceitação pretendida pelo teste, não a recusa exigida pelo aval | [nao verificado]
-| Passado | Exportada | Passa a guarda se argv faz `C=A(e)`; entregue=True barra escrita depois: `backfill_fio_morto_e4b.py:226`, `:257`, `:302` | Entrega no ato é coberta, mas não essa combinação temporal exata: `test_e4_backfill.py:160`, `:223`; **SEM PROVA** de corrente real |
-| Passado | Paga fora do sistema / entregue=False | Passa se argv faz `C=A(e)`; pagamento externo não muda K6; torna-se elegível a executar portas: `backfill_fio_morto_e4b.py:226`, `:257`, `:259`, `:313`; `folha/export.py:580` | **SEM PROVA** específica |
-| Futuro | Corrente real | Passa somente se o futuro ainda cai em `C=A(e)` para todas; se cruzou a janela, recusa: `backfill_fio_morto_e4b.py:226` | **SEM PROVA** com janela real e futuro |
-| Futuro | Anterior real | Regra continua `C=A(e)`; o código não compara a data com agora: `backfill_fio_morto_e4b.py:218`, `:219`, `:226` | **SEM PROVA** específica |
-| Futuro | Exportada | Mesma igualdade contra argv; True barra escrita depois: `backfill_fio_morto_e4b.py:226`, `:257` | **SEM PROVA** temporal específica |
-| Futuro | Paga fora do sistema / entregue=False | Mesma igualdade contra argv; False permite continuar, sem leitura de pagamento: `backfill_fio_morto_e4b.py:226`, `:257`; `folha/export.py:580` | **SEM PROVA** específica |
-| Qualquer | Competência futura escolhida pelo próprio argv | Passa se `C=A(e)` para todas; não há comparação com `R(e)`: `backfill_fio_morto_e4b.py:226` | O RED usa janela fixa e não testa futuro via argv: `test_e4b_classe_e_memoria.py:588`; **SEM PROVA** |
-
-Na tabela, os nomes curtos correspondem a `app/chamados/management/commands/backfill_fio_morto_e4b.py`, `app/chamados/tests/...` e `app/folha/export.py`.
-
-| Estado de entrega, depois de a guarda aceitar | Resultado | Prova que morde |
-|---|---|---|
-| True no plano | `bang:exportada`; fora de `executaveis`: `app/chamados/management/commands/backfill_fio_morto_e4b.py:257`, `:259` | `app/chamados/tests/test_e4b_classe_e_memoria.py:701` |
-| False no plano e no ato | Elegível a aplicar; exige ato em `_PORTA`, ausência de limbo/BANG e aprovação da cerca; pode seguir sem porta ou recusar por outros efeitos: `app/chamados/management/commands/backfill_fio_morto_e4b.py:259`, `:308`, `:313`, `:327`, `:366` | Apply/idempotência simulados: `app/chamados/tests/test_e4b_classe_e_memoria.py:681`; ORM aplica anterior real usando argv recuado: `app/chamados/tests/test_e4_backfill.py:142` |
-| None no plano | `bang:indeterminada`; fora de `executaveis`: `app/chamados/management/commands/backfill_fio_morto_e4b.py:257`, `:259` | Cerca None: `app/chamados/tests/test_e4b_foto_memoria.py:24`; caso None do comando no plano: **SEM PROVA** específica |
-| False no plano → True no ato | Rollback do savepoint antes da porta; BANG exportada: `app/chamados/management/commands/backfill_fio_morto_e4b.py:301` | Spy exige nenhuma entrada do dia em `_executar_dia`: `app/chamados/tests/test_e4_backfill.py:229`; mutante: `app/chamados/tests/test_e4b_c4v7_memoria.py:442` |
-| False no plano → None no ato | Rollback antes da porta; BANG indeterminada: `app/chamados/management/commands/backfill_fio_morto_e4b.py:302` | **SEM PROVA** específica do comando |
-| Linha alterada alcança True / None / outra competência | Rollback pela cerca: `app/chamados/services/foto_e4b.py:157`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:327` | `app/chamados/tests/test_e4b_foto_memoria.py:18`, `:24`, `:73` |
-
-`competencia_do_dia_entregue` só devolve None quando `dia is None`; para dia presente converte K6 em bool. O plano lê `dia` com `date.fromisoformat`, portanto None na coluna de entrega do plano não é um estado normalmente produzido por esse carregamento; None de alcance da foto continua possível e tratado: `app/chamados/services/vigia_fio.py:834`, `:841`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:251`; `app/chamados/services/foto_e4b.py:157`.
-
-| `--empresa` | Universo/efeito |
-|---|---|
-| Ausente | Guarda percorre todas visíveis; todas devem concordar com `C`; corte de cada empresa pode diferir: `app/chamados/management/commands/backfill_fio_morto_e4b.py:223`; `app/ponto/janelas.py:36` |
-| Uma ou várias visíveis | Guarda apenas selecionadas; uma divergência recusa todo comando: `app/chamados/management/commands/backfill_fio_morto_e4b.py:224`, `:228` |
-| Apenas inexistente/invisível | Nenhuma empresa passa na guarda; censo e complemento fazem interseção com visíveis, produzindo universo vazio, sem executar portas: `app/chamados/management/commands/backfill_fio_morto_e4b.py:224`, `:164`; `app/chamados/services/vigia_fio.py:566`; validação explícita de pk solicitado: **SEM PROVA** |
-| Visíveis com cortes que geram competências diferentes no mesmo `hoje` | Uma única `C` não satisfaz todas; recusa na primeira divergência: `app/chamados/management/commands/backfill_fio_morto_e4b.py:223`, `:228`; cortes: `app/ponto/janelas.py:50` |
-
-Empresas visíveis são ativas e excluem CNPJ diagnóstico: `app/colaboradores/queries.py:78`. Testes de `--empresa` ausente, seleção mista e cortes divergentes: **SEM PROVA** localizada; o helper de memória fixa empresa `[2]` e janela única: `app/chamados/tests/test_e4b_classe_e_memoria.py:585`, `:588`, `:646`.
-
-**Ponto da prova que não morde o bloqueante**
-
-O RED `test_RED_apply_so_competencia_corrente_falante` só troca `competencia`; usa `janela_atual=lambda *a: (..., 20/11/2026)`, indiferente à data argv. Seu mutante remove a comparação `if comp != corrente`, cobrindo a existência da comparação, sem distinguir relógio real de `--hoje`: `app/chamados/tests/test_e4b_c4v7_memoria.py:131`, `:449`; `app/chamados/tests/test_e4b_classe_e_memoria.py:588`.
-
-Mais forte: a fixture ORM congela agora em 25/09, documenta que isso é comp10, injeta 15/09 para aplicar comp09 e exige escrita; há expectativa de teste favorável ao comportamento contornável: `app/chamados/tests/test_e4_backfill.py:27`, `:97`, `:109`, `:144`, `:147`.
-
-Dependências de uma volta B, para a consolidação: guarda de produção em `app/chamados/management/commands/backfill_fio_morto_e4b.py:218`; expectativa temporal do helper ORM em `app/chamados/tests/test_e4_backfill.py:97`; RED corrente e mutante em `app/chamados/tests/test_e4b_c4v7_memoria.py:131`, `:449`; double de janela e passagem de argv em `app/chamados/tests/test_e4b_classe_e_memoria.py:588`, `:646`. A cerca e K6 não respondem competência de hoje e não precisam receber essa pergunta para caracterizar B: `app/chamados/services/foto_e4b.py:145`; `app/folha/export.py:556`.
-
-_4054 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4056 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
