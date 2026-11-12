@@ -1,7 +1,137 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 19:52** · publicado em **12/11/2026 19:52** (UTC-3)
+> Ultima resposta processada: **12/11/2026 19:55** · publicado em **12/11/2026 19:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 19:55 · sessao 67844783dc07 · TRANCA-VIVAS-08 · censo · origem=Code
+
+Numeração dos anexos transcritos: primeira linha de cada corpo = 1, incluindo linhas vazias.
+
+1. **(b) Codex viu; a triagem descartou — agregado com significado indevido e cobertura insuficiente.**  
+   **Pergunta:** “Consumidor da mensageria […] muda de significado?” e “campo com dois significados”; também perguntou sobre “selo/RED sem mordida”. (`preverif.q:17,19-20`)  
+   **Resposta:** identificou que o CLI publica a união como `decidir_pelo_dp`, enquanto a mensageria descreve “resposta do colaborador sem veredito”; apontou ainda: “Falta […] um caso nominal de `vivas_resgatadas` e da união sem duplicatas”. (`preverif.r:1,116`)  
+   **Motivos escritos na triagem:** rótulo descartado para FILA porque a “descricao ja incompleta antes da obra; consumidor fora do compose”; cobertura descartada porque “resgate defendido por test_competencia_trancada.py:164/:177; mudar teste agora invalida a arvore certificada”. (`triagem.txt:2,6`)   [nao verificado]
+   A execução específica do “mutante soma passa” consta do laudo, mas sua demonstração não foi fornecida: **[não verificado]**. (`opus_final.md:2`)
+
+2. **(b) Codex viu; a triagem descartou — `resgatado_em` também decorre de resposta do colaborador.**  
+   **Pergunta:** “As exclusoes (resgatado, tocado por admin, conversa) usam o discriminador existente ou reimplementam regra?”. (`preverif.q:15-16`)  
+   **Resposta:** “`resgatado_em` não significa exclusivamente ‘resgatado pelo admin’”, pois a porta aceita resgate por resposta do colaborador. (`preverif.r:3`)  
+   **Motivo escrito na triagem:** “discriminador existente, sem juiz novo”. (`triagem.txt:3`)  
+   O código confirma o caminho por resposta e o docstring restrito ao admin; o “em prod 0” permanece **[não verificado]**. (`app/chamados/services/materializacao.py:724-727`; `app/chamados/services/competencia_trancada.py:75`; `opus_final.md:3`)
+
+3. **(b) Codex viu; a triagem descartou — placar não lê o residual.**  
+   **Pergunta:** “liste TODOS os escritores e leitores no archive, inclusive fora do diff”, abrangendo o contador `vivas_apesar_da_tranca`. (`preverif.q:8-9`)  
+   **Resposta:** “O placar antigo **não lê o residual novo**: extrai somente a soma `chamados + perguntas + disputas`”. (`preverif.r:98`)  
+   **Motivo escrito na triagem:** “FILA (instrumento, pouso proprio)”. (`triagem.txt:5`) [nao verificado]
+
+4. **(a) Codex não apontou o achado documental, com o tema presente — assinatura do ato em JUIZES.md.**  
+   **Pergunta:** anexou expressamente `app/docs/JUIZES.md` e perguntou se a mudança distingue “via de sistema” de “ato humano legitimo”. (`preverif.q:3,12-14`)  
+   **Resposta:** reconheceu o predicado “aceita `via='admin'` **ou presença** de `acoes`”, mas tratou o registro apenas como existente: “C20 e sua relação com C6/tarefa já constam do registro e lookup”. Não apontou nesses trechos a necessidade de atualizar sua descrição. (`preverif.r:15,108`)  
+   Classifico como omissão de tema presente: o registro mantém “usuario humano, nunca o sistema”, enquanto o filtro exige a assinatura do ato; essa atualização documental é precisamente o achado do opus. (`app/docs/JUIZES.md:88`; `app/chamados/juizes.py:1298`; `opus_final.md:5`)
+
+5. **(c) Fora do alcance — prova de produção pós-cura.**  
+   **Pergunta:** pediu o universo do contador e o censo de leitores. (`preverif.q:8-9,15-16`)  
+   **Resposta:** identificou os leitores C20 em tarefa do dia e reconciliador, mas declarou: “A medição pós-cura da frota, universo não vazio, residual zero e publicação no RELATO: **[não verificado]**”. Portanto, conhecer os leitores não demonstrou seu impacto em produção. (`preverif.r:35-36,120`)  
+   **Triagem:** “fora do alcance do Codex (frota/sonda_frota.r)”. As lacunas específicas sobre banco, quatro alvos e `chamados=207` são relatadas pelo opus; seus resultados não estão demonstrados no dado fornecido: **[não verificado]**. (`triagem.txt:7`; `opus_final.md:6`)
+
+6. **(c) Fora do alcance quanto aos usuários de produção; os três atos já foram reconhecidos.**  
+   **Pergunta:** perguntou sobre alcance em ato humano legítimo e leitura do histórico antigo. (`preverif.q:13-14`)  
+   **Resposta:** enumerou os três fundamentos — cobrar, Resolver dia e desarquivar — e ressalvou: “Que todos os atos humanos antigos possuíam essas assinaturas: **[não verificado]**”. (`preverif.r:24,26`)  
+   O código confirma o conjunto de três atos. Já as identidades/naturezas dos usuários 657/653 aparecem apenas na referência do opus à `sonda_v4.r`, cujo conteúdo não foi fornecido: **[não verificado]**. (`app/chamados/juizes.py:1242-1250`; `opus_final.md:7`)
+
+**Contagem por classe:** **(a) 1; (b) 3; (c) 2; (e) 0; (d) 0. Total: 6 achados.** (`preverif.q:3,8-20`; `preverif.r:1,3,15,24,26,35-36,98,108,116,120`; `triagem.txt:2-7`; `opus_final.md:2-7`)
+
+## 12/11 19:55 · sessao b923d43079e6 · E3-FORMA-SQL · sonda · origem=Code
+
+Não executei novamente `sonda_espacos.py`: o script não foi localizado na cópia e não há acesso a banco/logs. Execução nova e identidade Git do HEAD: [nao verificado]. Abaixo está a transcrição integral do dado fornecido, incluindo o anexo; sua execução não foi verificada independentemente. [nao verificado] [nao verificado]
+
+```text
+sonda_leitura: sonda_espacos.py [71d433320633ce76] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+q_vivas_total=14548  q_vivas_com_carimbo_e_so_espacos=0
+carimbo__texto                                7976  amostra=[53332, 4938, 4944, 5000, 52249, 54324, 36412, 53521, 16369, 36272]
+carimbo__vazio                                9626  amostra=[48306, 48314, 4880, 4882, 4884, 48318, 4954, 7897, 5022, 5243]
+sem_carimbo__vazio                           31556  amostra=[46957, 43188, 43875, 53869, 37786, 40504, 41545, 49486, 40745, 39156]
+universo                                     49158  amostra=[]
+total_erros=0
+== anexo: e3_forma_sql_do_juiz.txt ==
+aval Ronald: E3-FORMA-SQL-DO-JUIZ (12/11 19:1x). UNIDADE: PerguntaDisputa. Nenhuma lei nova, nenhum juiz novo; responde a PERGUNTA DE DESENHO E3 porta A (1)(2).
+CONFERIDO: o juiz existe -- chamados/juizes.py:1515 respondida_sem_texto, com texto_vazio = (t or '').strip() (:1510); a forma SQL inline em models.py:3349-3350 (q_vivas) NAO e o mesmo predicado: so testa '' e NULL, e resposta so de espacos passa como viva. Derivacao paralela divergente = BUG no caminho (LEI-AKITA 6).
+(1) A forma Q nasce como a FACE SQL do juiz respondida_sem_texto, no mesmo modulo, com o mesmo teste de vazio (trim); q_vivas:3349 e os 9 sitios `respondida_em__isnull` leem ela. Selo de equivalencia por propriedade: juiz Python == Q sobre o mesmo universo, incluindo '', '   ', NULL, texto; mutante (tirar o trim) = vermelho. Nao e juiz novo: e a mesma pergunta, declarada uma vez com duas faces (molde qs_perguntas_absolviveis). [nao verificado]
+(2) Catraca pela forma de USO, nunca por lista: respondida_em em contexto booleano (isnull, is None, truthiness, filtro) = "respondeu?" e passa pelo juiz/face SQL; respondida_em lido como VALOR (instante, ordenacao, trilha) fica fora. Os 4 sitios (juizes.py:348, verbos.py:342, veredito_lavrado.py:207, backfill/DecisaoPergunta) sao julgados por essa regra no AST; o que for booleano migra.
+(3) Os 17 que movem passivo: medida na sombra antes, como ja manda o aval E3-10 item 3; o 8.622 declara a UNIDADE e o recorte contra os 142 do E3-10. App do colab muda ou supra_juiz retrata = PARA e publica a lista.
+LEI-AKITA: origem=chamados/juizes.py::respondida_sem_texto (face SQL), testemunha=o juiz, RED=resposta so de espacos viva no SQL e vazia no Python, quem-mais-le=9 sitios SQL + q_vivas + 4 de instante, juizes novos=0, padrao=Single Source of Truth
+Segue a fila; PAREI so em lei ou !
+```
+
+Na aplicação, os escritores explícitos encontrados são estes:
+
+| Escritor | Onde escreve e persiste | Pode gravar somente espaços com `respondida_em` preenchido? |
+|---|---|---|
+| `responder_pergunta_disputa_core` | Atribui texto/carimbo em [disputa_emissao.py:1467](app/chamados/services/disputa_emissao.py:1467); salva em [disputa_emissao.py:1508](app/chamados/services/disputa_emissao.py:1508). | **Não para a entrada recebida.** Faz `resposta = (resposta or '').strip()` e rejeita vazio **antes da atribuição e do save**, em [disputa_emissao.py:1432](app/chamados/services/disputa_emissao.py:1432). |
+| `responder_automaticamente` | Atribui `texto` e `instante` em [disputa_emissao.py:1652](app/chamados/services/disputa_emissao.py:1652); salva ambos em [disputa_emissao.py:1655](app/chamados/services/disputa_emissao.py:1655). | **Sim, a função permite**, recebendo `texto='   '` e instante preenchido, quando a guarda permite prosseguir. O `strip()` de [disputa_emissao.py:1647](app/chamados/services/disputa_emissao.py:1647) verifica a **resposta antiga**; o novo `texto` é gravado sem trim nem rejeição de vazio. |
+| `reabrir_para_correcao` | Define `resposta_colab=''` e `respondida_em=None` em [disputa_emissao.py:1593](app/chamados/services/disputa_emissao.py:1593); persiste por `descarimbar_em_lote` ou `qs.update` em [disputa_emissao.py:1630](app/chamados/services/disputa_emissao.py:1630). | **Não.** Escreve vazio literal e remove o carimbo; não depende de trim. |
+
+O chamador operacional localizado de `responder_automaticamente` passa `_TEXTO = '[auto] Foto recebida em upload separado.'`, definido em [foto_recebida.py:25](app/api/foto_recebida.py:25), com `agora` obtido em [foto_recebida.py:42](app/api/foto_recebida.py:42), na chamada de [foto_recebida.py:48](app/api/foto_recebida.py:48). Essa chamada fornece texto não vazio; atribuir a ela uma ocorrência real de resposta só de espaços é [nao verificado].
+
+Há também caminhos genéricos de persistência e o escritor da sombra, relevantes para não tratar a proteção do core como garantia de toda escrita:
+
+| Caminho | Escrita e tratamento de espaços |
+|---|---|
+| Nascimento por `abrir` / `abrir_conversa` → `_nascer` | Recebem `**campos` em [models.py:2777](app/chamados/models.py:2777) e [models.py:2795](app/chamados/models.py:2795); `_nascer` os passa ao construtor e salva em [models.py:3015](app/chamados/models.py:3015). Não há trim nesse trecho: um par fornecido como `resposta_colab='   ', respondida_em=instante` chega bruto ao save. Uso operacional desse par por essa entrada: [nao verificado]. |
+| `PerguntaDisputa.save` | Em [models.py:3414](app/chamados/models.py:3414), verifica identidade na inclusão e chama `super().save()` em [models.py:3424](app/chamados/models.py:3424), sem normalizar a resposta. Portanto, esse método não barra o par espaços/carimbo recebido em memória. |
+| `descarimbar_em_lote` | Aceita `**outros` em [models.py:3253](app/chamados/models.py:3253) e os repassa ao `update` em [models.py:3265](app/chamados/models.py:3265), sem trim. A interface permite fornecer resposta/carimbo por esses argumentos; a reabertura efetiva fornece `''`/`None`, conforme [disputa_emissao.py:1593](app/chamados/services/disputa_emissao.py:1593). Uso operacional para fornecer espaços/carimbo: [nao verificado]. |
+| Máscara da sombra | O inventário inclui `PerguntaDisputa.resposta_colab` em [sombra_regras_pessoais.py:85](bin/sombra_regras_pessoais.py:85). O executor atribui por `setattr` em [sombra_mascara_pessoal.py:57](bin/sombra_mascara_pessoal.py:57) e grava por `bulk_update` em [sombra_mascara_pessoal.py:62](bin/sombra_mascara_pessoal.py:62) e [sombra_mascara_pessoal.py:64](bin/sombra_mascara_pessoal.py:64), com banco exigido como `sombra` em [sombra_mascara_pessoal.py:10](bin/sombra_mascara_pessoal.py:10). Não faz trim, mas transforma espaços em `… <hash>`, conforme [sombra_regras_pessoais.py:29](bin/sombra_regras_pessoais.py:29); não produz resposta só de espaços. |
+
+Os testes também fazem escrita direta: há um `update(resposta_colab='   ')` explícito em [test_o261_resposta_vazia.py:152](app/chamados/tests/test_o261_resposta_vazia.py:152), após preencher `respondida_em` em [test_o261_resposta_vazia.py:150](app/chamados/tests/test_o261_resposta_vazia.py:150). Isso monta um cenário de teste; execução desse cenário nesta análise: [nao verificado].
+
+`carimbar_resposta_pela_trilha` não escreve `resposta_colab`: rejeita resposta cujo `strip()` fique vazio em [disputa_emissao.py:1670](app/chamados/services/disputa_emissao.py:1670) e salva exclusivamente `respondida_em` em [disputa_emissao.py:1676](app/chamados/services/disputa_emissao.py:1676).
+
+A proteção demonstrada é anterior ao save no **core**; ela não existe para o texto novo no **automático**, nem no `save` genérico. [disputa_emissao.py:1432](app/chamados/services/disputa_emissao.py:1432), [disputa_emissao.py:1652](app/chamados/services/disputa_emissao.py:1652), [models.py:3414](app/chamados/models.py:3414). Qual escritor originou registros reais, ou se algum já gravou somente espaços em produção, permanece [nao verificado].
+
+## 12/11 19:54 · sessao be142c9f6191 · - · - · origem=Ronald (tmux)
+
+Escritores indiretos e caminhos auditados:
+
+| Caminho | Evidência | Espaços + carimbo |
+|---|---|---|
+| `PerguntaDisputa._nascer` recebe `**campos`, constrói e persiste | `app/chamados/models.py:2826`, `:3015`, `:3016`, `:3018` | Pode receber `resposta_colab='   '` e `respondida_em=instante`; não faz trim. As portas `abrir`/`abrir_conversa` encaminham os campos em `:2791`/`:2803`. Os chamadores operacionais localizados não passam esse par: `app/chamados/services/disputa_emissao.py:439`, `:444`, `:837`, `:1371`; `app/chamados/services/declaracao_texto.py:376`, `:666`; `app/chamados/services/acoes_disputa.py:263`. Execução disso em produção: [não verificado]. |
+| Máscara da sombra | `bin/sombra_regras_pessoais.py:85` inventaria o campo; `bin/sombra_mascara_pessoal.py:57` atribui e `:62`/`:64` fazem `bulk_update` | Restrita ao banco `sombra` por `:10`; não usa trim, mas transforma espaços em texto com hash, conforme `bin/sombra_regras_pessoais.py:29`–`:33`, portanto não produz texto só de espaços. |
+| `PerguntaDisputa.save` | `app/chamados/models.py:3414`–`:3425` | Sem normalização/trim global: apenas identidade na inclusão e `super().save` dentro de transação. |
+| `DecisaoPergunta.registrar` | `app/chamados/models.py:3954`–`:3956` | Grava decisões e acorda células; não reescreve `PerguntaDisputa.resposta_colab`. |
+
+Entradas do escritor canônico:
+
+- O próprio core faz trim e rejeita vazio antes de atribuir/gravar: `app/chamados/services/disputa_emissao.py:1432`–`:1434`; atribui o par em `:1467`–`:1468`; salva em `:1508`.
+- Web faz trim antes da chamada: `app/chamados/views.py:1265`, `:1283`.
+- API faz trim e rejeita vazio antes da chamada: `app/api/views.py:2614`–`:2620`.
+- Correção administrativa faz trim e exige HH:MM antes da chamada: `app/chamados/services/acoes_disputa.py:334`–`:337`, `:371`.
+- Declaração de hora faz trim antes de chamar: `app/chamados/services/declaracao_texto.py:319`, `:419`.
+- Aplicação de declaração chama com hora extraída/formada como HH:MM: `app/chamados/services/declaracao_texto.py:33`–`:39`, `:611`–`:612`, `:693`.
+
+A porta automática aceita texto novo sem trim: `app/chamados/services/disputa_emissao.py:1652`–`:1655`. Seu único chamador operacional localizado passa uma constante com texto, definida em `app/api/foto_recebida.py:25` e passada em `:48`. Portanto a capacidade da função de gravar espaços é demonstrável pelo corpo; entrada de espaços pelo fluxo de foto atual não é sustentada por esse chamador. (`app/chamados/services/disputa_emissao.py:1652`–`:1655`; `app/api/foto_recebida.py:25`, `:48`.)
+
+`carimbar_resposta_pela_trilha` não escreve o campo de texto e recusa texto só de espaços antes de salvar o carimbo: `app/chamados/services/disputa_emissao.py:1670`, `:1674`–`:1676`.
+
+## 12/11 19:54 · sessao 2ca5f70d8909 · - · - · origem=Ronald (tmux)
+
+Escritores operacionais explícitos encontrados:
+
+| Função | Escrita e persistência | Só espaços com `respondida_em` preenchido? |
+|---|---|---|
+| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1467` atribui texto; `:1468` instante; `:1508` salva ambos. | **Não pelo argumento recebido**: normaliza em `:1432` com `(resposta or '').strip()` e rejeita vazio em `:1433-1434`, antes da atribuição/save. |
+| `responder_automaticamente` | Mesmo arquivo `:1652` atribui `texto` bruto; `:1653` instante; `:1655` salva ambos. | **Sim na função**, caso receba `texto='   '` e instante não nulo: não normaliza nem valida o argumento. O `strip()` de `:1647` examina **o texto antigo**, apenas impedindo sobrescrever resposta já existente. |
+| `reabrir_para_correcao` | Mesmo arquivo `:1593` prepara `resposta_colab=''` e `respondida_em=None`; persiste por `:1632` ou por `:1630` → `app/chamados/models.py:3265-3267`. | **Não**: grava vazio e remove instante; não depende de trim. |
+
+O único chamador operacional encontrado de `responder_automaticamente` é `app/api/foto_recebida.py:48`: fornece a constante não vazia `_TEXTO = '[auto] Foto recebida em upload separado.'` (`:25`) e `agora = _tz.now()` (`:42`). Portanto, possibilidade na função está demonstrada; geração de espaços por essa chamada atual não está demonstrada, pois o argumento é fixo.
+
+Também há portas genéricas que podem persistir o campo:
+
+- `PerguntaDisputa._nascer`: constrói com `**campos` em `app/chamados/models.py:3015-3016`, salva em `:3018`; recebe esses argumentos através de `abrir` (`:2777`, `:2790-2791`) ou `abrir_conversa` (`:2795`, `:2802-2803`). Não faz trim do campo; `save()` também não o faz (`:3414-3424`). Poderia receber texto de espaços e instante preenchido por esses kwargs. As chamadas operacionais examinadas não passam os campos de resposta: `disputa_emissao.py:439-452`, `:837-846`, `:1371-1378`; `declaracao_texto.py:376-377`, `:666-667`; `acoes_disputa.py:263-268`. O `**kw` de `disputa_emissao.py:845` contém apenas `chamados_relacionados_ids`, preparado em `:834-836`.
+- `PerguntaDisputa.descarimbar_em_lote`: `app/chamados/models.py:3253`, `:3265-3267` repassa `**outros` a `update`, sem trim. A chamada que passa `resposta_colab` é a reabertura acima, com `''`/`None` (`disputa_emissao.py:1593`, `:1630`); a outra chamada passa apenas `validada_em`, `validada_por`, `respondida_em` (`models.py:1567`).
+- Máscara da **sombra**: inventário `bin/sombra_regras_pessoais.py:85` inclui a coluna; executor `bin/sombra_mascara_pessoal.py:44-64` transforma valores, atribui por `setattr` (`:57`) e persiste por `bulk_update` (`:62`, `:64`). Exige banco chamado `sombra` (`:10`). Não faz trim, mas espaços viram marcador com hash conforme `bin/sombra_regras_pessoais.py:29-33`; não escreve `respondida_em`.
+
+`carimbar_resposta_pela_trilha` **não escreve `resposta_colab`**: só preenche instante em `disputa_emissao.py:1674-1676`; rejeita texto só de espaços antes disso em `:1670-1671`. `PerguntaDisputa.carimbar` também só adiciona instante com texto não vazio, usando `texto_vazio` em `models.py:3131-3134`, sem reescrever o texto.
 
 ## 12/11 19:52 · sessao 31a083aa2e1d · TRANCA-VIVAS-08 · verificador · origem=Code
 
@@ -617,67 +747,4 @@ Inventário de APIs em produção:
 
 Busca literal archive inteiro por `censo_orfas` não encontrou referências; chamadores dinâmicos [nao verificado]. Inventários detalhados de todos os sítios literais dos testes e projeções foram enviados nas mensagens anteriores; completude por análise de aliases/dinâmicos [nao verificado]. [nao verificado]
 
-## 12/11 19:21 · sessao b314db41c707 · - · - · origem=Ronald (tmux)
-
-**RETURNS misto continua bloqueante.** A v5 aceita a função quando encontra *algum* retorno JSON (`bin/leitores_de_chave.py:237`) e documenta que retorno misto semeia “SEM lacuna” (`bin/leitores_de_chave.py:60`). Isso mantém o contraexemplo `if b: return c.ata; return 42`: reconhecer a chamada com `b=False` não prova retorno JSON (`bin/leitores_de_chave.py:237`). O aval fornecido exige JSON ou lacuna, e o opus v4 nomeia retorno misto sem lacuna como bloqueante; anexos sem arquivo local **[nao verificado]**. O rótulo de instrumento não revoga essa correção específica (`bin/leitores_de_chave.py:29`, `:31`, `:60`).
-
-**Remover a ressalva stderr sem derrubar o selo é observação de cobertura.** O selo testa o rótulo, mas não a frase adicional sobre acessos reais (`bin/tests/test_leitores_de_chave.sh:61`, `:246`; `bin/leitores_de_chave.py:836`). A remoção ainda preservaria “eventos reconhecidos” e a negação de completude (`bin/leitores_de_chave.py:50`, `:51`). O aval fornecido exige mutantes comportamentais específicos e rótulos nas três saídas, não mutante para cada frase documental; anexo sem arquivo local **[nao verificado]**.
-
-## 12/11 19:20 · sessao f8513951ddd0 · - · - · origem=Ronald (tmux)
-
-1. **(l) morde o defeito de ciclo.** Asserções exigem exatamente as duas lacunas RETURNS e `LS1=1`; mutante com maior ponto fixo descendente mantém o ciclo, elimina as lacunas e reconhece a sonda, derrubando (l). Local: `bin/tests/test_leitores_de_chave.sh:125-130`; implementação corrigida: `bin/leitores_de_chave.py:707-727`. Medição em memória sobre AST de cartório; selo shell completo não executado [nao verificado].
-
-2. **(k) não distingue menor de maior ponto fixo descendente.** Ambos rejeitam `return 42`, produzem a lacuna e deixam de reconhecer a sonda; portanto (k) passa também no mutante com maior ponto fixo descendente. Ele mata “RETURNS sempre declarado” e “RET_EF iniciado inteiro com o laço crescente atual”. Asserções: `bin/tests/test_leitores_de_chave.sh:100-109`; reconhecimento de chamadas: `bin/leitores_de_chave.py:405-407`. Reversão exata para `a0f3b84f6` [nao verificado]: fonte histórica indisponível.
-
-3. **Ressalva nova no stderr não tem mordida.** Apagar somente o `print` “eventos reconhecidos por posicao, NAO acessos reais” não altera nenhuma asserção do selo; o selo exige apenas o rótulo anterior e “NAO exclui o acessor”. Texto: `bin/leitores_de_chave.py:836-837`; verificações: `bin/tests/test_leitores_de_chave.sh:61-62`, `bin/tests/test_leitores_de_chave.sh:246-247`. A ressalva final é apenas emitida, sem asserção: `bin/tests/test_leitores_de_chave.sh:273`.
-
-4. **(j) tem mordida para laço e reatribuição.** Em memória:
-   - Mutante substituir `if self.dentro(...)` por aceitação de qualquer laço do mesmo escopo produz os três caminhos proibidos; cai na asserção `NAO`. Origem: `bin/leitores_de_chave.py:361-363`; asserção: `bin/tests/test_leitores_de_chave.sh:231-234`.
-   - Mutante escolher o último binding do arquivo, ignorando posição do acesso, perde `k_antes` e `k_laco_vazio`; cai em `TEM`. Origem: `bin/leitores_de_chave.py:346-347`; asserção: `bin/tests/test_leitores_de_chave.sh:230-233`.
-   - Mutante retirar emissão de lacuna de apelido cai em (g) e (j). Origem: `bin/leitores_de_chave.py:344-345`; asserções: `bin/tests/test_leitores_de_chave.sh:193-194`, `bin/tests/test_leitores_de_chave.sh:232-235`.
-
-5. **Controle positivo de (l) sozinho não prova participação de RETURNS.** Mutante `retorna_json` sempre falso ainda passa (l): a sonda original reconhece `_ata_ate_o_teto` pela resolução local do retorno `dict`, e a versão cíclica deixa de reconhecer. A resolução local permite isso em `bin/leitores_de_chave.py:409-420`; (l) só verifica `LS0=0`, sem exigir ausência de lacuna prévia, em `bin/tests/test_leitores_de_chave.sh:120-130`. O mesmo mutante cai em (k), pois `K0` exige ausência da lacuna antes da mutação: `bin/tests/test_leitores_de_chave.sh:100-107`. O conjunto k+l cobre esse mutante.
-
-6. **Limite documental:** o comentário “só a proveniência RETURNS liga x ao JSON” é mais forte que o controle implementado, pois a resolução local também reconhece o retorno original. Comentário: `bin/tests/test_leitores_de_chave.sh:96`; caminho alternativo explícito: `bin/leitores_de_chave.py:409-420`.
-
-## 12/11 19:20 · sessao 6bfa5bcf567e · - · - · origem=Ronald (tmux)
-
-Não encontrei bloqueante adicional nos quatro classificadores; há diferenças de API também com contagem conhecida, mas elas não demonstram divergência dos códigos para uma ata válida HH:MM+n consistente atravessando o leitor antigo/novo. (app/escala/services/leitor_celula.py:421; app/escala/services/ata.py:20; app/ponto/supra_juiz.py:379; app/ponto/supra_juiz.py:516)
-
-1. **Comportamento — `_celula_furada`.** Sem lâmpada explicitamente apagada, a contagem desconhecida agora devolve `None`; antes a ausência de lista/n positivos acabava em `False`. Lista HH:MM sem n continua conhecida por `len`; n positivo sem lista continua acusando se a régua for confiável. (app/chamados/juizes.py:505; app/chamados/juizes.py:510; app/chamados/juizes.py:520; app/escala/services/ata.py:24)
-
-2. **Comportamento — status.** `orfas=None,n_orfas=2`, nenhuma casada e realizado zero agora dá `tem_batida=True`, diferença também com quantidade conhecida; no pipeline antigo a projeção `['?']*n` já preservava a presença. Com quantidade desconhecida e nenhuma prova positiva, `tem_batida=None` passa diretamente a `sem_certidao`, inclusive antes dos ramos falta/ausência/folga/isento. (app/ponto/status_dia.py:187; app/ponto/status_dia.py:192; app/ponto/status_dia.py:139; app/ponto/status_dia.py:141; app/ponto/status_dia.py:152)
-
-3. **Comportamento — causas.** Contagem conhecida positiva sem instantes passa a integrar `com_orfa`; quantidade desconhecida produz `indeterminado`, salvo causa conhecida da régua ou presença positiva no ramo sem previsão. (app/folha/causas.py:43; app/folha/causas.py:64; app/folha/causas.py:68; app/folha/causas.py:75; app/folha/causas.py:78)
-
-4. **Comportamento — supra.** Na API direta, `orfas=None,n_orfas=2` agora abre os ramos de fato e acusa `BATIDA_ORFA_FORA_TOLERANCIA`; `orfas=None` com quantidade desconhecida agora impede o fallback civil que antes entrava com `_orfas is None`. Na travessia de ata válida e consistente do escritor anterior, a positividade e quantidade são preservadas pelo novo leitor; não identifiquei contraexemplo corrente com códigos diferentes. Existência de entrada real divergente em produção: **[nao verificado]**. (app/ponto/supra_juiz.py:379; app/ponto/supra_juiz.py:382; app/ponto/supra_juiz.py:518; app/ponto/supra_juiz.py:526; app/escala/services/leitor_celula.py:421)
-
-5. **Retratação.** O command do supra usa `classificar_dia` para placar/exemplos/alarme; sua retratação lê o veredito `cobranca_indevida` e os protestos lavrados. Portanto diferença no classificador, isoladamente, não comprova diferença na retratação desse command. (app/ponto/management/commands/supra_juiz.py:223; app/ponto/management/commands/supra_juiz.py:239; app/ponto/management/commands/supra_juiz.py:246)
-
-6. **Vocabulário compatível.** `sem_certidao` já existe no vocabulário, modelo e migração. App traduz para `neutro`; calendário conta e oferece resolver; relatório de furos cobra somente `irregular`; espelho possui CSS próprio; painel imprime a palavra e rótulo. Palavra desconhecida pode atravessar D4 se houver rótulo gravado, mas sem rótulo causa `KeyError`; adaptador do app e tag de rótulo também causam `KeyError`. (app/ponto/status_dia.py:45; app/escala/models.py:1813; app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:16; app/ponto/status_dia.py:84; app/ponto/status_dia.py:89; app/ponto/status_dia.py:292; app/colaboradores/services/calendario.py:94; app/colaboradores/services/calendario.py:791; app/relatorios/furos.py:128; app/templates/ponto/espelho.html:122; app/templates/core/_painel_card.html:66; app/core/templatetags/hasner_filters.py:7)
-
-7. **Inventário status.** `fatos_do_status` escreve `tem_batida` e `nao_medidos`; cartório entrega o dict à porta via modelo; `_status_alvo` lê `tem_batida` pela regra, com precedência do admin. `nao_medidos` é aceito na assinatura, mas não participa da decisão. D4 alimenta calendário, espelho, relatório de furos, API e painel. (app/ponto/status_dia.py:192; app/ponto/status_dia.py:195; app/ponto/services/cartorio.py:933; app/ponto/services/cartorio.py:1294; app/ponto/services/cartorio.py:1855; app/escala/models.py:1820; app/ponto/portas/celula.py:951; app/ponto/status_dia.py:114; app/colaboradores/services/calendario.py:606; app/ponto/services/espelho.py:170; app/relatorios/furos.py:123; app/api/views.py:1483; app/core/services/painel_op.py:336)
-
-8. **Leitor fora da porta / None→0.** `insumos_da_ata`, fora do diff, ainda lê n cru com `or 0`: sem lâmpadas, ata desconhecida vira `(False,False)`; lista conhecida positiva sem n também vira ausência, embora o acessor saiba contar. Isso merece consolidação como achado de semântica/fonte paralela; o escritor corrente sempre grava ambos os campos. (app/ponto/services/cartorio.py:831; app/ponto/services/cartorio.py:837; app/escala/services/ata.py:32; app/escala/services/ata.py:151)
-
-A autoridade do status já está registrada; não identifiquei juiz novo duplicado nesses quatro classificadores. (app/core/juizes.py:195; app/docs/JUIZES.md:111)
-
-## 12/11 19:20 · sessao dbeb5aada79d · - · - · origem=Ronald (tmux)
-
-1. **Bloqueante — suite incompleta / leitores antigos nos testes.** Cinco assertivas ainda exigem órfãs HH:MM, incompatíveis com datetime na grade e ISO no JSON: `app/escala/tests/test_ata_x_turno_entrada.py:142`; `app/escala/tests/test_saida_valida_cross_meia_noite.py:102`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:135`; `app/ponto/tests/test_bateria_lavratura.py:637`; `app/ponto/tests/test_bateria_lavratura.py:1057`. Os produtores novos preservam datetime (`app/escala/utils.py:663`) e gravam ISO (`app/escala/services/ata.py:150`). O terceiro arquivo foi parcialmente adaptado, deixando sua assertiva antiga (`app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:184`).
-
-2. **Bloqueante — fixture existente quebra por chave agora obrigatória.** `_dia` não fornece `orfas`, mas os testes chamam `ata_do_dia`; agora a lavra executa `dia['orfas']`, produzindo `KeyError 'orfas'`. Reproduzi extraindo a fixture por AST e executando a lavra real isolada. (`app/chamados/tests/test_emis_ausencia_parcial_cobra.py:60`; `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:68`; `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:72`; `app/ponto/services/cartorio.py:769`)
-
-3. **Selo sem mordida — teste existente ficou vacuamente verde.** O teste de exclusividade compara `lampada['luz']` HH:MM com `ata['orfas']` ISO: a interseção fica vazia mesmo que a mesma batida seja simultaneamente acesa e órfã. (`app/ponto/tests/test_bateria_lavratura.py:959`; `app/ponto/tests/test_bateria_lavratura.py:960`; `app/escala/services/ata.py:150`). Os testes similares adaptados projetam ISO para HH:MM explicitamente. (`app/ponto/tests/test_o118_orfa_que_acendeu.py:167`; `app/ponto/tests/test_lampada_acende_pela_batida.py:84`)
-
-4. **Catraca incompleta — segundo escritor pode passar verde.** `AtaVigiada` cobre atribuição individual, mas herda `dict.update`, `dict.__ior__` e `dict.__delitem__` sem interceptação; após uma leitura legítima, escrever `a.update(orfas=...)`, `a |= {...}` ou apagar `orfas` passa em `exigir_catraca` com zero sítios crus. Reproduzi em memória. (`app/escala/services/ata.py:46`; `app/escala/services/ata.py:77`; `app/escala/services/ata.py:114`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:17`). Os mutantes publicados cobrem get/subscript/copy/dict/pop/setdefault, deixando essas escritas de fora. (`app/escala/tests/test_selo_tipo_na_fonte_orfas.py:43`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:55`)
-
-5. **Adaptações solicitadas preservam as defesas principais.** COBPARC conserva os três valores anteriores e acrescenta `nao_medidos=0`, mantendo também o caso de corrida dos deslogados. (`app/escala/tests/test_cobparc_rotulo_furos_diarios.py:34`; `app/escala/tests/test_cobparc_rotulo_furos_diarios.py:41`; `app/escala/tests/test_cobparc_rotulo_furos_diarios.py:46`; `app/escala/tests/test_cobparc_rotulo_furos_diarios.py:50`). Sobra mantém contraste ponta acesa/apagada, par distante, par de ontem e par correto; acrescenta segundos e uma negativa absoluta na virada. (`app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:324`; `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:336`; `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:344`; `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:361`; `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:372`; `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:456`). Propositor acrescenta instante às fixtures conservando os resultados de tipo incoerente, papel composto e coerência; o teste de legado passa a usar `None`, conforme o novo contrato do acessor. (`app/ponto/tests/test_propositor.py:165`; `app/ponto/tests/test_propositor.py:170`; `app/ponto/tests/test_propositor.py:176`; `app/ponto/tests/test_propositor.py:198`; `app/escala/tests/test_tipo_na_fonte_orfas.py:25`)
-
-6. **Os novos REDs executam funções reais, com isolamento material.** Há extração AST de funções, stubs de ORM/juízes e patches de dependências; a travessia grade→lavra→leitor realmente compara datas e segundos, e os mutantes de perda de data/persistência HH:MM executam código modificado. (`app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:19`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:70`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:107`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:123`; `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:39`). O teste do command verifica os argumentos passados à DP real usando `wraps`; não é só saída textual. (`app/escala/tests/test_tipo_na_fonte_orfas_v2.py:137`; `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:140`). O teste do supra com legado protege a acusação, mas não demonstra paridade com a base para atas correntes. (`app/escala/tests/test_selo_tipo_na_fonte_orfas.py:74`; `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:248`)
-
-Executei os cinco módulos novos com `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ... -v`: **47 testes passaram**; resultado da minha execução [nao verificado por arquivo persistido]. Suite Django/ORM não executada [nao verificado]. [nao verificado]
-
-**Veredito deste recorte: REPROVA**, bloqueantes 1–3; a lacuna da catraca está no achado 4. (`app/escala/tests/test_ata_x_turno_entrada.py:142`; `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:60`; `app/ponto/tests/test_bateria_lavratura.py:960`; `app/escala/services/ata.py:46`)
-
-_4409 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4413 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
