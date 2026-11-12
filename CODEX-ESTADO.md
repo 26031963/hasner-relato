@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:42** · publicado em **12/11/2026 09:44** (UTC-3)
+> Ultima resposta processada: **12/11/2026 09:49** · publicado em **12/11/2026 09:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 09:49 · sessao 06c5cff16f72 · PUSH-SEM-REGRAVAR · verificador · origem=Code
+
+**O delta fecha a perda de associações e o diagnóstico de registros malformados; fecha parcialmente whitespace, vocabulário e contagem.** A dispensa continua sem provar equivalência de negócio, e o texto final não explicita a população contada. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:856`)
+
+O anexo não identifica os achados por letras; adoto abaixo A=mapa, B=whitespace, C=vocabulário, D=saída malformada, E=contagem. Correspondência com uma rotulação original A–E: **[nao verificado]**. Execução do MORDE, RED/GREEN histórico e comportamento em produção: **[nao verificado]**.
+
+| Achado | A cura fecha? |
+|---|---|
+| **A — dois locais com mesmo patch-id** | **Sim, para esse defeito.** Cada pid conserva todos os SHAs; a inversão inclui cada local. A busca percorre também todos os publicados daquele pid até encontrar linhas iguais. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:406`) |
+| **B — whitespace semântico dispensado** | **Fecha o exemplo `ab` versus `a b`; não fecha equivalência de negócio nem igualdade byte a byte.** Agora exige igualdade das listas filtradas, mas descarta contexto e delimitadores de linha. (`bin/tests/test_lei_akita.sh:358`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`) |
+| **C — prosa/nome inteiro** | **Parcial.** Retira a prosa parentética da célula inteira; nomes internos curtos continuam entrando separadamente. Porém a célula de `sinal derivado…` mantém vírgula e continua impossível no campo. O inteiro literal `ADR (Architecture Decision Record)` também deixa de ser acrescentado por esse caminho. (`bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:319`; `app/docs/GLOSSARIO.md:13`, `app/docs/GLOSSARIO.md:28`) |
+| **D — `split()`/saída malformada** | **Sim, para quantidade e formato dos campos:** exige dois hexadecimais minúsculos de 40 caracteres e emite `PADRAO_ERRO`. Não verifica completude, pertencimento dos SHAs à seleção ou stdout vazio com sucesso. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:387`, `bin/tests/test_lei_akita.sh:390`) |
+| **E — contagem/texto final** | **Parcial.** O MORDE passa a proteger a exclusão de duplicatas em `JULGADOS`; a frase final continua sem explicar essa exclusão nem que o denominador inclui commits sem linha. (`bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:409`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:856`) |
+
+**1) Existe local dispensado sem publicado de linhas iguais?** [nao verificado]
+
+**Pelo caminho de duplicata, não.** O único `continue` dessa dispensa depende de `pub`, retornado apenas entre candidatos publicados do mesmo pid cuja lista de linhas seja igual. Local sem associação não encontra candidato e segue ao julgamento. Erro estrito de `git show` interrompe a execução; a ausência de `PADRAO_FIM` reprova no shell. (`bin/tests/test_lei_akita.sh:361`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:413`, `bin/tests/test_lei_akita.sh:848`)
+
+**Literalmente, existe outro caminho:** commit enumerado sem linha `LEI-AKITA:` é ignorado antes de consultar publicado. Isso permanece explícito no contrato de `julgar`. (`bin/tests/test_lei_akita.sh:338`, `bin/tests/test_lei_akita.sh:409`)
+
+“Publicado” significa alcançável de `origin/main`, após a exclusão pelo piso e sem merges; não há verificação de julgamento anterior daquele SHA. Portanto, `ja julgado` expressa uma premissa do instrumento. (`bin/tests/test_lei_akita.sh:373`, `bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:402`, `bin/tests/test_lei_akita.sh:847`)
+
+**2) Há contraexemplos e bordas restantes?**
+
+**Sim, há falso positivo de negócio.** Contraexemplo construído: duas funções do mesmo arquivo contêm blocos suficientemente longos com contexto idêntico; o publicado troca `return 1` por `return 0` na função de pagamento, enquanto o local faz a mesma troca na função de simulação. Diferindo somente posição e identificação da função no cabeçalho do hunk, podem coincidir o patch-id e todas as linhas filtradas. O comparador não conserva a localização da alteração. Ocorrência nos commits reais: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`)
+
+**Também há falso negativo para cherry-pick sobre outra base.** Se a base alterar uma linha de contexto, mantendo exatamente as mesmas remoções e adições, o patch-id pode mudar. Nesse caso, o comparador tolerante a contexto nunca recebe o publicado como candidato. A promessa do comentário de tolerar contexto diferente fica condicionada à igualdade prévia do pid. (`bin/tests/test_lei_akita.sh:381`, `bin/tests/test_lei_akita.sh:393`, `bin/tests/test_lei_akita.sh:406`)
+
+**“Byte a byte” é excessivo.** `text=True` e `splitlines()` normalizam/removem delimitadores; a marca `\ No newline at end of file` também é descartada. Assim, `old\n → new\n` e `old\n → new` podem produzir a mesma lista e o mesmo pid, apesar dos bytes finais diferentes. Consequência de negócio em produção: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:358`, `bin/tests/test_lei_akita.sh:392`, `bin/tests/test_lei_akita.sh:394`)
+
+| Borda | Comportamento |
+|---|---|
+| **Merge** | Excluído do cálculo de pid e impedido de usar a dispensa; com linha, incrementa `JULGADOS` e passa pelo julgamento dos hunks próprios. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:422`) |
+| **Vazio** | Sem registro de pid, não encontra publicado. Com linha, é contado e julgado com lista vazia de caminhos: termo inventado reprova; `n/a (instrumento)` pode passar. Saída efetiva do Git de produção: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:319`, `bin/tests/test_lei_akita.sh:325`, `bin/tests/test_lei_akita.sh:333`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:430`) |
+| **Binário** | Quando o diff só contém cabeçalhos e indicação de binário, a lista filtrada fica vazia; a distinção fica a cargo do patch-id. Não foi acrescentada comparação própria de blobs. Não se segue disso que binários diferentes sejam automaticamente duplicatas. Configuração/saída em produção: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`) |
+
+**3) O MORDE morde cada cura?**
+
+As mordidas abaixo são deduzidas das asserções; execução efetiva dos mutantes: **[nao verificado]**.
+
+| Cura | Mutante que pega | Mutante que não pega |
+|---|---|---|
+| **A — mapa** | Voltar a guardar um único local por pid: exige `dup2` **e** `dup3` no mapa exato. (`bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`) | Consultar somente o primeiro publicado do pid: não planta dois candidatos publicados, sendo apenas o segundo exato. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`) |
+| **B — linhas** | Retirar a comparação: `a b` local seria dispensado contra `ab` publicado, contrariando as falhas esperadas. (`bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:820`) | Comparar o diff inteiro, incluindo contexto: não planta cherry-pick com contexto diferente; tampouco cobre posição semântica ou LF final. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`) |
+| **C — prosa** | As provas existentes pegam retirar o inteiro sem parênteses e acrescentar o inteiro da segunda coluna. **Não há mordida específica da cura de prosa.** (`bin/tests/test_lei_akita.sh:445`, `bin/tests/test_lei_akita.sh:456`) | Reintroduzir a inclusão da célula com prosa parentética: a fixture não contém esse caso. Vírgulas também não são exercitadas. (`bin/tests/test_lei_akita.sh:445`, `bin/tests/test_lei_akita.sh:446`, `bin/tests/test_lei_akita.sh:459`) |
+| **D — saída** | **Não há mordida específica nova:** não injeta stdout malformado de `patch-id`. (`bin/tests/test_lei_akita.sh:381`, `bin/tests/test_lei_akita.sh:795`) | Remover a validação nova mantendo o processamento da saída saudável. (`bin/tests/test_lei_akita.sh:387`, `bin/tests/test_lei_akita.sh:389`) |
+| **E — contagem** | Contar duplicatas em `JULGADOS`: exige exatamente três, correspondentes à remoção, ao whitespace novo e ao outro patch. (`bin/tests/test_lei_akita.sh:812`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:815`, `bin/tests/test_lei_akita.sh:820`) | Alterar ou manter a descrição humana enganosa: o MORDE termina antes da emissão final. (`bin/tests/test_lei_akita.sh:835`, `bin/tests/test_lei_akita.sh:856`) |
+
+O cenário também pega retirada completa da dispensa, dispensa indiscriminada e associação publicada errada, pois exige simultaneamente falhas e mapa de duplicatas exatos. (`bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`)
+
+**4) Quem escreve/lê e o texto continua verdadeiro?**
+
+| Informação | Escritores e leitores |
+|---|---|
+| **`DUPLICATAS`** | Zerada por chamada; recebe local8/publicado12; lida pelo MORDE e pela emissão normal; o shell transforma o registro em `ja julgado:`. (`bin/tests/test_lei_akita.sh:376`, `bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:818`, `bin/tests/test_lei_akita.sh:839`, `bin/tests/test_lei_akita.sh:847`) |
+| **`JULGADOS`** | Zerado com a enumeração; incrementado após os dois filtros — sem linha e duplicata; lido pelo MORDE, emitido em `PADRAO_JULGADOS` e interpolado na frase final. (`bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:409`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:841`, `bin/tests/test_lei_akita.sh:856`) |
+
+O `pre-push` usa o código de saída; a régua também usa o código e exibe a saída quando há falha. Esses leitores não interpretam as contagens. Leitores externos: **[nao verificado]**. (`bin/pre-push.sh:38`; `bin/regua.sh:140`, `bin/regua.sh:142`)
+
+**O número de julgados é coerente; a descrição final continua incompleta.** Em `N de M`, **N** conta commits com linha que chegaram ao julgamento, excluindo duplicatas; **M** conta todos os enumerados, inclusive sem linha e duplicatas. A frase seria precisa como: “padrão julgado em N commits; M enumerados; D duplicatas dispensadas”. (`bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:409`, `bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:856`)
+
+## 12/11 09:47 · sessao 017bd36f7dcb · - · - · origem=Ronald (tmux)
+
+- **Nenhuma dispensa por duplicata sem comparação igual:** o único `continue` de duplicata exige `pub`, obtido entre publicados do mesmo patch-id com lista `+/-` igual. A associação local preserva todos os SHAs. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:413`) **Literalmente**, local sem `LEI-AKITA:` continua não julgado sem exigir publicado. (`bin/tests/test_lei_akita.sh:409`)
+
+- **Falso negativo por base diferente:** a comparação tolera contexto/posição diferentes, mas só é alcançada após igualdade de patch-id. Portanto, alteração de contexto que mude o patch-id impede reconhecer um cherry-pick com as mesmas linhas adicionadas/removidas; reprodução nessa configuração Git é **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`)
+
+- **“Byte a byte” é excessivo:** o subprocesso usa `text=True`, e o comparador usa `splitlines()`; também descarta a marca `\ No newline at end of file`. (`bin/tests/test_lei_akita.sh:358`, `bin/tests/test_lei_akita.sh:392`, `bin/tests/test_lei_akita.sh:394`) Contraexemplo candidato: publicado altera `old\n` para `new\n`; local altera `old\n` para `new` sem LF final. As listas são iguais; se o patch-id ignorar a marca, haverá dispensa apesar dos bytes diferentes. Igualdade dos patch-ids sem execução: **[nao verificado]**.
+
+- **Merge:** excluído do cálculo por `--no-merges`, bloqueado explicitamente no bypass e contado/julgado pelos hunks próprios. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:422`)
+
+- **Vazio:** sem registro de patch-id, não há candidato publicado; com linha, segue para julgamento e incrementa `JULGADOS`. A ausência efetiva de registro depende da saída do Git **[nao verificado]**. (`bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:430`)
+
+- **Binário:** se `show` emitir apenas cabeçalhos/`Binary files...`, a lista será vazia; a proteção contra binários diferentes permanece no patch-id, sem comparação própria de blobs. A saída/configuração efetiva de produção é **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`)
+
+- **Lacuna do MORDE:** o gerador pesquisa todos os publicados do mesmo pid, corrigindo também “primeiro publicado tem whitespace diferente; segundo é exato”; o caso plantado tem apenas um publicado por pid e não prova essa busca além do primeiro. (`bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:820`)
+
+## 12/11 09:47 · sessao 022365898ec8 · - · - · origem=Ronald (tmux)
+
+Leitura estática, sem execução do MORDE; RED/GREEN efetivo permanece **[nao verificado]**.
+
+| Cura | Mutante mordido pelo MORDE | Mutante/lacuna que escapa |
+|---|---|---|
+| Dois locais por patch-id | Voltar a conservar apenas um SHA: `dup2` e `dup3` usam o mesmo conteúdo/caminho, e a asserção exige ambos no mapa exato. (`bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`) | Procurar somente o primeiro publicado do mesmo pid: o cenário contém apenas um publicado equivalente a `dup`, sem candidato anterior de linhas diferentes. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:819`) |
+| Whitespace semântico | Retirar comparação de linhas: publicado contém `ab`, local contém `a b`, e local deve permanecer entre falhas. (`bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:820`) | Comparar diff inteiro, incluindo contexto: a prova nova só recria arquivo `dup.py` com conteúdo idêntico; não planta cherry-pick com contexto alterado. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`) |
+| Prosa em parênteses | **Não há mordida específica nova.** A fixture de vocabulário usa célula sem parênteses; casos de `julgar` tampouco usam prosa do glossário real. (`bin/tests/test_lei_akita.sh:445`, `bin/tests/test_lei_akita.sh:446`, `bin/tests/test_lei_akita.sh:459`, `bin/tests/test_lei_akita.sh:482`) | Reintroduzir o loop v1 que também adicionava a célula inteira com prosa preservaria as asserções existentes de inteiro/pedaços/segunda coluna. (`bin/tests/test_lei_akita.sh:456`, `bin/tests/test_lei_akita.sh:457`) |
+| Saída malformada patch-id | **Não há injeção específica de stdout malformado.** Os erros plantados são repositório raso, falta de origin e falta de corte. (`bin/tests/test_lei_akita.sh:715`, `bin/tests/test_lei_akita.sh:720`, `bin/tests/test_lei_akita.sh:829`) | Retirar a validação nova de quantidade/formato de campos não é exercitado por esses preparos saudáveis de patch-id. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:387`, `bin/tests/test_lei_akita.sh:795`) |
+| Contagem | Contar duplicatas em `JULGADOS`: esperado é exatamente 3, correspondentes a remoção, whitespace novo e outro patch; as duas duplicatas ficam de fora. (`bin/tests/test_lei_akita.sh:812`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:815`, `bin/tests/test_lei_akita.sh:820`) | Alterar somente a frase final para continuar sem explicar a exclusão não muda o valor validado pelo MORDE; a frase é emitida fora da execução MORDE. (`bin/tests/test_lei_akita.sh:834`, `bin/tests/test_lei_akita.sh:835`, `bin/tests/test_lei_akita.sh:856`) |
+
+O cenário também morde dispensa indiscriminada, retirada completa da dispensa e associação publicada errada, pois exige simultaneamente conjunto exato de falhas e mapa exato de duplicatas. (`bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`)
+
+A cura de prosa retira os parênteses antes de adicionar a célula inteira; `Architecture Conformance Test (armadilha: ...)` e `Offline Fallback (network-first: ...)` deixam de entrar com prosa. O termo `Architecture Decision Record` ainda entra isoladamente pelo filtro de nome entre parênteses. (`bin/tests/test_lei_akita.sh:84`, `bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:125`; `app/docs/GLOSSARIO.md:15`, `app/docs/GLOSSARIO.md:28`, `app/docs/GLOSSARIO.md:31`)
+
+Vírgula continua aberta: a célula `sinal derivado do estado, reconciliacao level-triggered` ainda entra inteira, mas o parser de `padrao=` não admite vírgula no valor. Não existe teste dessa célula na fixture nova. (`app/docs/GLOSSARIO.md:13`; `bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:127`, `bin/tests/test_lei_akita.sh:319`, `bin/tests/test_lei_akita.sh:445`)
 
 ## 12/11 09:42 · sessao 1644ac242a95 · PUSH-SEM-REGRAVAR · verificador · origem=Code
 
@@ -497,156 +592,4 @@ Pontos pendentes concretos:
 
 Comportamento Django real, rollback e custo em frota: [nao verificado]. Nenhum arquivo editado nesta revisão.
 
-## 12/11 09:11 · sessao 3d52e2f9914e · - · - · origem=Ronald (tmux)
-
-A escrita futura do cron está em `ponto/portas/celula.py:870-877`; o command apenas delega em `ponto/management/commands/gerar_celulas.py:309-313`. Alterar só o command exigiria contornar a operação existente; o escritor único está declarado em `core/portas.py:107-113` e cobrado por `ponto/tests/test_chokepoint_celula_gate.py:48-85`.
-
-O leitor HAIKU adequado é `api/views_mensageria.py:627-646`: `api_mensageria_saude` entrega snapshots prontos. Molde: `escala/services/vigencia_impossivel.py:65-74`, incluindo `total=None, sem_medida=True` antes da primeira lavra. URL existente: `api/urls.py:16`.
-
-Django, freezegun e pytest estão ausentes no interpretador consultado; execução ORM permanece [nao verificado]. Não executar `config.settings.ci`: cria diretórios temporários fora de `app/` (`config/settings/ci.py:25-33`) e configura PostgreSQL (`config/settings/ci.py:6-17`).
-
-Execuções observadas, sem alterações de arquivo ou banco:
-
-- `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_reverter_regen_sem_banco ponto.tests.test_reverter_exportada_sem_banco -v`: **36 OK**, 9,824 s. Contratos sem Django: `ponto/tests/test_reverter_regen_sem_banco.py:1-5`; I/O mockado no segundo: `ponto/tests/test_reverter_exportada_sem_banco.py:157-159`.
-- `core/tests/test_medida_turno_do_par.py`: **35 OK**, 41,107 s, usando exatamente a adaptação documentada em `core/tests/test_medida_turno_do_par.py:20-68` (`SimpleTestCase` → `unittest.TestCase` em memória).
-- `escala/tests/test_chokepoint_escala_gate.py` + `colaboradores/tests/test_chokepoint_cadastro_gate.py`: **12 OK**, 9,980 s, mesma substituição de base em memória; corpos originais preservados (`escala/tests/test_chokepoint_escala_gate.py:53-81`, `colaboradores/tests/test_chokepoint_cadastro_gate.py:50-90`).
-- Cinco métodos puramente estáticos de `ponto/tests/test_chokepoint_celula_gate.py`: **5 OK**, 3,387 s (`:50-61`, `:87-97`). Os dois métodos que importam a porta real não foram executados (`:63-85`) [nao verificado].
-
-Padrão para testes novos sem banco: compilar função real por AST com namespace controlado e trocar somente imports necessários; exemplo existente em `colaboradores/tests/test_ui_painel_mostra_o_app.py:74-98`. Helper de substituição reversível de módulos em `:25-42`; mutação de fonte somente em memória em `colaboradores/tests/ui_painel_fontes.py:38-53`.
-
-Nenhum arquivo foi editado.
-
-## 12/11 09:10 · sessao d20c4f297a46 · - · - · origem=Ronald (tmux)
-
-| Caminho | Classificação | Evidência e encaixe |
-|---|---|---|
-| Feriado salvo/editado/excluído | **E** | Trabalho calculado consulta feriado do lugar do vínculo; alteração pode mudar `trabalha` futuro. (`escala/models.py:1369`, `escala/models.py:1394`) Hoje o receiver só reavalia chamados da data nova; exclusão não tem receiver. (`chamados/signals.py:322`, `chamados/signals.py:326`) Capturar data anterior no `pre_save`; regenerar futuras existentes nas datas anterior/nova no `post_save` e na data excluída no `post_delete`, pela porta comum e sem estender horizonte. |
-| `Posto.opera_em_feriado` | **N**, para trabalho/geradora/DNA das células existentes | A flag do posto define somente o padrão ao **criar vínculo**; vínculo existente guarda sua própria `trabalha_em_feriado`. (`escala/models.py:904`, `escala/models.py:910`) O cálculo da célula lê essa flag do vínculo e o município, sem ler `opera_em_feriado`. (`escala/models.py:1389`, `escala/models.py:1394`) Há outro leitor da flag para cobrança do posto, fora desses campos. (`colaboradores/services/feriado_do_posto.py:60`) |
-| `reclassificar_base` | **N**, para trabalho/geradora/DNA | Salva exclusivamente `tipo_base`. (`escala/services/cadastro_tipo.py:133`) Trabalho é calculado por ciclo/foto/âncora/feriado, e os marcos usam horários, overrides e modo de intervalo. (`escala/models.py:816`, `escala/models.py:1271`, `escala/models.py:326`) O produtor de DNA não inclui nem consulta `tipo_base`. (`ponto/management/commands/gerar_celulas.py:83`) Isso não prova ausência de efeitos no motor financeiro, que permanece fora desta classificação. (`ponto/motor_calculo_v2.py:3647`) |
-| `TipoEscalaAdmin` | **E** | É `ModelAdmin` simples, sem encaminhamento de gravação/propagação. (`escala/admin.py:8`) Encaminhar `save_model` à porta de cadastro de template, preservando campos do admin; chamar apenas `super().save_model` mantém o buraco. A propagação existente fica em `_propagar_regeneracao_template`. (`escala/services/cadastro_tipo.py:327`) |
-| `trocar_calendario_de_folga` | **E**, para tornar a porta autossuficiente | Atualmente salva somente FK e trilha; quem materializa é a view individual ou o lote. (`colaboradores/services/vinculo.py:434`, `colaboradores/views.py:239`, `colaboradores/views.py:245`, `escala/views.py:408`) O cálculo do dia usa a foto `FolgaDia`, não a FK. (`escala/models.py:1280`, `escala/models.py:1310`) |
-| `salvar_calendario_de_folga` | **E**, para aplicar a edição às futuras existentes | Grava definição/tamanhos e retorna sem materializar foto; `semana_dia` tem retorno precoce. (`escala/folgas.py:548`, `escala/folgas.py:566`, `escala/folgas.py:574`) Reutilizar `datas_que_o_calendario_manda`. (`escala/folgas.py:43`) |
-
-Para os dois calendários, o suplemento deve reconciliar apenas fotos futuras da janela com células existentes, preservando `FolgaDia` manual, e regenerar pela porta comum com `estender_horizonte=False`. Chamar `gerar_foto_folgas` de mês inteiro ampliaria a escrita sobre o passado: ela apaga/recria as fotos do mês e relavra o mês inteiro. (`escala/folgas.py:175`, `escala/folgas.py:180`, `escala/folgas.py:201`)
-
-REDs sugeridos sem banco: feriado criado/removido/movido com células existentes nas duas datas; admin mudando horário com vínculo que começa amanhã; troca e edição de calendário movendo a folga de amanhã, preservando manual e célula editada. A execução desses testes permanece **[nao verificado]**. Nenhum arquivo foi editado. **[nao verificado por diff]** [nao verificado]
-
-## 12/11 09:04 · sessao 100e569d9f3b · FIO-E0-V4-E3-LEITORES · censo · origem=Code
-
-**Brief FIO-E0-V4-E3-LEITORES — somente censo.** Base informada: `087fe758a0488739ab22885a2f090b312b658a92`; identidade Git e pouso da E4B nesta cópia: [nao verificado]. As referências abaixo são da árvore lida; os anexos transcritos no pedido não foram conferidos contra arquivos originais [nao verificado].
-
-**0. Portão de arquivo**
-
-Há dois resultados distintos; o construtor precisa consumir o ampliado, porque o censo encontrou leitores além dos nomes iniciais. O calendário decide a oferta de “Resolver dia”; o copiloto publica vitalidade e retenção do dia. (`app/colaboradores/services/calendario.py:97`, `app/colaboradores/services/calendario.py:476`, `app/ponto/services/dia_do_colab.py:71`, `app/ponto/services/dia_do_colab.py:101`)
-
-| Recorte comparado com LASTRO fornecido | Arquivos em comum |
-|---|---|
-| Recorte nominal: seis caminhos MUDA, cinco respondedores, complemento 11–12 e testes identificados abaixo | **0 em comum**; estado da obra LASTRO [nao verificado]. | [nao verificado]
-| Censo ampliado dos leitores de dia e testes das mesmas funções | `app/colaboradores/services/calendario.py`; `app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py`; `app/ponto/services/dia_do_colab.py`; `app/core/tests/test_medida_turno_do_par.py`. Presença na lista LASTRO: anexo fornecido [nao verificado]. |
-| Registro necessário ao PRONTO 1 | `app/docs/RELATO.md`, também listado no LASTRO fornecido [nao verificado]. |
-| Ambos os recortes × caminhos de `bin/` | **0 em comum**. As referências encontradas em `bin/` descrevem o consumo do censo; não são os leitores de negócio listados aqui. (`bin/fio_estado.py:44`, `bin/tests/test_fio_estado.sh:38`) |
-
-Lastro dos quatro arquivos do recorte ampliado:
-
-- `app/colaboradores/services/calendario.py::contexto_calendario`: lê C6 e constrói `pode_ultimo_recurso`; isso participa da porta administrativa do dia. (`app/colaboradores/services/calendario.py:468`, `app/colaboradores/services/calendario.py:476`, `app/colaboradores/services/calendario.py:738`)
-- `app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py`: importa e exercita `contexto_calendario`; é teste do mesmo serviço, embora sua pergunta específica seja ausência/status. (`app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:14`, `app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:43`)
-- `app/ponto/services/dia_do_colab.py::dia_do_colab` e `::_pna_do_dia`: expõem C6 e `pergunta_no_app.do_dia` ao copiloto. (`app/ponto/services/dia_do_colab.py:62`, `app/ponto/services/dia_do_colab.py:71`, `app/ponto/services/dia_do_colab.py:107`)
-- `app/core/tests/test_medida_turno_do_par.py`: contém o sítio `tarefa_do_dia.py::instancias_do_turno` no universo da medição. Isso é acoplamento de teste, não demonstração de que esse arquivo precise ser editado. (`app/core/tests/test_medida_turno_do_par.py:380`)
-
-**Decisão de portão:** não usar o “0” nominal como autorização para um diff que inclua esses arquivos adicionais. A colisão de escrita efetiva depende do diff final, ainda [nao verificado]. O aval fornecido determina espera/serialização quando houver arquivo em comum [nao verificado].
-
-**1. Censo por AST e leitura dos sítios**
-
-O script ao fim percorre Python sem importar a aplicação, resolve chamadas, aliases e reexports estáticos, imprime os chamadores e aponta operações candidatas a escrita. Reflexão dinâmica e cobertura completa de efeitos transitivos permanecem [nao verificado].
-
-| Autoridade/sítio | O que responde; origem da resposta |
-|---|---|
-| `app/chamados/services/tarefa_do_dia.py:562::tarefa_do_dia` | Juiz do dia: ações por instância, dono, porta e desconhecimento explícito; delega à carga. (`app/chamados/services/tarefa_do_dia.py:32`, `app/chamados/services/tarefa_do_dia.py:564`, `app/chamados/services/tarefa_do_dia.py:572`) |
-| `app/chamados/services/tarefa_do_dia.py:515::CargaDaTarefa.tarefa` | Calcula pelo corpo do mesmo juiz e acrescenta portas/verbos carregados do painel. (`app/chamados/services/tarefa_do_dia.py:523`, `app/chamados/services/tarefa_do_dia.py:528`, `app/chamados/services/tarefa_do_dia.py:532`) |
-| `app/chamados/services/tarefa_do_dia.py:164::_tarefa_pura` | Decide exigibilidade lendo célula, lâmpada, teto, cobertura, decisões e efeitos; não é leitor externo. (`app/chamados/services/tarefa_do_dia.py:168`, `app/chamados/services/tarefa_do_dia.py:185`, `app/chamados/services/tarefa_do_dia.py:260`, `app/chamados/services/tarefa_do_dia.py:306`) |
-| `app/chamados/services/tarefa_do_dia.py:538::_portas_da_tarefa` | Projeta portas das ações já julgadas; fila residual não cria tarefa. (`app/chamados/services/tarefa_do_dia.py:541`, `app/chamados/services/tarefa_do_dia.py:545`, `app/chamados/services/tarefa_do_dia.py:553`) |
-| `app/chamados/juizes.py:1612::porta_alcancavel_do_dia` — C17 | Responde alcançabilidade por fila ou pergunta viva no app; deriva essa resposta sem ler `tarefa_do_dia`. (`app/chamados/juizes.py:1615`, `app/chamados/juizes.py:1646`, `app/chamados/juizes.py:1657`) |
-| `app/chamados/juizes.py:862::pergunta_viva` — C6 | Vitalidade de uma pergunta; usa o corpo `_pergunta_viva_calc` e memo por instância. Não responde sozinho a exigibilidade completa do dia. (`app/chamados/juizes.py:863`, `app/chamados/juizes.py:889`, `app/chamados/juizes.py:1389`; `app/core/juizes.py:112`) |
-| `app/chamados/juizes.py:1494::fio_vivo` — C15 | Redução de C6 sobre a coleção recebida; o universo pertence ao chamador. (`app/chamados/juizes.py:1499`, `app/chamados/juizes.py:1500`, `app/chamados/juizes.py:1503`) |
-| `app/chamados/models.py:3366::PerguntaDisputa.viva` | Property que delega a C6; o SQL `q_vivas` é apenas pré-filtro generoso. (`app/chamados/models.py:3373`, `app/chamados/models.py:3376`) |
-| `app/chamados/models.py:3035::PerguntaDisputa.estado` | Rótulo que combina carimbos e C6; não lê tarefa. (`app/chamados/models.py:3042`, `app/chamados/models.py:3045`) |
-
-**Escritores de tarefa:** o contrato é **0 escritores persistentes**; a função não possui tabela de estado de tarefa. As operações `update` encontradas no módulo alteram os dicionários locais de saída, não registros ORM. Isso não certifica ausência de escrita em toda dependência transitiva. (`app/docs/JUIZES.md:84`; `app/chamados/services/tarefa_do_dia.py:182`, `app/chamados/services/tarefa_do_dia.py:205`, `app/chamados/services/tarefa_do_dia.py:249`, `app/chamados/services/tarefa_do_dia.py:333`, `app/chamados/services/tarefa_do_dia.py:553`)
-
-Os consumidores atuais de produção de `tarefa_do_dia` encontrados são:
-
-| Arquivo::função | Leitura |
-|---|---|
-| `app/chamados/management/commands/backfill_fio_morto_e4b.py::ato_do_dia` | Lê tarefa para planejar atos do passivo; não é escritor de tarefa. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:82`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:87`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:97`) |
-| `app/chamados/management/commands/diff_e3_sombra.py::Command.comparar` | Lê carga e tarefa para comparar projeções dos três consumidores C17. (`app/chamados/management/commands/diff_e3_sombra.py:115`, `app/chamados/management/commands/diff_e3_sombra.py:125`, `app/chamados/management/commands/diff_e3_sombra.py:127`) |
-
-As chamadas diretas de teste à função estão em `test_e2_tarefa_do_dia`, `test_e3_c8c_orm` e `test_e3_portas_tarefa`; o script também imprime chamadas à carga e candidatos ao método `.tarefa`, incluindo wrappers de teste. (`app/chamados/tests/test_e2_tarefa_do_dia.py:139`, `app/chamados/tests/test_e2_tarefa_do_dia.py:321`, `app/chamados/tests/test_e3_c8c_orm.py:45`, `app/chamados/tests/test_e3_portas_tarefa.py:19`)
-
-Os **três consumidores de produção de C17** são exatamente os três abaixo; a catraca atual exige sua permanência e deverá mudar junto com a migração. (`app/chamados/tests/test_e3_pendentes_app.py:19`, `app/chamados/tests/test_e3_pendentes_app.py:145`)
-
-| Caminho MUDA/adicional | Sítio; saída atual | Derivação atual |
-|---|---|---|
-| Fio | `app/chamados/services/fio.py::montar_chamados_fio`: cartões, formulários, explicação, rótulos | C6, crédito, projeção de regularização e desenlace; não tarefa. (`app/chamados/services/fio.py:163`, `app/chamados/services/fio.py:238`, `app/chamados/services/fio.py:375`, `app/chamados/services/fio.py:390`) |
-| Tela admin — fio/modal | `app/chamados/views.py::fio_colaborador`; `::modal_fio_colaborador._resp_modal_full` | Consomem a montagem acima; modal habilita explicação. (`app/chamados/views.py:677`, `app/chamados/views.py:889`) |
-| Tela admin — drawer/ficha | `app/colaboradores/views.py::painel_colaborador`; `app/colaboradores/services/ficha.py::ficha_do_colab` | Drawer lê projeção do app; ficha deriva dono pelo verbo e pendência por texto/respostas sem veredito. (`app/colaboradores/views.py:940`, `app/colaboradores/services/ficha.py:154`, `app/colaboradores/services/ficha.py:159`, `app/colaboradores/services/ficha.py:169`) |
-| Tela admin — calendário | `app/colaboradores/services/calendario.py::contexto_calendario`; `::resolver_dia_oferecido` | Deriva oferta de ação com janela, resposta, C6 e status do dia. (`app/colaboradores/services/calendario.py:97`, `app/colaboradores/services/calendario.py:467`, `app/colaboradores/services/calendario.py:738`) |
-| API/app | `app/api/views.py::api_chamados_v2`; `::api_disputa_perguntas` | Leem `consulta_do_app`, não tarefa. (`app/api/views.py:992`, `app/api/views.py:2530`) |
-| Badge dos dois kernels | `app/api/views.py::api_me`; `app/api/views_core.py::api_me` | Leem `projecao_do_app`. (`app/api/views.py:315`, `app/api/views_core.py:303`) |
-| Badge/PWA dashboard | `app/core/views.py::dashboard` | Conta pendentes da consulta do app; template desenha essa contagem. (`app/core/views.py:252`, `app/templates/core/dashboard_colaborador_v2.html:78`) |
-| Badge da navbar do colaborador | `app/core/context_processors.py::navbar_context._badge_colab` | Conta chamados na fila, unidade diferente das perguntas pendentes dos kernels. (`app/core/context_processors.py:185`, `app/core/context_processors.py:187`) |
-| Fonte compartilhada API/badge | `app/chamados/services/pergunta_no_app.py::perguntas_do_app`; `::consulta_do_app`; `::projecao_do_app` | C6 → carimbo sem resposta + disputa aberta → contagem; não tarefa. (`app/chamados/services/pergunta_no_app.py:58`, `app/chamados/services/pergunta_no_app.py:71`, `app/chamados/services/pergunta_no_app.py:90`) |
-| `o_que_segura` | `app/folha/fora_da_folha.py::o_que_segura` | Lê `_fio_do_dia`/`_porta`, que chegam a C17. (`app/folha/fora_da_folha.py:203`, `app/folha/fora_da_folha.py:221`, `app/folha/fora_da_folha.py:225`) |
-| Fora da folha | `app/folha/fora_da_folha.py::_porta`; `::_fio_do_dia`; `::fora_da_folha` | C17 em `:67`; fio vem da resposta dessa porta. (`app/folha/fora_da_folha.py:67`, `app/folha/fora_da_folha.py:77`, `app/folha/fora_da_folha.py:178`) |
-| Cadastro realidade | `app/escala/services/cadastro_realidade.py::beco_em_lote` | Lê C17 e examina vivas/âncoras/cadastro; não tarefa. (`app/escala/services/cadastro_realidade.py:442`, `app/escala/services/cadastro_realidade.py:487`, `app/escala/services/cadastro_realidade.py:488`) |
-| Vigia/contador | `app/chamados/services/vigia_fio.py::censo_alcance` | C17 em `:635`; depois decide futuro, baldes e causas até contar fio morto. (`app/chamados/services/vigia_fio.py:542`, `app/chamados/services/vigia_fio.py:635`, `app/chamados/services/vigia_fio.py:648`, `app/chamados/services/vigia_fio.py:654`, `app/chamados/services/vigia_fio.py:695`) |
-| Vigia/cron | `app/chamados/management/commands/vigiar_fio_morto.py::Command.handle` | Executa os censos; é consumidor e publicador da medição. (`app/chamados/management/commands/vigiar_fio_morto.py:174`, `app/chamados/management/commands/vigiar_fio_morto.py:176`; `app/config/crons.py:1721`) |
-| Copiloto | `app/ponto/services/dia_do_colab.py::dia_do_colab`; `::_pna_do_dia` | Publica C6 e retenção própria de `pergunta_no_app.do_dia`. (`app/ponto/services/dia_do_colab.py:71`, `app/ponto/services/dia_do_colab.py:101`, `app/ponto/services/dia_do_colab.py:108`) |
-
-Há ainda um caminho indireto de contador administrativo: navbar → partição de verbos/crédito, e uma lavra por comando. Migrar a fonte exige conferir também essa testemunha, sem executar sua escrita nesta obra de censo. (`app/core/context_processors.py:84`, `app/core/context_processors.py:90`, `app/core/management/commands/lavrar_badge_navbar.py:63`, `app/core/management/commands/lavrar_badge_navbar.py:91`)
-
-**Cinco respondedores: origem e destino da certidão proposta**
-
-| Respondedor atual | Quem chama | Para onde deve ir a pergunta sobre o dia |
-|---|---|---|
-| `fio.py::montar_chamados_fio`, ramo `todas_respondidas` | Atendimento, fio admin, modal e parcial. (`app/chamados/views.py:569`, `app/chamados/views.py:677`, `app/chamados/views.py:889`, `app/chamados/services/fio.py:446`) | Projeção de C19 para tarefa; complemento 12 consulta C6/C15 para vitalidade. O ramo atual usa timestamp cru. (`app/chamados/services/fio.py:340`; `app/chamados/services/tarefa_do_dia.py:32`; `app/chamados/juizes.py:1503`) |
-| `raiox.py::creditos_perguntas` | `particionar_verbos` e montagem do fio. (`app/chamados/services/verbos.py:34`, `app/chamados/services/fio.py:390`) | Consumidores da tarefa leem a decisão C19; retirar a derivação por `respondida_em` do papel de respondedor do dia. (`app/chamados/services/raiox.py:135`, `app/chamados/services/raiox.py:139`; `app/docs/JUIZES.md:78`) |
-| `relatorios_disputa.py::classificar` | `coletar`. (`app/chamados/relatorios_disputa.py:47`) | Categorias de espera projetam ações/donos C19; fechamento continua C7. Hoje classifica por C6 + timestamp. (`app/chamados/relatorios_disputa.py:18`, `app/chamados/relatorios_disputa.py:21`; `app/docs/JUIZES.md:62`, `app/docs/JUIZES.md:78`) |
-| `cobranca.py::_calados` | `linhas_para_a_pauta`. (`app/chamados/services/cobranca.py:257`) | Pendência do colaborador vem de C19; canal e SLA continuam perguntas próprias. Hoje usa `q_vivas`, resposta nula e disputa aberta. (`app/chamados/services/cobranca.py:228`, `app/chamados/services/cobranca.py:243`, `app/chamados/services/cobranca.py:246`) |
-| `_card_atendimento.html` | Duas listas do atendimento. (`app/templates/chamados/meu_atendimento.html:127`, `app/templates/chamados/meu_atendimento.html:144`) | Receber projeção pronta do servidor; retirar derivações de documento/formulário/ação do dia. (`app/templates/chamados/partials/_card_atendimento.html:65`, `app/templates/chamados/partials/_card_atendimento.html:77`, `app/templates/chamados/partials/_card_atendimento.html:203`; `app/docs/JUIZES.md:78`) |
-
-A certidão remove o papel de respondedor e o código sem chamadores no mesmo commit; não significa apagar serviços inteiros nem C6. O registro histórico também usa “cinco respondedores” para outra enumeração de autoridades, que não deve ser confundida com os cinco sítios do aval. (`CLAUDE.md:191`; `app/core/juizes.py:153`; `app/chamados/services/tarefa_do_dia.py:491`)
-
-**Testes a carregar no brief** [nao verificado]
-
-| Frente | Testes existentes | [nao verificado]
-|---|---|
-| Tarefa, portas e DIFF | `app/chamados/tests/test_e2_tarefa_do_dia.py:139`; `app/chamados/tests/test_e3_portas_tarefa.py:32`; `app/chamados/tests/test_e3_diff_sombra.py:53`; `app/chamados/tests/test_e3_c8b_sem_banco.py:117`; `app/chamados/tests/test_e3_c8c_orm.py:45` |
-| API/badge/catraca | `app/chamados/tests/test_e3_pendentes_app.py:145`; `app/chamados/tests/test_e3_app_orm.py:28`; `app/chamados/tests/test_e3_v4_orm.py:20`; `app/core/tests/test_dashboard_badge.py:40`; `app/api/tests/test_api_me_badge.py:36`; `app/core/tests/test_badge_navbar_consome_particao.py:1` |
-| Fio e explicação | `app/chamados/tests/test_fio_explicacao.py:24`; `app/chamados/tests/test_selo_identidade_fio_explicacao.py:72`; `app/chamados/tests/test_fio_ancora_destino.py:58`; `app/chamados/tests/test_fio_le_o_juiz.py:102` |
-| Relatório/cartão | `app/chamados/tests/test_relatorio_pendencias.py:35`; `app/chamados/tests/test_o318_card_nao_oferece_o_que_a_porta_recusa.py:103`; `app/chamados/tests/test_o318_dia_misto_projecao_por_marco.py:124` |
-| Vigia/folha/cadastro | `app/chamados/tests/test_n1_alimentacao_unica.py:77`; `app/chamados/tests/test_o261e_f5_alcance.py:100`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:84`; `app/chamados/tests/test_o261_vigia_fio.py:799`; `app/folha/tests/test_haiku_fora_da_folha.py:65`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:163` |
-| Admin | `app/colaboradores/tests/test_selo_situacao_e_lampada.py:118`; `app/colaboradores/tests/test_ficha_do_colab.py:39`; calendário e medição do par citados no portão. |
-
-**JS/SW e CLASSE A:** há service worker no caminho PWA: registro em `pwa.js`, interceptação de GET e estratégias de rede/cache em `sw.js`. O `badge` do push nesse arquivo é um ícone. Não foi demonstrada necessidade de modificar JS/SW para a migração do servidor [nao verificado]. Se o diff tocar esses arquivos, aplica-se a CLASSE A e o smoke nas duas cascas exigidos pelo aval fornecido [nao verificado]. (`app/static/pwa.js:14`, `app/static/sw.js:33`, `app/static/sw.js:45`, `app/static/sw.js:82`, `app/static/sw.js:94`)
-
-**2. CASO-7445: confirmação e juiz correto**
-
-**Item 11 confirmado no código.** O mapa é por cartão; o cache é por disputa; o preenchimento do cache recebe as perguntas do cartão corrente. O primeiro cartão com lista não vazia pode definir a explicação reutilizada nos demais. O explicador aceita a lista fornecida e usa `fio_vivo(ps)` para dizer “Tudo resolvido”. (`app/chamados/services/fio.py:240`, `app/chamados/services/fio.py:305`, `app/chamados/services/fio.py:312`; `app/chamados/services/explicador.py:121`, `app/chamados/services/explicador.py:137`, `app/chamados/services/explicador.py:140`)
-
-O diff deve alimentar `por_que_nao_fecha` com **todas as perguntas da disputa**, compartilhando suas instâncias; chave e universo precisam coincidir. C15 já declara que o universo é responsabilidade do chamador. O RED 34390/disputa 7445/duas vivas é dado do anexo; reprodução nesta cópia [nao verificado]. (`app/chamados/juizes.py:1500`; `app/chamados/tests/test_selo_identidade_fio_explicacao.py:93`)
-
-**Item 12 confirmado no código.** `todas_respondidas` é `all(p.respondida_em ...)`, e o modal usa esse resultado no aviso de fechamento sem anuência. Pergunta morta por célula pode, portanto, continuar sendo tratada como ausência de resposta nesse cálculo. (`app/chamados/services/fio.py:340`; `app/templates/chamados/partials/modal_fio.html:334`)
-
-O aviso deve consultar a vitalidade por C6/C15 no universo do cartão; C7 continua decidindo se a disputa pode fechar, incluindo sua guarda de resposta sem veredito. Não basta substituir o cálculo por `not fio_vivo(...)`: pergunta viva respondida e pergunta viva sem resposta exigem projeções diferentes. O RED 35602/pergunta 51407/`celula_absolveu` vem do anexo; reprodução [nao verificado]. (`app/chamados/juizes.py:1407`, `app/chamados/juizes.py:1494`; `app/chamados/models.py:1850`, `app/chamados/models.py:1866`)
-
-**Registro:** `JUIZES.md` registra C7 e C19 e menciona C6; não contém verbete independente com os endereços literais C6/C15. O próprio documento manda consultar o registro vivo, onde constam `pergunta_viva` e `fio_vivo`. (`app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:62`, `app/docs/JUIZES.md:78`, `app/docs/JUIZES.md:90`; `app/core/juizes.py:278`, `app/core/juizes.py:287`)
-
-**3. DECISÕES técnicas, sem juiz novo**
-
-1. **Quem responde o dia:** C19 permanece a autoridade. C17 só pode virar fachada depois do DIFF; a regra já resolve os quatro conflitos históricos. (`app/docs/RELATO.md:515`, `app/docs/RELATO.md:518`)
-
-2. **Fila sem pergunta, fila A/pergunta B, verbos A/B e isento residual:** conservar as respostas de C19 e medir a mudança nos consumidores. As expectativas já estão escritas; sua incidência na frota atual está [aguarda sonda] [nao verificado]. (`app/chamados/tests/test_e3_portas_tarefa.py:32`, `app/chamados
-
-[truncado em 20000 de 40250 caracteres]
-
-_4135 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4138 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
