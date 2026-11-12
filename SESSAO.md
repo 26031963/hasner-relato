@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 13:45:36.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (460.8 MB). Acoes na janela: **1225**.
+**Medido em 12/11/2026 13:51:04.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (460.8 MB). Acoes na janela: **1226**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:46:36 | Bash | Rewrite caso 9 and rerun selo | `cd /home/ronald/wt-travas-item2-113819 && python3 - <<'EOF' import re p='bin/tests/test_disjuntor.sh'; s=open(p).read() i=s.index('# AUDITORIA-ITEM2-V5 (aval Ronald'); j=s.index('caso(9, c9)\n')+len('caso(9, c9)\n') novo = r'''# AUDITORIA-ITEM2-V5 (aval Ronald 12/11 13:3x): a varredura do "quem libera" e REGRA sobre a FONTE, por AST, e nao a # lista fechada dos 5 textos do caso 6. Universo: todo l ...` |
 | 13:42:00 | Bash | Narrow rule, add escrever mutant, rerun | `cd /home/ronald/wt-travas-item2-113819 && python3 - <<'EOF' p='bin/tests/test_disjuntor.sh'; s=open(p).read() rep=[(r"""_CODE_LIBERA = _re.compile(r'\bo Code\b[^.;\|]{0,40}?\b(libera\w*\|escrev\w*)', _re.I)""", r"""_CODE_LIBERA = _re.compile(r'\bo Code\b[^.;\|]{0,40}?\blibera\w*', _re.I) _ESCREVE = _re.compile(r'\bescrev\w*', _re.I) # escrever so conta junto de DESENHO/ERRO-BOBO (ensinar a linha)" ...` |
 | 13:41:44 | Bash | Save E3 aval, inspect disjuntor 1536 | `cd /home/ronald/saas-hasner && mkdir -p logs/E3-LEITORES && cat > logs/E3-LEITORES/aval_e3_leitores_b6_desenho.txt <<'EOF' aval Ronald: E3-LEITORES-B6-DESENHO. Unidade: #10 e #8 = pergunta (PerguntaDisputa); #4 = chamado. Responde a PERGUNTA DE DESENHO 12:27. Nenhuma lei nova. #10 DECIDIDO PELA LEI HX-PAR-RESPOSTA \| contestavel: "respondida sem texto" e estado ILEGAL com UM predicado (chamados/ju ...` |
 | 13:37:09 | Bash | Add AST rule caso 9 and run selo | `cd /home/ronald/wt-travas-item2-113819 && python3 - <<'EOF' p='bin/tests/test_disjuntor.sh'; s=open(p).read() a="caso(8, c8)\nruins = [n for n, v in ok if not v]\n" assert s.count(a)==1 novo = r'''caso(8, c8) # AUDITORIA-ITEM2-V5 (aval Ronald 12/11 13:3x): a varredura do "quem libera" e REGRA sobre a FONTE, por AST, e nao a # lista fechada dos 5 textos do caso 6. Universo: todo literal str de disj ...` |
