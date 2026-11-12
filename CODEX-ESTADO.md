@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 21:04** · publicado em **11/11/2026 21:05** (UTC-3)
+> Ultima resposta processada: **11/11/2026 21:07** · publicado em **11/11/2026 21:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 21:07 · sessao 4be47f121636 · BUG-ORFAO-COM-PAR · construtor · origem=Code
+
+Arquivo: [test_bug_orfao_com_par_ensaio.py:1](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:1). Classe candidata nomeada com `RED`; ensaio pela API real, relógio por passo e captura da pilha de nascimento ([arquivo:84](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:84), [arquivo:122](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:122)).
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_bug_orfao_com_par_ensaio --settings=config.settings.ci
+```
+
+Expectativa estática no HEAD:
+
+| ASSERT | Esperado | Por quê |
+|---|---|---|
+| A, após E | Zero perguntas nascidas, inclusive carimbadas | Turno ainda em curso: `escala/servico_jornada.py:385`. |
+| B, 06:30:48 | Zero nascimentos após cartório e reconciliação | Fábrica exige marco vencido; S vence às 07:30: `chamados/services/fabrica_da_celula.py:69`, `ponto/services/cartorio.py:882`. |
+| C, após S | Um turno fechado ancorado em D; zero nascimentos acumulados | Seleção pelo dia do turno: `ponto/turnos.py:1992`. |
+
+**Execução comportamental no HEAD: [nao verificado].** Não executei Django porque esta obra proíbe banco. Não afirmo RED nem “classe não reproduz no HEAD”; essa conclusão depende da suite. [nao verificado]
+
+**Mutante descrito, sem aplicação:** emitir `orfao_14h` imediatamente após E, dispensando vencimento, em `api/views_core.py:758`, alcançando `chamados/services/disputa_emissao.py:444`. Executar o mesmo comando na cópia mutante; ASSERT A deve falhar. Morte efetiva: [nao verificado]. Especificação em [arquivo:20](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:20).
+
+| Campo lido | Quem escreve | Quem lê em produção |
+|---|---|---|
+| Pergunta: `motivo` | `chamados/models.py:3014`, INSERT `:3017` | `chamados/juizes.py:941` |
+| Pergunta: `data_evento` | `chamados/services/fio.py:800` | `chamados/services/fabrica_da_celula.py:148` |
+| Pergunta: `materializada_em` | Carimbo `chamados/models.py:3099`; limpeza `:3208`, `:3266` | C6 `chamados/juizes.py:1370`; E2 `chamados/reconciliador.py:629` |
+| Batida: `timestamp`, `tipo` | `ponto/registro_batida.py:157` | `ponto/turnos.py:1217` |
+| Célula: `ata` | Cartório `ponto/services/cartorio.py:1837` → porta `ponto/portas/celula.py:1033` | `chamados/juizes.py:965` |
+
+Certificação permanece com o Code e o opus final. [nao verificado]
 
 ## 11/11 21:04 · sessao ae9a66b9c290 · DATA-EVENTO-CRU · censo · origem=Code
 
@@ -1666,31 +1696,4 @@ Censo só leitura das permissões e portas genéricas:
 
 `user_permissions` individuais são lidas indiretamente por `get_all_permissions` (`mixins.py:331`) e exibidas em `core/views_usuarios.py:159`; escritor próprio na árvore não identificado **[não verificado]**.
 
-## 11/11 20:29 · sessao 1bdb3edf051f · - · - · origem=Ronald (tmux)
-
-Censo de emissão factual de saída na cópia:
-
-| Caminho | Fonte do dia | Chamada da porta |
-|---|---|---|
-| Detector `orfao_14h` → geração | Batida pendente → `resolver_data_evento` → `_T1`; grava contexto com D. `app/chamados/detector_anomalias.py:41`; `app/escala/servico_jornada.py:495` | `app/chamados/services/disputa_emissao.py:444` |
-| Pendentes adicionais | Cada `pk` → `dia_do_turno_da_batida`; ignora o dia civil do item. `app/chamados/services/disputa_emissao.py:272` | Mesma geração, `app/chamados/services/disputa_emissao.py:294` |
-| Fábrica da célula | `cel.data` → contexto de motivo. `app/chamados/services/fabrica_da_celula.py:172` | Mesma geração, `app/chamados/services/fabrica_da_celula.py:174` |
-| Repasse, grupo com origem | `resolver_data_evento(...batida_origem)`; sem resposta não emite. `app/chamados/services/disputa_emissao.py:1205` | Helper em `app/chamados/services/disputa_emissao.py:1213`; `abrir` em `app/chamados/services/disputa_emissao.py:837` |
-| Repasse, sem origem | `data_evento_do_contexto` cru. `app/chamados/services/disputa_emissao.py:1232` | `app/chamados/services/disputa_emissao.py:1244` |
-| Complemento de marcos | Dia do marco faltante → `dia_do_turno_da_celula`. `app/chamados/services/disputa_emissao.py:873` | `app/chamados/services/disputa_emissao.py:881` |
-| Declaração do colab | Marco faltante casado com hora → dia da célula. `app/chamados/services/declaracao_texto.py:345` | `app/chamados/services/declaracao_texto.py:376` |
-| Declaração por texto/admin | Mesmo marco faltante → dia da célula. `app/chamados/services/declaracao_texto.py:628` | `app/chamados/services/declaracao_texto.py:666` |
-
-Os outros nascimentos encontrados são `abrir_conversa`, excluídos do fato de saída: `app/chamados/services/disputa_emissao.py:439`, `app/chamados/services/disputa_emissao.py:1371`, `app/chamados/services/acoes_disputa.py:263`.
-
-**Dedup:** `orfao_14h` pertence à família MARCO (`app/chamados/catalogo/motivos.py:34`). Chave é `(colaborador, data_evento, motivo, instancia_marco)`, excluídas conversa e vias fora do fato, com índice só a partir do horizonte (`app/chamados/models.py:3482`). Dedup da porta atravessa disputas; procura o universo do fato e elege canônica (`app/chamados/models.py:2905`). Os pré-dedups do emissor ainda usam `(disputa,motivo,data_evento,conversa=False)` (`app/chamados/services/disputa_emissao.py:417`; `app/chamados/services/disputa_emissao.py:1415`).
-
-**Limite importante:** não é correto afirmar que todas as fontes consultam `_T1`. A geração lê `contexto[motivo].data` diretamente (`app/chamados/services/disputa_emissao.py:371`) e o embrulha em `dia_do_turno_da_celula` (`app/chamados/services/disputa_emissao.py:443`). O repasse sem origem usa parser que aceita `data_batida`, `entrada_timestamp`, `pendentes` e `horario_previsto`, extraindo datas sem consultar turno (`app/chamados/data_evento.py:27`). Na porta, pergunta MARCO sem episódio devolve `dia_do_turno_da_celula(d)` (`app/chamados/services/fio.py:1638`); esse construtor apenas devolve `DiaDoTurno(d)`, sem converter (`app/ponto/turnos.py:2939`). Portanto D e D+1 errados continuam sendo chaves distintas; a porta única não corrige automaticamente contexto civil legado.
-
-**Conclusão sobre hoje:** detector principal, pendentes e repasse com origem foram corrigidos para D (`app/chamados/detector_anomalias.py:45`; `app/chamados/services/disputa_emissao.py:274`; `app/chamados/services/disputa_emissao.py:1203`). Fábrica e declarações usam dia da célula. O cenário normal novo deve convergir pelo dedup; reprodução executada disso é [nao verificado]. Garantia universal contra dia civil errado não existe nos dois caminhos acima, pelas linhas citadas.
-
-**Histórico dos pares:** a documentação junto ao resolvedor descreve exatamente o legado: `orfao_14h` gravava dia da saída esperada D+1 e o leitor somava mais um (`app/escala/servico_jornada.py:498`). Isso explica o mecanismo compatível com os pares da sonda; qual chamada efetiva criou cada PK, e se houve dois emissores ou duas invocações do mesmo, é [nao verificado]. A sonda não traz campo de emissor/criação da pergunta; não atribuir individualmente a fábrica/detector como fato.
-
-**RED sugerido:** inserir em `app/chamados/tests/test_plantio_noturno_mais1.py:75`, `OrfaoNoturnoTest`. Há fixture noturna em `app/chamados/tests/test_plantio_noturno_mais1.py:48`, D=21/10 em `app/chamados/tests/test_plantio_noturno_mais1.py:30`, teste do detector em `app/chamados/tests/test_plantio_noturno_mais1.py:90`. Acrescentar emissão combinada detector + fábrica + repasse, E(D,19h), S ausente, célula D trabalho e D+1 folga; exigir exatamente uma pergunta `orfao_14h`, `data_evento=D`, célula D e mesma PK após repetição. Mutante: resolvedor/contexto do detector volta a D+1 enquanto fábrica emite D; deve nascer segunda pergunta, pois o dedup distingue as datas. Especificação não executada: [nao verificado].
-
-_4024 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4025 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
