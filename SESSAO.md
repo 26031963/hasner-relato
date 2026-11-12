@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 16:45:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (482.6 MB). Acoes na janela: **1700**.
+**Medido em 12/11/2026 16:51:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (482.6 MB). Acoes na janela: **1701**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:45:53 | Bash | Update LASTRO cell for new ordering | `python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| LASTRO-FAIXA-SEM-DEFAULT \|')][0] c=L[i].split(' \| ') c[2]='REDESENHA-NA-FONTE + TIPO-NA-FONTE 12/11 16:4x: c20 encerrada; 1o cliente do acessor tipado da ata (orfas=instantes); construtor DEPOIS do acessor (TIPO-NA-FONTE); copia base wt-codex-lastro-redesenho-164050 f3ebd821b (HEAD+c3. ...` |
 | 16:45:47 | Bash | Register TIPO-NA-FONTE and FIO-DUP in BACKLOG/PROMPTS | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='PROMPTS.md'; s=open(p).read().rstrip('\n')+'\n' s+='- 12/11 16:4x TIPO-NA-FONTE + O168-TETO (aval Ronald, logs/AVAIS-1212/tipo_na_fonte_o168_teto.txt): lei INSTANTE-NA-FONTE; ferramenta leitores_de_chave + censo 72 chaves (Codex 16:4x); acessor tipado da ata (orfas 1a, LASTRO 1o cliente) na 1a vaga apos E3; O168 teto 222/282 -> preverif+ ...` |
 | 16:45:36 | Bash | Launch TIPO-NA-FONTE tool+census Codex call | `D=/home/ronald/saas-hasner/logs/TIPO-NA-FONTE; cd $D && cat > censo_72.q <<'EOF' OBRA TIPO-NA-FONTE, aval anexo (itens 1, 2 e 4). Papel CENSO. Hash = HEAD do main. Contrato do instrumento anexo (contrato.txt) -- mandado UMA vez. A. FERRAMENTA: escreva bin/leitores_de_chave.py conforme o contrato (Python 3 puro, ast, sem Django; argumentos <modelo.campo> <chave> e modo --todas <modelo.campo> que de ...` |
 | 16:45:22 | Bash | Mark old O168 PAREI as answered | `python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a='PAREI: O168-teto-chokepoint \| espera Ronald' assert s.count(a)==1 s=s.replace(a,'RESPONDIDA por aval TIPO-NA-FONTE + O168-TETO 16:4x (era PAREI O168-teto-chokepoint, espera Ronald)') open(p,'w').write(s) EOF /bin/grep -c '^PAREI' RELATO.md \| head -1; head -12 RELATO.md \| cut -c1-90` |
