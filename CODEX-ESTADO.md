@@ -1,7 +1,259 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 13:05** · publicado em **12/11/2026 13:07** (UTC-3)
+> Ultima resposta processada: **12/11/2026 13:10** · publicado em **12/11/2026 13:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 13:10 · sessao e93ae91a7d8b · S139-RESPEITA-A-RESPOSTA · censo · origem=Code
+
+**A. A S139 troca a hora antes da escrita; os leitores do slot herdam essa troca.** O trecho executável começa com `resposta_colab` e, para `intervalo_saida`/`intervalo_volta`, substitui-a pela hora de `_marco_faltante`, quando encontrada. Não há nesse trecho uma condição adicional sobre “intervalo fixo” nem uma verificação do envelope. (`app/chamados/services/materializacao.py:409-426`)
+
+As referências `:342` e `:712` indicadas na pergunta são de **`chamados/juizes.py`**, onde estão os comentários sobre essa derivação. (`app/chamados/juizes.py:342`; `app/chamados/juizes.py:712`)
+
+| Papel | Quem faz | Evidência |
+|---|---|---|
+| Resolve a hora e o tipo | `_ts_tipo_do_plantio` | `app/chamados/services/materializacao.py:333-428` |
+| Busca o marco cobrado | `_marco_faltante` → `entrada_de_marco`: motivo primeiro; fallback por tipo somente no formato legado | `app/chamados/juizes.py:523-580` |
+| Solicita o plantio | `_materializar_resposta_hora`, depois de derivar e procurar reuso | `app/chamados/services/materializacao.py:852-877` |
+| Grava `Batida.timestamp` | `registrar_batida` → `Batida.objects.create` | `app/chamados/services/materializacao.py:933-940`; `app/ponto/registro_batida.py:157-159` |
+| Grava a relação pergunta→batida | `anotar(... pergunta_origem=p)`, tanto para nova quanto para reusada | `app/chamados/services/materializacao.py:947-956` |
+| Grava resposta e instante derivado na trilha | `_log_auditoria_materializacao`, ação `materializar_batida` | `app/chamados/services/materializacao.py:957-978` |
+
+O campo persistido é **`Batida.pergunta_origem`**, reverso **`PerguntaDisputa.batidas_plantadas`**; não confundir com `PerguntaDisputa.batida_origem`, que identifica a batida sobre a qual outra família de perguntas pergunta. (`app/ponto/models.py:40-44`; `app/chamados/models.py:2437-2442`)
+
+Os leitores diretos da derivação são estes:
+
+| Leitor | Consequência |
+|---|---|
+| `estado_aplicacao_pergunta` | Calcula aplicação, reuso, paridade e horário anunciado na interface pelo instante derivado. (`app/chamados/services/materializacao.py:450-465`) |
+| `_slot_esperado` | **Hoje chama o mesmo derivador**; o docstring “Reproduz” é anterior ao corpo que delega. (`app/chamados/juizes.py:342`; `app/chamados/juizes.py:369-374`) |
+| `_pergunta_materializada_de_fato` | Confere as batidas vinculadas contra esse slot; a conferência aceita a janela de ±20 minutos. (`app/chamados/juizes.py:752-761`; `app/chamados/juizes.py:250-279`) |
+| `CargaDaVida` | Prepara/cacheia os slots usados pelo juiz. (`app/chamados/services/carga_pergunta_viva.py:113-126`) |
+| `_explicar_validada` | Busca batida perto do slot e escreve “validada como” usando sua hora. (`app/chamados/services/explicador.py:29-42`; `app/chamados/services/explicador.py:58-60`) |
+| `classe_do_lote` | Confere conflito perto do slot que o plantio usaria. (`app/chamados/services/validacao.py:869-876`) |
+| `vigia_carimbo.classificar` | Classifica slot não derivável, ausência de plantio ou plantio fora do slot. (`app/chamados/services/vigia_carimbo.py:105-113`) |
+
+O juiz de materialização também alimenta o veredito lavrado, o raio-X, o explicador e a conferência posterior ao plantio. (`app/chamados/veredito_lavrado.py:263`; `app/chamados/services/raiox.py:187`; `app/chamados/services/explicador.py:93`; `app/chamados/services/materializacao.py:1239`)
+
+**Outra cópia executável da substituição resposta→marco não foi localizada neste censo; exaustividade sobre todo consumidor indireto de `timestamp`: [nao verificado].** Os caminhos acima compartilham o derivador. (`app/chamados/services/materializacao.py:450`; `app/chamados/services/materializacao.py:852`; `app/chamados/juizes.py:372`)
+
+No esmeril semântico:
+
+- `resposta_colab` conserva a declaração; a substituição acontece na variável `_hora_fonte`, não na resposta persistida. A trilha grava os dois valores separadamente. (`app/chamados/services/materializacao.py:412-419`; `app/chamados/services/materializacao.py:969-977`)
+- `Batida.timestamp` recebe o instante materializado, que nesse ramo pode ser o marco. O pareador consome esse campo como instante da batida. (`app/ponto/registro_batida.py:157-159`; `app/ponto/turnos.py:1217`; `app/ponto/turnos.py:1357`)
+- Há textos que chamam esse slot de “hora respondida” ou “slot da resposta”, embora ele possa conter a hora do marco. (`app/chamados/juizes.py:663-667`; `app/chamados/services/explicador.py:31`; `app/chamados/services/vigia_carimbo.py:17-20`)
+- `delta_da_resposta` e `motivo_implausivel_validacao` preservam a distinção: leem resposta e marco separadamente. (`app/chamados/juizes.py:1846-1868`; `app/chamados/juizes.py:1972-1983`)
+- A reconciliação da grade reconhece a dependência: evita trocar o marco sob resposta viva já dada porque a materialização lê `marcos_faltantes`. (`app/ponto/management/commands/reconciliar_grade.py:437-440`; `app/ponto/management/commands/reconciliar_grade.py:460-462`)
+
+**B. O caso protegido era uma volta de intervalo declarada no horário da saída do intervalo.** O teste fundador descreve volta esperada às `03:00`, resposta `02:00`, e exige impedir `E@02:00` no slot da saída. A fixture valida essa resposta e exige `E@03:00`, expressamente diferente de `02:00`. (`app/chamados/tests/test_s139.py:15-18`; `app/chamados/tests/test_s139.py:40-56`)
+
+“Marco oposto” significa, nesse caso, jornada `19→07`, intervalo `02:00/S→03:00/E`: uma `E` próxima das `02:00` ocupa temporalmente o marco `S`. Outro teste reproduz a figura com `E@02:05` e exige a classificação `batida_retro_invertida`. (`app/chamados/tests/test_auditar_disputas_padroes.py:117-150`)
+
+O dano diretamente demonstrado é **tipo `E` no horário do marco `S`**. Consequência financeira ou quebra específica de pareamento pela retirada da S139: **[nao verificado]**.
+
+A O306 manteve explicitamente a S139: resposta `13:05` continua virando `13:00` quando esse é o marco do próprio motivo. Corrigiu outra falha: receber o marco de um motivo vizinho, deixando o marco perguntado vazio. (`app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:146-153`; `app/chamados/juizes.py:555-575`)
+
+Commit, autoria, data e corte específico do nascimento da S139 por `git log/blame`: **[nao verificado]**. As consultas Git falharam porque esta cópia não foi reconhecida como repositório. **[nao verificado]** A L-032 e a L-099 locais não identificam o nascimento da S139; estabelecem, respectivamente, reconhecimento do intervalo dentro do envelope e coerência com o cadastro existente. (`app/docs/LEIS.md:80`; `app/docs/LEIS.md:122`)
+
+**C. Os 90 minutos estão dentro de `parear_turnos`; não existe uma função única pronta com a assinatura perguntada.** O literal aparece no predicado interno `_absorvivel`, na guarda de continuidade e na absorção por marco. (`app/ponto/turnos.py:1251`; `app/ponto/turnos.py:1352`; `app/ponto/turnos.py:1358`)
+
+A função reutilizável é **`_dist_marco(ts, marcos)`**: devolve a menor distância local em minutos, considerando dia anterior, mesmo dia e seguinte. Não recebe colaborador, não resolve o marco e não retorna um booleano. (`app/ponto/turnos.py:326-340`)
+
+A composição disponível é:
+
+| Pergunta | Código existente |
+|---|---|
+| Qual vínculo responde pelo colaborador/dia? | `escala_vigente` → `vinculo_do_dia`. (`app/escala/servico_jornada.py:15-66`) |
+| Quais os marcos cadastrados desse dia? | `ec.marcos_do_dia`: DNA congelado, com fallback para template. (`app/escala/models.py:1098-1133`) |
+| Qual marco corresponde ao motivo? | `MARCO_DA_PERGUNTA`: saída→`hii`, volta→`hfi`. (`app/chamados/juizes.py:922-926`) |
+| Está no raio de 90 minutos desse marco? | `_dist_marco(...) <= 90`. (`app/ponto/turnos.py:326-340`; `app/ponto/turnos.py:1251`) |
+
+**Estar nesse raio não prova absorção pelo pareador.** A absorção também compara a proximidade das bordas e depende do turno corrente e de seu teto de continuidade. O pareador ainda refina marcos pelo DNA na data civil local da batida. (`app/ponto/turnos.py:1229-1251`; `app/ponto/turnos.py:1349-1370`)
+
+`intervalo_cadastrado` responde a duração cadastrada; não é a função de pertencimento ao envelope. (`app/ponto/juiz_batida.py:106-107`)
+
+**D. Script para colar no shell Django, dentro do envelope de leitura.** Ele usa a **relação persistida**, incluindo reuso, sem consultar a trilha. Essa relação é escrita nos dois caminhos; logo, sua contagem não significa “batidas novas criadas”. Também pode ser reassociada a outra pergunta pelo escritor. (`app/chamados/services/materializacao.py:865-876`; `app/chamados/services/materializacao.py:952-956`)
+
+O script imprime separadamente:
+
+- raio do marco **cadastrado** do colaborador/dia;
+- raio do marco **cobrado no snapshot** do chamado;
+- absorção completa pelo pareador como `NAO_VERIFICADO`, pelas dependências descritas em C. (`app/escala/models.py:1098-1133`; `app/chamados/juizes.py:523-580`; `app/ponto/turnos.py:1349-1370`)
+
+A diferença é a menor distância entre horas locais, inclusive pela meia-noite, calculada por `_dist_marco`; não atribui uma data inventada à resposta `HH:MM`. (`app/ponto/turnos.py:326-340`; `app/chamados/models.py:2448`)
+
+`S total` conta perguntas distintas; `relacoes` conta batidas vinculadas. Havendo várias batidas para uma pergunta, `acima30` significa que pelo menos uma ultrapassou 30 minutos. Isso fica explícito no código abaixo. Execução Django e números resultantes: **[nao verificado]**.
+
+```python
+from collections import defaultdict, Counter
+from datetime import date, datetime, time
+from django.db import connection
+from django.db.models import Q
+from django.utils import timezone
+from chamados.juizes import MARCO_DA_PERGUNTA, _marco_faltante
+from escala.servico_jornada import escala_vigente
+from ponto.models import Batida
+from ponto.turnos import _dist_marco
+
+INICIO = date(2026, 10, 21)
+# Raio existente: ponto/turnos.py:1251,1358.
+RAIO_MIN = 90
+TOTAL_ERROS = 0
+cache = {}
+grupos = defaultdict(lambda: defaultdict(set))
+links_por_pergunta = Counter()
+fora_recorte = set()
+sem_dia = set()
+
+def emitir(*campos):
+    print("\t".join(str(x) for x in campos))
+
+def erro(etapa, pk, exc):
+    global TOTAL_ERROS
+    TOTAL_ERROS += 1
+    # Nunca imprimir mensagem da excecao, objetos ou resposta bruta.
+    emitir("S", "ERRO", etapa, pk, type(exc).__name__)
+
+def tentar(etapa, pk, func):
+    try:
+        return func()
+    except Exception as exc:
+        erro(etapa, pk, exc)
+        return None
+
+def apenas_select(execute, sql, params, many, context):
+    if not str(sql).lstrip().upper().startswith("SELECT"):
+        raise RuntimeError("SQL_nao_SELECT")
+    return execute(sql, params, many, context)
+
+def hora(texto):
+    hh, mm = texto.strip().split(":")
+    return time(int(hh), int(mm))
+
+def marco_cadastro(cid, dia, chave):
+    ec = escala_vigente(cid, dia)
+    if ec is None:
+        return None
+    # Contrato: escala/models.py:1098-1133.
+    return dict(zip(("hi", "hf", "hii", "hfi"),
+                    ec.marcos_do_dia(dia)))[chave]
+
+def raio(resp, marco, dia):
+    if resp is None or marco is None:
+        return None
+    ts = timezone.make_aware(datetime.combine(dia, resp))
+    return _dist_marco(ts, [marco]) <= RAIO_MIN
+
+def preparar(p):
+    if p.pk in cache:
+        return cache[p.pk]
+    dia = p.data_evento
+    if dia is None:
+        texto = ((p.disputa.contexto or {}).get(p.motivo) or {}).get("data")
+        dia = tentar("dia_contexto", p.pk, lambda: date.fromisoformat(texto))
+    if dia is None:
+        sem_dia.add(p.pk)
+        cache[p.pk] = None
+        return None
+    if dia < INICIO:
+        fora_recorte.add(p.pk)
+        cache[p.pk] = None
+        return None
+    cid = p.disputa.colaborador_id
+    tipo, chave = MARCO_DA_PERGUNTA[p.motivo]
+    resp = tentar("hora_resposta", p.pk, lambda: hora(p.resposta_colab))
+    mc = tentar("marco_cadastro", p.pk,
+                lambda: marco_cadastro(cid, dia, chave))
+    def snapshot():
+        texto = _marco_faltante(p.chamado_destino, p.motivo, tipo)
+        return hora(texto) if texto else None
+    ms = tentar("marco_snapshot", p.pk, snapshot)
+    dc = tentar("raio_cadastro", p.pk, lambda: raio(resp, mc, dia))
+    ds = tentar("raio_snapshot", p.pk, lambda: raio(resp, ms, dia))
+    cache[p.pk] = (cid, dia, resp, mc, ms, dc, ds)
+    return cache[p.pk]
+
+def fmt_hora(h):
+    return h.strftime("%H:%M") if h is not None else "NAO_VERIFICADO"
+
+def flag(v):
+    return "NAO_VERIFICADO" if v is None else int(v)
+
+def registrar(chave, p, b, delta, dc, ds):
+    g = grupos[chave]
+    g["total"].add(p.pk)
+    g["relacoes"].add(b.pk)
+    if delta is None:
+        g["delta_nv"].add(p.pk)
+    else:
+        if delta > 0:
+            g["hora_diferente"].add(p.pk)
+        if delta > 30:
+            g["acima30"].add(p.pk)
+    g["raio_cadastro_nv" if dc is None else
+      "dentro90_cadastro" if dc else "fora90_cadastro"].add(p.pk)
+    g["raio_snapshot_nv" if ds is None else
+      "dentro90_snapshot" if ds else "fora90_snapshot"].add(p.pk)
+
+emitir("S", "R_COLUNAS", "col", "pergunta_pk", "batida_pk", "dia_turno",
+       "hora_respondida", "batida_local", "delta_relogio_min",
+       "marco_cadastro", "dentro90_cadastro", "marco_snapshot",
+       "dentro90_snapshot", "retratada", "absorcao_pareador")
+try:
+    with connection.execute_wrapper(apenas_select):
+        qs = (Batida.objects.filter(
+            pergunta_origem__motivo__in=("intervalo_saida", "intervalo_volta"),
+            pergunta_origem__tipo_resposta="hora",
+            pergunta_origem__respondida_em__isnull=False,
+            pergunta_origem__validada_em__isnull=False)
+            .filter(Q(pergunta_origem__data_evento__gte=INICIO) |
+                    Q(pergunta_origem__data_evento__isnull=True))
+            .select_related("pergunta_origem__disputa",
+                            "pergunta_origem__chamado_destino")
+            .order_by("pergunta_origem_id", "pk"))
+        for b in qs.iterator(chunk_size=1000):
+            try:
+                p = b.pergunta_origem
+                dados = preparar(p)
+                if dados is None:
+                    continue
+                cid, dia, resp, mc, ms, dc, ds = dados
+                if b.colaborador_id != cid:
+                    raise ValueError("colaborador_divergente")
+                links_por_pergunta[p.pk] += 1
+                local = timezone.localtime(b.timestamp)
+                delta = (tentar("delta_batida_resposta", p.pk,
+                                lambda: _dist_marco(b.timestamp, [resp]))
+                         if resp is not None else None)
+                emitir("R", f"col{cid:03d}", p.pk, b.pk, dia.isoformat(),
+                       fmt_hora(resp), local.isoformat(),
+                       "NAO_VERIFICADO" if delta is None else f"{delta:.3f}",
+                       fmt_hora(mc), flag(dc), fmt_hora(ms), flag(ds),
+                       int(b.retratada_em is not None), "NAO_VERIFICADO")
+                for chave in (("TOTAL",), ("COLAB", f"col{cid:03d}"),
+                              ("COLAB_DIA", f"col{cid:03d}", dia.isoformat())):
+                    registrar(chave, p, b, delta, dc, ds)
+            except Exception as exc:
+                erro("item", b.pk, exc)
+except Exception as exc:
+    erro("consulta", 0, exc)
+
+metricas = ("total", "relacoes", "hora_diferente", "acima30", "delta_nv",
+            "dentro90_cadastro", "fora90_cadastro", "raio_cadastro_nv",
+            "dentro90_snapshot", "fora90_snapshot", "raio_snapshot_nv")
+emitir("S", "RESUMO_COLUNAS", *metricas)
+if ("TOTAL",) not in grupos:
+    grupos[("TOTAL",)]
+for chave in sorted(grupos):
+    emitir("S", *chave, *(len(grupos[chave][m]) for m in metricas))
+emitir("S", "COLABS", sum(k[0] == "COLAB" for k in grupos))
+emitir("S", "PERGUNTAS_COM_MULTIPLAS_BATIDAS",
+       sum(n > 1 for n in links_por_pergunta.values()))
+emitir("S", "SEM_DIA", len(sem_dia))
+emitir("S", "FORA_RECORTE_CONTEXTUAL", len(fora_recorte))
+emitir("S", "TOTAL_ERROS", TOTAL_ERROS)
+```
+
+Os números `506/1282`, `376`, `133` e `59` ficam como informação do anexo, sem confirmação independente: **[nao verificado]**. Quantos dos 59 ultrapassam 30 minutos e quantos estão no raio cadastrado: **[nao verificado]**. O anexo também não fornece os marcos cadastrados necessários para confirmar que o caso 50833 é o contraexemplo “dentro do envelope”: **[nao verificado]**.
 
 ## 12/11 13:05 · sessao 529fdf18fac9 · - · - · origem=Ronald (tmux)
 
@@ -788,27 +1040,4 @@ Cura efetiva do aviso truncado: `_anuncia` passa `inteiro=True` para DISJUNTOR/S
 
 - **Mordidas:** o log anexado mostra os cinco novos mutantes derrubados — três no caso 6, um no 5 e um no 8 — e controle rc=0; execução atual dos seis antigos e de `b3_v4`: `[nao verificado]`. O harness exige âncora única, controle sem mutação e falha se o caso aceitar a mutação. (`bin/tests/test_disjuntor.sh:1715`, `bin/tests/test_disjuntor.sh:1719`, `bin/tests/test_disjuntor.sh:1723`, `bin/tests/test_disjuntor.sh:1741`; localizações exatas no log anexado: `[nao verificado]`)
 
-## 12/11 12:17 · sessao ad20865149a1 · - · - · origem=Ronald (tmux)
-
-Inventário e compatibilidade dos leitores, por inspeção somente leitura:
-
-| Valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| `inteiro` | Padrão `False` na assinatura; `_anuncia` passa `ev in B3_AVISO_INTEIRO`. O espião do selo recebe e encaminha `**kw`. (`bin/disjuntor.py:210`, `bin/disjuntor.py:1081`; `bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1077`) | `trilha` escolhe o limite `None` ou `300`; nenhum outro consumidor semântico encontrado. (`bin/disjuntor.py:218`) |
-| `B3_AVISO_INTEIRO` | Tupla constante `('DISJUNTOR', 'SOBE')`. (`bin/disjuntor.py:153`) | `_anuncia` determina a opção de escrita; mutantes removem o encaminhamento ou o SOBE. (`bin/disjuntor.py:1081`; `bin/tests/test_disjuntor.sh:2041`, `bin/tests/test_disjuntor.sh:2042`) |
-| `B3_SOBE_LINHA` | Constante `200`. (`bin/disjuntor.py:154`) | Construção de SOBE corta somente o texto livre final; selo exige linha maior que o limite e sufixo cortado. (`bin/disjuntor.py:1062`; `bin/tests/test_disjuntor.sh:1278`, `bin/tests/test_disjuntor.sh:1279`, `bin/tests/test_disjuntor.sh:2043`) |
-| Detalhe DISJUNTOR B3 | `decide_b3` produz prefixo, motivo e `_recado_auto`; `_anuncia` entrega a `trilha`, que normaliza espaços e grava uma linha. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1038`, `bin/disjuntor.py:1081`, `bin/disjuntor.py:217`) | `ler`, auxiliares de teste `_tem`/`ultima`, espião B3 v4. (`bin/disjuntor.py:2059`; `bin/tests/test_disjuntor.sh:96`, `bin/tests/test_disjuntor.sh:1234`, `bin/tests/test_disjuntor.sh:1086`) |
-| Detalhe SOBE | `decide_b3` produz obra, SHA, cota e instrução, seguidos de `ln[:200]`; mesma porta de anúncio/escrita. (`bin/disjuntor.py:1060`, `bin/disjuntor.py:1062`, `bin/disjuntor.py:1081`) | Selo `conta` e listas `sobe`/`sobe2`; `ler` não enumera SOBE, `_censo_24h` o descarta. (`bin/tests/test_disjuntor.sh:1165`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1276`; `bin/disjuntor.py:2035`, `bin/disjuntor.py:2105`, `bin/disjuntor.py:2148`) |
-
-**Todos os leitores diretos identificados em `bin/` suportam detalhe maior que 300:** a escrita continua em uma única linha; nenhuma leitura identificada limita bytes/caracteres a 300. (`bin/disjuntor.py:217`, `bin/disjuntor.py:2039`, `bin/disjuntor.py:2147`; `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1236`)
-
-- `ler()` percorre linhas completas, separa tokens e usa data/hora/evento; para DISJUNTOR conta `p[3]`, portanto o sufixo ampliado não muda a leitura. SOBE não participa da enumeração. (`bin/disjuntor.py:2035`, `bin/disjuntor.py:2040`, `bin/disjuntor.py:2044`, `bin/disjuntor.py:2059`)
-- `_censo_24h()` percorre linhas completas; o regex ancorado aceita apenas `CENSO ...` e `NEGOU DISJUNTOR CENSO:`, portanto ignora os dois eventos ampliados. (`bin/disjuntor.py:2105`, `bin/disjuntor.py:2146`, `bin/disjuntor.py:2148`)
-- `gerar_estado.py` e CLI `--linha` consomem a derivação `ler/linha`, sem leitor alternativo de detalhe. (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`; `bin/disjuntor.py:2402`, `bin/disjuntor.py:2403`)
-- Os leitores do selo disjuntor usam `grep`, `tail`, busca por substring ou leitura integral por linha; o espião observa evento/trava e encaminha o detalhe. (`bin/tests/test_disjuntor.sh:96`, `bin/tests/test_disjuntor.sh:97`, `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1236`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1276`, `bin/tests/test_disjuntor.sh:1285`, `bin/tests/test_disjuntor.sh:1705`)
-- O outro selo que lê diretamente a trilha é `test_censo_antes_da_vaga.sh`: `grep`/`tail` procuram eventos CENSO; o filtro seleciona os eventos antes de `tail`. Não depende do comprimento do detalhe B3. (`bin/tests/test_censo_antes_da_vaga.sh:114`, `bin/tests/test_censo_antes_da_vaga.sh:158`, `bin/tests/test_censo_antes_da_vaga.sh:249`, `bin/tests/test_censo_antes_da_vaga.sh:275`, `bin/tests/test_censo_antes_da_vaga.sh:314`, `bin/tests/test_censo_antes_da_vaga.sh:525`, `bin/tests/test_censo_antes_da_vaga.sh:543`)
-- A referência do hook a `disjuntor.log` apenas o inclui entre arquivos que não provam espera; não interpreta seu detalhe. (`bin/hook_stop_fila1.py:664`, `bin/hook_stop_fila1.py:666`)
-
-**Espião do caso 5 B3 v4:** continua provando presença de DISJUNTOR/LIBERA/REARMA e que a trava estava ocupada em todas essas chamadas. A exigência de conjunto exato impede o `all([])`. `**kw` apenas preserva a assinatura nova e chega à função original; o teste não verifica diretamente o valor de `inteiro`, obrigação coberta pelos novos casos de texto longo. (`bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1071`, `bin/tests/test_disjuntor.sh:1077`, `bin/tests/test_disjuntor.sh:1086`, `bin/tests/test_disjuntor.sh:1087`, `bin/tests/test_disjuntor.sh:1252`, `bin/tests/test_disjuntor.sh:1278`)
-
-_4245 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4246 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
