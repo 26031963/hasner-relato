@@ -1,7 +1,264 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 17:32** · publicado em **12/11/2026 17:32** (UTC-3)
+> Ultima resposta processada: **12/11/2026 17:37** · publicado em **12/11/2026 17:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 17:37 · sessao d45010bd76f3 · E3-LEITORES · censo · origem=Code
+
+**PERGUNTA DE DESENHO — o código tem várias operações que persistem a resposta.** O core humano, a resposta automática, o carimbo pela trilha e `PerguntaDisputa.carimbar` escrevem independentemente. Portanto, o censo não certifica **UMA porta de escrita**. (`app/chamados/services/disputa_emissao.py:1467`, `:1657`, `:1679`; `app/chamados/models.py:3157`)
+
+A função denominada “porta do carimbo de resposta”, `recusa_respondida_sem_texto`, é uma **guarda**, sem persistência: constrói um `SimpleNamespace`, consulta o predicado e pode levantar exceção. (`app/chamados/services/fio.py:1578`, `:1585`, `:1587`)
+
+**HEAD**
+
+Critério: sítio de acesso ao campo, incluindo payloads encaminhados, projeções ORM e acessos dinâmicos; chamadas transitivas não são contadas novamente como acesso direto. A identificação Git do snapshot, execução dos testes e estado efetivo de produção ficam **[nao verificado]**. [nao verificado]
+
+Nas tabelas, **E = `respondida_em`**, **T = `resposta_colab`**. Caminhos sem prefixo são relativos a **`app/chamados/`**. Linhas agrupadas pertencem à mesma função.
+
+**Escritores e enquadramento nas portas**
+
+A porta declarada para resposta web/API é `responder_pergunta_disputa_core`; ela recusa texto vazio e persiste o par. A guarda comum é `recusa_respondida_sem_texto`. São funções diferentes. (`services/disputa_emissao.py:1425`, `:1432`, `:1508`; `services/fio.py:1578`)
+
+| arquivo:linha:função | ESCRITOR/LEITOR | forma | campo | Como decidiu o modelo; porta |
+|---|---|---|---|---|
+| `models.py:1509:ChamadoColaborador._universo_da_ressuscitacao` | ESCRITOR — memória | `_q.respondida_em = None` | E | Cópia de `p` em `:1495`, vindo de `self.perguntas_que_resolvem` em `:1484`; relação de PD em `:3415`. **Fora do core**; simulação sem salvar, usada pelo juiz em `:1510`. |
+| `models.py:1567:ChamadoColaborador.ressuscitar_perguntas` | ESCRITOR — delegação | `descarimbar_em_lote(..., respondida_em=None)` | E | `alvo` da mesma relação, `:1551`. **Fora do core**; passa pelo descarimbo em lote. |
+| `models.py:2809:PerguntaDisputa.abrir` | ESCRITOR — encaminhamento possível | `**campos` para `_sob_contrato` | E/T recebidos | Método da classe PD. Caminho de nascimento; **fora do core**, chega à guarda em `:2864`. |
+| `models.py:2821:PerguntaDisputa.abrir_conversa` | ESCRITOR — encaminhamento possível | `**campos` para `_sob_contrato` | E/T recebidos | Classe PD; mesmo enquadramento. |
+| `models.py:2840:PerguntaDisputa._sob_contrato` | ESCRITOR — encaminhamento possível | `_nascer(**kw)` | E/T recebidos | `cls` da classe PD; chamadas em `:2809`, `:2821`. |
+| `models.py:3039,3042:PerguntaDisputa._nascer` | ESCRITOR | `cls(..., **campos)`; `save(force_insert=True)` | E/T recebidos | `cls` de PD. **Fora do core; chama a guarda** em `:2864`, `:2865`. |
+| `models.py:3157,3158,3177:PerguntaDisputa.carimbar` | ESCRITOR | atribuição; acrescenta E a `campos`; `save(update_fields=campos)` | E | `self` de PD. **Fora do core e da guarda comum**; exige texto em `:3155`. |
+| `models.py:3188:PerguntaDisputa._desfazer_em_memoria` | ESCRITOR — memória | restaura `self.respondida_em` | E | `self` de PD; desfaz `carimbar`, chamadas em `:3166`, `:3169`, `:3180`. **Fora do core**, sem persistência própria. |
+| `models.py:3289,3291:PerguntaDisputa.descarimbar_em_lote` | ESCRITOR | `PerguntaDisputa.objects...update(..., **outros)` | E/T recebidos | Modelo explícito. **Fora do core; HEAD sem guarda do par**. Payloads comprovados em `models.py:1567` e `services/disputa_emissao.py:1630`. |
+| `models.py:3448:PerguntaDisputa.save` | ESCRITOR — persistência genérica | `super().save(*args, **kwargs)` | E/T conforme save | `self` de PD. Infraestrutura comum dos saves; **não concentra os `QuerySet.update`**, existentes em `:3291` e `services/disputa_emissao.py:1632`. |
+| `services/disputa_emissao.py:1467,1468,1469,1508:responder_pergunta_disputa_core` | ESCRITOR | atribuições T/E; `save(update_fields=_campos)` | E/T | PD consultada em `views.py:1239`, passada ao core em `:1283`. **É o core**; exige texto em `:1432`, `:1434`; não chama a guarda comum. |
+| `services/disputa_emissao.py:1593,1630,1632:reabrir_para_correcao` | ESCRITOR | `dict(E=None,T='')`; `descarimbar_em_lote(**campos)` ou `qs.update(**campos)` | E/T | Querysets PD fornecidos em `services/validacao.py:593`, `services/materializacao.py:688`. **Fora do core**; porta de reabertura. |
+| `services/disputa_emissao.py:1657,1658,1660:responder_automaticamente` | ESCRITOR | atribuições T/E; `save(update_fields=[T,E])` | E/T | Perguntas do upload, chamada em `app/api/foto_recebida.py:48`. **Fora do core; chama a guarda** em `:1655`. |
+| `services/disputa_emissao.py:1679,1681:carimbar_resposta_pela_trilha` | ESCRITOR | atribuição E; `save(update_fields=[E])` | E | PD consultadas pelo comando em `management/commands/curar_perguntas_em_limbo.py:55`, chamada em `:67`, `:68`. **Fora do core e da guarda comum**; guarda própria em `:1675`. |
+| `bin/sombra_mascara_pessoal.py:57:<módulo>` | ESCRITOR — sombra | `setattr(o,c,novo)` | T | `apps.get_model(app,mod)` em `:46`; configuração identifica PD/T em `bin/sombra_regras_pessoais.py:85`. **Fora das portas**. |
+| `bin/sombra_mascara_pessoal.py:62,64:<módulo>` | ESCRITOR — sombra | `bulk_update(lote,list(campos))` | T | Mesma resolução de modelo/campo. **Fora das portas**; o script exige banco `sombra` em `:10`. |
+
+O nascimento aceita o par por `**campos`, independentemente de haver chamada atual passando essas chaves; sua aceitação e persistência estão no construtor e no save. (`models.py:2864`, `:3039`, `:3042`) Chamador de produção passando explicitamente o par ao nascimento: **[nao verificado]**.
+
+**Leitores no modelo e nos juízes**
+
+| arquivo:linha:função | ESCRITOR/LEITOR | forma | campo | Como decidiu o modelo |
+|---|---|---|---|---|
+| `models.py:1487:ChamadoColaborador._universo_da_ressuscitacao` | LEITOR | `Q(T__isnull=True)`, `Q(T='')` | T | Relação `perguntas_que_resolvem`, `:1484`; FK PD em `:3415`. |
+| `models.py:1565:ChamadoColaborador.ressuscitar_perguntas` | LEITOR | `only(E,T)` | E/T | Mesmo queryset relacionado. |
+| `models.py:1849,1850:DisputaSupervisao.respostas_sem_veredito` | LEITOR | atributos | E/T | `self.perguntas` em `:1847`; relação PD em `:2436`, `:2439`. |
+| `models.py:1933:DisputaSupervisao.fechar` | LEITOR | atributo T para trilha | T | `self.perguntas` → `vivas`, `:1902`, `:1903`. |
+| `models.py:2065:DisputaSupervisao.remover_motivo` | LEITOR | atributo T para trilha | T | Iteração de `self.perguntas.filter`, `:2061`. |
+| `models.py:2864,2865:PerguntaDisputa._nascer` | LEITOR — payload | `campos.get(E/T)` | E/T | Método PD; valores destinados ao construtor em `:3039`. |
+| `models.py:3070,3073:PerguntaDisputa.estado` | LEITOR | comparação de atributo | E | `self` da classe PD. |
+| `models.py:3152,3155,3156:PerguntaDisputa.carimbar` | LEITOR | foto anterior; teste de texto; comparação | E/T | `self` da classe PD. | [nao verificado]
+| `models.py:3373,3374:PerguntaDisputa.q_vivas` | LEITOR | `Q(E__isnull=False)`, exclusão de T vazio/nulo | E/T | Método da classe PD. |
+| `models.py:3523:PerguntaDisputa.respondida` | LEITOR | atributo `is not None` | E | `self` da classe PD. |
+| `models.py:3546,3551,3555,3559,3563,3566,3567,3568:PerguntaDisputa.resposta_display` | LEITOR | atributos; conversão; comparação; retorno | T | `self` da classe PD. |
+| `models.py:3949,3956,3957,3958,3959,3963:DecisaoPergunta.linhas_da_projecao_sem_linha` | LEITOR | atributos para projeção da trilha | E/T | Recebe PD em chamadas como `models.py:1564` e `services/disputa_emissao.py:1466`. |
+| `juizes.py:348,360:_slot_esperado` | LEITOR | atributos | E/T | Pergunta da cadeia do C6/materialização; chamada em `:752`. |
+| `juizes.py:852,853:_chave_memo_pv` | LEITOR | `getattr` literal | E/T | Chamado por `pergunta_viva`, `:890`, `:902`; admite também sondadores, conforme `:844`. |
+| `juizes.py:1346:_resposta_concorda_com_a_luz` | LEITOR | atributo | T | Recebe a pergunta do C6 em `:1419`. |
+| `juizes.py:1375:projecao_temporal_da_pergunta` | LEITOR | atributos | E/T | Recebe a pergunta do C6 em `:1390`. |
+| `juizes.py:1518:respondida_sem_texto` | LEITOR | atributos; `texto_vazio(T)` | E/T | Predicado aplicado às perguntas, inclusive em `models.py:1851`; também recebe sonda em `services/fio.py:1585`. |
+| `juizes.py:1665:perguntas_corrigiveis` | LEITOR | filtro ORM | E | `PerguntaDisputa.objects` explícito. |
+| `juizes.py:1672,1673,1675:perguntas_respondidas_a_validar` | LEITOR | filtro, exclusão, `order_by(E)` | E/T | `PerguntaDisputa.objects` explícito. |
+| `juizes.py:1701:declarou_hora` | LEITOR | atributo | T | Perguntas da materialização, chamada em `services/materializacao.py:555`. |
+| `juizes.py:1848:delta_da_resposta` | LEITOR | atributo | T | Pergunta da validação, chamada em `services/validacao.py:864`. |
+| `juizes.py:1952,1957:classificar_resposta_validacao` | LEITOR | atributo | T | Fila PD em `app/api/views_mensageria.py:540`, `:544`. |
+| `juizes.py:1974:motivo_implausivel_validacao` | LEITOR | atributo | T | Pergunta carregada em `services/validacao.py:389`, chamada em `:404`. |
+| `juizes.py:2022,2026:irmas_respondidas_sem_consumo` | LEITOR | filtro ORM; atributo | E/T | `PerguntaDisputa.objects`, `:2020`. |
+
+**Demais leitores de `app/chamados/`**
+
+| arquivo:linha:função | ESCRITOR/LEITOR | forma | campo | Como decidiu o modelo |
+|---|---|---|---|---|
+| `relatorios_disputa.py:21:classificar` | LEITOR | atributo `is None` | E | `disputa.perguntas.all()` em `:12`. |
+| `views.py:1280:responder_pergunta_disputa` | LEITOR | atributo `is not None` | E | Consulta PD em `:1239`. |
+| `views.py:1416:reabrir_disputa_supervisao` | LEITOR | filtro ORM | E | `PerguntaDisputa.objects` explícito. |
+| `views_cobrar.py:169,176:validar_inline` | LEITOR | atributo; filtro ORM | E | `_vivas_de(d)` e consulta PD em `:175`. |
+| `views_cobrar.py:291:proposta_lote` | LEITOR | `x['pergunta'].T` | T | Itens classificados pela fila, `services/validacao.py:921`, `:924`. |
+| `canal.py:65:perguntas_mudas_com_resposta` | LEITOR | filtro ORM | T | Consulta PD em `:58`, `:64`. |
+| `reconciliador.py:365:lavrar_sem_turno_aberto` | LEITOR | atributo | T | Pergunta recebida pela cadeia de reatar, chamada em `:1620`. |
+| `reconciliador.py:1083:veredito_orfa` | LEITOR | atributo | T | Universo PD em `:1048`, `:1049`; chamada em `:1136`. |
+| `veredito_lavrado.py:207,208:marcos_do_lote` | LEITOR | filtro E; `**_ate(E)`; `Max(E)` | E | Alias `_PD` em `:201`; `_ate` gera limite em `:163`. |
+| `services/acoes_disputa.py:95:acao_reabrir_disputa` | LEITOR | filtro ORM | E | Consulta PD explícita. |
+| `services/acoes_disputa.py:130:acao_regularizar_disputa` | LEITOR | atributo | E | Perguntas de `_vivas_de(d)`. |
+| `services/acoes_disputa.py:353:acao_corrigir_resposta` | LEITOR | atributo | T | Consulta PD em `:341`. |
+| `services/becos.py:30:classificar` | LEITOR | atributo | E | `d.perguntas.all()` em `:29`. |
+| `services/cobranca.py:229:_calados` | LEITOR | filtro ORM | E | `PerguntaDisputa.objects` em `:228`. |
+| `services/declaracao_texto.py:417,419:declarar_hora_colab` | LEITOR | atributos; `bool(E)` | E/T | Retorno de `PerguntaDisputa.abrir`, `:376`. |
+| `services/declaracao_texto.py:687:aplicar_declaracao` | LEITOR | atributo | E | Retorno de `PerguntaDisputa.abrir`, `:666`. |
+| `services/disputa_emissao.py:1619,1627:reabrir_para_correcao` | LEITOR | `values_list(T,E)`; nomes `_txt`, `_resp` | E/T | Queryset de perguntas; usa portas PD em `:1609`, `:1630`. |
+| `services/disputa_emissao.py:1647:responder_automaticamente` | LEITOR | atributo | T | Perguntas do upload, `app/api/foto_recebida.py:48`. |
+| `services/disputa_emissao.py:1675,1683:carimbar_resposta_pela_trilha` | LEITOR | atributos | E/T | Queryset PD do comando, `management/commands/curar_perguntas_em_limbo.py:55`, `:68`. |
+| `services/disputa_emissao.py:1718:recobrar_questionario` | LEITOR | filtro ORM | E | Consulta PD em `:1717`. |
+| `services/disputa_emissao.py:1826,1844:reabrir_credor_de_pergunta_viva` | LEITOR | atributos | E/T | Relação `perguntas_que_resolvem`, `:1803`, `:1805`. |
+| `services/disputa_emissao.py:1984,2057,2062,2074:_resolver_perguntas_por_chamado_resolvido` | LEITOR | atributos; serialização | E/T | Perguntas do chamado tratadas pela função, `:1984`. |
+| `services/explicador.py:32:_explicar_validada` | LEITOR | atributo | T | Chamado por `explicar_pergunta`, `:97`; consulta PD em `:122`. |
+| `services/explicador.py:79,80:explicar_pergunta` | LEITOR | atributos em textos | T | Consulta PD em `:122`, aplicação em `:133`. |
+| `services/fio.py:174:aguarda_o_colaborador` | LEITOR | atributo; predicado do par | E | Coleção PD do fio, carregada em `:242`, encaminhada em `:361`. |
+| `services/fio.py:681:processar_post_fio` | LEITOR | atributo | E | `perguntas_vivas_de`, importada em `:680`. |
+| `services/fio.py:1254:canonica_do_grupo` | LEITOR | atributo | T | Grupo PD fornecido, por exemplo, por `management/commands/dedup_perguntas_fato.py:74`, `:76`. |
+| `services/fio.py:1266:merito_perdedor` | LEITOR | atributo | T | Perguntas do mesmo grupo; constantes PD em `:1265`. |
+| `services/foto_e4b.py:180:nascimentos` | LEITOR | `a[c]`, `d[c]`, com `c=E` | E | Ramo `perguntas:` em `:179`; foto PD em `:272`. |
+| `services/foto_e4b.py:251:capturar.guardar` | LEITOR | `f.value_from_object(obj)` para todos os campos concretos | E/T | `guardar('perguntas', PerguntaDisputa.objects...)` em `:272`. |
+| `services/historico.py:99,105,109:_eventos_dos_chamados` | LEITOR | `getattr(p,campo)` variável; atributo T | E/T | Queryset PD em `:96`; E integra a tupla em `:99`. |
+| `services/materializacao.py:280,308:_tipo_pelo_marco` | LEITOR | atributos | T | Cadeia da materialização PD; queryset em `:1375` e carregamento em `services/validacao.py:389`. |
+| `services/materializacao.py:359,405,412:_ts_tipo_do_plantio` | LEITOR | atributos | T | Mesma cadeia da materialização. |
+| `services/materializacao.py:438:estado_aplicacao_pergunta` | LEITOR | atributo | T | Perguntas carregadas pelo fio em `services/fio.py:242`, chamada em `:357`. |
+| `services/materializacao.py:474:_declarar_ausencia_de_pergunta` | LEITOR | atributo | T | Cadeia da materialização PD. |
+| `services/materializacao.py:571:_materializar_ausencia_de_resposta` | LEITOR | atributo de `q` | T | `disputa.perguntas.filter`, `:538`. |
+| `services/materializacao.py:633:perguntas_absorvidas_por` | LEITOR | filtro `T__in` | T | Base PD em `:629`. |
+| `services/materializacao.py:674,675:devolver_absorvidas_da_ausencia_rejeitada` | LEITOR | atributos; foto em dict | E/T | `perguntas_absorvidas_por`, `:671`. |
+| `services/materializacao.py:835,876,977:_materializar_resposta_hora` | LEITOR | atributos | T | Cadeia da materialização PD. |
+| `services/materializacao.py:1001,1010,1062:_materializar_resposta_data_hora` | LEITOR | atributos | T | Cadeia da materialização PD. |
+| `services/materializacao.py:1376:materializar_perguntas_validadas_da_disputa` | LEITOR | filtro ORM | E | `disputa.perguntas.filter`, `:1375`. |
+| `services/painel.py:67:marcador_do_placar` | LEITOR | `Max(E)` | E | Agregação PD em `:66`. |
+| `services/passivo_validado.py:83:_reversao_de` | LEITOR | `getattr(p,c,None)` | E | `CAMPOS_REVERSAO` em `:64`, `:66`; pergunta recebida em `:367`. |
+| `services/pergunta_no_app.py:71:consulta_do_app` | LEITOR | atributo | E | `perguntas_do_app`, `:70`; consulta PD em `:49`. |
+| `services/raiox.py:138,143,144:creditos_perguntas` | LEITOR | `values_list(E,T)`; índices `p[3]`, `p[4]` | E/T | `_pq=PerguntaDisputa.objects`, `:56`; seleção em `:135`, `:138`. |
+| `services/validacao.py:141:_carimbar_validacao` | LEITOR | atributo | T | Pergunta carregada em `:389`. |
+| `services/validacao.py:189,207:devolver_validacao_recusada` | LEITOR | `refresh_from_db(fields=[T,...])`; atributo | T | Instância carregada em `:389`, encaminhada em `:464`. |
+| `services/validacao.py:236:_e_aceite_de_folga` | LEITOR | atributo | T | Helper da validação PD. |
+| `services/validacao.py:393:validar_pergunta` | LEITOR | atributo | E | Consulta PD em `:389`. |
+| `services/validacao.py:576,580,581,600:recusar_pergunta` | LEITOR | atributos; leitura `antes[T]` | E/T | Consulta PD em `:569`, `:570`. |
+| `services/validacao.py:851,853,855,860,861,862,863,866:classe_do_lote` | LEITOR | atributos | T | Perguntas da fila, chamadas em `:921`, `:922`. |
+| `services/validacao.py:924:fila_validar_classificada` | LEITOR | atributo; idade da resposta | E | Fila padrão em `:918`, `:921`; argumento alternativo `qs` sem validação de tipo. |
+| `services/verbos.py:335,336,342,345:placar_aceite` | LEITOR | filtro; `values(E)`; `pg[E]` | E | Consulta PD em `:333`. |
+| `services/vigia_fio.py:681:censo_alcance` | LEITOR | atributo | E | Universo PD em `:615`. |
+| `services/vigia_fio.py:789,792:respondida_sem_resposta` | LEITOR | filtro E; `values_list(T)` | E/T | Consulta PD explícita em `:789`. |
+| `templatetags/chamados_tags.py:142:leitura_da_resposta` | LEITOR | `getattr(perg,T,'')` | T | Recebe `perg` dos templates: `modal_fio.html:250`, `_pergunta_card.html:43`. |
+
+**Leitores nos management commands**
+
+Todos os caminhos desta tabela ficam em `app/chamados/management/commands/`.
+
+| arquivo:linha:função | ESCRITOR/LEITOR | forma | campo | Como decidiu o modelo |
+|---|---|---|---|---|
+| `curar_perguntas_em_limbo.py:32:nota_da_resposta` | LEITOR | atributo | T | Perguntas PD selecionadas em `:46`. |
+| `curar_perguntas_em_limbo.py:46,69:Command.handle` | LEITOR | filtros ORM | E/T | `PerguntaDisputa.objects` explícito. |
+| `validar_classe_a.py:80:Command.handle` | LEITOR | atributo | T | `d.respostas_sem_veredito()` em `:54`. |
+| `auditar_invariantes_chamados.py:177:_contraprova_i21a` | LEITOR | atributo | E | Subconjunto PD de `:1572`, encaminhado em `:1585`. |
+| `auditar_invariantes_chamados.py:592,1105,1106,1572,1575,1603,1655:Command.handle` | LEITOR | atributos; filtros ORM | E/T | Alias `PD.objects`; em `:1655`, relação de perguntas carregada em `:1652`. |
+| `backfill_decisoes_pergunta.py:56,60,61:linhas_a_criar` | LEITOR | filtro; `only(E,T)` | E/T | Consulta PD explícita. |
+| `backfill_decisoes_pergunta.py:326:aplicar` | LEITOR | atributo para trilha | T | Perguntas do backfill. |
+| `backfill_decisoes_pergunta.py:504:Command.handle` | LEITOR | `only(T)` | T | Consulta PD explícita. |
+| `dedup_perguntas_fato.py:75:Command.handle` | LEITOR | atributo | T | Queryset PD em `:74`. |
+
+**Leitores fora de `app/chamados/`**
+
+| arquivo:linha:função | ESCRITOR/LEITOR | forma | campo | Como decidiu o modelo |
+|---|---|---|---|---|
+| `bin/censo_folha.py:28,29:<módulo>` | LEITOR | filtros ORM | E | `PerguntaDisputa.objects`; import em `:12`. |
+| `app/folha/previa.py:142:_material` | LEITOR | atributo | T | Mapa PD em `:64`, `:67`, encaminhado em `:95`. |
+| `app/ponto/supra_juiz.py:545,548:pode_executar_csf` | LEITOR | atributos | E | Relações `d.perguntas` e `ch.perguntas_que_resolvem`, `:543`, `:548`; FKs em `app/chamados/models.py:2439`, `:3415`. |
+| `app/api/views.py:1159,1161:api_chamados_v2` | LEITOR | atributos; guarda e serialização E | E/T | Perguntas de `consulta`, mapa em `:1029`, `:1035`; fonte PD em `services/pergunta_no_app.py:49`. |
+| `app/api/views.py:2557,2559:api_disputa_perguntas._item` | LEITOR | atributos; guarda e serialização E | E/T | `consulta_do_app` em `:2532`, `:2535`; chamadas em `:2562`, `:2572`. |
+| `app/api/views.py:2573:api_disputa_perguntas` | LEITOR | atributo | E | `consulta['historico']`; mesma origem. |
+| `app/api/views.py:2616,2633:api_disputa_responder` | LEITOR | comparação; serialização | E | Consulta PD em `:2607`, `:2609`. |
+| `app/api/views_mensageria.py:567,569,570:_item_validar` | LEITOR | atributos; serialização; diferença de datas | E/T | Fila em `:540`, `:546`; consulta PD em `app/chamados/juizes.py:1672`. |
+| `app/colaboradores/services/calendario.py:474:contexto_calendario` | LEITOR | `exclude(T='')` | T | Alias PD em `:469`; queryset em `:473`. |
+| `app/colaboradores/services/ficha.
+
+[truncado em 20000 de 31100 caracteres]
+
+## 12/11 17:33 · sessao aa3d7d6986fe · TIPO-NA-FONTE · verificador · origem=Code
+
+**Não aprovo como cumprimento integral.** O instrumento entrega listagens e falhas explícitas, mas não garante “todo leitor e escritor”: há perdas silenciosas de proveniência e a medida chamada `acessos_crus_ata` ainda não significa “fora do acessor”. O selo tem mordida parcial e admite ferramentas quebradas em aspectos contratados. (`bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:224`, `bin/leitores_de_chave.py:538`, `bin/leitores_de_chave.py:627`; `bin/tests/test_leitores_de_chave.sh:100`)
+
+As referências a `aval.txt` e `contrato.txt` abaixo são aos anexos fornecidos, contando o título como linha 1. Execução histórica do selo, publicação prévia do contrato e pouso: **[não verificado]**. [nao verificado]
+
+**1. As cinco linhas do contrato têm atendimento parcial.**
+
+| Linha | Onde está e onde há furo |
+|---|---|
+| **Quem chama** | O contrato determina brief com saída anexa. O chamador executável demonstrado é o selo; o juiz existente do CENSO aceita referências textuais, sem conferir saída deste instrumento. Automatização para todo brief que toca ata/dna: **[não verificado]**. (`contrato.txt:2`, anexo; `bin/tests/test_leitores_de_chave.sh:26`; `bin/disjuntor.py:1565`) |
+| **Quem espera** | Texto e JSON entregam arquivo, linha, função e papéis. Entrega efetiva ao construtor/preverificador e espera condicionada ao resultado: **[não verificado]**. (`contrato.txt:3`, anexo; `bin/leitores_de_chave.py:291`, `bin/leitores_de_chave.py:663`) |
+| **Falha/limite** | Há universo Python, separação produção/testes, declaração de HTML/JS não cobertos, rc 1 nomeando chave sem resultado e rc 2 por erro de parse. O furo é tratar essas garantias como completude do censo: várias perdas de proveniência não geram erro nem lacuna. (`bin/leitores_de_chave.py:34`, `bin/leitores_de_chave.py:224`, `bin/leitores_de_chave.py:555`, `bin/leitores_de_chave.py:569`, `bin/leitores_de_chave.py:617`, `bin/leitores_de_chave.py:669`) |
+| **Medida** | Existem resumo por chave e `--contar-crus`. Publicação do censo das 72 chaves no RELATO: **[não verificado]**. O contador não exclui acessor nem compara com teto anterior; portanto fornece uma medida, ainda não a catraca contratada. (`contrato.txt:5`, anexo; `bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:631`, `bin/leitores_de_chave.py:648`) |
+| **Quem desliga / selo** | Ronald está declarado como autoridade no contrato. O mutante de chave desaparecida tem controle antes e vizinha preservada depois; não é vazio nesse aspecto. A mordida não cobre toda a semântica prometida. (`contrato.txt:6`, anexo; `bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:60`, `bin/tests/test_leitores_de_chave.sh:62`, `bin/tests/test_leitores_de_chave.sh:100`) |
+
+O conteúdo dos dois arquivos permanece no instrumento e no selo de host: não implementa acessor, migração de `orfas` ou persistência de instantes. Os modos adicionais servem à inspeção e à medida; chamá-los de catraca pronta antecipa uma garantia ausente. (`bin/leitores_de_chave.py:5`, `bin/leitores_de_chave.py:24`, `bin/leitores_de_chave.py:552`, `bin/leitores_de_chave.py:631`; `bin/tests/test_leitores_de_chave.sh:4`; `aval.txt:5`, anexo)
+
+**2. O AST reconhece candidatos sintáticos; não prova `CelulaDia`.**
+
+Não há regra global “variável chamada `ata` é ata”. Há, porém, dependência de **nomes declarados** por arquivo e função em `PARAMS`, e de nomes de funções em `RETURNS`. Além disso, qualquer atributo `.ata`/`.dna`, qualquer `getattr` com esse literal e qualquer argumento nomeado `ata=`/`dna=` com dicionário são aceitos sem prova da classe ou do destinatário. (`bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:128`, `bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:249`, `bin/leitores_de_chave.py:493`)
+
+| Forma | Resultado e risco |
+|---|---|
+| `a=c.ata; a["orfas"]` | Reconhecida por um salto. (`bin/leitores_de_chave.py:166`, `bin/leitores_de_chave.py:221`) |
+| `a=c.ata; b=a; b["orfas"]` | Perde o acesso no caso comum: o limite de profundidade interrompe o segundo salto. Ocorrência real de raiz perdida exclusivamente por isso: **[não verificado]**. (`bin/leitores_de_chave.py:224`) |
+| `a=b=c.ata` | Reconhece ambos: cada alvo recebe diretamente o mesmo valor. Não equivale ao caso anterior. (`bin/leitores_de_chave.py:134`, `bin/leitores_de_chave.py:138`) |
+| Comprehension | Acesso direto à origem é visto; `values_list` recebe tratamento específico. Um caso sintético como `[a["orfas"] for a in [c.ata]]` perde a ligação do elemento. (`bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:203`, `bin/leitores_de_chave.py:218`) |
+| `getattr(c,"ata")["orfas"]` | Reconhecido. Campo obtido de variável ou chamada indireta `getattr(c.ata,"get")("orfas")` não recebe a mesma resolução. (`bin/leitores_de_chave.py:249`, `bin/leitores_de_chave.py:256`) |
+| Reatribuição / ordem | O ambiente agrega atribuições da função inteira, sem invalidar proveniência. Em exemplo sintético `a=c.ata; a={...}; a["orfas"]`, o acesso continua atribuído à ata; uma atribuição posterior também pode contaminar acesso anterior. (`bin/leitores_de_chave.py:127`, `bin/leitores_de_chave.py:168`, `bin/leitores_de_chave.py:227`) |
+| Outro objeto com `.ata` | Entra como candidato. Já outro objeto apenas com `.orfas` não entra por esse motivo. (`bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:377`) |
+
+**Sítios reais incluídos:** `getattr` em `app/chamados/juizes.py:966`, `app/chamados/reconciliador.py:701` e `app/ponto/services/lastro.py:89`, `app/ponto/services/lastro.py:113`, `app/ponto/services/lastro.py:128`, `app/ponto/services/lastro.py:149`; comprehensions em `app/ponto/juiz_batida.py:161` e `app/relatorios/cartao_pela_celula.py:288`; desempacotamento de `values_list` em `app/ponto/services/vigia_pareador_celula.py:71`, com leituras em `app/ponto/services/vigia_pareador_celula.py:74` e `app/ponto/services/vigia_pareador_celula.py:78`.
+
+**Sítios corretamente excluídos:** a variável chamada `ata` em `app/relatorios/furos.py:132` é mapa de dias, consumido em `app/relatorios/furos.py:134`. As leituras de `orfas` em dias da grade ficam fora em `app/escala/services/furos_diarios.py:22`, `app/folha/causas.py:43`, `app/folha/causas.py:100`, `app/ponto/services/bordas_realizado.py:49`, `app/relatorios/pdf_espelho.py:477` e `app/relatorios/pdf_espelho.py:552`. `FuroDiario.orfas` é um inteiro próprio, não a chave do JSON. (`app/escala/models.py:1883`)
+
+**Perdas reais:** a leitura de `ata["lampadas"]` é vista, mas o laço não transmite proveniência a `lamp`; as escritas de `acesa`, `luz` e `dispensada` somem do censo dessas subchaves. Também ficam fora consultas ORM, conforme limite declarado. (`app/ponto/services/cartorio.py:805`, `app/ponto/services/cartorio.py:808`, `app/ponto/services/cartorio.py:809`, `app/ponto/services/cartorio.py:810`; `app/escala/management/commands/celulas_contra_o_template.py:49`; `app/chamados/models.py:3356`; `bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:34`)
+
+**O 95 depende das declarações.** Na reprodução em memória, o total foi 95; sem apenas `PARAMS`, 73; sem `PARAMS` e `RETURNS`, 62. A fórmula conta eventos de topo reconhecidos pelos mapas e pelo rastreamento. (`bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:627`)
+
+As 33 operações que desaparecem desligando ambos os mapas estão nestes sítios; multiplicidade indica mais de um evento na mesma linha:
+
+- `app/chamados/juizes.py:438` ×2.
+- `app/escala/services/leitor_celula.py:68`, `app/escala/services/leitor_celula.py:82`, `app/escala/services/leitor_celula.py:91`, `app/escala/services/leitor_celula.py:103`, `app/escala/services/leitor_celula.py:105` ×2, `app/escala/services/leitor_celula.py:115`, `app/escala/services/leitor_celula.py:175`, `app/escala/services/leitor_celula.py:187`, `app/escala/services/leitor_celula.py:190`.
+- `app/ponto/services/cartorio.py:424`, `app/ponto/services/cartorio.py:426`, `app/ponto/services/cartorio.py:738` ×2, `app/ponto/services/cartorio.py:739`, `app/ponto/services/cartorio.py:740`, `app/ponto/services/cartorio.py:741`, `app/ponto/services/cartorio.py:742`, `app/ponto/services/cartorio.py:745`, `app/ponto/services/cartorio.py:746`, `app/ponto/services/cartorio.py:762`, `app/ponto/services/cartorio.py:767`, `app/ponto/services/cartorio.py:771`, `app/ponto/services/cartorio.py:805`, `app/ponto/services/cartorio.py:812`, `app/ponto/services/cartorio.py:834`, `app/ponto/services/cartorio.py:839`, `app/ponto/services/cartorio.py:913`, `app/ponto/services/cartorio.py:917` ×2.
+- `app/relatorios/dia_da_frota.py:21`.
+
+Há uma perda silenciosa concreta por nome declarado: renomear somente o parâmetro `ata` e seus usos em `_orfas_da_ata`, mantendo a função, elimina duas operações e leva 95 a 93. O guard verifica a função, não a existência do parâmetro declarado. (`app/escala/services/leitor_celula.py:180`, `app/escala/services/leitor_celula.py:187`, `app/escala/services/leitor_celula.py:190`; `bin/leitores_de_chave.py:128`, `bin/leitores_de_chave.py:541`)
+
+**3. O selo morde alguns defeitos, mas não sustenta “todos os casos mordem”.**
+
+| Caso | Mordida / vacuidade |
+|---|---|
+| **a — árvore real** | Exige presença mínima de leitor/escritor nos arquivos esperados e número positivo. Não verifica completude nem valor/delta da medida. (`bin/tests/test_leitores_de_chave.sh:39`, `bin/tests/test_leitores_de_chave.sh:44`) |
+| **b — mutante** | Não vazio para desaparecimento: exige controle rc 0, mutante rc 1 nomeado e vizinha rc 0. Uma ferramenta sempre “sem resultado” reprova. (`bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:60`, `bin/tests/test_leitores_de_chave.sh:62`) |
+| **c — inexistente** | Exige rc 1 nomeado; isoladamente seria vazio para ferramenta sempre negativa, mas b fornece controle positivo. (`bin/tests/test_leitores_de_chave.sh:67`, `bin/tests/test_leitores_de_chave.sh:55`) |
+| **d — parse** | Introduz arquivo inválido depois do universo válido e exige rc 2, arquivo nomeado e stdout vazio. (`bin/tests/test_leitores_de_chave.sh:99`, `bin/tests/test_leitores_de_chave.sh:116`, `bin/tests/test_leitores_de_chave.sh:118`) |
+| **e — testes** | Confere separação e chave exclusiva de teste. A asserção do contador aceita stdout `8` sem verificar rc. (`bin/tests/test_leitores_de_chave.sh:106`, `bin/tests/test_leitores_de_chave.sh:110`, `bin/tests/test_leitores_de_chave.sh:113`) |
+| **f — declaração** | Morde função removida/renomeada; não morde parâmetro renomeado com função preservada. (`bin/tests/test_leitores_de_chave.sh:72`; `bin/leitores_de_chave.py:541`) |
+| **g — formas** | Confere exatamente caminhos e formas, mas ignora papéis. Retirar ESCRITOR de `setdefault` e ESCRITOR/EXCLUI de `pop` preserva a comparação. (`bin/tests/test_leitores_de_chave.sh:100`; `bin/leitores_de_chave.py:427`, `bin/leitores_de_chave.py:429`) |
+| **uso** | Exige rc 64 por argumento faltando. (`bin/tests/test_leitores_de_chave.sh:122`) |
+
+Todas as invocações do selo usam `CelulaDia.ata`; uma implementação de DNA quebrada pode passar. (`bin/tests/test_leitores_de_chave.sh:36`, `bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:99`, `bin/tests/test_leitores_de_chave.sh:122`)
+
+A raiz é calculada por `BASH_SOURCE/../..` e três arquivos são conferidos **antes** de `mktemp`. Isso permite cwd externo; transportar o script para fora da posição `bin/tests` altera a raiz calculada. A prova é de presença, não de identidade do hash. (`bin/tests/test_leitores_de_chave.sh:16`, `bin/tests/test_leitores_de_chave.sh:18`, `bin/tests/test_leitores_de_chave.sh:22`)
+
+No caminho normal, gravações ficam sob `$_tmp`. **Se `mktemp` falhar**, seu retorno não é conferido e `_tmp=''` produz tentativas em `/out`, `/err`, `/copia` e `/sint`. Portanto não há confinamento garantido em todos os caminhos. (`bin/tests/test_leitores_de_chave.sh:15`, `bin/tests/test_leitores_de_chave.sh:22`, `bin/tests/test_leitores_de_chave.sh:28`, `bin/tests/test_leitores_de_chave.sh:50`, `bin/tests/test_leitores_de_chave.sh:78`)
+
+**4. As três saídas não oferecem números intercambiáveis.**
+
+| Saída | Escritor, leitor demonstrado e significado |
+|---|---|
+| **Texto** | `run()` escreve eventos selecionados por seção; inclui `*` e descendentes compatíveis. O selo usa rc/stderr nas consultas textuais. (`bin/leitores_de_chave.py:635`, `bin/leitores_de_chave.py:659`; `bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:60`) |
+| **JSON** | `run()` escreve listas filtradas, mas o resumo é global, mesmo consultando uma chave. O selo lê sítios, formas e separação produção/testes. (`bin/leitores_de_chave.py:645`, `bin/leitores_de_chave.py:652`; `bin/tests/test_leitores_de_chave.sh:30`, `bin/tests/test_leitores_de_chave.sh:39`, `bin/tests/test_leitores_de_chave.sh:100`) |
+| **`--contar-crus`** | Imprime eventos de produção cujo caminho é exatamente uma chave literal de topo; exclui `*` e caminhos dinâmicos. O selo lê o número real e o sintético. (`bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:631`; `bin/tests/test_leitores_de_chave.sh:44`, `bin/tests/test_leitores_de_chave.sh:112`) |
+
+A unidade efetiva é **evento emitido e deduplicado**, com posição, caminho, papéis e forma; não linha nem arquivo. Uma operação com dois papéis continua um evento, portanto somar leitores e escritores pode contar duas vezes. (`bin/leitores_de_chave.py:288`, `bin/leitores_de_chave.py:302`, `bin/leitores_de_chave.py:385`, `bin/leitores_de_chave.py:424`)
+
+Também entram escritas apenas em memória, como `_cj.ata`; o contador não mede exclusivamente persistência. (`app/escala/utils.py:1886`, `app/escala/utils.py:1887`, `app/escala/utils.py:1895`)
+
+Os principais conflitos futuros são: nenhum filtro “fora do acessor”; nenhuma comparação com teto; e total zero retorna rc 1. Assim, a meta zero poderá produzir erro, enquanto acessos internos ao acessor continuarão contados. (`bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:633`; `aval.txt:5`, anexo)
+
+Não há evidência suficiente para atribuir a briefs futuros ou à linha HAIKU uma suposição de unidade “linha” ou “arquivo”: **[não verificado]**. Tampouco é legítimo interpretar 174→95 como redução: o aval descreve grep em outro HEAD, e o instrumento define outra seleção por AST. (`aval.txt:1`, anexo; `bin/leitores_de_chave.py:24`)
+
+**5. Classes que já reprovaram obra.**
+
+| Classe | Situação neste recorte |
+|---|---|
+| **Segundo juiz** | **Não demonstrado como juiz de negócio.** Há classificador sintático sem prova de classe, insuficiente como veredito completo sobre proveniência. (`bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:249`) |
+| **Segundo escritor** | **Não no instrumento para dados da aplicação:** lê fonte e emite saída. O selo escreve fixtures/cópias, com o furo de `mktemp` descrito. (`bin/leitores_de_chave.py:563`, `bin/leitores_de_chave.py:643`; `bin/tests/test_leitores_de_chave.sh:22`, `bin/tests/test_leitores_de_chave.sh:58`) |
+| **Relógio fora da borda** | **Não demonstrado no julgamento.** `date` mede apenas duração do selo. (`bin/tests/test_leitores_de_chave.sh:33`, `bin/tests/test_leitores_de_chave.sh:125`) |
+| **Derivação paralela de fonte única** | **Presente na proveniência manual:** `PARAMS/RETURNS` precisam acompanhar o código; o guard incompleto permite divergência silenciosa. (`bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:538`) |
+| **Selo sem mordida** | **Presente parcialmente:** papéis não conferidos, DNA sem exercício e rc ignorado numa asserção do contador. (`bin/tests/test_leitores_de_chave.sh:100`, `bin/tests/test_leitores_de_chave.sh:113`, `bin/tests/test_leitores_de_chave.sh:122`) |
+| **Ordem de trava** | **Não há operação de banco neste instrumento.** A ordem local raiz→temporário está correta, mas falta abortar na falha do temporário. (`bin/leitores_de_chave.py:552`; `bin/tests/test_leitores_de_chave.sh:18`, `bin/tests/test_leitores_de_chave.sh:22`) |
+| **Pouso antes do pré-requisito** | **[não verificado]**: anexos e código não provam cronologia de verificação, publicação ou pouso. | [nao verificado]
+| **Campo com dois significados** | **Presente no nome da medida:** `acessos_crus_ata` designa todos os eventos reconhecidos de topo, enquanto o contrato exige acessos fora do acessor. (`bin/leitores_de_chave.py:24`, `bin/leitores_de_chave.py:627`; `contrato.txt:5`, anexo) |
 
 ## 12/11 17:32 · sessao d7de2a47bc6a · - · - · origem=Ronald (tmux)
 
@@ -1175,126 +1432,4 @@ A diferença aritmética em relação às 72 do aval é **−60 chaves de topo**
 
 Os tipos acima são os produzidos pelo código; o conteúdo efetivamente presente no banco é [não verificado]. A porta aceita `dict(ata)` em `app/ponto/portas/celula.py:995`, e o campo é JSON sem esquema declarado em `app/escala/models.py:1778`.
 
-## 12/11 16:49 · sessao e2e181b5434c · - · - · origem=Ronald (tmux)
-
-Complemento da exploração, só leitura:
-
-1. **Fábrica do consumidor e do cartório alcança a cascata c1 já descoberta.** Consumidor chama fábrica em `app/chamados/reconciliador.py:1421`; fábrica percorre `perguntar_por_eventos` → `perguntar_pela_celula` → `perguntar` em `app/chamados/services/fabrica_da_celula.py:301`, `:219`, `:172-174`. A geração de perguntas chama `reatar_pergunta_orfa` em `app/chamados/services/disputa_emissao.py:459-464`; este pode chamar `lavrar_sem_turno_aberto` em `app/chamados/reconciliador.py:1653`, que fecha disputa sem consultar CSF em `:412-414`. O cartório chama a mesma fábrica em `app/ponto/services/cartorio.py:1076-1088`.
-
-2. **Há cascata adicional S143/S128 → disputa.fechar → S88 sem CSF.** O ramo histórico de reatar chama `resolver_perguntas_por_chamado_resolvido` em `app/chamados/reconciliador.py:1682`; `_retratar` também o chama em `:537`; qualquer save terminal que escreva status acorda S143 em `app/chamados/signals.py:91-117`. O resolver forma candidatos incluindo todas as disputas abertas do colaborador em `app/chamados/services/disputa_emissao.py:2026-2028`; fecha candidatos pelo C7, com veto de pergunta em voo, em `:2089-2092`. Não chama CSF nesse fecho. O filtro de pai/destino vivo em `:2032-2037` limita o **carimbo sem credor**, não o laço final de fechamento em `:2074-2092`.
-
-3. **Emissor chamado pelo cartório alcança outro auto-fecho.** `julgar_celula` injeta `detectar_ausencias.Command` em `app/ponto/services/cartorio.py:2066`, `:2091-2092`; corpo chama `_abrir_chamado` em `:1841`, `:1879`. Esse emissor chama `criar_disputa_a_partir_de_chamados_orfaos` em `app/ponto/management/commands/detectar_ausencias.py:792-803`. A porta de repasse fecha a disputa automaticamente quando C7 permite e não houve abstenção por ata em `app/chamados/services/disputa_emissao.py:1270-1287`, sem CSF.
-
-4. **Agrupamento LIMBO também pode fechar pelo ramo do emissor**, com regra própria: emissor chama `agrupar_furo` em `app/ponto/management/commands/detectar_ausencias.py:759-763`; agrupador reconcilia em `app/chamados/services/limbo_folgas.py:284-287`, depois da costura das vivas e do carimbo de agrupamento (`:275-283`), sem CSF. É agrupamento sob pai vivo, portanto não afirmo que seja fecho “sem furo” abrangido pela lei O168: **[nao verificado]**.
-
-5. **Outro ramo explícito do cartório é cluster:** chama `cluster_espurio.reconciliar_colab` em `app/ponto/services/cartorio.py:1081-1085`; esse reconcilia chamados que a premissa matou em `app/ponto/services/cluster_espurio.py:187-191`, sem CSF. O módulo é `cluster_batida_espuria` (`:11`), diferente da cobrança sem furo tratada no novo helper; aplicabilidade exata da lei O168 a esse domínio: **[nao verificado]**.
-
-6. **Não encontrei fecho direto no dedup de nascimento de pergunta lido.** O reuso atualiza célula/destino e retorna em `app/chamados/models.py:2922-3009`; nascimento grava pergunta e retorna em `:3014-3032`. O núcleo de criação/agregação de disputa reutiliza aberta ou cria nova, sem fechar, em `app/chamados/services/disputa_emissao.py:530-603`. O fecho relevante está nos ramos acima, e não nessas operações de dedup.
-
-São caminhos estruturais com chamada real de fechamento, sujeitos às demais guardas. Ocorrência concreta, resultado de execução e existência de dados que atravessem todas as condições: **[nao verificado]**.
-
-## 12/11 16:49 · sessao b4c3d76f5cee · - · - · origem=Ronald (tmux)
-
-DNA: 9 chaves de topo escritas pelo produtor; `DNA_CHAVES` declara apenas 8 e omite `extra_declarada`. Referências: `app/ponto/management/commands/gerar_celulas.py:17`, `:95`, `:122`.
-
-| Chave | Escritor em `gerar_celulas.py:montar_dna` | Tipo produzido | Leitor por chave |
-|---|---|---|---|
-| `dna_versao` | :96 | int, atualmente 2 (:16) | `app/ponto/services/cartorio.py:484:impressao_insumos` |
-| `vinculo_id` | :97 | ID do vínculo | Nenhum acesso por chave identificado; blob inteiro é comparado em `app/ponto/portas/celula.py:263`. |
-| `tipo_escala_id` | :98 | ID do tipo | Nenhum acesso por chave identificado; comparação do blob em `app/ponto/portas/celula.py:263`. |
-| `tipo_ciclo` | :99 | string (`app/escala/models.py:117`) | `app/ponto/services/vigia_entrada.py:129:do_dia` |
-| `marcos` | :100 | dict ou null (:77,:83) | 26 acessos AST, lista abaixo. |
-| `minutos_jornada` | :101 | int (`app/escala/models.py:49`) | Nenhum acesso por chave identificado; comparação do blob em `app/ponto/portas/celula.py:263`. |
-| `intervalo_livre` | :102 | bool | Nenhum acesso por chave identificado; comparação do blob em `app/ponto/portas/celula.py:263`. |
-| `lampadas` | :103 | list[dict] ou null (:78,:94) | `app/escala/utils.py:153:lampadas_de_dna` |
-| `extra_declarada` | :122 | dict `{antes:int,depois:int}` (:119,:120) | `app/escala/models.py:1235:extra_declarada_do_dia` |
-
-Esses são os tipos produzidos pelo código; conteúdo efetivamente armazenado em produção: [não verificado].
-
-Leitores de `marcos`, contando chamadas AST e preservando duas chamadas na linha 159:
-
-```text
-app/chamados/juizes.py:948:fato_do_marco_no_espelho
-app/chamados/juizes.py:1338:_resposta_concorda_com_a_luz
-app/chamados/services/adesao.py:36:universo_adesao
-app/escala/models.py:1124:marcos_do_dia
-app/escala/models.py:1189:pausas_do_dia
-app/escala/utils.py:53:pausas_dna_periodo
-app/escala/utils.py:104:marcos_dna_periodo
-app/escala/utils.py:137:pausas_de_celulas
-app/pautas/services.py:424:contexto_do_dia_texto
-app/ponto/juiz_batida.py:159:periodos_do_dia [2 chamadas]
-app/ponto/management/commands/aplicar_col900.py:172:handle
-app/ponto/management/commands/censo_col900.py:118:handle
-app/ponto/management/commands/censo_col900.py:119:handle
-app/ponto/management/commands/detectar_intervalo_ausente.py:53:furos_intervalo
-app/ponto/management/commands/tripwire_celulas.py:99:medir_pausa_faltando
-app/ponto/management/commands/tripwire_celulas.py:259:medir_sobra_com_tipo_trocado
-app/ponto/services/cartorio.py:484:impressao_insumos
-app/ponto/services/cartorio.py:615:lampadas_do_dia
-app/ponto/services/cartorio.py:840:insumos_da_ata
-app/ponto/services/dia_do_colab.py:46:dia_do_colab
-app/ponto/services/diagnostico_escala.py:153:diagnostico_escala
-app/ponto/services/esmeril_espelho.py:116:assinaturas_do_colab
-app/ponto/services/faltas_de_hoje.py:43:faltas_de_hoje_sem_cobranca
-app/ponto/services/veredito_celula.py:31:_marcos_do_dia
-app/ponto/services/vigia_entrada.py:126:do_dia
-```
-
-As subchaves `marcos.hi/hf/hii/hfi` contêm HH:MM ou null; `hii2/hfi2` são opcionais. Escritas: `app/ponto/management/commands/gerar_celulas.py:83`, `:93`; vocabulário: `app/escala/models.py:1652`.
-
-`lampadas[]` contém `{chave,tipo,hora,instante}`: `hora` é HH:MM; `instante` é ISO **sem fuso**, obtido por `datetime.combine(...).isoformat(...)`. Referências: `app/ponto/management/commands/gerar_celulas.py:68`, `:69`.
-
-Comparação de hora sem data existe para `marcos`:
-
-```text
-app/ponto/services/cartorio.py:640:lampadas_do_dia [pertinência]
-app/ponto/services/cartorio.py:648:lampadas_do_dia [chave de dict]
-app/ponto/services/cartorio.py:650:lampadas_do_dia [consulta de dict]
-app/ponto/services/cartorio.py:657:lampadas_do_dia [consulta de dict]
-app/ponto/services/cartorio.py:666:lampadas_do_dia [distância em minutos]
-app/ponto/services/cartorio.py:846:insumos_da_ata._um [igualdade; hi/hf passados em :855]
-app/chamados/juizes.py:965:fato_do_marco_no_espelho [chave de dict]
-app/chamados/juizes.py:968:fato_do_marco_no_espelho [consulta de dict]
-app/chamados/juizes.py:1345:_resposta_concorda_com_a_luz [igualdade]
-app/ponto/juiz_batida.py:230:periodos_do_dia [igualdade dos minutos]
-app/ponto/services/vigia_entrada.py:127:do_dia [comparação hi-hf]
-app/ponto/services/dia_do_colab.py:47:dia_do_colab [pertinência]
-app/ponto/management/commands/censo_col900.py:120:handle [igualdade do dict]
-```
-
-Também existe para `lampadas`: `app/escala/utils.py:155:lampadas_de_dna` usa `lamp['hora']` como chave de dict.
-
-Comparações do blob inteiro incluem `app/ponto/portas/celula.py:263`, `:594`, `:872` e `app/ponto/management/commands/tripwire_celulas.py:30`; portanto ausência de leitor individual não significa ausência de uso.
-
-Mapa para o instrumento:
-
-```text
-PRODUTOR:
-app/ponto/management/commands/gerar_celulas.py:73:montar_dna
-  retorna dna em :123
-
-PARÂMETROS DECLARADOS DNA:
-app/escala/utils.py:149:lampadas_de_dna                 posição0 dna
-app/ponto/services/cartorio.py:471:impressao_insumos    posição3 dna
-app/ponto/services/cartorio.py:599:lampadas_do_dia      posição2 dna
-app/ponto/services/cartorio.py:730:ata_do_dia           posição2 dna
-app/ponto/services/cartorio.py:816:insumos_da_ata       posição1 dna
-
-DESEMPACOTAMENTO ORM:
-app/escala/utils.py:52:pausas_dna_periodo
-app/escala/utils.py:103:marcos_dna_periodo
-app/escala/utils.py:136:pausas_de_celulas
-app/escala/utils.py:164:lampadas_dna_periodo
-app/chamados/services/adesao.py:33:universo_adesao
-
-APELIDO DE RETORNO:
-app/ponto/management/commands/censo_col900.py:115:handle
-  cand = montar_dna(...); leitura cand.get('marcos') em :118
-```
-
-`alvo` em `app/ponto/portas/celula.py:783` vem de `dna_anterior`; a restauração escreve o blob inteiro em `:786`, lê `marcos` em `:788` e `vinculo_id` em `:789`. Esses leitores não foram contados como acessos ao DNA atual.
-
-Contagem AST limitada aos acessos explícitos às nove chaves de topo, em `app/**/*.py`, sem testes nem migrations: 30 leitores em 17 arquivos + 9 escritores em um arquivo adicional = 39 acessos em 18 arquivos; subtotal management = 15; restante = 24. Os locais acima e o literal escritor em `app/ponto/management/commands/gerar_celulas.py:95` sustentam a contagem. Não inclui blob inteiro, DNA anterior ou chaves aninhadas.
-
-_4367 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4369 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
