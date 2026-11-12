@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 17:37** · publicado em **12/11/2026 17:38** (UTC-3)
+> Ultima resposta processada: **12/11/2026 17:43** · publicado em **12/11/2026 17:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 17:43 · sessao 3d62cbc2dfb9 · TRANCA-VIVAS-08 · sonda · origem=Code
+
+Não houve nova execução: foi fornecida a saída raspada, sem o código de `sonda_v3.py`; execução independente [nao verificado]. Transcrição integral da saída fornecida [nao verificado]:
+
+```text
+sonda_leitura: sonda_v3.py [a35d1b44e7abf2fc] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+agora 2026-11-12T17:42:11.101502-03:00
+PF#3 emp2 08/2026 fechado_em=2026-09-16T09:11:43.807307-03:00 reaberto_em=None janela_fechamento=(datetime.date(2026, 7, 21), datetime.date(2026, 8, 20))
+#20798 col367 emp2 data_evento=2026-08-01 dia_turno=2026-08-01 janela=2026-07-21..2026-08-20 chave=(2,8,2026) pf=3 pf_fechado=2026-09-16T09:11:43.807307-03:00 tocou=True C20=False
+   proj: validada=False respondida=False resposta_nao_vazia=False materializada=True via=sem_turno_aberto | celula=4538 veredito=furo via_cel=cartorio admin_decidiu=False concorda=n/a | viva=True
+   toque cobrar: n=0 []
+   toque resolver: n=1 [(769000, 653, '2026-10-26T11:05:49.557493-03:00')]
+   toque desarquivar: n=0 []
+#47879 col444 emp2 data_evento=2026-08-03 dia_turno=2026-08-03 janela=2026-07-21..2026-08-20 chave=(2,8,2026) pf=3 pf_fechado=2026-09-16T09:11:43.807307-03:00 tocou=True C20=False
+   proj: validada=False respondida=True resposta_nao_vazia=True materializada=False via= | celula=10151 veredito=furo via_cel=cartorio admin_decidiu=False concorda=None | viva=True
+   toque cobrar: n=0 []
+   toque resolver: n=2 [(747627, 657, '2026-10-22T15:35:32.359774-03:00'), (933557, 657, '2026-11-11T11:48:54.050593-03:00')]
+   toque desarquivar: n=0 []
+#47881 col444 emp2 data_evento=2026-08-04 dia_turno=2026-08-04 janela=2026-07-21..2026-08-20 chave=(2,8,2026) pf=3 pf_fechado=2026-09-16T09:11:43.807307-03:00 tocou=True C20=False
+   proj: validada=False respondida=True resposta_nao_vazia=True materializada=False via= | celula=10152 veredito=furo via_cel=cartorio admin_decidiu=False concorda=None | viva=True
+   toque cobrar: n=0 []
+   toque resolver: n=2 [(747617, 657, '2026-10-22T15:35:29.134502-03:00'), (747622, 657, '2026-10-22T15:35:30.735412-03:00')]
+   toque desarquivar: n=0 []
+#47884 col444 emp2 data_evento=2026-08-05 dia_turno=2026-08-05 janela=2026-07-21..2026-08-20 chave=(2,8,2026) pf=3 pf_fechado=2026-09-16T09:11:43.807307-03:00 tocou=True C20=False
+   proj: validada=False respondida=True resposta_nao_vazia=True materializada=False via= | celula=10153 veredito=discordante via_cel=cartorio admin_decidiu=False concorda=None | viva=True
+   toque cobrar: n=0 []
+   toque resolver: n=2 [(747607, 657, '2026-10-22T15:35:25.946330-03:00'), (747612, 657, '2026-10-22T15:35:27.552330-03:00')]
+   toque desarquivar: n=0 []
+total_erros=0
+```
+
+- Pelo dado fornecido, nas quatro perguntas a chave `(2,8,2026)`, derivada do fim da janela em `20/08/2026`, encontrou PF#3; portanto a causa não é período ausente. O juiz deriva e consulta essa chave em `app/chamados/juizes.py:1062`–`1068`. Dados de produção [nao verificado].
+- **#20798:** chega ao degrau **célula acusadora**, `furo`, e retorna `True` em `app/chamados/juizes.py:1440`–`1441`, apesar do carimbo `sem_turno_aberto`. C20=False por **Resolver dia**, log 769000, usuário 653, em 26/10, depois de `fechado_em` de 16/09; comparação em `app/chamados/juizes.py:1292`, inversão em `app/chamados/juizes.py:1079`. Dados de produção [nao verificado].
+- **#47879:** retorna no degrau **resposta preenchida, sem decisão administrativa atual, concordância não comprovada**: `concorda=None` faz `is not True` retornar `True` em `app/chamados/juizes.py:1407`–`1419`. C20=False por **Resolver dia**, logs 747627 e 933557, usuário 657, em 22/10 e 11/11, posteriores ao fechamento; `app/chamados/juizes.py:1292`, `app/chamados/juizes.py:1079`. Dados de produção [nao verificado].
+- **#47881:** mesmo degrau da resposta: `admin_decidiu=False`, `concorda=None`, retorno `True` em `app/chamados/juizes.py:1415`–`1419`. C20=False por **Resolver dia**, logs 747617 e 747622, usuário 657, em 22/10, posteriores ao fechamento; `app/chamados/juizes.py:1292`, `app/chamados/juizes.py:1079`. Dados de produção [nao verificado].
+- **#47884:** mesmo degrau da resposta, antes de examinar o veredito `discordante`: `admin_decidiu=False`, `concorda=None`, retorno `True` em `app/chamados/juizes.py:1415`–`1419`. C20=False por **Resolver dia**, logs 747607 e 747612, usuário 657, em 22/10, posteriores ao fechamento; `app/chamados/juizes.py:1292`, `app/chamados/juizes.py:1079`. Dados de produção [nao verificado].
+- **Resolver dia** corresponde a `veredito_celula` em `app/chamados/juizes.py:1088`; o filtro exige usuário preenchido e diferente do sistema em `app/chamados/juizes.py:1253`–`1254`. O dado fornecido mostra zero ocorrências de cobrar e desarquivar nas quatro perguntas [nao verificado].
 
 ## 12/11 17:37 · sessao d45010bd76f3 · E3-LEITORES · censo · origem=Code
 
@@ -1396,40 +1435,4 @@ O quadro identifica as portas e consumidores discriminados nesta auditoria; **ce
 - **L-073, L-124, L-115 e L-113:** conformidade geral **[nao verificado]**; esta leitura não certifica teto temporal, horizonte, pareamento e cálculo/folha por ausência de alteração nesses mecanismos. (`app/docs/LEIS.md:100`, `:145`, `:151`, `:153`.)
 - **E2-EMISSORES-COMPLEMENTO, LEI-TRANCA-E2-JUIZ e DOIS-AGENTES:** nenhuma violação adicional demonstrada nesta leitura; atendimento integral **[nao verificado]**. (`app/docs/CORTES.md:360`, `:427`, `:70`, `:259`.)
 
-## 12/11 16:50 · sessao 151f9586a29f · - · - · origem=Ronald (tmux)
-
-Censo ATA no perímetro literal conferido: **12 chaves de topo, 95 operações R/W, 27 arquivos**; excluindo `management`, **86 operações em 23 arquivos**. Unidade: operação AST com chave literal, incluindo escrita em construtor e em cópia apenas em memória; excluídos cópia integral `*`, chaves dinâmicas, aninhadas e lookup ORM. [não verificado: estatística reproduzida em Python em memória, sem arquivo de resultado]
-
-| Chave | R | W | Tipo produzido | Escritor |
-|---|---:|---:|---|---|
-| `tipo_dia` | 5 | 1 | string ou `None` | `app/ponto/services/cartorio.py:738:ata_do_dia` |
-| `lampadas` | 40 | 3 | lista de dict | `app/ponto/services/cartorio.py:738:ata_do_dia`; `app/ponto/services/cartorio.py:917:_ata_ate_o_teto`; `app/escala/utils.py:1892:montar_grade_prevista_periodo_por_turno` |
-| `minutos_previstos` | 1 | 1 | int | `app/ponto/services/cartorio.py:739:ata_do_dia` |
-| `minutos_realizados` | 3 | 1 | int | `app/ponto/services/cartorio.py:740:ata_do_dia` |
-| `sem_ancora` | 1 | 1 | bool | `app/ponto/services/cartorio.py:741:ata_do_dia` |
-| `n_orfas` | 4 | 1 | int | `app/ponto/services/cartorio.py:742:ata_do_dia` |
-| `orfas` | 10 | 2 | lista de strings HH:MM | `app/ponto/services/cartorio.py:745:ata_do_dia`; `app/escala/utils.py:1895:montar_grade_prevista_periodo_por_turno`; formatação em `app/escala/utils.py:1832` |
-| `n_missing` | 3 | 3 | int | `app/ponto/services/cartorio.py:746:ata_do_dia`; `app/ponto/services/cartorio.py:812:dispensar_por_ausencia`; `app/ponto/services/cartorio.py:917:_ata_ate_o_teto` |
-| `n_celulas` | 4 | 1 | int | `app/ponto/services/cartorio.py:762:ata_do_dia` |
-| `cobertura_parcial` | 3 | 1 | bool, `True` quando presente | `app/ponto/services/cartorio.py:767:ata_do_dia` |
-| `periodo_parcial` | 3 | 1 | enum string: `sem_periodo`, `dentro`, `fora`, `nao_sei` | `app/ponto/services/cartorio.py:771:ata_do_dia`; origem `app/ponto/turnos.py:2618` |
-| `precedencia` | 1 | 1 | dict | `app/ponto/portas/celula.py:1084:carimbar_precedencia`; conteúdo em `app/ponto/services/cartorio.py:2000` |
-
-Os dois escritores de `app/escala/utils.py` são cópia em memória: a cópia do objeto está em `app/escala/utils.py:1886`; os demais caminhos de persistência passam pela porta que atribui `cel.ata` em `app/ponto/portas/celula.py:1006` e `app/ponto/portas/celula.py:1033`.
-
-`lampadas` contém `tipo`, `hora`, `acesa`, `luz`, `tipo_real`, mais opcionais `isencao`, `dispensada`, `pendente`: construção em `app/ponto/services/cartorio.py:702`, `app/ponto/services/cartorio.py:720`; opcionais em `app/ponto/services/cartorio.py:591`, `app/ponto/services/cartorio.py:596`, `app/ponto/services/cartorio.py:915`. `luz` guarda HH:MM ou `None`; `hora` é marco previsto ou rótulo posicional `·I#`. `app/ponto/services/cartorio.py:703`; `app/ponto/juiz_batida.py:193`
-
-Comparações de hora sem data comprovadas:
-
-- `orfas`: ordenação e distância de minutos em `app/ponto/services/cluster_espurio.py:34` e `app/ponto/services/cluster_espurio.py:35`; pertinência de HH:MM em `app/ponto/services/vigia_pareador_celula.py:110` e `app/ponto/services/vigia_pareador_celula.py:111`.
-- `lampadas.hora`: igualdade com hora pedida em `app/ponto/services/lastro.py:90`; igualdade entre marcos ATA/DNA em `app/ponto/juiz_batida.py:230`; comparação com DNA em `app/ponto/services/cartorio.py:848`.
-- `lampadas.luz`: resposta `data_hora` perde a data em `app/chamados/juizes.py:1349`; depois compara minutos circulares com a luz em `app/chamados/juizes.py:1358` e `app/chamados/juizes.py:1362`.
-- A reconstrução atual da data da luz está em `app/ponto/juiz_batida.py:97` e `app/ponto/juiz_batida.py:215`.
-
-Fora do perímetro literal informado, há leitor ORM de `lampadas.pendente` em `app/chamados/models.py:3356`, projeção `values('ata')` em `app/chamados/reconciliador.py:879` e cópia dinâmica da chave `precedencia` por laço em `app/ponto/portas/celula.py:997`, cuja declaração está em `app/ponto/portas/celula.py:104`.
-
-A diferença aritmética em relação às 72 do aval é **−60 chaves de topo**; a razão da divergência é [não verificado]. A lista completa de leitores por chave e declarações de parâmetros/retornos foi enviada nas mensagens anteriores. [não verificado: registro das mensagens]
-
-Os tipos acima são os produzidos pelo código; o conteúdo efetivamente presente no banco é [não verificado]. A porta aceita `dict(ata)` em `app/ponto/portas/celula.py:995`, e o campo é JSON sem esquema declarado em `app/escala/models.py:1778`.
-
-_4369 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4370 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
