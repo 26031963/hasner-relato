@@ -1,7 +1,192 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 18:34** · publicado em **12/11/2026 18:38** (UTC-3)
+> Ultima resposta processada: **12/11/2026 18:52** · publicado em **12/11/2026 18:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 18:52 · sessao 02c4b526a44e · TIPO-ITEM1-DIMENSAO · verificador · origem=Code
+
+**1. PROCEDENTE — cura parcial; o “PRONTO” do aval ainda não está demonstrado.** Os contraexemplos exatos de acesso anterior à reatribuição e de contaminação dos dois sítios reais foram corrigidos, mas permanecem perdas, proveniências falsas e mutantes sobreviventes. (`bin/leitores_de_chave.py:318`, `bin/leitores_de_chave.py:351`, `bin/tests/test_leitores_de_chave.sh:204`)
+
+Executei reproduções com ASTs e mutantes somente em memória, usando `python3 -B`. O selo integral, que cria e remove temporários, **não foi executado**. Identidade Git do commit e comportamento em produção: **[não verificado]**. (`bin/tests/test_leitores_de_chave.sh:33`, `bin/tests/test_leitores_de_chave.sh:35`, `bin/tests/test_leitores_de_chave.sh:41`)
+
+**2. PROCEDENTE — destino de cada achado do preverif v2.**
+
+| Achado | Resultado |
+|---|---|
+| Semente de laço com prioridade e escopo inteiro | **Curado nos exemplos exatos; parcial no geral.** A semente de laço agora soma ao alias e exige pertencimento ao corpo/comprehension. Na cópia, desapareceram as contaminações em materialização e diagnóstico, preservando `lampadas.[].luz`. Persistem reatribuição interna, sombreamento e laços aninhados, detalhados abaixo. (`bin/leitores_de_chave.py:239`, `bin/leitores_de_chave.py:351`; `app/chamados/services/materializacao.py:177`; `app/ponto/services/diagnostico_escala.py:154`) |
+| Reatribuição posterior apaga acesso válido anterior | **Curado no caso linear exato:** `a=c.ata; a["k"]; a={}` preserva `k` e registra lacuna. Não resolve fluxo de ramos nem todos os ciclos de aliases. (`bin/leitores_de_chave.py:331`, `bin/leitores_de_chave.py:335`, `bin/leitores_de_chave.py:337`) |
+| RETURNS aceita `return 42` / `return None` | **Curado quando são os únicos retornos reconhecíveis.** Ambos retiram a função de `RET_EF` e geram lacuna. Retornos mistos, definições duplicadas e ciclos ainda permitem proveniência indevida. (`bin/leitores_de_chave.py:228`, `bin/leitores_de_chave.py:708`, `bin/leitores_de_chave.py:712`) |
+| Falta mutante de RETURNS | **Curada a ausência; cobertura parcial.** k existe e exige a lacuna após trocar os retornos por `42`, mas não exige que chamadas deixem de receber proveniência. (`bin/tests/test_leitores_de_chave.sh:91`, `bin/tests/test_leitores_de_chave.sh:101`) |
+| “Catraca” no selo | **Curado literalmente:** o selo apresenta dimensão e cota inferior. Ainda imprime `acessos_crus_ata = N` em a, preservando o nome associado à antiga catraca. (`bin/tests/test_leitores_de_chave.sh:4`, `bin/tests/test_leitores_de_chave.sh:60`, `bin/tests/test_leitores_de_chave.sh:247`) |
+
+**3. PROCEDENTE — posição do valor não representa execução nem conclusão da atribuição.**
+
+Os dois exemplos abaixo foram reproduzidos: o primeiro perde `k` apesar de o ramo não executar; o segundo atribui `ys.k`, sem lacuna, embora o ramo escolhido use `xs`. A lacuna depende de misturar proveniência vazia e não vazia; dois caminhos JSON diferentes não a acionam. (`bin/leitores_de_chave.py:331`, `bin/leitores_de_chave.py:335`, `bin/leitores_de_chave.py:338`)
+
+```python
+def perda(c):
+    a = c.ata
+    if False:
+        a = {}
+    a["k"]
+
+def caminho_errado(c):
+    if True:
+        a = c.ata["xs"]
+    else:
+        a = c.ata["ys"]
+    a["k"]
+```
+
+Há também erro sem ramo: cada componente da tupla recebe a posição final do respectivo valor, antes de Python concluir toda a avaliação do lado direito. Neste exemplo, a ferramenta conta a leitura como de `c.ata`, mas Python ainda lê o dicionário anterior. (`bin/leitores_de_chave.py:274`, `bin/leitores_de_chave.py:331`, `bin/leitores_de_chave.py:337`)
+
+```python
+def atribuicao(c):
+    a = {"k": 0}
+    a, b = c.ata, a["k"]
+```
+
+**4. PROCEDENTE — `try`, `while`, `with`, `global/nonlocal` e `AugAssign` continuam fora da resolução correta.** Nem todos são defeitos introduzidos nesta obra: o novo resolvedor continua indexando somente atribuições específicas e alvos simples de `for`; não passou a interpretar os demais bindings. (`bin/leitores_de_chave.py:159`, `bin/leitores_de_chave.py:174`, `bin/leitores_de_chave.py:318`)
+
+- **`try`:** uma atribuição textualmente anterior pode ser inalcançável. A reprodução abaixo perde `k` e emite apenas lacunas de alias. (`bin/leitores_de_chave.py:337`)
+- **`while`:** `a=c.ata; while False: a={}` seguido de `a["k"]` perde `k`. Na direção inversa, a atribuição ao final do corpo não determina o binding da próxima volta. (`bin/leitores_de_chave.py:331`, `bin/leitores_de_chave.py:338`)
+- **`with`:** `optional_vars` não entra no ambiente; o exemplo abaixo atribui indevidamente `k` à ata, sem lacuna. (`bin/leitores_de_chave.py:159`, `bin/leitores_de_chave.py:174`)
+- **`global/nonlocal`:** a consulta usa somente `env[s]`, sem seguir essas declarações. Um alias da ata no módulo ou na função externa pode desaparecer no consumidor, sem lacuna. (`bin/leitores_de_chave.py:254`, `bin/leitores_de_chave.py:332`)
+- **`AugAssign`:** há tratamento de papéis para subscripts, mas `a |= {"k":1}` não é indexado nem emitido como escrita; com `a=c.ata`, essa é mutação real do dicionário. (`bin/leitores_de_chave.py:160`, `bin/leitores_de_chave.py:511`, `bin/leitores_de_chave.py:641`)
+
+```python
+def tentativa(c):
+    a = c.ata
+    try:
+        raise ValueError()
+        a = {}
+    except ValueError:
+        pass
+    a["k"]
+
+def contexto(c, cm):
+    a = c.ata
+    with cm() as a:  # suponha __enter__ devolvendo {"k": 0}
+        a["k"]
+```
+
+**5. PROCEDENTE — a sentinela de `For` corrige um caso e cria perdas; a semente corporal ainda contamina.**
+
+A sentinela é instalada somente para alvo `Name`, na posição do iterável, independentemente de haver iteração. A semente, por sua vez, vale em qualquer descendente do corpo, mesmo após outro binding do mesmo nome. (`bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:180`, `bin/leitores_de_chave.py:252`, `bin/leitores_de_chave.py:351`)
+
+| Contraexemplo reproduzido | Erro observado |
+|---|---|
+| `a=c.ata; for a in []: pass`, seguido de `a["k"]` | Perde `k`, embora o laço vazio preserve `a` em Python; aparece lacuna de alias. (`bin/leitores_de_chave.py:183`, `bin/leitores_de_chave.py:338`) |
+| `for a in c.ata["xs"]: pass`, com `a["k"]` no `else` | Perde `xs.[].k` **sem lacuna**, inclusive quando `xs` contém um dicionário e o laço termina normalmente. O `else` está fora da região semeada. (`bin/leitores_de_chave.py:252`, `bin/leitores_de_chave.py:335`) |
+| Laço externo sobre `xs`, laço interno vazio reutilizando `a`, depois `a["k"]` | A semente externa sobrevive à sentinela interna. Se o laço interno receber outro dicionário, também permanece a atribuição indevida a `xs.[].k`. (`bin/leitores_de_chave.py:252`, `bin/leitores_de_chave.py:354`) |
+| Alvo `(a,b)` após `a=c.ata` | Não recebe a sentinela; o alias anterior pode continuar valendo dentro e depois do laço, embora Python tenha religado `a`. (`bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:281`) |
+
+Este contraexemplo ainda conta `xs.[].k` sem lacuna: a reatribuição não elimina a semente corporal. (`bin/leitores_de_chave.py:351`)
+
+```python
+def reatribuicao_no_corpo(c):
+    for a in c.ata["xs"]:
+        a = {}
+        a["k"]
+```
+
+Lambda dentro do corpo também continua contaminável: `for x in c.ata["xs"]:` seguido de `f=lambda x: x["k"]` atribui `xs.[].k`, apesar do parâmetro próprio da lambda. O indexador não cria escopo para lambda. (`bin/leitores_de_chave.py:260`, `bin/leitores_de_chave.py:252`)
+
+**6. PROCEDENTE — a regra de escrita em alvo `Name` perde escrita real e ainda conta rebinding como escrita.**
+
+O exemplo abaixo termina atribuindo `{"k":1}` a `c.ata`, mas a ferramenta não emite o escritor de `k`. Remover somente o novo filtro de `Name`, em memória, recupera esse evento. A perda combina o filtro com o limite de um salto de `write_dict`. (`bin/leitores_de_chave.py:445`, `bin/leitores_de_chave.py:652`)
+
+```python
+def escrita_perdida(c):
+    a = c.ata
+    a = {"k": 1}
+    b = a
+    d = b
+    c.ata = d
+```
+
+Na direção contrária, `a=c.ata; a=dict(a,k=1)` emite `k` como ESCRITOR, embora apenas construa uma cópia e religue `a`, sem modificar `c.ata`. Interseção de caminhos não prova identidade do objeto nem destino da cópia. (`bin/leitores_de_chave.py:393`, `bin/leitores_de_chave.py:475`, `bin/leitores_de_chave.py:653`)
+
+Sementes declaradas também mantêm o problema: numa função declarada com parâmetro `ata`, `ata={"k":1}` é contado como escrita, e acessos posteriores seguem recebendo raiz JSON, sem lacuna de reatribuição. (`bin/leitores_de_chave.py:156`, `bin/leitores_de_chave.py:349`, `bin/leitores_de_chave.py:652`)
+
+**Limite da evidência:** a comparação da árvore desta cópia com o mutante que remove somente esse filtro não encontrou eventos adicionais. Portanto, a regressão está demonstrada pelo contraexemplo sintético; ocorrência concreta dessa perda na aplicação atual: **[não verificado]**. (`bin/leitores_de_chave.py:652`)
+
+**7. PROCEDENTE — RETURNS: encadeamento direto funciona; duplicação, ciclos e retornos mistos não.**
+
+Nas reproduções abaixo, `f`/`g` foram declaradas no mapa RETURNS do módulo sintético. (`bin/leitores_de_chave.py:83`, `bin/leitores_de_chave.py:693`)
+
+| Situação | Resultado |
+|---|---|
+| `f(): return g()`; `g(): return 42` | **Curado:** caem `g` e depois `f`, com duas lacunas; chamadas deixam de semear. (`bin/leitores_de_chave.py:700`, `bin/leitores_de_chave.py:712`) |
+| `def f(): return {}` e depois `def f(): return 42` | **Furo:** `defs` guarda a última definição, mas os nós das duas são acumulados no mesmo escopo. O retorno antigo mantém `f` efetiva, sem lacuna. (`bin/leitores_de_chave.py:256`, `bin/leitores_de_chave.py:268`, `bin/leitores_de_chave.py:231`) |
+| `f(): return g()`; `g(): return f()` | **Furo:** ambas permanecem efetivas sem origem JSON independente. O ponto fixo começa assumindo todas válidas e o ciclo se sustenta. (`bin/leitores_de_chave.py:397`, `bin/leitores_de_chave.py:697`) |
+| Um ramo retorna `{}`, outro retorna `42`/`None` | **Furo:** basta **algum** retorno reconhecível; a chamada que retorna escalar ainda recebe proveniência JSON. (`bin/leitores_de_chave.py:229`, `bin/leitores_de_chave.py:236`) |
+| Função declarada em arquivo de teste, retornando `None` | **Separação correta no caso reproduzido:** cai com `secao="testes"`; não aumenta as lacunas de produção da dimensão. (`bin/leitores_de_chave.py:715`, `bin/leitores_de_chave.py:726`) |
+
+Há ainda distinção de saída: `return None` produz lacuna, mas `return` sem expressão também reprova a guarda de declaração e chega a rc 2. (`bin/leitores_de_chave.py:225`, `bin/leitores_de_chave.py:688`)
+
+**8. DUVIDA — não confirmei dependência de ordem entre ata e dna.**
+
+`RET_EF` é global, mas tem entradas separadas por campo, e `_verifica_returns` reinicializa a entrada consultada. A execução em memória `ata → dna → ata` produziu os mesmos eventos e lacunas nas duas passagens de ata. Não há contraprova de contaminação entre esses campos. (`bin/leitores_de_chave.py:96`, `bin/leitores_de_chave.py:100`, `bin/leitores_de_chave.py:697`)
+
+Existe outra persistência global: `run(--sem-declaracoes)` altera permanentemente `PARAMS[field]` e `RETURNS[field]` naquele processo. Isso afeta chamadas posteriores do mesmo campo; não é defeito novo de `RET_EF`. O selo inicia um processo por chamada. (`bin/leitores_de_chave.py:799`; `bin/tests/test_leitores_de_chave.sh:41`)
+
+**9. PROCEDENTE — os três modos comunicam dimensão, mas resta promessa indevida no docstring.**
+
+| Saída normal de medição | Rótulo |
+|---|---|
+| stderr de `--contar-crus` | Contém “cota inferior”, “nem prova de completude” e o total de lacunas por tipo. (`bin/leitores_de_chave.py:46`, `bin/leitores_de_chave.py:819`) |
+| Bloco `dimensao` do JSON | `nota` contém a ressalva; `rotulo` contém os números e tipos. O valor isolado de `rotulo` não contém “cota inferior”. (`bin/leitores_de_chave.py:728`, `bin/leitores_de_chave.py:834`) |
+| Linha textual | Contém literalmente “cota inferior, nao e completude”, mais números e tipos. (`bin/leitores_de_chave.py:855`) |
+
+**Permanece falsa** a frase “O que o AST nao reconhece vai a `lacunas`, que saem SEMPRE”: `with`, `nonlocal`, `AugAssign` e `for...else` demonstram omissões sem lacuna. Além disso, erros anteriores à medição retornam sem bloco de dimensão. (`bin/leitores_de_chave.py:5`, `bin/leitores_de_chave.py:160`, `bin/leitores_de_chave.py:252`, `bin/leitores_de_chave.py:803`)
+
+`NAO_COBERTOS` não promete completude; o selo não chama mais a medida de catraca. Entretanto, os falsos positivos demonstrados impedem interpretar o número como limite inferior garantido dos **acessos reais ao JSON**: ele dimensiona eventos classificados pelo reconhecedor, sujeito também a classificação errada. (`bin/leitores_de_chave.py:49`, `bin/leitores_de_chave.py:351`, `bin/leitores_de_chave.py:724`; `bin/tests/test_leitores_de_chave.sh:4`)
+
+**10. PROCEDENTE — mordida dos casos novos é parcial.**
+
+| Caso | Mordida e sobreviventes |
+|---|---|
+| **j, materialização real** | Cobra ausência da contaminação, mas não exige testemunha positiva nesse sítio. Suprimir toda a análise desse arquivo satisfaria essa asserção: há vacuidade possível do teste negativo isolado. (`bin/tests/test_leitores_de_chave.sh:66`, `bin/tests/test_leitores_de_chave.sh:70`) |
+| **j, diagnóstico real** | Mais forte: exige ausência de `lampadas.[].entrada` **e presença** de `lampadas.[].luz`. (`bin/tests/test_leitores_de_chave.sh:67`, `bin/tests/test_leitores_de_chave.sh:71`) |
+| **j sintético** | Morde as regressões exatas da ferramenta velha. Porém o mutante novo que devolve a união de todos os bindings passou nas três asserções reproduzidas: TEM, NAO e GAP. Falta proibir, por exemplo, `k_reatrib` de um alias religado depois. **O g existente captura esse mutante global**, pela comparação exata; a sobrevivência é de j isoladamente. (`bin/tests/test_leitores_de_chave.sh:164`, `bin/tests/test_leitores_de_chave.sh:204`) |
+| **k RETURNS** | Não é vazio quanto à troca de retorno: exige ausência prévia da lacuna e pelo menos um `return 42`. Morde a ferramenta velha e o mutante “não emitir lacuna RETURNS”. (`bin/tests/test_leitores_de_chave.sh:97`, `bin/tests/test_leitores_de_chave.sh:102`) |
+| **k, retirada da proveniência** | **Não morde.** Substituir somente `RET_EF[field] -= set(caem)` por `pass` mantém exatamente K1, mas chamadas continuam semeadas. Reproduzido: a chamada mutada ainda emite uma chave fictícia. (`bin/leitores_de_chave.py:712`; `bin/tests/test_leitores_de_chave.sh:101`) |
+| **Rótulo a/h** | Mordem a ausência do novo prefixo na ferramenta velha. Não cobram a ressalva de completude; h cobra apenas “NAO exclui o acessor” e os números. (`bin/tests/test_leitores_de_chave.sh:61`, `bin/tests/test_leitores_de_chave.sh:220`) |
+| **JSON/texto** | j verifica somente as chaves do bloco, não os valores nem a ressalva; não há asserção nova do conteúdo da linha textual. (`bin/tests/test_leitores_de_chave.sh:69`, `bin/tests/test_leitores_de_chave.sh:72`, `bin/leitores_de_chave.py:855`) |
+
+Logo, “todos os casos mordem” não demonstra todas as propriedades anunciadas, especialmente “RETURNS inválido nunca semeia”. (`bin/tests/test_leitores_de_chave.sh:22`, `bin/tests/test_leitores_de_chave.sh:247`)
+
+**11. PROCEDENTE — QUEM ESCREVE e QUEM LÊ: consumidor comprovado é o selo; disjuntor lê outra coisa.**
+
+| Valor | Escritor | Leitor comprovado |
+|---|---|---|
+| stdout numérico | `run()`, `len(top)`. (`bin/leitores_de_chave.py:815`, `bin/leitores_de_chave.py:821`) | Selo: positividade real, igualdade sintética 10, zero e DNA positivo. (`bin/tests/test_leitores_de_chave.sh:58`, `bin/tests/test_leitores_de_chave.sh:178`, `bin/tests/test_leitores_de_chave.sh:220`, `bin/tests/test_leitores_de_chave.sh:228`) |
+| JSON | `run()`: eventos, resumo global, dimensão e lacunas. (`bin/leitores_de_chave.py:831`) | `_jq()` e asserções do selo. (`bin/tests/test_leitores_de_chave.sh:43`, `bin/tests/test_leitores_de_chave.sh:163`) |
+| Texto | `run()`: listagens e linha de dimensão. (`bin/leitores_de_chave.py:849`) | Selo usa sobretudo rc e diagnósticos; não confere a dimensão textual. (`bin/tests/test_leitores_de_chave.sh:84`, `bin/tests/test_leitores_de_chave.sh:106`) |
+| CENSO de brief | Autor do brief: **[não verificado]**. | `disjuntor.py` exige referências `arquivo:linha` em leitores/escritores; não consulta a ferramenta nem confronta seus números. (`bin/disjuntor.py:1543`, `bin/disjuntor.py:1565`) |
+
+A busca na cópia, inclusive arquivos ocultos, não encontrou outro consumidor nominal da ferramenta ou de `CONTA_REATRIBUIDO`; briefs efetivos, logs e leitores externos: **[não verificado]**. O consumo demonstrável está nas chamadas e extrações do selo. (`bin/tests/test_leitores_de_chave.sh:32`, `bin/tests/test_leitores_de_chave.sh:41`, `bin/tests/test_leitores_de_chave.sh:43`)
+
+O JSON conserva as chaves anteriores e acrescenta `dimensao`; não há remoção/renomeação de chave no diff fornecido. A remoção de `CONTA_REATRIBUIDO` acompanha a troca da regra de resolução, sem consumidor externo encontrado na cópia. Dependência externa dessa constante: **[não verificado]**. (`bin/leitores_de_chave.py:48`, `bin/leitores_de_chave.py:318`, `bin/leitores_de_chave.py:833`)
+
+**12. PROCEDENTE — classes de reprovação presentes, com limites.**
+
+- **Selo/RED sem mordida: presente parcialmente.** k não distingue “emitir lacuna” de “retirar proveniência”; j sintético não distingue resolução temporal de união indiscriminada, embora g capture esta última globalmente. (`bin/tests/test_leitores_de_chave.sh:101`, `bin/tests/test_leitores_de_chave.sh:164`, `bin/tests/test_leitores_de_chave.sh:204`)
+- **ESMERIL-SEMÂNTICA: presente.** `ESCRITOR` agrega mutação do JSON, construção de cópia e rebinding declarado; o filtro por interseção não separa esses significados. Já o total da dimensão e `operacoes_topo` derivam do mesmo `top`, portanto não achei duas contas diferentes para esse total. (`bin/leitores_de_chave.py:475`, `bin/leitores_de_chave.py:652`, `bin/leitores_de_chave.py:815`, `bin/leitores_de_chave.py:836`)
+- **Derivação paralela: permanece na proveniência manual de PARAMS/RETURNS**, agora filtrada por uma verificação sintática parcial. Não encontrei nova derivação paralela da quantidade entre as três saídas: compartilham `dimensao()`. Implementação da catraca no acessor e seu consumo em produção: **[não verificado]**. (`bin/leitores_de_chave.py:56`, `bin/leitores_de_chave.py:83`, `bin/leitores_de_chave.py:228`, `bin/leitores_de_chave.py:817`)
+
+## 12/11 18:52 · sessao 9c408b3bfeef · - · - · origem=Ronald (tmux)
+
+Recomendações concretas, sem alterações:
+
+- A projeção precisa transportar a contagem pelo novo acessor: hoje lê `n_orfas` diretamente e perde a quantidade do legado HH:MM sem esse campo. [escala/services/leitor_celula.py:414](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/services/leitor_celula.py:414)
+- `_celula_furada` precisa decidir pela contagem conhecida, inclusive lista HH:MM sem `n_orfas`; quantidade desconhecida continua `None`. Hoje mistura instantes com leitura direta da contagem. [chamados/juizes.py:510](/home/ronald/wt-codex-tipo-na-fonte-184856/app/chamados/juizes.py:510)
+- `furos_diarios._furos_do_dia` transforma desconhecimento em zero; deve usar a contagem e publicar `nao_medidos`. Atenção: a porta exige tuplas de quatro valores e está proibida nesta obra; preservar esse contrato e proteger dias desconhecidos contra exclusão demanda adaptação nos chamadores. [escala/services/furos_diarios.py:22](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/services/furos_diarios.py:22), [ponto/portas/celula.py:1125](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/portas/celula.py:1125), [colaboradores/services/pos_vinculo.py:82](/home/ronald/wt-codex-tipo-na-fonte-184856/app/colaboradores/services/pos_vinculo.py:82)
+- `fatos_do_status` deve conservar quantidade conhecida, publicar `nao_medidos` e produzir `tem_batida=None` quando nenhuma outra prova permite decidir presença. Qualquer campo aditivo exige parâmetro correspondente em `status_da_lavra`, pois a porta expande o dicionário com `**fatos`. [ponto/status_dia.py:184](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/status_dia.py:184), [ponto/status_dia.py:113](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/status_dia.py:113), [ponto/portas/celula.py:963](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/portas/celula.py:963)
+- `bordas_realizado` deve usar presença trivalente e contar separadamente os desconhecidos. Acrescentar `nao_medidos` em `NOMES` também o publica no command existente. [ponto/services/bordas_realizado.py:49](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/services/bordas_realizado.py:49), [ponto/services/bordas_realizado.py:80](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/services/bordas_realizado.py:80), [ponto/management/commands/bordas_realizado.py:22](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/management/commands/bordas_realizado.py:22)
+- `_score_geometria` deve carregar `nao_medidos` ao lado das quatro dimensões; score desconhecido não pode provar melhora nem geometria perfeita. Seus consumidores são `_melhora_estrita`, `escolher_retratavel` e `_par_embutido_retratavel_geometria`. [ponto/management/commands/detectar_par_relampago.py:140](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/management/commands/detectar_par_relampago.py:140), [ponto/management/commands/detectar_par_relampago.py:154](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/management/commands/detectar_par_relampago.py:154), [ponto/management/commands/detectar_par_relampago.py:244](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/management/commands/detectar_par_relampago.py:244), [ponto/management/commands/detectar_par_relampago.py:267](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/management/commands/detectar_par_relampago.py:267)
+- `classificar_causa` deve selecionar dias com órfãs pela quantidade, incluir `nao_medidos` no resultado e impedir conclusões baseadas em ausência quando essa ausência é desconhecida. O resultado é transportado integralmente ao fechamento, permitindo campo aditivo sem mudar modelo. [folha/causas.py:43](/home/ronald/wt-codex-tipo-na-fonte-184856/app/folha/causas.py:43), [folha/causas.py:93](/home/ronald/wt-codex-tipo-na-fonte-184856/app/folha/causas.py:93), [folha/causas.py:100](/home/ronald/wt-codex-tipo-na-fonte-184856/app/folha/causas.py:100), [ponto/services/fechamento.py:1080](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/services/fechamento.py:1080)
 
 ## 12/11 18:34 · sessao e230e00fb7f6 · TIPO-NA-FONTE · construtor · origem=Code
 
@@ -978,70 +1163,4 @@ Casos que **não** devem entrar como escritor/leitor do modelo diretamente:
 
 Pontos de cautela de tipo: as funções auxiliares acima recebem parâmetros sem anotação; a evidência é o encadeamento de chamadas e querysets indicado. As funções `aguarda_o_colaborador`, `fila_validar_classificada(qs=...)`, filtros de template e helpers públicos não verificam em runtime que todo argumento é PD; afirmar isso para qualquer chamador externo seria `[nao verificado]`. Nenhum homônimo de outro modelo apareceu neste recorte da varredura AST; a exceção concreta é o `SimpleNamespace` em `fio.py:1585`.
 
-## 12/11 17:31 · sessao 144396724f9c · - · - · origem=Ronald (tmux)
-
-Censo AST de `.py` fora de `app/chamados`, excluindo diretórios `tests/` e `migrations/`; templates por expressões ativas, excluindo comentários. `E = respondida_em`; `T = resposta_colab`.
-
-| arquivo:linha:função | papel | forma/campo | prova do modelo |
-|---|---|---|---|
-| `bin/censo_folha.py:28,29:<módulo>` | LEITOR | filtros ORM `E__isnull` | `PerguntaDisputa.objects` explícito; import `:12` |
-| `app/folha/previa.py:142:_material` | LEITOR | atributo T | Chamador `:95`; mapa alimentado de `PerguntaDisputa.objects` em `:64-67` |
-| `app/ponto/supra_juiz.py:545,548:pode_executar_csf` | LEITOR | atributo E, `is not None` | Itera `d.perguntas` e `ch.perguntas_que_resolvem` em `:543-548`; relações declaradas por `PerguntaDisputa` em `app/chamados/models.py:2436-2439,3410-3415` |
-| `app/api/views.py:1159,1161:api_chamados_v2` | LEITOR | T; E duas vezes, serialização e guarda | `perguntas_por_chamado` alimentado de `consulta['pendentes'] + consulta['historico']` em `:1029-1035`; fonte `app/chamados/services/pergunta_no_app.py:49-58,70-75` |
-| `app/api/views.py:2557,2559:api_disputa_perguntas._item` | LEITOR | T; E duas vezes, serialização e guarda | `consulta_do_app` em `:2532-2535`; chamadas `_item(p)` `:2562,2572`; mesma fonte acima |
-| `app/api/views.py:2573:api_disputa_perguntas` | LEITOR | atributo E, `is not None` | `consulta['historico']`; fonte acima |
-| `app/api/views.py:2616,2633:api_disputa_responder` | LEITOR | E comparação e serialização | Objeto consultado explicitamente por `PerguntaDisputa.objects` em `:2607-2609` |
-| `app/api/views_mensageria.py:567,569,570:_item_validar` | LEITOR | T; E serialização e diferença de datas | Chamador `:540-546` usa `perguntas_respondidas_a_validar()`; origem explícita `PerguntaDisputa.objects` em `app/chamados/juizes.py:1672-1676` |
-| `app/colaboradores/services/calendario.py:474:contexto_calendario` | LEITOR | `.exclude(T='')` | `_PD = PerguntaDisputa`, import `:469`; queryset `:473` |
-| `app/colaboradores/services/ficha.py:171:ficha_do_colab` | LEITOR | atributo T | `perguntas_do_app` em `:166`; fonte explícita em `app/chamados/services/pergunta_no_app.py:49-58` |
-| `app/ponto/services/cartorio.py:1641:_julgar_colab_corpo._tem_resposta_do_colab` | LEITOR | atributo T | Chamador fornece `x.perguntas_que_resolvem.all()` em `:1645`; relação em `app/chamados/models.py:3410-3415` |
-| `app/ponto/services/dia_do_colab.py:70:dia_do_colab` | LEITOR | atributo T | `for p in PerguntaDisputa.objects.filter(...)` em `:64-65` |
-| `app/ponto/services/veredito_celula.py:197:fechar_o_fio_do_dia` | LEITOR | atributo T | `vivas` de `PerguntaDisputa.objects` em `:181-182`; iteração `:189` |
-| `app/ponto/management/commands/reconciliar_grade.py:461:Command._relavrar_orfa` | LEITOR | filtro ORM E | `PerguntaDisputa.objects.filter` em `:460-461` |
-| `bin/sombra_mascara_pessoal.py:51,54:<módulo>` | LEITOR | `.only('pk', *campos)`; `getattr(o,c)` variável T | `R.TEXTO` → `apps.get_model(app,mod)` em `:44-46`; `bin/sombra_regras_pessoais.py:85` contém `('chamados','PerguntaDisputa')` e `resposta_colab` |
-| `bin/sombra_selo_pessoal.py:77:<módulo>` | LEITOR | SQL dinâmico lê T em `coalesce` e regex | Itera `R.TEXTO` `:74-76`, tabela resolvida por `apps.get_model` `:24`; configuração `bin/sombra_regras_pessoais.py:85` |
-
-O mascarador também é **ESCRITOR fora da porta**: `setattr(o,c,novo)` em `bin/sombra_mascara_pessoal.py:57`, persistido por `bulk_update(lote,list(campos))` em `:62,64`. Ele exige banco chamado `sombra` por `assert` em `:10`; não atribuir esse escritor a produção operacional sem delimitar o universo. O código prova a escrita na cópia da sombra; execução efetiva [não verificado].
-
-Metadados, sem leitura do valor do campo: `bin/sombra_regras_pessoais.py:85` declara T; `bin/inventario_pessoal_dos_modelos.py:53-60` e `bin/sombra_selo_pessoal.py:26-29` usam essa declaração para inventariar colunas.
-
-Templates:
-
-| arquivo:linha:contexto | papel | forma/campo | prova do modelo |
-|---|---|---|---|
-| `app/templates/chamados/partials/_card_atendimento.html:94,155,384` | LEITOR | condições E | Loops sobre `chamado.perguntas_disputa` `:76,384`; fonte `app/chamados/services/fio.py:242,261,271` |
-| mesmo `:100` | LEITOR | filtro `default:T`; `E|date` | mesma origem |
-| mesmo `:108,135,148,176` | LEITOR | condições/comparações T | mesma origem |
-| mesmo `:137` | LEITOR | `default:T`, condição E, `E|date` | mesma origem |
-| mesmo `:142,177` | LEITOR | interpolação T com `default` | mesma origem |
-| mesmo `:385` | LEITOR | `default:T`, `E|date` | mesma origem |
-| `app/templates/chamados/partials/modal_fio.html:185,217` | LEITOR | condições E | Loop `:158` sobre mesma `chamado.perguntas_disputa`; fonte acima |
-| mesmo `:219,220` | LEITOR | interpolação T; filtro `E|date` | mesma origem |
-| `app/templates/chamados/partials/_pergunta_card.html:24,29,32` | LEITOR | condições E; `E|date` | Contexto explícito `{'perg': _p}` de `_PD.objects.filter` em `app/chamados/views.py:398-405` |
-| `app/templates/chamados/partials/_lote_preview.html:24` | LEITOR | interpolação `x.pergunta.T` | `views_cobrar.py:361-363` fornece `f['por_classe'][LOTE_A]`; `services/validacao.py:918-924` põe `pergunta=p` da fila `perguntas_respondidas_a_validar()`; queryset em `juizes.py:1672-1676` |
-
-Nenhum caso dessa tabela foi decidido **somente pelo nome**: todos têm origem rastreável em queryset, chamada ou relação declarada, conforme a última coluna.
-
-Delta dos templates no anexo: o wip retira as condições E das linhas HEAD `94,137,155,384`, substituindo por `resposta_enviada`; preserva a exibição E e as leituras T. No resultado projetado, E continua nas linhas wip `106,143,391`; T nas linhas `106,114,141,143,148,154,182,183,391` — linhas calculadas pelos hunks fornecidos, não por arquivo wip local. A atribuição `resposta_enviada` é outro atributo, não escrita dos dois campos censitados (`wip_1b.diff`, hunk `fio.py`, nova linha `358`).
-
-## 12/11 17:31 · sessao bc99985d1006 · - · - · origem=Ronald (tmux)
-
-- **Não há classificação global pelo nome `ata`/`dna`.** `Name` só ganha proveniência por declaração exata arquivo+função+nome, atribuição, `values_list` ou alias; qualquer `.ata`/`.dna` e `getattr(x, 'ata'/'dna')` é aceito sem comprovar a classe. (`bin/leitores_de_chave.py:127`, `bin/leitores_de_chave.py:140`, `bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:249`)
-
-- **O 95 depende das declarações.** Desligar somente `PARAMS` produz 73; desligar `PARAMS+RETURNS` produz 62 em reprodução em memória. A formação do número está em `bin/leitores_de_chave.py:627` e `bin/leitores_de_chave.py:631`; os mapas estão em `bin/leitores_de_chave.py:39` e `bin/leitores_de_chave.py:66`.
-
-- **Os 33 acessos de topo dependentes desses mapas**, agrupados por sítio, são: `app/chamados/juizes.py:438` (2); `app/escala/services/leitor_celula.py:68`, `:82`, `:91`, `:103`, `:105` (2), `:115`, `:175`, `:187`, `:190`; `app/ponto/services/cartorio.py:424`, `:426`, `:738` (2), `:739`, `:740`, `:741`, `:742`, `:745`, `:746`, `:762`, `:767`, `:771`, `:805`, `:812`, `:834`, `:839`, `:913`, `:917` (2); `app/relatorios/dia_da_frota.py:21`. As declarações correspondentes estão em `bin/leitores_de_chave.py:41` e `bin/leitores_de_chave.py:68`.
-
-- **Há furo na validação das declarações:** ela confere existência da função, sem conferir existência do nome declarado. Renomear o parâmetro `ata` e suas referências em `_orfas_da_ata`, mantendo a função, faz desaparecerem os acessos `orfas`/`n_orfas`; a contagem cai de 95 para 93 sem violar essa validação. (`bin/leitores_de_chave.py:128`, `bin/leitores_de_chave.py:541`, `app/escala/services/leitor_celula.py:180`, `app/escala/services/leitor_celula.py:187`, `app/escala/services/leitor_celula.py:190`)
-
-- **Sítios corretamente fora:** a variável chamada `ata` em `app/relatorios/furos.py:132` é mapa da grade indexado por data, consumido em `app/relatorios/furos.py:134`; `dia.get('orfas')` em `app/escala/services/furos_diarios.py:22` recebe dia da grade por `app/escala/services/furos_diarios.py:43` e `app/escala/services/furos_diarios.py:54`; outras leituras da grade ficam em `app/folha/causas.py:43`, `app/folha/causas.py:100`, `app/ponto/services/bordas_realizado.py:49`, `app/relatorios/pdf_espelho.py:477` e `app/relatorios/pdf_espelho.py:552`. `FuroDiario.orfas` é inteiro, separado do JSON da célula. (`app/escala/models.py:1883`)
-
-- **Sítios reais incluídos:** `getattr` em `app/chamados/juizes.py:966`, `app/chamados/reconciliador.py:701`, `app/ponto/services/lastro.py:89`, `:113`, `:128`, `:149`; comprehension lendo a raiz em `app/ponto/juiz_batida.py:161` e `app/relatorios/cartao_pela_celula.py:288`; desempacotamento e alias `a` em `app/ponto/services/vigia_pareador_celula.py:69`, `:73`, `:74`, `:78`. A cópia apenas em memória `_cj.ata` também conta como escrita de código. (`app/escala/utils.py:1886`, `app/escala/utils.py:1887`, `app/escala/utils.py:1895`)
-
-- **Faltas reais declaradas:** leitura ORM de `dna__marcos` em `app/escala/management/commands/celulas_contra_o_template.py:49`; filtro ORM de `ata.lampadas` em `app/chamados/models.py:3356`. A exclusão é declarada em `bin/leitores_de_chave.py:19` e `bin/leitores_de_chave.py:34`.
-
-- **Subchaves em laço comum não propagam proveniência:** `ata.get('lampadas')` é visto, mas `lamp['acesa']`, `lamp['luz']` e `lamp['dispensada']` não são ligados à ata. Isso limita censo de subchaves, embora a operação de topo já seja contada. (`app/ponto/services/cartorio.py:805`, `app/ponto/services/cartorio.py:806`, `app/ponto/services/cartorio.py:808`, `app/ponto/services/cartorio.py:809`, `app/ponto/services/cartorio.py:810`, `bin/leitores_de_chave.py:176`)
-
-- **Alias de dois saltos:** o corte é explícito em `bin/leitores_de_chave.py:224`. Exemplo real de acesso de topo perdido exclusivamente por esse corte: [não verificado]. Atribuição encadeada `a=b=c.ata` liga ambos os alvos ao mesmo valor; não constitui automaticamente dois saltos. (`bin/leitores_de_chave.py:134`, `bin/leitores_de_chave.py:138`, `bin/leitores_de_chave.py:166`)
-
-_4383 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4385 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
