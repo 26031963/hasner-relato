@@ -1,7 +1,267 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 16:53** · publicado em **12/11/2026 16:56** (UTC-3)
+> Ultima resposta processada: **12/11/2026 17:03** · publicado em **12/11/2026 17:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 17:03 · sessao 5849d664db84 · TIPO-NA-FONTE · censo · origem=Code
+
+A cópia permite confirmar **12 chaves de topo na ata** e **9 no DNA**, pelos escritores identificados; não sustenta uma enumeração de 72 chaves de topo (`app/ponto/services/cartorio.py:738`, `app/ponto/services/cartorio.py:767`, `app/ponto/portas/celula.py:1084`, `app/ponto/management/commands/gerar_celulas.py:95`, `app/ponto/management/commands/gerar_celulas.py:122`).
+
+**Identidade desta cópia com o HEAD do main: [nao verificado].** O registro local menciona o push `38605f141`, mas isso não autentica a árvore recebida (`app/docs/RELATO.md:32`).
+
+O script foi executado em memória, sem instalação. Resultados dessa execução sem artefato persistido: **[nao verificado]** para conferência externa. Abaixo estão o inventário verificável no código e o texto integral executado.
+
+Para as contagens, a unidade é **operação AST com chave literal de topo**. Incluí `management`, construtores e cópias em memória; separei testes e excluí migrations. Cópias integrais, chaves dinâmicas e subchaves aparecem separadamente no instrumento. **Não apresento esse perímetro como prova de cobertura irrestrita de Python dinâmico. [nao verificado]** [nao verificado]
+
+| Medida | Resultado no perímetro | Diferença aritmética do aval | Evidência |
+|---|---:|---:|---|
+| Chaves de topo da ata | 12 | −60 | `app/ponto/services/cartorio.py:738`, `app/ponto/services/cartorio.py:767`, `app/ponto/portas/celula.py:1084` |
+| Acessos literais de topo da ata | 95 em 27 arquivos | −79 acessos; +6 arquivos | Inventário abaixo; escritores em `app/ponto/services/cartorio.py:738` e leitores em `app/escala/services/leitor_celula.py:68` |
+| Chaves de topo do DNA | 9 | Aval sem número | `app/ponto/management/commands/gerar_celulas.py:95`, `app/ponto/management/commands/gerar_celulas.py:122` |
+| Acessos literais de topo do DNA | 41 em 19 arquivos | Aval sem número | Inventário abaixo, incluindo restauração em `app/ponto/portas/celula.py:788` |
+| `strftime('%H:%M')` em `app/` | 200 chamadas | +39 | Relação integral em C |
+| Mesmo formato fora de `app/` | +1 chamada | Total 201; +40 | `bin/disjuntor.py:2266` |
+
+A equivalência entre esses recortes e os greps do aval é **[nao verificado]**. Portanto, **95 não substitui silenciosamente a catraca 174**. Há operações adicionais de cópia e chave variável na lavra, além de consulta ORM ao JSON (`app/ponto/portas/celula.py:995`, `app/ponto/portas/celula.py:998`, `app/ponto/portas/celula.py:999`, `app/chamados/models.py:3356`).
+
+Os tipos abaixo são **tipos produzidos pelos caminhos de código**. O conteúdo efetivamente existente em produção é **[nao verificado]**: os campos são JSON sem esquema declarado, e a porta aceita `dict(ata)` (`app/escala/models.py:1697`, `app/escala/models.py:1778`, `app/ponto/portas/celula.py:995`).
+
+**B — Ata.** Nesta tabela, R/W contam operações literais de topo; os locais completos dos leitores vêm logo depois.
+
+| Chave | R/W | Tipo produzido | Escritores `arquivo:linha:função` |
+|---|---:|---|---|
+| `tipo_dia` | 5/1 | string ou null | `app/ponto/services/cartorio.py:738:ata_do_dia` |
+| `lampadas` | 40/3 | lista de dict | `app/ponto/services/cartorio.py:738:ata_do_dia`; `app/ponto/services/cartorio.py:917:_ata_ate_o_teto`; `app/escala/utils.py:1892:montar_grade_prevista_periodo_por_turno` |
+| `minutos_previstos` | 1/1 | int | `app/ponto/services/cartorio.py:739:ata_do_dia` |
+| `minutos_realizados` | 3/1 | int | `app/ponto/services/cartorio.py:740:ata_do_dia` |
+| `sem_ancora` | 1/1 | bool | `app/ponto/services/cartorio.py:741:ata_do_dia` |
+| `n_orfas` | 4/1 | int | `app/ponto/services/cartorio.py:742:ata_do_dia` |
+| `orfas` | 10/2 | lista de strings HH:MM, sem data | `app/ponto/services/cartorio.py:745:ata_do_dia`; `app/escala/utils.py:1895:montar_grade_prevista_periodo_por_turno`; formatação em `app/escala/utils.py:1832` |
+| `n_missing` | 3/3 | int | `app/ponto/services/cartorio.py:746:ata_do_dia`; `app/ponto/services/cartorio.py:812:dispensar_por_ausencia`; `app/ponto/services/cartorio.py:917:_ata_ate_o_teto` |
+| `n_celulas` | 4/1 | int | `app/ponto/services/cartorio.py:762:ata_do_dia` |
+| `cobertura_parcial` | 3/1 | bool; True quando presente | `app/ponto/services/cartorio.py:767:ata_do_dia` |
+| `periodo_parcial` | 3/1 | string: `sem_periodo`, `dentro`, `fora`, `nao_sei` | `app/ponto/services/cartorio.py:771:ata_do_dia`; vocabulário em `app/ponto/turnos.py:2618` |
+| `precedencia` | 1/1 | dict | `app/ponto/portas/celula.py:1084:carimbar_precedencia`; conteúdo em `app/ponto/services/cartorio.py:2000:aplicar_precedencia_na_celula` |
+
+As duas escritas de `escala/utils.py` são em cópia em memória; a cópia do objeto ocorre antes delas (`app/escala/utils.py:1886`). A atribuição da ata na lavra ocorre na porta (`app/ponto/portas/celula.py:1006`, `app/ponto/portas/celula.py:1033`).
+
+Leitores, preservando multiplicidades na mesma linha:
+
+```text
+tipo_dia:
+ app/chamados/juizes.py:438:ausencia_parcial_cobra_o_resto
+ app/chamados/juizes.py:456:dia_sem_trabalho [2 operações]
+ app/ponto/management/commands/tripwire_celulas.py:342:medir_ata_fantasma
+ app/escala/services/leitor_celula.py:397:grade_da_celula
+
+minutos_previstos:
+ app/escala/services/leitor_celula.py:399:grade_da_celula
+
+minutos_realizados:
+ app/folha/validacao_pdf.py:48:referencia_do_espelho
+ app/escala/services/leitor_celula.py:386:grade_da_celula
+ app/escala/services/leitor_celula.py:423:grade_da_celula
+
+sem_ancora:
+ app/escala/services/leitor_celula.py:421:grade_da_celula
+
+n_orfas:
+ app/chamados/juizes.py:510:_celula_furada
+ app/ponto/services/cartorio.py:839:insumos_da_ata
+ app/ponto/services/vigia_pareador_celula.py:74:censo
+ app/escala/services/leitor_celula.py:190:_orfas_da_ata
+
+orfas:
+ app/ponto/juiz_batida.py:161:periodos_do_dia
+ app/relatorios/cartao_pela_celula.py:288:orfas_e_isencao_da_ata
+ app/chamados/juizes.py:510:_celula_furada
+ app/ponto/services/cluster_espurio.py:29:_leitura_da_celula
+ app/ponto/services/cluster_espurio.py:31:_leitura_da_celula
+ app/ponto/services/vigia_pareador_celula.py:74:censo
+ app/ponto/services/esmeril_espelho.py:125:assinaturas_do_colab
+ app/ponto/management/commands/tripwire_celulas.py:264:medir_sobra_com_tipo_trocado
+ app/escala/services/leitor_celula.py:187:_orfas_da_ata
+ app/chamados/services/materializacao.py:181:_plantio_preenche_furo_na_data
+
+n_missing:
+ app/escala/services/leitor_celula.py:105:n_ok_lavrado
+ app/escala/services/leitor_celula.py:175:_celulas_da_ata
+ app/escala/services/leitor_celula.py:385:grade_da_celula
+
+n_celulas:
+ app/ponto/management/commands/tripwire_celulas.py:344:medir_ata_fantasma
+ app/escala/services/leitor_celula.py:91:n_ok_lavrado
+ app/escala/services/leitor_celula.py:105:n_ok_lavrado
+ app/escala/services/leitor_celula.py:385:grade_da_celula
+
+cobertura_parcial:
+ app/chamados/juizes.py:438:ausencia_parcial_cobra_o_resto
+ app/ponto/services/cartorio.py:424:parcial_so_lista
+ app/escala/services/leitor_celula.py:433:grade_da_celula
+
+periodo_parcial:
+ app/ponto/services/cartorio.py:426:parcial_so_lista
+ app/escala/services/leitor_celula.py:435:grade_da_celula
+ app/escala/services/leitor_celula.py:436:grade_da_celula
+
+precedencia:
+ app/ponto/portas/celula.py:1081:carimbar_precedencia
+
+lampadas:
+ app/folha/previa.py:84:montar_previa
+ app/ponto/juiz_batida.py:160:periodos_do_dia
+ app/ponto/worklist.py:22:linha_da_ata
+ app/relatorios/cartao_pela_celula.py:289:orfas_e_isencao_da_ata
+ app/relatorios/dia_da_frota.py:21:_faltando
+ app/chamados/reconciliador.py:701:_ctx_c2
+ app/chamados/juizes.py:505:_celula_furada
+ app/chamados/juizes.py:508:_celula_furada
+ app/chamados/juizes.py:966:fato_do_marco_no_espelho
+ app/chamados/juizes.py:1344:_resposta_concorda_com_a_luz
+ app/pautas/services.py:432:contexto_do_dia_texto
+ app/folha/services/sem_furo.py:22:dias_com_furo
+ app/colaboradores/services/feriado_do_posto.py:97:presenca_em_feriado
+ app/ponto/services/lastro.py:89:_lampada
+ app/ponto/services/lastro.py:113:marcos_inexistentes
+ app/ponto/services/lastro.py:128:marcos_apagados
+ app/ponto/services/lastro.py:149:marcos_pendentes
+ app/ponto/services/vigia_entrada.py:80:por_dia_da_semana
+ app/ponto/services/vigia_entrada.py:123:do_dia
+ app/ponto/services/cartorio.py:451:_marco_venceu_apagado
+ app/ponto/services/cartorio.py:805:dispensar_por_ausencia
+ app/ponto/services/cartorio.py:834:insumos_da_ata
+ app/ponto/services/cartorio.py:913:_ata_ate_o_teto
+ app/ponto/services/dia_do_colab.py:30:dia_do_colab
+ app/ponto/services/cluster_espurio.py:29:_leitura_da_celula
+ app/ponto/services/cluster_espurio.py:32:_leitura_da_celula
+ app/ponto/services/vigia_pareador_celula.py:78:censo
+ app/ponto/services/esmeril_espelho.py:129:assinaturas_do_colab
+ app/ponto/services/diagnostico_escala.py:156:diagnostico_escala
+ app/ponto/management/commands/tripwire_celulas.py:264:medir_sobra_com_tipo_trocado
+ app/ponto/management/commands/tripwire_celulas.py:342:medir_ata_fantasma
+ app/ponto/management/commands/curar_residuo_bug115.py:45:classificar
+ app/ponto/management/commands/curar_residuo_bug115.py:145:_lavrar
+ app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:61:classificar
+ app/ponto/management/commands/detectar_intervalo_ausente.py:64:furos_intervalo
+ app/escala/services/leitor_celula.py:68:_n_dispensadas
+ app/escala/services/leitor_celula.py:82:_justificado_lavrado
+ app/escala/services/leitor_celula.py:103:n_ok_lavrado
+ app/escala/services/leitor_celula.py:115:_celulas_da_ata
+ app/chamados/services/materializacao.py:173:_plantio_preenche_furo_na_data
+```
+
+As subchaves declaradas de `lampadas[]` são `tipo`, `hora`, `acesa`, `luz`, `tipo_real`, `isencao`, `dispensada`, `pendente`; `hora` é previsão ou rótulo posicional, enquanto `luz` guarda HH:MM realizado ou null (`app/ponto/services/cartorio.py:675`, `app/ponto/services/cartorio.py:702`, `app/ponto/services/cartorio.py:720`, `app/ponto/services/cartorio.py:591`, `app/ponto/services/cartorio.py:596`, `app/ponto/services/cartorio.py:915`, `app/ponto/juiz_batida.py:193`).
+
+`precedencia` recebe `tipo_do_dia`, `faixa`, `rotulo`, `suprimidos`, `era_dia_previsto`, `texto`; os valores vêm do juiz de precedência, e `suprimidos` é lista de strings (`app/ponto/services/cartorio.py:2000`, `app/ponto/precedencia.py:391`).
+
+**Comparação de hora sem data: sim para `orfas` e para `lampadas.hora/luz`.** Há ordenação/distância de órfãs, pertinência de batida por HH:MM, igualdade de marco previsto e comparação da resposta com a luz (`app/ponto/services/cluster_espurio.py:34`, `app/ponto/services/cluster_espurio.py:35`, `app/ponto/services/vigia_pareador_celula.py:110`, `app/ponto/services/vigia_pareador_celula.py:111`, `app/ponto/services/lastro.py:90`, `app/ponto/juiz_batida.py:230`, `app/chamados/juizes.py:1349`, `app/chamados/juizes.py:1358`, `app/chamados/juizes.py:1362`).
+
+Há ainda leitor ORM de `lampadas.pendente`, projeção da ata inteira e preservação dinâmica de `precedencia`; não os converti em falsos acessos literais adicionais (`app/chamados/models.py:3356`, `app/chamados/reconciliador.py:879`, `app/ponto/portas/celula.py:104`, `app/ponto/portas/celula.py:997`).
+
+**B — DNA.** A restauração está incluída: `alvo` é atribuído ao DNA antes das duas leituras por chave (`app/ponto/portas/celula.py:786`, `app/ponto/portas/celula.py:788`, `app/ponto/portas/celula.py:789`).
+
+| Chave | R/W | Tipo produzido | Escritor | Leitor |
+|---|---:|---|---|---|
+| `dna_versao` | 1/1 | int, 2 | `app/ponto/management/commands/gerar_celulas.py:96:montar_dna`; constante em `app/ponto/management/commands/gerar_celulas.py:16` | `app/ponto/services/cartorio.py:484:impressao_insumos` |
+| `vinculo_id` | 1/1 | ID numérico | `app/ponto/management/commands/gerar_celulas.py:97:montar_dna` | `app/ponto/portas/celula.py:789:reverter_regeneracao_dia` |
+| `tipo_escala_id` | 0/1 | ID numérico | `app/ponto/management/commands/gerar_celulas.py:98:montar_dna` | Sem leitura literal individual no perímetro; blob comparado em `app/ponto/portas/celula.py:263` |
+| `tipo_ciclo` | 1/1 | string | `app/ponto/management/commands/gerar_celulas.py:99:montar_dna`; campo em `app/escala/models.py:117` | `app/ponto/services/vigia_entrada.py:129:do_dia` |
+| `marcos` | 27/1 | dict ou null | `app/ponto/management/commands/gerar_celulas.py:100:montar_dna` | Relação abaixo |
+| `minutos_jornada` | 0/1 | int | `app/ponto/management/commands/gerar_celulas.py:101:montar_dna`; campo em `app/escala/models.py:49` | Sem leitura literal individual no perímetro; blob comparado em `app/ponto/portas/celula.py:263` |
+| `intervalo_livre` | 0/1 | bool | `app/ponto/management/commands/gerar_celulas.py:102:montar_dna` | Sem leitura literal individual no perímetro; blob comparado em `app/ponto/portas/celula.py:263` |
+| `lampadas` | 1/1 | lista de dict ou null | `app/ponto/management/commands/gerar_celulas.py:103:montar_dna` | `app/escala/utils.py:153:lampadas_de_dna` |
+| `extra_declarada` | 1/1 | dict `{antes:int,depois:int}` | `app/ponto/management/commands/gerar_celulas.py:122:montar_dna` | `app/escala/models.py:1235:EscalaColaborador.extra_declarada_do_dia` |
+
+Leitores de `marcos`:
+
+```text
+app/chamados/juizes.py:948:fato_do_marco_no_espelho
+app/chamados/juizes.py:1338:_resposta_concorda_com_a_luz
+app/chamados/services/adesao.py:36:universo_adesao
+app/escala/models.py:1124:EscalaColaborador.marcos_do_dia
+app/escala/models.py:1189:EscalaColaborador.pausas_do_dia
+app/escala/utils.py:53:pausas_dna_periodo
+app/escala/utils.py:104:marcos_dna_periodo
+app/escala/utils.py:137:pausas_de_celulas
+app/pautas/services.py:424:contexto_do_dia_texto
+app/ponto/juiz_batida.py:159:periodos_do_dia [2 operações]
+app/ponto/management/commands/aplicar_col900.py:172:Command.handle
+app/ponto/management/commands/censo_col900.py:118:Command.handle
+app/ponto/management/commands/censo_col900.py:119:Command.handle
+app/ponto/management/commands/detectar_intervalo_ausente.py:53:furos_intervalo
+app/ponto/management/commands/tripwire_celulas.py:99:medir_pausa_faltando
+app/ponto/management/commands/tripwire_celulas.py:259:medir_sobra_com_tipo_trocado
+app/ponto/portas/celula.py:788:reverter_regeneracao_dia
+app/ponto/services/cartorio.py:484:impressao_insumos
+app/ponto/services/cartorio.py:615:lampadas_do_dia
+app/ponto/services/cartorio.py:840:insumos_da_ata
+app/ponto/services/dia_do_colab.py:46:dia_do_colab
+app/ponto/services/diagnostico_escala.py:153:diagnostico_escala
+app/ponto/services/esmeril_espelho.py:116:assinaturas_do_colab
+app/ponto/services/faltas_de_hoje.py:43:faltas_de_hoje_sem_cobranca
+app/ponto/services/veredito_celula.py:31:_marcos_do_dia
+app/ponto/services/vigia_entrada.py:126:do_dia
+```
+
+As subchaves de `marcos` são `hi`, `hf`, `hii`, `hfi`, com HH:MM ou null, e os opcionais `hii2`, `hfi2`; a declaração canônica dos pares está no modelo (`app/ponto/management/commands/gerar_celulas.py:83`, `app/ponto/management/commands/gerar_celulas.py:93`, `app/escala/models.py:1652`).
+
+`dna.lampadas[]` recebe `chave`, `tipo`, `hora`, `instante`. **Esse `instante` é ISO sem fuso**, construído por `datetime.combine(...).isoformat(...)`; não o classifico como instante com fuso (`app/ponto/management/commands/gerar_celulas.py:68`, `app/ponto/management/commands/gerar_celulas.py:69`). O consumidor lê `hora` e `instante` para montar um dict indexado por HH:MM (`app/escala/utils.py:154`, `app/escala/utils.py:155`).
+
+`extra_declarada.antes/depois` são inteiros e ambos são lidos pelo acessor do vínculo (`app/ponto/management/commands/gerar_celulas.py:119`, `app/ponto/management/commands/gerar_celulas.py:122`, `app/escala/models.py:1238`).
+
+**Comparação de hora sem data: sim para `marcos` e `lampadas`.** Inclui pertinência, chave de dict, distância em minutos e igualdade ATA/DNA (`app/ponto/services/cartorio.py:640`, `app/ponto/services/cartorio.py:648`, `app/ponto/services/cartorio.py:666`, `app/ponto/services/cartorio.py:846`, `app/ponto/juiz_batida.py:230`, `app/ponto/services/vigia_entrada.py:127`, `app/escala/utils.py:155`). As comparações do blob inteiro também leem as demais chaves (`app/ponto/portas/celula.py:263`, `app/ponto/portas/celula.py:594`, `app/ponto/portas/celula.py:872`).
+
+**C — Classificação integral de `strftime('%H:%M')`.** A relação abaixo contém as 200 chamadas de `app/`; números repetidos preservam chamadas distintas na mesma linha. Os caminhos desta relação são relativos a `app/`.
+
+Legenda dos fatos em P/C: **B** batida; **M** marco realizado transportado da batida; **O** órfã; **R** resposta/plantio pretendido; **V** marco previsto; **T** relógio da tentativa/recepção; **A** período declarado de ausência; **E** evento da esteira; **X** tentativa de materialização que entrou no erro. A distinção entre tentativa e batida efetiva aparece no tratamento offline e nos contextos de tentativa (`app/api/views.py:508`, `app/api/views.py:627`, `app/ponto/services/triagem_batida.py:741`); o erro de materialização está em `app/ponto/services/veredito_celula.py:329`.
+
+A classificação primária usa P antes de C quando ambos se demonstram: **P62, C53, R83, U2**. As seis sobreposições P+C são `app/escala/utils.py:291`, `app/escala/utils.py:730`, `app/escala/utils.py:749`, `app/ponto/motor_calculo_v2.py:1671`, `app/ponto/motor_calculo_v2.py:1672`, `app/ponto/management/commands/detectar_ausencias.py:484`. Assim, há **59 chamadas com uso comparativo**, contando as sobreposições.
+
+```text
+arquivo | PERSISTIDO [linha:fato] | COMPARADO [linha:fato] | RENDER [linhas] | U
+api/views.py | 627:T,645:T | — | 355,535,681,800,1457,2035,2959,2960 | —
+api/views_core.py | 618:T,636:T | — | 343,521,672,794,1280,1281 | —
+chamados/detector_anomalias.py | 234:V,235:B | 213:B | — | 222
+chamados/juizes.py | — | 1814:V | — | —
+chamados/models.py | — | — | 4070,4072,4076,4078 | —
+chamados/reconciliador.py | — | 210:B | — | —
+chamados/services/acoes_chamado.py | — | — | 383 | —
+chamados/services/explicador.py | — | — | 57 | —
+chamados/services/materializacao.py | — | 182:R | 465 | —
+chamados/services/painel.py | — | — | 395 | —
+chamados/services/tarefa_do_dia.py | — | 78:V | — | —
+chamados/views_cobrar.py | — | — | 42,57 | —
+colaboradores/services/calendario.py | — | 625:B | — | —
+colaboradores/services/ficha.py | — | — | 28 | —
+colaboradores/views.py | — | — | 2312,2313 | —
+core/esteira_vigia.py | 1304:E,1560:E,1569:E,1572:E,1580:E,1590:E | — | — | —
+core/templatetags/hasner_filters.py | — | — | 102,102,147 | —
+core/views.py | — | — | 825 | —
+escala/models.py | — | — | 415,415,444,444,452,452,509,509,517,517,546,546,664,664,665,665 | —
+escala/servico_jornada.py | — | 455:V,456:B | 201,201 | —
+escala/utils.py | 291:V,326:M,621:O,662:O,712:V,730:V,749:V,799:O,1549:M,1828:M,1832:O,1834:O | 378:V,429:B,782:V,1675:O,1707:V,1719:V,1724:V,1742:V,1754:V,1755:V,2005:B/O,2028:B/O | — | —
+pautas/services.py | — | — | 431 | —
+ponto/calculador/alimentacao.py | — | 119:B | — | —
+ponto/calculador/nucleo.py | 142:B,146:B,238:B | — | — | —
+ponto/management/commands/censo_col900.py | 138:B | — | — | —
+ponto/management/commands/desvio_o68b.py | — | — | 125,126 | —
+ponto/management/commands/detectar_ausencias.py | 484:V,848:B | — | 410,418,429,436,452,782 | —
+ponto/management/commands/detectar_intervalo_ausente.py | — | 67:V,74:V,79:V,82:V,84:V | — | 81
+ponto/management/commands/detectar_par_relampago.py | 97:B,98:B | — | 393,394 | —
+ponto/management/commands/diff_calculador.py | — | — | 460 | —
+ponto/management/commands/diff_reclassificar_partido.py | — | — | 97,98 | —
+ponto/management/commands/dna_x_batida_real.py | 122:V,123:V | — | — | —
+ponto/management/commands/emitir_furo_retroativo.py | — | — | 152 | —
+ponto/management/commands/emitir_turno_aberto_retroativo.py | 167:V | — | — | —
+ponto/management/commands/gerar_celulas.py | 33:V | — | — | —
+ponto/management/commands/processar_alertas_avancados.py | 136:V | — | — | —
+ponto/management/commands/reconciliar_fantasmas.py | 121:B,123:B,134:B,134:V | — | — | —
+ponto/management/commands/tripwire_celulas.py | — | 192:V,195:O,280:V | — | —
+ponto/management/commands/tripwire_tipo_batida.py | — | — | 64 | —
+ponto/marcos.py | — | 11:V | — | —
+ponto/motor_cal
+
+[truncado em 20000 de 54867 caracteres]
 
 ## 12/11 16:53 · sessao 55d549d73138 · - · - · origem=Ronald (tmux)
 
@@ -1098,34 +1358,4 @@ Casos/spec aproveitáveis: órfã sem marcos não pode sumir (`app/escala/utils.
 
 Autoridades preservadas: grade/match e cluster guard estão em `app/docs/JUIZES.md:27`; geometria de turno em `:20`; encadeamento cross-midnight em `:24`. A mudança de transporte/leitura não deve criar novo julgamento nesses consumidores (`CLAUDE.md:20`, `:21`).
 
-## 12/11 16:39 · sessao a061d30af7be · - · - · origem=Ronald (tmux)
-
-Recenso na árvore após a cura, com `ast.parse` e inspeção dos operandos e consumidores, sem editar arquivos.
-
-| Sítio | Classe | Interpretação |
-|---|---|---|
-| `relatorios/pdf_espelho.py:698` e `:702` | **IDENTIDADE — residual** | O conjunto `DD/MM HH:MM` alimenta substring que elimina anomalia. Ainda perde segundos. |
-| `escala/utils.py:1760` | EXIBIÇÃO/projeção | Chave `(tipo, HH:MM do marco previsto)` localiza coluna da régua. Não compara a hora da batida. |
-| `escala/utils.py:1772` | EXIBIÇÃO/projeção com promoção | A ausência do **marco previsto** na régua promove a célula correspondente; hora e instante são transportados juntos em `:1775-1776`. Não identifica a órfã pela sua hora. |
-| `escala/utils.py:1778` | EXIBIÇÃO/projeção com promoção | Marco interno fora da régua ocupa slot `I`; se faltam slots, a célula inteira vira órfã, conservando o instante em `:1787-1788`. |
-| `escala/utils.py:1797`, `:1800` | EXIBIÇÃO/projeção | Chave prevista seleciona e deduplica colunas das pontas. |
-| `escala/utils.py:1801` | EXIBIÇÃO/projeção | `.index(_key4)` retorna a coluna do marco previsto. |
-| `escala/utils.py:1809-1810` | EXIBIÇÃO/projeção | `in` e `.index` mapeiam cada marco previsto à coluna. A pertença da **batida** ao turno é decidida depois por instante em `:2104`. |
-| `escala/utils.py:1897` | ORDENAÇÃO | Ordena pares hora/instante pela hora de exibição; conserva os pares em `:1898-1899`. |
-| `escala/utils.py:626`, `:669` | EXIBIÇÃO | HH:MM serializado em paralelo com os instantes em `:628`, `:671`; identificação usa índices e datetimes. |
-| `escala/services/leitor_celula.py:287`, `:302-303` | EXIBIÇÃO/projeção | Chaves de marcos previstos remapeiam células na régua. |
-| `escala/services/leitor_celula.py:347-350` | EXIBIÇÃO/projeção | Deduplicação de colunas previstas por `(tipo, HH:MM)`. |
-| `escala/services/leitor_celula.py:25`, `:30-35`, `:121` | EXIBIÇÃO/status | Truncamento para calcular desvio da luz em relação ao previsto; não decide identidade ou pertença de órfã. |
-| `relatorios/pdf_espelho.py:714-715`, `:863`, `:867`, `:889`, `:939`, `:1030`, `:1077` | EXIBIÇÃO | Formata escala, batidas, procedência e emissão. Os filtros usam `b.orfa`, decidido em `:590`. |
-
-Verificação dos sítios de identidade após a cura:
-
-- Dry-run compara `datetime` em `escala/utils.py:1702`, `:1726`.
-- Localizador da órfã compara ISO reconstruído com instante em `escala/utils.py:2068-2069`.
-- Guarda usa timestamps do turno em `escala/utils.py:2092`; interseção por instante em `:2093-2095`; instante da célula em `:2100-2102`; unicidade em `:2103`; pertença e ordem em `:2104`.
-- Leitor mantém pareamento posicional em `escala/services/leitor_celula.py:191-193`.
-- PDF identifica órfãs e períodos por timestamp em `relatorios/pdf_espelho.py:195`, `:500`, `:590`, `:944-947`.
-
-O achado de identidade reduzida remanescente neste escopo é o filtro textual do cabeçalho do PDF (`relatorios/pdf_espelho.py:698-702`).
-
-_4352 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4353 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
