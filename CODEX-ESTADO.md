@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 07:59** · publicado em **12/11/2026 08:02** (UTC-3)
+> Ultima resposta processada: **12/11/2026 08:05** · publicado em **12/11/2026 08:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 08:05 · sessao 553a6d49936c · FIO-E0-V4-E4B · construtor · origem=Code
+
+Cura aplicada. A [entrega completa](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c14_entrega.txt:7) contém as 69 classificações R/C, escritores/leitores e comandos individuais. [nao verificado]
+
+- GREEN: [158 testes de memória](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c14_memoria.txt:59) e [47 contratos estáticos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c14_selos.txt:6). [nao verificado]
+- [21 mutantes c14](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c14_entrega.txt:123) morderam por assertion, sem ERROR.
+
+Suíte inteira, ORM e medição SQL do C8: **[nao verificado]**; Django está ausente e banco foi vedado. Sem commit, conforme a proibição explícita das REGRAS. [Pendências para o Code](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c14_entrega.txt:194). [nao verificado]
+
+## 12/11 08:02 · sessao f2aeed7d1ba0 · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
+
+**REPROVA c10:** o rótulo da recusa não garante que a tela renderize: uma consulta posterior volta a levantar `TipoSemFaixa` (`app/ponto/views.py:184`, `app/ponto/services/espelho.py:170`, `app/ponto/status_dia.py:304`). O par financeiro da competência 11 exigido pelo aval não está demonstrado no dado fornecido [nao verificado].
+
+1. **PORTA e escritores**
+
+   A criação, inclusive inativa, e a ativação explícita consultam `faixa_de` antes da escrita; a recusa usa `AusenciaInvalida(codigo='tipo_sem_faixa')` (`app/ponto/services/ausencia.py:1308`, `app/ponto/services/ausencia.py:1312`).
+
+   Não encontrei segundo escritor operacional de `TipoAusencia` nas views, commands ou importadores pesquisados. O admin Django não registra esse modelo; os dois ramos da view passam pela porta. A migration 0052 escreve diretamente código/efeito/ativo, mas suas sementes têm faixa; 0062/0063 alteram flags de tipos existentes (`app/ponto/admin.py:11`, `app/ponto/admin.py:37`, `app/ponto/views_tipos_ausencia.py:87`, `app/ponto/views_tipos_ausencia.py:98`, `app/ponto/migrations/0052_seed_tipoausencia.py:33`, `app/ponto/precedencia.py:52`, `app/ponto/migrations/0062_fim_dos_17_tipos.py:51`, `app/ponto/migrations/0063_atestado_aceita_horas.py:20`).
+
+   **Achado — fila, brecha da própria porta.** Ela valida `tipo.codigo` antes de aplicar indiscriminadamente `campos`. Contraexemplo reproduzido em memória: um objeto `abono` aceita `campos={'codigo':'fantasma_xyz','ativo':True}` e chama `save()` com o código desconhecido ativo. A view atual não fornece `codigo` nesse dicionário; exploração por essa tela não foi demonstrada (`app/ponto/services/ausencia.py:1310`, `app/ponto/services/ausencia.py:1314`, `app/ponto/views_tipos_ausencia.py:67`).
+
+   A view não lê `.codigo`: entrega `str(erro)` ao feedback. Para `fantasma_xyz`, o texto é **“Tipo sem faixa de precedencia: fantasma_xyz”**; o JavaScript escreve na caixa de erro e no toast (`app/ponto/precedencia.py:100`, `app/ponto/views_tipos_ausencia.py:89`, `app/ponto/views_tipos_ausencia.py:100`, `app/core/respostas.py:65`, `app/templates/ponto/tipos_ausencia.html:73`, `app/templates/ponto/tipos_ausencia.html:86`).
+
+   Os leitores gerais de `AusenciaInvalida.codigo` encontrados são API, formulário de ausência e comando de rederivação; eles não são os chamadores do cadastro de tipos. O novo valor tem assert específico no ensaio c10 (`app/api/views.py:1819`, `app/ponto/views.py:2806`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:172`, `app/ponto/tests/test_lastro_c10_sem_banco.py:86`).
+
+2. **Cartório: isolamento, persistência e contadores**
+
+   O `except` envolve **`julgar_colab` inteiro**, não cada dia nem a empresa inteira. Captura somente `TipoSemFaixa`, incrementa uma vez por colaborador recusado, loga pk/código e continua (`app/ponto/management/commands/processar_cartorio.py:64`, `app/ponto/management/commands/processar_cartorio.py:70`, `app/ponto/management/commands/processar_cartorio.py:72`).
+
+   No caminho normal identificado, a grade do período consulta a A2 antes da primeira lavra. Um tipo desconhecido interrompe essa preparação: nenhuma ata nova daquele colaborador é escrita por esse caminho; as antigas permanecem (`app/ponto/services/cartorio.py:1168`, `app/escala/utils.py:1209`, `app/ponto/precedencia.py:419`, `app/ponto/services/cartorio.py:1288`).
+
+   Isso **não constitui rollback por colaborador**. Se a exceção surgir depois de uma gravação, ela pode permanecer: o `finally` limpa contexto/filas, sem desfazer persistência. Há `atomic()` por salvamento de célula/evento, não envolvendo o colaborador inteiro (`app/ponto/services/cartorio.py:1093`, `app/ponto/services/cartorio.py:1116`, `app/ponto/portas/celula.py:899`, `app/ponto/portas/celula.py:904`). Nesse eventual estado parcial, as atas já salvas continuam disponíveis ao leitor da célula (`app/escala/services/leitor_celula.py:418`).
+
+   Não há fundamento para atribuir conexão SQL quebrada à recusa normal: `TipoSemFaixa` é `ValueError` levantado pelo mapa. Continuidade com ORM e verificação de `TransactionManagementError` não foram executadas [nao verificado] (`app/ponto/precedencia.py:96`, `app/ponto/precedencia.py:108`).
+
+   **Achado — fila, campo com dois significados.** `tipos_ativos_sem_faixa` conta colaboradores recusados no cartório e códigos ativos no vigia; o cartório sequer filtra `ativo`. Contraexemplos: um código em três colaboradores pode produzir **3/1**; um código inativo com ausência pode produzir **1/0** (`app/ponto/management/commands/processar_cartorio.py:73`, `app/ponto/services/cartorio.py:1952`, `app/ponto/services/vigia_ausencia.py:160`, `app/ponto/services/vigia_ausencia.py:168`, `app/ponto/precedencia.py:419`).
+
+   Ambos chegam à mesma função real `faixa_de`: diretamente no vigia e pela grade/A2 no cartório. Portanto, são universos diferentes, sem evidência de segundo juiz de faixa (`app/ponto/services/vigia_ausencia.py:162`, `app/escala/utils.py:1209`, `app/ponto/precedencia.py:419`). O cartório publica seu contador no stdout; API/revisão semanal leem o contador do vigia (`app/ponto/management/commands/processar_cartorio.py:80`, `app/api/views_mensageria.py:1422`, `app/ponto/services/vigia_ausencia.py:259`).
+
+3. **Espelho/PDF**
+
+   A A2 recebe `recusas=`, exclui o dia recusado dos fatos e não ordena sua precedência; o compositor publica o rótulo pronto sem chamar `do_dia` para ele. O PDF reutiliza esse compositor (`app/ponto/precedencia.py:420`, `app/ponto/precedencia.py:425`, `app/ponto/services/espelho.py:339`, `app/relatorios/pdf_espelho.py:597`).
+
+   **Achado — bloqueia, recusa tratada no miolo e relançada na tela.** Após obter o espelho, a view chama `montar_semanas`; este consulta `status_dos_dias_lavrados` sem fornecer fatos/recusas. Quando chega a um dia sem batida e sem status lavrado, consulta novamente a A2, agora sem `recusas=` (`app/ponto/views.py:158`, `app/ponto/views.py:184`, `app/ponto/services/espelho.py:170`, `app/ponto/status_dia.py:287`, `app/ponto/status_dia.py:296`, `app/ponto/status_dia.py:304`).
+
+   **Contraexemplo:** ausência aprovada `fantasma_xyz` em dia passado sem batida e sem lavra. A primeira passagem produz “Tipo sem faixa: fantasma_xyz”; `montar_semanas` levanta novamente antes do `render`. Reproduzi essa sequência em memória com A2, D4 e `montar_semanas` reais; a execução HTTP completa permanece [nao verificado] (`app/ponto/precedencia.py:421`, `app/ponto/views.py:193`).
+
+   **Achado — fila, paridade do PDF para dias válidos não demonstrada.** A troca de órfãs do builder por `orfas_grade` troca efetivamente a fonte: a tela normalmente lê a ata. Sem célula, esse leitor entrega órfãs vazias; o builder conserva batidas não consumidas como órfãs (`app/relatorios/pdf_espelho.py:477`, `app/ponto/services/espelho.py:522`, `app/escala/services/leitor_celula.py:394`, `app/escala/services/leitor_celula.py:420`, `app/escala/utils.py:1849`).
+
+   **Contraexemplo de código:** builder com órfã `07:02`, ata/tela sem ela, período aberto iniciado às `07:02`. A substituição altera sua inclusão em `turnos_abertos`, depois `datas_turno_aberto`, podendo alterar dias em aberto e palavra. Nenhum tipo sem faixa é necessário; ocorrência em produção e magnitude são [nao verificado] (`app/relatorios/pdf_espelho.py:178`, `app/relatorios/pdf_espelho.py:515`, `app/relatorios/pdf_espelho.py:576`, `app/relatorios/cartao_pela_celula.py:418`, `app/relatorios/pdf_espelho.py:597`).
+
+   Órfãs e palavra passam pela autoridade da tela, mas o PDF ainda apura/soma seu resumo e calcula saldo antes de `folha_manda`; essas derivações já existiam no recorte da base (`app/relatorios/pdf_espelho.py:418`, `app/relatorios/pdf_espelho.py:504`, `app/relatorios/pdf_espelho.py:531`, `app/ponto/tests/lastro_c9_recortes.json:27`). Paridade integral de horas/saldo/totais com a base: [nao verificado].
+
+   Sem achado específico na remoção de `_realizado`: era helper local sem chamada no recorte fornecido da base; sua remoção isolada não explica mudança de saída (`app/ponto/tests/lastro_c9_recortes.json:27`).
+
+4. **Fechamento e competência**
+
+   As três capturas alteradas relançam `TipoSemFaixa`. Se ela ocorrer, interrompe o restante da chamada — empresa inteira ou subconjunto escolhido —, sem representar uma tranca formal da competência (`app/ponto/services/fechamento.py:555`, `app/ponto/services/fechamento.py:558`, `app/ponto/services/fechamento.py:1081`, `app/ponto/services/fechamento.py:1089`, `app/ponto/services/fechamento.py:1308`).
+
+   Não há atomicidade de lote: A pode estar salvo, B pode ganhar linha `aberto` antes da falha, e C não ser processado. Isso é consequência de propagação, não uma decisão nova de pagar/abonar/zerar B (`app/ponto/services/fechamento.py:899`, `app/ponto/services/fechamento.py:1015`, `app/ponto/services/fechamento.py:1149`, `app/ponto/services/fechamento.py:1308`).
+
+   Os chamadores relevantes têm estes destinos:
+
+   - View e command de recalcular deixam a recusa subir (`app/ponto/views.py:1252`, `app/ponto/management/commands/recalcular_fechamento.py:118`).
+   - Exportação chama leitura da empresa antes de classificar/gerar TXT; uma recusa interrompe esse fluxo (`app/folha/views.py:208`, `app/folha/views.py:212`).
+   - `simular_folha` chama o fechamento antes do seu `try` posterior (`app/folha/management/commands/simular_folha.py:123`, `app/folha/management/commands/simular_folha.py:130`, `app/folha/management/commands/simular_folha.py:132`).
+   - O callback por evento captura `Exception` e loga após o fato gravado: nesse chamador a recusa não chega ao usuário (`app/ponto/services/fechamento.py:1817`, `app/ponto/services/fechamento.py:1825`).
+   - O cadastro declara ausência de cron ordinário de recalcular (`app/config/crons.py:1130`).
+
+   Deixar levantar corresponde à instrução D do pedido; o isolamento por colaborador foi exigido especificamente para o cartório. A condição financeira de pouso, item 6, continua sem par medido no dado fornecido [nao verificado]. [nao verificado]
+
+5. **Fonte única e defaults**
+
+   Sem achado de default de **faixa** para tipo desconhecido: o mapa é consultado por indexação em `faixa_de`; A2/veto passam por essa função. O fallback `'trabalho'` da semana do posto relança expressamente `TipoSemFaixa` (`app/ponto/precedencia.py:108`, `app/ponto/precedencia.py:110`, `app/ponto/precedencia.py:419`, `app/ponto/precedencia.py:544`, `app/escala/services/semana_do_posto.py:178`).
+
+   **Achado — fila, fallback de efeito preexistente.** `_do_banco` captura qualquer exceção e `vigente` substitui falha/resultado vazio pelo catálogo congelado; `efeito_vigente` lê esse resultado. Contraexemplo: `abono` alterado para descontar, seguido de falha na leitura, pode voltar a responder `ABONA`. Isso é fallback de efeito, não de faixa (`app/ponto/catalogo/ausencias.py:102`, `app/ponto/catalogo/ausencias.py:254`, `app/ponto/catalogo/ausencias.py:283`, `app/ponto/catalogo/ausencias.py:298`).
+
+6. **Mordida dos testes** [nao verificado]
+
+   Executei os três harnesses juntos: **43 testes, OK, RC 0**; seus mecanismos executam AST do fonte com alimentação substituída (`app/ponto/tests/test_lastro_c5_sem_banco.py:108`, `app/ponto/tests/test_lastro_c10_sem_banco.py:75`, `app/ponto/tests/test_lastro_c7_sem_banco.py:70`).
+
+   Os mutantes executados ficaram vermelhos por asserção: retirar a guarda da porta, relançar no isolamento do cartório, restaurar o default `'atestado'` e retirar o rótulo. Portanto, há mordida de comportamento, além de inspeção textual (`app/ponto/tests/test_lastro_c10_sem_banco.py:31`, `app/ponto/tests/test_lastro_c10_sem_banco.py:36`, `app/ponto/tests/test_lastro_c10_sem_banco.py:43`, `app/ponto/tests/test_lastro_c10_sem_banco.py:280`, `app/ponto/tests/test_lastro_c5_sem_banco.py:50`).
+
+   **Limite que bloqueia a conclusão de integração:** o teste B substitui `julgar_colab`; o teste PDF executa somente um prefixo com espelho mockado; o teste D injeta a exceção nas capturas, sem motor/ORM. Eles não certificam persistência, PDF completo nem o caminho posterior de `montar_semanas` que falha (`app/ponto/tests/test_lastro_c10_sem_banco.py:180`, `app/ponto/tests/test_lastro_c10_sem_banco.py:311`, `app/ponto/tests/test_lastro_c10_sem_banco.py:319`, `app/ponto/tests/test_lastro_c10_sem_banco.py:349`).
+
+   O `test_05` cria `reciclagem` pela porta, aprova ausência e confere RD; os testes 07/08 são o par de criação/ativação recusadas. O código escolhido tem faixa e não está na semente 0052 (`app/relatorios/tests/test_rotulo_ausencia_pdf.py:52`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:64`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:73`, `app/ponto/precedencia.py:71`, `app/ponto/migrations/0052_seed_tipoausencia.py:10`). Execução ORM desses testes: [nao verificado].
+
+   Os RED B/C também falharam com `--red-c9`, mas esse mecanismo substitui recortes congelados; não executa um checkout independente da c9 (`app/ponto/tests/test_lastro_c10_sem_banco.py:22`, `app/ponto/tests/test_lastro_c10_sem_banco.py:28`).
+
+7. **Classes de reprovação**
+
+   Os achados concretos são: **integração da recusa incompleta — bloqueia**; **contador com duas unidades, brecha interna da porta e fallback de efeito — fila**. Não encontrei novo juiz de faixa nem segundo escritor operacional de tipos; a consulta duplicada na tela usa a própria A2, mas perde o tratamento de recusa (`app/ponto/status_dia.py:304`, `app/ponto/management/commands/processar_cartorio.py:73`, `app/ponto/services/vigia_ausencia.py:168`, `app/ponto/services/ausencia.py:1314`, `app/ponto/catalogo/ausencias.py:283`).
+
+   Sem achado de relógio novo no delta do PDF: `_hj` deriva do `agora` recebido. Os `except` que ainda absorvem falhas foram identificados no catálogo e no callback financeiro; as três capturas c10 do fechamento propagam a exceção (`app/relatorios/pdf_espelho.py:475`, `app/ponto/catalogo/ausencias.py:254`, `app/ponto/services/fechamento.py:1825`, `app/ponto/services/fechamento.py:1089`).
 
 ## 12/11 07:59 · sessao c2fbd7863c76 · - · - · origem=Ronald (tmux)
 
@@ -646,39 +741,4 @@ Não é correto afirmar igualdade literal com `ausencia_explica_o_dia_inteiro`: 
 
 **Gravidade sugerida: fila**, pela inferência de cobertura a partir de `tipo_dia`; um contraexemplo real produzido pela árvore que altere resultado por essa duplicação permanece **[não verificado]**. O caso concreto de divergência entre predicados é uma falta aprovada integral: `_coberto_inteiro_nb=True`, `ausencia_explica_o_dia_inteiro=False`, distinção explicitamente codificada; tratá-los como a mesma pergunta produziria reprovação falsa. (`app/ponto/services/cartorio.py:1239`; `app/ponto/turnos.py:2677`.)
 
-## 12/11 00:31 · sessao 28ee7fe73b79 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-c7 construída na cópia, sem bump e sem commit, conforme a proibição inicial. As 16 regressões receberam tratamento; o `test_05` permanece intacto, pendente do corte sobre o PDF. [Relato por vermelho](docs/RELATO.md:9).
-
-Validação local:
-
-- **61 testes sem banco GREEN**, mais a CATRACA de linhas GREEN. [Execuções](docs/lastro_faixa_c7_execucoes.txt:6102).
-- **RED da c6:** 27 falhas de asserção, zero erros. [Evidência](docs/lastro_faixa_c7_execucoes.txt:6172).
-- **22 mutantes mortos**, com comandos individuais registrados. [Resumo](docs/RELATO.md:63).
-
-Propagação de `TipoSemFaixa`, proposta restritiva para o PDF e quem escreve/lê cada campo estão no [relato](docs/RELATO.md:35).
-
-A suite Django dos 17, o teto SQL e o opus final seguem **[não verificado]**. O Python local não tem Django. [Registro](docs/lastro_faixa_c7_execucoes.txt:6879).
-
-## 12/11 00:19 · sessao 9443b128960e · - · - · origem=Ronald (tmux)
-
-Os 3 FAIL de impressão são causados por duplos que declaram `tipo_dia='ausencia'` sem fornecer as chaves que c6 passou a ler (`ponto/services/cartorio.py:1237`; `ponto/tests/test_e3_nb_impressao_memoria.py:365`, `:401`; `chamados/tests/test_e3_pos_suite_sem_banco.py:139`).
-
-- Reproduzi os 3 FAIL com `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria chamados.tests.test_e3_pos_suite_sem_banco -q`: 31 testes, 3 FAIL. [nao verificado]
-- Em diagnóstico exclusivamente em memória, fornecer `ausencia_tipo`/`ausencia_id` aos duplos com cobertura fez os mesmos 31 testes passarem, preservando todas as asserções. A grade real fornece essas chaves (`escala/utils.py:1228`).
-- Não há frase do aval autorizando mudar o hash B5u. Inverter essas asserções seria indevido. A decisão da sessão “Cobrança e dinheiro passaram a ler a CHAVE de cobertura” sustenta atualizar as entradas dos testes; isso precisa ser registrado como adaptação do contrato, sem mudar o comportamento caracterizado (`ponto/services/cartorio.py:1227`).
-
-`dia_sem_trabalho` é regressão de código: a exceção parcial passou a alcançar qualquer rótulo (`chamados/juizes.py:455`). Cura sugerida: falta continua dia sem trabalho; folga só entra na exceção parcial quando há chave de cobertura. Isso preserva o teste antigo com carimbo espúrio (`chamados/tests/test_emis_ausencia_parcial_cobra.py:50`) e o P1 com folga humana parcial real (`ponto/tests/test_lastro_c5_sem_banco.py:609`). Mantenha `ausencia_parcial_cobra_o_resto` lendo apenas o carimbo, pois o contrato da ata antiga exige isso (`ponto/tests/test_lastro_c5_sem_banco.py:621`).
-
-CATRACA: o censo em memória encontrou as mesmas identidades e quatro deslocamentos no registro (`core/tests/test_medida_turno_do_par.py:247`):
-
-| Sítio | Antes → c6 atual |
-|---|---|
-| `escala/utils.py::montar_grade_prevista_periodo_por_turno` | `[1480,1500,1510,1523,1534,1820]` → `[1484,1504,1514,1527,1538,1824]` |
-| `ponto/services/cartorio.py::_julgar_colab_corpo` | `[1191,1344]` → `[1198,1351]` |
-| `ponto/services/espelho.py::autoridade_do_periodo` | `[1029]` → `[1032]` |
-| `ponto/services/fechamento.py::_so_a_data` | `[1569]` → `[1568]` |
-
-Recalcule esses números depois das curas; a igualdade é cobrada em `core/tests/test_medida_turno_do_par.py:539`. Nenhum arquivo foi escrito por este explorer.
-
-_4087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4089 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
