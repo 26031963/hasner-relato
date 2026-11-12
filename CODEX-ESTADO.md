@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 15:30** · publicado em **12/11/2026 15:31** (UTC-3)
+> Ultima resposta processada: **12/11/2026 15:32** · publicado em **12/11/2026 15:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 15:32 · sessao d123cf6bebfd · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · leitura · origem=Code
+
+A cópia contém curas na origem, adaptações locais e transições ainda abertas. A candidata **(b)** está implementada; isso não basta para fechar os estados “futura carimbada”, “reativada por `update`” e “passada atingida por exclusão da geradora”. (`app/ponto/services/vigia_cadastro_futuro.py:31`; `app/colaboradores/services/vinculo.py:716`; `app/ponto/portas/celula.py:453`; `app/colaboradores/services/vinculo.py:1007`)
+
+A comparação histórica exata `0a747193e..a5a92544a` e o resultado da suíte em c4b ficam **[nao verificado]**: a cópia disponível não trouxe histórico Git nem esse diff. Abaixo separo comportamento verificável nesta árvore de atribuição histórica e dado de produção. **[nao verificado]**
+
+**1. Matriz de transições**
+
+“Gerada/editada” é `origem`; “regenerada” acrescenta marcas de reescrita; “carimbada” acrescenta julgamento. Portanto, as cinco colunas pedidas não são estados exclusivos: uma célula regenerada pode continuar gerada e carimbada. A proteção de `origem='editada'` prevalece sobre as demais características. (`app/escala/models.py:1690`; `app/escala/models.py:1718`; `app/escala/models.py:1745`; `app/ponto/portas/celula.py:285`)
+
+Nas matrizes, cada casa tem **ação atual / exigência / conclusão**. Os símbolos abaixo incorporam o comportamento e as referências indicadas; `=` significa concordância naquele recorte, `D` aponta divergência ou transição incompleta, e `?` significa que falta estabelecer a aplicação da lei. As exigências específicas dos avais transcritos são tomadas do dado fornecido, sem confirmação dos respectivos arquivos locais. **[nao verificado]**
+
+| Símbolo | Expansão verificável usada nas casas |
+|---|---|
+| **I** | Conserva a célula: suplemento seleciona somente futuras existentes `origem='gerada'`; não cria ausente nem seleciona editada. (`app/ponto/services/cadastro_futuro.py:18`; `app/ponto/services/cadastro_futuro.py:22`) |
+| **R** | Em dia coberto, compara `trabalha`, geradora e DNA; se mudou, reescreve esses campos e grava `dna_anterior`, `regenerada_em`, `regeneracoes`; repetição igual não escreve. (`app/ponto/portas/celula.py:277`; `app/ponto/portas/celula.py:285`; `app/ponto/portas/celula.py:293`) |
+| **K** | Executa **R**, refaz inclusive `dna.lampadas`, mas conserva ata, veredito, impressão e carimbo anteriores; julgamento de futura é pulado. (`app/ponto/management/commands/gerar_celulas.py:94`; `app/ponto/portas/celula.py:298`; `app/ponto/portas/celula.py:453`) |
+| **Z** | Fora da vigência, sendo gerada pela EC encerrada, sem lavra e sem outro vínculo cobrindo: põe `trabalha=False`, geradora nula, DNA sem marcos e marcas de regeneração. (`app/ponto/portas/celula.py:244`; `app/ponto/portas/celula.py:249`) |
+| **N** | Regeneração direta cria a célula ausente em dia coberto. (`app/ponto/portas/celula.py:280`) |
+| **B** | EC inativa sem fim: regeneração recusa e conserva células; vigia usa `vinculo_do_dia` e separa o caso em C6. (`app/ponto/portas/celula.py:146`; `app/ponto/services/vigia_cadastro_futuro.py:31`; `app/ponto/services/vigia_cadastro_futuro.py:40`) |
+| **G** | Gerador cria ausente; conserva futura existente e editada; no passado pode preencher DNA nulo. (`app/ponto/portas/celula.py:875`; `app/ponto/portas/celula.py:881`; `app/ponto/portas/celula.py:883`; `app/ponto/portas/celula.py:892`) |
+
+O suplemento usa **J = união das competências correntes das empresas ativas**, limitada inferiormente por amanhã e por `desde`; chama a regeneração para cada data existente, com `estender_horizonte=False`. Isso é a janela do gerador, não uma janela calculada individualmente por empresa dentro do suplemento. (`app/ponto/management/commands/gerar_celulas.py:281`; `app/ponto/services/cadastro_futuro.py:16`; `app/ponto/services/cadastro_futuro.py:30`)
+
+| Evento e entrada efetiva | Futura não existe | Futura gerada | Futura editada | Futura carimbada, origem gerada | Futura regenerada |
+|---|---|---|---|---|---|
+| **Salvar estrutura: município do posto**. Evento somente se mudou município; percorre vínculos do posto. (`app/colaboradores/services/estrutura.py:53`; `app/colaboradores/services/vinculo.py:931`) | I / I / = | R / R / =, ressalva **D2** | I / I / = | K / coerência / **D1** | R / R / =, ressalva **D2** |
+| **Salvar demais campos de estrutura**: essas operações apenas salvam; não chamam o suplemento. (`app/colaboradores/services/estrutura.py:18`; `app/colaboradores/services/estrutura.py:36`; `app/colaboradores/services/estrutura.py:75`; `app/colaboradores/services/estrutura.py:82`) | I / depende do efeito / ? | I / R se muda previsto / ? | I / I / = | I / depende do efeito / ? | I / R se muda previsto / ? |
+| **Salvar template pela porta comum**: futuro percorre todos os vínculos do tipo, inclusive encerrados. (`app/escala/services/cadastro_tipo.py:368`) | I / I / = | R / R / =, **D2** | I / I / = | K / coerência / **D1** | R / R / =, **D2** |
+| **Salvar template pelo admin**: salva e propaga somente futuras no mesmo atomic. (`app/escala/admin.py:11`; `app/escala/services/cadastro_tipo.py:380`) | I / I / = | R / R / =, **D2** | I / I / = | K / coerência / **D1** | R / R / =, **D2** |
+| **Folga lançada/alterada/foto relavrada**: passado pela regeneração; futuro pelo suplemento. (`app/escala/folgas.py:247`; `app/escala/folgas.py:290`; `app/escala/folgas.py:298`) | I / I / = | R / R / = | I / I / = | K / coerência / **D1** | R / R / = |
+| **Salvar calendário / trocar calendário do vínculo**: sincroniza foto futura e depois células existentes. (`app/escala/folgas.py:597`; `app/escala/folgas.py:619`; `app/escala/folgas.py:638`; `app/colaboradores/services/vinculo.py:455`) | I / I / = | R / R / = | I na célula / I / = | K / coerência / **D1** | R / R / = |
+| **Vínculo novo pelo executor**: cria EC e suplementa desde início. (`app/colaboradores/services/vinculo.py:281`; `app/colaboradores/services/vinculo.py:330`) | I / I / = | R pelo novo / R / = | I / I / = | K pelo novo / coerência / **D1** | R pelo novo / R / = |
+| **Encerrar com sucessor no executor**: fecha anterior em D−1 e depois aplica novo desde D. (`app/colaboradores/services/vinculo.py:205`; `app/colaboradores/services/vinculo.py:333`) | I / I / = | Z transitório ou conserva; termina R / R / = | I / I / = | termina K / coerência / **D1** | termina R / R / = |
+| **Encerrar sem sucessor por `fechar_vigencia`**: começa após menor fim antigo/novo. (`app/colaboradores/services/vinculo.py:640`; `app/colaboradores/services/vinculo.py:648`) | I / I / = | Z / sem previsão inválida / **D3** | I / I / = | Z, ata conservada / coerência / **D1+D3** | Z / sem previsão inválida / **D3** |
+| **Encerrar por `encerrar_vinculo`**: `save` dispara signal de vigência. (`app/colaboradores/services/vinculo.py:821`; `app/escala/signals.py:80`) | I / I / = | Z sem outro cobrindo; conserva havendo outro / evento deve fechar efeito / **D4** | I / I / = | mesma ação + ata antiga / coerência / **D1+D4** | mesma regra / evento deve fechar efeito / **D4** |
+| **Reativar pelo executor**: mesma EC recebe ativa, fim nulo e suplemento. (`app/colaboradores/services/vinculo.py:253`; `app/colaboradores/services/vinculo.py:270`; `app/colaboradores/services/vinculo.py:333`) | I / I / = | R / R / = | I / I / = | K / coerência / **D1** | R / R / = |
+| **Reabrir vigência impossível**: `update`, sem suplemento. (`app/colaboradores/services/vinculo.py:715`; `app/colaboradores/services/vinculo.py:730`) | I / I / = | I / R / **D5** | I / I / = | I / atualizar efeito / **D5** | I / R / **D5** |
+| **Trocar tipo/configuração pelo executor ou salvar template**: segue as respectivas linhas acima; âncora alterada para valor não nulo tem signal próprio. (`app/colaboradores/services/vinculo.py:268`; `app/escala/signals.py:111`; `app/escala/signals.py:131`) | I / I / = | R / R / = | I / I / = | K / coerência / **D1** | R / R / = |
+| **Trabalha em feriado**: flag mudou → suplemento; valor igual retorna. (`app/colaboradores/services/vinculo.py:869`; `app/colaboradores/services/vinculo.py:888`) | I / I / = | R / R / = | I / I / = | K / coerência / **D1** | R / R / = |
+| **Feriado salvo/movido**: datas antiga/nova; somente geradas; EC vem do juiz alimentado pela geradora. (`app/core/signals.py:14`; `app/core/signals.py:27`; `app/ponto/services/cadastro_futuro.py:53`; `app/ponto/services/cadastro_futuro.py:59`) | I / I / = | R se juiz responde; B no caso C6 / mesma autoridade / = | I / I / = | K se juiz responde / coerência / **D1** | R ou B / mesma autoridade / = |
+| **Feriado apagado**: mesma seleção, na data apagada. (`app/core/signals.py:30`; `app/ponto/services/cadastro_futuro.py:49`) | I / I / = | R ou B / mesma autoridade / = | I / I / = | K / coerência / **D1** | R ou B / mesma autoridade / = |
+| **DnaContrato**: cenário composto de encerramento, sucessor e edição de template; não é porta de cadastro autônoma. (`app/escala/tests/test_celula_dia.py:146`; `app/escala/tests/test_celula_dia.py:152`; `app/escala/tests/test_celula_dia.py:165`; `app/escala/tests/test_celula_dia.py:186`) | segue portas acima | segue portas acima | segue portas acima | cenário não prova esta coluna / exigência pendente / **D1** | segue portas acima |
+| **`regenerar_celulas_vinculo` direta**: intervalo explícito; extensão ligada por padrão. (`app/ponto/portas/celula.py:110`; `app/ponto/portas/celula.py:187`) | N / suplemento deveria I / **D6 se usada como suplemento** | R ou Z ou B / conforme ato / ressalvas acima | I / I / = | K / coerência / **D1** | R ou Z ou B / conforme ato / ressalvas acima |
+| **Cron `gerar_celulas`**: mede antes, trata hoje separadamente, gera ausentes e conserva futuras existentes. (`app/ponto/management/commands/gerar_celulas.py:337`; `app/ponto/management/commands/gerar_celulas.py:340`) | G só EC ativa / gerar ausentes vigentes / **D7** | I + vigia / I + vigia / = | I / I / = | I + vigia de DNA / vigiar coerência / **D1** | I + vigia / I + vigia / = |
+
+As ressalvas da matriz são estas:
+
+- **D1 — desenho novo com julgamento antigo.** `dna.lampadas` é previsão; `ata.lampadas` é o fato lavrado. A regeneração futura muda o primeiro e conserva o segundo. O leitor usa as lâmpadas da ata, e há consumidor que casa marco do DNA com luz da ata. O vigia compara `trabalha`/DNA, sem conferir essa coerência. (`app/ponto/portas/celula.py:298`; `app/ponto/portas/celula.py:453`; `app/escala/services/leitor_celula.py:114`; `app/chamados/juizes.py:1337`; `app/ponto/services/vigia_cadastro_futuro.py:48`)
+- **D2 — evento de atributo pode substituir o dono do dia.** O suplemento seleciona todas as futuras geradas da pessoa, sem restringir geradora; cada EC que cobre a data pode substituir o carimbo. Na propagação do template, vínculos são percorridos por início decrescente; havendo sobreposição do mesmo template, o mais antigo pode escrever por último, embora `vinculo_do_dia` preservasse o carimbo recebido. É um contraexemplo estático; ocorrência em produção **[nao verificado]**. (`app/ponto/services/cadastro_futuro.py:22`; `app/ponto/services/cadastro_futuro.py:26`; `app/escala/services/cadastro_tipo.py:373`; `app/escala/models.py:1003`; `app/ponto/portas/celula.py:294`; `app/escala/alimentacao.py:279`)
+- **D3 — fim sem sucessor ganhou representação, mas zero não comprova sua semântica.** A FK fica nula; `dna.vinculo_id` continua sendo a EC encerrada; o vigia põe o caso em `sem_geradora`, fora dos dois contadores esperado-zero. O teste exige essa representação, mas o aval transcrito não a especifica literalmente. (`app/ponto/portas/celula.py:250`; `app/ponto/management/commands/gerar_celulas.py:97`; `app/ponto/services/vigia_cadastro_futuro.py:34`; `app/ponto/tests/test_cadastro_futuro_c4.py:60`) **lei: representação e leitura da célula futura existente cujo vínculo terminou sem sucessor. [nao verificado]**
+- **D4 — encerrar não equivale sempre a aplicar sucessor.** Havendo outro vínculo cobrindo, a porta conserva a célula fora da vigência da geradora antiga; só o evento que efetivamente aplica o sucessor troca o carimbo. Encerramento isolado não completa essa transição. (`app/ponto/portas/celula.py:247`; `app/colaboradores/services/vinculo.py:333`)
+- **D5 — reativação por `update` fica fora do evento.** `reabrir_vigencia_impossivel` atualiza ativa/fim, registra trilha e retorna; não chama regeneração nem emite `save`. Introdução dessa omissão pela c4b **[nao verificado]**. (`app/colaboradores/services/vinculo.py:715`; `app/colaboradores/services/vinculo.py:722`; `app/colaboradores/services/vinculo.py:730`)
+- **D6 — regeneração explícita e suplemento têm contratos distintos.** A primeira cria ausentes e estende horizonte; o segundo só visita existentes. ESCALA-AUTO ainda usa diretamente a primeira, inclusive com horizonte padrão. O alcance anterior autorizado desse ato não pode ser revogado por inferência desta obra. (`app/ponto/portas/celula.py:187`; `app/ponto/portas/celula.py:280`; `app/escala/services/escala_auto_executor.py:99`; `app/escala/services/escala_auto_executor.py:104`)
+- **D7 — ausente com EC inativa ainda vigente.** O cron enumera apenas `ativa=True`; a autoridade admite inativa com fim declarado cobrindo a data. Assim, uma lacuna anterior a um fim futuro pode ficar fora do suplemento e do gerador. É consequência das seleções; existência em produção **[nao verificado]**. (`app/ponto/services/cadastro_futuro.py:22`; `app/ponto/portas/celula.py:851`; `app/escala/alimentacao.py:214`)
+
+Para o **passado**, estas são as expansões por estado:
+
+| Tratamento | Não existe | Gerada | Editada | Carimbada | Regenerada |
+|---|---|---|---|---|---|
+| **P0 — fora do alcance do evento** | conserva ausência | conserva | conserva | conserva | conserva |
+| **PR — chamada formal de regeneração** | cria se coberta | R; fora da vigência pode apagar trabalho/marcos mantendo geradora | conserva | desenho pode mudar; julgamento depende de `recalculo` e proteção humana | R, com nova marca somente se mudou |
+| **PG — gerador** | **cria: PROIBIDO** | DNA nulo pode ser preenchido: **PROIBIDO** | conserva | mesma regra de DNA nulo: **PROIBIDO** se escrever | conserva DNA existente |
+| **PX — exclusão de EC referenciada** | sem efeito | FK pode virar nula: **PROIBIDO** | restauração recusa | FK pode virar nula: **PROIBIDO** | FK pode virar nula: **PROIBIDO** |
+
+**PR** vem dos ramos de criação, reescrita e fora de vigência; o julgamento só ocorre com `recalculo`, excluindo vereditos humanos. **PG** escreve fora de `regenerar_celulas_vinculo`. **PX** decorre do `delete` e do `SET_NULL`, não de regeneração. (`app/ponto/portas/celula.py:260`; `app/ponto/portas/celula.py:280`; `app/ponto/portas/celula.py:285`; `app/ponto/portas/celula.py:444`; `app/ponto/portas/celula.py:875`; `app/ponto/portas/celula.py:886`; `app/colaboradores/services/vinculo.py:1005`; `app/colaboradores/services/vinculo.py:1007`; `app/escala/models.py:1693`)
+
+| Evento | Passada: atual / aval / divergência |
+|---|---|
+| Estrutura/município | **P0 / P0 / =**; município trata hoje separadamente. (`app/colaboradores/services/vinculo.py:933`) |
+| Template comum | **PR**, ativos, desde competência anterior/início da EC até hoje / preservar alcance anterior / anterioridade exata **[nao verificado]**. (`app/escala/services/cadastro_tipo.py:337`; `app/escala/services/cadastro_tipo.py:351`) |
+| Template no admin | **P0 / P0 / =**. (`app/escala/services/cadastro_tipo.py:380`) |
+| Folga/foto | **PR / alcance anterior pela mesma porta / = quanto ao escritor**. (`app/escala/folgas.py:290`; `app/escala/folgas.py:293`) |
+| Calendário salvo/trocado | **P0 / P0 / =** no suplemento; foto reconciliada somente após hoje. (`app/escala/folgas.py:632`; `app/escala/folgas.py:638`) |
+| Vínculo novo/reativado pelo executor | **PR**, início..hoje / preservar alcance anterior / anterioridade exata **[nao verificado]**. (`app/colaboradores/services/vinculo.py:319`) |
+| Fechar por `fechar_vigencia`, com/sem sucessor | **P0 / P0 / =**. (`app/colaboradores/services/vinculo.py:640`) |
+| Encerrar por `save` | **PR**, menor início..hoje / mesma porta / = quanto ao escritor. (`app/escala/signals.py:60`; `app/escala/signals.py:73`) |
+| Reabrir vigência impossível | **P0 / não ampliar passado / =**; a lacuna é futura, D5. (`app/colaboradores/services/vinculo.py:715`) |
+| Âncora para valor não nulo | **PR**, competência corrente..hoje / mesma porta / = quanto ao escritor. (`app/escala/signals.py:119`; `app/escala/signals.py:125`) |
+| Trabalha em feriado | **PR**, competência anterior..hoje / mesma porta / = quanto ao escritor. (`app/colaboradores/services/vinculo.py:878`; `app/colaboradores/services/vinculo.py:883`) |
+| Feriado salvo/apagado | **P0 / P0 / =** no suplemento. (`app/ponto/services/cadastro_futuro.py:49`) |
+| DnaContrato | Verifica congelamento do histórico encerrado após salvar template / conservar passado / cenário presente; execução **[nao verificado]**. (`app/escala/tests/test_celula_dia.py:166`; `app/escala/tests/test_celula_dia.py:197`) |
+| Regeneração explícita | **PR / exceção formal / = quanto ao escritor**, respeitadas lavra e edição humana. (`app/ponto/portas/celula.py:114`; `app/ponto/portas/celula.py:272`; `app/ponto/portas/celula.py:285`) |
+| Cron | **PG / nenhuma escrita passada fora da regeneração / PROIBIDO** pela regra desta leitura. (`app/ponto/portas/celula.py:875`; `app/ponto/portas/celula.py:886`) |
+| Restaurar snapshot/desfazer ajuste | **PX / conservar passada / PROIBIDO quando houver referência passada**; ocorrência real **[nao verificado]**. (`app/colaboradores/services/vinculo.py:1007`; `app/colaboradores/services/vinculo.py:1077`; `app/colaboradores/services/vinculo.py:1079`; `app/escala/models.py:1693`) |
+
+**2. As 11 falhas da c4**
+
+A numeração segue o anexo. O anexo demonstra os resultados em c4; aprovação posterior de cada teste em c4b permanece **[nao verificado]**. [nao verificado]
+
+| # | Falha / classe revelada / casa da matriz | Tratamento presente em c4b |
+|---|---|---|
+| 1 | `Cancelar_na_caixa...`: Feriado salvo × futura; data do evento sem representação canônica. O traceback fornecido morre no preparo, antes do clique. **[nao verificado]** | **Adaptação local por `isinstance`**: converte string ISO antes de comparar datas. Resolve essa incompatibilidade no serviço; não normaliza a origem `Feriado`. (`app/ponto/services/cadastro_futuro.py:48`; `app/core/models.py:12`) |
+| 2 | `a_tela_de_feriado_novo...`: mesma classe e mesma casa; falha no preparo fornecido. **[nao verificado]** | Mesmo contorno; há teste específico enviando string ao evento. (`app/ponto/services/cadastro_futuro.py:48`; `app/ponto/tests/test_cadastro_futuro_c4.py:146`) |
+| 3 | `Excluir_confirmado...`: mesma classe; não constitui prova do clique após preparar o cenário. **[nao verificado]** | Mesma conversão. Exclusão também passa `instance.data` ao serviço. (`app/ponto/services/cadastro_futuro.py:48`; `app/core/signals.py:30`) |
+| 4 | `Salvar_do_editar...`: Feriado salvo/movido × futura nas datas antiga/nova. | Mesma conversão seletiva; captura da data antiga continua no `pre_save`. (`app/ponto/services/cadastro_futuro.py:48`; `app/core/signals.py:14`; `app/core/signals.py:27`) |
+| 5 | `dna_congelado_sobrevive...`: encerramento → sucessor → template × futura gerada/regenerada; preservação histórica. | **Mudança da testemunha do teste.** Agora exige retirada do carimbo encerrado, aplica explicitamente o sucessor e fabrica divergência por `QuerySet.update` do template; depois verifica cura por `salvar_tipo`. Não é `skip`/allowlist, mas também não é uma cura de produção dessa falha isoladamente. (`app/escala/tests/test_celula_dia.py:159`; `app/escala/tests/test_celula_dia.py:165`; `app/escala/tests/test_celula_dia.py:170`; `app/escala/tests/test_celula_dia.py:177`; `app/escala/tests/test_celula_dia.py:186`) |
+| 6 | `template_derivado_trilha_e_passado_intocado`: fechamento com sucessor × futura anterior ao início do efeito, ainda coberta. | **Cura na origem do alcance**: começa em `min(fim_antigo,fim_novo)+1`. O teste original conserva a comparação da foto ant
+
+[truncado em 20000 de 37456 caracteres]
 
 ## 12/11 15:30 · sessao e5f3193debbc · O168 · verificador · origem=Code
 
@@ -991,18 +1092,4 @@ Caminho do vazio:
 - `data_conferida_em` tem escritor separado, `app/chamados/services/validacao.py:664`, com save apenas de conferência/autor em `:666`.
 - Atribuição histórica de cada uma das 143 a um desses caminhos: [não verificado].
 
-## 12/11 14:52 · sessao 4b2f9e7f47af · - · - · origem=Ronald (tmux)
-
-Conferência não-semente:
-
-- **FECHADOS contratualmente:** G1 antes do primeiro comentário e guarda sem unicidade global de `<!--`; v6:6–7. G2/lápide, G3/`GERADO:FIM`, manual em 2371, autoria por zonas e cópia byte a byte são mantidos pela incorporação do v5; v6:5. A cópia continua com leitura/recomposição textual, a substituir na construção; `bin/gerar_backlog.py:111`, `:127`, `:138–140`.
-- **FECHADA a omissão semântica do censo:** v6:12 declara expressamente que a coluna e o tachado deixam de excluir IDs da fonte; corresponde ao comportamento atual em `bin/hook_stop_fila1.py:168`, `:180`, `:250–252` e `bin/disjuntor.py:1634`.
-- **FECHADOS segundo classificador e TRAVA/censo:** `_pertence_fila1` permanece; v6:4,10. O matcher atual está em `bin/disjuntor.py:1688–1695`. A v6:14 distingue APROVADO de autorização de construção; o código aprova o brief em `bin/disjuntor.py:1721–1727`.
-- **Referência incorreta não bloqueia:** v6:8 menciona OBRAS:FIM em 2051 no vivo; nesta cópia está em `app/docs/BACKLOG.md:2042`. A própria v6:8 exige âncora por conteúdo; não há escolha contratual.
-- **Referência estreita de selo não bloqueia:** v6:15 substitui `test_hook_estado_e_a_coluna.sh:53–59`, mas os casos completos abrangem `:51–63`, e o contador continua em `:80–108`. A obrigação “a coluna não move o topo; só o .ids move” na v6:15 permite migrar os pontos coerentemente sem decisão nova.
-
-**Possível bloqueante por violação de aval já documentado:** APP continua após C20-O168 na cabeça; v6:26,30. `app/docs/BACKLOG.md:1916` registra o aval “depois da TRIAGEM, antes de O168/LASTRO”. A v6:30 admite a discrepância e reduz a frase a LASTRO alegando abertura anterior de O168. O anexo não fornece autorização nova de Ronald para esse corte; autorização: **[nao verificado]**. Se “aval literal” inclui esse aval citado pelo próprio contrato, é bloqueante; se a leitura pedida restringe o aval literal exclusivamente ao aval de origem reproduzido no pedido, deixá-lo como achado v5 ainda aberto.
-
-O contrato v5 completo não foi encontrado na árvore pesquisada; as obrigações incorporadas por “como no v5” só puderam ser cotejadas com a leitura v5 fornecida, não com o documento integral: **[nao verificado]**.
-
-_4313 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4314 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
