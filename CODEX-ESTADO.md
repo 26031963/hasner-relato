@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 21:07** · publicado em **11/11/2026 21:11** (UTC-3)
+> Ultima resposta processada: **11/11/2026 21:19** · publicado em **11/11/2026 21:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 21:19 · sessao 3c18a0449066 · PERGUNTA-DUPLA · construtor · origem=Code
+
+Criado somente [test_pergunta_dupla_saida_noturna.py](/home/ronald/wt-codex-pergunta-dupla-211041/app/chamados/tests/test_pergunta_dupla_saida_noturna.py:1). O ensaio usa API real, relógio congelado por etapa, signals preservados e observador aditivo de nascimento; exige exatamente uma pergunta `orfao_14h`, não conversa, em D, incluindo linhas carimbadas na contagem (`chamados/tests/test_pergunta_dupla_saida_noturna.py:85,120,135,188,234`).
+
+**Esperado no HEAD: VERDE.** Não encontrei produtor alcançável que entregue D+1 para essa saída ausente; não fabriquei contexto para obter RED. Execução Django e mordida do mutante: **[nao verificado]**, pois banco está vedado nesta construção. Sintaxe e compilação em memória passaram; isso não certifica comportamento (`chamados/tests/test_pergunta_dupla_saida_noturna.py:1`).
+
+Censo dos escritores e da origem do dia:
+
+| Escritor real | Valor e semântica |
+|---|---|
+| Detector `orfao_14h` | `data` vem de `resolver_data_evento` → juiz da batida: **D** (`chamados/detector_anomalias.py:41`; `escala/servico_jornada.py:508`). |
+| Fábrica da célula | `contexto[motivo].data` recebe o dia da célula: **D** (`chamados/services/fabrica_da_celula.py:172`). |
+| Pendentes adicionais | Consulta `dia_do_turno_da_batida`; grava contexto quando cria pergunta: **D** (`chamados/services/disputa_emissao.py:283,292,296`). |
+| Alertas de turno | Grava `tm.data_turno` e timestamp da entrada; **D** vem do turno materializado (`ponto/management/commands/processar_alertas_turno.py:316,349`). |
+| Alertas avançados | `ontem` é seleção pelo calendário, mas consulta trabalho, turno materializado e juiz da aberta antes de gravar: **D** neste cenário (`ponto/management/commands/processar_alertas_avancados.py:49,58,63,127`). |
+| Detector de ausências/cartório | Grava o dia previsto da passada/célula e `horario_previsto`; não converte uma saída civil em dia do turno (`ponto/management/commands/detectar_ausencias.py:138,706`). |
+| Retroativo de turno aberto | Grava `t.data_turno` e timestamp da entrada; **D**. É ato sem agenda de cron (`ponto/management/commands/emitir_turno_aberto_retroativo.py:88,128`; `config/crons.py:934`). |
+| Reconciliador c2 | Copia o dia recebido do fio; não faz nova conversão pelo pareador. O chamador prioriza `p.data_evento` (`chamados/reconciliador.py:690,811,920,1567`). |
+| Reconciliador de grade | Grava o dia da grade; cron está em sombra, sem `--apply` (`ponto/management/commands/reconciliar_grade.py:517`; `config/crons.py:462`). |
+| Web: entrada bloqueada | `pendentes` contém dia **civil da entrada**, D para E às 19h. Exige outra tentativa de E bloqueada, ausente deste ensaio (`ponto/views.py:275,279,301`; `ponto/services/triagem_batida.py:180`). |
+
+Os escritores civis encontrados não demonstram D+1 para a saída faltante:
+
+- `data_batida` do detector descreve batida **existente** em folga ou fora da escala (`chamados/detector_anomalias.py:174,220`).
+- A API grava `data_turno=localdate(batida.timestamp)` para desvio **leve**, categoria fora do mapa de regularização de saída (`api/views_core.py:710,717`; `chamados/models.py:3664`).
+- `saida_sem_entrada` tem a data corrigida pelo juiz nas duas APIs e na triagem; cobra a entrada ausente e exige S existente (`api/views_core.py:741,747`; `api/views.py:747,753`; `ponto/services/triagem_batida.py:729,739`).
+- Os contextos de justificativa copiam data informada ou `j.data_turno`; suas categorias não constam do mapa de saída (`api/views.py:1948,1968,1978`; `ponto/services/justificativa.py:297,302`; `chamados/models.py:3664`).
+
+Quem escreve e quem lê os campos envolvidos:
+
+| Campo | Escrita | Leitura |
+|---|---|---|
+| Pergunta: `motivo`, `conversa`, `data_evento` | `_nascer` recebe motivo/conversa; `fio.gravar_dia_do_fato` atribui a data; INSERT em `save` (`chamados/models.py:3014,3017`; `chamados/services/fio.py:800`). | Identidade/dedup, fábrica, fio e plantio (`chamados/models.py:2753`; `chamados/services/fabrica_da_celula.py:148`; `chamados/services/fio.py:1630`; `chamados/services/materializacao.py:280`). |
+| `DisputaSupervisao.contexto[motivo].data` | Produtores acima; agregador persiste nascimento/merge (`chamados/services/disputa_emissao.py:559,562,590`). | Gerador, derivação do destino e reconciliador (`chamados/services/disputa_emissao.py:191,372`; `chamados/reconciliador.py:1560`). |
+| `ChamadoColaborador.contexto_json`, cinco chaves | Produtores acima; atualização pela porta de contexto (`chamados/services/contexto.py:102`). | Parser, repasse sem origem e derivação do destino (`chamados/data_evento.py:16`; `chamados/services/disputa_emissao.py:1232,145`). |
+
+Os dois sítios ainda preservam uma data recebida: leitura crua do contexto e parser sem origem; `dia_do_turno_da_celula` apenas declara o valor (`chamados/services/disputa_emissao.py:372,451,1232`; `ponto/turnos.py:2939`).
+
+Comando para o Code:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test chamados.tests.test_pergunta_dupla_saida_noturna --settings=config.settings.ci
+```
+
+Mutante descrito, sem aplicação: em `chamados/services/disputa_emissao.py:451`, trocar `_dtc_g(_dia_p)` por `_dtc_g(_dia_p + datetime.timedelta(days=1))`. Executar o mesmo comando; o repasse conserva D, enquanto o gerador entrega D+1. O assert deve reprovar as duas chaves; mordida executada **[nao verificado]** (`chamados/tests/test_pergunta_dupla_saida_noturna.py:33,240`).
+
+Texto para o RELATO: **cura do +1 presente nesta cópia** (`escala/servico_jornada.py:508`); estado efetivamente “no ar” **[nao verificado]**. Atribuição histórica dos pares e situação atual da batida 147824 continuam **[nao verificado]**, no passivo BATIDA/histórico, L-099. Certificação permanece com Code e opus final.
 
 ## 11/11 21:07 · sessao 4be47f121636 · BUG-ORFAO-COM-PAR · construtor · origem=Code
 
@@ -1654,46 +1702,4 @@ O pareador ordena por `timestamp`, abre em E e fecha na S posterior, incluindo t
 
 RED proposto: fixture com E às 19:00 em D e S às 07:00 em D+1, ambas apuráveis, escala/célula noturna; congelar o relógio após a S e o prazo aplicável; chamar a porta emissora e exigir nenhuma pergunta `orfao_14h` para D, além de turno único fechado. Mutante: descartar a resposta fechada do pareador e decidir ausência de S apenas no dia civil D; precisa gerar a pergunta e matar o RED. Proposta não executada `[nao verificado]`. O teste existente comprova somente o pareamento 22–06, não a emissão (`app/ponto/tests/test_turnos.py:12`).
 
-## 11/11 20:29 · sessao bafd5a525e88 · - · - · origem=Ronald (tmux)
-
-Censo só leitura das permissões e portas genéricas:
-
-- **Supervisor da UI** recebe grupo `gestor` + grupos de setores de supervisão, e é criado com `is_staff=True`, `is_superuser=False`: `app/core/views_usuarios.py:48`, `:52`, `:291`, `:295`, `:296`, `:299`. Supervisor legado também ganha staff ao alterar `Colaborador.perfil`: `app/core/credenciais.py:132`, `:135`, `:139`.
-- **Entrada da fila/fio:** `_is_gestor` aceita staff ou grupo literal `dp_rh`, `gestor`, `admin_ti`: `app/chamados/views.py:24`, `:35`. Painel recusa com 404 em `:723`; fio em `:662`; modal em `:872`. Não basta chamar-se `supervisao` sem staff/grupo gestor: `app/chamados/views.py:35`.
-- **`tem_acao` não trata staff/admin_ti como bypass:** só superuser ou permissão efetiva nativa: `app/colaboradores/mixins.py:322`, `:328`, `:330`. Os grants reais da produção são **[não verificado]**.
-- **Default supervisor:** `gerir_chamados`, `regularizar_batida`, `editar_escalas`, `editar_ausencias`, entre outros, mas sem `materializar_saida`: `app/colaboradores/mixins.py:355`. DP tem `materializar_saida` em `:364`; TI em `:376`.
-
-| Porta/ação | Botão | URL / view | Guarda |
-|---|---|---|---|
-| Resposta + mover status no modal | `app/templates/chamados/partials/modal_fio.html:665`, `:672` | `/chamados/modal/<colab>/`, `app/chamados/urls.py:39`; `app/chamados/views.py:869`; executor `app/chamados/services/fio.py:708` | entrada `_is_gestor` `views.py:872`; render `modal_fio.html:652`; POST contextual `fio.py:714`; transição `:721` |
-| Resposta + mover status no fio | `app/templates/chamados/fio_colaborador.html:265`, `:272` | `/chamados/colaborador/<colab>/`, `urls.py:21`; `views.py:659`; executor `fio.py:708` | entrada `views.py:662`; render `fio_colaborador.html:255`; contextual `fio.py:714`; transição `:721` |
-| Resposta + mover status no detalhe | `app/templates/chamados/detalhe_local.html:393`, `:403` | `/chamados/local/<id>/`, `urls.py:14`; `views.py:359`; executor `acoes_chamado.py:283` | contextual `views.py:420`; execução status `acoes_chamado.py:313`; model `models.py:128` |
-| Aprovar exceção Art.468 | `modal_fio.html:599`; `detalhe_local.html:258` | `/chamados/local/<id>/`, `urls.py:14`; `views.py:426`; `acoes_chamado.py:21` | `_pode_aprovar` aceita staff ou grupo gestor/admin_ti: `views.py:41`; contextual `views.py:420` |
-| Autorizar/recusar geofence no modal | `modal_fio.html:506`, `:517` (ações; botão localizar no bloco) | modal acima; executor `fio.py:533`; `acoes_chamado.py:165`, `:243` | `_is_gestor` entrada; contextual `fio.py:541` |
-| Regularizar disputa | `modal_fio.html:355`; `detalhe_local.html:317` | modal/local acima; `fio.py:646`; `views.py:467`; `acoes_disputa.py:118` | contextual `fio.py:566` / `views.py:420`; exige resolução `fio.py:648`; muda viva recusa `:660` / `acoes_disputa.py:130` |
-| Arquivar | URL `app/chamados/urls.py:26`; botão não rastreado neste subcenso | `/chamados/arquivar/<id>/`, `views_arquivar.py:24` | `tem_acao gerir_chamados` `:26`; área `:32` retorna **403** em `:34` |
-| Reabrir disputa administrativa | botão não rastreado neste subcenso | modal, `fio.py:581`; `acoes_disputa.py:235` | contextual `fio.py:566`; **staff OU grupo literal admin_ti** `acoes_disputa.py:245` |
-| Reabrir/recobrar questionário | URL `urls.py:20`; view `views.py:1372` | `/chamados/local/<id>/reabrir-disputa/` | peculiaridade: só recusa se **não tem gerir_chamados E não pode_agir_chamado**, `views.py:1404` |
-
-**RBAC contextual:** `app/chamados/utils.py:32` resolve departamento pelo dono de `MOTIVOS[modulo_origem]`; solicitações com área válida usam a área antes do dono (`:39`). `colab`, `cadastro`, `supervisao` → supervisão; `dp` → DP; `sistema` → TI (`:27`). Permite gestor geral superuser/`tem_perfil admin_ti` (`:47`, `:57`), legado sem competências (`:60`), ou competência igual ao departamento (`:65`). `tem_perfil` lê competências dos setores, não grupo literal por nome (`mixins.py:193`).
-
-**Módulos do catálogo recusados ao supervisor puro pelo dono, se estiverem em Decidir:** `ausencia_colab` (`catalogo/modulos.py:120`), `colaborador_em_ferias` (`:123`), `desligamento_revisao` (`:141`), `mensagem_dp` (`:192`), `beneficio` (`:195`) → DP; `acesso_bloqueado` (`:154`), `smoke` (`:198`) → TI. Solicitações de qualquer área diferente de supervisão também: `utils.py:39`, `:65`. Ocorrência concreta na fila de produção **[não verificado]**.
-
-**Veto de negócio não é veto por perfil:** `ChamadoColaborador.transicionar` consulta perfil (`models.py:130`), recusa justificativa pendente (`:136`), disputa viva (`:153`), pergunta viva ancorada (`:165`) e furo não regularizado (`:181`). Motor só reserva reabertura do fechado/admin overrides a `admin_ti`: `catalogo/motor.py:150`, `:153`. `DisputaSupervisao.pode_fechar` exige ausência de respostas sem veredito e fio vivo: `models.py:1848`; `fechar` recusa respostas sem veredito `:1886` e vivas `:1897`. `admin_encerra` existe no modelo (`:1943`) mas nenhum chamador web foi encontrado no grep de `app/chamados` **[não verificado quanto a outras apps]**.
-
-**Quem escreve / quem lê:**
-
-| Campo/permissão | Escritores identificados | Leitores |
-|---|---|---|
-| `Group.permissions`, `rbac_*` | semeadura `colaboradores/signals.py:25`, `:30` → `mixins.py:397`; alterações UI `core/views_quadro.py:42`, `:45` | `mixins.py:330`; exibição `core/views_quadro.py:59` |
-| `User.groups` | criação `core/views_usuarios.py:299`; add/remove `:204`, `:206` | competência `mixins.py:139`; perfil `:116`; `_is_gestor` `chamados/views.py:38`; `_pode_aprovar` `:45` |
-| `User.is_staff` | criação `core/views_usuarios.py:295`; mudança de perfil `core/credenciais.py:139` | `_is_gestor` `chamados/views.py:36`; aprovação `:43`; apresentação admin `:707`, `:936`; reabrir admin `acoes_disputa.py:245`; fallback perfil `mixins.py:177` |
-| `User.is_superuser` | criação `core/views_usuarios.py:296`; alternância `:82` | `mixins.py:163`, `:194`, `:328`; geral contextual `chamados/utils.py:49` |
-| `Colaborador.perfil` | `core/credenciais.py:135`, acionado em `colaboradores/views.py:1470` | `mixins.py:171`; `transicionar` consome `get_perfil` em `chamados/models.py:131` |
-| `Setor.competencia/ativo` | criar `core/views_usuarios.py:248`, `:254` → `colaboradores/services/estrutura.py:97`; toggle ativo `core/views_usuarios.py:377` → `estrutura.py:109` | `mixins.py:117`, `:140`; semeadura `signals.py:30` |
-| `ChamadoColaborador.status_local` | núcleo `chamados/models.py:228`, chamado por `_aplicar` `:450` | partição/rótulo por outro subagente; botões genéricos `modal_fio.html:651`; motor `catalogo/motor.py:139` |
-| `Disputa.fechada_em/fechada_por/resolucao/motivo_fechamento` | `chamados/models.py:1932` | porta `:1879`; roteamento pergunta `services/fio.py:600`; busca detalhe `acoes_chamado.py:335` |
-
-`user_permissions` individuais são lidas indiretamente por `get_all_permissions` (`mixins.py:331`) e exibidas em `core/views_usuarios.py:159`; escritor próprio na árvore não identificado **[não verificado]**.
-
-_4025 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4026 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
