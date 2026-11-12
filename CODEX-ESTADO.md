@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 15:44** · publicado em **12/11/2026 15:47** (UTC-3)
+> Ultima resposta processada: **12/11/2026 15:58** · publicado em **12/11/2026 15:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 15:58 · sessao 89593e35bd52 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Cura entregue para certificação: **29 testes locais verdes, 14 mutantes mortos por asserção e Ruff limpo nos cinco Python tocados**. HEAD continua na base, sem commit. ([testes](docs/lastro_c19_execucao.txt:1040), [mutantes](docs/lastro_c19_execucao.txt:1086), [Ruff](docs/lastro_c19_execucao.txt:1045), [HEAD](docs/lastro_c19_execucao.txt:1053))
+
+| Item | RED que mordeu antes da cura |
+|---|---|
+| 1 | `test_reconciliacao_mesmo_minuto_remove_so_instante_alvo`: célula preenchida e órfã remanescente conferidas. [RED](docs/lastro_c19_execucao.txt:96) |
+| 2 | `test_dryrun_nao_orfa_no_mesmo_minuto_nao_vira_intervalo`. Também há cobertura com matcher real. [RED](docs/lastro_c19_execucao.txt:159), [matcher real](ponto/tests/test_lastro_c19_orfas_instantes.py:121) |
+| 3 | `test_contador_sem_chamador_foi_apagado`: contador removido com lápide de uma linha. [RED](docs/lastro_c19_execucao.txt:193), [lápide](ponto/services/cartorio.py:721) |
+| 4 | `test_leitor_filtra_par_hora_instante_junto`: filtra o par; ata antiga conserva instantes vazios. [RED](docs/lastro_c19_execucao.txt:213), [cura](escala/services/leitor_celula.py:187) |
+| 5 | **Procede.** `test_sem_marcos_publica_orfas_da_ata_e_pdf_declara_ignorancia`: adaptador conserva horas sem marcos; PDF mantém “não sei” para ata antiga. [RED](docs/lastro_c19_execucao.txt:268), [cura](escala/utils.py:1105) |
+
+Comandos para repetir os testes e os cinco mutantes C19: [nao verificado]
+
+```bash
+c19() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B \
+    -m ponto.tests.test_lastro_c19_orfas_instantes "$@" -v
+}
+
+c19 ReconciliacaoC19Test
+c19 DryRunC19Test
+c19 ContadorC19Test
+c19 LeitorC19Test.test_leitor_filtra_par_hora_instante_junto
+c19 LeitorC19Test.test_sem_marcos_publica_orfas_da_ata_e_pdf_declara_ignorancia
+
+c19 --mutante reconciliacao_minuto ReconciliacaoC19Test
+c19 --mutante dryrun_minuto DryRunC19Test
+c19 --mutante contador_volta ContadorC19Test
+c19 --mutante leitor_desalinhado LeitorC19Test
+c19 --mutante sem_marcos_descarta LeitorC19Test
+```
+
+Os comandos executados antes de cada cura, os nove mutantes C18 restantes e o comando exato do Ruff estão no [registro de entrega](docs/lastro_c19_execucao.txt:1065).
+
+Arquivos::funções alterados:
+
+- `escala/utils.py::montar_grade_prevista_periodo_por_turno` — comparação por instante no [dry-run](escala/utils.py:1699) e na [reconciliação](escala/utils.py:2067).
+- `escala/utils.py::montar_realizado_grade` — [órfãs independem dos marcos](escala/utils.py:1097).
+- `escala/services/leitor_celula.py::_orfas_da_ata` e `::grade_da_celula` — [filtragem pareada](escala/services/leitor_celula.py:180), [transporte](escala/services/leitor_celula.py:424).
+- `ponto/services/cartorio.py::contar_celulas_orfas_sem_instantes` — [apagada](ponto/services/cartorio.py:721).
+- Testes C18 ajustados e C19 acrescentados: [lista de funções e remoções](docs/lastro_c19_execucao.txt:1095).
+
+| Campos | Quem escreve | Quem lê |
+|---|---|---|
+| Grade `orfas` / `orfas_instantes` | Matcher, builders e reconciliação: [mapa completo](docs/lastro_c19_execucao.txt:1107) | [Cartório](ponto/services/cartorio.py:737), [adaptador](escala/utils.py:1105), [espelho](ponto/services/espelho.py:860) |
+| Ata `orfas` / `orfas_instantes` | [ata_do_dia](ponto/services/cartorio.py:739); porta persiste | [leitor](escala/services/leitor_celula.py:187) |
+| Grade lida | [grade_da_celula](escala/services/leitor_celula.py:427) | [adaptador/espelho](ponto/services/espelho.py:704) |
+| `orfas_grade` / `orfas_instantes_grade` | [montar_dias](ponto/services/espelho.py:859) | [PDF](relatorios/pdf_espelho.py:176), [tela](templates/ponto/espelho.html:240) |
+
+Certificação Code/Opus, dados de produção, relavratura, DIFF monetário e bytes do PDF: **[nao verificado]**.
 
 ## 12/11 15:44 · sessao 8296f491b2c5 · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
 
@@ -813,42 +865,4 @@ Use o inverso de `folha/export.py:597::competencia_fechada_para_celula`, passand
 
 Não deduzir abertura por `FechamentoMensal.status`: a própria guarda rejeita essa equivalência (`ponto/management/commands/gerar_celulas.py:131`).
 
-## 12/11 15:14 · sessao 87d57a6fc2f3 · E3-LEITORES · sonda · origem=Code
-
-Referências `DADO RASPADO:n` contam desde `sonda_leitura` como linha 1, preservando a linha vazia seguinte.
-
-A saída é conclusiva para a coorte atual: `total_erros=0` e `sonda_coorte_atual_conclusiva=1`. (`DADO RASPADO:25`, `DADO RASPADO:26`)
-
-| Medida | Resultado | Fonte |
-|---|---:|---|
-| Coorte atual de vencidos em COBRANCA | 11 | `DADO RASPADO:5` |
-| É 12? | Não (`mesma_quantidade_12=0`) | `DADO RASPADO:6` |
-| Chamados medidos | 11 | `DADO RASPADO:7` |
-| Visíveis ao colaborador no MAIN | 0 | `DADO RASPADO:8` |
-| Visíveis com a b4 | 3 | `DADO RASPADO:9` |
-| Passam a aparecer com a b4 | 3 | `DADO RASPADO:10` |
-| Chamados de colaboradores isentos | 8 | `DADO RASPADO:11` |
-| Isentos visíveis com a b4 | 1 | `DADO RASPADO:12` |
-| Isentos que passam a aparecer | 1 | `DADO RASPADO:13` |
-
-| Chamado | MAIN | b4 | Isento | Fonte |
-|---|---:|---:|---:|---|
-| col41/#3057 | 0 | 0 | 1 | `DADO RASPADO:14` |
-| col41/#3403 | 0 | 0 | 1 | `DADO RASPADO:15` |
-| col440/#11658 | 0 | 0 | 1 | `DADO RASPADO:16` |
-| col291/#11935 | 0 | 1 | 1 | `DADO RASPADO:17` |
-| col331/#16444 | 0 | 1 | 0 | `DADO RASPADO:18` |
-| col368/#16621 | 0 | 1 | 0 | `DADO RASPADO:19` |
-| col216/#23030 | 0 | 0 | 1 | `DADO RASPADO:20` |
-| col427/#23031 | 0 | 0 | 0 | `DADO RASPADO:21` |
-| col257/#23037 | 0 | 0 | 1 | `DADO RASPADO:22` |
-| col225/#23049 | 0 | 0 | 1 | `DADO RASPADO:23` |
-| col142/#27206 | 0 | 0 | 1 | `DADO RASPADO:24` |
-
-A saída **não prova identidade com os 12 históricos**: `identidade_com_12_historicos_verificada=0`. (`DADO RASPADO:27`)
-
-Na cópia, a lista do colaborador exige `silenciado_ate__isnull=True`. ([janela_colab.py:73](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/chamados/services/janela_colab.py:73))
-
-Para a rodada 2, os números acima são os da saída fornecida. Uma nova execução da sonda sobre `wt-e3-b6-114947`/`c70b7511c` nesta sessão: [nao verificado].
-
-_4322 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4323 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
