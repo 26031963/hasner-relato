@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 08:05** · publicado em **12/11/2026 08:07** (UTC-3)
+> Ultima resposta processada: **12/11/2026 08:12** · publicado em **12/11/2026 08:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 08:12 · sessao ee40839f9d72 · - · - · origem=Ronald (tmux)
+
+Censo na base c10, somente leitura:
+
+| Chamador direto da A2/faixa | Destino e tratamento |
+|---|---|
+| `ponto/status_dia.py:298`, `:304` | Leitura D4 sem `recusas=`; levanta em dia sem batida/lavra. Corrigir os dois ramos. |
+| `colaboradores/services/calendario.py:507` | Tela consulta A2 sem `recusas=` e propaga (`:515`); indexa `_fatos[data]` (`:661`) e chama `_do_dia` (`:716`). Precisa transportar a recusa ao D4 (`:606`) e à palavra, preservando `KeyError` para fato ausente sem recusa. |
+| `ponto/services/dia_do_colab.py:15` | Leitor da API (`api/views_mensageria.py:1970`) e ficha (`colaboradores/services/ficha.py:280`). Levanta; deve devolver rótulo da A2 sem concluir precedência. |
+| `escala/services/semana_do_posto.py:177` | API chama grade (`api/views_mensageria.py:2113`) e propostas (`:2114`). Relança em `semana_do_posto.py:178`; precisa resposta nomeada sem afirmar faixa válida. |
+| `ponto/services/espelho.py:653` | Já consulta com `recusas=` (`:654`); palavra recebe `erro.rotulo` (`:880`, `:341`) sem chamar `do_dia` no recusado. |
+| `ferias/situacao.py:95` | Captura específica (`:96`) e devolve aviso nomeado sem concluir descanso (`:98`). |
+| `ponto/services/vigia_ausencia.py:162` | Captura específica (`:163`) e conta códigos ativos (`:160`, `:168`); manter. |
+| `escala/utils.py:1209` | Builder compartilhado; julgamento/grade que alimenta dinheiro. Manter recusa, sem inventar fato válido. |
+| `ponto/status_dia.py:181` | Insumo da lavra, chamado pelo cartório (`cartorio.py:932`, `:1292`, `:1853`); manter recusa. |
+| `ponto/services/cartorio.py:1998` | Escrita de precedência na célula (`:1999`); manter recusa. |
+| `chamados/services/feriado_reavaliar.py:33` | Julga premissa antes de reconciliar (`:43`, `:94`); manter recusa. |
+| `ponto/management/commands/detectar_ausencias.py:616` | Julgamento do emissor; manter recusa. |
+| `ponto/services/ausencia.py:1310` | Porta converte em `AusenciaInvalida` (`:1312`); corrigir brecha de `campos` conforme pedido. |
+| `ponto/precedencia.py:544`, `:565` | Veto operacional; manter recusa. Chamadores: `ausencia.py:380`, `declarar_dia.py:120`, `escala/folgas.py:310`, `:336`, `ferias/views.py:254`. |
+| `folha/services/sem_furo.py:25` | Apuração de comando (`folha/management/commands/colabs_sem_furo.py:13`); nova semântica numérica da recusa não autorizada. |
+| `ponto/services/faltas_de_hoje.py:61` | Apuração de comando (`ponto/management/commands/faltas_de_hoje_sem_cobranca.py:16`); não é chamada de request identificada. |
+| `ponto/services/deslogados.py:166` | Apuração/lavra (`ponto/management/commands/lavrar_deslogados.py:38`, `ponto/services/pautas_dos_deslogados.py:62`). |
+| `ponto/services/abriu_nao_bateu.py:123` | Apuração/lavra (`ponto/management/commands/lavrar_abriu_nao_bateu.py:30`); API lê snapshot (`api/views_mensageria.py:139`), não executa A2 no request. |
+
+D4 chega a leitores por `ponto/services/espelho.py:170`, `api/views.py:1483`, `colaboradores/services/calendario.py:606`, `relatorios/furos.py:123` e `core/services/painel_op.py:336`. A forma unitária delega ao lote (`ponto/status_dia.py:218`).
+
+Fechamento continua propagando nas três capturas (`ponto/services/fechamento.py:1081`, `:1089`, `:1308`); TXT chama a leitura antes de gerar (`folha/views.py:208`), e simulação chama fechamento (`folha/management/commands/simular_folha.py:123`, `:130`).
+
+`dia_decidido.do_dia` tem dois chamadores operacionais: espelho (`ponto/services/espelho.py:343`) e calendário (`colaboradores/services/calendario.py:716`). Os `do_dia` de calculador, pergunta no app e vigia são homônimos distintos (`ponto/calculador/regras.py:576`, `chamados/services/pergunta_no_app.py:211`, `ponto/services/vigia_entrada.py:111`).
+
+Execução HTTP/ORM e ocorrência produtiva: [nao verificado].
 
 ## 12/11 08:05 · sessao 553a6d49936c · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -714,31 +747,4 @@ O bump não move automaticamente esse literal nem o índice; quebra o selo que e
 
 As 21 atas são sintetizadas e exercitam o ramo sem adesão, com batidas substituídas por vazio; não provam as 21 atas reais nem cadastro+batidas (`app/ponto/tests/test_lastro_c7_sem_banco.py:149`, `app/ponto/tests/test_lastro_c5_sem_banco.py:563`). Executei c5+c7: 30 testes passaram, sem bytecode/escrita; resultado da execução desta sessão, sem arquivo de registro. [não verificado por registro em arquivo]
 
-## 12/11 00:58 · sessao 9b3ed64a1791 · - · - · origem=Ronald (tmux)
-
-Itens 1/2 — conclusões:
-
-- **Folga humana parcial segue cobrando o resto.** A grade obtém a ausência aprovada pelo juiz `cobertura_ausencia_periodo`, calcula parcial pelo juiz `cobre_parte_do_dia`, escreve `tipo_dia`, `ausencia_tipo/id` e `cobertura_parcial`, e conserva o marco fora do período como `missing`; a ata transporta esses campos, portanto a condição nova entra na exceção parcial. (`app/escala/utils.py:1188`, `app/escala/utils.py:1228`, `app/escala/utils.py:1239`, `app/escala/utils.py:1253`; `app/ponto/services/cartorio.py:757`, `app/ponto/services/cartorio.py:766`; `app/chamados/juizes.py:455`.)
-- **Não encontrei produtor real nesta cadeia para os casos que c7 passou a excetuar:** `falta+parcial` e `folga+parcial` sem ambas as chaves. O ramo `falta` não escreve carimbo parcial; a folga humana escreve as duas chaves antes do carimbo. Os testes antigos fabricam diretamente aquelas combinações. (`app/escala/utils.py:1219`, `app/escala/utils.py:1230`, `app/escala/utils.py:1239`; `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:32`, `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:51`.)
-- **Mudança comprovada de um dia real contra `29e201d0c`: [não verificado].** O congelado disponível declara revisão `f218d86a719dbdfab1979856aba769c9198cb43a`, não a base pedida. (`app/ponto/tests/lastro_c3_fontes.json:2`.) O teste parcial é sintético e altera o cadastro da fixture para permitir horas; não prova a configuração real desses tipos. (`app/ponto/tests/test_lastro_c5_sem_banco.py:593`, `app/ponto/tests/test_lastro_c5_sem_banco.py:598`.)
-
-**Escritores:**
-
-| Chave | Origem → ata → persistência |
-|---|---|
-| `tipo_dia` | Grade normal trabalho/folga (`app/escala/utils.py:1810`, `app/escala/utils.py:1816`), overlay folga lançada (`app/escala/utils.py:1151`), overlay ausência/falta (`app/escala/utils.py:1220`, `app/escala/utils.py:1229`) → `ata_do_dia` (`app/ponto/services/cartorio.py:729`). |
-| `ausencia_tipo` | Overlay ausência não falta (`app/escala/utils.py:1230`) → transporte para ata (`app/ponto/services/cartorio.py:766`). |
-| `ausencia_id` | Falta (`app/escala/utils.py:1222`) e demais ausências (`app/escala/utils.py:1232`) → transporte para ata (`app/ponto/services/cartorio.py:766`). |
-| `cobertura_parcial` | Juiz `cobre_parte_do_dia` (`app/ponto/turnos.py:2585`, `app/ponto/turnos.py:2600`) alimenta grade (`app/escala/utils.py:1190`, `app/escala/utils.py:1239`) → ata (`app/ponto/services/cartorio.py:757`). |
-
-A lavratura chama a porta existente nos dois ramos; a atribuição de `cel.ata` continua na porta. (`app/ponto/services/cartorio.py:1288`, `app/ponto/services/cartorio.py:1849`; `app/ponto/portas/celula.py:974`, `app/ponto/portas/celula.py:1006`, `app/ponto/portas/celula.py:1033`.) O leitor reconstrói os campos da ata sem consultar novamente a cobertura. (`app/escala/services/leitor_celula.py:436`, `app/escala/services/leitor_celula.py:439`.)
-
-**Leitores de `dia_sem_trabalho`:** `_celula_furada`, premissa do chamado, fábrica, materialização, cluster espúrio, detector de intervalo e reconciliador; por adaptador, supra juiz, cartório e tarefa do dia. (`app/chamados/juizes.py:497`; `app/chamados/models.py:1284`; `app/chamados/services/fabrica_da_celula.py:112`, `app/chamados/services/fabrica_da_celula.py:201`; `app/chamados/services/materializacao.py:174`; `app/ponto/services/cluster_espurio.py:25`; `app/ponto/management/commands/detectar_intervalo_ausente.py:51`; `app/ponto/management/commands/reconciliar_grade.py:280`; `app/ponto/supra_juiz.py:71`, `app/ponto/supra_juiz.py:495`; `app/ponto/services/cartorio.py:1251`; `app/chamados/services/tarefa_do_dia.py:207`, `app/chamados/services/tarefa_do_dia.py:462`, `app/chamados/services/tarefa_do_dia.py:474`.)
-
-**Item 2 — derivação paralela, com ressalva de pergunta.** `_coberto_inteiro_nb` reconstrói “há cobertura integral” de rótulo/chaves e carimbo, embora a cobertura já tenha sido obtida por `_ac_nb` e sua parcialidade pela grade; seu resultado decide hash e substituição do veredito por `nunca_bateu`. (`app/ponto/services/cartorio.py:1221`, `app/ponto/services/cartorio.py:1231`, `app/ponto/services/cartorio.py:1239`, `app/ponto/services/cartorio.py:1255`, `app/ponto/services/cartorio.py:1285`.) As autoridades de cobertura existentes estão registradas. (`app/core/juizes.py:190`, `app/core/juizes.py:191`, `app/core/juizes.py:253`.)
-
-Não é correto afirmar igualdade literal com `ausencia_explica_o_dia_inteiro`: esse juiz **exclui falta**, enquanto `_coberto_inteiro_nb` inclui falta. (`app/ponto/turnos.py:2677`; `app/ponto/services/cartorio.py:1239`.) Tampouco é igual a `dia_sem_trabalho`: folga sem ausência pode ser dia sem trabalho e não cobertura. (`app/chamados/juizes.py:459`; `app/ponto/services/cartorio.py:1239`.)
-
-**Gravidade sugerida: fila**, pela inferência de cobertura a partir de `tipo_dia`; um contraexemplo real produzido pela árvore que altere resultado por essa duplicação permanece **[não verificado]**. O caso concreto de divergência entre predicados é uma falta aprovada integral: `_coberto_inteiro_nb=True`, `ausencia_explica_o_dia_inteiro=False`, distinção explicitamente codificada; tratá-los como a mesma pergunta produziria reprovação falsa. (`app/ponto/services/cartorio.py:1239`; `app/ponto/turnos.py:2677`.)
-
-_4089 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4090 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
