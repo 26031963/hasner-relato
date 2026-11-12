@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: codex_pergunta.sh | pid=3398566
+AUDITORIA item 2 volta 2 11:43: agente entregou branch raia/travas-item2 (wt-travas-item2-113819, e4fd9f1b5 + 025a12317 + d27a236d1), 4 curas procedentes; RED antes casos 1,2,6,8; 6 mutantes mordem (item2v2_mutantes.log); test_disjuntor rc0; hooks 13/14 (test_hook_nao_e_copia vermelho pre-existente: wt sem .git/hooks). Preverif v2 Codex lancada (preverif_item2v2.q). Agente encerrado.
 LASTRO c15 11:41: construtor rc 0 (11:39). B1 CURADO (orfa por instante do dia da tela; RED c14 0!=1 -> GREEN). B2 selo PDF==tela escrito mas NAO rodou sob Django. B3 mutante recalculador_vazio SOBREVIVE (fronteira Mock). Commit aed458c65 na raia. Prova com banco (B2 rodado + teste B3 com recalculador REAL que mata o mutante) -> agente opus na copia (logs/LASTRO-FAIXA/c16_*.log); depois preverif c16.
 PUSH 38605f141 11:38: rc=0, origin main 29e201d0c..38605f141; pos_push fechou TICKETS (096ace9d0). Trava de push livre.
 DESPACHO PORTA-QUE-NAO-AGE 11:36: (1) texto da sonda dos 15 dias -> Codex censo (logs/PORTA-QUE-NAO-AGE/escreve_sonda1.q), depois roda pelo envelope --sonda | (2) matriz de transicoes + escritores por AST + DECISOES -> Codex censo (matriz2.q) | (3) instrumento censo_alcance: contrato depois da matriz | (4) encaixe: decisao do Code depois da matriz. Nada de codigo antes.
