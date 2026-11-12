@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:04** · publicado em **12/11/2026 09:06** (UTC-3)
+> Ultima resposta processada: **12/11/2026 09:11** · publicado em **12/11/2026 09:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 09:11 · sessao 3d52e2f9914e · - · - · origem=Ronald (tmux)
+
+A escrita futura do cron está em `ponto/portas/celula.py:870-877`; o command apenas delega em `ponto/management/commands/gerar_celulas.py:309-313`. Alterar só o command exigiria contornar a operação existente; o escritor único está declarado em `core/portas.py:107-113` e cobrado por `ponto/tests/test_chokepoint_celula_gate.py:48-85`.
+
+O leitor HAIKU adequado é `api/views_mensageria.py:627-646`: `api_mensageria_saude` entrega snapshots prontos. Molde: `escala/services/vigencia_impossivel.py:65-74`, incluindo `total=None, sem_medida=True` antes da primeira lavra. URL existente: `api/urls.py:16`.
+
+Django, freezegun e pytest estão ausentes no interpretador consultado; execução ORM permanece [nao verificado]. Não executar `config.settings.ci`: cria diretórios temporários fora de `app/` (`config/settings/ci.py:25-33`) e configura PostgreSQL (`config/settings/ci.py:6-17`).
+
+Execuções observadas, sem alterações de arquivo ou banco:
+
+- `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_reverter_regen_sem_banco ponto.tests.test_reverter_exportada_sem_banco -v`: **36 OK**, 9,824 s. Contratos sem Django: `ponto/tests/test_reverter_regen_sem_banco.py:1-5`; I/O mockado no segundo: `ponto/tests/test_reverter_exportada_sem_banco.py:157-159`.
+- `core/tests/test_medida_turno_do_par.py`: **35 OK**, 41,107 s, usando exatamente a adaptação documentada em `core/tests/test_medida_turno_do_par.py:20-68` (`SimpleTestCase` → `unittest.TestCase` em memória).
+- `escala/tests/test_chokepoint_escala_gate.py` + `colaboradores/tests/test_chokepoint_cadastro_gate.py`: **12 OK**, 9,980 s, mesma substituição de base em memória; corpos originais preservados (`escala/tests/test_chokepoint_escala_gate.py:53-81`, `colaboradores/tests/test_chokepoint_cadastro_gate.py:50-90`).
+- Cinco métodos puramente estáticos de `ponto/tests/test_chokepoint_celula_gate.py`: **5 OK**, 3,387 s (`:50-61`, `:87-97`). Os dois métodos que importam a porta real não foram executados (`:63-85`) [nao verificado].
+
+Padrão para testes novos sem banco: compilar função real por AST com namespace controlado e trocar somente imports necessários; exemplo existente em `colaboradores/tests/test_ui_painel_mostra_o_app.py:74-98`. Helper de substituição reversível de módulos em `:25-42`; mutação de fonte somente em memória em `colaboradores/tests/ui_painel_fontes.py:38-53`.
+
+Nenhum arquivo foi editado.
+
+## 12/11 09:10 · sessao d20c4f297a46 · - · - · origem=Ronald (tmux)
+
+| Caminho | Classificação | Evidência e encaixe |
+|---|---|---|
+| Feriado salvo/editado/excluído | **E** | Trabalho calculado consulta feriado do lugar do vínculo; alteração pode mudar `trabalha` futuro. (`escala/models.py:1369`, `escala/models.py:1394`) Hoje o receiver só reavalia chamados da data nova; exclusão não tem receiver. (`chamados/signals.py:322`, `chamados/signals.py:326`) Capturar data anterior no `pre_save`; regenerar futuras existentes nas datas anterior/nova no `post_save` e na data excluída no `post_delete`, pela porta comum e sem estender horizonte. |
+| `Posto.opera_em_feriado` | **N**, para trabalho/geradora/DNA das células existentes | A flag do posto define somente o padrão ao **criar vínculo**; vínculo existente guarda sua própria `trabalha_em_feriado`. (`escala/models.py:904`, `escala/models.py:910`) O cálculo da célula lê essa flag do vínculo e o município, sem ler `opera_em_feriado`. (`escala/models.py:1389`, `escala/models.py:1394`) Há outro leitor da flag para cobrança do posto, fora desses campos. (`colaboradores/services/feriado_do_posto.py:60`) |
+| `reclassificar_base` | **N**, para trabalho/geradora/DNA | Salva exclusivamente `tipo_base`. (`escala/services/cadastro_tipo.py:133`) Trabalho é calculado por ciclo/foto/âncora/feriado, e os marcos usam horários, overrides e modo de intervalo. (`escala/models.py:816`, `escala/models.py:1271`, `escala/models.py:326`) O produtor de DNA não inclui nem consulta `tipo_base`. (`ponto/management/commands/gerar_celulas.py:83`) Isso não prova ausência de efeitos no motor financeiro, que permanece fora desta classificação. (`ponto/motor_calculo_v2.py:3647`) |
+| `TipoEscalaAdmin` | **E** | É `ModelAdmin` simples, sem encaminhamento de gravação/propagação. (`escala/admin.py:8`) Encaminhar `save_model` à porta de cadastro de template, preservando campos do admin; chamar apenas `super().save_model` mantém o buraco. A propagação existente fica em `_propagar_regeneracao_template`. (`escala/services/cadastro_tipo.py:327`) |
+| `trocar_calendario_de_folga` | **E**, para tornar a porta autossuficiente | Atualmente salva somente FK e trilha; quem materializa é a view individual ou o lote. (`colaboradores/services/vinculo.py:434`, `colaboradores/views.py:239`, `colaboradores/views.py:245`, `escala/views.py:408`) O cálculo do dia usa a foto `FolgaDia`, não a FK. (`escala/models.py:1280`, `escala/models.py:1310`) |
+| `salvar_calendario_de_folga` | **E**, para aplicar a edição às futuras existentes | Grava definição/tamanhos e retorna sem materializar foto; `semana_dia` tem retorno precoce. (`escala/folgas.py:548`, `escala/folgas.py:566`, `escala/folgas.py:574`) Reutilizar `datas_que_o_calendario_manda`. (`escala/folgas.py:43`) |
+
+Para os dois calendários, o suplemento deve reconciliar apenas fotos futuras da janela com células existentes, preservando `FolgaDia` manual, e regenerar pela porta comum com `estender_horizonte=False`. Chamar `gerar_foto_folgas` de mês inteiro ampliaria a escrita sobre o passado: ela apaga/recria as fotos do mês e relavra o mês inteiro. (`escala/folgas.py:175`, `escala/folgas.py:180`, `escala/folgas.py:201`)
+
+REDs sugeridos sem banco: feriado criado/removido/movido com células existentes nas duas datas; admin mudando horário com vínculo que começa amanhã; troca e edição de calendário movendo a folga de amanhã, preservando manual e célula editada. A execução desses testes permanece **[nao verificado]**. Nenhum arquivo foi editado. **[nao verificado por diff]** [nao verificado]
 
 ## 12/11 09:04 · sessao 100e569d9f3b · FIO-E0-V4-E3-LEITORES · censo · origem=Code
 
@@ -1125,73 +1159,4 @@ Testes prioritários identificados: [nao verificado]
 
 Os REDs reais 34390 e 35602/pergunta 51407 estão apenas no dado fornecido; reexecução e fixture completa estão [nao verificado]. Os demais REDs reais por leitor e por classe V/T precisam da sonda [aguarda sonda]; o dado fornecido não contém seus identificadores [nao verificado].
 
-## 12/11 08:51 · sessao 8e729553ce73 · - · - · origem=Ronald (tmux)
-
-Mapa dos leitores MUDA nesta cópia:
-
-| Sítio | Resposta/cadeia atual | Deriva ou lê tarefa |
-|---|---|---|
-| `app/chamados/services/fio.py::montar_chamados_fio` | Fio do colaborador e admin: perguntas agrupadas por chamado; `tem_pergunta_viva` usa `.viva` + `raiox.pergunta_sem_acao_possivel`; `todas_respondidas` usa carimbo cru; explicação cacheada por disputa recebe perguntas do cartão. | Não lê tarefa; decisões próprias em `app/chamados/services/fio.py:243`, `:283`, `:312`, `:340`. |
-| `app/chamados/views.py::meu_atendimento` | Tela colaborador chama `montar_chamados_fio(..., so_janela=True)`. | Casca de fio existente, `app/chamados/views.py:559`, `:566`, `:569`. |
-| `app/chamados/views.py::fio_colaborador` | Tela admin chama `montar_chamados_fio(colaborador)`; modal chama com explicação. | Casca de fio existente, `app/chamados/views.py:659`, `:676`, `:869`, `:889`. |
-| `app/chamados/services/fio.py::contexto_parcial_fio` | Re-render do modal chama montagem com explicação. | Mesmo leitor após ação, `app/chamados/services/fio.py:437`, `:446`. |
-| `app/colaboradores/views.py::painel_colaborador` | “No app dele agora” usa `projecao_do_app`, exibida em partial admin. | Não lê tarefa, `app/colaboradores/views.py:915`, `:940`; `app/templates/colaboradores/partials/painel_colaborador.html:190`. |
-| `app/api/views.py::api_me` e `app/api/views_core.py::api_me` | Badge/API usam `projecao_do_app`. | Não leem tarefa, `app/api/views.py:315`; `app/api/views_core.py:303`. |
-| `app/api/views.py::api_chamados_v2` | GET lê `consulta_do_app`. | Não lê tarefa, `app/api/views.py:991`. |
-| `app/api/views.py::api_disputa_perguntas` | Pendentes/histórico vêm de `consulta_do_app`. | Não lê tarefa, `app/api/views.py:2530`. |
-| `app/chamados/services/pergunta_no_app.py::perguntas_do_app` | Pré-filtro `q_vivas`, juiz C6 por pergunta. | Lê C6; não tarefa, `app/chamados/services/pergunta_no_app.py:45`, `:58`. |
-| `app/chamados/services/pergunta_no_app.py::consulta_do_app` | Separa pendentes/histórico por `respondida_em is None` e disputa aberta. | Derivação própria de apresentação, `app/chamados/services/pergunta_no_app.py:61`, `:70`. |
-| `app/chamados/services/pergunta_no_app.py::projecao_do_app` | Conta perguntas pendentes; combina com chamados não lidos para badge. | Derivação própria de contagem/prioridade, `app/chamados/services/pergunta_no_app.py:78`, `:90`, `:98`. |
-| `app/core/views.py::dashboard` | Badge/PWA conta `len(consulta_do_app(... )['pendentes'])`. | Não lê tarefa, `app/core/views.py:252`; render `:270`; badge em `app/templates/core/dashboard_colaborador_v2.html:78`. |
-| `app/core/context_processors.py::navbar_context._badge_colab` | Badge navbar conta `qs_na_fila(f_colab=...).count()`. | Outro sítio contador, não tarefa, `app/core/context_processors.py:185`. |
-| `app/folha/fora_da_folha.py::_porta` | Consulta C17. | Não tarefa, `app/folha/fora_da_folha.py:65`. |
-| `app/folha/fora_da_folha.py::_fio_do_dia` | Traduz ausência de porta para `FIO_SEM_PORTA`, senão lê `porta['fio']`. | Leitor de C17, `app/folha/fora_da_folha.py:70`. |
-| `app/folha/fora_da_folha.py::fora_da_folha` | Agrupa colaboradores pelo fio de seus dias retidos. | Leitura indireta de C17, `app/folha/fora_da_folha.py:142`, `:178`. |
-| `app/folha/fora_da_folha.py::o_que_segura` | Dias retidos, “destrava” e chamados da fila. | Leitura indireta de C17 e frase local `DESTRAVA`, `app/folha/fora_da_folha.py:203`, `:221`, `:225`. |
-| `app/escala/services/cadastro_realidade.py::beco_em_lote` | C11 filtra células acusadoras com perguntas vivas e ausência de porta C17. | Não tarefa, `app/escala/services/cadastro_realidade.py:442`, `:476`, `:488`. |
-| `app/chamados/services/vigia_fio.py::censo_alcance` | Universo dos dias retidos; porta C17, depois baldes e causas próprias para contador. | Não tarefa, `app/chamados/services/vigia_fio.py:542`, `:585`, `:635`, `:654`, `:695`. |
-| `app/chamados/services/vigia_fio.py::censo` | Outro universo do vigia, com fio/perguntas e depois mesmos baldes. | Não tarefa, `app/chamados/services/vigia_fio.py:318`, `:417`, `:431`. |
-| `app/chamados/services/vigia_fio.py::dono_fora_do_fio` | Cadeia local: resolver dia, ausência aberta, folga validada, lista admin. | Composição própria do “quem deve agir”; `app/chamados/services/vigia_fio.py:274`, `:306`. |
-
-O caminho UI carrega JavaScript e service worker: ambas bases carregam `pwa.js`, que registra `/sw.js`; ambas também carregam `static/js/popover-acao.js`. O SW intercepta GET e trata cache/push; nessas linhas ele não decide a tarefa do dia. A classificação CLASSE A depende do diff tocar os arquivos indicados pelo aval, e não apenas de existirem na cadeia. Fontes: `app/templates/base.html:20`, `:440`; `app/templates/base_app.html:20`, `:194`; `app/static/pwa.js:14`; `app/static/sw.js:33`, `:88`; condição CLASSE A fornecida no anexo `[nao verificado]` quanto ao diff futuro.
-
-A tela de atendimento escolhe as duas cascas por `base_tpl`; o dashboard do colaborador atualmente estende `base.html` diretamente. Fontes: `app/templates/chamados/meu_atendimento.html:1`; `app/core/context_processors.py:194`; `app/templates/core/dashboard_colaborador_v2.html:1`.
-
-Testes relevantes para o portão e adaptação: [nao verificado]
-
-- `app/chamados/tests/test_e3_pendentes_app.py`: catraca AST resolve imports, aliases, atribuições e `getattr`; permite hoje exatamente os três chamadores C17 de folha, vigia e cadastro. Fontes: `app/chamados/tests/test_e3_pendentes_app.py:19`, `:33`, `:145`.
-- `app/chamados/tests/test_e3_app_orm.py`: matriz API, dashboard, dois kernels, perguntas pendentes/histórico, badge vermelho. Fontes: `app/chamados/tests/test_e3_app_orm.py:28`, `:47`, `:52`, `:57`, `:62`, `:76`.
-- `app/chamados/tests/test_e3_v4_orm.py`: avisos/cobrança/badge na mesma pendente e leitura C6; fontes `app/chamados/tests/test_e3_v4_orm.py:20`, `:42`.
-- `app/chamados/tests/test_e3_portas_tarefa.py`: fila sem pergunta, A/B, verbos, isento, relógio e alimentação em lote; fontes `app/chamados/tests/test_e3_portas_tarefa.py:32`, `:40`, `:49`, `:57`, `:84`, `:113`.
-- `app/chamados/tests/test_fio_le_o_juiz.py`: admin/colaborador, viva em disputa fechada, exclusão de morta, vigia e badge; fontes `app/chamados/tests/test_fio_le_o_juiz.py:105`, `:115`, `:121`, `:129`, `:262`.
-- `app/chamados/tests/test_o261e_f5b_juiz_porta.py`: folha/vigia, A/B, fila sem pergunta, âncora fora da fila, verbos e registro C17; fontes `app/chamados/tests/test_o261e_f5b_juiz_porta.py:119`, `:125`, `:138`, `:226`, `:258`, `:278`.
-- `app/folha/tests/test_haiku_fora_da_folha.py`: leitura C17, fonte única, isento, grupos e datas; fontes `app/folha/tests/test_haiku_fora_da_folha.py:93`, `:175`, `:240`, `:475`, `:531`.
-- `app/ponto/tests/test_cxr_tela_le_o_motor.py`: C11 lê lista lavrada e não chama motor, sem resposta fora da lavra, relógio; fontes `app/ponto/tests/test_cxr_tela_le_o_motor.py:390`, `:410`, `:422`, `:444`.
-- `app/core/tests/test_dashboard_badge.py`: badge igual à consulta do app; fonte `app/core/tests/test_dashboard_badge.py:31`.
-- `app/api/tests/test_api_me_badge.py`: badge API zero/pendente/laranja; fontes `app/api/tests/test_api_me_badge.py:30`, `:36`, `:59`.
-
-Nenhum teste foi executado neste subtrabalho; estado RED/GREEN atual `[nao verificado]`. [nao verificado]
-
-## 12/11 08:51 · sessao b6b0d043e1b6 · - · - · origem=Ronald (tmux)
-
-1. **DECISÃO — tarefa é o juiz que fica.** Os quatro desacordos antigos (rota só fila, pergunta sob outra âncora, verbos A/B e isento com fila residual) já estão decididos por LEI-C17-UM-JUIZ: vale a tarefa, que deve responder rota/fila/verbos; migrar chamadores somente depois do DIFF na sombra. Não há pergunta nova de lei nesses quatro campos. `app/docs/RELATO.md:515`, `app/docs/RELATO.md:518`.
-
-2. **DECISÃO — consumidor e vigia leem a resposta.** Não recriar vida, exigibilidade nem julgamento por leitor; a lâmpada 4a manda o consumidor ler e o cron somente alarmar. `CLAUDE.md:169`, `CLAUDE.md:172`, `CLAUDE.md:173`. A tarefa já recebe a vida de C6 e não deve duplicá-la. `app/chamados/services/tarefa_do_dia.py:174`, `app/chamados/services/tarefa_do_dia.py:242`, `app/chamados/services/tarefa_do_dia.py:245`.
-
-3. **DECISÃO — migração em fases, Contract após censo.** L-127 exige que Expand não troque leitor de fonte e que Contract só apague depois que nenhum leitor use o antigo. `app/docs/LEIS.md:148`, `app/docs/PLANO-PADROES.md:79`, `app/docs/PLANO-PADROES.md:83`, `app/docs/PLANO-PADROES.md:85`. O registro antigo ainda diz “os 5 respondedores […] seguem vivos”, mas ali os cinco nomes são `cobranca_viva_do_dia`, `pergunta_viva`, `motivos_a_perguntar`, `porta_alcancavel_do_dia`, `dono_fora_do_fio`; não confundir essa lista documental com os cinco sítios do aval de agora e apagar C6 indevidamente. `app/core/juizes.py:150`, `app/core/juizes.py:153`, `app/docs/JUIZES.md:85`.
-
-4. **DECISÃO — não transportar o diagnóstico V antigo sem medir a árvore atual.** A tarefa atual já expõe ação administrativa em dia sem trabalho, motivos fora do mapa de marcos e `fato_em_ausencia` sem pergunta viva. `app/chamados/services/tarefa_do_dia.py:241`, `app/chamados/services/tarefa_do_dia.py:260`, `app/chamados/services/tarefa_do_dia.py:314`, `app/chamados/services/tarefa_do_dia.py:327`. A persistência das classes V/T/X nesta árvore depende da sonda [nao verificado]. A diferença entre os denominadores 230 e 232 é uma lacuna de identificação do universo, não uma nova lei [nao verificado].
-
-5. **Item 11 confirmado: chave e universo incompatíveis.** `montar_chamados_fio` mantém cache por `d.pk`, porém calcula sua primeira entrada com `perguntas_por_chamado.get(ch.pk)`. `app/chamados/services/fio.py:306`, `app/chamados/services/fio.py:312`, `app/chamados/services/fio.py:313`, `app/chamados/services/fio.py:314`. `por_que_nao_fecha` usa a lista recebida quando presente e só busca toda a disputa quando `perguntas is None`; depois decide fechamento por `not fio_vivo(ps)`. `app/chamados/services/explicador.py:121`, `app/chamados/services/explicador.py:124`, `app/chamados/services/explicador.py:134`, `app/chamados/services/explicador.py:137`. Portanto a correção deve alinhar o universo da lista ao universo da chave de cache e preservar as instâncias já carregadas, exigência do selo de identidade. `app/chamados/tests/test_selo_identidade_fio_explicacao.py:1`, `app/chamados/tests/test_selo_identidade_fio_explicacao.py:13`, `app/chamados/tests/test_selo_identidade_fio_explicacao.py:16`.
-
-6. **Item 12 confirmado: carimbo cru dirige aviso.** `todas_resp = all(p.respondida_em for p in ch.perguntas_disputa)` alimenta `ch.todas_respondidas`; o modal usa sua negação para escrever “não respondeu” e impedir fechamento sem anuência. `app/chamados/services/fio.py:340`, `app/chamados/services/fio.py:341`, `app/templates/chamados/partials/modal_fio.html:334`, `app/templates/chamados/partials/modal_fio.html:341`. Deve considerar a vida pelo C6 (`pergunta_viva`) e a redução da coleção por C15 (`fio_vivo`), preservando o significado da pendência do colaborador. C6 distingue explicitamente perguntas mortas por validação, tranca, vias vencedoras e lâmpada. `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1391`, `app/chamados/juizes.py:1395`, `app/chamados/juizes.py:1402`, `app/chamados/juizes.py:1452`. A definição de `fio_vivo` é a redução `any(pergunta_viva(p) …)` e o universo cabe ao chamador. `app/chamados/juizes.py:1494`, `app/chamados/juizes.py:1500`, `app/chamados/juizes.py:1503`.
-
-7. **Registro de juízes: ressalva necessária no brief.** `JUIZES.md` não enumera diretamente os endereços de `pergunta_viva` e `fio_vivo`: registra C7 em `DisputaSupervisao.pode_fechar` e cita C6 como leitor da tranca; declara que o registro vivo é `app/core/juizes.py` e que o vivo prevalece. `app/docs/JUIZES.md:10`, `app/docs/JUIZES.md:12`, `app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:62`, `app/docs/JUIZES.md:90`. A localização verificável é C6 → `chamados/juizes.py::pergunta_viva` e C15 → `chamados/juizes.py::fio_vivo`. `app/core/juizes.py:112`, `app/core/juizes.py:125`, `app/core/juizes.py:278`, `app/core/juizes.py:287`. Corrigir o lookup no mesmo commit segue sua própria instrução. `app/docs/JUIZES.md:14`.
-
-8. **REDs reais e PRONTO literal: limites.** Os números 34390, 35602 e 51407 e a disputa 7445 não foram encontrados em código/testes de `app` e `bin`; a fonte disponível é somente o anexo do usuário [nao verificado]. Ele fornece sintomas, não uma fixture completa; RED executável com fixture copiada permanece [aguarda sonda]. `logs/MAPA-20/pronto_xn.r` e a árvore `logs/` não estão disponíveis nesta cópia [nao verificado]. Copiar os dez itens literalmente do anexo dado, sem substituir pela lista resumida do BACKLOG [nao verificado]. Selo existente relacionado ao item 11: `app/chamados/tests/test_fio_explicacao.py:22`, `app/chamados/tests/test_fio_explicacao.py:36`.
-
-9. **Diferenças concretas dos respondedores para embasar decisões.** `raiox.creditos_perguntas` recorta por lavra e separa resposta pelo carimbo, atribuindo crédito ao destino vivo ou pai. `app/chamados/services/raiox.py:135`, `app/chamados/services/raiox.py:139`, `app/chamados/services/raiox.py:145`. `relatorios_disputa.classificar` usa C6, mas escolhe colaborador/supervisão por `respondida_em`. `app/chamados/relatorios_disputa.py:11`, `app/chamados/relatorios_disputa.py:18`, `app/chamados/relatorios_disputa.py:21`. `cobranca._calados` parte de `q_vivas`, carimbo sem resposta e disputa aberta, agrupando por pessoa. `app/chamados/services/cobranca.py:221`, `app/chamados/services/cobranca.py:228`, `app/chamados/services/cobranca.py:234`. O cartão oferece formulário por `p.viva` e diz “aguardando a supervisão” por `p.respondida_em`. `app/templates/chamados/partials/_card_atendimento.html:73`, `app/templates/chamados/partials/_card_atendimento.html:77`, `app/templates/chamados/partials/_card_atendimento.html:94`, `app/templates/chamados/partials/_card_atendimento.html:101`.
-
-10. **Sem pergunta nova de lei identificada neste recorte.** O que falta para decidir o DIFF é prova de frota e identificação do universo; as autoridades e a ordem de migração já estão escritas. `app/docs/RELATO.md:518`, `CLAUDE.md:173`, `app/docs/PLANO-PADROES.md:83`. Perguntas de lei deste subcenso: 0.
-
-_4116 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4118 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
