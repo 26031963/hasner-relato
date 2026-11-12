@@ -1,7 +1,134 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 10:21** · publicado em **12/11/2026 10:22** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:25** · publicado em **12/11/2026 10:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:25 · sessao 9a2b122ced99 · TRIAGEM-OFFLINE-RED-HEADLESS · construtor · origem=Code
+
+Criado [test_sw_offline_headless_red.py](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:1), somente em `core/tests/`. Não executei testes, Chromium ou Ruff; resultados abaixo são expectativas **[nao verificado]**. [nao verificado]
+
+O harness original usa `file://`, incompatível com este registro de SW; o ajuste ficou no teste novo: servidor HTTP em localhost e CDP para clique real e corte de rede nas abas e no worker. [Harness original](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_smoke_chromium.py:115), [ajuste](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:195), [offline](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:464). [nao verificado]
+
+A garantia da **FONTE** vem da leitura de `SW`, do redirecionamento da raiz da view real e da comparação do corpo HTTP com fonte + build. O mutante altera apenas uma cópia temporária. [Leitura e isolamento](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:226), [comparação pelo navegador](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:437).
+
+Comandos para a sessão, a partir de `app/`:
+
+```bash
+MUTANTE_SW= PYTHONDONTWRITEBYTECODE=1 python manage.py test core.tests.test_sw_offline_headless_red --settings=config.settings_test --parallel=1 -v 2
+```
+
+Esperado: controle verde; offline RED com `PASSO 3 OFFLINE C1: clique Bater ponto deve entregar documento /ponto/bater-v2/` e `PASSO 4 OFFLINE C1: reload da home deve entregar documento nao-branco`. O reload continua sendo tentado após a falha do clique. [Asserções](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:490). **[nao verificado]** [nao verificado]
+
+```bash
+MUTANTE_SW= PYTHONDONTWRITEBYTECODE=1 python manage.py test core.tests.test_sw_offline_headless_red.SWOfflineHeadlessRedTest.test_controle_com_rede_home_e_bater --settings=config.settings_test --parallel=1 -v 2
+```
+
+Esperado: verde com rede. [Controle](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:443). **[nao verificado]** [nao verificado]
+
+```bash
+MUTANTE_SW=navega_guarda PYTHONDONTWRITEBYTECODE=1 python manage.py test core.tests.test_sw_offline_headless_red --settings=config.settings_test --parallel=1 -v 2
+```
+
+Esperado: controle e offline verdes; o mutante aguarda `cache.put` no ramo `navigate`. [Trecho do mutante](/home/ronald/wt-codex-triagem-offline-red-headless-101137/app/core/tests/test_sw_offline_headless_red.py:70). **[nao verificado]**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -m ruff check core/tests/test_sw_offline_headless_red.py
+```
+
+Escritores e leitores das dependências:
+
+| Dado | Quem escreve/define | Quem lê/consome |
+|---|---|---|
+| Registro do SW | `static/pwa.js:14` | Inicialização em `static/pwa.js:324`; teste em `core/tests/test_sw_offline_headless_red.py:354` |
+| Scope `/` | `static/pwa.js:14`; `core/views.py:574` | `static/sw.js:23`; teste em `core/tests/test_sw_offline_headless_red.py:374` |
+| Build/cache | `core/views.py:555`, `:572`; `static/sw.js:1` | `static/sw.js:12`, `:20`, `:74`; teste em `core/tests/test_sw_offline_headless_red.py:440` |
+| Home efetiva | `core/urls.py:17`; `core/views.py:270` | Teste em `core/tests/test_sw_offline_headless_red.py:408` |
+| Link Bater ponto | `templates/core/dashboard_colaborador_v2.html:31`; `ponto/urls.py:12` | Clique em `core/tests/test_sw_offline_headless_red.py:381`; render em `ponto/views.py:356`; elemento em `templates/ponto/bater_ponto_v2.html:109` |
+
+Os dois modos de sessão são exercitados, mas essas rotas herdam literalmente `base.html`; cobertura de `base_app.html` não é demonstrada aqui. (`templates/core/dashboard_colaborador_v2.html:1`; `templates/ponto/bater_ponto_v2.html:1`; `core/tests/test_sw_offline_headless_red.py:397`.)
+
+## 12/11 10:24 · sessao 08ce782c30e6 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · verificador · origem=Code
+
+**BLOQUEIA — o admin de template passa a alcançar o passado, há portas sem atomicidade entre cadastro e cura, e a suíte em memória contém um erro antes do julgamento do feriado.** (`app/escala/services/cadastro_tipo.py:337`, `app/escala/services/cadastro_tipo.py:373`, `app/colaboradores/services/vinculo.py:326`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:599`)
+
+Identidade do hash/base por Git, estado atual de produção e execução da suíte Django: [nao verificado]. As comparações com `087fe758a` abaixo usam o diff fornecido, sem certificar sua completude por Git: [nao verificado].
+
+1. Para as portas do censo, o transporte comum seleciona células **existentes, geradas, estritamente futuras, dentro da janela corrente do gerador**, e chama a mesma porta com `[dia,dia]`, sem estender horizonte. (`app/ponto/services/cadastro_futuro.py:18`, `app/ponto/services/cadastro_futuro.py:22`, `app/ponto/services/cadastro_futuro.py:30`)
+
+Na tabela, **G** significa mutante que recoloca `data_inicio <= hoje`; **M** significa mutante que remove a chamada da cura. Ambos modificam em memória o corpo lido da produção; somente cinco funções recebem G. (`app/ponto/tests/test_cadastro_futuro_sem_banco.py:25`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:73`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:87`)
+
+| Porta do censo | Sítio que alcança o futuro | RED e achado |
+|---|---|---|
+| Escala/vínculo — `executar_vinculo` | `app/colaboradores/services/vinculo.py:326` | G morto pelo teste `app/ponto/tests/test_cadastro_futuro_sem_banco.py:339`. **BLOQUEIA:** cura fora do atomic do cadastro, detalhada no item 4. |
+| Flag `trabalha_em_feriado` | `app/colaboradores/services/vinculo.py:878` | G morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:352`. **BLOQUEIA:** save e cura separados. |
+| Município do posto | `app/colaboradores/services/vinculo.py:928` | G morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:356`. **BLOQUEIA:** save e cura separados. |
+| Template — `salvar_tipo` | `app/escala/services/cadastro_tipo.py:361` | G morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:361`. **BLOQUEIA:** universo limitado a `ativa=True`, em `app/escala/services/cadastro_tipo.py:334`. |
+| Template pelo admin | `app/escala/admin.py:12`, `app/escala/services/cadastro_tipo.py:373` | Teste de amanhã em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:392`. **BLOQUEIA:** passou a regenerar também o passado, em `app/escala/services/cadastro_tipo.py:348`. |
+| Signal de vigência | `app/escala/signals.py:77` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:576`; G específico não demonstrado pelo mutador. |
+| Signal de âncora | `app/escala/signals.py:128` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:569`; G específico não demonstrado pelo mutador. |
+| Foto mensal de folgas | `app/escala/folgas.py:215`, `app/escala/folgas.py:298` | M da relavra morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:584`; reconciliação mensal cobrada em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:612`. |
+| Lançar folga | `app/escala/folgas.py:337` → relavra comum | **BLOQUEIA por evidência incompleta:** sem RED individual “amanhã + mutante” demonstrado; o novo teste chama diretamente a relavra, em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:586`. |
+| Alterar/remover folga | `app/escala/folgas.py:380` → relavra comum | **BLOQUEIA por evidência incompleta:** teste anterior cobra idempotência, não a guarda futura por essa entrada: `app/escala/tests/test_bug136_plano_em_lote_relavra.py:105`. |
+| Folgas em lote | `app/escala/folgas.py:418` → relavra comum | **BLOQUEIA por evidência incompleta:** teste anterior usa o início da competência; não demonstra o mutante desta obra: `app/escala/tests/test_bug136_plano_em_lote_relavra.py:68`. |
+| Reparentar folga | `app/escala/folgas.py:523` → relavra comum | **BLOQUEIA por evidência incompleta:** há RED anterior de rejulgamento mensal, sem mordida futura desta obra demonstrada: `app/escala/tests/test_f3_beco1_cadastro_entrou.py:201`. |
+| Aplicar calendário por tipo | `app/escala/views.py:409`, `app/escala/views.py:416` | **BLOQUEIA por evidência incompleta:** teste anterior cobra FK/foto, sem conferir célula futura sob mutante: `app/escala/tests/test_folga_aplicar.py:39`. |
+| Editor de calendário | `app/escala/folgas.py:598` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:509`. |
+| Trocar calendário do vínculo | `app/colaboradores/services/vinculo.py:454` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:497`. |
+| Cadastrar/editar/importar feriado | Saves de formulário/importação atravessam o signal: `app/core/views_config.py:68`, `app/core/views_config.py:81`, `app/core/views_config.py:141`, `app/core/signals.py:29` | M do signal morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:429`. **BLOQUEIA:** prova específica de obedecer ao silêncio da juíza dá ERROR antes da chamada: `app/ponto/tests/test_cadastro_futuro_sem_banco.py:599`. |
+| Excluir feriado | `app/core/signals.py:35` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:435`. |
+| Fechar vigência por `update` | `app/colaboradores/services/vinculo.py:639` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:366`. **BLOQUEIA:** encerramento sem sucessor deixa contador positivo, detalhado no item 5. |
+| Recusa/restauração de snapshot | `app/colaboradores/services/vinculo.py:997` | M morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:448`. |
+| Correção retroativa com piso amanhã | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:243` | G morto em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:517`. |
+| ESCALA-AUTO — aplicar/desfazer | Chamada direta à mesma porta, ainda com horizonte: `app/escala/services/escala_auto_executor.py:104`, `app/escala/services/escala_auto_executor.py:143` | **FILA:** comportamento anterior mantido; sem RED desta obra por mutante demonstrado. Os testes existentes conferem cadastro/passado: `app/escala/tests/test_escala_auto_executor.py:66`, `app/escala/tests/test_escala_auto_executor.py:117`. |
+
+**BLOQUEIA — template não cobre todo vínculo que responde pelo futuro.** Contra-exemplo: hoje 12/11; vínculo inativo, mas com fim em 20/11; célula gerada de 13/11 nomeando esse vínculo. A juíza aceita a geradora dentro da vigência, mas a propagação do template a exclui por `ativa=True`; mudar 08:00 para 09:00 deixa o DNA antigo. (`app/escala/alimentacao.py:282`, `app/escala/services/cadastro_tipo.py:334`)
+
+**FILA — demais entradas encontradas pelo censo:** troca de `Colaborador.posto` não muda o posto declarado no vínculo; `Posto.opera_em_feriado` define o padrão de vínculos novos; reclassificação grava apenas `tipo_base`. Não há suplemento nesses caminhos; não ficou comprovada mudança de célula vigente exigida por eles. (`app/colaboradores/services/colaborador.py:47`, `app/escala/models.py:905`, `app/colaboradores/services/estrutura.py:80`, `app/escala/services/cadastro_tipo.py:134`)
+
+**FILA — portas técnicas adicionais:** correção de um dia continua sem horizonte; regeneração em exportada mantém horizonte apenas para vínculo ativo; cura BUG115 chama o gerador diretamente. Não ganharam RED específico desta obra demonstrado. (`app/ponto/portas/celula.py:734`, `app/ponto/portas/regen_exportada.py:174`, `app/ponto/management/commands/curar_residuo_bug115.py:135`)
+
+2. Nos contra-exemplos do aval:
+
+- **Nada — suplemento não cria célula fora da janela nem preenche lacunas futuras:** ele percorre somente datas existentes e desliga o horizonte. O teste isolado “início além da janela” passa; trocar para horizonte habilitado é morto pelos testes que detectam novas células entre 14 e 20/11. (`app/ponto/services/cadastro_futuro.py:22`, `app/ponto/services/cadastro_futuro.py:31`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:374`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:386`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:584`)
+- **FILA — a garantia não vale universalmente para AUTO:** `_ate` retorna pelo menos o início, mesmo sem célula; início além da janela cria aquela célula. É comportamento anterior preservado, não introduzido pelo suplemento. (`app/escala/services/escala_auto_executor.py:52`, `app/escala/services/escala_auto_executor.py:104`, `app/ponto/portas/celula.py:259`)
+- **Nada — `origem='editada'` fica fora da cura explícita:** seleção e escritor a preservam; snapshot e desfazer agora recusam apagar sua geradora. (`app/ponto/services/cadastro_futuro.py:23`, `app/ponto/portas/celula.py:263`, `app/colaboradores/services/vinculo.py:990`, `app/colaboradores/services/vinculo.py:1062`)
+- **BLOQUEIA — admin de template amplia o passado:** o hook novo chama `_propagar_regeneracao_template`, que começa na competência anterior e regenera até hoje. Contra-exemplo: célula gerada de ontem de vínculo ativo; editar horário pelo admin agora reescreve seu DNA, embora essa entrada antes apenas salvasse o template no diff fornecido. (`app/escala/admin.py:12`, `app/escala/services/cadastro_tipo.py:337`, `app/escala/services/cadastro_tipo.py:348`, `app/escala/services/cadastro_tipo.py:373`)
+- **BLOQUEIA — “só futuro” não limita todos os efeitos de escrita:** `fechar_vigencia` ganhou regeneração com recálculo padrão; a cauda chama o fechamento da competência inteira e este grava fechamento/dias pagos. Encerrar hoje, tocando amanhã, pode relavrar dias anteriores da mesma competência por esse caminho novo. Movimento efetivo de valores em produção: [nao verificado]. (`app/colaboradores/services/vinculo.py:639`, `app/ponto/portas/celula.py:445`, `app/ponto/portas/celula.py:458`, `app/ponto/services/fechamento.py:1810`, `app/ponto/services/fechamento.py:1144`, `app/ponto/services/fechamento.py:1201`)
+- **Nada — cron continua cadastrado às 05:50, cria faltantes e deixou de reescrever existentes de hoje/futuro; preserva editadas e ainda enriquece DNA histórico nulo.** Não há desligamento nesse caminho. (`app/config/crons.py:426`, `app/ponto/portas/celula.py:853`, `app/ponto/portas/celula.py:859`, `app/ponto/portas/celula.py:864`, `app/ponto/portas/celula.py:870`)
+- **BLOQUEIA — a retirada alcançou também hoje:** feriado cadastrado para hoje é excluído pelo suplemento; o cron novo também pula a célula existente de hoje. Contra-exemplo: célula de 12/11 `trabalha=True`; salvar feriado de 12/11 não a cura por esses dois caminhos, enquanto o ramo removido do cron a reescrevia. (`app/ponto/services/cadastro_futuro.py:44`, `app/ponto/portas/celula.py:861`, `app/ponto/portas/celula.py:870`)
+
+3. Escritores, leitores e significados conferidos:
+
+| Campo/valor | Quem escreve ou produz | Quem lê |
+|---|---|---|
+| `escala_geradora` | Regeneração, edição humana, reversão e criação do cron; há também `SET_NULL` implícito ao excluir vínculo. (`app/ponto/portas/celula.py:259`, `app/ponto/portas/celula.py:272`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:791`, `app/ponto/portas/celula.py:854`, `app/escala/models.py:1693`) | Juíza, carregadores, feriado e vigia. (`app/escala/alimentacao.py:270`, `app/escala/alimentacao.py:356`, `app/ponto/services/cadastro_futuro.py:53`, `app/ponto/services/vigia_cadastro_futuro.py:28`) |
+| `dna` | Produtor `montar_dna`; persistência pela porta nas operações acima e no enriquecimento histórico. (`app/ponto/management/commands/gerar_celulas.py:73`, `app/ponto/portas/celula.py:256`, `app/ponto/portas/celula.py:865`) | Marcos, pausas e extra do vínculo; grade; cartório; juízes; tripwire; vigia. (`app/escala/models.py:1124`, `app/escala/models.py:1189`, `app/escala/models.py:1235`, `app/escala/services/leitor_celula.py:398`, `app/ponto/services/cartorio.py:1251`, `app/chamados/juizes.py:948`, `app/ponto/management/commands/tripwire_celulas.py:30`, `app/ponto/services/vigia_cadastro_futuro.py:40`) |
+| `trabalha` | Cálculo cadastral alimenta regeneração/cron; edição e reversão também escrevem. (`app/ponto/portas/celula.py:255`, `app/ponto/portas/celula.py:272`, `app/ponto/portas/celula.py:600`, `app/ponto/portas/celula.py:788`, `app/ponto/portas/celula.py:856`) | Método do vínculo, semana do posto, precedência, juízes e suprajuiz. (`app/escala/models.py:1095`, `app/escala/services/semana_do_posto.py:85`, `app/ponto/precedencia.py:348`, `app/chamados/juizes.py:455`, `app/ponto/supra_juiz.py:62`) |
+| `origem` | Criação grava `gerada`; edição humana grava `editada`. (`app/ponto/portas/celula.py:260`, `app/ponto/portas/celula.py:603`, `app/ponto/portas/celula.py:856`) | Guardas da regeneração, reversão, cron, suplemento e exclusões protegidas. (`app/ponto/portas/celula.py:238`, `app/ponto/portas/celula.py:263`, `app/ponto/portas/celula.py:777`, `app/ponto/portas/celula.py:859`, `app/ponto/services/cadastro_futuro.py:23`, `app/colaboradores/services/vinculo.py:990`) |
+| `regenerada_em`, `regeneracoes`, `dna_anterior` | Regeneração e reversão; reversão consome e limpa o DNA anterior. (`app/ponto/portas/celula.py:273`, `app/ponto/portas/celula.py:787`, `app/ponto/portas/celula.py:792`) | Cobrança órfã, ponte do dia, cartório, invalidadores e comandos de correção/medição. (`app/escala/services/regeneracao.py:104`, `app/escala/services/regeneracao.py:119`, `app/ponto/services/dia_do_colab.py:94`, `app/ponto/services/cartorio.py:393`, `app/chamados/veredito_lavrado.py:193`, `app/escala/services/fase_12x36.py:189`, `app/ponto/management/commands/aplicar_col900.py:173`, `bin/r5_idempotencia_frota.py:57`) |
+| `FolgaDia`, `calendario_origem` | Foto automática grava calendário; lançamento manual deixa origem nula; reparentamento troca o vínculo. (`app/escala/folgas.py:194`, `app/escala/folgas.py:335`, `app/escala/folgas.py:360`, `app/escala/folgas.py:515`) | Reconciliação distingue manual/calendário; gerador lê foto do vínculo; precedência/grade aceitam manual da pessoa e calendário do vínculo do dia. (`app/escala/folgas.py:180`, `app/escala/folgas.py:187`, `app/escala/models.py:1286`, `app/escala/models.py:1356`, `app/ponto/precedencia.py:237`) |
+| `vinculo_do_dia` | Resposta produzida pela autoridade existente; carregadores apenas montam alimentação. (`app/escala/alimentacao.py:228`, `app/escala/alimentacao.py:358`) | Feriado, vigia, reparentamento, calendário, grade e fechamento. (`app/ponto/services/cadastro_futuro.py:54`, `app/ponto/services/vigia_cadastro_futuro.py:31`, `app/escala/folgas.py:493`, `app/colaboradores/services/calendario.py:389`, `app/escala/services/leitor_celula.py:411`, `app/ponto/services/fechamento.py:191`) |
+| `hoje` | Cron usa `date.today`; serviços usam `timezone.localdate`; porta também possui leituras internas. (`app/ponto/management/commands/gerar_celulas.py:304`, `app/ponto/services/cadastro_futuro.py:16`, `app/escala/folgas.py:280`, `app/ponto/portas/celula.py:186`, `app/ponto/portas/celula.py:296`) | Seleção futura, horizonte, julgamento e vigia. (`app/ponto/services/cadastro_futuro.py:18`, `app/ponto/portas/celula.py:190`, `app/ponto/portas/celula.py:431`, `app/ponto/services/vigia_cadastro_futuro.py:20`) |
+
+**Nada — divergência nova de limites inclusivos:** início e fim são inclusivos nas duas autoridades; lâmpadas noturnas deslocam instantes para D+1, mantendo a chave do turno; feriado é consultado pela data recebida do dia de escala. (`app/escala/alimentacao.py:214`, `app/escala/alimentacao.py:282`, `app/ponto/management/commands/gerar_celulas.py:67`, `app/escala/models.py:1395`)
+
+**FILA — calendário nulo tem documentação ambígua:** a porta descreve `None` como padrão do template, mas o sincronizador lê a FK literal e o interpretador trata `None` como calendário vazio; a view resolve o padrão explicitamente. (`app/colaboradores/services/vinculo.py:441`, `app/escala/folgas.py:625`, `app/escala/folgas.py:52`, `app/colaboradores/views.py:236`)
+
+**BLOQUEIA — nem todos usam o mesmo significado de cobertura:** geradora carimbada inativa sem fim é aceita por `vinculo_do_dia`, mas rejeitada por `vinculo_cobre_a_data` e pela regeneração. Esse desacordo atinge diretamente o contador novo. (`app/escala/alimentacao.py:196`, `app/escala/alimentacao.py:214`, `app/escala/alimentacao.py:282`, `app/ponto/portas/celula.py:146`)
+
+4. Nas classes de reprovação:
+
+- **Nada — segundo juiz novo no feriado/vigia:** ambos perguntam à autoridade registrada; o desacordo de cobertura acima é entre autoridades existentes. (`app/ponto/services/cadastro_futuro.py:54`, `app/ponto/services/vigia_cadastro_futuro.py:31`, `app/core/juizes.py:1304`, `app/core/juizes.py:1305`)
+- **Nada — derivação paralela nova de previsto/GRADE:** vigia compara trabalho/DNA pelos mesmos produtores usados pelo escritor; não calcula minutos previstos por uma regra nova. (`app/ponto/services/vigia_cadastro_futuro.py:39`, `app/ponto/portas/celula.py:255`)
+- **FILA — segundo escritor implícito permanece:** excluir vínculo aciona `SET_NULL` fora da porta. As duas exclusões explícitas protegidas agora recusam referências editadas; referências geradas históricas continuam sujeitas ao comportamento anterior. (`app/escala/models.py:1693`, `app/colaboradores/services/vinculo.py:988`, `app/colaboradores/services/vinculo.py:992`, `app/colaboradores/services/vinculo.py:1064`)
+- **FILA — reescrita sem denúncia permanece:** fora da vigência, o escritor altera apenas `trabalha/dna`, sem os três carimbos. Contra-exemplo: encerrar hoje uma geradora de amanhã sem sucessor apaga os marcos sem registrar essa regeneração nos campos que os leitores consultam; dívida anterior já documentada. (`app/ponto/portas/celula.py:238`, `app/ponto/portas/celula.py:245`, `app/docs/LEIS.md:163`, `app/escala/services/regeneracao.py:119`)
+- **FILA — fallbacks anteriores permanecem:** trabalho sem célula; marcos com DNA/marcos nulos mesmo havendo célula; pausas/extra sem célula; vínculo pela vigência quando não há geradora. Nada novo nesses fallbacks no diff fornecido. (`app/escala/models.py:1096`, `app/escala/models.py:1133`, `app/escala/models.py:1208`, `app/escala/models.py:1239`, `app/escala/alimentacao.py:285`)
+- **FILA — relógio fora da borda:** os novos serviços possuem `localdate` próprio; rejulgamento e cauda releem o relógio apesar de receberem dias derivados de `hoje`. Django usa São Paulo; fuso do SO em produção: [nao verificado]. Contra-exemplo condicional: SO em UTC já está em 13/11, enquanto São Paulo ainda está em 12/11. (`app/ponto/services/cadastro_futuro.py:16`, `app/ponto/services/cadastro_futuro.py:42`, `app/escala/folgas.py:616`, `app/ponto/portas/celula.py:296`, `app/ponto/portas/celula.py:426`, `app/config/settings/base.py:93`)
+- **BLOQUEIA — cura e cadastro não compartilham atomicidade em todas as portas:** vínculo sai do atomic antes da cura e engole falha; template salva antes da propagação e também engole falha; flag de feriado, município e formulário de feriado salvam antes da cura sem atomic abrangente próprio. Contra-exemplo: falha na regeneração após o save deixa cadastro novo e célula antiga, com sucesso possível nos caminhos que engolem a exceção. (`app/colaboradores/services/vinculo.py:188`, `app/colaboradores/services/vinculo.py:299`, `app/colaboradores/services/vinculo.py:331`, `app/escala/services/cadastro_tipo.py:306`, `app/escala/services/cadastro_tipo.py:322`, `app/colaboradores/services/vinculo.py:862`, `app/colaboradores/services/estrutura.py:68`, `app/core/views_config.py:68`)
+- **Nada — nas portas com atomic abrangente, a escrita futura é síncrona:** calendário do vínculo, fechamento, snapshot, folgas e admin abrangem a cura. `on_commit` agenda efeitos posteriores, não a escrita futura do DNA. (`app/colaboradores/services/vinculo.py:450`, `app/colaboradores/services/vinculo.py:623`, `app/colaboradores/services/vinculo.py:984`, `app/escala/folgas.py:332`, `app/escala/services/cadastro_tipo.py:369`, `app/ponto/services/cadastro_futuro.py:21`, `app/ponto/portas/celula.py:502`)
+- **BLOQUEIA — ordem inversa de travas:** snapshot trava célula C e depois exclui vínculo E; fechamento atualiza E e 
+
+[truncado em 20000 de 24767 caracteres]
 
 ## 12/11 10:21 · sessao 1c8e308c2f1a · - · - · origem=Ronald (tmux)
 
@@ -490,127 +617,4 @@ O `pre-push` usa o código de saída; a régua também usa o código e exibe a s
 
 - **Lacuna do MORDE:** o gerador pesquisa todos os publicados do mesmo pid, corrigindo também “primeiro publicado tem whitespace diferente; segundo é exato”; o caso plantado tem apenas um publicado por pid e não prova essa busca além do primeiro. (`bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:820`)
 
-## 12/11 09:47 · sessao 022365898ec8 · - · - · origem=Ronald (tmux)
-
-Leitura estática, sem execução do MORDE; RED/GREEN efetivo permanece **[nao verificado]**.
-
-| Cura | Mutante mordido pelo MORDE | Mutante/lacuna que escapa |
-|---|---|---|
-| Dois locais por patch-id | Voltar a conservar apenas um SHA: `dup2` e `dup3` usam o mesmo conteúdo/caminho, e a asserção exige ambos no mapa exato. (`bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`) | Procurar somente o primeiro publicado do mesmo pid: o cenário contém apenas um publicado equivalente a `dup`, sem candidato anterior de linhas diferentes. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:819`) |
-| Whitespace semântico | Retirar comparação de linhas: publicado contém `ab`, local contém `a b`, e local deve permanecer entre falhas. (`bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:820`) | Comparar diff inteiro, incluindo contexto: a prova nova só recria arquivo `dup.py` com conteúdo idêntico; não planta cherry-pick com contexto alterado. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`) |
-| Prosa em parênteses | **Não há mordida específica nova.** A fixture de vocabulário usa célula sem parênteses; casos de `julgar` tampouco usam prosa do glossário real. (`bin/tests/test_lei_akita.sh:445`, `bin/tests/test_lei_akita.sh:446`, `bin/tests/test_lei_akita.sh:459`, `bin/tests/test_lei_akita.sh:482`) | Reintroduzir o loop v1 que também adicionava a célula inteira com prosa preservaria as asserções existentes de inteiro/pedaços/segunda coluna. (`bin/tests/test_lei_akita.sh:456`, `bin/tests/test_lei_akita.sh:457`) |
-| Saída malformada patch-id | **Não há injeção específica de stdout malformado.** Os erros plantados são repositório raso, falta de origin e falta de corte. (`bin/tests/test_lei_akita.sh:715`, `bin/tests/test_lei_akita.sh:720`, `bin/tests/test_lei_akita.sh:829`) | Retirar a validação nova de quantidade/formato de campos não é exercitado por esses preparos saudáveis de patch-id. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:387`, `bin/tests/test_lei_akita.sh:795`) |
-| Contagem | Contar duplicatas em `JULGADOS`: esperado é exatamente 3, correspondentes a remoção, whitespace novo e outro patch; as duas duplicatas ficam de fora. (`bin/tests/test_lei_akita.sh:812`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:815`, `bin/tests/test_lei_akita.sh:820`) | Alterar somente a frase final para continuar sem explicar a exclusão não muda o valor validado pelo MORDE; a frase é emitida fora da execução MORDE. (`bin/tests/test_lei_akita.sh:834`, `bin/tests/test_lei_akita.sh:835`, `bin/tests/test_lei_akita.sh:856`) |
-
-O cenário também morde dispensa indiscriminada, retirada completa da dispensa e associação publicada errada, pois exige simultaneamente conjunto exato de falhas e mapa exato de duplicatas. (`bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`)
-
-A cura de prosa retira os parênteses antes de adicionar a célula inteira; `Architecture Conformance Test (armadilha: ...)` e `Offline Fallback (network-first: ...)` deixam de entrar com prosa. O termo `Architecture Decision Record` ainda entra isoladamente pelo filtro de nome entre parênteses. (`bin/tests/test_lei_akita.sh:84`, `bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:125`; `app/docs/GLOSSARIO.md:15`, `app/docs/GLOSSARIO.md:28`, `app/docs/GLOSSARIO.md:31`)
-
-Vírgula continua aberta: a célula `sinal derivado do estado, reconciliacao level-triggered` ainda entra inteira, mas o parser de `padrao=` não admite vírgula no valor. Não existe teste dessa célula na fixture nova. (`app/docs/GLOSSARIO.md:13`; `bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:127`, `bin/tests/test_lei_akita.sh:319`, `bin/tests/test_lei_akita.sh:445`)
-
-## 12/11 09:42 · sessao 1644ac242a95 · PUSH-SEM-REGRAVAR · verificador · origem=Code
-
-A pré-verificação encontra um defeito concreto em (a): **dois locais com o mesmo patch-id perdem uma das associações**, podendo deixar uma duplicata sujeita a reprovação. Em (b), há ampliação para prosa e nomes inteiros que entram no vocabulário, mas continuam impossíveis de usar em `padrao=` por conterem vírgulas. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:123`, `bin/tests/test_lei_akita.sh:317`)
-
-Não executei o MORDE completo, pois ele cria arquivos e repositórios temporários; os resultados históricos RED/GREEN e “4/4 mutantes” permanecem **[não verificado]**. (`bin/tests/test_lei_akita.sh:429`, `bin/tests/test_lei_akita.sh:432`, `bin/tests/test_lei_akita.sh:642`)
-
-1. **Aval versus implementação, por item.**
-
-   **(a)** O aval transcrito pede dispensar o commit cujo patch-id coincide com um publicado e emitir `DUPLICATA de <sha publicado>`; a transcrição não está disponível como arquivo local **[não verificado em arquivo]**. O código implementa essa dispensa antes de `julgar`, mas somente para commits com linha `LEI-AKITA:`, com até um pai e presentes no mapa local; merges continuam pelo hunk próprio. Portanto, não cobre literalmente todo commit duplicado, e a perda de associações no mapa impede reconhecer todas as duplicatas elegíveis. (`bin/tests/test_lei_akita.sh:398`, `bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:410`, `bin/tests/test_lei_akita.sh:385`)
-
-   A saída humana fica `ja julgado: <local8> DUPLICATA de <publicado12>`, e a duplicata deixa de incrementar `JULGADOS`. (`bin/tests/test_lei_akita.sh:402`, `bin/tests/test_lei_akita.sh:404`, `bin/tests/test_lei_akita.sh:815`, `bin/tests/test_lei_akita.sh:822`)
-
-   **(b)** O aval transcrito pede o nome inteiro da primeira coluna, além dos pedaços **[não verificado em arquivo]**. O código acrescenta tanto a célula inteira quanto sua versão sem parênteses, preservando a extração anterior das duas primeiras colunas; não acrescenta a segunda coluna inteira. Entretanto, o parser do campo ainda impede os nomes com vírgulas. (`bin/tests/test_lei_akita.sh:98`, `bin/tests/test_lei_akita.sh:117`, `bin/tests/test_lei_akita.sh:123`, `bin/tests/test_lei_akita.sh:317`)
-
-   Os anexos também divergem no testemunho de `7313a031c`: o aval cita `072556ec8`, enquanto a mensagem do commit cita `4aa0a00fb`. Se ambos são publicados equivalentes, **[não verificado]**; o código escolhe o primeiro publicado encontrado para cada patch-id. (`bin/tests/test_lei_akita.sh:385`)
-
-2. **Quando conteúdo diferente pode receber o mesmo patch-id.**
-
-   A tabela descreve a semântica do comando escolhido; sua reprodução na versão/configuração Git de produção é **[não verificado]**. A chamada efetiva usa `log -p --no-merges --no-renames` seguido de `patch-id --stable`. (`bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:379`)
-
-   | Caso | Consequência |
-   |---|---|
-   | Whitespace | É ignorado no cálculo: diferenças de indentação ou espaços dentro de strings podem preservar o patch-id e mudar comportamento. O bypass não faz comparação adicional de árvore, blob ou AST. (`bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:401`) |
-   | Base/contexto | Patch-id identifica o patch normalizado, não a árvore resultante nem sua equivalência semântica em outra base; o código aceita somente essa identidade. (`bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:401`) |
-   | Modo de arquivo | Cabeçalhos de mudança de modo participam do patch; “só modo” pode produzir patch-id e ser duplicata. Não é automaticamente vazio. (`bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:401`) |
-   | Binário | Não se pode afirmar que todo binário recebe o mesmo ID: a representação binária incorpora identificação dos blobs. Não há prova dessa borda no MORDE novo. (`bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:778`; comportamento em produção **[não verificado]**) |
-   | Rename | `--no-renames` apresenta remoção e adição, incluindo caminhos e conteúdo; o bypass não se baseia apenas no rótulo “rename”. (`bin/tests/test_lei_akita.sh:378`) |
-   | Commit vazio | Não produz registro de patch-id; portanto, não recebe um “ID vazio comum” que o torne duplicata. Sem associação local, segue o julgamento normal se tiver linha. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:398`, `bin/tests/test_lei_akita.sh:401`) |
-
-   **Há possibilidade de dispensar código de negócio novo sem julgá-lo:** por exemplo, patches que diferem apenas entre `return 'a b'` e `return 'ab'`. Isso decorre do critério de equivalência escolhido, além do defeito do mapa; sua ocorrência nos commits fornecidos é **[não verificado]**. (`bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:403`)
-
-   Um vazio com linha e termo inexistente continua vermelho; vazio com `n/a (instrumento)` pode passar por não tocar negócio. Um commit só de modo, sem correspondência publicada, continua sujeito ao julgamento dos caminhos alterados e pode reprovar `n/a` em `app/`. (`bin/tests/test_lei_akita.sh:323`, `bin/tests/test_lei_akita.sh:331`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:418`)
-
-3. **Publicados, erros e `split()`.** [nao verificado]
-
-   Os publicados são os commits não merge alcançáveis de `origin/main`, excluída a ancestralidade do pai do corte; é um limite de grafo, não uma data. Não há restrição a primeiro pai nem checagem de que o publicado teve efetivamente julgamento anterior. (`bin/tests/test_lei_akita.sh:371`, `bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:394`)
-
-   `origin/main` ausente provoca erro estrito na enumeração; repositório raso é recusado explicitamente; retorno não zero de `patch-id` produz `PADRAO_ERRO`. Esses caminhos não viram conjunto vazio silencioso. (`bin/tests/test_lei_akita.sh:359`, `bin/tests/test_lei_akita.sh:363`, `bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:388`)
-
-   **Há conjuntos vazios legítimos:** nenhum local enumerado; nenhum publicado restante após o piso; ou nenhum patch emitido, como numa seleção só de vazios. O código também aceita stdout vazio com retorno zero sem validar sua completude. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:395`)
-
-   Na saída normal, cada registro tem dois campos; commit vazio simplesmente não gera registro. Mas `pid, sha = ln.split()` lança `ValueError` diante de linha com quantidade diferente de campos, sem convertê-lo em `PADRAO_ERRO`; dois campos inválidos também não são validados. A ocorrência dessa saída anormal é **[não verificado]**. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:384`)
-
-   Exceções de execução ou decodificação dos subprocessos também não têm tratamento geral. Ainda assim, uma interrupção antes do fim deixa faltar `PADRAO_FIM`, e o shell reprova: diagnóstico fora do padrão, mas não verde por esse caminho. (`bin/tests/test_lei_akita.sh:356`, `bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:823`)
-
-4. **Locais, merges, raízes e mapa.**
-
-   `--no-walk=unsorted` seleciona os SHAs fornecidos sem percorrer seus ancestrais; `--no-merges` exclui merges do cálculo. Os merges permanecem em `hs` e seguem o julgamento de hunks próprios. (`bin/tests/test_lei_akita.sh:378`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:405`)
-
-   Raízes são elegíveis porque a condição é `len(pais) <= 1`. Na configuração usual, `log -p` mostra sua criação contra a árvore vazia; a configuração efetiva, inclusive `log.showRoot`, é **[não verificado]**. O julgamento posterior possui tratamento explícito de raiz. (`bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:416`)
-
-   **O mapa fica errado para dois locais com o mesmo patch-id:** `setdefault(pid, sha)` conserva apenas o primeiro SHA; inverter esse dicionário não recupera o outro. Um local omitido será julgado mesmo sendo duplicata publicada. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:401`)
-
-5. **Termos novos do GLOSSÁRIO real.**
-
-   São **dez entradas novas no conjunto**, provenientes das nove células abaixo; somente sete são utilizáveis pelo parser atual de `padrao=`. A normalização remove marcação, converte para minúsculas e compacta espaços. (`bin/tests/test_lei_akita.sh:83`, `bin/tests/test_lei_akita.sh:123`, `bin/tests/test_lei_akita.sh:317`)
-
-   | Célula que ganha aceite integral | Uso no campo |
-   |---|---|
-   | `Single Source of Truth / Aggregate Root` | Aceito. (`app/docs/GLOSSARIO.md:11`) |
-   | `sinal derivado do estado, reconciliacao level-triggered (o oposto, edge-triggered, e o fio morto)` | Entra inteiro **e sem o parêntese**, mas ambas as entradas contêm vírgula e são recusadas pelo parser. (`app/docs/GLOSSARIO.md:13`; `bin/tests/test_lei_akita.sh:123`, `bin/tests/test_lei_akita.sh:317`) |
-   | `Architecture Conformance Test (armadilha: selar a FORMA e nao o SIGNIFICADO)` | Aceito, incluindo a prosa. (`app/docs/GLOSSARIO.md:15`; `bin/tests/test_lei_akita.sh:331`) |
-   | `Parallel Change / Expand-Contract` | Aceito. (`app/docs/GLOSSARIO.md:18`) |
-   | `Shadow mode / Parallel run` | Aceito. (`app/docs/GLOSSARIO.md:21`) |
-   | `Backfill / Reprocessing` | Aceito. (`app/docs/GLOSSARIO.md:23`) |
-   | `Duplicated business logic / logic drift` | Aceito. (`app/docs/GLOSSARIO.md:25`) |
-   | `ADR (Architecture Decision Record)` | Aceito; o inteiro é novo, embora seus componentes já fossem extraídos. (`app/docs/GLOSSARIO.md:28`; `bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:123`) |
-   | `Offline Fallback (network-first: sem rede, a copia do cache; sem copia, o erro de rede de sempre -- nunca undefined no respondWith)` | Entra no conjunto após normalização, mas suas vírgulas impedem uso no campo. (`app/docs/GLOSSARIO.md:31`; `bin/tests/test_lei_akita.sh:83`, `bin/tests/test_lei_akita.sh:317`) |
-
-   Portanto, **sim, prosa passa a ser aceita integralmente** no caso de `Architecture Conformance Test`. O filtro antigo para parênteses que parecem nomes não é aplicado pelo loop novo à célula inteira. (`app/docs/GLOSSARIO.md:15`; `bin/tests/test_lei_akita.sh:88`, `bin/tests/test_lei_akita.sh:123`)
-
-6. **Quem escreve e quem lê.**
-
-   | Informação | Escrita e leitura |
-   |---|---|
-   | `DUPLICATAS` | Zerada por chamada, preenchida com local8/publicado12; lida pelo MORDE novo e pela emissão normal. (`bin/tests/test_lei_akita.sh:374`, `bin/tests/test_lei_akita.sh:402`, `bin/tests/test_lei_akita.sh:794`, `bin/tests/test_lei_akita.sh:814`) |
-   | `JULGADOS` | Inicializada na enumeração e incrementada depois da exclusão de duplicatas; emitida em `PADRAO_JULGADOS`. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:404`, `bin/tests/test_lei_akita.sh:816`) |
-   | `ENUMERADOS` | Total de `hs`, incluindo sem linha e duplicatas; lida na saída e nas asserções de sincronização, outra ref e piso. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:676`, `bin/tests/test_lei_akita.sh:701`, `bin/tests/test_lei_akita.sh:802`, `bin/tests/test_lei_akita.sh:816`) |
-   | `PADRAO_FALHA` | Python emite; shell conta e transforma em `FALHA: PADRAO-NA-CURA`. (`bin/tests/test_lei_akita.sh:813`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:821`) |
-   | `PADRAO_DUPLICATA` | Python emite; shell transforma em `ja julgado:`. (`bin/tests/test_lei_akita.sh:815`, `bin/tests/test_lei_akita.sh:822`) |
-   | `PADRAO_JULGADOS` | Consumida pelo próprio selo para compor a frase final de sucesso. (`bin/tests/test_lei_akita.sh:816`, `bin/tests/test_lei_akita.sh:831`) |
-   | `PADRAO_FIM` / `PADRAO_ERRO` | O sentinela é exigido; não há parser dedicado de `PADRAO_ERRO`, cuja interrupção provoca ausência do sentinela. (`bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:823`) |
-
-   `pre-push.sh` passa o SHA e decide pelo código de saída; `regua.sh` também decide pelo código de saída e apenas exibe a saída quando há falha. A adição da linha de duplicata não quebra esses leitores. (`bin/pre-push.sh:38`; `bin/regua.sh:140`, `bin/regua.sh:142`)
-
-   Outro selo que grepe essa saída não foi encontrado na varredura da cópia; leitor externo, ignorado ou ausente da cópia é **[não verificado]**.
-
-7. **MORDE e mutantes.**
-
-   O caso sintético de vocabulário morde retirar o nome inteiro e acrescentar também o inteiro da segunda coluna; os dois casos de `julgar` mordem negar `Parallel Change / Expand-Contract` e aceitar uma composição inventada só porque contém um pedaço válido. (`bin/tests/test_lei_akita.sh:444`, `bin/tests/test_lei_akita.sh:449`, `bin/tests/test_lei_akita.sh:450`, `bin/tests/test_lei_akita.sh:471`)
-
-   O caso de duplicata morde retirar a dispensa, dispensar indiscriminadamente o outro patch ou emitir associação publicada errada naquele cenário. Contudo, o patch diferente está em **outro arquivo**, e existe apenas um local com o patch-id publicado. (`bin/tests/test_lei_akita.sh:783`, `bin/tests/test_lei_akita.sh:789`, `bin/tests/test_lei_akita.sh:791`, `bin/tests/test_lei_akita.sh:795`)
-
-   Permanecem lacunas concretas: dois locais com mesmo patch-id — inclusive o defeito atual —; mudança diferente no mesmo caminho; whitespace semântico; vazio/modo/binário/raiz; erro ou saída malformada de `patch-id`; prosa e vírgulas nas células. Esses casos não são plantados pela prova nova. (`bin/tests/test_lei_akita.sh:433`, `bin/tests/test_lei_akita.sh:778`)
-
-   Também sobreviveria à asserção nova um mutante que continuasse contando duplicatas em `JULGADOS`, porque ela verifica somente falhas e associação da duplicata. Um mutante que devolvesse `{}` apenas quando `patch-id` falha não seria exercitado pelo cenário saudável; sua execução efetiva é **[não verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:795`)
-
-8. **As três classes de reprovação citadas.**
-
-   **Selo/RED sem mordida:** as asserções novas têm ligação com os comportamentos pretendidos, mas não provam todas as bordas; o defeito de múltiplos locais passa pela prova nova. O RED histórico alegado continua **[não verificado]**. (`bin/tests/test_lei_akita.sh:444`, `bin/tests/test_lei_akita.sh:795`, `bin/tests/test_lei_akita.sh:385`)
-
-   **Erro operacional virando verde:** não encontrei esse caminho nas falhas explícitas examinadas; ausência de `PADRAO_FIM` reprova, e `MORDE_OK` sozinho não basta quando existe `MORDE_FALHOU`. Há, porém, exceções fora de `PADRAO_ERRO` e stdout vazio com sucesso sem validação adicional. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:823`, `bin/tests/test_lei_akita.sh:827`)
-
-   **Campo com dois significados:** o formato `N de M` permanece, mas `JULGADOS` agora exclui duplicatas com linha. Nenhum dos dois leitores operacionais identificados depende da contagem; o próprio texto final continua dizendo “commit(s) com linha LEI-AKITA”, sem explicar a exclusão, e o MORDE novo não protege essa semântica. (`bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:795`, `bin/tests/test_lei_akita.sh:831`; `bin/pre-push.sh:38`; `bin/regua.sh:140`)
-
-_4154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4156 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
