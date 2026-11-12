@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 20:49** · publicado em **11/11/2026 20:49** (UTC-3)
+> Ultima resposta processada: **11/11/2026 20:57** · publicado em **11/11/2026 21:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 20:57 · sessao ef30d638d860 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Implementados mapa explícito, recusa `TipoSemFaixa` e contador por tipo ativo. A certificação pelo Code/suite e opus final permanece **[nao verificado]**. (`ponto/precedencia.py:52`, `:96`; `ponto/services/vigia_ausencia.py:155`)
+
+Arquivos alterados:
+
+- [precedencia.py](/home/ronald/wt-codex-lastro-faixa-sem-default-204847/app/ponto/precedencia.py:48): comentário, mapa, exceção independente de `VetoDePrecedencia` e último recurso de `_nome_do_tipo` devolvendo o código cru.
+- [vigia_ausencia.py](/home/ronald/wt-codex-lastro-faixa-sem-default-204847/app/ponto/services/vigia_ausencia.py:155): `tipos_ativos_sem_faixa`, consultando `faixa_de` com `try/except TipoSemFaixa`; frases com códigos e URL da tela.
+- [test_lastro_faixa_sem_default.py](/home/ronald/wt-codex-lastro-faixa-sem-default-204847/app/ponto/tests/test_lastro_faixa_sem_default.py:11): testes novos, incluindo fixture pk 5356, fantasma, inativação, sementes, choices e consulta à autoridade. [nao verificado]
+- [test_a6_vigia_familia_ausencia.py](/home/ronald/wt-codex-lastro-faixa-sem-default-204847/app/ponto/tests/test_a6_vigia_familia_ausencia.py:124): expectativa de oito linhas.
+- [test_calendario_ausencia_pela_autoridade.py](/home/ronald/wt-codex-lastro-faixa-sem-default-204847/app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:52): preservado o caso que dependia do default; agora exige a recusa nomeada.
+
+Mapa final:
+
+| Faixa | Códigos | Fonte |
+|---|---|---|
+| `ferias` | `ferias` | `ponto/precedencia.py:53` |
+| `afastamento` | `afastamento_inss`, `suspensao`, `licenca_maternidade`, `licenca_paternidade`, `licenca_luto` | `ponto/precedencia.py:54` |
+| `atestado` | `atestado`, `atestado_inss`, `abon_hr`, `abono`, `atraso`, `aviso_home_office`, `declaracao`, `declaracao_acompanhante_sem_ab`, `declaracao_de_acompanhante`, `desligamento`, `falta`, `reciclagem`, `reducao_de_7_dias_do_aviso`, `saida_antecipada`, `treinamento`, `atestado_medico`, `obito`, `outros` | `ponto/precedencia.py:59` |
+| `folga` | `folga_compensatoria`, `feriado_folga`, `folga`, `folga_abonada`, `troca_de_plantao` | `ponto/precedencia.py:79` |
+
+Cada entrada tem justificativa de uma linha. A conferência por grep e AST não encontrou faltantes entre os 17 choices e as 17 sementes. (`ponto/precedencia.py:52`; `ponto/models.py:661`; `ponto/migrations/0052_seed_tipoausencia.py:9`)
+
+A execução Django parou por ausência de Django, antes dos testes (`manage.py:11`). RED/GREEN de integração, inclusive pk 5356, estão **[nao verificado]**. Em checagem isolada, com dependências simuladas, passaram três testes puros e o contrato do contador; ambos os mutantes foram mordidos. (`ponto/tests/test_lastro_faixa_sem_default.py:13`, `:19`, `:56`, `:132`)
+
+Comando RED, para o HEAD/base informado **com somente o teste novo aplicado**; execução nesse HEAD **[nao verificado]**: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 CONGELAR_EM='2026-11-11 12:00:00' \
+python3 manage.py test ponto.tests.test_lastro_faixa_sem_default \
+--settings=config.settings.ci --noinput
+```
+
+Comando GREEN para o Code; resultado **[nao verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 CONGELAR_EM='2026-11-11 12:00:00' \
+python3 manage.py test \
+ponto.tests.test_lastro_faixa_sem_default \
+ponto.tests.test_a6_vigia_familia_ausencia \
+ponto.tests.test_a2_precedencia \
+colaboradores.tests.test_calendario_ausencia_pela_autoridade \
+--settings=config.settings.ci --noinput
+```
+
+Mutante **default de volta**, somente em memória:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 - <<'PY'
+import django
+django.setup()
+from django.core.management import call_command
+from ponto import precedencia as p
+p.faixa_de = lambda tipo: p._FAIXA_DE_TIPO.get(tipo, 'atestado')
+call_command('test', 'ponto.tests.test_lastro_faixa_sem_default', interactive=False)
+PY
+```
+
+O teste do fantasma ficou vermelho na checagem isolada. O contador do fantasma também deve ficar vermelho na integração **[nao verificado]**. O caso pk 5356 continua verde nesse mutante porque `folga` permanece explicitamente mapeada. (`ponto/tests/test_lastro_faixa_sem_default.py:13`, `:92`, `:108`; `ponto/precedencia.py:81`)
+
+Mutante **contador lê o dict**, somente em memória:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 - <<'PY'
+import django
+django.setup()
+import inspect
+from django.core.management import call_command
+from ponto import precedencia as p
+from ponto.services import vigia_ausencia as v
+src = inspect.getsource(v.contadores)
+src = src.replace('faixa_de(_t.codigo)', '_FAIXA_DE_TIPO[_t.codigo]')
+src = src.replace('except TipoSemFaixa:', 'except KeyError:')
+v.__dict__['_FAIXA_DE_TIPO'] = p._FAIXA_DE_TIPO
+exec(compile(src, v.__file__, 'exec'), v.__dict__)
+call_command('test', 'ponto.tests.test_lastro_faixa_sem_default.LastroFaixaSemDefaultTest.test_MORDE_contador_pergunta_a_autoridade_em_vez_do_dict', interactive=False)
+PY
+```
+
+Esse mutante ficou vermelho na checagem isolada porque deixou de consultar `faixa_de('abono')`; integração **[nao verificado]**. (`ponto/tests/test_lastro_faixa_sem_default.py:132`)
+
+Escritores e leitores dos campos envolvidos:
+
+| Campo | QUEM ESCREVE | QUEM LÊ |
+|---|---|---|
+| `TipoAusencia.codigo` | UI gera na criação; porta insere; seed inicializa. (`ponto/views_tipos_ausencia.py:89`; `ponto/services/ausencia.py:1310`; `ponto/migrations/0052_seed_tipoausencia.py:33`) | UI, catálogo, vigia e novo contador. (`ponto/views_tipos_ausencia.py:31`; `ponto/catalogo/ausencias.py:250`; `ponto/services/vigia_ausencia.py:144`, `:162`) |
+| `TipoAusencia.ativo` | Checkbox da UI → porta; seed inicializa. (`ponto/views_tipos_ausencia.py:80`; `ponto/services/ausencia.py:1305`; `ponto/migrations/0052_seed_tipoausencia.py:36`) | Catálogo e novo contador. (`ponto/catalogo/ausencias.py:249`; `ponto/services/vigia_ausencia.py:160`) |
+| `Ausencia.tipo` | Porta de criação/edição; fixtures dos testes. (`ponto/services/ausencia.py:342`, `:418`, `:498`; `ponto/tests/test_lastro_faixa_sem_default.py:96`) | Precedência histórica, nomeação e vigia existente. (`ponto/precedencia.py:128`, `:298`, `:406`; `ponto/services/vigia_ausencia.py:105`) |
+| Faixa | Definição no mapa; resultado do dia montado pela precedência. (`ponto/precedencia.py:52`, `:429`) | `faixa_de` lê o mapa; fatos, veto e contador consultam essa autoridade. (`ponto/precedencia.py:103`, `:406`, `:522`, `:543`; `ponto/services/vigia_ausencia.py:162`) |
+
+As escritas novas de cadastro/inativação são fixtures de teste. (`ponto/tests/test_lastro_faixa_sem_default.py:111`, `:119`)
+
+Nos quatro leitores preservados, uma recusa durante a chamada capturada produz:
+
+- **Espelho:** warning e continuidade com mapas vazios, podendo ficar sem palavras da janela. (`ponto/services/espelho.py:644`)
+- **Cartório:** na aplicação posterior da precedência, registra a exceção e retorna `out`. (`ponto/services/cartorio.py:2032`)
+- **Situação de férias:** devolve `False` para descanso. (`ferias/situacao.py:93`)
+- **Semana do posto:** devolve `trabalho`. (`escala/services/semana_do_posto.py:175`)
 
 ## 11/11 20:49 · sessao 683fb9683207 · CASO-0711-HJ003 · sonda · origem=Code
 
@@ -1664,80 +1763,4 @@ Migrations são schema, não novos eleitores: DS aberta/fechada/resolução/cham
 
 O selo existente continua por arquivo e regex, incluindo somente atribuição/update e excluindo migrations; não demonstra função escritora única nem pega todos os construtores/kwargs. (`app/core/tests/test_contract_escritores_estado.py:61`, `:179`, `:182`, `:191`.) A ferramenta de censo geral documenta baldes não atribuíveis e inferências; não usar “nenhum resultado” como prova universal de ausência de escrita dinâmica. (`app/core/censo_escritas.py:15`, `:38`, `:43`, `:54`.)
 
-## 11/11 20:29 · sessao 5e279eb98337 · - · - · origem=Ronald (tmux)
-
-Rastreamento de templates e causas, só leitura:
-
-| Item/causa | Botão e condição | URL |
-|---|---|---|
-| Proposta de escala | `modal_fio.html:54` Aplicar; `:64` Recusar; basta `proposta_viva` (`:40`), sem guarda de perfil no template | `chamados:modal_fio`, `acao=aplicar_proposta_escala/recusar_proposta_escala`, forms `:49/:56` |
-| Pergunta respondida não validada | `modal_fio.html:269/:284` Validar; `:298` Rejeitar; `:312` Corrigir hora; bloco condicionado ao `pode_agir_map` em `:123`, resposta `:217`, não validada `:228/:239` | `chamados:modal_fio` |
-| Pergunta sem data, não respondida | `modal_fio.html:193` Aplicar correção; `:200` Apagar; condição `:185` e guarda externa `:123` | `chamados:modal_fio` |
-| Datas divergentes | `modal_fio.html:177` Conferir data; depende `pode_conferir_data` `:172` | `chamados:conferir_data_pergunta`, form `:173` |
-| Disputa aberta, sem `ancora_ausente`, todas respondidas | `modal_fio.html:359` Regularizar; condições `:326/:327/:334` e guarda externa `:123` | `chamados:modal_fio`, ação em `:355` |
-| Disputa aberta com `ancora_ausente` | Não oferece fechamento manual, aviso `modal_fio.html:327-332`; continua oferecendo Reabrir `:372` | `chamados:reabrir_disputa_supervisao`, form `:368` |
-| Disputa aberta com pergunta sem resposta | Não oferece Regularizar; oferece Cobrar `modal_fio.html:334-351` e Reabrir `:372` | `chamados:cobrar_chamado`, `chamados:reabrir_disputa_supervisao` |
-| Disputa fechada | Reabertura administrativa `modal_fio.html:412`, exige `is_admin_ti` `:382` e contador <2 `:383` | `chamados:modal_fio`, `reabrir_disputa_admin` `:390` |
-| GPS fora geofence | Aceitar `modal_fio.html:509`; advertir `:520`; recusar `:532`, guarda `:500` | `chamados:modal_fio` |
-| `sem_previsao_escala`, aberto, sugestão fixa | Aceitar folga `modal_fio.html:551-553`; condição `:544`, guarda `:547` | `chamados:detalhe_local`, `aceitar_folga_limbo` `:550` |
-| `regua_suspeita`, aberto/em análise | Confirmar cadastro errado `modal_fio.html:567-569`; realocar `:576-578` só se destino `:572`; guarda `:563` | `chamados:detalhe_local`, `corroborar_regua/realocar_regua` |
-| `batida_fora_horario`, aberto, com motivo anuência | Aprovar exceção `modal_fio.html:599-601`; condição `:588`; guarda `:595`; alternativa desabilitada `:605` | `chamados:detalhe_local`, `aprovar_excecao` |
-| Furo sem pergunta regularizável | Perguntar ao colaborador `modal_fio.html:629-630`, condição primeiro card + contador + gestor `:617` | `chamados:modal_fio`, `iniciar_disputa_orfaos` |
-| `ancora_limbo`, aberto | Pedir confirmação `modal_fio.html:645`; condição e guarda `:636` | `chamados:modal_fio`, `pedir_confirmacao_ancora` |
-| Demais locais não fechados, sem GLPI e fora modo benefício | Enviar `modal_fio.html:672`, seletor mover `:665-670`; condições `:651-652` | `chamados:modal_fio` |
-| `ausencia_colab` | No detalhe, link Abrir registro e validar `detalhe_local.html:233-235`; condição `:221`; bloco ausente no fio [não verificado por referência positiva] | `chamados:ir_para_ausencia` |
-
-Todos os caminhos acima são `app/templates/chamados/...`; esta tabela descreve renderização, a aceitação POST depende das guardas que o outro agente rastreia.
-
-A lista mostra **Decidir sem botão inline** em `_lista_chamados.html:86`; clique abre fio em `:42`. Resumo mostra `Decidir` em `_lista_resumo.html:46/:71` e abre fio `:53-54`. O fio mostra o verbo em `modal_fio.html:117-120` **antes** da guarda de ação em `:123`.
-
-Rótulos e seus produtores/leitores:
-
-- `catalogo/natureza.py:41-54` classifica por módulo + resposta não validada + pergunta viva; `:58-63` mapeia `sem_pergunta/cadastro → decidir`; não lê usuário/perfil.
-- `services/verbos.py:44-47` lê módulo e créditos das perguntas; `:80-84` escreve descrição do verbo; `:149-158` gera rótulo da linha.
-- `services/painel.py:383-388` escreve `verbo/rotulo_linha`; templates leem `_lista_chamados.html:86`, `_lista_resumo.html:71`.
-- `services/fio.py:400` escreve conjunto de módulos com bloco próprio; `:403-407` chama `desenlace`; `services/desenlace.py:78-80` escreve “Decisão sua / Use os botões” sem conferir perfil nem condições particulares do bloco; template lê `modal_fio.html:117-120`.
-- `services/fio.py:340-345` escreve `todas_respondidas`; template lê `modal_fio.html:334`.
-- `services/fio.py:467` e `views.py:933` escrevem `pode_agir_map` consultando `pode_agir_chamado`; leituras no modal `:123/:500/:547/:563/:595/:636/:652`.
-- `services/fio.py:470` e `views.py:936` escrevem `is_admin_ti` como `is_staff OR grupo admin_ti`; template lê `modal_fio.html:382`.
-- `services/fio.py:474` escreve `pode_conferir_data` via `tem_acao('gerir_chamados')`; template lê `modal_fio.html:172`.
-- `templatetags/chamados_tags.py:27-30` delega `pode_agir` a `pode_agir_chamado`; `:53-64` delega espera; `:67-78` delega opções de movimento. Este arquivo não decide o rótulo “Decidir”.
-
-Universo AST:
-
-- 16 motivos em `app/chamados/catalogo/motivos.py:34-49`.
-- 34 módulos em `app/chamados/catalogo/modulos.py:105-198`.
-- Módulo `gps_ausente` é registro (`natureza.py:18-23`), embora exista também motivo de pergunta homônimo (`motivos.py:42`).
-- Módulo `gps_fora_geofence` é Validar (`natureza.py:29-31/:46-47`), não Decidir.
-
-Script AST efetivamente executado, por stdin, sem importar o app:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import ast
-from pathlib import Path
-for name in ('motivos','modulos'):
- p=Path('app/chamados/catalogo')/(name+'.py')
- t=ast.parse(p.read_text())
- print(p)
- for n in ast.walk(t):
-  if isinstance(n,ast.Assign) and any(isinstance(x,ast.Name) and x.id=='MOTIVOS' for x in n.targets):
-   if isinstance(n.value,ast.Dict):
-    for k in n.value.keys: print(k.value,k.lineno)
-  elif isinstance(n,ast.AnnAssign) and isinstance(n.target,ast.Name) and n.target.id=='MOTIVOS':
-   for c in n.value.elts: print(next(k.value.value for k in c.keywords if k.arg=='id'),c.lineno)
-PY
-```
-
-Grep usado:
-
-```bash
-rg -n 'Decidir|DECIDIR|decidir' app/templates
-rg -n 'pode_agir_map|is_gestor|is_admin_ti|proposta_viva|todas_respondidas' \
-  app/chamados/views.py app/chamados/services/fio.py
-rg -n 'desenlace\(|tem_bloco_proprio|rotulo_linha|rotulo_de_linha' \
-  app/chamados/services/fio.py app/chamados/services/painel.py
-rg -n 'modal_fio|ir_para_ausencia|detalhe_local' app/chamados/urls.py
-```
-
-_4021 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4022 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

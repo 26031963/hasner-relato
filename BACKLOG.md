@@ -2400,3 +2400,5 @@
 | HJ-068 | fila 2 raia wt-ui, so tela (aval CASO-0711-HJ003-E-ATA-1111 item 4) | fio lateral do admin so com o acionavel; encerrados num Historico explicito; contador = itens acionaveis | registrado | 11/11 |
 | HJ-071 | fila 2 raia wt-ui, so tela (aval CASO-0711-HJ003-E-ATA-1111 item 4) | espelho e PDF mostram hora_ini-hora_fim da declaracao no dia do turno; PRIMEIRO medir se o valor esta gravado | registrado | 11/11 |
 | HJ-073 | censo antes de cura (aval CASO-0711-HJ003-E-ATA-1111 item 5) | cada "Decidir" da fila por causa x permissao do perfil supervisor -> botao executavel? Nenhuma cura antes do censo e da F0 | Codex censo logs/CASO-0711/hj073.r | 11/11 |
+| LASTRO-GUARDA-NO-CADASTRO | fila (fora do escopo literal do aval LASTRO-FAIXA-SEM-DEFAULT) | gravar_tipo_ausencia (ausencia.py:1301-1310) aceita tipo ATIVO sem faixa no mapa; hoje so o vigia tipos_ativos_sem_faixa acusa depois | censo_c3.r | 11/11 21:0x |
+| DATA-EVENTO-CRU-TOTAL-NO-ESTADO | fila (achado 6 do opus final, nao bloqueia) | RELATO.md:7966 promete total da allowlist da catraca no ESTADO; ninguem produz | logs/DATA-EVENTO-CRU/opus_final.r | 11/11 21:0x |

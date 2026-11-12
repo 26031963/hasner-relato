@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 20:54:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (405.0 MB). Acoes na janela: **2188**.
+**Medido em 11/11/2026 21:00:31.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (405.0 MB). Acoes na janela: **2185**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2195,6 +2195,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:00:48 | Bash | Inspect sem_rollback mutant definition | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app; /bin/grep -n "sem_rollback" -A25 $W/chamados/tests/e4b_c4_verificar.py \| head -60` |
 | 09:00:41 | Bash | Launch E3 ORM runner | `D=/home/ronald/saas-hasner/logs/FIO-E0-V4-E3; ls -ld /home/ronald/wt-codex-fio-e0-v4-e3-032042/ruff.toml 2>&1; cd $D && setsid nohup bash $D/e3fix10_orm.sh >/dev/null 2>&1 & /usr/bin/sleep 2; ps -eo pid,args \| /bin/grep -E 'e3fix10_orm.sh$' \| /bin/grep -v grep` |
 | 09:00:38 | Bash | Commit e3fix10 and build corrected ORM runner | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; D=/home/ronald/saas-hasner/logs/FIO-E0-V4-E3; cd /home/ronald/wt-codex-fio-e0-v4-e3-032042 && git add app/core/tests/test_medida_turno_do_par.py app/ponto/tests/test_x1_folga_sem_adesao.py && cat > $SP/msg_e3fix10.txt <<'EOF' E3 e3fix10 (copia): goldens c4/c4b medidos com o cartorio da BASE; catraca d ...` |
-| 09:00:28 | Bash | E3 copy status and ORM runner | `cd /home/ronald/wt-codex-fio-e0-v4-e3-032042 && git status --porcelain; cat /home/ronald/saas-hasner/logs/FIO-E0-V4-E3/e3fix9_orm.sh` |
-| 09:00:22 | Bash | Read e3fix10 result and c4v9 ORM log | `cd /home/ronald/saas-hasner; cat logs/FIO-E0-V4-E3/e3fix10.log; cat logs/FIO-E0-V4-E3/construtor_e3fix10.r; echo ====; cat logs/E4B-ALCANCE/c4v9_orm.log \| head -60` |
-| 09:00:02 | Bash | Check pids, RELATO line 3, producer logs | `cd /home/ronald/saas-hasner; sed -n 3p app/docs/RELATO.md \| cut -c1-200; date +%H:%M; for p in 469978 890447 977909; do kill -0 $p 2>/dev/null && echo "$p vivo" \|\| echo "$p morto"; done; ls -la logs/FIO-E0-V4-E3/e3fix10* logs/FIO-E0-V4-E3/construtor_e3fix10.r 2>&1; tail -3 logs/E4B-ALCANCE/c4v9_orm.log; ls logs/E4B-ALCANCE/c4v9_orm.fim 2>&1; /bin/grep -rl 469978 logs/*/ 2>/dev/null \| head` |
