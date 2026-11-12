@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 10:06** · publicado em **12/11/2026 10:06** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:09** · publicado em **12/11/2026 10:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:09 · sessao 86c3a6ecfcf4 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · construtor · origem=Code
+
+1. **Censo:** feriado e vigia agora perguntam a `vinculo_do_dia`. O vigia compara diretamente o carimbo com a resposta; a variável `geradora` apenas alimenta a juíza (`ponto/services/cadastro_futuro.py:54`, `ponto/services/vigia_cadastro_futuro.py:31`).
+
+2. **Folgas:** a sincronização futura reutiliza `_gerar_foto_folgas_no_ato`, com recorte de datas. A reconciliação mensal existente mantém sua relavra (`escala/folgas.py:166`, `escala/folgas.py:637`).
+
+3. **Feriado relâmpago:** caracteriza cron preservando a divergência e o formulário real `form_feriado` corrigindo no Salvar (`escala/tests/test_celula_dia.py:373`).
+
+4. **Stale:** cobra contador positivo após o cron e zero após `salvar_tipo` (`escala/tests/test_celula_dia.py:328`).
+
+5. **DNA:** cobra futuro atualizado pela porta, cron sem reescrita e DNA histórico preservado (`escala/tests/test_celula_dia.py:146`).
+
+No fluxo alterado:
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `CelulaDia.escala_geradora` | Porta da célula (`ponto/portas/celula.py:272`) | Juíza e vigia (`escala/alimentacao.py:269`, `ponto/services/vigia_cadastro_futuro.py:36`) |
+| `dna` | Porta, usando `montar_dna` (`ponto/portas/celula.py:256`) | Vigia (`ponto/services/vigia_cadastro_futuro.py:40`) |
+| `trabalha` | Porta (`ponto/portas/celula.py:272`) | Vigia (`ponto/services/vigia_cadastro_futuro.py:40`) |
+| `FolgaDia.calendario_origem` | Escritor existente (`escala/folgas.py:195`) | Escritor e juiz da folga (`escala/folgas.py:187`, `ponto/precedencia.py:231`) |
+
+Comandos para a sessão. **Testes, RED na base e morte dos mutantes: [não verificado]**; não os executei, conforme solicitado. [nao verificado]
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+C2=ponto.tests.test_cadastro_futuro_sem_banco
+
+python3 manage.py test \
+  escala.tests.test_contract_juiz_escala \
+  ponto.tests.test_catraca_folga_lancada_um_juiz \
+  escala.tests.test_celula_dia
+
+python3 -m unittest "$C2"
+```
+
+Mutantes em memória e seus testes mordentes (`ponto/tests/test_cadastro_futuro_sem_banco.py:34`, `:309`, `:647`):
+
+```bash
+MUTANTE_CADASTRO=feriado_toma_geradora python3 -m unittest "${C2}.EventosFuturosTest.test_feriado_pergunta_a_juiza_e_respeita_o_silencio"
+
+MUTANTE_CADASTRO=feriado_escolhe_outro python3 -m unittest "${C2}.EventosFuturosTest.test_feriado_nao_escolhe_outra_geradora_sobreposta"
+
+MUTANTE_CADASTRO=vigia_toma_geradora python3 -m unittest "${C2}.VigiaTest.test_vigia_compara_carimbo_com_resposta_da_juiza"
+
+MUTANTE_CADASTRO=foto_no_ato_sem_recorte python3 -m unittest "${C2}.EventosFuturosTest.test_calendario_preserva_foto_manual_e_passado"
+
+MUTANTE_CADASTRO=foto_no_ato_sem_relavra_mensal python3 -m unittest "${C2}.EventosFuturosTest.test_foto_mensal_continua_relavrando_e_poupando_manual"
+
+MUTANTE_CADASTRO=foto_so_dias_com_celula python3 -m unittest "${C2}.EventosFuturosTest.test_foto_mensal_inclui_folga_sem_celula_fora_da_janela"
+
+MUTANTE_CADASTRO=_propagar_regeneracao_template python3 -m unittest "${C2}.EventosFuturosTest.test_propagar_regeneracao_template"
+```
+
+## 12/11 10:08 · sessao c626fa8aa4e0 · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
+
+**BLOQUEIA o pouso:** permanecem duas fontes para órfãs, regra própria no PDF e um ramo que impede a recusa nomeada (`app/relatorios/pdf_espelho.py:474`, `:517`; `app/ponto/services/espelho.py:522`, `:563`). O par financeiro obrigatório da competência 11 está **[nao verificado]**.
+
+1. Classificação dos dez:
+
+| Nº | Classe | Conferência |
+|---|---|---|
+| 1 | **H correta** | Harness substitui também atributos dos pacotes carregados; conserva contador=1 e ausência de `explicados`. Retirar a correção em memória produz falha de busca proibida. Nada. `app/ponto/tests/test_lastro_c12_sem_banco.py:89`, `:103`; `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. |
+| 2 | **H correta** | Conserva posto presente, buracos=1 e explicados=0; reversão do harness falha por grade proibida. Nada. `app/ponto/tests/test_lastro_c12_sem_banco.py:109`; `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. |
+| 3 | **H correta** | Conserva recusa nomeada e vizinho reconhecido explicado; reversão do harness falha por busca proibida. Nada. `app/ponto/tests/test_lastro_c12_sem_banco.py:141`; `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. |
+| 4 | **C correta** | A inversão exige recusa nomeada, `sem_certidao` e veredito vazio: corresponde à leitura sem concluir precedência do aval 4; não virou sucesso genérico. Nada. `app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:59`. Execução Django/ORM: **[nao verificado]**. |
+| 5 | **C correta** | `licenca especial` normaliza para `licenca_especial`, fora do mapa; o sucesso agora usa `reciclagem`, já mapeado, e verifica palavra. O par exige recusa nomeada sem gravação: corresponde ao aval 5. Nada. `app/ponto/views_tipos_ausencia.py:92`; `app/ponto/precedencia.py:70`; `app/ponto/tests/test_tela_tipos.py:29`, `:51`. Execução HTTP/ORM: **[nao verificado]**. |
+| 6 | **R correta** | A chamada do contrato voltou; o selo original passou adaptado sem banco. Ressalvas de produto no item 3 abaixo. `app/relatorios/pdf_espelho.py:474`; `app/ponto/tests/test_lastro_c13_sem_banco.py:130`. |
+| 7 | **R correta** | Mesmo resultado: contrato restaurado, selo original preservado. Isso não prova ausência de regras próprias. `app/relatorios/tests/test_cartao_pela_celula.py:176`; `app/ponto/tests/test_lastro_c13_sem_banco.py:130`. |
+| 8 | **R correta quanto ao sintoma** | A expectativa original continua `orfa=True`; a costura restaurada exige isso, mas preserva divergência com a tela, abaixo. `app/relatorios/tests/test_cartao_marca_espuria.py:59`; `app/ponto/tests/test_lastro_c11_sem_banco.py:383`. |
+| 9 | **R correta quanto ao sintoma** | A expectativa original continua zero turno aberto por espúria; costura passou. Prova nativa do PDF binário: **[nao verificado]**. `app/relatorios/tests/test_cartao_marca_espuria.py:75`, `:84`; `app/ponto/tests/test_lastro_c11_sem_banco.py:385`. |
+| 10 | **H compatível com o delta** | O registro atual aponta a consulta de feriados, e a igualdade estrita permanece. Recolocar `[1032]` em memória causa falha, sem erro de harness. Nada no instrumento atual. `app/ponto/services/espelho.py:1039`; `app/core/tests/test_medida_turno_do_par.py:542`. Identidade AST histórica c9/c12: **[nao verificado]**. |
+
+2. Escritores, leitores e `None`:
+
+- **Nada — escritor do dict:** A2 escreve `recusas[data]`; sem destinatário, levanta. O rótulo nasce na exceção. `app/ponto/precedencia.py:423`, `:422`, `:102`.
+- **Nada — transporte:** `_marcar_ausencias` escreve `dia['recusa']` e `tipo_dia=None`; PDF lê a recusa e entrega ao compositor, que escreve palavra nomeada e veredito vazio. `app/escala/utils.py:1219`, `:1220`; `app/relatorios/pdf_espelho.py:567`; `app/ponto/services/espelho.py:339`.
+- **Nada — leitores internos alcançados:** legacy preserva `None`; isenção não concede flag de dia de trabalho para esse tipo. `app/escala/utils.py:1046`, `:889`.
+- **FILA — incompatibilidade latente:** `classificar_orfas({'tipo_dia': None, 'orfas': ['16:19']})` classifica como `FOLGA_DESMENTIDA`; `por_dia_da_grade` descarta esse tipo sem `ausencia_tipo`. São interpretações incompatíveis com “precedência recusada”. `app/escala/orfa_classe.py:65`; `app/ponto/services/dia_pago.py:392`. Alcance desses leitores pelo canal novo do PDF: **[nao verificado]**.
+- **Nada por inspeção do delta com `recusas=None`:** retorno antecipado, condição de consulta A2 e chamada sem argumento conservam os ramos anteriores; o ramo novo fica desativado. `app/escala/utils.py:1205`, `:1213`, `:1218`, `:2114`, `:2117`, `:2365`. Equivalência dinâmica em todo chamador: **[nao verificado]**.
+- **Unidades dos contadores:** cartório conta colaboradores isolados; `tipos_ativos_sem_faixa` conta códigos ativos do cadastro, inclusive sem lançamento. Dois colaboradores com um código representam 2 no primeiro universo e 1 no segundo. `app/ponto/management/commands/processar_cartorio.py:73`; `app/ponto/services/vigia_ausencia.py:155`, `:168`.
+
+3. PDF, contrato e igualdade com a tela:
+
+- **BLOQUEIA — duas fontes para a mesma órfã.** PDF reconstrói pelo contrato; tela lê a célula na competência. Contra-exemplo já fixado pelo teste alterado: tela tem `orfas_grade=[]`, enquanto PDF marca a batida como órfã e conta zero aberto. A igualdade `pdf['dias']==dias` compara a lista compartilhada que o próprio coletor modifica. `app/relatorios/pdf_espelho.py:474`, `:571`; `app/ponto/services/espelho.py:522`; `app/ponto/tests/test_lastro_c11_sem_banco.py:326`, `:382`, `:383`, `:384`.
+
+- **BLOQUEIA — regra própria de turno aberto permanece.** PDF une órfãs de todas as datas por HH:MM e usa esse conjunto para excluir abertos. Contra-exemplo executado em memória: órfã em **10/11 07:02** elimina um aberto legítimo de **11/11 07:02**, mesmo sem órfã nesse segundo dia; a tela conta esse aberto. Regra herdada, ainda presente: `app/relatorios/pdf_espelho.py:174`, `:480`, `:517`; `app/ponto/services/espelho.py:436`. Contraria a testemunha sem regra própria: `CLAUDE.md:20`.
+
+- **BLOQUEIA — rótulo não garantido no ramo de ata agregada.** O handler chama `_pela_grade()` sem `recusas`; uma ausência aprovada `fantasma_xyz` levanta `TipoSemFaixa` antes do transporte nomeado. PDF também passa por essa tela depois de obter sua grade. Contra-exemplo: ata agregada que exige o builder + ausência aprovada sem faixa. `app/ponto/services/espelho.py:495`, `:563`, `:653`; `app/relatorios/pdf_espelho.py:479`. Ocorrência produtiva: **[nao verificado]**.
+
+- **Nada no canal coberto do rótulo:** tela e PDF transportam o mesmo `TipoSemFaixa.rotulo` ao mesmo compositor; PDF imprime a palavra resultante. `app/ponto/precedencia.py:102`; `app/ponto/services/espelho.py:880`, `:339`; `app/relatorios/pdf_espelho.py:567`, `:886`.
+
+4. Classes de reprovação:
+
+- **BLOQUEIA — juiz/derivação paralela:** materializações distintas de órfãs e exclusão própria de turno aberto, demonstradas acima. `app/ponto/services/espelho.py:522`; `app/relatorios/pdf_espelho.py:474`, `:517`.
+- **BLOQUEIA — selo insuficiente para igualdade:** o teste aceita explicitamente respostas diferentes para a órfã; portanto verde não certifica “cartão=espelho”. `app/ponto/tests/test_lastro_c11_sem_banco.py:383`, `:384`.
+- **Segundo escritor fora da porta: nada no delta inspecionado.** A grade copia a recusa da A2; cadastro continua validando antes de gravar. `app/escala/utils.py:1219`; `app/ponto/services/ausencia.py:1312`.
+- **Relógio novo fora da borda: nada no delta inspecionado.** Contrato usa o `agora` recebido. `app/escala/utils.py:2359`, `:2364`.
+- **Campo com dois significados:** FILA latente descrita no item 2; divergência alcançável causada pelo novo `None`: **[nao verificado]**.
+
+5. Dinheiro:
+
+- **Nada de caminho demonstrado recebendo o novo `None`:** `simular_folha` passa pelo fechamento; fechamento lê `grade_do_fechamento`, cuja fonte é `grade_da_celula`. `app/folha/management/commands/simular_folha.py:122`, `:130`; `app/ponto/services/fechamento.py:1015`, `:1048`; `app/folha/export.py:335`.
+- **BLOQUEIA pouso — condição financeira pendente:** par `simular_folha` da competência 11, efeito `abona=0` e diferenças por rubrica: **[nao verificado]**, conforme o dado fornecido. Ausência de movimento financeiro: **[nao verificado]**. [nao verificado]
+
+6. Fora dos dez e do mínimo:
+
+- **Nada identificado no delta fornecido:** alterações produtivas concentram-se no transporte da recusa e na leitura do contrato pelo PDF; testes auxiliares acompanham esses caminhos. `app/escala/utils.py:1159`, `:2350`; `app/relatorios/pdf_espelho.py:474`; `app/ponto/tests/test_lastro_c13_sem_banco.py:177`. Comparação histórica integral da cópia com `86726416c`: **[nao verificado]**.
+- **Limite da verificação:** passaram 72 testes sem banco e 35 da catraca; os mutantes executados ficaram vermelhos. Os builders da costura são reduzidos às chamadas extraídas, sem geometria/ORM completos. `app/ponto/tests/test_lastro_c13_sem_banco.py:73`, `:196`, `:200`; `app/core/tests/test_medida_turno_do_par.py:525`. Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**.
 
 ## 12/11 10:06 · sessao 0ab2e5092d0c · - · - · origem=Ronald (tmux)
 
@@ -440,157 +549,4 @@ ACHADO 4 | CODIGO: confere em parte — `agora` chega somente à alimentação d
 
 Observação para consolidação: se “EFEITO” significar ocorrência efetiva em algum dia **do dado de produção fornecido**, marque `[nao verificado]` nos três; não há instâncias/linhas de produção no material que demonstrem esses estados. Os “sim” acima são possibilidades condicionais demonstradas pelo código, não medições de frota.
 
-## 12/11 09:39 · sessao e7a5c82407d6 · - · - · origem=Ronald (tmux)
-
-ACHADO 5 | CODIGO: confere em parte — importa os privados em `app/ponto/services/pautas_dos_discordantes.py:61`; alimenta em `:75`, exclui dias cujo fio é diferente de `FIO_SEM_PORTA` em `:77` e inclui os restantes em `:79`; pode escrever Pautas quando `apply=True` (`:173`, `:177`, `:183`). A quebra ou permanência obrigatória no juiz antigo não decorre disso: `_fio_do_dia` chama `_porta` (`app/folha/fora_da_folha.py:77`), que chama C17 (`:67`); alterar internamente `_porta` preservando o contrato alcança esse consumidor. | CENSO: NOVO consumidor concreto; o censo fornecido lista o wrapper, mas não este chamador; linha numérica do anexo [nao verificado]. | EFEITO: nao — este caminho consulta a porta e escreve Pautas, sem alterar entradas dos três juízes (`app/ponto/services/pautas_dos_discordantes.py:75`, `:177`, `:183`).
-
-ACHADO 6 | CODIGO: confere — o resultado de `do_dia` escolhe órfãos com causa `fabrica_nao_rodou`, dispara a fábrica com `notificar=True` e relê o resultado (`app/chamados/services/cobrar_dia.py:45`, `:46`, `:49`, `:53`); mensagem/`ok` usam pergunta/chamado do resultado (`:55`, `:58`, `:70`). `do_dia` usa `VIVOS`, módulos, dia do chamado, perguntas C6 e retenção (`app/chamados/services/pergunta_no_app.py:217`, `:218`, `:220`, `:221`, `:223`). | CENSO: NOVO chamador com efeito de escrita; o serviço já listado pelo copiloto não cobre este uso; linha numérica do anexo [nao verificado]. | EFEITO: sim, potencial estático — a fábrica abre perguntas (`app/chamados/services/disputa_emissao.py:837`), cujo nascimento persiste (`app/chamados/models.py:3018`); a tarefa e C17 carregam essas entradas (`app/chamados/services/tarefa_do_dia.py:374`, `app/chamados/juizes.py:1571`); ocorrência em produção [nao verificado].
-
-ACHADO 7 | CODIGO: confere — qualquer texto não vazio ganha precedência sobre a vitalidade; depois consulta `fio_vivo` sem informar relógio e senão devolve `nada` (`app/folha/previa.py:142`, `:144`, `:146`); essa saída preenche o campo `material` (`:95`). | CENSO: NOVO leitor concreto; ausente da relação de leitores fornecida; linha numérica do anexo [nao verificado]. | EFEITO: nao — muda a apresentação `material` da prévia, não a resposta de tarefa/C6/C17; o caminho mostrado apenas recebe perguntas e devolve rótulo (`app/folha/previa.py:139`, `:142`, `:144`, `:146`).
-
-ACHADO 8 | CODIGO: confere — o contador considera canal a pergunta com `respondida_em` nulo ou chamado em `VIVOS`, sem filtro de silêncio (`app/chamados/services/furo_sem_canal.py:80`, `:82`, `:85`); `VIVOS` inclui `registrado`, enquanto `COBRANCA` não (`app/chamados/catalogo/motor.py:24`, `:29`). Pode excluir do balde sem canal um dia cujo único chamado é registrado/silenciado; ocorrência real [nao verificado]. | CENSO: NOVO leitor concreto; ausente da relação fornecida; linha numérica do anexo [nao verificado]. | EFEITO: nao — o caminho calcula conjuntos e retorna contagens/amostra; não altera entradas ou respostas dos juízes (`app/chamados/services/furo_sem_canal.py:80`, `:85`, `:89`).
-
-## 12/11 09:38 · sessao 4d2389e8adb8 · TRIAGEM-OFFLINE-SEM-CAMERA · leitura · origem=Code
-
-**Sim: a entrega de páginas offline já era defeituosa no pré-v6.** O SW não grava documentos nas navegações normais; abrir as páginas com internet não executa o ramo que guardaria o HTML. Depois, sem rede e sem entrada correspondente no CacheStorage, ele devolve `Response.error()`. Essa cadeia permanece na v6, pois o patch fornecido não altera o SW. (`app/static/sw.js:3–12`, `29–30`, `45–50`, `67–79`.)
-
-**A reprodução literal de “todos os toques inertes” e “tela branca” no iPhone é indeterminada pela leitura.** O código permite demonstrar a falha de entrega do documento; não demonstra a aparência apresentada pelo Safari, os eventos de toque nem o conteúdo efetivo do cache daquele aparelho. [nao verificado]
-
-Nas referências seguintes, **`Δ arquivo:+N` identifica a linha do arquivo novo numerada pelos hunks do patch**, não a posição física na mensagem. **`=` significa pré-v6 e v6 iguais**: SW, views, URLs, home e bases não aparecem como arquivos alterados no diff completo fornecido. Para esses arquivos, não existe linha adicionada no patch para citar.
-
-Para o SW — itens 1, 4 e C1 — a comparação é:
-
-| Questão | Pré-v6 | V6 |
-|---|---|---|
-| Nome do cache | `juliani-__BUILD_ID__`. (`app/static/sw.js:1`.) | = |
-| Precache | `/static/pwa.js`, `/static/manifest.json`, `/static/icons/icon-192.png`, `/static/icons/icon-512.png`. (`app/static/sw.js:3–8`.) | = |
-| Instalação | `cache.addAll(STATIC_CACHE)`. (`app/static/sw.js:10–13`.) | = |
-| Navegação online | `fetch(event.request)`, **sem gravar a resposta**. (`app/static/sw.js:45–50`.) | = |
-| Navegação offline | `caches.match(request)`; ausente, `Response.error()`. (`app/static/sw.js:29–30`, `48`.) | = |
-| Fallback de documento | Nenhuma página alternativa: só a resposta correspondente à própria requisição, ou erro de rede. (`app/static/sw.js:29–30`.) | = |
-| Gravação dinâmica de HTML | Existe para GET de `/` e `/ponto/bater/…`, **depois do retorno antecipado das navegações**. (`app/static/sw.js:46–50`, `67–79`.) | = |
-
-Portanto, o preparo relatado foi feito, mas **esse preparo por navegação não povoa o cache de documentos neste código**. Isso decorre do retorno em `app/static/sw.js:50`, anterior ao `cache.put` de `app/static/sw.js:74`; não depende de supor que o usuário esqueceu de abrir alguma tela.
-
-Há também uma distinção de rota: a home efetiva do colaborador renderiza `dashboard_colaborador_v2.html`, cujo “Bater ponto” aponta para **`/ponto/bater-v2/`**, não `/ponto/bater/`. (`app/core/views.py:270–271`, `app/templates/core/dashboard_colaborador_v2.html:31`, `app/ponto/urls.py:12`; v6 =.)
-
-| Página/documento | O que uma navegação ou reload offline recebe, nos dois lados |
-|---|---|
-| Home `/` | Resposta encontrada para a requisição; ausente, `Response.error()`. (`app/static/sw.js:29–30`, `45–50`.) |
-| `/ponto/bater/` | O mesmo tratamento. (`app/static/sw.js:29–30`, `45–50`.) |
-| Apto da triagem | Não tem URL própria nesses caminhos: é o template escolhido pela view de bater. O cache é consultado pela URL navegada, não pelo nome `apto.html`. (`app/ponto/views.py:225–235`, `358`; `app/static/sw.js:29–30`.) |
-| `/ponto/bater-v2/`, destino da home | O mesmo tratamento de navegação; essa rota tampouco está na lista posterior `comCache`. (`app/static/sw.js:45–50`, `68`; `app/ponto/urls.py:12`.) |
-
-**Não há mudança de fallback entre pré-v6 e v6.** O retorno sem documento é erro de rede; não é uma resposta HTML 404/500 fabricada pelo SW. A tela branca como apresentação desse erro no iOS é [nao verificado]. (`app/static/sw.js:29–30`.)
-
-O build id é derivado assim, em ambos os lados:
-
-- `GOVERNADOS_PELO_SW` contém `sw.js`, `pwa.js`, `manifest.json` e os dois ícones. Templates não entram. (`app/core/views.py:524–525`.)
-- A raiz é `/app/staticfiles` quando ali existe `sw.js`; caso contrário, `/app/static`. (`app/core/views.py:528–530`.)
-- O cálculo concatena os conteúdos no SHA-1, na ordem da tupla, usando `ausente:<nome>` em falha de leitura, e conserva os oito primeiros hexadecimais. Há memoização por processo durante 30 segundos. (`app/core/views.py:520–556`.)
-- A view substitui `__BUILD_ID__` pelo resultado e usa `ETag: "sw-<build>"`. (`app/core/views.py:560–576`.)
-
-**A v6 muda uma entrada desse hash: `pwa.js`.** Se o nome resultante mudar, o `activate` apaga os outros caches; o `controllerchange` já podia recarregar páginas sem formulário marcado como sujo. Esses mecanismos são anteriores à v6. Sua ocorrência durante o smoke e os nomes concretos dos caches implantados são [nao verificado]. (`app/core/views.py:548–555`; `Δ app/static/pwa.js:+58–305`; `app/static/sw.js:17–23`; `app/static/pwa.js:34–45`, trecho preservado.)
-
-Sobre os cliques — item 2, C4 e C5 — **os cartões da home não precisam de handlers registrados por `pwa.js`**. Bater, Espelho, Escala, Confirmar Batidas, Chamados, Justificar, Ausência, Holerites e Férias são links `<a href>`, sem `await`, pré-checagem de rede ou teste de `navigator.onLine` antes de navegar. (`app/templates/core/dashboard_colaborador_v2.html:31`, `56`, `60`, `66`, `78`, `82`, `88`, `100`, `110`; v6 =.)
-
-O relógio consulta `/hora/` separadamente; offline, usa seu fallback. Ele não envolve o clique dos cartões. (`app/templates/core/dashboard_colaborador_v2.html:152–159`; v6 =.)
-
-| Controle | Quem fornece o comportamento, nos dois lados |
-|---|---|
-| Cartões de navegação | O próprio `<a href>`. (`app/templates/core/dashboard_colaborador_v2.html:31–110`.) |
-| Menus da casca | Script inline independente do PWA. (`app/templates/base.html:340–382`; `app/templates/base_app.html:98–139`.) |
-| Fechar/adiar modal de onboarding | `onclick` inline com `remove()`. Presença desse modal no smoke: [nao verificado]. (`app/templates/core/dashboard_colaborador_v2.html:121–141`.) |
-| “Ligar avisos” e fechar o convite | Criados e ligados por `pwa.js`. (`app/static/pwa.js:351–374`; v6: linhas herdadas `+536–559`.) |
-
-As duas cascas carregam `pwa.js` com `defer`; a ausência desse script prejudica a fila e os recursos que ele exporta, mas não remove os `href` dos cartões. (`app/templates/base.html:20`; `app/templates/base_app.html:20`; `app/static/pwa.js:305–318`; v6: `Δ app/static/pwa.js:+489–502`.)
-
-A auditoria de sintaxe/APIs encontrou:
-
-| Construção ou API | Pré-v6 | V6 e alcance da falha |
-|---|---|---|
-| Optional chaining | `event.data?.type`, `req.result?.valor` e acessos ao cookie. (`app/static/pwa.js:16`, `78`, `140`, `245`, `261`, `403`.) | Já existia; configuração passa a `linha?.valor`. (`Δ app/static/pwa.js:+124`; demais usos preservados.) Parser incompatível pode rejeitar o script inteiro; isso no aparelho relatado é [nao verificado]. |
-| Nullish coalescing `??` | Já em `lerConfig`. (`app/static/pwa.js:78`.) | Preservado em `Δ app/static/pwa.js:+124`. |
-| `async/await`, arrows, `let/const`, spread, destructuring e `catch` sem binding | Já presentes. (`app/static/pwa.js:11`, `50`, `95`, `209`, `240`, `286`.) | Continuam presentes; não constituem novidade exclusiva da v6. (`Δ app/static/pwa.js:+61–128`, `188–231`.) |
-| Chave computada e métodos de objeto | — | Novos no helper de selfie/aviso. São sintaxe analisada junto com o script. (`Δ app/static/pwa.js:+199`, `244`, `253`.) |
-| `AbortController` | — no `pwa.js` pré; já usado pelos relógios das telas. (`app/templates/core/dashboard_colaborador_v2.html:154`; `app/templates/ponto/triagem/base_triagem.html:41`.) | Novos usos no PWA verificam `typeof AbortController === 'function'`. (`Δ app/static/pwa.js:+146`, `297`.) |
-| `navigator.mediaDevices.getUserMedia` | Chamado nas telas. (`app/templates/ponto/bater_ponto_v2.html:238`; `app/templates/ponto/triagem/apto.html:149`, `248`.) | Chamado dentro do trabalho assíncrono de `_noTeto`, que captura exceções/rejeições; não durante a avaliação inicial. (`Δ app/static/pwa.js:+188–195`, `211–217`.) |
-| `indexedDB` | Acesso ao chamar `abrirDB`. (`app/static/pwa.js:48–60`.) | Continua dentro da função, agora com captura explícita. (`Δ app/static/pwa.js:+66–86`.) |
-| `serviceWorker`, storage, geolocation e push | Guardas/`try` já existentes. (`app/static/pwa.js:12–30`, `35–46`, `291`, `333–344`, `436–443`.) | Preservados; não há nova chamada desses recursos identificada como fatal na avaliação inicial. (`Δ app/static/pwa.js`, trechos preservados.) |
-
-**Primeiro iOS suportado para cada construção/API acima: [nao verificado].** O código e o anexo não fornecem uma matriz de compatibilidade.
-
-Não há `structuredClone`, `AbortSignal.timeout`, `crypto.randomUUID`, `Promise.any` nem `await` de nível superior no PWA auditado; os `await` estão dentro de funções assíncronas. (`app/static/pwa.js:1–443`; `Δ app/static/pwa.js:+45–305`, `489–511`.) Não identifiquei no acréscimo da v6 uma nova API sem guarda chamada sincronamente antes dos exports; erro real de avaliação no Safari permanece [nao verificado].
-
-A espera de `/hora/` na inicialização também ocorre **depois** da definição de `window.JulianiPWA`; sua pendência não impede, por essa cadeia, a criação dos exports. (`app/static/pwa.js:305–326`; v6: `Δ app/static/pwa.js:+489–511`.)
-
-Para C2, o SW **não contém tratamento de `response.redirected`**: não rejeita a resposta, não a reconstrói e não normaliza seu URL antes de servir. Os ramos que gravam cache clonam a resposta e a guardam pela requisição original. (`app/static/sw.js:29–30`, `54–60`, `67–77`; v6 =.)
-
-Entretanto, **o código chama `fetch(event.request)`**, sem estabelecer `redirect: 'follow'`. Não basta aplicar o padrão de `fetch(url)` e afirmar qual era o modo de redirect da requisição de navegação concreta. Esse valor e uma resposta `redirected=true` efetivamente guardada no aparelho são [nao verificado]. (`app/static/sw.js:42`, `48`, `57`, `71`.)
-
-Há estes caminhos condicionais de redirect, iguais nos dois lados:
-
-- Home: login, troca de senha e ciência de comunicado. (`app/core/views.py:117`, `122–123`, `136–140`; `app/config/settings/base.py:106`.)
-- Bater e bater-v2: login, onboarding e ciência de comunicado. (`app/ponto/views.py:241–255`.)
-- Ciência pode produzir URL com `?next=…` e `app=1`. (`app/comunicados/services.py:36–50`.)
-
-Não existe redirect obrigatório nos caminhos liberados: eles renderizam os templates. Qual condição ocorreu no smoke é [nao verificado]. (`app/core/views.py:270–271`; `app/ponto/views.py:356–358`.) O `CommonMiddleware` está configurado, mas o redirect concreto de URL sem barra não foi demonstrado. (`app/config/settings/base.py:57`; comportamento efetivo [nao verificado].)
-
-**Um GET não navegacional de `/` ou `/ponto/bater/…` pode guardar a resposta recebida sem verificar se ela veio de redirect**, inclusive porque a exclusão de login é decidida pelo pathname original. Depois, o fallback não verifica `redirected` ao servi-la. Isso é possibilidade do código; não prova que aconteceu no iPhone. (`app/static/sw.js:39–43`, `67–77`, `29–30`; v6 =.) A recusa específica pelo Safari/iOS e sua manifestação como branco são [nao verificado].
-
-Para C3, o SW usa a requisição completa como chave em `cache.put` e em `caches.match`, sem `ignoreSearch`, `ignoreVary` ou normalização de barra. Portanto não programa equivalência entre URLs com queries diferentes ou com/sem barra; também não pede para ignorar `Vary`. (`app/static/sw.js:30`, `56`, `59`, `74`; v6 =.) Os headers `Vary`, URLs finais e pares de chaves realmente presentes no dispositivo são [nao verificado].
-
-Assim, **C1, C2, C3 e C4 já tinham essas características antes da v6**: mesmo ramo de navegação, mesmo tratamento de respostas, mesmas chaves e mesmos links da home. (`app/static/sw.js:29–79`; `app/templates/core/dashboard_colaborador_v2.html:31–110`; arquivos ausentes do diff completo fornecido.)
-
-Sobre `bater_ponto.html`, item 3:
-
-| Referência pré-v6 | O que ela significa | V6 |
-|---|---|---|
-| Views e URLs ativas | `/bater/` seleciona triagem; `/bater-v2/` renderiza v2. Nenhum desses renders aponta para o legado. (`app/ponto/urls.py:11–12`; `app/ponto/views.py:225–235`, `356–358`.) | = |
-| Verificador da lei | Lê o arquivo para inspeção textual. (`app/scripts/check_a_lei_batida.py:20–23`.) | Referências removidas no hunk `Δ app/scripts/check_a_lei_batida.py:@@ -17,10 +17,7 @@`. |
-| Verificador de URLs | Inclui o arquivo na lista inspecionada. (`app/tools/check_frontend_urls.py:29`.) | Entrada removida no hunk `Δ app/tools/check_frontend_urls.py:@@ -26,7 +26,6 @@`. |
-| Links dentro do legado | Usam o nome da rota `ponto:bater_ponto`, não o arquivo como destino. (`app/templates/ponto/bater_ponto.html:27`, `201`.) | Arquivo inteiro eliminado: `Δ app/templates/ponto/bater_ponto.html:@@ -1,614 +0,0 @@`. |
-| SW/PWA e retorno offline | SW não precacheia esse documento; PWA envia à API; apto retorna à home. (`app/static/sw.js:3–8`; `app/static/pwa.js:153`; `app/templates/ponto/triagem/apto.html:115–118`, `298`.) | Nenhum desses caminhos passa a depender do arquivo apagado. (`Δ app/static/pwa.js`, sync preservado; `Δ app/templates/ponto/triagem/apto.html:+307`.) |
-
-**A exclusão não retirou página alguma do precache nem rompeu os renders ativos identificados.** Atribuir a ela 404, 500 ou branco não é sustentado por esses caminhos; ocorrência real por outro caminho é [nao verificado]. (`app/static/sw.js:3–8`; `app/ponto/views.py:356–358`; hunk de exclusão acima.)
-
-As mudanças da v6 que efetivamente alteram o caminho **depois de chegar à tela de batida** são:
-
-| Pré-v6 | Alteração da v6 |
-|---|---|
-| V2 recusa continuar sem foto. (`app/templates/ponto/bater_ponto_v2.html:285–290`, `312`.) | Passa a consultar o helper de selfie e seguir com aviso. (`Δ app/templates/ponto/bater_ponto_v2.html:+269–296`.) |
-| Apto offline esconde confirmar após rejeição da câmera; a gravação fica dentro do callback de `toBlob`. (`app/templates/ponto/triagem/apto.html:248–282`.) | Mantém confirmar e consulta captura com teto. (`Δ app/templates/ponto/triagem/apto.html:+245–293`.) |
-| Escritor espera `obterGap`, que pode esperar `/hora/` e seu corpo sem teto. (`app/static/pwa.js:86–108`.) | Limita o gap antes da fila. (`Δ app/static/pwa.js:+135–162`, `269–276`.) |
-| Transação da fila trata `complete` e `error`. (`app/static/pwa.js:111–121`.) | Helper trata também `abort`; demora mostra aviso e continua esperando o evento definitivo. (`Δ app/static/pwa.js:+90–103`, `239–286`.) |
-
-O RED headless adequado deve exercitar **navegação HTTP real com SW**, porque o teste novo da v6 abre templates em `file://` e substitui rede/armazenamento; ele não cobre o trajeto home → documento offline, e declara não provar Safari. (`Δ app/ponto/tests/test_selfie_nao_barra_chromium.py:+9–18`, `30–34`.)
-
-Proposta de RED, **não executada** [nao verificado]:
-
-1. Usar contexto novo, usuário de teste liberado dos redirects e SW controlando a página; abrir com rede home, bater-v2 e bater/confirmar, depois voltar à home. As rotas e condições estão em `app/ponto/urls.py:11–12`, `app/ponto/views.py:241–255`, `356–358`.
-2. Cortar a rede e clicar no `<a>` “Bater ponto”; exigir que apareça o documento de bater-v2. (`app/templates/core/dashboard_colaborador_v2.html:31`.)
-3. Registrar a batida e exigir uma linha persistida em `batidas_pendentes`; testar câmera funcional e, separadamente, câmera ausente. (`app/static/pwa.js:112–120`; v6: `Δ app/static/pwa.js:+275–282`.)
-4. Recarregar offline home e cada tela; exigir documento utilizável. O ramo sob teste é `app/static/sw.js:45–50`.
-
-**No contexto novo preparado apenas por navegações, o primeiro passo que viola o esperado já é o clique da home:** o SW não guardou o documento durante o preparo e entrega `Response.error()` quando a consulta não encontra entrada. O reload tem a mesma falha. Isso vale para pré-v6 e v6. (`app/static/sw.js:3–12`, `29–30`, `45–50`, `67–79`.) Se a tela for alcançada por outro estado de cache, o pré-v6 ainda possui as barreiras de foto e espera da hora descritas acima; qual delas ocorreu no campo é [nao verificado].
-
-Por fim, estes são os escritores e leitores dos caminhos de execução do front:
-
-| Dado | Quem escreve/define | Quem lê — pré-v6 e v6 |
-|---|---|---|
-| Build id | Calcula SHA-1 e grava `_CACHE_DO_BUILD['v']`. (`app/core/views.py:547–556`; v6 =.) | Memoização e view `/sw.js`. (`app/core/views.py:543–545`, `562`, `572`; v6 =.) |
-| `GOVERNADOS_PELO_SW` | Tupla declarada em `app/core/views.py:524–525`; v6 =. | Laço do hash em `app/core/views.py:548`; v6 =. |
-| `CACHE_NAME` | View injeta o build; SW define a constante. (`app/core/views.py:572`; `app/static/sw.js:1`; v6 =.) | Instalação, limpeza de caches e gravações dinâmicas. (`app/static/sw.js:12`, `20`, `59`, `74`; v6 =.) |
-| Lista de precache | Array `STATIC_CACHE`. (`app/static/sw.js:3–8`; v6 =.) | `cache.addAll`. (`app/static/sw.js:12`; v6 =.) |
-| Conteúdo do CacheStorage | `addAll` e `cache.put`. (`app/static/sw.js:12`, `59`, `74`; v6 =.) | `caches.match`, consultando caches sem restringir por `CACHE_NAME`. (`app/static/sw.js:30`, `56`; v6 =.) |
-| Banco e chave da fila | IndexedDB **`juliani-offline`, versão 2**, store **`batidas_pendentes`**, chave **`id` autoIncrement**. Pré: `app/static/pwa.js:50–54`; v6: `Δ app/static/pwa.js:+73–77`. | Operações abaixo; não é uma chave de `localStorage`. (Mesmas referências.) |
-| Inclusão de batida | Pré: `registrarBatidaOffline` → `add`, `app/static/pwa.js:107–120`. V6: `Δ app/static/pwa.js:+269–282`. | Sync usa `getAll`: pré `app/static/pwa.js:132`; v6 linha herdada `+313`. |
-| Contagem da fila | As inclusões/exclusões alteram a quantidade. (Referências desta tabela.) | Indicador usa `count`: pré `app/static/pwa.js:190`; v6 herdada `+371`. |
-| Exclusão da fila | Sync usa `delete(b.id)` após sucesso ou HTTP 400: pré `app/static/pwa.js:158–174`; v6 herdadas `+339–355`, deletes em `+343`, `+353`. | Próximos `getAll`/`count` acima. |
-| Configuração do relógio, separada da fila | Store `config`, chave `chave`; `put` de `ntp_gap`/`ntp_calculado_em`. Pré: `app/static/pwa.js:56`, `67`, `92–93`; v6: `Δ app/static/pwa.js:+79`, `114`, `158–159`. | Pré `get` em `app/static/pwa.js:77`; v6 `Δ app/static/pwa.js:+123`. |
-
-As linhas v6 marcadas **herdadas** resultam do deslocamento `+181` nos trechos de sync/indicador preservados pelo patch; não estão impressas individualmente nele. (`Δ app/static/pwa.js:@@ -104,23 +170,138 @@`, `@@ -308,6 +489,9 @@`.)
-
-O SW não abre essa fila: envia `SYNC_BATIDAS` às páginas, e o receptor de `pwa.js` chama a sincronização. A limpeza de caches usa CacheStorage, enquanto a fila permanece no IndexedDB. (`app/static/sw.js:19–20`, `112–125`; `app/static/pwa.js:15–16`, `50–54`; v6 = nesses trechos, banco em `Δ app/static/pwa.js:+73–77`.)
-
-_4147 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4149 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
