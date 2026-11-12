@@ -1,7 +1,150 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 12:11** · publicado em **12/11/2026 12:15** (UTC-3)
+> Ultima resposta processada: **12/11/2026 12:19** · publicado em **12/11/2026 12:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 12:19 · sessao 856fc304b1e9 · AUDITORIA-DE-TRAVAS-CORTE · verificador · origem=Code
+
+REPROVADO
+
+O delta cura o truncamento e reforça as transições dos casos 5 e 8. Persistem as divergências com o aval literal e a compatibilidade descoberta da cota antiga; além disso, um ramo do caso 6 ainda aceita aviso ausente. (`bin/disjuntor.py:218`, `bin/disjuntor.py:1031`, `bin/disjuntor.py:1185`; `bin/tests/test_disjuntor.sh:1222`, `bin/tests/test_disjuntor.sh:1250`, `bin/tests/test_disjuntor.sh:1306`)
+
+Referências aos anexos contam desde a primeira linha de conteúdo. Execução local do selo e confirmação do intervalo pelo histórico Git: [nao verificado]. As mordidas abaixo são as do log fornecido.
+
+**1. Destino de cada achado procedente da volta 2**
+
+| Achado | O delta cura? | O selo morde? |
+|---|---|---|
+| Aviso truncado em nomes longos | **Sim.** DISJUNTOR/SOBE recebem `inteiro=True`; somente a linha livre final do SOBE fica limitada a 200 caracteres. (`bin/disjuntor.py:153`, `bin/disjuntor.py:218`, `bin/disjuntor.py:1062`, `bin/disjuntor.py:1081`) | **Sim:** `B3-aviso-cortado`, `B3-sobe-cortado` e `B3-sobe-linha-sem-limite` caem no caso 6. (`item2v3_mutantes.log:30`, `item2v3_mutantes.log:45`, `item2v3_mutantes.log:60`) |
+| Testemunha positiva da medida `lib['auto']` | Já estava curado; permanece exigindo trilha positiva, igualdade com o medidor e apresentação correspondente. (`bin/tests/test_disjuntor.sh:1284`, `bin/tests/test_disjuntor.sh:1292`) | Mutante continua declarado; sua execução nesta volta: [nao verificado]. (`bin/tests/test_disjuntor.sh:2036`) |
+| Contrato FALHA × SOBE | Já estava conciliado: contrato pede SOBE e código produz SOBE. (`contrato_item2.txt:4`; `bin/disjuntor.py:1060`) | Caso 2 exige exatamente um SOBE; mutante específico FALHA/SOBE não consta entre os onze do item. (`bin/tests/test_disjuntor.sh:1195`, `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2049`) |
+| Cota e medida com nomes distintos | Mantido: `auto_usada` governa a cota; `lib['auto']` conta eventos em 24 h. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:2029`, `bin/disjuntor.py:2033`, `bin/disjuntor.py:2058`) | Há verificações de ambas; a compatibilidade com a chave antiga continua sem caso/mutante específico. (`bin/tests/test_disjuntor.sh:1179`, `bin/tests/test_disjuntor.sh:1292`, `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2049`) |
+| Cota herdada em `r['auto']` ignorada | **Não.** O predicado continua lendo somente `auto_usada`; a migração existente trata o limiar, sem converter aquela chave. Existência desse estado em produção: [nao verificado]. (`bin/disjuntor.py:815`, `bin/disjuntor.py:832`, `bin/disjuntor.py:1185`) | Não há mordida demonstrada para esse caminho. (`bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2049`) |
+| Precedência das portas antigas | Já estava curado; mantém ordenação estável antes de AUTO. (`bin/disjuntor.py:1050`) | Caso 8 foi reforçado; mutante de precedência continua declarado, mas sua execução nesta volta: [nao verificado]. (`bin/tests/test_disjuntor.sh:1306`, `bin/tests/test_disjuntor.sh:2037`) |
+| Disparo não condicionado literalmente a DESENHO | **Não.** Continua disparando pelo número de reprovações/voltas e retornando PARADA antes de examinar liberações. A classe só entra na porta posterior. (`aval_auditoria_de_travas_corte_1211.txt:4`; `bin/disjuntor.py:1031`, `bin/disjuntor.py:1040`, `bin/disjuntor.py:1074` [correção: validação da classe em `bin/disjuntor.py:774`]) | Não há mutante declarado que cobre essa divergência entre aval e contrato. (`contrato_item2.txt:2`; `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2049`) |
+| Segunda ocorrência pode sair pela porta antiga sem autoria Ronald | **Não.** ERRO-BOBO exige motivo, sem conferir autor; a cota restringe apenas AUTO. Isso preserva o contrato, mas mantém a divergência com o aval literal. (`contrato_item2.txt:2`; `aval_auditoria_de_travas_corte_1211.txt:4`; `bin/disjuntor.py:768`, `bin/disjuntor.py:1057`) | O caso 5 exige que essa porta continue liberando com cota gasta. (`bin/tests/test_disjuntor.sh:1227`, `bin/tests/test_disjuntor.sh:1230`) |
+| Caso 5 podia passar sem provar liberação | **Sim.** Agora exige estado previamente disparado, LIBERA do tipo correto acrescentada e preservação da cota. (`bin/tests/test_disjuntor.sh:1220`, `bin/tests/test_disjuntor.sh:1228`, `bin/tests/test_disjuntor.sh:1232`) | **Sim:** `B3-c5-solta-sem-libera` passa a derrubar também o caso 5. Antes já derrubava o caso 6; não era sobrevivente da suíte inteira. (`item2v3_mutantes.log:67`, `item2v3_mutantes.log:73`) |
+| Caso 8 podia passar sem segundo disparo/liberação final | **Sim.** Exige segundo disparo, evento AUTO e cota unitária finais. (`bin/tests/test_disjuntor.sh:1300`, `bin/tests/test_disjuntor.sh:1306`) | **Sim:** `B3-c8-sem-2o-disparo` passa de rc=0 para rc=8. (`item2v3_mutantes.log:81`, `item2v3_mutantes.log:89`) |
+| Relógio fora da borda | **Não; permanece herdado.** Há `time.time()` dentro de `decide_b3` e `datetime.now()` dentro de `trilha`. (`bin/disjuntor.py:999`, `bin/disjuntor.py:217`) | Os cinco mutantes novos não atacam isso. (`bin/tests/test_disjuntor.sh:2041`, `bin/tests/test_disjuntor.sh:2049`) |
+
+**2. Quem escreve e quem lê; detalhe maior que 300**
+
+| Campo/valor | Quem escreve/produz | Quem lê |
+|---|---|---|
+| Parâmetro `inteiro` | Padrão `False` na assinatura; `_anuncia` fornece o resultado de `ev in B3_AVISO_INTEIRO`. O espião encaminha `**kw`. (`bin/disjuntor.py:210`, `bin/disjuntor.py:1081`; `bin/tests/test_disjuntor.sh:1077`) | `trilha` escolhe corte em 300 ou ausência desse corte. O parâmetro não é persistido na linha. (`bin/disjuntor.py:217`, `bin/disjuntor.py:218`) |
+| `B3_AVISO_INTEIRO` | Constante `('DISJUNTOR', 'SOBE')`. (`bin/disjuntor.py:153`) | `_anuncia`; os mutantes retiram o encaminhamento ou SOBE da tupla. (`bin/disjuntor.py:1081`; `bin/tests/test_disjuntor.sh:2041`, `bin/tests/test_disjuntor.sh:2042`) |
+| `B3_SOBE_LINHA` | Constante `200`. (`bin/disjuntor.py:154`) | Montagem do SOBE e assert do sufixo limitado; mutante remove o corte. (`bin/disjuntor.py:1062`; `bin/tests/test_disjuntor.sh:1278`, `bin/tests/test_disjuntor.sh:2043`) |
+| Detalhe DISJUNTOR B3 | `decide_b3` monta obra, motivo e recado; `_anuncia → trilha` grava após persistência, normalizando espaços. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1038`, `bin/disjuntor.py:1081`, `bin/disjuntor.py:217`) | `ler()` conta pelo prefixo; selo procura o aviso completo e observa evento/trava. (`bin/disjuntor.py:2059`; `bin/tests/test_disjuntor.sh:1234`, `bin/tests/test_disjuntor.sh:1265`, `bin/tests/test_disjuntor.sh:1086`) |
+| Detalhe SOBE B3 | `decide_b3` monta obra, SHA, cota, instrução e linha limitada ao final; passa pela mesma porta de anúncio. (`bin/disjuntor.py:1060`, `bin/disjuntor.py:1062`, `bin/disjuntor.py:1081`) | `conta()` e listas `sobe/sobe2` do selo. `ler()` não contabiliza SOBE. (`bin/tests/test_disjuntor.sh:1165`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1276`; `bin/disjuntor.py:2035`) |
+
+**Os leitores identificados em `bin/` continuam compatíveis com o detalhe ampliado:**
+
+- `ler()` percorre linhas completas, filtra pelo token do evento e conta DISJUNTOR usando `p[3]`; o sufixo longo não muda essa posição. (`bin/disjuntor.py:2039`, `bin/disjuntor.py:2041`, `bin/disjuntor.py:2060`)
+- `_censo_24h()` também percorre linhas completas; seu regex ancorado descarta DISJUNTOR/SOBE. (`bin/disjuntor.py:2105`, `bin/disjuntor.py:2147`, `bin/disjuntor.py:2149`)
+- ESTADO e CLI usam `ler/linha`. A referência do hook ao caminho apenas o exclui como prova de espera. (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`; `bin/disjuntor.py:2403`; `bin/hook_stop_fila1.py:666`)
+- Os selos usam leitura integral por linha, `grep` ou `tail`, sem teto de 300. Isso inclui o selo de censo fora do diff. (`bin/tests/test_disjuntor.sh:96`, `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1236`; `bin/tests/test_censo_antes_da_vaga.sh:158`, `bin/tests/test_censo_antes_da_vaga.sh:525`)
+
+**3. Segunda AUTO, DESENHO, rearme e reinício**
+
+- **Segunda AUTO sozinha, com `auto_usada` preservada: não libera.** Registra SHA recusado em `auto_sobe`, deduplica SOBE e continua sem consumir a linha. (`bin/disjuntor.py:1057`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:1063`, `bin/disjuntor.py:1069`)
+- **Com estado antigo apenas em `auto`: pode aceitar outra AUTO.** Ausência de `auto_usada` é lida como zero, conforme o próprio contrato. Ocorrência em produção: [nao verificado]. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:1065`; `contrato_item2.txt:4`)
+- **`classe=DESENHO` não libera pela porta nova.** Um motivo dizendo “erro de desenho” sob rótulo FORMA pode passar: o reconhecedor valida o rótulo e motivo alfanumérico. Classificação real em produção: [nao verificado]. (`bin/disjuntor.py:148`, `bin/disjuntor.py:774`)
+- **Rearme e reinício com JSON preservado não zeram a cota.** Rearme altera outros campos; o carregamento seguinte recupera o objeto persistido. Arquivo ausente inicia `{}`. (`bin/disjuntor.py:1148`, `bin/disjuntor.py:1150`, `bin/disjuntor.py:377`, `bin/disjuntor.py:380`)
+- **Uma linha antiga ERRO-BOBO pode liberar com cota gasta**, sem comprovar autoria Ronald; isso não é uma segunda AUTO aceita. (`bin/disjuntor.py:768`, `bin/disjuntor.py:1050`, `bin/disjuntor.py:1057`)
+
+**4. Espião do caso 5 de `b3_v4`**
+
+**Sim, preserva a prova anterior:** tenta adquirir a trava por outro descritor, registra se estava ocupada e exige presença de DISJUNTOR/LIBERA/REARMA antes do `all(...)`. `**kw` é encaminhado intacto à função original. Não prova SOBE nem verifica diretamente o valor de `inteiro`. (`bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1071`, `bin/tests/test_disjuntor.sh:1077`, `bin/tests/test_disjuntor.sh:1086`, `bin/tests/test_disjuntor.sh:1087`)
+
+**5. Assert vazio e mordida dos mutantes**
+
+**Casos 5 e 8:** os vazios apontados foram curados pelas testemunhas de transição descritas acima. (`bin/tests/test_disjuntor.sh:1222`, `bin/tests/test_disjuntor.sh:1228`, `bin/tests/test_disjuntor.sh:1306`)
+
+**Caso 6: ainda há ramo vazio.** O retorno de `dispara('OBRA-F')` é ignorado; `ultima()` pode retornar `''`. Nesse caso, “`AUTO ja usada` ausente” passa, e `mensagem_b3` ainda ensina AUTOLIBERA sem exigir registro da obra. Portanto esse ramo aceita ausência de disparo/aviso F. As provas novas de textos longos exigem eventos positivos e não passam integralmente vazias. (`bin/tests/test_disjuntor.sh:1240`, `bin/tests/test_disjuntor.sh:1245`, `bin/tests/test_disjuntor.sh:1250`, `bin/tests/test_disjuntor.sh:1265`, `bin/tests/test_disjuntor.sh:1278`; `bin/disjuntor.py:1202`)
+
+| Mutante novo | Mordida no log final |
+|---|---|
+| `B3-aviso-cortado` | Caso 6, rc=6. (`item2v3_mutantes.log:30`, `item2v3_mutantes.log:31`) |
+| `B3-sobe-cortado` | Caso 6, rc=6. (`item2v3_mutantes.log:45`, `item2v3_mutantes.log:46`) |
+| `B3-sobe-linha-sem-limite` | Caso 6, rc=6. (`item2v3_mutantes.log:60`, `item2v3_mutantes.log:61`) |
+| `B3-c5-solta-sem-libera` | Casos 5/6, rc=5. (`item2v3_mutantes.log:73`, `item2v3_mutantes.log:74`) |
+| `B3-c8-sem-2o-disparo` | Caso 8, rc=8. (`item2v3_mutantes.log:88`, `item2v3_mutantes.log:89`) |
+
+**Nenhum dos cinco novos sobrevive no log; o controle passa.** A execução nesta volta dos seis antigos e de `b3_v4`: [nao verificado]. (`item2v3_mutantes.log:15`, `item2v3_mutantes.log:16`; `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2039`)
+
+**Contrato:** continuam oito casos numerados, agora com mais cenários internos; há onze mutantes do item. “8 casos” permanece correto; “6 mutantes” virou divergência documental relevante para rastrear cobertura, sem alterar por si só a regra operacional. (`contrato_item2.txt:5`; `bin/tests/test_disjuntor.sh:1180`, `bin/tests/test_disjuntor.sh:1307`, `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2049`)
+
+**6. Classes de reprovação**
+
+| Classe | Resultado |
+|---|---|
+| Segundo escritor fora da porta | Não identificado para a cota operacional: acréscimo específico em `decide_b3`, persistência por `_com_estado`. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1089`, `bin/disjuntor.py:390`) |
+| Relógio fora da borda | **Presente, herdado:** fallback em `decide_b3`; wrapper chega sem instante explícito; `trilha` captura seu próprio horário. (`bin/disjuntor.py:999`, `bin/disjuntor.py:1172`, `bin/disjuntor.py:217`; `bin/codex_pergunta.sh:378`) |
+| Selo sem mordida | Nenhum sobrevivente entre os cinco novos demonstrados; permanece a checagem vazia de aviso F. Mordida atual dos seis antigos: [nao verificado]. (`item2v3_mutantes.log:30`, `item2v3_mutantes.log:45`, `item2v3_mutantes.log:60`, `item2v3_mutantes.log:73`, `item2v3_mutantes.log:88`; `bin/tests/test_disjuntor.sh:1250`) |
+| Campo com dois significados | Não nos campos atuais: cota e medida permanecem distintas. A chave antiga continua sem conversão. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:2033`, `bin/disjuntor.py:2058`, `bin/disjuntor.py:815`) |
+| Ordem de trava | Não identifiquei inversão introduzida: gravação e anúncio permanecem sob a trava do estado; wrapper/triagem tomam resposta antes de estado. (`bin/disjuntor.py:370`, `bin/disjuntor.py:391`, `bin/disjuntor.py:402`, `bin/disjuntor.py:405`, `bin/disjuntor.py:908`, `bin/disjuntor.py:940`; `bin/codex_pergunta.sh:376`, `bin/codex_pergunta.sh:378`) |
+
+## 12/11 12:17 · sessao 9aa9d65cb110 · - · - · origem=Ronald (tmux)
+
+Os achados persistentes da volta 2 **não foram curados por este delta**: o disparo continua condicionado apenas ao número de reprovações/voltas, e retorna PARADA nessa chamada; a classe só é examinada posteriormente na porta AUTOLIBERA. (`bin/disjuntor.py:1031`, `bin/disjuntor.py:1040`, `bin/disjuntor.py:774`)
+
+A exclusividade “segunda ocorrência só Ronald” também permanece falsa pela porta antiga: `ERRO-BOBO OBRA-A: motivo` exige apenas motivo alfanumérico, sem autoria; essas candidatas precedem AUTO e a cota só restringe `tipo == 'auto'`. Isso é preservação expressa da porta antiga pelo contrato, mas continua divergindo da leitura literal do aval já apontada na volta 2. (`bin/disjuntor.py:768`, `bin/disjuntor.py:1050`, `bin/disjuntor.py:1057`; `contrato_item2.txt:2`; `aval_auditoria_de_travas_corte_1211.txt:4`)
+
+Para a pergunta 3:
+
+- **Estado atual com `auto_usada`: segunda AUTOLIBERA sozinha não libera.** Acrescenta SHA a `auto_sobe` uma vez, anuncia SOBE e continua sem consumir SHA; o único acréscimo a `auto_usada` fica depois dessa guarda. (`bin/disjuntor.py:1057`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:1063`, `bin/disjuntor.py:1065`, `bin/disjuntor.py:1069`)
+- **DESENHO pela porta nova:** rótulo `classe=DESENHO` é recusado porque as classes aceitas são FORMA/ERRO-BOBO; o texto “erro de desenho” sob rótulo FORMA pode passar, pois o reconhecedor valida rótulo e presença de letra/dígito, não a natureza do defeito. Classificação real em produção: `[nao verificado]`. (`bin/disjuntor.py:148`, `bin/disjuntor.py:774`)
+- **Rearme não zera cota:** altera apenas `rearmado`, `reprovados`, `codex`, `disparado`. A decisão subsequente continua lendo `auto_usada`. (`bin/disjuntor.py:1148`, `bin/disjuntor.py:1150`, `bin/disjuntor.py:1185`)
+- **Reinício com JSON preservado não zera cota:** a transição carrega JSON existente e o grava inteiro; carregamento de consulta faz o mesmo. Arquivo ausente inicia `{}`; isto é perda/ausência de estado, não efeito necessário do reinício. (`bin/disjuntor.py:377`, `bin/disjuntor.py:380`, `bin/disjuntor.py:390`, `bin/disjuntor.py:411`, `bin/disjuntor.py:414`)
+- **Compatibilidade herdada continua descoberta:** estado com `auto=['sha-antigo']` sem `auto_usada` é lido como cota livre, podendo aceitar nova AUTO; o predicado lê só `auto_usada`, a migração existente só trata limiar/reprovações e não converte `auto`. O contrato explicitamente chama ausência de `auto_usada` de zero; existência de tal estado em produção: `[nao verificado]`. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:815`, `bin/disjuntor.py:832`, `bin/disjuntor.py:1065`; `contrato_item2.txt:4`)
+
+Classes da pergunta 6:
+
+| Classe | Evidência |
+|---|---|
+| Segundo escritor da cota fora da porta | Não identificado no código operacional pesquisado: acréscimo específico só em `decide_b3`; persistência genérica por `_com_estado`. Os escritores adicionais em `bin/tests` são fixtures. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1089`, `bin/disjuntor.py:390`; `bin/tests/test_disjuntor.sh:1153`) |
+| Relógio fora da borda | Persiste, herdado: `decide_b3` chama `time.time()` se não recebe instante; wrapper chama `b3_parada → estado_b3` sem instante. `trilha` também lê `datetime.now()`. Stop e PreToolUse fornecem instante capturado na borda. (`bin/disjuntor.py:999`, `bin/disjuntor.py:1172`, `bin/disjuntor.py:217`; `bin/codex_pergunta.sh:378`; `bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`; `bin/disjuntor.py:1951`, `bin/disjuntor.py:1834`) |
+| Campo com dois significados | Nos nomes atuais não: cota cumulativa `auto_usada` versus medida de LIBERA(auto) em 24h `lib['auto']`; compatibilidade da chave antiga segue sem conversão. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:2029`, `bin/disjuntor.py:2033`, `bin/disjuntor.py:2056`) |
+| Ordem de trava | Não identifiquei inversão introduzida: estado é travado antes de ler/mutar/gravar/anunciar; anúncio ocorre antes de fechar FD. Wrapper e triagem tomam resposta antes de estado. (`bin/disjuntor.py:370`, `bin/disjuntor.py:385`, `bin/disjuntor.py:391`, `bin/disjuntor.py:402`, `bin/disjuntor.py:405`; `bin/codex_pergunta.sh:376`, `bin/codex_pergunta.sh:378`; `bin/disjuntor.py:908`, `bin/disjuntor.py:940`) |
+
+Cura efetiva do aviso truncado: `_anuncia` passa `inteiro=True` para DISJUNTOR/SOBE; `trilha` deixa de aplicar corte de 300 nesses chamados; SOBE preserva instrução antes da linha livre, e somente essa linha fica limitada a 200. (`bin/disjuntor.py:153`, `bin/disjuntor.py:154`, `bin/disjuntor.py:1081`, `bin/disjuntor.py:218`, `bin/disjuntor.py:1060`, `bin/disjuntor.py:1062`)
+
+## 12/11 12:17 · sessao 5f42930059da · - · - · origem=Ronald (tmux)
+
+- **Espião `b3_v4` caso 5 preservado.** `**kw` segue intacto para `orig`; a tentativa de `flock(LOCK_EX|LOCK_NB)` em descritor separado continua detectando trava ocupada. O assert exige presença dos três eventos antes de `all(...)`, impedindo `all([])`. Prova DISJUNTOR/LIBERA/REARMA sob trava; SOBE não está no filtro. (`bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1071`, `bin/tests/test_disjuntor.sh:1077`, `bin/tests/test_disjuntor.sh:1086`, `bin/tests/test_disjuntor.sh:1087`)
+
+- **Caso 5 corrigido:** controles exigem estado previamente disparado, incremento LIBERA do tipo certo e cota apropriada; terceiro controle exige preservação exata da cota. Lista obrigatoriamente contém três resultados. (`bin/tests/test_disjuntor.sh:1220`, `bin/tests/test_disjuntor.sh:1222`, `bin/tests/test_disjuntor.sh:1228`, `bin/tests/test_disjuntor.sh:1232`)
+
+- **Caso 8 corrigido:** segundo disparo deve retornar verdadeiro, AUTO final deve produzir evento e cota unitária. (`bin/tests/test_disjuntor.sh:1300`, `bin/tests/test_disjuntor.sh:1303`, `bin/tests/test_disjuntor.sh:1306`)
+
+- **Caso 6 tem ramo residual vazio:** ignora retorno de `dispara('OBRA-F')`; `ultima` pode devolver `''`, e o assert aceita ausência de aviso porque só exige ausência da marca de cota gasta, além da instrução em `mensagem_b3`, que funciona mesmo sem registro da obra. Assim pode passar sem disparo/aviso F. As novas provas longas, entretanto, exigem disparos e SOBE positivos; não passam integralmente vazias. (`bin/tests/test_disjuntor.sh:1240`, `bin/tests/test_disjuntor.sh:1245`, `bin/tests/test_disjuntor.sh:1250`, `bin/disjuntor.py:1202`, `bin/disjuntor.py:1205`, `bin/tests/test_disjuntor.sh:1265`, `bin/tests/test_disjuntor.sh:1278`)
+
+- **Inventário:** seguem oito casos numerados; há onze mutantes item 2, seis antigos e cinco novos. Logo “8 casos” permanece correto; “6 mutantes” está desatualizado, divergência documental sem alteração das regras operacionais. (`bin/tests/test_disjuntor.sh:1180`, `bin/tests/test_disjuntor.sh:1307`, `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2039`, `bin/tests/test_disjuntor.sh:2041`, `bin/tests/test_disjuntor.sh:2049`; `contrato_item2.txt:5`)
+
+- **Mordidas:** o log anexado mostra os cinco novos mutantes derrubados — três no caso 6, um no 5 e um no 8 — e controle rc=0; execução atual dos seis antigos e de `b3_v4`: `[nao verificado]`. O harness exige âncora única, controle sem mutação e falha se o caso aceitar a mutação. (`bin/tests/test_disjuntor.sh:1715`, `bin/tests/test_disjuntor.sh:1719`, `bin/tests/test_disjuntor.sh:1723`, `bin/tests/test_disjuntor.sh:1741`; localizações exatas no log anexado: `[nao verificado]`)
+
+## 12/11 12:17 · sessao ad20865149a1 · - · - · origem=Ronald (tmux)
+
+Inventário e compatibilidade dos leitores, por inspeção somente leitura:
+
+| Valor | Quem escreve/produz | Quem lê |
+|---|---|---|
+| `inteiro` | Padrão `False` na assinatura; `_anuncia` passa `ev in B3_AVISO_INTEIRO`. O espião do selo recebe e encaminha `**kw`. (`bin/disjuntor.py:210`, `bin/disjuntor.py:1081`; `bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1077`) | `trilha` escolhe o limite `None` ou `300`; nenhum outro consumidor semântico encontrado. (`bin/disjuntor.py:218`) |
+| `B3_AVISO_INTEIRO` | Tupla constante `('DISJUNTOR', 'SOBE')`. (`bin/disjuntor.py:153`) | `_anuncia` determina a opção de escrita; mutantes removem o encaminhamento ou o SOBE. (`bin/disjuntor.py:1081`; `bin/tests/test_disjuntor.sh:2041`, `bin/tests/test_disjuntor.sh:2042`) |
+| `B3_SOBE_LINHA` | Constante `200`. (`bin/disjuntor.py:154`) | Construção de SOBE corta somente o texto livre final; selo exige linha maior que o limite e sufixo cortado. (`bin/disjuntor.py:1062`; `bin/tests/test_disjuntor.sh:1278`, `bin/tests/test_disjuntor.sh:1279`, `bin/tests/test_disjuntor.sh:2043`) |
+| Detalhe DISJUNTOR B3 | `decide_b3` produz prefixo, motivo e `_recado_auto`; `_anuncia` entrega a `trilha`, que normaliza espaços e grava uma linha. (`bin/disjuntor.py:1036`, `bin/disjuntor.py:1038`, `bin/disjuntor.py:1081`, `bin/disjuntor.py:217`) | `ler`, auxiliares de teste `_tem`/`ultima`, espião B3 v4. (`bin/disjuntor.py:2059`; `bin/tests/test_disjuntor.sh:96`, `bin/tests/test_disjuntor.sh:1234`, `bin/tests/test_disjuntor.sh:1086`) |
+| Detalhe SOBE | `decide_b3` produz obra, SHA, cota e instrução, seguidos de `ln[:200]`; mesma porta de anúncio/escrita. (`bin/disjuntor.py:1060`, `bin/disjuntor.py:1062`, `bin/disjuntor.py:1081`) | Selo `conta` e listas `sobe`/`sobe2`; `ler` não enumera SOBE, `_censo_24h` o descarta. (`bin/tests/test_disjuntor.sh:1165`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1276`; `bin/disjuntor.py:2035`, `bin/disjuntor.py:2105`, `bin/disjuntor.py:2148`) |
+
+**Todos os leitores diretos identificados em `bin/` suportam detalhe maior que 300:** a escrita continua em uma única linha; nenhuma leitura identificada limita bytes/caracteres a 300. (`bin/disjuntor.py:217`, `bin/disjuntor.py:2039`, `bin/disjuntor.py:2147`; `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1236`)
+
+- `ler()` percorre linhas completas, separa tokens e usa data/hora/evento; para DISJUNTOR conta `p[3]`, portanto o sufixo ampliado não muda a leitura. SOBE não participa da enumeração. (`bin/disjuntor.py:2035`, `bin/disjuntor.py:2040`, `bin/disjuntor.py:2044`, `bin/disjuntor.py:2059`)
+- `_censo_24h()` percorre linhas completas; o regex ancorado aceita apenas `CENSO ...` e `NEGOU DISJUNTOR CENSO:`, portanto ignora os dois eventos ampliados. (`bin/disjuntor.py:2105`, `bin/disjuntor.py:2146`, `bin/disjuntor.py:2148`)
+- `gerar_estado.py` e CLI `--linha` consomem a derivação `ler/linha`, sem leitor alternativo de detalhe. (`bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`; `bin/disjuntor.py:2402`, `bin/disjuntor.py:2403`)
+- Os leitores do selo disjuntor usam `grep`, `tail`, busca por substring ou leitura integral por linha; o espião observa evento/trava e encaminha o detalhe. (`bin/tests/test_disjuntor.sh:96`, `bin/tests/test_disjuntor.sh:97`, `bin/tests/test_disjuntor.sh:1167`, `bin/tests/test_disjuntor.sh:1236`, `bin/tests/test_disjuntor.sh:1261`, `bin/tests/test_disjuntor.sh:1276`, `bin/tests/test_disjuntor.sh:1285`, `bin/tests/test_disjuntor.sh:1705`)
+- O outro selo que lê diretamente a trilha é `test_censo_antes_da_vaga.sh`: `grep`/`tail` procuram eventos CENSO; o filtro seleciona os eventos antes de `tail`. Não depende do comprimento do detalhe B3. (`bin/tests/test_censo_antes_da_vaga.sh:114`, `bin/tests/test_censo_antes_da_vaga.sh:158`, `bin/tests/test_censo_antes_da_vaga.sh:249`, `bin/tests/test_censo_antes_da_vaga.sh:275`, `bin/tests/test_censo_antes_da_vaga.sh:314`, `bin/tests/test_censo_antes_da_vaga.sh:525`, `bin/tests/test_censo_antes_da_vaga.sh:543`)
+- A referência do hook a `disjuntor.log` apenas o inclui entre arquivos que não provam espera; não interpreta seu detalhe. (`bin/hook_stop_fila1.py:664`, `bin/hook_stop_fila1.py:666`)
+
+**Espião do caso 5 B3 v4:** continua provando presença de DISJUNTOR/LIBERA/REARMA e que a trava estava ocupada em todas essas chamadas. A exigência de conjunto exato impede o `all([])`. `**kw` apenas preserva a assinatura nova e chega à função original; o teste não verifica diretamente o valor de `inteiro`, obrigação coberta pelos novos casos de texto longo. (`bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1071`, `bin/tests/test_disjuntor.sh:1077`, `bin/tests/test_disjuntor.sh:1086`, `bin/tests/test_disjuntor.sh:1087`, `bin/tests/test_disjuntor.sh:1252`, `bin/tests/test_disjuntor.sh:1278`)
 
 ## 12/11 12:11 · sessao ccf3a0772d66 · SAIDA-NOTURNA-NO-DIA-CERTO · censo · origem=Code
 
@@ -911,602 +1054,4 @@ Estas saídas não precisam de uma nova escrita nos quatro campos pesquisados (`
 
 [truncado em 20000 de 30259 caracteres]
 
-## 12/11 11:44 · sessao 52942a8dad1b · PORTA-QUE-NAO-AGE · censo · origem=Code
-
-```python
-# Execucao e resultados em producao: [nao verificado].
-# Molde: anexo sonda_medida3.py fornecido no pedido [nao verificado].
-# Universo literal do pedido [nao verificado].
-#
-# Juizes chamados pelo censo:
-# alimentar_portas: app/chamados/services/vigia_fio.py:604.
-# porta_alcancavel_do_dia: app/chamados/services/vigia_fio.py:635.
-# resolver_dia_oferecido_nas_datas, via _resolver_da_rodada:
-# app/chamados/services/vigia_fio.py:265,636.
-# dono_fora_do_fio, somente no ramo sem porta e passado:
-# app/chamados/services/vigia_fio.py:642,648,654.
-#
-# Perguntas DO DIA: celula_id, sem filtrar por data_evento.
-# app/chamados/services/vigia_fio.py:614.
-# A fabrica usa outra chave: colaborador + data_evento + conversa=False.
-# app/chamados/services/fabrica_da_celula.py:148.
-#
-# Classes abaixo agrupam observacoes, sem inventar causa/degrau do C6.
-# O juiz devolve booleano: app/chamados/juizes.py:862,1389.
-
-import datetime as dt
-import inspect
-import io
-import json
-import logging
-import traceback
-from collections import defaultdict
-from contextlib import contextmanager, redirect_stdout, redirect_stderr
-
-from django.db import connection, transaction
-
-
-FIXO = {
-    129: "2026-10-25 2026-11-01 2026-11-02 2026-11-08",
-    258: "2026-10-30 2026-11-06 2026-11-09",
-    427: "2026-09-21",
-    451: "2026-10-21 2026-10-23 2026-10-25 2026-10-27",
-    502: "2026-10-28",
-    899: "2026-10-24",
-    999: "2026-10-28",
-}
-DATAS = {
-    cid: [dt.date.fromisoformat(s) for s in datas.split()]
-    for cid, datas in FIXO.items()
-}
-PARES = [(cid, data) for cid, datas in DATAS.items() for data in datas]
-chamada = {}
-
-
-def endereco(arquivo, linha):
-    caminho = (
-        "app/" + arquivo.split("/app/", 1)[1]
-        if "/app/" in arquivo
-        else "<sonda-ou-biblioteca>"
-    )
-    return caminho + ":" + str(linha)
-
-
-def tb_seguro(tb):
-    # Nao inclui mensagens, codigo-fonte ou variaveis locais.
-    return "\n".join(
-        endereco(frame.filename, frame.lineno) + " " + frame.name
-        for frame in traceback.extract_tb(tb)
-    )
-
-
-class FalhaInternaRegistrada(RuntimeError):
-    pass
-
-
-class Captura(logging.Handler):
-    def __init__(self):
-        super().__init__(logging.WARNING)
-        self.registros = []
-
-    def emit(self, record):
-        self.registros.append(record)
-
-
-@contextmanager
-def somente_capturar_logs(captura):
-    # Alteracoes apenas em memoria; mensagens livres nao vao aos handlers.
-    loggers = [logging.getLogger()] + [
-        obj
-        for obj in list(logging.Logger.manager.loggerDict.values())
-        if isinstance(obj, logging.Logger)
-    ]
-    anteriores = [
-        (obj, obj.handlers[:], obj.propagate, obj.level, obj.disabled)
-        for obj in loggers
-    ]
-    try:
-        for obj in loggers:
-            obj.handlers = [captura]
-            obj.propagate = False
-            obj.setLevel(logging.WARNING)
-            obj.disabled = False
-        yield
-    finally:
-        for obj, handlers, propaga, nivel, desativado in anteriores:
-            obj.handlers = handlers
-            obj.propagate = propaga
-            obj.setLevel(nivel)
-            obj.disabled = desativado
-
-
-def chamar(funcao, *args, **kwargs):
-    global chamada
-    assinatura = inspect.signature(funcao)
-    chamada = {
-        "funcao": funcao.__module__ + "." + funcao.__name__,
-        "assinatura": str(assinatura),
-    }
-    try:
-        assinatura.bind(*args, **kwargs)
-    except TypeError as exc:
-        # bind informa parametros ausentes/incompativeis sem imprimir objetos.
-        chamada["argumento_incompativel_ou_ausente"] = str(exc)
-        raise
-
-    antes = len(captura.registros)
-    resultado = funcao(*args, **kwargs)
-    novos = captura.registros[antes:]
-    if novos:
-        # Falhas internas registradas tambem invalidam a medicao:
-        # app/chamados/juizes.py:1463,1476;
-        # app/colaboradores/services/calendario.py:478.
-        exc = FalhaInternaRegistrada("funcao registrou WARNING/ERROR")
-        exc.registros = novos
-        causa = next(
-            (
-                record.exc_info[1]
-                for record in novos
-                if record.exc_info and record.exc_info[1]
-            ),
-            None,
-        )
-        if causa is not None:
-            raise exc from causa
-        raise exc
-
-    if connection.needs_rollback:
-        raise FalhaInternaRegistrada("transacao marcada para rollback")
-    return resultado
-
-
-def erro_seguro(exc):
-    causa = exc.__cause__
-    return {
-        "erro_classe": type(exc).__name__,
-        "erro": (
-            "falha de leitura; mensagem livre omitida para preservar a raspagem"
-        ),
-        "chamada": dict(chamada),
-        "tb": tb_seguro(exc.__traceback__),
-        "causa_classe": type(causa).__name__ if causa is not None else None,
-        "causa_tb": (
-            tb_seguro(causa.__traceback__) if causa is not None else None
-        ),
-        "registros_internos": [
-            {
-                "nivel": record.levelname,
-                "fonte": endereco(record.pathname, record.lineno),
-                "erro_classe": (
-                    record.exc_info[0].__name__
-                    if record.exc_info and record.exc_info[0]
-                    else None
-                ),
-            }
-            for record in getattr(exc, "registros", ())
-        ],
-    }
-
-
-def local(valor):
-    return timezone.localtime(valor).isoformat() if valor is not None else None
-
-
-def evidencia_autoria(p):
-    # Autor do carimbo persistido nao garante autor da via atual:
-    # app/chamados/models.py:3183;
-    # app/chamados/services/relavra_via.py:123.
-    #
-    # Projecoes sem descricao, payload, texto de resposta ou ator livre:
-    # app/core/models.py:295;
-    # app/chamados/models.py:3872.
-    logs = LogAuditoria.objects.filter(
-        modelo="PerguntaDisputa", objeto_id=p.pk
-    )
-    todos_pks = list(logs.order_by("pk").values_list("pk", flat=True))
-    coincidentes = list(
-        logs.filter(valor_depois__via_resolucao=p.via_resolucao)
-        .order_by("pk")
-        .values("pk", "usuario_id", "criado_em")
-    )
-    decisoes = list(
-        DecisaoPergunta.objects.filter(pergunta_id=p.pk)
-        .order_by("pk")
-        .values("pk", "ato_por_id", "ato_em")
-    )
-    return {
-        "materializada_por_id": p.materializada_por_id,
-        "materializada_em_local": local(p.materializada_em),
-        "autoria_da_via_atual_apenas_pelo_campo": "[nao verificado]",
-        "auditoria_n": len(todos_pks),
-        "auditoria_pks": todos_pks,
-        "auditoria_com_payload_da_via_atual_n": len(coincidentes),
-        "auditoria_com_payload_da_via_atual": [
-            {
-                "pk": item["pk"],
-                "usuario_id": item["usuario_id"],
-                "criado_em_local": local(item["criado_em"]),
-            }
-            for item in coincidentes
-        ],
-        "decisoes_n": len(decisoes),
-        "decisoes": [
-            {
-                "pk": item["pk"],
-                "ato_por_id": item["ato_por_id"],
-                "ato_em_local": local(item["ato_em"]),
-            }
-            for item in decisoes
-        ],
-        # Auditoria e best-effort: app/core/observ.py:94,139.
-        "completude_historica": "[nao verificado]",
-        # DecisaoPergunta nao tem via_resolucao:
-        # app/chamados/models.py:3872.
-        "vinculo_das_decisoes_com_a_via": "[nao verificado]",
-    }
-
-
-captura = Captura()
-
-# Impede saidas livres dos chamadores; somente o JSON final sera impresso.
-with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-    try:
-        with transaction.atomic():
-            with connection.cursor() as cur:
-                cur.execute(
-                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-                )
-                cur.execute("SELECT current_user, current_schema()")
-                if cur.fetchone() != ("leitor", "juliani"):
-                    raise RuntimeError("contexto_incorreto")
-
-            with somente_capturar_logs(captura):
-                from django.db.models import Q
-                from django.utils import timezone
-
-                from chamados.juizes import (
-                    alimentar_portas,
-                    fato_do_marco_no_espelho,
-                    pergunta_viva,
-                    porta_alcancavel_do_dia,
-                    um_colaborador_por_identidade,
-                )
-                from chamados.models import DecisaoPergunta, PerguntaDisputa
-                from chamados.services.fabrica_da_celula import motivos_a_perguntar
-                from chamados.services.vigia_fio import (
-                    ListaDoAdmin,
-                    dono_fora_do_fio,
-                )
-                from colaboradores.models import Colaborador
-                from colaboradores.services.calendario import (
-                    STATUS_QUE_PEDEM_DECISAO,
-                    contexto_calendario,
-                    resolver_dia_oferecido,
-                    resolver_dia_oferecido_nas_datas,
-                )
-                from core.models import LogAuditoria
-                from escala.models import CelulaDia
-                from ponto.janelas import janela_atual
-                from ponto.status_dia import status_do_dia_lavrado
-
-                agora = timezone.now()
-                hoje = timezone.localdate(agora)
-
-                filtro = Q(pk__in=[])
-                for cid, datas in DATAS.items():
-                    filtro |= Q(colaborador_id=cid, data__in=datas)
-
-                colabs = Colaborador.objects.select_related("empresa").in_bulk(
-                    list(DATAS)
-                )
-                celulas = list(
-                    CelulaDia.objects.filter(filtro).select_related("colaborador")
-                )
-                por_dia = {
-                    (cel.colaborador_id, cel.data): cel for cel in celulas
-                }
-
-                # Mesma alimentacao compartilhada do censo:
-                # app/chamados/services/vigia_fio.py:604.
-                alim = chamar(
-                    alimentar_portas,
-                    [cel.pk for cel in celulas],
-                    colabs.values(),
-                )
-                todas = chamar(
-                    um_colaborador_por_identidade,
-                    PerguntaDisputa.objects.filter(
-                        celula_id__in=[cel.pk for cel in celulas]
-                    )
-                    .select_related("disputa", "celula")
-                    .order_by("pk"),
-                    alim["instancias"],
-                )
-                por_celula = defaultdict(list)
-                for p in todas:
-                    por_celula[p.celula_id].append(p)
-
-                lista = ListaDoAdmin(hoje)
-                resolver_cache = {}
-                dias = []
-
-                for cid, data in PARES:
-                    chamada = {"etapa": "carregar_dia"}
-                    try:
-                        # Isola erro SQL do dia; erro nunca vira resultado zero.
-                        with transaction.atomic():
-                            colab = colabs[cid]
-                            cel = por_dia[(cid, data)]
-                            cel.colaborador = colab
-                            perguntas = por_celula.get(cel.pk, [])
-
-                            porta = chamar(
-                                porta_alcancavel_do_dia,
-                                cel.pk,
-                                alimentacao=alim,
-                            )
-
-                            # Plural por colaborador, como a rodada do censo:
-                            # app/chamados/services/vigia_fio.py:258.
-                            if cid not in resolver_cache:
-                                try:
-                                    resolver_cache[cid] = chamar(
-                                        resolver_dia_oferecido_nas_datas,
-                                        colab,
-                                        DATAS[cid],
-                                    )
-                                except Exception as exc:
-                                    resolver_cache[cid] = (
-                                        exc,
-                                        dict(chamada),
-                                    )
-                                    raise
-
-                            resolucao = resolver_cache[cid]
-                            if isinstance(resolucao, tuple):
-                                exc, origem = resolucao
-                                chamada = dict(origem)
-                                raise exc
-                            oferecido = resolucao[data]
-
-                            linha = {
-                                "col": "col%d" % cid,
-                                "data": data.isoformat(),
-                                "celula_pk": cel.pk,
-                                "chave_perguntas": "celula_id",
-                                "porta_alcancavel_do_dia": porta,
-                                "resolver_dia_oferecido_nas_datas": oferecido,
-                                "vivas_lidas_na_alimentacao_pks": sorted(
-                                    p.pk
-                                    for p in alim["vivas"].get(cel.pk, ())
-                                ),
-                                "motivos_a_perguntar": chamar(
-                                    motivos_a_perguntar,
-                                    cel,
-                                    hoje,
-                                    agora=agora,
-                                ),
-                                "perguntas": [],
-                            }
-
-                            for p in perguntas:
-                                viva = chamar(pergunta_viva, p)
-                                marco = chamar(fato_do_marco_no_espelho, p)
-                                linha["perguntas"].append({
-                                    "pk": p.pk,
-                                    "disputa_pk": p.disputa_id,
-                                    "celula_pk": p.celula_id,
-                                    "data_evento": p.data_evento,
-                                    "motivo": p.motivo,
-                                    "via_resolucao": p.via_resolucao,
-                                    "respondida_em_local": local(p.respondida_em),
-                                    "validada_em_local": local(p.validada_em),
-                                    "validada_por_id": p.validada_por_id,
-                                    "pergunta_viva": viva,
-                                    # Preserva True/False/None:
-                                    # app/chamados/juizes.py:930.
-                                    "fato_do_marco_no_espelho": marco,
-                                    "autoria": evidencia_autoria(p),
-                                })
-
-                            # Mesma condicao de entrada nesse ramo do censo:
-                            # app/chamados/services/vigia_fio.py:642,648,654.
-                            chamar_dono = porta is None and data < hoje
-                            linha["dono_fora_do_fio_chamado"] = chamar_dono
-                            if chamar_dono:
-                                linha["dono_fora_do_fio"] = chamar(
-                                    dono_fora_do_fio,
-                                    colab,
-                                    data,
-                                    perguntas,
-                                    lista,
-                                    com_papel=True,
-                                    oferecido=oferecido,
-                                )
-
-                            if cid == 427 and data == dt.date(2026, 9, 21):
-                                d4 = chamar(
-                                    status_do_dia_lavrado,
-                                    colab,
-                                    data,
-                                    agora=agora,
-                                )
-                                ctx = chamar(
-                                    contexto_calendario,
-                                    colab,
-                                    {
-                                        "modo": "custom",
-                                        "data_ini": data.isoformat(),
-                                        "data_fim": data.isoformat(),
-                                        "mes": str(data.month),
-                                        "ano": str(data.year),
-                                    },
-                                )
-                                dia_tela = next(
-                                    item
-                                    for item in ctx["dias"]
-                                    if item["data"] == data
-                                )
-                                direto = chamar(
-                                    resolver_dia_oferecido, dia_tela, hoje
-                                )
-                                if direto != oferecido:
-                                    raise RuntimeError(
-                                        "resolver_plural_diverge_da_tela"
-                                    )
-
-                                linha["D4"] = {
-                                    "status": d4["status"],
-                                    "fonte": d4["fonte"],
-                                }
-                                # O juiz nao retorna motivo separado. Publica
-                                # operandos reais e sua expressao original,
-                                # sem implementar outro predicado explicativo:
-                                # app/colaboradores/services/calendario.py:97.
-                                linha["motivo_do_falso_operandos_do_juiz"] = {
-                                    "retorno_real": direto,
-                                    "pode_ultimo_recurso": (
-                                        dia_tela["pode_ultimo_recurso"]
-                                    ),
-                                    "data": dia_tela["data"],
-                                    "hoje": hoje,
-                                    "status_D4_na_tela": dia_tela["status"],
-                                    "status_que_pedem_decisao": list(
-                                        STATUS_QUE_PEDEM_DECISAO
-                                    ),
-                                    "janela_atual": chamar(
-                                        janela_atual, hoje, colab.empresa
-                                    ),
-                                    "regra": inspect.getsource(
-                                        resolver_dia_oferecido
-                                    ),
-                                    "fonte": (
-                                        "app/colaboradores/services/"
-                                        "calendario.py:97"
-                                    ),
-                                    "causa_exclusiva_sem_exame_dos_operandos": (
-                                        "[nao verificado]"
-                                    ),
-                                }
-
-                            if timezone.localdate() != hoje:
-                                raise RuntimeError("relogio_cruzou_data_local")
-
-                            linha["ok"] = True
-                            transaction.set_rollback(True)
-
-                        dias.append(linha)
-
-                    except Exception as exc:
-                        # Descarta a medicao parcial; publica erro do dia.
-                        dias.append({
-                            "col": "col%d" % cid,
-                            "data": data.isoformat(),
-                            "ok": False,
-                            **erro_seguro(exc),
-                        })
-
-                # Classes observadas de perguntas MORTAS pelo juiz real.
-                # Um dia pode ter mais de uma classe; nao somar os dias entre
-                # classes como
-
-[truncado em 20000 de 23818 caracteres]
-
-## 12/11 11:41 · sessao e7dc53643837 · - · - · origem=Ronald (tmux)
-
-Censo AST executado em memória: 767 arquivos Python de produção em `app`, excluindo testes, migrations, assets e logs; zero falhas de parse. Reutilizei por extração AST o detector de `app/chamados/tests/test_o261e_f2_porta_carimbo.py:99`, com campos ampliados; ele cobre atribuição, `setattr`, dicionários propagados, construtor, `update` e `bulk_update`, mas declara limites para nomes vindos de outro módulo e `__dict__` em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:111`. Execução de testes e confirmação no banco: [nao verificado].
-
-**Escritores físicos encontrados**
-
-| Campo | Atribuição e persistência |
-|---|---|
-| `via_resolucao` | `_escrever_carimbo`: `app/chamados/models.py:3102`; persistido por `carimbar` em `:3153`, `carimbar_identidade` em `:3191` e `descarimbar` em `:3213`. |
-| `via_resolucao` em lote | `PerguntaDisputa.objects…update` em `app/chamados/models.py:3265`, com via vazia, materialização e autor nulos em `:3267`. |
-| `via_resolucao` isolada | `encerrar_por_fato_no_espelho`, atribuição/save em `app/chamados/models.py:3276`; `relavrar`, atribuição/save em `app/chamados/services/relavra_via.py:125`. |
-| `respondida_em` | `carimbar`, atribuição em `app/chamados/models.py:3133`, save em `:3153`; resposta humana em `app/chamados/services/disputa_emissao.py:1468`, save em `:1508`; automática em `:1653`, save em `:1655`; recuperação pela trilha em `:1674`, save em `:1676`. |
-| `validada_em`/`validada_por` | Simetria de `carimbar` em `app/chamados/models.py:3136`, save em `:3153`; ato de validar em `app/chamados/services/validacao.py:134`, save em `:137`; devolução da validação em `:199`, save em `:202`; resposta nova limpa ambos em `app/chamados/services/disputa_emissao.py:1480`, save em `:1508`. |
-| Limpeza dos três campos de resposta/validação | `ressuscitar_perguntas` passa campos explícitos a `descarimbar_em_lote` em `app/chamados/models.py:1567`; `reabrir_para_correcao` monta `campos` em `app/chamados/services/disputa_emissao.py:1593` e chama a mesma porta em `:1630`. |
-| Alterações somente em memória | Cópia para consultar o C6 em `app/chamados/models.py:1507`; restauração da tentativa recusada em `:3163`. |
-
-Não apareceu outro `bulk_update` nem outro `QuerySet.update` desses campos no universo acima [nao verificado como garantia além dos limites do detector]. `flip_auto.py:128` é **leitor** por `filter`, não escritor; `competencia_trancada.py:126` determina saída por leitura e `:255` apenas reabre o legado.
-
-**Apelidos e reexports**
-
-- Reabertura: `_reabrir` em `app/chamados/models.py:2220` e `app/chamados/services/acoes_disputa.py:102`; `_reabrir2` em `app/chamados/views.py:1435`.
-- `PerguntaDisputa` como `_PD`: `app/colaboradores/models.py:432`, `app/chamados/veredito_lavrado.py:201`, `app/chamados/views.py:398`, `app/colaboradores/services/calendario.py:469`, `app/ponto/services/cartorio.py:1635`, `app/chamados/services/limbo_folgas.py:270`, `app/chamados/services/disputa_emissao.py:1501`, `app/chamados/services/raiox.py:177` e `app/chamados/services/fio.py:392`, `:768`, `:883`.
-- `_PD_ordem`: `app/ponto/services/declarar_dia.py:189`, `app/ponto/services/veredito_celula.py:225`, `app/chamados/services/validacao.py:428`; `_PD_inf`: `app/chamados/services/painel.py:260`.
-- Reexports explícitos dos escritores pelo modelo: `app/chamados/models.py:4088` e `:4093`. Importação `*` de `chamados` na produção varrida: não encontrada [nao verificado fora desse universo].
-
-**Matriz dos caminhos principais**
-
-| Entrada → juiz → operação | Persistência → retorno → prova aberta |
-|---|---|
-| Pergunta sem validação → `carimbar` consulta C6 **depois de aplicar carimbos**, `app/chamados/models.py:3130` e `:3140` | Trio materialização/via; havendo texto, `resposta='validar'` preenche resposta e validação antes do C6, `:3131`; save `:3153`, `True` em `:3158`; viva desfaz e retorna `False`, `:3144`. Testes de recusa/restauração: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:665`, `:687`, `:713`. |
-| Admin decide/silêncio → não consulta C6 na porta de identidade, `app/chamados/models.py:3169` | `fechar_por_admin` escolhe `admin_decidiu`, `:3065`; trio em `:3187`, save/`True` em `:3191`; idempotente `False` em `:3056`. Fecho explícito da disputa grava `DecisaoPergunta.SILENCIO`, `:1920`; prova `app/chamados/tests/test_e1_entradas.py:121`. |
-| Dia decidido pelo admin → lista `q_vivas` daquele dia, `app/ponto/services/veredito_celula.py:180` | `fechar_por_admin` em `:190`; linha `SILENCIO` em `:195`. Prova real e idempotência: `app/chamados/tests/test_e1_v5_portas_backfill.py:83`. |
-| Folga aceita → juiz `o_dia_ja_e_folga` ou `checar_declaracao`, `app/chamados/services/validacao.py:280`, `:305` | Validação + `admin_decidiu`, `:288`, `:320`, `:329`; retorna `folga_ja_declarada` em `:302` ou `folga_declarada` em `:367`; recusa posterior reverte transação em `:343`. Provas nomeadas em `app/chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py:136` e `:197`; corpo não aberto [nao verificado]. |
-| Motivo removido → pertence aos motivos atuais e disputa aberta, `app/chamados/models.py:2034` | Linha `RETRATACAO` em `:2057`, identidade `motivo_retratado` em `:2062`, conserva carimbo anterior; retorna `removido` em `:2068`. Prova aberta preserva resposta e constata morte: `app/chamados/tests/test_e1_entradas.py:142`. |
-| Duplicata → `plano_de_retratacao`, `app/chamados/services/fio.py:1341` | `retratar_duplicata` grava `duplicata`, conserva carimbo, anota canônica em `:1360`; `True` em `:1364`, já duplicata `False` em `:1351`. Prova aberta apply/idempotência: `app/chamados/tests/test_e1_v5_portas_backfill.py:207`; veto de mérito: `app/chamados/tests/test_e1_v9.py:210`. |
-| Paridade recusada → exige lâmpada `is True`, `app/chamados/services/materializacao.py:906` | Identidade `paridade_recusada` em `:930`, retorna `None` em `:931`; apagada apenas recusa e retorna `None`, `:919`. Provas abertas dos três valores: `app/chamados/tests/test_o261_paridade_respeita_a_lampada.py:175`, `:183`, `:192`. |
-| Colisão tipo oposto → `traduzir_recusa`, `app/chamados/services/materializacao.py:1097` | Sem materialização e código `COLISAO`, identidade `fato_ocupado` + motivo em `:1105`; sem teste local da lâmpada. Retorno implícito `None`, função termina em `:1113`; prova específica [nao verificado]. |
-| Ausência declarada → `declarou_hora as _declarou_hora`, `app/chamados/services/materializacao.py:548`; C6 dentro da porta | Irmãs não materializadas: `declaracao` ou `ausencia_dia`, `:555`; `carimbar(...resposta='validar')`, `:567`; se gravou, linha `ABSORCAO`, `:569`; se recusou, evento e lista de recusadas, `:573`. Prova de recusa aberta apenas por localização: `app/chamados/tests/test_o261e_f2_fila.py:238` [nao verificado corpo]. |
-| Materializador → juiz de lastro após plantio, `app/chamados/services/materializacao.py:1240`; via por `_declarou`/`_via_fato`, `:1267` | `carimbar` com simetria da validação e lavra, `:1283`; C6 recusa → `_Reprovada`, rollback, `:1285`. Prova específica de rollback localizada em `app/chamados/tests/test_hx_materializa_depois_julga.py:30` [nao verificado corpo]. |
-| Fecho de disputa, pendentes aprovadas → lastro em `app/chamados/services/materializacao.py:1433`, C6 na porta | `juiz_aprovou` em `:1437`, devolve lista em `:1439`; prova aberta barra resposta não validada: `app/chamados/tests/test_o261e_f2_porta_carimbo.py:687`. |
-| Sem turno aberto → motivo limitado, sem texto/materialização e núcleo sem turno, `app/chamados/reconciliador.py:363`; C6 antes em `:398`, novamente pela porta em `:406` | Trio com `sem_turno_aberto`; eventual fecho da disputa por C7 em `:412`; retorna `True`, `:415`. Prova aberta **com marco apagado e validação prévia**: `app/chamados/tests/test_o261_lavra_le_a_lampada.py:148`; construção da lâmpada apagada em `:115`. |
-| Célula absolveu → `perguntas_absolvidas_pela_celula`, `app/chamados/reconciliador.py:585`; C6 na porta | `celula_absolveu`, `:596`; contabiliza e eventualmente fecha por C7, `:612`. Prova localizada em `app/chamados/tests/test_selo_celula_absolveu.py:66` [nao verificado corpo]. |
-| Fantasma atual → `veredito_orfa == ENCERRA`, `app/chamados/reconciliador.py:1108` | Consumidor chama `encerrar_fantasma`; porta passa pelo C6, `app/chamados/models.py:3288`. Provas abertas: barra viva respondida em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:665`; aceita turno fechado em `:676`. |
-| Fato materializado → comando exige lâmpada `is True`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:41` | Só troca via, `app/chamados/models.py:3276`; retorna `True`, `:3278`; não é via cega nesse chamador. Prova específica [nao verificado]. |
-| Re-lavra de carimbo derivado → `declarou_hora`/`via_pelo_fato`, `app/chamados/services/relavra_via.py:95` | Altera via e lavra no mesmo save `:125`; retorna `(n_via,n_ver)`, `:139`; não exige lâmpada localmente. Prova específica [nao verificado]. |
-
-**Divergência comprovada para decisão**
-
-O `carimbar` exige “C6 deu morta”, mas o C6 pode responder sobre a **validação que o próprio carimbar acabou de preencher**, antes de conferir o efeito do marco: `app/chamados/models.py:3135` e `:3140`. A outra leitura é a lâmpada de `CLAUDE.md:169`. O teste `app/chamados/tests/test_o261_lavra_le_a_lampada.py:148` comprova a variante já validada: lâmpada de entrada apagada, via `sem_turno_aberto` persistida e disputa fechada. O teste de paridade explicita que validada sai do fio mesmo sem absolvição por fato, `app/chamados/tests/test_o261_paridade_respeita_a_lampada.py:210`. Cabe decisão numerada na consolidação, sem escolher entre essas leituras.
-
-**Cobertura no backlog aberto**
-
-- E4 cobre o conjunto de portas de estado, com E4b backfill, E4c leitores e E4d parada da projeção: `app/docs/BACKLOG.md:1885`.
-- Identidade/duplicata tem fato próprio adiado para depois da E4d: `app/docs/BACKLOG.md:1889`; excedentes duplicados estão explicitamente em E1/E4: `:1912`.
-- Reação da raiz aos carimbadores e fecho fica em RAIZ F3/F4; F5 se combina com E4d: `app/docs/BACKLOG.md:1904`; os sete carimbadores sem C7 estão nomeados em `:1911`.
-- `celula_absolveu` pelo dia errado tem complemento específico **ABSOLVIDA-PELA-FOLGA**, E1-ENTRADAS, com pergunta #51407: `app/docs/BACKLOG.md:1935`. Isso não demonstra a classe dos outros 14 dias [nao verificado].
-
-## 12/11 11:40 · sessao 92e371f1103f · - · - · origem=Ronald (tmux)
-
-BLOQUEIA — `app/chamados/services/explicador.py:137` duplica C7 incompleto: define `pode_fechar = not fio_vivo(ps)`, mas C7 exige também ausência de respostas sem veredito (`app/chamados/models.py:1866`). Contraexemplo: pergunta com texto e `respondida_em`, sem validação/materialização, célula `ok` decidida pelo admin; C6 pode considerá-la morta (`app/chamados/juizes.py:1404`, `app/chamados/juizes.py:1452`), enquanto a guarda mantém a resposta pendente (`app/chamados/models.py:1855`). Explicador publica “Tudo resolvido” (`app/chamados/services/explicador.py:140`), modal oferece fechar/regularizar (`app/templates/chamados/partials/modal_fio.html:446`), e fechamento recusa (`app/chamados/models.py:1899`).
-
-BLOQUEIA — #9 deixa silêncio vencido com significados diferentes: fila e lista do colaborador excluem somente futuro (`app/chamados/services/painel.py:190`, `app/chamados/services/janela_colab.py:78`), mas a partição classifica qualquer prazo vencido como `HISTORICO` (`app/chamados/services/verbos.py:48`), e a lista padrão administrativa o exclui (`app/chamados/services/painel.py:324`). Contraexemplo: chamado aberto com silêncio vencido aparece ao colaborador e entra na fila, porém desaparece da lista padrão do admin; a tarefa ainda remove esse chamado de sua `fila` publicada (`app/chamados/services/tarefa_do_dia.py:551`). Os testes novos verificam `qs_na_fila` e `chamados_visiveis_colab`, sem verificar a lista efetiva do painel (`app/chamados/tests/test_e3_b4_silencio_vencido.py:36`).
-
-FILA — `respondida_em`: escritor de resposta humana em `app/chamados/services/disputa_emissao.py:1468`, com projeção e decisão no mesmo ato (`app/chamados/services/disputa_emissao.py:1503`); escritores adicionais de resposta automática e carimbo em `app/chamados/services/disputa_emissao.py:1653`, `app/chamados/services/disputa_emissao.py:1674`, `app/chamados/models.py:3145`; leitores relevantes C6 (`app/chamados/juizes.py:1375`), aviso corrigido (`app/chamados/services/fio.py:174`) e crédito ainda por timestamp (`app/chamados/services/raiox.py:139`). Contraexemplo: resposta com timestamp e texto vazio vira crédito de respondida no painel, mas o aviso continua esperando o colaborador (`app/chamados/services/raiox.py:139`, `app/chamados/services/fio.py:174`).
-
-FILA — `silenciado_ate`: escritores conferidos `arquivo.silenciar` e `arquivo.levantar` (`app/chamados/services/arquivo.py:166`, `app/chamados/services/arquivo.py:202`); instante futuro estrito, igualdade significa vencido (`app/chamados/models.py:512`, `app/chamados/models.py:524`). Contraexemplo de leitor divergente: prazo vencido permanece histórico na partição (`app/chamados/services/verbos.py:51`).
-
-FILA — `data_evento`: atribuição direta única encontrada em `app/chamados/services/fio.py:819`; nascimento usa essa porta (`app/chamados/models.py:3029`), costura também (`app/chamados/services/fio.py:898`) e rechaveamento também (`app/chamados/services/fio.py:1056`). Campo significa dia do turno para fato (`app/chamados/models.py:2796`) e dia civil para conversa (`app/chamados/models.py:2808`); C19 separa `conversa=False` (`app/chamados/services/tarefa_do_dia.py:375`). Ocorrência material adicional de mistura entre esses significados: nada demonstrado; incidência em produção [nao verificado].
-
-FILA — `status_local`: núcleo persistente em `app/chamados/models.py:228`; nascimento em `app/chamados/models.py:1108`; outras atribuições encontradas simulam e restauram estado em memória (`app/chamados/models.py:356`, `app/chamados/models.py:371`). Segundo escritor direto fora dessas portas: nada encontrado; reflexão e kwargs dinâmicos [nao verificado].
-
-FILA — porta: saída escrita em memória pelo próprio C19 (`app/chamados/services/tarefa_do_dia.py:555`), projetada por `porta_da_tarefa` (`app/chamados/services/tarefa_do_dia.py:565`); não há persistência nesse trecho (`app/chamados/services/tarefa_do_dia.py:540`). Contraexemplo material: silêncio vencido pode manter `rota=porta_fila` enquanto `fila=()` porque `da_celula` é calculado antes da exclusão de `HISTORICO` (`app/chamados/services/tarefa_do_dia.py:550`, `app/chamados/services/tarefa_do_dia.py:555`).
-
-FILA — ordem de trava: nada novo material encontrado nos caminhos conferidos; núcleo de status trava universo antes de salvar (`app/chamados/models.py:280`), silêncio pede a porta de ordem (`app/chamados/services/arquivo.py:170`, `app/chamados/services/arquivo.py:209`), rechaveamento trava antes da releitura/escrita (`app/chamados/services/fio.py:1025`). Ordem implementada C→D→CH→P em `app/chamados/models.py:2679`, `app/chamados/models.py:2688`, `app/chamados/models.py:2701`, `app/chamados/models.py:2705`; cobertura global/transitiva [nao verificado].
-
-## 12/11 11:39 · sessao bf78c34d5db7 · - · - · origem=Ronald (tmux)
-
-BLOQUEIA — item 5, respondedores vivos: `raiox.creditos_perguntas` ainda separa respondidas por timestamp (`app/chamados/services/raiox.py:135`, `app/chamados/services/raiox.py:139`); `relatorios_disputa.classificar` decide dono por C6 + timestamp (`app/chamados/relatorios_disputa.py:18`, `app/chamados/relatorios_disputa.py:21`); `_calados` usa `q_vivas` + timestamp nulo (`app/chamados/services/cobranca.py:229`); cartão deriva documento/formulário/espera no template (`app/templates/chamados/partials/_card_atendimento.html:65`, `app/templates/chamados/partials/_card_atendimento.html:77`, `app/templates/chamados/partials/_card_atendimento.html:94`). Contraexemplo: resposta vazia com timestamp continua tarefa RESPONDER do colaborador (`app/chamados/services/tarefa_do_dia.py:135`), mas relatório diz AGUARDA_SUPERVISAO (`app/chamados/relatorios_disputa.py:23`) e cartão diz “Aguardando a supervisao conferir” (`app/templates/chamados/partials/_card_atendimento.html:101`).
-
-BLOQUEIA — API/badge/PWA não migraram: `consulta_do_app` ainda exige timestamp nulo + disputa aberta para pendente (`app/chamados/services/pergunta_no_app.py:70`); `projecao_do_app` conta essa lista (`app/chamados/services/pergunta_no_app.py:90`). Consumidores: dois kernels (`app/api/views.py:315`, `app/api/views_core.py:303`), API chamados (`app/api/views.py:993`), API perguntas (`app/api/views.py:2533`) e dashboard (`app/core/views.py:252`). Contraexemplo: resposta vazia com timestamp cai no histórico, badge não conta RESPONDER, enquanto tarefa mantém RESPONDER (`app/chamados/services/tarefa_do_dia.py:137`); o próprio novo teste identifica essa resposta como ainda devida pelo colaborador (`app/chamados/tests/test_e3_leitores_fio_disputa.py:143`).
-
-BLOQUEIA — tela admin/fio continuam derivando dono por fonte antiga: partição chama `creditos_perguntas` (`app/chamados/services/verbos.py:34`); natureza prioriza resposta creditada como `admin_validar` (`app/chamados/catalogo/natureza.py:48`); fio passa esses créditos ao desenlace (`app/chamados/services/fio.py:405`, `app/chamados/services/fio.py:421`); desenlace imprime “Sua vez: Validar” (`app/chamados/services/desenlace.py:72`). Contraexemplo: resposta vazia timestamp presente produz crédito respondido (`app/chamados/services/raiox.py:139`) e oferece validação onde tarefa exige RESPONDER (`app/chamados/services/tarefa_do_dia.py:137`).
-
-BLOQUEIA — #9 não resolve o consumidor real da fila: silêncio vencido vira HISTORICO na partição (`app/chamados/services/verbos.py:48`), e painel padrão exclui esses ids (`app/chamados/services/painel.py:324`). Ao mesmo tempo, queryset da fila e lista do colaborador devolvem o chamado (`app/chamados/services/painel.py:189`, `app/chamados/services/janela_colab.py:77`). Contraexemplo: chamado aberto com `silenciado_ate=agora−1min` aparece para colaborador e no contador COBRANCA (`app/chamados/services/painel.py:212`), mas não na lista padrão administrativa (`app/chamados/services/painel.py:331`). RED #9 verifica somente os dois querysets (`app/chamados/tests/test_e3_b4_silencio_vencido.py:35`), portanto não morde essa divergência de apresentação.
-
-BLOQUEIA — porta da tarefa pode publicar fila vazia sob silêncio vencido: `alimentar_fila` inclui chamado vencido em `fila_ids` (`app/chamados/juizes.py:1533`); `_portas_da_tarefa` mantém esse inteiro em `portas` (`app/chamados/services/tarefa_do_dia.py:548`), exclui HISTORICO apenas de `fila` (`app/chamados/services/tarefa_do_dia.py:551`) e publica rota porque `portas` permanece preenchido (`app/chamados/services/tarefa_do_dia.py:555`). Contraexemplo: pergunta exigível ancorada no chamado vencido da célula gera `porta_fila`, `fila=()`, enquanto lista admin esconde a âncora (`app/chamados/services/painel.py:331`).
-
-BLOQUEIA — item 6, selo não cobre o universo prometido: catraca exige somente um chamador C17 (`app/chamados/tests/test_e3_pendentes_app.py:145`); seu mutante acrescenta chamada C17 (`app/chamados/tests/test_e3_pendentes_app.py:153`). Contraexemplo: todos os leitores próprios acima permanecem e a catraca não os busca, pois o detector só reconhece o alvo literal resolvido `chamados.juizes.porta_alcancavel_do_dia` (`app/chamados/tests/test_e3_pendentes_app.py:33`, `app/chamados/tests/test_e3_pendentes_app.py:89`).
-
-BLOQUEIA — leitor administrativo adicional não migrou: calendário consulta C6 sem relógio recebido (`app/colaboradores/services/calendario.py:476`), exclui texto vazio antes do juiz (`app/colaboradores/services/calendario.py:474`) e calcula `pode_ultimo_recurso` separadamente (`app/colaboradores/services/calendario.py:738`), consumido por `resolver_dia_oferecido` (`app/colaboradores/services/calendario.py:103`). Contraexemplo: pergunta viva com resposta vazia em competência passada não bloqueia essa oferta, enquanto tarefa publica RESPONDER (`app/chamados/services/tarefa_do_dia.py:137`); incidência real [nao verificado].
-
-BLOQUEIA — copiloto permanece com derivação e relógio próprios: `dia_do_colab` publica C6 sem `agora` (`app/ponto/services/dia_do_colab.py:71`) e delega retenção ao antigo `do_dia` (`app/ponto/services/dia_do_colab.py:108`), que lê `timezone.localdate`, VIVOS, universo do app e `retencao` (`app/chamados/services/pergunta_no_app.py:217`, `app/chamados/services/pergunta_no_app.py:223`). Contraexemplo: pergunta viva respondida com texto segue descrita genericamente como esperando “resposta ou decisao” (`app/ponto/services/dia_do_colab.py:148`), sem publicar tarefa/porta única (`app/ponto/services/dia_do_colab.py:73`); contador de leitores fora da tarefa e pergunta golden solicitados não foram encontrados por busca textual, ausência completa [nao verificado].
-
-FILA — badge navbar mantém unidade chamado em fila (`app/core/context_processors.py:185`), diferente do badge de perguntas pendentes (`app/chamados/services/pergunta_no_app.py:91`); contraexemplo: chamado na fila sem pergunta produz navbar 1, enquanto tarefa pode ter apenas ação do sistema e nenhuma porta, caso já explicitado no novo teste (`app/chamados/tests/test_e3_leitores_c17_chamadores.py:101`). Migração desse sítio permanece sem RED específico identificado [nao verificado].
-
-FILA — `_calados` ainda trata pré-filtro como vida exata (`app/chamados/services/cobranca.py:229`), embora o contrato de `q_vivas` declare seleção mais generosa que C6 (`app/chamados/models.py:3349`). Contraexemplo: pergunta sem resposta em dia trancado por leitura pode entrar em cobrança apesar de morta no C6; incidência e execução [nao verificado].
-
-_4225 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4229 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
