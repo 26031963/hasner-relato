@@ -1,7 +1,132 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 20:25** · publicado em **12/11/2026 20:25** (UTC-3)
+> Ultima resposta processada: **12/11/2026 20:41** · publicado em **12/11/2026 20:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 20:41 · sessao 4eab9461e94e · - · - · origem=Ronald (tmux)
+
+Confirmado com execução pura do cenário já existente em `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:91`: a saída fica acesa e o mesmo instante permanece órfão; o teste verifica somente que acendeu em `:98`.
+
+**Bloqueante — segundo juiz funcional / derivação paralela.** O cartório incorpora a órfã em `_reais` (`app/ponto/services/cartorio.py:629`), atribui-a ao marco por proximidade (`:664`, `:670`, `:672`) e grava a lista original de órfãs (`:770`). A pergunta “que marco previsto a batida ocupa?” já pertence a `_match_marcos` (`app/core/juizes.py:212`; `app/docs/JUIZES.md:27`).
+
+O ramo foi reescrito pelo diff fornecido e o novo teste aceita a contradição (`app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:98`). A aproximação já aparecia no ramo anterior mostrado no anexo; comparação literal com a base nesta cópia: [nao verificado].
+
+## 12/11 20:40 · sessao 4eab9461e94e · - · - · origem=Ronald (tmux)
+
+Censo estático consolidado:
+
+| Valor | Origem/escritor | Leitores/transportadores de produção |
+|---|---|---|
+| JSON `orfas` e `n_orfas` | `app/escala/services/ata.py:233` e `:234`; chamado por `app/ponto/services/cartorio.py:770` e `app/escala/utils.py:1903` | Leitura semântica central `app/escala/services/ata.py:45`; persistência/cópias integrais `app/ponto/portas/celula.py:945`, `:995`, `:1006`, `:1033`; leitor cru operacional `bin/snapshot_o118_col221.py:32`. |
+| `precedencia` | Conteúdo vem de `fatos_do_dia`, em `app/ponto/services/cartorio.py:2007`; preparado em `:2008`; escrito em `app/ponto/portas/celula.py:1087` | Comparação em `app/ponto/portas/celula.py:1081`; preservação dinâmica em `:997`, `:998`, `:999`, pela chave declarada em `:104`. Outro leitor de conteúdo por alias: [nao verificado]. |
+| Retorno `leitura_orfas` | `app/escala/services/ata.py:55`, `:58`, `:70` | `ler_orfas` em `:74`, `contar_orfas` em `:78`, `copiar_ata` em `:101`, `horas_orfas` em `:129`. |
+| Retorno `ler_orfas` | `app/escala/services/ata.py:74` | `app/escala/services/leitor_celula.py:186`. |
+| Retorno `contar_orfas` | `app/escala/services/ata.py:78` | `app/escala/services/leitor_celula.py:192`; `app/ponto/services/cartorio.py:841`. |
+| Retorno `horas_orfas` | Legado copiado em `app/escala/services/ata.py:131`; ISO convertido para hora local em `:133` | `app/chamados/services/materializacao.py:182`. |
+| Retorno `orfas_da_ata` | `app/escala/services/leitor_celula.py:186` | `app/escala/services/leitor_celula.py:422`; `app/ponto/juiz_batida.py:163`; `app/ponto/management/commands/tripwire_celulas.py:235`; `app/ponto/services/esmeril_espelho.py:126`; `app/ponto/services/vigia_pareador_celula.py:76`; `app/ponto/services/cluster_espurio.py:30`. |
+| Retorno `contagem_orfas_da_ata` | `app/escala/services/leitor_celula.py:192` | `app/escala/services/leitor_celula.py:422`; `app/chamados/juizes.py:511`. |
+| Retorno `contar_orfas_da_grade` | `app/escala/services/ata.py:118`, `:124` | `app/escala/services/furos_diarios.py:23`; `app/folha/causas.py:44`; `app/ponto/status_dia.py:189`; `app/ponto/supra_juiz.py:380` por alias definido em `:379`; `app/ponto/services/bordas_realizado.py:50`; `app/ponto/management/commands/detectar_par_relampago.py:141`; `app/ponto/services/cartorio.py:820`. |
+| `copiar_ata` | `app/escala/services/ata.py:99` | `app/ponto/services/cartorio.py:927`. |
+| `copiar_envelope` | `app/escala/services/ata.py:81` | `app/escala/services/ata.py:102`; `app/ponto/portas/celula.py:1086`. |
+| `AtaVigiada` | Construção automática em `app/escala/services/ata_ci.py:22`, `:28`; cópias em `app/escala/services/ata.py:90`, `:210`, `:213` | Reconhecimento em `app/escala/services/ata_ci.py:21`, `:27`, `:43`; transporte JSON interno em `:44`; fiscalização em `app/escala/services/ata.py:162`; métodos de leitura/escrita em `:180`, `:184`, `:188`, `:192`. |
+
+Achados relevantes:
+
+1. **Leitura crua residual.** `bin/snapshot_o118_col221.py:32` lê `ata.orfas` diretamente; a ata foi obtida do modelo em `:18`. É script operacional que escreve snapshot em `:30`; execução atual e uso em produção: [nao verificado].
+
+2. **Cópias cruas residuais.** `celula_como_o_julgamento_deixa` mantém `dict(ata)` em `app/ponto/portas/celula.py:945`; `lavrar_veredito` mantém outro em `:995`. Ambos atravessam a iteração proibida de `AtaVigiada`, definida em `app/escala/services/ata.py:192`. O chamador do primeiro é `app/chamados/juizes.py:424`, alimentado pelo estado corrente do cartório em `:422`. A passagem efetiva de wrapper por cada ramo na suíte completa: [nao verificado].
+
+3. **O resíduo de precedência mencionado no relato foi corrigido na cópia atual.** `app/ponto/portas/celula.py:1086` usa `copiar_envelope`; `None` vira somente envelope vazio em `app/escala/services/ata.py:87`, sem produzir contagem zero. A validação de órfãs continua exclusiva de `copiar_ata`, em `:101`.
+
+4. **Dia civil versus dia do turno permanece divergente.** A grade guarda as órfãs do turno em `app/escala/utils.py:1763` e as projeta em `:1816`; as sobras são distribuídas civilmente em `:1837` e `:1839`. O vigia declara o entendimento civil em `app/ponto/services/vigia_pareador_celula.py:67` e procura pela data civil em `:112`. A preexistência literal frente a `0a747193e` não pôde ser conferida nesta cópia sem `.git`: [nao verificado].
+
+5. **Plantio foi tocado, mas mantém comparação HH:MM.** O código atual introduz o adaptador em `app/chamados/services/materializacao.py:179` e o consome em `:182`; slots e instante plantado continuam reduzidos a HH:MM em `:180` e `:183`. O diff fornecido mostra essa alteração; igualdade literal com o HEAD proibido de alterar: [nao verificado]. `dna.lampadas[].instante` continua sendo produzido sem fuso em `app/ponto/management/commands/gerar_celulas.py:69`.
+
+6. **Não identifiquei juiz novo duplicando autoridade registrada nas novas portas de ata.** O registro conserva a propriedade do turno em `app/core/juizes.py:208` e do casamento em `:212`; a tabela os aponta em `app/docs/JUIZES.md:20` e `:27`. O encadeamento dos marcos usado pelo cartório delega à função existente em `app/ponto/services/cartorio.py:623`. Completude dinâmica dessa conclusão: [nao verificado].
+
+7. **Contrato da grade menos estrito que sua documentação.** `contar_orfas_da_grade` documenta lista de datetimes em `app/escala/services/ata.py:108`, mas valida somente lista e contagem em `:119` e `:122`; não verifica datetime nem fuso dos elementos. Um JSON comum passado por engano pode ser aceito; o teste só prova rejeição quando o argumento é `AtaVigiada`, em `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:124`.
+
+8. **Docstring de retorno desatualizada.** `classificar_orfas` ainda promete chaves HH:MM em `app/escala/orfa_classe.py:50`, mas retorna chaves datetime em `:64`, `:69`, `:75`, ou `None` em `:56`. Chamador de produção dessa função: [nao verificado]; o uso localizado em `app/ponto/turnos.py:1581` importa somente a constante.
+
+Os retornos projetados são consumidos como instantes/`None` pelo calendário em `app/colaboradores/services/calendario.py:380` e `:623`, propositor em `app/ponto/propositor.py:36` e `:81`, cobertura parcial em `app/ponto/turnos.py:2667`, adaptador da grade em `app/escala/utils.py:1089` e `:1114`, PDF em `app/relatorios/pdf_espelho.py:183`, `:203`, `:218`, e template em `app/templates/ponto/espelho.html:247`.
+
+Testes que consomem diretamente as portas, incluindo os existentes alterados: [nao verificado]
+
+- `leitura_orfas`: `app/escala/tests/test_tipo_na_fonte_orfas.py:34`, `:36`.
+- `ler_orfas`: `app/escala/tests/test_ata_ci.py:65`, `:71`, `:97`, `:139`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:59`, `:74`, `:87`, `:97`, `:120`, `:132`; `app/escala/tests/test_preverif_v3_asserts.py:74`, `:94`; `app/escala/tests/test_ata_x_turno_entrada.py:144`; `app/escala/tests/test_saida_valida_cross_meia_noite.py:104`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:137`; `app/ponto/tests/test_bateria_lavratura.py:639`, `:963`, `:1060`.
+- `contar_orfas`: `app/escala/tests/test_ata_ci.py:64`, `:82`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:60`; `app/escala/tests/test_preverif_v3_asserts.py:75`; `app/escala/tests/test_tipo_item3_cartorio.py:72`; `app/ponto/tests/test_bateria_lavratura.py:544`, `:554`, `:648`, `:800`, `:952`.
+- `orfas_da_ata`: `app/escala/tests/test_tipo_na_fonte_orfas.py:14`, `:53`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:45`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:74`, `:89`, `:121`, `:133`; observação com wrapper em `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:181`.
+- `contagem_orfas_da_ata`: `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:46`.
+- `contar_orfas_da_grade`: `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:127`.
+- `copiar_ata`: `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:131`, `:137`, `:148`.
+- `gravar_orfas`: `app/escala/tests/test_tipo_na_fonte_orfas.py:65`, `:70`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:58`; `app/escala/tests/test_preverif_v3_asserts.py:60`, `:63`, `:106`, `:112`, `:123`, `:130`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:187`, `:337`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:131`.
+- `horas_orfas`: exercitado indiretamente pelo plantio em `app/chamados/tests/test_tipo_na_fonte_plantio_expand.py:74`, `:79`, `:85`.
+- `copiar_envelope`: teste direto específico: [nao verificado]; o teste de cópia atual passa por `copiar_ata` em `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:131`, que delega em `app/escala/services/ata.py:102`.
+
+## 12/11 20:39 · sessao 962f0e17ae3b · - · - · origem=Ronald (tmux)
+
+Achado bloqueante: **ata ainda não lavrada passa a ser corrupção**, em caminhos sem filtro de lavra. `None` falha em `app/escala/services/ata.py:43`; `{}` e só `precedencia` falham em `app/escala/services/ata.py:47`. O transporte de precedência aceita explicitamente esses envelopes, portanto a própria fronteira reconhece sua legitimidade antes da lavra (`app/escala/services/ata.py:81`, `app/ponto/portas/celula.py:1086`).
+
+Matriz dos chamadores de produção:
+
+| Porta e chamador | Entrada possível e resultado |
+|---|---|
+| `leitura_orfas` ← `ler_orfas` | Chamada sem guarda; valida mapping e ambas as chaves (`app/escala/services/ata.py:74`, `app/escala/services/ata.py:40`). |
+| `leitura_orfas` ← `contar_orfas` | Mesmo contrato; HH:MM coerente conserva quantidade (`app/escala/services/ata.py:78`, `app/escala/services/ata.py:57`). |
+| `leitura_orfas` ← `copiar_ata` | Valida antes de transportar; `None/{}/precedencia` falham (`app/escala/services/ata.py:101`). |
+| `leitura_orfas` ← `horas_orfas` | Legado preserva HH:MM; ISO converte ao fuso local; inválido levanta (`app/escala/services/ata.py:129`). |
+| `ler_orfas` ← `orfas_da_ata` | `getattr(..., None)` permite chegar `None`; não há guarda de lavra (`app/escala/services/leitor_celula.py:186`). |
+| `contar_orfas` ← `contagem_orfas_da_ata` | Idem (`app/escala/services/leitor_celula.py:192`). |
+| `copiar_ata` ← `_ata_ate_o_teto` | Só chama com mapping e pendências; `{}`/precedência seriam rejeitados. Chamadas ordinárias fornecem `ata_do_dia` recém construída (`app/ponto/services/cartorio.py:918`, `app/ponto/services/cartorio.py:927`, `app/ponto/services/cartorio.py:1444`, `app/ponto/services/cartorio.py:1859`). |
+| `contar_orfas` ← `insumos_da_ata` | Valida incondicionalmente, mesmo quando lâmpadas seriam suficientes (`app/ponto/services/cartorio.py:841`). Cartório usa atas novas (`app/ponto/services/cartorio.py:1321`, `app/ponto/services/cartorio.py:1880`); backfill e vigia usam persistidas, filtrando `julgada_em` (`app/ponto/management/commands/backfill_b5_insumos.py:61`, `app/ponto/management/commands/backfill_b5_insumos.py:73`, `app/ponto/management/commands/vigia_b5_ausencia.py:55`, `app/ponto/management/commands/vigia_b5_ausencia.py:79`). |
+| `contagem_orfas_da_ata` ← `_celula_furada` | `None/{}/precedência` retornam `None` antes do acessor por ausência de `lampadas`; chave faltante numa ata com lâmpadas chega ao acessor salvo apagada anterior; exceção é engolida, retornando `None` (`app/chamados/juizes.py:493`, `app/chamados/juizes.py:505`, `app/chamados/juizes.py:508`, `app/chamados/juizes.py:511`, `app/chamados/juizes.py:521`). |
+| `orfas_da_ata` e contagem ← `grade_da_celula` | Célula inexistente não chama; célula existente, inclusive sem lavra, chama ambos sem guarda. `None/{}/precedência` levantam (`app/escala/services/leitor_celula.py:380`, `app/escala/services/leitor_celula.py:396`, `app/escala/services/leitor_celula.py:422`). |
+| `orfas_da_ata` ← `periodos_do_dia` | Chamada incondicional antes das verificações do DNA/lâmpadas; `None/{}/precedência` levantam (`app/ponto/juiz_batida.py:158`, `app/ponto/juiz_batida.py:163`, `app/ponto/juiz_batida.py:176`). |
+| `orfas_da_ata` ← cluster | Só dia sem trabalho retorna antes; célula de trabalho não lavrada levanta, em vez de devolver não medido (`app/ponto/services/cluster_espurio.py:25`, `app/ponto/services/cluster_espurio.py:30`). |
+| `orfas_da_ata` ← esmeril | Consulta todas as células do período; não filtra lavra. Só `so_escala=True` evita essa leitura (`app/ponto/services/esmeril_espelho.py:96`, `app/ponto/services/esmeril_espelho.py:102`, `app/ponto/services/esmeril_espelho.py:126`). |
+| `orfas_da_ata` ← vigia pareador | Consulta todas as atas da janela ampliada; transforma `None` em `{}` e chama; não filtra lavra (`app/ponto/services/vigia_pareador_celula.py:71`, `app/ponto/services/vigia_pareador_celula.py:75`, `app/ponto/services/vigia_pareador_celula.py:76`). |
+| `orfas_da_ata` ← tripwire | Consulta células `trabalha=True`; apenas menos de dois marcos evita leitura. Ata não lavrada com dois marcos levanta (`app/ponto/management/commands/tripwire_celulas.py:228`, `app/ponto/management/commands/tripwire_celulas.py:233`, `app/ponto/management/commands/tripwire_celulas.py:235`). |
+| `horas_orfas` ← plantio | `None/{}/precedência` sem lâmpadas não chega; com lâmpadas e chaves ausentes levanta e `except Exception` devolve `False` (`app/chamados/services/materializacao.py:172`, `app/chamados/services/materializacao.py:175`, `app/chamados/services/materializacao.py:182`, `app/chamados/services/materializacao.py:186`). |
+
+Propagação e mudanças silenciosas relevantes:
+
+- `periodos_do_dia` chega de `turnos`: exceção engolida exclui célula da alimentação de papéis (`app/ponto/turnos.py:1633`, `app/ponto/turnos.py:1634`); chega do motor: exceção registrada e dia ignorado (`app/ponto/motor_calculo_v2.py:616`, `app/ponto/motor_calculo_v2.py:617`); chega do censo de cadastro sem filtro de lavra e sem captura local (`app/escala/services/cadastro_realidade.py:261`, `app/escala/services/cadastro_realidade.py:266`); chega de retenção pela pausa sem captura local (`app/folha/export.py:1150`).
+- Uma célula não lavrada dentro de uma janela faz `grade_da_celula` levantar; o espelho captura e **zera a grade do período**, sem cair no builder nesse ramo (`app/ponto/services/espelho.py:519`, `app/ponto/services/espelho.py:569`); o calendário captura e perde o mapa das órfãs (`app/colaboradores/services/calendario.py:334`, `app/colaboradores/services/calendario.py:399`).
+- Calculadores de inteligência capturam a falha da grade e excluem o colaborador da métrica (`app/inteligencia/calculadores.py:42`, `app/inteligencia/calculadores.py:43`, `app/inteligencia/calculadores.py:143`, `app/inteligencia/calculadores.py:144`); materialização captura e devolve régua vazia (`app/chamados/services/materializacao.py:235`, `app/chamados/services/materializacao.py:237`).
+
+Para HH:MM válido, as contagens permanecem conhecidas, mas os leitores temporais mudam resultados:
+
+- Toda lista HH:MM não vazia vira `instantes=None` (`app/escala/services/ata.py:57`). Cluster devolve não medido, sem detectar rajada legada (`app/ponto/services/cluster_espurio.py:31`); esmeril deixa de preencher A5 (`app/ponto/services/esmeril_espelho.py:126`); tripwire exclui a célula do universo medido (`app/ponto/management/commands/tripwire_celulas.py:236`); vigia não a inclui em `celulas_com_orfa` nem em `com_orfa` (`app/ponto/services/vigia_pareador_celula.py:77`, `app/ponto/services/vigia_pareador_celula.py:79`, `app/ponto/services/vigia_pareador_celula.py:82`).
+- O propositor não avalia o legado projetado (`app/ponto/propositor.py:36`); classificador devolve `None` (`app/escala/orfa_classe.py:54`); horas da ausência parcial passam a incluir desconhecido (`app/ponto/turnos.py:2667`); PDF marca batidas `orfa=None` e não soma turnos abertos cuja classificação é desconhecida (`app/relatorios/pdf_espelho.py:183`, `app/relatorios/pdf_espelho.py:214`).
+- Essas mudanças temporais podem decorrer intencionalmente do contrato EXPAND; a perda de quantidade foi evitada nas portas escalares (`app/escala/services/ata.py:105`, `app/ponto/status_dia.py:189`, `app/ponto/services/cartorio.py:820`). O problema bloqueante distinto é aplicar corrupção às células legitimamente não lavradas (`app/escala/services/leitor_celula.py:422`, `app/escala/services/ata.py:43`).
+
+Reprodução local, sem arquivos nem banco: executei accessor, tripwire com doubles existentes e grade completa com carregador de previsto isolado; as três entradas `None`, `{}`, só precedência levantaram `EstadoIlegalDaAta`; HH:MM coerente retornou `None` temporal, e tripwire `( [], 0 )`. As funções reais correspondentes estão em `app/escala/services/ata.py:40`, `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:39`, `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:81`. Registro persistido dessa execução: [nao verificado].
+
+## 12/11 20:38 · sessao 54a4e982ac49 · - · - · origem=Ronald (tmux)
+
+1. **Bloqueante — selo/mutante quebrado na árvore atual.** `test_MORDE_mutante_copia_perde_catraca` modifica a expressão de `copiar_envelope`, mas carrega somente `copiar_ata`; esta chama a implementação original de `copiar_envelope`. Portanto o mutante não atinge a cópia executada e o teste falha em seu `assertRaises` externo. Referências: `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:143`, `:146`, `:149`; `app/escala/services/ata.py:90`, `:102`.
+
+   Executei agregado de dez módulos puros com `PYTHONDONTWRITEBYTECODE=1`: **74 testes, 1 falha, 1 skipped**, falha acima. Registro persistido da execução: [nao verificado]. O skip decorre da indisponibilidade de Django/registry, prevista em `app/escala/tests/test_ata_ci.py:129`.
+
+2. **Bloqueante — selo anterior perdeu mordida pela troca de formato.** O selo O118 ainda intersecta `lampada.luz` HH:MM com as strings ISO de `ata.orfas`: `app/ponto/tests/test_o118_orfa_que_acendeu.py:89`, `:90`, `:92`; escritor ISO: `app/escala/services/ata.py:232`. Reproduzi por extração AST do método real com a mesma identidade ISO na lâmpada acesa e na lista de órfãs: o selo passou. Registro persistido dessa execução: [nao verificado]. A ata usada pelo selo nasce como dict normal de `ata_do_dia`, sem atravessar o descriptor ORM: `app/ponto/tests/test_o118_orfa_que_acendeu.py:84`; a catraca automática não cobre essa leitura.
+
+3. **Bloqueante para alegação de suite verde — fixtures incompatíveis com contrato novo.** [nao verificado]
+   - `app/escala/tests/test_t41_leitor_celula.py:88` lavra ata com `n_orfas=2` e sem `orfas`; em `:94` espera `None`. O acessor agora exige ambas as chaves e levanta por ausência: `app/escala/services/ata.py:45`, `:47`.
+   - A fixture alterada do calendário escreve ISO sem `n_orfas`: `app/colaboradores/tests/test_calendario_orfa.py:79`, `:81`; mesma rejeição em `app/escala/services/ata.py:45`.
+   - Execução Django desses cenários: [nao verificado].
+
+4. **Settings: a hipótese de suite sem ci não procede.** A execução efetiva termina em `manage.py test ... --settings=config.settings.ci`: `bin/suite.sh:232`, `:233`; saída seca também mostra ci: `bin/suite.sh:188`. O perfil ci define o runner novo e ativa a flag: `app/config/settings/ci.py:40`, `:42`. `EscalaConfig.ready` instala descriptor e hook somente quando a flag é verdadeira: `app/escala/apps.py:11`, `:13`, `:14`.
+
+   `prod` importa base, `saas` importa base e `sombra` importa saas: `app/config/settings/prod.py:1`, `app/config/settings/saas.py:10`, `app/config/settings/sombra.py:27`. Não há definição de `VIGIAR_ATA_ORFAS` nesses perfis na busca do archive; ativação normal neles é falsa pelo default explícito em `app/escala/apps.py:11`. Já depois de instalada, a instrumentação modifica a classe e `unittest.TestCase.run` permanentemente naquele processo; não existe desinstalação no código: `app/escala/services/ata_ci.py:37`, `:47`, `:72`. Uso real de troca ci→prod/sombra no mesmo processo: [nao verificado].
+
+5. **Settings de cada tipo de prova.**
+   - Selos Django lançados por `bin/suite.sh`: ci, `bin/suite.sh:233`.
+   - Testes puros por `python -m unittest`: não inicializam settings no seu carregador AST, `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:20`, `:29`.
+   - Prova automática local de `ready`: usa `django.conf` falso com a flag escolhida pelo teste, `app/escala/tests/test_ata_ci.py:52`, `:55`.
+   - Prova de registry real: usa os settings já ativos, exige a flag e pode pular se registry/Django faltar, `app/escala/tests/test_ata_ci.py:129`, `:132`, `:135`.
+   - Prova do runner em teardown: usa pai simulado, `app/escala/tests/test_ata_ci.py:109`, `:119`; execução real paralela: [nao verificado].
+
+6. **Resíduos de indicadores.** A busca do archive encontrou `nao_medidos` apenas em três asserts negativos: `app/escala/tests/test_tipo_item3_expand_contadores.py:37`, `:39`, `:146`. `cego_orfas`: nenhuma ocorrência na busca textual do archive [nao verificado — ausência global não possui linha positiva citável]. Nenhuma saída de produção desses indicadores foi encontrada [nao verificado].
 
 ## 12/11 20:25 · sessao 525ac3c7b50c · TIPO-NA-FONTE · construtor · origem=Code
 
@@ -387,127 +512,4 @@ A dívida de `resgatado_em` permanece: a descrição “RESGATADO pelo admin” 
 
 Execução da suite, histórico RED, resultados de produção pós-cura e integridade do hash do archive: [nao verificado]. [nao verificado]
 
-## 12/11 19:45 · sessao 041d9a2e35d3 · TIPO-NA-FONTE · sonda · origem=Code
-
-A tentativa `bash bin/sonda_leitura.sh sonda_estado_c.py` terminou na guarda de arquivo inexistente, antes das escritas do wrapper ([bin/sonda_leitura.sh:71](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/bin/sonda_leitura.sh:71)). Saída integral:
-
-```text
-sonda_leitura: sonda_estado_c.py nao existe
-```
-
-Não houve nova medição de produção. A identidade Git do HEAD da cópia permanece [nao verificado].
-
-Abaixo, reprodução integral do dado fornecido; execução e conteúdo do arquivo original da sonda [nao verificado]:
-
-```text
-sonda_leitura: sonda_estado_c.py [5eafc1a4f533ae11] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-lavradas                     135068  amostra=[]
-orfas_hhmm                     3415  amostra=[104313, 143296, 7908, 137769, 117714, 123044, 24044, 28707, 113924, 113931]
-orfas_vazia                  131653  amostra=[137148, 123129, 111993, 109909, 22590, 138874, 22594, 28678, 138878, 33849]
-total_erros=0
-== anexo: complemento_tipo_item3_matriz.txt ==
-aval Ronald: COMPLEMENTO TIPO-ITEM3-MATRIZ (12/11 19:5x) -- texto integral no prompt da sessao 12/11 ~19:5x; resumo operativo: EXPAND so (escritor ISO com fuso, todo leitor de producao pelo acessor incl. cartorio:837/:1424, 5 asserts + selo :959-960 pelo acessor, fixture ganha a chave); plantio NAO muda (registrar chave dna.lampadas[].instante com fuso); AtaVigiada vira MutableMapping injetada automaticamente sob settings ci (mutantes update, |=, del); nao_medidos SAI do diff, (c) chave ausente/n_orfas inconsistente = ESTADO ILEGAL com tripwire, sonda de frota de (c) ANTES (>0 = PARA e publica); achado 6: igual no HEAD 0a747193e -> REGISTRAR (TURNO-G5), se o diff mudou cura. PROIBIDO big bang em pousos separados, None=zero, fallback, tocar plantio. LEI-AKITA: origem=escala/services/ata.py (acessor+gravar_orfas), testemunha=o acessor, RED=contraexemplos 1-5 da preverif v2, quem-mais-le=tabela item 8 da preverif, juizes novos=0, padrao=Single Writer Principle
-```
-
-**O código permite persistir ata sem `orfas` ou com contador divergente.** O construtor habitual entrega ambas corretamente, mas a porta não valida o contrato; a operação de precedência também pode criar uma ata sem essas chaves ([cartorio.py:742](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:742), [cartorio.py:745](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:745), [portas/celula.py:995](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:995), [portas/celula.py:1083](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1083)).
-
-| Escritor operacional | O que escreve e quais estados permite |
-|---|---|
-| `ata_do_dia` | Constrói `n_orfas = len(dia.get('orfas') or [])` e `orfas = [str(h) …]`. Para as listas produzidas pela grade, inclui ambas e mantém `n_orfas == len(orfas)` ([cartorio.py:742](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:742), [cartorio.py:745](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:745), [utils.py:1811](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/utils.py:1811)). |
-| `lavrar_veredito` | Recebe qualquer `dict(ata)`, preservando somente a chave alheia `precedencia`. Atribui a ata nos **dois ramos**, em `:1006` e `:1033`. Não exige `orfas`, `n_orfas` ou igualdade entre eles; portanto aceita, por exemplo, `{}` ou `{'orfas': [], 'n_orfas': 1}` ([portas/celula.py:104](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:104), [:991](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:991), [:1006](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1006), [:1033](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1033)). |
-| `carimbar_precedencia` | Copia `cel.ata or {}`, acrescenta `precedencia` e persiste o JSON inteiro. Pode criar `{'precedencia': …}` sobre `None`/`{}`, sem `orfas` nem `n_orfas`; também conserva eventual divergência anterior ([portas/celula.py:1083](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1083), [:1087](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1087)). |
-| `carimbar` → `salvar_e_emitir` | Persiste a ata previamente atribuída pela lavra com `save=False`, quando `ata` vem em `lavrados`; não recalcula as duas chaves ([portas/celula.py:1070](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1070), [:905](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:905)). |
-
-O método do modelo apenas delega à porta, e o campo é `JSONField(null=True, blank=True)` ([models.py:1826](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1826), [models.py:1778](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1778)).
-
-No cartório normal, a ata vem de `ata_do_dia`, passa à lavra e é salva pelo carimbo ([cartorio.py:1851](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:1851), [:1853](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:1853), [:1873](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:1873)). No ramo nunca-bateu, `_dia_nb` ausente resulta em `ata=None`, que não substitui a ata existente; depois, o caminho unitário ainda pode carimbar precedência ([cartorio.py:1251](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:1251), [:1293](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:1293), [portas/celula.py:991](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:991), [cartorio.py:2048](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:2048)).
-
-Os comandos de backfill/regeneração chegam aos mesmos escritores:
-
-| Entrada | Caminho |
-|---|---|
-| `processar_cartorio --apply --forcar` | `--forcar` declara backfill de ata; chama `julgar_colab` ([processar_cartorio.py:29](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/processar_cartorio.py:29), [:65](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/processar_cartorio.py:65)). |
-| `celula_veredito_velho` | Chama `julgar_colab(apply_=True, forcar=True)`; sem aplicação, desfaz a transação ([celula_veredito_velho.py:144](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/celula_veredito_velho.py:144), [:156](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/celula_veredito_velho.py:156)). |
-| `rejulgar_ausencia_em_folga` | Chama `julgar_celula(..., forcar=True)` ([rejulgar_ausencia_em_folga.py:78](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/rejulgar_ausencia_em_folga.py:78)). |
-| `curar_residuo_bug115` | Pode gerar a célula e depois relavra pelo cartório ([curar_residuo_bug115.py:135](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/curar_residuo_bug115.py:135), [:143](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/curar_residuo_bug115.py:143)). |
-| `bin/rejulgar_o118_col221.py` | Chama `julgar_colab(..., forcar=True)` ([rejulgar_o118_col221.py:24](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/bin/rejulgar_o118_col221.py:24)). |
-| `aplicar_col900` | Regenera ou reverte pela porta ([aplicar_col900.py:232](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/aplicar_col900.py:232), [:184](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/aplicar_col900.py:184)). |
-| `corrigir_escala_retroativa` | Chama regeneração e reconciliação ([corrigir_escala_retroativa.py:230](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/colaboradores/management/commands/corrigir_escala_retroativa.py:230), [:237](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/colaboradores/management/commands/corrigir_escala_retroativa.py:237)). |
-| `diff_col900` | Exercita a regeneração em ensaio com transação desfeita ([diff_col900.py:69](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/diff_col900.py:69), [:77](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/diff_col900.py:77)). |
-
-A regeneração/reversão alcança `julgar_celula(..., forcar=True)` pelo processamento posterior da alteração; não constrói outro par `orfas/n_orfas` ([portas/celula.py:434](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:434), [:734](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:734), [:811](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:811)).
-
-Há ainda estas distinções:
-
-- Geração e regeneração podem criar célula com `ata=NULL`; isso difere de um dicionário lavrado sem `orfas` ([portas/celula.py:259](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:259), [:854](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:854), [models.py:1778](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1778)).
-- `backfill_b5_insumos` lê a ata e grava apenas os insumos; seu `bulk_update` não inclui `ata` ([backfill_b5_insumos.py:73](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/management/commands/backfill_b5_insumos.py:73), [portas/celula.py:1108](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:1108)).
-- A migração da ata apenas adiciona o campo anulável ([0037_hx_ata_celula.py:13](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/migrations/0037_hx_ata_celula.py:13)).
-- As outras atribuições operacionais a `.ata` são cópias em memória: projeção do julgamento e montagem da grade; esta última contém `orfas` sem `n_orfas`, sem persistência nesse fluxo ([portas/celula.py:943](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/portas/celula.py:943), [utils.py:1886](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/utils.py:1886), [:1895](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/utils.py:1895)).
-
-**Não é possível atribuir escritor/data a classes `c_*`: nenhuma foi apresentada no dado.** Também não foram fornecidos valores de `n_orfas`, presença explícita da chave por registro ou datas de gravação; o significado de `total_erros=0` depende do código ausente da sonda. [nao verificado]
-
-As duas categorias positivas fornecidas, `orfas_hhmm=3415` e `orfas_vazia=131653`, são compatíveis com o construtor atual, que grava strings e lista vazia respectivamente; isso não demonstra qual escritor gravou cada linha nem quando ([cartorio.py:742](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:742), [:745](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/ponto/services/cartorio.py:745)). Autoria, data e associação a qualquer `c_*`: [nao verificado].
-
-## 12/11 19:44 · sessao f7c1b2d23ac2 · TIPO-NA-FONTE · construtor · origem=Code
-
-Parei antes de editar: o complemento exige **“sonda de frota de (c) ANTES (>0 = PARA e publica)”**. O resultado dessa sonda não consta do dado fornecido: **[nao verificado]**. Falta de resultado não permite assumir zero.
-
-A inspeção confirmou:
-
-- Ausência/inconsistência ainda retorna `None`: [ata.py:119](escala/services/ata.py:119).
-- Os REDs em memória reproduziram os escapes de `update`, `|=` e `del` da classe atual: [ata.py:46](escala/services/ata.py:46).
-- Os leitores crus permanecem: [cartorio.py:837](ponto/services/cartorio.py:837) e [cartorio.py:1424](ponto/services/cartorio.py:1424).
-- Achado 6: **pre-existente, DECIDIDO PELA LEI TURNO-G5, obra própria**. A comparação com `0a747193e` confirmou a consulta civil e a atribuição por turno: [vigia_pareador_celula.py:114](ponto/services/vigia_pareador_celula.py:114), [utils.py:1763](escala/utils.py:1763).
-- Próxima chave permanece pendente: `dna.lampadas[].instante` nasce sem fuso em [gerar_celulas.py:69](ponto/management/commands/gerar_celulas.py:69).
-
-Envie o resultado raspado da sonda, com **total examinado e quantidade de estados (c)**. A cura e sua validação aguardam essa condição obrigatória.
-
-## 12/11 19:43 · sessao 770ef8f2cd1b · - · - · origem=Ronald (tmux)
-
-Escritores persistentes em services/portas/models:
-
-- `app/ponto/services/cartorio.py:730` (`ata_do_dia`) é o construtor dos dois valores: `n_orfas = len(dia.get('orfas') or [])` em `:742`, `orfas = [str(h) ...]` em `:745`. Com a lista de entrada produzida pela grade, sempre inclui ambas as chaves e mantém os comprimentos iguais; a grade materializa listas em `app/escala/utils.py:1811` e ordena em `:1837-1838`.
-- O cartório normal monta a ata em `app/ponto/services/cartorio.py:1851`, passa à lavra em `:1853`, e persiste pelo carimbo em `:1873-1874`.
-- O ramo nunca-bateu monta ata completa apenas quando `_dia_nb` existe; caso contrário passa `None` (`app/ponto/services/cartorio.py:1251`, `:1292-1293`). `ata=None` não altera a ata na porta (`app/ponto/portas/celula.py:991`). O carimbo final ocorre em `app/ponto/services/cartorio.py:1314-1316`.
-- `app/escala/models.py:1819-1828` só delega para a porta; o campo é JSON livre, nullable (`:1778`), sem constraint sobre essas chaves em `Meta` (`:1830-1838`).
-- Escritor efetivo `lavrar_veredito`: copia qualquer `dict(ata)` sem validar as chaves ou a igualdade (`app/ponto/portas/celula.py:991-1001`), preservando apenas `precedencia` (`:104`, `:997-999`). Atribui em `:1006` ou `:1033`, persiste em `:1008` ou `:1040`, usando `salvar_e_emitir` (`:899-907`). Portanto pode persistir uma ata recebida sem `orfas`, sem `n_orfas` ou com contagem divergente; os chamadores produtivos do cartório localizados usam o construtor acima (`app/ponto/services/cartorio.py:1251`, `:1851`).
-- Outro escritor efetivo do JSON inteiro: `carimbar_precedencia` copia `cel.ata or {}`, acrescenta `precedencia`, atribui e salva (`app/ponto/portas/celula.py:1083-1087`). Pode criar uma ata apenas com `precedencia` quando a anterior era `None`/`{}`; também conserva uma eventual inconsistência preexistente, pois não lê essas duas chaves (`:1080-1087`). É chamado por `aplicar_precedencia_na_celula` (`app/ponto/services/cartorio.py:1986`, `:2000`) após `julgar_colab` no caminho unitário (`:2040-2048`).
-
-Transformadores que preservam `orfas` e `n_orfas`: `dispensar_por_ausencia` modifica lâmpadas e `n_missing` (`app/ponto/services/cartorio.py:802-813`); `_ata_ate_o_teto` retorna cópia com lâmpadas e `n_missing` (`:907-917`).
-
-Atribuições apenas em memória: `celula_como_o_julgamento_deixa` cria cópia e atribui `dict(ata)` (`app/ponto/portas/celula.py:932-948`); o montador cria cópia contendo `orfas` e sem `n_orfas`, entregue a `turnos_do_colab`, sem save nesse fluxo (`app/escala/utils.py:1886-1898`).
-
-Datas presentes no código são comentários de desenho, sem demonstração da data de escrita das linhas de produção: ata identificada como HX-ATA-CELULA em 29/08 (`app/escala/models.py:1774`); lista identificada como T4.2 (`app/ponto/services/cartorio.py:743-745`); precedência identificada como A2 de 09/09 (`app/ponto/portas/celula.py:1078`); preservação dessa chave identificada como O261 de 18/10 (`:85-104`). Autoria/data de cada célula do dado raspado: [nao verificado].
-
-## 12/11 19:43 · sessao 79016e5a536d · - · - · origem=Ronald (tmux)
-
-Escritores e caminhos encontrados, somente leitura:
-
-- `lavrar_veredito` é o persistidor da ata recebida: converte com `dict(ata)` sem validar `orfas`/`n_orfas`, preserva somente `precedencia`, atribui em dois ramos. Portanto pode receber e gravar dicionário sem `orfas` ou com contador inconsistente. `app/ponto/portas/celula.py:991`, `:995`, `:997`, `:1006`, `:1033`, `:1040`.
-- `carimbar_precedencia` também escreve a ata inteira: parte de `dict(cel.ata or {})`, acrescenta somente `precedencia`, salva. Pode criar ata sem `orfas` quando a anterior é vazia; preserva inconsistência prévia sem repará-la. `app/ponto/portas/celula.py:1083`, `:1084`, `:1085`, `:1087`. Chamador de produção: `app/ponto/services/cartorio.py:2000`.
-- A persistência efetiva passa por `cel.save(update_fields=campos)`, sem validação dessas chaves nesta função. `app/ponto/portas/celula.py:899`, `:905`.
-
-Entradas de comandos/scripts que relavram pelo cartório, sem montar escritor alternativo de `orfas`:
-
-| Entrada | Fluxo demonstrado |
-|---|---|
-| `processar_cartorio --apply [--forcar]` | `--forcar` é explicitamente backfill de ata em `app/ponto/management/commands/processar_cartorio.py:29`; chama `julgar_colab` em `:65`. |
-| `celula_veredito_velho` | Intercepta e delega à mesma porta em `app/ponto/management/commands/celula_veredito_velho.py:121`; chama `julgar_colab(apply_=True, forcar=True)` em `:144`; sem `--aplicar`, desfaz a transação em `:156`. |
-| `rejulgar_ausencia_em_folga --apply` | Gate em `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:70`; `julgar_celula(..., forcar=True)` em `:78`. |
-| `curar_residuo_bug115` | Pode criar célula em `app/ponto/management/commands/curar_residuo_bug115.py:135`; relavra pelo cartório em `:143`. |
-| `bin/rejulgar_o118_col221.py` | Recorta col221 desde 2026-09-21 em `:17`, `:20`, `:21`; chama `julgar_colab(..., apply_=APLICAR, forcar=True)` em `:24`. |
-| `aplicar_col900` | Regenera pela porta em `app/ponto/management/commands/aplicar_col900.py:232`; reversão em `:184`. |
-| `corrigir_escala_retroativa` | Chama regeneração em `app/colaboradores/management/commands/corrigir_escala_retroativa.py:230`; depois reconcilia em `:237`. |
-
-Regeneração não monta diretamente ata: altera DNA/campos em `app/ponto/portas/celula.py:272` e `:276`; chama `_o_chao_do_dia_mudou` em `:354`, que relavra dias elegíveis por `julgar_celula(..., apply_=True, forcar=True)` em `:434`. `regenerar_celulas_dia` delega à mesma regeneração em `:734`; reversão altera DNA em `:786` e `:794` e chama o mesmo rabo em `:811`.
-
-`backfill_b5_insumos` **não escreve ata**: lê em `app/ponto/management/commands/backfill_b5_insumos.py:73`, chama `carimbar_insumos_em_lote` em `:81`/`:84`, cujo `bulk_update` inclui somente ausência, entrada, saída e `insumos_em`. `app/ponto/portas/celula.py:1108`.
-
-A migração de ata apenas adiciona JSONField anulável, sem validação de estrutura e sem backfill de conteúdo. `app/escala/migrations/0037_hx_ata_celula.py:13`, `:16`. A data **do cabeçalho gerado** é 2026-08-29; isso não demonstra data de implantação/execução. `app/escala/migrations/0037_hx_ata_celula.py:1`; implantação [nao verificado].
-
-Criações de células pela geração/regeneração omitem `ata`, podendo nascer com `NULL`; isso é diferente de uma ata lavrada sem a chave. `app/ponto/portas/celula.py:259`, `:854`; campo anulável `app/escala/models.py:1778`.
-
-Atribuições em `celula_como_o_julgamento_deixa` e no builder aparecem em `app/ponto/portas/celula.py:945` e `app/escala/utils.py:1887`; avaliar com o outro explorador que são objetos/copias de leitura, não persistidores, antes de listá-las como escritores de banco.
-
-_4421 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4425 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
