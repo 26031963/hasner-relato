@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 23:01** · publicado em **11/11/2026 23:05** (UTC-3)
+> Ultima resposta processada: **11/11/2026 23:23** · publicado em **11/11/2026 23:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 23:23 · sessao 2ecf1a0154a7 · FIO-E0-V4-E4B · construtor · origem=Code
+
+C12 aplicada. A [entrega com tabela, leitores/escritores e comandos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c12.txt:6) registra os 46 sítios migrados. [nao verificado]
+
+Validação local:
+
+- [15 testes novos verdes](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:1185) e [106 de regressão verdes](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:730). [nao verificado]
+- [55 mutantes: exatamente um subTest vermelho por sítio](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:470).
+- [Base: 46 falhas esperadas](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:1162).
+
+ORM D3/D5 preparado, sem execução: **[não verificado]**. Sem commit, conforme a [proibição da obra](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c12.txt:4). Certificação permanece com Code/suite/opus. [nao verificado]
 
 ## 11/11 23:01 · sessao e5ede8a32f5b · - · - · origem=Ronald (tmux)
 
@@ -605,18 +617,4 @@ No caminho cadastral, o motor usa o efeito; a rubrica **8932** seleciona os tipo
 
 O raspado informa **`abona` para ambos**. Diferenças de minutos, parcialidade, batidas ou pagamento efetivo entre seus registros: **[nao verificado]**.
 
-## 11/11 21:58 · sessao 035564513909 · - · - · origem=Ronald (tmux)
-
-Não encontrei regra monetária especial para `folga_abonada` em relação a `folga`. Os caminhos concretos consultados aplicam os mesmos critérios aos dois:
-
-- A2 atribui a ambos a faixa `folga`. `app/ponto/precedencia.py:81-82`.
-- A grade marca ausência aprovada não-falta como `tipo_dia='ausencia'`, preservando o slug em `ausencia_tipo`; esse ramo não separa os dois. `app/escala/utils.py:1210-1223`.
-- O mapa de dinheiro filtra exclusivamente `tipo_dia in ('trabalho','ausencia')`; para `ausencia`, abona previsto menos realizado coberto. Não consulta `ausencia_tipo` nem o efeito cadastrado. `app/ponto/services/dia_pago.py:387-401`.
-- A alimentação do motor usa o efeito cadastrado: `ABONA` inclui em `datas_justificadas`; efeito diferente de `DESCONTA` suprime. A propriedade lê `efeito_vigente(self.tipo)`. `app/ponto/services/fechamento.py:693-701`; `app/ponto/models.py:839-842`.
-- A rubrica 8932 seleciona todos os códigos cujo efeito vigente é `ABONA`, excetuando apenas `ferias`, `declaracao` e `licenca_maternidade`. Não há exceção entre `folga` e `folga_abonada`. `app/folha/export.py:193-205`; `app/ponto/catalogo/ausencias.py:288-290`; `app/ponto/catalogo/ausencias.py:308-310`.
-
-O dado fornecido informa `abona` para ambos; validade atual no banco: **[nao verificado]**.
-
-Existe distinção fora do dinheiro: `folga_humana_ou_feriado` considera `tipo_do_dia` diferente de `None` e de `'folga'` como folga humana; assim, `folga_abonada` satisfaz esse termo, e `folga` depende de `folga_lancada`. Seu chamador encontrado decide status. `app/ponto/precedencia.py:211-216`; `app/ponto/status_dia.py:180-181`.
-
-_4060 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4061 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
