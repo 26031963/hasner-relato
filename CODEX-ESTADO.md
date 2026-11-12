@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 21:59** · publicado em **11/11/2026 22:00** (UTC-3)
+> Ultima resposta processada: **11/11/2026 22:20** · publicado em **11/11/2026 22:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 22:20 · sessao 671e565c4e1a · FIO-E0-V4-E4B · construtor · origem=Code
+
+Implementei as seis bordas, relógio do apply, dia canônico e entrega das recusas posteriores. Arquivos, campos e comandos estão no [recibo c11](docs/FIO-E0-V4-E4B-c11.txt:7).
+
+Execução local sem banco: **106 testes rc=0**, 12 mutantes c11 com assertion esperada; retorno antecipado e sem Pauta também falharam nos dois casos em memória ([registro](chamados/tests/e4b_c11_execucao.txt:49)).
+
+**ORM, queries e estado pós-reconciliador: [nao verificado].** Os comandos estão [preparados para o Code](docs/FIO-E0-V4-E4B-c11.txt:126).
+
+A9 permanece pendente, com [trecho exato para a sessão](docs/FIO-E0-V4-E4B-c11.txt:41). Não editei models nem fiz commit, conforme as proibições ([recibo](docs/FIO-E0-V4-E4B-c11.txt:4)).
 
 ## 11/11 21:59 · sessao 0ffd773054d2 · LASTRO-FAIXA-SEM-DEFAULT · censo · origem=Code
 
@@ -851,16 +861,4 @@ Numeração dos anexos: primeira linha do conteúdo = 1, incluindo linhas vazias
 
 A promessa do achado 6 está em [RELATO.md:7950](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7950) nesta cópia; [RELATO.md:7966](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7966) registra a volta 3.
 
-## 11/11 21:03 · sessao 8e89de2fb777 · - · - · origem=Ronald (tmux)
-
-| Achado | Letra sugerida | Evidência |
-|---|---|---|
-| 1 | **a** | `contrato_catraca.q:1`: “o regex de template deixa escapar algum leitor”; `preverif_catraca.q:4`: “quais formas de ler data_evento o varredor nao ve”. A resposta enumera `with` e `attr`, sem `regroup`/`dictsort` (`preverif_catraca.r:9,11,20`). |
-| 2 | **a** | `preverif_catraca_v2.q:1`: “Algum leitor real NOVO ficou de fora por regra nova (chave de dict literal como rotulo...)?”; resposta: “não localizei [...] As chaves literais encontradas são payload/trilha” (`preverif_catraca_v2.r:14`). A pergunta cobre a exclusão; a resposta não identifica o dict de filtro. |
-| 3 | **e**, com distinção temporal | A última pergunta trata a **sobrecontagem** de `return 'data_evento'` (`preverif_catraca_v3.q:2,4,6`). O Codex encontra compensação e a bloqueia (`preverif_catraca_v3.r:19,27,29`). A isenção ampla de `return` do opus é defeito da cura posterior, sem pergunta de revisão correspondente nos anexos; a passagem v3→v4 registra “PROCEDE e curado” (`app/docs/RELATO.md:7968`). Não classificar **b**: o achado visto pelo Codex foi acolhido, não descartado (`app/docs/RELATO.md:7968`). |
-
-Numeração considerada: primeira linha do conteúdo de cada anexo = 1; linhas vazias incluídas.
-
-Para o achado 2, a resposta inicial já reconhecia escapes por `**` (`preverif_catraca.r:11,16`), mas não há trecho demonstrando descarte pela triagem do caso específico do dict literal guardado em variável **[nao verificado]**.
-
-_4042 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4043 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
