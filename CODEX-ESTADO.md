@@ -1,7 +1,110 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 17:03** · publicado em **12/11/2026 17:06** (UTC-3)
+> Ultima resposta processada: **12/11/2026 17:14** · publicado em **12/11/2026 17:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 17:14 · sessao 18d0805c03a7 · - · - · origem=Ronald (tmux)
+
+5. Vigia realizado conforme (b), sem cura:
+
+- `medir` recebe `hoje`, seleciona `data > hoje`; selo D1 conta todas futuras, demais baldes só geradas (`app/ponto/services/vigia_cadastro_futuro.py:24`, `:31`, `:45`, `:49`).
+- Com geradora, alimenta `vinculo_do_dia`; sem geradora, usa `vinculos_dos_dias` (`app/ponto/services/vigia_cadastro_futuro.py:41`, `:58`). O carregador delega à mesma juíza (`app/escala/alimentacao.py:358`).
+- A juíza conserva geradora inativa sem fim se as datas não a excluem; a candidata (a) não foi implementada (`app/escala/alimentacao.py:269`, `:282`, `:284`).
+- Inativa sem fim vira `na_lista_do_admin_c6`, fora do contador estrutural esperado zero (`app/ponto/services/vigia_cadastro_futuro.py:69`). A porta recusa regenerá-la (`app/ponto/portas/celula.py:148`). A lista real C6 consulta o predicado canônico, formata por vínculo e agrega ao cadastro (`app/escala/services/cadastro_realidade.py:320`, `:331`, `:829`).
+- Os quatro indicadores levam esperado zero; cron mede antes de gerar e lavra depois; API lê o snapshot, ausência é `None`, nunca zero (`app/ponto/services/vigia_cadastro_futuro.py:86`, `:99`, `:119`; `app/ponto/management/commands/gerar_celulas.py:346`, `:353`; `app/api/views_mensageria.py:647`).
+- N de produção exigido antes de construir não consta do dado fornecido [não verificado]. Há relato local afirmando N=4, 143 células/51 futuras, mas não considero esse relato substituto da sonda raspada autorizada (`app/docs/RELATO.md:15`).
+
+7. Classes:
+
+- **Relógio fora da borda: PRESENTE, prova direta.** A lei manda ler uma vez na borda e condena explicitamente `hoje=None` lendo por dentro (`app/docs/GLOSSARIO.md:19`; `app/docs/PLANO-PADROES.md:92`, `:94`). Ambos novos serviços fazem isso (`app/ponto/services/cadastro_futuro.py:22`, `:53`). Caminhos efetivos sem injeção: sinais de feriado (`app/core/signals.py:33`, `:39`); admin de template → propagador com `hoje=None` (`app/escala/services/cadastro_tipo.py:386`, `:368`, `:375`); fechar/reabrir vigência (`app/colaboradores/services/vinculo.py:649`, `:737`). O vigia e o command estão corretos neste ponto (`app/ponto/services/vigia_cadastro_futuro.py:24`; `app/ponto/management/commands/gerar_celulas.py:339`, `:346`).
+- **Segundo juiz/derivação paralela: ausentes nos dois novos serviços inspecionados.** Eles chamam autoridades existentes de vínculo e produtor de DNA (`app/ponto/services/cadastro_futuro.py:35`, `:41`, `:67`; `app/ponto/services/vigia_cadastro_futuro.py:26`, `:58`, `:76`, `:79`). Executei o predicado real `_so_alimenta` sobre ambos; nenhum tomador por fora encontrado; definição do censo em `app/escala/tests/test_contract_juiz_escala.py:97`, `:124`.
+- **Selo sem mordida: D1/D3 têm mordida demonstrada nos ensaios.** Fontes dos mutantes e aplicação em memória: `app/ponto/tests/test_cadastro_futuro_c5.py:27`, `:74`; `app/ponto/tests/test_cadastro_futuro_c5b.py:30`, `:65`. Resultado observado na sessão, sem arquivo gerado: seis módulos, **113 testes OK**; **24/24 mutantes c5+c5b rc=1**, dos quais 21 por AssertionError e três por erro semântico do corpo mutado. D1/D3: todos os 14 por asserção. Persistência dessa saída em arquivo [não verificado].
+- Os três erros semânticos foram: D2 que remove teste de `None` → `None.pk` em `app/ponto/services/cadastro_futuro.py:38`; feriado salvo/excluído sem canonização → comparação `date < str` em `:57`. Não foram importação ou fixture.
+- **Ordem de travas:** snapshot declara e executa vínculo→célula (`app/colaboradores/services/vinculo.py:1005`, `:1012`); suplemento trava células antes de regenerar (`app/ponto/services/cadastro_futuro.py:28`). Prova global de concorrência PostgreSQL [não verificado]; os testes assumem ORM em memória (`app/ponto/tests/test_cadastro_futuro_c3.py:1`).
+- **Pouso antes do pré-requisito:** não se comprova pouso no dado fornecido [não verificado]. Relato local diz E4B já pousada antes de abrir construção (`app/docs/RELATO.md:97`); regra exige suíte inteira antes do opus (`CLAUDE.md:377`). Execução offline não certifica suíte inteira.
+- **Campo com dois significados:** a distinção `ativa`/vigência está explicitada em duas autoridades diferentes por pergunta, não autoriza trocar uma pela outra (`app/escala/alimentacao.py:189`, `:205`, `:228`; `app/docs/JUIZES.md:121`). O caso inativo sem fim conserva dono e ganha C6, conforme aval (b) (`app/ponto/services/vigia_cadastro_futuro.py:69`).
+
+8. Leis dos sítios:
+
+- A violação nova demonstrada é **Clock Injection** acima (`app/docs/PLANO-PADROES.md:92`, `:94`; `app/ponto/services/cadastro_futuro.py:22`, `:53`).
+- Evento no Salvar e cron vigia seguem o desenho de `CLAUDE.md:171`; testemunha lê a autoridade em `app/ponto/services/vigia_cadastro_futuro.py:58`; preservação do cadastro C6 segue L-099 em `CLAUDE.md:179`.
+- L-020 denuncia a reescrita futura com DNA anterior/instante/contador (`app/ponto/portas/celula.py:256`, `:258`, `:259`, `:302`). Guardas de editada/exportada continuam no escritor (`app/ponto/portas/celula.py:248`, `:250`, `:285`, `:289`).
+- L-090: janela das futuras vem do `_janela_default` e autoridade de janela; mês civil da foto tem propósito explícito de fase mensal (`app/ponto/services/cadastro_futuro.py:23`; `app/ponto/management/commands/gerar_celulas.py:291`; `app/escala/folgas.py:629`).
+- Nenhuma violação concreta nova de L-086/L-091/L-071 provada nesta leitura [não verificado]; não ampliaria conclusões sobre cálculo/front com esses ensaios sem banco.
+
+## 12/11 17:14 · sessao 2f1c44e0a6a0 · - · - · origem=Ronald (tmux)
+
+Achado concreto: a casca do cron amplia o universo de escrita de HOJE para vínculo inativo. O novo `_regenerar_hoje_existentes` seleciona toda célula gerada de HOJE e regenera pelo vínculo respondido pelo juiz, sem exigir `ativa=True` (`app/ponto/management/commands/gerar_celulas.py:316`, `:321`, `:323`). O teste fixa o vínculo inativo (`app/ponto/tests/test_cadastro_futuro_sem_banco.py:282`) e exige que a célula de HOJE seja reescrita por ele (`app/ponto/tests/test_cadastro_futuro_c4.py:165`, `:168`, `:171`). Executei esse teste isolado com `python3 -B`, sem banco: 1 teste, OK, rc 0; a execução não tem arquivo de evidência persistido [não verificado]. O diff fornecido mostra que o loop antigo enumerava somente `ativa=True`; portanto esse caso era excluído antes [não verificado: referência histórica disponível apenas no diff do prompt].
+
+Censo das portas:
+
+| Porta | Caminho que alcança futura existente | Alcance anterior preservado |
+|---|---|---|
+| Estrutura: município | `atualizar_posto` / `definir_municipio_posto` → evento → `reavaliar_pela_troca_de_municipio` (`app/colaboradores/services/estrutura.py:59`, `:65`, `:88`; `app/colaboradores/services/vinculo.py:947`) | Chamada direta permanece somente HOJE e quando cobre HOJE (`app/colaboradores/services/vinculo.py:941`) |
+| Executar vínculo | Suplemento explícito após cadastro (`app/colaboradores/services/vinculo.py:333`) | Trecho `data_inicio..hoje`, horizonte desligado (`:319`, `:323`) |
+| Encerrar vínculo | `save` em `encerrar_vinculo` → signal de vigência (`app/colaboradores/services/vinculo.py:829`; `app/escala/signals.py:81`) | Signal limita ramo histórico a HOJE (`app/escala/signals.py:72`) |
+| Fechar vigência/desligamento | `fechar_vigencia` → suplemento; desligamento delega a ele (`app/colaboradores/services/vinculo.py:649`, `:849`) | Suplemento começa após menor fim antigo/novo e somente futuro (`:648`; `app/ponto/services/cadastro_futuro.py:24`) |
+| Reabrir vigência impossível | Update e suplemento no mesmo atomic (`app/colaboradores/services/vinculo.py:716`, `:737`) | Somente futuras existentes pelo suplemento (`app/ponto/services/cadastro_futuro.py:24`, `:28`) |
+| Snapshot | Restauração → suplemento (`app/colaboradores/services/vinculo.py:1016`, `:1020`) | Suplemento somente futuro (`app/ponto/services/cadastro_futuro.py:24`) |
+| Flag trabalha em feriado | Chamada histórica separada do suplemento (`app/colaboradores/services/vinculo.py:891`, `:897`) | Janela anterior até HOJE (`:886`, `:888`, `:892`) |
+| Âncora | Signal → suplemento (`app/escala/signals.py:132`) | Janela atual até HOJE (`:120`, `:125`) |
+| Tipo pela tela | `salvar_tipo` → propagação histórica + propagação futura (`app/escala/services/cadastro_tipo.py:321`, `:326`) | Ativos, janela anterior até HOJE (`:337`, `:339`, `:351`) |
+| Tipo pelo admin | `salvar_tipo_no_admin` → somente propagação futura (`app/escala/services/cadastro_tipo.py:380`, `:386`) | Nenhuma chamada histórica nova nesse caminho (`:382`) |
+| Folga manual/foto | Portas convergem em `relavrar_celulas_da_foto`, que chama suplemento (`app/escala/folgas.py:215`, `:298`, `:337`) | Ramo histórico conserva desde até HOJE; rejulgamento mantém intervalo vazio específico (`:284`, `:290`, `:294`) |
+| Calendário de folga | Editor → sincronização futura → suplemento (`app/escala/folgas.py:598`, `:638`); troca de calendário também chama sincronização (`app/colaboradores/services/vinculo.py:459`) | Fotos novas recortadas para amanhã em diante, preservando manuais (`app/escala/folgas.py:184`, `:187`, `:632`) |
+| Feriado criar/editar/importar/excluir | ORM dispara signals → serviço futuro (`app/core/views_config.py:70`, `:83`, `:144`, `:201`; `app/core/signals.py:33`, `:39`) | Serviço aceita exclusivamente `hoje < data` (`app/ponto/services/cadastro_futuro.py:57`) |
+| Escala auto aplicar/desfazer | Regeneração explícita com `estender_horizonte=True` (`app/escala/services/escala_auto_executor.py:107`, `:147`) | Início estritamente futuro / volta a partir de amanhã (`:100`, `:143`) |
+| Corrigir escala retroativa | Suplemento após trecho histórico (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:243`) | Mesmo piso e topo limitado a HOJE (`:225`, `:228`, `:231`) |
+
+D2: eventos de atributo consultam `vinculos_dos_dias` e só permitem dono igual ao vínculo ou juiz calado (`app/ponto/services/cadastro_futuro.py:34`). `substitui_dono=True` aparece somente em executar vínculo, fechar/reabrir vigência, snapshot, correção retroativa e signal de vigência (`app/colaboradores/services/vinculo.py:335`, `:651`, `:739`, `:1020`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:245`; `app/escala/signals.py:83`).
+
+Município sem o antigo filtro sobre o universo futuro não é defeito D2: apenas a chamada de HOJE exige cobertura HOJE; o suplemento futuro mantém `substitui_dono=False` e aplica o filtro do juiz (`app/colaboradores/services/vinculo.py:941`, `:947`; `app/ponto/services/cadastro_futuro.py:34`).
+
+D3: a futura encerrada sem sucessor recebe geradora nula, DNA produzido por `montar_dna(None, ...)` e denúncia de regeneração (`app/ponto/portas/celula.py:246`, `:255`, `:256`, `:257`). O produtor recusa `trabalha=True` sem vínculo (`app/ponto/management/commands/gerar_celulas.py:80`).
+
+D5: realizado dentro do mesmo atomic do update (`app/colaboradores/services/vinculo.py:716`, `:737`).
+
+D6: ambas chamadas declaram horizonte explicitamente e mantêm o efeito estritamente futuro (`app/escala/services/escala_auto_executor.py:100`, `:108`, `:143`, `:148`).
+
+D7: o corpo `gerar_celulas_periodo` só admite inativo em `d > hoje`, mediante juiz, cria ausente e preserva futura existente (`app/ponto/portas/celula.py:899`, `:904`, `:921`). Isso não sana o achado separado da casca do cron para HOJE (`app/ponto/management/commands/gerar_celulas.py:323`).
+
+Feriado: a fronteira converte pela autoridade `DateField.to_python`, preserva a data anterior e entrega datas ao serviço; salvar e excluir passam por ela (`app/core/signals.py:19`, `:25`, `:33`, `:39`). O serviço não converte representação e consulta `vinculo_do_dia` (`app/ponto/services/cadastro_futuro.py:57`, `:67`).
+
+Não classificar `marcar_opera_em_feriado` como defeito de regeneração do DNA existente: ele grava o posto (`app/colaboradores/services/estrutura.py:82`), e a leitura para DNA documentada é o default de vínculo NOVO (`app/escala/models.py:905`, `:910`, `:911`; `app/colaboradores/services/vinculo.py:290`). `atualizar_empresa` também não dispara regeneração (`app/colaboradores/services/estrutura.py:18`), mas mudança de `dia_inicio_competencia` altera a autoridade da janela, não campo do produtor de DNA (`app/ponto/janelas.py:36`; `app/ponto/management/commands/gerar_celulas.py:104`); defeito nesta obra [não verificado].
+
+## 12/11 17:14 · sessao 19a0673d17e0 · - · - · origem=Ronald (tmux)
+
+Achados D1:
+
+- A limpeza fica em `app/ponto/portas/celula.py:1115`; é chamada depois da reescrita normal (`:301-310`), no ramo futura sem vínculo (`:253-263`) e ao reverter regeneração (`:819-836`). Limpa os 13 campos de `CAMPOS_DO_JULGAMENTO` (`:1103-1104`), conserva antes/depois em evento (`:1146-1152`) e emite outbox pelo `salvar_e_emitir` (`:948-956`).
+- **Defeito comprovado: trilha não é obrigatória na execução.** `desfazer_julgamento_da_futura` ignora o retorno de `evento` (`app/ponto/portas/celula.py:1149`); esse escritor engole falha com savepoint e retorna `None`, deixando o negócio confirmar (`app/core/observ.py:94-105`, `:124-139`). Diferentemente, `editar_dia` exige retorno da trilha e levanta erro (`app/ponto/portas/celula.py:643-654`).
+- **PAREI literal não implementado.** O único detector humano é `cel.veredito_via == 'admin'`; ele conserva tudo, registra evento e retorna normalmente (`app/ponto/portas/celula.py:1140-1145`), depois do DNA já ter sido escrito (`:301-310`). Não há inspeção do conteúdo da ata (`:1136-1147`). A ocorrência de ata com fato humano em produção continua [não verificado].
+- O fato externo Ausencia/folga/atestado não é apagado por essa função: ela só anula atributos da própria CelulaDia, inclusive a FK ausência (`app/ponto/portas/celula.py:1103-1104`, `:1146-1148`); o teste demonstra preservar o objeto externo (`app/ponto/tests/test_cadastro_futuro_c5.py:165-172`).
+- Executei ensaio `python3 -B` puramente em memória com a fixture `C5Test.setUp` (`app/ponto/tests/test_cadastro_futuro_c5.py:93`), `julgar` (`:114`) e `regenerar` (`:127`): retorno da trilha forçado a `None` → regeneração retorna 1 e ata fica `None`; via admin → regeneração retorna 1, troca geradora para 2 e conserva ata admin. Isso reproduz os dois comportamentos acima, sem provar ocorrência em produção. O teste existente exige conservação e selo 1, em vez de bloqueio (`:199-208`).
+
+Escritores futuros que não passam pela limpeza:
+
+| Escritor | Evidência | Enquadramento |
+|---|---|---|
+| `editar_dia` | Escreve DNA e origem editada, sem limite futuro nem limpeza (`app/ponto/portas/celula.py:617-642`); sua cauda não julga futuras (`:459-465`). | Fora do escopo literal “Salvar regenerando cadastro”; pode conservar ata antiga ao mudar DNA humano. |
+| `julgar_colab` | Aceita lista recebida (`app/ponto/services/cartorio.py:940`); laços não filtram futuras (`:1212`, `:1353`), lavra e carimba (`:1851-1874`). | Não regenera DNA e não é Salvar cadastro; a guarda futura existe no avulso `julgar_celula` (`:2025-2026`), não no lote. |
+| `veredito_celula` | Serviço não verifica data futura antes de executar (`app/ponto/services/veredito_celula.py:211-227`); pode criar ausência (`:332-339`) e lavra admin (`:351-352`). | Fora de “Salvar regenerando”; é caminho que pode criar julgamento futuro. |
+
+“Quem escreve / quem lê”:
+
+| Campo | Escritores persistentes encontrados | Leitores identificados |
+|---|---|---|
+| `CelulaDia.ata` | `lavrar_veredito` (`app/ponto/portas/celula.py:1055`, `:1082`), `carimbar_precedencia` (`:1187-1193`), limpeza D1 (`:1146-1148`). Cartório usa a porta (`app/ponto/services/cartorio.py:1853`); admin usa a porta (`app/ponto/services/veredito_celula.py:352`). | Grade/folha `app/escala/services/leitor_celula.py:379`; `app/folha/previa.py:83`; `app/folha/validacao_pdf.py:47`; relatórios `app/relatorios/cartao_pela_celula.py:287`, `app/relatorios/dia_da_frota.py:61`; chamados `app/chamados/juizes.py:450`, `:493`, `:966`, `:1344`, `app/chamados/services/materializacao.py:172`, `app/chamados/services/disputa_emissao.py:940`, `app/chamados/services/fabrica_da_celula.py:123`, `app/chamados/reconciliador.py:701`, `:879`; pautas `app/pautas/services.py:432`; feriado do posto `app/colaboradores/services/feriado_do_posto.py:97`; batida `app/ponto/juiz_batida.py:157`; lastro `app/ponto/services/lastro.py:89`; worklist `app/ponto/worklist.py:22`; cluster `app/ponto/services/cluster_espurio.py:27`; cartório `app/ponto/services/cartorio.py:451`, `:1440`; vigias `app/ponto/services/vigia_entrada.py:80`, `:123`, `app/ponto/services/vigia_cadastro_futuro.py:21`, `:45`, `app/ponto/services/vigia_pareador_celula.py:71`; diagnósticos `app/ponto/services/diagnostico_escala.py:156`, `app/ponto/services/esmeril_espelho.py:125`; comandos `app/ponto/management/commands/vigia_b5_ausencia.py:79`, `app/ponto/management/commands/backfill_b5_insumos.py:73`, `app/ponto/management/commands/tripwire_celulas.py:258`, `:341`, `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:61`, `app/ponto/management/commands/detectar_intervalo_ausente.py:47`, `app/ponto/management/commands/curar_residuo_bug115.py:45`, `:145`, `app/ponto/management/commands/celula_veredito_velho.py:108`; `app/folha/services/sem_furo.py:22`. |
+| `CelulaDia.dna` | Produtor do conteúdo: `app/ponto/management/commands/gerar_celulas.py:73`. Gravação: regeneração `app/ponto/portas/celula.py:256`, `:273`, `:288-289`, `:301`; edição `:633-642`; reversão `:819`; criação/backfill do gerador `:904-917`. | Marcos/pausas/extra `app/escala/models.py:1124`, `:1189`, `:1235`; utilitários `app/escala/utils.py:46`, `:97`, `:130`, `:166`; cartório `app/ponto/services/cartorio.py:1251`, `:1257`, `:1398`, `:1437`, `:1851`, `:1872`; admin `app/ponto/services/veredito_celula.py:31`; vigia novo `app/ponto/services/vigia_cadastro_futuro.py:60`, `:79`; juiz de batida `app/ponto/juiz_batida.py:158`; chamados `app/chamados/juizes.py:948`, `:1338`; pautas `app/pautas/services.py:424`; dia `app/ponto/services/dia_do_colab.py:46`; diagnósticos `app/ponto/services/diagnostico_escala.py:153`, `app/ponto/services/esmeril_espelho.py:116`; vigia entrada `app/ponto/services/vigia_entrada.py:126`; faltas hoje `app/ponto/services/faltas_de_hoje.py:43`; comandos `app/ponto/management/commands/tripwire_celulas.py:30`, `:99`, `:259`, `app/ponto/management/commands/detectar_intervalo_ausente.py:53`, `app/ponto/management/commands/celulas_contra_o_template.py` [não verificado: caminho correto é escala/management/commands/celulas_contra_o_template.py:46-49], `app/ponto/management/commands/censo_col900.py:119`, `app/ponto/management/commands/censo_fase_12x36.py:392`, `app/ponto/management/commands/aplicar_col900.py:76`, `:172`. |
+| `regenerada_em` | Regeneração `app/ponto/portas/celula.py:258`, `:303`; reversão `:826`. | `app/escala/services/regeneracao.py:84`, `:101-105`, `:119-122`; `app/escala/services/fase_12x36.py:189`; `app/chamados/veredito_lavrado.py:193`; `app/ponto/services/cartorio.py:393`; `app/ponto/services/dia_do_colab.py:94`. |
+| `regeneracoes` | Regeneração incrementa `app/ponto/portas/celula.py:259`, `:304`; reversão incrementa `:827`. | Próprios incrementos leem o valor anterior (`:259`, `:304`, `:827`); outro leitor de produção encontrado [não verificado]. |
+| `dna_anterior` | Regeneração guarda anterior `app/ponto/portas/celula.py:257`, `:302`; reversão limpa `:820`. | Reversão `app/ponto/portas/celula.py:810`, `:816`; comando operacional `app/ponto/management/commands/aplicar_col900.py:173`. |
+| `EscalaColaborador.data_fim` | Todas as atribuições EC localizadas ficam na porta de vínculo: reativação `app/colaboradores/services/vinculo.py:271`; fechar `:629`; reabrir `:717`, `:731`; encerrar `:831-832`; criar encerrada/corrigir `:958`, `:968`; snapshot `:1018`; desfazer auto `:1088`. | Juízes `app/escala/alimentacao.py:189`, `:205`, `:228`; candidatura em lote `:150`; signals fotografam/comparecem `app/escala/signals.py:25-28`, `:57-60`, `:67`; portas usam os valores anteriores e os novos (`app/colaboradores/services/vinculo.py:698`, `:731`, `:958`); cadastro realidade `app/escala/services/cadastro_realidade.py:306-315`. Censo global de todos os leitores de data_fim não fechado [não verificado]. |
+| `EscalaColaborador.ativa` | Porta de vínculo: reativação `app/colaboradores/services/vinculo.py:270`; criação `:286`, `:978`, `:1075`, `:1094`; fechar `:629`; reabrir `:717`, `:732`; absorver `:786`; encerrar `:830-832`; criar encerrada `:959`; snapshot `:1018`; desfazer auto `:1088`. | Vigência declarada/cobertura e vínculo do dia `app/escala/alimentacao.py:189`, `:205`, `:228`; candidatura `:150`; gerador D7 `app/ponto/portas/celula.py:899`; leitores administrativos/cadastro `app/escala/services/cadastro_realidade.py:256`, `:306-315`. Censo global de todos os leitores de ativa não fechado [não verificado]. |
+
+As atribuições de ata fora da porta em `app/escala/utils.py:1887` são sobre cópia em memória nunca salva (`:1886`); a equivalente da porta também declara cópia de leitura (`app/ponto/portas/celula.py:981-996`). Não são segundo escritor persistente por essa evidência.
+
+Autoridades do JUIZES: marcos congelados na EC (`app/docs/JUIZES.md:22-23`); dia de trabalho/precedência/ausência/feriado (`:103-109`); folga manual da pessoa versus calendário do vínculo (`:113-119`); vínculo do dia e cobertura (`:121-125`). A denúncia da regeneração não muda significado: `regenerada_em` exclui edição humana (`app/escala/models.py:1718-1721`), `regeneracoes` conta reescritas (`:1723-1724`) e `dna_anterior` guarda somente a última versão (`:1714-1729`).
 
 ## 12/11 17:03 · sessao 5849d664db84 · TIPO-NA-FONTE · censo · origem=Code
 
@@ -1224,138 +1327,4 @@ Não classificar como perda da data o mapa `papel_por_minuto_da_ata`: seu normal
 
 HTML/JS por busca textual, **não AST**: transporte/render de `orfas_grade` em `app/templates/ponto/espelho.html:151` e `:240`; render de `b.orfa` em `app/templates/colaboradores/partials/_calendario_grade.html:121`. Resultado JS relevante às chaves/funções pedidas: nenhum encontrado pela busca textual [não verificado quanto a nomes computados].
 
-## 12/11 16:43 · sessao 842846aab3c0 · - · - · origem=Ronald (tmux)
-
-Censo da fonte e escritores, somente leitura.
-
-- A lavra atual é `app/ponto/services/cartorio.py:730::ata_do_dia`; grava `n_orfas=len(...)` em `:742` e `'orfas': [str(h) ...]` em `:745`. O campo persistido é JSON, sem validação de formato na declaração: `app/escala/models.py:1778`.
-- O conteúdo produtivo chega como **strings HH:MM**, sem data, segundos ou offset: `_match_marcos` perde essas partes em `app/escala/utils.py:621,:662`; sobras fora do envelope em `:799,:1832,:1834`; promoção de célula a órfã em `:1722,:1733`. Antes da perda, são datetimes aware derivados de `timezone.localtime(b.timestamp)` em `:683,:1323`; configuração padrão `America/Sao_Paulo` e `USE_TZ=True` em `app/config/settings/base.py:93,:95`. O fuso efetivamente ativo em uma execução de produção é [não verificado].
-- Portanto trocar apenas o `str(h)` da ata por outra serialização não recupera o instante; é necessário preservar o datetime desde os pontos acima, inclusive nas promoções, e serializar `isoformat()` **no mesmo campo `orfas`**. O instante original da célula casada também se perde hoje em `_celula_do_marco`, `app/escala/utils.py:326`; a promoção precisa conservá-lo, em vez de reutilizar `hora` (`:1722,:1733`).
-
-**Todos os escritores produtivos da ata identificados pelo AST e leitura:**
-
-| Escritor | Efeito e fonte |
-|---|---|
-| `cartorio.ata_do_dia` | Constrói a ata, incluindo órfãs: `app/ponto/services/cartorio.py:738,:745`. |
-| `lavrar_veredito` | Atribui ata inteira em `app/ponto/portas/celula.py:1006,:1033`; preserva apenas chaves declaradas de outra operação em `:997` — atualmente `precedencia`, `:104`. |
-| `carimbar_precedencia` | Copia a ata, troca `precedencia`, atribui a ata inteira e salva: `app/ponto/portas/celula.py:1083,:1084,:1085,:1087`; transporta órfãs sem interpretá-las. |
-| `escala.utils` — memória | Cria ata sintética com órfãs em `app/escala/utils.py:1887,:1895` numa cópia explicitamente não salva (`:1886`). Deve migrar junto para não apresentar outra forma de ata ao leitor único. |
-| `celula_como_o_julgamento_deixa` — memória | Copia ata inteira para projeção, `app/ponto/portas/celula.py:945`; cópia sem persistência declarada em `:933,:934`. |
-| Cartório — memória | `SimpleNamespace(ata=...)` com ata do julgamento em `app/ponto/services/cartorio.py:1436`; publicação transitória da mesma ata em `:1440`. |
-
-A fachada do modelo apenas encaminha: `app/escala/models.py:1819,:1827`. O cartório chama a porta com `save=False` nos ramos “nunca bateu” e normal (`app/ponto/services/cartorio.py:1292,:1853`); `carimbar(...,lavrados=_cv)` efetiva a gravação em `:1314,:1873`, via `app/ponto/portas/celula.py:1072::salvar_e_emitir`, cujo `cel.save(update_fields=campos)` está em `:905`, junto com emissão do evento (`:904,:907`).
-
-`dispensar_por_ausencia` e `_ata_ate_o_teto` modificam lâmpadas/`n_missing`, sem escrever órfãs (`app/ponto/services/cartorio.py:805,:812,:913,:917`). A reversão de regeneração grava DNA/trabalho/carimbos, sem ata (`app/ponto/portas/celula.py:786,:794`).
-
-AST executado em memória sobre 3.559 arquivos Python da cópia, buscando atribuições `.ata`, subscritos `['ata']`, keywords `ata=`, `setattr(...,'ata',...)`, `update` e `bulk_update` com ata; nenhum `update(ata=...)`/`bulk_update(...,'ata')` produtivo adicional apareceu [não verificado: instrumento não salvo, saída da execução disponível no histórico]. Censo de sintaxe não prova ausência de metaprogramação arbitrária [não verificado].
-
-Snapshots **leem** a ata e escrevem arquivo externo; não são escritores da CelulaDia: `bin/snapshot_o118_col221.py:18,:30`; `app/ponto/management/commands/celula_veredito_velho.py:108,:112,:113`. O primeiro descreve reversão em texto (`bin/snapshot_o118_col221.py:27`), sem implementá-la nesse arquivo; o segundo relavra pelo cartório (`app/ponto/management/commands/celula_veredito_velho.py:144`) e desfaz o ensaio por rollback (`:156,:157`).
-
-**Leitor importante dentro da própria fonte:** `lampadas_do_dia` recebe órfãs em `app/ponto/services/cartorio.py:599`. O parser `_min` fatia HH:MM (`:621,:623`) e alimenta `_reais` com órfãs em `:628`. O ramo `j is None` procura proximidade de até 30 minutos (`:666`) e acende lâmpada com luz HH:MM (`:672,:673`), sem retirar a batida da lista de órfãs; o próprio comentário registra a obrigação “acesa e órfã disjuntas” (`:702,:703`). Esse consumidor precisa da migração por instante e do juiz geométrico existente; passar ISO diretamente para `_min` é incorreto (`:623`).
-
-**Autoridades para a implementação:** `_match_marcos` já responde qual marco previsto a batida ocupa (`app/core/juizes.py:212`, `app/docs/JUIZES.md:27`); turno/data_turno é `turnos_do_colab` (`app/core/juizes.py:208`); marcos congelados são `EscalaColaborador.marcos_do_dia` (`:213`); `CelulaDia` só pode ser escrita pela porta (`app/core/portas.py:107,:112`). A fonte única já é padrão registrado (`app/docs/GLOSSARIO.md:11`); não precisa nascer outro juiz.
-
-**Avisos enviados ao pai para o censo de leitores:** leitura direta também em `app/ponto/juiz_batida.py:161`; `cluster_espurio` fatia HH:MM em `app/ponto/services/cluster_espurio.py:29,:31,:34`; `app/ponto/turnos.py:2667` converte órfãs a minutos relativos, com pressuposto de data da linha explícito em `:2649`. Esses sítios entram na migração, embora não sejam escritores.
-
-## 12/11 16:43 · sessao ffcae5163e6e · - · - · origem=Ronald (tmux)
-
-HTML/JS — busca textual, **não AST**:
-
-| Arquivo:linha | Sítio | Operação/tipo | Perda da data |
-|---|---|---|---|
-| `app/templates/ponto/espelho.html:151` | calendário: `{% for o in d.orfas_grade %}` | LEITURA, HH:MM str, render | Já chega sem data |
-| `app/templates/ponto/espelho.html:240` | detalhe: `{% for o in dia.orfas_grade %}` | LEITURA, HH:MM str, render em `:241` | Já chega sem data |
-| `app/templates/colaboradores/partials/_calendario_grade.html:121` | `{% if b.orfa %}`, render `b.timestamp\|date:"H:i"` | LEITURA de classificação bool; datetime → texto no render | Texto sem data; objeto conserva datetime |
-
-A busca integral de `*.html`/`*.js` pelos nomes `orfas_grade`, `_orfas_da_ata`, `orfas_da_ata`, `orfas_instantes`, `\borfas\b`, `\borfa\b` encontrou somente os sítios acima e o texto explicativo de ranking, sem leitura de órfã, em `app/templates/relatorios/ranking_furos.html:42`.
-
-Falsos positivos examinados, fora do casamento de órfã:
-
-- Confirmação de resposta `time`/`datetime-local`: `app/templates/chamados/meu_atendimento.html:252`, `:253`, `:255`.
-- Filtro pelo horário inicial cadastrado da escala: `app/static/js/hasner-filter.js:24`, `:30`.
-- Endereço `tipo:id`, não hora: `app/static/js/live-cell.js:36`.
-- Conversão de horário da agenda: `app/templates/colaboradores/partials/agenda_edit_dia.html:255`.
-- Exibição do relógio e confirmação local de batida salva: `app/templates/ponto/bater_ponto.html:317`, `:547`, `:599`; `app/templates/ponto/bater_ponto_v2.html:164`, `:336`, `:349`.
-
-**Spec reprovada — lista de acréscimos, separada da cópia.** Nas referências seguintes, `+N` é o início do hunk **do anexo**, não linha da cópia. A ancoragem por hunk é necessária porque o anexo não existe como arquivo local [não verificado].
-
-| Arquivo no anexo / hunk | Novos sítios, transportes ou operações |
-|---|---|
-| `escala/services/leitor_celula.py`, `+177` | Parâmetro `orfas_instantes` em `_orfas_da_ata`; novo `ata.get('orfas_instantes')`; validação de lista/tamanho; `orfas_instantes.extend(...)` acoplado por `zip(horas, instantes)`. HH:MM e ISO str seguem em listas paralelas. A leitura `ata.get('orfas')` é modificada, não adicionada. |
-| mesmo, `+393` | Novo literal `'orfas_instantes': []` na base de dia. |
-| mesmo, `+421` | Novo coletor `_orfas_instantes=[]`; chamada `_orfas_da_ata(..., orfas_instantes=...)`; novo campo de saída `orfas_instantes=...`. |
-| `escala/utils.py`, `+320` | `_celula_do_marco`: novo `'instante': instante.isoformat()`; mantém `'hora': instante.strftime('%H:%M')`. |
-| mesmo, `+584` | `_match_marcos`: novo parâmetro `orfas_instantes`. |
-| mesmo, `+622` | Nova lista `_sobras` de datetimes; novo `extend(t.isoformat()...)`; mantém geração HH:MM separada. |
-| mesmo, `+667` | Novo coletor de `B[j].isoformat()` para órfãs. |
-| mesmo, `+768` | `montar_grade_prevista`: novo campo vazio `orfas_instantes` em folga. |
-| mesmo, `+782` | Novo coletor e argumento para `_match_marcos`. |
-| mesmo, `+796` | Novo campo `orfas_instantes` no dia de trabalho. |
-| mesmo, `+808` | Novo append ISO para sobra externa; nova leitura conjunta via `zip(_d['orfas'], _d['orfas_instantes'])`; ordenação pelo primeiro componente, **HH:MM**; reescrita sincronizada das duas listas. |
-| mesmo, `+975` | `clipar_grade_janela`: duas novas escritas zerando `orfas_instantes`, em futuro e fora da janela. |
-| mesmo, `+1021` | `_montar_grade_prevista_periodo_legacy`: novo campo vazio em segmento sem escala. |
-| mesmo, `+1050` | Mesmo builder: novo campo vazio em dia sem dados. |
-| mesmo, `+1100` | `montar_realizado_grade`: leitura antecipada `orfas = list(gd.get('orfas') or [])` e retorno dessas órfãs sem marcos. A leitura substitui a leitura antiga no retorno final; muda também o fluxo. |
-| mesmo, `+1173` | `_aplicar_folgas_foto`: nova escrita zerando `orfas_instantes`. |
-| mesmo, `+1252` | `_marcar_ausencias`: nova escrita zerando `orfas_instantes` em falta coberta. |
-| mesmo, `+1296` | Mesmo overlay: duas novas escritas zerando `orfas_instantes`, em ausência integral e justificativa. |
-| mesmo, `+1482` | `montar_grade_prevista_periodo_por_turno`: novo mapa `instantes_orfas_por_data`. |
-| mesmo, `+1613` | Novo armazenamento de lista vazia nesse mapa. |
-| mesmo, `+1696` | Novo coletor `_orf2_instantes`; argumento para `_match_marcos`; novo set de datetimes via `fromisoformat`. Substitui o set de HH:MM. |
-| mesmo, `+1723` | Nova condição de candidatura `locs[k][0] in _orfset`, datetime, substituindo membership HH:MM. |
-| mesmo, `+1749` | Novo coletor `orfas_instantes` e argumento para `_match_marcos`. |
-| mesmo, `+1773` | Novo append de `_cc['instante']` quando célula vira órfã. |
-| mesmo, `+1785` | Segundo novo append de `_cc['instante']`, excedente de intervalo. |
-| mesmo, `+1811` | Novo armazenamento do coletor em `instantes_orfas_por_data[d]`. |
-| mesmo, `+1855` | Novo campo vazio em dia de folga. |
-| mesmo, `+1864` | Novo campo preenchido do mapa em dia de trabalho. |
-| mesmo, `+1887` | Dois novos appends ISO na conservação de sobras; nova leitura `zip` e reescrita sincronizada das duas listas, ainda ordenadas por HH:MM. |
-| mesmo, `+2064` | Nova leitura `dias_out[...].get('orfas_instantes')`; localização por `fromisoformat(_iso) == _inst_t`; mantém `_hhmm_t = _inst_t.strftime('%H:%M')` mais abaixo. |
-| mesmo, `+2101` | Nova mutação `orfas_instantes.pop(_ix_orfa)` e remoção posicional no alias `_lista_orf`; substitui remoção pelo valor HH:MM. |
-| `ponto/services/cartorio.py`, `+737` | `ata_do_dia`: nova escrita do campo da ata `'orfas_instantes'` e nova leitura `dia.get('orfas_instantes')`, ISO str. Mantém escrita HH:MM em `ata['orfas']`. |
-| `ponto/services/espelho.py`, `+494` | `_grade_builder`: nova escrita `dia_grade['orfas_instantes']=[]`, descartando os instantes não lavrados. |
-| mesmo, `+857` | `montar_dias`: nova leitura de `_gd.get('orfas_instantes')`, nova publicação `'orfas_instantes_grade'`. |
-| `relatorios/pdf_espelho.py`, `+171` | Nova função `_orfas_publicadas`: novas leituras `dia.get('orfas_grade')` e `dia.get('orfas_instantes_grade')`; validação de tamanho/ISO/fuso; retorna `set[datetime]`, vazio ou `None`. `_entrada_espuria` passa a receber e comparar instantes. |
-| mesmo, `+485` | Novas chamadas `_orfas_publicadas(d)` por dia; novo set `_orfas_instantes` filtrado por timestamps de batidas da tela. |
-| mesmo, `+534` | Chamada de `_entrada_espuria` alterada para novo conjunto de instantes. |
-| mesmo, `+584` | Nova escrita `orfas_sem_instantes`; nova comparação `_b.timestamp in _orfas_instantes` para escrever `_b.orfa`. |
-| mesmo, `+694` | **Novo casamento textual ainda truncado:** conjunto `_espurias_datadas` com `strftime('%d/%m %H:%M')`; filtro por substring no texto da anomalia. Preserva dia/mês; perde ano, segundos e offset. Não compara datetime. |
-| mesmo, `+896` | Nova leitura `dia.get('orfas_sem_instantes')` para render “não sei”. |
-| mesmo, `+941` | Novo conjunto `_espurias_instantes` de `b.timestamp`; leitura `pp.entrada` e membership por datetime, substituindo HH:MM. |
-
-Diferença material entre anexo e cópia: o PDF atual ainda remonta grades e lê `orfas` em `app/relatorios/pdf_espelho.py:472`, `:477`, `:544`, `:552`; o hunk `+485` do anexo pressupõe um contexto antigo já baseado na tela. Logo, não afirmar aplicabilidade do patch ao HEAD [não verificado].
-
-O texto HH:MM continua sendo a fonte atual em `app/escala/services/leitor_celula.py:187` e `app/ponto/services/cartorio.py:745`; a spec adiciona transporte paralelo de ISO nos hunks indicados, sem substituir a chave `orfas`.
-
-## 12/11 16:43 · sessao 2746476993e6 · - · - · origem=Ronald (tmux)
-
-Censo AST executado em memória com `python3 -B` (sem gerar arquivos); no escopo de tela/PDF, os sítios atuais e a migração proposta são os seguintes. [não verificado: execução não persistiu relatório]
-
-| Sítio atual | Comportamento hoje | Pré-desenho |
-|---|---|---|
-| `app/escala/services/leitor_celula.py:180`, `:187`, `:190` | `_orfas_da_ata(ata)` entrega strings da ata ou `'?' * n_orfas`. | Substituir pela porta pública `orfas_da_ata(celula) -> list[datetime] \| None`; todo elemento exige ISO completo e offset; HH:MM, valor inválido ou ausência de lastro retorna `None`, preservando `[]` como zero conhecido. Proposta ancorada no sítio a substituir. |
-| `app/escala/services/leitor_celula.py:420` | `grade_da_celula` chama o leitor privado e publica `dia['orfas']`. | Chamar a porta com `cel`; transportar a mesma lista de datetimes/`None`, sem recompor pela data do dia. |
-| `app/escala/utils.py:1084`, `:1110` | `montar_realizado_grade` devolve `[], []` sem marcos; no caminho normal faz `list(gd.get('orfas') or [])`. | Não descartar órfãs em dia sem marcos; preservar `None` explicitamente. O ajuste equivalente no diff serve como caso/spec, sem sua dupla lista. |
-| `app/ponto/services/espelho.py:519`, `:689`, `:844` | Tela lê grade da célula, passa pelo adaptador e escreve `orfas_grade`. | `orfas_grade` pode conservar o nome, mudando seu tipo para lista aware/`None`; nenhuma lista paralela de instantes. |
-| `app/ponto/services/espelho.py:489`, `:530`, `:537`, `:560` | Trecho visual anterior à competência ou ata agregada passa pelo builder antigo. | A degradação de geometria não autoriza publicar órfãs reconstruídas como lavradas: consultar o mesmo leitor da célula e manter `None` se a ata não sabe. |
-| `app/templates/ponto/espelho.html:151`, `:240` | Render imprime a string `o` diretamente; órfãs estão dentro do ramo que exige `realizado_grade`. | Render final `date:"H:i"` sobre instante e ramo explícito de `None`; desenhar órfã mesmo quando o dia não tem células realizadas. |
-| `app/colaboradores/services/calendario.py:380`, `:381`, `:622`, `:625` | Calendário guarda set de órfãs em mapa por `(dia, mês)` e compara com `b.timestamp.strftime('%H:%M')`, escrevendo `b.orfa=True` em `:627`. | Mapa por data completa para localizar a resposta, mas pertencimento por `b.timestamp` aware; `None` não vira set vazio nem `False`. |
-| `app/templates/colaboradores/partials/_calendario_grade.html:121` | Lê `b.orfa` e desenha timestamp com `date:"H:i"`. | Manter HH:MM apenas nesse render; exibir estado desconhecido sem afirmar classificação negativa. |
-
-PDF atual difere da base mostrada no diff: importa `grade_espelho_janela` como `_grade` (`app/relatorios/pdf_espelho.py:193`), remonta o builder para obter órfãs duas vezes (`:475`, `:543`) e só depois consulta a tela (`:598`). Logo, não aplicar o hunk do anexo por transplante; reescrever o caminho atual para consumir a resposta da tela oriunda do leitor único (`app/relatorios/pdf_espelho.py:475`, `:543`, `:598`; desenho do anexo: [não verificado no filesystem]).
-
-Todos os comparadores do PDF que precisam migrar:
-
-- União de HH:MM de toda a janela em `app/relatorios/pdf_espelho.py:472`, `:477`; `_entrada_espuria` compara entrada por HH:MM em `:178`, chamado em `:513`. Trocar por pertencimento do datetime aware e resultado triestado; desconhecido não pode virar “entrada não espúria”. Proposta nos sítios citados.
-- Atribuição da resposta à linha por `data_fim - índice` em `app/relatorios/pdf_espelho.py:550`, `:551`, `:552`, seguida de `b.orfa` por HH:MM em `:609`. Consumir a resposta já publicada pela tela e comparar timestamp real; a data localiza a célula, não fabrica o instante. Proposta nos sítios citados.
-- Supressão de anomalia por substring HH:MM em `app/relatorios/pdf_espelho.py:716`, `:719`, `:720`. **Também precisa sair**; o diff apenas adiciona `%d/%m`, mantendo identidade textual sem ano/segundos/offset. A fonte atual já perde o instante ao fabricar mensagens em `app/ponto/adaptador_motor.py:33`, `:35`, `:40`, `:42`; para supressão exata, transportar a identidade estruturada do fato desde esse adaptador e renderizar a mensagem no fim. Não reconstruir instante parseando texto. Proposta fundamentada nos pontos de perda citados.
-- Supressão dos alertas de turno por HH:MM em `app/relatorios/pdf_espelho.py:960`, `:963`, `:964`. Trocar o conjunto por `b.timestamp` e testar `pp.entrada` diretamente; `None` precisa chegar ao render como desconhecido. Proposta nos sítios citados.
-- O HH:MM final legítimo fica em `app/relatorios/pdf_espelho.py:881` e `:885`; `b.orfa` controla marca e legenda em `:876`, `:877`, `:1024`. O campo é escrito pelo coletor em `:609`.
-
-Leitor direto adicional do escopo PDF: `relatorios.cartao_pela_celula.orfas_e_isencao_da_ata` lê `ata.get('orfas')` em `app/relatorios/cartao_pela_celula.py:288`. A busca de referência encontrou somente seu teste (`app/relatorios/tests/test_cartao_pela_celula.py:159`, `:166`) além da definição (`app/relatorios/cartao_pela_celula.py:277`); candidato à remoção pela L-111, não à criação de outro parser (`CLAUDE.md:191`).
-
-Casos/spec aproveitáveis: órfã sem marcos não pode sumir (`app/escala/utils.py:1084`); somente órfã sem `realizado_grade` precisa aparecer no template (`app/templates/ponto/espelho.html:151`, `:231`, `:240`); mesmo HH:MM em dias distintos deve marcar somente o instante correspondente, atingindo os quatro comparadores do PDF acima; ata HH:MM antiga deve devolver desconhecido na tela, calendário e PDF (`app/escala/services/leitor_celula.py:187`; proposta [não verificado]).
-
-Autoridades preservadas: grade/match e cluster guard estão em `app/docs/JUIZES.md:27`; geometria de turno em `:20`; encadeamento cross-midnight em `:24`. A mudança de transporte/leitura não deve criar novo julgamento nesses consumidores (`CLAUDE.md:20`, `:21`).
-
-_4353 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4356 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
