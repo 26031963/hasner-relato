@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 18:18** · publicado em **12/11/2026 18:22** (UTC-3)
+> Ultima resposta processada: **12/11/2026 18:34** · publicado em **12/11/2026 18:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 18:34 · sessao e230e00fb7f6 · TIPO-NA-FONTE · construtor · origem=Code
+
+**Entrega parcial; não pronta para pouso.** A fonte preserva instantes, mas restam leitores sem contrato de “não sei”. Resultado dirigido: **24 testes, 22 passaram e 2 selos globais falharam**. [Evidência](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_testes.txt:68) [nao verificado]
+
+O [relato completo](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:15) registra arquivos::funções alterados, comandos individuais dos mutantes e limitações.
+
+Foram alterados:
+
+- `ata.py::ler_orfas/gravar_orfas` e `leitor_celula.py::orfas_da_ata/grade_da_celula`: ISO aware; `None` como único desconhecimento; leitor privado apagado. [ata.py:13](/home/ronald/wt-codex-tipo-na-fonte-181049/app/escala/services/ata.py:13), [leitor_celula.py:180](/home/ronald/wt-codex-tipo-na-fonte-181049/app/escala/services/leitor_celula.py:180)
+- `utils.py::_celula_do_marco/_match_marcos/montar_grade_prevista/montar_realizado_grade/montar_grade_prevista_periodo_por_turno`: conservação, promoções, dry-run, reconciliação e ata sintética por instante. [Inventário](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:18)
+- `cartorio.py::lampadas_do_dia/ata_do_dia/_julgar_colab_corpo`: comparação absoluta e escrita pelo acessor. [cartorio.py:599](/home/ronald/wt-codex-tipo-na-fonte-181049/app/ponto/services/cartorio.py:599)
+- Calendário, classificador, propositor, ausência parcial, suprajuiz, espelho, simulação e render do detector receberam adaptações; as limitações restantes estão discriminadas no relato. [Funções e referências](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:26)
+
+Destino de cada leitor do censo:
+
+| Leitor | Resultado e “não sei” |
+|---|---|
+| `_celula_furada` | Migrado; `None` sem prova escalar de presença. `chamados/juizes.py:510` |
+| `_plantio_preenche_furo_na_data` | Migrado; dado ausente não absolve, conforme contrato existente. `chamados/services/materializacao.py:143` |
+| `_orfas_da_ata` / `grade_da_celula` | Privado apagado; grade transporta `None`. `escala/services/leitor_celula.py:180`, `:414` |
+| `periodos_do_dia` | Migrado; transporta `None` e registra pergunta. `ponto/juiz_batida.py:161`, `:254` |
+| Cluster espúrio | Migrado; `None` permanece não medido. `ponto/services/cluster_espurio.py:29` |
+| Vigia pareador | Migrado; desconhecimento publica `cego=1`. `ponto/services/vigia_pareador_celula.py:120` |
+| Cartão pela célula | Função sem chamador produtivo encontrado apagada; chamadas dinâmicas [não verificado]. `relatorios/cartao_pela_celula.py:277` |
+| Tripwire | **Pendente:** `(achados, universo)` não representa não medidos. `ponto/management/commands/tripwire_celulas.py:237` |
+| Esmeril A5 | **Pendente:** saída só contém assinaturas positivas. `ponto/services/esmeril_espelho.py:79` |
+
+RED antes/depois:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest escala.tests.test_tipo_na_fonte_orfas -v
+```
+
+Antes: seis erros por ausência da API/acessor, observados nesta sessão; transcrição anterior em arquivo [não verificado]. Depois: os mesmos seis passaram. **O RED anterior é de contrato/API**; execução da travessia completa no HEAD original [não verificado]. [Registro](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:39)
+
+Os mutantes de acesso cru/alias, comparação por HH:MM, perda da data na grade, fabricação de instante e escritor persistindo HH:MM foram mordidos. Cada comando está no [relato dos mutantes](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:52); resultados em [testes:7](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_testes.txt:7) e [testes:19](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_testes.txt:19). [nao verificado]
+
+Catraca:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 tools/censo_orfas.py CelulaDia.ata orfas
+```
+
+Antes pelo mesmo scanner: **[não verificado]**. O anexo informa 21 entradas incluindo cópias; não afirmo redução comparável `21→2`. Depois: **2 acessos crus**, teto declarado **2**, meta zero pendente. [Censo](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_censo.txt:1)
+
+Quem escreve agora: `ata.py::gravar_orfas`, chamado pelo cartório e pela ata sintética. Quem lê o JSON: `ata.py::ler_orfas`, pela porta pública; **tripwire e esmeril ainda leem cru**. [Escrita e leitura](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:87)
+
+**INCOMPLETO:**
+
+- Perguntas de desenho pendentes para tripwire e esmeril A5. `ponto/management/commands/tripwire_celulas.py:237`; `ponto/services/esmeril_espelho.py:79`.
+- PDF: contagem desconhecida e supressão de anomalias sem identidade temporal. `relatorios/pdf_espelho.py:513`, `:716`.
+- Contadores de projeção, cadeia completa do propositor e fixtures dos pontos interrompidos. [Lista detalhada](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:96)
+- Suite Django, integração/render e certificação Code/opus **[não verificado]**; `django.test` indisponível nesta cópia. [Registro](/home/ronald/wt-codex-tipo-na-fonte-181049/app/docs/tipo_na_fonte_orfas_relato.txt:49) [nao verificado]
+
+LEI-AKITA: origem=cartorio.ata_do_dia/escala.utils (grade), testemunha=leitor_celula.orfas_da_ata, RED=test_tipo_na_fonte_orfas+test_tipo_na_fonte_orfas_fluxo, quem-mais-le=tripwire/esmeril (docs/tipo_na_fonte_orfas_censo.txt:3), juizes novos=0, padrao=Single Source of Truth
 
 ## 12/11 18:18 · sessao 0d22f717f4c0 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · verificador · origem=Code
 
@@ -988,19 +1044,4 @@ Delta dos templates no anexo: o wip retira as condições E das linhas HEAD `94,
 
 - **Alias de dois saltos:** o corte é explícito em `bin/leitores_de_chave.py:224`. Exemplo real de acesso de topo perdido exclusivamente por esse corte: [não verificado]. Atribuição encadeada `a=b=c.ata` liga ambos os alvos ao mesmo valor; não constitui automaticamente dois saltos. (`bin/leitores_de_chave.py:134`, `bin/leitores_de_chave.py:138`, `bin/leitores_de_chave.py:166`)
 
-## 12/11 17:29 · sessao 56a1fc7d5d3d · - · - · origem=Ronald (tmux)
-
-Achados sobre consumidores e semântica:
-
-- O emissor é `run()`: `--contar-crus` imprime `len(top)`; JSON imprime resumo e listas; texto imprime seções e seus comprimentos. São projeções do mesmo censo, mas seus números têm unidades diferentes: operações de topo, arquivos distintos e eventos selecionados. `bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:631`, `bin/leitores_de_chave.py:645`, `bin/leitores_de_chave.py:659`.
-- No texto, `len(sel)` inclui eventos `*`, descendentes e dinâmicos que casem com a seleção; no JSON, `resumo_producao` é global mesmo numa consulta de uma chave; `producao`/`testes` são filtrados. Não são números intercambiáveis. `bin/leitores_de_chave.py:635`, `bin/leitores_de_chave.py:645`, `bin/leitores_de_chave.py:652`, `bin/leitores_de_chave.py:660`.
-- Cada evento guarda posição, caminho, papéis e forma; a deduplicação usa também coluna, papéis e forma. Não é uma unidade “linha”, “arquivo” ou necessariamente “nó AST único”. Um `setdefault`, `pop` ou `+=` conta um evento com dois papéis; somar leitores e escritores superconta as operações. `bin/leitores_de_chave.py:288`, `bin/leitores_de_chave.py:302`, `bin/leitores_de_chave.py:385`, `bin/leitores_de_chave.py:424`.
-- Execução somente leitura confirmou `--contar-crus CelulaDia.ata` = 95; JSON produziu 12 chaves, 95 operações de topo, 27 arquivos, 103 eventos de produção e 89 pares arquivo:linha. Os totais são resultado da execução, sem arquivo de resultado persistido: [não verificado]. O cálculo correspondente está em `bin/leitores_de_chave.py:627`.
-- Os quatro eventos `*` vistos foram cópias de JSON em `app/ponto/portas/celula.py:945`, `app/ponto/portas/celula.py:995`, `app/ponto/portas/celula.py:1083`, `app/ponto/services/cartorio.py:917`; entram na listagem por chave, mas não no contador. `bin/leitores_de_chave.py:629`, `bin/leitores_de_chave.py:635`.
-- O consumidor executável encontrado é o selo: chama a ferramenta, captura stdout/stderr e lê JSON, número e códigos de retorno. O JSON é lido para conferir sítios, formas e separação produção/testes; o número é lido para os casos real e sintético. `bin/tests/test_leitores_de_chave.sh:26`, `bin/tests/test_leitores_de_chave.sh:30`, `bin/tests/test_leitores_de_chave.sh:36`, `bin/tests/test_leitores_de_chave.sh:44`, `bin/tests/test_leitores_de_chave.sh:99`, `bin/tests/test_leitores_de_chave.sh:106`, `bin/tests/test_leitores_de_chave.sh:112`.
-- A implementação chama esse número de catraca `acessos_crus_ata`, mas conta todos os eventos de topo de produção; não existe exclusão do futuro acessor nem comparação com teto anterior. Portanto ainda não implementa “acessos crus fora do acessor, só encolhe”. `bin/leitores_de_chave.py:24`, `bin/leitores_de_chave.py:627`, `bin/tests/test_leitores_de_chave.sh:44`.
-- Não encontrei consumidor da ferramenta em `gerar_estado`, disjuntor ou briefs disponíveis: integração futura e unidade pressuposta por esses leitores são [não verificado]. O juiz existente do CENSO exige referências textuais de leitores/escritores e decisões, sem conferir saída desse instrumento. `bin/disjuntor.py:1522`, `bin/disjuntor.py:1565`.
-- `PARAMS`/`RETURNS` são fonte manual adicional de proveniência. O guard verifica somente existência da função; não verifica nome do parâmetro, tipo nem fluxo. Renomear só o parâmetro pode reduzir o censo sem disparar rc 2. `bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:538`.
-- O censo publicado, o envio prévio do contrato, a execução histórica do selo, o pouso e o aval em arquivos de `logs/` não estão demonstrados pelos arquivos disponíveis: [não verificado]. A referência local ao contrato é apenas comentário/docstring. `bin/leitores_de_chave.py:10`, `bin/tests/test_leitores_de_chave.sh:2`.
-
-_4382 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4383 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
