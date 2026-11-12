@@ -1,7 +1,188 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 07:53** · publicado em **12/11/2026 07:56** (UTC-3)
+> Ultima resposta processada: **12/11/2026 07:59** · publicado em **12/11/2026 08:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 07:59 · sessao c2fbd7863c76 · - · - · origem=Ronald (tmux)
+
+1. **Bloqueia — tela admin ainda pode levantar `TipoSemFaixa` antes de renderizar.** A view obtém o espelho com a recusa rotulada (`app/ponto/views.py:158`), mas depois chama `montar_semanas` (`app/ponto/views.py:184`). Esta chama `status_dos_dias_lavrados` sem fornecer fatos ou recusas (`app/ponto/services/espelho.py:170`). Ao alcançar dia sem batida e sem status lavrado, o leitor pergunta novamente à A2 pela janela inteira, sem `recusas=` (`app/ponto/status_dia.py:296`, `app/ponto/status_dia.py:304`). A A2 relança nessa modalidade (`app/ponto/precedencia.py:421`). Contraexemplo: ausência aprovada `legado_rd` em dia passado sem batida e célula sem `status_dia`; a palavra pode estar pronta no miolo, mas a view falha antes do `render` (`app/ponto/views.py:193`). O PDF não chama `montar_semanas`; chama somente o miolo (`app/relatorios/pdf_espelho.py:476`).
+
+2. **Fila — paridade PDF sem tipo inválido não está provada; há mudança concreta de fonte.** Agora órfãs vêm da tela (`app/relatorios/pdf_espelho.py:477`), que normalmente lê a ATA (`app/ponto/services/espelho.py:522`, `app/escala/services/leitor_celula.py:420`). Antes vinham diretamente do builder, conforme o diff fornecido `[nao verificado: checkout independente da base]`. Essas listas não têm contrato de igualdade: sem célula, o leitor entrega dia sem órfãs (`app/escala/services/leitor_celula.py:390`, `app/escala/services/leitor_celula.py:394`); o builder conserva batidas não consumidas como órfãs (`app/escala/utils.py:1832`, `app/escala/utils.py:1849`).
+
+   Contraexemplo condicional: builder classifica `07:02` como órfã e a ATA lida pela tela não; um período aberto iniciado às `07:02` passa a entrar em `_abertos_ts` (`app/relatorios/pdf_espelho.py:515`), muda `datas_turno_aberto` (`app/relatorios/pdf_espelho.py:576`) e pode mudar `dias_em_aberto`, seu badge e a palavra da linha (`app/relatorios/cartao_pela_celula.py:418`, `app/relatorios/pdf_espelho.py:750`, `app/relatorios/pdf_espelho.py:597`). Nenhum tipo sem faixa é necessário. Existência desse estado em produção e delta de horas/saldo/dinheiro: `[nao verificado]`.
+
+3. **O selo de PDF não mede essa paridade.** Executa somente o prefixo até `_orfas_hhmm` (`app/ponto/tests/test_lastro_c10_sem_banco.py:302`, `app/ponto/tests/test_lastro_c10_sem_banco.py:319`), com `espelho_do_colab` substituído por `Mock` (`app/ponto/tests/test_lastro_c10_sem_banco.py:311`). Não executa os consumidores de órfãs, o resumo final nem a renderização; portanto o verde desse teste não certifica os efeitos descritos acima (`app/ponto/tests/test_lastro_c10_sem_banco.py:324`).
+
+4. **Fonte única melhorou para órfãs e palavra, mas o PDF ainda calcula seu próprio resumo.** Lê os dias do espelho (`app/relatorios/pdf_espelho.py:561`), reutiliza a mesma porta de composição da palavra (`app/relatorios/pdf_espelho.py:597`) e apenas imprime `palavra_dia` (`app/relatorios/pdf_espelho.py:882`). Ainda executa `apurar_por_fatia` (`app/relatorios/pdf_espelho.py:418`), soma períodos (`app/relatorios/pdf_espelho.py:504`) e calcula saldo (`app/relatorios/pdf_espelho.py:531`) antes de `folha_manda` (`app/relatorios/pdf_espelho.py:587`). Esses caminhos já aparecem na base congelada (`app/ponto/tests/lastro_c9_recortes.json:27`); não são novos no delta.
+
+5. **Sem achado na remoção de `_realizado`.** Era função local sem chamadas no recorte da base congelada (`app/ponto/tests/lastro_c9_recortes.json:27`); o PDF atual recebe minutos e pago pelo dict da tela (`app/ponto/services/espelho.py:792`, `app/ponto/services/espelho.py:820`). A remoção do helper, isoladamente, não muda saída; fidelidade do JSON ao commit real `[nao verificado]`.
+
+6. **Sem relógio novo nesse delta.** `_hj` deriva do `agora` recebido e a chamada continua terminando em ontem (`app/relatorios/pdf_espelho.py:475`, `app/relatorios/pdf_espelho.py:476`). A mesma chamada foi apenas antecipada segundo o diff fornecido `[nao verificado: checkout independente da base]`.
+
+## 12/11 07:59 · sessao 0214359824a2 · - · - · origem=Ronald (tmux)
+
+2. O isolamento envolve **o colaborador inteiro**, na chamada única de `julgar_colab`; captura exclusivamente `TipoSemFaixa`, incrementa uma vez e registra pk/código antes de continuar (`app/ponto/management/commands/processar_cartorio.py:64`, `:70`, `:72`–`:80`).
+
+No caminho normal desse erro, a grade inteira é montada antes de qualquer lavra (`app/ponto/services/cartorio.py:1168`); ela chama A2 (`app/escala/utils.py:1209`), que levanta em `faixa_de` (`app/ponto/precedencia.py:419`–`:422`). Portanto, nesse caminho, **nenhuma ata nova daquele colaborador é gravada**, e as anteriores permanecem; a primeira lavra/carimbo vem depois (`app/ponto/services/cartorio.py:1288`, `:1310`). Não existe rollback de colaborador: se a exceção ocorrer numa fase posterior, escritas anteriores podem permanecer; o `finally` limpa filas e contexto, mas não desfaz persistência (`app/ponto/services/cartorio.py:1093`–`:1118`).
+
+Não há `atomic()` envolvendo o comando nem `julgar_colab`; existe atomicidade menor na porta que salva célula e evento (`app/ponto/portas/celula.py:899`–`:907`). `TipoSemFaixa` é `ValueError` puro (`app/ponto/precedencia.py:96`), levantado pela consulta ao mapa (`:105`–`:110`): esse caminho não evidencia SQL abortado ou `TransactionManagementError`. Ensaio ORM real da continuidade: **[nao verificado]**.
+
+Os contadores são diferentes: cartório mede **colaboradores recusados na passada** (`app/ponto/services/cartorio.py:1952`–`:1954`; comando `:73`), vigia mede **códigos ativos sem faixa** (`app/ponto/services/vigia_ausencia.py:159`–`:168`). Ambos chegam à autoridade `faixa_de`: diretamente no vigia (`:162`), por grade/A2 no cartório (`app/escala/utils.py:1209`; `app/ponto/precedencia.py:419`). Leitores: resumo stdout do comando (`:75`–`:80`); API do vigia (`app/api/views_mensageria.py:1416`–`:1424`) e revisão semanal (`app/ponto/services/vigia_ausencia.py:259`–`:262`). Consumo automático do stdout em produção: **[nao verificado]**.
+
+**Achado, fila — campo com dois significados:** `tipos_ativos_sem_faixa` designa unidades diferentes e o cartório nem exige que o cadastro esteja ativo. Contraexemplo: um código X usado por três colaboradores produz cartório=3 e vigia=1; X inativo, mas com ausência aprovada, pode produzir cartório=1 e vigia=0, porque a A2 consulta o código sem consultar `.ativo` (`app/ponto/management/commands/processar_cartorio.py:73`; `app/ponto/services/vigia_ausencia.py:160`; `app/ponto/precedencia.py:419`). Isso não introduz segundo juiz de faixa, mas cria ambiguidade semântica no nome compartilhado.
+
+4. A recusa sobe pelas três capturas alteradas (`app/ponto/services/fechamento.py:1081`, `:1089`, `:1308`), interrompendo **todo o restante do universo daquela chamada**, que pode ser empresa inteira ou subconjunto (`:555`–`:558`, `:620`). Não é uma tranca de competência: são interrompidos o cálculo e o retorno, sem alteração específica de status por essa recusa (`:1308`–`:1318`).
+
+**Persistência parcial concreta:** não existe atomicidade de lote. A pode ser salvo (`app/ponto/services/fechamento.py:1149`), B pode ganhar uma linha `status='aberto'` pelo `get_or_create` (`:899`–`:902`) e só depois falhar ao montar sua grade (`:1015`); C não será processado (`:1308`–`:1309`). Sem fotografia anterior para B, pode sobrar linha com defaults; com fotografia anterior, ela pode permanecer velha. Não houve regra de dinheiro nova para resolver B (`:1089`–`:1104`).
+
+Chamadores relevantes:
+
+- Botão de recalcular: chamada sem captura da recusa; deixa de retornar sucesso (`app/ponto/views.py:1252`–`:1253`). Resposta HTTP efetivamente observada: **[nao verificado]**.
+- Gerar TXT: recalcula empresa inteira em leitura antes de classificar/aprovar; a recusa impede chegar à geração e ao carimbo (`app/folha/views.py:207`–`:212`, `:250`–`:252`).
+- Comando `recalcular_fechamento --apply`: propaga antes de fotografar o depois (`app/ponto/management/commands/recalcular_fechamento.py:118`–`:122`).
+- `simular_folha`, modos recalcular/lido: chamadas fora do `try` posterior; propaga (`app/folha/management/commands/simular_folha.py:121`–`:135`).
+- Evento de batida/célula/HE: callback **captura qualquer Exception e loga**, preservando o fato já gravado; a recusa não sobe ao usuário por esse chamador (`app/ponto/services/fechamento.py:1814`–`:1828`).
+- Regeneração em exportada: chama dentro de `transaction.atomic()`, portanto a recusa propagada desfaz o ato envolvente (`app/ponto/portas/regen_exportada.py:169`–`:180`).
+
+Não encontrei cron ordinário de `recalcular_fechamento`; o cadastro de crons declara explicitamente que não há cron dessa operação (`app/config/crons.py:1130`–`:1137`). O comentário do callback dizendo que “o cron rega” não demonstra um agendamento real (`app/ponto/services/fechamento.py:1827`).
+
+A propagação financeira corresponde à instrução D do pedido fornecido — deixar levantar quando seria necessário inventar regra. O item 4 do aval exige isolamento especificamente no **cartório**, não no fechamento; o item 6 exige par medido da competência 11. O dado fornecido não contém esse par: **[nao verificado]**.
+
+## 12/11 07:59 · sessao 7bde65f716ea · - · - · origem=Ronald (tmux)
+
+Itens 1 e 5, com achados separados de limites:
+
+- **Fila — brecha na própria porta, anterior à c10.** `gravar_tipo_ausencia` valida o código atual e depois aplica qualquer chave de `campos` por `setattr`. Contraexemplo: `gravar_tipo_ausencia(tipo_com_codigo_abono, campos={'codigo': 'fantasma_xyz', 'ativo': True})` valida `abono` e salva `fantasma_xyz` ativo, sem faixa. A view atual não fornece `codigo` em `campos`, portanto não demonstrei exploração pelo HTTP. Evidências: `app/ponto/services/ausencia.py:1310`, `app/ponto/services/ausencia.py:1314`, `app/ponto/views_tipos_ausencia.py:67`.
+
+- **Não encontrei segundo escritor runtime de `TipoAusencia` fora da porta.** O admin Django registra outros cinco modelos, sem `TipoAusencia`; a view de cadastro chama a porta nos dois ramos. A migration 0052 escreve diretamente código, efeito e ativo, mas seus 17 códigos estão todos no mapa. As migrations 0062 e 0063 alteram flags de tipos existentes, sem criar/ativar código novo. Evidências: `app/ponto/admin.py:11`, `app/ponto/admin.py:37`, `app/ponto/views_tipos_ausencia.py:87`, `app/ponto/views_tipos_ausencia.py:98`, `app/ponto/migrations/0052_seed_tipoausencia.py:10`, `app/ponto/migrations/0052_seed_tipoausencia.py:33`, `app/ponto/precedencia.py:52`, `app/ponto/migrations/0062_fim_dos_17_tipos.py:51`, `app/ponto/migrations/0063_atestado_aceita_horas.py:20`. Censo literal global não encontrou comando/importador/seed adicional que escreva esse modelo; caminhos dinâmicos externos à cópia: [nao verificado].
+
+- **A recusa chega nomeada à tela.** A porta levanta `AusenciaInvalida(..., codigo='tipo_sem_faixa')`; a view lê somente `str(erro)`, não `.codigo`. `resposta_acao` envia `showToast` com tipo erro; o JavaScript escreve o texto na caixa `ta-erro` e no toast. Contraexemplo esperado: código `fantasma_xyz` exibe `Tipo sem faixa de precedencia: fantasma_xyz`. Evidências: `app/ponto/services/ausencia.py:1312`, `app/ponto/views_tipos_ausencia.py:89`, `app/ponto/views_tipos_ausencia.py:100`, `app/core/respostas.py:51`, `app/core/respostas.py:65`, `app/templates/ponto/tipos_ausencia.html:72`, `app/templates/ponto/tipos_ausencia.html:83`, `app/templates/ponto/tipos_ausencia.html:86`.
+
+- **Leitores de `AusenciaInvalida.codigo`.** A API distingue `sobreposicao` → 409, demais códigos → 400; edição de ausência escolhe campo do formulário pelo código; um comando de rederivação registra o código. Esses consumidores não chamam `gravar_tipo_ausencia`; o novo valor `tipo_sem_faixa` tem assert específico no ensaio c10. Evidências: `app/api/views.py:1819`, `app/api/views.py:1823`, `app/ponto/views.py:2806`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:172`, `app/ponto/tests/test_lastro_c10_sem_banco.py:86`.
+
+- **Fonte da faixa preservada.** `_FAIXA_DE_TIPO` só é acessado em `faixa_de`, que faz indexação e levanta `TipoSemFaixa` quando falta a chave. A2 e veto consultam essa função; nenhum default executável `'atestado'` substitui tipo desconhecido. `ROTULOS.get` é fallback de texto depois da classificação; `ICONE_PADRAO='atestado'` é desenho. Evidências: `app/ponto/precedencia.py:52`, `app/ponto/precedencia.py:108`, `app/ponto/precedencia.py:110`, `app/ponto/precedencia.py:419`, `app/ponto/precedencia.py:544`, `app/ponto/precedencia.py:565`, `app/ponto/catalogo/ausencias.py:119`, `app/ponto/catalogo/ausencias.py:181`.
+
+- **Fila — fallback de efeito/cadastro sobrevive, anterior à c10.** `_do_banco` engole qualquer exceção e `vigente` troca resultado vazio/falha pelo `CATALOGO` congelado; `efeito_vigente` lê isso. Contraexemplo: `abono` configurado como `desconta`, seguido de falha de leitura do cadastro, pode voltar a responder `ABONA` do congelado. É fallback de efeito, não de faixa, e não foi introduzido pela c10. Evidências: `app/ponto/catalogo/ausencias.py:254`, `app/ponto/catalogo/ausencias.py:283`, `app/ponto/catalogo/ausencias.py:298`, `app/ponto/catalogo/ausencias.py:102`.
+
+- **Outro fallback encontrado, sem engolir `TipoSemFaixa`.** Semana do posto usa `'trabalho'` quando não recebe faixa ou ocorre outra exceção, mas relança expressamente `TipoSemFaixa`. Portanto não demonstra sobrevivência do default para tipo sem faixa. Evidências: `app/escala/services/semana_do_posto.py:177`, `app/escala/services/semana_do_posto.py:178`, `app/escala/services/semana_do_posto.py:180`.
+
+- **ESMERIL-SEMANTICA: mesmo nome, universos distintos.** O vigia conta códigos ativos de cadastro sem faixa; cartório conta colaboradores recusados na passada. Contraexemplo estático: um código ativo usado por três colaboradores pode resultar em vigia=1/cartório=3; código ativo sem lançamento pode resultar em vigia=1/cartório=0. Ambos consultam a mesma autoridade, portanto isso não prova segundo juiz. Evidências: `app/ponto/services/vigia_ausencia.py:155`, `app/ponto/services/vigia_ausencia.py:162`, `app/ponto/services/vigia_ausencia.py:168`, `app/ponto/services/cartorio.py:1952`, `app/ponto/management/commands/processar_cartorio.py:73`.
+
+`TipoSemFaixa.codigo` significa identificador do tipo; `AusenciaInvalida.codigo` significa categoria da recusa. São classes distintas, e seus leitores encontrados respeitam esses sentidos. Evidências: `app/ponto/precedencia.py:101`, `app/ponto/services/ausencia.py:63`, `app/ponto/management/commands/processar_cartorio.py:74`, `app/api/views.py:1819`.
+
+## 12/11 07:57 · sessao bbca41c9563d · BO-ROTULO-REABRIR-SO-NO-DETALHE · leitura · origem=Code
+
+A diferença está confirmada no código: os dois detalhes incluem `Reabrir`; fio, modal e painel do turno omitem esse destino. Há também uma diferença no processamento: `detalhe.html` ignora o status enviado; `detalhe_local.html` chega ao motor. (`app/templates/chamados/detalhe.html:135`; `app/templates/chamados/detalhe_local.html:398`; `app/templates/chamados/fio_colaborador.html:268–270`; `app/templates/chamados/partials/modal_fio.html:668–670`; `app/templates/chamados/partials/painel_chamado_turno.html:76–78`; `app/chamados/views.py:292–310`; `app/chamados/services/acoes_chamado.py:313–321`.)
+
+**1. Oferta por tela e responsável pela lista**
+
+| Tela | Oferta de `novo_status=aberto` / “Reabrir” |
+|---|---|
+| `detalhe.html` | **Sim**, para `is_gestor`, quando `status_local != fechado`. Não filtra os outros estados. (`app/templates/chamados/detalhe.html:117`, `:127–135`.) |
+| `detalhe_local.html` | **Sim**, para `is_gestor` com `pode_agir`, quando `status_local != fechado`. (`app/templates/chamados/detalhe_local.html:375–398`.) |
+| `fio_colaborador.html` | **Não**. Oferece somente `em_analise`, `resolvido`, `fechado`; formulário condicionado a chamado não fechado, sem GLPI e com `pode_agir_map`. (`app/templates/chamados/fio_colaborador.html:254–270`.) |
+| `modal_fio.html` | **Não**. Mesmos três destinos; exige chamado não fechado, sem GLPI, fora de `modo_beneficio` e com `pode_agir_map`. (`app/templates/chamados/partials/modal_fio.html:651–670`.) |
+| `painel_chamado_turno.html` | **Não**. Mesmos três destinos, quando não fechado; a view exige gestor. (`app/templates/chamados/partials/painel_chamado_turno.html:65–78`; `app/chamados/views.py:347–350`.) |
+
+Nos dois detalhes, portanto, a opção é oferecida em **`aberto`, `em_analise`, `resolvido`, `registrado`, `cancelado` e `superado`**: são todos os estados cadastrados, exceto `fechado`. (`app/chamados/models.py:28–35`; `app/templates/chamados/detalhe.html:117–135`; `app/templates/chamados/detalhe_local.html:375–398`.)
+
+`is_gestor` significa `is_staff` ou pertencimento aos grupos `dp_rh`, `gestor`, `admin_ti`. No detalhe local, `pode_agir` consulta o departamento dono do chamado, incluindo as liberações para gestor geral e para usuários sem competências declaradas. (`app/chamados/views.py:24`, `:35–38`; `app/chamados/services/acoes_chamado.py:403–404`; `app/chamados/utils.py:32–72`.)
+
+**Cada template enumera seus destinos.** O código compartilhado fornece a apresentação: `MOVER_PARA['aberto'] = 'Reabrir'`; `rotulo_de_movimento` retorna texto/title; `opcao_mover` gera a `<option>`. Essa tag recebe somente o destino, sem chamado, estado atual ou papel. (`app/chamados/services/verbos.py:132–146`; `app/chamados/templatetags/chamados_tags.py:67–78`.)
+
+“Reabrir questionario”, existente no modal, é outra ação, enviada ao endpoint `reabrir_disputa_supervisao`; não é a opção `novo_status=aberto`. (`app/templates/chamados/partials/modal_fio.html:368–372`, `:665–670`.)
+
+**2. Caminho da requisição e decisão do motor**
+
+No **detalhe local**, para os seis estados acima, o caminho do formulário é:
+
+1. POST para `chamados:detalhe_local` → rota `local/<chamado_id>/` → view `detalhe_chamado_local`. (`app/templates/chamados/detalhe_local.html:385`; `app/chamados/urls.py:14`; `app/chamados/views.py:359`.)
+2. Guarda de departamento → `acao_resposta_livre`, que lê `novo_status` e chama `chamado.transicionar`. (`app/chamados/views.py:418–421`, `:547`; `app/chamados/services/acoes_chamado.py:287`, `:313–315`.)
+3. `transicionar` obtém `get_perfil(user)` → `pode_transicionar` → `motor.decidir(estado, 'TRANSICAO_HUMANA', destino='aberto', perfil=perfil)`. (`app/chamados/models.py:119–134`.)
+
+O motor **aceita `em_analise → aberto` para ambos os grupos de perfil**; aceita `resolvido → aberto` e `registrado → aberto` somente quando o perfil efetivo é `admin_ti`. As demais recusas estão discriminadas abaixo. (`app/chamados/catalogo/motor.py:101–105`, `:142–156`.)
+
+Essa exceção usa o resultado de `get_perfil`, não `is_gestor`: superuser resulta em `admin_ti`; `is_staff`, sozinho, tem fallback `dp_rh`. (`app/chamados/models.py:130–132`; `app/colaboradores/mixins.py:154–178`.)
+
+No **detalhe GLPI (`detalhe.html`)**, em qualquer dos seis estados, o formulário envia ao endpoint `followup`; a view lê apenas `conteudo`, chama `GLPIClient.adicionar_followup` e retorna o resultado da mensagem. **Não lê `novo_status` nem consulta o motor.** Em sucesso, responde “Mensagem enviada.”; em `GLPIError`, “Nao foi possivel enviar a mensagem. Tente novamente.” (`app/templates/chamados/detalhe.html:122`; `app/chamados/urls.py:12`; `app/chamados/views.py:292–310`; `app/chamados/glpi_client.py:219–230`.)
+
+**As linhas do censo anterior continuam corretas:** `motor.py:102` exclui `aberto` dos destinos humanos de `resolvido`; `motor.py:153` aplica essa restrição para perfil diferente de `admin_ti`; a mensagem está em `:154–155`. (`app/chamados/catalogo/motor.py:102`, `:153–155`.)
+
+**3. Pares em que a tela oferece e o motor recusa**
+
+| Par (tela, status atual) | Perfil que recebe recusa | Mensagem |
+|---|---|---|
+| (`detalhe_local.html`, `aberto`) | Todos | `Chamado ja esta neste status.` (`app/chamados/catalogo/motor.py:148–149`.) |
+| (`detalhe_local.html`, `resolvido`) | Diferente de `admin_ti` | `Transicao resolvido -> aberto nao permitida.` (`app/chamados/catalogo/motor.py:102`, `:153–155`.) |
+| (`detalhe_local.html`, `registrado`) | Diferente de `admin_ti` | `Transicao registrado -> aberto nao permitida.` (`app/chamados/catalogo/motor.py:105`, `:153–155`.) |
+| (`detalhe_local.html`, `cancelado`) | Todos | `cancelado e terminal absoluto - nao reabre (revival = re-emissao).` (`app/chamados/catalogo/motor.py:142–144`.) |
+| (`detalhe_local.html`, `superado`) | Todos | `superado e terminal absoluto - nao reabre (revival = re-emissao).` (`app/chamados/catalogo/motor.py:142–144`.) |
+
+Esses estados recebem a opção porque o template exclui apenas `fechado`; para gestor autorizado, inclui `aberto` sem consultar a matriz. (`app/templates/chamados/detalhe_local.html:375–398`.)
+
+O motivo vira `ValueError`, é capturado sem tradução e segue como erro ao usuário. No formulário comum, há mensagem Django e redirect, e o detalhe renderiza a mensagem; em HTMX, o helper emite `showToast`. (`app/chamados/models.py:132–134`; `app/chamados/services/acoes_chamado.py:320–321`; `app/chamados/views.py:410–415`; `app/core/respostas.py:63–71`; `app/templates/chamados/detalhe_local.html:39–42`.)
+
+`detalhe.html` não entra nessa lista de **recusas do motor**, pois seu endpoint não executa a transição. (`app/chamados/views.py:292–310`.)
+
+**4. Origem da diferença entre telas**
+
+A disponibilidade vem da **enumeração feita em cada template**; o mapa compartilhado centraliza rótulos, não decide quais destinos oferecer conforme estado/papel. Isso aparece diretamente nas cinco listas e na assinatura de `opcao_mover(status_local)`. (`app/templates/chamados/detalhe.html:132–135`; `app/templates/chamados/detalhe_local.html:395–398`; `app/templates/chamados/fio_colaborador.html:268–270`; `app/templates/chamados/partials/modal_fio.html:668–670`; `app/templates/chamados/partials/painel_chamado_turno.html:76–78`; `app/chamados/templatetags/chamados_tags.py:68–78`.)
+
+A diferença também está explicitamente preservada no teste existente: `DESTINOS` inclui `aberto` apenas nos dois detalhes, e a asserção compara conjunto e ordem de cada seletor. (`app/chamados/tests/test_bo_rotulo_encerrado.py:71–79`, `:136–141`.)
+
+## 12/11 07:56 · sessao 4d1d3242e9fe · - · - · origem=Ronald (tmux)
+
+O caminho que chega ao motor é o de `detalhe_local.html`; o de `detalhe.html` envia apenas um followup ao GLPI, ignorando `novo_status`. [`app/templates/chamados/detalhe_local.html:385`, `app/chamados/views.py:547`, `app/chamados/services/acoes_chamado.py:315`; `app/templates/chamados/detalhe.html:122`, `app/chamados/views.py:292`, `app/chamados/views.py:304`]
+
+- `detalhe_local.html` oferece `aberto`/“Reabrir” para `is_gestor`, com `pode_agir`, sempre que o status não é `fechado`; a lista é fixa e inclui a própria situação `aberto`, além de `em_analise`, `resolvido`, `registrado`, `cancelado` e `superado`. [`app/templates/chamados/detalhe_local.html:375`, `app/templates/chamados/detalhe_local.html:380`, `app/templates/chamados/detalhe_local.html:390`, `app/templates/chamados/detalhe_local.html:398`, `app/chamados/models.py:28`]
+- `is_gestor` significa `is_staff` ou grupo `dp_rh`, `gestor`, `admin_ti`; `pode_agir` vem do controle por departamento dono do chamado. [`app/chamados/views.py:24`, `app/chamados/views.py:35`, `app/chamados/services/acoes_chamado.py:403`, `app/chamados/utils.py:68`, `app/chamados/utils.py:52`]
+
+Caminho do clique local: `POST chamados:detalhe_local` → rota `local/<chamado_id>/` → `detalhe_chamado_local` → guarda de departamento → `acao_resposta_livre` → `ChamadoColaborador.transicionar` → `pode_transicionar` → `motor.decidir(..., 'TRANSICAO_HUMANA', destino='aberto', perfil=get_perfil(user))`. [`app/templates/chamados/detalhe_local.html:385`, `app/chamados/urls.py:14`, `app/chamados/views.py:359`, `app/chamados/views.py:420`, `app/chamados/views.py:547`, `app/chamados/services/acoes_chamado.py:313`, `app/chamados/models.py:128`, `app/chamados/models.py:119`]
+
+| Status de origem no detalhe local | Motor com perfil diferente de `admin_ti` | Motor com perfil `admin_ti` |
+|---|---|---|
+| `aberto` | Recusa: `Chamado ja esta neste status.` | Mesma recusa. [`app/chamados/catalogo/motor.py:148`] |
+| `em_analise` | Aceita → `aberto`. | Aceita → `aberto`. [`app/chamados/catalogo/motor.py:101`, `app/chamados/catalogo/motor.py:153`, `app/chamados/catalogo/motor.py:156`] |
+| `resolvido` | Recusa: `Transicao resolvido -> aberto nao permitida.` | Aceita → `aberto`. [`app/chamados/catalogo/motor.py:102`, `app/chamados/catalogo/motor.py:153`] |
+| `registrado` | Recusa: `Transicao registrado -> aberto nao permitida.` | Aceita → `aberto`. [`app/chamados/catalogo/motor.py:105`, `app/chamados/catalogo/motor.py:153`] |
+| `cancelado` | Recusa: `cancelado e terminal absoluto - nao reabre (revival = re-emissao).` | Mesma recusa. [`app/chamados/catalogo/motor.py:142`] |
+| `superado` | Recusa: `superado e terminal absoluto - nao reabre (revival = re-emissao).` | Mesma recusa. [`app/chamados/catalogo/motor.py:142`] |
+
+As referências antigas continuam corretas: a linha **102** exclui `aberto` dos destinos humanos de `resolvido`; a linha **153** aplica a recusa, com exceção de `admin_ti`; a mensagem está nas linhas 154–155. [`app/chamados/catalogo/motor.py:102`, `app/chamados/catalogo/motor.py:153`]
+
+Cada recusa vira `ValueError(motivo)`, é capturada sem tradução e entregue ao usuário com o mesmo texto: `resp('erro', str(_ve))` → `_resp` → `resposta_acao`; formulário comum recebe mensagem Django e redirect, HTMX recebe `showToast`. [`app/chamados/models.py:132`, `app/chamados/services/acoes_chamado.py:320`, `app/chamados/views.py:410`, `app/core/respostas.py:63`, `app/core/respostas.py:68`]
+
+O perfil do motor é o resultado efetivo de `get_perfil`, não o booleano `is_gestor`: superuser resulta em `admin_ti`; depois entram competência de grupos, perfil do colaborador e fallback `is_staff → dp_rh`. [`app/chamados/models.py:130`, `app/colaboradores/mixins.py:154`]
+
+No `detalhe.html`, o seletor também oferece `Reabrir` para gestor quando `status_local != fechado`, mas o caminho termina em `adicionar_followup`, sem consulta ao motor e sem alteração de status. A mensagem é `Mensagem enviada.` se o GLPI aceitar o followup, ou `Nao foi possivel enviar a mensagem. Tente novamente.` se ocorrer `GLPIError`. [`app/templates/chamados/detalhe.html:117`, `app/templates/chamados/detalhe.html:127`, `app/templates/chamados/detalhe.html:135`, `app/chamados/views.py:292`, `app/chamados/views.py:301`, `app/chamados/views.py:305`]
+
+Há ainda uma diferença literal de identificador nesse caminho: o formulário passa `chamado.pk`, a rota chama esse valor de `ticket_id`, e a view o encaminha diretamente ao GLPI; o GET encontra o registro local por `ticket_id_glpi`. O efeito concreto para um registro depende dos valores dos dois identificadores. [`app/templates/chamados/detalhe.html:122`, `app/chamados/urls.py:12`, `app/chamados/views.py:304`, `app/chamados/views.py:252`; efeito em produção: **[não verificado]**]
+
+A lista não é gerada pela matriz do motor: `MOVER_PARA['aberto']` define somente o rótulo `Reabrir`, `rotulo_de_movimento` retorna rótulo/title e `opcao_mover` produz a `<option>` sem receber chamado, status atual ou papel. Cada template escolhe explicitamente quais destinos incluir. [`app/chamados/services/verbos.py:132`, `app/chamados/services/verbos.py:140`, `app/chamados/templatetags/chamados_tags.py:68`]
+
+## 12/11 07:56 · sessao e99ba5fece4f · - · - · origem=Ronald (tmux)
+
+Oferta de `novo_status=aberto`:
+
+| Tela | Condição e destino |
+|---|---|
+| `detalhe.html` | `status_local != fechado` e `is_gestor`; lista inclui `aberto`. `app/templates/chamados/detalhe.html:117`, `app/templates/chamados/detalhe.html:127`, `app/templates/chamados/detalhe.html:135` |
+| `detalhe_local.html` | `status_local != fechado`, `is_gestor` e `pode_agir`; lista inclui `aberto`. `app/templates/chamados/detalhe_local.html:375`, `app/templates/chamados/detalhe_local.html:380`, `app/templates/chamados/detalhe_local.html:390`, `app/templates/chamados/detalhe_local.html:398` |
+| `fio_colaborador.html` | Não inclui `aberto`; só `em_analise`, `resolvido`, `fechado`. Formulário exige chamado não fechado, sem GLPI e `pode_agir_map`. `app/templates/chamados/fio_colaborador.html:254`, `app/templates/chamados/fio_colaborador.html:255`, `app/templates/chamados/fio_colaborador.html:268` |
+| `modal_fio.html` | Não inclui `aberto`; mesmos três destinos, sob chamado não fechado, sem GLPI, fora de `modo_beneficio` e `pode_agir_map`. `app/templates/chamados/partials/modal_fio.html:651`, `app/templates/chamados/partials/modal_fio.html:652`, `app/templates/chamados/partials/modal_fio.html:668` |
+| `painel_chamado_turno.html` | Não inclui `aberto`; mesmos três destinos sob chamado não fechado. A view restringe acesso a gestor. `app/templates/chamados/partials/painel_chamado_turno.html:65`, `app/templates/chamados/partials/painel_chamado_turno.html:76`, `app/chamados/views.py:349` |
+
+Os seis status oferecidos nos detalhes, por exclusão somente de `fechado`, são `aberto`, `em_analise`, `resolvido`, `cancelado`, `registrado`, `superado`; o universo de choices está em `app/chamados/models.py:28`.
+
+`is_gestor` corresponde a `is_staff` ou grupo `dp_rh`, `gestor`, `admin_ti`. `app/chamados/views.py:24`, `app/chamados/views.py:35`.
+
+`pode_agir` do detalhe local vem do contexto (`app/chamados/services/acoes_chamado.py:404`) e consulta departamento do chamado (`app/chamados/utils.py:68`), com gestor geral superuser/admin_ti (`app/chamados/utils.py:47`), compatibilidade por competências ou perfil e liberação legado sem competências (`app/chamados/utils.py:52`).
+
+A lista de destinos é enumerada em cada template; o código comum fornece apenas rótulo/title e HTML da opção: `MOVER_PARA['aberto']='Reabrir'` em `app/chamados/services/verbos.py:136`; retorno do par em `app/chamados/services/verbos.py:146`; geração de `<option>` em `app/chamados/templatetags/chamados_tags.py:67`. A divergência das listas também é congelada no teste em `app/chamados/tests/test_bo_rotulo_encerrado.py:71` e conferida em `app/chamados/tests/test_bo_rotulo_encerrado.py:136`.
+
+**Ressalva relevante para caminho:** `detalhe.html` posta em `chamados:followup` (`app/templates/chamados/detalhe.html:122`), cujo handler lê apenas `conteudo` (`app/chamados/views.py:292`), envia followup GLPI (`app/chamados/views.py:303`) e retorna “Mensagem enviada.” em sucesso (`app/chamados/views.py:301`, `app/chamados/views.py:310`); não lê `novo_status` nem chama motor no corpo da função (`app/chamados/views.py:273`).
+
+O modal contém outras reaberturas: “Reabrir questionario”, para disputa existente e `pode_agir_map`, disputa aberta, em endpoint próprio (`app/templates/chamados/partials/modal_fio.html:123`, `app/templates/chamados/partials/modal_fio.html:326`, `app/templates/chamados/partials/modal_fio.html:368`); “Reabertura administrativa”, para disputa fechada, admin TI e menos de duas reaberturas (`app/templates/chamados/partials/modal_fio.html:376`, `app/templates/chamados/partials/modal_fio.html:382`, `app/templates/chamados/partials/modal_fio.html:383`, `app/templates/chamados/partials/modal_fio.html:390`). São formulários distintos do seletor `novo_status` (`app/templates/chamados/partials/modal_fio.html:665`).
 
 ## 12/11 07:53 · sessao 1ae2b1829e34 · - · - · origem=Ronald (tmux)
 
@@ -500,243 +681,4 @@ CATRACA: o censo em memória encontrou as mesmas identidades e quatro deslocamen
 
 Recalcule esses números depois das curas; a igualdade é cobrada em `core/tests/test_medida_turno_do_par.py:539`. Nenhum arquivo foi escrito por este explorer.
 
-## 12/11 00:18 · sessao ef9964a52222 · - · - · origem=Ronald (tmux)
-
-Mapa na c6, por leitura estática; execução com banco não realizada [não verificado].
-
-- Origem: `faixa_de` levanta `TipoSemFaixa` em `ponto/precedencia.py:105`; `fatos_do_periodo` chama para cada ausência em `ponto/precedencia.py:409`.
-- Grade: `_marcar_ausencias` consulta o período sem captura em `escala/utils.py:1205`; builder chama o overlay em `escala/utils.py:1852`; contrato dos renders chama o builder em `escala/utils.py:2341`.
-- PDF: `_coletar_dados_espelho` chama a grade sem captura em `relatorios/pdf_espelho.py:475`; PDF informacional propaga em `relatorios/pdf_espelho.py:1046`; PDF mensal propaga em `relatorios/pdf_espelho.py:1093`. O traceback fornecido confirma a interrupção desse coletor.
-- Tela: o primeiro caminho pelo builder tem captura geral em `ponto/services/espelho.py:569`, mas a consulta independente de A2 em `ponto/services/espelho.py:649` recaptura e levanta especificamente em `ponto/services/espelho.py:651`. Propaga por `espelho_do_colab` em `ponto/services/espelho.py:1265`, tela web em `ponto/views.py:158` e API em `api/views.py:1354`.
-- Cartório: julgamento consulta o builder sem captura em `ponto/services/cartorio.py:1168`, chamado em `ponto/services/cartorio.py:990`. Outra leitura direta, `aplicar_precedencia_na_celula`, consulta A2 em `ponto/services/cartorio.py:1992`, mas seu chamador captura e registra em `ponto/services/cartorio.py:2042`.
-- Folha: **não há propagação direta por essa grade**. `grade_do_fechamento` lê a ata por `grade_da_celula` em `folha/export.py:335` e `folha/export.py:338`; prontidão consome essa grade em `folha/export.py:1095`. Falha anterior na lavratura pode impedir atualização, mas impacto efetivo não medido [não verificado].
-- Semana do posto: `_fato_do_dia` recaptura e levanta em `escala/services/semana_do_posto.py:178`; sua leitura ocorre em `escala/services/semana_do_posto.py:151`.
-
-Forma **já existente** que conserva o nome sem derrubar seu leitor: vigia captura `TipoSemFaixa`, acumula os códigos e devolve o contador `tipos_ativos_sem_faixa` em `ponto/services/vigia_ausencia.py:163` e `ponto/services/vigia_ausencia.py:168`. Não encontrei representação de dia recusado nas grades/PDF; os únicos tratamentos específicos de produção aparecem nos locais acima [não verificado quanto a mecanismos indiretos].
-
-Proposta restritiva: manter `faixa_de` recusando, manter `test_05` intacto e registrar a decisão pendente sobre representação da recusa no PDF. Usar apenas o contador como justificativa para continuar julgando o dia inventaria uma resposta que ele não fornece (`ponto/services/vigia_ausencia.py:168`).
-
-Férias é regressão: contrato explícito exige leitura sem exceção (`ferias/situacao.py:1`, `ferias/situacao.py:22`, `ferias/situacao.py:38`); c6 introduziu `raise` em `ferias/situacao.py:96`, que viola o selo AST em `ferias/test_a3_situacao_de_ferias.py:739`. A estrutura existente `_aviso` permite preservar a recusa nomeada sem derrubar o leitor (`ferias/situacao.py:64`): capturar o erro, anexar aviso vermelho com seu texto nos caminhos de situação/agendamento, sem concluir descanso para o dia não julgado (`ferias/situacao.py:245`, `ferias/situacao.py:322`). Isso requer transportar avisos ao helper; não exige campo de modelo. Nenhum arquivo foi alterado.
-
-## 11/11 23:53 · sessao 9bd2d7f7b5cd · FIO-E0-V4-E4B · verificador · origem=Code
-
-A pré-verificação tem pendências: o selo aceita formas concretas de escrita fora da porta; há caminho estático para Pauta por limbo sem competência exportada; e a explicação dos tetos não fecha a aritmética do cenário com três chamados. (app/chamados/tests/e4b_c12_ast.py:247; app/chamados/services/disputa_emissao.py:1841; app/chamados/services/fecho_runtime.py:119; app/ponto/tests/test_selo_chokepoint_escrita.py:210)
-
-Não achei no material fornecido a tabela comparativa da corrente da manhã e do cartório emp. 2/3/4 exigida pelo aval; resultado desse DIFF, ORM, concorrência e identidade Git independente permanecem **[não verificado]**. A própria entrega distingue o snapshot textual da identidade Git e declara ORM/PROD não verificados. (app/docs/FIO-E0-V4-E4B-c12.txt:3; app/docs/FIO-E0-V4-E4B-c12.txt:4)
-
-**1. Censo**
-
-Não achei outro escritor corrente de **fechamento/resolução** fora da porta e dos nove sítios internos nominais. O corpo nominal inclui o gravador e os gates; o selo procura chamadas adicionais fora desse corpo. Isso não prova ausência de reflexão ou SQL arbitrário. (app/chamados/tests/e4b_c12_ast.py:18; app/chamados/tests/e4b_c12_ast.py:220; app/chamados/tests/e4b_c12_ast.py:249; completude dinâmica **[não verificado]**)
-
-Para a pergunta literal sobre **qualquer escrita de status**, existem chamadores não terminais fora da porta e da tabela S/E. `analisar` e `reabrir` chegam ao gravador, mas não constam de `GATES`; seus eventos levam a `em_analise`, portanto não são fechadores/resolvedores do aval. (app/chamados/models.py:807; app/chamados/models.py:1443; app/chamados/tests/e4b_c12_ast.py:14; app/chamados/catalogo/motor.py:112)
-
-| Operação fora da porta | Chamadores encontrados |
-|---|---|
-| `analisar` | app/chamados/views.py:1513; app/ponto/services/regularizacao.py:137; app/chamados/services/disputa_emissao.py:1085, :1159, :1178, :1223, :1252, :1379; app/chamados/management/commands/geofence_registrados_para_analise.py:32 |
-| `reabrir` | app/chamados/models.py:1020; app/chamados/views_arquivar.py:70; app/ponto/management/commands/reconciliar_grade.py:530; app/ponto/management/commands/detectar_ausencias.py:302; app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49; app/chamados/services/disputa_emissao.py:1851, :2011; app/chamados/services/competencia_trancada.py:266; app/chamados/services/acoes_disputa.py:270; app/chamados/services/adesao.py:93; app/chamados/management/commands/reabrir_orfas_enterradas.py:172 |
-
-As migrations escrevem fora da porta: 0038 altera aberto/registrado; 0039 faz o backfill de estado/via. Elas estão nominalizadas no selo separado. A aplicação anterior em PROD e a afirmação de tabela vazia em instalação nova aparecem como comentário, sem prova correspondente no dado raspado. (app/chamados/migrations/0038_a3_registrado_backfill.py:10; app/chamados/migrations/0038_a3_registrado_backfill.py:15; app/chamados/migrations/0039_a3_via_backfill.py:24; app/chamados/migrations/0039_a3_via_backfill.py:33; app/chamados/tests/test_e4b_c12_selo.py:93; app/chamados/tests/test_e4b_c12_selo.py:97)
-
-O selo principal só percorre `app/` e exclui migrations e testes. Não achei outro fechador terminal literal nas buscas de views/API, cascatas, comandos e scripts externos; censo irrestrito de tasks dinâmicas, aliases interprocedurais e SQL: **[não verificado]**. (app/chamados/tests/e4b_c12_ast.py:11; app/chamados/tests/e4b_c12_ast.py:34)
-
-**2. Equivalência dos sítios**
-
-O ramo `ato=` executa o callable sem lhe acrescentar argumentos e devolve seu resultado exato. Assim, os `user` externos não transformam `reconciliar()` em ato humano nem `encerrar()` deixa de usar sua via original. (app/chamados/services/fecho_runtime.py:165; app/chamados/services/fecho_runtime.py:169; app/chamados/models.py:655; app/chamados/models.py:1620)
-
-A comparação reversível em memória recuperou o AST dos arquivos anteriores, descontados os imports, contra o snapshot textual usado pelo runner; equivalência contra o commit Git real **[não verificado]**. O runner carrega essa base textual. (app/chamados/tests/e4b_c12_verificar.py:17; app/chamados/tests/e4b_c12_verificar.py:18)
-
-Na tabela, “booleano” significa que a seleção, condição ou retorno continua usando o booleano original; “descartado” significa que o chamador não consome o retorno. A preservação desse retorno está no ramo da porta. (app/chamados/services/fecho_runtime.py:165; app/chamados/services/fecho_runtime.py:169)
-
-| Sítio | Callable/operação e uso mantidos | Código |
-|---|---|---|
-| S01 | `reconciliar()`, booleano | app/chamados/management/commands/auditar_chamados_orfaos.py:68 |
-| S02–S04 | `transicionar(destino, usuário)`, retorno descartado; sem `ato=` | app/chamados/management/commands/smoke_chamados.py:135, :148, :164 |
-| S05 | `encerrar()`, booleano | app/chamados/reconciliador.py:497 |
-| S06 | `reconciliar()`, booleano | app/chamados/reconciliador.py:524 |
-| S07–S08 | `reconciliar()`, booleano | app/chamados/services/adesao.py:116, :151 |
-| S09 | `encerrar_por_competencia_trancada()`, booleano | app/chamados/services/competencia_trancada.py:185 |
-| S10 | `reconciliar()`, booleano | app/chamados/services/feriado_reavaliar.py:48 |
-| S11 | `reconciliar()`, booleano | app/chamados/services/limbo_folgas.py:102 |
-| S12–S13 | `reconciliar()`, booleano; conserva rollback entre tentativas | app/chamados/services/limbo_folgas.py:284, :286, :287 |
-| S14 | `reconciliar()`, descartado | app/chamados/services/materializacao.py:583 |
-| S15 | `reconciliar()`, booleano devolvido | app/chamados/services/materializacao.py:772 |
-| S16 | `encerrar()`, descartado | app/chamados/services/regularizacao_ext.py:206 |
-| S17 | `reconciliar()`, booleano | app/chamados/services/silencio_ausencia.py:102 |
-| S18 | `reconciliar()`, booleano | app/chamados/signals.py:43 |
-| S19 | `reconciliar()`, booleano | app/colaboradores/management/commands/marcar_feriado_do_posto.py:141 |
-| S20 | `encerrar()`, booleano combinado com status | app/colaboradores/services/desligamento.py:156 |
-| S21 | `reconciliar()`, booleano | app/colaboradores/services/pos_vinculo.py:43 |
-| S22 | `encerrar()`, descartado | app/colaboradores/services/vinculo.py:388 |
-| S23 | `cancelar(motivo=...)`, booleano; motivo e `ch=ch` conservados | app/escala/management/commands/fechar_avisos_regua_na_lista.py:48 |
-| S24 | `reconciliar()`, booleano | app/ponto/management/commands/curar_residuo_bug115.py:152 |
-| S25 | `reconciliar()`, descartado | app/ponto/management/commands/detectar_ausencias.py:159 |
-| S26–S28 | `reconciliar()`, booleano | app/ponto/management/commands/detectar_ausencias.py:825, :835, :846 |
-| S29 | `reconciliar()`, booleano; dry continua em `reconciliaria()` | app/ponto/management/commands/detectar_intervalo_ausente.py:139 |
-| S30 | `fechar(sistema, resolucao=...)`, `None` descartado; defaults capturam `ch/dia/te` | app/ponto/management/commands/fechar_chamados_meio_periodo.py:110 |
-| S31 | `cancelar(motivo=...)`, booleano; motivo e `ch=ch` conservados | app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:58 |
-| S32 | `reconciliar()`, booleano | app/ponto/services/ausencia.py:695 |
-| S33–S38 | `reconciliar()`, booleano nas seleções/condições | app/ponto/services/cartorio.py:987, :1512, :1525, :1546, :1624, :1639 |
-| S39 | `reconciliar()`, booleano | app/ponto/services/cluster_espurio.py:125 |
-| S40 | `reconciliar()`, atribuído a `_fechou` | app/ponto/services/cobertura.py:123 |
-| S41 | `reconciliar()`, booleano | app/ponto/services/cobertura.py:318 |
-| S42 | `reconciliar()`, booleano; serviço continua devolvendo chamado/`None` | app/ponto/services/entrada_sincronizada.py:32 |
-| S43 | `reconciliar()`, booleano | app/ponto/services/lastro.py:401 |
-| S44 | `reconciliar()`, booleano | app/ponto/services/triagem_batida.py:598 |
-| S45 | `reconciliar()`, booleano | app/ponto/services/veredito_celula.py:203 |
-| S46 | `transicionar('em_analise', user)`, descartado; sem `ato=` | app/chamados/services/acoes_chamado.py:238 |
-
-E01–E09 descartam o retorno da porta; não achei consumidor desses sítios confundindo contagem de Pautas com booleano ou objeto. (app/chamados/models.py:455; app/chamados/services/acoes_chamado.py:71, :226, :283, :110, :152, :322; app/chamados/services/fio.py:722; app/colaboradores/views.py:2069)
-
-**A equivalência de ordem não é absoluta em S30.** Antes, a porta interna de `fechar()` entregava a Pauta e depois vinha a nota; agora a reentrada interna reutiliza o coletor, a nota é escrita e o wrapper externo entrega a Pauta depois. Estado continua antes da nota, mas Pauta e nota trocam de ordem, e a nota passa a integrar o atomic externo da porta. (app/chamados/models.py:455; app/chamados/models.py:458; app/chamados/services/fecho_runtime.py:173; app/chamados/services/fecho_runtime.py:168; app/ponto/management/commands/fechar_chamados_meio_periodo.py:110)
-
-Não achei outra troca entre escritas antigas dos sítios; equivalência operacional com ORM e concorrência: **[não verificado]**. (app/docs/FIO-E0-V4-E4B-c12.txt:10)
-
-**3. Porta, reentrada e atomicidade**
-
-| Caso | Comportamento do código |
-|---|---|
-| Reentrada imediata do mesmo chamado | Executa o gate usando o coletor atual; não abre outro atomic nem entrega outro lote. (app/chamados/services/fecho_runtime.py:158; app/chamados/services/fecho_runtime.py:173) |
-| Outro chamado aninhado | Abre seu atomic e coletor; restaura o anterior antes de entregar seu lote. (app/chamados/services/fecho_runtime.py:161; app/chamados/services/fecho_runtime.py:167) |
-| A→B→A | A comparação é somente com o chamado do coletor corrente; o segundo A, enquanto B está corrente, abre outro lote. Não existe mapa global de chamados ativos. (app/chamados/services/fecho_runtime.py:156; app/chamados/services/fecho_runtime.py:159) |
-| Exceção que sai de `ato()` | Restaura o contexto e pula `_escrever_pautas`; a exceção sai pelo atomic da porta. (app/chamados/services/fecho_runtime.py:164; app/chamados/services/fecho_runtime.py:168) |
-| Falha na entrega da Pauta | Propaga fora do S143 e sai pelo mesmo atomic do ato. (app/chamados/services/fecho_runtime.py:161; app/chamados/services/fecho_runtime.py:168) |
-| Chamador captura essa falha | A captura externa ocorre depois da saída do atomic da porta; o receiver S88 é exemplo de chamador que captura. (app/chamados/signals.py:42; app/chamados/signals.py:47) |
-| Chamador já em atomic | A porta pede atomic com savepoint padrão; os gates automáticos internos continuam com `savepoint=False`. (app/chamados/services/fecho_runtime.py:161; app/chamados/models.py:651; app/chamados/models.py:1613) |
-| Autocommit | O atomic externo da porta delimita ato e entrega; não se pode chamar seu custo de SAVEPOINT/RELEASE em todos os contextos. (app/chamados/services/fecho_runtime.py:161; comportamento efetivo do backend **[não verificado]**) |
-
-Há caminhos de **transição sem Pauta**:
-
-- O S143 captura falhas do resolver. O coletor só incorpora as recusas depois de o contexto e o savepoint saírem sem erro; portanto uma falha pode preservar o fechamento e descartar a coleta. Isso é consequência explícita do best-effort existente. (app/chamados/signals.py:116; app/chamados/signals.py:118; app/chamados/services/fecho_runtime.py:35; app/chamados/services/fecho_runtime.py:40)
-- Pergunta sem dia de turno não ancora Pauta; via `competencia_trancada` também sai antes do processamento normal do resolver. (app/chamados/services/fecho_runtime.py:120; app/chamados/services/fecho_runtime.py:122; app/chamados/services/disputa_emissao.py:1901)
-- Sem recusa coletada, não há entrega. (app/chamados/services/fecho_runtime.py:118; app/chamados/services/fecho_runtime.py:128)
-
-A porta também **não exige uma transição bem-sucedida para escrever**: entrega o lote independentemente de `resultado`, inclusive `False`. O teste de memória exige justamente esse contrato. Nos gates produtivos inventariados, não achei um caso comprovado de Pauta sem nenhuma transição no ato; essa garantia não é imposta pela porta. (app/chamados/services/fecho_runtime.py:165; app/chamados/services/fecho_runtime.py:168; app/chamados/tests/test_e4b_c12_memoria.py:27; app/chamados/tests/test_e4b_c12_memoria.py:31)
-
-O retorno antecipado de `_escrever_pautas` só retira o atomic vazio quando nenhuma recusa tem âncora. O atomic externo continua cobrindo o ato; não achei mudança de rollback ou reentrada causada por esse retorno. (app/chamados/services/fecho_runtime.py:128; app/chamados/services/fecho_runtime.py:130; app/chamados/services/fecho_runtime.py:161)
-
-**4. Quem escreve, quem lê e significado**
-
-O quadro abaixo identifica escritores e famílias de leitores encontradas; não certifico censo irrestrito de todos os leitores dinâmicos/SQL. **[não verificado]**
-
-| Campo/valor | Escritores | Leitores identificados |
-|---|---|---|
-| `status_local` | Atribuição e persistência em app/chamados/models.py:228, :296; nascimento em :1096; simulação restaurada em :356, :371; migrations citadas no item 1 | Gates/tripwire em app/chamados/models.py:165, :219, :221; S143 em app/chamados/signals.py:97, :105; destino em app/chamados/juizes.py:760; fio em app/chamados/services/fio.py:389, :432; fila em app/chamados/services/na_fila.py:17; painel em app/chamados/services/painel.py:213; cartório em app/ponto/services/cartorio.py:1358, :1616; cascatas em app/colaboradores/services/desligamento.py:153, :156 e app/colaboradores/services/vinculo.py:386 |
-| `status_local`, outros consumidores | Mesmo escritor acima | app/chamados/reconciliador.py:247, :840; app/ponto/management/commands/detectar_ausencias.py:153, :194, :259; app/api/views.py:320, :1044, :1972; app/api/views_core.py:309; app/chamados/views.py:976, :1477; app/colaboradores/services/calendario.py:437; app/relatorios/views.py:745, :920; app/relatorios/pdf_chamados.py:116; app/chamados/management/commands/auditar_invariantes_chamados.py:573, :1068 |
-| `status_local`, apresentação | Mesmo escritor acima | app/templates/chamados/detalhe_local.html:68; app/templates/chamados/detalhe.html:36; app/templates/chamados/fio_colaborador.html:167; app/templates/chamados/partials/_lista_chamados.html:33; app/templates/chamados/partials/_card_atendimento.html:13; app/templates/chamados/partials/modal_fio.html:98; app/templates/chamados/partials/painel_chamado_turno.html:18; app/templates/relatorios/historico_chamados.html:121 |
-| `via_encerramento` | app/chamados/models.py:245, :249; backfill em app/chamados/migrations/0039_a3_via_backfill.py:24 | app/chamados/models.py:715, :1008, :1343, :1376; app/chamados/views_arquivar.py:64, :165; app/ponto/services/furos_sem_cobranca.py:69; app/chamados/services/disputa_emissao.py:1874, :1901; app/chamados/services/competencia_trancada.py:194, :260, :271; app/chamados/services/adesao.py:91; app/chamados/management/commands/auditar_invariantes_chamados.py:1070; app/chamados/management/commands/reabrir_orfas_enterradas.py:135 |
-| `resolvido_em` | app/chamados/models.py:244, :248 | app/chamados/models.py:243, :715, :1343, :1347, :1376; app/chamados/services/disputa_emissao.py:1861; app/chamados/services/painel.py:65, :245, :249; app/chamados/services/verbos.py:230, :237; app/chamados/services/fila.py:109; app/chamados/views_arquivar.py:166; app/chamados/management/commands/auditar_invariantes_chamados.py:574; app/chamados/management/commands/reabrir_orfas_enterradas.py:134; app/templates/relatorios/historico_chamados.html:127; app/templates/chamados/detalhe_local.html:88; app/templates/chamados/detalhe.html:56 |
-| `Pauta.ancora_id/texto` | E4B monta em app/chamados/services/fecho_runtime.py:58, :120; INSERT delegado em app/pautas/services.py:180; resposta copia âncora em :199 | Dedup em app/chamados/services/fecho_runtime.py:136; lista/âncora em app/pautas/services.py:322, :336; API em app/pautas/views.py:40, :47; apresentação em app/templates/core/_copiloto.html:405, :570 e app/templates/colaboradores/detalhe.html:119; suporte em app/pautas/management/commands/suporte_hasner.py:109 |
-| `_RECUSAS` | Default, `set`, `reset` e atualização do mapa em app/chamados/services/fecho_runtime.py:13, :20, :35, :39, :40, :163, :167, :179, :183 | Somente o runtime: app/chamados/services/fecho_runtime.py:18, :30, :156 |
-| `PerguntaDisputa.via_resolucao/materializada_em` | Atribuição conjunta em app/chamados/models.py:3098; persistem `carimbar` em :3155, identidade em :3191, descarimbo em :3213, lote em :3265; troca isolada de via em :3276 | C6 em app/chamados/juizes.py:662, :674, :689, :1342, :1368, :1374, :1405; estado/SQL em app/chamados/models.py:3044, :3056, :3351; materializador em app/chamados/services/materializacao.py:435, :439, :626, :1090, :1373; validação em app/chamados/services/validacao.py:188, :461, :472 |
-| Carimbo da pergunta, outros consumidores | Mesmas portas acima | app/chamados/services/disputa_emissao.py:1908, :2040; app/chamados/reconciliador.py:353, :367, :1144, :1495; app/chamados/veredito_lavrado.py:203; app/chamados/services/fio.py:1101, :1168, :1244, :1351, :1434, :1854; app/chamados/services/passivo_validado.py:21, :64, :140; app/chamados/services/relavra_via.py:42, :58, :66, :181, :244; app/chamados/services/fabrica_da_celula.py:149, :171; app/chamados/services/tarefa_do_dia.py:227; app/ponto/services/cartorio.py:1623 |
-| Carimbo da pergunta, tela/auditoria/reparo | Mesmas portas acima | app/chamados/services/painel.py:67; app/chamados/services/raiox.py:135; app/chamados/services/historico.py:103; app/chamados/views.py:1257; app/templates/chamados/partials/_card_atendimento.html:182; app/chamados/management/commands/auditar_invariantes_chamados.py:433, :470, :955, :1710; app/chamados/management/commands/auditar_disputas.py:71, :150; app/chamados/management/commands/reabrir_orfas_enterradas.py:67, :129, :142; app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70, :147; app/chamados/management/commands/relavrar_via_i6.py:32, :58; app/chamados/management/commands/backfill_decisoes_pergunta.py:101, :314, :325, :330 |
-
-Os significados relevantes não são todos intercambiáveis:
-
-- `ENCERRADOS` é resolvido/fechado; `TERMINAIS` acrescenta cancelado/superado; `NAO_FECHADOS` inclui resolvido. A porta coleta por `ENCERRADOS`, não por todo terminal. (app/chamados/catalogo/motor.py:30; app/chamados/catalogo/motor.py:31; app/chamados/catalogo/motor.py:32; app/chamados/services/fecho_runtime.py:158)
-- `resolvido_em` preserva o instante anterior em resolvido→fechado, mas `via_encerramento` é sobrescrita. Portanto o par não necessariamente descreve o mesmo ato terminal; isso já está no núcleo existente. (app/chamados/models.py:242; app/chamados/models.py:245)
-- A competência da Pauta usa o mês do **fim da janela**, com corte empresarial; não usa simplesmente o mês civil da pergunta. As datas inicial e final representam o intervalo corte…corte−1. (app/chamados/services/fecho_runtime.py:124; app/chamados/services/fecho_runtime.py:125; app/ponto/janelas.py:10; app/ponto/janelas.py:24)
-- Conversa usa dia civil em `data_evento`, e o juiz devolve `None` para seu dia de turno. O runtime respeita isso; `_vivas_entre` ainda consulta competência pelo `data_evento` cru. Essa divergência é preexistente e impede afirmar uniformidade total. (app/chamados/juizes.py:332; app/chamados/services/fecho_runtime.py:120; app/chamados/models.py:364)
-- `materializada_em` não prova plantio de batida: a porta de identidade grava `admin_decidiu` sem plantio, embora o help text ainda diga “batida criada + chamado fechado”. O C6 lê via e carimbo juntos. (app/chamados/models.py:3396; app/chamados/models.py:3170; app/chamados/juizes.py:1368)
-- `_RECUSAS` contém identidades e motivos, sem grandeza temporal. O runtime não acrescenta relógio próprio; os relógios alcançados continuam nos escritores de estado/carimbo/contador. O fuso configurado é São Paulo, com `USE_TZ=True`. (app/chamados/services/fecho_runtime.py:19; app/chamados/models.py:244; app/chamados/models.py:3186; app/pautas/services.py:362; app/pautas/services.py:366; app/confi
-
-[truncado em 20000 de 31158 caracteres]
-
-## 11/11 23:49 · sessao 78d66b49c516 · - · - · origem=Ronald (tmux)
-
-**Item 4 — escritores/leitores e semântica**
-
-- `status_local`: escritor persistente canônico `_gravar_estado`, atribuição em `app/chamados/models.py:228`, `save` em `:296`; INSERT de nascimento em `:1096`; simulação com restauração em `:356`/`:371`. Os gates usam o motor existente, e seus significados continuam separados: VIVOS, COBRANCA, ENCERRADOS, TERMINAIS e NAO_FECHADOS em `app/chamados/catalogo/motor.py:24-32`; autoridades registradas em `app/core/juizes.py:273-279`.
-- Leitores de `status_local`, por famílias: gate/tripwire `app/chamados/models.py:165`, `:219`, `:221`, `:364`; receiver `app/chamados/signals.py:97`, `:105`; C6/destino `app/chamados/juizes.py:760`; fio/fila `app/chamados/services/fio.py:389`, `:432`, `app/chamados/services/na_fila.py:17`; painel `app/chamados/services/painel.py:213-224`; cartório `app/ponto/services/cartorio.py:1358`, `:1616`; encerramentos/cascatas `app/colaboradores/services/desligamento.py:153`, `:156`, `app/colaboradores/services/vinculo.py:386`; emissores/reconciliadores `app/ponto/management/commands/detectar_ausencias.py:153`, `:194`, `:259`, `app/chamados/reconciliador.py:247`, `:840`; API/telas `app/api/views.py:320`, `:1044`, `:1972`, `app/api/views_core.py:309`, `app/chamados/views.py:976`, `:1477`, `app/colaboradores/services/calendario.py:437`; relatórios `app/relatorios/views.py:745`, `:920`, `app/relatorios/pdf_chamados.py:116`; auditorias `app/chamados/management/commands/auditar_invariantes_chamados.py:573`, `:1068`; templates `app/templates/chamados/detalhe_local.html:68`, `app/templates/chamados/detalhe.html:36`, `app/templates/chamados/fio_colaborador.html:167`, `app/templates/chamados/partials/_lista_chamados.html:33`, `app/templates/chamados/partials/_card_atendimento.html:13`, `app/templates/chamados/partials/modal_fio.html:98`, `app/templates/chamados/partials/painel_chamado_turno.html:18`, `app/templates/relatorios/historico_chamados.html:121`. Catálogo acima resume famílias; exaustividade de leitores, sobretudo SQL/dinâmicos, **[não verificado]**.
-- `via_encerramento`: escrito em `app/chamados/models.py:245`, limpo em `:249`; significado “quem/como deixou de ser vivo”, fonte em `app/chamados/catalogo/motor.py:86-96`. Leitores: `app/chamados/models.py:1008`, `:1343`; `app/chamados/views_arquivar.py:64`, `:165`; `app/ponto/services/furos_sem_cobranca.py:69-70`; `app/chamados/services/disputa_emissao.py:1874`, `:1901`; `app/chamados/services/competencia_trancada.py:260`; `app/chamados/services/adesao.py:91`; auditoria em `app/chamados/management/commands/auditar_invariantes_chamados.py:1070`; relatório de reparo em `app/chamados/management/commands/reabrir_orfas_enterradas.py:135`.
-- `resolvido_em`: instante da primeira saída de vivo; `resolvido→fechado` preserva carimbo, em `app/chamados/models.py:242-244`; reabertura limpa em `:248`. Leitores: proteção contra reabertura `app/chamados/models.py:1343-1347`; dedup de nota `app/chamados/services/disputa_emissao.py:1861`; janela civil/deslizante inclusiva `>=` em `app/chamados/services/painel.py:235-252`; `app/chamados/services/verbos.py:230`, `:237`; `app/chamados/services/fila.py:109`; ordenação `app/chamados/views_arquivar.py:166`; auditoria `app/chamados/management/commands/auditar_invariantes_chamados.py:574`; templates `app/templates/relatorios/historico_chamados.html:127`, `app/templates/chamados/detalhe_local.html:88`, `app/templates/chamados/detalhe.html:56`.
-- `Pauta.ancora_id/texto`: E4B monta texto em `app/chamados/services/fecho_runtime.py:58-83`, competência em `:120-126`; único INSERT delegado em `app/pautas/services.py:180-185`; resposta copia âncora em `:199`. Semântica empresa+competência documentada em `app/pautas/models.py:34`, `:84-89`. Leitores: dedup `app/chamados/services/fecho_runtime.py:136-137`; lista/chip `app/pautas/services.py:322`, `:336`; API `app/pautas/views.py:40-41`, `:47`; UI `app/templates/core/_copiloto.html:405`, `:570-573`; ficha `app/templates/colaboradores/detalhe.html:119`; suporte `app/pautas/management/commands/suporte_hasner.py:109-113`. Competência usa mês do **fim** da janela, com intervalo inclusivo corte..corte−1 em `app/ponto/janelas.py:10-32`, `:60-63`.
-- `_RECUSAS`: somente em `app/chamados/services/fecho_runtime.py`: default `:13`, leituras `:18`, `:30`, `:156`, atribuições/restaurações `:35`, `:39`, `:163`, `:167`, `:179`, `:183`; significado `{chamado:pk, perguntas:{pk:(pergunta,motivo)}}` em `:19-20`, `:34`, `:162`; não contém instante/unidade temporal.
-- `PerguntaDisputa.materializada_em/via_resolucao`: atribuição central conjunta em `app/chamados/models.py:3098-3102`; persistência pelas portas `carimbar`, `carimbar_identidade`, `descarimbar` e lote em `:3155`, `:3191`, `:3213`, `:3265-3267`; exceção nominal troca apenas via no fato já materializado em `:3276-3277`. C7 chama `fechar_por_admin` em `:1922`, usando o próprio instante no registro em `:1926`; S143 chama `carimbar` em `app/chamados/services/disputa_emissao.py:2060`.
-- Leitores principais desses campos: C6 `app/chamados/juizes.py:662`, `:674`, `:689`, `:1342`, `:1368`, `:1374`, `:1405`; estado/SQL de vivas `app/chamados/models.py:3044`, `:3056`, `:3351-3353`; materializador `app/chamados/services/materializacao.py:435`, `:439`, `:626-633`, `:1090`, `:1373`; validação `app/chamados/services/validacao.py:188-190`, `:461`, `:472`; S143 `app/chamados/services/disputa_emissao.py:1908`, `:2040`; reconciliador `app/chamados/reconciliador.py:353`, `:367`, `:1144`, `:1495`; veredito lavrado `app/chamados/veredito_lavrado.py:203-204`; fio `app/chamados/services/fio.py:1101`, `:1168`, `:1244`, `:1351`, `:1434`, `:1854`; passivo `app/chamados/services/passivo_validado.py:21`, `:64`, `:140-142`; relavra `app/chamados/services/relavra_via.py:42`, `:58`, `:66`, `:181`, `:244-252`; fábrica `app/chamados/services/fabrica_da_celula.py:149`, `:171`; tarefa `app/chamados/services/tarefa_do_dia.py:227-228`; cartório `app/ponto/services/cartorio.py:1623`; painel/raiox/histórico `app/chamados/services/painel.py:67`, `app/chamados/services/raiox.py:135`, `app/chamados/services/historico.py:103`; tela `app/chamados/views.py:1257`, `app/templates/chamados/partials/_card_atendimento.html:182`, `:186`; auditorias `app/chamados/management/commands/auditar_invariantes_chamados.py:433`, `:470`, `:955`, `:1710`, `app/chamados/management/commands/auditar_disputas.py:71`, `:150`; reparadores `app/chamados/management/commands/reabrir_orfas_enterradas.py:67`, `:129`, `:142`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70-72`, `:147`, `app/chamados/management/commands/relavrar_via_i6.py:32`, `:58-68`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:101`, `:314`, `:325`, `:330`.
-
-**Achados para itens 4/5**
-
-1. **Pauta sem exportada é permitida pelo código.** Limbo sozinho produz `recusa:credor_carrega_limbo:...`; o sufixo exportada é opcional em `app/chamados/services/disputa_emissao.py:1835-1846`; S143 coleta todo esse prefixo em `:1948-1952`; `_escrever_pautas` exige dia válido, sem exigir exportada no motivo, em `app/chamados/services/fecho_runtime.py:119-126`, `:139-141`. A origem humana `resolvido→fechado`, agora coletada em `:173-184`, permite alcançar isso sem guarda de origem viva em `app/chamados/models.py:165`. A carga inclui irmã limbo mesmo morta, porque `app/chamados/services/disputa_emissao.py:1798-1801` usa `_ancoradas`, cujo filtro não exige viva em `app/chamados/models.py:344-347`; a pergunta alvo pode continuar viva pela célula furada em `app/chamados/juizes.py:1378-1381`. Ocorrência PROD e execução ORM **[não verificado]**.
-2. **Dois usos de data preexistentes:** gate lê `data_evento` cru em `app/chamados/models.py:364`; runtime usa juiz que devolve `None` para conversa em `app/chamados/services/fecho_runtime.py:120`, `app/chamados/juizes.py:332-336`. Assim, dia civil de conversa pode ser tratado como exportado na guarda e não ancorar Pauta. Não é mudança nova no diff fornecido; ocorrência **[não verificado]**.
-3. **Ambiguidade documental preexistente:** `materializada_em` diz “batida criada + chamado fechado” em `app/chamados/models.py:3394-3396`, mas `carimbar_identidade` registra decisões sem plantio em `:3170-3191`; C6 lê via+carimbo como identidade em `app/chamados/juizes.py:1360-1369`. Não achei novo significado introduzido pelo diff nesses campos.
-4. **Relógio novo no runtime: não achei.** O alcance novo passa pelos relógios preexistentes do núcleo/carimbo em `app/chamados/models.py:244`, `:3125`, `:3186` e contador em `app/pautas/services.py:362`, `:366`; timezone configurado `America/Sao_Paulo`/`USE_TZ=True` em `app/config/settings/base.py:93`, `:95`.
-5. **Juiz duplicado no runtime: não achei:** composição chama juiz do dia e janela em `app/chamados/services/fecho_runtime.py:113`, `:116`, `:120-125`, sem regra própria de vitalidade; autoridades registradas em `app/core/juizes.py:273-292`.
-6. Ordem canônica existente C→D→Ch→P em `app/chamados/models.py:2630-2694`; nova entrega acrescenta contador DP→âncoras ordenadas após ato em `app/chamados/services/fecho_runtime.py:130-141`, `app/pautas/services.py:344-352`. Ciclo concorrente concreto causado pela ampliação **[não verificado]**; não certificar ordem global de lotes multicollaboradores sem medição/inspeção do atomic externo.
-
-## 11/11 23:48 · sessao 1d0a0301f85d · - · - · origem=Ronald (tmux)
-
-**Item 2.** Contra o snapshot textual, reverter os 46 enxertos recupera o AST anterior dos 30 arquivos, descontados os imports; o runner também usa esse snapshot, carregado em `app/chamados/tests/e4b_c12_verificar.py:17-18`. Identidade Git da base e comparação independente de commits: [não verificado]; a cópia não contém repositório Git [não verificado].
-
-O ramo `ato=` devolve exatamente o resultado do callable, inclusive `False` e `None`; `user` e `novo_status` externos não são repassados ao método original, que conserva seus argumentos (`app/chamados/services/fecho_runtime.py:157-169`). `reconciliar`, `encerrar`, `encerrar_por_competencia_trancada` e `cancelar` devolvem booleanos; `fechar` não possui retorno explícito (`app/chamados/models.py:642`, `app/chamados/models.py:656`, `app/chamados/models.py:1606`, `app/chamados/models.py:1621`, `app/chamados/models.py:1641`, `app/chamados/models.py:774`, `app/chamados/models.py:793`, `app/chamados/models.py:452`).
-
-- S01–S13: mesmos métodos/argumentos e mesmos usos booleanos; S02–S04 descartam retorno; S12/S13 preservam as duas tentativas e rollback intermediário (`app/chamados/management/commands/auditar_chamados_orfaos.py:68`; `app/chamados/management/commands/smoke_chamados.py:135`, `:148`, `:164`; `app/chamados/reconciliador.py:497`, `:524`; `app/chamados/services/adesao.py:116`, `:151`; `app/chamados/services/competencia_trancada.py:185`; `app/chamados/services/feriado_reavaliar.py:48`; `app/chamados/services/limbo_folgas.py:102`, `:284`, `:287`).
-- S14–S25: S14/S16/S22/S25 descartam resultado; S15 devolve o booleano; demais usam condição booleana; S23 mantém motivo completo e captura `ch=ch` (`app/chamados/services/materializacao.py:583`, `:772`; `app/chamados/services/regularizacao_ext.py:206`; `app/chamados/services/silencio_ausencia.py:102`; `app/chamados/signals.py:43`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:141`; `app/colaboradores/services/desligamento.py:156`; `app/colaboradores/services/pos_vinculo.py:43`; `app/colaboradores/services/vinculo.py:388`; `app/escala/management/commands/fechar_avisos_regua_na_lista.py:48`; `app/ponto/management/commands/curar_residuo_bug115.py:152`; `app/ponto/management/commands/detectar_ausencias.py:159`).
-- S26–S38: usos booleanos preservados, inclusive seleção das comprehensions e ramo dry; S30 conserva argumentos e descarta `None`; S31 conserva motivo e captura `ch=ch` (`app/ponto/management/commands/detectar_ausencias.py:825`, `:835`, `:846`; `app/ponto/management/commands/detectar_intervalo_ausente.py:139`; `app/ponto/management/commands/fechar_chamados_meio_periodo.py:110`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:58`; `app/ponto/services/ausencia.py:695`; `app/ponto/services/cartorio.py:987`, `:1512`, `:1525`, `:1546`, `:1624`, `:1639`).
-- S39–S46: usos booleanos preservados; S40 mantém `_fechou`; S46 descarta retorno e conserva a transição não terminal (`app/ponto/services/cluster_espurio.py:125`; `app/ponto/services/cobertura.py:123`, `:318`; `app/ponto/services/entrada_sincronizada.py:32`; `app/ponto/services/lastro.py:401`; `app/ponto/services/triagem_batida.py:598`; `app/ponto/services/veredito_celula.py:203`; `app/chamados/services/acoes_chamado.py:238`).
-- E01–E09 descartam retorno da porta, portanto não há conversão indevida de contagem em booleano nesses chamadores (`app/chamados/models.py:455`; `app/chamados/services/acoes_chamado.py:71`, `:226`, `:283`, `:110`, `:152`, `:322`; `app/chamados/services/fio.py:722`; `app/colaboradores/views.py:2069`).
-
-**Ressalva S30:** a ordem entre a Pauta existente de E01 e a nota muda. Antes, `fechar` escrevia Pauta pela porta interna e depois nota; com wrapper externo, a reentrada interna retorna sem escrever Pauta, a nota nasce e só depois o wrapper entrega Pauta (`app/chamados/models.py:455-458`; `app/ponto/management/commands/fechar_chamados_meio_periodo.py:110`; `app/chamados/services/fecho_runtime.py:173-176`, `:168`). Não achei troca na ordem entre as escritas antigas de estado e nota; equivalência operacional ORM [não verificado].
-
-**Item 7.** A primeira chamada pula a disputa porque a irmã morta tem resposta sem veredito; essa lista exige `materializada_em is None` e texto/resposta (`app/colaboradores/services/desligamento.py:140-143`; `app/chamados/models.py:1843-1847`). S20 encerra o chamado; S143 poupa a viva e carimba a irmã morta com `resposta='validar'`, removendo o impedimento da disputa (`app/colaboradores/services/desligamento.py:156`; `app/chamados/services/disputa_emissao.py:1966-1987`).
-
-Na segunda chamada, a disputa entra em `fechar(..., motivo=desligamento)`; C7 chama `fechar_por_admin` nas vivas e grava `admin_decidiu`/`materializada_em` por `carimbar_identidade` (`app/colaboradores/services/desligamento.py:143`; `app/chamados/models.py:1919-1927`; `app/chamados/models.py:3065`; `app/chamados/models.py:3186-3191`). Esse enterro ocorre **antes** do save da disputa e fora de S143/porta do Chamado; o save da disputa pode depois acionar S88, mas a pergunta já foi carimbada (`app/chamados/models.py:1937`; `app/chamados/signals.py:19-43`).
-
-O teste alterado ainda exige viva sem `materializada_em` antes da segunda chamada, verifica Pauta idêntica depois e passa a exigir a via C7 esperada; não achei ocultação de enterro na primeira chamada (`app/chamados/tests/test_e4b_c12_orm.py:168-179`). Resultado ORM e demonstração pareada contra c11 real: [não verificado]. O teste não afirma explicitamente `materializada_em is not None` após a segunda chamada (`app/chamados/tests/test_e4b_c12_orm.py:174-179`).
-
-**Item 8.** O mecanismo de +2 por entrada **aninhada e não reentrante** é coerente com o `atomic()` padrão; isso inclui entrada cujo gate devolve `False` (`app/chamados/services/fecho_runtime.py:158-169`). Sem recusas, o retorno anterior ao atomic remove o savepoint vazio de `_escrever_pautas` (`app/chamados/services/fecho_runtime.py:118-130`).
-
-A explicação “2 entradas por chamado” não bate com +8 para três chamados: duas vezes três entradas, a +2 cada, seriam +12; +8 corresponde a quatro entradas (`app/ponto/tests/test_selo_chokepoint_escrita.py:210`). O código permite uma entrada por chamado no loop e outra por disputa/pai fechado no E2: E2 roda antes do loop, fecha disputas distintas e dispara S88; depois o loop ainda pode entrar para um chamado já fechado pelo signal (`app/ponto/services/cartorio.py:983-987`; `app/chamados/reconciliador.py:609-615`; `app/chamados/signals.py:34-43`). Logo, “N chamados + um pai de disputa” explicaria +4/+8; contagem efetiva dessa execução [não verificado].
-
-“Nunca por item” só é defensável para o custo do savepoint por entrada. A porta é chamada dentro de loops por chamado; com recusas, `_escrever_pautas` percorre perguntas, acessa suas relações e janela, depois executa lock/dedup/escrita por competência (`app/ponto/services/cartorio.py:987`; `app/chamados/services/fecho_runtime.py:119-141`). Totais observados 217/277 e alegação de diff SQL exclusivamente SAVEPOINT/RELEASE: [não verificado]; constam como declarações nos comentários e no plano, sem a medição no dado raspado (`app/ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`; `PLANO_PISCADA.md:142`).
-
-## 11/11 23:47 · sessao 7ca0371690e3 · - · - · origem=Ronald (tmux)
-
-Itens 1 e 6 — somente leitura.
-
-**Censo**
-
-Não achei escritor corrente de fechamento/resolução de `ChamadoColaborador` fora da porta e do corpo nominal; os nove sítios internos estão em `app/chamados/tests/e4b_c12_ast.py:18`, e o teste cobra ausência de outros escritores em `app/chamados/tests/test_e4b_c12_selo.py:22`. Completude contra reflexão/SQL arbitrário: [não verificado].
-
-A leitura literal de “todo escritor de status” encontra **20 chamadores não terminais fora da porta**, omitidos pelo conjunto `GATES`; `analisar` e `reabrir` escrevem em `app/chamados/models.py:807` e `app/chamados/models.py:1443`, mas seus nomes não constam de `app/chamados/tests/e4b_c12_ast.py:14`. O motor limita esses eventos ao destino `em_analise`, portanto não são fechadores/resolvedores do aval (`app/chamados/catalogo/motor.py:112`).
-
-- `analisar`: `app/chamados/views.py:1513`; `app/ponto/services/regularizacao.py:137`; `app/chamados/services/disputa_emissao.py:1085`, `:1159`, `:1178`, `:1223`, `:1252`, `:1379`; `app/chamados/management/commands/geofence_registrados_para_analise.py:32`.
-- `reabrir`: `app/chamados/models.py:1020`; `app/chamados/views_arquivar.py:70`; `app/ponto/management/commands/reconciliar_grade.py:530`; `app/ponto/management/commands/detectar_ausencias.py:302`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49`; `app/chamados/services/disputa_emissao.py:1851`, `:2011`; `app/chamados/services/competencia_trancada.py:266`; `app/chamados/services/acoes_disputa.py:270`; `app/chamados/services/adesao.py:93`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:172`.
-
-As migrations escrevem fora da porta: 0038 em `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `:15`; 0039 em `app/chamados/migrations/0039_a3_via_backfill.py:24`, `:33`. São nominalizadas em `app/chamados/tests/test_e4b_c12_selo.py:97`. Aplicação prévia/vazio de tenant novo só aparece como alegação de comentário e não está comprovada pelo dado raspado (`app/chamados/tests/test_e4b_c12_selo.py:93`).
-
-Não achei escrita terminal literal em scripts externos de `bin`/`mensageria` nem SQL literal de `status_local`; completude dessa ausência é [não verificado]. O selo restringe a varredura a `app`, pois `ROOT` nasce em `app/chamados/tests/e4b_c12_ast.py:11`, e ainda exclui migrations, diretórios de teste e arquivos com prefixos `test_`/`tests_` (`app/chamados/tests/e4b_c12_ast.py:34`).
-
-**Mordida e buracos**
-
-Os testes existentes cobrem botão direto, update, aliases, getattr literal, loop, save e bulk_update literal (`app/chamados/tests/test_e4b_c12_selo.py:48`, `:64`, `:77`). Executei o runner somente em memória, com `python3 -B`/`PYTHONDONTWRITEBYTECODE=1`: **17 testes, OK**, sem banco; registro persistente desse resultado [não verificado].
-
-Experimentos somente em memória mostraram:
-
-| Forma | Resultado do AST | Explicação no código |
-|---|---|---|
-| `import chamados.models as m; ...encerrar()` | Morde | Resolve imports/atributos (`app/chamados/tests/e4b_c12_ast.py:109`, `:190`) |
-| `C.custom.filter(...).update(status_local=...)` | Morde | Update aceita tipo desconhecido (`app/chamados/tests/e4b_c12_ast.py:253`) |
-| `bulk_update(..., ['status_local'])` | Morde | Campo literal reconhecido (`app/chamados/tests/e4b_c12_ast.py:259`) |
-| `getattr(c, 'encer' + 'rar')()` | Passa | Só resolve string `Constant` (`app/chamados/tests/e4b_c12_ast.py:114`) |
-| Método herdado: `class Proxy(C): ... self.encerrar()` | Passa | Não resolve herança; compara tipo exatamente com TARGET (`app/chamados/tests/e4b_c12_ast.py:127`, `:249`) |
-| `bulk_update(..., ['status_' + 'local'])` | Passa | Soma faz união dos fragmentos, não concatenação (`app/chamados/tests/e4b_c12_ast.py:161`) |
-| `update(**{'status_local':'fechado'})` | Passa | Ignora keyword com `arg=None` (`app/chamados/tests/e4b_c12_ast.py:241`) |
-| `save(False, False, None, ['status_local'])` | Passa | Só examina keyword `update_fields` e atribuição anterior (`app/chamados/tests/e4b_c12_ast.py:264`) |
-| `transicionar_com_pauta(..., ato=c.encerrar())` | Passa | Autoriza qualquer AST dentro de `ato`; a chamada seria avaliada antes da entrada da porta (`app/chamados/tests/e4b_c12_ast.py:246`) |
-
-O selo de migration pega update literal e atribuição, conforme seus dois adversariais (`app/chamados/tests/test_e4b_c12_selo.py:133`). Entretanto, **não pega bulk_update com fields posicional ou keyword `fields`, getattr literal, `save(update_fields=...)`, nem `**kwargs`**, pois a regra só reconhece chamadas de atributo com keyword `status_local`/`defaults`, ou atribuição explícita (`app/chamados/tests/test_e4b_c12_selo.py:112`).
-
-Há um buraco adicional mais forte: inserir **uma nova escrita terminal literal dentro de `0039.backfill`** mantém o selo verde, porque os achados são um conjunto apenas de `(arquivo, função)`; a nova operação não muda esse conjunto (`app/chamados/tests/test_e4b_c12_selo.py:115`, `:119`, `:131`). Reproduzi em memória acrescentando `C.objects.update(status_local='fechado')` dentro dessa função; registro persistente [não verificado].
-
-A descoberta de migrations ainda depende de nomes `0*.py`, excluindo uma futura `1000_*.py` (`app/chamados/tests/test_e4b_c12_selo.py:126`).
-
-## 11/11 23:44 · sessao d83266f85771 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-C6 aplicada: cobertura separada do rótulo, mapas legados preservados, efeito de tipos inativos mantido e versão 5 com horizonte `2026-11`. [Relato, censo e escritores/leitores](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6.r:1). [nao verificado]
-
-22 testes GREEN; RED na base `f218d86a7` e na c5; 15 mutantes mortos, incluindo os nove anteriores. [Comandos e resultados](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6_execucoes.r:4).
-
-Sem commit, pela proibição inicial. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6.r:66). Certificação da suíte completa e Opus final: [nao verificado]. [nao verificado]
-
-_4081 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
