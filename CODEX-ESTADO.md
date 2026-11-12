@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 20:08** · publicado em **12/11/2026 20:08** (UTC-3)
+> Ultima resposta processada: **12/11/2026 20:25** · publicado em **12/11/2026 20:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 20:25 · sessao 525ac3c7b50c · TIPO-NA-FONTE · construtor · origem=Code
+
+Entrega parcial no [relato completo](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/RELATO_TIPO_ITEM3_V3.txt:1), com alterações, leitores/escritores, REDs e comandos dos mutantes.
+
+- **92 testes passaram; 1 pulado.** [Evidência](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/TIPO_ITEM3_V3_TESTES.txt:214). [nao verificado]
+- **Pendência:** a catraca detectou cópia crua em `ponto/portas/celula.py:1083`, arquivo proibido; a meta zero permanece aberta. [Reprodução](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/TIPO_ITEM3_V3_TESTES.txt:220).
+- Suite Django: **[nao verificado]**, por ausência de `django.test`. [Tentativa](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/TIPO_ITEM3_V3_TESTES.txt:241). [nao verificado]
+
+Sem commit, conforme a proibição do envelope. [Registro](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/RELATO_TIPO_ITEM3_V3.txt:151). [nao verificado]
 
 ## 12/11 20:08 · sessao d89d76f9010a · - · - · origem=Ronald (tmux)
 
@@ -500,20 +510,4 @@ Criações de células pela geração/regeneração omitem `ata`, podendo nascer
 
 Atribuições em `celula_como_o_julgamento_deixa` e no builder aparecem em `app/ponto/portas/celula.py:945` e `app/escala/utils.py:1887`; avaliar com o outro explorador que são objetos/copias de leitura, não persistidores, antes de listá-las como escritores de banco.
 
-## 12/11 19:42 · sessao 4957a50984d0 · - · - · origem=Ronald (tmux)
-
-Não localizei `sonda_estado_c.py`, o hash `5eafc1a4f533ae11` nem o anexo `TIPO-ITEM3-MATRIZ` na cópia por busca de nomes e conteúdo. Ausência comprovável por arquivo:linha é impossível; marcar `[nao verificado]`.
-
-A porta `bin/sonda_leitura.sh` exige arquivo existente antes de prosseguir (`:71`). Executá-la com uma sonda existente violaria “não crie, edite nem apague arquivo”: reescreve credencial (`:126-134`), cria e remove temporários (`:216-218`), acrescenta trilha (`:248-250`) e usa banco/Django (`:235-240`). Também ajusta roles/GRANTs/rede (`:140-143`, `:157-181`, `:186-193`).
-
-O texto fornecido não contém nenhuma contagem `c_*`, definição dessas classes, datas por célula nem identidade do escritor. Não permite atribuir uma classe positiva a escritor/data. `[nao verificado]`
-
-Referências temporais no HEAD que não comprovam autoria dos dados fornecidos:
-
-- `app/escala/tests/test_t41_leitor_celula.py:50-53` e `:75-76`: comentários sobre atas anteriores à T4.2 e medição em 31/08.
-- `app/ponto/tests/test_o118_orfa_que_acendeu.py:2-16`: comentário sobre problema entre 22/09 e 01/10.
-- `app/escala/models.py:1774-1778`: documentação inicial da ata em 29/08, listando `n_orfas` sem mencionar `orfas`.
-
-Fábrica atual inclui ambos os campos, com contagem e lista derivados de `dia.get('orfas') or []`: `app/ponto/services/cartorio.py:742-745`.
-
-_4420 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4421 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
