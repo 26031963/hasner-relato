@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 19:00** · publicado em **12/11/2026 19:05** (UTC-3)
+> Ultima resposta processada: **12/11/2026 19:11** · publicado em **12/11/2026 19:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 19:11 · sessao d9121af81e22 · TIPO-NA-FONTE · construtor · origem=Code
+
+Entrega registrada no [relato v2](docs/tipo_na_fonte_orfas_relato_v2.txt:1), com os oito itens do censo, REDs, comandos e INCOMPLETO.
+
+- **47 testes dirigidos passaram, rc=0.** [Registro](docs/tipo_na_fonte_orfas_execucao_v2.txt:251)
+- **Sete mutantes foram rejeitados.** [Comandos e resultados](docs/tipo_na_fonte_orfas_execucao_v2.txt:307)
+- Suite Django e integração completa do PDF não executadas; certificação Code/opus pendente. [Limites](docs/tipo_na_fonte_orfas_relato_v2.txt:101)
 
 ## 12/11 19:00 · sessao 16931418c3a8 · - · - · origem=Ronald (tmux)
 
@@ -995,101 +1003,4 @@ Todos os caminhos desta tabela ficam em `app/chamados/management/commands/`.
 
 [truncado em 20000 de 31100 caracteres]
 
-## 12/11 17:33 · sessao aa3d7d6986fe · TIPO-NA-FONTE · verificador · origem=Code
-
-**Não aprovo como cumprimento integral.** O instrumento entrega listagens e falhas explícitas, mas não garante “todo leitor e escritor”: há perdas silenciosas de proveniência e a medida chamada `acessos_crus_ata` ainda não significa “fora do acessor”. O selo tem mordida parcial e admite ferramentas quebradas em aspectos contratados. (`bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:224`, `bin/leitores_de_chave.py:538`, `bin/leitores_de_chave.py:627`; `bin/tests/test_leitores_de_chave.sh:100`)
-
-As referências a `aval.txt` e `contrato.txt` abaixo são aos anexos fornecidos, contando o título como linha 1. Execução histórica do selo, publicação prévia do contrato e pouso: **[não verificado]**. [nao verificado]
-
-**1. As cinco linhas do contrato têm atendimento parcial.**
-
-| Linha | Onde está e onde há furo |
-|---|---|
-| **Quem chama** | O contrato determina brief com saída anexa. O chamador executável demonstrado é o selo; o juiz existente do CENSO aceita referências textuais, sem conferir saída deste instrumento. Automatização para todo brief que toca ata/dna: **[não verificado]**. (`contrato.txt:2`, anexo; `bin/tests/test_leitores_de_chave.sh:26`; `bin/disjuntor.py:1565`) |
-| **Quem espera** | Texto e JSON entregam arquivo, linha, função e papéis. Entrega efetiva ao construtor/preverificador e espera condicionada ao resultado: **[não verificado]**. (`contrato.txt:3`, anexo; `bin/leitores_de_chave.py:291`, `bin/leitores_de_chave.py:663`) |
-| **Falha/limite** | Há universo Python, separação produção/testes, declaração de HTML/JS não cobertos, rc 1 nomeando chave sem resultado e rc 2 por erro de parse. O furo é tratar essas garantias como completude do censo: várias perdas de proveniência não geram erro nem lacuna. (`bin/leitores_de_chave.py:34`, `bin/leitores_de_chave.py:224`, `bin/leitores_de_chave.py:555`, `bin/leitores_de_chave.py:569`, `bin/leitores_de_chave.py:617`, `bin/leitores_de_chave.py:669`) |
-| **Medida** | Existem resumo por chave e `--contar-crus`. Publicação do censo das 72 chaves no RELATO: **[não verificado]**. O contador não exclui acessor nem compara com teto anterior; portanto fornece uma medida, ainda não a catraca contratada. (`contrato.txt:5`, anexo; `bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:631`, `bin/leitores_de_chave.py:648`) |
-| **Quem desliga / selo** | Ronald está declarado como autoridade no contrato. O mutante de chave desaparecida tem controle antes e vizinha preservada depois; não é vazio nesse aspecto. A mordida não cobre toda a semântica prometida. (`contrato.txt:6`, anexo; `bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:60`, `bin/tests/test_leitores_de_chave.sh:62`, `bin/tests/test_leitores_de_chave.sh:100`) |
-
-O conteúdo dos dois arquivos permanece no instrumento e no selo de host: não implementa acessor, migração de `orfas` ou persistência de instantes. Os modos adicionais servem à inspeção e à medida; chamá-los de catraca pronta antecipa uma garantia ausente. (`bin/leitores_de_chave.py:5`, `bin/leitores_de_chave.py:24`, `bin/leitores_de_chave.py:552`, `bin/leitores_de_chave.py:631`; `bin/tests/test_leitores_de_chave.sh:4`; `aval.txt:5`, anexo)
-
-**2. O AST reconhece candidatos sintáticos; não prova `CelulaDia`.**
-
-Não há regra global “variável chamada `ata` é ata”. Há, porém, dependência de **nomes declarados** por arquivo e função em `PARAMS`, e de nomes de funções em `RETURNS`. Além disso, qualquer atributo `.ata`/`.dna`, qualquer `getattr` com esse literal e qualquer argumento nomeado `ata=`/`dna=` com dicionário são aceitos sem prova da classe ou do destinatário. (`bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:128`, `bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:249`, `bin/leitores_de_chave.py:493`)
-
-| Forma | Resultado e risco |
-|---|---|
-| `a=c.ata; a["orfas"]` | Reconhecida por um salto. (`bin/leitores_de_chave.py:166`, `bin/leitores_de_chave.py:221`) |
-| `a=c.ata; b=a; b["orfas"]` | Perde o acesso no caso comum: o limite de profundidade interrompe o segundo salto. Ocorrência real de raiz perdida exclusivamente por isso: **[não verificado]**. (`bin/leitores_de_chave.py:224`) |
-| `a=b=c.ata` | Reconhece ambos: cada alvo recebe diretamente o mesmo valor. Não equivale ao caso anterior. (`bin/leitores_de_chave.py:134`, `bin/leitores_de_chave.py:138`) |
-| Comprehension | Acesso direto à origem é visto; `values_list` recebe tratamento específico. Um caso sintético como `[a["orfas"] for a in [c.ata]]` perde a ligação do elemento. (`bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:203`, `bin/leitores_de_chave.py:218`) |
-| `getattr(c,"ata")["orfas"]` | Reconhecido. Campo obtido de variável ou chamada indireta `getattr(c.ata,"get")("orfas")` não recebe a mesma resolução. (`bin/leitores_de_chave.py:249`, `bin/leitores_de_chave.py:256`) |
-| Reatribuição / ordem | O ambiente agrega atribuições da função inteira, sem invalidar proveniência. Em exemplo sintético `a=c.ata; a={...}; a["orfas"]`, o acesso continua atribuído à ata; uma atribuição posterior também pode contaminar acesso anterior. (`bin/leitores_de_chave.py:127`, `bin/leitores_de_chave.py:168`, `bin/leitores_de_chave.py:227`) |
-| Outro objeto com `.ata` | Entra como candidato. Já outro objeto apenas com `.orfas` não entra por esse motivo. (`bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:377`) |
-
-**Sítios reais incluídos:** `getattr` em `app/chamados/juizes.py:966`, `app/chamados/reconciliador.py:701` e `app/ponto/services/lastro.py:89`, `app/ponto/services/lastro.py:113`, `app/ponto/services/lastro.py:128`, `app/ponto/services/lastro.py:149`; comprehensions em `app/ponto/juiz_batida.py:161` e `app/relatorios/cartao_pela_celula.py:288`; desempacotamento de `values_list` em `app/ponto/services/vigia_pareador_celula.py:71`, com leituras em `app/ponto/services/vigia_pareador_celula.py:74` e `app/ponto/services/vigia_pareador_celula.py:78`.
-
-**Sítios corretamente excluídos:** a variável chamada `ata` em `app/relatorios/furos.py:132` é mapa de dias, consumido em `app/relatorios/furos.py:134`. As leituras de `orfas` em dias da grade ficam fora em `app/escala/services/furos_diarios.py:22`, `app/folha/causas.py:43`, `app/folha/causas.py:100`, `app/ponto/services/bordas_realizado.py:49`, `app/relatorios/pdf_espelho.py:477` e `app/relatorios/pdf_espelho.py:552`. `FuroDiario.orfas` é um inteiro próprio, não a chave do JSON. (`app/escala/models.py:1883`)
-
-**Perdas reais:** a leitura de `ata["lampadas"]` é vista, mas o laço não transmite proveniência a `lamp`; as escritas de `acesa`, `luz` e `dispensada` somem do censo dessas subchaves. Também ficam fora consultas ORM, conforme limite declarado. (`app/ponto/services/cartorio.py:805`, `app/ponto/services/cartorio.py:808`, `app/ponto/services/cartorio.py:809`, `app/ponto/services/cartorio.py:810`; `app/escala/management/commands/celulas_contra_o_template.py:49`; `app/chamados/models.py:3356`; `bin/leitores_de_chave.py:176`, `bin/leitores_de_chave.py:34`)
-
-**O 95 depende das declarações.** Na reprodução em memória, o total foi 95; sem apenas `PARAMS`, 73; sem `PARAMS` e `RETURNS`, 62. A fórmula conta eventos de topo reconhecidos pelos mapas e pelo rastreamento. (`bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:627`)
-
-As 33 operações que desaparecem desligando ambos os mapas estão nestes sítios; multiplicidade indica mais de um evento na mesma linha:
-
-- `app/chamados/juizes.py:438` ×2.
-- `app/escala/services/leitor_celula.py:68`, `app/escala/services/leitor_celula.py:82`, `app/escala/services/leitor_celula.py:91`, `app/escala/services/leitor_celula.py:103`, `app/escala/services/leitor_celula.py:105` ×2, `app/escala/services/leitor_celula.py:115`, `app/escala/services/leitor_celula.py:175`, `app/escala/services/leitor_celula.py:187`, `app/escala/services/leitor_celula.py:190`.
-- `app/ponto/services/cartorio.py:424`, `app/ponto/services/cartorio.py:426`, `app/ponto/services/cartorio.py:738` ×2, `app/ponto/services/cartorio.py:739`, `app/ponto/services/cartorio.py:740`, `app/ponto/services/cartorio.py:741`, `app/ponto/services/cartorio.py:742`, `app/ponto/services/cartorio.py:745`, `app/ponto/services/cartorio.py:746`, `app/ponto/services/cartorio.py:762`, `app/ponto/services/cartorio.py:767`, `app/ponto/services/cartorio.py:771`, `app/ponto/services/cartorio.py:805`, `app/ponto/services/cartorio.py:812`, `app/ponto/services/cartorio.py:834`, `app/ponto/services/cartorio.py:839`, `app/ponto/services/cartorio.py:913`, `app/ponto/services/cartorio.py:917` ×2.
-- `app/relatorios/dia_da_frota.py:21`.
-
-Há uma perda silenciosa concreta por nome declarado: renomear somente o parâmetro `ata` e seus usos em `_orfas_da_ata`, mantendo a função, elimina duas operações e leva 95 a 93. O guard verifica a função, não a existência do parâmetro declarado. (`app/escala/services/leitor_celula.py:180`, `app/escala/services/leitor_celula.py:187`, `app/escala/services/leitor_celula.py:190`; `bin/leitores_de_chave.py:128`, `bin/leitores_de_chave.py:541`)
-
-**3. O selo morde alguns defeitos, mas não sustenta “todos os casos mordem”.**
-
-| Caso | Mordida / vacuidade |
-|---|---|
-| **a — árvore real** | Exige presença mínima de leitor/escritor nos arquivos esperados e número positivo. Não verifica completude nem valor/delta da medida. (`bin/tests/test_leitores_de_chave.sh:39`, `bin/tests/test_leitores_de_chave.sh:44`) |
-| **b — mutante** | Não vazio para desaparecimento: exige controle rc 0, mutante rc 1 nomeado e vizinha rc 0. Uma ferramenta sempre “sem resultado” reprova. (`bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:60`, `bin/tests/test_leitores_de_chave.sh:62`) |
-| **c — inexistente** | Exige rc 1 nomeado; isoladamente seria vazio para ferramenta sempre negativa, mas b fornece controle positivo. (`bin/tests/test_leitores_de_chave.sh:67`, `bin/tests/test_leitores_de_chave.sh:55`) |
-| **d — parse** | Introduz arquivo inválido depois do universo válido e exige rc 2, arquivo nomeado e stdout vazio. (`bin/tests/test_leitores_de_chave.sh:99`, `bin/tests/test_leitores_de_chave.sh:116`, `bin/tests/test_leitores_de_chave.sh:118`) |
-| **e — testes** | Confere separação e chave exclusiva de teste. A asserção do contador aceita stdout `8` sem verificar rc. (`bin/tests/test_leitores_de_chave.sh:106`, `bin/tests/test_leitores_de_chave.sh:110`, `bin/tests/test_leitores_de_chave.sh:113`) |
-| **f — declaração** | Morde função removida/renomeada; não morde parâmetro renomeado com função preservada. (`bin/tests/test_leitores_de_chave.sh:72`; `bin/leitores_de_chave.py:541`) |
-| **g — formas** | Confere exatamente caminhos e formas, mas ignora papéis. Retirar ESCRITOR de `setdefault` e ESCRITOR/EXCLUI de `pop` preserva a comparação. (`bin/tests/test_leitores_de_chave.sh:100`; `bin/leitores_de_chave.py:427`, `bin/leitores_de_chave.py:429`) |
-| **uso** | Exige rc 64 por argumento faltando. (`bin/tests/test_leitores_de_chave.sh:122`) |
-
-Todas as invocações do selo usam `CelulaDia.ata`; uma implementação de DNA quebrada pode passar. (`bin/tests/test_leitores_de_chave.sh:36`, `bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:99`, `bin/tests/test_leitores_de_chave.sh:122`)
-
-A raiz é calculada por `BASH_SOURCE/../..` e três arquivos são conferidos **antes** de `mktemp`. Isso permite cwd externo; transportar o script para fora da posição `bin/tests` altera a raiz calculada. A prova é de presença, não de identidade do hash. (`bin/tests/test_leitores_de_chave.sh:16`, `bin/tests/test_leitores_de_chave.sh:18`, `bin/tests/test_leitores_de_chave.sh:22`)
-
-No caminho normal, gravações ficam sob `$_tmp`. **Se `mktemp` falhar**, seu retorno não é conferido e `_tmp=''` produz tentativas em `/out`, `/err`, `/copia` e `/sint`. Portanto não há confinamento garantido em todos os caminhos. (`bin/tests/test_leitores_de_chave.sh:15`, `bin/tests/test_leitores_de_chave.sh:22`, `bin/tests/test_leitores_de_chave.sh:28`, `bin/tests/test_leitores_de_chave.sh:50`, `bin/tests/test_leitores_de_chave.sh:78`)
-
-**4. As três saídas não oferecem números intercambiáveis.**
-
-| Saída | Escritor, leitor demonstrado e significado |
-|---|---|
-| **Texto** | `run()` escreve eventos selecionados por seção; inclui `*` e descendentes compatíveis. O selo usa rc/stderr nas consultas textuais. (`bin/leitores_de_chave.py:635`, `bin/leitores_de_chave.py:659`; `bin/tests/test_leitores_de_chave.sh:55`, `bin/tests/test_leitores_de_chave.sh:60`) |
-| **JSON** | `run()` escreve listas filtradas, mas o resumo é global, mesmo consultando uma chave. O selo lê sítios, formas e separação produção/testes. (`bin/leitores_de_chave.py:645`, `bin/leitores_de_chave.py:652`; `bin/tests/test_leitores_de_chave.sh:30`, `bin/tests/test_leitores_de_chave.sh:39`, `bin/tests/test_leitores_de_chave.sh:100`) |
-| **`--contar-crus`** | Imprime eventos de produção cujo caminho é exatamente uma chave literal de topo; exclui `*` e caminhos dinâmicos. O selo lê o número real e o sintético. (`bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:631`; `bin/tests/test_leitores_de_chave.sh:44`, `bin/tests/test_leitores_de_chave.sh:112`) |
-
-A unidade efetiva é **evento emitido e deduplicado**, com posição, caminho, papéis e forma; não linha nem arquivo. Uma operação com dois papéis continua um evento, portanto somar leitores e escritores pode contar duas vezes. (`bin/leitores_de_chave.py:288`, `bin/leitores_de_chave.py:302`, `bin/leitores_de_chave.py:385`, `bin/leitores_de_chave.py:424`)
-
-Também entram escritas apenas em memória, como `_cj.ata`; o contador não mede exclusivamente persistência. (`app/escala/utils.py:1886`, `app/escala/utils.py:1887`, `app/escala/utils.py:1895`)
-
-Os principais conflitos futuros são: nenhum filtro “fora do acessor”; nenhuma comparação com teto; e total zero retorna rc 1. Assim, a meta zero poderá produzir erro, enquanto acessos internos ao acessor continuarão contados. (`bin/leitores_de_chave.py:627`, `bin/leitores_de_chave.py:633`; `aval.txt:5`, anexo)
-
-Não há evidência suficiente para atribuir a briefs futuros ou à linha HAIKU uma suposição de unidade “linha” ou “arquivo”: **[não verificado]**. Tampouco é legítimo interpretar 174→95 como redução: o aval descreve grep em outro HEAD, e o instrumento define outra seleção por AST. (`aval.txt:1`, anexo; `bin/leitores_de_chave.py:24`)
-
-**5. Classes que já reprovaram obra.**
-
-| Classe | Situação neste recorte |
-|---|---|
-| **Segundo juiz** | **Não demonstrado como juiz de negócio.** Há classificador sintático sem prova de classe, insuficiente como veredito completo sobre proveniência. (`bin/leitores_de_chave.py:218`, `bin/leitores_de_chave.py:249`) |
-| **Segundo escritor** | **Não no instrumento para dados da aplicação:** lê fonte e emite saída. O selo escreve fixtures/cópias, com o furo de `mktemp` descrito. (`bin/leitores_de_chave.py:563`, `bin/leitores_de_chave.py:643`; `bin/tests/test_leitores_de_chave.sh:22`, `bin/tests/test_leitores_de_chave.sh:58`) |
-| **Relógio fora da borda** | **Não demonstrado no julgamento.** `date` mede apenas duração do selo. (`bin/tests/test_leitores_de_chave.sh:33`, `bin/tests/test_leitores_de_chave.sh:125`) |
-| **Derivação paralela de fonte única** | **Presente na proveniência manual:** `PARAMS/RETURNS` precisam acompanhar o código; o guard incompleto permite divergência silenciosa. (`bin/leitores_de_chave.py:39`, `bin/leitores_de_chave.py:66`, `bin/leitores_de_chave.py:538`) |
-| **Selo sem mordida** | **Presente parcialmente:** papéis não conferidos, DNA sem exercício e rc ignorado numa asserção do contador. (`bin/tests/test_leitores_de_chave.sh:100`, `bin/tests/test_leitores_de_chave.sh:113`, `bin/tests/test_leitores_de_chave.sh:122`) |
-| **Ordem de trava** | **Não há operação de banco neste instrumento.** A ordem local raiz→temporário está correta, mas falta abortar na falha do temporário. (`bin/leitores_de_chave.py:552`; `bin/tests/test_leitores_de_chave.sh:18`, `bin/tests/test_leitores_de_chave.sh:22`) |
-| **Pouso antes do pré-requisito** | **[não verificado]**: anexos e código não provam cronologia de verificação, publicação ou pouso. | [nao verificado]
-| **Campo com dois significados** | **Presente no nome da medida:** `acessos_crus_ata` designa todos os eventos reconhecidos de topo, enquanto o contrato exige acessos fora do acessor. (`bin/leitores_de_chave.py:24`, `bin/leitores_de_chave.py:627`; `contrato.txt:5`, anexo) |
-
-_4387 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4388 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
