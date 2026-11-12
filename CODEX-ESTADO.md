@@ -1,7 +1,227 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 11:25** · publicado em **12/11/2026 11:26** (UTC-3)
+> Ultima resposta processada: **12/11/2026 11:30** · publicado em **12/11/2026 11:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 11:30 · sessao 1cbff62e7def · AUDITORIA-DE-TRAVAS-CORTE · verificador · origem=Code
+
+REPROVADO
+
+**1. O diff não realiza literalmente o item 2.** O aval diz “para só em DESENHO”, mas o disparo continua dependendo da quantidade de reprovações, sem consultar sua classe; inclusive a chamada que dispara retorna PARADA antes de examinar liberações. A classe aparece apenas na nova linha `AUTOLIBERA`. Referências: `aval_auditoria_de_travas_corte_1211.txt:4` do anexo; `bin/disjuntor.py:652`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1028`, `bin/disjuntor.py:763`.
+
+A exclusividade da segunda ocorrência também não está garantida: a cota protege somente `tipo == 'auto'`. O Code pode liberar pela antiga `ERRO-BOBO`, sem cota nem prova de autoria Ronald; o próprio teste exige essa saída. Isso corresponde à preservação das portas antigas pelo contrato, mas diverge do aval literal. Referências: `contrato_item2.txt:2` do anexo; `bin/disjuntor.py:757`, `bin/disjuntor.py:1044`, `bin/disjuntor.py:1049`, `bin/tests/test_disjuntor.sh:1213`.
+
+Há outra divergência textual: o contrato pede “só 1 FALHA por sha recusado”; implementação e teste usam **SOBE**. Referências: `contrato_item2.txt:4` do anexo; `bin/disjuntor.py:1047`, `bin/tests/test_disjuntor.sh:1177`. As linhas dos anexos foram contadas a partir do primeiro conteúdo de cada anexo.
+
+**2. Escritores e leitores.**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `est['b3'][obra]['auto']` | `decide_b3` acrescenta SHA na liberação automática; `_com_estado` persiste o JSON. `bin/disjuntor.py:1051`, `bin/disjuntor.py:379`. | Guarda da cota; testes da primeira liberação e sobrevivência ao rearme. `bin/disjuntor.py:1044`, `bin/tests/test_disjuntor.sh:1170`, `bin/tests/test_disjuntor.sh:1180`. |
+| `auto_sobe` | `decide_b3` acrescenta SHA recusado. `bin/disjuntor.py:1046`. | Deduplicação do aviso. `bin/disjuntor.py:1045`. |
+| `lib['auto']` / `b3_libera['auto']` | `ler()` inicializa e conta eventos `LIBERA (auto)`, na janela de 24 horas. `bin/disjuntor.py:1996`, `bin/disjuntor.py:2000`, `bin/disjuntor.py:2025`. | `linha()` formata; `gerar_estado.py` usa `ler()/linha()`; teste antigo consulta o resultado. `bin/disjuntor.py:2285`, `bin/disjuntor.py:2289`, `bin/gerar_estado.py:280`, `bin/gerar_estado.py:281`, `bin/tests/test_disjuntor.sh:430`. |
+| Evento `SOBE` | `decide_b3` prepara; `_anuncia` publica após persistência, através de `trilha()`. `bin/disjuntor.py:1047`, `bin/disjuntor.py:1064`, `bin/disjuntor.py:1067`, `bin/disjuntor.py:205`. | Leitor específico encontrado: teste `conta()`. O ESTADO não enumera `SOBE`; o leitor de censo também o descarta. `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1177`, `bin/disjuntor.py:2002`, `bin/disjuntor.py:2115`. |
+| SHA consumido | `_sha_b3()` normaliza/calcula; `decide_b3` grava em `consumidas`. `bin/disjuntor.py:677`, `bin/disjuntor.py:1039`, `bin/disjuntor.py:1055`. | Guarda de reutilização lê `consumidas` e `topo_no_disparo`. A fotografia produz os SHA anteriores ao disparo. `bin/disjuntor.py:1040`, `bin/disjuntor.py:832`. |
+| `B3_AUTO_COTA` | Constante `1`. `bin/disjuntor.py:147`. | Guarda, texto de `SOBE` e mensagem do B3. `bin/disjuntor.py:1044`, `bin/disjuntor.py:1048`, `bin/disjuntor.py:1176`. |
+
+Os consumidores decisórios fora do diff convergem na mesma decisão, podendo provocar a gravação da liberação:
+
+- **Stop:** `hook_stop_fila1.py` chama `julga_b3`, que chama `decide_b3`; recebe paradas e mensagens. `bin/hook_stop_fila1.py:1204`, `bin/hook_stop_fila1.py:1205`, `bin/disjuntor.py:1096`.
+- **PreToolUse:** `_nega_b3 → estado_b3 → julga_b3 → decide_b3`. `bin/disjuntor.py:1801`, `bin/disjuntor.py:1105`, `bin/disjuntor.py:1096`.
+- **Wrapper Codex:** `--b3-parada → b3_parada → estado_b3`; recusa retorno diferente de sucesso. `bin/codex_pergunta.sh:378`, `bin/disjuntor.py:2383`, `bin/disjuntor.py:1158`.
+- **ESTADO:** recebe a contagem de eventos, incorpora `dj_txt` e grava a página; não lê a cota persistida como medida. `bin/gerar_estado.py:281`, `bin/gerar_estado.py:378`, `bin/gerar_estado.py:390`, `bin/disjuntor.py:2025`.
+
+Há ainda leitores genéricos do JSON: `_com_estado` e `ler_estado`; os consumidores deste último selecionam B1, B4 e históricos, sem interpretar `auto`. A referência do hook ao arquivo serve para rejeitá-lo como prova de espera. Referências: `bin/disjuntor.py:367`, `bin/disjuntor.py:401`, `bin/disjuntor.py:596`, `bin/disjuntor.py:1882`, `bin/disjuntor.py:2213`, `bin/hook_stop_fila1.py:664`.
+
+**3. Caminhos e contraexemplos.**
+
+- **Segunda AUTOLIBERA, sozinha:** permanece PARADA, registra `auto_sobe` e não consome seu SHA. A recusa dá `continue` antes da liberação e do consumo. `bin/disjuntor.py:1044`, `bin/disjuntor.py:1046`, `bin/disjuntor.py:1049`, `bin/disjuntor.py:1055`.
+- **Segunda ocorrência liberada:** após gastar a primeira AUTO, disparar novamente e escrever no topo:
+  ```
+  AUTOLIBERA OBRA-A: classe=ERRO-BOBO segundo erro
+  ERRO-BOBO OBRA-A: segundo erro escrito pelo Code
+  ```
+  A primeira linha gera `SOBE`; a segunda libera na mesma decisão, sem autenticar Ronald. Esse caminho está expressamente exercitado pelo teste. `bin/disjuntor.py:757`, `bin/disjuntor.py:1047`, `bin/disjuntor.py:1049`, `bin/disjuntor.py:1056`, `bin/tests/test_disjuntor.sh:1214`.
+- **`classe=DESENHO`:** não entra pela porta nova. Porém `classe=FORMA erro de desenho` satisfaz o reconhecedor: há validação do rótulo, não da natureza real do defeito. `bin/disjuntor.py:146`, `bin/disjuntor.py:763`. Classificação correta dos defeitos em produção: `[nao verificado]`.
+- **Rearme/reinício normal:** não zeram a cota; rearme preserva `auto`, e cada transição relê o estado persistido. Se o estado estiver ausente, a inicialização usa `{}` e a ausência de `auto` vale zero; isso é perda/troca de estado, não efeito do reinício normal. `bin/disjuntor.py:1134`, `bin/disjuntor.py:1136`, `bin/disjuntor.py:367`, `bin/disjuntor.py:368`, `bin/disjuntor.py:1044`. Ocorrência dessa perda em produção: `[nao verificado]`.
+
+**4. As linhas antigas mudam em alguma composição.** Seus reconhecedores individuais continuam iguais, mas uma AUTO válida anterior ganha a seleção e encerra o loop. Com AUTO seguida de `ERRO-BOBO`, passa a consumir o SHA da AUTO, gastar cota e registrar `LIBERA (auto)`; antes, a candidata seria `ERRO-BOBO`, com outro SHA e outra contagem. Referências: `bin/disjuntor.py:746`, `bin/disjuntor.py:757`, `bin/disjuntor.py:1038`, `bin/disjuntor.py:1051`, `bin/disjuntor.py:1055`, `bin/disjuntor.py:1059`.
+
+Com cota esgotada, a antiga abaixo continua liberando, conforme o controle `c5`. `bin/disjuntor.py:1049`, `bin/tests/test_disjuntor.sh:1213`, `bin/tests/test_disjuntor.sh:1215`.
+
+**5. Os três mutantes declarados têm mordida identificável.**
+
+| Mutante | Verificação que o rejeita |
+|---|---|
+| Libera a segunda | `c2` exige duas recusas, um SOBE e recusa após rearme. `bin/tests/test_disjuntor.sh:1942`, `bin/tests/test_disjuntor.sh:1186`. |
+| Aceita DESENHO | `c3` exige PARADA e reconhecimento vazio. `bin/tests/test_disjuntor.sh:1943`, `bin/tests/test_disjuntor.sh:1195`. |
+| Aceita sem classe | A alteração também aceita DESENHO, atingindo `c3`; os inválidos atingem `c4`. `bin/tests/test_disjuntor.sh:1944`, `bin/tests/test_disjuntor.sh:1195`, `bin/tests/test_disjuntor.sh:1206`. |
+
+O harness confere âncora única e inclui controle da cópia sem mutação. `bin/tests/test_disjuntor.sh:1626`, `bin/tests/test_disjuntor.sh:1630`, `bin/tests/test_disjuntor.sh:1652`.
+
+Não há `all([])` nesses controles: `rs` recebe quatro resultados e `ctrl`, três. Entretanto, **a medição positiva fica sem prova**: o teste de `ler()` exige apenas `auto=0`, enquanto `b3_auto` conta a trilha diretamente. Retirar `auto` da regex do medidor mantém esse assert satisfeito. Referências: `bin/tests/test_disjuntor.sh:1201`, `bin/tests/test_disjuntor.sh:1204`, `bin/tests/test_disjuntor.sh:1210`, `bin/tests/test_disjuntor.sh:1215`, `bin/tests/test_disjuntor.sh:431`, `bin/tests/test_disjuntor.sh:1156`, `bin/disjuntor.py:2023`.
+
+O controle da porta antiga também ignora o retorno de `dispara()` e verifica apenas ausência no mapa, sem exigir `LIBERA (erro-bobo)`. É uma fragilidade; A já deveria estar PARADA pelo caso anterior. `bin/tests/test_disjuntor.sh:1186`, `bin/tests/test_disjuntor.sh:1213`, `bin/tests/test_disjuntor.sh:1215`. Execução integral do selo com arquivos e travas reais: `[nao verificado]`.
+
+**6. Classes de reprovação.**
+
+| Classe | Resultado |
+|---|---|
+| Segundo escritor fora da porta | Não identificado para `auto`: a atribuição específica está em `decide_b3`, persistida pela porta comum. `bin/disjuntor.py:1051`, `bin/disjuntor.py:1075`. |
+| Relógio fora da borda | Há leitura interna herdada: `decide_b3` usa `time.time()` quando falta `agora`, como ocorre na via `b3_parada`; `trilha()` usa `datetime.now()`. A cota nova não depende de relógio. `bin/disjuntor.py:988`, `bin/disjuntor.py:1158`, `bin/disjuntor.py:206`, `bin/disjuntor.py:1044`. |
+| Selo sem mordida | Os três declarados mordem; falta testemunha positiva do contador `auto` no ESTADO. `bin/tests/test_disjuntor.sh:1186`, `bin/tests/test_disjuntor.sh:1195`, `bin/tests/test_disjuntor.sh:1206`, `bin/tests/test_disjuntor.sh:431`. |
+| Campo com dois significados | Existem dois `auto` distintos: lista cumulativa por obra e contador de eventos em 24 horas. Não são a mesma célula; zero no painel não significa cota disponível. `bin/disjuntor.py:1051`, `bin/disjuntor.py:1996`, `bin/disjuntor.py:2025`. |
+| Ordem de trava | Sem inversão acrescentada: decisão e persistência ficam sob `LOCK_EX`, com anúncio ainda sob a trava. Wrapper e triagem adquirem resposta antes de estado. `bin/disjuntor.py:359`, `bin/disjuntor.py:374`, `bin/disjuntor.py:390`, `bin/codex_pergunta.sh:376`, `bin/codex_pergunta.sh:378`, `bin/disjuntor.py:897`, `bin/disjuntor.py:929`. |
+
+“Sobe ao Ronald” produz uma linha de trilha que o ESTADO não trata como evento próprio; entrega ou notificação efetiva ao Ronald permanece `[nao verificado]`. `bin/disjuntor.py:1047`, `bin/disjuntor.py:2002`.
+
+## 12/11 11:28 · sessao 23a31f2a2d8d · - · - · origem=Ronald (tmux)
+
+Achados, todos limitados à cópia:
+
+- **Divergência literal do aval:** B3 continua disparando por quantidade de reprovações, sem consultar classe: `n >= B3_REPROVACOES` ou `nc >= B3_CODEX_VOLTAS`, marcando PARADA e dando `continue` (`bin/disjuntor.py:1018`, `bin/disjuntor.py:1020`, `bin/disjuntor.py:1028`). A leitura de veredito recolhe obra e APROVADO/REPROVADO, não FORMA/DESENHO (`bin/disjuntor.py:652`, `bin/disjuntor.py:669`). Portanto “para só em DESENHO” não foi implementado literalmente.
+
+- **Segunda ocorrência pode liberar pela porta antiga:** cota protege exclusivamente `tipo == 'auto'`; esgotada, dá `continue` (`bin/disjuntor.py:1044`, `bin/disjuntor.py:1049`). `ERRO-BOBO` antigo não exige autoria Ronald nem cota (`bin/disjuntor.py:757`); entra na liberação genérica (`bin/disjuntor.py:1052`, `bin/disjuntor.py:1058`). O próprio selo exige esse comportamento (`bin/tests/test_disjuntor.sh:1213`, `bin/tests/test_disjuntor.sh:1217`).
+
+  Reproduzi exclusivamente em memória, com IO substituído: primeira AUTO de OBRA-A libera e grava um SHA; nova reprovação, topo contendo AUTO classe=ERRO-BOBO e `ERRO-BOBO OBRA-A: erro 2 escrito pelo Code`, retorna livre e emite **SOBE + LIBERA(erro-bobo)** na mesma decisão. Isso contraria a exclusividade “2a sobe a mim”, mas corresponde ao contrato que preserva a porta antiga (`bin/disjuntor.py:1047`, `bin/disjuntor.py:1056`).
+
+- **DESENHO na nova porta:** `classe=DESENHO` é recusada pelo conjunto fechado FORMA/ERRO-BOBO (`bin/disjuntor.py:146`, `bin/disjuntor.py:763`). Porém só se verifica o rótulo: `classe=FORMA erro de desenho` é reconhecida como auto; classe real do defeito não é auditada (`bin/disjuntor.py:762`, `bin/disjuntor.py:764`). Confirmei ambos os resultados em memória. A ocorrência desse uso em produção é `[nao verificado]`.
+
+- **Rearme/reinício:** rearme altera rearmado, reprovados, codex e disparado; não altera auto (`bin/disjuntor.py:1134`, `bin/disjuntor.py:1136`). Reinício normal relê JSON persistido (`bin/disjuntor.py:366`). Estado ausente vira `{}` e auto ausente equivale a zero (`bin/disjuntor.py:368`, `bin/disjuntor.py:1044`); isso depende de perda/troca/remoção de estado, não é reset causado por reinício normal. Ocorrência real de perda: `[nao verificado]`.
+
+- **Linhas antigas têm mudança observável em combinação com a nova:** reconhecedores DESENHO/ERRO-BOBO estão intactos (`bin/disjuntor.py:746`, `bin/disjuntor.py:757`), mas AUTO válida anterior ganha a seleção e encerra o loop (`bin/disjuntor.py:1038`, `bin/disjuntor.py:1059`). Confirmado em memória:
+  - topo `AUTOLIBERA OBRA-A: classe=FORMA ajuste` seguido de `ERRO-BOBO OBRA-A: ajuste`: código novo consome SHA AUTO, gasta cota e registra LIBERA(auto);
+  - simulação da base filtrando candidatos AUTO: consome SHA ERRO-BOBO, não gasta cota e registra LIBERA(erro-bobo).
+  
+  Portanto “comportamento das antigas não mudou em nenhum caso” seria incorreto: consumo, contador e cota mudam nessa combinação (`bin/disjuntor.py:1051`, `bin/disjuntor.py:1055`, `bin/disjuntor.py:1056`).
+
+- **Travas:** leitura, incremento da cota e persistência permanecem sob a mesma LOCK_EX (`bin/disjuntor.py:359`, `bin/disjuntor.py:374`, `bin/disjuntor.py:379`); anúncio é executado ainda sob essa trava (`bin/disjuntor.py:390`, `bin/disjuntor.py:1064`). O diff não acrescenta outra trava nem inversão de ordem nessas operações (`bin/disjuntor.py:1044`, `bin/disjuntor.py:1051`).
+
+- **Relógio:** novo gate usa comprimento da lista e constante, sem leitura temporal (`bin/disjuntor.py:1044`). Existe fallback herdado `time.time()` dentro de `decide_b3`, antes da aquisição da trava (`bin/disjuntor.py:988`), utilizado pela via `b3_parada`, que não passa `agora` (`bin/disjuntor.py:1158`). `trilha` também lê `datetime.now()` (`bin/disjuntor.py:206`). Não há contraexemplo temporal novo encontrado; fotografia usa máximo do relógio recebido e dos mtimes observados (`bin/disjuntor.py:828`, `bin/disjuntor.py:841`).
+
+- **Contrato, evento recusado:** contrato fornecido exige “só 1 FALHA por sha recusado”; implementação usa **SOBE**, deduplicado em auto_sobe (`bin/disjuntor.py:1045`, `bin/disjuntor.py:1047`), e teste também espera SOBE (`bin/tests/test_disjuntor.sh:1177`). Leitor `ler()` não enumera SOBE (`bin/disjuntor.py:2002`). Entrega/notificação efetiva ao Ronald é `[nao verificado]`.
+
+## 12/11 11:28 · sessao 467d3fa641a2 · - · - · origem=Ronald (tmux)
+
+O caso `b3_auto` morde os três mutantes declarados; há lacunas de cobertura fora deles (`bin/tests/test_disjuntor.sh:1942`, `bin/tests/test_disjuntor.sh:1943`, `bin/tests/test_disjuntor.sh:1944`).
+
+| Mutação | Resultado em memória | Assert que morde |
+|---|---|---|
+| Libera a 2ª | saída 2; falha `[2]` | `bin/tests/test_disjuntor.sh:1186` |
+| Aceita DESENHO | saída 3; falha `[3]` | `bin/tests/test_disjuntor.sh:1195` |
+| Aceita sem classe | saída 3; falhas `[3,4]` | `bin/tests/test_disjuntor.sh:1195`, `bin/tests/test_disjuntor.sh:1206` |
+| `continue` vira `break` | saída 5; falha `[5]` | `bin/tests/test_disjuntor.sh:1215` |
+| SOBE duplicado | saída 2; falha `[2]` | `bin/tests/test_disjuntor.sh:1177`, `bin/tests/test_disjuntor.sh:1186` |
+| Remove gravação de `consumidas` | passa | ausência de conferência desse campo em `bin/tests/test_disjuntor.sh:1170`, `bin/tests/test_disjuntor.sh:1186`, `bin/tests/test_disjuntor.sh:1217` |
+| Retira `auto` da regex de `ler()` | passa | `b3_auto` conta diretamente a trilha, sem chamar `ler()`: `bin/tests/test_disjuntor.sh:1156`, `bin/tests/test_disjuntor.sh:1170`; alteração em `bin/disjuntor.py:2023` |
+
+O teste antigo de medição exige somente `auto: 0`: contador permanentemente zero satisfaz esse assert. Falta testemunha positiva `ler()['b3_libera']['auto'] > 0` (`bin/tests/test_disjuntor.sh:430`, `bin/tests/test_disjuntor.sh:431`).
+
+Não há `all([])` na sequência normal: `rs` recebe quatro resultados e `ctrl` recebe três (`bin/tests/test_disjuntor.sh:1201`, `bin/tests/test_disjuntor.sh:1204`, `bin/tests/test_disjuntor.sh:1210`, `bin/tests/test_disjuntor.sh:1215`). O controle da porta antiga ignora o retorno de `dispara()` e exige apenas ausência no mapa, sem comprovar `LIBERA (erro-bobo)` ou estado persistido; porém A já ficou parada ao final de c2, portanto isso é fragilidade, não falso verde vazio demonstrado na sequência normal (`bin/tests/test_disjuntor.sh:1186`, `bin/tests/test_disjuntor.sh:1213`, `bin/tests/test_disjuntor.sh:1215`).
+
+O harness verifica âncora única e executa controle da cópia sem mutação, evitando queda apenas por árvore incompleta (`bin/tests/test_disjuntor.sh:1623`, `bin/tests/test_disjuntor.sh:1626`, `bin/tests/test_disjuntor.sh:1630`, `bin/tests/test_disjuntor.sh:1652`).
+
+Execução realizada com Python `-B`, fontes compiladas em strings, corpo original de `b3_auto` e substituições de IO/estado/relógio/triagem em memória; integração real de arquivos e travas, execução integral da suíte e resultados de produção: `[nao verificado]`. [nao verificado]
+
+## 12/11 11:27 · sessao fc614e3aba36 · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
+
+**Não fecharia a c14:** há perda da data na guarda de órfãs, a prova integrada de (d) permanece incompleta e o selo sem célula enfraquece “nunca turno aberto”. (`app/relatorios/pdf_espelho.py:476`, `:512`; `app/ponto/tests/test_lastro_c14_sem_banco.py:295`; `app/relatorios/tests/test_cartao_marca_espuria.py:136`)
+
+1. **(a) PDF — bloqueia: HH:MM de outro dia suprime turno legítimo.**
+
+   A grade própria saiu: órfãs vêm de `orfas_grade`, e a recusa recebida permanece até o compositor comum. Sem achado de outra fonte para **essa classificação de batida/recusa**. (`app/relatorios/pdf_espelho.py:475`, `:561`, `:594`)
+
+   Contudo, `_orfas_hhmm` apaga a data e `_entrada_espuria` compara somente HH:MM. **Contraexemplo sintético:** órfã `07:02` em **10/11**; entrada legítima aberta `07:02` em **11/11**, cujo `orfas_grade=[]`. O resumo exclui o turno de 11/11, mas `batida.orfa=False` nessa linha, que continua imprimindo “turno aberto”. No período livre, a troca pelos totais da competência não corrige esse contador. (`app/relatorios/pdf_espelho.py:178`, `:476`, `:512`, `:565`, `:920`, `:927`; `app/relatorios/cartao_pela_celula.py:322`)
+
+   Portanto, **muda o resultado do código real**; um dia efetivamente atingido em produção não foi demonstrado pelo dado fornecido: **[nao verificado]**.
+
+   Sobra uma leitura literal de outra espécie de órfã: `datas_saida_orfa(_turnos_juiz, ...)`. Ela identifica **saída sem entrada**, não `ata.orfas`; a tela consulta o mesmo juiz. **Sem achado de segundo juiz nesse ponto**, embora o PDF ainda não leia esse campo do retorno da tela. (`app/relatorios/pdf_espelho.py:578`; `app/ponto/turnos.py:234`; `app/ponto/services/espelho.py:622`)
+
+2. **(b) Três sítios — sem achado de perda do canal corrigido.**
+
+   O mapa nasce antes da seleção, entra em `_pela_grade`, atende pré-apuração e `AtaAgregadaSemMarcos` e sobrevive à composição posterior. A2 escreve a recusa por data e deixa esse dia sem conclusão de precedência; o overlay transporta o rótulo com `tipo_dia=None`. (`app/ponto/services/espelho.py:486`, `:498`, `:536`, `:565`, `:655`, `:881`; `app/ponto/precedencia.py:423`, `:425`; `app/escala/utils.py:1218`)
+
+   **Nenhum `except` novo que engole no delta.** Permanecem os genéricos antigos; `TipoSemFaixa` fora do transporte por data é explicitamente relançado. Os testes exercitam seleção e handlers reais, mas não um request HTTP inteiro. Ausência de qualquer outro caminho de 500: **[nao verificado]**. (`app/ponto/services/espelho.py:574`, `:657`, `:660`; `app/ponto/tests/test_lastro_c14_sem_banco.py:113`, `:124`)
+
+   **Fila — visibilidade na UI:** ausência `fantasma_xyz` com batida ou status anteriormente lavrado pode conservar título genérico/antigo. D4 retorna antes das recusas e o template lê `status_rotulo`. Isso não invalida o transporte de `palavra_dia`, mas impede afirmar que o aviso aparece sempre na faixa. (`app/ponto/status_dia.py:290`, `:295`, `:317`; `app/templates/ponto/espelho.html:151`; `app/ponto/tests/test_lastro_c14_sem_banco.py:169`)
+
+3. **QUEM ESCREVE / QUEM LÊ.**
+
+   | Campo | Escritor | Leitor |
+   |---|---|---|
+   | `recusas[data]` | A2 grava `TipoSemFaixa`, cujo construtor fornece código/rótulo. (`app/ponto/precedencia.py:99`, `:423`) | Overlay, espelho e D4. (`app/escala/utils.py:1218`; `app/ponto/services/espelho.py:881`; `app/ponto/status_dia.py:317`) |
+   | `_recusa_do_dia` | Espelho transporta o rótulo. (`app/ponto/services/espelho.py:881`) | Compositor escreve palavra/veredito/cor; último leitor remove o transporte. PDF chama esse compositor. (`app/ponto/services/espelho.py:339`, `:350`; `app/relatorios/pdf_espelho.py:594`) |
+   | `orfas_grade` | Cartório compõe `ata.orfas`; leitor transporta; adaptador devolve; espelho publica. (`app/ponto/services/cartorio.py:736`; `app/escala/services/leitor_celula.py:420`; `app/escala/utils.py:1113`; `app/ponto/services/espelho.py:854`) | HTML e mapa do PDF. (`app/templates/ponto/espelho.html:240`; `app/relatorios/pdf_espelho.py:475`) |
+   | `palavra_dia` | Compositor comum, inclusive ramo de recusa. (`app/ponto/services/espelho.py:340`, `:347`) | Desenho do PDF. A faixa HTML lê outro campo. (`app/relatorios/pdf_espelho.py:879`; `app/templates/ponto/espelho.html:151`) |
+   | `batida.orfa` | Coletor PDF, em memória, por comparação HH:MM na linha. (`app/relatorios/pdf_espelho.py:565`) | Separação visual e supressão de alertas. (`app/relatorios/pdf_espelho.py:832`, `:916`, `:920`) |
+
+   **Bloqueia — ESMERIL-SEMÂNTICA:** uma hora órfã de determinado dia passa a significar “qualquer entrada desse horário na janela”. É a perda demonstrada no item 1. A própria classificação visual ainda usa o mapa por data, criando duas respostas no mesmo documento. (`app/relatorios/pdf_espelho.py:476`, `:512`, `:563`)
+
+   **Fila — desconhecido versus negativo:** sem célula, `orfas_grade=[]` termina em `batida.orfa=False`; isso significa “sem marca disponível”, não prova de batida legitimamente casada. Atas antigas também podem transportar `'?'`. O campo deve ser entendido como marca de apresentação. (`app/escala/services/leitor_celula.py:190`, `:394`; `app/escala/utils.py:1087`; `app/relatorios/pdf_espelho.py:565`)
+
+   **Sem achado de mudança do significado de `data` no delta:** a tela agrupa pelo juiz `dia_das_batidas`, que distingue dia do turno e dia civil da batida não reclamada. O defeito identificado é eliminar essa chave posteriormente. (`app/ponto/turnos.py:2886`; `app/ponto/services/espelho.py:580`; `app/relatorios/pdf_espelho.py:476`)
+
+4. **(c)/(d) Mordida das provas.**
+
+   **(c), sem achado de núcleo novo puramente congelado:** o carregador padrão lê e compila os fontes da cópia; mutantes alteram AST produtiva do canal, reset, classificação e metadados. Há mordida sobre essas operações. (`app/ponto/tests/test_lastro_c5_sem_banco.py:39`, `:108`; `app/ponto/tests/test_lastro_c14_sem_banco.py:35`, `:45`; `app/ponto/tests/test_lastro_c13_sem_banco.py:46`)
+
+   **Fila — alcance parcial:** F1c/cartão continuam contendo selos textuais. A prova dos canais recorta as chamadas e substitui o restante dos builders. **Contraexemplo:** quebrar a geometria antes do repasse pode escapar desse ensaio, embora retirar `recusas` seja detectável. (`app/escala/tests/test_f1c_contrato.py:68`; `app/relatorios/tests/test_cartao_pela_celula.py:170`; `app/ponto/tests/test_lastro_c13_sem_banco.py:194`, `:198`)
+
+   REDs históricos dependem de `git show`; sua reexecução histórica nesta cópia e as saídas dos arquivos de evidência mencionados no relato: **[nao verificado]**. (`app/ponto/tests/test_lastro_c13_sem_banco.py:26`; `app/ponto/tests/test_lastro_c14_sem_banco.py:29`)
+
+   **(d), há transporte real em memória:** builder → `ata_do_dia` → porta `save=False` → leitor → mapas/trecho do fechamento. Não é apenas um duplo; verifica classificação, metadados e limpeza das órfãs. (`app/ponto/tests/test_lastro_c14_sem_banco.py:204`, `:216`, `:235`, `:255`, `:269`)
+
+   **Bloqueia a comprovação integrada de (d):** o simulador recebe `Mock(return_value={17: fech})`. **Contraexemplo:** o recalculador produtivo parar de ler a ata nova e retornar `{}` não reprovaria esse teste. A ata antiga também é sintetizada da nova, mudando apenas `tipo_dia`. Portanto, prova transporte real parcial, mas não a sequência integrada ausência → relavra → recalculador → simulador. (`app/ponto/tests/test_lastro_c14_sem_banco.py:218`, `:295`, `:301`; `app/folha/management/commands/simular_folha.py:130`)
+
+5. **Retarget — preserva o positivo com ata; enfraquece o universo original sem célula.**
+
+   Com ata, continuam marca positiva e zero turno aberto. **Sem célula, o mesmo cenário de 10/06 às 16:19 agora exige ausência de marca e um turno aberto.** Assim, “nunca turno aberto” não foi preservado integralmente. O precedente do calendário documenta perda do asterisco, não essa garantia adicional. **Bloqueia declarar a pergunta preservada.** (`app/relatorios/tests/test_cartao_marca_espuria.py:55`, `:81`, `:97`, `:122`, `:128`, `:136`; `app/colaboradores/tests/test_calendario_orfa.py:18`)
+
+   **É como a tela no mesmo dia?** A tela conta períodos abertos sem a guarda de espúria; com uma única entrada aberta e órfãs vazias, ambos podem contar 1. Porém o novo selo não chama a tela nem compara a data: a igualdade integrada nessa fixture permanece **[nao verificado]**. (`app/ponto/services/espelho.py:436`; `app/relatorios/pdf_espelho.py:512`; `app/relatorios/tests/test_cartao_marca_espuria.py:135`)
+
+   **Fila — mordida visual:** manter `orfa=True` e `16:19` no texto, mas desenhar a batida junto das comuns, escaparia dos asserts. A implementação atual separa e acrescenta asterisco; o selo não prova toda essa disposição. A classe sem célula ainda substitui a emissão do PDF por checagem do resumo. (`app/relatorios/tests/test_cartao_marca_espuria.py:81`, `:109`, `:131`; `app/relatorios/pdf_espelho.py:832`, `:841`)
+
+6. **Demais classes de reprovação.**
+
+   **Sem achado de novo escritor produtivo fora da porta ou nova ordem de trava:** o retarget escreve fixtures; a prova de relavra chama a porta real sem persistência. A afirmação “ata que o cartório lavraria” não é demonstrada pela fixture pronta. (`app/relatorios/tests/test_cartao_marca_espuria.py:66`; `app/ponto/tests/test_lastro_c14_sem_banco.py:235`; `app/ponto/portas/celula.py:1032`)
+
+   **Sem achado de faixa inventada/default novo:** `faixa_de` recusa código desconhecido; o transporte mantém `tipo_dia=None`. Derivação paralela, campo ambíguo e selo sem mordida estão discriminados acima. (`app/ponto/precedencia.py:105`; `app/escala/utils.py:1220`)
+
+   **Fila herdada — relógio fora da borda:** o coletor recebe `agora`, mas `folha_manda` consulta turno vivo e teto sem repassá-lo; estes podem ler o relógio corrente. **Contraexemplo:** ato simulado antes da meia-noite executado depois dela pode usar outro teto/dia vivo. Não nasceu na c14; ocorrência concreta em produção: **[nao verificado]**. (`app/relatorios/pdf_espelho.py:584`; `app/relatorios/cartao_pela_celula.py:398`, `:412`, `:40`; `app/ponto/turnos.py:2291`)
+
+## 12/11 11:27 · sessao 38008ed6103d · - · - · origem=Ronald (tmux)
+
+Mapa dos campos e dos caminhos de produção:
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `est['b3'][obra]['auto']` | `decide_b3`, acrescenta SHA somente ao aceitar `tipo == 'auto'`: `bin/disjuntor.py:1050-1051`; persistência por `_com_estado`: `bin/disjuntor.py:374-380`. | Cota em `decide_b3`: `bin/disjuntor.py:1044`. Teste lê estado em `bin/tests/test_disjuntor.sh:1162-1170` e `:1180`. |
+| `auto_sobe` | `decide_b3`, acrescenta SHA recusado: `bin/disjuntor.py:1046`. | Deduplicação do aviso: `bin/disjuntor.py:1045`. |
+| `lib['auto']` | `ler` inicializa contador em zero e soma eventos `LIBERA` com `(auto)`: `bin/disjuntor.py:2000`, `:2022-2025`. | Exportado em `b3_libera`: `bin/disjuntor.py:2068`; `linha` lê e imprime: `:2285-2289`. `bin/gerar_estado.py:280-281` chama `ler`/`linha`, incorpora resultado em `:378` e grava página em `:390`. Teste lê em `bin/tests/test_disjuntor.sh:430-431`. |
+| Evento `SOBE` | Produzido ao recusar AUTOLIBERA excedente: `bin/disjuntor.py:1047-1048`; publicado somente depois da gravação do estado: `:1064-1067`. | Leitor explícito encontrado é o teste: `bin/tests/test_disjuntor.sh:1156-1161`, `:1177`. O medidor de ESTADO enumera eventos sem `SOBE`: `bin/disjuntor.py:2002-2003`; o outro leitor da trilha aceita somente regex de censo: `:2072`, `:2113-2117`. Assim, `SOBE` não aparece como contador/encaminhamento no ESTADO por esse código. |
+| SHA consumido (`consumidas`) | Criado com `_sha_b3` em `bin/disjuntor.py:1039`; acrescentado a `consumidas` em `:1055`. SHA da fotografia também é produzido em `:832`. | Aceitação testa `consumidas` e `topo_no_disparo`: `:1040`; recusa excedente usa `continue` antes do consumo: `:1049`. |
+| `B3_AUTO_COTA` | Constante igual a 1: `bin/disjuntor.py:147`. | Guarda em `:1044`, texto do evento em `:1048`, mensagem do B3 em `:1176`. |
+
+Todos os consumidores decisórios de produção convergem no mesmo escritor:
+
+- Stop: `bin/hook_stop_fila1.py:1204` → `julga_b3` → `decide_b3` (`bin/disjuntor.py:1093-1099`). O hook recebe as paradas e compõe mensagens em `bin/hook_stop_fila1.py:1205-1208`.
+- PreToolUse: `_nega_b3` chama `estado_b3` em `bin/disjuntor.py:1801`; este chama `julga_b3` em `:1105`, que chama `decide_b3` em `:1096`.
+- Wrapper: `bin/codex_pergunta.sh:378` executa `--b3-parada`; CLI encaminha em `bin/disjuntor.py:2382-2383`; `b3_parada` usa `estado_b3` em `:1158`.
+- Recorte das duas linhas úteis continua no hook: `bin/hook_stop_fila1.py:451-464`; disjuntor o chama sobre o RELATO já lido em `bin/disjuntor.py:797`.
+- Referência do hook ao arquivo de estado em `bin/hook_stop_fila1.py:666-669` serve para impedir que o próprio estado prove espera; não interpreta `auto`.
+- `ler_estado` lê o JSON inteiro em `bin/disjuntor.py:397-408`; seus leitores de B1/B4 e dos históricos selecionam outros campos (`:596`, `:1882`, `:2213`), sem interpretar `b3[obra].auto`.
+
+Persistência e travas:
+
+- `_com_estado` toma `LOCK_EX` antes de ler o JSON (`bin/disjuntor.py:355-374`), grava por substituição (`:377-380`) e anuncia ainda sob a trava (`:390-394`). A decisão nova usa essa porta em `:1075`.
+- Rearme não limpa `auto`, `auto_sobe` ou `consumidas`: altera `rearmado`, `reprovados`, `codex` e `disparado` em `bin/disjuntor.py:1134-1136`. A migração também preserva esses campos (`:804-821`).
+- Reinício normal relê o JSON em `bin/disjuntor.py:366-374`; ausência do arquivo vira `{}` (`:368-369`), mas ilegibilidade levanta erro (`:370-373`). A ausência real desse arquivo em produção é `[nao verificado]`.
+- Wrapper toma o slot antes da porta (`bin/codex_pergunta.sh:350-364`), depois a trava da resposta (`:374-376`), e então pergunta B3 (`:378`). Triagem toma a mesma trava de resposta compartilhada antes da trava do estado (`bin/disjuntor.py:889-900`, `:915-929`).
+
+Duas observações para a consolidação:
+
+1. `auto` persistido e `auto` do painel têm unidades diferentes: lista cumulativa de SHA por obra (`bin/disjuntor.py:1051`) versus número de eventos LIBERA na janela de 24 h (`:1996`, `:2000`, `:2025`). São estruturas distintas; o painel não é um leitor da cota.
+2. “Sobe ao Ronald” está implementado como texto na trilha (`bin/disjuntor.py:1047-1048`), sem leitor de produção específico para `SOBE` no mapa encontrado. Entrega/notificação externa a Ronald é `[nao verificado]`.
 
 ## 12/11 11:25 · sessao dc6cc4c65e84 · - · - · origem=Ronald (tmux)
 
@@ -601,89 +821,4 @@ Selos vizinhos podem exigir delegação a `espelho_do_colab`, consumo de `orfas_
 
 Há incompatibilidade concreta na fixture de marca espúria: cria vínculo e batidas, sem `CelulaDia`; a tela entrega `sem_celula`, e o adaptador retorna órfãs vazias sem marcos (`relatorios/tests/test_cartao_marca_espuria.py:33`; `escala/services/leitor_celula.py:394`; `escala/utils.py:1087`). Comparar apenas vazios perderia a mordida positiva. Para preservá-la, a fixture precisa entregar tela com célula/ata/lâmpadas/órfã e manter tanto a marca quanto a supressão do turno aberto e a prova textual do PDF (`relatorios/tests/test_cartao_marca_espuria.py:55`, `:70`).
 
-## 12/11 11:04 · sessao fdafdbeb8bfa · - · - · origem=Ronald (tmux)
-
-Recorte recente: **298 registros, 89 FAILED, 4.691,280 minutos brutos** (`suites_14d.tsv:229–526`). As últimas 20 linhas são `507–526`.
-
-Tabela completa enviada nas mensagens anteriores com n bruto, FAILED, soma dos tempos e referências. Pontos principais:
-
-| Prefixo | n | FAILED | Minutos brutos | Linhas |
-|---|---:|---:|---:|---|
-| BO-0611-05 | 9 | 2 | 132,060 | 478–479, 481–487 |
-| BO-DISPUTA-SEM-PERGUNTA | 6 | 6 | 112,739 | 480, 488, 490–491, 493, 495 |
-| FIO-E0-V4-E3 | 7 | 4 | 161,441 | 496–502 |
-| E4B-ALCANCE | 6 | 4 | 128,479 | 492, 494, 504–505, 515, 519 |
-| LASTRO-FAIXA | 5 | 5 | 98,717 | 521–525 |
-| DATA-EVENTO-CRU | 3 | 0 | 35,784 | 510, 512, 518 |
-| TRIAGEM-OFFLINE-SEM-CAMERA | 3 | 0 | 74,051 | 511, 517, 520 |
-| O169-FECHADA | 2 | 0 | 42,975 | 475, 503 |
-
-**Intermediárias que mudaram decisão: não medido.** Não há fechamento demonstrado do vínculo entre execução vermelha específica, cura dos respectivos casos e final da obra. BO-DISPUTA e LASTRO terminam vermelhos no anexo (`suites_14d.tsv:495,525`).
-
-Há registros potencialmente copiados para `opus_final`, portanto estes números contam linhas, sem demonstrar execuções independentes: `jv3:281–282`; `c20_fiomudo:287,292;290,293;294–295;298–299`; `pep:302,304`; `otimiza3:305,308;306–307`; `lastro2:309–312`.
-
-## 12/11 11:04 · sessao 0c048614a4ba · - · - · origem=Ronald (tmux)
-
-Recalculei e enviei a tabela dos 27 grupos com FAILED: **169 registros, 51 FAILED e 2.317,742 minutos brutos**. `suites_14d.tsv:1-228`
-
-O trecho completo tem **228 registros e 3.181,774 minutos brutos**; os outros **59 registros** são OK e somam **864,032 minutos**. `suites_14d.tsv:1-228`
-
-“Intermediárias” e “mudaram decisão” permanecem **não medido**; nenhuma contagem usa `n−1`. [não verificado]
-
-## 12/11 11:03 · sessao 0c048614a4ba · - · - · origem=Ronald (tmux)
-
-No trecho `suites_14d.tsv:1-228`:
-
-- **228 registros**, **51 FAILED**, **56 prefixos**.
-- Proxy “todas menos a última observada por prefixo”: **172 candidatas**, **2.278,789 minutos**.
-- Nos **27 prefixos com FAILED**: **169 registros**, **142 candidatas**, **1.883,350 minutos**.
-- **Mudaram decisão: não medido**. Não fechei um vínculo entre falha identificada na suite intermediária, commit que atribua a cura àquela falha e final comprovada; os títulos truncados não sustentam essa causalidade. [não verificado] [nao verificado]
-
-Tabelas completas, referências de linhas e grupos sem FAILED foram enviadas nas mensagens anteriores. Os minutos são soma de `Ran ... in Xs / 60`, sem o último registro de cada agrupamento; não representam tempo causal de cura. `suites_14d.tsv:1-228`
-
-Cuidados para consolidar:
-
-- `comboio`, `suite_impacto`, `otimiza3` e `jv1` continuam no trecho recente; agregar antes de subtrair a última observação. `suites_14d.tsv:100,227-229`
-- `suite_impacto:57,226` contém duas gerações distintas; a associação a uma mesma obra não está demonstrada. [não verificado]
-- A última observação é vermelha em `orfas`, `n1pna` e `suite_impacto`; não a chamar de final comprovada. `suites_14d.tsv:19,217,226`
-- Exemplos antigos de cura que pareciam promissores citam reprovação do **opus**, ou vermelhos anteriores à suite, e não fecham a prova solicitada. [não verificado] [nao verificado]
-
-## 12/11 11:03 · sessao 6fd90b5b6a65 · - · - · origem=Ronald (tmux)
-
-Método: linhas numeradas a partir da primeira linha de dados; p50 = mediana; p95 = ordem `ceil(0,95 × n)`.
-
-| Recorte | n | p50 s | p95 s | max s | rc124 | >900 s | Fonte |
-|---|---:|---:|---:|---:|---:|---:|---|
-| Últimas20 construtor |20|715,5|1630|1928|0|7|chamadas_fim_vivo.tsv:316–395, filtrando construtor |
-| Últimas20 verificador |20|325,5|594|656|0|0|chamadas_fim_vivo.tsv:335–400, filtrando verificador |
-| Últimas20 leitura/censo/sonda |20|204,5|891|1178|0|1|chamadas_fim_vivo.tsv:351–399, filtrando o grupo |
-| Últimas20 globais |20|332|1068|1928|0|2|chamadas_fim_vivo.tsv:381–400 |
-| União das três janelas |60|386,5|1206|1928|0|8|mesmas seleções |
-
-Linhas exatas selecionadas:
-
-- Construtor:316,333,342,350,352,353,356,359,360,365,366,368,371,374,375,378,386,391,393,395.
-- Verificador:335,336,337,338,339,341,354,361,367,369,373,376,379,380,388,389,390,392,394,400.
-- Grupo leitura/censo/sonda:351,355,357,358,362,363,364,370,372,377,381,382,383,384,385,387,396,397,398,399.
-
-O anexo inteiro tem400 chamadas; seus3 `rc=124` são construtor904s, construtor905s e censo905s, todos fora das janelas acima. (chamadas_fim_vivo.tsv:66,130,317)
-
-Últimas20 linhas `Ran`: p50=1306,5525s; p95=1638,001s; max=1788,073s;15 passaram de900s. (suites_14d.tsv:507–526)
-
-Se considerar apenas completas, últimas20 linhas são500–507,509,511,513–520,524–525: p50=1316,237s; p95/max permanecem1638,001/1788,073s. A classificação como completa usa nomes e tamanho observado dos testes. (suites_14d.tsv:500–525) [nao verificado]
-
-Margens mínimas empíricas:
-
-- Suite: `1788,073 − 1638,001 =150,072s`; teto `1638,001+150,072=1788,073s`, arredondável para1789s inteiros. (suites_14d.tsv:514,524) [nao verificado]
-- Wrapper/construtor, janela20: `1928−1630=298s`; teto1928s. (chamadas_fim_vivo.tsv:365,386)
-- Wrapper/construtor, cobrindo todo o histórico fornecido: max comrc0=2806s; `2806−1630=1176s`; teto2806s. (chamadas_fim_vivo.tsv:214,365)
-
-O fato de um124 ter sido “falso” e qualquer garantia para chamadas futuras são [não verificado].
-
-## 12/11 11:01 · sessao e15566ed2acf · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · construtor · origem=Code
-
-Entrega parcial em [resposta_c3.txt](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/docs/resposta_c3.txt:1), com correções, comandos RED/GREEN, mutantes e inventário.
-
-[66 testes passaram; dois REDs permanecem](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/docs/resposta_c3.txt:5), dependentes da porta proibida. Ruff indisponível. Sem commit, respeitando a proibição inicial; limitações registradas no arquivo. [nao verificado]
-
-_4195 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4200 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
