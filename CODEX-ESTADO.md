@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 17:21** · publicado em **12/11/2026 17:21** (UTC-3)
+> Ultima resposta processada: **12/11/2026 17:23** · publicado em **12/11/2026 17:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 17:23 · sessao b18576745da1 · TRANCA-VIVAS-08 · sonda · origem=Code
+
+1. **Transcrição integral do dado fornecido.** A execução e o hash da sonda não foram conferidos independentemente nesta cópia. [nao verificado]
+
+```text
+sonda_leitura: sonda_v2.py [8c23d857275b021a] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+agora 2026-11-12T17:13:38.126957-03:00
+PF#7 emp2 04/2026 universo=0 vivas_juiz=0 contador_medir=0
+PF#8 emp2 05/2026 universo=24 vivas_juiz=0 contador_medir=0
+PF#9 emp2 06/2026 universo=37 vivas_juiz=0 contador_medir=0
+PF#10 emp2 07/2026 universo=152 vivas_juiz=0 contador_medir=0
+PF#3 emp2 08/2026 universo=12898 vivas_juiz=4 contador_medir=0
+  VIVA #20798 col367 disputa#2502 data_evento=2026-08-01 dia_turno=2026-08-01 conversa=False C20=False no_medir=False respondida=False validada=False materializada=True motivo=saida_sem_entrada
+  VIVA #47879 col444 disputa#3309 data_evento=2026-08-03 dia_turno=2026-08-03 conversa=False C20=False no_medir=False respondida=True validada=False materializada=False motivo=orfao_14h
+  VIVA #47881 col444 disputa#3309 data_evento=2026-08-04 dia_turno=2026-08-04 conversa=False C20=False no_medir=False respondida=True validada=False materializada=False motivo=intervalo_volta
+  VIVA #47884 col444 disputa#3309 data_evento=2026-08-05 dia_turno=2026-08-05 conversa=False C20=False no_medir=False respondida=True validada=False materializada=False motivo=intervalo_volta
+PF#11 emp3 04/2026 universo=0 vivas_juiz=0 contador_medir=0
+PF#12 emp3 05/2026 universo=7 vivas_juiz=0 contador_medir=0
+PF#13 emp3 06/2026 universo=28 vivas_juiz=0 contador_medir=0
+PF#4 emp3 07/2026 universo=1165 vivas_juiz=0 contador_medir=0
+PF#5 emp3 08/2026 universo=2048 vivas_juiz=0 contador_medir=0
+PF#14 emp4 04/2026 universo=2 vivas_juiz=0 contador_medir=0
+PF#15 emp4 05/2026 universo=63 vivas_juiz=0 contador_medir=0
+PF#16 emp4 06/2026 universo=616 vivas_juiz=0 contador_medir=0
+PF#2 emp4 07/2026 universo=493 vivas_juiz=0 contador_medir=0
+PF#6 emp4 08/2026 universo=399 vivas_juiz=0 contador_medir=0
+TOTAL {'universo': 17932, 'vivas': 4, 'medir': 0, 'classe:trancado_False': 4}
+total_erros=0
+== anexo: retira_acervo_tranca_2.txt ==
+aval Ronald: RETIRA ACERVO-TRANCA-2 (publicado 16:3x, contraria CLAUDE.md 7b DINHEIRO item 3: nenhuma trava por exportada/trancada/paga; correcao provada entra em qualquer competencia). Nao executar os itens 1, 2, 3 e 5; nenhuma lei nova. Fica SO o item 4, que e lei existente (TRANCA-DE-VERDADE): as 4 perguntas vivas na comp 08 emp2 trancada -> listar pk e o degrau de chamados/juizes.py::pergunta_viva que as deixou vivas; curar na origem se for defeito; contador vivas_apesar_da_tranca na frota, esperado 0. Segue a fila; PAREI so em lei ou !
+```
+
+2. **Por PF, conforme a saída fornecida.** [nao verificado]
+
+| PF | Empresa | Competência | Universo | Vivas juiz | Contador medir | Evidência |
+|---|---|---|---:|---:|---:|---|
+| 7 | 2 | 04/2026 | 0 | 0 | 0 | [nao verificado] |
+| 8 | 2 | 05/2026 | 24 | 0 | 0 | [nao verificado] |
+| 9 | 2 | 06/2026 | 37 | 0 | 0 | [nao verificado] |
+| 10 | 2 | 07/2026 | 152 | 0 | 0 | [nao verificado] |
+| 3 | 2 | 08/2026 | 12898 | 4 | 0 | [nao verificado] |
+| 11 | 3 | 04/2026 | 0 | 0 | 0 | [nao verificado] |
+| 12 | 3 | 05/2026 | 7 | 0 | 0 | [nao verificado] |
+| 13 | 3 | 06/2026 | 28 | 0 | 0 | [nao verificado] |
+| 4 | 3 | 07/2026 | 1165 | 0 | 0 | [nao verificado] |
+| 5 | 3 | 08/2026 | 2048 | 0 | 0 | [nao verificado] |
+| 14 | 4 | 04/2026 | 2 | 0 | 0 | [nao verificado] |
+| 15 | 4 | 05/2026 | 63 | 0 | 0 | [nao verificado] |
+| 16 | 4 | 06/2026 | 616 | 0 | 0 | [nao verificado] |
+| 2 | 4 | 07/2026 | 493 | 0 | 0 | [nao verificado] |
+| 6 | 4 | 08/2026 | 399 | 0 | 0 | [nao verificado] |
+
+**Há defeito de UNIVERSO em `vivas_apesar_da_tranca`, quando usado para contar todas as vivas da competência.** A lista nasce vazia e só recebe perguntas no ramo em que pai ou destino pertence a `resgatados`; no ramo comum, apenas perguntas mortas são registradas, e as vivas ficam sem inclusão. Isso contraria o comentário “contador tem que ver o mesmo que quem valida” e a LEI-AKITA 8. (`app/chamados/services/competencia_trancada.py:81`, `app/chamados/services/competencia_trancada.py:119–134`, `CLAUDE.md:35–36`)
+
+Esse recorte é mais estreito que a exceção humana do juiz: `resgatados` exige chamado vivo elegível e `resgatado_em > pf.fechado_em`; o juiz também reconhece “Cobrar este dia” e “Resolver dia”. (`app/chamados/services/competencia_trancada.py:89–106`, `app/chamados/juizes.py:1083–1089`)
+
+Já `r['perguntas']` vazio tem semântica intencional: representa perguntas que seriam carimbadas pela operação, retirada após a mudança para tranca por leitura. Isso não justifica omitir vivas de `vivas_apesar_da_tranca`. (`app/chamados/services/competencia_trancada.py:126–134`)
+
+O significado operacional de `no_medir=False` dentro da sonda, inclusive se representa ausência do filtro SQL ou ausência da lista final, é **[nao verificado]**.
+
+3. **Degrau e motivo de sobrevivência de cada VIVA.**
+
+`pergunta_viva()` delega a `_pergunta_viva_calc()`; a tranca é testada antes da resposta do colaborador. Portanto resposta não ultrapassa uma tranca que tenha retornado `True`. (`app/chamados/juizes.py:888–894`, `app/chamados/juizes.py:1391–1407`)
+
+| VIVA | O que os campos publicados permitem identificar | [nao verificado]
+|---|---|
+| **#20798** | Com `respondida=False` e `materializada=True`, são compatíveis o retorno por **célula acusando** ou por **materialização sem testemunha suficiente**. O degrau efetivamente tomado é **[nao verificado]**. (`app/chamados/juizes.py:1438–1441`, `app/chamados/juizes.py:1473–1475`) |
+| **#47879** | São compatíveis o ramo de **resposta com texto sem concordância comprovada com a luz**, **célula acusando** ou **ausência de materialização**. O degrau efetivamente tomado é **[nao verificado]**. (`app/chamados/juizes.py:1407–1419`, `app/chamados/juizes.py:1438–1441`, `app/chamados/juizes.py:1466–1467`) |
+| **#47881** | Mesmas possibilidades: resposta nas condições do juiz, célula acusando ou ausência de materialização. O degrau efetivamente tomado é **[nao verificado]**. (`app/chamados/juizes.py:1407–1419`, `app/chamados/juizes.py:1438–1441`, `app/chamados/juizes.py:1466–1467`) |
+| **#47884** | Mesmas possibilidades: resposta nas condições do juiz, célula acusando ou ausência de materialização. O degrau efetivamente tomado é **[nao verificado]**. (`app/chamados/juizes.py:1407–1419`, `app/chamados/juizes.py:1438–1441`, `app/chamados/juizes.py:1466–1467`) |
+
+`respondida=True` sozinho não prova passagem pelo ramo da resposta: esse ramo também exige texto não vazio e ausência de decisão administrativa do dia. Esses campos não foram publicados. (`app/chamados/juizes.py:1405–1419`; valores individuais: [nao verificado])
+
+Existe ainda o retorno por falta dentro da janela viva. Com `hoje=2026-11-12`, a janela calculada pelo código é 20/09–20/11, excluindo os quatro dias de agosto; o argumento efetivamente usado pela sonda é **[nao verificado]**. (`app/chamados/juizes.py:592–618`, `app/chamados/juizes.py:1454–1462`, `app/ponto/janelas.py:10–33`, `app/ponto/janelas.py:36–63`)
+
+**Por que C20 não as calou:** nas quatro linhas aparecem `conversa=False`, dia preenchido e `C20=False`; logo, o dado não sustenta “conversa” nem “dia None” como explicação individual. [nao verificado]
+
+O código transforma conversa em dia de turno `None`; para as demais perguntas usa `data_evento`. O juiz começa em `False`, exige dia/colaborador/empresa, procura o PF da competência calculada e, encontrando-o, retorna `not tocou`. (`app/chamados/juizes.py:334–338`, `app/chamados/juizes.py:991–992`, `app/chamados/juizes.py:1023–1027`, `app/chamados/juizes.py:1062–1079`)
+
+Assim, **`C20=False` não identifica sozinho “sem PF” ou “toque posterior”**. O PF efetivamente encontrado, seu `fechado_em` e a trilha humana de cada pergunta são **[nao verificado]**.
+
+Se o juiz encontrou PF vivo para aquele colaborador/dia, seu resultado `False` corresponde a toque reconhecido. Os atos admitidos são `cobrar_dia_manual`, `veredito_celula` e `desarquivar_chamado`, com usuário identificado diferente do sistema e instante estritamente posterior à tranca. **Qual ato ocorreu para #20798, #47879, #47881 e #47884: [nao verificado].** (`app/chamados/juizes.py:1078–1089`, `app/chamados/juizes.py:1252–1254`, `app/chamados/juizes.py:1268`, `app/chamados/juizes.py:1292`, `app/chamados/juizes.py:1315`)
+
+4. **Escritores, leitores e significado de dia.**
+
+| Campo | Quem escreve | Quem lê / significado |
+|---|---|---|
+| `conversa` | `abrir()` passa `False`; `abrir_conversa()` passa `True`; nascimento instancia e salva. (`app/chamados/models.py:2790`, `app/chamados/models.py:2802`, `app/chamados/models.py:3015–3018`) | O juiz usa o discriminador para retirar o dia civil da leitura de turno e da tranca. (`app/chamados/juizes.py:334–338`, `app/chamados/juizes.py:991–992`) |
+| `data_evento` | A atribuição central é `gravar_dia_do_fato`; nascimento, costura de linha sem dia e rechaveamento passam por ela. (`app/chamados/services/fio.py:791–802`, `app/chamados/models.py:3017`, `app/chamados/services/fio.py:880`, `app/chamados/services/fio.py:1038`) | Fato recebe **dia do turno**; conversa recebe **dia civil local do pedido**, conservado pelo derivador. (`app/chamados/models.py:2784–2803`, `app/chamados/services/fio.py:1631–1636`) |
+| `vivas_apesar_da_tranca` | `medir()` inicializa e acrescenta somente no ramo dos resgatados. (`app/chamados/services/competencia_trancada.py:81`, `app/chamados/services/competencia_trancada.py:119–124`) | `medir_frota()` lê seu tamanho, expõe a contagem por competência e a soma em `ficam_com_o_admin`. (`app/chamados/services/competencia_trancada.py:313–320`) |
+
+**Os leitores não aplicam todos a mesma distinção de dia.** O juiz distingue conversa de turno; `medir()` seleciona pela faixa de `data_evento` cru, sem discriminar conversa, e `reabrir()` também usa esse campo cru. Portanto esses filtros podem incluir o dia civil de uma conversa no universo da competência. (`app/chamados/juizes.py:334–338`, `app/chamados/services/competencia_trancada.py:107–109`, `app/chamados/services/competencia_trancada.py:252–253`)
+
+Outro leitor cru é a lavra, que passa `p.data_evento` a `expira_em`; a documentação dessa função ainda associa conversa a dia `None`, enquanto `abrir_conversa()` grava `localdate()`. (`app/chamados/veredito_lavrado.py:131`, `app/chamados/veredito_lavrado.py:273`, `app/chamados/models.py:2802`)
+
+Na exposição do contador, o comando imprime `ficam_com_o_admin` como `decidir_pelo_dp`, mas seu total principal soma somente chamados, perguntas e disputas; a API entrega `por_competencia`, onde está a contagem própria das vivas. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:20–23`, `app/api/views_mensageria.py:1573–1574`)
+
+A saída informa **`total_erros=0`**. [nao verificado]
 
 ## 12/11 17:21 · sessao d3492b1ae160 · - · - · origem=Ronald (tmux)
 
@@ -1276,28 +1376,4 @@ Não afirmar escritor único literal de resposta/validação: há caminhos expl�
 
 O último degrau delega a `_pergunta_materializada_de_fato`, que lê também testemunhas externas de batida/turno; sua investigação completa excede os campos diretos mapeados aqui. `app/chamados/juizes.py:662`, `app/chamados/juizes.py:708`, `app/chamados/juizes.py:1473`.
 
-## 12/11 16:45 · sessao b1de5a0cb52e · - · - · origem=Ronald (tmux)
-
-`medir()` usa a janela de `janela_fechamento(mes, ano, Empresa)` e seleciona perguntas por `data_evento` cru entre os extremos, sem filtro `conversa=False` — `app/chamados/services/competencia_trancada.py:87`, `:107-109`. A tranca usa `_dia_de_turno_da_pergunta`, que devolve `None` para conversa e `data_evento` para pergunta de fato — `app/chamados/juizes.py:334-338`, `:991-992`. Portanto há uma diferença demonstrável de universo para conversas; não há linha de produção fornecida que prove ocorrência dela neste caso [não verificado].
-
-Para pergunta de fato, ambos usam o corte cadastrado da empresa: `janela_fechamento` chama `periodo_apuracao(..., corte_da_empresa(...))`, e `janela_atual` chama `periodo_apuracao_atual(..., corte_da_empresa(...))` — `app/ponto/janelas.py:54-63`. O juiz extrai mês/ano do fim da janela que contém o dia e consulta a tranca — `app/chamados/juizes.py:1062-1070`.
-
-O toque humano posterior é lei documentada, não hipótese: OPÇÃO (A), menos `(colaborador,dia)` tocado pelo administrador depois da tranca, em `app/docs/CORTES.md:83`, repetida em `:272`. O código efetua essa exceção com `out[i] = not tocou` — `app/chamados/juizes.py:1071-1079`. Isso não reabre o PF: a reabertura do período escreve `reaberto_em` em outra porta — `app/ponto/services/fechamento.py:1432-1441`.
-
-**Limitação material do contador da cópia:** `vivas_apesar_da_tranca` recebe perguntas vivas somente no ramo em que chamado destino ou pai está no conjunto `resgatados` — `app/chamados/services/competencia_trancada.py:119-125`. Fora desse ramo, o código apenas acrescenta as perguntas mortas a `perguntas_lidas_trancadas`; não acrescenta a viva a `vivas_apesar_da_tranca` — `:130-134`. Assim, o contador de `medir()` pode dar zero sem esgotar todas as vivas selecionadas, por inspeção do fluxo — `:119-134`. **Não se pode atribuir essa limitação à sonda raspada:** sem fonte de `sonda_vivas08.py`, não sabemos se ela chama `medir()` ou faz censo próprio [não verificado].
-
-Mapa de campos:
-
-| Campo | Escrita | Leitura pertinente |
-|---|---|---|
-| `PerguntaDisputa.data_evento` | Ponto de atribuição `fio.gravar_dia_do_fato`, `app/chamados/services/fio.py:791-802`; nascimento chama-o e salva em `app/chamados/models.py:3014-3018`. Portas: pergunta de fato recebe dia do turno em `:2777-2791`; conversa recebe `localdate()` em `:2795-2803`. | `medir`: `app/chamados/services/competencia_trancada.py:108`; tranca pelo discriminador: `app/chamados/juizes.py:338`, `:991-992`. |
-| `PerguntaDisputa.conversa` | `_nascer` recebe a porta e insere em `app/chamados/models.py:3015`; `abrir` passa `False` em `:2790`, `abrir_conversa` passa `True` em `:2802`. | `_dia_de_turno_da_pergunta`: `app/chamados/juizes.py:338`. |
-| `Empresa.dia_inicio_competencia` | Form lê/valida em `app/colaboradores/views.py:496-499`, repassa para atualizar em `:520-523`, criar em `:531-538`; portas persistem em `app/colaboradores/services/estrutura.py:12-20`. | `corte_da_empresa`: `app/ponto/janelas.py:42-51`; ambas as janelas: `:57`, `:63`. |
-| PF `empresa_id`, `mes`, `ano` | `trancar_periodo.get_or_create`: `app/ponto/services/fechamento.py:1408-1410`. | `periodo_trancado`: `:1470`; frota: `app/chamados/services/competencia_trancada.py:312-313`. |
-| PF `fechado_em` | Inserção automática: `app/ponto/models.py:926`; retranca: `app/ponto/services/fechamento.py:1415`, salva `:1419`. | Exceção resgatado: `app/chamados/services/competencia_trancada.py:105`; juiz do toque: `app/chamados/juizes.py:1070`. |
-| PF `reaberto_em` | Retranca limpa: `app/ponto/services/fechamento.py:1417`; reabertura grava: `:1439`, salva `:1441`. | Tranca viva: `:1470`; frota: `app/chamados/services/competencia_trancada.py:312`. `ativo` não é autoridade da tranca — `app/ponto/services/fechamento.py:1464-1470`. |
-| Chamado `resgatado_em` | `arquivo.levantar` guarda o primeiro carimbo e salva: `app/chamados/services/arquivo.py:197-210`. A documentação da porta diz que pode representar mão humana **ou do colaborador** — `:180-184`; portanto não prova sozinho toque de admin. | `medir` compara com PF `fechado_em`: `app/chamados/services/competencia_trancada.py:105-106`. |
-
-O dado enviado contém listas vazias em todos os 15 PF e `total_erros=0`, mas não traz nenhum PK ou campo individual das quatro perguntas históricas citadas no aval; atribuir degrau concreto, conversa ou toque humano a qualquer delas seria [não verificado].
-
-_4360 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4361 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 17:21:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (484.7 MB). Acoes na janela: **1740**.
+**Medido em 12/11/2026 17:27:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (484.8 MB). Acoes na janela: **1744**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:26:58 | Bash |  | `cd /home/ronald/saas-hasner/app; L="TIPO-NA-FONTE item 1 17:2x: construtor (agente) entregou f1add6e91 em wt-codex-leitores-chave-171434 (bin/leitores_de_chave.py + selo test_leitores_de_chave.sh, rc0, mutante cai); --contar-crus CelulaDia.ata = 95 (12 chaves/27 arq; dna 41/9/19) = censo Codex; amostra conferida pela sessao (cartorio.py:745 ESCRITOR, leitor_celula.py:187 LEITOR). Preverif Codex ve ...` |
+| 17:26:53 | Bash |  | `set -e; D=/home/ronald/saas-hasner/logs/TIPO-NA-FONTE/preverif_item1; mkdir -p $D; cd $D cp ../contrato.txt . 2>/dev/null \|\| sed -n '/^CONTRATO-DE-INSTRUMENTO bin\/leitores_de_chave/,/^5\. QUEM DESLIGA/p' /home/ronald/saas-hasner/app/docs/RELATO.md > contrato.txt cp /home/ronald/saas-hasner/logs/AVAIS-1212/tipo_na_fonte_o168_teto.txt aval.txt git -C /home/ronald/wt-codex-leitores-chave-171434 di ...` |
+| 17:26:38 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/BUG-CADASTRO-FUTURO/c5_preverif/lanca.sh` |
+| 17:26:14 | Bash |  | `cd /home/ronald/wt-codex-leitores-chave-171434; git log --oneline -2; git show --stat HEAD\|tail -3; python3 bin/leitores_de_chave.py --raiz . --contar-crus CelulaDia.ata; echo rc=$?; python3 bin/leitores_de_chave.py --raiz . CelulaDia.ata orfas \| head -30` |
 | 17:16:14 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/ \| arquivo=logs\/O168\/v4\/suite.rc$//' docs/RELATO.md; sed -n 3p docs/RELATO.md` |
 | 17:16:11 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/^ESPERANDO: codex_pergunta.sh \| pid=4102696$/ESPERANDO: red_green_suite.sh \| pid=4106522 \| arquivo=logs\/O168\/v4\/suite.rc/' docs/RELATO.md; sed -n 3p docs/RELATO.md; sed -i '4i O168 v4 17:1x: cura em copia wt-o168v3-153055 (predicado do pai VIVO = `status_local in VIVOS`, teste MORDE pai terminal cancelado/superado) -> logs/O168/v4/red_green_suite.s ...` |
 | 17:16:05 | Bash |  | `cd /home/ronald/saas-hasner/app; head -40 docs/RELATO.md \| cut -c1-260` |
