@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 12:31** · publicado em **12/11/2026 12:31** (UTC-3)
+> Ultima resposta processada: **12/11/2026 12:32** · publicado em **12/11/2026 12:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 12:32 · sessao 8db6fd841a74 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
+
+As contas batem com a medida fornecida; há furos na semântica do prazo e na cobertura do selo. (`contrato_item6.txt:3–6`; `medida_6_8.r:9–11`; `bin/codex_pergunta.sh:348–408`; `bin/tests/test_codex_pergunta.sh:447–548`)
+
+Nos anexos, conto linhas desde a primeira linha de conteúdo fornecida.
+
+1. **Sítios de tempo no wrapper**
+
+| Sítio | Hoje | Efeito da tabela por papel com cap |
+|---|---|---|
+| Documentação e atribuição | Segundos, default `900`; `CODEX_TIMEOUT` entra diretamente em `TIMEOUT`. | Muda a origem do valor; o contrato deixa ambíguo o default quando a variável está ausente/vazia. (`bin/codex_pergunta.sh:6`, `:83`; `contrato_item6.txt:3–4`) |
+| Validação do papel | Aceita exatamente leitura, censo, verificador, sonda e construtor; demais saem com rc 2. | Esses cinco papéis precisam estar cobertos pela tabela. (`bin/codex_pergunta.sh:81–85`; `contrato_item6.txt:3–4`) |
+| Vaga do construtor | `flock -n`: recusa imediata com rc 2. | Não usa `TIMEOUT`; permanece imediato. (`bin/codex_pergunta.sh:239–240`) |
+| Gate e slots | Gate bloqueante sem prazo; busca slots imediatamente e repete espera de cinco segundos enquanto não consegue. | A tabela não limita essa espera acumulada. `CODEX_TETO` controla quantidade de slots, não segundos. (`bin/codex_pergunta.sh:84`, `:348–364`) |
+| Diagnóstico de espera | Mede desde antes do gate até obter o slot. | Continua medindo espera efetiva; não é o teto da tabela. (`bin/codex_pergunta.sh:350–365`) |
+| Trava da resposta | `flock -w "$TIMEOUT"`; mensagem usa `${TIMEOUT}s`; falha sai com rc 3. | Espera e mensagem passam a usar o valor efetivo limitado pelo papel. (`bin/codex_pergunta.sh:374–376`) |
+| Execução construtora | `timeout -k 30 "$TIMEOUT" codex …`. | Usa o valor limitado, mantendo os 30 segundos adicionais de escalada. (`bin/codex_pergunta.sh:401–405`) |
+| Execução dos quatro papéis de leitura | `timeout "$TIMEOUT" codex …`. | Verificador recebe seu teto; leitura/censo/sonda recebem o teto comum previsto. (`bin/codex_pergunta.sh:408–409`; `contrato_item6.txt:3`) |
+| Duração e retorno | `fim` grava papel, rc e duração desde `T0C`; captura o rc da execução, com possíveis substituições posteriores. | Duração observada muda, mas seu significado permanece; o valor efetivo de `TIMEOUT` não é registrado. (`bin/codex_pergunta.sh:252–260`, `:411`, `:433–455`) |
+
+2. **Furos e limites do contrato**
+
+- **Teto da execução não é prazo total do lançador.** Há fila sem limite acumulado; depois, a trava da resposta pode consumir um `TIMEOUT` inteiro e o Codex recebe outro inteiro. Preparação, revalidação e inventário ficam fora do timeout do Codex. Portanto, “até ~32 min para cair” não fecha como limite total do wrapper. (`bin/codex_pergunta.sh:295–319`, `:348–376`, `:391–420`; `aval_respostas_1211_1230.txt:3`)
+
+- **“Estourou = rc 124” precisa de escopo.** Vencer a espera da resposta produz rc **3**. No construtor, recusa do inventário também vence qualquer retorno anterior com rc **3**. (`contrato_item6.txt:4`; `bin/codex_pergunta.sh:376`, `:417–433`)
+
+- **Default não está fechado.** Conservar `${CODEX_TIMEOUT:-900}` e apenas aplicar cap deixa construtor e leitura/censo/sonda em **900** quando não houver override; usar o teto como default produz **1930/1191**. O contrato especifica os tetos e o rebaixamento, mas não explicita essa escolha. (`bin/codex_pergunta.sh:83`; `contrato_item6.txt:3–4`)
+
+- **Papéis atuais estão cobertos pelo texto**, desde que leitura, censo e sonda tenham entradas correspondentes a 1191. Não há papel atual omitido na enumeração; a recusa de papel desconhecido já existe. A futura tabela e sua recusa por ausência de entrada permanecem **[não verificado]**. (`bin/codex_pergunta.sh:85`; `contrato_item6.txt:3–4`)
+
+- **ESMERIL-SEMÂNTICA:** os leitores demonstrados recebem o mesmo valor apresentado como segundos, mas com significados distintos: espera da trava e duração permitida ao processo. Já `duracao_s` inclui preparação e espera; ultrapassar o teto nessa medida não prova estouro do Codex. Leitor externo que suponha outra unidade: **[não verificado]**. O domínio aceito para override — zero, negativos, frações, sufixos ou texto — também não está definido no contrato; hoje o valor é repassado diretamente. (`bin/codex_pergunta.sh:83`, `:252–260`, `:348–408`; `contrato_item6.txt:4`)
+
+- **Há uso documentado acima do teto:** PC2-FIO-MUDO registra tentativa com `CODEX_TIMEOUT=2400`, em papel **censo**; pelo contrato seria rebaixado a **1191**. Dependência atual desse prazo ou necessidade comprovada dos 2400 segundos: **[não verificado]**. O construtor documentado com 1800 fica abaixo de 1930. (`app/docs/RELATO.md:7756`, `:7782`, `:425`; `contrato_item6.txt:3`)
+
+- **A premissa “selo hoje fixa 900” não corresponde à cópia.** O `900` do selo conta worktrees falsas. O falso captura argumentos do **Codex**, não o argumento de `timeout`; os casos e mutantes atuais não cobrem cap. Assim, `3600 → 1191` e mutante sem cap vermelho são exigências futuras, ainda **[não verificado]** por execução. (`bin/tests/test_codex_pergunta.sh:101–111`, `:322–328`, `:447–548`; `contrato_item6.txt:6`)
+
+- **Registro disponível não equivale ao contador contratado.** `fim` contém papel, rc e duração; o contador existente por papel conta linhas `ini`, qualquer rc. A meta de até um rc 124 por papel em 24 horas permanece **[não verificado]** pelo dado fornecido. (`bin/codex_pergunta.sh:253–260`; `bin/codex_limite_estado.py:71–79`; `contrato_item6.txt:5`)
+
+O outro `900`, em `encadeado.sh`, limita espera por carimbos e sai com rc 2; sua manutenção está expressamente autorizada no aval. (`bin/encadeado.sh:71`, `:84–96`; `aval_respostas_1211_1230.txt:3`)
+
+3. **Conferência dos números**
+
+| Papel/grupo medido | p95 + 300 s | Contrato |
+|---|---:|---:|
+| Construtor | 1630 + 300 = **1930 s** | Confere |
+| Verificador | 594 + 300 = **894 s** | Confere |
+| Leitura/censo/sonda | 891 + 300 = **1191 s** | Confere |
+
+Fontes das três contas: `medida_6_8.r:9–11`; margem e tetos: `contrato_item6.txt:3`.
+
+A terceira janela contém **20 chamadas do grupo**, não 20 de cada papel: p95 individual de leitura, censo e sonda é **[não verificado]**. Os números conferem para a duração registrada; sua capacidade de evitar futuros rc 124 é **[não verificado]**. (`medida_6_8.r:5–11`; `bin/codex_pergunta.sh:252–260`, `:348–408`)
 
 ## 12/11 12:31 · sessao 796afec6fbfb · - · - · origem=Ronald (tmux)
 
@@ -977,18 +1029,4 @@ Censo do delta e dos produtores/leitores:
 | `chamado_encerrado` | `resolver_perguntas_por_chamado_resolvido`: exige C6 morta, escolhe `via_pelo_fato` ou fallback, chama carimbar (`app/chamados/services/disputa_emissao.py:2048`, `:2058`, `:2059`, `:2060`); seleção final da via (`app/chamados/juizes.py:1757`). |
 | Autoria histórica individual dessas linhas | As portas atuais acima não provam autor, instante nem caminho que produziu cada registro raspado [nao verificado]. |
 
-## 12/11 11:56 · sessao 6014d0662f17 · - · - · origem=Ronald (tmux)
-
-**Q2 — fecha por inspeção; execução ORM [nao verificado].** O módulo importa diretamente `instantaneo`, `julgar_celula` e `recalcular_fechamento_mes`, chama os três e não instala duplos: `app/ponto/tests/test_lastro_c16_recalculador_relavra.py:31`, `:34`, `:35`, `:79`, `:83`, `:89`.
-
-- **Regra independente:** cadastro 08–17, intervalo 12–13 e jornada 480 (`app/ponto/tests/test_lastro_c16_recalculador_relavra.py:56`); quatro batidas reais na segunda (`:66`); ausência folga aprovada na terça (`:73`). Os esperados literais são 960 previstos, 2 dias, 480 abonados, 480 realizados (`:107`). A regra produtiva preserva ausência como jornada, inclui o previsto e abona a parte não realizada (`app/ponto/services/dia_pago.py:392`, `:398`, `:400`, `:402`).
-
-- **Integração real:** o recalculador lê `grade_do_fechamento`, chama `por_dia_da_grade` e preenche previstos/abono/realizado (`app/ponto/services/fechamento.py:1014`, `:1047`, `:1048`, `:1062`, `:1064`); o leitor transporta os três metadados da ata (`app/escala/services/leitor_celula.py:436`). O simulador chama novamente o recalculador real e entrega seus objetos aos três consumidores (`app/folha/management/commands/simular_folha.py:129`, `:133`, `:134`, `:152`).
-
-- **Morde, por raciocínio do código:** `return {}` antecipado reprova `assertIn` (`app/ponto/tests/test_lastro_c16_recalculador_relavra.py:85`); perda do transporte na ata reprova presença/tipo/id (`:95`, `:97`, `:98`); recalculador cego a `ausencia_tipo` reprova contraprova que exige 480→0 de abono e diferença 480 no previsto (`:130`, `:139`). Trocar a autoridade de `_retidos` pelo gravado, vazio nesta fixture, deixa `apto_folha=None` e reprova o acesso/asserção de percentagem (`app/folha/management/commands/simular_folha.py:76`, `:85`; `app/ponto/tests/test_lastro_c16_recalculador_relavra.py:125`, `:128`). Execução desses mutantes [nao verificado].
-
-- **Limites:** a ata antiga continua sintetizada da nova, removendo metadados e mudando `tipo_dia`; não é reprodução executada do cartório histórico (`app/ponto/tests/test_lastro_c16_recalculador_relavra.py:101`). Os asserts posteriores também comparam saídas antes/depois; não são todos valores independentes (`:116`, `:119`, `:123`). `ausencia_label` é cobrado por presença, sem conferir seu conteúdo (`:95`, `:98`).
-
-- **Comentário impreciso:** “MESMO objeto” não é identidade demonstrada: `_lido()` e `_foto()` fazem chamadas independentes, embora a implementação atual do simulador transporte seus próprios objetos do recalculador (`app/ponto/tests/test_lastro_c16_recalculador_relavra.py:83`, `:89`, `:121`; `app/folha/management/commands/simular_folha.py:130`). A execução do ensaio com banco e o seu resultado permanecem [nao verificado].
-
-_4236 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4237 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
