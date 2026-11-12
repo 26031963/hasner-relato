@@ -1,7 +1,109 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 20:41** · publicado em **12/11/2026 20:41** (UTC-3)
+> Ultima resposta processada: **12/11/2026 20:45** · publicado em **12/11/2026 20:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 20:45 · sessao f2b03b2454de · TIPO-NA-FONTE · verificador · origem=Code
+
+1. **BLOQUEANTE — segundo juiz / derivação paralela: uma batida sai ACESA e ÓRFÃ.** A pergunta “que marco previsto a batida ocupa?” pertence a `_match_marcos`. O cartório volta a respondê-la: incorpora órfãs em `_reais`, escolhe uma por proximidade, acende a lâmpada e depois grava a lista original de órfãs. (`app/core/juizes.py:212`; `app/ponto/services/cartorio.py:629`; `app/ponto/services/cartorio.py:664`; `app/ponto/services/cartorio.py:670`; `app/ponto/services/cartorio.py:770`)
+
+   O próprio teste novo fornece o contraexemplo: DNA 23:00→00:30, régua contendo somente E23:00 e órfã em D+1 00:30. A saída acende com esse instante, que permanece em `orfas`, com `n_orfas=1`. O teste verifica apenas a lâmpada acesa, deixando passar a contradição. (`app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:92`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:95`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:98`; `app/ponto/services/cartorio.py:672`; `app/escala/services/ata.py:233`)
+
+   A aproximação já aparece no trecho anterior do diff fornecido; sua comparação histórica literal com `0a747193e` é [nao verificado]. A contradição permanece no ramo reescrito e exercitado pela obra. (`app/ponto/services/cartorio.py:661`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:91`)
+
+2. **BLOQUEANTE — célula não lavrada passa a disparar corrupção, inclusive em produção sem ci.** `None` levanta “ata não é mapping”; `{}` e somente `precedencia` levantam “chave obrigatória ausente”. Isso ocorre independentemente de `AtaVigiada`: o acessor estrito também atua sobre dict comum. (`app/escala/services/ata.py:42`; `app/escala/services/ata.py:45`; `app/escala/services/ata.py:47`)
+
+   A fronteira reconhece ata ausente como estado legítimo para transportar precedência; os leitores abaixo não distinguem esse estado de uma ata lavrada corrompida. (`app/escala/services/ata.py:83`; `app/escala/services/ata.py:87`; `app/ponto/portas/celula.py:1086`)
+
+   | Chamador de produção | Entrada e efeito |
+   |---|---|
+   | `grade_da_celula` → `orfas_da_ata` e contagem | Célula inexistente é tratada antes; célula existente dentro da vida funcional chega aos acessores mesmo com `None/{}/precedencia`, levantando. (`app/escala/services/leitor_celula.py:394`; `app/escala/services/leitor_celula.py:396`; `app/escala/services/leitor_celula.py:422`) |
+   | `periodos_do_dia` → `orfas_da_ata` | Chamada incondicional, antes das verificações de marcos e lâmpadas; as três formas não lavradas levantam. (`app/ponto/juiz_batida.py:158`; `app/ponto/juiz_batida.py:163`; `app/ponto/juiz_batida.py:176`) |
+   | `_leitura_da_celula`, cluster | Dia sem trabalho retorna antes; célula de trabalho não lavrada chega ao acessor e levanta, antes do retorno “não medido”. (`app/ponto/services/cluster_espurio.py:25`; `app/ponto/services/cluster_espurio.py:30`; `app/ponto/services/cluster_espurio.py:31`) |
+   | `assinaturas_do_colab`, esmeril | Carrega todas as células do período, sem filtro de lavra; chega ao acessor salvo saída antecipada por `so_escala`. (`app/ponto/services/esmeril_espelho.py:96`; `app/ponto/services/esmeril_espelho.py:102`; `app/ponto/services/esmeril_espelho.py:126`) |
+   | `censo`, vigia pareador | Carrega todas as atas da janela ampliada; transforma `None` em `{}` e chama o acessor, levantando. (`app/ponto/services/vigia_pareador_celula.py:71`; `app/ponto/services/vigia_pareador_celula.py:75`; `app/ponto/services/vigia_pareador_celula.py:76`) |
+   | `medir_sobra_com_tipo_trocado` | Consulta células de trabalho; com dois marcos, ata não lavrada chega ao acessor e levanta. (`app/ponto/management/commands/tripwire_celulas.py:228`; `app/ponto/management/commands/tripwire_celulas.py:233`; `app/ponto/management/commands/tripwire_celulas.py:235`) |
+   | `_celula_furada` → contagem | `None/{}/precedencia` sem `lampadas` retornam `None` antes do acessor. Com lâmpadas, chaves faltantes podem chegar à validação; a exceção vira `None` no `except` amplo. (`app/chamados/juizes.py:493`; `app/chamados/juizes.py:505`; `app/chamados/juizes.py:508`; `app/chamados/juizes.py:511`; `app/chamados/juizes.py:521`) |
+   | Plantio → `horas_orfas` | Sem lâmpadas, as formas não lavradas são puladas. Com lâmpadas e chaves ausentes, a exceção é capturada e a resposta vira `False`. (`app/chamados/services/materializacao.py:172`; `app/chamados/services/materializacao.py:175`; `app/chamados/services/materializacao.py:182`; `app/chamados/services/materializacao.py:186`) |
+   | `_ata_ate_o_teto` → `copiar_ata` | `None` ou ausência de pendências retorna antes. Mapping vazio/somente precedência, com pendências, seria validado e rejeitado. Os dois chamadores ordinários constroem a ata com `ata_do_dia`. (`app/ponto/services/cartorio.py:918`; `app/ponto/services/cartorio.py:927`; `app/ponto/services/cartorio.py:1444`; `app/ponto/services/cartorio.py:1859`) |
+   | `insumos_da_ata` → `contar_orfas` | Valida incondicionalmente, inclusive quando existem lâmpadas. Cartório fornece atas construídas; backfill e vigia filtram `julgada_em`. (`app/ponto/services/cartorio.py:841`; `app/ponto/services/cartorio.py:1880`; `app/ponto/management/commands/backfill_b5_insumos.py:61`; `app/ponto/management/commands/backfill_b5_insumos.py:73`; `app/ponto/management/commands/vigia_b5_ausencia.py:55`; `app/ponto/management/commands/vigia_b5_ausencia.py:79`) |
+
+   No ramo `nunca_bateu`, `_ata_nb` pode ser construído como `None` quando falta `_dia_nb`; existe chamada posterior a `insumos_da_ata`. A ocorrência real dessa ausência de grade não está demonstrada pela sonda: [nao verificado]. (`app/ponto/services/cartorio.py:1247`; `app/ponto/services/cartorio.py:1261`; `app/ponto/services/cartorio.py:1321`)
+
+   **Exceções engolidas também alteram o resultado:** turnos exclui a célula da alimentação dos papéis; motor registra e ignora o dia; espelho captura a falha da grade e segue com o mapa vazio; calendário captura a falha; inteligência exclui o colaborador da métrica; materialização devolve régua vazia. (`app/ponto/turnos.py:1633`; `app/ponto/turnos.py:1634`; `app/ponto/motor_calculo_v2.py:616`; `app/ponto/motor_calculo_v2.py:621`; `app/ponto/services/espelho.py:569`; `app/ponto/services/espelho.py:571`; `app/colaboradores/services/calendario.py:399`; `app/inteligencia/calculadores.py:43`; `app/inteligencia/calculadores.py:46`; `app/chamados/services/materializacao.py:237`; `app/chamados/services/materializacao.py:241`)
+
+   Há ainda chamadas sem captura local em cadastro da realidade e na avaliação da pausa para exportação. (`app/escala/services/cadastro_realidade.py:261`; `app/escala/services/cadastro_realidade.py:266`; `app/folha/export.py:1150`)
+
+   Portanto, `c=0` nas **lavradas** não cobre o universo das não lavradas informado no prompt. Os números da sonda não possuem arquivo correspondente aberto nesta cópia: [nao verificado em arquivo].
+
+3. **BLOQUEANTE — ainda existem transportes crus de produção; o resíduo da precedência foi corrigido.** Permanecem `dict(ata)` em `celula_como_o_julgamento_deixa` e `lavrar_veredito`. Recebendo `AtaVigiada` com as chaves migradas, essas cópias atravessam a iteração fiscalizada e levantam. (`app/ponto/portas/celula.py:945`; `app/ponto/portas/celula.py:995`; `app/escala/services/ata.py:192`; `app/escala/services/ata.py:195`)
+
+   O script operacional `snapshot_o118_col221.py` também lê `ata.orfas` cru; sua execução atual em produção é [nao verificado]. (`bin/snapshot_o118_col221.py:18`; `bin/snapshot_o118_col221.py:32`)
+
+   Já `carimbar_precedencia` usa agora `copiar_envelope`; o resíduo citado pelo relato em torno de `:1083` não corresponde mais ao código atual. Esse transporte aceita `None`, conserva a catraca e não fabrica `n_orfas=0`. (`app/ponto/portas/celula.py:1085`; `app/ponto/portas/celula.py:1086`; `app/escala/services/ata.py:87`; `app/escala/services/ata.py:90`)
+
+4. **Censo de escritores e leitores das portas, incluindo sítios fora do diff.** Os escritores de formato JSON encontrados são as duas atribuições em `gravar_orfas`; cartório e grade sintética chamam esse escritor. A persistência do envelope continua na porta da célula. (`app/escala/services/ata.py:233`; `app/escala/services/ata.py:234`; `app/ponto/services/cartorio.py:770`; `app/escala/utils.py:1903`; `app/ponto/portas/celula.py:1006`; `app/ponto/portas/celula.py:1033`)
+
+   | Campo/valor | Origem e leitores encontrados |
+   |---|---|
+   | `ata.orfas`, `ata.n_orfas` | Escritor: `gravar_orfas`; leitor semântico central: `_valores_orfas`. Cópias/leitor cru: achado 3. (`app/escala/services/ata.py:233`; `app/escala/services/ata.py:234`; `app/escala/services/ata.py:45`) |
+   | `ata.precedencia` | Conteúdo vem de `fatos_do_dia`, preparado pelo cartório; atribuição em `carimbar_precedencia`; comparação para idempotência e preservação dinâmica na lavra. (`app/ponto/services/cartorio.py:2007`; `app/ponto/services/cartorio.py:2008`; `app/ponto/portas/celula.py:1087`; `app/ponto/portas/celula.py:1081`; `app/ponto/portas/celula.py:104`; `app/ponto/portas/celula.py:997`) |
+   | Retorno de `leitura_orfas` | Produzido nas saídas legado/ISO; lido por `ler_orfas`, `contar_orfas`, `copiar_ata` e `horas_orfas`. `medida` tem default `True`. (`app/escala/services/ata.py:37`; `app/escala/services/ata.py:58`; `app/escala/services/ata.py:70`; `app/escala/services/ata.py:74`; `app/escala/services/ata.py:78`; `app/escala/services/ata.py:101`; `app/escala/services/ata.py:129`) |
+   | Retorno de `ler_orfas` | Consumido por `orfas_da_ata`. (`app/escala/services/ata.py:74`; `app/escala/services/leitor_celula.py:186`) |
+   | Retorno de `contar_orfas` | Consumido por `contagem_orfas_da_ata` e `insumos_da_ata`. (`app/escala/services/ata.py:78`; `app/escala/services/leitor_celula.py:192`; `app/ponto/services/cartorio.py:841`) |
+   | Retorno de `orfas_da_ata` | Grade, juiz da batida, tripwire, esmeril, vigia pareador e cluster. (`app/escala/services/leitor_celula.py:422`; `app/ponto/juiz_batida.py:163`; `app/ponto/management/commands/tripwire_celulas.py:235`; `app/ponto/services/esmeril_espelho.py:126`; `app/ponto/services/vigia_pareador_celula.py:76`; `app/ponto/services/cluster_espurio.py:30`) |
+   | Retorno de `contagem_orfas_da_ata` | Grade e `_celula_furada`. (`app/escala/services/leitor_celula.py:422`; `app/chamados/juizes.py:511`) |
+   | Retorno de `contar_orfas_da_grade` | Furos, causas, status, supra-juiz, bordas, score de par relâmpago e cartório. O nome `contar_orfas` no supra é alias desta porta da grade. (`app/escala/services/furos_diarios.py:23`; `app/folha/causas.py:44`; `app/ponto/status_dia.py:189`; `app/ponto/supra_juiz.py:379`; `app/ponto/supra_juiz.py:380`; `app/ponto/services/bordas_realizado.py:50`; `app/ponto/management/commands/detectar_par_relampago.py:141`; `app/ponto/services/cartorio.py:820`) |
+   | Retorno de `horas_orfas` | Legado copiado como HH:MM; ISO convertido ao fuso local; consumidor de produção: plantio. (`app/escala/services/ata.py:131`; `app/escala/services/ata.py:133`; `app/chamados/services/materializacao.py:182`) |
+   | Retorno de `copiar_ata` | `_ata_ate_o_teto`; delega o transporte a `copiar_envelope` depois de validar. (`app/ponto/services/cartorio.py:927`; `app/escala/services/ata.py:101`; `app/escala/services/ata.py:102`) |
+   | Retorno de `copiar_envelope` | `copiar_ata` e `carimbar_precedencia`. (`app/escala/services/ata.py:102`; `app/ponto/portas/celula.py:1086`) |
+   | `AtaVigiada` | Produzida pelo descriptor e pelas cópias; reconhecida pelo preparo JSON; leitura/escrita fiscalizadas pelos métodos próprios. (`app/escala/services/ata_ci.py:22`; `app/escala/services/ata_ci.py:28`; `app/escala/services/ata.py:90`; `app/escala/services/ata.py:213`; `app/escala/services/ata_ci.py:43`; `app/escala/services/ata_ci.py:44`; `app/escala/services/ata.py:180`; `app/escala/services/ata.py:184`) |
+
+   A projeção `dia.orfas` tem escritores próprios nos builders, overlays e leitor da ata; não é o JSON persistido. Ela é consumida pelo calendário, propositor, cobertura parcial, adaptador de realizado e PDF. (`app/escala/utils.py:622`; `app/escala/utils.py:663`; `app/escala/utils.py:800`; `app/escala/utils.py:964`; `app/escala/utils.py:1157`; `app/escala/utils.py:1816`; `app/escala/utils.py:1839`; `app/escala/services/leitor_celula.py:422`; `app/colaboradores/services/calendario.py:380`; `app/ponto/propositor.py:36`; `app/ponto/propositor.py:81`; `app/ponto/turnos.py:2667`; `app/escala/utils.py:1114`; `app/relatorios/pdf_espelho.py:203`)
+
+   Também existem escritores/leitores diretos em fixtures e testes, inclusive fora dos dirigidos: calendário, juiz da batida, T4.1, O118 e lâmpadas. Eles não desapareceram com o acessor. (`app/colaboradores/tests/test_calendario_orfa.py:79`; `app/ponto/tests/test_juiz_batida.py:188`; `app/escala/tests/test_t41_leitor_celula.py:88`; `app/ponto/tests/test_o118_orfa_que_acendeu.py:90`; `app/ponto/tests/test_lampada_acende_pela_batida.py:84`)
+
+   Os consumidores adicionais das portas nos testes incluem as cinco assertivas migradas e bateria, provas da matriz, fluxo, cópia e ativação. (`app/escala/tests/test_ata_x_turno_entrada.py:144`; `app/escala/tests/test_saida_valida_cross_meia_noite.py:104`; `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:137`; `app/ponto/tests/test_bateria_lavratura.py:639`; `app/ponto/tests/test_bateria_lavratura.py:1060`; `app/ponto/tests/test_bateria_lavratura.py:544`; `app/ponto/tests/test_bateria_lavratura.py:963`; `app/escala/tests/test_tipo_na_fonte_orfas.py:34`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:74`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:45`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:46`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:127`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:131`; `app/escala/tests/test_ata_ci.py:64`)
+
+   Completude de aliases dinâmicos, acesso indireto por serialização e todas as fixtures do archive: [nao verificado].
+
+5. **Mudanças efetivas para o legado HH:MM, mesmo com contagem coerente.** HH:MM não vazio produz `instantes=None`, preservando quantidade; vazio explícito produz `[]` e zero. Não há exceção nessas duas formas válidas. (`app/escala/services/ata.py:56`; `app/escala/services/ata.py:58`; `app/escala/services/ata.py:70`)
+
+   | Consumidor | Resultado para HH:MM não vazio |
+   |---|---|
+   | Cluster | Retorna não medido, sem procurar rajada legada. (`app/ponto/services/cluster_espurio.py:30`; `app/ponto/services/cluster_espurio.py:31`) |
+   | Esmeril A5 | Não acrescenta essas órfãs aos buckets. (`app/ponto/services/esmeril_espelho.py:126`; `app/ponto/services/esmeril_espelho.py:127`; `app/ponto/services/esmeril_espelho.py:131`) |
+   | Tripwire | Pula a célula antes de incrementar o universo. (`app/ponto/management/commands/tripwire_celulas.py:235`; `app/ponto/management/commands/tripwire_celulas.py:236`; `app/ponto/management/commands/tripwire_celulas.py:238`) |
+   | Vigia pareador | Não conta a célula como tendo órfã nem inclui o colaborador por essa informação. (`app/ponto/services/vigia_pareador_celula.py:77`; `app/ponto/services/vigia_pareador_celula.py:79`; `app/ponto/services/vigia_pareador_celula.py:82`) |
+   | Propositor/classificador | Propositor retorna não avaliável; classificador retorna `None`. (`app/ponto/propositor.py:36`; `app/ponto/propositor.py:37`; `app/escala/orfa_classe.py:54`; `app/escala/orfa_classe.py:56`) |
+   | Ausência parcial | A leitura temporal inclui desconhecimento, `[None]`. (`app/ponto/turnos.py:2667`; `app/ponto/turnos.py:2669`) |
+   | PDF/calendário | Batidas podem receber `orfa=None`; o PDF não incrementa abertos quando a classificação é desconhecida. (`app/relatorios/pdf_espelho.py:185`; `app/relatorios/pdf_espelho.py:214`; `app/relatorios/pdf_espelho.py:215`; `app/colaboradores/services/calendario.py:624`; `app/colaboradores/services/calendario.py:628`) |
+
+   As portas escalares preservam a quantidade legada; o plantio preserva suas horas HH:MM pelo adaptador. Essas mudanças temporais decorrem do contrato implementado, mas seus totais reais por consumidor não constam da sonda: [nao verificado]. (`app/escala/services/ata.py:78`; `app/escala/services/ata.py:118`; `app/escala/services/ata.py:131`)
+
+6. **CI: a suite canônica usa ci; a catraca não fica desligada por escolha de settings.** `bin/suite.sh` executa explicitamente `--settings=config.settings.ci`; esse perfil ativa a flag e seleciona `RunnerAtaVigiada`. (`bin/suite.sh:232`; `bin/suite.sh:233`; `app/config/settings/ci.py:40`; `app/config/settings/ci.py:42`)
+
+   | Execução/prova | Settings e alcance |
+   |---|---|
+   | Suite canônica, inclusive testes Django/selos | `config.settings.ci`. (`bin/suite.sh:233`) |
+   | Dirigidos puros por `python -m unittest` | O carregador AST executa funções sem inicializar settings Django. (`app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:19`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:28`) |
+   | Prova local de `ready` | `django.conf` falso, com flag definida pelo teste. (`app/escala/tests/test_ata_ci.py:52`; `app/escala/tests/test_ata_ci.py:55`) |
+   | Prova da registry real | Usa settings já ativos, exige a flag e pula quando Django/registry não está disponível. (`app/escala/tests/test_ata_ci.py:129`; `app/escala/tests/test_ata_ci.py:132`; `app/escala/tests/test_ata_ci.py:135`) |
+   | Prova do runner fora do caso | Executa a classe real com runner pai simulado. (`app/escala/tests/test_ata_ci.py:109`; `app/escala/tests/test_ata_ci.py:119`) |
+
+   A instalação depende da flag em `ready`. Prod importa base, SaaS importa base, sombra importa SaaS; esses caminhos não importam ci. Não há ativação normal pelo código desses perfis. (`app/escala/apps.py:11`; `app/config/settings/prod.py:1`; `app/config/settings/saas.py:10`; `app/config/settings/sombra.py:27`)
+
+   Entretanto, depois de instalada, a instrumentação modifica a classe do modelo, o field e `unittest.TestCase.run` sem desinstalação. Trocar settings no **mesmo processo** não desfaz isso; ocorrência real dessa troca é [nao verificado]. (`app/escala/services/ata_ci.py:37`; `app/escala/services/ata_ci.py:47`; `app/escala/services/ata_ci.py:72`)
+
+7. **BLOQUEANTE — teste novo de mutação está vermelho na árvore atual.** `test_MORDE_mutante_copia_perde_catraca` altera texto de `copiar_envelope`, mas extrai somente `copiar_ata`. A função extraída chama o `copiar_envelope` original do namespace; a mutação não alcança a operação executada e o `assertRaises` externo falha. (`app/escala/tests/test_selo_tipo_na_fonte_orfas.py:143`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:146`; `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:149`; `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:24`; `app/escala/services/ata.py:102`)
+
+   A rodada local dos dez módulos puros terminou em **74 testes, uma falha e um skip**; a falha foi essa. Registro persistido da execução: [nao verificado em arquivo]. O skip previsto depende da disponibilidade de Django/registry. (`app/escala/tests/test_ata_ci.py:129`; `app/escala/tests/test_ata_ci.py:132`)
+
+   Além disso, fixtures existentes seguem incompatíveis: T4.1 lavra `n_orfas=2` sem `orfas` e espera `None`; calendário escreve ISO sem `n_orfas`. O novo acessor rejeita ambas. Execução Django desses cenários: [nao verificado]. (`app/escala/tests/test_t41_leitor_celula.py:90`; `app/escala/tests/test_t41_leitor_celula.py:94`; `app/colaboradores/tests/test_calendario_orfa.py:81`; `app/escala/services/ata.py:45`; `app/escala/services/ata.py:47`)
+
+8. **BLOQUEANTE — selo anterior perdeu mordida pela troca de formato.** O selo O118 ainda intersecta `lampada.luz` HH:MM com `ata.orfas` agora ISO. Assim, a mesma batida acesa e órfã pode produzir interseção vazia. A ata usada nesse selo vem diretamente de `ata_do_dia`, como dict comum, sem passar pelo descriptor ORM. (`app/ponto/tests/test_o118_orfa_que_acendeu.py:84`; `app/ponto/tests/test_o118_orfa_que_acendeu.py:89`; `app/ponto/tests/test_o118_orfa_que_acendeu.py:90`; `app/ponto/tests/test_o118_orfa_que
+
+[truncado em 20000 de 24670 caracteres]
 
 ## 12/11 20:41 · sessao 4eab9461e94e · - · - · origem=Ronald (tmux)
 
@@ -492,24 +594,4 @@ O snapshot `app/chamados/tests/e4b_c12_base.json:6` contém a implementação an
 
 Testes da API e mensageria verificam contagem geral/repasse, sem certificar os quatro novos campos (`app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:39-48`; `mensageria/nucleo/tests/test_ferramenta_chamados_em_competencia_trancada.py:23-28`). Execução desses testes: [nao verificado].
 
-## 12/11 19:50 · sessao d5aabf8b9f26 · - · - · origem=Ronald (tmux)
-
-JUIZES.md está coerente com o filtro real: a linha 88 descreve a assinatura `via='admin'` ou presença de `acoes`; o código exige exatamente um `dict` com uma dessas condições (`app/docs/JUIZES.md:88`; `app/chamados/juizes.py:1298`; constante em `app/ponto/services/veredito_celula.py:76`). Ainda exige usuário não nulo, diferente do sistema, e ato estritamente posterior à tranca (`app/chamados/juizes.py:1260`; `app/chamados/juizes.py:1302`).
-
-`acoes=[]` conta por presença da chave, coerentemente com o escritor real e com teste explícito; não se exige lista preenchida (`app/ponto/services/veredito_celula.py:358`; `app/chamados/tests/test_tranca_vivas_08.py:107`; `app/chamados/tests/test_tranca_vivas_08.py:109`). `acoes=None` também satisfaria o predicado, mas produção desse valor pelo escritor examinado é [nao verificado].
-
-Os escritores reais confirmam a distinção: a porta da célula grava `via` no evento; o despachante humano chama a mesma porta com `via='admin'` e depois registra `acoes` (`app/ponto/portas/celula.py:1042`; `app/ponto/portas/celula.py:1044`; `app/ponto/services/veredito_celula.py:352`; `app/ponto/services/veredito_celula.py:356`). O ator pode vir do request inclusive na lavra automática; o código de observabilidade documenta e implementa essa herança (`app/core/observ.py:100`; `app/core/observ.py:108`; `app/core/observ.py:115`).
-
-No checklist:
-
-- **Segundo juiz:** não identificado no caminho examinado. C20 está registrado; o avulso delega ao lote, e o contador lê `pergunta_viva` e o mesmo helper de toque usado pelo lote (`app/core/juizes.py:292`; `app/chamados/juizes.py:991`; `app/chamados/juizes.py:1076`; `app/chamados/services/competencia_trancada.py:144`; `app/chamados/services/competencia_trancada.py:155`).
-- **Segundo escritor:** os trechos novos de produção apenas agregam dicionários, projetam JSON e imprimem contagens; não acrescentam escrita persistente (`app/chamados/services/competencia_trancada.py:341`; `app/chamados/services/competencia_trancada.py:355`; `app/api/views_mensageria.py:1563`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:22`). A chamada do teste continua passando pela porta canônica da célula (`app/chamados/tests/test_tranca_vivas_08.py:177`; `app/escala/models.py:1826`).
-- **Relógio fora da borda:** não identificado nesses trechos. O filtro compara com `fechado_em`; a fixture congela `AGORA` e posiciona a trilha em `fechado_em + 5min` (`app/chamados/juizes.py:1070`; `app/chamados/juizes.py:1302`; `app/chamados/tests/test_tranca_vivas_08.py:30`; `app/chamados/tests/test_tranca_vivas_08.py:49`).
-- **Derivação paralela:** não identificada nesse contador: os juízos são consultados nas autoridades existentes; união/contagens ficam em `medir_frota`, e API/CLI leem sua saída (`app/chamados/services/competencia_trancada.py:144`; `app/chamados/services/competencia_trancada.py:155`; `app/chamados/services/competencia_trancada.py:348`; `app/api/views_mensageria.py:1563`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:14`).
-- **Campo com dois significados:** a união agora recebe o nome próprio e os componentes são expostos separadamente (`app/chamados/services/competencia_trancada.py:336`; `app/chamados/services/competencia_trancada.py:353`; `app/api/views_mensageria.py:1573`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:22`).
-
-A dívida de `resgatado_em` permanece: a descrição “RESGATADO pelo admin” é mais estreita que a origem real, pois resposta do colaborador também carimba o resgate (`app/chamados/services/competencia_trancada.py:75`; `app/chamados/services/arquivo.py:180`; `app/chamados/services/materializacao.py:725`). Isso corresponde ao item 2 já encaminhado para FILA no dado do usuário; registro desse encaminhamento em arquivo da cópia é [nao verificado].
-
-Execução da suite, histórico RED, resultados de produção pós-cura e integridade do hash do archive: [nao verificado]. [nao verificado]
-
-_4425 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4426 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
