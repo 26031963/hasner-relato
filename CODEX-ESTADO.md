@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 10:25** · publicado em **12/11/2026 10:27** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:36** · publicado em **12/11/2026 10:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:36 · sessao 0d7a98f2dd10 · ABSOLVIDA-PELA-FOLGA · sonda · origem=Code
+
+**931 no universo; 931 em `sem_batida_origem`; listas de casos vazias.** Transcrição do JSON fornecido, sem conferência em produção. [nao verificado]
+
+```json
+{"caso_51407": [], "casos": [], "contagem": {"sem_batida_origem": 931, "universo_base": 931}}
+```
+
+- **Exportada × não exportada:** os grupos não constam da saída; não podem ser transcritos como zero. Nenhuma tupla `(colNNN, #pk, data_evento, dia do turno, competência)` foi retornada. [nao verificado]
+- **#51407/col999 não aparece.** A saída não identifica seu contador individual. Se integrou `universo_base`, os totais são compatíveis com exclusão em `sem_batida_origem`; confirmar isso exige o script ou o diagnóstico individual. [nao verificado]
+
+1. **A saída não comprova a medida do aval.** O conteúdo de `sonda_medida1.py` não está no texto recebido nem foi localizado nesta cópia; seus filtros de `via_resolucao`, ausência de resposta e ordem dos contadores permanecem [nao verificado].
+
+- **A FK `PerguntaDisputa.batida_origem` não é a fonte garantida de `orfao_14h`.** Esse motivo pertence à família MARCO; a FK identifica episódios BATIDA, e seu preenchimento automático retorna `None` para MARCO. Exigir essa FK descarta perguntas sem avaliar o turno que elas cobram. — `app/chamados/catalogo/motivos.py:34`; `app/chamados/models.py:2437`; `app/chamados/models.py:3462`.
+- **O argumento homônimo `resolver_data_evento(..., batida_origem=...)` representa, sim, a entrada aberta de `orfao_14h`.** Ele consulta `dia_do_turno_da_batida`; isso não significa que aquela entrada esteja gravada na FK da pergunta. — `app/escala/servico_jornada.py:495`; `app/escala/servico_jornada.py:499`; `app/escala/servico_jornada.py:509`.
+- **Buscar o turno por `pk` em `t.batidas` usa a mesma associação do juiz.** Porém, o juiz do dia monta um mapa por PK e atribui o dia local às batidas não reclamadas por turno; exigir exatamente um turno acrescenta uma restrição. A equivalência também depende da janela utilizada pela sonda. — `app/ponto/turnos.py:2933`; `app/ponto/turnos.py:2952`; `app/ponto/turnos.py:2955`. Janela e restrições efetivas da sonda: [nao verificado].
+- **A migração existente não exige essa FK para encontrar a entrada aberta:** procura candidato único com entrada, sem saída e último marco previsto no dia gravado, retornando `t.entrada`; também exclui explicitamente `orfao_14h` materializada. — `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:115`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:126`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:168`.
+- **A separação deve consultar `marcos_da_competencia(...)[“exportada”]`.** O campo `marco` pode indicar uma etapa posterior, como paga; a competência da data segue a janela da empresa. — `app/ponto/services/fechamento.py:1537`; `app/ponto/services/fechamento.py:1543`; `app/ponto/services/dia_pago.py:716`.
+
+2. **Os números e as listas são exatamente os transcritos acima; o total real do predicado continua indeterminado.** [nao verificado]
+
+3. **O contador capaz de esconder casos é `sem_batida_origem`: 931/931, ou 100% do universo reportado.** [nao verificado] A exclusão por FK nula não demonstra ausência do predicado, pois essa família não recebe a FK automaticamente. — `app/chamados/models.py:3462`.
+
+- **`juiz_sem_dia`, `ambiguo` e `com_saida` não foram publicados:** tamanho e participação nas exclusões individuais são [nao verificado]. [nao verificado]
+- **`juiz_sem_dia` e `ambiguo` representam falta de determinação, não prova de inexistência do caso:** o juiz pode devolver `None`, e a busca da fonte pode encontrar múltiplos candidatos. — `app/ponto/turnos.py:2936`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120`.
+- **`com_saida` excluiria corretamente apenas quando fosse a saída do turno certo da fonte**, pois o predicado exige turno ainda sem saída. O código distingue candidatos por entrada e ausência de saída; se a sonda aplicou isso ao turno correto permanece [nao verificado]. — `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108`.
+
+## 12/11 10:35 · sessao 5f24455a0385 · - · - · origem=Ronald (tmux)
+
+- `marcos_da_competencia` separa exportada pelo booleano `['exportada']`, delegado a `competencia_entregue(empresa_id, mes, ano)`. Comparar `['marco'] == 'exportada'` perderia competências cujo marco mais adiantado é `trancada` ou `paga`. — `app/ponto/services/fechamento.py:1537`, `app/ponto/services/fechamento.py:1543`
+- Entregue significa existência de `ExportacaoDominio` vigente com `invalidada_em is None`; existência de qualquer exportação ou `FechamentoMensal.status='exportado'` não substitui esse juiz. — `app/folha/export.py:588`, `app/folha/export.py:591`, `app/ponto/services/fechamento.py:1533`
+- Competência do fato: `competencia_do_fato(colaborador, dia)` chama `competencias_do_fato`; a derivação usa `janela_atual(dia, empresa)` e toma mês/ano do fim da janela. — `app/ponto/services/fechamento.py:1602`, `app/ponto/services/fechamento.py:1599`, `app/ponto/services/dia_pago.py:716`
+- `competencia_do_dia_entregue` já compõe janela da empresa e juiz de entrega; `None` significa ausência de dia, não comprovação de não exportada. — `app/chamados/services/vigia_fio.py:822`, `app/chamados/services/vigia_fio.py:834`, `app/chamados/services/vigia_fio.py:838`
+- Datas 28/10 e 29/10 pertencem ambas à competência 11 do mesmo ano para qualquer corte permitido neste código: corte máximo 28; dia a partir do corte avança o mês. Isso não informa se a competência foi exportada. — `app/ponto/janelas.py:26`, `app/ponto/janelas.py:27`, `app/ponto/janelas.py:32`
+- Conteúdo de `sonda_medida1.py`, seu cálculo da competência e seu uso efetivo de `marcos_da_competencia`: [não verificado].
+
+## 12/11 10:35 · sessao 3e1d1c1a78a4 · - · - · origem=Ronald (tmux)
+
+- `orfao_14h` pertence à família MARCO; sua identidade é pessoa + dia do turno + motivo + instância. A coluna `PerguntaDisputa.batida_origem` identifica episódios da família BATIDA, portanto não é uma fonte obrigatória nem garantida para `orfao_14h`. `app/chamados/catalogo/motivos.py:15`, `app/chamados/catalogo/motivos.py:34`, `app/chamados/models.py:2437`.
+- O preenchimento automático da FK devolve `None` para motivos fora da família BATIDA. Logo excluir `orfao_14h` por FK nula exclui linhas por algo esperado no modelo, sem verificar se têm turno aberto no dia errado. `app/chamados/models.py:3453`, `app/chamados/models.py:3461`.
+- O acervo ficou com FK nula deliberadamente: o contexto da disputa muda e não permite reconstruir retrospectivamente o episódio antigo. `app/chamados/migrations/0052_pergunta_batida_origem.py:1`.
+- O argumento homônimo `resolver_data_evento(..., batida_origem=...)` significa a entrada aberta de `orfao_14h`; ele chama `dia_do_turno_da_batida`. Esse argumento não equivale à FK da pergunta. `app/escala/servico_jornada.py:495`, `app/escala/servico_jornada.py:499`, `app/escala/servico_jornada.py:506`.
+- Um emissor encontra a entrada aberta por `entradas_pendentes[].pk` e passa a batida a esse argumento. A lista contém `_t.entrada.pk` de turnos abertos. `app/chamados/detector_anomalias.py:35`, `app/chamados/detector_anomalias.py:43`, `app/chamados/detector_anomalias.py:47`, `app/ponto/utils_turno_orfao.py:30`, `app/ponto/utils_turno_orfao.py:38`.
+- Outro emissor encontra a entrada com `_achar_batida_origem(chamado)`, que consulta `turnos_do_colab`, seleciona turnos abertos com entrada anterior à criação do chamado e retorna a entrada candidata; o objeto é usado em `resolver_data_evento`, sem ser passado à criação da pergunta como FK. `app/chamados/services/materializacao.py:110`, `app/chamados/services/materializacao.py:124`, `app/chamados/services/materializacao.py:125`, `app/chamados/services/materializacao.py:140`, `app/chamados/services/disputa_emissao.py:1187`, `app/chamados/services/disputa_emissao.py:1205`, `app/chamados/services/disputa_emissao.py:1213`.
+- A migração já identifica fonte de `orfao_14h` viva por turno com entrada e sem saída cujo último marco previsto cai em `data_evento`, exigindo candidato único, e retorna `t.entrada`; ela não depende de `p.batida_origem`. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:82`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:115`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:126`.
+- Para materializada, a migração usa batida viva com `pergunta_origem_id=p.pk`, encontra o turno por `pk` em `t.batidas` e exige exatamente um turno; após obter o dia pelo juiz, exclui explicitamente `orfao_14h` materializada como `fora_do_aval`. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:65`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:76`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:138`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:160`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:168`.
+- Não foi possível auditar filtros e ordem dos contadores da sonda: seu conteúdo não está no dado recebido nem foi localizado na cópia. [não verificado]
 
 ## 12/11 10:25 · sessao 9a2b122ced99 · TRIAGEM-OFFLINE-RED-HEADLESS · construtor · origem=Code
 
@@ -527,94 +575,4 @@ Referências abaixo em `bin/tests/test_lei_akita.sh`, salvo indicação contrár
 - **Frase final:** agora explica corretamente numerador, denominador e número de dispensas (`:888`): `ENUMERADOS=len(hs)` (`:406`, `:407`), pula ausência de linha (`:419`), pula duplicatas (`:423`) e só depois incrementa `JULGADOS` (`:426`). Porém **“histórico já julgado” continua uma premissa**, não uma prova de julgamento anterior: candidatos vêm de `origin/main` e piso (`:412`); não há consulta a resultado anterior (`:416`, `:424`).
 - **Escritores/leitores:** `DUPLICATAS` é zerada (`:386`), acrescentada (`:424`), lida pelo MORDE (`:850`), emitida (`:871`), traduzida pelo shell para `ja julgado:` (`:879`) e contada na frase (`:888`). `JULGADOS` é zerado (`:407`), incrementado (`:426`), conferido pelo MORDE (`:852`), emitido com `ENUMERADOS` (`:873`) e interpolado na frase (`:888`). O MORDE termina antes da emissão normal/final (`:866`, `:867`); portanto não testa a veracidade da redação humana (`:888`).
 
-## 12/11 09:53 · sessao f284376b3ac7 · - · - · origem=Ronald (tmux)
-
-- `DUPLICATAS`: declarada global e zerada por chamada; recebe `(local[:8], publicado[:12])` antes do `continue`. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:386`, `bin/tests/test_lei_akita.sh:424`, `bin/tests/test_lei_akita.sh:425`)
-- Leitores: MORDE converte em dicionário e exige mapa exato; execução normal emite `PADRAO_DUPLICATA`; shell transforma em `ja julgado:` e conta os registros na frase final. (`bin/tests/test_lei_akita.sh:850`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:871`, `bin/tests/test_lei_akita.sh:872`, `bin/tests/test_lei_akita.sh:879`, `bin/tests/test_lei_akita.sh:888`)
-- `JULGADOS`: zerado juntamente com `ENUMERADOS=len(hs)`; incrementado depois de excluir commits sem linha e duplicatas. MORDE exige quatro; execução normal emite `PADRAO_JULGADOS N de M`; shell interpola na frase final. (`bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:423`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:873`, `bin/tests/test_lei_akita.sh:888`)
-- A frase final é escrita pelo `echo` do ramo `falhas=0`. O pre-push usa o código de saída; a régua captura a saída e a exibe apenas na falha; nenhum desses leitores interpreta os contadores. (`bin/tests/test_lei_akita.sh:887`, `bin/tests/test_lei_akita.sh:888`, `bin/pre-push.sh:38`, `bin/regua.sh:140`, `bin/regua.sh:142`)
-
-**Contagem/texto:** a descrição das populações está corrigida: N conta commits com linha que não foram dispensados; M conta todos os enumerados em `head ^origin/main`, respeitado o piso; duplicatas são contadas pelos registros emitidos. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:424`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:872`, `bin/tests/test_lei_akita.sh:888`)
-
-**“Histórico já julgado” continua sem prova e não é universalmente verdadeiro:** candidatos publicados são todos os patches de `origin/main` desde o piso, sem checagem de mensagem ou julgamento anterior. Um publicado sem linha `LEI-AKITA:` não seria julgado por esse instrumento, mas ainda pode dispensar um local com o mesmo patch e linha inválida; logo, “publicado” não implica “já julgado”. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:422`, `bin/tests/test_lei_akita.sh:424`)
-
-A afirmação de “14 duplicatas reais [...] iguais byte a byte” está apenas no comentário; comprovação pelos anexos fornecidos: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:399`)
-
-## 12/11 09:49 · sessao 06c5cff16f72 · PUSH-SEM-REGRAVAR · verificador · origem=Code
-
-**O delta fecha a perda de associações e o diagnóstico de registros malformados; fecha parcialmente whitespace, vocabulário e contagem.** A dispensa continua sem provar equivalência de negócio, e o texto final não explicita a população contada. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:388`, `bin/tests/test_lei_akita.sh:856`)
-
-O anexo não identifica os achados por letras; adoto abaixo A=mapa, B=whitespace, C=vocabulário, D=saída malformada, E=contagem. Correspondência com uma rotulação original A–E: **[nao verificado]**. Execução do MORDE, RED/GREEN histórico e comportamento em produção: **[nao verificado]**.
-
-| Achado | A cura fecha? |
-|---|---|
-| **A — dois locais com mesmo patch-id** | **Sim, para esse defeito.** Cada pid conserva todos os SHAs; a inversão inclui cada local. A busca percorre também todos os publicados daquele pid até encontrar linhas iguais. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:406`) |
-| **B — whitespace semântico dispensado** | **Fecha o exemplo `ab` versus `a b`; não fecha equivalência de negócio nem igualdade byte a byte.** Agora exige igualdade das listas filtradas, mas descarta contexto e delimitadores de linha. (`bin/tests/test_lei_akita.sh:358`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`) |
-| **C — prosa/nome inteiro** | **Parcial.** Retira a prosa parentética da célula inteira; nomes internos curtos continuam entrando separadamente. Porém a célula de `sinal derivado…` mantém vírgula e continua impossível no campo. O inteiro literal `ADR (Architecture Decision Record)` também deixa de ser acrescentado por esse caminho. (`bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:319`; `app/docs/GLOSSARIO.md:13`, `app/docs/GLOSSARIO.md:28`) |
-| **D — `split()`/saída malformada** | **Sim, para quantidade e formato dos campos:** exige dois hexadecimais minúsculos de 40 caracteres e emite `PADRAO_ERRO`. Não verifica completude, pertencimento dos SHAs à seleção ou stdout vazio com sucesso. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:387`, `bin/tests/test_lei_akita.sh:390`) |
-| **E — contagem/texto final** | **Parcial.** O MORDE passa a proteger a exclusão de duplicatas em `JULGADOS`; a frase final continua sem explicar essa exclusão nem que o denominador inclui commits sem linha. (`bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:409`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:856`) |
-
-**1) Existe local dispensado sem publicado de linhas iguais?** [nao verificado]
-
-**Pelo caminho de duplicata, não.** O único `continue` dessa dispensa depende de `pub`, retornado apenas entre candidatos publicados do mesmo pid cuja lista de linhas seja igual. Local sem associação não encontra candidato e segue ao julgamento. Erro estrito de `git show` interrompe a execução; a ausência de `PADRAO_FIM` reprova no shell. (`bin/tests/test_lei_akita.sh:361`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:413`, `bin/tests/test_lei_akita.sh:848`)
-
-**Literalmente, existe outro caminho:** commit enumerado sem linha `LEI-AKITA:` é ignorado antes de consultar publicado. Isso permanece explícito no contrato de `julgar`. (`bin/tests/test_lei_akita.sh:338`, `bin/tests/test_lei_akita.sh:409`)
-
-“Publicado” significa alcançável de `origin/main`, após a exclusão pelo piso e sem merges; não há verificação de julgamento anterior daquele SHA. Portanto, `ja julgado` expressa uma premissa do instrumento. (`bin/tests/test_lei_akita.sh:373`, `bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:402`, `bin/tests/test_lei_akita.sh:847`)
-
-**2) Há contraexemplos e bordas restantes?**
-
-**Sim, há falso positivo de negócio.** Contraexemplo construído: duas funções do mesmo arquivo contêm blocos suficientemente longos com contexto idêntico; o publicado troca `return 1` por `return 0` na função de pagamento, enquanto o local faz a mesma troca na função de simulação. Diferindo somente posição e identificação da função no cabeçalho do hunk, podem coincidir o patch-id e todas as linhas filtradas. O comparador não conserva a localização da alteração. Ocorrência nos commits reais: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`)
-
-**Também há falso negativo para cherry-pick sobre outra base.** Se a base alterar uma linha de contexto, mantendo exatamente as mesmas remoções e adições, o patch-id pode mudar. Nesse caso, o comparador tolerante a contexto nunca recebe o publicado como candidato. A promessa do comentário de tolerar contexto diferente fica condicionada à igualdade prévia do pid. (`bin/tests/test_lei_akita.sh:381`, `bin/tests/test_lei_akita.sh:393`, `bin/tests/test_lei_akita.sh:406`)
-
-**“Byte a byte” é excessivo.** `text=True` e `splitlines()` normalizam/removem delimitadores; a marca `\ No newline at end of file` também é descartada. Assim, `old\n → new\n` e `old\n → new` podem produzir a mesma lista e o mesmo pid, apesar dos bytes finais diferentes. Consequência de negócio em produção: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:358`, `bin/tests/test_lei_akita.sh:392`, `bin/tests/test_lei_akita.sh:394`)
-
-| Borda | Comportamento |
-|---|---|
-| **Merge** | Excluído do cálculo de pid e impedido de usar a dispensa; com linha, incrementa `JULGADOS` e passa pelo julgamento dos hunks próprios. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:422`) |
-| **Vazio** | Sem registro de pid, não encontra publicado. Com linha, é contado e julgado com lista vazia de caminhos: termo inventado reprova; `n/a (instrumento)` pode passar. Saída efetiva do Git de produção: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:319`, `bin/tests/test_lei_akita.sh:325`, `bin/tests/test_lei_akita.sh:333`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:430`) |
-| **Binário** | Quando o diff só contém cabeçalhos e indicação de binário, a lista filtrada fica vazia; a distinção fica a cargo do patch-id. Não foi acrescentada comparação própria de blobs. Não se segue disso que binários diferentes sejam automaticamente duplicatas. Configuração/saída em produção: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`) |
-
-**3) O MORDE morde cada cura?**
-
-As mordidas abaixo são deduzidas das asserções; execução efetiva dos mutantes: **[nao verificado]**.
-
-| Cura | Mutante que pega | Mutante que não pega |
-|---|---|---|
-| **A — mapa** | Voltar a guardar um único local por pid: exige `dup2` **e** `dup3` no mapa exato. (`bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`) | Consultar somente o primeiro publicado do pid: não planta dois candidatos publicados, sendo apenas o segundo exato. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`) |
-| **B — linhas** | Retirar a comparação: `a b` local seria dispensado contra `ab` publicado, contrariando as falhas esperadas. (`bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:820`) | Comparar o diff inteiro, incluindo contexto: não planta cherry-pick com contexto diferente; tampouco cobre posição semântica ou LF final. (`bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:811`, `bin/tests/test_lei_akita.sh:813`) |
-| **C — prosa** | As provas existentes pegam retirar o inteiro sem parênteses e acrescentar o inteiro da segunda coluna. **Não há mordida específica da cura de prosa.** (`bin/tests/test_lei_akita.sh:445`, `bin/tests/test_lei_akita.sh:456`) | Reintroduzir a inclusão da célula com prosa parentética: a fixture não contém esse caso. Vírgulas também não são exercitadas. (`bin/tests/test_lei_akita.sh:445`, `bin/tests/test_lei_akita.sh:446`, `bin/tests/test_lei_akita.sh:459`) |
-| **D — saída** | **Não há mordida específica nova:** não injeta stdout malformado de `patch-id`. (`bin/tests/test_lei_akita.sh:381`, `bin/tests/test_lei_akita.sh:795`) | Remover a validação nova mantendo o processamento da saída saudável. (`bin/tests/test_lei_akita.sh:387`, `bin/tests/test_lei_akita.sh:389`) |
-| **E — contagem** | Contar duplicatas em `JULGADOS`: exige exatamente três, correspondentes à remoção, ao whitespace novo e ao outro patch. (`bin/tests/test_lei_akita.sh:812`, `bin/tests/test_lei_akita.sh:814`, `bin/tests/test_lei_akita.sh:815`, `bin/tests/test_lei_akita.sh:820`) | Alterar ou manter a descrição humana enganosa: o MORDE termina antes da emissão final. (`bin/tests/test_lei_akita.sh:835`, `bin/tests/test_lei_akita.sh:856`) |
-
-O cenário também pega retirada completa da dispensa, dispensa indiscriminada e associação publicada errada, pois exige simultaneamente falhas e mapa de duplicatas exatos. (`bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:819`, `bin/tests/test_lei_akita.sh:820`)
-
-**4) Quem escreve/lê e o texto continua verdadeiro?**
-
-| Informação | Escritores e leitores |
-|---|---|
-| **`DUPLICATAS`** | Zerada por chamada; recebe local8/publicado12; lida pelo MORDE e pela emissão normal; o shell transforma o registro em `ja julgado:`. (`bin/tests/test_lei_akita.sh:376`, `bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:818`, `bin/tests/test_lei_akita.sh:839`, `bin/tests/test_lei_akita.sh:847`) |
-| **`JULGADOS`** | Zerado com a enumeração; incrementado após os dois filtros — sem linha e duplicata; lido pelo MORDE, emitido em `PADRAO_JULGADOS` e interpolado na frase final. (`bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:409`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:841`, `bin/tests/test_lei_akita.sh:856`) |
-
-O `pre-push` usa o código de saída; a régua também usa o código e exibe a saída quando há falha. Esses leitores não interpretam as contagens. Leitores externos: **[nao verificado]**. (`bin/pre-push.sh:38`; `bin/regua.sh:140`, `bin/regua.sh:142`)
-
-**O número de julgados é coerente; a descrição final continua incompleta.** Em `N de M`, **N** conta commits com linha que chegaram ao julgamento, excluindo duplicatas; **M** conta todos os enumerados, inclusive sem linha e duplicatas. A frase seria precisa como: “padrão julgado em N commits; M enumerados; D duplicatas dispensadas”. (`bin/tests/test_lei_akita.sh:397`, `bin/tests/test_lei_akita.sh:409`, `bin/tests/test_lei_akita.sh:414`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:856`)
-
-## 12/11 09:47 · sessao 017bd36f7dcb · - · - · origem=Ronald (tmux)
-
-- **Nenhuma dispensa por duplicata sem comparação igual:** o único `continue` de duplicata exige `pub`, obtido entre publicados do mesmo patch-id com lista `+/-` igual. A associação local preserva todos os SHAs. (`bin/tests/test_lei_akita.sh:389`, `bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:413`) **Literalmente**, local sem `LEI-AKITA:` continua não julgado sem exigir publicado. (`bin/tests/test_lei_akita.sh:409`)
-
-- **Falso negativo por base diferente:** a comparação tolera contexto/posição diferentes, mas só é alcançada após igualdade de patch-id. Portanto, alteração de contexto que mude o patch-id impede reconhecer um cherry-pick com as mesmas linhas adicionadas/removidas; reprodução nessa configuração Git é **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`)
-
-- **“Byte a byte” é excessivo:** o subprocesso usa `text=True`, e o comparador usa `splitlines()`; também descarta a marca `\ No newline at end of file`. (`bin/tests/test_lei_akita.sh:358`, `bin/tests/test_lei_akita.sh:392`, `bin/tests/test_lei_akita.sh:394`) Contraexemplo candidato: publicado altera `old\n` para `new\n`; local altera `old\n` para `new` sem LF final. As listas são iguais; se o patch-id ignorar a marca, haverá dispensa apesar dos bytes diferentes. Igualdade dos patch-ids sem execução: **[nao verificado]**.
-
-- **Merge:** excluído do cálculo por `--no-merges`, bloqueado explicitamente no bypass e contado/julgado pelos hunks próprios. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:422`)
-
-- **Vazio:** sem registro de patch-id, não há candidato publicado; com linha, segue para julgamento e incrementa `JULGADOS`. A ausência efetiva de registro depende da saída do Git **[nao verificado]**. (`bin/tests/test_lei_akita.sh:403`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:430`)
-
-- **Binário:** se `show` emitir apenas cabeçalhos/`Binary files...`, a lista será vazia; a proteção contra binários diferentes permanece no patch-id, sem comparação própria de blobs. A saída/configuração efetiva de produção é **[nao verificado]**. (`bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:394`, `bin/tests/test_lei_akita.sh:406`)
-
-- **Lacuna do MORDE:** o gerador pesquisa todos os publicados do mesmo pid, corrigindo também “primeiro publicado tem whitespace diferente; segundo é exato”; o caso plantado tem apenas um publicado por pid e não prova essa busca além do primeiro. (`bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:797`, `bin/tests/test_lei_akita.sh:799`, `bin/tests/test_lei_akita.sh:820`)
-
-_4156 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
