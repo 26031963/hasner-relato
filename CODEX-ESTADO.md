@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 08:12** · publicado em **12/11/2026 08:12** (UTC-3)
+> Ultima resposta processada: **12/11/2026 08:22** · publicado em **12/11/2026 08:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 08:22 · sessao b901d43194d7 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Cura deixada na árvore, com censos e resposta do PDF em [LASTRO_C11.txt:6](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/LASTRO_C11.txt:6).
+
+- 55 testes sem banco passaram; Ruff passou ([registro:243](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/LASTRO_C11.txt:243)). [nao verificado]
+- RED contra c10 reproduzido; 10 mutantes falharam por asserção, com comandos registrados ([registro:209](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/LASTRO_C11.txt:209)).
+- Par financeiro da competência 11: **[nao verificado]** ([limites:334](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/LASTRO_C11.txt:334)).
 
 ## 12/11 08:12 · sessao ee40839f9d72 · - · - · origem=Ronald (tmux)
 
@@ -727,24 +735,4 @@ Os avisos saem no retorno/indexação, são publicados pela API e preservados pe
 
 **FILA — `except` que engole permanece:** qualquer outra exceção em `fatos_do_dia` vira `False` sem aviso; por exemplo, um `RuntimeError` de leitura. O teste novo exige esse comportamento. A remarcação também transforma qualquer exceção na obtenção dos avisos em lista vazia. Ocorrência real e introdução dessas capturas pela obra: [não verificado]. (`app/ferias/situacao.py:100`, `app/ponto/tests/test_lastro_c7_sem_banco.py:124`, `app/ferias/views.py:499`)
 
-## 12/11 00:58 · sessao 6721847f8e52 · - · - · origem=Ronald (tmux)
-
-5. **v5 gravada em ambiente real: [não verificado].** O código atual declara v4 (`app/ponto/services/cartorio.py:132`). Se existir célula comp11 gravada sob v5, voltar a v4 altera o hash mesmo sem fato novo: a versão integra a impressão (`app/ponto/services/cartorio.py:490`), os dois ramos calculam a versão atual (`app/ponto/services/cartorio.py:1254`, `app/ponto/services/cartorio.py:1397`) e só pulam quando o hash coincide (`app/ponto/services/cartorio.py:1256`, `app/ponto/services/cartorio.py:1405`). Contraexemplo executado em memória com o harness: regra antiga4 → pulada; antiga5 → carimbada, ata `ausencia`→`folga`; construção desse cenário em `app/ponto/tests/test_lastro_c5_sem_banco.py:539`, `app/ponto/tests/test_lastro_c5_sem_banco.py:579`. **Fila condicional**, sem prova de alcance real. [não verificado quanto à existência em ambiente]
-
-`versao_para` tem um chamador de produção, `_regra_do_dia`, que alimenta os dois hashes (`app/ponto/services/cartorio.py:1185`, `app/ponto/services/cartorio.py:1254`, `app/ponto/services/cartorio.py:1397`). `HORIZONTE_DO_FATO` permanece literal em 21/09/2026, tanto no modelo quanto na migration (`app/chamados/models.py:2403`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:28`). Seus leitores são:
-
-- Índices únicos do modelo (`app/chamados/models.py:3483`, `app/chamados/models.py:3492`).
-- Guarda e índices da migration (`app/chamados/migrations/0053_pergunta_unica_por_familia.py:31`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:39`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:57`).
-- Recorte do fio, grupos e contadores (`app/chamados/services/fio.py:1412`, `app/chamados/services/fio.py:1436`, `app/chamados/services/fio.py:1947`).
-- Backfill e deduplicação (`app/chamados/management/commands/backfill_decisoes_pergunta.py:104`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:277`, `app/chamados/management/commands/dedup_perguntas_fato.py:78`).
-- Conferência do corte empresarial, cuja divergência recusa o apply (`app/chamados/management/commands/backfill_decisoes_pergunta.py:145`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:242`).
-
-O bump não move automaticamente esse literal nem o índice; quebra o selo que exige literal = início da competência do maior horizonte declarado (`app/chamados/tests/test_e1_v6_horizonte.py:36`). Remover v5 restaura essa igualdade (`app/ponto/services/cartorio.py:132`, `app/chamados/models.py:2403`).
-
-6. **Os GREEN executam código atual, mas não a integração real.** Sem revisão, `fonte` lê a árvore (`app/ponto/tests/test_lastro_c5_sem_banco.py:39`); `carregar` compila funções AST selecionadas (`app/ponto/tests/test_lastro_c5_sem_banco.py:111`). C7 roda corpos originais das noturnas e B5u/S2S3 (`app/ponto/tests/test_lastro_c7_sem_banco.py:79`, `app/ponto/tests/test_lastro_c7_sem_banco.py:178`). ORM, módulos, grade de entrada e persistência são substituídos (`app/ponto/tests/test_lastro_c5_sem_banco.py:214`, `app/ponto/tests/test_lastro_c5_sem_banco.py:576`, `app/ponto/tests/test_lastro_c5_sem_banco.py:583`).
-
-**Fila — procedência do congelado sem mordida:** o JSON declara revisão e SHA, mas o carregador confere apenas a string da revisão e devolve `ast`; não valida SHA (`app/ponto/tests/lastro_c3_fontes.json:2`, `app/ponto/tests/lastro_c3_fontes.json:5`, `app/ponto/tests/test_lastro_c5_sem_banco.py:33`). Contraexemplo: adulterar só `sha256_fonte` não altera nenhum comportamento ou assert desse carregador (`app/ponto/tests/test_lastro_c5_sem_banco.py:35`). O congelado é c3/f218, não evidência da base29 (`app/ponto/tests/test_lastro_c5_sem_banco.py:27`, `app/ponto/tests/lastro_c3_fontes.json:2`). Os recortes c6 só substituem funções na variante RED, instalada pelo `__main__`; não participam do GREEN normal (`app/ponto/tests/test_lastro_c7_sem_banco.py:31`, `app/ponto/tests/test_lastro_c7_sem_banco.py:204`).
-
-As 21 atas são sintetizadas e exercitam o ramo sem adesão, com batidas substituídas por vazio; não provam as 21 atas reais nem cadastro+batidas (`app/ponto/tests/test_lastro_c7_sem_banco.py:149`, `app/ponto/tests/test_lastro_c5_sem_banco.py:563`). Executei c5+c7: 30 testes passaram, sem bytecode/escrita; resultado da execução desta sessão, sem arquivo de registro. [não verificado por registro em arquivo]
-
-_4090 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4091 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
