@@ -1,7 +1,170 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 10:41** · publicado em **12/11/2026 10:43** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:47** · publicado em **12/11/2026 10:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:47 · sessao e39f8978844e · - · - · origem=Ronald (tmux)
+
+| Achado | Classe sugerida | Trechos literais / limites |
+|---|---|---|
+| RED c13 apenas em prosa, sem saída de falha | **(c)** | `.q`: preverif_c13.q: “Caso H -- o harness novo ainda morde (mutante que desfaz a cura do produto fica vermelho)?” `.r`: preverif_c13.r: “os mutantes executados ficaram vermelhos.” Isso afirma execução, mas não fornece o log cuja ausência o opus apontou. Prova documental de execução c13: **[nao verificado]**. |
+| Item 8: relavra muda `ausencia`→`folga`; leitores financeiros não fechados | **(a)** para a lacuna de código | `.q`: preverif_c5.q: “O que o diff afirma preservar e de fato preservado em todo caminho (com snapshot e sem snapshot, ata gravada antes desta versao sem as chaves novas)?”; preverif_c13.q: “Dinheiro: algum caminho de folha/simular_folha le o que mudou?” `.r` que encontre relavra, `_folga_bat` ou tripwire: **nenhum**. A resposta c13 restringiu-se a: “**Nada de caminho demonstrado recebendo o novo `None`:** `simular_folha` passa pelo fechamento; fechamento lê `grade_do_fechamento`, cuja fonte é `grade_da_celula`.” O leitor `folga`+órfã existe efetivamente em `app/folha/causas.py:100`. Resultado financeiro de produção: **[nao verificado]**. |
+| FILA: `efeito_vigente` inclui inativos | **(a)** defensável; não confundir com achado anterior inverso | `.q`: preverif_c5.q: “Algum leitor de dinheiro (dia_pago, fechamento, folha/export, prontidao) muda de VALOR para algum tipo/dia?” `.r` que aponte a inclusão atual de inativos como mudança: **nenhum**. A c5.r encontrou o inverso: “**BLOQUEIA — a ata nova perde valores quando o tipo sai do catálogo ativo.**” Portanto isso não é citação de que o Codex viu o achado final. A inclusão atual está em `app/ponto/catalogo/ausencias.py:299`, com universo implementado em `:249`. Efeito zero na frota: somente dado do opus, **[nao verificado]**. |
+| FILA: `folga`→`folga_da_escala` recarimba precedência preguiçosamente e API expõe | **(a)** | `.q`: preverif_c5.q: “Para cada campo/valor que o diff le ou grava (faixa, tipo_do_dia, tipo_dia, ausencia_tipo, ausencia_id, ausencia_label, mapas abono/previsto/realizado por dia, totais do fechamento, prontidao, TipoSemFaixa, tipos_ativos_sem_faixa): QUEM ESCREVE e QUEM LE, inclusive fora do diff; todos supoem o MESMO significado [...]?” `.r` que identifique esse efeito de recarimbo: **nenhum**. A c5.r reconheceu somente a origem/consumidores: “A2 escreve o código vencedor; c5 distingue folga automática por `folga_da_escala`.” O valor atual nasce em `app/ponto/precedencia.py:431`; a API de diagnóstico expõe em `app/ponto/services/dia_do_colab.py:90`; o carimbo por chamada A2 está em `app/ponto/services/cartorio.py:1997`. |
+| FILA: `orfa_classe.py` sem chamador produtivo | **(e)** | `.q` que peça censo de chamadores dessa função ou órfãos dessa obra: **nenhum**. `.r` que encontre zero chamador: **nenhum**. C13.r discutiu interpretação latente de `None` e declarou alcance **[nao verificado]**, não encontrou ausência de chamadores. A busca atual encontra definição em `app/escala/orfa_classe.py:53` e uso nos testes em `app/escala/tests/test_orfa_classe.py:20`; nenhum uso produtivo localizado na busca `app/{folha,escala,ponto,relatorios}`. |
+| Suite: rc do processo não registrado | **(c)** | `.q` específica sobre registro do rc da suite c13: **nenhum**. `.r`: preverif_c13.r: “Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**.” O dado da execução é externo à inspeção de código; rc efetivo: **[nao verificado]**. | [nao verificado]
+
+Não há material suficiente sobre opus anteriores para sustentar **(d)** nestes itens; atribuí-la exigiria inferência **[nao verificado]**.
+
+## 12/11 10:46 · sessao fe2690a1a345 · - · - · origem=Ronald (tmux)
+
+**BLOQUEIA-1 — classe não determinável entre as cinco sem inferir descarte.** O Codex viu; a triagem o considerou procedente. Descarte: nenhum. [nao verificado]
+
+- **preverif_c13.q, item 3:** “relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
+   orfa ou turno aberto (LEI-AKITA 2)? A tela e o PDF mostram o mesmo rotulo 'Tipo sem faixa: <codigo>' para o mesmo dia?”
+- **preverif_c13.r, item 3:** “**BLOQUEIA — duas fontes para a mesma órfã.** PDF reconstrói pelo contrato; tela lê a célula na competência. Contra-exemplo já fixado pelo teste alterado: tela tem `orfas_grade=[]`, enquanto PDF marca a batida como órfã e conta zero aberto. A igualdade `pdf['dias']==dias` compara a lista compartilhada que o próprio coletor modifica.” [nao verificado]
+- **preverif_c13.r, item 4:** “**BLOQUEIA — selo insuficiente para igualdade:** o teste aceita explicitamente respostas diferentes para a órfã; portanto verde não certifica ‘cartão=espelho’.” [nao verificado]
+- **Triagem literal:** “B1 duas fontes de orfa (PDF grade_espelho_janela recusas={} x tela orfas_grade): PROCEDENTE -- o c13 TROCOU a fonte (c10 lia _tela['dias'].orfas_grade; c13 le _grade_pdf.orfas) para fazer R6-R9 passarem; test_lastro_c11_sem_banco.py:383-384 aceita respostas diferentes. Pergunta de desenho ao opus: quem e a fonte da orfa no PDF quando a celula responde sem_celula.”
+- **Motivo literal de descarte:** nenhum. [nao verificado]
+
+**BLOQUEIA-2 — mesma insuficiência classificatória.** Visto e considerado procedente; descarte não documentado. [nao verificado]
+
+- **preverif_c13.q, item 3:** “A tela e o PDF mostram o mesmo rotulo 'Tipo sem faixa: <codigo>' para o mesmo dia?”
+- **preverif_c13.r, item 3:** “**BLOQUEIA — rótulo não garantido no ramo de ata agregada.** O handler chama `_pela_grade()` sem `recusas`; uma ausência aprovada `fantasma_xyz` levanta `TipoSemFaixa` antes do transporte nomeado. PDF também passa por essa tela depois de obter sua grade. Contra-exemplo: ata agregada que exige o builder + ausência aprovada sem faixa.”
+- **Triagem literal:** “B3 _pela_grade sem recusas no ramo de ata agregada (espelho.py:495,563): PROCEDENTE por leitura; ocorrencia em prod nao medida.”
+- **Motivo literal de descarte:** nenhum. [nao verificado]
+
+**FILA união HH:MM — mesma insuficiência classificatória.** Visto; triagem o qualifica como herdado, mas não o descarta. [nao verificado]
+
+- **preverif_c13.q, item 3:** “relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
+   orfa ou turno aberto (LEI-AKITA 2)?”
+- **preverif_c13.r, item 3:** “**BLOQUEIA — regra própria de turno aberto permanece.** PDF une órfãs de todas as datas por HH:MM e usa esse conjunto para excluir abertos. Contra-exemplo executado em memória: órfã em **10/11 07:02** elimina um aberto legítimo de **11/11 07:02**, mesmo sem órfã nesse segundo dia; a tela conta esse aberto.”
+- **Triagem literal:** “B2 uniao HH:MM entre datas (pdf_espelho.py:174 _entrada_espuria, :480 _orfas_hhmm, :517): PROCEDENTE, HERDADO (c10 ja unia); bug no caminho (LEI-AKITA 6).”
+- **Motivo literal de descarte:** nenhum. [nao verificado]
+
+**FILA fechamento aborta empresa — classe não determinável sem inventar triagem.** Perguntado e visto na c10; nenhuma linha de triagem correspondente no anexo. [nao verificado]
+
+- **preverif_c10.q, item 4:** “fechamento deixa TipoSemFaixa subir: quem chama o fechamento (cron, view, export) e o que acontece com a competencia quando sobe -- trava o fechamento inteiro da empresa? Isso e o comportamento que o aval pede (item 4/6)?”
+- **preverif_c10.r, item 4:** “As três capturas alteradas relançam `TipoSemFaixa`. Se ela ocorrer, interrompe o restante da chamada — empresa inteira ou subconjunto escolhido —, sem representar uma tranca formal da competência”
+- **preverif_c10.r, item 4:** “Não há atomicidade de lote: A pode estar salvo, B pode ganhar linha `aberto` antes da falha, e C não ser processado.”
+- **Triagem:** nenhum. [nao verificado]
+- **Motivo literal de descarte:** nenhum. [nao verificado]
+
+O único encaminhamento geral literal é: “DESTINO: MANHA-1211 item 3 = UMA volta de cura (foi a c13) e UM opus final; CODEX item 5(d) >3 voltas sobe ao opus. Vai ao opus final com esta triagem + preverif_c13.r como anexo, depois da suite verde e do par simular_folha.” Isso prova encaminhamento, não descarte. [nao verificado] [nao verificado]
+
+## 12/11 10:43 · sessao f87651c142b3 · ABSOLVIDA-PELA-FOLGA · sonda · origem=Code
+
+1. Transcrição integral do JSON fornecido; execução e conteúdo em produção sem verificação independente. [nao verificado]
+
+```json
+{
+  "contagem": {
+    "coerente_ou_sem_turno_aberto": 860,
+    "exportada": 27,
+    "materializadas": 931,
+    "nao_exportada": 39,
+    "universo_base": 931
+  },
+  "foras": {
+    "ambigua": 4,
+    "sem_fonte": 1
+  },
+  "soma_conferida": 931,
+  "casos": [
+    {"col": "col110", "comp": "09/2026", "data_evento": "2026-09-18", "dia_do_turno": "2026-09-17", "emp": 3, "grupo": "exportada", "pk": 32655},
+    {"col": "col219", "comp": "09/2026", "data_evento": "2026-08-22", "dia_do_turno": "2026-08-21", "emp": 2, "grupo": "exportada", "pk": 15779},
+    {"col": "col241", "comp": "09/2026", "data_evento": "2026-09-20", "dia_do_turno": "2026-09-19", "emp": 2, "grupo": "exportada", "pk": 33624},
+    {"col": "col272", "comp": "09/2026", "data_evento": "2026-08-30", "dia_do_turno": "2026-08-29", "emp": 2, "grupo": "exportada", "pk": 22275},
+    {"col": "col296", "comp": "08/2026", "data_evento": "2026-07-22", "dia_do_turno": "2026-07-21", "emp": 2, "grupo": "exportada", "pk": 37081},
+    {"col": "col331", "comp": "09/2026", "data_evento": "2026-09-14", "dia_do_turno": "2026-09-13", "emp": 2, "grupo": "exportada", "pk": 26344},
+    {"col": "col331", "comp": "09/2026", "data_evento": "2026-09-16", "dia_do_turno": "2026-09-15", "emp": 2, "grupo": "exportada", "pk": 26717},
+    {"col": "col332", "comp": "09/2026", "data_evento": "2026-09-13", "dia_do_turno": "2026-09-12", "emp": 2, "grupo": "exportada", "pk": 26113},
+    {"col": "col344", "comp": "08/2026", "data_evento": "2026-08-12", "dia_do_turno": "2026-08-11", "emp": 2, "grupo": "exportada", "pk": 9192},
+    {"col": "col425", "comp": "09/2026", "data_evento": "2026-08-29", "dia_do_turno": "2026-08-28", "emp": 2, "grupo": "exportada", "pk": 21229},
+    {"col": "col475", "comp": "09/2026", "data_evento": "2026-09-08", "dia_do_turno": "2026-09-07", "emp": 2, "grupo": "exportada", "pk": 25832},
+    {"col": "col478", "comp": "09/2026", "data_evento": "2026-08-24", "dia_do_turno": "2026-08-23", "emp": 2, "grupo": "exportada", "pk": 16271},
+    {"col": "col499", "comp": "08/2026", "data_evento": "2026-07-24", "dia_do_turno": "2026-07-23", "emp": 2, "grupo": "exportada", "pk": 23261},
+    {"col": "col499", "comp": "09/2026", "data_evento": "2026-09-08", "dia_do_turno": "2026-09-07", "emp": 2, "grupo": "exportada", "pk": 25187},
+    {"col": "col499", "comp": "09/2026", "data_evento": "2026-09-10", "dia_do_turno": "2026-09-09", "emp": 2, "grupo": "exportada", "pk": 25561},
+    {"col": "col612", "comp": "09/2026", "data_evento": "2026-09-13", "dia_do_turno": "2026-09-12", "emp": 2, "grupo": "exportada", "pk": 26178},
+    {"col": "col634", "comp": "08/2026", "data_evento": "2026-08-08", "dia_do_turno": "2026-08-07", "emp": 2, "grupo": "exportada", "pk": 25262},
+    {"col": "col649", "comp": "09/2026", "data_evento": "2026-08-26", "dia_do_turno": "2026-08-25", "emp": 2, "grupo": "exportada", "pk": 20900},
+    {"col": "col67", "comp": "09/2026", "data_evento": "2026-09-04", "dia_do_turno": "2026-09-03", "emp": 3, "grupo": "exportada", "pk": 23025},
+    {"col": "col673", "comp": "09/2026", "data_evento": "2026-09-14", "dia_do_turno": "2026-09-13", "emp": 2, "grupo": "exportada", "pk": 26346},
+    {"col": "col72", "comp": "09/2026", "data_evento": "2026-08-23", "dia_do_turno": "2026-08-22", "emp": 3, "grupo": "exportada", "pk": 15980},
+    {"col": "col747", "comp": "09/2026", "data_evento": "2026-08-31", "dia_do_turno": "2026-08-30", "emp": 3, "grupo": "exportada", "pk": 22514},
+    {"col": "col820", "comp": "09/2026", "data_evento": "2026-08-31", "dia_do_turno": "2026-08-30", "emp": 2, "grupo": "exportada", "pk": 22518},
+    {"col": "col820", "comp": "09/2026", "data_evento": "2026-09-10", "dia_do_turno": "2026-09-09", "emp": 2, "grupo": "exportada", "pk": 25567},
+    {"col": "col865", "comp": "08/2026", "data_evento": "2026-08-01", "dia_do_turno": "2026-07-31", "emp": 2, "grupo": "exportada", "pk": 35287},
+    {"col": "col888", "comp": "09/2026", "data_evento": "2026-09-06", "dia_do_turno": "2026-09-05", "emp": 2, "grupo": "exportada", "pk": 23344},
+    {"col": "col891", "comp": "08/2026", "data_evento": "2026-08-15", "dia_do_turno": "2026-08-14", "emp": 2, "grupo": "exportada", "pk": 10104},
+    {"col": "col1011", "comp": "11/2026", "data_evento": "2026-11-02", "dia_do_turno": "2026-11-01", "emp": 2, "grupo": "nao_exportada", "pk": 54345},
+    {"col": "col110", "comp": "08/2026", "data_evento": "2026-07-28", "dia_do_turno": "2026-07-27", "emp": 3, "grupo": "nao_exportada", "pk": 3533},
+    {"col": "col121", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 3, "grupo": "nao_exportada", "pk": 38608},
+    {"col": "col127", "comp": "08/2026", "data_evento": "2026-08-12", "dia_do_turno": "2026-08-11", "emp": 3, "grupo": "nao_exportada", "pk": 9189},
+    {"col": "col134", "comp": "08/2026", "data_evento": "2026-07-29", "dia_do_turno": "2026-07-28", "emp": 3, "grupo": "nao_exportada", "pk": 3686},
+    {"col": "col134", "comp": "08/2026", "data_evento": "2026-08-04", "dia_do_turno": "2026-08-03", "emp": 3, "grupo": "nao_exportada", "pk": 5715},
+    {"col": "col134", "comp": "08/2026", "data_evento": "2026-08-08", "dia_do_turno": "2026-08-07", "emp": 3, "grupo": "nao_exportada", "pk": 7642},
+    {"col": "col165", "comp": "08/2026", "data_evento": "2026-08-05", "dia_do_turno": "2026-08-04", "emp": 3, "grupo": "nao_exportada", "pk": 6055},
+    {"col": "col165", "comp": "10/2026", "data_evento": "2026-09-22", "dia_do_turno": "2026-09-21", "emp": 3, "grupo": "nao_exportada", "pk": 34753},
+    {"col": "col331", "comp": "10/2026", "data_evento": "2026-10-04", "dia_do_turno": "2026-10-03", "emp": 2, "grupo": "nao_exportada", "pk": 40234},
+    {"col": "col332", "comp": "11/2026", "data_evento": "2026-11-04", "dia_do_turno": "2026-11-03", "emp": 2, "grupo": "nao_exportada", "pk": 53721},
+    {"col": "col335", "comp": "11/2026", "data_evento": "2026-11-01", "dia_do_turno": "2026-10-31", "emp": 2, "grupo": "nao_exportada", "pk": 53269},
+    {"col": "col340", "comp": "10/2026", "data_evento": "2026-10-09", "dia_do_turno": "2026-10-08", "emp": 2, "grupo": "nao_exportada", "pk": 42053},
+    {"col": "col347", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 2, "grupo": "nao_exportada", "pk": 39002},
+    {"col": "col396", "comp": "10/2026", "data_evento": "2026-09-29", "dia_do_turno": "2026-09-28", "emp": 2, "grupo": "nao_exportada", "pk": 38296},
+    {"col": "col407", "comp": "11/2026", "data_evento": "2026-11-03", "dia_do_turno": "2026-11-02", "emp": 2, "grupo": "nao_exportada", "pk": 53628},
+    {"col": "col416", "comp": "11/2026", "data_evento": "2026-11-03", "dia_do_turno": "2026-11-02", "emp": 2, "grupo": "nao_exportada", "pk": 53376},
+    {"col": "col451", "comp": "10/2026", "data_evento": "2026-10-16", "dia_do_turno": "2026-10-15", "emp": 2, "grupo": "nao_exportada", "pk": 44515},
+    {"col": "col467", "comp": "10/2026", "data_evento": "2026-10-12", "dia_do_turno": "2026-10-11", "emp": 2, "grupo": "nao_exportada", "pk": 42809},
+    {"col": "col490", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51402},
+    {"col": "col496", "comp": "11/2026", "data_evento": "2026-10-23", "dia_do_turno": "2026-10-22", "emp": 2, "grupo": "nao_exportada", "pk": 49135},
+    {"col": "col496", "comp": "10/2026", "data_evento": "2026-09-29", "dia_do_turno": "2026-09-28", "emp": 2, "grupo": "nao_exportada", "pk": 55068},
+    {"col": "col516", "comp": "11/2026", "data_evento": "2026-10-21", "dia_do_turno": "2026-10-20", "emp": 2, "grupo": "nao_exportada", "pk": 46463},
+    {"col": "col551", "comp": "11/2026", "data_evento": "2026-10-28", "dia_do_turno": "2026-10-27", "emp": 2, "grupo": "nao_exportada", "pk": 51001},
+    {"col": "col599", "comp": "10/2026", "data_evento": "2026-10-19", "dia_do_turno": "2026-10-18", "emp": 2, "grupo": "nao_exportada", "pk": 45740},
+    {"col": "col612", "comp": "11/2026", "data_evento": "2026-11-06", "dia_do_turno": "2026-11-05", "emp": 2, "grupo": "nao_exportada", "pk": 54473},
+    {"col": "col72", "comp": "08/2026", "data_evento": "2026-08-11", "dia_do_turno": "2026-08-10", "emp": 3, "grupo": "nao_exportada", "pk": 23252},
+    {"col": "col841", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 2, "grupo": "nao_exportada", "pk": 38600},
+    {"col": "col863", "comp": "10/2026", "data_evento": "2026-09-25", "dia_do_turno": "2026-09-24", "emp": 2, "grupo": "nao_exportada", "pk": 36061},
+    {"col": "col876", "comp": "11/2026", "data_evento": "2026-11-01", "dia_do_turno": "2026-10-31", "emp": 3, "grupo": "nao_exportada", "pk": 52434},
+    {"col": "col879", "comp": "11/2026", "data_evento": "2026-11-05", "dia_do_turno": "2026-11-04", "emp": 2, "grupo": "nao_exportada", "pk": 54449},
+    {"col": "col888", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51404},
+    {"col": "col938", "comp": "10/2026", "data_evento": "2026-09-24", "dia_do_turno": "2026-09-23", "emp": 2, "grupo": "nao_exportada", "pk": 36109},
+    {"col": "col94", "comp": "08/2026", "data_evento": "2026-08-14", "dia_do_turno": "2026-08-13", "emp": 3, "grupo": "nao_exportada", "pk": 9782},
+    {"col": "col960", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 2, "grupo": "nao_exportada", "pk": 39409},
+    {"col": "col976", "comp": "11/2026", "data_evento": "2026-10-27", "dia_do_turno": "2026-10-26", "emp": 2, "grupo": "nao_exportada", "pk": 50668},
+    {"col": "col992", "comp": "11/2026", "data_evento": "2026-11-09", "dia_do_turno": "2026-11-08", "emp": 2, "grupo": "nao_exportada", "pk": 56105},
+    {"col": "col999", "comp": "11/2026", "data_evento": "2026-10-26", "dia_do_turno": "2026-10-25", "emp": 2, "grupo": "nao_exportada", "pk": 50394},
+    {"col": "col999", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51407}
+  ],
+  "caso_51407": [
+    {"col": "col999", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51407}
+  ]
+}
+```
+
+A soma das categorias fornecidas fecha: **860 + 27 + 39 + 4 + 1 = 931**; são 66 casos listados, sendo 27 exportados e 39 não exportados. `materializadas=931` descreve o universo e não é parcela adicional; `caso_51407` repete um membro de `casos`. [nao verificado — conferência do dado fornecido]
+
+2. **`materializada_em` pode estar preenchido sem resposta porque essa via carimba uma resolução pela célula.** O escritor funcional é `retratar_perguntas_absolvidas_por_celula`, que chama `p.carimbar(VIA_CELULA_ABSOLVEU, _user)` sem argumento de resposta. [app/chamados/reconciliador.py:596](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/reconciliador.py:596)
+
+A atribuição literal é `self.materializada_em = quando`, em `_escrever_carimbo`; `carimbar` chama essa função e persiste com `self.save(update_fields=campos)`, após consultar o juiz e recusar o carimbo se a pergunta continuar viva. [app/chamados/models.py:3100](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3100) [app/chamados/models.py:3130](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3130) [app/chamados/models.py:3140](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3140) [app/chamados/models.py:3153](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3153)
+
+`respondida_em` só é preenchido quando há opção de resposta **e** texto não vazio; essa chamada não pede isso. Portanto, os dois campos não precisam nascer juntos. [app/chamados/models.py:3104](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3104) [app/chamados/models.py:3131](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3131)
+
+Nesta via, “materializada” significa **carimbada por resolução da célula**: `celula_absolveu` integra `VIAS_SEM_TESTEMUNHA`, e o código declara que a testemunha é a célula julgada, sem batida a exigir. O `help_text` do campo, que ainda menciona “batida criada + chamado fechado”, é mais estreito que esse comportamento. [app/chamados/models.py:3741](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3741) [app/chamados/models.py:3747](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3747) [app/chamados/models.py:3396](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3396)
+
+Isso não acrescenta ao predicado do aval uma exigência de resposta ou de batida plantada. [nao verificado — interpretação do aval fornecido] Explica, porém, o desvio de `classificar()`: ele usa apenas o carimbo para escolher `_fonte_materializada`, que exige batida plantada viva e lança `sem_fonte` quando ela falta. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:151](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:151) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:68](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:68)
+
+O caminho histórico exato que gravou cada uma das 931 perguntas permanece [nao verificado].
+
+3. **Sim: `_fonte_viva` contém condições mais restritivas que a divergência de dia descrita no aval.** [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108) [nao verificado — comparação com o aval fornecido]
+
+- **Aberto no próprio dia:** se qualquer candidato aberto tem `data_turno == data_evento`, retorna `None` imediatamente. Assim, outro aberto em dia diferente pode nem ser examinado. A ocorrência dessa coexistência nas 931 é [nao verificado]. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:109](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:109)
+- **Saída prevista:** ignora turnos com `data_turno >= data_evento` e só aceita os anteriores cuja saída prevista seja exatamente `data_evento`. Um aberto com dia divergente e previsão diferente pode terminar em `None`. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:113](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:113) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:118](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:118) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:125](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:125)
+- **Exceções distintas:** sem correspondência e com candidato sem marcos, lança `sem_fonte`; com múltiplas correspondências de saída prevista, lança `ambigua`. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:123](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:123)
+
+O contador que **potencialmente esconderia os descartes por `None` é `coerente_ou_sem_turno_aberto=860`**. O vínculo exato entre retorno e contador é [nao verificado], pois a implementação de `sonda_medida3.py` não foi localizada na cópia. Quantos desses 860 satisfazem o predicado do aval é [nao verificado]; portanto, os 66 listados não demonstram exaustividade da medida. [nao verificado]
 
 ## 12/11 10:41 · sessao 8f661e04ae0f · - · - · origem=Ronald (tmux)
 
@@ -502,50 +665,4 @@ MUTANTE_CADASTRO=_propagar_regeneracao_template python3 -m unittest "${C2}.Event
 - **Nada identificado no delta fornecido:** alterações produtivas concentram-se no transporte da recusa e na leitura do contrato pelo PDF; testes auxiliares acompanham esses caminhos. `app/escala/utils.py:1159`, `:2350`; `app/relatorios/pdf_espelho.py:474`; `app/ponto/tests/test_lastro_c13_sem_banco.py:177`. Comparação histórica integral da cópia com `86726416c`: **[nao verificado]**.
 - **Limite da verificação:** passaram 72 testes sem banco e 35 da catraca; os mutantes executados ficaram vermelhos. Os builders da costura são reduzidos às chamadas extraídas, sem geometria/ORM completos. `app/ponto/tests/test_lastro_c13_sem_banco.py:73`, `:196`, `:200`; `app/core/tests/test_medida_turno_do_par.py:525`. Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**.
 
-## 12/11 10:06 · sessao 0ab2e5092d0c · - · - · origem=Ronald (tmux)
-
-1–3 H: corretas. O defeito é o atributo do pacote já carregado: API importa pelos pais (`app/api/views_mensageria.py:2077`, `:2100`); o harness agora substitui ambos e restaura no cleanup (`app/ponto/tests/test_lastro_c12_sem_banco.py:89`). Asserções continuam exigindo 1 buraco, zero explicados e vizinhos preservados (`:103`, `:109`, `:141`). Reverti somente esse bloco em AST: três falhas de busca/grade proibidas, zero erros; a fixture adversarial está em `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. Achado: nada.
-
-4 C: correta por inspeção; a inversão exige recusa nomeada, `sem_certidao` e veredito vazio (`app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:59`). O calendário já recebe a recusa A2 e transporta seu rótulo (`app/colaboradores/services/calendario.py:510`, `:607`, `:714`). Não apagou o caso nem substituiu por sucesso genérico (`app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:52`). Execução Django/ORM: [nao verificado]. Achado: nada.
-
-5 C: correta. `licenca especial` vira `licenca_especial` pela view (`app/ponto/views_tipos_ausencia.py:92`); esse código não consta do mapa (`app/ponto/precedencia.py:52`). O novo sucesso cria `reciclagem`, cuja faixa já existe (`app/ponto/tests/test_tela_tipos.py:31`; `app/ponto/precedencia.py:70`), verifica crescimento e palavra pelo compositor (`app/ponto/tests/test_tela_tipos.py:37`, `:47`). O par exige não gravar e erro nomeado (`:51`). A porta consulta o juiz antes de gravar (`app/ponto/services/ausencia.py:1312`). Execução HTTP/ORM: [nao verificado]. Achado: nada.
-
-6–7 R: corretas quanto à perda/restauração do contrato; os selos originais exigem o contrato (`app/escala/tests/test_f1c_contrato.py:70`; `app/relatorios/tests/test_cartao_pela_celula.py:176`) e o coletor voltou a chamá-lo (`app/relatorios/pdf_espelho.py:474`). A nova prova executa as mesmas funções dos selos (`app/ponto/tests/test_lastro_c13_sem_banco.py:130`). Achado dos testes: nada; isso sozinho não certifica ausência de regras próprias no restante do PDF (`app/escala/tests/test_f1c_contrato.py:68`).
-
-8–9 R: corretas quanto às expectativas preservadas: espúria deve ser marcada e não produzir turno aberto (`app/relatorios/tests/test_cartao_marca_espuria.py:59`, `:75`). O substituto sem banco agora exige `orfa=True`/zero aberto (`app/ponto/tests/test_lastro_c11_sem_banco.py:384`); suprimir as órfãs restauradas é o mutante (`:68`) e ficou vermelho nesta reexecução. O teste nativo também exige o texto e a batida no PDF binário (`app/relatorios/tests/test_cartao_marca_espuria.py:84`); essa execução está [nao verificado]. Achado dos testes: nada.
-
-10 H: atualização do registro preserva a igualdade estrita (`app/core/tests/test_medida_turno_do_par.py:542`); a ocorrência atual é a consulta de feriados em `app/ponto/services/espelho.py:1039`. Rodei os 35 testes existentes: verdes; recolocar somente `[1032]` em memória causa uma falha de igualdade, zero erros (`app/core/tests/test_medida_turno_do_par.py:541`). A identidade AST histórica c9/c12 está [nao verificado], pois esta cópia não contém `.git`; o delta fornecido não altera o produto `espelho.py` [nao verificado]. Achado: nada.
-
-Verificação própria: os 72 testes C5/C7/C10/C11/C12/C13 passaram; os 11 mutantes C13 e os oito vizinhos executados ficaram vermelhos nas asserções/canais correspondentes (`app/ponto/tests/test_lastro_c13_sem_banco.py:45`, `:73`; `app/ponto/tests/test_lastro_c12_sem_banco.py:34`; `app/ponto/tests/test_lastro_c10_sem_banco.py:296`; `app/ponto/tests/test_lastro_c11_sem_banco.py:68`). São costuras: o teste dos builders reduz seus corpos às chamadas extraídas, portanto não executa a geometria/ORM completa (`app/ponto/tests/test_lastro_c13_sem_banco.py:196`, `:200`).
-
-FILA — portabilidade do replay: `--red-c12` e `--mutante harness_c12` dependem de `git show`, indisponível nesta cópia sem repositório (`app/ponto/tests/test_lastro_c13_sem_banco.py:27`, `:40`). Contra-exemplo: invocar o replay nesta cópia falha antes de exercer a cura; substituí a reversão por AST em memória para verificar a mordida [nao verificado quanto à execução do replay original].
-
-## 12/11 10:06 · sessao 38bc72b0ad37 · - · - · origem=Ronald (tmux)
-
-- **BLOQUEIA — PDF mantém regra própria de órfã/turno aberto, preexistente e não curada.** `_entrada_espuria` compara apenas HH:MM (app/relatorios/pdf_espelho.py:174–178), depois da união das órfãs de todas as datas (:480–481), para excluir turnos abertos (:517–519). Contraexemplo executado em memória: órfã em 10/11 às 07:02; turno aberto legítimo em 11/11 às 07:02, sem órfã nesse dia → função retorna `True` e exclui o turno. Tela conta `p.turno_aberto` sem essa guarda (app/ponto/services/espelho.py:436–437). Viola testemunha sem regra própria (CLAUDE.md:20–22).
-
-- **BLOQUEIA — c13 restaura o contrato no PDF, mas conserva duas respostas para a mesma órfã.** PDF usa builder `grade_espelho_janela` (app/relatorios/pdf_espelho.py:474); tela usa `grade_da_celula`/`remapear_na_regua` (app/ponto/services/espelho.py:522–530). O novo teste fixa concretamente `orfas_grade=[]` para tela e `batida.orfa=True`, `turnos_abertos=0` para PDF (app/ponto/tests/test_lastro_c11_sem_banco.py:383–385). O teste chama tela por `Mock` (:326) e fornece órfã pronta ao builder (:356–357); não certifica convergência dos leitores. Classificações R de 6–9 fazem sentido, mas a cura dos sintomas não fecha a classe.
-
-- **BLOQUEIA — rótulo não está garantido no ramo de ata agregada, defeito anterior não alcançado pelo canal c13.** Tela chama contrato sem `recusas` em `_pela_grade` (app/ponto/services/espelho.py:495–496). Se `grade_da_celula` levanta `AtaAgregadaSemMarcos`, seu handler chama `_pela_grade` (:563); uma `TipoSemFaixa` levantada ali escapa ao `except Exception` irmão (:572). PDF passa pelo contrato com `recusas={}` (app/relatorios/pdf_espelho.py:474), mas depois chama essa tela (:479). Contraexemplo: ata agregada + ausência aprovada sem faixa → leitura pode levantar em vez de apresentar o rótulo. O comportamento sem destinatário está explicitamente preservado e cobrado (app/ponto/tests/test_lastro_c13_sem_banco.py:126–127). Ocorrência produtiva: [nao verificado].
-
-- **Rótulo no canal coberto:** nasce de `TipoSemFaixa.rotulo` (app/ponto/precedencia.py:102), chega ao PDF por `dia['recusa']` (app/escala/utils.py:1219; app/relatorios/pdf_espelho.py:567) e ao compositor único (app/ponto/services/espelho.py:339–341), que escreve palavra e veredito vazio. Tela transporta o mesmo atributo (app/ponto/services/espelho.py:880). Não encontrei contraexemplo novo de apagamento do rótulo por sobreposição em :567 com mesmas entradas/janela; universalidade fora desses canais: [nao verificado].
-
-## 12/11 10:06 · sessao e928c079842b · - · - · origem=Ronald (tmux)
-
-- BLOQUEIA — leitura nomeada incompleta no espelho/PDF: `_pela_grade()` chama o contrato **sem `recusas`** em `app/ponto/services/espelho.py:495`; esse caminho roda no trecho anterior à competência (`app/ponto/services/espelho.py:534`) ou na ata agregada (`app/ponto/services/espelho.py:563`), antes da carga nomeada (`app/ponto/services/espelho.py:653`). Contra-exemplo reproduzido em memória: ausência aprovada `fantasma_xyz` faz `_pela_grade()` levantar `TipoSemFaixa`; o PDF também chama esse espelho (`app/relatorios/pdf_espelho.py:479`). Execução completa com ORM: [nao verificado].
-
-- Escritor do dicionário `recusas[data]`: A2, `app/ponto/precedencia.py:423`; sem destinatário, levanta em `app/ponto/precedencia.py:422`. A recusa impede produzir fato nesse dia (`app/ponto/precedencia.py:425`).
-
-- Escritor de `dia['recusa']` e `dia['tipo_dia']=None`: `app/escala/utils.py:1219` e `app/escala/utils.py:1220`. Leitor produtivo encontrado de **essa recusa da grade**: `app/relatorios/pdf_espelho.py:567`; o compositor imprime a palavra e deixa veredito vazio em `app/ponto/services/espelho.py:339`.
-
-- `tipo_dia=None` também é lido internamente pelo overlay de isenção: não ganha a flag de dia de trabalho (`app/escala/utils.py:889`), chamado depois da ausência (`app/escala/utils.py:1875`); o legacy preserva `None`, pois o default de `.get()` só cobre chave ausente (`app/escala/utils.py:1046`).
-
-- Nenhum caminho financeiro demonstrado recebe o novo `None`: o único chamador produtivo encontrado que abre `recusas` na grade é o PDF (`app/relatorios/pdf_espelho.py:474`); `grade_do_fechamento()` lê `grade_da_celula` (`app/folha/export.py:335`, `app/folha/export.py:338`). Fechamento lê essa grade em `app/ponto/services/fechamento.py:1015` e seus mapas em `app/ponto/services/fechamento.py:1048`; `simular_folha --recalcular/--lido` passa por esse fechamento (`app/folha/management/commands/simular_folha.py:122`, `app/folha/management/commands/simular_folha.py:130`).
-
-- Leitores potencialmente incompatíveis existem, porém alcance pelo canal novo não foi demonstrado: `por_dia_da_grade` descarta `None` sem `ausencia_tipo` (`app/ponto/services/dia_pago.py:392`); `classificar_orfas` traduz `None` para folga (`app/escala/orfa_classe.py:65`). Nenhum chamador produtivo de `classificar_orfas` encontrado no censo textual: [nao verificado]. Não classificar isso como regressão alcançável da c13.
-
-- Sem `recusas`, o delta conserva os guards e chamadas anteriores: retorno cedo em `app/escala/utils.py:1205`, condição de consulta A2 em `app/escala/utils.py:1213`, ramo novo desativado em `app/escala/utils.py:1218`; os transportes omitem o argumento quando `None` (`app/escala/utils.py:808`, `app/escala/utils.py:1010`, `app/escala/utils.py:1019`, `app/escala/utils.py:1873`, `app/escala/utils.py:2114`, `app/escala/utils.py:2117`, `app/escala/utils.py:2365`). Equivalência dinâmica de todos os chamadores: [nao verificado].
-
-- BLOQUEIA pouso financeiro — par `simular_folha` da competência 11 e efeito `abona=0`: [nao verificado], conforme dado fornecido. O comparador mede TXT e retidos (`app/folha/management/commands/simular_folha.py:160`, `app/folha/management/commands/simular_folha.py:218`); inspeção de código não substitui esse par: [nao verificado].
-
-_4164 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4167 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
