@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 13:10** · publicado em **12/11/2026 13:12** (UTC-3)
+> Ultima resposta processada: **12/11/2026 13:17** · publicado em **12/11/2026 13:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 13:17 · sessao f268da51b608 · S139-RESPEITA-A-RESPOSTA · sonda · origem=Code
+
+Referências `DADO:N` contam as linhas tabuladas do bloco fornecido, começando em `S R_COLUNAS` como linha 1.
+
+1. **TOTAL**
+
+| Medida | Número | Fonte |
+|---|---:|---|
+| perguntas | 152 | DADO:317 (`S TOTAL`) |
+| relações | 152 | DADO:317 |
+| hora_diferente | 62 | DADO:317 |
+| acima30 | 31 | DADO:317 |
+| delta_nv | 0 | DADO:317 |
+| COLABS | 52 | DADO:318 |
+| SEM_DIA | 0 | DADO:320 |
+| FORA_RECORTE_CONTEXTUAL | 0 | DADO:321 |
+| TOTAL_ERROS | 0 | DADO:322 |
+
+Nenhum erro reportado torna os números pedidos impossíveis de afirmar; há campos de snapshot não verificados, discriminados abaixo. (DADO:322; DADO:15–137, filtrando `delta_relogio_min > 30`.)
+
+2. **Das 31 perguntas acima30**
+
+| Marco | DENTRO dos 90 min | FORA | NÃO_VERIFICADO |
+|---|---:|---:|---:|
+| Cadastrado | **23** | **8** | **0** |
+| Snapshot | **7** | **1** | **23** |
+
+Fontes da contagem pelo cadastro:
+
+- **23 dentro:** DADO:15–17, 32–34, 42–43, 56, 59, 71–72, 82, 101–103, 105–109, 115, 130.
+- **8 fora:** DADO:51, 54, 57, 113, 122, 128–129, 137.
+- **0 não verificado:** todas essas 31 linhas têm classificação cadastral preenchida. (Mesmas linhas.)
+
+Pelo snapshot, as **7 dentro** são as pks **49876, 50079, 51892, 52250, 53443, 53847 e 54585**; a **1 fora** é a pk **54584**; as outras **23** têm `NAO_VERIFICADO`. (DADO:33–34, 71, 82, 103, 115, 129–130; demais linhas acima30 enumeradas acima.)
+
+**Retratadas: 0** entre as 31 perguntas acima30. (DADO:15–137, mesmas 31 linhas filtradas.)
+
+3. **Colaboradores e dia-colab distintos, considerando somente acima30**
+
+| Classificação pelo cadastro | Colabs | Dia-colab | Fonte |
+|---|---:|---:|---|
+| Ao menos uma pergunta dentro | **9** | **15** | DADO:214, 216, 229, 248–249, 251, 254–255, 282, 290, 312–316 |
+| Somente perguntas fora | **2** | **6** | DADO:169, 183; 230–232, 256, 283, 289 |
+
+Os **2 colaboradores somente fora** são **col301 e col707**. **col873 e col909** têm perguntas acima30 dentro e fora em dias diferentes: entram nos 9 colaboradores com alguma dentro, enquanto seus dias somente fora entram nos 6 dia-colab. (DADO:169, 183, 282–283, 289–290.)
+
+4. **Pergunta pk 50833**
+
+Sim: **col707**, batida pk **152915**, dia de turno **27/10/2026**; resposta **11:10**, batida local **2026-10-27T16:00:00-03:00**, marco cadastrado **16:00**, delta **290 minutos**, `dentro90_cadastro=0`: **FORA**. (DADO:51.)
+
+5. **Distribuição do delta entre acima30**
+
+Faixas sem sobreposição, incluindo o limite superior:
+
+| Faixa em minutos | Perguntas | Fonte |
+|---|---:|---|
+| 30 < delta ≤ 60 | **22** | Linhas dentro do cadastro listadas no item 2, exceto DADO:82 |
+| 60 < delta ≤ 120 | **3** | DADO:82 — 63 min; DADO:54, 57 — 120 min |
+| 120 < delta ≤ 240 | **5** | DADO:113, 122, 128–129, 137 — 180 min |
+| delta > 240 | **1** | DADO:51 — 290 min |
+
+## 12/11 13:15 · sessao 50160a1d8a3a · - · - · origem=Ronald (tmux)
+
+Conferência dos itens 2, 3 e 5:
+
+- **Cadastro:** 23 DENTRO, 8 FORA, 0 NÃO_VERIFICADO. DENTRO sustentado pelas linhas R com pergunta_pk 49126, 49246, 49247, 49875, 49876, 50079, 50503, 50504, 51108, 51132, 51892, 51923, 52250, 53440, 53442, 53443, 53446, 53449, 53450, 53453, 53454, 53847, 54585. FORA sustentado pelas linhas R com pergunta_pk 50833, 51086, 51111, 53641, 54017, 54583, 54584, 55094.
+- **Snapshot:** 7 DENTRO — linhas R com pergunta_pk 49876, 50079, 51892, 52250, 53443, 53847, 54585; 1 FORA — linha R com pergunta_pk 54584; 23 NÃO_VERIFICADO — demais linhas acima30 enumeradas no primeiro item.
+- **Retratadas:** 0 nas 31 linhas acima30 enumeradas; todas têm retratada=0.
+
+**Universos distintos entre perguntas acima30:**
+
+| Cadastro | Colabs | Dia-colab |
+|---|---:|---:|
+| Ao menos uma DENTRO | 9 | 15 |
+| Somente FORA | 2 | 6 |
+
+Suporte para DENTRO, por linhas R acima30 e respectivas linhas S COLAB_DIA:
+
+- col040: 2026-11-04.
+- col055: 2026-10-25.
+- col263: 2026-10-31.
+- col502: 2026-10-24 e 2026-10-28.
+- col516: 2026-10-22.
+- col569: 2026-10-23 e 2026-10-30.
+- col873: 2026-10-26.
+- col909: 2026-11-05.
+- col993: 2026-10-24, 2026-10-26, 2026-10-28, 2026-10-30 e 2026-11-01.
+
+Suporte para SOMENTE FORA por colaborador: col707 (R 50833) e col301 (R 53641, 54017, 55094). col873 e col909 têm acima30 DENTRO em outros dias, portanto não entram como colaboradores “só fora” (R 50503, 50504, 54585).
+
+Os 6 dia-colab somente FORA são col707/2026-10-27; col873/2026-10-28; col301/2026-11-03, 2026-11-04 e 2026-11-07; col909/2026-11-03 (linhas R 50833, 51086, 51111, 53641, 54017, 55094, 54583, 54584).
+
+**Faixas sem sobreposição, com limite superior incluído:**
+
+| Faixa | Perguntas | Suporte |
+|---|---:|---|
+| 30 < delta ≤ 60 | 22 | As linhas DENTRO acima, exceto R 52250 |
+| 60 < delta ≤ 120 | 3 | R 52250=63; R 51086 e 51111=120 |
+| 120 < delta ≤ 240 | 5 | R 53641, 54017, 54583, 54584, 55094=180 |
+| delta > 240 | 1 | R 50833=290 |
 
 ## 12/11 13:10 · sessao e93ae91a7d8b · S139-RESPEITA-A-RESPOSTA · censo · origem=Code
 
@@ -1001,43 +1102,4 @@ Referências aos anexos contam desde a primeira linha de conteúdo. Execução l
 | Campo com dois significados | Não nos campos atuais: cota e medida permanecem distintas. A chave antiga continua sem conversão. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:2033`, `bin/disjuntor.py:2058`, `bin/disjuntor.py:815`) |
 | Ordem de trava | Não identifiquei inversão introduzida: gravação e anúncio permanecem sob a trava do estado; wrapper/triagem tomam resposta antes de estado. (`bin/disjuntor.py:370`, `bin/disjuntor.py:391`, `bin/disjuntor.py:402`, `bin/disjuntor.py:405`, `bin/disjuntor.py:908`, `bin/disjuntor.py:940`; `bin/codex_pergunta.sh:376`, `bin/codex_pergunta.sh:378`) |
 
-## 12/11 12:17 · sessao 9aa9d65cb110 · - · - · origem=Ronald (tmux)
-
-Os achados persistentes da volta 2 **não foram curados por este delta**: o disparo continua condicionado apenas ao número de reprovações/voltas, e retorna PARADA nessa chamada; a classe só é examinada posteriormente na porta AUTOLIBERA. (`bin/disjuntor.py:1031`, `bin/disjuntor.py:1040`, `bin/disjuntor.py:774`)
-
-A exclusividade “segunda ocorrência só Ronald” também permanece falsa pela porta antiga: `ERRO-BOBO OBRA-A: motivo` exige apenas motivo alfanumérico, sem autoria; essas candidatas precedem AUTO e a cota só restringe `tipo == 'auto'`. Isso é preservação expressa da porta antiga pelo contrato, mas continua divergindo da leitura literal do aval já apontada na volta 2. (`bin/disjuntor.py:768`, `bin/disjuntor.py:1050`, `bin/disjuntor.py:1057`; `contrato_item2.txt:2`; `aval_auditoria_de_travas_corte_1211.txt:4`)
-
-Para a pergunta 3:
-
-- **Estado atual com `auto_usada`: segunda AUTOLIBERA sozinha não libera.** Acrescenta SHA a `auto_sobe` uma vez, anuncia SOBE e continua sem consumir SHA; o único acréscimo a `auto_usada` fica depois dessa guarda. (`bin/disjuntor.py:1057`, `bin/disjuntor.py:1059`, `bin/disjuntor.py:1063`, `bin/disjuntor.py:1065`, `bin/disjuntor.py:1069`)
-- **DESENHO pela porta nova:** rótulo `classe=DESENHO` é recusado porque as classes aceitas são FORMA/ERRO-BOBO; o texto “erro de desenho” sob rótulo FORMA pode passar, pois o reconhecedor valida rótulo e presença de letra/dígito, não a natureza do defeito. Classificação real em produção: `[nao verificado]`. (`bin/disjuntor.py:148`, `bin/disjuntor.py:774`)
-- **Rearme não zera cota:** altera apenas `rearmado`, `reprovados`, `codex`, `disparado`. A decisão subsequente continua lendo `auto_usada`. (`bin/disjuntor.py:1148`, `bin/disjuntor.py:1150`, `bin/disjuntor.py:1185`)
-- **Reinício com JSON preservado não zera cota:** a transição carrega JSON existente e o grava inteiro; carregamento de consulta faz o mesmo. Arquivo ausente inicia `{}`; isto é perda/ausência de estado, não efeito necessário do reinício. (`bin/disjuntor.py:377`, `bin/disjuntor.py:380`, `bin/disjuntor.py:390`, `bin/disjuntor.py:411`, `bin/disjuntor.py:414`)
-- **Compatibilidade herdada continua descoberta:** estado com `auto=['sha-antigo']` sem `auto_usada` é lido como cota livre, podendo aceitar nova AUTO; o predicado lê só `auto_usada`, a migração existente só trata limiar/reprovações e não converte `auto`. O contrato explicitamente chama ausência de `auto_usada` de zero; existência de tal estado em produção: `[nao verificado]`. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:815`, `bin/disjuntor.py:832`, `bin/disjuntor.py:1065`; `contrato_item2.txt:4`)
-
-Classes da pergunta 6:
-
-| Classe | Evidência |
-|---|---|
-| Segundo escritor da cota fora da porta | Não identificado no código operacional pesquisado: acréscimo específico só em `decide_b3`; persistência genérica por `_com_estado`. Os escritores adicionais em `bin/tests` são fixtures. (`bin/disjuntor.py:1065`, `bin/disjuntor.py:1089`, `bin/disjuntor.py:390`; `bin/tests/test_disjuntor.sh:1153`) |
-| Relógio fora da borda | Persiste, herdado: `decide_b3` chama `time.time()` se não recebe instante; wrapper chama `b3_parada → estado_b3` sem instante. `trilha` também lê `datetime.now()`. Stop e PreToolUse fornecem instante capturado na borda. (`bin/disjuntor.py:999`, `bin/disjuntor.py:1172`, `bin/disjuntor.py:217`; `bin/codex_pergunta.sh:378`; `bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1204`; `bin/disjuntor.py:1951`, `bin/disjuntor.py:1834`) |
-| Campo com dois significados | Nos nomes atuais não: cota cumulativa `auto_usada` versus medida de LIBERA(auto) em 24h `lib['auto']`; compatibilidade da chave antiga segue sem conversão. (`bin/disjuntor.py:1185`, `bin/disjuntor.py:2029`, `bin/disjuntor.py:2033`, `bin/disjuntor.py:2056`) |
-| Ordem de trava | Não identifiquei inversão introduzida: estado é travado antes de ler/mutar/gravar/anunciar; anúncio ocorre antes de fechar FD. Wrapper e triagem tomam resposta antes de estado. (`bin/disjuntor.py:370`, `bin/disjuntor.py:385`, `bin/disjuntor.py:391`, `bin/disjuntor.py:402`, `bin/disjuntor.py:405`; `bin/codex_pergunta.sh:376`, `bin/codex_pergunta.sh:378`; `bin/disjuntor.py:908`, `bin/disjuntor.py:940`) |
-
-Cura efetiva do aviso truncado: `_anuncia` passa `inteiro=True` para DISJUNTOR/SOBE; `trilha` deixa de aplicar corte de 300 nesses chamados; SOBE preserva instrução antes da linha livre, e somente essa linha fica limitada a 200. (`bin/disjuntor.py:153`, `bin/disjuntor.py:154`, `bin/disjuntor.py:1081`, `bin/disjuntor.py:218`, `bin/disjuntor.py:1060`, `bin/disjuntor.py:1062`)
-
-## 12/11 12:17 · sessao 5f42930059da · - · - · origem=Ronald (tmux)
-
-- **Espião `b3_v4` caso 5 preservado.** `**kw` segue intacto para `orig`; a tentativa de `flock(LOCK_EX|LOCK_NB)` em descritor separado continua detectando trava ocupada. O assert exige presença dos três eventos antes de `all(...)`, impedindo `all([])`. Prova DISJUNTOR/LIBERA/REARMA sob trava; SOBE não está no filtro. (`bin/tests/test_disjuntor.sh:1067`, `bin/tests/test_disjuntor.sh:1071`, `bin/tests/test_disjuntor.sh:1077`, `bin/tests/test_disjuntor.sh:1086`, `bin/tests/test_disjuntor.sh:1087`)
-
-- **Caso 5 corrigido:** controles exigem estado previamente disparado, incremento LIBERA do tipo certo e cota apropriada; terceiro controle exige preservação exata da cota. Lista obrigatoriamente contém três resultados. (`bin/tests/test_disjuntor.sh:1220`, `bin/tests/test_disjuntor.sh:1222`, `bin/tests/test_disjuntor.sh:1228`, `bin/tests/test_disjuntor.sh:1232`)
-
-- **Caso 8 corrigido:** segundo disparo deve retornar verdadeiro, AUTO final deve produzir evento e cota unitária. (`bin/tests/test_disjuntor.sh:1300`, `bin/tests/test_disjuntor.sh:1303`, `bin/tests/test_disjuntor.sh:1306`)
-
-- **Caso 6 tem ramo residual vazio:** ignora retorno de `dispara('OBRA-F')`; `ultima` pode devolver `''`, e o assert aceita ausência de aviso porque só exige ausência da marca de cota gasta, além da instrução em `mensagem_b3`, que funciona mesmo sem registro da obra. Assim pode passar sem disparo/aviso F. As novas provas longas, entretanto, exigem disparos e SOBE positivos; não passam integralmente vazias. (`bin/tests/test_disjuntor.sh:1240`, `bin/tests/test_disjuntor.sh:1245`, `bin/tests/test_disjuntor.sh:1250`, `bin/disjuntor.py:1202`, `bin/disjuntor.py:1205`, `bin/tests/test_disjuntor.sh:1265`, `bin/tests/test_disjuntor.sh:1278`)
-
-- **Inventário:** seguem oito casos numerados; há onze mutantes item 2, seis antigos e cinco novos. Logo “8 casos” permanece correto; “6 mutantes” está desatualizado, divergência documental sem alteração das regras operacionais. (`bin/tests/test_disjuntor.sh:1180`, `bin/tests/test_disjuntor.sh:1307`, `bin/tests/test_disjuntor.sh:2031`, `bin/tests/test_disjuntor.sh:2039`, `bin/tests/test_disjuntor.sh:2041`, `bin/tests/test_disjuntor.sh:2049`; `contrato_item2.txt:5`)
-
-- **Mordidas:** o log anexado mostra os cinco novos mutantes derrubados — três no caso 6, um no 5 e um no 8 — e controle rc=0; execução atual dos seis antigos e de `b3_v4`: `[nao verificado]`. O harness exige âncora única, controle sem mutação e falha se o caso aceitar a mutação. (`bin/tests/test_disjuntor.sh:1715`, `bin/tests/test_disjuntor.sh:1719`, `bin/tests/test_disjuntor.sh:1723`, `bin/tests/test_disjuntor.sh:1741`; localizações exatas no log anexado: `[nao verificado]`)
-
-_4246 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4248 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
