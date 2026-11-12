@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 16:09** · publicado em **12/11/2026 16:13** (UTC-3)
+> Ultima resposta processada: **12/11/2026 16:39** · publicado em **12/11/2026 16:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 16:39 · sessao a061d30af7be · - · - · origem=Ronald (tmux)
+
+Recenso na árvore após a cura, com `ast.parse` e inspeção dos operandos e consumidores, sem editar arquivos.
+
+| Sítio | Classe | Interpretação |
+|---|---|---|
+| `relatorios/pdf_espelho.py:698` e `:702` | **IDENTIDADE — residual** | O conjunto `DD/MM HH:MM` alimenta substring que elimina anomalia. Ainda perde segundos. |
+| `escala/utils.py:1760` | EXIBIÇÃO/projeção | Chave `(tipo, HH:MM do marco previsto)` localiza coluna da régua. Não compara a hora da batida. |
+| `escala/utils.py:1772` | EXIBIÇÃO/projeção com promoção | A ausência do **marco previsto** na régua promove a célula correspondente; hora e instante são transportados juntos em `:1775-1776`. Não identifica a órfã pela sua hora. |
+| `escala/utils.py:1778` | EXIBIÇÃO/projeção com promoção | Marco interno fora da régua ocupa slot `I`; se faltam slots, a célula inteira vira órfã, conservando o instante em `:1787-1788`. |
+| `escala/utils.py:1797`, `:1800` | EXIBIÇÃO/projeção | Chave prevista seleciona e deduplica colunas das pontas. |
+| `escala/utils.py:1801` | EXIBIÇÃO/projeção | `.index(_key4)` retorna a coluna do marco previsto. |
+| `escala/utils.py:1809-1810` | EXIBIÇÃO/projeção | `in` e `.index` mapeiam cada marco previsto à coluna. A pertença da **batida** ao turno é decidida depois por instante em `:2104`. |
+| `escala/utils.py:1897` | ORDENAÇÃO | Ordena pares hora/instante pela hora de exibição; conserva os pares em `:1898-1899`. |
+| `escala/utils.py:626`, `:669` | EXIBIÇÃO | HH:MM serializado em paralelo com os instantes em `:628`, `:671`; identificação usa índices e datetimes. |
+| `escala/services/leitor_celula.py:287`, `:302-303` | EXIBIÇÃO/projeção | Chaves de marcos previstos remapeiam células na régua. |
+| `escala/services/leitor_celula.py:347-350` | EXIBIÇÃO/projeção | Deduplicação de colunas previstas por `(tipo, HH:MM)`. |
+| `escala/services/leitor_celula.py:25`, `:30-35`, `:121` | EXIBIÇÃO/status | Truncamento para calcular desvio da luz em relação ao previsto; não decide identidade ou pertença de órfã. |
+| `relatorios/pdf_espelho.py:714-715`, `:863`, `:867`, `:889`, `:939`, `:1030`, `:1077` | EXIBIÇÃO | Formata escala, batidas, procedência e emissão. Os filtros usam `b.orfa`, decidido em `:590`. |
+
+Verificação dos sítios de identidade após a cura:
+
+- Dry-run compara `datetime` em `escala/utils.py:1702`, `:1726`.
+- Localizador da órfã compara ISO reconstruído com instante em `escala/utils.py:2068-2069`.
+- Guarda usa timestamps do turno em `escala/utils.py:2092`; interseção por instante em `:2093-2095`; instante da célula em `:2100-2102`; unicidade em `:2103`; pertença e ordem em `:2104`.
+- Leitor mantém pareamento posicional em `escala/services/leitor_celula.py:191-193`.
+- PDF identifica órfãs e períodos por timestamp em `relatorios/pdf_espelho.py:195`, `:500`, `:590`, `:944-947`.
+
+O achado de identidade reduzida remanescente neste escopo é o filtro textual do cabeçalho do PDF (`relatorios/pdf_espelho.py:698-702`).
+
+## 12/11 16:36 · sessao a061d30af7be · - · - · origem=Ronald (tmux)
+
+Censo preliminar feito com `ast.parse`, sem editar arquivos.
+
+| Achado | Classe | Razão |
+|---|---|---|
+| `utils.py:2093,2097,2099` | IDENTIDADE | A redução para HH:MM decide pertença/unicidade de órfã e pertença da célula ao turno. |
+| `pdf_espelho.py:698-702` | IDENTIDADE | Conjunto e substring sem segundos eliminam anomalias de outra batida no mesmo minuto. |
+| `utils.py:1760` | EXIBIÇÃO/projeção | Chave `(tipo, HH:MM previsto)` alinha célula na coluna do marco. |
+| `utils.py:1772,1778` | EXIBIÇÃO/projeção | Compara o marco previsto com a régua; quando promove uma célula, conserva seu instante (`utils.py:1776,1788`). |
+| `utils.py:1797-1801` | EXIBIÇÃO/projeção | Identifica e deduplica colunas de marcos previstos; não compara órfãs/batidas. |
+| `utils.py:1809-1810` | EXIBIÇÃO/projeção | `.index` localiza coluna do marco previsto. |
+| `utils.py:1897` | ORDENAÇÃO | Ordena pares hora/instante, conservando o pareamento (`utils.py:1898-1899`). |
+| `leitor_celula.py:287,302-303` | EXIBIÇÃO/projeção | Remapeia células por coluna prevista. |
+| `leitor_celula.py:347-350` | EXIBIÇÃO/projeção | Deduplica colunas previstas da régua. |
+| `leitor_celula.py:24-35,121` | EXIBIÇÃO/status | Calcula desvio, sem decidir identidade/orfandade. |
+| `utils.py:626,669` | EXIBIÇÃO | Serializa HH:MM junto dos respectivos instantes (`utils.py:628,671`). |
+| `pdf_espelho.py:863,867,939` | EXIBIÇÃO | Formata batidas cuja identidade já foi estabelecida por timestamp (`pdf_espelho.py:590`). |
+
+Os caminhos já datados usam `datetime`: dry-run (`utils.py:1702,1726`), localizador da reconciliação (`utils.py:2068-2069`), órfãs publicadas/PDF (`pdf_espelho.py:195,500,590,944-947`) e pareamento posicional do leitor (`leitor_celula.py:191-193`). [nao verificado]
+
+A célula de `_celula_do_marco` já carrega `instante.isoformat()` com offset (`utils.py:327-328`).
+
+Aguardo a cura para repetir o censo na árvore final.
 
 ## 12/11 16:09 · sessao 7d019a0204b9 · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
 
@@ -670,133 +725,4 @@ A numeração segue o anexo. O anexo demonstra os resultados em c4; aprovação 
 
 [truncado em 20000 de 37456 caracteres]
 
-## 12/11 15:30 · sessao e5f3193debbc · O168 · verificador · origem=Code
-
-**Não considero a O168 encerrada:** os quatro fechamentos diretos receberam a guarda, mas há caminhos indiretos que chegam ao mesmo escritor sem consultá-la; além disso, “44 preservados” conta avaliações recusadas, não demonstra 44 chamados distintos salvos (`app/ponto/services/cartorio.py:1040`, `:1568`, `:1581`, `:1602`, `:963`; `app/chamados/signals.py:43`; `app/chamados/reconciliador.py:524`).
-
-1. **Sítios diretos do cartório — os quatro passam pelo helper.**
-
-   | Sítio | Passa por `_fecham_cobrancas_sem_furo`? | Evidência |
-   |---|---|---|
-   | Adiados pela lâmpada, depois do E2 | Sim | `app/ponto/services/cartorio.py:1035-1040` |
-   | RECONCILIA-MARCO: marcos cobrados acenderam; inclui quem não protesta em dia sem trabalho | Sim | `app/ponto/services/cartorio.py:1562-1575` |
-   | MARCO-INEXISTENTE: marco cobrado deixou de existir na escala | Sim | `app/ponto/services/cartorio.py:1576-1593` |
-   | B5.3b: `COBRANCA_SEM_FURO` ou `COBRANCA_EM_DIA_SEM_TRABALHO` | Sim | `app/ponto/services/cartorio.py:1594-1606` |
-
-   O helper pergunta a `pode_executar_csf` antes de chamar a porta; só devolve como fechados aqueles cuja transição retornou verdadeiro (`app/ponto/services/cartorio.py:955-966`).
-
-2. **Há fechadores indiretos e externos sem essa guarda.**
-
-   O desvio mais próximo está **antes do helper dos adiados**: cartório → E2 → `DisputaSupervisao.fechar()` → signal S88 → `ch.reconciliar()`. O E2 fecha a disputa quando C7 permite; o save dispara S88, que pede fechamento do chamado-pai sem consultar `pode_executar_csf` (`app/ponto/services/cartorio.py:1035-1040`; `app/chamados/reconciliador.py:609-615`; `app/chamados/models.py:1933-1937`; `app/chamados/signals.py:19-43`).
-
-   A porta central não corrige essa ausência: decide pela matriz, pela premissa e pela pergunta **viva**, sem testar qualquer pergunta anteriormente respondida. Uma resposta já consumida pode, portanto, ficar fora da proteção existente da porta (`app/chamados/models.py:672-694`; `app/ponto/supra_juiz.py:543-549`). Reprodução dinâmica e ocorrência desse desvio em produção: **[não verificado]**.
-
-   | Outro caminho | Helper / guarda de conversa | Evidência |
-   |---|---|---|
-   | Receiver da batida, posterior ao cartório → premissa morta → `_retratar` | Não / não | `app/ponto/signals.py:206-215`; `app/chamados/reconciliador.py:1433-1442`, `:1454-1465`, `:519-524` |
-   | Consumidor de `EventoCelula` → absolvição pela célula | Não / não | `app/chamados/reconciliador.py:1369`, `:997-1010` |
-   | Consumidor de `EventoCelula` → premissa morta | Não / não | `app/chamados/reconciliador.py:1373`, `:1465` |
-   | Consumidor → lastro: todos os marcos cobrados acenderam | Não / não | `app/chamados/reconciliador.py:1383-1384`; `app/ponto/services/lastro.py:388-403` |
-   | `detectar_ausencias`: batida satisfez os marcos cobrados | Não / não | `app/ponto/management/commands/detectar_ausencias.py:404-413`, `:845-849` |
-   | Entrada sincronizada/API: marcos cobrados acesos | Não / não | `app/ponto/services/entrada_sincronizada.py:29-32` |
-   | Ausência aprovada, premissa morta e lâmpada sem acusação | Não / não | `app/chamados/services/silencio_ausencia.py:29-42`, `:94-106` |
-   | Fecho por afastamento ou cobertura | Não / não | `app/ponto/management/commands/detectar_ausencias.py:821-849` |
-   | Designação/declaração de cobertura | Não / não | `app/ponto/services/cobertura.py:115-123`, `:311-319` |
-
-   A retenção de `_retratar` não equivale à guarda CSF: protege irmã respondida **sem consumo** e justificativa alheia pendente, enquanto CSF protege qualquer `respondida_em` não nulo nas duas relações (`app/chamados/reconciliador.py:438-455`; `app/ponto/supra_juiz.py:543-549`).
-
-   Materialização também fecha destino e clones sem CSF, mas ocorre no contexto de processamento de resposta; classificá-la integralmente como fechamento automático proibido exige distinguir o ato humano que a autorizou — **[não verificado]** (`app/chamados/services/materializacao.py:740-787`).
-
-3. **Quem escreve e quem lê os campos e relações.**
-
-   | Campo/relação | Quem escreve | Quem lê neste circuito |
-   |---|---|---|
-   | `ChamadoColaborador.status_local` | No fechamento: helper → `transicionar_com_pauta` → `reconciliar` → `_gravar_estado`; este atribui e salva. Nascimento também escreve pela criação | Seleção de vivos, matriz/gates, cartório e testes | [nao verificado]
-   | Evidência | `app/ponto/services/cartorio.py:965`; `app/chamados/services/fecho_runtime.py:157-169`; `app/chamados/models.py:651-655`, `:228-229`, `:296`, `:1096` | `app/ponto/management/commands/supra_juiz.py:212`; `app/chamados/models.py:674`, `:713-716`; `app/ponto/services/cartorio.py:1672`; `app/ponto/tests/test_o168_guarda_csf_no_evento.py:104-106` |
-   | `out['csf_com_conversa_preservado']` | Exclusivamente o incremento do helper encontrado neste circuito | Os quatro testes protegidos; retorno de `out` ao chamador | [nao verificado]
-   | Evidência | `app/ponto/services/cartorio.py:963` | `app/ponto/tests/test_o168_guarda_csf_no_evento.py:121`, `:135`, `:147`, `:161`; `app/ponto/services/cartorio.py:2068-2071` |
-   | `disputa_origem__perguntas` | Não é coluna nova: são relações reversas de `DisputaSupervisao.chamado` e `PerguntaDisputa.disputa`. Emissão cria esses vínculos | Prefetch do helper; juiz CSF percorre ambas |
-   | Evidência | `app/chamados/models.py:1750-1755`, `:2417-2420`; `app/chamados/services/disputa_emissao.py:587-592`, `:837-845` | `app/ponto/services/cartorio.py:959`; `app/ponto/supra_juiz.py:543-545` |
-   | `perguntas_que_resolvem` | Relação reversa de `PerguntaDisputa.chamado_destino`; nascimento/reuso e costura podem definir ou trocar o destino | Carregadores do cartório/supra e juiz CSF |
-   | Evidência | `app/chamados/models.py:3386-3392`, `:2983-3018`; `app/chamados/services/fio.py:926-929` | `app/ponto/services/cartorio.py:127-128`; `app/ponto/management/commands/supra_juiz.py:190-192`; `app/ponto/supra_juiz.py:547-549` |
-
-   **O insumo decisivo de CSF é somente `respondida_em`.** O juiz não consulta texto, `validada_em`, `materializada_em`, `via_resolucao`, booleano `conversa` ou histórico de decisões (`app/ponto/supra_juiz.py:539-550`).
-
-   Escrevem esse carimbo: resposta humana, resposta automática, reparo pela trilha e carimbo com resposta. Reabertura para correção pode zerá-lo, preservando a resposta anterior no histórico, que CSF não lê (`app/chamados/services/disputa_emissao.py:1467-1469`, `:1652-1655`, `:1674-1676`, `:1593-1598`, `:1630-1632`; `app/chamados/models.py:3131-3153`; `app/ponto/supra_juiz.py:543-549`). Efeito dessa reabertura nos casos fornecidos: **[não verificado]**.
-
-   As atribuições temporárias de `status_local` durante a simulação do pós-estado são restauradas; não constituem outro escritor persistente (`app/chamados/models.py:355-371`). Censo completo de todos os leitores de tela/relatório: **[não verificado]**.
-
-4. **Os contadores do supra e do cartório não têm a mesma unidade operacional; 44 não equivalem aos seis fechamentos.**
-
-   No cartório, cada passagem recusada pelo juiz incrementa o contador, sem conjunto de PKs vistos e antes de descobrir se a porta fecharia. Quem foi preservado continua em `vivos`, podendo ser contado novamente em outro sítio ou passada (`app/ponto/services/cartorio.py:961-965`, `:1575`, `:1593`, `:1602`, `:1050`).
-
-   No supra, `CSF_COM_CONVERSA_PRESERVADO` cresce por chamado visitado no ramo da lavra `cobranca_indevida` com código reconhecido. A seleção é diferente da união das avaliações dos quatro sítios do cartório (`app/ponto/management/commands/supra_juiz.py:249-262`).
-
-   O dado informa seis fechamentos com conversa no main — cinco na empresa 2 e um na 3 —, zero na cópia e 44 incrementos de preservação — 34 + 8 + 2. Não fornece a decomposição dos 44 por chamado e avaliação (`diff_sombra.txt:1-2`, anexo fornecido). Logo, quantos chamados distintos esses incrementos representam e quantos realmente seriam fechados sem a guarda: **[não verificado]**.
-
-   O rótulo **“preservados/impacto” não descreve fielmente essa soma de recusas**. Usá-la como número de chamados distintos para o limite percentual mistura unidades, contrariando “rótulo diz o que a conta faz; contador == universo” (`app/ponto/services/cartorio.py:963`; `diff_sombra.txt:9-14`; `CLAUDE.md:35-36`).
-
-   Há ainda avaliações potencialmente omitidas: a releitura pós-emissão usa `_conv`, mas não incorpora seu contador CSF ao `out` principal. O resumo de `processar_cartorio` também não imprime esse campo (`app/ponto/services/cartorio.py:1114-1126`; `app/ponto/management/commands/processar_cartorio.py:66-70`).
-
-5. **Prefetch: até dois SELECTs adicionais por invocação fria; N+1 permanece no supra.**
-
-   Para cada um dos quatro sítios, uma lista não vazia e sem cache pode exigir **um SELECT de disputas + um SELECT de perguntas**. Lista vazia retorna antes; sem disputas não há segundo nível; objetos já carregados podem reaproveitar cache. Trata-se de previsão estrutural, não medição SQL (`app/ponto/services/cartorio.py:956-959`; `app/chamados/models.py:1750-1755`, `:2417-2420`).
-
-   Esse limite é por **invocação/lista**, não duas consultas para o sítio durante toda a rodada: há laços por célula e segunda passada. Sobreposição das listas pode reutilizar os mesmos objetos carregados (`app/ponto/services/cartorio.py:1037-1050`, `:1382`, `:1568-1602`). A relação direta já vem prefetchada no carregador do cartório (`app/ponto/services/cartorio.py:127-128`).
-
-   No supra, o carregador prefetcha somente `perguntas_que_resolvem`; CSF também percorre origem e perguntas por disputa. Permanece, portanto, consulta por chamado para origem e por disputa para perguntas, até eventual retorno antecipado (`app/ponto/management/commands/supra_juiz.py:190-192`; `app/ponto/supra_juiz.py:543-549`). Contagens SQL efetivamente executadas e cumprimento dos tetos: **[não verificado]**.
-
-6. **A lei citada não autoriza uma exclusão geral de FIO-DUP.**
-
-   O literal reproduzido diz: “o cartorio nao fecha cobranca sem furo de chamado que tem conversa”; não contém exceção para FIO-DUP. A exclusão aparece na justificativa escrita pela própria obra (`app/ponto/services/cartorio.py:941-947`).
-
-   Deduplicar enquanto outro chamado continua cobrando um furo existente pode estar fora da premissa “sem furo”. Entretanto, o gate aceita `premissa_regularizada` **antes** de examinar deduplicação: o nome FIO-DUP não garante que todo fechamento dali preserve um furo ainda existente (`app/chamados/models.py:739-750`).
-
-   FIO-DUP e FIO-DUP-C8 não passam pelo helper. Sua isenção lê **texto das perguntas dirigidas**, enquanto CSF lê **carimbo nas perguntas dirigidas e de origem**. São proteções diferentes; conversa apenas na origem não é coberta por essa isenção (`app/ponto/services/cartorio.py:1666-1680`, `:1690-1695`; `app/ponto/supra_juiz.py:543-549`). Ocorrência dessa combinação no dado: **[não verificado]**.
-
-7. **Os testes têm controles úteis, mas não comprovam toda a lei nem a cascata.** [nao verificado]
-
-   Há pares com/sem conversa para os quatro sítios, pela porta real, com recarga do estado final. Isso sustenta a expectativa estática de que retirar individualmente cada guarda faça seu caso falhar; execução dos quatro mutantes: **[não verificado]** (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:100-161`).
-
-   A lacuna concreta está no adiado: a fixture cria perguntas sem `celula` e sem `data_evento`; E2 exige `celula` não nula. Assim, o teste não percorre a cascata real E2 → fechamento da disputa → S88. A pergunta sem data também pode ser desconsiderada pelo gate por competência indecidível (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:80-88`; `app/chamados/reconciliador.py:628-638`; `app/chamados/models.py:364-365`).
-
-   Todos os cenários plantam dia inteiramente batido, e a mesma pergunta integra origem e destino. Faltam provas separadas para dia sem trabalho, marco satisfeito com outro furo restante, conversa apenas na origem/destino e fechador posterior ao cartório. A idempotência não exige estabilidade do contador CSF (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:62-66`, `:80-88`, `:109-175`).
-
-8. **Classes históricas: resultado desta leitura.**
-
-   | Classe | Resultado |
-   |---|---|
-   | Segundo juiz | O helper reutiliza CSF; não copia sua decisão. FIO mantém predicado de proteção diferente, conforme achado 6 (`app/ponto/services/cartorio.py:955-962`, `:1666-1670`). |
-   | Segundo escritor fora da porta | O trecho novo conserva wrapper e escritor existentes. Os desvios encontrados também passam pela porta: falta-lhes a guarda, não a porta (`app/ponto/services/cartorio.py:965`; `app/chamados/signals.py:43`; `app/chamados/models.py:655`). |
-   | Relógio fora da borda | O helper novo não lê relógio; as duas ocorrências deslocadas são conversões de timestamps explícitos (`app/ponto/services/cartorio.py:953-967`, `:1234`, `:1387`). |
-   | Derivação paralela | Não aparece nova derivação de conversa no helper; a divergência entre texto/FIO e carimbo/CSF permanece (`app/ponto/services/cartorio.py:962`, `:1670`; `app/ponto/supra_juiz.py:545-549`). |
-   | RED sem mordida | Há pares comportamentais, mas a cascata E2/S88 escapa à fixture; mutação executada por sítio **[não verificado]** (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:80-88`, `:109-161`; `app/chamados/reconciliador.py:632`). |
-   | Ordem de trava | A extração mantém o caminho central de aquisição de travas. A leitura/prefetch da guarda ocorre antes de entrar nessa porta; ausência de corrida concorrente **[não verificado]** (`app/ponto/services/cartorio.py:959-965`; `app/chamados/models.py:651-652`, `:703-713`). |
-   | Pouso antes do pré-requisito | A cópia ainda configura supra com `--executar`; o anexo não mede `CSF_RETRATADO`. Remoção posterior da flag, pouso e pré-requisito zero **[não verificado]** (`app/config/crons.py:599`; `diff_sombra.txt:1-2`). |
-   | Campo com dois significados | O contador tem unidades diferentes entre chamadores. “Conversa” em CSF significa carimbo de resposta, não o booleano homônimo (`app/ponto/services/cartorio.py:963`; `app/ponto/management/commands/supra_juiz.py:262`; `app/ponto/supra_juiz.py:543-549`; `app/chamados/models.py:2777-2803`). |
-
-9. **55→52 e catraca temporal: ajustes coerentes com a extração, sem afrouxamento demonstrado nesses dois selos.**
-
-   Os quatro pontos físicos de transição viraram uma chamada física no helper; S33 passa a identificá-la, enquanto FIO-DUP/FIO-DUP-C8 continuam cadastrados. O selo segue procurando escritores não cadastrados e exige exceções vazias. Portanto, a redução é consequência da extração escolhida; não demonstra redução de cobertura das quatro rotas de negócio (`diff.txt`, trecho de `e4b_c12_sitios.json`; `app/chamados/tests/e4b_c12_sitios.json:259-280`; `app/chamados/tests/test_e4b_c12_selo.py:22-36`; `app/ponto/services/cartorio.py:965`).
-
-   A catraca apenas registra o deslocamento das mesmas duas expressões de `localdate(timestamp)`. A igualdade integral das ocorrências continua exigida; não houve aumento de tolerância nesse diff (`app/core/tests/test_medida_turno_do_par.py:319-321`, `:546-550`; `app/ponto/services/cartorio.py:1234`, `:1387`).
-
-10. **Limites da verificação.** RED/GREEN executados, mutantes individuais, custo SQL medido, reprodução dos desvios, decomposição dos 44, conservação depois dos receivers/outbox, `CSF_RETRATADO=0`, implantação e identidade Git independente do hash/pai informado: **[não verificado]**. O anexo demonstra somente os resultados declarados das duas rodadas de `julgar_celula`; seu próprio cabeçalho delimita esse ato em rollback (`diff_sombra.txt:1-2`, `:16-20`).
-
-## 12/11 15:27 · sessao 5516d069f335 · - · - · origem=Ronald (tmux)
-
-1. **O selo O168 não prova a cascata indireta E2→S88.** A fixture cria perguntas sem `celula` e sem `data_evento` (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:80`–88; campos nulos em `app/chamados/models.py:2415`, `:2424`). O E2 exige `celula__isnull=False` (`app/chamados/reconciliador.py:628`–638), logo não carimba nem fecha aquelas disputas. Já o caminho real fecha disputa em `app/chamados/reconciliador.py:609`–615 e o S88 chama `reconciliar` sem `pode_executar_csf` (`app/chamados/signals.py:29`–43).
-
-2. **O teste do “adiado” pode fechar no controle sem exercitar esse pré-requisito.** A pergunta viva sem data aciona o adiamento (`app/ponto/services/cartorio.py:1418`, `:1562`–1565), mas o gate desconsidera competência indecidível (`app/chamados/models.py:364`–365). Assim, o controle fechar não demonstra que o E2 tenha resolvido pergunta datada real. O texto promete “lavrar→E2→reconciliar” (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:14`), mas a fixture não cobre essa sequência.
-
-3. **Mordida dos quatro sítios: plausível por análise estática; execução dos mutantes [não verificado].** Há pares com e sem conversa para B53b (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:109`–121), marco aceso (`:126`–135), adiado (`:138`–147) e inexistente (`:152`–161), com estado final recarregado (`:104`–106). Os ramos correspondentes estão em `app/ponto/services/cartorio.py:1602`, `:1568`, `:1040`, `:1581`. Porém o arquivo não implementa mutação individual: somente afirma que cada retirada fica vermelha (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:16`–17). Não rodei testes.
-
-4. **A cobertura é estreita.** Todos os casos plantam dia inteiramente batido (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:62`–66); não há caso específico de dia sem trabalho nem marco satisfeito com outro furo restante. A mesma pergunta pertence à origem e ao destino (`:80`–88), logo não há prova separada das duas relações lidas pelo juiz (`app/ponto/supra_juiz.py:543`–549). Idempotência compara estado, veredito e quantidade de perguntas, mas não exige contador estável (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:166`–175).
-
-5. **55→52 é consolidação de chamadas físicas, sem afrouxamento demonstrado do selo global.** S33 identifica o único fechamento no novo helper (`app/chamados/tests/e4b_c12_sitios.json:259`–264; `app/ponto/services/cartorio.py:965`), enquanto FIO-DUP continua nos S37/S38 (`app/chamados/tests/e4b_c12_sitios.json:267`–280). O selo varre toda a produção e reprova também escritores não cadastrados (`app/chamados/tests/test_e4b_c12_selo.py:22`–32), mantendo exceções vazias (`:34`–36). O manifesto é resolvido por função e texto, não pelo número antigo da linha (`app/chamados/tests/e4b_c12_verificar.py:84`–115). É consequência da extração escolhida; a extração não era a única implementação possível da cura.
-
-6. **A catraca temporal só registra deslocamento.** As duas expressões continuam conversões de timestamps explícitos (`app/ponto/services/cartorio.py:1234`, `:1387`), registradas agora em `app/core/tests/test_medida_turno_do_par.py:319`–321. A igualdade integral das ocorrências segue exigida (`:546`–550); não há relaxamento do teto no diff fornecido.
-
-7. **Classes estruturais no trecho novo:** o helper importa e chama o juiz existente (`app/ponto/services/cartorio.py:955`, `:962`), conserva a porta real (`:954`, `:965`) e não introduz relógio ou `select_for_update` (`:953`–967). O fechamento continua adquirindo a ordem central de trava (`app/chamados/models.py:651`–652, `:703`–713; ordem implementada em `:2667`, `:2676`, `:2689`, `:2693`). Ausência de corrida entre prefetch/guarda e aquisição dessas travas: **[não verificado]**. Pouso e execução do supra após pré-requisito: **[não verificado]**; os dados fornecidos não demonstram `CSF_RETRATADO=0`.
-
-_4331 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4333 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
