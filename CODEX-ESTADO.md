@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 10:36** · publicado em **12/11/2026 10:37** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:41** · publicado em **12/11/2026 10:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:41 · sessao 8f661e04ae0f · - · - · origem=Ronald (tmux)
+
+- O escritor funcional é `retratar_perguntas_absolvidas_por_celula`: percorre as perguntas absolvíveis, obtém `get_user_sistema()` e chama `p.carimbar(PerguntaDisputa.VIA_CELULA_ABSOLVEU, _user)`, **sem pedir escrita de resposta**. `app/chamados/reconciliador.py:550`, `:585`, `:588`, `:596`.
+- A porta `carimbar` tem `resposta=None`; escolhe `quando` ou `timezone.now()`, chama `_escrever_carimbo`, consulta `pergunta_viva` e só salva se a pergunta resultar morta. A atribuição literal de `materializada_em` está em `_escrever_carimbo`; a persistência está em `self.save(update_fields=campos)`. `app/chamados/models.py:3104`, `:3125`, `:3130`, `:3100`, `:3140`, `:3144`, `:3153`.
+- `respondida_em` só recebe instante dentro de `if resposta and not texto_vazio(self.resposta_colab)`. Como o chamador desta via não passa `resposta`, é coerente haver `materializada_em` preenchido com `respondida_em` nulo. `app/chamados/models.py:3131`, `:3132`, `:3133`; `app/chamados/reconciliador.py:596`.
+- A seleção exige carimbo e validação ainda nulos, célula vinculada, julgada e com veredito que não acusa; depois o gerador consulta o juiz real e exclui dia trancado. `app/chamados/reconciliador.py:628`, `:630`, `:631`, `:632`, `:638`, `:640`, `:642`, `:662`, `:668`.
+- O juiz pode dar a pergunta por morta por célula com veredito que não acusa e sem marcos pendentes; isso não exige resposta nem plantio de batida. `app/chamados/juizes.py:1438`, `:1440`, `:1451`, `:1452`, `:1453`.
+- `celula_absolveu` pertence explicitamente a `VIAS_SEM_TESTEMUNHA`: o comentário identifica a célula julgada como testemunha e explica que não há batida a exigir num dia absolvido. Portanto, nesta via, “materializada” é carimbo de processamento/resolução pela célula, e não prova de declaração do colaborador ou batida plantada. `app/chamados/models.py:3731`, `:3741`, `:3742`, `:3743`, `:3747`.
+- O `help_text` do campo ainda diz “batida criada + chamado fechado”, descrição mais estreita que o comportamento executável acima. `app/chamados/models.py:3394`, `:3396`.
+- Isso não altera o predicado solicitado no aval; invalida usar `materializada_em != NULL` como sinônimo de “existe batida plantada”. O comando existente faz essa divisão em `classificar`, mandando qualquer carimbada para `_fonte_materializada`, que reprova ausência de batida plantada viva. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:151`, `:152`, `:68`, `:69`, `:72`.
+- O caminho histórico exato que carimbou cada uma das 931 perguntas, sua data e seu autor no banco não foi comprovado nesta inspeção. [nao verificado]
+
+## 12/11 10:41 · sessao 9913f3b3b51d · - · - · origem=Ronald (tmux)
+
+- `classificar()` considera “materializada” apenas pela presença de `materializada_em` e escolhe `_fonte_materializada`; essa função exige batida plantada viva e lança `sem_fonte` quando ela falta. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:151`, `:65`, `:68`, `:72`)
+
+- `_fonte_viva` começa com turnos que têm entrada, não têm saída e possuem `data_turno`. Se **qualquer** candidato tem `data_turno == data_evento`, retorna `None` antes de procurar um candidato de outro dia. Logo, se coexistirem um aberto no próprio dia e outro aberto cujo dia diverge, esse segundo não será avaliado nessa chamada; a existência dessa configuração nas 931 é [nao verificado]. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108`, `:109`, `:110`)
+
+- Há outros cortes: ignora candidatos com `data_turno >= data_evento`; dos anteriores, aceita somente aqueles cuja saída prevista é igual a `data_evento`. A previsão vem do último marco de `marcos_turno`, convertido em data local. Se não encontrar correspondência e todos os candidatos examinados tiverem marcos, retorna `None`. Esses critérios são mais restritivos que simplesmente exigir dia do turno diferente e turno ainda sem saída. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:113`, `:115`, `:118`, `:122`, `:125`, `:82`, `:90`, `:91`)
+
+- Se não houver correspondência, mas existir candidato anterior sem marcos, lança `sem_fonte`; se houver mais de uma correspondência, lança `ambigua`. Portanto, os cortes com retorno `None` devem ser distinguidos dessas exceções. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:116`, `:120`, `:123`)
+
+- **Contador potencialmente ocultador na v3: `coerente_ou_sem_turno_aberto` (860 no JSON fornecido).** A associação exata entre os retornos `None` e esse contador é [nao verificado]: `sonda_medida3.py` e o texto do contador não foram encontrados na cópia; o usuário forneceu somente a saída da sonda. A quantidade das 860 que satisfaria o predicado do aval também é [nao verificado].
+
+- O juiz efetivo consulta `dia_das_batidas` para a batida por PK; a implementação atribui a cada batida reclamada o `data_turno` do turno e usa a data local para as demais. (`app/ponto/turnos.py:2927`, `:2935`, `:2945`, `:2953`, `:2955`)
+
+## 12/11 10:39 · sessao aa1c00a286c9 · ABSOLVIDA-PELA-FOLGA · sonda · origem=Code
+
+1. Transcrição integral do JSON fornecido; resultado de produção sem verificação independente. [nao verificado]
+
+```json
+{"caso_51407": [{"em_classificar": true, "no_universo": true}], "casos": [], "contagem": {"linhas_classificar": 931, "materializadas_no_universo": 931, "sem_dia_novo": 931, "universo_base": 931}, "foras_sem_dia": {"sem_fonte": 931}}
+```
+
+2. **`classificar` não é um medidor geral do predicado do aval.** Ela seleciona a fonte conforme `materializada_em`: preenchida → `_fonte_materializada`; ausente → `_fonte_viva`. `via_resolucao=celula_absolveu` e `respondida_em` nula não alteram essa escolha. [classificar:147](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147)
+
+Para `orfao_14h` **viva**, `_fonte_viva` procura turnos com entrada, sem saída e com `data_turno`. Ela:
+
+- Devolve `None` imediatamente se **qualquer** candidato tem `data_turno == data_evento`, considerando a pergunta coerente. [fonte_viva:108](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108)
+- Entre os candidatos anteriores a `data_evento`, aceita somente aqueles cuja saída prevista cai exatamente em `data_evento`; essa previsão vem do último marco da escala. [fonte_viva:112](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:112), [saida_esperada:82](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:82)
+- Marca `fora=ambigua` se houver mais de um encaixe; sem encaixe, marca `fora=sem_fonte` se algum candidato examinado não tiver marcos. Sem encaixe e sem essa falta de marcos, devolve `None`, inclusive quando existem turnos abertos que não satisfazem o encaixe exigido. Um único encaixe devolve sua entrada e seu turno. [fonte_viva:120](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120)
+
+Para **materializada**, a fonte exigida é uma batida viva vinculada por `Batida.pergunta_origem`, não a entrada aberta encontrada por `_fonte_viva`. Sem essa batida, `celula_absolveu` cai em `sem_fonte`; múltiplas batidas geram `ambigua`; uma batida ausente dos turnos gera `sem_fonte`, e presente em múltiplos turnos gera `ambigua`. [classificar:138](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:138), [fonte_materializada:65](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:65)
+
+Obtida a fonte, `novo` só é preenchido depois de o juiz devolver um dia não nulo, diferente de `data_evento` e igual ao `data_turno` encontrado. Juiz sem dia gera `sem_fonte`; divergência entre juiz e turno gera `ambigua`, ambos ainda sem `novo`. Depois de preencher `novo`, `orfao_14h` materializada recebe `fora_do_aval`; para quem passar dessa condição, fato já existente no destino gera `colisao`. Portanto, **`novo` preenchido não significa ausência de `fora`**. [classificar:160](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:160)
+
+Precisão sobre `None`: quem o devolve é `_fonte_viva`; `classificar` responde com uma lista e omite essa pergunta por `continue`. Também omite materializada cujo turno não tenha saída ou cuja saída não caia em `data_evento`, e qualquer pergunta cujo dia devolvido pelo juiz já coincida com o gravado. [classificar:154](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:154), [classificar:176](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:176)
+
+**Sim, o predicado amplo do aval pode sofrer descarte silencioso:** uma materializada com fonte encontrada, turno ainda aberto e dia diferente é omitida antes de consultar o juiz, porque `t.saida is None`. Nas vivas, uma entrada aberta com dia diferente também pode ser omitida quando sua saída prevista não coincide com `data_evento`; existir outro turno aberto no próprio `data_evento` provoca o retorno antecipado de “coerente”. Essas condições são mais restritivas que apenas “entrada aberta cujo dia difere do gravado”. [classificar:158](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:158), [fonte_viva:108](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108)
+
+3. **O bloqueio equivalente nesta saída é `sem_dia_novo=931`, explicado por `foras_sem_dia.sem_fonte=931`.** Os mesmos 931 constam como materializados e como linhas retornadas; portanto, o agregado fornecido não mostra perda de perguntas entre universo e retorno, mas mostra todas sem dia novo. [nao verificado]
+
+Como materializadas seguem `_fonte_materializada`, chamar a função real **não garante chamar o caminho que procura entrada aberta**; a exigência de batida plantada pode barrar a medição antes disso. [classificar:151](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:151), [fonte_materializada:68](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:68)
+
+Assim, `casos: []` **não demonstra zero casos do aval**. O JSON só confirma, para #51407, presença no universo e no retorno; não fornece seu dia novo, sua entrada aberta nem separação entre exportadas e não exportadas. O número que satisfaz efetivamente o predicado do aval permanece [nao verificado].
+
+## 12/11 10:38 · sessao 5cbda7b3d038 · - · - · origem=Ronald (tmux)
+
+Entradas já alcançam a relavra comum: lançar [escala/folgas.py:337], alterar/remover [:380], lote [:418], reparentar [:523]. A relavra suplementa futuras em [:298]. Assim, testes comportamentais de amanhã devem ficar GREEN no HEAD; RED no HEAD desses comportamentos é [nao verificado]. A deficiência apontada é de evidência individual. [nao verificado]
+
+Para ampliar a suíte pura: [nao verificado]
+
+- Carregar `_foto_do_dia`, `lancar_folga`, `alterar_folga`, `aplicar_folgas_em_lote`, `reparentar_folga` e **a relavra real**, usando `_dias_dos_meses_que_sairam=lambda *a: []`; o teste atual da relavra já usa esse preparo. [ponto/tests/test_cadastro_futuro_sem_banco.py:584] [nao verificado]
+- Reutilizar `calendario()`: seu `eh_dia_trabalho_calculado` consulta as fotos do vínculo, permitindo verificar que amanhã muda de trabalho para folga. [ponto/tests/test_cadastro_futuro_sem_banco.py:480]
+- Acrescentar `Query.get_or_create`, necessário para lançamento. [escala/folgas.py:335]
+- Usar foto com `save/delete`, `pk`, `tipo` e `calendario_origem=None`; `Foto` atual fornece somente a propriedade do calendário. [ponto/tests/test_cadastro_futuro_sem_banco.py:176]
+- Dublar `ponto.precedencia.veto_de_lancamento` e `core.models.LogAuditoria`; a porta de reparentamento exige também `vinculo_do_dia_carregado`, retornando o vínculo novo pela autoridade previamente carregada. [escala/folgas.py:328] [escala/folgas.py:479] [escala/folgas.py:493]
+
+Casos individuais recomendados:
+
+1. `lancar_folga(novo, AMANHA, 'F')`: começar com amanhã coerente, trabalhando, nomeando `novo`; verificar foto criada e célula não trabalhando. [escala/folgas.py:335]
+2. `alterar_folga(novo, AMANHA, 'F2')`: foto manual já existente e célula com DNA anterior incoerente; verificar tipo e DNA atualizados. [escala/folgas.py:364]
+3. Remoção: foto manual existente, célula coerente como folga; `alterar_folga(..., '')` remove foto e amanhã volta a trabalhar. [escala/folgas.py:353]
+4. `aplicar_folgas_em_lote(novo, [(AMANHA, 'F')], hoje=HOJE)`: conferir lista gravada, foto e célula. [escala/folgas.py:405]
+5. Reparentar: foto manual de amanhã no vínculo velho encerrado hoje; célula de amanhã já nomeia `novo`; conferir retorno `migrada`, FK da foto e célula. [escala/folgas.py:487] [escala/folgas.py:515]
+6. Aplicar calendário: carregar função real da view sem decoradores; publicar serviços reais preparados em `sys.modules`; fornecer `request.method='POST'` e `POST['tipo_escala_id']`; dublar somente `JsonResponse`, `get_object_or_404` e relógio. [escala/views.py:376] [escala/views.py:388]
+
+O mutante comum apropriado é envolver a chamada futura da relavra em `if ec.data_inicio <= _hoje_teste`. O mutador atual apenas remove essa chamada porque `relavrar_celulas_da_foto` não integra seu conjunto de guardas; precisa receber essa variante. [ponto/tests/test_cadastro_futuro_sem_banco.py:87] [escala/folgas.py:298]
+
+Aplicar calendário tem redundância legítima: troca a FK com sincronização futura, materializa fotos que também relavram e chama relavra explícita. Mutar somente a chamada explícita pode sobreviver graças aos outros caminhos; o teste deve executar tudo e aplicar a guarda aos transportes futuros comuns. [escala/views.py:409] [escala/views.py:411] [escala/views.py:416] [colaboradores/services/vinculo.py:454] [escala/folgas.py:215] [nao verificado]
+
+## 12/11 10:38 · sessao b118550ea971 · - · - · origem=Ronald (tmux)
+
+Item 4(c) está bloqueado pelo limite de escrita: a regeneração fora da vigência conserva `escala_geradora` e só salva se `trabalha` ainda não for falso ([celula.py:238](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/portas/celula.py:238)). A juíza devolve `None` para a geradora encerrada ([alimentacao.py:282](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/escala/alimentacao.py:282)), portanto o contador permanece positivo corretamente ([vigia_cadastro_futuro.py:36](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/services/vigia_cadastro_futuro.py:36)). Nenhuma operação existente permite limpar o carimbo: a reversão também só atribui geradora quando o identificador restaurado é verdadeiro ([celula.py:789](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/portas/celula.py:789)). Resolver sem editar esse arquivo exigiria outro escritor ou alterar artificialmente julgamento/contador.
+
+Item 5 admite solução na casca do comando: dentro do atomic existente, regenerar somente células geradas existentes de hoje, chamando a porta atual com `recalculo=False` e `estender_horizonte=False`; a chamada ficaria junto ao gerador ([gerar_celulas.py:310](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/management/commands/gerar_celulas.py:310)). Assim o cron mantém a execução pelo comando, sem editar sua configuração. A seleção deve preservar o universo ativo do gerador ([celula.py:830](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/portas/celula.py:830)); usar a geradora carimbada julgada pode divergir do comportamento anterior em sobreposições. Equivalência completa desse caminho alternativo: [nao verificado].
 
 ## 12/11 10:36 · sessao 0d7a98f2dd10 · ABSOLVIDA-PELA-FOLGA · sonda · origem=Code
 
@@ -461,118 +548,4 @@ FILA — portabilidade do replay: `--red-c12` e `--mutante harness_c12` dependem
 
 - BLOQUEIA pouso financeiro — par `simular_folha` da competência 11 e efeito `abona=0`: [nao verificado], conforme dado fornecido. O comparador mede TXT e retidos (`app/folha/management/commands/simular_folha.py:160`, `app/folha/management/commands/simular_folha.py:218`); inspeção de código não substitui esse par: [nao verificado].
 
-## 12/11 09:57 · sessao 12930e22770f · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-Cura deixada na cópia. Classificação dos dez vermelhos, alterações, RED, mutantes e comandos estão em [LASTRO_C13.txt](LASTRO_C13.txt:1).
-
-Passaram Ruff, 72 testes sem banco, 35 da catraca e 8 estáticos; 22 mutantes foram rejeitados. [Evidências](LASTRO_C13.txt:156) [nao verificado]
-
-Suite com Django, PDF real e par financeiro da competência 11: **[não verificado]**. [Limites](LASTRO_C13.txt:274) [nao verificado]
-
-## 12/11 09:57 · sessao 28365f5c4971 · PUSH-SEM-REGRAVAR · verificador · origem=Code
-
-**O v3 fecha as perdas do comparador anterior, mas não fecha toda a auditoria:** comparar stdout em bytes ainda depende do que o Git apresenta; a mordida de `lugar` depende do contexto; e “histórico já julgado” continua sem comprovação. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:888`)
-
-**1) Fechamento dos achados do v2**
-
-| Achado | Veredito |
-|---|---|
-| Falso positivo de lugar | **Fecha o defeito do comparador:** agora conserva cabeçalhos, contexto e posição. A fixture distingue as duas alterações, com a ressalva de não vacuidade detalhada abaixo. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:845`, `bin/tests/test_lei_akita.sh:852`) |
-| LF final/binário | **Fecha a perda anterior por normalização e filtragem:** retorna `p.stdout` em bytes e acrescenta `--binary`. A comparação deixou de usar `text=True`, `splitlines()` e seleção de linhas `+/-`. Isso garante igualdade da saída capturada, condicionada à apresentação feita pelo Git. (`bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:404`) |
-| Mordida C — prosa | **Fecha a ausência da prova específica:** planta a célula com `armadilha:` e reprova qualquer termo que conserve essa prosa. (`bin/tests/test_lei_akita.sh:457`, `bin/tests/test_lei_akita.sh:470`) |
-| Mordida D — saída malformada | **Fecha parcialmente:** injeta `lixo` e exige `PADRAO_ERRO`; também protege os dois SHAs do mesmo pid. Porém retirar somente a validação hexadecimal, conservando `len(cs) != 2`, sobrevive aos casos novos. (`bin/tests/test_lei_akita.sh:362`, `bin/tests/test_lei_akita.sh:474`, `bin/tests/test_lei_akita.sh:479`) |
-| Frase final | **Fecha a explicação das populações N/M e das dispensas. Não comprova julgamento anterior do publicado.** (`bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:888`) |
-
-As bordas anteriores de vocabulário permanecem: o inteiro com vírgula continua incompatível com o parser do campo; o literal completo `ADR (Architecture Decision Record)` continua sendo separado, em vez de acrescentado inteiro. (`app/docs/GLOSSARIO.md:13`, `app/docs/GLOSSARIO.md:28`, `bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:319`)
-
-**2) Commit novo com diff diferente pode sair como DUPLICATA?** [nao verificado]
-
-**Sim, há um contraexemplo construído com apresentação não injetiva por `textconv`:** os dois produtores de diff permitem essa conversão; nenhum passa `--no-textconv`. A segunda comparação verifica a saída apresentada, sem comparar diretamente árvores ou blobs. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`)
-
-Considere esta configuração e estes commits hipotéticos: [nao verificado]
-
-```text
-diff.default.textconv = sed '/^IGNORADO=/d'
-
-Publicado P: [nao verificado]
-  A: valor=0 → valor=1
-
-Local L, sobre a mesma base:
-  A: valor=0 → valor=1
-  F: IGNORADO=0 → IGNORADO=1
-```
-
-A conversão conserva o patch de `A` e torna iguais as imagens de `F`, ocultando inteiramente sua alteração. Assim, `log -p` fornece o mesmo patch-id e `show --binary` apresenta os mesmos bytes; `L` encontra `P` e entra em `DUPLICATAS`, embora seu diff bruto contenha uma alteração adicional. Esse é o caminho permitido pelos dois comandos e pela dispensa. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:424`)
-
-Execução ponta a ponta desse cenário com commits reais e ocorrência em produção: **[nao verificado]**. [nao verificado]
-
-Quanto às configurações citadas:
-
-| Configuração | O que se pode concluir |
-|---|---|
-| `diff.noprefix`, `mnemonicPrefix`, cor | Os dois lados usam o mesmo comando e repositório. Mudança de representação, isoladamente, não demonstra falsa igualdade; se resultar em bytes diferentes, a dispensa falha. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:416`) |
-| `textconv` | Pode eliminar informação antes da comparação, como no contraexemplo acima; não exige configuração diferente entre os lados. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`) |
-| `ext-diff` | Não há `--ext-diff` nos comandos; a simples ausência de `--no-ext-diff` não demonstra execução de um externo. Habilitação efetiva nesse ambiente: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`) |
-
-O código também não congela configuração entre subprocessos. Uma mudança efetiva de configuração entre as chamadas que tenha causado dispensa indevida nos dados fornecidos: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:416`)
-
-**3) `lugar` tem realmente o mesmo patch-id?**
-
-**Sim, com contexto padrão de três linhas.** A base tem dois blocos iguais; o publicado troca o primeiro `V`, e o local troca o segundo. Reconstruindo esses patches em memória e passando-os a `git patch-id --stable`, ambos resultam em `eef41b6dc7f223182f6b375487979f6d30ec0357`. (`bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:822`, `bin/tests/test_lei_akita.sh:828`, `bin/tests/test_lei_akita.sh:845`)
-
-Os hunks têm o mesmo corpo — contexto `a,b,c`, remoção `V`, adição `W`, contexto `d,e,f` — mas cabeçalhos diferentes: `@@ -1,7 +1,7 @@` e `@@ -9,7 +9,7 @@`. Portanto, o comparador anterior os igualava; o novo distingue seus bytes. (`bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:828`, `bin/tests/test_lei_akita.sh:845`, `bin/tests/test_lei_akita.sh:416`)
-
-**A prova não está protegida contra vacuidade por configuração.** Com contexto quatro, `sep` passa a integrar os contextos em posições diferentes, e os pids reconstruídos divergem: `d05d6ed6fc9a394fc975b679e1d2ff95dfe49b95` e `dc2bd81c57071c4a778df9ca541ed480b4a55ecb`. O comando não fixa `-U3`, e a asserção não exige explicitamente igualdade dos pids; nesse caso, retirar a comparação adicional ainda deixaria `lugar` julgado. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:852`)
-
-**4) Escritores, leitores e verdade da frase**
-
-| Informação | Escritores e leitores |
-|---|---|
-| `DUPLICATAS` | Zerada por chamada; recebe local8/publicado12 antes do `continue`. MORDE confere o mapa; emissão normal produz `PADRAO_DUPLICATA`; shell escreve `ja julgado:` e conta os registros na frase final. (`bin/tests/test_lei_akita.sh:386`, `bin/tests/test_lei_akita.sh:424`, `bin/tests/test_lei_akita.sh:850`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:871`, `bin/tests/test_lei_akita.sh:879`, `bin/tests/test_lei_akita.sh:888`) |
-| `JULGADOS` | Zerado com `ENUMERADOS=len(hs)`; incrementado após excluir ausência de linha e duplicatas. MORDE exige quatro; emissão produz `PADRAO_JULGADOS N de M`; shell interpola esse registro. (`bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:873`, `bin/tests/test_lei_akita.sh:888`) |
-| Frase final | Escrita pelo `echo` quando `falhas=0`. O pre-push consome o código de saída; a régua captura a saída e a exibe na falha, sem interpretar os contadores. (`bin/tests/test_lei_akita.sh:887`, `bin/tests/test_lei_akita.sh:888`, `bin/pre-push.sh:38`, `bin/regua.sh:140`, `bin/regua.sh:142`) |
-
-**As contagens estão descritas corretamente; “histórico já julgado” não é garantido.** Um publicado sem linha `LEI-AKITA:` pode fornecer o patch usado para dispensar um local com linha inválida, embora o próprio publicado não fosse julgado por esse instrumento. Publicação e julgamento anterior são condições diferentes no código. (`bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:424`)
-
-A alegação das **14 duplicatas reais iguais byte a byte** consta somente do comentário; comprovação no dado fornecido: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:399`)
-
-## 12/11 09:54 · sessao ec9bb461cbab · - · - · origem=Ronald (tmux)
-
-Confirmação adicional: `git hash-object --stdin`, sem `-w`, confirmou os blobs usados na reconstrução da fixture (`bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:828`, `bin/tests/test_lei_akita.sh:845`).
-
-| Contexto reconstruído | Patch-ids | Comparador antigo | Bytes completos |
-|---|---|---|---|
-| 3 linhas | ambos `eef41b6dc7f223182f6b375487979f6d30ec0357` | iguais | diferentes |
-| 4 linhas | `d05d6ed6fc9a394fc975b679e1d2ff95dfe49b95` / `dc2bd81c57071c4a778df9ca541ed480b4a55ecb` | iguais | diferentes |
-
-A condição de pid igual está demonstrada para contexto três; a fixture não fixa esse contexto nem o verifica expressamente (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:852`). A configuração efetiva e a execução integral do MORDE permanecem **[nao verificado]**.
-
-## 12/11 09:54 · sessao c049468680ad · - · - · origem=Ronald (tmux)
-
-Contraexemplo condicional mais forte: publicado altera `A`; local altera `A` identicamente e também um gitlink `S`. Com configuração que oculte completamente a alteração de submódulo, `log -p` e `show --binary` enxergam somente `A`; os pids e os bytes comparados coincidem, entrando em `DUPLICATAS`. Os comandos não fixam `--ignore-submodules=none`. Ocorrência/configuração efetiva e execução desse cenário: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:424`)
-
-Outro contraexemplo condicional usa `textconv`: além do patch comum `A`, o local altera `F`, mas a conversão de `F` devolve o mesmo conteúdo antes/depois e elimina inteiramente seu diff. Ambos os comandos deixam de desabilitar textconv; se `F` desaparecer nos dois, a igualdade dos bytes não detectará a alteração. A omissão efetiva e a configuração são **[nao verificado]**. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`)
-
-Para as cinco configurações pedidas:
-
-- `diff.noprefix`, `color` e `mnemonicPrefix`: os comandos não fixam esses valores; mudança de representação não demonstra, sozinha, falsa igualdade. Não construí contraexemplo de dispensa provocado apenas por esses três. **[nao verificado]**. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`)
-- `textconv`: candidato de perda de informação descrito acima; `--binary` não é explicitamente acompanhado de `--no-textconv`. (`bin/tests/test_lei_akita.sh:400`)
-- `ext-diff`: não há `--ext-diff` nem `--no-ext-diff`; o comando, isoladamente, não prova execução de filtro externo. A habilitação padrão de externos em `show/log` seria uma afirmação sobre Git que exige qualificação **[nao verificado]** sob a restrição de fontes do usuário. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`)
-
-Os dois lados de `diff_inteiro` passam pelo mesmo comando, no mesmo `repo`; o código não fornece configurações diferentes por lado nem congela a configuração entre subprocessos. Drift real entre chamadas: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:416`)
-
-A cópia não contém repositório Git utilizável; testar `git show HEAD` falhou por ausência de `.git`. Não executei fixtures nem criei arquivos. **[nao verificado]**. [nao verificado]
-
-## 12/11 09:53 · sessao ec9bb461cbab · - · - · origem=Ronald (tmux)
-
-Referências abaixo em `bin/tests/test_lei_akita.sh`, salvo indicação contrária.
-
-- **`lugar` não é mordida vazia com contexto padrão de três linhas.** A base contém dois blocos iguais (`:820`, `:822`); o publicado muda o primeiro `V` (`:828`) e o local muda o segundo (`:845`). Reconstruí os dois patches em memória e executei somente `git patch-id --stable`, sem criar arquivos: ambos deram `eef41b6dc7f223182f6b375487979f6d30ec0357`. Os hunks são `@@ -1,7 +1,7 @@` e `@@ -9,7 +9,7 @@`, ambos com ` a / b / c / -V / +W / d / e / f`. O cabeçalho `index` também difere: `7c92588..aa0c6d0` versus `7c92588..f53da47`; logo `diff_inteiro` distingue ambos (`:400`, `:416`).
-- **Ressalva de configuração:** o código não fixa `-U3` no cálculo de pid (`:390`) nem afirma explicitamente a igualdade dos pids no MORDE (`:852`). Reconstruindo com contexto quatro, os pids passam a `d05d6ed6fc9a394fc975b679e1d2ff95dfe49b95` e `dc2bd81c57071c4a778df9ca541ed480b4a55ecb`: `sep` entra em posições diferentes do contexto. Nesse ambiente a mordida fica vazia. O MORDE apaga variáveis `GIT_`, mas não isola configuração global (`:69`). Configuração e execução em produção: **[nao verificado]**.
-- **Lugar, LF final e binário:** a comparação conserva agora stdout em bytes e usa `--binary`, sem `text=True`, `splitlines()` ou filtro `+/-` (`:395`, `:400`, `:404`). Isso fecha os contraexemplos de perda por filtragem/normalização. A nova fixture cobre lugar (`:845`, `:852`); fixtures específicas de LF final e binário no delta: **não há** (`:813`, `:855`).
-- **C ganhou mordida específica de prosa:** a fixture inclui `Ggg Hhh (armadilha: iii jjj)` (`:457`) e exige `ggg hhh`, proibindo qualquer termo contendo `armadilha` (`:470`). Reintroduzir a célula inteira com prosa faz essa condição falhar; a implementação remove parênteses (`:125`). A borda da célula com vírgula permanece: `app/docs/GLOSSARIO.md:13`, parser `:319`; o literal inteiro com `ADR (...)` continua não acrescentado por esse caminho (`:125`; `app/docs/GLOSSARIO.md:28`).
-- **D ganhou mordida, mas não de cada requisito:** o parser usado pelo instrumento é o helper (`:394`); o MORDE injeta linha válida seguida de `lixo` e exige `PADRAO_ERRO` (`:474`, `:477`). Também exige conservar ambos os SHAs (`:479`). Retirar somente o teste hexadecimal e manter `len(cs) != 2` **sobrevive**: não há caso com dois tokens inválidos (`:362`, `:474`, `:479`). Completude, pertencimento à seleção e stdout vazio continuam sem verificação no helper (`:360`, `:365`). [nao verificado]
-- **Frase final:** agora explica corretamente numerador, denominador e número de dispensas (`:888`): `ENUMERADOS=len(hs)` (`:406`, `:407`), pula ausência de linha (`:419`), pula duplicatas (`:423`) e só depois incrementa `JULGADOS` (`:426`). Porém **“histórico já julgado” continua uma premissa**, não uma prova de julgamento anterior: candidatos vêm de `origin/main` e piso (`:412`); não há consulta a resultado anterior (`:416`, `:424`).
-- **Escritores/leitores:** `DUPLICATAS` é zerada (`:386`), acrescentada (`:424`), lida pelo MORDE (`:850`), emitida (`:871`), traduzida pelo shell para `ja julgado:` (`:879`) e contada na frase (`:888`). `JULGADOS` é zerado (`:407`), incrementado (`:426`), conferido pelo MORDE (`:852`), emitido com `ENUMERADOS` (`:873`) e interpolado na frase (`:888`). O MORDE termina antes da emissão normal/final (`:866`, `:867`); portanto não testa a veracidade da redação humana (`:888`).
-
-_4159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4164 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
