@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 15:32** · publicado em **12/11/2026 15:36** (UTC-3)
+> Ultima resposta processada: **12/11/2026 15:38** · publicado em **12/11/2026 15:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 15:38 · sessao 876dbbcd439a · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+C18 implementada; censo, REDs, comandos e limites estão no [relatório](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_c18_relatorio.txt:1).
+
+- **86 testes sem banco passaram; 14 mutantes morderam.** Contador: `0`; retirando o instante do escritor: `1`. [Evidências](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_c18_relatorio.txt:5) [nao verificado]
+- Suite Django e Ruff ficaram bloqueados por dependências ausentes; entrega sem certificação. [Limites](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_c18_relatorio.txt:8) [nao verificado]
+- Sem commit ou relavra, conforme restrições; frota e DIFF financeiro **[nao verificado]**. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_c18_relatorio.txt) [nao verificado]
+
+## 12/11 15:37 · sessao 83ad142c7d01 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · sonda · origem=Code
+
+Reproduzo a saída raspada fornecida. Nova execução, código e predicados exatos de `sonda_numeros.py`: **[nao verificado]**.
+
+```text
+sonda_leitura: sonda_numeros.py [919e00d77781d52f] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+hoje 2026-11-12
+futuras_total 8721
+futuras_por_origem [('gerada',)] {'gerada': 8721, 'editada': 0}
+D1_futura_com_julgamento 0 colabs 0
+D1_regenerada_apos_julgada 0
+D3_futura_gerada_sem_geradora 0 colabs 0 trabalha_true 0
+D7_vinculo_inativo_com_fim_futuro 2 colabs 2
+  D7 ec#489 col574 ini=2024-01-01 fim=2027-07-06 celulas_futuras_dela=236
+  D7 ec#955 col203 ini=2026-07-21 fim=2026-12-31 celulas_futuras_dela=0
+total_erros 0
+```
+
+**`total_erros = 0`**, conforme o dado fornecido; conferência independente: **[nao verificado]**. Os zeros reportados para D1/D3 não demonstram impossibilidade desses estados nem medem lacunas por pessoa/data em D7. **[nao verificado quanto à abrangência da sonda]**
+
+**D1 — caminho possível no código**
+
+- A entrada unitária `julgar_celula` recusa `data > hoje`, retornando `None`. (`app/ponto/services/cartorio.py:2016`; `app/ponto/services/cartorio.py:2025`)
+- A entrada de lote `julgar_colab` recebe `cels` do chamador e repassa a lista ao corpo sem filtrar futuras. (`app/ponto/services/cartorio.py:940`; `app/ponto/services/cartorio.py:996`)
+- Um caminho concreto é o ramo `adesao is None`: percorre as células recebidas; com `apply_=True`, `completar_status=False` e vencido o pulo de idempotência — por exemplo, `forcar=True` — chama `lavrar_veredito(..., save=False, ata=_ata_nb)` e depois `carimbar(..., lavrados=_cv)`. (`app/ponto/services/cartorio.py:1211`; `app/ponto/services/cartorio.py:1261`; `app/ponto/services/cartorio.py:1264`; `app/ponto/services/cartorio.py:1268`; `app/ponto/services/cartorio.py:1292`; `app/ponto/services/cartorio.py:1314`)
+- As duas operações da porta não validam `cel.data`: a lavra atribui ata/veredito quando aplicável; o carimbo atribui `julgada_em=agora` e persiste também os campos lavrados. Ata preenchida nesse ramo depende de `_ata_nb` não nula e diferente da atual. A chamada direta dessas operações também permite essa sequência. (`app/ponto/portas/celula.py:991`; `app/ponto/portas/celula.py:1032`; `app/ponto/portas/celula.py:1039`; `app/ponto/portas/celula.py:1065`; `app/ponto/portas/celula.py:1070`)
+
+Isso estabelece possibilidade estática. Um chamador de produção ter entregue uma futura ao lote, ou executado diretamente essa sequência: **[nao verificado]**.
+
+A regeneração pode conservar julgamento previamente preenchido: seu save altera desenho e marcas de regeneração, sem ata/veredito/julgada_em; o rejulgamento pula futuras. (`app/ponto/portas/celula.py:272`; `app/ponto/portas/celula.py:276`; `app/ponto/portas/celula.py:431`)
+
+**D7 — ausência em dia coberto**
+
+O dado informa 236 futuras “dela” para `ec#489/col574` e zero para `ec#955/col203`. Isso **não comprova célula futura AUSENTE para nenhum dos dois**: não foram fornecidas datas nem o predicado desse contador. **[nao verificado]**
+
+A identidade da célula é **colaborador/data**, não vínculo/data. Portanto, zero atribuídas à EC pode coexistir com células da pessoa cuja geradora seja outra EC ou nula; 236 também não certifica cobertura completa das datas. (`app/escala/models.py:1692`; `app/escala/models.py:1833`) Quais dessas situações existem para os IDs listados: **[nao verificado]**.
+
+A possibilidade estrutural de D7 existe: o gerador seleciona apenas `ativa=True`, embora a autoridade admita vínculo inativo com fim declarado e cobertura inclusiva entre início e fim. (`app/ponto/portas/celula.py:829`; `app/ponto/portas/celula.py:849`; `app/escala/alimentacao.py:196`; `app/escala/alimentacao.py:214`) Para afirmar ausência real, falta verificar existência de célula por pessoa/data em cada dia futuro coberto; essa medição não aparece na saída. **[nao verificado]**
+
+Há divergências materiais entre matriz e cópia: nesta árvore, o gerador reescreve futuras existentes quando necessário, e o ramo fora de vigência salva somente `trabalha/dna`, conservando a FK. Assim, as descrições de conservação pelo cron e de FK anulada em D3 não correspondem a esses trechos. (`app/ponto/portas/celula.py:870`; `app/ponto/portas/celula.py:876`; `app/ponto/portas/celula.py:238`; `app/ponto/portas/celula.py:245`)
+
+## 12/11 15:36 · sessao af02dd476f08 · - · - · origem=Ronald (tmux)
+
+D1 — caminho estático mínimo:
+
+- A entrada unitária `julgar_celula` obtém `hoje = timezone.localdate()` e retorna `None` para `data > hoje`; portanto essa entrada não julga uma célula futura. (`app/ponto/services/cartorio.py:2016`; `app/ponto/services/cartorio.py:2025`)
+- A entrada de lote `julgar_colab(c, cels, hoje=..., agora=..., apply_=...)` recebe a lista do chamador e a repassa ao corpo sem filtrar futuras. (`app/ponto/services/cartorio.py:940`; `app/ponto/services/cartorio.py:983`; `app/ponto/services/cartorio.py:996`)
+- No corpo, havendo **`adesao is None`**, percorre todas as células recebidas. Com **`apply_=True`**, **`completar_status=False`** e sem o pulo por impressão idêntica (ou com `forcar=True`), chama `cel.lavrar_veredito(..., save=False, ata=_ata_nb)` e depois `carimbar(..., lavrados=_cv)`. Esse é um caminho conjunto que pode alcançar uma futura indevidamente incluída pelo chamador. (`app/ponto/services/cartorio.py:1211`; `app/ponto/services/cartorio.py:1261`; `app/ponto/services/cartorio.py:1264`; `app/ponto/services/cartorio.py:1268`; `app/ponto/services/cartorio.py:1292`; `app/ponto/services/cartorio.py:1314`)
+- `lavrar_veredito` não verifica a data: quando há alteração, atribui `ata`, `veredito`, `veredito_via`, `veredito_em`; `save=False` deixa os campos para a operação seguinte salvar. Ata preenchida depende de `_ata_nb` não nula e diferente da atual. (`app/ponto/portas/celula.py:974`; `app/ponto/portas/celula.py:991`; `app/ponto/portas/celula.py:1032`; `app/ponto/portas/celula.py:1039`)
+- `carimbar` também não verifica a data: atribui `julgada_em=agora` e salva junto os campos lavrados; o save é efetivado por `salvar_e_emitir`. Assim, chamada direta dessas operações também permite preencher uma futura, respeitadas suas outras guardas e condições de alteração. (`app/ponto/portas/celula.py:1052`; `app/ponto/portas/celula.py:1061`; `app/ponto/portas/celula.py:1065`; `app/ponto/portas/celula.py:1070`; `app/ponto/portas/celula.py:905`)
+
+Isso demonstra possibilidade estática; chamador de produção fornecendo uma futura, execução desse caminho e existência de futura carimbada em produção: **[nao verificado]**.
+
+A regeneração reescreve trabalho/FK/DNA e marcas de regeneração, sem incluir ata/veredito/julgada_em no save; o rejulgamento pula futuras. Portanto pode **conservar** um julgamento previamente preenchido sem o produzir por esse ato. (`app/ponto/portas/celula.py:272`; `app/ponto/portas/celula.py:276`; `app/ponto/portas/celula.py:431`)
+
+A matriz anexa diverge da cópia no ramo fora de vigência: aqui ele só grava `trabalha` e `dna`, conservando a geradora; não grava FK nula. (`app/ponto/portas/celula.py:238`; `app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:245`)
+
+## 12/11 15:36 · sessao a5e0c3951f1e · - · - · origem=Ronald (tmux)
+
+D7 não comprova célula ausente para nenhum dos dois vínculos. O dado informa apenas `ec#489 col574 celulas_futuras_dela=236` e `ec#955 col203 celulas_futuras_dela=0`; o predicado exato desse contador não foi verificado, pois o código de `sonda_numeros.py` não está disponível. [nao verificado]
+
+A célula pertence à identidade **colaborador/data**, com unicidade definida em `app/escala/models.py:1833`. Portanto, zero células atribuídas à EC não demonstra zero células da pessoa nas mesmas datas: elas podem existir com outra geradora ou geradora nula; quais existem para esses IDs permanece [nao verificado].
+
+Na cópia, o gerador seleciona somente ECs `ativa=True` (`app/ponto/portas/celula.py:829`), depois exige cobertura (`app/ponto/portas/celula.py:849`), consulta células por pessoa/data e cria ausentes (`app/ponto/portas/celula.py:840`, `app/ponto/portas/celula.py:852`, `app/ponto/portas/celula.py:853`). A autoridade admite EC inativa com fim declarado e considera início/fim inclusivos (`app/escala/alimentacao.py:196`, `app/escala/alimentacao.py:214`). Assim, a exclusão dessas ECs pelo gerador é demonstrável; ocorrência concreta de ausência por dia não foi medida no stdout fornecido. [nao verificado quanto à ocorrência]
+
+O comando usa por padrão a união das competências correntes das empresas ativas (`app/ponto/management/commands/gerar_celulas.py:290`, `app/ponto/management/commands/gerar_celulas.py:291`) e chama essa porta (`app/ponto/management/commands/gerar_celulas.py:310`). O stdout não fornece datas ausentes, células de outras geradoras, janela efetivamente examinada para D7 ou escolha de autoridade por dia. [nao verificado]
+
+**Divergência material do anexo:** `cadastro_futuro.py` e `vigia_cadastro_futuro.py` não apareceram na cópia pesquisada; atribuir-lhes comportamento nesta árvore fica [nao verificado]. Além disso, o gerador desta cópia reescreve células existentes de hoje/futuro quando desenho/geradora mudam (`app/ponto/portas/celula.py:870`, `app/ponto/portas/celula.py:872`, `app/ponto/portas/celula.py:876`), diferentemente da conservação descrita na matriz.
 
 ## 12/11 15:32 · sessao d123cf6bebfd · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · leitura · origem=Code
 
@@ -944,152 +1022,4 @@ Consolidado enviado ao pai, com referências físicas dos anexos.
 - LASTRO-FOLGA permanece sem reconciliação; os planos ORDEM-ATE-O-ZERO e RAIA-2 entram mecanicamente, enquanto META é excluído explicitamente. (`app/docs/BACKLOG.md:1812`, `:1883`, `:1906`, `:2406`; `app/docs/RELATO.md:175`; `contrato_item3_v6.txt:20`, `:22`)
 - Não bloqueia: a fórmula esquece descontar três IDs fora do bloco, mas o script já desconta; sufixos geram NAO SEI determinístico no matcher que o contrato manda preservar. (`contrato_item3_v6.txt:4`, `:10`, `:22–23`, `:44`, `:46`; `semente_item3_v6.py:72`; `bin/disjuntor.py:1688–1695`)
 
-## 12/11 14:54 · sessao 4b2f9e7f47af · - · - · origem=Ronald (tmux)
-
-Eu separaria assim:
-
-1. **Novo bloqueante normativo:** exclusão geral por `_item_fechado` antes da reconciliação por ID. A v6:17,21 autoriza descartar fechadas pela coluna sem inventariá-las como pousadas; a semente:40–41 executa isso. O predicado atual também aceita tachado da descrição; `bin/hook_stop_fila1.py:168`. Isso não demonstra que alguma das 208 fechadas esteja indevidamente excluída — pouso delas: **[nao verificado]** —, mas o contrato permite exclusão sem a prova por ID exigida pelo aval. A v6:12 declara a mudança do censo e não resolve essa definição da semente. Corrigir exige reconciliar os IDs ou obter autorização para o critério por estado.
-
-2. **ESMERIL-SEM-INSTANTE:** achado herdado **ABERTO**, com pouso documental já apontado pela leitura v5; `item3_contrato_v5.r`, seção 4; `app/docs/RELATO.md:1005`. Se permanece em ORDEM, contraria “não pousada”, mas a correção por ID é inequívoca; não é novo dilema contratual.
-
-3. **Identidades ausentes:** **ABERTO operacional**, sem contar como novo bloqueante contratual pelo limiar solicitado. O contrato exige identidade única; v6:3. A semente recusa a inexistência; `semente_item3_v6.py:56–58`, `:85`. O contador fechar não substitui essa guarda. Não há licença contratual para omitir esses IDs silenciosamente.
-
-4. **APP:** **ABERTO herdado**, agora com tentativa explícita de reinterpretação. A v6:30 reduz a LASTRO a precedência “antes de O168/LASTRO” registrada em `app/docs/BACKLOG.md:1916`; autorização nova para isso: **[nao verificado]**. Apresentaria no item 1 e não como defeito novo no item 2. Se o total final incluir qualquer aberto que requer aval, soma mais um.
-
-5. **V5 integral ausente:** não contar como bloqueante; registrar detalhes herdados não demonstrados como **[nao verificado]**.
-
-Portanto: **1 novo bloqueante** pelo critério estrito do item 2; **APP permanece aberto** e pode elevar para **2 impedimentos de fechamento** se o veredito contabilizar também os herdados que dependem de aval.
-
-## 12/11 14:52 · sessao 211c513607a0 · - · - · origem=Ronald (tmux)
-
-A trilha fornecida não identifica o escritor de `respondida_em` de nenhuma das 143 perguntas: **143 em SEM TRILHA, 17 colabs**; isso é conclusão sobre a suficiência do dado fornecido, não atribuição histórica. [não verificado]
-
-- `pergunta_emitida` é gravado no nascimento, em `app/chamados/models.py:3026`, após inserir a pergunta em `app/chamados/models.py:3015`; esse log não descreve escrita posterior de resposta.
-- `carimbo_desfeito_por_lastro` identifica a remoção do carimbo de materialização, em `app/chamados/services/relavra_via.py:244`, `app/chamados/services/relavra_via.py:246` e `app/chamados/services/relavra_via.py:248`. O antes/depois contém `materializada_em` e `via_resolucao`, não o ato que gravou `respondida_em`.
-- A remoção chama `PerguntaDisputa.descarimbar`, que salva apenas `via_resolucao`, `materializada_em` e `materializada_por`, em `app/chamados/models.py:3209` e `app/chamados/models.py:3213`. Logo, o removedor não é o escritor da resposta.
-- `chamado_encerrado` não identifica escritor único: é usado por `app/chamados/services/disputa_emissao.py:2058` e `app/chamados/services/materializacao.py:1269`.
-- `sem_turno_aberto` tem lavrador atual em `app/chamados/reconciliador.py:341` e `app/chamados/reconciliador.py:406`, mas esse caminho não pede escrita de resposta: chama `carimbar` sem `resposta`. O comentário do bloco removido não prova autoria dos cinco PKs em produção, em `app/chamados/reconciliador.py:402`. Atribuir esses cinco ao escritor de `respondida_em` seria [não verificado].
-- Igualdade entre `materializada_em` e `respondida_em`, bem como contagens de logs por disputa, não fornece identidade do ato escritor por PK. [não verificado]
-
-Inventário das portas API/web e suas assinaturas:
-
-| Porta | Escritor efetivo | Trilha e campos |
-|---|---|---|
-| Web `app/chamados/views.py:1265`, `app/chamados/views.py:1283` | `app/chamados/services/disputa_emissao.py:1467` | Core recusa vazio em `:1432–1434`; grava texto+timestamp em `:1467–1469`/`:1508`; decisão `resposta` em `:1511`; log `resp_pergunta_gravada`/`PerguntaDisputa` em `:1529`. |
-| API `app/api/views.py:2614`, `app/api/views.py:2620` | Mesmo core | API recusa vazio em `app/api/views.py:2615`; logs `resp_pergunta_recusada`/`resp_pergunta_ok` via `app/api/views.py:2594`, `app/api/views.py:2624`; modelo `PerguntaDisputa`. |
-| Correção admin `app/chamados/services/acoes_disputa.py:371` | Mesmo core | Texto HH:MM obrigatório em `:336`; log adicional `corrigir_resposta_admin` em `:375`; depois valida em `:379`. |
-| Declaração de horário `app/chamados/services/declaracao_texto.py:419`, `app/chamados/services/declaracao_texto.py:693` | Mesmo core | Resposta passa pelo mesmo escritor e sua decisão/log; notas em `app/chamados/services/declaracao_texto.py:423`. |
-| Upload foto `app/api/views.py:856`, `app/api/views_core.py:840` → `app/api/foto_recebida.py:48` | `app/chamados/services/disputa_emissao.py:1652` | Texto constante não vazio em `app/api/foto_recebida.py:25`; grava par em `:1652–1655`; decisão `resposta` com motivo automático em `:1656`; sem log próprio nesse helper. |
-| Cura limbo `app/chamados/management/commands/curar_perguntas_em_limbo.py:67` | `app/chamados/services/disputa_emissao.py:1674` | Exige texto existente e timestamp nulo em `:1670`; salva só timestamp em `:1676`; decisão `resposta` em `:1677`; log `carimbar_resposta_pela_trilha`/`PerguntaDisputa` em `:1679`. |
-
-Detalhes relevantes ao inventário do agente principal:
-
-- `responder_automaticamente` não valida se seu argumento `texto` é vazio; o único chamador executável encontrado passa a constante não vazia da foto. `app/chamados/services/disputa_emissao.py:1647`, `app/chamados/services/disputa_emissao.py:1652`, `app/api/foto_recebida.py:25`, `app/api/foto_recebida.py:48`.
-- O core limpa validação velha junto à resposta (`validada_em`, `validada_por`) em `app/chamados/services/disputa_emissao.py:1471`, `app/chamados/services/disputa_emissao.py:1480`; limpa carimbo sem lastro através de `reabrir_por_resposta` em `app/chamados/services/disputa_emissao.py:1485`; grava log adicional `validacao_desfeita_por_resposta` quando aplicável em `app/chamados/services/disputa_emissao.py:1520`.
-- `PerguntaDisputa.carimbar` só atribui `respondida_em` se `resposta` foi pedida e o texto existente não é vazio, em `app/chamados/models.py:3131`. Não copia texto. Atribui timestamp em `:3133`; se `resposta='validar'`, atribui `validada_em`/`validada_por` em `:3135`; sempre escreve materialização/via em `:3130`; pode lavrar `veredito_lavrado`, `julgado_em`, `janela_expira_em` em `:3150`; salva em `:3153`. Não grava decisão nem LogAuditoria próprios nesse método.
-- Chamadores que pedem resposta ao carimbo: absorção de ausência em `app/chamados/services/materializacao.py:567` (`validar`, decisão `absorcao` em `:569`); materialização em `app/chamados/services/materializacao.py:1283` (`validar`, lavra); resolução por chamado em `app/chamados/services/disputa_emissao.py:1986` (`validar`, lavra); fecho sem credor em `app/chamados/services/disputa_emissao.py:2060` (`responder`, log `fecho_sem_credor` em `:2063`).
-- Nascimento genérico aceita `**campos`, insere e registra as assinaturas recebidas, em `app/chamados/models.py:3015`, `app/chamados/models.py:3018`, `app/chamados/models.py:3020`. É um caminho potencial de entrada de `respondida_em`; chamadas concretas com esse campo precisam ser verificadas pelo inventário principal.
-- O método geral `PerguntaDisputa.save` apenas deriva identidade na inserção e chama `super().save` dentro de transação; não fabrica resposta/timestamp, em `app/chamados/models.py:3414`, `app/chamados/models.py:3421`, `app/chamados/models.py:3424`.
-- O próprio código prevê projeção antiga sem linha de decisão: `MOTIVO_PROJECAO_SEM_LINHA`, em `app/chamados/models.py:3912`; descrição em `app/chamados/models.py:3918`; recuperação de resposta em `app/chamados/models.py:3932`. Portanto, ausência de decisões não exclui escritores históricos por si só.
-- Comentário que reconhece carimbo antigo sem texto em `app/chamados/services/disputa_emissao.py:2053` é evidência do histórico descrito no código; não comprova que esse escritor produziu qualquer PK da sonda. [não verificado]
-
-## 12/11 14:52 · sessao 939b40b206eb · - · - · origem=Ronald (tmux)
-
-Leitores que decidem usando `respondida_em`/`resposta_colab`:
-
-| Leitor | Decisão |
-|---|---|
-| `app/chamados/juizes.py:1510` e `:1515` | `texto_vazio` usa `(t or '').strip()`; `respondida_sem_texto` exige carimbo não nulo e texto vazio. |
-| `app/chamados/juizes.py:1375` e `:1407` | Projeção temporal corta resposta futura; vitalidade dá precedência à resposta somente com carimbo **e texto**. |
-| `app/chamados/models.py:3349` | Espelho SQL `q_vivas` considera resposta com carimbo e texto diferente de `''`/NULL; a decisão final continua no juiz. |
-| `app/chamados/models.py:3042` | `estado`: validada/materializada prevalecem; nos demais ramos o carimbo sozinho distingue PENDENTE/RESPONDIDA (`:3046`, `:3049`). |
-| `app/chamados/models.py:3497` | Propriedade `respondida` é somente `respondida_em is not None`. |
-| `app/chamados/models.py:1843` | `respostas_sem_veredito` inclui sem validação/materialização quando existe carimbo **ou** texto, respeitando tranca. |
-| `app/chamados/models.py:1854` | `pode_fechar` exige ausência de respostas sem veredito e de fio vivo. |
-| `app/chamados/services/pergunta_no_app.py:69` | **App:** viva com carimbo entra em `historico`; apenas carimbo nulo + disputa aberta entra em `pendentes` (`:71-75`). |
-| `app/chamados/services/pergunta_no_app.py:90` | Badge/contador usam tamanho de `pendentes` (`:91`, `:98-103`). |
-| `app/api/views.py:2530` | API lê essa consulta; `aguarda_admin` depende de estado RESPONDIDA (`:2543-2546`); `respondidas` contém histórico com carimbo (`:2570`). |
-| `app/api/views.py:1172` | Oferece solicitar correção quando todas perguntas possuem carimbo e reaberturas <2. |
-| `app/chamados/services/fio.py:340` | Todas respondidas/possibilidade de correção usam carimbo sozinho. |
-| `app/chamados/services/fio.py:660` e `app/chamados/services/acoes_disputa.py:130` | Fechamento manual barra se alguma viva tem carimbo nulo. |
-| `app/chamados/services/validacao.py:393` | Validação exige carimbo; sem ele retorna “Aguardando resposta do colab”. |
-| `app/chamados/services/validacao.py:576` | Recusa sem carimbo retorna “já pendente”. |
-| `app/chamados/services/materializacao.py:1375` | Seleção para materializar: respondida, validada e não materializada. |
-| `app/chamados/services/materializacao.py:835` | Plantio recusa texto vazio como “sem resposta do colaborador”, chamando porta de recusa (`:842`). |
-| `app/chamados/juizes.py:1663` | Perguntas corrigíveis começam pelas carimbadas, depois juiz de lastro/vitalidade. |
-| `app/chamados/juizes.py:1670` | Fila global de validação exige carimbo e exclui texto `''`, depois verifica viva. |
-| `app/chamados/juizes.py:1699` | `declarou_hora` exige texto e exclui escapes maiúsculos/`[descartado`. |
-| `app/chamados/juizes.py:1846`, `:1950`, `:1972` | Texto determina delta, classe e plausibilidade da resposta. |
-| `app/chamados/juizes.py:2020` | Irmãs respondidas não consumidas exigem carimbo, ausência de validação/materialização e texto (`:2024`). |
-| `app/chamados/juizes.py:1651` | Porta alcançável recusa `respondida_sem_texto`. |
-| `app/chamados/services/vigia_fio.py:673` | Viva respondida sem texto recebe causa `b`; `:675` classifica carimbada sob âncora terminal como causa `c`. |
-| `app/chamados/services/vigia_fio.py:783` | Contador seleciona pelo instante do carimbo e conta textos vazios (`:786`). |
-| `app/chamados/views_cobrar.py:169` | Preview de validação seleciona vivas carimbadas; sem elas busca perguntas com carimbo nulo (`:175`). |
-| `app/chamados/views.py:1416` | Reabrir/recobrar conta sem carimbo e vivas; se não há corrigíveis, recobra (`:1424-1425`). |
-| `app/chamados/services/acoes_disputa.py:95` | Mensagem “questionário já pendente” conta carimbo nulo. |
-| `app/chamados/services/cobranca.py:229` | Silenciosos: vivas sem carimbo em disputa aberta. |
-| `app/chamados/services/furo_sem_canal.py:80` | Pergunta aberta para diagnóstico significa carimbo nulo. |
-| `app/chamados/services/becos.py:29` | Pergunta visível para classificar beco exige carimbo nulo e destino não resolvido. |
-| `app/chamados/services/fio.py:1233`, `:1244` | Dedup prioriza texto; protege mérito do admin com texto. |
-| `app/chamados/reconciliador.py:365`, `:1083` | Texto bloqueia cura automática sem turno e resolução automática do marco. |
-| `app/chamados/services/disputa_emissao.py:1821` | Reabrir credor recusa pergunta carimbada; `:1839` reconhece limbo por texto sem carimbo. |
-| `app/chamados/services/disputa_emissao.py:1979` | Protege resposta com texto/carimbo sem materialização de fato contra vassoura automática. |
-| `app/ponto/supra_juiz.py:545`, `:548` | Executor de cobrança sem furo recusa retratação automática se há carimbo em qualquer pergunta ligada. |
-| `app/chamados/services/verbos.py:335`, `:342` | Métrica de resposta pós-cobrança compara carimbo com instante da cobrança. |
-| `app/colaboradores/services/ficha.py:169` | Ficha usa respostas sem veredito; classifica sem resposta quando não está entre essas e não há texto (`:171`). |
-| `app/folha/previa.py:142` | Material disponível para o dia distingue “resposta do colaborador” por texto, depois pergunta viva. |
-
-Templates também tomam decisões pelo carimbo: `app/templates/chamados/partials/_pergunta_card.html:24` mostra “aguardando validação”; `:29` mostra resposta e controles; `app/templates/chamados/partials/_card_atendimento.html:94` mostra “você respondeu”, `:155` escolhe reenviar/enviar; `app/templates/chamados/partials/modal_fio.html:217` exibe bloco de resposta.
-
-Caminhos de entrada e apagamento:
-
-- Core web/API recusa vazio após strip em `app/chamados/services/disputa_emissao.py:1432-1434`, copia texto e carimbo em `:1467-1469`. API ainda recusa vazio na casca em `app/api/views.py:2614-2617`; web chama core em `app/chamados/views.py:1283`.
-- `responder_automaticamente` protege texto existente em `app/chamados/services/disputa_emissao.py:1647`, mas **não valida texto recebido como não vazio**: atribui ambos em `:1652-1653`, salva e registra decisão `resposta` em `:1655-1657`. Chamador histórico das 143 [não verificado].
-- `carimbar_resposta_pela_trilha` só carimba quando já existe texto e não há carimbo: `app/chamados/services/disputa_emissao.py:1670`; registra decisão `resposta` e evento homônimo em `:1677-1681`.
-- Apagador explícito encontrado: `reabrir_para_correcao` zera **texto e carimbo juntos**, além da validação, em `app/chamados/services/disputa_emissao.py:1593`; registra foto `reabertura`/`recusa` antes em `:1615-1628`, aplica update em `:1630-1632`. Portanto esse caminho atual não preserva carimbo deixando texto vazio.
-- Recusa do admin chama essa porta com ato `recusa` em `app/chamados/services/validacao.py:593-594`, registra evento e `LogAuditoria` `recusar_pergunta/PerguntaDisputa` em `:602-610`.
-
-Aplicação às 143: pelo código da consulta, perguntas vivas com carimbo não nulo seguem para histórico, mesmo com texto vazio (`app/chamados/services/pergunta_no_app.py:69-75`); a API as inclui em `respondidas` e `historico` (`app/api/views.py:2559-2571`). O anexo não contém a medição efetiva do app de cada colaborador, portanto resultado real por colaborador e garantia “app não muda” [não verificado].
-
-## 12/11 14:52 · sessao dd082d0c62f2 · - · - · origem=Ronald (tmux)
-
-Inventário dos escritores de `respondida_em` encontrados no código executável:
-
-| Escritor | Persistência e campos juntos | Trilha |
-|---|---|---|
-| `app/chamados/services/disputa_emissao.py:1468`, `responder_pergunta_disputa_core` | `resposta_colab` + `respondida_em`; limpa validação anterior e eventual carimbo sem lastro; salva em `:1508`. Texto vazio é recusado em `:1432–1434`. | `DecisaoPergunta.RESPOSTA` com instante/texto/autor em `:1511`; `resp_pergunta_gravada / PerguntaDisputa` em `:1529`; eventual `validacao_desfeita_por_resposta` em `:1520`; followup em `:1555`. |
-| `app/chamados/services/disputa_emissao.py:1653`, `responder_automaticamente` | `resposta_colab=texto` + `respondida_em=instante`, save em `:1655`. Não valida que o argumento `texto` seja não vazio; apenas preserva texto que já existia em `:1647`. | `DecisaoPergunta.RESPOSTA` em `:1656`, motivo “resposta automatica…”. |
-| `app/chamados/services/disputa_emissao.py:1674`, `carimbar_resposta_pela_trilha` | Salva somente `respondida_em` em `:1676`; exige texto já presente em `:1670`. | `DecisaoPergunta.RESPOSTA` em `:1677`; `carimbar_resposta_pela_trilha / PerguntaDisputa` em `:1679`. |
-| `app/chamados/models.py:3133`, `PerguntaDisputa.carimbar` | Só escreve se `resposta` foi solicitada, texto não é vazio e carimbo estava nulo (`:3131–3134`). Sempre salva materialização/autor/via (`:3129`); com `resposta='validar'`, acrescenta validação/autor quando nulos (`:3135–3138`); opcionalmente veredito/julgado/janela (`:3150–3153`). | A porta não registra decisão nem log de sucesso em seu corpo (`:3104–3158`); depende do chamador. |
-| `app/chamados/models.py:1567`, `ressuscitar_perguntas` | Zera `respondida_em`, validação/autor e os três campos do carimbo por `descarimbar_em_lote`; update real em `:3265–3267`. Só seleciona resposta null/vazia em `:1487`. | Preserva decisões legadas em `:1564`; log `perguntas_ressuscitadas / ChamadoColaborador` em `:1590`, com pks em `:1593–1594`. |
-| `app/chamados/services/disputa_emissao.py:1593`, `reabrir_para_correcao` | Zera conjuntamente `respondida_em`, validação/autor e texto; update em `:1632`, ou `descarimbar_em_lote` em `:1630` quando desfaz absorção. | Decisão com foto anterior em `:1615–1628`, ato padrão `reabertura`, podendo ser `recusa` pelo parâmetro (`:1562`, `:1597–1598`). |
-
-Chamadores da porta `carimbar` que podem escrever `respondida_em`:
-
-| Chamador | Assinatura |
-|---|---|
-| `app/chamados/services/materializacao.py:567`, `_materializar_ausencia_de_resposta` | `resposta='validar'`, via declaração ou ausência (`:555`); `DecisaoPergunta.ABSORCAO` com escape/ausência/texto em `:569–572`. |
-| `app/chamados/services/materializacao.py:1283`, `_materializar_uma` | `resposta='validar'`, `lavrar_veredito=True`; via declaração ou via do fato (`:1267–1284`); não registra decisão/log de sucesso nesse trecho. |
-| `app/chamados/services/disputa_emissao.py:1986`, resolução pelo encerramento | `resposta='validar'`, `lavrar_veredito=True`; via do fato. Não registra decisão/log por pergunta nesse ramo (`:1986–1990`). |
-| `app/chamados/services/disputa_emissao.py:2060`, ramo sem credor | `resposta='responder'`; log `fecho_sem_credor / PerguntaDisputa` em `:2063`, antes/depois com `respondida_em`, materialização, via e presença de texto em `:2051–2052`, `:2068–2070`. |
-
-Outras atribuições são somente em memória: cópia usada para julgar ressuscitação em `app/chamados/models.py:1509`; rollback da porta em `app/chamados/models.py:3164`.
-
-API e command delegam: foto fornece texto fixo não vazio em `app/api/foto_recebida.py:25`, chama automático em `:48`; cura do limbo chama a porta pela trilha em `app/chamados/management/commands/curar_perguntas_em_limbo.py:67` e reabertura em `:69`. As migrations de dados consultadas escrevem identidade em `app/chamados/migrations/0051_decisao_pergunta.py:25–27` e verificam colisões em `0053_pergunta_unica_por_familia.py:36–46`; `respondida_em` aparece como criação de campo em `0014_perguntadisputa.py:25`.
-
-Pontos decisivos para o casamento:
-
-- `carimbo_desfeito_por_lastro` identifica o **desfazedor da materialização**, cujo log é emitido em `app/chamados/services/relavra_via.py:248`; a foto anterior só inclui via/materialização em `:244–245`, e a porta conserva resposta/validação conforme `:206–207`. Não identifica o escritor anterior de `respondida_em`.
-- Via anterior `sem_turno_aberto` tampouco identifica escritor da resposta: `app/chamados/reconciliador.py:406` chama `carimbar` sem `resposta=...`; comentário documenta a retirada do antigo bloco em `:402–403`.
-- Via `chamado_encerrado` não é assinatura exclusiva: pode sair de `_materializar_uma` em `app/chamados/services/materializacao.py:1274`, do ramo sem credor em `app/chamados/services/disputa_emissao.py:2059`, além da derivação por fato em `:1986`.
-- Carimbos históricos sem decisões são previstos por `DecisaoPergunta.linhas_da_projecao_sem_linha`, que só projeta resposta atual/instante e motivo genérico em `app/chamados/models.py:3912–3935`. Essa projeção não recupera o escritor histórico.
-
-Caminho do vazio:
-
-- O core rejeita envio vazio (`disputa_emissao.py:1433`); a porta de materialização exige texto (`models.py:3131`); a cura pela trilha exige texto (`disputa_emissao.py:1670`).
-- O automático aceita argumento vazio em sua assinatura/corpo (`disputa_emissao.py:1638–1656`), mas seu chamador encontrado entrega a constante não vazia (`api/foto_recebida.py:25`, `:48`).
-- O apagador encontrado limpa texto **e** `respondida_em` juntos (`disputa_emissao.py:1593`), portanto não explica sozinho o par vazio/carimbado.
-- `data_conferida_em` tem escritor separado, `app/chamados/services/validacao.py:664`, com save apenas de conferência/autor em `:666`.
-- Atribuição histórica de cada uma das 143 a um desses caminhos: [não verificado].
-
-_4314 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4318 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
