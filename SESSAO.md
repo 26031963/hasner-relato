@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 12:46:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (457.4 MB). Acoes na janela: **1195**.
+**Medido em 12/11/2026 12:51:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (457.5 MB). Acoes na janela: **1201**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:46:53 | Bash | Reword recado, relax selo to instruction verbs, rerun | `cd /home/ronald/wt-travas-item2-113819 && python3 - <<'EOF' p='bin/disjuntor.py'; s=open(p).read() a=""" 'verificador procedente \| obra PARADA: o Code poe no topo do RELATO a PERGUNTA DE DESENHO (lei=<%s>, a ' 'pergunta sem juiz, <arquivo>:<linha>); as linhas `DESENHO %s:` e `ERRO-BOBO %s:` que liberam sao do Ronald ' '(B3-SO-COM-LIBERA-B3), como o rearma (bin/disjuntor.py --rearma-b3 %s "<motivo ...` |
+| 12:46:43 | Bash | Show mensagem_b3 | `cd /home/ronald/wt-travas-item2-113819 && sed -n 1199,1211p bin/disjuntor.py` |
+| 12:46:34 | Bash | Find rc 9 and mensagem_b3 body | `cd /home/ronald/wt-travas-item2-113819 && /bin/grep -n "return 9\b" bin/tests/test_disjuntor.sh \| head; /bin/grep -n "_recado_auto\\|def mensagem_b3" bin/disjuntor.py \| head; sed -n "$(/bin/grep -n 'def mensagem_b3' bin/disjuntor.py \| cut -d: -f1),+22p" bin/disjuntor.py` |
+| 12:46:29 | Bash | Read caso 6 and rc 9 site | `cd /home/ronald/wt-travas-item2-113819 && sed -n 1232,1262p bin/tests/test_disjuntor.sh; /bin/grep -n "return 9$\\|return 9 \\|\\|\\| return 9" bin/tests/test_disjuntor.sh \| head` |
+| 12:46:26 | Bash | Find selo checks on recado text | `cd /home/ronald/wt-travas-item2-113819 && /bin/grep -n "ERRO-BOBO\\|erro bobo\\|2 primeiras" bin/tests/test_disjuntor.sh \| head -40` |
+| 12:46:23 | Bash | Check LASTRO censo producer and selo b3 expectations | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA/c17/ && ls -la censo_hhmm* ; tail -5 censo_hhmm.log 2>/dev/null; wc -c censo_hhmm.r 2>/dev/null; cd /home/ronald/wt-travas-item2-113819 && sed -n 1025,1045p bin/disjuntor.py; /bin/grep -n "b3)\\|'b3'\\|caso_b3()\\|def caso_b3\\|primeiras linhas\\|PARADA" bin/tests/test_disjuntor.sh \| head -20` |
 | 12:42:36 | Bash | GREEN: cured disjuntor vs selo | `cd /home/ronald/wt-travas-item2-113819 && (bash bin/tests/test_disjuntor.sh > /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item2v4_green.log 2>&1; echo rc=$?); /bin/grep -n 'b3_auto 6\\|b3_auto falhas\\|^disjuntor\\|FALHA' /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item2v4_green.log` |
 | 12:38:15 | Bash | RED: old disjuntor vs new selo assertion | `cd /home/ronald/wt-travas-item2-113819 && cp bin/disjuntor.py /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/disjuntor_cura.py && git show HEAD:bin/disjuntor.py > bin/disjuntor.py && (bash bin/tests/test_disjuntor.sh > /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item2v4_red.log 2>&1; echo rc=$?) ; cp /tmp/claude-1001/-home-ronald-saas-hasner-app/70 ...` |
 | 12:38:10 | Bash | Check copy status and how selo finds disjuntor | `cd /home/ronald/wt-travas-item2-113819 && git status --porcelain && /bin/grep -n 'RAIZ=\\|disjuntor.py' bin/tests/test_disjuntor.sh \| head -5` |
