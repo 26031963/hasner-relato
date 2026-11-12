@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 12:41:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (457.4 MB). Acoes na janela: **1194**.
+**Medido em 12/11/2026 12:46:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (457.4 MB). Acoes na janela: **1195**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:42:36 | Bash | GREEN: cured disjuntor vs selo | `cd /home/ronald/wt-travas-item2-113819 && (bash bin/tests/test_disjuntor.sh > /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item2v4_green.log 2>&1; echo rc=$?); /bin/grep -n 'b3_auto 6\\|b3_auto falhas\\|^disjuntor\\|FALHA' /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item2v4_green.log` |
 | 12:38:15 | Bash | RED: old disjuntor vs new selo assertion | `cd /home/ronald/wt-travas-item2-113819 && cp bin/disjuntor.py /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/disjuntor_cura.py && git show HEAD:bin/disjuntor.py > bin/disjuntor.py && (bash bin/tests/test_disjuntor.sh > /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item2v4_red.log 2>&1; echo rc=$?) ; cp /tmp/claude-1001/-home-ronald-saas-hasner-app/70 ...` |
 | 12:38:10 | Bash | Check copy status and how selo finds disjuntor | `cd /home/ronald/wt-travas-item2-113819 && git status --porcelain && /bin/grep -n 'RAIZ=\\|disjuntor.py' bin/tests/test_disjuntor.sh \| head -5` |
 | 12:37:03 | Bash | Cure recado FORMA and add selo assertion | `cd /home/ronald/wt-travas-item2-113819; python3 - <<'EOF' p='bin/disjuntor.py' s=open(p).read() a="""'B3 %s: %s \| obra PARADA: topo do RELATO com DESENHO (lei + pergunta ' 'arquivo:linha) ou ERRO-BOBO (motivo); proximo verificador final e proxima volta Codex ' 'verificador negados ate la \| %s'""" assert s.count(a)==1 s=s.replace(a,"""'B3 %s: %s \| obra PARADA: o Code poe a PERGUNTA DE DESENHO (l ...` |
