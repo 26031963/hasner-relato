@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 18:55** · publicado em **12/11/2026 18:59** (UTC-3)
+> Ultima resposta processada: **12/11/2026 19:00** · publicado em **12/11/2026 19:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 19:00 · sessao 16931418c3a8 · - · - · origem=Ronald (tmux)
+
+Achados para corrigir ou declarar:
+
+- **Alta:** legado direto `orfas=['08:00']` alcança `h.strftime` e quebra; RED atual cobre somente projeção `None` com `n_orfas`. `ponto/supra_juiz.py:520`.
+- **Alta:** um único dia desconhecido transforma a janela PDF inteira em `None`, apagando identificações conhecidas no contador. `relatorios/pdf_espelho.py:492`.
+- **Alta:** período sem entrada correspondente nas batidas passa a suprimir todos os alertas, ampliando o comportamento anterior. `relatorios/pdf_espelho.py:195`, `relatorios/pdf_espelho.py:990`.
+- **Média:** `_furos_do_dia` mudou de três para quatro posições; três expectativas vizinhas precisam acompanhar. `escala/tests/test_cobparc_rotulo_furos_diarios.py:34`, `:46`, `:50`.
+- **Limite comprovado:** `copy().get`, `dict(ata).get` e `pop` escapam da contagem de `AtaVigiada`; executei os três sem Django: `leituras_acessor=1`, `acessos_crus_ata=0`. Interceptadores atuais: `escala/services/ata.py:68`.
+- **Limite de cobertura:** a catraca dirigida executa tripwire, esmeril e duas portas; não sustenta afirmação de unicidade global. `escala/tests/test_selo_tipo_na_fonte_orfas.py:25`.
+
+Não escrevi arquivos nem executei Django/banco/rede. [nao verificado]
 
 ## 12/11 18:55 · sessao 81eaddfdbeb2 · TRANCA-VIVAS-08 · sonda · origem=Code
 
@@ -1079,59 +1092,4 @@ Não há evidência suficiente para atribuir a briefs futuros ou à linha HAIKU 
 | **Pouso antes do pré-requisito** | **[não verificado]**: anexos e código não provam cronologia de verificação, publicação ou pouso. | [nao verificado]
 | **Campo com dois significados** | **Presente no nome da medida:** `acessos_crus_ata` designa todos os eventos reconhecidos de topo, enquanto o contrato exige acessos fora do acessor. (`bin/leitores_de_chave.py:24`, `bin/leitores_de_chave.py:627`; `contrato.txt:5`, anexo) |
 
-## 12/11 17:32 · sessao d7de2a47bc6a · - · - · origem=Ronald (tmux)
-
-Censo de escritores do HEAD por AST, sem execução do app e sem gravações. A árvore não contém `.git`; a identidade do HEAD informado não pôde ser verificada independentemente `[não verificado]`.
-
-`R = respondida_em`; `T = resposta_colab`.
-
-| arquivo:linha:função | papel | forma/campo | prova do modelo e porta |
-|---|---|---|---|
-| `app/chamados/models.py:1509:ChamadoColaborador._universo_da_ressuscitacao` | ESCRITOR, memória | `_q.respondida_em = None` — R | `_q = copy.copy(p)` em `:1495`; `p` vem de `self.perguntas_que_resolvem` em `:1484`, reverse FK de PerguntaDisputa declarada em `:3415`. Não salva a cópia; simula estado para `pergunta_viva` em `:1510`. |
-| `app/chamados/models.py:1567:ChamadoColaborador.ressuscitar_perguntas` | ESCRITOR, delegação | `PerguntaDisputa.descarimbar_em_lote(..., respondida_em=None)` — R | `alvo` vem da mesma reverse FK em `:1551`. Passa pela porta de descarimbo em lote, não pelo core de resposta. |
-| `app/chamados/models.py:2809:PerguntaDisputa.abrir` | encaminhamento de payload | `**campos` → `_sob_contrato` — R/T se recebidos | Método da classe PerguntaDisputa, encaminha sem selecionar campos. |
-| `app/chamados/models.py:2821:PerguntaDisputa.abrir_conversa` | encaminhamento de payload | `**campos` → `_sob_contrato` — R/T se recebidos | Mesmo modelo; nascimento de conversa. |
-| `app/chamados/models.py:2840:PerguntaDisputa._sob_contrato` | encaminhamento de payload | `cls._nascer(**kw)` — R/T se recebidos | `cls` de PerguntaDisputa; os dois chamadores estão em `:2809/:2821`. |
-| `app/chamados/models.py:3039:PerguntaDisputa._nascer` | ESCRITOR | `p = cls(..., **campos)`; `p.save(force_insert=True)` em `:3042` — R/T | `cls` de PerguntaDisputa. Guarda `recusa_respondida_sem_texto` em `:2864/:2865`. Fora do core de resposta. O código aceita o payload; chamador de produção passando explicitamente R/T no nascimento não foi encontrado. |
-| `app/chamados/models.py:3157:PerguntaDisputa.carimbar` | ESCRITOR | atribuição R; `campos.append('respondida_em')` em `:3158`; `save(update_fields=campos)` em `:3177` | `self` de PerguntaDisputa. Guarda própria exige texto em `:3155`. Fora do core e da função `recusa_respondida_sem_texto`. |
-| `app/chamados/models.py:3188:PerguntaDisputa._desfazer_em_memoria` | ESCRITOR, memória | restaura R a partir de `antes` | `self` de PerguntaDisputa; restauração na recusa/exceção de `carimbar`, chamadas em `:3166/:3169/:3180`. Sem persistência própria. |
-| `app/chamados/models.py:3289:PerguntaDisputa.descarimbar_em_lote` | ESCRITOR | queryset `.update(..., **outros)` termina em `:3291` — R/T conforme payload | Queryset explicitamente `PerguntaDisputa.objects`; recebe R em `:1567` e R/T no caminho `disputa_emissao.py:1630`. Fora do core; HEAD não valida o par aqui. |
-| `app/chamados/models.py:3448:PerguntaDisputa.save` | persistência genérica | `super().save(*args, **kwargs)` — pode persistir R/T | `self` de PerguntaDisputa. HEAD só envolve a persistência em atomic, sem guarda do par (`:3438/:3448`). É infraestrutura comum dos saves, não reúne o caminho `QuerySet.update`. |
-| `app/chamados/services/disputa_emissao.py:1467:responder_pergunta_disputa_core` | ESCRITOR | T em `:1467`, R em `:1468`; `_campos` em `:1469`; `save(update_fields=_campos)` em `:1508` | `p` vem comprovadamente de `PerguntaDisputa.objects` em `chamados/views.py:1239`, passado ao core em `:1283`. É a porta de resposta web/API declarada em `disputa_emissao.py:1425/:1429`; recusa texto vazio em `:1432/:1434`. |
-| `app/chamados/services/disputa_emissao.py:1593:reabrir_para_correcao` | ESCRITOR | `dict(respondida_em=None, ..., resposta_colab='')`; `descarimbar_em_lote(qs, **campos)` em `:1630` ou `qs.update(**campos)` em `:1632` | Chamadores dão queryset explícito de PerguntaDisputa em `validacao.py:593`, `materializacao.py:688`, `curar_perguntas_em_limbo.py:69`. Fora do core; porta de reabertura. |
-| `app/chamados/services/disputa_emissao.py:1657:responder_automaticamente` | ESCRITOR | T em `:1657`, R em `:1658`; `save(update_fields=['resposta_colab','respondida_em'])` em `:1660` | Modelo determinado pelo chamador de foto e seu conjunto de perguntas, não só pelo nome `p`; chamada `api/foto_recebida.py:48`. Guarda comum em `disputa_emissao.py:1655`. Fora do core de resposta web/API. |
-| `app/chamados/services/disputa_emissao.py:1679:carimbar_resposta_pela_trilha` | ESCRITOR | atribui R; `save(update_fields=['respondida_em'])` em `:1681` | O comando obtém os objetos com `PerguntaDisputa.objects.filter(...)` em `curar_perguntas_em_limbo.py:55` e chama em `:67/:68`. Guarda própria em `disputa_emissao.py:1675`. Fora do core e da guarda comum. |
-
-Há um escritor operacional adicional, explicitamente restrito à sombra:
-
-| arquivo:linha:função | papel | forma/campo | prova do modelo |
-|---|---|---|---|
-| `bin/sombra_mascara_pessoal.py:57:<módulo>` | ESCRITOR | `setattr(o, c, novo)` — T | `M=apps.get_model(app,mod)` em `:46`; `o` vem de `M._base_manager` em `:51`; `TEXTO[('chamados','PerguntaDisputa')]` inclui T em `bin/sombra_regras_pessoais.py:85`. |
-| `bin/sombra_mascara_pessoal.py:62:<módulo>` | ESCRITOR | `M._base_manager.bulk_update(lote,list(campos))` — T; lote cheio | Mesma origem acima. |
-| `bin/sombra_mascara_pessoal.py:64:<módulo>` | ESCRITOR | mesmo `bulk_update` — T; sobra | Mesma origem acima. |
-
-O script exige `connection.settings_dict['NAME'] == 'sombra'` em `bin/sombra_mascara_pessoal.py:10`; portanto não prova uma segunda porta viva no banco de produção. A presença do escritor de T no código está comprovada pelas linhas acima.
-
-A função `app/chamados/services/fio.py:1578:recusa_respondida_sem_texto` **não é um escritor de PerguntaDisputa**: instancia apenas `SimpleNamespace` em `:1585`, consulta o predicado e pode levantar em `:1587`. No HEAD, os escritores que a chamam são `_nascer` (`models.py:2864`) e `responder_automaticamente` (`disputa_emissao.py:1655`). O core humano, a trilha, o carimbo e a reabertura têm caminhos distintos nos pontos da tabela. Assim, não há UMA porta que concentre todas as escritas físicas enumeradas.
-
-Casos excluídos após prova:
-
-- `app/chamados/services/explicador.py:78`: `base.update(...)` atualiza dict, não queryset; utiliza T apenas na construção dos textos em `:79/:80`.
-- `app/chamados/veredito_lavrado.py:250`: `PerguntaDisputa.objects.bulk_update(...)` usa `CAMPOS_DA_LAVRA`, definido em `:237` sem R/T.
-- `app/core/reexibir.py:49`: `setattr(obj,campo,valor)` genérico, sem persistência; os chamadores encontrados são `colaboradores/views.py:1097/:1262` e trabalham com Colaborador, não PerguntaDisputa.
-- `app/chamados/services/passivo_validado.py:83`: `getattr(p,c,None)` percorre `CAMPOS_REVERSAO` (`:64/:66`) para um snapshot colocado na saída em `:367`; não há restauração desse snapshot no arquivo.
-- `app/chamados/services/foto_e4b.py:180`: leitura dos dicts antes/depois, não atribuição.
-
-Não houve escritor selecionado somente pelo nome da variável: os escritores da tabela foram atribuídos por classe, queryset/relação, chamador ou registro `apps.get_model`.
-
-Sobre escritores que mudam o desenho:
-
-- `responder_automaticamente` é outra operação persistente de resposta comprovada, chamada por upload de foto em `api/foto_recebida.py:48`; não passa pelo core humano (`disputa_emissao.py:1657/:1660`).
-- `carimbar_resposta_pela_trilha` é outra operação persistente comprovada, chamada por management command com `--apply` em `curar_perguntas_em_limbo.py:64/:68`; não passa pelo core humano.
-- `PerguntaDisputa.carimbar` pode também persistir R (`models.py:3157/:3177`), além do carimbo de materialização.
-- Migrações que obtêm o modelo histórico: `0051_decisao_pergunta.py:23` atualiza somente `colaborador_id` em `:25` e `instancia_marco` em `:27`; `0053_pergunta_unica_por_familia.py:37` somente consulta colisões em `:39/:46`. Os campos R/T em `0014_perguntadisputa.py:24/:25` são declaração de schema. Não foi encontrado escritor de dados R/T nas migrations examinadas.
-- Receivers de PerguntaDisputa fecham beco (`signals.py:229/:240`) ou emitem eventos (`:252/:259`), sem escrita direta do par nesses corpos.
-
-No WIP fornecido, as atribuições e updates listados permanecem; acrescentam-se validações no `save` e no lote. Isso acrescenta uma guarda compartilhada a mais caminhos, mas não transfere as escritas para uma única função — prova no anexo `wip_1b.diff`, hunks de `models.py` iniciados em `@@ -3279` e `@@ -3442`. A execução dos testes e o estado efetivo de produção são `[não verificado]`. [nao verificado]
-
-_4386 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4387 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
