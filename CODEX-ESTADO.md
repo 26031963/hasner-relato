@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:49** · publicado em **12/11/2026 09:50** (UTC-3)
+> Ultima resposta processada: **12/11/2026 09:54** · publicado em **12/11/2026 09:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 09:54 · sessao ec9bb461cbab · - · - · origem=Ronald (tmux)
+
+Confirmação adicional: `git hash-object --stdin`, sem `-w`, confirmou os blobs usados na reconstrução da fixture (`bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:828`, `bin/tests/test_lei_akita.sh:845`).
+
+| Contexto reconstruído | Patch-ids | Comparador antigo | Bytes completos |
+|---|---|---|---|
+| 3 linhas | ambos `eef41b6dc7f223182f6b375487979f6d30ec0357` | iguais | diferentes |
+| 4 linhas | `d05d6ed6fc9a394fc975b679e1d2ff95dfe49b95` / `dc2bd81c57071c4a778df9ca541ed480b4a55ecb` | iguais | diferentes |
+
+A condição de pid igual está demonstrada para contexto três; a fixture não fixa esse contexto nem o verifica expressamente (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:852`). A configuração efetiva e a execução integral do MORDE permanecem **[nao verificado]**.
+
+## 12/11 09:54 · sessao c049468680ad · - · - · origem=Ronald (tmux)
+
+Contraexemplo condicional mais forte: publicado altera `A`; local altera `A` identicamente e também um gitlink `S`. Com configuração que oculte completamente a alteração de submódulo, `log -p` e `show --binary` enxergam somente `A`; os pids e os bytes comparados coincidem, entrando em `DUPLICATAS`. Os comandos não fixam `--ignore-submodules=none`. Ocorrência/configuração efetiva e execução desse cenário: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:424`)
+
+Outro contraexemplo condicional usa `textconv`: além do patch comum `A`, o local altera `F`, mas a conversão de `F` devolve o mesmo conteúdo antes/depois e elimina inteiramente seu diff. Ambos os comandos deixam de desabilitar textconv; se `F` desaparecer nos dois, a igualdade dos bytes não detectará a alteração. A omissão efetiva e a configuração são **[nao verificado]**. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`)
+
+Para as cinco configurações pedidas:
+
+- `diff.noprefix`, `color` e `mnemonicPrefix`: os comandos não fixam esses valores; mudança de representação não demonstra, sozinha, falsa igualdade. Não construí contraexemplo de dispensa provocado apenas por esses três. **[nao verificado]**. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`)
+- `textconv`: candidato de perda de informação descrito acima; `--binary` não é explicitamente acompanhado de `--no-textconv`. (`bin/tests/test_lei_akita.sh:400`)
+- `ext-diff`: não há `--ext-diff` nem `--no-ext-diff`; o comando, isoladamente, não prova execução de filtro externo. A habilitação padrão de externos em `show/log` seria uma afirmação sobre Git que exige qualificação **[nao verificado]** sob a restrição de fontes do usuário. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`)
+
+Os dois lados de `diff_inteiro` passam pelo mesmo comando, no mesmo `repo`; o código não fornece configurações diferentes por lado nem congela a configuração entre subprocessos. Drift real entre chamadas: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:416`)
+
+A cópia não contém repositório Git utilizável; testar `git show HEAD` falhou por ausência de `.git`. Não executei fixtures nem criei arquivos. **[nao verificado]**. [nao verificado]
+
+## 12/11 09:53 · sessao ec9bb461cbab · - · - · origem=Ronald (tmux)
+
+Referências abaixo em `bin/tests/test_lei_akita.sh`, salvo indicação contrária.
+
+- **`lugar` não é mordida vazia com contexto padrão de três linhas.** A base contém dois blocos iguais (`:820`, `:822`); o publicado muda o primeiro `V` (`:828`) e o local muda o segundo (`:845`). Reconstruí os dois patches em memória e executei somente `git patch-id --stable`, sem criar arquivos: ambos deram `eef41b6dc7f223182f6b375487979f6d30ec0357`. Os hunks são `@@ -1,7 +1,7 @@` e `@@ -9,7 +9,7 @@`, ambos com ` a / b / c / -V / +W / d / e / f`. O cabeçalho `index` também difere: `7c92588..aa0c6d0` versus `7c92588..f53da47`; logo `diff_inteiro` distingue ambos (`:400`, `:416`).
+- **Ressalva de configuração:** o código não fixa `-U3` no cálculo de pid (`:390`) nem afirma explicitamente a igualdade dos pids no MORDE (`:852`). Reconstruindo com contexto quatro, os pids passam a `d05d6ed6fc9a394fc975b679e1d2ff95dfe49b95` e `dc2bd81c57071c4a778df9ca541ed480b4a55ecb`: `sep` entra em posições diferentes do contexto. Nesse ambiente a mordida fica vazia. O MORDE apaga variáveis `GIT_`, mas não isola configuração global (`:69`). Configuração e execução em produção: **[nao verificado]**.
+- **Lugar, LF final e binário:** a comparação conserva agora stdout em bytes e usa `--binary`, sem `text=True`, `splitlines()` ou filtro `+/-` (`:395`, `:400`, `:404`). Isso fecha os contraexemplos de perda por filtragem/normalização. A nova fixture cobre lugar (`:845`, `:852`); fixtures específicas de LF final e binário no delta: **não há** (`:813`, `:855`).
+- **C ganhou mordida específica de prosa:** a fixture inclui `Ggg Hhh (armadilha: iii jjj)` (`:457`) e exige `ggg hhh`, proibindo qualquer termo contendo `armadilha` (`:470`). Reintroduzir a célula inteira com prosa faz essa condição falhar; a implementação remove parênteses (`:125`). A borda da célula com vírgula permanece: `app/docs/GLOSSARIO.md:13`, parser `:319`; o literal inteiro com `ADR (...)` continua não acrescentado por esse caminho (`:125`; `app/docs/GLOSSARIO.md:28`).
+- **D ganhou mordida, mas não de cada requisito:** o parser usado pelo instrumento é o helper (`:394`); o MORDE injeta linha válida seguida de `lixo` e exige `PADRAO_ERRO` (`:474`, `:477`). Também exige conservar ambos os SHAs (`:479`). Retirar somente o teste hexadecimal e manter `len(cs) != 2` **sobrevive**: não há caso com dois tokens inválidos (`:362`, `:474`, `:479`). Completude, pertencimento à seleção e stdout vazio continuam sem verificação no helper (`:360`, `:365`). [nao verificado]
+- **Frase final:** agora explica corretamente numerador, denominador e número de dispensas (`:888`): `ENUMERADOS=len(hs)` (`:406`, `:407`), pula ausência de linha (`:419`), pula duplicatas (`:423`) e só depois incrementa `JULGADOS` (`:426`). Porém **“histórico já julgado” continua uma premissa**, não uma prova de julgamento anterior: candidatos vêm de `origin/main` e piso (`:412`); não há consulta a resultado anterior (`:416`, `:424`).
+- **Escritores/leitores:** `DUPLICATAS` é zerada (`:386`), acrescentada (`:424`), lida pelo MORDE (`:850`), emitida (`:871`), traduzida pelo shell para `ja julgado:` (`:879`) e contada na frase (`:888`). `JULGADOS` é zerado (`:407`), incrementado (`:426`), conferido pelo MORDE (`:852`), emitido com `ENUMERADOS` (`:873`) e interpolado na frase (`:888`). O MORDE termina antes da emissão normal/final (`:866`, `:867`); portanto não testa a veracidade da redação humana (`:888`).
+
+## 12/11 09:53 · sessao f284376b3ac7 · - · - · origem=Ronald (tmux)
+
+- `DUPLICATAS`: declarada global e zerada por chamada; recebe `(local[:8], publicado[:12])` antes do `continue`. (`bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:386`, `bin/tests/test_lei_akita.sh:424`, `bin/tests/test_lei_akita.sh:425`)
+- Leitores: MORDE converte em dicionário e exige mapa exato; execução normal emite `PADRAO_DUPLICATA`; shell transforma em `ja julgado:` e conta os registros na frase final. (`bin/tests/test_lei_akita.sh:850`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:871`, `bin/tests/test_lei_akita.sh:872`, `bin/tests/test_lei_akita.sh:879`, `bin/tests/test_lei_akita.sh:888`)
+- `JULGADOS`: zerado juntamente com `ENUMERADOS=len(hs)`; incrementado depois de excluir commits sem linha e duplicatas. MORDE exige quatro; execução normal emite `PADRAO_JULGADOS N de M`; shell interpola na frase final. (`bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:423`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:873`, `bin/tests/test_lei_akita.sh:888`)
+- A frase final é escrita pelo `echo` do ramo `falhas=0`. O pre-push usa o código de saída; a régua captura a saída e a exibe apenas na falha; nenhum desses leitores interpreta os contadores. (`bin/tests/test_lei_akita.sh:887`, `bin/tests/test_lei_akita.sh:888`, `bin/pre-push.sh:38`, `bin/regua.sh:140`, `bin/regua.sh:142`)
+
+**Contagem/texto:** a descrição das populações está corrigida: N conta commits com linha que não foram dispensados; M conta todos os enumerados em `head ^origin/main`, respeitado o piso; duplicatas são contadas pelos registros emitidos. (`bin/tests/test_lei_akita.sh:383`, `bin/tests/test_lei_akita.sh:406`, `bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:424`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:872`, `bin/tests/test_lei_akita.sh:888`)
+
+**“Histórico já julgado” continua sem prova e não é universalmente verdadeiro:** candidatos publicados são todos os patches de `origin/main` desde o piso, sem checagem de mensagem ou julgamento anterior. Um publicado sem linha `LEI-AKITA:` não seria julgado por esse instrumento, mas ainda pode dispensar um local com o mesmo patch e linha inválida; logo, “publicado” não implica “já julgado”. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:422`, `bin/tests/test_lei_akita.sh:424`)
+
+A afirmação de “14 duplicatas reais [...] iguais byte a byte” está apenas no comentário; comprovação pelos anexos fornecidos: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:399`)
 
 ## 12/11 09:49 · sessao 06c5cff16f72 · PUSH-SEM-REGRAVAR · verificador · origem=Code
 
@@ -533,63 +585,4 @@ Complemento útil: configuração prod/saas declara `NoStoreHTMLMiddleware` em `
 
 3. **O repetido fica sem classificação.** “Sem resposta ou sem arquivo:linha = conta 0 achados” classifica os dois primeiros casos. Um achado correto que apenas repete o censo não recebe destino explícito; conferir no arquivo não demonstra novidade. (`contrato.txt:1`). A distinção importa porque a pergunta autorizada é precisamente o que “o censo não viu”. (`aval_fable_revisor_de_desenho_1211.txt:3`).
 
-## 12/11 09:28 · sessao b63c886da997 · - · - · origem=Ronald (tmux)
-
-- **`bater_ponto.html` não é o template da rota `/ponto/bater/`.** A URL `bater/` chama `views.bater_ponto`; `bater-v2/` chama a mesma view com `ui_v2=True` (`app/ponto/urls.py:11-12`). A view renderiza `ponto/bater_ponto_v2.html` no ramo v2; no outro ramo usa `_template_triagem(context)`, que pode devolver `ponto/triagem/apto.html` (`app/ponto/views.py:225-235`, `app/ponto/views.py:356-358`).
-
-- **As referências executáveis literais encontradas ao arquivo apagado são verificadores de fonte:** `app/scripts/check_a_lei_batida.py:20-23` e `app/tools/check_frontend_urls.py:29`. O patch fornecido remove exatamente essas entradas, além de apagar o template; não altera `ponto/views.py`, `ponto/urls.py` nem `sw.js` (anexo `diff_v6_vs_pre.patch`, hunks desses arquivos). Referências dinâmicas não identificadas pela busca literal: [nao verificado].
-
-- **O template apagado nunca esteve nessa lista de precache.** `STATIC_CACHE` contém somente `/static/pwa.js`, `/static/manifest.json`, `/static/icons/icon-192.png` e `/static/icons/icon-512.png` (`app/static/sw.js:3-8`). O `cache.addAll` usa essa lista (`app/static/sw.js:10-13`). A remoção de `bater_ponto.html` não remove entrada alguma dela; o patch não modifica `sw.js` (anexo `diff_v6_vs_pre.patch`).
-
-- **Não há redirect offline para `bater_ponto.html`.** O fallback do SW procura a própria request e devolve `Response.error()` se não encontra cópia (`app/static/sw.js:29-30`, `app/static/sw.js:45-50`). O redirect após sucesso offline do apto aponta para `core:dashboard`, assim como seu link “Ir para o início” (`app/templates/ponto/triagem/apto.html:115`, `app/templates/ponto/triagem/apto.html:292-299`). O patch mantém o destino `core:dashboard` no hunk `@@ -263,41 +270,41 @@`.
-
-- **A navegação HTML retorna antes do trecho que gravaria home/bater no cache.** `mode === 'navigate'` executa fetch com fallback e retorna (`app/static/sw.js:45-50`); o `comCache` com `cache.put` aparece depois (`app/static/sw.js:67-79`). Assim, esse `cache.put` não é atingido pelas navegações usuais; aparência efetiva do erro de rede no Safari: [nao verificado].
-
-- **A fila offline usa IndexedDB, não uma chave de localStorage:** banco `juliani-offline`, versão `2`; store `batidas_pendentes`, chave primária `id` com `autoIncrement` (`app/static/pwa.js:50-54`). O escritor insere com `add` (`app/static/pwa.js:107-122`); sync lê por `getAll` (`app/static/pwa.js:126-134`), remove após sucesso (`app/static/pwa.js:158-164`) e também após HTTP 400 (`app/static/pwa.js:166-174`); indicador lê `count` (`app/static/pwa.js:184-192`).
-
-- **Os chamadores de escrita pre-v6 são:** v2 no catch de rede (`app/templates/ponto/bater_ponto_v2.html:333`), v2 explicitamente offline (`app/templates/ponto/bater_ponto_v2.html:346`), apto offline (`app/templates/ponto/triagem/apto.html:282`) e os dois caminhos do template apagado, sem renderizador encontrado (`app/templates/ponto/bater_ponto.html:543`, `app/templates/ponto/bater_ponto.html:597`; cadeia de renderização em `app/ponto/views.py:356-358`).
-
-- **O SW pede sincronização; quem acessa a fila é pwa.js.** O SW envia `SYNC_BATIDAS` aos clientes abertos (`app/static/sw.js:112-125`); pwa.js recebe a mensagem e chama `sincronizarBatidas` (`app/static/pwa.js:15-16`). Também dispara sync ao voltar online e no bootstrap online (`app/static/pwa.js:320`, `app/static/pwa.js:328`).
-
-- **Na v6, nomes e identidade da fila permanecem; muda a espera da escrita.** O patch mantém `indexedDB.open('juliani-offline', 2)` e criação de `batidas_pendentes` no hunk `@@ -45,9 +45,32 @@`; troca a gravação direta pela função `_transacao`, com `complete`, `error` e `abort`, no hunk `@@ -55,37 +78,80 @@`; limita o gap antes do `add` e mostra aviso enquanto o armazenamento permanece pendente no hunk `@@ -104,23 +170,138 @@`. Os leitores/deletores abaixo de `sincronizarBatidas` não são alterados por esse patch (mesmo hunk termina imediatamente antes dessa função).
-
-- **Linhas v6 dos consumidores inalterados, calculadas pelo deslocamento `+181` do patch:** `sincronizarBatidas` começa em `app/static/pwa.js:307`, `getAll` fica em `:313`, deletes em `:343` e `:353`, `count` em `:371`; pre-v6 correspondentes `:126`, `:132`, `:162`, `:172`, `:190` (anexo `diff_v6_vs_pre.patch`, hunk `@@ -308,6 +489,9 @@`, e `app/static/pwa.js:126-190`).
-
-## 12/11 09:28 · sessao 29bcabb8275e · - · - · origem=Ronald (tmux)
-
-- A home do colaborador renderizada é `core/dashboard_colaborador_v2.html` (`app/core/views.py:270-271`); ela estende `base.html` (`app/templates/core/dashboard_colaborador_v2.html:1`).
-- Seus cards são links HTML nativos: Bater (`:31`), Espelho (`:56`), Escala (`:60`), Confirmar Batidas (`:66`), Chamados (`:78`), Justificar (`:82`), Ausência (`:88`), Holerites (`:100`), Benefícios (`:104`), Férias (`:110`), todos em `app/templates/core/dashboard_colaborador_v2.html`. Não registram handlers em `pwa.js`; a navegação efetiva no iPhone é [nao verificado].
-- Os botões “×” e “Mais tarde” do modal usam `onclick` inline para remover `onb-modal`, independentes de `pwa.js` (`app/templates/core/dashboard_colaborador_v2.html:126`, `:138`); modal presente/bloqueando cliques no aparelho é [nao verificado].
-- A home antiga também usa link nativo para Bater (`app/templates/core/dashboard_colaborador.html:39`) e fecha modal por `onclick` inline (`app/templates/core/dashboard_colaborador.html:187`, `:199`).
-- `pwa.js` carrega com `defer` em ambas as cascas (`app/templates/base.html:20`; `app/templates/base_app.html:20`). Ajuda/Minha conta têm registro próprio no script inline da casca (`app/templates/base.html:341`, `:345-348`, `:364-370`); dropdowns de `base_app` também têm script separado (`app/templates/base_app.html:99`, `:121-127`).
-- `hasner-ui.js` intercepta clique somente em `.dropdown-toggle`; não é um interceptador universal dos cards (`app/static/js/hasner-ui.js:14-32`). O `<body>` das duas cascas é simples, sem `hx-boost` (`app/templates/base.html:91`; `app/templates/base_app.html:83`).
-- Os botões diretamente criados por `pwa.js` são o convite de notificações: fechar (`app/static/pwa.js:358-364`) e ligar avisos (`app/static/pwa.js:365-374`). Seu nascimento depende de a inicialização ultrapassar `await calcularESalvarGap()` (`app/static/pwa.js:323-340`). A v6 troca essa espera por `_noTeto` no hunk do patch `app/static/pwa.js @@ -323,7 +507,8`.
-- O relógio da home possui script próprio: offline chama fallback local e retorna (`app/templates/core/dashboard_colaborador_v2.html:143-160`, particularmente `:153`); `AbortController` está dentro de `try` (`:154-157`).
-- Optional chaining já existia no `pwa.js` pré-v6: `event.data?.type` (`app/static/pwa.js:16`), `req.result?.valor ?? null` (`:78`), extração CSRF (`:140`, `:245`, `:261`, `:403`). Compatibilidade exata com a versão iOS do aparelho é [nao verificado].
-- A inicialização assíncrona não é top-level `await`: é uma IIFE `async` (`app/static/pwa.js:323-346`). As chamadas a câmera introduzidas pela v6 estão em funções executadas sob `_noTeto`, conforme os hunks fornecidos; sua execução real no Safari é [nao verificado].
-
-## 12/11 09:27 · sessao d20c4f297a46 · - · - · origem=Ronald (tmux)
-
-Dois achados introduzidos:
-
-1. **Feriado pode trocar a geradora sem mudança de vínculo.** O serviço percorre todos os vínculos do colaborador e regenera as mesmas datas por cada um. Com vínculos sobrepostos declarados, vence a ordem de iteração. (`ponto/services/cadastro_futuro.py:49`, `ponto/services/cadastro_futuro.py:22`, `ponto/services/cadastro_futuro.py:30`) A porta substitui a geradora pela EC recebida quando cobre a data. (`ponto/portas/celula.py:263`) Para esse evento, selecionar datas agrupadas pela geradora atual.
-
-2. **Foto parcial pode produzir fase errada no 12x36.** A sincronização materializa folgas somente em datas com célula `gerada`. (`escala/folgas.py:607`, `escala/folgas.py:623`) Se a única folga do calendário no mês tiver célula editada, ou estiver além da janela de células existentes, ela desaparece da alimentação. O cálculo então pode retornar à âncora, embora a foto mensal devesse determinar a fase. (`escala/models.py:1280`, `escala/models.py:1289`, `escala/models.py:1353`) Preservar células editadas e não criar células fora da janela permite materializar a `FolgaDia` necessária ao cálculo mensal.
-
-Reprodução dinâmica sem banco: **[nao verificado]**. O decorator de `_hpd_pares` foi excluído dos achados por ser preexistente, conforme informação do agente principal. **[nao verificado por diff]**
-
-## 12/11 09:27 · sessao 3d52e2f9914e · - · - · origem=Ronald (tmux)
-
-Não identifiquei erro de compatibilidade ORM nos arquivos novos: campos e tipos da lavra correspondem ao modelo (`ponto/services/vigia_cadastro_futuro.py:38-46`, `inteligencia/models.py:87-96`), os receivers são carregados (`core/apps.py:8-10`) e o HAIKU lê snapshots (`api/views_mensageria.py:647-648`).
-
-Pontos pendentes concretos:
-
-- Cron continua reescrevendo; o novo teste acusa explicitamente essa pendência (`ponto/portas/celula.py:870-877`, `ponto/tests/test_cadastro_futuro_sem_banco.py:619-628`).
-- Falhas de regeneração ainda podem deixar cadastro salvo e futuro antigo: `executar_vinculo` captura a exceção do suplemento (`colaboradores/services/vinculo.py:324-332`); `salvar_tipo` salva antes de capturar a propagação (`escala/services/cadastro_tipo.py:306-323`). O dublê usa transações sem rollback (`ponto/tests/test_cadastro_futuro_sem_banco.py:218`).
-- `lavrar()` não tem teste executável nos novos casos; o fio do command é verificado apenas por AST (`ponto/services/vigia_cadastro_futuro.py:38-46`, `ponto/tests/test_cadastro_futuro_sem_banco.py:583-597`).
-- O fake ignora ordenação, e o teste HAIKU oferece somente um snapshot; escolher a medição mais recente não está demonstrado (`ponto/tests/test_cadastro_futuro_sem_banco.py:105`, `:575-580`).
-- Os contadores novos não fornecem `rotulo`, embora o contrato documentado do endpoint espere esse campo (`ponto/services/vigia_cadastro_futuro.py:33-35`, `api/views_mensageria.py:630-631`).
-
-Comportamento Django real, rollback e custo em frota: [nao verificado]. Nenhum arquivo editado nesta revisão.
-
-_4138 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4142 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
