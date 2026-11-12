@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 14:11:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (465.7 MB). Acoes na janela: **1336**.
+**Medido em 12/11/2026 14:16:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (465.8 MB). Acoes na janela: **1340**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:16:10 | Bash | Read rest of Codex verdict v4 | `cd /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS; tail -c +9000 item3_contrato_v4.r` |
+| 14:16:06 | Bash | Read Codex verdict on contract v4 | `cd /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS; tail -1 item3_contrato_v4.log; wc -c item3_contrato_v4.r; head -c 9000 item3_contrato_v4.r` |
+| 14:12:18 | Bash | Publish C2 result in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') l="SAIDA-NOTURNA-NA-FRENTE item 3 14:12 (sonda C2 rc=0, total_erros=0, conclusiva; logs/E3-LEITORES/quarentena/sonda_c2.r): coorte ATUAL de silencio vencido em COBRANCA = 11 (nao 12; identidade com os 12 historicos NAO verificada); visiveis ao colab no MAIN 0 -> com a b4 3 (col291/#11935, col331/#16 ...` |
+| 14:12:13 | Bash | Read C2 sonda result | `cd /home/ronald/saas-hasner/logs/E3-LEITORES/quarentena; tail -2 sonda_c2.log; head -c 4500 sonda_c2.r` |
 | 14:11:07 | Bash | Publish #10 PARAR line in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') l="PAREI: E3-#10-respondida-sem-texto \| espera Ronald -- sonda C1 rc=0 14:10 (logs/E3-LEITORES/quarentena/sonda_c1.r, total_erros=0, conclusiva): 143 perguntas VIVAS em respondida_sem_texto (17 colabs: col60 1, col191 17, col204 4, col224 9, col310 6, col331 1, col349 10, col437 16, col446 16, col5 ...` |
 | 14:11:03 | Bash | Run C2 sonda (12 chamados x b4) | `/home/ronald/saas-hasner/logs/E3-LEITORES/quarentena/lanca_c2.sh` |
 | 14:10:59 | Bash | Read C1 sonda result | `cd /home/ronald/saas-hasner/logs/E3-LEITORES/quarentena; tail -4 sonda_c1.log; head -c 5000 sonda_c1.r` |
