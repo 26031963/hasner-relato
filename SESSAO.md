@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 02:02:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (422.1 MB). Acoes na janela: **1513**.
+**Medido em 12/11/2026 02:08:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (422.2 MB). Acoes na janela: **1519**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:07:26 | Bash | Add admin label and run pautas tests | `cd /home/ronald/wt-codex-lastro-faixa-sem-default-215253/app && python3 - <<'EOF' p='pautas/semanal.py'; s=open(p).read() a=" 'aprovada_sem_aprovador': 'Aprovada sem quem aprovou',\n}" assert s.count(a)==1 s=s.replace(a," 'aprovada_sem_aprovador': 'Aprovada sem quem aprovou',\n # LASTRO-FAIXA (12/11): contador do vigia de ausencia nascido com a obra.\n 'tipos_ativos_sem_faixa': 'Tipo de ausencia s ...` |
+| 02:07:19 | Bash | See sibling label entries | `cd /home/ronald/wt-codex-lastro-faixa-sem-default-215253/app && /bin/grep -n "range_aberto_sem_ser" pautas/semanal.py; sed -n 49,70p pautas/semanal.py` |
+| 02:07:17 | Bash | Inspect ROTULOS_DE_ADMIN and the counter | `cd /home/ronald/wt-codex-lastro-faixa-sem-default-215253/app && /bin/grep -n 'ROTULOS_DE_ADMIN' pautas/semanal.py \| head -3; /bin/grep -n "ROTULOS_DE_ADMIN = " -A12 pautas/semanal.py \| head -20; /bin/grep -n 'tipos_ativos_sem_faixa' -B3 -A8 ponto/services/vigia_ausencia.py \| head -40` |
+| 02:07:12 | Bash | Failure message and test source | `cd /home/ronald/saas-hasner && sed -n 4134,4150p logs/LASTRO-FAIXA/suite_c8.log; sed -n 55,85p /home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/pautas/tests/test_contract_rotulo_declarado.py` |
+| 02:07:10 | Bash | Show the unexpected failure traceback | `cd /home/ronald/saas-hasner && /bin/grep -n -A25 '^FAIL: test_MORDE_nenhuma_chave_cai_no_generico' logs/LASTRO-FAIXA/suite_c8.log \| head -40` |
+| 02:07:07 | Bash | Read suite result and DIFF state | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bbl9bb84l.output; date +%H:%M; ls /home/ronald/saas-hasner/logs/E4B-ALCANCE/c12_diff.fim 2>&1; ps -p 2485415 -o etime=` |
 | 01:36:37 | Bash | Check suite started | `/usr/bin/sleep 20; tail -5 /home/ronald/saas-hasner/logs/LASTRO-FAIXA/suite_c8.log` |
 | 01:36:34 | Bash | Wait for full suite c8 | `until [ -f /home/ronald/saas-hasner/logs/LASTRO-FAIXA/suite_c8.fim ]; do /usr/bin/sleep 30; done; /bin/grep -E '^(FAIL\|ERROR):' /home/ronald/saas-hasner/logs/LASTRO-FAIXA/suite_c8.log \| head -20; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' /home/ronald/saas-hasner/logs/LASTRO-FAIXA/suite_c8.log \| tail -4` |
 | 01:36:33 | Bash | Record volta result in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='LASTRO c8 commit 2cb1ed522' assert s.count(a)==1 i=s.index(a); j=s.index('\n',i) s=s[:j]+' VOLTA c8 01:35: 5330 testes, so test_05 vermelho (lei pendente), ruff 0, disjuntor 0, 1101 s. Suite inteira pre-opus lancada 01:36 (logs/LASTRO-FAIXA/suite_c8.log).'+s[j:] open(p,'w').write(s) EOF echo ok` |
