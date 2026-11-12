@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 14:31** · publicado em **12/11/2026 14:33** (UTC-3)
+> Ultima resposta processada: **12/11/2026 14:49** · publicado em **12/11/2026 14:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 14:49 · sessao c9775433a019 · - · - · origem=Ronald (tmux)
+
+Censo produtivo da família chamados, somente leitura. Todos os caminhos abaixo usam a tranca viva independentemente de existir `FechamentoMensal` ou de seu status; os corpos listados não consultam FM. (`app/chamados/juizes.py:1028`, `app/chamados/services/competencia_trancada.py:76`, `app/chamados/models.py:1041`.)
+
+| Porta | Leitor, função e chamada | Efeito ao trancar |
+|---|---|---|
+| K7 | `app/chamados/juizes.py:1066`, `dias_trancados` | Calcula C20 por empresa/competência da data do turno; usa `pf.fechado_em` como início do intervalo para procurar toque humano. (`app/chamados/juizes.py:1062`, `app/chamados/juizes.py:1070`.) |
+| K7 | `app/chamados/services/competencia_trancada.py:83`, `medir` | Antes retorna universo vazio; trancada passa a selecionar chamados/disputas elegíveis para encerramento e respostas para Pauta DP. Não carimba perguntas. (`app/chamados/services/competencia_trancada.py:84`, `app/chamados/services/competencia_trancada.py:126`, `app/chamados/services/competencia_trancada.py:147`, `app/chamados/services/competencia_trancada.py:159`.) |
+| K4 | `app/chamados/models.py:1045`, `ChamadoColaborador._dia_em_competencia_trancada` | `renascer` recusa reabertura automática. Cadastro e atos DP nomeados ficam fora. (`app/chamados/models.py:1010`, `app/chamados/models.py:1042`, `app/chamados/catalogo/modulos.py:268`.) |
+| PF direto | `app/chamados/juizes.py:2043`, `dia_em_competencia_trancada` | Itera competências com `reaberto_em IS NULL`; retorna verdadeiro quando a data pertence à janela de folha. Fail-open em exceção. (`app/chamados/juizes.py:2040`, `app/chamados/juizes.py:2045`.) |
+| PF direto | `app/chamados/services/competencia_trancada.py:312`, `medir_frota` | Inclui a competência no contador e chama `medir`; não escreve. (`app/chamados/services/competencia_trancada.py:313`.) |
+| C20 | `app/chamados/juizes.py:1395`, `_pergunta_viva_calc` | Pergunta passa a morta por leitura, antes de considerar a resposta; não planta batida, não absolve nem carimba. (`app/chamados/juizes.py:1393`, `app/chamados/juizes.py:1397`.) |
+| C20 | `app/chamados/models.py:1847`, `DisputaSupervisao.respostas_sem_veredito` | Exclui respostas trancadas da lista que impede fechar a disputa; `ignorar_tranca=True` conserva-as para a Pauta DP. (`app/chamados/models.py:1841`, `app/chamados/models.py:1854`, `app/chamados/services/competencia_trancada.py:114`.) |
+| C20 | `app/chamados/reconciliador.py:668`, `perguntas_absolvidas_pela_celula` | Pula a pergunta, impedindo que a vassoura a carimbe como absolvida permanentemente. (`app/chamados/reconciliador.py:664`.) |
+| C20 | `app/chamados/reconciliador.py:748`, `_dia_fora_do_alcance_c` | Retira a pergunta do alcance novo da cura O261(C): a reemissão nova não age sobre ela. A consulta de entregue acontece antes. (`app/chamados/reconciliador.py:720`, `app/chamados/reconciliador.py:743`, `app/chamados/reconciliador.py:756`.) |
+| C20 | `app/chamados/services/disputa_emissao.py:1970`, `_resolver_perguntas_por_chamado_resolvido` | Pula carimbo definitivo na pergunta morta pela tranca, permitindo que destrancar a devolva. (`app/chamados/services/disputa_emissao.py:1968`.) |
+| C20 lote | `app/chamados/juizes.py:991`, `dia_da_pergunta_trancado` | Avulso delega ao lote de um; conversa não tem dia de turno/competência de fato. (`app/chamados/juizes.py:983`, `app/chamados/juizes.py:989`.) |
+| C20 lote | `app/chamados/juizes.py:1145`, `tranca_da_consulta` | Pré-carrega os resultados por identidade da pergunta; o avulso os lê em `:987`. É alimentação da leitura, sem efeito persistente próprio. (`app/chamados/juizes.py:1125`, `app/chamados/juizes.py:987`.) |
+| C20 lote | `app/chamados/services/tarefa_do_dia.py:422`, `CargaDaTarefa.__init__` | Alimenta conjunto de dias trancados; `_tarefa_pura` devolve razão `competencia_trancada` e nenhuma ação exigível por instância. (`app/chamados/services/tarefa_do_dia.py:195`, `app/chamados/services/tarefa_do_dia.py:198`, `app/chamados/services/tarefa_do_dia.py:202`.) |
+| C20 resultado carregado | `app/chamados/services/carga_pergunta_viva.py:91`, `CargaDaVida.__init__`; `:147`, `CargaDaVida.trancada` | Reutiliza conjunto da tarefa, consultado por C6 na alternativa `carga.trancada(p)`. (`app/chamados/juizes.py:1395`.) |
+
+Leitores do alimentador `tranca_da_consulta`, relevantes para aliases: `pergunta_no_app.perguntas_do_app` chama em `app/chamados/services/pergunta_no_app.py:57`; `_resolver_perguntas_por_chamado_resolvido` pode transformá-lo em `partial` com memo inicial em `app/chamados/services/disputa_emissao.py:1922`, usa-o em `:1942` e abre consulta fresca para fechamento em `:2081`. O resultado filtrado do app é `[p ... if pergunta_viva(p)]`. (`app/chamados/services/pergunta_no_app.py:58`.)
+
+Exceção C20: a tranca só cala se não houver toque humano posterior em `(colab, dia)`. Os três atos são cobrar dia, resolver dia e desarquivar; humano significa usuário presente diferente do sistema; comparação estrita `criado_em > fechado_em`. (`app/chamados/juizes.py:1071`, `app/chamados/juizes.py:1083`, `app/chamados/juizes.py:1237`, `app/chamados/juizes.py:1253`.) Sem data, colaborador ou empresa, retorna falso; conversa não é fato trancável. (`app/chamados/juizes.py:1024`, `app/chamados/juizes.py:989`.) Quantos casos reais têm toque: `[não verificado]`.
+
+O leitor indireto atual de `dia_em_competencia_trancada` é `app/ponto/services/furos_sem_cobranca.py:85`, função `medir`: remove dias trancados da contagem; a própria seleção está limitada à competência atual calculada com `hoje`. (`app/ponto/services/furos_sem_cobranca.py:60`, `app/ponto/services/furos_sem_cobranca.py:61`.)
+
+Campos PF nesta família: `fechado_em` é lido em `app/chamados/juizes.py:1070` (referência do toque) e `app/chamados/services/competencia_trancada.py:105` (chamado resgatado depois da tranca fica com admin). `reaberto_em` é filtro de tranca viva nos dois PF diretos, `app/chamados/juizes.py:2043` e `app/chamados/services/competencia_trancada.py:312`. Escritas desses campos nesta família: nenhuma nos corpos citados; `ativo`/`fechado_por` tampouco são consultados nesses leitores. (`app/chamados/juizes.py:1004`, `app/chamados/services/competencia_trancada.py:66`.)
+
+Efeito persistente do gancho: `disparar_no_ato` mede e, se houver ações, chama `encerrar` até o limite ou inicia comando em processo próprio. (`app/chamados/services/competencia_trancada.py:279`, `app/chamados/services/competencia_trancada.py:282`, `app/chamados/services/competencia_trancada.py:298`.) `encerrar` fecha chamados pela via da tranca, fecha disputas somente se `pode_fechar` permite e cria Pauta DP para respostas sem veredito. (`app/chamados/services/competencia_trancada.py:185`, `app/chamados/services/competencia_trancada.py:203`, `app/chamados/services/competencia_trancada.py:208`.) Quantidade de ações nas dez competências: `[não verificado]`.
+
+DECISAO: `app/chamados/juizes.py:1395` / `app/chamados/services/tarefa_do_dia.py:195` | perguntas e tarefas passam a silêncio automático, reversível por toque humano | respondida por L-051 + corte LEI-TRANCA-E2-JUIZ, `app/chamados/juizes.py:1071`, `app/docs/CORTES.md:427`.
+
+DECISAO: `app/chamados/services/competencia_trancada.py:83` | gancho pode fechar chamados/disputas e encaminhar respostas ao DP sem FM aprovado | regra explícita de tranca, `app/chamados/services/competencia_trancada.py:3`, `app/chamados/services/competencia_trancada.py:179`; exceções em `app/chamados/catalogo/modulos.py:268`.
+
+DECISAO: `app/chamados/services/competencia_trancada.py:4` | texto diz “imutável” e sequência “aprovada → exportada → trancada”, mas o corpo não exige aprovação/exportação | O44 permite toque e validação, `app/chamados/services/cobrar_dia.py:8`, `app/chamados/services/validacao.py:399`; pressuposição executável “trancada implica aprovada” nesta família não demonstrada.
+
+DECISAO: `app/chamados/services/cobrar_dia.py:39` / `app/chamados/services/validacao.py:399` | escrita manual continua autorizada; não há veto novo da tranca nessas portas | O44 “a tranca não barra o toque”, `app/chamados/services/cobrar_dia.py:8`, `app/chamados/services/validacao.py:399`.
+
+Perguntas novas de lei identificadas nesta família: zero; leis existentes já respondem aos efeitos acima. (`app/docs/CORTES.md:427`, `app/chamados/juizes.py:1071`.)
 
 ## 12/11 14:31 · sessao 0b5862773d72 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
 
@@ -1446,111 +1487,4 @@ E3 cruza `app/chamados/services/janela_colab.py` (função em `:40`, lista em `:
 - O toque humano O44 já tem três atos — `app/chamados/juizes.py:1083`; a devolução de quarentena por cobrar está no diff antigo, mas a aplicação aos outros dois atos precisa ser demonstrada segundo a regra existente — `app/docs/CORTES.md:349`. Não sugerir lei nova; levantar a lacuna como pergunta somente se o censo integral não encontrar cobertura.
 - Garantia de trilha obrigatória × captura best-effort de `registrar_log` — `app/core/auditoria.py:25`: o comportamento já aceito da flag é manter a isenção mesmo se trilha falhar — `app/colaboradores/views.py:188`. A reaplicação precisa explicitar qual comportamento já autorizado conserva, sem afirmar atomicidade de trilha que o código não dá.
 
-## 12/11 14:05 · sessao 85db53f6de83 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
-
-**O v3 ainda não fecha o contrato.** Corrige a distinção entre universo e andabilidade, mas mantém problemas no RED, nos selos, na validação e na semente. (`contrato_item3_v3.txt:1`, `:3`, `:7`, `:8`; `contrato_item3_v3_semente.txt:2`, `:21`)
-
-Nas referências aos **anexos fornecidos**, contei cada linha física, começando pelo título — ou `[ORDEM]`, na semente — como linha 1. Pousos abaixo são declarações documentais; confirmação em produção: **[nao verificado]**.
-
-**1. Os seis furos do v2**
-
-| Furo | Veredito sobre o v3 |
-|---|---|
-| **Universo × andável / RED ca320b69f** | **Semântica corrigida; promessa do RED não fechada.** Pertencimento passa a incluir todos de `[ORDEM]`, inclusive travados; restantes andáveis são somente os posteriores ao primeiro sem `TRAVA`. Isso permite distinguir os dois casos exigidos. Não demonstra que a fixture antiga passe sem edição. (`contrato_item3_v3.txt:3`, `:8`; `bin/hook_stop_fila1.py:1243`, `:1245`) |
-| **Leitores não migrados e selos** | **Parcial.** A cláusula “TODOS os leitores do censo v2” amplia a cobertura, mas a enumeração omite leitores indiretos e há propriedades antigas incompatíveis com a nova autoridade. Migrar apenas fixtures não resolve esses conflitos. (`contrato_item3_v3.txt:5`, `:8`; `bin/interrompidas_estado.py:93`; `bin/tests/test_hook_estado_e_a_coluna.sh:53`; `bin/tests/test_censo_antes_da_vaga.sh:544`) |
-| **Janela/cauda do publicador** | **Fecha a obrigação de preservar; não fecha completamente a divisão entre preservar e regenerar.** A “cauda após OBRAS:FIM” contém também tabelas geradas. Preservá-la inteira e acrescentar novamente o corpo gerado duplicaria conteúdo. O contrato precisa delimitar a substituição dessa parte, além da preservação manual. (`contrato_item3_v3.txt:6`; `bin/gerar_backlog.py:100`, `:127`; `app/docs/BACKLOG.md:2042`, `:2044`, `:2369`, `:2371`) |
-| **942 × len−1** | **Corrige a unidade da comparação**, adotando “andáveis além do em curso” nos dois lados. **O 941 não corresponde à cópia entregue:** recontagem em memória pelas funções atuais deu **945 totais e 944 além do topo**. O valor de um HEAD externo continua **[nao verificado]**. (`contrato_item3_v3.txt:8`; `bin/hook_stop_fila1.py:231`, `:270`; `app/docs/BACKLOG.md:712`, `:2042`) |
-| **Semente ambígua** | **Não fechado.** Há identidades sem linha válida em OBRAS, exclusão indevida de delta e contradição de precedência. A seção 5 encaminha a conferência; não resolve os fatos apresentados. (`contrato_item3_v3.txt:9`; `contrato_item3_v3_semente.txt:2`, `:10`, `:11`, `:21`; `app/docs/BACKLOG.md:1916`, `:1969`, `:2404`, `:2417`) |
-| **Vazio/repetição/gramática/falha aberta** | **Parcial.** Vazio válido, repetição intra/entre seções, seções e gramática inválidas passam a ter regra. Restam ilegibilidade/decodificação e falhas da leitura do BACKLOG sem conversão explicitada em `ErroFonte`; a lista de erros também exige linha em OBRAS somente para `[ORDEM]`, embora a identidade da seção 0 valha para todas as seções. (`contrato_item3_v3.txt:2`, `:7`, `:8`; `bin/hook_stop_fila1.py:1460`, `:1461`) |
-
-Há mais dois pontos concretos nessa especificação:
-
-- **Topo com TRAVA:** permitido pelo v3. Se `_ids_que_nao_andam()` virar mecanicamente “ids com TRAVA”, o veto atual rejeitará o PAREI do próprio topo antes de compará-lo com o em curso. A migração precisa mudar esse veto; o selo A/B/C proposto deixa A sem TRAVA e não cobre esse caso. (`contrato_item3_v3.txt:3`, `:5`, `:8`; `bin/hook_stop_fila1.py:1298`, `:1302`, `:1310`)
-- **Gramática das travas:** a seção 0 nomeia `aval`, `!`, `lei`, `desenho`, `portao`, mas a semente usa `E3-#4-ATRAS-DA-QUARENTENA` e `PERGUNTA-DE-DESENHO-S1`. Falta dizer se aquela enumeração é fechada ou se admite motivo livre; na leitura fechada, a própria semente é inválida. (`contrato_item3_v3.txt:2`; `contrato_item3_v3_semente.txt:3`, `:5`)
-
-**2. O RED fica verde sem edição?** [nao verificado]
-
-**Não há suporte para essa promessa.** O arquivo `bin/tests/test_hook_andavel_e_a_ordem_viva.sh` não está disponível nesta cópia: seu conteúdo literal e as mudanças exatas nas linhas 51/73 são **[nao verificado]**. O RELATO registra ca320b69f na outra raia `wt-travas-105806`. (`app/docs/RELATO.md:37`)
-
-Para a fixture descrita no anexo — que escreve marcador/prosa/coluna — a semântica nova exige estas mudanças:
-
-| Cenário informado | Mudança necessária na fixture |
-|---|---|
-| **:51 — restantes travados** | Fornecer o `.ids` da árvore temporária, com o mesmo topo e os restantes em `[ORDEM]` com `TRAVA`; ruído aberto fica fora de `[ORDEM]`, POS-20 em sua seção. Manter a exigência de PAREI do topo liberar. (`contrato_item3_v3.txt:2`, `:3`, `:8`; conteúdo literal do RED: **[nao verificado]**) |
-| **:73 — restante aberto** | Alterar o **`.ids`**, retirando a TRAVA do restante que deve andar; alterar somente a coluna não pode mudar a resposta. Manter a exigência de bloquear com um restante andável. (`contrato_item3_v3.txt:3`, `:4`, `:8`; conteúdo literal do RED: **[nao verificado]**) |
-
-Também é necessário dirigir o leitor ao `.ids` da fixture, junto do BACKLOG correspondente; usar a fonte real não representaria os cenários temporários. O selo vizinho verificável hoje substitui apenas `BACKLOG`/`RELATO`, escreve a tabela e alterna a coluna. (`bin/tests/test_hook_parei_com_andavel.sh:22`, `:25`, `:41`, `:56`)
-
-**Isso mantém a propriedade do RED, mas edita sua fixture.** Portanto é compatível com “o RED fica” entendido como conservar os casos e as asserções; é incompatível com **“SEM ser editado”**. O próprio v3 manda migrar fixtures na linha 8 e proíbe editar na linha 1. (`contrato_item3_v3.txt:1`, `:8`)
-
-**3. Censo: omissões e perguntas diferentes**
-
-A lista **nominal** da seção 1 deixa estes sítios de fora; a cláusula geral “TODOS” os abrange, mas precisa alcançar as interfaces e os textos indicados. Vários já delegam, portanto a omissão nominal não prova que sobreviverá um parser próprio. (`contrato_item3_v3.txt:5`; `bin/interrompidas_estado.py:93`; `bin/handoff_sessao.sh:64`)
-
-| Omissão nominal | O que precisa acompanhar a troca |
-|---|---|
-| `interrompidas_estado.py` | Topo consultado ao hook; preservar separadamente a leitura documental de interrupção/fusão/fechamento. (`bin/interrompidas_estado.py:54`, `:93`, `:105`, `:125`) |
-| Primeira parte do handoff | Topo, em curso e PAREI; também o rótulo “MARCADOR”. (`bin/handoff_sessao.sh:64`, `:66`, `:71`, `:120`, `:123`) |
-| Wrapper e placar | Delegação do censo e do alarme. (`bin/codex_pergunta.sh:247`; `bin/placar_code.sh:368`) |
-| Chamadores do fabricante | Delegação ao seletor. (`bin/fabricante.sh:129`; `bin/fabricante_alvo.py:315`, `:320`) |
-| Publicação e entradas | Transporte dos documentos e chamadas dos instrumentos. (`bin/relato.sh:115`, `:116`; `.claude/settings.json:9`, `:20`, `:29`, `:40`, `:53`, `:68`) |
-
-`gerar_backlog.py` está fora da seção 1, mas coberto pela seção 2. As declarações documentais da autoridade antiga continuam sem emenda explicitamente listada no v3. (`contrato_item3_v3.txt:5`, `:6`; `app/docs/LEIS.md:140`; `app/docs/CORTES.json:736`; `app/docs/BACKLOG.md:1576`)
-
-Quanto a **OUTRA pergunta**:
-
-| Leitor | Fronteira correta |
-|---|---|
-| Handoff: avais de hoje e raia20 | Pergunta fechamento documental, não pertencimento à ORDEM. (`bin/handoff_sessao.sh:171`, `:209`, `:216`) |
-| Interrompidas | Pergunta interrupção, fusão, fechamento e retorno; somente o topo vem da ORDEM. (`bin/interrompidas_estado.py:105`, `:116`, `:121`, `:125`) |
-| `gerar_backlog_topo.py` | Resume O-números abertos e ordena numericamente; não representa ORDEM VIVA. (`bin/gerar_backlog_topo.py:19`, `:26`, `:39`) |
-| Fabricante | Pergunta elegibilidade para sorteio. A exceção “livres/O-F fora da fila 1” precisa excluir efetivamente os membros de `[ORDEM]`; hoje o ramo “livre” também aplica veto pela coluna. (`contrato_item3_v3.txt:5`; `bin/fabricante_alvo.py:256`, `:273`, `:275`, `:282`) |
-| Testes de existência/padrão | Podem continuar documentais. (`app/core/tests/test_marca_cron15.py:89`; `app/chamados/tests/e4b_c4_verificar.py:209`; `bin/tests/test_prompt_virou_item.sh:25`) |
-
-**Há conflitos que não se resolvem apenas mudando fixture:**
-
-- `test_hook_estado_e_a_coluna.sh` exige que tachado, FECHADA e aguardando invalidem o topo. O v3 retira essa autoridade da coluna e admite topo com TRAVA. Pode conservar a propriedade documental de fechamento; precisa substituir as antigas propriedades sobre a escolha do topo. (`bin/tests/test_hook_estado_e_a_coluna.sh:53`, `:54`, `:55`, `:59`; `contrato_item3_v3.txt:3`, `:4`, `:8`)
-- O censo exige **NAO SEI/nega** para `O9` contra `O9 (C)`, caixa trocada e obra qualificada contra célula nua. `pertence(id)` por igualdade exata pode devolver **False**, que dispensa censo. Logo a promessa de preservar todas essas propriedades conflita com a nova identidade; precisa ser resolvida expressamente. (`bin/tests/test_censo_antes_da_vaga.sh:544`, `:549`, `:575`, `:603`; `bin/disjuntor.py:1707`, `:1708`; `contrato_item3_v3.txt:5`, `:8`)
-
-**4. Conferência da semente**
-
-O bloco OBRAS desta cópia vai de **712 a 2042**. Linha posterior não satisfaz a identidade exigida pela seção 0. (`app/docs/BACKLOG.md:712`, `:2042`; `contrato_item3_v3.txt:2`)
-
-| Seção / ID | Evidência e classificação documental |
-|---|---|
-| ORDEM — `SAIDA-NOTURNA-NO-DIA-CERTO` | Linha exata no BACKLOG: **[nao verificado]**. O RELATO registra aval/despacho, mas não fornece a linha exigida em OBRAS. (`app/docs/RELATO.md:29`) |
-| ORDEM — `FIO-E0-V4-E3-LEITORES` | **Dentro**, fila 1, ABERTA, EM OBRA. (`app/docs/BACKLOG.md:1873`) |
-| ORDEM — `QUARENTENA-DO-COLAB` | **Dentro**, REPROVADA, espera a vez. A linha não declara fila 1; esse pertencimento fica **[nao verificado]**. (`app/docs/BACKLOG.md:765`) |
-| ORDEM — `LASTRO-FAIXA-SEM-DEFAULT` | **Dentro**, fila 1, ABERTA. A linha diz que o aval responde o DESENHO; não comprova a trava `PERGUNTA-DE-DESENHO-S1`. (`app/docs/BACKLOG.md:1813`; `contrato_item3_v3_semente.txt:5`) |
-| ORDEM — `C20-O168` | **Dentro**, fila 1, espera vaga, ABERTA. (`app/docs/BACKLOG.md:2008`) |
-| ORDEM — `RAIZ-DA-DISPUTA-F0-CASO-7279` | Linha exata **fora**, fila 1, sonda, frente da F1. (`app/docs/BACKLOG.md:2417`) |
-| ORDEM — `RAIZ-DA-DISPUTA-F0F1` | **Dentro**, fila 1; F0/F1 prontos, F1 respondida, c22 aguarda vaga. Não declara pouso. (`app/docs/BACKLOG.md:1882`) |
-| ORDEM — `AUDITORIA-DE-TRAVAS-CORTE` | Linha exata **fora**, instrumento EM CURSO; não declara literalmente fila 1. (`app/docs/BACKLOG.md:2404`) |
-| ORDEM — `APP-MENSAGENS-MSG-0` | **Dentro**, fila 1/raia 2, ABERTA, nada construído. (`app/docs/BACKLOG.md:1916`) |
-| ORDEM — `TRIAGEM-OFFLINE-SEM-CAMERA` | **Dentro**, REVERTIDA, retorno condicionado; sua inclusão na fila 1/raia 2 aparece na RAIA-2-BO-VISIVEL. (`app/docs/BACKLOG.md:1915`, `:1906`) |
-| POS-20 — `BUG-CADASTRO-NAO-ALCANCA-O-FUTURO` | Linha exata **fora**, POS-20/frente da fila 2, próxima vaga de construção. (`app/docs/BACKLOG.md:2408`) |
-| POS-20 — `UI-PAINEL-FILA-OPUS-V5` | Linha exata **fora**, POS-20. O pouso citado é da tela; esta linha registra os achados restantes. (`app/docs/BACKLOG.md:2407`) |
-| POS-20 — `AUDITORIA-ITEM6-CONTADOR-124` | Linha exata no BACKLOG: **[nao verificado]**. O RELATO diz “NAO construido → fila”, sem classificá-lo como POS-20. (`app/docs/RELATO.md:9`) |
-| POS-20 — `TRIAGEM-FILA-OPUS-V6` | **Dentro**, POS-20, ABERTA. (`app/docs/BACKLOG.md:1815`) |
-| POS-20 — `E4B-FILA-OPUS-C14` | **Dentro**, POS-20. (`app/docs/BACKLOG.md:1896`) |
-| POUSADAS — `FIO-E0-V4-E4B` | **Dentro**, POUSOU 12/11 08:46, commit 087fe758a. (`app/docs/BACKLOG.md:1894`) |
-| POUSADAS — `FIO-E0-V4-E4A-2` | **Dentro**, NO AR, merge 613a51498. (`app/docs/BACKLOG.md:1893`) |
-| POUSADAS — `O169-FECHADA` | **Dentro, mas a classificação não está provada:** é fila 1 REGISTRAR, delta do contador, B3/volta 5. O pouso citado pertence a **C20-O169**. (`app/docs/BACKLOG.md:1969`, `:1798`) |
-
-Portanto, a ORDEM já contém **um id sem linha exata demonstrada e dois com linha somente fora do bloco**. POS-20 também contém duas linhas externas e um id sem linha exata demonstrada. A validação não pode aceitar esses casos como se satisfizessem a seção 0. (`contrato_item3_v3_semente.txt:2`, `:7`, `:9`, `:13`, `:14`, `:15`; `contrato_item3_v3.txt:2`, `:7`; `app/docs/BACKLOG.md:2404`, `:2407`, `:2408`, `:2417`; linhas ausentes: **[nao verificado]**)
-
-**Contradição de precedência, sem escolher ordem:** a semente põe APP antes de TRIAGEM; a própria linha de APP determina **depois da TRIAGEM**. (`contrato_item3_v3_semente.txt:10`, `:11`; `app/docs/BACKLOG.md:1916`)
-
-**Faltante explícito:** `BUG-ORFAO-COM-PAR` está declarado **ESTRUTURA fila 1**, com sonda/classe/cura pendentes, e não está na semente; sua linha também está fora de OBRAS. Há ainda `TRAVA-MENOS-FILA-COM-SELO`, literalmente fila 1 instrumento **ABERTA**. (`app/docs/BACKLOG.md:2418`, `:2396`; `contrato_item3_v3_semente.txt:1`–`:22`)
-
-Outras linhas continuam declarando fila 1/ABERTA sem classificação na semente: `MEDE-CLEAR-X-COMPACT`, `CODEX-QUEIMA-B`, `C20-FIO-MUDO`, `E3-X1-FOLGA-NAO-E-SEM-COBERTURA`, `SONDA-SEM-GRANT` e `AUDITORIA-0911`. Isso demonstra reconciliação documental incompleta; não certifica que todas devam executar agora. (`app/docs/BACKLOG.md:1796`, `:1797`, `:1817`, `:1876`, `:1979`, `:1981`; `contrato_item3_v3_semente.txt:1`–`:22`)
-
-As **DUVIDAS** do fim:
-
-- **E4c/E4d:** são etapas de `FIO-E0-V4-E4-ESCRITORES`: E4c leitores e E4d parar projeção. Não há identidade própria demonstrada para inseri-las separadamente. Usar o id da obra agrega etapas; usar os aliases viola a identidade exata. O contrato precisa resolver essa representação. (`app/docs/BACKLOG.md:1885`; `contrato_item3_v3.txt:2`)
-- **BO-0611-05:** a linha própria continua B3/PARADA; o complemento registra bateria e aval de pouso, sem demonstrar sua efetivação. Estado final: **[nao verificado]**. (`app/docs/BACKLOG.md:1897`, `:1901`)
-- **BO-DISPUTA-SEM-PERGUNTA:** a linha própria registra construtor lançado; RAIZ-F0F1 diz expressamente **ESTACIONADA**, com o bug seguindo até F2. Não há pouso demonstrado nessas linhas. (`app/docs/BACKLOG.md:1898`, `:1882`)
-- **BUG-CADASTRO:** a relação do item 4(b) com essa obra está documentada no RELATO. Existe discrepância entre o BACKLOG POS-20/frente da fila 2 e a construção já despachada/entregue parcialmente, com 4(b) respondido pelo aval. Nenhuma dessas evidências declara sua transferência para fila 1; não cabe inventá-la nem ignorar o aval. (`app/docs/BACKLOG.md:2408`; `app/docs/RELATO.md:39`, `:50`, `:92`; `aval_respostas_1211_1230.txt:2`)
-- **DECLARADO-X-GRAVADO:** o RELATO registra despacho de medida/censo e “Nada construido”, mas não demonstra pertencimento à fila 1 nem linha exata em OBRAS. Portanto **entrada em ORDEM: [nao verificado]**; a identidade exigida impede incluí-lo como está. (`app/docs/RELATO.md:6`, `:7`; `contrato_item3_v3.txt:2`)
-
-_4289 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4290 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
