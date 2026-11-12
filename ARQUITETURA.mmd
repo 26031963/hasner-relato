@@ -180,7 +180,8 @@ flowchart TD
     x_chamados_management_commands_relavrar_via_i6_py["chamados/management/commands/relavrar_via_i6.py"] --> p_relavrar
     p_desfazer_carimbo_sem_lastro(["desfazer_carimbo_sem_lastro()<br/>carimbo desfeito<br/>1 chamador(es)"])
     x_chamados_services_fabrica_da_celula_py["chamados/services/fabrica_da_celula.py"] --> p_desfazer_carimbo_sem_lastro
-    p_materializar_perguntas_validadas_da_disputa(["materializar_perguntas_validadas_da_disputa()<br/>materializacao<br/>4 chamador(es)"])
+    p_materializar_perguntas_validadas_da_disputa(["materializar_perguntas_validadas_da_disputa()<br/>materializacao<br/>5 chamador(es)"])
+    x_chamados_management_commands_backfill_fio_morto_e4b_py["chamados/management/commands/backfill_fio_morto_e4b.py"] --> p_materializar_perguntas_validadas_da_disputa
     x_chamados_models_py["chamados/models.py"] --> p_materializar_perguntas_validadas_da_disputa
     x_chamados_services_acoes_disputa_py["chamados/services/acoes_disputa.py"] --> p_materializar_perguntas_validadas_da_disputa
     x_chamados_services_fio_py["chamados/services/fio.py"] --> p_materializar_perguntas_validadas_da_disputa
