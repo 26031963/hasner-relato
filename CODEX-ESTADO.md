@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 22:57** · publicado em **11/11/2026 23:00** (UTC-3)
+> Ultima resposta processada: **11/11/2026 23:01** · publicado em **11/11/2026 23:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 23:01 · sessao e5ede8a32f5b · - · - · origem=Ronald (tmux)
+
+Exploração somente leitura concluída; ORM não executado [não verificado].
+
+- Reutilizar `RecusaS143RuntimeTest._cenario`: cria exportação, fechamento e pergunta viva com assertions reais (`chamados/tests/test_e4b_c6_orm.py:45`).
+- D3 deve testar `resolvido → fechado`: matriz permite (`chamados/catalogo/motor.py:102`), guarda humana de viva só roda para origem `VIVOS` (`chamados/models.py:165`), e save terminal dispara S143 (`chamados/signals.py:96`). Resultado ORM: [não verificado].
+- Vínculo: tornar categoria `escala_aceite` e chamar `_executar_aceite` com template do vínculo existente; fechamento precede criação (`colaboradores/services/vinculo.py:384`, `colaboradores/services/vinculo.py:393`).
+- Desligamento: `_cenario(limbo=True)` mantém disputa mista aberta pela resposta sem veredito (`chamados/models.py:1843`); cascata pula essa disputa e alcança `encerrar` (`colaboradores/services/desligamento.py:139`, `colaboradores/services/desligamento.py:155`).
+- Regularização: preparar disputas fechadas sem carimbar a pergunta, verificar C6 viva, então materializar reg confirmada. Guard só barra disputas abertas (`chamados/services/regularizacao_ext.py:58`), mas coleta S143 usa `_ancoradas()` também de disputas fechadas (`chamados/services/disputa_emissao.py:1940`). C6 não consulta `disputa.fechada_em` (`chamados/juizes.py:1330`). Existência desse acervo em produção: [não verificado].
+- Cron: chamar `Command()._fechar_chamado(ch, entrada)` com chamado não-furo da fixture; gate permite premissa não-furo (`chamados/models.py:728`), sítio preserva booleano (`ponto/management/commands/detectar_ausencias.py:842`).
+- Signal: fechar outra disputa sem perguntas cujo pai seja `ch`, conservando a disputa da viva; receiver reconcilia pai (`chamados/signals.py:28`).
+- API: chamado `batida_ausente` no dia aberto, marco E08 aceso na célula e viva em outro dia exportado. Lookup é real (`chamados/juizes.py:2105`), juiz lê célula gravada (`ponto/services/lastro.py:185`).
+- Cartório: cobrar marco antigo E07 num dia cuja grade contém E08/S17; manter viva em outro dia exportado. Ramo `marcos_inexistentes → reconciliar` exercita `_julgar_colab_corpo` sem adiar fechamento (`ponto/services/cartorio.py:1523`); gate consulta mesmo juiz (`chamados/models.py:1298`).
+
+Para mutantes ORM, seguir enxerto em memória já existente, substituindo somente função/sítio e preservando globais (`chamados/tests/e4b_c11_verificar.py:78`, `chamados/tests/e4b_c11_verificar.py:90`). Execução e comandos novos dependem dos nomes finais [não verificado].
 
 ## 11/11 22:57 · sessao 65a24b6b5e82 · FIO-E0-V4-E4B · sonda · origem=Code
 
@@ -603,23 +619,4 @@ O dado fornecido informa `abona` para ambos; validade atual no banco: **[nao ver
 
 Existe distinção fora do dinheiro: `folga_humana_ou_feriado` considera `tipo_do_dia` diferente de `None` e de `'folga'` como folga humana; assim, `folga_abonada` satisfaz esse termo, e `folga` depende de `folga_lancada`. Seu chamador encontrado decide status. `app/ponto/precedencia.py:211-216`; `app/ponto/status_dia.py:180-181`.
 
-## 11/11 21:58 · sessao 4032abe3bb5a · - · - · origem=Ronald (tmux)
-
-Para os campos indicados, o abono vem da **classificação da grade**, com a ressalva de que o fechamento também usa o efeito do cadastro em outra etapa do motor. (`app/ponto/services/fechamento.py:693-701`; `app/ponto/services/fechamento.py:1060-1064`)
-
-| Sítio | Comportamento concreto | Fonte |
-|---|---|---|
-| Origem da cobertura na grade | Obtém cobertura com `para='folha'`; esse modo filtra somente `status='aprovada'`, sem filtrar pelo efeito `abona/suprime`. | `app/escala/utils.py:1188`; `app/ponto/turnos.py:2516-2517`; `app/ponto/turnos.py:2753-2754` |
-| Classificação da grade | Cobertura não-falta escreve `tipo_dia='ausencia'`, além do tipo, rótulo e ID da ausência. Não há consulta ao efeito nesse ramo. | `app/escala/utils.py:1210-1223` |
-| Grade consumida pelo fechamento | `grade_do_fechamento` chama `grade_da_celula` na janela da competência; o leitor recupera `tipo_dia` da ata, com fallback pela célula. | `app/folha/export.py:329-338`; `app/escala/services/leitor_celula.py:397-398` |
-| Previsto materializado no fechamento | Soma minutos e conta dias apenas para `tipo_dia in ('trabalho', 'ausencia')`. | `app/ponto/services/fechamento.py:1046-1049`; `app/ponto/services/fechamento.py:1083-1086` |
-| Abono materializado no fechamento | Chama `por_dia_da_grade(_g)` e grava `sum(_abono_dia.values())`. A função inclui somente trabalho/ausência; para ausência, abono = previsto − `min(realizado, previsto)`. Não lê efeito do cadastro. | `app/ponto/services/fechamento.py:1060-1064`; `app/ponto/services/dia_pago.py:387-402` |
-| Prontidão com snapshot | Se há `previsto_em` e `minutos_previstos`, usa os campos gravados de previsto, realizado e abono; o numerador soma realizado e abono. | `app/folha/export.py:1045-1050`; `app/folha/export.py:1075-1079` |
-| Prontidão sem snapshot | Lê diretamente a grade, seleciona trabalho/ausência, soma previsto desses dois; abona o previsto inteiro das ausências e soma realizado com teto somente dos dias de trabalho. Não lê efeito do cadastro nesse ramo. | `app/folha/export.py:1095-1111` |
-| Outro uso do efeito no fechamento | Em etapa anterior, lê `_a.efeito`: `ABONA` acrescenta a `datas_justificadas`; efeito diferente de `DESCONTA` acrescenta a `_datas_suprimidas`. Dias suprimidos ficam fora de `datas_previstas_trabalho`; os conjuntos alimentam o motor. | `app/ponto/services/fechamento.py:693-701`; `app/ponto/services/fechamento.py:729-740` |
-
-Portanto, mudar a grade para `folga` exclui o dia dos três mapas de `por_dia_da_grade` e dos cálculos diretos de previsto/abono da prontidão. Isso não altera por si só o ramo anterior que consulta `_a.efeito`. (`app/ponto/services/dia_pago.py:387-402`; `app/folha/export.py:1095-1106`; `app/ponto/services/fechamento.py:693-701`)
-
-Atenção para a precisão do anexo: nesta cópia, `por_dia_da_grade` já calcula abono descontando minutos cobertos por batidas; o fallback da prontidão ainda calcula abono inteiro e realizado apenas para trabalho. Para o exemplo sem batidas do anexo, ambas as formas dão os mesmos 480 minutos de abono. (`app/ponto/services/dia_pago.py:393-401`; `app/folha/export.py:1100-1106`)
-
-_4059 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4060 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
