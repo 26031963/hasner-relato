@@ -1,7 +1,45 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 22:53** · publicado em **11/11/2026 22:54** (UTC-3)
+> Ultima resposta processada: **11/11/2026 22:57** · publicado em **11/11/2026 23:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 22:57 · sessao 65a24b6b5e82 · FIO-E0-V4-E4B · sonda · origem=Code
+
+JSON integral fornecido, sem reexecução independente: não localizei `sonda_mig0039.py` na cópia. [não verificado]
+
+```json
+{"aplicada_em": "2026-08-23 04:09:15.485039+00:00", "chamados_superado": 107, "mig0039_aplicada": 1, "migrations_chamados_posteriores": 14} [nao verificado]
+```
+
+**(a)** O acionamento registrado é `RunPython(backfill, desfazer)`: `backfill` na aplicação efetiva da 0039; `desfazer` na reversão dela, com dependência da 0038. ([0039_a3_via_backfill.py:38](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0039_a3_via_backfill.py:38), [0039_a3_via_backfill.py:39](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0039_a3_via_backfill.py:39))
+
+“Somente podem rodar por migrate/rollback” seria excessivo: testes chamam ambas diretamente. ([test_esmeril2_migracoes_reversas.py:36](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/tests/test_esmeril2_migracoes_reversas.py:36), [test_esmeril2_migracoes_reversas.py:39](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/tests/test_esmeril2_migracoes_reversas.py:39))
+
+**(b)** No fluxo de tenant novo implementado, **zero**: a tabela nasce por `CreateModel`, sem inserções; as migrations de dados anteriores apenas atualizam registros existentes. ([0001_initial.py:16](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0001_initial.py:16), [0023_rebaixar_urgencia_resolvidos.py:4](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4), [0024_rebaixar_urgencia_resolvidos_regressao.py:5](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:5), [0038_a3_registrado_backfill.py:9](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0038_a3_registrado_backfill.py:9))
+
+O provisionamento cria o tenant com schema automático antes do bootstrap administrativo. ([models.py:21](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/tenants/models.py:21), [services.py:11](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/tenants/services.py:11), [services.py:13](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/tenants/services.py:13)) Contagem medida num tenant novo de produção: [não verificado].
+
+**(c)** Não encontrei importação ou chamada dessas funções em código de produção fora de migrations na busca estática da cópia. Ausência em execução real: [não verificado]. O import direto encontrado está em teste; as referências produtivas encontradas à 0039 são comentários. ([test_esmeril2_migracoes_reversas.py:11](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/tests/test_esmeril2_migracoes_reversas.py:11), [cluster_espurio.py:134](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cluster_espurio.py:134), [cluster_espurio.py:136](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cluster_espurio.py:136))
+
+Atribuir os 107 `superado` à execução da 0039, apenas com esse JSON: [não verificado].
+
+## 11/11 22:57 · sessao 7e1f793c05ad · - · - · origem=Ronald (tmux)
+
+No fluxo de tenant novo implementado, a 0039 encontra **0 `ChamadoColaborador`**: a tabela é criada em `app/chamados/migrations/0001_initial.py:16`, sem inserção de registros; as migrações de dados anteriores apenas alteram objetos existentes (`app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4`, `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:5`, `app/chamados/migrations/0038_a3_registrado_backfill.py:9`).
+
+O provisionamento cria `Cliente` antes do bootstrap (`app/tenants/services.py:11`, `app/tenants/services.py:13`), com criação automática do schema habilitada (`app/tenants/models.py:14`, `app/tenants/models.py:21`). O bootstrap posterior cria Empresa, Setores e usuário administrador (`app/tenants/bootstrap.py:27`, `app/tenants/bootstrap.py:32`, `app/tenants/bootstrap.py:34`). O teste de scaffolding também contém a asserção `ChamadoColaborador.objects.count() == 0` (`app/tenants/tests.py:13`).
+
+Isso descreve o fluxo da cópia; não executei testes nem medi um tenant novo em produção. O dado fornecido não contém essa contagem de tenant novo. [não verificado] [nao verificado]
+
+## 11/11 22:57 · sessao f6699bf6e06d · - · - · origem=Ronald (tmux)
+
+A 0039 registra `backfill` e `desfazer` como operação direta/reversa de `RunPython`; depende da 0038. `app/chamados/migrations/0039_a3_via_backfill.py:38-39`.
+
+Não cabe afirmar que as funções **somente podem** executar via migrate/rollback: o teste importa a migration e chama ambas diretamente. `app/chamados/tests/test_esmeril2_migracoes_reversas.py:11`, `:36`, `:39`, `:47`, `:55`.
+
+Na busca estática de toda a cópia, incluindo arquivos ocultos/ignorados e excluindo `.git`, não encontrei importação ou chamada dessas funções em código de produção fora migrations; ausência absoluta em execução é [não verificado]. As referências produtivas encontradas são comentários: `app/ponto/services/cluster_espurio.py:134`, `:136`, `:139`; `app/chamados/models.py:798`. A migration seguinte apenas declara a dependência: `app/chamados/migrations/0040_a27_recusa_motivo.py:9`.
+
+Não encontrei arquivo `sonda_mig0039.py` nem ocorrência do hash `273df217b8f8d27b` na cópia; execução independente da sonda e conferência desse hash são [não verificado].
 
 ## 11/11 22:53 · sessao 0524c0e7b362 · FIO-E0-V4-E4B · censo · origem=Code
 
@@ -584,219 +622,4 @@ Portanto, mudar a grade para `folga` exclui o dia dos três mapas de `por_dia_da
 
 Atenção para a precisão do anexo: nesta cópia, `por_dia_da_grade` já calcula abono descontando minutos cobertos por batidas; o fallback da prontidão ainda calcula abono inteiro e realizado apenas para trabalho. Para o exemplo sem batidas do anexo, ambas as formas dão os mesmos 480 minutos de abono. (`app/ponto/services/dia_pago.py:393-401`; `app/folha/export.py:1100-1106`)
 
-## 11/11 21:58 · sessao 1f44a57f3f36 · FIO-E0-V4-E4B · censo · origem=Code
-
-Os dois bloqueantes estão presentes: fechamentos humanos diretos sem coletor e comparação da competência corrente contra `--hoje` (`app/chamados/services/acoes_chamado.py:70,108,149,222,277`; `app/colaboradores/views.py:2068`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:218-230`).
-
-Referências abaixo relativas a `app/`. “Prova” identifica o teste e sua asserção; execução dos testes nesta sessão, banco, logs e identidade Git da árvore: `[nao verificado]`. [nao verificado]
-
-**1. Porta A — inventário das entradas humanas**
-
-| ID | Caminho | Transição / coletor | Nota própria do caminho | Prova de S143 + Pauta |
-|---|---|---|---|---|
-| A1 | Detalhe → aprovar exceção: `chamados/views.py:426` | `resolvido`, direto, sem coletor: `chamados/services/acoes_chamado.py:70` | `excecao_aprovada`, antes da transição: `chamados/services/acoes_chamado.py:69` | **SEM PROVA** |
-| A2 | Detalhe → aceitar/recusar agenda: `chamados/views.py:460` | `resolvido`, direto, sem coletor: `chamados/services/acoes_chamado.py:108` | `agenda_respondida`, no atomic: `chamados/services/acoes_chamado.py:102-108` | **SEM PROVA** |
-| A3 | Detalhe → aceitar/recusar escala: `chamados/views.py:463` | `resolvido`, direto, sem coletor: `chamados/services/acoes_chamado.py:149` | `escala_respondida`, no atomic: `chamados/services/acoes_chamado.py:139-149` | **SEM PROVA** |
-| A4 | Detalhe/fio → autorizar geofence, com/sem advertência: `chamados/views.py:540`; `chamados/services/fio.py:533` | `resolvido`, direto, sem coletor: `chamados/services/acoes_chamado.py:222` | `geofence_autorizada`: `chamados/services/acoes_chamado.py:218-220` | **SEM PROVA** S143/Pauta; fluxo normal: `chamados/tests/test_s127_fluxo_geofence.py:31,38` |
-| A5 | Detalhe/fio → recusar geofence: `chamados/views.py:543`; `chamados/services/fio.py:544` | `resolvido`, direto, sem coletor: `chamados/services/acoes_chamado.py:277` | Retrata batida e escreve `geofence_recusada`: `chamados/services/acoes_chamado.py:269-275` | **SEM PROVA** S143/Pauta; fluxo normal: `chamados/tests/test_geofence_validar_e_recusar.py:87` |
-| A6 | Avaliar benefício: `colaboradores/views.py:2046` | Aprovar → `resolvido`; demais ações → `fechado`; direto, sem coletor: `colaboradores/views.py:2068` | `beneficio_avaliado`, depois da transição: `colaboradores/views.py:2069-2071` | **SEM PROVA** |
-| A7 | Detalhe → resposta livre/dropdown: `chamados/views.py:547` | Usa coletor, com import local: `chamados/services/acoes_chamado.py:315-316` | `resposta_livre`, quando há conteúdo: `chamados/services/acoes_chamado.py:289-292` | Exportada e limbo mistos: `chamados/tests/test_e4b_c6_orm.py:90-100,148-154` |
-| A8 | Fio → resposta rápida/dropdown; exige chamado e conteúdo: `chamados/services/fio.py:708-719` | Usa coletor, com import local: `chamados/services/fio.py:721-722` | `mensagem_dp`: `chamados/services/fio.py:718` | `chamados/tests/test_e4b_c6_orm.py:96-99,156-157` |
-| A9 | `fechar_chamados_meio_periodo --apply`: `ponto/management/commands/fechar_chamados_meio_periodo.py:94-109` | `fechar` → `transicionar('fechado')`, sem coletor: `chamados/models.py:452-454` | `fechamento`, depois da transição: `chamados/models.py:455-457` | **SEM PROVA** S143/Pauta |
-
-Os demais chamadores internos de `transicionar` são o bump de geofence para `em_analise` e as duas saídas do wrapper (`chamados/services/acoes_chamado.py:229-233`; `chamados/services/fecho_runtime.py:149-156`). Chamadas por atributo atribuído a apelido ou despacho dinâmico: `[nao verificado]`.
-
-`smoke_chamados` também chama `transicionar`, mas exige banco com nome de teste e desfaz a transação; não constitui persistência produtiva (`chamados/management/commands/smoke_chamados.py:30-44,134,147,163`).
-
-| Outras entradas humanas | Gate e efeito | Coletor / prova pertinente |
-|---|---|---|
-| Abrir registro de ausência | `analisar` → `em_analise`: `chamados/views.py:1494,1513`; `chamados/models.py:800-806` | Não encerra; **SEM PROVA** S143/Pauta |
-| Desarquivar chamado encerrado pela tranca | `reabrir(humano=True)`: `chamados/views_arquivar.py:64-70` | **SEM PROVA** específica das recusas E4B |
-| Reabrir disputa como admin | `reabrir_admin` e `ch.reabrir(humano=True)`: `chamados/services/acoes_disputa.py:259,270` | **SEM PROVA** específica das recusas E4B |
-| Reabrir competência | Devolve chamados por `reabrir(humano=True)`: `ponto/services/fechamento.py:1447`; `chamados/services/competencia_trancada.py:265` | **SEM PROVA** específica das recusas E4B |
-| Aplicar vínculo substituindo aceite anterior | `encerrar` os `escala_aceite` vivos: `colaboradores/services/vinculo.py:384-387` | Sem coletor; **SEM PROVA** S143/Pauta |
-| Confirmar regularização externa, inclusive API | API chama a porta; porta encerra `reg.chamado`: `api/views.py:2985-3000`; `chamados/services/regularizacao_ext.py:197-205` | Sem coletor; **SEM PROVA** S143/Pauta |
-| Desligamento | Fecha disputas e encerra chamados restantes: `colaboradores/services/desligamento.py:139-155` | Viva segurando encerramento: `chamados/tests/test_o261e_f1_porta_encerramento.py:272` |
-| Trancar competência | `encerrar_por_competencia_trancada`: `ponto/views.py:1367`; `ponto/services/fechamento.py:1427`; `chamados/services/competencia_trancada.py:184` | Resolver sai sem escrever para essa via: `chamados/services/disputa_emissao.py:1899-1900` |
-| Upload de foto da API | Fecha **Disputa**; signal reconcilia o chamado-pai: `api/foto_recebida.py:80`; `chamados/signals.py:18-45` | Sem coletor; **SEM PROVA** S143/Pauta |
-
-Arquivar comum e arquivar em lote escrevem silêncio, sem mudar `status_local` (`chamados/views_arquivar.py:24-42,140-146`). Registro de `ModelAdmin` que permita editar status de Chamado ou outra API de transição direta: `[nao verificado]`.
-
-O inventário dos consumidores dos demais gates, incluindo comandos acionáveis por humano e cascatas, é:
-
-| Gate / destino | Consumidores de produção localizados |
-|---|---|
-| `reconciliar` → `resolvido`; escritor: `chamados/models.py:641-654` | `chamados/signals.py:42`; `chamados/reconciliador.py:523`; `chamados/services/adesao.py:115,150`; `chamados/services/feriado_reavaliar.py:47`; `chamados/services/limbo_folgas.py:101,283,286`; `chamados/services/materializacao.py:582,771`; `chamados/services/silencio_ausencia.py:101`; `colaboradores/services/pos_vinculo.py:42`; `ponto/services/ausencia.py:694`; `ponto/services/cartorio.py:986,1511,1524,1545,1623,1638`; `ponto/services/cobertura.py:122,317`; `ponto/services/lastro.py:400`; `ponto/services/veredito_celula.py:202`; `ponto/services/triagem_batida.py:597`; `ponto/services/entrada_sincronizada.py:31`; `ponto/services/cluster_espurio.py:124` |
-| Comandos que chegam a `reconciliar` | `chamados/management/commands/auditar_chamados_orfaos.py:67`; `ponto/management/commands/detectar_intervalo_ausente.py:138`; `ponto/management/commands/curar_residuo_bug115.py:151`; `ponto/management/commands/detectar_ausencias.py:158,824,834,845`; `colaboradores/management/commands/marcar_feriado_do_posto.py:140`; `ponto/management/commands/reconciliar_fantasmas.py:274-281` |
-| `encerrar` → `fechado`; escritor: `chamados/models.py:1605-1619` | `chamados/reconciliador.py:496`; `chamados/services/regularizacao_ext.py:205`; `colaboradores/services/desligamento.py:155`; `colaboradores/services/vinculo.py:387` |
-| `cancelar` → `cancelado`; escritor: `chamados/models.py:773-788` | `escala/management/commands/fechar_avisos_regua_na_lista.py:47`; `ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57` |
-| `analisar` → `em_analise`; escritor: `chamados/models.py:800-806` | `chamados/views.py:1513`; `chamados/services/disputa_emissao.py:1085,1159,1178,1223,1252,1379`; `ponto/services/regularizacao.py:137`; `chamados/management/commands/geofence_registrados_para_analise.py:32` |
-| `reabrir` → `em_analise`; escritor: `chamados/models.py:1362-1442` | `chamados/views_arquivar.py:70`; `chamados/services/acoes_disputa.py:270`; `chamados/services/competencia_trancada.py:265`; `chamados/services/adesao.py:92`; `chamados/services/disputa_emissao.py:1849,2009`; renascimento: `chamados/models.py:1019`; comandos: `chamados/management/commands/reabrir_orfas_enterradas.py:172`; `ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49`; `ponto/management/commands/detectar_ausencias.py:301`; `ponto/management/commands/reconciliar_grade.py:530` |
-| Encerramento pela tranca | `chamados/services/competencia_trancada.py:184` → `chamados/models.py:1622-1639`; comando: `chamados/management/commands/encerrar_por_competencia_trancada.py:20` |
-
-O disparo humano de cada cascata acima, em produção, não consta do dado: `[nao verificado]`. Os destinos dos gates são definidos no motor (`chamados/catalogo/motor.py:99-116`).
-
-**2. Porta A — matriz de transições**
-
-As dimensões pedidas se cruzam: destino/pai/não listado é a âncora; exportada/aberta é a competência; limbo pode coexistir com ambas. Limbo prevalece no motivo quando coexistir com exportada (`chamados/models.py:344-345`; `chamados/services/disputa_emissao.py:1835-1844`).
-
-Cada caminho A1–A9 cruza todas as linhas abaixo. A7/A8 são **C**; A1–A6/A9 são **D**. O wrapper só instala coleta em passagem de `VIVOS` para `ENCERRADOS` (`chamados/services/fecho_runtime.py:149-159`).
-
-| Caminho × entrada | Juiz que decide antes/no S143 | O que se escreve: status, nota, Pauta, trilha | Prova |
-|---|---|---|---|
-| C ou D × pergunta viva por `chamado_destino`, competência aberta, continua viva no pós-estado | Guarda humana `_vivas_ancoradas` → C6 + entregue `is False`: `chamados/models.py:165-171,349-369` | Recusa antes de `_aplicar`; sem escrita de status/S143/Pauta por essa transição. A nota própria eventualmente anterior depende do atomic do caminho: `chamados/models.py:199`; notas na tabela A1–A8 | Gate por destino preserva aberto: `chamados/tests/test_o261e_f1_porta_encerramento.py:193-198`. Por A1–A9 individualmente: **SEM PROVA** |
-| C ou D × pergunta viva pelo pai, sem destino, disputa aberta | S127: disputa aberta sem perguntas ou com `fio_vivo`; **sem filtro de entregue nessa guarda**: `chamados/models.py:153-161`; `chamados/juizes.py:2314-2327` | Recusa antes do status/S143; sem Pauta dessa transição. Vale também se a viva do pai for exportada: `chamados/juizes.py:2322-2327` | Container pelo gate de sistema: `chamados/tests/test_o261e_f1_porta_encerramento.py:94-99`. Transição humana/exportada pelo pai: **SEM PROVA** |
-| C ou D × não listado como âncora | Reabridor percorre `_ancoradas`, não toda pergunta viva do colaborador: `chamados/services/disputa_emissao.py:1938-1945`; `chamados/models.py:344-345` | Sem recusa de reabertura dessa pergunta nessa lista. Aceito o fecho, grava destino e trilha; S128/HX ainda podem atuar em seus universos próprios: `chamados/models.py:228-296`; `chamados/services/disputa_emissao.py:1904-1908,2024-2026` | Não varrer destino terminal de outro fecho: `chamados/tests/test_e4b_classe_e_memoria.py:399`. Por caminho humano: **SEM PROVA** |
-| **D** × credor toca exportada; demais guardas deixam fechar | Reabridor examina toda carga e retorna `credor_toca_exportada`: `chamados/services/disputa_emissao.py:1829-1844` | Status solicitado pela porta humana, via `admin`, trilha `estado_chamado`; nota `recusa_reabertura_pergunta_viva`; **nenhuma Pauta pelo coletor ausente**: `chamados/models.py:450`; `chamados/catalogo/motor.py:95`; `chamados/services/disputa_emissao.py:1855-1859`; `chamados/services/fecho_runtime.py:18-20` | Reabridor/exportada em memória: `chamados/tests/test_e4b_classe_e_memoria.py:831-841`. A1–A6/A9 ponta a ponta: **SEM PROVA** |
-| **C** × mesma recusa exportada | Mesmo reabridor; S143 registra a recusa: `chamados/services/disputa_emissao.py:1945-1950` | Mesmos status/nota/trilha; Pauta DP pela competência datável, salvo marcador vivo já existente: `chamados/services/fecho_runtime.py:114-134`; trilha `pauta_escrita`: `pautas/services.py:180-188` | Mortas carimbadas, órfã fechada, chamado fechado, zero reabertura, uma Pauta: `chamados/tests/test_e4b_c6_orm.py:112-136,148,156` |
-| **D** × credor carrega limbo; demais guardas deixam fechar | Texto não vazio sem `respondida_em` na carga; motivo inclui PKs e eventual exportada: `chamados/services/disputa_emissao.py:1837-1842` | Fecho + trilha; nota com motivo próprio; sem Pauta pelo coletor ausente: `chamados/services/disputa_emissao.py:1855-1859`; `chamados/services/fecho_runtime.py:18-20` | Limbo próprio/irmã: `chamados/tests/test_e4b_classe_e_memoria.py:904-924`. A1–A6/A9 ponta a ponta: **SEM PROVA** |
-| **C** × mesma recusa limbo | Mesmo juiz e coleta: `chamados/services/disputa_emissao.py:1837-1842,1946-1950` | Fecho + nota + trilha; Pauta com motivo limbo, sujeita às mesmas exclusões de data/marcador: `chamados/services/fecho_runtime.py:64-79,114-134` | Limbo misto com viva exportada e irmã morta da aberta: `chamados/tests/test_e4b_c6_orm.py:151-154`. Limbo com viva exclusivamente aberta bloqueada antes do S143: **SEM PROVA** específica |
-| C ou D × competência aberta, mas pergunta morre no pós-estado | C6 no pós-estado não a inclui na trava: `chamados/models.py:356-369` | Pode fechar; S128 só carimba se C6 a der por morta, não trancada e passar as guardas de resposta/materialização: `chamados/services/disputa_emissao.py:1964-1986` | Pós-estado pelo gate de sistema: `chamados/tests/test_o261e_f1_porta_encerramento.py:172-188`. Cada entrada humana: **SEM PROVA** |
-| C ou D × credor já vivo quando o reabridor o lê | Reabridor retorna sem ato: `chamados/services/disputa_emissao.py:1826-1828` | Nenhuma nota/Pauta de recusa por essa chamada: `chamados/services/disputa_emissao.py:1828,1855` | Âncora viva: `chamados/tests/test_e4b_classe_e_memoria.py:385` |
-| C ou D × credor aberto elegível a reabrir, sem exportada/limbo | `recusa_da_reabertura`, depois `reabrir`: `chamados/services/disputa_emissao.py:1846-1849` | Reabre para `em_analise` e escreve nota; ou registra outra recusa, como `admin_sem_fato_novo`, sem coleta E4B: `chamados/models.py:1390-1442`; `chamados/services/disputa_emissao.py:1850-1859,1946` | Reabertura: `chamados/tests/test_e4b_classe_e_memoria.py:358`; recusa admin: `chamados/tests/test_o261e_f1_porta_encerramento.py:231-245` |
-
-A âncora pelo pai só lista quando não há destino; ser `disputa.chamado` com destino em outro chamado não basta (`chamados/services/fio.py:97-103`; `chamados/models.py:344-345`).
-
-| Condição adicional da matriz | Efeito e prova |
-|---|---|
-| Justificativa pendente; transição proibida; furo ainda não regularizado | Podem impedir o fecho antes do S143, independentemente de exportada/limbo: `chamados/models.py:123-141,181-198`. Resultado concreto sem esses insumos: `[nao verificado]` |
-| Conversa ou pergunta sem dia canônico | A recusa pode ser produzida usando `data_evento` cru, mas o agrupador pula a pergunta sem dia de turno: `chamados/services/disputa_emissao.py:1835-1836`; `chamados/juizes.py:332-336`; `chamados/services/fecho_runtime.py:114-116`. Exclusão do agrupador: `chamados/tests/test_e4b_c6_orm.py:173-187`; coerência completa reabridor→Pauta: **SEM PROVA** |
-| Pauta viva já existe na competência | `continue`, sem acrescentar a nova recusa: `chamados/services/fecho_runtime.py:128-130`. Teste exige uma Pauta mesmo após outro chamado/pergunta: `chamados/tests/test_e4b_c6_orm.py:205-214`. Incorporação da segunda recusa: **SEM PROVA** |
-| Resolver falha no savepoint | S143 preserva o fechamento e registra erro; coleta do lote não é publicada: `chamados/signals.py:106-118`; `chamados/services/fecho_runtime.py:24-40`. Prova de descarte: `chamados/tests/test_e4b_c6_orm.py:294-312` |
-| S128, HX e C7 depois da recusa | Não há retorno antecipado nesse ramo; seguem seus próprios juízes: `chamados/services/disputa_emissao.py:1946-1953,1964,2007,2046,2089`. Prova mista: `chamados/tests/test_e4b_c6_orm.py:115-126` |
-| Chamadores fora do runtime | Beco, reconciliador e fantasmas chamam o resolver compartilhado, sem instalar coleta: `chamados/services/becos.py:54`; `chamados/reconciliador.py:536,1648`; `ponto/management/commands/reconciliar_fantasmas.py:281`; coletor: `chamados/services/fecho_runtime.py:18-20`. Prova concreta de passivo sem Pauta cobre save, resolver direto e beco: `chamados/tests/test_e4b_c6_orm.py:159-171`; demais chamadores: **SEM PROVA** específica |
-
-Para `reconciliar`/`encerrar`/`cancelar`, a viva da aberta pode ser reatada ao sobrevivente antes do fecho; sem sobrevivente, há recusa com trilha `fechamento_recusado`. Isso difere da recusa humana por `ValueError` (`chamados/models.py:410-444`; `chamados/tests/test_o261e_f1_porta_encerramento.py:82-110,135-141`). As entradas `analisar`/`reabrir` escrevem estado vivo e não acionam S143 por esse save (`chamados/models.py:806,1442`; `chamados/signals.py:96-97`).
-
-**3. Categorias dos caminhos sem coletor**
-
-| Caminho | Código que cria/seleciona a categoria | Pode excluir pergunta viva ancorada? |
-|---|---|---|
-| A1, exceção | Normalmente `batida_fora_horario`/`horario_nao_previsto`: `ponto/services/triagem_batida.py:336` | A ação não exige essa categoria; guarda de papel na view: `chamados/services/acoes_chamado.py:21-25`; `chamados/views.py:426`. Exclusão geral: não |
-| A2, agenda | `agenda_aceite`/`proposta`, módulo `agenda_dia`: `colaboradores/views.py:2363-2374` | A ação exige categoria, mas o nascimento não estabelece veto a futuras âncoras: `chamados/services/acoes_chamado.py:88`. Relações existentes: **não sei pelo código** |
-| A3 e substituição de aceite | `escala_aceite`/`mudanca`, módulo `escala_colaborador`: `colaboradores/services/vinculo.py:393-409`; seleção dos antigos: `colaboradores/services/vinculo.py:384-387` | A ação exige categoria: `chamados/services/acoes_chamado.py:130`. Relações existentes: **não sei pelo código** |
-| A4/A5, geofence | Nascimento normal `auditoria_clt`/`gps_fora_geofence`: `ponto/services/geofence.py:361` | Ações não possuem guarda de categoria: `chamados/services/acoes_chamado.py:165-181,243-265`. Exclusão geral: não |
-| A6, benefício | Cria módulo `beneficio`, sem categoria explícita: `colaboradores/views.py:1978-1985` | Avaliação aceita `sol.chamado_origem` sem filtro de categoria: `colaboradores/views.py:2066-2068`. FK efetiva: **não sei pelo código** |
-| A9, meio período | Filtra módulos `intervalo_pendente` e `batida_fora_escala_leve`, sem filtro de categoria: `ponto/management/commands/fechar_chamados_meio_periodo.py:30,55-57` | Categorias e âncoras dos alvos: **não sei pelo código** |
-| Desligamento | Seleciona chamados `NAO_FECHADOS`, sem whitelist de categoria: `colaboradores/services/desligamento.py:150-155` | O próprio fluxo admite viva que impede encerrar: `colaboradores/services/desligamento.py:147-155` |
-| Regularização externa | Usa a FK `reg.chamado`: `chamados/services/regularizacao_ext.py:201-205` | Categoria e âncoras dessa FK: **não sei pelo código** |
-| Demais comandos/cascatas | Gates genéricos não impõem whitelist de categoria: `chamados/models.py:641,773,1605` | Exclusão geral por categoria: não; relações concretas: **não sei pelo código** |
-
-O derivador automático por categoria não cobre agenda/escala/geofence/exceção; isso demonstra o alcance daquele derivador, não impossibilidade de ancoragem (`chamados/services/disputa_emissao.py:198-213`; `chamados/models.py:3664-3681`). As portas genéricas aceitam destino e o juiz admite conversa, pergunta sem dia e módulo não-DIA, respeitada a identidade do colaborador (`chamados/models.py:2776-2802`; `chamados/juizes.py:2187-2213`).
-
-Os nascimentos de disputa localizados criam pai `disputa_supervisao`; categoria de toda FK histórica não decorre desses nascimentos (`chamados/services/disputa_emissao.py:568-587,1105-1123,1340-1358`). Portanto, “essas categorias nunca ancoram viva em PROD”: `[nao verificado]`.
-
-**4. Porta B — matriz do `--aplicar`**
-
-O juiz registrado de competência de hoje é `janela_atual`; o backfill o consulta com a data de argv, enquanto captura `agora` separadamente (`docs/JUIZES.md:94,98`; `core/ju
-
-[truncado em 20000 de 33201 caracteres]
-
-## 11/11 21:55 · sessao d0425c51ff1b · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-**perguntas de lei: 1**
-
-**1 — Sítio `ponto/services/dia_pago.py:388`: a folga humana deve retirar o dia dos mapas de abono, previsto e realizado?** Mudar a grade de `ausencia` para `folga` faz exatamente isso. O fechamento grava o abono resultante; portanto, a cura de B1 alcança dinheiro e aciona sua condição de parada. (`ponto/services/dia_pago.py:395`; `ponto/services/fechamento.py:1062`)
-
-Executei a função real extraída por AST, somente em memória, com um dia **sintético** de 480 minutos previstos e zero realizados: [nao verificado]
-
-| `tipo_dia` | Abono | Previsto | Realizado |
-|---|---:|---:|---|
-| `ausencia` | 480 | 480 | sem entrada |
-| `folga` | sem entrada | sem entrada | sem entrada |
-
-Esse resultado decorre do filtro e das somas em `ponto/services/dia_pago.py:387–402`. Impacto quantitativo em produção: **[nao verificado]**.
-
-O censo anterior à edição encontrou:
-
-| Escritor/leitor | Efeito da troca proposta |
-|---|---|
-| Grade escreve `tipo_dia`, `ausencia_label/id` | Hoje escreve `ausencia` para não-falta. (`escala/utils.py:1220`; `escala/utils.py:1222`; `escala/utils.py:1223`) |
-| Dinheiro: `por_dia_da_grade` | Exclui o dia dos três mapas. (`ponto/services/dia_pago.py:388`) |
-| Fechamento | Recebe abono/realizado desses mapas e também exclui `folga` da soma de previsto. (`ponto/services/fechamento.py:1047`; `ponto/services/fechamento.py:1061`) |
-| Prontidão | Exclui o dia do previsto e do abono calculados pela grade. (`folha/export.py:1097`; `folha/export.py:1101`) |
-| Status lavrado | Sem batida, pode mudar de `ausencia` para `folga`. (`ponto/status_dia.py:141`; `ponto/status_dia.py:148`) |
-| Suprajuiz / cobertura parcial | `folga` sai do predicado de cobrança parcial; o predicado compartilhado também exige `ausencia`. (`ponto/supra_juiz.py:304`; `chamados/juizes.py:438`) |
-| Cartório / releitura | Copia `tipo_dia` para a ata; o leitor recupera esse campo. (`ponto/services/cartorio.py:728`; `escala/services/leitor_celula.py:397`) |
-
-O calendário renderiza o link pelo objeto `dia.ausencia`, antes do ramo visual de folga. Preservação completa do drawer após uma cura: **[nao verificado]**. (`templates/colaboradores/partials/_calendario_grade.html:97`)
-
-Quanto às capturas, a mudança indicada seria deixar **somente `TipoSemFaixa` propagar**:
-
-- Semana do posto: hoje degrada para `trabalho`. (`escala/services/semana_do_posto.py:178`)
-- Férias: hoje degrada para `False`. (`ferias/situacao.py:95`)
-- Espelho: hoje captura e continua com mapas vazios quando A2 recusa. (`ponto/services/espelho.py:644`; `ponto/services/espelho.py:650`)
-
-Parei sem editar a cópia; B2, B3 e as capturas ficaram pendentes pela parada de B1. Não há cura nem RED/GREEN/mutantes novos entregues ou certificação nesta volta. **[nao verificado por suíte]** [nao verificado]
-
-## 11/11 21:54 · sessao 2b55b7c8a142 · FIO-E0-V4-E4B · censo · origem=Code
-
-Auditoria primeiro: as perguntas identificam o **Codex como verificador**, mas não identificam quem as redigiu; autoria de quem perguntou e identidade de quem decidiu a triagem: **[nao verificado]** (`preverif_c4.q:1`; `preverif_c6.q:1`; `preverif_c7.q:1`). O recibo registra “FILA solicitada / sem cura nesta volta”, sem identificar o solicitante (`app/docs/FIO-E0-V4-E4B-c8.txt:90`). A regra exige motivo para descarte e auditoria prévia de perguntador e triador (`CLAUDE.md:372-384`).
-
-A justificativa “HERDADO, nao regressao” pertence ao **ciclo C↔Cel**; atribuí-la aos achados abaixo seria **[nao verificado]** (`triagem_c9_c10.txt:40`). Para `.q/.r`, contei as linhas dos anexos desde a primeira, incluindo linhas vazias; correspondência com a numeração física dos originais: **[nao verificado]**.
-
-1. **BLOQUEANTE 1 — (b): visto e colocado em FILA.**
-
-   **Pergunta:** “Caminhos que fecham chamado SEM passar pelas duas bordas humanas […] Algum fecha o chamado com pergunta viva da exportada sem que ninguem a entregue?” (`preverif_c6.q:8`).
-
-   **Resposta:** “Fechamentos futuros fora das duas bordas sem entrega E4B | **Não curado — FILA de alcance.**” (`preverif_c7.r:24`).
-
-   **Triagem/motivo registrado:** delimitação às duas bordas; o recibo preserva explicitamente o fechamento direto sem coletor (`app/docs/FIO-E0-V4-E4B-c8.txt:90`, `:93`). Justificativa adicional demonstrando que essas categorias nunca ancoram pergunta viva: **[nao verificado]**. As transições humanas diretas continuam na cópia (`app/chamados/services/acoes_chamado.py:70`, `:108`, `:149`, `:222`, `:277`; `app/colaboradores/views.py:2068`).
-
-2. **BLOQUEANTE 2 — (a): tema presente; contorno pelo `--hoje` não apontado.**
-
-   **Pergunta:** “apply so em competencia aberta […] comp 10 sem apply” (`preverif_c4.q:10`); “reconferencia antes da escrita” (`preverif_c4.q:20`).
-
-   **Resposta sobre o contorno pelo argv:** **ausente**. O Codex havia visto o problema anterior: “**comp 10 sem `!` não possui impedimento próprio**”; portanto, não cabe dizer que ignorou toda a proteção da competência 10 (`preverif_c4.r:9`).
-
-   A classe **(a)** corresponde especificamente à autorização contornável: a cópia compara a competência com a janela de `hoje`, substituível pelo argumento, enquanto `agora` vem do relógio (`app/chamados/management/commands/backfill_fio_morto_e4b.py:218-230`). A revalidação posterior verifica entrega; execução concreta do contorno: **[nao verificado]** (`app/chamados/management/commands/backfill_fio_morto_e4b.py:301-305`).
-
-3. **FILA a — (b): leitores temporais divergentes vistos e mantidos em FILA.**
-
-   **Pergunta:** “nenhum data_evento cru restante no caminho do S143?” (`preverif_c7.q:5`).
-
-   **Resposta:** “A recusa de exportada lê `q.data_evento` […] sem concluir a migração integral — **FILA preexistente**.” (`preverif_c7.r:29`).
-
-   **Triagem/motivo registrado:** “Leitores crus **preexistentes** de data_evento: FILA”; exaustividade declarada não verificada (`app/docs/FIO-E0-V4-E4B-c8.txt:96`). A divergência permanece: recusa pelo atributo cru, agrupador pelo juiz temporal, descartando `None` (`app/chamados/services/disputa_emissao.py:1835-1836`; `app/chamados/services/fecho_runtime.py:114-116`).
-
-4. **FILA b — (b): perda de novas recusas na Pauta existente vista e mantida em FILA.**
-
-   **Pergunta:** “Pauta DP […] idempotente por marcador+ancora” (`preverif_c6.q:6`); depois, “Cada achado do preverif_c6.r […] nao curado” (`preverif_c7.q:5`).
-
-   **Resposta:** “Reentrega não acrescenta novos IDs à Pauta existente | **Não curado — FILA.** […] a nota S143 conserva o rastro individual.” (`preverif_c7.r:23`).
-
-   **Triagem:** “Reentrega nao agrega novos IDs: continue na Pauta viva”, sob “FILA solicitada” (`app/docs/FIO-E0-V4-E4B-c8.txt:90`, `:92`). Motivo adicional do triador: **[nao verificado]**; a preservação da nota é observação da resposta, sem assinatura de triagem (`preverif_c7.r:23`). O `continue` permanece (`app/chamados/services/fecho_runtime.py:128-130`).
-
-5. **FILA c — (e): NAO PERGUNTADO quanto à estabilidade posterior contra o reconciliador.**
-
-   **Pergunta específica sobre terminar em `em_analise` e depois executar o reconciliador:** **ausente**. Há pergunta sobre caminhos do reconciliador e outra sobre falso verde, mas sem esse ensaio de estabilidade (`preverif_c6.q:8`; `preverif_c7.q:9`). [nao verificado]
-
-   **Resposta sobre esse flap:** **ausente** nos anexos fornecidos **[nao verificado: histórico além dos anexos]**.
-
-   O teste exige `em_analise`, confere a trilha e termina sem uma passagem posterior pelo reconciliador; isso permite constatar a cobertura ausente por leitura, sem afirmar que o flap ocorreu (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:211-229`). Ocorrência do flap: **[nao verificado]**.
-
-6. **FILA d — (a): tema dos tetos presente; ressalva de desenho não apontada.**
-
-   **Pergunta:** “Teto de queries: o teste mede o caminho real ou um proxy?” (`preverif_c4.q:24`). [nao verificado]
-
-   **Resposta:** “**O teto global mede caminho real**” (`preverif_c4.r:100`). Reconhecimento dos aumentos e da “PERGUNTA DE DESENHO” aberta: **ausente** nessa resposta.
-
-   A ressalva é legível na cópia: expectativas 213/269 com `[nao verificado]` e pergunta de desenho aberta (`app/ponto/tests/test_selo_chokepoint_escrita.py:192-195`, `:207-209`). Porém, o opus generalizou: **27→28 e 59→60 estão descritos como medidos pela sessão**, não como não verificados (`app/ponto/tests/test_selo_chokepoint_escrita.py:122`, `:132`). A classe refere-se à omissão dessa ressalva documental; certificação independente dos números: **[nao verificado]**.
-
-7. **FILA e — (c): fora do alcance quanto à execução histórica do RED.**
-
-   **Trecho apresentado na pergunta:** “mutantes retorno_antecipado e sem_pauta morrem nos dois RED” (`preverif_c6.q:3`).
-
-   **Resposta que comprove reexecução após c7–c9:** **ausente**. A afirmação “não re-rodado” aparece no opus, mas os logs dessas execuções não foram fornecidos para conferência (`opus_final_c10.r:4`; execução posterior: **[nao verificado]**).
-
-   Há uma limitação estática verificável: o roteiro c9 inclui c8/c7, mas o retorno de c7 não incorpora o ramo padrão c6 que contém `retorno_antecipado`. Isso não exclui execução independente pela sessão (`app/chamados/tests/e4b_c6_verificar.py:320-333`, `:388-389`).
-
-8. **FILA f — (e): NAO PERGUNTADO sobre conciliação dos padrões documentais.**
-
-   **Pergunta sobre `append-only` × `Single Writer Principle` × `Parallel Change`: ausente. Resposta correspondente: ausente.** A c4 inclusive declara “Diff (sem app/docs)”; isso não equivale a uma pergunta sobre coerência dos rótulos (`preverif_c4.q:6`).
-
-   A cópia mostra E4B com `Parallel Change / Expand-Contract`; a linha 1889 pertence a outra obra (`app/docs/BACKLOG.md:1875`, `:1889`). O recibo c4 registra substituição de `append-only`, enquanto c8/c9 declaram `Single Writer Principle` (`app/docs/FIO-E0-V4-E4B-c4.txt:33`; `app/docs/FIO-E0-V4-E4B-c8.txt:5`; `app/docs/FIO-E0-V4-E4B-c9.txt:5`). O merge específico descrito pelo opus e o conteúdo do `recibo_c6.txt`: **[nao verificado]**.
-
-Contagem por classe, nos oito itens acima: **(a) 2 | (b) 3 | (c) 1 | (d) 0 | (e) 2.**
-
-_4056 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4059 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
