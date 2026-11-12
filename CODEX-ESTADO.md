@@ -1,7 +1,45 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 14:56** · publicado em **12/11/2026 15:00** (UTC-3)
+> Ultima resposta processada: **12/11/2026 15:14** · publicado em **12/11/2026 15:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 15:14 · sessao 87d57a6fc2f3 · E3-LEITORES · sonda · origem=Code
+
+Referências `DADO RASPADO:n` contam desde `sonda_leitura` como linha 1, preservando a linha vazia seguinte.
+
+A saída é conclusiva para a coorte atual: `total_erros=0` e `sonda_coorte_atual_conclusiva=1`. (`DADO RASPADO:25`, `DADO RASPADO:26`)
+
+| Medida | Resultado | Fonte |
+|---|---:|---|
+| Coorte atual de vencidos em COBRANCA | 11 | `DADO RASPADO:5` |
+| É 12? | Não (`mesma_quantidade_12=0`) | `DADO RASPADO:6` |
+| Chamados medidos | 11 | `DADO RASPADO:7` |
+| Visíveis ao colaborador no MAIN | 0 | `DADO RASPADO:8` |
+| Visíveis com a b4 | 3 | `DADO RASPADO:9` |
+| Passam a aparecer com a b4 | 3 | `DADO RASPADO:10` |
+| Chamados de colaboradores isentos | 8 | `DADO RASPADO:11` |
+| Isentos visíveis com a b4 | 1 | `DADO RASPADO:12` |
+| Isentos que passam a aparecer | 1 | `DADO RASPADO:13` |
+
+| Chamado | MAIN | b4 | Isento | Fonte |
+|---|---:|---:|---:|---|
+| col41/#3057 | 0 | 0 | 1 | `DADO RASPADO:14` |
+| col41/#3403 | 0 | 0 | 1 | `DADO RASPADO:15` |
+| col440/#11658 | 0 | 0 | 1 | `DADO RASPADO:16` |
+| col291/#11935 | 0 | 1 | 1 | `DADO RASPADO:17` |
+| col331/#16444 | 0 | 1 | 0 | `DADO RASPADO:18` |
+| col368/#16621 | 0 | 1 | 0 | `DADO RASPADO:19` |
+| col216/#23030 | 0 | 0 | 1 | `DADO RASPADO:20` |
+| col427/#23031 | 0 | 0 | 0 | `DADO RASPADO:21` |
+| col257/#23037 | 0 | 0 | 1 | `DADO RASPADO:22` |
+| col225/#23049 | 0 | 0 | 1 | `DADO RASPADO:23` |
+| col142/#27206 | 0 | 0 | 1 | `DADO RASPADO:24` |
+
+A saída **não prova identidade com os 12 históricos**: `identidade_com_12_historicos_verificada=0`. (`DADO RASPADO:27`)
+
+Na cópia, a lista do colaborador exige `silenciado_ate__isnull=True`. ([janela_colab.py:73](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/chamados/services/janela_colab.py:73))
+
+Para a rodada 2, os números acima são os da saída fornecida. Uma nova execução da sonda sobre `wt-e3-b6-114947`/`c70b7511c` nesta sessão: [nao verificado].
 
 ## 12/11 14:56 · sessao a3191175b1ce · AUDITORIA-DE-TRAVAS · leitura · origem=Code
 
@@ -1019,32 +1057,4 @@ Resultado recomendado: **8 PARADA; 2 ABSORVIDA-POR**. As descrições das raias 
 
 Arquivos **literalmente ausentes** conferidos (não confundir com todo delta do stat): quarentena.py; testes quarentena e ambos silêncio; `_quarentenas.html`; ambos testes COBPARC relógio; três testes novos justificativa; teste pai terminal; três testes ATA pausa/juiz uma entrada; teste LASTRO degrau2; testes BUG-ENC e E4-CARGA [nao verificado quanto a arquivo:linha de ausência]. Os arquivos de produção modificados do stat já existem, mas o delta não está provado como pousado. [nao verificado]
 
-## 12/11 14:22 · sessao 7e5d0ea3b9d0 · - · - · origem=Ronald (tmux)
-
-Conferência das 10 obras, somente leitura. A cópia não tem `.git`; branches, refs e identidade dos blobs das raias não puderam ser conferidos. [nao verificado]
-
-| Obra | Classe sugerida | Prova no main e síntese |
-|---|---|---|
-| O275 | PARADA | **não achei** o campo `feriado_e_dia_trabalho`; o leitor atual começa em `app/escala/models.py:1252`. A raia cria cadastro do tipo para tornar feriado previsto; pouso retido por FORMA A × B, segundo `app/docs/RELATO-ARQUIVO.md:753` e `app/docs/RELATO-ARQUIVO.md:755`; trava dupla explicitada em `app/docs/RELATO-ARQUIVO.md:1486`. |
-| O276 | NO-MAIN-COM-OUTRO-NOME | `app/ponto/turnos.py:1430` e `app/ponto/turnos.py:1447`: fecho em fluxo pergunta teto do dia; ultrapassado, cria turno aberto e saída órfã em `app/ponto/turnos.py:1453`. Pouso sob **R1-H-PORTAO-DE-26H** documentado em `app/docs/RELATO.md:3293`. **Ressalva:** main aplica exceção L-084, devolvendo teto de 26 h quando ambas as pontas estão deslocadas (`app/ponto/turnos.py:1435`); não é reprodução literal irrestrita da raia. |
-| V3-RETOMA-FILA | PARADA | **não achei** o lado v2 obtido da lavra: main ainda monta `m_dia` por laço próprio em `app/ponto/management/commands/diff_calculador.py:245`; CCT continua calculada com `ini` e template do chamador em `app/ponto/calculador/alimentacao.py:389`. Motivo registrado: instrumento pousa depois da V3, `app/docs/RELATO.md:1707`. |
-| V3-RETOMA-PERIODOS-DA-CELULA | PARADA | **não achei** a regra completa: main ainda preenche `pares_por_dia` com segmentos em `app/ponto/calculador/alimentacao.py:158`, e declara/continua quando período não tem dia ou carimbo em `app/ponto/calculador/alimentacao.py:79`, em vez da recusa da raia. Motivo: dependência da pista, P4 aberto e base atrasada, `app/docs/RELATO.md:7328`. **P5 isolada foi refeita e pousou** sob outra obra, `app/docs/RELATO.md:7408`, mas isso não absorve a obra inteira. |
-| V3-E1 | PARADA | **não achei** os cinco arquivos do stat. É bateria/arnês, não implementação de produção; resultado registrado da validação tem 14 falhas de status em 11 casos, `app/docs/RELATO.md:1805`; registro anterior de não pousar junto à v2 e necessidade de E1 validado em `app/docs/RELATO.md:1815`. Motivo mais recente integral: **não sei**; a linha de validação não declara o destino posterior do arnês. |
-| E3-ISENTO-INSUMOS | ABSORVIDA-POR ISENTO-H10 | `app/docs/BACKLOG.md:934` diz explicitamente SUPERADA por ISENTO-H10 e que `c9f16a60` vira sua base; pouso em `app/docs/BACKLOG.md:924`. Produção `app/ponto/services/cartorio.py:548` acrescenta `isento:1` com isenção e `regra >= 4`; o horizonte substitui a aplicação atemporal da raia. |
-| CASA-ESCALA-E4 | NO-MAIN-COM-OUTRO-NOME | `app/colaboradores/queries.py:64` usa `q_vinculo_cobre_a_data`; dinheiro usa a juíza em `app/folha/previa.py:81`, `app/ponto/services/fechamento.py:229`; carregamento em `app/ponto/nucleo.py:15`. Parte 5 pousada e dez cópias migradas documentadas em `app/docs/RELATO.md:3384` e `app/docs/RELATO.md:3386`. Mesmo comportamento em main, com nomes dos juízes. |
-| QUATRO-PRAZOS | NO-MAIN-COM-OUTRO-NOME | `app/ponto/turnos.py:3186`, `app/ponto/turnos.py:3199`, `app/ponto/turnos.py:3229`; chamadas reais `app/ponto/management/commands/processar_alertas_avancados.py:63` e `app/ponto/management/commands/processar_alertas_turno.py:118`. Gate do detectar pergunta autoridades em `app/ponto/management/commands/detectar_ausencias.py:471` e `app/ponto/management/commands/detectar_ausencias.py:474`. Pousos das partes anexadas: `app/docs/RELATO.md:3350` e `app/docs/RELATO.md:3406`. |
-| JUIZ-VARREDURA-1 | NO-MAIN-COM-OUTRO-NOME | Cron atual apenas conta e alarma em `app/ponto/management/commands/reavaliar_ausencias_feriado.py:35` e `app/ponto/management/commands/reavaliar_ausencias_feriado.py:43`; pouso posterior como **JUIZ-1 v5** em `app/docs/RELATO.md:1297`, registro NO AR em `app/docs/RELATO.md:1294`. A raia anexada inclui também JV4A, mas contém a obra JV1; não é raia alheia. [nao verificado quanto aos blobs] |
-| JUIZ-VARREDURA-3 | ABSORVIDA-POR C20-JUIZ-3 | `app/docs/RELATO.md:7859` a `app/docs/RELATO.md:7863` descrevem pouso C20-JUIZ-3 e nomeiam o cron vigia, outbox e receiver; `app/docs/BACKLOG.md:1816` registra NO AR. Produção: consumidor chama retratação da premissa em `app/chamados/reconciliador.py:1373`; cron só conta e alarma em `app/chamados/management/commands/reconciliar_chamados.py:118`. |
-
-Arquivos do stat para as quatro PARADAS, distinguindo **ausentes fisicamente** de alterações de raia em arquivos já existentes:
-
-- **O275:** ausentes `app/escala/management/commands/vinculos_tipo_feriado_contra_vinculo.py`, `app/escala/migrations/0043_tipoescala_feriado_e_dia_trabalho.py`, `app/escala/tests/test_o275_sdf_feriado_e_dia.py`, `app/escala/tests/test_tripwire_o275_leitor_unico_do_flag.py`. [nao verificado: ausência não tem linha] Outros arquivos do stat já existem: `app/config/crons.py`, `app/escala/{models.py,services/cadastro_tipo.py,views_wizard.py}`, `app/templates/escala/{_wizard_preview.html,tipos_lista.html,wizard_tipo_escala.html}`; identidade das alterações [nao verificado].
-- **V3-RETOMA-FILA:** ausentes `app/ponto/tests/test_diff_calculador_lado_v2_e_a_lavra.py` e `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py`. [nao verificado: ausência não tem linha] Os dois arquivos de produção do stat existem, mas conservam regra anterior nas linhas citadas acima.
-- **V3-RETOMA-PERIODOS-DA-CELULA:** ausentes `app/ponto/tests/test_v3_dobra_do_ciclo_do_dia.py`, `app/ponto/tests/test_v3_dobra_noturna_e_cct_do_dia.py`, `app/ponto/tests/test_v3_periodos_da_celula.py`. [nao verificado: ausência não tem linha] Existem os quatro arquivos de produção do stat e `test_s5b_split_noturno_tem_um_dono.py`, `test_v3_parei_p5_parte_menor_que_todo.py`; a existência do último decorre da P5 posterior, sem comprovar toda a regra (`app/docs/RELATO.md:7408`).
-- **V3-E1:** ausentes todos os cinco: `app/docs/E1-PERGUNTA-AO-DP-CONTADOR.md`, `app/ponto/tests/{test_e1_lote1_valor_do_dia.py,test_e1_lote2_status_do_dia.py,test_e1_lote3.py,test_v3_e1_valor.py}`. [nao verificado: ausência não tem linha]
-
-Todos os primeiros diffs deste grupo foram truncados a 5.000 bytes no dado fornecido; os corpos posteriores ao corte não são visíveis e a identidade completa das alterações não é verificável sem refs. [nao verificado] Não encontrei raia evidentemente alheia neste grupo; `wt-jv4a-033135` empilha JV4A sobre JV1, e `wt-v3p5v2-cura4-220249` empilha P5 sobre V3-PERIODOS, conforme os commits anexados. [nao verificado] [nao verificado]
-
-Contagem deste grupo: NO-MAIN-COM-OUTRO-NOME **4**, ABSORVIDA-POR **2**, MORTA-POR-CORTE **0**, PARADA **4** = **10**. [nao verificado]
-
-_4302 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4303 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
