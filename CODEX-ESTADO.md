@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 07:14** · publicado em **12/11/2026 07:14** (UTC-3)
+> Ultima resposta processada: **12/11/2026 07:53** · publicado em **12/11/2026 07:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 07:53 · sessao 1ae2b1829e34 · - · - · origem=Ronald (tmux)
+
+Censo em memória confirmou:
+
+- Totais: pareadores 9, derivações 85; critérios A1=6/B1=82, conforme `core/tests/test_medida_turno_do_par.py:104`.
+- Identidades/sítios, composição e CLASSIFICAR permanecem iguais ao registro, conferidos pelo censo de `core/medida_turno_do_par.py:448`.
+- Apenas quatro entradas de linhas diferem:
+  - `chamados/services/materializacao.py:171`: `[170] → [171]`.
+  - `ponto/management/commands/detectar_intervalo_ausente.py:83`: `[82] → [83]`.
+  - `ponto/services/triagem_batida.py:425`: `[424] → [425]`.
+  - `ponto/services/triagem_batida.py:248`, `:255`, `:261`: `[247,254,260] → [248,255,261]`.
+
+Os três arquivos têm import de `fecho_runtime` antes das ocorrências, respectivamente em `materializacao.py:43`, `detectar_intervalo_ausente.py:18`, `triagem_batida.py:6`. Retirar os imports de topo em `ponto` pode devolver suas ocorrências às linhas registradas; recalcule após a cura A16. O conteúdo histórico anterior dessas ocorrências, sem ler a base, é [nao verificado].
+
+Execução usada: `PYTHONDONTWRITEBYTECODE=1 python3 -B -`, carregando `core/tests/test_medida_turno_do_par.py` em memória com a substituição documentada em `core/tests/test_medida_turno_do_par.py:20`, e comparando `m.censo(_app())` com os registros. Nenhum arquivo foi alterado.
+
+## 12/11 07:53 · sessao 3b060935ddd6 · - · - · origem=Ronald (tmux)
+
+(C) O selo não reconhece o encaminhamento por `ato=`: classifica `ato=ch.reconciliar` como “método preso a apelido” em [test_selo_reconciliar_le_o_retorno.py:57](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_selo_reconciliar_le_o_retorno.py:57).
+
+A porta preserva o retorno: devolve `ato()` diretamente em [fecho_runtime.py:160](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/fecho_runtime.py:160), captura `resultado = ato()` em [fecho_runtime.py:165](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/fecho_runtime.py:165) e devolve esse valor em [fecho_runtime.py:169](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/fecho_runtime.py:169).
+
+Os cinco sítios de `_julgar_colab_corpo` continuam lendo o booleano em filtros/condicional, antes de contar ou registrar fechamento: [cartorio.py:1538](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:1538), [cartorio.py:1551](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:1551), [cartorio.py:1572](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:1572), [cartorio.py:1650](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:1650), [cartorio.py:1665](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/services/cartorio.py:1665).
+
+Correção recomendada do selo: reconhecer o atributo somente como argumento `ato=` da porta real, conferir igualdade entre receptor e primeiro argumento e verificar descarte sobre a chamada da porta. Preservar detecção de apelidos, `getattr` e portas desconhecidas. A allowlist existente deve continuar contendo apenas os dois descartes deliberados: [detectar_ausencias.py:159](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/ponto/management/commands/detectar_ausencias.py:159) e [materializacao.py:588](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/services/materializacao.py:588).
+
+Mutantes recomendados: chamada da porta em statement; porta falsa; receptor diferente; remoção da leitura no chamador; `return resultado` substituído por valor constante na porta. O teste existente já exige a preservação exata de `False` em [test_e4b_c12_memoria.py:31](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/test_e4b_c12_memoria.py:31). [nao verificado]
+
+Nenhum arquivo foi escrito; execução dos testes e dos mutantes [não verificado]. [nao verificado]
 
 ## 12/11 07:14 · sessao 1db4d2d51bc8 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
 
@@ -709,32 +739,4 @@ C6 aplicada: cobertura separada do rótulo, mapas legados preservados, efeito de
 
 Sem commit, pela proibição inicial. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6.r:66). Certificação da suíte completa e Opus final: [nao verificado]. [nao verificado]
 
-## 11/11 23:23 · sessao 2ecf1a0154a7 · FIO-E0-V4-E4B · construtor · origem=Code
-
-C12 aplicada. A [entrega com tabela, leitores/escritores e comandos](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c12.txt:6) registra os 46 sítios migrados. [nao verificado]
-
-Validação local:
-
-- [15 testes novos verdes](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:1185) e [106 de regressão verdes](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:730). [nao verificado]
-- [55 mutantes: exatamente um subTest vermelho por sítio](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:470).
-- [Base: 46 falhas esperadas](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/chamados/tests/e4b_c12_execucao.txt:1162).
-
-ORM D3/D5 preparado, sem execução: **[não verificado]**. Sem commit, conforme a [proibição da obra](/home/ronald/wt-codex-fio-e0-v4-e4b-005824/app/docs/FIO-E0-V4-E4B-c12.txt:4). Certificação permanece com Code/suite/opus. [nao verificado]
-
-## 11/11 23:01 · sessao e5ede8a32f5b · - · - · origem=Ronald (tmux)
-
-Exploração somente leitura concluída; ORM não executado [não verificado].
-
-- Reutilizar `RecusaS143RuntimeTest._cenario`: cria exportação, fechamento e pergunta viva com assertions reais (`chamados/tests/test_e4b_c6_orm.py:45`).
-- D3 deve testar `resolvido → fechado`: matriz permite (`chamados/catalogo/motor.py:102`), guarda humana de viva só roda para origem `VIVOS` (`chamados/models.py:165`), e save terminal dispara S143 (`chamados/signals.py:96`). Resultado ORM: [não verificado].
-- Vínculo: tornar categoria `escala_aceite` e chamar `_executar_aceite` com template do vínculo existente; fechamento precede criação (`colaboradores/services/vinculo.py:384`, `colaboradores/services/vinculo.py:393`).
-- Desligamento: `_cenario(limbo=True)` mantém disputa mista aberta pela resposta sem veredito (`chamados/models.py:1843`); cascata pula essa disputa e alcança `encerrar` (`colaboradores/services/desligamento.py:139`, `colaboradores/services/desligamento.py:155`).
-- Regularização: preparar disputas fechadas sem carimbar a pergunta, verificar C6 viva, então materializar reg confirmada. Guard só barra disputas abertas (`chamados/services/regularizacao_ext.py:58`), mas coleta S143 usa `_ancoradas()` também de disputas fechadas (`chamados/services/disputa_emissao.py:1940`). C6 não consulta `disputa.fechada_em` (`chamados/juizes.py:1330`). Existência desse acervo em produção: [não verificado].
-- Cron: chamar `Command()._fechar_chamado(ch, entrada)` com chamado não-furo da fixture; gate permite premissa não-furo (`chamados/models.py:728`), sítio preserva booleano (`ponto/management/commands/detectar_ausencias.py:842`).
-- Signal: fechar outra disputa sem perguntas cujo pai seja `ch`, conservando a disputa da viva; receiver reconcilia pai (`chamados/signals.py:28`).
-- API: chamado `batida_ausente` no dia aberto, marco E08 aceso na célula e viva em outro dia exportado. Lookup é real (`chamados/juizes.py:2105`), juiz lê célula gravada (`ponto/services/lastro.py:185`).
-- Cartório: cobrar marco antigo E07 num dia cuja grade contém E08/S17; manter viva em outro dia exportado. Ramo `marcos_inexistentes → reconciliar` exercita `_julgar_colab_corpo` sem adiar fechamento (`ponto/services/cartorio.py:1523`); gate consulta mesmo juiz (`chamados/models.py:1298`).
-
-Para mutantes ORM, seguir enxerto em memória já existente, substituindo somente função/sítio e preservando globais (`chamados/tests/e4b_c11_verificar.py:78`, `chamados/tests/e4b_c11_verificar.py:90`). Execução e comandos novos dependem dos nomes finais [não verificado].
-
-_4079 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4081 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
