@@ -1,7 +1,277 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 13:26** · publicado em **12/11/2026 13:29** (UTC-3)
+> Ultima resposta processada: **12/11/2026 13:33** · publicado em **12/11/2026 13:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 13:33 · sessao 3ddb216d4271 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
+
+**O contrato v2 está errado como está: troca a fonte do topo, mas não especifica a troca de todos os juízes da fila; além disso, sua fórmula de andáveis e seu selo contradizem o RED que o aval manda manter.** (`contrato_item3_v2.txt:3`, `:6`; `aval_respostas_1211_1230.txt:4`; `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:59`, `:72`)
+
+Nas referências aos dois anexos, numerei as linhas do **texto fornecido**, começando pelo título como linha 1. Não são referências a arquivos localizados nesta cópia. A análise abaixo trata o BACKLOG como evidência documental; pousos e medidas de produção nele declarados não foram confirmados em banco ou log. [nao verificado]
+
+**1. Censo**
+
+Na coluna “efeito”, confronto cada leitor com a determinação de retirar marcador e coluna da condição de fonte. (`aval_respostas_1211_1230.txt:4`; `contrato_item3_v2.txt:2`)
+
+| Sítio | Pergunta ou escrita atual | Efeito da fonte nova |
+|---|---|---|
+| `bin/gerar_backlog.py:110`, `:119`, `:127` | Lê e republica a janela antiga desde o marcador até `OBRAS:FIM`, incluindo a prosa intermediária. | Precisa distinguir conteúdo manual preservado de publicação derivada; copiar essa janela integralmente pode recolocar marcador/lista antigos. |
+| `bin/gerar_backlog.py:131`, `:138` | Exige presença dos textos do marcador e de `OBRAS:INICIO`; escreve BACKLOG por `.novo` e `os.replace`. | A guarda de presença não certifica igualdade com a fonte estruturada. |
+| `bin/hook_stop_fila1.py:149`, `:171` | `_item_fechado` decide pela coluna de estado ou tachado na descrição; `_item_parado` acrescenta congelamento, fila 2, espera, PAREI e portão. | Esses predicados precisam deixar de decidir pertencimento e andabilidade da ORDEM. |
+| `bin/hook_stop_fila1.py:192`, `:209`, `:225` | `_item_da_ordem_viva`: qual é o topo? Extrai marcador, procura o id no bloco OBRAS e veta pela coluna. | Trocar apenas a extração do marcador deixa o veto da coluna funcionando como segunda fonte. |
+| `bin/hook_stop_fila1.py:231`, `:250`, `:256` | `_itens_andaveis` enumera todos os não parados de OBRAS; `_ha_item_aberto` decide fila vazia por essa lista. | Ambos precisam migrar; mudar somente `_andaveis_fora_do_em_curso` não resolve o vazio. |
+| `bin/hook_stop_fila1.py:270`, `:276` | Quais e quantos andam além do topo? O recado manda buscar o próximo no adendo. | A contagem muda com a exclusão do ruído; a orientação ainda levaria o humano à prosa se permanecer. |
+| `bin/hook_stop_fila1.py:290`, `:312` | Diagnostica marcador quebrado e oferece o item em curso aos demais leitores. | Diagnóstico precisa passar a “fonte quebrada”; o topo só permanece igual se o primeiro id estruturado for o mesmo. |
+| `bin/hook_stop_fila1.py:323`, `:344` | `_ids_que_nao_andam`: quais ids estão parados pela coluna? | Continua juiz ativo: essa lista veta o PAREI em `:1298`. |
+| `bin/hook_stop_fila1.py:349`, `:378`, `:380` | `travas_da_fila`: quais obras não fechadas têm palavra de trava na coluna? | Não pode continuar sustentando a conclusão de “fila inteira travada” pela prosa. |
+| `bin/hook_stop_fila1.py:1232`, `:1245` | `_relato_parou`: PAREI do em curso devolve turno somente sem outro andável. | A resposta muda quando se retiram linhas abertas fora da ORDEM. |
+| `bin/hook_stop_fila1.py:1248`, `:1298`, `:1310` | `_parei_do_em_curso`: reconhece `!`, rejeita ids parados pela coluna e compara com o topo. | Também precisa migrar o veto por coluna, não apenas a obtenção do topo. |
+| `bin/hook_stop_fila1.py:1391`, `:1400` | Sem topo válido, decide entre fila vazia e marcador quebrado consultando OBRAS. | Precisa distinguir fonte válida vazia de fonte inválida usando a nova fonte. |
+| `bin/handoff_sessao.sh:54`, `:64`, `:71`, `:120` | Publica topo, em curso, trava do item e devolução do turno, perguntando ao hook. | Herda a migração do juiz; rótulos e respostas sobre PAREI também mudam. |
+| `bin/handoff_sessao.sh:163`, `:171`, `:209`, `:216` | Perguntas distintas: avais de hoje não cumpridos e linhas abertas da raia20, pelo fechamento da coluna. | Podem continuar como informação documental, mas não como exclusão de pousadas ou definição da ORDEM. |
+| `bin/handoff_sessao.sh:290`, `:294`, `:299`, `:314` | Sem próximo, mostra lista travada e afirma que o turno se devolve; descreve próximo como primeiro aberto de OBRAS ou manda conferir a ordem à mão. | Precisa mudar: topo inválido não significa fila inteiramente travada; os textos ainda encaminham à autoridade antiga. |
+| `bin/disjuntor.py:1671`, `:1682` | `_fila1_viva`: quais obras exigem censo? Obtém todos os andáveis de OBRAS. | Universo muda para o estruturado; linhas abertas fora dele deixam de integrar essa lista. |
+| `bin/disjuntor.py:1720`, `:1736` | `_pertence_fila1`: esta obra pertence à fila? Usa token e nomeação inteira, com recusa de ambiguidades. | Contrato precisa definir identidade exata dos ids, inclusive qualificações e aliases. |
+| `bin/disjuntor.py:1746`, `:1755`, `:2355` | Aplica ou dispensa o censo conforme pertencimento; CLI usa a mesma pergunta. | Herda a mudança de universo. “Não muda de resposta” não vale para itens retirados da lista. |
+| `bin/codex_pergunta.sh:228` | Chama o censo antes de obter a vaga. | Leitor indireto; deve continuar delegando ao disjuntor. |
+| `bin/backlog_estado.py:56`, `:57`, `:59`, `:62` | Escreve estado e compara próximo/ids parados antes e depois. | Escrever coluna precisa deixar de mudar a ORDEM. Hoje o script **escreve e informa**, apesar da docstring dizer que para quando muda o veredito (`:8`, `:66`). |
+| `bin/interrompidas_estado.py:89`, `:93`, `:105`, `:121`, `:125` | Lê INTERROMPIDA/FUNDIDA; pergunta topo ao hook; considera retorno por topo, fusão ou fechamento. | Topo migra indiretamente; fechamento documental continua pela coluna, se mantido. Não pode definir a exclusão estruturada de pousadas. |
+| `bin/gerar_estado.py:236`, `:241` | Publica interrompidas e topo do medidor. | Leitor indireto; diagnóstico de marcador em `:243` precisa acompanhar a fonte nova. |
+| `bin/alarme_sessao_ociosa.py:89`, `:96`, `:113` | **Parser próprio:** conta linhas de `## OBRAS`, excluindo ☑/FEITO/FECHAD na linha inteira. | Continua segundo juiz se não migrar: essa contagem decide fila vazia e disparo (`:40`, `:148`). |
+| `bin/placar_code.sh:368` | Publica o alarme de sessão. | Herda o leitor anterior. |
+| `bin/fabricante_alvo.py:238`, `:251`, `:273`, `:279` | **Parser próprio:** escolhe O/F por texto e coluna — dinheiro, só registrar, Ronald/aval/corte/smoke, livre e fechado. | Continua lendo prosa e escolhendo “item da ORDEM” se não migrar. O contrato precisa delimitar essa pergunta. |
+| `bin/fabricante_alvo.py:315`, `:320`; `bin/fabricante.sh:129` | Tenta livres e depois ORDEM escalonada; fabricante chama o seletor. | Leitores indiretos do seletor anterior. |
+| `bin/gerar_backlog_topo.py:16`, `:26`, `:30`, `:39` | Produz resumo de O-números abertos, por frases e ordenação numérica. | É pergunta diferente da ORDEM VIVA; não pode passar a ser consumido como fila 1. |
+| `bin/relato.sh:35`, `:115`, `:116` | Gera o resumo e publica BACKLOG completo. | Transporta a publicação derivada. Seu comentário ainda declara que a ORDEM se lê na tabela completa (`:7`). |
+| `.claude/settings.json:9`, `:20`, `:29`, `:40`, `:53`, `:68` | Stop chama hook; PreCompact chama handoff; SessionStart lê handoff; PreToolUse chama disjuntor. | São entradas/leitores indiretos. Apontam para `/home/ronald/saas-hasner`; execução desta cópia nesse caminho é [nao verificado]. |
+
+Os selos também fazem parte da migração:
+
+| Selo em `bin/tests/` | Pergunta/fixture atual e efeito |
+|---|---|
+| `test_hook_andavel_e_a_ordem_viva.sh:34`, `:51`, `:73` | Escreve marcador, ordem em prosa, estados, POS-20 e ruído; exige liberar com restante travado e bloquear com restante aberto. Precisa representar os dois casos na fonte estruturada. |
+| `test_hook_parei_com_andavel.sh:25`, `:42`, `:56` | Alterna restante aberto/travado pela coluna para exigir bloquear/liberar. |
+| `test_hook_parei_trava_o_item_em_curso.sh:20`, `:40`, `:53` | Distingue PAREI do topo de PAREI de outro item; fixtures precisam migrar. |
+| `test_hook_parei_casa_id_inteiro.sh:21`, `:42`, `:57` | Escreve marcador e congeladas; preserva a pergunta de identidade inteira, mudando a fonte do congelamento. |
+| `test_hook_le_o_marcador.sh:39`, `:56`, `:74`, `:92` | Exige autoridade/falhas do marcador e vazio pela tabela. Essas expectativas precisam virar autoridade/falhas/vazio da fonte estruturada. |
+| `test_hook_estado_e_a_coluna.sh:41`, `:51`, `:59`, `:80` | Exige estado/tachado como veto do topo e examina BACKLOG real. Essa expectativa sobre a ORDEM conflita com o aval novo. |
+| `test_hook_nao_cobra_congelado.sh:12`, `:111`, `:115`, `:135`, `:168` | Lê o predicado de coluna, valida marcador real e escreve fixtures. Exigir marcador como fonte deixa de valer. |
+| `test_interrompidas_estado.sh:37`, `:60`, `:67`, `:82` | Testa topo/fusão/fechamento e ausência de escrita. Migrar topo, mantendo a pergunta específica de interrupção. |
+| `test_censo_antes_da_vaga.sh:36`, `:112`, `:125`, `:568`, `:694` | Testa pertencimento pela tabela, fechada fora, fonte ausente e ambiguidades; inclui mutante dependente dessa leitura. Fixtures, expectativas e mutante precisam migrar. |
+| `test_handoff_sessao.sh:124`, `:130`, `:151` | Proíbe parser próprio do marcador/OBRAS e usa fixture de tabela. A guarda precisa alcançar a fonte nova; a fixture precisa fornecê-la. |
+| `test_fabricante_le_a_ordem.sh:25`, `:34`, `:65` | Recalcula quem espera Ronald pela coluna e confronta o fabricante; continua leitor da fonte antiga se mantido. |
+| `test_fabricante_backlog.sh:22`, `:35`, `:39` | Exige livres/expansão escalonada e reconhece ORDEM pelo texto. Depende da delimitação do fabricante. |
+| `test_alarme_vigia_a_sessao.sh:62` | Exige textualmente que a fila venha de BACKLOG; essa guarda precisa acompanhar a troca. |
+| `test_orcamento_contexto.sh:40`, `:165`, `:451` | Cria marcador e altera coluna para simular fila vazia. Migrar a representação do vazio. |
+| `test_disjuntor.sh:59` | Cria marcador/tabela para hook e disjuntor. Precisa da fonte estruturada na fixture. |
+| `test_hook_nao_para_por_processo.sh:36`, `:65` | Simula fila viva/vazia com marcador e fechado; preservar respostas com fixtures novas. |
+| `test_hook_parei_so_lei.sh:36`, `:48`, `:68` | Simula lei, técnico, `!` e só registro pela tabela; migrar a fonte dessas condições. |
+| `test_hook_teto_nao_conta_espera.sh:40`, `:69` | Fixture de marcador para testar teto/espera. Muda a fixture, não a pergunta do teto. |
+| `test_hook_esperando_com_prova.sh:40`, `:65`, `:79` | Fixture para prova de espera e `siga`; precisa da nova fonte. |
+| `test_hook_stop_saida_valida.sh:20`, `:45` | Fixture para schema e silêncio; precisa da nova fonte. |
+| `test_relato_prova_no_stop.sh:16`, `:23` | Fixture para chegar à guarda de prova; precisa da nova fonte. |
+
+Em `app/`, os outros leitores encontrados de BACKLOG perguntam **existência do item** e **padrão declarado da obra**, não ordem/andabilidade: `app/core/tests/test_marca_cron15.py:89` e `app/chamados/tests/e4b_c4_verificar.py:209`. A mesma distinção vale para `bin/tests/test_prompt_virou_item.sh:25`.
+
+Há declarações documentais da autoridade antiga que precisam receber a emenda do instrumento: marcador manual em `app/docs/LEIS.md:140`, `app/docs/CORTES.json:736` e `app/docs/BACKLOG.md:1574`. O handoff salvo ainda publica `MANHA-0511`, enquanto o marcador atual publica `ORDEM-POS-E4A2`; não serve como prova da ordem atual. (`app/docs/HANDOFF-SESSAO.md:19`; `app/docs/BACKLOG.md:8`)
+
+**2. Cobertura literal do aval**
+
+| Exigência | Veredito sobre v2 |
+|---|---|
+| Fonte única estruturada em arquivo próprio | **Cobre a forma:** três seções no mesmo arquivo, com um escritor declarado. (`contrato_item3_v2.txt:2`) |
+| `gerar_backlog` publica; hook lê | **Cobre a intenção.** “Renderiza no BACKLOG, sem escrever nele” precisa identificar que o arquivo intocável é o `.ids`; literalmente, o antecedente fica ambíguo. (`contrato_item3_v2.txt:2`) |
+| Marcador e coluna deixam de ser fonte | **Não fecha a implementação:** nomeia duas funções, mas deixa sem especificação os demais caminhos do censo acima. (`contrato_item3_v2.txt:3`; `bin/hook_stop_fila1.py:225`, `:267`, `:344`, `:380`, `:1298`) |
+| Universo = fila 1 não pousada | **Não resolve a semântica:** transforma todos os restantes de ORDEM em andáveis. O RED exige distinguir restante travado de restante aberto. (`contrato_item3_v2.txt:3`; `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:51`, `:73`) |
+| Exclusões POS-20 e pousadas, pelo id | **Representa as seções**, mas falta a semente com identidade resolvida e a regra operacional de exclusão. A interdição de repetição entre seções cobre conflito, não resolve aliases. (`contrato_item3_v2.txt:2`, `:5`; `app/docs/BACKLOG.md:2031`, `:1965`) |
+| RED ca320b69f permanece | **Diz que permanece, mas contradiz seu comportamento.** (`contrato_item3_v2.txt:6`; `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:59`, `:72`) |
+
+O defeito central é concreto: **ORDEM com três ids, dois restantes andáveis e PAREI do em curso liberando** não preserva a regra guardada. Com outro andável, o RED exige **não devolver o turno**. Não é questão de confirmar uma hipótese do Code: essa cláusula do contrato está errada. (`contrato_item3_v2.txt:6`; `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:75`; `bin/hook_stop_fila1.py:1245`)
+
+Além disso, uma lista apenas de ids não registra a diferença entre os dois estados que o RED exercita. O contrato precisa explicar essa diferença dentro da fonte estruturada, sem reintroduzir coluna, marcador ou adendo como juiz. A representação dessa condição está ausente do v2. (`contrato_item3_v2.txt:2`, `:3`; `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:51`, `:73`)
+
+Também faltam: vazio válido; repetição **dentro** da mesma seção; gramática/seções inválidas; identidade canônica; e separação entre falha esperada da fonte e exceção que alcança a falha aberta. O v2 enumera ausência/ilegibilidade/repetição entre seções/id sem linha, mas não esses casos. (`contrato_item3_v2.txt:5`; `bin/disjuntor.py:1736`; `bin/hook_stop_fila1.py:1460`)
+
+A promessa de handoff/disjuntor “não mudarem de resposta” sobra como garantia geral: a correção pretende justamente mudar pertencimento/contagem e, por consequência, devolução do turno e exigência de censo. (`contrato_item3_v2.txt:4`; `bin/disjuntor.py:1682`, `:1755`; `bin/hook_stop_fila1.py:1245`)
+
+**Sim, sobrariam leitores de prosa** se a migração seguir apenas os nomes explícitos do §1: veto de PAREI, lista travada, alarme e fabricante; os recados também continuariam mandando o humano ao adendo. (`bin/hook_stop_fila1.py:1298`, `:380`, `:285`; `bin/alarme_sessao_ociosa.py:113`; `bin/fabricante_alvo.py:273`; `bin/handoff_sessao.sh:314`)
+
+**3. Riscos do publicador e ordem de migração** [nao verificado]
+
+- **Reintroduzir saída velha:** a preservação começa no marcador antigo. Acrescentar publicação nova sem retirar a antiga dessa janela pode duplicar marcador/lista; o hook atual usa a primeira ocorrência encontrada. (`bin/gerar_backlog.py:119`, `:127`; `bin/hook_stop_fila1.py:209`)
+- **Perder adendos:** preservar apenas `OBRAS:INICIO` em diante descartaria a prosa entre o marcador e o início do bloco, atualmente incluída na janela. (`app/docs/BACKLOG.md:8`, `:712`; `bin/gerar_backlog.py:119`)
+- **Tripwire inadequado:** remover o marcador pode parar a geração; conservar qualquer ocorrência textual satisfaz uma guarda que não verifica valor nem derivação. (`bin/gerar_backlog.py:131`)
+- **Perder a cauda manual atual:** OBRAS termina em `:2038`, mas META-18 e outras linhas estão em `:2392` em diante. O gerador preserva apenas a janela terminada em OBRAS:FIM e recompõe o restante. (`app/docs/BACKLOG.md:2038`, `:2392`, `:2401`; `bin/gerar_backlog.py:100`, `:119`, `:138`)
+- **Declarar falsa fila vazia:** ausência/erro da fonte não pode virar lista vazia nem escapar pelo tratamento genérico que libera o hook. (`contrato_item3_v2.txt:5`; `bin/hook_stop_fila1.py:1400`, `:1460`)
+- **Fixture antiga impedir ou falsear a migração:** os selos de marcador/coluna precisam mudar junto com os leitores, preservando as propriedades do RED. (`bin/tests/test_hook_le_o_marcador.sh:56`; `bin/tests/test_hook_estado_e_a_coluna.sh:51`; `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:59`)
+
+A sequência recomendada, sem dois juízes ativos, é:
+
+1. **Corrigir o contrato antes do código:** resolver universo versus andabilidade, cláusula do PAREI, identidade dos ids e preservação da cauda. São incompatibilidades já demonstradas, não decisões para o código adivinhar. (`contrato_item3_v2.txt:3`, `:6`; `app/docs/BACKLOG.md:2038`, `:2401`)
+2. **Preparar uma única alteração completa:** fonte semeada, leitor/validador compartilhado, todos os consumidores do censo, publicador, fixtures e emenda documental. Nenhum consumidor deve consultar a fonte antiga como fallback. (`aval_respostas_1211_1230.txt:4`; `contrato_item3_v2.txt:3`, `:7`) [nao verificado]
+3. **No publicador, separar explicitamente preservação e geração:** conservar os trechos manuais necessários; substituir a publicação antiga; se houver marcador, gerar exatamente um a partir da fonte. Verificar igualdade da publicação e estabilidade de duas gerações, além da preservação manual. (`bin/gerar_backlog.py:119`, `:131`; `contrato_item3_v2.txt:6`)
+4. **Ativar o conjunto no mesmo corte**, sem leitores antigos em execução atravessando a troca; confirmar o caminho efetivamente chamado pela configuração. Um commit único não demonstra sozinho qual cópia está em execução. (`contrato_item3_v2.txt:3`; `.claude/settings.json:9`, `:68`)
+5. **Reverter o conjunto junto**, sem deixar seletor de compatibilidade marcador/arquivo. (`contrato_item3_v2.txt:7`)
+
+Recontando **em memória**, pela lógica desta cópia: são **942** itens em `_itens_andaveis` e **941 além do em curso**. Portanto o “antes 942 / depois len(ORDEM)−1” do contrato compara total com restantes; precisa usar a mesma medida nos dois lados. O número pós-migração ainda é [nao verificado], pois depende da semente. (`bin/hook_stop_fila1.py:231`, `:270`; `app/docs/BACKLOG.md:8`, `:1758`; `contrato_item3_v2.txt:6`)
+
+**4. Lista inicial e ambiguidades**
+
+**Não há uma lista linear única que possa ser transcrita como semente sem resolver contradições.** O marcador aponta uma ordem que recebeu substituições posteriores, inclusive duas raias. (`app/docs/BACKLOG.md:8`, `:1758`, `:1759`, `:1880`, `:2401`)
+
+Estas são as sequências literais relevantes, na ordem escrita em cada fonte:
+
+| Fonte | Sequência nomeada |
+|---|---|
+| Adendo acima do marcador, histórico | O-OUTBOX → CONTRATO-20-E2-REBAIXA → funções de lastro/órfãs → disparar_perguntas_competencia → PENDENCIA-SEM-JUIZ-3/SILENCIO-VENCIDO-VOLTA → JUSTIFICATIVA-PAGA-O-PERIODO. Mistura ids e funções. (`app/docs/BACKLOG.md:7`) |
+| **ORDEM-POS-E4A2**, apontada pelo marcador | BO-0611-05 → BO-DISPUTA-SEM-PERGUNTA → E4b → E4c → E4d → BUG-PAR-FROTA-1110 → DISPUTA-ZUMBI-1110 → O169/O168/LASTRO. (`app/docs/BACKLOG.md:8`, `:1758`) |
+| **PLANO-JANELA-POS-RESET** | AUDITORIA-DE-TRAVAS primeiro; depois O169-FECHADA/O168/LASTRO → RAIZ F0/F1, F2=BO-DISPUTA, F3/F4 absorvendo ZUMBI/PAR → E4b/E4c/E4d → MAPA-DA-FILA-BO. Substitui a ordem anterior do E4b em diante. (`app/docs/BACKLOG.md:1759`) |
+| **ORDEM-ATE-O-ZERO** | c21 BO → E3 inteira → E4b inteira → E4c → E4d → O169/O168/LASTRO; AUDITORIA permanece antes. (`app/docs/BACKLOG.md:1880`) |
+| **META-18-DUAS-RAIAS** | Série E + RAIZ F1–F7 + O169/O168/LASTRO; muda posição da RAIZ/item 5 e inicia raia 2 com O169-FECHADA v5. Não fornece intercalação linear completa. (`app/docs/BACKLOG.md:2401`) |
+| **RAIA-2-BO-VISIVEL** | Após O169 v5: BO-ROTULO-ENCERRADO → TRIAGEM-OFFLINE-SEM-CAMERA → LOTE-VALIDAR-REGRESSAO-0311. (`app/docs/BACKLOG.md:1903`) |
+| Inserção posterior na raia 2 | APP-MENSAGENS-MSG-0 depois de TRIAGEM-OFFLINE e antes de O168/LASTRO; posição relativa ao LOTE não explicitada. (`app/docs/BACKLOG.md
+
+[truncado em 20000 de 23679 caracteres]
+
+## 12/11 13:30 · sessao 7bbc60e1c1e5 · - · - · origem=Ronald (tmux)
+
+Censo de `bin/tests/` e `app/`, só leitura; não executei selos, pois eles criam fixtures (`bin/tests/test_hook_andavel_e_a_ordem_viva.sh:20`, `:42`).
+
+**Ponto que invalida o v2 como está:** o RED mantido exige duas respostas: `ITEM-A` na ordem, mas esperando `!`, não impede liberar o PAREI do em curso; o mesmo `ITEM-A` aberto impede. O contrato “andáveis = IDs de ORDEM menos em curso” perde essa distinção se ORDEM significa o universo “fila 1 não pousada”. O selo mostra literalmente os dois estados em `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:51`, `:60`, `:66`, `:73`, `:75`, `:78`. Contar 2 restantes e simultaneamente exigir que o PAREI do em curso libere também contradiz o comportamento guardado por `bin/tests/test_hook_parei_com_andavel.sh:45`, `:55`. A especificação precisa resolver a distinção pertença/andabilidade sem voltar a usar prosa/coluna como fonte; como fazê-lo não está definido pelo anexo [nao verificado].
+
+| Sítio | O que pergunta / efeito da migração |
+|---|---|
+| `bin/tests/test_hook_andavel_e_a_ordem_viva.sh:34`, `:51`, `:73` | Escreve marcador, ordem em prosa, estados, POS-20 e 30 ruídos; pergunta ao hook sobre topo/andáveis/PAREI. Precisa fixture estruturada preservando ambos os lados do RED. |
+| `bin/tests/test_hook_parei_com_andavel.sh:25`, `:42`, `:46`, `:56` | Escreve marcador/tabela; usa coluna para alternar restante livre/`!` e exigir bloquear/liberar. Muda se o v2 só contar IDs. |
+| `bin/tests/test_hook_parei_trava_o_item_em_curso.sh:20`, `:40`, `:53`, `:61` | Marcador O261, outro item; PAREI de outro item não libera; PAREI do topo libera quando outro está em `!`. Fixture/alteração de coluna precisam migrar. |
+| `bin/tests/test_hook_parei_casa_id_inteiro.sh:21`, `:42`, `:57`, `:64` | Escreve marcador; classifica O1/O14 congeladas e O142 vivo para testar ID inteiro e PAREI. Fixture/fonte de congelamento precisam migrar. |
+| `bin/tests/test_hook_le_o_marcador.sh:39`, `:56`, `:64`, `:74`, `:81`, `:88` | Exige autoridade do marcador e suas falhas; fila vazia é decidida pela tabela. Precisa virar autoridade/falhas do `.ids`, incluindo vazio explícito. |
+| `bin/tests/test_hook_estado_e_a_coluna.sh:41`, `:51`, `:59`, `:80`, `:94` | Exige que estado/tachado definam topo parado; varre BACKLOG real com padrões do hook. A expectativa sobre ordem conflita com coluna deixar de ser fonte. |
+| `bin/tests/test_hook_nao_cobra_congelado.sh:12`, `:25`, `:32`, `:111`, `:115`, `:135`, `:168` | Raspa `_NAO_ANDA` do código, valida coluna; pergunta ao hook pelo marcador real e sintético; exige falha sem marcador. Precisa rever tanto autoridade quanto fixtures. |
+| `bin/tests/test_interrompidas_estado.sh:37`, `:44`, `:60`, `:67`, `:82` | Escreve marcador e estado, testa topo/fundida/fechada e ausência de escrita. Deve migrar topo para `.ids`, preservar a pergunta específica de interrupção. |
+| `bin/tests/test_censo_antes_da_vaga.sh:36`, `:112`, `:125`, `:131`, `:568`, `:579`, `:694` | Escreve marcador e estados; exige pertencer à fila por tabela, exclusão fechada, “não sei” sem BACKLOG/bloco, ambiguidade de IDs; mutante depende da leitura de BACKLOG. Migração alcança fixtures, asserts e mutante. |
+| `bin/tests/test_handoff_sessao.sh:124`, `:125`, `:130`, `:151` | Guarda exige importar hook e proíbe parser próprio OBRAS/marcador. A guarda permanece útil, mas precisa cobrir eventual parser próprio `.ids`; a fixture só tabela não fornece a nova fonte. |
+| `bin/tests/test_fabricante_le_a_ordem.sh:25`, `:30`, `:34`, `:65`, `:70` | Lê estados reais para calcular quem espera Ronald e confronta fabricante; escreve casos espera/livre. Continua leitor de coluna se não migrar. |
+| `bin/tests/test_fabricante_backlog.sh:22`, `:29`, `:35`, `:39` | Consome fabricante, exige itens livres e expansão `escalonar=True`, reconhece ordem pelo texto “ORDEM”. Deve rever se pertence ao escopo fila 1; essa delimitação não aparece no contrato [nao verificado]. |
+| `bin/tests/test_alarme_vigia_a_sessao.sh:62` | Guarda textual exige que alarme use `docs/BACKLOG.md`; pode exigir autoridade antiga depois da migração. |
+| `bin/tests/test_orcamento_contexto.sh:40`, `:165`, `:451` | Escreve marcador/tabela e muda coluna para simular fila vazia; precisa representar vazio no `.ids`. |
+| `bin/tests/test_disjuntor.sh:59` | Escreve marcador/tabela ITEM-VIVO para exercitar hook/disjuntor; precisa `.ids` na fixture. |
+| `bin/tests/test_hook_nao_para_por_processo.sh:36`, `:47`, `:65`, `:74` | Escreve marcador para fila viva e só fechado para vazia; bloqueio/liberação devem preservar resposta com nova fixture. |
+| `bin/tests/test_hook_parei_so_lei.sh:36`, `:40`, `:48`, `:59`, `:68` | Escreve marcador; testa PAREI técnico/lei/`!` e só-registro por coluna. Precisa preservar perguntas com fonte estruturada. |
+| `bin/tests/test_hook_teto_nao_conta_espera.sh:40`, `:52`, `:69` | Escreve marcador/tabela para exercitar teto com/sem espera. Fonte muda; resposta pretendida não. |
+| `bin/tests/test_hook_esperando_com_prova.sh:40`, `:65`, `:67`, `:79` | Escreve marcador/tabela e exige liberação com prova ou `siga: ITEM-VIVO` sem prova. Fonte muda; resposta pretendida não. |
+| `bin/tests/test_hook_stop_saida_valida.sh:20`, `:27`, `:45` | Escreve marcador/tabela; testa schema de bloqueio e silêncio com PAREI. Fonte muda; resposta pretendida não. |
+| `bin/tests/test_relato_prova_no_stop.sh:16`, `:23`, `:28` | Escreve marcador/tabela para chegar ao guard de prova. Fonte muda; checagem de prova não deveria mudar. |
+
+Outros leitores reais de BACKLOG encontrados em `app/` e `bin/tests/` não respondem à pergunta auditada: existência do item (`app/core/tests/test_marca_cron15.py:89`, `bin/tests/test_prompt_virou_item.sh:25`) e texto do padrão da obra (`app/chamados/tests/e4b_c4_verificar.py:209`). Não classificá-los como leitores da ORDEM VIVA.
+
+Documentos que ainda declaram a autoridade antiga e precisam reconciliar no marco: `app/docs/LEIS.md:140` diz marcador escrito à mão; `app/docs/CORTES.json:736` idem; `app/docs/BACKLOG.md:707` chama marcador de primeiro aberto único; `app/docs/BACKLOG.md:1574` diz que medidor lê marcador e ele continua manual. `app/docs/HANDOFF-SESSAO.md:19` publica topo “MANHA-0511”, enquanto o marcador real está em “ORDEM-POS-E4A2” (`app/docs/BACKLOG.md:8`); é saída envelhecida, não prova da ordem atual.
+
+## 12/11 13:30 · sessao a3d3702630bf · - · - · origem=Ronald (tmux)
+
+Censo `bin/` e `.claude/`, exceto testes: [nao verificado]
+
+| Sítio | Pergunta/ato atual | Efeito da fonte nova |
+|---|---|---|
+| `bin/gerar_backlog.py:110-127` | Lê e recoloca janela manual começando no marcador, incluindo toda prosa entre marcador e OBRAS. | Tem de separar saída derivada da janela preservada; senão recoloca marcador/lista velhos e pode duplicar saída. |
+| `bin/gerar_backlog.py:129-140` | Tripwire exige que marcador e OBRAS presentes antes continuem no resultado; escreve BACKLOG por `.novo` + replace. | Se remover marcador, tripwire impede geração; se conservar como derivado, presença sozinha não verifica valor/fonte nova. |
+| `bin/hook_stop_fila1.py:149-180` | `_item_fechado`: FECHADO/NO AR na coluna estado ou tachado na descrição; `_item_parado`: fechado ou regex de CONGELADA/FILA 2/espera/PAREI/portão. | Precisam deixar de julgar pertinência/andabilidade por estado; podem permanecer para perguntas documentais distintas. |
+| `bin/hook_stop_fila1.py:192-228` | `_item_da_ordem_viva`: extrai marcador, exige linha correspondente em OBRAS, veta `_item_parado`. | Nova origem do topo; manter veto de coluna contradiz “coluna deixa de ser fonte”. |
+| `bin/hook_stop_fila1.py:231-267` | `_itens_andaveis`: todos os ids não parados de OBRAS, ordem física; `_ha_item_aberto`: bool dessa lista. | Devem passar à fonte estruturada. Contrato só mudar `_andaveis_fora...` não basta: vazio continua julgado pela tabela. |
+| `bin/hook_stop_fila1.py:270-287` | Conta andáveis além do topo; recado manda humano pegar próximo na “ORDEM VIVA (adendo do BACKLOG)”. | Lista deve vir da fonte única; recado ainda encaminharia leitura humana da prosa se não mudar. |
+| `bin/hook_stop_fila1.py:290-322` | Diagnóstico de marcador quebrado; `_proximo_da_fila` delega topo. | Diagnóstico muda para fonte quebrada; topo pode conservar resposta se primeiro id for o mesmo. |
+| `bin/hook_stop_fila1.py:323-346` | `_ids_que_nao_andam`: lista por estado de OBRAS. | Continua segundo juiz se não migrar; é usada para rejeitar PAREI em `bin/hook_stop_fila1.py:1298-1302`. |
+| `bin/hook_stop_fila1.py:349-383` | `travas_da_fila`: varre OBRAS, exclui fechadas, mostra palavra de trava encontrada na coluna. | Se usada como “fila inteira travada”, continua juiz por prosa; contrato não a menciona. |
+| `bin/hook_stop_fila1.py:1232-1245` | `_relato_parou`: PAREI do topo + nenhum outro andável. | Resposta muda quando tabela tem ruído fora da ORDEM. |
+| `bin/hook_stop_fila1.py:1248-1313` | `_parei_do_em_curso`: PAREI `!`, elimina parados por coluna, compara id com topo. | Precisa retirar veto antigo por coluna e usar a mesma identidade estruturada. |
+| `bin/hook_stop_fila1.py:1391-1403` | Main escolhe topo; sem topo consulta tabela para liberar “fila vazia” ou reclamar marcador. | Deve validar fonte antes de distinguir fila vazia/quebrada; manter tabela permite resposta divergente. |
+| `bin/handoff_sessao.sh:54-78` | Lê BACKLOG, pergunta topo e próximo ao hook, publica ambos. | Herda fonte nova se API migrar; rótulo “MARCADOR” fica velho. |
+| `bin/handoff_sessao.sh:120-123` | Pergunta “trava item?” e “devolve turno?” ao hook. | Herda mudanças do censo de andáveis/PAREI. |
+| `bin/handoff_sessao.sh:163-174` | Para avais de hoje, procura linha BACKLOG e chama `_item_fechado` para dizer não cumprido. | Pergunta diferente de ordem, mas continua lendo estado/prosa de fechamento. Não pode servir de exclusão de pousadas da ORDEM. |
+| `bin/handoff_sessao.sh:209-219` | Lista linhas abertas da raia20 usando `_item_fechado`. | Pergunta documental distinta; continua lendo coluna, portanto declarar exceção de escopo. |
+| `bin/handoff_sessao.sh:290-299` | Sem `_proximo_da_fila`, publica `travas_da_fila` e afirma “nenhum item livre: turno se devolve”. | Perigoso manter: topo inválido não implica fila vazia nem inteira travada. |
+| `bin/handoff_sessao.sh:309-316` | Publica próximo e diz “1o ABERTO do bloco OBRAS”; na ausência manda conferir ORDEM VIVA à mão. | Texto precisa migrar; preservá-lo manda humano ler a prosa velha. |
+| `bin/disjuntor.py:1671-1682` | `_fila1_viva`: lê BACKLOG, exige marcador OBRAS, retorna `_itens_andaveis`. | Tem de ler universo estruturado; tabela aberta inteira deixa de exigir censo. Promessa contratual “não muda resposta” é falsa para itens abertos fora da ORDEM. |
+| `bin/disjuntor.py:1720-1743` | Pertinência por token da célula e coincidência inteira nos dois sentidos, com ambiguidades. | Deve definir identidade do novo arquivo: ids exatos ou token qualificado? Contrato não resolve. |
+| `bin/disjuntor.py:1746-1759` | Censo exigido só para obra pertencente à fila viva. | Herda troca do universo. |
+| `bin/disjuntor.py:2355-2364` | CLI publica FORA ou aplica mesmo censo. | Herda troca; fora da lista nova muda resposta. |
+| `bin/codex_pergunta.sh:228-234` | Invoca `disjuntor.py --censo` antes da vaga, usando raiz viva. | Leitor indireto da pertinência; não duplicar parser. |
+| `bin/backlog_estado.py:56-68` | Antes/depois de escrever estado, consulta próximo e ids que não andam; imprime veredito alterado. | Deve deixar de sugerir que escrever coluna muda a ORDEM; hoje o código escreve e só informa a mudança, apesar da docstring prometer “PARA” em `bin/backlog_estado.py:8-10`. |
+| `bin/interrompidas_estado.py:89-125` | Lê coluna INTERROMPIDA/FUNDIDA e topo importado; diz “voltou” quando id/fusão coincide com topo ou `_item_fechado`. | Topo migra indiretamente; fechamento documental permanece por coluna. Não usar este fechamento como exclusão estruturada. |
+| `bin/gerar_estado.py:236-250` | Publica medição de interrompidas e topo importado. | Leitor indireto; texto “sem marcador” em `:243` precisa mudar. |
+| `bin/alarme_sessao_ociosa.py:89-116` | **Leitor próprio esquecido:** conta itens em `## OBRAS`, excluindo ☑/FEITO/FECHAD da linha inteira. | Precisa migrar. Hoje decide fila vazia/disparo em `:40-45`, chamado por `:148-150`; mantendo-o, haverá dois juízes. |
+| `bin/placar_code.sh:368-369` | Publica saída do alarme. | Leitor indireto; herda mudança. |
+| `bin/fabricante_alvo.py:238-283` | **Leitor próprio esquecido:** lê linhas O/F, usa texto/estado (dinheiro, só registrar, Ronald/aval/corte/smoke/suspensão, livre, no ar/feito/fechado), escolhe itens da “ORDEM escalonada”. | Continua lendo prosa se não migrar; definição do universo do fabricante precisa ficar explícita. |
+| `bin/fabricante_alvo.py:315-320` | Tenta itens livres, depois ORDEM escalonada. | Herda seletor anterior. |
+| `bin/fabricante.sh:129` | Invoca seletor de alvo. | Leitor indireto. |
+| `bin/gerar_backlog_topo.py:16-40` | Lista O-números “abertos”, decide FEITO pela descrição/onde e estado por frases; ordena numericamente. | É resumo distinto, não fila1/ORDEM; se permanecer, rotulá-lo e não consumi-lo como fonte de fila. |
+| `bin/relato.sh:35`, `bin/relato.sh:115-121` | Gera resumo e publica BACKLOG inteiro. | Transporta saída derivada; não decide topo. Comentário em `bin/relato.sh:7-8` ainda afirma que ORDEM só se lê na tabela completa. |
+| `.claude/settings.json:9` | Stop chama hook. | Herda fonte nova; configuração aponta caminho absoluto `/home/ronald/saas-hasner`, portanto execução dessa cópia em produção é [nao verificado]. |
+| `.claude/settings.json:20`, `:29`, `:40`, `:53`, `:68` | PreCompact chama handoff; SessionStart lê handoff; PreToolUse chama disjuntor. | Leitores indiretos dos juízes acima. |
+
+Contradições contratuais centrais:
+
+- Mudar só duas funções deixa cinco caminhos ativos lendo tabela/estado: `_itens_andaveis`, `_ha_item_aberto`, `_ids_que_nao_andam`, `travas_da_fila` e veto `_item_parado` dentro do topo; referências em `bin/hook_stop_fila1.py:225`, `:250`, `:267`, `:344`, `:378-382`, `:1298-1302`, `:1400`.
+- “Handoff e disjuntor mudam só fonte, não resposta” não pode ser literal: o bug consiste justamente em contar abertos fora da ORDEM, e disjuntor usa essa lista em `bin/disjuntor.py:1682`; PAREI depende dela em `bin/hook_stop_fila1.py:1245`.
+- Não basta parar o parser de marcador: orientação ao humano ainda manda ler adendo/prosa em `bin/hook_stop_fila1.py:285-287` e `bin/handoff_sessao.sh:314-316`.
+- Tripwire atual só verifica presença; necessidade de verificar igualdade da publicação derivada ao `.ids` e impedir prosa velha duplicada decorre de `bin/gerar_backlog.py:119-137`.
+
+Não executei scripts auditados: possuem escritas explícitas (`bin/gerar_backlog.py:138-140`, `bin/backlog_estado.py:59`, `bin/hook_stop_fila1.py:51-54`, `bin/relato.sh:121-131`).
+
+## 12/11 13:30 · sessao e4ace4e8c489 · - · - · origem=Ronald (tmux)
+
+Não há lista linear única que eu possa transcrever como “fila 1 não pousada atual” sem resolver contradições e aliases por conta própria. O marcador aponta `ORDEM-POS-E4A2`; a própria cópia registra várias substituições posteriores dessa ordem. (`app/docs/BACKLOG.md:8`, `app/docs/BACKLOG.md:1758`, `app/docs/BACKLOG.md:1759`, `app/docs/BACKLOG.md:1880`, `app/docs/BACKLOG.md:2401`)
+
+**Listas literais por camada, preservando a ordem escrita:**
+
+| Fonte | Sequência literal |
+|---|---|
+| Topo, ainda anterior ao marcador | `O-OUTBOX` → `CONTRATO-20-E2-REBAIXA` → `fechar_cobranca_com_lastro` e `reconciliar_perguntas_orfas` → `disparar_perguntas_competencia` → `PENDENCIA-SEM-JUIZ-3` e `SILENCIO-VENCIDO-VOLTA` → `JUSTIFICATIVA-PAGA-O-PERIODO`; mistura ids e nomes de funções. (`app/docs/BACKLOG.md:7`) |
+| Item apontado pelo marcador | `BO-0611-05` → `BO-DISPUTA-SEM-PERGUNTA` → E4b BACKFILL → E4c LEITORES → E4d CONTRACT → `BUG-PAR-FROTA-1110` → `DISPUTA-ZUMBI-1110` → O169/O168/LASTRO. (`app/docs/BACKLOG.md:1758`) |
+| Substituição do E4b em diante, vigente a partir de 11/11 18h segundo o texto | Primeiro `AUDITORIA-DE-TRAVAS`; depois (a) `O169-FECHADA`, O168, LASTRO; (b) `RAIZ-DA-DISPUTA` F0/F1, F2=BO-DISPUTA, F3/F4 absorvem DISPUTA-ZUMBI e BUG-PAR; (c) E4b/E4c/E4d; (d) itens do `MAPA-DA-FILA-BO`. (`app/docs/BACKLOG.md:1759`) |
+| Substituição do item (3) anterior | c21 BO → E3 inteira → E4b inteira → E4c → E4d → O169/O168/LASTRO; AUDITORIA-DE-TRAVAS permanece antes. (`app/docs/BACKLOG.md:1880`) |
+| Emenda posterior | Série E + RAIZ F1–F7 + O169/O168/LASTRO; duas raias, com raia 2 iniciando em `O169-FECHADA` v5. Diz substituir posição da RAIZ e item 5, mas não dá nessa linha intercalação linear de todas as etapas. (`app/docs/BACKLOG.md:2401`) |
+| Raia 2 subsequente | Depois do pouso O169 v5: `BO-ROTULO-ENCERRADO` → `TRIAGEM-OFFLINE-SEM-CAMERA` → `LOTE-VALIDAR-REGRESSAO-0311`. (`app/docs/BACKLOG.md:1903`) |
+| Inserção na raia 2 | `APP-MENSAGENS-MSG-0` depois de TRIAGEM-OFFLINE e antes de O168/LASTRO; posição relativa ao LOTE-VALIDAR não explicitada. (`app/docs/BACKLOG.md:1913`) |
+| Inserção na RAIZ | `RAIZ-DA-DISPUTA-F0-CASO-7279` à frente da F1 e de HJ-067/HJ-073. (`app/docs/BACKLOG.md:2406`) |
+| Lista fechada do 20 | O168, LASTRO, E3-LEITORES, E4B, E4C, E4D; a linha diz “lista fechada”, não declara que esta enumeração é ordem de execução. O169 é expressamente “pousada”. (`app/docs/BACKLOG.md:2031`) |
+
+**Exclusões/pousos com prova textual, sem inferir por nome ou prefixo:**
+
+- `FIO-E0-V4-E4B`: a própria linha diz **POUSOU 12/11 08:46**, commit `087fe758a`; permanece no rol fechado do 20 sob alias E4B. Portanto não pode ser carregada como “não pousada” só porque aparece nesse rol. (`app/docs/BACKLOG.md:1891`, `app/docs/BACKLOG.md:2031`)
+- `C20-O169`: **POUSADA 05/11**, FECHADA. O169 é dita pousada no rol do 20. (`app/docs/BACKLOG.md:1796`, `app/docs/BACKLOG.md:2031`)
+- **Ambiguidade O169:** `O169-FECHADA` diz “já POUSADO 05/11 pela C20-O169”, mas separa delta do contador e ainda descreve B3/volta 5; não autoriza excluir automaticamente esse delta pelo pouso de `C20-O169`. (`app/docs/BACKLOG.md:1965`)
+- `FIO-E0-V4-E4A-2`: NO AR em 10/11, merge `613a51498`. (`app/docs/BACKLOG.md:1890`)
+- `FIO-E0-V4-E2-FUNCAO`: NO AR em 09/11, comboio com “E3”; isso não prova o pouso da E3-LEITORES posterior, cuja linha continua ABERTA/em obra. (`app/docs/BACKLOG.md:1869`, `app/docs/BACKLOG.md:1870`)
+- `O-OUTBOX` e `CONTRATO-20-LASTRO-E-ORFAS`, ainda citados na lista do topo, estão respectivamente NO AR e FECHADA em suas linhas. (`app/docs/BACKLOG.md:733`, `app/docs/BACKLOG.md:735`)
+
+**Ids explicitamente classificados POS-20 nas suas linhas:**
+
+| id | Linha |
+|---|---:|
+| TRIAGEM-FILA-OPUS-V6 | `app/docs/BACKLOG.md:1812` |
+| E4B-FILA-OPUS-C14 | `app/docs/BACKLOG.md:1893` |
+| CORTES-JSON-DEFASADO | `app/docs/BACKLOG.md:2030` |
+| CICLO-C-CEL-TEMPLATE | `app/docs/BACKLOG.md:2032` |
+| FAIXA-NO-CADASTRO | `app/docs/BACKLOG.md:2033` |
+| EFEITO-SEM-FALLBACK-CATALOGO | `app/docs/BACKLOG.md:2034` |
+| LASTRO-FILA-PREVERIF-C11 | `app/docs/BACKLOG.md:2035` |
+| BO-ROTULO-REABRIR-SO-NO-DETALHE | `app/docs/BACKLOG.md:2036` |
+| PROPORCAO-FILA-OPUS-V11 | `app/docs/BACKLOG.md:2037` |
+| AUDITORIA-DE-TRAVAS: MAPA-20-DERIVADO | `app/docs/BACKLOG.md:2399` |
+| UI-PAINEL-FILA-OPUS-V5 | `app/docs/BACKLOG.md:2402` |
+| BUG-CADASTRO-NAO-ALCANCA-O-FUTURO | `app/docs/BACKLOG.md:2403` |
+| UI-ESCALA-REQUADRO | `app/docs/BACKLOG.md:2404` |
+| UI-ESCALA-REQUADRO-ESPELHO | `app/docs/BACKLOG.md:2405` |
+
+Não classificar `PROPORCAO-POR-RISCO` como POS-20 por substring: sua linha diz FECHADA NO AR e destina **achado novo** à AUDITORIA-DE-TRAVAS POS-20. Tampouco classificar `CONGELA-O-20` por sua frase de regra para **linha nova**. (`app/docs/BACKLOG.md:1917`, `app/docs/BACKLOG.md:2031`)
+
+**Problemas concretos para semear o `.ids`:**
+
+- E4c/E4d são etapas escritas dentro de `FIO-E0-V4-E4-ESCRITORES`; a linha não cria ids próprios para cada etapa. Exigir “id de ORDEM com linha OBRAS” impede usar literalmente `E4C`/`E4D` sem esclarecer a identidade. (`app/docs/BACKLOG.md:1882`, `app/docs/BACKLOG.md:2031`; ausência de linha própria: [nao verificado] como prova negativa completa)
+- O168 tem linha `O168` e outra `C20-O168`; LASTRO tem `LASTRO-FOLGA-FORA-DO-CATALOGO` e `LASTRO-FAIXA-SEM-DEFAULT`, esta explicitamente “obra LASTRO”. A migração não pode escolher esses aliases silenciosamente. (`app/docs/BACKLOG.md:1398`, `app/docs/BACKLOG.md:2004`, `app/docs/BACKLOG.md:1810`, `app/docs/BACKLOG.md:1811`)
+- `BUG-PAR-FROTA-1110` e `DISPUTA-ZUMBI-1110` são complementos absorvidos por outras obras/etapas; incluí-los como três obras autônomas pode duplicar o mesmo trabalho. (`app/docs/BACKLOG.md:1900`, `app/docs/BACKLOG.md:1908`, `app/docs/BACKLOG.md:1759`)
+- A prosa histórica afirma simultaneamente “marcador autoridade”, “ordem é a das linhas” e “hook lê este bloco”; esses registros pertencem a momentos diferentes e não entregam uma regra atual única para ordenar a semente. (`app/docs/BACKLOG.md:689`, `app/docs/BACKLOG.md:699`, `app/docs/BACKLOG.md:722`)
 
 ## 12/11 13:26 · sessao 0fb37705e777 · - · - · origem=Ronald (tmux)
 
@@ -715,141 +985,4 @@ O selo integral não foi executado porque cria, altera e apaga arquivos, inclusi
 - **Fonte histórica não prova p95 individual:** comentário afirma últimas 20 “DO PAPEL”, mas o anexo `contrato.r` informa 20 chamadas do grupo leitura/censo/sonda. Atribuir p95 individual aos três segue [não verificado] (`bin/codex_pergunta.sh:85–88`; `contrato.r`, seção 3).
 - **Outras classes:** o diff não demonstra segundo juiz, segundo escritor ou inversão de travas: concentra decisão temporal em `:89–92` e mantém consumidores/ordem existentes; ocorrência no restante do sistema [não verificado] (`bin/codex_pergunta.sh:89–92`, `:355–415`).
 
-## 12/11 12:54 · sessao d52cf582f8d8 · MAPA-DO-FIO-MORTO · sonda · origem=Code
-
-Referências `dado:N`: numeração do texto colado, contando somente linhas não vazias, de `S UNIVERSO_D...` como linha 1 até `S ERROS...` como linha 256.
-
-1. **Universo e comparação com os 241**
-
-| Medida | Dia-colab | Sustentação |
-|---|---:|---|
-| Universo d | **243** | `dado:1` |
-| `fio=nada` | **155** | `dado:245` |
-| Outro fio conhecido | **68**: `sistema=60`, `admin=8` | Soma de `dado:245` |
-| `fio=nao_sei` | **20** | `dado:245` |
-| Conferência | **155 + 60 + 8 + 20 = 243** | `dado:245` |
-
-**243 não bate com 241: são 2 dia-colab a mais.** O anexo anterior separa classe d em **241 `SEM_ACAO` + 2 `COLAB_RESPONDE`**, cuja soma é 243 (`censo_mapa.r` fornecido, referências transcritas `recorte.out:50` e `recorte.out:49`; `dado:1`).
-
-Causa provável **[nao verificado]**: a sonda atual inclui toda a classe d, reunindo aqueles dois subconjuntos. Que sejam exatamente os mesmos dias, sob o mesmo recorte temporal, é **[nao verificado]**.
-
-Também **155 `nada` não equivale aos 241 `SEM_ACAO`: diferença de 86**. A classificação anterior `SEM_ACAO` não media diretamente `tarefa_do_dia == nada` (`dado:245`; anexo `censo_mapa.r`, referências transcritas `recorte.out:50` e `sonda_mapa_fio.py:39`).
-
-2. **Grupos e comportamento da folha**
-
-| Fio | Motivo de retenção | Veredito | n | Folha | Linha do dado |
-|---|---|---|---:|---|---|
-| `nada` | `espelho_nunca_bateu` | `nunca_bateu` | 97 | Retém pelo motivo indicado | `dado:247` |
-| `sistema` | `espelho_nunca_bateu` | `nunca_bateu` | 58 | Retém pelo motivo indicado | `dado:248` |
-| `nada` | `espelho_indefinida` | `indefinida` | 27 | Retém pelo motivo indicado | `dado:249` |
-| `nada` | `sem_celula` | `None` | 25 | Retém como `sem_celula` | `dado:250` |
-| `nao_sei` | `sem_celula` | `None` | 20 | Retém como `sem_celula` | `dado:251` |
-| `admin` | `espelho_fato_em_ausencia` | `fato_em_ausencia` | 8 | Retém pelo motivo indicado | `dado:252` |
-| `nada` | `espelho_furo` | `furo` | 4 | Retém pelo motivo indicado | `dado:253` |
-| `sistema` | `espelho_indefinida` | `indefinida` | 2 | Retém pelo motivo indicado | `dado:254` |
-| `nada` | `espelho_discordante` | `discordante` | 2 | Retém pelo motivo indicado | `dado:255` |
-
-**Todos os 243 apresentados retêm; nenhum grupo aparece como “não retém”.** Os grupos somam 243, e a função devolve em `dias` somente dias retidos (`dado:247–255`; `app/folha/export.py:1193`, `app/folha/export.py:1226`).
-
-Na função, **`espelho_X` significa retenção pelo veredito acusador `X` da célula**, após as guardas de protestos não cobráveis e de furo somente da pausa (`app/folha/export.py:1241`, `app/folha/export.py:1253`, `app/folha/export.py:1261`, `app/folha/export.py:1262`). O significado dos vereditos na cópia é:
-
-- **`nunca_bateu`**: ramo sem adesão, descrito como “zero batida na vida”; o literal depende das guardas de cobertura integral e dia sem trabalho (`app/ponto/services/cartorio.py:1211`, `app/ponto/services/cartorio.py:1289`, `app/ponto/services/cartorio.py:1295`).
-- **`indefinida`**: agrega previsto com dia indefinido, fase não declarada com previsto ou parcial sem período (`app/escala/models.py:1615`).
-- **`fato_em_ausencia`**: trabalho em dia coberto por ausência (`app/escala/models.py:1755`).
-- **`furo`**: agrega os códigos de furo enumerados no mapa; o dado não identifica qual código gerou cada ocorrência **[nao verificado]** (`app/escala/models.py:1612`).
-- **`discordante`**: agrega batida órfã fora da tolerância, realizado inflado ou realizado zero com turno; o código individual não consta **[nao verificado]** (`app/escala/models.py:1616`).
-
-**`sem_celula` não significa liberação**: pode indicar célula ausente, havendo vínculo, ou célula existente sem veredito e com `trabalha` definido, respeitadas as condições de dia passado e demissão. Qual dessas situações corresponde a cada um dos 45 é **[nao verificado]** (`app/folha/export.py:1235`, `app/folha/export.py:1238`, `app/folha/export.py:1263`; `dado:246`).
-
-3. **Erros da sonda**
-
-**0 erros reportados; nenhum tipo listado (`{}`).** O item 1 não é parcial por erros reportados: são 243 classificados e zero faltantes por erro na saída fornecida (`dado:256`; `dado:245`).
-
-## 12/11 12:54 · sessao aa21dc92d6e9 · - · - · origem=Ronald (tmux)
-
-Censo literal completo em `bin/` e `bin/tests/`, incluindo ignorados:
-
-| Variável | Quem escreve | Quem lê |
-|---|---|---|
-| `CODEX_TIMEOUT` | Teste limite: `20`; teste disjuntor: `20`; selo wrapper: `unset`, `3600`, `600`, `abc`. (`bin/tests/test_codex_limite.sh:24`; `bin/tests/test_disjuntor.sh:1213`; `bin/tests/test_codex_pergunta.sh:121`, `:458`, `:462`, `:467`) | Wrapper importa em `TIMEOUT` com default para ausente **ou vazio**. Outros leitores funcionais em `bin/`: não encontrados no censo textual; leitores dinâmicos: [não verificado]. (`bin/codex_pergunta.sh:90`) |
-| `TIMEOUT` | Wrapper atribui override/default e depois cap; mutante remove a segunda atribuição apenas na cópia de teste. (`bin/codex_pergunta.sh:90`, `:92`; `bin/tests/test_codex_pergunta.sh:567`, `:583`) | Validação, comparação/diagnóstico, espera da resposta, duração do processo nos dois ramos; mutante externo menciona literalmente o comando de flock. (`bin/codex_pergunta.sh:91`, `:92`, `:383`, `:408`, `:415`; `bin/tests/test_disjuntor.sh:1826`) |
-
-`CODEX_TIMEOUT` **não recebe de volta** o cap: pode permanecer `3600` no ambiente herdado enquanto `TIMEOUT=1191` rege o wrapper. Leitor descendente que suponha `CODEX_TIMEOUT` efetivo: [não verificado]. (`bin/codex_pergunta.sh:90`, `:92`; `bin/tests/test_codex_pergunta.sh:458`)
-
-ESMERIL: unidade declarada é segundos; o campo tem duas aplicações reais, **espera da trava** e **duração do processo**, com orçamentos renovados em série. Flock falha com rc3; timeout é outro sítio; construtor acrescenta `-k 30`. Não existe orçamento global compartilhado. (`bin/codex_pergunta.sh:6`, `:383`, `:408`, `:415`)
-
-A fila anterior permanece fora desse orçamento: gate bloqueante e repetição de tentativas de cinco segundos sem prazo acumulado. `duracao_s` vai de `T0C` ao trap e inclui preparação/fila/trava, portanto não equivale ao tempo controlado por `timeout`. (`bin/codex_pergunta.sh:259`, `:267`, `:358`, `:360`, `:368`, `:383`, `:408`)
-
-A mensagem de flock usa o valor efetivo corretamente, mas continua afirmando “ocupada há Ns” em **qualquer** falha de flock; o código não mede idade da ocupação nem distingue erro da espera vencida. (`bin/codex_pergunta.sh:383`)
-
-Chamador acima do teto em código `bin/`: o próprio selo, leitura `3600 → 1191`. Registro histórico externo: PC2-FIO-MUDO documenta `2400`, com papel censo definido no contrato desse piloto; hoje seria capado a1191. Necessidade atual desses2400: [não verificado]. O construtor1800 documentado fica abaixo de1930. (`bin/tests/test_codex_pergunta.sh:458`, `:460`; `app/docs/RELATO.md:7756`, `:7782`, `:425`; `bin/codex_pergunta.sh:89`, `:92`)
-
-O `timeout 900` em teste disjuntor é texto enviado ao parser para verificar reconhecimento de chamada com prefixo; não é leitura de `TIMEOUT`/`CODEX_TIMEOUT`, nem execução desse timeout. (`bin/tests/test_disjuntor.sh:520`, `:563`; `bin/disjuntor.py:1342`)
-
-O `900` de encadeado é outro parâmetro, `TETO`, vindo do quarto argumento e aplicado à espera por carimbos, com rc2; não participa do circuito dessas variáveis. (`bin/encadeado.sh:71`, `:84`, `:92`, `:94`)
-
-## 12/11 12:53 · sessao 8a1026fde32e · - · - · origem=Ronald (tmux)
-
-- **Os dois mutantes têm mordida estática.** Sem `TIMEOUT=$TETO_S`, o argumento permanece `3600`, contrariando a asserção `1191`; sem `exit 2`, `abc` continua até o cap e permite chamar o Codex, contrariando `_recusa`, que exige rc 2 e ausência de captura. (`bin/codex_pergunta.sh:91–92`; `bin/tests/test_codex_pergunta.sh:140–143`, `:458–460`, `:467`, `:567–568`) Execução e resultado efetivo dos mutantes: **[não verificado]**.
-
-- **O fake timeout não troca o valor nesta cópia:** grava `"$@"` e executa `/usr/bin/timeout "$@"`. O arquivo de captura é apagado antes de cada subcaso, evitando reutilizar argumento velho. (`bin/tests/test_codex_pergunta.sh:115–118`, `:458`, `:462`, `:464`)
-
-- **A prova cobre passagem do argumento, não expiração.** O Codex falso termina imediatamente com rc 0; os casos novos não demonstram rc 124, escalada `-k 30`, teto do construtor, `flock -w`, mensagem da trava ou recusa de papel sem entrada. (`bin/tests/test_codex_pergunta.sh:111`, `:455–467`; `bin/codex_pergunta.sh:383`, `:408`)
-
-- **Há lacunas menores no selo:** somente o primeiro subcaso exige rc 0; os de `600` e default `894` verificam apenas a primeira linha do argv. A mensagem é procurada na saída mesclada, sem provar stderr nem quantidade de linhas. (`bin/tests/test_codex_pergunta.sh:136`, `:459–465`) O caso de domínio exercita somente `abc`, sem testar zero, negativos, frações, sufixos, zeros iniciais ou inteiros muito grandes. (`bin/tests/test_codex_pergunta.sh:467`)
-
-- **Não executar o selo preserva a regra de só leitura:** o próprio script cria diretório temporário, escreve arquivos, reescreve o wrapper copiado para os mutantes e apaga o cenário ao sair. (`bin/tests/test_codex_pergunta.sh:18–19`, `:74–75`, `:585`)
-
-## 12/11 12:32 · sessao 8db6fd841a74 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
-
-As contas batem com a medida fornecida; há furos na semântica do prazo e na cobertura do selo. (`contrato_item6.txt:3–6`; `medida_6_8.r:9–11`; `bin/codex_pergunta.sh:348–408`; `bin/tests/test_codex_pergunta.sh:447–548`)
-
-Nos anexos, conto linhas desde a primeira linha de conteúdo fornecida.
-
-1. **Sítios de tempo no wrapper**
-
-| Sítio | Hoje | Efeito da tabela por papel com cap |
-|---|---|---|
-| Documentação e atribuição | Segundos, default `900`; `CODEX_TIMEOUT` entra diretamente em `TIMEOUT`. | Muda a origem do valor; o contrato deixa ambíguo o default quando a variável está ausente/vazia. (`bin/codex_pergunta.sh:6`, `:83`; `contrato_item6.txt:3–4`) |
-| Validação do papel | Aceita exatamente leitura, censo, verificador, sonda e construtor; demais saem com rc 2. | Esses cinco papéis precisam estar cobertos pela tabela. (`bin/codex_pergunta.sh:81–85`; `contrato_item6.txt:3–4`) |
-| Vaga do construtor | `flock -n`: recusa imediata com rc 2. | Não usa `TIMEOUT`; permanece imediato. (`bin/codex_pergunta.sh:239–240`) |
-| Gate e slots | Gate bloqueante sem prazo; busca slots imediatamente e repete espera de cinco segundos enquanto não consegue. | A tabela não limita essa espera acumulada. `CODEX_TETO` controla quantidade de slots, não segundos. (`bin/codex_pergunta.sh:84`, `:348–364`) |
-| Diagnóstico de espera | Mede desde antes do gate até obter o slot. | Continua medindo espera efetiva; não é o teto da tabela. (`bin/codex_pergunta.sh:350–365`) |
-| Trava da resposta | `flock -w "$TIMEOUT"`; mensagem usa `${TIMEOUT}s`; falha sai com rc 3. | Espera e mensagem passam a usar o valor efetivo limitado pelo papel. (`bin/codex_pergunta.sh:374–376`) |
-| Execução construtora | `timeout -k 30 "$TIMEOUT" codex …`. | Usa o valor limitado, mantendo os 30 segundos adicionais de escalada. (`bin/codex_pergunta.sh:401–405`) |
-| Execução dos quatro papéis de leitura | `timeout "$TIMEOUT" codex …`. | Verificador recebe seu teto; leitura/censo/sonda recebem o teto comum previsto. (`bin/codex_pergunta.sh:408–409`; `contrato_item6.txt:3`) |
-| Duração e retorno | `fim` grava papel, rc e duração desde `T0C`; captura o rc da execução, com possíveis substituições posteriores. | Duração observada muda, mas seu significado permanece; o valor efetivo de `TIMEOUT` não é registrado. (`bin/codex_pergunta.sh:252–260`, `:411`, `:433–455`) |
-
-2. **Furos e limites do contrato**
-
-- **Teto da execução não é prazo total do lançador.** Há fila sem limite acumulado; depois, a trava da resposta pode consumir um `TIMEOUT` inteiro e o Codex recebe outro inteiro. Preparação, revalidação e inventário ficam fora do timeout do Codex. Portanto, “até ~32 min para cair” não fecha como limite total do wrapper. (`bin/codex_pergunta.sh:295–319`, `:348–376`, `:391–420`; `aval_respostas_1211_1230.txt:3`)
-
-- **“Estourou = rc 124” precisa de escopo.** Vencer a espera da resposta produz rc **3**. No construtor, recusa do inventário também vence qualquer retorno anterior com rc **3**. (`contrato_item6.txt:4`; `bin/codex_pergunta.sh:376`, `:417–433`)
-
-- **Default não está fechado.** Conservar `${CODEX_TIMEOUT:-900}` e apenas aplicar cap deixa construtor e leitura/censo/sonda em **900** quando não houver override; usar o teto como default produz **1930/1191**. O contrato especifica os tetos e o rebaixamento, mas não explicita essa escolha. (`bin/codex_pergunta.sh:83`; `contrato_item6.txt:3–4`)
-
-- **Papéis atuais estão cobertos pelo texto**, desde que leitura, censo e sonda tenham entradas correspondentes a 1191. Não há papel atual omitido na enumeração; a recusa de papel desconhecido já existe. A futura tabela e sua recusa por ausência de entrada permanecem **[não verificado]**. (`bin/codex_pergunta.sh:85`; `contrato_item6.txt:3–4`)
-
-- **ESMERIL-SEMÂNTICA:** os leitores demonstrados recebem o mesmo valor apresentado como segundos, mas com significados distintos: espera da trava e duração permitida ao processo. Já `duracao_s` inclui preparação e espera; ultrapassar o teto nessa medida não prova estouro do Codex. Leitor externo que suponha outra unidade: **[não verificado]**. O domínio aceito para override — zero, negativos, frações, sufixos ou texto — também não está definido no contrato; hoje o valor é repassado diretamente. (`bin/codex_pergunta.sh:83`, `:252–260`, `:348–408`; `contrato_item6.txt:4`)
-
-- **Há uso documentado acima do teto:** PC2-FIO-MUDO registra tentativa com `CODEX_TIMEOUT=2400`, em papel **censo**; pelo contrato seria rebaixado a **1191**. Dependência atual desse prazo ou necessidade comprovada dos 2400 segundos: **[não verificado]**. O construtor documentado com 1800 fica abaixo de 1930. (`app/docs/RELATO.md:7756`, `:7782`, `:425`; `contrato_item6.txt:3`)
-
-- **A premissa “selo hoje fixa 900” não corresponde à cópia.** O `900` do selo conta worktrees falsas. O falso captura argumentos do **Codex**, não o argumento de `timeout`; os casos e mutantes atuais não cobrem cap. Assim, `3600 → 1191` e mutante sem cap vermelho são exigências futuras, ainda **[não verificado]** por execução. (`bin/tests/test_codex_pergunta.sh:101–111`, `:322–328`, `:447–548`; `contrato_item6.txt:6`)
-
-- **Registro disponível não equivale ao contador contratado.** `fim` contém papel, rc e duração; o contador existente por papel conta linhas `ini`, qualquer rc. A meta de até um rc 124 por papel em 24 horas permanece **[não verificado]** pelo dado fornecido. (`bin/codex_pergunta.sh:253–260`; `bin/codex_limite_estado.py:71–79`; `contrato_item6.txt:5`)
-
-O outro `900`, em `encadeado.sh`, limita espera por carimbos e sai com rc 2; sua manutenção está expressamente autorizada no aval. (`bin/encadeado.sh:71`, `:84–96`; `aval_respostas_1211_1230.txt:3`)
-
-3. **Conferência dos números**
-
-| Papel/grupo medido | p95 + 300 s | Contrato |
-|---|---:|---:|
-| Construtor | 1630 + 300 = **1930 s** | Confere |
-| Verificador | 594 + 300 = **894 s** | Confere |
-| Leitura/censo/sonda | 891 + 300 = **1191 s** | Confere |
-
-Fontes das três contas: `medida_6_8.r:9–11`; margem e tetos: `contrato_item6.txt:3`.
-
-A terceira janela contém **20 chamadas do grupo**, não 20 de cada papel: p95 individual de leitura, censo e sonda é **[não verificado]**. Os números conferem para a duração registrada; sua capacidade de evitar futuros rc 124 é **[não verificado]**. (`medida_6_8.r:5–11`; `bin/codex_pergunta.sh:252–260`, `:348–408`)
-
-_4256 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4260 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

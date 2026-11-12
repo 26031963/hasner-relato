@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 13:29:03.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (460.4 MB). Acoes na janela: **1213**.
+**Medido em 12/11/2026 13:34:34.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (460.5 MB). Acoes na janela: **1216**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:29:30 | Bash | Fix comment, rerun selos, amend contract | `cd /home/ronald/wt-travas-item6-122918 && sed -i 's/(o selo le a 2a linha do argv do timeout)/(o selo le as linhas 1-2 do argv do timeout)/' bin/codex_pergunta.sh && git diff --stat && D=/home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/item6; CODEX_SELO_MUTANTES_LOG=$D/v4b_mutantes.txt bash bin/tests/test_codex_pergunta.sh > $D/v4b_green.log 2>&1; echo rc=$?; tail -1 $D/v4b_green.log; bash bin/tests ...` |
+| 13:29:11 | Bash | Wait for next Codex job | `L=/home/ronald/saas-hasner/logs; until [ -e $L/DECLARADO-X-GRAVADO/censo.fim ] \|\| [ -e $L/AUDITORIA-TRAVAS/item3_contrato_v2.fim ] \|\| [ -e $L/LASTRO-FAIXA/c17/c17.fim ]; do /usr/bin/sleep 30; done; ls $L/DECLARADO-X-GRAVADO/censo.fim $L/AUDITORIA-TRAVAS/item3_contrato_v2.fim $L/LASTRO-FAIXA/c17/c17.fim 2>/dev/null; true` |
+| 13:29:08 | Bash | Publish item 8 proposal in RELATO | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('AUDITORIA item 3 13:3x')) L.insert(i,'DECLARADO-X-GRAVADO item 8 PROPOSTA DE TELA (Codex leitura rc0 13:28, logs/DECLARADO-X-GRAVADO/leitura.r; conferido materializacao.py:431-465 e modal_fio.html:219-263): o juiz que responde "o que vai ser gravad ...` |
 | 13:28:55 | Bash | Verify Codex citations for item 8 | `cd /home/ronald/saas-hasner && git show 096ace9d0:app/chamados/services/materializacao.py \| sed -n 431,466p; git show 096ace9d0:app/templates/chamados/partials/modal_fio.html \| sed -n 219,263p \| /bin/grep -n 'estado_aplicacao\\|horário\\|horario'` |
 | 13:28:51 | Bash | Read item 8 leitura result | `cd /home/ronald/saas-hasner/logs/DECLARADO-X-GRAVADO; tail -2 leitura.log; wc -c leitura.r; cat leitura.r` |
 | 13:28:48 | Bash | See which job finished | `L=/home/ronald/saas-hasner/logs; ls $L/DECLARADO-X-GRAVADO/ $L/AUDITORIA-TRAVAS/item3_contrato_v2* $L/LASTRO-FAIXA/c17/ \| /bin/grep -E 'fim\|\.r$'; date +%H:%M` |
