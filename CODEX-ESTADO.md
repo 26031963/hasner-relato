@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:54** · publicado em **12/11/2026 09:55** (UTC-3)
+> Ultima resposta processada: **12/11/2026 09:57** · publicado em **12/11/2026 10:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 09:57 · sessao 12930e22770f · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Cura deixada na cópia. Classificação dos dez vermelhos, alterações, RED, mutantes e comandos estão em [LASTRO_C13.txt](LASTRO_C13.txt:1).
+
+Passaram Ruff, 72 testes sem banco, 35 da catraca e 8 estáticos; 22 mutantes foram rejeitados. [Evidências](LASTRO_C13.txt:156) [nao verificado]
+
+Suite com Django, PDF real e par financeiro da competência 11: **[não verificado]**. [Limites](LASTRO_C13.txt:274) [nao verificado]
+
+## 12/11 09:57 · sessao 28365f5c4971 · PUSH-SEM-REGRAVAR · verificador · origem=Code
+
+**O v3 fecha as perdas do comparador anterior, mas não fecha toda a auditoria:** comparar stdout em bytes ainda depende do que o Git apresenta; a mordida de `lugar` depende do contexto; e “histórico já julgado” continua sem comprovação. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:888`)
+
+**1) Fechamento dos achados do v2**
+
+| Achado | Veredito |
+|---|---|
+| Falso positivo de lugar | **Fecha o defeito do comparador:** agora conserva cabeçalhos, contexto e posição. A fixture distingue as duas alterações, com a ressalva de não vacuidade detalhada abaixo. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:845`, `bin/tests/test_lei_akita.sh:852`) |
+| LF final/binário | **Fecha a perda anterior por normalização e filtragem:** retorna `p.stdout` em bytes e acrescenta `--binary`. A comparação deixou de usar `text=True`, `splitlines()` e seleção de linhas `+/-`. Isso garante igualdade da saída capturada, condicionada à apresentação feita pelo Git. (`bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:404`) |
+| Mordida C — prosa | **Fecha a ausência da prova específica:** planta a célula com `armadilha:` e reprova qualquer termo que conserve essa prosa. (`bin/tests/test_lei_akita.sh:457`, `bin/tests/test_lei_akita.sh:470`) |
+| Mordida D — saída malformada | **Fecha parcialmente:** injeta `lixo` e exige `PADRAO_ERRO`; também protege os dois SHAs do mesmo pid. Porém retirar somente a validação hexadecimal, conservando `len(cs) != 2`, sobrevive aos casos novos. (`bin/tests/test_lei_akita.sh:362`, `bin/tests/test_lei_akita.sh:474`, `bin/tests/test_lei_akita.sh:479`) |
+| Frase final | **Fecha a explicação das populações N/M e das dispensas. Não comprova julgamento anterior do publicado.** (`bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:888`) |
+
+As bordas anteriores de vocabulário permanecem: o inteiro com vírgula continua incompatível com o parser do campo; o literal completo `ADR (Architecture Decision Record)` continua sendo separado, em vez de acrescentado inteiro. (`app/docs/GLOSSARIO.md:13`, `app/docs/GLOSSARIO.md:28`, `bin/tests/test_lei_akita.sh:114`, `bin/tests/test_lei_akita.sh:125`, `bin/tests/test_lei_akita.sh:319`)
+
+**2) Commit novo com diff diferente pode sair como DUPLICATA?** [nao verificado]
+
+**Sim, há um contraexemplo construído com apresentação não injetiva por `textconv`:** os dois produtores de diff permitem essa conversão; nenhum passa `--no-textconv`. A segunda comparação verifica a saída apresentada, sem comparar diretamente árvores ou blobs. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`)
+
+Considere esta configuração e estes commits hipotéticos: [nao verificado]
+
+```text
+diff.default.textconv = sed '/^IGNORADO=/d'
+
+Publicado P: [nao verificado]
+  A: valor=0 → valor=1
+
+Local L, sobre a mesma base:
+  A: valor=0 → valor=1
+  F: IGNORADO=0 → IGNORADO=1
+```
+
+A conversão conserva o patch de `A` e torna iguais as imagens de `F`, ocultando inteiramente sua alteração. Assim, `log -p` fornece o mesmo patch-id e `show --binary` apresenta os mesmos bytes; `L` encontra `P` e entra em `DUPLICATAS`, embora seu diff bruto contenha uma alteração adicional. Esse é o caminho permitido pelos dois comandos e pela dispensa. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:424`)
+
+Execução ponta a ponta desse cenário com commits reais e ocorrência em produção: **[nao verificado]**. [nao verificado]
+
+Quanto às configurações citadas:
+
+| Configuração | O que se pode concluir |
+|---|---|
+| `diff.noprefix`, `mnemonicPrefix`, cor | Os dois lados usam o mesmo comando e repositório. Mudança de representação, isoladamente, não demonstra falsa igualdade; se resultar em bytes diferentes, a dispensa falha. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:416`) |
+| `textconv` | Pode eliminar informação antes da comparação, como no contraexemplo acima; não exige configuração diferente entre os lados. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`) |
+| `ext-diff` | Não há `--ext-diff` nos comandos; a simples ausência de `--no-ext-diff` não demonstra execução de um externo. Habilitação efetiva nesse ambiente: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:400`) |
+
+O código também não congela configuração entre subprocessos. Uma mudança efetiva de configuração entre as chamadas que tenha causado dispensa indevida nos dados fornecidos: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:400`, `bin/tests/test_lei_akita.sh:415`, `bin/tests/test_lei_akita.sh:416`)
+
+**3) `lugar` tem realmente o mesmo patch-id?**
+
+**Sim, com contexto padrão de três linhas.** A base tem dois blocos iguais; o publicado troca o primeiro `V`, e o local troca o segundo. Reconstruindo esses patches em memória e passando-os a `git patch-id --stable`, ambos resultam em `eef41b6dc7f223182f6b375487979f6d30ec0357`. (`bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:822`, `bin/tests/test_lei_akita.sh:828`, `bin/tests/test_lei_akita.sh:845`)
+
+Os hunks têm o mesmo corpo — contexto `a,b,c`, remoção `V`, adição `W`, contexto `d,e,f` — mas cabeçalhos diferentes: `@@ -1,7 +1,7 @@` e `@@ -9,7 +9,7 @@`. Portanto, o comparador anterior os igualava; o novo distingue seus bytes. (`bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:828`, `bin/tests/test_lei_akita.sh:845`, `bin/tests/test_lei_akita.sh:416`)
+
+**A prova não está protegida contra vacuidade por configuração.** Com contexto quatro, `sep` passa a integrar os contextos em posições diferentes, e os pids reconstruídos divergem: `d05d6ed6fc9a394fc975b679e1d2ff95dfe49b95` e `dc2bd81c57071c4a778df9ca541ed480b4a55ecb`. O comando não fixa `-U3`, e a asserção não exige explicitamente igualdade dos pids; nesse caso, retirar a comparação adicional ainda deixaria `lugar` julgado. (`bin/tests/test_lei_akita.sh:390`, `bin/tests/test_lei_akita.sh:820`, `bin/tests/test_lei_akita.sh:852`)
+
+**4) Escritores, leitores e verdade da frase**
+
+| Informação | Escritores e leitores |
+|---|---|
+| `DUPLICATAS` | Zerada por chamada; recebe local8/publicado12 antes do `continue`. MORDE confere o mapa; emissão normal produz `PADRAO_DUPLICATA`; shell escreve `ja julgado:` e conta os registros na frase final. (`bin/tests/test_lei_akita.sh:386`, `bin/tests/test_lei_akita.sh:424`, `bin/tests/test_lei_akita.sh:850`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:871`, `bin/tests/test_lei_akita.sh:879`, `bin/tests/test_lei_akita.sh:888`) |
+| `JULGADOS` | Zerado com `ENUMERADOS=len(hs)`; incrementado após excluir ausência de linha e duplicatas. MORDE exige quatro; emissão produz `PADRAO_JULGADOS N de M`; shell interpola esse registro. (`bin/tests/test_lei_akita.sh:407`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:426`, `bin/tests/test_lei_akita.sh:852`, `bin/tests/test_lei_akita.sh:873`, `bin/tests/test_lei_akita.sh:888`) |
+| Frase final | Escrita pelo `echo` quando `falhas=0`. O pre-push consome o código de saída; a régua captura a saída e a exibe na falha, sem interpretar os contadores. (`bin/tests/test_lei_akita.sh:887`, `bin/tests/test_lei_akita.sh:888`, `bin/pre-push.sh:38`, `bin/regua.sh:140`, `bin/regua.sh:142`) |
+
+**As contagens estão descritas corretamente; “histórico já julgado” não é garantido.** Um publicado sem linha `LEI-AKITA:` pode fornecer o patch usado para dispensar um local com linha inválida, embora o próprio publicado não fosse julgado por esse instrumento. Publicação e julgamento anterior são condições diferentes no código. (`bin/tests/test_lei_akita.sh:412`, `bin/tests/test_lei_akita.sh:416`, `bin/tests/test_lei_akita.sh:419`, `bin/tests/test_lei_akita.sh:424`)
+
+A alegação das **14 duplicatas reais iguais byte a byte** consta somente do comentário; comprovação no dado fornecido: **[nao verificado]**. (`bin/tests/test_lei_akita.sh:399`)
 
 ## 12/11 09:54 · sessao ec9bb461cbab · - · - · origem=Ronald (tmux)
 
@@ -532,57 +607,4 @@ Sobre sintaxe e APIs:
 
 Achado que afeta diretamente o RED: navegações retornam cedo no SW (`app/static/sw.js:46–50`), antes do ramo que gravaria home e bater (`:68–77`). Abrir as páginas com rede **não executa aquele `cache.put` para requisições `navigate`**, e o precache só contém quatro recursos estáticos (`:3–8`). Assim, o preparo humano relatado não demonstra presença do HTML no Cache Storage desse SW; conteúdo efetivo do cache no aparelho permanece [nao verificado].
 
-## 12/11 09:32 · sessao c24c40daec67 · - · - · origem=Ronald (tmux)
-
-Cadeia efetiva da home:
-
-- Home `/` é `core/urls.py:17` → `dashboard`, protegida por login em `core/views.py:117`, renderizando `core/dashboard_colaborador_v2.html` em `core/views.py:270-271`.
-- Bater é `<a href="{% url 'ponto:bater_ponto_v2' %}">`, em `app/templates/core/dashboard_colaborador_v2.html:31`; destino `/ponto/bater-v2/`, por `app/ponto/urls.py:12`. Não é `/ponto/bater/`.
-- Outros cartões também são links comuns: Espelho `:56`, Escala `:60`, Confirmar Batidas `:66`, Chamados `:78`, Justificar `:82`, Ausência `:88`, Holerites `:100`, Férias `:110`. Não têm handler PWA nem await antes da navegação nessas linhas.
-- Script do relógio é independente: `app/templates/core/dashboard_colaborador_v2.html:152-159`; offline chama fallback e retorna `:153`, fetch `/hora/` apenas em `:155`.
-- A home antiga também usa link comum a v2 em `app/templates/core/dashboard_colaborador.html:39`.
-- PWA é carregado defer em `app/templates/base.html:20` e `app/templates/base_app.html:20`. Dropdowns têm registro próprio em script inline, `base.html:340-382`, `base_app.html:97-139`; não dependem do carregamento de `pwa.js`.
-- `hasner-ui.js` impede clique padrão apenas em `.dropdown-toggle`: `app/static/js/hasner-ui.js:14-33`. Não intercepta os cartões acima.
-- Botões efetivamente criados por PWA: convite “Ligar avisos” e fechar, `app/static/pwa.js:351-374`, handlers `:361` e `:365`.
-- Há modal condicional que cobre a tela em `dashboard_colaborador_v2.html:121-141`, removido pelos onclick `:126`, `:138`. Sua presença no smoke é [nao verificado]; não apontar como causa.
-
-SW e preparo:
-
-- Precaching é só quatro arquivos estáticos, `app/static/sw.js:3-8`, gravados por `cache.addAll` em `:12`.
-- Toda navegação retorna antes do ramo que grava HTML: `request.mode === 'navigate'` em `:46`, fetch com fallback em `:48`, return em `:50`.
-- Ramo `comCache` para `/` e `/ponto/bater/`, `:68-79`, é alcançável apenas para GET que não seja navegação nem estático. Seu `cache.put` está em `:74`. Portanto abrir home/bater com internet em navegação comum não grava documentos nesse SW; isso permanece verdadeiro mesmo com o preparo relatado.
-- Na falta de rede, navegação usa match da request, depois `Response.error()`, `sw.js:29-30,46-50`. Não há fallback de documento.
-- `/ponto/bater-v2/` também passa pela navegação `:46-50`; não é incluído sequer na lista `comCache` de `:68`.
-- Não há diferença desses arquivos na v6 no patch fornecido. Não existe linha de patch v6 para SW/home/views/URLs porque são inalterados.
-
-Rotas, apto e redirects:
-
-- `/ponto/bater/` → `views.bater_ponto`, `app/ponto/urls.py:11`; `/ponto/bater-v2/` mesma view com `ui_v2=True`, `:12`.
-- `apto.html` é template escolhido, não URL independente: `app/ponto/views.py:225-235`; GET normal renderiza em `:358`, v2 em `:356-357`.
-- Possíveis redirects home: login por decorator `core/views.py:117` com `LOGIN_URL='/login/'` em `config/settings/base.py:106`; troca de senha `core/views.py:122-123`; ciência `:136-140`; supervisor para outro painel `:229-230`.
-- Possíveis redirects bater/ambas: login `ponto/views.py:241`; onboarding incompleto `:243-244`; ciência `:251-255`.
-- Ciência constrói `/comunicados/ciencia/?next=...`, `app/comunicados/services.py:36-50`; depende de pendências `:48`.
-- Não há redirect obrigatório para home `/` ou URLs canônicas com barra, conforme caminhos/render acima. Redirect efetivamente ocorrido no aparelho é [nao verificado].
-- `CommonMiddleware` é configurado em `app/config/settings/base.py:57`; redirecionamento concreto sem barra depende de execução/configuração Django [nao verificado].
-- Home Chamados pode acrescentar `?aba=cham`, `dashboard_colaborador_v2.html:78`; isso não é redirect.
-- Template apto volta para home via `<a>` em `app/templates/ponto/triagem/apto.html:115-118`; após fila também usa `window.location.href` no timer em `:298-307`. Não aponta para template legado.
-
-Template removido:
-
-- Nenhum renderizador identificado para `ponto/bater_ponto.html`. View ativa renderiza v2 ou triagem (`app/ponto/views.py:225-235,356-358`).
-- Referências literais existentes são ferramentas: `app/scripts/check_a_lei_batida.py:20-23` e `app/tools/check_frontend_urls.py:29`. Ambos são removidos no patch fornecido.
-- Links dentro do próprio legado usam nome de URL `ponto:bater_ponto`, por exemplo `app/templates/ponto/bater_ponto.html:27` e `:201`, que resolve à view ativa; não são chamadas do arquivo legado.
-- SW não precacheia template/página antiga (`app/static/sw.js:3-8`), não tem redirect para ela (`:29-30,46-50`); pwa faz sync para API (`app/static/pwa.js:153`).
-- Exclusão não retira documento da lista de precache nem rompe render da view pelos caminhos acima. A alegação de 404/500/branco causado pela exclusão não é sustentada; comportamento real é [nao verificado].
-
-Complemento útil: configuração prod/saas declara `NoStoreHTMLMiddleware` em `app/config/settings/prod.py:40-46` e `app/config/settings/saas.py:71-74`; middleware aplica `Cache-Control: no-store, no-cache, must-revalidate, max-age=0` a HTML em `app/core/middleware.py:207-213`. Uso efetivo desse perfil na implantação é [nao verificado].
-
-## 12/11 09:31 · sessao 406759e16cfd · FABLE-REVISOR-DE-DESENHO · leitura · origem=Code
-
-1. **Cobertura parcial.** Faltam explicitar a ordem de abertura, a pergunta sobre caminho que “o censo não viu”, o descarte com “1 linha de motivo” e o **NÃO MUDA**. O aval exige esses pontos; o contrato apenas o referencia. (`aval_fable_revisor_de_desenho_1211.txt:2`, `:3`, `:5`, `:8`; `contrato.txt:1`). Há diferença de momento: “ao abrir construtor” versus “paralelo ao censo”; E3 já aberto recebe entrada tardia. Não há ordem de segurar vaga, trocar papéis ou criar código: “ninguém”, “a vaga não espera”, “sem código, nada em bin/”; “nenhum hook” não é repetido. (`contrato.txt:1`; `aval_fable_revisor_de_desenho_1211.txt:1`, `:4`).
-
-2. **A tabela de totais cabe; a avaliação fica incompleta.** “Achados/procedentes/que o opus pegaria/voltas…/tokens/tempo” são campos previstos, permitindo verificar procedentes zero. Porém “que o opus pegaria” não tem critério de apuração, e “voltas sem queda” não define como comparar com a referência. (`contrato.txt:1`; `aval_fable_revisor_de_desenho_1211.txt:6`, `:7`). Para dispensar reconstrução, faltam registros vinculados por obra: achado e evidência de novidade perante o censo, decisão/motivo, fundamento da atribuição ao opus e comparação das voltas com a referência. O contrato exige os totais, mas não esses vínculos. (`contrato.txt:1`).
-
-3. **O repetido fica sem classificação.** “Sem resposta ou sem arquivo:linha = conta 0 achados” classifica os dois primeiros casos. Um achado correto que apenas repete o censo não recebe destino explícito; conferir no arquivo não demonstra novidade. (`contrato.txt:1`). A distinção importa porque a pergunta autorizada é precisamente o que “o censo não viu”. (`aval_fable_revisor_de_desenho_1211.txt:3`).
-
-_4142 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4144 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
