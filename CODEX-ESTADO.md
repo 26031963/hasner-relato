@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 19:45** · publicado em **12/11/2026 19:47** (UTC-3)
+> Ultima resposta processada: **12/11/2026 19:52** · publicado em **12/11/2026 19:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 19:52 · sessao 31a083aa2e1d · TRANCA-VIVAS-08 · verificador · origem=Code
+
+**REPROVA — bloqueante 1: a cobertura ainda permite retirar `vivas_resgatadas` da união sem contrariar os oráculos examinados.** O caso novo mantém essa parcela em zero; falta um caso com resgatada exclusiva conferindo o total e a linha por competência. (`app/chamados/tests/test_tranca_vivas_08.py:186`; `app/chamados/services/competencia_trancada.py:351`)
+
+1. **BLOQUEIA 1: rótulos curados; prova da união ainda incompleta.**
+
+   | Campo | Quem escreve o valor | Quem lê |
+   |---|---|---|
+   | `decidir_pelo_dp` | `medir()` inclui IDs não resgatados vindos de `respostas_sem_veredito(ignorar_tranca=True)`. (`app/chamados/services/competencia_trancada.py:126`, `:137`) | Pauta do DP, comando de encerramento e agregador. (`app/chamados/services/competencia_trancada.py:246`; `app/chamados/management/commands/encerrar_por_competencia_trancada.py:38`; `app/chamados/services/competencia_trancada.py:353`) |
+   | `vivas_resgatadas` | `medir()` inclui perguntas vivas ligadas a chamados resgatados após a tranca. (`app/chamados/services/competencia_trancada.py:117`, `:132`, `:149`) | `medir_frota()` incorpora à união e conta separadamente. (`app/chamados/services/competencia_trancada.py:348`, `:353`) |
+   | `vivas_tocadas_pelo_admin` | `medir()` classifica perguntas vivas usando o helper real de toque. (`app/chamados/services/competencia_trancada.py:155`, `:158`) | `medir_frota()` incorpora à união e conta separadamente. (`app/chamados/services/competencia_trancada.py:348`, `:353`) |
+   | `ficam_com_o_admin` | `medir_frota()` calcula a cardinalidade da união por competência e acumula os totais. (`app/chamados/services/competencia_trancada.py:348`, `:351`, `:355`) | CLI, API e mensageria, pelo percurso abaixo. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `app/api/views_mensageria.py:1573`; `mensageria/nucleo/ferramentas.py:2038`) |
+
+   A CLI agora imprime a união como `ficam_com_o_admin=` e publica as três contagens separadas. A API repassa os quatro valores; `core_client` lê JSON, e a ferramenta descreve corretamente a união e devolve o payload. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `app/api/views_mensageria.py:1573`; `mensageria/nucleo/core_client.py:239`; `mensageria/nucleo/ferramentas.py:2032`)
+
+   O outro comando, `encerrar_por_competencia_trancada`, imprime `decidir_pelo_dp` como quantidade e IDs da lista de respostas; não imprime a união sob esse nome. (`app/chamados/management/commands/encerrar_por_competencia_trancada.py:36`; `app/chamados/services/competencia_trancada.py:139`)
+
+   **Não encontrei leitor da CLI alterada que dependesse de `decidir_pelo_dp=` como união:** o placar extrai exclusivamente `^chamados_em_competencia_trancada=`; o teste antigo que procura `decidir_pelo_dp=1 ids=...` chama o comando de **encerramento**; o teste novo exige a contagem separada. (`bin/placar_code.sh:287`; `app/chamados/tests/test_competencia_trancada.py:54`, `:149`; `app/chamados/tests/test_tranca_vivas_08.py:199`)
+
+   API e mensageria têm testes de contagem geral/repasse, mas suas asserções não certificam os quatro campos. (`app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:39`; `mensageria/nucleo/tests/test_ferramenta_chamados_em_competencia_trancada.py:23`)
+
+   Permanecem descrições históricas: o relato de 17/09 registra a semântica antiga do residual e sua soma em `ficam_com_o_admin`; TICKETS registra a regra antiga de escrever a via na pergunta. São registros datados, enquanto o fonte atual declara a retirada dessa escrita. (`app/docs/RELATO-ARQUIVO.md:17319`, `:17323`; `app/docs/TICKETS.md:1180`; `app/chamados/services/competencia_trancada.py:133`)
+
+   Consumidores externos, usos dinâmicos em templates e leitores não identificados pelo censo textual: **[nao verificado]**.
+
+2. **Fixture real, mordida da soma e mutante sobrevivente.**
+
+   Por leitura, a fixture monta a **mesma pergunta** nas duas listas pelo caminho real: cria pergunta sem vínculo com a célula, grava resposta sem validação, lavra a célula via admin e posiciona a trilha após a tranca. `medir()` consulta `respostas_sem_veredito`, `pergunta_viva` e o helper de toque; a asserção exige expressamente o mesmo PK nas duas listas. (`app/chamados/tests/test_c7_red_minimos.py:110`; `app/chamados/tests/test_tranca_vivas_08.py:175`, `:177`, `:49`, `:182`; `app/chamados/services/competencia_trancada.py:126`, `:144`, `:155`) Execução dessa fixture com ORM: **[nao verificado]**.
+
+   Conferi a agregação em memória, extraindo o corpo real de `medir_frota` e substituindo apenas as entradas: a âncora da união ocorre uma vez; DP `[id]`, resgatadas `[]`, tocadas `[id]` produzem **1**, enquanto a troca por concatenação produz **2**. Isso corresponde à transformação e ao resultado exigidos pelo teste. (`app/chamados/services/competencia_trancada.py:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:206`, `:211`, `:221`)
+
+   Os exemplos simples precisam desta distinção:
+
+   - União → somente DP ou somente tocadas mantém o resultado comportamental `1`, mas remove a âncora e é barrado por `fonte.count(velho) == 1`. (`app/chamados/tests/test_tranca_vivas_08.py:186`, `:221`)
+   - Cardinalidade → `len()` de DP ou tocadas preserva a âncora, mas devolve `1` quando o teste da soma exige `2`. (`app/chamados/tests/test_tranca_vivas_08.py:211`; `app/chamados/services/competencia_trancada.py:351`)
+
+   **O bloqueante é outro mutante:** substituir, na saída, `len(_com_o_admin)` por `len(_com_o_admin) - len(m['vivas_resgatadas'])`. Ele preserva a âncora, o vazio `0`, a sobreposição `1` e a soma mutada `2`; porém uma resgatada exclusiva passa de **1 para 0**. Conferi esses resultados em memória. Os oráculos examinados deixam passar a perda de uma categoria expressamente integrante da união. (`app/chamados/services/competencia_trancada.py:336`, `:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:163`, `:186`, `:189`, `:198`, `:211`)
+
+   Os testes antigos de resgate verificam desarquivamento e vida da pergunta; o teste antigo do placar confere apenas o contador geral. Não fecham essa lacuna da união. (`app/chamados/tests/test_competencia_trancada.py:164`, `:177`, `:219`) Sobrevivência na suíte Django completa: **[nao verificado]**.
+
+3. **FILA e JUIZES.md.**
+
+   O item 2 continua materialmente presente: resposta do colaborador também carimba `resgatado_em`, embora o docstring da exclusão ainda diga “RESGATADO pelo admin”. (`app/chamados/services/materializacao.py:724`; `app/chamados/services/arquivo.py:205`; `app/chamados/services/competencia_trancada.py:75`)
+
+   O item 3 permanece: o placar lê o contador geral e não extrai `vivas_apesar_da_tranca`. (`bin/placar_code.sh:287`) Registro em arquivo da cópia do encaminhamento dos itens 2, 3 e 5 para FILA, assim como medição pós-cura da frota e das quatro perguntas: **[nao verificado]**.
+
+   **O item 4 está coerente:** JUIZES.md descreve `via='admin'` ou presença de `acoes`; o filtro exige exatamente essa assinatura em um `dict`, além de usuário não nulo, diferente do sistema, e timestamp estritamente posterior à tranca. `acoes=[]` conta por presença da chave e tem caso explícito. (`app/docs/JUIZES.md:88`; `app/chamados/juizes.py:1260`, `:1298`, `:1302`; `app/ponto/services/veredito_celula.py:76`; `app/chamados/tests/test_tranca_vivas_08.py:107`)
+
+4. **Checklist do delta.**
+
+   - **Segundo juiz / derivação paralela:** não identificados nos caminhos examinados; o contador consulta as autoridades existentes, e API/CLI leem `medir_frota`. (`app/core/juizes.py:292`; `app/chamados/services/competencia_trancada.py:144`, `:155`; `app/api/views_mensageria.py:1563`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:14`)
+   - **Segundo escritor fora da porta:** não identificado nos trechos novos de produção; são agregação, projeção e impressão. (`app/chamados/services/competencia_trancada.py:341`; `app/api/views_mensageria.py:1573`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:22`)
+   - **Relógio fora da borda:** não identificado; o filtro recebe `fechado_em`, e a fixture usa relógio congelado. (`app/chamados/juizes.py:1070`, `:1302`; `app/chamados/tests/test_tranca_vivas_08.py:30`, `:49`)
+   - **Selo sem mordida:** há mordida contra soma, mas proteção incompleta contra perda de categoria — **bloqueante 1 acima**. (`app/chamados/tests/test_tranca_vivas_08.py:187`, `:211`)
+   - **Campo com dois significados:** a publicação agora distingue união e parcelas; permanece a dívida já descrita sobre a autoria do resgate. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `mensageria/nucleo/ferramentas.py:2032`; `app/chamados/services/materializacao.py:725`)
+
+Suíte completa, histórico RED/GREEN, integridade do hash e efeito em produção: **[nao verificado]**. [nao verificado]
+
+## 12/11 19:51 · sessao c5e6ab20fd86 · - · - · origem=Ronald (tmux)
+
+A fixture é consistente por leitura e percorre `medir()` real: cria uma pergunta sem `celula`, grava resposta sem validação/materialização e lavra o dia via admin; o log vai para cinco minutos após a tranca. A lista DP vem de `respostas_sem_veredito(ignorar_tranca=True)` e a mesma pergunta viva entra em tocadas pelo helper real. A asserção exige explicitamente o mesmo PK nas duas listas. (`app/chamados/tests/test_tranca_vivas_08.py:34`, `:43`, `:175`, `:182`; `app/chamados/tests/test_c7_red_minimos.py:110`; `app/chamados/models.py:1843`; `app/chamados/services/competencia_trancada.py:123`, `:137`, `:144`, `:155`.) Execução ORM: [nao verificado].
+
+Executei somente a agregação extraída por AST de `medir_frota`, em memória, substituindo import de `PeriodoFechado` e retorno de `medir`. A âncora ocorre uma vez; DP `[1]`, resgatadas `[]`, tocadas `[1]` dão união `1` e soma `2`. Isso corresponde à âncora e ao oráculo escritos no teste. (`app/chamados/services/competencia_trancada.py:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:206`, `:211`, `:221`.)
+
+Os exemplos simples **não sobrevivem à classe inteira**:
+
+- União → só DP ou só tocadas: passam o caso comportamental `1`, mas removem a âncora e falham em `fonte.count(velho) == 1`. (`app/chamados/tests/test_tranca_vivas_08.py:182`, `:221`.)
+- `len(_com_o_admin)` → `len(m['decidir_pelo_dp'])`: preserva a âncora, mas o MORDE passa a devolver `1` quando exige `2`. (`app/chamados/services/competencia_trancada.py:351`; `app/chamados/tests/test_tranca_vivas_08.py:211`.)
+
+Há, porém, um mutante ligado ao requisito que escapa aos oráculos examinados: substituir `len(_com_o_admin)` por `len(_com_o_admin) - len(m['vivas_resgatadas'])`. Mantém a âncora, preserva overlap `1`, vazio `0` e soma mutada `2`; portanto preserva as asserções da classe. Numa resgatada exclusiva, produz união `0` quando a fonte real produz `1`, contrariando a categoria declarada. (`app/chamados/services/competencia_trancada.py:336`, `:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:163`, `:186`, `:189`, `:198`, `:209`, `:211`.) Sobrevivência da suíte Django completa: [nao verificado].
+
+Os testes antigos citados de resgate verificam desarquivamento, vida e segunda passada; não conferem a união de `medir_frota`. O teste antigo do placar confere apenas `chamados_em_competencia_trancada`. (`app/chamados/tests/test_competencia_trancada.py:164`, `:177`, `:219`.)
+
+## 12/11 19:51 · sessao ea33eaacf0ca · - · - · origem=Ronald (tmux)
+
+Censo semântico concluído por leitura:
+
+| Campo | Quem escreve | Quem lê/publica |
+|---|---|---|
+| `decidir_pelo_dp` | `medir()` inclui ids não resgatados vindos de `respostas_sem_veredito(ignorar_tranca=True)` — `app/chamados/services/competencia_trancada.py:126`, `:137-139` | `_pauta_do_dp` usa ids de respostas — `:246-249`; `encerrar` chama pauta — `:232-233`; comando de encerramento imprime quantidade e ids — `app/chamados/management/commands/encerrar_por_competencia_trancada.py:36-39`; contador calcula cardinalidade — `competencia_trancada.py:353`. |
+| `vivas_resgatadas` | `medir()` inclui pergunta viva ligada a chamado resgatado depois da tranca — `competencia_trancada.py:117-118`, `:132`, `:145-150` | `medir_frota()` usa na união e conta separadamente — `:348`, `:353`. |
+| `vivas_tocadas_pelo_admin` | `medir()` consulta `_admin_tocou_os_dias_depois` e classifica pergunta viva — `competencia_trancada.py:155-158` | `medir_frota()` usa na união e conta separadamente — `:348`, `:353`. |
+| `ficam_com_o_admin` | `medir_frota()` calcula cardinalidade da união e soma por competência — `competencia_trancada.py:348-356` | comando imprime união nominal e separadas — `app/chamados/management/commands/chamados_em_competencia_trancada.py:16-25`; API repassa — `app/api/views_mensageria.py:1573-1578`; cliente GET JSON — `mensageria/nucleo/core_client.py:239-241`; ferramenta descreve união corretamente e devolve payload — `mensageria/nucleo/ferramentas.py:2032-2040`. |
+
+Não identifiquei consumidor da CLI que ainda interprete `decidir_pelo_dp=` como união: o placar extrai exclusivamente `^chamados_em_competencia_trancada=` (`bin/placar_code.sh:287-289`); o teste antigo procura `decidir_pelo_dp=1 ids=...` (`app/chamados/tests/test_competencia_trancada.py:149`), mas seu helper chama o **outro comando**, `encerrar_por_competencia_trancada` (`:52-55`); o teste novo procura a lista separada (`app/chamados/tests/test_tranca_vivas_08.py:199`). Consumidores externos à cópia: [nao verificado].
+
+Há textos/fontes antigos preservados: `RELATO-ARQUIVO.md:17319-17323` registra o BO de 17/09 com `vivas_apesar_da_tranca` significando resgatadas e soma em `ficam_com_o_admin`; `:17387` registra o contador antigo. `TICKETS.md:1180` registra a regra FEITO 15/09, inclusive a escrita antiga na pergunta, enquanto o fonte atual declara sua retirada pela C7 (`competencia_trancada.py:133-135`).
+
+O snapshot `app/chamados/tests/e4b_c12_base.json:6` contém a implementação antiga, inclusive `ficam_com_o_admin=len(dp)+len(vivas_apesar_da_tranca)`. É base de teste carregada em `e4b_c12_verificar.py:18`; o modo `base` reenxerta funções escritoras listadas (`:132-153`), e o sítio dessa família é o encerramento (`e4b_c12_sitios.json:68-72`). Não constitui parser vivo da linha alterada nem substituição de `medir_frota()` nesse modo (`e4b_c12_verificar.py:140-153`).
+
+Testes da API e mensageria verificam contagem geral/repasse, sem certificar os quatro novos campos (`app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:39-48`; `mensageria/nucleo/tests/test_ferramenta_chamados_em_competencia_trancada.py:23-28`). Execução desses testes: [nao verificado].
+
+## 12/11 19:50 · sessao d5aabf8b9f26 · - · - · origem=Ronald (tmux)
+
+JUIZES.md está coerente com o filtro real: a linha 88 descreve a assinatura `via='admin'` ou presença de `acoes`; o código exige exatamente um `dict` com uma dessas condições (`app/docs/JUIZES.md:88`; `app/chamados/juizes.py:1298`; constante em `app/ponto/services/veredito_celula.py:76`). Ainda exige usuário não nulo, diferente do sistema, e ato estritamente posterior à tranca (`app/chamados/juizes.py:1260`; `app/chamados/juizes.py:1302`).
+
+`acoes=[]` conta por presença da chave, coerentemente com o escritor real e com teste explícito; não se exige lista preenchida (`app/ponto/services/veredito_celula.py:358`; `app/chamados/tests/test_tranca_vivas_08.py:107`; `app/chamados/tests/test_tranca_vivas_08.py:109`). `acoes=None` também satisfaria o predicado, mas produção desse valor pelo escritor examinado é [nao verificado].
+
+Os escritores reais confirmam a distinção: a porta da célula grava `via` no evento; o despachante humano chama a mesma porta com `via='admin'` e depois registra `acoes` (`app/ponto/portas/celula.py:1042`; `app/ponto/portas/celula.py:1044`; `app/ponto/services/veredito_celula.py:352`; `app/ponto/services/veredito_celula.py:356`). O ator pode vir do request inclusive na lavra automática; o código de observabilidade documenta e implementa essa herança (`app/core/observ.py:100`; `app/core/observ.py:108`; `app/core/observ.py:115`).
+
+No checklist:
+
+- **Segundo juiz:** não identificado no caminho examinado. C20 está registrado; o avulso delega ao lote, e o contador lê `pergunta_viva` e o mesmo helper de toque usado pelo lote (`app/core/juizes.py:292`; `app/chamados/juizes.py:991`; `app/chamados/juizes.py:1076`; `app/chamados/services/competencia_trancada.py:144`; `app/chamados/services/competencia_trancada.py:155`).
+- **Segundo escritor:** os trechos novos de produção apenas agregam dicionários, projetam JSON e imprimem contagens; não acrescentam escrita persistente (`app/chamados/services/competencia_trancada.py:341`; `app/chamados/services/competencia_trancada.py:355`; `app/api/views_mensageria.py:1563`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:22`). A chamada do teste continua passando pela porta canônica da célula (`app/chamados/tests/test_tranca_vivas_08.py:177`; `app/escala/models.py:1826`).
+- **Relógio fora da borda:** não identificado nesses trechos. O filtro compara com `fechado_em`; a fixture congela `AGORA` e posiciona a trilha em `fechado_em + 5min` (`app/chamados/juizes.py:1070`; `app/chamados/juizes.py:1302`; `app/chamados/tests/test_tranca_vivas_08.py:30`; `app/chamados/tests/test_tranca_vivas_08.py:49`).
+- **Derivação paralela:** não identificada nesse contador: os juízos são consultados nas autoridades existentes; união/contagens ficam em `medir_frota`, e API/CLI leem sua saída (`app/chamados/services/competencia_trancada.py:144`; `app/chamados/services/competencia_trancada.py:155`; `app/chamados/services/competencia_trancada.py:348`; `app/api/views_mensageria.py:1563`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:14`).
+- **Campo com dois significados:** a união agora recebe o nome próprio e os componentes são expostos separadamente (`app/chamados/services/competencia_trancada.py:336`; `app/chamados/services/competencia_trancada.py:353`; `app/api/views_mensageria.py:1573`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:22`).
+
+A dívida de `resgatado_em` permanece: a descrição “RESGATADO pelo admin” é mais estreita que a origem real, pois resposta do colaborador também carimba o resgate (`app/chamados/services/competencia_trancada.py:75`; `app/chamados/services/arquivo.py:180`; `app/chamados/services/materializacao.py:725`). Isso corresponde ao item 2 já encaminhado para FILA no dado do usuário; registro desse encaminhamento em arquivo da cópia é [nao verificado].
+
+Execução da suite, histórico RED, resultados de produção pós-cura e integridade do hash do archive: [nao verificado]. [nao verificado]
 
 ## 12/11 19:45 · sessao 041d9a2e35d3 · TIPO-NA-FONTE · sonda · origem=Code
 
@@ -568,96 +680,4 @@ Executei os cinco módulos novos com `PYTHONDONTWRITEBYTECODE=1 python3 -B -m un
 
 **Veredito deste recorte: REPROVA**, bloqueantes 1–3; a lacuna da catraca está no achado 4. (`app/escala/tests/test_ata_x_turno_entrada.py:142`; `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:60`; `app/ponto/tests/test_bateria_lavratura.py:960`; `app/escala/services/ata.py:46`)
 
-## 12/11 19:19 · sessao b314db41c707 · - · - · origem=Ronald (tmux)
-
-1. **Único consumidor direto encontrado na cópia: o selo.** Ele executa a ferramenta e lê stdout/stderr/rc, depois interpreta o JSON em `_jq` (`bin/tests/test_leitores_de_chave.sh:32`, `:39`, `:43`). A régua chama o selo genericamente e usa seu rc, exibindo a saída somente na falha (`bin/regua.sh:138`, `:140`, `:141`). Outros leitores externos, briefs e histórico: **[nao verificado]**.
-
-2. **Não há número de catraca vindo da ferramenta no selo.** `N_REAL` e `N_DNA` vêm de `--contar-crus`, mas só recebem checagens de formato, rc e positividade; não há teto nem comparação histórica (`bin/tests/test_leitores_de_chave.sh:57`, `:59`, `:60`, `:253`, `:255`, `:256`). A linha final os apresenta como dimensão de eventos reconhecidos, explicitamente “nao de acessos reais” (`bin/tests/test_leitores_de_chave.sh:273`).
-
-3. **Os textos abertos não prometem completude.** Docstring admite construções sem lacuna e falsos positivos (`bin/leitores_de_chave.py:5`, `:6`, `:7`); stderr rejeita completude e acessos reais (`bin/leitores_de_chave.py:51`, `:836`); saída textual também rejeita completude (`bin/leitores_de_chave.py:872`). O selo descreve leitores/escritores reconhecidos e separa a trava do acessor (`bin/tests/test_leitores_de_chave.sh:3`, `:4`, `:5`). Mensagens de commit: **[nao verificado]**.
-
-4. **`disjuntor.py:1565` não lê essa ferramenta.** O trecho valida se os campos textuais `leitores`/`escritores` do CENSO contêm referência arquivo:linha; não lê sua contagem nem JSON (`bin/disjuntor.py:1565`, `:1566`, `:1567`).
-
-5. **Falhas explícitas da análise não viram número default na CLI.** Raiz ausente, erro de parse e declaração sem sítio retornam rc 2 antes da produção de `dim`/stdout numérico (`bin/leitores_de_chave.py:810`, `:812`, `:818`, `:821`, `:823`, `:826`, `:832`, `:838`). Existe fallback interno de `_returns` para declarados quando `RET_EF is None`, porém o caminho CLI inicializa o conjunto vazio e verifica RETURNS antes de construir/scannear os arquivos (`bin/leitores_de_chave.py:108`, `:109`, `:707`, `:766`, `:768`).
-
-6. **Campo “cota inferior” está delimitado como eventos reconhecidos nos textos abertos**, incluindo a linha final do selo; não há evidência de um leitor da cópia reinterpretando-o como acessos reais (`bin/leitores_de_chave.py:7`, `:38`, `:39`, `bin/tests/test_leitores_de_chave.sh:273`). A correção de RETURNS misto e a mordida dos novos testes precisam da consolidação dos outros exames; este censo não concede APROVA global (`bin/leitores_de_chave.py:60`).
-
-## 12/11 19:11 · sessao d9121af81e22 · TIPO-NA-FONTE · construtor · origem=Code
-
-Entrega registrada no [relato v2](docs/tipo_na_fonte_orfas_relato_v2.txt:1), com os oito itens do censo, REDs, comandos e INCOMPLETO.
-
-- **47 testes dirigidos passaram, rc=0.** [Registro](docs/tipo_na_fonte_orfas_execucao_v2.txt:251)
-- **Sete mutantes foram rejeitados.** [Comandos e resultados](docs/tipo_na_fonte_orfas_execucao_v2.txt:307)
-- Suite Django e integração completa do PDF não executadas; certificação Code/opus pendente. [Limites](docs/tipo_na_fonte_orfas_relato_v2.txt:101)
-
-## 12/11 19:00 · sessao 16931418c3a8 · - · - · origem=Ronald (tmux)
-
-Achados para corrigir ou declarar:
-
-- **Alta:** legado direto `orfas=['08:00']` alcança `h.strftime` e quebra; RED atual cobre somente projeção `None` com `n_orfas`. `ponto/supra_juiz.py:520`.
-- **Alta:** um único dia desconhecido transforma a janela PDF inteira em `None`, apagando identificações conhecidas no contador. `relatorios/pdf_espelho.py:492`.
-- **Alta:** período sem entrada correspondente nas batidas passa a suprimir todos os alertas, ampliando o comportamento anterior. `relatorios/pdf_espelho.py:195`, `relatorios/pdf_espelho.py:990`.
-- **Média:** `_furos_do_dia` mudou de três para quatro posições; três expectativas vizinhas precisam acompanhar. `escala/tests/test_cobparc_rotulo_furos_diarios.py:34`, `:46`, `:50`.
-- **Limite comprovado:** `copy().get`, `dict(ata).get` e `pop` escapam da contagem de `AtaVigiada`; executei os três sem Django: `leituras_acessor=1`, `acessos_crus_ata=0`. Interceptadores atuais: `escala/services/ata.py:68`.
-- **Limite de cobertura:** a catraca dirigida executa tripwire, esmeril e duas portas; não sustenta afirmação de unicidade global. `escala/tests/test_selo_tipo_na_fonte_orfas.py:25`.
-
-Não escrevi arquivos nem executei Django/banco/rede. [nao verificado]
-
-## 12/11 18:55 · sessao 81eaddfdbeb2 · TRANCA-VIVAS-08 · sonda · origem=Code
-
-Transcrição integral das linhas de ids e contagens fornecidas; valores de produção [nao verificado]:
-
-```text
-comp emp2 04/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp2 05/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp2 06/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp2 07/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp2 08/2026 perguntas=0 chamados=207 disputas=10 com_o_admin=4 vivas_apesar_da_tranca=0
-comp emp3 04/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp3 05/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp3 06/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp3 07/2026 perguntas=0 chamados=1 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp3 08/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp4 04/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp4 05/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp4 06/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp4 07/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-comp emp4 08/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
-TOTAL perguntas=0 chamados=208 disputas=10 com_o_admin=4 vivas_apesar_da_tranca=0
-emp2 08/2026 perguntas n=0 ids=[]
-emp2 08/2026 vivas_apesar_da_tranca n=0 ids=[]
-emp2 08/2026 vivas_resgatadas n=0 ids=[]
-emp2 08/2026 vivas_tocadas_pelo_admin n=0 ids=[]
-emp2 08/2026 fora_conversa n=0 ids=[]
-emp2 08/2026 decidir_pelo_dp n=4 ids=[20599, 47879, 47881, 47884]
-alvo_ainda_vivas_apesar=[]
-total_erros=0
-```
-
-Montagem das seis listas explicitadas para emp2 08/2026, na cópia:
-
-| Lista | Linha e condição |
-|---|---|
-| `perguntas` | Inicializada vazia em [competencia_trancada.py:90](app/chamados/services/competencia_trancada.py:90); permanece vazia por construção, conforme [competencia_trancada.py:135](app/chamados/services/competencia_trancada.py:135). |
-| `vivas_apesar_da_tranca` | Recebe `q.pk` quando `tocou` é falso, em [competencia_trancada.py:158](app/chamados/services/competencia_trancada.py:158). |
-| `vivas_resgatadas` | Recebe `q.pk` quando a pergunta é resgatada e viva, em [competencia_trancada.py:149](app/chamados/services/competencia_trancada.py:149). |
-| `vivas_tocadas_pelo_admin` | Recebe `q.pk` quando `tocou` é verdadeiro, em [competencia_trancada.py:158](app/chamados/services/competencia_trancada.py:158); consulta do toque em [competencia_trancada.py:155](app/chamados/services/competencia_trancada.py:155). |
-| `fora_conversa` | Recebe `q.pk` quando `_dia_de_turno_da_pergunta(q)` retorna `None`, em [competencia_trancada.py:142](app/chamados/services/competencia_trancada.py:142). |
-| `decidir_pelo_dp` | Recebe `q.pk` quando não é resgatada e pertence a `_sem_veredito`, em [competencia_trancada.py:139](app/chamados/services/competencia_trancada.py:139); origem desse conjunto em [competencia_trancada.py:126](app/chamados/services/competencia_trancada.py:126). |
-
-As listas representadas pelas outras contagens são montadas em [competencia_trancada.py:171](app/chamados/services/competencia_trancada.py:171) (`chamados`) e [competencia_trancada.py:183](app/chamados/services/competencia_trancada.py:183) (`disputas`). `com_o_admin` corresponde à contagem da união, sem repetição, de `decidir_pelo_dp`, `vivas_resgatadas` e `vivas_tocadas_pelo_admin`, formada em [competencia_trancada.py:343](app/chamados/services/competencia_trancada.py:343).
-
-**O degrau efetivamente decisivo por id não está demonstrado pelo dado fornecido [nao verificado].**
-
-| ID pedido | O que consta no dado | Degrau efetivamente percorrido |
-|---|---|---|
-| `20798` | Não aparece na saída transcrita [nao verificado]. | [nao verificado] |
-| `47879` | Consta em `decidir_pelo_dp` [nao verificado]. | [nao verificado] |
-| `47881` | Consta em `decidir_pelo_dp` [nao verificado]. | [nao verificado] |
-| `47884` | Consta em `decidir_pelo_dp` [nao verificado]. | [nao verificado] |
-
-O código permite localizar o degrau da **leitura da tranca**: retorna `False` em [juizes.py:1405](app/chamados/juizes.py:1405). Entretanto, a validação já retorna `False` antes dele, em [juizes.py:1401](app/chamados/juizes.py:1401), e existem outros retornos posteriores; portanto, resultado agregado não identifica sozinho o ramo executado. Atribuir especificamente o degrau da tranca a cada id permanece [nao verificado].
-
-Além disso, `decidir_pelo_dp` é preenchida **antes** de consultar `pergunta_viva`, em [competencia_trancada.py:139](app/chamados/services/competencia_trancada.py:139) e [competencia_trancada.py:144](app/chamados/services/competencia_trancada.py:144). Sua presença nessa lista não registra qual degrau do juiz decidiu a pergunta.
-
-_4405 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4409 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
