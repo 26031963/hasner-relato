@@ -1,7 +1,53 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 22:20** · publicado em **11/11/2026 22:21** (UTC-3)
+> Ultima resposta processada: **11/11/2026 22:22** · publicado em **11/11/2026 22:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 22:22 · sessao fba735337724 · - · - · origem=Ronald (tmux)
+
+Execução sem banco já tem molde na cópia: `ponto/tests/test_reverter_exportada_sem_banco.py:1-7` e `ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:1-5`. Ambos usam `unittest` stdlib, fonte real compilado e duplos apenas de I/O. O settings de testes usa PostgreSQL; evite `manage.py test`. (`config/settings_test.py:4`)
+
+Proposta de harness:
+
+- Extraia por AST as funções reais `_marcar_ausencias`, `por_dia_da_grade`, `fatos_do_periodo`, `folga_humana_ou_feriado`, `fatos_do_status`, `status_da_lavra` e `status_dos_dias_lavrados`. (`escala/utils.py:1156`; `ponto/services/dia_pago.py:365`; `ponto/precedencia.py:203`; `ponto/precedencia.py:284`; `ponto/status_dia.py:113`; `ponto/status_dia.py:166`; `ponto/status_dia.py:221`)
+- Use QuerySet duplo estrito que efetivamente avalie filtros/exclusões, conforme o molde existente; falso que apenas retorna a lista não prova B3. (`ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:23-58`)
+- B1 deve usar a mesma ausência na A2 real, overlay real da grade e status real. O ramo sem lavra aceita carga e fatos já alimentados, evitando qualquer acesso ao banco. (`ponto/status_dia.py:244-247`; `ponto/status_dia.py:300-313`)
+- Para comparação financeira, carregue também `por_dia_da_grade` e `prontidao` da base via `git show`, em memória, e compare resultados por tipo, com realizado zero/parcial/excedente. O molde `--base` já faz exatamente essa leitura sem alteração de fonte. (`ponto/tests/test_bo0611_05_leitores_geo.py:150-165`)
+- B2 deve comparar ausência humana `'folga'` e dia exclusivamente de escala, chegando pelo produtor real. A colisão está no marcador da escala e no predicado consumidor. (`ponto/precedencia.py:215-216`; `ponto/precedencia.py:410`)
+- B3 deve testar `troca_de_plantao` aguardando/aprovada/rejeitada, incluindo controle de outro tipo aguardando para verificar o recorte específico. A origem atualmente exclui apenas rejeitadas. (`ponto/precedencia.py:298-304`)
+
+Mutantes sugeridos, sempre em memória: default de volta em `faixa_de`; atribuição independente `dia['tipo_dia']='ausencia'` na grade; restaurar marcador automático `'folga'`; remover exclusão da troca aberta. O harness pode oferecer `--mutante`, seguindo o existente. (`ponto/precedencia.py:100-105`; `escala/utils.py:1220`; `ponto/tests/test_bo0611_05_leitores_geo.py:154-165`)
+
+Atenção: testes financeiros anteriores constroem dias `ausencia` sem `ausencia_tipo`. Eles devem continuar cobertos no teste de compatibilidade para evitar quebra involuntária. (`ponto/tests/test_bob_b2_abono_feriado_guarda.py:54-69`; `ponto/tests/test_retrato_exportada.py:47`)
+
+Não editei arquivos nem executei testes. [nao verificado por execução] [nao verificado]
+
+## 11/11 22:22 · sessao b8dc92699ec6 · - · - · origem=Ronald (tmux)
+
+Censo B2, somente leitura:
+
+| Sítio | Significado e ajuste |
+|---|---|
+| `ponto/precedencia.py:410` | Hoje mistura FolgaDia/escala com `Ausencia.tipo='folga'`. Separar na origem: `folga_da_escala` para `previsto=False` sem FolgaDia; preservar `folga` para FolgaDia e ausência humana. |
+| `ponto/precedencia.py:216` | Predicado deve excluir `(None, 'folga_da_escala')`, mantendo o teste existente de `fatos.folga_lancada`. Assim `folga` humana passa a responder True. |
+| `ponto/services/dia_decidido.py:371` | Única outra comparação produtiva direta encontrada: aceitar `('folga', 'folga_da_escala')`, preservando palavra/veredito FOLGA. |
+| `ponto/status_dia.py:311` | Lê o código para efeito somente nas faixas `atestado`/`afastamento`; nova distinção não entra nesse ramo. |
+| `ponto/services/deslogados.py:166` | Exclui qualquer tipo diferente de trabalho/None: significado preservado. |
+| `ponto/services/faltas_de_hoje.py:61` | Mesmo predicado: significado preservado. |
+| `folha/services/sem_furo.py:26` | Seleciona somente trabalho: significado preservado. |
+| `ponto/services/cartorio.py:1987` | Copia o código para o carimbo de precedência existente. |
+| `ponto/services/dia_do_colab.py:87` | Expõe o código no resultado; passa a distinguir origem automática. |
+| `ponto/precedencia.py:450` | Texto da supressão usa faixa/rótulo; preservado. |
+
+Testes antigos que precisam acompanhar a nova origem: expectativa de folga automática em `ponto/tests/test_a2_precedencia.py:152`; fixture automática em `ponto/tests/test_e3_status_lavrado.py:128`. A fixture humana com FolgaDia deve continuar `folga` em `ponto/tests/test_e3_status_lavrado.py:124`.
+
+Capturas: adicionar `except TipoSemFaixa: raise` antes da captura genérica, importando a exceção junto da autoridade, em:
+
+- `escala/services/semana_do_posto.py:175`: outras exceções continuam retornando `trabalho` em `:179`.
+- `ferias/situacao.py:92`: outras exceções continuam retornando False em `:96`.
+- `ponto/services/espelho.py:646`: outras exceções continuam registrando warning e prosseguindo com mapas vazios em `:650`.
+
+A captura de cartório não foi incluída no pedido c5; permanece a captura genérica em `ponto/services/cartorio.py:2032`. Não executei testes nem fiz alterações.
 
 ## 11/11 22:20 · sessao 671e565c4e1a · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -813,52 +859,4 @@ Mutante descrito, sem aplicação: em `chamados/services/disputa_emissao.py:451`
 
 Texto para o RELATO: **cura do +1 presente nesta cópia** (`escala/servico_jornada.py:508`); estado efetivamente “no ar” **[nao verificado]**. Atribuição histórica dos pares e situação atual da batida 147824 continuam **[nao verificado]**, no passivo BATIDA/histórico, L-099. Certificação permanece com Code e opus final.
 
-## 11/11 21:07 · sessao 4be47f121636 · BUG-ORFAO-COM-PAR · construtor · origem=Code
-
-Arquivo: [test_bug_orfao_com_par_ensaio.py:1](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:1). Classe candidata nomeada com `RED`; ensaio pela API real, relógio por passo e captura da pilha de nascimento ([arquivo:84](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:84), [arquivo:122](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:122)).
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_bug_orfao_com_par_ensaio --settings=config.settings.ci
-```
-
-Expectativa estática no HEAD:
-
-| ASSERT | Esperado | Por quê |
-|---|---|---|
-| A, após E | Zero perguntas nascidas, inclusive carimbadas | Turno ainda em curso: `escala/servico_jornada.py:385`. |
-| B, 06:30:48 | Zero nascimentos após cartório e reconciliação | Fábrica exige marco vencido; S vence às 07:30: `chamados/services/fabrica_da_celula.py:69`, `ponto/services/cartorio.py:882`. |
-| C, após S | Um turno fechado ancorado em D; zero nascimentos acumulados | Seleção pelo dia do turno: `ponto/turnos.py:1992`. |
-
-**Execução comportamental no HEAD: [nao verificado].** Não executei Django porque esta obra proíbe banco. Não afirmo RED nem “classe não reproduz no HEAD”; essa conclusão depende da suite. [nao verificado]
-
-**Mutante descrito, sem aplicação:** emitir `orfao_14h` imediatamente após E, dispensando vencimento, em `api/views_core.py:758`, alcançando `chamados/services/disputa_emissao.py:444`. Executar o mesmo comando na cópia mutante; ASSERT A deve falhar. Morte efetiva: [nao verificado]. Especificação em [arquivo:20](/home/ronald/wt-codex-bug-orfao-com-par-210341/app/ponto/tests/test_bug_orfao_com_par_ensaio.py:20).
-
-| Campo lido | Quem escreve | Quem lê em produção |
-|---|---|---|
-| Pergunta: `motivo` | `chamados/models.py:3014`, INSERT `:3017` | `chamados/juizes.py:941` |
-| Pergunta: `data_evento` | `chamados/services/fio.py:800` | `chamados/services/fabrica_da_celula.py:148` |
-| Pergunta: `materializada_em` | Carimbo `chamados/models.py:3099`; limpeza `:3208`, `:3266` | C6 `chamados/juizes.py:1370`; E2 `chamados/reconciliador.py:629` |
-| Batida: `timestamp`, `tipo` | `ponto/registro_batida.py:157` | `ponto/turnos.py:1217` |
-| Célula: `ata` | Cartório `ponto/services/cartorio.py:1837` → porta `ponto/portas/celula.py:1033` | `chamados/juizes.py:965` |
-
-Certificação permanece com o Code e o opus final. [nao verificado]
-
-## 11/11 21:04 · sessao ae9a66b9c290 · DATA-EVENTO-CRU · censo · origem=Code
-
-Numeração dos anexos: primeira linha do conteúdo = 1, incluindo linhas vazias e excluindo `== anexo ==`. Em **b**, considero a triagem da própria resposta; descarte posterior pela sessão é **[nao verificado]**.
-
-| Achado | Letra | Trecho q | Trecho r | Motivo em 1 linha |
-|---|---|---|---|---|
-| **1 — templates sem ponto** (`opus_final.r:3`) | **a** | “o regex de template deixa escapar algum leitor” (`contrato_catraca.q:1`) | Reconhece `with` e aponta `attr` como escape (`preverif_catraca.r:9`, `:11`) | A cobertura dos escapes foi perguntada; `regroup` e `dictsort` ficaram sem identificação. |
-| **2 — dict de filtro em variável** (`opus_final.r:4`) | **a** | “Algum leitor real NOVO ficou de fora por regra nova (chave de dict literal como rotulo...)?” (`preverif_catraca_v2.q:1`) | “não localizei”; “As chaves literais encontradas são payload/trilha” (`preverif_catraca_v2.r:14`) | A exclusão de chaves foi expressamente questionada; o dict usado como filtro não foi identificado. |
-| **3 — isenção ampla de return** (`opus_final.r:5`) | **e** | A v3 informa “sobrecontagem admitida” do retorno e pergunta sua estabilidade (`preverif_catraca_v3.q:2`, `:6`) | “`return 'data_evento'`, continua contado”; depois bloqueia a compensação (`preverif_catraca_v3.r:5`, `:19`, `:25`) | A pergunta examinava a sobrecontagem; a isenção defeituosa pertence à cura posterior, registrada na [volta 4](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7968). |
-| **4 — comentário multilinha** (`opus_final.r:6`) | **a** | “o regex de template deixa escapar algum leitor” (`contrato_catraca.q:1`) | Recomenda “retirar comentários antes de contar”, mencionando `{# ... #}` (`contrato_catraca.r:40`) | A revisão do regex estava no alcance; a resposta não distinguiu a semântica de comentário em uma linha da multilinha. |
-| **5 — ESCRITA pelo nome da chamada** (`opus_final.r:7`) | **a** | “Algum leitor real NOVO ficou de fora por regra nova (... destino de escrita, DESTINO_KW)?” (`preverif_catraca_v2.q:1`) | “Leitor real novo omitido pelas exclusões novas: não localizei”; demonstra apenas a regressão do subscrito (`preverif_catraca_v2.r:14`) | As exclusões de escrita foram perguntadas; a isenção indistinta pelo nome do método não foi apontada. |
-| **6 — total no ESTADO** (`opus_final.r:8`) | **e** | Pergunta “Quem escreve e quem le o JSON” e colisões com enumeradores (`preverif_catraca.q:7`) | “Publicação desse total no BACKLOG/ESTADO: **[nao verificado]**” (`preverif_catraca.r:36`) | Nenhuma q cobra explicitamente o produtor do total no ESTADO; a resposta menciona a publicação sem verificá-la. |
-| **7 — código e JSON sobem juntos** (`opus_final.r:9`) | **b** | Pergunta se acrescentar leitor fica vermelho e se a catraca “so desce” (`preverif_catraca.q:3`) | “aumentar código **e** allowlist juntos pode passar; não há comparação com o baseline anterior” (`preverif_catraca.r:7`) | O Codex viu e tratou como limite, deixando-o fora da lista final de bloqueantes (`preverif_catraca.r:7`, `:40`). |
-
-**Contagem da classificação acima:** **a = 4; b = 1; c = 0; d = 0; e = 2. Total = 7** (`opus_final.r:3–9`).
-
-A promessa do achado 6 está em [RELATO.md:7950](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7950) nesta cópia; [RELATO.md:7966](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7966) registra a volta 3.
-
-_4043 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4045 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
