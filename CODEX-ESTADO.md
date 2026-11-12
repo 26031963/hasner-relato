@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 17:43** · publicado em **12/11/2026 17:43** (UTC-3)
+> Ultima resposta processada: **12/11/2026 17:46** · publicado em **12/11/2026 17:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 17:46 · sessao d118260d8f2a · TRANCA-VIVAS-08 · sonda · origem=Code
+
+O envelope executa a sonda antes do Codex e entrega a saída raspada no prompt ([bin/codex_pergunta.sh:326](bin/codex_pergunta.sh:326), [bin/codex_pergunta.sh:357](bin/codex_pergunta.sh:357)). Segue a transcrição integral recebida; reexecução independente: [nao verificado].
+
+```text
+sonda_leitura: sonda_v4.py [b406e34784086e43] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+log#747607 acao=veredito_celula modelo=CelulaDia obj=10153 usuario=657 ator=None em=2026-10-22T15:35:25.946330-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=cobrado veredito_depois=cobrado chaves_depois=['protestos', 'veredito', 'via'] acoes=None desc_ini='veredito cobrado -> cobrado via cartorio'
+log#747612 acao=veredito_celula modelo=CelulaDia obj=10153 usuario=657 ator=None em=2026-10-22T15:35:27.552330-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=cobrado veredito_depois=discordante chaves_depois=['protestos', 'veredito', 'via'] acoes=None desc_ini='veredito cobrado -> discordante via cartorio'
+log#747617 acao=veredito_celula modelo=CelulaDia obj=10152 usuario=657 ator=None em=2026-10-22T15:35:29.134502-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=cobrado veredito_depois=cobrado chaves_depois=['protestos', 'veredito', 'via'] acoes=None desc_ini='veredito cobrado -> cobrado via cartorio'
+log#747622 acao=veredito_celula modelo=CelulaDia obj=10152 usuario=657 ator=None em=2026-10-22T15:35:30.735412-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=cobrado veredito_depois=discordante chaves_depois=['protestos', 'veredito', 'via'] acoes=None desc_ini='veredito cobrado -> discordante via cartorio'
+log#747627 acao=veredito_celula modelo=CelulaDia obj=10151 usuario=657 ator=None em=2026-10-22T15:35:32.359774-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=cobrado veredito_depois=cobrado chaves_depois=['protestos', 'veredito', 'via'] acoes=None desc_ini='veredito cobrado -> cobrado via cartorio'
+log#769000 acao=veredito_celula modelo=CelulaDia obj=4538 usuario=653 ator=None em=2026-10-26T11:05:49.557493-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=concorde veredito_depois=furo chaves_depois=['protestos', 'veredito', 'via'] acoes=None desc_ini='veredito concorde -> furo via cartorio'
+log#933557 acao=veredito_celula modelo=CelulaDia obj=10151 usuario=657 ator=None em=2026-11-11T11:48:54.050593-03:00 via_depois=cartorio via_antes=cartorio veredito_antes=cobrado veredito_depois=furo chaves_depois=['protestos', 'status_dia', 'veredito', 'via'] acoes=None desc_ini='veredito cobrado -> furo via cartorio'
+cel#4538 colab367 data=2026-08-01 veredito=furo via=cartorio veredito_em=2026-10-26T11:05:49.511359-03:00
+   logs veredito_celula com usuario: 1; com acoes (servico Resolver dia): 0
+cel#10151 colab444 data=2026-08-03 veredito=furo via=cartorio veredito_em=2026-11-11T11:48:53.970330-03:00
+   logs veredito_celula com usuario: 2; com acoes (servico Resolver dia): 0
+cel#10152 colab444 data=2026-08-04 veredito=furo via=cartorio veredito_em=2026-11-12T06:27:03.004867-03:00
+   logs veredito_celula com usuario: 2; com acoes (servico Resolver dia): 0
+cel#10153 colab444 data=2026-08-05 veredito=discordante via=cartorio veredito_em=2026-10-22T15:35:27.512146-03:00
+   logs veredito_celula com usuario: 2; com acoes (servico Resolver dia): 0
+total_erros=0
+== anexo: retira_acervo_tranca_2.txt ==
+aval Ronald: RETIRA ACERVO-TRANCA-2 (publicado 16:3x, contraria CLAUDE.md 7b DINHEIRO item 3: nenhuma trava por exportada/trancada/paga; correcao provada entra em qualquer competencia). Nao executar os itens 1, 2, 3 e 5; nenhuma lei nova. Fica SO o item 4, que e lei existente (TRANCA-DE-VERDADE): as 4 perguntas vivas na comp 08 emp2 trancada -> listar pk e o degrau de chamados/juizes.py::pergunta_viva que as deixou vivas; curar na origem se for defeito; contador vivas_apesar_da_tranca na frota, esperado 0. Segue a fila; PAREI so em lei ou !
+```
+
+1. Pela assinatura recebida, **747607, 747612, 747617, 747622 e 747627** correspondem à trilha da lavra em **`app/ponto/portas/celula.py:1042`**, todos via **`cartorio`**; a descrição coincide com `app/ponto/portas/celula.py:1043`.
+2. **769000** corresponde à mesma lavra, via **`cartorio`** (`app/ponto/portas/celula.py:1042`, `app/ponto/portas/celula.py:1043`).
+3. **933557** corresponde à mesma lavra, via **`cartorio`**, incluindo `status_dia` no payload (`app/ponto/portas/celula.py:1044`).
+4. Nenhum tem a assinatura de “Resolver dia”, que grava `acoes` (`app/ponto/services/veredito_celula.py:356`, `app/ponto/services/veredito_celula.py:358`), nem a descrição exclusiva de alteração de status do ramo `app/ponto/portas/celula.py:1028`.
+5. **`_toque_humano_nos_dias` confunde as assinaturas:** usa a ação definida em `app/chamados/juizes.py:1088`, exige usuário não nulo/diferente do sistema (`app/chamados/juizes.py:1253`) e aceita ação+célula+horário, sem conferir `via`, `acoes` ou `ator` (`app/chamados/juizes.py:1287`, `app/chamados/juizes.py:1292`).
+6. Esse toque passa por `_admin_tocou_os_dias_depois` (`app/chamados/juizes.py:1225`) e afasta a tranca em `dias_trancados` (`app/chamados/juizes.py:1079`), influenciando o degrau de `pergunta_viva` em `app/chamados/juizes.py:1395`.
+7. Outro leitor direto é **`decisao_do_dia`**: restringe previamente a célula à via humana `admin` (`app/ponto/services/veredito_celula.py:76`, `app/ponto/services/veredito_celula.py:110`) e consulta a ação para completar autoria (`app/ponto/services/veredito_celula.py:115`, `app/ponto/services/veredito_celula.py:120`).
+8. A lavra pode herdar o usuário autenticado da requisição (`app/core/observ.py:113`); portanto, usuário preenchido não distingue “Resolver dia” de cartório. Identidade do usuário de sistema, horário da tranca, PKs das perguntas e efeito efetivo desses logs na produção: [nao verificado].
+
+## 12/11 17:45 · sessao a73b5ea5ea07 · - · - · origem=Ronald (tmux)
+
+Encontrei dois leitores diretos de `LogAuditoria.acao='veredito_celula'`:
+
+- `_toque_humano_nos_dias`: constante em `app/chamados/juizes.py:1088`; exige usuário não nulo/diferente do sistema em `app/chamados/juizes.py:1253`; consulta ação, modelo e célula em `app/chamados/juizes.py:1287`; marca toque pelo horário em `app/chamados/juizes.py:1292`, sem conferir `acoes`, `via` ou `ator`. Esse toque afasta a tranca em `app/chamados/juizes.py:1079`.
+- `decisao_do_dia`: primeiro restringe as células a `veredito_via='admin'` em `app/ponto/services/veredito_celula.py:110`; depois consulta essa ação em `app/ponto/services/veredito_celula.py:115` para obter o autor da última trilha com nome em `app/ponto/services/veredito_celula.py:118`. Consumidores: calendário em `app/colaboradores/services/calendario.py:416` e API em `app/api/views.py:1411`.
+
+Não encontrei outro leitor direto na busca da cópia; exaustividade fora dos arquivos pesquisados: [não verificado].
 
 ## 12/11 17:43 · sessao 3d62cbc2dfb9 · TRANCA-VIVAS-08 · sonda · origem=Code
 
@@ -1182,257 +1227,4 @@ ponto/motor_cal
 
 [truncado em 20000 de 54867 caracteres]
 
-## 12/11 16:53 · sessao 55d549d73138 · - · - · origem=Ronald (tmux)
-
-Censo por AST: **200 chamadas** em **185 linhas de 59 arquivos** de `app/`, excluindo diretórios `tests`, `__pycache__`, `.venv`, `venv` e arquivos `test_*.py`; zero erros de parse. São 162 chamadas fora de `management` e 38 dentro. A diferença contra 161 é **+39 chamadas**; o comando/recorte do grep do aval não foi fornecido, portanto equivalência entre as medições é [não verificado]. Incluindo o repositório inteiro com os mesmos filtros há mais uma chamada de render em `bin/disjuntor.py:2266`.
-
-A classificação primária usa **P > C > R** quando há mais de um destino demonstrado: **P62 + C53 + R83 + U2 = 200**. `U` identifica valor descartado, fora da taxonomia solicitada. Sobreposição explícita P+C: seis chamadas — `app/escala/utils.py:291`, `app/escala/utils.py:730`, `app/escala/utils.py:749`, `app/ponto/motor_calculo_v2.py:1671`, `app/ponto/motor_calculo_v2.py:1672`, `app/ponto/management/commands/detectar_ausencias.py:484`. Contando essas sobreposições, são 59 chamadas com uso comparativo. Os totais são a soma da tabela abaixo; classificação de todos os destinos possíveis em execução é [não verificado].
-
-Na tabela, linhas repetidas significam duas chamadas na mesma linha; cada número compõe `arquivo:linha`.
-
-```text
-arquivo                                                       PERSISTIDO                 COMPARADO                       RENDER                              SEM USO
-app/api/views.py                                              627,645                                                     355,535,681,800,1457,2035,2959,2960
-app/api/views_core.py                                         618,636                                                     343,521,672,794,1280,1281
-app/chamados/detector_anomalias.py                             234,235                    213                                                                 222
-app/chamados/juizes.py                                                                   1814
-app/chamados/models.py                                                                                                   4070,4072,4076,4078
-app/chamados/reconciliador.py                                                            210
-app/chamados/services/acoes_chamado.py                                                                                    383
-app/chamados/services/explicador.py                                                                                       57
-app/chamados/services/materializacao.py                                                   182                            465
-app/chamados/services/painel.py                                                                                          395
-app/chamados/services/tarefa_do_dia.py                                                     78
-app/chamados/views_cobrar.py                                                                                             42,57
-app/colaboradores/services/calendario.py                                                   625
-app/colaboradores/services/ficha.py                                                                                      28
-app/colaboradores/views.py                                                                                              2312,2313
-app/core/esteira_vigia.py                                     1304,1560,1569,1572,1580,1590
-app/core/templatetags/hasner_filters.py                                                                                  102,102,147
-app/core/views.py                                                                                                       825
-app/escala/models.py                                                                                                    415,415,444,444,452,452,509,509,
-                                                                                                                       517,517,546,546,664,664,665,665
-app/escala/servico_jornada.py                                                             455,456                        201,201
-app/escala/utils.py                                          291,326,621,662,712,730,749,  378,429,782,1675,1707,1719,
-                                                            799,1549,1828,1832,1834     1724,1742,1754,1755,2005,2028
-app/pautas/services.py                                                                                                  431
-app/ponto/calculador/alimentacao.py                                                       119
-app/ponto/calculador/nucleo.py                               142,146,238
-app/ponto/management/commands/censo_col900.py                 138
-app/ponto/management/commands/desvio_o68b.py                                                                              125,126
-app/ponto/management/commands/detectar_ausencias.py           484,848                                                     410,418,429,436,452,782
-app/ponto/management/commands/detectar_intervalo_ausente.py                                67,74,79,82,84                                                      81
-app/ponto/management/commands/detectar_par_relampago.py       97,98                                                       393,394
-app/ponto/management/commands/diff_calculador.py                                                                          460
-app/ponto/management/commands/diff_reclassificar_partido.py                                                               97,98
-app/ponto/management/commands/dna_x_batida_real.py            122,123
-app/ponto/management/commands/emitir_furo_retroativo.py                                                                    152
-app/ponto/management/commands/emitir_turno_aberto_retroativo.py 167
-app/ponto/management/commands/gerar_celulas.py               33
-app/ponto/management/commands/processar_alertas_avancados.py 136
-app/ponto/management/commands/reconciliar_fantasmas.py        121,123,134,134
-app/ponto/management/commands/tripwire_celulas.py                                         192,195,280
-app/ponto/management/commands/tripwire_tipo_batida.py                                                                     64
-app/ponto/marcos.py                                                                     11
-app/ponto/motor_calculo_v2.py                                1671,1672                   1488,3069                      2221,2222,2229,2230
-app/ponto/propositor.py                                                                 340,342,342,343,345
-app/ponto/services/ausencia.py                               910,911,934,934
-app/ponto/services/cartorio.py                                                          878,1927
-app/ponto/services/dia_do_colab.py                                                                                       57
-app/ponto/services/diagnostico_escala.py                                                 26
-app/ponto/services/entrada_sincronizada.py                    28
-app/ponto/services/espelho.py                                                                                           210
-app/ponto/services/faltas_de_hoje.py                                                     45
-app/ponto/services/flip_auto.py                                                         219,221,221,222,232            319
-app/ponto/services/lastro.py                                                                                            313
-app/ponto/services/passivo_s84.py                            103
-app/ponto/services/teto_na_lista.py                          82,83
-app/ponto/services/triagem_batida.py                         472,473,479,480,492,540,
-                                                            586,611,741                                               187
-app/ponto/services/veredito_celula.py                        320,329                     252
-app/ponto/services/vigia_pareador_celula.py                                              110
-app/ponto/utils_turno_orfao.py                                                                                          40
-app/relatorios/pdf_espelho.py                                                           178,609,716,960,963             732,733,881,885,907,907,955
-app/relatorios/services.py                                                                                             133
-```
-
-Os dois valores sem uso são:
-
-- `app/chamados/detector_anomalias.py:222`: `horario_real` no retorno `informativa`. Os dois chamadores tratam `grave` e `leve`, sem consumir esse retorno: `app/api/views.py:701`, `app/api/views.py:702`, `app/api/views.py:705`, `app/api/views_core.py:692`, `app/api/views_core.py:693`, `app/api/views_core.py:696`.
-- `app/ponto/management/commands/detectar_intervalo_ausente.py:81`: a hora compõe `marcos_faltantes`, mas o chamador usa apenas as datas e a quantidade de furos; a emissão está encerrada por `continue`: `app/ponto/management/commands/detectar_intervalo_ausente.py:120`, `app/ponto/management/commands/detectar_intervalo_ausente.py:121`, `app/ponto/management/commands/detectar_intervalo_ausente.py:156`, `app/ponto/management/commands/detectar_intervalo_ausente.py:157`.
-
-Persistidos: fato e destino demonstrado:
-
-| Origem | Fato/previsão | Destino/prova |
-|---|---|---|
-| `app/escala/utils.py:326`, `:1549`, `:1828` | Batida/marco realizado | A hora realizada da célula torna-se `lampadas[].luz`: `app/ponto/services/cartorio.py:711`, `:712`, `:736`, `:738`. |
-| `app/escala/utils.py:621`, `:662`, `:799`, `:1832`, `:1834` | Órfã | A lista da grade vira `ata['orfas']` sem instante: `app/ponto/services/cartorio.py:743`, `:745`. |
-| `app/escala/utils.py:291`, `:712`, `:730`, `:749` | Marco previsto | Produzem a régua `tipo/hora`; a régua alimenta a hora prevista das lâmpadas: `app/escala/utils.py:734`, `:753`, `:1401`; `app/ponto/services/cartorio.py:638`, `:648`, `:711`. |
-| `app/chamados/detector_anomalias.py:234`, `:235` | Previsto e batida, respectivamente | `ctx_desvio` vira `contexto_json` de chamado: `app/api/views.py:714`, `:717`, `:726`; `app/api/views_core.py:708`, `:720`. |
-| `app/api/views.py:627`, `:645`; `app/api/views_core.py:618`, `:636` | Hora da tentativa/recepção, pelo relógio do servidor | Compõem contexto de disputa: `app/api/views.py:497`, `:498`, `:625`, `:642`, `:765`. Não são necessariamente o instante efetivo offline da batida: `app/api/views.py:508`. |
-| `app/ponto/services/triagem_batida.py:472`, `:479`, `:741` | Tentativa/batida web | Chamado JSON, sessão, disputa: `app/ponto/services/triagem_batida.py:470`, `:486`, `:735`. |
-| `app/ponto/services/triagem_batida.py:473`, `:480`, `:492` | Previsto | Chamado/sessão e texto da justificativa da batida: `app/ponto/services/triagem_batida.py:470`, `:486`, `:690`, `:697`, `:702`. |
-| `app/ponto/services/triagem_batida.py:540`, `:586`, `:611` | Batida | Texto humano salvo em ocorrência e descrição de justificativa: `app/ponto/services/triagem_batida.py:603`, `:609`, `:613`. |
-| `app/ponto/services/entrada_sincronizada.py:28` | Batida sincronizada | Ocorrência, justificativa e resolução: `app/ponto/services/entrada_sincronizada.py:35`, `:42`, `:43`, `:60`. |
-| `app/ponto/motor_calculo_v2.py:1671`, `:1672` | Batida real e previsto | Lista do motor levada a `MetricaSnapshot.detalhe`: `app/ponto/motor_calculo_v2.py:2719`; `app/ponto/services/cxr_na_lista.py:79`, `:86`, `:130`, `:145`, `:148`. |
-| `app/ponto/services/teto_na_lista.py:82`, `:83` | Marcos previstos `hi/hf` | Snapshot: `app/ponto/services/teto_na_lista.py:113`, `:116`. |
-| `app/ponto/services/ausencia.py:910`, `:911`, `:934` duas chamadas | Período declarado de ausência | Auditoria antes/depois: `app/ponto/services/ausencia.py:932`, `:933`, `:934`; `app/core/auditoria.py:22`. Realização do período é [não verificado]. |
-| `app/ponto/services/veredito_celula.py:320`, `:329` | Batida corrigida; tentativa de materializar marco | Ações/erros salvos em auditoria: `app/ponto/services/veredito_celula.py:356`, `:358`. Sucesso da materialização do caso `:329` é [não verificado]. |
-| `app/ponto/management/commands/detectar_par_relampago.py:97`, `:98` | Batidas do par | `contexto_json['par']`: `app/ponto/management/commands/detectar_par_relampago.py:383`. |
-| `app/ponto/management/commands/detectar_ausencias.py:484` | Marco previsto | `contexto_json['marcos_faltantes']`: `app/ponto/management/commands/detectar_ausencias.py:706`, `:710`, `:712`. |
-| `app/ponto/management/commands/detectar_ausencias.py:848` | Batida | Ocorrência textual: `app/ponto/management/commands/detectar_ausencias.py:852`. |
-| `app/ponto/management/commands/gerar_celulas.py:33` | Marco previsto | Helper alimenta `dna.marcos` e `dna.lampadas[].hora`: `app/ponto/management/commands/gerar_celulas.py:68`, `:83`, `:93`, `:100`, `:103`. |
-| `app/ponto/management/commands/processar_alertas_avancados.py:136`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:167` | Saída prevista | Descrição do chamado: `app/ponto/management/commands/processar_alertas_avancados.py:121`, `:133`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151`, `:159`. |
-| `app/ponto/management/commands/reconciliar_fantasmas.py:121`, `:123`, `:134` duas chamadas | Entrada/saída reais; saída real e saída prevista na linha 134 | Diagnóstico `detalhe` salvo em ocorrência/auditoria: `app/ponto/management/commands/reconciliar_fantasmas.py:205`, `:206`, `:278`, `:280`, `:286`, `:299`. |
-| `app/ponto/calculador/nucleo.py:142`, `:146`, `:238` | Batidas | Arquivo CSV diagnóstico: `app/ponto/management/commands/e6_oraculo.py:330`, `:404`, `:444`, `:445`. |
-| `app/ponto/management/commands/censo_col900.py:138` | Primeira batida | Arquivo JSON opcional: `app/ponto/management/commands/censo_col900.py:178`, `:179`. |
-| `app/ponto/management/commands/dna_x_batida_real.py:122`, `:123` | Marcos previstos | Arquivo JSON opcional: `app/ponto/management/commands/dna_x_batida_real.py:155`, `:156`, `:157`. |
-| `app/ponto/services/passivo_s84.py:103` | Batida | Arquivo de reversão: `app/ponto/management/commands/passivo_disputa_retro.py:139`, `:141`, `:146`, `:148`. |
-| `app/core/esteira_vigia.py:1304`, `:1560`, `:1569`, `:1572`, `:1580`, `:1590` | Eventos da esteira; não batida/órfã/resposta/marco | Arquivos de relato/fim: `app/core/esteira_vigia.py:1329`, `:1559`, `:1570`, `:1578`, `:1589`; o argumento de `destravar` chega a `f.write`: `app/core/esteira_vigia.py:1027`, `:1028`. |
-
-Comparados: fato e operação demonstrada:
-
-| Origem | Fato/previsão e uso |
-|---|---|
-| `app/escala/utils.py:291`, `:730`, `:749`, `:782`, `:1707`, `:1719`, `:1724`, `:1742`, `:1754`, `:1755` | Marcos previstos: chaves de dict, pertinência e busca de coluna. `app/escala/utils.py:292`, `:730`, `:749`, `:785`, `:1708`, `:1719`, `:1724`, `:1745`, `:1754`, `:1755`. |
-| `app/escala/utils.py:378` | Marco previsto encadeado: chave de dict para casar régua e instante. `app/escala/utils.py:378`, `:381`, `:382`. |
-| `app/escala/utils.py:429` | Batida: igualdade com hora realizada da célula. `app/escala/utils.py:431`. |
-| `app/escala/utils.py:1675` | Batida/órfã: pertinência na lista de órfãs convertida em conjunto. `app/escala/utils.py:1650`, `:1651`, `:1675`. |
-| `app/escala/utils.py:2005`, `:2028` | Batidas/órfãs: pertinência, igualdade de listas e ordem textual da hora realizada. `app/escala/utils.py:2006`, `:2032`, `:2034`, `:2039`. |
-| `app/ponto/motor_calculo_v2.py:1488`; `app/ponto/calculador/alimentacao.py:119` | Entrada real: chave `(dia, HH:MM)` e pertinência no conjunto de pares bloqueados. `app/ponto/calculador/alimentacao.py:74`, `:119`. |
-| `app/ponto/motor_calculo_v2.py:1671`, `:1672` | Real/previsto: deduplicação por igualdade do item; previsto também casa com marco da célula. `app/ponto/services/cxr_na_lista.py:86`, `:107`; `app/ponto/janela_he.py:296` e continuação do corpo. |
-| `app/ponto/motor_calculo_v2.py:3069` | Entrada real: igualdade com hora realizada do alinhamento. `app/ponto/motor_calculo_v2.py:3069`. |
-| `app/ponto/propositor.py:340`, `:342` duas chamadas, `:343`, `:345`; `app/escala/servico_jornada.py:455`, `:456`; `app/ponto/services/flip_auto.py:219`, `:221` duas chamadas, `:222`, `:232` | Previstos e batidas convertidos à mesma representação de hora do dia para atribuição posicional. `app/ponto/propositor.py:351`; `app/escala/servico_jornada.py:455`; `app/ponto/services/flip_auto.py:233`, `:238`. |
-| `app/ponto/marcos.py:11` | Previsto: helper utilizado em igualdades de hora. `app/ponto/marcos.py:31`, `:33`, `:37`, `:39`, `:47`, `:49`, `:63`, `:65`, `:108`. |
-| `app/chamados/reconciliador.py:210` | Batida: chave de dict usada para recuperar os integrantes do par por HH:MM. `app/chamados/reconciliador.py:209`, `:213`. |
-| `app/chamados/detector_anomalias.py:213` | Batida: igualdade com hora realizada do alinhamento. `app/chamados/detector_anomalias.py:214`. |
-| `app/chamados/juizes.py:1814` | Previsto: retorna HH:MM para comparação com resposta; a resposta é reduzida a minutos do dia. `app/chamados/juizes.py:1852`, `:1858`, `:1863`, `:1868`, `:1878`. |
-| `app/chamados/services/materializacao.py:182` | Instante pretendido pela resposta/plantio: atribuição contra slots e horas reais/órfãs. `app/chamados/services/materializacao.py:179`, `:180`, `:181`, `:182`. |
-| `app/chamados/services/tarefa_do_dia.py:78` | Previsto: igualdade com a hora prevista da lâmpada. `app/chamados/services/tarefa_do_dia.py:78`. |
-| `app/ponto/services/cartorio.py:878`, `:1927` | Previstos: conjunto de marcos vencidos e dict de instantes por `(tipo, HH:MM)`. `app/ponto/services/cartorio.py:447`, `:450`, `:1927`, `:1930`, `:1931`, `:1936`. |
-| `app/ponto/services/veredito_celula.py:252` | Previsto: chave de dict para materialização do marco faltante. `app/ponto/services/veredito_celula.py:275`, `:276`. |
-| `app/ponto/services/faltas_de_hoje.py:45` | Previsto: volta a `datetime` para comparação com agora. `app/ponto/services/faltas_de_hoje.py:48`, `:49`. |
-| `app/ponto/services/diagnostico_escala.py:26` | Batida: helper serve render e chaves de dict; também distância entre primeira entrada e `dna.marcos.hi`. `app/ponto/services/diagnostico_escala.py:160`, `:163`, `:165`, `:167`, `:172`. |
-| `app/colaboradores/services/calendario.py:625` | Batida: pertinência em órfãs e lookup por hora. `app/colaboradores/services/calendario.py:626`, `:631`. |
-| `app/ponto/services/vigia_pareador_celula.py:110` | Batida: pertinência em órfãs civis. `app/ponto/services/vigia_pareador_celula.py:111`. |
-| `app/relatorios/pdf_espelho.py:178`, `:609`, `:716`, `:960`, `:963` | Batidas/órfãs: pertinência por HH:MM, inclusive filtragem textual de anomalias. `app/relatorios/pdf_espelho.py:178`, `:609`, `:720`, `:964`. |
-| `app/ponto/management/commands/tripwire_celulas.py:192`, `:195`, `:280` | Previsto, órfã e previsto, respectivamente: igualdade HH:MM antes de teste por instante. `app/ponto/management/commands/tripwire_celulas.py:192`, `:195`, `:280`, `:285`. |
-| `app/ponto/management/commands/detectar_intervalo_ausente.py:67`, `:74`, `:79`, `:82`, `:84` | Previstos: lookup de lâmpadas e de instante encadeado por `(tipo, HH:MM)`. `app/ponto/management/commands/detectar_intervalo_ausente.py:67`, `:74`, `:79`, `:82`, `:84`. |
-| `app/ponto/management/commands/detectar_ausencias.py:484` | Previsto: traduzido/comparado por `marco_para_motivo` e persistido nos marcos faltantes. `app/ponto/management/commands/detectar_ausencias.py:482`, `:484`, `:712`; `app/ponto/marcos.py:31`. |
-
-A lei fornecida exclui `dna.hi/hf` previstos; o produtor desta cópia efetivamente os escreve como hora do dia por `_hhmm`: `app/ponto/management/commands/gerar_celulas.py:33`, `:83`. O principal escritor de fato em HH:MM está antes da lavra: `_celula_do_marco` grava a batida em `hora`, e o cartório a transporta para `lampadas[].luz`; órfãs são transportadas como strings: `app/escala/utils.py:326`; `app/ponto/services/cartorio.py:712`, `:745`.
-
-A classificação P inclui texto humano salvo, CSV/JSON diagnóstico e arquivos da est
-
-[truncado em 20000 de 20154 caracteres]
-
-## 12/11 16:52 · sessao c79798754d32 · C20-O168 · verificador · origem=Code
-
-**A guarda cobre os quatro sítios alterados e a cascata E2, mas não todos os fechamentos automáticos alcançados pelo evento. Há também divergência entre “pai vivo preservado” e o universo efetivamente contado.** (`app/ponto/services/cartorio.py:965`, `app/chamados/reconciliador.py:651`, `app/ponto/services/lastro.py:401`, `app/chamados/services/disputa_emissao.py:2091`.)
-
-Execução da suíte, execução de mutantes e ocorrência dos achados em produção: **[nao verificado]**. [nao verificado]
-
-**1. Caminhos que fecham e cobertura da guarda**
-
-| Caminho | Passa por `pode_executar_csf`? | Prova |
-|---|---|---|
-| Cartório: adiados pela lâmpada | **Sim** | `app/ponto/services/cartorio.py:1054` → guarda em `app/ponto/services/cartorio.py:965`. |
-| Cartório: RECONCILIA-MARCO | **Sim** | `app/ponto/services/cartorio.py:1589`. |
-| Cartório: MARCO-INEXISTENTE | **Sim** | `app/ponto/services/cartorio.py:1602`. |
-| Cartório: B5.3b | **Sim** | `app/ponto/services/cartorio.py:1615`, `app/ponto/services/cartorio.py:1623`. |
-| E2 → `disputa.fechar` → S88 | **Sim, antes de fechar a disputa** | Lote consulta o juiz em `app/chamados/reconciliador.py:649`; preservação precede `.fechar()` em `app/chamados/reconciliador.py:621`, `app/chamados/reconciliador.py:629`. |
-| Cartório: FIO-DUP e FIO-DUP-C8 | **Não** | Fechos em `app/ponto/services/cartorio.py:1701`, `app/ponto/services/cartorio.py:1716`; isenção própria por texto em `app/ponto/services/cartorio.py:1687`. |
-| `reconciliar_chamados_colab` → premissa morta → `_retratar` | **Não** | `app/chamados/reconciliador.py:1475`, `app/chamados/reconciliador.py:1498`, `app/chamados/reconciliador.py:524`. |
-| `reconciliar_chamados_colab` → órfãs → `lavrar_sem_turno_aberto` → disputa → S88 | **Não** | `app/chamados/reconciliador.py:1467`, `app/chamados/reconciliador.py:1653`, `app/chamados/reconciliador.py:413`. |
-| Consumidor `EventoCelula` → E2 | **Sim** | `app/chamados/reconciliador.py:1399` → proteção central em `app/chamados/reconciliador.py:621`. |
-| Consumidor → chamados absolvidos pela célula → `_retratar` | **Não** | `app/chamados/reconciliador.py:1402`, `app/chamados/reconciliador.py:1038`, `app/chamados/reconciliador.py:524`. |
-| Consumidor → premissa morta → `_retratar` | **Não** | `app/chamados/reconciliador.py:1406`, `app/chamados/reconciliador.py:1498`. |
-| Consumidor → órfãs pela lâmpada → disputa → S88 | **Não** | `app/chamados/reconciliador.py:1409`, `app/chamados/reconciliador.py:1205`. |
-| Consumidor → lastro por marco → `reconciliar` | **Não** | `app/chamados/reconciliador.py:1417`, `app/ponto/services/lastro.py:395`, `app/ponto/services/lastro.py:401`. |
-| S143/S128 → resolver perguntas → disputa → S88 | **Não** | S143 chama resolver em `app/chamados/signals.py:117`; candidatos incluem disputas abertas do colaborador em `app/chamados/services/disputa_emissao.py:2026`; fechamento em `app/chamados/services/disputa_emissao.py:2092`. |
-| Fábrica → geração → reatar órfã | **Não nos fechos alcançados** | Geração chama reata em `app/chamados/services/disputa_emissao.py:459`; reata chega aos fechos em `app/chamados/reconciliador.py:1653`, `app/chamados/reconciliador.py:1682`. |
-| Emissor do cartório → repasse de órfãos → auto-fecho da disputa | **Não** | Emissor chama repasse em `app/ponto/management/commands/detectar_ausencias.py:792`; auto-fecho em `app/chamados/services/disputa_emissao.py:1278`, `app/chamados/services/disputa_emissao.py:1284`. |
-
-Há ainda fechamento por agrupamento LIMBO e por premissa de cluster, ambos sem CSF. O enquadramento desses dois domínios na lei específica de **cobrança sem furo** é **[nao verificado]**. (`app/chamados/services/limbo_folgas.py:284`, `app/ponto/services/cartorio.py:1085`, `app/ponto/services/cluster_espurio.py:190`.)
-
-**S88 e o gate não completam a proteção ausente nos chamadores:** S88 chama a porta; `reconciliar` consulta motor, premissa e pergunta viva, sem CSF. (`app/chamados/signals.py:43`, `app/chamados/models.py:672`, `app/chamados/models.py:683`, `app/chamados/models.py:686`.)
-
-As guardas existentes são diferentes: `_retratar` retém resposta **sem consumo**, enquanto CSF retém qualquer `respondida_em`, inclusive resposta já validada/materializada. C7 pergunta por fio vivo e resposta sem veredito. (`app/chamados/reconciliador.py:448`, `app/chamados/juizes.py:2018`, `app/ponto/supra_juiz.py:545`, `app/chamados/models.py:1843`, `app/chamados/models.py:1854`.)
-
-O FIO-DUP está explicitamente declarado como lacuna em fila no próprio helper; não o apresento como cura prometida pelo delta. (`app/ponto/services/cartorio.py:948`.)
-
-**2. Constância e mordida do teste** [nao verificado]
-
-- **O desenho de consultas em lote existe nos dois helpers.** `_pais_com_conversa` carrega as duas famílias de perguntas; `_fecham_cobrancas_sem_furo` carrega origem/perguntas, recebendo as resolvedoras já carregadas pelo caminho real do cartório. (`app/chamados/reconciliador.py:649`, `app/ponto/services/cartorio.py:962`, `app/ponto/services/cartorio.py:128`, `app/ponto/services/cartorio.py:1369`.)
-- **A comparação explícita 1 × 3 mede somente `_pais_com_conversa`.** Não mede o E2 completo nem os quatro sítios diretos. O E2 conserva, inclusive, `refresh_from_db` dentro do laço por disputa. (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:281`, `app/ponto/tests/test_o168_guarda_csf_no_evento.py:286`, `app/chamados/reconciliador.py:620`.)
-- **Um mutante que acrescente uma query por disputa dentro do helper é alcançado pela igualdade:** acrescentaria +1 versus +3 às capturas. Isso é conclusão estática; execução do mutante **[nao verificado]**. Mutação fora desse trecho capturado não é demonstrada por esse teste. (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:275`, `app/ponto/tests/test_o168_guarda_csf_no_evento.py:282`, `app/ponto/tests/test_o168_guarda_csf_no_evento.py:286`.)
-- Os tetos **222/282** estão registrados, mas o selo geral cobra `medido <= teto`; não compara o delta da guarda entre os cenários. CPU e volume de perguntas também não são constantes: o juiz percorre as coleções. (`app/ponto/tests/test_selo_chokepoint_escrita.py:196`, `app/ponto/tests/test_selo_chokepoint_escrita.py:210`, `app/ponto/tests/test_selo_chokepoint_escrita.py:293`, `app/ponto/supra_juiz.py:543`.)
-
-Portanto: **lote nos novos sítios; prova comparativa de constância somente no helper E2**, sem certificação do custo completo do evento. (`app/ponto/services/cartorio.py:962`, `app/chamados/reconciliador.py:649`, `app/ponto/tests/test_o168_guarda_csf_no_evento.py:282`.)
-
-**3. Contador `csf_com_conversa_preservado`**
-
-| Aspecto | Escritor/leitor e prova |
-|---|---|
-| Unidade implementada | `pk` de chamado distinto **por ato**, pelo conjunto em `app/ponto/services/cartorio.py:978`. |
-| Incrementador | `_contar_csf_preservado`, em `app/ponto/services/cartorio.py:981`. |
-| Chamador direto | Guarda negativa em `app/ponto/services/cartorio.py:966`. |
-| Chamador pela cascata | Callback fornecido em `app/ponto/services/cartorio.py:1050`, invocado em `app/chamados/reconciliador.py:626`. |
-| Releitura | Compartilha o conjunto e soma somente incrementos novos em `app/ponto/services/cartorio.py:1131`, `app/ponto/services/cartorio.py:1134`. |
-| Duração | Conjunto removido no `finally`; o número permanece acumulado no `out` do lote. (`app/ponto/services/cartorio.py:1150`, `app/ponto/services/cartorio.py:977`.) |
-| Inicialização | Surge no primeiro incremento; não consta no retorno inicial de `contadores()`. (`app/ponto/services/cartorio.py:981`, `app/ponto/services/cartorio.py:2005`.) |
-| Leitores | Consolidação da releitura e testes de resultado. (`app/ponto/services/cartorio.py:1133`, `app/ponto/tests/test_o168_guarda_csf_no_evento.py:244`, `app/ponto/tests/test_o168_guarda_csf_no_evento.py:298`.) |
-| Exposição | `julgar_celula` devolve `out`; os resumos dos dois comandos não imprimem esse contador. (`app/ponto/services/cartorio.py:2105`, `app/ponto/management/commands/processar_cartorio.py:66`, `app/ponto/management/commands/lavrar_status_competencia.py:58`.) |
-
-**Defeito de universo:** `_pais_com_conversa` anuncia pai VIVO, mas usa `not in ENCERRADOS`. Isso admite `cancelado` e `superado`, que não são vivos e já seriam recusados por RECONCILIAR. Esses pais podem segurar a disputa e alcançar o contador. Ocorrência real: **[nao verificado]**. (`app/chamados/reconciliador.py:638`, `app/chamados/reconciliador.py:651`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:111`, `app/chamados/reconciliador.py:626`.)
-
-Também há divergência no contrato do callback: a documentação promete uma chamada por pai, mas a implementação chama por disputa preservada. O contador consegue deduplicar essas chamadas; o callback, isoladamente, não oferece essa garantia. (`app/chamados/reconciliador.py:559`, `app/chamados/reconciliador.py:618`, `app/chamados/reconciliador.py:626`, `app/chamados/models.py:1750`, `app/ponto/services/cartorio.py:979`.)
-
-**4. Quem escreve e quem lê**
-
-**É o mesmo juiz**, importado pelos dois helpers e pelo executor supra. C7 permanece outra pergunta, registrada: “a disputa pode fechar?”. (`app/ponto/services/cartorio.py:958`, `app/chamados/reconciliador.py:645`, `app/ponto/management/commands/supra_juiz.py:257`, `app/core/juizes.py:279`.)
-
-| Campo/função | Quem escreve ou define | Quem lê na decisão auditada |
-|---|---|---|
-| `respondida_em` | Resposta humana, automática e recuperação pela trilha: `app/chamados/services/disputa_emissao.py:1468`, `:1653`, `:1674`; carimbo: `app/chamados/models.py:3133`; reversões: `app/chamados/services/disputa_emissao.py:1593`, `app/chamados/models.py:1567`. | CSF: `app/ponto/supra_juiz.py:545`, `:548`; C7: `app/chamados/models.py:1845`; retenção: `app/chamados/juizes.py:2020`. |
-| `resposta_colab` | `app/chamados/services/disputa_emissao.py:1467`, `:1652`; limpeza em `:1593`. | Isenção FIO-DUP: `app/ponto/services/cartorio.py:1691`; **CSF não lê texto**, lê carimbo em `app/ponto/supra_juiz.py:545`. |
-| `disputa_origem` / `Disputa.chamado` | Relação declarada em `app/chamados/models.py:1750`; nascimento em `app/chamados/services/disputa_emissao.py:587`, `:1123`, `:1358`. | CSF: `app/ponto/supra_juiz.py:543`; lote E2: `app/chamados/reconciliador.py:649`; S88: `app/chamados/signals.py:33`. |
-| `Disputa.perguntas` / `Pergunta.disputa` | Relação em `app/chamados/models.py:2417`; nascimento em `app/chamados/models.py:3015`. | CSF: `app/ponto/supra_juiz.py:544`; C7: `app/chamados/models.py:1854`. |
-| `perguntas_que_resolvem` / `chamado_destino` | Relação em `app/chamados/models.py:3386`; nascimento/reuso em `:3015`, `:2983`; reaponte em `app/chamados/services/fio.py:926`. | CSF: `app/ponto/supra_juiz.py:547`; cartório: `app/ponto/services/cartorio.py:1439`, `:1695`; lote E2: `app/chamados/reconciliador.py:649`. |
-| `status_local` | Núcleo `_gravar_estado`: `app/chamados/models.py:228`; nascimento: `app/chamados/models.py:1096`. | Motor: `app/chamados/models.py:674`; filtro novo: `app/chamados/reconciliador.py:651`; S88: `app/chamados/signals.py:34`. |
-| `VIVOS` / `ENCERRADOS` | Fonte: `app/chamados/catalogo/motor.py:24`, `:30`. | Cartório usa VIVOS em `app/ponto/services/cartorio.py:1434`; helper E2 usa ENCERRADOS em `app/chamados/reconciliador.py:651`. |
-| `fechada_em` | Fecha em `app/chamados/models.py:1933`; reabre em `:2150`, `:2174`. | E2: `app/chamados/reconciliador.py:620`, `:621`; S88: `app/chamados/signals.py:29`. |
-| `materializada_em`, `materializada_por`, `via_resolucao` | Atribuição conjunta em `app/chamados/models.py:3098`; persistência do carimbo em `:3153`; reversão em lote em `:3265`. | Seleção E2 em `app/chamados/reconciliador.py:663`; C7 em `app/chamados/models.py:1844`; retenção em `app/chamados/juizes.py:2019`. |
-| `pode_executar_csf` | Definição pura em `app/ponto/supra_juiz.py:539`. | Supra em `app/ponto/management/commands/supra_juiz.py:261`; cartório em `app/ponto/services/cartorio.py:965`; E2 em `app/chamados/reconciliador.py:651`. |
-| `_pais_com_conversa` | Produz mapa por disputa em `app/chamados/reconciliador.py:650`. | E2 em `app/chamados/reconciliador.py:617`, `:621`, `:626`; teste de custo em `app/ponto/tests/test_o168_guarda_csf_no_evento.py:282`. |
-| `_fecham_cobrancas_sem_furo` | Produz lista apenas dos fechamentos confirmados em `app/ponto/services/cartorio.py:968`. | Quatro sítios: `app/ponto/services/cartorio.py:1054`, `:1589`, `:1602`, `:1623`. |
-| E2: retorno e `ao_preservar` | Retorno continua número de perguntas carimbadas em `app/chamados/reconciliador.py:607`, `:634`; callback em `:626`. | Cartório em `app/ponto/services/cartorio.py:1050`; consumidor em `app/chamados/reconciliador.py:1399`; reconciliador em `:1466`. |
-| `_csf_preservados_vistos` / `CHAVES_DO_ATO` | Criação/adição em `app/ponto/services/cartorio.py:978`; compartilhamento em `:1131`; declaração em `:2001`. | Deduplicação em `app/ponto/services/cartorio.py:979`; drenagem em `:1150`; selo em `app/ponto/tests/test_out_do_lote.py:195`, `:203`. |
-| Filas/contadores existentes | Fechos alimentam `reconciliados`/`rejulgar` em `app/ponto/services/cartorio.py:1056`; corpo escreve `cods` em `:1527`. | Segunda passada em `app/ponto/services/cartorio.py:1060`; releitura/consolidação em `:1136`; devolução ao lote em `:1166`. |
-| Tetos, registro de linhas e manifesto E4B | Literais alterados em `app/ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`; `app/core/tests/test_medida_turno_do_par.py:322`; `app/chamados/tests/e4b_c12_sitios.json:261`. | Cobrança do teto em `app/ponto/tests/test_selo_chokepoint_escrita.py:292`; igualdade das linhas em `app/core/tests/test_medida_turno_do_par.py:547`; manifesto em `app/chamados/tests/e4b_c12_verificar.py:17`, `:85`. |
-
-O quadro identifica as portas e consumidores discriminados nesta auditoria; **censo global exaustivo de todos os leitores legados desses campos: [nao verificado]**.
-
-**5. Classes que já reprovaram obra**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz duplicando autoridade | **Ausente nos helpers novos:** ambos chamam CSF; C7 continua registrado separadamente. (`app/ponto/services/cartorio.py:965`, `app/chamados/reconciliador.py:651`, `app/core/juizes.py:279`.) |
-| Segundo escritor fora da porta | **Ausente no delta lido:** mantém `transicionar_com_pauta`, `carimbar` e `fechar`. (`app/ponto/services/cartorio.py:968`, `app/chamados/reconciliador.py:604`, `:629`.) |
-| Relógio fora da borda | **Nenhuma leitura nova nos helpers.** A cadeia preexistente tem relógios em `carimbar`, `fechar` e `julgar_celula`; conformidade global com a borda **[nao verificado]**. (`app/chamados/models.py:3125`, `:1933`, `app/ponto/services/cartorio.py:2067`, `:2091`.) |
-| Derivação paralela de fonte única | **Ausente nos helpers; permanece isenção não equivalente no FIO-DUP:** texto nas resolvedoras versus carimbo também na origem. (`app/ponto/services/cartorio.py:1691`, `app/ponto/supra_juiz.py:543`, `:547`.) |
-| Selo/RED sem mordida | **Há pares controle/protegido de estado final** para os quatro sítios e cascata; o teste do evento seguinte declara provar somente estabilidade. Execução dos REDs/mutantes **[nao verificado]**. (`app/ponto/tests/test_o168_guarda_csf_no_evento.py:114`, `:122`, `:131`, `:136`, `:143`, `:148`, `:157`, `:162`, `:227`, `:236`, `:259`.) |
-| Ordem de trava | **Nenhuma inversão nova identificada:** E2 mantém trava do colaborador antes do carimbo; fechamento chama a porta de ordem. Implementação ordena Colaborador→Disputa→Chamado→Pergunta. (`app/chamados/reconciliador.py:601`, `app/chamados/models.py:1911`, `:2667`, `:2676`, `:2689`, `:2693`.) |
-| Pouso antes do pré-requisito | **[nao verificado]**; suíte inteira precede opus, e Codex não aprova sozinho o pouso. (`CLAUDE.md:377`, `CLAUDE.md:380`.) | [nao verificado]
-| ESMERIL-SEMÂNTICA | **Presente:** “pai vivo preservado” admite terminais absolutos e pode alimentar o contador. (`app/chamados/reconciliador.py:638`, `:651`, `:626`, `app/chamados/catalogo/motor.py:31`.) |
-
-**6. Leis dos sítios**
-
-- **O168 não está universalmente atendida nos caminhos solicitados:** persistem fechamentos sem consulta à guarda, especialmente lastro no consumidor e cascata S143/S128. (`app/ponto/services/lastro.py:401`, `app/chamados/services/disputa_emissao.py:2092`.)
-- **Contador == universo:** há divergência demonstrável entre o rótulo “vivo preservado” e a seleção de pais terminais; é incompatível com o contrato anunciado e com a exigência de o rótulo dizer o que a conta faz. (`CLAUDE.md:35`, `app/ponto/services/cartorio.py:974`, `app/chamados/reconciliador.py:651`.)
-- **L-061 e C7:** os helpers novos conservam leitura da célula e consulta aos juízes existentes; não identifiquei novo julgamento paralelo da lâmpada nesses helpers. (`app/docs/LEIS.md:95`, `app/chamados/reconciliador.py:604`, `:628`, `:661`.)
-- **RELÓGIO-INJETADO:** o delta não acrescenta relógio; conformidade da cadeia inteira **[nao verificado]**, pelos sítios preexistentes discriminados acima. (`app/docs/CORTES.md:370`, `app/chamados/models.py:3125`, `app/ponto/services/cartorio.py:2067`.)
-- **L-073, L-124, L-115 e L-113:** conformidade geral **[nao verificado]**; esta leitura não certifica teto temporal, horizonte, pareamento e cálculo/folha por ausência de alteração nesses mecanismos. (`app/docs/LEIS.md:100`, `:145`, `:151`, `:153`.)
-- **E2-EMISSORES-COMPLEMENTO, LEI-TRANCA-E2-JUIZ e DOIS-AGENTES:** nenhuma violação adicional demonstrada nesta leitura; atendimento integral **[nao verificado]**. (`app/docs/CORTES.md:360`, `:427`, `:70`, `:259`.)
-
-_4370 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4372 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
