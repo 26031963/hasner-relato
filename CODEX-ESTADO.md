@@ -1,7 +1,219 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 11:06** · publicado em **12/11/2026 11:10** (UTC-3)
+> Ultima resposta processada: **12/11/2026 11:15** · publicado em **12/11/2026 11:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 11:15 · sessao 78f2590fba58 · - · - · origem=Ronald (tmux)
+
+Mapa consolidado: **88 FINAL estritas: 85 OK e 3 FAILED**; **94 com classificação temporal indeterminada**; sobre 526 linhas, restam **344 INTERMEDIÁRIAS**. Todas as associações obra↔pasta/pouso são por nome **[nao verificado]**. [nao verificado]
+
+Os três FAILED finais são `orfas/suite_inteira_6.log` (10-29 08:53), `o261v/suite3_9c9e030e.log` (10-30 23:07) e `lastro3/suite_v3.log` (11-06 09:00). **[nao verificado: associação por nome]**
+
+As 94 linhas temporalmente indeterminadas compreendem:
+
+- 84 linhas em 25 grupos sem pouso identificável posterior. [nao verificado]
+- 8 linhas empatadas no minuto do pouso: `o261v`, `medida_programa`, `o261e/d3`, `disjuntor`, `e3solo`, `mc`, `jv2p`, `h12h06b/pauta08`. [nao verificado]
+- `lastro2/construcao_green.log`, posterior ao pouso conhecido.
+- `o261/suite_bd0aef09.log`, cuja associação depende de tratar um commit “cura” como pouso. **[nao verificado]**
+
+Para as duas linhas `lastro2/.../suite_v2.log` de 11-06 05:55, a FINAL única usa a última linha do TSV, `lastro2/suite_v2.log`; a ordem real entre ambas é **[nao verificado]**.
+
+A lista completa das 88 FINAL e os hashes dos pousos foi enviada nas mensagens anteriores.
+
+## 12/11 11:15 · sessao 628c0cf32473 · - · - · origem=Ronald (tmux)
+
+Não há `.git` nem anexos locais nesta cópia; não foi possível verificar arquivos alterados por commit. O gitlog fornecido contém assunto, data e hash, sem diff. Portanto, “mudou decisão” e “ruído exclusivo” não são quantificáveis com comprovação. [nao verificado] [nao verificado]
+
+Coincidências integrais candidatas a ruído, contando IDs completos de teste e distância absoluta ≤24 h: [nao verificado]
+
+| Linhas em `suites_14d_falhas.tsv` | Contrapartes |
+|---|---|
+| 3, 5, 11 | Entre si: diagrama |
+| 20 | 18: import resolve |
+| 26 | 18: diagrama |
+| 31 | 26 ou 35: diagrama |
+| 35 | 31 ou 37: diagrama |
+| 63 | 57 ou 73: cron |
+| 69 | 77: chokepoint |
+| 82 | 83: signal âncora |
+| 83 | 80 ou 82: signal âncora |
+| 103 | 105; alternativamente 112 para `classificar` e 104 para `linhas` |
+| 106, 107, 108 | 103–105 e entre si: catraca linhas |
+| 112, 113 | 103 ou 105: classificar |
+| 114 | 109: diagrama e mapa |
+| 116 | 121, 124, 127 ou 132: catraca linhas |
+| 132 | 116, 121, 124, 127 ou 135: catraca linhas |
+
+São **20 candidatas**, separando E1/E2/FILA dentro de `fio_e0_v4`; **18** se usar somente pasta raiz. Todas as separações de obra por nome são [nao verificado]. Referências: linhas indicadas de `suites_14d_falhas.tsv`.
+
+Duas candidatas parecem FINAL FAILED, devendo sair das intermediárias: linha 5, `orfas/suite_inteira_6.log`, antes de `ac7216078` em 29/10 09:24; linha 69, `lastro3/suite_v3.log`, antes de `24946096d` em 06/11 09:43. Associação por nome [nao verificado]. Isso deixa **18 candidatas intermediárias** com divisão E1/E2/FILA, ou **16** com pasta raiz.
+
+A precedência “cura antes de ruído” continua impossível de verificar: as candidatas podem também ter recebido alterações posteriores na própria obra. A classificação estrita deve manter todo FAILED intermediário como indeterminado e apresentar as coincidências como subtotal observável. [nao verificado]
+
+O código atual permite resolver módulos, por exemplo `app/core/tests/test_medida_turno_do_par.py:544`, `app/core/tests/test_medida_turno_do_par.py:550` e `app/core/tests/test_selo_diagrama_do_codigo.py:42`; ele não fornece o histórico de alterações. [nao verificado]
+
+Há inconsistência na linha 140 do anexo de falhas: veredito `failures=5`, mas lista extensa de FAIL e dois ERROR. Conta como uma linha/run; composição histórica dessa lista [nao verificado].
+
+## 12/11 11:14 · sessao ae97398abee9 · - · - · origem=Ronald (tmux)
+
+Censo por linha do anexo: **526 runs = 140 FAILED + 386 OK; 111 pastas/raízes distintas**, incluindo `integrador.log` como raiz sem pasta. Fontes: `suites_14d.tsv:1–526`, `suites_14d_falhas.tsv:1–140` (numeração do anexo textual).
+
+Formato abaixo: `pasta total/FAILED`; OK = total − FAILED. Fonte de todas as contagens: `suites_14d.tsv:1–526`.
+
+```text
+fio_e0_v4 83/27
+o261e 40/13
+cobparc 14/3
+o261 12/3
+orfas 11/3
+e4cal 11/2
+jv1 11/2
+c20_fiomudo 11/2
+v2bugs 10/2
+grade_juiz 9/1
+BO-0611-05 9/2
+col129 8/2
+v3p5 8/0
+f3_beco1 8/3
+dme 7/0
+otimiza3 7/0
+FIO-E0-V4-E3 7/4
+calendario_hoje 6/1
+cobparc_relogio 6/1
+jv3 6/2
+jv4 6/0
+h12h06 6/1
+h12h06b 6/1
+fio_e3 6/3
+BO-DISPUTA-SEM-PERGUNTA 6/6
+E4B-ALCANCE 6/4
+grupo1 5/3
+v3retoma 5/0
+grade_folga 5/1
+f1c4emis 5/1
+lastro2 5/2
+esemvivab 5/0
+LASTRO-FAIXA 5/5
+justif 4/2
+o261n 4/1
+o261v 4/2
+vfase_asof 4/0
+mc 4/1
+n1im 4/1
+f346 4/0
+plantio_mais1 4/3
+motor_turno 4/0
+par_nao_adjacente 4/1
+selos_canon 4/1
+FIO-E0-V4-E4-ESCRITORES 4/2
+FIO-E0-V4-E4A-2 4/1
+disjuntor 3/1
+e4_7iii 3/1
+v3per 3/1
+lenvivos 3/0
+toast 3/0
+e4app 3/2
+juizvarredura2 3/0
+n1alim 3/1
+snc2 3/1
+pep3 3/1
+o10c 3/0
+codexneg 3/0
+cxr_tela 3/1
+UI-PAINEL 3/1
+DATA-EVENTO-CRU 3/0
+TRIAGEM-OFFLINE-SEM-CAMERA 3/0
+outbox 2/1
+grupo1p1 2/0
+suite_impacto 2/1
+medida_programa 2/0
+e3status 2/1
+comboio 2/0
+e3isento 2/0
+cobparc_rotulo 2/0
+isento_h10 2/0
+noreverse 2/0
+n1pna 2/2
+he 2/0
+cronsmarca 2/0
+c20_o169 2/0
+pep 2/2
+akmed 2/0
+ferias2x 2/1
+e1fila_v22 2/1
+CODEX-2-RAIAS 2/0
+MODO-COMUM-PASSADO-SEM-TURNO 2/1
+O169-FECHADA 2/0
+COMBOIO-1556 2/1
+fioadmin 1/0
+e3solo 1/0
+reprova_desenho 1/0
+instr 1/0
+comboio_instr 1/0
+e4_comboio 1/0
+contencao 1/0
+cods_ato 1/0
+e4_8 1/0
+e4esp 1/0
+cron15 1/0
+sw 1/0
+jv2p 1/0
+sombra_c1 1/0
+lastro3 1/1
+fiomudob 1/0
+pep5 1/0
+o10b 1/0
+r1pub 1/0
+comboio_0611 1/0
+esminst 1/0
+ata_pausa_0811 1/1
+auditoria_0911 1/0
+REVERTER-DIA-SEM-RECALCULO 1/0
+FIO-E0-V4-E4B 1/1
+BO-ROTULO-ENCERRADO 1/0
+integrador.log 1/1
+```
+
+Separação solicitada por nome de arquivo — identidade de obra [nao verificado]:
+
+| Pasta | Stream inferido | Runs | FAILED | OK |
+|---|---|---:|---:|---:|
+| fio_e0_v4 | E1 | 62 | 20 | 42 |
+| fio_e0_v4 | E2 | 15 | 6 | 9 |
+| fio_e0_v4 | E1FILA | 6 | 1 | 5 |
+| o261e | F1 | 4 | 4 | 0 |
+| o261e | D3 | 1 | 0 | 1 |
+| o261e | F5 | 8 | 2 | 6 |
+| o261e | F5C | 6 | 1 | 5 |
+| o261e | F1C4 | 5 | 2 | 3 |
+| o261e | F1C4-3 | 3 | 1 | 2 |
+| o261e | F2 | 9 | 2 | 7 |
+| o261e | F2FILA | 3 | 1 | 2 |
+| o261e | dj → DISJUNTOR | 1 | 0 | 1 |
+
+E2 inclui 11 `green_e2*` em 07/11, `e2_grade_recorte` em 08/11 e três `e2_rebase` em 09/11. E1FILA inclui quatro `e1_fila*` em 08/11 e dois em 09/11. Fonte: `suites_14d.tsv:347–448`. Associações [nao verificado].
+
+Há **10 linhas em `opus_final`** com Ran/tempo/veredito repetidos fora da subpasta: 3 FAILED e 7 OK; mantidas na contagem. Distribuição: jv3 1, c20_fiomudo 4, pep 1, otimiza3 2, lastro2 2. Fonte: `suites_14d.tsv:282–312`; identidade física da execução [nao verificado].
+
+Faixas do anexo úteis para citações:
+
+```text
+29/10: 1–33
+30/10: 34–74
+31/10: 75–139
+01/11: 140–168
+02/11: 169–198
+03/11: 199
+04/11: 200–228
+05/11: 229–289
+06/11: 290–346
+07/11: 347–397
+08/11: 398–441
+09/11: 442–473
+10/11: 474–490
+11/11: 491–520
+12/11: 521–526
+```
 
 ## 12/11 11:06 · sessao e7500f65d2e9 · AUDITORIA-DE-TRAVAS-CORTE · censo · origem=Code
 
@@ -591,166 +803,4 @@ A união só por HH:MM existe (`app/relatorios/pdf_espelho.py:481`); `_entrada_e
 
 Não há material suficiente sobre opus anteriores para sustentar **(d)** nestes itens; atribuí-la exigiria inferência **[nao verificado]**.
 
-## 12/11 10:46 · sessao fe2690a1a345 · - · - · origem=Ronald (tmux)
-
-**BLOQUEIA-1 — classe não determinável entre as cinco sem inferir descarte.** O Codex viu; a triagem o considerou procedente. Descarte: nenhum. [nao verificado]
-
-- **preverif_c13.q, item 3:** “relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
-   orfa ou turno aberto (LEI-AKITA 2)? A tela e o PDF mostram o mesmo rotulo 'Tipo sem faixa: <codigo>' para o mesmo dia?”
-- **preverif_c13.r, item 3:** “**BLOQUEIA — duas fontes para a mesma órfã.** PDF reconstrói pelo contrato; tela lê a célula na competência. Contra-exemplo já fixado pelo teste alterado: tela tem `orfas_grade=[]`, enquanto PDF marca a batida como órfã e conta zero aberto. A igualdade `pdf['dias']==dias` compara a lista compartilhada que o próprio coletor modifica.” [nao verificado]
-- **preverif_c13.r, item 4:** “**BLOQUEIA — selo insuficiente para igualdade:** o teste aceita explicitamente respostas diferentes para a órfã; portanto verde não certifica ‘cartão=espelho’.” [nao verificado]
-- **Triagem literal:** “B1 duas fontes de orfa (PDF grade_espelho_janela recusas={} x tela orfas_grade): PROCEDENTE -- o c13 TROCOU a fonte (c10 lia _tela['dias'].orfas_grade; c13 le _grade_pdf.orfas) para fazer R6-R9 passarem; test_lastro_c11_sem_banco.py:383-384 aceita respostas diferentes. Pergunta de desenho ao opus: quem e a fonte da orfa no PDF quando a celula responde sem_celula.”
-- **Motivo literal de descarte:** nenhum. [nao verificado]
-
-**BLOQUEIA-2 — mesma insuficiência classificatória.** Visto e considerado procedente; descarte não documentado. [nao verificado]
-
-- **preverif_c13.q, item 3:** “A tela e o PDF mostram o mesmo rotulo 'Tipo sem faixa: <codigo>' para o mesmo dia?”
-- **preverif_c13.r, item 3:** “**BLOQUEIA — rótulo não garantido no ramo de ata agregada.** O handler chama `_pela_grade()` sem `recusas`; uma ausência aprovada `fantasma_xyz` levanta `TipoSemFaixa` antes do transporte nomeado. PDF também passa por essa tela depois de obter sua grade. Contra-exemplo: ata agregada que exige o builder + ausência aprovada sem faixa.”
-- **Triagem literal:** “B3 _pela_grade sem recusas no ramo de ata agregada (espelho.py:495,563): PROCEDENTE por leitura; ocorrencia em prod nao medida.”
-- **Motivo literal de descarte:** nenhum. [nao verificado]
-
-**FILA união HH:MM — mesma insuficiência classificatória.** Visto; triagem o qualifica como herdado, mas não o descarta. [nao verificado]
-
-- **preverif_c13.q, item 3:** “relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
-   orfa ou turno aberto (LEI-AKITA 2)?”
-- **preverif_c13.r, item 3:** “**BLOQUEIA — regra própria de turno aberto permanece.** PDF une órfãs de todas as datas por HH:MM e usa esse conjunto para excluir abertos. Contra-exemplo executado em memória: órfã em **10/11 07:02** elimina um aberto legítimo de **11/11 07:02**, mesmo sem órfã nesse segundo dia; a tela conta esse aberto.”
-- **Triagem literal:** “B2 uniao HH:MM entre datas (pdf_espelho.py:174 _entrada_espuria, :480 _orfas_hhmm, :517): PROCEDENTE, HERDADO (c10 ja unia); bug no caminho (LEI-AKITA 6).”
-- **Motivo literal de descarte:** nenhum. [nao verificado]
-
-**FILA fechamento aborta empresa — classe não determinável sem inventar triagem.** Perguntado e visto na c10; nenhuma linha de triagem correspondente no anexo. [nao verificado]
-
-- **preverif_c10.q, item 4:** “fechamento deixa TipoSemFaixa subir: quem chama o fechamento (cron, view, export) e o que acontece com a competencia quando sobe -- trava o fechamento inteiro da empresa? Isso e o comportamento que o aval pede (item 4/6)?”
-- **preverif_c10.r, item 4:** “As três capturas alteradas relançam `TipoSemFaixa`. Se ela ocorrer, interrompe o restante da chamada — empresa inteira ou subconjunto escolhido —, sem representar uma tranca formal da competência”
-- **preverif_c10.r, item 4:** “Não há atomicidade de lote: A pode estar salvo, B pode ganhar linha `aberto` antes da falha, e C não ser processado.”
-- **Triagem:** nenhum. [nao verificado]
-- **Motivo literal de descarte:** nenhum. [nao verificado]
-
-O único encaminhamento geral literal é: “DESTINO: MANHA-1211 item 3 = UMA volta de cura (foi a c13) e UM opus final; CODEX item 5(d) >3 voltas sobe ao opus. Vai ao opus final com esta triagem + preverif_c13.r como anexo, depois da suite verde e do par simular_folha.” Isso prova encaminhamento, não descarte. [nao verificado] [nao verificado]
-
-## 12/11 10:43 · sessao f87651c142b3 · ABSOLVIDA-PELA-FOLGA · sonda · origem=Code
-
-1. Transcrição integral do JSON fornecido; execução e conteúdo em produção sem verificação independente. [nao verificado]
-
-```json
-{
-  "contagem": {
-    "coerente_ou_sem_turno_aberto": 860,
-    "exportada": 27,
-    "materializadas": 931,
-    "nao_exportada": 39,
-    "universo_base": 931
-  },
-  "foras": {
-    "ambigua": 4,
-    "sem_fonte": 1
-  },
-  "soma_conferida": 931,
-  "casos": [
-    {"col": "col110", "comp": "09/2026", "data_evento": "2026-09-18", "dia_do_turno": "2026-09-17", "emp": 3, "grupo": "exportada", "pk": 32655},
-    {"col": "col219", "comp": "09/2026", "data_evento": "2026-08-22", "dia_do_turno": "2026-08-21", "emp": 2, "grupo": "exportada", "pk": 15779},
-    {"col": "col241", "comp": "09/2026", "data_evento": "2026-09-20", "dia_do_turno": "2026-09-19", "emp": 2, "grupo": "exportada", "pk": 33624},
-    {"col": "col272", "comp": "09/2026", "data_evento": "2026-08-30", "dia_do_turno": "2026-08-29", "emp": 2, "grupo": "exportada", "pk": 22275},
-    {"col": "col296", "comp": "08/2026", "data_evento": "2026-07-22", "dia_do_turno": "2026-07-21", "emp": 2, "grupo": "exportada", "pk": 37081},
-    {"col": "col331", "comp": "09/2026", "data_evento": "2026-09-14", "dia_do_turno": "2026-09-13", "emp": 2, "grupo": "exportada", "pk": 26344},
-    {"col": "col331", "comp": "09/2026", "data_evento": "2026-09-16", "dia_do_turno": "2026-09-15", "emp": 2, "grupo": "exportada", "pk": 26717},
-    {"col": "col332", "comp": "09/2026", "data_evento": "2026-09-13", "dia_do_turno": "2026-09-12", "emp": 2, "grupo": "exportada", "pk": 26113},
-    {"col": "col344", "comp": "08/2026", "data_evento": "2026-08-12", "dia_do_turno": "2026-08-11", "emp": 2, "grupo": "exportada", "pk": 9192},
-    {"col": "col425", "comp": "09/2026", "data_evento": "2026-08-29", "dia_do_turno": "2026-08-28", "emp": 2, "grupo": "exportada", "pk": 21229},
-    {"col": "col475", "comp": "09/2026", "data_evento": "2026-09-08", "dia_do_turno": "2026-09-07", "emp": 2, "grupo": "exportada", "pk": 25832},
-    {"col": "col478", "comp": "09/2026", "data_evento": "2026-08-24", "dia_do_turno": "2026-08-23", "emp": 2, "grupo": "exportada", "pk": 16271},
-    {"col": "col499", "comp": "08/2026", "data_evento": "2026-07-24", "dia_do_turno": "2026-07-23", "emp": 2, "grupo": "exportada", "pk": 23261},
-    {"col": "col499", "comp": "09/2026", "data_evento": "2026-09-08", "dia_do_turno": "2026-09-07", "emp": 2, "grupo": "exportada", "pk": 25187},
-    {"col": "col499", "comp": "09/2026", "data_evento": "2026-09-10", "dia_do_turno": "2026-09-09", "emp": 2, "grupo": "exportada", "pk": 25561},
-    {"col": "col612", "comp": "09/2026", "data_evento": "2026-09-13", "dia_do_turno": "2026-09-12", "emp": 2, "grupo": "exportada", "pk": 26178},
-    {"col": "col634", "comp": "08/2026", "data_evento": "2026-08-08", "dia_do_turno": "2026-08-07", "emp": 2, "grupo": "exportada", "pk": 25262},
-    {"col": "col649", "comp": "09/2026", "data_evento": "2026-08-26", "dia_do_turno": "2026-08-25", "emp": 2, "grupo": "exportada", "pk": 20900},
-    {"col": "col67", "comp": "09/2026", "data_evento": "2026-09-04", "dia_do_turno": "2026-09-03", "emp": 3, "grupo": "exportada", "pk": 23025},
-    {"col": "col673", "comp": "09/2026", "data_evento": "2026-09-14", "dia_do_turno": "2026-09-13", "emp": 2, "grupo": "exportada", "pk": 26346},
-    {"col": "col72", "comp": "09/2026", "data_evento": "2026-08-23", "dia_do_turno": "2026-08-22", "emp": 3, "grupo": "exportada", "pk": 15980},
-    {"col": "col747", "comp": "09/2026", "data_evento": "2026-08-31", "dia_do_turno": "2026-08-30", "emp": 3, "grupo": "exportada", "pk": 22514},
-    {"col": "col820", "comp": "09/2026", "data_evento": "2026-08-31", "dia_do_turno": "2026-08-30", "emp": 2, "grupo": "exportada", "pk": 22518},
-    {"col": "col820", "comp": "09/2026", "data_evento": "2026-09-10", "dia_do_turno": "2026-09-09", "emp": 2, "grupo": "exportada", "pk": 25567},
-    {"col": "col865", "comp": "08/2026", "data_evento": "2026-08-01", "dia_do_turno": "2026-07-31", "emp": 2, "grupo": "exportada", "pk": 35287},
-    {"col": "col888", "comp": "09/2026", "data_evento": "2026-09-06", "dia_do_turno": "2026-09-05", "emp": 2, "grupo": "exportada", "pk": 23344},
-    {"col": "col891", "comp": "08/2026", "data_evento": "2026-08-15", "dia_do_turno": "2026-08-14", "emp": 2, "grupo": "exportada", "pk": 10104},
-    {"col": "col1011", "comp": "11/2026", "data_evento": "2026-11-02", "dia_do_turno": "2026-11-01", "emp": 2, "grupo": "nao_exportada", "pk": 54345},
-    {"col": "col110", "comp": "08/2026", "data_evento": "2026-07-28", "dia_do_turno": "2026-07-27", "emp": 3, "grupo": "nao_exportada", "pk": 3533},
-    {"col": "col121", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 3, "grupo": "nao_exportada", "pk": 38608},
-    {"col": "col127", "comp": "08/2026", "data_evento": "2026-08-12", "dia_do_turno": "2026-08-11", "emp": 3, "grupo": "nao_exportada", "pk": 9189},
-    {"col": "col134", "comp": "08/2026", "data_evento": "2026-07-29", "dia_do_turno": "2026-07-28", "emp": 3, "grupo": "nao_exportada", "pk": 3686},
-    {"col": "col134", "comp": "08/2026", "data_evento": "2026-08-04", "dia_do_turno": "2026-08-03", "emp": 3, "grupo": "nao_exportada", "pk": 5715},
-    {"col": "col134", "comp": "08/2026", "data_evento": "2026-08-08", "dia_do_turno": "2026-08-07", "emp": 3, "grupo": "nao_exportada", "pk": 7642},
-    {"col": "col165", "comp": "08/2026", "data_evento": "2026-08-05", "dia_do_turno": "2026-08-04", "emp": 3, "grupo": "nao_exportada", "pk": 6055},
-    {"col": "col165", "comp": "10/2026", "data_evento": "2026-09-22", "dia_do_turno": "2026-09-21", "emp": 3, "grupo": "nao_exportada", "pk": 34753},
-    {"col": "col331", "comp": "10/2026", "data_evento": "2026-10-04", "dia_do_turno": "2026-10-03", "emp": 2, "grupo": "nao_exportada", "pk": 40234},
-    {"col": "col332", "comp": "11/2026", "data_evento": "2026-11-04", "dia_do_turno": "2026-11-03", "emp": 2, "grupo": "nao_exportada", "pk": 53721},
-    {"col": "col335", "comp": "11/2026", "data_evento": "2026-11-01", "dia_do_turno": "2026-10-31", "emp": 2, "grupo": "nao_exportada", "pk": 53269},
-    {"col": "col340", "comp": "10/2026", "data_evento": "2026-10-09", "dia_do_turno": "2026-10-08", "emp": 2, "grupo": "nao_exportada", "pk": 42053},
-    {"col": "col347", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 2, "grupo": "nao_exportada", "pk": 39002},
-    {"col": "col396", "comp": "10/2026", "data_evento": "2026-09-29", "dia_do_turno": "2026-09-28", "emp": 2, "grupo": "nao_exportada", "pk": 38296},
-    {"col": "col407", "comp": "11/2026", "data_evento": "2026-11-03", "dia_do_turno": "2026-11-02", "emp": 2, "grupo": "nao_exportada", "pk": 53628},
-    {"col": "col416", "comp": "11/2026", "data_evento": "2026-11-03", "dia_do_turno": "2026-11-02", "emp": 2, "grupo": "nao_exportada", "pk": 53376},
-    {"col": "col451", "comp": "10/2026", "data_evento": "2026-10-16", "dia_do_turno": "2026-10-15", "emp": 2, "grupo": "nao_exportada", "pk": 44515},
-    {"col": "col467", "comp": "10/2026", "data_evento": "2026-10-12", "dia_do_turno": "2026-10-11", "emp": 2, "grupo": "nao_exportada", "pk": 42809},
-    {"col": "col490", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51402},
-    {"col": "col496", "comp": "11/2026", "data_evento": "2026-10-23", "dia_do_turno": "2026-10-22", "emp": 2, "grupo": "nao_exportada", "pk": 49135},
-    {"col": "col496", "comp": "10/2026", "data_evento": "2026-09-29", "dia_do_turno": "2026-09-28", "emp": 2, "grupo": "nao_exportada", "pk": 55068},
-    {"col": "col516", "comp": "11/2026", "data_evento": "2026-10-21", "dia_do_turno": "2026-10-20", "emp": 2, "grupo": "nao_exportada", "pk": 46463},
-    {"col": "col551", "comp": "11/2026", "data_evento": "2026-10-28", "dia_do_turno": "2026-10-27", "emp": 2, "grupo": "nao_exportada", "pk": 51001},
-    {"col": "col599", "comp": "10/2026", "data_evento": "2026-10-19", "dia_do_turno": "2026-10-18", "emp": 2, "grupo": "nao_exportada", "pk": 45740},
-    {"col": "col612", "comp": "11/2026", "data_evento": "2026-11-06", "dia_do_turno": "2026-11-05", "emp": 2, "grupo": "nao_exportada", "pk": 54473},
-    {"col": "col72", "comp": "08/2026", "data_evento": "2026-08-11", "dia_do_turno": "2026-08-10", "emp": 3, "grupo": "nao_exportada", "pk": 23252},
-    {"col": "col841", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 2, "grupo": "nao_exportada", "pk": 38600},
-    {"col": "col863", "comp": "10/2026", "data_evento": "2026-09-25", "dia_do_turno": "2026-09-24", "emp": 2, "grupo": "nao_exportada", "pk": 36061},
-    {"col": "col876", "comp": "11/2026", "data_evento": "2026-11-01", "dia_do_turno": "2026-10-31", "emp": 3, "grupo": "nao_exportada", "pk": 52434},
-    {"col": "col879", "comp": "11/2026", "data_evento": "2026-11-05", "dia_do_turno": "2026-11-04", "emp": 2, "grupo": "nao_exportada", "pk": 54449},
-    {"col": "col888", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51404},
-    {"col": "col938", "comp": "10/2026", "data_evento": "2026-09-24", "dia_do_turno": "2026-09-23", "emp": 2, "grupo": "nao_exportada", "pk": 36109},
-    {"col": "col94", "comp": "08/2026", "data_evento": "2026-08-14", "dia_do_turno": "2026-08-13", "emp": 3, "grupo": "nao_exportada", "pk": 9782},
-    {"col": "col960", "comp": "10/2026", "data_evento": "2026-10-01", "dia_do_turno": "2026-09-30", "emp": 2, "grupo": "nao_exportada", "pk": 39409},
-    {"col": "col976", "comp": "11/2026", "data_evento": "2026-10-27", "dia_do_turno": "2026-10-26", "emp": 2, "grupo": "nao_exportada", "pk": 50668},
-    {"col": "col992", "comp": "11/2026", "data_evento": "2026-11-09", "dia_do_turno": "2026-11-08", "emp": 2, "grupo": "nao_exportada", "pk": 56105},
-    {"col": "col999", "comp": "11/2026", "data_evento": "2026-10-26", "dia_do_turno": "2026-10-25", "emp": 2, "grupo": "nao_exportada", "pk": 50394},
-    {"col": "col999", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51407}
-  ],
-  "caso_51407": [
-    {"col": "col999", "comp": "11/2026", "data_evento": "2026-10-29", "dia_do_turno": "2026-10-28", "emp": 2, "grupo": "nao_exportada", "pk": 51407}
-  ]
-}
-```
-
-A soma das categorias fornecidas fecha: **860 + 27 + 39 + 4 + 1 = 931**; são 66 casos listados, sendo 27 exportados e 39 não exportados. `materializadas=931` descreve o universo e não é parcela adicional; `caso_51407` repete um membro de `casos`. [nao verificado — conferência do dado fornecido]
-
-2. **`materializada_em` pode estar preenchido sem resposta porque essa via carimba uma resolução pela célula.** O escritor funcional é `retratar_perguntas_absolvidas_por_celula`, que chama `p.carimbar(VIA_CELULA_ABSOLVEU, _user)` sem argumento de resposta. [app/chamados/reconciliador.py:596](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/reconciliador.py:596)
-
-A atribuição literal é `self.materializada_em = quando`, em `_escrever_carimbo`; `carimbar` chama essa função e persiste com `self.save(update_fields=campos)`, após consultar o juiz e recusar o carimbo se a pergunta continuar viva. [app/chamados/models.py:3100](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3100) [app/chamados/models.py:3130](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3130) [app/chamados/models.py:3140](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3140) [app/chamados/models.py:3153](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3153)
-
-`respondida_em` só é preenchido quando há opção de resposta **e** texto não vazio; essa chamada não pede isso. Portanto, os dois campos não precisam nascer juntos. [app/chamados/models.py:3104](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3104) [app/chamados/models.py:3131](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3131)
-
-Nesta via, “materializada” significa **carimbada por resolução da célula**: `celula_absolveu` integra `VIAS_SEM_TESTEMUNHA`, e o código declara que a testemunha é a célula julgada, sem batida a exigir. O `help_text` do campo, que ainda menciona “batida criada + chamado fechado”, é mais estreito que esse comportamento. [app/chamados/models.py:3741](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3741) [app/chamados/models.py:3747](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3747) [app/chamados/models.py:3396](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/models.py:3396)
-
-Isso não acrescenta ao predicado do aval uma exigência de resposta ou de batida plantada. [nao verificado — interpretação do aval fornecido] Explica, porém, o desvio de `classificar()`: ele usa apenas o carimbo para escolher `_fonte_materializada`, que exige batida plantada viva e lança `sem_fonte` quando ela falta. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:151](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:151) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:68](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:68)
-
-O caminho histórico exato que gravou cada uma das 931 perguntas permanece [nao verificado].
-
-3. **Sim: `_fonte_viva` contém condições mais restritivas que a divergência de dia descrita no aval.** [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108) [nao verificado — comparação com o aval fornecido]
-
-- **Aberto no próprio dia:** se qualquer candidato aberto tem `data_turno == data_evento`, retorna `None` imediatamente. Assim, outro aberto em dia diferente pode nem ser examinado. A ocorrência dessa coexistência nas 931 é [nao verificado]. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:109](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:109)
-- **Saída prevista:** ignora turnos com `data_turno >= data_evento` e só aceita os anteriores cuja saída prevista seja exatamente `data_evento`. Um aberto com dia divergente e previsão diferente pode terminar em `None`. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:113](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:113) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:118](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:118) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:125](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:125)
-- **Exceções distintas:** sem correspondência e com candidato sem marcos, lança `sem_fonte`; com múltiplas correspondências de saída prevista, lança `ambigua`. [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120) [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:123](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:123)
-
-O contador que **potencialmente esconderia os descartes por `None` é `coerente_ou_sem_turno_aberto=860`**. O vínculo exato entre retorno e contador é [nao verificado], pois a implementação de `sonda_medida3.py` não foi localizada na cópia. Quantos desses 860 satisfazem o predicado do aval é [nao verificado]; portanto, os 66 listados não demonstram exaustividade da medida. [nao verificado]
-
-## 12/11 10:41 · sessao 8f661e04ae0f · - · - · origem=Ronald (tmux)
-
-- O escritor funcional é `retratar_perguntas_absolvidas_por_celula`: percorre as perguntas absolvíveis, obtém `get_user_sistema()` e chama `p.carimbar(PerguntaDisputa.VIA_CELULA_ABSOLVEU, _user)`, **sem pedir escrita de resposta**. `app/chamados/reconciliador.py:550`, `:585`, `:588`, `:596`.
-- A porta `carimbar` tem `resposta=None`; escolhe `quando` ou `timezone.now()`, chama `_escrever_carimbo`, consulta `pergunta_viva` e só salva se a pergunta resultar morta. A atribuição literal de `materializada_em` está em `_escrever_carimbo`; a persistência está em `self.save(update_fields=campos)`. `app/chamados/models.py:3104`, `:3125`, `:3130`, `:3100`, `:3140`, `:3144`, `:3153`.
-- `respondida_em` só recebe instante dentro de `if resposta and not texto_vazio(self.resposta_colab)`. Como o chamador desta via não passa `resposta`, é coerente haver `materializada_em` preenchido com `respondida_em` nulo. `app/chamados/models.py:3131`, `:3132`, `:3133`; `app/chamados/reconciliador.py:596`.
-- A seleção exige carimbo e validação ainda nulos, célula vinculada, julgada e com veredito que não acusa; depois o gerador consulta o juiz real e exclui dia trancado. `app/chamados/reconciliador.py:628`, `:630`, `:631`, `:632`, `:638`, `:640`, `:642`, `:662`, `:668`.
-- O juiz pode dar a pergunta por morta por célula com veredito que não acusa e sem marcos pendentes; isso não exige resposta nem plantio de batida. `app/chamados/juizes.py:1438`, `:1440`, `:1451`, `:1452`, `:1453`.
-- `celula_absolveu` pertence explicitamente a `VIAS_SEM_TESTEMUNHA`: o comentário identifica a célula julgada como testemunha e explica que não há batida a exigir num dia absolvido. Portanto, nesta via, “materializada” é carimbo de processamento/resolução pela célula, e não prova de declaração do colaborador ou batida plantada. `app/chamados/models.py:3731`, `:3741`, `:3742`, `:3743`, `:3747`.
-- O `help_text` do campo ainda diz “batida criada + chamado fechado”, descrição mais estreita que o comportamento executável acima. `app/chamados/models.py:3394`, `:3396`.
-- Isso não altera o predicado solicitado no aval; invalida usar `materializada_em != NULL` como sinônimo de “existe batida plantada”. O comando existente faz essa divisão em `classificar`, mandando qualquer carimbada para `_fonte_materializada`, que reprova ausência de batida plantada viva. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:151`, `:152`, `:68`, `:69`, `:72`.
-- O caminho histórico exato que carimbou cada uma das 931 perguntas, sua data e seu autor no banco não foi comprovado nesta inspeção. [nao verificado]
-
-_4183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4186 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
