@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 10:47** · publicado em **12/11/2026 10:48** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:49** · publicado em **12/11/2026 10:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:49 · sessao c53e9ca51217 · LASTRO-FAIXA-SEM-DEFAULT · censo · origem=Code
+
+1. **BLOQUEIA-1 — selo PDF/tela e igualdade sobre lista compartilhada**
+   - **Classe:** [nao verificado]. O Codex viu; descarte pela triagem não está documentado. (`preverif_c13.r:29`; `postmortem_anexo_triagem.txt:2`)
+   - **Pergunta — preverif_c13.q:11-12:**
+     > relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
+     > orfa ou turno aberto (LEI-AKITA 2)?
+   - **Resposta — preverif_c13.r:29:**
+     > Contra-exemplo já fixado pelo teste alterado: tela tem `orfas_grade=[]`, enquanto PDF marca a batida como órfã e conta zero aberto. A igualdade `pdf['dias']==dias` compara a lista compartilhada que o próprio coletor modifica. [nao verificado]
+   - **Triagem — postmortem_anexo_triagem.txt:2:**
+     > B1 duas fontes de orfa (PDF grade_espelho_janela recusas={} x tela orfas_grade): PROCEDENTE
+   - **Motivo literal de descarte:** nenhum.
+
+2. **BLOQUEIA-2 — `_pela_grade` sem recusas**
+   - **Classe:** [nao verificado]. O Codex viu o ramo de ata agregada; descarte pela triagem não está documentado. (`preverif_c13.r:33`; `postmortem_anexo_triagem.txt:4`)
+   - **Pergunta — preverif_c13.q:12:**
+     > A tela e o PDF mostram o mesmo rotulo 'Tipo sem faixa: \<codigo>' para o mesmo dia?
+   - **Resposta — preverif_c13.r:33:**
+     > **BLOQUEIA — rótulo não garantido no ramo de ata agregada.** O handler chama `_pela_grade()` sem `recusas`; uma ausência aprovada `fantasma_xyz` levanta `TipoSemFaixa` antes do transporte nomeado.
+   - **Resposta específica sobre o `except` da pré-apuração:** nenhum.
+   - **Triagem — postmortem_anexo_triagem.txt:4:**
+     > B3 _pela_grade sem recusas no ramo de ata agregada (espelho.py:495,563): PROCEDENTE por leitura; ocorrencia em prod nao medida.
+   - **Motivo literal de descarte:** nenhum.
+
+3. **Item 2 — RED e mutantes c13 somente em prosa**
+   - **Classe:** **(c)** — evidência de execução/RED. (`CLAUDE.md:386`; `opus_final_c13.txt:12-13`)
+   - **Pergunta — preverif_c13.q:6:**
+     > Caso H -- o harness novo ainda morde (mutante que desfaz a cura do produto fica vermelho)?
+   - **Resposta — preverif_c13.r:53:**
+     > os mutantes executados ficaram vermelhos.
+   - **Trecho da resposta que fornece saída de falha em `c13.log`/`construtor_c13.r`:** nenhum.
+
+4. **Item 8 — relavra `ausencia` → `folga` e leitores não fechados**
+   - **Classe:** **(a)** para a lacuna de código sobre relavra e leitores; efeito financeiro efetivo em produção: [nao verificado]. (`preverif_c5.q:5`; `preverif_c13.r:47`; `app/folha/causas.py:100`)
+   - **Pergunta — preverif_c5.q:5:**
+     > Algum leitor de dinheiro (dia_pago, fechamento, folha/export, prontidao) muda de VALOR para algum tipo/dia? Liste o caso concreto (cadastro + batidas) se mudar. O que o diff afirma preservar e de fato preservado em todo caminho (com snapshot e sem snapshot, ata gravada antes desta versao sem as chaves novas)?
+   - **Pergunta — preverif_c13.q:15:**
+     > Dinheiro: algum caminho de folha/simular_folha le o que mudou?
+   - **Resposta — preverif_c13.r:47:**
+     > **Nada de caminho demonstrado recebendo o novo `None`:** `simular_folha` passa pelo fechamento; fechamento lê `grade_do_fechamento`, cuja fonte é `grade_da_celula`.
+   - **Trecho que identifica a lacuna da relavra, `_folga_bat`/`dias_trocados` ou `tripwire_celulas`:** nenhum.
+
+5. **FILA — união HH:MM entre datas suprime turno aberto**
+   - **Classe:** [nao verificado]. O Codex viu; a triagem registrou procedência e herança, sem descarte literal. (`preverif_c13.r:31`; `postmortem_anexo_triagem.txt:3`)
+   - **Pergunta — preverif_c13.q:11-12:**
+     > relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
+     > orfa ou turno aberto (LEI-AKITA 2)?
+   - **Resposta — preverif_c13.r:31:**
+     > **BLOQUEIA — regra própria de turno aberto permanece.** PDF une órfãs de todas as datas por HH:MM e usa esse conjunto para excluir abertos.
+   - **Triagem — postmortem_anexo_triagem.txt:3:**
+     > B2 uniao HH:MM entre datas (pdf_espelho.py:174 _entrada_espuria, :480 _orfas_hhmm, :517): PROCEDENTE, HERDADO (c10 ja unia); bug no caminho (LEI-AKITA 6).
+   - **Motivo literal de descarte:** nenhum.
+
+6. **FILA — fechamento relança `TipoSemFaixa` e interrompe a empresa**
+   - **Classe:** [nao verificado]. O Codex viu; não há linha de triagem correspondente no anexo. (`preverif_c10.r:47`; descarte: [nao verificado])
+   - **Pergunta — preverif_c10.q:7:**
+     > fechamento deixa TipoSemFaixa subir: quem chama o fechamento (cron, view, export) e o que acontece com a competencia quando sobe -- trava o fechamento inteiro da empresa? Isso e o comportamento que o aval pede (item 4/6)?
+   - **Resposta — preverif_c10.r:47:**
+     > As três capturas alteradas relançam `TipoSemFaixa`. Se ela ocorrer, interrompe o restante da chamada — empresa inteira ou subconjunto escolhido —, sem representar uma tranca formal da competência
+   - **Resposta — preverif_c10.r:49:**
+     > Não há atomicidade de lote: A pode estar salvo, B pode ganhar linha `aberto` antes da falha, e C não ser processado.
+   - **Triagem:** nenhum.
+   - **Motivo literal de descarte:** nenhum.
+
+7. **FILA — `efeito_vigente` inclui inativos**
+   - **Classe:** **(a)** quanto à inclusão de inativos; efeito zero na frota: [nao verificado]. (`preverif_c5.q:5`; `app/ponto/catalogo/ausencias.py:299`)
+   - **Pergunta — preverif_c5.q:5:**
+     > Algum leitor de dinheiro (dia_pago, fechamento, folha/export, prontidao) muda de VALOR para algum tipo/dia?
+   - **Resposta que identifica a inclusão de inativos como o achado final:** nenhum.
+   - **Resposta anterior, sobre o comportamento inverso — preverif_c5.r:28:**
+     > **BLOQUEIA — a ata nova perde valores quando o tipo sai do catálogo ativo.**
+
+8. **FILA — `folga_da_escala` recarimba precedência e é exposta pela API**
+   - **Classe:** **(a)**. (`preverif_c5.q:4`; `app/ponto/precedencia.py:431`; `app/ponto/services/cartorio.py:1999`; `app/ponto/services/dia_do_colab.py:90`)
+   - **Pergunta — preverif_c5.q:4:**
+     > QUEM ESCREVE e QUEM LE, inclusive fora do diff; todos supoem o MESMO significado (unidade, dia do turno x dia civil, inclusivo/exclusivo, folga humana x folga da escala)?
+   - **Resposta sobre o marcador — preverif_c5.r:10:**
+     > A2 escreve o código vencedor; c5 distingue folga automática por `folga_da_escala`.
+   - **Trecho que identifica o efeito de recarimbo preguiçoso e sua exposição pela API:** nenhum.
+
+9. **FILA — `orfa_classe.py` sem chamador produtivo**
+   - **Classe:** **(e) NAO PERGUNTADO** — pergunta específica sobre ausência de chamadores: nenhum. (`opus_final_c13.txt:22`; `CLAUDE.md:386`)
+   - **Pergunta:** nenhum.
+   - **Resposta que identifica zero chamador:** nenhum.
+   - **Resposta sobre alcance, sem identificar o órfão — preverif_c13.r:23:**
+     > Alcance desses leitores pelo canal novo do PDF: **[nao verificado]**.
+
+10. **Suíte c13 — RC do processo não registrado** [nao verificado]
+    - **Classe:** **(c)** — evidência de execução/suíte. (`CLAUDE.md:386`; `opus_final_c13.txt:17`) [nao verificado]
+    - **Pergunta específica sobre registro do RC da suíte c13:** nenhum. [nao verificado]
+    - **Resposta — preverif_c13.r:53:**
+      > Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**. [nao verificado]
+
+| Achado | Classe | Volta |
+|---|---|---|
+| BLOQUEIA-1 | [nao verificado]: viu; descarte não documentado | c13 |
+| BLOQUEIA-2 | [nao verificado]: viu; descarte não documentado | c13 |
+| RED c13 somente em prosa | (c) | c13 |
+| Item 8: relavra e leitores | (a) | c5/c13 |
+| FILA: união HH:MM | [nao verificado]: viu; descarte não documentado | c13 |
+| FILA: fechamento interrompe empresa | [nao verificado]: viu; triagem ausente | c10 |
+| FILA: efeito inclui inativos | (a) | c5 |
+| FILA: recarimbo/API | (a) | c5 |
+| FILA: `orfa_classe` sem chamador | (e) | nenhuma |
+| Suíte: RC não registrado | (c) | c13 | [nao verificado]
 
 ## 12/11 10:47 · sessao e39f8978844e · - · - · origem=Ronald (tmux)
 
@@ -609,60 +715,4 @@ MUTANTE_CADASTRO=foto_so_dias_com_celula python3 -m unittest "${C2}.EventosFutur
 MUTANTE_CADASTRO=_propagar_regeneracao_template python3 -m unittest "${C2}.EventosFuturosTest.test_propagar_regeneracao_template"
 ```
 
-## 12/11 10:08 · sessao c626fa8aa4e0 · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
-
-**BLOQUEIA o pouso:** permanecem duas fontes para órfãs, regra própria no PDF e um ramo que impede a recusa nomeada (`app/relatorios/pdf_espelho.py:474`, `:517`; `app/ponto/services/espelho.py:522`, `:563`). O par financeiro obrigatório da competência 11 está **[nao verificado]**.
-
-1. Classificação dos dez:
-
-| Nº | Classe | Conferência |
-|---|---|---|
-| 1 | **H correta** | Harness substitui também atributos dos pacotes carregados; conserva contador=1 e ausência de `explicados`. Retirar a correção em memória produz falha de busca proibida. Nada. `app/ponto/tests/test_lastro_c12_sem_banco.py:89`, `:103`; `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. |
-| 2 | **H correta** | Conserva posto presente, buracos=1 e explicados=0; reversão do harness falha por grade proibida. Nada. `app/ponto/tests/test_lastro_c12_sem_banco.py:109`; `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. |
-| 3 | **H correta** | Conserva recusa nomeada e vizinho reconhecido explicado; reversão do harness falha por busca proibida. Nada. `app/ponto/tests/test_lastro_c12_sem_banco.py:141`; `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. |
-| 4 | **C correta** | A inversão exige recusa nomeada, `sem_certidao` e veredito vazio: corresponde à leitura sem concluir precedência do aval 4; não virou sucesso genérico. Nada. `app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:59`. Execução Django/ORM: **[nao verificado]**. |
-| 5 | **C correta** | `licenca especial` normaliza para `licenca_especial`, fora do mapa; o sucesso agora usa `reciclagem`, já mapeado, e verifica palavra. O par exige recusa nomeada sem gravação: corresponde ao aval 5. Nada. `app/ponto/views_tipos_ausencia.py:92`; `app/ponto/precedencia.py:70`; `app/ponto/tests/test_tela_tipos.py:29`, `:51`. Execução HTTP/ORM: **[nao verificado]**. |
-| 6 | **R correta** | A chamada do contrato voltou; o selo original passou adaptado sem banco. Ressalvas de produto no item 3 abaixo. `app/relatorios/pdf_espelho.py:474`; `app/ponto/tests/test_lastro_c13_sem_banco.py:130`. |
-| 7 | **R correta** | Mesmo resultado: contrato restaurado, selo original preservado. Isso não prova ausência de regras próprias. `app/relatorios/tests/test_cartao_pela_celula.py:176`; `app/ponto/tests/test_lastro_c13_sem_banco.py:130`. |
-| 8 | **R correta quanto ao sintoma** | A expectativa original continua `orfa=True`; a costura restaurada exige isso, mas preserva divergência com a tela, abaixo. `app/relatorios/tests/test_cartao_marca_espuria.py:59`; `app/ponto/tests/test_lastro_c11_sem_banco.py:383`. |
-| 9 | **R correta quanto ao sintoma** | A expectativa original continua zero turno aberto por espúria; costura passou. Prova nativa do PDF binário: **[nao verificado]**. `app/relatorios/tests/test_cartao_marca_espuria.py:75`, `:84`; `app/ponto/tests/test_lastro_c11_sem_banco.py:385`. |
-| 10 | **H compatível com o delta** | O registro atual aponta a consulta de feriados, e a igualdade estrita permanece. Recolocar `[1032]` em memória causa falha, sem erro de harness. Nada no instrumento atual. `app/ponto/services/espelho.py:1039`; `app/core/tests/test_medida_turno_do_par.py:542`. Identidade AST histórica c9/c12: **[nao verificado]**. |
-
-2. Escritores, leitores e `None`:
-
-- **Nada — escritor do dict:** A2 escreve `recusas[data]`; sem destinatário, levanta. O rótulo nasce na exceção. `app/ponto/precedencia.py:423`, `:422`, `:102`.
-- **Nada — transporte:** `_marcar_ausencias` escreve `dia['recusa']` e `tipo_dia=None`; PDF lê a recusa e entrega ao compositor, que escreve palavra nomeada e veredito vazio. `app/escala/utils.py:1219`, `:1220`; `app/relatorios/pdf_espelho.py:567`; `app/ponto/services/espelho.py:339`.
-- **Nada — leitores internos alcançados:** legacy preserva `None`; isenção não concede flag de dia de trabalho para esse tipo. `app/escala/utils.py:1046`, `:889`.
-- **FILA — incompatibilidade latente:** `classificar_orfas({'tipo_dia': None, 'orfas': ['16:19']})` classifica como `FOLGA_DESMENTIDA`; `por_dia_da_grade` descarta esse tipo sem `ausencia_tipo`. São interpretações incompatíveis com “precedência recusada”. `app/escala/orfa_classe.py:65`; `app/ponto/services/dia_pago.py:392`. Alcance desses leitores pelo canal novo do PDF: **[nao verificado]**.
-- **Nada por inspeção do delta com `recusas=None`:** retorno antecipado, condição de consulta A2 e chamada sem argumento conservam os ramos anteriores; o ramo novo fica desativado. `app/escala/utils.py:1205`, `:1213`, `:1218`, `:2114`, `:2117`, `:2365`. Equivalência dinâmica em todo chamador: **[nao verificado]**.
-- **Unidades dos contadores:** cartório conta colaboradores isolados; `tipos_ativos_sem_faixa` conta códigos ativos do cadastro, inclusive sem lançamento. Dois colaboradores com um código representam 2 no primeiro universo e 1 no segundo. `app/ponto/management/commands/processar_cartorio.py:73`; `app/ponto/services/vigia_ausencia.py:155`, `:168`.
-
-3. PDF, contrato e igualdade com a tela:
-
-- **BLOQUEIA — duas fontes para a mesma órfã.** PDF reconstrói pelo contrato; tela lê a célula na competência. Contra-exemplo já fixado pelo teste alterado: tela tem `orfas_grade=[]`, enquanto PDF marca a batida como órfã e conta zero aberto. A igualdade `pdf['dias']==dias` compara a lista compartilhada que o próprio coletor modifica. `app/relatorios/pdf_espelho.py:474`, `:571`; `app/ponto/services/espelho.py:522`; `app/ponto/tests/test_lastro_c11_sem_banco.py:326`, `:382`, `:383`, `:384`.
-
-- **BLOQUEIA — regra própria de turno aberto permanece.** PDF une órfãs de todas as datas por HH:MM e usa esse conjunto para excluir abertos. Contra-exemplo executado em memória: órfã em **10/11 07:02** elimina um aberto legítimo de **11/11 07:02**, mesmo sem órfã nesse segundo dia; a tela conta esse aberto. Regra herdada, ainda presente: `app/relatorios/pdf_espelho.py:174`, `:480`, `:517`; `app/ponto/services/espelho.py:436`. Contraria a testemunha sem regra própria: `CLAUDE.md:20`.
-
-- **BLOQUEIA — rótulo não garantido no ramo de ata agregada.** O handler chama `_pela_grade()` sem `recusas`; uma ausência aprovada `fantasma_xyz` levanta `TipoSemFaixa` antes do transporte nomeado. PDF também passa por essa tela depois de obter sua grade. Contra-exemplo: ata agregada que exige o builder + ausência aprovada sem faixa. `app/ponto/services/espelho.py:495`, `:563`, `:653`; `app/relatorios/pdf_espelho.py:479`. Ocorrência produtiva: **[nao verificado]**.
-
-- **Nada no canal coberto do rótulo:** tela e PDF transportam o mesmo `TipoSemFaixa.rotulo` ao mesmo compositor; PDF imprime a palavra resultante. `app/ponto/precedencia.py:102`; `app/ponto/services/espelho.py:880`, `:339`; `app/relatorios/pdf_espelho.py:567`, `:886`.
-
-4. Classes de reprovação:
-
-- **BLOQUEIA — juiz/derivação paralela:** materializações distintas de órfãs e exclusão própria de turno aberto, demonstradas acima. `app/ponto/services/espelho.py:522`; `app/relatorios/pdf_espelho.py:474`, `:517`.
-- **BLOQUEIA — selo insuficiente para igualdade:** o teste aceita explicitamente respostas diferentes para a órfã; portanto verde não certifica “cartão=espelho”. `app/ponto/tests/test_lastro_c11_sem_banco.py:383`, `:384`.
-- **Segundo escritor fora da porta: nada no delta inspecionado.** A grade copia a recusa da A2; cadastro continua validando antes de gravar. `app/escala/utils.py:1219`; `app/ponto/services/ausencia.py:1312`.
-- **Relógio novo fora da borda: nada no delta inspecionado.** Contrato usa o `agora` recebido. `app/escala/utils.py:2359`, `:2364`.
-- **Campo com dois significados:** FILA latente descrita no item 2; divergência alcançável causada pelo novo `None`: **[nao verificado]**.
-
-5. Dinheiro:
-
-- **Nada de caminho demonstrado recebendo o novo `None`:** `simular_folha` passa pelo fechamento; fechamento lê `grade_do_fechamento`, cuja fonte é `grade_da_celula`. `app/folha/management/commands/simular_folha.py:122`, `:130`; `app/ponto/services/fechamento.py:1015`, `:1048`; `app/folha/export.py:335`.
-- **BLOQUEIA pouso — condição financeira pendente:** par `simular_folha` da competência 11, efeito `abona=0` e diferenças por rubrica: **[nao verificado]**, conforme o dado fornecido. Ausência de movimento financeiro: **[nao verificado]**. [nao verificado]
-
-6. Fora dos dez e do mínimo:
-
-- **Nada identificado no delta fornecido:** alterações produtivas concentram-se no transporte da recusa e na leitura do contrato pelo PDF; testes auxiliares acompanham esses caminhos. `app/escala/utils.py:1159`, `:2350`; `app/relatorios/pdf_espelho.py:474`; `app/ponto/tests/test_lastro_c13_sem_banco.py:177`. Comparação histórica integral da cópia com `86726416c`: **[nao verificado]**.
-- **Limite da verificação:** passaram 72 testes sem banco e 35 da catraca; os mutantes executados ficaram vermelhos. Os builders da costura são reduzidos às chamadas extraídas, sem geometria/ORM completos. `app/ponto/tests/test_lastro_c13_sem_banco.py:73`, `:196`, `:200`; `app/core/tests/test_medida_turno_do_par.py:525`. Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**.
-
-_4167 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4168 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
