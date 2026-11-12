@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 18:52** · publicado em **12/11/2026 18:54** (UTC-3)
+> Ultima resposta processada: **12/11/2026 18:55** · publicado em **12/11/2026 18:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 18:55 · sessao 81eaddfdbeb2 · TRANCA-VIVAS-08 · sonda · origem=Code
+
+Transcrição integral das linhas de ids e contagens fornecidas; valores de produção [nao verificado]:
+
+```text
+comp emp2 04/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp2 05/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp2 06/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp2 07/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp2 08/2026 perguntas=0 chamados=207 disputas=10 com_o_admin=4 vivas_apesar_da_tranca=0
+comp emp3 04/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp3 05/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp3 06/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp3 07/2026 perguntas=0 chamados=1 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp3 08/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp4 04/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp4 05/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp4 06/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp4 07/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+comp emp4 08/2026 perguntas=0 chamados=0 disputas=0 com_o_admin=0 vivas_apesar_da_tranca=0
+TOTAL perguntas=0 chamados=208 disputas=10 com_o_admin=4 vivas_apesar_da_tranca=0
+emp2 08/2026 perguntas n=0 ids=[]
+emp2 08/2026 vivas_apesar_da_tranca n=0 ids=[]
+emp2 08/2026 vivas_resgatadas n=0 ids=[]
+emp2 08/2026 vivas_tocadas_pelo_admin n=0 ids=[]
+emp2 08/2026 fora_conversa n=0 ids=[]
+emp2 08/2026 decidir_pelo_dp n=4 ids=[20599, 47879, 47881, 47884]
+alvo_ainda_vivas_apesar=[]
+total_erros=0
+```
+
+Montagem das seis listas explicitadas para emp2 08/2026, na cópia:
+
+| Lista | Linha e condição |
+|---|---|
+| `perguntas` | Inicializada vazia em [competencia_trancada.py:90](app/chamados/services/competencia_trancada.py:90); permanece vazia por construção, conforme [competencia_trancada.py:135](app/chamados/services/competencia_trancada.py:135). |
+| `vivas_apesar_da_tranca` | Recebe `q.pk` quando `tocou` é falso, em [competencia_trancada.py:158](app/chamados/services/competencia_trancada.py:158). |
+| `vivas_resgatadas` | Recebe `q.pk` quando a pergunta é resgatada e viva, em [competencia_trancada.py:149](app/chamados/services/competencia_trancada.py:149). |
+| `vivas_tocadas_pelo_admin` | Recebe `q.pk` quando `tocou` é verdadeiro, em [competencia_trancada.py:158](app/chamados/services/competencia_trancada.py:158); consulta do toque em [competencia_trancada.py:155](app/chamados/services/competencia_trancada.py:155). |
+| `fora_conversa` | Recebe `q.pk` quando `_dia_de_turno_da_pergunta(q)` retorna `None`, em [competencia_trancada.py:142](app/chamados/services/competencia_trancada.py:142). |
+| `decidir_pelo_dp` | Recebe `q.pk` quando não é resgatada e pertence a `_sem_veredito`, em [competencia_trancada.py:139](app/chamados/services/competencia_trancada.py:139); origem desse conjunto em [competencia_trancada.py:126](app/chamados/services/competencia_trancada.py:126). |
+
+As listas representadas pelas outras contagens são montadas em [competencia_trancada.py:171](app/chamados/services/competencia_trancada.py:171) (`chamados`) e [competencia_trancada.py:183](app/chamados/services/competencia_trancada.py:183) (`disputas`). `com_o_admin` corresponde à contagem da união, sem repetição, de `decidir_pelo_dp`, `vivas_resgatadas` e `vivas_tocadas_pelo_admin`, formada em [competencia_trancada.py:343](app/chamados/services/competencia_trancada.py:343).
+
+**O degrau efetivamente decisivo por id não está demonstrado pelo dado fornecido [nao verificado].**
+
+| ID pedido | O que consta no dado | Degrau efetivamente percorrido |
+|---|---|---|
+| `20798` | Não aparece na saída transcrita [nao verificado]. | [nao verificado] |
+| `47879` | Consta em `decidir_pelo_dp` [nao verificado]. | [nao verificado] |
+| `47881` | Consta em `decidir_pelo_dp` [nao verificado]. | [nao verificado] |
+| `47884` | Consta em `decidir_pelo_dp` [nao verificado]. | [nao verificado] |
+
+O código permite localizar o degrau da **leitura da tranca**: retorna `False` em [juizes.py:1405](app/chamados/juizes.py:1405). Entretanto, a validação já retorna `False` antes dele, em [juizes.py:1401](app/chamados/juizes.py:1401), e existem outros retornos posteriores; portanto, resultado agregado não identifica sozinho o ramo executado. Atribuir especificamente o degrau da tranca a cada id permanece [nao verificado].
+
+Além disso, `decidir_pelo_dp` é preenchida **antes** de consultar `pergunta_viva`, em [competencia_trancada.py:139](app/chamados/services/competencia_trancada.py:139) e [competencia_trancada.py:144](app/chamados/services/competencia_trancada.py:144). Sua presença nessa lista não registra qual degrau do juiz decidiu a pergunta.
 
 ## 12/11 18:52 · sessao 02c4b526a44e · TIPO-ITEM1-DIMENSAO · verificador · origem=Code
 
@@ -1077,90 +1134,4 @@ Sobre escritores que mudam o desenho:
 
 No WIP fornecido, as atribuições e updates listados permanecem; acrescentam-se validações no `save` e no lote. Isso acrescenta uma guarda compartilhada a mais caminhos, mas não transfere as escritas para uma única função — prova no anexo `wip_1b.diff`, hunks de `models.py` iniciados em `@@ -3279` e `@@ -3442`. A execução dos testes e o estado efetivo de produção são `[não verificado]`. [nao verificado]
 
-## 12/11 17:31 · sessao 1cf1df545dd1 · - · - · origem=Ronald (tmux)
-
-Censo AST somente leitura concluído para `app/chamados/**/*.py`, excluindo `tests/`, `migrations/`, `models.py` e `juizes.py` (estes ficaram com o agente principal). Atributos `Load`, kwargs ORM, literais de projeção, `getattr`, índices e nomes provenientes de tuplas foram conferidos no código.
-
-Legenda: `E=respondida_em`, `T=resposta_colab`; todas as linhas abaixo são **LEITOR**. Caminhos relativos a `app/chamados/`.
-
-| arquivo:linha:função | forma/campo | origem/modelo |
-|---|---|---|
-| `canal.py:65:perguntas_mudas_com_resposta` | filtro T | `PerguntaDisputa.objects`, 58,64 |
-| `reconciliador.py:365:lavrar_sem_turno_aberto` | atributo T | recebe pergunta; chamada em 1620 a partir de `reatar_pergunta_orfa`; origem por encadeamento, não anotação |
-| `reconciliador.py:1083:veredito_orfa` | atributo T | universo `_orfas_abertas`, `PerguntaDisputa.objects` em 1048-1049; chamada 1136 |
-| `views_cobrar.py:169:validar_inline` | atributo E | `_vivas_de(d)`/perguntas vivas; origem `PerguntaDisputa` |
-| `views_cobrar.py:176:validar_inline` | filtro E | `PerguntaDisputa.objects` 175 |
-| `views_cobrar.py:291:proposta_lote` | `x['pergunta'].resposta_colab` T | itens da fila/classificação de perguntas |
-| `veredito_lavrado.py:207-208:marcos_do_lote` | filtro E, `**_ate('respondida_em')`, `Max(E)` | alias `_PD=PerguntaDisputa`, 201; `_ate` 163 gera filtro de corte |
-| `views.py:1280:responder_pergunta_disputa` | atributo E | `PerguntaDisputa.objects.filter` 1239 |
-| `views.py:1416:reabrir_disputa_supervisao` | filtro E | `PerguntaDisputa.objects` na própria linha |
-| `relatorios_disputa.py:21:classificar` | atributo E | `disputa.perguntas.all()` 12; `vivas` 18 |
-| `services/cobranca.py:229:_calados` | filtro E | `PerguntaDisputa.objects` 228 |
-| `services/vigia_fio.py:681:censo_alcance` | atributo E | universo `PerguntaDisputa.objects` 615 |
-| `services/vigia_fio.py:789,792:respondida_sem_resposta` | filtro E / `values_list(T)` | `PerguntaDisputa.objects` 789 |
-| `services/passivo_validado.py:83:_reversao_de` | `getattr(p,c)` E | `CAMPOS_REVERSAO` 64-66; chamada 367, universo `classificar(empresas)` 324 |
-| `services/materializacao.py:280,308:_tipo_pelo_marco` | atributos T | parâmetro `p` da cadeia de materialização; chamadas originam do queryset de perguntas 1375-1382 e da validação `PerguntaDisputa.objects.get` em `validacao.py:389,463` |
-| `services/materializacao.py:359,405,412:_ts_tipo_do_plantio` | atributos T | mesma cadeia |
-| `services/materializacao.py:438:estado_aplicacao_pergunta` | atributo T | chamada por `fio.py:356`, sobre perguntas do chamado; usa também constantes `PerguntaDisputa` 444 |
-| `services/materializacao.py:474:_declarar_ausencia_de_pergunta` | atributo T | mesma cadeia de materialização |
-| `services/materializacao.py:571:_materializar_ausencia_de_resposta` | atributo T de `q` | `disputa.perguntas.filter` 538 |
-| `services/materializacao.py:633:perguntas_absorvidas_por` | filtro T | `base=PerguntaDisputa.objects.filter` 629 |
-| `services/materializacao.py:674-675:devolver_absorvidas_da_ausencia_rejeitada` | atributos T/E; serialização para dict | `ps=perguntas_absorvidas_por` 671; origem PD 629 |
-| `services/materializacao.py:835,876,977:_materializar_resposta_hora` | atributos T; dict de saída | mesma cadeia de materialização |
-| `services/materializacao.py:1001,1010,1062:_materializar_resposta_data_hora` | atributos T; dict de saída | mesma cadeia |
-| `services/materializacao.py:1376:materializar_perguntas_validadas_da_disputa` | filtro E | `disputa.perguntas.filter` 1375 |
-| `services/validacao.py:141:_carimbar_validacao` | atributo T | `perg` carregada por `validar_pergunta`, `PerguntaDisputa.objects.get` 389 |
-| `services/validacao.py:189,207:devolver_validacao_recusada` | `refresh_from_db(fields=[T])`; atributo T | chamada 464 com a instância carregada em 389 |
-| `services/validacao.py:236:_e_aceite_de_folga` | atributo T | helper da validação PD |
-| `services/validacao.py:393:validar_pergunta` | atributo E | `PerguntaDisputa.objects.get` 389 |
-| `services/validacao.py:576,580-581,600:recusar_pergunta` | atributos E/T; leitura `antes[T]` | `PerguntaDisputa.objects...get` 569-570 |
-| `services/validacao.py:851,853,855,860-863,866:classe_do_lote` | atributos T | fila de `perguntas_respondidas_a_validar`, chamada 921-922 |
-| `services/validacao.py:924:fila_validar_classificada` | atributo E | `perguntas_respondidas_a_validar()` 918,921; parâmetro `qs` alternativo não é validado por tipo |
-| `services/pergunta_no_app.py:71:consulta_do_app` | atributo E | `perguntas_do_app` 70, cuja consulta é `PerguntaDisputa.objects` 49 |
-| `services/declaracao_texto.py:417,419:declarar_hora_colab` | atributos E/T | retorno `PerguntaDisputa.abrir` 376 |
-| `services/declaracao_texto.py:687:aplicar_declaracao` | atributo E | retorno `PerguntaDisputa.abrir` 666 |
-| `services/verbos.py:335-336,342,345:placar_aceite` | filtro E; `values(E)`; `pg[E]` | `PerguntaDisputa.objects` 333 |
-| `services/disputa_emissao.py:1619,1627:reabrir_para_correcao` | `values_list(T,E)`; nomes `_txt`,`_resp` na condição | queryset de PD; método chama portas PD em 1609,1630 |
-| `services/disputa_emissao.py:1647:responder_automaticamente` | atributo T | parâmetro `p`, contrato e chamadas de resposta PD |
-| `services/disputa_emissao.py:1675,1683:carimbar_resposta_pela_trilha` | atributos E/T | parâmetro `p`; chamada no command `curar_perguntas_em_limbo` sobre PD |
-| `services/disputa_emissao.py:1718:recobrar_questionario` | filtro E | `PerguntaDisputa.objects` 1717 |
-| `services/disputa_emissao.py:1826,1844:reabrir_credor_de_pergunta_viva` | atributos E/T | `p` pergunta; `carga` de relações `perguntas_que_resolvem`, 1803-1805 |
-| `services/disputa_emissao.py:1984,2057,2062,2074:_resolver_perguntas_por_chamado_resolvido` | atributos E/T | universo perguntas do chamado, PD importada 17 |
-| `services/explicador.py:32:_explicar_validada` | atributo T | chamada 97 por `explicar_pergunta`; origem queryset PD 122,133 |
-| `services/explicador.py:79-80:explicar_pergunta` | atributo T | `PerguntaDisputa.objects.filter` 122; chamada 133 |
-| `services/foto_e4b.py:180:nascimentos` | `a[c]`,`d[c]`, c=E | somente ramo `chave.startswith('perguntas:')` 179; foto associa perguntas a PD 254,272,311 |
-| `services/raiox.py:138,143-144:creditos_perguntas` | `values_list(E,T)`, `p[3]`,`p[4]` | `_pq=PerguntaDisputa.objects` 56, `_vivas` 74,135-138 |
-| `services/painel.py:67:marcador_do_placar` | `Max(E)` | `PerguntaDisputa.objects.aggregate` 66 |
-| `services/becos.py:30:classificar` | atributo E | `d.perguntas.all()` 29 |
-| `services/acoes_disputa.py:95:acao_reabrir_disputa` | filtro E | `PerguntaDisputa.objects` na linha |
-| `services/acoes_disputa.py:130:acao_regularizar_disputa` | atributo E | `_vivas_de(d)` |
-| `services/acoes_disputa.py:353:acao_corrigir_resposta` | atributo T | `PerguntaDisputa.objects...get` 341 |
-| `services/fio.py:174:aguarda_o_colaborador` | atributo E | coleção de perguntas recebida; chamadores e contrato PD |
-| `services/fio.py:681:processar_post_fio` | atributo E | `perguntas_vivas_de` importada 680 |
-| `services/fio.py:1254:canonica_do_grupo` | atributo T | contrato retorno PD 1248; grupos carregados de PD, por exemplo command dedup 74,76 |
-| `services/fio.py:1266:merito_perdedor` | atributo T | perguntas do mesmo grupo; constante PD 1265 |
-| `services/historico.py:99,105,109:_eventos_dos_chamados` | campo variável `getattr(p,campo)` E; atributo T | `PerguntaDisputa.objects` 96, laço 97-105 |
-| `templatetags/chamados_tags.py:142:leitura_da_resposta` | `getattr(perg,T,'')` | parâmetro de filtro de template; passagem por juiz de resposta 144-147; tipo não validado em runtime |
-| `management/commands/curar_perguntas_em_limbo.py:32:nota_da_resposta` | atributo T | `p` de queryset PD em `handle`, 46 |
-| `management/commands/curar_perguntas_em_limbo.py:46,69:Command.handle` | filtros E/T | `PerguntaDisputa.objects` |
-| `management/commands/validar_classe_a.py:80:Command.handle` | atributo T | `d.respostas_sem_veredito()` 54, guardadas em `pendentes` e `classe_a` |
-| `management/commands/auditar_invariantes_chamados.py:177:_contraprova_i21a` | atributo E | chamada 1585 sobre subconjunto de `_i21_cru`, queryset PD 1572 |
-| `management/commands/auditar_invariantes_chamados.py:592,1105-1106,1572,1575,1603,1655:Command.handle` | atributos E/T e filtros E/T | alias `PD.objects`; 1655 relação `perguntas_que_resolvem` 1652 |
-| `management/commands/backfill_decisoes_pergunta.py:56,60-61:linhas_a_criar` | filtro E; `only(E,T)` | `PerguntaDisputa.objects` 56 |
-| `management/commands/backfill_decisoes_pergunta.py:326:aplicar` | atributo T | itens de perguntas do backfill |
-| `management/commands/backfill_decisoes_pergunta.py:504:Command.handle` | `only(T)` | `PerguntaDisputa.objects` na linha |
-| `management/commands/dedup_perguntas_fato.py:75:Command.handle` | atributo T | `ps=PerguntaDisputa.objects...` 74 |
-
-Casos que **não** devem entrar como escritor/leitor do modelo diretamente:
-
-- `services/fio.py:1585:recusa_respondida_sem_texto`: kwargs E/T são de **`types.SimpleNamespace`**, importado em 1583; o código cria um sondador para o predicado, não `PerguntaDisputa`. É guarda do payload, não porta que persiste. `fio.py:1578-1585`.
-- `services/validacao.py:605`: dict `depois` enviado ao observador `_evento`, não escrita ORM. A limpeza real passa por `reabrir_para_correcao` em 593-594.
-- `services/disputa_emissao.py:1686`: chave E em dict de observabilidade, não escrita de modelo.
-- `services/materializacao.py:674-678`: dict `_foto` guarda valores lidos, não os persiste de volta.
-- `services/passivo_validado.py:66`: declaração de nomes; a leitura real é 83.
-- `services/disputa_emissao.py:1469,1660,1681`: literais dos campos em `save`, portanto pertencem à tabela de **escritores**, não projeções leitoras.
-- `services/disputa_emissao.py:1593`: dict de limpeza E/T, portanto payload de **escritor**; persistência em 1630 ou ramo subsequente.
-
-Pontos de cautela de tipo: as funções auxiliares acima recebem parâmetros sem anotação; a evidência é o encadeamento de chamadas e querysets indicado. As funções `aguarda_o_colaborador`, `fila_validar_classificada(qs=...)`, filtros de template e helpers públicos não verificam em runtime que todo argumento é PD; afirmar isso para qualquer chamador externo seria `[nao verificado]`. Nenhum homônimo de outro modelo apareceu neste recorte da varredura AST; a exceção concreta é o `SimpleNamespace` em `fio.py:1585`.
-
-_4385 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4386 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
