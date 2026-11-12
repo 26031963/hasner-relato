@@ -1,7 +1,154 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 02:58** · publicado em **12/11/2026 03:01** (UTC-3)
+> Ultima resposta processada: **12/11/2026 03:03** · publicado em **12/11/2026 03:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 03:03 · sessao 2fd88cf92d26 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
+
+| trava | a — disparos | b — defeito real confirmado | c — custo sem defeito de comportamento | d — suites inteiras / minutos | proposta | fonte |
+|---|---|---|---|---|---|---|
+| **1. Preverif Codex** | Total não medido; **15 voltas triadas**, 12 procedentes e 3 descartadas. | **≥2 episódios com cura**, detalhados abaixo; 12 procedentes não equivalem a 12 defeitos. | **3 consultas descartadas**; voltas adicionais causadas por elas: não medido. | Consultas triadas: **80,58 min**, sendo **13,52 min** descartadas. Suites atribuíveis: não medido. | **MUDA** a medição, conserva a revisão. Retirar perde achados comprovados; manter custa as consultas, inclusive descartadas. | `anexo:triagem.log:1–15`; `app/docs/RELATO.md:1446,322,327–328`; cruzamento C descrito no §1. |
+| **2. Opus final** | Total de leituras não medido; **48 disparos B3** têm rótulo de reprovação final. | **≥3 episódios comprovados**: PAR-NAO-ADJACENTE, SELOS-CANON-I1 e E3. | **≥5 reprovações por forma/prova/documento**. | **5 suites posteriores associadas / 88,11 min**; incremento causal não medido. Duração das leituras finais: não medido. | **FICA**. Retirar perde descobertas posteriores ao preverif; manter conserva revisão e custos formais documentados. | `app/docs/RELATO.md:539,543,548–550,138,1275–1278,1415,1426`; D e S do §2. |
+| **3. Disjuntor B3** | **50 disparos; 48 liberações**, sendo 22 desenho e 26 erro-bobo; **6 rearmes e 7 migrações**. | Ganho próprio do disjuntor: **não medido**; ele recebe resultados das revisões. | Os mesmos **≥5 episódios formais** do item anterior; não somar novamente. | Mesmas **5 suites / 88,11 min associados**; espera imposta pelo B3: não medida. | **MUDA** a escalada: distinguir defeito, prova/forma e desenho. Retirar perde a interrupção de ciclos; manter custa parada e liberação sem custo completo medido. | `anexo:disjuntor_14d.log`, linhas por evento; `bin/disjuntor.py:834–848,955–957,1004–1014`; §3. |
+| **4. Hook Stop** | **1.006 registros BLOCK fila**, 2 BLOCK RELATO e 3 BLOCK ORCAMENTO; **237 liberações por teto**. | Não medido. | Não medido; teto não comprova falso positivo. | Suites e minutos atribuíveis: não medido. | **MUDA** a elegibilidade. Retirar perde contenção do encerramento; manter conserva cobrança incompatível com a lista e a série vigentes. | `anexo:hook_stop_por_dia.tsv:1–78`; `bin/hook_stop_fila1.py:238–252,270–287,1404,1439–1448`; §4. |
+| **5. Hook PreToolUse** | É **`bin/disjuntor.py pretool`**. Invocações e negativas próprias: não medidas. | Não medido. | Não medido. | Suites/minutos: não medido. | **FICA**, com medição e conferência da instalação. Retirar perde as verificações B1/B3/B4/CENSO; manter tem custo por ferramenta e negativas não quantificados. | `.claude/settings.json:62–69`; `bin/disjuntor.py:1820–1872,1901–1907`; §5. |
+| **6. ESPERANDO** | **1.839 liberações com prova + 590 registros sem prova**; não são esperas únicas. | Não medido. | **≥1 espera improdutiva documental**, de **100 min**, após morte do produtor. | **100 min documentais** nesse incidente; suites e total do período não medidos. | **MUDA** a reavaliação após o produtor terminar. Retirar perde liberação durante trabalho comprovado; manter conserva o risco de espera vencida. | `anexo:hook_stop_por_dia.tsv:1–78`; `app/docs/BACKLOG.md:1933`; `bin/hook_stop_fila1.py:789–838,1383–1390`. |
+| **7. Uma vaga de construtor por repo** | Não medido: recusa por vaga ocupada ocorre antes do registro da chamada. | Colisões realmente evitadas: não medido. | Recusas desnecessárias: não medido. | Suites/minutos de serialização ou retomada: não medido. | **FICA**. Retirar perde exclusão entre construtores Codex; manter custa serialização não medida. | `bin/codex_pergunta.sh:235–260,291–293`; §7. |
+| **8. Catraca de número de linha** | **≥4 disparos documentados como único vermelho de suite inteira**. | Defeitos de comportamento pegos por essa subtrava: não medido. | **≥4 episódios de deslocamento de linha**. | **4 falhas / 88,64 min**, seguidas de **4 repetições / 89,89 min**; **8 suites / 178,53 min observados**. | **MUDA** para identidade estrutural/conteúdo. Retirar posição absoluta perde aviso de deslocamento; manter conserva repetições documentadas. Economia efetiva de uma mudança: não medida. | `app/core/tests/test_medida_turno_do_par.py:539–543`; `app/docs/RELATO.md:46,547,553,560`; S do §8. |
+| **9. Timeout do construtor** | **3 chamadas construtor rc=124**. | Defeito real evitado pelo encerramento: não medido. | Não medido; **2 entregas parciais preservadas** estão documentadas. | **45,27 min nas 3 chamadas**; suites e retrabalho adicional não medidos. | **MUDA** o teto mediante duração/progresso medidos. Retirar perde limite de ocupação; manter pode interromper trabalho aproveitável. | `bin/codex_pergunta.sh:83,401,419–433`; `app/docs/RELATO.md:296,519`; C do §9. |
+| **10. Selo `padrao=`** | Total não medido; **2 commits só de comentário/anotação barrados** estão documentados. | Defeitos de comportamento pegos pelo campo: não medido. | **2 commits de comentário**, com **19 pares de árvores idênticas** após reescrita; outro episódio tem **3 rewords de instrumento**. | Suites/minutos atribuíveis: não medido. | **MUDA** a classificação por conteúdo, preservando a declaração. Retirar perde cobrança de termo/padrão; manter conserva reescrita formal sem mudança de árvore. | `app/docs/BACKLOG.md:1906`; `app/docs/RELATO.md:319,483`; `bin/tests/test_lei_akita.sh:122–123,307–325`. |
+| **11. Suite, trava e vigias** | Negativas/esperas totais: não medidas. | Defeitos e colisões evitados no período: não medidos. | Não medido. | Construção TRAVA-SELO: **8 verificadores + 1 censo / 45,52 min**. Custo recorrente em suites/espera: não medido. Documento registra vigia e réguas atualmente em **0 suites/dia**, sem log anexo que confirme toda a janela. | **FICA** a exclusão; **MUDA** a observabilidade e a cobertura das entradas. Retirar perde serialização; manter conserva fila não medida e entradas fora da guarda de motivo. | `bin/trava_teste.sh:21–41`; `bin/suite.sh:173–175,221–226`; `app/docs/BACKLOG.md:2385,2390–2391`; C do §11. |
+| **12. SUITE-SO-NO-FIM** | Execuções atribuíveis ao piloto: não medidas; foi substituído **06:28 → 06:29, “sem efeito”**. | Descobertas causadas pelo piloto: não medidas. | Suites evitáveis: não medidas. | E3: **7 inteiras / 161,44 min**; E4B-ALCANCE: **6 / 128,48 min**. **13 / 289,92 min observados**, sem atribuição causal ao piloto. | **MUDA** a avaliação: medir fases da conduta substituta. Mais inteiras custam repetição; adiá-las pode atrasar descoberta global, risco não quantificado. | `app/docs/PROMPTS.md:2086–2087`; S do §12; `bin/suite.sh:80–98,133–175`. |
+
+Nas referências abaixo, **C[hora, obra]** identifica a linha exata de `anexo:chamadas_fim.tsv`; **S[caminho]**, a linha de `anexo:suites_14d.tsv` pelo campo `log`; **D[hora, evento/obra]**, a linha de `anexo:disjuntor_14d.log`; **G[hash]**, a linha de `anexo:gitlog_14d.txt`. São seletores de linha, sem inventar numeração. As propostas são insumo para decisão; custos compartilhados entre travas não devem ser somados novamente.
+
+**1. Preverif Codex**
+
+As triagens procedentes são as linhas **1–6, 8–9 e 11–14**; descartadas, **7, 10 e 15**. O escritor define uma volta como uma chamada, independentemente de quantos achados ela contém. Portanto, o anexo sustenta **12 voltas procedentes**, não uma contagem de defeitos. (`anexo:triagem.log:1–15`; `bin/disjuntor.py:870–872`.)
+
+Há cura comprovada em **F1C4-3-EMISSORES**, volta 13, commit **`e548d8ca`**, após triagem procedente do preverif v12; e em **FIO-E0-V4-E4A-2**, preverif9, com reversão da mudança indevida do juiz e ajuste da prova nas voltas **`ea76f9f16` / `858bc0527`**. (`app/docs/RELATO.md:1446,322,327–328`; G[`ea76f9f16`], G[`858bc0527`].)
+
+O cruzamento pela obra e pelo instante `fim` embutido na triagem soma **4.024 s procedentes + 811 s descartados = 4.835 s / 80,58 min**. As descartadas correspondem a C[10/11 02:26:14, REVERTER-DIA-SEM-RECALCULO], C[10/11 08:47:56, O169-FECHADA] e C[10/11 11:56:50, FIO-E0-V4-E4A-2]: **231 + 229 + 351 s**. Não há ligação suficiente para atribuir suites ou espera adicional a essas consultas. (`anexo:triagem.log:1–15`; respectivas linhas C.)
+
+Para medir o total faltam classificação explícita de cada chamada como preverif, achado individual, triagem e commit da cura; `chamadas_fim.tsv` preserva papel e duração, e `triagem.log` preserva veredito por volta. (`bin/codex_pergunta.sh:253–260`; `bin/disjuntor.py:900–912`.)
+
+**2. Opus final**
+
+Três episódios comprovam utilidade posterior ao preverif:
+
+- **PAR-NAO-ADJACENTE:** revisão final confirmou conflito entre pausa abaixo do piso e intervalo; cura **`d361dfee`**. (`app/docs/RELATO.md:548–550`.)
+- **SELOS-CANON-I1:** comparação com célula crua deixava obra nascer sem censo; cura registrada na cópia **`ff47644a`**. (`app/docs/RELATO.md:539,543–544`.)
+- **FIO-E0-V4-E3:** marcador sem horizonte alcançaria competências fora do escopo; cura **`2e0810cd0`**, pouso **`072556ec8`**. (`app/docs/RELATO.md:138`; G[`2e0810cd0`], G[`072556ec8`].)
+
+Os **cinco episódios formais** são F1C4 v11, GRADE-FOLGA-JUIZ de 01/11, TOAST e duas reprovações MODO-COMUM. As suites posteriores associadas são:
+
+| Linha S | segundos |
+|---|---:|
+| `f1c4emis/v13/suite.log` | 1.173,218 |
+| `grade_juiz/vb/suite_60258b80.log` | 1.036,669 |
+| `toast/suite_36768b29.log` | 1.165,072 |
+| `mc/suite_2d78b6ec.log` | 961,538 |
+| `mc/suite_a25e2149.log` | 950,240 |
+| **Soma calculada das linhas acima** | **5.286,737 = 88,11 min** |
+
+A classificação formal está em `app/docs/RELATO.md:1426,1415,1278,1275–1276`. A soma mede execuções associadas às curas; não demonstra economia contrafactual de remover a revisão.
+
+Faltam início/fim, modelo efetivo e identificação das leituras finais para medir seu custo total. A configuração do agente usa **`model: inherit`**: o nome do papel sozinho não comprova execução em opus. (`.claude/agents/verificador.md:3–7`.)
+
+**3. B3**
+
+Os **50 disparos**, por data, são: 31/10 **6**; 01/11 **6**; 02/11 **5**; 04/11 **4**; 05/11 **7**; 06/11 **1**; 07/11 **3**; 08/11 **3**; 09/11 **2**; 10/11 **4**; 11/11 **7**; 12/11 **2**. A contagem considera exclusivamente linhas `DISJUNTOR B3`; liberações, rearmes e migrações são eventos separados. (`anexo:disjuntor_14d.log`, linhas com esses eventos e datas.)
+
+Dois disparos explicitam **três voltas Codex procedentes**, ambos E4A-2: **10/11 02:22:34 e 11:49:24**. DATA-EVENTO-CRU apresenta inconsistência: o disparo diz revisão final, enquanto a liberação relata terceira volta Codex; origem consistente [nao verificado]. (D[10/11 02:22:34, B3 E4A-2], D[10/11 11:49:24, B3 E4A-2], D[11/11 17:31:19, B3 DATA-EVENTO-CRU], D[11/11 17:31:55, LIBERA DATA-EVENTO-CRU].)
+
+**As 26 liberações erro-bobo não são 26 falsos positivos.** Há defeitos de implementação nesse grupo, inclusive H12H06 e OTIMIZA-3; a liberação por texto tampouco certifica cura. (D[05/11 20:48:58, LIBERA H12H06], D[05/11 00:47:21, LIBERA OTIMIZA-3]; `bin/disjuntor.py:1025–1031`.)
+
+Para medir espera e ganho próprios faltam negativa individual, intervalo efetivamente ocioso, trabalho que continuou durante a parada e ligação à cura. O registro atual anuncia a transição e o motivo, sem esses campos. (`bin/disjuntor.py:193–201,1007–1014`.)
+
+**4. Stop e os “937 andáveis”**
+
+A causa está no código: `_itens_andaveis()` percorre **toda a tabela OBRAS**, excluindo itens pelo estado reconhecido por `_item_parado()`; `_andaveis_fora_do_em_curso()` somente remove o ID em curso; o recado imprime o tamanho restante. A lista fechada CONGELA e a ordem serial não participam desse cálculo. (`bin/hook_stop_fila1.py:95–97,166–180,238–252,270–287`; `app/docs/CORTES.md:446`; `app/docs/BACKLOG.md:1758`.)
+
+Assim, um item pode continuar contado por estar aberto na tabela mesmo estando fora da vez pela lista fechada ou pela série. O ramo manda pegar o próximo da ordem, mas calcula a quantidade a partir da tabela ampla. (`bin/hook_stop_fila1.py:270–287,1391–1393`.)
+
+**Quantas mensagens desse tipo houve: não medido.** Existem **1.006 registros da classe ampla** `BLOCK fila 1 com item aberto`; o agregado não preserva a subclasse nem o número anunciado. O episódio específico “937”, às 02:4x, não tem sua saída crua anexada [nao verificado]. (`anexo:hook_stop_por_dia.tsv:1–78`.)
+
+Além disso, `BLOCK fila` é registrado antes de possível liberação por teto: **1.006 registros não equivalem a 1.006 decisões finais bloqueadas**. Faltam log/transcript cru, identificação da execução e decisão final para separar bloqueio útil, repetição e recado de elegibilidade incorreta. (`bin/hook_stop_fila1.py:1404,1439–1448`.)
+
+**5. PreToolUse**
+
+A instalação versionada aponta para **`bin/disjuntor.py pretool`**. Eventos `via=wrapper` no anexo não podem ser contabilizados como invocações desse hook: o wrapper também chama a porta CENSO diretamente. (`.claude/settings.json:62–69`; `bin/codex_pergunta.sh:229–234`.)
+
+Há falha de instalação documentada em sessões iniciadas em `app/`, com B3 observado depois do pouso pelo Stop; isso é evidência documental, não censo completo das falhas do período. A instalação efetiva atual no host permanece [nao verificado]. (`app/docs/RELATO.md:7539,7676`.)
+
+Para medir a–d faltam registros próprios de entrada, permissão/negação, regra responsável e início/fim. As negativas atuais registram o motivo, sem duração nem desfecho da obra. (`bin/disjuntor.py:1901–1907`.)
+
+**6. ESPERANDO**
+
+As **1.839 aceitações e 590 registros sem prova** não distinguem primeiras observações, tentativas repetidas e esperas únicas. Uma recusa pode decorrer de PID morto, campo inválido ou ausência de avanço observado; não comprova falso positivo. (`anexo:hook_stop_por_dia.tsv:1–78`; `bin/hook_stop_fila1.py:721–723,798–835`.)
+
+O incidente documentado é preciso: produtor terminou, a linha deixou de ser válida e a esteira ficou **1h40** parada; ESPERANDO só era reavaliado no Stop. O log do incidente não foi anexado, portanto os **100 min** são medida documental, não reconstrução independente. (`app/docs/BACKLOG.md:1933`.)
+
+Faltam identidade da espera, término do produtor, próxima reavaliação e retomada para medir o restante do período. A memória de mtime atual não constitui esse histórico. (`bin/hook_stop_fila1.py:681–723`.)
+
+**7. Uma vaga por repositório**
+
+O wrapper toma **`flock -n`** em `logs/construtor.vaga`, usando o repositório compartilhado pelas worktrees. A recusa por ocupação ocorre **antes** do trap e do registro `ini`; por isso, ausência em `chamadas_fim.tsv` não significa ausência de recusas. (`bin/codex_pergunta.sh:69–78,235–269,291–293`.)
+
+A vaga cobre construtores Codex; sozinha não demonstra cumprimento da ordem serial entre todos os tipos de construtor. Para medir colisões evitadas e custo de ficar faltam tentativa, ocupante, recusa e retomada por obra. (`bin/codex_pergunta.sh:235–240`; `app/docs/BACKLOG.md:1758`.)
+
+**8. Catraca de linha**
+
+O selo pedido é **`test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit`**. Ele compara literalmente `LINHAS_REGISTRADAS` com as posições retornadas pelo medidor; a identidade dos sítios já tem comparação separada imediatamente acima. (`app/core/tests/test_medida_turno_do_par.py:533–543`.)
+
+| Obra; commit de registro | Suite falha → repetição verde | minutos calculados | [nao verificado]
+|---|---|---:|
+| E2; `93a48702` | S[`fio_e0_v4/e2_rebase/suite_v2.log`] → S[`fio_e0_v4/e2_rebase/suite_v3.log`] | 19,23 → 19,19 |
+| PAR-NAO-ADJACENTE; `795cafdf` | S[`par_nao_adjacente/suite_v3.log`] → S[`par_nao_adjacente/suite_v4.log`] | 23,05 → 26,32 |
+| SELOS-CANON-I1; `f0103bef` | S[`selos_canon/i1_suite_v4.log`] → S[`selos_canon/i1_suite_v5.log`] | 24,64 → 18,65 |
+| UI-PAINEL; `2ca185e0e` | S[`UI-PAINEL/suite_v3.log`] → S[`UI-PAINEL/suite_v4.log`] | 21,73 → 25,74 |
+
+Os relatos classificam esses vermelhos como deslocamentos de posição: texto preservado nos três primeiros e linhas movidas pelo encurtamento de função no UI-PAINEL. (`app/docs/RELATO.md:560,553,547,46`.)
+
+As **quatro repetições / 89,89 min** são custo observado após esses bloqueios, não economia garantida: por exemplo, E2 também incorporou main antes da repetição. Misturas com defeitos reais em outras suites não entram nessa conta exclusiva. (`app/docs/RELATO.md:560,223,275,316`; linhas S acima.)
+
+A proposta preserva o controle de sítios novos/alterados, retirando posição absoluta como motivo isolado de reprovação. Sua eficácia ainda é [nao verificado]; o próprio medidor declara não provar semântica, fluxo ou chamadas dinâmicas. (`app/core/medida_turno_do_par.py:18–20,32–38`.)
+
+**9. Timeout de 900 s**
+
+As linhas de construtor com `rc=124` são:
+
+- C[09/11 07:47:50, FIO-E0-V4-E3]: **907 s**.
+- C[10/11 00:30:33, PAUTA-SEM-TURNO-PREFIXO-RESERVADO]: **904 s**.
+- C[10/11 17:12:03, BO-DISPUTA-SEM-PERGUNTA]: **905 s**.
+
+A soma é **2.716 s / 45,27 min**. O default é configurável; construtor usa `timeout -k 30`, e a duração registrada inclui preparação/espera do wrapper. Portanto, duração acima de 900 s não demonstra sozinha falha do timeout. (`bin/codex_pergunta.sh:83,252,360–378,401`.)
+
+E3 deixou código aproveitado no commit **`1394b61eb`**; BO-DISPUTA deixou arquivos tocados e entrega parcial. Isso comprova interrupção de trabalho aproveitável, sem comprovar que as chamadas estavam livres de defeitos. (`app/docs/RELATO.md:519,296`.)
+
+Separadamente, as **8 recusas de limite**, somando **609 s / 10,15 min**, são `rc=75`, não timeout do construtor. (`anexo:limite.log:1–8`; C[05/11 15:05:08–15:05:46, respectivas obras]; `bin/codex_pergunta.sh:430–442`.)
+
+**10. `padrao=` / PADRAO-NA-CURA**
+
+O selo classifica negócio por caminho `app/`, ressalvando testes/docs; `n/a (instrumento)` não ganha análise que reconheça comentário apenas. A exceção de medida em Python é outra regra, limitada ao registro de módulos/dados. (`bin/tests/test_lei_akita.sh:122–137,316–321`.)
+
+O caso pedido está registrado: **`11f82cfec` e `6c6689036`**, só comentário/anotação, viraram **`d75e5f2e1` e `ea1f0cab8`** alterando apenas `padrao=`; foram refeitos **17 descendentes**, com árvores iguais nos **19 pares**. A auditoria está aberta como **AUDITORIA-TRAVAS-POS-RESET-PADRAO-NA**. (`app/docs/BACKLOG.md:1906`; `app/docs/RELATO.md:319`.)
+
+Outro episódio registra **3 rewords de instrumento**, também com árvores idênticas. Minutos e suites decorrentes não são medidos pelos anexos; faltam execução do portão, commit, instante, duração e retomada. (`app/docs/RELATO.md:483`; `bin/codex_pergunta.sh:253–260`.)
+
+O campo verifica termo e admissibilidade; conferir se o diff realiza o padrão continua sendo leitura do verificador. (`bin/tests/test_lei_akita.sh:307–325`; `.claude/agents/verificador.md:8–15`.)
+
+**11. Suite, trava, vigia e réguas** [nao verificado]
+
+`bin/suite.sh` recusa inteira sem motivo válido antes do custo de montagem/docker; inteiras e recortes passam pela trava. A trava espera até **3.600 s**, retorna **75** se não obtiver a vez e mantém apenas ocupante atual; o histórico solicitado permanece pendente. (`bin/suite.sh:154,173–175,221–226`; `bin/trava_teste.sh:21–41`; `app/docs/BACKLOG.md:2391`.)
+
+No anexo, TRAVA-SELO tem **8 chamadas verificador**, durações **432, 229, 225, 293, 266, 435, 238 e 229 s**, e **1 censo de 384 s**: **2.731 s / 45,52 min**, custo de construção do instrumento. O resumo documental “3 preverif, 1 opus” não deve substituir essa contagem observada. (C[11/11 06:40:31–08:02:16, TRAVA-SELO]; `app/docs/RELATO.md:141,154,157`.)
+
+Para vigia/réguas, o documento registra **0 suites/dia atuais**, mas os logs citados não vieram anexados: o custo dos 14 dias permanece **não medido**. A implementação permite contar **1 inteira por chamada da régua relógio**, pela trava, e **3 por chamada da régua calendário**, fora dela. (`app/docs/BACKLOG.md:2390`; `bin/regua_relogio.sh:51–56`; `bin/regua_calendario.sh:41–46`.)
+
+A unidade autorizada da guarda de motivo ficou restrita a **`suite.sh`**; régua e pre-push co
+
+[truncado em 20000 de 24577 caracteres]
 
 ## 12/11 02:58 · sessao 8dc5a164915d · - · - · origem=Ronald (tmux)
 
@@ -598,12 +745,4 @@ O provisionamento cria o tenant com schema automático antes do bootstrap admini
 
 Atribuir os 107 `superado` à execução da 0039, apenas com esse JSON: [não verificado].
 
-## 11/11 22:57 · sessao 7e1f793c05ad · - · - · origem=Ronald (tmux)
-
-No fluxo de tenant novo implementado, a 0039 encontra **0 `ChamadoColaborador`**: a tabela é criada em `app/chamados/migrations/0001_initial.py:16`, sem inserção de registros; as migrações de dados anteriores apenas alteram objetos existentes (`app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4`, `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:5`, `app/chamados/migrations/0038_a3_registrado_backfill.py:9`).
-
-O provisionamento cria `Cliente` antes do bootstrap (`app/tenants/services.py:11`, `app/tenants/services.py:13`), com criação automática do schema habilitada (`app/tenants/models.py:14`, `app/tenants/models.py:21`). O bootstrap posterior cria Empresa, Setores e usuário administrador (`app/tenants/bootstrap.py:27`, `app/tenants/bootstrap.py:32`, `app/tenants/bootstrap.py:34`). O teste de scaffolding também contém a asserção `ChamadoColaborador.objects.count() == 0` (`app/tenants/tests.py:13`).
-
-Isso descreve o fluxo da cópia; não executei testes nem medi um tenant novo em produção. O dado fornecido não contém essa contagem de tenant novo. [não verificado] [nao verificado]
-
-_4077 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4078 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
