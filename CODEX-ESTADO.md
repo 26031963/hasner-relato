@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 03:03** · publicado em **12/11/2026 03:06** (UTC-3)
+> Ultima resposta processada: **12/11/2026 07:14** · publicado em **12/11/2026 07:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 07:14 · sessao 1db4d2d51bc8 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Cura c10 escrita na cópia. A–D, funções alteradas, escritores, leitores e os dois contadores estão detalhados no [relato](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/LASTRO_C10.txt:5).
+
+- **43 testes locais verdes**, incluindo P1–P5: [execuções](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_c10_execucoes.txt:12). [nao verificado]
+- **RED/GREEN A–D e nove mutantes mortos por asserção**, com cada comando e saída integral; RED executado sobre recortes confirmados da c9: [provas](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/LASTRO_C10.txt:113).
+- Teste 05 atualizado para criar `reciclagem` pela porta; pares de criar/ativar sem faixa escritos: [testes](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/relatorios/tests/test_rotulo_ausencia_pdf.py:52). [nao verificado]
+
+**Sem commit**, conforme a proibição inicial. [Auditoria](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_c10_auditoria.txt:10). [nao verificado]
+
+**Suite ORM e par `simular_folha` comp11: [não verificado]** — banco e Docker permaneceram proibidos. Não afirmo delta financeiro nem certificação; seguem para Code e opus. [Limites](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/LASTRO_C10.txt:254). [nao verificado]
 
 ## 12/11 03:03 · sessao 2fd88cf92d26 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
 
@@ -725,24 +737,4 @@ Exploração somente leitura concluída; ORM não executado [não verificado].
 
 Para mutantes ORM, seguir enxerto em memória já existente, substituindo somente função/sítio e preservando globais (`chamados/tests/e4b_c11_verificar.py:78`, `chamados/tests/e4b_c11_verificar.py:90`). Execução e comandos novos dependem dos nomes finais [não verificado].
 
-## 11/11 22:57 · sessao 65a24b6b5e82 · FIO-E0-V4-E4B · sonda · origem=Code
-
-JSON integral fornecido, sem reexecução independente: não localizei `sonda_mig0039.py` na cópia. [não verificado]
-
-```json
-{"aplicada_em": "2026-08-23 04:09:15.485039+00:00", "chamados_superado": 107, "mig0039_aplicada": 1, "migrations_chamados_posteriores": 14} [nao verificado]
-```
-
-**(a)** O acionamento registrado é `RunPython(backfill, desfazer)`: `backfill` na aplicação efetiva da 0039; `desfazer` na reversão dela, com dependência da 0038. ([0039_a3_via_backfill.py:38](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0039_a3_via_backfill.py:38), [0039_a3_via_backfill.py:39](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0039_a3_via_backfill.py:39))
-
-“Somente podem rodar por migrate/rollback” seria excessivo: testes chamam ambas diretamente. ([test_esmeril2_migracoes_reversas.py:36](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/tests/test_esmeril2_migracoes_reversas.py:36), [test_esmeril2_migracoes_reversas.py:39](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/tests/test_esmeril2_migracoes_reversas.py:39))
-
-**(b)** No fluxo de tenant novo implementado, **zero**: a tabela nasce por `CreateModel`, sem inserções; as migrations de dados anteriores apenas atualizam registros existentes. ([0001_initial.py:16](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0001_initial.py:16), [0023_rebaixar_urgencia_resolvidos.py:4](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4), [0024_rebaixar_urgencia_resolvidos_regressao.py:5](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:5), [0038_a3_registrado_backfill.py:9](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/migrations/0038_a3_registrado_backfill.py:9))
-
-O provisionamento cria o tenant com schema automático antes do bootstrap administrativo. ([models.py:21](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/tenants/models.py:21), [services.py:11](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/tenants/services.py:11), [services.py:13](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/tenants/services.py:13)) Contagem medida num tenant novo de produção: [não verificado].
-
-**(c)** Não encontrei importação ou chamada dessas funções em código de produção fora de migrations na busca estática da cópia. Ausência em execução real: [não verificado]. O import direto encontrado está em teste; as referências produtivas encontradas à 0039 são comentários. ([test_esmeril2_migracoes_reversas.py:11](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/chamados/tests/test_esmeril2_migracoes_reversas.py:11), [cluster_espurio.py:134](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cluster_espurio.py:134), [cluster_espurio.py:136](/home/ronald/codex_ws/dbf76ed34c62dfe145ca3b263ea682ad1eb40e3e/app/ponto/services/cluster_espurio.py:136))
-
-Atribuir os 107 `superado` à execução da 0039, apenas com esse JSON: [não verificado].
-
-_4078 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4079 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
