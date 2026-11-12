@@ -1,7 +1,143 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 12:06** · publicado em **12/11/2026 12:10** (UTC-3)
+> Ultima resposta processada: **12/11/2026 12:11** · publicado em **12/11/2026 12:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 12:11 · sessao ccf3a0772d66 · SAIDA-NOTURNA-NO-DIA-CERTO · censo · origem=Code
+
+Critério: censo estático dos caminhos operacionais, templates e comandos. Testes e cópias históricas não entram nas contagens; mecanismos genéricos e ferramentas da sombra aparecem separados. A identificação do hash e os estados de produção de #51467/#56641 são os fornecidos no texto; confirmação independente: `[nao verificado]`. [nao verificado]
+
+**1. Escritores de `PerguntaDisputa.pergunta`**
+
+São **oito expressões de interpolação de data: quatro `.format` e quatro `.replace`, em sete locais lógicos**. Os dois ramos de `texto_pergunta_com_data` contam como duas expressões, uma função (`app/chamados/catalogo/query.py:64,66`).
+
+| Sítio arquivo:linha | O que faz | Observação |
+|---|---|---|
+| `app/chamados/catalogo/query.py:64` | Substitui `{data}` pelo ISO convertido para `dd/mm/aaaa`. | Data de `contexto_disputa[motivo]['data']`, lida em `:58,59`; não deriva o dia civil do marco. Chamadores: `app/chamados/services/disputa_emissao.py:345,354`. |
+| `app/chamados/catalogo/query.py:66` | Na exceção, substitui `{data}` pela string original. | Mesma origem; nesse ramo não valida nem converte a data. |
+| `app/chamados/services/disputa_emissao.py:879` | Formata pergunta para cada marco faltante. | Usa `dia` da tupla de `_marcos_faltantes`, exigindo igualdade com `data_evento` em `:873,874`. A tupla usa **data da célula**, inclusive quando a célula é a da véspera: `app/chamados/services/declaracao_texto.py:109,139`. |
+| `app/chamados/services/disputa_emissao.py:1151` | Formata pergunta de intervalo. | Usa `_m['data']` de `chamado.contexto_json.marcos_faltantes`, convertido em `:1143,1148`. Um produtor comprovado grava ali o **dia civil do marco encadeado**, potencialmente D+1: `app/ponto/management/commands/detectar_intervalo_ausente.py:77,78,82`. |
+| `app/chamados/services/disputa_emissao.py:1208` | Formata pergunta do grupo com batida de origem. | Usa `data_evento` resolvido em `:1205`: **dia do turno da batida**, pelo resolvedor em `app/escala/servico_jornada.py:495,509`. |
+| `app/chamados/services/disputa_emissao.py:1246` | Formata pergunta sem batida de origem. | Usa `_ddc(ch.contexto_json)`, em `:1232`. A hierarquia aceita `data_turno`, `data_batida`, data de `entrada_timestamp`, `pendentes` e `horario_previsto`: `app/chamados/data_evento.py:16,27,31,39`. Não tem uma única origem temporal. |
+| `app/chamados/services/declaracao_texto.py:374` | Substitui `{data}` ao criar pergunta da declaração. | Usa `dia` escolhido pelo casamento da hora em `:341,345`; origem na data da célula de `_marcos_faltantes`, em `:109,139`. |
+| `app/chamados/services/declaracao_texto.py:664` | Substitui `{data}` ao aplicar proposta textual. | Usa `p['dia']`; proposta deriva de `_marcos_faltantes` e `_casar_hora` em `:615,625,628,635`. |
+| `app/chamados/services/acoes_disputa.py:265` | Formata confirmação administrativa com `% label_motivo`. | **Sem data no texto.** Cria conversa em `:262,268`; a conversa recebe dia civil da emissão em `app/chamados/models.py:2802`. |
+| `app/chamados/services/disputa_emissao.py:1374` | Copia texto de catálogo da âncora ou literal de fallback. | **Sem interpolação de data.** Cria conversa `ancora_ausente`, tipo `data_hora`, em `:1369,1377`. |
+| `app/chamados/services/disputa_emissao.py:440,447` | Encaminha `texto` para `abrir_conversa` ou `abrir`. | O texto já foi produzido em `:345,354`; a data do nascimento passa por outra derivação em `:371,424,451`. Não recompõe o texto depois disso. |
+| `app/chamados/services/disputa_emissao.py:840` | `_criar_pergunta_se_couber` encaminha pergunta e data recebidas. | Não reformata. |
+| `app/chamados/models.py:3015,3017,3018` | `_nascer` instancia com `**campos`, atribui a data e insere. | Persistência comum do texto recebido. No reuso retorna a pergunta existente em `:3009`, sem reescrever seu texto. |
+| `app/chamados/catalogo/perguntas.py:49`; `app/chamados/models.py:3566` | Definem “Confirme o horário da saída no dia {data}”. | São **templates**, não formatadores. A referência raspada `models.py:3564-3565` não identifica o formatador nesta cópia. |
+| `bin/sombra_regras_pessoais.py:85`; `bin/sombra_mascara_pessoal.py:54,55,57,62,64` | Na cópia sombra, lê, mascara e grava `pergunta` por `bulk_update`. | Escritor adicional fora da emissão do domínio; não projeta nenhuma data. Transformação definida em `bin/sombra_regras_pessoais.py:29,33`. |
+
+**2. Leitores de `PerguntaDisputa.pergunta`**
+
+Há **20 ocorrências explícitas de leitura do campo: 14 Python e seis templates**, discriminadas abaixo. Excluir `__str__` e o comando smoke produz 18; esse recorte deixa leitores de fora (`app/chamados/models.py:3547`; `app/chamados/management/commands/smoke_chamados.py:108`). Além dessas 20, existem leitura genérica, leitores da sombra e propagação indireta.
+
+| Sítio arquivo:linha | O que faz | Observação |
+|---|---|---|
+| `app/api/views.py:1155` | API de chamados copia `p.pergunta`. | Texto cru; data enviada separadamente em `:1153,1154`. |
+| `app/api/views.py:2551` | API de perguntas do app monta `_item`. | Texto cru para pendentes/histórico. |
+| `app/api/views_mensageria.py:564` | API da fila de validação copia pergunta. | Texto cru; `data_evento` separado em `:568`. |
+| `app/ponto/services/dia_do_colab.py:69` | Consulta do dia entrega pergunta. | Texto cru; seleção por `data_evento=data` em `:65`. |
+| `app/chamados/views_cobrar.py:291` | Monta amostra de validação em lote. | Texto cru. |
+| `app/chamados/canal.py:81` | Monta pergunta muda com resposta no fio. | Texto cru; correlação por colaborador/data em `:71,79`. |
+| `app/chamados/services/explicador.py:71` | Monta dict explicativo. | Conserva texto cru; estado, ação e dia ficam em campos separados. |
+| `app/chamados/services/disputa_emissao.py:1549` | Copia pergunta para ocorrência de resposta. | Envolve texto cru com tag/resposta; grava em `:1555,1556`. |
+| `app/chamados/services/validacao.py:599` | Copia pergunta para ocorrência de recusa. | Envolve texto cru com autor, resposta anterior e motivo. |
+| `app/chamados/templatetags/chamados_extras.py:11` | Detecta pergunta “cega” com regex de data. | Inspeciona o texto gravado; não o recompõe. |
+| `app/chamados/management/commands/auditar_disputas.py:74` | Procura data no texto. | Regex sobre o campo cru. |
+| `app/chamados/management/commands/curar_perguntas_em_limbo.py:33` | Procura ocorrência correspondente. | Usa o texto cru como substring `Pergunta: ...`. |
+| `app/chamados/management/commands/smoke_chamados.py:108` | Verifica `{data}` residual. | Leitura operacional do campo persistido. |
+| `app/chamados/models.py:3547` | `__str__`. | Prefixa motivo e corta texto cru em 60 caracteres. |
+| `app/templates/chamados/partials/_card_atendimento.html:93` | Cartão da resposta. | Exibe texto cru. |
+| `app/templates/chamados/partials/_card_atendimento.html:175` | Cartão do histórico. | Exibe texto cru. |
+| `app/templates/chamados/partials/_pergunta_card.html:28` | Cartão de supervisão/Central. | Exibe texto cru. |
+| `app/templates/chamados/partials/modal_fio.html:160` | Modal do fio. | Exibe texto cru; data do fato separada em `:167`. |
+| `app/templates/chamados/partials/_lote_preview.html:24` | Prévia de lote. | Texto cru com `truncatechars:60`. |
+| `app/templates/colaboradores/partials/painel_colaborador.html:197` | Painel do colaborador, bloco “no app”. | Exibe texto cru. |
+| `app/chamados/services/foto_e4b.py:251,272` | **Leitor genérico:** fotografa todos os campos concretos. | Inclui `pergunta` por `value_from_object`; não renderiza nem recompõe. |
+| `bin/sombra_mascara_pessoal.py:54`; `bin/sombra_regras_pessoais.py:85` | **Sombra:** lê para mascarar. | Não é apresentação da pergunta. |
+| `bin/sombra_selo_pessoal.py:74,77`; `bin/sombra_regras_pessoais.py:85` | **Sombra:** SQL confere se o texto foi mascarado. | Leitura adicional por regra dinâmica de campos. |
+| `app/templates/chamados/partials/modal_fio.html:439` | **Indireto:** exibe dict do explicador. | Texto copiado por `app/chamados/services/explicador.py:71`, truncado. |
+| `app/chamados/views_cobrar.py:180,186` | **Indireto:** repassa dict do canal. | Origem em `app/chamados/canal.py:81`. |
+| `mensageria/nucleo/ferramentas.py:119` | **Indireto:** copia pergunta recebida da API. | Não recompõe. |
+| `app/relatorios/pdf_chamados.py:145,147` | **PDF indireto:** imprime `fup.conteudo`. | Pode imprimir a pergunta copiada pelas ocorrências de resposta/recusa; limita conteúdo a 1.000 caracteres. Fontes dessas cópias: `app/chamados/services/disputa_emissao.py:1549,1556`; `app/chamados/services/validacao.py:598,600`. |
+| `app/chamados/catalogo/query.py:45,52,64,66` | Existe `texto_pergunta_com_data`. | É interpolador do **catálogo no emissor**, não projeção comum dos leitores. Os acessos acima leem diretamente o campo ou sua cópia. |
+| Renderizador específico do cliente nativo/PWA | Execução efetiva e eventual recomposição no cliente. | `[nao verificado]`; os pontos comprovados nesta cópia são APIs e templates acima. |
+
+**3. `VIA_FATO_OCUPADO`: escritores, leitores e colisão**
+
+| Sítio arquivo:linha | O que faz | Observação |
+|---|---|---|
+| `app/chamados/models.py:2488` | Declara `'fato_ocupado'`. | Definição da constante. |
+| `app/chamados/services/materializacao.py:1095,1097,1099,1105` | Único chamador operacional encontrado que solicita gravação dessa via. | Predicado exato: `p.materializada_em is None and codigo == 'COLISAO'`. **Não consulta o marco cobrado nem sua lâmpada.** |
+| `app/chamados/catalogo/recusa.py:66,79,80,81,82,83` | Classifica `COLISAO` pela substring `colisao tipo-oposto`. | Classificação textual, sem comparação de marcos. |
+| `app/chamados/models.py:3179,3186,3187,3189,3191` | `carimbar_identidade` persiste a solicitação. | Grava via, instante, autor e, quando fornecido, motivo da recusa. Não pergunta ao C6 nem limpa resposta/validação. |
+| `app/ponto/registro_batida.py:94,138,139,145,150` | Produz a recusa original de colisão. | Existe batida **oposta, não retratada**, na janela inclusiva `timestamp ± g_op`, e a candidata não casa com marco próprio. Sem autoridade humana, recusa. Não recebe a pergunta nem consulta sua lâmpada. |
+| `app/ponto/registro_batida.py:21,28,32` | Define a janela de colisão. | 300 segundos com escala/marcos no dia civil local da candidata; senão 60 segundos. |
+| `app/ponto/registro_batida.py:35,42,49` | `_casa_marco_proprio` excepciona a colisão por geometria. | Procura algum marco previsto do mesmo tipo, no dia local ou véspera, a até cinco minutos. Portanto a origem não olha **somente** vizinhança, mas tampouco identifica o marco da `PerguntaDisputa`. |
+| `app/chamados/models.py:2511` | Inclui a via na identidade. | Consumidores na tabela 4. |
+| `app/chamados/models.py:2535` | Define descrição de apresentação. | “Fato já ocupado (batida existente no slot)”. |
+| `app/chamados/models.py:3738`; `app/chamados/juizes.py:679,689,691` | Inclui em `VIAS_SEM_TESTEMUNHA`; juiz reconhece a família e a identidade carimbada. | Família distinta de `VIAS_DE_IDENTIDADE`. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:47,48,460,746` | Família sem testemunha participa do piso I6 e de sua apresentação. | Leitura indireta da via por pertencimento ao conjunto. |
+| `app/templates/chamados/partials/_card_atendimento.html:186` | Trata literalmente `fato_ocupado` ou `paridade_recusada`. | Exibe “já havia batida registrada”. |
+| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:40,42` | Permite apenas vias vazia/legado/nula. | `fato_ocupado` fica fora desse recorte por filtro genérico. |
+| `app/chamados/migrations/0040_a27_recusa_motivo.py:21`; `0041_b2_via_legado_sem_lastro.py:16`; `0042_hx_via_ausencia_dia.py:16`; `0046_via_celula_absolveu.py:16`; `0048_via_competencia_trancada.py:15`; `0051_decisao_pergunta.py:111` | Preservam o valor nos `choices` históricos. | Declaração de esquema; não são novos escritores de registros com essa via. |
+
+**4. Leitores de `VIAS_DE_IDENTIDADE` e efeito de retirar somente `fato_ocupado`**
+
+São **quatro acessos diretos à tupla e cinco consumidores operacionais das funções de acesso**, além da definição (`app/chamados/models.py:3090,3096,3119,3179,3348`; `app/chamados/juizes.py:689,1427`; `app/chamados/services/relavra_via.py:181`; `app/chamados/management/commands/auditar_invariantes_chamados.py:195`).
+
+| Sítio arquivo:linha | O que faz | Observação: retirada somente da tupla |
+|---|---|---|
+| `app/chamados/models.py:2511` | Fonte: admin, duplicata, fato ocupado, paridade recusada, motivo retratado. | Passaria de cinco para quatro valores. |
+| `app/chamados/models.py:3090` | `vias_de_identidade()` devolve a tupla. | Deixaria de devolver fato ocupado. |
+| `app/chamados/models.py:3096` | `vias_que_encerram_por_identidade()` acrescenta competência trancada. | Deixaria de devolver fato ocupado; conservaria tranca. |
+| `app/chamados/models.py:3119,3140` | `carimbar` rejeita vias da família de identidade. | Fato ocupado passaria a ser aceito por essa porta e submetido ao C6. |
+| `app/chamados/models.py:3179,3180`; `app/chamados/services/materializacao.py:1105` | A porta atual exige identidade. | **O chamador atual de colisão passaria a levantar `ValueError` antes de gravar.** |
+| `app/chamados/models.py:3348,3351,3362` | `q_vivas` exclui identidade materializada, condicionado aos demais predicados. | Deixaria de excluir fato ocupado por identidade; resposta, validação e célula continuariam condicionando o resultado. |
+| `app/chamados/juizes.py:679,689,691,693,698,705` | Juiz do lastro absolve identidades carimbadas. | Deixaria de absolver sempre por identidade. Contudo a via continuaria em `VIAS_SEM_TESTEMUNHA`, por `app/chamados/models.py:3738`, e poderia absolver por ausência de dia, janela, classificação do dia ou exceção. Não passaria automaticamente a exigir a lâmpada específica. |
+| `app/chamados/juizes.py:1427,1428` | C6 encerra identidade materializada. | Seguiria aos degraus de lâmpada, célula, lei e lastro em `:1435,1452,1454,1472`. **Validação continuaria matando antes**, em `:1391,1392`; resposta pode retornar antes em `:1407,1419`. |
+| `app/chamados/services/relavra_via.py:181,236,242,246` | Filtro de carimbo desfazível exclui identidades. | Fato ocupado se tornaria elegível; só cairia após releitura e C6 vivo. Validação ainda pode impedir isso. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:195,202,206` | Contraprova F1T classifica o degrau da morte. | Deixaria de rotular “via de identidade”; se ainda morta, cairia em outra classificação; se viva, entraria no alarme. |
+
+**5. `fato_do_marco_no_espelho`: predicado, universo, chamadas e D+1**
+
+| Sítio arquivo:linha | O que faz | Observação |
+|---|---|---|
+| `app/chamados/juizes.py:922,941,943` | Mapeia `saida_sem_entrada→E/hi`, `orfao_14h→S/hf`, `intervalo_saida→S/hii`, `intervalo_volta→E/hfi`. | Motivo sem mapeamento retorna `None`. |
+| `app/chamados/juizes.py:944,948,965,966` | Lê `p.celula`, `cel.dna.marcos` e `cel.ata.lampadas`. | Não calcula timestamp, não lê resposta nem usa `data_evento` para conferir a identidade da célula. |
+| `app/chamados/juizes.py:956,960` | Para intervalo, reúne as posições correspondentes de todas as pausas do DNA. | Cobra AND das pausas; não escolhe uma única pausa pela resposta. |
+| `app/chamados/juizes.py:962,963,968,969,971` | Procura lâmpadas por `(hora,tipo)` e retorna `all(bool(acesa))`. | Sem hora ou faltando lâmpada: `None`. Lâmpada presente com `acesa=None`: **False**, pela conversão `bool`. |
+| `app/chamados/models.py:1502,1504` | Ressuscitação não devolve pergunta de marco aceso. | Usa cópia com célula do julgamento em curso. |
+| `app/chamados/services/materializacao.py:906,907,919,930` | Guarda de paridade consulta a lâmpada antes de carimbar. | `is not True` segue à recusa com motivo. Essa guarda não cobre a colisão de `:1099,1105`. |
+| `app/chamados/juizes.py:1334`; `:1419` | `_resposta_concorda_com_a_luz` exige marco aceso. | C6 usa esse resultado no ramo de resposta. |
+| `app/chamados/juizes.py:1435` | C6 encerra pergunta materializada com marco aceso. | Executa depois dos degraus anteriores. |
+| `app/chamados/juizes.py:1452` | C6 também consulta o marco no ramo da célula. | Segundo sítio de chamada dentro do C6. |
+| `app/chamados/reconciliador.py:1083,1085,1087,1097` | `veredito_orfa` consulta a lâmpada. | Exclui resposta com texto; acrescenta condições de vitalidade/teto. |
+| `app/chamados/management/commands/reabrir_orfas_enterradas.py:67,68,78,83` | Classifica luz True/False/None e seleciona luz False com C6 vivo. | Universo de fantasmas materializadas, não validadas. |
+| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:32,40,43` | Seleciona marco aceso para recarimbar via. | Universo materializado, não validado e restrito por via. |
+| `app/ponto/services/veredito_celula.py:47,56,60,66,67,68` | `_abs_marcos` encadeia entrada, pausas e saída; soma dias enquanto `dt <= prev`. | Entrada 19h e saída 7h resulta em saída **D+1**. |
+| `app/ponto/services/veredito_celula.py:251,252,275,280,282,291` | Usa cadeia absoluta e preserva o instante do candidato faltante. | O candidato de saída pode ficar em D+1. |
+| `app/ponto/services/cartorio.py:620,648,656` | Ata mantém lâmpadas das chaves do DNA por tipo/hora. | O juiz pode reconhecer `hf=07:00` na célula do turno D, embora o marco absoluto esteja em D+1. |
+| `app/chamados/juizes.py:941,948,965,971`; `app/ponto/services/veredito_celula.py:66,68` | **Responde para a saída noturna pela lâmpada da célula do turno.** | Não recalcula nem certifica o dia civil da saída. Célula/lâmpada efetivamente gravadas de #51467/#56641: `[nao verificado]`. |
+
+São **oito sítios de chamada, em sete funções e seis arquivos**, nas oito linhas de consumidores acima (`app/chamados/models.py:1504`; `app/chamados/services/materializacao.py:907`; `app/chamados/juizes.py:1334,1435,1452`; `app/chamados/reconciliador.py:1085`; comandos `reabrir_orfas_enterradas.py:78` e `encerrar_perguntas_com_fato.py:43`).
+
+**6. Ramo de recusa “PENDENTE com motivo”**
+
+| Sítio arquivo:linha | O que faz | Observação |
+|---|---|---|
+| `app/chamados/services/materializacao.py:1099,1107,1108,1109` | **Existe:** fora do carimbo de colisão, se o motivo mudou, salva somente `recusa_motivo`. | Trunca motivo a 240 caracteres em `:1096`. Não limpa resposta, validação, materialização ou via. |
+| `app/chamados/services/materializacao.py:1110,1111,1113` | Anexa ocorrência `recusa_materializacao` ao destino. | Só quando houve carimbo ou mudança de motivo e existe destino; inclui código/texto/ação traduzidos. |
+| `app/chamados/models.py:3042,3044,3046,3049` | Calcula o rótulo de estado. | O ramo anterior **não garante o rótulo `PENDENTE`**: com validação pode continuar `VALIDADA`; com resposta, `RESPONDIDA`. |
+| `app/chamados/services/validacao.py:188,190,192,199,202,205` | Lê motivo e devolve validação recusada. | Operação separada: para resposta de hora, sem materialização e com motivo, limpa validação, preserva resposta e registra `DEVOLUCAO`. Chamada em `:464`. |
+| `app/chamados/services/materializacao.py:842,919,1219,1303`; `app/chamados/services/passivo_validado.py:545` | Chamadores de `_carimbar_recusa`. | Cobrem ausência de resposta, paridade sem luz, divergência de data, erro final da unidade e recusa de geometria do lote. |
+| `app/chamados/services/materializacao.py:1095,1098`; `app/chamados/services/validacao.py:147,188,192,208,225,228,582,604`; `app/chamados/services/passivo_validado.py:66,83` | Leem o motivo para comparação, devolução, foto e trilha. | Leitores operacionais do campo persistido. |
+| `app/chamados/services/explicador.py:90`; `app/templates/chamados/partials/modal_fio.html:226`; `app/templates/chamados/partials/_card_atendimento.html:186` | Apresentam o motivo ou o usam como explicação. | No modal, sua exibição está dentro do ramo `pendencia_admin`, em `:222`. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:536,1075,1112` | Usa motivo vazio como condição dos universos 
+
+[truncado em 20000 de 44505 caracteres]
 
 ## 12/11 12:06 · sessao c16ee12ee21d · - · - · origem=Ronald (tmux)
 
@@ -1373,14 +1509,4 @@ FILA — badge navbar mantém unidade chamado em fila (`app/core/context_process
 
 FILA — `_calados` ainda trata pré-filtro como vida exata (`app/chamados/services/cobranca.py:229`), embora o contrato de `q_vivas` declare seleção mais generosa que C6 (`app/chamados/models.py:3349`). Contraexemplo: pergunta sem resposta em dia trancado por leitura pode entrar em cobrança apesar de morta no C6; incidência e execução [nao verificado].
 
-## 12/11 11:39 · sessao eef0afa7e826 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-- **B1 curado:** resumo e marca usam o mesmo conjunto de instantes. RED na c14 (`0 != 1`) e GREEN após a cura. [Evidência](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c15_execucoes.r:6).
-- **B2:** selo compara PDF e tela, incluindo a marca de 10/06. A fixture original não executou por ausência de Django; seus números permanecem **[nao verificado]**. [Detalhes](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c15_execucoes.r:16).
-- **B3:** mantido o duplo porque o recalculador exige leituras ORM. A prova parcial mata três mutantes; `recalculador_vazio` sobrevive, expondo a lacuna integrada. [Justificativa em três linhas](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c15_execucoes.r:24).
-
-**37 testes sem banco e ruff passaram; oito mutantes mortos e um sobrevivente.** Comandos e saídas no [relatório](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c15_execucoes.r:34). [nao verificado]
-
-Sem commit, respeitando a proibição inicial. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c15_execucoes.r:36). [nao verificado]
-
-_4224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4225 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
