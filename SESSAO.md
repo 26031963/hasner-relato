@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 04:22:04.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (424.9 MB). Acoes na janela: **1095**.
+**Medido em 12/11/2026 04:27:36.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (424.9 MB). Acoes na janela: **1094**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1104,4 +1104,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:34:08 | Bash | Add DOCS-E-PWA rows to both CORTES.md | `for C in /home/ronald/wt-proporcao-131413/app/docs/CORTES.md /home/ronald/saas-hasner/app/docs/CORTES.md; do python3 - "$C" <<'PY' import sys p=sys.argv[1]; s=open(p).read() a="`app/chamados/templatetags/chamados_tags.py` FIM-LISTA-FECHADA-PROPORCAO-B" assert s.count(a)==1, p s=s.replace(a,"`app/chamados/templatetags/chamados_tags.py`; `app/docs/*.md` FIM-LISTA-FECHADA-PROPORCAO-B (item `app/docs/ ...` |
 | 16:33:55 | Bash | RED: v10 harness against v9 selo | `cd /home/ronald/wt-proporcao-131413; T=$(mktemp -d); mkdir -p $T/bin/tests; git show HEAD:bin/selo_proporcao.py > $T/bin/selo_proporcao.py; git show HEAD:bin/selo_proporcao.sh > $T/bin/selo_proporcao.sh; chmod +x $T/bin/selo_proporcao.sh; cp bin/tests/test_selo_proporcao.sh $T/bin/tests/; bash $T/bin/tests/test_selo_proporcao.sh > /home/ronald/saas-hasner/logs/PROPORCAO/v10_red_contra_v9.txt 2>&1; ...` |
 | 16:28:08 | Bash | Sharpen marker messages, rerun mutants | `cd /home/ronald/wt-proporcao-131413; f=bin/tests/test_selo_proporcao.sh; for c in sem_marcador so_inicio marcador_duplo inicio_apos_fim fim_duplo; do sed -i "s/^\(caso_lista $c *\)'marcadores'/\1'marcadores LISTA-FECHADA'/" $f; done; /bin/grep -c "'marcadores LISTA-FECHADA'" $f python3 - <<'PY' p='bin/tests/test_selo_proporcao.sh'; s=open(p).read() a="caso_lista excecao_curinga" assert s.count(a)= ...` |
-| 16:22:21 | Bash | Fix mutant script and rerun | `cd /home/ronald/saas-hasner/logs/PROPORCAO; python3 - <<'PY' p='v10_mutantes.sh'; s=open(p).read() def rep(a,b): global s; assert s.count(a)==1, a; s=s.replace(a,b) rep('''for g in $(/bin/grep -o 'GUARDA:[a-z_0-9]*' "$W/bin/$P" \| cut -d: -f2); do''','''for g in $(/bin/grep -o 'GUARDA:[a-z_0-9]*' "$W/bin/$P" \| cut -d: -f2 \| /bin/grep -vx item_exato); do # elif: mutante proprio abaixo''') rep('"t ...` |
