@@ -1,7 +1,40 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex | pid=1093967
-RESCALDO-DAS-RAIAS-1211 14:2x recebido (logs/rescaldo/1211/aval_rescaldo_das_raias_1211.txt): DESPACHO censo -> Codex UMA chamada (logs/rescaldo/1211/censo.q, pid 1093967). Mapa obra->raia pelo Code por nome no commit (29/29 com raia; escolha.tsv), refs/rescaldo/1211/<raia> (37) e patches main..head guardados em logs/rescaldo/1211/; anexo_raias.txt 223 KB. Ordem da fila nao muda.
+ESPERANDO: codex | pid=1368216
+DESPACHO C20-O168 14:28: censo ja feito (logs/O168/censo_v1.r, Codex 11/11) | construtor -> opus na copia /home/ronald/wt-o168-142801 @0a747193e (vaga do hook; arquivos de SAIDA-NOTURNA e BUG-CADASTRO PROIBIDOS no brief: intersecao 0) | escopo: guarda no evento (cartorio) com UM juiz; --executar do cron fica para depois do CSF_RETRATADO medido zero | DIFF sombra pela sessao, >10% fila viva = PAREI.
+RESCALDO-DAS-RAIAS-1211 PRONTO 14:3x: censo Codex rc=0 14:25 (logs/rescaldo/1211/censo.r); amostra Code 10/10 arquivo:linha conferidos no HEAD 0a747193e (turnos.py:1430, reconciliar_grade.py:281, deploy.sh:341, queries.py:64, escala/utils.py:613, cartorio.py:548, reavaliar_ausencias_feriado.py:35, painel.py:188, lastro.py:307, fio_estado.py:137). Soma: NO-MAIN 6 + ABSORVIDA 6 + MORTA 0 + PARADA 17 = 29. As 17 PARADA viraram INTERROMPIDA (L-119) no BACKLOG: interrompidas_estado universo=17 abertas=17 mais_de_24h=17 (data = ultimo commit da raia). Nada saiu da fila; ordem intocada.
+| obra | classe | prova no main / motivo |
+|---|---|---|
+| QUARENTENA-DO-COLAB | PARADA | opus reprovou 29/10; aval QUARENTENA-REABRE |
+| SILENCIO-VENCIDO-VOLTA | PARADA | pousa com a QUARENTENA |
+| COBPARC-FILA-RELOGIO | PARADA | estacionada por aval 02/11 |
+| JUSTIFICATIVA-PAGA-O-PERIODO | PARADA | DIFF falhou; motor nao consome parcial |
+| O261-PAI-TERMINAL | PARADA | mistura competencia exportada |
+| ATA-X-TURNO-PAUSA | PARADA | 10/10 e dinheiro igual |
+| LASTRO-DEGRAU-2 | PARADA | dependia da janela |
+| JUIZ-DO-PAR-DUAS-ENTRADAS | ABSORVIDA-POR JUIZ-DO-PAR-CURA-NA-FONTE | escala/utils.py:613 |
+| BUG-ENC-CELULAS-FORMA | PARADA | vaga devolvida a F2 |
+| GRADE-FOLGA-DO-VINCULO | ABSORVIDA-POR GRADE-FOLGA-JUIZ | escala/utils.py:1149, precedencia.py:237 |
+| O275 | PARADA | FORMA A x B |
+| O276 | NO-MAIN-COM-OUTRO-NOME | turnos.py:1430/1447 (R1-H-PORTAO-DE-26H) |
+| V3-RETOMA-FILA | PARADA | espera pouso da V3 |
+| V3-RETOMA-PERIODOS-DA-CELULA | PARADA | P4 + ! do motor (P5) |
+| V3-E1 | PARADA | motivo: nao sei |
+| E3-ISENTO-INSUMOS | ABSORVIDA-POR ISENTO-H10 | cartorio.py:548 |
+| CASA-ESCALA-E4 | NO-MAIN-COM-OUTRO-NOME | colaboradores/queries.py:64 |
+| QUATRO-PRAZOS | NO-MAIN-COM-OUTRO-NOME | processar_alertas_avancados.py:63, detectar_ausencias.py:471 |
+| JUIZ-VARREDURA-1 | NO-MAIN-COM-OUTRO-NOME | reavaliar_ausencias_feriado.py:35 (JUIZ-1 v5) |
+| JUIZ-VARREDURA-3 | ABSORVIDA-POR C20-JUIZ-3 | reconciliador.py:1373 |
+| F1C4-3-RG-SEM-CELULA-CASO | NO-MAIN-COM-OUTRO-NOME | reconciliar_grade.py:281 |
+| O10-C | PARADA | volta 2 com lista do admin |
+| DEPLOY-[nome]-ELO | ABSORVIDA-POR DEPLOY-RELOAD-GRACIOSO | deploy.sh:341/359 |
+| SUITE-POR-IMPACTO | PARADA | PRONTO 5 incompleto |
+| PADRAO-DE-CIMA | PARADA | desenho PDC, 9 voltas |
+| CODEX-CONSTRUTOR-PILOTO | ABSORVIDA-POR CODEX-CONSTRUTOR-NEGOCIO | codex_pergunta.sh:217/415 |
+| CODEX-CONTEXTO-DA-CASA | PARADA | espera briefs em voo |
+| OTIMIZA-1 | PARADA | suite/replay/verificador |
+| FIO-ESTADO-LE-O-ALCANCE | NO-MAIN-COM-OUTRO-NOME | bin/fio_estado.py:137/175 |
+AUDITORIA item 3 14:4x: contrato v5 + semente (logs/AUDITORIA-TRAVAS/contrato_item3_v5*.txt) -> Codex leitura. Fecha o v4: particao por marcador (G1/G2/P1/G3/CAUDA, migracao (a)(b)(c) ancorada por conteudo, cauda HEAD:2371+ sem triagem); disjuntor sem 2o classificador (_pertence_fila1 intocado, so _fila1_viva troca de fonte; muda so 131-135/289-293, declarada); semente corrigida (O169-FECHADA, BO-0611-05, TRAVA-SELO -> POUSADAS; +SONDA-MATRIZ/SEGREDO-ARGV/SOMBRA-CARIMBO; BUG-CADASTRO -> POS-20 pela linha; LASTRO e F0F1 sem trava).
 QUARENTENA-REABRE 14:2x: censo Codex rc=0 14:17 (logs/QUARENTENA-REABRE/censo.r, 60 KB): sitio a sitio do diff antigo no HEAD, matriz da porta, arquivos em comum com SAIDA-NOTURNA (chamados/juizes.py, chamados/models.py) e com a E3 (janela_colab, verbos, tarefa_do_dia, pergunta_no_app, aviso_pendencia, fio). 3 DECISOES, as tres respondidas pela lei escrita:
 DECIDIDO PELA LEI QUARENTENA-ISENTO-DESDE-QUANDO (b) (CORTES.md, 28/10 18:4x): conversa sem dia do fato = item SEM DIA -> entra so em janela ABERTA, em janela fechada segue na fila; nunca usa o data_evento civil da emissao | contestavel
 DECIDIDO PELA LEI QUARENTENA-DO-COLAB-POR-PERIODO + LEI-AKITA 2/4 (leitor que nao migrou): C19 (tarefa_do_dia.py:188) e o leitor_celula.py:360 deixam de ler a flag isento atual e perguntam colab_em_quarentena(colab, dia); dia anterior a ligacao ou no intervalo desligado volta a cobrar | contestavel

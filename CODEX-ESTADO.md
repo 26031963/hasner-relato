@@ -1,7 +1,192 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 14:22** · publicado em **12/11/2026 14:22** (UTC-3)
+> Ultima resposta processada: **12/11/2026 14:26** · publicado em **12/11/2026 14:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 14:26 · sessao 95dd89c9b57b · - · - · origem=Ronald (tmux)
+
+Resultado da semente, somente leitura. Todas as referências abaixo são documentais; produção atual [nao verificado].
+
+| Seção | ID exato | Linha e estado declarado |
+|---|---|---|
+| ORDEM | SAIDA-NOTURNA-NO-DIA-CERTO | Primeira célula exata ausente [nao verificado]; despacho/construtor após pouso E3 em `app/docs/RELATO.md:29`. |
+| ORDEM | QUARENTENA-DO-COLAB | REPROVADA; espera vez. `app/docs/BACKLOG.md:765` |
+| ORDEM | FIO-E0-V4-E3-LEITORES | Fila 1, ABERTA, EM OBRA; entrada após E4B. `app/docs/BACKLOG.md:1873` |
+| ORDEM | LASTRO-FAIXA-SEM-DEFAULT | Fila 1, ABERTA, c3. `app/docs/BACKLOG.md:1813` |
+| ORDEM | FIO-E0-V4-E4-ESCRITORES | Fila 1, E4a–E4d; E4a-1 NO AR, sem fechamento inteiro. `app/docs/BACKLOG.md:1885` |
+| ORDEM | C20-O168 | Fila 1, ABERTA, espera vaga. `app/docs/BACKLOG.md:2008` |
+| ORDEM | RAIZ-DA-DISPUTA-F0-CASO-7279 | Fila 1, F0/sonda, frente F1/HJ-067/HJ-073. `app/docs/BACKLOG.md:2417` |
+| ORDEM | RAIZ-DA-DISPUTA-F0F1 | Fila 1, F0/F1 PRONTOS, F1 RESPONDIDA, c22 após E3/E4B c4. `app/docs/BACKLOG.md:1882` |
+| ORDEM | AUDITORIA-DE-TRAVAS-CORTE | Instrumento EM CURSO. `app/docs/BACKLOG.md:2404` |
+| ORDEM | BUG-ORFAO-COM-PAR | ESTRUTURA fila 1, sonda antes classe/cura. `app/docs/BACKLOG.md:2418` |
+| ORDEM | SONDA-MATRIZ-DE-TRANSICOES | Fila 1 instrumento ABERTA; matriz rc0 já feita, volta8 após CODEX-2-RAIAS. `app/docs/BACKLOG.md:1980` |
+| ORDEM | SONDA-SEM-GRANT | Fila 1 instrumento ABERTA, sondas congeladas até pouso. `app/docs/BACKLOG.md:1979` |
+| ORDEM | AUDITORIA-0911 | Fila 1 medida ABERTA, após SONDA. `app/docs/BACKLOG.md:1981` |
+| ORDEM | SEGREDO-ARGV-RESIDUO | Fila 1 instrumento ABERTA, depois pouso SONDA. `app/docs/BACKLOG.md:1982` |
+| ORDEM | SOMBRA-CARIMBO-MENTE | Fila 1 instrumento ABERTA, depois pouso SONDA. `app/docs/BACKLOG.md:1983` |
+| ORDEM | TRIAGEM-OFFLINE-SEM-CAMERA | REVERTIDA; retorna após classe/RED. `app/docs/BACKLOG.md:1915` |
+| ORDEM | APP-MENSAGENS-MSG-0 | Fila 1 raia2 ABERTA, nada construído; após TRIAGEM, **antes O168/LASTRO**. `app/docs/BACKLOG.md:1916` |
+| ORDEM | MEDE-CLEAR-X-COMPACT | Fila 1 medida ABERTA, em curso. `app/docs/BACKLOG.md:1796` |
+| ORDEM | CODEX-QUEIMA-B | Fila 1 medida ABERTA, sondas rodando. `app/docs/BACKLOG.md:1797` |
+| ORDEM | C20-FIO-MUDO | Fila 1 ABERTA, construtor aberto. `app/docs/BACKLOG.md:1817` |
+| ORDEM | BO-DISPUTA-SEM-PERGUNTA | Linha própria diz construtor lançado; estacionamento posterior documentado. `app/docs/BACKLOG.md:1898`; `app/docs/RELATO.md:373` |
+| ORDEM | E3-X1-FOLGA-NAO-E-SEM-COBERTURA | Linha própria ABERTA; RELATO declara fase X1 POUSADA, “X1 6 de 7”, com apply pós-pouso. `app/docs/BACKLOG.md:1876`; `app/docs/RELATO.md:266`, `:185` |
+| POS-20 | BUG-CADASTRO-NAO-ALCANCA-O-FUTURO | POS-20, frente fila2. `app/docs/BACKLOG.md:2408` |
+| POS-20 | UI-PAINEL-FILA-OPUS-V5 | POS-20, fila registrada; pousada qualifica UI original. `app/docs/BACKLOG.md:2407` |
+| POS-20 | AUDITORIA-ITEM6-CONTADOR-124 | Primeira célula exata ausente [nao verificado]; RELATO diz não construído → fila, sem POS-20. `app/docs/RELATO.md:9` |
+| POS-20 | TRIAGEM-FILA-OPUS-V6 | POS-20 ABERTA. `app/docs/BACKLOG.md:1815` |
+| POS-20 | E4B-FILA-OPUS-C14 | POS-20, fila opus. `app/docs/BACKLOG.md:1896` |
+| POUSADAS | FIO-E0-V4-E4B | POUSOU 087fe758a. `app/docs/BACKLOG.md:1894` |
+| POUSADAS | FIO-E0-V4-E4A-2 | NO AR 613a51498. `app/docs/BACKLOG.md:1893` |
+| POUSADAS | C20-O169 | POUSADA/FECHADA. `app/docs/BACKLOG.md:1798` |
+| POUSADAS | O169-FECHADA | Linha própria B3/volta5; delta v5 pousou depois. `app/docs/BACKLOG.md:1969`; `app/docs/RELATO.md:265` |
+| POUSADAS | BO-0611-05 | Linha própria B3/PARADA; merge/deploy depois. `app/docs/BACKLOG.md:1897`; `app/docs/RELATO.md:8059` |
+| POUSADAS | TRAVA-MENOS-FILA-COM-SELO | Linha própria ABERTA; ligação TRAVA-SELO/construção e pouso documentados. `app/docs/BACKLOG.md:2396`; `app/docs/RELATO.md:8107`, `:312` |
+
+Achados para consolidar:
+
+- **Identidade ainda quebra:** os dois IDs sem primeira célula exata não satisfazem seção0; referências ao RELATO não substituem linha do BACKLOG. A ausência foi varrida em todas as 2425 linhas [nao verificado como referência positiva de linha].
+- **Pouso em ORDEM permanece:** X1 tem pouso documental; “6 de 7” demonstra incompletude medida, não anula o pouso registrado nem demonstra outro ID independente para o restante. `app/docs/RELATO.md:248`, `:266`, `:185`.
+- **Trava E3 específica sem lastro:** E3 tem bloqueio real, mas a condição “esperar pouso QUARENTENA” não é determinada. O desenho oferece absorver SVV, reverter lista b4 ou declarar limite; há ainda outros dois desenhos. `app/docs/RELATO.md:19`.
+- **Trava SONDA/MATRIZ desatualizada:** MATRIZ já rc0; condição declarada restante é pouso CODEX-2-RAIAS + rebase, cujo ID falta. `app/docs/BACKLOG.md:1980`, `:1986`; `app/docs/RELATO.md:616`, `:589`.
+- **Trava BO ESTACIONADA tem lastro.** `app/docs/BACKLOG.md:1882`; `app/docs/RELATO.md:373`.
+- **LASTRO/F0F1:** remover perguntas/travas antigas é sustentado; LASTRO foi rearmado condicionado ao censo/selo; ESTACIONADA era BO, não RAIZ. `app/docs/RELATO.md:20`; `app/docs/BACKLOG.md:1882`.
+- **Dependência contrariada:** APP após TRIAGEM está certo, mas está depois de LASTRO/O168, contrariando a linha exata. `app/docs/BACKLOG.md:1916`. SAIDA no topo também contraria despacho de construir após pouso E3. `app/docs/RELATO.md:29`, `:23`.
+- **Notas erradas:** BUG-CADASTRO é BACKLOG:2408, enquanto :2417 é RAIZ-F0. Regra MATRIZ é :1980; :1985 é PLACAR-RETIDO-DO-LASTRO. `app/docs/BACKLOG.md:2408`, `:2417`, `:1980`, `:1985`.
+- **Faltantes inequívocos adicionais:** CODEX-2-RAIAS-PORTAO-CPU ABERTA e CODEX-ALIVIA-1-WRAPPER-BIN ABERTA/COMPLEMENTO, MOTOR-LE-O-TURNO fila1 esperando E2/E3, E1-FILA-V2-3-A-6 e E1-FILA-OPUS6-FILA fila1 abertos; ESMERIL-SEM-INSTANTE, ESMERIL-SEM-DIA-DO-TURNO e ESMERIL-SEM-BORDA fila1 abertas; V2-BUGS-DO-MOTOR com itens1/3/4/5 abertos. `app/docs/BACKLOG.md:1986`, `:1987`, `:1850`, `:1865`, `:1866`, `:1830`, `:1831`, `:1832`, `:1835`.
+- **Linhas de planos também ficam sem reconciliação:** ORDEM-ATE-O-ZERO, RAIA-2-BO-VISIVEL e META-18 declaram fila1 ABERTA, mas são ordem/plano; contrato não define a exclusão desse tipo de ID. Não trataria automaticamente como novas obras. `app/docs/BACKLOG.md:1883`, `:1906`, `:2406`.
+- Não declarar H12B/PAUTA08 faltantes não pousadas só pelo retrato antigo ABERTA: há pousos posteriores documentados. `app/docs/BACKLOG.md:1805`, `:1808`; `app/docs/RELATO.md:1144`, `:1044`.
+
+## 12/11 14:25 · sessao f36a941955ec · - · - · origem=Ronald (tmux)
+
+A partição proposta cobre as **2425 linhas do HEAD**, uma vez cada, após (a), (b), (c); G2 e os delimitadores/cabeçalhos novos são inserções. A linha 8 fica em P1 com a substituição expressamente autorizada pela lápide. (`app/docs/BACKLOG.md:1`, `:7`, `:8`, `:2042`, `:2043`, `:2370`, `:2371`, `:2425`; `contrato_item3_v5.txt:12–23`, numeração física do anexo)
+
+| Zona após migração | Linhas ancestrais do HEAD |
+|---|---|
+| G1 | 1–6. (`app/docs/BACKLOG.md:1`, `:6`, `:7`; `bin/gerar_backlog.py:65–73`) |
+| G2 | Novo bloco inserido antes da antiga linha 7. (`contrato_item3_v5.txt:13`, `:19`; `app/docs/BACKLOG.md:7`) |
+| P1 | 7–2042, inclusive o marcador final; linha 8 substituída pela lápide. (`app/docs/BACKLOG.md:7`, `:8`, `:2042`; `contrato_item3_v5.txt:14`, `:20`) |
+| G3 | 2043–2370 e o novo GERADO:FIM. (`app/docs/BACKLOG.md:2043`, `:2044`, `:2370`; `contrato_item3_v5.txt:15`, `:21`) |
+| CAUDA | 2371–2425, precedidas pelo novo cabeçalho. (`app/docs/BACKLOG.md:2371`, `:2425`; `contrato_item3_v5.txt:16`, `:21`) |
+
+**Não identifiquei linha gerada promovida a manual nem linha manual comida pelos limites propostos.** O cabeçalho produzido corresponde a G1; contagem e tabelas por família ficam em G3; o gerador atual recupera a janela manual de ORDEM-VIVA-TOPO até OBRAS:FIM, mas não gera seu conteúdo. A primeira linha manual hoje perdida pelo gerador, 7, passa a P1; a cauda começa corretamente em 2371. (`bin/gerar_backlog.py:65–100`, `:119–127`; `app/docs/BACKLOG.md:7`, `:2042`, `:2370–2374`)
+
+A tabela BATIDA obsoleta, linhas **2365–2370**, fica em G3 e pode desaparecer sem promoção para manual: `PENDENTES['batida']` está vazio; famílias vazias são omitidas pelo gerador. (`app/docs/BACKLOG.md:2365–2370`; `app/core/juizes.py:1266`; `bin/gerar_backlog.py:76–79`)
+
+Ressalva textual: **“marcador repetido (`<!--` de G1)” precisa significar a fronteira da primeira ocorrência**, como a definição de G1, e não unicidade global do token genérico `<!--`. Há muitas linhas de comentário em P1, além do novo G2 começar com esse token; uma contagem global rejeitaria o próprio BACKLOG válido. (`contrato_item3_v5.txt:12`, `:13`, `:24`; exemplos `app/docs/BACKLOG.md:7`, `:8`, `:9`, `:712`, `:2042`)
+
+O mecanismo novo e seus tripwires ainda são **contrato**, sem implementação demonstrada nesta cópia: o código atual continua leitura em texto, `rstrip`/`split`, `join` e reescrita. (`contrato_item3_v5.txt:23–25`; `bin/gerar_backlog.py:111`, `:127`, `:138–140`)
+
+## 12/11 14:25 · sessao 22c96c6beaae · RESCALDO-DAS-RAIAS-1211 · censo · origem=Code
+
+A cópia não contém `.git`; não pude abrir branches/refs nem conferir os blobs completos das raias. Os trechos posteriores aos cortes de 5.000 bytes, os diffs não apresentados das segundas raias e a identidade integral dos patches ficam **[nao verificado]**.
+
+Nas PARADAS, **S1–S15** remetem aos arquivos do `--stat` transcritos abaixo; isso identifica conteúdo atribuído à raia, sem afirmar que todos esses caminhos estejam fisicamente ausentes do main. **[nao verificado]**
+
+| OBRA | CLASSE | Prova no main | Regra da raia, situação e motivo |
+|---|---|---|---|
+| QUARENTENA-DO-COLAB | PARADA | nao achei | Isola cobrança por colaborador/período; o main ainda seleciona por cobrança e silêncio futuro (`app/chamados/services/painel.py:188`); fora: **S1**; motivo: cópia reprovada por fechamento da janela, vigia, segundo escritor e provas (`app/docs/RELATO.md:2493`). |
+| SILENCIO-VENCIDO-VOLTA | PARADA | nao achei | Devolve o silêncio vencido à fila/pílula/app; a fila já o aceita, mas o verbo ainda vira HISTORICO (`app/chamados/services/painel.py:189`; `app/chamados/services/verbos.py:51`); fora: **S1**; motivo: pouso preso à QUARENTENA (`app/docs/RELATO.md:19`). |
+| COBPARC-FILA-RELOGIO | PARADA | nao achei | Transmite um instante único da borda pelos laços; o main ainda lê relógio por chamada (`app/ponto/services/cartorio.py:373`); fora: **S2**; motivo: estacionada por aval, faltando mutantes/suite e resposta sobre o padrão (`app/docs/RELATO.md:1540`). |
+| JUSTIFICATIVA-PAGA-O-PERIODO | PARADA | nao achei | Limita cobertura ao marco/período e leva pagamento parcial à porta; fora: **S3**; motivo: condições do DIFF falharam, motor/folha não consumiam o parcial e o aval posterior exigiu novo DIFF (`app/docs/RELATO.md:2553`; `app/docs/BACKLOG.md:1061`). |
+| O261-PAI-TERMINAL | PARADA | nao achei | Religa disputa a pai vivo; o main ainda devolve disputa aberta sem conferir o pai e declara essa lacuna no nascimento (`app/chamados/services/disputa_emissao.py:566`; `app/chamados/services/fio.py:755`); fora: **S4**; motivo: religação mistura competências, inclusive exportadas (`app/docs/RELATO.md:2218`). |
+| ATA-X-TURNO-PAUSA | PARADA | nao achei | Faz a ata reconhecer a pausa do juiz e acusa pausa deslocada no motor/CxR; fora: **S5**; motivo: retomada depende de 10/10 e dinheiro igual, e o registro mais recente a deixa no fim da fila Codex (`app/docs/RELATO.md:847`; `app/docs/RELATO.md:753`). |
+| LASTRO-DEGRAU-2 | PARADA | nao achei | Substitui casamento próprio pela grade/ata composta; o main ainda compara tipo e distância linear (`app/ponto/services/lastro.py:307`); fora: **S6**; motivo: resultado dependia da janela, exigindo cura anterior no construtor (`app/docs/RELATO.md:2393`; `app/docs/RELATO.md:2379`). |
+| JUIZ-DO-PAR-DUAS-ENTRADAS | ABSORVIDA-POR JUIZ-DO-PAR-CURA-NA-FONTE | `app/docs/RELATO.md:2486`; `app/docs/RELATO.md:2446`; `app/escala/utils.py:613` | A ata senta cada batida pelo papel do turno; o main realiza isso na fonte `_match_marcos`, compartilhada pelos leitores, com pouso documentado. |
+| BUG-ENC-CELULAS-FORMA | PARADA | nao achei | Corrige a alimentação de `dias_encerrados`, mas o main ainda repassa `celulas` cru ao pareador (`app/ponto/turnos.py:2150`); fora: **S7**; motivo: faltavam cura da via singular, selos, suite e impacto, com vaga devolvida à F2 (`app/docs/RELATO.md:7541`). |
+| GRADE-FOLGA-DO-VINCULO | ABSORVIDA-POR GRADE-FOLGA-JUIZ | `app/docs/RELATO.md:1600`; `app/docs/RELATO.md:7508`; `app/escala/utils.py:1149`; `app/ponto/precedencia.py:237` | O núcleo calendário-do-vínculo/manual-da-pessoa está no juiz comum; o trecho `eh_trabalho` do calendário foi retirado expressamente, portanto não afirmo absorção de todos os deltas anexados (`app/docs/RELATO.md:1590`; `app/docs/BACKLOG.md:826`). |
+| O275 | PARADA | nao achei | Cria cadastro do tipo para tornar feriado previsto; fora: **S8**; motivo: pouso retido na escolha entre FORMA A e FORMA B, que produzem códigos diferentes (`app/docs/RELATO-ARQUIVO.md:753`; `app/docs/RELATO-ARQUIVO.md:755`). |
+| O276 | NO-MAIN-COM-OUTRO-NOME | `app/ponto/turnos.py:1430`; `app/ponto/turnos.py:1447`; `app/docs/RELATO.md:3293` | O teto do dia chegou pelo R1-H-PORTAO-DE-26H: saída além dele deixa turno aberto e saída órfã; o main também aplica a exceção L-084 das duas pontas deslocadas (`app/ponto/turnos.py:1435`). |
+| V3-RETOMA-FILA | PARADA | nao achei | Faz `diff_calculador` obter v2 da lavra, mas o main conserva laço próprio e CCT do template inicial (`app/ponto/management/commands/diff_calculador.py:245`; `app/ponto/calculador/alimentacao.py:389`); fora: **S9**; motivo: instrumento espera o pouso da V3 (`app/docs/RELATO.md:1707`). |
+| V3-RETOMA-PERIODOS-DA-CELULA | PARADA | nao achei | Faz a v3 ler períodos/pausas lavrados e recusar período sem proveniência; o main ainda guarda segmentos e continua diante das lacunas (`app/ponto/calculador/alimentacao.py:158`; `app/ponto/calculador/alimentacao.py:79`); fora: **S10**; motivo: pista dependente, P4 aberto e base atrasada; só P5 isolada pousou (`app/docs/RELATO.md:7328`; `app/docs/RELATO.md:7408`). |
+| V3-E1 | PARADA | nao achei | É bateria/arnês, sem implementação de produção no stat; fora: **S11**; motivo: nao sei; o último resultado encontrado registra validação de status vermelha, sem declarar destino posterior do arnês (`app/docs/RELATO.md:1805`; `app/docs/RELATO.md:1815`). |
+| E3-ISENTO-INSUMOS | ABSORVIDA-POR ISENTO-H10 | `app/docs/BACKLOG.md:934`; `app/docs/BACKLOG.md:924`; `app/ponto/services/cartorio.py:548` | A isenção entrou na impressão dos insumos pela ISENTO-H10, com horizonte `regra >= 4`, substituindo o alcance atemporal da cópia. |
+| CASA-ESCALA-E4 | NO-MAIN-COM-OUTRO-NOME | `app/colaboradores/queries.py:64`; `app/ponto/nucleo.py:15`; `app/folha/previa.py:81`; `app/docs/RELATO.md:3386` | Os leitores anexados já perguntam aos juízes `q_vinculo_cobre_a_data`, `vinculo_cobre_a_data` e `escalas_do_periodo`, inclusive no dinheiro. |
+| QUATRO-PRAZOS | NO-MAIN-COM-OUTRO-NOME | `app/ponto/management/commands/processar_alertas_avancados.py:63`; `app/ponto/management/commands/processar_alertas_turno.py:118`; `app/ponto/management/commands/detectar_ausencias.py:471` | As partes anexadas estão nos juízes `turno_aberto_ha`, `lembrete_fim_turno`, `marcos_vencidos` e `dia_encerrado`, chamados pelo código de produção. |
+| JUIZ-VARREDURA-1 | NO-MAIN-COM-OUTRO-NOME | `app/ponto/management/commands/reavaliar_ausencias_feriado.py:35`; `app/ponto/management/commands/reavaliar_ausencias_feriado.py:43`; `app/docs/RELATO.md:1297` | A conversão do cron em vigia está no main pela versão JUIZ-1 v5; ele conta e alarma, com pouso posterior ao da cópia anexada. |
+| JUIZ-VARREDURA-3 | ABSORVIDA-POR C20-JUIZ-3 | `app/docs/RELATO.md:7859`; `app/docs/RELATO.md:7862`; `app/chamados/reconciliador.py:1373`; `app/chamados/management/commands/reconciliar_chamados.py:118` | O cron virou vigia pela C20-JUIZ-3, junto dos produtores/consumidores de eventos necessários à retratação no ato. |
+| F1C4-3-RG-SEM-CELULA-CASO | NO-MAIN-COM-OUTRO-NOME | `app/ponto/management/commands/reconciliar_grade.py:281` | A raia acrescenta o teste; a regra já está na F1C4-3-NONE-COBRA: sem célula, o dia não entra nos mortos por indefinição. |
+| O10-C | PARADA | nao achei | Leva trocas históricas ao par pela porta existente; fora: **S12**; motivo: SOLO exige lista do admin com porta de UI alcançável, retirando a cópia do comboio para uma volta 2 (`app/docs/RELATO.md:1088`; `app/docs/RELATO.md:1091`). |
+| DEPLOY-[nome]-ELO | ABSORVIDA-POR DEPLOY-RELOAD-GRACIOSO | `app/docs/BACKLOG.md:930`; `bin/deploy.sh:341`; `bin/deploy.sh:359` | A proteção do elo foi resolvida por HUP gracioso e recusa de restart com cron vivo, substituindo o mecanismo de admissão anexado. |
+| SUITE-POR-IMPACTO | PARADA | nao achei | Seleciona testes por cobertura e certifica inteira em cópia; fora: **S13**; motivo: mapa/replay do PRONTO 5 incompletos e rebase ainda em cópia (`app/docs/RELATO.md:1385`; `app/docs/RELATO.md:1387`; `app/docs/RELATO.md:1399`). |
+| PADRAO-DE-CIMA | PARADA | nao achei | A raia pertinente altera disjuntor/harness; fora: **S14**; motivo: nove voltas e reprovação de desenho, com a décima sem verificador/opus; a primeira raia anexada é de outra obra (`app/docs/RELATO.md:1595`; `app/docs/BACKLOG.md:870`). |
+| CODEX-CONSTRUTOR-PILOTO | ABSORVIDA-POR CODEX-CONSTRUTOR-NEGOCIO | `app/docs/RELATO.md:1127`; `app/docs/RELATO.md:873`; `bin/codex_pergunta.sh:217`; `bin/codex_pergunta.sh:415` | O instrumento anexado foi generalizado para construtor em worktree validada, com escrita limitada a `WT/app`; isso não comprova entrega da tela do piloto (`app/docs/RELATO.md:2239`). |
+| CODEX-CONTEXTO-DA-CASA | PARADA | nao achei | Gera AGENTS e valida brief independente do verificador; fora: **S15**; motivo: pouso retido para aguardar briefs dos construtores em voo, com complementos ainda dependentes dessa obra (`app/docs/BACKLOG.md:1020`; `app/docs/RELATO.md:1743`). |
+| OTIMIZA-1 | PARADA | nao achei | Publica inteiras por pouso no ESTADO; o gerador ainda passa da recusa diretamente ao Codex (`bin/gerar_estado.py:265`); fora: **S13**; motivo: faltavam suite, replay, verificador e pouso próprio (`app/docs/RELATO.md:1395`). |
+| FIO-ESTADO-LE-O-ALCANCE | NO-MAIN-COM-OUTRO-NOME | `bin/fio_estado.py:137`; `bin/fio_estado.py:175`; `app/docs/BACKLOG.md:966` | A manchete foi reimplementada em `_ler_carimbo`/`linha` sob contrato v2, com pouso próprio registrado; a validação das somas de partições da raia antiga não integra essa versão (`app/docs/RELATO.md:1787`). |
+
+Os inventários seguintes transcrevem os nomes exibidos nos stats anexados, agrupando prefixos e alternativas com `{…}`; a comparação integral desses arquivos com os blobs das raias é **[nao verificado]**. Em **S1**, o resumo anuncia 54 arquivos, mas nem todos os nomes foram exibidos no dado fornecido; os nomes omitidos são **[nao verificado]**.
+
+- **S1 — QUARENTENA / SILENCIO:** `app/chamados/services/{pergunta_no_app.py,quarentena.py,silencio_ausencia.py,silencio_isentos.py,verbos.py,vigia_fio.py}`; `app/chamados/{signals.py,urls.py,views_arquivar.py}`; `app/chamados/tests/{test_f1_arquivar.py,test_f7_janela_arquivo.py,test_f8_lista_esconde.py,test_f9_contador_bate_com_a_lista.py,test_o261_vigia_fio.py,test_porta_arquivo_silencio.py,test_quarentena_do_colab.py,test_silenciar_isentos.py,test_silencio_vencido_2a_leitura.py,test_silencio_vencido_volta.py,test_varredura_isentos_evento.py}`; `app/colaboradores/services/{colaborador.py,ficha.py,isencao.py}`; `app/colaboradores/{views.py,tests/test_porta_colaborador.py}`; `app/core/{juizes.py,portas.py,management/commands/lavrar_badge_navbar.py,tests/test_selo_performance.py,tests/test_tripwire_contagem_de_pendencia.py}`; `app/docs/{ARQUITETURA.mmd,MAPA.md}`; `app/ponto/management/commands/{alertar_disputas_pendentes.py,escalonar_chamados_supervisao.py}`; `app/ponto/tests/test_selo_chokepoint_escrita.py`; `app/templates/chamados/partials/{_busca_arquivados.html,_lista_chamados.html,_meus_arquivados.html,_quarentenas.html}`. **[nao verificado]**
+- **S2 — COBPARC-FILA-RELOGIO:** `app/chamados/management/commands/{disparar_perguntas_competencia.py,fechar_becos_disputa.py,reabrir_orfas_enterradas.py,reconciliar_chamados.py,retratar_chamados_lei_cala.py,smoke_chamados.py}`; `app/chamados/{models.py,reconciliador.py,tests/test_selo_universo_reconciliador.py}`; `app/chamados/services/{adesao.py,becos.py,competencia_trancada.py,disputa_emissao.py,fabrica_da_celula.py,pergunta_no_app.py}`; `app/escala/{management/commands/apurar_furos_diarios.py,regua_defesa.py,tests/test_cobertura_parcial_periodo.py}`; `app/ponto/management/commands/{detectar_ausencias.py,detectar_cluster_espurio.py,detectar_par_relampago.py,emitir_turno_aberto_retroativo.py,marcar_foto_ausente_retro.py,processar_alertas_avancados.py,processar_alertas_turno.py,reabrir_chamados_ausencia_aberta.py,reconciliar_fantasmas.py,reconciliar_grade.py,reconciliar_vinculo.py,supra_juiz.py}`; `app/ponto/services/{cartorio.py,cluster_espurio.py,geofence.py,justificativa.py}`; `app/ponto/{views.py,tests/test_cobparc_relogio_na_borda.py,tests/test_cobparc_relogio_um_instante_por_laco.py,tests/test_o_outbox_celula.py}`. **[nao verificado]**
+- **S3 — JUSTIFICATIVA:** `app/chamados/tests/test_cobertura_parcial_nao_emite_retroativo.py`; `app/core/juizes.py`; `app/escala/{utils.py,tests/test_cobertura_justificativa_so_o_marco.py,tests/test_grade_segue_a_precedencia.py,tests/test_grade_visual_ferias.py,tests/test_justificativa_paga_o_periodo.py}`; `app/ponto/{turnos.py,services/cartorio.py,services/efeito_ausencia.py,services/fechamento.py}`. **[nao verificado]**
+- **S4 — PAI-TERMINAL:** `app/chamados/{management/commands/vigiar_fio_morto.py,models.py,services/acoes_disputa.py,services/vigia_fio.py,tests/test_o261_pai_terminal.py,tests/test_o261_vigia_fio.py}`; `logs/o261/{codex_c2_censo_emissores.txt,codex_c2_sonda_passivo.txt,passivo_pai_terminal.py,recorte_c2_b21ee2c3.log,red_c2_e3f6d405.log}`. **[nao verificado]**
+- **S5 — ATA-PAUSA, união das duas raias:** `app/core/tests/test_medida_turno_do_par.py`; `app/escala/{services/cadastro_realidade.py,tests/test_ata_x_turno_pausa.py,utils.py}`; `app/ponto/{management/commands/diff_janela_he.py,motor_calculo_v2.py,services/cxr_na_lista.py,tests/test_ata_pausa_l084_cxr.py,tests/test_juiz_do_par_uma_entrada.py,turnos.py}`. **[nao verificado]**
+- **S6 — LASTRO:** `app/ponto/{management/commands/fechar_cobranca_com_lastro.py,services/cartorio.py,services/lastro.py,tests/test_bug114_fechador_de_dois_dias.py,tests/test_lastro_degrau2_juiz_do_par.py,tests/test_tripwire_b5j_universo_de_apuracao.py}`. **[nao verificado]**
+- **S7 — BUG-ENC:** `app/ponto/{tests/test_bug_enc_celulas_forma.py,tests/test_e4_carga_paridade.py,turnos.py}`. **[nao verificado]**
+- **S8 — O275:** `app/config/crons.py`; `app/escala/{management/commands/vinculos_tipo_feriado_contra_vinculo.py,migrations/0043_tipoescala_feriado_e_dia_trabalho.py,models.py,services/cadastro_tipo.py,tests/test_o275_sdf_feriado_e_dia.py,tests/test_tripwire_o275_leitor_unico_do_flag.py,views_wizard.py}`; `app/templates/escala/{_wizard_preview.html,tipos_lista.html,wizard_tipo_escala.html}`. **[nao verificado]**
+- **S9 — V3-FILA:** `app/ponto/{calculador/alimentacao.py,management/commands/diff_calculador.py,tests/test_diff_calculador_lado_v2_e_a_lavra.py,tests/test_v3_dobra_do_ciclo_do_dia.py}`. **[nao verificado]**
+- **S10 — V3-PERIODOS, união das duas raias:** `app/ponto/{calculador/alimentacao.py,calculador/periodo.py,calculador/regras.py,motor_calculo_v2.py}`; `app/ponto/tests/{test_s5b_split_noturno_tem_um_dono.py,test_v3_dobra_do_ciclo_do_dia.py,test_v3_dobra_noturna_e_cct_do_dia.py,test_v3_parei_p5_parte_menor_que_todo.py,test_v3_periodos_da_celula.py}`. **[nao verificado]**
+- **S11 — V3-E1:** `app/docs/E1-PERGUNTA-AO-DP-CONTADOR.md`; `app/ponto/tests/{test_e1_lote1_valor_do_dia.py,test_e1_lote2_status_do_dia.py,test_e1_lote3.py,test_v3_e1_valor.py}`. **[nao verificado]**
+- **S12 — O10-C:** `app/config/crons.py`; `app/ponto/{management/commands/trocas_plantao_lote_o10c.py,tests/test_o10c_lote_trocas.py}`. **[nao verificado]**
+- **S13 — SUITE / OTIMIZA, união das raias:** `bin/{gerar_estado.py,pista_estado.py,pre-push.sh,recursos.sh,regua.sh,suite.sh,suite_impacto.py,suite_impacto.sh,trava_teste.sh}`; `bin/suite_impacto/{contexto_modulo.py,coveragerc,extrair_mapa.py,selos_so_na_principal.txt,sitecustomize.py}`; `bin/tests/{test_medida_suites_por_pouso.sh,test_porta_le_env_da_casa.sh,test_selo_espera_processo_morde.sh,test_suite_impacto_certificado.sh,test_suite_impacto_selecao.sh,test_suite_sh.sh,test_trava_teste.sh}`. **[nao verificado]** [nao verificado]
+- **S14 — PADRAO, raia pertinente `wt-pdc-v3-170430`:** `bin/{codex_pergunta.sh,disjuntor.py,hook_stop_fila1.py,padrao_vocab.py}`; `bin/tests/{_mordida.sh,test_disjuntor.sh,test_hook_esperando_com_prova.sh,test_lei_akita.sh,test_padrao_de_cima.sh}`. **[nao verificado]**
+- **S14, primeira raia anexada, de CONTENCAO:** `.claude/settings.json`; `CLAUDE.md`; `app/docs/{TICKETS.md,contratos/CONTENCAO-QUE-MORDE-V2.txt}`; `bin/{arvore_hash.sh,codex_pergunta.sh,contrato_do_push.py,disjuntor.py,hook_stop_fila1.py,marco_de_clear.py,pre-push.sh,suite.sh}`; `bin/tests/{test_contrato_do_push.sh,test_disjuntor.sh,test_handoff_sessao.sh,test_hora_da_secao_nao_e_futura.sh}`. **[nao verificado]**
+- **S15 — CODEX-CONTEXTO:** `AGENTS.md`; `bin/{codex_brief_verificador.py,codex_limite_estado.py,codex_pergunta.sh,gerar_agents_md.py,relato.sh}`; `bin/tests/{test_agents_md_gerado.sh,test_codex_brief_verificador.sh}`. **[nao verificado]**
+
+**Soma das classificações:** NO-MAIN-COM-OUTRO-NOME **6** + ABSORVIDA-POR **6** + MORTA-POR-CORTE **0** + PARADA **17** = **29**. **[nao verificado: contagem derivada desta resposta, sem arquivo próprio]**
+
+**Obras com raia aparentemente alheia:**
+
+- **PADRAO-DE-CIMA → `wt-contencao-v4-111700`:** o head `3a743cdd` é identificado como CONTENCAO-QUE-MORDE-V2; a raia própria do PDC é `wt-pdc-v3-170430`. (`app/docs/BACKLOG.md:870`; `app/docs/RELATO.md:1595`)
+- **JUIZ-DO-PAR-DUAS-ENTRADAS → segunda raia, `wt-atapausa-092038`:** os commits anexados são de ATA-X-TURNO-PAUSA **[nao verificado]**; o main distingue a classe da pausa da divergência da ata e diz que aquela cópia antiga não foi portada. (`app/docs/RELATO.md:2530`)
+
+## 12/11 14:25 · sessao ecf2340693ca · - · - · origem=Ronald (tmux)
+
+A seção 4 conserva o classificador, mas **muda o domínio entregue a ele**: `_fila1_viva` hoje retorna apenas células julgadas andáveis; o v5 passa a entregar toda `[ORDEM]`, inclusive IDs com TRAVA. (`bin/disjuntor.py:1623`, `bin/disjuntor.py:1634`; `contrato_item3_v5.txt:26`)
+
+O filtro atual efetivamente lê coluna/estado:
+
+- `_itens_andaveis` descarta `_item_parado`. (`bin/hook_stop_fila1.py:250`)
+- `_item_parado` combina fechamento e expressões de parada na célula `[3]`. (`bin/hook_stop_fila1.py:180`)
+- Fechamento lê `[3]` e tachado `~~` na descrição `[2]`. (`bin/hook_stop_fila1.py:168`)
+- Parada inclui `CONGELADA`, `FILA 2`, `aguardando`, `PAREI`, `NAO CONSTRUIR`, portão e outras formas. (`bin/hook_stop_fila1.py:95`, `bin/hook_stop_fila1.py:96`, `bin/hook_stop_fila1.py:97`)
+
+Portanto a propriedade **“parada/fechada na coluna → excluída da fonte do censo” deixa de valer**. Isso não requer alterar `_pertence_fila1`, pois a entrada já mudou antes de ele ser chamado. (`bin/disjuntor.py:1634`, `bin/disjuntor.py:1707`, `bin/disjuntor.py:2306`)
+
+| Linhas do selo | Efeito exato |
+|---|---|
+| `112–115` | Hoje `OBRA-FECHADA` retorna rc0 e grava FORA porque a linha da fixture tem estado `**FECHADA**`. Depois só conserva essa saída se o ID ficar fora de `[ORDEM]`; estando dentro, sem brief, passa a recusa/NEGOU. (`bin/tests/test_censo_antes_da_vaga.sh:43`, `bin/tests/test_censo_antes_da_vaga.sh:112`, `bin/tests/test_censo_antes_da_vaga.sh:114`; `bin/disjuntor.py:1715`, `bin/disjuntor.py:2311`) |
+| `250–251` | Mesmo deslocamento no Agent: a dispensa de `OBRA-FECHADA` passa a depender da exclusão no `.ids`. Se incluído, sem brief, o censo nega. (`bin/tests/test_censo_antes_da_vaga.sh:250`, `bin/tests/test_censo_antes_da_vaga.sh:251`; `bin/disjuntor.py:1707`, `bin/disjuntor.py:1728`) |
+| `252–253` | `OBRA-FILA2` hoje passa por estar `CONGELADA, FILA 2`; depois passa por ausência em `[ORDEM]`. Inclusão passaria a exigir censo. (`bin/tests/test_censo_antes_da_vaga.sh:44`, `bin/tests/test_censo_antes_da_vaga.sh:252`, `bin/tests/test_censo_antes_da_vaga.sh:253`; `bin/hook_stop_fila1.py:95`) |
+| `534–645` | O conjunto equivalente de células preserva os resultados do matcher, incluindo qualificada aprovada, exato com variante ambíguo e `ValueError` direto. A troca da fonte por si só não muda essas três propriedades. (`bin/disjuntor.py:1688`, `bin/disjuntor.py:1689`, `bin/disjuntor.py:1692`, `bin/disjuntor.py:1694`; `bin/tests/test_censo_antes_da_vaga.sh:542`, `bin/tests/test_censo_antes_da_vaga.sh:578`, `bin/tests/test_censo_antes_da_vaga.sh:603`, `bin/tests/test_censo_antes_da_vaga.sh:606`) |
+
+**Não é correto afirmar que as saídas de `112–115` e `250–253` inevitavelmente mudam**, pois o v5 autoriza migrar a fixture e pode excluir esses dois IDs de `[ORDEM]`. O que inevitavelmente muda é a propriedade provada: sai a autoridade do estado, entra a presença no `.ids`. (`contrato_item3_v5.txt:28`; `bin/tests/test_censo_antes_da_vaga.sh:43`, `bin/tests/test_censo_antes_da_vaga.sh:44`)
+
+Um ID com TRAVA em `[ORDEM]` pode receber `CENSO APROVADO` se o brief estiver conforme: `_pertence_fila1` só recebe strings de IDs, e a porta do censo não recebe nem consulta a TRAVA. Portanto **“TRAVA → censo nega” não é propriedade desse desenho**. (`contrato_item3_v5.txt:5`, `contrato_item3_v5.txt:26`; `bin/disjuntor.py:1707`, `bin/disjuntor.py:1721`, `bin/disjuntor.py:1722`)
+
+## 12/11 14:22 · sessao 750fcce341e8 · - · - · origem=Ronald (tmux)
+
+Resultado recomendado: **8 PARADA; 2 ABSORVIDA-POR**. As descrições das raias dependem dos anexos; sem refs locais, o conteúdo além dos 5.000 bytes é [nao verificado].
+
+| OBRA | CLASSE | Provas conferidas e frase utilizável |
+|---|---|---|
+| QUARENTENA-DO-COLAB | PARADA | **nao achei**. A raia isola a cobrança por colaborador/período; o main continua selecionando a fila apenas por COBRANCA e silêncio futuro em `app/chamados/services/painel.py:188`; motivo: reprovação da 7e864870 por fechar/levantar janela, vigia, segundo escritor, migration e provas, em `app/docs/RELATO.md:2493`. |
+| SILENCIO-VENCIDO-VOLTA | PARADA | **nao achei**. A raia devolve silêncio vencido à fila/pílula/app; só a metade da fila está presente (`app/chamados/services/painel.py:189`), enquanto `app/chamados/services/verbos.py:51` ainda transforma vencido em HISTORICO; motivo: presa à QUARENTENA reprovada, expressamente `app/docs/RELATO.md:19`. |
+| COBPARC-FILA-RELOGIO | PARADA | **nao achei**. A raia lê um instante na borda e o transmite pelos laços; `app/ponto/services/cartorio.py:373` ainda usa `ate or now()` por chamada; motivo: estacionada por aval, faltando mutantes/suite e com pergunta do padrão aberta, `app/docs/RELATO.md:1540`. |
+| JUSTIFICATIVA-PAGA-O-PERIODO | PARADA | **nao achei**. A raia limita a justificativa ao marco/período e leva pagamento parcial à porta; motivo registrado: a condição literal do DIFF falhou porque motor/folha não liam o parcial; o aval posterior concedeu `!` e exigiu novo DIFF, não prova pouso (`app/docs/RELATO.md:2553`, `app/docs/BACKLOG.md:1061`). |
+| O261-PAI-TERMINAL | PARADA | **nao achei**. A raia religa disputa com pai terminal a pai vivo; o main ainda retorna a disputa aberta sem examinar o pai (`app/chamados/services/disputa_emissao.py:535`, retorno `:566`), e declara que nascimento com pai/destino terminal não passa pela proteção existente (`app/chamados/services/fio.py:755`); motivo: religar por disputa mistura competências/exportada, `app/docs/RELATO.md:2218`. |
+| ATA-X-TURNO-PAUSA | PARADA | **nao achei**. A raia acende pares de pausa pelo juiz e acusa `l084_pausa` no motor/CxR; motivo mais recente encontrado: última da fila Codex e nada aberto (`app/docs/RELATO.md:753`), com retomada subordinada a 10/10 e dinheiro igual (`app/docs/RELATO.md:847`); prova histórica dos bloqueios `app/docs/RELATO.md:2975`. |
+| LASTRO-DEGRAU-2 | PARADA | **nao achei**. A raia troca a tolerância própria pelo julgamento da grade/ata composta; o main ainda casa por tipo e distância linear em `app/ponto/services/lastro.py:307`; motivo: grade responde diferente conforme janela, cura serializada após grupo (1), `app/docs/RELATO.md:2393`, causas medidas `:2379`. |
+| JUIZ-DO-PAR-DUAS-ENTRADAS | **ABSORVIDA-POR JUIZ-DO-PAR-CURA-NA-FONTE** | `app/docs/RELATO.md:2486` liga explicitamente a raia 34b0d5a5 ao redesenho na fonte; pouso declarado em `app/docs/RELATO.md:2446` e `:2449`; produção `app/escala/utils.py:596`, `:613` e `:619` deriva os papéis, alinha e produz células, com implementação em `:502`. A raia fazia a ata sentar batidas pelo papel; o main realiza isso no `_match_marcos`, compartilhado com outros leitores; resíduo 573 explicitamente separado em `app/docs/RELATO.md:2455`. |
+| BUG-ENC-CELULAS-FORMA | PARADA | **nao achei**. A raia corrige a alimentação de `dias_encerrados` e deixa RED da via singular; o main ainda repassa `celulas` cru ao pareador em `app/ponto/turnos.py:2150`; motivo: estacionamento para liberar F2, com cura do vigia, bool/pad, suite e impacto incompletos em `app/docs/RELATO.md:7541`. |
+| GRADE-FOLGA-DO-VINCULO | **ABSORVIDA-POR GRADE-FOLGA-JUIZ**, com recorte explícito | Núcleo: produção `app/escala/utils.py:1149` pergunta ao juiz; `app/ponto/precedencia.py:237` aceita folga manual e `:239` restringe calendário ao vínculo do dia. Associação registrada em `app/docs/RELATO.md:1600` (desenho GRADE-v5 respondido por GRADE-FOLGA-JUIZ), pouso `app/docs/RELATO.md:7508`, confirmado como main com juiz em `:7537`. **Delimitar**: a raia anexa inclui `eh_trabalho` de calendário e fase_conflitante; foram retirados expressamente: `app/docs/RELATO.md:1590`, `app/docs/BACKLOG.md:850`, `app/docs/BACKLOG.md:826`. Hoje o campo `eh_trabalho` morreu pela lavra em `app/colaboradores/services/calendario.py:89`; fase_conflitante ainda lê foto própria em `app/escala/services/fase_conflitante.py:74`. Portanto absorção do núcleo vigente; não afirmar que todos os deltas da raia pousaram. |
+
+**O261 exige cuidado:** `app/docs/BACKLOG.md:874` anuncia absorção de FIO-MORTO-PELO-RETRATO (2)(3)(4) pela O261-E, mas F3 aparece parada na mesma linha; a proteção de encerramento em `app/chamados/models.py:374` não é regra de nascimento. A declaração `app/chamados/services/fio.py:755` impede usar esse plano como prova de obra realizada.
+
+**Raias aparentemente mal atribuídas:** para JUIZ-DO-PAR-DUAS-ENTRADAS, a **segunda** anexada, `wt-atapausa-092038`, é da ATA-X-TURNO-PAUSA pelos commits fornecidos [nao verificado]; o main também distingue as duas classes em `app/docs/RELATO.md:2530` (“cópia antiga 383adb81 ... é a classe da pausa ... não portada”). A primeira, `wt-juizpar-2810-1850`, é da obra (`app/docs/RELATO.md:2520`). As demais 1–10 têm vínculo nominal/registro compatível nas provas acima; histórico completo das refs [nao verificado].
+
+Arquivos **literalmente ausentes** conferidos (não confundir com todo delta do stat): quarentena.py; testes quarentena e ambos silêncio; `_quarentenas.html`; ambos testes COBPARC relógio; três testes novos justificativa; teste pai terminal; três testes ATA pausa/juiz uma entrada; teste LASTRO degrau2; testes BUG-ENC e E4-CARGA [nao verificado quanto a arquivo:linha de ausência]. Os arquivos de produção modificados do stat já existem, mas o delta não está provado como pousado. [nao verificado]
 
 ## 12/11 14:22 · sessao 7e5d0ea3b9d0 · - · - · origem=Ronald (tmux)
 
@@ -1260,305 +1445,4 @@ DUVIDAS:
 - **BUG-CADASTRO:** linha exata diz POS-20 e próxima vaga, fora de OBRAS; o aval fornecido aprova 4(b), mas não nomeia o ID completo nem declara formalmente sua migração entre seções. Não presumir identidade/pertencimento só pelo prefixo. A ligação entre “BUG-CADASTRO 4(b)” e esta obra específica é **[nao verificado]**. (`app/docs/BACKLOG.md:2408`; `aval_respostas_1211_1230.txt:2`; `contrato_item3_v3.txt:2`)
 - **DECLARADO-X-GRAVADO:** o ID não aparece literalmente nem tem primeira coluna exata; entrada em ORDEM/POS-20/POUSADAS **[nao verificado]**. A regra de identidade impede incluí-lo como está. (`contrato_item3_v3.txt:2`; limites de OBRAS em `app/docs/BACKLOG.md:712`, `:2042`)
 
-## 12/11 14:02 · sessao 8e13c5768979 · - · - · origem=Ronald (tmux)
-
-**A lista nominal do §1 não reproduz todo o censo; a cláusula “TODOS os leitores do censo v2” cobre as omissões genericamente.** Faltam nominalmente `interrompidas_estado.py`, as primeiras leituras do handoff e os transportadores/entradas abaixo. Isso não demonstra segundo parser sobrevivente: vários já delegam ao hook e herdarão a mudança se as interfaces forem conservadas. (`contrato_item3_v3.txt:5`; `bin/interrompidas_estado.py:54`, `:93`; `bin/handoff_sessao.sh:64`, `:71`, `:120`)
-
-| Fora da enumeração nominal do §1 | Situação |
-|---|---|
-| `interrompidas_estado.py` | Pergunta topo ao hook; lê INTERROMPIDA/FUNDIDA e fechamento documental por outra pergunta. Migrar o topo indiretamente, conservar o medidor documental. (`bin/interrompidas_estado.py:93`, `:105`, `:121`, `:125`) |
-| Primeira parte de `handoff_sessao.sh` | Topo, em curso e PAREI já vêm do hook; falta atualizar “MARCADOR” e comentários antigos. (`bin/handoff_sessao.sh:58`, `:64`, `:66`, `:71`, `:120`, `:123`) |
-| `codex_pergunta.sh` | Delega o censo ao disjuntor; linha atual é **247**, não 228. (`bin/codex_pergunta.sh:247`) |
-| `placar_code.sh` | Delega o alarme. (`bin/placar_code.sh:368`) |
-| `fabricante.sh`; `fabricante_alvo.py` chamadas finais | Delegam o seletor migrado. (`bin/fabricante.sh:129`; `bin/fabricante_alvo.py:315`, `:320`) |
-| `relato.sh` publicação | Transporta os dois documentos, não decide pertencimento. (`bin/relato.sh:115`, `:116`) |
-| `.claude/settings.json` | Entradas dos instrumentos e leitura do handoff; continuam apontando para `/home/ronald/saas-hasner`. Execução desta cópia nesses caminhos: [nao verificado]. (`.claude/settings.json:9`, `:20`, `:29`, `:40`, `:53`, `:68`) |
-| `gerar_backlog.py` | Não está nominalmente no §1, mas está coberto pelo §2. (`contrato_item3_v3.txt:6`) |
-| Selos | Não enumerados no v3; §4 remete genericamente ao censo e exige lista no RELATO. (`contrato_item3_v3.txt:8`) |
-
-**As exceções por “OUTRA pergunta” fazem sentido, com estas fronteiras:**
-
-- Avais de hoje ainda não cumpridos e linhas da raia20 perguntam fechamento documental, não pertencimento. (`bin/handoff_sessao.sh:139`, `:171`, `:209`, `:216`)
-- Interrompidas pergunta estado, fusão, fechamento e retorno ao topo: só a parte do topo pertence à migração da ORDEM. (`bin/interrompidas_estado.py:105`, `:116`, `:121`, `:125`)
-- `gerar_backlog_topo.py` resume O-números abertos e ordena por número; não é ORDEM VIVA. (`bin/gerar_backlog_topo.py:19`, `:26`, `:39`)
-- Fabricante pergunta elegibilidade de sorteio: dinheiro, “só registrar”, espera por Ronald e níveis livre/escalonado. Não equivale simplesmente a “pertence à fila 1”. A exceção do v3 só funciona se o ramo preservado de livres/O-F for efetivamente limitado aos **fora de [ORDEM]**; do contrário, um integrante da fila pode continuar julgado pela coluna no ramo “livre”. (`contrato_item3_v3.txt:5`; `bin/fabricante_alvo.py:256`, `:259`, `:261`, `:273`, `:275`, `:282`)
-- Existência do item e padrão declarado da obra são perguntas documentais. (`app/core/tests/test_marca_cron15.py:89`; `app/chamados/tests/e4b_c4_verificar.py:209`; `bin/tests/test_prompt_virou_item.sh:25`)
-
-**Há dois conflitos substantivos na promessa de migrar fixtures preservando a propriedade de todos os selos:**
-
-1. `pertence(id)` por igualdade exata altera a propriedade do censo: hoje `O9` contra `O9 (C)`, caixa trocada e obra qualificada contra célula nua devem resultar em **NAO SEI/nega**, não FORA. Também `O9` exato acompanhado de `O9 (C)` deve negar. Igualdade simples retorna False ou True, e False dispensa censo. Isso exige decisão explícita no contrato; trocar fixture não preserva essa propriedade. (`contrato_item3_v3.txt:2`, `:5`, `:8`; `bin/tests/test_censo_antes_da_vaga.sh:544`, `:549`, `:575`, `:603`; `bin/disjuntor.py:1707`, `:1708`)
-
-2. `test_hook_estado_e_a_coluna.sh` exige que tachado, FECHADA e aguardando façam o topo ser “parado”. O v3 retira essa autoridade da coluna e declara topo o primeiro id com ou sem TRAVA. Conservar o teste documental de `_item_fechado` é possível; conservar as antigas asserções sobre o topo não é. O contrato precisa identificar propriedades revogadas e propriedades preservadas, em vez de prometer apenas migração de fixture. (`contrato_item3_v3.txt:3`, `:4`, `:8`; `bin/tests/test_hook_estado_e_a_coluna.sh:53`, `:54`, `:55`, `:59`)
-
-As referências a `contrato_item3_v3.txt` acima numeram o anexo fornecido, com título na linha 1; as referências ao código usam as linhas desta cópia. As funções atuais do disjuntor estão em `:1623` e `:1672`, diferentes das referências históricas do v2/v3. (`bin/disjuntor.py:1623`, `:1672`)
-
-## 12/11 14:01 · sessao 00795d4fdce6 · - · - · origem=Ronald (tmux)
-
-**O v3 corrige a diferença universo/andabilidade no desenho, mas não sustenta “RED verde sem editar”.** [contrato_item3_v3.txt:1-3, anexo fornecido] [nao verificado]
-
-- `[ORDEM]` inclui itens travados; os restantes só andam se não tiverem `TRAVA`. Portanto A/B/C com B e C travados admite PAREI de A; removendo a trava de C, deve bloquear. Isso coincide com a regra existente: `_relato_parou` exige PAREI do topo e nenhum restante andável. [contrato_item3_v3.txt:3, :8, anexo; bin/hook_stop_fila1.py:1232, :1243, :1245]
-- O arquivo `bin/tests/test_hook_andavel_e_a_ordem_viva.sh` não existe nesta cópia; seu conteúdo literal e mudanças exatas nas linhas 51/73 são **[nao verificado]**. O RELATO registra o RED ca320b69f em outra worktree, `wt-travas-105806`. [app/docs/RELATO.md:37]
-- Pela descrição fornecida do RED, precisa: criar `.ids` na fixture; direcionar o leitor compartilhado para esse arquivo; manter os mesmos IDs e linhas OBRAS; representar os restantes travados como `ID | TRAVA: !` no primeiro cenário; retirar a TRAVA do restante aberto no segundo; manter ruído/POS-20 fora de ORDEM e preservar as expectativas liberar/bloquear. O marcador/prosa pode permanecer como ruído, mas não pode alimentar a ordem. [item3_contrato_v2.r, seção “Os selos”, entrada do RED; contrato_item3_v3.txt:2-3, :8, anexos; conteúdo literal do RED: **[nao verificado]**]
-- Isso preserva a **propriedade** do RED, mas edita sua fixture. A promessa “SEM ser editado” e a ordem de migrar fixtures são incompatíveis. [contrato_item3_v3.txt:1, :8, anexo]
-- Há exemplo verificável dessa migração necessária no selo vizinho: ele só escreve BACKLOG e alterna coluna entre livre/travada, depois exige bloquear/liberar. Sem fornecer `.ids`, não descreve a fonte do v3. [bin/tests/test_hook_parei_com_andavel.sh:25, :27, :30, :41, :46, :56, :57]
-
-**Cuidado adicional:** topo com TRAVA é permitido no v3, mas o veto atual de PAREI rejeita qualquer ID de `_ids_que_nao_andam()` antes de comparar com o topo. Migrar essa lista mecanicamente para “IDs com TRAVA” recusaria o PAREI do próprio topo. O contrato manda migrar ambas funções, portanto é implementável, mas precisa distinguir pertencimento, trava e topo; o novo cenário A/B/C mantém A sem TRAVA e não guarda esse caso. [contrato_item3_v3.txt:3, :5, :8, anexo; bin/hook_stop_fila1.py:1298, :1302, :1310, :1313]
-
-**Falha residual:** o v3 não enumera ilegibilidade ou erro de decodificação como `ErroFonte`; sem conversão explícita, alcançam a falha aberta existente. [contrato_item3_v3.txt:7, anexo; bin/hook_stop_fila1.py:1460, :1461]
-
-## 12/11 14:01 · sessao 2b6ccd8a2d08 · DECLARADO-X-GRAVADO · sonda · origem=Code
-
-Referências `saída:N` abaixo numeram somente as linhas iniciadas por `S` do dado fornecido, começando em `S UNIVERSO 6729`; a última é `saída:107`. São referências à transcrição, não a um arquivo criado.
-
-**Não há bloqueio por erro de execução:** `TOTAL_ERROS TOTAL = 0`; todas as etapas informadas também têm zero. Não há exemplo de erro apresentado. As contagens podem ser publicadas como resultados da sonda, preservando as limitações abaixo (`saída:95-107`). [nao verificado]
-
-Item 2 — desfechos das perguntas respondidas:
-
-| Desfecho | Quantidade | Fonte |
-|---|---:|---|
-| Batida nova | 886 | saída:2 |
-| Reuso | 23 | saída:3 |
-| Recusa de paridade | 230 | saída:4 |
-| Pendente do admin | 121 | saída:5 |
-| Não validada | 1210 | saída:6 |
-| OUTRO | 4259 | saída:7 |
-| **Soma dos desfechos** | **6729** | saída:8 |
-| **Universo** | **6729** | saída:1 |
-| Indicador soma igual ao universo | 1 | saída:9 |
-
-`OUTRO` está integralmente explicado pela categoria `validada_sem_relacao_nem_recusa`: **4259**. Não cabe redistribuí-la entre os demais desfechos (`saída:10`).
-
-Item 3 — diferença entre instante gravado e resposta com data, preservando as categorias emitidas:
-
-| Medida | `intervalo_saida` | `intervalo_volta` |
-|---|---:|---:|
-| Novas por origem | 437 — saída:18 | 449 — saída:38 |
-| Até 5 minutos | 260 — saída:19 | 283 — saída:39 |
-| Mais de 5 até 30 minutos | 24 — saída:20 | 43 — saída:40 |
-| Acima de 30 minutos | 137 — saída:21 | 108 — saída:41 |
-| Delta não verificado (`delta_nv`) | 16 — saída:22 | 15 — saída:42 |
-
-As faixas, incluindo `delta_nv`, fecham os respectivos totais de novas por origem (`saída:18-22`; `saída:38-42`).
-
-| Datas e sinal do delta | `intervalo_saida` | `intervalo_volta` |
-|---|---:|---:|
-| `resposta_dmais1` | 44 — saída:23 | 92 — saída:43 |
-| Gravada fora do dia do turno | 48 — saída:24 | 93 — saída:44 |
-| Datas diferentes | 10 — saída:25 | 5 — saída:45 |
-| Delta assinado negativo | 87 — saída:26 | 61 — saída:46 |
-| Delta assinado positivo | 83 — saída:27 | 127 — saída:47 |
-| Delta zero | 251 — saída:28 | 246 — saída:48 |
-
-A convenção da subtração usada no delta assinado é **[nao verificado]**; os sinais acima não foram traduzidos como “adiantamento” ou “atraso”.
-
-| Proximidade do marco oposto | `intervalo_saida` | `intervalo_volta` |
-|---|---:|---:|
-| Medidos | 420 — saída:29 | 431 — saída:49 |
-| `oposto_ate5` | 35 — saída:30 | 52 — saída:50 |
-| `oposto_ate30` | 55 — saída:31 | 86 — saída:51 |
-| Não verificados (`oposto_nv`) | 17 — saída:32 | 18 — saída:52 |
-
-A saída fornece proximidade por tolerância; quantidade de coincidências exatas com o marco oposto **[nao verificado]**. A vigência histórica do marco também exige a ressalva de `dna_vigencia_nao_confirmada` (`saída:30-32`; `saída:50-52`; `saída:91`).
-
-Item 4 — **TRIAGEM** dos casos acima de 30 minutos:
-
-| Resultado emitido | `intervalo_saida` | `intervalo_volta` |
-|---|---:|---:|
-| Resposta mais próxima | 49 — saída:33 | 26 — saída:53 |
-| Gravada mais próxima | 9 — saída:34 | 2 — saída:54 |
-| Empate | 0 — saída:35 | 0 — saída:55 |
-| Sem indício | 79 — saída:36 | 80 — saída:56 |
-| Não verificado (`triagem_nv`) | 0 — saída:37 | 0 — saída:57 |
-
-A triagem fecha nos respectivos totais acima de 30 minutos; ela permanece indício, conforme o item 4 do aval, sem determinar qual horário foi o efetivamente trabalhado (`saída:21,33-37`; `saída:41,53-57`; `aval_declarado_x_gravado_v2.txt:7`, contando as linhas do anexo transcrito).
-
-Item 5 — regeneração da célula depois da resposta:
-
-| Categoria emitida | Quantidade | Fonte |
-|---|---:|---|
-| Depois da resposta | **403** | saída:11 |
-| Não depois da resposta | 5984 | saída:12 |
-| Sem data | 0 | saída:13 |
-| Sem célula | 342 | saída:14 |
-| Erro de célula | 0 | saída:15 |
-| Erro | 0 | saída:16 |
-| Não processadas | 0 | saída:17 |
-
-Essas categorias fecham o universo. “Sem célula” permanece separado de “não depois da resposta” (`saída:1,11-17`).
-
-Item 6 — carga semanal ISO, com os três campos numéricos na ordem exata da saída:
-
-| Semana ISO | Primeiro campo | Segundo campo | Terceiro campo | Fonte |
-|---|---:|---:|---:|---|
-| 2026-W39 | 280 | 44 | 5 | saída:58 |
-| 2026-W40 | 148 | 13 | 6 | saída:59 |
-| 2026-W41 | 147 | 34 | 0 | saída:60 |
-| 2026-W42 | 221 | 28 | 1 | saída:61 |
-| 2026-W43 | 160 | 30 | 7 | saída:62 |
-| 2026-W44 | 180 | 37 | 0 | saída:63 |
-| 2026-W45 | 81 | 15 | 3 | saída:64 |
-| 2026-W46 | 93 | 6 | 0 | saída:65 |
-
-**Os cabeçalhos desses três campos são [nao verificado].** As linhas fornecidas não os identificam; portanto, a associação de cada coluna a “validações”, “acima de 30 minutos” ou outra medida não pode ser publicada como confirmada (`saída:58-65`). O recorte temporal efetivamente aplicado pela consulta é **[nao verificado]**. [nao verificado]
-
-| Colaborador | Contagem emitida | Fonte |
-|---|---:|---|
-| col569 | 32 | saída:66 |
-| col723 | 22 | saída:67 |
-| col926 | 14 | saída:68 |
-| col438 | 11 | saída:69 |
-| col696 | 9 | saída:70 |
-| col993 | 8 | saída:71 |
-| col518 | 7 | saída:72 |
-| col055 | 6 | saída:73 |
-| col502 | 5 | saída:74 |
-| col909 | 5 | saída:75 |
-
-| Escala modelo | Contagem emitida | Fonte |
-|---|---:|---|
-| #431 | 32 | saída:76 |
-| #276 | 22 | saída:77 |
-| #178 | 15 | saída:78 |
-| #496 | 14 | saída:79 |
-| #197 | 11 | saída:80 |
-
-| Vínculo | Contagem emitida | Fonte |
-|---|---:|---|
-| #484 | 32 | saída:81 |
-| #924 | 22 | saída:82 |
-| #1181 | 14 | saída:83 |
-| #376 | 11 | saída:84 |
-| #970 | 9 | saída:85 |
-
-O filtro exato usado para selecionar os casos desses rankings é **[nao verificado]**; as tabelas preservam as contagens e identificadores emitidos (`saída:66-85`).
-
-Limitações e sobreposições declaradas pela própria saída:
-
-| Aviso | Quantidade e fonte | O que impede afirmar |
-|---|---|---|
-| `criacao_por_esta_pergunta_nv` | 886 — saída:86 | Que cada batida classificada como nova foi criada pela própria pergunta examinada. |
-| `dna_anterior` | 24 — saída:87 | São casos sinalizados com DNA anterior; o rótulo sozinho não comprova sua vigência no instante do plantio. |
-| `dna_atual` | 831 — saída:88 | São casos sinalizados com DNA atual; isso sozinho não comprova que ele era o vigente no plantio. |
-| `dna_dna_sem_marcos` | 5 — saída:89 | Concluir a comparação com o marco nesses casos. |
-| `dna_historico_multiplas_regeneracoes` | 13 — saída:90 | Reconstruir toda a sequência histórica apenas com o DNA anterior disponível. |
-| `dna_vigencia_nao_confirmada` | 13 — saída:91 | Afirmar atendimento integral ao requisito de usar o marco vigente no plantio. |
-| `origem_disputa_preexiste_resposta_atual` | 3 — saída:92 | Atribuir a criação dessa batida à resposta atual. |
-| `pendencia_admin_com_batida` | 14 — saída:93 | Tratar pendência administrativa como sinônimo de ausência de batida. |
-| `relacao_com_batida_retratada` | 5 — saída:94 | Tratar toda relação encontrada como batida atualmente apurável. |
-
-O código confirma que `dna_anterior` guarda somente a versão imediatamente anterior, enquanto o histórico completo fica fora desse campo; `regenerada_em` registra a última regeneração. Portanto, o item de regeneração e a comparação histórica não demonstram, por si, todas as versões passadas ([models.py](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1714), [models.py](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1718)).
-
-Esses avisos não constituem uma partição demonstrada: suas interseções são **[nao verificado]**. Zero erros de execução não resolve as limitações declaradas (`saída:86-107`).
-
-## 12/11 14:01 · sessao e74da5cb4d3c · - · - · origem=Ronald (tmux)
-
-Parte A — provas locais para consolidação (todos os caminhos abaixo relativos à raiz da cópia).
-
-A lei vigente está em `app/docs/CORTES.md:348`, complementada por O44 em `app/docs/CORTES.md:349`; data da flag sem trilha e item sem dia estão decididos em `app/docs/CORTES.md:352`. A reprovação e as sete curas constam literalmente em `app/docs/BACKLOG.md:765`. As alternativas de fechar chamados / impedir nascimento foram substituídas: `app/docs/CORTES.md:345`, `app/docs/CORTES.md:346`, `app/docs/CORTES.md:347`; a substituição do item do emissor também consta em `app/docs/BACKLOG.md:766`.
-
-A1 — quem decide hoje
-
-| Leitor/estado | Pergunta, universo e escritor |
-|---|---|
-| `isento_ponto` | Responde **flag atual**, não “isento nesta data”. Retorna bool de `Colaborador.isento_ponto`, sem cargo nem período: `app/core/constants.py:13-18`. Campo booleano sem data: `app/colaboradores/models.py:294`. Tela Passe Livre escreve pela porta `gravar(...,'cadastro',...)` em `app/colaboradores/views.py:173-176`, tenta trilha com antes/depois/motivo em `:183-186`; falha da trilha não desfaz alteração, `:187-202`. Semente histórica escreve flag sem trilha em `app/colaboradores/migrations/0043_isento_ponto.py:13-14`. |
-| `silencio_isentos.alvos` | “Quais chamados vivos de flag isento ainda não têm **nenhum** `silenciado_ate`?” Filtra flag diretamente e todos VIVOS; não restringe módulo, dia ou janela: `app/chamados/services/silencio_isentos.py:20-31`. `silenciar` põe prazo padrão pela porta `arquivo.silenciar`: `:34-49`. Ignora resgate por política declarada: `:5-6`. |
-| Gatilho da flag e do chamado | Todo save de colab com flag true agenda `silenciar_do_colab`, sem detectar transição false→true: `app/chamados/signals.py:269-281`. Chamado nascido/voltando a VIVOS ou com véu levantado agenda a mesma porta se `silenciado_ate is None`: `:285-308`. Portanto levantar véu de isento pode chamar o ressequenciamento que o põe de novo: `:290-301`. |
-| Cron isentos | Modo `--alarme` é leitura e retorna 2 se houver alvos; `--apply` continua autorizado pelo próprio command a escrever véus: `app/chamados/management/commands/silenciar_chamados_isentos.py:25-49`. Seu universo atual é `alvos()`, sem janela: `:36`. |
-| `silenciado_em` / `q_silenciado_em` | “O véu do **chamado** vale neste instante?” Ambos usam prazo futuro: `app/chamados/models.py:508-524`. O escritor é `arquivo.silenciar` (`app/chamados/services/arquivo.py:141-174`) ou `arquivo.levantar` (`:177-212`), não um estado de quarentena. |
-| `qs_na_fila` | “Quais chamados cobram agora?” VIVOS → COBRANÇA → exclui silêncio futuro: `app/chamados/services/painel.py:188-190`; VIVOS definido pela consulta em `:153-155`. Não pergunta isenção nem período. |
-| `chamados_visiveis_colab` | Lista de trabalho da pessoa: competência corrente por empresa (`app/chamados/services/janela_colab.py:40-46`), ampliada por perguntas `q_vivas` com destino (`:65-73`), exclui silêncio futuro e módulos internos (`:74-79`). Não filtra status vivo. `desligamento_revisao` já é interno à lista do colab: `:30-37`. |
-| Contadores/pílulas | Ativos e abertos/em análise usam `qs_na_fila`: `app/chamados/services/painel.py:212-225`. Pílula calcula `particionar_verbos(qs_vivos(...))`: `:229-231`. **Divergência ainda presente**: qualquer `silenciado_ate` vencido vira HISTORICO, `app/chamados/services/verbos.py:48-51`; lista padrão exclui ARQUIVADO e HISTORICO, `app/chamados/services/painel.py:325-331`. Contraria retorno exigido em `app/docs/CORTES.md:335`. |
-| Badge admin | Prefere `PlacarNavbar.badge_chamados`, depois `exige_o_admin(particionar_verbos(qs_vivos()))`, depois fila: `app/core/context_processors.py:80-93`. Badge “registrados” lê lavrado ou fila: `:138-150`. Badge colab lê fila: `:185-187`. Escritor do lavrado: `app/core/management/commands/lavrar_badge_navbar.py:91-93`; origem painel: `:39-42`, exigência admin: `:72-74`. Logo só migrar fila deixa caminho da pílula/badge admin descoberto. |
-| Alerta SLA | Universo de cobrança lido via fila: `app/chamados/management/commands/alertar_chamados_sla.py:24-32`. |
-| Alerta avançado | Isento atual é descartado pelo juiz `isento_ponto`, `app/ponto/management/commands/processar_alertas_avancados.py:29-33`; N5 também descarta chamado com silêncio vigente pelo método, `:110-113`. O primeiro é flag global, o segundo véu do chamado; nenhum pergunta período. |
-| Disparo pela célula | `motivos_a_perguntar` usa dia sem trabalho, situação ativo, tempo, veredito e lista admin: `app/chamados/services/fabrica_da_celula.py:105-125`; `perguntar_pela_celula` chama `perguntar` com dia da célula, `:217-220`. `perguntar` chama `gerar_perguntas_disputa` em `:160-174`; não há consulta ao novo juiz. |
-| Disparo por disputa/agrupador | `gerar_perguntas_disputa` (`app/chamados/services/disputa_emissao.py:300`) abre conversa ou pergunta datada em `:439-451`. Agrupador `_criar_pergunta_se_couber` guarda ausência e duplicata e abre em `:823-847`; âncora abre conversa em `:1371`. |
-| `detectar_par_relampago` | Na cópia linhas antigas deslocaram: universo é escala ativa sem fim + colab ativo, `app/ponto/management/commands/detectar_par_relampago.py:336-338`; abre **fato chamado** em `:368-385`, sem consulta a isento/quarentena. Pela lei vigente emissão de fato continua; isolar cobrança/disparo, não reintroduzir a regra substituída de “não nasce”: `app/docs/BACKLOG.md:766`, `app/docs/CORTES.md:348`. |
-
-A2 — matriz exigida de pré-desenho (não há implementação desta entidade/juiz/porta localizada; status de implementação das sete curas nesta cópia: **[nao verificado]**, a linha da obra é reprovada em `app/docs/BACKLOG.md:765`).
-
-| Estado → juiz | Operação | Persistência/retorno a exigir | Prova do contrato |
-|---|---|---|---|
-| Sem janela → falso; dia coberto → verdadeiro | Abrir período manual | Entidade com colab/início/fim/motivo/quem/quando e uma porta com trilha; não fechar chamados nem pôr véu. Retorno real/API inexistente **[nao verificado]**. | `app/docs/CORTES.md:348` |
-| Janela de isento aberta → verdadeira só no período | **Fechar**, não levantar, ao desligar flag | Preservar passado do período e registrar fim; distinguir do levantamento administrativo que devolve cobrança. A distinção é cura exigida, assinatura concreta e bordas inclusivas **[nao verificado]**. | `app/docs/BACKLOG.md:765`; flag atual só bool em `app/core/constants.py:18` |
-| Quarentena vigente → verdadeiro | Levantar | Quem/quando/motivo + trilha; retorno automático dos itens, sem mutar chamados/cálculo. | `app/docs/CORTES.md:348` |
-| Dia isolado → falso **só para aquele dia** | Desarquivar `(colab,dia)` por toque admin | Exceção persistida/trilhada para o par; restante da janela segue isolado. Não chamar `arquivo.levantar` de todos os chamados. | `app/docs/CORTES.md:349`; porta atual levanta um chamado em `app/chamados/services/arquivo.py:177-212` |
-| Flag true → janela de isento | Porta separada da janela de isento | Efeito da troca de flag passa pela porta; impedir que alteração manual de período vire segundo escritor da semântica da flag. Detalhe técnico da porta **[nao verificado]**. | `app/docs/BACKLOG.md:765`; trocas com trilha/abre-fecha em `app/docs/CORTES.md:352`; escritor atual `app/colaboradores/views.py:176` |
-| Histórico de flag → início da janela | Migration reversível e congelada; última ligação | Selecionar **última ligação** relevante do histórico, não primeira flag true; sem trilha usar admissão e rótulo explícito. Congelar interpretação para não importar juiz runtime mutável e guardar reversão que remova só o que migration criou. Implementação/migration específica **[nao verificado]**. | sete curas `app/docs/BACKLOG.md:765`; fallback autorizado `app/docs/CORTES.md:352`; seed histórica sem trilha `app/colaboradores/migrations/0043_isento_ponto.py:13-14` |
-| Chamado de isento com dia coberto pelo juiz | Vigia só dentro da janela | Esperado 0 para cobrança que escapou **dentro** da janela; chamado anterior ao início não pode ser chamado vazamento por flag atual. Não escrever nem re-silenciar. | `app/docs/BACKLOG.md:765`; universo atual demasiado amplo `app/chamados/services/silencio_isentos.py:24-31` |
-| Pergunta viva ou retida em item isolado | RED da retenção | Cobrir que retenção não devolve cobrança pela lateral, e que levantar/desarquivar restaura conforme lei. Qual `retencao` a reprovação nomeou especificamente é **[nao verificado]**: há `pergunta_no_app.retencao`, `app/chamados/services/pergunta_no_app.py:121-153`, e retenção de retratação, `app/chamados/reconciliador.py:438-455`. Não afirmar que uma delas é a nomeada sem anexo adicional. | `app/docs/BACKLOG.md:765` |
-| Candidatos migration → antes/depois | DIFF pela **função real da migration** | Executar seleção/projeção pura da função congelada em modo leitura e comparar itens/colabs/perguntas; não reconstruir seleção paralela. Função concreta não localizada **[nao verificado]**. | `app/docs/BACKLOG.md:765`; grandezas do DIFF `app/docs/CORTES.md:348` |
-| Item sem dia | Perguntar o mesmo juiz | Janela aberta cobre item sem dia; fechada não cobre. | `app/docs/CORTES.md:352` |
-| `desligamento_revisao` | Fora da quarentena | Sem isolar ato de DP por esta obra; não criar juiz extra de dono. | `app/docs/CORTES.md:348` |
-
-A3 — arquivos e sobreposição
-
-Núcleo necessariamente toca `app/chamados/models.py` (entidade histórica; estado atual só véu em `:508-524`), `app/chamados/juizes.py` (corte autoriza **apenas** `colab_em_quarentena`, `app/docs/CORTES.md:348`), `app/core/juizes.py` (registro previsto na política local; nova entrada **[nao verificado]**), migration nova (nome **[nao verificado]**), porta única nova (nome **[nao verificado]**), `app/chamados/views_arquivar.py`/template (modo/lista/botão exigidos por `app/docs/CORTES.md:348`), `app/colaboradores/views.py:176` e `app/chamados/signals.py:269-308` (troca de flag e vassoura atual). Preservar espelho/folha/TXT e não trocar `isento_ponto` de cálculo por novo significado de cobrança: `app/docs/CORTES.md:348`.
-
-Leitores diretos a migrar: fila `app/chamados/services/painel.py:188-190`; pílula `app/chamados/services/verbos.py:48-51`; lista do colab `app/chamados/services/janela_colab.py:74-79`; alerta avançado `app/ponto/management/commands/processar_alertas_avancados.py:110-113`; fábrica `app/chamados/services/fabrica_da_celula.py:92`, `:160`, `:178`, `:234`; gerador e agrupador `app/chamados/services/disputa_emissao.py:300`, `:823`, `:1302`; vigia e universo fio mudo `app/chamados/management/commands/disparar_perguntas_competencia.py:99-120`; vassoura `app/chamados/services/silencio_isentos.py:20-31` e seu command `app/chamados/management/commands/silenciar_chamados_isentos.py:31-49`. Caminhos indiretos/badge precisam validação após migração porque preferem valor lavrado: `app/core/context_processors.py:80-93`, `:138-150`; lavrador `app/core/management/commands/lavrar_badge_navbar.py:39-42`, `:91-93`.
-
-Outros disparadores a conferir sem trancar declaração/ação voluntária: `app/chamados/services/acoes_disputa.py:263` abre conversa; `app/chamados/services/declaracao_texto.py:376`, `:666` abre pergunta no ato de declaração. A porta genérica `PerguntaDisputa.abrir` atende ambos, `app/chamados/models.py:2792-2807`; pôr veto universal nela arriscaria contrariar “nada tranca”, `app/docs/CORTES.md:349`. O censo deve distinguir disparo de cobrança e ato voluntário por chamador, sem juiz novo.
-
-Crons chamadores do agrupador: `app/ponto/management/commands/detectar_ausencias.py:803`, `app/ponto/management/commands/processar_alertas_turno.py:385`, `app/ponto/management/commands/processar_alertas_avancados.py:159`; célula/cartório chama fábrica em `app/ponto/services/cartorio.py:1045`. `detectar_par_relampago.py:368` continua emissão de fato, não chamar isso de disparador direto de PerguntaDisputa sem prova.
-
-Sobreposição E3: usar o aval recebido como fonte do diff, pois comparação main não está disponível. Ele nomeia `chamados/juizes.py` alimentar_portas e `chamados/models.py` q_silenciado_em/respostas_sem_veredito; fonte da cópia confirma localizações atuais em `app/chamados/models.py:515`, `:1836` e `app/chamados/juizes.py:1541` em diante. Sobreposição SAÍDA-NOTURNA nos mesmos **arquivos**, outras regiões dadas pelo usuário: `juizes.py:679-705/:941-971`, `models.py:2511/:3179/:3738`; conteúdo do diff SAÍDA-NOTURNA **[nao verificado]**.
-
-Observação para C2: `app/docs/CORTES.md:345` lista os oito históricos nominalizados por #pk: `3403,3057,11935,23036,11658,23049,23037,23030`. Esses não são lista completa dos 12 nem medição atual. Só o dado/snapshot sustenta “8+4” à época; resultado atual permanece **[nao verificado]**.
-
-## 12/11 14:00 · sessao 667377a17498 · - · - · origem=Ronald (tmux)
-
-B1 — Varri **3.566 arquivos `.py` por AST**, sem erro de parse; procurei Store de atributo, keyword `respondida_em`, dict/subscript, `save(update_fields)`, `bulk_update`, `F()` e `setattr`, e complementei com fluxo de `**campos`/`**outros` e o censo estrutural existente. O censo existente reconhece aliases/imports e gerentes reversos, mas declara limites de atribuição em `app/core/censo_escritas.py:43`, `:451`, `:469`. Resultado da execução só em memória: 10 sítios literais runtime, 317 sítios em testes (160 arquivos); o total bruto inclui atribuições em memória e descritores de campo, portanto **não equivale a 10 escritores persistentes**. A execução do censo não tem arquivo de resultado persistido: `[nao verificado]` por arquivo:linha.
-
-| Escritor / fluxo | Pode persistir timestamp sem texto? | Ramo e prova |
-|---|---|---|
-| `responder_pergunta_disputa_core` | Não com entrada vazia no fluxo normal | `resposta` é normalizada e vazia retorna antes (`app/chamados/services/disputa_emissao.py:1432`); texto e timestamp atribuídos juntos `:1467`, `:1468`; campos `:1469`, save `:1508`; registra ato de resposta em seguida `:1511`. |
-| `responder_automaticamente` | **A função aceita** `texto=''`/espaços; grava ambos vazios e ato vazio se `instante` não nulo | Guarda apenas texto **anterior** `app/chamados/services/disputa_emissao.py:1647`; grava `texto` recebido sem validar `:1652`, timestamp `:1653`, save `:1655`, `ato_texto=texto` `:1656`. Único chamador runtime encontrado passa constante não vazia: `app/api/foto_recebida.py:25`, `:48`. Escrita vazia efetiva em produção: `[nao verificado]`. |
-| `carimbar(...,resposta='responder'/'validar')` | Pode escrever timestamp sem **reescrever** texto, mas só com texto preexistente não vazio | Guarda real `texto_vazio` em `app/chamados/models.py:3146`, timestamp só quando nulo `:3147`, `:3148`, save `:3168`; não escreve `ato_texto` aqui. Ausência semântica de texto não é permitida por esse ramo. |
-| `carimbar_resposta_pela_trilha` | Pode gravar só o timestamp no modelo, mas exige texto preexistente e registra-o no ato | Recusa carimbo existente ou texto vazio em `app/chamados/services/disputa_emissao.py:1670`; atribui `:1674`; save somente `respondida_em` `:1676`; `ato_texto=p.resposta_colab` `:1678`. |
-| `reabrir_para_correcao` | Só grava `None` no timestamp nos usos atuais | Dicionário com `respondida_em=None` e `resposta_colab=''` em `app/chamados/services/disputa_emissao.py:1593`; preserva foto anterior `:1615`; `descarimbar_em_lote(**campos)` `:1630` ou `qs.update(**campos)` `:1632`. |
-| `ressuscitar_perguntas` | Só grava `None` nos usos atuais; não cria timestamp não nulo | Universo restrito a texto vazio/null em `app/chamados/models.py:1499`; chamada persistente com `respondida_em=None` em `:1579`. |
-| `descarimbar_em_lote(qs,**outros)` | **Porta genericamente aceita** timestamp arbitrário sem texto | Só proíbe chaves de carimbo, não o par de resposta: `app/chamados/models.py:3271`; `update(...,**outros)` em `:3280`–`:3282`. Chamadores encontrados passam apenas `None`: `models.py:1579`, `disputa_emissao.py:1593`, `:1630`. Uso não nulo atual: `[nao verificado]`. |
-| Nascimento `abrir` / `abrir_conversa` → `_sob_contrato` → `_nascer` | **Porta genericamente aceita** `respondida_em` em `**campos` sem texto | `app/chamados/models.py:2792`, `:2810`, `:2822`, `:2841`; constrói `cls(...,**campos)` `:3030`–`:3031`, insere `:3033`; `save` não valida o par `:3429`–`:3439`. A conservação da projeção gera ato até com texto vazio em `:3947`–`:3950`. Não localizei chamador runtime que passe explicitamente assinatura não nula no nascimento; origem real em produção `[nao verificado]`. |
-
-Não são escritores persistentes:
-
-- `_universo_da_ressuscitacao` atribui `None` numa **cópia** para consulta ao juiz: `app/chamados/models.py:1507`, `:1521`, `:1522`.
-- `_desfazer_em_memoria` restaura o valor antigo sem save: `app/chamados/models.py:3175`, `:3179`; usado nos ramos de recusa/exceção `:3157`, `:3160`, `:3171`.
-- `DecisaoPergunta.linhas_da_projecao_sem_linha` **lê** `respondida_em` e pode copiar legado sem texto para `ato_texto=''`, não escreve `PerguntaDisputa.respondida_em`: `app/chamados/models.py:3947`–`:3950`.
-- O `bulk_update` de PerguntaDisputa encontrado grava apenas os três campos da lavra, não `respondida_em`: `app/chamados/veredito_lavrado.py:237`, `:250`.
-- `setattr` genérico de reexibição só muta memória, sem save: `app/core/reexibir.py:21`, `:49`, `:50`.
-- Migration só declara o campo, não contém backfill dele: `app/chamados/migrations/0014_perguntadisputa.py:25`.
-- Não encontrei `F('respondida_em')`, `setattr(...,'respondida_em',...)`, `bulk_update(...,'respondida_em')` nem update runtime direto não nulo; a ausência resulta da varredura em memória e não tem artefato persistido `[nao verificado]`.
-
-A suíte antiga não certifica a simetria pedida: o contrato declara literalmente o inverso “inofensivo”, só exige `respondida_em` quando encontra escrita de `resposta_colab`, e só inspeciona atribuição/update no corpo: `app/chamados/tests/test_contract_par_resposta.py:28`–`:37`, `:69`–`:83`; mutante absolve “só carimbo” em `:109`, `:113`. Isso conflita com o corte novo do anexo e não prova a saúde do sentido timestamp→texto.
-
-B2 — Leitores diretos runtime de `respostas_sem_veredito`:
-
-| Arquivo:linha | Uso |
-|---|---|
-| `app/chamados/models.py:1869` | Parte do juiz `pode_fechar`. |
-| `app/chamados/models.py:1902` | Guarda de **todas** as portas de `fechar`, inclusive exceções. |
-| `app/chamados/reconciliador.py:1164` | Segura disputa e relata perguntas no fecho das órfãs pela lâmpada. |
-| `app/chamados/services/fila_por_causa.py:226` | Gaveta `respondido_a_decidir`. |
-| `app/chamados/services/competencia_trancada.py:114` | `ignorar_tranca=True` para pauta do DP. |
-| `app/colaboradores/services/ficha.py:169` | Conta respostas sem veredito restritas a perguntas vivas da ficha; saída `:246`. |
-| `app/colaboradores/services/desligamento.py:141` | Pula fechamento automático da disputa na cascata de desligamento. |
-| `app/chamados/management/commands/validar_classe_a.py:54` | Compõe conjunto para classificação/validação assinada. |
-
-Corpo atual divergente: validação/materialização nulas e `(respondida_em não nulo OU resposta_colab.strip())`, excetuando tranca salvo parâmetro: `app/chamados/models.py:1857`–`:1861`. `pode_fechar` combina essa lista com `fio_vivo` real: `:1867`–`:1869`.
-
-Leitores diretos runtime de `pode_fechar`:
-
-- `app/chamados/reconciliador.py:412`, `:612`, `:1171`.
-- `app/chamados/services/becos.py:33` (classificação), `:56` (fecho).
-- `app/chamados/services/competencia_trancada.py:154` (medição), `:203` (aplicação).
-- `app/chamados/services/explicador.py:139` (retorna booleano na explicação em `:165`).
-- `app/chamados/services/disputa_emissao.py:1278`, `:2091`.
-- `app/chamados/services/materializacao.py:591`, `:1322`.
-- `app/ponto/services/entrada_sincronizada.py:59`.
-
-Leitores indiretos da saída do explicador: `app/chamados/services/desenlace.py:63`; template `app/templates/chamados/partials/modal_fio.html:435`, `:446`. Registro de autoridade, não chamada: `app/core/juizes.py:283`.
-
-Não há banco/log disponível nesta tarefa; nenhum escritor histórico responsável por perguntas reais pode ser identificado só pela possibilidade estática `[nao verificado]`.
-
-_4283 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4288 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
