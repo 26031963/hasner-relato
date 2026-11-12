@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 15:26:02.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (477.0 MB). Acoes na janela: **1545**.
+**Medido em 12/11/2026 15:31:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (477.2 MB). Acoes na janela: **1549**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:30:55 | Bash | Create fresh worktree for O168 volta 3 | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-o168v3-$(date +%H%M%S); git worktree add -b raia/o168v3-$(date +%H%M%S) $W d9fbfd979 2>&1 \| tail -1; cd $W && git log --oneline -1 && mkdir -p app/logs app/media && echo $W` |
+| 15:30:25 | Bash | Inspect E2 -> S88 cascade in copy | `cd /home/ronald/wt-o168-142801/app; sed -n 1025,1052p ponto/services/cartorio.py; echo ----SIG; sed -n 15,50p chamados/signals.py; echo ----REC; sed -n 600,640p chamados/reconciliador.py` |
+| 15:30:16 | Bash | Read O168 Codex preverif result | `cd /home/ronald/saas-hasner/logs/O168/preverif1; cat preverif1.fim; tail -2 preverif1.log; wc -c preverif1.r; cat preverif1.r \| cut -c1-600` |
+| 15:26:10 | Bash | Save list and publish E3-10 passivo stop in RELATO | `cd /home/ronald/saas-hasner; awk '/^col[0-9]+: #/' logs/E3-LEITORES/e3_10/app/sonda_app.r > logs/E3-LEITORES/e3_10/app/lista_142_historico_para_pendentes.txt; wc -l < logs/E3-LEITORES/e3_10/app/lista_142_historico_para_pendentes.txt; cd app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read().split('\n') l=("PAREI E3-10 PASSIVO 15:3x (aval E3-10-CURA-NO-ESCRITOR: \"apply so se o app nao muda, s ...` |
 | 15:26:02 | Bash | Confirm app partition rule cited by Codex | `cd /home/ronald/saas-hasner/app; sed -n 60,75p chamados/services/pergunta_no_app.py` |
 | 15:25:56 | Bash | Read E3-10 app sonda answer | `cd /home/ronald/saas-hasner; cat logs/E3-LEITORES/e3_10/app/sonda_app.r \| cut -c1-400` |
 | 15:25:53 | Bash | Fix ESPERANDO line and test hook proof | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=519916/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
