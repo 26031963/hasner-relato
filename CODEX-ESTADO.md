@@ -1,7 +1,134 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 22:43** · publicado em **11/11/2026 22:43** (UTC-3)
+> Ultima resposta processada: **11/11/2026 22:47** · publicado em **11/11/2026 22:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 22:47 · sessao 041b3efca22e · LASTRO-FAIXA-SEM-DEFAULT · verificador · origem=Code
+
+**REPROVO a c5.** Encontrei três regressões bloqueantes: perda de valores quando o tipo é inativado; parcial que deixa de cobrar o restante do turno; folga aprovada que pode virar `nunca_bateu`. A propriedade “grade == status” também não está garantida para atas antigas já carimbadas. Referências: `app/ponto/services/dia_pago.py:390` **c5**; `app/chamados/juizes.py:438`; `app/ponto/services/cartorio.py:1230`, `:1275`, `:1395`.
+
+Referências sem indicação são da **base**; **c5** indica a linha resultante do patch. Os contraexemplos abaixo são construídos a partir do código; ocorrência e impacto quantitativo em produção: **[nao verificado]**.
+
+**1. Quem escreve, quem lê e o significado dos campos**
+
+| Campo/valor | Quem escreve ou define | Quem lê, inclusive fora do diff |
+|---|---|---|
+| `faixa` | `_FAIXA_DE_TIPO` define a faixa; `faixa_de` consulta; A2 escolhe a vencedora. `app/ponto/precedencia.py:52`, `:100`, `:421` | Grade nova, status, predicado de folga humana, semana do posto, reavaliação de chamados, diagnóstico do colaborador e carimbo. `app/escala/utils.py:1224` **c5**; `app/ponto/status_dia.py:308`; `app/ponto/precedencia.py:212`; `app/escala/services/semana_do_posto.py:177`; `app/chamados/services/feriado_reavaliar.py:36`; `app/ponto/services/dia_do_colab.py:132`; `app/ponto/services/cartorio.py:1988` |
+| `tipo_do_dia` | A2 escreve o código vencedor; c5 distingue folga automática por `folga_da_escala`. `app/ponto/precedencia.py:413`, `:432` **c5** | Tradutor, status, deslogados, faltas de hoje, sem-furo, diagnóstico e carimbo. `app/ponto/services/dia_decidido.py:371` **c5**; `app/ponto/status_dia.py:311`; `app/ponto/services/deslogados.py:166`; `app/ponto/services/faltas_de_hoje.py:61`; `app/folha/services/sem_furo.py:26`; `app/ponto/services/dia_do_colab.py:87`; `app/ponto/services/cartorio.py:1987` |
+| `tipo_dia` | Builders/overlays escrevem a classificação da grade; cartório serializa; porta persiste; leitor reconstrói da ata. `app/escala/utils.py:1801`, `:1809`; `app/escala/utils.py:1224` **c5**; `app/ponto/services/cartorio.py:728`; `app/ponto/portas/celula.py:995`; `app/escala/services/leitor_celula.py:397` | Dinheiro, status, cobrança parcial, suprajuiz, ramo sem adesão e espelho. `app/ponto/services/dia_pago.py:397` **c5**; `app/ponto/status_dia.py:189`; `app/chamados/juizes.py:438`; `app/ponto/supra_juiz.py:304`; `app/ponto/services/cartorio.py:1230`; `app/ponto/services/espelho.py:679` |
+| `ausencia_tipo` | Grade obtém o código da cobertura para folha; c5 transporta grade → ata → grade lida. `app/escala/utils.py:1188`, `:1189`; `app/ponto/services/cartorio.py:765` **c5**; `app/escala/services/leitor_celula.py:436` **c5** | Novo leitor financeiro consulta o efeito vigente desse código. `app/ponto/services/dia_pago.py:390` **c5** |
+| `ausencia_id`, `ausencia_label` | Grade escreve PK/display da cobertura; c5 transporta as chaves pela ata. Falta recebe ID no ramo próprio. `app/escala/utils.py:1189`, `:1216`; `app/escala/utils.py:1226` **c5**; `app/ponto/services/cartorio.py:765` **c5** | O transporte preserva as chaves, mas o link do calendário citado nas notas usa outro objeto: cobertura atual → `dia.ausencia.id/label`. `app/colaboradores/services/calendario.py:485`, `:673`; `app/templates/colaboradores/partials/_calendario_grade.html:97` |
+| Mapas `abono/previsto/realizado` por dia | `por_dia_da_grade`, em minutos, indexados por `data`. `app/ponto/services/dia_pago.py:364`, `:367`; implementação nova em `:387` **c5** | Fechamento soma; lavratura copia para `DiaPago`; prontidão nova soma; retrato de exportada e testemunha da porta também consultam. `app/ponto/services/fechamento.py:1062`, `:1212`; `app/ponto/services/dia_pago.py:288`, `:464`; `app/folha/export.py:1098` **c5**; `app/folha/porta_export.py:139` |
+| Totais do fechamento | Rubricas horárias vêm de `resultado`; os três totais de minutos vêm dos mapas; previsto/dias/carimbo são gravados no mesmo bloco. `app/ponto/services/fechamento.py:1002`, `:1062`, `:1083` | Prontidão com snapshot, exportação de eventos e conferências de lavratura. `app/folha/export.py:1045`, `:1076`, `:402`; `app/ponto/services/dia_pago.py:550`; `app/folha/porta_export.py:143` |
+| `prontidao` | Calculada por `folha.export.prontidao`; retorna percentual e previsto em horas. `app/folha/export.py:1025`, `:1050` | Snapshot lê os totais persistidos; caminho sem snapshot passa a consultar os mapas. `app/folha/export.py:1045`; `app/folha/export.py:1098` **c5** |
+| `TipoSemFaixa` | `faixa_de` levanta recusa nomeada para código fora do mapa. Já existe na c3. `app/ponto/precedencia.py:96`, `:100` | Vigia conta; três capturas passam a propagar; cartório ainda captura genericamente. `app/ponto/services/vigia_ausencia.py:163`; `app/ferias/situacao.py:95` **c5**; `app/escala/services/semana_do_posto.py:178` **c5**; `app/ponto/services/espelho.py:651` **c5**; `app/ponto/services/cartorio.py:2035` |
+| `tipos_ativos_sem_faixa` | Vigia percorre **todos os tipos ativos**, mesmo sem lançamentos, perguntando a `faixa_de`. `app/ponto/services/vigia_ausencia.py:144`, `:160`, `:168` | API de contadores e revisão da família. `app/api/views_mensageria.py:1416`; `app/ponto/management/commands/vigiar_familia_ausencia.py:23` |
+
+**Não supõem todos o mesmo significado.** A2 escolhe o fato mais forte; cobertura para folha escolhe a ausência aprovada mais recente. Portanto `tipo_dia` pode refletir a faixa de um fato enquanto `ausencia_tipo/id/label` identificam outro lançamento. Essa separação é exercitada pelo próprio teste de sobreposição da c5. `app/ponto/precedencia.py:421`; `app/ponto/turnos.py:2516`, `:2753`; `app/ponto/tests/test_lastro_c5_sem_banco.py:261` **c5**.
+
+Datas de cobertura são inclusivas; o parcial noturno usa minutos desde o início do turno, podendo ultrapassar 1440, e inclui ambas as bordas. Os mapas financeiros mantêm a data recebida da grade; não convertem para o dia civil das batidas. `app/ponto/turnos.py:2540`, `:2638`, `:2641`, `:2647`; `app/ponto/services/dia_pago.py:390`, `:288`.
+
+B2 separa a folga automática na origem da A2, mas `tipo_dia='folga'` continua agrupando folga humana e automática. Os leitores de cobrança que ainda interpretam esse rótulo causam os bloqueios abaixo. `app/ponto/precedencia.py:413` **c5**; `app/escala/utils.py:1224` **c5**; `app/chamados/juizes.py:438`; `app/ponto/services/cartorio.py:1230`.
+
+**2. Dinheiro: preservação limitada e regressão concreta**
+
+**BLOQUEIA — a ata nova perde valores quando o tipo sai do catálogo ativo.**
+
+Contraexemplo: tipo `folga`, efeito ABONA; ausência aprovada; jornada prevista de 480 minutos; batidas pareadas cobrindo 180 minutos, por exemplo 08–11. A ata antiga era `ausencia`; a nova é `folga` com `ausencia_tipo='folga'`. Enquanto o efeito está disponível, ambas produzem abono 300, previsto 480 e realizado 180. Se o tipo for inativado, o catálogo deixa de retorná-lo e a ata nova passa a produzir **três mapas vazios**. `app/escala/utils.py:1224` **c5**; `app/ponto/services/dia_pago.py:390`, `:397` **c5**; `app/ponto/catalogo/ausencias.py:249`, `:293`.
+
+A inativação é permitida pela porta; o signal invalida o cache, e o modelo declara que inativar preserva o histórico. O vigia de faixas não acusa esse caso, pois só conta tipos ativos sem mapa. `app/ponto/services/ausencia.py:1301`; `app/ponto/models.py:607`, `:1235`; `app/ponto/services/vigia_ausencia.py:160`.
+
+A prova executada em memória confirmou os resultados abaixo para P=480/C=180; não exercitou banco ou persistência. As condições executadas correspondem a `app/ponto/services/dia_pago.py:387` da base e `:390` **c5**.
+
+| Efeito disponível | Base, ata antiga `ausencia` | c5, ata nova `folga` |
+|---|---:|---:|
+| `abona`, `suprime` ou `desconta` | 300 / 480 / 180 | 300 / 480 / 180 |
+| `None` | 300 / 480 / 180 | mapas vazios |
+
+Alcance dessa regressão:
+
+- **Com snapshot:** prontidão continua lendo o número gravado até sua invalidação/recálculo. **Sem snapshot:** uma janela composta só desse dia passa de 8 horas previstas/100% para `cego=True`, motivo `sem_escala`. `app/folha/export.py:1045`, `:1078`; `app/folha/export.py:1098`, `:1108` **c5**.
+- **Fechamento e DiaPago:** recálculo soma os mapas; lavratura copia seus minutos. `app/ponto/services/fechamento.py:1046` **c5**; `app/ponto/services/dia_pago.py:288`.
+- **Exportada:** o helper alterado também é chamado por `retratar_exportada`, que atualiza ou zera esses campos. Portanto “não tocar exportada” não está assegurado apenas por não editar esse chamador. A execução depende da guarda existente. `app/ponto/services/dia_pago.py:451`, `:464`, `:481`, `:495`.
+- **Falha do catálogo:** `_do_banco` captura exceções e `vigente` usa a semente; códigos como `folga` e `troca_de_plantao` não estão nessa semente. Isso oferece outro caminho para efeito ausente. Falha real nesse caminho: **[nao verificado]**. `app/ponto/catalogo/ausencias.py:87`, `:253`, `:278`.
+
+**O que preserva:** para dias anteriormente classificados como `ausencia`, com código ainda encontrável e efeito válido, c5 conserva P−C/P/C, inclusive nos SUPRIME/DESCONTA que o pedido mandou manter. Na prontidão sem snapshot, a contribuição antiga P passa a `(P−C)+C`, preservando o percentual nesse universo. `app/ponto/services/dia_pago.py:394` **c5**; `app/folha/export.py:1100`; `app/folha/export.py:1098` **c5**.
+
+Não encontrei mudança direta nas fórmulas das rubricas horárias emitidas pelo TXT: elas continuam lendo os campos horários do fechamento. Isso não elimina a mudança de retenção descrita abaixo. `app/folha/export.py:402`; `app/folha/export.py:1241`.
+
+Valores, batidas, atas e snapshots dos 24 dias reais mencionados no raspado: **[nao verificado]**.
+
+**3. Classes de reprovação**
+
+| Classe | Conclusão |
+|---|---|
+| Segundo juiz | Não identifiquei nova função que clone A2, cobertura ou previsto: a grade consulta A2 e os consumidores financeiros passam a compartilhar o helper. Permanecem leitores com regra incompatível, detalhados abaixo. Autoridades registradas: `app/core/juizes.py:184`, `:187`, `:190`, `:290`; costura c5: `app/escala/utils.py:1204`; `app/folha/export.py:1098` **c5**. |
+| Segundo escritor fora da porta | Não encontrei novo escritor persistente no delta: `ata_do_dia` monta o dicionário; a lavra e a porta existentes persistem. `app/ponto/services/cartorio.py:765` **c5**; `app/ponto/services/cartorio.py:1839`; `app/ponto/portas/celula.py:995`, `:899`. |
+| Relógio fora da borda | Não há nova leitura de relógio nos acréscimos do patch. Existe leitura preexistente de `localdate()`/`now()` em `julgar_celula`, mesmo com `agora=` recebido: **fila**. Contraexemplo: replay com `agora` de outro dia usa a data real nas guardas. `app/ponto/services/cartorio.py:1997`, `:2002`, `:2023`, `:2026`. |
+| Derivação paralela | A soma financeira fica concentrada no helper; entretanto, leitores de `tipo_dia` mantêm interpretações próprias da cobertura. São os bloqueios parcial/sem adesão abaixo. `app/ponto/services/fechamento.py:1046` **c5**; `app/chamados/juizes.py:438`; `app/ponto/services/cartorio.py:1230`. |
+| Campo com dois significados | `folga` passa a representar também ausência aprovada com efeito financeiro e possível cobertura parcial, enquanto leitores ainda o tratam como descanso integral. `app/escala/utils.py:1224` **c5**; `app/chamados/juizes.py:456`; `app/ponto/services/cartorio.py:1230`. |
+| Default/except que engole | A recusa de faixa é nominal, mas a aplicação final de precedência ainda a captura genericamente; há também a captura/fallback do catálogo que alcança o novo leitor financeiro. `app/ponto/precedencia.py:105`; `app/ponto/services/cartorio.py:2033`; `app/ponto/catalogo/ausencias.py:253`, `:278`. |
+| Ordem de trava | O delta não acrescenta locks/transações; save e evento continuam no mesmo `atomic`. Integração concorrente e ordem efetiva de locks: **[nao verificado]**. `app/ponto/portas/celula.py:899`. |
+| Pouso antes do pré-requisito | Pouso executado: **[nao verificado]**. Suite inteira e opus final desta volta: **[nao verificado]**. A ordem exigida é suite verde → opus final → pouso. `CLAUDE.md:377`, `:381`. | [nao verificado]
+
+**BLOQUEIA — parcial passa a calar o restante do turno.**
+
+Contraexemplo: `folga_compensatoria` cadastrada como ABONA e `parcial=True`; ausência aprovada de 120 minutos, período 08–10; turno 08–17; marco das 17 apagado. Esse cadastro é aceito pela porta e pelo juiz de parcialidade. `app/ponto/services/ausencia.py:1301`; `app/ponto/catalogo/ausencias.py:250`; `app/ponto/turnos.py:2600`.
+
+A c5 escreve `tipo_dia='folga'`, mantendo `cobertura_parcial=True`. Porém `ausencia_parcial_cobra_o_resto` exige literalmente `ausencia`; passa a False, e `dia_sem_trabalho` passa a True. O suprajuiz também deixa de reconhecer o dia como dia de cobrança. A prova em memória confirmou a mudança False → True no juiz de dia sem trabalho. `app/escala/utils.py:1224`, `:1234` **c5**; `app/chamados/juizes.py:438`, `:456`; `app/ponto/supra_juiz.py:304`.
+
+**BLOQUEIA — folga integral aprovada pode virar `nunca_bateu` e reter folha.**
+
+Contraexemplo: colaborador ativo, nenhuma batida apurável na vida; célula `trabalha=True`; folga aprovada integral em 15/10/2026, empresa com corte 21; primeiro julgamento ou julgamento forçado. Na base, a grade `ausencia` satisfaz `_coberto_inteiro_nb`; na c5, a grade `folga` deixa de satisfazê-lo. Fora do horizonte de competência 11, `sem_trabalho` também é False, e o ramo força `nunca_bateu`. `app/ponto/services/cartorio.py:1197`, `:1230`, `:1241`, `:1275`; `app/ponto/services/cartorio.py:270`, `:281`.
+
+Esse veredito acusa e retém a folha mesmo sem protestos: muda a elegibilidade de pagamento/exportação, embora os mapas do dia possam continuar iguais. `app/escala/models.py:1767`; `app/folha/export.py:1241`, `:1251`, `:1262`.
+
+**FILA preexistente — recusa pode ser engolida depois da lavra.**
+
+Uma ausência aberta já persistida, de tipo sem faixa, pode ficar fora da cobertura de folha; o overlay retorna sem perguntar A2. A aplicação final de precedência encontra o tipo e sua exceção é capturada após o julgamento. Existência dessa linha em produção: **[nao verificado]**. `app/ponto/turnos.py:2516`; `app/escala/utils.py:1202`; `app/ponto/services/cartorio.py:2026`, `:2033`; `app/ponto/precedencia.py:105`.
+
+Não atribuo esse exemplo à criação normal: o caminho com veto consulta a precedência antes. `app/ponto/services/ausencia.py:377`; `app/ponto/precedencia.py:522`.
+
+**O RED sem banco não cobre esses caminhos reais.**
+
+O harness executa funções e trechos AST, mas substitui ORM, calendário, cadastro e relógio. Em particular: `vigente()` vira dicionário; o teste de ata fabrica a célula diretamente; o fechamento executa só o trecho até `_dias_inc`; a prontidão recebe `previsto_em=None`. `app/ponto/tests/test_lastro_c5_sem_banco.py:7`, `:169`, `:307`, `:354`, `:240` **c5**.
+
+Assim, ele não exercita inativação/cache/signals, guardas da impressão, `julgar_colab` completo, persistência pela porta, eventos, transações, snapshot nem retenção real. Esses caminhos estão fora dos trechos chamados pelos testes citados; suas implementações reais estão em `app/ponto/models.py:1235`; `app/ponto/services/cartorio.py:1246`, `:1395`; `app/ponto/portas/celula.py:899`; `app/folha/export.py:1045`, `:1241`.
+
+**4. Ata antiga lida pelo leitor novo**
+
+As três chaves ausentes **continuam ausentes**. O transporte só copia quando `campo in ata`; não consulta a cobertura atual. `app/escala/services/leitor_celula.py:436` **c5**.
+
+Quem decide é:
+
+- **Classificação:** `ata.tipo_dia`; se ausente/vazio, o leitor usa `cel.trabalha`. `app/escala/services/leitor_celula.py:397`.
+- **Dinheiro sem slug:** o ramo legado de `por_dia_da_grade`. Ata `ausencia`, P480/C180, mantém 300/480/180; ata `folga` sem slug continua fora dos mapas. `app/ponto/services/dia_pago.py:397` **c5**.
+- **Status já lavrado:** a coluna persistida, quando disponível e fora do andamento do turno. `app/ponto/status_dia.py:287`.
+
+**BLOQUEIA a propriedade B1 integral — ata antiga pode permanecer divergente.** Contraexemplo: folga humana aprovada, ata antiga `ausencia`, status persistido `ausencia`, impressão atual e nenhum fato novo. A grade viva c5 passa a `folga`; a ata/status continuam antigos porque o cartório pula impressão igual. O patch não altera `REGRA_VERSOES`, e `tipo_dia` da grade não integra essa impressão. `app/ponto/services/cartorio.py:132`, `:192`, `:1395`; `app/escala/utils.py:1224` **c5**; `app/ponto/status_dia.py:287`.
+
+Isso preserva o dinheiro legado da ata, mas não prova “grade == status no mesmo dia” em todo caminho. O teste de B1 chama status sem lavra e a função de status da lavra diretamente, sem passar pela guarda real. `app/ponto/tests/test_lastro_c5_sem_banco.py:228`, `:245` **c5**.
+
+**5. B3: efeitos fora da A2**
+
+**FILA — há mudança concreta de classe fora da A2.** Contraexemplo: troca `aguardando_decisao`, dia previsto de trabalho, nenhuma batida, ata com lâmpada apagada. Antes, A2 classificava como folga e `dias_com_furo` não incluía a data; c5 exclui a troca, A2 responde trabalho e o contador passa a incluir a data como furo. `app/ponto/precedencia.py:301` **c5**; `app/folha/services/sem_furo.py:20`, `:26`.
+
+Simultaneamente, a cobertura de cobrança continua incluindo a troca aberta e pode suspender a cobrança antes de consultar a ata. Deslogados e faltas de hoje também a excluem pela cobertura. Isso mantém respostas distintas entre os indicadores. `app/ponto/turnos.py:2518`; `app/chamados/juizes.py:476`; `app/ponto/services/deslogados.py:163`; `app/ponto/services/faltas_de_hoje.py:59`.
+
+A mudança do contador é consequência demonstrável; que ela seja indesejada: **[nao verificado]**. Mudança de valor financeiro causada especificamente por B3: **[nao verificado]**. A cobertura de folha já exige aprovação, independentemente dessa alteração na A2. `app/ponto/turnos.py:2516`.
+
+**6. Leitores que não migraram ou mantêm regra própria**
+
+| Sítio | Resultado |
+|---|---|
+| `app/chamados/juizes.py:438` e consumidores, inclusive `app/chamados/services/declaracao_texto.py:119` | **Bloqueia:** parcial só é reconhecida sob `ausencia`; contraexemplo 08–10/turno até 17 acima. |
+| `app/ponto/supra_juiz.py:304` | **Bloqueia:** mesmo requisito literal para cobrar o restante da parcial. |
+| `app/ponto/services/cartorio.py:1230` | **Bloqueia:** cobertura integral aprovada só reconhecida sob `ausencia/falta`; contraexemplo sem adesão na competência 10 acima. |
+| `app/escala/utils.py:1210`, `:1213` | **Fila preexistente:** falta continua com ramo próprio por slug. Falta aprovada em folga conserva folga na grade, enquanto A2 admite o fato em faixa de atestado. `app/ponto/precedencia.py:69`, `:406`; `app/ponto/status_dia.py:311`. |
+| `app/ponto/services/cartorio.py:2035` | **Fila preexistente:** captura genérica ainda alcança `TipoSemFaixa`; contraexemplo de ausência aberta já persistida acima. |
+| `app/colaboradores/services/calendario.py:485`, `:673` | **Fila de evidência:** o link citado nas notas nasce da cobertura atual, não das novas chaves da ata. Transportar ID/label não prova sozinho o clique no calendário. `app/templates/colaboradores/partials/_calendario_grade.html:97`. |
+
+No censo de `tipo_do_dia`, não encontrei outra comparação produtiva direta com `folga` além do tradutor alterado: os demais selecionam trabalho, leem faixa ou transportam o código. Li `app/ponto/services/dia_decidido.py:370`; `app/ponto/services/deslogados.py:166`; `app/ponto/services/faltas_de_hoje.py:61`; `app/folha/services/sem_furo.py:26`; `app/ponto/status_dia.py:308`; `app/ponto/services/dia_do_colab.py:87`; `app/ponto/services/cartorio.py:1987`. Isso não elimina as regressões dos leitores de **`tipo_dia`** listadas acima.
 
 ## 11/11 22:43 · sessao 1c91f963fa17 · - · - · origem=Ronald (tmux)
 
@@ -779,18 +906,4 @@ Mais forte: a fixture ORM congela agora em 25/09, documenta que isso é comp10, 
 
 Dependências de uma volta B, para a consolidação: guarda de produção em `app/chamados/management/commands/backfill_fio_morto_e4b.py:218`; expectativa temporal do helper ORM em `app/chamados/tests/test_e4_backfill.py:97`; RED corrente e mutante em `app/chamados/tests/test_e4b_c4v7_memoria.py:131`, `:449`; double de janela e passagem de argv em `app/chamados/tests/test_e4b_classe_e_memoria.py:588`, `:646`. A cerca e K6 não respondem competência de hoje e não precisam receber essa pergunta para caracterizar B: `app/chamados/services/foto_e4b.py:145`; `app/folha/export.py:556`.
 
-## 11/11 21:51 · sessao ccb68bd8192e · - · - · origem=Ronald (tmux)
-
-Somente leitura; não executei testes. [nao verificado]
-
-- **FILA c — confirmação limitada:** `test_i_terminal_para_terminal_passa` termina exigindo `em_analise` e trilha `['fechado', 'em_analise']`; não chama reconciliador depois desse estado. O trecho encerra verificando nota e `materializada_em=None`. Portanto o teste prova a reabertura, não mede o flap posterior. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:211`, `:222`, `:225`, `:226`, `:229`) O recibo c4 já nomeia esse teste, mas não documenta ensaio posterior contra o reconciliador. (`app/docs/FIO-E0-V4-E4B-c4.txt:121`)
-
-- **FILA d — confirmado no código, com distinção:** 27→28 e 59→60 estão descritos como **medidos pela sessão**, não `[nao verificado]`. (`app/ponto/tests/test_selo_chokepoint_escrita.py:117`, `:122`, `:127`, `:132`) Os valores 213 e 269 estão mantidos como tetos; sua expectativa após cura aparece `[nao verificado]`, e o custo da carga canônica continua `PERGUNTA DE DESENHO`. (`app/ponto/tests/test_selo_chokepoint_escrita.py:184`, `:192`, `:193`, `:196`, `:204`, `:207`, `:208`, `:210`) Logo não generalizar o rótulo `[nao verificado]` aos quatro deltas.
-
-- **FILA e — execução histórica não verificável; roteiro explica lacuna:** `retorno_antecipado` está definido com assertion-alvo `"S128 nao carimbou a morta"`. (`app/chamados/tests/e4b_c6_verificar.py:45`) `ensaios(c9)` inclui c8, c8 inclui c7, porém c7 retorna somente casos/mutantes C7 e não inclui o ramo padrão c6, onde estão `retorno_antecipado` e `sem_pauta`. (`app/chamados/tests/e4b_c6_verificar.py:320`, `:325`, `:328`, `:332`) `--orm --c9` usa esse roteiro. (`app/chamados/tests/e4b_c6_verificar.py:388`) A ausência de rerun independente depois c7–c9 continua **[nao verificado]**; `c6_orm.log:15,38` é apenas referência do anexo opus, não log disponível para inspeção.
-
-- **FILA f — a referência do opus diverge da cópia:** E4B está em `app/docs/BACKLOG.md:1875`, com `padrao=Parallel Change / Expand-Contract, fase BACKFILL`; `:1889` é outra obra. O recibo c4 registra literalmente `"antes de substituir append-only"` e a substituição para Parallel Change. (`app/docs/FIO-E0-V4-E4B-c4.txt:33`, `:9`) Os recibos c8/c9 declaram `Single Writer Principle`. (`app/docs/FIO-E0-V4-E4B-c8.txt:5`, `app/docs/FIO-E0-V4-E4B-c9.txt:5`) Assim há evidência de três rótulos ao longo dos documentos, mas **não** de `append-only` na linha E4B atual. Conteúdo específico do `recibo_c6.txt` e merge que preservaria append-only: **[nao verificado]**.
-
-Para classificar pelos anexos: FILA c/f não são nomeadas especificamente nas perguntas fornecidas; d tem tema de teto explicitamente na c4 (`preverif_c4.q`, item 8); e envolve prova histórica/RED, com tema genérico nas c6–c9 e alegações de execução nos cabeçalhos. Atribuir c/e/f a falha de leitura sem separar pergunta e prova seria extrapolação. [nao verificado: classificação final depende da numeração literal dos anexos pelo agente principal]
-
-_4053 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4054 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
