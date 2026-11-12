@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 20:57** · publicado em **11/11/2026 21:00** (UTC-3)
+> Ultima resposta processada: **11/11/2026 21:04** · publicado em **11/11/2026 21:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 21:04 · sessao ae9a66b9c290 · DATA-EVENTO-CRU · censo · origem=Code
+
+Numeração dos anexos: primeira linha do conteúdo = 1, incluindo linhas vazias e excluindo `== anexo ==`. Em **b**, considero a triagem da própria resposta; descarte posterior pela sessão é **[nao verificado]**.
+
+| Achado | Letra | Trecho q | Trecho r | Motivo em 1 linha |
+|---|---|---|---|---|
+| **1 — templates sem ponto** (`opus_final.r:3`) | **a** | “o regex de template deixa escapar algum leitor” (`contrato_catraca.q:1`) | Reconhece `with` e aponta `attr` como escape (`preverif_catraca.r:9`, `:11`) | A cobertura dos escapes foi perguntada; `regroup` e `dictsort` ficaram sem identificação. |
+| **2 — dict de filtro em variável** (`opus_final.r:4`) | **a** | “Algum leitor real NOVO ficou de fora por regra nova (chave de dict literal como rotulo...)?” (`preverif_catraca_v2.q:1`) | “não localizei”; “As chaves literais encontradas são payload/trilha” (`preverif_catraca_v2.r:14`) | A exclusão de chaves foi expressamente questionada; o dict usado como filtro não foi identificado. |
+| **3 — isenção ampla de return** (`opus_final.r:5`) | **e** | A v3 informa “sobrecontagem admitida” do retorno e pergunta sua estabilidade (`preverif_catraca_v3.q:2`, `:6`) | “`return 'data_evento'`, continua contado”; depois bloqueia a compensação (`preverif_catraca_v3.r:5`, `:19`, `:25`) | A pergunta examinava a sobrecontagem; a isenção defeituosa pertence à cura posterior, registrada na [volta 4](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7968). |
+| **4 — comentário multilinha** (`opus_final.r:6`) | **a** | “o regex de template deixa escapar algum leitor” (`contrato_catraca.q:1`) | Recomenda “retirar comentários antes de contar”, mencionando `{# ... #}` (`contrato_catraca.r:40`) | A revisão do regex estava no alcance; a resposta não distinguiu a semântica de comentário em uma linha da multilinha. |
+| **5 — ESCRITA pelo nome da chamada** (`opus_final.r:7`) | **a** | “Algum leitor real NOVO ficou de fora por regra nova (... destino de escrita, DESTINO_KW)?” (`preverif_catraca_v2.q:1`) | “Leitor real novo omitido pelas exclusões novas: não localizei”; demonstra apenas a regressão do subscrito (`preverif_catraca_v2.r:14`) | As exclusões de escrita foram perguntadas; a isenção indistinta pelo nome do método não foi apontada. |
+| **6 — total no ESTADO** (`opus_final.r:8`) | **e** | Pergunta “Quem escreve e quem le o JSON” e colisões com enumeradores (`preverif_catraca.q:7`) | “Publicação desse total no BACKLOG/ESTADO: **[nao verificado]**” (`preverif_catraca.r:36`) | Nenhuma q cobra explicitamente o produtor do total no ESTADO; a resposta menciona a publicação sem verificá-la. |
+| **7 — código e JSON sobem juntos** (`opus_final.r:9`) | **b** | Pergunta se acrescentar leitor fica vermelho e se a catraca “so desce” (`preverif_catraca.q:3`) | “aumentar código **e** allowlist juntos pode passar; não há comparação com o baseline anterior” (`preverif_catraca.r:7`) | O Codex viu e tratou como limite, deixando-o fora da lista final de bloqueantes (`preverif_catraca.r:7`, `:40`). |
+
+**Contagem da classificação acima:** **a = 4; b = 1; c = 0; d = 0; e = 2. Total = 7** (`opus_final.r:3–9`).
+
+A promessa do achado 6 está em [RELATO.md:7950](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7950) nesta cópia; [RELATO.md:7966](/home/ronald/codex_ws/29e201d0ca2c9a6534ece9880e4a989a629f9987/app/docs/RELATO.md:7966) registra a volta 3.
+
+## 11/11 21:03 · sessao 8e89de2fb777 · - · - · origem=Ronald (tmux)
+
+| Achado | Letra sugerida | Evidência |
+|---|---|---|
+| 1 | **a** | `contrato_catraca.q:1`: “o regex de template deixa escapar algum leitor”; `preverif_catraca.q:4`: “quais formas de ler data_evento o varredor nao ve”. A resposta enumera `with` e `attr`, sem `regroup`/`dictsort` (`preverif_catraca.r:9,11,20`). |
+| 2 | **a** | `preverif_catraca_v2.q:1`: “Algum leitor real NOVO ficou de fora por regra nova (chave de dict literal como rotulo...)?”; resposta: “não localizei [...] As chaves literais encontradas são payload/trilha” (`preverif_catraca_v2.r:14`). A pergunta cobre a exclusão; a resposta não identifica o dict de filtro. |
+| 3 | **e**, com distinção temporal | A última pergunta trata a **sobrecontagem** de `return 'data_evento'` (`preverif_catraca_v3.q:2,4,6`). O Codex encontra compensação e a bloqueia (`preverif_catraca_v3.r:19,27,29`). A isenção ampla de `return` do opus é defeito da cura posterior, sem pergunta de revisão correspondente nos anexos; a passagem v3→v4 registra “PROCEDE e curado” (`app/docs/RELATO.md:7968`). Não classificar **b**: o achado visto pelo Codex foi acolhido, não descartado (`app/docs/RELATO.md:7968`). |
+
+Numeração considerada: primeira linha do conteúdo de cada anexo = 1; linhas vazias incluídas.
+
+Para o achado 2, a resposta inicial já reconhecia escapes por `**` (`preverif_catraca.r:11,16`), mas não há trecho demonstrando descarte pela triagem do caso específico do dict literal guardado em variável **[nao verificado]**.
 
 ## 11/11 20:57 · sessao ef30d638d860 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
 
@@ -1663,104 +1693,4 @@ Os outros nascimentos encontrados são `abrir_conversa`, excluídos do fato de s
 
 **RED sugerido:** inserir em `app/chamados/tests/test_plantio_noturno_mais1.py:75`, `OrfaoNoturnoTest`. Há fixture noturna em `app/chamados/tests/test_plantio_noturno_mais1.py:48`, D=21/10 em `app/chamados/tests/test_plantio_noturno_mais1.py:30`, teste do detector em `app/chamados/tests/test_plantio_noturno_mais1.py:90`. Acrescentar emissão combinada detector + fábrica + repasse, E(D,19h), S ausente, célula D trabalho e D+1 folga; exigir exatamente uma pergunta `orfao_14h`, `data_evento=D`, célula D e mesma PK após repetição. Mutante: resolvedor/contexto do detector volta a D+1 enquanto fábrica emite D; deve nascer segunda pergunta, pois o dedup distingue as datas. Especificação não executada: [nao verificado].
 
-## 11/11 20:29 · sessao 9de252d3d87f · - · - · origem=Ronald (tmux)
-
-Eleição e vínculo conferidos na cópia, sem alterações.
-
-| Ponto | Resultado e prova |
-|---|---|
-| Regra da dona | Núcleo, agrupador e âncora selecionam `filter(colaborador=..., fechada_em__isnull=True).first()`, sem filtro de dia. A ordenação do modelo é `['-aberta_em']`: escolhem a mais recente ainda aberta. (`app/chamados/services/disputa_emissao.py:531`, `:1096`, `:1332`; `app/chamados/models.py:1804`.) |
-| Helper de leitura | `colaborador_em_disputa` aplica a mesma seleção; é leitor, não escritor. (`app/chamados/services/disputa_emissao.py:34`, `:40`.) |
-| Novos dias na mesma dona | O wrapper chama `gerar_perguntas_disputa` também no reuso da DS, mesmo com motivo repetido. A fábrica envia o dia próprio da célula. (`app/chamados/services/disputa_emissao.py:662`, `:682`; `app/chamados/services/fabrica_da_celula.py:172`.) |
-| Declarações | Colaborador e administração obtêm a DS por `disputa_para_declaracao` → núcleo; depois abrem P com seu dia e chamado. (`app/chamados/services/declaracao_texto.py:360`, `:376`, `:659`, `:666`; `app/chamados/services/disputa_emissao.py:627`.) |
-| Complemento de pergunta existente | O agrupador pode selecionar a dona da P que já aponta ao chamado, em vez da aberta global. (`app/chamados/services/disputa_emissao.py:1070`, `:1073`, `:1081`.) |
-| Escritor de `P.disputa` | O nascimento recebe `disputa` no construtor e persiste com `force_insert`; reuso retorna a P existente sem mudar sua dona. (`app/chamados/models.py:3014`, `:3017`, `:3008`.) |
-| Autoria histórica dos seis registros | A sonda não contém trilha de nascimento/caller. Portanto, atribuir individualmente cada P a agrupador, fábrica, API ou declaração é **[nao verificado]**; o sumidouro canônico atual é o acima. (`app/chamados/models.py:3014`, `:3025`.) |
-
-`DS.chamado` é FK nullable com `SET_NULL` e reverse `disputa_origem`, sem unicidade; a sonda confirma especificamente `7279.chamado_id=33492` e inversa `[7279]`. Os valores da sonda são dado recebido sem arquivo numerado: **[nao verificado]**. A definição do relacionamento é `app/chamados/models.py:1749`.
-
-Há três escritores de nascimento da FK:
-
-| Escritor | Eleição do pai |
-|---|---|
-| Núcleo: `app/chamados/services/disputa_emissao.py:587`, campo `:591` | `ChamadoColaborador.abrir`, categoria `disputa_supervisao`, módulo `disputa_supervisao`, status VIVOS. (`:568`.) |
-| Agrupador: mesmo arquivo `:1123`, campo `:1127` | `abrir`, módulo `disputa_supervisao_manual`, subcategoria `orfao_14h`, VIVOS. (`:1104`.) |
-| Âncora: mesmo arquivo `:1358`, campo `:1362` | `abrir`, módulo manual, subcategoria `ancora_ausente`, VIVOS. (`:1339`.) |
-
-Os ramos de reuso alteram motivos/contexto, preservando pai e data de abertura. (`app/chamados/services/disputa_emissao.py:541`, `:562`, `:565`, `:1131`, `:1366`.) A assinatura do chamado 33492 é compatível com o nascimento pelo agrupador; identificar o ato histórico é **[nao verificado]**.
-
-`DS.chamado` participa da apresentação em dois passos: `montar_chamados_fio` mapeia as disputas por pai, e `chamado_que_lista` escolhe `P.chamado_destino_id` ou, quando nulo, `DS.chamado_id`. (`app/chamados/services/fio.py:184`, `:192`, `:199`, `:116`, `:117`, `:240`, `:243`, `:252`, `:258`.)
-
-Assim, pelas FKs fornecidas, P51823 e P52340 sem destino seriam listadas no container 33492; as outras quatro têm seus próprios destinos. A execução histórica dessa tela é **[nao verificado]**. A regra está em `app/chamados/services/fio.py:117`.
-
-A data exibida no cabeçalho do modal é `Chamado.criado_em`; os cards também agrupam por esse campo. (`app/templates/chamados/partials/modal_fio.html:86`; `app/templates/chamados/partials/_card_atendimento.html:5`.) Seu escritor é `auto_now_add`, não a data da pergunta. (`app/chamados/models.py:67`.) O catálogo declara ambos os módulos de disputa sem chave de dia e `data_do_chamado` devolve `None` nessa condição. (`app/chamados/catalogo/modulos.py:144`, `:146`, `:219`, `:223`.)
-
-Isso explica o mecanismo de “container criado em 22/10 contendo P de 30/10 e 31/10”; não demonstra qual interface foi vista historicamente. (`app/chamados/services/fio.py:117`; `app/templates/chamados/partials/modal_fio.html:86`; interface histórica: **[nao verificado]**.)
-
-O fechamento do pai depende de outro ato: o receiver S88 retorna imediatamente enquanto `DS.fechada_em` está nulo; após fechamento tenta `ch.reconciliar()`. (`app/chamados/signals.py:28`, `:32`, `:42`.) A FK e a agregação não impõem fechamento ou renovação por dia. (`app/chamados/services/disputa_emissao.py:531`, `:566`; `app/chamados/signals.py:28`.)
-
-`Chamado.status_local` é gravado em `_gravar_estado`; `analisar()` consulta o motor e delega a esse escritor. (`app/chamados/models.py:201`, `:228`, `:800`, `:803`, `:806`.) O motor permite `ANALISAR` de aberto/registrado para `em_analise`. (`app/chamados/catalogo/motor.py:112`.) Qual desses atos deixou especificamente 33492 em análise é **[nao verificado]**.
-
-Não identifiquei deslocamento de linhas nem substituição dos sítios de eleição/vínculo citados no `f0f1.r`: os endereços acima coincidem. Comparação Git e identidade criptográfica com PROD são **[nao verificado]**.
-
-## 11/11 20:29 · sessao 204cfd08d6af · - · - · origem=Ronald (tmux)
-
-F0 pertinente confirmado por AST e abertura dos corpos; todos os sítios persistentes já citados no `f0f1.r` permanecem nos mesmos endereços abaixo. Um escritor foi omitido pelo inventário anterior: `limpar_resolucao_residual`. Ser alteração posterior às 02h, em vez de omissão anterior: [nao verificado].
-
-| Campo | Escritor persistente / valor | Delta frente ao inventário |
-|---|---|---|
-| `P.disputa` | `_nascer`: construtor `app/chamados/models.py:3014`, inserção `:3017` | Mesmo endereço |
-| `P.chamado_destino` nascimento | Mesmo construtor/inserção `app/chamados/models.py:3014`, `:3017` | Mesmo endereço |
-| `P.chamado_destino` reuso | `_nascer`: atribuição `app/chamados/models.py:2982`, lista dinâmica `:2983`, persistência `:3006`; retorno preserva dona `:3008` | Mesmo endereço |
-| `P.chamado_destino` reaponte | `reapontar_resolvedora`: `app/chamados/services/fio.py:925`, save `:927` | Mesmo endereço |
-| `DS.chamado` nascimento núcleo | `app/chamados/services/disputa_emissao.py:587`, keyword `:591` | Mesmo endereço |
-| `DS.chamado` agrupador | `app/chamados/services/disputa_emissao.py:1123`, keyword `:1127` | Mesmo endereço |
-| `DS.chamado` âncora | `app/chamados/services/disputa_emissao.py:1358`, keyword `:1362` | Mesmo endereço |
-| `DS.aberta_em` | ORM no nascimento, `auto_now_add=True`: `app/chamados/models.py:1756`; três inserções acima | Campo não incluído no script antigo |
-| `DS.fechada_em`/`resolucao`/`motivo_fechamento` nascimento | `NULL`/`''`/`''` pelos campos: `app/chamados/models.py:1757`, `:1773`, `:1793` | Nascimentos permanecem |
-| Os três campos no fechamento | `fechar`: `app/chamados/models.py:1932`, `:1934`, `:1935`; save `:1936` | Mesmo endereço |
-| Os três campos na reabertura admin | `app/chamados/models.py:2149`, `:2151`, `:2152`; save `:2161` | Mesmo endereço |
-| Os três campos na reabertura sistema | `app/chamados/models.py:2173`, `:2175`, `:2176`; save `:2177` | Mesmo endereço |
-| **`DS.resolucao` limpeza residual** | **`limpar_resolucao_residual`: `app/chamados/models.py:2265`, save `:2266`; guarda aberta e texto não vazio `:2262`, trilha `:2269`** | **Novo no inventário; novidade temporal [nao verificado]** |
-
-O script anterior também não incluía `resolucao` e `chamado` no conjunto `FIELDS`, embora enumerasse construtores da DS por nome. Isso explica por que não bastava para o escopo agora solicitado; literal do script anterior: [nao verificado].
-
-Nenhum sítio movido/removido fica demonstrado pela comparação com os endereços fornecidos: os endereços principais permanecem. Comparação Git real com uma árvore das 02h: [nao verificado].
-
-Classificação dos candidatos não persistentes:
-
-| Candidato | Classificação |
-|---|---|
-| `app/chamados/models.py:367` | Memória: reassocia o mesmo chamado, conforme identidade conferida `:366`; não persiste essa atribuição |
-| `app/chamados/models.py:2876` | Proxy temporário para o juiz do dia, chamada `:2875`; não é o `p` inserido em `:3014` |
-| `app/chamados/services/fio.py:779`, `:783` | Simulação seguida de restauração em `finally`, para `pergunta_viva` `:781` |
-| `app/chamados/services/regularizacao_ext.py:256`, save `:257` | Campo de outra entidade (`reg`), não DS |
-| `app/chamados/migrations/0051_decisao_pergunta.py:25` | Escreve `colaborador_id`; `disputa_id` está somente no `OuterRef` de leitura |
-
-Escapes e efeitos estruturais:
-
-- `PerguntaDisputa.descarimbar_em_lote` permite campos adicionais em `**outros`; a guarda proíbe somente campos do carimbo, deixando capacidade latente para os alvos deste censo. (`app/chamados/models.py:3252`, `:3255`, `:3264`, `:3266`.)
-- A cadeia de nascimento aceita `**campos`; encaminha por `abrir`/`abrir_conversa` → `_sob_contrato` → `_nascer`, terminando no construtor. (`app/chamados/models.py:2776`, `:2789`, `:2794`, `:2801`, `:2820`, `:3014`.) Uso produtivo atual de `disputa_id`/`chamado_destino_id` por essa expansão: [nao verificado].
-- O `save` genérico da P chama `super().save` dentro de atomic. Não é uma eleição adicional. (`app/chamados/models.py:3413`, `:3422`, `:3423`.)
-- Exclusão de chamado pode zerar `DS.chamado` ou `P.chamado_destino` por `SET_NULL`; exclusão da DS elimina P por `CASCADE`. (`app/chamados/models.py:1751`, `:3387`, `:2418`.)
-- `texto.reescrever_texto` não é escape para esses campos: sua lista permite apenas título/assunto/descrição e rejeita os demais. (`app/chamados/services/texto.py:18`, `:25`, `:27`, `:33`.)
-- `core.reexibir` é mutação em memória e devolução do objeto; não salva no próprio helper. (`app/core/reexibir.py:45`, `:49`, `:50`.) Ausência universal de persistência posterior por qualquer consumidor: [nao verificado].
-- Chamador produtivo nominal de `limpar_resolucao_residual` não foi encontrado pela busca; execução dessa porta em produção: [nao verificado].
-
-Leitores abertos e conferidos:
-
-| Campo | Leitores |
-|---|---|
-| `P.disputa` | Identidade: `app/chamados/models.py:3430`; fallback do fio: `app/chamados/services/fio.py:116` |
-| `P.chamado_destino` | Chamado de resolução do fio: `app/chamados/services/fio.py:117`; simulação do C6: `:778`; guarda e comparação do reuso: `app/chamados/models.py:2968` |
-| `DS.chamado` | Fallback do fio: `app/chamados/services/fio.py:117`; fechamento do pai: `app/chamados/signals.py:28`, `:32`; trilha de reabertura: `app/chamados/models.py:2178`, `:2180` |
-| `DS.aberta_em` | Ordenação que determina `.first()`: `app/chamados/models.py:1804`; cor por abertura crescente: `:1819` |
-| `DS.fechada_em` | Propriedade aberta: `app/chamados/models.py:1824`; eleição núcleo: `app/chamados/services/disputa_emissao.py:532`; eleição agrupador `:1097`; âncora `:1333`; signal pai `app/chamados/signals.py:28` |
-| `DS.resolucao` | Idempotência de fechar: `app/chamados/models.py:1880`; guarda/antes da limpeza `:2262`, `:2264`; texto para fechamento do pai `app/chamados/signals.py:45`; resolução pedida/fallback materializador `app/chamados/services/materializacao.py:1333` |
-| `DS.motivo_fechamento` | Idempotência de fechar `app/chamados/models.py:1881`; vigia disputa vazia `app/chamados/services/vigia_fio.py:734` |
-
-Migrations são schema, não novos eleitores: DS aberta/fechada/resolução/chamado em `app/chamados/migrations/0013_disputasupervisao.py:23`, `:24`, `:25`, `:26`; P.disputa em `app/chamados/migrations/0014_perguntadisputa.py:27`; destino em `app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:18`; motivo de fechamento em `app/chamados/migrations/0049_disputa_motivo_fechamento.py:14`.
-
-O selo existente continua por arquivo e regex, incluindo somente atribuição/update e excluindo migrations; não demonstra função escritora única nem pega todos os construtores/kwargs. (`app/core/tests/test_contract_escritores_estado.py:61`, `:179`, `:182`, `:191`.) A ferramenta de censo geral documenta baldes não atribuíveis e inferências; não usar “nenhum resultado” como prova universal de ausência de escrita dinâmica. (`app/core/censo_escritas.py:15`, `:38`, `:43`, `:54`.)
-
-_4022 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4024 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
