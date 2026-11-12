@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 00:19** · publicado em **12/11/2026 00:19** (UTC-3)
+> Ultima resposta processada: **12/11/2026 00:31** · publicado em **12/11/2026 00:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 00:31 · sessao 28ee7fe73b79 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+c7 construída na cópia, sem bump e sem commit, conforme a proibição inicial. As 16 regressões receberam tratamento; o `test_05` permanece intacto, pendente do corte sobre o PDF. [Relato por vermelho](docs/RELATO.md:9).
+
+Validação local:
+
+- **61 testes sem banco GREEN**, mais a CATRACA de linhas GREEN. [Execuções](docs/lastro_faixa_c7_execucoes.txt:6102).
+- **RED da c6:** 27 falhas de asserção, zero erros. [Evidência](docs/lastro_faixa_c7_execucoes.txt:6172).
+- **22 mutantes mortos**, com comandos individuais registrados. [Resumo](docs/RELATO.md:63).
+
+Propagação de `TipoSemFaixa`, proposta restritiva para o PDF e quem escreve/lê cada campo estão no [relato](docs/RELATO.md:35).
+
+A suite Django dos 17, o teto SQL e o opus final seguem **[não verificado]**. O Python local não tem Django. [Registro](docs/lastro_faixa_c7_execucoes.txt:6879).
 
 ## 12/11 00:19 · sessao 9443b128960e · - · - · origem=Ronald (tmux)
 
@@ -579,82 +593,4 @@ B2 — não encontrei outro leitor produtivo comparando diretamente `tipo_do_dia
 
 Recusa engolida remanescente — `julgar_celula` captura toda exceção de `aplicar_precedencia_na_celula` e apenas registra log, incluindo `TipoSemFaixa` (`app/ponto/services/cartorio.py:2033`). A chamada acontece depois de `julgar_colab`, que pode ter aplicado a lavra (`app/ponto/services/cartorio.py:2026`). As três capturas corrigidas pela c5 não cobrem essa sequência real (`app/ferias/situacao.py:95`, c5; `app/escala/services/semana_do_posto.py:178`, c5; `app/ponto/services/espelho.py:651`, c5).
 
-## 11/11 22:38 · sessao 17dfcca52004 · - · - · origem=Ronald (tmux)
-
-Censo adicional: 41 chamadas a `reconciliar/cancelar/encerrar/encerrar_por_competencia_trancada`; `pautas/views.py:123` é falso positivo de outro domínio. As referências abaixo são linhas do HEAD; o diff c11 fornecido não altera estes arquivos/sites. [não verificado quanto à identidade Git da cópia, que não contém `.git`]
-
-| Sítio | Função | Disparador comprovado |
-|---|---|---|
-| `chamados/management/commands/auditar_chamados_orfaos.py:67` | `Command.handle` | humano comando, guarda `--fechar` em `:58` |
-| `chamados/reconciliador.py:496` | `encerrar_com_retencao` | humano UI, `ponto/services/justificativa.py:87`, `:400` |
-| `chamados/reconciliador.py:523` | `_retratar` | cron `config/crons.py:394` → `reconciliador.py:1368`, `:1372`; signal de batida `ponto/signals.py:215`; humano comando `ponto/management/commands/reconciliar_fantasmas.py:280` |
-| `chamados/services/adesao.py:115` | `sincronizar_adesao` | cron/comando `escala/management/commands/apurar_furos_diarios.py:17`, `config/crons.py:1512` |
-| `chamados/services/adesao.py:150` | `sincronizar_adesao` | mesmo caminho, `fechar=True` em `escala/management/commands/apurar_furos_diarios.py:17` |
-| `chamados/services/competencia_trancada.py:184` | `encerrar` | humano comando `chamados/management/commands/encerrar_por_competencia_trancada.py:29`; ato de trancar `ponto/services/fechamento.py:1428`; não cron por desenho `config/crons.py:1276` |
-| `chamados/services/feriado_reavaliar.py:47` | `encerrar` | signal `chamados/signals.py:334`; porta da célula `ponto/portas/celula.py:500` |
-| `chamados/services/limbo_folgas.py:101` | `aceitar_sugestao` | humano UI `chamados/views.py:433` |
-| `chamados/services/limbo_folgas.py:283` | `agrupar_furo` | cron/comando `escala/management/commands/apurar_furos_diarios.py:19`; `ponto/management/commands/detectar_ausencias.py:761` |
-| `chamados/services/limbo_folgas.py:286` | `agrupar_furo` | mesmo caminho; segunda tentativa após rollback, `:284` |
-| `chamados/services/materializacao.py:582` | `_materializar_ausencia_de_resposta` | confirmação/materialização de resposta; chamada humana `chamados/services/validacao.py:469` [demais gatilhos não verificados] |
-| `chamados/services/materializacao.py:771` | `_reconciliar_destino_e_clones._fecha` | humano UI `chamados/services/fio.py:670`, `chamados/services/acoes_disputa.py:139`; humano comando `chamados/management/commands/backfill_fio_morto_e4b.py:147` |
-| `chamados/services/regularizacao_ext.py:205` | `materializar_regularizacao_externa` | humano UI `chamados/views_regularizacao.py:217`; API colaborador `api/views.py:3000`, `api/views_core.py:1322`; signal de disputa `chamados/signals.py:133` → `regularizacao_ext.py:224` |
-| `chamados/services/silencio_ausencia.py:101` | `reconciliar_por_ausencia` | signal `ponto/signals.py:265`–`:269`; humano comando `ponto/management/commands/reavaliar_ausencias_lancadas.py:54` |
-| `chamados/signals.py:42` | `disputa_fechada_fecha_chamado_pai` | signal `post_save` de disputa, `:18` |
-| `colaboradores/management/commands/marcar_feriado_do_posto.py:140` | `Command._marcar` | humano comando `config/crons.py:1331` |
-| `colaboradores/services/desligamento.py:155` | `executar_desligamento` | humano UI `colaboradores/views.py:1434`; cron `config/crons.py:440` → `colaboradores/management/commands/efetivar_desligamentos_agendados.py:57` |
-| `colaboradores/services/pos_vinculo.py:42` | `fechar_adesao_com_batida` | signal `ponto/signals.py:234`; humano UI via `colaboradores/services/vinculo.py:330` → `pos_vinculo.py:88`; humano comando `colaboradores/management/commands/corrigir_escala_retroativa.py:237` |
-| `colaboradores/services/vinculo.py:387` | `_executar_aceite` | humano UI `colaboradores/views.py:423`; chat `colaboradores/services/troca_pelo_chat.py:75`; humano comando `ponto/management/commands/censo_fase_12x36.py:423` |
-| `escala/management/commands/fechar_avisos_regua_na_lista.py:47` | `Command.handle` | humano comando, `--apply` em `:42` |
-| `ponto/management/commands/curar_residuo_bug115.py:151` | `Command._ata_sem_furo` | humano comando `config/crons.py:1458` |
-| `ponto/management/commands/detectar_ausencias.py:158` | `Command.handle` | cron `config/crons.py:364` |
-| `ponto/management/commands/detectar_ausencias.py:824` | `Command._fechar_por_afastamento` | cron `config/crons.py:364` |
-| `ponto/management/commands/detectar_ausencias.py:834` | `Command._fechar_por_cobertura` | cron `config/crons.py:364` |
-| `ponto/management/commands/detectar_ausencias.py:845` | `Command._fechar_chamado` | cron `config/crons.py:364` |
-| `ponto/management/commands/detectar_intervalo_ausente.py:138` | `Command.handle` | humano comando; cron usa `--alarme`, `config/crons.py:491`, que força dry em `detectar_intervalo_ausente.py:107` |
-| `ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57` | `Command.handle` | humano comando, `--apply` em `:52` |
-| `ponto/services/ausencia.py:694` | `fechar_chamado_da_ausencia` | signal `ponto/signals.py:266`, `:271` → `ausencia.py:729` |
-| `ponto/services/cartorio.py:986` | `julgar_colab` | cron `config/crons.py:616`; outros chamadores [não verificado] |
-| `ponto/services/cartorio.py:1511` | `_julgar_colab_corpo` | mesmo cartório, `config/crons.py:616` |
-| `ponto/services/cartorio.py:1524` | `_julgar_colab_corpo` | mesmo cartório, `config/crons.py:616` |
-| `ponto/services/cartorio.py:1545` | `_julgar_colab_corpo` | mesmo cartório, `config/crons.py:616` |
-| `ponto/services/cartorio.py:1623` | `_julgar_colab_corpo` | mesmo cartório, `config/crons.py:616` |
-| `ponto/services/cartorio.py:1638` | `_julgar_colab_corpo` | mesmo cartório, `config/crons.py:616` |
-| `ponto/services/cluster_espurio.py:124` | `reconciliar_colab` | cartório `ponto/services/cartorio.py:1016`; humano comando `ponto/management/commands/detectar_cluster_espurio.py:46` |
-| `ponto/services/cobertura.py:122` | `designar_cobertura` | humano UI `ponto/views.py:3048` |
-| `ponto/services/cobertura.py:317` | `declarar_cobertura_passada` | chamador de produção não encontrado no `rg` por nome; disparador [não verificado] |
-| `ponto/services/entrada_sincronizada.py:31` | `resolver_cobranca_da_entrada` | API colaborador `api/views.py:803`, `api/views_core.py:798` |
-| `ponto/services/lastro.py:400` | `fechar_pelo_marco_colab` | cron consumidor `config/crons.py:394` → `chamados/reconciliador.py:1383` |
-| `ponto/services/triagem_batida.py:597` | `_autoresolve_f2_f4` | UI colaborador `ponto/services/triagem_batida.py:753`, `ponto/views.py:349` |
-| `ponto/services/veredito_celula.py:202` | `fechar_o_fio_do_dia` | humano UI `ponto/services/veredito_celula.py:346`, `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:296` |
-
-Os alvos dos 41 sites são: `reconciliar` → `resolvido`, pelo gate em `chamados/models.py:641`, `:654`; `encerrar` → `fechado`, `models.py:1605`, `:1619`; `cancelar` → decisão `CANCELAR`, `models.py:783`, `:788`; tranca → `fechado`, `models.py:1632`, `:1639`. O catálogo declara `resolvido/fechado/cancelado/superado` terminais e não declara um estado literal `encerrado`, em `chamados/catalogo/motor.py:19`, `:30`, `:31`.
-
-**Provas e limites da classificação:**
-
-- Todos os `reconciliar/encerrar` genéricos acima ficam **sem-prova**: a guarda de pergunta viva ignora competência entregue cujo resultado seja diferente de `False`, em `chamados/models.py:364`, `:365`; a documentação diz explicitamente que exportada fica fora em `:328`. O S143 percorre `_ancoradas()` e chama a reabertura em `chamados/services/disputa_emissao.py:1938`, `:1945`, registrando recusas em `:1946`, `:1950`.
-- O site de tranca tem **não quanto à recusa S143**: escreve `via=VIA_COMPETENCIA_TRANCADA` em `chamados/models.py:1639`; o resolver retorna antes do laço de reabertura em `chamados/services/disputa_emissao.py:1899`, `:1900`. Também mede vivas pelas duas relações antes de selecionar chamados em `chamados/services/competencia_trancada.py:139`, `:142`, `:146`.
-- Os dois sites de `cancelar` têm **não quanto à recusa S143**: escrevem `cancelado`, que não pertence a `ENCERRADOS` (`chamados/catalogo/motor.py:30`, `:31`); o receiver retorna em `chamados/signals.py:96`. Isso não prova ausência de pergunta viva exportada.
-- `chamados/migrations/0039_a3_via_backfill.py:24` escreve `superado`; `:33` escreve `cancelado`. `RunPython` liga ambos à migração em `:39`; `.update()` não emite o `post_save`, conforme `chamados/signals.py:95`. Não excluir essas linhas do inventário fora de testes.
-- `smoke_chamados.py:134` é um site dinâmico que pode alcançar terminal; `:147` só reabre, por destinos literais de `:144`; `:163` só tenta destinos de reabertura/mesmo aberto listados em `:158`. O comando recusa banco sem `test` no nome em `:32`–`:35` e força rollback em `:39`–`:44`.
-
-**Leitores comuns / resolver:** os saves de `_gravar_estado` nomeiam `status_local` em `chamados/models.py:229`; S143 filtra encerrado e coluna salva em `chamados/signals.py:96`, `:104`, chama o resolver em `:116`. Outros leitores principais: rebaixa urgência em `signals.py:70`; C6 lê destino encerrado em `chamados/juizes.py:760`; fila/painel em `chamados/services/painel.py:155`, `:217`, `:218`; fio em `chamados/services/fio.py:432`, `:771`. `_retratar` ainda chama o resolver diretamente em `chamados/reconciliador.py:536`, além do signal.
-
-**Obstáculos para trechos mínimos:**
-
-| Grupo | Obstáculo comprovado |
-|---|---|
-| Todos os automáticos | Trocar por `fechar()` ativa perfil e guards humanos: `chamados/models.py:130`, `:136`, `:148`, `:181`; perde a via do evento original porque `_aplicar` escreve `TRANSICAO_HUMANA`, `:449`, `:450`. |
-| Todos os `if reconciliar()` | `transicionar_com_pauta` devolve número de Pautas, inclusive zero após fechar, em `chamados/services/fecho_runtime.py:159`; não pode substituir como retorno booleano. `reconciliar` devolve falso/verdadeiro em `models.py:652`, `:655`. |
-| Reconciliar | Preservar premissa, dedup e reata em `chamados/models.py:682`–`:692`; fechamento humano recusa sem reatar em `:165`–`:171`. |
-| Desligamento | Atomic externo `colaboradores/services/desligamento.py:103`; disputa fecha antes do chamado em `:139`–`:155`; cron pode não ter user em `:70`–`:75`. |
-| Regularização externa | Atomic externo `chamados/services/regularizacao_ext.py:121`; status do lote salvo antes do chamado em `:197`–`:205`; retomada pode vir de signal/on_commit `chamados/signals.py:133`–`:145`. |
-| LIMBO agrupamento | Atomic e ordem global `chamados/services/limbo_folgas.py:270`–`:274`; savepoint e segunda tentativa `:277`–`:288`; idempotência inicial `:252`. |
-| Materialização | Pergunta em voo e atomic do materializador `chamados/services/materializacao.py:751`–`:754`; retenção de irmãs antes do fechamento `:762`–`:771`. |
-| Lastro | Fecho + nota no mesmo atomic `ponto/services/lastro.py:399`–`:402`. |
-| Cobertura | Atomic externo `ponto/services/cobertura.py:99`, `:283`; user existe na assinatura `:22`, `:246`. |
-| Marcar feriado | Autor pode ser `None` no lookup `colaboradores/management/commands/marcar_feriado_do_posto.py:127`; atomic por chamado em `:139`. |
-| Tranca | Via própria com efeito de não resolver, `chamados/models.py:1639`, `chamados/services/disputa_emissao.py:1899`; não migrar ingenuamente para humano. |
-
-A solução mínima que preserve comportamento dos automáticos exige permitir à porta existente envolver a execução do gate original, preservando retorno e via; uma simples troca de chamada por `fechar()` altera guardas e idempotência pelos pontos acima. Isso é proposta de implementação [não verificado], sem necessidade demonstrada de juiz novo.
-
-_4068 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4069 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
