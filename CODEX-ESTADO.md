@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 20:45** · publicado em **12/11/2026 20:46** (UTC-3)
+> Ultima resposta processada: **12/11/2026 20:48** · publicado em **12/11/2026 20:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 20:48 · sessao 0d5c462a6a28 · TIPO-NA-FONTE · sonda · origem=Code
+
+Reproduzo a saída fornecida, sem nova execução. [não verificado] O envelope escreve arquivos, contrariando a restrição de somente leitura. [bin/sonda_leitura.sh:132](bin/sonda_leitura.sh:132)
+
+```text
+sonda_leitura: sonda_nao_lavradas.py [8b136f1f57fab7fb] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+campos=id,colaborador,data,trabalha,origem,escala_geradora,dna,gerada_em,regenerada_em,regeneracoes,dna_anterior,editada_em,editada_por,julgada_em,impressao,veredito,veredito_via,veredito_em,protestos,ata,ausencia,tem_entrada,tem_saida,insumos_em,status_dia,status_rotulo
+ata_lavrada_hoje                  274  amostra=[138954, 139016, 139512, 139698, 139915, 140008, 140163, 140535, 140628, 140969]
+ata_lavrada_passado            134799  amostra=[137148, 123129, 111993, 109909, 22590, 104313, 138874, 22594, 143296, 28678]
+ata_nula_futuro                  8721  amostra=[138866, 138867, 138868, 138869, 138893, 138894, 138895, 138896, 138897, 138898]
+ata_nula_hoje                     333  amostra=[138892, 138923, 138985, 139078, 139171, 139202, 139233, 139264, 139326, 139357]
+ata_nula_passado                   75  amostra=[121488, 121494, 124325, 124326, 123980, 123981, 123991, 123982, 123983, 123984]
+total                          144202  amostra=[]
+total_erros=0
+```
+
+Conferência do dado fornecido: 274 + 134799 + 8721 + 333 + 75 = 144202; `total_erros=0`. [não verificado]
 
 ## 12/11 20:45 · sessao f2b03b2454de · TIPO-NA-FONTE · verificador · origem=Code
 
@@ -575,23 +594,4 @@ Há, porém, um mutante ligado ao requisito que escapa aos oráculos examinados:
 
 Os testes antigos citados de resgate verificam desarquivamento, vida e segunda passada; não conferem a união de `medir_frota`. O teste antigo do placar confere apenas `chamados_em_competencia_trancada`. (`app/chamados/tests/test_competencia_trancada.py:164`, `:177`, `:219`.)
 
-## 12/11 19:51 · sessao ea33eaacf0ca · - · - · origem=Ronald (tmux)
-
-Censo semântico concluído por leitura:
-
-| Campo | Quem escreve | Quem lê/publica |
-|---|---|---|
-| `decidir_pelo_dp` | `medir()` inclui ids não resgatados vindos de `respostas_sem_veredito(ignorar_tranca=True)` — `app/chamados/services/competencia_trancada.py:126`, `:137-139` | `_pauta_do_dp` usa ids de respostas — `:246-249`; `encerrar` chama pauta — `:232-233`; comando de encerramento imprime quantidade e ids — `app/chamados/management/commands/encerrar_por_competencia_trancada.py:36-39`; contador calcula cardinalidade — `competencia_trancada.py:353`. |
-| `vivas_resgatadas` | `medir()` inclui pergunta viva ligada a chamado resgatado depois da tranca — `competencia_trancada.py:117-118`, `:132`, `:145-150` | `medir_frota()` usa na união e conta separadamente — `:348`, `:353`. |
-| `vivas_tocadas_pelo_admin` | `medir()` consulta `_admin_tocou_os_dias_depois` e classifica pergunta viva — `competencia_trancada.py:155-158` | `medir_frota()` usa na união e conta separadamente — `:348`, `:353`. |
-| `ficam_com_o_admin` | `medir_frota()` calcula cardinalidade da união e soma por competência — `competencia_trancada.py:348-356` | comando imprime união nominal e separadas — `app/chamados/management/commands/chamados_em_competencia_trancada.py:16-25`; API repassa — `app/api/views_mensageria.py:1573-1578`; cliente GET JSON — `mensageria/nucleo/core_client.py:239-241`; ferramenta descreve união corretamente e devolve payload — `mensageria/nucleo/ferramentas.py:2032-2040`. |
-
-Não identifiquei consumidor da CLI que ainda interprete `decidir_pelo_dp=` como união: o placar extrai exclusivamente `^chamados_em_competencia_trancada=` (`bin/placar_code.sh:287-289`); o teste antigo procura `decidir_pelo_dp=1 ids=...` (`app/chamados/tests/test_competencia_trancada.py:149`), mas seu helper chama o **outro comando**, `encerrar_por_competencia_trancada` (`:52-55`); o teste novo procura a lista separada (`app/chamados/tests/test_tranca_vivas_08.py:199`). Consumidores externos à cópia: [nao verificado].
-
-Há textos/fontes antigos preservados: `RELATO-ARQUIVO.md:17319-17323` registra o BO de 17/09 com `vivas_apesar_da_tranca` significando resgatadas e soma em `ficam_com_o_admin`; `:17387` registra o contador antigo. `TICKETS.md:1180` registra a regra FEITO 15/09, inclusive a escrita antiga na pergunta, enquanto o fonte atual declara sua retirada pela C7 (`competencia_trancada.py:133-135`).
-
-O snapshot `app/chamados/tests/e4b_c12_base.json:6` contém a implementação antiga, inclusive `ficam_com_o_admin=len(dp)+len(vivas_apesar_da_tranca)`. É base de teste carregada em `e4b_c12_verificar.py:18`; o modo `base` reenxerta funções escritoras listadas (`:132-153`), e o sítio dessa família é o encerramento (`e4b_c12_sitios.json:68-72`). Não constitui parser vivo da linha alterada nem substituição de `medir_frota()` nesse modo (`e4b_c12_verificar.py:140-153`).
-
-Testes da API e mensageria verificam contagem geral/repasse, sem certificar os quatro novos campos (`app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:39-48`; `mensageria/nucleo/tests/test_ferramenta_chamados_em_competencia_trancada.py:23-28`). Execução desses testes: [nao verificado].
-
-_4426 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4427 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
