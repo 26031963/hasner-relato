@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:28** · publicado em **12/11/2026 09:28** (UTC-3)
+> Ultima resposta processada: **12/11/2026 09:32** · publicado em **12/11/2026 09:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 09:32 · sessao c24c40daec67 · - · - · origem=Ronald (tmux)
+
+Cadeia efetiva da home:
+
+- Home `/` é `core/urls.py:17` → `dashboard`, protegida por login em `core/views.py:117`, renderizando `core/dashboard_colaborador_v2.html` em `core/views.py:270-271`.
+- Bater é `<a href="{% url 'ponto:bater_ponto_v2' %}">`, em `app/templates/core/dashboard_colaborador_v2.html:31`; destino `/ponto/bater-v2/`, por `app/ponto/urls.py:12`. Não é `/ponto/bater/`.
+- Outros cartões também são links comuns: Espelho `:56`, Escala `:60`, Confirmar Batidas `:66`, Chamados `:78`, Justificar `:82`, Ausência `:88`, Holerites `:100`, Férias `:110`. Não têm handler PWA nem await antes da navegação nessas linhas.
+- Script do relógio é independente: `app/templates/core/dashboard_colaborador_v2.html:152-159`; offline chama fallback e retorna `:153`, fetch `/hora/` apenas em `:155`.
+- A home antiga também usa link comum a v2 em `app/templates/core/dashboard_colaborador.html:39`.
+- PWA é carregado defer em `app/templates/base.html:20` e `app/templates/base_app.html:20`. Dropdowns têm registro próprio em script inline, `base.html:340-382`, `base_app.html:97-139`; não dependem do carregamento de `pwa.js`.
+- `hasner-ui.js` impede clique padrão apenas em `.dropdown-toggle`: `app/static/js/hasner-ui.js:14-33`. Não intercepta os cartões acima.
+- Botões efetivamente criados por PWA: convite “Ligar avisos” e fechar, `app/static/pwa.js:351-374`, handlers `:361` e `:365`.
+- Há modal condicional que cobre a tela em `dashboard_colaborador_v2.html:121-141`, removido pelos onclick `:126`, `:138`. Sua presença no smoke é [nao verificado]; não apontar como causa.
+
+SW e preparo:
+
+- Precaching é só quatro arquivos estáticos, `app/static/sw.js:3-8`, gravados por `cache.addAll` em `:12`.
+- Toda navegação retorna antes do ramo que grava HTML: `request.mode === 'navigate'` em `:46`, fetch com fallback em `:48`, return em `:50`.
+- Ramo `comCache` para `/` e `/ponto/bater/`, `:68-79`, é alcançável apenas para GET que não seja navegação nem estático. Seu `cache.put` está em `:74`. Portanto abrir home/bater com internet em navegação comum não grava documentos nesse SW; isso permanece verdadeiro mesmo com o preparo relatado.
+- Na falta de rede, navegação usa match da request, depois `Response.error()`, `sw.js:29-30,46-50`. Não há fallback de documento.
+- `/ponto/bater-v2/` também passa pela navegação `:46-50`; não é incluído sequer na lista `comCache` de `:68`.
+- Não há diferença desses arquivos na v6 no patch fornecido. Não existe linha de patch v6 para SW/home/views/URLs porque são inalterados.
+
+Rotas, apto e redirects:
+
+- `/ponto/bater/` → `views.bater_ponto`, `app/ponto/urls.py:11`; `/ponto/bater-v2/` mesma view com `ui_v2=True`, `:12`.
+- `apto.html` é template escolhido, não URL independente: `app/ponto/views.py:225-235`; GET normal renderiza em `:358`, v2 em `:356-357`.
+- Possíveis redirects home: login por decorator `core/views.py:117` com `LOGIN_URL='/login/'` em `config/settings/base.py:106`; troca de senha `core/views.py:122-123`; ciência `:136-140`; supervisor para outro painel `:229-230`.
+- Possíveis redirects bater/ambas: login `ponto/views.py:241`; onboarding incompleto `:243-244`; ciência `:251-255`.
+- Ciência constrói `/comunicados/ciencia/?next=...`, `app/comunicados/services.py:36-50`; depende de pendências `:48`.
+- Não há redirect obrigatório para home `/` ou URLs canônicas com barra, conforme caminhos/render acima. Redirect efetivamente ocorrido no aparelho é [nao verificado].
+- `CommonMiddleware` é configurado em `app/config/settings/base.py:57`; redirecionamento concreto sem barra depende de execução/configuração Django [nao verificado].
+- Home Chamados pode acrescentar `?aba=cham`, `dashboard_colaborador_v2.html:78`; isso não é redirect.
+- Template apto volta para home via `<a>` em `app/templates/ponto/triagem/apto.html:115-118`; após fila também usa `window.location.href` no timer em `:298-307`. Não aponta para template legado.
+
+Template removido:
+
+- Nenhum renderizador identificado para `ponto/bater_ponto.html`. View ativa renderiza v2 ou triagem (`app/ponto/views.py:225-235,356-358`).
+- Referências literais existentes são ferramentas: `app/scripts/check_a_lei_batida.py:20-23` e `app/tools/check_frontend_urls.py:29`. Ambos são removidos no patch fornecido.
+- Links dentro do próprio legado usam nome de URL `ponto:bater_ponto`, por exemplo `app/templates/ponto/bater_ponto.html:27` e `:201`, que resolve à view ativa; não são chamadas do arquivo legado.
+- SW não precacheia template/página antiga (`app/static/sw.js:3-8`), não tem redirect para ela (`:29-30,46-50`); pwa faz sync para API (`app/static/pwa.js:153`).
+- Exclusão não retira documento da lista de precache nem rompe render da view pelos caminhos acima. A alegação de 404/500/branco causado pela exclusão não é sustentada; comportamento real é [nao verificado].
+
+Complemento útil: configuração prod/saas declara `NoStoreHTMLMiddleware` em `app/config/settings/prod.py:40-46` e `app/config/settings/saas.py:71-74`; middleware aplica `Cache-Control: no-store, no-cache, must-revalidate, max-age=0` a HTML em `app/core/middleware.py:207-213`. Uso efetivo desse perfil na implantação é [nao verificado].
+
+## 12/11 09:31 · sessao 406759e16cfd · FABLE-REVISOR-DE-DESENHO · leitura · origem=Code
+
+1. **Cobertura parcial.** Faltam explicitar a ordem de abertura, a pergunta sobre caminho que “o censo não viu”, o descarte com “1 linha de motivo” e o **NÃO MUDA**. O aval exige esses pontos; o contrato apenas o referencia. (`aval_fable_revisor_de_desenho_1211.txt:2`, `:3`, `:5`, `:8`; `contrato.txt:1`). Há diferença de momento: “ao abrir construtor” versus “paralelo ao censo”; E3 já aberto recebe entrada tardia. Não há ordem de segurar vaga, trocar papéis ou criar código: “ninguém”, “a vaga não espera”, “sem código, nada em bin/”; “nenhum hook” não é repetido. (`contrato.txt:1`; `aval_fable_revisor_de_desenho_1211.txt:1`, `:4`).
+
+2. **A tabela de totais cabe; a avaliação fica incompleta.** “Achados/procedentes/que o opus pegaria/voltas…/tokens/tempo” são campos previstos, permitindo verificar procedentes zero. Porém “que o opus pegaria” não tem critério de apuração, e “voltas sem queda” não define como comparar com a referência. (`contrato.txt:1`; `aval_fable_revisor_de_desenho_1211.txt:6`, `:7`). Para dispensar reconstrução, faltam registros vinculados por obra: achado e evidência de novidade perante o censo, decisão/motivo, fundamento da atribuição ao opus e comparação das voltas com a referência. O contrato exige os totais, mas não esses vínculos. (`contrato.txt:1`).
+
+3. **O repetido fica sem classificação.** “Sem resposta ou sem arquivo:linha = conta 0 achados” classifica os dois primeiros casos. Um achado correto que apenas repete o censo não recebe destino explícito; conferir no arquivo não demonstra novidade. (`contrato.txt:1`). A distinção importa porque a pergunta autorizada é precisamente o que “o censo não viu”. (`aval_fable_revisor_de_desenho_1211.txt:3`).
 
 ## 12/11 09:28 · sessao b63c886da997 · - · - · origem=Ronald (tmux)
 
@@ -780,278 +833,4 @@ Entrega em [LASTRO_C12.txt](/home/ronald/wt-codex-lastro-faixa-sem-default-21525
 
 Par financeiro da competência 11: **[nao verificado]**.
 
-## 12/11 08:56 · sessao a53ca1c97fa3 · - · - · origem=Ronald (tmux)
-
-Censo de leitores concluído por AST em memória (`python3 -B`, sem importar Django ou escrever arquivo). O inventário completo de chamadas e o cruzamento LASTRO foram enviados nas mensagens anteriores. A execução de cada leitor em produção permanece [não verificado].
-
-- A autoridade já existe: `app/core/juizes.py:1304-1305`. A célula com geradora fora da vigência devolve `None`, sem escolher o vínculo novo: `app/escala/alimentacao.py:269-286`.
-- Há leitores que admitem futuro: calendário aceita mês, semana, quinzena, competência e intervalo customizado sem teto em hoje (`app/colaboradores/services/calendario.py:159-212`), carrega células/geradoras (`:314-316`) e chama a autoridade (`:389`); `grade_da_celula` percorre toda a janela recebida (`app/escala/services/leitor_celula.py:350-412`); semana do posto pode incluir dias futuros e lê `CelulaDia.trabalha` (`app/escala/services/semana_do_posto.py:51-56`, `:85-87`).
-- O cron não tem horizonte fixo de N dias. Sua janela é a união das competências correntes das empresas ativas: `app/ponto/management/commands/gerar_celulas.py:281-291`. Roda às 05:50 sem argumentos: `app/config/crons.py:426`. O corte vem de `Empresa.dia_inicio_competencia`, default 21 (`app/colaboradores/models.py:46`), interpretado por `app/ponto/janelas.py:10-63`. Horizonte real = `(fim - hoje).days` [aguarda sonda].
-- Interseção direta com LASTRO: `app/api/views_mensageria.py:976`; `app/colaboradores/services/calendario.py:315,389`; `app/escala/utils.py:988,1311,2183,2192,2194,2212,2260`; `app/folha/export.py:359`; `app/ponto/precedencia.py:313,320,349,510,537`; `app/ponto/services/cartorio.py:875,1768,1903,2035`; `app/ponto/services/espelho.py:286,625,724,1054,1065`; `app/ponto/services/fechamento.py:125,190,191,656,948`; `app/relatorios/pdf_espelho.py:307,358,571`. A identificação desses caminhos como LASTRO provém do anexo fornecido [não verificado quanto ao estado externo da obra].
-- MAPA-20: `app/docs/BACKLOG.md:1916` nomeia `bin/mapa20_montar.py`; `:1900` cita publicação por `bin/relato.sh`. O publicador desta cópia não inclui MAPA-20 nos pares publicados (`bin/relato.sh:103-117`) nem no `git add` (`:121`). Estado externo da obra [não verificado].
-- Lei já resolve evento imediato, cron vigia, escritor único, célula irretroativa e exceção formal: `CLAUDE.md:149-156`, `:171-178`. Não identifiquei necessidade de juiz novo; as perguntas do domínio já têm autoridades registradas (`app/core/juizes.py:1304-1305`). O aval fornecido já determina alcance apenas de futuros existentes na janela, preservação de editadas e proibição de ampliar passado [não verificado fora do anexo].
-
-Perguntas de lei sugeridas para consolidação: **0**.
-
-## 12/11 08:56 · sessao 563c7d44c06f · - · - · origem=Ronald (tmux)
-
-Censo executado por AST em memória, com o script integral já enviado; não importou Django nem código da cópia. Resultado: 13 definições, 403 ocorrências de chamada — 94 em produção e 309 em 97 arquivos de teste; zero erros de parse. Essas contagens são da execução do script enviado, sem arquivo persistido [nao verificado]. [nao verificado]
-
-`models.py` reexporta `pergunta_viva`; desconsiderar esse reexport perderia leitores reais. `app/chamados/models.py:4083`.
-
-As 94 chamadas de produção seguem abaixo. Cada linha conserva o alvo e o sítio `arquivo:linha::função`.
-
-```text
-pergunta_viva:
-app/api/views.py:2608::api_disputa_responder
-app/chamados/juizes.py:1486::pergunta_sem_lastro_ou_viva
-app/chamados/juizes.py:1491::perguntas_vivas_de
-app/chamados/juizes.py:1503::fio_vivo
-app/chamados/juizes.py:1573::alimentar_portas
-app/chamados/juizes.py:1674::perguntas_respondidas_a_validar
-app/chamados/juizes.py:2336::_dias_das_perguntas_vivas
-app/chamados/management/commands/auditar_invariantes_chamados.py:202::_contraprova_f1t
-app/chamados/management/commands/auditar_invariantes_chamados.py:540::_i6_pares
-app/chamados/management/commands/auditar_invariantes_chamados.py:858::Command.handle
-app/chamados/management/commands/auditar_invariantes_chamados.py:894::Command.handle
-app/chamados/management/commands/auditar_invariantes_chamados.py:1653::Command.handle
-app/chamados/management/commands/auditar_invariantes_chamados.py:1710::Command.handle
-app/chamados/management/commands/auditar_invariantes_chamados.py:1769::Command.handle
-app/chamados/management/commands/auditar_invariantes_chamados.py:1782::Command.handle
-app/chamados/management/commands/disparar_perguntas_competencia.py:109::contador_fio_mudo
-app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:449::Command._descarimbados
-app/chamados/management/commands/reabrir_orfas_enterradas.py:83::Command.handle
-app/chamados/models.py:368::ChamadoColaborador._vivas_entre
-app/chamados/models.py:1510::ChamadoColaborador._universo_da_ressuscitacao
-app/chamados/models.py:1897::DisputaSupervisao.fechar
-app/chamados/models.py:3045::PerguntaDisputa.estado
-app/chamados/models.py:3140::PerguntaDisputa.carimbar
-app/chamados/models.py:3376::PerguntaDisputa.viva
-app/chamados/reconciliador.py:399::lavrar_sem_turno_aberto
-app/chamados/reconciliador.py:662::perguntas_absolvidas_pela_celula
-app/chamados/reconciliador.py:759::_viva_em_competencia_aberta
-app/chamados/reconciliador.py:1087::veredito_orfa
-app/chamados/reconciliador.py:1595::reatar_pergunta_orfa
-app/chamados/relatorios_disputa.py:18::classificar
-app/chamados/services/acoes_chamado.py:355::montar_contexto_detalhe
-app/chamados/services/competencia_trancada.py:123::medir
-app/chamados/services/competencia_trancada.py:133::medir
-app/chamados/services/competencia_trancada.py:143::medir
-app/chamados/services/disputa_emissao.py:1821::reabrir_credor_de_pergunta_viva
-app/chamados/services/disputa_emissao.py:1966::_resolver_perguntas_por_chamado_resolvido
-app/chamados/services/disputa_emissao.py:2048::_resolver_perguntas_por_chamado_resolvido
-app/chamados/services/fio.py:238::montar_chamados_fio
-app/chamados/services/fio.py:606::processar_post_fio
-app/chamados/services/fio.py:782::_costura_nao_mata_o_fio
-app/chamados/services/fio.py:961::_colisao_ao_datar
-app/chamados/services/fio.py:2129::_migrar_sob_trava
-app/chamados/services/fio.py:2134::_migrar_sob_trava
-app/chamados/services/pergunta_no_app.py:58::perguntas_do_app
-app/chamados/services/pergunta_no_app.py:170::_marco_ja_perguntado
-app/chamados/services/relavra_via.py:242::desfazer_carimbo_sem_lastro
-app/chamados/services/tarefa_do_dia.py:491::_carga_da_tarefa_cls.CargaDaTarefa._ler_vida
-app/chamados/services/vigia_fio.py:755::viva_em_disputa_fechada
-app/chamados/services/vigia_fio.py:813::carimbos_sem_lastro_por_dono
-app/chamados/views.py:1242::responder_pergunta_disputa
-app/chamados/views.py:1257::responder_pergunta_disputa
-app/chamados/views.py:1417::reabrir_disputa_supervisao
-app/colaboradores/services/calendario.py:476::contexto_calendario
-app/ponto/services/dia_do_colab.py:71::dia_do_colab
-
-_pergunta_viva_calc:
-app/chamados/juizes.py:889::pergunta_viva
-app/chamados/juizes.py:894::pergunta_viva
-
-fio_vivo:
-app/chamados/juizes.py:2389::disputa_viva_do_chamado
-app/chamados/management/commands/encerrar_perguntas_com_fato.py:83::Command.handle
-app/chamados/models.py:1854::DisputaSupervisao.pode_fechar
-app/chamados/services/disputa_emissao.py:1422::_ja_perguntou
-app/chamados/services/explicador.py:137::por_que_nao_fecha
-app/chamados/services/limbo_folgas.py:203::filhos_no_defeito
-app/chamados/services/vigia_fio.py:166::fio_do_dia
-app/folha/previa.py:144::_material
-app/ponto/management/commands/emitir_furo_retroativo.py:98::Command.handle
-app/ponto/management/commands/reconciliar_grade.py:460::Command._relavrar_orfa
-app/ponto/management/commands/supra_juiz.py:215::Command.handle
-app/ponto/services/cartorio.py:1389::_julgar_colab_corpo
-app/ponto/services/cartorio.py:1646::_julgar_colab_corpo
-
-porta_alcancavel_do_dia:
-app/chamados/services/vigia_fio.py:635::censo_alcance
-app/escala/services/cadastro_realidade.py:488::beco_em_lote
-app/folha/fora_da_folha.py:67::_porta
-
-tarefa_do_dia:
-app/chamados/management/commands/backfill_fio_morto_e4b.py:87::ato_do_dia
-app/chamados/management/commands/diff_e3_sombra.py:125::Command.comparar
-
-carga_da_tarefa:
-app/chamados/management/commands/diff_e3_sombra.py:115::Command.comparar
-app/chamados/services/tarefa_do_dia.py:569::tarefa_do_dia
-
-CargaDaTarefa.tarefa:
-app/chamados/services/tarefa_do_dia.py:572::tarefa_do_dia
-
-cobranca_viva_do_dia:
-app/chamados/models.py:390::ChamadoColaborador._plano_pergunta_viva
-app/chamados/models.py:749::ChamadoColaborador._gate_premissa_do_fechamento
-app/ponto/services/cartorio.py:1655::_julgar_colab_corpo
-app/ponto/services/entrada_sincronizada.py:29::resolver_cobranca_da_entrada
-app/ponto/services/triagem_batida.py:590::_autoresolve_f2_f4
-
-motivos_a_perguntar:
-app/chamados/management/commands/disparar_perguntas_competencia.py:115::contador_fio_mudo
-app/chamados/services/fabrica_da_celula.py:207::perguntar_pela_celula
-app/chamados/services/fabrica_da_celula.py:242::motivos_que_o_evento_deixou
-
-montar_chamados_fio:
-app/chamados/services/fio.py:446::contexto_parcial_fio
-app/chamados/views.py:569::meu_atendimento
-app/chamados/views.py:677::fio_colaborador
-app/chamados/views.py:889::modal_fio_colaborador._resp_modal_full
-
-creditos_perguntas:
-app/chamados/services/fio.py:390::montar_chamados_fio
-app/chamados/services/verbos.py:34::particionar_verbos
-
-pergunta_sem_acao_possivel:
-app/chamados/services/fio.py:284::montar_chamados_fio
-
-relatorios_disputa.classificar:
-app/chamados/relatorios_disputa.py:47::coletar
-
-cobranca._calados:
-app/chamados/services/cobranca.py:257::linhas_para_a_pauta
-```
-
-Escritores ORM dentro de `tarefa_do_dia.py`: nenhum candidato encontrado pelos nomes `save/create/update/delete/bulk_create/bulk_update/get_or_create/update_or_create`, salvo seis `.update` de dicionários em memória. `app/chamados/services/tarefa_do_dia.py:205`, `:214`, `:249`, `:252`, `:333`, `:553`. O carregador monta os insumos, e a tarefa retorna o resultado: `app/chamados/services/tarefa_do_dia.py:361`, `:523`, `:572`.
-
-Candidatos relevantes a leitura indireta C6:
-
-```text
-app/api/views.py:2543::api_disputa_perguntas._item -> p.estado
-app/chamados/management/commands/arquivar_competencia_encerrada.py:158::Command._disputa_viva -> p.viva
-app/chamados/services/explicador.py:72::explicar_pergunta -> p.estado
-app/chamados/services/fio.py:614::processar_post_fio -> _p.estado
-app/chamados/services/vigia_fio.py:311::dono_fora_do_fio -> p.estado
-app/chamados/services/cobranca.py:229::_calados -> PerguntaDisputa.q_vivas
-app/chamados/services/fio.py:224::montar_chamados_fio -> PerguntaDisputa.q_vivas
-app/chamados/services/janela_colab.py:63::chamados_visiveis_colab -> PerguntaDisputa.q_vivas
-app/chamados/services/pergunta_no_app.py:50::perguntas_do_app -> PerguntaDisputa.q_vivas
-app/chamados/services/raiox.py:74::creditos_perguntas -> PerguntaDisputa.q_vivas
-app/chamados/services/vigia_fio.py:748::viva_em_disputa_fechada -> PerguntaDisputa.q_vivas
-app/ponto/services/veredito_celula.py:181::fechar_o_fio_do_dia -> PerguntaDisputa.q_vivas
-```
-
-`q_vivas` declara contenção generosa, não igualdade com o C6, e encaminha quem precisa da resposta exata a `pergunta_viva`/`.viva`. `app/chamados/models.py:3328`, `:3340`, `:3343`. O template lê `.viva`, mas também carimbos crus nos ramos de resposta. `app/templates/chamados/partials/_card_atendimento.html:77`, `:94`, `:155`.
-
-O gate **ampliado**, incluindo todos os consumidores de C6/fio_vivo, cruza o anexo LASTRO nestes três arquivos: `app/colaboradores/services/calendario.py:476`, `app/ponto/services/dia_do_colab.py:71`, `app/ponto/services/cartorio.py:1389`. A presença dos três no anexo é dado fornecido pelo usuário [nao verificado]. Isso precisa ficar separado do gate estrito dos arquivos MUDA+respondedores+testes; não faz desses três automaticamente arquivos a alterar.
-
-Os 309 sítios de chamada em testes, agrupados por arquivo, abaixo. As funções completas são impressas pelo `TEST_FILE` do script integral enviado. [nao verificado]
-
-```text
-app/api/tests/test_api_mensageria_pendencias.py:78 [1]
-app/chamados/tests/test_adesao_por_colab.py:61 [1]
-app/chamados/tests/test_b2d_resposta_visivel.py:76,99 [2]
-app/chamados/tests/test_bug117_marco_no_espelho.py:128,135,143,153 [4]
-app/chamados/tests/test_c2_endpoints_janela.py:37,45 [2]
-app/chamados/tests/test_c7_red_minimos.py:124 [1]
-app/chamados/tests/test_clique_morto.py:67,76,91,92,99,109 [6]
-app/chamados/tests/test_competencia_trancada.py:127,134,156,201 [4]
-app/chamados/tests/test_contract_pergunta_viva.py:56 [1]
-app/chamados/tests/test_cq_c8.py:37,39,40 [3]
-app/chamados/tests/test_e1_entradas.py:152 [1]
-app/chamados/tests/test_e1_v10.py:229,239 [2]
-app/chamados/tests/test_e1_v15c2_descarimbo_efeito.py:44,65,79 [3]
-app/chamados/tests/test_e1_v6_horizonte.py:470,476,538,550 [4]
-app/chamados/tests/test_e1_v9.py:171,202 [2]
-app/chamados/tests/test_e2_pergunta_so_ao_c6.py:95,103 [2]
-app/chamados/tests/test_e2_tarefa_do_dia.py:139,321,443,446,523,547,611,613,613,683,684,684,883,884,895,907,908,909,910,933,936,1134,1169,1170 [24]
-app/chamados/tests/test_e3_c8c_orm.py:40,45,46,57,65,66,66,76,90 [9]
-app/chamados/tests/test_e3_portas_tarefa.py:19,109,120,121,122,124 [6]
-app/chamados/tests/test_e4a2_nunca_bateu.py:158 [1]
-app/chamados/tests/test_e4a_relogio_injetado.py:34,35 [2]
-app/chamados/tests/test_e4b_c11_orm.py:145,169 [2]
-app/chamados/tests/test_e4b_c12_orm.py:61,93 [2]
-app/chamados/tests/test_e4b_c4_orm.py:473 [1]
-app/chamados/tests/test_e4b_c6_orm.py:80,81,82,83 [4]
-app/chamados/tests/test_exibicao_so_viva.py:76 [1]
-app/chamados/tests/test_f1c4_3_emissores.py:78 [1]
-app/chamados/tests/test_fechar3_retorno_do_gate.py:100,108,139 [3]
-app/chamados/tests/test_fio_ancora_destino.py:60,68,79 [3]
-app/chamados/tests/test_fio_explicacao.py:33 [1]
-app/chamados/tests/test_fio_le_o_juiz.py:103 [1]
-app/chamados/tests/test_hx_pergunta_viva_topo.py:43 [1]
-app/chamados/tests/test_hx_tipo_pelo_marco.py:161,163 [2]
-app/chamados/tests/test_invariantes_disputa.py:145 [1]
-app/chamados/tests/test_jv3_reconciliar_vira_vigia.py:151 [1]
-app/chamados/tests/test_limbo_nao_fecha_com_filho_no_defeito.py:85,127 [2]
-app/chamados/tests/test_migrar_data_evento_dia_do_turno.py:104,119 [2]
-app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:150,238,265 [3]
-app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:98,98 [2]
-app/chamados/tests/test_o261_fabrica_le_a_lampada.py:57 [1]
-app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:98,99,104,111,184 [5]
-app/chamados/tests/test_o261_lavra_le_a_lampada.py:138,163 [2]
-app/chamados/tests/test_o261_pergunta_viva_teto.py:55,60,65,89 [4]
-app/chamados/tests/test_o261_recusa_fala.py:105,127,132,177,183 [5]
-app/chamados/tests/test_o261_resposta_vazia.py:113 [1]
-app/chamados/tests/test_o261_vigia_fio.py:134,135,238,241 [4]
-app/chamados/tests/test_o261e_f1_porta_encerramento.py:75,436,446 [3]
-app/chamados/tests/test_o261e_f2_fila.py:246 [1]
-app/chamados/tests/test_o261e_f2_porta_carimbo.py:668,731 [2]
-app/chamados/tests/test_o261e_f2_ramo_e_i20.py:186,202,237,260 [4]
-app/chamados/tests/test_o261e_f5b_juiz_porta.py:81,106,188,189 [4]
-app/chamados/tests/test_o318_card_nao_oferece_o_que_a_porta_recusa.py:102,222,237 [3]
-app/chamados/tests/test_o318_dia_misto_projecao_por_marco.py:123,219,230 [3]
-app/chamados/tests/test_o44_tranca_nao_barra_o_toque.py:177,183 [2]
-app/chamados/tests/test_orfa_sem_candidato.py:70 [1]
-app/chamados/tests/test_orfas_pelo_evento.py:102,110,354,378 [4]
-app/chamados/tests/test_particionar_verbos.py:39 [1]
-app/chamados/tests/test_pergunta_do_dia_em_curso.py:89,90,92,99,289,316,457,507 [8]
-app/chamados/tests/test_pergunta_no_app.py:85 [1]
-app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:54 [1]
-app/chamados/tests/test_pergunta_viva.py:18,22,27,36,42,47,51,60,67,72,77 [11]
-app/chamados/tests/test_porta_veredito_pergunta.py:427,428,438,454 [4]
-app/chamados/tests/test_profile_e53.py:86 [1]
-app/chamados/tests/test_pvmuda_carimbo_em_voo.py:76,90,116,125,127,275,281,282 [8]
-app/chamados/tests/test_reabrir_orfas_enterradas.py:103 [1]
-app/chamados/tests/test_reabrir_pendente_pelo_juiz.py:67,68 [2]
-app/chamados/tests/test_reconciliador_c1_escopo.py:48 [1]
-app/chamados/tests/test_relatorio_pendencias.py:35,39,43,47,53,59 [6]
-app/chamados/tests/test_relatorio_pendencias_lei.py:22,31 [2]
-app/chamados/tests/test_resposta_nao_e_fantasma.py:86 [1]
-app/chamados/tests/test_selo_celula_absolveu.py:72,85,117 [3]
-app/chamados/tests/test_selo_defer_json_creditos.py:80,94 [2]
-app/chamados/tests/test_selo_emissor_fio_mudo.py:269 [1]
-app/chamados/tests/test_selo_get_nao_escreve.py:88,101 [2]
-app/chamados/tests/test_selo_i6_ouve_a_lei.py:114,130 [2]
-app/chamados/tests/test_selo_i8_fio_solto.py:95,119,167,179 [4]
-app/chamados/tests/test_selo_i8b_resolvedora_cruzada.py:83 [1]
-app/chamados/tests/test_selo_identidade_fio_explicacao.py:78,82 [2]
-app/chamados/tests/test_selo_juizes_orfaos.py:73,79 [2]
-app/chamados/tests/test_selo_memo_pergunta_viva.py:86,87,88,108,109,110,112,124,126,129,132,137,140,148,150,153,156,164,166,174,176,177 [22]
-app/chamados/tests/test_snc2_toque_em_lote.py:85,95,98,144,146,148,161,163,179,181,195,197,220,234,238 [15]
-app/chamados/tests/test_t34_furo_sob_limbo.py:55 [1]
-app/chamados/tests/test_tranca_de_verdade.py:52,59,82,87 [4]
-app/chamados/tests/test_viva_delega_ao_juiz.py:42 [1]
-app/colaboradores/tests/test_calendario_ultimo_recurso_le_o_c6.py:56 [1]
-app/core/tests/test_selo_performance.py:480,482 [2]
-app/escala/tests/test_f3_beco1_folga_na_lista.py:80,148,173,191,193 [5]
-app/ponto/tests/test_bug114_fechador_de_dois_dias.py:239 [1]
-app/ponto/tests/test_cobparc_marco_no_periodo.py:386 [1]
-app/ponto/tests/test_cods_do_ato.py:124 [1]
-app/ponto/tests/test_cxr_tela_le_o_motor.py:367,368 [2]
-app/ponto/tests/test_fechar3_troca_escala_gate.py:152,203,204,253,254 [5]
-app/ponto/tests/test_hx_cartorio_ressuscita.py:56,65 [2]
-app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:102 [1]
-app/ponto/tests/test_o261_cobrado_le_o_fio.py:134,147,161,195,309,325,349,419 [8]
-app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:84,91,150,175,184 [5]
-app/ponto/tests/test_x1_folga_sem_adesao.py:325,391 [2]
-```
-
-O script não encontrou chamadas desses alvos em arquivos `bin/`; isso é resultado da execução sem relatório persistido [nao verificado]. Referências textuais em shell/documentação não equivalem a arquivo compartilhado nem a chamada Python provada.
-
-Limites: `.viva/.estado` de modelos diferentes aparecem entre os 214 candidatos; não declarar 214 leitores C6. Dispatch dinâmico, atribuições em tupla e consumidores de ordem superior não estão provados [nao verificado]. AST Python não julga HTML/JS: o ramo do template requer leitura textual; o script imprime o restante para inspeção.
-
-_4122 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4124 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
