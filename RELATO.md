@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex | pid=1368216
+ESPERANDO: trava_teste.sh | pid=797281
 DESPACHO C20-O168 14:28: censo ja feito (logs/O168/censo_v1.r, Codex 11/11) | construtor -> opus na copia /home/ronald/wt-o168-142801 @0a747193e (vaga do hook; arquivos de SAIDA-NOTURNA e BUG-CADASTRO PROIBIDOS no brief: intersecao 0) | escopo: guarda no evento (cartorio) com UM juiz; --executar do cron fica para depois do CSF_RETRATADO medido zero | DIFF sombra pela sessao, >10% fila viva = PAREI.
 RESCALDO-DAS-RAIAS-1211 PRONTO 14:3x: censo Codex rc=0 14:25 (logs/rescaldo/1211/censo.r); amostra Code 10/10 arquivo:linha conferidos no HEAD 0a747193e (turnos.py:1430, reconciliar_grade.py:281, deploy.sh:341, queries.py:64, escala/utils.py:613, cartorio.py:548, reavaliar_ausencias_feriado.py:35, painel.py:188, lastro.py:307, fio_estado.py:137). Soma: NO-MAIN 6 + ABSORVIDA 6 + MORTA 0 + PARADA 17 = 29. As 17 PARADA viraram INTERROMPIDA (L-119) no BACKLOG: interrompidas_estado universo=17 abertas=17 mais_de_24h=17 (data = ultimo commit da raia). Nada saiu da fila; ordem intocada.
 | obra | classe | prova no main / motivo |

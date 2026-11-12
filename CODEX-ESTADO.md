@@ -1,7 +1,154 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 14:26** · publicado em **12/11/2026 14:28** (UTC-3)
+> Ultima resposta processada: **12/11/2026 14:31** · publicado em **12/11/2026 14:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 14:31 · sessao 0b5862773d72 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
+
+**O v5 fecha os limites da publicação e o segundo classificador, mas ainda não fecha a semente nem declara toda a mudança de semântica do censo.** (`contrato_item3_v5.txt:12–26`; `contrato_item3_v5_semente.txt:4`, `:13`, `:18`, `:23`; `BACKLOG.md:1916`; `RELATO.md:266`, `:616`)
+
+Uso `BACKLOG.md` e `RELATO.md` para os arquivos de `app/docs/`. Nos anexos, conto linhas físicas a partir de 1. Pousos e estados abaixo são declarações documentais; estado atual de produção: **[nao verificado]**.
+
+**1. Furos do v4**
+
+| Furo | Veredito sobre o v5 |
+|---|---|
+| G1 inclusivo | **Fecha:** termina antes do primeiro comentário; a antiga linha 7 pertence a P1. (`contrato_item3_v5.txt:12`, `:14`; `BACKLOG.md:7`) |
+| G2 sem inserção/lápide | **Fecha:** (a) insere G2 e (b) substitui expressamente o marcador antigo pela lápide. (`contrato_item3_v5.txt:18–19`) |
+| G3 sem `GERADO:FIM` | **Fecha:** (c) insere o delimitador entre BATI-02 e a primeira linha manual. (`contrato_item3_v5.txt:20`; `BACKLOG.md:2370–2371`) |
+| Manual começando em 2371 | **Fecha:** preserva 2371 até EOF, incluindo as três linhas anteriormente mal delimitadas. (`contrato_item3_v5.txt:20`; `BACKLOG.md:2371–2373`) |
+| “Render não produz” | **Fecha:** autoria passa a ser delimitada por zonas; BATIDA obsoleta permanece em G3 e pode desaparecer. (`contrato_item3_v5.txt:11`, `:15`, `:33`; `BACKLOG.md:2365–2370`; `app/core/juizes.py:1266`) |
+| Byte a byte × mecanismo | **Fecha contratualmente:** exige substituir leitura/recomposição por cópia das zonas preservadas e verificar com `cmp`. O código desta cópia ainda usa texto, `rstrip`, `split` e `join`. (`contrato_item3_v5.txt:22–24`; `bin/gerar_backlog.py:111`, `:127`, `:139`) |
+| Quatro propriedades do censo | **Resolve três e declara a alteração da quarta:** qualificada conforme, exato acompanhado de variante e `ValueError` direto conservam o matcher; ausência de OBRAS é substituída por falha do `.ids`. **Ainda omite a perda da exclusão por estado**, detalhada no item 3. (`contrato_item3_v5.txt:26–29`; `bin/tests/test_censo_antes_da_vaga.sh:542`, `:578`, `:603–608`; `bin/hook_stop_fila1.py:250–252`) |
+| Segundo classificador | **Fecha:** permanece `_pertence_fila1`; a igualdade do fabricante compara a própria célula identificadora e não classifica pedidos livres. (`contrato_item3_v5.txt:7`, `:9`, `:26`; `bin/disjuntor.py:1672–1695`) |
+| Semente: pousados | **Parcial:** retira O169-FECHADA, BO-0611-05 e TRAVA-SELO de `[ORDEM]`; mantém X1, cuja fase tem pouso documental, com incompletude “6 de 7”. (`contrato_item3_v5_semente.txt:23`, `:34–36`; `RELATO.md:265–266`, `:8059`, `:312`) | [nao verificado]
+| Semente: faltantes | **Parcial:** inclui os três apontados no v4, mas ainda deixa outras linhas explicitamente fila 1 abertas sem representação. (`contrato_item3_v5_semente.txt:12`, `:15–16`; `BACKLOG.md:1831–1832`, `:1865–1866`, `:1986–1987`) |
+| Travas LASTRO/F0F1 | **Fecha as atribuições erradas:** LASTRO recebe liberação condicionada; ESTACIONADA pertence à BO-DISPUTA. (`contrato_item3_v5_semente.txt:5`, `:9`, `:22`; `aval_respostas_1211_1230.txt:6`; `BACKLOG.md:1882`) |
+| Linha BUG-CADASTRO | **Fecha a seção, mas não a referência:** está corretamente em POS-20; a nota continua apontando 2417, que é RAIZ-F0. BUG-CADASTRO está em 2408. (`contrato_item3_v5_semente.txt:25`, `:40`; `BACKLOG.md:2408`, `:2417`) |
+
+Resta uma ambiguidade operacional na seção 2: **“marcador repetido (`<!--` de G1)” não pode significar unicidade global de `<!--`**. Esse token aparece em vários comentários preservados e no próprio G2 novo; essa interpretação recusaria um arquivo válido. A fronteira pela **primeira ocorrência** está definida; a regra de repetição do token genérico precisa ser corrigida. (`contrato_item3_v5.txt:12–13`, `:23`; `BACKLOG.md:7–9`, `:2042`)
+
+**2. Partição depois de (a), (b), (c)**
+
+**Sim: os limites descritos distribuem todas as linhas ancestrais uma vez cada**, com a substituição autorizada da linha 8; G2 e os novos delimitadores/cabeçalhos são inserções. (`contrato_item3_v5.txt:12–21`; `BACKLOG.md:1–7`, `:2042–2044`, `:2370–2371`, `:2425`)
+
+| Zona | Linhas do HEAD que recebe |
+|---|---|
+| G1 | **1–6**. (`BACKLOG.md:1–7`; `bin/gerar_backlog.py:65–73`) |
+| G2 | **Nenhuma ancestral:** bloco novo antes da antiga linha 7. (`contrato_item3_v5.txt:13`, `:18`; `BACKLOG.md:7`) |
+| P1 | **7–2042**, com linha **8** substituída pela lápide. (`contrato_item3_v5.txt:14`, `:19`; `BACKLOG.md:7–8`, `:2042`) |
+| G3 | **2043–2370**, seguido do novo `GERADO:FIM`. (`contrato_item3_v5.txt:15`, `:20`; `BACKLOG.md:2043–2044`, `:2370`) |
+| CAUDA | **2371–2425**, precedidas do cabeçalho novo. (`contrato_item3_v5.txt:16`, `:20`; `BACKLOG.md:2371`, `:2425`) |
+
+**Linhas de conteúdo produzido pelo render promovidas a P1/CAUDA: nenhuma identificada. Linhas manuais comidas por G1/G3: nenhuma identificada.** O gerador produz cabeçalho, contagem e famílias; a janela intermediária é conteúdo recuperado do arquivo anterior. (`bin/gerar_backlog.py:65–100`, `:119–127`)
+
+Se “ESCREVE” significar a chamada física de escrita, o gerador atual também reescreve as linhas preservadas **8–2042**. Isso é cópia de conteúdo manual já preservado, não promoção de conteúdo gerado a manual. (`BACKLOG.md:8`, `:2042`; `bin/gerar_backlog.py:119–127`, `:138–140`)
+
+Os casos antes problemáticos agora ficam assim:
+
+| Linhas | Destino |
+|---|---|
+| 7, comentário ESTRUTURAL | P1. (`BACKLOG.md:7`; `contrato_item3_v5.txt:14`) |
+| 2365–2370, BATIDA obsoleta | G3; desaparece se não renderizada. (`BACKLOG.md:2365–2370`; `app/core/juizes.py:1266`; `contrato_item3_v5.txt:15`) |
+| 2371, SELO-MORDE | CAUDA. (`BACKLOG.md:2371`; `contrato_item3_v5.txt:20`) |
+| 2372, MARCO-1490 | CAUDA. (`BACKLOG.md:2372`; `contrato_item3_v5.txt:20`) |
+| 2373, ORFAOS-L-111 | CAUDA. (`BACKLOG.md:2373`; `contrato_item3_v5.txt:20`) |
+
+**3. O censo muda de universo, mesmo com o matcher intacto**
+
+Hoje `_fila1_viva` devolve `_itens_andaveis`, que exclui `_item_parado`: lê fechamento e palavras de parada na célula `[3]`, além de tachado na descrição `[2]`. O v5 entrega toda `[ORDEM]`, incluindo travados, sem reproduzir esse filtro. Portanto deixa de valer **“estado parado/fechado exclui a obra da fonte do censo”**. (`bin/disjuntor.py:1623–1634`; `bin/hook_stop_fila1.py:95–97`, `:168`, `:180`, `:244–252`; `contrato_item3_v5.txt:5`, `:26`)
+
+| Linhas de `bin/tests/test_censo_antes_da_vaga.sh` | Efeito |
+|---|---|
+| **112–115** | FECHADA hoje dá rc0/FORA pela coluna. Depois conserva essa saída somente se ficar fora de `[ORDEM]`; se entrar, sem brief, exige censo e nega. A propriedade de exclusão por estado desaparece. (`:43`, `:112–115`; `bin/disjuntor.py:1707`, `:1715–1716`) |
+| **250–251** | Mesmo deslocamento no Agent para FECHADA: dispensa passa a decorrer da ausência no `.ids`. (`:250–251`; `bin/disjuntor.py:1707`, `:1728`) |
+| **252–253** | FILA2/CONGELADA também deixa de ser exclusão calculada pelo estado; depende de não constar em `[ORDEM]`. (`:44`, `:252–253`; `bin/hook_stop_fila1.py:95–97`) |
+| **116–124** | IDs sem relação e validação da entrada continuam preserváveis; não dependem do filtro de estado. (`:116–124`; `bin/disjuntor.py:1690–1691`, `:2288`) |
+| **125–130; 281–288** | Falha do BACKLOG continua obrigatoriamente NAO SEI pela validação de fonte do v5. (`:125–130`, `:281–288`; `contrato_item3_v5.txt:25–26`) |
+| **131–135; 289–293** | Alteração já declarada: ausência de OBRAS deixa de ser falha; ausência da fonte estruturada passa a ser falha. (`:131–135`, `:289–293`; `contrato_item3_v5.txt:29`) |
+| **301–305** | Forma inadequada de membro continua recusada depois do pertencimento. (`:301–305`; `bin/disjuntor.py:1707–1712`) |
+| **534–543** | Qualificada sem brief nega; com brief conforme aprova. Preservado com a mesma célula na fonte. (`:534–543`; `bin/disjuntor.py:1688–1694`, `:1715–1727`) |
+| **544–558; 559–574** | Ambiguidade, caixa, fronteira, cauda e dois candidatos conservam o matcher. (`:544–574`; `bin/disjuntor.py:1688–1695`) |
+| **575–582** | Exato mais variante continua NAO SEI; exato sozinho conforme continua aprovado. (`:575–582`; `bin/disjuntor.py:1688–1694`) |
+| **583–619** | Espelhos e `ValueError` direto permanecem; controles O1/O142 permanecem False. (`:583–619`; `bin/disjuntor.py:1689–1695`) |
+| **621–645; 750–763** | Formato da negativa e mutantes do matcher continuam obrigações independentes; a troca de fonte não exige alterá-los. (`:621–645`, `:750–763`; `contrato_item3_v5.txt:26`, `:28`) |
+
+**Não há fundamento para dizer que os resultados de 112–115/250–253 necessariamente ficam vermelhos:** a fixture pode excluir FECHADA/FILA2 de `[ORDEM]`. Mas então esses testes passam a provar exclusão pela lista, e deixam de provar exclusão pela coluna. Essa mudança também precisa ser declarada. (`contrato_item3_v5.txt:28`; `bin/tests/test_censo_antes_da_vaga.sh:43–44`, `:112–115`, `:250–253`)
+
+**TRAVA não é veto do censo neste desenho:** o predicado recebe somente IDs, e um brief conforme pode obter APROVADO para um ID travado. Isso não equivale a autorizar sua construção nem prova que a trava foi satisfeita. (`contrato_item3_v5.txt:5`, `:26`; `bin/disjuntor.py:1703–1707`, `:1721–1727`)
+
+**4. Semente: primeira célula exata e estado da linha**
+
+| Seção | ID | Linha exata e declaração do BACKLOG |
+|---|---|---|
+| ORDEM | `SAIDA-NOTURNA-NO-DIA-CERTO` | Linha exata: **[nao verificado]**. Há despacho no RELATO, que não substitui a identidade exigida. (`RELATO.md:29`; `contrato_item3_v5.txt:4`) |
+| ORDEM | `QUARENTENA-DO-COLAB` | REPROVADA; espera a vez. (`BACKLOG.md:765`) |
+| ORDEM | `FIO-E0-V4-E3-LEITORES` | Fila 1, ABERTA, EM OBRA; entrada após E4B. (`BACKLOG.md:1873`) |
+| ORDEM | `LASTRO-FAIXA-SEM-DEFAULT` | Fila 1, ABERTA, c3. (`BACKLOG.md:1813`) |
+| ORDEM | `FIO-E0-V4-E4-ESCRITORES` | Fila 1; E4a–E4d; E4a-1 NO AR, sem fechamento da obra inteira. (`BACKLOG.md:1885`) |
+| ORDEM | `C20-O168` | Fila 1, ABERTA, espera vaga. (`BACKLOG.md:2008`) |
+| ORDEM | `RAIZ-DA-DISPUTA-F0-CASO-7279` | Fila 1, F0/sonda, frente da F1/HJ-067/HJ-073. (`BACKLOG.md:2417`) |
+| ORDEM | `RAIZ-DA-DISPUTA-F0F1` | F0/F1 prontos; F1 respondida; c22 após E3/E4B. (`BACKLOG.md:1882`) |
+| ORDEM | `AUDITORIA-DE-TRAVAS-CORTE` | Instrumento EM CURSO. (`BACKLOG.md:2404`) |
+| ORDEM | `BUG-ORFAO-COM-PAR` | ESTRUTURA fila 1; sonda antes de classe/cura. (`BACKLOG.md:2418`) |
+| ORDEM | `SONDA-MATRIZ-DE-TRANSICOES` | Fila 1 instrumento ABERTA; matriz rc0; volta 8 após CODEX-2-RAIAS. (`BACKLOG.md:1980`) |
+| ORDEM | `SONDA-SEM-GRANT` | Fila 1 instrumento ABERTA; sondas congeladas até pouso. (`BACKLOG.md:1979`) | [nao verificado]
+| ORDEM | `AUDITORIA-0911` | Fila 1 medida ABERTA; sondas após SONDA-SEM-GRANT. (`BACKLOG.md:1981`) |
+| ORDEM | `SEGREDO-ARGV-RESIDUO` | Fila 1 instrumento ABERTA; depois do pouso SONDA. (`BACKLOG.md:1982`) | [nao verificado]
+| ORDEM | `SOMBRA-CARIMBO-MENTE` | Fila 1 instrumento ABERTA; depois do pouso SONDA. (`BACKLOG.md:1983`) | [nao verificado]
+| ORDEM | `TRIAGEM-OFFLINE-SEM-CAMERA` | REVERTIDA; retorno condicionado à classe e RED. (`BACKLOG.md:1915`) |
+| ORDEM | `APP-MENSAGENS-MSG-0` | Fila 1/raia 2 ABERTA, nada construído; após TRIAGEM, **antes de O168/LASTRO**. (`BACKLOG.md:1916`) |
+| ORDEM | `MEDE-CLEAR-X-COMPACT` | Fila 1 medida ABERTA, em curso. (`BACKLOG.md:1796`) |
+| ORDEM | `CODEX-QUEIMA-B` | Fila 1 medida ABERTA, sondas rodando. (`BACKLOG.md:1797`) |
+| ORDEM | `C20-FIO-MUDO` | Fila 1 ABERTA, construtor aberto. (`BACKLOG.md:1817`) |
+| ORDEM | `BO-DISPUTA-SEM-PERGUNTA` | Linha própria registra construtor lançado. (`BACKLOG.md:1898`) |
+| ORDEM | `E3-X1-FOLGA-NAO-E-SEM-COBERTURA` | Linha própria ABERTA, construtor após c8b. (`BACKLOG.md:1876`) |
+| POS-20 | `BUG-CADASTRO-NAO-ALCANCA-O-FUTURO` | POS-20, frente da fila 2. (`BACKLOG.md:2408`) |
+| POS-20 | `UI-PAINEL-FILA-OPUS-V5` | POS-20, fila registrada; pouso citado pertence à UI original. (`BACKLOG.md:2407`) | [nao verificado]
+| POS-20 | `AUDITORIA-ITEM6-CONTADOR-124` | Linha exata: **[nao verificado]**. RELATO registra “não construído → fila”, sem classificá-lo como POS-20. (`RELATO.md:9`) |
+| POS-20 | `TRIAGEM-FILA-OPUS-V6` | POS-20, ABERTA. (`BACKLOG.md:1815`) |
+| POS-20 | `E4B-FILA-OPUS-C14` | POS-20, fila do opus. (`BACKLOG.md:1896`) |
+| POUSADAS | `FIO-E0-V4-E4B` | POUSOU, commit 087fe758a. (`BACKLOG.md:1894`) |
+| POUSADAS | `FIO-E0-V4-E4A-2` | NO AR, merge 613a51498. (`BACKLOG.md:1893`) |
+| POUSADAS | `C20-O169` | POUSADA/FECHADA. (`BACKLOG.md:1798`) |
+| POUSADAS | `O169-FECHADA` | Linha própria B3/volta 5; pouso posterior do delta documentado. (`BACKLOG.md:1969`; `RELATO.md:265`) | [nao verificado]
+| POUSADAS | `BO-0611-05` | Linha própria B3/PARADA; merge/deploy posterior documentado. (`BACKLOG.md:1897`; `RELATO.md:8059`) | [nao verificado]
+| POUSADAS | `TRAVA-MENOS-FILA-COM-SELO` | Linha própria ABERTA; ligação a TRAVA-SELO e pouso documentados. (`BACKLOG.md:2396`; `RELATO.md:8107`, `:312`) | [nao verificado]
+
+A identidade de **SAIDA-NOTURNA** e **AUDITORIA-ITEM6-CONTADOR-124** continua sem linha exata demonstrada; a semente não satisfaz a exigência de exatamente uma linha para cada ID apenas citando seus despachos. (`contrato_item3_v5_semente.txt:2`, `:27`; `contrato_item3_v5.txt:4`; linhas exatas: **[nao verificado]**)
+
+**Pouso em `[ORDEM]`: X1 permanece sem reconciliação.** O RELATO declara pouso da fase X1, “6 de 7”, e apply pós-pouso. Isso prova pouso parcial e incompletude; não prova fechamento integral, mas também não sustenta tratar seu estado como desconhecido. O restante precisa ser distinguido do pouso já registrado. (`contrato_item3_v5_semente.txt:23`, `:45`; `RELATO.md:248`, `:266`, `:185`) [nao verificado]
+
+**Faltantes documentais:** além dos três corrigidos, estas primeiras células continuam fora da semente embora suas linhas declarem fila 1 aberta ou trabalho restante:
+
+| ID faltante | Declaração |
+|---|---|
+| `COBPARC-ATA-DEFASADA-09` | Fila 1, aberta. (`BACKLOG.md:772`) |
+| `COBPARC-AUSENCIA-CALA-DOIS-JUIZES` | Fila 1, aberta, depois da COBPARC. (`BACKLOG.md:773`) |
+| `COBPARC-FUROS-LEITOR-PARCIAL` | Fila 1, aberta, depois da COBPARC. (`BACKLOG.md:774`) |
+| `FASE-CONFLITANTE-VINCULO-DO-DIA` | Fila 1, aberta. (`BACKLOG.md:827`) |
+| `LENVIVOS-A6-ALARME` | Fila 1, aberta. (`BACKLOG.md:887`) |
+| `O125` | Fila 1, aberta. (`BACKLOG.md:1213`) |
+| `ESMERIL-SEM-DIA-DO-TURNO` | Fila 1, aberta. (`BACKLOG.md:1831`) |
+| `ESMERIL-SEM-BORDA` | Fila 1, aberta. (`BACKLOG.md:1832`) |
+| `V2-BUGS-DO-MOTOR` | Fila 1; itens 1/3/4/5 abertos. (`BACKLOG.md:1835`) |
+| `MOTOR-LE-O-TURNO` | Fila 1; espera E2/E3. (`BACKLOG.md:1850`; `RELATO.md:890`) |
+| `E1-FILA-V2-3-A-6` | Fila 1, aberto. (`BACKLOG.md:1865`) |
+| `E1-FILA-OPUS6-FILA` | Fila 1, aberto. (`BACKLOG.md:1866`) |
+| `CODEX-2-RAIAS-PORTAO-CPU` | Fila 1 instrumento ABERTA; ainda falta pouso. (`BACKLOG.md:1986`; `RELATO.md:589`) | [nao verificado]
+| `CODEX-ALIVIA-1-WRAPPER-BIN` | Fila 1 instrumento ABERTA, complemento da CODEX-2-RAIAS. (`BACKLOG.md:1987`) |
+
+Essas são omissões de **linhas documentadas**, sem afirmar ausência de pouso em produção. Há ainda reconciliações necessárias: LASTRO-FOLGA consta ABERTA, mas seu desenho foi respondido por LASTRO-FAIXA; ESMERIL-SEM-INSTANTE consta aberta, mas tem pouso posterior; linhas de plano como ORDEM-ATE-O-ZERO, RAIA-2-BO-VISIVEL e META-18 declaram fila 1 ABERTA, sem exclusão específica desse tipo no contrato. (`BACKLOG.md:1812`, `:1830`, `:1883`, `:1906`, `:2406`; `RELATO.md:175`, `:1005`; `contrato_item3_v5.txt:2–6`) [nao verificado]
+
+As travas e dependências restantes são:
+
+- **E3 → pouso QUARENTENA:** há bloqueio de desenho real, mas não decisão impondo esse evento específico. O RELATO oferece absorver SVV, reverter a lista ou declarar limite, além de outros dois desenhos pendentes. A trava escolhe uma condição ainda não determinada pelo dado. (`contrato_item3_v5_semente.txt:4`; `RELATO.md:19`) [nao verificado]
+- **SONDA → MATRIZ:** a matriz já está rc0; a condição restante escrita é **pouso CODEX-2-RAIAS + rebase**. A trava não representa essa condição, e CODEX-2-RAIAS falta na semente. (`contrato_item3_v5_semente.txt:13`, `:44`; `BACKLOG.md:1980`, `:1986`; `RELATO.md:616`) [nao verificado]
+- **AUDITORIA → SONDA:** tem lastro explícito. (`contrato_item3_v5_semente.txt:14`; `BACKLOG.md:1981`; `RELATO.md:698`)
+- **BO-DISPUTA ESTACIONADA:** tem lastro explícito. (`contrato_item3_v5_semente.txt:22`; `BACKLOG.md:1882`; `RELATO.md:373`)
+- **APP:** estar após TRIAGEM respeita a linha; estar após O168/LASTRO a contraria. (`contrato_item3_v5_semente.txt:5`, `:7`, `:17–18`; `BACKLOG.md:1916`)
+- **SAIDA:** o censo pode ocorrer antes, mas seu construtor espera pouso E3. Colocá-la no topo sem trava nem distinção de fase não representa essa dependência de construção. (`contrato_item3_v5_semente.txt:2`, `:4`; `RELATO.md:29`; `contrato_item3_v5.txt:5`) [nao verificado]
+- **Endereços das notas:** BUG-CADASTRO é **2408**, não 2417; a regra da MATRIZ é **1980**, não 1985, que contém PLACAR-RETIDO-DO-LASTRO. (`contrato_item3_v5_semente.txt:40`, `:44`; `BACKLOG.md:2408`, `:2417`, `:1980`, `:1985`)
 
 ## 12/11 14:26 · sessao 95dd89c9b57b · - · - · origem=Ronald (tmux)
 
@@ -1406,43 +1553,4 @@ As **DUVIDAS** do fim:
 - **BUG-CADASTRO:** a relação do item 4(b) com essa obra está documentada no RELATO. Existe discrepância entre o BACKLOG POS-20/frente da fila 2 e a construção já despachada/entregue parcialmente, com 4(b) respondido pelo aval. Nenhuma dessas evidências declara sua transferência para fila 1; não cabe inventá-la nem ignorar o aval. (`app/docs/BACKLOG.md:2408`; `app/docs/RELATO.md:39`, `:50`, `:92`; `aval_respostas_1211_1230.txt:2`)
 - **DECLARADO-X-GRAVADO:** o RELATO registra despacho de medida/censo e “Nada construido”, mas não demonstra pertencimento à fila 1 nem linha exata em OBRAS. Portanto **entrada em ORDEM: [nao verificado]**; a identidade exigida impede incluí-lo como está. (`app/docs/RELATO.md:6`, `:7`; `contrato_item3_v3.txt:2`)
 
-## 12/11 14:02 · sessao 183b52816031 · - · - · origem=Ronald (tmux)
-
-A conferência exata da primeira coluna deu:
-
-| Seção/ID da semente | Linha do BACKLOG e conclusão documental |
-|---|---|
-| ORDEM — SAIDA-NOTURNA-NO-DIA-CERTO | Não ocorre literalmente na cópia; nenhuma linha exata em OBRAS. Bloco delimitado por `app/docs/BACKLOG.md:712` e `:2042`; estado/pertencimento **[nao verificado]**. |
-| ORDEM — FIO-E0-V4-E3-LEITORES | `app/docs/BACKLOG.md:1873`: fila 1, ABERTA, EM OBRA. |
-| ORDEM — QUARENTENA-DO-COLAB | `app/docs/BACKLOG.md:765`: linha própria dentro; REPROVADA, espera a vez. A linha não declara literalmente fila 1; pertencimento à fila 1 **[nao verificado]**. |
-| ORDEM — LASTRO-FAIXA-SEM-DEFAULT | `app/docs/BACKLOG.md:1813`: CONGELA-O-20, obra LASTRO, fila 1, ABERTA. |
-| ORDEM — C20-O168 | `app/docs/BACKLOG.md:2008`: fila 1, espera vaga, ABERTA. |
-| ORDEM — RAIZ-DA-DISPUTA-F0-CASO-7279 | `app/docs/BACKLOG.md:2417`: fila 1, frente da F1, sonda; linha exata **fora** de OBRAS, depois de `:2042`. |
-| ORDEM — RAIZ-DA-DISPUTA-F0F1 | `app/docs/BACKLOG.md:1882`: fila 1, F0+F1 prontos e F1 respondida; c22 na vaga após E3 e E4B; não diz pousada. |
-| ORDEM — AUDITORIA-DE-TRAVAS-CORTE | `app/docs/BACKLOG.md:2404`: instrumento EM CURSO; linha exata **fora** de OBRAS. Não declara literalmente fila 1. |
-| ORDEM — APP-MENSAGENS-MSG-0 | `app/docs/BACKLOG.md:1916`: fila 1, raia 2, ABERTA, nada construído. |
-| ORDEM — TRIAGEM-OFFLINE-SEM-CAMERA | `app/docs/BACKLOG.md:1915`: REVERTIDA, volta condicionada a classe nomeada/RED; fila BO. `:1906` a coloca na fila 1 raia 2. |
-| POS-20 — BUG-CADASTRO-NAO-ALCANCA-O-FUTURO | `app/docs/BACKLOG.md:2408`: POS-20, frente da fila 2, construção na próxima vaga; linha exata **fora** de OBRAS. |
-| POS-20 — UI-PAINEL-FILA-OPUS-V5 | `app/docs/BACKLOG.md:2407`: POS-20; linha exata **fora** de OBRAS. O “pousada df2be6b12” refere a tela, cujos nove achados são esta fila. |
-| POS-20 — AUDITORIA-ITEM6-CONTADOR-124 | Não ocorre literalmente na cópia; nenhuma linha exata em OBRAS. Pertencimento/estado **[nao verificado]**. |
-| POS-20 — TRIAGEM-FILA-OPUS-V6 | `app/docs/BACKLOG.md:1815`: POS-20, ABERTA; linha dentro de OBRAS. |
-| POS-20 — E4B-FILA-OPUS-C14 | `app/docs/BACKLOG.md:1896`: POS-20; linha dentro de OBRAS. |
-| POUSADAS — FIO-E0-V4-E4B | `app/docs/BACKLOG.md:1894`: POUSOU 12/11 08:46, commit 087fe758a; linha dentro. Pouso declarado documentalmente, não confirmado em produção. |
-| POUSADAS — FIO-E0-V4-E4A-2 | `app/docs/BACKLOG.md:1893`: NO AR, merge 613a51498; linha dentro. Pouso declarado documentalmente. |
-| POUSADAS — O169-FECHADA | `app/docs/BACKLOG.md:1969`: **não prova o pouso deste delta**. Diz fila 1 REGISTRAR, delta do contador, B3 desenho e volta 5. O pouso ali citado pertence a **C20-O169**, cuja linha é `:1798`. |
-
-A semente viola a identidade da seção 0 já na ORDEM: primeiro ID inexistente, RAIZ-CASO e AUDITORIA com linha somente fora do bloco. Também há POS-20 com linha fora ou inexistente; a seção 0 exige linha de OBRAS para todos, mas a lista de erros da seção 3 menciona explicitamente só IDs de ORDEM, deixando inconsistente a validação das exclusões. (`contrato_item3_v3.txt:2`, `:7`; `app/docs/BACKLOG.md:2042`, `:2404`, `:2407`, `:2408`, `:2417`)
-
-Há contradição de ordem explícita sem precisar escolher uma: a semente põe APP antes de TRIAGEM, enquanto a própria linha de APP diz **depois da TRIAGEM**. (`contrato_item3_v3_semente.txt:10`, `:11`; `app/docs/BACKLOG.md:1916`)
-
-Faltantes que o documento ainda declara fila 1 aberta incluem **BUG-ORFAO-COM-PAR** (`app/docs/BACKLOG.md:2418`, fora do bloco), **TRAVA-MENOS-FILA-COM-SELO** (`:2396`, fila 1 instrumento ABERTA, fora), **FIO-E0-V4-E4-ESCRITORES** (`:1885`, fila 1, contém E4c/d), **SONDA-SEM-GRANT** (`:1979`, ABERTA), **AUDITORIA-0911** (`:1981`, ABERTA), **MEDE-CLEAR-X-COMPACT** (`:1796`, ABERTA), **CODEX-QUEIMA-B** (`:1797`, ABERTA) e **C20-FIO-MUDO** (`:1817`, ABERTA). Isso não decide execução nem certifica estado atual em produção; demonstra que a semente não é reconciliação documental completa. (`contrato_item3_v3.txt:3`, `:9`)
-
-DUVIDAS:
-
-- **E4c/E4d:** não têm linha própria exata. São etapas da linha **FIO-E0-V4-E4-ESCRITORES**, que declara E4c leitores e E4d parar projeção; usar o ID da obra perde distinção das etapas, usar “E4c/E4d” viola identidade da seção 0. O desenho precisa resolver a identidade, não o parser. (`app/docs/BACKLOG.md:1885`; `contrato_item3_v3.txt:2`)
-- **BO-0611-05:** sua linha permanece B3/PARADA; a linha de complemento registra aval de pouso, bateria e manutenção dos 403, mas não prova efetivação do pouso. Estado final **[nao verificado]**. (`app/docs/BACKLOG.md:1897`, `:1901`)
-- **BO-DISPUTA-SEM-PERGUNTA:** linha própria registra construtor lançado; RAIZ-F0F1 registra explicitamente **ESTACIONADA**, bug segue até F2. Não há prova documental de pouso nessas linhas. (`app/docs/BACKLOG.md:1898`, `:1882`)
-- **BUG-CADASTRO:** linha exata diz POS-20 e próxima vaga, fora de OBRAS; o aval fornecido aprova 4(b), mas não nomeia o ID completo nem declara formalmente sua migração entre seções. Não presumir identidade/pertencimento só pelo prefixo. A ligação entre “BUG-CADASTRO 4(b)” e esta obra específica é **[nao verificado]**. (`app/docs/BACKLOG.md:2408`; `aval_respostas_1211_1230.txt:2`; `contrato_item3_v3.txt:2`)
-- **DECLARADO-X-GRAVADO:** o ID não aparece literalmente nem tem primeira coluna exata; entrada em ORDEM/POS-20/POUSADAS **[nao verificado]**. A regra de identidade impede incluí-lo como está. (`contrato_item3_v3.txt:2`; limites de OBRAS em `app/docs/BACKLOG.md:712`, `:2042`)
-
-_4288 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4289 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
