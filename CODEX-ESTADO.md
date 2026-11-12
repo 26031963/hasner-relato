@@ -1,7 +1,53 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:57** · publicado em **12/11/2026 10:01** (UTC-3)
+> Ultima resposta processada: **12/11/2026 10:06** · publicado em **12/11/2026 10:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 10:06 · sessao 0ab2e5092d0c · - · - · origem=Ronald (tmux)
+
+1–3 H: corretas. O defeito é o atributo do pacote já carregado: API importa pelos pais (`app/api/views_mensageria.py:2077`, `:2100`); o harness agora substitui ambos e restaura no cleanup (`app/ponto/tests/test_lastro_c12_sem_banco.py:89`). Asserções continuam exigindo 1 buraco, zero explicados e vizinhos preservados (`:103`, `:109`, `:141`). Reverti somente esse bloco em AST: três falhas de busca/grade proibidas, zero erros; a fixture adversarial está em `app/ponto/tests/test_lastro_c13_sem_banco.py:92`. Achado: nada.
+
+4 C: correta por inspeção; a inversão exige recusa nomeada, `sem_certidao` e veredito vazio (`app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:59`). O calendário já recebe a recusa A2 e transporta seu rótulo (`app/colaboradores/services/calendario.py:510`, `:607`, `:714`). Não apagou o caso nem substituiu por sucesso genérico (`app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:52`). Execução Django/ORM: [nao verificado]. Achado: nada.
+
+5 C: correta. `licenca especial` vira `licenca_especial` pela view (`app/ponto/views_tipos_ausencia.py:92`); esse código não consta do mapa (`app/ponto/precedencia.py:52`). O novo sucesso cria `reciclagem`, cuja faixa já existe (`app/ponto/tests/test_tela_tipos.py:31`; `app/ponto/precedencia.py:70`), verifica crescimento e palavra pelo compositor (`app/ponto/tests/test_tela_tipos.py:37`, `:47`). O par exige não gravar e erro nomeado (`:51`). A porta consulta o juiz antes de gravar (`app/ponto/services/ausencia.py:1312`). Execução HTTP/ORM: [nao verificado]. Achado: nada.
+
+6–7 R: corretas quanto à perda/restauração do contrato; os selos originais exigem o contrato (`app/escala/tests/test_f1c_contrato.py:70`; `app/relatorios/tests/test_cartao_pela_celula.py:176`) e o coletor voltou a chamá-lo (`app/relatorios/pdf_espelho.py:474`). A nova prova executa as mesmas funções dos selos (`app/ponto/tests/test_lastro_c13_sem_banco.py:130`). Achado dos testes: nada; isso sozinho não certifica ausência de regras próprias no restante do PDF (`app/escala/tests/test_f1c_contrato.py:68`).
+
+8–9 R: corretas quanto às expectativas preservadas: espúria deve ser marcada e não produzir turno aberto (`app/relatorios/tests/test_cartao_marca_espuria.py:59`, `:75`). O substituto sem banco agora exige `orfa=True`/zero aberto (`app/ponto/tests/test_lastro_c11_sem_banco.py:384`); suprimir as órfãs restauradas é o mutante (`:68`) e ficou vermelho nesta reexecução. O teste nativo também exige o texto e a batida no PDF binário (`app/relatorios/tests/test_cartao_marca_espuria.py:84`); essa execução está [nao verificado]. Achado dos testes: nada.
+
+10 H: atualização do registro preserva a igualdade estrita (`app/core/tests/test_medida_turno_do_par.py:542`); a ocorrência atual é a consulta de feriados em `app/ponto/services/espelho.py:1039`. Rodei os 35 testes existentes: verdes; recolocar somente `[1032]` em memória causa uma falha de igualdade, zero erros (`app/core/tests/test_medida_turno_do_par.py:541`). A identidade AST histórica c9/c12 está [nao verificado], pois esta cópia não contém `.git`; o delta fornecido não altera o produto `espelho.py` [nao verificado]. Achado: nada.
+
+Verificação própria: os 72 testes C5/C7/C10/C11/C12/C13 passaram; os 11 mutantes C13 e os oito vizinhos executados ficaram vermelhos nas asserções/canais correspondentes (`app/ponto/tests/test_lastro_c13_sem_banco.py:45`, `:73`; `app/ponto/tests/test_lastro_c12_sem_banco.py:34`; `app/ponto/tests/test_lastro_c10_sem_banco.py:296`; `app/ponto/tests/test_lastro_c11_sem_banco.py:68`). São costuras: o teste dos builders reduz seus corpos às chamadas extraídas, portanto não executa a geometria/ORM completa (`app/ponto/tests/test_lastro_c13_sem_banco.py:196`, `:200`).
+
+FILA — portabilidade do replay: `--red-c12` e `--mutante harness_c12` dependem de `git show`, indisponível nesta cópia sem repositório (`app/ponto/tests/test_lastro_c13_sem_banco.py:27`, `:40`). Contra-exemplo: invocar o replay nesta cópia falha antes de exercer a cura; substituí a reversão por AST em memória para verificar a mordida [nao verificado quanto à execução do replay original].
+
+## 12/11 10:06 · sessao 38bc72b0ad37 · - · - · origem=Ronald (tmux)
+
+- **BLOQUEIA — PDF mantém regra própria de órfã/turno aberto, preexistente e não curada.** `_entrada_espuria` compara apenas HH:MM (app/relatorios/pdf_espelho.py:174–178), depois da união das órfãs de todas as datas (:480–481), para excluir turnos abertos (:517–519). Contraexemplo executado em memória: órfã em 10/11 às 07:02; turno aberto legítimo em 11/11 às 07:02, sem órfã nesse dia → função retorna `True` e exclui o turno. Tela conta `p.turno_aberto` sem essa guarda (app/ponto/services/espelho.py:436–437). Viola testemunha sem regra própria (CLAUDE.md:20–22).
+
+- **BLOQUEIA — c13 restaura o contrato no PDF, mas conserva duas respostas para a mesma órfã.** PDF usa builder `grade_espelho_janela` (app/relatorios/pdf_espelho.py:474); tela usa `grade_da_celula`/`remapear_na_regua` (app/ponto/services/espelho.py:522–530). O novo teste fixa concretamente `orfas_grade=[]` para tela e `batida.orfa=True`, `turnos_abertos=0` para PDF (app/ponto/tests/test_lastro_c11_sem_banco.py:383–385). O teste chama tela por `Mock` (:326) e fornece órfã pronta ao builder (:356–357); não certifica convergência dos leitores. Classificações R de 6–9 fazem sentido, mas a cura dos sintomas não fecha a classe.
+
+- **BLOQUEIA — rótulo não está garantido no ramo de ata agregada, defeito anterior não alcançado pelo canal c13.** Tela chama contrato sem `recusas` em `_pela_grade` (app/ponto/services/espelho.py:495–496). Se `grade_da_celula` levanta `AtaAgregadaSemMarcos`, seu handler chama `_pela_grade` (:563); uma `TipoSemFaixa` levantada ali escapa ao `except Exception` irmão (:572). PDF passa pelo contrato com `recusas={}` (app/relatorios/pdf_espelho.py:474), mas depois chama essa tela (:479). Contraexemplo: ata agregada + ausência aprovada sem faixa → leitura pode levantar em vez de apresentar o rótulo. O comportamento sem destinatário está explicitamente preservado e cobrado (app/ponto/tests/test_lastro_c13_sem_banco.py:126–127). Ocorrência produtiva: [nao verificado].
+
+- **Rótulo no canal coberto:** nasce de `TipoSemFaixa.rotulo` (app/ponto/precedencia.py:102), chega ao PDF por `dia['recusa']` (app/escala/utils.py:1219; app/relatorios/pdf_espelho.py:567) e ao compositor único (app/ponto/services/espelho.py:339–341), que escreve palavra e veredito vazio. Tela transporta o mesmo atributo (app/ponto/services/espelho.py:880). Não encontrei contraexemplo novo de apagamento do rótulo por sobreposição em :567 com mesmas entradas/janela; universalidade fora desses canais: [nao verificado].
+
+## 12/11 10:06 · sessao e928c079842b · - · - · origem=Ronald (tmux)
+
+- BLOQUEIA — leitura nomeada incompleta no espelho/PDF: `_pela_grade()` chama o contrato **sem `recusas`** em `app/ponto/services/espelho.py:495`; esse caminho roda no trecho anterior à competência (`app/ponto/services/espelho.py:534`) ou na ata agregada (`app/ponto/services/espelho.py:563`), antes da carga nomeada (`app/ponto/services/espelho.py:653`). Contra-exemplo reproduzido em memória: ausência aprovada `fantasma_xyz` faz `_pela_grade()` levantar `TipoSemFaixa`; o PDF também chama esse espelho (`app/relatorios/pdf_espelho.py:479`). Execução completa com ORM: [nao verificado].
+
+- Escritor do dicionário `recusas[data]`: A2, `app/ponto/precedencia.py:423`; sem destinatário, levanta em `app/ponto/precedencia.py:422`. A recusa impede produzir fato nesse dia (`app/ponto/precedencia.py:425`).
+
+- Escritor de `dia['recusa']` e `dia['tipo_dia']=None`: `app/escala/utils.py:1219` e `app/escala/utils.py:1220`. Leitor produtivo encontrado de **essa recusa da grade**: `app/relatorios/pdf_espelho.py:567`; o compositor imprime a palavra e deixa veredito vazio em `app/ponto/services/espelho.py:339`.
+
+- `tipo_dia=None` também é lido internamente pelo overlay de isenção: não ganha a flag de dia de trabalho (`app/escala/utils.py:889`), chamado depois da ausência (`app/escala/utils.py:1875`); o legacy preserva `None`, pois o default de `.get()` só cobre chave ausente (`app/escala/utils.py:1046`).
+
+- Nenhum caminho financeiro demonstrado recebe o novo `None`: o único chamador produtivo encontrado que abre `recusas` na grade é o PDF (`app/relatorios/pdf_espelho.py:474`); `grade_do_fechamento()` lê `grade_da_celula` (`app/folha/export.py:335`, `app/folha/export.py:338`). Fechamento lê essa grade em `app/ponto/services/fechamento.py:1015` e seus mapas em `app/ponto/services/fechamento.py:1048`; `simular_folha --recalcular/--lido` passa por esse fechamento (`app/folha/management/commands/simular_folha.py:122`, `app/folha/management/commands/simular_folha.py:130`).
+
+- Leitores potencialmente incompatíveis existem, porém alcance pelo canal novo não foi demonstrado: `por_dia_da_grade` descarta `None` sem `ausencia_tipo` (`app/ponto/services/dia_pago.py:392`); `classificar_orfas` traduz `None` para folga (`app/escala/orfa_classe.py:65`). Nenhum chamador produtivo de `classificar_orfas` encontrado no censo textual: [nao verificado]. Não classificar isso como regressão alcançável da c13.
+
+- Sem `recusas`, o delta conserva os guards e chamadas anteriores: retorno cedo em `app/escala/utils.py:1205`, condição de consulta A2 em `app/escala/utils.py:1213`, ramo novo desativado em `app/escala/utils.py:1218`; os transportes omitem o argumento quando `None` (`app/escala/utils.py:808`, `app/escala/utils.py:1010`, `app/escala/utils.py:1019`, `app/escala/utils.py:1873`, `app/escala/utils.py:2114`, `app/escala/utils.py:2117`, `app/escala/utils.py:2365`). Equivalência dinâmica de todos os chamadores: [nao verificado].
+
+- BLOQUEIA pouso financeiro — par `simular_folha` da competência 11 e efeito `abona=0`: [nao verificado], conforme dado fornecido. O comparador mede TXT e retidos (`app/folha/management/commands/simular_folha.py:160`, `app/folha/management/commands/simular_folha.py:218`); inspeção de código não substitui esse par: [nao verificado].
 
 ## 12/11 09:57 · sessao 12930e22770f · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
 
@@ -547,64 +593,4 @@ As linhas v6 marcadas **herdadas** resultam do deslocamento `+181` nos trechos d
 
 O SW não abre essa fila: envia `SYNC_BATIDAS` às páginas, e o receptor de `pwa.js` chama a sincronização. A limpeza de caches usa CacheStorage, enquanto a fila permanece no IndexedDB. (`app/static/sw.js:19–20`, `112–125`; `app/static/pwa.js:15–16`, `50–54`; v6 = nesses trechos, banco em `Δ app/static/pwa.js:+73–77`.)
 
-## 12/11 09:38 · sessao fb866086792a · - · - · origem=Ronald (tmux)
-
-- O caso sintético exige nome inteiro da primeira coluna, preserva seus dois pedaços e recusa o inteiro da segunda coluna e uma combinação inventada; portanto morde retirar o aceite do inteiro ou adicionar também o inteiro da descrição. O próprio teste não contém parênteses, vírgulas ou prosa na primeira coluna. `bin/tests/test_lei_akita.sh:433`, `bin/tests/test_lei_akita.sh:444`.
-- Os dois casos novos exercitam `julgar`: `Parallel Change / Expand-Contract` precisa passar; `Parallel Change / Padrao Inventado` precisa falhar. A comparação é executada contra a expectativa booleana, logo morde negar o nome completo e aceitar qualquer expressão com um pedaço válido. `bin/tests/test_lei_akita.sh:449`, `bin/tests/test_lei_akita.sh:450`, `bin/tests/test_lei_akita.sh:471`.
-- O novo cenário de duplicata publica `dup.py`, recria o mesmo conteúdo em outro commit com padrão inválido e acrescenta um patch diferente, também inválido, em `outro.py`; exige somente a falha de `outro` e a associação exata local→publicado. Assim morde retirar a exceção, aplicá-la indiscriminadamente ou informar SHA publicado incorreto nesse cenário. `bin/tests/test_lei_akita.sh:778`, `bin/tests/test_lei_akita.sh:783`, `bin/tests/test_lei_akita.sh:789`, `bin/tests/test_lei_akita.sh:791`, `bin/tests/test_lei_akita.sh:795`.
-- A nova prova tem somente um local duplicado: não cobre dois locais com o mesmo patch-id. A implementação descarta todos os SHA locais além do primeiro por `setdefault(pid, sha)` e depois inverte o mapa; portanto só um deles pode ser reconhecido como duplicata. `bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:778`.
-- Não há injeção de erro nem saída malformada de `patch-id` nesse teste; um mutante que trocasse a exceção por `return {}` somente quando `patch-id` falha não é exercitado pelo cenário novo. A execução efetiva desse mutante permanece [não verificado]. `bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:778`.
-- Repo raso e ausência de `origin/main` já têm casos anteriores, que exigem `SystemExit` contendo `PADRAO_ERRO`; isso não equivale a testar falha do subprocesso `patch-id`. `bin/tests/test_lei_akita.sh:662`, `bin/tests/test_lei_akita.sh:703`, `bin/tests/test_lei_akita.sh:707`.
-- O teste novo não cobre commits vazios, apenas modo, binário, raiz ou mudanças de whitespace semanticamente relevantes: planta adições textuais em dois arquivos diferentes. `bin/tests/test_lei_akita.sh:649`, `bin/tests/test_lei_akita.sh:778`.
-- `MORDE_OK` é impresso mesmo após diagnósticos `MORDE_FALHOU`, mas o shell exige simultaneamente aquele marcador e ausência destes; portanto um diagnóstico de falha não vira verde apenas pela presença do OK. `bin/tests/test_lei_akita.sh:809`, `bin/tests/test_lei_akita.sh:827`.
-- A desestruturação sem validação `pid, sha = ln.split()` pode lançar `ValueError`, que não é convertido em `PADRAO_ERRO`; o shell ainda reprova porque faltará `PADRAO_FIM`. `bin/tests/test_lei_akita.sh:384`, `bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:823`.
-- Os quatro mutantes e os logs RED/GREEN alegados no anexo não foram executados nem comprovados por esta leitura [não verificado].
-
-## 12/11 09:38 · sessao 133de6d0f685 · - · - · origem=Ronald (tmux)
-
-- `ENUMERADOS` é escrito como `len(hs)` e `JULGADOS` inicia em zero; commits sem linha `LEI-AKITA:` ficam fora de `JULGADOS`, duplicatas também; merges com linha entram antes de verificar seus hunks. Portanto `JULGADOS` não significa somente commits efetivamente aprovados/reprovados nem todos os commits com linha. (`bin/tests/test_lei_akita.sh:389`, `:398`, `:401`, `:404`, `:410`)
-- `DUPLICATAS` é zerado por chamada, recebe pares `(sha local de 8 caracteres, sha publicado de 12)` e é lido na emissão normal e no MORDE novo. (`bin/tests/test_lei_akita.sh:374`, `:402`, `:794`, `:814`)
-- O Python escreve `PADRAO_FALHA`, `PADRAO_DUPLICATA`, `PADRAO_JULGADOS N de M` e `PADRAO_FIM`; o shell transforma falhas em `FALHA: PADRAO-NA-CURA`, conta-as, transforma duplicatas em `ja julgado:` e exige o sentinela `PADRAO_FIM`. (`bin/tests/test_lei_akita.sh:813`, `:815`, `:816`, `:817`, `:820`, `:821`, `:822`, `:823`)
-- `PADRAO_JULGADOS` é consumido pelo próprio selo para montar a frase final `padrao julgado em N de M commit(s) com linha LEI-AKITA, dos nao publicados`; o formato continua igual, mas a descrição fica incompleta porque agora exclui duplicatas com linha. (`bin/tests/test_lei_akita.sh:401`, `:404`, `:831`)
-- `PADRAO_ERRO` não tem parser dedicado: sai no stderr capturado e a ausência de `PADRAO_FIM` gera falha. Uma exceção Python não convertida em `PADRAO_ERRO` também não torna verde por esse caminho. (`bin/tests/test_lei_akita.sh:819`, `:823`, `:830`, `:834`)
-- MORDE lê `ENUMERADOS` nos casos de sincronização, outra ref e piso; não há asserção de `JULGADOS` nos casos existentes nem no novo caso de duplicata. O novo caso confere falhas e o par de duplicata. (`bin/tests/test_lei_akita.sh:676`, `:701`, `:794`, `:795`, `:802`)
-- `bin/pre-push.sh` passa `PUSH_SHA` por `LEI_AKITA_HEAD` e decide exclusivamente pelo código de saída do selo; não interpreta suas linhas. (`bin/pre-push.sh:33`, `:38`)
-- `bin/regua.sh` percorre `tests/test_*.sh`, decide pelo código de saída e só imprime a saída capturada quando o selo falha; não interpreta contagens ou prefixos do akita. (`bin/regua.sh:138`, `:140`, `:142`, `:143`)
-- Assim, a adição de `ja julgado:` e a mudança semântica de `JULGADOS` não quebram esses dois leitores concretos. (`bin/pre-push.sh:38`; `bin/regua.sh:140`; `bin/tests/test_lei_akita.sh:822`, `:831`)
-- A varredura da cópia não encontrou outro selo que execute akita ou grepe sua saída; ausência de leitor externo à cópia permanece **[não verificado]**. Não apareceu `AGENTS.md` na varredura **[não verificado]**.
-
-## 12/11 09:34 · sessao 1406a8871f6f · - · - · origem=Ronald (tmux)
-
-Auditoria `pwa.js` concluída, somente leitura.
-
-| Assunto | Pré-v6 | V6 — número da linha nova do patch |
-|---|---|---|
-| Banco | `app/static/pwa.js:50`: `juliani-offline`, versão 2 | `pwa.js:+73`, mesmo banco/versão |
-| Criação da fila | `pwa.js:54`: `batidas_pendentes`, `keyPath:'id'`, `autoIncrement:true` | `pwa.js:+77`, mesmos nomes |
-| Criação de configuração | `pwa.js:56`: store `config`, chave `chave` | `pwa.js:+79` |
-| Escritor de batida | `pwa.js:107`; `add` em `:113` | Função `+269`; `add` em `+276` |
-| Leitor para sincronização | `pwa.js:132`: `getAll()` | Linha herdada **+313** |
-| Exclusão após sucesso | `pwa.js:162`: `delete(b.id)` | Linha herdada **+343** |
-| Exclusão após HTTP 400 | `pwa.js:172`: `delete(b.id)` | Linha herdada **+353** |
-| Leitor do indicador | `pwa.js:190`: `count()` | Linha herdada **+371** |
-| Configuração do relógio | Escritor `pwa.js:67`, leitores `:77`; chaves em `:92`, `:93`, `:96`, `:101`, `:104` | Escritor `+114`, leitor `+123`; mesmas chaves, funções do relógio preservadas/alteradas no hunk `-93/+159` |
-
-As linhas herdadas acima são **derivadas dos offsets do patch**, não aparecem impressas individualmente nele: depois do grande hunk, pré `126` = v6 `307` (**+181**); três exports novos tornam o deslocamento **+184** até a inicialização; a linha adicional da inicialização torna-o **+185** depois dela (`@@ -308/+489`, `@@ -323/+507`).
-
-A fila não é uma chave de `localStorage`: a chave dos registros é `id` no store IndexedDB `batidas_pendentes` (`pwa.js:50–54`; patch `+73–77`). O SW pede sincronização às páginas mediante mensagem, sem abrir diretamente esse banco (`app/static/sw.js:112–125`; receptor `pwa.js:15–16`).
-
-O bloqueio anterior ao `add` já existia: `registrarBatidaOffline` aguarda `obterGap` (`pwa.js:108`), que pode chamar `calcularESalvarGap` (`:101–104`); esta aguarda `fetch('/hora/')` e `resp.json()` sem teto (`:86–88`). A v6 limita o gap na entrada do escritor (`patch pwa.js:+271`), usa `_noTeto` (`+188–195`) e transforma a espera do armazém em aviso, preservando a espera pelo evento definitivo (`+90–103`, `+239–286`). Isso explica uma fila potencialmente pendente, **não prova a causa de toques da home sem navegação** [nao verificado].
-
-Sobre sintaxe e APIs:
-
-- Optional chaining já existia em `pwa.js:16`, `:78`, `:140`, `:245`, `:261`, `:403`; nullish coalescing em `:78`. Na v6, o acesso de configuração vira `linha?.valor ?? null` (`patch +124`); os demais permanecem: `+16`, herdadas `+321`, `+426`, `+442`, `+588`. Um parser incompatível poderia rejeitar o script inteiro, inclusive por construções dentro de funções; atribuir isso ao iPhone do relato é [nao verificado]. Primeiro iOS suportado: [nao verificado].
-- `async/await`, arrows, `let/const`, destructuring, spread e `catch` sem binding já aparecem no pré (`pwa.js:11`, `:50`, `:95`, `:209`, `:240`, `:286`). A v6 acrescenta chave computada (`patch +199`) e métodos de objeto (`+244`, `+253`); suporte exato no iOS: [nao verificado].
-- A nova chamada `navigator.mediaDevices.getUserMedia` fica **dentro** de função assíncrona passada a `_noTeto` (`patch +211–217`, chamada `+214`), cujo mecanismo captura exceção/rejeição (`+194`). Não é chamada na avaliação inicial do script (`+211–217`).
-- Os dois novos usos de `AbortController` são condicionais a `typeof AbortController === 'function'` (`patch +144`, `+297`). `navigator.storage` já tem guarda e `try/catch` no pré (`pwa.js:436–443`, herdadas v6 `+621–628`). `serviceWorker` já tem guarda no pré (`:12`, `:35`); a instalação do listener síncrono é antiga (`:41`).
-- Não há novos `structuredClone`, `AbortSignal.timeout`, `crypto.randomUUID`, `Promise.any` ou top-level `await` no patch de `pwa.js`; os `await` novos estão em funções assíncronas (`patch +111–128`, `+142–160`, `+211–231`, `+269–305`, `+507–511`). Ausência desses símbolos no script pré conferida em `app/static/pwa.js:1–443`.
-- Nenhuma nova API sem guarda foi identificada como chamada síncrona na avaliação inicial, antes dos exports; os novos corpos de câmera, armazenamento e rede executam ao chamar suas funções (`patch +66–128`, `+188–231`, `+269–305`). Erro real de avaliação no Safari específico: [nao verificado].
-- O export `window.JulianiPWA` já é definido **antes** do IIFE que espera a hora (`pwa.js:305–326`); na v6, export e inicialização continuam nessa ordem (`patch +489–511`). Portanto `/hora/` pendurada na inicialização não impede, por essa cadeia, a criação de `window.JulianiPWA` (`pwa.js:305–326`; patch `+489–511`).
-
-Achado que afeta diretamente o RED: navegações retornam cedo no SW (`app/static/sw.js:46–50`), antes do ramo que gravaria home e bater (`:68–77`). Abrir as páginas com rede **não executa aquele `cache.put` para requisições `navigate`**, e o precache só contém quatro recursos estáticos (`:3–8`). Assim, o preparo humano relatado não demonstra presença do HTML no Cache Storage desse SW; conteúdo efetivo do cache no aparelho permanece [nao verificado].
-
-_4144 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4147 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
