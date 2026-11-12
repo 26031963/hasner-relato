@@ -1,7 +1,192 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 11:04** · publicado em **12/11/2026 11:04** (UTC-3)
+> Ultima resposta processada: **12/11/2026 11:06** · publicado em **12/11/2026 11:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 11:06 · sessao e7500f65d2e9 · AUDITORIA-DE-TRAVAS-CORTE · censo · origem=Code
+
+Numerei cada anexo desde a primeira linha de dados. Usei **p50 = mediana** e **p95 = valor na posição `ceil(0,95 × n)`**, após ordenar.
+
+**Item 6 — chamadas do wrapper**
+
+“Total” abaixo significa últimas 20 chamadas globais; leitura/censo/sonda formam um grupo.
+
+| Janela | n | p50 (s) | p95 (s) | Máximo (s) | rc=124 | >900 s | Fonte |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Construtor | 20 | 715,5 | 1.630 | 1.928 | 0 | 7 | `chamadas_fim_vivo.tsv:316–395`, filtrando papel |
+| Verificador | 20 | 325,5 | 594 | 656 | 0 | 0 | `chamadas_fim_vivo.tsv:335–400`, filtrando papel |
+| Leitura/censo/sonda | 20 | 204,5 | 891 | 1.178 | 0 | 1 | `chamadas_fim_vivo.tsv:351–399`, filtrando grupo |
+| Total global | 20 | 332 | 1.068 | 1.928 | 0 | 2 | `chamadas_fim_vivo.tsv:381–400` |
+| União das três janelas | 60 | 386,5 | 1.206 | 1.928 | 0 | 8 | Mesmas seleções acima |
+
+No anexo inteiro, os **três rc=124** são: construtor/904 s, construtor/905 s e censo/905 s; estão fora dessas janelas. (`chamadas_fim_vivo.tsv:66,130,317`)
+
+| Suites | n | p50 (s) | p95 (s) | Máximo (s) | Fonte |
+|---|---:|---:|---:|---:|---|
+| Últimas 20 linhas `Ran` | 20 | 1.306,5525 | 1.638,001 | 1.788,073 | `suites_14d.tsv:507–526` |
+| Últimas 20 aparentemente completas¹ | 20 | 1.316,237 | 1.638,001 | 1.788,073 | `suites_14d.tsv:500–525`, seleção por nome/tamanho |
+
+¹ A classificação como completa usa o nome do log e o número de testes; a fase efetiva da execução não consta do anexo. [não verificado] [nao verificado]
+
+O **timeout de 900 s do wrapper deve ser avaliado pelas chamadas Codex**. Ele envolve `codex exec`, tanto no construtor quanto nos demais papéis; o construtor recebe `-k 30`. Nesta cópia, os locais são `bin/codex_pergunta.sh:401` e `:408`, e o default permanece em `:83`. O próprio cabeçalho atribui a certificação por suite ao Code. (`bin/codex_pergunta.sh:331`)
+
+Há uma ressalva na medida: `duracao_s` começa antes da preparação e da espera por vagas/locks. Portanto, **passar de 900 s não demonstra que o `codex exec` excedeu seu timeout**, nem revela o `CODEX_TIMEOUT` efetivamente usado naquela chamada. (`bin/codex_pergunta.sh:252,260,348–376`; valor efetivo por chamada: [não verificado])
+
+Outro teto de **900 s** existe em **`bin/encadeado.sh:71`**: espera carimbos de conclusão de cron e sai com rc=2 quando vence; não é timeout de suite nem de Codex. (`bin/encadeado.sh:84–96`)
+
+As contas das margens são:
+
+| Cobertura pretendida | Conta `p95 + margem` | Teto empírico | Fonte |
+|---|---|---:|---|
+| Últimas 20 suites | `1.638,001 + (1.788,073 − 1.638,001)` | **1.788,073 s → 1.789 s inteiros** | `suites_14d.tsv:514,524` |
+| Últimos 20 construtores | `1.630 + (1.928 − 1.630)` | **1.928 s** | `chamadas_fim_vivo.tsv:365,386` |
+| Wrapper cobrindo também o maior rc=0 de todo o anexo | `1.630 + (2.806 − 1.630)` | **2.806 s** | `chamadas_fim_vivo.tsv:214,365` |
+
+**Proposta empírica para o wrapper: 2.807 s**, isto é, `1.630 + 1.177`; a margem é `(2.806 − 1.630) + 1 s`, ficando estritamente acima do máximo registrado, com resolução inteira. Usar apenas a janela recente daria 1.929 s pelo mesmo critério. (`chamadas_fim_vivo.tsv:214,365,386`)
+
+Isso cobre os máximos de **duração registrada**; a afirmação de que algum dos três rc=124 foi falso, ou de que esse teto evitaria falsos rc=124 futuros, permanece **[não verificado]**.
+
+**Item 8 — “mudaram decisão”: não medido; não significa zero.**
+
+Há **526 registros `Ran`, 140 deles FAILED**. O anexo informa totais de falhas, mas não identifica os testes; também não marca sistematicamente intermediária/final. Há possíveis cópias em diretórios `opus_final`, impedindo equiparar linhas a execuções independentes. (`suites_14d.tsv:1–526`; exemplos de cópias: `281–282,302–304,309–312`) [nao verificado]
+
+O caso E3 mostra o limite: a suite tem sete falhas, um commit posterior diz “pós-suite: S1–S7 curados”, depois aparecem três falhas e finalmente verde. O título truncado não identifica os casos da execução nem fecha a prova pedida até a final. (`suites_14d.tsv:497–500`; `gitlog_14d.txt:59,30`) [nao verificado]
+
+A tabela abaixo cobre **todos os agrupamentos com algum FAILED**. **NM = não medido** em ambas as colunas solicitadas. Os números entre parênteses são o censo verificável: **registros / FAILED**. Minutos são a soma bruta de `Ran ... in Xs ÷ 60`, **não minutos comprovados de intermediárias ou de economia**. Não tratei a última observação como final. (`suites_14d.tsv:1–526`)
+
+| Obra/prefixo do anexo | Intermediárias (registros/FAILED) | Mudaram decisão | Minutos brutos | Linhas em `suites_14d.tsv` |
+|---|---:|---|---:|---|
+| outbox | NM (2/1) | NM | 18,640 | 1–2 |
+| orfas | NM (11/3) | NM | 119,192 | 3–19, prefixo |
+| col129 | NM (8/2) | NM | 93,913 | 6–21, prefixo |
+| grupo1 | NM (5/3) | NM | 72,541 | 22–26 |
+| justif | NM (4/2) | NM | 59,898 | 27,30–32 |
+| o261n | NM (4/1) | NM | 33,198 | 34,36–38 |
+| o261v | NM (4/2) | NM | 63,096 | 35,59,71,73 |
+| o261/veto_a2 | NM (11/3) | NM | 166,253 | 40–50 |
+| calendario_hoje | NM (6/1) | NM | 85,975 | 51–56 |
+| suite_impacto — gerações distintas | NM (2/1) | NM | 49,138 | 57,226 |
+| o261e, exceto f2/f2fila | NM (28/10) | NM | 327,878 | 58–97, prefixo |
+| disjuntor | NM (3/1) | NM | 44,711 | 78,84,96 |
+| e3status | NM (2/1) | NM | 30,745 | 98–99 |
+| grade_folga | NM (5/1) | NM | 69,002 | 106,111,116,120,122 |
+| f1c4emis | NM (5/1) | NM | 84,507 | 107,109,113,117,119 |
+| e4_7iii | NM (3/1) | NM | 43,106 | 118,121,123 |
+| v3per | NM (3/1) | NM | 39,316 | 124–126 |
+| grade_juiz | NM (9/1) | NM | 150,402 | 127–149, prefixo |
+| cobparc | NM (14/3) | NM | 208,564 | 142–170, prefixo |
+| o261e/f2 | NM (9/2) | NM | 108,488 | 151–159 |
+| cobparc_relogio | NM (6/1) | NM | 79,354 | 174–179 |
+| e4cal | NM (11/2) | NM | 168,778 | 186–199, prefixo |
+| mc | NM (4/1) | NM | 69,594 | 203,205,207,209 |
+| e4app | NM (3/2) | NM | 36,395 | 213–215 |
+| n1pna | NM (2/2) | NM | 41,197 | 216–217 |
+| n1im | NM (4/1) | NM | 40,556 | 219–222 |
+| jv1 | NM (11/2) | NM | 169,889 | 228–264, prefixo |
+| n1alim | NM (3/1) | NM | 28,680 | 232–233,235 |
+| jv3 | NM (6/2) | NM | 93,137 | 239,241,279,281–283 |
+| o261e/f2fila | NM (3/1) | NM | 41,743 | 244,246,248 |
+| f3_beco1 | NM (8/3) | NM | 152,549 | 256–275, prefixo |
+| h12h06 | NM (6/1) | NM | 99,348 | 265–280, prefixo |
+| snc2 | NM (3/1) | NM | 37,106 | 268,271,273 |
+| c20_fiomudo | NM (11/2) | NM | 119,175 | 284–300, prefixo |
+| h12h06b, incluindo pauta08 | NM (6/1) | NM | 103,853 | 291,297,301,303,331–332 |
+| pep | NM (2/2) | NM | 34,120 | 302,304 |
+| lastro2 | NM (5/2) | NM | 76,021 | 309–312,508 |
+| lastro3 | NM (1/1) | NM | 17,170 | 313 |
+| pep3 | NM (3/1) | NM | 26,640 | 314,316,318 |
+| plantio_mais1 | NM (4/3) | NM | 63,081 | 333–334,336,339 |
+| v2bugs/i2 | NM (10/2) | NM | 82,524 | 338–357, prefixo |
+| ferias2x | NM (2/1) | NM | 36,728 | 342–343 |
+| fio_e0_v4 — mistura E1/E2/fila/rebase | NM (83/27) | NM | 1.055,536 | 346–448, prefixo |
+| cxr_tela | NM (3/1) | NM | 64,876 | 405–407 |
+| ata_pausa_0811 | NM (1/1) | NM | 19,673 | 409 |
+| e1fila_v22 | NM (2/1) | NM | 38,836 | 444,446 |
+| par_nao_adjacente | NM (4/1) | NM | 87,109 | 449–450,453–454 |
+| selos_canon | NM (4/1) | NM | 82,189 | 451–452,455–456 |
+| fio_e3 — 09/11 | NM (6/3) | NM | 124,964 | 457–465, prefixo |
+| FIO-E0-V4-E4-ESCRITORES | NM (4/2) | NM | 78,317 | 466–469 |
+| MODO-COMUM-PASSADO-SEM-TURNO | NM (2/1) | NM | 39,387 | 470–471 |
+| FIO-E0-V4-E4A-2 | NM (4/1) | NM | 79,135 | 472–473,476–477 |
+| BO-0611-05 | NM (9/2) | NM | 132,060 | 478–487, prefixo |
+| BO-DISPUTA-SEM-PERGUNTA | NM (6/6) | NM | 112,739 | 480,488,490–491,493,495 |
+| FIO-E0-V4-E4B | NM (1/1) | NM | 3,754 | 489 |
+| E4B-ALCANCE | NM (6/4) | NM | 128,479 | 492,494,504–505,515,519 |
+| FIO-E0-V4-E3 — 11/11 | NM (7/4) | NM | 161,441 | 496–502 |
+| UI-PAINEL | NM (3/1) | NM | 69,216 | 506–507,516 |
+| COMBOIO-1556 | NM (2/1) | NM | 49,174 | 513–514 |
+| LASTRO-FAIXA | NM (5/5) | NM | 98,717 | 521–525 |
+| integrador | NM (1/1) | NM | 6,606 | 526 |
+
+**Falta, para cada linha NM:** identificar a execução e sua fase, os testes que ficaram vermelhos, o commit que curou esses mesmos testes e a execução final que confirma a cura. A correspondência entre prefixos e obras também precisa fechar onde há agrupamentos mistos. [não verificado] [nao verificado]
+
+Além disso:
+
+- **BO-DISPUTA e LASTRO-FAIXA:** a última observação ainda é FAILED; falta a final. (`suites_14d.tsv:495,525`)
+- **FIO-E4B ↔ E4B-ALCANCE:** falta comprovar a associação entre esses nomes. [não verificado]
+- **jv3, c20_fiomudo, pep e lastro2:** falta distinguir cópia de log de execução independente. (`suites_14d.tsv:281–282,287,292–295,298–299,302,304,309–312`)
+- **Demais prefixos:** seus registros não contêm FAILED; isso não identifica quantas execuções foram intermediárias nem comprova a final. (`suites_14d.tsv:1–526`, excluindo os agrupamentos da tabela)
+
+Assim, **140 linhas FAILED não podem ser convertidas em 140 suites intermediárias que mudaram decisão**. O número solicitado no item 8 permanece **não medido** pelos anexos fornecidos. (`suites_14d.tsv:1–526`; vínculo causal: [não verificado])
+
+## 12/11 11:05 · sessao f9aecd196290 · - · - · origem=Ronald (tmux)
+
+Proposta concreta, sem escrita:
+
+1. Use builder completo, sem reaproveitar `julgar_sem_adesao`: esse harness força ausência de batidas e testa outro caminho (`ponto/tests/test_lastro_c5_sem_banco.py:566-567`).
+
+2. O builder completo mais curto é `montar_grade_prevista`: aceita escala/horários e batidas em memória; executa pareamento, cobertura e classificação para folga (`escala/utils.py:668`, `escala/utils.py:805-814`). Limite: esse builder não publica minutos previstos/realizados; não atribuir a ele uma prova financeira positiva (`escala/utils.py:791`). Para provar esses valores, usar o builder por turno (`escala/utils.py:1301`).
+
+3. Crie célula em memória com ata antiga `tipo_dia='ausencia'`; rode builder com ausência `folga` integral e batida. A cobertura deve produzir `tipo_dia='folga'`, transportar ausência e limpar órfãs/células, preservando a batida de entrada externa (`escala/utils.py:1243-1254`, `escala/utils.py:1275-1277`).
+
+4. Execute `ata_do_dia`, depois a porta real por AST: `lavrar_veredito`, `veredito_que_a_lavra_escreve`, `_status_alvo`, `_aplicar_status`; substitua somente emissão/persistência por duplos. Assert obrigatório: retorno contém `ata`, ata mudou de ausência para folga e metadados sobreviveram (`ponto/services/cartorio.py:721-768`, `ponto/portas/celula.py:912`, `ponto/portas/celula.py:951-1054`). Ler esse arquivo não exige editá-lo.
+
+5. Para provar leitores: `grade_do_fechamento` real → `grade_da_celula` real → `por_dia_da_grade` real → bloco do fechamento que publica mapas e causa. Execute `_retidos` real de `simular_folha` com esse fechamento e `prontidao` real; isso demonstra o leitor do simulador, com integração completa/motor/TXT ainda `[nao verificado]` (`folha/export.py:329-338`, `escala/services/leitor_celula.py:397-438`, `ponto/services/fechamento.py:1014-1085`, `folha/management/commands/simular_folha.py:68-93`).
+
+Dois pontos que precisam constar do relato:
+
+- Batida isolada não implica `dias_trocados`: esse ramo exige órfã e condições anteriores; cobertura integral limpa órfãs (`folha/causas.py:92-106`, `escala/utils.py:1275-1277`).
+- Célula `trabalha=True`, mesmo com ata relavrada para folga, fica fora do tripwire de ata fantasma (`ponto/management/commands/tripwire_celulas.py:338-342`).
+
+## 12/11 11:05 · sessao 8f90fa80b83a · - · - · origem=Ronald (tmux)
+
+Mapeamento somente leitura; nenhum arquivo escrito.
+
+- Curas c13 mantidas: transporte `recusas` nas seis costuras dos builders e tratamento no overlay, preservando geometria e removendo conclusão de faixa (`escala/utils.py:807`, `:1009`, `:1018`, `:1205`, `:1212`, `:1218`, `:1872`, `:2112`, `:2364`). Harness de pacotes previamente carregados (`ponto/tests/test_lastro_c12_sem_banco.py:87`).
+- RED histórico executado: `--red-c12` com os três testes `LastroC13.test_grade_recusa_nomeada_preserva_orfa_e_vizinhos_sem_inventar_faixa`, `test_recusa_nao_depende_de_cobertura_aprovada_nem_de_quem_a_venceu` e `test_canal_atravessa_dispatcher_e_costuras_dos_dois_builders`: rc 1, `FAILED (errors=6)`, por ausência do argumento `recusas` na c12 (`ponto/tests/test_lastro_c13_sem_banco.py:39`).
+- Nove mutantes executados, todos rc 1: `recusa_apagada`, `recusa_gate`, `recusa_faixa`, `canal_grade`, `canal_dispatcher`, `canal_turno`, `canal_legacy`, `canal_single`, `canal_overlay` (`ponto/tests/test_lastro_c13_sem_banco.py:49`).
+- `--mutante harness_c12` executa o `setUp` histórico exato. Dois testes API falharam: `busca real proibida` e `grade real proibida`, rc 1 (`ponto/tests/test_lastro_c13_sem_banco.py:26`, `:89`).
+
+Comando comum:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.test_lastro_c13_sem_banco --mutante NOME TESTE -v [nao verificado]
+```
+
+Selos vizinhos podem exigir delegação a `espelho_do_colab`, consumo de `orfas_grade` e proibição da grade própria no PDF, preservando as exigências financeiras (`escala/tests/test_f1c_contrato.py:42`; `relatorios/tests/test_cartao_pela_celula.py:170`).
+
+Há incompatibilidade concreta na fixture de marca espúria: cria vínculo e batidas, sem `CelulaDia`; a tela entrega `sem_celula`, e o adaptador retorna órfãs vazias sem marcos (`relatorios/tests/test_cartao_marca_espuria.py:33`; `escala/services/leitor_celula.py:394`; `escala/utils.py:1087`). Comparar apenas vazios perderia a mordida positiva. Para preservá-la, a fixture precisa entregar tela com célula/ata/lâmpadas/órfã e manter tanto a marca quanto a supressão do turno aberto e a prova textual do PDF (`relatorios/tests/test_cartao_marca_espuria.py:55`, `:70`).
+
+## 12/11 11:04 · sessao fdafdbeb8bfa · - · - · origem=Ronald (tmux)
+
+Recorte recente: **298 registros, 89 FAILED, 4.691,280 minutos brutos** (`suites_14d.tsv:229–526`). As últimas 20 linhas são `507–526`.
+
+Tabela completa enviada nas mensagens anteriores com n bruto, FAILED, soma dos tempos e referências. Pontos principais:
+
+| Prefixo | n | FAILED | Minutos brutos | Linhas |
+|---|---:|---:|---:|---|
+| BO-0611-05 | 9 | 2 | 132,060 | 478–479, 481–487 |
+| BO-DISPUTA-SEM-PERGUNTA | 6 | 6 | 112,739 | 480, 488, 490–491, 493, 495 |
+| FIO-E0-V4-E3 | 7 | 4 | 161,441 | 496–502 |
+| E4B-ALCANCE | 6 | 4 | 128,479 | 492, 494, 504–505, 515, 519 |
+| LASTRO-FAIXA | 5 | 5 | 98,717 | 521–525 |
+| DATA-EVENTO-CRU | 3 | 0 | 35,784 | 510, 512, 518 |
+| TRIAGEM-OFFLINE-SEM-CAMERA | 3 | 0 | 74,051 | 511, 517, 520 |
+| O169-FECHADA | 2 | 0 | 42,975 | 475, 503 |
+
+**Intermediárias que mudaram decisão: não medido.** Não há fechamento demonstrado do vínculo entre execução vermelha específica, cura dos respectivos casos e final da obra. BO-DISPUTA e LASTRO terminam vermelhos no anexo (`suites_14d.tsv:495,525`).
+
+Há registros potencialmente copiados para `opus_final`, portanto estes números contam linhas, sem demonstrar execuções independentes: `jv3:281–282`; `c20_fiomudo:287,292;290,293;294–295;298–299`; `pep:302,304`; `otimiza3:305,308;306–307`; `lastro2:309–312`.
 
 ## 12/11 11:04 · sessao 0c048614a4ba · - · - · origem=Ronald (tmux)
 
@@ -568,79 +753,4 @@ O contador que **potencialmente esconderia os descartes por `None` é `coerente_
 - Isso não altera o predicado solicitado no aval; invalida usar `materializada_em != NULL` como sinônimo de “existe batida plantada”. O comando existente faz essa divisão em `classificar`, mandando qualquer carimbada para `_fonte_materializada`, que reprova ausência de batida plantada viva. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:151`, `:152`, `:68`, `:69`, `:72`.
 - O caminho histórico exato que carimbou cada uma das 931 perguntas, sua data e seu autor no banco não foi comprovado nesta inspeção. [nao verificado]
 
-## 12/11 10:41 · sessao 9913f3b3b51d · - · - · origem=Ronald (tmux)
-
-- `classificar()` considera “materializada” apenas pela presença de `materializada_em` e escolhe `_fonte_materializada`; essa função exige batida plantada viva e lança `sem_fonte` quando ela falta. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147`, `:151`, `:65`, `:68`, `:72`)
-
-- `_fonte_viva` começa com turnos que têm entrada, não têm saída e possuem `data_turno`. Se **qualquer** candidato tem `data_turno == data_evento`, retorna `None` antes de procurar um candidato de outro dia. Logo, se coexistirem um aberto no próprio dia e outro aberto cujo dia diverge, esse segundo não será avaliado nessa chamada; a existência dessa configuração nas 931 é [nao verificado]. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108`, `:109`, `:110`)
-
-- Há outros cortes: ignora candidatos com `data_turno >= data_evento`; dos anteriores, aceita somente aqueles cuja saída prevista é igual a `data_evento`. A previsão vem do último marco de `marcos_turno`, convertido em data local. Se não encontrar correspondência e todos os candidatos examinados tiverem marcos, retorna `None`. Esses critérios são mais restritivos que simplesmente exigir dia do turno diferente e turno ainda sem saída. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:113`, `:115`, `:118`, `:122`, `:125`, `:82`, `:90`, `:91`)
-
-- Se não houver correspondência, mas existir candidato anterior sem marcos, lança `sem_fonte`; se houver mais de uma correspondência, lança `ambigua`. Portanto, os cortes com retorno `None` devem ser distinguidos dessas exceções. (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:116`, `:120`, `:123`)
-
-- **Contador potencialmente ocultador na v3: `coerente_ou_sem_turno_aberto` (860 no JSON fornecido).** A associação exata entre os retornos `None` e esse contador é [nao verificado]: `sonda_medida3.py` e o texto do contador não foram encontrados na cópia; o usuário forneceu somente a saída da sonda. A quantidade das 860 que satisfaria o predicado do aval também é [nao verificado].
-
-- O juiz efetivo consulta `dia_das_batidas` para a batida por PK; a implementação atribui a cada batida reclamada o `data_turno` do turno e usa a data local para as demais. (`app/ponto/turnos.py:2927`, `:2935`, `:2945`, `:2953`, `:2955`)
-
-## 12/11 10:39 · sessao aa1c00a286c9 · ABSOLVIDA-PELA-FOLGA · sonda · origem=Code
-
-1. Transcrição integral do JSON fornecido; resultado de produção sem verificação independente. [nao verificado]
-
-```json
-{"caso_51407": [{"em_classificar": true, "no_universo": true}], "casos": [], "contagem": {"linhas_classificar": 931, "materializadas_no_universo": 931, "sem_dia_novo": 931, "universo_base": 931}, "foras_sem_dia": {"sem_fonte": 931}}
-```
-
-2. **`classificar` não é um medidor geral do predicado do aval.** Ela seleciona a fonte conforme `materializada_em`: preenchida → `_fonte_materializada`; ausente → `_fonte_viva`. `via_resolucao=celula_absolveu` e `respondida_em` nula não alteram essa escolha. [classificar:147](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:147)
-
-Para `orfao_14h` **viva**, `_fonte_viva` procura turnos com entrada, sem saída e com `data_turno`. Ela:
-
-- Devolve `None` imediatamente se **qualquer** candidato tem `data_turno == data_evento`, considerando a pergunta coerente. [fonte_viva:108](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108)
-- Entre os candidatos anteriores a `data_evento`, aceita somente aqueles cuja saída prevista cai exatamente em `data_evento`; essa previsão vem do último marco da escala. [fonte_viva:112](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:112), [saida_esperada:82](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:82)
-- Marca `fora=ambigua` se houver mais de um encaixe; sem encaixe, marca `fora=sem_fonte` se algum candidato examinado não tiver marcos. Sem encaixe e sem essa falta de marcos, devolve `None`, inclusive quando existem turnos abertos que não satisfazem o encaixe exigido. Um único encaixe devolve sua entrada e seu turno. [fonte_viva:120](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:120)
-
-Para **materializada**, a fonte exigida é uma batida viva vinculada por `Batida.pergunta_origem`, não a entrada aberta encontrada por `_fonte_viva`. Sem essa batida, `celula_absolveu` cai em `sem_fonte`; múltiplas batidas geram `ambigua`; uma batida ausente dos turnos gera `sem_fonte`, e presente em múltiplos turnos gera `ambigua`. [classificar:138](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:138), [fonte_materializada:65](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:65)
-
-Obtida a fonte, `novo` só é preenchido depois de o juiz devolver um dia não nulo, diferente de `data_evento` e igual ao `data_turno` encontrado. Juiz sem dia gera `sem_fonte`; divergência entre juiz e turno gera `ambigua`, ambos ainda sem `novo`. Depois de preencher `novo`, `orfao_14h` materializada recebe `fora_do_aval`; para quem passar dessa condição, fato já existente no destino gera `colisao`. Portanto, **`novo` preenchido não significa ausência de `fora`**. [classificar:160](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:160)
-
-Precisão sobre `None`: quem o devolve é `_fonte_viva`; `classificar` responde com uma lista e omite essa pergunta por `continue`. Também omite materializada cujo turno não tenha saída ou cuja saída não caia em `data_evento`, e qualquer pergunta cujo dia devolvido pelo juiz já coincida com o gravado. [classificar:154](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:154), [classificar:176](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:176)
-
-**Sim, o predicado amplo do aval pode sofrer descarte silencioso:** uma materializada com fonte encontrada, turno ainda aberto e dia diferente é omitida antes de consultar o juiz, porque `t.saida is None`. Nas vivas, uma entrada aberta com dia diferente também pode ser omitida quando sua saída prevista não coincide com `data_evento`; existir outro turno aberto no próprio `data_evento` provoca o retorno antecipado de “coerente”. Essas condições são mais restritivas que apenas “entrada aberta cujo dia difere do gravado”. [classificar:158](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:158), [fonte_viva:108](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:108)
-
-3. **O bloqueio equivalente nesta saída é `sem_dia_novo=931`, explicado por `foras_sem_dia.sem_fonte=931`.** Os mesmos 931 constam como materializados e como linhas retornadas; portanto, o agregado fornecido não mostra perda de perguntas entre universo e retorno, mas mostra todas sem dia novo. [nao verificado]
-
-Como materializadas seguem `_fonte_materializada`, chamar a função real **não garante chamar o caminho que procura entrada aberta**; a exigência de batida plantada pode barrar a medição antes disso. [classificar:151](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:151), [fonte_materializada:68](/home/ronald/codex_ws/e4fd9f1b5c0fae57791b510c4c2b816dd0590b21/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:68)
-
-Assim, `casos: []` **não demonstra zero casos do aval**. O JSON só confirma, para #51407, presença no universo e no retorno; não fornece seu dia novo, sua entrada aberta nem separação entre exportadas e não exportadas. O número que satisfaz efetivamente o predicado do aval permanece [nao verificado].
-
-## 12/11 10:38 · sessao 5cbda7b3d038 · - · - · origem=Ronald (tmux)
-
-Entradas já alcançam a relavra comum: lançar [escala/folgas.py:337], alterar/remover [:380], lote [:418], reparentar [:523]. A relavra suplementa futuras em [:298]. Assim, testes comportamentais de amanhã devem ficar GREEN no HEAD; RED no HEAD desses comportamentos é [nao verificado]. A deficiência apontada é de evidência individual. [nao verificado]
-
-Para ampliar a suíte pura: [nao verificado]
-
-- Carregar `_foto_do_dia`, `lancar_folga`, `alterar_folga`, `aplicar_folgas_em_lote`, `reparentar_folga` e **a relavra real**, usando `_dias_dos_meses_que_sairam=lambda *a: []`; o teste atual da relavra já usa esse preparo. [ponto/tests/test_cadastro_futuro_sem_banco.py:584] [nao verificado]
-- Reutilizar `calendario()`: seu `eh_dia_trabalho_calculado` consulta as fotos do vínculo, permitindo verificar que amanhã muda de trabalho para folga. [ponto/tests/test_cadastro_futuro_sem_banco.py:480]
-- Acrescentar `Query.get_or_create`, necessário para lançamento. [escala/folgas.py:335]
-- Usar foto com `save/delete`, `pk`, `tipo` e `calendario_origem=None`; `Foto` atual fornece somente a propriedade do calendário. [ponto/tests/test_cadastro_futuro_sem_banco.py:176]
-- Dublar `ponto.precedencia.veto_de_lancamento` e `core.models.LogAuditoria`; a porta de reparentamento exige também `vinculo_do_dia_carregado`, retornando o vínculo novo pela autoridade previamente carregada. [escala/folgas.py:328] [escala/folgas.py:479] [escala/folgas.py:493]
-
-Casos individuais recomendados:
-
-1. `lancar_folga(novo, AMANHA, 'F')`: começar com amanhã coerente, trabalhando, nomeando `novo`; verificar foto criada e célula não trabalhando. [escala/folgas.py:335]
-2. `alterar_folga(novo, AMANHA, 'F2')`: foto manual já existente e célula com DNA anterior incoerente; verificar tipo e DNA atualizados. [escala/folgas.py:364]
-3. Remoção: foto manual existente, célula coerente como folga; `alterar_folga(..., '')` remove foto e amanhã volta a trabalhar. [escala/folgas.py:353]
-4. `aplicar_folgas_em_lote(novo, [(AMANHA, 'F')], hoje=HOJE)`: conferir lista gravada, foto e célula. [escala/folgas.py:405]
-5. Reparentar: foto manual de amanhã no vínculo velho encerrado hoje; célula de amanhã já nomeia `novo`; conferir retorno `migrada`, FK da foto e célula. [escala/folgas.py:487] [escala/folgas.py:515]
-6. Aplicar calendário: carregar função real da view sem decoradores; publicar serviços reais preparados em `sys.modules`; fornecer `request.method='POST'` e `POST['tipo_escala_id']`; dublar somente `JsonResponse`, `get_object_or_404` e relógio. [escala/views.py:376] [escala/views.py:388]
-
-O mutante comum apropriado é envolver a chamada futura da relavra em `if ec.data_inicio <= _hoje_teste`. O mutador atual apenas remove essa chamada porque `relavrar_celulas_da_foto` não integra seu conjunto de guardas; precisa receber essa variante. [ponto/tests/test_cadastro_futuro_sem_banco.py:87] [escala/folgas.py:298]
-
-Aplicar calendário tem redundância legítima: troca a FK com sincronização futura, materializa fotos que também relavram e chama relavra explícita. Mutar somente a chamada explícita pode sobreviver graças aos outros caminhos; o teste deve executar tudo e aplicar a guarda aos transportes futuros comuns. [escala/views.py:409] [escala/views.py:411] [escala/views.py:416] [colaboradores/services/vinculo.py:454] [escala/folgas.py:215] [nao verificado]
-
-## 12/11 10:38 · sessao b118550ea971 · - · - · origem=Ronald (tmux)
-
-Item 4(c) está bloqueado pelo limite de escrita: a regeneração fora da vigência conserva `escala_geradora` e só salva se `trabalha` ainda não for falso ([celula.py:238](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/portas/celula.py:238)). A juíza devolve `None` para a geradora encerrada ([alimentacao.py:282](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/escala/alimentacao.py:282)), portanto o contador permanece positivo corretamente ([vigia_cadastro_futuro.py:36](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/services/vigia_cadastro_futuro.py:36)). Nenhuma operação existente permite limpar o carimbo: a reversão também só atribui geradora quando o identificador restaurado é verdadeiro ([celula.py:789](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/portas/celula.py:789)). Resolver sem editar esse arquivo exigiria outro escritor ou alterar artificialmente julgamento/contador.
-
-Item 5 admite solução na casca do comando: dentro do atomic existente, regenerar somente células geradas existentes de hoje, chamando a porta atual com `recalculo=False` e `estender_horizonte=False`; a chamada ficaria junto ao gerador ([gerar_celulas.py:310](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/management/commands/gerar_celulas.py:310)). Assim o cron mantém a execução pelo comando, sem editar sua configuração. A seleção deve preservar o universo ativo do gerador ([celula.py:830](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745/app/ponto/portas/celula.py:830)); usar a geradora carimbada julgada pode divergir do comportamento anterior em sobreposições. Equivalência completa desse caminho alternativo: [nao verificado].
-
-_4179 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
