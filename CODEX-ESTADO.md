@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 12:03** · publicado em **12/11/2026 12:04** (UTC-3)
+> Ultima resposta processada: **12/11/2026 12:06** · publicado em **12/11/2026 12:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 12:06 · sessao c16ee12ee21d · - · - · origem=Ronald (tmux)
+
+Censo P8 concluído em leitura; inventários completos de leitores por campo enviados nas quatro mensagens anteriores. A tabela abaixo consolida escritores e significado.
+
+| Campo / sítio arquivo:linha | O que escreve | Observação |
+|---|---|---|
+| `data_evento` — `app/chamados/services/fio.py:801` | Única atribuição explícita: `linha.data_evento = dia_do_turno`. | Nascimento chama em `app/chamados/models.py:3017`, persistindo em `:3018`; costura chama em `app/chamados/services/fio.py:880`, com reversão em memória em `:898` e `:913`; rechaveamento chama em `:1038`, persistindo em `:1044`. |
+| `data_evento` — `app/chamados/models.py:2790`, `:2802`; `app/chamados/services/fio.py:1631` | Porta do fato recebe dia do turno; porta da conversa fornece `localdate()`; discriminador `conversa` preserva o pedido. | **Não possui significado universal:** fato = dia do turno; conversa = dia civil de emissão, comprovado em `app/chamados/models.py:2802` e `app/chamados/services/fio.py:1632`. |
+| `via_resolucao` — `app/chamados/models.py:3102` | Atribuição junto com instante e autor do carimbo. | Persistida por `carimbar` em `:3153`, por `carimbar_identidade` em `:3191` e por `descarimbar` em `:3213`. |
+| `via_resolucao` — `app/chamados/models.py:3267`, `:3276`; `app/chamados/services/relavra_via.py:125` | Lote limpa `''`; encerramento por fato troca para `fato_materializado`; relavra substitui pela via derivada atual. | Últimas duas persistem em `app/chamados/models.py:3277` e `app/chamados/services/relavra_via.py:127`. Default vazio em `app/chamados/models.py:2563`. |
+| `materializada_em` — `app/chamados/models.py:3100` | Instante do ato de carimbar; também `None` no descarimbo. | Mesmo conjunto de portas do carimbo acima; lote limpa em `app/chamados/models.py:3267`. |
+| `materializada_em` — `app/chamados/models.py:3065`; `app/chamados/services/materializacao.py:1105` | Carimbo também nasce por decisão administrativa e por colisão recusada. | **Não comprova sozinho batida criada:** administrador chama identidade e colisão chama `fato_ocupado`. O help text “batida criada + chamado fechado” em `app/chamados/models.py:3396` é mais estreito que esses usos. |
+| `respondida_em` — `app/chamados/services/disputa_emissao.py:1468`, `:1653`, `:1674` | Resposta corrente usa `now()`; resposta automática usa instante recebido; reconstrução pela trilha usa instante recebido. | Persistência em `:1509` **[nao verificado: confirmar linha exata do save normal]**, `:1655` e `:1676`. |
+| `respondida_em` — `app/chamados/models.py:3133` | Carimbo pode preencher instante quando há texto e `resposta` pede responder/validar. | Não exige passagem pela atribuição normal de resposta: condição em `app/chamados/models.py:3131`. |
+| `respondida_em` — `app/chamados/services/disputa_emissao.py:1593`, `:1632`; `app/chamados/models.py:1567` | Reabertura limpa; ressuscitação limpa. | Reabertura também limpa resposta; ressuscitação opera universo sem texto, filtrado em `app/chamados/models.py:1487`. |
+| `validada_em` — `app/chamados/services/validacao.py:134`, `:199` | Validação usa `timezone.now()`; devolução limpa `None`. | Persistência em `:137` e `:202`; atos `VALIDACAO` e `DEVOLUCAO` em `:139` e `:205`. |
+| `validada_em` — `app/chamados/models.py:3136`; `app/chamados/services/disputa_emissao.py:1480` | Carimbo pode preencher validação vazia quando `resposta='validar'`; resposta nova desfaz validação anterior. | Condições em `app/chamados/models.py:3135` e `app/chamados/services/disputa_emissao.py:1471`. |
+| `validada_em` — `app/chamados/services/disputa_emissao.py:1593`, `:1632`; `app/chamados/models.py:1567` | Reabertura e ressuscitação limpam. | Não confundir com julgamento da célula: estado projetado usa validação e materialização separadamente em `app/chamados/models.py:3042`. |
+| `resposta_colab` — `app/chamados/services/disputa_emissao.py:1467`, `:1652` | Resposta normal e resposta automática. | Automática não sobrescreve texto existente: guarda em `:1647`. |
+| `resposta_colab` — `app/chamados/services/disputa_emissao.py:1593`, `:1632` | Reabertura limpa `''`. | Salva foto anterior em `DecisaoPergunta` em `:1615`, lendo texto e carimbos em `:1619`. |
+| `resposta_colab` — `app/chamados/models.py:2448` | Default `''` no nascimento. | É texto polimórfico: hora, escape e identificadores de posto/escala; leitores diferenciados em `app/chamados/models.py:3527`, `:3535` e `app/chamados/services/materializacao.py:359`. |
+| Memória, sem novo escritor persistente — `app/chamados/models.py:1508`, `:1509`, `:3164`, `:3165` | Limpa carimbos na cópia julgada; restaura instância após recusa/erro de `carimbar`. | Não contar como persistências independentes: cópia em `:1495`; função de restauração em `:3160`. |
+| Fora do fluxo de produção: `bin/sombra_regras_pessoais.py:85` → `bin/sombra_mascara_pessoal.py:54`, `:57`, `:62`, `:64` | Lê e transforma `pergunta` e `resposta_colab`, persistindo por `bulk_update` na cópia sombra. | Leitor adicional SQL da máscara: `bin/sombra_selo_pessoal.py:74`, `:77`. |
+| Todos os sete campos — `app/chamados/services/foto_e4b.py:251`, `:272` | Leitor genérico fotografa todos os campos concretos de `PerguntaDisputa`. | Deve entrar no censo mesmo sem referência literal ao nome de cada campo; inclusive `pergunta`. |
+
+Complementos para consolidar a tabela P8:
+
+- Leitores dinâmicos de instantes: `app/chamados/services/historico.py:98`, `:105`; leitor de reversão de materialização/via/resposta/validação: `app/chamados/services/passivo_validado.py:64`, `:66`, `:83`; agregador dos três instantes: `app/chamados/services/painel.py:66`.
+- O instante efetivo de uma saída noturna não é a simples soma da data gravada com a hora: combinação inicial em `app/chamados/services/materializacao.py:419`, ajuste overnight em `:426`. A classificação de conflito já usa `_slot_esperado` em `app/chamados/services/validacao.py:872`.
+- API expõe `data_evento` diretamente como ISO e rótulo em `app/api/views.py:1153`, `:1154`; template apresenta essa data sem recompor o dia civil do marco em `app/templates/chamados/partials/_card_atendimento.html:90`.
+- Migração histórica com leitura de identidade: `app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`, `:33`, `:40`; schema original de resposta/carimbos: `app/chamados/migrations/0014_perguntadisputa.py:24`, `:25`, `:26`.
+- Auxiliar externo que lê respondida/validada: `bin/censo_folha.py:28`, `:29`; consumidor indireto do payload de pergunta/data: `mensageria/nucleo/ferramentas.py:119`, `:127`.
+- Excluir homônimo de outro modelo: `app/chamados/services/regularizacao_ext.py:199`, `:220` refere-se a `RegularizacaoExterna`, não `PerguntaDisputa`.
 
 ## 12/11 12:03 · sessao d57e2b6a2b71 · - · - · origem=Ronald (tmux)
 
@@ -1349,30 +1383,4 @@ FILA — `_calados` ainda trata pré-filtro como vida exata (`app/chamados/servi
 
 Sem commit, respeitando a proibição inicial. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c15_execucoes.r:36). [nao verificado]
 
-## 12/11 11:39 · sessao be892ef56153 · - · - · origem=Ronald (tmux)
-
-BLOQUEIA — item 7, instrumento diverge do vigia migrado: `diff_e3_sombra.py:54` calcula `exige_admin` pelos verbos; `vigia_fio.py:650` usa `porta['fio'] == 'admin'`. Contraexemplo: pergunta respondida sem texto, verbo `validar`, fio `colab`: sombra informa admin=True, vigia False; o próprio caso está em `test_o261e_f5_alcance.py:177`, com assert False em `:192`. O teste do instrumento conserva a resposta antiga em `test_e3_diff_sombra.py:143`. [nao verificado]
-
-BLOQUEIA — selo/mutante sem alvo: `e3_mutantes.py:112` procura o antigo `return` da candidata, mas o código agora tem alias em `diff_e3_sombra.py:43`; o harness encerra por `AssertionError('Mutante sem alvo')` em `e3_mutantes.py:162`. Contagem literal por AST em memória confirmou 0 alvos; morte do mutante por teste: [nao verificado]. [nao verificado]
-
-BLOQUEIA — mutante de relógio atinge sítio errado e é equivalente: `e3_mutantes.py:101` troca o primeiro `agora=self.agora)` por `agora=None)`; há dois alvos, e `replace(...,1)` em `:164` alcança C6 em `tarefa_do_dia.py:493`, deixando `alimentar_fila` em `:533` intacta. C6 recupera `carga.agora` em `juizes.py:883`; portanto não reverte a cura pretendida.
-
-FILA — item 11 não cobre literalmente a disputa inteira quando fechada: `fio.py:241` pré-filtra suas perguntas com `q_vivas`, `:255` descarta mortas antes de preencher o novo mapa em `:257`. Contraexemplo: disputa fechada com uma pergunta viva e outra validada: explicação recebe só a viva; o RED novo monta disputa aberta em `test_e3_leitores_fio_disputa.py:84`. Incidência de produção: [nao verificado].
-
-#4 — cura da alimentação presente em `juizes.py:1575`; C6 recebe o instante, deriva seu dia local em `:885`, e evita o fallback de `:592`. Tarefa já chama C6 com seu instante em `tarefa_do_dia.py:493` e alimenta fila em `:533`. RED e controle em `test_e3_bloqueantes.py:110`/`:129`; verificação de repasse em `:135`. Reversão de `:1575` deve contrariar assert de `:145` por leitura estática; execução e mutante morto: [nao verificado].
-
-#8 — REDs distinguem chamado sem ação, âncora silenciada e registrada em `test_e3_bloqueantes.py:148`, `:155`, `:164`; controle com porta em `:171` e mock da autoridade em `:184`. Reversão ao predicado cru contraria esses asserts por leitura estática; execução/mutante morto: [nao verificado].
-
-#9 — RED vencido, controles vigente/NULL, instante recebido e fronteira exatamente igual em `test_e3_b4_silencio_vencido.py:41`, `:46`, `:50`, `:54`, `:59`. Reversão a NULL contraria o RED de `:43`; teste não exercita `tarefa_do_dia`, apenas os dois querysets (`:35`). Execução/mutante morto: [nao verificado]. [nao verificado]
-
-Item 4 — REDs de folha, pauta e vigia distinguem o C17 anterior em `test_e3_leitores_c17_chamadores.py:124`, `:135`, `:154`, `:170`; controle de não chamada ao C17 em `:183`. Beco possui caso divergente em `test_f3_beco1_folga_na_lista.py:166`. Execução e mutantes por leitor: [nao verificado].
-
-Item 6 — catraca verifica exclusivamente chamadas a C17 em `test_e3_pendentes_app.py:33`/`:145`; injeção demonstra detectar retorno da folha ao C17 em `:150`. Não certifica 0 derivações próprias nem 0 respondedores vivos; sua pergunta concreta é a contagem C17 (`:147`).
-
-Item 11 — caso multicartão e universo completo aberto em `test_e3_leitores_fio_disputa.py:95`; regressão à lista do primeiro cartão contradiz asserts em `:103`/`:105`. Controle todas mortas em `:108`. Execução/mutante morto: [nao verificado].
-
-Item 12 — caso morta sem resposta em `test_e3_leitores_fio_disputa.py:125`; controles viva sem resposta/com texto/sem texto em `:134`, `:138`, `:143`; API em `:156`/`:164`. Reversão ao timestamp cru contraria `:131` e `:146`. Execução/mutante morto: [nao verificado].
-
-PRONTO 1–3/7–10 — o código documental ainda registra E3-LEITORES “1 de 10” em `RELATO.md:77`/`:95`; não há resultado da obra atual nesses trechos. Sonda 232, V/T/X, cura V, queda por classe, suite final, opus e pouso deste HEAD: [nao verificado]. [nao verificado]
-
-_4223 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
