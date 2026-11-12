@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 11:15** · publicado em **12/11/2026 11:15** (UTC-3)
+> Ultima resposta processada: **12/11/2026 11:21** · publicado em **12/11/2026 11:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 11:21 · sessao 94df418df845 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Curas, REDs, mutantes e comando para a sombra estão no [LASTRO_C14.txt](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/LASTRO_C14.txt:7).
+
+**81 testes sem banco e ruff passaram**, com RC=0 ([saídas](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/evidencia_c14_validacao.txt:403)). [nao verificado]
+
+A entrega permanece parcial: parei o ponto do selo de marca espúria porque sua premissa depende da grade própria, conforme sua condição literal ([pendência](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/LASTRO_C14.txt:36)). Os vizinhos Django não carregaram por falta da dependência ([saída](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/evidencia_c14_validacao.txt:109)).
+
+Sem execução da sombra ou commit ([escopo](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/evidencia_c14_escopo.txt:35)). [nao verificado]
+
+## 12/11 11:19 · sessao 49c101e1bfcf · AUDITORIA-DE-TRAVAS-CORTE · censo · origem=Code
+
+Regra adotada, antes dos números:
+
+1. Uma linha do TSV = uma run, incluindo cópias em `opus_final`. A numeração abaixo começa na primeira linha de cada anexo.
+2. Associação pela pasta; separação por nome quando a pasta reúne obras diferentes, como E1/E2/E1-FILA em `fio_e0_v4`. Associações e agrupamentos por nome são **[nao verificado]**.
+3. FINAL candidata = última linha com horário **estritamente anterior** ao pouso associado. Empate entre runs: última linha do TSV. Empate com o minuto do commit, ausência de pouso identificável ou execução posterior ao pouso: classificação temporal indeterminada **[nao verificado]**. [nao verificado]
+4. FAILED intermediária: primeiro procurar alteração posterior do arquivo/módulo em commit da mesma obra; depois verificar se **todos os IDs completos** dos testes vermelhos aparecem em outras obras com distância absoluta ≤24 h; restante indeterminado. Coincidência não prova causalidade **[nao verificado]**. [nao verificado]
+
+**O censo fecha por linha; o número de “mudaram decisão” não é verificável com o material fornecido.** O gitlog não informa arquivos alterados por commit, e o código atual não permite reconstruir essas alterações históricas **[nao verificado]**. [nao verificado]
+
+| Classificação nominal | Total | FAILED | OK |
+|---|---:|---:|---:|
+| FINAL candidatas | 88 | 3 | 85 |
+| INTERMEDIARIAS | 344 | 109 | 235 |
+| Classificação temporal indeterminada | 94 | 28 | 66 |
+| **Total** | **526** | **140** | **386** |
+
+Fonte: `suites_14d.tsv:1–526`; classificação por associação de nomes **[nao verificado]**.
+
+São **525 linhas com rótulo de pasta/obra e 1 SEM obra**, `integrador.log`. Rótulo de pasta não comprova identidade da obra **[nao verificado]**. Fontes: `suites_14d.tsv:1–526`, especialmente `suites_14d.tsv:526`.
+
+As **94 temporalmente indeterminadas** são: 84 sem pouso identificável, oito empatadas no minuto do pouso, uma posterior ao pouso conhecido (`lastro2/construcao_green.log`) e uma cujo commit associado diz “cura”, sem pouso explícito (`o261/suite_bd0aef09.log`) **[nao verificado]**.
+
+Para classificar cada linha sem reproduzir os 526 registros: estas são as **88 FINAL candidatas**; a lista seguinte contém as 94 temporalmente indeterminadas; **todas as demais linhas são as 344 INTERMEDIARIAS**, segundo a regra acima **[nao verificado]**.
+
+| Data | Linhas FINAL candidatas em `suites_14d.tsv` |
+|---|---|
+| 29/10 | 2, 19, 21, 29, 32 |
+| 30/10 | 39, 50, 56, 60, 71 |
+| 31/10 | 83, 84, 88, 92, 93, 97, 99, 108, 112, 114, 119, 123, 138 |
+| 01/11 | 141, 149, 159 |
+| 02/11 | 170, 173, 181, 183, 185, 194 |
+| 03/11 | 199 |
+| 04/11 | 204, 207, 208, 210–212, 215, 218, 222, 224–225 |
+| 05/11 | 235, 238, 248, 251–252, 260, 263–264, 273, 275, 277, 280, 283, 289 |
+| 06/11 | 303, 312–313, 319–320, 322, 330–331, 335, 343 |
+| 07/11 | 353, 357, 378, 389 |
+| 08/11 | 407, 437 |
+| 09/11 | 443, 446, 448, 456, 465, 469, 471 |
+| 10/11 | 474, 477, 487 |
+| 11/11 | 502–503, 509, 516 |
+
+As três FINAL candidatas FAILED são ORFAS, O261-V e LASTRO-3 (`suites_14d.tsv:19`, `suites_14d.tsv:71`, `suites_14d.tsv:313`); associação aos pousos **[nao verificado]**.
+
+As 94 linhas temporalmente indeterminadas, em `suites_14d.tsv`, são **[nao verificado: associação ao pouso]**: [nao verificado]
+
+```text
+33–34, 36–38, 57, 61–62, 73, 96, 100, 102, 150, 171,
+174–180, 191, 193, 198, 200–201, 209, 226–227, 243, 253,
+284, 287, 290, 292–296, 298–300, 305–308, 315, 317,
+323–326, 332–334, 336, 339, 366, 409, 449–450, 453–454,
+460, 463–464, 480, 488–495, 504–505, 508, 510–515, 517–526
+```
+
+**Das 109 INTERMEDIARIAS FAILED, nenhuma pode ser atribuída com comprovação a “mudou decisão” ou a “ruído exclusivo”.** Todas permanecem indeterminadas quanto a essa divisão **[nao verificado]**.
+
+Dentro delas, **17 atendem ao critério observável de coincidência integral em outras obras em até 24 h**: linhas 6, 30, 65, 79, 107, 130, 291, 365, 368, 439, 447, 451, 466, 468, 470, 478 e 506 de `suites_14d.tsv`. Os IDs constam de `suites_14d_falhas.tsv:3`, `:11`, `:20`, `:26`, `:31`, `:35`, `:63`, `:82–83`, `:103`, `:106`, `:108`, `:112–114`, `:116` e `:132`; distinção entre obras **[nao verificado]**.
+
+Essas 17 são **candidatas a ruído**, pois falta excluir alteração posterior na própria obra. As outras **92** não preencheram esse critério integral; isso também não demonstra cura **[nao verificado]**.
+
+Das OK, são **235 intermediárias**, sem mudança de decisão pela definição solicitada. As **85 OK escolhidas como últimas antes do pouso** estão entre as FINAL candidatas; outras **66 OK** têm classificação temporal indeterminada (`suites_14d.tsv:1–526`; associação **[nao verificado]**). [nao verificado]
+
+| Tabela final solicitada | Resultado |
+|---|---:|
+| Total | **526** |
+| Intermediárias na reconstrução nominal | **344** **[nao verificado]** |
+| Intermediárias que mudaram decisão | **[nao verificado] — 0 comprovadas** |
+| Ruído exclusivo | **[nao verificado] — 0 comprovadas** |
+| FAILED intermediárias indeterminadas | **109**, incluindo 17 candidatas a ruído |
+| Runs sem classificação FINAL/INTERMEDIARIA resolvida | **94** **[nao verificado]** |
+
+Fonte das contagens: `suites_14d.tsv:1–526` e `suites_14d_falhas.tsv:1–140`. “0 comprovadas” expressa ausência de comprovação, **não zero ocorrências reais [nao verificado]**.
+
+As dez obras com mais intermediárias **na reconstrução nominal**, excluídas as 94 linhas temporalmente indeterminadas, são **[nao verificado: associações por nome]**:
+
+| Obra/agrupamento adotado | Intermediárias | Fonte em `suites_14d.tsv` |
+|---|---:|---|
+| FIO-E0-V4-E1 | 61 | `:346–437` |
+| FIO-E0-V4-E2 | 14 | `:358–448` |
+| COBPARC | 13 | `:142–170` |
+| GRADE-FOLGA-JUIZ (`grade_folga` + `grade_juiz`) | 13 | `:106–149` |
+| O261-E-F5C (`F5` + `F5C`) | 13 | `:63–88` |
+| JUIZ-VARREDURA-1 | 10 | `:228–264` |
+| O261-VETO-A | 10 | `:40–50` |
+| ORFAS | 10 | `:3–19` |
+| V3-P5 (`v3per` + `v3p5`) | 10 | `:124–141` |
+| V2-BUGS-DO-MOTOR, item 2 | 9 | `:338–357` |
+
+O ranking definitivo e a quantidade causal pedida no item 8 permanecem **[nao verificado]**, pelas associações nominais, pelas 94 posições temporais não resolvidas e pela ausência dos arquivos alterados por commit. [nao verificado]
 
 ## 12/11 11:15 · sessao 78f2590fba58 · - · - · origem=Ronald (tmux)
 
@@ -684,123 +785,4 @@ A igualdade do selo é fraca: coletor seleciona os mesmos objetos de `_tela['dia
 
 A união só por HH:MM existe (`app/relatorios/pdf_espelho.py:481`); `_entrada_espuria` compara apenas horário (`:178`), e esse predicado controla a contagem de turnos abertos (`:517`). Assim, a estrutura permite colisão entre datas; incidência real no dado raspado [nao verificado].
 
-## 12/11 10:49 · sessao c53e9ca51217 · LASTRO-FAIXA-SEM-DEFAULT · censo · origem=Code
-
-1. **BLOQUEIA-1 — selo PDF/tela e igualdade sobre lista compartilhada**
-   - **Classe:** [nao verificado]. O Codex viu; descarte pela triagem não está documentado. (`preverif_c13.r:29`; `postmortem_anexo_triagem.txt:2`)
-   - **Pergunta — preverif_c13.q:11-12:**
-     > relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
-     > orfa ou turno aberto (LEI-AKITA 2)?
-   - **Resposta — preverif_c13.r:29:**
-     > Contra-exemplo já fixado pelo teste alterado: tela tem `orfas_grade=[]`, enquanto PDF marca a batida como órfã e conta zero aberto. A igualdade `pdf['dias']==dias` compara a lista compartilhada que o próprio coletor modifica. [nao verificado]
-   - **Triagem — postmortem_anexo_triagem.txt:2:**
-     > B1 duas fontes de orfa (PDF grade_espelho_janela recusas={} x tela orfas_grade): PROCEDENTE
-   - **Motivo literal de descarte:** nenhum.
-
-2. **BLOQUEIA-2 — `_pela_grade` sem recusas**
-   - **Classe:** [nao verificado]. O Codex viu o ramo de ata agregada; descarte pela triagem não está documentado. (`preverif_c13.r:33`; `postmortem_anexo_triagem.txt:4`)
-   - **Pergunta — preverif_c13.q:12:**
-     > A tela e o PDF mostram o mesmo rotulo 'Tipo sem faixa: \<codigo>' para o mesmo dia?
-   - **Resposta — preverif_c13.r:33:**
-     > **BLOQUEIA — rótulo não garantido no ramo de ata agregada.** O handler chama `_pela_grade()` sem `recusas`; uma ausência aprovada `fantasma_xyz` levanta `TipoSemFaixa` antes do transporte nomeado.
-   - **Resposta específica sobre o `except` da pré-apuração:** nenhum.
-   - **Triagem — postmortem_anexo_triagem.txt:4:**
-     > B3 _pela_grade sem recusas no ramo de ata agregada (espelho.py:495,563): PROCEDENTE por leitura; ocorrencia em prod nao medida.
-   - **Motivo literal de descarte:** nenhum.
-
-3. **Item 2 — RED e mutantes c13 somente em prosa**
-   - **Classe:** **(c)** — evidência de execução/RED. (`CLAUDE.md:386`; `opus_final_c13.txt:12-13`)
-   - **Pergunta — preverif_c13.q:6:**
-     > Caso H -- o harness novo ainda morde (mutante que desfaz a cura do produto fica vermelho)?
-   - **Resposta — preverif_c13.r:53:**
-     > os mutantes executados ficaram vermelhos.
-   - **Trecho da resposta que fornece saída de falha em `c13.log`/`construtor_c13.r`:** nenhum.
-
-4. **Item 8 — relavra `ausencia` → `folga` e leitores não fechados**
-   - **Classe:** **(a)** para a lacuna de código sobre relavra e leitores; efeito financeiro efetivo em produção: [nao verificado]. (`preverif_c5.q:5`; `preverif_c13.r:47`; `app/folha/causas.py:100`)
-   - **Pergunta — preverif_c5.q:5:**
-     > Algum leitor de dinheiro (dia_pago, fechamento, folha/export, prontidao) muda de VALOR para algum tipo/dia? Liste o caso concreto (cadastro + batidas) se mudar. O que o diff afirma preservar e de fato preservado em todo caminho (com snapshot e sem snapshot, ata gravada antes desta versao sem as chaves novas)?
-   - **Pergunta — preverif_c13.q:15:**
-     > Dinheiro: algum caminho de folha/simular_folha le o que mudou?
-   - **Resposta — preverif_c13.r:47:**
-     > **Nada de caminho demonstrado recebendo o novo `None`:** `simular_folha` passa pelo fechamento; fechamento lê `grade_do_fechamento`, cuja fonte é `grade_da_celula`.
-   - **Trecho que identifica a lacuna da relavra, `_folga_bat`/`dias_trocados` ou `tripwire_celulas`:** nenhum.
-
-5. **FILA — união HH:MM entre datas suprime turno aberto**
-   - **Classe:** [nao verificado]. O Codex viu; a triagem registrou procedência e herança, sem descarte literal. (`preverif_c13.r:31`; `postmortem_anexo_triagem.txt:3`)
-   - **Pergunta — preverif_c13.q:11-12:**
-     > relatorios/pdf_espelho.py: o PDF le SO o contrato de render (grade_espelho_janela) -- nenhuma regra propria de dia, faixa,
-     > orfa ou turno aberto (LEI-AKITA 2)?
-   - **Resposta — preverif_c13.r:31:**
-     > **BLOQUEIA — regra própria de turno aberto permanece.** PDF une órfãs de todas as datas por HH:MM e usa esse conjunto para excluir abertos.
-   - **Triagem — postmortem_anexo_triagem.txt:3:**
-     > B2 uniao HH:MM entre datas (pdf_espelho.py:174 _entrada_espuria, :480 _orfas_hhmm, :517): PROCEDENTE, HERDADO (c10 ja unia); bug no caminho (LEI-AKITA 6).
-   - **Motivo literal de descarte:** nenhum.
-
-6. **FILA — fechamento relança `TipoSemFaixa` e interrompe a empresa**
-   - **Classe:** [nao verificado]. O Codex viu; não há linha de triagem correspondente no anexo. (`preverif_c10.r:47`; descarte: [nao verificado])
-   - **Pergunta — preverif_c10.q:7:**
-     > fechamento deixa TipoSemFaixa subir: quem chama o fechamento (cron, view, export) e o que acontece com a competencia quando sobe -- trava o fechamento inteiro da empresa? Isso e o comportamento que o aval pede (item 4/6)?
-   - **Resposta — preverif_c10.r:47:**
-     > As três capturas alteradas relançam `TipoSemFaixa`. Se ela ocorrer, interrompe o restante da chamada — empresa inteira ou subconjunto escolhido —, sem representar uma tranca formal da competência
-   - **Resposta — preverif_c10.r:49:**
-     > Não há atomicidade de lote: A pode estar salvo, B pode ganhar linha `aberto` antes da falha, e C não ser processado.
-   - **Triagem:** nenhum.
-   - **Motivo literal de descarte:** nenhum.
-
-7. **FILA — `efeito_vigente` inclui inativos**
-   - **Classe:** **(a)** quanto à inclusão de inativos; efeito zero na frota: [nao verificado]. (`preverif_c5.q:5`; `app/ponto/catalogo/ausencias.py:299`)
-   - **Pergunta — preverif_c5.q:5:**
-     > Algum leitor de dinheiro (dia_pago, fechamento, folha/export, prontidao) muda de VALOR para algum tipo/dia?
-   - **Resposta que identifica a inclusão de inativos como o achado final:** nenhum.
-   - **Resposta anterior, sobre o comportamento inverso — preverif_c5.r:28:**
-     > **BLOQUEIA — a ata nova perde valores quando o tipo sai do catálogo ativo.**
-
-8. **FILA — `folga_da_escala` recarimba precedência e é exposta pela API**
-   - **Classe:** **(a)**. (`preverif_c5.q:4`; `app/ponto/precedencia.py:431`; `app/ponto/services/cartorio.py:1999`; `app/ponto/services/dia_do_colab.py:90`)
-   - **Pergunta — preverif_c5.q:4:**
-     > QUEM ESCREVE e QUEM LE, inclusive fora do diff; todos supoem o MESMO significado (unidade, dia do turno x dia civil, inclusivo/exclusivo, folga humana x folga da escala)?
-   - **Resposta sobre o marcador — preverif_c5.r:10:**
-     > A2 escreve o código vencedor; c5 distingue folga automática por `folga_da_escala`.
-   - **Trecho que identifica o efeito de recarimbo preguiçoso e sua exposição pela API:** nenhum.
-
-9. **FILA — `orfa_classe.py` sem chamador produtivo**
-   - **Classe:** **(e) NAO PERGUNTADO** — pergunta específica sobre ausência de chamadores: nenhum. (`opus_final_c13.txt:22`; `CLAUDE.md:386`)
-   - **Pergunta:** nenhum.
-   - **Resposta que identifica zero chamador:** nenhum.
-   - **Resposta sobre alcance, sem identificar o órfão — preverif_c13.r:23:**
-     > Alcance desses leitores pelo canal novo do PDF: **[nao verificado]**.
-
-10. **Suíte c13 — RC do processo não registrado** [nao verificado]
-    - **Classe:** **(c)** — evidência de execução/suíte. (`CLAUDE.md:386`; `opus_final_c13.txt:17`) [nao verificado]
-    - **Pergunta específica sobre registro do RC da suíte c13:** nenhum. [nao verificado]
-    - **Resposta — preverif_c13.r:53:**
-      > Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**. [nao verificado]
-
-| Achado | Classe | Volta |
-|---|---|---|
-| BLOQUEIA-1 | [nao verificado]: viu; descarte não documentado | c13 |
-| BLOQUEIA-2 | [nao verificado]: viu; descarte não documentado | c13 |
-| RED c13 somente em prosa | (c) | c13 |
-| Item 8: relavra e leitores | (a) | c5/c13 |
-| FILA: união HH:MM | [nao verificado]: viu; descarte não documentado | c13 |
-| FILA: fechamento interrompe empresa | [nao verificado]: viu; triagem ausente | c10 |
-| FILA: efeito inclui inativos | (a) | c5 |
-| FILA: recarimbo/API | (a) | c5 |
-| FILA: `orfa_classe` sem chamador | (e) | nenhuma |
-| Suíte: RC não registrado | (c) | c13 | [nao verificado]
-
-## 12/11 10:47 · sessao e39f8978844e · - · - · origem=Ronald (tmux)
-
-| Achado | Classe sugerida | Trechos literais / limites |
-|---|---|---|
-| RED c13 apenas em prosa, sem saída de falha | **(c)** | `.q`: preverif_c13.q: “Caso H -- o harness novo ainda morde (mutante que desfaz a cura do produto fica vermelho)?” `.r`: preverif_c13.r: “os mutantes executados ficaram vermelhos.” Isso afirma execução, mas não fornece o log cuja ausência o opus apontou. Prova documental de execução c13: **[nao verificado]**. |
-| Item 8: relavra muda `ausencia`→`folga`; leitores financeiros não fechados | **(a)** para a lacuna de código | `.q`: preverif_c5.q: “O que o diff afirma preservar e de fato preservado em todo caminho (com snapshot e sem snapshot, ata gravada antes desta versao sem as chaves novas)?”; preverif_c13.q: “Dinheiro: algum caminho de folha/simular_folha le o que mudou?” `.r` que encontre relavra, `_folga_bat` ou tripwire: **nenhum**. A resposta c13 restringiu-se a: “**Nada de caminho demonstrado recebendo o novo `None`:** `simular_folha` passa pelo fechamento; fechamento lê `grade_do_fechamento`, cuja fonte é `grade_da_celula`.” O leitor `folga`+órfã existe efetivamente em `app/folha/causas.py:100`. Resultado financeiro de produção: **[nao verificado]**. |
-| FILA: `efeito_vigente` inclui inativos | **(a)** defensável; não confundir com achado anterior inverso | `.q`: preverif_c5.q: “Algum leitor de dinheiro (dia_pago, fechamento, folha/export, prontidao) muda de VALOR para algum tipo/dia?” `.r` que aponte a inclusão atual de inativos como mudança: **nenhum**. A c5.r encontrou o inverso: “**BLOQUEIA — a ata nova perde valores quando o tipo sai do catálogo ativo.**” Portanto isso não é citação de que o Codex viu o achado final. A inclusão atual está em `app/ponto/catalogo/ausencias.py:299`, com universo implementado em `:249`. Efeito zero na frota: somente dado do opus, **[nao verificado]**. |
-| FILA: `folga`→`folga_da_escala` recarimba precedência preguiçosamente e API expõe | **(a)** | `.q`: preverif_c5.q: “Para cada campo/valor que o diff le ou grava (faixa, tipo_do_dia, tipo_dia, ausencia_tipo, ausencia_id, ausencia_label, mapas abono/previsto/realizado por dia, totais do fechamento, prontidao, TipoSemFaixa, tipos_ativos_sem_faixa): QUEM ESCREVE e QUEM LE, inclusive fora do diff; todos supoem o MESMO significado [...]?” `.r` que identifique esse efeito de recarimbo: **nenhum**. A c5.r reconheceu somente a origem/consumidores: “A2 escreve o código vencedor; c5 distingue folga automática por `folga_da_escala`.” O valor atual nasce em `app/ponto/precedencia.py:431`; a API de diagnóstico expõe em `app/ponto/services/dia_do_colab.py:90`; o carimbo por chamada A2 está em `app/ponto/services/cartorio.py:1997`. |
-| FILA: `orfa_classe.py` sem chamador produtivo | **(e)** | `.q` que peça censo de chamadores dessa função ou órfãos dessa obra: **nenhum**. `.r` que encontre zero chamador: **nenhum**. C13.r discutiu interpretação latente de `None` e declarou alcance **[nao verificado]**, não encontrou ausência de chamadores. A busca atual encontra definição em `app/escala/orfa_classe.py:53` e uso nos testes em `app/escala/tests/test_orfa_classe.py:20`; nenhum uso produtivo localizado na busca `app/{folha,escala,ponto,relatorios}`. |
-| Suite: rc do processo não registrado | **(c)** | `.q` específica sobre registro do rc da suite c13: **nenhum**. `.r`: preverif_c13.r: “Suite integral, HTTP/ORM e PDF binário: **[nao verificado]**.” O dado da execução é externo à inspeção de código; rc efetivo: **[nao verificado]**. | [nao verificado]
-
-Não há material suficiente sobre opus anteriores para sustentar **(d)** nestes itens; atribuí-la exigiria inferência **[nao verificado]**.
-
-_4186 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4188 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
