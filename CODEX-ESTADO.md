@@ -1,7 +1,56 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 23:23** · publicado em **11/11/2026 23:26** (UTC-3)
+> Ultima resposta processada: **11/11/2026 23:47** · publicado em **11/11/2026 23:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 11/11 23:47 · sessao 7ca0371690e3 · - · - · origem=Ronald (tmux)
+
+Itens 1 e 6 — somente leitura.
+
+**Censo**
+
+Não achei escritor corrente de fechamento/resolução de `ChamadoColaborador` fora da porta e do corpo nominal; os nove sítios internos estão em `app/chamados/tests/e4b_c12_ast.py:18`, e o teste cobra ausência de outros escritores em `app/chamados/tests/test_e4b_c12_selo.py:22`. Completude contra reflexão/SQL arbitrário: [não verificado].
+
+A leitura literal de “todo escritor de status” encontra **20 chamadores não terminais fora da porta**, omitidos pelo conjunto `GATES`; `analisar` e `reabrir` escrevem em `app/chamados/models.py:807` e `app/chamados/models.py:1443`, mas seus nomes não constam de `app/chamados/tests/e4b_c12_ast.py:14`. O motor limita esses eventos ao destino `em_analise`, portanto não são fechadores/resolvedores do aval (`app/chamados/catalogo/motor.py:112`).
+
+- `analisar`: `app/chamados/views.py:1513`; `app/ponto/services/regularizacao.py:137`; `app/chamados/services/disputa_emissao.py:1085`, `:1159`, `:1178`, `:1223`, `:1252`, `:1379`; `app/chamados/management/commands/geofence_registrados_para_analise.py:32`.
+- `reabrir`: `app/chamados/models.py:1020`; `app/chamados/views_arquivar.py:70`; `app/ponto/management/commands/reconciliar_grade.py:530`; `app/ponto/management/commands/detectar_ausencias.py:302`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49`; `app/chamados/services/disputa_emissao.py:1851`, `:2011`; `app/chamados/services/competencia_trancada.py:266`; `app/chamados/services/acoes_disputa.py:270`; `app/chamados/services/adesao.py:93`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:172`.
+
+As migrations escrevem fora da porta: 0038 em `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `:15`; 0039 em `app/chamados/migrations/0039_a3_via_backfill.py:24`, `:33`. São nominalizadas em `app/chamados/tests/test_e4b_c12_selo.py:97`. Aplicação prévia/vazio de tenant novo só aparece como alegação de comentário e não está comprovada pelo dado raspado (`app/chamados/tests/test_e4b_c12_selo.py:93`).
+
+Não achei escrita terminal literal em scripts externos de `bin`/`mensageria` nem SQL literal de `status_local`; completude dessa ausência é [não verificado]. O selo restringe a varredura a `app`, pois `ROOT` nasce em `app/chamados/tests/e4b_c12_ast.py:11`, e ainda exclui migrations, diretórios de teste e arquivos com prefixos `test_`/`tests_` (`app/chamados/tests/e4b_c12_ast.py:34`).
+
+**Mordida e buracos**
+
+Os testes existentes cobrem botão direto, update, aliases, getattr literal, loop, save e bulk_update literal (`app/chamados/tests/test_e4b_c12_selo.py:48`, `:64`, `:77`). Executei o runner somente em memória, com `python3 -B`/`PYTHONDONTWRITEBYTECODE=1`: **17 testes, OK**, sem banco; registro persistente desse resultado [não verificado].
+
+Experimentos somente em memória mostraram:
+
+| Forma | Resultado do AST | Explicação no código |
+|---|---|---|
+| `import chamados.models as m; ...encerrar()` | Morde | Resolve imports/atributos (`app/chamados/tests/e4b_c12_ast.py:109`, `:190`) |
+| `C.custom.filter(...).update(status_local=...)` | Morde | Update aceita tipo desconhecido (`app/chamados/tests/e4b_c12_ast.py:253`) |
+| `bulk_update(..., ['status_local'])` | Morde | Campo literal reconhecido (`app/chamados/tests/e4b_c12_ast.py:259`) |
+| `getattr(c, 'encer' + 'rar')()` | Passa | Só resolve string `Constant` (`app/chamados/tests/e4b_c12_ast.py:114`) |
+| Método herdado: `class Proxy(C): ... self.encerrar()` | Passa | Não resolve herança; compara tipo exatamente com TARGET (`app/chamados/tests/e4b_c12_ast.py:127`, `:249`) |
+| `bulk_update(..., ['status_' + 'local'])` | Passa | Soma faz união dos fragmentos, não concatenação (`app/chamados/tests/e4b_c12_ast.py:161`) |
+| `update(**{'status_local':'fechado'})` | Passa | Ignora keyword com `arg=None` (`app/chamados/tests/e4b_c12_ast.py:241`) |
+| `save(False, False, None, ['status_local'])` | Passa | Só examina keyword `update_fields` e atribuição anterior (`app/chamados/tests/e4b_c12_ast.py:264`) |
+| `transicionar_com_pauta(..., ato=c.encerrar())` | Passa | Autoriza qualquer AST dentro de `ato`; a chamada seria avaliada antes da entrada da porta (`app/chamados/tests/e4b_c12_ast.py:246`) |
+
+O selo de migration pega update literal e atribuição, conforme seus dois adversariais (`app/chamados/tests/test_e4b_c12_selo.py:133`). Entretanto, **não pega bulk_update com fields posicional ou keyword `fields`, getattr literal, `save(update_fields=...)`, nem `**kwargs`**, pois a regra só reconhece chamadas de atributo com keyword `status_local`/`defaults`, ou atribuição explícita (`app/chamados/tests/test_e4b_c12_selo.py:112`).
+
+Há um buraco adicional mais forte: inserir **uma nova escrita terminal literal dentro de `0039.backfill`** mantém o selo verde, porque os achados são um conjunto apenas de `(arquivo, função)`; a nova operação não muda esse conjunto (`app/chamados/tests/test_e4b_c12_selo.py:115`, `:119`, `:131`). Reproduzi em memória acrescentando `C.objects.update(status_local='fechado')` dentro dessa função; registro persistente [não verificado].
+
+A descoberta de migrations ainda depende de nomes `0*.py`, excluindo uma futura `1000_*.py` (`app/chamados/tests/test_e4b_c12_selo.py:126`).
+
+## 11/11 23:44 · sessao d83266f85771 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+C6 aplicada: cobertura separada do rótulo, mapas legados preservados, efeito de tipos inativos mantido e versão 5 com horizonte `2026-11`. [Relato, censo e escritores/leitores](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6.r:1). [nao verificado]
+
+22 testes GREEN; RED na base `f218d86a7` e na c5; 15 mutantes mortos, incluindo os nove anteriores. [Comandos e resultados](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6_execucoes.r:4).
+
+Sem commit, pela proibição inicial. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c6.r:66). Certificação da suíte completa e Opus final: [nao verificado]. [nao verificado]
 
 ## 11/11 23:23 · sessao 2ecf1a0154a7 · FIO-E0-V4-E4B · construtor · origem=Code
 
@@ -550,71 +599,4 @@ Capturas: adicionar `except TipoSemFaixa: raise` antes da captura genérica, imp
 
 A captura de cartório não foi incluída no pedido c5; permanece a captura genérica em `ponto/services/cartorio.py:2032`. Não executei testes nem fiz alterações.
 
-## 11/11 22:20 · sessao 671e565c4e1a · FIO-E0-V4-E4B · construtor · origem=Code
-
-Implementei as seis bordas, relógio do apply, dia canônico e entrega das recusas posteriores. Arquivos, campos e comandos estão no [recibo c11](docs/FIO-E0-V4-E4B-c11.txt:7).
-
-Execução local sem banco: **106 testes rc=0**, 12 mutantes c11 com assertion esperada; retorno antecipado e sem Pauta também falharam nos dois casos em memória ([registro](chamados/tests/e4b_c11_execucao.txt:49)).
-
-**ORM, queries e estado pós-reconciliador: [nao verificado].** Os comandos estão [preparados para o Code](docs/FIO-E0-V4-E4B-c11.txt:126).
-
-A9 permanece pendente, com [trecho exato para a sessão](docs/FIO-E0-V4-E4B-c11.txt:41). Não editei models nem fiz commit, conforme as proibições ([recibo](docs/FIO-E0-V4-E4B-c11.txt:4)).
-
-## 11/11 21:59 · sessao 0ffd773054d2 · LASTRO-FAIXA-SEM-DEFAULT · censo · origem=Code
-
-**O abono materializado no fechamento vem da grade.** A prontidão usa esse snapshot ou calcula diretamente pela grade. O efeito cadastrado também alimenta o motor, em etapa separada. (`app/ponto/services/fechamento.py:697–701`; `app/ponto/services/fechamento.py:1060–1064`; `app/folha/export.py:1078`; `app/folha/export.py:1095–1106`)
-
-Não reexecutei a sonda de produção; consolidei o JSON fornecido. Todos os valores das duas tabelas abaixo têm como fonte esse dado raspado, sem validação independente: **[nao verificado]**. `—` significa combinação não informada no JSON. **[nao verificado]**
-
-| Tipo | Efeito cadastrado | Linhas aprovadas | Linhas rejeitadas | Linhas aguardando_decisao |
-|---|---|---:|---:|---:|
-| `folga` | abona | 55 | 2 | — |
-| `folga_abonada` | abona | 9 | 1 | — |
-| `folga_compensatoria` | abona | 48 | 1 | — |
-| `feriado_folga` | suprime | 1 | — | — |
-| `troca_de_plantao` | abona | 40 | 5 | 1 |
-| **Total: 163 linhas** | — | **153** | **9** | **1** |
-
-No corte 21→20, as janelas são: 08/2026 = 21/07–20/08; 09/2026 = 21/08–20/09; 10/2026 = 21/09–20/10; 11/2026 = 21/10–20/11; 12/2026 = 21/11–20/12. (`app/ponto/janelas.py:10–21`)
-
-Cada célula abaixo contém **DIAS / COLABS**, conforme o agregado recebido. **[nao verificado]**
-
-| Tipo | Status | 08/2026 anterior | 09/2026 anterior | 10/2026 anterior | **11/2026 aberta** | 12/2026 futura |
-|---|---|---:|---:|---:|---:|---:|
-| `folga` | aprovada | — | 3 / 1 | 40 / 22 | **10 / 7** | 2 / 1 |
-| `folga` | rejeitada | — | — | 2 / 2 | — | — |
-| `folga_abonada` | aprovada | — | 4 / 2 | 5 / 4 | — | — |
-| `folga_abonada` | rejeitada | — | — | 1 / 1 | — | — |
-| `folga_compensatoria` | aprovada | 17 / 13 | 29 / 19 | 5 / 4 | — | — |
-| `folga_compensatoria` | rejeitada | — | — | 2 / 1 | — | — |
-| `feriado_folga` | aprovada | 1 / 1 | — | — | — | — |
-| `troca_de_plantao` | aprovada | — | 9 / 9 | 20 / 16 | **14 / 14** | — |
-| `troca_de_plantao` | rejeitada | — | 1 / 1 | 5 / 4 | — | — |
-| `troca_de_plantao` | aguardando_decisao | — | 1 / 1 | — | — | — |
-
-Em **11/2026**, a soma das células aprovadas é **24 dias**; nas anteriores, **18 em 08/2026, 45 em 09/2026 e 70 em 10/2026**. Total de colaboradores distintos entre tipos ou competências: **[nao verificado]**. Situação financeira das competências anteriores — fechadas, exportadas ou pagas: **[nao verificado]**.
-
-**(1) O que fechamento e prontidão usam para abonar**
-
-| Sítio | Comportamento concreto | Arquivo:linha |
-|---|---|---|
-| Grade | A cobertura para folha seleciona aprovadas; o ramo não-falta escreve `tipo_dia='ausencia'`, sem separar os cinco tipos pelo efeito cadastrado. | `app/ponto/turnos.py:2516–2517`; `app/escala/utils.py:1188`; `app/escala/utils.py:1210–1223` |
-| Mapas por dia | Inclui somente `trabalho` e `ausencia`. Para ausência: **abono = previsto − min(realizado, previsto)**. Não consulta efeito nem `ausencia_tipo`. | `app/ponto/services/dia_pago.py:387–401` |
-| Fechamento: abono e previsto gravados | Obtém os mapas da grade e atribui a soma do abono a `minutos_abonados`. O previsto também seleciona somente trabalho/ausência. | `app/ponto/services/fechamento.py:1046–1049`; `app/ponto/services/fechamento.py:1060–1064`; `app/ponto/services/fechamento.py:1083` |
-| Prontidão com snapshot | Lê previsto, realizado e abono materializados; soma realizado + abono no numerador. | `app/folha/export.py:1045–1050`; `app/folha/export.py:1076–1079` |
-| Prontidão sem snapshot | Lê a grade. Soma previsto de trabalho/ausência, abona o **previsto inteiro** das ausências e conta realizado somente dos dias de trabalho. | `app/folha/export.py:1095–1111` |
-| Outra etapa do fechamento | Consulta `_a.efeito`: `ABONA` acrescenta a `datas_justificadas`; efeito diferente de `DESCONTA` acrescenta a `_datas_suprimidas`, ressalvado o desvio das parciais. Esses conjuntos alimentam o motor. | `app/ponto/services/fechamento.py:693–701`; `app/ponto/services/fechamento.py:729–740` |
-
-Portanto, **um dia recebido como `folga` fica fora dos três mapas**, inclusive abono e previsto; o fallback da prontidão também o exclui. Isso vale nesse caminho inclusive para `feriado_folga`: o ramo da grade escreve `ausencia` para não-falta, sem consultar seu efeito `suprime`. (`app/ponto/services/dia_pago.py:387–402`; `app/folha/export.py:1096–1106`; `app/escala/utils.py:1213–1223`)
-
-Minutos e valores financeiros correspondentes às contagens raspadas: **[nao verificado]**.
-
-**(2) `folga_abonada` já recebe tratamento monetário diferente de `folga`?**
-
-**Não encontrei distinção monetária específica entre esses nomes nos caminhos examinados.** Ambos têm faixa A2 `folga`; o ramo da grade os trata como não-falta, e o cálculo monetário por grade consulta `tipo_dia`, sem consultar o slug da ausência. (`app/ponto/precedencia.py:81–82`; `app/escala/utils.py:1213–1223`; `app/ponto/services/dia_pago.py:387–401`)
-
-No caminho cadastral, o motor usa o efeito; a rubrica **8932** seleciona os tipos que abonam e exclui apenas `ferias`, `declaracao` e `licenca_maternidade`, sem exceção para nenhum dos dois. (`app/ponto/services/fechamento.py:697–701`; `app/folha/export.py:193–205`; `app/ponto/catalogo/ausencias.py:290`; `app/ponto/catalogo/ausencias.py:308–310`)
-
-O raspado informa **`abona` para ambos**. Diferenças de minutos, parcialidade, batidas ou pagamento efetivo entre seus registros: **[nao verificado]**.
-
-_4061 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4063 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

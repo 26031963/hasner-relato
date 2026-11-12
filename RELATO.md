@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lanca_c6.sh | pid=589017
+ESPERANDO: lanca_preverif_c12.sh | pid=1754865
 E4B c12 CONSTRUTOR rc 0 (23:23, logs/E4B-ALCANCE/construtor_c12.r): 46 sitios na porta transicionar_com_pauta(ato=); 55 mutantes de sitio, cada um 1 subTest vermelho; base 46 RED. ORM nao rodado pelo construtor -> sessao roda (c12_rodar_orm.sh, 23:3x, pela trava).
 E4B c12 + SESSAO (23:3x): selo SeloMigrationNominalTest -- escritores de status_local em migration == {0038 registrar/desfazer, 0039 backfill/desfazer} nominal com prova (sonda_mig0039.r); mutante migration nova morde (2 formas). Selo 9 testes OK sem banco.
 DESPACHO E4B-C12-DIFF-DE-PAUTA (aval 23:2x, logs/E4B-ALCANCE/aval_e4b_c12_diff_de_pauta_1111.txt): DIFF na sombra arvore c12 x BASE (corrente da manha + processar_cartorio emp 2/3/4, atomic+raise) -> sessao pelo bin/sombra.sh (sonda que escreve na sombra) | tabela anexa ao opus final | numero fora do esperado = PAREI com a tabela.
