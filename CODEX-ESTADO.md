@@ -1,7 +1,210 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 09:32** · publicado em **12/11/2026 09:33** (UTC-3)
+> Ultima resposta processada: **12/11/2026 09:38** · publicado em **12/11/2026 09:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 09:38 · sessao 4d2389e8adb8 · TRIAGEM-OFFLINE-SEM-CAMERA · leitura · origem=Code
+
+**Sim: a entrega de páginas offline já era defeituosa no pré-v6.** O SW não grava documentos nas navegações normais; abrir as páginas com internet não executa o ramo que guardaria o HTML. Depois, sem rede e sem entrada correspondente no CacheStorage, ele devolve `Response.error()`. Essa cadeia permanece na v6, pois o patch fornecido não altera o SW. (`app/static/sw.js:3–12`, `29–30`, `45–50`, `67–79`.)
+
+**A reprodução literal de “todos os toques inertes” e “tela branca” no iPhone é indeterminada pela leitura.** O código permite demonstrar a falha de entrega do documento; não demonstra a aparência apresentada pelo Safari, os eventos de toque nem o conteúdo efetivo do cache daquele aparelho. [nao verificado]
+
+Nas referências seguintes, **`Δ arquivo:+N` identifica a linha do arquivo novo numerada pelos hunks do patch**, não a posição física na mensagem. **`=` significa pré-v6 e v6 iguais**: SW, views, URLs, home e bases não aparecem como arquivos alterados no diff completo fornecido. Para esses arquivos, não existe linha adicionada no patch para citar.
+
+Para o SW — itens 1, 4 e C1 — a comparação é:
+
+| Questão | Pré-v6 | V6 |
+|---|---|---|
+| Nome do cache | `juliani-__BUILD_ID__`. (`app/static/sw.js:1`.) | = |
+| Precache | `/static/pwa.js`, `/static/manifest.json`, `/static/icons/icon-192.png`, `/static/icons/icon-512.png`. (`app/static/sw.js:3–8`.) | = |
+| Instalação | `cache.addAll(STATIC_CACHE)`. (`app/static/sw.js:10–13`.) | = |
+| Navegação online | `fetch(event.request)`, **sem gravar a resposta**. (`app/static/sw.js:45–50`.) | = |
+| Navegação offline | `caches.match(request)`; ausente, `Response.error()`. (`app/static/sw.js:29–30`, `48`.) | = |
+| Fallback de documento | Nenhuma página alternativa: só a resposta correspondente à própria requisição, ou erro de rede. (`app/static/sw.js:29–30`.) | = |
+| Gravação dinâmica de HTML | Existe para GET de `/` e `/ponto/bater/…`, **depois do retorno antecipado das navegações**. (`app/static/sw.js:46–50`, `67–79`.) | = |
+
+Portanto, o preparo relatado foi feito, mas **esse preparo por navegação não povoa o cache de documentos neste código**. Isso decorre do retorno em `app/static/sw.js:50`, anterior ao `cache.put` de `app/static/sw.js:74`; não depende de supor que o usuário esqueceu de abrir alguma tela.
+
+Há também uma distinção de rota: a home efetiva do colaborador renderiza `dashboard_colaborador_v2.html`, cujo “Bater ponto” aponta para **`/ponto/bater-v2/`**, não `/ponto/bater/`. (`app/core/views.py:270–271`, `app/templates/core/dashboard_colaborador_v2.html:31`, `app/ponto/urls.py:12`; v6 =.)
+
+| Página/documento | O que uma navegação ou reload offline recebe, nos dois lados |
+|---|---|
+| Home `/` | Resposta encontrada para a requisição; ausente, `Response.error()`. (`app/static/sw.js:29–30`, `45–50`.) |
+| `/ponto/bater/` | O mesmo tratamento. (`app/static/sw.js:29–30`, `45–50`.) |
+| Apto da triagem | Não tem URL própria nesses caminhos: é o template escolhido pela view de bater. O cache é consultado pela URL navegada, não pelo nome `apto.html`. (`app/ponto/views.py:225–235`, `358`; `app/static/sw.js:29–30`.) |
+| `/ponto/bater-v2/`, destino da home | O mesmo tratamento de navegação; essa rota tampouco está na lista posterior `comCache`. (`app/static/sw.js:45–50`, `68`; `app/ponto/urls.py:12`.) |
+
+**Não há mudança de fallback entre pré-v6 e v6.** O retorno sem documento é erro de rede; não é uma resposta HTML 404/500 fabricada pelo SW. A tela branca como apresentação desse erro no iOS é [nao verificado]. (`app/static/sw.js:29–30`.)
+
+O build id é derivado assim, em ambos os lados:
+
+- `GOVERNADOS_PELO_SW` contém `sw.js`, `pwa.js`, `manifest.json` e os dois ícones. Templates não entram. (`app/core/views.py:524–525`.)
+- A raiz é `/app/staticfiles` quando ali existe `sw.js`; caso contrário, `/app/static`. (`app/core/views.py:528–530`.)
+- O cálculo concatena os conteúdos no SHA-1, na ordem da tupla, usando `ausente:<nome>` em falha de leitura, e conserva os oito primeiros hexadecimais. Há memoização por processo durante 30 segundos. (`app/core/views.py:520–556`.)
+- A view substitui `__BUILD_ID__` pelo resultado e usa `ETag: "sw-<build>"`. (`app/core/views.py:560–576`.)
+
+**A v6 muda uma entrada desse hash: `pwa.js`.** Se o nome resultante mudar, o `activate` apaga os outros caches; o `controllerchange` já podia recarregar páginas sem formulário marcado como sujo. Esses mecanismos são anteriores à v6. Sua ocorrência durante o smoke e os nomes concretos dos caches implantados são [nao verificado]. (`app/core/views.py:548–555`; `Δ app/static/pwa.js:+58–305`; `app/static/sw.js:17–23`; `app/static/pwa.js:34–45`, trecho preservado.)
+
+Sobre os cliques — item 2, C4 e C5 — **os cartões da home não precisam de handlers registrados por `pwa.js`**. Bater, Espelho, Escala, Confirmar Batidas, Chamados, Justificar, Ausência, Holerites e Férias são links `<a href>`, sem `await`, pré-checagem de rede ou teste de `navigator.onLine` antes de navegar. (`app/templates/core/dashboard_colaborador_v2.html:31`, `56`, `60`, `66`, `78`, `82`, `88`, `100`, `110`; v6 =.)
+
+O relógio consulta `/hora/` separadamente; offline, usa seu fallback. Ele não envolve o clique dos cartões. (`app/templates/core/dashboard_colaborador_v2.html:152–159`; v6 =.)
+
+| Controle | Quem fornece o comportamento, nos dois lados |
+|---|---|
+| Cartões de navegação | O próprio `<a href>`. (`app/templates/core/dashboard_colaborador_v2.html:31–110`.) |
+| Menus da casca | Script inline independente do PWA. (`app/templates/base.html:340–382`; `app/templates/base_app.html:98–139`.) |
+| Fechar/adiar modal de onboarding | `onclick` inline com `remove()`. Presença desse modal no smoke: [nao verificado]. (`app/templates/core/dashboard_colaborador_v2.html:121–141`.) |
+| “Ligar avisos” e fechar o convite | Criados e ligados por `pwa.js`. (`app/static/pwa.js:351–374`; v6: linhas herdadas `+536–559`.) |
+
+As duas cascas carregam `pwa.js` com `defer`; a ausência desse script prejudica a fila e os recursos que ele exporta, mas não remove os `href` dos cartões. (`app/templates/base.html:20`; `app/templates/base_app.html:20`; `app/static/pwa.js:305–318`; v6: `Δ app/static/pwa.js:+489–502`.)
+
+A auditoria de sintaxe/APIs encontrou:
+
+| Construção ou API | Pré-v6 | V6 e alcance da falha |
+|---|---|---|
+| Optional chaining | `event.data?.type`, `req.result?.valor` e acessos ao cookie. (`app/static/pwa.js:16`, `78`, `140`, `245`, `261`, `403`.) | Já existia; configuração passa a `linha?.valor`. (`Δ app/static/pwa.js:+124`; demais usos preservados.) Parser incompatível pode rejeitar o script inteiro; isso no aparelho relatado é [nao verificado]. |
+| Nullish coalescing `??` | Já em `lerConfig`. (`app/static/pwa.js:78`.) | Preservado em `Δ app/static/pwa.js:+124`. |
+| `async/await`, arrows, `let/const`, spread, destructuring e `catch` sem binding | Já presentes. (`app/static/pwa.js:11`, `50`, `95`, `209`, `240`, `286`.) | Continuam presentes; não constituem novidade exclusiva da v6. (`Δ app/static/pwa.js:+61–128`, `188–231`.) |
+| Chave computada e métodos de objeto | — | Novos no helper de selfie/aviso. São sintaxe analisada junto com o script. (`Δ app/static/pwa.js:+199`, `244`, `253`.) |
+| `AbortController` | — no `pwa.js` pré; já usado pelos relógios das telas. (`app/templates/core/dashboard_colaborador_v2.html:154`; `app/templates/ponto/triagem/base_triagem.html:41`.) | Novos usos no PWA verificam `typeof AbortController === 'function'`. (`Δ app/static/pwa.js:+146`, `297`.) |
+| `navigator.mediaDevices.getUserMedia` | Chamado nas telas. (`app/templates/ponto/bater_ponto_v2.html:238`; `app/templates/ponto/triagem/apto.html:149`, `248`.) | Chamado dentro do trabalho assíncrono de `_noTeto`, que captura exceções/rejeições; não durante a avaliação inicial. (`Δ app/static/pwa.js:+188–195`, `211–217`.) |
+| `indexedDB` | Acesso ao chamar `abrirDB`. (`app/static/pwa.js:48–60`.) | Continua dentro da função, agora com captura explícita. (`Δ app/static/pwa.js:+66–86`.) |
+| `serviceWorker`, storage, geolocation e push | Guardas/`try` já existentes. (`app/static/pwa.js:12–30`, `35–46`, `291`, `333–344`, `436–443`.) | Preservados; não há nova chamada desses recursos identificada como fatal na avaliação inicial. (`Δ app/static/pwa.js`, trechos preservados.) |
+
+**Primeiro iOS suportado para cada construção/API acima: [nao verificado].** O código e o anexo não fornecem uma matriz de compatibilidade.
+
+Não há `structuredClone`, `AbortSignal.timeout`, `crypto.randomUUID`, `Promise.any` nem `await` de nível superior no PWA auditado; os `await` estão dentro de funções assíncronas. (`app/static/pwa.js:1–443`; `Δ app/static/pwa.js:+45–305`, `489–511`.) Não identifiquei no acréscimo da v6 uma nova API sem guarda chamada sincronamente antes dos exports; erro real de avaliação no Safari permanece [nao verificado].
+
+A espera de `/hora/` na inicialização também ocorre **depois** da definição de `window.JulianiPWA`; sua pendência não impede, por essa cadeia, a criação dos exports. (`app/static/pwa.js:305–326`; v6: `Δ app/static/pwa.js:+489–511`.)
+
+Para C2, o SW **não contém tratamento de `response.redirected`**: não rejeita a resposta, não a reconstrói e não normaliza seu URL antes de servir. Os ramos que gravam cache clonam a resposta e a guardam pela requisição original. (`app/static/sw.js:29–30`, `54–60`, `67–77`; v6 =.)
+
+Entretanto, **o código chama `fetch(event.request)`**, sem estabelecer `redirect: 'follow'`. Não basta aplicar o padrão de `fetch(url)` e afirmar qual era o modo de redirect da requisição de navegação concreta. Esse valor e uma resposta `redirected=true` efetivamente guardada no aparelho são [nao verificado]. (`app/static/sw.js:42`, `48`, `57`, `71`.)
+
+Há estes caminhos condicionais de redirect, iguais nos dois lados:
+
+- Home: login, troca de senha e ciência de comunicado. (`app/core/views.py:117`, `122–123`, `136–140`; `app/config/settings/base.py:106`.)
+- Bater e bater-v2: login, onboarding e ciência de comunicado. (`app/ponto/views.py:241–255`.)
+- Ciência pode produzir URL com `?next=…` e `app=1`. (`app/comunicados/services.py:36–50`.)
+
+Não existe redirect obrigatório nos caminhos liberados: eles renderizam os templates. Qual condição ocorreu no smoke é [nao verificado]. (`app/core/views.py:270–271`; `app/ponto/views.py:356–358`.) O `CommonMiddleware` está configurado, mas o redirect concreto de URL sem barra não foi demonstrado. (`app/config/settings/base.py:57`; comportamento efetivo [nao verificado].)
+
+**Um GET não navegacional de `/` ou `/ponto/bater/…` pode guardar a resposta recebida sem verificar se ela veio de redirect**, inclusive porque a exclusão de login é decidida pelo pathname original. Depois, o fallback não verifica `redirected` ao servi-la. Isso é possibilidade do código; não prova que aconteceu no iPhone. (`app/static/sw.js:39–43`, `67–77`, `29–30`; v6 =.) A recusa específica pelo Safari/iOS e sua manifestação como branco são [nao verificado].
+
+Para C3, o SW usa a requisição completa como chave em `cache.put` e em `caches.match`, sem `ignoreSearch`, `ignoreVary` ou normalização de barra. Portanto não programa equivalência entre URLs com queries diferentes ou com/sem barra; também não pede para ignorar `Vary`. (`app/static/sw.js:30`, `56`, `59`, `74`; v6 =.) Os headers `Vary`, URLs finais e pares de chaves realmente presentes no dispositivo são [nao verificado].
+
+Assim, **C1, C2, C3 e C4 já tinham essas características antes da v6**: mesmo ramo de navegação, mesmo tratamento de respostas, mesmas chaves e mesmos links da home. (`app/static/sw.js:29–79`; `app/templates/core/dashboard_colaborador_v2.html:31–110`; arquivos ausentes do diff completo fornecido.)
+
+Sobre `bater_ponto.html`, item 3:
+
+| Referência pré-v6 | O que ela significa | V6 |
+|---|---|---|
+| Views e URLs ativas | `/bater/` seleciona triagem; `/bater-v2/` renderiza v2. Nenhum desses renders aponta para o legado. (`app/ponto/urls.py:11–12`; `app/ponto/views.py:225–235`, `356–358`.) | = |
+| Verificador da lei | Lê o arquivo para inspeção textual. (`app/scripts/check_a_lei_batida.py:20–23`.) | Referências removidas no hunk `Δ app/scripts/check_a_lei_batida.py:@@ -17,10 +17,7 @@`. |
+| Verificador de URLs | Inclui o arquivo na lista inspecionada. (`app/tools/check_frontend_urls.py:29`.) | Entrada removida no hunk `Δ app/tools/check_frontend_urls.py:@@ -26,7 +26,6 @@`. |
+| Links dentro do legado | Usam o nome da rota `ponto:bater_ponto`, não o arquivo como destino. (`app/templates/ponto/bater_ponto.html:27`, `201`.) | Arquivo inteiro eliminado: `Δ app/templates/ponto/bater_ponto.html:@@ -1,614 +0,0 @@`. |
+| SW/PWA e retorno offline | SW não precacheia esse documento; PWA envia à API; apto retorna à home. (`app/static/sw.js:3–8`; `app/static/pwa.js:153`; `app/templates/ponto/triagem/apto.html:115–118`, `298`.) | Nenhum desses caminhos passa a depender do arquivo apagado. (`Δ app/static/pwa.js`, sync preservado; `Δ app/templates/ponto/triagem/apto.html:+307`.) |
+
+**A exclusão não retirou página alguma do precache nem rompeu os renders ativos identificados.** Atribuir a ela 404, 500 ou branco não é sustentado por esses caminhos; ocorrência real por outro caminho é [nao verificado]. (`app/static/sw.js:3–8`; `app/ponto/views.py:356–358`; hunk de exclusão acima.)
+
+As mudanças da v6 que efetivamente alteram o caminho **depois de chegar à tela de batida** são:
+
+| Pré-v6 | Alteração da v6 |
+|---|---|
+| V2 recusa continuar sem foto. (`app/templates/ponto/bater_ponto_v2.html:285–290`, `312`.) | Passa a consultar o helper de selfie e seguir com aviso. (`Δ app/templates/ponto/bater_ponto_v2.html:+269–296`.) |
+| Apto offline esconde confirmar após rejeição da câmera; a gravação fica dentro do callback de `toBlob`. (`app/templates/ponto/triagem/apto.html:248–282`.) | Mantém confirmar e consulta captura com teto. (`Δ app/templates/ponto/triagem/apto.html:+245–293`.) |
+| Escritor espera `obterGap`, que pode esperar `/hora/` e seu corpo sem teto. (`app/static/pwa.js:86–108`.) | Limita o gap antes da fila. (`Δ app/static/pwa.js:+135–162`, `269–276`.) |
+| Transação da fila trata `complete` e `error`. (`app/static/pwa.js:111–121`.) | Helper trata também `abort`; demora mostra aviso e continua esperando o evento definitivo. (`Δ app/static/pwa.js:+90–103`, `239–286`.) |
+
+O RED headless adequado deve exercitar **navegação HTTP real com SW**, porque o teste novo da v6 abre templates em `file://` e substitui rede/armazenamento; ele não cobre o trajeto home → documento offline, e declara não provar Safari. (`Δ app/ponto/tests/test_selfie_nao_barra_chromium.py:+9–18`, `30–34`.)
+
+Proposta de RED, **não executada** [nao verificado]:
+
+1. Usar contexto novo, usuário de teste liberado dos redirects e SW controlando a página; abrir com rede home, bater-v2 e bater/confirmar, depois voltar à home. As rotas e condições estão em `app/ponto/urls.py:11–12`, `app/ponto/views.py:241–255`, `356–358`.
+2. Cortar a rede e clicar no `<a>` “Bater ponto”; exigir que apareça o documento de bater-v2. (`app/templates/core/dashboard_colaborador_v2.html:31`.)
+3. Registrar a batida e exigir uma linha persistida em `batidas_pendentes`; testar câmera funcional e, separadamente, câmera ausente. (`app/static/pwa.js:112–120`; v6: `Δ app/static/pwa.js:+275–282`.)
+4. Recarregar offline home e cada tela; exigir documento utilizável. O ramo sob teste é `app/static/sw.js:45–50`.
+
+**No contexto novo preparado apenas por navegações, o primeiro passo que viola o esperado já é o clique da home:** o SW não guardou o documento durante o preparo e entrega `Response.error()` quando a consulta não encontra entrada. O reload tem a mesma falha. Isso vale para pré-v6 e v6. (`app/static/sw.js:3–12`, `29–30`, `45–50`, `67–79`.) Se a tela for alcançada por outro estado de cache, o pré-v6 ainda possui as barreiras de foto e espera da hora descritas acima; qual delas ocorreu no campo é [nao verificado].
+
+Por fim, estes são os escritores e leitores dos caminhos de execução do front:
+
+| Dado | Quem escreve/define | Quem lê — pré-v6 e v6 |
+|---|---|---|
+| Build id | Calcula SHA-1 e grava `_CACHE_DO_BUILD['v']`. (`app/core/views.py:547–556`; v6 =.) | Memoização e view `/sw.js`. (`app/core/views.py:543–545`, `562`, `572`; v6 =.) |
+| `GOVERNADOS_PELO_SW` | Tupla declarada em `app/core/views.py:524–525`; v6 =. | Laço do hash em `app/core/views.py:548`; v6 =. |
+| `CACHE_NAME` | View injeta o build; SW define a constante. (`app/core/views.py:572`; `app/static/sw.js:1`; v6 =.) | Instalação, limpeza de caches e gravações dinâmicas. (`app/static/sw.js:12`, `20`, `59`, `74`; v6 =.) |
+| Lista de precache | Array `STATIC_CACHE`. (`app/static/sw.js:3–8`; v6 =.) | `cache.addAll`. (`app/static/sw.js:12`; v6 =.) |
+| Conteúdo do CacheStorage | `addAll` e `cache.put`. (`app/static/sw.js:12`, `59`, `74`; v6 =.) | `caches.match`, consultando caches sem restringir por `CACHE_NAME`. (`app/static/sw.js:30`, `56`; v6 =.) |
+| Banco e chave da fila | IndexedDB **`juliani-offline`, versão 2**, store **`batidas_pendentes`**, chave **`id` autoIncrement**. Pré: `app/static/pwa.js:50–54`; v6: `Δ app/static/pwa.js:+73–77`. | Operações abaixo; não é uma chave de `localStorage`. (Mesmas referências.) |
+| Inclusão de batida | Pré: `registrarBatidaOffline` → `add`, `app/static/pwa.js:107–120`. V6: `Δ app/static/pwa.js:+269–282`. | Sync usa `getAll`: pré `app/static/pwa.js:132`; v6 linha herdada `+313`. |
+| Contagem da fila | As inclusões/exclusões alteram a quantidade. (Referências desta tabela.) | Indicador usa `count`: pré `app/static/pwa.js:190`; v6 herdada `+371`. |
+| Exclusão da fila | Sync usa `delete(b.id)` após sucesso ou HTTP 400: pré `app/static/pwa.js:158–174`; v6 herdadas `+339–355`, deletes em `+343`, `+353`. | Próximos `getAll`/`count` acima. |
+| Configuração do relógio, separada da fila | Store `config`, chave `chave`; `put` de `ntp_gap`/`ntp_calculado_em`. Pré: `app/static/pwa.js:56`, `67`, `92–93`; v6: `Δ app/static/pwa.js:+79`, `114`, `158–159`. | Pré `get` em `app/static/pwa.js:77`; v6 `Δ app/static/pwa.js:+123`. |
+
+As linhas v6 marcadas **herdadas** resultam do deslocamento `+181` nos trechos de sync/indicador preservados pelo patch; não estão impressas individualmente nele. (`Δ app/static/pwa.js:@@ -104,23 +170,138 @@`, `@@ -308,6 +489,9 @@`.)
+
+O SW não abre essa fila: envia `SYNC_BATIDAS` às páginas, e o receptor de `pwa.js` chama a sincronização. A limpeza de caches usa CacheStorage, enquanto a fila permanece no IndexedDB. (`app/static/sw.js:19–20`, `112–125`; `app/static/pwa.js:15–16`, `50–54`; v6 = nesses trechos, banco em `Δ app/static/pwa.js:+73–77`.)
+
+## 12/11 09:38 · sessao fb866086792a · - · - · origem=Ronald (tmux)
+
+- O caso sintético exige nome inteiro da primeira coluna, preserva seus dois pedaços e recusa o inteiro da segunda coluna e uma combinação inventada; portanto morde retirar o aceite do inteiro ou adicionar também o inteiro da descrição. O próprio teste não contém parênteses, vírgulas ou prosa na primeira coluna. `bin/tests/test_lei_akita.sh:433`, `bin/tests/test_lei_akita.sh:444`.
+- Os dois casos novos exercitam `julgar`: `Parallel Change / Expand-Contract` precisa passar; `Parallel Change / Padrao Inventado` precisa falhar. A comparação é executada contra a expectativa booleana, logo morde negar o nome completo e aceitar qualquer expressão com um pedaço válido. `bin/tests/test_lei_akita.sh:449`, `bin/tests/test_lei_akita.sh:450`, `bin/tests/test_lei_akita.sh:471`.
+- O novo cenário de duplicata publica `dup.py`, recria o mesmo conteúdo em outro commit com padrão inválido e acrescenta um patch diferente, também inválido, em `outro.py`; exige somente a falha de `outro` e a associação exata local→publicado. Assim morde retirar a exceção, aplicá-la indiscriminadamente ou informar SHA publicado incorreto nesse cenário. `bin/tests/test_lei_akita.sh:778`, `bin/tests/test_lei_akita.sh:783`, `bin/tests/test_lei_akita.sh:789`, `bin/tests/test_lei_akita.sh:791`, `bin/tests/test_lei_akita.sh:795`.
+- A nova prova tem somente um local duplicado: não cobre dois locais com o mesmo patch-id. A implementação descarta todos os SHA locais além do primeiro por `setdefault(pid, sha)` e depois inverte o mapa; portanto só um deles pode ser reconhecido como duplicata. `bin/tests/test_lei_akita.sh:385`, `bin/tests/test_lei_akita.sh:395`, `bin/tests/test_lei_akita.sh:401`, `bin/tests/test_lei_akita.sh:778`.
+- Não há injeção de erro nem saída malformada de `patch-id` nesse teste; um mutante que trocasse a exceção por `return {}` somente quando `patch-id` falha não é exercitado pelo cenário novo. A execução efetiva desse mutante permanece [não verificado]. `bin/tests/test_lei_akita.sh:379`, `bin/tests/test_lei_akita.sh:380`, `bin/tests/test_lei_akita.sh:778`.
+- Repo raso e ausência de `origin/main` já têm casos anteriores, que exigem `SystemExit` contendo `PADRAO_ERRO`; isso não equivale a testar falha do subprocesso `patch-id`. `bin/tests/test_lei_akita.sh:662`, `bin/tests/test_lei_akita.sh:703`, `bin/tests/test_lei_akita.sh:707`.
+- O teste novo não cobre commits vazios, apenas modo, binário, raiz ou mudanças de whitespace semanticamente relevantes: planta adições textuais em dois arquivos diferentes. `bin/tests/test_lei_akita.sh:649`, `bin/tests/test_lei_akita.sh:778`.
+- `MORDE_OK` é impresso mesmo após diagnósticos `MORDE_FALHOU`, mas o shell exige simultaneamente aquele marcador e ausência destes; portanto um diagnóstico de falha não vira verde apenas pela presença do OK. `bin/tests/test_lei_akita.sh:809`, `bin/tests/test_lei_akita.sh:827`.
+- A desestruturação sem validação `pid, sha = ln.split()` pode lançar `ValueError`, que não é convertido em `PADRAO_ERRO`; o shell ainda reprova porque faltará `PADRAO_FIM`. `bin/tests/test_lei_akita.sh:384`, `bin/tests/test_lei_akita.sh:817`, `bin/tests/test_lei_akita.sh:823`.
+- Os quatro mutantes e os logs RED/GREEN alegados no anexo não foram executados nem comprovados por esta leitura [não verificado].
+
+## 12/11 09:38 · sessao 133de6d0f685 · - · - · origem=Ronald (tmux)
+
+- `ENUMERADOS` é escrito como `len(hs)` e `JULGADOS` inicia em zero; commits sem linha `LEI-AKITA:` ficam fora de `JULGADOS`, duplicatas também; merges com linha entram antes de verificar seus hunks. Portanto `JULGADOS` não significa somente commits efetivamente aprovados/reprovados nem todos os commits com linha. (`bin/tests/test_lei_akita.sh:389`, `:398`, `:401`, `:404`, `:410`)
+- `DUPLICATAS` é zerado por chamada, recebe pares `(sha local de 8 caracteres, sha publicado de 12)` e é lido na emissão normal e no MORDE novo. (`bin/tests/test_lei_akita.sh:374`, `:402`, `:794`, `:814`)
+- O Python escreve `PADRAO_FALHA`, `PADRAO_DUPLICATA`, `PADRAO_JULGADOS N de M` e `PADRAO_FIM`; o shell transforma falhas em `FALHA: PADRAO-NA-CURA`, conta-as, transforma duplicatas em `ja julgado:` e exige o sentinela `PADRAO_FIM`. (`bin/tests/test_lei_akita.sh:813`, `:815`, `:816`, `:817`, `:820`, `:821`, `:822`, `:823`)
+- `PADRAO_JULGADOS` é consumido pelo próprio selo para montar a frase final `padrao julgado em N de M commit(s) com linha LEI-AKITA, dos nao publicados`; o formato continua igual, mas a descrição fica incompleta porque agora exclui duplicatas com linha. (`bin/tests/test_lei_akita.sh:401`, `:404`, `:831`)
+- `PADRAO_ERRO` não tem parser dedicado: sai no stderr capturado e a ausência de `PADRAO_FIM` gera falha. Uma exceção Python não convertida em `PADRAO_ERRO` também não torna verde por esse caminho. (`bin/tests/test_lei_akita.sh:819`, `:823`, `:830`, `:834`)
+- MORDE lê `ENUMERADOS` nos casos de sincronização, outra ref e piso; não há asserção de `JULGADOS` nos casos existentes nem no novo caso de duplicata. O novo caso confere falhas e o par de duplicata. (`bin/tests/test_lei_akita.sh:676`, `:701`, `:794`, `:795`, `:802`)
+- `bin/pre-push.sh` passa `PUSH_SHA` por `LEI_AKITA_HEAD` e decide exclusivamente pelo código de saída do selo; não interpreta suas linhas. (`bin/pre-push.sh:33`, `:38`)
+- `bin/regua.sh` percorre `tests/test_*.sh`, decide pelo código de saída e só imprime a saída capturada quando o selo falha; não interpreta contagens ou prefixos do akita. (`bin/regua.sh:138`, `:140`, `:142`, `:143`)
+- Assim, a adição de `ja julgado:` e a mudança semântica de `JULGADOS` não quebram esses dois leitores concretos. (`bin/pre-push.sh:38`; `bin/regua.sh:140`; `bin/tests/test_lei_akita.sh:822`, `:831`)
+- A varredura da cópia não encontrou outro selo que execute akita ou grepe sua saída; ausência de leitor externo à cópia permanece **[não verificado]**. Não apareceu `AGENTS.md` na varredura **[não verificado]**.
+
+## 12/11 09:34 · sessao 1406a8871f6f · - · - · origem=Ronald (tmux)
+
+Auditoria `pwa.js` concluída, somente leitura.
+
+| Assunto | Pré-v6 | V6 — número da linha nova do patch |
+|---|---|---|
+| Banco | `app/static/pwa.js:50`: `juliani-offline`, versão 2 | `pwa.js:+73`, mesmo banco/versão |
+| Criação da fila | `pwa.js:54`: `batidas_pendentes`, `keyPath:'id'`, `autoIncrement:true` | `pwa.js:+77`, mesmos nomes |
+| Criação de configuração | `pwa.js:56`: store `config`, chave `chave` | `pwa.js:+79` |
+| Escritor de batida | `pwa.js:107`; `add` em `:113` | Função `+269`; `add` em `+276` |
+| Leitor para sincronização | `pwa.js:132`: `getAll()` | Linha herdada **+313** |
+| Exclusão após sucesso | `pwa.js:162`: `delete(b.id)` | Linha herdada **+343** |
+| Exclusão após HTTP 400 | `pwa.js:172`: `delete(b.id)` | Linha herdada **+353** |
+| Leitor do indicador | `pwa.js:190`: `count()` | Linha herdada **+371** |
+| Configuração do relógio | Escritor `pwa.js:67`, leitores `:77`; chaves em `:92`, `:93`, `:96`, `:101`, `:104` | Escritor `+114`, leitor `+123`; mesmas chaves, funções do relógio preservadas/alteradas no hunk `-93/+159` |
+
+As linhas herdadas acima são **derivadas dos offsets do patch**, não aparecem impressas individualmente nele: depois do grande hunk, pré `126` = v6 `307` (**+181**); três exports novos tornam o deslocamento **+184** até a inicialização; a linha adicional da inicialização torna-o **+185** depois dela (`@@ -308/+489`, `@@ -323/+507`).
+
+A fila não é uma chave de `localStorage`: a chave dos registros é `id` no store IndexedDB `batidas_pendentes` (`pwa.js:50–54`; patch `+73–77`). O SW pede sincronização às páginas mediante mensagem, sem abrir diretamente esse banco (`app/static/sw.js:112–125`; receptor `pwa.js:15–16`).
+
+O bloqueio anterior ao `add` já existia: `registrarBatidaOffline` aguarda `obterGap` (`pwa.js:108`), que pode chamar `calcularESalvarGap` (`:101–104`); esta aguarda `fetch('/hora/')` e `resp.json()` sem teto (`:86–88`). A v6 limita o gap na entrada do escritor (`patch pwa.js:+271`), usa `_noTeto` (`+188–195`) e transforma a espera do armazém em aviso, preservando a espera pelo evento definitivo (`+90–103`, `+239–286`). Isso explica uma fila potencialmente pendente, **não prova a causa de toques da home sem navegação** [nao verificado].
+
+Sobre sintaxe e APIs:
+
+- Optional chaining já existia em `pwa.js:16`, `:78`, `:140`, `:245`, `:261`, `:403`; nullish coalescing em `:78`. Na v6, o acesso de configuração vira `linha?.valor ?? null` (`patch +124`); os demais permanecem: `+16`, herdadas `+321`, `+426`, `+442`, `+588`. Um parser incompatível poderia rejeitar o script inteiro, inclusive por construções dentro de funções; atribuir isso ao iPhone do relato é [nao verificado]. Primeiro iOS suportado: [nao verificado].
+- `async/await`, arrows, `let/const`, destructuring, spread e `catch` sem binding já aparecem no pré (`pwa.js:11`, `:50`, `:95`, `:209`, `:240`, `:286`). A v6 acrescenta chave computada (`patch +199`) e métodos de objeto (`+244`, `+253`); suporte exato no iOS: [nao verificado].
+- A nova chamada `navigator.mediaDevices.getUserMedia` fica **dentro** de função assíncrona passada a `_noTeto` (`patch +211–217`, chamada `+214`), cujo mecanismo captura exceção/rejeição (`+194`). Não é chamada na avaliação inicial do script (`+211–217`).
+- Os dois novos usos de `AbortController` são condicionais a `typeof AbortController === 'function'` (`patch +144`, `+297`). `navigator.storage` já tem guarda e `try/catch` no pré (`pwa.js:436–443`, herdadas v6 `+621–628`). `serviceWorker` já tem guarda no pré (`:12`, `:35`); a instalação do listener síncrono é antiga (`:41`).
+- Não há novos `structuredClone`, `AbortSignal.timeout`, `crypto.randomUUID`, `Promise.any` ou top-level `await` no patch de `pwa.js`; os `await` novos estão em funções assíncronas (`patch +111–128`, `+142–160`, `+211–231`, `+269–305`, `+507–511`). Ausência desses símbolos no script pré conferida em `app/static/pwa.js:1–443`.
+- Nenhuma nova API sem guarda foi identificada como chamada síncrona na avaliação inicial, antes dos exports; os novos corpos de câmera, armazenamento e rede executam ao chamar suas funções (`patch +66–128`, `+188–231`, `+269–305`). Erro real de avaliação no Safari específico: [nao verificado].
+- O export `window.JulianiPWA` já é definido **antes** do IIFE que espera a hora (`pwa.js:305–326`); na v6, export e inicialização continuam nessa ordem (`patch +489–511`). Portanto `/hora/` pendurada na inicialização não impede, por essa cadeia, a criação de `window.JulianiPWA` (`pwa.js:305–326`; patch `+489–511`).
+
+Achado que afeta diretamente o RED: navegações retornam cedo no SW (`app/static/sw.js:46–50`), antes do ramo que gravaria home e bater (`:68–77`). Abrir as páginas com rede **não executa aquele `cache.put` para requisições `navigate`**, e o precache só contém quatro recursos estáticos (`:3–8`). Assim, o preparo humano relatado não demonstra presença do HTML no Cache Storage desse SW; conteúdo efetivo do cache no aparelho permanece [nao verificado].
 
 ## 12/11 09:32 · sessao c24c40daec67 · - · - · origem=Ronald (tmux)
 
@@ -772,65 +975,4 @@ Item 7: os casos centrais usam o montador real: a fixture copia `mapa20_montar.p
 
 A suíte não foi executada porque cria/remove arquivos e repositórios; resultado corrente GREEN e 33/33 mutantes: [nao verificado] (`bin/tests/test_mapa20_valida.sh:18`, `:69`, `:77`, `:81`).
 
-## 12/11 09:00 · sessao 3b33739374a1 · - · - · origem=Ronald (tmux)
-
-RED adicional concluído **contra a c11 reconstruída do delta fornecido, somente em memória**: **7 testes, 7 falhas por asserção, RC 1**, sem erro de carregamento. Os casos reproduzem contador/API zerados, proposta ausente, recusa fora dos buracos e helper sem levantar a exceção. (`app/ponto/tests/test_lastro_c12_sem_banco.py:98`, `app/ponto/tests/test_lastro_c12_sem_banco.py:104`, `app/ponto/tests/test_lastro_c12_sem_banco.py:115`, `app/ponto/tests/test_lastro_c12_sem_banco.py:127`, `app/ponto/tests/test_lastro_c11_sem_banco.py:260`, `app/ponto/tests/test_lastro_c11_sem_banco.py:273`)
-
-Inverti literalmente os blocos executáveis indicados pelo delta: tratamento na grade, retorno do helper e chave `explicados` da API; o carregamento e execução utilizaram o harness existente. (`app/escala/services/semana_do_posto.py:154`, `app/escala/services/semana_do_posto.py:187`, `app/api/views_mensageria.py:2122`, `app/ponto/tests/test_lastro_c5_sem_banco.py:112`)
-
-Identidade dessa reconstrução com o objeto Git `1bca7dc22`: **[nao verificado]**. O replay histórico continua indisponível nesta cópia; seu mecanismo exige `git show`. (`app/ponto/tests/test_lastro_c12_sem_banco.py:26`)
-
-## 12/11 09:00 · sessao 3b33739374a1 · - · - · origem=Ronald (tmux)
-
-A inversão é coerente: o helper passa a levantar `TipoSemFaixa`, e a grade guarda o rótulo em `recusa`, conservando o dia em `buracos`, sem `explicado_por` nem entrada em `explicados`. Os testes C5/C11 exigem esses contratos. (`app/escala/services/semana_do_posto.py:156`, `app/escala/services/semana_do_posto.py:187`, `app/ponto/tests/test_lastro_c5_sem_banco.py:500`, `app/ponto/tests/test_lastro_c11_sem_banco.py:273`)
-
-Os quatro mutantes atingem código real compilado da árvore, com alterações exclusivamente em memória; o carregador lê o arquivo e compila os nós AST selecionados. (`app/ponto/tests/test_lastro_c5_sem_banco.py:39`, `app/ponto/tests/test_lastro_c5_sem_banco.py:108`, `app/ponto/tests/test_lastro_c5_sem_banco.py:112`)
-
-| Ensaio reexecutado | Resultado | Evidência |
-|---|---|---|
-| Cinco harnesses C5/C7/C10/C11/C12 | 62 testes, OK, RC 0 | `app/ponto/tests/test_lastro_c12_sem_banco.py:152` inclui novamente dois contratos C11 |
-| C12 isolado | 7 testes, OK, RC 0 | `app/ponto/tests/test_lastro_c12_sem_banco.py:95`, `app/ponto/tests/test_lastro_c12_sem_banco.py:152` |
-| `recusa_explicada` | RC 1, 7 falhas por asserção | Mutação do helper real: `app/ponto/tests/test_lastro_c12_sem_banco.py:33`; cobrança de contagem: `app/ponto/tests/test_lastro_c12_sem_banco.py:98` |
-| `buraco_sem_rotulo` | RC 1, 3 falhas por asserção | `app/ponto/tests/test_lastro_c12_sem_banco.py:42`, `app/ponto/tests/test_lastro_c12_sem_banco.py:128` |
-| `celula_sem_rotulo` | RC 1, 2 falhas por asserção | `app/ponto/tests/test_lastro_c12_sem_banco.py:48`, `app/ponto/tests/test_lastro_c12_sem_banco.py:129` |
-| `api_explica_recusa` | RC 1, 3 falhas por asserção | `app/ponto/tests/test_lastro_c12_sem_banco.py:49`, `app/ponto/tests/test_lastro_c12_sem_banco.py:99` |
-
-A mordida semântica principal é `recusa_explicada`: devolver `erro.rotulo` no canal normal faz novamente `dias_sem_explicacao=0`, omite o posto do contador e retira a proposta; as asserções correspondentes falham. (`app/ponto/tests/test_lastro_c12_sem_banco.py:38`, `app/ponto/tests/test_lastro_c12_sem_banco.py:98`, `app/ponto/tests/test_lastro_c12_sem_banco.py:104`, `app/ponto/tests/test_lastro_c12_sem_banco.py:115`)
-
-O quarto mutante sela a **remoção da chave da resposta**, não a classificação: ele apenas recoloca `'explicados': g['explicados']`, inclusive quando a lista está vazia. Não deve ser apresentado como uma quarta prova independente da cura semântica. (`app/ponto/tests/test_lastro_c12_sem_banco.py:49`)
-
-C12 executa grade/helper/propostas/contador e o corpo inteiro da view; substitui alimentação ORM, limites da semana, busca, token, decorator e `JsonResponse`. A2 executa a implementação real alimentada por linhas simuladas; somente o teste de identidade substitui explicitamente `fatos_do_dia`. HTTP/ORM completos permanecem [nao verificado]. (`app/ponto/tests/test_lastro_c12_sem_banco.py:70`, `app/ponto/tests/test_lastro_c12_sem_banco.py:76`, `app/ponto/tests/test_lastro_c12_sem_banco.py:88`, `app/ponto/tests/test_lastro_c5_sem_banco.py:193`, `app/ponto/tests/test_lastro_c5_sem_banco.py:232`, `app/ponto/tests/test_lastro_c12_sem_banco.py:125`)
-
-O contrato C11 da API isoladamente avalia apenas o dicionário final, mas C12 cobre também a execução da função real nos dois ramos. (`app/ponto/tests/test_lastro_c11_sem_banco.py:279`, `app/ponto/tests/test_lastro_c12_sem_banco.py:93`, `app/ponto/tests/test_lastro_c12_sem_banco.py:95`, `app/ponto/tests/test_lastro_c12_sem_banco.py:101`)
-
-O replay `--red-c11` falhou com **7 erros de carregamento**, não asserções: `git show` retornou 128 porque esta cópia não contém repositório Git. O RED histórico relatado pelo construtor não foi reproduzido aqui; permanece [nao verificado]. O carregador exige esse objeto Git. (`app/ponto/tests/test_lastro_c12_sem_banco.py:26`)
-
-## 12/11 08:59 · sessao b5ce655b1b89 · - · - · origem=Ronald (tmux)
-
-Não encontrei quebra nova nos leitores da cópia nem chamador produtivo adicional de `_fato_do_dia`: a única chamada produtiva está na grade, imediatamente protegida pela captura específica (`app/escala/services/semana_do_posto.py:155`, `app/escala/services/semana_do_posto.py:156`). Consumidores externos: [nao verificado].
-
-| Campo | Escritor | Leitores e efeito |
-|---|---|---|
-| `buraco.recusa` | Grade copia `erro.rotulo` diretamente (`app/escala/services/semana_do_posto.py:159`). | Nenhum leitor produtivo localizado que examine esse campo. Propostas leem data/id/nome do buraco; contador e API contam a lista (`app/escala/services/semana_do_posto.py:206`, `app/escala/services/semana_do_posto.py:214`, `app/escala/services/semana_do_posto.py:251`, `app/api/views_mensageria.py:2121`). Testes examinam valor/identidade (`app/ponto/tests/test_lastro_c11_sem_banco.py:273`, `app/ponto/tests/test_lastro_c12_sem_banco.py:128`). |
-| `celula.recusa` | Grade copia `erro.rotulo` (`app/escala/services/semana_do_posto.py:157`). | Nenhum leitor produtivo específico localizado; API usa somente quantidade de linhas, sem serializar células (`app/api/views_mensageria.py:2120`). Testes leem o campo (`app/ponto/tests/test_lastro_c11_sem_banco.py:277`, `app/ponto/tests/test_lastro_c12_sem_banco.py:129`). |
-| `explicado_por` | Apenas ramo normal, `fato != 'trabalho'` (`app/escala/services/semana_do_posto.py:161`, `app/escala/services/semana_do_posto.py:162`). | Nenhum leitor produtivo específico localizado. Contratos exigem ausência na recusa e presença no atestado (`app/ponto/tests/test_lastro_c11_sem_banco.py:278`, `app/ponto/tests/test_lastro_c12_sem_banco.py:144`, `app/ponto/tests/test_lastro_c12_sem_banco.py:145`). |
-| `grade.explicados` | Apenas ramo normal reconhecido (`app/escala/services/semana_do_posto.py:163`). | Contador lê comprimento e publica inteiro homônimo; testes existentes verificam lista do atestado (`app/escala/services/semana_do_posto.py:252`, `app/escala/tests/test_semana_do_posto.py:138`). |
-| `API detalhe.explicados` removido | Resposta atual termina sem essa chave (`app/api/views_mensageria.py:2116`, `app/api/views_mensageria.py:2130`). | Nenhum leitor tipado produtivo localizado. Mensageria transporta JSON integral; não acessa chave nem fornece default vazio (`mensageria/nucleo/core_client.py:308`, `mensageria/nucleo/ferramentas.py:879`, `mensageria/nucleo/ferramentas.py:884`, `mensageria/nucleo/ferramentas.py:422`, `mensageria/nucleo/copiloto.py:379`). |
-
-A distinção permanece na grade; o resumo da API não transporta o rótulo individual, porque entrega somente contagens e pares. Isso limita o que a mensageria poderá narrar, mas não identifiquei leitor que passe a quebrar ou interpretar ausência de `explicados` como lista vazia (`app/api/views_mensageria.py:2120`, `app/api/views_mensageria.py:2121`, `app/api/views_mensageria.py:2123`, `mensageria/nucleo/copiloto.py:379`). Interpretação efetiva pelo modelo: [nao verificado].
-
-Propostas e contador tratam recusa como buraco comum: ambos são “previsto sem batida nem faixa explicativa reconhecida”. O contador mantém o posto e conta o dia; propostas produzem hipótese quando existe extra no mesmo dia, sem resolver precedência (`app/escala/services/semana_do_posto.py:129`, `app/escala/services/semana_do_posto.py:206`, `app/escala/services/semana_do_posto.py:207`, `app/escala/services/semana_do_posto.py:246`, `app/escala/services/semana_do_posto.py:251`). O copiloto manda explicitamente apresentar par como hipótese e exigir confirmação da supervisão; não encontrei segundo significado incompatível nesses consumidores (`mensageria/nucleo/copiloto.py:280`, `mensageria/nucleo/copiloto.py:284`).
-
-Contraexemplo conferido por leitura: único previsto sem batida e `fantasma_xyz` resulta em um buraco com rótulo, `explicados=[]`, célula com `recusa` sem `explicado_por`; contador conserva linha com `buracos=1`, `extras=0`, `explicados=0`, `com_par=0`; API sem posto conserva o posto, e detalhe publica `dias_sem_explicacao=1` (`app/escala/services/semana_do_posto.py:156`, `app/escala/services/semana_do_posto.py:159`, `app/escala/services/semana_do_posto.py:246`, `app/escala/services/semana_do_posto.py:251`, `app/api/views_mensageria.py:2083`, `app/api/views_mensageria.py:2090`, `app/api/views_mensageria.py:2121`).
-
-**Fila preexistente — except/fallback:** `RuntimeError` na autoridade ainda vira `'trabalho'`, e portanto buraco comum sem recusa. Contraexemplo concreto: falha de consulta ao julgar candidato previsto sem batida. Está explicitamente preservado e testado; não é introdução da cura (`app/escala/services/semana_do_posto.py:189`, `app/escala/services/semana_do_posto.py:190`, `app/ponto/tests/test_lastro_c5_sem_banco.py:503`).
-
-## 12/11 08:56 · sessao 925bd426ff97 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-A recusa permanece em `buracos`, com `erro.rotulo` em campo próprio no buraco e na célula ([código](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/escala/services/semana_do_posto.py:156)).
-
-Entrega em [LASTRO_C12.txt](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/LASTRO_C12.txt:8): censo, comandos, RED na c11, 62 execuções GREEN, quatro mutantes C12 e dez C11 falhando por asserção, além do ruff aprovado.
-
-Par financeiro da competência 11: **[nao verificado]**.
-
-_4124 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4128 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
