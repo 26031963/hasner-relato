@@ -1,7 +1,229 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 13:33** · publicado em **12/11/2026 13:34** (UTC-3)
+> Ultima resposta processada: **12/11/2026 13:35** · publicado em **12/11/2026 13:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 13:35 · sessao 0746de58f99f · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
+
+Curas implementadas nos três sítios:
+
+| Sítio | Alteração | RED → GREEN |
+|---|---|---|
+| S1 | Órfãs casadas com a data da tela — [PDF:478](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/relatorios/pdf_espelho.py:478) | [rc=1 → rc=0](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:41) |
+| S2 | Anomalias filtradas por DD/MM HH:MM — [PDF:682](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/relatorios/pdf_espelho.py:682) | [rc=1 → rc=0](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:49) |
+| S3 | Supressão pelo instante completo — [PDF:926](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/relatorios/pdf_espelho.py:926) | [rc=1 → rc=0](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:57) |
+
+O censo AST passou de seis nós sem data para zero. Cada mutante S1/S2/S3 derrubou o teste correspondente e o selo; comandos e saídas estão no [relato:65](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:65). [nao verificado]
+
+`marca_espuria` voltou a exigir zero no PDF e na tela — [teste:162](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/relatorios/tests/test_cartao_marca_espuria.py:162). A catraca registra `[1040]`, com motivo — [registro:321](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/core/tests/test_medida_turno_do_par.py:321). [nao verificado]
+
+Passaram 7 testes novos, 12 de regressão, 35 da catraca e ruff; comandos no [relato:130](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:130). [nao verificado]
+
+Fixture ORM: PDF e tela **[nao verificado]**; não houve acesso a banco. Certificação Code/opus permanece pendente — [limites:118](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:118). Sem commit, pela proibição explícita de escrita em `.git` — [relato:7](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c17_execucoes.r:7). [nao verificado]
+
+## 12/11 13:34 · sessao 73e7fb13d78d · DECLARADO-X-GRAVADO · censo · origem=Code
+
+**A — Escritores e transformações**
+
+A S139 continua substituindo a resposta pelo marco para ambos os motivos de intervalo. O corpo não verifica “intervalo fixo”, distância da resposta ou pertencimento ao envelope antes da substituição. (`app/chamados/services/materializacao.py:409-426`)
+
+| Sítio | Entrada → valor associado/gravado | Caso protegido e teste | Sustentação | [nao verificado]
+|---|---|---|---|
+| S139, `_ts_tipo_do_plantio` | `resposta_colab` → hora de `_marco_faltante`, quando encontrado; preserva o texto da resposta. (`app/chamados/services/materializacao.py:412-419`) | Volta declarada `02:00`, marco `03:00`: exige `E@03:00` e rejeita `E@02:00`. (`app/chamados/tests/test_s139.py:14-18`; `app/chamados/tests/test_s139.py:40-56`) | **SEM LEI específica localizada** nos três documentos pesquisados. [nao verificado] L-032 reconhece intervalo fora do horário exato dentro do envelope; não enuncia substituição da declaração. (`app/docs/LEIS.md:80`) |
+| `_tipo_pelo_marco` | Tipo inicialmente inferido pelo motivo → tipo do marco cobrado; fallback para marco próximo da ATA, até 240 minutos. O snapshot cobrado prevalece na divergência. (`app/chamados/services/materializacao.py:246-300`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:390-407`) | `orfao_14h` com hora de entrada gerava saída; teste exige entrada e cobre o sentido inverso. (`app/chamados/tests/test_hx_tipo_pelo_marco.py:86-119`) | Corte de 31/08 declarado no código; registro específico em LEIS/CORTES/DOSSIES: **SEM LEI localizada**. (`app/chamados/services/materializacao.py:247-262`) [nao verificado] |
+| Tipo sem marco identificável | Mantém o tipo inferido pelo motivo e segue o plantio com `pendencia_admin` e `recusa_motivo`. (`app/chamados/services/materializacao.py:392-407`; `app/chamados/services/materializacao.py:851-859`) | Sem régua ou marco próximo, planta pelo motivo e deixa pendência. (`app/chamados/tests/test_hx_tipo_pelo_marco.py:121-142`) | “Caminho C”, corte de 31/08 declarado no corpo; registro específico nos três documentos: **SEM LEI localizada**. (`app/chamados/services/materializacao.py:393-405`) [nao verificado] |
+| Data e `_ajustar_saida_overnight` | Combina hora com `data_evento`, fallback contexto do motivo; depois escolhe D ou D+1 pelo envelope da cadeia prevista, ±90 minutos. Fora dele, ou sem marcos, permanece D. (`app/chamados/services/materializacao.py:345-353`; `app/chamados/services/materializacao.py:418-426`; `app/chamados/juizes.py:296-331`) | Saída do turno partido permanece D; volta noturna `00:00` vai a D+1; sem marcos não recua para D−1. (`app/chamados/tests/test_s3f4_data_e_ancora_pela_autoridade.py:59-91`; `app/chamados/tests/test_plantio_noturno_mais1.py:78-117`) | L-085: dia do turno é o dia do início. O ajuste específico declara cortes de 15/09 no código. (`app/docs/LEIS.md:117`; `app/chamados/juizes.py:297-309`) |
+| Reuso S137 | Instante derivado → primeira batida por timestamp do mesmo colaborador/tipo em ±20 minutos. Preserva os valores existentes e anota `pergunta_origem`. (`app/chamados/juizes.py:235-247`; `app/chamados/services/materializacao.py:865-876`; `app/chamados/services/materializacao.py:952-956`) | Evita duplicar saída noturna já existente; teste exige contagem inalterada. (`app/chamados/tests/test_materializar_overnight.py:48-71`) | Propósito declarado no juiz; tolerância de ±20 minutos: **SEM LEI específica localizada** nos três documentos. (`app/chamados/juizes.py:235-238`) [nao verificado] |
+| Deduplicação da porta | Mesmo tipo vivo em ±60 segundos → existente; mesma chave colaborador/instante → existente, inclusive outro tipo ou retratada. Pode devolver valores diferentes do tipo/instante solicitado, sem alterá-los. (`app/ponto/registro_batida.py:106-122`) | Reenvio da mesma marca já reclassificada causava conflito de unicidade; caso documentado e testado. (`app/ponto/registro_batida.py:116-122`; `app/ponto/tests/test_bater_mesma_chave_idempotente.py:1-6`) | Corte de 14/09 declarado no corpo; registro específico nos três documentos: **SEM LEI localizada**. (`app/ponto/registro_batida.py:116-119`) [nao verificado] |
+| Ramo `data_hora` | Data + `HH:MM[:SS]` → data e HH:MM, descartando segundos; sem componente de hora completa `00:00`; tipo solicitado sempre `E`. (`app/chamados/services/materializacao.py:1001-1014`) | Teste fundador da truncagem/default: [nao verificado]. O teste localizado protege colisão da âncora com marca oposta. (`app/chamados/tests/test_chokepoint_ancora.py:8-11`; `app/chamados/tests/test_chokepoint_ancora.py:24-44`) | Truncagem e preenchimento `00:00`: **SEM LEI específica localizada**. [nao verificado] |
+
+No ramo `hora`, o colaborador não fornece um campo de tipo: o tipo vem das inferências acima. Assim, a divergência de tipo identificada é entre motivo e marco, enquanto a divergência de hora pode ser diretamente resposta versus plantio. (`app/chamados/models.py:2443-2449`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:390-419`)
+
+A O306 mantém a substituição `13:05` → `13:00`; protege contra escolher o marco de outro motivo. (`app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:136-153`)
+
+Validação individual, lote, regularização da disputa e reparo do passivo convergem para o materializador; os dois ramos criadores passam `timestamp` e `tipo` à porta, que os grava sem outra transformação no `create`. (`app/chamados/services/acoes_disputa.py:13-22`; `app/chamados/services/validacao.py:461-469`; `app/chamados/services/validacao.py:735-746`; `app/chamados/services/acoes_disputa.py:118-139`; `app/chamados/services/passivo_validado.py:514-516`; `app/ponto/registro_batida.py:152-159`)
+
+A regularização externa é uma entrada adjacente: usa itens da supervisão confirmados pelo colaborador, sem ler `PerguntaDisputa.resposta_colab`. No intervalo, ordena as horas e atribui S à menor/E à maior; o teste protege campos preenchidos na direção contrária. Na correção, prioriza `hora_saida`, senão `hora_entrada`, combina com `item.data` e altera diretamente timestamp/tipo, sem ajuste overnight nesse ramo. Lei específica para essa ordenação/prioridade: **SEM LEI localizada**. (`app/chamados/services/regularizacao_ext.py:1-19`; `app/chamados/services/regularizacao_ext.py:143-179`; `app/chamados/tests/test_reg_intervalo.py:11-14`; `app/chamados/tests/test_reg_intervalo.py:28-45`) [nao verificado]
+
+O corte “LEI-DO-MIOLO-CEDE-A-LAMPADA” determina que resposta validada vire registro do intervalo; não especifica a substituição da hora respondida pelo marco. (`app/docs/CORTES.md:273`)
+
+**B — Telas e rotas**
+
+“Previsto” na tabela abaixo não significa automaticamente “instante que será gravado”: o lote obtém o previsto por `delta_da_resposta`, enquanto a derivação do plantio é outra chamada. (`app/chamados/services/validacao.py:864-877`; `app/chamados/services/materializacao.py:409-426`)
+
+| Superfície | View/rota e template | Hora respondida / futura; leitor |
+|---|---|---|
+| Modal do fio | Rota `modal/<id>/`; view `modal_fio_colaborador`. (`app/chamados/urls.py:39`; `app/chamados/views.py:869`; `app/chamados/views.py:927`) Template: `app/templates/chamados/partials/modal_fio.html:219`. | Mostra resposta e, no alerta, previsto. Calcula `estado_aplicacao_pergunta`, mas desenha apenas detalhes de paridade/reuso; não desenha `aplicavel`, que contém a hora futura. (`app/chamados/services/fio.py:335-338`; `app/templates/chamados/partials/modal_fio.html:230-246`; `app/templates/chamados/partials/modal_fio.html:258-284`; `app/chamados/services/materializacao.py:463-465`) |
+| Detalhe local, cartão da pergunta | Rota `local/<id>/`; view e inclusão do cartão. (`app/chamados/urls.py:14`; `app/chamados/views.py:483-501`; `app/templates/chamados/detalhe_local.html:307-310`) | Mostra `resposta_display`, evidência e resposta versus previsto; não apresenta derivação do plantio. Lê `leitura_da_resposta` → `classificar_resposta_validacao`. O alerta afirma que “este horário” será gravado, sem consultar o derivador nessa apresentação. (`app/templates/chamados/partials/_pergunta_card.html:29-54`; `app/chamados/templatetags/chamados_tags.py:144-152`) |
+| Central, ✓ inline | Rota `validar-inline/<id>/`; view `validar_inline`. (`app/chamados/urls.py:33`; `app/chamados/views_cobrar.py:145-169`) Template: `app/templates/chamados/partials/_lista_chamados.html:79-82`. | O controle não apresenta resposta nem hora futura. Seleciona `perguntas_vivas_de` e chama `acao_validar_pergunta`, sem leitura de `estado_aplicacao_pergunta` nesse caminho. (`app/chamados/views_cobrar.py:168-169`; `app/chamados/views_cobrar.py:201-208`; `app/templates/chamados/partials/_lista_chamados.html:79-82`) |
+| Central, drawer de lote | Rotas prévia/tela e views. (`app/chamados/urls.py:36-37`; `app/chamados/views_cobrar.py:353-386`) Template: `app/templates/chamados/partials/_lote_preview.html:21-26`. | Mostra resposta, previsto e diferença; não a derivação futura. Usa `fila_validar_classificada`/`classe_do_lote`; `_slot_esperado` serve à verificação de conflito. (`app/templates/chamados/partials/_lote_preview.html:21-26`; `app/chamados/services/validacao.py:864-877`) |
+| Copiloto, proposta de lote | Rotas de proposta/validação; views. (`app/chamados/urls.py:34`; `app/chamados/urls.py:38`; `app/chamados/views_cobrar.py:232-302`) Template: `app/templates/core/_copiloto.html:236-250`. | Mostra amostra de resposta e previsto, obtidos da classificação do lote; não consulta `estado_aplicacao_pergunta`. (`app/chamados/views_cobrar.py:287-293`; `app/templates/core/_copiloto.html:236-250`) |
+| Modal, aplicar declaração em texto | Preparação e aplicação da proposta. (`app/chamados/services/fio.py:291-299`; `app/chamados/services/declaracao_texto.py:641-652`) Template: `app/templates/chamados/partials/modal_fio.html:126-143`. | Mostra hora extraída, tipo, dia e marco; depois grava a resposta e chama `validar_pergunta`. Não calcula ali a hora efetiva do materializador. (`app/templates/chamados/partials/modal_fio.html:129-143`; `app/chamados/services/declaracao_texto.py:687-696`) |
+| Fio completo | Rota `colaborador/<id>/`; delega POST ao processador comum. (`app/chamados/urls.py:21`; `app/chamados/views.py:667-677`) | Aceita o processamento comum de validação, mas seu HTML apresenta descrição, followups e caixa de resposta, sem os cartões de validação do modal. (`app/chamados/services/fio.py:585-609`; `app/templates/chamados/fio_colaborador.html:229-260`) |
+
+“Regularizar disputa” também está no detalhe e modal: aciona fechamento/materialização, sem apresentar uma previsão individual adicional de plantio. (`app/templates/chamados/detalhe_local.html:314-326`; `app/templates/chamados/partials/modal_fio.html:353-359`; `app/chamados/views.py:467-475`; `app/chamados/services/fio.py:646-656`)
+
+**C — Trilha atual**
+
+`_log_auditoria_materializacao` envia ação, modelo `Batida`, PK, descrição, `valor_depois` e ator para `evento`, em regime best effort. (`app/chamados/services/materializacao.py:731-737`)
+
+| Registro | Campos |
+|---|---|
+| `materializar_batida` | `batida_pk`, `colaborador_id`, `timestamp`, `tipo`, `origem`, `disputa_pk`, `chamado_pai_pk`, `chamado_destino_pk`, `chamados_relacionados_ids`, `pergunta_pk`, `resposta_colab`. (`app/chamados/services/materializacao.py:966-978`) |
+| `materializar_ancora` | `batida_pk`, `colaborador_id`, `timestamp`, `tipo`, `origem`, `disputa_pk`, `chamado_destino_pk`, `pergunta_pk`, `resposta_colab`. (`app/chamados/services/materializacao.py:1053-1063`) |
+| `anotar`, vínculo da pergunta | Ação `vincular_pergunta_origem`, antigo/novo `pergunta_origem`, descrição com PKs e ator; se já coincide, não grava novamente. (`app/chamados/services/materializacao.py:952-956`; `app/ponto/registro_batida.py:235-263`) |
+| Envelope da auditoria | `usuario`, `acao`, `modelo`, `objeto_id`, `descricao`, `valor_antes`, `valor_depois`, `ip`, `ator`, `criado_em`. (`app/core/models.py:295-307`) |
+
+**Não registra qual regra substituiu a hora nem qual marco foi usado.** Registra resposta e instante derivado. No reuso, o mesmo log usa `timestamp=ts` derivado e origem literal de disputa, embora esses valores possam diferir dos da Batida existente; portanto o payload não é prova do instante efetivamente persistido na batida reusada. (`app/chamados/services/materializacao.py:865-876`; `app/chamados/services/materializacao.py:957-978`)
+
+**D — Script dos itens 2–6**
+
+Há um limite de identificação: `pergunta_origem` pode ser reassociada, e o reuso aceita inclusive batida de disputa. A porta também devolve existente sem retornar `created`. Portanto **origem de disputa não prova criação por aquela pergunta**. (`app/chamados/services/materializacao.py:863-876`; `app/chamados/services/materializacao.py:952-956`; `app/ponto/registro_batida.py:94-122`)
+
+O script usa o critério operacional por origem pedido: relação única com `origem='disputa_s84_retro'` → `batida_nova`; outra origem → `reuso`. A soma dessa partição é verificável; a separação **causal** nova/reuso de disputa permanece [nao verificado]. Relações múltiplas/inconsistentes ficam em `OUTRO`. (`app/ponto/models.py:40-45`; `app/chamados/services/materializacao.py:933-956`)
+
+Os demais critérios são os campos reais: via de paridade ou `traduzir_recusa(...)=PARIDADE`; pendência ou recusa não terminal; ausência de `validada_em`. Plantio/reuso precedem pendência porque ela pode coexistir com batida. O universo usa `respondida_em`, pois `p.estado == RESPONDIDA` excluiria validadas. (`app/chamados/services/materializacao.py:853-857`; `app/chamados/services/materializacao.py:906-930`; `app/chamados/services/materializacao.py:1089-1109`; `app/chamados/catalogo/recusa.py:77-88`; `app/chamados/models.py:3042-3049`)
+
+Para datar a resposta, combina sua HH:MM com o dia do turno e chama **somente** `_ajustar_saida_overnight`, alimentado com DNA histórico. Plantio é `Batida.criado_em`; instante marcado é `Batida.timestamp`. Se houve regeneração posterior, seleciona `CelulaDia.dna_anterior`; múltiplas regenerações ou edição posterior deixam a reconstrução não verificada, sem fallback para template atual. (`app/chamados/juizes.py:296-331`; `app/ponto/models.py:23`; `app/ponto/models.py:79`; `app/escala/models.py:1714-1732`; `app/escala/models.py:1124-1133`)
+
+A TRIAGEM usa `turnos_do_colab` e `_carimbada_como_miolo`: `is_intervalo`, `_intra_dur` ou `_intra_ata`; filtra origem `app` e confirma o vínculo do dia. Compara a menor distância de cada instante ao conjunto dessas marcas. É leitura da geometria atual, não reconstrução histórica do pareamento. (`app/ponto/turnos.py:932-940`; `app/ponto/turnos.py:1850-1866`; `app/ponto/turnos.py:1915-1939`; `app/escala/servico_jornada.py:15-66`)
+
+Carga semanal significa uma validação atual por pergunta, datada por `validada_em`; não todos os atos históricos de revalidação. Estes têm outra representação, `DecisaoPergunta`. Os tops distinguem PK do modelo de escala e PK do vínculo, ambos presentes no DNA. (`app/chamados/models.py:2450`; `app/chamados/models.py:3840-3850`; `app/chamados/models.py:3872-3876`; `app/ponto/management/commands/gerar_celulas.py:95-100`)
+
+Execução Django, cobertura histórica e números dos itens 2–6: [nao verificado].
+
+```python
+from collections import Counter, defaultdict
+from contextlib import redirect_stdout, redirect_stderr
+from copy import deepcopy
+from datetime import date, datetime, time, timedelta
+from io import StringIO
+from types import SimpleNamespace
+import logging
+import re
+
+from django.db import connection
+from django.db.models import Prefetch
+from django.utils import timezone
+from chamados.models import PerguntaDisputa
+from chamados.catalogo.recusa import traduzir_recusa
+from chamados.juizes import _ajustar_saida_overnight
+from escala.models import CelulaDia, EscalaColaborador
+from escala.alimentacao import vinculo_do_dia
+from escala.servico_jornada import escala_vigente
+from ponto.models import Batida
+from ponto.turnos import turnos_do_colab, _carimbada_como_miolo
+
+INICIO = date(2026, 9, 21)
+MOTIVOS = ("intervalo_saida", "intervalo_volta")
+DESFECHOS = (
+    "batida_nova", "reuso", "recusa_paridade",
+    "pendente_admin", "nao_validada", "OUTRO",
+)
+ETAPAS = (
+    "consulta", "classificar", "data", "celula", "item5",
+    "semana", "dna", "data_resposta", "oposto", "triagem",
+    "item", "sql",
+)
+NV = object()
+erros = Counter({k: 0 for k in ETAPAS})
+desfechos = Counter({k: 0 for k in DESFECHOS})
+outros, avisos, item5 = Counter(), Counter(), Counter()
+medidas = defaultdict(Counter)
+semanas = defaultdict(Counter)
+top_col, top_escala, top_vinculo = Counter(), Counter(), Counter()
+cache_cel, cache_ec, cache_reais = {}, {}, {}
+
+def tentar(etapa, fn):
+    antes = erros["sql"]
+    try:
+        valor = fn()
+        if erros["sql"] != antes:
+            erros[etapa] += 1
+            return NV
+        return valor
+    except Exception:
+        erros[etapa] += 1
+        return NV
+
+def apenas_select(execute, sql, params, many, context):
+    s = str(sql).strip()
+    corpo = s[:-1] if s.endswith(";") else s
+    if (not re.match(r"(?is)^SELECT\b", s) or ";" in corpo
+            or re.search(
+                r"(?is)\bFOR\s+(UPDATE|SHARE)\b|\bINTO\b", corpo)):
+        erros["sql"] += 1
+        raise RuntimeError("SQL_NAO_SELECT")
+    return execute(sql, params, many, context)
+
+def dia_de(p):
+    # app/chamados/services/materializacao.py:345-353
+    if p.data_evento:
+        return p.data_evento
+    texto = ((p.disputa.contexto or {}).get(p.motivo) or {}).get("data")
+    return date.fromisoformat(texto) if texto else None
+
+def celula(cid, dia):
+    k = (cid, dia)
+    if k not in cache_cel:
+        cache_cel[k] = CelulaDia.objects.filter(
+            colaborador_id=cid, data=dia).first()
+    return cache_cel[k]
+
+def ec_por_pk(pk):
+    if pk not in cache_ec:
+        cache_ec[pk] = EscalaColaborador.objects.filter(
+            pk=pk).select_related("tipo_escala").first()
+    return cache_ec[pk]
+
+def classificar(p):
+    # app/ponto/models.py:40-45
+    # app/chamados/services/materializacao.py:863-876,952-956
+    bs = p._b_censo
+    if len(bs) > 1:
+        return "OUTRO", None, "multiplas_relacoes"
+    if bs:
+        b = bs[0]
+        if b.colaborador_id != p.disputa.colaborador_id:
+            return "OUTRO", None, "colaborador_divergente"
+        # Criterio por ORIGEM; criacao causal por p NAO VERIFICADA.
+        if b.origem == "disputa_s84_retro":
+            return "batida_nova", b, ""
+        return "reuso", b, ""
+    if (p.via_resolucao == PerguntaDisputa.VIA_PARIDADE_RECUSADA
+            or (not p.materializada_em
+                and traduzir_recusa(p.recusa_motivo)[0] == "PARIDADE")):
+        return "recusa_paridade", None, ""
+    # app/chamados/services/materializacao.py:1089-1109
+    if (p.pendencia_admin
+            or (not p.materializada_em and p.recusa_motivo)):
+        return "pendente_admin", None, ""
+    if p.validada_em is None:
+        return "nao_validada", None, ""
+    return "OUTRO", None, "validada_sem_relacao_nem_recusa"
+
+def historico(c, cid, dia, instante):
+    # app/escala/models.py:1697-1732
+    # app/ponto/portas/celula.py:263-277
+    if c is None:
+        return None, "sem_celula"
+    anterior = bool(c.regenerada_em and c.regenerada_em > instante)
+    dna = deepcopy(c.dna_anterior if anterior else c.dna)
+    if c.gerada_em > instante:
+        return None, "celula_posterior_ao_plantio"
+    if c.editada_em and c.editada_em > instante:
+        return None, "edicao_posterior_ao_plantio"
+    if anterior and c.regeneracoes != 1:
+        return None, "historico_multiplas_regeneracoes"
+    if not isinstance(dna, dict) or not isinstance(dna.get("marcos"), dict):
+        return None, "dna_sem_marcos"
+    if not dna["marcos"].get("hi") or not dna["marcos"].get("hf"):
+        return None, "dna_sem_bordas"
+    # Sem fallback para marcos do template atual.
+    ev = ec_por_pk(dna.get("vinculo_id"))
+    if ev is None or ev.colaborador_id != cid or ev.tipo_escala is N
+
+[truncado em 20000 de 29952 caracteres]
 
 ## 12/11 13:33 · sessao 3ddb216d4271 · AUDITORIA-DE-TRAVAS · leitura · origem=Code
 
@@ -905,84 +1127,4 @@ Commit, data, autoria e corte/lei específicos do nascimento da S139 por `git lo
 
 A L-032 local exige reconhecer intervalo dentro do envelope apesar da diferença de horário, mas sua linha não cita S139 — [app/docs/LEIS.md:80](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/docs/LEIS.md:80). A L-099 exige coerência com o cadastro e encaminha divergências de cadastro/batida ao admin; tampouco cita a origem da S139 — [app/docs/LEIS.md:122](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/docs/LEIS.md:122).
 
-## 12/11 12:57 · sessao 9d7727ee3e34 · AUDITORIA-DE-TRAVAS · verificador · origem=Code
-
-**Parecer: atendimento parcial.** O cap foi implementado, mas permanecem a falta de recusa específica por ausência de entrada na tabela e a diferença entre teto da execução e prazo total do wrapper. (`bin/codex_pergunta.sh:89`, `:358`, `:383`, `:408`)
-
-1. **Contrato, aval e furos apontados**
-
-| Ponto | Resultado |
-|---|---|
-| Tetos e rebaixamento | Confere: construtor **1930**, verificador **894**, leitura/censo/sonda **1191**; override maior reduz `TIMEOUT` e emite “teto do papel”. (`contrato_item6.txt:3–4`; `bin/codex_pergunta.sh:89–92`) |
-| Default sem override | Resolvido no código: variável **ausente ou vazia** usa o teto do papel. Isso altera o default anterior de 900 e escolhe uma das alternativas que o contrato deixara abertas. Aval específico dessa escolha: **[não verificado]**. (`diff_c8c3420f1.txt`, hunk `@@ -80,9 +80,16 @@`; `contrato_item6.txt:3–4`; `bin/codex_pergunta.sh:90`) |
-| Domínio do override | Agora aceita somente `[1-9][0-9]*`: recusa zero, negativos, frações, sufixos e até `0600`. É uma restrição adicional não definida pelo contrato; “inteiro positivo” não explica a rejeição de zeros iniciais. (`contrato_item6.txt:4`; `bin/codex_pergunta.sh:91`) |
-| Inteiro enorme | Passa pela guarda textual, mas pode exceder a faixa da comparação `-le`: produz diagnóstico do Bash antes da linha de rebaixamento. O cap continua aplicado, porém a promessa de **uma linha** no stderr não fica garantida nesse domínio. (`bin/codex_pergunta.sh:91–92`; `contrato_item6.txt:4`) |
-| Mensagem do `flock -w` | Usa corretamente o `TIMEOUT` já limitado. Continua dizendo “ocupada há Ns” sem medir idade da ocupação e dá esse diagnóstico para qualquer falha do `flock`; esse comportamento foi preservado. (`bin/codex_pergunta.sh:383`; `diff_c8c3420f1.txt`, alterações do wrapper) |
-| Papel sem entrada | **Nenhum dos cinco papéis atuais fica descoberto.** Entretanto, a tabela usa `*) TETO_S=1191`: acrescentar um papel somente à lista de aceitos concede default silencioso, sem exigir medida/entrada própria. A recusa contratada por ausência de medida não está materializada na tabela. (`contrato_item6.txt:4`; `bin/codex_pergunta.sh:84`, `:89`) |
-
-Portanto, não certifico “o contrato e o aval, e só eles”: o núcleo do cap está entregue, mas o diff também fixa default e domínio antes indefinidos, enquanto mantém o fallback genérico da tabela. (`contrato_item6.txt:3–4`; `bin/codex_pergunta.sh:89–92`)
-
-O `900` de `encadeado.sh` continua sendo outro parâmetro: espera por carimbos, com rc 2; sua preservação corresponde ao aval. (`aval_respostas_1211_1230.txt:3`; `bin/encadeado.sh:71`, `:84–96`)
-
-2. **ESMERIL-SEMÂNTICA: quem escreve e quem lê**
-
-O censo textual de `bin/`, incluindo `bin/tests/`, resulta nos seguintes escritores e leitores; produtores ou leitores dinâmicos fora dos sítios identificados são **[não verificado]**. (`bin/codex_pergunta.sh:90–92`; referências individuais abaixo)
-
-| Variável | Quem escreve | Quem lê |
-|---|---|---|
-| `CODEX_TIMEOUT` | `20` no selo de limite; `20` no selo do disjuntor; `unset`, `3600`, `600` e `abc` no selo do wrapper. (`bin/tests/test_codex_limite.sh:24`; `bin/tests/test_disjuntor.sh:1213`; `bin/tests/test_codex_pergunta.sh:121`, `:458`, `:462`, `:467`) | O wrapper importa o ambiente para `TIMEOUT`. O selo encaminha esse ambiente pelo `_roda`. (`bin/codex_pergunta.sh:90`; `bin/tests/test_codex_pergunta.sh:132–137`) |
-| `TIMEOUT` | O wrapper atribui override/default e depois aplica o cap. O mutante remove a atribuição do cap na cópia de teste. (`bin/codex_pergunta.sh:90`, `:92`; `bin/tests/test_codex_pergunta.sh:567`, `:583–585`) | Guarda de domínio; comparação e diagnóstico; espera e mensagem da trava; execução construtora; execução dos demais papéis. (`bin/codex_pergunta.sh:91`, `:92`, `:383`, `:408`, `:415`) |
-| Referências textuais | O teste do disjuntor manipula literalmente o comando contendo `$TIMEOUT`; não calcula outro prazo. (`bin/tests/test_disjuntor.sh:1826`) | O mutador do selo lê o fonte e substitui a atribuição marcada. (`bin/tests/test_codex_pergunta.sh:567`, `:577–586`) |
-
-Há dois usos documentados relevantes fora de `bin/`: **censo com 2400**, que nesta implementação seria reduzido a **1191**, e **construtor com 1800**, que permanece abaixo de 1930. São registros históricos, não prova de chamadores atualmente ativos nem da necessidade desses prazos. (`app/docs/RELATO.md:7756`, `:7782`, `:425`; `bin/codex_pergunta.sh:89`, `:92`)
-
-`CODEX_TIMEOUT` **não recebe o valor limitado de volta**: pode continuar sendo `3600` no ambiente enquanto `TIMEOUT=1191` governa o wrapper. Um descendente que leia o primeiro como prazo efetivo: **[não verificado]**. (`bin/codex_pergunta.sh:90`, `:92`)
-
-A unidade dos consumidores é segundos, mas há **dois orçamentos sucessivos**: a trava da resposta pode esperar um teto inteiro; depois o processo recebe outro teto inteiro. O construtor mantém ainda `-k 30`. Logo, 1930 segundos não é prazo total do lançador. (`bin/codex_pergunta.sh:6`, `:383`, `:408`, `:415`)
-
-Antes disso, o gate bloqueia sem prazo e os slots repetem esperas de cinco segundos sem limite acumulado. A duração registrada começa em `T0C`, inclui preparação posterior, filas, trava e encerramento; não mede exclusivamente o intervalo sob `timeout`. (`bin/codex_pergunta.sh:259–267`, `:298–325`, `:358–370`, `:427`)
-
-“Estourou = 124” também precisa desse escopo: a espera da resposta sai **3**, e o inventário construtor pode substituir inclusive um retorno 124 por **3**. O contador existente por papel conta `ini`, qualquer rc; não é o contador contratado de rc 124 em 24 horas. Meta `≤1` por papel: **[não verificado]**. (`contrato_item6.txt:4–5`; `bin/codex_pergunta.sh:383`, `:418`, `:427–440`; `bin/codex_limite_estado.py:71–79`)
-
-3. **Casos novos, mutantes e fake timeout**
-
-**Os dois mutantes têm mordida demonstrável pela leitura do código; execução efetiva permanece [não verificado].** O primeiro deixa `3600` no argumento, contrariando `1191`; o segundo deixa `abc` prosseguir até o cap e a chamada do Codex, contrariando rc 2 e ausência de captura exigidos por `_recusa`. (`bin/codex_pergunta.sh:91–92`; `bin/tests/test_codex_pergunta.sh:140–143`, `:458–460`, `:467`, `:567–568`)
-
-`c_teto_papel` verifica três comportamentos: leitura `3600→1191`, verificador `600→600` e verificador sem override `→894`. `c_timeout_int` cobre somente `abc`. Não cobre os demais limites do domínio nem todos os tetos/defaults por papel. (`bin/tests/test_codex_pergunta.sh:455–467`)
-
-**O fake desta cópia encaminha o valor ao timeout real:** grava `"$@"` e executa `/usr/bin/timeout "$@"`, sem transformação. Cada subcaso apaga previamente a captura, evitando argumento velho. (`bin/tests/test_codex_pergunta.sh:115–118`, `:458`, `:462`, `:464`)
-
-A cobertura, porém, tem limites concretos:
-
-- Apenas o primeiro subcaso exige rc 0; os de `600` e `894` verificam somente o argumento capturado. A mensagem é buscada em stdout+stderr mesclados, sem exigir stderr nem exatamente uma linha. (`bin/tests/test_codex_pergunta.sh:136`, `:459–465`)
-- O Codex falso termina imediatamente: os casos não provam expiração, rc 124, escalada `-k 30`, nem aplicação do teto ao `flock`. (`bin/tests/test_codex_pergunta.sh:111`, `:455–467`; `bin/codex_pergunta.sh:383`, `:408`)
-- Existe um falso verde possível além dos dois mutantes: separar `timeout "$TIMEOUT" true; codex ...` manteria a primeira linha capturada correta, deixando o Codex fora do relógio. Os casos novos não verificam qual comando recebe o timeout. Execução desse mutante adicional: **[não verificado]**. (`bin/tests/test_codex_pergunta.sh:456`, `:460`, `:463`, `:465`; chamada atual correta em `bin/codex_pergunta.sh:415`)
-
-O selo integral não foi executado porque cria, altera e apaga arquivos, inclusive a cópia usada pelos mutantes. Resultado do selo e tabela de mutantes nesta auditoria: **[não verificado]**. (`bin/tests/test_codex_pergunta.sh:18–19`, `:74–75`, `:585`, `:596`)
-
-4. **Classes de reprovação**
-
-| Classe | Constatação neste delta |
-|---|---|
-| Segundo juiz | Não identificado para o teto: a decisão permanece no wrapper. (`bin/codex_pergunta.sh:89–92`) |
-| Segundo escritor fora da porta | Não identificado: default e cap escrevem a variável no mesmo wrapper; a escrita dos mutantes ocorre no cenário de teste. (`bin/codex_pergunta.sh:90`, `:92`; `bin/tests/test_codex_pergunta.sh:585`) |
-| Relógio fora da borda | **Presente e preservado:** fila sem prazo global, espera da resposta separada da execução, preparação e inventário fora do timeout do Codex. (`bin/codex_pergunta.sh:358–370`, `:383`, `:408`, `:427`) |
-| Derivação paralela de fonte única | Não aparece uma segunda tabela operacional de tetos. Entretanto, o comentário afirma janela de 20 “DO PAPEL”; p95 individual de leitura/censo/sonda continua **[não verificado]**, pois o anexo relata janela agrupada. (`bin/codex_pergunta.sh:85–89`; `contrato.r`, seção 3) |
-| Selo/RED sem mordida | Os dois mutantes têm mordida estática; a cobertura não certifica toda a semântica temporal. (`bin/tests/test_codex_pergunta.sh:455–467`, `:567–594`) |
-| Ordem de trava | Preservada: vaga construtora → gate/slot → resposta → porta B3. Não há inversão introduzida no diff fornecido. (`bin/codex_pergunta.sh:247`, `:358`, `:363`, `:383–385`) |
-| Campo com dois significados | **Presente, inclusive previsto no contrato:** `TIMEOUT` governa espera da trava e duração do processo. A falha semântica é tratá-lo como prazo global ou equipará-lo a `duracao_s`. (`contrato_item6.txt:3`; `bin/codex_pergunta.sh:267`, `:383`, `:408`, `:415`) |
-
-## 12/11 12:54 · sessao ede65d4988a8 · - · - · origem=Ronald (tmux)
-
-- **Implementação principal confere:** 1930/894/1191, default no teto, cap com diagnóstico e compartilhamento do valor entre `flock` e execução; escolhas estão em `bin/codex_pergunta.sh:89–92`, leitores em `:383`, `:408`, `:415`. Exatidão dos p95 individuais e eficácia futura: [não verificado].
-- **Default resolvido pelo código:** ausência ou vazio vira teto, pois usa `${CODEX_TIMEOUT:-$TETO_S}`. É uma escolha entre as alternativas antes apontadas, não explicitada no contrato fornecido (`bin/codex_pergunta.sh:90`; `contrato_item6.txt:3–4`).
-- **Domínio novo:** aceita apenas decimal sem zero inicial; rejeita `0`, `0600`, negativos, frações e sufixos. A recusa de `0600`, inclusive, excede a descrição “inteiro positivo”. Essa restrição não aparece no contrato (`bin/codex_pergunta.sh:91`; `contrato_item6.txt:4`).
-- **Papel sem entrada permanece um furo estrutural:** desconhecido atual sai 2 pela lista, mas a tabela tem `*)1191`. Acrescentar papel somente à lista produz teto silencioso; inexiste recusa específica por falta de entrada (`bin/codex_pergunta.sh:84`, `:89`; `contrato_item6.txt:4`).
-- **Mensagem do flock usa o valor efetivo:** `${TIMEOUT}s` acompanha o cap. Porém “ocupada há” não mede idade da ocupação, e qualquer falha de `flock` recebe esse diagnóstico; comportamento preexistente (`bin/codex_pergunta.sh:383`).
-- **Relógio fora da borda e campo com dois significados permanecem:** gate e repetição de slots sem limite acumulado; depois a resposta pode consumir um teto inteiro e a execução recebe outro teto inteiro. Logo 1930 segundos não limita duração total do wrapper (`bin/codex_pergunta.sh:358–370`, `:383`, `:408`, `:415`).
-- **124 não cobre todo estouro/resultado:** trava sai 3; inventário construtor pode substituir inclusive um 124 por 3. São comportamentos preservados, não introduzidos pelo diff (`bin/codex_pergunta.sh:383`, `:427–440`).
-- **Métrica tem borda diferente:** `duracao_s` começa em `T0C`, inclui preparação posterior e filas, e termina na saída; não é apenas duração sob `timeout` (`bin/codex_pergunta.sh:259–267`, `:298–325`, `:358–415`).
-- **Fonte histórica não prova p95 individual:** comentário afirma últimas 20 “DO PAPEL”, mas o anexo `contrato.r` informa 20 chamadas do grupo leitura/censo/sonda. Atribuir p95 individual aos três segue [não verificado] (`bin/codex_pergunta.sh:85–88`; `contrato.r`, seção 3).
-- **Outras classes:** o diff não demonstra segundo juiz, segundo escritor ou inversão de travas: concentra decisão temporal em `:89–92` e mantém consumidores/ordem existentes; ocorrência no restante do sistema [não verificado] (`bin/codex_pergunta.sh:89–92`, `:355–415`).
-
-_4260 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4262 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
