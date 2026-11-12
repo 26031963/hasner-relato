@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 18:38:24.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (491.4 MB). Acoes na janela: **1918**.
+**Medido em 12/11/2026 18:43:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (491.6 MB). Acoes na janela: **1924**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:42:52 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; L=/home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item1_dimensao; /bin/grep -E "FALHA\|VERMELHO\|^rc=" $L/red.out; timeout 300 bash bin/tests/test_leitores_de_chave.sh > $L/green.out 2>&1; echo rc=$? >> $L/green.out; /bin/grep -E "FALHA\|OK --\|VERMELHO\|^rc=" $L/green.out` |
+| 18:41:30 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; python3 - <<'ZZEOF' import py_compile, shutil p="bin/leitores_de_chave.py"; s=open(p).read() old=''' # alvo NOME e REBINDING, nao escrita no JSON: so a proveniencia DECLARADA # (semente de PARAMS ou `x.ata = nome`) faz dele escrita; apelido nao # (`r = c.ata; r = {"x": 1}` nao escreve `x` na ata). if isinstance(t, ast.Name) and t.id not in self.seeds.get(s, {}) ...` |
+| 18:41:19 | Bash |  | `cd ~/wt-codex-leitores-chave-171434/app; sed -n 907,918p ponto/services/cartorio.py; sed -n 395,412p escala/services/leitor_celula.py; sed -n 38,46p ponto/services/faltas_de_hoje.py` |
+| 18:39:49 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/patch_lc2.py <<'ZZEOF' import sys, py_compile, shutil p = sys.argv[1]; s = open(p).read() def rep(old, new): global s assert s.count(old) == 1, (s.count(old), old[:80]); s = s.replace(old, new) rep(''' elif isinstance(n, (ast.For, ast.AsyncFor, ast.comprehension) ...` |
+| 18:39:35 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; /bin/grep -n "self.env\\|def bind" bin/leitores_de_chave.py; n=$(/bin/grep -n "def bind" bin/leitores_de_chave.py \| cut -d: -f1); sed -n "$n,$((n+14))p" bin/leitores_de_chave.py` |
+| 18:39:23 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; sed -n 140,200p bin/leitores_de_chave.py; echo ......; sed -n 625,660p bin/leitores_de_chave.py` |
 | 18:37:08 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; L=/home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item1_dimensao; mkdir -p $L echo "== GREEN (ferramenta nova)"; bash bin/tests/test_leitores_de_chave.sh > $L/green.out 2>&1; echo rc=$? >> $L/green.out; cat $L/green.out rm -rf $S/red_old; mkdir -p $S/red_old; git archiv ...` |
 | 18:37:01 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; P=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/patch_selo.py cat > $P <<'ZZEOF' import sys p = sys.argv[1]; s = open(p).read() def rep(old, new): global s assert s.count(old) == 1, (s.count(old), old[:70]); s = s.replace(old, new) rep('''# logs/TIPO-NA-FONTE/contrato.txt). A ferramenta lista por AST todo LEITOR e ...` |
 | 18:36:31 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; git status --porcelain; ls` |
