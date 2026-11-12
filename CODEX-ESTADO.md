@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **11/11/2026 23:53** · publicado em **11/11/2026 23:58** (UTC-3)
+> Ultima resposta processada: **12/11/2026 00:19** · publicado em **12/11/2026 00:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 00:19 · sessao 9443b128960e · - · - · origem=Ronald (tmux)
+
+Os 3 FAIL de impressão são causados por duplos que declaram `tipo_dia='ausencia'` sem fornecer as chaves que c6 passou a ler (`ponto/services/cartorio.py:1237`; `ponto/tests/test_e3_nb_impressao_memoria.py:365`, `:401`; `chamados/tests/test_e3_pos_suite_sem_banco.py:139`).
+
+- Reproduzi os 3 FAIL com `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_e3_nb_impressao_memoria chamados.tests.test_e3_pos_suite_sem_banco -q`: 31 testes, 3 FAIL. [nao verificado]
+- Em diagnóstico exclusivamente em memória, fornecer `ausencia_tipo`/`ausencia_id` aos duplos com cobertura fez os mesmos 31 testes passarem, preservando todas as asserções. A grade real fornece essas chaves (`escala/utils.py:1228`).
+- Não há frase do aval autorizando mudar o hash B5u. Inverter essas asserções seria indevido. A decisão da sessão “Cobrança e dinheiro passaram a ler a CHAVE de cobertura” sustenta atualizar as entradas dos testes; isso precisa ser registrado como adaptação do contrato, sem mudar o comportamento caracterizado (`ponto/services/cartorio.py:1227`).
+
+`dia_sem_trabalho` é regressão de código: a exceção parcial passou a alcançar qualquer rótulo (`chamados/juizes.py:455`). Cura sugerida: falta continua dia sem trabalho; folga só entra na exceção parcial quando há chave de cobertura. Isso preserva o teste antigo com carimbo espúrio (`chamados/tests/test_emis_ausencia_parcial_cobra.py:50`) e o P1 com folga humana parcial real (`ponto/tests/test_lastro_c5_sem_banco.py:609`). Mantenha `ausencia_parcial_cobra_o_resto` lendo apenas o carimbo, pois o contrato da ata antiga exige isso (`ponto/tests/test_lastro_c5_sem_banco.py:621`).
+
+CATRACA: o censo em memória encontrou as mesmas identidades e quatro deslocamentos no registro (`core/tests/test_medida_turno_do_par.py:247`):
+
+| Sítio | Antes → c6 atual |
+|---|---|
+| `escala/utils.py::montar_grade_prevista_periodo_por_turno` | `[1480,1500,1510,1523,1534,1820]` → `[1484,1504,1514,1527,1538,1824]` |
+| `ponto/services/cartorio.py::_julgar_colab_corpo` | `[1191,1344]` → `[1198,1351]` |
+| `ponto/services/espelho.py::autoridade_do_periodo` | `[1029]` → `[1032]` |
+| `ponto/services/fechamento.py::_so_a_data` | `[1569]` → `[1568]` |
+
+Recalcule esses números depois das curas; a igualdade é cobrada em `core/tests/test_medida_turno_do_par.py:539`. Nenhum arquivo foi escrito por este explorer.
+
+## 12/11 00:18 · sessao ef9964a52222 · - · - · origem=Ronald (tmux)
+
+Mapa na c6, por leitura estática; execução com banco não realizada [não verificado].
+
+- Origem: `faixa_de` levanta `TipoSemFaixa` em `ponto/precedencia.py:105`; `fatos_do_periodo` chama para cada ausência em `ponto/precedencia.py:409`.
+- Grade: `_marcar_ausencias` consulta o período sem captura em `escala/utils.py:1205`; builder chama o overlay em `escala/utils.py:1852`; contrato dos renders chama o builder em `escala/utils.py:2341`.
+- PDF: `_coletar_dados_espelho` chama a grade sem captura em `relatorios/pdf_espelho.py:475`; PDF informacional propaga em `relatorios/pdf_espelho.py:1046`; PDF mensal propaga em `relatorios/pdf_espelho.py:1093`. O traceback fornecido confirma a interrupção desse coletor.
+- Tela: o primeiro caminho pelo builder tem captura geral em `ponto/services/espelho.py:569`, mas a consulta independente de A2 em `ponto/services/espelho.py:649` recaptura e levanta especificamente em `ponto/services/espelho.py:651`. Propaga por `espelho_do_colab` em `ponto/services/espelho.py:1265`, tela web em `ponto/views.py:158` e API em `api/views.py:1354`.
+- Cartório: julgamento consulta o builder sem captura em `ponto/services/cartorio.py:1168`, chamado em `ponto/services/cartorio.py:990`. Outra leitura direta, `aplicar_precedencia_na_celula`, consulta A2 em `ponto/services/cartorio.py:1992`, mas seu chamador captura e registra em `ponto/services/cartorio.py:2042`.
+- Folha: **não há propagação direta por essa grade**. `grade_do_fechamento` lê a ata por `grade_da_celula` em `folha/export.py:335` e `folha/export.py:338`; prontidão consome essa grade em `folha/export.py:1095`. Falha anterior na lavratura pode impedir atualização, mas impacto efetivo não medido [não verificado].
+- Semana do posto: `_fato_do_dia` recaptura e levanta em `escala/services/semana_do_posto.py:178`; sua leitura ocorre em `escala/services/semana_do_posto.py:151`.
+
+Forma **já existente** que conserva o nome sem derrubar seu leitor: vigia captura `TipoSemFaixa`, acumula os códigos e devolve o contador `tipos_ativos_sem_faixa` em `ponto/services/vigia_ausencia.py:163` e `ponto/services/vigia_ausencia.py:168`. Não encontrei representação de dia recusado nas grades/PDF; os únicos tratamentos específicos de produção aparecem nos locais acima [não verificado quanto a mecanismos indiretos].
+
+Proposta restritiva: manter `faixa_de` recusando, manter `test_05` intacto e registrar a decisão pendente sobre representação da recusa no PDF. Usar apenas o contador como justificativa para continuar julgando o dia inventaria uma resposta que ele não fornece (`ponto/services/vigia_ausencia.py:168`).
+
+Férias é regressão: contrato explícito exige leitura sem exceção (`ferias/situacao.py:1`, `ferias/situacao.py:22`, `ferias/situacao.py:38`); c6 introduziu `raise` em `ferias/situacao.py:96`, que viola o selo AST em `ferias/test_a3_situacao_de_ferias.py:739`. A estrutura existente `_aviso` permite preservar a recusa nomeada sem derrubar o leitor (`ferias/situacao.py:64`): capturar o erro, anexar aviso vermelho com seu texto nos caminhos de situação/agendamento, sem concluir descanso para o dia não julgado (`ferias/situacao.py:245`, `ferias/situacao.py:322`). Isso requer transportar avisos ao helper; não exige campo de modelo. Nenhum arquivo foi alterado.
 
 ## 11/11 23:53 · sessao 9bd2d7f7b5cd · FIO-E0-V4-E4B · verificador · origem=Code
 
@@ -618,56 +657,4 @@ Os alvos dos 41 sites são: `reconciliar` → `resolvido`, pelo gate em `chamado
 
 A solução mínima que preserve comportamento dos automáticos exige permitir à porta existente envolver a execução do gate original, preservando retorno e via; uma simples troca de chamada por `fechar()` altera guardas e idempotência pelos pontos acima. Isso é proposta de implementação [não verificado], sem necessidade demonstrada de juiz novo.
 
-## 11/11 22:37 · sessao 001149cdb325 · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
-
-C5 implementada na cópia: B1/B2/B3, transporte pela ata e propagação de `TipoSemFaixa`. Mapa, censo e escritores/leitores estão no [RELATO](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/RELATO.md:5).
-
-Verificação local sem banco: **17 testes passaram; RED na base e nove mutantes falharam por asserções**. [Execuções e comandos](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c5_execucoes.r:1). [nao verificado]
-
-O abono legado de `feriado_folga`/`suprime` foi preservado; quem mudaria de valor está listado no [DIFF financeiro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/RELATO.md:12).
-
-Sem commit, conforme a proibição explícita; HEAD permanece na base. [Registro](/home/ronald/wt-codex-lastro-faixa-sem-default-215253/app/docs/lastro_faixa_c5_execucoes.r:2037). Suíte completa, opus final e valores reais de produção: **[nao verificado]**. [nao verificado]
-
-## 11/11 22:36 · sessao 55ec9f8f4980 · - · - · origem=Ronald (tmux)
-
-Censo humano, referências HEAD → c11 aplicado virtualmente: [nao verificado]
-
-| Sítio c11 | Função | Disparo | Porta | Âncora |
-|---|---|---|---|---|
-| `chamados/services/acoes_chamado.py:71` (HEAD:70) | `acao_aprovar_excecao` | humano UI, `chamados/views.py:426-427` | sim, chamada direta c11 | sem-prova: o guard só exclui encerrados, HEAD `acoes_chamado.py:25`; não exclui perguntas |
-| `chamados/services/acoes_chamado.py:110` (HEAD:108) | `acao_responder_agenda` | humano UI do colaborador, `chamados/views.py:459-461` | sim, chamada direta c11 | sem-prova: categoria/alvo conferidos HEAD `acoes_chamado.py:88-97`, sem exclusão de perguntas |
-| `chamados/services/acoes_chamado.py:152` (HEAD:149) | `acao_responder_escala` | humano UI do colaborador, `chamados/views.py:463-464` | sim, chamada direta c11 | sem-prova: categoria/alvo conferidos HEAD `acoes_chamado.py:130-135`, sem exclusão de perguntas |
-| `chamados/services/acoes_chamado.py:226` (HEAD:222) | `acao_autorizar_geofence` | humano UI, `chamados/views.py:540-541`, também `chamados/services/fio.py:533-546` | sim, chamada direta c11 | sem-prova: encerrados excluídos HEAD `acoes_chamado.py:176-177`, sem exclusão de perguntas |
-| `chamados/services/acoes_chamado.py:282` (HEAD:277) | `acao_recusar_geofence` | humano UI, `chamados/views.py:543-544`, também `chamados/services/fio.py:544-545` | sim, chamada direta c11 | sem-prova: batida validada HEAD `acoes_chamado.py:257-265`, sem exclusão de perguntas |
-| `chamados/services/acoes_chamado.py:321` (HEAD:316) | `acao_resposta_livre` | humano UI gestor, HEAD `acoes_chamado.py:313`, `chamados/views.py:547` | sim, chamada direta | sem-prova; alvo dinâmico pode qualquer `STATUS_CHOICES`, HEAD `acoes_chamado.py:287,313-316` |
-| `chamados/services/fio.py:722` | `processar_post_fio` | humano UI DP, `chamados/services/fio.py:708-722` | sim, chamada direta | sem-prova; alvo POST dinâmico `fio.py:502,719` |
-| `colaboradores/views.py:2069` (HEAD:2068) | `avaliar_solicitacao_beneficio` | humano UI, permissão/POST em `colaboradores/views.py:2048` | sim, chamada direta c11 | sem-prova; só exige `sol.chamado_origem`, HEAD `colaboradores/views.py:2066-2068` |
-| `ponto/management/commands/fechar_chamados_meio_periodo.py:109` | `Command.handle` | humano comando `--apply`, `:94-106` | sim, `ChamadoColaborador.fechar` c11 `chamados/models.py:455` | sem-prova; universo por módulo/dia/template `:55-81`, sem exclusão de perguntas |
-
-Todos acima chegam ao S143 síncrono por `post_save`, `chamados/signals.py:90-116`; leitores comuns incluem fila `chamados/services/painel.py:155`, placar `:217-224`, API `api/views.py:1142,1152`, contador `chamados/services/na_fila.py:17`.
-
-Obstáculos já presentes, sem migração adicional porque esses sítios entram na c11:
-
-- Agenda já tem atomic externo HEAD `acoes_chamado.py:102` → c11:103.
-- Escala já tem atomic externo HEAD `acoes_chamado.py:140` → c11:142; a recusa chama `reverter_para_snapshot` antes de fechar, HEAD `:145-146` → c11:147-148. Essa operação pode executar a cascata de vínculo antes da porta humana.
-- Benefício tem atomic externo `colaboradores/views.py:2065`; o chamado fecha antes dos efeitos de benefício `:2072-2087`.
-- Geofence recusa retrata a batida antes da transição HEAD `acoes_chamado.py:269` → c11:273; autorização cria advertência antes de fechar HEAD `:193-209`.
-- Meio período escolhe superuser ativo para assinar, `fechar_chamados_meio_periodo.py:102-106`; via humana permanece através de `fechar`.
-
-Outros achados importantes para o censo completo:
-
-| Sítio | Alvo | Observação |
-|---|---|---|
-| `chamados/migrations/0039_a3_via_backfill.py:24` | `superado` | `apps.get_model`, `:12`; atualização direta não emite S143, prova expressa `chamados/signals.py:90-95` |
-| `chamados/migrations/0039_a3_via_backfill.py:33` | `cancelado` | reversão com modelo histórico `:32`; atualização direta não emite S143, `chamados/signals.py:90-95` |
-| `chamados/management/commands/smoke_chamados.py:134` | dinâmico, inclui terminais | arquivo fora de tests; guard exige substring `test` no nome do banco, `:32-35`; atomic e rollback `:39-43`; cria chamados `smoke`, `:122-127` |
-| `smoke_chamados.py:147` | `aberto`/`em_analise` | não terminal pelo laço `:144`; excluir da tabela terminal |
-| `smoke_chamados.py:163` | `aberto` | não terminal pelo laço `:158`; excluir da tabela terminal |
-
-Não reutilizar silenciosamente exclusões do censo existente: `core/censo_escritas.py:66-82` exclui migrations e arquivos `test*`; o pedido específico pode requerer que migrações sejam listadas.
-
-Verificação AST somente em memória encontrou as únicas atribuições a `status_local` fora tests em `chamados/models.py:228,356,371`; as duas últimas são estado temporário em memória, restaurado em `:371`. Não encontrou `setattr(..., 'status_local', ...)`, nem `bulk_update` desse campo, nem alias de método guardado por `f = x.fechar` etc. [não verificado: conclusão depende do pequeno verificador executado, sem artefato de arquivo]
-
-Imports relevantes HEAD: `transicionar_com_pauta` em `acoes_chamado.py:315` e `fio.py:721`; `encerrar` importado em `management/commands/encerrar_por_competencia_trancada.py:20` é serviço, não método de Chamado. [não verificado: completude decorre da varredura AST somente em memória]
-
-_4066 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4068 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
