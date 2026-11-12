@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/11/2026 23:05:33.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (413.2 MB). Acoes na janela: **2006**.
+**Medido em 11/11/2026 23:11:03.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (413.2 MB). Acoes na janela: **2003**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2013,6 +2013,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:20:12 | Bash | Read sonda_leitura envelope usage | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/sonda_leitura.sh \| /bin/grep -E "^#\|uso\|usage" \| head -15` |
 | 11:19:55 | Bash | Run FASE=depois snapshot and compare | `cd /home/ronald/saas-hasner; docker cp logs/FIO-E0-V4-E3/snapshot_comp11_e3.py saas_core:/tmp/snap_e3.py; docker exec -e FASE=depois saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/snap_e3.py').read())" > logs/FIO-E0-V4-E3/snapshot_depois.out 2>&1; echo rc=$?; /bin/grep -E "^comp\|^FASE" logs/FIO-E0-V4-E3/snapshot_depois.out > /tmp/claude-1001/-home-rona ...` |
 | 11:19:49 | Bash | Find how snapshot was run | `cd /home/ronald/saas-hasner; /bin/grep -rn "snapshot_comp11_e3" logs/FIO-E0-V4-E3/*.sh app/docs/RELATO.md 2>/dev/null \| head -3 \| cut -c1-300; sed -n 30,200p logs/FIO-E0-V4-E3/snapshot_comp11_e3.py \| /bin/grep -n "FASE\\|open(\\|print" \| head -20 \| cut -c1-200` |
-| 11:10:08 | Bash | processar_cartorio apply for 3 empresas | `cd /home/ronald/saas-hasner; for e in 2 3 4; do docker exec saas_core python manage.py tenant_command processar_cartorio --empresa $e --apply --schema=juliani > logs/FIO-E0-V4-E3/pos_apply_emp$e.log 2>&1; echo "emp$e rc=$?"; /bin/grep -E "fim:" logs/FIO-E0-V4-E3/pos_apply_emp$e.log \| tail -1 \| cut -c1-300; done` |
-| 11:10:04 | Bash | Update RELATO top per RETOMA-AUTO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: v1_rodar_orm.sh'), L[2] assert L[3].startswith('PAREI: E3-POUSO-DESLIGADO-TRAB'), L[3][:60] L[2]='ESPERANDO: suite3_rodar.sh \| pid=3979323' parei=L[3] novas=[ 'UI-PAINEL v1 ORM 10:55 (RETOMA-AUTO; logs/UI-PAINEL/v1_orm.log, produtor pid 3947531 terminou rc=0): VERM ...` |
-| 11:09:51 | Bash | Find live E4B suite producer pid | `cd /home/ronald/saas-hasner; ps -eo pid,args \| /bin/grep -E "suite3_rodar\|suite.sh" \| /bin/grep -v grep \| cut -c1-160` |
