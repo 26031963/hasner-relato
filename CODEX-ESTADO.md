@@ -1,7 +1,312 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 13:35** · publicado em **12/11/2026 13:40** (UTC-3)
+> Ultima resposta processada: **12/11/2026 14:01** · publicado em **12/11/2026 14:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 14:01 · sessao 2b6ccd8a2d08 · DECLARADO-X-GRAVADO · sonda · origem=Code
+
+Referências `saída:N` abaixo numeram somente as linhas iniciadas por `S` do dado fornecido, começando em `S UNIVERSO 6729`; a última é `saída:107`. São referências à transcrição, não a um arquivo criado.
+
+**Não há bloqueio por erro de execução:** `TOTAL_ERROS TOTAL = 0`; todas as etapas informadas também têm zero. Não há exemplo de erro apresentado. As contagens podem ser publicadas como resultados da sonda, preservando as limitações abaixo (`saída:95-107`). [nao verificado]
+
+Item 2 — desfechos das perguntas respondidas:
+
+| Desfecho | Quantidade | Fonte |
+|---|---:|---|
+| Batida nova | 886 | saída:2 |
+| Reuso | 23 | saída:3 |
+| Recusa de paridade | 230 | saída:4 |
+| Pendente do admin | 121 | saída:5 |
+| Não validada | 1210 | saída:6 |
+| OUTRO | 4259 | saída:7 |
+| **Soma dos desfechos** | **6729** | saída:8 |
+| **Universo** | **6729** | saída:1 |
+| Indicador soma igual ao universo | 1 | saída:9 |
+
+`OUTRO` está integralmente explicado pela categoria `validada_sem_relacao_nem_recusa`: **4259**. Não cabe redistribuí-la entre os demais desfechos (`saída:10`).
+
+Item 3 — diferença entre instante gravado e resposta com data, preservando as categorias emitidas:
+
+| Medida | `intervalo_saida` | `intervalo_volta` |
+|---|---:|---:|
+| Novas por origem | 437 — saída:18 | 449 — saída:38 |
+| Até 5 minutos | 260 — saída:19 | 283 — saída:39 |
+| Mais de 5 até 30 minutos | 24 — saída:20 | 43 — saída:40 |
+| Acima de 30 minutos | 137 — saída:21 | 108 — saída:41 |
+| Delta não verificado (`delta_nv`) | 16 — saída:22 | 15 — saída:42 |
+
+As faixas, incluindo `delta_nv`, fecham os respectivos totais de novas por origem (`saída:18-22`; `saída:38-42`).
+
+| Datas e sinal do delta | `intervalo_saida` | `intervalo_volta` |
+|---|---:|---:|
+| `resposta_dmais1` | 44 — saída:23 | 92 — saída:43 |
+| Gravada fora do dia do turno | 48 — saída:24 | 93 — saída:44 |
+| Datas diferentes | 10 — saída:25 | 5 — saída:45 |
+| Delta assinado negativo | 87 — saída:26 | 61 — saída:46 |
+| Delta assinado positivo | 83 — saída:27 | 127 — saída:47 |
+| Delta zero | 251 — saída:28 | 246 — saída:48 |
+
+A convenção da subtração usada no delta assinado é **[nao verificado]**; os sinais acima não foram traduzidos como “adiantamento” ou “atraso”.
+
+| Proximidade do marco oposto | `intervalo_saida` | `intervalo_volta` |
+|---|---:|---:|
+| Medidos | 420 — saída:29 | 431 — saída:49 |
+| `oposto_ate5` | 35 — saída:30 | 52 — saída:50 |
+| `oposto_ate30` | 55 — saída:31 | 86 — saída:51 |
+| Não verificados (`oposto_nv`) | 17 — saída:32 | 18 — saída:52 |
+
+A saída fornece proximidade por tolerância; quantidade de coincidências exatas com o marco oposto **[nao verificado]**. A vigência histórica do marco também exige a ressalva de `dna_vigencia_nao_confirmada` (`saída:30-32`; `saída:50-52`; `saída:91`).
+
+Item 4 — **TRIAGEM** dos casos acima de 30 minutos:
+
+| Resultado emitido | `intervalo_saida` | `intervalo_volta` |
+|---|---:|---:|
+| Resposta mais próxima | 49 — saída:33 | 26 — saída:53 |
+| Gravada mais próxima | 9 — saída:34 | 2 — saída:54 |
+| Empate | 0 — saída:35 | 0 — saída:55 |
+| Sem indício | 79 — saída:36 | 80 — saída:56 |
+| Não verificado (`triagem_nv`) | 0 — saída:37 | 0 — saída:57 |
+
+A triagem fecha nos respectivos totais acima de 30 minutos; ela permanece indício, conforme o item 4 do aval, sem determinar qual horário foi o efetivamente trabalhado (`saída:21,33-37`; `saída:41,53-57`; `aval_declarado_x_gravado_v2.txt:7`, contando as linhas do anexo transcrito).
+
+Item 5 — regeneração da célula depois da resposta:
+
+| Categoria emitida | Quantidade | Fonte |
+|---|---:|---|
+| Depois da resposta | **403** | saída:11 |
+| Não depois da resposta | 5984 | saída:12 |
+| Sem data | 0 | saída:13 |
+| Sem célula | 342 | saída:14 |
+| Erro de célula | 0 | saída:15 |
+| Erro | 0 | saída:16 |
+| Não processadas | 0 | saída:17 |
+
+Essas categorias fecham o universo. “Sem célula” permanece separado de “não depois da resposta” (`saída:1,11-17`).
+
+Item 6 — carga semanal ISO, com os três campos numéricos na ordem exata da saída:
+
+| Semana ISO | Primeiro campo | Segundo campo | Terceiro campo | Fonte |
+|---|---:|---:|---:|---|
+| 2026-W39 | 280 | 44 | 5 | saída:58 |
+| 2026-W40 | 148 | 13 | 6 | saída:59 |
+| 2026-W41 | 147 | 34 | 0 | saída:60 |
+| 2026-W42 | 221 | 28 | 1 | saída:61 |
+| 2026-W43 | 160 | 30 | 7 | saída:62 |
+| 2026-W44 | 180 | 37 | 0 | saída:63 |
+| 2026-W45 | 81 | 15 | 3 | saída:64 |
+| 2026-W46 | 93 | 6 | 0 | saída:65 |
+
+**Os cabeçalhos desses três campos são [nao verificado].** As linhas fornecidas não os identificam; portanto, a associação de cada coluna a “validações”, “acima de 30 minutos” ou outra medida não pode ser publicada como confirmada (`saída:58-65`). O recorte temporal efetivamente aplicado pela consulta é **[nao verificado]**. [nao verificado]
+
+| Colaborador | Contagem emitida | Fonte |
+|---|---:|---|
+| col569 | 32 | saída:66 |
+| col723 | 22 | saída:67 |
+| col926 | 14 | saída:68 |
+| col438 | 11 | saída:69 |
+| col696 | 9 | saída:70 |
+| col993 | 8 | saída:71 |
+| col518 | 7 | saída:72 |
+| col055 | 6 | saída:73 |
+| col502 | 5 | saída:74 |
+| col909 | 5 | saída:75 |
+
+| Escala modelo | Contagem emitida | Fonte |
+|---|---:|---|
+| #431 | 32 | saída:76 |
+| #276 | 22 | saída:77 |
+| #178 | 15 | saída:78 |
+| #496 | 14 | saída:79 |
+| #197 | 11 | saída:80 |
+
+| Vínculo | Contagem emitida | Fonte |
+|---|---:|---|
+| #484 | 32 | saída:81 |
+| #924 | 22 | saída:82 |
+| #1181 | 14 | saída:83 |
+| #376 | 11 | saída:84 |
+| #970 | 9 | saída:85 |
+
+O filtro exato usado para selecionar os casos desses rankings é **[nao verificado]**; as tabelas preservam as contagens e identificadores emitidos (`saída:66-85`).
+
+Limitações e sobreposições declaradas pela própria saída:
+
+| Aviso | Quantidade e fonte | O que impede afirmar |
+|---|---|---|
+| `criacao_por_esta_pergunta_nv` | 886 — saída:86 | Que cada batida classificada como nova foi criada pela própria pergunta examinada. |
+| `dna_anterior` | 24 — saída:87 | São casos sinalizados com DNA anterior; o rótulo sozinho não comprova sua vigência no instante do plantio. |
+| `dna_atual` | 831 — saída:88 | São casos sinalizados com DNA atual; isso sozinho não comprova que ele era o vigente no plantio. |
+| `dna_dna_sem_marcos` | 5 — saída:89 | Concluir a comparação com o marco nesses casos. |
+| `dna_historico_multiplas_regeneracoes` | 13 — saída:90 | Reconstruir toda a sequência histórica apenas com o DNA anterior disponível. |
+| `dna_vigencia_nao_confirmada` | 13 — saída:91 | Afirmar atendimento integral ao requisito de usar o marco vigente no plantio. |
+| `origem_disputa_preexiste_resposta_atual` | 3 — saída:92 | Atribuir a criação dessa batida à resposta atual. |
+| `pendencia_admin_com_batida` | 14 — saída:93 | Tratar pendência administrativa como sinônimo de ausência de batida. |
+| `relacao_com_batida_retratada` | 5 — saída:94 | Tratar toda relação encontrada como batida atualmente apurável. |
+
+O código confirma que `dna_anterior` guarda somente a versão imediatamente anterior, enquanto o histórico completo fica fora desse campo; `regenerada_em` registra a última regeneração. Portanto, o item de regeneração e a comparação histórica não demonstram, por si, todas as versões passadas ([models.py](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1714), [models.py](/home/ronald/codex_ws/0a747193e3baedc1ee65ec1bb0b2fd4547728ba2/app/escala/models.py:1718)).
+
+Esses avisos não constituem uma partição demonstrada: suas interseções são **[nao verificado]**. Zero erros de execução não resolve as limitações declaradas (`saída:86-107`).
+
+## 12/11 14:01 · sessao e74da5cb4d3c · - · - · origem=Ronald (tmux)
+
+Parte A — provas locais para consolidação (todos os caminhos abaixo relativos à raiz da cópia).
+
+A lei vigente está em `app/docs/CORTES.md:348`, complementada por O44 em `app/docs/CORTES.md:349`; data da flag sem trilha e item sem dia estão decididos em `app/docs/CORTES.md:352`. A reprovação e as sete curas constam literalmente em `app/docs/BACKLOG.md:765`. As alternativas de fechar chamados / impedir nascimento foram substituídas: `app/docs/CORTES.md:345`, `app/docs/CORTES.md:346`, `app/docs/CORTES.md:347`; a substituição do item do emissor também consta em `app/docs/BACKLOG.md:766`.
+
+A1 — quem decide hoje
+
+| Leitor/estado | Pergunta, universo e escritor |
+|---|---|
+| `isento_ponto` | Responde **flag atual**, não “isento nesta data”. Retorna bool de `Colaborador.isento_ponto`, sem cargo nem período: `app/core/constants.py:13-18`. Campo booleano sem data: `app/colaboradores/models.py:294`. Tela Passe Livre escreve pela porta `gravar(...,'cadastro',...)` em `app/colaboradores/views.py:173-176`, tenta trilha com antes/depois/motivo em `:183-186`; falha da trilha não desfaz alteração, `:187-202`. Semente histórica escreve flag sem trilha em `app/colaboradores/migrations/0043_isento_ponto.py:13-14`. |
+| `silencio_isentos.alvos` | “Quais chamados vivos de flag isento ainda não têm **nenhum** `silenciado_ate`?” Filtra flag diretamente e todos VIVOS; não restringe módulo, dia ou janela: `app/chamados/services/silencio_isentos.py:20-31`. `silenciar` põe prazo padrão pela porta `arquivo.silenciar`: `:34-49`. Ignora resgate por política declarada: `:5-6`. |
+| Gatilho da flag e do chamado | Todo save de colab com flag true agenda `silenciar_do_colab`, sem detectar transição false→true: `app/chamados/signals.py:269-281`. Chamado nascido/voltando a VIVOS ou com véu levantado agenda a mesma porta se `silenciado_ate is None`: `:285-308`. Portanto levantar véu de isento pode chamar o ressequenciamento que o põe de novo: `:290-301`. |
+| Cron isentos | Modo `--alarme` é leitura e retorna 2 se houver alvos; `--apply` continua autorizado pelo próprio command a escrever véus: `app/chamados/management/commands/silenciar_chamados_isentos.py:25-49`. Seu universo atual é `alvos()`, sem janela: `:36`. |
+| `silenciado_em` / `q_silenciado_em` | “O véu do **chamado** vale neste instante?” Ambos usam prazo futuro: `app/chamados/models.py:508-524`. O escritor é `arquivo.silenciar` (`app/chamados/services/arquivo.py:141-174`) ou `arquivo.levantar` (`:177-212`), não um estado de quarentena. |
+| `qs_na_fila` | “Quais chamados cobram agora?” VIVOS → COBRANÇA → exclui silêncio futuro: `app/chamados/services/painel.py:188-190`; VIVOS definido pela consulta em `:153-155`. Não pergunta isenção nem período. |
+| `chamados_visiveis_colab` | Lista de trabalho da pessoa: competência corrente por empresa (`app/chamados/services/janela_colab.py:40-46`), ampliada por perguntas `q_vivas` com destino (`:65-73`), exclui silêncio futuro e módulos internos (`:74-79`). Não filtra status vivo. `desligamento_revisao` já é interno à lista do colab: `:30-37`. |
+| Contadores/pílulas | Ativos e abertos/em análise usam `qs_na_fila`: `app/chamados/services/painel.py:212-225`. Pílula calcula `particionar_verbos(qs_vivos(...))`: `:229-231`. **Divergência ainda presente**: qualquer `silenciado_ate` vencido vira HISTORICO, `app/chamados/services/verbos.py:48-51`; lista padrão exclui ARQUIVADO e HISTORICO, `app/chamados/services/painel.py:325-331`. Contraria retorno exigido em `app/docs/CORTES.md:335`. |
+| Badge admin | Prefere `PlacarNavbar.badge_chamados`, depois `exige_o_admin(particionar_verbos(qs_vivos()))`, depois fila: `app/core/context_processors.py:80-93`. Badge “registrados” lê lavrado ou fila: `:138-150`. Badge colab lê fila: `:185-187`. Escritor do lavrado: `app/core/management/commands/lavrar_badge_navbar.py:91-93`; origem painel: `:39-42`, exigência admin: `:72-74`. Logo só migrar fila deixa caminho da pílula/badge admin descoberto. |
+| Alerta SLA | Universo de cobrança lido via fila: `app/chamados/management/commands/alertar_chamados_sla.py:24-32`. |
+| Alerta avançado | Isento atual é descartado pelo juiz `isento_ponto`, `app/ponto/management/commands/processar_alertas_avancados.py:29-33`; N5 também descarta chamado com silêncio vigente pelo método, `:110-113`. O primeiro é flag global, o segundo véu do chamado; nenhum pergunta período. |
+| Disparo pela célula | `motivos_a_perguntar` usa dia sem trabalho, situação ativo, tempo, veredito e lista admin: `app/chamados/services/fabrica_da_celula.py:105-125`; `perguntar_pela_celula` chama `perguntar` com dia da célula, `:217-220`. `perguntar` chama `gerar_perguntas_disputa` em `:160-174`; não há consulta ao novo juiz. |
+| Disparo por disputa/agrupador | `gerar_perguntas_disputa` (`app/chamados/services/disputa_emissao.py:300`) abre conversa ou pergunta datada em `:439-451`. Agrupador `_criar_pergunta_se_couber` guarda ausência e duplicata e abre em `:823-847`; âncora abre conversa em `:1371`. |
+| `detectar_par_relampago` | Na cópia linhas antigas deslocaram: universo é escala ativa sem fim + colab ativo, `app/ponto/management/commands/detectar_par_relampago.py:336-338`; abre **fato chamado** em `:368-385`, sem consulta a isento/quarentena. Pela lei vigente emissão de fato continua; isolar cobrança/disparo, não reintroduzir a regra substituída de “não nasce”: `app/docs/BACKLOG.md:766`, `app/docs/CORTES.md:348`. |
+
+A2 — matriz exigida de pré-desenho (não há implementação desta entidade/juiz/porta localizada; status de implementação das sete curas nesta cópia: **[nao verificado]**, a linha da obra é reprovada em `app/docs/BACKLOG.md:765`).
+
+| Estado → juiz | Operação | Persistência/retorno a exigir | Prova do contrato |
+|---|---|---|---|
+| Sem janela → falso; dia coberto → verdadeiro | Abrir período manual | Entidade com colab/início/fim/motivo/quem/quando e uma porta com trilha; não fechar chamados nem pôr véu. Retorno real/API inexistente **[nao verificado]**. | `app/docs/CORTES.md:348` |
+| Janela de isento aberta → verdadeira só no período | **Fechar**, não levantar, ao desligar flag | Preservar passado do período e registrar fim; distinguir do levantamento administrativo que devolve cobrança. A distinção é cura exigida, assinatura concreta e bordas inclusivas **[nao verificado]**. | `app/docs/BACKLOG.md:765`; flag atual só bool em `app/core/constants.py:18` |
+| Quarentena vigente → verdadeiro | Levantar | Quem/quando/motivo + trilha; retorno automático dos itens, sem mutar chamados/cálculo. | `app/docs/CORTES.md:348` |
+| Dia isolado → falso **só para aquele dia** | Desarquivar `(colab,dia)` por toque admin | Exceção persistida/trilhada para o par; restante da janela segue isolado. Não chamar `arquivo.levantar` de todos os chamados. | `app/docs/CORTES.md:349`; porta atual levanta um chamado em `app/chamados/services/arquivo.py:177-212` |
+| Flag true → janela de isento | Porta separada da janela de isento | Efeito da troca de flag passa pela porta; impedir que alteração manual de período vire segundo escritor da semântica da flag. Detalhe técnico da porta **[nao verificado]**. | `app/docs/BACKLOG.md:765`; trocas com trilha/abre-fecha em `app/docs/CORTES.md:352`; escritor atual `app/colaboradores/views.py:176` |
+| Histórico de flag → início da janela | Migration reversível e congelada; última ligação | Selecionar **última ligação** relevante do histórico, não primeira flag true; sem trilha usar admissão e rótulo explícito. Congelar interpretação para não importar juiz runtime mutável e guardar reversão que remova só o que migration criou. Implementação/migration específica **[nao verificado]**. | sete curas `app/docs/BACKLOG.md:765`; fallback autorizado `app/docs/CORTES.md:352`; seed histórica sem trilha `app/colaboradores/migrations/0043_isento_ponto.py:13-14` |
+| Chamado de isento com dia coberto pelo juiz | Vigia só dentro da janela | Esperado 0 para cobrança que escapou **dentro** da janela; chamado anterior ao início não pode ser chamado vazamento por flag atual. Não escrever nem re-silenciar. | `app/docs/BACKLOG.md:765`; universo atual demasiado amplo `app/chamados/services/silencio_isentos.py:24-31` |
+| Pergunta viva ou retida em item isolado | RED da retenção | Cobrir que retenção não devolve cobrança pela lateral, e que levantar/desarquivar restaura conforme lei. Qual `retencao` a reprovação nomeou especificamente é **[nao verificado]**: há `pergunta_no_app.retencao`, `app/chamados/services/pergunta_no_app.py:121-153`, e retenção de retratação, `app/chamados/reconciliador.py:438-455`. Não afirmar que uma delas é a nomeada sem anexo adicional. | `app/docs/BACKLOG.md:765` |
+| Candidatos migration → antes/depois | DIFF pela **função real da migration** | Executar seleção/projeção pura da função congelada em modo leitura e comparar itens/colabs/perguntas; não reconstruir seleção paralela. Função concreta não localizada **[nao verificado]**. | `app/docs/BACKLOG.md:765`; grandezas do DIFF `app/docs/CORTES.md:348` |
+| Item sem dia | Perguntar o mesmo juiz | Janela aberta cobre item sem dia; fechada não cobre. | `app/docs/CORTES.md:352` |
+| `desligamento_revisao` | Fora da quarentena | Sem isolar ato de DP por esta obra; não criar juiz extra de dono. | `app/docs/CORTES.md:348` |
+
+A3 — arquivos e sobreposição
+
+Núcleo necessariamente toca `app/chamados/models.py` (entidade histórica; estado atual só véu em `:508-524`), `app/chamados/juizes.py` (corte autoriza **apenas** `colab_em_quarentena`, `app/docs/CORTES.md:348`), `app/core/juizes.py` (registro previsto na política local; nova entrada **[nao verificado]**), migration nova (nome **[nao verificado]**), porta única nova (nome **[nao verificado]**), `app/chamados/views_arquivar.py`/template (modo/lista/botão exigidos por `app/docs/CORTES.md:348`), `app/colaboradores/views.py:176` e `app/chamados/signals.py:269-308` (troca de flag e vassoura atual). Preservar espelho/folha/TXT e não trocar `isento_ponto` de cálculo por novo significado de cobrança: `app/docs/CORTES.md:348`.
+
+Leitores diretos a migrar: fila `app/chamados/services/painel.py:188-190`; pílula `app/chamados/services/verbos.py:48-51`; lista do colab `app/chamados/services/janela_colab.py:74-79`; alerta avançado `app/ponto/management/commands/processar_alertas_avancados.py:110-113`; fábrica `app/chamados/services/fabrica_da_celula.py:92`, `:160`, `:178`, `:234`; gerador e agrupador `app/chamados/services/disputa_emissao.py:300`, `:823`, `:1302`; vigia e universo fio mudo `app/chamados/management/commands/disparar_perguntas_competencia.py:99-120`; vassoura `app/chamados/services/silencio_isentos.py:20-31` e seu command `app/chamados/management/commands/silenciar_chamados_isentos.py:31-49`. Caminhos indiretos/badge precisam validação após migração porque preferem valor lavrado: `app/core/context_processors.py:80-93`, `:138-150`; lavrador `app/core/management/commands/lavrar_badge_navbar.py:39-42`, `:91-93`.
+
+Outros disparadores a conferir sem trancar declaração/ação voluntária: `app/chamados/services/acoes_disputa.py:263` abre conversa; `app/chamados/services/declaracao_texto.py:376`, `:666` abre pergunta no ato de declaração. A porta genérica `PerguntaDisputa.abrir` atende ambos, `app/chamados/models.py:2792-2807`; pôr veto universal nela arriscaria contrariar “nada tranca”, `app/docs/CORTES.md:349`. O censo deve distinguir disparo de cobrança e ato voluntário por chamador, sem juiz novo.
+
+Crons chamadores do agrupador: `app/ponto/management/commands/detectar_ausencias.py:803`, `app/ponto/management/commands/processar_alertas_turno.py:385`, `app/ponto/management/commands/processar_alertas_avancados.py:159`; célula/cartório chama fábrica em `app/ponto/services/cartorio.py:1045`. `detectar_par_relampago.py:368` continua emissão de fato, não chamar isso de disparador direto de PerguntaDisputa sem prova.
+
+Sobreposição E3: usar o aval recebido como fonte do diff, pois comparação main não está disponível. Ele nomeia `chamados/juizes.py` alimentar_portas e `chamados/models.py` q_silenciado_em/respostas_sem_veredito; fonte da cópia confirma localizações atuais em `app/chamados/models.py:515`, `:1836` e `app/chamados/juizes.py:1541` em diante. Sobreposição SAÍDA-NOTURNA nos mesmos **arquivos**, outras regiões dadas pelo usuário: `juizes.py:679-705/:941-971`, `models.py:2511/:3179/:3738`; conteúdo do diff SAÍDA-NOTURNA **[nao verificado]**.
+
+Observação para C2: `app/docs/CORTES.md:345` lista os oito históricos nominalizados por #pk: `3403,3057,11935,23036,11658,23049,23037,23030`. Esses não são lista completa dos 12 nem medição atual. Só o dado/snapshot sustenta “8+4” à época; resultado atual permanece **[nao verificado]**.
+
+## 12/11 14:00 · sessao 667377a17498 · - · - · origem=Ronald (tmux)
+
+B1 — Varri **3.566 arquivos `.py` por AST**, sem erro de parse; procurei Store de atributo, keyword `respondida_em`, dict/subscript, `save(update_fields)`, `bulk_update`, `F()` e `setattr`, e complementei com fluxo de `**campos`/`**outros` e o censo estrutural existente. O censo existente reconhece aliases/imports e gerentes reversos, mas declara limites de atribuição em `app/core/censo_escritas.py:43`, `:451`, `:469`. Resultado da execução só em memória: 10 sítios literais runtime, 317 sítios em testes (160 arquivos); o total bruto inclui atribuições em memória e descritores de campo, portanto **não equivale a 10 escritores persistentes**. A execução do censo não tem arquivo de resultado persistido: `[nao verificado]` por arquivo:linha.
+
+| Escritor / fluxo | Pode persistir timestamp sem texto? | Ramo e prova |
+|---|---|---|
+| `responder_pergunta_disputa_core` | Não com entrada vazia no fluxo normal | `resposta` é normalizada e vazia retorna antes (`app/chamados/services/disputa_emissao.py:1432`); texto e timestamp atribuídos juntos `:1467`, `:1468`; campos `:1469`, save `:1508`; registra ato de resposta em seguida `:1511`. |
+| `responder_automaticamente` | **A função aceita** `texto=''`/espaços; grava ambos vazios e ato vazio se `instante` não nulo | Guarda apenas texto **anterior** `app/chamados/services/disputa_emissao.py:1647`; grava `texto` recebido sem validar `:1652`, timestamp `:1653`, save `:1655`, `ato_texto=texto` `:1656`. Único chamador runtime encontrado passa constante não vazia: `app/api/foto_recebida.py:25`, `:48`. Escrita vazia efetiva em produção: `[nao verificado]`. |
+| `carimbar(...,resposta='responder'/'validar')` | Pode escrever timestamp sem **reescrever** texto, mas só com texto preexistente não vazio | Guarda real `texto_vazio` em `app/chamados/models.py:3146`, timestamp só quando nulo `:3147`, `:3148`, save `:3168`; não escreve `ato_texto` aqui. Ausência semântica de texto não é permitida por esse ramo. |
+| `carimbar_resposta_pela_trilha` | Pode gravar só o timestamp no modelo, mas exige texto preexistente e registra-o no ato | Recusa carimbo existente ou texto vazio em `app/chamados/services/disputa_emissao.py:1670`; atribui `:1674`; save somente `respondida_em` `:1676`; `ato_texto=p.resposta_colab` `:1678`. |
+| `reabrir_para_correcao` | Só grava `None` no timestamp nos usos atuais | Dicionário com `respondida_em=None` e `resposta_colab=''` em `app/chamados/services/disputa_emissao.py:1593`; preserva foto anterior `:1615`; `descarimbar_em_lote(**campos)` `:1630` ou `qs.update(**campos)` `:1632`. |
+| `ressuscitar_perguntas` | Só grava `None` nos usos atuais; não cria timestamp não nulo | Universo restrito a texto vazio/null em `app/chamados/models.py:1499`; chamada persistente com `respondida_em=None` em `:1579`. |
+| `descarimbar_em_lote(qs,**outros)` | **Porta genericamente aceita** timestamp arbitrário sem texto | Só proíbe chaves de carimbo, não o par de resposta: `app/chamados/models.py:3271`; `update(...,**outros)` em `:3280`–`:3282`. Chamadores encontrados passam apenas `None`: `models.py:1579`, `disputa_emissao.py:1593`, `:1630`. Uso não nulo atual: `[nao verificado]`. |
+| Nascimento `abrir` / `abrir_conversa` → `_sob_contrato` → `_nascer` | **Porta genericamente aceita** `respondida_em` em `**campos` sem texto | `app/chamados/models.py:2792`, `:2810`, `:2822`, `:2841`; constrói `cls(...,**campos)` `:3030`–`:3031`, insere `:3033`; `save` não valida o par `:3429`–`:3439`. A conservação da projeção gera ato até com texto vazio em `:3947`–`:3950`. Não localizei chamador runtime que passe explicitamente assinatura não nula no nascimento; origem real em produção `[nao verificado]`. |
+
+Não são escritores persistentes:
+
+- `_universo_da_ressuscitacao` atribui `None` numa **cópia** para consulta ao juiz: `app/chamados/models.py:1507`, `:1521`, `:1522`.
+- `_desfazer_em_memoria` restaura o valor antigo sem save: `app/chamados/models.py:3175`, `:3179`; usado nos ramos de recusa/exceção `:3157`, `:3160`, `:3171`.
+- `DecisaoPergunta.linhas_da_projecao_sem_linha` **lê** `respondida_em` e pode copiar legado sem texto para `ato_texto=''`, não escreve `PerguntaDisputa.respondida_em`: `app/chamados/models.py:3947`–`:3950`.
+- O `bulk_update` de PerguntaDisputa encontrado grava apenas os três campos da lavra, não `respondida_em`: `app/chamados/veredito_lavrado.py:237`, `:250`.
+- `setattr` genérico de reexibição só muta memória, sem save: `app/core/reexibir.py:21`, `:49`, `:50`.
+- Migration só declara o campo, não contém backfill dele: `app/chamados/migrations/0014_perguntadisputa.py:25`.
+- Não encontrei `F('respondida_em')`, `setattr(...,'respondida_em',...)`, `bulk_update(...,'respondida_em')` nem update runtime direto não nulo; a ausência resulta da varredura em memória e não tem artefato persistido `[nao verificado]`.
+
+A suíte antiga não certifica a simetria pedida: o contrato declara literalmente o inverso “inofensivo”, só exige `respondida_em` quando encontra escrita de `resposta_colab`, e só inspeciona atribuição/update no corpo: `app/chamados/tests/test_contract_par_resposta.py:28`–`:37`, `:69`–`:83`; mutante absolve “só carimbo” em `:109`, `:113`. Isso conflita com o corte novo do anexo e não prova a saúde do sentido timestamp→texto.
+
+B2 — Leitores diretos runtime de `respostas_sem_veredito`:
+
+| Arquivo:linha | Uso |
+|---|---|
+| `app/chamados/models.py:1869` | Parte do juiz `pode_fechar`. |
+| `app/chamados/models.py:1902` | Guarda de **todas** as portas de `fechar`, inclusive exceções. |
+| `app/chamados/reconciliador.py:1164` | Segura disputa e relata perguntas no fecho das órfãs pela lâmpada. |
+| `app/chamados/services/fila_por_causa.py:226` | Gaveta `respondido_a_decidir`. |
+| `app/chamados/services/competencia_trancada.py:114` | `ignorar_tranca=True` para pauta do DP. |
+| `app/colaboradores/services/ficha.py:169` | Conta respostas sem veredito restritas a perguntas vivas da ficha; saída `:246`. |
+| `app/colaboradores/services/desligamento.py:141` | Pula fechamento automático da disputa na cascata de desligamento. |
+| `app/chamados/management/commands/validar_classe_a.py:54` | Compõe conjunto para classificação/validação assinada. |
+
+Corpo atual divergente: validação/materialização nulas e `(respondida_em não nulo OU resposta_colab.strip())`, excetuando tranca salvo parâmetro: `app/chamados/models.py:1857`–`:1861`. `pode_fechar` combina essa lista com `fio_vivo` real: `:1867`–`:1869`.
+
+Leitores diretos runtime de `pode_fechar`:
+
+- `app/chamados/reconciliador.py:412`, `:612`, `:1171`.
+- `app/chamados/services/becos.py:33` (classificação), `:56` (fecho).
+- `app/chamados/services/competencia_trancada.py:154` (medição), `:203` (aplicação).
+- `app/chamados/services/explicador.py:139` (retorna booleano na explicação em `:165`).
+- `app/chamados/services/disputa_emissao.py:1278`, `:2091`.
+- `app/chamados/services/materializacao.py:591`, `:1322`.
+- `app/ponto/services/entrada_sincronizada.py:59`.
+
+Leitores indiretos da saída do explicador: `app/chamados/services/desenlace.py:63`; template `app/templates/chamados/partials/modal_fio.html:435`, `:446`. Registro de autoridade, não chamada: `app/core/juizes.py:283`.
+
+Não há banco/log disponível nesta tarefa; nenhum escritor histórico responsável por perguntas reais pode ser identificado só pela possibilidade estática `[nao verificado]`.
+
+## 12/11 14:00 · sessao d8d8ef0c0ef6 · - · - · origem=Ronald (tmux)
+
+C2 pode embutir a b4 sem migration: `q_silenciado_em` apenas devolve `Q(silenciado_ate__gt=agora)`, e o leitor novo o usa no `exclude`; não introduz campo nem consulta de escrita. `app/chamados/models.py:515-524`; `app/chamados/services/janela_colab.py:74-79`.
+
+A coorte histórica é de **12 vencidos em COBRANCA**, não simplesmente todo chamado com data antiga de silêncio. O corte está em `app/docs/CORTES.md:335`. A contagem real existente é `particionar_verbos`, cujo ramo `HISTORICO` lê silêncio vencido; o painel chama essa partição sobre `qs_vivos`. `app/chamados/services/verbos.py:30-62`; `app/chamados/services/painel.py:230`.
+
+Use no script:
+
+```python
+part = particionar_verbos(qs_vivos(), agora=agora)
+ids_historico = {
+    pk for pk, verbo in part["mapa"].items()
+    if verbo == HISTORICO
+}
+ids_coorte = set(
+    qs_na_fila(agora=agora)
+    .filter(pk__in=ids_historico)
+    .values_list("pk", flat=True)
+)
+```
+
+Isso chama a partição verdadeira e a fila verdadeira, sem reimplementar comparação de silêncio/status. `app/chamados/services/verbos.py:47-51`; `app/chamados/services/painel.py:188-190`. A igualdade entre a coorte atual e os 12 históricos continua `[nao verificado]`; imprimir contagem atual e divergência de 12.
+
+Para simular a b4 fielmente no MAIN, embutir literalmente em string:
+
+- `app/chamados/models.py:515-524`, removendo apenas a indentação de classe com `textwrap.dedent`, e instalar a função com `patch.object(ChamadoColaborador, "q_silenciado_em", staticmethod(...), create=True)`.
+- `app/chamados/services/janela_colab.py:30-37`, o conjunto `MODULOS_INTERNOS`.
+- `app/chamados/services/janela_colab.py:40-46`, `janela_do_colab`.
+- `app/chamados/services/janela_colab.py:49-79`, **a função inteira**, inclusive docstring e comentários.
+
+Executar as três últimas fatias em namespace isolado `{"timezone": timezone}`. Assim o ensaio não pressupõe igualdade entre helper/constante do MAIN e da cópia. Essa função retorna queryset e só lê o banco. `app/chamados/services/janela_colab.py:65-79`.
+
+Antes de instalar o método novo, calcular a visibilidade com a função real importada do MAIN. Durante a chamada b4, instalar temporariamente o método e chamar a função compilada com `hoje=timezone.localdate(agora), agora=agora`. Fixar `django.utils.timezone.now` em `agora` também durante chamadas legadas sem argumento; nenhuma segunda chamada solta ao relógio é necessária. `app/chamados/services/janela_colab.py:42`; `app/chamados/services/janela_colab.py:78`; `app/chamados/services/verbos.py:35`.
+
+Para cada chamado da coorte, imprimir apenas `colNNN/#pk`, visibilidade MAIN, visibilidade b4 e `isento_ponto(ch.colaborador)`. O juiz real de isenção é `app/core/constants.py:13-18`. Contar separadamente:
+
+- total da coorte;
+- visíveis no MAIN;
+- visíveis na b4;
+- novos visíveis `b4 - MAIN`;
+- isentos da coorte;
+- isentos entre visíveis b4;
+- isentos entre novos visíveis.
+
+A b4 chama deliberadamente `q_vivas()`, que é um **superconjunto** do juiz exato; substituir por `pergunta_viva` falsearia o comportamento sob medição. `app/chamados/services/janela_colab.py:65-69`; `app/chamados/models.py:3352-3359`.
+
+Os testes existentes cobrem retorno às duas filas com silêncio vencido, exclusão com vigente, inclusão sem silêncio, respeito ao relógio recebido e igualdade entre método/filtro de silêncio. Não executei a suíte. `app/chamados/tests/test_e3_b4_silencio_vencido.py:41-65`; execução `[nao verificado]`.
+
+Há fontes locais úteis para a matriz A2: o corte posterior manda **abrir/fechar** a janela quando muda a flag, estabelece admissão como início sem trilha e cobre item sem dia apenas em janela aberta. `app/docs/CORTES.md:352`. O toque administrativo desarquiva apenas `(colab,dia)` e não tranca nada. `app/docs/CORTES.md:349`.
 
 ## 12/11 13:35 · sessao 0746de58f99f · LASTRO-FAIXA-SEM-DEFAULT · construtor · origem=Code
 
@@ -791,340 +1096,4 @@ Os 6 dia-colab somente FORA são col707/2026-10-27; col873/2026-10-28; col301/20
 | 120 < delta ≤ 240 | 5 | R 53641, 54017, 54583, 54584, 55094=180 |
 | delta > 240 | 1 | R 50833=290 |
 
-## 12/11 13:10 · sessao e93ae91a7d8b · S139-RESPEITA-A-RESPOSTA · censo · origem=Code
-
-**A. A S139 troca a hora antes da escrita; os leitores do slot herdam essa troca.** O trecho executável começa com `resposta_colab` e, para `intervalo_saida`/`intervalo_volta`, substitui-a pela hora de `_marco_faltante`, quando encontrada. Não há nesse trecho uma condição adicional sobre “intervalo fixo” nem uma verificação do envelope. (`app/chamados/services/materializacao.py:409-426`)
-
-As referências `:342` e `:712` indicadas na pergunta são de **`chamados/juizes.py`**, onde estão os comentários sobre essa derivação. (`app/chamados/juizes.py:342`; `app/chamados/juizes.py:712`)
-
-| Papel | Quem faz | Evidência |
-|---|---|---|
-| Resolve a hora e o tipo | `_ts_tipo_do_plantio` | `app/chamados/services/materializacao.py:333-428` |
-| Busca o marco cobrado | `_marco_faltante` → `entrada_de_marco`: motivo primeiro; fallback por tipo somente no formato legado | `app/chamados/juizes.py:523-580` |
-| Solicita o plantio | `_materializar_resposta_hora`, depois de derivar e procurar reuso | `app/chamados/services/materializacao.py:852-877` |
-| Grava `Batida.timestamp` | `registrar_batida` → `Batida.objects.create` | `app/chamados/services/materializacao.py:933-940`; `app/ponto/registro_batida.py:157-159` |
-| Grava a relação pergunta→batida | `anotar(... pergunta_origem=p)`, tanto para nova quanto para reusada | `app/chamados/services/materializacao.py:947-956` |
-| Grava resposta e instante derivado na trilha | `_log_auditoria_materializacao`, ação `materializar_batida` | `app/chamados/services/materializacao.py:957-978` |
-
-O campo persistido é **`Batida.pergunta_origem`**, reverso **`PerguntaDisputa.batidas_plantadas`**; não confundir com `PerguntaDisputa.batida_origem`, que identifica a batida sobre a qual outra família de perguntas pergunta. (`app/ponto/models.py:40-44`; `app/chamados/models.py:2437-2442`)
-
-Os leitores diretos da derivação são estes:
-
-| Leitor | Consequência |
-|---|---|
-| `estado_aplicacao_pergunta` | Calcula aplicação, reuso, paridade e horário anunciado na interface pelo instante derivado. (`app/chamados/services/materializacao.py:450-465`) |
-| `_slot_esperado` | **Hoje chama o mesmo derivador**; o docstring “Reproduz” é anterior ao corpo que delega. (`app/chamados/juizes.py:342`; `app/chamados/juizes.py:369-374`) |
-| `_pergunta_materializada_de_fato` | Confere as batidas vinculadas contra esse slot; a conferência aceita a janela de ±20 minutos. (`app/chamados/juizes.py:752-761`; `app/chamados/juizes.py:250-279`) |
-| `CargaDaVida` | Prepara/cacheia os slots usados pelo juiz. (`app/chamados/services/carga_pergunta_viva.py:113-126`) |
-| `_explicar_validada` | Busca batida perto do slot e escreve “validada como” usando sua hora. (`app/chamados/services/explicador.py:29-42`; `app/chamados/services/explicador.py:58-60`) |
-| `classe_do_lote` | Confere conflito perto do slot que o plantio usaria. (`app/chamados/services/validacao.py:869-876`) |
-| `vigia_carimbo.classificar` | Classifica slot não derivável, ausência de plantio ou plantio fora do slot. (`app/chamados/services/vigia_carimbo.py:105-113`) |
-
-O juiz de materialização também alimenta o veredito lavrado, o raio-X, o explicador e a conferência posterior ao plantio. (`app/chamados/veredito_lavrado.py:263`; `app/chamados/services/raiox.py:187`; `app/chamados/services/explicador.py:93`; `app/chamados/services/materializacao.py:1239`)
-
-**Outra cópia executável da substituição resposta→marco não foi localizada neste censo; exaustividade sobre todo consumidor indireto de `timestamp`: [nao verificado].** Os caminhos acima compartilham o derivador. (`app/chamados/services/materializacao.py:450`; `app/chamados/services/materializacao.py:852`; `app/chamados/juizes.py:372`)
-
-No esmeril semântico:
-
-- `resposta_colab` conserva a declaração; a substituição acontece na variável `_hora_fonte`, não na resposta persistida. A trilha grava os dois valores separadamente. (`app/chamados/services/materializacao.py:412-419`; `app/chamados/services/materializacao.py:969-977`)
-- `Batida.timestamp` recebe o instante materializado, que nesse ramo pode ser o marco. O pareador consome esse campo como instante da batida. (`app/ponto/registro_batida.py:157-159`; `app/ponto/turnos.py:1217`; `app/ponto/turnos.py:1357`)
-- Há textos que chamam esse slot de “hora respondida” ou “slot da resposta”, embora ele possa conter a hora do marco. (`app/chamados/juizes.py:663-667`; `app/chamados/services/explicador.py:31`; `app/chamados/services/vigia_carimbo.py:17-20`)
-- `delta_da_resposta` e `motivo_implausivel_validacao` preservam a distinção: leem resposta e marco separadamente. (`app/chamados/juizes.py:1846-1868`; `app/chamados/juizes.py:1972-1983`)
-- A reconciliação da grade reconhece a dependência: evita trocar o marco sob resposta viva já dada porque a materialização lê `marcos_faltantes`. (`app/ponto/management/commands/reconciliar_grade.py:437-440`; `app/ponto/management/commands/reconciliar_grade.py:460-462`)
-
-**B. O caso protegido era uma volta de intervalo declarada no horário da saída do intervalo.** O teste fundador descreve volta esperada às `03:00`, resposta `02:00`, e exige impedir `E@02:00` no slot da saída. A fixture valida essa resposta e exige `E@03:00`, expressamente diferente de `02:00`. (`app/chamados/tests/test_s139.py:15-18`; `app/chamados/tests/test_s139.py:40-56`)
-
-“Marco oposto” significa, nesse caso, jornada `19→07`, intervalo `02:00/S→03:00/E`: uma `E` próxima das `02:00` ocupa temporalmente o marco `S`. Outro teste reproduz a figura com `E@02:05` e exige a classificação `batida_retro_invertida`. (`app/chamados/tests/test_auditar_disputas_padroes.py:117-150`)
-
-O dano diretamente demonstrado é **tipo `E` no horário do marco `S`**. Consequência financeira ou quebra específica de pareamento pela retirada da S139: **[nao verificado]**.
-
-A O306 manteve explicitamente a S139: resposta `13:05` continua virando `13:00` quando esse é o marco do próprio motivo. Corrigiu outra falha: receber o marco de um motivo vizinho, deixando o marco perguntado vazio. (`app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:146-153`; `app/chamados/juizes.py:555-575`)
-
-Commit, autoria, data e corte específico do nascimento da S139 por `git log/blame`: **[nao verificado]**. As consultas Git falharam porque esta cópia não foi reconhecida como repositório. **[nao verificado]** A L-032 e a L-099 locais não identificam o nascimento da S139; estabelecem, respectivamente, reconhecimento do intervalo dentro do envelope e coerência com o cadastro existente. (`app/docs/LEIS.md:80`; `app/docs/LEIS.md:122`)
-
-**C. Os 90 minutos estão dentro de `parear_turnos`; não existe uma função única pronta com a assinatura perguntada.** O literal aparece no predicado interno `_absorvivel`, na guarda de continuidade e na absorção por marco. (`app/ponto/turnos.py:1251`; `app/ponto/turnos.py:1352`; `app/ponto/turnos.py:1358`)
-
-A função reutilizável é **`_dist_marco(ts, marcos)`**: devolve a menor distância local em minutos, considerando dia anterior, mesmo dia e seguinte. Não recebe colaborador, não resolve o marco e não retorna um booleano. (`app/ponto/turnos.py:326-340`)
-
-A composição disponível é:
-
-| Pergunta | Código existente |
-|---|---|
-| Qual vínculo responde pelo colaborador/dia? | `escala_vigente` → `vinculo_do_dia`. (`app/escala/servico_jornada.py:15-66`) |
-| Quais os marcos cadastrados desse dia? | `ec.marcos_do_dia`: DNA congelado, com fallback para template. (`app/escala/models.py:1098-1133`) |
-| Qual marco corresponde ao motivo? | `MARCO_DA_PERGUNTA`: saída→`hii`, volta→`hfi`. (`app/chamados/juizes.py:922-926`) |
-| Está no raio de 90 minutos desse marco? | `_dist_marco(...) <= 90`. (`app/ponto/turnos.py:326-340`; `app/ponto/turnos.py:1251`) |
-
-**Estar nesse raio não prova absorção pelo pareador.** A absorção também compara a proximidade das bordas e depende do turno corrente e de seu teto de continuidade. O pareador ainda refina marcos pelo DNA na data civil local da batida. (`app/ponto/turnos.py:1229-1251`; `app/ponto/turnos.py:1349-1370`)
-
-`intervalo_cadastrado` responde a duração cadastrada; não é a função de pertencimento ao envelope. (`app/ponto/juiz_batida.py:106-107`)
-
-**D. Script para colar no shell Django, dentro do envelope de leitura.** Ele usa a **relação persistida**, incluindo reuso, sem consultar a trilha. Essa relação é escrita nos dois caminhos; logo, sua contagem não significa “batidas novas criadas”. Também pode ser reassociada a outra pergunta pelo escritor. (`app/chamados/services/materializacao.py:865-876`; `app/chamados/services/materializacao.py:952-956`)
-
-O script imprime separadamente:
-
-- raio do marco **cadastrado** do colaborador/dia;
-- raio do marco **cobrado no snapshot** do chamado;
-- absorção completa pelo pareador como `NAO_VERIFICADO`, pelas dependências descritas em C. (`app/escala/models.py:1098-1133`; `app/chamados/juizes.py:523-580`; `app/ponto/turnos.py:1349-1370`)
-
-A diferença é a menor distância entre horas locais, inclusive pela meia-noite, calculada por `_dist_marco`; não atribui uma data inventada à resposta `HH:MM`. (`app/ponto/turnos.py:326-340`; `app/chamados/models.py:2448`)
-
-`S total` conta perguntas distintas; `relacoes` conta batidas vinculadas. Havendo várias batidas para uma pergunta, `acima30` significa que pelo menos uma ultrapassou 30 minutos. Isso fica explícito no código abaixo. Execução Django e números resultantes: **[nao verificado]**.
-
-```python
-from collections import defaultdict, Counter
-from datetime import date, datetime, time
-from django.db import connection
-from django.db.models import Q
-from django.utils import timezone
-from chamados.juizes import MARCO_DA_PERGUNTA, _marco_faltante
-from escala.servico_jornada import escala_vigente
-from ponto.models import Batida
-from ponto.turnos import _dist_marco
-
-INICIO = date(2026, 10, 21)
-# Raio existente: ponto/turnos.py:1251,1358.
-RAIO_MIN = 90
-TOTAL_ERROS = 0
-cache = {}
-grupos = defaultdict(lambda: defaultdict(set))
-links_por_pergunta = Counter()
-fora_recorte = set()
-sem_dia = set()
-
-def emitir(*campos):
-    print("\t".join(str(x) for x in campos))
-
-def erro(etapa, pk, exc):
-    global TOTAL_ERROS
-    TOTAL_ERROS += 1
-    # Nunca imprimir mensagem da excecao, objetos ou resposta bruta.
-    emitir("S", "ERRO", etapa, pk, type(exc).__name__)
-
-def tentar(etapa, pk, func):
-    try:
-        return func()
-    except Exception as exc:
-        erro(etapa, pk, exc)
-        return None
-
-def apenas_select(execute, sql, params, many, context):
-    if not str(sql).lstrip().upper().startswith("SELECT"):
-        raise RuntimeError("SQL_nao_SELECT")
-    return execute(sql, params, many, context)
-
-def hora(texto):
-    hh, mm = texto.strip().split(":")
-    return time(int(hh), int(mm))
-
-def marco_cadastro(cid, dia, chave):
-    ec = escala_vigente(cid, dia)
-    if ec is None:
-        return None
-    # Contrato: escala/models.py:1098-1133.
-    return dict(zip(("hi", "hf", "hii", "hfi"),
-                    ec.marcos_do_dia(dia)))[chave]
-
-def raio(resp, marco, dia):
-    if resp is None or marco is None:
-        return None
-    ts = timezone.make_aware(datetime.combine(dia, resp))
-    return _dist_marco(ts, [marco]) <= RAIO_MIN
-
-def preparar(p):
-    if p.pk in cache:
-        return cache[p.pk]
-    dia = p.data_evento
-    if dia is None:
-        texto = ((p.disputa.contexto or {}).get(p.motivo) or {}).get("data")
-        dia = tentar("dia_contexto", p.pk, lambda: date.fromisoformat(texto))
-    if dia is None:
-        sem_dia.add(p.pk)
-        cache[p.pk] = None
-        return None
-    if dia < INICIO:
-        fora_recorte.add(p.pk)
-        cache[p.pk] = None
-        return None
-    cid = p.disputa.colaborador_id
-    tipo, chave = MARCO_DA_PERGUNTA[p.motivo]
-    resp = tentar("hora_resposta", p.pk, lambda: hora(p.resposta_colab))
-    mc = tentar("marco_cadastro", p.pk,
-                lambda: marco_cadastro(cid, dia, chave))
-    def snapshot():
-        texto = _marco_faltante(p.chamado_destino, p.motivo, tipo)
-        return hora(texto) if texto else None
-    ms = tentar("marco_snapshot", p.pk, snapshot)
-    dc = tentar("raio_cadastro", p.pk, lambda: raio(resp, mc, dia))
-    ds = tentar("raio_snapshot", p.pk, lambda: raio(resp, ms, dia))
-    cache[p.pk] = (cid, dia, resp, mc, ms, dc, ds)
-    return cache[p.pk]
-
-def fmt_hora(h):
-    return h.strftime("%H:%M") if h is not None else "NAO_VERIFICADO"
-
-def flag(v):
-    return "NAO_VERIFICADO" if v is None else int(v)
-
-def registrar(chave, p, b, delta, dc, ds):
-    g = grupos[chave]
-    g["total"].add(p.pk)
-    g["relacoes"].add(b.pk)
-    if delta is None:
-        g["delta_nv"].add(p.pk)
-    else:
-        if delta > 0:
-            g["hora_diferente"].add(p.pk)
-        if delta > 30:
-            g["acima30"].add(p.pk)
-    g["raio_cadastro_nv" if dc is None else
-      "dentro90_cadastro" if dc else "fora90_cadastro"].add(p.pk)
-    g["raio_snapshot_nv" if ds is None else
-      "dentro90_snapshot" if ds else "fora90_snapshot"].add(p.pk)
-
-emitir("S", "R_COLUNAS", "col", "pergunta_pk", "batida_pk", "dia_turno",
-       "hora_respondida", "batida_local", "delta_relogio_min",
-       "marco_cadastro", "dentro90_cadastro", "marco_snapshot",
-       "dentro90_snapshot", "retratada", "absorcao_pareador")
-try:
-    with connection.execute_wrapper(apenas_select):
-        qs = (Batida.objects.filter(
-            pergunta_origem__motivo__in=("intervalo_saida", "intervalo_volta"),
-            pergunta_origem__tipo_resposta="hora",
-            pergunta_origem__respondida_em__isnull=False,
-            pergunta_origem__validada_em__isnull=False)
-            .filter(Q(pergunta_origem__data_evento__gte=INICIO) |
-                    Q(pergunta_origem__data_evento__isnull=True))
-            .select_related("pergunta_origem__disputa",
-                            "pergunta_origem__chamado_destino")
-            .order_by("pergunta_origem_id", "pk"))
-        for b in qs.iterator(chunk_size=1000):
-            try:
-                p = b.pergunta_origem
-                dados = preparar(p)
-                if dados is None:
-                    continue
-                cid, dia, resp, mc, ms, dc, ds = dados
-                if b.colaborador_id != cid:
-                    raise ValueError("colaborador_divergente")
-                links_por_pergunta[p.pk] += 1
-                local = timezone.localtime(b.timestamp)
-                delta = (tentar("delta_batida_resposta", p.pk,
-                                lambda: _dist_marco(b.timestamp, [resp]))
-                         if resp is not None else None)
-                emitir("R", f"col{cid:03d}", p.pk, b.pk, dia.isoformat(),
-                       fmt_hora(resp), local.isoformat(),
-                       "NAO_VERIFICADO" if delta is None else f"{delta:.3f}",
-                       fmt_hora(mc), flag(dc), fmt_hora(ms), flag(ds),
-                       int(b.retratada_em is not None), "NAO_VERIFICADO")
-                for chave in (("TOTAL",), ("COLAB", f"col{cid:03d}"),
-                              ("COLAB_DIA", f"col{cid:03d}", dia.isoformat())):
-                    registrar(chave, p, b, delta, dc, ds)
-            except Exception as exc:
-                erro("item", b.pk, exc)
-except Exception as exc:
-    erro("consulta", 0, exc)
-
-metricas = ("total", "relacoes", "hora_diferente", "acima30", "delta_nv",
-            "dentro90_cadastro", "fora90_cadastro", "raio_cadastro_nv",
-            "dentro90_snapshot", "fora90_snapshot", "raio_snapshot_nv")
-emitir("S", "RESUMO_COLUNAS", *metricas)
-if ("TOTAL",) not in grupos:
-    grupos[("TOTAL",)]
-for chave in sorted(grupos):
-    emitir("S", *chave, *(len(grupos[chave][m]) for m in metricas))
-emitir("S", "COLABS", sum(k[0] == "COLAB" for k in grupos))
-emitir("S", "PERGUNTAS_COM_MULTIPLAS_BATIDAS",
-       sum(n > 1 for n in links_por_pergunta.values()))
-emitir("S", "SEM_DIA", len(sem_dia))
-emitir("S", "FORA_RECORTE_CONTEXTUAL", len(fora_recorte))
-emitir("S", "TOTAL_ERROS", TOTAL_ERROS)
-```
-
-Os números `506/1282`, `376`, `133` e `59` ficam como informação do anexo, sem confirmação independente: **[nao verificado]**. Quantos dos 59 ultrapassam 30 minutos e quantos estão no raio cadastrado: **[nao verificado]**. O anexo também não fornece os marcos cadastrados necessários para confirmar que o caso 50833 é o contraexemplo “dentro do envelope”: **[nao verificado]**.
-
-## 12/11 13:05 · sessao 529fdf18fac9 · - · - · origem=Ronald (tmux)
-
-C — o número e o juiz real:
-
-- A L-032 aponta o envelope de 90 minutos em `app/docs/LEIS.md:80`.
-- O número **90 não é constante compartilhada**: aparece literalmente dentro de `parear_turnos`, no predicado interno `_absorvivel` (`app/ponto/turnos.py:1251`), na guarda do teto (`app/ponto/turnos.py:1352`) e na absorção por marco (`app/ponto/turnos.py:1358`).
-- A função reutilizável real é `_dist_marco(ts, marcos)`: calcula a menor distância em minutos entre o instante local e cada hora de marco, considerando dia anterior, mesmo dia e seguinte. Retorna `None` sem marco; **não recebe colaborador nem dia da jornada e não responde um booleano** (`app/ponto/turnos.py:326`–`340`).
-- O predicado completo de absorção exige distância ao intervalo `<=90` e intervalo tão próximo quanto a borda do turno; no laço exige também turno corrente e respeita o teto de continuidade. Portanto, estar no raio de X não prova que a resposta seria absorvida como intervalo numa jornada real (`app/ponto/turnos.py:1246`–`1251`; `app/ponto/turnos.py:1349`–`1370`).
-- **Não há função única pronta** `(colab, dia, marco X, resposta) -> dentro_envelope`. Essa pergunta é composta por resolução de vínculo/marcos, distância e guardas internas do pareador (`app/escala/servico_jornada.py:15`–`66`; `app/ponto/turnos.py:1229`–`1251`; `app/ponto/turnos.py:1349`–`1370`).
-
-Fontes de marco:
-
-- Vínculo de um colaborador/dia: `escala_vigente`, que carrega células/vínculos e chama `vinculo_do_dia` (`app/escala/servico_jornada.py:15`–`66`).
-- Marcos desse vínculo/dia: `ec.marcos_do_dia(dia)`, DNA congelado da célula com fallback para template (`app/escala/models.py:1098`–`1133`).
-- Marcos efetivamente usados pelo pareador: template por `marcos_do_template` (`app/ponto/turnos.py:1504`–`1514`), refinado por DNA usando a **data civil local da batida** em `_ivm_de`/`_bm_de` (`app/ponto/turnos.py:1229`–`1244`). Com segundo intervalo, o chamador deixa de passar mapa DNA para preservar o segundo par do template (`app/ponto/turnos.py:1984`–`1989`).
-- `intervalo_cadastrado` responde **duração cadastrada**, não pertencimento ao envelope (`app/ponto/juiz_batida.py:106`–`146`).
-
-D — recomendação para a sonda:
-
-Use o marco X **cobrado na pergunta**, pelo leitor puro `entrada_de_marco(p.chamado_destino, p.motivo, tipo=None)`; ele resolve por motivo no snapshot `marcos_faltantes`. A casca `_marco_faltante(ch,motivo,tipo)` devolve só a hora e admite fallback por tipo apenas no formato legado (`app/chamados/juizes.py:523`–`580`). Teste o raio chamando a função real:
-
-```python
-dist = _dist_marco(ts_resposta, [hora_marco])
-dentro_raio_marco_cobrado = None if dist is None else dist <= 90
-```
-
-Esse resultado precisa ser descrito como **“raio de 90 minutos do marco cobrado no snapshot”**, e não “classificação plena do pareador”; o último resultado depende de contexto e guardas acima (`app/ponto/turnos.py:1246`–`1251`; `app/ponto/turnos.py:1349`–`1370`).
-
-Não usar `grade_da_celula` para identificar `hii`/`hfi` apenas pelo tipo: ela entrega `{'tipo','hora'}` das lâmpadas, sem chave de marco ou motivo (`app/escala/services/leitor_celula.py:148`; `app/escala/services/leitor_celula.py:413`–`418`). Identificação só por E/S é precisamente a ambiguidade entrada/volta e intervalo/saída descrita em `_marco_faltante` (`app/chamados/juizes.py:526`–`531`). A grade faz leituras no corpo, mas sua régua é a ATA, uma fonte diferente do DNA/template usado no pareador (`app/escala/services/leitor_celula.py:361`–`362`; `app/escala/services/leitor_celula.py:413`–`418`).
-
-## 12/11 13:05 · sessao 5af3ff980af8 · - · - · origem=Ronald (tmux)
-
-Item A — achados da cópia, somente leitura:
-
-- **Correção de caminho:** as referências `:342` e `:712` pertencem a `app/chamados/juizes.py`; em `app/core/juizes.py:342` está `SEM_JUIZ` e em `app/core/juizes.py:712` está `_TT4`. (`app/chamados/juizes.py:341`, `app/chamados/juizes.py:712`, `app/core/juizes.py:342`, `app/core/juizes.py:712`)
-
-- **Derivador da hora:** `_ts_tipo_do_plantio` começa com `p.resposta_colab`; para os dois motivos de intervalo, pede `_marco_faltante` e, havendo hora, substitui a resposta pelo marco. Combina a hora com o dia e aplica overnight. O comentário “horário FIXO” não corresponde a uma condição explícita sobre `intervalo_modo` nesse trecho: o discriminador executável é motivo de intervalo + marco encontrado. (`app/chamados/services/materializacao.py:409`, `app/chamados/services/materializacao.py:413`, `app/chamados/services/materializacao.py:419`, `app/chamados/services/materializacao.py:426`)
-
-- **Fonte do marco:** `_marco_faltante` delega a `entrada_de_marco`, que lê `ch.contexto_json['marcos_faltantes']`, casa primeiro por motivo; havendo algum motivo na lista, não cai no tipo de outro marco; somente lista inteiramente legada admite fallback por tipo. (`app/chamados/juizes.py:523`, `app/chamados/juizes.py:535`, `app/chamados/juizes.py:549`, `app/chamados/juizes.py:551`, `app/chamados/juizes.py:576`, `app/chamados/juizes.py:578`)
-
-- **Quem escreve:** `_materializar_resposta_hora` chama o derivador e consulta reuso em ±20 minutos. Sem reuso, chama `registrar_batida(colaborador, ts, tipo, 'disputa_s84_retro', ...)`; a porta efetua `Batida.objects.create(timestamp=timestamp, ...)`. (`app/chamados/services/materializacao.py:852`, `app/chamados/services/materializacao.py:865`, `app/chamados/services/materializacao.py:933`, `app/ponto/registro_batida.py:157`)
-
-- **Relação persistida:** nova ou reusada, recebe `pergunta_origem=p` via `anotar`; o FK reverso é `batidas_plantadas`. Portanto, esse vínculo inclui reuso e sozinho não prova que uma batida nova nasceu. A trilha `materializar_batida` também é emitida após os dois caminhos e grava `batida_pk`, timestamp pretendido, `pergunta_pk` e `resposta_colab`. (`app/chamados/services/materializacao.py:871`, `app/chamados/services/materializacao.py:952`, `app/chamados/services/materializacao.py:954`, `app/chamados/services/materializacao.py:957`, `app/chamados/services/materializacao.py:967`, `app/chamados/services/materializacao.py:976`, `app/ponto/models.py:40`)
-
-- **Não localizei segunda cópia executável dessa substituição** no inventário de chamadas: `_ts_tipo_do_plantio` serve o plantio, o estado da UI e `_slot_esperado`. Este último **hoje delega** ao mesmo derivador; o docstring “Reproduz” ficou, mas o corpo declara expressamente que não reproduz mais. (`app/chamados/services/materializacao.py:450`, `app/chamados/services/materializacao.py:852`, `app/chamados/juizes.py:342`, `app/chamados/juizes.py:369`, `app/chamados/juizes.py:372`)
-
-Leitores diretos desse slot, portanto herdando a hora do marco:
-
-| Leitor | Uso | Evidência |
-|---|---|---|
-| `estado_aplicacao_pergunta` | Estado do modal; reuso, paridade e promessa de horário a registrar | `app/chamados/services/materializacao.py:450`, `app/chamados/services/materializacao.py:453`, `app/chamados/services/materializacao.py:458`, `app/chamados/services/materializacao.py:463` |
-| `_pergunta_materializada_de_fato` | Compara batidas ligadas à hora do slot; fallback de acervo busca a mesma janela | `app/chamados/juizes.py:752`, `app/chamados/juizes.py:755`, `app/chamados/juizes.py:760`, `app/chamados/juizes.py:812` |
-| `_plantio_na_hora_do_slot` | Batida ligada deve estar em ±20 minutos do slot; para hora, aceita dia do turno ou seguinte | `app/chamados/juizes.py:267`, `app/chamados/juizes.py:276`, `app/chamados/juizes.py:278` |
-| `CargaDaVida` | Cache de slots e preparação das testemunhas do C6 | `app/chamados/services/carga_pergunta_viva.py:113`, `app/chamados/services/carga_pergunta_viva.py:119`, `app/chamados/services/carga_pergunta_viva.py:126` |
-| `_explicar_validada` | Procura batida em ±20 minutos e diz “validada como …” usando a hora derivada | `app/chamados/services/explicador.py:29`, `app/chamados/services/explicador.py:34`, `app/chamados/services/explicador.py:58`, `app/chamados/services/explicador.py:60` |
-| `classe_do_lote` | Confere conflito próximo do slot de plantio | `app/chamados/services/validacao.py:869`, `app/chamados/services/validacao.py:872`, `app/chamados/services/validacao.py:875` |
-| `vigia_carimbo.classificar` | Distingue slot não derivável / plantio fora do slot / sem plantio | `app/chamados/services/vigia_carimbo.py:105`, `app/chamados/services/vigia_carimbo.py:110`, `app/chamados/services/vigia_carimbo.py:113` |
-
-**Leitores transitivos do juiz de materialização:** veredito lavrado, raiox, explicador e fechamento/materialização voltam a esse juiz. (`app/chamados/veredito_lavrado.py:263`, `app/chamados/services/raiox.py:187`, `app/chamados/services/explicador.py:93`, `app/chamados/services/materializacao.py:1239`, `app/chamados/services/materializacao.py:1433`, `app/chamados/juizes.py:1473`)
-
-**Esmeril semântica:** o campo bruto `resposta_colab` permanece a fala; `Batida.timestamp` pode conter o marco, e o slot esperado também passa a conter o marco. Assim, não é uma mistura dentro de `resposta_colab`; é uma divergência entre declaração preservada e instante materializado. O próprio código guarda ambos na trilha. (`app/chamados/services/materializacao.py:412`, `app/chamados/services/materializacao.py:416`, `app/chamados/services/materializacao.py:969`, `app/chamados/services/materializacao.py:977`)
-
-Há frases que chamam o slot de “hora respondida” embora o cálculo possa usar o marco: docstring do juiz de materialização, explicador e descrição do vigia. Isso sustenta o descompasso textual e operacional; uma intenção adicional de seus autores é [nao verificado]. (`app/chamados/juizes.py:663`, `app/chamados/juizes.py:667`, `app/chamados/services/explicador.py:31`, `app/chamados/services/vigia_carimbo.py:17`)
-
-**Leitores que preservam a distinção:** `delta_da_resposta` lê a resposta bruta separadamente do marco; `motivo_implausivel_validacao` faz o mesmo. Ambos procuram marco no chamado e depois na grade, sem substituir a resposta. O fio também apresenta `esperada_prevista` separadamente e calcula o estado da aplicação via derivador. (`app/chamados/juizes.py:1846`, `app/chamados/juizes.py:1850`, `app/chamados/juizes.py:1863`, `app/chamados/juizes.py:1972`, `app/chamados/juizes.py:1977`, `app/chamados/services/fio.py:325`, `app/chamados/services/fio.py:331`, `app/chamados/services/fio.py:336`)
-
-**Testes da mesma política:** `test_s139.py` exige resposta `02:00` virar `E@03:00`, rejeitando expressamente `02:00`. O teste posterior O306 mantém S139: resposta `13:05` deve produzir `13:00` quando é o marco do próprio motivo. (`app/chamados/tests/test_s139.py:40`, `app/chamados/tests/test_s139.py:45`, `app/chamados/tests/test_s139.py:51`, `app/chamados/tests/test_s139.py:53`, `app/chamados/tests/test_s139.py:55`, `app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:146`, `app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:151`, `app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:153`)
-
-**Outro consumidor explícito do caráter mutável do marco:** reconciliar grade evita reescrever a cobrança enquanto houver fio vivo respondido, porque a materialização lê `marcos_faltantes`; comentário declara que trocar o marco sob resposta já dada a orfanaria. (`app/ponto/management/commands/reconciliar_grade.py:437`, `app/ponto/management/commands/reconciliar_grade.py:460`)
-
-## 12/11 13:05 · sessao 46494a3f7c2a · - · - · origem=Ronald (tmux)
-
-B — O caso protegido está declarado em [app/chamados/tests/test_s139.py:15](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/tests/test_s139.py:15): volta esperada às 03:00; resposta livre 02:00; impedir uma `E@02:00` no horário da saída do intervalo. A fixture contém marco `03:00/E`, resposta `02:00` e validação; o teste exige batida `E`, diferente de `02:00`, exatamente `03:00` — [app/chamados/tests/test_s139.py:40](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/tests/test_s139.py:40), [app/chamados/tests/test_s139.py:46](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/tests/test_s139.py:46), [app/chamados/tests/test_s139.py:49](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/tests/test_s139.py:49).
-
-“Cair no slot oposto” significa concretamente: jornada `19→07`, intervalo `02:00/S→03:00/E`; a batida `E@02:00` coincide com o marco `S`. O teste do auditor descreve esse caso e comprova detecção como `batida_retro_invertida` criando `E@02:05`; o detector anterior, limitado às bordas da jornada, não o encontrava — [app/chamados/tests/test_auditar_disputas_padroes.py:117](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303b41ddb91e3a/app/chamados/tests/test_auditar_disputas_padroes.py:117), [app/chamados/tests/test_auditar_disputas_padroes.py:140](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/tests/test_auditar_disputas_padroes.py:140). Consequência específica em pareamento, folha ou dinheiro causada pela retirada da S139: [nao verificado].
-
-A S139 hoje não testa distância nem envelope: substitui a resposta pelo `_marco_faltante` quando há motivo de intervalo e marco disponível — [app/chamados/services/materializacao.py:409](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/services/materializacao.py:409).
-
-A O306 preservou expressamente a regra para o marco do próprio motivo: resposta `13:05` continua produzindo `13:00` — [app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:146](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:146). Corrigiu outra falha: fallback por tipo entregava marco de outro motivo, produzindo `08:00` para pergunta de `13:00`; o marco das 13:00 continuava vazio, a célula seguia `furo` e havia nova declaração — [app/chamados/juizes.py:555](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/chamados/juizes.py:555).
-
-Commit, data, autoria e corte/lei específicos do nascimento da S139 por `git log/blame`: [nao verificado]. Raiz e `app/` não foram reconhecidas como repositório Git nas tentativas de consulta; nenhum arquivo foi criado. [nao verificado] [nao verificado]
-
-A L-032 local exige reconhecer intervalo dentro do envelope apesar da diferença de horário, mas sua linha não cita S139 — [app/docs/LEIS.md:80](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/docs/LEIS.md:80). A L-099 exige coerência com o cadastro e encaminha divergências de cadastro/batida ao admin; tampouco cita a origem da S139 — [app/docs/LEIS.md:122](/home/ronald/codex_ws/096ace9d0f9fe1a939f12e1f303bcb41ddb91e3a/app/docs/LEIS.md:122).
-
-_4262 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
