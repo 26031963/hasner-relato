@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 15:47:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (479.6 MB). Acoes na janela: **1609**.
+**Medido em 12/11/2026 15:52:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (479.6 MB). Acoes na janela: **1611**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:47:26 | Bash | Update RELATO ESPERANDO line to c19 wrapper pid | `sleep 5 2>/dev/null; P=$(pgrep -f 'codex_pergunta.sh --construtor' \| head -1); echo "wrapper=$P"; tail -3 /home/ronald/saas-hasner/logs/LASTRO-FAIXA/c19/c19.log 2>/dev/null cd /home/ronald/saas-hasner/app/docs; python3 - "$P" <<'EOF' import sys p=sys.argv[1]; f='RELATO.md'; s=open(f).read() old='ESPERANDO: codex_pergunta.sh \| pid=1759921\n' assert s.count(old)==1 new=(f'ESPERANDO: codex_pergunta ...` |
+| 15:47:14 | Bash | Launch c19 construtor detached and show RELATO top | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; setsid nohup c19/lanca_construtor_c19.sh > c19/lanca.out 2>&1 < /dev/null & /usr/bin/sleep 3; pgrep -f lanca_construtor_c19.sh; head -5 /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-200` |
 | 15:47:11 | Bash | Write c19 construtor brief and launcher | `D=/home/ronald/saas-hasner/logs/LASTRO-FAIXA; cd $D/c19; cat > construtor_c19.q <<'EOF' LASTRO-FAIXA-SEM-DEFAULT volta c19 (construtor). Base: o HEAD desta copia (b00107990 = c18). Aval vigente: anexo lastro_c17_s1.txt (S1=(A): a identidade da orfa e o INSTANTE lavrado na ata; exportada diz "nao sei"). O pre-verificador reprovou a c18 (anexo preverif_c18.r). A sessao conferiu cada linha citada. Cu ...` |
 | 15:46:46 | Bash | Check leitor filter and PDF helper for remaining findings | `D=/home/ronald/saas-hasner/logs/LASTRO-FAIXA; mkdir -p $D/c19; cd $D/c19; cp ../c18/preverif/preverif_c18.r preverif_c18.r; W=/home/ronald/wt-codex-lastro-faixa-sem-default-215253; sed -n 180,195p $W/app/escala/services/leitor_celula.py; sed -n 415,425p $W/app/escala/services/leitor_celula.py; sed -n 698,708p $W/app/ponto/services/espelho.py; sed -n 174,200p $W/app/relatorios/pdf_espelho.py` |
 | 15:46:41 | Bash | Inspect c18 launch script and construtor vaga | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA/c18; ls; cat lanca*.sh 2>/dev/null \| head -30; cat /home/ronald/saas-hasner/logs/construtor.vaga 2>/dev/null; ps aux \| /bin/grep -c "[c]odex exec"` |
