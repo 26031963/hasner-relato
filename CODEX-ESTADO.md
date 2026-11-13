@@ -1,7 +1,200 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 10:48** · publicado em **13/11/2026 10:49** (UTC-3)
+> Ultima resposta processada: **13/11/2026 10:52** · publicado em **13/11/2026 10:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 10:52 · sessao bf56601fcd1a · FERIADO-NASCE-DA-ESCALA · verificador · origem=Code
+
+**REPROVA.** Há caminhos que mantêm ou recriam `5x2=True`, herança sem escolha obrigatória, reversão incompleta e escolha humana sem efeito em dois ciclos. (`app/colaboradores/services/vinculo.py:1027`, `app/colaboradores/services/vinculo.py:1078`, `app/colaboradores/services/vinculo.py:185`, `app/escala/models.py:1422`)
+
+A correspondência da cópia com o hash Git informado, execução da suíte, opus, deploy, aplicação dos 16 e resultados posteriores em produção permanecem **[não verificado]**. [nao verificado]
+
+**A. Todos os nascimentos e reaproveitamentos encontrados**
+
+| Sítio de produção | Origem de `trabalha_em_feriado` |
+|---|---|
+| `executar_vinculo`: criação | `v['trabalha_em_feriado']`, calculado por `_feriado_do_veredito`. (`app/colaboradores/services/vinculo.py:144`, `app/colaboradores/services/vinculo.py:329`, `app/colaboradores/services/vinculo.py:338`) |
+| `executar_vinculo`: reaproveitamento da mesma data | Troca o tipo e recebe a flag do mesmo veredito. (`app/colaboradores/services/vinculo.py:315`, `app/colaboradores/services/vinculo.py:317`) |
+| `criar_trecho_retroativo` | `feriado_do_trecho(tipo_destino, flag_original)`. (`app/colaboradores/services/vinculo.py:1017`, `app/colaboradores/services/vinculo.py:1021`) |
+| `ajustar_vinculo_pelo_sistema` | `feriado_do_trecho(tipo_derivado, flag_original)`. (`app/colaboradores/services/vinculo.py:1136`, `app/colaboradores/services/vinculo.py:1139`) |
+| `desfazer_ajuste_do_sistema`: renascimento | `feriado_do_trecho(tipo_antigo, flag_antiga)`. (`app/colaboradores/services/vinculo.py:1158`, `app/colaboradores/services/vinculo.py:1161`) |
+| `desfazer_ajuste_do_sistema`: reabertura | Reativa o antigo, mantendo sua flag sem novo julgamento. (`app/colaboradores/services/vinculo.py:1149`, `app/colaboradores/services/vinculo.py:1154`) |
+| `corrigir_vinculo_retroativo`: troca de tipo | **Mantém a flag anterior sem consultar o juiz.** (`app/colaboradores/services/vinculo.py:1027`, `app/colaboradores/services/vinculo.py:1030`) |
+| `reverter_para_snapshot`: restauração de tipo | **Mantém a flag atual; o snapshot não contém a anterior.** (`app/colaboradores/services/vinculo.py:108`, `app/colaboradores/services/vinculo.py:1078`) |
+
+Nos quatro `create` encontrados, a flag é explícita. Não encontrei outro nascimento por `get_or_create`, `update_or_create`, construtor ou `bulk_create` na produção examinada; ausência de caminhos dinâmicos adicionais é **[não verificado]**. Os quatro nascimentos estão em `app/colaboradores/services/vinculo.py:329`, `app/colaboradores/services/vinculo.py:1017`, `app/colaboradores/services/vinculo.py:1136` e `app/colaboradores/services/vinculo.py:1158`.
+
+**Bloqueante 1 — troca retroativa fora do julgamento:** `6x1=True → 5x2` pela correção no lugar continua `True`. O comando chama exatamente essa função. (`app/colaboradores/services/vinculo.py:1027`, `app/colaboradores/services/vinculo.py:1030`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:212`)
+
+**Bloqueante 2 — reversão do aceite incompleta:** reaproveitar `5x2=False` como `12x36=True` e depois recusar restaura o tipo `5x2`, mas deixa `True`. Uma mudança somente da flag também não é desfeita. O snapshot omite a flag e a restauração não a escreve. (`app/colaboradores/services/vinculo.py:108`, `app/colaboradores/services/vinculo.py:317`, `app/colaboradores/services/vinculo.py:1078`, `app/chamados/services/acoes_chamado.py:149`)
+
+O default perigoso continua `True`; a proteção depende das portas e do selo, que tem escapes descritos em G. (`app/escala/models.py:897`, `app/escala/tests/test_feriado_nasce_da_escala_selo.py:90`)
+
+**B. Matriz completa e identidade do substituído**
+
+A função não recebe `acao`: a tabela abaixo vale igualmente quando chamada durante `criar`, `atualizar` ou o candidato inicial a `no_op`. `R` significa `ValueError`; `S` significa a flag armazenada no substituído. (`app/colaboradores/services/vinculo.py:144`, `app/colaboradores/services/vinculo.py:165`)
+
+| Juiz | Substituído | `''`/ausente | `'1'` | `'0'` | Inválida |
+|---|---|---:|---:|---:|---:|
+| `True` | Nenhum / mesmo ciclo / outro ciclo | `True` | `True` | R | R |
+| `False` | Nenhum / mesmo ciclo / outro ciclo | `False` | R | `False` | R |
+| `None` | Nenhum | R | `True` | `False` | R |
+| `None` | Mesmo ciclo | S | `True` | `False` | R |
+| `None` | Outro ciclo | R | `True` | `False` | R |
+
+A validação da escolha inválida precede o juiz; as respostas fixas vêm antes da herança; o mesmo ciclo somente é considerado quando o juiz retorna `None`. (`app/colaboradores/services/vinculo.py:173`, `app/colaboradores/services/vinculo.py:178`, `app/colaboradores/services/vinculo.py:185`)
+
+O produto cartesiano tem combinações inalcançáveis pelo chamador:
+
+- **`criar`:** não existe vínculo da mesma data; o substituído pode ser ausente, ativo de mesmo ciclo ou ativo de outro ciclo. A ação continua `criar`. (`app/colaboradores/services/vinculo.py:102`, `app/colaboradores/services/vinculo.py:125`, `app/colaboradores/services/vinculo.py:141`)
+- **`atualizar`:** existe vínculo da mesma data, inclusive inativo; ele sempre ganha a preferência como substituído. Pode ter mesmo ciclo ou outro ciclo, mas não ser `None`. (`app/colaboradores/services/vinculo.py:122`, `app/colaboradores/services/vinculo.py:141`)
+- **Candidato a `no_op`:** existente ativo, mesmo template e âncora compatível; portanto substituído existente e mesmo ciclo. Se a flag calculada difere, vira `atualizar`; caso contrário permanece `no_op`. (`app/colaboradores/services/vinculo.py:119`, `app/colaboradores/services/vinculo.py:145`)
+- **Outras ações:** `julgar_vinculo` somente produz essas três. (`app/colaboradores/services/vinculo.py:120`)
+
+**Bloqueante 3 — nascimento sem escolha:** `criar` um novo vínculo `6x1` em outra data, tendo substituído `6x1`, aceita escolha vazia e herda a flag. Não exige prova de escolha humana; um `True` legado pelo default passa como escolha. Isso é uma exceção implementada à obrigatoriedade de escolha no nascimento. (`app/colaboradores/services/vinculo.py:125`, `app/colaboradores/services/vinculo.py:170`, `app/colaboradores/services/vinculo.py:185`)
+
+**O substituído não representa sempre o vínculo cujo período está sendo substituído:**
+
+- Sem existente na mesma data, a consulta pega o ativo mais recente **sem limitar seu início a D**. Se ele começa depois de D, `fechar_vigencia` o recusa e `absorver_vigencias_posteriores` o absorve. A afirmação de que seria “o ativo que o executor fecha” é falsa nesse caso. (`app/colaboradores/services/vinculo.py:141`, `app/colaboradores/services/vinculo.py:664`, `app/colaboradores/services/vinculo.py:830`)
+- Uma vigência inativa anterior que cobre D também pode ser encerrada pelo executor, mas não participa dessa busca de substituído. (`app/colaboradores/services/vinculo.py:141`, `app/colaboradores/services/vinculo.py:282`)
+- Existindo vínculo **inativo na mesma data**, ele vence qualquer ativo que também será fechado ou absorvido. Há um objeto reaproveitado definido, mas isso não prova que sua flag é a escolha do período efetivamente substituído. (`app/colaboradores/services/vinculo.py:102`, `app/colaboradores/services/vinculo.py:141`, `app/colaboradores/services/vinculo.py:255`, `app/colaboradores/services/vinculo.py:294`)
+
+Consequência derivável: um futuro `6x1=True` pode fornecer a herança para um novo `6x1` anterior à sua vigência; um futuro de outro ciclo pode provocar recusa mesmo havendo uma vigência anterior `6x1` cobrindo D. São caminhos demonstráveis pelo código; ocorrência nos dados fornecidos é **[não verificado]**. (`app/colaboradores/services/vinculo.py:141`, `app/colaboradores/services/vinculo.py:185`, `app/colaboradores/services/vinculo.py:282`)
+
+**`no_op → atualizar` não executa uma operação restrita à flag.** Ele percorre fechamento e absorção, redefine posto, ativa o vínculo, apaga `data_fim`, pode copiar calendário e recalibrar âncora. Essas operações são incondicionais no executor. (`app/colaboradores/services/vinculo.py:255`, `app/colaboradores/services/vinculo.py:294`, `app/colaboradores/services/vinculo.py:316`, `app/colaboradores/services/vinculo.py:319`, `app/colaboradores/services/vinculo.py:326`, `app/colaboradores/services/vinculo.py:351`)
+
+A regeneração passada e futura é acionada, e a trilha técnica inclui a flag. Entretanto, o histórico classifica essa alteração como `ancora`, enquanto o impacto não recebe a nova flag e calcula o “depois” pela aritmética do template. Logo a prévia não representa fielmente uma alteração somente de feriado. (`app/colaboradores/services/vinculo.py:370`, `app/colaboradores/services/vinculo.py:380`, `app/colaboradores/services/vinculo.py:395`, `app/colaboradores/services/vinculo.py:418`, `app/escala/services/impacto_troca.py:22`, `app/escala/services/impacto_troca.py:40`)
+
+**C. Chamadores da porta**
+
+| Chamador | Passa a escolha? Efeito |
+|---|---|
+| Tela Vincular | Encaminha `request.POST`; os rádios enviam `'1'`/`'0'`, sem pré-seleção. (`app/colaboradores/views.py:411`, `app/colaboradores/views.py:423`, `app/templates/colaboradores/partials/painel_vinculo.html:176`) |
+| Chat: prévia | Não. `_post` monta template, início, modo e eventualmente âncora; a recusa retorna em `erros`. (`app/colaboradores/services/troca_pelo_chat.py:11`, `app/colaboradores/services/troca_pelo_chat.py:58`, `app/colaboradores/services/troca_pelo_chat.py:60`) |
+| Chat: execução | Não; a interface nem recebe argumento de feriado. Novo vínculo sem substituído ou troca de ciclo para um ciclo sem padrão passa a ser recusado. Mesmo ciclo pode herdar. (`app/colaboradores/services/troca_pelo_chat.py:64`, `app/colaboradores/services/troca_pelo_chat.py:72`, `app/colaboradores/services/vinculo.py:185`) |
+| Régua de defesa/realocar | Não. O dict omite a flag e captura a nova recusa. Destinos cíclicos já são recusados antes; destinos sem padrão precisam satisfazer a herança. (`app/escala/regua_defesa.py:310`, `app/escala/regua_defesa.py:313`, `app/escala/regua_defesa.py:316`) |
+| `censo_fase_12x36` | Não. O dict tem template/início/âncora; para destino 12x36 o juiz fornece `True`. (`app/ponto/management/commands/censo_fase_12x36.py:419`, `app/ponto/management/commands/censo_fase_12x36.py:422`, `app/escala/models.py:921`) |
+
+Não encontrei chamador direto adicional por API/importação nas buscas estáticas; caminhos dinâmicos permanecem **[não verificado]**. O Django admin do vínculo é somente leitura. (`app/escala/admin.py:18`)
+
+**D. Trechos, passado e competência exportada**
+
+`criar_trecho_retroativo` realmente alimenta regeneração do passado: o comando cria o trecho e chama a porta até `min(fim, hoje)`, além do suplemento futuro. (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:194`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:223`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:242`)
+
+O novo `feriado_do_trecho` pode mudar a flag copiada: destino 5x2 recebe `False`; 12x36/24x48 recebe `True`; demais destinos recebem `bool(flag_original)`. Assim, também cria `12x36=True → 6x1=True` sem perguntar ao DP, embora a porta principal recuse troca de ciclo sem escolha. (`app/escala/models.py:921`, `app/escala/models.py:928`, `app/escala/models.py:934`, `app/colaboradores/services/vinculo.py:188`)
+
+Por padrão, a regeneração consulta as competências protegidas e pula seus dias; células humanas também não são reescritas pelo ramo de regeneração. A autoridade considera TXT entregue e holerite publicado. (`app/ponto/portas/celula.py:221`, `app/ponto/portas/celula.py:284`, `app/ponto/portas/celula.py:297`, `app/folha/export.py:617`)
+
+Existe uma exceção explícita preexistente: `corrigir_escala_retroativa --apesar-da-lavra` passa o motivo à porta, que esvazia a lista de proteção. Portanto “nunca toca exportada” não é verdade para todas as opções desse comando. Uso dessa exceção nesta obra é **[não verificado]**. (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:42`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:233`, `app/ponto/portas/celula.py:218`)
+
+Já os chamadores do ajuste automático trabalham somente no futuro: aplicação exige `inicio > hoje`; desfazer usa `max(inicio, hoje+1)` e regenera dali em diante. (`app/escala/services/escala_auto_executor.py:100`, `app/escala/services/escala_auto_executor.py:107`, `app/escala/services/escala_auto_executor.py:143`, `app/escala/services/escala_auto_executor.py:147`)
+
+**E. Auditoria, autoria e idempotência**
+
+Com `autor` autenticado, `_ReqDoAutor` fornece o usuário, `registrar_log` o encaminha como ator e `evento` o grava em `LogAuditoria.usuario`. Com `autor=None`, uma request corrente pode fornecer o usuário pelo contexto; fora dela, fica a identificação do processo, sem usuário humano. (`app/colaboradores/services/vinculo.py:19`, `app/colaboradores/services/vinculo.py:939`, `app/core/auditoria.py:24`, `app/core/observ.py:108`, `app/core/observ.py:118`)
+
+`sincronizar_feriado_admin` chama sem autor e sem motivo. Não há uma segunda gravação explícita de auditoria nesse loop; a nova linha vem da porta. (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:58`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:61`, `app/colaboradores/services/vinculo.py:939`)
+
+Mesmo valor **na instância recebida** retorna antes de save, trilha e regeneração. A porta não relê nem trava o valor persistido antes dessa comparação; portanto isso não prova idempotência sob instância desatualizada ou concorrência. (`app/colaboradores/services/vinculo.py:932`, `app/colaboradores/services/vinculo.py:936`)
+
+**Bloqueante 4 — trilha não é garantia da transação:** `registrar_log` captura falhas; `evento` usa savepoint e engole falha da própria auditoria. A flag pode confirmar sem `LogAuditoria`, apesar do `@atomic` da porta. (`app/colaboradores/services/vinculo.py:910`, `app/core/auditoria.py:25`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`)
+
+O sincronizador também continua derivando a escolha dos ciclos sem padrão pelo cargo. Pode sobrescrever `6x1` sem resposta DP; não há bloqueio que o restrinja à “só lista” desta obra. Execução dele nos 82 é **[não verificado]**. (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:51`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:61`, `app/escala/models.py:934`)
+
+**F. Lote, reversão, atomicidade e relógio**
+
+- **Universo:** vínculo que cobre hoje, colaborador ativo, ciclo 5x2 e flag `True`. Não é simplesmente `ativa=True`: pode incluir inativo com fim vigente e excluir ativo futuro. Igualdade com os “16 ativos” raspados é **[não verificado]**. (`app/escala/models.py:943`, `app/escala/models.py:945`, `app/escala/alimentacao.py:219`)
+- **Lista:** compara exatamente universo e `--esperado`, antes de escrever. Imprime vínculo/colaborador/tipo/valor, mas não verifica publicação prévia no RELATO. Publicação da lista e do censo é **[não verificado]**. (`app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:35`, `app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:43`)
+- **Reversão antes da escrita:** correto na ordem do programa. O JSON completo fecha antes do loop; modo `x` impede sobrescrita. É uma lista de valores anteriores, sem diário de progresso. (`app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:51`, `app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:55`)
+- **Atomicidade:** por vínculo, não pelo lote. Queda após N commits deixa N aplicados e os demais intactos; a reversão contém todos. Repetir a lista original falha na igualdade do universo; reutilizar o arquivo falha no `open('x')`. Não há retomada automática. (`app/colaboradores/services/vinculo.py:910`, `app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:38`, `app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:51`)
+- **Efeitos incompletos:** rejulgamento captura falhas; dinheiro e E2 têm efeitos após commit que também podem falhar sem desfazer a flag. Repetir `marcar(False)` depois retorna imediatamente, sem reparar esses efeitos. Contador zero não prova cura completa. (`app/ponto/portas/celula.py:475`, `app/ponto/portas/celula.py:540`, `app/ponto/services/fechamento.py:1818`, `app/colaboradores/services/vinculo.py:932`)
+- **Exportadas:** a regeneração ordinária do lote mantém a guarda, pois não passa `apesar_da_lavra`. Entretanto, o `save()` também invalida o previsto dos fechamentos do colaborador, sem filtro de competência exportada: muda `previsto_em`/`atualizado_em`, embora isso não demonstre alteração monetária. (`app/colaboradores/services/vinculo.py:936`, `app/colaboradores/services/vinculo.py:951`, `app/ponto/portas/celula.py:218`, `app/escala/signals.py:138`, `app/ponto/services/fechamento.py:1611`)
+- **20/11:** o suplemento só regenera células futuras geradas **já existentes**, na janela calculada. Não cria uma célula ausente. As 16 células de 20/11 com `False` são **[não verificado]**. (`app/ponto/services/cadastro_futuro.py:26`, `app/ponto/services/cadastro_futuro.py:31`, `app/ponto/services/cadastro_futuro.py:43`)
+
+**Bloqueante 5 — relógio fora da borda:** o comando chama o contador duas vezes sem fornecer hoje; cada marcação lê outro hoje depois de salvar; o signal do save lê seu próprio hoje; o rejulgamento interno lê novamente. Uma passagem pela meia-noite pode usar datas distintas no mesmo lote. (`app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:36`, `app/escala/management/commands/aplicar_feriado_nasce_da_escala.py:57`, `app/escala/models.py:943`, `app/colaboradores/services/vinculo.py:944`, `app/ponto/signals.py:63`, `app/ponto/portas/celula.py:464`)
+
+**G. Alcance real do selo AST**
+
+| Construção | Resultado do scanner |
+|---|---|
+| `from ... import EscalaColaborador as EC`; `m.EscalaColaborador.objects.create` | Reconhece. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:34`, `app/escala/tests/test_feriado_nasce_da_escala_selo.py:44`) |
+| `EC = EscalaColaborador`; manager guardado em variável; manager custom/`_default_manager` | Escapa: nascimento exige `.objects` diretamente no nome reconhecido. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:90`) |
+| `_meta.model`, `__class__` | Escapa ao reconhecimento do modelo. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:44`, `app/escala/tests/test_feriado_nasce_da_escala_selo.py:90`) |
+| Construtor reconhecido sem flag, seguido de `save()` | Pega o construtor. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:93`) |
+| Instância carregada/copied/refresh, `pk=None`, `save()` | Escapa: não acompanha identidade ou `save()`. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:90`, `app/escala/tests/test_feriado_nasce_da_escala_selo.py:102`) |
+| `qs.update(trabalha_em_feriado=...)`, queryset em variável | Pega; não precisa conhecer a origem do queryset. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:102`) |
+| `qs.update(**dados)`, `bulk_update`, escrita por `__dict__` | Escapa às formas examinadas. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:102`, `app/escala/tests/test_feriado_nasce_da_escala_selo.py:108`) |
+
+**Bloqueante 6 — procedência falsificável:** qualquer `v['trabalha_em_feriado']` é aceito, mesmo vindo de um dict literal; qualquer chamada chamada `feriado_do_trecho` também é aceita, sem conferir módulo ou autoridade. O selo não garante que o valor veio do veredito real. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:48`)
+
+**O mutante literal morde:** retirar a keyword ou substituí-la por `True` no nascimento atual gera achado. O teste faz essas duas mutações; isso não cobre os escapes acima nem equivale a uma campanha de mutação do juiz. (`app/escala/tests/test_feriado_nasce_da_escala_selo.py:137`, `app/escala/tests/test_feriado_nasce_da_escala_selo.py:143`)
+
+O RED “col148” cria colaborador, vínculo e célula sintéticos. Verifica flag
+
+[truncado em 20000 de 27330 caracteres]
+
+## 13/11 10:50 · sessao 3dc36bb74794 · O168 · verificador · origem=Code
+
+**APROVA o delta — sem bloqueantes demonstrados.** A referência nua deixou de contar como chamada, e os dois pontos de atribuição de erros passaram a usar o mesmo separador. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:288`; `app/chamados/services/validacao.py:142`; `app/chamados/services/validacao.py:510`.)
+
+**A. Contador e fila.** `qs_na_fila` aceita `_base`: repassa-o a `qs_vivos`, que usa esse queryset diretamente e aplica `VIVOS`; depois restringe a `COBRANCA` e exclui silêncio futuro. O juiz da fila é `chamados/services/painel.py::qs_na_fila`. (`app/chamados/services/painel.py:153`; `app/chamados/services/painel.py:158`; `app/chamados/services/painel.py:188`; `app/chamados/services/painel.py:190`.)
+
+O significado **muda**: de recusados ainda vivos para recusados ainda cobrados na fila, excluindo `registrado` e silenciados no futuro. A docstring declara o universo novo. (`app/chamados/catalogo/motor.py:24`; `app/chamados/catalogo/motor.py:29`; `app/chamados/juizes.py:2512`; `app/chamados/juizes.py:2525`.)
+
+O leitor executável localizado é `_estado` do selo, que publica o número como `segurados`; não localizei consumidor de placar. Há também uma referência documental em `_registrar_recusa`, sem chamada ao contador. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:67`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:75`; `app/chamados/models.py:712`.) Consumidores externos à cópia: **[não verificado]**.
+
+**B. Escritores e donos.** A entrada é `erros_proprios` da unidade de materialização mais `res['erros']` da disputa. O import por `models.py` reexporta a implementação de `materializacao.py`; não constitui outro escritor. (`app/chamados/services/validacao.py:486`; `app/chamados/services/validacao.py:492`; `app/chamados/services/validacao.py:493`; `app/chamados/models.py:4143`.)
+
+Na tabela, **S(e)** significa todos os pks cuja marca `Pergunta #<pk>` era substring da mensagem — incluindo prefixos numéricos e perguntas citadas depois. A cura atribui exclusivamente ao primeiro identificador admissível. (`app/chamados/services/validacao.py:113`; `app/chamados/services/validacao.py:116`; `app/chamados/tests/test_bug29_30_log_validacao.py:117`; `app/chamados/tests/test_bug29_30_log_validacao.py:124`.)
+
+| Escritor/caso que alimenta `erros` | Arquivo:linha | Dono antes → depois |
+|---|---|---|
+| `_ts_tipo_do_plantio`: sem data | `app/chamados/services/materializacao.py:352` | S(e) → `p.pk` |
+| Resposta de escape | `app/chamados/services/materializacao.py:361` | S(e) → `p.pk` |
+| Default do relógio sem marco correspondente | `app/chamados/services/materializacao.py:377` | S(e) → `p.pk` |
+| Hora inválida, incluindo exceção | `app/chamados/services/materializacao.py:421` | S(e) → `p.pk` |
+| `_declarar_ausencia_de_pergunta`: sem data | `app/chamados/services/materializacao.py:484` | S(e) → `p.pk` |
+| `_materializar_resposta_hora`: sem resposta | `app/chamados/services/materializacao.py:843` | S(e) → `p.pk` |
+| Vizinha do mesmo tipo/paridade | `app/chamados/services/materializacao.py:884` | S(e) → `p.pk` |
+| Conflito devolvido por `registrar_batida` | `app/chamados/services/materializacao.py:942` | S(e) → `p.pk` |
+| `_materializar_resposta_data_hora`: parse inválido | `app/chamados/services/materializacao.py:1010` | S(e) → `p.pk` |
+| Conflito no plantio da âncora | `app/chamados/services/materializacao.py:1027` | S(e) → `p.pk` |
+| Gate `DATA_EM_DISPUTA` | `app/chamados/services/materializacao.py:1201`; `app/chamados/services/materializacao.py:1205` | S(e) → `p.pk` |
+| `_Reprovada`: não gerou batida | `app/chamados/services/materializacao.py:1245`; `app/chamados/services/materializacao.py:1290` | S(e) → `p.pk` |
+| `_Reprovada`: C6 ainda considera viva | `app/chamados/services/materializacao.py:1285`; `app/chamados/services/materializacao.py:1290` | S(e) → `p.pk` |
+| Outras exceções capturadas pela unidade | `app/chamados/services/materializacao.py:1291`; `app/chamados/services/materializacao.py:1292` | S(e) → `p.pk` |
+
+Todos esses formatos colocam o identificador do dono antes dos conteúdos dinâmicos. Conflitos e exceções são embrulhados depois de `Pergunta #p.pk:`; portanto uma pergunta citada dentro deles não antecede a dona. (`app/chamados/services/materializacao.py:421`; `app/chamados/services/materializacao.py:943`; `app/chamados/services/materializacao.py:1010`; `app/chamados/services/materializacao.py:1028`; `app/chamados/services/materializacao.py:1292`.)
+
+As particularidades são:
+
+- **`__REUSO__Pergunta #p.pk`** escreve temporariamente em `erros`, mas o `finally` remove a mensagem dessa lista e a transfere para `reusos`. Se entregue diretamente ao helper, seria S(e) → `p.pk`. (`app/chamados/services/materializacao.py:872`; `app/chamados/services/materializacao.py:1297`; `app/chamados/services/materializacao.py:1301`; `app/chamados/services/validacao.py:106`.)
+- **`DATA_EM_DISPUTA Pergunta #p.pk`** permanece reconhecido: o prefixo não contém outro identificador de pergunta. (`app/chamados/services/materializacao.py:1201`; `app/chamados/tests/test_bug29_30_log_validacao.py:136`.)
+- **`DecisaoPergunta #N`** é escrito pelas exceções de imutabilidade de outra entidade. Isolado, antes casava com a pergunta N e seus prefixos; agora não tem dono. Capturado pela unidade, recebe antes o prefixo da pergunta processada. Ocorrência efetiva dessa exceção nesse caminho: **[não verificado]**. (`app/chamados/models.py:3961`; `app/chamados/models.py:3965`; `app/chamados/services/materializacao.py:1292`; `app/chamados/tests/test_bug29_30_log_validacao.py:134`.)
+- **Sem pk:** se recebido, não era próprio de pergunta alguma e continua sem dono, entrando em `irmas`. Não identifiquei escritor direto desse formato no fluxo enumerado. (`app/chamados/services/validacao.py:116`; `app/chamados/services/validacao.py:124`; `app/chamados/services/materializacao.py:1392`.)
+- **Fallback de `erros_da_pergunta`:** é mensagem de saída, não novo insumo da materialização; abre pelo pk consultado e informa ausência de causa própria. (`app/chamados/services/validacao.py:142`; `app/chamados/services/validacao.py:145`.)
+
+**C. Leitores de `irmas`.** Para mensagens com um único identificador legítimo, sem coincidência de prefixo, permanecem os mesmos itens, textos e ordem. O separador acrescenta o objeto original à lista escolhida. (`app/chamados/services/validacao.py:120`; `app/chamados/services/validacao.py:124`.)
+
+Os leitores não refazem a partição: o log da recusa usa `erros_da_pergunta`; o log das irmãs concatena a lista; `traduzir_recusa` classifica motivos, sem conhecer pk; a tela consome esses resultados. (`app/chamados/services/validacao.py:519`; `app/chamados/services/validacao.py:532`; `app/chamados/catalogo/recusa.py:79`; `app/chamados/catalogo/recusa.py:81`; `app/chamados/services/acoes_disputa.py:34`; `app/chamados/services/acoes_disputa.py:59`.)
+
+**Não há invariância total fora do prefixo numérico:** `Pergunta #5: ... Pergunta #7` deixa de ser próprio da #7. Essa mudança é deliberadamente cobrada pelo teste novo. Antes, a mensagem podia ser própria em duas consultas diferentes; dentro de uma mesma chamada, `in`/`not in` já produziam listas complementares. (`app/chamados/tests/test_bug29_30_log_validacao.py:125`; `app/chamados/tests/test_bug29_30_log_validacao.py:127`; `app/chamados/tests/test_bug29_30_log_validacao.py:129`; `app/chamados/services/validacao.py:113`.)
+
+**Ressalva do aviso:** `aviso_das_irmas` continua coletando todas as menções, não apenas donos. Recebendo aquele erro como irmã da #7, pode anunciar “1 pergunta” com IDs `#5, #7`, incluindo a própria #7. É uma inconsistência demonstrável com o exemplo sintético; ocorrência produtiva: **[não verificado]**. Esse coletor apresenta referências e não constitui outro particionador de erros. (`app/chamados/services/validacao.py:547`; `app/chamados/services/validacao.py:549`; `app/chamados/tests/test_bug29_30_log_validacao.py:127`.)
+
+**D. Lookbehind.** Não perde nenhum escritor legítimo identificado. Veta somente letra ASCII imediatamente anterior; espaço, `_` e dígito são aceitos. Assim, `__REUSO__Pergunta`, `_Pergunta` e `3Pergunta` são reconhecidos; `DecisaoPergunta` é excluído. O uso de `search` encontra o primeiro token admissível, sem exigir início literal da string. (`app/chamados/services/validacao.py:106`; `app/chamados/services/validacao.py:116`; `app/chamados/tests/test_bug29_30_log_validacao.py:134`; `app/chamados/tests/test_bug29_30_log_validacao.py:135`.)
+
+**E. Outro separador por substring.** Na varredura textual da cópia, não localizei outro sítio de produção com essa separação. Os dois pontos migrados delegam ao helper; o regex restante do aviso enumera menções. Ausência de variantes construídas dinamicamente: **[não verificado]**. (`app/chamados/services/validacao.py:142`; `app/chamados/services/validacao.py:510`; `app/chamados/services/validacao.py:547`.)
+
+**F. Classes de reprovação.** Não demonstrei novo juiz paralelo nem campo simultaneamente operando com dois significados: o contador consulta a fila existente, e a atribuição de erros tem implementação compartilhada. A mudança de universo do contador está declarada. (`app/chamados/juizes.py:2512`; `app/chamados/juizes.py:2525`; `app/chamados/services/validacao.py:142`; `app/chamados/services/validacao.py:510`.)
+
+O bloqueante da volta 4 foi curado: o fecho exige `ast.Call`, e o teste rejeita a auxiliar apenas referenciada. Permanece o limite anterior de aceitar uma chamada cujo resultado seja descartado; ele não foi introduzido pelo delta. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:288`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:334`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:389`.)
+
+A catraca mantém a linha na identidade e `EXCECOES` vazio; as fixtures passam a fornecer os campos do juiz, delegar ao corpo canônico e zerar também o texto quando pretendem representar silêncio. (`app/chamados/tests/e4b_c12_ast.py:18`; `app/chamados/tests/e4b_c12_ast.py:29`; `app/chamados/tests/e4b_c12_ast.py:222`; `app/ponto/tests/test_supra_juiz_executor.py:24`; `app/ponto/tests/test_supra_juiz_executor.py:46`; `app/chamados/tests/test_pep_reentrada.py:280`.)
+
+Executei em memória os seis testes puros de atribuição e os três adversariais do AST: passaram. Restaurar a substring reprova os testes de prefixo e segunda citação; restaurar o fecho por referência nua reprova a isca. Há mordida nessas curas. (`app/chamados/tests/test_bug29_30_log_validacao.py:104`; `app/chamados/tests/test_bug29_30_log_validacao.py:117`; `app/chamados/tests/test_bug29_30_log_validacao.py:124`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:369`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:389`.)
+
+Execução integral Django/ORM, banco, logs e identidade Git do HEAD: **[não verificado]**.
 
 ## 13/11 10:48 · sessao 85aeb4ade445 · - · - · origem=Ronald (tmux)
 
@@ -743,101 +936,4 @@ sonda_leitura: sonda_16.py [01ee92abd7a7aa16] no cpuset 4-7, lendo saas_hasner c
 erros 0
 ```
 
-## 13/11 09:11 · sessao a6eba0319a4e · FERIADO-ESCALA · sonda · origem=Code
-
-```text
-sonda_leitura: sonda_16.py [b1b8e75be9d0a984] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-== universo ativa=True total 535
-  ciclo=12x36 base=12x36 trabalha=False : 2
-  ciclo=12x36 base=12x36 trabalha=True : 332
-  ciclo=5x2 base=comercial trabalha=False : 16
-  ciclo=5x2 base=comercial trabalha=True : 15
-  ciclo=5x2 base=turno_partido trabalha=False : 4
-  ciclo=5x2 base=turno_partido trabalha=True : 1
-  ciclo=6x1 base=comercial trabalha=False : 70
-  ciclo=6x1 base=comercial trabalha=True : 59
-  ciclo=6x1 base=turno_partido trabalha=False : 1
-  ciclo=6x1 base=turno_partido trabalha=True : 23
-  ciclo=intermitente base=intermitente trabalha=True : 8
-  ciclo=personalizado base=comercial trabalha=False : 1
-  ciclo=personalizado base=comercial trabalha=True : 3
-== universo vigente(juiza) total 536
-  ciclo=12x36 base=12x36 trabalha=False : 2
-  ciclo=12x36 base=12x36 trabalha=True : 333
-  ciclo=5x2 base=comercial trabalha=False : 16
-  ciclo=5x2 base=comercial trabalha=True : 15
-  ciclo=5x2 base=turno_partido trabalha=False : 4
-  ciclo=5x2 base=turno_partido trabalha=True : 1
-  ciclo=6x1 base=comercial trabalha=False : 70
-  ciclo=6x1 base=comercial trabalha=True : 59
-  ciclo=6x1 base=turno_partido trabalha=False : 1
-  ciclo=6x1 base=turno_partido trabalha=True : 23
-  ciclo=intermitente base=intermitente trabalha=True : 8
-  ciclo=personalizado base=comercial trabalha=False : 1
-  ciclo=personalizado base=comercial trabalha=True : 3
-== contador existente vinculos_5x2_6x1_trabalha_feriado: {'total': 98, 'declarados': 64, 'nao_declarados': 34}
-== 5x2/6x1 ativos com True: ec col te ciclo base posto posto.opera_em_feriado criado_em data_inicio data_fim padrao_juiz nasceu_apos_16_09 vigente
-Traceback (most recent call last):
-  File "<string>", line 30, in <module>
-AttributeError: 'EscalaColaborador' object has no attribute 'criado_em'
-erros 1
-```
-
-## 13/11 09:01 · sessao a880ed8aade7 · O168 · verificador · origem=Code
-
-**REPROVA — bloqueante no selo do item F:** o novo “fecho por chamada” segue qualquer referência `ast.Name`, permitindo contar uma auxiliar que nunca é chamada. Isso cria falso positivo que o detector anterior fornecido rejeitava. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:328`.)
-
-**A. Curas da volta 3**
-
-| Item | Resultado e mordida |
-|---|---|
-| **(1) Contrato** | **Curado.** Cobra delegação no wrapper e procura `materializada_em is None` no helper. Em memória, passa no atual e falha retirando essa condição ou substituindo a delegação por `return []`. (`app/chamados/tests/test_contract_dedup_status.py:141`; `app/chamados/tests/test_contract_dedup_status.py:143`.) |
-| **(2) Fixture** | **Curado o `AttributeError`.** Injeta o helper real sem bind; executei os quatro testes, todos passaram. (`app/chamados/tests/test_e4b_c4v14_memoria.py:50`; `app/chamados/tests/test_e4b_c4v14_memoria.py:121`; `app/chamados/tests/test_e4b_c4v14_memoria.py:143`.) |
-| **F** | **Parcialmente curado.** O teste novo morde auxiliar chamada com leitura crua, constante de módulo e juiz preservado sem referência; também aceita chamada por apelido. Executei essas asserções em memória. Continua contando auxiliar apenas referenciada, contrariando o requisito “função não chamada não conta”. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:275`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:376`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:385`.) |
-
-**B. Terminação e escapes**
-
-Termina para AST finita: há finitos nomes em `defs`; cada nome entra em `vistos` antes da expansão e só é expandido uma vez, inclusive em ciclos. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:283`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:285`.)
-
-| Caminho da leitura crua | Detector |
-|---|---|
-| Método de classe definida no módulo | **Escapa:** classe/método não entram em `defs`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
-| Lambda atribuída no módulo | **Escapa:** não é `FunctionDef`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
-| Lambda local ou função aninhada dentro de função alcançada | **Detecta:** percorre seus corpos, mesmo sem execução. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:311`.) |
-| Função importada de outro módulo | **Não inspeciona seu corpo.** (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:305`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
-
-No CSF atual, o fecho contém somente `pode_executar_csf` e `perguntas_que_seguram_csf`; obtive `raw=False`, `judge=True`. Existem chamadas aos métodos canônicos importados do juiz, sem leitura crua nesses dois corpos. (`app/ponto/supra_juiz.py:557`; `app/ponto/supra_juiz.py:558`; `app/ponto/supra_juiz.py:559`; `app/ponto/supra_juiz.py:573`.)
-
-**C. Falso positivo e comparação**
-
-**Import isolado não basta:** o detector exige `ast.Call`. Porém, `j(ch); return True` passa, embora o resultado do juiz seja descartado; origem do import e sombreamento também não são validados. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:326`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:330`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:334`.)
-
-O bloqueante mais direto é este exemplo sintético, reproduzido em memória: `_le_respondida_cru=False` e `_pergunta_ao_juiz=True`, embora nenhuma chamada ao juiz ocorra na execução. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:332`.)
-
-```python
-def _isca(ch):
-    return ch.sem_veredito_entre()
-
-def pode_executar_csf(ch):
-    _isca
-    return True
-```
-
-Na reconstrução do algoritmo anterior fornecido, esse exemplo dava `judge=False`; agora dá `True`. Há enfraquecimento nesse formato. A falta de vínculo com o retorno já existia para chamadas por atributo. Conferência contra o commit-base Git exato: **[não verificado]**. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:332`.)
-
-**D. Mutantes do contrato e da fixture**
-
-O **contrato morde** a retirada de `materializada_em is None`; a **fixture não**: os quatro testes passaram também com esse mutante. Suas perguntas começam com `materializada_em=None`, sem cenário materializado que diferencie as versões. (`app/chamados/tests/test_contract_dedup_status.py:143`; `app/chamados/tests/test_e4b_classe_e_memoria.py:285`; `app/chamados/tests/test_e4b_c4v14_memoria.py:40`.)
-
-Substituir a delegação por `return []` também deixou os quatro testes da fixture verdes; quem barrou esse mutante foi a nova asserção textual do contrato. Portanto, a fixture cura a dependência ausente, mas não certifica essas duas propriedades. (`app/chamados/tests/test_contract_dedup_status.py:141`; `app/chamados/tests/test_e4b_c4v14_memoria.py:47`; `app/chamados/tests/test_e4b_c4v14_memoria.py:50`.)
-
-**E. Outros testes** [nao verificado]
-
-Encontrei substituição do método por mock em `test_termo_fechar`; ela preserva a interface pública e não extrai o corpo. Outro extrator por fonte/AST/injeção não foi localizado; ausência absoluta, inclusive por nomes construídos dinamicamente: **[não verificado]**. (`app/chamados/tests/test_termo_fechar.py:28`.)
-
-Há ainda fixture runtime incompatível fora do delta: `_D` não fornece `respostas_sem_veredito`, e `_P` não fornece `validada_em`. Reproduzi três `AttributeError` nos casos existentes; isso não é regressão nova demonstrada deste delta. (`app/ponto/tests/test_supra_juiz_executor.py:29`; `app/ponto/tests/test_supra_juiz_executor.py:16`; `app/ponto/tests/test_supra_juiz_executor.py:40`; `app/ponto/tests/test_supra_juiz_executor.py:43`; `app/ponto/tests/test_supra_juiz_executor.py:46`; `app/chamados/models.py:1899`.)
-
-Execução Django/ORM integral, banco, logs e identidade Git do HEAD: **[não verificado]**.
-
-_4536 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4538 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
