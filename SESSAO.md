@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 06:17:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (520.9 MB). Acoes na janela: **1027**.
+**Medido em 13/11/2026 06:23:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (520.9 MB). Acoes na janela: **1018**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1028,12 +1028,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:27:54 | Bash |  | `cd /home/ronald; ls -d wt-*/bin/leitores_de_chave.py 2>/dev/null; ls -la saas-hasner/logs/TIPO-NA-FONTE/leitores_de_chave.py; head -5 saas-hasner/logs/TIPO-NA-FONTE/preverif_item1_v2/delta_v2.diff; /bin/grep -n 'leitores_de_chave\\|TIPO' saas-hasner/app/docs/RELATO.md \| cut -c1-200 \| head` |
 | 18:27:51 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/TIPO-NA-FONTE/preverif_item1_v2 logs/TIPO-NA-FONTE/preverif_item1; wc -l logs/TIPO-NA-FONTE/leitores_de_chave.py; cat logs/TIPO-NA-FONTE/contrato.txt \| head -30; git worktree list \| head -20` |
 | 18:27:48 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/TIPO-NA-FONTE/ \| head -40; ls -d ~/wt-*tipo* 2>/dev/null; ls bin/leitores_de_chave.py app/*/leitores_de_chave.py 2>/dev/null; git log --oneline -3 -- bin/leitores_de_chave.py` |
-| 18:21:23 | Bash |  | `cd /home/ronald/saas-hasner; cp /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/a9e7f0593ff451e7c.output logs/O168/opus_final/opus_final_v4.out 2>/dev/null; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') novo=['PERGUNTA DE DESENHO O168 (opus final v4 REPROVOU DESENHO 18:3x, logs/O168/opus_final/opu ...` |
-| 18:21:13 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 720,760p bin/disjuntor.py; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/b3-so-libera-com-aval-explicito.md` |
-| 18:21:09 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n 'B3' bin/disjuntor.py \| head -30; ls logs/O168/opus_final/` |
-| 18:21:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/pid=63725/pid=67186/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md python3 - <<'EOF' p='app/docs/BACKLOG.md' s=open(p).read() lines=s.split('\n') i=[k for k,l in enumerate(lines) if l.startswith('\| BUG-CADASTRO-NAO-ALCANCA-O-FUTURO \|')] assert len(i)==1 k=i[0] if 'CLOCK-INJECTION-RESTO' not in s: lines.insert(k+1,'\| CLOCK-INJECTION-RESTO \| fila (clas ...` |
-| 18:20:59 | Bash |  | `cd /home/ronald/saas-hasner; ps -o pid,etime,cmd -p 67186 \| cut -c1-150; sed -n 1,6p app/docs/RELATO.md \| cut -c1-220; /bin/grep -n 'BUG-CADASTRO\\|CLOCK-INJECTION' app/docs/BACKLOG.md \| cut -c1-200 \| head` |
-| 18:20:08 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/BUG-CADASTRO-FUTURO/c5d_preverif/triagem.txt.c5d <<'EOF' TRIAGEM preverif c5d (logs/BUG-CADASTRO-FUTURO/c5d_preverif/preverif.r), sessao 18:2x, arquivo:linha conferido em wt-bug-cadastro-c4-140456 @5fadfeaa5 (amostra: vinculo.py:208/:314/:646, test_cadastro_futuro_c5.py:199, PLANO-PADROES L-128): P1 (trilha obrigatoria D1): CURADO. Ressalva do objeto em memo ...` |
-| 18:19:50 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "L-128" app/docs/LEIS.md app/docs/CORTES.md \| cut -c1-600 \| head -5; sed -n 85,100p app/docs/PLANO-PADROES.md` |
-| 18:19:48 | Bash |  | `cd /home/ronald/wt-bug-cadastro-c4-140456/app; sed -n 640,650p colaboradores/services/vinculo.py; sed -n 205,210p colaboradores/services/vinculo.py; sed -n 310,316p colaboradores/services/vinculo.py; sed -n 195,205p ponto/tests/test_cadastro_futuro_c5.py` |
-| 18:19:23 | Bash |  | `cd /home/ronald/saas-hasner/logs; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b1c0636pw.output; tail -3 BUG-CADASTRO-FUTURO/c5d_preverif/preverif.log; wc -c BUG-CADASTRO-FUTURO/c5d_preverif/preverif.r; cat BUG-CADASTRO-FUTURO/c5d_preverif/preverif.r` |
