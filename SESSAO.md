@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 23:11:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (511.1 MB). Acoes na janela: **1837**.
+**Medido em 12/11/2026 23:16:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (511.1 MB). Acoes na janela: **1833**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1843,7 +1843,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:19:54 | Bash | Build gitlog with changed files | `cd /home/ronald/saas-hasner; git log --since="15 days ago" --name-only --format='@@ %h %ad %s' --date=format:'%m-%d %H:%M' -- 'app/*.py' 'bin/*' \| cut -c1-160 > logs/AUDITORIA-TRAVAS/gitlog_14d_arquivos.txt; wc -c logs/AUDITORIA-TRAVAS/gitlog_14d_arquivos.txt logs/AUDITORIA-TRAVAS/suites_14d_falhas.tsv logs/AUDITORIA-TRAVAS/suites_14d.tsv` |
 | 11:19:49 | Bash | Read item 8 censo result | `cat /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS/medida_8.r` |
 | 11:19:47 | Bash | See which finished | `cd /home/ronald/saas-hasner/logs; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b0jipa4ej.output; tail -3 AUDITORIA-TRAVAS/medida_8.log 2>/dev/null; tail -3 LASTRO-FAIXA/c14.log 2>/dev/null; tail -2 PUSH-SEM-REGRAVAR/push_1211.log` |
-| 11:11:44 | Bash | Wait for first of c14, item 8, push | `cd /home/ronald/saas-hasner/logs; until [ -e LASTRO-FAIXA/c14.fim ] \|\| [ -e AUDITORIA-TRAVAS/medida_8.fim ] \|\| [ -e PUSH-SEM-REGRAVAR/push_1211.fim ]; do /usr/bin/sleep 30; done; ls LASTRO-FAIXA/c14.fim AUDITORIA-TRAVAS/medida_8.fim PUSH-SEM-REGRAVAR/push_1211.fim 2>/dev/null; date +%H:%M` |
-| 11:11:39 | Bash | Commit c3 partial delivery in its worktree | `cd /home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745; mkdir -p /home/ronald/saas-hasner/logs/BUG-CADASTRO/c3; mv app/docs/evidencia_c3_*.txt app/docs/resposta_c3.txt /home/ronald/saas-hasner/logs/BUG-CADASTRO/c3/; cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/msg_c3.txt <<'EOF' BUG-CADASTRO-NAO-ALCANCA-O-FUTURO c3: portas de estrut ...` |
-| 11:11:26 | Bash | Status of c3 worktree | `cd /home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-090745; git status --porcelain \| head -30; git log --oneline -2` |
-| 11:11:23 | Bash | Add lei line for BUG-CADASTRO 4(b) | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(3,"lei: BUG-CADASTRO 4(b) -- duas leis escritas decidem o mesmo caso de dois jeitos. Caso: vinculo INATIVO sem data_fim que e a geradora carimbada da celula. LEI E1 (24/10, 'vigencia, nao o flag ativo') faz vinculo_do_dia devolve- ...` |
