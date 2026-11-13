@@ -1,7 +1,185 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 15:15** · publicado em **13/11/2026 15:15** (UTC-3)
+> Ultima resposta processada: **13/11/2026 15:17** · publicado em **13/11/2026 15:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 15:17 · sessao 5addfb7c75bc · E3 · leitura · origem=Code
+
+**A e B compartilham a alimentação da fila, mas não carregam o mesmo conjunto de perguntas nem oferecem os mesmos dados públicos. Há duas chamadas de `alimentar_fila` no caminho direto; a expansão pela `ListaDoAdmin` pode acrescentar outras.** (`app/chamados/juizes.py:1594`; `app/chamados/services/tarefa_do_dia.py:376–380`; `app/chamados/services/tarefa_do_dia.py:529–565`; `app/escala/services/cadastro_realidade.py:486–497`)
+
+As contagens abaixo distinguem sítios de carregamento, objetos ORM e projeções `values_list`; quantidade de SQL efetivamente executado e quantidade de linhas em produção são **[nao verificado]**.
+
+**1. Escritores e leitores das sete chaves de A**
+
+A recebe as células dos pares retidos, os colaboradores previamente carregados e `agora`; não recebe simplesmente todas as células entre duas datas. (`app/chamados/services/vigia_fio.py:598–608`)
+
+| Chave | Quem escreve e de onde vem | Quem lê no caminho de `censo_alcance` |
+|---|---|---|
+| `fila_ids` | `alimentar_fila`: percorre `qs_na_fila(agora=agora).values_list('pk','celula_id')`, descarta PK ausente de `verbo` e adiciona os demais ao conjunto **global**. (`app/chamados/juizes.py:1561–1564`) | O censo cria `fila_pk`; depois testa a âncora fora desse conjunto para formar o véu. (`app/chamados/services/vigia_fio.py:609`; `app/chamados/services/vigia_fio.py:673–674`) |
+| `verbo` | `alimentar_fila`: `particionar_verbos(qs_vivos(), agora=agora)['mapa']`. Dentro da própria alimentação, sua presença filtra `fila_ids`. (`app/chamados/juizes.py:1558`; `app/chamados/juizes.py:1562`) | Não há leitura dessa chave de **A** no corpo atual do censo nem nos auxiliares aos quais ele passa A; a porta usada vem de B. (`app/chamados/services/vigia_fio.py:608–625`; `app/chamados/services/vigia_fio.py:640–708`) |
+| `fila_cel` | `alimentar_fila`: usa a mesma leitura global da fila, mas só agrupa os chamados cujo `celula_id` pertence aos IDs recebidos. (`app/chamados/juizes.py:1560–1566`) | Não há leitura dessa chave de **A** no caminho atual do censo. (`app/chamados/services/vigia_fio.py:608–625`; `app/chamados/services/vigia_fio.py:640–708`) |
+| `vivas` | `alimentar_portas`: `PerguntaDisputa.filter(celula_id__in=_ids).select_related('disputa','celula').order_by('pk')`; passa pelo mapa de identidade e chama `pergunta_viva(p, agora=agora)` para cada pergunta carregada; agrupa as aprovadas por célula. (`app/chamados/juizes.py:1599–1604`) | Alias `perg`; extração das âncoras; seleção de `ps` do dia; status das âncoras/véu; causas e detalhes do sem-porta. (`app/chamados/services/vigia_fio.py:614`; `app/chamados/services/vigia_fio.py:621`; `app/chamados/services/vigia_fio.py:646`; `app/chamados/services/vigia_fio.py:670–700`) |
+| `colab` | `alimentar_portas`: mapa célula → colaborador, por `CelulaDia.filter(pk__in=_ids).values_list('pk','colaborador_id')`, sem `select_related`. (`app/chamados/juizes.py:1606`) | Não é lida pelo censo: seu wrapper `no_app(cid)` passa diretamente `cid` para `_no_app`. (`app/chamados/services/vigia_fio.py:624–625`; `app/chamados/services/vigia_fio.py:700`) |
+| `no_app` | `alimentar_portas` inicia `{}`; `_no_app` preenche, sob demanda, com `{p.pk for p in perguntas_do_app(_c)}`. (`app/chamados/juizes.py:1606`; `app/chamados/juizes.py:1613–1620`) | `_no_app` testa o cache e devolve o conjunto; o censo testa se alguma pergunta viva pertence a ele, exclusivamente no detalhe `pergunta_viva_fora_do_app`. (`app/chamados/juizes.py:1613`; `app/chamados/juizes.py:1621`; `app/chamados/services/vigia_fio.py:700–701`) |
+| `instancias` | `alimentar_portas` semeia `{c.pk:c for c in colabs}`. O mapa de identidade pode acrescentar um colaborador que o consumidor tenha carregado; `_no_app` também pode acrescentar o resultado de `Colaborador.filter(pk=colab_id).first()` quando falta a chave. (`app/chamados/juizes.py:1598`; `app/chamados/juizes.py:1179–1186`; `app/chamados/juizes.py:1616–1619`) | Mapa usado na alimentação das vivas, no segundo carregamento `perg_todas` e em `_no_app`. (`app/chamados/juizes.py:1600`; `app/chamados/services/vigia_fio.py:618–619`; `app/chamados/juizes.py:1616–1619`) |
+
+As queries que sustentam as três chaves da fila são:
+
+- `qs_vivos()` parte de `ChamadoColaborador`, declara `select_related('colaborador','colaborador__empresa','colaborador__posto','respondido_por')`, `prefetch_related('followups')`, anotações e ordenação; sem os filtros opcionais, aplica `status_local__in=VIVOS`. (`app/chamados/services/painel.py:96–115`; `app/chamados/services/painel.py:153–155`)
+- `qs_na_fila(agora=...)` acrescenta `status_local__in=COBRANCA` e exclui `silenciado_ate__gt=agora`. (`app/chamados/services/painel.py:188–190`)
+- A partição remove o prefetch e lê os campos do chamado por `values_list`; também consulta os créditos de perguntas. Portanto a declaração de `select_related` da base não significa que essa projeção materialize objetos de `Colaborador`. (`app/chamados/services/verbos.py:34`; `app/chamados/services/verbos.py:44–46`)
+- Os créditos consultam `PerguntaDisputa` com destino em vivos **ou** chamado da disputa em vivos, aplicam `q_vivas()`, excluem a combinação materializada + `VL_SIM` e projetam cinco campos; não chamam C6 em Python nesse percurso. (`app/chamados/services/raiox.py:56–58`; `app/chamados/services/raiox.py:74`; `app/chamados/services/raiox.py:135–155`)
+
+Os auxiliares citados na pergunta consomem os derivados assim:
+
+| Auxiliar/derivado | Uso |
+|---|---|
+| `no_app` / `_no_app` | O wrapper encaminha A; `_no_app` usa `no_app` e `instancias`. `perguntas_do_app` consulta `PerguntaDisputa.filter(disputa__colaborador=colab).filter(q_vivas()).select_related('disputa','celula').order_by('id')` e aplica `pergunta_viva(p)` **sem** `agora`, `hoje` ou `carga`. (`app/chamados/services/vigia_fio.py:624–625`; `app/chamados/juizes.py:1613–1621`; `app/chamados/services/pergunta_no_app.py:49–58`) |
+| `perg_todas` | É uma variável, não uma função. Recarrega todas as perguntas com `celula_id__in=_cels`, `select_related('disputa','celula')`, compartilhando `alim['instancias']`; não filtra vitalidade. (`app/chamados/services/vigia_fio.py:617–620`) |
+| `dono_fora_do_fio` | Recebe `colabs[cid]`, as perguntas de `perg_todas`, a lista e `oferecido`; não recebe o dict A. Das perguntas, lê `p.estado == VALIDADA` e `_e_aceite_de_folga(p)`. (`app/chamados/services/vigia_fio.py:311–314`; `app/chamados/services/vigia_fio.py:662–664`) |
+| `p.estado` / aceite de folga | `estado` retorna pelo carimbo de validação quando preenchido; caso contrário chama `pergunta_viva(self)` sem argumentos temporais. O aceite compara `resposta_colab.strip()` com o código `FOLGA_CONTESTA`. (`app/chamados/models.py:3067–3074`; `app/chamados/services/validacao.py:77`; `app/chamados/services/validacao.py:236–238`) |
+| `chamado_que_lista` | Recebe perguntas de `vivas`; lê a disputa e devolve `chamado_destino_id` ou `disputa.chamado_id`. É usado para carregar status das âncoras e para as classificações posteriores. (`app/chamados/services/fio.py:116–117`; `app/chamados/services/vigia_fio.py:621–622`; `app/chamados/services/vigia_fio.py:670–698`) |
+| `respondida_sem_texto` | Recebe perguntas de `vivas`; lê `respondida_em` e `resposta_colab`, usando o mesmo teste de texto vazio. (`app/chamados/services/vigia_fio.py:682`; `app/chamados/juizes.py:1510–1518`) |
+| `ListaDoAdmin` | Não lê as sete chaves de A. Carrega sua própria `cadastro_realidade.lista`, produz `_dias`/`_colabs` e responde presença, dono e papel. O censo consulta `dia_na_lista` e `colab_na_lista`; `dono_fora_do_fio` consulta `dia_do_admin` e `papel_do_dia`. (`app/chamados/services/vigia_fio.py:205–251`; `app/chamados/services/vigia_fio.py:312–314`; `app/chamados/services/vigia_fio.py:669`; `app/chamados/services/vigia_fio.py:686`) |
+
+**2. Equivalência de cada chave com B**
+
+B recebe os mesmos colaboradores de entrada, mas uma janela contínua entre a menor e a maior data do censo; sua base carrega células dessa janela com padding. (`app/chamados/services/vigia_fio.py:639–641`; `app/ponto/turnos.py:2973–2984`)
+
+| Chave de A | Comparação com B |
+|---|---|
+| `fila_ids` | **Mesma autoridade, query global e `agora`** na chamada de `alimentar_fila` feita por B. Entretanto o dado fica em `carga._portas`, privado; a saída pública publica apenas as portas pertencentes às ações exigíveis da tarefa. (`app/chamados/juizes.py:1558–1567`; `app/chamados/services/tarefa_do_dia.py:529–549`; `app/chamados/services/tarefa_do_dia.py:559–565`) |
+| `verbo` | **Mesma autoridade, universo global e argumento temporal** nessa alimentação. O `verbos` público da tarefa é um subconjunto selecionado pelas ações, não o mapa global de A. (`app/chamados/juizes.py:1558`; `app/chamados/services/tarefa_do_dia.py:548–556`) |
+| `fila_cel` | **Mesma autoridade, recorte diferente.** A recebe somente `_cels` dos pares enumerados; B passa todas as suas células dentro de `[ini,fim]`, podendo incluir dias intermediários. (`app/chamados/services/vigia_fio.py:600–608`; `app/chamados/services/tarefa_do_dia.py:531–533`) |
+| `vivas` | **Não é o mesmo carregamento nem o mesmo predicado aplicado ao mesmo universo.** A usa `celula_id__in` e julga todas as carregadas. B consulta `colaborador_id__in`, `conversa=False`, `data_evento` dentro da janela e só aplica C6 às candidatas selecionadas. (`app/chamados/juizes.py:1599–1604`; `app/chamados/services/tarefa_do_dia.py:376–383`; `app/chamados/services/tarefa_do_dia.py:467–493`) |
+| `colab` | **Não há equivalente público desse mapa.** B guarda células em `_cels` e cadastro em `_cadastro`, com outros universos/carregamentos; `porta_da_tarefa` devolve somente `rota`, `fila`, `verbos` e `fio`. (`app/ponto/turnos.py:2978–2984`; `app/chamados/services/tarefa_do_dia.py:372`; `app/chamados/services/tarefa_do_dia.py:565`) |
+| `no_app` | **B não carrega esse conjunto pela autoridade `perguntas_do_app`.** Sua seleção usa as perguntas do fato e as ações da tarefa; a interface pública de porta não devolve presença no app. (`app/chamados/services/tarefa_do_dia.py:376–383`; `app/chamados/services/tarefa_do_dia.py:525–565`; `app/chamados/services/pergunta_no_app.py:49–58`) |
+| `instancias` | **Não é o mesmo mapa de identidade.** B guarda os objetos recebidos em `_colabs`, mas recarrega `_cadastro`; para candidatas, substitui `p.disputa.colaborador` por esse cadastro recarregado. A utiliza o mapa semeado pelos objetos do censo. As `instancias` públicas da tarefa são linhas de marcos/ações. (`app/ponto/turnos.py:2978`; `app/chamados/services/tarefa_do_dia.py:372`; `app/chamados/services/tarefa_do_dia.py:481–482`; `app/chamados/juizes.py:1598–1600`; `app/chamados/services/tarefa_do_dia.py:184–185`) |
+
+A diferença exata da chamada C6 é:
+
+- A: `pergunta_viva(p, agora=agora)`. (`app/chamados/juizes.py:1603`)
+- B: `pergunta_viva(p, hoje=_hoje(self.agora), carga=carga_da_vida(...), agora=self.agora)`, somente nas candidatas. A seleção considera grade, isenção, tipo do dia, tranca, exportação e posições das perguntas; pode dispensar C6 para perguntas normais dentro da grade. (`app/chamados/services/tarefa_do_dia.py:467–493`)
+- Com `agora` preenchido, o wrapper de A também deriva `hoje=_hoje(agora)`. Portanto não há diferença necessária no dia civil entre A e B; há diferença de argumentos, alimentação, universo avaliado e uso do memo avulso. (`app/chamados/juizes.py:883–894`)
+
+B ainda faz uma leitura própria de fila para suas âncoras: `qs_na_fila(_base=ChamadoColaborador.objects.filter(pk__in=ancoras), agora=agora)`, guardada em `_fila`. Essa leitura recortada é distinta da alimentação global guardada em `_portas`. (`app/chamados/services/tarefa_do_dia.py:415–418`; `app/chamados/services/tarefa_do_dia.py:529–533`)
+
+**3. Quantas chamadas de `alimentar_fila` por rodada**
+
+No caminho direto, com `dias` não vazio e execução concluída, são **duas**; se `dias` está vazio, retorna antes delas. (`app/chamados/services/vigia_fio.py:594–595`; `app/chamados/juizes.py:1594`; `app/chamados/services/tarefa_do_dia.py:529–533`)
+
+| Sítio | Argumentos |
+|---|---|
+| A → `alimentar_portas` → `alimentar_fila` | IDs não vazios normalizados das células dos pares retidos; `agora` recebido pelo censo. (`app/chamados/services/vigia_fio.py:602–608`; `app/chamados/juizes.py:1593–1594`) |
+| Primeira `carga.tarefa(...)` de B | Todas as células de `_cels` dentro de `[ini,fim]`; `agora=self.agora`. As tarefas seguintes reutilizam `_portas`. (`app/chamados/services/tarefa_do_dia.py:427`; `app/chamados/services/tarefa_do_dia.py:529–534`) |
+
+**Incluindo a expansão transitiva da lista, a contagem em execução concluída é `2 + b + j`:**
+
+- `b=1` se esta chamada efetivamente carregar a lista e `beco_em_lote` encontrar células; caso contrário, `b=0`. A lista é carregada no máximo uma vez por objeto, e o beco retorna antes da alimentação quando não encontra células. (`app/chamados/services/vigia_fio.py:205–216`; `app/escala/services/cadastro_realidade.py:483–486`; `app/escala/services/cadastro_realidade.py:873`)
+- `j` é o número de janelas distintas **`(ini,fim)`** com perguntas vivas no beco. Para cada uma, ele cria uma carga B e consulta tarefas, produzindo uma alimentação de fila por carga. (`app/escala/services/cadastro_realidade.py:488–497`; `app/chamados/services/tarefa_do_dia.py:529–533`)
+- As janelas extras vêm das competências abertas, cortadas em ontem; as células extras exigem empresa correspondente, colaborador ativo, `veredito='indefinida'` e protesto `PREVISTO_COM_DIA_INDEFINIDO`. (`app/escala/services/cadastro_realidade.py:478–481`; `app/escala/services/cadastro_realidade.py:571–582`)
+
+A lista pode já ter sido carregada pelo `censo()` anterior: o comando compartilha o mesmo objeto entre os dois censos. Nesse caso, seus carregamentos não se repetem dentro de `censo_alcance`. (`app/chamados/management/commands/vigiar_fio_morto.py:170–176`; `app/chamados/services/vigia_fio.py:205–207`)
+
+Quanto à diferença entre os dois resultados principais:
+
+- `verbo` e `fila_ids` têm a mesma definição global, sem recorte por empresa, colaborador ou célula; somente `fila_cel` é recortada pelos argumentos. (`app/chamados/juizes.py:1557–1566`)
+- Com o mesmo estado lido e o mesmo `agora`, o recorte das células não altera `verbo`/`fila_ids`; pode alterar `fila_cel`. São leituras separadas, e o código contempla corrida entre partição e fila. Divergência efetivamente ocorrida em produção: **[nao verificado]**. (`app/chamados/juizes.py:1558–1566`)
+- O censo avulso cria `ListaDoAdmin(hoje, empresas)` **sem `agora`**; nesse percurso, `lista()` pode usar seu próprio `timezone.now()`. O comando, por sua vez, constrói a lista com o instante da rodada. (`app/chamados/services/vigia_fio.py:627`; `app/chamados/services/vigia_fio.py:199–201`; `app/chamados/services/vigia_fio.py:216`; `app/escala/services/cadastro_realidade.py:803–804`; `app/chamados/management/commands/vigiar_fio_morto.py:166–170`)
+
+**4. Carregamentos de `PerguntaDisputa` e `Colaborador`**
+
+Para `PerguntaDisputa`, o núcleo contém **três carregamentos de objetos**, mais **duas projeções de créditos**, além dos ramos condicionais abaixo. (`app/chamados/juizes.py:1599`; `app/chamados/services/vigia_fio.py:618–619`; `app/chamados/services/tarefa_do_dia.py:376–380`; `app/chamados/services/raiox.py:135–138`)
+
+| Sítio | Frequência e filtro |
+|---|---|
+| A | Uma vez: `celula_id__in=_cels`, `select_related('disputa','celula')`, ordem PK. (`app/chamados/juizes.py:1599–1600`) |
+| `perg_todas` | Uma vez: mesmo filtro de células e mesmos relacionamentos; sem o filtro Python de vida. Recarrega o universo SQL de A. (`app/chamados/services/vigia_fio.py:618–620`) |
+| B | Uma vez: `colaborador_id__in`, `conversa=False`, `data_evento__gte=ini`, `data_evento__lte=fim`; `select_related('disputa__colaborador__empresa','celula','chamado_destino')`. (`app/chamados/services/tarefa_do_dia.py:376–380`) |
+| Créditos da fila | Uma projeção por `alimentar_fila`, portanto `2+b+j` no grafo descrito: destino ou pai em vivos, `q_vivas()`, exclusão materializada + `VL_SIM`; cinco campos, sem objetos de pergunta/colaborador. (`app/chamados/services/verbos.py:34`; `app/chamados/services/raiox.py:56–58`; `app/chamados/services/raiox.py:74`; `app/chamados/services/raiox.py:135–138`) |
+| `_no_app` | Uma consulta por colaborador cujo cache `no_app` seja solicitado: `disputa__colaborador=colab`, `q_vivas()`, `select_related('disputa','celula')`; sem recorte por datas/células/conversa. (`app/chamados/juizes.py:1613–1621`; `app/chamados/services/pergunta_no_app.py:49–58`) |
+| Calendário do “Resolver dia” | Uma consulta por bloco de datas de cada colaborador sem porta em dia passado: `disputa__colaborador=colaborador`, `data_evento__range`, exclui `resposta_colab=''`; `select_related('disputa__colaborador','celula','chamado_destino')`. Os blocos seguem o teto de 366 dias. (`app/chamados/services/vigia_fio.py:642–643`; `app/chamados/services/vigia_fio.py:266–271`; `app/colaboradores/services/calendario.py:114`; `app/colaboradores/services/calendario.py:128–137`; `app/colaboradores/services/calendario.py:472–476`) |
+| Expansão do beco | Mais `b` carregamentos A e `j` carregamentos B, com os universos próprios do beco/janelas. (`app/escala/services/cadastro_realidade.py:478–497`) |
+
+A consulta A e `perg_todas` têm o mesmo universo SQL; `vivas` é a seleção Python da primeira. B, app, calendário e créditos podem se sobrepor a elas, mas seus filtros não definem conjuntos iguais nem uma relação geral de inclusão entre todos eles. Interseções concretas: **[nao verificado]**. (`app/chamados/juizes.py:1599–1604`; `app/chamados/services/vigia_fio.py:618–620`; `app/chamados/services/tarefa_do_dia.py:376–380`; `app/chamados/services/pergunta_no_app.py:49–58`; `app/colaboradores/services/calendario.py:473–474`; `app/chamados/services/raiox.py:56–74`)
+
+Para `Colaborador`, há **duas cargas explícitas no núcleo**, sobre os mesmos IDs: a do censo e a recarga `_cadastro` de B. B também materializa colaboradores pelo JOIN de sua consulta de perguntas, mesmo depois substituindo os das candidatas pelo cadastro. (`app/chamados/services/vigia_fio.py:607`; `app/chamados/services/tarefa_do_dia.py:370–380`; `app/chamados/services/tarefa_do_dia.py:481–482`)
+
+| Sítio adicional de `Colaborador` | Frequência/filtro |
+|---|---|
+| Formação do universo: export | Por empresa × competência: `FechamentoMensal.filter(colaborador__empresa=empresa, mes=mes, ano=ano).select_related('colaborador')`. (`app/chamados/services/vigia_fio.py:586–589`; `app/folha/fora_da_folha.py:130`; `app/folha/export.py:785–791`) |
+| Formação do universo: retidos | Por empresa × competência: `Colaborador.filter(pk__in=_ids_furo).select_related('empresa')`. Os IDs vêm dos itens classificados como `furo_espelho`, portanto repetem um subconjunto do carregamento anterior. (`app/folha/fora_da_folha.py:133–142`) |
+| `_no_app` | Fallback `filter(pk=colab_id).first()` somente se o ID faltar em `instancias`; o censo semeia o mapa com seus colaboradores. (`app/chamados/juizes.py:1598`; `app/chamados/juizes.py:1617–1619`; `app/chamados/services/vigia_fio.py:607–608`) |
+| Calendário | JOIN `disputa__colaborador` por bloco descrito acima; o mapa substitui a instância carregada pela recebida. (`app/colaboradores/services/calendario.py:472–475`) |
+| Beco | Se houver células: `filter(pk__in={colaboradores das células}).select_related('empresa')`; cada carga B extra também repete sua recarga de cadastro e seu JOIN. (`app/escala/services/cadastro_realidade.py:485–493`; `app/chamados/services/tarefa_do_dia.py:372–380`) |
+| Lista: afastados | Lê PKs de `exclude(situacao='desligado')`, opcionalmente filtrado por empresa, com `situacao='afastado'`; o queryset também limita a consulta do juiz de afastamento. Havendo PKs, carrega `filter(pk__in=pks).select_related('empresa').order_by('pk')`. (`app/escala/services/cadastro_realidade.py:612–624`; `app/colaboradores/services/situacao_exibida.py:44–47`) |
+| Lista: nunca bateu | Por empresa, projeção de PKs com `pk__in` nos c
+
+[truncado em 20000 de 23006 caracteres]
+
+## 13/11 15:17 · sessao f0888a9c60e1 · - · - · origem=Ronald (tmux)
+
+Achados da frente telas/Haiku/RED:
+
+1. **BLOQUEANTE — saldo negativo perde o campo no caminho até Haiku.** A API envia `saldo_negativo_dias`, mas a ferramenta reconstrói o payload sem ele: `app/api/views_mensageria.py:836`; `mensageria/nucleo/ferramentas.py:2109-2119`. Contra-exemplo: oito períodos antigos positivos e o nono com saldo −3. A ordenação privilegia os antigos e a API corta em oito (`app/ferias/situacao.py:163-164`; `app/api/views_mensageria.py:41,842`); Haiku recebe apenas os positivos, `saldo_dias` positivo e nenhum número de saldo negativo. O aviso ainda informa consumo acima do direito, portanto o passivo não fica inteiramente oculto (`app/ferias/situacao.py:179-190`). Na tela principal e no drawer, o saldo individual é exibido sem corte (`app/templates/ferias/saldo.html:41`; `app/templates/ferias/_secao_colab.html:50`).
+
+2. **NAO-BLOQ — RED aceita erro de programação como recusa de domínio.** `_recusou` captura qualquer `Exception` (`app/ferias/test_hj090_red_por_valor.py:45-51`). Contra-exemplo: `executar_agendamento` passa a levantar `TypeError` antes de escrever; os testes continuam verdes porque houve exceção e o banco permaneceu intacto (`app/ferias/test_hj090_red_por_valor.py:77-79,91-93`). Os testes históricos também descartam a resposta e conferem apenas ausência de escrita (`app/ferias/test_hj090_red_por_valor.py:40-42,67-71,82-87,96-98`): uma recusa antecipada por autorização satisfaz essas asserções. Mordida **executada** na base: [nao verificado]. O delta fornecido permite inferir mordida por valor dos casos de saldo na antiga porta, mas não substitui execução.
+
+3. **NAO-BLOQ — redirecionamento convencional pode escolher período incapaz de receber o pedido.** Escolhe o primeiro `p.pode_agendar`, que exige apenas status adquirido e saldo positivo (`app/ferias/views.py:221-228`; `app/ferias/models.py:233-234`). Contra-exemplo: primeiro período adquirido com saldo 10, segundo adquirido com saldo 30, pedido futuro de 30 dias: abre o primeiro formulário com `value=30`, `max=10` (`app/templates/ferias/agendar.html:22`). O período correto não é procurado. Existência desse arranjo entre os 32 casos: [nao verificado].
+
+Curas delimitadas:
+
+- **Triagem 9:** prefill do POST convencional implementado em `app/ferias/views.py:213-228,331-339` e `app/templates/ferias/agendar.html:18,22`. O teste cobre redirect e GET preenchido (`app/ferias/test_hj090_um_juiz.py:445-458`); aceitação dos mesmos 32 casos de produção: [nao verificado].
+- **Triagem 10:** `status_de_periodo` consulta a propriedade registrada, inclusive para objetos com os mesmos campos (`app/ferias/models.py:95-98,219-220`; `app/core/juizes.py:264`).
+- **Triagem 11, parte procedente:** histórico repassa `hoje` ao status do agendamento e do período (`app/ferias/services.py:451,476`). Outros relógios internos continuam em `app/ferias/services.py:491,510,610,637,700`.
+- **Triagem 12:** inclusão dos períodos negativos e agregado separados implementados (`app/ferias/situacao.py:300-302`); caminho Haiku permanece parcial conforme achado 1.
+- **Triagem 8:** universo corrigido para `Ausencia(tipo='ferias')`, sem filtro de status, cruzado com `batidas_apuraveis` (`app/ferias/management/commands/listar_ferias_com_batida.py:40-46`); competência atual ordenada primeiro e status impresso (`:61-69`). `--desde` obrigatório remove a data produtiva cravada (`:25`). Correspondência aos 40 dias e quatro de novembro: [nao verificado].
+
+## 13/11 15:17 · sessao 8d553393ec76 · - · - · origem=Ronald (tmux)
+
+- **BLOQUEANTE — triagem 7 meio-curada: contador continua sem caminho ao ESTADO.** O tripwire agora retira `OK` nos dois sentidos e alarma `soma_maior`, mas só imprime (`app/ferias/management/commands/tripwire_status_ferias.py:38–57`). O leitor genérico existe: compara `esperado` com `censo` (`bin/fio_estado.py:125–126`) e imprime qualquer divergência (`bin/fio_estado.py:191–194`); o ESTADO o chama (`bin/gerar_estado.py:260–261`). Porém o produtor desse carimbo não entrega os contadores de férias em `esperado` nem `censo` (`app/chamados/management/commands/vigiar_fio_morto.py:233–241`). **Contra-exemplo:** PA com concedidos 30/soma 33: o tripwire retorna 2, mas a rodada do vigia não acrescenta essa divergência ao carimbo consumido pelo ESTADO. Ocorrência efetiva em produção: [nao verificado].
+
+- **NAO-BLOQ — comando preexistente escreve sem `--apply`, já declarado como fila na triagem.** `alertar_ferias_vencendo` chama `p.sincronizar_status(hoje)` incondicionalmente (`app/ferias/management/commands/alertar_ferias_vencendo.py:14–32`), que delega à porta escritora (`app/ferias/models.py:152–158`). **Contra-exemplo:** executar apenas `alertar_ferias_vencendo` com PA adquirido cujo limite venceu muda seu status, além de emitir notificações (`app/ferias/management/commands/alertar_ferias_vencendo.py:35–53`).
+
+Conferência das listas, sem novo bloqueante demonstrado:
+
+- `listar_ferias_dp` imprime os dois números no sentido concedidos>soma; períodos posteriores incluem origem e status usado, anteriores adquiridos com saldo (`app/ferias/management/commands/listar_ferias_dp.py:55–75`). A origem é inferida de texto livre de `obs`, não de campo estruturado (`app/ferias/management/commands/listar_ferias_dp.py:26–32`); correspondência das 52 linhas reais e separação agregada exigida no RELATO: [nao verificado].
+- A simulação não persiste: cancela dentro de transação, pergunta à validação normal e força rollback (`app/ferias/management/commands/listar_ferias_dp.py:98–111`). Aceitação efetiva dos mesmos 32 casos: [nao verificado].
+- A lista com batidas usa `Ausencia(tipo='ferias')`, sem filtro de status, cruza `batidas_apuraveis`, imprime status, marca batidas da véspera e prioriza competência atual (`app/ferias/management/commands/listar_ferias_com_batida.py:40–69`). Reprodução dos 40 dias/four casos prioritários do anexo: [nao verificado].
+- A data padrão cravada saiu desse comando: `--desde` é obrigatório (`app/ferias/management/commands/listar_ferias_com_batida.py:24–25`).
+
+## 13/11 15:17 · sessao 5f68d2093f96 · - · - · origem=Ronald (tmux)
+
+Achado adicional para consolidar:
+
+- **BLOQUEANTE — edição do direito continua julgando foto antes da trava.** `app/ferias/views.py:844` compara `dias_direito` somente com `dias_concedidos` carregado pela request; `app/ferias/services.py:728` abre atomic, mas `:729-733` grava sem reler/travar nem recalcular status. Contra-exemplo: request lê concedidos=0; outra porta agenda 30 sob trava; edição de direito=20, já aprovada pela foto, grava depois e produz saldo=-10. Mesmo sem corrida, direito30/concedidos20/vendidos10 aceita direito20 e produz saldo=-10: a validação ignora vendidos (`app/ferias/views.py:844`; juiz `app/ferias/models.py:220`). É escritor de **insumo** do saldo fora da trava, embora não escreva diretamente os quatro campos solicitados.
+
+- **NAO-BLOQ, estrutural — exclusão inverte a ordem nominal.** Trava PA e depois apaga ausência e agendamento (`app/ferias/services.py:744`, `:749`; `app/ferias/models.py:456-460`; `app/ponto/services/ausencia.py:1267-1271`), contra a ordem documentada AG→PA→Ausencia (`app/ferias/services.py:557-563`). Deadlock entre portas oficiais **[nao verificado]**: a exclusão só aceita cancelados (`app/ferias/services.py:745-747`) e `_travar_agendamento` recusa cancelado antes de pedir PA (`app/ferias/services.py:561-563`).
+
+Censo de escritores encontrado:
+
+| Campo | Escritores |
+|---|---|
+| PA.concedidos | realinhar `services.py:156-158`; reverter `:179-181`; histórico `:474-477`; executar `:509-511`; cancelar DP `:577-579`; cancelar admin `:604-606`; trocar janela `:635-651`; aprovar solicitação `:706-708` |
+| PA.vendidos | abono integrado `services.py:259-261`; histórico `:475-477`; venda isolada `:806-808` |
+| PA.status | Escritores acima por `aplicar_status`; sincronizar `services.py:330-344`; garantir existente `:375-378`; criação por defaults `:369-370` |
+| PA.saldo | Property, sem coluna/escritor próprio: `models.py:218-220` |
+| AG.status/dias/datas | histórico `services.py:447-473`; executar `:506-508`; aprovar `:695-705`; cancelar `:580-581`, `:612-613`; trocar `:636-649`; cron `:825-829` |
+| Ausencia férias | AG.save→espelhar `models.py:449-454`; criar dias `ausencia.py:1203-1208`; remover cancelados `:1189-1193`; apagar janela `:1263-1271`; rejeitar em massa `:1282-1284` |
+
+Leitores centrais:
+
+- Saldo/status: juiz `app/ferias/models.py:98`, `:220`, `:233-242`; validação normal `app/ferias/views.py:250-258`; abono `app/ferias/services.py:294-302`; histórico `:464-472`; remarcação `:631-633`; aprovação `:684-691`; venda `:799-803`.
+- Concedidos/status/AG.dias: contador e soma `app/ferias/services.py:105-126`; realinhamento/reversão `:137`, `:152-176`; DP `app/ferias/management/commands/listar_ferias_dp.py:55-84`.
+- Tela: `app/templates/ferias/_secao_colab.html:42`, `:49-51`, `:117-120`; `app/templates/ferias/saldo.html:37-46`, `:59-66`.
+- Haiku: `app/api/views_mensageria.py:837-844`; situação agrega positivos e negativos separadamente `app/ferias/situacao.py:300-302`.
+- Ausencia férias: materializador lê status/datas/dono do PA `app/ponto/services/ausencia.py:1180-1186`; lista com batida lê tipo/data/status `app/ferias/management/commands/listar_ferias_com_batida.py:43-45`, `:68-70`.
+
+Observações de escopo:
+
+- Abono integrado pede a mesma trava PA três vezes (`app/ferias/services.py:245`, `:493`, `:258`), sem mudança da ordem.
+- A porta genérica de editar ausência pode alterar férias sem trava PA/AG (`app/ponto/services/ausencia.py:465-509`); mudar estado/reabrir também (`:818-836`, `:1142-1149`). A triagem fornecida separa isso para HJ-091 **[nao verificado]**; não apresentar como novo bloqueio HJ-090.
+- `_trilha` estrita cobre realinhamento/reversão (`app/ferias/services.py:161-162`, `:182-183`, `:404-411`). Criação das ausências ainda usa evento best effort (`app/ponto/services/ausencia.py:440-448`; `app/core/observ.py:105`, `:139`); demais portas de saldo não chamam `_trilha` nos seus corpos citados acima.
 
 ## 13/11 15:15 · sessao cee2ecca4203 · DESLIGADO-NAO-TRAVA · verificador · origem=Code
 
@@ -501,145 +679,4 @@ O cálculo é:
 
 **Limite:** o anexo não mostra a saída do pareador histórico nem as batidas da janela com pad. `turnos_do_colab` carrega dias vizinhos — `ponto/turnos.py:1862-1866`; a montagem pede uma janela — `escala/utils.py:1898`. Portanto, os pares da execução histórica são **[não verificado]**; o pareamento acima é a consequência do código aplicado exclusivamente às batidas listadas.
 
-## 13/11 14:41 · sessao bfb9aff3c2f8 · HJ-092 · sonda · origem=Code
-
-**A saída classifica 133 como `t1_certo`, 15 como `t2_certo` e deixa 469 indeterminadas. “Certo” aqui é o rótulo da sonda, condicionado ao teste de alternância.** `[nao verificado]` [nao verificado]
-
-Os números abaixo derivam exclusivamente do dado colado, por isso levam `[nao verificado]`. Não localizei `sonda_classe.py` na cópia; seu corpo não consta do texto fornecido, portanto não pude conferir sua implementação nem o hash informado. `[nao verificado]`
-
-**1. Contagem por competência**
-
-Nas colunas de ocupação: P = preenchido, V = vazio, ? = `None`. `[nao verificado]`
-
-| Competência | Total | t1 certo | t2 certo | Sem plantio vivo | Nenhum alterna | Ambos alternam | Outro marco P / V / ? | Fonte |
-|---|---:|---:|---:|---:|---:|---:|---|---|
-| 2026-08 | 55 | 3 | 1 | 48 | 3 | 0 | 31 / 24 / 0 | `[nao verificado]` |
-| 2026-09 | 198 | 44 | 8 | 96 | 50 | 0 | 100 / 77 / 21 | `[nao verificado]` |
-| 2026-10 | 221 | 74 | 4 | 98 | 43 | 2 | 81 / 92 / 48 | `[nao verificado]` |
-| 2026-11 | 143 | 12 | 2 | 124 | 4 | 1 | 13 / 53 / 77 | `[nao verificado]` |
-| **Total** | **617** | **133** | **15** | **366** | **100** | **3** | **225 / 246 / 146** | `[nao verificado]` |
-
-O total “não dá para dizer” é **51 / 146 / 143 / 129**, respectivamente, somando **469**. As classes fecham exatamente as 617 entradas, e o cabeçalho declara `ERROS 0`. `[nao verificado]`
-
-Sobre **627 versus 617**, a saída permite confirmar somente o universo declarado de 617 nesta execução e a diferença aritmética de 10. Ela não identifica os dez `pergunta_id` adicionais nem demonstra quais logs estavam ausentes; portanto não permite reconciliar os dois universos ou classificar os dez restantes. `[nao verificado]`
-
-**2. Limitações do critério e alcance**
-
-Na cópia, `t1` vem do casamento por motivo em `marcos_faltantes`, passando `tipo=None`; `t2` usa a resposta, escolhe o marco mais próximo por distância circular e aceita distância até 240 minutos. Na divergência, retorna `t1`. `app/chamados/juizes.py:549`, `app/chamados/juizes.py:553`, `app/chamados/services/materializacao.py:275`, `app/chamados/services/materializacao.py:280`, `app/chamados/services/materializacao.py:296`, `app/chamados/services/materializacao.py:310`, `app/chamados/services/declaracao_texto.py:25`.
-
-| Fraqueza | Onde pode errar | Quantos a saída permite delimitar |
-|---|---|---|
-| **Janela fixa** | Pode cortar vizinhos relevantes ou incluir outro turno. O materializador pode substituir a hora respondida pela hora do marco de intervalo e ajustar o instante por overnight. `app/chamados/services/materializacao.py:412`, `app/chamados/services/materializacao.py:426`. | **251** têm plantio vivo e entram potencialmente na comparação: **148** decididos e **103** ambíguos. Quantos sofreram corte ou contaminação da janela: `[nao verificado]`. |
-| **Alternância como prova** | Alternar não demonstra identidade do marco, horário correto ou jornada correta. O pareador considera intervalo e papel informado pela ATA, que pode prevalecer sobre o tipo gravado. `app/ponto/turnos.py:1195`, `app/ponto/turnos.py:1201`. | Os **148** rótulos conclusivos dependem dessa heurística; **100** não alternam em nenhuma hipótese e **3** alternam nas duas. Quantos dos 148 estão efetivamente errados: `[nao verificado]`. |
-| **Grade lida hoje** | O leitor consulta a célula/ATA disponível, sem parâmetro de instante histórico. Isso não reconstrói necessariamente o marco que originou `t2` no ato. `app/escala/services/leitor_celula.py:350`, `app/escala/services/leitor_celula.py:362`, `app/escala/services/leitor_celula.py:379`. | Até **617** reconstruções de marco/ocupação ficam expostas; **471** receberam booleano de ocupação e **146** receberam `None`. Quantas grades mudaram: `[nao verificado]`. |
-| **Resposta do log × atual** | A derivação lê `p.resposta_colab`, e o log registra esse valor naquela chamada. O modelo admite respostas posteriores que superam anteriores. `app/chamados/services/materializacao.py:280`, `app/chamados/services/materializacao.py:308`, `app/chamados/models.py:3501`. | Até **617** comparações históricas ficam expostas se a sonda recomputa pela resposta atual. A saída não informa quantas respostas mudaram. Há **29** plantados diferentes de `t1`, mas isso não identifica a causa. `[nao verificado]` |
-| **Exigir plantio vivo vinculado** | Ausência de vínculo não prova ausência histórica de plantio: `pergunta_origem` aceita nulo e seu contrato inclui plantios anteriores a 06/09. `app/ponto/models.py:40`. | Limita os **366 `sem_plantio_vivo`**; quantos representam ausência real, vínculo antigo ausente ou retratação: `[nao verificado]`. |
-| **Ocupação histórica aproximada** | Sem o script, não se conferem os filtros temporais e de validade usados no teste dos 30 minutos. O modelo distingue instante da marca, criação e retratação. `app/ponto/models.py:23`, `app/ponto/models.py:67`, `app/ponto/models.py:79`. | **225 preenchidos, 246 vazios, 146 desconhecidos** são resultados do indicador. Quantos reproduzem incorretamente a ocupação no ato: `[nao verificado]`. |
-
-Os alcances acima se sobrepõem; não são quantidades de erros demonstrados nem devem ser somados. `[nao verificado]`
-
-**3. Cruzamento com ocupação**
-
-| Classe da sonda | Total | Outro preenchido | Outro vazio | Desconhecido | Fonte |
-|---|---:|---:|---:|---:|---|
-| `t1_certo` | 133 | **92** | 41 | 0 | `[nao verificado]` |
-| `t2_certo` | 15 | 4 | **11** | 0 | `[nao verificado]` |
-
-Entre `t2_certo`, **11/15 = 73,3%** tinham o outro marco vazio. Entre `t1_certo`, **92/133 = 69,2%** tinham o outro preenchido. Isso sustenta uma associação na amostra, condicionada ao critério da sonda. `[nao verificado]`
-
-A candidata **“a grade só vale contra marco ainda vazio” não é sustentada como condição universal**: existem quatro `t2_certo` com outro marco preenchido — **pk26279, pk34263, pk39767 e pk44524**. Além disso, há **41 `t1_certo` com outro vazio**, portanto vazio sozinho não determina que `t2` esteja certo. `[nao verificado]`
-
-O código atual também não exige marco vazio para selecionar `t2`: a lista de marcos contém tipo/hora de todas as lâmpadas, e a seleção filtra hora/tipo, proximidade e tolerância. `app/escala/services/leitor_celula.py:148`, `app/chamados/services/materializacao.py:293`, `app/chamados/services/materializacao.py:299`.
-
-**4. col824 — pk52752 / pk52753 / pk53024**
-
-| Pergunta | Entrada histórica fornecida | Saída fornecida | Fonte |
-|---|---|---|---|
-| **pk52752** | `CASO 52752 None`; sem valores disponíveis de `t1`/`t2`. | Não aparece nas listas de classificação. Isso não prova inexistência da pergunta nem ausência em outros logs. | `[nao verificado]` |
-| **pk52753** | `intervalo_volta`, resposta **06:00**, **t1=E / t2=S**. | Plantado vivo **E**, outro marco **vazio**, `nao_da_para_dizer(nenhum_alterna)`. O plantado coincide com `t1`, mas a sonda não confirma nenhum dos dois. | `[nao verificado]` |
-| **pk53024** | `orfao_14h`, resposta **01:01**, **t1=S / t2=E**. | Sem plantio vivo vinculado, ocupação **None**, `nao_da_para_dizer(sem_plantio_vivo)`. Não permite decidir entre `t1` e `t2`. | `[nao verificado]` |
-
-## 13/11 14:40 · sessao f4074b0f4b47 · - · - · origem=Ronald (tmux)
-
-Cálculo exclusivamente das tuplas fornecidas; sem acesso à definição do último campo. `[nao verificado]`
-
-| Competência | t1 certo: preenchido | t1 certo: vazio | t1: desconhecido | t2 certo: preenchido | t2 certo: vazio | t2: desconhecido |
-|---|---:|---:|---:|---:|---:|---:|
-| 2026-08 | 2 | 1 | 0 | 0 | 1 | 0 |
-| 2026-09 | 31 | 13 | 0 | 1 | 7 | 0 |
-| 2026-10 | 51 | 23 | 0 | 3 | 1 | 0 |
-| 2026-11 | 8 | 4 | 0 | 0 | 2 | 0 |
-| Total | 92 | 41 | 0 | 4 | 11 | 0 |
-
-Toda a tabela deriva da saída fornecida. `[nao verificado]`
-
-Os quatro `t2_certo` com outro marco preenchido são pk26279, pk34263, pk39767 e pk44524. `[nao verificado]`
-
-Há 29 plantados diferentes de t1: 16 em 2026-09 e 13 em 2026-10. A divisão por classe é: `[nao verificado]`
-
-- `t1_certo`: 3 — pk31938, pk31942, pk34270. `[nao verificado]`
-- `t2_certo`: 4 — pk22626, pk25140, pk27739, pk44524. `[nao verificado]`
-- `nenhum_alterna`: 22 — pk20883, pk23194, pk24950, pk25441, pk26108, pk26298, pk26885, pk29236, pk29930, pk33586, pk33606, pk34460, pk35300, pk37621, pk39998, pk40362, pk40757, pk41275, pk41356, pk41656, pk41978, pk43672. `[nao verificado]`
-- `ambos_alternam`: 0. `[nao verificado]`
-
-O último campo é maior que 1 em 26 tuplas: 8 `sem_plantio_vivo`, 7 `nenhum_alterna`, 11 `t1_certo`, nenhuma nas outras classes; sua soma em todas as 617 tuplas é 648. Não é possível atribuir esse campo a repetições de log sem o script. `[nao verificado]`
-
-## 13/11 14:40 · sessao dfa9ae20f57a · - · - · origem=Ronald (tmux)
-
-Não localizei `sonda_classe.py` na cópia; o hash e a implementação exata da sonda não puderam ser conferidos. A análise do critério depende da descrição e da saída fornecidas. `[nao verificado]`
-
-| Fraqueza | Evidência e alcance |
-|---|---|
-| Janela fixa pode cortar turno noturno ou incluir outro turno | O materializador pode ajustar o instante por overnight; intervalo também pode usar hora do marco em vez da resposta. `app/chamados/services/materializacao.py:413`, `app/chamados/services/materializacao.py:426`. Potencialmente **251** perguntas com plantio vivo entram na comparação de sequências: **148** decididas e **103** ambíguas; quantidade efetivamente prejudicada pela janela não consta. `[nao verificado]` |
-| Alternância não prova qual marco ocorreu | O pareador distingue intervalo e papel informado pela ATA; o papel pode prevalecer sobre `Batida.tipo`. `app/ponto/turnos.py:1195`, `app/ponto/turnos.py:1201`. As **148** classificações conclusivas são conclusões da heurística; os **100 nenhum_alterna** e **3 ambos_alternam** expõem suas abstenções. Número de conclusões erradas: não mensurável pela saída. `[nao verificado]` |
-| Grade atual não reconstrói a grade do ato | O leitor consulta `CelulaDia` por colaborador/data, sem parâmetro de instante histórico. `app/escala/services/leitor_celula.py:350`, `app/escala/services/leitor_celula.py:362`. Potencialmente **617** casos expostos; quantidade de grades efetivamente alteradas não consta. Os **146 None** na ocupação não comprovam alteração de grade. `[nao verificado]` |
-| Resposta atual pode diferir da registrada no log | A derivação lê `p.resposta_colab`; o log grava a resposta vigente daquela chamada. `app/chamados/services/materializacao.py:280`, `app/chamados/services/materializacao.py:308`. O modelo reconhece respostas anteriores superadas. `app/chamados/models.py:3501`. Potencialmente **617** expostos; quantidade efetivamente alterada não consta. `[nao verificado]` |
-| Ausência de plantio vivo vinculado não prova ausência histórica de plantio | `pergunta_origem` aceita nulo; seu próprio contrato inclui plantio anterior a 06/09 entre os registros sem vínculo. `app/ponto/models.py:40`. Isso limita a interpretação dos **366 sem_plantio_vivo**. `[nao verificado]` |
-| Ocupação atual não basta para provar ocupação histórica | Há campos distintos de instante da batida, criação e retratação. `app/ponto/models.py:23`, `app/ponto/models.py:67`, `app/ponto/models.py:79`. Sem o script, não se confere como esses tempos e o raio de 30 minutos foram empregados. A saída possui **225 True**, **246 False**, **146 None**; erros efetivos não são contáveis. `[nao verificado]` |
-
-O cálculo de `t2` não filtra marco vazio: seleciona entre marcos com hora e tipo válidos, escolhe o mais próximo e aplica a tolerância. `app/chamados/services/materializacao.py:293`. A tolerância é 240 minutos. `app/chamados/services/declaracao_texto.py:25`. Quando ambos divergem, o retorno favorece `t1`. `app/chamados/services/materializacao.py:310`.
-
-Para `col824`, `CASO 52752 None` só mostra ausência de entrada naquele mapeamento fornecido; não prova inexistência da pergunta nem ausência em todos os logs. `pk52753`: entrada histórica `intervalo_volta`, resposta `06:00`, `t1=E`, `t2=S`; saída com plantado `E`, ocupação `False`, classificação `nenhum_alterna`. `pk53024`: entrada histórica `orfao_14h`, resposta `01:01`, `t1=S`, `t2=E`; saída sem plantio vivo e ocupação `None`. `[nao verificado]`
-
-## 13/11 14:38 · sessao 27bbcb37f3da · HJ-092 · sonda · origem=Code
-
-**(a)** Na ATA fornecida da célula **128589 / col824**, **nenhuma lâmpada acesa tem `tipo_real` diferente do marco**: 17:00=`E/E`, 22:00=`S/S`, 23:00=`E/E`. Às 05:00, o marco é `S`, mas está apagado, com `tipo_real=null`; isso não demonstra inversão. A oposição mencionada no laudo anterior não aparece nesta ATA. [nao verificado]
-
-A origem de `tipo_real` é:
-
-- A grade monta `locs` com **`b.tipo`**, o tipo gravado da batida (`app/escala/utils.py:1323`).
-- O alinhamento passa esse valor para `_celula_do_marco`, tanto no ramo por papel quanto no ramo por custo (`app/escala/utils.py:619`, `app/escala/utils.py:631`, `app/escala/utils.py:661`).
-- A célula guarda separadamente `tipo/papel=tipo_m` e `tipo_real=tipo_real` (`app/escala/utils.py:326–327`).
-- O cartório copia `x['tipo_real']` para a lâmpada; não o substitui pelo papel (`app/ponto/services/cartorio.py:711–713`).
-
-Portanto, **`tipo_real` representa o tipo gravado da batida casada**, enquanto `tipo/papel` representa o marco. No anexo, 22:00=`S` coincide com **pk152080**, e 23:00=`E` coincide com **pk152081**. [nao verificado]
-
-**(b)** A sequência e o pareamento **efetivamente exibido em `TURNO_SEM_MARCOS`** são:
-
-| pk | Hora local | Tipo gravado | Resultado exibido |
-|---|---|---|---|
-| 143310 | 01/11 12:56:03 | E | Turno aberto. [nao verificado] |
-| 143421 | 01/11 17:00:04 | E | Turno aberto. [nao verificado] |
-| 143443 | 01/11 18:00:05 | E | Entrada do turno fechado. [nao verificado] |
-| 152080 | 01/11 22:00:00 | S | Interna: saída para intervalo. [nao verificado] |
-| 152081 | 01/11 23:00:00 | E | Interna: volta do intervalo. [nao verificado] |
-| 143650 | 02/11 01:01:06 | S | Fecha o turno iniciado em pk143443. [nao verificado] |
-
-**Sim: 17:00 e 18:00 já são entradas gravadas; 18:00 inicia o único turno fechado exibido.** [nao verificado] Uma `E` sucessiva preserva o turno anterior aberto e inicia outro (`app/ponto/turnos.py:1417–1420`). Sem marcos, o par `S22:00→E23:00` é reconhecido como intervalo pela existência da `S` posterior (`app/ponto/turnos.py:393–420`).
-
-Para a célula, a grade chama `turnos_do_colab` e entrega seus turnos a `realizado_do_dia` (`app/escala/utils.py:1898`, `app/escala/utils.py:2045–2049`). O espelho também chama esse wrapper (`app/ponto/services/espelho.py:614`, `app/ponto/services/espelho.py:675–676`). O wrapper chama `parear_turnos` com papel da ATA, marcos e DNA diário (`app/ponto/turnos.py:1939`, `app/ponto/turnos.py:1992–1994`).
-
-Com a ATA fornecida, o marco final apagado impede **esta célula** de emitir papel ao pareador; sem papel, vale o tipo gravado (`app/ponto/turnos.py:1682–1683`, `app/ponto/turnos.py:1382`). Com os marcos 22:00/23:00, essas batidas são absorvidas como intervalo (`app/ponto/turnos.py:1356–1376`).
-
-**(c)** **Sim, a reconstituição fecha em 240 + 121 = 361:**
-
-- **240 min:** pk143443 **18:00 → 22:00** pk152080. [nao verificado]
-- **121 min:** pk152081 **23:00 → 01:01 do dia seguinte** pk143650. [nao verificado]
-
-O código calcula **um turno bruto menos a pausa**: `421 − 60 = 361`; elimina segundos antes das diferenças e desconta o intervalo reconhecido (`app/ponto/turnos.py:605–606`, `app/ponto/turnos.py:740–741`, `app/ponto/turnos.py:756–771`). Os turnos abertos sem par fechado não acrescentam minutos (`app/ponto/turnos.py:735–739`).
-
-A sonda não imprime os turnos efetivos de `turnos_do_colab` com toda a alimentação da janela. Para comprovar essa execução específica, faltam seus pares/pks e o mapa efetivo de papéis, incluindo eventuais batidas e células vizinhas. [nao verificado]
-
-**(d) BATIDA — lista do admin:** há entradas consecutivas pk143310/pk143421/pk143443 e nenhuma oposição nas lâmpadas acesas da ATA apresentada [nao verificado]; `tipo_real` preserva o tipo gravado e cada nova `E` abre outro turno (`app/escala/utils.py:1323`, `app/escala/utils.py:619`, `app/ponto/turnos.py:1417–1420`).
-
-_4630 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4634 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
