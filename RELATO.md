@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: encadeia.sh | pid=1566057
+PONTO 12:1x TIPO item 3 volta 5c: suite INTEIRA da copia wt-codex-tipo-na-fonte-184856 @12e424d5f VERDE (OK skipped=42 xfail=41, Ran 15523, rc 0; logs/TIPO-NA-FONTE/item3/volta5/suite_pre_opus_c/suite.log) -> opus final lancado (verificador, so leitura); depois DIFF ZERO por leitor (29) -> pouso
 PONTO 12:2x COMPLEMENTO-DESLIGAR-1311 (aval Ronald): DESLIGAR-LIQUIDA-TUDO = item (d) da O50-DESLIGAR-ENCERRA-TUDO, FORA da copia wt-desligado-112447 (vaga serial apos a LEI-DESLIGADO); censo+sonda do (d) ja no Codex (logs/DESLIGAR-LIQUIDA/censo1, sonda1); UI-RESCISAO registrada (absorve O59, le O58, depois do 20) e censo Codex lancado (logs/UI-RESCISAO/censo1.r, sem suite nem construtor)
 PONTO 12:0x DESLIGAR-LIQUIDA-TUDO (aval Ronald, complemento da LEI-DESLIGADO-NAO-TRAVA; substitui DESLIGAMENTO-ENCERRA-PERGUNTA-RESPONDIDA 28/10) registrado; DESPACHO DESLIGAR-LIQUIDA: censo via_resolucao/respostas_sem_veredito/leitores da via nova -> Codex | frota de vivos de desligado por competencia -> Codex --sonda | construcao -> opus (sessao) [RESPONDIDA por COMPLEMENTO-DESLIGAR-1311 12:2x: vai como item (d) da O50, fora da copia wt-desligado-112447]
 PONTO 12:0x O168 v6 ressalva do preverif5 (validacao.py:547) curada: aviso_das_irmas le dono_do_erro (RED logs/O168/v6/cura_aviso_irmas FAILED 1 -> GREEN OK Ran 15); commit cb3eb7469 na copia wt-o168v6-233014; volta 5 > 3 -> suite inteira (logs/O168/v6/suite_pre_opus_f, na fila da trava) -> opus final
