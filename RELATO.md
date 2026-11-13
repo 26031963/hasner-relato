@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: push.sh | pid=3001848
+ESPERANDO: codex_pergunta.sh | pid=3089042
+PONTO 20:2x VAGAS (teto 2 construtores conferido): E3 v6 = Codex construtor (vaga unica logs/construtor.vaga, pid 3089042) + BUG-PAR volta (a) = agente opus wt-bugpar-124848; HJ-090 = integrador de mutantes (copia propria). JUSTIFICATIVA-PAGA-O-PERIODO espera a 1a vaga que soltar; GRADE-MESTRA = Codex leitura (sem vaga).
 DECIDIDO PELA LEI aval BUG-PAR-163-X-DECLARADO (literal: 'hora ou tipo diferente') 20:1x: as 64 so-data (declarado 00-04h, data_evento = dia do turno, D+1 e a representacao da madrugada por desenho, chamados/juizes.py:306-331) contam como IGUAIS -> seguem BUG-PAR-103=(A); espera DECLARADO-X-GRAVADO = 79 (hora/tipo diferente) + pk 14953 NAO_GRAVA | contestavel; reversao: mover as 64 para espera; prova = RED do construtor (logs/BUG-PAR-O-PAR/e3/sonda163/semantica/r.r).
 DECIDIDO PELA LEI LEI-C17-UM-JUIZ 20:1x (pergunta de desenho do construtor v5, test_verbo_nao_e_traducao_da_acao_da_tarefa): fio = 'quem age a seguir' -- (1) donos das acoes quando a tarefa tem acao (caminho normal intacto); (2) fio_pelos_verbos so para chamado vivo na fila sem acao; (3) os dois -> prioridade de dono existente. Construtor v6 @0ab510f6e (logs/E3-FORMA-SQL/construtor_v6/) | contestavel; reversao: volta ao fio por acao so (e01da1d51).
 DESPACHO GRADE-MESTRA 20:1x: grade por obra (6 baldes, 9 casas) -> Codex leitura UMA vez @897184a6f (logs/GRADE-MESTRA/q.q, 7 anexos 249 KB) | amostra 10 linhas x BACKLOG + gravar app/docs/GRADE-MESTRA.md -> Code | nada a sonnet/opus.
