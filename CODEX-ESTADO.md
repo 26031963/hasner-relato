@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 20:21** · publicado em **13/11/2026 20:22** (UTC-3)
+> Ultima resposta processada: **13/11/2026 20:23** · publicado em **13/11/2026 20:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 20:23 · sessao f7ca6f461627 · GRADE-MESTRA · leitura · origem=Code
+
+Não consigo entregar uma GRADE-MESTRA completa e conferida nesta resposta. O inventário ainda tem dúvidas de exclusão e consolidação; publicar contagens agora daria precisão falsa. [nao verificado]
+
+A conferência identificou pontos que precisam ser preservados no documento:
+
+| ponto | conclusão | fonte |
+|---|---|---|
+| Universo | O recorte exigido começa no marcador OBRAS e termina antes das tabelas adicionais do arquivo. | app/docs/BACKLOG.md:712; app/docs/BACKLOG.md:2105 |
+| O168 | Deve constar como **NO AR hoje**; as linhas C20-O168 e O168-GUARDA-NO-GATE-DO-PAI precisam ser consolidadas com ela. | app/docs/BACKLOG.md:1422; app/docs/BACKLOG.md:1942; app/docs/BACKLOG.md:2049; anexo:relato_1311.md:10 |
+| JUSTIFICATIVA-PAGA-O-PERIODO | O BACKLOG registra retorno à ordem viva após HJ-090, mas o medidor ainda registra **INTERROMPIDA**. | app/docs/BACKLOG.md:1875; anexo:interrompidas.txt:25 |
+| OTIMIZA-1 | Tem brief pronto, mas continua **INTERROMPIDA** no medidor. | app/docs/BACKLOG.md:2086; anexo:interrompidas.txt:31 |
+| Interrompidas | A triagem examinou 17; a saída atual registra 16. O261-PAI-TERMINAL passou a DEMOLIR, com residual encaminhado para outra linha. | anexo:tabela.md:1; anexo:interrompidas.txt:34; app/docs/BACKLOG.md:2083 |
+| COBERTURA-PARCIAL-UM-JUIZ | Não pode ser excluída pelo NO AR antigo: a mesma célula registra reabertura e PAREI posterior. | app/docs/BACKLOG.md:786 |
+| Conclusões parciais | PENDENCIA-SEM-JUIZ-3 e JUIZ-DO-PAR-GRUPO-1 conservam partes pendentes apesar de pousos antigos. | app/docs/BACKLOG.md:782; app/docs/BACKLOG.md:812 |
+| Censo versus obra | “Censo FECHADO” não encerra DISPARAR-PERGUNTAS-NO-CONTRATO-20. | app/docs/BACKLOG.md:814 |
+| Estado sem representação | HJ-092 está FECHADA como BATIDA hoje, sem prova de deploy; nenhum dos seis estados permitidos representa esse fato integralmente. | app/docs/BACKLOG.md:741 |
+| Duplicatas | VERIFICADOR-EM-FABLE e BUG-PLANTIO-NOTURNO-MAIS-1 aparecem duas vezes e precisam contar uma obra cada. | app/docs/BACKLOG.md:1785; app/docs/BACKLOG.md:1911; app/docs/BACKLOG.md:1852; app/docs/BACKLOG.md:1975 |
+| Ordem da auditoria | AUDITORIA-DE-TRAVAS deve entrar logo após o pouso da E3, junto de GATE-PELA-CLASSE, conforme o aval desta obra. | anexo:aval.txt:1 | [nao verificado]
+
+Este texto é um registro parcial de conferência, **não o conteúdo solicitado para publicação em app/docs/GRADE-MESTRA.md**. [nao verificado]
 
 ## 13/11 20:21 · sessao 37a98bab2c73 · - · - · origem=Ronald (tmux)
 
@@ -1381,102 +1403,4 @@ FIM
 
 3. **O dado não mostra erro nem a falha de chave exemplificada:** `CHAVES_LAMPADA` contém `tipo` e `hora`, e os agrupamentos aparecem como `E`/`S`, sem `?`; nenhuma das três medidas impressas está vazia. [nao verificado] A ausência de uma chave literalmente chamada `marco` não caracteriza falha: o código representa o marco usando `tipo` e `hora` (`app/ponto/services/cartorio.py:648–650`, `app/ponto/services/cartorio.py:711`). O corpo da sonda, o tratamento de âncoras nulas e o código de saída da execução permanecem [nao verificado].
 
-## 13/11 18:37 · sessao 85aae53bb678 · RAIA-PREPARACAO · censo · origem=Code
-
-**O universo global não fechou: total de costuras e total global com desencontro = [nao verificado].** A revisão individualizada abaixo resulta em **30 itens: 23 reais, 6 escritas mortas, 0 ramos mortos demonstrados e 1 falso**. Dos 23 originais, são **16 reais, 6 escritas mortas e 1 falso**; os sete adicionais repetem a omissão da data catalogada no leitor em lote (`app/chamados/juizes.py:114`, `:187`; provas individuais no quadro).
-
-“Real” abaixo significa incompatibilidade demonstrada em caminho alcançável pelo código. Ocorrência e quantidade efetiva em produção continuam **[nao verificado]**.
-
-**Contagem e limite do universo.** Usei AST em memória sobre `Path('app/chamados').rglob('*.py')`, excluindo componentes `tests`, `migrations`, `__pycache__` e arquivos `test_*`. Os padrões foram `ast.Dict`, `ast.DictComp`, chamadas `dict(...)`, chamadas com `keyword.arg is None`, funções com `args.kwarg`, subscritos e chamadas `.get/.setdefault/.update/.items/.values/.keys`. A busca textual complementar usou:
-
-```text
-contexto_json|merge_contexto|contexto_novo
-JsonResponse|resposta_render|render\(
-\*\*(kwargs|campos|chaves|extras|ln)
-\.(get|pop|setdefault|update|items|values|keys)\(
-```
-
-Esse procedimento levanta **sítios candidatos**, não resolve sozinho os pares emissor→consumidor. Não concluí a expansão de todos os chamadores, apelidos, variantes, encaminhamentos integrais e leitores Python/templates/JS; portanto, não apresento sua contagem sintática como universo **[nao verificado]**.
-
-Os sítios concretos ainda sem expansão global fechada são:
-
-| Fronteira | Por que contar literais ou chaves nominais não fecha |
-|---|---|
-| Contexto por kwargs | Recebe chaves variáveis, compara e persiste o grupo: `app/chamados/services/contexto.py:62`, `:71`, `:76`, `:82`, `:100`, `:102`. |
-| Contexto fundido | Percorre qualquer chave recebida e a incorpora: `app/chamados/services/contexto.py:146`, `:154`, `:156`, `:161`. |
-| Contexto da disputa | Mescla chaves dinâmicas; o nascimento recebe o contexto inteiro: `app/chamados/services/disputa_emissao.py:548`, `:556`, `:561`, `:590`. |
-| Kwargs de decisão | Cada linha recebida vira kwargs do modelo: `app/chamados/models.py:3952`, `:3954`. |
-| Leitura catalogada | O nome da chave lida vem do catálogo: `app/chamados/catalogo/modulos.py:225`. |
-| Leitura integral | O painel mostra todas as chaves/valores; ausência de leitura nominal não prova escrita morta de `contexto_json`: `app/templates/chamados/partials/painel_chamado_turno.html:35`. |
-| Auditoria | Persiste os dicionários integrais recebidos: `app/core/observ.py:94`, `:136`. |
-
-No quadro, caminhos sem prefixo são relativos a **`app/chamados/`**; `T/` significa **`app/templates/chamados/`**.
-
-- **N** = selo específico que prenda a diferença não demonstrado; inexistência global **[nao verificado]**.
-- **S1** = existe teste do par, explicado após o quadro; execução verde **[nao verificado]**. [nao verificado]
-- **E** = ESTRUTURA: diferença no protocolo do código, pela separação da L-099 (`CLAUDE.md:179`). Em D07, **E\*** indica somente o domínio auditado; não há defeito ao qual atribuir culpa.
-
-| ID | Emissor arquivo:linha | Chave(s) | Consumidor arquivo:linha | Classe | Prova que decide | Selo | Dono |
-|---|---|---|---|---|---|---|---|
-| D01 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98` | Grava `foto_ausente.batida_id,batida_em`; leitor procura `[motivo].data,ultima_batida.id` | `services/disputa_emissao.py:372`, `:387` | **real** | Contexto do nascimento é preservado em `services/disputa_emissao.py:590`; sem dia, segue para conversa em `:431`, `:439`. Retro agendado com `--apply`: `app/config/crons.py:686`. | N | E |
-| D02 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98` | `foto_ausente.batida_id` → `ultima_batida.id` | `models.py:3464` | **real** | Retorna origem `None` em `models.py:3465`; esse resultado decide o dedup em `services/disputa_emissao.py:325`, `:326`. | N | E |
-| D03 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98` | Mesma troca de identidade | `app/api/foto_recebida.py:67` | **real** | Sem identidade correspondente, pula a disputa em `app/api/foto_recebida.py:68`. Upload chama o consumidor em `app/api/views.py:858`. | N | E |
-| D04 | `services/abertura.py:183`, `:191`; catálogo `catalogo/modulos.py:120` | `ausencia_colab.data`; lote procura `data_turno` | `juizes.py:187`, `:197`, `:226` | **real** | Singular lê catálogo em `juizes.py:114`; lote omite esse degrau. Sem célula, pode contar chamado datado como sem dia: `services/juizes_do_dia.py:94`, `:95`. | N | E |
-| D05 | `services/adesao.py:79`, `:86` | `data_inicio,periodo`; lote procura `data_turno` | `juizes.py:187`, `:226` | **real** | Catálogo exige `data_inicio` para esse módulo em `catalogo/modulos.py:126`; leitor do lote não a consulta em `juizes.py:187`. | N | E |
-| D06 | `services/abertura.py:183`, `:191` | Não fornece `ausencia_id` | `views.py:1512` | **real** | O problema provado é a nota: quando `analisar()` avança, grava “registro da ausencia #None” em `views.py:1513`, `:1516`. O redirecionamento geral tem alternativa explícita em `:1517`. | N | E |
-| D07 | `services/abertura.py:183`, `:191` | Não fornece `ausencia_id` | `juizes.py:2331` | **falso** | Ausência é fonte opcional. A competência já recebe `dia_do_fato`, que lê a data catalogada: `juizes.py:114`, `:2359`, `:2362`. Não depende desse ID para obter a data humana. | N | E* |
-| D08 | `services/abertura.py:183`, `:191` | Não fornece `tem_documento,ausencia_id` | `T/partials/_card_atendimento.html:65`, `:70` | **real** | Ausência de `tem_documento` oferece o anexo; ID vazio monta `/api/ausencias//documento/`: `T/partials/_card_atendimento.html:65`, `:70`. | N | E |
-| D09 | `reconciliador.py:708`; formato `app/ponto/services/lastro.py:134` | `marcos_faltantes[].motivo='lampada_apagada'` | `juizes.py:551`, `:576` | **real** | Leitor exige motivo da pergunta; qualquer motivo preenchido bloqueia alternativa por tipo. Resultado influencia tipo e hora do plantio: `services/materializacao.py:275`, `:414`. | N | E |
-| D10 | `management/commands/nomear_marco_por_lampada.py:61`, `:109` | Mesmo formato de D09 | `juizes.py:551`, `:576` | **real** | Comando entrega a saída de `marcos_apagados`; o leitor trata a etiqueta da lâmpada como motivo da pergunta: `app/ponto/services/lastro.py:134`, `juizes.py:551`. Caminho de escrita condicionado a `--apply`: comando `:97`, `:109`. | N | E |
-| D11 | `push_utils.py:28` | `requireInteraction,url`; leitor usa `urgente` e destino fixo | `app/static/sw.js:97`, `:107` | **real** | `requireInteraction=True` não alimenta a opção; clique abre `/` ou apenas focaliza janela: `app/static/sw.js:97`, `:106`, `:107`. | N | E |
-| D12 | `glpi_client.py:138` | Ticket sem `urgencia` | `T/partials/tabela_chamados.html:30` | **real** | Formato chega diretamente ao template por `views.py:323`, `:340`; ausência de urgência termina em “Normal”: `T/partials/tabela_chamados.html:37`. | N | E |
-| D13 | `glpi_client.py:209` | `data`; não fornece `criado_em,autor_tipo,autor_user` | `T/detalhe.html:83`, `:98`, `:101` | **real** | Transporte direto em `views.py:246`, `:262`; data fica vazia e autor cai em “Colaborador”: `T/detalhe.html:98`, `:101`. | N | E |
-| D14 | `views_arquivar.py:62` | `erro` singular → `erros` plural | `T/partials/_lista_chamados.html:134` | **real** | Botão chama desarquivar em `T/partials/_lista_chamados.html:85`; recusa específica vira “Falha ao arquivar” em `:134`. Visualização não exige permissão de agir: `utils.py:71`. | N | E |
-| D15 | `services/fio.py:461` | Omite `contador_ativos,contador_msgs_mes,contador_disputas_abertas,cor_disputas_map` | `T/partials/modal_fio.html:14`, `:76` | **real** | Callback renderiza esse contexto em `services/fio.py:494`; contadores somem e cor ausente cai no cinza em `templatetags/chamados_tags.py:107`. Completo fornece os campos em `views.py:945`. | N | E |
-| D16 | `views.py:927` | Omite `pode_conferir_data` | `T/partials/modal_fio.html:172` | **real** | GET usa esse contexto em `views.py:956`; usuário autorizado recebe o ramo de bloqueio em `T/partials/modal_fio.html:180`. Parcial calcula a permissão em `services/fio.py:474`. | N | E |
-| D17 | `views_cobrar.py:263`, `:265` | `ok,erros,nao_gravados`; JS lê apenas contagem/recusados | `app/templates/core/_copiloto.html:251`, `:254` | **real** | Serviço distingue validação sem gravação em `services/validacao.py:753`, `:756`; outro template mostra esse aviso em `T/partials/_lote_preview.html:9`, mas copiloto o omite. Também não lê `ok/erros`: `app/templates/core/_copiloto.html:252`. | N | E |
-| D18 | `services/fio.py:1114` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:553` | **escrita morta** | Consumidor imprime os demais campos com cabeçalho fixo em `management/commands/backfill_decisoes_pergunta.py:554`, `:555`; não usa `fonte`. | N | E |
-| D19 | `services/fio.py:1181` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:559` | **escrita morta** | Mesmo descarte no retorno: `management/commands/backfill_decisoes_pergunta.py:560`, `:561`. | N | E |
-| D20 | `services/fio.py:1206` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:565` | **escrita morta** | Produção imprime cabeçalho fixo e demais campos em `management/commands/backfill_decisoes_pergunta.py:566`, `:567`. Há leitura de `fonte` em teste: `tests/test_e1_v15h.py:186`. | **Sim, S1** | E |
-| D21 | `services/fio.py:1902` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:545` | **escrita morta** | Impressão usa `n,esperado,motivo,pks`, sem `fonte`: `management/commands/backfill_decisoes_pergunta.py:546`, `:547`. | N | E |
-| D22 | `services/fio.py:1343` | `merito_recusado,episodios_unidos,sem_episodio_intocada,canonica_sem_episodio` excedentes | `management/commands/backfill_decisoes_pergunta.py:331` | **escrita morta** | Esse chamador e `services/fio.py:2181` extraem só `retratadas`; `services/fio.py:922` ignora o retorno inteiro. Classificação vale para a saída; o plano anterior tem leitores em `services/fio.py:2162`, `:2165`. | N | E |
-| D23 | `reconciliador.py:1340` | `rejuntados,perguntas,lastro` excedentes | `management/commands/consumir_eventos_celula.py:31` | **escrita morta** | Interpolação nomeia oito campos, sem esses três: `management/commands/consumir_eventos_celula.py:32`, `:35`. Os efeitos continuam executados: `reconciliador.py:1365`, `:1366`, `:1384`. | N | E |
-| D24 | `app/colaboradores/services/desligamento.py:203` | `desligamento_revisao.data_demissao` | `juizes.py:187` | **real** | Chave declarada em `catalogo/modulos.py:141`, lida pelo singular em `juizes.py:114`, ignorada pelo lote que alimenta `services/juizes_do_dia.py:94`. | N | E |
-| D25 | `app/colaboradores/services/vinculo.py:419`, `:424` | `escala_colaborador.data_inicio` | `juizes.py:187` | **real** | Declaração em `catalogo/modulos.py:137`; mesma perda no ramo sem célula do lote: `juizes.py:184`, `:187`, `:226`. | N | E |
-| D26 | `app/escala/regua_defesa.py:72`, `:76` | `regua_degenerada.data_exemplo` | `juizes.py:187` | **real** | Declaração em `catalogo/modulos.py:133`; emissão chamada pelo detector em `app/ponto/management/commands/detectar_ausencias.py:601`; lote ignora a chave. | N | E |
-| D27 | `app/ponto/utils.py:120`, `:122` | `colaborador_em_ferias.data_inicio` | `juizes.py:187` | **real** | Declaração em `catalogo/modulos.py:123`; emissor chamado por `detector_anomalias.py:116`, acionado pela API em `app/api/views.py:434`. | N | E |
-| D28 | `app/ponto/management/commands/detectar_ausencias.py:224`, `:231` | `sem_previsao_escala/folga_nao_definida.data_inicio` | `juizes.py:187` | **real** | Chave catalogada em `catalogo/modulos.py:126`; lote sem célula passa por `juizes.py:187`, `:226` sem consultá-la. | N | E |
-| D29 | `app/ponto/management/commands/detectar_ausencias.py:294`, `:297` | `ancora_limbo.data_inicio` | `juizes.py:187` | **real** | Chave declarada em `catalogo/modulos.py:131`; mesma omissão do lote, observada pelo contador em `services/juizes_do_dia.py:94`, `:95`. | N | E |
-| D30 | `app/ponto/management/commands/detectar_ausencias.py:532` | `sem_previsao_escala/dia_sem_grade.data_inicio` | `juizes.py:187` | **real** | O próprio chamador exige célula inexistente antes de emitir: `app/ponto/management/commands/detectar_ausencias.py:660`, `:668`. Assim, o primeiro degrau do lote não recupera a data emitida. | N | E |
-
-A condição dos nove itens de data é relevante: **célula ligada pode esconder a incompatibilidade**, pois o lote a consulta primeiro; a porta permite nascimento sem essa ligação (`app/chamados/juizes.py:184`, `app/chamados/models.py:1241`, `:1243`). O consumidor que conta “sem dia” seleciona todos os estados vivos, incluindo `registrado` (`app/chamados/services/juizes_do_dia.py:92`, `app/chamados/catalogo/motor.py:24`).
-
-As omissões dos contextos do modal não são preenchidas pelo helper de resposta: ele encaminha o contexto diretamente ao render (`app/core/respostas.py:74`, `:83`). Os processadores configurados também não fornecem esses campos (`app/config/settings/base.py:76`; retornos em `app/core/context_processors.py:154`, `:189`, `:210`, `app/core/context_processors_ia.py:31`, `app/pautas/context_processors.py:35`).
-
-**O anexo errou em D07 e exagerou a conclusão possível de D18–D23.** D07 não demonstra incompatibilidade, porque a data humana já chega pela outra fonte. D18–D23 descrevem campos excedentes de retorno, sem decisão errada demonstrada nos consumidores de produção rastreados; não são funções inteiras mortas (`app/chamados/juizes.py:2359`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:547`, `:555`, `:561`, `:567`, `:331`; `app/chamados/management/commands/consumir_eventos_celula.py:32`).
-
-Também é incorreto generalizar “zero selo de par demonstrado”: **S1 existe em D20**, chama o backfill e verifica sua saída. Ele não exige imprimir `fonte`, portanto não transforma esse metadado excedente em defeito real (`app/chamados/tests/test_e1_v15h.py:194`, `:197`, `:200`, `:201`). Nos demais itens, os testes citados pelo anexo cobrem aspectos separados: contexto canônico em `app/chamados/tests/test_a2_data_evento_batida.py:21`; emissão humana em `app/chamados/tests/test_form_catalogo.py:76`; escritor/leitor de marcos separadamente em `app/chamados/tests/test_emissor_nomeia_o_marco.py:54` e `app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:45`; modal completo em `app/chamados/tests/test_paridade_fio_modal_f8.py:65`. Cobertura global dos pares permanece **[nao verificado]**.
-
-Os totais são **do quadro individualizado**, não do módulo inteiro:
-
-| Classe | D01–D23 | D24–D30 | Total |
-|---|---:|---:|---:|
-| real | 16 | 7 | **23** |
-| escrita morta | 6 | 0 | **6** |
-| ramo morto demonstrado | 0 | 0 | **0** |
-| falso | 1 | 0 | **1** |
-| Itens examinados | **23** | **7** | **30** |
-
-Entre os reais, estas são repetições da mesma causa:
-
-| Itens | Mesma classe de defeito | Prova |
-|---|---|---|
-| **D01–D03** | Identidade da batida emitida em um caminho e procurada em outro: **CONTRATO-DE-ENTRADA-DO-FIO**, já registrado. | `app/docs/BACKLOG.md:2100`; `app/chamados/models.py:3464`; `app/api/foto_recebida.py:67`. |
-| **D04, D05, D24–D30** | Lote omite o degrau da chave de data catalogada que o singular consulta. | `app/chamados/juizes.py:114`, `:187`. |
-| **D06, D08** | Emissão humana de ausência consumida como se trouxesse referência a uma entidade `Ausencia`. | `app/chamados/services/abertura.py:183`; `app/chamados/views.py:1516`; `app/templates/chamados/partials/_card_atendimento.html:70`. |
-| **D09, D10** | `motivo` significa etiqueta da lâmpada no emissor e motivo da pergunta no leitor. | `app/ponto/services/lastro.py:134`; `app/chamados/juizes.py:551`, `:576`. |
-| **D15, D16** | Dois construtores do mesmo contexto entregam conjuntos diferentes de campos ao mesmo template. | `app/chamados/services/fio.py:461`; `app/chamados/views.py:927`; `app/templates/chamados/partials/modal_fio.html:14`, `:172`. |
-
-D11, D12, D13, D14 e D17 continuam como incompatibilidades próprias dos respectivos protocolos; agrupá-las numa única causa além de “contrato divergente” seria **[nao verificado]**. O total global e a afirmação de que não há outros desencontros continuam **[nao verificado]**.
-
-_4799 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4800 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
