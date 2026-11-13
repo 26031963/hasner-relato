@@ -1,7 +1,182 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 18:36** · publicado em **13/11/2026 18:36** (UTC-3)
+> Ultima resposta processada: **13/11/2026 18:41** · publicado em **13/11/2026 18:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 18:41 · sessao 0edada80a8c4 · JUSTIFICATIVA-PAGA-O-PERIODO · sonda · origem=Code
+
+Não fiz nova execução: o envelope reescreve credenciais, cria arquivo temporário e acrescenta uma trilha, contrariando a regra de não escrever arquivos (`bin/sonda_leitura.sh:126–134`, `bin/sonda_leitura.sh:216–218`, `bin/sonda_leitura.sh:248–250`).
+
+Segue a transcrição literal inteira da saída fornecida, sem validação independente da execução. [nao verificado]
+
+```text
+sonda_leitura: sonda.py [3f1bd3f83f2f34bc] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO 45
+CHAVES_LAMPADA ['acesa', 'dispensada', 'hora', 'luz', 'tipo', 'tipo_real']
+MULT just_aprovadas_mesmo_tipo>=2 0 ancoras_distintas_mesmo_tipo>=2 0 lampadas_dispensadas_mesmo_marco>=2 28 sem_justificativa_aprovada_no_dia 0
+HIST (n_just_aprovadas, n_lampadas_dispensadas) -> [((1, 1), 17), ((1, 2), 1), ((1, 3), 27)]
+CASO (118689, 56, '2026-10-07', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1}, 2)
+CASO (140889, 56, '2026-10-25', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1}, 2)
+CASO (127808, 976, '2026-10-26', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (112074, 567, '2026-10-12', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (135337, 496, '2026-10-22', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (3283, 408, '2026-08-17', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (114134, 206, '2026-09-22', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (2261, 855, '2026-08-18', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (110059, 341, '2026-10-07', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (108830, 340, '2026-10-08', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (24651, 697, '2026-09-01', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1, 'S': 2}, 4)
+CASO (24660, 697, '2026-09-10', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (140580, 750, '2026-10-26', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (113955, 438, '2026-09-23', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (112352, 347, '2026-09-30', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (112358, 347, '2026-10-06', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (106510, 922, '2026-09-28', {'outro': 1}, {'outro': 1}, {'S': 1}, 2)
+CASO (106526, 922, '2026-10-14', {'outro': 1}, {'outro': 1}, {'S': 1}, 2)
+CASO (110352, 389, '2026-09-30', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (105323, 789, '2026-10-11', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (8127, 518, '2026-07-25', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (8131, 518, '2026-07-29', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1, 'S': 2}, 4)
+CASO (8148, 518, '2026-08-15', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1, 'S': 2}, 4)
+CASO (8150, 518, '2026-08-17', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (141802, 996, '2026-10-26', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (131421, 912, '2026-10-23', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (105365, 938, '2026-09-23', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (33812, 564, '2026-09-24', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (116944, 358, '2026-10-02', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (121745, 962, '2026-10-25', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2}, 4)
+CASO (105667, 931, '2026-09-25', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1}, 2)
+CASO (33879, 310, '2026-09-21', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 2, 'S': 1}, 4)
+CASO (21683, 228, '2026-09-14', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (104743, 228, '2026-10-01', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 1}, 2)
+CASO (113727, 468, '2026-10-05', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (116515, 829, '2026-09-23', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 2, 'S': 1}, 4)
+CASO (106125, 331, '2026-10-03', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (118347, 643, '2026-09-25', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (16234, 510, '2026-08-10', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (129875, 932, '2026-10-27', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (143004, 1004, '2026-10-27', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'E': 2, 'S': 1}, 4)
+CASO (111910, 396, '2026-09-28', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 1}, 2)
+CASO (1013, 863, '2026-08-10', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (1021, 863, '2026-08-18', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+CASO (1023, 863, '2026-08-20', {'esqueci_saida': 1}, {'esqueci_saida': 1}, {'S': 2, 'E': 1}, 4)
+FIM
+```
+
+1. **Contagens impressas para 2+ no mesmo colab-dia:**
+
+   | Medida | Casos |
+   |---|---:|
+   | Justificativas aprovadas do mesmo tipo | 0 [nao verificado] |
+   | Âncoras `batida_entrada` distintas do mesmo tipo | 0 [nao verificado] |
+   | Lâmpadas dispensadas agrupadas pelo tipo do marco | 28 [nao verificado] |
+
+   **A medida de âncoras distintas é a que corresponde a episódios/turnos distintos entre as três:** `batida_entrada` nomeia a “Batida de entrada do turno com problema”, e a identidade declarada da justificativa combina colaborador, data e essa âncora (`app/ponto/models.py:139–144`, `app/ponto/models.py:186–187`).
+
+   A lâmpada nomeia o **marco** por `tipo` e `hora`, mantendo separadamente `tipo_real` da batida (`app/ponto/services/cartorio.py:648–650`, `app/ponto/services/cartorio.py:706–713`). Portanto, os agrupamentos impressos `E`/`S` mostram repetição de **tipo de marco**, sem demonstrar repetição do mesmo marco completo `(tipo, hora)` nem de episódios. [nao verificado] Uma justificativa pode acompanhar várias lâmpadas dispensadas porque o código percorre todas as lâmpadas ainda não acesas quando o dia está justificado (`app/ponto/services/cartorio.py:802–810`).
+
+2. **Sim, bate numericamente: 45 = 9+23+3+10**, distribuição registrada em `app/docs/BACKLOG.md:1872`; o dado fornecido declara 45, lista 45 casos e seu histograma soma 17+1+27=45. [nao verificado] A identidade dos IDs com `logs/HJ-093/sonda2/r.r` e a equivalência dos filtros não foram verificadas. [nao verificado]
+
+3. **O dado não mostra erro nem a falha de chave exemplificada:** `CHAVES_LAMPADA` contém `tipo` e `hora`, e os agrupamentos aparecem como `E`/`S`, sem `?`; nenhuma das três medidas impressas está vazia. [nao verificado] A ausência de uma chave literalmente chamada `marco` não caracteriza falha: o código representa o marco usando `tipo` e `hora` (`app/ponto/services/cartorio.py:648–650`, `app/ponto/services/cartorio.py:711`). O corpo da sonda, o tratamento de âncoras nulas e o código de saída da execução permanecem [nao verificado].
+
+## 13/11 18:37 · sessao 85aae53bb678 · RAIA-PREPARACAO · censo · origem=Code
+
+**O universo global não fechou: total de costuras e total global com desencontro = [nao verificado].** A revisão individualizada abaixo resulta em **30 itens: 23 reais, 6 escritas mortas, 0 ramos mortos demonstrados e 1 falso**. Dos 23 originais, são **16 reais, 6 escritas mortas e 1 falso**; os sete adicionais repetem a omissão da data catalogada no leitor em lote (`app/chamados/juizes.py:114`, `:187`; provas individuais no quadro).
+
+“Real” abaixo significa incompatibilidade demonstrada em caminho alcançável pelo código. Ocorrência e quantidade efetiva em produção continuam **[nao verificado]**.
+
+**Contagem e limite do universo.** Usei AST em memória sobre `Path('app/chamados').rglob('*.py')`, excluindo componentes `tests`, `migrations`, `__pycache__` e arquivos `test_*`. Os padrões foram `ast.Dict`, `ast.DictComp`, chamadas `dict(...)`, chamadas com `keyword.arg is None`, funções com `args.kwarg`, subscritos e chamadas `.get/.setdefault/.update/.items/.values/.keys`. A busca textual complementar usou:
+
+```text
+contexto_json|merge_contexto|contexto_novo
+JsonResponse|resposta_render|render\(
+\*\*(kwargs|campos|chaves|extras|ln)
+\.(get|pop|setdefault|update|items|values|keys)\(
+```
+
+Esse procedimento levanta **sítios candidatos**, não resolve sozinho os pares emissor→consumidor. Não concluí a expansão de todos os chamadores, apelidos, variantes, encaminhamentos integrais e leitores Python/templates/JS; portanto, não apresento sua contagem sintática como universo **[nao verificado]**.
+
+Os sítios concretos ainda sem expansão global fechada são:
+
+| Fronteira | Por que contar literais ou chaves nominais não fecha |
+|---|---|
+| Contexto por kwargs | Recebe chaves variáveis, compara e persiste o grupo: `app/chamados/services/contexto.py:62`, `:71`, `:76`, `:82`, `:100`, `:102`. |
+| Contexto fundido | Percorre qualquer chave recebida e a incorpora: `app/chamados/services/contexto.py:146`, `:154`, `:156`, `:161`. |
+| Contexto da disputa | Mescla chaves dinâmicas; o nascimento recebe o contexto inteiro: `app/chamados/services/disputa_emissao.py:548`, `:556`, `:561`, `:590`. |
+| Kwargs de decisão | Cada linha recebida vira kwargs do modelo: `app/chamados/models.py:3952`, `:3954`. |
+| Leitura catalogada | O nome da chave lida vem do catálogo: `app/chamados/catalogo/modulos.py:225`. |
+| Leitura integral | O painel mostra todas as chaves/valores; ausência de leitura nominal não prova escrita morta de `contexto_json`: `app/templates/chamados/partials/painel_chamado_turno.html:35`. |
+| Auditoria | Persiste os dicionários integrais recebidos: `app/core/observ.py:94`, `:136`. |
+
+No quadro, caminhos sem prefixo são relativos a **`app/chamados/`**; `T/` significa **`app/templates/chamados/`**.
+
+- **N** = selo específico que prenda a diferença não demonstrado; inexistência global **[nao verificado]**.
+- **S1** = existe teste do par, explicado após o quadro; execução verde **[nao verificado]**. [nao verificado]
+- **E** = ESTRUTURA: diferença no protocolo do código, pela separação da L-099 (`CLAUDE.md:179`). Em D07, **E\*** indica somente o domínio auditado; não há defeito ao qual atribuir culpa.
+
+| ID | Emissor arquivo:linha | Chave(s) | Consumidor arquivo:linha | Classe | Prova que decide | Selo | Dono |
+|---|---|---|---|---|---|---|---|
+| D01 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98` | Grava `foto_ausente.batida_id,batida_em`; leitor procura `[motivo].data,ultima_batida.id` | `services/disputa_emissao.py:372`, `:387` | **real** | Contexto do nascimento é preservado em `services/disputa_emissao.py:590`; sem dia, segue para conversa em `:431`, `:439`. Retro agendado com `--apply`: `app/config/crons.py:686`. | N | E |
+| D02 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98` | `foto_ausente.batida_id` → `ultima_batida.id` | `models.py:3464` | **real** | Retorna origem `None` em `models.py:3465`; esse resultado decide o dedup em `services/disputa_emissao.py:325`, `:326`. | N | E |
+| D03 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98` | Mesma troca de identidade | `app/api/foto_recebida.py:67` | **real** | Sem identidade correspondente, pula a disputa em `app/api/foto_recebida.py:68`. Upload chama o consumidor em `app/api/views.py:858`. | N | E |
+| D04 | `services/abertura.py:183`, `:191`; catálogo `catalogo/modulos.py:120` | `ausencia_colab.data`; lote procura `data_turno` | `juizes.py:187`, `:197`, `:226` | **real** | Singular lê catálogo em `juizes.py:114`; lote omite esse degrau. Sem célula, pode contar chamado datado como sem dia: `services/juizes_do_dia.py:94`, `:95`. | N | E |
+| D05 | `services/adesao.py:79`, `:86` | `data_inicio,periodo`; lote procura `data_turno` | `juizes.py:187`, `:226` | **real** | Catálogo exige `data_inicio` para esse módulo em `catalogo/modulos.py:126`; leitor do lote não a consulta em `juizes.py:187`. | N | E |
+| D06 | `services/abertura.py:183`, `:191` | Não fornece `ausencia_id` | `views.py:1512` | **real** | O problema provado é a nota: quando `analisar()` avança, grava “registro da ausencia #None” em `views.py:1513`, `:1516`. O redirecionamento geral tem alternativa explícita em `:1517`. | N | E |
+| D07 | `services/abertura.py:183`, `:191` | Não fornece `ausencia_id` | `juizes.py:2331` | **falso** | Ausência é fonte opcional. A competência já recebe `dia_do_fato`, que lê a data catalogada: `juizes.py:114`, `:2359`, `:2362`. Não depende desse ID para obter a data humana. | N | E* |
+| D08 | `services/abertura.py:183`, `:191` | Não fornece `tem_documento,ausencia_id` | `T/partials/_card_atendimento.html:65`, `:70` | **real** | Ausência de `tem_documento` oferece o anexo; ID vazio monta `/api/ausencias//documento/`: `T/partials/_card_atendimento.html:65`, `:70`. | N | E |
+| D09 | `reconciliador.py:708`; formato `app/ponto/services/lastro.py:134` | `marcos_faltantes[].motivo='lampada_apagada'` | `juizes.py:551`, `:576` | **real** | Leitor exige motivo da pergunta; qualquer motivo preenchido bloqueia alternativa por tipo. Resultado influencia tipo e hora do plantio: `services/materializacao.py:275`, `:414`. | N | E |
+| D10 | `management/commands/nomear_marco_por_lampada.py:61`, `:109` | Mesmo formato de D09 | `juizes.py:551`, `:576` | **real** | Comando entrega a saída de `marcos_apagados`; o leitor trata a etiqueta da lâmpada como motivo da pergunta: `app/ponto/services/lastro.py:134`, `juizes.py:551`. Caminho de escrita condicionado a `--apply`: comando `:97`, `:109`. | N | E |
+| D11 | `push_utils.py:28` | `requireInteraction,url`; leitor usa `urgente` e destino fixo | `app/static/sw.js:97`, `:107` | **real** | `requireInteraction=True` não alimenta a opção; clique abre `/` ou apenas focaliza janela: `app/static/sw.js:97`, `:106`, `:107`. | N | E |
+| D12 | `glpi_client.py:138` | Ticket sem `urgencia` | `T/partials/tabela_chamados.html:30` | **real** | Formato chega diretamente ao template por `views.py:323`, `:340`; ausência de urgência termina em “Normal”: `T/partials/tabela_chamados.html:37`. | N | E |
+| D13 | `glpi_client.py:209` | `data`; não fornece `criado_em,autor_tipo,autor_user` | `T/detalhe.html:83`, `:98`, `:101` | **real** | Transporte direto em `views.py:246`, `:262`; data fica vazia e autor cai em “Colaborador”: `T/detalhe.html:98`, `:101`. | N | E |
+| D14 | `views_arquivar.py:62` | `erro` singular → `erros` plural | `T/partials/_lista_chamados.html:134` | **real** | Botão chama desarquivar em `T/partials/_lista_chamados.html:85`; recusa específica vira “Falha ao arquivar” em `:134`. Visualização não exige permissão de agir: `utils.py:71`. | N | E |
+| D15 | `services/fio.py:461` | Omite `contador_ativos,contador_msgs_mes,contador_disputas_abertas,cor_disputas_map` | `T/partials/modal_fio.html:14`, `:76` | **real** | Callback renderiza esse contexto em `services/fio.py:494`; contadores somem e cor ausente cai no cinza em `templatetags/chamados_tags.py:107`. Completo fornece os campos em `views.py:945`. | N | E |
+| D16 | `views.py:927` | Omite `pode_conferir_data` | `T/partials/modal_fio.html:172` | **real** | GET usa esse contexto em `views.py:956`; usuário autorizado recebe o ramo de bloqueio em `T/partials/modal_fio.html:180`. Parcial calcula a permissão em `services/fio.py:474`. | N | E |
+| D17 | `views_cobrar.py:263`, `:265` | `ok,erros,nao_gravados`; JS lê apenas contagem/recusados | `app/templates/core/_copiloto.html:251`, `:254` | **real** | Serviço distingue validação sem gravação em `services/validacao.py:753`, `:756`; outro template mostra esse aviso em `T/partials/_lote_preview.html:9`, mas copiloto o omite. Também não lê `ok/erros`: `app/templates/core/_copiloto.html:252`. | N | E |
+| D18 | `services/fio.py:1114` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:553` | **escrita morta** | Consumidor imprime os demais campos com cabeçalho fixo em `management/commands/backfill_decisoes_pergunta.py:554`, `:555`; não usa `fonte`. | N | E |
+| D19 | `services/fio.py:1181` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:559` | **escrita morta** | Mesmo descarte no retorno: `management/commands/backfill_decisoes_pergunta.py:560`, `:561`. | N | E |
+| D20 | `services/fio.py:1206` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:565` | **escrita morta** | Produção imprime cabeçalho fixo e demais campos em `management/commands/backfill_decisoes_pergunta.py:566`, `:567`. Há leitura de `fonte` em teste: `tests/test_e1_v15h.py:186`. | **Sim, S1** | E |
+| D21 | `services/fio.py:1902` | `fonte` excedente | `management/commands/backfill_decisoes_pergunta.py:545` | **escrita morta** | Impressão usa `n,esperado,motivo,pks`, sem `fonte`: `management/commands/backfill_decisoes_pergunta.py:546`, `:547`. | N | E |
+| D22 | `services/fio.py:1343` | `merito_recusado,episodios_unidos,sem_episodio_intocada,canonica_sem_episodio` excedentes | `management/commands/backfill_decisoes_pergunta.py:331` | **escrita morta** | Esse chamador e `services/fio.py:2181` extraem só `retratadas`; `services/fio.py:922` ignora o retorno inteiro. Classificação vale para a saída; o plano anterior tem leitores em `services/fio.py:2162`, `:2165`. | N | E |
+| D23 | `reconciliador.py:1340` | `rejuntados,perguntas,lastro` excedentes | `management/commands/consumir_eventos_celula.py:31` | **escrita morta** | Interpolação nomeia oito campos, sem esses três: `management/commands/consumir_eventos_celula.py:32`, `:35`. Os efeitos continuam executados: `reconciliador.py:1365`, `:1366`, `:1384`. | N | E |
+| D24 | `app/colaboradores/services/desligamento.py:203` | `desligamento_revisao.data_demissao` | `juizes.py:187` | **real** | Chave declarada em `catalogo/modulos.py:141`, lida pelo singular em `juizes.py:114`, ignorada pelo lote que alimenta `services/juizes_do_dia.py:94`. | N | E |
+| D25 | `app/colaboradores/services/vinculo.py:419`, `:424` | `escala_colaborador.data_inicio` | `juizes.py:187` | **real** | Declaração em `catalogo/modulos.py:137`; mesma perda no ramo sem célula do lote: `juizes.py:184`, `:187`, `:226`. | N | E |
+| D26 | `app/escala/regua_defesa.py:72`, `:76` | `regua_degenerada.data_exemplo` | `juizes.py:187` | **real** | Declaração em `catalogo/modulos.py:133`; emissão chamada pelo detector em `app/ponto/management/commands/detectar_ausencias.py:601`; lote ignora a chave. | N | E |
+| D27 | `app/ponto/utils.py:120`, `:122` | `colaborador_em_ferias.data_inicio` | `juizes.py:187` | **real** | Declaração em `catalogo/modulos.py:123`; emissor chamado por `detector_anomalias.py:116`, acionado pela API em `app/api/views.py:434`. | N | E |
+| D28 | `app/ponto/management/commands/detectar_ausencias.py:224`, `:231` | `sem_previsao_escala/folga_nao_definida.data_inicio` | `juizes.py:187` | **real** | Chave catalogada em `catalogo/modulos.py:126`; lote sem célula passa por `juizes.py:187`, `:226` sem consultá-la. | N | E |
+| D29 | `app/ponto/management/commands/detectar_ausencias.py:294`, `:297` | `ancora_limbo.data_inicio` | `juizes.py:187` | **real** | Chave declarada em `catalogo/modulos.py:131`; mesma omissão do lote, observada pelo contador em `services/juizes_do_dia.py:94`, `:95`. | N | E |
+| D30 | `app/ponto/management/commands/detectar_ausencias.py:532` | `sem_previsao_escala/dia_sem_grade.data_inicio` | `juizes.py:187` | **real** | O próprio chamador exige célula inexistente antes de emitir: `app/ponto/management/commands/detectar_ausencias.py:660`, `:668`. Assim, o primeiro degrau do lote não recupera a data emitida. | N | E |
+
+A condição dos nove itens de data é relevante: **célula ligada pode esconder a incompatibilidade**, pois o lote a consulta primeiro; a porta permite nascimento sem essa ligação (`app/chamados/juizes.py:184`, `app/chamados/models.py:1241`, `:1243`). O consumidor que conta “sem dia” seleciona todos os estados vivos, incluindo `registrado` (`app/chamados/services/juizes_do_dia.py:92`, `app/chamados/catalogo/motor.py:24`).
+
+As omissões dos contextos do modal não são preenchidas pelo helper de resposta: ele encaminha o contexto diretamente ao render (`app/core/respostas.py:74`, `:83`). Os processadores configurados também não fornecem esses campos (`app/config/settings/base.py:76`; retornos em `app/core/context_processors.py:154`, `:189`, `:210`, `app/core/context_processors_ia.py:31`, `app/pautas/context_processors.py:35`).
+
+**O anexo errou em D07 e exagerou a conclusão possível de D18–D23.** D07 não demonstra incompatibilidade, porque a data humana já chega pela outra fonte. D18–D23 descrevem campos excedentes de retorno, sem decisão errada demonstrada nos consumidores de produção rastreados; não são funções inteiras mortas (`app/chamados/juizes.py:2359`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:547`, `:555`, `:561`, `:567`, `:331`; `app/chamados/management/commands/consumir_eventos_celula.py:32`).
+
+Também é incorreto generalizar “zero selo de par demonstrado”: **S1 existe em D20**, chama o backfill e verifica sua saída. Ele não exige imprimir `fonte`, portanto não transforma esse metadado excedente em defeito real (`app/chamados/tests/test_e1_v15h.py:194`, `:197`, `:200`, `:201`). Nos demais itens, os testes citados pelo anexo cobrem aspectos separados: contexto canônico em `app/chamados/tests/test_a2_data_evento_batida.py:21`; emissão humana em `app/chamados/tests/test_form_catalogo.py:76`; escritor/leitor de marcos separadamente em `app/chamados/tests/test_emissor_nomeia_o_marco.py:54` e `app/chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:45`; modal completo em `app/chamados/tests/test_paridade_fio_modal_f8.py:65`. Cobertura global dos pares permanece **[nao verificado]**.
+
+Os totais são **do quadro individualizado**, não do módulo inteiro:
+
+| Classe | D01–D23 | D24–D30 | Total |
+|---|---:|---:|---:|
+| real | 16 | 7 | **23** |
+| escrita morta | 6 | 0 | **6** |
+| ramo morto demonstrado | 0 | 0 | **0** |
+| falso | 1 | 0 | **1** |
+| Itens examinados | **23** | **7** | **30** |
+
+Entre os reais, estas são repetições da mesma causa:
+
+| Itens | Mesma classe de defeito | Prova |
+|---|---|---|
+| **D01–D03** | Identidade da batida emitida em um caminho e procurada em outro: **CONTRATO-DE-ENTRADA-DO-FIO**, já registrado. | `app/docs/BACKLOG.md:2100`; `app/chamados/models.py:3464`; `app/api/foto_recebida.py:67`. |
+| **D04, D05, D24–D30** | Lote omite o degrau da chave de data catalogada que o singular consulta. | `app/chamados/juizes.py:114`, `:187`. |
+| **D06, D08** | Emissão humana de ausência consumida como se trouxesse referência a uma entidade `Ausencia`. | `app/chamados/services/abertura.py:183`; `app/chamados/views.py:1516`; `app/templates/chamados/partials/_card_atendimento.html:70`. |
+| **D09, D10** | `motivo` significa etiqueta da lâmpada no emissor e motivo da pergunta no leitor. | `app/ponto/services/lastro.py:134`; `app/chamados/juizes.py:551`, `:576`. |
+| **D15, D16** | Dois construtores do mesmo contexto entregam conjuntos diferentes de campos ao mesmo template. | `app/chamados/services/fio.py:461`; `app/chamados/views.py:927`; `app/templates/chamados/partials/modal_fio.html:14`, `:172`. |
+
+D11, D12, D13, D14 e D17 continuam como incompatibilidades próprias dos respectivos protocolos; agrupá-las numa única causa além de “contrato divergente” seria **[nao verificado]**. O total global e a afirmação de que não há outros desencontros continuam **[nao verificado]**.
 
 ## 13/11 18:36 · sessao 7ecd4aa57676 · RAIA-PREPARACAO · censo · origem=Code
 
@@ -948,101 +1123,4 @@ O anexo marca `main_moveu=True` nestes 24 arquivos; conflitos textuais e aplica�
 | LASTRO-DEGRAU-2 | Recuo lê juiz do marco (`app/core/juizes.py:212`) | **SIM** (`app/ponto/services/lastro.py:304`) | Janela, evento e relógio (`app/docs/BACKLOG.md:1756`, `app/escala/utils.py:2084`) | Construtor + grupo (1) (`app/docs/BACKLOG.md:811`) | **CONCLUIR** após construtor — INFERIU (`app/docs/BACKLOG.md:1756`) |
 | ATA-X-TURNO-PAUSA | Pausa na ata e CxR (`app/docs/BACKLOG.md:1725`) | **PARCIAL** (`app/escala/utils.py:2039`, `app/ponto/services/cxr_na_lista.py:30`) | Reconstrução, 10/10, dinheiro igual (`app/docs/RELATO.md:1082`, `app/docs/CORTES.md:304`) | `!` motor condicionado; arquivos em voo **[não verificado]** | **CONCLUIR**, após precedências registradas — INFERIU (`app/docs/RELATO.md:1003`) |
 
-## 13/11 18:22 · sessao 497fecd73508 · - · - · origem=Ronald (tmux)
-
-**O10-C**
-
-1. **LEU — cura:** falta conduzir troca histórica SOLO à lista do admin e permitir que o admin declare o substituto e as duas cartas pela UI. A porta de negócio já existe e recusa par incompleto; o código lido não tem chamador de produção de `trocar_plantao` fora da própria definição/registro (`app/ponto/portas/celula.py:670`, `app/ponto/portas/celula.py:691`, `app/ponto/urls.py:53`; ausência global por busca em Python/HTML não-teste, sem um sítio positivo: [não verificado]).
-
-2. **SIM — objetivo ainda ausente; base parcialmente pronta.** O10-B já implementou a operação com duas cartas, trava e duas edições no mesmo atomic (`app/ponto/portas/celula.py:695`, `app/ponto/portas/celula.py:702`, `app/ponto/portas/celula.py:711`). Falta o fluxo UI/lista descrito pelo pedido; o RELATO registra precisamente essa falta e seu desenho, mas é registro documental, não prova de execução (`app/docs/RELATO.md:1338`). O merge `c3ba27d7` é atribuição documental do BACKLOG; ancestralidade não foi verificada (`app/docs/BACKLOG.md:2033`).
-
-3. **Falta:** volta 2 com Pauta DP por dia e link para view/form da troca, admin declarando substituto, duas cartas e motivo; RED “SOLO → zero edição do par + uma linha com porta alcançável” (`app/docs/RELATO.md:1338`, `app/docs/PROMPTS.md:1907`, `app/docs/BACKLOG.md:2082`). **INFERIU:** o lote da raia é semente aproveitável, mas imprimir `so_um_lado` não atende à entrega UI/lista; não pousar a raia como está (`app/docs/RELATO.md:1338`; conteúdo do lote só no anexo [não verificado na cópia]). `main_moveu=True` somente `app/config/crons.py` no anexo [não verificado na cópia]; a região one-shot continua em `app/config/crons.py:1370`. Conflito textual de merge [não verificado].
-
-4. **Em comum com obras em voo:** `app/config/crons.py` com BUG-PAR e HJ-090, segundo `arquivos_em_voo.txt` [não verificado na cópia]. Novos arquivos UI/lista ainda não definidos na raia fornecida [não verificado na cópia].
-
-5. **Depende:** desenho SOLO já respondido: substituto vem do admin e nunca é deduzido (`app/docs/PROMPTS.md:1907`). Porta requer vínculo e barra competência lavrada (`app/ponto/portas/celula.py:606`, `app/ponto/portas/celula.py:622`). `!` específico para comp. 09 após DRY por colaborador; dado de escala/vínculo e gravado exportado exigem `!` (`app/docs/RELATO.md:1342`, `CLAUDE.md:265`). Não precisa tocar motor para implementar a UI que chama a porta existente — **INFERIU** do desenho registrado e da porta (`app/docs/RELATO.md:1338`, `app/ponto/portas/celula.py:670`).
-
-6. **PROPOSTA — CONCLUIR o objetivo O10-C**, pela volta 2 UI/lista, na primeira vaga de negócio após as obras estruturais prioritárias; a operação existente continua sem entrega alcançável ao admin (`app/docs/RELATO.md:1338`, `app/docs/PROMPTS.md:1898`, `CLAUDE.md:291`). Não demolir o objetivo; retirar a ideia de pousar somente o lote, pois não cumpre o corte SOLO (`app/docs/PROMPTS.md:1907`).
-
-**O275**
-
-1. **LEU — cura:** permitir declarar no TipoEscala que um feriado cria dia previsto, inclusive quando o padrão semanal não previa trabalho. Hoje o semanal decide apenas pelos dias cadastrados e o vínculo só transforma `True` em folga por feriado (`app/escala/models.py:830`, `app/escala/models.py:1365`). O corte exige cadastro novo desligado por padrão e intermitente intocado (`app/docs/PROMPTS.md:1229`).
-
-2. **SIM.** O campo não existe entre `apelido` e os campos de ciclo (`app/escala/models.py:114`, `app/escala/models.py:117`); o método termina em base do template e supressão de feriado, sem caminho que faça `False` virar `True` por feriado (`app/escala/models.py:1365`, `app/escala/models.py:1369`). Payload e formulário tampouco oferecem o flag (`app/escala/views_wizard.py:34`, `app/templates/escala/wizard_tipo_escala.html:173`). Nenhuma cura equivalente encontrada; commit de cura [não verificado].
-
-3. **Falta:** decidir a lei FORMA A/B antes do pouso (`app/docs/BACKLOG.md:1557`). A = todo ciclo menos intermitente; B = só 6x1/5x2/semanal, preservando fase dos plantões; essa diferença está expressamente documentada (`app/docs/RELATO-ARQUIVO.md:750`). O relato dos **12 h versus 36 h** é medição histórica documental, não revalidada nesta auditoria (`app/docs/RELATO-ARQUIVO.md:748`; realidade de produção [não verificado]).
-
-   `main_moveu=True`: crons, models, cadastro_tipo, views_wizard, tipos_lista, segundo anexo [não verificado na cópia]. **LEU:** locais ainda recebem as inserções conceitualmente, mas houve evolução da propagação do cadastro (`app/escala/services/cadastro_tipo.py:323`, `app/escala/services/cadastro_tipo.py:328`), do lugar do feriado para o vínculo do dia (`app/escala/models.py:1385`) e do contador de vínculos para `q_vinculo_cobre_a_data` (`app/escala/models.py:929`). **INFERIU:** a raia antiga precisa conciliar essas autoridades; não transportar sem revisão o contador com `ativa=True` e o novo leitor com `lugar_do_colab` do anexo [não verificado na cópia].
-
-   **Conflito concreto de grafo:** a raia traz migração `0043` dependente de `0042` [não verificado na cópia]; HEAD já tem `0043_eventocelula` dependente de `0042` e `0044` dependente daquela (`app/escala/migrations/0043_eventocelula.py:8`, `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:9`). **INFERIU:** precisa reencadear/conciliar a migration antes de pousar; não é só deslocamento de linhas.
-
-4. **Em comum:** `app/config/crons.py` com BUG-PAR/HJ-090, pelo anexo de arquivos em voo [não verificado na cópia].
-
-5. **Depende:** corte FORMA A/B ainda pedido, regra de um derivador, cadastro pela UI e migration/deploy (`app/docs/BACKLOG.md:1557`, `app/docs/RELATO-ARQUIVO.md:750`, `app/docs/RELATO-ARQUIVO.md:753`). O277 depende do pouso da O275, não é pré-requisito dela (`app/docs/PROMPTS.md:1239`). Aplicar alteração de dado escala/vínculo exige `!`; tocar motor na O277 também exige aval próprio (`CLAUDE.md:265`, `CLAUDE.md:142`). A O275 fornecida não altera o motor [não verificado na cópia; diff do anexo].
-
-6. **PROPOSTA — CONCLUIR após resposta de lei**, em vaga de negócio e antes da O277; não liberá-la como pronta por “default desligado”, pois A e B são comportamentos diferentes (`app/docs/RELATO-ARQUIVO.md:753`, `app/docs/PROMPTS.md:1239`). Não há evidência de cura por outro caminho que justifique demolir (`app/escala/models.py:1365`).
-
-| id | cura | existe no HEAD | falta | depende | proposta |
-|---|---|---|---|---|---|
-| O10-C | SOLO com lista e troca declarada pela UI (`RELATO.md:1338`) | SIM; porta pronta (`celula.py:670`) | volta 2 UI/lista (`BACKLOG.md:2082`) | admin declara par; exportada/vínculo `!` (`PROMPTS.md:1907`, `CLAUDE.md:265`) | CONCLUIR objetivo na vaga de negócio; não pousar só lote (`RELATO.md:1338`) |
-| O275 | feriado cria previsto por cadastro (`PROMPTS.md:1229`) | SIM (`models.py:1365`) | A/B e conciliação da migration (`BACKLOG.md:1557`, `0044…py:9`) | lei A/B; escala/vínculo `!` (`RELATO-ARQUIVO.md:750`, `CLAUDE.md:265`) | CONCLUIR depois da lei, antes O277 (`PROMPTS.md:1239`) |
-
-## 13/11 18:22 · sessao 13b256a6e4d6 · - · - · origem=Ronald (tmux)
-
-**SILENCIO-VENCIDO-VOLTA**
-
-1. **LEU — cura:** o juiz inclui o silêncio vencido na fila (`app/chamados/services/painel.py:188`), mas a partição o transforma em HISTORICO (`app/chamados/services/verbos.py:48`) e a lista exclui esse verbo (`app/chamados/services/painel.py:328`). A lista do colaborador exige ausência de qualquer prazo, inclusive vencido (`app/chamados/services/janela_colab.py:70`).
-
-2. **LEU — SIM, defeito ainda existe:** os três caminhos acima permanecem contraditórios. Há cura parcial do relógio: `qs_na_fila` já aceita `agora` (`app/chamados/services/painel.py:158`) e a instância possui `silenciado_em` (`app/chamados/models.py:508`), mas isso não cura a partição nem a lista. A resposta ainda tenta levantar todo prazo não nulo, mesmo vencido (`app/chamados/services/materializacao.py:718`). Commit da introdução desses trechos [nao verificado].
-
-3. **LEU — falta:** implementar a SPEC atual, composta pelo transplante b4 da E3 mais a remoção de HISTORICO para vivo e a correção da lista do colaborador; pousar junto da QUARENTENA (`app/docs/BACKLOG.md:782`). “Pronta” nessa mesma célula não é prova: o HEAD conserva o defeito nos sítios acima. A validade atual dos números históricos 12/34/13 [nao verificado]. A descrição de revert da b4/b6a é registro documental, não inspeção de commit (`app/docs/RELATO.md:243`).
-
-4. **Arquivos comuns:** ver quadro compartilhado abaixo; a raia do anexo acumula as duas obras, portanto não demonstra que a fatia isolada de SILENCIO precise de todos aqueles arquivos [nao verificado].
-
-5. **LEU — depende:** QUARENTENA e integração da SPEC retirada da E3 (`app/docs/BACKLOG.md:782`); L-062 é regra de silêncio com prazo (`app/docs/LEIS.md:96`). Nenhuma necessidade de tocar `motor_calculo_v2`, exportada ou escala/vínculo foi demonstrada para esta fatia [nao verificado].
-
-6. **INFERIU — CONCLUIR:** como bloco com QUARENTENA, após o pouso E3; essa é a condição de reabertura atual, superior à ordem antiga do comentário do backlog (`app/docs/BACKLOG.md:2469`). O defeito é diretamente legível nos sítios citados, portanto não há fundamento para DEMOLIR (`app/chamados/services/verbos.py:48`; `app/chamados/services/janela_colab.py:70`).
-
-**QUARENTENA-DO-COLAB**
-
-1. **LEU — cura:** substituir o isolamento por silêncio escrito em cada chamado por isolamento do colaborador por período, com juiz e porta únicos; este é o contrato registrado (`app/docs/BACKLOG.md:783`). Hoje a porta de isentos ainda grava o véu chamado a chamado (`app/chamados/services/silencio_isentos.py:34`) e os sinais continuam acionando essa porta (`app/chamados/signals.py:270`).
-
-2. **LEU — SIM, falta a cura:** a fila ainda decide somente por status e prazo (`app/chamados/services/painel.py:188`); a criação de pergunta datada segue direto para `PerguntaDisputa.abrir` (`app/chamados/services/disputa_emissao.py:443`), e o agrupador protege apenas ausência e duplicação (`app/chamados/services/disputa_emissao.py:830`). O vigia ainda dispõe de `--apply` e escreve silêncio (`app/chamados/management/commands/silenciar_chamados_isentos.py:49`). Não encontrei símbolos `quarentena` nos diretórios de produção pesquisados; a ausência global de outra cura equivalente [nao verificado].
-
-3. **LEU — falta:** reaplicar a SPEC numa cópia nova do HEAD, resolver os achados da reprovação e obter DIFF de frota (`app/docs/BACKLOG.md:783`). O registro detalhado traz **oito** achados: desligar isenção levanta em vez de fechar; vigia não zera; segundo escritor; migration não reversível/importando serviço vivo; LEI-AKITA ausente; retenção reordenada sem RED; DIFF copiando consulta; início pela primeira ligação (`app/docs/RELATO.md:251`). A retomada também foi suspensa com apenas um RED não rodado (`app/docs/RELATO.md:190`; `app/docs/BACKLOG.md:2469`). A suite antiga não possui veredito no registro, portanto “suite feita” não está estabelecido (`app/docs/RELATO.md:251`).
-
-4. **Arquivos comuns:** quadro abaixo, integralmente proveniente dos anexos, sem confirmação por comparação das refs [nao verificado].
-
-5. **LEU — depende:** decisão de desenho sobre início da isenção, última ligação e proposta de 16 janelas em vez das 15 do aval (`app/docs/RELATO.md:191`); E3 deve pousar antes da reabertura (`app/docs/BACKLOG.md:2469`). O contrato exige que espelho, folha e TXT não mudem (`app/docs/BACKLOG.md:783`); cumprimento disso pela implementação proposta [nao verificado]. Nenhum `!` de motor/exportada/escala foi demonstrado por esta leitura [nao verificado].
-
-6. **INFERIU — CONCLUIR:** retomar com SILENCIO após E3 e coordenar com SAIDA-NOTURNA, cujo registro de fila também depende de E3 (`app/docs/BACKLOG.md:1934`; `app/docs/BACKLOG.md:2469`). Tratar o diff antigo como SPEC, não como patch aprovado; a interrupção e a reprovação permanecem documentadas (`app/docs/RELATO.md:190`; `app/docs/RELATO.md:251`).
-
-**Raia compartilhada: divergências e interseções**
-
-`main_moveu=True` no anexo para os arquivos abaixo; sem `.git` e sem as versões-base/raia disponíveis para inspeção, conflito textual e aplicação limpa [nao verificado]:
-
-- `app/chamados/management/commands/auditar_invariantes_chamados.py`;
-- `app/chamados/models.py`, `signals.py`, `views_arquivar.py`;
-- `app/chamados/services/{aviso_pendencia,cobrar_dia,disputa_emissao,materializacao,painel,pergunta_no_app,silencio_ausencia,verbos,vigia_fio}.py`;
-- `app/chamados/tests/test_o261_vigia_fio.py`;
-- `app/colaboradores/services/{colaborador,ficha}.py`, `app/colaboradores/views.py`;
-- `app/core/{juizes,portas}.py`, `app/core/tests/{test_selo_performance,test_tripwire_contagem_de_pendencia}.py`;
-- `app/docs/{ARQUITETURA.mmd,MAPA.md}`;
-- `app/ponto/tests/test_selo_chokepoint_escrita.py`. [nao verificado]
-
-**Conflitos semânticos LEU/INFERIU:** o patch antigo do aviso filtrava perguntas diretamente; o HEAD agora delega a `consulta_do_app`, cuja seleção separa pendentes e histórico pela E3 (`app/chamados/services/aviso_pendencia.py:7`; `app/chamados/services/pergunta_no_app.py:61`). Reaplicar o corpo antigo arriscaria desfazer essa delegação — INFERIU. A cobrança manual ganhou trilha antes do cartório, que deve ser preservada ao inserir devolução da quarentena (`app/chamados/services/cobrar_dia.py:31`). A emissão agora distingue conversa de fato datado, distinção que o filtro antigo deve respeitar (`app/chamados/services/disputa_emissao.py:424`). O relógio `agora` já está presente, portanto esse pedaço da raia não é mudança inédita (`app/chamados/services/painel.py:158`).
-
-Interseção literal dos dois anexos com `arquivos_em_voo.txt`:
-
-| Obra em voo | Arquivos comuns à raia compartilhada |
-|---|---|
-| BUG-PAR e E3 | `app/chamados/models.py`; `app/chamados/services/{disputa_emissao,materializacao,vigia_fio}.py`; `app/chamados/tests/test_o261_vigia_fio.py`; `app/core/juizes.py`; `app/core/tests/test_tripwire_contagem_de_pendencia.py`. [nao verificado] |
-| O168 | `app/chamados/models.py`; `app/core/juizes.py`; `app/ponto/tests/test_selo_chokepoint_escrita.py`. [nao verificado] |
-| HJ-090 | `app/chamados/tests/test_o261_vigia_fio.py`. [nao verificado] |
-
-| id | cura | existe no HEAD | falta | depende | proposta |
-|---|---|---|---|---|---|
-| SILENCIO-VENCIDO-VOLTA | Vencido retorna coerentemente à fila (`verbos.py:48`, caminho completo acima) | SIM (`app/chamados/services/verbos.py:51`) | SPEC b4 + verbos/lista (`app/docs/BACKLOG.md:782`) | QUARENTENA/E3 (`app/docs/BACKLOG.md:2469`) | CONCLUIR junto, após E3 — INFERIU (`app/docs/BACKLOG.md:2469`) |
-| QUARENTENA-DO-COLAB | Isolamento por período em vez de véu por chamado (`app/docs/BACKLOG.md:783`) | SIM (`app/chamados/services/silencio_isentos.py:43`) | Oito achados, RED/validação e DIFF (`app/docs/RELATO.md:251`) | E3 + desenho 16×15 (`app/docs/BACKLOG.md:2469`; `app/docs/RELATO.md:191`) | CONCLUIR com SILENCIO, após E3 — INFERIU (`app/docs/BACKLOG.md:2469`) |
-
-_4779 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4781 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
