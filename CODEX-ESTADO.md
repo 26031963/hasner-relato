@@ -1,7 +1,78 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 00:07** · publicado em **13/11/2026 00:11** (UTC-3)
+> Ultima resposta processada: **13/11/2026 00:15** · publicado em **13/11/2026 00:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 00:15 · sessao d165bc130172 · E3-FORMA-SQL · leitura · origem=Code
+
+**Há uma incompatibilidade concreta entre (b) e a preservação dos leitores reais em (g). Não consigo entregar um script integral afirmando que cumpre ambos:** leitores por colaborador executam consultas globais internamente, inclusive consultas cujo recorte mudaria o resultado. [app/folha/fora_da_folha.py:227; app/chamados/juizes.py:1558; app/chamados/juizes.py:1581]
+
+As referências a `e3_diff_leitores_v1.py` abaixo numeram o anexo fornecido, contando seu primeiro comentário como linha 1. A condição do perfil está em `:369`, corrigindo a referência intermediária a `:375`. [e3_diff_leitores_v1.py:1; e3_diff_leitores_v1.py:369]
+
+**1. Onde a memória cresce na v1**
+
+| Ponto | Retenção ou materialização |
+|---|---|
+| `REGISTROS[nome]["linhas"]` | Cada `guardar` acrescenta unidade e valor canonizado; nenhuma linha é descartada durante a sonda. Cresce com todos os resultados diretos e observados. [e3_diff_leitores_v1.py:319; e3_diff_leitores_v1.py:327] |
+| `SEQUENCIAS` | Conserva uma chave por combinação distinta de leitor raiz, contexto, observação e unidade. Repetir a mesma chave aumenta seu contador; novas unidades aumentam o dicionário. Não existe limpeza entre chamadas. [e3_diff_leitores_v1.py:74; e3_diff_leitores_v1.py:336] |
+| `celulas` | Materializa todas as células da envoltória das janelas. O fingerprint ainda constrói uma lista de dicionários dos campos e sua representação canônica. [e3_diff_leitores_v1.py:839; e3_diff_leitores_v1.py:851] |
+| `UNIVERSO["_celula_para_dia"]` | Acrescenta um mapa completo, por célula, de colaborador e data. Só é removido perto do fim. [e3_diff_leitores_v1.py:843; e3_diff_leitores_v1.py:1380] |
+| Empresas e colaboradores | `empresas` materializa empresas; `empresa_de` contém todos os colaboradores; `ids_selecionados` e `colabs` conservam os colaboradores com células na envoltória. [e3_diff_leitores_v1.py:812; e3_diff_leitores_v1.py:813; e3_diff_leitores_v1.py:858; e3_diff_leitores_v1.py:859] |
+| Perguntas | `list(perguntas)` avalia o queryset completo, incluindo relações carregadas. `fase` constrói outra lista de referências; o queryset `perguntas` permanece referenciado com seu cache. [e3_diff_leitores_v1.py:906; e3_diff_leitores_v1.py:953; e3_diff_leitores_v1.py:526] |
+| Disputas | Materializa todas as disputas selecionadas, com colaboradores, chamados e perguntas prefetched. `fase` acrescenta outra lista de referências. [e3_diff_leitores_v1.py:958; e3_diff_leitores_v1.py:526] |
+| Faces e conjuntos globais | `todos_pks` contém todas as perguntas; cada projeção constrói `escolhidos`; `q_sem_texto` conserva outro conjunto. Além disso, registra um booleano por pergunta e por face. [e3_diff_leitores_v1.py:868; e3_diff_leitores_v1.py:872; e3_diff_leitores_v1.py:875; e3_diff_leitores_v1.py:902] |
+| Créditos | Mantém `vivo_pks`, conjuntos de créditos e a união ordenada. Dentro do laço, reconstrói `set(vivo_pks)` para **cada** unidade: alocação transitória repetida, além da retenção em `REGISTROS`. [e3_diff_leitores_v1.py:1074; e3_diff_leitores_v1.py:1079; e3_diff_leitores_v1.py:1083] |
+| Cada janela | Constrói `cids`, cópias de colaboradores, datas e o produto cartesiano `pares`. A projeção de `dias_trancados` ainda produz uma lista de retornos de `guardar`. [e3_diff_leitores_v1.py:1102; e3_diff_leitores_v1.py:1107; e3_diff_leitores_v1.py:1111; e3_diff_leitores_v1.py:1134] |
+| Plano do backfill | Reconstrói `dias_vigia` a partir das linhas já retidas pelo registro; `fase` materializa outra lista de referências. [e3_diff_leitores_v1.py:1349; e3_diff_leitores_v1.py:526] |
+| Emissão final | Ordena todas as linhas de cada leitor, constrói o conjunto de unidades distintas e fatia blocos. Nesse momento, as linhas originais continuam retidas. [e3_diff_leitores_v1.py:1438; e3_diff_leitores_v1.py:1443; e3_diff_leitores_v1.py:1448] |
+
+Há também crescimento **durante cada chamada**, mesmo eliminando o armazenamento de linhas da sonda:
+
+| Mecanismo | Crescimento por chamada |
+|---|---|
+| Instrumentação | `rodar` transforma retornos QuerySet em lista; `linhas` materializa seus itens; `canonico` constrói coleções recursivas; `resumo` mantém a representação canônica e serializações integrais transitórias. [e3_diff_leitores_v1.py:511; e3_diff_leitores_v1.py:554; e3_diff_leitores_v1.py:265; e3_diff_leitores_v1.py:546] |
+| Cópias e observações | Perguntas/disputas são copiadas; o perfil constrói conjuntos/mapas auxiliares para furo e beco; comandos DRY acumulam stdout/stderr em `StringIO`. [e3_diff_leitores_v1.py:917; e3_diff_leitores_v1.py:972; e3_diff_leitores_v1.py:402; e3_diff_leitores_v1.py:459; e3_diff_leitores_v1.py:585] |
+| Carga da tarefa | Materializa perguntas, decisões, pares e caches por colaborador/dia. Esses dados pertencem à carga da janela. [app/chamados/services/tarefa_do_dia.py:376; app/chamados/services/tarefa_do_dia.py:391; app/chamados/services/tarefa_do_dia.py:423; app/chamados/services/tarefa_do_dia.py:500] |
+| Tranca | Materializa pares, vetor de resultados e vetores auxiliares. [app/chamados/juizes.py:1022] |
+| Relatórios/créditos/cobrança | Os leitores reais constroem buckets, listas de perguntas e mapas por colaborador. Streaming na saída não elimina essas materializações internas. [app/chamados/relatorios_disputa.py:51; app/chamados/services/raiox.py:135; app/chamados/services/cobranca.py:239] |
+| Vigia | Mantém universo de dias, colaboradores, alimentação, perguntas, portas e lista final de alcance. [app/chamados/services/vigia_fio.py:585; app/chamados/services/vigia_fio.py:607; app/chamados/services/vigia_fio.py:617; app/chamados/services/vigia_fio.py:633; app/chamados/services/vigia_fio.py:641] |
+
+Isso identifica estruturas que crescem; **não quantifica sua participação no RSS da E3**. Não há medição de RSS da E3 no dado apresentado. [nao verificado]
+
+**2. Por que não entrego um script apresentado como conforme**
+
+O primeiro impedimento independe do tamanho da frota:
+
+1. A parte precisa executar `o_que_segura` para seu colaborador, conforme (b). O leitor chama `classificar_export(empresa, mes, ano)` e só depois seleciona o colaborador em Python. O export consulta os fechamentos da empresa inteira. Manter essa chamada viola o filtro literal de (b); recortá-la exige alterar a alimentação do leitor. [app/folha/fora_da_folha.py:215; app/folha/fora_da_folha.py:227; app/folha/export.py:785]
+
+2. `tarefa_do_dia` utiliza a carga real, que chama `alimentar_fila`. Esta executa `particionar_verbos(qs_vivos())` e percorre `qs_na_fila()` global. A partição chama novamente `creditos_perguntas`. Portanto, mover apenas a chamada direta de créditos para `"agregado"` não elimina as execuções globais dentro das partes. [app/chamados/services/tarefa_do_dia.py:531; app/chamados/juizes.py:1558; app/chamados/juizes.py:1561; app/chamados/services/verbos.py:34]
+
+3. Acrescentar filtros nessas consultas não é uma transformação neutra: o código documenta que o crédito depende do conjunto vivo recebido e pode mudar quando esse conjunto é recortado. [app/chamados/juizes.py:1581]
+
+Há ainda dois pontos que a reescrita precisa resolver explicitamente:
+
+- **Manifesto entre processos:** a v1 executa `ato_do_dia` para todos os dias registrados pelo alcance, independentemente da rota. Esse universo vem dos dias retidos pela folha nas competências naturais do vigia. Para distribuir exatamente essas unidades sem repetir o vigia, o agregado precisa emitir IDs/datas consumíveis pelas partes; substituí-los apenas por hashes perde essa alimentação. [e3_diff_leitores_v1.py:1307; e3_diff_leitores_v1.py:1349; app/chamados/services/vigia_fio.py:587; app/chamados/services/vigia_fio.py:591]
+- **Memória dos globais:** leitores integrais continuam materializando dados internamente. Um watchdog permite interromper uma execução excedente; não demonstra antecipadamente que o agregado terminará abaixo de 2 GB. Esse resultado permanece [nao verificado]. [app/chamados/services/raiox.py:135; app/chamados/services/vigia_fio.py:633]
+
+A interpretação viável seria: **(b) restringe todas as consultas de seleção da sonda, com exceções declaradas para consultas globais internas; (c) restringe as chamadas diretas da sonda; o agregado emite um manifesto de IDs/datas.** Isso é uma alteração do contrato solicitado, não uma propriedade que eu possa assumir silenciosamente. [app/chamados/juizes.py:1558; app/folha/fora_da_folha.py:227; e3_diff_leitores_v1.py:1349]
+
+**3. Diferenças de cobertura que precisam ser declaradas**
+
+Não há uma versão nova entregue ou executada para comparar. Estas são as diferenças e perdas que uma implementação precisa evitar ou assumir expressamente. [nao verificado]
+
+| Ponto | Consequência para a cobertura |
+|---|---|
+| Perguntas versus colaboradores selecionados | A v1 mede perguntas da frota inteira, incluindo perguntas sem célula e fora das janelas. Restringir perguntas aos colaboradores selecionados pelas células perderia cobertura. A divisão deve usar o colaborador da disputa sem acrescentar essa restrição. [e3_diff_leitores_v1.py:904; e3_diff_leitores_v1.py:906; e3_diff_leitores_v1.py:958] |
+| Disputas inteiras | Dividir perguntas de uma mesma disputa mudaria a alimentação de `pode_fechar`, `respostas_sem_veredito` e explicador. A v1 entrega a disputa com todas as suas perguntas. [e3_diff_leitores_v1.py:958; e3_diff_leitores_v1.py:975] |
+| Leitores de empresa/janela | `dias_que_seguram`, `fora_da_folha`, retrato/contadores/DRY, competência trancada e beco explícito também precisam ficar no agregado; não são consultas por colaborador só porque estavam dentro de `uma_janela`. [e3_diff_leitores_v1.py:1151; e3_diff_leitores_v1.py:1175; e3_diff_leitores_v1.py:1193; e3_diff_leitores_v1.py:1211; e3_diff_leitores_v1.py:1216; e3_diff_leitores_v1.py:1224] |
+| Pautas | Particionar a entrada de `sincronizar` mudaria o cálculo de fechamento: ele compara a entrada com todas as pautas vivas da família. Precisa receber o resultado integral no agregado. [app/ponto/services/pautas_dos_discordantes.py:169] |
+| Paridade da face SQL | A v1 confronta o juiz por pergunta com o conjunto global `q_sem_texto`. Manter esse leitor nas partes exige transportar a pertença calculada no agregado; recalcular a face nas partes muda sua alocação de execução. [e3_diff_leitores_v1.py:902; e3_diff_leitores_v1.py:933] |
+| Plano do backfill | Reconstruir seus dias a partir das células das janelas não preserva o universo da v1. O manifesto precisa vir do alcance real e incluir todas as rotas. [e3_diff_leitores_v1.py:1349; app/chamados/services/vigia_fio.py:591] |
+| Chamadas internas repetidas | A v1 chama `_calados` diretamente e através de `linhas_para_a_pauta`; também chama o alcance diretamente e através de `BF._alcance`. Suprimir essas chamadas internas modifica o que era observado. [e3_diff_leitores_v1.py:1092; app/chamados/services/cobranca.py:266; e3_diff_leitores_v1.py:1338; app/chamados/management/commands/backfill_fio_morto_e4b.py:78] |
+| `vigia.ramo` | O gancho da v1 descarta retornos `None`, mas `_listar` não retorna valor. Corrigi-lo acrescenta observação efetiva. As projeções `vigia.censo_alcance.dia` já existem independentemente desse gancho. [e3_diff_leitores_v1.py:369; app/chamados/services/vigia_fio.py:629; e3_diff_leitores_v1.py:1307] |
+| Fingerprints | A v1 calcula SHA256 de listas ordenadas e publica suas linhas. Um fingerprint novo por faixas precisa ser comparado entre base/cópia usando o mesmo texto novo; equivalência com os digests antigos depende do algoritmo escolhido. [e3_diff_leitores_v1.py:1438; e3_diff_leitores_v1.py:1452] |
+
+Para explicar a queda por classe, precisam permanecer contagens das rotas, dos quatro baldes de lei, das causas `a`–`e`, dos detalhes de `e` e dos papéis, conservando as identidades de soma do vigia. A classificação deve vir do resultado real, sem implementar outro juiz. A queda efetiva e sua distribuição por classe não estão demonstradas no dado fornecido. [app/chamados/services/vigia_fio.py:531; app/chamados/services/vigia_fio.py:535; app/chamados/services/vigia_fio.py:648; app/chamados/services/vigia_fio.py:676; app/chamados/services/vigia_fio.py:690; nao verificado]
 
 ## 13/11 00:07 · sessao 38e18dd8d0ce · - · - · origem=Ronald (tmux)
 
@@ -2428,49 +2499,4 @@ Existem chamadas de logging nos caminhos de calendário, grade e espelho; desabi
 
 O calendário consulta `timezone.now()` internamente; congelar o mesmo instante nas duas execuções evita que a comparação varie com o relógio. O PDF já recebe `agora`. `app/colaboradores/services/calendario.py:163`, `app/colaboradores/services/calendario.py:250`, `app/relatorios/pdf_espelho.py:236`
 
-## 12/11 22:16 · sessao 1ec7a97f7721 · - · - · origem=Ronald (tmux)
-
-Não há repositório Git neste workspace; BASE foi conferida somente pela reversão dos hunks do `diff_producao.txt` fornecido, sem acesso independente ao commit `78994522d` `[nao verificado]`.
-
-| Função | Assinatura conferida | CÓPIA | BASE reconstruída |
-|---|---|---|---|
-| `_celula_furada` | `(colaborador, data_iso, *, para='cobranca')` | `app/chamados/juizes.py:459` | `app/chamados/juizes.py:459` |
-| `_plantio_preenche_furo_na_data` | `(colaborador, ts)` | `app/chamados/services/materializacao.py:143` | mesmo arquivo:143 |
-| `_ts_tipo_do_plantio` | `(disputa, p, erros, pendencia=None, *, carga=None)` | mesmo arquivo:339 | mesmo arquivo:333 |
-| `estado_aplicacao_pergunta` | `(disputa, p)` | mesmo arquivo:437 | mesmo arquivo:431 |
-| `_leitura_da_celula` | `(cel)` | `app/ponto/services/cluster_espurio.py:15` | mesmo arquivo:15 |
-| `dias_com_cluster` | `(colab, ec, ref, dias)` | mesmo arquivo:49 | mesmo arquivo:40 |
-| `pendencias` | `(colab, hoje, dias=JANELA_DIAS)` | mesmo arquivo:162 | mesmo arquivo:153 |
-| `reconciliar_colab` | `(colab, hoje, dias=JANELA_DIAS)` | mesmo arquivo:185 | mesmo arquivo:176 |
-| `Command.handle` | `(self, *a, **o)` | `app/ponto/management/commands/detectar_cluster_espurio.py:65` | mesmo arquivo:65 |
-
-Todas essas assinaturas permaneceram iguais no diff fornecido; nenhuma precisa adaptação por tentativa e erro. As linhas BASE acima são derivadas dos deslocamentos dos hunks do anexo `[nao verificado quanto ao commit Git real]`. [nao verificado]
-
-Para `_celula_furada`, são necessários dois leitores separados: `para='cobranca'` e `para='folha'`, em todo par colaborador/data de CelulaDia. A produção distingue esses efeitos e propaga o argumento na recursão da véspera (`app/chamados/juizes.py:472`, `app/chamados/juizes.py:505`; `app/chamados/models.py:739`, `app/chamados/models.py:1253`, `app/chamados/models.py:1300`, `app/chamados/models.py:1350`). A função consulta a célula internamente, não recebe objeto pré-carregado (`app/chamados/juizes.py:487`; `app/chamados/juizes.py:403`).
-
-**Cuidado com interpretar a matriz:** ata NULL significa zero na componente de órfãs, mas `_celula_furada` pode devolver `None`, porque ausência de `lampadas` é desconhecimento; não se deve substituir seu retorno por False (`app/chamados/juizes.py:494`, `app/chamados/juizes.py:511`).
-
-`_plantio_preenche_furo_na_data` recebe um timestamp de proposta de plantio. Fabricar meia-noite/meio-dia por CelulaDia não representa o universo de produção. O timestamp real vem de `_ts_tipo_do_plantio`, que considera resposta, marco de intervalo e ajuste overnight (`app/chamados/services/materializacao.py:339`, `app/chamados/services/materializacao.py:415`, `app/chamados/services/materializacao.py:432`). A superfície real de leitura é `estado_aplicacao_pergunta(disputa,p)`, executável sobre toda PerguntaDisputa dos colaboradores com CelulaDia; ela chama o plantio somente quando as guardas reais chegam a ele (`app/chamados/services/materializacao.py:437`, `app/chamados/services/materializacao.py:455`, `app/chamados/services/materializacao.py:465`). Um observador transparente da função real pode registrar suas entradas/retornos enquanto essa superfície roda. Não reconstruir as guardas.
-
-O materializador também chama o plantio, mas escreve antes e depois; não deve ser chamado na sonda (`app/chamados/services/materializacao.py:863`, `app/chamados/services/materializacao.py:888`, `app/chamados/services/materializacao.py:1234`, `app/chamados/services/materializacao.py:1241`). Os candidatos que só seriam atingidos após essas escritas não são integralmente cobertos pelo chamador de leitura `[nao verificado]`.
-
-**`reconciliar_colab` não possui DRY**: fecha chamados e abre outros (`app/ponto/services/cluster_espurio.py:199`, `app/ponto/services/cluster_espurio.py:205`). A chamada mais próxima sem escrita é `pendencias(colab, hoje, dias)`, explicitamente read-only e usada pelo próprio reconciliador (`app/ponto/services/cluster_espurio.py:162`, `app/ponto/services/cluster_espurio.py:196`). Sua saída deve projetar `a_fechar` para IDs dos chamados; serializar instâncias com `str()` arrisca dados pessoais `[nao verificado quanto ao __str__]`.
-
-O comando DRY é chamável com:
-
-```python
-Command(stdout=sink, stderr=sink).handle(
-    apply=False, alarme=False, legado=False,
-    dias=14, colab=colab.pk, esperados=None,
-)
-```
-
-As opções são definidas em `app/ponto/management/commands/detectar_cluster_espurio.py:35`. O ramo DRY chama `pendencias` em `:85` e o contador de encerrados em `:94`. Entretanto, ele imprime `colab.nome` em `:87`; stdout/stderr precisam ser capturados em memória e nunca impressos diretamente. Seu retorno é `None`, então hashear somente esse retorno não mede a alteração de formatação do comando (`app/ponto/management/commands/detectar_cluster_espurio.py:87`, `app/ponto/management/commands/detectar_cluster_espurio.py:101`).
-
-O universo padrão do comando é escala ativa sem data_fim, colaborador ativo, com uma iteração por EscalaColaborador, potencialmente repetindo colaborador (`app/ponto/management/commands/detectar_cluster_espurio.py:71`, `app/ponto/management/commands/detectar_cluster_espurio.py:78`). Para atender à frota solicitada, medir adicionalmente `pendencias` em **todos** os colaboradores com CelulaDia, sem aplicar esse filtro; a janela de abertura continua sendo `hoje - dias + 1 .. hoje`, enquanto fechamento consulta o dia próprio de todos os chamados vivos (`app/ponto/services/cluster_espurio.py:53`, `app/ponto/services/cluster_espurio.py:62`, `app/ponto/services/cluster_espurio.py:174`).
-
-Há exceções engolidas internamente: `_celula_furada` retorna None e plantio retorna False em falhas; a contagem externa de `EXC:<Classe>` não as revela (`app/chamados/juizes.py:525`, `app/chamados/services/materializacao.py:191`). `core.observ.engolidos()` fornece contadores adicionais sem consulta a logs (`app/core/observ.py:60`), mas não cobre o except final silencioso de `_celula_furada` (`app/chamados/juizes.py:525`).
-
-Desabilitar logging durante a sonda evita que os caminhos de erro escrevam arquivos ou exponham respostas em handlers: há logging no plantio e em `registrar_engolido` (`app/chamados/services/materializacao.py:192`; `app/core/observ.py:79`). Nenhum script/teste foi executado e nenhum arquivo foi alterado nesta investigação `[nao verificado por auditoria externa]`.
-
-_4472 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4473 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
