@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 03:25:43.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1345**.
+**Medido em 13/11/2026 03:31:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1336**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1346,12 +1346,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:31:24 | Bash | Check E3 copy base and logs | `cd /home/ronald/wt-e3-b6-114947; git merge-base HEAD 0a747193e \| cut -c1-9; git log --oneline -1 $(git merge-base HEAD 0a747193e); git log --oneline $(git merge-base HEAD 0a747193e)..HEAD \| wc -l; ls /home/ronald/saas-hasner/logs/E3-LEITORES/ \| head -30` |
 | 15:31:23 | SendMessage |  | `-` |
 | 15:31:15 | Bash | Save aval, inspect E3 copy and SAIDA-NOTURNA state | `cd /home/ronald/saas-hasner; mkdir -p logs/AVAIS-1212; cat > logs/AVAIS-1212/teto_c8_1512_e3_na_vaga.txt <<'EOF' aval Ronald: TETO-C8-1512 + E3-NA-VAGA (substitui qualquer versao anterior; unidade = queries por chamada no selo ponto/tests/test_selo_chokepoint_escrita; nenhuma lei nova) 1. C20-O168: +1 query CONSTANTE aceita; teto 217/277 -> 218/278 SO com prova de constancia no proprio selo (mesma ...` |
-| 15:30:55 | Bash | Create fresh worktree for O168 volta 3 | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-o168v3-$(date +%H%M%S); git worktree add -b raia/o168v3-$(date +%H%M%S) $W d9fbfd979 2>&1 \| tail -1; cd $W && git log --oneline -1 && mkdir -p app/logs app/media && echo $W` |
-| 15:30:25 | Bash | Inspect E2 -> S88 cascade in copy | `cd /home/ronald/wt-o168-142801/app; sed -n 1025,1052p ponto/services/cartorio.py; echo ----SIG; sed -n 15,50p chamados/signals.py; echo ----REC; sed -n 600,640p chamados/reconciliador.py` |
-| 15:30:16 | Bash | Read O168 Codex preverif result | `cd /home/ronald/saas-hasner/logs/O168/preverif1; cat preverif1.fim; tail -2 preverif1.log; wc -c preverif1.r; cat preverif1.r \| cut -c1-600` |
-| 15:26:10 | Bash | Save list and publish E3-10 passivo stop in RELATO | `cd /home/ronald/saas-hasner; awk '/^col[0-9]+: #/' logs/E3-LEITORES/e3_10/app/sonda_app.r > logs/E3-LEITORES/e3_10/app/lista_142_historico_para_pendentes.txt; wc -l < logs/E3-LEITORES/e3_10/app/lista_142_historico_para_pendentes.txt; cd app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read().split('\n') l=("PAREI E3-10 PASSIVO 15:3x (aval E3-10-CURA-NO-ESCRITOR: \"apply so se o app nao muda, s ...` |
-| 15:26:02 | Bash | Confirm app partition rule cited by Codex | `cd /home/ronald/saas-hasner/app; sed -n 60,75p chamados/services/pergunta_no_app.py` |
-| 15:25:56 | Bash | Read E3-10 app sonda answer | `cd /home/ronald/saas-hasner; cat logs/E3-LEITORES/e3_10/app/sonda_app.r \| cut -c1-400` |
-| 15:25:53 | Bash | Fix ESPERANDO line and test hook proof | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=519916/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 15:25:49 | Bash | Inspect children of suite wrapper | `cd /home/ronald/saas-hasner; ps --ppid 519912 -o pid,cmd \| cut -c1-200; P=$(ps --ppid 519912 -o pid= \| head -1); ps --ppid $P -o pid,cmd \| cut -c1-200; tail -3 logs/O168/recorte2.log \| cut -c1-200` |
-| 15:25:45 | Bash | Locate live suite processes | `cd /home/ronald/saas-hasner; ps -ef \| /bin/grep "suite.sh" \| /bin/grep -v grep \| cut -c1-200; cat logs/O168/recorte2.rc 2>/dev/null` |
