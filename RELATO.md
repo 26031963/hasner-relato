@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=2962648
+ESPERANDO: push.sh | pid=3001848
+PONTO 19:4x E3 PORTA-SEM-CASO construtor entregou na copia wt-e3-b6-114947 @e01da1d51 (cdf9ae7ee cura + e01da1d51 fio na fonte = chamados/juizes.py::fio_pelos_verbos): RED 91bed1694 Ran 12 FAILED 3; GREEN green3.log Ran 7036 OK rc 0; F5B = (i) fixture A2entra, helper le a porta do C17. INCOMPLETO: A2 na sombra nao refeito (dias que GANHAM porta sem medida); residual chamado vivo + acao de sistema/razao de dia sem porta (f5b:164, f5_alcance:153, beco contraex1); SC-A 25 -> linha E4b.
+DESPACHO E3-PORTA-SEM-CASO-PREVERIF 19:4x: preverif volta 4 -> Codex (verificador, e01da1d51, logs/E3-FORMA-SQL/preverif_v4/) | sombra A2 + merge main + suite -> Code depois | opus final -> opus.
 RESPONDIDA por aval PUSH-PADRAO-FORA-DO-GLOSSARIO=(c) 13/11 19:3x (logs/AVAIS-1313/push_padrao_c.txt): corte Ronald, o termo Policy Enforcement Point nasce no GLOSSARIO (gate do CSF lendo respostas_sem_veredito); 31874371 e 89becf4a intocados, sem EXCECAO_NOMINAL; push pela regua.
 PONTO 19:2x O168 NO AR d33c0a899: bin/deploy.sh --sem-migrate rc 0 (logs/O168/v9/deploy.log): 3 cascas HUP, 3 rotas provadas (core /health/ 200, ui 302, mensageria 200), selo BUG 128 verde, importerror_500=0. Smoke funcional = a rodada do supra_juiz da manha.
 PONTO 19:2x E3 PORTA-SEM-CASO vizinhos green2 (logs/E3-FORMA-SQL/porta_sem_caso/green2.log): Ran 7036, OK (skipped=4, expected failures=14) -- as 2 do F5B curadas pelo construtor; proximo: commit na copia, Codex preverif, merge main, suite, opus.
