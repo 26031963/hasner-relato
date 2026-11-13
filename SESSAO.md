@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 15:46:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (575.1 MB). Acoes na janela: **1680**.
+**Medido em 13/11/2026 15:51:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (575.1 MB). Acoes na janela: **1682**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:51:01 | Monitor | fim da suite inteira LEI-DESLIGADO | `cd /home/ronald/saas-hasner; until [ -e logs/DESLIGADO-NAO-TRAVA/suite/fim ] \|\| ! ps -p 2434966 >/dev/null; do /usr/bin/sleep 20; done; /usr/bin/sleep 5; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/DESLIGADO-NAO-TRAVA/suite/suite_inteira.log \| tail -n 3; ls logs/DESLIGADO-NAO-TRAVA/suite/` |
+| 15:50:55 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/DESLIGADO-NAO-TRAVA/suite/; tail -c 300 logs/DESLIGADO-NAO-TRAVA/suite/suite_inteira.log; echo; bin/trava_teste.sh --quem; date +%H:%M` |
 | 15:40:12 | Bash |  | `cd /home/ronald/saas-hasner/app; ps -p 2434966 -o cmd= \| cut -c1-60; sed -i '3s#^ESPERANDO: .*#ESPERANDO: trava_teste.sh \| pid=2434966#' docs/RELATO.md; sed -n 1,4p docs/RELATO.md \| cut -c1-160` |
 | 15:40:07 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 789,850p bin/hook_stop_fila1.py; sed -n 1360,1400p bin/hook_stop_fila1.py` |
 | 15:40:04 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -n 30` |
