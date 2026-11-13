@@ -1,7 +1,173 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 16:39** · publicado em **13/11/2026 16:39** (UTC-3)
+> Ultima resposta processada: **13/11/2026 16:44** · publicado em **13/11/2026 16:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 16:44 · sessao 994e7d801813 · E3-FORMA-SQL · leitura · origem=Code
+
+**A recontagem fecha em 351 colab-dias. G5 tem 132, não 125. Não há, nos fatos fornecidos e nos casos escritos, prova suficiente para declarar algum colab-dia obrigatoriamente ATUAL e, portanto, FUTURO errado. Há escolhas de campos amparadas pela regra e várias combinações sem caso escrito.** (a1v2_par_det.txt:1–351; app/chamados/tests/test_e3_portas_tarefa.py:32–111)
+
+Uso estas abreviações nas referências:
+
+- **D:n** = `a1v2_par_det.txt:n`, contando exclusivamente as linhas `PAR_DET` coladas, começando em 1.
+- **T:n** = [app/chamados/tests/test_e3_portas_tarefa.py](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/tests/test_e3_portas_tarefa.py):n.
+
+Os dois scripts `logs/sombra/e3_par_a_par.py` e `e3_par_det.py` não estão disponíveis nesta cópia; conferir sua emissão específica ficou **[nao verificado]**. O instrumento disponível confirma ATUAL=C17, FUTURO=`porta_da_tarefa`, e as projeções dos consumidores. (app/chamados/management/commands/diff_e3_sombra.py:46–59,126–130)
+
+**1. Regra aplicável por grupo**
+
+Para G6–G10, explicito abaixo a numeração adotada: o enunciado não identifica suas assinaturas anteriores; a correspondência com aqueles números antigos é **[nao verificado]**.
+
+| Grupo | Quantidade e assinatura | Caso escrito e escolha que ele permite |
+|---|---|---|
+| **G1** | **35**, somente fila encolhe. (D:1–351) | **Sem caso escrito para múltiplos chamados da célula.** T:67–73 cobre uma pergunta sob um chamado da célula; não decide conservar/excluir os demais chamados. Faltam identidade, âncora e exigibilidade de cada porta retirada. |
+| **G2** | **68**, `chamado → nada`, fila esvazia. (D:1–351) | **53 sem vivas:** a cláusula “só fila sem pergunta” manda ausência de porta humana, portanto **FUTURO nesses campos**. Contudo, o caso também exige `perguntar/sistema/emissor`, ação ausente nesses 53: não há conformidade integral demonstrada. **15 com vivas: sem caso escrito** para a combinação apresentada. (T:3,32–38; exemplos D:2–3,10–11) |
+| **G3** | **30**, `colab → nada`, fila esvazia. (D:1–351) | **1 sem vivas**, pk **115432**: mesma conclusão parcial do caso 1, **FUTURO para ausência de porta**. **29 com vivas: sem caso escrito** que autorize escolher ATUAL ou FUTURO só com esses campos. (D:52; T:32–38) |
+| **G4** | **65**, `admin → nada`, fila esvazia. (D:1–351) | Todas têm vivas e ações vazias: **sem caso escrito** correspondente. Faltam decisões E1, identidade/âncora, lâmpadas, vencimento e razões por instância para explicar por que nenhuma ação permanece. (exemplos D:5–6; T:32–82; app/chamados/services/tarefa_do_dia.py:230–313) |
+| **G5** | **132**, `admin → colab`, sem diferença de fila. (D:1–351) | T:75–82 escreve que **`responder/colaborador` pode coexistir com verbo `validar`**. Isso ampara essa combinação, mas não certifica os 132 nem decide o desempate nos **8 com ações colab+admin**. **Sem caso escrito geral que imponha um dos lados ao grupo inteiro.** |
+| **G6** | **4**, `admin → colab` e fila encolhe. (D:23,94,96,180) | **Sem caso escrito** para a combinação: três têm ações colab+admin; uma somente colab; todas retiram outra porta da célula. Faltam regra de desempate e caso para múltiplas portas. (T:67–82) |
+| **G7** | **2**, fila esvazia, rota `porta_fila → porta_pergunta`, fio permanece. (D:26,225) | **130217:** corresponde à escolha A/B: responder sob B, retirar A residual; **FUTURO** nos campos comparados. **134521:** a ação é `validar/admin/B`; **sem caso escrito nesse arquivo para essa variante**, que não é a ação responder usada no caso A/B. (T:40–55; D:26,225) |
+| **G8** | **7**, `admin → nada`, rota da pergunta desaparece; sem diferença de fila. (D:48,69,113,230–231,300,328) | Vivas presentes e ações vazias: **sem caso escrito** correspondente. Faltam identidade/âncora, decisões e exigibilidade por instância. (T:32–82; app/chamados/services/tarefa_do_dia.py:230–313) |
+| **G9** | **7**, `chamado → colab`; tarefa com verbo `historico`. (D:105–111) | T:100–111 admite verbo `historico` e fila vazia, mas **não decide esse fio**. **Sem caso escrito para escolher entre chamado e colab nessa combinação.** |
+| **G10** | **1**, `admin → colab`, fila esvazia e rota passa à pergunta; A=`decidir`, B=`validar`. (D:302) | O caso A/B ampara **FUTURO para rota/fila**, preservando o verbo de B; responder com verbo validar também está escrito. **O fio nessa combinação não recebe um teste explícito de desempate entre as duas formas de resumi-lo.** (T:40–55,75–82) | [nao verificado]
+
+A classificação automática `so_fila_sem_pergunta` verifica fila e ausência de vivas; ela não verifica todas as premissas do teste. Há inclusive ressalva escrita de que tarefa `nao_sei` por marco fora do turno **não seria o caso 1**. (app/chamados/management/commands/diff_e3_sombra.py:63–70; app/chamados/tests/test_e3_leitores_c17_chamadores.py:46–47)
+
+**2. Subgrupos e exemplos**
+
+Cada exemplo abaixo é **pk da célula**, seguido da referência ao anexo. Subgrupos unitários têm apenas um exemplo possível.
+
+| Grupo | Subgrupos exatos; exemplos |
+|---|---|
+| **G1 — 35** | **29** com `cobrar+decidir`: 141754 (D:1), 138821 (D:50). **4** com `cobrar+cobrar`: 129205 (D:195), 129879 (D:282). **1** com `cobrar+cobrar+decidir`: 142967 (D:341). **1** com `validar+decidir+decidir`: 142942 (D:340). Nenhuma dessas variantes ganha caso explícito para múltiplas portas em T:67–82. |
+| **G2 — 68** | **53 vivas vazias:** **51** sem ações — 120067 (D:2), 119985 (D:3); **1** com `rejulgar/sistema/cartorio` — 130929 (D:157); **1** com `validar/admin/null` — 120319 (D:294). **15 vivas presentes:** **12** com `responder/colaborador/null` — 118930 (D:10), 118931 (D:11); **2** com `decidir_ausencia/admin/null` — 138643 (D:166), 129575 (D:241); **1** com `validar/admin/null` — 141817 (D:338). A condição “sem pergunta” muda entre 53 e 15; nenhuma das ações observadas reproduz integralmente T:37–38. |
+| **G3 — 30** | **1** sem vivas: 115432 (D:52). **24** com vivas e ações vazias: 132340 (D:53), 129189 (D:57). **2** com `responder/colaborador/null`: 141714 (D:4), 141810 (D:337). **3** com `decidir_ausencia/admin/null`: 117062 (D:87), 112501 (D:223), 127887 (D:321). Por verbos: **28** somente cobrar, **1** cobrar+decidir (D:223), **1** somente decidir (D:321). |
+| **G4 — 65** | **61** somente validar: 130162 (D:6), 118933 (D:13). **4** validar+decidir: 130160 (D:5), 123932 (D:217), 129563 (D:235), 132052 (D:264). Todas têm vivas e ações vazias; trocar esses verbos não encontra caso específico em T:32–82. |
+| **G5 — 132** | **102** fila vazia, sem ação admin: 124787 (D:7), 124794 (D:8). **1** fila vazia, colab+admin: 115080 (D:139). **22** fila presente, sem ação admin: 123615 (D:16), 117853 (D:17). **7** fila presente, colab+admin: 130970 (D:90), 129663 (D:152). Portanto, **124 sem admin e 8 com admin**. Dos 124, um também tem ação sistema: 131734 (D:38). O caso misto colab+admin não está decidido em T:75–82. |
+| **G6 — 4** | **3** colab+admin: 127078 (D:23), 132926 (D:94), 139136 (D:96). **1** somente colab: 119775 (D:180). O caso misto e a retirada de porta adicional continuam sem teste específico. (T:67–82) | [nao verificado]
+| **G7 — 2** | **1** responder/colaborador/B, verbos A/B cobrar: 130217 (D:26), coberto pela escolha A/B. **1** validar/admin/B, verbos A/B validar: 134521 (D:225), variante sem caso escrito nesse arquivo. (T:40–55) |
+| **G8 — 7** | Vivas presentes e ações vazias: 131162 (D:48), 116182 (D:69). Nenhuma separação adicional que decida ATUAL/FUTURO foi demonstrada pelos campos apresentados. (D:48,69,113,230–231,300,328; T:32–111) |
+| **G9 — 7** | Todos com responder/colaborador e verbo da tarefa histórico: 110014 (D:105), 110016 (D:106). O teste de histórico não escolhe o fio. (T:100–111) | [nao verificado]
+| **G10 — 1** | 120408 (D:302): A decidir, B validar, responder/colaborador/B. Não há segundo exemplo. |
+
+**3. Onde o FUTURO é produzido e dono L-099**
+
+**Não há lista comprovada de “ATUAL obrigatório/FUTURO errado”.** As lacunas acima não autorizam declarar ATUAL correto; tampouco certificam FUTURO nos casos sem cobertura escrita. (T:32–111)
+
+Os pontos que produzem o FUTURO observado são:
+
+| Comportamento | Arquivo:linha |
+|---|---|
+| A ação recebe porta inteira apenas quando a âncora pertence à fila carregada; caso contrário, recebe `None`. | app/chamados/services/tarefa_do_dia.py:128–129 |
+| Decisões E1 escolhem responder, validar, materializar ou decidir ausência. | app/chamados/services/tarefa_do_dia.py:130–162 |
+| Lâmpadas, teto, cobertura e identidade podem deixar a instância sem ação ou `nao_sei`. | app/chamados/services/tarefa_do_dia.py:262–313 |
+| Só portas inteiras presentes nas ações e na fila global entram na publicação; isso pode encolher a fila. | app/chamados/services/tarefa_do_dia.py:547–551 |
+| O fio é escolhido pelos donos das ações, com colab antes de admin. | app/chamados/services/tarefa_do_dia.py:552–556 |
+| Sem rota, `porta_da_tarefa` devolve `None`; a projeção da folha transforma isso em `nada`. | app/chamados/services/tarefa_do_dia.py:559–565; app/chamados/management/commands/diff_e3_sombra.py:49–50 |
+
+**Dono individual L-099: [nao verificado].** O anexo não fornece os argumentos necessários ao juiz: horas do dia, cadastro × realidade, folga não definida, vínculo, batida fora do turno e fase deslocada. Motivo de pergunta não substitui esses argumentos. (app/ponto/management/commands/e6_oraculo.py:53–54; D:1–351)
+
+O juiz prioriza cadastro por folga/vínculo; depois batida fora do turno ou quantidade ímpar; depois fase deslocada; finalmente cadastro × realidade ou estrutura residual. Atribuir ESTRUTURA automaticamente a uma divergência de porta não seria executar esse juiz. (app/ponto/management/commands/e6_oraculo.py:98–110)
+
+**4. Perda de porta humana**
+
+**São 170 colab-dias passando a `nada`: 163 com verbo explicitamente apresentado em `verbos_c17`, mais 7 G8 cuja existência de verbo `validar` é deduzida do ATUAL `admin` pelo código do C17.** (D:1–351; app/chamados/juizes.py:1633–1639,1677–1688)
+
+**Nenhuma linha apresenta literalmente status `aberto`: os campos mostrados são `null`. A quantidade realmente aberta é [nao verificado].** Não interpretei `null` como aberto. (D:1–351)
+
+| Grupo | Quantidade | Pks das células |
+|---|---:|---|
+| **G2** | **68** | 103972, 104004, 104127, 105151, 105621, 105623, 105729, 105768, 105773, 106282, 106286, 106462, 106602, 106604, 106608, 106939, 107178, 108035, 108622, 108826, 109494, 109708, 110555, 110559, 110573, 111382, 112703, 112716, 113113, 113667, 113671, 113673, 113675, 113679, 113681, 115993, 116542, 116546, 116554, 117245, 118928, 118930, 118931, 118932, 118934, 119985, 120067, 120233, 120319, 123531, 129083, 129090, 129093, 129575, 129598, 129745, 129747, 129749, 129751, 130771, 130929, 138643, 140114, 140121, 140122, 140128, 141817, 142013. (D:2–339) |
+| **G3** | **30** | 112501, 115432, 117062, 121500, 127887, 127949, 129189, 129217, 129559, 129561, 129567, 129569, 129571, 129573, 129577, 130044, 130294, 130418, 130781, 132340, 133374, 135811, 136215, 137154, 137166, 138912, 138914, 138916, 141714, 141810. (D:4–337) |
+| **G4** | **65** | 33784, 104040, 104784, 106350, 106594, 106963, 108591, 108633, 110506, 111346, 111845, 115650, 116432, 116436, 118933, 119517, 120325, 120326, 120378, 120486, 122073, 123033, 123487, 123534, 123614, 123932, 123998, 124364, 124370, 124774, 127039, 127041, 127964, 128516, 128519, 129384, 129563, 129565, 129885, 129901, 130026, 130160, 130162, 130931, 130933, 130935, 130937, 130939, 132052, 132144, 133364, 135067, 135778, 138672, 139432, 140331, 140522, 140524, 140580, 140707, 140928, 141797, 143313, 143393, 143395. (D:5–345) |
+| **G8** | **7** | 113307 (D:113), 116182 (D:69), 127477 (D:328), 128533 (D:300), 130346 (D:230), 130348 (D:231), 131162 (D:48). |
+
+Nos sete G8, `verbos_c17={}` **não prova ausência de chamado com verbo**: o ATUAL é `porta_pergunta/admin`, e esse resultado do C17 exige âncora na fila global e verbo validar. O pk desse chamado não está apresentado nesses registros. (D:48,69,113,230–231,300,328; app/chamados/juizes.py:1633–1639,1677–1688)
+
+**5. Prioridade colab/admin e cobrar/validar**
+
+A escada `cobrar > validar` está em **`app/chamados/juizes.py:1624–1628`**, não em `core/juizes.py`: o comentário escreve que a pergunta devida pelo colaborador precede a validação pelo admin. A tarefa documenta colab/admin/sistema e aplica essa ordem aos **donos das ações**. (app/chamados/services/tarefa_do_dia.py:39,552–554)
+
+**Não há, em `test_e3_portas_tarefa.py`, caso escrito que determine qual dessas duas formas de resumir o dia vence quando elas divergem, nem caso explícito de ações simultâneas colab+admin.** O teste escreve justamente que ação responder e verbo validar podem coexistir. (T:32–111, especialmente 75–82) [nao verificado]
+
+Há uma escolha escrita adicional para o **vigia**: o papel da porta vem do fio da tarefa, independentemente do verbo do painel. Isso decide a leitura do vigia; não constitui um teste da prioridade interna entre ações colab e admin. (app/chamados/tests/test_e3_bloqueantes.py:15–16,193–198)
+
+## 13/11 16:41 · sessao c2b6a137d107 · - · - · origem=Ronald (tmux)
+
+Auditoria independente confirmou:
+
+| Grupo | Contagem | Subgrupos |
+|---|---:|---|
+| G2 | 68 | 53 com `vivas_c17=[]`; 15 não vazias. Das 53: 51 ações vazias, 130929 `rejulgar/sistema/cartorio`, 120319 `validar/admin/null`. Das 15: 12 `responder/colaborador/null`, 2 `decidir_ausencia/admin/null` (138643,129575), 1 `validar/admin/null` (141817). |
+| G3 | 30 | 1 com vivas vazias (115432), 29 não vazias; verbo `cobrar` em 29, `decidir` em 127887. Ações vazias em 25; responder/null em 141714 e141810; decidir_ausencia/admin/null em117062,112501,127887. |
+| G4 | 65 | Todas com vivas não vazias e ações vazias. Verbo somente validar em61; validar+decidir em130160,123932,129563,132052. |
+| G8 | 7 | 131162,116182,113307,130346,130348,128533,127477. |
+
+Contagens auditadas por transcrição manual do anexo em memória e contagem JavaScript; referências de linhas individuais ficaram a cargo do agente contagem.
+
+Q4: **170 perdem porta humana**, sendo **163 com verbo explicitamente mostrado em `verbos_c17`** (G2+G3+G4) e **7 G8 com existência de verbo `validar` deduzida do fio ATUAL `admin`**: C17 só retorna porta com `_verbos` não vazio e calcula fio por esses verbos; `admin` exige presença de `validar`. (app/chamados/juizes.py:1633–1639,1677–1688)
+
+Nos sete G8, `fila_cel_c17=[]`, mas a rota ATUAL é `porta_pergunta`; portanto existe âncora sob chamado na fila global. Não se deve interpretar `verbos_c17={}` como ausência de chamado; o mapa completo retornado pelo C17 necessariamente contém `validar`, embora seu pk não esteja mostrado. (app/chamados/juizes.py:1677–1688)
+
+Todos os campos `status`/`status_disputa` mostrados nas vivas são `null`; **nenhum `"aberto"` explícito**. Quantidade realmente aberta: **[nao verificado]**. As listas completas dos163 pks foram enviadas por mensagem.
+
+## 13/11 16:41 · sessao 372c5381d4b8 · - · - · origem=Ronald (tmux)
+
+Recontagem das **351 linhas PAR_DET**, numeradas a partir da primeira linha do anexo colado:
+
+| Grupo por assinatura | Contagem |
+|---|---:|
+| G1: apenas fila encolhe | 35 |
+| G2: chamado→nada, fila→() | 68 |
+| G3: colab→nada, fila→() | 30 |
+| G4: admin→nada, fila→() | 65 |
+| G5: admin→colab, sem diferença de fila | **132** |
+| G6: admin→colab, fila encolhe | 4 |
+| G7: fila→(), rota fila→pergunta, sem diferença de fio | 2 |
+| G8: admin→nada, rota pergunta→None, sem diferença de fila | 7 |
+| G9: chamado→colab | 7 |
+| G10: admin→colab, fila→(), rota fila→pergunta | 1 |
+
+A numeração G6..G10 acima é convenção minha, porque o prompt não identifica as antigas assinaturas pequenas. As contagens somam 351; a contagem antiga G5=125 não se reproduz.
+
+Subgrupos conferidos:
+
+| Grupo | Fatos | n | Exemplos pk:linha PAR_DET |
+|---|---|---:|---|
+| G1 | verbos cobrar+decidir, qualquer ordem | 29 | 141754:1; 138821:50 |
+| G1 | cobrar+cobrar | 4 | 129205:195; 129879:282 |
+| G1 | cobrar+cobrar+decidir | 1 | 142967:341 |
+| G1 | validar+decidir+decidir | 1 | 142942:340 |
+| G2 | vivas vazias, ações vazias | 51 | 120067:2; 119985:3 |
+| G2 | vivas vazias, rejulgar sistema | 1 | 130929:157 |
+| G2 | vivas vazias, validar admin, porta null | 1 | 120319:294 |
+| G2 | vivas não vazias, responder colab, porta null | 12 | 118930:10; 118931:11 |
+| G2 | vivas não vazias, decidir_ausencia admin, porta null | 2 | 138643:166; 129575:241 |
+| G2 | vivas não vazias, validar admin, porta null | 1 | 141817:338 |
+| G3 | vivas vazias | 1 | 115432:52 |
+| G3 | vivas não vazias, ações vazias | 24 | 132340:53; 129189:57 |
+| G3 | vivas não vazias, responder colab, porta null | 2 | 141714:4; 141810:337 |
+| G3 | vivas não vazias, decidir_ausencia admin, porta null | 3 | 117062:87; 112501:223; terceiro 127887:321 |
+| G3 | só cobrar | 28 | 141714:4; 115432:52 |
+| G3 | cobrar+decidir | 1 | 112501:223 |
+| G3 | só decidir | 1 | 127887:321 |
+| G4 | só validar | 61 | 130162:6; 118933:13 |
+| G4 | validar+decidir | 4 | 130160:5; 123932:217; demais 129563:235 e 132052:264 |
+| G5 | fila vazia, sem ação admin | 102 | 124787:7; 124794:8 |
+| G5 | fila vazia, colab+admin | 1 | 115080:139 |
+| G5 | fila não vazia, sem ação admin | 22 | 123615:16; 117853:17 |
+| G5 | fila não vazia, colab+admin | 7 | 130970:90; 129663:152 |
+| G6 | colab+admin | 3 | 127078:23; 132926:94 |
+| G6 | só colab | 1 | 119775:180 |
+| G7 | responder colab sob B; verbos A/B cobrar | 1 | 130217:26 |
+| G7 | validar admin sob B; verbos A/B validar | 1 | 134521:225 |
+| G8 | fila vazia, verbos vazios, ações vazias; vivas não vazias | 7 | 131162:48; 116182:69 |
+| G9 | fila vazia; verbo_tarefa historico; responder colab | 7 | 110014:105; 110016:106 |
+| G10 | A decidir, B validar; responder colab sob B | 1 | 120408:302 |
+
+G5 possui **123 registros somente com ações colab**, **8 com colab+admin** e **1 com colab+sistema**, este último 131734:38. Portanto “sem admin” é o rótulo correto para os 124 restantes; “somente colab” não cobre 131734:38.
+
+Para Q4: **163 registros** têm FUTURO nada e verbo em `verbos_c17`: G2=68, G3=30, G4=65. Listas completas e linhas foram enviadas em mensagens anteriores. Os sete G8 não têm verbo C17, e todos os status presentes no anexo são null; nenhum registro comprova `status='aberto'`. Os G8 são 131162:48, 116182:69, 113307:113, 130346:230, 130348:231, 128533:300 e 127477:328.
 
 ## 13/11 16:39 · sessao b13326346ebb · - · - · origem=Ronald (tmux)
 
@@ -835,74 +1001,4 @@ Globais não devem virar falsos desencontros: `request` e `messages` vêm dos pr
 
 As lacunas precisas são: todos os campos aninhados de `dias/semanas/resumo_mes/escala_resumo`, `resumos[].{pront,folha,causa}`, `colabs` da HE, `historico/resumo_historico` e todas as referências herdadas dos layouts/includes comuns. Seus escritores e consumidores completos não foram fechados neste complemento. Total de costuras do módulo e quantidade completa sem selo permanecem [não verificado].
 
-## 13/11 15:46 · sessao 3a3451fa21d5 · - · - · origem=Ronald (tmux)
-
-Consolidado por **estrutura × módulo emissor × módulo consumidor**, incluindo auxiliares que efetivamente leem o mesmo dict e excluindo caches que apenas transportam:
-
-- `celulas_do_periodo`: **15 módulos consumidores identificados**; referências enviadas na mensagem anterior. Escritor `escala/alimentacao.py:73-78`. Ausência de consumidores indiretos adicionais `[nao verificado]`.
-- `folgas_do_periodo`: **1 módulo consumidor efetivo**, `escala/models.py:1281`, chave dinâmica `ec.pk`, default `frozenset()`. Escritor `escala/alimentacao.py:97-102`. Selos de cadeia `escala/tests/test_selo_alimentacao_dias.py:59-73,96-108`.
-- `escalas_do_periodo_por_colab`: **6 módulos consumidores**: `escala/folgas.py:79`; `escala/services/cadastro_realidade.py:511,528`; `escala/services/propositor.py:442,446`; `ponto/turnos.py:2361,3038,3058`; `ponto/portas/regen_exportada.py:147`; `folha/previa.py:81`. Escritor `escala/alimentacao.py:145-160`. Defaults `[]` ou `()` para chave cid ausente. Selo explícito de cadeia para turnos: `escala/tests/test_o131_um_carregador_de_candidatos.py:192-224`; demais selos específicos `[nao verificado]`.
-- `vinculos_do_dia_carregado`: **3 módulos consumidores**, `escala/proposta_pdf.py:36`; `chamados/services/validacao.py:902-903`; `ponto/management/commands/gerar_celulas.py:321`. Escritor `escala/alimentacao.py:329-331`, chave cid, valor EC ou None. Selos específicos `[nao verificado]`.
-- `vinculos_dos_dias`: **4 módulos consumidores**, `colaboradores/management/commands/marcar_feriado_do_posto.py:110`; `chamados/services/fila_por_causa.py:176`; `ponto/services/cadastro_futuro.py:40-41`; `ponto/services/vigia_cadastro_futuro.py:56`. Escritor `escala/alimentacao.py:350-358`, chave `(cid,data)`; primeiro consumidor usa `.get` default None, demais `[]`. Selos específicos `[nao verificado]`.
-- kwargs de alimentação utils → models: **1 costura**, emissores `escala/utils.py:2215,2218,2265,2269,2291`; chaves opcionais `celulas,folgas`, somente valores não None; consumidores `escala/models.py:1069,1098,1166`, defaults None. Selo da cadeia específica `[nao verificado]`.
-
-São **30 costuras adicionais identificadas** nesse bloco. Nenhum desencontro de chave demonstrado nesse bloco; exaustividade dos aliases indiretos `[nao verificado]`.
-
-Para `grade_da_celula`/`remapear_na_regua`, considerei o mesmo contrato de grade produzido pelo módulo `escala/services/leitor_celula.py`, agrupando as duas funções na costura de espelho. O inventário entregue tem **23 módulos consumidores efetivos**:
-
-| Módulo consumidor | Leitura | Selo da cadeia ou seletor |
-|---|---|---|
-| `relatorios/furos.py` | `:132-139,194-206` | sim: `escala/tests/test_f1c_contrato.py:61-62` |
-| `escala/services/furos_diarios.py` | `:18-22,45-54` | sim: `escala/tests/test_cobparc_rotulo_furos_diarios.py:58-67` |
-| `inteligencia/calculadores.py` | `:48-64,147-161,333` | sim: `inteligencia/tests/test_t42_calculadores_celula.py:25-30` |
-| `ponto/worklist.py` | `:18-21` | sim: `ponto/tests/test_worklist_ata.py:44-68` |
-| `colaboradores/services/calendario.py` | `:353-385` | sim: `colaboradores/tests/test_relogio_riscado_calendario.py:86-106` |
-| `ponto/services/bordas_realizado.py` | `:49-51,71-87` | cadeia específica `[nao verificado]`; testes do predicado `ponto/tests/test_bordas_realizado.py:119-152` |
-| `chamados/services/materializacao.py` | `:234-243,284-300` | sim: `chamados/tests/test_p71_marco_sem_hora.py:31-46` |
-| `chamados/services/declaracao_texto.py` | `:104-133` | sim: `chamados/tests/test_hx_ata_nao_sabe.py:57-99` |
-| `chamados/services/disputa_emissao.py` | `:84-85` | `[nao verificado]` |
-| `chamados/services/tarefa_do_dia.py` | `:88-89,461-467,499-501` | sim: `chamados/tests/test_e2_tarefa_do_dia.py:603,1380-1391` |
-| `ponto/management/commands/propor_reorganizacao.py` | `:66,91-112` | `[nao verificado]` |
-| `ponto/management/commands/emitir_furo_retroativo.py` | `:90-102` | sim: `ponto/tests/test_t42_furo_retroativo_celula.py:20-25` |
-| `ponto/management/commands/supra_juiz.py` | `:205-224` | sim: `ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:164,215-230` |
-| `ponto/supra_juiz.py` | `:70-71,222-530` | sim: `ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:41-70` |
-| `folha/export.py` | `:1095-1106`, wrapper `:338` | sim: `folha/tests/test_borda_celula.py:62-68` |
-| `folha/causas.py` | `:35-43,58,84-100` | cadeia específica `[nao verificado]`; teste de contrato sintético `folha/tests/test_causas_sem_previsao.py:24-67` |
-| `ponto/services/fechamento.py` | `:1020,1043-1050` | sim: `ponto/tests/test_o48_sem_celula_nao_e_zero.py:96-185` |
-| `ponto/services/dia_pago.py` | `:387-400` | cadeia específica `[nao verificado]`; leis do consumidor `ponto/tests/test_retrato_exportada.py:46-65` |
-| `ponto/management/commands/mapa_divergencia.py` | `:99-155,174-194` | `[nao verificado]` |
-| `ponto/propositor.py` | `:209-213` | `[nao verificado]` |
-| `chamados/juizes.py` | `:438` | cadeia específica `[nao verificado]` |
-| `escala/utils.py` | `:845-849,957-965,1086-1110` | sim para isenção: `escala/tests/test_leitor_isento.py:64-90`; demais trechos `[nao verificado]` |
-| `ponto/services/espelho.py` | `:519-524,677-685,856,892-893` | sim: `escala/tests/test_fronteira_remap.py:64-91` |
-
-Nesse bloco de grade: **23 costuras identificadas; 14 com selo de cadeia/seletor localizado e 9 sem selo específico localizado** — “sem selo” como ausência de localização nesta leitura, não prova de inexistência `[nao verificado]`.
-
-Nenhum desencontro novo foi fechado aqui. As variantes sem célula omitem campos específicos como `celula_id/n_ok/n_casadas`, enquanto os consumidores localizados usam guardas ou `.get`; produtores e variantes estão em `escala/services/leitor_celula.py:390-445`. `futuro/fora_janela` lidos no espelho são acrescentados pelo mutador `escala/utils.py:951-965`, chamado em `ponto/services/espelho.py:521`; não são falta demonstrada no contrato.
-
-**Total dos dois blocos adicionais: 53 costuras identificadas**, além das 13 do levantamento anterior; unicidade com as costuras já enumeradas pelo root exige consolidação `[nao verificado]`.
-
-## 13/11 15:45 · sessao e4cbbc1b1738 · - · - · origem=Ronald (tmux)
-
-Inventário entregue nas quatro mensagens, com emissores, chaves, consumidores, defaults e selos localizados. Correções posteriores prevalecem: `cadastro_realidade.lista` possui também leitores em `vigia_fio`, `fechar_chamados_vinculo_na_lista` e `fechar_avisos_regua_na_lista`; o diagnóstico `n_dias` é consumido em `ponto/services/diagnostico_escala.py:240`.
-
-Limite principal: a busca estática não prova resolução completa de aliases, chamadas dinâmicas nem leitores JavaScript de APIs; completude global `[nao verificado]`. Nenhum arquivo foi alterado e nenhum banco, log ou teste foi executado. [nao verificado]
-
-## 13/11 15:45 · sessao 2c14b553a604 · - · - · origem=Ronald (tmux)
-
-Censo local entregue nas mensagens anteriores: 28 pares nominais de `CelulaDia.ata`, 20 de DNA, 7 de JSON do fechamento e 17 linhas de métricas antes da deduplicação com o censo principal; completude global e total final [não verificado].
-
-Ajustes essenciais para consolidar:
-
-- Incluir `desfazer_julgamento_da_futura` como escritor da variante `ata=None`. `app/ponto/portas/celula.py:1165`.
-- Agrupar os leitores de `chamados/juizes.py` numa única costura por estrutura; há leituras em `:450`, `:965` e `:1354`.
-- Se repasses indiretos contam, acrescentar ATA/DNA → `ponto/turnos.py`, que carrega células e delega a `periodos_do_dia`. `app/ponto/turnos.py:1582`, `app/ponto/turnos.py:1586`.
-- `DiaPago.detalhe`: escritores confirmados em `app/ponto/services/dia_pago.py:346`, `:358`, `:474`, `:512`; leitor nominal confirmado somente no mesmo módulo, em `:897`. Leitor externo da estrutura [não verificado].
-- `Advertencia.detalhe_json`: emissor encontrado fora de ponto, em `app/chamados/services/acoes_chamado.py:203`; não entra como estrutura escrita por ponto.
-- `ata.precedencia`: escritor em `app/ponto/services/cartorio.py:2000` e `app/ponto/portas/celula.py:1213`; leitor de negócio em outro módulo [não verificado].
-- `diff_calculador.py:546` lê `Rubricas.detalhe`, não `DiaPago.detalhe`: tipo e atribuição em `app/ponto/management/commands/diff_calculador.py:427`, `:502`.
-- Não tratar chaves diagnósticas como absolutamente órfãs quando existe leitura opaca do blob; hash do fechamento inclui ambos os JSON em `app/ponto/portas/regen_exportada.py:56`, `app/ponto/management/commands/lavrar_dias_pagos.py:70`.
-
-Selos conferidos incluem transporte de isenção, cobertura parcial e métricas C8/C12; vários outros testes só cobrem fixtures ou leitores isolados, portanto não demonstram a costura completa. `app/ponto/tests/test_carimbo_isencao_lampada.py:144`; `app/escala/tests/test_cobparc7_leitor_transporta_a_lampada.py:29`; `app/ponto/tests/test_c2_vinculo_vira_lista.py:73`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:84`; `app/folha/tests/test_retrato_folha_quadros.py:1464`.
-
-_4671 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4674 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
