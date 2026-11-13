@@ -1,7 +1,125 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 15:53** · publicado em **13/11/2026 15:56** (UTC-3)
+> Ultima resposta processada: **13/11/2026 15:57** · publicado em **13/11/2026 16:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 15:57 · sessao 07b93e1ddafe · CONTRATOS-ENTRADA · censo · origem=Code
+
+**O censo não ficou fechado para TODO o módulo.** Abaixo estão as costuras rastreadas e os desencontros confirmados; total exaustivo de costuras, desencontros e ausência de selo permanece **[não verificado]**. Não usei como evidência de produção os números mencionados em comentários do código. **[não verificado]**
+
+Método: busca textual e inspeção AST de `JSONField`, atribuições de dict, mutações posteriores, `contexto_json`, contexto de disputa, portas com dict/kwargs, eventos, auditoria e renderização; depois leitura dos consumidores e dos testes localizados. As raízes persistidas incluem `DiaPago.detalhe`, os dois JSON do fechamento e `Advertencia.detalhe_json`; portas e renderização ampliam esse universo. (`app/ponto/models.py:378`, `app/ponto/models.py:451`, `app/ponto/models.py:452`, `app/ponto/models.py:1173`, `app/ponto/registro_batida.py:94`, `app/ponto/views.py:193`)
+
+A unidade adotada é **estrutura × módulo gravador × módulo leitor**, reunindo os sítios do mesmo módulo. Leitura integral, cópia e hash contam como consumo opaco; não equivalem à interpretação de uma chave. Há exemplos desses consumos no contexto de chamados, na emissão de disputa e no hash do fechamento. (`app/chamados/services/contexto.py:70`, `app/chamados/services/disputa_emissao.py:54`, `app/ponto/portas/regen_exportada.py:56`)
+
+O método não demonstrou todos os aliases dinâmicos, os kwargs indiretos, todos os includes transitivos nem todos os escritores complementares externos. Também não demonstrou inexistência global de testes. **[não verificado]** [nao verificado]
+
+Nas tabelas, os caminhos começam em `app/`; `P` significa `app/ponto/`, `C` significa `app/chamados/` e `T` significa `app/templates/`. `NV` significa **selo da costura não verificado**, e não prova de que nenhum teste exista. O dono indicado como **ESTRUTURA provável** é inferência sobre o desencontro entre contratos, pela distinção da L-099; não é classificação do dado de produção. (`CLAUDE.md:179`) [nao verificado]
+
+**Desencontros comprovados nos pares abaixo.** Defaults e caminhos alternativos estão registrados; ocorrência ou consequência em produção permanece **[não verificado]**.
+
+| Estrutura | Emissor | Chaves gravadas | Consumidor | Chaves lidas | DESENCONTRO | Selo que prende | Dono provável | Classe |
+|---|---|---|---|---|---|---|---|---|
+| Disputa de selfie retroativa | `P/management/commands/marcar_foto_ausente_retro.py:98` | `foto_ausente.{tipo_batida,batida_id,batida_em,_por}` | `C/services/disputa_emissao.py:372`, `:387` | `[motivo].data`; `ultima_batida.id`, ambos com ausência tolerada | A referência gravada fica em outra posição; o leitor não consulta `foto_ausente.batida_id` | NV; o teste verifica a gravação, não este consumidor: `P/tests/test_bug126_selfie_invisivel.py:65` | ESTRUTURA | sim |
+| Mesma disputa | mesmo emissor `:98` | mesmas chaves | `C/models.py:3464` | `ultima_batida.id`, default `None` | A identidade do nascimento não consulta a referência gravada | NV; limite do teste acima | ESTRUTURA | sim |
+| Mesma disputa | mesmo emissor `:98` | mesmas chaves | `api/foto_recebida.py:67` | `ultima_batida={}`; `id=None` | O fechamento por upload separado procura outra posição | NV | ESTRUTURA | sim |
+| Contexto `turno_aberto` | `P/management/commands/processar_alertas_turno.py:348` | `data_turno,entrada_timestamp,posto` | `C/services/disputa_emissao.py:54`, `:59`, `:68` | Funde os contextos; procura `entrada_sem_saida.entrada_id/entrada_aberta_em` ou `ultima_batida.id`; outra função lê `entrada_timestamp` em `:145` | `_data_furo_da_grade` não usa `entrada_timestamp`; as referências alternativas não vêm deste emissor | NV | ESTRUTURA | sim |
+| Contexto `turno_aberto_24h` | `P/management/commands/processar_alertas_avancados.py:126` | `data_turno,entrada_timestamp` | mesmo consumidor `:54`, `:59`, `:68`, `:145` | mesmas chaves | Mesmo desencontro no helper de data | NV | ESTRUTURA | sim |
+| Contexto `turno_aberto_24h` retroativo | `P/management/commands/emitir_turno_aberto_retroativo.py:128`, persistência `:156` | `data_turno,entrada_timestamp` | mesmo consumidor `:54`, `:59`, `:68`, `:145` | mesmas chaves | Mesmo desencontro no helper de data | NV; teste da presença de `entrada_timestamp`: `P/tests/test_passe_turno_aberto_retroativo.py:102` | ESTRUTURA | sim |
+| `sem_previsao_escala.data_inicio` | `P/management/commands/detectar_ausencias.py:231`, `:532` | Primeiro `ec.data_inicio`; segundo `data_ref`, com causa `dia_sem_grade` | `C/catalogo/modulos.py:126`, `:225` | `data_inicio`, declarado início de período; default `None` | Mesmo nome para início do vínculo e dia da lacuna | NV | ESTRUTURA | sim |
+| Entrada bloqueada | `P/views.py:280`, renovação `:288`, nascimento `:301` | `pendentes,total` | `C/catalogo/modulos.py:182`, `:225` | `data_turno`, default `None` | O catálogo pede uma chave que esse emissor não grava | NV | ESTRUTURA | sim |
+| WebPush central | `P/webpush.py:44` | `title,body,url` | `static/sw.js:88`, `:102` | `title`/`body` com defaults; `urgente=false`; clique abre `/` | `urgente` não é gravada; o clique não usa `url` | NV | ESTRUTURA | sim |
+| WebPush avançado N3 e DP | `P/management/commands/processar_alertas_avancados.py:207`, `:240` | `title,body,url,requireInteraction` | `static/sw.js:88`, `:102` | `title,body,urgente`; clique abre `/` | Emissor usa `requireInteraction`, leitor usa `urgente`; clique não usa `url` | NV | ESTRUTURA | sim |
+| WebPush de turno | `P/management/commands/processar_alertas_turno.py:279` | `title,body,url,requireInteraction` | `static/sw.js:88`, `:102` | mesmas leituras | Mesmo desencontro | NV | ESTRUTURA | sim |
+| Contexto do lote de fechamento | `P/views.py:1087` | `resumos,proximo_offset,restantes,qs_lotes` | `T/ponto/_fech_linha.html:13`, `:42`, `:47`, via include `T/ponto/_fech_lote.html:8` | `empresa_id,periodo_fechado`, além de `r` local | As duas raízes não vêm do render do lote; a página principal as fornece | NV; testes de lote conferem quantidade/ordem: `P/tests/test_selo_lotes_fechamento.py:57` | ESTRUTURA | sim |
+| Contexto da triagem no seletor | `P/services/triagem_batida.py:206` | `tem_bloqueio_turno` | `P/views.py:229` | `.get('entrada_bloqueada_turno_aberto')` | Nomes diferentes para selecionar o ramo de regularização | NV; teste afirma a chave do produtor: `P/tests/test_f7_triagem_caracterizacao.py:78` | ESTRUTURA | sim |
+| Contexto da triagem apta | `P/services/triagem_batida.py:758` | `sucesso,batida_id,tipo_batida,hora_registro,aviso_do_dia` | `T/ponto/triagem/apto.html:39` | `saida_sem_entrada` | Esse nome é gravado no contexto da disputa, não no contexto de tela inspecionado: `triagem_batida.py:738` | NV | ESTRUTURA | sim |
+| Contexto do painel de ausência | `P/views.py:2079`, helpers `:2032`, `:2046` | `a,raiz,irmaos,cobre_parte_do_dia,tipos,parciais,pode_editar,escala_rotulo,status_fundo,status_cor,historico,resumo_historico,periodo_aquisitivo,pdf_historico_url` | `T/ponto/partials/painel_ausencia.html:282` | `volta_url`, além das raízes fornecidas | `volta_url` não é fornecida por esses escritores | NV; teste parcial do histórico: `P/tests/test_drawer_ausencia_no_molde.py:112` | ESTRUTURA | sim |
+
+O exemplo informado, portanto, confere nas **três** costuras da selfie acima. Isso não permite dizer que `foto_ausente.batida_id` nunca é transportada: a emissão copia o contexto inteiro antes de interpretar suas referências. (`P/management/commands/marcar_foto_ausente_retro.py:98`, `C/services/disputa_emissao.py:54`, `C/services/disputa_emissao.py:387`, `C/models.py:3464`, `api/foto_recebida.py:67`)
+
+Os esquemas persistidos de célula encontrados foram estes:
+
+| Estrutura | Escritores e chaves |
+|---|---|
+| **ATA** | Construção em `P/services/cartorio.py:738`: `tipo_dia,lampadas,minutos_previstos,minutos_realizados,sem_ancora,n_orfas,orfas,n_missing,n_celulas`; cobertura parcial em `:772`; transformações de dispensa em `:808` e teto em `:915`. Persistência pela porta em `P/portas/celula.py:1064`, `:1091`; precedência em `:1213`; variante `ata=None` em `:1165`. |
+| **L**, item de `ATA.lampadas` | `tipo,hora,acesa,luz,tipo_real`, nas variantes de `P/services/cartorio.py:672`, `:676`, `:678`, `:711`, `:722`; opcionais `isencao` em `:590`, `dispensada` em `:808`, `pendente` em `:915`. |
+| **DNA** | Construtor `P/management/commands/gerar_celulas.py:83`, `:104`: `dna_versao,vinculo_id,tipo_escala_id,tipo_ciclo,marcos,minutos_jornada,intervalo_livre,lampadas`; `marcos` contém `hi,hf,hii,hfi`, com pausas adicionais condicionais; `extra_declarada.{antes,depois}` em `:131`. |
+| Persistência do DNA | Mesmo módulo gravador, funções distintas: `P/portas/celula.py:261`, `:278`, `:294`, `:306`, `:638`, `:642`, `:827`, `:917`, `:925`. A reversão em `:827` restaura um blob histórico; esquema de todos esses históricos **[não verificado]**. |
+| **DNA anterior** | Blob anterior gravado em `P/portas/celula.py:262`, `:307`; restauração e leitura de `marcos,vinculo_id` em `:824`. |
+| **Precedência na ATA** | `P/services/cartorio.py:2000`: `tipo_do_dia,faixa,rotulo,suprimidos,era_dia_previsto,texto`; escrita pela porta `P/portas/celula.py:1213`. Leitor de negócio em outro módulo **[não verificado]**. |
+
+Para as costuras de ATA abaixo, o gravador persistente é `P/portas/celula.py:1064`, `:1091`, com os escritores e variantes descritos acima. `—` significa nenhum desencontro nominal confirmado **nessa leitura**, não certificação global. Selo integral dos pares não indicado permanece **NV**.
+
+| Estrutura | Emissor | Chaves gravadas | Consumidor | Chaves lidas/defaults | DESENCONTRO | Selo | Dono provável | Classe |
+|---|---|---|---|---|---|---|---|---|
+| ATA | `P/portas/celula.py:1091` | ATA/L | `escala/services/leitor_celula.py:385`, `:436`; item `:119` | Campos da ATA; L, inclusive `isencao,dispensada`; default de `acesa` pela existência de `luz` | Opcionais de L não vêm de todas as variantes; `acesa=None` tem tratamento próprio | Parcial: `P/tests/test_carimbo_isencao_lampada.py:144`; `escala/tests/test_cobparc7_leitor_transporta_a_lampada.py:29` | ESTRUTURA | sim, formal |
+| ATA | mesmo `:1091` | ATA/L | `P/juiz_batida.py:157` | `lampadas=[]`, `orfas=[]`; L `hora,tipo,acesa,luz,tipo_real` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/worklist.py:22` | `lampadas` ou `[]` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/diagnostico_escala.py:154` | L `hora,tipo,acesa,luz`; `bool(acesa)` | `None` perde a distinção de falso nesse retrato; consequência **[não verificado]** | NV | ESTRUTURA | não verificada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/esmeril_espelho.py:125` | `orfas=[]`; L `luz,hora,acesa`, defaults vazios | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/vigia_pareador_celula.py:74` | `n_orfas=0,orfas=(),lampadas=[]`; L `tipo,hora,acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/cluster_espurio.py:27` | `orfas,lampadas`, ausência retorna `None`; L `acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/dia_do_colab.py:30` | L `hora,tipo,acesa,luz`; `bool(acesa)` | Distinção `None/False` não aparece nesse booleano; consequência **[não verificado]** | NV | ESTRUTURA | não verificada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/vigia_entrada.py:50`, `:80`, `:123` | `lampadas`; L `tipo,acesa` | Usa `bool(acesa)`; consequência **[não verificado]** | NV | ESTRUTURA | não verificada |
+| ATA | mesmo `:1091` | ATA/L | `P/management/commands/tripwire_celulas.py:264`, `:342` | `lampadas,orfas,tipo_dia,n_celulas`; L `hora,acesa` em `:172` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/management/commands/detectar_intervalo_ausente.py:64` | `lampadas`; L `tipo,hora,acesa,luz`; default de `acesa` por `luz` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/management/commands/ausencias_sem_efeito_na_celula.py:61` | `lampadas`; L `acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/management/commands/curar_residuo_bug115.py:45`, `:148` | Existência de `lampadas` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `C/juizes.py:450`, `:965`, `:1354` | `tipo_dia,cobertura_parcial,lampadas,orfas,n_orfas`; L `hora,tipo,acesa,luz` | `cobertura_parcial` é condicional; ausência é tratada pelo leitor | NV | ESTRUTURA | sim, formal |
+| ATA | mesmo `:1091` | ATA/L | `C/services/materializacao.py:172` | `lampadas=[],orfas=[]`; L `tipo,hora,luz,acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `C/reconciliador.py:701`, `:879` | `lampadas`; repassa ATA inteira | Leitura opaca adicional | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `C/services/fabrica_da_celula.py:123` | Repassa ATA ao julgamento da parcial | Consumo transitivo; todas as chaves desse percurso **[não verificado]** | NV | ESTRUTURA | não verificada |
+| ATA | mesmo `:1091` | ATA/L | `C/services/disputa_emissao.py:940` | Repassa ATA ao julgamento da parcial | Mesmo limite | NV | ESTRUTURA | não verificada |
+| ATA | mesmo `:1091` | ATA/L | `pautas/services.py:432` | L `hora,acesa`; lista default `[]` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `relatorios/dia_da_frota.py:20`, `:61` | `lampadas`; L `tipo,hora,acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `relatorios/cartao_pela_celula.py:287` | `orfas`; L `hora,isencao`; lista default `[]` | `isencao` é omitida na variante comum | NV | ESTRUTURA | sim, formal |
+| ATA | mesmo `:1091` | ATA/L | `colaboradores/services/feriado_do_posto.py:97`, `:115` | `lampadas`; L `acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `folha/previa.py:83` | `lampadas`; L `acesa,hora,tipo` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `folha/validacao_pdf.py:47` | `minutos_realizados=0` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `folha/services/sem_furo.py:20` | `lampadas`; L `acesa` | — | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/services/lastro.py:89`, `:128`, `:148` | L `hora,tipo,acesa,pendente` | `pendente` é condicional; portanto não é chave globalmente sem leitor | NV | ESTRUTURA | sim, formal |
+| ATA | mesmo `:1091` | ATA/L | `P/management/commands/vigia_b5_ausencia.py:79` | Repassa ATA; destino `cartorio.insumos_da_ata` lê `lampadas,n_orfas` e L `tipo,hora,acesa` em `cartorio.py:834` | — no percurso identificado | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/management/commands/backfill_b5_insumos.py:73` | Mesmo repasse ao leitor `cartorio.py:834` | — no percurso identificado | NV | ESTRUTURA | não constatada |
+| ATA | mesmo `:1091` | ATA/L | `P/turnos.py:1582`, `:1586`, `:1633` | Carrega célula e delega ao juiz da batida | Consumo transitivo da ATA | NV | ESTRUTURA | não constatada |
+
+Para DNA, todos os escritores persistentes encontrados estão nas funções da porta citadas no inventário. A coluna de gravador abaixo aponta a regeneração; edição, reversão e geração do período também escrevem a mesma estrutura. (`P/portas/celula.py:261`, `:638`, `:827`, `:917`)
+
+| Estrutura | Emissor | Chaves gravadas | Consumidor | Chaves lidas/defaults | DESENCONTRO | Selo | Dono provável | Classe |
+|---|---|---|---|---|---|---|---|---|
+| DNA | `P/portas/celula.py:261` | DNA | `escala/models.py:1124`, `:1189`, `:1235` | `marcos`, todos os pares de pausa; `extra_declarada.antes/depois=0` | Extras são condicionais no produtor | NV | ESTRUTURA | sim, formal |
+| DNA | mesmo `:261` | DNA | `escala/utils.py:53`, `:104`, `:137`, `:153` | `marcos`; `lampadas=[]`, itens `hora,instante` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/cartorio.py:484`, `:615`, `:840` | `dna_versao,marcos`; `hi,hf` e pares de pausa | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/juiz_batida.py:158` | `marcos={}`, todos os pares de pausa | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/esmeril_espelho.py:116` | `marcos`, via `marcos_presentes` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/veredito_celula.py:31` | `marcos`, todos os pares | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/diagnostico_escala.py:153`, `:172` | `marcos.hi/hf` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/vigia_cadastro_futuro.py:60`, `:79` | `vinculo_id`; compara blob inteiro com `montar_dna` | Consumo nominal e opaco | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/dia_do_colab.py:46` | Todos os marcos | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/vigia_entrada.py:126` | `marcos.hi/hf,tipo_ciclo` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/services/faltas_de_hoje.py:43` | `marcos.hi` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/management/commands/detectar_intervalo_ausente.py:53` | Marcos de todos os pares | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/management/commands/tripwire_celulas.py:30`, `:99`, `:259` | Blob inteiro e `marcos` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/management/commands/censo_col900.py:119` | `marcos` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/management/commands/aplicar_col900.py:174` | `marcos.hi`; DNA anterior em `:175` | Esquema histórico completo **[não verificado]** | NV | ESTRUTURA | não verificada |
+| DNA | mesmo `:261` | DNA | `P/management/commands/censo_fase_12x36.py:392` | Blob inteiro | Leitura opaca | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `pautas/services.py:424` | Todos os marcos | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `C/juizes.py:1348` | Marcos das pausas e chave do motivo | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `C/services/adesao.py:35` | `marcos`, via `marcos_presentes` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `escala/management/commands/celulas_contra_o_template.py:49` | Existência de `marcos` | — | NV | ESTRUTURA | não constatada |
+| DNA | mesmo `:261` | DNA | `P/turnos.py:1582`, `:1586`, `:1633` | Delega a `periodos_do_dia` | Consumo transitivo | NV | ESTRUTURA | não constatada |
+
+Os dois JSON do fechamento têm escritor localizado em `services/fechamento.py`; não confundi o campo persistido `motivos_espelho` com outro dict transitório produzido pelo exportador. (`P/services/fechamento.py:1067`, `:1080`, `:1186`, `folha/export.py:972`)
+
+| Estrutura | Emissor | Chaves gravadas | Consumidor | Chaves lidas | DESENCONTRO | Selo | Dono provável | Classe |
+|---|---|---|---|---|---|---|---|---|
+| `causa_espelho` | `P/services/fechamento.py:1080`, `:1082`, `:1187` | `{causa,dias_furo,dias_previstos,evidencia}` ou `None`; origem `folha/causas.py:31` | `P/services/fechamento_lista.py:122` | Dict inteiro ou `None` | — | NV | ESTRUTURA | não constatada |
+| mesma | mesmo escritor | mesmas chaves | `T/ponto/_fech_linha.html:16` | `causa`, default `zzz`; `evidencia` | Variante `None` é possível e a apresentação a admite | NV | ESTRUTURA | não constatada |
+| mesma | mesmo escritor | mesmas chaves | `folha/retrato_folha.py:1113` | `get('causa')=None`, com guarda de tipo | — | Parcial: `folha/tests/test_retrato_folha_quadros.py:1356`; usa mock da leitura em `:1340` | ESTRUTURA | não constatada |
+| mesma | mesmo escritor | blob inteiro | `P/portas/regen_exportada.py:56` | Campo inteiro no hash | Leitura opaca | NV | ESTRUTURA | não constatada |
+| mesma | mesmo escritor | blob inteiro | `P/management/commands/lavrar_dias_pagos.py:70` | Campo inteiro no hash | Leitura opaca | NV | ESTRUTURA | não constatada |
+| `motivos_espelho` | `P/services/fechamento
+
+[truncado em 20000 de 59955 caracteres]
 
 ## 13/11 15:53 · sessao 475ff71b94a6 · CONTRATOS-ENTRADA · censo · origem=Code
 
@@ -1334,40 +1452,4 @@ Os campos de cada proposta Q vêm dos emissores internos de `app/escala/services
 
 **Residual já localizado, ainda fora dessas 93:** lavra de fase em `app/escala/services/fase_12x36.py:85`, produzida pelo command `app/ponto/management/commands/censo_fase_12x36.py:279`; consumidores `app/escala/services/cadastro_realidade.py:421`, `app/api/views_mensageria.py:1685`, além dos leitores internos da lavra em `fase_12x36.py:97`, `:117`, `:197`. Lavra C7 em `app/escala/services/regua_na_lista.py:48`, consumidores `app/escala/services/cadastro_realidade.py:347` e `app/escala/views.py:469`. Há ainda `ancora_sugerida → propositor` em `app/escala/services/fase_12x36.py:50`/`:64` e `app/escala/services/propositor.py:333`, e `impacto_da_troca → julgar_vinculo` em `app/escala/services/impacto_troca.py:47` e `app/colaboradores/services/vinculo.py:142`. Essas pendências impedem chamar o subtotal de censo total.
 
-## 13/11 15:27 · sessao e6c5df440ac0 · - · - · origem=Ronald (tmux)
-
-Ampliação dos dicionários transitórios: **13 pares adicionais enumerados, sem desencontro de chave obrigatório demonstrado neste recorte**. O produtor de `alimentar_portas` e o produtor da tarefa são estruturas diferentes; não há chamada de `tarefa_do_dia` no corpo atual de `censo_alcance`. (`app/chamados/juizes.py:1585`; `app/chamados/services/tarefa_do_dia.py:182`; `app/chamados/services/vigia_fio.py:604`, `:635`)
-
-Todos os donos abaixo são **ESTRUTURA prováveis**, porque a unidade observada é o esquema entre funções/módulos, não a correção do cadastro ou da batida; classe **sim**, como contrato reutilizado. Atribuição provável, não resultado do oráculo L-099. (`CLAUDE.md:179`)
-
-Os testes citados foram lidos, não executados; estado RED/GREEN nesta cópia [não verificado]. [nao verificado]
-
-| # | Estrutura | Emissor; chaves escritas | Consumidor; chaves lidas/defaults | Desencontro | Selo que prende |
-|---|---|---|---|---|---|
-| T01 | partição dos verbos | `app/chamados/services/verbos.py:62`: `mapa`, `contagens`; mapa contém `chamado_id→verbo/None`; contagens contém `verbo→{n,atrasados,urgentes}` (`:37-39`) | `app/chamados/juizes.py:1540`: `['mapa']`, sem default | Não demonstrado; `contagens` não é consumida por este leitor, mas há outros leitores no próprio serviço (`verbos.py:201`) e fora deste recorte [não verificado] | Caminho real exercitado por `app/chamados/tests/test_e3_portas_tarefa.py:49-55` e `:113-127`; não é uma catraca de todo consumidor futuro |
-| T02 | alimentação de fila | `app/chamados/juizes.py:1549`: `verbo`, `fila_ids`, `fila_cel` | `app/chamados/services/tarefa_do_dia.py:529-532`, `:546-549`: `fila_ids`, `verbo[pk]`, `fila_cel.get(celula_id,())`; nenhum default de chave superior | Não demonstrado | **Sim:** `app/chamados/tests/test_e3_portas_tarefa.py:113-127`, `test_RED_lote_le_painel_uma_vez_sem_rejulgar_C6`, usa `wraps=alimentar_fila`, cobra uma alimentação, relógio, zero query na releitura e verbo da tarefa; casos de forma em `:32-82` |
-| T03 | alimentação completa C17 | `app/chamados/juizes.py:1585-1587`: anteriores + `vivas`, `colab`, `no_app={}`, `instancias`; `_no_app` acrescenta `no_app[colab_id]`/instância em `:1593-1601` | `app/chamados/services/vigia_fio.py:605`, `:610`, `:615`: `fila_ids`, `vivas`, `instancias`; passa a estrutura ao `_no_app` em `:621` e ao C17 em `:635` | Não demonstrado. Esse leitor usa os **insumos brutos**, além da resposta da porta | Integração do alcance lê produtor real em `app/chamados/tests/test_o261e_f5_alcance.py:310-315` e `:385-400`; selo independente de todas as chaves brutas [não verificado] |
-| T04 | alimentação completa C17 | `app/chamados/juizes.py:1585-1587`: `verbo,fila_ids,fila_cel,vivas,colab,no_app,instancias` | `app/escala/services/cadastro_realidade.py:484-488`: `vivas.get(pk) or ()`; restante encaminhado como `alimentacao` ao C17 | Não demonstrado | **Sim, integração de comportamento:** `app/escala/tests/test_f3_beco1_folga_na_lista.py:163-175`, `:177-196`, dois contraexemplos com C17 e lista reais; não checa lista textual de todas as chaves |
-| T05 | alimentação completa C17 | `app/chamados/juizes.py:1585-1587`: mesmas chaves | `app/chamados/management/commands/diff_e3_sombra.py:114`, `:62-64`: `fila_cel.get(cel_id,())`, `vivas.get(cel_id,())`, `fila_ids`; encaminha ao `_porta` em `:124` | Não demonstrado | **Sim:** `app/chamados/tests/test_e3_diff_sombra.py:150-163`, `test_AB_categorizado_e_diff_por_consumidor`, executa o command real e cobra casos A/B/diffs; `:165-174` cobre fila residual/isento |
-| T06 | resposta de porta C17 | `app/chamados/juizes.py:1667-1668`: `rota,fila,verbos,fio`, ou `None` em `:1655`, `:1664` | `app/chamados/services/vigia_fio.py:635`, `:642-646`: se não None, `verbos.values()` e `rota`; sem defaults | Não demonstrado. `fila`/`fio` não são lidos por este consumidor | **Sim:** `app/chamados/tests/test_o261e_f5_alcance.py:317-324`, `test_MORDE_o_papel_SEGUE_o_juiz_e_nao_uma_tabela_do_vigia`, troca resposta do juiz e exige mudança no papel; produtor C17 tem bateria `app/chamados/tests/test_e3_pendentes_app.py:160-192` |
-| T07 | resposta de porta C17 | `app/chamados/juizes.py:1667-1668`, ou None | `app/escala/services/cadastro_realidade.py:488`: só a distinção `is not None`, sem leitura de chave | Não demonstrado | **Sim:** dois contraexemplos reais `app/escala/tests/test_f3_beco1_folga_na_lista.py:163-196` |
-| T08 | resposta de porta C17 | `app/chamados/juizes.py:1667-1668`, ou None | `app/folha/fora_da_folha.py:67`, `:78`: `fio`, None→`FIO_SEM_PORTA`; `:225`: `.get('fila') or ()`, depois `list` | Não demonstrado | **Sim:** `app/folha/tests/test_haiku_fora_da_folha.py:93-112`, juiz falso diz `xyz`/`abc` e a folha deve conservar; `:114-148` garante que número do chamado sai de `fila`, não das âncoras em `verbos` |
-| T09 | resposta de porta C17 via casca `_porta` | `app/chamados/juizes.py:1667-1668`, casca devolve intacta em `app/folha/fora_da_folha.py:67` | `app/chamados/management/commands/diff_e3_sombra.py:124`, `:51-57`, `:139-141`: `fio,fila,rota,verbos`; None→`nada,(),None,[],False`, conforme projeção | Não demonstrado | **Sim:** `app/chamados/tests/test_e3_diff_sombra.py:138-144` fixa projeções; integração real em `:150-163` |
-| T10 | tarefa do dia/CargaDaTarefa | `app/chamados/services/tarefa_do_dia.py:182-183`: `colaborador_id,dia_do_turno,agora,celula_id,nao_sei,razao,instancias`; itens em `:256-258`, ações em `:113`; `:553-554` acrescenta sempre `rota,fila,verbos,fio` antes de `CargaDaTarefa.tarefa` retornar `:533` | `app/chamados/management/commands/diff_e3_sombra.py:125`, `:44`: `rota,fila,verbos,fio`, só projeta se `rota` truthy; `:68`: `razao`; sem defaults de chaves | Não demonstrado. Demais dados da tarefa não são necessários à projeção desse leitor | **Sim:** `app/chamados/tests/test_e3_diff_sombra.py:131-136`, conserva exatamente quatro campos e None sem rota; integração `:150-174`; produtor real de tarefas selado por `app/chamados/tests/test_e3_portas_tarefa.py:32-82` |
-| T11 | tarefa do dia para backfill | Mesmo produtor de T10; itens têm `instancia,tipo,hora,data_civil,lampada,vencido,motivo,pergunta_id,razao,acoes`; ação tem `acao,de,porta` (`app/chamados/services/tarefa_do_dia.py:113`, `:256-258`, `:316-318`) | `app/chamados/management/commands/backfill_fio_morto_e4b.py:87`, `:97-117`: `instancias`, `instancias[].{razao,pergunta_id,acoes}`, `acoes[].{de,acao,porta}`, `razao`, `nao_sei`; todos por acesso obrigatório, sem `.get` | Não demonstrado | Selo real produtor→backfill completo [não verificado]. `app/chamados/tests/test_e4b_classe_e_memoria.py:592-595` **substitui** tarefa por dict sintético e usa corpo real do leitor em `:638`; isso cobre leitor, não compatibilidade com produtor real |
-| T12 | relatório censo_alcance | `app/chamados/services/vigia_fio.py:571-575`: `alcance_universo,alcance_competencias,alcance_porta_fila,alcance_porta_pergunta,alcance_de_hoje_pra_frente,fio_morto_alcance,alcance_porta_exige_o_admin,alcance_e_detalhe,alcance_por_rota_papel,alcance_dias,alcance_dias_omitidos`, `alcance_<causas/baldes>`; `:589` acrescenta `alcance_cego`; retorno `:700` | `app/chamados/management/commands/vigiar_fio_morto.py:176`, `:189`: encaminha inteiro a `linhas_alcance`; `:240`: `fio_morto_alcance`; `:243`: persiste inteiro dentro do carimbo `alcance` | Não demonstrado; leitura nominal e cópia integral | Selo específico desse par [não verificado]. Integridade dos campos/listas do produtor coberta por `app/chamados/tests/test_o261e_f5_alcance.py:385-400` |
-| T13 | relatório/lista censo_alcance | Mesmo produtor de T12. Linha sempre `[celula_id,colab_id,data,competencia,rota,causa,detalhe,papel]` em `app/chamados/services/vigia_fio.py:629` | `app/chamados/management/commands/backfill_fio_morto_e4b.py:79`: `alcance_dias`, posição 4=`sem_porta`; `:239`: `alcance_universo,fio_morto_alcance`; `:242-254`: posições 3/1 e desempacota as oito colunas, parse ISO de `data` | Não demonstrado | Selo produtor→backfill real completo [não verificado]. Teste de backfill usa linha sintética de oito colunas em `app/chamados/tests/test_e4b_classe_e_memoria.py:620-626`; integridade do produtor isolado em `app/chamados/tests/test_o261e_f5_alcance.py:385-400` |
-
-A estrutura de `alimentar_portas` não pode ser tomada como “mesma resposta” da tarefa apenas por ambos terem informação sobre porta. A primeira entrega mapas brutos `fila_ids,vivas,instancias` usados no vigia (`app/chamados/juizes.py:1585-1587`; `app/chamados/services/vigia_fio.py:605-615`); a segunda entrega ações por instância e resume `fio` pelos donos das ações (`app/chamados/services/tarefa_do_dia.py:545-554`). O DIFF extrai da tarefa somente `rota,fila,verbos,fio` (`app/chamados/management/commands/diff_e3_sombra.py:27`, `:44`) e mede diferenças conhecidas por consumidor (`app/chamados/tests/test_e3_diff_sombra.py:161-163`). Isso é diferença declarada, não desencontro acidental comprovado.
-
-A memória e os números A1/A2/A3 da execução real não são inferíveis da leitura acima. [não verificado]
-
-Adicional fora dessa contagem de 13:
-
-| Estrutura | Emissor | Escritas | Consumidor | Leituras | Desencontro | Selo; dono; classe |
-|---|---|---|---|---|---|---|
-| push web de chamados | `app/chamados/push_utils.py:28-33` | `title,body,url,requireInteraction=True` | `app/static/sw.js:89-99`, `:102-107` | `title || 'Hasner Ponto'`, `body || 'Nova notificação'`, `urgente || false`; copia payload em notification.data | **Sim:** emissor escreve `requireInteraction`; consumidor procura `urgente`. `url` é transportada dentro de `data` (`:96`) mas o clique não a lê: foca primeira janela ou abre `'/'` (`:105-107`) | Selo específico [não verificado]; ESTRUTURA provável; classe sim |
-
-Correção à minha contagem anterior: os dois pares `data_turno` das APIs leves devem ser classificados como **semânticas distintas observadas**, não automaticamente defeito, porque o catálogo distingue os módulos e a consequência alcançável não foi verificada. Fontes da diversidade continuam `app/api/views.py:714-716`, `app/api/views_core.py:708-710`, `app/ponto/management/commands/processar_alertas_turno.py:349`. Assim, dos 57 pares anteriores há **4 incompatibilidades de chave demonstradas** (retro→gerador, retro→models, retro→foto_recebida, bloqueio→catálogo), mais duas diferenças semânticas cuja classificação como defeito é [não verificado].
-
-_4659 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4660 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

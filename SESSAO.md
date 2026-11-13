@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 15:56:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (575.3 MB). Acoes na janela: **1692**.
+**Medido em 13/11/2026 16:01:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (575.5 MB). Acoes na janela: **1702**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:01:18 | SendMessage |  | `-` |
+| 16:01:11 | ToolSearch |  | `-` |
+| 16:01:07 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=13; assert L[i].startswith('lei: BUG-PAR preverif2 item 3'), L[i][:40] L[i]=L[i].replace('lei: BUG-PAR','RESPONDIDA por aval BUG-PAR-103-NA-EXPORTADA 16:00 (DECIDIDO PELA LEI L-113; logs/AVAIS-1313/bug_par_103_na_exportada.txt) -- era: BUG-PAR',1) moved=L.pop(i); L.append(moved) if False else L.in ...` |
+| 16:00:59 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; cat > logs/AVAIS-1313/bug_par_103_na_exportada.txt <<'EOF' aval Ronald 13/11 (literal): BUG-PAR-103-NA-EXPORTADA = DECIDIDO PELA LEI L-113 (substitui qualquer versao anterior; nenhuma lei nova). UNIDADE: resposta de intervalo (pergunta) x colab-competencia. A L-113 (07/10, ALTERA a L-092) responde a lei do preverif2 item 3: o sistema calcula o que tem; val ...` |
+| 15:57:50 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '4s#TOTAL C (3 modulos): 28+23+15 = 66 costuras com desencontro listadas (escala 17 + chamados 23 + ponto 15 = 55 com desencontro)#TOTAL C (3 modulos): 66 costuras explicitadas (escala 28 + chamados 23 + ponto 15), 55 com desencontro (17+23+15)#' docs/RELATO.md; sed -n 4p docs/RELATO.md \| cut -c560-760` |
+| 15:57:46 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:'), L[2] L.insert(3,'PONTO 16:1x CODEX-CENSO-CONTRATOS-DE-ENTRADA parte ponto (censo_ponto.r, rc 0): >=15 costuras com desencontro, 15 sem selo demonstrado; total [nao verificado]. Amostra PROCEDENTE: triagem_batida.py:206 grava tem_bloqueio_turno, ponto/views.py:22 ...` |
+| 15:57:38 | Bash |  | `cd /home/ronald/saas-hasner/app; git grep -n "entrada_bloqueada_turno_aberto" -- '*.py' '*.html' \| /bin/grep -v tests \| head` |
+| 15:57:35 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 200,210p ponto/services/triagem_batida.py; sed -n 225,232p ponto/views.py` |
+| 15:57:31 | Bash |  | `cd /home/ronald/saas-hasner/logs/CONTRATOS-ENTRADA; /bin/grep -n "^\| *[A-Z]*0*1 \\|^\| *1 \\|^\| P01\\|^\| D01" censo_ponto.r \| head -n 3 \| cut -c1-200; awk 'NR>=1 && NR<=60 && /^\\|/' censo_ponto.r \| sed -n 3,17p \| cut -c1-330` |
+| 15:57:27 | Bash |  | `cd /home/ronald/saas-hasner/logs/CONTRATOS-ENTRADA; tail -n 1 log_ponto; wc -c censo_ponto.r; /bin/grep -n -i "contagem\\|não fechei\\|nao fechei" censo_ponto.r \| cut -c1-300; /bin/grep -n -A12 -i "^\*\*Contagem\\|^Contagem\\|\| Medida" censo_ponto.r \| tail -n 14 \| cut -c1-400` |
 | 15:54:23 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:'), L[2] L.insert(3,'PONTO 16:0x CODEX-CENSO-CONTRATOS-DE-ENTRADA parte chamados (censo_chamados.r, rc 0): 23 costuras com desencontro (D01-D23), 0 com selo do par demonstrado; total do modulo [nao verificado] (censo nao fechado). D01-D03 = o fio foto_ausente.batida ...` |
 | 15:54:15 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 60,72p chamados/views_arquivar.py; /bin/grep -n "erros" templates/chamados/partials/_lista_chamados.html \| head -n 3; sed -n 25,32p chamados/push_utils.py; sed -n 88,103p static/sw.js` |
 | 15:54:11 | Bash |  | `cd /home/ronald/saas-hasner/logs/CONTRATOS-ENTRADA; sed -n 1,40p censo_chamados.r \| cut -c1-500; sed -n 205,230p censo_chamados.r \| cut -c1-500` |
