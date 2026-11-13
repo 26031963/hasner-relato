@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 02:58:13.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1482**.
+**Medido em 13/11/2026 03:03:43.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1473**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1483,12 +1483,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:04:25 | Bash | Write sombra result and reversal command to RELATO | `cd /home/ronald/saas-hasner; ps -o pid,etime -p 3355209,3764476,3132159 ; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') nova=["ACERVO-TRANCA 15:2x item 2 SOMBRA (logs/acervo_tranca_item2.out; censo item 1 logs/ACERVO-TRANCA/censo_item1.r lido e conferido por amostra de 5 citacoes ANTES da sombra -- fechamento.html:208, furos_diarios.py:75-78, chamados/juizes.py:2043/1395, c ...` |
 | 15:04:14 | Bash | Write prod apply and reversal scripts | `mkdir -p /home/ronald/saas-hasner/logs/ACERVO-TRANCA; cd /home/ronald/saas-hasner/logs/ACERVO-TRANCA; cat > comum.py <<'EOF' # ACERVO-TRANCA-ANTES-DO-SISTEMA: base comum de prod (apply e reversao). So ids. import hashlib, json, os from django.contrib.auth.models import User from colaboradores.models import Empresa from ponto.models import PeriodoFechado, FechamentoMensal from escala.models import  ...` |
 | 15:03:51 | Bash | Check evento signature and prod shell pattern | `cd /home/ronald/saas-hasner/app; /bin/grep -n "^def evento" -A12 core/observ.py; docker exec saas_core ls /tmp >/dev/null && echo core-ok; /bin/grep -rn "tenant_command shell" ../bin/*.sh \| head -3` |
-| 15:03:42 | Bash | Read registrar_log | `cd /home/ronald/saas-hasner/app; sed -n 1,45p core/auditoria.py` |
-| 15:03:38 | Bash | Read view around tranca for trilha | `cd /home/ronald/saas-hasner/app; sed -n 1340,1380p ponto/views.py; /bin/grep -n "^def registrar\\|^def auditar\\|^def log_" core/*.py \| head` |
-| 15:03:35 | Bash | Find tranca callers and their trilha | `cd /home/ronald/saas-hasner/app; /bin/grep -rn "trancar_periodo(" --include=*.py . \| /bin/grep -v tests \| head; /bin/grep -n "trancar_periodo(" -B3 -A12 ponto/views.py \| /bin/grep -n "LogAuditoria\\|registrar\\|acao\\|auditar" \| head` |
-| 15:03:27 | Bash | Read trancar/reabrir porta signatures | `cd /home/ronald/saas-hasner/app; sed -n 1400,1440p ponto/services/fechamento.py; /bin/grep -n "def reabrir_periodo" -A25 ponto/services/fechamento.py \| head -40; git check-ignore -q ../logs/x && echo logs-ignored` |
-| 15:03:18 | Bash | Reread ACERVO aval; find Ronald user pk | `cd /home/ronald/saas-hasner; cat logs/ACERVO-TRANCA/aval_acervo_tranca_antes_do_sistema.txt; /bin/grep -rhoE "(autor\|por)[ =]*Ronald[^\|]{0,60}u[0-9]+\|Ronald \(u[0-9]+\)\|u[0-9]+ \(Ronald\)" app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md logs/*.txt 2>/dev/null \| sort \| uniq -c \| head` |
-| 15:03:14 | SendMessage |  | `-` |
-| 15:03:12 | SendMessage |  | `-` |
-| 15:03:09 | SendMessage |  | `-` |
-| 15:03:02 | ToolSearch |  | `-` |
