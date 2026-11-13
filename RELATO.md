@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=636165
+ESPERANDO: codex_pergunta.sh | pid=629663
 RESPONDIDA por aval Ronald 21:48 libera B3: ERRO-BOBO TRANCA-VIVAS-08: as 3 voltas procedentes do Codex verificador foram ORACULO DE TESTE fino (resgatada exclusiva
 RESPONDIDA por aval Ronald 21:48 TIPO-ITEM3-NAO-LAVRADA=(A): lei: TIPO-NA-FONTE item 3 PARADO (12-CHAVES item 5, 3a reprovacao; preverif Codex v3 REPROVA): Celul
 RESPONDIDA por aval Ronald 21:48 E3 item (2) 4 sitios fora por nome: PERGUNTA DE DESENHO E3-FORMA-SQL item (2): 4 sitios de respondida_em em forma BOOLEANA pel
