@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 19:38** · publicado em **13/11/2026 19:41** (UTC-3)
+> Ultima resposta processada: **13/11/2026 19:42** · publicado em **13/11/2026 19:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 19:42 · sessao 8a778cbd3dc4 · E3-FORMA-SQL · verificador · origem=Code
+
+**Veredito geral: BLOQUEIA.** A cura mantém exceções que deixam chamado vivo da fila sem porta e introduz dois critérios para o significado de `fio`. ([tarefa_do_dia.py:562](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:562), [tarefa_do_dia.py:572](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:572))
+
+**1. BLOQUEIA — cumprimento parcial do aval (ii).**
+
+O ramo novo não cria ação nem encerra chamado: monta portas e atualiza o resultado em memória. O encerramento persistente continua passando por `encerrar → _gravar_estado`. ([tarefa_do_dia.py:563](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:563), [models.py:1620](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/models.py:1620))
+
+Entretanto, chamado vivo da fila continua sem porta quando o dia tem `razao` ou existe ação com porta textual de sistema. Isso preserva a omissão no leitor, embora não mate o chamado no banco. A recuperação exige simultaneamente `not out['razao']` e **todas** as ações com `porta is None`. ([tarefa_do_dia.py:562](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:562))
+
+Também permanece a exclusão do chamado residual A quando existe ação sob B: o teste exige expressamente que A não apareça em `verbos`. Nesse caso o dia conserva porta por B, mas A não é publicado por ela. ([test_e3_portas_tarefa.py:44](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:44))
+
+A restauração dos 79 casos de produção não está demonstrada pelo material fornecido. **[nao verificado]**
+
+**2. BLOQUEIA — a união de âncoras também amplia a antiga porta de pergunta.**
+
+Há duas comparações distintas:
+
+- Contra `_portas_da_tarefa` anterior, os três testes novos exigem portas antes ausentes: marco aceso, passivo com âncora própria e passivo com âncora externa. ([test_e3_portas_tarefa.py:146](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:146), [test_e3_portas_tarefa.py:164](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:164), [test_e3_portas_tarefa.py:181](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:181))
+- Contra a antiga `porta_pergunta` do C17, a classe é mais ampla: C17 exige pergunta viva, presença no app e ausência de resposta carimbada vazia; a regra nova exige somente pergunta exposta pela tarefa e sua âncora em `fila_ids`. ([juizes.py:1603](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1603), [juizes.py:1681](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1681), [tarefa_do_dia.py:566](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:566))
+
+Uma classe concreta do código: pergunta validada, lavra `sim`, sem efeito, classificada `encerrada_pelo_juiz`, com ações vazias. A tarefa conserva seu `pergunta_id`; C6 rejeita pergunta validada; a regra nova recupera sua âncora externa da fila e publica `porta_pergunta`. Portanto, abre porta para um dia ao qual C17 não dava essa porta. ([tarefa_do_dia.py:144](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:144), [tarefa_do_dia.py:308](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:308), [juizes.py:1389](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1389), [tarefa_do_dia.py:565](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:565))
+
+Isso excede **manter a porta do ATUAL**: a âncora é viva, mas a relação adicional de alcance por pergunta encerrada não existia naquela porta. A presença dessa classe em produção e sua autorização específica no aval não estão demonstradas. **[nao verificado]**
+
+**3. APROVA a reutilização da autoridade; BLOQUEIA a uniformidade semântica.**
+
+`fio_pelos_verbos` não duplica a escada: é a mesma função chamada pelo C17 e pelo ramo novo. O registro vivo já declara a migração dos leitores de C17 para C19; `JUIZES.md` também aponta essa migração. ([juizes.py:1633](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1633), [juizes.py:1688](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1688), [core/juizes.py:132](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/core/juizes.py:132), [JUIZES.md:85](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/docs/JUIZES.md:85))
+
+Todos os caminhos citados usam a projeção da tarefa, mas **nem todos leem `fio`**:
+
+| Leitor | O que efetivamente lê |
+|---|---|
+| Folha `_fio_da_porta` / `_grupo` | `fio` literal; depois agrupa `nada→D`, `chamado→C`, `colab→B`, restante→A. ([fora_da_folha.py:86](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/folha/fora_da_folha.py:86)) |
+| `vigia_fio.censo_alcance` | `rota`, `fio`; “exige admin” significa `fio == 'admin'`. ([vigia_fio.py:648](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/vigia_fio.py:648)) |
+| `pautas_dos_discordantes` | Fio pela folha; seleciona `FIO_SEM_PORTA`. ([pautas_dos_discordantes.py:79](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/ponto/services/pautas_dos_discordantes.py:79)) |
+| `furo_sem_canal` | Existência e rota da porta. ([furo_sem_canal.py:94](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/furo_sem_canal.py:94)) |
+| `cadastro_realidade.beco` | Existência da porta. ([cadastro_realidade.py:497](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/escala/services/cadastro_realidade.py:497)) |
+| `diff_e3_sombra.candidata` | Alias direto de `porta_da_tarefa`. ([diff_e3_sombra.py:43](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/management/commands/diff_e3_sombra.py:43)) |
+
+O problema está no produtor: no caminho normal `fio` significa **prioridade dos donos das ações**; na recuperação significa **escada dos verbos do painel**. Esses critérios discordam: o teste existente admite ação `responder` com verbo `validar`; o primeiro critério produz `colab`, enquanto a escada desse verbo produz `admin`. A projeção não informa qual critério produziu o campo. ([test_e3_portas_tarefa.py:79](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:79), [tarefa_do_dia.py:571](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:571))
+
+**4. BLOQUEIA — sistema+fila e razão de dia continuam sendo furos.**
+
+Ação de sistema usa portas como `emissor`, `materializacao` e `cartorio`; essas strings impedem a recuperação pela fila. `ata_sem_lampadas` preenche a razão de dia e também a impede. São exceções à regra de visibilidade que o próprio trecho anuncia. ([tarefa_do_dia.py:149](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:149), [tarefa_do_dia.py:217](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:217), [tarefa_do_dia.py:305](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:305), [tarefa_do_dia.py:548](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:548))
+
+Os testes afirmam expressamente: [nao verificado]
+
+- Sistema+fila → nenhuma porta; isento+fila → nenhuma porta. ([test_e3_portas_tarefa.py:36](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:36), [test_e3_portas_tarefa.py:61](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:61))
+- Folha permanece sem fio/grupo D e vigia permanece `sem_porta` no caso sistema+fila. ([test_e3_leitores_c17_chamadores.py:124](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_leitores_c17_chamadores.py:124), [test_e3_leitores_c17_chamadores.py:170](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_leitores_c17_chamadores.py:170))
+
+Os testes localizados de `ata_sem_lampadas` afirmam razão e desconhecimento; não verificam a combinação chamado na fila + porta. ([test_e2_tarefa_do_dia.py:391](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e2_tarefa_do_dia.py:391), [test_e2_tarefa_do_dia.py:840](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e2_tarefa_do_dia.py:840))
+
+**5. BLOQUEIA — o rótulo não acompanha a porta publicada.** [nao verificado]
+
+`nao_sei` permanece na tarefa, mas `porta_da_tarefa` publica somente `rota`, `fila`, `verbos` e `fio`. Existe leitor que consulta também o booleano: `furo_sem_canal`; contudo, ele só o contabiliza no `elif` em que **não há porta**. Portanto, o passivo agora com porta não aparece nesse contador como `nao_sei`. ([tarefa_do_dia.py:589](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:589), [furo_sem_canal.py:95](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/furo_sem_canal.py:95))
+
+Os testes novos provam preservação interna do booleano, não visibilidade do rótulo nos leitores. ([test_e3_portas_tarefa.py:162](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:162))
+
+O aval fornecido exige “visíveis com o rótulo nao_sei”, sem nomear leitor ou formato específico; sua presença como arquivo numerado no HEAD e a demonstração dessa visibilidade não foram verificadas. **[nao verificado]**
+
+**6. BLOQUEIA — ESMERIL-SEMÂNTICA.**
+
+| Campo/valor | Quem escreve ou fornece | Quem lê; significado |
+|---|---|---|
+| Ação `porta` | `_acao`; `_pela_decisao` fornece âncora inteira/`None`; ações de sistema usam strings. | `_portas_da_tarefa` distingue essas três formas. ([tarefa_do_dia.py:115](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:115), [tarefa_do_dia.py:128](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:128), [tarefa_do_dia.py:561](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:561)) |
+| `portas` | Conjunto local escrito por `_portas_da_tarefa`: ações inteiras; depois, condicionalmente, união célula/âncoras. | Produz `verbos`, `da_celula`, `fila` e `rota`; não é estado persistido. ([tarefa_do_dia.py:561](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:561)) |
+| `fila_ids` | `alimentar_fila`, lendo `qs_na_fila` e excluindo IDs ausentes do mapa de verbos. | Tarefa, C17, vigia e diff: pertença à fila com verbo disponível. ([juizes.py:1559](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1559), [vigia_fio.py:609](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/vigia_fio.py:609), [diff_e3_sombra.py:66](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/management/commands/diff_e3_sombra.py:66)) |
+| `chamado_que_lista` | Função pura que retorna destino, senão pai; não grava vínculo. | `_pela_decisao`, carga e novo mapa de âncoras usam esse ID. ([fio.py:97](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/fio.py:97), [tarefa_do_dia.py:416](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:416), [tarefa_do_dia.py:535](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:535)) |
+| `fio` | Tarefa: donos das ações **ou** escada dos verbos. C17: escada dos verbos. | Projeção e leitores do item 3 recebem o mesmo nome, sem distinção de origem semântica. ([tarefa_do_dia.py:572](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:572), [juizes.py:1688](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/juizes.py:1688)) |
+| `nao_sei` | Corpo puro inicializa e marca desconhecimento. | Composição do fio e leitores diretos da tarefa; excluído da projeção de porta. ([tarefa_do_dia.py:185](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:185), [tarefa_do_dia.py:312](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:312), [tarefa_do_dia.py:589](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:589)) |
+
+O contrato do módulo ainda descreve `fila/verbos` como portas exigíveis e `fio` exclusivamente como resumo dos donos das ações, sem enumerar `chamado`. A documentação não acompanhou a ampliação. ([tarefa_do_dia.py:38](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:38))
+
+**7. APROVA a mordida conjunta dos mutantes na tarefa, com limites.**
+
+| Teste novo | Reverter `_portas_da_tarefa` | Fixar o fio novo em `admin` | [nao verificado]
+|---|---|---|
+| Marco aceso | Morde pela porta exigida. | Morde: o esperado é a escada do verbo `decidir`, isto é, `chamado`. ([test_e3_portas_tarefa.py:138](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:138)) |
+| Passivo da célula | Morde pela porta exigida. | Não separa o mutante quando o verbo esperado é `validar→admin`. ([test_e3_portas_tarefa.py:157](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:157)) |
+| Passivo com âncora externa | Morde pela `porta_pergunta` exigida. | Não afirma `fio`. ([test_e3_portas_tarefa.py:179](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:179)) |
+
+O helper F5B preserva a proteção contra universo errado e falso `admin`: mantém verbo literal `decidir`, fio literal `chamado`, exige igualdade completa tarefa/C17 e verifica o fio da folha. Não perdeu essa mordida; substituiu a antiga expectativa de invisibilidade. ([test_o261e_f5b_juiz_porta.py:232](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_o261e_f5b_juiz_porta.py:232))
+
+Há uma ressalva ao alvo do mutante: se a própria **função compartilhada** `fio_pelos_verbos` for fixada em `admin`, os dois novos asserts que a usam como oráculo ficam correlacionados com a implementação. F5B conserva expectativas literais que mordem essa alteração. ([test_e3_portas_tarefa.py:148](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_e3_portas_tarefa.py:148), [test_o261e_f5b_juiz_porta.py:293](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/tests/test_o261e_f5b_juiz_porta.py:293))
+
+Execução RED em `91bed1694`, GREEN dos testes Django e suite inteira: **[nao verificado]**.
+
+**8. BLOQUEIA — classes reprovadoras presentes e ausentes.**
+
+Está presente **campo com dois critérios semânticos**, acompanhado de contrato documental divergente. Também está presente cobertura que ainda exige omissão de vivo nas exceções sistema/razão de dia. ([tarefa_do_dia.py:38](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:38), [tarefa_do_dia.py:562](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:562), [tarefa_do_dia.py:572](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:572))
+
+A chamada nova não constitui, por si, segundo juiz: reutiliza a escada existente. O trecho novo tampouco introduz escritor persistente ou relógio interno; recebe a alimentação carregada no `agora` da carga. ([tarefa_do_dia.py:530](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:530), [tarefa_do_dia.py:575](/home/ronald/codex_ws/e01da1d515e9f6744caf4d5b4efd74e5e8b3e0fa/app/chamados/services/tarefa_do_dia.py:575))
+
+Ordem operacional de trava, pouso, complemento E4b com medição dos 25, mescla com `9e2c540` e opus final: **[nao verificado]**.
 
 ## 13/11 19:38 · sessao c56b8a116909 · - · - · origem=Ronald (tmux)
 
@@ -783,26 +879,4 @@ A busca de leitores nomeados foi global em `app/`, com os padrões exatos `rotul
 
 - **NAO-BLOQUEIA — deadlock específico não demonstrado.** Realinhar/reverter travam PA, mas consultam agendamentos sem `select_for_update`; a ordem agendamento→PA da remarcação não estabelece ciclo de espera com essas portas (`app/ferias/services.py:105-113`; `app/ferias/services.py:139-140`; `app/ferias/services.py:154`; `app/ferias/services.py:577-580`). Concorrência executada: **[nao verificado]**.
 
-## 13/11 18:29 · sessao a3cfceb0b3b9 · - · - · origem=Ronald (tmux)
-
-D: **BLOQUEIA pela cobertura incompleta do calendário**, embora criação e edição agora concordem: ambas usam `datas_do_ciclo` (`app/ferias/views.py:167`; `app/ferias/services.py:770`). A criação promete linha completa de ciclos (`app/ferias/views.py:157`).
-
-Contraexemplo confirmado executando somente as duas funções reais extraídas via AST, em memória: admissão em 29/02/2024 produz ciclo 28/02/2027–27/02/2028 e próximo ciclo começando em 29/02/2028; **28/02/2028 não pertence a ciclo algum**. O início é calculado pela admissão original e o fim pelo início já truncado (`app/ferias/views.py:164`; `app/ferias/services.py:742`; `app/ferias/services.py:754`). O algoritmo já existia na criação apresentada no delta; a extração conservou esse defeito. Existência desse caso em produção: [nao verificado].
-
-Esse buraco tem leitores concretos: faltas usam intervalo inclusivo e a falta desse dia fica fora de todos os PAs (`app/ferias/models.py:147`); o gozo histórico busca PA contendo `gi`, mas, sem resultado, escolhe o PA mais recente de todo o acervo, possivelmente posterior ao gozo (`app/ferias/views.py:199`; `app/ferias/views.py:203`). A porta valida futuro, intervalo e saldo, mas não a pertinência de `gi` ao PA escolhido (`app/ferias/services.py:460`; `app/ferias/services.py:475`; `app/ferias/services.py:487`).
-
-Último dia do mês: a função entrega 31/01/2024→30/01/2025, limite 30/01/2026; 31/03/2025→30/03/2026, limite 30/03/2027. Isso corresponde à fórmula documentada, aniversário menos um dia (`app/ferias/services.py:750`). Para início em 29/02/2024 entrega 27/02/2025 e limite 27/02/2026, porque primeiro trunca o aniversário para 28/02 e depois subtrai um dia (`app/ferias/services.py:743`; `app/ferias/services.py:754`).
-
-**RED D: mordida parcial.** Restaurar a antiga aritmética da edição reprovaria o teste de 01/01/2024; porém restaurar a conta independente na criação sobreviveria, pois o novo teste não chama a view. Também não cobre 29/02 ou último dia do mês (`app/ferias/test_hj090_volta3.py:316`).
-
-**Juiz: OK quanto a duplicação registrada.** As autoridades registradas são saldo, status/vencimento, abono, fracionamento, aviso e duração da ausência; nenhuma responde às datas do ciclo aquisitivo. `fim_de` trata duração da ausência, outra pergunta (`app/core/juizes.py:268`). A exigência de corte refere-se ao registro de autoridade nova em `core/juizes.py` (`CLAUDE.md:74`).
-
-Mapa dos campos de datas:
-
-- **Escritores:** criação pela porta `garantir_periodo_aquisitivo`, recebendo início e defaults (`app/ferias/services.py:378`); edição pela porta travada (`app/ferias/services.py:758`). Criação entrega as datas calculadas pela função comum (`app/ferias/views.py:164`).
-- **Leitores inclusivos:** faltas (`app/ferias/models.py:147`), sobreposição (`app/ferias/models.py:193`), PA do gozo histórico (`app/ferias/views.py:199`), PA vigente no painel (`app/ponto/views.py:2022`).
-- **Leitores de vencimento:** status considera ciclo aberto enquanto `data_fim >= hoje`, vencimento apenas quando `limite < hoje` (`app/ferias/models.py:101`); situação usa limite inclusivo para aviso e exclusivo para vencido (`app/ferias/situacao.py:193`; `app/ferias/situacao.py:209`).
-- **Leitores de apresentação/ordenação:** API (`app/api/views_mensageria.py:837`), CSV (`app/relatorios/views.py:365`), seção do colaborador (`app/templates/ferias/_secao_colab.html:41`), lista DP (`app/ferias/management/commands/listar_ferias_dp.py:66`; `app/ferias/management/commands/listar_ferias_dp.py:101`).
-- **Admin/migration/command:** admin registra somente `Afastamento` (`app/ferias/admin.py:2`); migration inicial declara os campos, sem derivação (`app/ferias/migrations/0001_initial.py:40`); cron de vencimento lê limite e delega sincronização (`app/ferias/management/commands/alertar_ferias_vencendo.py:26`). `FeriasConfig` não registra signals (`app/ferias/apps.py:3`). Não encontrei outra derivação produtiva das datas na busca integral; execução dinâmica fora dos arquivos examinados: [nao verificado].
-
-_4785 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4786 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
