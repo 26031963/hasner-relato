@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 09:23:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (533.9 MB). Acoes na janela: **942**.
+**Medido em 13/11/2026 09:28:51.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (534.2 MB). Acoes na janela: **949**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:28:18 | Bash |  | `cd /home/ronald/saas-hasner; T=$(date +%H%M%S); WT=/home/ronald/wt-feriado-$T; git worktree add -b raia/feriado-escala-$T $WT HEAD >/dev/null 2>&1; git -C $WT log --oneline -1; echo $WT; sed -n 40,165p $WT/app/colaboradores/services/vinculo.py` |
+| 09:28:10 | Bash |  | `cd /home/ronald/saas-hasner; git grep -n "padrao_trabalha_em_feriado\\|trabalha_em_feriado" HEAD -- app/core/juizes.py app/docs/JUIZES.md app/docs/LEIS.md app/docs/CORTES.md \| cut -c1-250 \| head; git show HEAD:app/escala/regua_defesa.py \| sed -n 300,330p; git show HEAD:app/colaboradores/services/troca_pelo_chat.py \| sed -n 55,85p; git show HEAD:app/colaboradores/services/vinculo.py \| sed -n 1 ...` |
+| 09:27:38 | Bash |  | `mkdir -p /home/ronald/saas-hasner/logs/FERIADO-ESCALA/sonda2 && cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA/sonda2 && cat > sonda2.py <<'EOF' # FERIADO-ESCALA sonda 2 (so leitura): (1) trilha do ec1264 (nasceu True com padrao False); (2) dry do # sincronizar_feriado_admin restrito aos 16 (quantos ele voltaria a True), por empresa; (3) competencias da # janela da porta (anterior + atual) por em ...` |
+| 09:27:12 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/colaboradores/models.py \| sed -n 548,590p; git show HEAD:app/core/models.py \| sed -n 5,40p; git show HEAD:app/folha/export.py \| sed -n 597,615p; git show HEAD:app/ponto/janelas.py \| sed -n 60,75p; git grep -n "def feriados_do_lugar\\|def eh_feriado\b\\|def feriado_vira_folga" HEAD -- app \| head` |
+| 09:27:09 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA/sonda; sed -n 1,19p sonda_16.py; git -C /home/ronald/saas-hasner show HEAD:app/ponto/janelas.py \| /bin/grep -n "^def " \| head; git -C /home/ronald/saas-hasner grep -n "def competencia_fechada_para_celula\\|class HistoricoVinculo\\|class Feriado(" HEAD -- app \| head` |
+| 09:27:02 | Bash |  | `cd /home/ronald/saas-hasner; git grep -n "sincronizar_feriado_admin" HEAD -- app/config bin \| head; git show HEAD:app/colaboradores/management/commands/sincronizar_feriado_admin.py \| head -70; git show HEAD:app/colaboradores/services/vinculo.py \| sed -n 860,915p` |
+| 09:24:24 | Read |  | `/home/ronald/saas-hasner/logs/FERIADO-ESCALA/censo/censo.r` |
 | 09:14:22 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA/censo; until [ -f censo.fim ]; do /usr/bin/sleep 20; done; tail -2 censo.log; wc -c censo.r` |
 | 09:13:37 | Bash |  | `cd /home/ronald/saas-hasner/logs; until [ -f FERIADO-ESCALA/sonda/sonda.fim ]; do /usr/bin/sleep 15; done; cat FERIADO-ESCALA/sonda/sonda_16.r \| sed -n '/5x2\/6x1 ativos/,$p'` |
 | 09:13:33 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/colaboradores/services/vinculo.py \| sed -n 230,330p` |
