@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 14:13** · publicado em **13/11/2026 14:17** (UTC-3)
+> Ultima resposta processada: **13/11/2026 14:22** · publicado em **13/11/2026 14:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 14:22 · sessao d07877763393 · E3-FORMA-SQL · leitura · origem=Code
+
+1. **Não dá para atribuir cada parcela dos +79 a uma mudança específica.** O raspado fornece diferenças líquidas, sem identificar os dias que entraram e saíram [nao verificado].
+
+   | Recorte no anexo | Aumento | Mudança causadora / dono L-099 |
+   |---|---:|---|
+   | Competência `[0]` / `[1]` | +16 / +63 | [nao verificado] |
+   | Empresa×competência `[2]` | +12 | [nao verificado] |
+   | Empresa×competência `[3]` | +52 | [nao verificado] |
+   | Empresa×competência `[4]` | +4 | [nao verificado] |
+   | Empresa×competência `[5]` | +10 | [nao verificado] |
+   | Empresa×competência `[7]` | +1 | [nao verificado] |
+
+   As chaves empresa/competência desses itens não aparecem no raspado; não cabe identificá-las pelos índices [nao verificado].
+
+   A mudança principal é **pedida** pelo aval E3-LEITORES: no diff, `porta_alcancavel_do_dia(...)` vira `porta_da_tarefa(carga.tarefa(...))`; implementação em [vigia_fio.py:640](app/chamados/services/vigia_fio.py:640). A tarefa escolhe portas pelas ações exigíveis em [tarefa_do_dia.py:547](app/chamados/services/tarefa_do_dia.py:547). Mas ausência de porta ainda atravessa os baldes legais antes de incrementar o contador — [vigia_fio.py:662](app/chamados/services/vigia_fio.py:662), [vigia_fio.py:704](app/chamados/services/vigia_fio.py:704). Portanto, **não está demonstrado que cada parcela seja exclusivamente efeito pedido** [nao verificado].
+
+   Há outras mudanças a isolar: relógio repassado ao C6, diff `pergunta_viva(p)` → `pergunta_viva(p, agora=agora)`, em [juizes.py:1603](app/chamados/juizes.py:1603); trim SQL em [models.py:3397](app/chamados/models.py:3397); e exclusão de veredito `''` da absolvição, diff `+ ~Q(celula__veredito='')`, em [models.py:3408](app/chamados/models.py:3408). Essa última é distinta do trim autorizado; participação nos +79 e autorização específica [nao verificado].
+
+   As identidades agregadas acompanharem o total não fornece decomposição causal; `_alcance` reutiliza o mesmo censo em [backfill_fio_morto_e4b.py:78](app/chamados/management/commands/backfill_fio_morto_e4b.py:78). **Dono de cada parcela: [nao verificado]**; faltam os dias e insumos para o juiz que distingue CADASTRO, BATIDA e ESTRUTURA em [e6_oraculo.py:98](app/ponto/management/commands/e6_oraculo.py:98).
+
+2. **O LEITOR compara observações diferentes; também existe mudança semântica real no código. Não é simples mudança de lugar da função.** A cópia conserva `alimentar_portas` em [vigia_fio.py:608](app/chamados/services/vigia_fio.py:608) e acrescenta a leitura da tarefa em [vigia_fio.py:641](app/chamados/services/vigia_fio.py:641); o trecho removido no diff consultava C17 diretamente.
+
+   Pelo script anexado, `alimentar_portas` observa identidade célula/colaborador e perguntas/fila; `carga.tarefa` observa colaborador/dia e retorno completo. Assim, faixas, hashes e classes desses dois registros não são comparação da mesma resposta [nao verificado]. As 34 classes não demonstram 34 comportamentos novos [nao verificado].
+
+   **Os 2387 recebem a mesma resposta? Não dá para dizer** [nao verificado]. Falta parear por colaborador/dia e comparar uma projeção comum de porta e o resultado final do leitor, incluindo exceções. O comparador local já confronta C17 e tarefa por dia em [diff_e3_sombra.py:125](app/chamados/management/commands/diff_e3_sombra.py:125), mas esse resultado não foi apresentado [nao verificado]. **Dono da comparabilidade do instrumento: ESTRUTURA; donos dos dias: [nao verificado].**
+
+3. **Não dá para explicar numericamente +9626/+2 exceções nem atribuir o pico inteiro ao diff** [nao verificado]. O script soma exceções externas e internas e exercita a nova recusa por pergunta; essa recusa lança `RespondidaSemTexto` em [fio.py:1602](app/chamados/services/fio.py:1602). Também há exceções engolidas pelo fio em [fio.py:349](app/chamados/services/fio.py:349) e [fio.py:375](app/chamados/services/fio.py:375). Faltam contagens por leitor, classe e unidade para separar recusas esperadas de falhas [nao verificado].
+
+   **Existe custo adicional de memória no caminho real:** o diff acrescenta a carga em [vigia_fio.py:640](app/chamados/services/vigia_fio.py:640), mantendo alimentação/perguntas anteriores em [vigia_fio.py:608](app/chamados/services/vigia_fio.py:608). A carga conserva perguntas, decisões e pares colaboradores×dias — [tarefa_do_dia.py:376](app/chamados/services/tarefa_do_dia.py:376), [tarefa_do_dia.py:391](app/chamados/services/tarefa_do_dia.py:391), [tarefa_do_dia.py:423](app/chamados/services/tarefa_do_dia.py:423). O comando de produção chama esse caminho em [vigiar_fio_morto.py:176](app/chamados/management/commands/vigiar_fio_morto.py:176).
+
+   Isso demonstra ampliação de alocação, mas **1233 MB por processo, vazamento ou OOM em produção: [nao verificado]**. Falta perfil por consumidor, sem retenção da sonda, incluindo concorrência. **Dono: ESTRUTURA.**
+
+4. **O zero apresentado cobre o LEITOR `respondida_sem_texto`, não toda a frota de leitores** [nao verificado]. A função real verifica carimbo e chama `texto_vazio`, que aplica `(t or '').strip()` — [juizes.py:1518](app/chamados/juizes.py:1518), [juizes.py:1512](app/chamados/juizes.py:1512). O script programa essa chamada por pergunta global; não houve alteração desse predicado no diff fornecido [nao verificado].
+
+   Esse zero não comprova equivalência das faces SQL, de `q_vivas` ou dos consumidores da tarefa, cujos caminhos são distintos — [juizes.py:1538](app/chamados/juizes.py:1538), [models.py:3397](app/chamados/models.py:3397). Como `rodar` também registra `EXC`, faltam as exceções desse LEITOR para afirmar 49257 retornos booleanos bem-sucedidos [nao verificado]. **Dono da interpretação/cobertura: ESTRUTURA.**
+
+Há ainda uma lacuna de instrumento: o script textual anexado não calcula memória, identidades, classes ou blocos por faixa/bitmap no formato apresentado; falta a versão efetiva ou transformação intermediária [nao verificado].
+
+VEREDITO DE IMPACTO: nao da para dizer em parcelas dos +79, equivalência dos 2387 e atribuição das exceções/pico [nao verificado].
+
+## 13/11 14:21 · sessao 977450ce877d · - · - · origem=Ronald (tmux)
+
+Q3 — Não é possível explicar numericamente +9.626/+2 exceções nem atribuir os MB ao diff com os anexos; faltam contagens por leitor/classe/unidade e perfil de memória isolado [nao verificado].
+
+- A sonda textual soma tanto exceções externas de `rodar` quanto internas de dois wrappers; a recusa nova é chamada para cada pergunta e pode lançar `RespondidaSemTexto` (`app/chamados/services/fio.py:1602`). Portanto “exceções registradas” inclui recusa de domínio, e não equivale automaticamente a falhas novas de produção; quanto dos incrementos vem disso é [nao verificado]. O diff que adiciona esse caminho é `+def recusa_respondida_sem_texto` e os chamadores nas portas de escrita; cópia `app/chamados/models.py:3472`, `app/chamados/models.py:3508`.
+- Há exceções internas engolidas no fio: explicador em `app/chamados/services/fio.py:346`/`:349` e aplicação em `:373`/`:375`; os totais não revelam qual delas ocorreu [nao verificado].
+- O texto fornecido não implementa `memoria/pico_mb` nem o formato observado de blocos por faixa/bitmap: esses resultados pressupõem instrumento ou pós-processamento adicional cuja implementação é [nao verificado]. Isso limita qualquer atribuição do pico.
+
+Há custo adicional real no caminho de produção, não apenas na instrumentação:
+
+- O diff troca C17 por `carga_da_tarefa` em `app/chamados/services/vigia_fio.py:640` e conserva simultaneamente a alimentação e perguntas anteriores (`:608`, `:618`). O cron real chama esse caminho em `app/chamados/management/commands/vigiar_fio_morto.py:176`.
+- A carga mantém cadastro (`app/chamados/services/tarefa_do_dia.py:372`), perguntas completas (`:376`/`:382`), decisões (`:391`/`:394`), pares colaboradores×todos os dias da janela (`:423`/`:429`) e caches por dia (`:503`, `:508`, `:514`). A classe herdada mantém células/escalas (`app/ponto/turnos.py:2978`, `:2986`) e, quando necessário, batidas/turnos (`:3016`, `:3021`, `:3036`).
+- Outros consumidores novos carregam esses objetos: folha (`app/folha/fora_da_folha.py:178`), furo (`app/chamados/services/furo_sem_canal.py:91`), beco, que conserva cargas por janela (`app/escala/services/cadastro_realidade.py:492`).
+
+Assim, existe ampliação estrutural de alocação no caminho real; afirmar “1233 MB por processo de produção”, vazamento ou OOM seria [nao verificado]. Para medir: cada consumidor real isolado com/sem perfil/registro canônico da sonda, mesmas entradas, RSS e heap por fase, cardinalidades/janela, retenção após retorno e concorrência/orçamento do worker [nao verificado]. Dono da implementação/instrumento/custo: **ESTRUTURA**; não há evidência para deslocar esse problema a CADASTRO/BATIDA [nao verificado quanto às ocorrências individuais].
+
+## 13/11 14:21 · sessao 6b4d651b1e6b · - · - · origem=Ronald (tmux)
+
+Q2: **Há mudança de instrumento e mudança real de comportamento; o anexo não permite dizer que os 2.387 registros receberam a mesma resposta.**
+
+- O observador base `alimentar_portas` registra `[pk_celula, cid]` e somente `perguntas/fila`; o observador cópia `carga.tarefa` registra `[cid,dia]` e a tarefa inteira — conforme `perfil` do script anexado, sem arquivo local numerado [nao verificado].
+- A função não apenas mudou de lugar: o vigia ainda chama `alimentar_portas` em [app/chamados/services/vigia_fio.py:608](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/vigia_fio.py:608) e passou a consultar `carga.tarefa`/`porta_da_tarefa` em [app/chamados/services/vigia_fio.py:640](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/vigia_fio.py:640). O diff anexo substitui ali C17 por tarefa.
+- O C17 considera chamado da célula na fila ou pergunta viva no app ancorada na fila ([app/chamados/juizes.py:1677](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1677)); a tarefa escolhe portas a partir das ações exigíveis ([app/chamados/services/tarefa_do_dia.py:547](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:547)). Há mudança semântica implementada.
+- As 34 classes refletem campos disponíveis no retorno completo da tarefa; sua ausência no registro base não comprova que inexistiam naquele comportamento [nao verificado]. O mesmo `n_total` conta observações, sem demonstrar correspondência entre unidades [nao verificado].
+- Falta comparar, pela mesma chave `(empresa, competência, colaborador, dia)`, a saída final de cada leitor e uma projeção comum de porta (`rota/fila/verbos/fio`), preservando exceções e ramo. O instrumento local já compara C17 e tarefa no mesmo dia em [app/chamados/management/commands/diff_e3_sombra.py:125](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:125), mas seu resultado não foi fornecido [nao verificado].
+- **Dono:** a divergência de instrumento é ESTRUTURA; os donos L-099 dos dias não podem ser determinados sem insumos do juiz [app/ponto/management/commands/e6_oraculo.py:98](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/ponto/management/commands/e6_oraculo.py:98).
+
+Q4: **O zero fornecido cobre somente o leitor chamado `respondida_sem_texto`, em 49.257 observações; não comprova paridade de toda a frota de leitores** [nao verificado: resumo fornecido].
+
+- A função real testa `respondida_em is not None` e chama `texto_vazio`, cujo teste é `(t or '').strip()` ([app/chamados/juizes.py:1518](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d533ec2348b4d4/app/chamados/juizes.py:1518), caminho correto abaixo; [app/chamados/juizes.py:1512](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1512)).
+- No script anexado, esse leitor é chamado diretamente, uma vez por pergunta global, em instância independente. As demais funções são registradas sob outros nomes [nao verificado: script sem arquivo local numerado].
+- Portanto esse zero não cobre `q_respondida_sem_texto`, `q_respondida_com_texto` ([app/chamados/juizes.py:1531](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1531), [app/chamados/juizes.py:1541](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1541)), nem `q_vivas` ([app/chamados/models.py:3396](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/models.py:3396)), nem os leitores de porta.
+- `rodar` também registra `("EXC", classe)` como valor. Sem o conteúdo de `excecoes_por_classe` desse leitor, zero diferenças não comprova 49.257 retornos booleanos bem-sucedidos [nao verificado].
+- **Dono:** ESTRUTURA para escopo/interpretação da medição; dono L-099 de dias individuais [nao verificado].
+
+Observação para consolidação: o script textual anexado não produz o formato de `diferencas.txt`: imprime `blocos` inteiro e lotes sequenciais; não contém cálculo de `faixa`, bitmap, `classes`, `identidades_vigia` nem pico de memória. Falta a versão efetivamente executada ou a transformação intermediária para verificar o significado exato desses campos [nao verificado].
+
+## 13/11 14:20 · sessao 4f6c776a50bd · - · - · origem=Ronald (tmux)
+
+- O aumento líquido é **+79**, dividido em **+16 e +63** nos índices das competências; por empresa×competência, **+12, +52, +4, +10 e +1**. O anexo omite as chaves dos respectivos itens: identificar empresas/competências e causalidade individual é **[nao verificado]**.
+- A troca concreta é `porta_alcancavel_do_dia(...)` → `porta_da_tarefa(carga.tarefa(...))`, no hunk `vigia_fio.py @@ -632`; cópia: `app/chamados/services/vigia_fio.py:639-641`. A tarefa só publica portas vinculadas às ações exigíveis: `app/chamados/services/tarefa_do_dia.py:547-565`. Porta publicada escapa do contador em `app/chamados/services/vigia_fio.py:648-655`; ausência de porta ainda passa pelos baldes de lei em `:660-668`; apenas o restante entra em `fio_morto_alcance`, `:704-708`.
+- O aval E3-LEITORES pede essa troca, mas o raspado não mostra quais transições produziram cada parcela, nem entradas/saídas compensatórias: chamar os **79** de efeito exclusivamente pedido é **[nao verificado]**.
+- Outros deltas capazes de influenciar a leitura: relógio chega ao C6 em `app/chamados/juizes.py:1603` (hunk `@@ -1570`); `q_vivas` lê a face SQL do texto em `app/chamados/models.py:3396-3397` e passa a excluir veredito `''` da absolvição em `:3408` (hunk `@@ -3346`). Essa segunda alteração é distinta do trim da resposta autorizado em aval.txt; efeito numérico dela **[nao verificado]**.
+- Dono L-099 **não pode ser inferido desses agregados**. O juiz precisa dos insumos por dia e decide CADASTRO/BATIDA/ESTRUTURA em `app/ponto/management/commands/e6_oraculo.py:98-110`. `sem_porta` tampouco significa automaticamente ESTRUTURA: a retirada de BATIDA/CADASTRO exige presença na lista, `app/chamados/services/vigia_fio.py:222-228`, `:313-315`.
+- As `identidades_vigia` acompanharam o total, mas provam somente as igualdades agregadas apresentadas; não demonstram mesma resposta por dia nem atribuição causal **[nao verificado]**.
+- Medida faltante: comparação por `(colaborador, dia)` com rota/porta anterior e posterior, causa/balde, decisão da tarefa, recorte empresa×competência e retorno do juiz L-099; contrafactuais que isolem troca da porta, relógio e mudanças SQL. O próprio comparador existente enumera pares e compara projeções em `app/chamados/management/commands/diff_e3_sombra.py:123-139`, mas seu resultado por essas parcelas não foi fornecido **[nao verificado]**.
 
 ## 13/11 14:13 · sessao b3b8c64d7738 · BUG-PAR-DESCONGELA · sonda · origem=Code
 
@@ -728,182 +816,4 @@ Mapa de escrita/leitura relevante:
 - **C5**: produz `colabs_nunca_bateu` com juiz (`app/escala/services/cadastro_realidade.py:169`); formata `_nunca_bateu` (`:176`); lê contador (`app/chamados/management/commands/disparar_perguntas_competencia.py:56`).
 - **`barrados_desligado`**: produzido como quantidade de pares únicos excluídos (`app/chamados/management/commands/disparar_perguntas_competencia.py:58`, `:62`, `:72`); é contador de exclusão, não prova de desligados ainda retidos (`:61`).
 
-## 13/11 13:26 · sessao dbab1381c92f · - · - · origem=Ronald (tmux)
-
-1. **BLOQUEANTE — não existe o contador `desligados_retidos` pedido no aval.** A busca literal em toda a cópia não encontrou definição nem leitor; o ESTADO conecta `fio_estado`, e o carimbo publica contadores de fio/C5, sem esse contador. `bin/gerar_estado.py:260`; `app/chamados/management/commands/vigiar_fio_morto.py:233`; `app/chamados/management/commands/vigiar_fio_morto.py:239`. Ausência literal no conjunto da cópia: `[nao verificado]` por arquivo:linha.
-
-2. **BLOQUEANTE para declarar PRONTO — golden e medição de produção ausentes.** O teste diz que col718/col270/col373 serão medidos por sonda no pouso; seu fixture é genérico, com três dias da competência 10, não os 8/3/1 dias da competência 11. `app/folha/tests/test_lei_desligado_nao_trava.py:8`; `app/folha/tests/test_lei_desligado_nao_trava.py:26`. Saídas RED/GREEN nominais, suite completa, opus, pouso e comp11=0: `[nao verificado]`.
-
-3. **NAO-BLOQ — `barrados_desligado` não substitui `desligados_retidos`.** Conta pares desligados excluídos do comparador C5, antes da filtragem pelo piso temporal; não consulta retenção da folha. `app/chamados/management/commands/disparar_perguntas_competencia.py:60`; `app/chamados/management/commands/disparar_perguntas_competencia.py:72`. Viaja no bloco informativo inteiro `nunca_bateu_sem_adesao` do carimbo, enquanto `censo/esperado` levam apenas `numero/esperado` do comparador. `app/chamados/management/commands/vigiar_fio_morto.py:233`; `app/chamados/management/commands/vigiar_fio_morto.py:242`. O ESTADO compara chaves do `esperado` e mostra divergências, sem ler `barrados_desligado` como contador próprio. `bin/fio_estado.py:121`; `bin/fio_estado.py:191`.
-
-4. **NAO-BLOQ — mutante do retentor é testemunha positiva, não execução do FAIL exigido.** O teste denominado mutante força `esta_desligado=False` e afirma que os dias voltaram; não executa a asserção original esperando reprovação. `app/folha/tests/test_lei_desligado_nao_trava.py:135`. A asserção normal de vazio mataria esse mutante se executada sobre ele; portanto não há base para afirmar que o mutante é semanticamente inofensivo. `app/folha/tests/test_lei_desligado_nao_trava.py:67`. Execução ORM dessa mutação: `[nao verificado]`.
-
-5. **NAO-BLOQ — cobertura INSS/PROIBIDOS é parcial.** O controle afastado apenas cria `situacao='afastado'`, sem afastamento INSS materializado. `app/folha/tests/test_lei_desligado_nao_trava.py:50`; `app/folha/tests/test_lei_desligado_nao_trava.py:79`. O teste “nada escrito” compara apenas `CelulaDia`; não sela Batida, Ausencia ou lançamento de falta. `app/folha/tests/test_lei_desligado_nao_trava.py:128`.
-
-6. **NAO-BLOQ — selo AST do retentor aceita chamada em ramo morto.** Examina todos os nós e exige apenas o nome `esta_desligado`, sem verificar ramo morto ou influência no resultado. `app/folha/tests/test_lei_desligado_nao_trava.py:157`. O selo C5 possui tratamento/testemunha explícitos para ramo morto. `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:285`.
-
-Verificação executada sem banco/rede/escrita: C5 memória **9 OK** e matriz memória **20 OK**, incluindo seus catálogos de mutantes; registros de execução não salvos: `[nao verificado]`. Os módulos declaram execução em memória e carregamento das funções reais por AST. `app/chamados/tests/test_e4a2_c5_memoria.py:1`; `app/chamados/tests/test_e4a2_matriz_memoria.py:1`. O harness C5 realmente reaplica a asserção e exige `AssertionError` após mutação. `app/chamados/tests/test_e4a2_c5_memoria.py:211`.
-
-## 13/11 13:26 · sessao 9647e3caf3e2 · - · - · origem=Ronald (tmux)
-
-1. **BLOQUEANTE — ainda existe trava de aprovação para desligado.** `classificar_export` cria `turno_aberto` sem consultar `esta_desligado` e grava a resposta em `travas_aprovacao` (`app/folha/export.py:830-848`). O lote exclui o colaborador da aprovação (`app/ponto/views.py:1295-1312`), e a aprovação individual recusa explicitamente quem tem essa trava (`app/ponto/views.py:1505-1513`). A tela também usa essas travas para habilitar o botão (`app/ponto/views.py:1168-1171`). O carimbo automático do TXT mantém esse crivo (`app/folha/views.py:244-248`). **Precisão:** isso não impede necessariamente a linha no TXT: `montar_linhas_export` aceita fechamentos abertos e aprovados e seleciona pelo `status='entra'` (`app/folha/export.py:687`, `app/folha/export.py:714-726`).
-
-2. **BLOQUEANTE — informativo não integrado à apresentação do DP.** A lista nova só é acrescentada ao retorno da ferramenta `o_que_segura` (`app/folha/fora_da_folha.py:232-238`). O escritor do Retrato continua gravando somente campos antigos, sem `informativo_rescisao` (`app/folha/retrato_folha.py:1177-1189`); a tela lê as linhas gravadas (`app/folha/views_retrato.py:190-196`). O drawer lê o mesmo Retrato e seus campos antigos (`app/colaboradores/views.py:977-983`). Acesso manual pela ferramenta existe; entrega efetiva do informativo ao DP por tela/PDF é **[nao verificado]**.
-
-3. **BLOQUEANTE para o requisito literal de censo/juiz único — sobrevivem derivações paralelas.**
-   - O painel de retenção pergunta quem está fora ao export (`app/folha/views.py:586-591`), mas reconstrói os dias via `furos_por_dia`, cortando pela `data_demissao` crua (`app/folha/views.py:605-619`), em vez de ler `_dias_que_retem`.
-   - O preview apresenta como dias o tamanho da lista de motivos (`app/folha/views.py:398-402`).
-   - Esses caminhos não recolocam por si o desligado no balde `furo_espelho`, pois dependem previamente do veredito do export (`app/folha/views.py:589-591`); entretanto não satisfazem “nenhum leitor deriva por conta própria”.
-
-4. **NAO-BLOQ — leitores alinhados ao novo retentor.**
-   - `_dias_que_retem` delega diretamente a `motivos_retencao_celula(com_dias=True)` (`app/folha/fora_da_folha.py:95-99`).
-   - `dias_que_seguram` usa `classificar_export` e só busca dias dos itens `furo_espelho` (`app/folha/fora_da_folha.py:118-137`).
-   - `fora_da_folha` conta os dias recebidos dessa autoridade (`app/folha/fora_da_folha.py:160-193`).
-   - Prévia: `_cobre_a_retencao` consulta o retentor e usa suas datas (`app/folha/previa.py:169-173`).
-   - Vigia de pausa: consulta o mesmo retentor (`app/folha/services/vigia_pausa.py:123-130`).
-   - Vigia de fio: lê `dias_que_seguram` (`app/chamados/services/vigia_fio.py:583-587`).
-   - Retidos do gerador: deriva a lista do resultado `status/motivo` do export (`app/folha/views.py:257-260`).
-   - PDF de retidos: chama o mesmo `classificar_export` (`app/folha/views.py:858-859`).
-   - Retrato novo: `montar_linhas` lê `fora_da_folha` e grava os campos resultantes (`app/folha/retrato_folha.py:1156-1189`); único escritor persistente nessa porta é `lavrar_retrato_folha --apply` (`app/folha/management/commands/lavrar_retrato_folha.py:65-76`).
-
-5. **NAO-BLOQ — lavra antiga continua sendo lida sem reaplicar a cura.** O leitor de Retrato devolve as linhas JSON gravadas, sem consultar o estado atual do colaborador ou o novo retentor (`app/folha/retrato_folha.py:98-111`). A tela usa esse leitor (`app/folha/views_retrato.py:190-196`); o vigia de retidos calados também (`app/folha/vigia_retido_calado.py:45-55`). Portanto o pouso precisa incluir relavratura; ocorrência/execução dessa relavratura em produção é **[nao verificado]**. O indicador de frescor compara apenas o horário do Retrato com `FechamentoMensal.atualizado_em`, não com mudança de código ou de situação (`app/folha/retrato_folha.py:1295-1306`).
-
-6. **BLOQUEANTE — contador `desligados_retidos` no ESTADO ausente.** A busca literal em toda a cópia não encontrou o identificador **[nao verificado por referência positiva: ausência]**. O gerador tem integração explícita para outros medidores, como fio morto (`bin/gerar_estado.py:253-261`), leitores do dia (`bin/gerar_estado.py:284-293`) e turno do par (`bin/gerar_estado.py:294-302`); não há medidor/integração equivalente para desligados no código pesquisado **[nao verificado por referência positiva: ausência]**.
-
-## 13/11 12:59 · sessao c2c9fc70ece1 · HJ-090 · censo · origem=Code
-
-**(A) Não há arquivo em comum nas listas fornecidas. Nenhuma das três listas contém migration de `ponto`.** Para citar os anexos colados, conto o primeiro caminho depois de cada marcador como linha 1.
-
-| Obra | Interseção com os arquivos declarados da HJ-091 | Migration de `ponto` listada | Fonte fornecida |
-|---|---|---|---|
-| DESLIGADO | Vazia | Não | `arquivos_wt-desligado-112447.txt:1–14` |
-| FERIADO | Vazia | Não | `arquivos_wt-feriado1609-110424.txt:1–2` |
-| E3 | Vazia | Não | `arquivos_e3.txt:1–73` |
-
-O painel efetivamente usado é `app/templates/ponto/partials/painel_ausencia.html`, renderizado por `painel_ausencia`. Seus includes são `_cabecalho_drawer.html` e `_btn_pdf.html`; este inclui `_icone_pdf.html`. Nenhum desses caminhos aparece nas três listas fornecidas. (`app/ponto/views.py:2079`; `app/templates/ponto/partials/painel_ausencia.html:24`, `:206`, `:244`; `app/templates/core/_btn_pdf.html:37`; anexos acima.)
-
-`app/folha/export.py` aparece em DESLIGADO, mas o complemento declara expressamente que esse arquivo **não muda** na HJ-091. (`arquivos_wt-desligado-112447.txt:10`; `complemento_hj_091.txt:2`, numeração do texto fornecido.)
-
-Assim, os anexos não demonstram conflito de arquivo ou de número de migration. O número da migration futura e mudanças omitidas das listas são **[nao verificado]**. Existe na cópia a migration `0077`, dependente de `0076`; isso não demonstra reserva do próximo número. (`app/ponto/migrations/0077_ausencia_minutos_help_text_grade.py:8`.)
-
-**(B) Escritores de `Ausencia` que alcançam férias.**
-
-“Derivada” abaixo designa a linha criada por `espelhar_ferias`, que grava `Ferias agendamento #<pk>` na descrição. O espelhador seleciona existentes por colaborador, tipo e janela, sem filtrar status ou conferir esse texto; qualquer dia encontrado é pulado. (`app/ponto/services/ausencia.py:1183`, `:1200`, `:1203`, `:1207`.)
-
-`ABERTAS` significa `aguardando_documento` e `aguardando_decisao`. A máquina permite aprovação a partir de `aguardando_decisao`; `aguardando_documento` não tem transição direta para aprovada. (`app/ponto/services/ausencia.py:766`, `:768`.)
-
-| Função | Escrita e alcance de férias derivada |
-|---|---|
-| `criar_ausencia` | Valida tipo pelo catálogo; cria e salva. Também encontra rejeitada do mesmo colaborador/tipo/data e chama `_reabrir`, sem conferir agendamento de origem. **Alcança derivada rejeitada por esse caminho.** (`app/ponto/services/ausencia.py:194`, `:254`, `:291`, `:385`, `:418`.) |
-| `garantir_ausencia` | Delega ao criador com `se_existir='retornar'`; não acrescenta exclusão de férias. **Função genérica; seus chamadores de regularização/abandono fornecem `falta`.** (`app/ponto/services/ausencia.py:453`, `:461`; `app/ponto/services/regularizacao.py:118`; `app/ponto/management/commands/marcar_abandono_provisorio.py:76`.) |
-| `editar_ausencia_registro` | Troca tipo, data, fim, dias, descrição não vazia e minutos; salva, invalida fechamento e rejulga estado quando muda o tipo. **Alcança derivada**, sem guarda de origem. (`app/ponto/services/ausencia.py:465`, `:474`, `:498`, `:509`, `:524`, `:528`.) |
-| `rejulgar_status_pelo_tipo` | Só atua em estados abertos; calcula estado inicial, muda estado e eventualmente grava prazo. **Alcança férias abertas**; para férias, o estado inicial é `aguardando_decisao`, sem prazo documental. (`app/ponto/services/ausencia.py:534`, `:541`, `:546`, `:551`, `:794`.) |
-| `mudar_estado` | Valida transição, grava status, limpa prazo quando cabível e salva os campos derivados. **Alcança derivada**, sem filtro de tipo/origem. (`app/ponto/services/ausencia.py:809`, `:818`, `:825`, `:836`.) |
-| `decidir` | Aceita aprovada/rejeitada; chama `mudar_estado` e grava decisor, data, descrição e período quando fornecidos. **Alcança derivada.** (`app/ponto/services/ausencia.py:898`, `:905`, `:912`, `:914`, `:928`.) |
-| `_validar_periodo` / `_aplicar_periodo` | Auxiliares de `decidir`: exigem ausência parcial e atribuem horas. **Não excluem férias por literal**, mas a escrita depende de `cobre_parte_do_dia`. (`app/ponto/services/ausencia.py:880`, `:888`, `:892`, `:909`, `:926`.) |
-| `anexar_documento` | Grava documento; em `aguardando_documento`, muda para `aguardando_decisao`. **Alcança derivada**, sem filtro de tipo. (`app/ponto/services/ausencia.py:847`, `:858`, `:860`, `:874`.) |
-| `reverter_rejeicao` | Exige rejeitada e motivo; delega a `_reabrir`. **Alcança derivada rejeitada.** (`app/ponto/services/ausencia.py:1072`, `:1098`, `:1101`, `:1103`.) |
-| `_reabrir` | Pode gravar documento/descrição; muda ao estado inicial calculado pelo tipo/anexo e grava prazo quando necessário. **Alcança derivada**, sem conferir origem. (`app/ponto/services/ausencia.py:1107`, `:1120`, `:1131`, `:1141`, `:1142`, `:1149`.) |
-| `escalonar_aguardando_documento` | Seleciona por estado e prazo, sem tipo; com `aplicar`, vencidas passam a `aguardando_decisao`. **Alcança férias que estejam nessa seleção.** (`app/ponto/services/ausencia.py:974`, `:993`, `:1002`.) |
-| `espelhar_ferias` | Agendamento ativo: cria férias aprovadas nos dias sem linha existente. Inativo: apaga as férias selecionadas na janela. **Alcança derivadas e outras férias da mesma janela**, sem conferir origem. Não busca linhas deslocadas para fora dela. (`app/ponto/services/ausencia.py:1181`, `:1183`, `:1189`, `:1200`, `:1203`.) |
-| `apagar_ausencias_de_ferias` | Apaga por colaborador, `tipo='ferias'` e data inicial dentro da janela; `exceto` preserva a janela indicada. **Alcança qualquer derivada selecionada**, sem origem. (`app/ponto/services/ausencia.py:1263`, `:1267`, `:1269`, `:1271`.) |
-| `rejeitar_ausencias_de_ferias` | Faz `update` para rejeitada nas férias não rejeitadas da janela, com atualização do carimbo; não passa por `save`. **Alcança qualquer derivada selecionada.** (`app/ponto/services/ausencia.py:1274`, `:1282`.) |
-| `apagar_ausencias_em_ensaio` | Exige banco de ensaio e apaga o queryset recebido. **Alcança derivada incluída nele.** (`app/ponto/services/ausencia.py:1287`, `:1289`, `:1291`.) |
-| `rederivar_fim` | Salva novamente a ausência e recarrega. **Alcança derivada**, sem filtro próprio. (`app/ponto/services/ausencia.py:1294`, `:1297`.) |
-| `Ausencia.save` | Carimba decisão; deriva dias pelo intervalo e fim pelos dias quando cabível. **Alcança derivada**, sem guarda de origem. (`app/ponto/models.py:868`, `:872`, `:894`, `:902`, `:908`.) |
-
-O adaptador `_a4_decidir` das views delega a `decidir`; não acrescenta guarda para férias derivadas. (`app/ponto/views.py:82`, `:85`.)
-
-**Portas HTTP de ausência.** As rotas de ponto recebem prefixo `/ponto/`; as da API, `/api/`. (`app/config/urls.py:29`, `:37`.)
-
-| View / rota | Comportamento e alcance |
-|---|---|
-| `lancar_ausencia` — `ausencias/lancar/` | Tipo vem do POST; chama criador com `status='aprovada'`. **Cria férias sem agendamento e alcança reabertura pelo criador**; não seleciona derivada por ID. (`app/ponto/urls.py:57`; `app/ponto/views.py:2378`, `:2415`, `:2420`; `app/ponto/services/ausencia.py:254`, `:291`.) |
-| `submeter_ausencia` — `ausencias/submeter/` | Valida catálogo/sobreposição e chama criador, sem status explícito nem agendamento. **Não exclui férias**; aplica os vetos e a reabertura do criador. (`app/ponto/urls.py:64`; `app/ponto/views.py:2509`, `:2525`, `:2536`.) |
-| `editar_ausencia` — `ausencias/<aid>/editar/` | Busca só por PK e chama editor geral. **Edita derivada**, conservando férias ou trocando o tipo, sujeita às validações do editor. (`app/ponto/urls.py:76`; `app/ponto/views.py:2761`, `:2794`, `:2796`.) |
-| `cancelar_ausencia` — `ausencias/<aid>/cancelar/` | Busca por PK; recusa apenas rejeitada; decide rejeitada e prefixa descrição. **Cancela derivada aprovada.** (`app/ponto/urls.py:75`; `app/ponto/views.py:2728`, `:2729`, `:2734`.) |
-| `cancelar_ausencia_lote` — `ausencias/lote/cancelar/` | Para cada PK, exclui só rejeitada e decide rejeitada. **Cancela derivada aprovada.** (`app/ponto/urls.py:56`; `app/ponto/views.py:2345`, `:2351`.) |
-| `rejeitar_ausencia` — `ausencias/<aid>/rejeitar/` | Seleciona ausência e raiz/irmãos documentais em estados abertos; rejeita cada um. **Alcança derivada aberta.** (`app/ponto/urls.py:74`; `app/ponto/views.py:2687`, `:2689`, `:2701`.) |
-| `rejeitar_ausencia_lote` — `ausencias/lote/rejeitar/` | PK + estados abertos; rejeita e pode acrescentar motivo à descrição. **Alcança derivada aberta.** (`app/ponto/urls.py:55`; `app/ponto/views.py:2316`, `:2319`.) |
-| `reverter_rejeicao_ausencia` — `ausencias/<aid>/reverter-rejeicao/` | Busca só por PK e chama reversor. **Reabre derivada rejeitada**, exigindo motivo. (`app/ponto/urls.py:68`; `app/ponto/views.py:2583`, `:2584`; `app/ponto/services/ausencia.py:1098`, `:1101`.) |
-| `aprovar_ausencia` — `ausencias/<aid>/aprovar/` | Seleciona aberta e raiz/irmãos abertos; passa pelo gate e decide aprovação. **Não exclui derivada**; gate e máquina de estados limitam a aprovação. (`app/ponto/urls.py:65`; `app/ponto/views.py:2606`, `:2608`, `:2616`, `:2643`.) |
-| `aprovar_ausencia_lote` — `ausencias/lote/aprovar/` | PK + estados abertos, gate e decisão. **Não exclui derivada**, com as mesmas limitações de aprovação. (`app/ponto/urls.py:54`; `app/ponto/views.py:2282`, `:2284`, `:2290`.) |
-| `editar_periodo_ausencia` — `ausencias/<aid>/periodo/` | Busca aprovada por PK e envia horas ao decisor. **Sem exclusão literal de férias**; exige tipo parcial no catálogo vigente, dia único e minutos entre zero e o dia inteiro. O catálogo vigente de produção é **[nao verificado]**. (`app/ponto/urls.py:66`; `app/ponto/views.py:2670`, `:2673`; `app/ponto/services/ausencia.py:888`; `app/ponto/turnos.py:2600`.) |
-| `anexar_documento_ausencia` — `ausencias/<aid>/anexar-documento/` | Busca por PK sem filtro de tipo/status e chama anexador. **Alcança derivada.** (`app/ponto/urls.py:71`; `app/ponto/views.py:2140`, `:2151`.) |
-| `api_ausencias` — `ausencias/` | POST fornece tipo; criador recebe `devolver_mesmo_fato`. Reenvio pode anexar documento na existente. **Cria férias, reabre rejeitada e anexa na derivada existente**, conforme esses caminhos. (`app/api/urls.py:82`; `app/api/views.py:1705`, `:1805`, `:1811`, `:1833`, `:1838`; `app/ponto/services/ausencia.py:254`, `:291`.) |
-| `api_ausencia_documento` — `ausencias/<aid>/documento/` | Busca PK + colaborador, exige estado aberto e chama anexador. **Alcança derivada aberta do próprio colaborador.** (`app/api/urls.py:83`; `app/api/views.py:3069`, `:3078`, `:3108`.) |
-| `veredito_celula_view` — `celula/veredito/` | Encaminha `tipo_ausencia` recebido ao serviço `veredito_celula`; no ramo justificado ele cria ausência aprovada sem veto próprio a férias. **Cria férias sem agendamento; a reabertura segue o criador.** (`app/ponto/urls.py:58`; `app/ponto/views.py:3312`, `:3340`; `app/ponto/services/veredito_celula.py:211`, `:333`, `:337`.) |
-
-O veto a férias de `AusenciaForm.clean_tipo` não protege lançar/submeter/editar: essas views chamam diretamente os serviços, que validam pelo catálogo. (`app/ponto/forms.py:65`; `app/ponto/views.py:2415`, `:2536`, `:2794`; `app/ponto/services/ausencia.py:194`, `:474`.)
-
-Há ainda o escritor genérico `lancar_ausencia_porta`, chamado por `_aplicar_ausencia` através de `ia_perguntar → _aplicar_proposta`, em `/ia/perguntar/`. O escritor recebe tipo e cria aprovada; **o fluxo normal de prévia recusa férias antes de guardar a proposta**. (`app/ponto/services/checar_ausencia.py:43`, `:46`, `:10`, `:21`; `app/core/views_ia.py:931`, `:935`, `:985`, `:153`, `:874`; `app/core/urls.py:15`.)
-
-**Escrita pelo agendamento e respectivas portas.**
-
-`AgendamentoFerias.save → _sync_ausencia → espelhar_ferias` executa em save completo ou alteração de status/datas/período aquisitivo. `AgendamentoFerias.delete` chama o apagador de férias da janela inteira, sem conferir `#N`. **Ambos alcançam as derivadas selecionadas.** (`app/ferias/models.py:386`, `:392`, `:444`, `:446`, `:450`, `:453`, `:455`.)
-
-As rotas desta tabela têm prefixo `/ferias/`. (`app/config/urls.py:32`.)
-
-| Escritor | Efeito nas ausências | View/porta que chega nele |
-|---|---|---|
-| `registrar_gozo_historico` | Cria agendamento e salva, disparando espelho. (`app/ferias/services.py:270`, `:278`, `:298`.) | `criar_periodo_aquisitivo → registrar_gozo_historico`. (`app/ferias/views.py:124`, `:211`; `app/ferias/urls.py:15`.) |
-| `executar_agendamento` | Cria agendamento, disparando espelho. (`app/ferias/services.py:306`, `:321`.) | `agendar_ferias` e `agendar_lote`, pelo wrapper `_executar_agendamento`. (`app/ferias/views.py:299`, `:636`, `:260`, `:264`; `app/ferias/urls.py:16`, `:10`.) |
-| `agendar_ferias_porta` | Delega a `executar_agendamento`. (`app/ferias/services.py:128`, `:157`.) | `ia_perguntar → _aplicar_proposta → _aplicar_ferias → escritor registrado`. (`app/core/views_ia.py:874`, `:145`, `:668`, `:684`; `app/core/intake.py:34`; `app/core/urls.py:15`.) |
-| `cancelar_agendamento_dp` | Salva cancelado; o espelho apaga férias da janela. (`app/ferias/services.py:372`, `:384`, `:385`; `app/ponto/services/ausencia.py:1189`.) | `cancelar_agendamento`. (`app/ferias/views.py:322`, `:330`; `app/ferias/urls.py:18`.) |
-| `executar_cancelamento_admin` | Primeiro rejeita férias da janela; depois salva cancelado e o espelho as apaga. (`app/ferias/services.py:390`, `:411`, `:417`.) | `cancelar_agendamento_admin`, `corrigir_concluida_admin` e `cancelar_admin_massa`, pelo wrapper `_executar_cancelamento_admin`; correção de concluída passa `permitir_concluido=True`. (`app/ferias/views.py:370`, `:418`, `:575`, `:527`, `:531`; `app/ferias/urls.py:19`, `:20`, `:9`.) |
-| `_trocar_janela` | Apaga trecho antigo fora da janela nova; salva datas/status e espelha a nova janela. (`app/ferias/services.py:422`, `:445`, `:450`.) | `editar_datas_admin → corrigir_datas_agendamento → _trocar_janela`; `editar_agendamento → remarcar_agendamento → _trocar_janela`. (`app/ferias/views.py:503`, `:688`; `app/ferias/services.py:457`, `:459`, `:462`, `:466`; `app/ferias/urls.py:21`, `:22`.) |
-| `aprovar_solicitacao` | Havendo ciclo e saldo, cria/salva agendamento, disparando espelho. (`app/ferias/services.py:469`, `:483`, `:489`, `:493`, `:503`.) | `avaliar_solicitacao`, ação aprovar. (`app/ferias/views.py:733`, `:750`, `:753`; `app/ferias/urls.py:12`.) |
-| `alinhar_status_por_data` | Relê sob trava; mudança de status de não cancelado dispara espelho. (`app/ferias/services.py:588`, `:600`, `:602`, `:604`.) | `sincronizar_status_ferias.Command.handle`, somente com `--apply`. (`app/ferias/management/commands/sincronizar_status_ferias.py:24`, `:44`, `:49`.) |
-
-Pedir confirmação e registrar resposta do colaborador salvam somente campos de confirmação, que não disparam esse espelho. (`app/ferias/services.py:553`, `:571`, `:575`; `app/ferias/models.py:444`, `:450`.)
-
-**Demais comandos, função genérica e escrita auxiliar.**
-
-| Entrada/função | Comportamento e alcance |
-|---|---|
-| `curar_ausencia_sem_fim.Command.handle` | Seleciona não rejeitadas com dias > 1, fim nulo e tipo fora dos abertos; `--apply` chama `rederivar_fim`. **Não exclui férias derivadas.** (`app/ponto/management/commands/curar_ausencia_sem_fim.py:26`, `:29`, `:38`, `:46`.) |
-| `rejulgar_status_por_tipo.Command.handle` | Seleciona `aguardando_documento`, sem tipo; `--apply` chama rejulgador. **Alcança derivadas nesse estado.** (`app/ponto/management/commands/rejulgar_status_por_tipo.py:19`, `:23`, `:30`.) |
-| `escalonar_documentos_ausencia.Command.handle` | Encaminha `--apply` ao escalonador geral. **Alcance dado pela seleção de estado/prazo, sem exclusão de férias.** (`app/ponto/management/commands/escalonar_documentos_ausencia.py:24`, `:26`; `app/ponto/services/ausencia.py:993`.) |
-| `zerar_dados_operacionais.Command.handle` | Com confirmação, envia todas as ausências ao apagador de ensaio. **Inclui derivadas em banco de ensaio.** (`app/ponto/management/commands/zerar_dados_operacionais.py:71`, `:89`; `app/ponto/services/ausencia.py:1289`.) |
-| `rederivar_minutos_h06_comp11.tratar_linha` | Busca PK, confere identidade e chama editor geral, sem veto próprio de tipo. **Função genérica; o plano atual do comando contém somente atestado/falta.** (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:126`, `:138`, `:142`, `:169`, `:50`, `:244`, `:265`.) |
-| `_materializar_ausencia_de_resposta` | Recebe tipo/status e chama criador sem veto próprio a férias. **O fluxo atual fornece somente falta/atestado**, pelo mapa de escapes. (`app/chamados/services/materializacao.py:502`, `:527`, `:603`; `app/chamados/services/disputa_emissao.py:1538`.) |
-| Portas desse materializador | `responder_pergunta_disputa` e `api_disputa_responder` fornecem resposta ao core; o mapa acima restringe os tipos produzidos. (`app/chamados/views.py:1228`, `:1283`; `app/chamados/urls.py:17`; `app/api/views.py:2577`, `:2620`; `app/api/urls.py:93`.) |
-| Código de módulo `sombra_mascara_pessoal.py` | Exige banco `sombra`; atualiza documento e descrição sem filtro de tipo. **Alcança derivadas na sombra**, fora das portas da aplicação. (`bin/sombra_mascara_pessoal.py:10`, `:22`, `:44`, `:62`; `bin/sombra_regras_pessoais.py:64`, `:109`.) |
-
-Também existem escritores históricos nas migrations de dados, sem filtro que exclua férias:
-
-- `0057._para_frente` transforma `pendente` em estado documental/decisório; `_para_tras` retorna os estados abertos para `pendente`. **Alcançam férias selecionadas.** (`app/ponto/migrations/0057_a4_backfill_pendente.py:21`, `:35`, `:43`, `:58`, `:63`.)
-- `0058._para_frente` e `_para_tras` alteram prazo das ausências em `aguardando_documento`. **Alcançam férias selecionadas.** (`app/ponto/migrations/0058_a4_relogio_recomeca.py:29`, `:37`, `:42`, `:57`, `:59`, `:63`.)
-- `0059._mover`, chamado por `_para_frente`/`_para_tras`, altera prazo por estado, sem tipo. **Alcança férias selecionadas.** (`app/ponto/migrations/0059_a4_d0_no_primeiro_dia_do_cron.py:26`, `:32`, `:36`, `:48`, `:53`.)
-
-O Django admin de `Ausencia` está em somente leitura: adicionar, alterar e apagar retornam falso. (`app/ponto/admin.py:38`; `app/core/admin.py:59`, `:62`, `:65`.)
-
-**Leitores que casam férias com agendamento pelo `#N`: nenhum localizado; inexistência universal [nao verificado].** Os comportamentos concretos encontrados são:
-
-| Leitor | O que efetivamente usa |
-|---|---|
-| `espelhar_ferias` | Colaborador + tipo férias + janela; pula dia existente. O `#N` é **escrito**, sem ser usado para casar a existente. (`app/ponto/services/ausencia.py:1183`, `:1200`, `:1207`.) |
-| `AgendamentoFerias._guard_sobreposicao` | Trata como `_minhas` todas as férias do colaborador na janela antiga; não compara descrição. (`app/ferias/models.py:427`, `:430`, `:435`.) |
-| `painel_ausencia` / template | Agrupa por `documento_referencia`; mostra intervalo/data da ausência e descrição como texto. (`app/ponto/views.py:2073`, `:2076`, `:2079`; `app/templates/ponto/partials/painel_ausencia.html:50`, `:57`.) |
-| `dias_ferias_com_batida` | Lê agendamentos por `ferias_na_janela` e cruza suas datas com batidas; não casa descrição de ausência. (`app/folha/export.py:484`, `:491`, `:499`.) |
-
-Ocorrências, contagens e situação atual de produção além do texto fornecido permanecem **[nao verificado]**.
-
-## 13/11 12:57 · sessao 0858a2d44305 · - · - · origem=Ronald (tmux)
-
-As duas portas que fornecem resposta arbitrária ao ramo escape são:
-
-- `responder_pergunta_disputa`: recebe `resposta` do POST e chama o core. `app/chamados/views.py:1228`, `:1265`, `:1283`; rota `app/chamados/urls.py:17`.
-- `api_disputa_responder`: recebe `resposta` de `request.data` e chama o core. `app/api/views.py:2577`, `:2614`, `:2620`; rota `app/api/urls.py:93`.
-
-O core consulta `ESCAPES_QUE_VIRAM_AUSENCIA` e chama `_materializar_ausencia_de_resposta`; o mapa atual contém somente falta e atestado. `app/chamados/services/disputa_emissao.py:1538`; `app/chamados/services/materializacao.py:603`.
-
-Outros caminhos chegam ao core, mas fornecem apenas hora e não alcançam esse ramo:
-
-- `aplicar_declaracao`: passa `p['hora']`, produzida pelo parser de horas. `app/chamados/services/declaracao_texto.py:28`, `:35`, `:624`, `:635`, `:693`. HTTP `detalhe_chamado_local` com ação `aplicar_declaracao_texto`: `app/chamados/views.py:359`, `:478`; rota `app/chamados/urls.py:14`.
-- `acao_corrigir_resposta`: exige regex `HH:MM` e pergunta de hora antes de chamar o core. `app/chamados/services/acoes_disputa.py:302`, `:336`, `:349`, `:371`. Entradas: `detalhe_chamado_local` → `:536`; `fio_colaborador` → `app/chamados/views.py:674`; `modal_fio_colaborador` → `:954`; dispatcher `app/chamados/services/fio.py:485`, `:639`. Rotas `app/chamados/urls.py:14`, `:21`, `:39`.
-- `declarar_hora_colab`: chama core com `hora`. `app/chamados/services/declaracao_texto.py:306`, `:419`; entrada `responder_chamado_colaborador`: `app/chamados/views.py:1041`, `:1089`.
-
-`declarar_nao_trabalhou` não chama o core nem cria Ausência: atualiza contexto e anexa nota. `app/chamados/services/declaracao_texto.py:189`, `:208`, `:211`.
-
-_4604 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4608 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
