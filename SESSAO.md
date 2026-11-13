@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 17:16:12.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (583.8 MB). Acoes na janela: **2017**.
+**Medido em 13/11/2026 17:21:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (584.5 MB). Acoes na janela: **2023**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:20:09 | Bash |  | `cd /home/ronald/saas-hasner; python3 -I - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md' t=open(p).read().split('\n') i=[n for n,l in enumerate(t) if l.startswith('\| RETRATO-DOIS-RELOGIOS \|')]; assert len(i)==1 novas=['\| OTIMIZA-1-COMPLEMENTO-CARGA \| **COMPLEMENTO da OTIMIZA-1** (raia wt-si-2235; REGISTRAR, nao construir; fonte logs/E3-FORMA-SQL/impacto/item3.md, pico 1237 MB RSS, ca ...` |
+| 17:19:56 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "^\| LEI-DESLIGADO-NAO-TRAVA" app/docs/BACKLOG.md \| cut -d: -f1; awk -F'\|' '/^\\| LEI-DESLIGADO-NAO-TRAVA/{print $4}' app/docs/BACKLOG.md \| cut -c1-400` |
+| 17:19:50 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 725,740p app/docs/BACKLOG.md \| cut -c1-260; sed -n 1184,1192p app/docs/BACKLOG.md \| cut -c1-200` |
+| 17:19:46 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2081p app/docs/BACKLOG.md \| cut -c1-900; /bin/grep -n "^## \\|^### " app/docs/BACKLOG.md \| head -20; /bin/grep -n "LEI-DESLIGADO" app/docs/BACKLOG.md \| head -5 \| cut -c1-200` |
+| 17:19:41 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/raia_preparacao.txt <<'EOF' aval Ronald: RAIA-PREPARACAO (CONSTRUIR so leitura e desenho; nenhuma lei nova). UNIDADE: obra. MUDA: nada em producao, nada na trava de testes, nada na sombra; nao tira vaga de construtor (PRE-APROVADO-AMPLIA c intocado). DESPACHO: Codex primeiro (leitura/censo); o Code confere amostra declarada (CODEX 4) e publica. Sa ...` |
+| 17:19:26 | Bash |  | `cd /home/ronald/saas-hasner; git fetch -q origin && git rev-parse origin/main HEAD; git log --oneline -3; git status --porcelain \| /bin/grep -v '^??'` |
 | 17:10:17 | Bash |  | `date +%H:%M; ps -p 2607105 -o etime= ; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; tail -n 3 /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/push/push.log \| cut -c1-200` |
 | 17:10:12 | Monitor | sonda E3 v4 (A1 resto + A2 entra) na sombra | `F=/home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto; until [ -f $F/fim_v4 ]; do /usr/bin/sleep 20; done; tail -n 1 $F/v4_det.runlog; /bin/grep -c V4_DET $F/v4_det.runlog; /bin/grep -c ERRO_ $F/v4_det.runlog; /bin/grep -E "V4_ACHADOS\|FIM_V4\|Traceback\|Error" $F/v4_det.runlog \| tail -n 5` |
 | 17:10:05 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "in ALVO\\|V4_\\|ALVO\[" logs/sombra/e3_v4_det.py \| cut -c1-150` |
