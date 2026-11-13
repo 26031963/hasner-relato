@@ -1,7 +1,131 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 16:22** · publicado em **13/11/2026 16:23** (UTC-3)
+> Ultima resposta processada: **13/11/2026 16:28** · publicado em **13/11/2026 16:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 16:28 · sessao 2177abea7475 · - · - · origem=Ronald (tmux)
+
+Leitura concluída. Não localizei AGENTS.md na busca por `rg --files -g AGENTS.md`; instruções em ancestrais fora da árvore [não verificado].
+
+**Incompatibilidade central entre anexo e código atual**
+
+- `diff_e3_sombra.py` não escreve `PAR_DIF` nem arrays `[copia, base]`: calcula agregado e o imprime como JSON (`app/chamados/management/commands/diff_e3_sombra.py:108`, `:118`, `:148`). Define `atual` como C17 e `futuro` como tarefa (`:127-130`), mas essa definição não confirma a ordem da versão do instrumento que produziu o anexo.
+- A tarefa atual não pode escrever fio `chamado`: escolhe somente `colab`, `admin`, `sistema`, `nao_sei`, `nada` (`app/chamados/services/tarefa_do_dia.py:553-554`); a projeção pública documenta porta com fio `colab` ou `admin` (`:559-565`). O anexo atribui `chamado` à cópia; procedência da execução [não verificado].
+- Na mesma alimentação, a fila da tarefa é subconjunto da fila C17: tarefa toma portas inteiras das ações ∩ fila global, depois ∩ chamados da célula, e filtra visíveis (`app/chamados/services/tarefa_do_dia.py:548-551`); C17 usa todos os chamados da célula e filtra visíveis (`app/chamados/juizes.py:1677-1688`). Isso impede justificar ampliações do anexo como uma identidade comprovada destes dois corpos sobre a mesma alimentação; alimentações efetivamente executadas [não verificado].
+
+**Quem escreve e lê**
+
+| Campo | Escritor lógico atual | Leitor real |
+|---|---|---|
+| fio | `_portas_da_tarefa`, prioridade de donos das ações (`app/chamados/services/tarefa_do_dia.py:552-556`); `porta_da_tarefa` só projeta (`:565`) | folha `_fio_da_porta` (`app/folha/fora_da_folha.py:86-89`); vigia `censo_alcance` (`app/chamados/services/vigia_fio.py:648-655`) |
+| fila | ações com porta, pertencimento à fila, vínculo com célula e visibilidade (`app/chamados/services/tarefa_do_dia.py:548-556`) | folha `o_que_segura` converte para lista de chamados mostrados (`app/folha/fora_da_folha.py:233-242`) |
+| rota | tarefa: tem porta exigível da célula → `porta_fila`, só âncora exigível → `porta_pergunta`, nenhuma → `None` (`app/chamados/services/tarefa_do_dia.py:548-556`) | vigia soma por rota e lista (`app/chamados/services/vigia_fio.py:652-655`) |
+| sem_porta | não é coluna persistida: o comparador fabrica `porta is None` (`app/chamados/management/commands/diff_e3_sombra.py:56`) | CXR aplica diretamente `porta_da_tarefa(...) is not None` para excluir o dia (`app/escala/services/cadastro_realidade.py:492-498`) |
+| sem_fio | não é coluna persistida: comparador fabrica `porta is None` (`app/chamados/management/commands/diff_e3_sombra.py:59`) | pauta lê `_fio_do_dia` e compara ao `FIO_SEM_PORTA` (`app/ponto/services/pautas_dos_discordantes.py:64`, `:79-84`) |
+
+Escritor lógico C17 conservado no HEAD: fio por verbo, prioridade `cobrar→colab`, `validar→admin`, demais→`chamado` (`app/chamados/juizes.py:1624-1639`); fila/rota/verbos/fio retornados juntos (`:1677-1688`). Esses são bytes da cópia, não comprovação dos bytes de `main` antes da E3 [não verificado].
+
+Os nomes de leitores no comparador não significam execução deles: a função diz expressamente “não executa os censos nem suas outras decisões” (`app/chamados/management/commands/diff_e3_sombra.py:47`).
+
+**Discordância na mesma cópia**
+
+Nenhum grupo do anexo demonstra a contradição exemplificada pelo usuário [não verificado quanto à execução real]. Neste comparador, todos os “leitores” são projeções da mesma variável `porta`: fio da folha e do vigia vêm do mesmo valor (`app/chamados/management/commands/diff_e3_sombra.py:49`, `:54`); `sem_porta` e `sem_fio` são exatamente o mesmo teste (`:56`, `:59`). Se a porta tem `fio='chamado'`, sua rota é projetada da mesma porta, não `None` (`:49-55`).
+
+Leitores reais também chamam a mesma autoridade: folha `porta_da_tarefa(carga.tarefa(...))` (`app/folha/fora_da_folha.py:71-74`), vigia (`app/chamados/services/vigia_fio.py:640-641`), CXR (`app/escala/services/cadastro_realidade.py:492-497`), pauta via folha (`app/ponto/services/pautas_dos_discordantes.py:64`, `:79-82`). Ainda faltariam execuções comparáveis, mesma entrada/instante/estado, para afirmar igualdade efetiva entre cargas independentes [não decidível]. Lei aplicável: L-002 (`app/docs/LEIS.md:60`) e propriedade “todo leitor lê o mesmo número” de L-110 (`app/docs/LEIS.md:136`).
+
+O vigia real, quando não há porta, ainda pode classificar dia de hoje/futuro ou balde de lei, em vez de contar fio morto (`app/chamados/services/vigia_fio.py:656-668`). O comparador não mede esses ramos (`app/chamados/management/commands/diff_e3_sombra.py:47`).
+
+**Semânticas**
+
+- Dia da tarefa é **dia do turno** (`app/chamados/services/tarefa_do_dia.py:573-583`); `data_evento` é explicitamente esse dia, sem reinterpretar como dia civil (`:219-222`, `:238`).
+- `data_civil` é separado, calculado pelo instante local do marco (`app/chamados/services/tarefa_do_dia.py:94-105`). Logo uma mudança turno/civil não pode ser inferida de um `PAR_DIF` sem perguntas/marcos [não decidível].
+- A tarefa busca perguntas por `data_evento` na janela e agrupa por `(colaborador, data_evento)` (`app/chamados/services/tarefa_do_dia.py:375-382`). C17 lê perguntas associadas por `celula_id` (`app/chamados/juizes.py:1599-1604`). Célula/pergunta mal associadas poderiam ser relevantes, mas o anexo não traz identidades dessas perguntas nem seus dias [não decidível].
+- `fila_ids` é global: itera `qs_na_fila()` sem recorte de datas; só `fila_cel` é restrita às células fornecidas (`app/chamados/juizes.py:1557-1567`). A partição de verbos é sobre todos os vivos, também sem janela (`:1558`). Isso é deliberado para preservar crédito do painel (`:1577-1583`).
+- A tarefa primeiro restringe `_fila` às âncoras de suas perguntas (`app/chamados/services/tarefa_do_dia.py:415-418`) e depois usa a alimentação global para expor as portas efetivamente exigíveis (`:529-534`, `:548-556`). Não é fila global de um lado versus fila temporal de outro.
+- Fila significa vivos cobrando e não silenciados no instante (`app/chamados/services/painel.py:158-190`), enquanto a tupla pública significa portas visíveis da própria célula (`app/chamados/services/tarefa_do_dia.py:550-551`; `app/chamados/juizes.py:1654-1657`). Confundir tupla pública com todas as âncoras seria significado incorreto; o código da folha preserva essa distinção (`app/folha/fora_da_folha.py:235-239`).
+
+**Classes**
+
+Atribuidor é `casos_do_par`, não os leitores (`app/chamados/management/commands/diff_e3_sombra.py:63-70`):
+
+- `todos`: sempre;
+- `so_fila_sem_pergunta`: fila da célula não vazia e nenhuma pergunta viva C6;
+- `fila_A_pergunta_B` e `verbos_A_B`: sempre juntos, se há fila da célula e âncora de pergunta viva na fila fora daquele conjunto;
+- `isento_fila_residual`: tarefa com razão `isento_ponto` e fila da célula.
+
+São etiquetas sobrepostas; o laço contabiliza uma linha em cada etiqueta aplicável (`app/chamados/management/commands/diff_e3_sombra.py:131-139`). A classe `so_fila_sem_pergunta` não prova ausência de perguntas brutas/decisões nem identifica dono L-099: “vivas” vem do C6 (`app/chamados/juizes.py:1599-1604`).
+
+## 13/11 16:28 · sessao 5c944161d1b8 · - · - · origem=Ronald (tmux)
+
+O código disponível não confirma o formato nem a ordem declarados no anexo: `diff_e3_sombra.py` escreve uma mensagem de limite e JSON agregado, sem emitir `PAR_DIF`, `PAR_TOTAL` ou listas `[valor_copia, valor_base]` (`app/chamados/management/commands/diff_e3_sombra.py:107-108,118-148`). Seu lado `antes` é C17; `depois` é a projeção da tarefa (`:126-130`). A versão da sonda que produziu o anexo e sua associação ao HEAD/base ficam [não verificado].
+
+Há incompatibilidade concreta: `tarefa_do_dia` calcula `fio` entre `colab`, `admin`, `sistema`, `nao_sei`, `nada`, nunca `chamado` (`app/chamados/services/tarefa_do_dia.py:547-556`). O anexo atribui `chamado` à posição declarada “cópia”; portanto essa posição não é confirmável como saída da tarefa desta árvore. `porta_da_tarefa` apenas retorna os campos quando existe rota (`:559-565`).
+
+| Aspecto | C17 preservado na árvore | Tarefa da cópia |
+|---|---|---|
+| Existência | Todo chamado da célula em `fila_cel` entra; perguntas acrescentam âncoras se vivas, com texto válido e no app (`app/chamados/juizes.py:1677-1684`). | Somente portas inteiras de ações exigíveis, intersectadas com `fila_ids` (`app/chamados/services/tarefa_do_dia.py:547-548`). |
+| Fila | Todos os chamados da célula visíveis na lista padrão (`app/chamados/juizes.py:1685-1688`). | Portas das ações exigíveis pertencentes à célula, visíveis na lista padrão (`app/chamados/services/tarefa_do_dia.py:550-551`). |
+| Rota | `porta_fila` quando há qualquer `_fila`; senão `porta_pergunta` (`app/chamados/juizes.py:1687`). | `porta_fila` quando há porta exigível da célula; senão `porta_pergunta` quando há outra porta exigível (`app/chamados/services/tarefa_do_dia.py:555`). |
+| Fio | Escada dos verbos: cobrar→colab, validar→admin, demais→chamado (`app/chamados/juizes.py:1624-1639,1688`). | Donos das ações: colaborador vence admin, que vence sistema (`app/chamados/services/tarefa_do_dia.py:552-556`). |
+
+A implementação C17 acima é a cópia preservada do caminho antigo, não prova da versão exata de `main` anterior à E3 [não verificado].
+
+As regras escritas são explícitas: somente fila sem pergunta não cria porta humana; fila A com pergunta sob B publica B e descarta A residual; verbo é lido do painel; isento com fila residual não tem ação ou porta (`app/chamados/tests/test_e3_portas_tarefa.py:1-8`). Os testes documentam:
+
+- Só fila: tarefa `rota=None`, `fila=()`, fio `sistema`, ação `perguntar/emissor` (`:32-38`). O contraste explícito mostra C17=`porta_fila` versus tarefa sem porta (`app/chamados/tests/test_e3_leitores_c17_chamadores.py:93-103`).
+- A/B: tarefa `porta_pergunta`, fila vazia e verbo somente de B (`app/chamados/tests/test_e3_portas_tarefa.py:40-47`).
+- Isento: sem rota, fila, verbos ou ações (`:57-65`).
+
+Essas direções são contrárias à leitura “cópia→base” declarada para exemplos do anexo. Não se deve inverter silenciosamente as colunas: falta a implementação que emitiu os pares [não decidível].
+
+As classes são atribuídas por `casos_do_par` (`app/chamados/management/commands/diff_e3_sombra.py:63-70`):
+
+| Classe | Predicado |
+|---|---|
+| `todos` | Sempre (`:68`). |
+| `so_fila_sem_pergunta` | Fila da célula não vazia e nenhuma pergunta viva C6 (`:64-68`). |
+| `fila_A_pergunta_B` | Existe fila da célula e âncora de pergunta viva na fila global fora dessa fila da célula (`:66-69`). |
+| `verbos_A_B` | Exatamente o mesmo predicado da anterior; sempre são emitidas juntas (`:69`). |
+| `isento_fila_residual` | `tarefa.razao == isento_ponto` e fila da célula não vazia (`:70`). |
+
+São classes sobrepostas; a soma de ocorrências por classe não é a quantidade de colab-dias distintos (`:68-70`).
+
+O instrumento projeta uma mesma variável `porta` para os quatro consumidores; não executa censos nem suas outras decisões (`app/chamados/management/commands/diff_e3_sombra.py:46-59`). Assim, o anexo mede projeções declaradas, não comprova execução concordante ou discordante dos leitores reais. Campos ausentes da diferença tampouco significam `None`: a comparação registra somente campos diferentes (`:133-139`).
+
+A alimentação lê fila global para `fila_ids`, mas recorta `fila_cel` às células pedidas (`app/chamados/juizes.py:1557-1567`). Verbos são particionados no universo vivo global, pois créditos dependem do conjunto (`:1575-1583`), e `qs_na_fila` exclui estados fora de cobrança e silêncio vigente (`app/chamados/services/painel.py:158-190`).
+
+A tarefa utiliza `data_evento` exclusivamente como dia do turno (`app/chamados/services/tarefa_do_dia.py:219-241`), carregando perguntas da janela (`:375-382`). O C17 recolhe perguntas por vínculo `celula_id` (`app/chamados/juizes.py:1599-1604`). Seu teste “no app” não recebe `agora` e chama `perguntas_do_app` (`:1610-1620`); o próprio comparador declara que esse lado usa relógio da máquina (`app/chamados/management/commands/diff_e3_sombra.py:107`).
+
+A lei de julgamento é L-110: comparar com a regra aplicada ao cadastro e batidas; DIFF mede impacto e não certifica o caminho novo (`CLAUDE.md:45-58`). Sem fatos de entrada individuais e sem o emissor dos pares, classificar cada assinatura como cópia certa/regressão fica [não decidível]. [nao verificado]
+
+## 13/11 16:27 · sessao e3b2fb8631ff · - · - · origem=Ronald (tmux)
+
+O dono L-099 é **[não decidível] para todos os grupos do anexo**: o juiz exige dados que nenhuma projeção comparada fornece. A ordem efetiva é:
+
+| Condição | Dono | Referência |
+|---|---|---|
+| Folga não definida; sem vínculo no dia; sem vínculo em dia de trabalho | CADASTRO | `app/ponto/management/commands/e6_oraculo.py:98` |
+| Batida fora de turno | BATIDA | `app/ponto/management/commands/e6_oraculo.py:104` |
+| Número ímpar de batidas recebidas pelo dia | BATIDA | `app/ponto/management/commands/e6_oraculo.py:106` |
+| Fase deslocada lavrada | CADASTRO | `app/ponto/management/commands/e6_oraculo.py:108` |
+| Dia em cadastro × realidade do motor | CADASTRO | `app/ponto/management/commands/e6_oraculo.py:110` |
+| Resíduo | ESTRUTURA | `app/ponto/management/commands/e6_oraculo.py:110` |
+
+Faltam esses insumos **por colab-dia**; o carregador real lê batidas, turnos, cadastro, lavra de fase e cadastro × realidade em `app/ponto/management/commands/e6_oraculo.py:149`–`:195`. Zero batidas tem contagem par e não implica BATIDA (`app/ponto/management/commands/e6_oraculo.py:72`).
+
+**Bloqueio de proveniência:** a ordem `[cópia, base]` dos registros PAR_DIF não pode ser confirmada pelo arquivo fornecido da cópia. `diff_e3_sombra.py` monta `antes=projecoes(atual)` e `depois=projecoes(futuro)` (`app/chamados/management/commands/diff_e3_sombra.py:127`–`:130`), mas não emite PAR_DIF; publica JSON agregado (`app/chamados/management/commands/diff_e3_sombra.py:107`–`:108`). O serializador do anexo falta **[não verificado]**.
+
+Há contradição objetiva entre anexo e implementação caso se mantenha a ordem declarada: o primeiro elemento contém `fio="chamado"`, mas a tarefa só produz `colab/admin/sistema/nao_sei/nada` (`app/chamados/services/tarefa_do_dia.py:553`). A projeção só publica porta quando existe rota (`app/chamados/services/tarefa_do_dia.py:565`), e não transforma o fio. `chamado` é precisamente a alternativa do **C17 retido**, em `app/chamados/juizes.py:1628`–`:1639`. Isso não autoriza inverter silenciosamente o anexo.
+
+As regras específicas existentes decidem cenários completos, não as assinaturas resumidas:
+
+- Só fila sem pergunta: nenhuma porta humana e fila vazia (`app/chamados/tests/test_e3_portas_tarefa.py:3`; verificação `:32`–`:38`).
+- Fila residual A e pergunta ancorada sob B: porta da pergunta, fila da célula vazia, verbo de B (`app/chamados/tests/test_e3_portas_tarefa.py:4`–`:7`; verificação `:40`–`:55`).
+- Isento com fila residual: nenhuma ação, rota ou fio (`app/chamados/tests/test_e3_portas_tarefa.py:8`; verificação `:57`–`:65`).
+
+A implementação escolhe portas das ações exigíveis, intersectadas com a fila, e o fio pelos donos das ações (`app/chamados/services/tarefa_do_dia.py:547`–`:556`); o C17 retido abre porta por chamado da célula na fila, independentemente dessa exigibilidade, e acrescenta âncoras de perguntas (`app/chamados/juizes.py:1677`–`:1688`).
+
+Não atribuir “cópia certa” apenas porque mudou: L-110 diz que o código antigo não é gabarito e que o DIFF é impacto (`app/docs/LEIS.md:136`). L-114 repete que impacto não certifica, enquanto a igualdade entre leitores vale para qualquer dado (`app/docs/LEIS.md:152`). L-099 separa dono do dado da coerência estrutural (`app/docs/LEIS.md:122`).
 
 ## 13/11 16:22 · sessao c2fe3b531de7 · LEI-DESLIGADO-NAO-TRAVA · censo · origem=Code
 
@@ -931,377 +1055,4 @@ Para completar TODOS os emissores do JSON, estes também foram encontrados; aval
 
 [truncado em 20000 de 20392 caracteres]
 
-## 13/11 15:43 · sessao 73e2ed51da70 · - · - · origem=Ronald (tmux)
-
-Catálogo local de contextos: cobertura completa de escritores/leitores indiretos **[não verificado]**. A busca foi textual por `contexto_json`, `.contexto`, `contexto=`, `renovar_contexto`, `anotar_contexto`, `contexto_novo`, `criar_ou_atualizar_disputa`, seguida de leitura dos corpos; ela não demonstra fluxo dinâmico completo nem incidentes em produção **[não verificado]**.
-
-Todos os caminhos abaixo são relativos a `app/`. `E` significa dono provável ESTRUTURA, inferido da divergência entre formatos; confirmação L-099 do caso concreto **[não verificado]**. “Sem selo” abaixo significa **selo desta costura não verificado**, nunca prova global de inexistência de teste **[não verificado]**. [nao verificado]
-
-**Desencontros confirmados por comparação do código**
-
-| # | Estrutura | Emissor/chaves gravadas | Consumidor/chaves lidas | Desencontro | Selo/classe |
-|---|---|---|---|---|---|
-| D1 | disputa de selfie | `ponto/management/commands/marcar_foto_ausente_retro.py:98`: `foto_ausente.{tipo_batida,batida_id,batida_em,_por}` | `chamados/services/disputa_emissao.py:372`: `[motivo].data`; `:387`: `ultima_batida.id` | Nenhuma das duas referências esperadas é gravada pelo emissor; `batida_id` fica em outra posição. | Teste `ponto/tests/test_bug126_selfie_invisivel.py:65` sela existência da disputa e `foto_ausente.batida_id/_por` (`:69-72`), não leitura pelo consumidor. Selo da costura **[não verificado]**; E; classe sim. |
-| D2 | mesma | mesmo emissor/chaves D1 | `chamados/models.py:3464`: `ultima_batida.id`, default implícito `None` | O nascimento da identidade do episódio não consulta `foto_ausente.batida_id`. | Mesmo limite de teste D1; E; classe sim. |
-| D3 | mesma | mesmo emissor/chaves D1 | `api/foto_recebida.py:67`: `ultima_batida`, default `{}`; `:68`: `id`, default `None` | O fechamento pelo upload separado exige referência em outra posição. | Selo da costura **[não verificado]**; E; classe sim. |
-| D4 | contexto `turno_aberto` | `ponto/management/commands/processar_alertas_turno.py:348`: `data_turno,entrada_timestamp,posto` | `chamados/services/disputa_emissao.py:54`: funde contexto disputa/chamado; `:59,68-74`: `entrada_sem_saida.entrada_id/entrada_aberta_em`, `ultima_batida.id` | `_data_por_grade` não consulta `entrada_timestamp`; as referências que consulta não são gravadas pelo emissor. | Selo **[não verificado]**; E; classe sim. |
-| D5 | contexto `turno_aberto_24h` | `ponto/management/commands/processar_alertas_avancados.py:126`: `data_turno,entrada_timestamp` | mesmo consumidor/chaves D4 | Mesmo desencontro D4. | Selo **[não verificado]**; E; classe sim. |
-| D6 | contexto `turno_aberto_24h` retroativo | `ponto/management/commands/emitir_turno_aberto_retroativo.py:128`, persistido `:156`: `data_turno,entrada_timestamp` | mesmo consumidor/chaves D4 | Mesmo desencontro D4. | Selo **[não verificado]**; E; classe sim. |
-| D7 | `sem_previsao_escala.data_inicio` | `ponto/management/commands/detectar_ausencias.py:231`: `ec.data_inicio`; mesmo módulo `:532`: `data_ref` | `chamados/catalogo/modulos.py:126`: declara `data_inicio` do período; `:225`: lê chave declarada | Mesmo nome representa início do vínculo no primeiro emissor e dia sem grade no segundo (`:533`, causa `dia_sem_grade`). Consequência funcional **[não verificado]**. | Selo **[não verificado]**; E; classe sim quanto à dupla semântica. |
-
-D7 contém **dois pares gravador–leitor**, portanto os sete registros acima representam **oito costuras comparadas**, com desencontro estático; não equivalem ao total do módulo **[não verificado]**.
-
-**Outros escritores encontrados e chaves**
-
-| ID | Estrutura/emissor | Chaves |
-|---|---|---|
-| W1 | entrada bloqueada, `ponto/views.py:280`, renovação `:288`, nascimento `:301` | `pendentes` = resumo textual BR; `total` |
-| W2 | acesso bloqueado, `ponto/services/triagem_batida.py:117` | `motivo,situacao,posto` |
-| W3 | fora horário, nascimento `ponto/services/triagem_batida.py:347` | `tipo_batida,hora_tentativa` |
-| W4 | fora horário, renovação `ponto/services/triagem_batida.py:353`, gravação `:371` | `motivo_anuencia,tipo_batida,hora_tentativa`; condicionais `foto_b64,foto_nome` (`:359-362`) |
-| W5 | outro nascimento fora horário, `ponto/services/triagem_batida.py:470` | `tipo_batida,hora_tentativa,hora_prevista,diferenca_minutos,escala` |
-| W6 | disputa saída sem entrada, `ponto/services/triagem_batida.py:738` | `saida_sem_entrada.{data,hora_tentativa}` |
-| W7 | furo detector, `ponto/management/commands/detectar_ausencias.py:706` | `data_turno,horario_previsto,atraso_min,marcos_faltantes`; forma `{tipo,hora,motivo}` descrita e construída pelo helper a partir de `:476` |
-| W8 | atualização do furo, `ponto/management/commands/detectar_ausencias.py:559` | `marcos_faltantes,_marco_por` |
-| W9 | furo grade, `ponto/management/commands/reconciliar_grade.py:516` | `data_turno,origem,marcos_faltantes[{tipo,hora,motivo}]` |
-| W10 | órfã curada, `ponto/management/commands/reconciliar_grade.py:465`, gravação `:473` | `marcos_faltantes,orfa_regeneracao_curada`; esta copia a marca anterior e acrescenta `relavrada_em,marcos_antes` |
-| W11 | marca de órfã, `ponto/management/commands/gerar_celulas.py:264` | `orfa_regeneracao.{em,marcos_na_emissao}` |
-| W12 | candidatos, `ponto/management/commands/curar_residuo_bug115.py:124` | `marcos_candidatos,_marco_por` |
-| W13 | ausência, `ponto/services/ausencia.py:672` | `ausencia_id,data,tipo,tem_documento` |
-| W14 | rejeição justificativa, `ponto/services/justificativa.py:301` | `data_turno,tipo,motivo_rejeicao,rejeitado_por` |
-| W15 | cluster, `ponto/services/cluster_espurio.py:211` | `data_turno,orfas,n_missing` |
-| W16 | par relâmpago, `ponto/management/commands/detectar_par_relampago.py:383` | `data_turno,par,duracao_min` |
-| W17 | férias, `ponto/utils.py:120` | `agendamento_pk,data_inicio,data_fim` |
-| W18 | limbo folgas, `ponto/management/commands/detectar_ausencias.py:224` | `escala_id,tipo_escala_id,tipo_escala_codigo,tipo_ciclo,colabs_mesmo_template,causa,data_inicio` |
-| W19 | âncora limbo, `ponto/management/commands/detectar_ausencias.py:294` | `escala_id,tipo_ciclo,data_inicio` |
-| W20 | sem grade, `ponto/management/commands/detectar_ausencias.py:532` | `data_inicio,causa,escala_id`; ocorrência agregada `dias_sem_grade` em `:538` |
-| W21 | ressalva folga, `ponto/management/commands/detectar_ausencias.py:766` | `folga_nao_declarada,nao_calado_porque` |
-| W22 | geofence, `ponto/services/geofence.py:345`, nascimento `:375` | `ocorrencias[{batida_id,alerta_geofence_id,distancia_metros,batida_lat,batida_lon,tipo_batida}]`; topo `alerta_geofence_id,batida_id,tipo_alerta,distancia_metros,raio_metros,posto_nome,posto_endereco,posto_lat,posto_lon,batida_lat,batida_lon,tipo_batida` |
-| W23 | nova ocorrência geofence, `ponto/services/geofence.py:359` | agrega `ocorrencias` com a mesma forma W22; preservação/fusão pela porta `chamados/services/nota.py:110` |
-| W24 | escalonamento, `ponto/management/commands/escalonar_chamados_supervisao.py:64,138,163,179,195` | respectivamente `orfao_detectado,escalado_n2_1h,escalado_n3_4h,escalado_n4_comercial,escalado_n5_24h` |
-| W25 | incidente da disputa, `ponto/management/commands/escalonar_chamados_supervisao.py:159` | `incidente_operacional.{marcado_em,idade_min_no_marco}` |
-| W26 | alerta da disputa, `ponto/management/commands/alertar_disputas_pendentes.py:48` | `ultimo_alerta_diario` |
-
-**Pares funcionais adicionais verificáveis — uma linha por par com emissores expandidos abaixo**
-
-Nas linhas com `W7/W8/W9/W10`, cada ID é um emissor distinto e deve virar uma linha na consolidação; mesma regra para W3/W4/W5. Essa é uma matriz de expansão, não uma alegação de que a unidade seja a estrutura **[não verificado]**.
-
-| Emissor | Consumidor | Chaves lidas/defaults |
-|---|---|---|
-| W1 | `ponto/worklist.py:54` | `pendentes`, default `None` |
-| W1 | `ponto/management/commands/reconciliar_fantasmas.py:183` | `pendentes`, default `None` |
-| W1 | `ponto/management/commands/reconciliar_grade.py:381` | `pendentes`, default `None`; reconhece formato BR |
-| W1 | `chamados/data_evento.py:27` | tenta `data_turno,data_batida,entrada_timestamp`; depois `pendentes` (`:31`), depois `horario_previsto` (`:39`); todos default `None` |
-| W3 | `chamados/services/acoes_chamado.py:30` | `tipo_batida='E',hora_tentativa='',motivo_anuencia=''`; `foto_b64=None` (`:57`), `foto_nome='selfie.jpg'` (`:61`) |
-| W4 | mesmo leitor W3 | mesmas chaves/defaults |
-| W5 | mesmo leitor W3 | mesmas chaves/defaults |
-| W3 | `templates/chamados/partials/modal_fio.html:588` | `motivo_anuencia,tipo_batida,hora_tentativa` (`:592-594`) |
-| W4 | mesmo template | mesmas chaves |
-| W5 | mesmo template | mesmas chaves |
-| W3 | `templates/chamados/detalhe_local.html:245` | `motivo_anuencia,tipo_batida` (`:249`, default “—”), `hora_tentativa` (`:251`, default “—”) |
-| W4 | mesmo template | mesmas chaves/defaults |
-| W5 | mesmo template | mesmas chaves/defaults |
-| W6 | `chamados/catalogo/query.py:58` | `[motivo].data`, default `None` |
-| W6 | `chamados/services/disputa_emissao.py:372` | `[motivo].data`, default `None` |
-| W6 | `chamados/juizes.py:391` | `[p.motivo].data`, default `None` |
-| W6 | `chamados/services/materializacao.py:346` | `[p.motivo].data`, default `None`; usado se `p.data_evento` ausente (`:347-350`) |
-| W6 | `chamados/services/materializacao.py:478` | mesma chave/default; usado se `p.data_evento` ausente (`:479-482`) |
-| W7/W8/W9/W10 | `ponto/services/lastro.py:75` | `marcos_faltantes` default `[]`; item `hora=None,tipo=None` (`:76-78`) |
-| W7/W8/W9/W10 | `chamados/juizes.py:549` | `marcos_faltantes` default `[]`; item `motivo=None,hora=None` (`:551`) |
-| W7/W8/W9/W10 | `escala/utils.py:1066` | `marcos_faltantes` default `[]`; item `tipo=None,hora=None` (`:1070`) |
-| W7/W8/W9/W10 | `escala/services/regeneracao.py:148` | `marcos_faltantes=None`; ausência retorna `None` (`:149-150`) |
-| W7/W8/W9/W10 | `chamados/services/disputa_emissao.py:1143` | `marcos_faltantes` default `[]`; itens usados para complementar perguntas |
-| W7 | `ponto/services/vigia_de_hora.py:112` | lookup/`values_list` de `contexto_json__data_turno` |
-| W9 | mesmo consumidor W7 | mesma chave |
-| W11 | `ponto/management/commands/reconciliar_grade.py:445` | `orfa_regeneracao=None`; copia dict inteiro (`:465`) |
-| W13 | `chamados/views.py:1512` | `ausencia_id=None` |
-| W13 | `api/views.py:1045` | `ausencia_id=None` |
-| W13 | `templates/chamados/partials/_card_atendimento.html:65` | `tem_documento`; usa `ausencia_id` na rota (`:70`) |
-| W13 | `templates/chamados/detalhe_local.html:227` | `tem_documento` |
-| W13 | `ponto/management/commands/reabrir_chamados_ausencia_aberta.py:32` | `ausencia_id=None` |
-| W13 | `chamados/juizes.py:2331` | `ausencia_id=None`; consulta data da Ausencia (`:2335`) |
-| W13 | `chamados/catalogo/modulos.py:120`, leitor `:225` | `data`, default `None` |
-| W14 | `chamados/catalogo/modulos.py:117`, leitor `:225` | `data_turno`, default `None` |
-| W15 | `chamados/catalogo/modulos.py:115`, leitor `:225` | `data_turno`, default `None` |
-| W16 | `chamados/reconciliador.py:198` | `par=None`; usa cada hora para localizar batidas (`:212-215`) |
-| W16 | `chamados/catalogo/modulos.py:113`, leitor `:225` | `data_turno`, default `None` |
-| W17 | `chamados/catalogo/modulos.py:123`, leitor `:225` | `data_inicio`, default `None` |
-| W18 | `chamados/services/limbo_folgas.py:64` | `tipo_escala_id=None` |
-| W18 | `chamados/views.py:441` | `tipo_escala_id=None` |
-| W18 | `chamados/catalogo/modulos.py:126`, leitor `:225` | `data_inicio`, default `None` |
-| W20 | mesmo consumidor W18 | `data_inicio`, default `None`; dupla semântica D7 |
-| W22 | `ponto/services/geofence.py:403` | `ocorrencias=None`; item `batida_id,batida_lat,batida_lon=None`; fallback topo mesmas três (`:406`) |
-| W23 | mesmo consumidor W22 | mesmas chaves/defaults |
-| W22 | `chamados/services/acoes_chamado.py:184` | `distancia_metros,alerta_geofence_id,tipo_batida,posto_nome,raio_metros,posto_lat,posto_lon,batida_lat,batida_lon` (`:185-210`), defaults `None` ou apresentação `—` |
-| W22 | `chamados/services/acoes_chamado.py:246` | `batida_id=None`, `ocorrencias=[]`, item `batida_id=None` |
-| W23 | mesmo consumidor `:246` | mesmas chaves |
-| W22 | `templates/chamados/partials/_relatorio_geo.html:18` | `tipo_batida` default `-`; `tipo_alerta` (`:19`); `distancia_metros,raio_metros` (`:22`); `posto_nome,posto_endereco,posto_lat,posto_lon,batida_lat,batida_lon` (`:26-33`) |
-| W22 | `templates/chamados/partials/modal_fio.html:481` | `batida_lat,batida_lon,distancia_metros,raio_metros,posto_lat,posto_lon,posto_nome,posto_endereco` (`:483-488`); `raio_metros` default `200`, distância `0`, nomes/endereço `''`; `batida_id` default `''` (`:529`) |
-| W25 | `chamados/models.py:2101` | porta `anotar_contexto`: lê chave dinâmica `incidente_operacional` e preserva o primeiro valor (`:2105-2106`) |
-| W26 | `chamados/models.py:2119` | porta `renovar_contexto`: lê chave dinâmica `ultimo_alerta_diario`, compara valor e grava (`:2123-2124`) |
-
-A matriz acima contém **65 pares**, contando as quatro linhas W7/W8/W9/W10 como quatro pares cada; conferência aritmética manual **[não verificado]**. Não certifico desencontro/classe/selo de todas essas linhas sem revisão individual **[não verificado]**. Nos pares W3 e W5 → `acoes_chamado`, `motivo_anuencia/foto_b64/foto_nome` não são gravadas nesses nascimentos, mas têm defaults explícitos; classificação como contrato quebrado em vez de opcionalidade **[não verificado]**, pelas leituras de `chamados/services/acoes_chamado.py:30-61` e escritores W3/W5.
-
-**Três escritores de turno para quatro leitores adicionais**
-
-Cada uma das seguintes linhas gera três pares, usando os emissores D4/D5/D6:
-
-| Consumidor | Chaves |
-|---|---|
-| `chamados/juizes.py:2163` | `entrada_timestamp=None`, normaliza `T`/espaço (`:2164`) |
-| `chamados/reconciliador.py:146` | `entrada_timestamp=None`, procura entrada exata normalizada (`:148-152`) |
-| `chamados/services/disputa_emissao.py:145` | `entrada_timestamp=None`, identifica chamado do turno |
-| `chamados/catalogo/modulos.py:107`/`:109`, leitor `:225` | `data_turno=None` |
-
-Esses são **12 pares adicionais** por expansão dos três emissores citados; completude de leitores **[não verificado]**.
-
-**Leitores genéricos e limites para “ninguém lê”**
-
-- `templates/chamados/partials/painel_chamado_turno.html:35` percorre `chamado.contexto_json.items`: portanto qualquer chave de W1–W5 e W7–W24 pode ter consumo genérico de apresentação; alcance efetivo desse template por cada chamado **[não verificado]**.
-- `chamados/services/contexto.py:70,97,118,144` copia/lê o contexto inteiro nas portas, inclusive chaves que não têm leitor funcional nomeado.
-- `chamados/services/disputa_emissao.py:54-58` copia contexto da disputa e itens do chamado inteiro. Isso impede declarar “ninguém lê `foto_ausente.batida_id`” no sentido de transporte; o que está confirmado é que os três consumidores D1–D3 não consultam essa chave como referência da batida.
-- `marcos_candidatos` tem auto leitura no próprio emissor em `ponto/management/commands/curar_residuo_bug115.py:121`; leitor funcional em outro módulo **[não verificado]**. O genérico de contexto acima existe.
-- `incidente_operacional` tem leitura de idempotência pela porta `chamados/models.py:2101`; leitor funcional de `marcado_em/idade_min_no_marco` **[não verificado]**. O teste `chamados/tests/test_porta_anotacao_contexto.py:201-212` caracteriza preservação do primeiro marco, não consumo operacional dessas subchaves.
-- `ultimo_alerta_diario` é lido pela porta `chamados/models.py:2119`; teste genérico de renovação está em `chamados/tests/test_porta_anotacao_contexto.py:214-230`, mas selo com esse nome de chave concreto **[não verificado]**.
-- Escritor externo complementar da estrutura W13: `api/views.py:3120` renova `tem_documento=True`; os leitores de `tem_documento` não dependem apenas do nascimento em ponto. Outros escritores externos de todas as estruturas **[não verificado]**.
-
-Não fechar total do módulo com esta entrega: ela identifica escritores, leitores e expansões rastreados, mas não demonstra o produto completo gravador–leitor, os transportes genéricos alcançáveis, nem todos os escritores de módulos externos das mesmas estruturas **[não verificado]**.
-
-## 13/11 15:43 · sessao 823646fecf8a · - · - · origem=Ronald (tmux)
-
-Método: busca textual por `**campos`, `**kwargs`, `payload`, `EventoCelula`, `valor_antes/depois` e nomes das portas, seguida de leitura dos emissores, consumidores e testes. Os resultados abaixo são estáticos; execução, população de produção e completude global permanecem [não verificado]. [nao verificado]
-
-`ponto/` abaixo significa `app/ponto/`; `tests/` significa `app/ponto/tests/`. A unidade destas linhas é função emissora × módulo consumidor × estrutura, preservando emissores distintos no mesmo arquivo. [não verificado]
-
-| Estrutura | Emissor | Chaves gravadas | Consumidor | Chaves lidas/defaults | Desencontro | Selo | Dono provável / classe |
-|---|---|---|---|---|---|---|---|
-| WebPush central | `ponto/webpush.py:44` | `title, body, url` | `app/static/sw.js:88` | `title || 'Hasner Ponto'`, `body || 'Nova notificação'`, `urgente || false`; clique `:102-107` | `urgente` não é gravada; `url` é transportada como `data` mas o clique abre `/` | Não identificado [não verificado] | ESTRUTURA / sim, inferência pelas chaves |
-| WebPush N3 | `ponto/management/commands/processar_alertas_avancados.py:207` | `title, body, url, requireInteraction=True` | `app/static/sw.js:88` | mesmas leituras acima | Emissor grava `requireInteraction`, leitor usa `urgente`; clique não usa `url` | Não identificado [não verificado] | ESTRUTURA / sim, inferência pelas chaves |
-| WebPush DP | `ponto/management/commands/processar_alertas_avancados.py:240` | `title, body, url, requireInteraction=True` | `app/static/sw.js:88` | mesmas leituras acima | Igual ao N3 | Não identificado [não verificado] | ESTRUTURA / sim, inferência pelas chaves |
-| Resultado WebPush | `ponto/webpush.py:39`, `:43`, `:73-76` | `ok, motivo` em todos os retornos | `app/holerite/servicos.py:42-48` | `.get('ok')`; retorna o dict inteiro em sucesso ou fallback | `motivo` é repassado; não há ausência de chave constatada | `app/holerite/tests/test_selo_sem_notificacao.py:375` testa fallback com `ok,motivo`; cobertura integral [não verificado] | ESTRUTURA / não |
-| NOTIFY batida | `ponto/realtime.py:32-43` | `tipo='batida', colab_id, batida_id, ts` | `app/sse_server.py:73-93` | `n.payload` inteiro, sem ler chaves | Nenhuma chave é interpretada pelo relay; consumidor final dessas chaves não localizado [não verificado] | Não identificado [não verificado] | ESTRUTURA / [não verificado] |
-| Outbox EventoCelula | `ponto/portas/celula.py:945-954` | `celula_id, colaborador_id, data`; defaults `criado_em`, `processado_em=None`, `tentativas=0`, `erro=''` em `app/escala/models.py:1857-1863` | `app/chamados/reconciliador.py:1247-1263`, `:1344-1409` | `processado_em, tentativas, criado_em, pk, colaborador_id`; marca `erro/tentativas/processado_em` | Não há ausência constatada; o módulo também usa `celula_id` na semeadura/vigia, portanto não é chave globalmente órfã (`:1280` e chamadas relacionadas) | Sim: `tests/test_o_outbox_celula.py:56-61`, `:142-148`, `:163-180` | ESTRUTURA / não |
-| Outbox EventoCelula | `ponto/portas/celula.py:954` | `celula_id, colaborador_id, data` | `app/chamados/services/fabrica_da_celula.py:288-301` | `e.data`; colaborador vem do argumento; relê células atuais | `celula_id` deliberadamente não é autoridade neste leitor, conforme `:291-292`; não classificar isoladamente como defeito | Selo específico desse consumo não localizado [não verificado] | ESTRUTURA / não |
-| Resultado decidir HE | `ponto/portas/he.py:178-179`, `:203` | `estado,minutos,criada,trocada,no_op` | `ponto/views.py:529-541` | `no_op,estado,trocada,minutos` | `criada` não é lida nessa view; ausência global de leitores [não verificado] | Sim parcial: `tests/test_atomicidade_porta_he.py:50`, `:90-91`; `tests/test_tela_gestao_he.py:254-274` | ESTRUTURA / não |
-| Resultado recusar lote | `ponto/portas/he.py:234-246` | `recusados,no_op,erros` | `ponto/views.py:614-625` | as três chaves, indexadas | Sem desencontro constatado | Sim: `tests/test_tela_gestao_he.py:375-390`, `:444-455` | ESTRUTURA / não |
-| Resultado autorizar lote | `ponto/portas/he.py:545-571` | `dias,autorizados,no_op,erros` | `ponto/services/autorizacao_he_periodo.py:277-289` | `erros`; preserva dict, sobrescreve `dias`, acrescenta `antes,depois,diff,exportada,periodo` | Sem ausência constatada; preserva o contrato com extensão explícita | Selo do resultado completo não localizado [não verificado] | ESTRUTURA / não |
-| Resultado ponta pequena | `ponto/portas/he.py:330`, `:335`, `:344` | `recusada,ja_decidido,minutos` | `ponto/management/commands/recusar_ponta_pequena.py:170-183` | `recusada,minutos` | `ja_decidido` não é lida pelo comando; ausência global [não verificado] | Sim parcial: `tests/test_o273_recusa_do_sistema_envelhece.py:238` | ESTRUTURA / não |
-| Resultado revogar recusa | `ponto/portas/he.py:448-477` | `revogada,por_que_nao,minutos_na_decisao,minutos` em todos os ramos | `ponto/management/commands/lavrar_he_pendente.py:56-60` | `['revogada']` | Demais chaves não são lidas nesse comando; são exercitadas nos testes, não bastando para afirmar leitor operacional | Sim: `tests/test_o273_recusa_do_sistema_envelhece.py:130`, `:163`, `:208`, `:273-278` | ESTRUTURA / não |
-| Resultado regen exportada | `ponto/portas/regen_exportada.py:221-225` | `celulas,vinculos,sem_cobertura,ambiguos,hash_antes,hash_depois,antes,depois,mudou,campos_que_mudaram,regua_antes,regua_depois` | `app/chamados/services/passivo_validado.py:178-208`, `:444-449` | `.get('antes')`, `.get('depois') or {}`, `.get('campos_que_mudaram') or []`, `regua_antes,regua_depois,hash_antes,hash_depois,celulas,mudou` | `vinculos,sem_cobertura,ambiguos` não são lidas neste consumidor; ausência global [não verificado] | `tests/test_regen_em_exportada.py:91-111` prende os dois hashes na trilha; retorno completo [não verificado] | ESTRUTURA / não |
-| `fatos_do_status` | `ponto/status_dia.py:189-192`; chamadas reais `ponto/services/cartorio.py:935`, `:1296`, `:1857` | `tipo_dia,previsto_min,tem_batida,isento,cobertura_parcial,folga_humana` | `ponto/portas/celula.py:1009-1021`, expandindo para `ponto/status_dia.py:113-114` | todos; os dois últimos têm defaults `False` na função final | Sem desencontro constatado | AST exige passagem do argumento: `tests/test_selo_veredito_so_pela_porta.py:158-167`, `:268-287`; esquema completo não fica provado pelo AST | ESTRUTURA / não |
-
-As portas de batida recebem mapas abertos ou mapas de anotação com validação distinta: `registrar_batida(**campos)` sanitiza somente `latitude,longitude,gps_accuracy`, depois entrega todas as chaves ao ORM (`ponto/registro_batida.py:3-18`, `:94-105`, `:152-158`); `anotar(campos)` restringe ao conjunto `tipo,aprovada,aprovada_por,aprovada_em,origem,retratada_em,foto,justificativa,pergunta_origem` (`:203-205`, `:241-254`). Não existe esquema próprio completo para `**campos` nessa porta; validação efetiva adicional do ORM não foi executada. [não verificado]
-
-| Estrutura de entrada | Escritor em ponto | Chaves escritas | Leitor | Desencontro / selo |
-|---|---|---|---|---|
-| kwargs de nascimento web | `ponto/services/triagem_batida.py:702-713`; submapa `:680-685` | `canal,sequencia,latitude,longitude,gps_accuracy,justificativa,aprovada`; opcionais `ordem_substituicao,posto_efetivo` | `ponto/registro_batida.py:94-105`, `:152-158` | Nenhuma chave exigida pela sanitização precisa estar presente; sem desencontro constatado. Selo completo de esquema [não verificado] |
-| kwargs de materialização humana | `ponto/services/veredito_celula.py:323-324` | `aprovada_por,is_intervalo` | mesma porta | Sem desencontro constatado; selo completo [não verificado] |
-| kwargs de saída por justificativa | `ponto/services/justificativa.py:188-194`, `:361-368` | primeiro: `justificativa,aprovada,aprovada_por`; retro acrescenta `aprovada_em` | mesma porta | Chave adicional tem natureza opcional; sem desencontro constatado. Selo completo [não verificado] |
-| kwargs de aprovação em lote | `ponto/views.py:1815-1821` | `justificativa,aprovada,aprovada_por` | mesma porta | Sem desencontro constatado; selo completo [não verificado] |
-| mapa de anotação de aprovação offline | `ponto/views.py:472-475` | `aprovada,aprovada_por,aprovada_em,origem`; substitui a trilha automática por `_snap` | `ponto/registro_batida.py:235-263` | Campos aceitos pelo conjunto fechado; trilha sob outro esquema é explícita, mas todos os leitores dela [não verificado] |
-| mapa de flip | `ponto/services/flip_batida.py:30-33` | `campos.tipo`; trilha antes `tipo`, depois `tipo,causa` | `ponto/registro_batida.py:235-263` | As chaves são aceitas; preserva os mapas fornecidos |
-| mapa de retratação humana | `ponto/services/retratar_humano.py:179-182` → `ponto/registro_batida.py:274-276` | `aprovada=False,retratada_em`; extra `motivo_retratacao.{id,nome},observacao` | `ponto/registro_batida.py:235-263` | `extra` mescla e pode sobrescrever chaves de `depois` (`:262`); colisão efetiva neste emissor não ocorre |
-| mapa de desfazer retratação | `ponto/services/retratar_humano.py:207-209` | `aprovada=True,retratada_em=None` | mesma porta | Campos aceitos; selo da janela e efeito em `tests/test_porta_retratar_batida.py:132-169` |
-
-Todas as oito linhas anteriores têm dono provável ESTRUTURA e classe “não”, por comparação dos campos com `ponto/registro_batida.py:203-205`, `:241-263`; cobertura de outros emissores fora dos pontos citados [não verificado].
-
-Auditoria semanticamente consumida:
-
-| Estrutura | Emissores / chaves | Consumidor / chaves | Desencontro / selo / classe |
-|---|---|---|---|
-| Trilha de retratação humana | `ponto/services/retratar_humano.py:179-182` + `ponto/registro_batida.py:251-263`: `aprovada,retratada_em,motivo_retratacao.{id,nome},observacao` | `ponto/services/retratar_humano.py:95-100`: `.get('motivo_retratacao') or {}` → `.get('nome') or ''`, `.get('observacao') or ''`; `:243-244` agrupa `nome` com default `(sem motivo registrado)` | `motivo_retratacao.id` não é usado por esses dois leitores; leitor global ausente [não verificado]. Selo positivo do esquema e agrupamento `tests/test_porta_retratar_batida.py:108-110`, `:190-199`. Dono ESTRUTURA, classe não |
-| Trilha de flip | `ponto/services/flip_batida.py:33` + `ponto/registro_batida.py:263`: antes `tipo`, depois `tipo,causa` | `ponto/services/flip_batida.py:73-80`: `tipo` default `?`, `causa` default `humano`; normaliza string para `{tipo:...}` em `:46-53` | Sem desencontro entre escritor atual e leitor; compatibilidade de formato legado explicitamente implementada. Teste específico do esquema não localizado [não verificado]. Dono ESTRUTURA, classe não |
-| Trilha regenerar vínculo | `ponto/portas/celula.py:372-387`: `desde,ate,alteradas,barrados_dias,barrados_lavra,apesar_da_lavra,cobrancas_orfas_marcadas` | `app/escala/services/regeneracao.py:58-67`: `['desde'],['ate']`, captura `KeyError/TypeError/ValueError` | Outras chaves não são lidas nesse juiz; não afirmar ausência global. Dono ESTRUTURA, classe não; selo específico do esquema [não verificado] |
-| Trilha resolver dia, variante lavra | `ponto/portas/celula.py:1085-1088`, `:1100-1104`: `veredito,via,protestos,status_dia` | `app/chamados/juizes.py:1295-1299`: `.get('via') == VIA_HUMANA or 'acoes' in dict` | Leitor admite variantes; não requer `acoes` neste emissor. Selo sim `app/chamados/tests/test_tranca_vivas_08.py:95-99`. ESTRUTURA / não |
-| Trilha resolver dia, variante despachante | `ponto/services/veredito_celula.py:356-358`: `veredito,acoes,erros` | mesmo juiz `app/chamados/juizes.py:1298` | Não grava `via`; a alternativa `'acoes' in dict` está explicitamente prevista. Selo sim `app/chamados/tests/test_tranca_vivas_08.py:101-107`. ESTRUTURA / não |
-
-Transporte da auditoria não deve ser confundido com leitura semântica: `core/observ.py:142-148` lê kwargs `acao,modelo='',objeto_id,descricao='',valor_antes,valor_depois,usuario,ip` e `:134-137` grava os blobs inteiros; `core/auditoria.py:22-24` repassa os blobs. O exportador de fotos lê todos os campos concretos em `app/chamados/services/foto_e4b.py:247-252` e inclui auditoria de Batida/Célula/Chamado/Ausência em `:310-323`; portanto “ninguém lê a chave” exige distinguir exportação integral de interpretação da chave. `app/templates/core/log_auditoria.html:55-74` não lê `valor_antes/depois`.
-
-Ficaram sem fechamento exaustivo os consumidores semânticos de todos os demais payloads de auditoria, todos os aliases dinâmicos, todos os kwargs indiretos e o consumo final das chaves do SSE. Contagem total de `app/ponto/`, incluindo todos esses caminhos, [não verificado]. As três costuras WebPush com desencontro estão confirmadas pelo código citado; inexistência de selo específico para elas [não verificado].
-
-## 13/11 15:42 · sessao bcbd0a8413ab · - · - · origem=Ronald (tmux)
-
-Recorte concluído por busca nominal e leitura dos corpos, sem executar testes. A contagem depende de consolidar “emissor” como função ou módulo; abaixo deixo os sítios separados para o root expandir pares sem confundir gravação física com construção do payload. Completude para aliases/reflexão/chaves calculadas: [nao verificado]. [nao verificado]
-
-**1. DisputaSupervisao.contexto — JSONField definido em `app/chamados/models.py:1746`.**
-
-Escritores físicos e construtores encontrados:
-
-| Escritor | Chaves/efeito |
-|---|---|
-| `app/chamados/services/disputa_emissao.py:587` | Cria contexto com `contexto_nascimento or {}` em `:590`; payload aberto, sem schema enumerado. |
-| `app/chamados/services/disputa_emissao.py:548` | Merge de todas as chaves recebidas; para motivo-dict mantém anteriores, aplica novas e grava `qtd`, `ultima_em` em `:557-558`. `qtd` anterior usa `.get('qtd',1)` em `:552`. |
-| `app/chamados/services/disputa_emissao.py:630` | Declaração fornece somente `{'origem':origem}`; não faz merge em disputa existente. |
-| `app/chamados/services/disputa_emissao.py:1126` | `origem='manual_orfaos'`, `chamados_orfaos_ids=[pk...]`. |
-| `app/chamados/services/disputa_emissao.py:1361` | `origem='ancora_limbo'`, `chamado_limbo_id`. |
-| `app/chamados/services/disputa_emissao.py:292` | Escreve/atualiza `[motivo]['data']`; persistência em `:296` somente se criou perguntas. |
-| `app/chamados/services/fabrica_da_celula.py:172` | Fornece `{motivo:{'data':dia.isoformat()}}` à porta persistente. |
-| `app/chamados/management/commands/smoke_chamados.py:97` | Fornece `{motivo:{data}}` se template contém `{data}`, senão `{}`; chama porta em `:100-102`. |
-| `app/chamados/models.py:1966` | Remove chave `[motivo]` por `pop(motivo,None)`, grava em `:1968-1969`. |
-| `app/chamados/models.py:2042` | Acrescenta `revalidacoes[]` com `evento`, `em`, `motivo_removido`, mais `contexto_extra or {}`; grava em `:2065-2066`. |
-| `app/chamados/models.py:2104` | `anotar_contexto`: chave dinâmica, valor aberto, somente quando `.get(chave)` é falso; grava `:2105-2106`. |
-| `app/chamados/models.py:2122` | `renovar_contexto`: chave dinâmica, valor aberto, somente quando `.get(chave)!=valor`; grava `:2123-2124`. |
-| `app/chamados/views.py:1343` | Chama anotação de `supervisao_omissa_escalado=timestamp ISO`. |
-
-O detector constrói payload também persistido pela porta, via API: `app/api/views.py:433-434`, `:764-765`; gêmeo `app/api/views_core.py:419-420`, `:758-759`.
-
-| Construtor | Chaves |
-|---|---|
-| `app/chamados/detector_anomalias.py:49` | `orfao_14h.{entradas_pendentes,data,hora_abertura}`. `data` pode ser `None`, inicializado em `:37`. |
-| `app/chamados/detector_anomalias.py:55` | `_erro_orfao`. |
-| `app/chamados/detector_anomalias.py:65` | `colisao_escala.{escalas_ids,count}`. |
-| `app/chamados/detector_anomalias.py:92` | `ordem_substituicao_invalida.ordens[]` com `{ordem_id,problemas}`; atribuição ao contexto em `:98`. |
-| `app/chamados/detector_anomalias.py:103` | `posto_desativado.{posto_id,posto_nome}`. |
-| `app/chamados/detector_anomalias.py:111` | `sem_posto={}`. |
-| `app/chamados/detector_anomalias.py:119` | `em_ferias=info` se dict, senão `{info:str(info)}`. |
-| `app/chamados/detector_anomalias.py:121` | `_erro_ferias`. |
-
-Entradas externas da porta, necessárias para conferir o exemplo:
-
-- `app/ponto/management/commands/marcar_foto_ausente_retro.py:96-104`: `foto_ausente.{tipo_batida,batida_id,batida_em,_por}`; nenhuma `ultima_batida`.
-- `app/api/views.py:758-762` e `app/api/views_core.py:752-756`: `ultima_batida.{id,tipo,timestamp}`.
-- `app/ponto/services/triagem_batida.py:735-744`: `saida_sem_entrada.{data,hora_tentativa}`.
-- `app/ponto/management/commands/alertar_disputas_pendentes.py:48`: `ultimo_alerta_diario`.
-- `app/ponto/management/commands/escalonar_chamados_supervisao.py:159`: `incidente_operacional`.
-- `app/colaboradores/signals.py:81-82`: extras de revalidação `posto_id,posto_nome`.
-- `app/escala/signals.py:178-182`: extras de revalidação `escala_id,ancora,origem_ancora`.
-
-Leitores nominais de produção encontrados:
-
-| Consumidor | Chaves lidas/defaults |
-|---|---|
-| `app/chamados/catalogo/query.py:58-59` | `(contexto_disputa or {}).get(motivo) or {}`; `.get('data')`, default `None`; ausência retorna `None` em `:60-61`. |
-| `app/chamados/services/disputa_emissao.py:54-73` | Cópia integral; `entrada_sem_saida` default `{}`; `.get('entrada_id')`; `.get('entrada_aberta_em')`; `ultima_batida` default `{}`, `.get('id')`. |
-| `app/chamados/services/disputa_emissao.py:191-196` | `[motivo]` default `{}`; `.get('data')` como fallback da data da pergunta. |
-| `app/chamados/services/disputa_emissao.py:273-280` | `[motivo].entradas_pendentes` default `[]`; cada item default `{}`; `.get('pk')`. O `data` civil do item é explicitamente ignorado pelo corpo. |
-| `app/chamados/services/disputa_emissao.py:345` | Passa estrutura ao interpolador de texto. |
-| `app/chamados/services/disputa_emissao.py:372` | `[motivo].data`, defaults `{}` e `None`. |
-| `app/chamados/services/disputa_emissao.py:387` | `ultima_batida.id`, defaults `{}` e `None`. |
-| `app/chamados/services/disputa_emissao.py:551-552` | `[motivo]` anterior; `qtd`, default `1`. É autorreleitura dentro do módulo escritor. |
-| `app/chamados/models.py:2102` | `.get(chave)` da porta anotadora, default `None`. |
-| `app/chamados/models.py:2120` | `.get(chave)` da porta renovadora, default `None`. |
-| `app/chamados/models.py:3464` | `ultima_batida.id`, defaults `{}` e `None`. |
-| `app/chamados/juizes.py:391` | `[p.motivo].data`, defaults `{}` e `None`; fallback quando pergunta não traz dia. |
-| `app/chamados/services/materializacao.py:346-350` | `[p.motivo].data`, defaults `{}` e `None`; só usa quando `p.data_evento` ausente. |
-| `app/chamados/services/materializacao.py:478-482` | Mesmo fallback para declaração de ausência. |
-| `app/chamados/reconciliador.py:1561-1569` | `[p.motivo].data`, defaults `{}` e `None`; prioriza `p.data_evento`. |
-| `app/chamados/management/commands/auditar_disputas.py:75-82` | `[p.motivo].data`, defaults `{}` e `None`; produz diagnóstico. |
-| `app/chamados/management/commands/auditar_disputas.py:88-91` | Para cada motivo, `.get(m)` e `.get('data')`; defaults `None`. |
-| `app/chamados/management/commands/auditar_disputas.py:191` | Passa contexto ao interpolador. |
-| `app/api/foto_recebida.py:67-68` | `ultima_batida` default `{}`, `.get('id')`, default `None`. |
-| `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:52-55` | `device_comprometido` default `{}`; `.get('motivo')`, `.get('device_id_prefix')`, defaults `None`. |
-
-Costuras com desencontro comprovável:
-
-| Estrutura | Emissor | Gravadas | Consumidor | Lidas | Desencontro | Selo | Dono/classe |
-|---|---|---|---|---|---|---|---|
-| `Disputa.contexto` | Porta `disputa_emissao.py:666-667`, payload retro em `ponto/management/commands/marcar_foto_ausente_retro.py:98-103` | `foto_ausente.batida_id`, `batida_em`, `tipo_batida`, `_por` | `chamados/services/disputa_emissao.py:372-392` | `[motivo].data`, `ultima_batida.id` | Origem da batida existe sob chave que consumidor não procura. | Específico do retro: não localizado [nao verificado]. | ESTRUTURA provável; classe sim. |
-| mesma | mesma | mesmas | `chamados/models.py:3464` | `ultima_batida.id` | Mesmo desencontro de identidade. | Específico do retro: não localizado [nao verificado]. | ESTRUTURA provável; classe sim. |
-| mesma | mesma | mesmas | `api/foto_recebida.py:67-68` | `ultima_batida.id` | Upload não encontra a referência retro por `foto_ausente.batida_id`. Efeito em produção: [nao verificado]. | Específico do retro: não localizado [nao verificado]. | ESTRUTURA provável; classe sim. |
-
-A trilha `revalidacoes` e os campos `ultima_em`, `origem`, `chamados_orfaos_ids`, `chamado_limbo_id` **dentro de Disputa.contexto** não tiveram leitor nominal de produção localizado. Não confundir com as mesmas chaves em `Chamado.contexto_json`, que têm leitores (`app/chamados/reconciliador.py:243`, `app/chamados/signals.py:361`). Ausência global de leitores dinâmicos: [nao verificado].
-
-Selos existentes, sem execução:
-
-- `app/chamados/tests/test_a2_data_evento_batida.py:22-44` prende contexto **canônico** com `ultima_batida.id` à data e identidade da pergunta; `:53-56` prende contexto sem essa chave ao nascimento como conversa. Não testa o emissor retro.
-- `app/chamados/tests/test_hx_entradas_pendentes.py:33-41` prende os dias pendentes à emissão; `:64-71` prende ausência da Batida referenciada a nenhuma pergunta.
-- `app/chamados/tests/test_porta_disputa_emissao.py:199-208` prende declaração à agregação de motivo sem alteração do contexto existente.
-- `app/chamados/tests/test_porta_anotacao_contexto.py:180-230` prende primeiro valor, preservação das outras chaves, idempotência e persistência das portas de anotação/renovação.
-- `app/chamados/tests/test_porta_remocao_motivo.py:268-271` prende `revalidacoes[].motivo_removido/evento`; `:344-356` prende extras e `em`. São testes do escritor, não leitor de produção da trilha.
-- `app/chamados/tests/test_plantio_noturno_mais1.py:90-96` prende `detector.contexto['orfao_14h']['data']` ao dia do turno.
-- `app/chamados/tests/test_smoke_ciclo_disputa.py:57-64` prende materialização de saída/entrada/âncora ao tipo da Batida; fallback exato do contexto por cada origem: [nao verificado].
-
-**2. DisputaSupervisao.motivos — JSONField definido em `app/chamados/models.py:1742`.**
-
-Escritores:
-
-- `app/chamados/models.py:1967`: remove motivo respondido.
-- `app/chamados/models.py:2064`: substitui pelos restantes na remoção.
-- `app/chamados/models.py:2157-2161`: reabertura administrativa acrescenta motivo.
-- `app/chamados/services/disputa_emissao.py:541`: união ordenada dos motivos.
-- `app/chamados/services/disputa_emissao.py:589`: lista de motivos no nascimento.
-- `app/chamados/services/disputa_emissao.py:1083-1084`: complementação da disputa existente.
-- `app/chamados/services/disputa_emissao.py:1125`: nascimento do agrupador.
-- `app/chamados/services/disputa_emissao.py:1131-1132`, `:1160-1161`, `:1255-1256`: atualizações do agrupador.
-- `app/chamados/services/disputa_emissao.py:1360`, `:1366-1367`: nascimento/atualização da disputa de âncora.
-
-Leitores:
-
-- `app/chamados/models.py:1962`, `:2033`, `:2157`: leitura de lista com `or []`.
-- `app/chamados/services/disputa_emissao.py:536-540`: lista com `or []`, set/ordenação.
-- `app/chamados/services/disputa_emissao.py:1081`, `:1100`, `:1131`, `:1160`, `:1254`, `:1335`: agregação/comparação do rol; `:1100` e `:1335` pressupõem lista quando disputa existe.
-- `app/chamados/relatorios_disputa.py:52`: lista com `or []`, aplica `labels.get(m,m)`.
-- `app/chamados/management/commands/auditar_disputas.py:88`: lista com `or []`; `:142`: valor inteiro; `:169-191`: set com `or []`, compara motivos com catálogo e perguntas.
-- `app/chamados/services/fio.py:680`: lista com `or []`, transforma em labels.
-- `app/chamados/services/acoes_disputa.py:149`: idem.
-- `app/api/foto_recebida.py:63`: ORM contém `foto_ausente`; `:70`: iteração sem default.
-- `app/colaboradores/signals.py:74`: ORM contém `posto_desativado`.
-- `app/escala/signals.py:171`: ORM contém `ancora_ausente`.
-- `app/colaboradores/management/commands/pauta_aparelhos_compartilhados.py:49-50`: `or []`; aceita dict convertendo em lista de chaves.
-- `app/ponto/management/commands/alertar_disputas_pendentes.py:82`: interpola valor inteiro.
-- `app/templates/chamados/detalhe_local.html:301`: join dos itens.
-- `app/templates/chamados/partials/modal_fio.html:327`: contém `ancora_ausente`.
-
-Desencontro de shape entre escritores nominais de produção e esses leitores: não localizado; comprovação sobre dados persistidos: [nao verificado]. O agrupador registra motivo antes de saber se pergunta nasce, explicitamente em `app/chamados/services/disputa_emissao.py:828-833`; por isso “motivo sem pergunta” pode existir por guarda e não prova defeito por si.
-
-Selos do rol: `app/chamados/tests/test_porta_disputa_emissao.py:185-208`, `:211-221`; `app/chamados/tests/test_porta_remocao_motivo.py:251-285`; o auditor de dessincronia tem corpo em `app/chamados/management/commands/auditar_disputas.py:181-195`. Cobertura de cada consumidor de apresentação: [nao verificado].
-
-**3. PerguntaDisputa.opcoes — JSONField em `app/chamados/models.py:2444`, default `list`.**
-
-Todos os construtores nominais de produção em chamados encontrados:
-
-| Emissor | Shape gravado |
-|---|---|
-| `app/chamados/services/disputa_emissao.py:330`, `:441`, `:449` | Lista copiada do catálogo: strings para escolha; dict `{valor,rotulo}` para hora; `[]` quando sem opção. Catálogo em `app/chamados/catalogo/perguntas.py:34-138`. |
-| `app/chamados/services/disputa_emissao.py:333-337` | Posto: `{id,nome}`. |
-| `app/chamados/services/disputa_emissao.py:339-343` | Escala: `{id,tipo_escala__template_nome}`. |
-| `app/chamados/services/disputa_emissao.py:842` | `_criar_pergunta_se_couber` repassa `opcoes`; chamadores `:882`, `:1155`, `:1215`, `:1247` usam escapes `{valor,rotulo}` ou lista vazia. |
-| `app/chamados/services/disputa_emissao.py:1376` | `[]`, pergunta de âncora/conversa. |
-| `app/chamados/services/declaracao_texto.py:376`, `:666` | `[]`, tipo hora. |
-| `app/chamados/services/acoes_disputa.py:267` | Strings `['Sim, confirmo','Nao, foi erro']`, tipo escolha. |
-
-Persistência passa `**campos` por `app/chamados/models.py:2790-2791`, `:2802-2803`, `:2826`; o campo também pode nascer sem `opcoes`, usando default `list` (`models.py:2444`).
-
-Todos os leitores nominais encontrados:
-
-| Consumidor | Shape/chaves lidas |
-|---|---|
-| `app/chamados/services/disputa_emissao.py:1436-1439` | Escolha: se primeiro item é dict, `.get('valor')` default `None`; senão item inteiro. |
-| `app/chamados/services/disputa_emissao.py:1447` | Hora: dicts, `.get('valor')` default `None`. |
-| `app/chamados/services/disputa_emissao.py:1458` | Dropdown: dicts, `.get('id')` default `None`. |
-| `app/chamados/models.py:3540-3543` | Dict: `.get('valor')` default `None`; `.get('rotulo',self.resposta_colab)`. |
-| `app/api/views.py:1157` | Serializa campo integral. |
-| `app/api/views.py:2538-2540` | `or []`; hora remove dict cujo `.get('valor')=='OUTRO_MOTIVO'`. |
-| `app/api/views_mensageria.py:566` | Serializa com `or []`. |
-| `app/templates/chamados/partials/_card_atendimento.html:105-108` | Escolha imprime item inteiro como value e label. |
-| `app/templates/chamados/partials/_card_atendimento.html:147-149` | Dropdown lê `id`; label em sequência `nome`, `label`, `descricao`, `tipo_escala__template_nome`, finalmente `id`. |
-| `app/templates/chamados/partials/_card_atendimento.html:162-167` | Hora lê `valor`, `rotulo`. |
-
-Desencontros nominais da definição literal “chave lida que algum emissor não grava”: `label`/`descricao` não são gravados pelos emissores dropdown localizados, e um emissor escreve `nome` enquanto outro escreve `tipo_escala__template_nome`; o template explicita alternativas em `app/templates/chamados/partials/_card_atendimento.html:149`. Assim, diferença de chaves confirmada, defeito de costura não demonstrado.
-
-Candidato separado: o responder aceita escolha-dict `{valor,rotulo}` (`disputa_emissao.py:1436-1438`), mas template escolha imprime dict inteiro (`_card_atendimento.html:107-108`). **Nenhum emissor nominal atual de escolha-dict foi localizado**; incidência e classe: [nao verificado].
-
-Selos:
-
-- `app/chamados/tests/test_escape_outro_motivo.py:9-25`: recusa `OUTRO_MOTIVO` e o exclui dos catálogos.
-- `app/chamados/tests/test_responder_web_falta.py:31-42`: opções de escape na web levam à ausência materializada.
-- `app/chamados/tests/test_e3_app_orm.py:86-100`: endpoint remove `OUTRO_MOTIVO`, preserva outro `valor`.
-- Cobertura cruzada completa de todas as variantes de dropdown, serializers e template: [nao verificado].
-
-**4. PerguntaDisputa.chamados_relacionados_ids — JSONField em `app/chamados/models.py:3408-3411`, default `list`.**
-
-Único emissor nominal explícito localizado: `app/chamados/services/disputa_emissao.py:1198` constrói os IDs dos chamados do grupo depois do canônico; passa em `:1216`; helper adiciona ao kwargs em `:835-836` e entrega à porta em `:837-845`. Demais nascimentos omitem a chave e usam default `[]` (`app/chamados/models.py:3408-3409`).
-
-| Estrutura | Emissor | Gravadas | Consumidor | Lidas | Desencontro | Selo | Dono/classe |
-|---|---|---|---|---|---|---|---|
-| relacionados | `disputa_emissao.py:1198`, `:1216`, `:836` | Lista de PKs dos clones | `materializacao.py:781-787` | `list(p.chamados_relacionados_ids or [])`; fecha clones | Não localizado | Sim, `app/chamados/tests/test_regressao_etapa7.py:483-497` | ESTRUTURA provável; classe não |
-| relacionados | mesmas | mesma | `validacao.py:431-434` | Lista com `or []`, acrescenta aos chamados travados | Não localizado | Específico do travamento dos relacionados: [nao verificado] | ESTRUTURA provável; classe não |
-| relacionados | mesmas | mesma | `materializacao.py:975` | Lista com `or []`, copia ao LogAuditoria.valor_depois | Não localizado | Específico da cópia na trilha: [nao verificado] | ESTRUTURA provável; classe não |
-
-São **3 sítios de consumo**, em **2 módulos consumidores** (`materializacao.py:781`, `:975`; `validacao.py:433`); contar duas ou três costuras conforme a identidade de consumidor usada no consolidado. Escritor e dois módulos leitores efetivamente localizados; valor dos dados reais: [nao verificado].
-
-**5. Outra costura de dict encontrada seguindo motivos**
-
-`app/chamados/relatorios_disputa.py:47-53` grava `buckets[classificar(d)][]` com `{disputa_id,colaborador_id,nome,dias,motivos}`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:39` lê `it['motivos']`. Falta conferir demais chaves do corpo desse comando no consolidado.
-
-_4664 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
