@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 06:23:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (520.9 MB). Acoes na janela: **1018**.
+**Medido em 13/11/2026 06:28:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (520.9 MB). Acoes na janela: **1011**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1021,10 +1021,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:29:47 | Bash |  | `cd ~/wt-codex-leitores-chave-171434/app; for f in ata_do_dia ata_deste_julgamento dispensar_por_ausencia _ata_ate_o_teto; do echo "== $f"; python3 - "$f" <<'EOF' import ast,sys t=ast.parse(open('ponto/services/cartorio.py').read()) for n in ast.walk(t): if isinstance(n,ast.FunctionDef) and n.name==sys.argv[1]: print(n.lineno, [ (r.lineno, ast.unparse(r.value)[:80]) for r in ast.walk(n) if isinstan ...` |
 | 18:29:10 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; sed -n 1555,1575p bin/disjuntor.py; git grep -n 'leitores_de_chave\\|contar-crus' -- . ':!bin/leitores_de_chave.py' ':!app/docs/RELATO*' \| cut -c1-180 \| head -20; cat bin/tests/test_leitores_de_chave.sh` |
 | 18:28:52 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; sed -n 380,745p bin/leitores_de_chave.py` |
-| 18:28:26 | Bash |  | `cd ~/wt-codex-leitores-chave-171434; sed -n 140,380p bin/leitores_de_chave.py` |
-| 18:28:24 | Bash |  | `cd /home/ronald/saas-hasner; echo '- 12/11 18:3x TIPO-ITEM1-E-DIMENSAO (aval Ronald, logs/AVAIS-1212/tipo_item1_e_dimensao.txt): leitores_de_chave vira DIMENSAO (cota inferior, lacunas na saida), 3 falsos do preverif v2, catraca acessos_crus_ata muda para o ACESSOR (contrato item 4), 1 preverif -> opus -> pouso proprio. Item BACKLOG TIPO-ITEM1-DIMENSAO.' >> app/docs/PROMPTS.md python3 - <<'EOF' p= ...` |
-| 18:28:16 | Bash |  | `cd /home/ronald/saas-hasner; tail -3 app/docs/PROMPTS.md \| cut -c1-200; /bin/grep -n 'TIPO-NA-FONTE' app/docs/BACKLOG.md \| cut -c1-200 \| head -5; cd ~/wt-codex-leitores-chave-171434 && git status --short \| head; git log --oneline -3` |
-| 18:28:08 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/AVAIS-1212; cat > logs/AVAIS-1212/tipo_item1_e_dimensao.txt <<'EOF' aval Ronald: TIPO-ITEM1-E-DIMENSAO (12/11 18:3x). UNIDADE: evento reconhecido por posicao/caminho/papel/forma (leitores_de_chave.py:361). Nenhuma lei nova; muda o item 4 do CONTRATO-DE-INSTRUMENTO leitores_de_chave (corte Ronald). Item 1 sai da serie de voltas pela 2a reprovacao (preverif ...` |
-| 18:27:54 | Bash |  | `cd /home/ronald; ls -d wt-*/bin/leitores_de_chave.py 2>/dev/null; ls -la saas-hasner/logs/TIPO-NA-FONTE/leitores_de_chave.py; head -5 saas-hasner/logs/TIPO-NA-FONTE/preverif_item1_v2/delta_v2.diff; /bin/grep -n 'leitores_de_chave\\|TIPO' saas-hasner/app/docs/RELATO.md \| cut -c1-200 \| head` |
-| 18:27:51 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/TIPO-NA-FONTE/preverif_item1_v2 logs/TIPO-NA-FONTE/preverif_item1; wc -l logs/TIPO-NA-FONTE/leitores_de_chave.py; cat logs/TIPO-NA-FONTE/contrato.txt \| head -30; git worktree list \| head -20` |
-| 18:27:48 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/TIPO-NA-FONTE/ \| head -40; ls -d ~/wt-*tipo* 2>/dev/null; ls bin/leitores_de_chave.py app/*/leitores_de_chave.py 2>/dev/null; git log --oneline -3 -- bin/leitores_de_chave.py` |
