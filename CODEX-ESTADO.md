@@ -1,7 +1,184 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 12:28** · publicado em **13/11/2026 12:31** (UTC-3)
+> Ultima resposta processada: **13/11/2026 12:35** · publicado em **13/11/2026 12:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 12:35 · sessao b52f3ed8eaa9 · - · - · origem=Ronald (tmux)
+
+Censo por ocorrência AST (`Call`, `Subscript` em leitura ou `.get`), sem executar aplicação nem suite. Comple­tude para formas dinâmicas/reflexivas: [não verificado]. [nao verificado]
+
+| Acessor | Produção fora de ata.py | Teste direto | [nao verificado]
+|---|---:|---:|
+| `horas_orfas` | 6 | 5 |
+| `contar_orfas` | 3 | 5 |
+| `leitura_orfas` | 1 | 3 |
+| `horas_orfas_medidas` | 1 | 1 |
+| `tem_orfas` | 1 | 3 |
+| `instantes_orfas` | 0 | 5 |
+| Total | **12 expressões, 11 posições, 10 arquivos** | **22 expressões** |
+
+Referências produção: `app/chamados/juizes.py:511`; `app/chamados/services/materializacao.py:182`; `app/escala/services/leitor_celula.py:194-195`; `app/ponto/juiz_batida.py:163`; `app/ponto/management/commands/tripwire_celulas.py:267`; `app/ponto/services/cartorio.py:841`; `app/ponto/services/cluster_espurio.py:31`; `app/ponto/services/esmeril_espelho.py:126`; `app/ponto/services/vigia_pareador_celula.py:76`; `app/relatorios/cartao_pela_celula.py:289`.
+
+Referências teste, todas em `app/escala/tests/test_tipo_item3_v5_expand.py`: horas `101,118,130,334,339`; contar `102,119,335,340,345`; leitura `100,122,333`; medidas `124`; tem `120,336,341`; instantes `79,85,92,103,123`.
+
+Adicionais: nove chamadas internas da porta (`ata.py:112,142,148,154,160,173,176,231,262`); três chamadas diretas de `_orfas_da_ata` em teste (`test_tipo_item3_v5_expand.py:121,140,141`), uma em produção (`leitor_celula.py:425`); quatro funções leitoras passadas como valores e chamadas indiretamente no teste (`test_tipo_item3_v5_expand.py:352-357`). [nao verificado]
+
+Chaves cruas comprovadas da ATA:
+
+| Chave | Produção fora da porta | Dentro da porta | Testes | [nao verificado]
+|---|---:|---:|---:|
+| `orfas` | 0 reconhecido | 1 | 19 |
+| `n_orfas` | 0 reconhecido | 1 | 11 |
+| `orfas_instantes` | 0 reconhecido | 1 | 2 |
+
+Porta: `app/escala/services/ata.py:92,168`. Testes `orfas`: `test_tipo_item3_v5_expand.py:75,76,201,202,203,212,334,336`; `test_bateria_lavratura.py:637,960,1057`; `test_lampada_acende_pela_batida.py:78,81`; `test_o118_orfa_que_acendeu.py:90,108,133,162,165,167`. Testes `n_orfas`: expand `77,204,335,336`; bateria `542,552,646,798,950`; o118 `104,108`. Instantes: expand `78,205`.
+
+São 12 métodos de teste lendo `orfas`, nove lendo `n_orfas`, união de 16 métodos; referências nos sites enumerados acima. A exceção aos testes é explícita em `app/escala/services/ata.py:294-297`.
+
+As **33 leituras de `orfas` da grade/saída-dia**, fora da porta:
+
+| Arquivo em `app/` | Linhas |
+|---|---|
+| `colaboradores/services/calendario.py` | 380,381 |
+| `escala/orfa_classe.py` | 58 |
+| `escala/services/furos_diarios.py` | 22 |
+| `escala/utils.py` | 802,805,806,1046,1113,1835,1837,1840,1841,1897,1898,1971,1976 |
+| `folha/causas.py` | 43,100 |
+| `ponto/management/commands/detectar_par_relampago.py` | 140 |
+| `ponto/management/commands/propor_reorganizacao.py` | 104 |
+| `ponto/propositor.py` | 39 |
+| `ponto/services/bordas_realizado.py` | 49 |
+| `ponto/services/cartorio.py` | 737,772,1428 |
+| `ponto/services/simular_dia.py` | 12 |
+| `ponto/status_dia.py` | 188 |
+| `ponto/supra_juiz.py` | 379,514 |
+| `ponto/turnos.py` | 2667 |
+| `relatorios/pdf_espelho.py` | 477,552 |
+
+O 34º homônimo bruto não trata órfãs de batida: são perguntas fora do cadastro de juízes (`app/core/management/commands/gerar_diagrama.py:854`).
+
+Nos testes, 82 leituras sintáticas de `orfas` se dividem em 19 ATA e 63 grade/saída-dia, conforme os sites ATA acima e exemplos de grade `app/escala/tests/test_grade_fuzz.py:80,83,213,236`, `app/escala/tests/test_t41_leitor_celula.py:71,93`, `app/escala/tests/test_tipo_item3_v5_expand.py:194-196,201`.
+
+`lampadas`: 40 leituras sintáticas em produção fora da porta, uma delas DNA (`app/escala/utils.py:154`); 70 em teste. **Não equivalem a leitores do valor órfão**: o produtor guarda `luz`/`acesa` e órfãs separadamente (`app/ponto/services/cartorio.py:629,712-725`).
+
+Subconjunto objetivo de `lampadas` co-lido com o valor órfão no mesmo leitor: dez expressões em nove leitores de produção (`juizes.py:509`; `materializacao.py:174`; `juiz_batida.py:161`; `tripwire_celulas.py:267`; `cartorio.py:835`; `cluster_espurio.py:32,35`; `esmeril_espelho.py:130`; `vigia_pareador_celula.py:80`; `cartao_pela_celula.py:290`). Testes: 11 expressões em dez métodos (`test_o118_orfa_que_acendeu.py:89,101,132,166`; `test_bateria_lavratura.py:645,793,945,959,1042,1054`; `test_lampada_acende_pela_batida.py:65`). [nao verificado]
+
+Fixtures: **cota inferior de 203 expressões `Dict` em 129 arquivos**, reconhecendo apenas `ata=dict`, atribuição `.ata`, nome de variável contendo `ata` e `setattr(...,'ata',dict)`; 76 expressões pertencem diretamente a **74 métodos `test_` de 39 arquivos**, outras 127 estão em 121 contextos auxiliares/setup/classe. Exemplos diretos: `app/escala/tests/test_t41_leitor_celula.py:16,41,64,87,156`; `app/ponto/tests/test_juiz_batida.py:156,171,185,199`; `app/ponto/tests/test_porta_celula.py:83,114,139,152,209`. Total com aliases, retornos de helper, herança, tabelas de casos e kwargs dinâmicos: [não verificado]. Exclusões concretas do reconhecimento direto: `app/escala/tests/test_tipo_item3_v5_expand.py:110-115,237-247,316-328`.
+
+A entrada dict pode permanecer: `AtaVigiada` aceita dict, e o descriptor envolve `Mapping` automaticamente; portanto esses 74 testes **não representam 74 mudanças obrigatórias** (`app/escala/services/ata.py:272-273`; `app/escala/services/ata_ci.py:20-29`). Exigir conversão de fixtures por estriteza seria outra escolha: [não verificado].
+
+Comparações diretas de retorno do acessor com lista/int: **dez expressões em seis testes**, todas em `test_tipo_item3_v5_expand.py:79,92,101,102,118,119,334,335,339,340` — métodos iniciados nas linhas `71,87,99,106,330,338`. Mudam para extração explícita do resultado se TIPO retornar objeto opaco sem igualdade compatível; detalhes dessa API: [não verificado]. [nao verificado]
+
+O corte (A) atinge diretamente dois testes que exigem presença da chave paralela (`test_tipo_item3_v5_expand.py:78,205`). Os demais cinco sites chamadores de `instantes_orfas` só têm custo integral determinado quando se decidir o destino dessa API; a remoção da chave, isoladamente, não especifica sua substituição (`test_tipo_item3_v5_expand.py:79,85,92,103,123`). [nao verificado]
+
+## 13/11 12:33 · sessao 1a0cd66ebe6f · - · - · origem=Ronald (tmux)
+
+As fontes abaixo usam o prefixo `app/`. A matriz descreve a parcela de órfãs; o resultado integral também depende de lâmpadas, DNA, cobertura e régua, portanto o estado sozinho não determina a saída integral. (`chamados/juizes.py:494`, `chamados/services/materializacao.py:174`, `ponto/services/cartorio.py:835`, `ponto/management/commands/tripwire_celulas.py:264`)
+
+Leitores diretos: **12 chamadas em 10 funções/arquivos**; H=6, C=3, T=1, M=1, R=1. O wrapper `grade_da_celula` chama `_orfas_da_ata` e põe sua lista no vocabulário da grade. (`chamados/services/materializacao.py:182`, `relatorios/cartao_pela_celula.py:289`, `ponto/juiz_batida.py:163`, `ponto/services/esmeril_espelho.py:126`, `ponto/services/vigia_pareador_celula.py:76`, `escala/services/leitor_celula.py:194`, `escala/services/leitor_celula.py:195`, `ponto/services/cartorio.py:841`, `chamados/juizes.py:511`, `ponto/services/cluster_espurio.py:31`, `ponto/management/commands/tripwire_celulas.py:267`, `escala/services/leitor_celula.py:425`)
+
+Definições para as 70 linhas:
+
+- **H**=`horas_orfas`, **C**=`contar_orfas`, **T**=`tem_orfas`, **M**=`horas_orfas_medidas`, **R**=`leitura_orfas`. (`escala/services/ata.py:108`, `escala/services/ata.py:140`, `escala/services/ata.py:146`, `escala/services/ata.py:152`, `escala/services/ata.py:158`)
+- **N**=NAO_LAVRADA/None; **S**=LEGADO_SEM_CHAVES/{}; **C2**=LEGADO_SO_CONTAGEM, exemplo `{'n_orfas':2}`; **L**=LEGADO_SO_LISTA; **D**=LEGADO_DESCASADA; **V**=LAVRADA/completa; **I**=não Mapping, exemplo `['x']`. (`escala/services/ata.py:26`, `escala/services/ata.py:95`, `escala/services/ata.py:110`)
+- Em L/D/V, `h` e `c` são os valores efetivamente devolvidos por H/C; D **não** garante lista/int: o caso `orfas='08:00'` é explicitamente testado. (`escala/services/ata.py:128`, `escala/tests/test_tipo_item3_v5_expand.py:327`, `escala/tests/test_tipo_item3_v5_expand.py:334`)
+- Para S com outras chaves, por exemplo `{'lampadas':[...]}`, valem as guardas da linha do leitor; não se pode extrapolar o caminho de `{}` para toda a classe S. (`escala/services/ata.py:95`, `escala/tests/test_tipo_item3_v5_expand.py:319`)
+
+| Estado | Leitor | Acessor → retorno → ação | Prova |
+|---|---|---|---|
+| N | `_orfas_da_ata` | não chamado → `[]` pela guarda | `escala/services/leitor_celula.py:189`; teste `escala/tests/test_tipo_item3_v5_expand.py:141` |
+| S={} | `_orfas_da_ata` | não chamado → `[]` pela guarda | `escala/services/leitor_celula.py:189`; prova específica de `{}` no leitor [não verificado] |
+| C2 | `_orfas_da_ata` | H→`[]`, C→2 → `['?','?']` | `escala/services/leitor_celula.py:194`; teste `escala/tests/test_tipo_item3_v5_expand.py:112` |
+| L | `_orfas_da_ata` | H→h → strings não vazias; C só se `reais` vazio | `escala/services/leitor_celula.py:194`; teste `escala/tests/test_tipo_item3_v5_expand.py:113` |
+| D | `_orfas_da_ata` | H→h; se `reais` vazio, C→c → `'?' * int(c)` | `escala/services/leitor_celula.py:195`; exemplo D testado `escala/tests/test_tipo_item3_v5_expand.py:114` |
+| V | `_orfas_da_ata` | H→h; repassa strings; C só se `reais` vazio | `escala/services/leitor_celula.py:194`; teste `escala/tests/test_tipo_item3_v5_expand.py:140` |
+| I | `_orfas_da_ata` | se truthy, H levanta; se falsy, guarda devolve `[]` | `escala/services/leitor_celula.py:189`, `escala/services/ata.py:90`; teste deste leitor [não verificado] |
+| N | materialização | `None→{}`; sem lâmpadas → pula, sem H | `chamados/services/materializacao.py:173`; teste específico [não verificado] |
+| S={} | materialização | sem lâmpadas → pula, sem H | `chamados/services/materializacao.py:174`; teste específico [não verificado] |
+| C2 | materialização | se lâmpadas permitem: H→`[]`; acrescenta nenhuma marca órfã | `chamados/services/materializacao.py:176`, `chamados/services/materializacao.py:182`; teste específico [não verificado] |
+| L | materialização | se guarda permite: H→h; filtra HH:MM válidos e une às luzes | `chamados/services/materializacao.py:178`; teste específico [não verificado] |
+| D | materialização | se guarda permite: H→h; filtro pode rejeitar valores/erro ser capturado | `chamados/services/materializacao.py:182`, `chamados/services/materializacao.py:186`; teste específico [não verificado] |
+| V | materialização | H→h; marcas alimentam `plantio_preenche_furo` | `chamados/services/materializacao.py:181`; teste com lista vazia `chamados/tests/test_hx_plantio_celula.py:30`, `chamados/tests/test_hx_plantio_celula.py:35` |
+| I | materialização | exemplo lista truthy falha no `.get` antes de H; captura → False | `chamados/services/materializacao.py:174`, `chamados/services/materializacao.py:186`; teste específico [não verificado] |
+| N | `_celula_furada` | `None→{}`; falta `lampadas` → None, sem T | `chamados/juizes.py:494`, `chamados/juizes.py:506`; teste específico [não verificado] |
+| S={} | `_celula_furada` | falta `lampadas` → None, sem T | `chamados/juizes.py:506`; teste específico [não verificado] |
+| C2 | `_celula_furada` | se chega a T: True; prende só se régua confiável | `chamados/juizes.py:511`, `chamados/juizes.py:517`; teste específico [não verificado] |
+| L | `_celula_furada` | T→bool(h); True consulta régua; lâmpada apagada pode retornar antes | `chamados/juizes.py:509`; teste específico [não verificado] |
+| D | `_celula_furada` | T→bool(h) ou bool(c); mesma régua | `chamados/juizes.py:511`, `escala/services/ata.py:163`; teste específico [não verificado] |
+| V | `_celula_furada` | T→bool(h) ou bool(c); régua decide se órfã prende | `chamados/juizes.py:517`; teste `chamados/tests/test_s122_orfa_regua.py:52`, `chamados/tests/test_s122_orfa_regua.py:60` |
+| I | `_celula_furada` | exemplo `['x']`: falta `lampadas` → None; outros erros capturados → None | `chamados/juizes.py:506`, `chamados/juizes.py:520`; teste específico [não verificado] |
+| N | cartão | `None→{}`; não H → conjunto vazio | `relatorios/cartao_pela_celula.py:288`; teste específico [não verificado] |
+| S={} | cartão | não H → conjunto vazio | `relatorios/cartao_pela_celula.py:289`; teste específico [não verificado] |
+| C2 | cartão | H→`[]` → conjunto vazio | `relatorios/cartao_pela_celula.py:289`; teste específico [não verificado] |
+| L | cartão | H→h → conjunto só com strings | `relatorios/cartao_pela_celula.py:289`; teste `relatorios/tests/test_cartao_pela_celula.py:163`, `relatorios/tests/test_cartao_pela_celula.py:167` |
+| D | cartão | H→h → itera e conserva strings; tipo inadequado pode falhar | `relatorios/cartao_pela_celula.py:289`; teste específico [não verificado] |
+| V | cartão | H→h → conjunto por data | `relatorios/cartao_pela_celula.py:289`; teste específico V [não verificado] |
+| I | cartão | exemplo lista truthy: H levanta | `relatorios/cartao_pela_celula.py:289`, `escala/services/ata.py:90`; teste específico [não verificado] |
+| N | juiz_batida | não Mapping→{}; não H → `orfas=[]` | `ponto/juiz_batida.py:158`; teste específico [não verificado] |
+| S={} | juiz_batida | não H → `orfas=[]` | `ponto/juiz_batida.py:163`; teste específico [não verificado] |
+| C2 | juiz_batida | H→`[]` → `orfas=[]` | `ponto/juiz_batida.py:163`; teste específico [não verificado] |
+| L | juiz_batida | H→h → lista `str(h)` no resultado | `ponto/juiz_batida.py:163`; teste `ponto/tests/test_juiz_batida.py:179` |
+| D | juiz_batida | H→h → itera/converte; tipo inadequado pode falhar | `ponto/juiz_batida.py:163`; teste específico [não verificado] |
+| V | juiz_batida | H→h → lista exibida, separada dos períodos | `ponto/juiz_batida.py:166`; teste específico V [não verificado] |
+| I | juiz_batida | não Mapping→{}; não H → `orfas=[]` | `ponto/juiz_batida.py:158`; teste específico [não verificado] |
+| N | esmeril | não H → nenhuma contribuição A5 | `ponto/services/esmeril_espelho.py:126`; teste específico [não verificado] |
+| S={} | esmeril | não H → nenhuma contribuição A5 | `ponto/services/esmeril_espelho.py:126`; teste específico [não verificado] |
+| C2 | esmeril | H→`[]` → nenhuma contribuição A5 | `ponto/services/esmeril_espelho.py:126`; teste específico [não verificado] |
+| L | esmeril | H→h; `_hm(str(h))`; conta faixas de meia hora | `ponto/services/esmeril_espelho.py:127`; teste A5 [não verificado] |
+| D | esmeril | H→h; mesma iteração/conversão, sem garantia de forma | `ponto/services/esmeril_espelho.py:126`; teste específico [não verificado] |
+| V | esmeril | H→h; repetição >=3 produz A5 | `ponto/services/esmeril_espelho.py:140`; teste A5 [não verificado] |
+| I | esmeril | exemplo lista truthy: H levanta | `ponto/services/esmeril_espelho.py:126`, `escala/services/ata.py:90`; teste específico [não verificado] |
+| N | vigia | `None→{}`; C→0; não H; conjunto vazio | `ponto/services/vigia_pareador_celula.py:74`; teste específico [não verificado] |
+| S={} | vigia | C→0; não H; conjunto vazio | `ponto/services/vigia_pareador_celula.py:76`; teste específico [não verificado] |
+| C2 | vigia | C→2; H→`[]`; conjunto vazio apesar da contagem | `ponto/services/vigia_pareador_celula.py:76`; teste específico [não verificado] |
+| L | vigia | C→0; não H; **descarta a lista existente** | `ponto/services/vigia_pareador_celula.py:76`; teste específico [não verificado] |
+| D | vigia | se C truthy, conjunto(H); se C falsy, conjunto vazio | `ponto/services/vigia_pareador_celula.py:76`; teste específico [não verificado] |
+| V | vigia | C controla leitura H; conjunto usado para posicionar bordas | `ponto/services/vigia_pareador_celula.py:76`; teste `ponto/tests/test_vigia_pareador_celula.py:44`, `ponto/tests/test_vigia_pareador_celula.py:47` |
+| I | vigia | exemplo lista truthy: C levanta | `ponto/services/vigia_pareador_celula.py:76`, `escala/services/ata.py:90`; teste específico [não verificado] |
+| N | cluster | `None→{}`; não M; retorna None=NAO MEDIDO | `ponto/services/cluster_espurio.py:27`; teste `escala/tests/test_tipo_item3_v5_expand.py:148` |
+| S={} | cluster | não M; retorna None | `ponto/services/cluster_espurio.py:31`; teste específico [não verificado] |
+| C2 | cluster | M→None; retorna None | `ponto/services/cluster_espurio.py:31`; M isolado testado `escala/tests/test_tipo_item3_v5_expand.py:124`; leitor [não verificado] |
+| L | cluster | M→lista; só mede se `lampadas` também lista | `ponto/services/cluster_espurio.py:32`; teste específico [não verificado] |
+| D | cluster | M→lista crua ou None conforme tipo; decide assinatura por rajada/missing | `ponto/services/cluster_espurio.py:34`, `escala/services/ata.py:149`; teste específico [não verificado] |
+| V | cluster | M→lista; >=2 válidas, <=15min e missing → assinatura; senão `()` | `ponto/services/cluster_espurio.py:36`; teste `escala/tests/test_tipo_item3_v5_expand.py:143` |
+| I | cluster | exemplo lista truthy: M levanta | `ponto/services/cluster_espurio.py:31`, `escala/services/ata.py:90`; teste específico [não verificado] |
+| N | cartório/insumos | não C → `(False,False)` | `ponto/services/cartorio.py:841`; teste `escala/tests/test_tipo_item3_v5_expand.py:104` |
+| S={} | cartório/insumos | não C → `(False,False)` | `ponto/services/cartorio.py:841`; teste específico [não verificado] |
+| C2 | cartório/insumos | sem lâmpadas: C→2 → `(None,None)` | `ponto/services/cartorio.py:835`; teste equivalente n=3 `escala/tests/test_selo_b5f3_lavra_batida.py:79` |
+| L | cartório/insumos | sem lâmpadas: C→0 → `(False,False)`; com lâmpadas, não C | `ponto/services/cartorio.py:835`; teste específico [não verificado] |
+| D | cartório/insumos | sem lâmpadas: C→c; truthy→None/None, falsy→False/False | `ponto/services/cartorio.py:841`; teste específico [não verificado] |
+| V | cartório/insumos | sem lâmpadas: C→c; com lâmpadas, ramo dos marcos | `ponto/services/cartorio.py:841`, `ponto/services/cartorio.py:844`; teste específico V+órfãs [não verificado] |
+| I | cartório/insumos | exemplo lista truthy: `.get` falha antes de C; falsy normaliza para{} | `ponto/services/cartorio.py:834`; teste específico [não verificado] |
+| N | tripwire | Mapping? não → None; guarda pula, sem R | `ponto/management/commands/tripwire_celulas.py:261`; teste específico [não verificado] |
+| S={} | tripwire | guarda pula, sem R | `ponto/management/commands/tripwire_celulas.py:264`; teste específico [não verificado] |
+| C2 | tripwire | se >=2 marcos: R.horas→None; parâmetro cai em `orfas or []` | `ponto/management/commands/tripwire_celulas.py:267`, `ponto/management/commands/tripwire_celulas.py:168`; teste estado×leitor [não verificado] |
+| L | tripwire | se guarda permite: R.horas→lista; peneira por HH:MM | `ponto/management/commands/tripwire_celulas.py:267`; predicado isolado testado `escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:434`; ligação do estado [não verificado] |
+| D | tripwire | R.horas→cru; `or []` colapsa valor falsy; valor truthy é iterado | `ponto/management/commands/tripwire_celulas.py:168`; teste estado×leitor [não verificado] |
+| V | tripwire | R.horas→lista; peneira e confirmação posterior por instante | `ponto/management/commands/tripwire_celulas.py:267`, `ponto/management/commands/tripwire_celulas.py:283`; prova integral estado×leitor [não verificado] |
+| I | tripwire | não Mapping→None; guarda pula, sem R | `ponto/management/commands/tripwire_celulas.py:261`; teste específico [não verificado] |
+
+A matriz é a mesma linha de base para os dois desenhos; os retornos dos desenhos propostos ainda não existem nesta cópia. O tipo atual é `LeituraOrfas` com `.horas: list|None`, `.quantidade: int|None` e `.estado: str`, sem proibição de valor-verdade declarada. (`escala/services/ata.py:81`)
+
+Além dos três `None→{}` do veredito, há `cluster_espurio.py:27`, `leitor_celula.py:384` e `cartao_pela_celula.py:288`; `juiz_batida.py:158` transforma todo não Mapping em `{}`. Isso afeta o nome/caminho observado antes do acessor, independentemente da escolha SELO/TIPO. (`ponto/services/cluster_espurio.py:27`, `escala/services/leitor_celula.py:384`, `relatorios/cartao_pela_celula.py:288`, `ponto/juiz_batida.py:158`)
+
+Os testes de estados do acessor cobrem None, ausência das chaves, só contagem/lista, descasamento, inclusive lista substituída por string; isso **não é prova do produto estado×cada leitor**. (`escala/tests/test_tipo_item3_v5_expand.py:316`, `escala/tests/test_tipo_item3_v5_expand.py:330`, `escala/tests/test_tipo_item3_v5_expand.py:338`)
+
+## 13/11 12:32 · sessao f4ef51503017 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos somente por leitura:
+
+- **Escritor da grade confirmado:** `_cj` é cópia em memória; recebe ata com `lampadas` e `orfas`, sem `n_orfas`, e alimenta `turnos_do_colab`. Essa ata corresponde a `LEGADO_SO_LISTA`; o censo consulta somente `CelulaDia.objects`, portanto não inclui esse universo transitório. `app/escala/utils.py:1889`, `app/escala/utils.py:1890`, `app/escala/utils.py:1898`, `app/escala/utils.py:1901`, `app/escala/services/ata.py:100`, `app/escala/services/ata.py:228`.
+- **Retirar `orfas_instantes` evita a diferença causada exclusivamente pela futura adição dessa chave.** A comparação é do envelope inteiro; somente `precedencia` é conservada da ata anterior. Uma ata diferente pode atualizar `veredito_em`, salvar/emitir e registrar evento. No ramo de decisão administrativa anterior, atualiza ata/outbox e retorna sem renovar `veredito_em`. Quantidade real atingida: [não verificado]. `app/ponto/portas/celula.py:104`, `app/ponto/portas/celula.py:1003`, `app/ponto/portas/celula.py:1005`, `app/ponto/portas/celula.py:1040`, `app/ponto/portas/celula.py:1043`, `app/ponto/portas/celula.py:1045`.
+- **None→{} confirmado nos três pontos citados**, mas materialização pode sair antes de chamar o acessor (`not lamp`), e chamados pode sair por ausência da chave `lampadas`; não afirmar que todos executam classificação como legado em toda chamada. `app/ponto/services/vigia_pareador_celula.py:74`, `app/ponto/services/vigia_pareador_celula.py:76`, `app/chamados/services/materializacao.py:173`, `app/chamados/services/materializacao.py:176`, `app/chamados/juizes.py:494`, `app/chamados/juizes.py:506`.
+- **Selo atual só examina `BoolOp(Or)`**, reconhecendo acessor direto e atributos de nomes ligados a `leitura_orfas`; não há propagação interprocedural. O resíduo passa `.horas` ao parâmetro que executa `or []`. `app/escala/tests/test_tipo_item3_selo_classe_fallback.py:76`, `app/escala/tests/test_tipo_item3_selo_classe_fallback.py:86`, `app/escala/tests/test_tipo_item3_selo_classe_fallback.py:124`, `app/ponto/management/commands/tripwire_celulas.py:267`, `app/ponto/management/commands/tripwire_celulas.py:168`.
+- **`__bool__` apenas em `LeituraOrfas` não resolve:** `.horas` e `.quantidade` continuam campos crus `list|None`/`int|None`; o mesmo resíduo permanece se os campos não forem protegidos. Proibir iteração também altera comprehensions atuais. `app/escala/services/ata.py:81`, `app/escala/services/ata.py:83`, `app/escala/services/leitor_celula.py:194`, `app/ponto/juiz_batida.py:163`, `app/chamados/services/materializacao.py:182`.
+- **Mesmo um valor protegido contra bool não obriga consulta ao estado:** exemplo hipotético `return [] if x is None else []` não solicita bool/len/iter. API proposta para extração explícita e seu policiamento: [não verificado].
+- **RED por AttributeError:** o conteúdo do log só foi fornecido no prompt; não encontrei o artefato na cópia. [não verificado].
+- **Custo próprio do (A):** seis métodos de teste têm chamadas/asserts diretamente ligados ao paralelo; há também uma fixture de classe com a chave. `app/escala/tests/test_tipo_item3_v5_expand.py:71`, `app/escala/tests/test_tipo_item3_v5_expand.py:81`, `app/escala/tests/test_tipo_item3_v5_expand.py:87`, `app/escala/tests/test_tipo_item3_v5_expand.py:99`, `app/escala/tests/test_tipo_item3_v5_expand.py:106`, `app/escala/tests/test_tipo_item3_v5_expand.py:198`, `app/escala/tests/test_tipo_item3_v5_expand.py:135`.
+
+O instrumento retornou **79 operações reconhecidas de topo, 11 chaves e 27 arquivos**, com **58 lacunas totais**; é dimensão, não censo completo. O próprio instrumento declara que inclui o acessor, mas não reconheceu seus parâmetros como origem da ata; os acessos de `ata.py` precisam da complementação manual já enviada. `bin/leitores_de_chave.py:50`, `bin/leitores_de_chave.py:53`, `bin/leitores_de_chave.py:64`, `bin/leitores_de_chave.py:739`, `app/escala/services/ata.py:92`.
+
+O mapa das 12 chaves e a lista das 40 leituras reconhecidas de `lampadas` foram enviados nas mensagens anteriores, com todas as referências; estas 40 não equivalem a 40 leitores de órfãs. `bin/leitores_de_chave.py:851`, `app/ponto/services/lastro.py:89`, `app/relatorios/cartao_pela_celula.py:290`.
 
 ## 13/11 12:28 · sessao 9e24452e1e42 · HJ-090 · censo · origem=Code
 
@@ -1141,180 +1318,4 @@ Estes sítios do domínio de chamados só alteram apresentação, opção ou dia
 
 [truncado em 20000 de 58730 caracteres]
 
-## 13/11 11:43 · sessao ccecfb700358 · FERIADO-USA-A-LEI-DE-1609 · verificador · origem=Code
-
-**REPROVA:** o delta corrige os casos nomeados do item B, mas restam formas não declaradas que passam pelo selo; além disso, preservar a célula exportada não garante preservar os números dos leitores vivos (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:87`, `:137`; `app/ponto/services/fechamento.py:949`).
-
-**A. O reparo cobre os casos da volta 2, mas a catraca continua incompleta.**
-
-| Caso | Morde pelo motivo anunciado? | Evidência |
-|---|---|---|
-| t1 | Sim: nascimento pelo reverso `escalas`, sem flag. | `app/escala/tests/test_feriado_nasce_do_juiz_selo.py:127`, `:312`, `:347` |
-| t2 | Sim: reverso `vinculos`, inclusive pela cadeia `filter().get_or_create()`. | Mesmo arquivo`:122`, `:313`, `:348` |
-| t3 | Sim: `defaults` escreve a flag do existente, embora o nascimento por `create_defaults` seja válido. | Mesmo arquivo`:207`, `:314`, `:349` |
-| t4 | Sim: `defaults` sobrescreve a keyword de busca; acusa `True`. | Mesmo arquivo`:159`, `:316`, `:350` |
-| t5 | Sim: `**kw` posterior torna a flag opaca. | Mesmo arquivo`:143`, `:318`, `:351` |
-| t6 | Sim: última chave literal vence; acusa `True`. | Mesmo arquivo`:145`, `:320`, `:352` |
-| t7 | Sim: reconhece `acreate` sem flag. | Mesmo arquivo`:57`, `:322`, `:353` |
-| t8 | Sim: reconhece escrita crua por `aupdate`. | Mesmo arquivo`:59`, `:215`, `:323`, `:354` |
-| t9 | Sim: encontra a atribuição dentro do desempacotamento. | Mesmo arquivo`:172`, `:224`, `:324`, `:355` |
-| u1 | Sim: reconhece `get_model` com nome posicional. | Mesmo arquivo`:96`, `:325`, `:356` |
-| u2 | Sim: rastreia o alias anotado. | Mesmo arquivo`:87`, `:326`, `:357` |
-| u3 | Não morde corretamente: primeiro argumento só atualiza `ativa`; segundo fornece `create_defaults` com cópia válida. | Mesmo arquivo`:150`, `:164`, `:207`, `:328` |
-| u4 | Não morde corretamente: reconhece o reverso e aceita a flag explícita copiada. | Mesmo arquivo`:105`, `:127`, `:330` |
-
-Há, pelo menos, duas formas possíveis de produção omitidas de `LIMITES`:
-
-```python
-(EC := EscalaColaborador).objects.create(colaborador=c)
-```
-
-O alias por `NamedExpr` não é rastreado: `_apelidos` cobre `Assign` e `AnnAssign`; `_eh_modelo` não reconhece esse receptor. Assim o nascimento pode escapar sem flag explícita, usando o default ainda existente (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:87`, `:96`, `:125`; `app/escala/models.py:896`). Essa forma não consta dos limites (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:34`).
-
-```python
-campo = 'trabalha_em_feriado'
-EC.objects.get_or_create(
-    colaborador=c,
-    defaults={
-        'trabalha_em_feriado': origem.trabalha_em_feriado,
-        campo: True,
-    },
-)
-```
-
-A chave dinâmica posterior sobrescreve a literal, mas `_do_dict` ignora chaves que não sejam constantes ou `**`; conserva a cópia aceita e deixa passar o nascimento com `True`. Também não está declarado em `LIMITES` (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:137`, `:105`, `:199`, `:34`).
-
-São contraexemplos da cobertura do selo; ocorrência dessas formas em um escritor já existente na produção: **[não verificado]**. Os quatro nascimentos explícitos identificados na cópia perguntam ao juiz ou copiam a flag de origem (`app/colaboradores/services/vinculo.py:296`, `:975`, `:1093`, `:1114`).
-
-**B. A-3 e F-6 sustentam-se como FILA; nenhum bloqueia isoladamente este pouso.** [nao verificado]
-
-A-3 é real: `_o_chao_do_dia_mudou` relê `timezone.localdate()` no interior. Porém o teto declara exatamente esse sítio, e o complemento proíbe ampliar a cura naquela volta; o BACKLOG registra a pendência (`app/ponto/portas/celula.py:464`; `app/ponto/tests/test_cadastro_futuro_c5e.py:316`, `:368`; `app/docs/BACKLOG.md:2062`). O lote transmite seu `hoje` à porta e à regeneração (`app/escala/management/commands/aplicar_feriado_lei_1609.py:48`, `:73`; `app/colaboradores/services/vinculo.py:905`).
-
-F-6 também existe: `sincronizar_feriado_admin` decide pelo cargo e aplica pela porta. Esse comando não integra a cadeia do apply desta obra, cujo contador pergunta ao juiz de 16/09 (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:19`, `:47`, `:58`; `app/escala/management/commands/aplicar_feriado_lei_1609.py:46`, `:73`; `app/escala/models.py:960`). A classificação histórica como preexistente vem da triagem fornecida: **[não verificado]** por histórico da cópia.
-
-**C. Escritores, leitores e significado.**
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `trabalha_em_feriado` no nascimento | `executar_vinculo` pergunta ao juiz; trecho retroativo, ajuste e desfazer copiam a origem. | `app/colaboradores/services/vinculo.py:296`, `:975`, `:1093`, `:1114` |
-| Flag de vínculo existente | Atribuição e `save` em `marcar_trabalha_em_feriado`. | `app/colaboradores/services/vinculo.py:893` |
-| Flag para decidir/corrigir | Contador compara com o juiz; comando legado compara com cargo; porta compara antes de salvar. | `app/escala/models.py:960`; `app/colaboradores/management/commands/sincronizar_feriado_admin.py:47`; `app/colaboradores/services/vinculo.py:890` |
-| Flag para efeito no dia/dinheiro | `feriado_vira_folga`, usado pelo gerador, precedência e separação das rubricas. | `app/escala/models.py:1406`, `:1427`; `app/ponto/precedencia.py:377`; `app/ponto/services/fechamento.py:949` |
-| `minutos_previstos` / `previsto_em` | Recalculo soma a grade e carimba; falha produz `None`; persiste por `save` ou `update`. | `app/ponto/services/fechamento.py:1048`, `:1083`, `:1094`, `:1144`, `:1181`, `:1188` |
-| Invalidação de `previsto_em` | Signal chama `invalidar_previsto`, que zera o carimbo e avança `atualizado_em`. | `app/escala/signals.py:138`; `app/ponto/services/fechamento.py:1607` |
-| Restauração desses campos | Porta genérica restaura os campos pedidos. | `app/ponto/services/fechamento.py:1380`, `:1393` |
-| Leitura do previsto mensal | Prontidão; cartão/espelho; fotografia e hash dos campos gravados. | `app/folha/export.py:1045`; `app/relatorios/cartao_pela_celula.py:117`; `app/chamados/services/foto_e4b.py:290`; `app/ponto/portas/regen_exportada.py:58` |
-
-`previsto_em` significa frescor do previsto; `minutos_previstos` mede minutos da grade, convertidos em horas pelos consumidores. Não demonstram congelamento da competência nem frescor do registro inteiro (`app/ponto/models.py:430`, `:454`; `app/folha/export.py:1050`; `app/relatorios/cartao_pela_celula.py:117`).
-
-A divergência relevante é temporal: a célula conserva a decisão histórica, enquanto a separação de rubricas consulta a flag atual da linha do vínculo que responde pelo dia (`app/escala/models.py:1131`; `app/escala/servico_jornada.py:61`; `app/ponto/services/fechamento.py:949`). Portanto, os leitores não garantem a mesma fotografia histórica.
-
-**D. Classes de reprovação.**
-
-- **Segundo juiz:** existe a decisão por cargo, fora do caminho deste lote; o lote usa o juiz existente (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:47`; `app/escala/models.py:960`).
-- **Segundo escritor fora da porta:** não aparece no apply; ele chama a porta, onde ficam atribuição e `save` (`app/escala/management/commands/aplicar_feriado_lei_1609.py:73`; `app/colaboradores/services/vinculo.py:893`). A garantia AST continua incompleta pelos contraexemplos de A (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:87`, `:137`).
-- **Relógio interior:** presente, explicitamente em fila, conforme B (`app/ponto/portas/celula.py:464`; `app/docs/BACKLOG.md:2062`).
-- **Derivação paralela:** `fechamento_lido` chama o próprio recalculador; não cria outra conta. O problema demonstrado é usar cadastro atual dentro dessa conta histórica (`app/ponto/services/fechamento.py:1759`, `:949`).
-- **Selo/prova sem cobertura suficiente:** os novos mutantes têm expectativas específicas; o hash do gravado, porém, não cobre os números derivados pelos leitores vivos (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:347`; `app/ponto/portas/regen_exportada.py:37`, `:71`; `app/chamados/services/foto_e4b.py:328`).
-- **Pré-requisito:** o comando verifica o universo e fecha o arquivo exclusivo de reversão antes da primeira mutação (`app/escala/management/commands/aplicar_feriado_lei_1609.py:64`, `:69`, `:73`). Inversão concreta de travas, pouso efetivo e cumprimento operacional dos pré-requisitos: **[não verificado]**.
-- **Campo com dois significados:** não demonstrei duas unidades para o previsto; demonstrei mistura entre decisão congelada e flag atual no significado histórico do feriado (`app/ponto/models.py:432`; `app/escala/models.py:1131`, `:1427`; `app/ponto/services/fechamento.py:949`).
-
-**G. A exportada pode mudar nos leitores vivos.**
-
-O encadeamento informado procede: o apply salva por vínculo; o signal invalida todo fechamento do colaborador com `previsto_em`, sem filtro de competência. Essa operação altera carimbos, conservando os campos numéricos gravados (`app/escala/management/commands/aplicar_feriado_lei_1609.py:73`; `app/colaboradores/services/vinculo.py:894`; `app/escala/signals.py:146`; `app/ponto/services/fechamento.py:1611`).
-
-| Leitor, depois do lote | Fonte do número |
-|---|---|
-| `folha.export.prontidao` | Sem carimbo, calcula pela grade; `trab` continua vindo de `fech.horas_trabalhadas`. `app/folha/export.py:1036`, `:1045`, `:1095` |
-| Lista do fechamento | Campos do FM gravado, com prontidão calculada separadamente. `app/ponto/views.py:1135`; `app/ponto/services/fechamento_lista.py:85`, `:107` |
-| Painel lateral | Cálculo vivo por `fechamento_lido`. `app/ponto/views.py:993` |
-| PDF do TXT histórico | Snapshot de `ExportacaoDominio.conteudo`. `app/folha/pdf_export.py:63` |
-| PDF cartão/espelho | Totais vivos por `fechamento_lido`. `app/relatorios/pdf_espelho.py:628`; `app/relatorios/cartao_pela_celula.py:73`, `:323` |
-| TXT histórico baixado | Conteúdo gravado. `app/folha/views.py:561` |
-| Novo TXT da mesma competência | Cálculo vivo injetado na montagem. `app/folha/views.py:208`, `:268` |
-| `foto_e4b` | Guarda FM gravado inteiro **e** `dinheiro_online` vivo. `app/chamados/services/foto_e4b.py:290`, `:328` |
-| `regen_exportada.hash_do_gravado` | Campos gravados; exclui `previsto_em` e `atualizado_em`. `app/ponto/portas/regen_exportada.py:37`, `:71` |
-| `regenerar_em_exportada`, se executada depois | Ato adicional que regenera apesar da lavra e recalcula. `app/ponto/portas/regen_exportada.py:179`, `:184` |
-
-**O previsto da prontidão lê a célula preservada.** A grade usa `ata.tipo_dia`/`cel.trabalha` e os minutos da ata; no fallback do previsto, `eh_dia_trabalho` devolve diretamente `cel.trabalha`. Portanto, a flag nova, sozinha, não reduz esse previsto quando célula/ata estão preservadas e coerentes (`app/escala/services/leitor_celula.py:397`, `:411`; `app/escala/utils.py:2266`; `app/escala/models.py:1131`). Contudo, se o snapshot mensal já divergir da grade, invalidar o carimbo muda a fonte exibida; a invalidação não verifica essa igualdade (`app/folha/export.py:1045`, `:1095`; `app/ponto/services/fechamento.py:1611`). Existência dessa divergência no lote real: **[não verificado]**.
-
-**O dinheiro vivo também lê a flag atual.** Considere vínculo weekday corrigido de `True` para `False`, em competência exportada, com feriado já congelado como folga, par trabalhado e escala certa. O motor continua colocando o par em `periodos_ft`, pois consulta a célula preservada (`app/ponto/motor_calculo_v2.py:2448`, `:2492`). Mas `feriado_vira_folga` passa de falso para verdadeiro pela alteração da flag (`app/escala/models.py:1427`, `:1432`).
-
-Consequência: as horas desse par saem de `horas_folga_trabalhada` e entram em `horas_extras_100_feriado`, `horas_extras_100` e `horas_extras`; o subconjunto noturno também pode mudar. Isso ocorre na leitura, sem regenerar a célula exportada ([app/ponto/services/fechamento.py:949](/home/ronald/codex_ws/b4e060c4bda347dc5302a7805ff28eb37b07e311/app/ponto/services/fechamento.py:949), `:955`, `:962`, `:965`).
-
-Assim, painel, cartão PDF e fotografia online podem mudar; um novo TXT pode refletir a mudança conforme as rubricas cadastradas. TXT/PDF históricos continuam mostrando o snapshot (`app/ponto/views.py:993`; `app/relatorios/cartao_pela_celula.py:73`; `app/chamados/services/foto_e4b.py:328`; `app/folha/export.py:443`, `:446`; `app/folha/views.py:561`; `app/folha/pdf_export.py:63`). Ocorrência e valores concretos desse cenário na produção: **[não verificado]**.
-
-**REPROVA — A: lacunas não declaradas da catraca (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:87`, `:137`); G/F-4: números vivos de exportada podem mudar, sem cobertura pelo hash do gravado (`app/ponto/services/fechamento.py:949`; `app/ponto/portas/regen_exportada.py:37`).**
-
-## 13/11 11:40 · sessao 7795cd9bc9de · - · - · origem=Ronald (tmux)
-
-G: há cenário de mudança de número de competência exportada, mesmo com célula preservada: o cálculo vivo reclassifica folga trabalhada usando a flag atual do vínculo. A ocorrência desse cenário na produção raspada é **[não verificado]**; o caminho existe no código (`app/ponto/services/fechamento.py:949`, `app/escala/models.py:1427`).
-
-- O apply chama a porta por vínculo (`app/escala/management/commands/aplicar_feriado_lei_1609.py:73`). A porta salva a flag (`app/colaboradores/services/vinculo.py:893`), disparando o signal (`app/escala/signals.py:137`), que invalida **todos** os fechamentos com `previsto_em`, sem filtro de competência exportada: zera o carimbo e altera `atualizado_em`, conservando os números gravados (`app/ponto/services/fechamento.py:1611`).
-- A guarda preserva células da exportada: encontra as competências exportadas (`app/ponto/portas/celula.py:221`) e pula seus dias antes da geração (`app/ponto/portas/celula.py:284`).
-
-| Leitor | Fonte após o lote |
-|---|---|
-| `folha.export.prontidao` | Com carimbo invalidado, calcula pela grade; o snapshot só vale com `previsto_em` (`app/folha/export.py:1045`, `app/folha/export.py:1095`). |
-| Lista de fechamento | Conserva FM gravado e chama prontidão para a coluna correspondente (`app/ponto/views.py:1135`, `app/ponto/services/fechamento_lista.py:85`). |
-| Painel lateral | `fechamento_lido`, cálculo vivo (`app/ponto/views.py:993`, `app/ponto/services/fechamento.py:1759`). |
-| PDF do TXT histórico | `ExportacaoDominio.conteudo`, snapshot (`app/folha/pdf_export.py:63`, `app/folha/views.py:834`). |
-| PDF cartão/espelho | Totais vivos: PDF chama `folha_manda`, que chama `totais_da_folha`, que chama `fechamento_lido` (`app/relatorios/pdf_espelho.py:628`, `app/relatorios/cartao_pela_celula.py:323`, `app/relatorios/cartao_pela_celula.py:73`). |
-| TXT histórico baixado | Conteúdo gravado intacto (`app/folha/views.py:561`). |
-| Novo TXT da mesma competência | Recalcula em leitura e injeta esses objetos na montagem (`app/folha/views.py:208`, `app/folha/views.py:268`). |
-| `foto_e4b` | Fotografa FM gravado inteiro **e**, separadamente, `dinheiro_online` vivo (`app/chamados/services/foto_e4b.py:290`, `app/chamados/services/foto_e4b.py:328`). |
-| `regen_exportada.hash_do_gravado` | Hash dos números gravados; exclui precisamente os carimbos alterados pela invalidação (`app/ponto/portas/regen_exportada.py:37`, `app/ponto/portas/regen_exportada.py:71`). |
-| `regenerar_em_exportada` executada depois | É ato adicional que abre a lavra, regenera e recalcula o FM (`app/ponto/portas/regen_exportada.py:179`, `app/ponto/portas/regen_exportada.py:184`). |
-
-**Previsto da prontidão:** o fallback lê `ata.tipo_dia`/`cel.trabalha` e `ata.minutos_previstos`; sem minutos lavrados, chama o juiz (`app/escala/services/leitor_celula.py:397`, `app/escala/services/leitor_celula.py:411`). O juiz consulta `eh_dia_trabalho` (`app/escala/utils.py:2266`), que devolve diretamente `cel.trabalha` quando existe célula (`app/escala/models.py:1131`). Portanto, **não há cadeia que faça apenas a flag nova reduzir o previsto de uma célula/ata preservada e coerente**; `precedencia.py` não entra nesse leitor (`app/escala/services/leitor_celula.py:397`).
-
-**Contraprova de invariância dos demais números:** considere vínculo do lote weekday com `True → False`, em feriado que já estava congelado como folga, com par trabalhado de `h` horas e escala certa. O contador permite tal correção (`app/escala/models.py:960`); o motor mantém o par em `periodos_ft` porque lê a célula como folga (`app/ponto/motor_calculo_v2.py:2448`, `app/ponto/motor_calculo_v2.py:2492`). Antes, `feriado_vira_folga` devolve `False` pela flag `True`; depois devolve `True` pela flag `False` e feriado do lugar (`app/escala/models.py:1427`, `app/escala/models.py:1432`). O fechamento vivo retira essas `h` horas de `horas_folga_trabalhada`, adiciona-as a `horas_extras_100`, `horas_extras_100_feriado` e `horas_extras`, e pode mover também o subconjunto noturno (`app/ponto/services/fechamento.py:949`, `app/ponto/services/fechamento.py:955`, `app/ponto/services/fechamento.py:962`, `app/ponto/services/fechamento.py:965`).
-
-Assim, painel, cartão PDF, fotografia online e eventual novo TXT podem mudar; TXT/PDF históricos conservam a fotografia anterior (`app/ponto/views.py:993`, `app/relatorios/cartao_pela_celula.py:73`, `app/chamados/services/foto_e4b.py:328`, `app/folha/views.py:208`, `app/folha/views.py:561`, `app/folha/pdf_export.py:63`). O novo TXT distingue os eventos de feriado e folga trabalhada, embora rubricas cadastradas possam fazê-los convergir no arquivo — essa configuração é **[não verificado]** (`app/folha/export.py:443`, `app/folha/export.py:446`).
-
-O hash inalterado do gravado prova apenas que seus campos incluídos não mudaram; **não prova invariância dos leitores vivos** (`app/ponto/portas/regen_exportada.py:37`, `app/ponto/portas/regen_exportada.py:71`).
-
-## 13/11 11:40 · sessao 1911af74687d · - · - · origem=Ronald (tmux)
-
-A cura os casos descritos na volta 2 e os mutantes novos mordem os motivos esperados. Reexecutei o scanner em memória, sem criar arquivos: `achados(app) == []`, contagem do escritor autorizado igual a 1, e a lista esperada integral dos mutantes coincidiu. Evidência da verificação pode ser reproduzida pelo scanner e pelas expectativas em `app/escala/tests/test_feriado_nasce_do_juiz_selo.py:183`, `:253`, `:260`, `:333`.
-
-| Caso | Resultado e motivo | Referências |
-|---|---|---|
-| t1/t2 | Acusam nascimento sem flag pelos reversos `escalas`/`vinculos`, inclusive cadeia `filter().get_or_create()`. | selo `:122`, `:127`, `:312`, `:313`, `:347`, `:348`; reversos reais `app/escala/models.py:872`, `:892`. |
-| t3 | Acusa escrita do existente por `defaults`; nascimento com `create_defaults` copiado permanece aceito. | selo `:159`, `:207`, `:314`, `:349`. |
-| t4 | `defaults` sobrescreve a flag de busca e o valor literal `True` é acusado. | selo `:159`, `:205`, `:316`, `:350`. |
-| t5 | `**kw` posterior à flag torna o valor opaco e é acusado. | selo `:137`, `:143`, `:203`, `:318`, `:351`. |
-| t6 | Última chave literal vence; acusa `True`. | selo `:142`, `:145`, `:320`, `:352`. |
-| t7/t8 | `acreate` acusa ausência da flag; `aupdate` acusa escrita crua. | selo `:55`, `:59`, `:196`, `:215`, `:322`, `:353`. |
-| t9 | Atribuição desempacotada acusa escrita fora da porta. | selo `:172`, `:224`, `:324`, `:355`. |
-| u1/u2 | `get_model` com nome em argumento posicional e alias anotado são reconhecidos e acusam ausência da flag. | selo `:87`, `:96`, `:325`, `:356`. |
-| u3 | Limpo pelo motivo certo: segundo argumento fornece `create_defaults` com cópia; primeiro `defaults` só contém `ativa`. | selo `:150`, `:164`, `:207`, `:328`. |
-| u4 | Limpo pelo motivo certo: reverso é reconhecido, e nascimento recebe cópia aceita. | selo `:105`, `:127`, `:330`. |
-
-Persistem formas possíveis em código de produção que o selo não acusa e `LIMITES` não declara — **não encontrei ocorrência dessas formas no HEAD**; ocorrência real é `[não verificado]`:
-
-1. **Chave dinâmica posterior em `defaults`:**
-   ```python
-   campo = 'trabalha_em_feriado'
-   EC.objects.get_or_create(
-       colaborador=c,
-       defaults={'trabalha_em_feriado': origem.trabalha_em_feriado, campo: True},
-   )
-   ```
-   O scanner retorna `[]`: `_do_dict` ignora a chave dinâmica e conserva a cópia aceita, embora a última chave efetiva seja `True`. Trata `**` como opaco e constantes como chaves conhecidas, sem tratamento das demais chaves. `app/escala/tests/test_feriado_nasce_do_juiz_selo.py:137`, `:143`, `:145`, `:105`, `:199`; limites enumerados em `:34`.
-
-2. **Alias por expressão de atribuição:**
-   ```python
-   (EC := EscalaColaborador).objects.create(colaborador=c)
-   ```
-   Scanner retorna `[]`: rastreia `Assign` e `AnnAssign`, mas não `NamedExpr`; `_eh_modelo` não reconhece esse receptor. `app/escala/tests/test_feriado_nasce_do_juiz_selo.py:87`, `:96`, `:125`; limites em `:34`. Esse contraexemplo reproduz diretamente a volta do default proibido, ainda presente em `app/escala/models.py:896`.
-
-3. **`get_model` com keywords:**
-   ```python
-   apps.get_model(app_label='escala', model_name='EscalaColaborador').objects.create(colaborador=c)
-   ```
-   Scanner retorna `[]`, pois `_eh_modelo` só consulta `no.args`, não keywords. Compatibilidade da chamada com implementação Django não incluída na cópia: `[não verificado]`; dependência declarada é Django 5.2.14 em `app/requirements.txt:13`. Falha do reconhecimento AST é verificável em `app/escala/tests/test_feriado_nasce_do_juiz_selo.py:96`; ausência no inventário em `:34`.
-
-Os quatro nascimentos explícitos atuais continuam corretos: pergunta ao juiz em `app/colaboradores/services/vinculo.py:287`/`:296`, cópias em `:971`/`:975`, `:1090`/`:1093`, `:1111`/`:1114`.
-
-_4576 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4579 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
