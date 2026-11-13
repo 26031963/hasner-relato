@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 16:50** · publicado em **13/11/2026 16:55** (UTC-3)
+> Ultima resposta processada: **13/11/2026 17:06** · publicado em **13/11/2026 17:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 17:06 · sessao fa8f1832d687 · - · - · origem=Ronald (tmux)
+
+Leituras e escritores encontrados, todos na cópia:
+
+| Campo de instância | Quem escreve | Quem lê e significado |
+|---|---|---|
+| `lampada` | `app/chamados/services/tarefa_do_dia.py:104–105` copia o valor de `acesa_lavrada`, obtido em `:87–91`. O leitor único copia `ata.lampadas[].acesa` diretamente em `app/escala/services/leitor_celula.py:134–137`. A ata é montada em `app/ponto/services/cartorio.py:730–738`, com valores True/None/False em `:672–678,711–724`; o teto pode trocar False por None em `:907–917`. | A tarefa distingue True (`tarefa_do_dia.py:262–271`), None (`:272–275`) e False que segue ao teto (`:276–282`). O outro campo `missing` do leitor trata None como acesa (`leitor_celula.py:119–120`), mas **a tarefa usa `acesa_lavrada`**, preservando o triestado (`:134–137`). |
+| `vencido` | `app/ponto/services/cartorio.py:892–893`: `quando + timedelta(minutes=teto_min) <= agora`, com default de 30 min em `:862`. A carga usa esse corpo em `app/ponto/turnos.py:3060–3066`; a tarefa chama com `self.agora` e copia o resultado em `tarefa_do_dia.py:506–514,104–105`. | `tarefa_do_dia.py:276–282`: None = marco sem teto conhecido; False = ainda não venceu. O cálculo usa **instante do marco encadeado no turno**, não comparação do dia civil (`cartorio.py:865–868,882–893`). |
+| `razao` | Inicialização e cópia em `tarefa_do_dia.py:258–260`; ramificações escrevem em `:263,273,277,281,285–290,296,303,309`. `_pela_decisao` fornece razões de pergunta em `:130–163`. Exposição administrativa escreve em `:249–255`; instâncias adicionais em `:318–323`; `celula_acusa_sem_pergunta_viva` em `:335–336`. | Não determina a publicação da porta: `_portas_da_tarefa` não a consulta (`:547–556`). Leitor operacional adicional `app/chamados/management/commands/backfill_fio_morto_e4b.py:97–99` reconhece `passivo_sem_linha`; `:116–117` agrega razões para explicar ausência de ato. O diff usa apenas **razão da tarefa**, para reconhecer isenção (`diff_e3_sombra.py:70`). |
+| `acoes` | Formato e default de porta em `tarefa_do_dia.py:114–115`; decisões em `:130–162`; ausência em `:286–291`; perguntar em `:300,304`; cópia da decisão em `:308–313`; exposição admin em `:253–255`; acusação sem pergunta em `:335–336`. | `_portas_da_tarefa` achata ações em `:547`, publica só porta inteira ∩ fila global em `:548–551`, e calcula **fio da tarefa pelos donos das ações** em `:552–556`. Backfill lê ações e reconhece humanos sem porta em `backfill_fio_morto_e4b.py:100–115`. |
+
+**Ação humana com FUTURO=`nada` não significa que o fio interno da tarefa seja `nada`.** A tarefa calcula `fio='colab'/'admin'` pelos donos mesmo sem porta inteira; a projeção posterior pode descartá-lo ao retornar None. Isso é explícito no comentário “ausência de porta não diz ausência de tarefa”. (`app/chamados/services/tarefa_do_dia.py:540–556`)
+
+Cadeia exata que produz esse resultado:
+
+1. `responder/validar` só recebem âncora inteira se ela estiver na fila particular carregada: `tarefa_do_dia.py:128–140`; a carga dessa fila está em `:415–418`.
+2. `decidir_ausencia/admin` pode nascer diretamente com porta None: `:114–115,283–291`.
+3. `celula_acusa_sem_pergunta_viva` produz `validar/admin` com porta None: `:335–336`.
+4. Só `porta` inteira pertencente a `alimentacao['fila_ids']` entra na publicação: `:547–548`.
+5. Sem essas portas, `rota=None`; o fio interno ainda preserva o humano: `:552–556`.
+6. `porta_da_tarefa` devolve None quando a rota é None: `:559–565`.
+7. O diff converte None em folha `fio='nada'`, vigia `fio=None/exige_admin=False`, beco `sem_porta=True`, pauta `sem_fio=True`: `app/chamados/management/commands/diff_e3_sombra.py:46–59`.
+
+**Porta e projeções não reinterpretam `lampada`, `vencido` nem razão por instância:** elas não leem esses campos. A redução perde essas informações e também o fio humano quando não há rota. (`tarefa_do_dia.py:547–565`; `diff_e3_sombra.py:46–59`)
+
+Há diferença entre a descrição textual da pauta — “não estão esperando NINGUÉM” — e o predicado executado, que testa ausência de porta por meio de `_fio_do_dia`. Esse predicado admite ações humanas sem porta. (`app/ponto/services/pautas_dos_discordantes.py:46–56,79–84`; `app/folha/fora_da_folha.py:77–89`; `tarefa_do_dia.py:283–291,547–565`)
+
+A folha documenta a interpretação mais estreita: nenhuma ação exigível **passa por uma porta da fila**, e seu texto de `nada` diz que alguém precisa olhar. (`app/folha/fora_da_folha.py:52–58`)
+
+## 13/11 17:05 · sessao c41b2ea51ab4 · - · - · origem=Ronald (tmux)
+
+Em `test_e3_portas_tarefa.py`, nenhum caso cobre explicitamente as combinações `aceso`, `nao_venceu`, `lampada_nao_sabe`, `passivo_sem_linha`, `veredito_sem_lavra_vigente`, `ausencia_aprovada`, `ausencia_a_decidir`, `dia_sem_trabalho` ou `encerrada_pelo_juiz` observadas no V3; esse arquivo escreve os casos abaixo. (`app/chamados/tests/test_e3_portas_tarefa.py:21–127`)
+
+| Caso escrito | Premissas necessárias e resultado |
+|---|---|
+| Só fila sem pergunta | Marco apagado, nenhuma pergunta, ação `perguntar/sistema/emissor`; rota ausente e fila vazia. FUTURO nesses campos, desde que as premissas sejam comprovadas. (`app/chamados/tests/test_e3_portas_tarefa.py:32–38`) |
+| A residual, pergunta sob B | Âncora B viva fora da célula; ação responder com `porta=b.pk`; rota da pergunta, fio colab e verbo cobrar de B. (`app/chamados/tests/test_e3_portas_tarefa.py:21–30,40–47`) |
+| Âncora da própria célula | Pergunta ancorada no chamado da célula, publicado na fila; rota da fila, fio colab. (`app/chamados/tests/test_e3_portas_tarefa.py:67–73`) |
+| Isento | `isento_ponto=True`, razão geral `isento_ponto`, nenhuma ação/rota/fila/verbo e fio nada. As razões gerais vazias do V3 não reproduzem esse caso. (`app/chamados/tests/test_e3_portas_tarefa.py:57–65`) |
+| Verbo independente da ação | Responder pode coexistir com verbo validar de B; continua exigindo B do cenário A/B. (`app/chamados/tests/test_e3_portas_tarefa.py:75–82`) |
+| Relógio | Testa silêncio do chamado e propagação de `agora`; não testa vencimento de marco nem lâmpada desconhecida. (`app/chamados/tests/test_e3_portas_tarefa.py:84–111`) |
+
+Para subgrupos com ação humana, o fato decisivo ausente no V3 é a **porta da ação e sua presença na fila global**, além da localização da âncora para distinguir os cenários A/B e própria célula; o V3 trouxe apenas `[acao,de]`. Os testes exigem essas identidades concretas. (`app/chamados/tests/test_e3_portas_tarefa.py:40–47,67–73`)
+
+**Ação humana com FUTURO `nada` não prova contradição interna.** O contrato implementado escreve expressamente que “ausencia de porta nao diz ausencia de tarefa”; o fio pode ser humano e a rota ausente. Só portas inteiras presentes na fila global produzem rota; `porta_da_tarefa` retorna `None` sem rota, e o diff projeta `None` como `nada`. (`app/chamados/services/tarefa_do_dia.py:540–565`; `app/chamados/management/commands/diff_e3_sombra.py:46–59`)
+
+Há inclusive caso escrito E2 em que a ação é `responder/colaborador`, mas `porta=None`, pois a âncora está silenciada. Portanto essa combinação é admitida pela tarefa; não há esse caso específico no arquivo E3 solicitado. (`app/chamados/tests/test_e2_tarefa_do_dia.py:396–409`; `app/chamados/tests/test_e3_portas_tarefa.py:21–127`)
+
+O anexo permite listar os humanos com FUTURO `nada`, mas não transformar essa lista em “ATUAL obrigatório” nem em bloqueantes ESTRUTURA sem demonstrar a porta pertinente. (`app/chamados/services/tarefa_do_dia.py:128–133,547–565`; `app/chamados/tests/test_e3_portas_tarefa.py:40–47,67–73`)
 
 ## 13/11 16:50 · sessao b2ed85ab4ddc · LEI-DESLIGADO-NAO-TRAVA · sonda · origem=Code
 
@@ -529,69 +579,4 @@ A tarefa utiliza `data_evento` exclusivamente como dia do turno (`app/chamados/s
 
 A lei de julgamento é L-110: comparar com a regra aplicada ao cadastro e batidas; DIFF mede impacto e não certifica o caminho novo (`CLAUDE.md:45-58`). Sem fatos de entrada individuais e sem o emissor dos pares, classificar cada assinatura como cópia certa/regressão fica [não decidível]. [nao verificado]
 
-## 13/11 16:27 · sessao e3b2fb8631ff · - · - · origem=Ronald (tmux)
-
-O dono L-099 é **[não decidível] para todos os grupos do anexo**: o juiz exige dados que nenhuma projeção comparada fornece. A ordem efetiva é:
-
-| Condição | Dono | Referência |
-|---|---|---|
-| Folga não definida; sem vínculo no dia; sem vínculo em dia de trabalho | CADASTRO | `app/ponto/management/commands/e6_oraculo.py:98` |
-| Batida fora de turno | BATIDA | `app/ponto/management/commands/e6_oraculo.py:104` |
-| Número ímpar de batidas recebidas pelo dia | BATIDA | `app/ponto/management/commands/e6_oraculo.py:106` |
-| Fase deslocada lavrada | CADASTRO | `app/ponto/management/commands/e6_oraculo.py:108` |
-| Dia em cadastro × realidade do motor | CADASTRO | `app/ponto/management/commands/e6_oraculo.py:110` |
-| Resíduo | ESTRUTURA | `app/ponto/management/commands/e6_oraculo.py:110` |
-
-Faltam esses insumos **por colab-dia**; o carregador real lê batidas, turnos, cadastro, lavra de fase e cadastro × realidade em `app/ponto/management/commands/e6_oraculo.py:149`–`:195`. Zero batidas tem contagem par e não implica BATIDA (`app/ponto/management/commands/e6_oraculo.py:72`).
-
-**Bloqueio de proveniência:** a ordem `[cópia, base]` dos registros PAR_DIF não pode ser confirmada pelo arquivo fornecido da cópia. `diff_e3_sombra.py` monta `antes=projecoes(atual)` e `depois=projecoes(futuro)` (`app/chamados/management/commands/diff_e3_sombra.py:127`–`:130`), mas não emite PAR_DIF; publica JSON agregado (`app/chamados/management/commands/diff_e3_sombra.py:107`–`:108`). O serializador do anexo falta **[não verificado]**.
-
-Há contradição objetiva entre anexo e implementação caso se mantenha a ordem declarada: o primeiro elemento contém `fio="chamado"`, mas a tarefa só produz `colab/admin/sistema/nao_sei/nada` (`app/chamados/services/tarefa_do_dia.py:553`). A projeção só publica porta quando existe rota (`app/chamados/services/tarefa_do_dia.py:565`), e não transforma o fio. `chamado` é precisamente a alternativa do **C17 retido**, em `app/chamados/juizes.py:1628`–`:1639`. Isso não autoriza inverter silenciosamente o anexo.
-
-As regras específicas existentes decidem cenários completos, não as assinaturas resumidas:
-
-- Só fila sem pergunta: nenhuma porta humana e fila vazia (`app/chamados/tests/test_e3_portas_tarefa.py:3`; verificação `:32`–`:38`).
-- Fila residual A e pergunta ancorada sob B: porta da pergunta, fila da célula vazia, verbo de B (`app/chamados/tests/test_e3_portas_tarefa.py:4`–`:7`; verificação `:40`–`:55`).
-- Isento com fila residual: nenhuma ação, rota ou fio (`app/chamados/tests/test_e3_portas_tarefa.py:8`; verificação `:57`–`:65`).
-
-A implementação escolhe portas das ações exigíveis, intersectadas com a fila, e o fio pelos donos das ações (`app/chamados/services/tarefa_do_dia.py:547`–`:556`); o C17 retido abre porta por chamado da célula na fila, independentemente dessa exigibilidade, e acrescenta âncoras de perguntas (`app/chamados/juizes.py:1677`–`:1688`).
-
-Não atribuir “cópia certa” apenas porque mudou: L-110 diz que o código antigo não é gabarito e que o DIFF é impacto (`app/docs/LEIS.md:136`). L-114 repete que impacto não certifica, enquanto a igualdade entre leitores vale para qualquer dado (`app/docs/LEIS.md:152`). L-099 separa dono do dado da coerência estrutural (`app/docs/LEIS.md:122`).
-
-## 13/11 16:22 · sessao c2fe3b531de7 · LEI-DESLIGADO-NAO-TRAVA · censo · origem=Code
-
-As referências `q.q` e `r.r` abaixo usam linhas contadas em cada bloco fornecido, sem o cabeçalho do anexo.
-
-1. **Bloqueante 1 — (e) para `juizes novos=0`; (a) para o censo incompleto dos leitores crus.**
-
-   **Declaração `juizes novos=0`: (e), NÃO PERGUNTADO.** A pergunta trata de concorrência com juiz registrado; conferir a declaração de nascimento é outra verificação. O código contém a função e seu registro. (`q.q`, volta 1:4; `app/colaboradores/services/desligamento.py:23`; `app/core/juizes.py:267`)
-
-   - Pergunta literal: “2o juiz que duplica juiz registrado (esta_desligado x algum juiz existente de situacao/ativo)”. (`q.q`, volta 1:4)
-   - Resposta literal: “Não encontrei juiz **registrado** concorrente para ‘está desligado?’.” (`r.r`, volta 1:75)
-   - Resposta apontando especificamente o **zero falso**: **ausente**. (`r.r`, volta 1:75; volta 2, item 5; localização original deste último: [nao verificado])
-
-   **Censo dos leitores crus: (a), tema presente, levantamento incompleto.** A pergunta inclui expressamente `situacao`; a resposta identifica uma comparação crua, mas não apresenta o censo referido pelo veredito. (`q.q`, volta 1:3; `r.r`, volta 1:75; `veredito.md:2`)
-
-   - Pergunta literal: “QUEM ESCREVE e QUEM LE cada campo/valor que o diff le ou muda (situacao, data_desligamento, o_que_segura, informativo_rescisao, retidos, C5 colabs_nunca_bateu, barrados_desligado)”. (`q.q`, volta 1:3)
-   - Resposta literal: “Há comparação crua duplicada no formatador de situação exibida, mas isso não comprova uma segunda autoridade registrada.” (`r.r`, volta 1:75)
-
-2. **Bloqueante 2 — (e), NÃO PERGUNTADO, quanto à presença do corte no commit.** [nao verificado]
-
-   - Pergunta literal sobre conferir o corte em `CORTES.md` na cópia certificada: **ausente**. A pergunta próxima pede conferir o cabeçalho de bolha. (`q.q`, volta 3:5)
-   - Resposta literal identificando a ausência desse corte: **ausente**; a resposta examina a inscrição da bolha e o predicado. (Anexo `r.r`, volta 3; linha original: [nao verificado])
-
-   O selo exige a frase especificamente em `CORTES.md`; o comentário no registro não satisfaz essa busca. A cópia termina esse documento na linha 447. (`bin/tests/test_juiz_novo_tem_corte.sh:41`; `bin/tests/test_juiz_novo_tem_corte.sh:44`; `app/core/juizes.py:264`; `app/docs/CORTES.md:447`)
-
-   A **execução VERMELHA** e o estado da árvore viva são a parcela **(c)**: constam do veredito fornecido; comprovação independente: **[nao verificado]**. (`veredito.md:3`)
-
-3. **Bloqueante 3 — (e) para a auditoria financeira não perguntada; (c) para a comprovação produtiva.**
-
-   - Pergunta literal sobre impacto `fora → entra`, reversão, hashes ou regeneração do TXT: **ausente**. (Anexos `q.q`, voltas 1–3; localização original: [nao verificado])
-   - Resposta literal identificando esse bloqueante financeiro: **ausente**. (Anexos `r.r`, voltas 1–3; localização original: [nao verificado])
-   - Trecho relacionado, sem apontar o bloqueante: “a montagem aceita fechamentos `aberto` e `aprovado`, selecionados pelo resultado `entra`.” (`r.r`, volta 1:15)
-
-   A possibilidade de mudança era inspecionável no código: desligado recebe motivos vazios; motivos determinam `fora/furo_espelho`; o TXT seleciona `entra`. (`app/folha/export.py:1207`; `app/folha/export.py:970`; `app/folha/export.py:716`)
-
-   Os **18 casos em outubro, um em novembro, competências exportada/aberta e ausência de reversão/hash** constituem a parcela **(c)**, sustentada pelo veredito fornecido; não aparecem demonstrados nas verificações anteriores. (`veredito.md:4`; comprovação independente: [nao verificado])
-
-_4683 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4685 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
