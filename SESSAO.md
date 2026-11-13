@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 21:07:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (504.7 MB). Acoes na janela: **2075**.
+**Medido em 12/11/2026 21:12:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (504.7 MB). Acoes na janela: **2068**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2078,10 +2078,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:21:36 | Bash | Check state and files of TRIAGEM merge | `cd ~/saas-hasner; date +%H:%M; git status --porcelain \| /bin/grep -v '^??' ; ls .git/MERGE_HEAD 2>&1; ps -eo pid,cmd \| /bin/grep -E "[g]it push\|[p]re-push\|[d]eploy.sh" \| cut -c1-120; git log --oneline -1 HEAD; git show --stat --format='%P' d14450fff \| head -40; git diff --name-only d14450fff^1 d14450fff \| /bin/grep -E "migrations"` |
 | 09:18:00 | Bash | Register UI-ESCALA-REQUADRO-ESPELHO complement | `cd ~/saas-hasner; cat > logs/UI-ESCALA-REQUADRO/aval_ui_escala_requadro_espelho_1211.txt <<'EOF' aval Ronald: UI-ESCALA-REQUADRO-ESPELHO -- REGISTRAR como COMPLEMENTO da UI-ESCALA-REQUADRO (fila 2, POS-20, nao construir antes dela nem antes da META-18). UNIDADE = linha do dia no espelho x escala vigente nele. Mesma fonte: vinculo_do_dia (CelulaDia.escala_geradora) + HistoricoVinculo; constroi uma  ...` |
 | 09:17:46 | Bash | Find UI-ESCALA-REQUADRO backlog line | `cd ~/saas-hasner; ls logs/UI-ESCALA-REQUADRO/; /bin/grep -n "UI-ESCALA-REQUADRO" app/docs/BACKLOG.md \| cut -c1-400` |
-| 09:09:03 | Bash | Wait for LASTRO simular and suite results | `cd ~/saas-hasner/logs/LASTRO-FAIXA; until [ -f simular_c12.fim ] && [ -f suite_c12.fim ]; do /usr/bin/sleep 30; done; date +%H:%M; tail -5 simular_c12.log \| cut -c1-300; /bin/grep -E '^(OK\|FAILED)($\| \()' suite_c12.log \| tail -1; /bin/grep -E '^Ran [0-9]+' suite_c12.log \| tail -1; cat suite_c12.fim simular_c12.fim 2>/dev/null; tail -2 suite_c12.log` |
-| 09:08:59 | Bash | Update RELATO, BACKLOG, PROMPTS for new aval | `cd ~/saas-hasner/app/docs; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys; H=sys.argv[1] R=open('RELATO.md').read().split('\n') assert R[2].startswith('ESPERANDO:') R[2]='ESPERANDO: /home/ronald/saas-hasner/bin/codex_pergunta.sh \| pid=2736208' i=[k for k,l in enumerate(R) if l.startswith('MAPA-20-DERIVADO CONGELADO 09:03')]; assert len(i)==1 R[i[0]]=R[i[0]].replace('Pelo aval MAPA-20-NA-2A-V ...` |
-| 09:08:39 | Agent | Build E3-LEITORES in copy | `You are the CONSTRUTOR of obra FIO-E0-V4-E3-LEITORES in the Hasner Ponto repo (Django, multi-tenant CLT time clock). Read /home/ronald/saas-hasner/CLAUDE.md first (sections 0, 3, 4, 6, 7b are binding: LEI-AKITA, RED first, no fallback, no new juiz, no new lei). COPY (your ONLY writable tree): /home/ronald/wt-e3-leitores-090814 (branch raia/e3-leitores-090814, base main 087fe758a). Never edit /home ...` |
-| 09:08:14 | Bash | Create E3-LEITORES worktree | `cd ~/saas-hasner; T=$(date +%H%M%S); W=/home/ronald/wt-e3-leitores-$T; git worktree add -b raia/e3-leitores-$T $W 087fe758a >/dev/null 2>&1; git -C $W log --oneline -1 \| cut -c1-12; echo $W > logs/E3-LEITORES/wt.txt; ls logs/FIO-E0-V4-E3/ \| /bin/grep -i "sonda_230c\\|classes\\|v15" ; echo $W` |
-| 09:08:06 | Bash | Read E3 phase 1 results | `cd ~/saas-hasner; sed -n 316,328p app/docs/RELATO.md \| cut -c1-900; ls logs/FIO-E0-V4-E3 \| head -50` |
-| 09:08:03 | Bash | Find prior E3 sonda results | `cd ~/saas-hasner; ls -d logs/*E3* logs/*e3* 2>/dev/null; /bin/grep -n "232\\|V/T/X\\|classe V\\|118 + 114\\|118+114" app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md 2>/dev/null \| cut -c1-260 \| head -15` |
-| 09:07:59 | Bash | Read PRONTO map from E3 censo | `cd ~/saas-hasner/logs/E3-LEITORES; sed -n 133,230p censo.r \| cut -c1-500` |
