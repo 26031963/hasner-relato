@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 09:13:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (533.8 MB). Acoes na janela: **934**.
+**Medido em 13/11/2026 09:18:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (533.9 MB). Acoes na janela: **942**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:14:22 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA/censo; until [ -f censo.fim ]; do /usr/bin/sleep 20; done; tail -2 censo.log; wc -c censo.r` |
+| 09:13:37 | Bash |  | `cd /home/ronald/saas-hasner/logs; until [ -f FERIADO-ESCALA/sonda/sonda.fim ]; do /usr/bin/sleep 15; done; cat FERIADO-ESCALA/sonda/sonda_16.r \| sed -n '/5x2\/6x1 ativos/,$p'` |
+| 09:13:33 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/colaboradores/services/vinculo.py \| sed -n 230,330p` |
+| 09:13:31 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') novas=['PONTO 09:1x FERIADO-ESCALA (HJ-074; aval FERIADO-NASCE-DA-ESCALA 09:09): LEI EXISTENTE achada (LEI-AKITA 4) = FERIADO-PADRAO-POR-ESCALA (corte 16/09), juiz escala/models.py::EscalaColaborador.padrao_trabalha_em_feriado chamado em colaboradores/services/vi ...` |
+| 09:13:21 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; head -8 RELATO.md \| cut -c1-600` |
+| 09:13:19 | Bash |  | `cd /home/ronald/saas-hasner/logs/O168/v6/suite_pre_opus; ls; tail -c 400 suite.log; date +%H:%M` |
+| 09:13:11 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/escala/models.py \| sed -n 890,960p` |
+| 09:13:08 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA; until [ -f sonda/sonda.fim ] && [ -f censo/censo.fim ]; do /usr/bin/sleep 20; done; tail -2 sonda/sonda.log censo/censo.log` |
 | 09:13:05 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA/sonda && python3 - <<'EOF' p='sonda_16.py'; s=open(p).read() s=s.replace("apos = e.criado_em.date() >= corte if e.criado_em else None","apos = e.data_inicio >= corte") s=s.replace("e.criado_em.date() if e.criado_em else None, e.data_inicio","'-', e.data_inicio") s=s.replace("criado_em data_inicio","(sem criado_em; apos16/09 = data_inicio) data_inicio ...` |
 | 09:13:00 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/escala/models.py \| /bin/grep -n "^class EscalaColaborador" ; git show HEAD:app/escala/models.py \| sed -n '/^class EscalaColaborador/,/def padrao_trabalha/p' \| /bin/grep -E "models\.(DateTimeField\|DateField)"` |
 | 09:12:57 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/escala/models.py \| awk '/^class EscalaColaborador/,/^class [A-Z][a-zA-Z]*\(/' \| /bin/grep -nE "^\s+[a-z_]+ = models\." \| head -30; sed -n 20,60p logs/FERIADO-ESCALA/sonda/sonda_16.py` |
