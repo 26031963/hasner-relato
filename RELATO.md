@@ -1,6 +1,10 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: trava_teste.sh | pid=774191
+PONTO 23:28 (aval HANDOFF-ANTES-DO-COMPACT; RETOMA-AUTO: produtor 653015 = suite inteira E3, morreu por FIM, rc=0): E3 copia wt-e3-b6-114947 @ 91bed1694 suite inteira OK (skipped=42, expected failures=41) Ran 15634 rc 0 (logs/E3-FORMA-SQL/volta4/suite_inteira.log); merge-tree com main limpo; falta DIFF de frota na sombra (Codex escrevendo o script: logs/E3-FORMA-SQL/diff_frota/script.q -> script.r, sinal script.fim) -> opus final -> pouso.
+PONTO 23:28: c5e copia wt-codex-bug-cadastro-c5e-214307 @ b078c1bfb (volta 4: RED FAILED failures=30 Ran 73, GREEN OK Ran 73, censo 42=42) -> suite inteira 'pre-opus BUG-CADASTRO-C5E' na trava (logs/BUG-CADASTRO-FUTURO/c5e/volta4/suite_inteira.log, sinal .rc) -> opus final -> pouso.
+PONTO 23:28: TIPO item 3 copia wt-codex-tipo-na-fonte-184856 @ bb3653aec (4c: load_tests sem pickle removido); focada 4c FAILED (errors=1) Ran 1500 = so o label inexistente ponto.tests.test_cadastro_futuro_sem_banco (_FailedTest), 0 failure real (logs/TIPO-NA-FONTE/item3/volta4/volta4c/focado.log); DIFF de frota v2 na sombra base->copia (logs/TIPO-NA-FONTE/item3/volta4/diff_frota/, sinal v2.fim; v1 abortou CanonicoIncompleto, canonizador agora marca o tipo) -> ZERO por leitor -> suite inteira -> opus final -> pouso.
+PONTO 23:28: O168 espera vaga (ORDEM-POS-E4A2, 1 construtor em serie).
 RESPONDIDA por aval Ronald 21:48 libera B3: ERRO-BOBO TRANCA-VIVAS-08: as 3 voltas procedentes do Codex verificador foram ORACULO DE TESTE fino (resgatada exclusiva
 RESPONDIDA por aval Ronald 21:48 TIPO-ITEM3-NAO-LAVRADA=(A): lei: TIPO-NA-FONTE item 3 PARADO (12-CHAVES item 5, 3a reprovacao; preverif Codex v3 REPROVA): Celul
 RESPONDIDA por aval Ronald 21:48 E3 item (2) 4 sitios fora por nome: PERGUNTA DE DESENHO E3-FORMA-SQL item (2): 4 sitios de respondida_em em forma BOOLEANA pel
