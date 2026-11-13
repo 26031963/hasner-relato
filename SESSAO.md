@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 14:54:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (570.5 MB). Acoes na janela: **1508**.
+**Medido em 13/11/2026 14:59:58.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (570.6 MB). Acoes na janela: **1509**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:56:57 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/DESLIGADO-NAO-TRAVA/redgreen/fim7 ]; do /usr/bin/sleep 10; done; L=logs/DESLIGADO-NAO-TRAVA/redgreen/green7.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -n 1; /bin/grep '^Ran' $L \| tail -n 1; /bin/grep -E '^(FAIL\|ERROR):\|^rc=' $L \| head; date +%H:%M` |
 | 14:50:14 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/DESLIGADO-NAO-TRAVA/redgreen/fim7 ]; do /usr/bin/sleep 10; done; L=logs/DESLIGADO-NAO-TRAVA/redgreen/green7.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -n 1; /bin/grep '^Ran' $L \| tail -n 1; /bin/grep -E '^(FAIL\|ERROR):\|^rc=' $L \| head` |
 | 14:50:10 | Bash |  | `cd /home/ronald/saas-hasner; source bin/recursos.sh; W=/home/ronald/wt-desligado-112447; docker run --rm $TESTE_DOCKER -u $(id -u):$(id -g) -v $W/app:/app:ro -w /app saas-hasner-core:latest ruff check --no-cache --config ruff.toml folha/tests/test_lei_desligado_nao_trava.py folha/retrato_folha.py folha/management/commands/lavrar_retrato_folha.py 2>&1 \| tail -n 3` |
 | 14:50:06 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^(FAIL\|ERROR):\|Error\|assert' red7.log \| head -n 20; cd /home/ronald/wt-desligado-112447 && git status --short \| head; cmp app/folha/retrato_folha.py /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen/rf.cura7 && echo cura_restaurada` |
