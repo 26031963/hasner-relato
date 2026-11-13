@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 00:15** · publicado em **13/11/2026 00:16** (UTC-3)
+> Ultima resposta processada: **13/11/2026 00:36** · publicado em **13/11/2026 00:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 00:36 · sessao eac820637f03 · - · - · origem=Ronald (tmux)
+
+Para C, tomando D como dia capturado em `executar_vinculo` e D+1 como leitura posterior à meia-noite; ocorrência real em produção [não verificado]. O executor captura D em `app/colaboradores/services/vinculo.py:194`, passa D aos dois fechamentos (`:219`, `:247`), à regeneração até D (`:328`) e ao suplemento futuro (`:339`).
+
+| Sítio | Grafo observado | Efeito concreto se sua leitura devolver D+1 |
+|---|---|---|
+| `_copiar_folga_padrao` | **Chamada direta** por `executar_vinculo`, tanto na atualização quanto na criação: `app/colaboradores/services/vinculo.py:284`, `:298`. Somente entra com calendário padrão e sem calendário já escolhido: `:157`–`:159`. | `date.today()` escolhe o **mês da foto**, não o dia-turno: `:163`–`:166`. Dentro do mesmo mês, a mudança D→D+1 não muda os dois meses escolhidos; na virada de mês troca o par mês corrente/próximo pelo novo par, deixando de fotografar o mês que continha D nesse caminho (`:164`–`:166`). `date.today()` usa data do processo; equivalência com data civil local do Django [não verificado]. |
+| `relavrar_celulas_da_foto` | **Chamada transitiva** do executor: `_copiar_folga_padrao` → `gerar_foto_folgas` (`vinculo.py:165`–`:166`) → `_gerar_foto_folgas_no_ato` (`app/escala/folgas.py:162`–`:163`) → `relavrar_celulas_da_foto` (`:215`–`:218`). | Lê seu próprio `hoje=D+1` (`folgas.py:280`), regenera `desde..D+1` como passado/hoje (`:290`–`:296`) e só seleciona futuras a partir de D+2 (`:298`–`:299`; `app/ponto/services/cadastro_futuro.py:27`). D+1 recebe DNA novo pelo caminho passado/hoje, sem a limpeza reservada a `d > hoje` (`app/ponto/portas/celula.py:289`–`:315`). Pode chegar ao julgamento de D+1 no rabo (`:392`, `:464`–`:472`); julgamento efetivo obedece às guardas descritas abaixo. |
+| `_ec_vigencia_regenera_celulas` | **Signal de `post_save`** registrado em `app/escala/signals.py:34`; no executor a atualização existente faz `save()` (`app/colaboradores/services/vinculo.py:283`). Só roda se vigência mudou e não é criação/raw (`signals.py:54`–`:59`). | Uma leitura própria D+1 (`:67`) governa **ambas** as partes: passado/hoje até D+1 (`:72`–`:75`) e futuras desde D+2 (`:81`–`:83`; `cadastro_futuro.py:27`). O buraco interno antigo entre duas leituras foi eliminado; continua tendo um dia próprio distinto do D do executor (`vinculo.py:194`). DNA de D+1 é tratado no ramo passado/hoje; seu julgamento segue as guardas do cartório (`celula.py:312`; `cartorio.py:2025`, `:2033`). |
+| `_ec_ancora_regenera_celulas` | **Outro signal de `post_save`**, `app/escala/signals.py:86`; `save()` do executor em `vinculo.py:283` pode acioná-lo quando muda a âncora. Recusa criação/raw, âncora nula ou inalterada (`signals.py:111`–`:116`). | Lê D+1 (`:119`), escolhe janela da competência por D+1 (`:120`), regenera até D+1 (`:124`–`:127`) e suplementa desde D+2 (`:132`–`:134`; `cadastro_futuro.py:27`). Na virada da competência, também muda o início da janela histórica (`signals.py:120`–`:121`). |
+| `_o_chao_do_dia_mudou` | **Chamada direta pela porta do aval** `regenerar_celulas_vinculo` (`app/ponto/portas/celula.py:392`); recebe dias tocados, **não recebe `hoje`** (`:404`–`:405`). Também chamado por edição humana (`:665`) e reversão (`:858`). | A porta usa D (`:193`), reescreve DNA futuro D+1 e desfaz julgamento (`:306`–`:315`). Depois o rabo lê D+1 (`:464`), deixa D+1 passar no filtro (`:469`) e chama o juiz (`:472`). O juiz relê o relógio (`app/ponto/services/cartorio.py:2016`), recusa futuro (`:2025`) e, para hoje com trabalho, espera fim do turno (`:2033`–`:2038`). **Contraexemplo concreto: D+1 com `trabalha=False`** não passa pela espera de turno e pode ser julgado novamente (`:2033`, `:2040`), embora seja futuro segundo o D injetado na porta. |
+| `reabrir_vigencia_impossivel` | **Outro ato**: chamador de produção encontrado é `app/escala/management/commands/corrigir_vinculo_vigencia.py:86`; recebe `ec`, `data_fim`, autor/motivo, sem `hoje` (`app/colaboradores/services/vinculo.py:674`). Não há chamada a essa função no corpo de `executar_vinculo` (`:170`–`:387`). | Com autor, grava `HistoricoVinculo.data=D` por `date.today()` (`vinculo.py:740`; escritor do campo em `app/colaboradores/services/historico_vinculo.py:15`), depois passa D+1 ao suplemento (`vinculo.py:752`), que só seleciona desde D+2 (`cadastro_futuro.py:27`). Uma célula **existente** de D+1 com DNA antigo fica fora desse suplemento e não há regeneração do passado/hoje nessa função (`vinculo.py:729`–`:753`). O `update()` não emite signal (`:730`, `:746`). O command já havia capturado outro `hoje` na borda (`corrigir_vinculo_vigencia.py:48`), usado no fechamento seguinte (`:107`–`:108`) mas não entregue à reabertura (`:86`–`:88`). |
+
+Atenção à interação: quando um caminho intermediário julga D+1, o suplemento final do executor, usando D, só limpa esse julgamento **se reescrever DNA**; o ramo exige diferença em `trabalha`, geradora ou DNA antes de chamar a limpeza (`app/ponto/portas/celula.py:297`–`:315`). Portanto um julgamento recém-criado pode permanecer se o suplemento encontrar o mesmo DNA (`:297`). Dado de produção demonstrando esse caso [não verificado].
+
+Leituras adicionais no executor: `reconciliar_apos_vinculo` é chamado diretamente sem `hoje` (`app/colaboradores/services/vinculo.py:345`–`:348`), lê D+1 (`app/colaboradores/services/pos_vinculo.py:56`), inclui D+1 no intervalo (`:57`) e tenta julgá-lo (`:64`–`:75`), além de apurar furos até esse teto (`:82`). O próprio comentário do executor declara essa releitura como sítio interior fora da cura (`vinculo.py:189`–`:192`); isso descreve o código, não resolve a interpretação do aval.
+
+## 13/11 00:35 · sessao 0575d92ce211 · - · - · origem=Ronald (tmux)
+
+D. A troca amplia os **candidatos**, sem retirar nenhum ativo: antes `ativa=True`; agora ficam fora apenas `ativa=False AND data_fim IS NULL`. Entram os inativos com `data_fim` preenchido, inclusive passado, hoje, futuro e vigências impossíveis como candidatos; a cobertura efetiva ainda exige `data_inicio <= d <= data_fim`. (`app/escala/alimentacao.py:199-216`; `app/ponto/portas/celula.py:883-910`)
+
+O candidato inativo só pode criar célula quando `d > hoje`, cobre `d`, a juíza `vinculo_do_dia` o escolhe e a célula está ausente. Nenhum passado ou hoje passa a ser escrito **por essa ampliação**, pois todos os inativos são barrados em `d <= hoje`; futura existente também é pulada. Ativos mantêm o comportamento: criam ausentes e podem enriquecer DNA nulo no passado. (`app/ponto/portas/celula.py:906-935`)
+
+A seleção da juíza sem célula prefere `(ativa, data_inicio)`: o ativo vence o inativo sobreposto. (`app/escala/alimentacao.py:285-286`) Os testes existentes declaram casos para futura ausente inativa, passado/hoje preservados, limite do fim, sobreposição com ativo, futura existente e inativo sem fim; execução desses testes nesta verificação: [não verificado]. (`app/ponto/tests/test_cadastro_futuro_c5b.py:272-305`)
+
+E/6. **Procede no código**: o cron chama `_regenerar_hoje_existentes` antes do gerador, seleciona células geradas de `data=hoje`, consulta a juíza e chama `regenerar_celulas_vinculo(ec, hoje, hoje, hoje=hoje, recalculo=False, estender_horizonte=False)`. Se DNA, geradora ou trabalho diferem, a porta reescreve a célula. Respeita mão humana e competência lavrada. Isso existe independentemente da ampliação D7. (`app/ponto/management/commands/gerar_celulas.py:303-325`, `:347-350`; `app/ponto/portas/celula.py:284-311`) O cron está declarado às 05:50 com papel `gerador`. (`app/config/crons.py:426`, `:2301`) Ocorrência concreta em produção: [não verificado].
+
+E/7. **Procede como possibilidade estrutural**: snapshot remove ECs ausentes do retrato e depois regenera apenas os sobreviventes do snapshot; remover a EC zera a FK `escala_geradora` por `SET_NULL`, enquanto `dna` permanece um JSON independente. (`app/colaboradores/services/vinculo.py:1022-1035`; `app/escala/models.py:1692-1700`)
+
+Contraexemplo: célula futura gerada pela EC removida; snapshot vazio, ou todos os restaurados terminam antes dessa data. Com snapshot vazio, nenhuma regeneração é chamada. Com restaurados que não cobrem a data, o ramo de desligar futura exige `cel.escala_geradora_id == ec.id`, condição falsa após `SET_NULL`; portanto o DNA pode continuar nomeando o PK removido. (`app/colaboradores/services/vinculo.py:1005`, `:1029-1035`; `app/ponto/portas/celula.py:229-254`)
+
+O vigia compara `dna.vinculo_id` com o vínculo escolhido pela autoridade e apenas incrementa `CHAVE_DNA_DE_OUTRO`; o gerador pula a futura existente. (`app/ponto/services/vigia_cadastro_futuro.py:55-61`; `app/ponto/portas/celula.py:930-935`) Ocorrência em produção: [não verificado].
 
 ## 13/11 00:15 · sessao d165bc130172 · E3-FORMA-SQL · leitura · origem=Code
 
@@ -2400,103 +2433,4 @@ A base `0a747193e:app/escala/services/leitor_celula.py:122`/`:123` não tinha `i
 
 Não escrevi arquivos nem executei banco ou testes. Não encontrei `AGENTS.md` nos diretórios ancestrais ou em `escala/` [não verificado quanto a arquivos fora desses caminhos]. [nao verificado]
 
-## 12/11 22:16 · sessao ce93dc9cf830 · - · - · origem=Ronald (tmux)
-
-Conferido com `git show` em `78994522d` (B) e `69a3d1570` (C).
-
-| Função | BASE | CÓPIA | Chamada comum |
-|---|---|---|---|
-| `dia_degenerado(dia)` | `app/ponto/propositor.py:34` | `app/ponto/propositor.py:36` | `fn(dia)` |
-| `insumos_atribuicao(dia)` | Ausente; lógica inline em `app/ponto/management/commands/propor_reorganizacao.py:91` | `app/ponto/propositor.py:88` | Não existe isoladamente nas duas |
-| `_runs_de_rajada(horas)` | `app/escala/orfa_classe.py:40` | `app/escala/orfa_classe.py:36` | Pelo chamador `classificar_orfas(dia)` |
-| `classificar_orfas(dia)` | `app/escala/orfa_classe.py:53` | `app/escala/orfa_classe.py:54` | `fn(dia)` |
-| `horas_reais_do_dia(dia, deslocamentos=None)` | `app/ponto/turnos.py:2646` | `app/ponto/turnos.py:2646` | `fn(dia, deslocamentos)` |
-| `_entrada_espuria(periodo, batidas, terceiro)` | Terceiro `orfas_hhmm`, `app/relatorios/pdf_espelho.py:174` | Terceiro `orfas_instantes`, `app/relatorios/pdf_espelho.py:174` | Três argumentos posicionais |
-| `_marcar_orfas_pdf(dia, orfas)` | Ausente; lógica inline `app/relatorios/pdf_espelho.py:609` | `app/relatorios/pdf_espelho.py:186` | Pelo coletor comum |
-| `_coletar_dados_espelho(colaborador, data_ini, data_fim, _turnos_juiz=None, *, agora)` | `app/relatorios/pdf_espelho.py:187` | `app/relatorios/pdf_espelho.py:236` | `fn(c, ini, fim, agora=fixo)` |
-| `_coletar_dados_espelho_mes(colaborador, mes, ano, *, agora)` | `app/relatorios/pdf_espelho.py:654` | `app/relatorios/pdf_espelho.py:694` | `fn(c, mes, ano, agora=fixo)` |
-| `contexto_calendario(colaborador, GET, *, datas_em_aberto=None)` | `app/colaboradores/services/calendario.py:159` | `app/colaboradores/services/calendario.py:159` | `fn(c, GET)` |
-
-`insumos_atribuicao` deve ser identificado como ausente na BASE; extrair ou reconstruir a lógica inline violaria a exigência. O pai comum é `propor_reorganizacao.Command._run`, assinatura em ambas `app/ponto/management/commands/propor_reorganizacao.py:25`. Opções suficientes:
-
-```python
-{
-    "empresa": c.empresa_id,
-    "dias": (fim - ini).days + 1,
-    "colab": c.pk,
-    "ref": fim.isoformat(),
-    "detalhe": False,
-}
-```
-
-Esse pai seleciona ativos, não isentos e exclui vínculos ativos intermitentes; chama `dia_degenerado` em todos os dias da grade e `insumos_atribuicao` somente nos dias escalados cujo template não foi declarado suspeito. Capturar `Command(stdout=io.StringIO())._run(opts)` é necessário porque o relatório pode conter nomes. Referências C: `app/ponto/management/commands/propor_reorganizacao.py:35`, `:65`, `:71`, `:83`, `:91`, `:108`, `:124`. O comando declara sombra e nenhuma escrita; seu corpo somente calcula e imprime: `app/ponto/management/commands/propor_reorganizacao.py:1`, `:109`.
-
-`_runs_de_rajada` deve ser alcançada por `classificar_orfas`, que faz a guarda de lista vazia e só chama runs em trabalho com furo. Referências B `app/escala/orfa_classe.py:58`, `:65`, `:70`, `:74`; C `app/escala/orfa_classe.py:59`, `:68`, `:73`, `:77`. Chamador de produção de `classificar_orfas` além dos testes: [não verificado]. Na cópia, a busca local encontrou apenas consumo de `JANELA_CLUSTER_MIN` pelo código de produção em `app/ponto/turnos.py:1581`.
-
-`horas_reais_do_dia(dia)` sozinho usa assinatura válida, mas não reproduz os argumentos de produção: o chamador real passa `deslocamentos.get(d)` no ramo de ausência parcial. O mapa vem da cadeia do turno, montado no builder e transmitido ao overlay. Referências `app/escala/utils.py:1235`, `:1238`, `:1757`, `:1854`. Para cobertura estrita sem reconstrução, executar o builder real `montar_grade_prevista_periodo_por_turno(colab, batidas, dias=..., ref=..., agora=...)`, assinatura B/C `app/escala/utils.py:1281`, e observar o resultado desse caminho. A chamada default deve ser rotulada como insuficiente para esse chamador.
-
-O coletor PDF mensal é o pai comum adequado: chama o período real da competência e depois o coletor completo. C `app/relatorios/pdf_espelho.py:701`. Na CÓPIA, os adaptadores são executados em `app/relatorios/pdf_espelho.py:644`, `:649`; na BASE, `_entrada_espuria` em `app/relatorios/pdf_espelho.py:513`, marcação inline em `:609`. `_marcar_orfas_pdf` retorna `None`, mas modifica `Batida.orfa` em memória, portanto medir apenas o retorno tornaria a prova vazia; observar também `(b.pk, b.orfa)`. C `app/relatorios/pdf_espelho.py:186`.
-
-O coletor devolve `resumo`, `dias`, objetos `tipo_escala` e `escala`, `anomalias_mes` e `carimbo_convencao`, em C `app/relatorios/pdf_espelho.py:683`. Serializar modelos somente por PK perderia os atributos transitórios `orfa`. O coletor não chama persistência diretamente; usa apuração, motor, espelho e folha: C `app/relatorios/pdf_espelho.py:467`, `:483`, `:638`, `:668`. Ausência de qualquer efeito externo transitivo: [não verificado]. A fábrica do motor lê `ParametroSistema` e usa um mapa fraco em memória: `app/core/regua_cct.py:443`, `:488`.
-
-Calendário aceita:
-
-```python
-{"mes": str(mes), "ano": str(ano)}
-{"modo": "competencia", "mes": str(mes), "ano": str(ano)}
-{"modo": "custom", "data_ini": ini.isoformat(), "data_fim": fim.isoformat()}
-```
-
-As janelas são escolhidas em `app/colaboradores/services/calendario.py:165`, `:177`, `:198`; custom limita diferença a 366 dias em `:205`. A view repassa GET sem restringir modos; preload original usa `posto__praca`: `app/colaboradores/views.py:1946`. O drawer usa custom: `app/colaboradores/services/drawer.py:121`. O histórico efetivo de GETs de produção é [não verificado].
-
-Congelar `timezone.now` para o mesmo instante nas duas execuções é necessário para calendário, pois lê o relógio internamente: `app/colaboradores/services/calendario.py:163`, `:250`. O retorno inclui modelos e batidas em `app/colaboradores/services/calendario.py:732`, `:749`, `:798`; novamente, preservar atributos transitórios ao medir.
-
-## 12/11 22:16 · sessao f1db4288a56d · - · - · origem=Ronald (tmux)
-
-Conferência somente por leitura; a cópia não tem `.git`, portanto linhas da base abaixo foram reconstruídas pelo `diff_producao.txt` fornecido, não conferidas em checkout separado. [nao verificado]
-
-| Função | Cópia | Base reconstruída |
-|---|---|---|
-| `dia_degenerado(dia)` | `app/ponto/propositor.py:36` | `app/ponto/propositor.py:34` |
-| `insumos_atribuicao(dia)` | `app/ponto/propositor.py:88` | Inexistente; nova no diff |
-| `_runs_de_rajada(horas)` | `app/escala/orfa_classe.py:36` | `app/escala/orfa_classe.py:40` |
-| `classificar_orfas(dia)` | `app/escala/orfa_classe.py:54` | `app/escala/orfa_classe.py:53` |
-| `horas_reais_do_dia(dia, deslocamentos=None)` | `app/ponto/turnos.py:2646` | Mesma linha/assinatura |
-| `_entrada_espuria(periodo, batidas, orfas_instantes)` | `app/relatorios/pdf_espelho.py:174` | Mesma linha; parâmetro final `orfas_hhmm` |
-| `_marcar_orfas_pdf(dia, orfas)` | `app/relatorios/pdf_espelho.py:186` | Inexistente; nova no diff |
-| `contexto_calendario(colaborador, GET, *, datas_em_aberto=None)` | `app/colaboradores/services/calendario.py:159` | Mesma linha/assinatura |
-| `_coletar_dados_espelho(colaborador, data_ini, data_fim, _turnos_juiz=None, *, agora)` | `app/relatorios/pdf_espelho.py:236` | `app/relatorios/pdf_espelho.py:187` |
-| `_coletar_dados_espelho_mes(colaborador, mes, ano, *, agora)` | `app/relatorios/pdf_espelho.py:694` | `app/relatorios/pdf_espelho.py:654` |
-
-A chamada posicional `_entrada_espuria(periodo, batidas, orfas)` funciona nas duas assinaturas; validar com `inspect.signature(...).bind(...)`, sem capturar `TypeError` para escolher versão. `app/relatorios/pdf_espelho.py:174`
-
-Para calendário de competência, chamada real:
-
-```python
-contexto_calendario(
-    colab,
-    {"modo": "competencia", "mes": str(mes), "ano": str(ano)},
-)
-```
-
-O próprio calendário resolve a janela com `janela_fechamento(mes, ano, colaborador.empresa)`; modos `mes`, `semana`, `quinzena` e `custom` também existem, e o código não informa quais requisições ocorreram em produção. `app/colaboradores/services/calendario.py:165`, `app/colaboradores/services/calendario.py:175`, `app/colaboradores/services/calendario.py:177`, `app/colaboradores/services/calendario.py:198`
-
-Para PDF, usar `_coletar_dados_espelho_mes(colab, mes, ano, agora=FIXO)` ou resolver com a função real `periodo_da_competencia(colab, mes, ano)` e chamar o coletor comum. O dono da janela delega a `folha.export.janela_competencia`. `app/relatorios/pdf_espelho.py:694`, `app/relatorios/pdf_espelho.py:703`, `app/relatorios/cartao_pela_celula.py:21`
-
-O coletor comum percorre os adaptadores alterados em seu contexto real: `_entrada_espuria` é chamada apenas para períodos abertos, por `_contar_abertos_pdf`; `_marcar_orfas_pdf` atua nas batidas de cada dia retornado pelo espelho. Ambas as alterações mudam objetos apenas em memória nesse trecho. `app/relatorios/pdf_espelho.py:220`, `app/relatorios/pdf_espelho.py:223`, `app/relatorios/pdf_espelho.py:644`, `app/relatorios/pdf_espelho.py:649`
-
-Para observar `horas_reais_do_dia` com argumentos de produção, instalar wrapper no atributo `ponto.turnos.horas_reais_do_dia` antes de chamar o coletor PDF. `_marcar_ausencias` importa essa função localmente e a chama com o dia da grade e `deslocamentos.get(d)`, antes de substituir células pela cobertura de ausência. Chamar a função diretamente sobre `grade_da_celula` sem deslocamentos mede outra entrada. `app/escala/utils.py:1181`, `app/escala/utils.py:1182`, `app/escala/utils.py:1235`, `app/escala/utils.py:1238`
-
-O PDF chama `grade_espelho_janela`, que passa pelo builder e pelo overlay de ausências; isso permite observar as chamadas reais sem reconstruir a lógica de deslocamentos. `app/relatorios/pdf_espelho.py:242`, `app/relatorios/pdf_espelho.py:585`, `app/escala/utils.py:2343`, `app/escala/utils.py:1854`
-
-O propositor de produção usa `Command._run(o)`: seleciona colaboradores ativos e não isentos por empresa, exclui vínculos ativos intermitentes, gera a grade real e chama `dia_degenerado` para cada dia. `insumos_atribuicao` só é chamada quando o dia escalou e o template não é suspeito. `app/ponto/management/commands/propor_reorganizacao.py:35`, `app/ponto/management/commands/propor_reorganizacao.py:42`, `app/ponto/management/commands/propor_reorganizacao.py:65`, `app/ponto/management/commands/propor_reorganizacao.py:71`, `app/ponto/management/commands/propor_reorganizacao.py:83`, `app/ponto/management/commands/propor_reorganizacao.py:91`
-
-Como `insumos_atribuicao` não existe na base, medir o chamador comum `Command._run` é a aproximação real que preserva a lógica inline antiga. Capturar `stdout` em memória; o comando imprime nomes em duas saídas. `app/ponto/management/commands/propor_reorganizacao.py:25`, `app/ponto/management/commands/propor_reorganizacao.py:108`, `app/ponto/management/commands/propor_reorganizacao.py:123`
-
-`_runs_de_rajada` tem como chamador `classificar_orfas`; a busca por todo o app não encontrou chamador de produção deste último, apenas testes. Sua unidade documentada é o dict-dia da grade. Cobri-lo com `classificar_orfas(dia)` é sonda adicional, não demonstra execução em produção. `app/escala/orfa_classe.py:54`, `app/escala/orfa_classe.py:55`, `app/escala/orfa_classe.py:77`; ausência de chamadas em produção [nao verificado]
-
-Existem chamadas de logging nos caminhos de calendário, grade e espelho; desabilitar logging em memória evita que a sonda dispare handlers de arquivo. `app/colaboradores/services/calendario.py:400`, `app/escala/utils.py:193`, `app/ponto/services/espelho.py:570`
-
-O calendário consulta `timezone.now()` internamente; congelar o mesmo instante nas duas execuções evita que a comparação varie com o relógio. O PDF já recebe `agora`. `app/colaboradores/services/calendario.py:163`, `app/colaboradores/services/calendario.py:250`, `app/relatorios/pdf_espelho.py:236`
-
-_4473 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4475 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
