@@ -1,5 +1,9 @@
 # RELATO — esteira saas-hasner
 
+ESPERANDO: codex_pergunta.sh | pid=2678494
+DESPACHO BO-[nome]-1311-ROTEIRO 17:3x: sonda PROD leitura + roteiro -> Codex (papel sonda, logs/BO-[nome]-1311/sonda_roteiro.py, READ ONLY + guarda de SQL, funcoes reais motivos_retencao_celula/estado_aplicacao_pergunta/pergunta_viva) | amostra -> Code | nada a sonnet/opus. Caso NN <- ordem do UNIVERSO do aval (o texto do relatorio nao esta na casa; contestavel).
+PONTO 17:4x BUG-PAR v3 commitado na copia: b7f6efa8b (wt-bugpar-124848; ruff dos .py tocados verde; recorte fix3 OK Ran 174). Mutante test_9 (passivo_validado.py:379 sem a trava) MORTO: FAILED (failures=2: test_9 e test_RED_6) Ran 40 rc 1 (logs/BUG-PAR-O-PAR/e3/volta3/mut9.log), arquivo restaurado (git status limpo); preverif3 Codex lancado sobre b7f6efa8b (logs/BUG-PAR-O-PAR/e3/preverif3/r.r).
+PONTO 17:4x E3 leitura volta 4 lancada (Codex leitura, logs/E3-FORMA-SQL/impacto/codex/a1v4_julga.r): 181 A1resto + 79 A2entra por dono, regressao x universo novo, e as +9626 excecoes conferidas pelo codigo.
 PONTO 17:1x PUSH LEI-DESLIGADO NO REMOTO: origin/main = 41e5f727a (git fetch conferido); pos_push 08385f8af local, vai no proximo push. Marco LEI-DESLIGADO fecha com este commit de docs; depois compacta e abre RAIA-PREPARACAO.
 RECEBIDO 17:1x RAIA-PREPARACAO (logs/AVAIS-1313/raia_preparacao.txt): leitura/desenho, sem vaga, sem suite/sombra/prod; itens 1->4 (LASTRO pre-desenho, censo-antes-da-vaga x4, triagem das 17 interrompidas AO CHAT, 55 contratos de entrada); saida logs/PREPARACAO/<item>/. BACKLOG RAIA-PREPARACAO.
 RECEBIDO 16:53 COMPLEMENTO-OTIMIZA-1 (REGISTRAR, nao construir): BACKLOG OTIMIZA-1-COMPLEMENTO-CARGA; E3 nao muda.
