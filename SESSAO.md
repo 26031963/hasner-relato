@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 11:10:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (546.5 MB). Acoes na janela: **1069**.
+**Medido em 13/11/2026 11:16:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (546.7 MB). Acoes na janela: **1082**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:16:16 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1993,1994p docs/BACKLOG.md \| cut -c1-900` |
+| 11:16:14 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rln "BUG-PAR-O-PAR-E-A-UNIDADE" app/docs logs/AVAIS-1313 2>/dev/null \| head; /bin/grep -n "BUG-PAR-O-PAR" app/docs/BACKLOG.md app/docs/PROMPTS.md \| cut -c1-220 \| head` |
+| 11:16:10 | Bash |  | `kill 1896843 1896842; /usr/bin/sleep 1; pgrep -af "wt-feriado1609-red" \| /bin/grep -v pgrep \| head -3; cd /home/ronald/saas-hasner; echo "rc=interrompido pela sessao 11:2x (preverif1 REPROVA; copia sera editada)" >> logs/FERIADO-LEI-1609/red_green/red.log; /bin/grep -n "BUG-PAR" app/docs/BACKLOG.md \| head -5 \| cut -c1-200` |
+| 11:16:06 | Bash |  | `pgrep -f "FERIADO-LEI-1609/red_green/roda.sh" -a; pgrep -af "wt-feriado1609" \| head; cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; ls logs/FERIADO-LEI-1609/red_green/` |
+| 11:15:56 | Bash |  | `cd /home/ronald/wt-feriado1609-110424/app; /bin/grep -rn "marcar_trabalha_em_feriado(" --include=*.py . \| /bin/grep tests \| wc -l; /bin/grep -rln "marcar_trabalha_em_feriado(" --include=*.py . \| /bin/grep tests; sed -n 865,880p colaboradores/services/vinculo.py; sed -n 40,80p escala/management/commands/aplicar_feriado_lei_1609.py` |
+| 11:15:52 | Bash |  | `cd /home/ronald/wt-feriado1609-110424/app; cat -n escala/tests/test_feriado_nasce_do_juiz_selo.py \| sed -n 200,260p` |
+| 11:15:42 | Bash |  | `cd /home/ronald/wt-feriado1609-110424/app; cat -n escala/tests/test_feriado_nasce_do_juiz_selo.py \| sed -n 1,200p; sed -n 966,976p colaboradores/services/vinculo.py; sed -n 1086,1094p colaboradores/services/vinculo.py` |
+| 11:15:20 | Bash |  | `cd /home/ronald/wt-feriado1609-110424/app; sed -n 880,905p colaboradores/services/vinculo.py; echo ----; sed -n 1600,1620p ponto/services/fechamento.py; echo ----; sed -n 1,70p colaboradores/management/commands/sincronizar_feriado_admin.py; echo ---; /bin/grep -n "sincronizar_feriado_admin" config/crons.py; /bin/grep -rn "marcar_trabalha_em_feriado(" --include=*.py . \| /bin/grep -v tests` |
+| 11:15:05 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-LEI-1609/preverif1; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/be75dhkbd.output; wc -c preverif1.r; cat preverif1.r \| head -150` |
+| 11:13:07 | Bash |  | `cd /home/ronald/saas-hasner; sed -i 's/\[laudo DP\]/[nome]/g' logs/AVAIS-1313/o50_complemento_fernando_1311.txt; head -c 150 logs/AVAIS-1313/o50_complemento_fernando_1311.txt` |
+| 11:13:03 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/AVAIS-1313; cat > logs/AVAIS-1313/o50_complemento_fernando_1311.txt <<'EOF' aval Ronald: REGISTRAR O50-COMPLEMENTO-[nome]-1311 (so registrar, nao construir; nao trava folha -- medido 13/11 10:19 pelo juiz _dias_que_retem): laudo [nome] aponta (a) colaboradores fechar_vinculos_ativos nao encerra vinculo com inicio POSTERIOR a demissao; (b) celulas futu ...` |
+| 11:12:52 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1314p docs/BACKLOG.md \| awk -F'\|' '{print NF}'; sed -n 1314p docs/BACKLOG.md \| cut -c250-900` |
+| 11:12:50 | Bash |  | `cd /home/ronald/saas-hasner/app; date +%H:%M; /bin/grep -n "O50" docs/BACKLOG.md \| head -8 \| cut -c1-250; /bin/grep -n "HJ-075" docs/BACKLOG.md \| head -3 \| cut -c1-250` |
 | 11:09:02 | Bash |  | `until [ -f /home/ronald/saas-hasner/logs/FERIADO-LEI-1609/preverif1/preverif1.fim ]; do /usr/bin/sleep 30; done; date +%H:%M; tail -3 /home/ronald/saas-hasner/logs/FERIADO-LEI-1609/preverif1/preverif1.log` |
 | 11:09:00 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/FERIADO-LEI-1609/preverif1; mkdir -p $D; cp logs/AVAIS-1313/feriado_usa_a_lei_de_1609.txt $D/aval.txt; cp app/docs/JUIZES.md $D/juizes.md; git -C /home/ronald/wt-feriado1609-110424 diff 7621a973f..1989e41c9 -- app > $D/diff.txt; wc -c $D/*.txt $D/juizes.md cat > $D/preverif1.q <<'EOF' Papel: VERIFICADOR adversarial da obra FERIADO-USA-A-LEI-DE-1609 (HJ-074), vol ...` |
 | 11:08:43 | Bash |  | `cd /home/ronald/saas-hasner/logs/FERIADO-ESCALA/preverif1; ls; cat *.sh 2>/dev/null \| head -30; head -c 1500 preverif1.q` |
