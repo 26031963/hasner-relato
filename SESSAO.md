@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 13:40:07.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (563.8 MB). Acoes na janela: **1299**.
+**Medido em 13/11/2026 13:45:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (563.9 MB). Acoes na janela: **1286**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1296,16 +1296,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:55:18 | Bash | Inspect TIPO output structure | `cd /home/ronald/saas-hasner; f=logs/tipo3p_inteiroof1_base.out; /bin/grep -a -n '^===' $f \| head -30; /bin/grep -a -c '' $f` |
 | 05:55:13 | Bash | Check TIPO whole run results | `cd /home/ronald/saas-hasner; date +%H:%M; D=logs/TIPO-NA-FONTE/item3/volta4/diff_partes; for l in base copia; do echo "== $l"; tail -c 400 $D/tipo3p_inteiroof1_$l.runlog \| tail -4; /bin/grep -a 'Maximum resident\\|TETO_DURO\\|lavra_de_prod' $D/tipo3p_inteiroof1_$l.runlog \| head -3; ls -la logs/tipo3p_inteiroof1_$l.out 2>&1; done; ls $D/inteiro.fim` |
 | 01:45:25 | Bash | Record c5e approval and pouso wait | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| RELOGIO-NA-BORDA \|')) L.insert(i+1,'\| RELOGIO-NA-BORDA-OPUS-C5E \| complemento da RELOGIO-NA-BORDA (opus final c5e v5 APROVA, itens fila): (1) update de vinculo: signals escala/signals.py:67,:119 + folgas.py:280, pos_vinculo.py:56, celula.py:46 ...` |
-| 01:45:15 | Bash | Locate BACKLOG anchors | `cd /home/ronald/saas-hasner; /bin/grep -n 'SETNULL-ORFA-DNA' app/docs/BACKLOG.md \| head -2; /bin/grep -n 'RELOGIO-NA-BORDA' app/docs/BACKLOG.md \| head -3` |
-| 01:45:08 | Bash | Relaunch E3 chain with fresh sombra step | `/home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/inteiro/rodar_inteiro.sh` |
-| 01:45:05 | Bash | Insert fresh sombra ensaio between TIPO and E3 | `cd /home/ronald/saas-hasner; D=logs/E3-FORMA-SQL/diff_frota/inteiro; ls $D; python3 - <<'EOF' p='/home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/inteiro/rodar_inteiro.sh' t=open(p).read() a='until [ -f logs/TIPO-NA-FONTE/item3/volta4/diff_partes/inteiro.fim ]; do /usr/bin/sleep 30; done\n' assert t.count(a)==1 b=a+('# Entre a TIPO e a E3: ensaio do dia (o cron das 04:11 nao pega a trava com  ...` |
-| 01:44:59 | TaskStop |  | `-` |
-| 01:44:58 | Bash | Read refazer/dump-agora handling | `cd /home/ronald/saas-hasner; sed -n 425,450p bin/sombra.sh; /bin/grep -n 'dump-agora' bin/sombra.sh \| head -5` |
-| 01:44:39 | Bash | Estimate TIPO whole run progress | `cd /home/ronald/saas-hasner; D=logs/TIPO-NA-FONTE/item3/volta4/diff_partes; /bin/grep -a '^===FASE' $D/tipo3p_inteiroof1_base.runlog; ls -la --time-style=+%H:%M $D/tipo3p_inteiroof1_base.runlog; tail -c 300 $D/tipo3p_inteiroof1_base.runlog; echo; /bin/grep -a '^===FASE' $D/tipo3p_0of12_base.runlog; head -c 300 $D/tipo3p_0of12_base.runlog \| head -3; date +%H:%M` |
-| 01:44:23 | Bash | Check sombra pause/lock handling | `cd /home/ronald/saas-hasner; /bin/grep -n 'pausa\\|PAUSA' bin/sombra.sh bin/sombra_trava.sh \| head; sed -n 1,60p bin/sombra_trava.sh \| /bin/grep -n 'timeout\\|TIMEOUT\\|flock'` |
-| 01:44:20 | Bash | Look for a cron skip mechanism | `cd /home/ronald/saas-hasner; sed -n 1,60p bin/cron_run.sh \| /bin/grep -n 'if \\|pausad\\|skip\\|PULA\\|exit' \| head -20; ls *.pausada logs/*.pausada 2>/dev/null` |
-| 01:44:16 | Bash | Read pausar.sh and cron_run pause handling | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/pausar.sh; /bin/grep -n 'paus' bin/cron_run.sh \| head` |
-| 01:44:11 | Bash | Check sombra.sh locking between rodar and refazer | `cd /home/ronald/saas-hasner; /bin/grep -n 'flock\\|trava\\|lock' bin/sombra.sh \| head -30` |
-| 01:44:07 | Bash | Check conferir rc and sombra cron time | `cd /home/ronald/saas-hasner; echo "rc=$?"; bin/sombra.sh --conferir >/dev/null 2>&1; echo "rc=$?"; /bin/grep -n "inicio_derivado" -A3 app/config/crons.py \| head -20; crontab -l \| /bin/grep -i sombra \| head` |
-| 01:44:05 | Bash | Check today's sombra ensaio status | `cd /home/ronald/saas-hasner; bin/sombra.sh --conferir 2>&1 \| tail -5; /bin/grep -n "sombra" app/docs/CRONS.md \| head -8` |
-| 01:43:59 | Bash | Check migrations and deploy gate rules | `cd /home/ronald/wt-c5e-pouso-234811; git diff --stat 78994522d..HEAD \| /bin/grep -i migration; cd /home/ronald/saas-hasner; git log --oneline -1; git status --porcelain \| /bin/grep -v '^??' ; /bin/grep -n 'sem-sombra\\|ensaio\\|dump-agora' bin/deploy.sh \| head -30; date +%H:%M` |
