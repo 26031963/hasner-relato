@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: push.sh | pid=3001848
+PONTO 20:0x E3 PORTA-SEM-CASO preverif v4 = BLOQUEIA (logs/E3-FORMA-SQL/preverif_v4/preverif.r): triagem logs/E3-FORMA-SQL/construtor_v5/triagem.txt -- procedentes 1/4 (vivo sem porta com razao ou porta de sistema; residual A fora dos verbos), 2 (rota da porta recuperada), 3/6 (fio com dois criterios, ESMERIL-SEMANTICA), 5 (nao_sei fora da projecao); 7 aprova.
+DESPACHO E3-PORTA-SEM-CASO-V5 20:0x: RED+cura dos 4 procedentes -> Codex construtor (copia /home/ronald/wt-codex-e3-forma-sql-195919 @e01da1d51, logs/E3-FORMA-SQL/construtor_v5/) | conferencia + suite -> Code | opus final -> opus.
 PONTO 19:4x E3 PORTA-SEM-CASO construtor entregou na copia wt-e3-b6-114947 @e01da1d51 (cdf9ae7ee cura + e01da1d51 fio na fonte = chamados/juizes.py::fio_pelos_verbos): RED 91bed1694 Ran 12 FAILED 3; GREEN green3.log Ran 7036 OK rc 0; F5B = (i) fixture A2entra, helper le a porta do C17. INCOMPLETO: A2 na sombra nao refeito (dias que GANHAM porta sem medida); residual chamado vivo + acao de sistema/razao de dia sem porta (f5b:164, f5_alcance:153, beco contraex1); SC-A 25 -> linha E4b.
 DESPACHO E3-PORTA-SEM-CASO-PREVERIF 19:4x: preverif volta 4 -> Codex (verificador, e01da1d51, logs/E3-FORMA-SQL/preverif_v4/) | sombra A2 + merge main + suite -> Code depois | opus final -> opus.
 RESPONDIDA por aval PUSH-PADRAO-FORA-DO-GLOSSARIO=(c) 13/11 19:3x (logs/AVAIS-1313/push_padrao_c.txt): corte Ronald, o termo Policy Enforcement Point nasce no GLOSSARIO (gate do CSF lendo respostas_sem_veredito); 31874371 e 89becf4a intocados, sem EXCECAO_NOMINAL; push pela regua.
