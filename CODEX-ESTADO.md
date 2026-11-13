@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 07:58** · publicado em **13/11/2026 07:59** (UTC-3)
+> Ultima resposta processada: **13/11/2026 08:04** · publicado em **13/11/2026 08:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 08:04 · sessao c7334fc8cc25 · - · - · origem=Ronald (tmux)
+
+**c — BLOQUEIA:** a área comum continua gravável: `container()` monta `$SAIDA:/sombra` sem `:ro`; a sonda pode sobrescrever `lavra_prod.json`, `repor_lavra.py` ou outra sonda. `PGOPTIONS` não protege arquivos. A montagem permaneceu inalterada no diff. (HEAD `bin/sombra.sh:189-191`; diff `bin/sombra.sh:499-514` usa esse mesmo `container()`.)
+
+Escritas identificadas no caminho:
+
+- Inicialização cria `$SAIDA` quando ausente. (HEAD `bin/sombra.sh:81-84`.)
+- Trava cria `logs/`, abre/cria `sombra.lock` em append e acrescenta evento a `sombra_espera.jsonl`. (Diff `bin/sombra_trava.sh:58-65`.)
+- `tee` cria/trunca `logs/$_rot.out`; duas execuções do mesmo script sem rótulos distintos usam o mesmo destino. **FILA:** corrida introduzida pela simultaneidade, com perda/mistura dos resultados. (Diff `bin/sombra.sh:502-514`, conforme posição final a conferir; trecho novo iniciado no hunk `@@ -459,6 +479,21 @@`.)
+- Django cria `/app/logs` e abre `errors.log` e `ponto.log`; são tmpfs particulares de cada container. (HEAD `app/config/settings/saas.py:118`, `:138-139`, `:162-163`; `bin/sombra.sh:189`.)
+- Docker cria/remove o container; camada gravável local permanece permitida, pois inexiste `--read-only`; `/app` e `/sombra_bin` são mounts somente leitura, `/app/media` é tmpfs. (HEAD `bin/sombra.sh:183-191`.)
+- Portão tenta `CREATE TEMP TABLE`; escrita efetivamente aceita depende do runtime **[nao verificado]**. Não há atualização de lavra no novo ramo. (Diff `bin/sombra_confere_leitura.py:21-26`; novo ramo do diff.)
+- A sonda é código arbitrário carregado por `exec`; suas escritas concretas não constam no dado **[nao verificado]**. (Novo ramo do diff, comando `exec(open('/sombra/$_scr').read())`.)
+- `sombra_db.sh --conferir` faz inspeções e `SELECT 1`; retorna antes das rotinas de criação/update. (HEAD `bin/sombra_db.sh:57-84`, `:86-100`.)
+- `md5_lavra_prod` usa processo dentro de `saas_core`, cujo startup Django herda os handlers de arquivo; settings efetivos e escritas reais desse container **[nao verificado]**. (Diff `bin/sombra.sh:145-151`; HEAD `app/config/settings/saas.py:138-139`, `:162-163`.)
+
+**BLOQUEIA adicional:** a cura indicada pelo portão, `--lavra`, continua despachando `lavra_de_prod` sem adquirir trava. Ela pode escrever arquivos e snapshots enquanto leitores seguram a compartilhada. É defeito preexistente que passa a furar o novo contrato. (HEAD `bin/sombra.sh:462`, `:144`, `:151`, `:157-163`; diff `bin/sombra_confere_leitura.py:32-34`.)
+
+**e — FILA:** o selo verifica palavras, não comportamento da porta. Substituir integralmente `sombra_confere_leitura.py` por `print('ok')` mantém o selo verde: ele só exige existência e procura referências/flags/`&&` no shell. Também `echo RECUSADA; return 0` passa (d), e `echo NEGADA; return 0` passa os casos de recusa, que ignoram o rc. (Diff `bin/tests/test_sombra_leitura_compartilhada.sh:13-14`, `:35`, `:38`, `:41`, `:44`, `:49-50`, `:55-66`.)
+
+**f — sem regressão demonstrada nesses consumidores:**
+
+- `modo` é aceito pelo leitor conhecido: `json.loads` e `.get` ignoram campos extras; placar usa apenas a saída agregada. (HEAD `bin/sombra_trava.sh:49-57`; `bin/placar_code.sh:166`.)
+- Os outros `container()` existentes recebem array vazio quando `SOMBRA_SO_LEITURA` não existe; variável prefixada na chamada nova não muda persistentemente as chamadas seguintes. (Diff `bin/sombra.sh:200-203`; chamadas HEAD `bin/sombra.sh:166`, `:204-206`, `:266-275`, `:346`, `:351`.)
+- Selos conhecidos recortam funções/ramo por delimitadores, não números de linha; o diff preserva seus alvos. Execução contra o diff **[nao verificado]**. (HEAD `bin/tests/test_ensaio_de_dinheiro_sincroniza_lavra.sh:17-27`; `bin/tests/test_bloco_repoe_a_lavra.sh:29-48`; `bin/tests/test_sombra_guarda_num_sitio.sh:25-33`.)
+- Outros usuários de fd 8 existem; colisão em shell que sobrescreva esse descritor é anterior ao diff, pois o escritor do HEAD já usa fd 8. (HEAD `bin/sombra_trava.sh:26`; `bin/trava.sh:64`; `bin/integrador.sh:41`; `bin/codex_pergunta.sh:368`.)
+
+## 13/11 08:04 · sessao eed45d568fae · - · - · origem=Ronald (tmux)
+
+- **a — exclusão normal correta:** escritor HEAD usa `flock` exclusivo no mesmo `logs/sombra.lock`; leitor novo usa `flock -s`. Escritor herdado conserva exclusiva; leitura repetida retorna antes de reabrir fd 8; escritor novo sob leitura é recusado. `simular_folha par` conserva a herança nas duas fotos. Referências: HEAD `bin/sombra_trava.sh:16,22,26,28,38`; diff `bin/sombra_trava.sh:29,30,53,54,58,60,69`; HEAD `bin/simular_folha.sh:96-99`.
+
+- **BLOQUEIA se a alegação inclui filhos executando HEAD:** pai segura leitura nova; filho executa função escritora HEAD, que ignora `SOMBRA_TRAVA_LEITURA`, reabre seu fd 8 e espera exclusiva; pai ainda tem compartilhada e aguarda o filho. Resultado: autoespera até timeout. Isso não ocorre com escritor velho independente já rodando, que é excluído corretamente. Referências: diff `bin/sombra_trava.sh:58,60,69`; HEAD `bin/sombra_trava.sh:22,26,28`; HEAD `bin/sombra.sh:461` fornece execução síncrona do comando embrulhado. Existência de uma árvore antiga concreta disponível para esse filho: **[não verificado]**.
+
+- **BLOQUEIA — escritor fora do protocolo:** `--lavra` continua chamando diretamente `lavra_de_prod`, sem exclusiva. Portanto pode gravar durante uma leitura, embora o próprio portão mande executá-lo como remédio. Referências: HEAD `bin/sombra.sh:462`, preservado como diff `bin/sombra.sh:503`; diff `bin/sombra_confere_leitura.py:33`.
+
+- **e — FILA, falso verde de status:** mutante `echo "...RECUSADA..."; return 0` passa (d), que compara somente texto. Os chamadores reais aceitam esse retorno e prosseguem como escritores. B/C/C2/D2 também procuram `NEGADA` sem exigir rc de falha. Referências: diff `bin/tests/test_sombra_leitura_compartilhada.sh:34,37,40,43,49-50`; diff `bin/sombra_trava.sh:31`; HEAD `bin/sombra.sh:456,487`; HEAD `bin/simular_folha.sh:67,96`.
+
+- **e — FILA, corrida restante:** `segura` não segura indefinidamente até `solta`; chama `espera_arq`, que desiste após aproximadamente dez segundos. Um host atrasado pode perder o mantenedor durante os casos; `wait` não transforma sua falha em `FALHA`. Referências: diff `bin/tests/test_sombra_leitura_compartilhada.sh:18,25,35,38,41`.
+
+- **e — FILA, lacunas:** (a) realmente exige sucesso do segundo leitor; D2 verifica continuidade da trava e ausência de novo registro, mas não distingue reabertura com reaquisição imediata sem log. Mutante que reabre e readquire compartilhada sem registrar passa D2 quando nenhum escritor entra na janela. A porta (e) continua sendo verificação textual; `false && lavra_de_prod` seria rejeitado apesar de nunca escrever, enquanto escrita por função auxiliar com outro nome não é detectada. Referências: diff `bin/tests/test_sombra_leitura_compartilhada.sh:33,44-50,54-66`.
+
+- **f — compatibilidade observada:** o consumidor JSONL ignora chaves adicionais; `modo` não quebra sua leitura. O selo que conta a guarda aceita usos adicionais de `$E_SOMBRA`. Fd 8 já era ocupado pelo escritor, portanto outros usos existentes não demonstram regressão introduzida especificamente pelo leitor. Referências: HEAD `bin/sombra_trava.sh:51-57`; HEAD `bin/tests/test_sombra_guarda_num_sitio.sh:25-33`; HEAD `bin/sombra_trava.sh:26`; HEAD `bin/trava.sh:64`; HEAD `bin/codex_pergunta.sh:368-374`.
+
+Nenhum selo foi executado, porque ele cria e remove arquivos; resultados de execução: **[não verificado]**.
 
 ## 13/11 07:58 · sessao 65e6cfdf0ed3 · ACELERA-DIFF · verificador · origem=Code
 
@@ -1232,91 +1277,4 @@ Atenção à interação: quando um caminho intermediário julga D+1, o suplemen
 
 Leituras adicionais no executor: `reconciliar_apos_vinculo` é chamado diretamente sem `hoje` (`app/colaboradores/services/vinculo.py:345`–`:348`), lê D+1 (`app/colaboradores/services/pos_vinculo.py:56`), inclui D+1 no intervalo (`:57`) e tenta julgá-lo (`:64`–`:75`), além de apurar furos até esse teto (`:82`). O próprio comentário do executor declara essa releitura como sítio interior fora da cura (`vinculo.py:189`–`:192`); isso descreve o código, não resolve a interpretação do aval.
 
-## 13/11 00:35 · sessao 0575d92ce211 · - · - · origem=Ronald (tmux)
-
-D. A troca amplia os **candidatos**, sem retirar nenhum ativo: antes `ativa=True`; agora ficam fora apenas `ativa=False AND data_fim IS NULL`. Entram os inativos com `data_fim` preenchido, inclusive passado, hoje, futuro e vigências impossíveis como candidatos; a cobertura efetiva ainda exige `data_inicio <= d <= data_fim`. (`app/escala/alimentacao.py:199-216`; `app/ponto/portas/celula.py:883-910`)
-
-O candidato inativo só pode criar célula quando `d > hoje`, cobre `d`, a juíza `vinculo_do_dia` o escolhe e a célula está ausente. Nenhum passado ou hoje passa a ser escrito **por essa ampliação**, pois todos os inativos são barrados em `d <= hoje`; futura existente também é pulada. Ativos mantêm o comportamento: criam ausentes e podem enriquecer DNA nulo no passado. (`app/ponto/portas/celula.py:906-935`)
-
-A seleção da juíza sem célula prefere `(ativa, data_inicio)`: o ativo vence o inativo sobreposto. (`app/escala/alimentacao.py:285-286`) Os testes existentes declaram casos para futura ausente inativa, passado/hoje preservados, limite do fim, sobreposição com ativo, futura existente e inativo sem fim; execução desses testes nesta verificação: [não verificado]. (`app/ponto/tests/test_cadastro_futuro_c5b.py:272-305`)
-
-E/6. **Procede no código**: o cron chama `_regenerar_hoje_existentes` antes do gerador, seleciona células geradas de `data=hoje`, consulta a juíza e chama `regenerar_celulas_vinculo(ec, hoje, hoje, hoje=hoje, recalculo=False, estender_horizonte=False)`. Se DNA, geradora ou trabalho diferem, a porta reescreve a célula. Respeita mão humana e competência lavrada. Isso existe independentemente da ampliação D7. (`app/ponto/management/commands/gerar_celulas.py:303-325`, `:347-350`; `app/ponto/portas/celula.py:284-311`) O cron está declarado às 05:50 com papel `gerador`. (`app/config/crons.py:426`, `:2301`) Ocorrência concreta em produção: [não verificado].
-
-E/7. **Procede como possibilidade estrutural**: snapshot remove ECs ausentes do retrato e depois regenera apenas os sobreviventes do snapshot; remover a EC zera a FK `escala_geradora` por `SET_NULL`, enquanto `dna` permanece um JSON independente. (`app/colaboradores/services/vinculo.py:1022-1035`; `app/escala/models.py:1692-1700`)
-
-Contraexemplo: célula futura gerada pela EC removida; snapshot vazio, ou todos os restaurados terminam antes dessa data. Com snapshot vazio, nenhuma regeneração é chamada. Com restaurados que não cobrem a data, o ramo de desligar futura exige `cel.escala_geradora_id == ec.id`, condição falsa após `SET_NULL`; portanto o DNA pode continuar nomeando o PK removido. (`app/colaboradores/services/vinculo.py:1005`, `:1029-1035`; `app/ponto/portas/celula.py:229-254`)
-
-O vigia compara `dna.vinculo_id` com o vínculo escolhido pela autoridade e apenas incrementa `CHAVE_DNA_DE_OUTRO`; o gerador pula a futura existente. (`app/ponto/services/vigia_cadastro_futuro.py:55-61`; `app/ponto/portas/celula.py:930-935`) Ocorrência em produção: [não verificado].
-
-## 13/11 00:15 · sessao d165bc130172 · E3-FORMA-SQL · leitura · origem=Code
-
-**Há uma incompatibilidade concreta entre (b) e a preservação dos leitores reais em (g). Não consigo entregar um script integral afirmando que cumpre ambos:** leitores por colaborador executam consultas globais internamente, inclusive consultas cujo recorte mudaria o resultado. [app/folha/fora_da_folha.py:227; app/chamados/juizes.py:1558; app/chamados/juizes.py:1581]
-
-As referências a `e3_diff_leitores_v1.py` abaixo numeram o anexo fornecido, contando seu primeiro comentário como linha 1. A condição do perfil está em `:369`, corrigindo a referência intermediária a `:375`. [e3_diff_leitores_v1.py:1; e3_diff_leitores_v1.py:369]
-
-**1. Onde a memória cresce na v1**
-
-| Ponto | Retenção ou materialização |
-|---|---|
-| `REGISTROS[nome]["linhas"]` | Cada `guardar` acrescenta unidade e valor canonizado; nenhuma linha é descartada durante a sonda. Cresce com todos os resultados diretos e observados. [e3_diff_leitores_v1.py:319; e3_diff_leitores_v1.py:327] |
-| `SEQUENCIAS` | Conserva uma chave por combinação distinta de leitor raiz, contexto, observação e unidade. Repetir a mesma chave aumenta seu contador; novas unidades aumentam o dicionário. Não existe limpeza entre chamadas. [e3_diff_leitores_v1.py:74; e3_diff_leitores_v1.py:336] |
-| `celulas` | Materializa todas as células da envoltória das janelas. O fingerprint ainda constrói uma lista de dicionários dos campos e sua representação canônica. [e3_diff_leitores_v1.py:839; e3_diff_leitores_v1.py:851] |
-| `UNIVERSO["_celula_para_dia"]` | Acrescenta um mapa completo, por célula, de colaborador e data. Só é removido perto do fim. [e3_diff_leitores_v1.py:843; e3_diff_leitores_v1.py:1380] |
-| Empresas e colaboradores | `empresas` materializa empresas; `empresa_de` contém todos os colaboradores; `ids_selecionados` e `colabs` conservam os colaboradores com células na envoltória. [e3_diff_leitores_v1.py:812; e3_diff_leitores_v1.py:813; e3_diff_leitores_v1.py:858; e3_diff_leitores_v1.py:859] |
-| Perguntas | `list(perguntas)` avalia o queryset completo, incluindo relações carregadas. `fase` constrói outra lista de referências; o queryset `perguntas` permanece referenciado com seu cache. [e3_diff_leitores_v1.py:906; e3_diff_leitores_v1.py:953; e3_diff_leitores_v1.py:526] |
-| Disputas | Materializa todas as disputas selecionadas, com colaboradores, chamados e perguntas prefetched. `fase` acrescenta outra lista de referências. [e3_diff_leitores_v1.py:958; e3_diff_leitores_v1.py:526] |
-| Faces e conjuntos globais | `todos_pks` contém todas as perguntas; cada projeção constrói `escolhidos`; `q_sem_texto` conserva outro conjunto. Além disso, registra um booleano por pergunta e por face. [e3_diff_leitores_v1.py:868; e3_diff_leitores_v1.py:872; e3_diff_leitores_v1.py:875; e3_diff_leitores_v1.py:902] |
-| Créditos | Mantém `vivo_pks`, conjuntos de créditos e a união ordenada. Dentro do laço, reconstrói `set(vivo_pks)` para **cada** unidade: alocação transitória repetida, além da retenção em `REGISTROS`. [e3_diff_leitores_v1.py:1074; e3_diff_leitores_v1.py:1079; e3_diff_leitores_v1.py:1083] |
-| Cada janela | Constrói `cids`, cópias de colaboradores, datas e o produto cartesiano `pares`. A projeção de `dias_trancados` ainda produz uma lista de retornos de `guardar`. [e3_diff_leitores_v1.py:1102; e3_diff_leitores_v1.py:1107; e3_diff_leitores_v1.py:1111; e3_diff_leitores_v1.py:1134] |
-| Plano do backfill | Reconstrói `dias_vigia` a partir das linhas já retidas pelo registro; `fase` materializa outra lista de referências. [e3_diff_leitores_v1.py:1349; e3_diff_leitores_v1.py:526] |
-| Emissão final | Ordena todas as linhas de cada leitor, constrói o conjunto de unidades distintas e fatia blocos. Nesse momento, as linhas originais continuam retidas. [e3_diff_leitores_v1.py:1438; e3_diff_leitores_v1.py:1443; e3_diff_leitores_v1.py:1448] |
-
-Há também crescimento **durante cada chamada**, mesmo eliminando o armazenamento de linhas da sonda:
-
-| Mecanismo | Crescimento por chamada |
-|---|---|
-| Instrumentação | `rodar` transforma retornos QuerySet em lista; `linhas` materializa seus itens; `canonico` constrói coleções recursivas; `resumo` mantém a representação canônica e serializações integrais transitórias. [e3_diff_leitores_v1.py:511; e3_diff_leitores_v1.py:554; e3_diff_leitores_v1.py:265; e3_diff_leitores_v1.py:546] |
-| Cópias e observações | Perguntas/disputas são copiadas; o perfil constrói conjuntos/mapas auxiliares para furo e beco; comandos DRY acumulam stdout/stderr em `StringIO`. [e3_diff_leitores_v1.py:917; e3_diff_leitores_v1.py:972; e3_diff_leitores_v1.py:402; e3_diff_leitores_v1.py:459; e3_diff_leitores_v1.py:585] |
-| Carga da tarefa | Materializa perguntas, decisões, pares e caches por colaborador/dia. Esses dados pertencem à carga da janela. [app/chamados/services/tarefa_do_dia.py:376; app/chamados/services/tarefa_do_dia.py:391; app/chamados/services/tarefa_do_dia.py:423; app/chamados/services/tarefa_do_dia.py:500] |
-| Tranca | Materializa pares, vetor de resultados e vetores auxiliares. [app/chamados/juizes.py:1022] |
-| Relatórios/créditos/cobrança | Os leitores reais constroem buckets, listas de perguntas e mapas por colaborador. Streaming na saída não elimina essas materializações internas. [app/chamados/relatorios_disputa.py:51; app/chamados/services/raiox.py:135; app/chamados/services/cobranca.py:239] |
-| Vigia | Mantém universo de dias, colaboradores, alimentação, perguntas, portas e lista final de alcance. [app/chamados/services/vigia_fio.py:585; app/chamados/services/vigia_fio.py:607; app/chamados/services/vigia_fio.py:617; app/chamados/services/vigia_fio.py:633; app/chamados/services/vigia_fio.py:641] |
-
-Isso identifica estruturas que crescem; **não quantifica sua participação no RSS da E3**. Não há medição de RSS da E3 no dado apresentado. [nao verificado]
-
-**2. Por que não entrego um script apresentado como conforme**
-
-O primeiro impedimento independe do tamanho da frota:
-
-1. A parte precisa executar `o_que_segura` para seu colaborador, conforme (b). O leitor chama `classificar_export(empresa, mes, ano)` e só depois seleciona o colaborador em Python. O export consulta os fechamentos da empresa inteira. Manter essa chamada viola o filtro literal de (b); recortá-la exige alterar a alimentação do leitor. [app/folha/fora_da_folha.py:215; app/folha/fora_da_folha.py:227; app/folha/export.py:785]
-
-2. `tarefa_do_dia` utiliza a carga real, que chama `alimentar_fila`. Esta executa `particionar_verbos(qs_vivos())` e percorre `qs_na_fila()` global. A partição chama novamente `creditos_perguntas`. Portanto, mover apenas a chamada direta de créditos para `"agregado"` não elimina as execuções globais dentro das partes. [app/chamados/services/tarefa_do_dia.py:531; app/chamados/juizes.py:1558; app/chamados/juizes.py:1561; app/chamados/services/verbos.py:34]
-
-3. Acrescentar filtros nessas consultas não é uma transformação neutra: o código documenta que o crédito depende do conjunto vivo recebido e pode mudar quando esse conjunto é recortado. [app/chamados/juizes.py:1581]
-
-Há ainda dois pontos que a reescrita precisa resolver explicitamente:
-
-- **Manifesto entre processos:** a v1 executa `ato_do_dia` para todos os dias registrados pelo alcance, independentemente da rota. Esse universo vem dos dias retidos pela folha nas competências naturais do vigia. Para distribuir exatamente essas unidades sem repetir o vigia, o agregado precisa emitir IDs/datas consumíveis pelas partes; substituí-los apenas por hashes perde essa alimentação. [e3_diff_leitores_v1.py:1307; e3_diff_leitores_v1.py:1349; app/chamados/services/vigia_fio.py:587; app/chamados/services/vigia_fio.py:591]
-- **Memória dos globais:** leitores integrais continuam materializando dados internamente. Um watchdog permite interromper uma execução excedente; não demonstra antecipadamente que o agregado terminará abaixo de 2 GB. Esse resultado permanece [nao verificado]. [app/chamados/services/raiox.py:135; app/chamados/services/vigia_fio.py:633]
-
-A interpretação viável seria: **(b) restringe todas as consultas de seleção da sonda, com exceções declaradas para consultas globais internas; (c) restringe as chamadas diretas da sonda; o agregado emite um manifesto de IDs/datas.** Isso é uma alteração do contrato solicitado, não uma propriedade que eu possa assumir silenciosamente. [app/chamados/juizes.py:1558; app/folha/fora_da_folha.py:227; e3_diff_leitores_v1.py:1349]
-
-**3. Diferenças de cobertura que precisam ser declaradas**
-
-Não há uma versão nova entregue ou executada para comparar. Estas são as diferenças e perdas que uma implementação precisa evitar ou assumir expressamente. [nao verificado]
-
-| Ponto | Consequência para a cobertura |
-|---|---|
-| Perguntas versus colaboradores selecionados | A v1 mede perguntas da frota inteira, incluindo perguntas sem célula e fora das janelas. Restringir perguntas aos colaboradores selecionados pelas células perderia cobertura. A divisão deve usar o colaborador da disputa sem acrescentar essa restrição. [e3_diff_leitores_v1.py:904; e3_diff_leitores_v1.py:906; e3_diff_leitores_v1.py:958] |
-| Disputas inteiras | Dividir perguntas de uma mesma disputa mudaria a alimentação de `pode_fechar`, `respostas_sem_veredito` e explicador. A v1 entrega a disputa com todas as suas perguntas. [e3_diff_leitores_v1.py:958; e3_diff_leitores_v1.py:975] |
-| Leitores de empresa/janela | `dias_que_seguram`, `fora_da_folha`, retrato/contadores/DRY, competência trancada e beco explícito também precisam ficar no agregado; não são consultas por colaborador só porque estavam dentro de `uma_janela`. [e3_diff_leitores_v1.py:1151; e3_diff_leitores_v1.py:1175; e3_diff_leitores_v1.py:1193; e3_diff_leitores_v1.py:1211; e3_diff_leitores_v1.py:1216; e3_diff_leitores_v1.py:1224] |
-| Pautas | Particionar a entrada de `sincronizar` mudaria o cálculo de fechamento: ele compara a entrada com todas as pautas vivas da família. Precisa receber o resultado integral no agregado. [app/ponto/services/pautas_dos_discordantes.py:169] |
-| Paridade da face SQL | A v1 confronta o juiz por pergunta com o conjunto global `q_sem_texto`. Manter esse leitor nas partes exige transportar a pertença calculada no agregado; recalcular a face nas partes muda sua alocação de execução. [e3_diff_leitores_v1.py:902; e3_diff_leitores_v1.py:933] |
-| Plano do backfill | Reconstruir seus dias a partir das células das janelas não preserva o universo da v1. O manifesto precisa vir do alcance real e incluir todas as rotas. [e3_diff_leitores_v1.py:1349; app/chamados/services/vigia_fio.py:591] |
-| Chamadas internas repetidas | A v1 chama `_calados` diretamente e através de `linhas_para_a_pauta`; também chama o alcance diretamente e através de `BF._alcance`. Suprimir essas chamadas internas modifica o que era observado. [e3_diff_leitores_v1.py:1092; app/chamados/services/cobranca.py:266; e3_diff_leitores_v1.py:1338; app/chamados/management/commands/backfill_fio_morto_e4b.py:78] |
-| `vigia.ramo` | O gancho da v1 descarta retornos `None`, mas `_listar` não retorna valor. Corrigi-lo acrescenta observação efetiva. As projeções `vigia.censo_alcance.dia` já existem independentemente desse gancho. [e3_diff_leitores_v1.py:369; app/chamados/services/vigia_fio.py:629; e3_diff_leitores_v1.py:1307] |
-| Fingerprints | A v1 calcula SHA256 de listas ordenadas e publica suas linhas. Um fingerprint novo por faixas precisa ser comparado entre base/cópia usando o mesmo texto novo; equivalência com os digests antigos depende do algoritmo escolhido. [e3_diff_leitores_v1.py:1438; e3_diff_leitores_v1.py:1452] |
-
-Para explicar a queda por classe, precisam permanecer contagens das rotas, dos quatro baldes de lei, das causas `a`–`e`, dos detalhes de `e` e dos papéis, conservando as identidades de soma do vigia. A classificação deve vir do resultado real, sem implementar outro juiz. A queda efetiva e sua distribuição por classe não estão demonstradas no dado fornecido. [app/chamados/services/vigia_fio.py:531; app/chamados/services/vigia_fio.py:535; app/chamados/services/vigia_fio.py:648; app/chamados/services/vigia_fio.py:676; app/chamados/services/vigia_fio.py:690; nao verificado]
-
-_4492 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4494 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
