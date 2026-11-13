@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 21:12:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (504.7 MB). Acoes na janela: **2068**.
+**Medido em 12/11/2026 21:18:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (504.7 MB). Acoes na janela: **2066**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2076,5 +2076,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:21:46 | Bash | Record served md5 of pwa.js and sw.js | `cd ~/saas-hasner; mkdir -p logs/TRIAGEM-REVERTE; D=logs/TRIAGEM-REVERTE; for u in /static/pwa.js /sw.js; do echo "$u $(curl -sk --max-time 10 -H 'Host: juliani.hasner.com.br' https://127.0.0.1$u \| md5sum \| cut -c1-32) $(curl -sk -o /dev/null -w '%{http_code}' -H 'Host: juliani.hasner.com.br' https://127.0.0.1$u)"; done \| tee $D/md5_antes_revert.txt; curl -sk -H 'Host: juliani.hasner.com.br' htt ...` |
 | 09:21:42 | Bash | Find SW path, later overlaps, md5s | `cd ~/saas-hasner; /bin/grep -o "register([^)]*)" app/static/pwa.js \| head -3; /bin/grep -rn "serviceWorker.register" app/templates \| head -3 \| cut -c1-200; for c in a684424bb 087fe758a; do git diff --name-only $c^1 $c \| /bin/grep -E "pwa.js\|bater_ponto\|apto.html\|check_a_lei\|check_frontend\|test_l030\|test_selfie" ; done; echo "--- md5 HEAD~ vs d14450fff^1"; git show d14450fff^1:app/static/ ...` |
 | 09:21:36 | Bash | Check state and files of TRIAGEM merge | `cd ~/saas-hasner; date +%H:%M; git status --porcelain \| /bin/grep -v '^??' ; ls .git/MERGE_HEAD 2>&1; ps -eo pid,cmd \| /bin/grep -E "[g]it push\|[p]re-push\|[d]eploy.sh" \| cut -c1-120; git log --oneline -1 HEAD; git show --stat --format='%P' d14450fff \| head -40; git diff --name-only d14450fff^1 d14450fff \| /bin/grep -E "migrations"` |
-| 09:18:00 | Bash | Register UI-ESCALA-REQUADRO-ESPELHO complement | `cd ~/saas-hasner; cat > logs/UI-ESCALA-REQUADRO/aval_ui_escala_requadro_espelho_1211.txt <<'EOF' aval Ronald: UI-ESCALA-REQUADRO-ESPELHO -- REGISTRAR como COMPLEMENTO da UI-ESCALA-REQUADRO (fila 2, POS-20, nao construir antes dela nem antes da META-18). UNIDADE = linha do dia no espelho x escala vigente nele. Mesma fonte: vinculo_do_dia (CelulaDia.escala_geradora) + HistoricoVinculo; constroi uma  ...` |
-| 09:17:46 | Bash | Find UI-ESCALA-REQUADRO backlog line | `cd ~/saas-hasner; ls logs/UI-ESCALA-REQUADRO/; /bin/grep -n "UI-ESCALA-REQUADRO" app/docs/BACKLOG.md \| cut -c1-400` |
