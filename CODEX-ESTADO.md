@@ -1,7 +1,622 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 00:47** · publicado em **13/11/2026 00:48** (UTC-3)
+> Ultima resposta processada: **13/11/2026 00:49** · publicado em **13/11/2026 00:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 00:49 · sessao eb2adfbaf90a · E3-FORMA-SQL · leitura · origem=Code
+
+```python
+# SOMENTE TEXTO; não executado, compilado ou validado em execução. [nao verificado]
+# Nenhum arquivo foi criado, editado ou apagado nesta revisão. [nao verificado]
+#
+# Executar o MESMO texto na BASE e na COPIA, mudando somente PARTE.
+# Compatibilidade com a BASE e sombra imutável: [nao verificado].
+#
+# Particionamento: decisão expressa no enunciado.
+# Pergunta tem colaborador próprio: app/chamados/models.py:2454.
+# Disputa recebe todas as perguntas: app/chamados/models.py:1859.
+#
+# Hash novo: Merkle + multiconjunto combinável em faixas fixas de IDs.
+# Não é o SHA256 das listas da v1; comparar BASE/COPIA com este mesmo texto.
+# Implementação proposta e propriedades em execução: [nao verificado].
+#
+# O acumulador aceita IDs fora de ordem e repetidos; necessário para:
+# app/chamados/relatorios_disputa.py:60;
+# app/chamados/services/fio.py:206.
+#
+# vigia.ramo preserva a guarda da v1: _listar retorna None e não é registrado.
+# e3_diff_leitores_v1.py:369; app/chamados/services/vigia_fio.py:629.
+#
+# PRONTO 7: descrição literal do aval não fornecida. [nao verificado]
+# São emitidas categorias reais, respostas sem veredito, booleanos C7,
+# classes da tarefa e as aberturas nativas do vigia:
+# app/chamados/relatorios_disputa.py:6;
+# app/chamados/models.py:1847;
+# app/chamados/models.py:1854;
+# app/chamados/services/vigia_fio.py:575.
+#
+# Paridade externa:
+# agregado: paridade_face_sql_sem_texto::face
+# partes:   paridade_face_sql_sem_texto::juiz
+# Confrontar os acumuladores dos mesmos blocos após somar as partes.
+# Não se emite um booleano de paridade local sem a face global.
+# Decisão expressa no enunciado; juiz/face:
+# app/chamados/juizes.py:1515; app/chamados/juizes.py:1531.
+
+PARTE = 0                  # int entre 0 e N_PARTES-1, ou "agregado"
+N_PARTES = 12
+BLOCO = 1000
+TETO_MB = 2048
+TETO_DURO_MB = 2560
+TRACO = False
+
+import sys
+sys.dont_write_bytecode = True
+
+import collections
+import collections.abc
+import contextlib
+import copy
+import dataclasses
+import datetime as dt
+import decimal
+import enum
+import hashlib
+import importlib
+import inspect
+import io
+import json
+import logging
+import os
+import re
+import signal
+import threading
+import time
+import uuid
+
+from unittest.mock import patch
+from zoneinfo import ZoneInfo
+
+FIXO = dt.datetime.fromisoformat("2026-11-12T23:48:00+00:00")
+ZONA = ZoneInfo("America/Sao_Paulo")
+HOJE = FIXO.astimezone(ZONA).date()
+DIA = dt.timedelta(days=1)
+DATA_REAL = dt.date
+INSTANTE_REAL = dt.datetime
+
+Model = QuerySet = None
+transaction = J = None
+
+ASSINATURAS = {}
+AUSENTES = set()
+REGISTROS = {}
+MANIFESTOS = {}
+TEMPOS = {}
+UNIVERSO = {}
+INCANONIZAVEL = collections.Counter()
+SQL_ERROS = collections.Counter()
+OBS_ERROS = collections.Counter()
+SEQUENCIAS = collections.Counter()
+ATUAL = None
+ALCANCADO_FIM = False
+ROLLBACKS = 0
+
+MODULO_HASH = 1 << 256
+MASCARA_HASH = MODULO_HASH - 1
+
+MEMORIA = {
+    "pico_mb": 0.0,
+    "teto_mb": TETO_MB,
+    "teto_duro_mb": TETO_DURO_MB,
+}
+MEMORIA_LOCK = threading.Lock()
+PARAR_VIGIA = threading.Event()
+
+TOKENS = set("""
+porta_fila porta_pergunta sem_porta de_hoje_pra_frente
+admin colab colaborador sistema cadastro estrutura ninguem nada chamado nao_sei
+a b c d e
+AGUARDA_COLAB AGUARDA_SUPERVISAO SEM_PERGUNTA PRONTA_FECHAR
+decisao_do_dia_pendente aguarda_decisao_de_ausencia
+escala_nao_descreve_o_dia fio_do_admin
+fora_vinculo isento_ponto competencia_trancada sem_celula nao_venceu
+ata_sem_lampadas passivo_sem_linha respondida_sem_texto
+aguarda_resposta aguarda_validacao sem_resposta resolvida pendencia_admin
+validada_sem_gravar devolvida_ao_colaborador materializacao_recusada
+veredito_sem_lavra_vigente validada_sem_efeito efeito_sem_lampada
+encerrada_pelo_juiz silencio_decidido absorvida_aprovada
+absorcao_rejeitada absorcao_aguarda_documento absorcao_pendente
+perguntar responder validar materializar rejulgar decidir_ausencia
+entregar_documento emissor cartorio materializacao
+furo cobrado discordante indefinida concordante
+entra bloqueado modulo_proprio sim nao
+regularizar_batida admin-cadastro admin-batida
+sem_pergunta_viva pergunta_viva_sob_chamado_terminal
+pergunta_viva_sem_ancora pergunta_viva_fora_do_app outra
+dia_na_lista_dono_batida dia_na_lista_dono_cadastro
+dia_na_lista_dono_estrutura dia_na_lista_dono_nenhum
+reabrir_credor registrar_decisao
+""".split())
+TOKENS.update({
+    "", "nenhuma porta", "fora da lista do admin", "lista sem resposta",
+})
+
+CHAVES = set("""
+pk id colab colaborador_id empresa empresa_id pergunta_id disputa_id
+celula_id chamado_id chamado_destino_id data dia dia_do_turno
+agora competencia mes ano ini fim
+rota fila verbos fio nao_sei razao instancias instancia tipo hora
+data_civil lampada vencido motivo acoes acao de porta
+pode_fechar todas_respondidas pode_solicitar_correcao resposta_enviada
+tem_pergunta_viva perguntas perguntas_disputa itens estado dono resumo
+status grupo grupos motivos motivos_retencao dias datas por_fio
+total entram fora_por_motivo furo_espelho dias_por_fio
+colaboradores esperado universo por_veredito amostra maiores
+com_pergunta_aberta com_chamado_vivo com_porta_fila com_porta_pergunta
+alcance_universo alcance_competencias alcance_porta_fila
+alcance_porta_pergunta alcance_de_hoje_pra_frente fio_morto_alcance
+alcance_porta_exige_o_admin alcance_e_detalhe alcance_por_rota_papel
+alcance_dias alcance_dias_omitidos alcance_cego
+alcance_a alcance_b alcance_c alcance_d alcance_e
+alcance_decisao_do_dia_pendente alcance_aguarda_decisao_de_ausencia
+alcance_escala_nao_descreve_o_dia alcance_fio_do_admin
+causa detalhe papel porta_real perguntas_reais
+retido sem_canal candidato vencido_cobranca sem_canal_push
+creditada_respondida creditada_pendente pertence
+q_vivas viva juiz respondida_sem_texto trancada fora_do_fato
+paridade_q_sem_texto
+colabs furo dias_ferias_com_batida
+dono_do_dia ec_do_dia posto_do_dia pai_limbo
+saldo codigo_tipo chamados disputas fica_resposta_sem_veredito
+fica_pergunta_viva_fora fica_resgatado perguntas_com_resposta_sem_veredito
+disputas_com_pai_vivo_fora sem_dia fica_fora_da_tranca decidir_pelo_dp
+vivas_apesar_da_tranca perguntas_lidas_trancadas aplicadas [nao verificado]
+ok pendentes prazo_ate canal erros
+alvo abrir fechar mantidas alvo_dias estrutura por_dono
+abrir_chaves fechar_chaves n chave
+q_respondida_sem_texto q_respondida_com_texto
+resultado ordem faltam saida_sha256 bytes
+categoria pendentes_com_tranca pendentes_ignorando_tranca
+""".split())
+
+PRIVADOS = {
+    "nome", "nome_completo", "cpf", "username", "email",
+    "codigo", "codigo_dominio", "telefone", "matricula",
+}
+
+CAMPOS_CLASSE = (
+    "rota", "fio", "razao", "estado", "status", "grupo", "motivo",
+    "causa", "detalhe", "papel", "dono", "acao", "de", "categoria",
+    "pode_fechar", "todas_respondidas", "pode_solicitar_correcao",
+    "resposta_enviada", "tem_pergunta_viva", "nao_sei",
+    "sem_canal", "vencido_cobranca", "sem_canal_push",
+    "candidato", "creditada_respondida", "creditada_pendente",
+    "pertence",
+)
+
+
+class DesfazerSonda(Exception):
+    pass
+
+
+class FalhaDaSonda(BaseException):
+    pass
+
+
+class EscritaBloqueada(FalhaDaSonda):
+    pass
+
+
+class TetoDeMemoria(FalhaDaSonda):
+    pass
+
+
+class FormatoInesperado(Exception):
+    pass
+
+
+class Sink:
+    def write(self, texto):
+        return len(texto)
+
+    def flush(self):
+        pass
+
+    def isatty(self):
+        return False
+
+
+class MetaRelogio(type):
+    def __instancecheck__(cls, objeto):
+        return isinstance(objeto, cls._real)
+
+
+class DataFixa(DATA_REAL, metaclass=MetaRelogio):
+    _real = DATA_REAL
+
+    @classmethod
+    def today(cls):
+        return HOJE
+
+
+class InstanteFixo(INSTANTE_REAL, metaclass=MetaRelogio):
+    _real = INSTANTE_REAL
+
+    @classmethod
+    def now(cls, tz=None):
+        if tz is None:
+            return FIXO.astimezone(ZONA).replace(tzinfo=None)
+        return FIXO.astimezone(tz)
+
+    @classmethod
+    def today(cls):
+        return cls.now()
+
+    @classmethod
+    def utcnow(cls):
+        return FIXO.astimezone(dt.timezone.utc).replace(tzinfo=None)
+
+
+def serial(valor):
+    return json.dumps(
+        valor, ensure_ascii=True, sort_keys=True,
+        separators=(",", ":"), allow_nan=False,
+    )
+
+
+def sha(valor):
+    texto = valor if isinstance(valor, str) else serial(valor)
+    return hashlib.sha256(texto.encode("utf-8")).hexdigest()
+
+
+def rss_mb():
+    with open("/proc/self/statm", "r") as arquivo:
+        paginas = int(arquivo.read().split()[1])
+    return paginas * os.sysconf("SC_PAGE_SIZE") / 1048576.0
+
+
+def atualizar_pico(atual):
+    with MEMORIA_LOCK:
+        MEMORIA["pico_mb"] = max(MEMORIA["pico_mb"], atual)
+
+
+def memoria_saida():
+    with MEMORIA_LOCK:
+        return {
+            **MEMORIA,
+            "pico_mb": round(MEMORIA["pico_mb"], 1),
+        }
+
+
+def medir_memoria():
+    atual = rss_mb()
+    atualizar_pico(atual)
+    if atual > TETO_MB:
+        raise TetoDeMemoria()
+    return atual
+
+
+def traco(nome, unidade, etapa):
+    if TRACO:
+        os.write(2, (
+            "TRACO %s %s rss=%.1f etapa=%s\n"
+            % (nome, serial(unidade), rss_mb(), etapa)
+        ).encode("ascii"))
+
+
+def iniciar_vigia_duro():
+    def laco():
+        while not PARAR_VIGIA.is_set():
+            try:
+                atual = rss_mb()
+                atualizar_pico(atual)
+                if atual > TETO_DURO_MB:
+                    os.write(1, (
+                        "===TETO_DURO_MB_EXCEDIDO===\n"
+                        + serial({
+                            "fatal": "TetoDuroDeMemoria",
+                            "execucao_completa": False,
+                            "rss_mb": round(atual, 1),
+                            **memoria_saida(),
+                        })
+                        + "\n"
+                    ).encode("ascii"))
+                    os.kill(os.getpid(), signal.SIGKILL)
+            except Exception:
+                os.write(1, b"===FALHA_VIGIA_DURO===\n")
+                os.kill(os.getpid(), signal.SIGKILL)
+            PARAR_VIGIA.wait(0.25)
+
+    threading.Thread(
+        target=laco, name="e3-teto-rss", daemon=True,
+    ).start()
+
+
+def sem_forma(valor, prefixo="sem_forma"):
+    tipo = type(valor)
+    chave = tipo.__module__ + "." + tipo.__qualname__
+    INCANONIZAVEL[prefixo + ":" + chave] += 1
+    return ("incanonizavel", tipo.__module__, tipo.__qualname__)
+
+
+def canonico(valor, ativos=None, memo=None):
+    # Memo com referência forte ao original: cura do DAG do anexo.
+    # Forma inteira usa tuplas; digest_forma nunca serializa o DAG expandido.
+    # Implementação proposta: [nao verificado].
+    if ativos is None:
+        ativos = set()
+    if memo is None:
+        memo = {}
+
+    if valor is None or isinstance(valor, (bool, int)):
+        return valor
+    if isinstance(valor, str):
+        if valor in TOKENS or re.fullmatch(r"\d{4}-\d{2}-\d{2}", valor):
+            return valor
+        return ("str_sha256", len(valor), sha(valor))
+    if isinstance(valor, float):
+        return ("float", valor.hex())
+
+    identidade = id(valor)
+    if identidade in ativos:
+        return sem_forma(valor, "ciclo")
+    if identidade in memo:
+        return memo[identidade][1]
+
+    ativos.add(identidade)
+    try:
+        try:
+            if isinstance(valor, enum.Enum):
+                forma = canonico(valor.value, ativos, memo)
+            elif isinstance(valor, decimal.Decimal):
+                forma = ("decimal", str(valor))
+            elif isinstance(valor, (INSTANTE_REAL, DATA_REAL, dt.time)):
+                forma = ("iso", valor.isoformat())
+            elif isinstance(valor, dt.timedelta):
+                forma = (
+                    "duracao", valor.days, valor.seconds, valor.microseconds,
+                )
+            elif isinstance(valor, uuid.UUID):
+                forma = ("uuid", str(valor))
+            elif isinstance(valor, bytes):
+                forma = (
+                    "bytes_sha256", len(valor),
+                    hashlib.sha256(valor).hexdigest(),
+                )
+            elif Model is not None and isinstance(valor, Model):
+                # Mesma projeção de modelo da E3 v1: somente identidade.
+                # e3_diff_leitores_v1.py:265.
+                forma = ("model", valor._meta.label_lower, valor.pk)
+            elif QuerySet is not None and isinstance(valor, QuerySet):
+                itens = [canonico(x, ativos, memo) for x in valor]
+                ordem = {}
+                forma = (
+                    "queryset",
+                    tuple(sorted(
+                        itens, key=lambda x: digest_forma(x, ordem),
+                    )),
+                )
+            elif isinstance(valor, collections.abc.Mapping):
+                itens = []
+                for chave, conteudo in valor.items():
+                    if isinstance(chave, str) and chave.lower() in PRIVADOS:
+                        continue
+                    k = (
+                        chave
+                        if isinstance(chave, str) and chave in CHAVES
+                        else canonico(chave, ativos, memo)
+                    )
+                    itens.append((k, canonico(conteudo, ativos, memo)))
+                ordem = {}
+                forma = (
+                    "dict",
+                    tuple(sorted(
+                        itens,
+                        key=lambda x: digest_forma(x[0], ordem),
+                    )),
+                )
+            elif isinstance(valor, (set, frozenset)):
+                itens = [canonico(x, ativos, memo) for x in valor]
+                ordem = {}
+                forma = (
+                    "set",
+                    tuple(sorted(
+                        itens, key=lambda x: digest_forma(x, ordem),
+                    )),
+                )
+            elif isinstance(valor, (list, tuple)):
+                forma = (
+                    "list" if isinstance(valor, list) else "tuple",
+                    tuple(canonico(x, ativos, memo) for x in valor),
+                )
+            elif dataclasses.is_dataclass(valor) and not isinstance(valor, type):
+                forma = canonico({
+                    f.name: getattr(valor, f.name)
+                    for f in dataclasses.fields(valor)
+                    if f.name.lower() not in PRIVADOS
+                }, ativos, memo)
+            else:
+                forma = sem_forma(valor)
+        except Exception:
+            forma = sem_forma(valor, "erro_canonizador")
+    finally:
+        ativos.remove(identidade)
+
+    memo[identidade] = (valor, forma)
+    return forma
+
+
+def digest_forma(forma, memo=None):
+    if memo is None:
+        memo = {}
+    if isinstance(forma, tuple):
+        chave = id(forma)
+        if chave in memo:
+            return memo[chave][1]
+        h = hashlib.sha256(b"T%d(" % len(forma))
+        for item in forma:
+            h.update(digest_forma(item, memo).encode("ascii"))
+            h.update(b",")
+        h.update(b")")
+        digest = h.hexdigest()
+        memo[chave] = (forma, digest)
+        return digest
+    return hashlib.sha256(
+        ("P" + repr(forma)).encode("utf-8")
+    ).hexdigest()
+
+
+def bytes_forma(forma, memo=None):
+    # Comprimento JSON expandido calculado sem construir esse JSON.
+    # Implementação proposta: [nao verificado].
+    if memo is None:
+        memo = {}
+    if not isinstance(forma, tuple):
+        return len(serial(forma).encode("utf-8"))
+    chave = id(forma)
+    if chave in memo:
+        return memo[chave][1]
+    tamanho = (
+        2 + max(0, len(forma) - 1)
+        + sum(bytes_forma(x, memo) for x in forma)
+    )
+    memo[chave] = (forma, tamanho)
+    return tamanho
+
+
+def primeiro_id(unidade):
+    if type(unidade) is int:
+        return unidade
+    if isinstance(unidade, (list, tuple)):
+        for item in unidade:
+            ident = primeiro_id(item)
+            if ident is not None:
+                return ident
+    return None
+
+
+def rotulo_classe(valor):
+    if valor is None:
+        return "None"
+    if type(valor) is bool:
+        return "True" if valor else "False"
+    if isinstance(valor, str):
+        return valor if valor in TOKENS else "FORA_DO_VOCABULARIO"
+    if isinstance(valor, enum.Enum):
+        return rotulo_classe(valor.value)
+    return "TIPO:" + type(valor).__name__
+
+
+class Registro:
+    # Não conserva eventos/linhas: somente acumuladores por faixa de IDs,
+    # bitmap de IDs da faixa e contadores de classes.
+    # Algoritmo proposto; validação em execução: [nao verificado].
+    def __init__(self):
+        self.chamadas = 0
+        self.projecoes = 0
+        self.excecoes = collections.Counter()
+        self.hist = collections.Counter()
+        self.classes = collections.Counter()
+        self.metricas = collections.Counter()
+        self.blocos = {}
+
+    def contar_classes(self, valor):
+        self.hist[rotulo_classe(valor)] += 1
+        if not isinstance(valor, collections.abc.Mapping):
+            return
+
+        def campos(d, prefixo):
+            for campo in CAMPOS_CLASSE:
+                if campo in d:
+                    v = d[campo]
+                    if v is None or isinstance(v, (bool, str, enum.Enum)):
+                        self.classes[
+                            prefixo + campo + ":" + rotulo_classe(v)
+                        ] += 1
+
+        campos(valor, "")
+        for instancia in valor.get("instancias") or ():
+            if not isinstance(instancia, collections.abc.Mapping):
+                continue
+            campos(instancia, "instancia.")
+            for acao in instancia.get("acoes") or ():
+                if isinstance(acao, collections.abc.Mapping):
+                    campos(acao, "acao.")
+
+    def adicionar(self, ident, contexto, valor, exc=None, projecao=False):
+        if projecao:
+            self.projecoes += 1
+        else:
+            self.chamadas += 1
+        if exc:
+            self.excecoes[exc] += 1
+        self.contar_classes(valor)
+
+        evento = (
+            canonico(contexto),
+            ("forma_sha256", digest_forma(canonico(valor))),
+        )
+        digest = digest_forma(evento)
+        numero = int(digest, 16)
+
+        if ident is not None and (type(ident) is not int or ident < 0):
+            raise FalhaDaSonda()
+        faixa = None if ident is None else ident // BLOCO
+        bloco = self.blocos.setdefault(faixa, {
+            "n": 0, "soma": 0, "quadrados": 0, "xor": 0, "bitmap": 0,
+        })
+        bloco["n"] += 1
+        bloco["soma"] = (bloco["soma"] + numero) & MASCARA_HASH
+        bloco["quadrados"] = (
+            bloco["quadrados"] + numero * numero
+        ) & MASCARA_HASH
+        bloco["xor"] ^= numero
+        if ident is not None:
+            bloco["bitmap"] |= 1 << (ident % BLOCO)
+
+    def resultado(self):
+        blocos = []
+        for faixa in sorted(
+            self.blocos, key=lambda x: (-1 if x is None else x),
+        ):
+            b = self.blocos[faixa]
+            atomos = {
+                "n": b["n"],
+                "soma256": "%064x" % b["soma"],
+                "quadrados256": "%064x" % b["quadrados"],
+                "xor256": "%064x" % b["xor"],
+            }
+            blocos.append({
+                "faixa": faixa,
+                "id_de": None if faixa is None else faixa * BLOCO,
+                "id_ate": (
+                    None if faixa is None else (faixa + 1) * BLOCO - 1
+                ),
+                "ids_distintos": b["bitmap"].bit_count(),
+                "ids_bitmap_hex": format(b["bitmap"], "x"),
+                **atomos,
+                "sha256": sha(atomos),
+            })
+        return {
+            "universo_registros": self.chamadas + self.projecoes,
+            "chamadas_ou_observacoes": self.chamadas,
+            "projecoes_de_resultado": self.projecoes,
+            "excecoes_por_classe": dict(sorted(self.excecoes.items())),
+            "histograma": dict(sorted(self.hist.items())),
+            "classes": dict(sorted(self.classes.items())),
+            "metricas": dict(sorted(self.metricas.items())),
+            "blocos": blocos,
+        }
+
+
+def registro(nome):
+    return REGISTROS.setdefault(nome, Registro())
+
+
+def guardar(
+    
+
+[truncado em 20000 de 82527 caracteres]
 
 ## 13/11 00:47 · sessao fd03853988f3 · BUG-CADASTRO-C5E · censo · origem=Code
 
@@ -1795,82 +2410,4 @@ try:
 
 [truncado em 20000 de 44760 caracteres]
 
-## 12/11 22:25 · sessao 424e40a0f738 · BUG-CADASTRO-C5E · verificador · origem=Code
-
-REPROVA
-
-1. **A classe do bloqueante anterior continua aberta: leituras novas ainda deixam a catraca verde.** `_atribuir` visita o alvo e apaga bindings antes de resolver novamente o valor; `_e_none` não reconhece walrus; e a anotação sem valor apaga um binding que deveria preservar. (`app/ponto/tests/test_cadastro_futuro_c5e.py:478`, `app/ponto/tests/test_cadastro_futuro_c5e.py:443`, `app/ponto/tests/test_cadastro_futuro_c5e.py:497`, `app/ponto/tests/test_cadastro_futuro_c5e.py:492`)
-
-   Construí estes **três mutantes novos**, inseridos individualmente antes da leitura original de `reconciliar_apos_vinculo`. São sequências diretas, fora dos limites declarados de fluxo, defaults, retornos e transporte de alias. (`app/colaboradores/services/pos_vinculo.py:56`)
-
-   | Mutante novo | Por que escapa |
-   |---|---|
-   | `_ler = _tz.localdate; _ler = _ler; _ler()` | Visitar o segundo alvo apaga `_ler`; `_ligar` já não encontra a função no valor. (`app/ponto/tests/test_cadastro_futuro_c5e.py:481`, `app/ponto/tests/test_cadastro_futuro_c5e.py:461`) |
-   | `_tz.localdate(_instante := None)` | `_e_none` aceita somente constante ou nome; a chamada é classificada antes da visita ao argumento. (`app/ponto/tests/test_cadastro_futuro_c5e.py:497`, `app/ponto/tests/test_cadastro_futuro_c5e.py:501`) |
-   | `_v = None; _v: object; _tz.localdate(_v)` | A anotação sem valor visita o alvo e esquece o `None`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:487`, `app/ponto/tests/test_cadastro_futuro_c5e.py:443`) |
-
-   **Resultado de cada mutante:** total permaneceu 42, função permaneceu com 1, `_furos=[]` e os **23 testes C5E passaram**. Execuções em memória, sem relatório persistido. [nao verificado] [nao verificado]
-
-   Cada inserção deveria produzir `reconciliar_apos_vinculo: 2 > teto 1`, reprovando a asserção principal; o teto dessa função continua sendo 1. (`app/ponto/tests/test_cadastro_futuro_c5e.py:338`, `app/ponto/tests/test_cadastro_futuro_c5e.py:529`, `app/ponto/tests/test_cadastro_futuro_c5e.py:533`)
-
-2. **O visitante novo também rejeita código legítimo.** Dentro de uma função, `_v: _tz.localdate()` passa a ser contado pela visita incondicional à anotação. (`app/ponto/tests/test_cadastro_futuro_c5e.py:488`)
-
-   No ensaio, Python não executou essa anotação local: zero chamadas runtime. Inserida em `reconciliar_apos_vinculo`, porém, ela elevou o censo para 43 e produziu `2 > teto 1`. Portanto, o selo fica vermelho sem leitura adicional de relógio. Execução em memória, sem relatório persistido. [nao verificado]
-
-**Informativos — cura dos exemplos da volta 2**
-
-**Os exemplos exatos foram curados; a classe não foi fechada**, pelos bloqueantes acima. A cobertura acrescentada é esta: (`app/ponto/tests/test_cadastro_futuro_c5e.py:632`, `app/ponto/tests/test_cadastro_futuro_c5e.py:642`, `app/ponto/tests/test_cadastro_futuro_c5e.py:657`)
-
-| Forma anterior | Implementação atual | Metateste/mutante que morde |
-|---|---|---|
-| Leitura no alvo de `Assign` | `_atribuir` percorre o alvo. (`app/ponto/tests/test_cadastro_futuro_c5e.py:481`) | `_cache[_tz.localdate()] = 1`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:634`) |
-| Leitura no alvo de `AnnAssign` | Delega a `_atribuir`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:490`) | `_cache[_tz.localdate()]: int = 1`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:635`) |
-| Leitura no alvo de `AugAssign` | Permanece na travessia herdada de `ast.NodeVisitor`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:401`) | `_cache[_tz.localdate()] += 1`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:636`) |
-| Walrus que fornece a função chamada | `_atributo` resolve `NamedExpr`; a atribuição tem visitante próprio. (`app/ponto/tests/test_cadastro_futuro_c5e.py:410`, `app/ponto/tests/test_cadastro_futuro_c5e.py:494`) | `(_ler := _tz.localdate)()`. **Não cobre walrus no argumento**, mostrado no bloqueante 1. (`app/ponto/tests/test_cadastro_futuro_c5e.py:649`) |
-| Alias por desempacotamento | `_ligar` associa elementos de tupla/lista; formas não casadas recebem contagem conservadora. (`app/ponto/tests/test_cadastro_futuro_c5e.py:466`, `app/ponto/tests/test_cadastro_futuro_c5e.py:472`) | Tupla, lista, estrutura aninhada e starred. (`app/ponto/tests/test_cadastro_futuro_c5e.py:645`, `app/ponto/tests/test_cadastro_futuro_c5e.py:651`) |
-| `None` ligado diretamente a nome | `_ligar` registra a constante; `_e_none` consulta o nome. (`app/ponto/tests/test_cadastro_futuro_c5e.py:464`, `app/ponto/tests/test_cadastro_futuro_c5e.py:497`) | Atribuição simples, anotada, desempacotamento e chamada por alias. (`app/ponto/tests/test_cadastro_futuro_c5e.py:659`) |
-
-Esses metatestes exigem expressamente o furo `2 > teto 1`, substituindo a fonte produtiva somente em memória. (`app/ponto/tests/test_cadastro_futuro_c5e.py:621`, `app/ponto/tests/test_cadastro_futuro_c5e.py:629`)
-
-**Contagem da árvore real**
-
-O teto continua em **42**, e o teste exige igualdade integral entre o censo e o mapa por função. (`app/ponto/tests/test_cadastro_futuro_c5e.py:372`, `app/ponto/tests/test_cadastro_futuro_c5e.py:535`, `app/ponto/tests/test_cadastro_futuro_c5e.py:537`)
-
-Comparei o visitante anterior reconstruído em memória com o atual: ambos produziram **42 leituras em 37 funções**, com os mesmos achados `(função, linha, atributo)` em todo o universo. **Não observei leitura existente duplicada nem perdida pelo delta.** Resultado efêmero, sem relatório persistido. [nao verificado]
-
-Como conferência pontual, permanecem uma leitura no pós-vínculo, dois carimbos na regeneração e três leituras em `julgar_celula`; a conversão externa em `localtime(now())` não acrescenta uma quarta leitura. (`app/colaboradores/services/pos_vinculo.py:56`, `app/ponto/portas/celula.py:263`, `app/ponto/portas/celula.py:308`, `app/ponto/services/cartorio.py:2016`, `app/ponto/services/cartorio.py:2037`, `app/ponto/services/cartorio.py:2040`, `app/ponto/tests/test_cadastro_futuro_c5e.py:503`)
-
-**Rebindings, escopos e falsos positivos**
-
-- **Rebind simples funciona:** `_v=None; _v=instante; _tz.localtime(_v)` tem expectativa de zero leituras no metateste. (`app/ponto/tests/test_cadastro_futuro_c5e.py:672`, `app/ponto/tests/test_cadastro_futuro_c5e.py:678`)
-- **Comprehension tem erro de escopo:** não recebe o tratamento de escopo reservado a funções/classes, e seus nomes passam pelo apagamento genérico. (`app/ponto/tests/test_cadastro_futuro_c5e.py:441`, `app/ponto/tests/test_cadastro_futuro_c5e.py:443`)
-- `_v=None; [_tz.localdate(_v) for _v in instantes]`, com instantes válidos, contou uma leitura indevida; o ensaio runtime fez somente conversão. Na direção inversa, `_v=None; [_v for _v in ()]; _tz.localdate(_v)` escondeu uma leitura real porque o visitante esqueceu o `_v` externo. Resultados em memória. [nao verificado]
-- **Lambda também não ganha escopo próprio:** o tratamento explícito cobre `FunctionDef`, `AsyncFunctionDef` e `ClassDef`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:441`) `_v=None; (lambda _v: _tz.localdate(_v))(instante)` produziu falso positivo no ensaio. [nao verificado]
-- **Closures, `global` e `nonlocal` não têm propagação de bindings entre chamadas:** o visitante copia e depois restaura o estado ao visitar a definição. (`app/ponto/tests/test_cadastro_futuro_c5e.py:430`, `app/ponto/tests/test_cadastro_futuro_c5e.py:440`) Helpers que trocam `None` por um instante antes da conversão produziram falsos positivos; por envolverem fluxo entre funções, mantenho esses exemplos como informativos dentro da limitação declarada. [nao verificado]
-- **Redefinir um alias com `def`, classe ou import pode conservar o alias antigo:** `_escopo` não invalida o nome definido no escopo externo, e o apagamento depende de `ast.Name`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:430`, `app/ponto/tests/test_cadastro_futuro_c5e.py:443`) Atribuir esse defeito especificamente ao último delta permanece [nao verificado].
-
-**Quem escreve e quem lê os três símbolos**
-
-| Símbolo | Quem escreve | Quem lê e quais selos dependem |
-|---|---|---|
-| `TETO_RELOGIO` | Literal de módulo. (`app/ponto/tests/test_cadastro_futuro_c5e.py:333`) | `_furos`; soma e igualdade integral do teste principal; metatestes indiretamente por `_furos`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:528`, `app/ponto/tests/test_cadastro_futuro_c5e.py:535`, `app/ponto/tests/test_cadastro_futuro_c5e.py:537`, `app/ponto/tests/test_cadastro_futuro_c5e.py:629`) |
-| `TOTAL_RELOGIO` | Literal `42`. (`app/ponto/tests/test_cadastro_futuro_c5e.py:372`) | Limite da soma medida e conferência da soma dos tetos. (`app/ponto/tests/test_cadastro_futuro_c5e.py:534`, `app/ponto/tests/test_cadastro_futuro_c5e.py:535`) |
-| `leituras_de_relogio` | Definição da função. (`app/ponto/tests/test_cadastro_futuro_c5e.py:383`) | `censo_relogio`; selo de portas sem leitura de dia; selos dos serviços/auxiliares sem relógio; metatestes de conversão, rebinding e não duplicação. (`app/ponto/tests/test_cadastro_futuro_c5e.py:520`, `app/ponto/tests/test_cadastro_futuro_c5e.py:543`, `app/ponto/tests/test_cadastro_futuro_c5e.py:546`, `app/ponto/tests/test_cadastro_futuro_c5e.py:550`, `app/ponto/tests/test_cadastro_futuro_c5e.py:617`, `app/ponto/tests/test_cadastro_futuro_c5e.py:681`) |
-
-A busca na cópia encontrou esses três nomes somente nesse arquivo, sem outro binding ou dependência textual externa. Resultado de busca sem relatório persistido. [nao verificado]
-
-**Classes de reprovação e restante da obra**
-
-- **Selo/RED sem mordida: presente**, pelo bloqueante 1; a promessa continua sendo denunciar qualquer leitura adicional dentro do universo. (`app/ponto/tests/test_cadastro_futuro_c5e.py:318`)
-- **Segundo juiz, derivação paralela e segundo escritor fora da porta:** não identifiquei outro caso concreto nos caminhos inspecionados. O suplemento consulta `vinculos_dos_dias` e delega a regeneração; a limpeza do julgamento também passa pela porta. (`app/ponto/services/cadastro_futuro.py:38`, `app/ponto/services/cadastro_futuro.py:44`, `app/ponto/portas/celula.py:314`, `app/ponto/portas/celula.py:1167`)
-- **Ordem de trava:** o snapshot mantém vínculos antes de células, com selo exigindo `E → C`. Concorrência real não foi demonstrada por esse teste sem banco. (`app/colaboradores/services/vinculo.py:1018`, `app/colaboradores/services/vinculo.py:1023`, `app/ponto/tests/test_cadastro_futuro_c3.py:242`, `app/ponto/tests/test_cadastro_futuro_c3.py:3`)
-- **Relógio interior:** permanece como passivo autorizado. Não o transformo em bloqueante nem proponho tornar `hoje` obrigatório nesses sítios; o próprio selo registra a proibição de ampliar esta cura. (`app/ponto/tests/test_cadastro_futuro_c5e.py:316`)
-- **Campo com dois significados:** não encontrei ocorrência nova nos valores examinados: `_hoje` é separado do dia de efeito e do carimbo `regenerada_em`. (`app/colaboradores/services/vinculo.py:192`, `app/colaboradores/services/vinculo.py:209`, `app/ponto/portas/celula.py:263`)
-- **Comentário inexato:** `executar_vinculo` promete transmitir o mesmo dia ao pós-vínculo, mas essa chamada não passa `hoje`, e o destinatário lê o relógio. Corrigir a promessa documental não exige ampliar aos interiores. (`app/colaboradores/services/vinculo.py:189`, `app/colaboradores/services/vinculo.py:345`, `app/colaboradores/services/pos_vinculo.py:56`)
-- **Triagem de `reparar` confirmada:** remover sua guarda faz a recusa chegar por `_trabalhar_o_par`; a regex exige a origem `reparar`. O mutante já alcança `classificar`, mas a delegada impede o plantio. (`app/ponto/tests/test_cadastro_futuro_sem_banco.py:45`, `app/ponto/tests/test_cadastro_futuro_c5e.py:231`, `app/chamados/services/passivo_validado.py:327`, `app/chamados/services/passivo_validado.py:375`, `app/chamados/services/passivo_validado.py:430`)
-- **Validação executada:** C5E + sem banco, **66/66**; C3, C3_folgas, C4, C5, C5b e C5d, **83/83**. Execuções sem artefato persistido. [nao verificado]
-- **Limites da conclusão:** não houve acesso a banco/log nem execução da suíte com banco; implantação e pouso efetivos permanecem [nao verificado]. Sem histórico Git disponível nesta cópia, a comparação integral e a atribuição de outros defeitos ao intervalo `8dc931da9..4b34ed21a` permanecem [nao verificado].
-
-Não discordo dos limites declarados como limites desta pré-verificação; **os bloqueantes encontrados independem deles** e ficam no próprio mecanismo da catraca. (`app/ponto/tests/test_cadastro_futuro_c5e.py:478`, `app/ponto/tests/test_cadastro_futuro_c5e.py:488`, `app/ponto/tests/test_cadastro_futuro_c5e.py:497`)
-
-_4482 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4483 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
