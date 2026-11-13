@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 14:22:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (567.0 MB). Acoes na janela: **1405**.
+**Medido em 13/11/2026 14:28:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (567.1 MB). Acoes na janela: **1407**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:23:00 | Bash |  | `cd /home/ronald/saas-hasner; until [ -e logs/E3-FORMA-SQL/diff_frota/inteiro/delta/fim ] \|\| /bin/grep -q '^rc=' logs/DESLIGADO-NAO-TRAVA/suite/inteira.log; do /usr/bin/sleep 30; done; date +%H:%M; ls logs/E3-FORMA-SQL/diff_frota/inteiro/delta/; tail -n 3 logs/E3-FORMA-SQL/diff_frota/inteiro/delta/*.runlog 2>/dev/null; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/DESLIGADO-NAO-TRAVA/suite/inteira.lo ...` |
+| 14:22:54 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/sombra/e3_alcance_delta.py <<'EOF' # E3 IMPACTO: quais dias entram/saem do fio_morto_alcance (rota sem_porta) entre BASE e COPIA. LEITURA, so ids. # Roda UMA vez em cada arvore (SOMBRA_ARVORE), mesmo FIXO do e3_diff_leitores_v1; a sessao cruza as duas saidas. import datetime as dt, inspect, json, sys from zoneinfo import ZoneInfo from chamados.services impor ...` |
 | 14:22:41 | Bash |  | `sed -n 45,60p /home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/partes/e3_diff_leitores_v1.py; ls /home/ronald/saas-hasner/logs/sombra/ \| /bin/grep -i e3i \| head; sed -n 483,495p /home/ronald/saas-hasner/bin/sombra.sh` |
 | 14:22:35 | Bash |  | `sed -n 1290,1335p /home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/partes/e3_diff_leitores_v1.py; /bin/grep -n 'AGORA\s*=\\|HOJE\s*=\\|freeze' /home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/partes/e3_diff_leitores_v1.py \| head; cat /home/ronald/saas-hasner/bin/sombra.sh \| /bin/grep -n 'rodar' \| head` |
 | 14:22:32 | Bash |  | `cd /home/ronald/wt-e3-base-087fe758a/app; /bin/grep -n 'def censo_alcance' chamados/services/vigia_fio.py; /bin/grep -n "'alcance_[a-z_]*'" chamados/services/vigia_fio.py \| head -20; /bin/grep -n "fio_morto_alcance_total" /home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/partes/e3_diff_leitores_v1.py \| head -5` |
