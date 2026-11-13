@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 16:28:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (578.0 MB). Acoes na janela: **1779**.
+**Medido em 13/11/2026 16:34:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (578.3 MB). Acoes na janela: **1797**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:34:06 | Bash |  | `cat /home/ronald/saas-hasner/logs/sombra/e3_par_a_par.py` |
+| 16:34:01 | Bash |  | `cd /home/ronald/saas-hasner/logs/sombra; /bin/grep -n 'PAR_DIF\\|PAR_TOTAL\\|antes\\|depois\\|copia\\|base' e3_par_a_par.py \| head -40; wc -l e3_par_a_par.py` |
+| 16:33:58 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto; /bin/grep -c '^PAR_DIF' codex/a1_par_dif.txt; /bin/grep '^PAR_DIF' codex/a1_par_dif.txt \| python3 -c " import sys,json pk=[json.loads(l[8:])[0] for l in sys.stdin]; print(len(pk),len(set(pk)))"; cat roda.sh \| head -20; find /home/ronald -maxdepth 4 -name 'e3_par_a_par.py' 2>/dev/null \| head` |
+| 16:33:49 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto/codex; cat a1_donos.out; wc -c a1_donos.r; cat a1_donos.r` |
+| 16:33:22 | Bash |  | `cd /home/ronald/wt-codex-hj-090-152256/app; /bin/grep -n "class DireitoNaPorta\\|def test_MORDE_foto_velha_nao_autoriza\\|def test_MORDE_limite_igual_ao_consumo" ferias/test_hj090_volta3.py` |
+| 16:33:17 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; sed -i "s/^D = 'ferias.test_hj090_volta3.'$/D = 'ferias.test_hj090_volta3.DireitoNaPorta.'/" mutantes2.py; python3 -c " import importlib.util as u;s=u.spec_from_file_location('m','mutantes2.py');m=u.module_from_spec(s);s.loader.exec_module(m);print(list(m.MUTANTES), m.D)" cat > roda2.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner D=logs/HJ-090/vo ...` |
+| 16:33:09 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; /bin/grep -n "^S\b\\|^S =\\|^D =\\|^MUTANTES" hj090_volta3_mutantes.py; cat > mutantes2.py <<'EOF' # segundo lote HJ-090 v3: ancoras unicas no arquivo (o lote 1 casava 'vivo = _travar_periodo' em varias funcoes) S = 'ferias.services' D = 'ferias.test_hj090_volta3.' _A = 'vivo = _travar_periodo(periodo)\n consumidos = vivo.dias_concedidos + vivo.dias_ ...` |
+| 16:33:02 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; sed -n 1,12p hj090_volta3_mutantes.py; S=/home/ronald/wt-codex-hj-090-152256/app/ferias/services.py; python3 - "$S" <<'EOF' import sys s=open(sys.argv[1]).read() for a in ['vivo = _travar_periodo(periodo)\n consumidos = vivo.dias_concedidos + vivo.dias_vendidos','vivo.dias_direito = dias\n vivo.aplicar_status()']: print(repr(a[:40]), s.count(a)) EOF` |
+| 16:32:54 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; cat mutar.py \| head -60; cat roda.sh \| head -40` |
+| 16:32:50 | Bash |  | `cd /home/ronald/wt-codex-hj-090-152256/app; /bin/grep -n "def editar_periodo_aquisitivo" -A45 ferias/services.py \| /bin/grep -n "travar\\|aplicar_status\\|vivo"` |
+| 16:32:47 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; ls; /bin/grep -n "direito_julga_foto\\|direito_sem_trava\\|direito_sem_status" -A6 hj090_volta3_mutantes.py \| head -50` |
+| 16:32:42 | Bash |  | `cd /home/ronald/saas-hasner/logs; cat HJ-090/volta3/mutantes.txt; ls O168/v8/; tail -n 3 O168/v8/green2.log; cat O168/v8/mede_green.sh` |
+| 16:32:36 | Bash |  | `cd /home/ronald/saas-hasner/logs; date +%H:%M; ls BUG-PAR-O-PAR/e3/volta3/*.fim O168/v8/ E3-FORMA-SQL/impacto/codex/ 2>&1 \| tr '\n' ' '; echo; tail -n 3 HJ-090/volta3/mutantes.txt; cat O168/v8/medida.log \| /bin/grep -E 'Error\|!=\|>' \| head -5` |
+| 16:31:30 | Monitor | BUG-PAR base e fix2 | `cd /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/volta3; a=0;b=0; while true; do if [ $a = 0 ] && [ -e base.fim ]; then a=1; echo "base $(cat base.fim)"; fi; if [ $b = 0 ] && [ -e fix2.fim ]; then b=1; echo "fix2 $(cat fix2.fim)"; fi; [ $a$b = 11 ] && break; /usr/bin/sleep 30; done` |
+| 16:30:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: run.sh \| pid=2541123$/ESPERANDO: roda.sh \| pid=2481296/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
+| 16:30:02 | Bash |  | `cd /home/ronald/saas-hasner; ps -eo pid,etime,cmd \| /bin/grep -E 'HJ-090/volta3/roda.sh\|mede_green' \| /bin/grep -v grep \| cut -c1-100` |
+| 16:29:59 | SendMessage |  | `-` |
+| 16:29:49 | Bash |  | `cd /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/volta3; /bin/grep -E '^(OK\|FAILED)($\| \()' green.log \| tail -1; /bin/grep '^Ran' green.log \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' green.log \| head -20` |
 | 16:27:51 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: suite \| pid=2541123$/ESPERANDO: run.sh \| pid=2541123/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 16:27:48 | Bash |  | `cd /home/ronald/saas-hasner; tail -n 6 logs/hook_stop_fila1.log \| cut -c1-250; ps -p 2541123 -o pid,cmd \| cut -c1-120` |
 | 16:27:45 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n '_trilha(' bin/hook_stop_fila1.py \| head -3; /bin/grep -n 'def _trilha' -A8 bin/hook_stop_fila1.py \| /bin/grep -o "'[^']*\.log'\\|logs/[a-z_./]*" \| head; ls -t logs/*.log \| head -5` |

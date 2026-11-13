@@ -1,7 +1,132 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 16:28** · publicado em **13/11/2026 16:28** (UTC-3)
+> Ultima resposta processada: **13/11/2026 16:33** · publicado em **13/11/2026 16:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 16:33 · sessao 6d1c9cc531a4 · E3-FORMA-SQL · leitura · origem=Code
+
+**O anexo não pode ser certificado como saída do comparador desta cópia.** O código imprime JSON agregado; não escreve `PAR_DIF`, `PAR_TOTAL` nem pares `[cópia, base]`. Ele identifica C17 como `antes` e tarefa como `depois`, mas não confirma a ordem do serializador apresentado. ([diff_e3_sombra.py:107](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:107), [diff_e3_sombra.py:126](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:126).)
+
+Também contei **344 registros, com 344 PKs distintos e dez assinaturas**, não 351: ficam sete diferenças declaradas sem linha correspondente no texto recebido. As contagens e os PKs abaixo são do anexo colado, sem arquivo local para referência: **[não verificado]**.
+
+Há uma incompatibilidade objetiva com a ordem declarada: a tarefa desta cópia **nunca produz `fio='chamado'`**; esse valor pertence ao C17 preservado. Não inverti as colunas para acomodar o resultado. ([tarefa_do_dia.py:552](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:552), [juizes.py:1628](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1628).)
+
+**1. Agrupamento literal do anexo**
+
+Convenções: `F` = `fora_da_folha._porta`; `V` = `vigia_fio.censo_alcance`; `C` = `cadastro_realidade.beco_em_lote`; `P` = `pautas_dos_discordantes.dias_sem_fio`. Os campos são as projeções definidas em [diff_e3_sombra.py:46](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:46).
+
+As setas seguem **primeira posição → segunda posição**, declaradas pelo enunciado como cópia → base **[não verificado]**. Para apresentar os conjuntos completos sem repeti-los:
+
+- **S(x,r)** = `F.fio x→nada`; `V.fio x→None`; `V.rota r→None`; `C.sem_porta False→True`; `P.sem_fio False→True`.
+- **A** = `F.fio admin→colab`; `V.fio admin→colab`; `V.exige_admin True→False`.
+- **f+** = `F.fila não vazia→()`.
+- **f⊃** = `F.fila superconjunto próprio→subconjunto não vazio`.
+
+Essas convenções apenas abreviam os registros fornecidos **[não verificado]**.
+
+| Grupo | Assinatura completa | Contagem | Dois exemplos: PK da célula |
+|---|---|---:|---|
+| G1 | `f⊃` | 35 | 141754; 138821 |
+| G2 | `S(chamado, porta_fila)` + `f+` | 68 | 120067; 119985 |
+| G3 | `S(colab, porta_fila)` + `f+` | 30 | 141714; 115432 |
+| G4 | `S(admin, porta_fila)` + `f+` + `V.exige_admin True→False` | 65 | 130160; 130162 |
+| G5 | `A` | 125 | 124787; 124794 |
+| G6 | `A` + `f⊃` | 4 | 127078; 132926 |
+| G7 | `f+` + `V.rota porta_fila→porta_pergunta` | 2 | 130217; 134521 |
+| G8 | `S(admin, porta_pergunta)` + `V.exige_admin True→False` | 7 | 131162; 116182 |
+| G9 | `F.fio chamado→colab`; `V.fio chamado→colab` | 7 | 110014; 110016 |
+| G10 | `A` + `f+` + `V.rota porta_fila→porta_pergunta` | 1 | 120408; não existe segundo exemplo |
+| **Total** | | **344** | **[não verificado: anexo colado]** |
+
+Os mecanismos legíveis dos dois caminhos são estes; **C17 abaixo é o código antigo preservado na cópia, não uma comprovação dos bytes de `main` anterior à E3 [não verificado]**.
+
+| Grupos | C17 preservado | Tarefa da cópia | O que se pode concluir |
+|---|---|---|---|
+| G1 | Inclui todos os chamados visíveis da célula na fila. ([juizes.py:1677](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1677)) | Inclui somente portas das ações exigíveis pertencentes à célula. ([tarefa_do_dia.py:548](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:548)) | Sob a mesma alimentação, a fila da tarefa é subconjunto da C17; esses corpos não justificam a ampliação declarada. |
+| G2, G9 | Verbos diferentes de `cobrar`/`validar` podem resultar em `chamado`. ([juizes.py:1633](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1633)) | O vocabulário calculado não contém `chamado`. ([tarefa_do_dia.py:553](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:553)) | A primeira posição não pode ser essa saída da tarefa. |
+| G3 | Abre por fila da célula ou âncora de pergunta viva, com texto válido e no app. ([juizes.py:1677](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1677)) | A decisão pode exigir resposta do colaborador; a publicação depende da porta dessa ação. ([tarefa_do_dia.py:129](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:129), [tarefa_do_dia.py:548](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:548)) | Falta a pergunta, decisão e alimentação usadas para identificar a causa concreta. |
+| G4, G8 | Usa os critérios de alcance acima e traduz verbos em fio. ([juizes.py:1681](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1681), [juizes.py:1633](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1633)) | A sequência pode exigir validação administrativa; há exposição administrativa específica nos marcos dispensados. ([tarefa_do_dia.py:138](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:138), [tarefa_do_dia.py:243](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:243)) | A assinatura não informa qual decisão/instância produziu a ação. |
+| G5 | `cobrar` vence `validar` entre os verbos das portas. ([juizes.py:1628](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1628)) | O dono é escolhido entre as ações exigíveis: colaborador antes de admin. ([tarefa_do_dia.py:552](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:552)) | Há mudança de fonte semântica; faltam ações e verbos individuais para explicar cada registro. |
+| G6 | Combina os mecanismos de G1 e G5. ([juizes.py:1686](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1686)) | Combina seleção de portas e donos das ações. ([tarefa_do_dia.py:548](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:548)) | Mesmas limitações de G1 e G5. |
+| G7 | `porta_fila` se existe qualquer fila da célula. ([juizes.py:1687](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1687)) | `porta_fila` somente se existe porta exigível da célula; outra âncora gera `porta_pergunta`. ([tarefa_do_dia.py:550](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:550)) | Sob a mesma alimentação, não explica a direção declarada. |
+| G10 | Combina os mecanismos de G5 e G7. ([juizes.py:1687](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1687)) | Combina seleção de rota e donos das ações. ([tarefa_do_dia.py:552](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:552)) | Falta a execução identificada para atribuir causa. |
+
+**2. Dono L-099 e julgamento**
+
+Para **cada grupo G1–G10**, tanto o dono quanto a classificação “universo antes inalcançável/cópia certa” ou “regressão/cópia errada” são **[não decidível]**. A assinatura não contém os insumos exigidos pelo juiz; seu resíduo `ESTRUTURA` só pode ser aplicado depois de avaliar as condições anteriores. ([e6_oraculo.py:98](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/ponto/management/commands/e6_oraculo.py:98).)
+
+| Precedência efetiva | Dono |
+|---|---|
+| Folga não definida ou ausência de vínculo aplicável | CADASTRO |
+| Batida fora de turno ou quantidade ímpar de batidas | BATIDA |
+| Fase deslocada | CADASTRO |
+| Presença em cadastro × realidade | CADASTRO |
+| Resíduo | ESTRUTURA |
+
+Essa ordem está em [e6_oraculo.py:98](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/ponto/management/commands/e6_oraculo.py:98). Faltam esses fatos **por colab-dia**, além do emissor dos pares e da base histórica identificada **[não verificado]**.
+
+As regras que permitiriam julgar cenários completos estão escritas antes dos testes: [nao verificado]
+
+- Só fila sem pergunta: nenhuma porta humana; sistema deve perguntar.
+- Fila residual A com pergunta sob B: publicar a porta de B, sem A residual.
+- Ler o verbo de B no universo do painel.
+- Isento com fila residual: nenhuma ação ou porta.
+
+Referência: [test_e3_portas_tarefa.py:1](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/tests/test_e3_portas_tarefa.py:1). As etiquetas do anexo não substituem todos os fatos desses cenários. L-110 determina que DIFF mede impacto, não correção; L-114 distingue impacto de certificado. ([LEIS.md:136](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/docs/LEIS.md:136), [LEIS.md:152](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/docs/LEIS.md:152).)
+
+**3. Discordância entre leitores da mesma cópia**
+
+**Nenhum grupo apresentado demonstra essa discordância [não verificado: anexo colado].** Neste instrumento, todos os leitores são projeções da **mesma variável `porta`**: os dois fios vêm do mesmo campo; `sem_porta` e `sem_fio` são o mesmo teste `porta is None`. `nada` na folha e `None` no vigia representam a mesma ausência. ([diff_e3_sombra.py:46](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:46).)
+
+O comparador declara que **não executa os censos nem suas outras decisões**. Portanto não prova concordância das execuções reais; para isso faltam saídas dos leitores com a mesma entrada, estado e instante. **[não decidível]** ([diff_e3_sombra.py:47](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:47).) Uma discordância efetiva nessas condições violaria a propriedade de igualdade entre leitores, válida para qualquer dado pela L-114. ([LEIS.md:152](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/docs/LEIS.md:152).)
+
+**4. Classes e reconciliação**
+
+Quem atribui as classes é **`casos_do_par`**, usando fila da célula, perguntas vivas C6, suas âncoras e a razão da tarefa. Não são classificações produzidas pelos quatro leitores. ([diff_e3_sombra.py:63](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:63).)
+
+| Classe | Condição no código | Contagem no texto |
+|---|---|---:|
+| `todos` | Sempre | 344 |
+| `so_fila_sem_pergunta` | Fila da célula, sem pergunta viva C6 | 54 |
+| `fila_A_pergunta_B` | Fila da célula e âncora viva na fila global fora desse conjunto | 8 |
+| `verbos_A_B` | Exatamente o mesmo predicado da anterior | 8 |
+| `isento_fila_residual` | Razão `isento_ponto` e fila residual | 0 |
+
+Predicados: [diff_e3_sombra.py:64](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:64). Contagens: **[não verificado: anexo colado]**.
+
+A reconciliação é: `so_fila` = G2(53) + G3(1); cada classe A/B = G3(4) + G4(1) + G7(2) + G10(1). As ocorrências de etiquetas somam **414**, porque há sobreposição; os grupos somam **344 colab-dias**. Não reconciliam os **351** declarados. **[não verificado: anexo colado]**
+
+**5. Quem escreve e quem lê**
+
+Aqui “escrever” significa montar a saída em memória. `sem_porta`, `sem_fio` e `exige_admin` são campos fabricados pela projeção do comparador. ([diff_e3_sombra.py:46](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:46).)
+
+| Campo | Escritor lógico | Leitor real |
+|---|---|---|
+| `fio` | Cópia: donos das ações, [tarefa_do_dia.py:552](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:552). C17: verbos, [juizes.py:1633](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1633). | Folha: [fora_da_folha.py:86](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/folha/fora_da_folha.py:86). Vigia: [vigia_fio.py:648](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/vigia_fio.py:648). |
+| `fila` | Cópia: [tarefa_do_dia.py:550](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:550). C17: [juizes.py:1686](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1686). | Folha, números dos chamados publicados: [fora_da_folha.py:235](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/folha/fora_da_folha.py:235). |
+| `rota` | Cópia: [tarefa_do_dia.py:555](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:555). C17: [juizes.py:1687](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1687). | Vigia, contador por rota: [vigia_fio.py:652](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/vigia_fio.py:652). |
+| `sem_porta` | `porta is None`: [diff_e3_sombra.py:56](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:56). | Beco aplica o teste sobre a porta, além de suas outras condições: [cadastro_realidade.py:497](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/escala/services/cadastro_realidade.py:497). |
+| `sem_fio` | `porta is None`: [diff_e3_sombra.py:59](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:59). | Pauta compara o fio da folha com `FIO_SEM_PORTA`: [pautas_dos_discordantes.py:79](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/ponto/services/pautas_dos_discordantes.py:79). |
+| `exige_admin` | `porta.fio == 'admin'`: [diff_e3_sombra.py:55](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:55). | Vigia usa a mesma comparação: [vigia_fio.py:653](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/vigia_fio.py:653). |
+
+As distinções semânticas relevantes são:
+
+- **Turno × civil:** a tarefa usa `data_evento` como dia do turno, explicitamente sem reinterpretá-lo como dia civil. `data_civil` é separado, derivado do instante local do marco. C17 recolhe perguntas por `celula_id`. O anexo não permite conferir a correspondência entre esses vínculos. ([tarefa_do_dia.py:219](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:219), [tarefa_do_dia.py:104](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:104), [juizes.py:1599](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1599).)
+- **Fila global × janela:** `fila_ids` e a partição dos verbos vêm do universo global; somente `fila_cel` é recortada às células solicitadas. A tupla pública `fila` significa chamados visíveis da própria célula, não todas as âncoras globais. ([juizes.py:1557](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/juizes.py:1557), [fora_da_folha.py:235](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/folha/fora_da_folha.py:235).)
+- **Sem porta ≠ sem tarefa:** pode existir ação do sistema ou tarefa indeterminada sem porta publicada. Logo `sem_fio=True` não prova inexistência de pendência. ([tarefa_do_dia.py:559](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py:559), [fora_da_folha.py:52](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/folha/fora_da_folha.py:52).)
+- **Instante:** o próprio comparador declara que o teste C17 “no app” lê o relógio da máquina, enquanto a tarefa recebe `agora`. Portanto nem essa equivalência temporal está assegurada pelo instrumento. ([diff_e3_sombra.py:107](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py:107).)
+
+## 13/11 16:30 · sessao 5c944161d1b8 · - · - · origem=Ronald (tmux)
+
+344 linhas: 35 + 68 + 30 + 65 + 125 + 4 + 2 + 7 + 7 + 1. Minha transcrição inicial omitiu os PKs 107710 e 130818; corrigidos. Diferença para `PAR_TOTAL diferentes 351`: 7 linhas. [não verificado: contagem do texto do prompt, sem arquivo local]
+
+## 13/11 16:29 · sessao e3b2fb8631ff · - · - · origem=Ronald (tmux)
+
+Contagem independente do texto herdado: **342 linhas**, PKs únicos. Confirmados: fila cresce35; chamado/nada68; colab/nada30; admin/nada com fila65; admin/colab sem fila123; admin/colab fila cresce4; rota+fila2; admin/nada porta_pergunta7; chamado/colab7; admin/colab+rota+fila1. [não verificado: dado transcrito do prompt, sem arquivo local]
+
+Classes:54 `so_fila_sem_pergunta`,8 `fila_A_pergunta_B`,8 `verbos_A_B`,0 `isento_fila_residual`. [não verificado: dado do prompt]
+
+Os dois PKs que explicariam a diferença para sua contagem344 —115231 e107710— **não constam na versão do prompt herdada que recebi**; não os acrescentei por sequência. [não verificado]
 
 ## 13/11 16:28 · sessao 2177abea7475 · - · - · origem=Ronald (tmux)
 
@@ -781,278 +906,4 @@ Para o dicionário do espelho não limitar o inventário ao literal do `return`:
 
 Nenhum desencontro novo inequívoco confirmado nesse complemento; preservo D1–D7 do relatório anterior. Ausência global de outros desencontros **[não verificado]**.
 
-## 13/11 15:44 · sessao 3432109c0e42 · - · - · origem=Ronald (tmux)
-
-Censo do recorte enviado em mensagens com todos os sítios e chaves. Nenhum arquivo criado, editado ou apagado; nenhum teste executado. [nao verificado]
-
-Desencontros confirmados:
-
-| Estrutura | Emissor | Consumidor | Desencontro | Selo | Dono / classe |
-|---|---|---|---|---|---|
-| WebPush | `app/chamados/push_utils.py:28` | `app/static/sw.js:89` | Emite `requireInteraction`; lê `urgente \|\| false`. Emite `url`; clique abre `/` sem lê-la (`app/static/sw.js:102`). | Não localizado [nao verificado]; `app/chamados/tests/test_push_fcm.py:106` verifica somente envio chamado. | ESTRUTURA provável; sim. |
-| Ticket GLPI | `app/chamados/glpi_client.py:138` | `app/templates/chamados/partials/tabela_chamados.html:19` | Template lê `urgencia`, ausente no formatador; termina em “Normal”. `assunto` e `colaborador_nome` também ausentes, com alternativas explícitas (`:21`, `:24`, `:30`). | Não localizado [nao verificado]. | ESTRUTURA provável; sim. |
-| Followup GLPI | `app/chamados/glpi_client.py:209` | `app/templates/chamados/detalhe.html:80` | Grava `id,data,conteudo`; template lê `autor_tipo,autor_user,criado_em,conteudo`. Transporte confirmado em `app/chamados/views.py:246` e `:262`. | Não localizado [nao verificado]. | ESTRUTURA provável; sim. |
-
-Portas auditadas sem incompatibilidade demonstrada: entradas `defaults/**lookup/**campos` dos chamados (`app/chamados/models.py:834`, `:1055`); entradas das perguntas (`:2777`, `:2795`); decisões (`:3944`); descarimbo em lote (`:3253`); texto (`app/chamados/services/texto.py:21`); leitura de notas (`app/chamados/services/nota.py:126`); anotação de batidas (`app/ponto/registro_batida.py:235`).
-
-Carimbo do fio possui dois módulos leitores comprovados: `bin/fio_estado.py:121` e `app/core/management/commands/pipeline_placar.py:92`, alimentados por `app/chamados/management/commands/vigiar_fio_morto.py:228`. Selos encontrados: `app/chamados/tests/test_o261_vigia_fio.py:787`, `app/core/tests/test_fio_mudo_placar.py:147`, `:197` e `:227`.
-
-Logs: inventário enviado de 47 sítios iniciais mais seis sítios descobertos por resolução de aliases, com consumidores integrais `core.observ.evento` (`app/core/observ.py:94`), `evento_kw` (`:142`) e `registrar_log` (`app/core/auditoria.py:8`). Normalizar pela unidade final solicitada pelo coordenador: estrutura × módulo emissor × módulo consumidor; não somar sítios como costuras.
-
-A persistência do outbox fica fora de `chamados`: `app/ponto/portas/celula.py:954`. As origens em chamados e o payload intermediário foram enumerados; o primeiro grava `{celula_id,colaborador_id,data}`, enquanto `app/chamados/models.py:3229` produz as tuplas intermediárias. Considerar essa fronteira explicitamente na consolidação.
-
-Completude global, execução dos selos e efeitos em produção: [nao verificado].
-
-## 13/11 15:44 · sessao 219ef396477d · - · - · origem=Ronald (tmux)
-
-Recorte concluído por busca estática de chamadas, retornos dict, `render`, chaves `.get`/subscritas e testes. Nenhum arquivo alterado. Testes não executados. A busca não demonstra exaustividade de chamadas dinâmicas, consumidores externos ao repositório ou dados de produção `[nao verificado]`. [nao verificado]
-
-Nos quadros abaixo, **“sem selo” significa teste produtor+consumidor não localizado `[nao verificado]`**, e não prova de inexistência. **Classe** está indicada como “sim” apenas para desencontro de chave demonstrado; diferenças opcionais aparecem nomeadas sem afirmar defeito operacional. [nao verificado]
-
-### Schemas compartilhados
-
-**W — payload wizard.** Emissor `app/escala/views_wizard.py:20-59`: `template_nome,apelido,hora_inicio,hora_fim,hora_inicio_intervalo,hora_fim_intervalo,hora_inicio_intervalo2,hora_fim_intervalo2,intervalo_duracao_min,noturno,permite_hora_extra,he_extra_antes_min,he_extra_depois_min,folga_calendario_padrao_id,folgas,dias_trabalho_semana`; apenas criação acrescenta `tipo_ciclo,tipo_base,tipo_base_ref`; apenas POST com `horarios_por_dia` preenchido acrescenta essa chave (`:49-59`). Outro emissor da mesma porta, fora do recorte, grava apenas `template_nome,folgas`: `app/chamados/services/limbo_folgas.py:92`.
-
-**P — envelope e proposta viva.** Emissor `app/escala/services/propositor.py:465-467,585-589`: envelope `fonte,n,propostas,universo,janela_dias,ritmo_discordante,ritmo_discordante_vinculos,pausa_nao_cadastrada,pausa_nao_cadastrada_vinculos`. Escritores internos das propostas: `:184-195,299-305,319-323,339-342,363-375`, chaves comuns `tipo,template_id,template,ancora,casa_hoje,casaria,previsto_novo`; ramos aplicáveis acrescentam `sobra`; alguns ramos acrescentam `motivo`. Enriquecimento `:539-561`: `colaborador_id,colaborador,posto,vinculo_id,template_atual,ancora_atual,razao_fora_dentro,dias_discordantes,entrou_por,dias_batidos,dias_previstos,aplicar_desde`; `motivo` pode ser reescrito em `:568-570`; `chamados_que_morreriam` nasce em `:572,575-576`, contendo `{chamado_id,dia}` escrito em `:634-635`. `previsto_novo` é removido em `:577`, salvo ramo `so_existencia=True`, que retorna antes da remoção (`:571-574`).
-
-**D — detector v0.** Emissor `app/escala/detector_proposta.py:123-132,153-156`: `padrao,proposta,confianca,porque`; proposta preenchida contém `tipo_escala_id,codigo,descricao,ciclo,horario`. `padrao` vem de `:63-65,82-92`: `dias,marcos_moda,entrada,saida,duracao_h,dispersao_entrada_min,dows,padrao_dias`; ramo com dados também grava `marcos_freq`.
-
-### Portas e propostas: 17 pares identificados
-
-| ID / estrutura | Emissor / gravadas | Consumidor / lidas | DESENCONTRO | Selo que prende | Dono provável / classe |
-|---|---|---|---|---|---|
-| P01 W | `views_wizard.py:20-59`, W | `services/cadastro_tipo.py:148-267`: W por `.get`; `template_nome→''`, ciclo/base→`12x36`, campos texto→`''`, bool via `bool`; duração só altera se dígitos; HPD inválido→`{}`; lê presença de `descricao` em `:185` | `descricao` nunca emitida pelo wizard; HPD pode faltar e é lido por `.get` em `:217`; demais omissões condicionais têm guardas. Trata-se de protocolo opcional, sem dano demonstrado | **sim**, `tests/test_wizard_views.py:28-49,51-67` percorre POST→payload→service→modelo; ponte duração em `tests/test_wizard_intervalo.py:76-89` | ESTRUTURA provável; classe: sim, ausência opcional pelo critério literal |
-| P02 ajustes `**aj` | `services/escala_auto_executor.py:65-84`: `_delta_blocos`, seis horários no A7; pausa/duração no A4; `folga_dia_semana` no FOLGA | `services/cadastro_tipo.py:443-445`: `pop('_delta_blocos',0)` e todos demais itens via `setattr` | A4/FOLGA não emitem `_delta_blocos`; default explícito 0. Sem chave de ajuste descartada | **sim**, `tests/test_escala_auto_executor.py:66-84` percorre executor→derivação e confirma pausa do novo template | ESTRUTURA provável; classe: sim, opcional |
-| P03 P | `services/propositor.py:465-589`, P | `management/commands/propostas_de_escala.py:39-98`: `propostas,colaborador_id,vinculo_id→None,universo,n,colaborador,tipo,template_atual,ancora_atual,casa_hoje,dias_batidos,motivo` no ramo grade; `template,ancora,casaria,sobra` no outro; `aplicar_desde,chamados_que_morreriam[].chamado_id` | Guardas dos ramos respeitam a ausência de `sobra` na grade. Chaves órfãs globais abaixo | Sem selo real localizado; `tests/test_o261_v_fase_na_lista.py:527,539` usa mocks do produtor | ESTRUTURA provável; classe não demonstrada |
-| P04 P | mesmos escritores P | `management/commands/ritmo_discordante.py:20-22`: `ritmo_discordante_vinculos→[]`, itens `colaborador_id,ciclo,ritmo,proposta`; `ritmo_discordante→0` | Chaves emitidas nos dois retornos do envelope | Sem selo localizado | ESTRUTURA provável; classe não demonstrada |
-| P05 P | mesmos escritores P | `app/chamados/services/painel.py:522-524`: `propostas[].colaborador_id`; produtor chamado com `so_existencia=True` | Esse ramo preserva `previsto_novo` no dict (`propositor.py:571-577`), consumidor não lê; nenhum dano demonstrado | Sem selo produtor real localizado | ESTRUTURA provável; classe não demonstrada |
-| P06 P | mesmos escritores P | `app/colaboradores/services/ficha.py:176-184`: `propostas,tipo`; `.get(template_atual,template,ancora,casa_hoje,casaria,dias_batidos,aplicar_desde)→None`; `chamados_que_morreriam→[]` | Chaves lidas são emitidas; consumidor substitui janela por literal `28` (`:181`) embora envelope tenha `janela_dias` | Sem selo produtor real localizado | ESTRUTURA provável; classe não demonstrada: nome/significado de janela não provado divergente |
-| P07 P | mesmos escritores P | `app/chamados/services/proposta_no_fio.py:41-42,68-92,107-114,141-146`: `n→None,propostas`; `dias_batidos,casa_hoje,casaria,aplicar_desde`; `chamados_que_morreriam→[]`, `chamado_id`; `.get(vinculo_id,tipo,ancora,ancora_atual,template,template_atual,motivo,entrou_por)→None`; assinatura lê `tipo,template_id,ancora,aplicar_desde` em `propositor.py:663-665` | `motivo` falta em ramos `:339-342,363-367`; consumidor aceita None | Sem selo produtor real localizado; testes fio substituem propostas, `app/chamados/tests/test_proposta_no_fio.py:131-146` | ESTRUTURA provável; classe sim, opcional |
-| P08 P | mesmos escritores P | `app/core/views_ia.py:575-582,598-636,664`: `propostas→[]`, `colaborador_id→None`; `.get(tipo,entrou_por,dias_discordantes,vinculo_id,ancora,ancora_atual,template_atual,template,aplicar_desde,casa_hoje,casaria)`, `dias_discordantes→0`, `chamados_que_morreriam→[]`; assinatura por autoridade `:578` | Chaves lidas emitidas; ramos respeitados | Sem selo produtor real localizado; `app/core/tests/test_ia_escala_com_sim.py:59,104-145` fabrica envelope | ESTRUTURA provável; classe não demonstrada |
-| P09 P | mesmos escritores P | `app/api/views_mensageria.py:2034-2049`: `propostas→[]`, `.get(colaborador,posto,ancora,template_atual,template,casa_hoje,casaria,aplicar_desde,tipo)`, `chamados_que_morreriam→[]`, `n→0` | Chaves lidas emitidas | Sem selo produtor real localizado | ESTRUTURA provável; classe não demonstrada |
-| P10 linhas da pauta — transporte | `services/propositor.py:644-650`: `chave,n,frase,url` | `services/fase_12x36.py:267-280`: concatena lista e passa `linhas` a `escrever_semanal`; não lê chaves internas | Nenhum desencontro demonstrado; é transporte, excluir da contagem se “leitor” exigir acesso a chave | Sem selo específico localizado | ESTRUTURA provável; classe não |
-| P11 linhas da pauta | mesmo emissor `propositor.py:644-650` | `app/pautas/semanal.py:146,163-168`: `alavanca→n→0`, `frase→''`, `chave,n` no fallback, `url` obrigatório | Produtor não grava `alavanca`; usa-se `n`, apesar de frase mencionar chamadas que morreriam (`propositor.py:643-648`) | Sem selo do par localizado | ESTRUTURA provável; classe sim, opcional |
-| P12 opções da porta retroativa | `services/propositor.py:765-771`: `colab,vinculo,template,desde,ate,ancora,novo_trecho,regenerar_desde,apesar_da_lavra,apply,schema` | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:63-66,81-86,109-110,158,172,192-194,225,233`: todos salvo `schema`; opcionais `.get` sem default ou `apesar_da_lavra→''` | `schema` gravado mas `_rodar` não lê; só `handle` lê em `:48-51`, deliberadamente evitado pelo emissor (`propositor.py:760-764`) | **sim parcial**, `tests/test_porta_da_proposta.py:148-166` chama aplicar real e confirma trilha/decisão; não prende especificamente `schema` | ESTRUTURA provável; classe sim, chave transportada sem leitura nessa entrada |
-| P13 resultado aplicar | `services/propositor.py:788`: `decisao_id,saida` | `management/commands/propostas_de_escala.py:68-72`: `saida,decisao_id` | Sem desencontro de chave | Sem selo real CLI→produtor localizado | ESTRUTURA provável; classe não |
-| **P14 resultado aplicar** | **`services/propositor.py:788`: apenas `decisao_id,saida`** | **`app/chamados/services/proposta_no_fio.py:151-153`: `r.get('ok',True)` e `(r or {}).get('msg')`** | **`ok` e `msg` nunca emitidos por aplicar. `ok` ausente vira sucesso True.** Mapeamento não adapta resultado: `app/core/intake.py:49-52,481-487` resolve diretamente `escala.services.propositor.aplicar` | **Sem selo dessas chaves localizado**; mocks de fio em `app/chamados/tests/test_proposta_no_fio.py:131-146` não atravessam produtor real | **ESTRUTURA provável; classe sim** |
-| P15 D | `detector_proposta.py:63-92,123-156`, D | `proposta_pdf.py:75-80,121-138`: `proposta,confianca,padrao.dias,marcos_moda,entrada,saida,duracao_h,dispersao_entrada_min,padrao_dias,dows`; `proposta.codigo,horario,ciclo`; `porque` | Todas chaves lidas são emitidas em seus ramos; `marcos_freq` não é lido pelo PDF, mas é lido pelo próprio detector `:133-149` | **sim**, `tests/test_detector_proposta.py:141-165,168-181` monta resultados pelo produtor real e gera PDF | ESTRUTURA provável; classe não |
-| P16 D | mesmos escritores D | `management/commands/propor_escala_limbo.py:37-57`: `confianca,proposta,padrao` com as mesmas oito chaves de padrão do PDF; proposta `codigo,horario,ciclo`; `porque` | Todas chaves lidas emitidas nos ramos respectivos | Sem selo real CLI localizado | ESTRUTURA provável; classe não |
-| P17 D | mesmos escritores D | `services/escala_auto.py:120-125`: `proposta→None,confianca→None,padrao.dias,proposta.tipo_escala_id,codigo,descricao,horario,porque` | Chaves emitidas; ramo `proposta` guarda acesso à proposta e ao mínimo de dados | Sem selo do par real localizado | ESTRUTURA provável; classe não |
-
-### Render e resposta JSON: 13 pares identificados
-
-| ID / estrutura | Emissor / gravadas | Consumidor / lidas | DESENCONTRO | Selo que prende | Dono provável / classe |
-|---|---|---|---|---|---|
-| P18 contexto minha escala | `views.py:15,23` grava só `sem_vinculo`; ramo normal `:55-70` grava `escala,dias,hoje,ancora_ausente,titulo_pagina`; dias `{data,trabalho,hora_inicio,hora_fim,status_rotulo}` | `app/templates/escala/minha_escala.html:10,24-49,62-84`: `sem_vinculo,escala,ancora_ausente,dias,hoje` e todas chaves dos dias. `base_tpl|default:"base.html"` em `:1` pode vir de contexto externo | Ramo normal não grava `sem_vinculo`, consumido como condição falsa. `titulo_pagina` sem leitura direta localizada. Bases/includes globais não fechados `[nao verificado]` | **sim**, `tests/test_e4_6_minha_escala_e_previsao.py:50-73` atravessa view/template e confirma rótulo HTML | ESTRUTURA provável; classe sim, ausência opcional |
-| P19 contexto tipos | `views.py:114-115`: `tipos,uso,quadros_barra`; uso mapa `{tipo_id:n}` em `:85-90` | `app/templates/escala/tipos_lista.html:21,42,89-91`: as três chaves; `uso|get_item` por pk | Sem desencontro nominal demonstrado | **sim parcial**, `tests/test_o122_etapa1_barra_em_tipos.py:56-82` atravessa rota/render e confirma quadro | ESTRUTURA provável; classe não |
-| P20 quadros barra | `views.py:105-112`: quadros `{titulo,itens}`; item `{atalho,rotulo,icone,href,onclick,attrs,title}` | `app/templates/core/_barra_gestao.html:65,67` via `tipos_lista.html:21`: lê `titulo,title,itens`; item `atalho,botao,attrs,onclick,ativo,title,icone,rotulo,href|default:'javascript:void(0)'`; ramo não atalho também `classe,cor,negrito_escuro,numero` | `q.title,it.botao,it.ativo` faltam neste emissor; opcionais. Ramo não atalho é inalcançável para o item emitido | **sim**, `tests/test_o122_etapa1_barra_em_tipos.py:56-82` prende título, ícone, href e attrs htmx | ESTRUTURA provável; classe sim, opcionais |
-| P21 contexto opções busca | `views.py:229`: `escalas` | `app/templates/colaboradores/partials/_opcoes_escala.html:1-7`: `escalas` | Sem desencontro de chave | Teste específico real busca→partial não lido; `[nao verificado]` | ESTRUTURA provável; classe não |
-| P22 contexto lista calendários | `views.py:294-310`: `itens[].{cal,tamanhos,semana_dia_rotulo,colabs,n_colabs}`, `tamanhos[].{tamanho,dias,canonico}` | `app/templates/escala/folga_calendarios_lista.html:12-38`: todos campos item; tamanhos lê só `canonico` (`:21-22`) | `tamanhos.tamanho,dias` gravados sem leitura neste consumidor; sem outro leitor desse dict localizado `[nao verificado]` | `tests/test_editor_folga_modo.py:66-71` verifica contexto, não HTML; **sem selo das chaves órfãs** | ESTRUTURA provável; classe sim, órfãs no par |
-| P23 contexto editor calendário | `views.py:363-371`: `cal,tamanhos,tipos,modo,celulas`; tamanho `{tamanho,rotulo,dias_range,marcados}` | `app/templates/escala/folga_calendario_editar.html:6-21,67-68`: `cal,modo,celulas,tamanhos.{tamanho,rotulo,marcados}` | `tipos` e `tamanhos.dias_range` sem leitura no template; sem outro leitor desse dict localizado `[nao verificado]` | `tests/test_editor_folga_modo.py:58-64` verifica contexto, não uso HTML; **sem selo das órfãs** | ESTRUTURA provável; classe sim, órfãs |
-| P24 wrapper cadastro realidade | `views.py:492`: `{dados}`; conteúdo vem de `services/cadastro_realidade.lista`, coberto pelo agente contextos | `app/templates/escala/cadastro_x_realidade.html:8-29`: `dados` e chaves internas conforme serviço | Wrapper em si confere; não duplicar contrato interno de `lista` | Selo não conferido aqui `[nao verificado]` | ESTRUTURA provável; classe não demonstrada |
-| P25 contexto plano | `views_plano_folgas.py:38-47`: `empresas,mes,ano,meses,anos,empresa_id,posto_id`, condicional `postos,linhas,cab`; `:72-93` linhas `{ec,cels,sem_previsao,escala_nome}`, cels `{dia,tipo,proj}`, cab `{dia,dow,domingo}` | `app/templates/escala/plano_folgas.html:14-90,173,192-193`: todas chaves descritas; `cab|length|default:0` em `:193` | `postos,linhas,cab` omitidos sem empresa; consumidor consulta dentro de guardas/iterações vazias/default | Testes locais de `_grid_ctx` em `tests/test_plano_folgas_filtro.py:53-64`; **selo HTML dessas chaves não localizado** | ESTRUTURA provável; classe sim, omissões opcionais |
-| P26 contexto wizard | `views_wizard.py:75-91`: `tipo,criar,ciclos,bases,hpd_json,folgas_atuais,pai,folga_calendarios,perso_valor,drawer,base_tpl` | `app/templates/escala/wizard_tipo_escala.html:1-37,146,225-234`: todos salvo `folga_calendarios`, lido em include P27 | Sem desencontro no conjunto template+include | **sim parcial**, `tests/test_wizard_drawer.py:25-34` atravessa `drawer/base_tpl` e verifica HTML; calendários em `tests/test_wizard_folga_padrao.py:83-89` verifica contexto | ESTRUTURA provável; classe não |
-| P27 contexto wizard herdado pelo select | mesmo emissor P26; `selecionado=tipo.folga_calendario_padrao_id` acrescentado pelo include em `wizard_tipo_escala.html:146` | `app/templates/escala/_wizard_cal_select.html:4-5`: `folga_calendarios,selecionado` | `selecionado` nasce no template intermediário, não na view; cadeia completa confere | Sem selo que prenda seleção real localizado | ESTRUTURA provável; classe não |
-| P28 contexto select calendário criado | `views_wizard.py:175-178,196-199`: `folga_calendarios,selecionado` | `app/templates/escala/_wizard_cal_select.html:4-5`: ambas | Confere | **sim parcial**, `tests/test_wizard_folga_padrao.py:41-54` cria pela rota e confirma nome do calendário no fragmento; seleção por pk não assertada | ESTRUTURA provável; classe não |
-| P29 contexto preview | `views_wizard.py:263-265`: `tipo,folgas_rotulos,eh_perso,perso_dias` | `app/templates/escala/_wizard_preview.html:4-12`: as quatro | Confere | **sim**, `tests/test_wizard_views.py:140-152` atravessa POST→preview→HTML e confirma apelido/HE | ESTRUTURA provável; classe não |
-| P30 JSON aplicação lote plano | `views_plano_folgas.py:158,171-190`: erro inicial `{erro}` com 400; sucesso `{ok,gravadas,erros,celulas_relavradas,barrados}`; erros itens `{ec,dia,erro}` | JS `app/templates/escala/plano_folgas.html:174-185`: lê `ok`, `erro||'erro'` se falsy; `erros||[]`, erro item `ec,dia,erro` | Resposta de erro inicial não tem `ok`, JS usa ausência como false. `gravadas,celulas_relavradas,barrados` não são lidas por esse JS; leitura por outros consumidores não localizada `[nao verificado]` | Teste `tests/test_bug136_plano_em_lote_relavra.py:75-81` verifica JSON de erro na API, sem executar o JS; **selo da costura com JS não localizado** | ESTRUTURA provável; classe sim, omissão opcional e campos sem leitor no par |
-
-### Pontos a incorporar na consolidação
-
-- **30 linhas identificadas**, das quais **P10 é mero transporte de lista**; se o critério exigir acesso a chave interna, são **29 costuras** deste recorte. P24 é wrapper e deve ser distinguido da costura de conteúdo `cadastro_realidade.lista→template` do outro agente.
-- **Desencontro mais forte: P14**, comprovado com produtor, consumidor e roteamento dinâmico, sem hipótese sobre banco.
-- Proposta tem possíveis chaves órfãs `razao_fora_dentro` (`propositor.py:547`), `dias_previstos` (`:559`) e `chamados_que_morreriam[].dia` (`:634-635`). Nenhum leitor nominal do objeto proposta foi localizado; orfandade global permanece `[nao verificado]`.
-- **Assimetria de schema em P:** `previsto_novo` é retirado no retorno normal (`propositor.py:577`), mas fica no retorno de existência (`:571-574`). O consumidor atual do ramo de existência lê apenas `colaborador_id` (`app/chamados/services/painel.py:522-524`); dano não demonstrado.
-- Há respostas JSON de `views.py:127-133,245-250,266-279,422` e `views_plano_folgas.py:138-139` cujo consumidor não foi localizado neste recorte `[nao verificado]`. Não inventei costura sem leitor.
-- `services/agenda.py:11-45` recebe parâmetros escalares/modelos/lista de IDs e grava campos ORM; não identifiquei dict customizado emitido por ela e lido por outro módulo. Não contei kwargs internos de `objects.create/update` como contrato customizado.
-- Todos os donos acima são **prováveis pelo protocolo de código**, não aplicação do juiz L-099 por dia de produção `[nao verificado]`.
-
-## 13/11 15:43 · sessao f90fd80293fd · - · - · origem=Ronald (tmux)
-
-Inventário estático de `ChamadoColaborador.contexto_json`, por leitura de referências nominais, AST em memória e seguimento dos aliases e portas. Campo persistido: `app/chamados/models.py:47`. As portas aceitam chaves arbitrárias; portanto reflexão, chamadas dinâmicas, dados históricos e execução real permanecem [nao verificado] (`app/chamados/services/contexto.py:62`, `:82`, `:131`). Não executei testes nem escrevi arquivos.
-
-**Escritores internos encontrados, com shapes**
-
-`app/chamados/services/contexto.py:76`, `:102`, `:125`, `:161` são os saves efetivos de anotar/renovar/retirar/fundir; os emissores semânticos encontrados são:
-
-| Emissor | Chaves gravadas |
-|---|---|
-| `services/abertura.py:58` | `sistema,nome,empresa,posto,pendente_glpi=True` |
-| `services/abertura.py:116` | `pendente_glpi=False` |
-| `services/abertura.py:183` | `sistema,nome,empresa,posto,aberto_por_user_id,aberto_por,pendente_glpi=False`, mais chave dinâmica de data em `:191`; resolve por `catalogo/modulos.py:315` |
-| `services/adesao.py:79` | `adesao=True,data_inicio,periodo=[ini,fim]` |
-| `services/adesao.py:113` | `agrupado_em` |
-| `reconciliador.py:691`, `:708`, `:709`, persistido em `:921` | `data_turno,origem='reconciliador_c2'`, condicionalmente `marcos_faltantes,_marco_por='lampada_da_celula'`; marcos têm `{hora,tipo,motivo:'lampada_apagada'}` por `app/ponto/services/lastro.py:134` |
-| `services/disputa_emissao.py:580`, reuso em `:586` | `contexto_nascimento` arbitrário; wrapper `:630` passa `{origem}`, wrapper `:666` repassa `contexto or {}` |
-| `services/disputa_emissao.py:1116`, reuso `:1122` | `chamados_orfaos_ids` |
-| `services/disputa_emissao.py:1351` | `origem='ancora_limbo',chamado_limbo_id` |
-| `services/disputa_emissao.py:1357` | `chamados_limbo_ids`, em reuso |
-| `services/limbo_folgas.py:68` | `sugestao={classe,dias,ndias,semanas}` |
-| `services/limbo_folgas.py:276` | `agrupado_em,defeito_cadastro='folga_nao_definida'`; guarda só por `agrupado_em` |
-| `services/declaracao_texto.py:208` | `escape_colab,escape_colab_em`; guarda só por `escape_colab` |
-| `management/commands/nomear_marco_por_lampada.py:109` | `marcos_faltantes,_marco_por='reconstruido_pela_lampada'` |
-| `management/commands/carimbar_por_batida_coincidente.py:98` | `batida_id,data_turno,_dia_por` |
-| `management/commands/smoke_chamados.py:97`, via porta em `:102` | `{motivo:{data}}` quando pergunta do catálogo pede data; caso contrário `{}`; também nasce no contexto do chamado pela porta |
-
-A ponte adicional de fusão está em `services/nota.py:110` → `:123` → `services/contexto.py:131`: `contexto_novo` é arbitrário, listas unem, escalares existentes ficam (`services/contexto.py:146`).
-
-**Leitores nominais e shapes/defaults**
-
-Caminhos abaixo têm prefixo `app/chamados/`, salvo os explicitamente iniciados por `app/`.
-
-| Leitor | Chaves lidas |
-|---|---|
-| `catalogo/modulos.py:225` | `ctx.get(m['chave_data'])`, default `None`; chave vem de `MOTIVOS`, `:105-198` |
-| `juizes.py:114`, `:118`, `:129-130` | chave catalogada; fallback `data_turno=None`; `batida_id=None`, seguido de acesso direto |
-| `juizes.py:159-162` | `ultima_batida=None → {}`, `ultima_batida.timestamp=None`; fallback `entrada_timestamp=None` |
-| `juizes.py:187`, `:197`, `:226` | lote: `data_turno=None`, `batida_id=None`; depois contexto fraco anterior; **não consulta chave catalogada** |
-| `juizes.py:549-551`, `:576`, `:579` | `marcos_faltantes=None → []`; por marco `motivo=None,hora=None,tipo=None`; motivo nomeado impede fallback por tipo |
-| `juizes.py:1723`, `:1747` | `agrupado_em=None` |
-| `juizes.py:2163` | `entrada_timestamp=None` |
-| `juizes.py:2331` | `ausencia_id=None` |
-| `models.py:816` | `agrupado_em=None` |
-| `models.py:924` | `defaults.contexto_json=None → {}`; `marcos_faltantes=None` |
-| `models.py:931` | ORM `contexto_json__has_key='agrupado_em'` |
-| `models.py:955-958` | `defaults.contexto_json`; chaves dinâmicas extraídas de `contexto_json__*` |
-| `models.py:1068`, `:1235-1236` | contexto inteiro para `_celula_de`; `_modulo_origem=None → ''`; delega dia ao juiz |
-| `models.py:1435` | `entrada_timestamp=None` |
-| `reconciliador.py:146` | `entrada_timestamp=None` |
-| `reconciliador.py:198` | `par=None`, espera lista/tupla de horários |
-| `reconciliador.py:243` | `chamados_orfaos_ids=None`; ausência retorna `None`, não `False` |
-| `reconciliador.py:836`, `:1589` | filtro ORM `data_turno` |
-| `data_evento.py:27-39` | ordem `data_turno=None,data_batida=None,entrada_timestamp=None,pendentes=None,horario_previsto=None`; datas ISO ou texto BR para pendentes |
-| `services/disputa_emissao.py:57-59` | todas as chaves por `.items()` e `setdefault`; usa `entrada_sem_saida=None → {}` |
-| `services/disputa_emissao.py:68-73` | `entrada_sem_saida.entrada_id=None`, `.entrada_aberta_em=None`, `ultima_batida=None → {}`, `.id=None` |
-| `services/disputa_emissao.py:145` | `entrada_timestamp=None` |
-| `services/disputa_emissao.py:733`, `:739` | delega marcos a `_marcos_cobrados`; data catalogada |
-| `services/disputa_emissao.py:930` | data catalogada |
-| `services/disputa_emissao.py:1074`, `:1232` | delega contexto a `data_evento_do_contexto` |
-| `services/disputa_emissao.py:1143` | `marcos_faltantes=None → []`; subchaves dos marcos em `:1146-1151` |
-| `services/disputa_emissao.py:1170` | data catalogada |
-| `services/acoes_chamado.py:30-32` | `tipo_batida='E',hora_tentativa='',motivo_anuencia=''` |
-| `services/acoes_chamado.py:57`, `:61` | `foto_b64=None,foto_nome='selfie.jpg'` |
-| `services/acoes_chamado.py:96`, `:403` | `agenda_dia_ids=[]` |
-| `services/acoes_chamado.py:144-146` | presença de `snapshot_ecs`; `.get(None) → []` |
-| `services/acoes_chamado.py:185`, `:191`, `:195-210` | `distancia_metros,alerta_geofence_id,tipo_batida,posto_nome,raio_metros,posto_lat,posto_lon,batida_lat,batida_lon`, todos `.get` sem default; texto usa `or` para vazios |
-| `services/acoes_chamado.py:247` | `batida_id=None,ocorrencias=None → []`; em ocorrência `batida_id=None` |
-| `services/acoes_chamado.py:267`, `:275-276` | `batida_id=None`, `distancia_metros=None → '?'`, `posto_nome=None → '-'`, `raio_metros=None → '-'` |
-| `services/acoes_chamado.py:371` | `hora_tentativa=None → None` |
-| `services/limbo_folgas.py:64`, `:84`, `:101` | `tipo_escala_id=None`, também filtro ORM |
-| `services/limbo_folgas.py:82-85` | `sugestao=None → {}`, `.dias=None → []`, `.classe=None` |
-| `services/limbo_folgas.py:193` | filtro ORM `agrupado_em` |
-| `services/limbo_folgas.py:253` | `agrupado_em=None`, guarda |
-| `services/adesao.py:111` | `agrupado_em=None`, guarda |
-| `services/declaracao_texto.py:205` | `escape_colab=None`, guarda |
-| `services/abertura.py:168` | filtro ORM `aberto_por_user_id` |
-| `services/contexto.py:70-71`, `:97-100`, `:118-123`, `:144-156` | todas as chaves dinâmicas do ato: `.get(k)=None`, pertencimento e listas; ler e escrever no mesmo módulo |
-| `services/feriado_reavaliar.py:78` | filtro ORM `data_turno__in` |
-| `services/pergunta_no_app.py:114` | data catalogada |
-| `services/cobranca_folha.py:32` | data catalogada |
-| `services/materializacao.py:135` | contexto delegado a `data_evento_do_contexto` |
-| `services/celula_carimbada.py:45`, `:149` | carrega campo completo e delega dia ao juiz |
-| `rejuncao.py:83` | data catalogada |
-| `views.py:441` | `tipo_escala_id=None` |
-| `views.py:1512` | `ausencia_id=None` |
-| `signals.py:361` | ORM `chamados_orfaos_ids__contains` |
-| `management/commands/nomear_marco_por_lampada.py:50`, `:65`, `:70` | `marcos_faltantes=None → []`, `horario_previsto=None`, `origem=None` |
-| `management/commands/auditar_invariantes_chamados.py:73`, `:93`, `:104`, `:617`, `:686`, `:1016` | ORM data_turno; `entrada_timestamp=None`; chave catalogada por `MOTIVOS[m]['chave_data']` |
-| `app/templates/chamados/partials/painel_chamado_turno.html:35-36` | **todas as chaves e valores por `.items`** |
-| `app/templates/chamados/partials/modal_fio.html:481-488` | coordenadas batida/posto, distância, raio; raio default `200`, distância `0`, posto_nome/endereço `''` |
-| `app/templates/chamados/partials/modal_fio.html:529` | `batida_id`, default `''` |
-| `app/templates/chamados/partials/modal_fio.html:544` | `sugestao.classe` |
-| `app/templates/chamados/partials/modal_fio.html:561-578` | `classe,evidencia,destino.codigo,destino.n_colabs` |
-| `app/templates/chamados/partials/modal_fio.html:588-594` | `motivo_anuencia,tipo_batida,hora_tentativa` |
-| `app/templates/chamados/partials/_relatorio_geo.html:18-33` | tipo_batida default `'-'`; tipo_alerta; distância; raio default `'-'`; posto_nome default `'-'`; endereço e coordenadas |
-| `app/templates/chamados/detalhe_local.html:227`, `:245-253` | `tem_documento,motivo_anuencia,tipo_batida,hora_tentativa`, últimos dois default `'—'` |
-| `app/templates/chamados/partials/_card_atendimento.html:65-70`, `:232-235` | `tem_documento,ausencia_id,data_turno` |
-
-**Leitores externos efetivamente encontrados**
-
-Estes são consumidores do mesmo JSON persistido e entram conforme a fronteira do usuário:
-
-- `app/escala/utils.py:1062`, `:1066-1070`: `agrupado_em=None`; `marcos_faltantes=None → []`; marcos `tipo=None,hora=None`.
-- `app/colaboradores/services/calendario.py:438`, `:448-451`: ORM `data_turno` não nulo, presença de `agrupado_em`; `.get('agrupado_em')=None`.
-- `app/colaboradores/services/pos_vinculo.py:38-41`: `periodo=None → []`, só restringe datas se tamanho 2.
-- `app/escala/services/regeneracao.py:149`, `:196`: `marcos_faltantes=None`; por marco `hora=None`.
-- `app/ponto/services/lastro.py:75-78`: `marcos_faltantes=None → []`; `hora=None`, `tipo=None → None`. Entradas pelos consumidores de `:110`, `:170`, `:273`, `:346`.
-- `app/ponto/services/entrada_sincronizada.py:51`, `:55`: ORM `chamados_orfaos_ids__contains`; `.get(None)` comparado com lista unitária.
-- `app/ponto/services/cartorio.py:136`, `app/ponto/services/cobertura.py:230`, `app/ponto/management/commands/supra_juiz.py:200`, `app/ponto/management/commands/mapa_divergencia.py:293`: data catalogada.
-- `app/ponto/worklist.py:54-55`: `pendentes=None`.
-- `app/ponto/management/commands/reconciliar_grade.py:376-383`: `orfao_14h=None`; nested `data=None,entradas_pendentes=None → []`, entradas `data=None`; `pendentes=None`.
-- `app/ponto/management/commands/reconciliar_grade.py:445-449`, `:465-467`: `orfa_regeneracao=None`, `marcos_faltantes=None → []`, marcos `hora=None`.
-- `app/ponto/management/commands/escalonar_chamados_supervisao.py:63`, `:112`, `:147`, `:172`, `:188`: `orfao_detectado,escalado_n2_1h,escalado_n3_4h,escalado_n4_comercial,escalado_n5_24h`, todos `.get(None)`.
-- `app/ponto/management/commands/reconciliar_fantasmas.py:183-184`: `pendentes=None`.
-- `app/ponto/management/commands/curar_residuo_bug115.py:76`, `:83`, `:86`, `:121`: `marcos_faltantes=None → []`, `horario_previsto=None`, `origem=None`, `marcos_candidatos=None`.
-- `app/ponto/management/commands/gerar_celulas.py:259-260`: `marcos_faltantes=None → []`; marcos `hora=None`.
-- `app/ponto/management/commands/detectar_ausencias.py:557`: `marcos_faltantes=None`.
-- `app/ponto/services/faltas_de_hoje.py:64`, `:85`; `app/ponto/services/furos_sem_cobranca.py:69`, `:130`; `app/ponto/services/vigia_de_hora.py:112-113`; `app/ponto/services/veredito_celula.py:150`; `app/ponto/management/commands/flip_automatico.py:76`; `app/ponto/management/commands/processar_alertas_turno.py:166`, `:181`, `:338`: filtros/projeções ORM por `data_turno`.
-- `app/api/views.py:1045`, `:3114`: `ausencia_id=None`, filtro ORM pelo mesmo ID; `:1956-1957` filtro data_turno.
-- `app/ponto/services/ausencia.py:662`, `:712`, `:715`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:32`: `ausencia_id`, `.get(None)`.
-- `app/ponto/services/justificativa.py:57-58`: filtro data_turno.
-- `app/escala/regua_defesa.py:54`, `:328`, `:334`: filtro tipo_escala_id; `destino=None → {}`, nested `codigo=None`; `tipo_escala_codigo=None`.
-- `app/escala/management/commands/fechar_avisos_regua_na_lista.py:42`: `classe=None`.
-- `app/ponto/services/geofence.py:403-406`, chamado em `:425`: `ocorrencias=None`, ocorrências `batida_id=None,batida_lat=None,batida_lon=None`; fallback das três chaves no topo.
-
-Leitores da **resposta derivada** de `dias_do_fato`, além do próprio JSON: `app/chamados/management/commands/arquivar_competencia_encerrada.py:102`, `services/juizes_do_dia.py:94`, `services/fila_por_causa.py:162`, `:319`, `:367`, e `management/commands/nomear_marco_por_lampada.py:51`; os consumidores externos do juiz são chamados em `app/colaboradores/management/commands/marcar_feriado_do_posto.py:106`, `corrigir_escala_retroativa.py:142`, `app/ponto/management/commands/curar_residuo_bug115.py:77`, `app/escala/services/propositor.py:633`.
-
-**Escritores externos da mesma estrutura**
-
-Para completar TODOS os emissores do JSON, estes também foram encontrados; avaliar na consolidação se unidade trata nascimento delegado à porta interna como emissão aqui:
-
-- `app/colaboradores/views.py:2376`: `agenda_dia_ids`.
-- `app/colaboradores/services/vinculo.py:419`: `snapshot_ecs,ec_nova,template_id,template_nome,data_inicio`.
-- `app/colaboradores/services/desligamento.py:182`: `data_demissao,motivo_informado,executado_por_username,executado_por_id,executado_em`.
-- `app/ponto/utils.py:120`: `agendamento_pk,data_inicio,data_fim`.
-- `app/ponto/views.py:280`, persistência `:288` ou `:301`: `pendentes,total`.
-- `app/escala/regua_defesa.py:72`: `tipo_escala_id,tipo_escala_codigo,causa,data_exemplo`.
-- `app/api/views.py:714-726`, gêmeo `app/api/views_core.py:708-720`: dict do detector mais `batida_id,data_turno`.
-- `app/api/views.py:1978`: `data_turno`; `:3120`: `tem_documento=True`.
-- `app/ponto/services/justificativa.py:301`: `data_turno,tipo,motivo_rejeicao,rejeitado_por`.
-- `app/ponto/services/cluster_espurio.py:211`: `data_turno,orfas,n_missing`.
-- `app/ponto/services/geofence.py:375`: `ocorrencias,alerta_geofence_id,batida_id,tipo_alerta,distancia_metros,raio_metros,posto_nome,posto_endereco,posto_lat,posto_lon,batida_lat,batida_lon,tipo_batida`; agregação de ocorrências via nota em `:359`.
-- `app/ponto/services/ausencia.py:672`: `ausencia_id,data,tipo,tem_documento`.
-- `app/ponto/services/triagem_batida.py:117`: `motivo,situacao,posto`; `:347`: `tipo_batida,hora_tentativa`; `:353-371` renovação `motivo_anuencia,tipo_batida,hora_tentativa`, opcional `foto_b64,foto_nome`; `:470`: `tipo_batida,hora_tentativa,hora_prevista,diferenca_minutos,escala`.
-- `app/ponto/management/commands/detectar_par_relampago.py:383`: `data_turno,par,duracao_min`.
-- `app/ponto/management/commands/processar_alertas_avancados.py:126`: `data_turno,entrada_timestamp`.
-- `app/ponto/management/commands/reconciliar_grade.py:516`: `data_turno,origem,marcos_faltantes[{tipo,hora,motivo}]`; `:473`: `marcos_faltantes,orfa_regeneracao_curada`; retira `orfa_regeneracao` em `:454`, `:474`.
-- `app/ponto/management/commands/detectar_ausencias.py:224`: `escala_id,tipo_escala_id,tipo_escala_codigo,tipo_ciclo,colabs_mesmo_template,causa,data_inicio`; `:294`: `escala_id,tipo_ciclo,data_inicio`; `:532`: `data_inicio,causa,escala_id`; `:538`: soma `dias_sem_grade`; `:559`: `marcos_faltantes,_marco_por`; `:706`: `data_turno,horario_previsto,atraso_min`, mais `marcos_faltantes` pelo argumento ou helper; `:766`: `folga_nao_declarada` e companheiras a conferir [nao verificado].
-- `app/ponto/management/commands/processar_alertas_turno.py:348`: `data_turno,entrada_timestamp,posto`.
-- `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:156`: `_ctx`, shape não concluído [nao verificado].
-- `app/ponto/management/commands/gerar_celulas.py:264`: `orfa_regeneracao={em,marcos_na_emissao}`.
-- `app/ponto/management/commands/escalonar_chamados_supervisao.py:64`, `:138`, `:163`, `:179`, `:195`: carimbos de escalada listados acima.
-- `app/ponto/management/commands/curar_residuo_bug115.py:124`: `marcos_candidatos,_marco_por`, demais companheiras [nao verificado].
-
-**Desencontros literais comprovados e selos**
-
-1. `abertura.py:183-191` → `juizes.py:187-197`: emissor grava chave catalogada (`data` para ausência em `catalogo/modulos.py:120`; `data_inicio` aparece também em `adesao.py:86`), mas o leitor em lote só lê `data_turno` antes de procurar batida/disputa/carimbo. O singular lê catálogo em `juizes.py:114`, e `_dia_do_contexto_fraco` só lê timestamps em `:159-162`. A falta das outras âncoras pode produzir singular com data e lote sem data pela leitura estática. ESTRUTURA provável; classe sim. Selo específico da paridade de **chaves** não localizado [nao verificado]. `tests/test_e1_v9.py:357-368` cobre conversa versus fato, não essas chaves.
-
-2. `abertura.py:183-191` → `views.py:1512`: abertura humana de `ausencia_colab` grava `data`, mas não `ausencia_id`; leitor pede `ausencia_id=None`. ESTRUTURA provável; classe sim; impacto de produção [nao verificado]. `tests/test_form_catalogo.py:76-83` sela módulo e data, sem selar ID.
-
-3. Mesmo emissor → `juizes.py:2331`: pede `ausencia_id` ausente nessa forma humana. ESTRUTURA provável; classe sim; selo específico não localizado [nao verificado].
-
-4. Mesmo emissor → `app/templates/chamados/partials/_card_atendimento.html:65-70`: pede `tem_documento` e usa `ausencia_id` no endpoint; ambas ausentes na forma humana. ESTRUTURA provável; classe sim; selo específico não localizado [nao verificado]. O emissor externo especializado **grava ambas** em `app/ponto/services/ausencia.py:672`: distinguir formas, sem assumir prejuízo observado.
-
-5. `reconciliador.py:708` → `juizes.py:551`, `:576-577`: `marcos_faltantes[].motivo` vale `'lampada_apagada'` no emissor (`app/ponto/services/lastro.py:134`), mas o leitor compara com o motivo da Pergunta e recusa fallback se houver qualquer motivo nomeado. Mesmo nome para etiqueta da lâmpada e identidade da pergunta. ESTRUTURA provável; classe sim. Existem selos separados do escritor e leitor, sem selo encontrado do par com esse shape: escritor `tests/test_emissor_nomeia_o_marco.py:54-74`; leitor `tests/test_selo_juizes_orfaos.py:84-123`, `tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:33`. Cobertura específica da costura [nao verificado].
-
-6. `nomear_marco_por_lampada.py:109` → `juizes.py:551` repete o shape com `'lampada_apagada'`, confirmado por `tests/test_emissor_nomeia_o_marco.py:159-162`. Mesma classe anterior; selo do par [nao verificado].
-
-**Selos positivos utilizáveis**
-
-- `services/limbo_folgas.py:68` → template `modal_fio.html:544`: `tests/test_limbo_folgas.py:97` renderiza o botão, com integração de sugestão/template em `:47-64`; conferir assertions completas para marcar par exato.
-- `services/adesao.py:113` → `models.py:816`: `tests/test_agrupado_em.py:32`, `:42` prende bloqueio por pai vivo e liberação após fechamento.
-- `services/limbo_folgas.py:276` → reata/fecho/agrupamento: `tests/test_t34_furo_sob_limbo.py:37`.
-- `services/disputa_emissao.py:1116/:1122` → fusão: `tests/test_3b_reuso_899.py:31`; consumidor semântico `_filhos_vivos` não necessariamente selado por esse teste [nao verificado].
-- `services/disputa_emissao.py:1351/:1357` → fusão: `tests/test_3b_reuso_1061.py:17`; não demonstra leitor semântico dos IDs.
-- `services/contexto.py:62/:82/:131` regras de escrita: `tests/test_porta_contexto.py:92-116`, `:132-156`, `:220-257`, `:273-279`.
-- `retirar_contexto` e renovação de órfãs: `tests/test_porta_chamado_e2.py:39-69`.
-- fusão por nota: `tests/test_anexar_ocorrencia.py:22-48`.
-- semântica de `entrada_timestamp`: `tests/test_cq_c8.py:14`.
-- nascimento/junção pelo contexto: `tests/test_f1b_celula.py:17-48`, `tests/test_emissor_carimba_celula.py:68-106`.
-
-**Atenção para consolidar contagem**
-
-`app/templates/chamados/partials/painel_chamado_turno.html:35-36` é leitor válido de **todo** o JSON. Portanto, `escape_colab_em`, `defeito_cadastro`, `chamados_limbo_ids`, metadados e quaisquer outras chaves não podem ser declaradas “gravadas que ninguém lê” globalmente: o template as lê. Pode-se registrar ausência de leitor semântico específico como [nao verificad
-
-[truncado em 20000 de 20392 caracteres]
-
-_4667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
