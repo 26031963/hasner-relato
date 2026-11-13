@@ -1,7 +1,158 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 21:50** · publicado em **12/11/2026 21:50** (UTC-3)
+> Ultima resposta processada: **12/11/2026 21:54** · publicado em **12/11/2026 21:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 21:54 · sessao 2f8bf08376aa · E3-FORMA-SQL · sonda · origem=Code
+
+Saída integral fornecida, sem nova execução [nao verificado]:
+
+```text
+sonda_leitura: sonda_e3_v3.py [e3c78f262addb5bc] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+candidatas_veredito_vazio                   0  amostra=[]
+celula_veredito_vazio                       0  amostra=[]
+pendente_bool_True                         54  amostra=[136970, 130883, 131162, 131162, 131162, 122296, 127887, 139760, 122542, 132309]
+perguntas_total                         49192  amostra=[]
+total_erros=0
+```
+
+Não executei o envelope porque ele escreve arquivos, contrariando sua regra de somente leitura ([bin/sonda_leitura.sh:132](/home/ronald/codex_ws/78994522d93958fd6c687f4228ee735b1ad04f9a/bin/sonda_leitura.sh:132)).
+
+Igualdade das somas: [nao verificado]. As quatro contagens `NOVA_*` solicitadas não constam do dado fornecido [nao verificado].
+
+## 12/11 21:52 · sessao 3bec7d2c5253 · E3-FORMA-SQL · verificador · origem=Code
+
+**REPROVA**, por dois bloqueantes: ainda existe estado permitido pelo modelo que quebra a continência de `q_vivas`; a catraca ainda erra nos dois sentidos entre VALOR e RESPONDEDOR. (`app/chamados/models.py:3403`; `app/ponto/services/lastro.py:150`; `app/chamados/tests/test_e3_catraca_respondedores.py:175`, `app/chamados/tests/test_e3_catraca_respondedores.py:196`)
+
+1. **Bloqueante — pendência verdadeira para o Python pode não ser pendência para o SQL.**
+
+   Contraexemplo: pergunta não validada, destrancada, sem resposta, sem materialização, sem via terminal; célula `veredito='concorde'`, `veredito_via='cartorio'`, com esta ata e sem fato no marco. O modelo admite esse JSON sem impor tipo booleano a `pendente`. (`app/escala/models.py:1778`; `app/chamados/juizes.py:1391`, `app/chamados/juizes.py:1402`, `app/chamados/juizes.py:1434`)
+
+   ```python
+   {"lampadas": [
+       {"hora": "14:20", "tipo": "S", "acesa": None, "pendente": "sim"}
+   ]}
+   ```
+
+   `marcos_pendentes` aceita `"sim"` por truthiness. O juiz considera o veredito provisório, prossegue e retorna **VIVA** porque não há materialização. O SQL procura especificamente `{'pendente': True}`; não reconhecendo a string como booleano, considera a célula absolvente e exclui a pergunta. Essa é uma dedução do Q; execução no Postgres é **[não verificado]**. (`app/ponto/services/lastro.py:148`; `app/chamados/juizes.py:1452`, `app/chamados/juizes.py:1466`; `app/chamados/models.py:3403`, `app/chamados/models.py:3408`, `app/chamados/models.py:3413`)
+
+   O cartório canônico escreve `pendente=True`; portanto, não demonstrei que ele produza o contraexemplo. Existência desse estado em produção: **[não verificado]**. A divergência entre os dois leitores permanece demonstrável no universo solicitado, o do modelo. (`app/ponto/services/cartorio.py:915`; `app/escala/models.py:1778`)
+
+2. **Bloqueante — as três fugas literais da catraca foram corrigidas, mas a classe continua aberta.**
+
+   Este uso retorna exatamente “há carimbo?”, porém o classificador dá **VALOR**: `usa()` percorre também o ramo morto. (`app/chamados/tests/test_e3_catraca_respondedores.py:175`, `app/chamados/tests/test_e3_catraca_respondedores.py:182`)
+
+   ```python
+   return p.respondida_em is not None and (
+       True or p.respondida_em.isoformat()
+   )
+   ```
+
+   Há também uma fuga menos artificial: o agregado de **outro queryset**, dentro de uma subconsulta, concede VALOR ao filtro booleano externo. `cadeia_do_queryset` limita a subida, mas o `ast.walk` posterior invade todos os argumentos dessa cadeia. (`app/chamados/tests/test_e3_catraca_respondedores.py:204`, `app/chamados/tests/test_e3_catraca_respondedores.py:236`)
+
+   ```python
+   return qs.filter(
+       respondida_em__isnull=False,
+       pk__in=other.values("pk")
+           .annotate(m=Max("respondida_em"))
+           .filter(m__gt=d)
+           .values("pk"),
+   ).exists()
+   ```
+
+   No sentido inverso, esta serialização recebe **RESPONDEDOR**: o caminho `UnaryOp(Not)` retorna `DECIDE` sem reconhecer a guarda do instante no ramo correspondente. (`app/chamados/tests/test_e3_catraca_respondedores.py:196`)
+
+   ```python
+   return None if not p.respondida_em else p.respondida_em.isoformat()
+   ```
+
+   Também recebe RESPONDEDOR `p.respondida_em is not None and str(p.respondida_em)`: chamada a `str()` não está entre os usos reconhecidos como valor. Esses resultados foram reproduzidos com o classificador extraído em memória. (`app/chamados/tests/test_e3_catraca_respondedores.py:158`, `app/chamados/tests/test_e3_catraca_respondedores.py:175`)
+
+**Curas dos achados 1, 3, 5 e 6 da volta 1:**
+
+| Achado | O que mudou e resultado |
+|---|---|
+| **1 — veredito vazio** | **Curado no caso identificado.** `_celula_absolve` passou a exigir veredito diferente de `''`, alinhando-se ao `if cel.veredito`. O teste força o vazio e exige inclusão. Não resta aquele contraexemplo; resta o bloqueante 1 acima. (`app/chamados/models.py:3408`; `app/chamados/juizes.py:1438`; `app/chamados/tests/test_e3_forma_sql_do_juiz.py:181`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:188`) |
+| **3 — prosa e leitores** | **Corrigido o comentário:** reconhece que o degrau 6 também lê resposta via materialização/slot. O censo dos oito leitores está abaixo; conteúdo do corpo do commit é **[não verificado]**. (`app/chamados/models.py:3393`; `app/chamados/juizes.py:1473`, `app/chamados/juizes.py:360`) |
+| **5 — classificador** | **Curados os três exemplos anteriores**, pela comparação do objeto com `ast.dump`, seleção do ramo de `IfExp` e delimitação da cadeia. **Não curada a classe**, pelos contraexemplos do bloqueante 2. (`app/chamados/tests/test_e3_catraca_respondedores.py:173`, `app/chamados/tests/test_e3_catraca_respondedores.py:179`, `app/chamados/tests/test_e3_catraca_respondedores.py:204`) |
+| **6 — cobertura dos selos** | **Cobertos os buracos nomeados:** acrescentados U+0085, U+2028, U+3000 e U+FEFF; U+200B permanece; acrescentado o caso `veredito=''`. Isso amplia a matriz, sem torná-la exaustiva. Resultado SQL da volta 2: **[não verificado]**. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:94`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:188`) |
+
+**Continência, degrau a degrau:** para a leitura atual e atas com `pendente` booleano canônico, não encontrei outra exclusão indevida; o ponto que impede estender essa conclusão a todo o modelo é o bloqueante 1. (`app/chamados/juizes.py:1389`; `app/chamados/models.py:3398`; `app/ponto/services/lastro.py:150`)
+
+| Degrau | Relação Python → SQL |
+|---|---|
+| **0: validada** | Ambos excluem. (`app/chamados/juizes.py:1391`; `app/chamados/models.py:3411`) |
+| **0a: tranca por leitura** | O Python pode excluir mais; a ausência desse teste no SQL alarga os candidatos. (`app/chamados/juizes.py:1395`; `app/chamados/models.py:3379`) |
+| **0b: via que vence resposta** | Com materialização, ambos excluem; sem materialização, essa via não basta para excluir. (`app/chamados/juizes.py:1402`; `app/chamados/models.py:3400`) |
+| **1: resposta** | Carimbo **com texto após strip** ganha o ramo SQL. Sem carimbo, ou com texto vazio/branco, não ganha esse ramo. Admin/luz podem matar posteriormente no Python, produzindo candidatos excedentes no SQL. (`app/chamados/juizes.py:1407`, `app/chamados/juizes.py:1415`, `app/chamados/juizes.py:1419`; `app/chamados/juizes.py:1546`) |
+| **2: identidade** | Com materialização, exclui em ambos, salvo resposta que já venceu pelo degrau anterior; sem materialização, não exclui por identidade. (`app/chamados/juizes.py:1428`; `app/chamados/models.py:3398`, `app/chamados/models.py:3413`) |
+| **Fato do marco** | O Python pode matar uma pergunta materializada; o SQL conserva candidatos excedentes. (`app/chamados/juizes.py:1434`; `app/chamados/models.py:3413`) |
+| **3: célula** | `''`, NULL e ausência de célula não absolvem; acusatório entra; não acusatório com `pendente=True` entra. Não acusatório definitivo mata no Python antes dos degraus inferiores. A pendência truthy não booleana quebra essa correspondência. (`app/chamados/models.py:3403`, `app/chamados/models.py:3408`, `app/chamados/models.py:3410`; `app/chamados/juizes.py:1438`, `app/chamados/juizes.py:1452`) |
+| **4–6: lei, ausência de carimbo, lastro** | Nas atas canônicas, quem chega vivo a esses degraus já está coberto por `~_celula_absolve`, com ou sem materialização. O degrau 6 efetivamente pode ler resposta. (`app/chamados/juizes.py:1454`, `app/chamados/juizes.py:1466`, `app/chamados/juizes.py:1473`; `app/chamados/models.py:3413`) |
+
+`q_vivas()` não recebe horizonte; `pergunta_viva(agora=...)` pode desconsiderar carimbos posteriores ao instante consultado. A continência histórica exige uma qualificação adicional e não fundamenta aqui outro bloqueante da cura. (`app/chamados/models.py:3368`; `app/chamados/juizes.py:1377`, `app/chamados/juizes.py:1382`, `app/chamados/juizes.py:875`)
+
+**Quem lê a lista mais larga de células `veredito=''`:**
+
+| Leitor direto | Mudança possível |
+|---|---|
+| **Fila de validar** | Aplica também a face “com texto” e refina pelo C6. Para `''`, as perguntas com texto já entravam pelo ramo da resposta; a abertura adicional sem texto não basta para entrar nessa fila. (`app/chamados/juizes.py:1700`, `app/chamados/juizes.py:1703`; `app/chamados/models.py:3412`) |
+| **Fio administrativo** | Amplia candidatos de disputas fechadas e depois consulta C6. Disputas abertas já são carregadas sem esse filtro. (`app/chamados/services/fio.py:251`, `app/chamados/services/fio.py:254`, `app/chamados/services/fio.py:268`) |
+| **Perguntas do app** | Amplia candidatos, depois consulta C6. A partição pendentes/histórico ainda depende do carimbo cru e de a disputa estar aberta. (`app/chamados/services/pergunta_no_app.py:50`, `app/chamados/services/pergunta_no_app.py:58`, `app/chamados/services/pergunta_no_app.py:71`) |
+| **Cobrança** | Amplia candidatos de disputas abertas; exige espera pelo texto e C6 antes da contagem. (`app/chamados/services/cobranca.py:237`, `app/chamados/services/cobranca.py:241`) |
+| **Vigia de disputa fechada** | Amplia candidatos; só conta os confirmados pelo C6. (`app/chamados/services/vigia_fio.py:757`, `app/chamados/services/vigia_fio.py:764`) |
+| **Janela do colaborador** | **Sem C6 posterior:** destinos adicionais ampliam diretamente a janela dos chamados visíveis. (`app/chamados/services/janela_colab.py:63`, `app/chamados/services/janela_colab.py:69`) |
+| **Raio-X/crédito** | **Sem C6 posterior:** exclui materializada com `VL_SIM`, depois particiona por carimbo/texto; pode ampliar créditos a responder/validar. (`app/chamados/services/raiox.py:74`, `app/chamados/services/raiox.py:135`, `app/chamados/services/raiox.py:143`) |
+| **Fechamento administrativo** | **Escreve sem C6 posterior:** entrega os resultados a `fechar_por_admin` e, havendo fechamento, registra `SILENCIO`. (`app/ponto/services/veredito_celula.py:181`, `app/ponto/services/veredito_celula.py:190`, `app/ponto/services/veredito_celula.py:195`) |
+
+A ampliação chega, portanto, à escrita de via, materialização, autor e decisão. `fechar_por_admin` usa a porta de identidade, cuja guarda é de idempotência e que não pergunta ao C6. Não é escritor novo fora da porta; também não é mudança exclusivamente visual. Fechamento indevido efetivo ou quantidade afetada em produção: **[não verificado]**. (`app/chamados/models.py:3081`, `app/chamados/models.py:3090`, `app/chamados/models.py:3194`, `app/chamados/models.py:3212`, `app/chamados/models.py:3216`; `app/ponto/services/veredito_celula.py:196`)
+
+Esse caminho tem três chamadores de produção: veredito da célula, declaração de dia e validação de folga. (`app/ponto/services/veredito_celula.py:347`; `app/ponto/services/declarar_dia.py:206`; `app/chamados/services/validacao.py:298`)
+
+**Os 27 sítios mantêm a classe?** Sim: reconstruindo em memória os trechos anteriores do delta e comparando os registros completos, não houve troca de classe nos fontes atuais. Isso é mais forte que o teste permanente, que exige apenas cardinalidade 27 e alguns sítios nomeados. Os nove métodos das duas classes da catraca passaram nessa execução isolada, sem banco. (`app/chamados/tests/test_e3_catraca_respondedores.py:303`, `app/chamados/tests/test_e3_catraca_respondedores.py:333`, `app/chamados/tests/test_e3_catraca_respondedores.py:350`, `app/chamados/tests/test_e3_catraca_respondedores.py:448`)
+
+Os três retirados continuam usos legítimos de instante: resposta posterior à cobrança, máximo instante e idade da resposta. Entretanto, estabilidade do conjunto não prova acerto semântico universal: entre os classificados RESPONDEDOR permanecem usos de horizonte, preservação de legado, correspondência ato/instante e guarda da cura. Migrá-los mecanicamente para “com texto” mudaria essas perguntas. (`app/chamados/services/verbos.py:342`; `app/chamados/veredito_lavrado.py:207`; `app/chamados/services/validacao.py:932`; `app/chamados/juizes.py:348`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`; `app/chamados/models.py:4017`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`)
+
+**Mordida dos testes:** abaixo, “passa” significa passar pelo método isolado; outro teste pode detectar o mesmo mutante. Execução da bateria SQL da volta 2: **[não verificado]**. As propriedades SQL usam o mesmo universo em `filter`, `exclude` e negação, mas esse universo é uma matriz fixa de 28 linhas. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:52`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:65`)
+
+| Teste novo da **volta 2** | Pega | Deixa passar | [nao verificado]
+|---|---|---|
+| `test_amostra_cobre_os_brancos_e_os_invisiveis` | Retirar U+0085 de `_BRANCOS`. | Trocar a face Q pela forma sem trim: esse método não consulta a face. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:94`) |
+| `test_RED_celula_de_veredito_VAZIO_nao_absolve_no_sql` | Remover `~Q(celula__veredito='')`. | Restringir a cura às perguntas sem materialização; todas as fixtures desse método têm materialização ausente. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:184`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:188`) |
+| `test_MORDE_veredito_vazio_com_texto_e_veredito_que_absolve` | Fazer o SQL incluir também `concorde` sem resposta. | Restaurar o bug de `''`: o caso vazio desse método tem texto e entra pelo degrau 1. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:198`) |
+| `test_MORDE_classificador_VALOR_exige...` | Restaurar guarda sem identidade do objeto, escopo do statement ou ramo errado do `IfExp`. São mutantes do **classificador**, que mora no selo. | As fugas por ramo morto/subconsulta e a serialização com `not` do bloqueante 2. (`app/chamados/tests/test_e3_catraca_respondedores.py:448`, `app/chamados/tests/test_e3_catraca_respondedores.py:236`) |
+
+Para os demais testes introduzidos ou ampliados pela obra: [nao verificado]
+
+| Teste | Pega / deixa passar | [nao verificado]
+|---|---|
+| `test_universo_tem_os_dois_lados` | Pega juiz constante `False`; deixa passar erro apenas na face Q. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:79`) |
+| `test_face_sem_texto_igual_ao_juiz` | Pega retirar o requisito de carimbo da face; deixa passar retirar U+1680 de `_BRANCOS`, ausente da amostra. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:85`) |
+| `test_face_com_texto_igual_ao_juiz` | Pega voltar ao vazio `''` sem trim; deixa passar a mesma omissão de U+1680. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:89`) |
+| `test_none_no_python_e_vazio` | Pega retirar o tratamento de `None` no Python; deixa passar retirar o ramo SQL NULL. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:114`; `app/chamados/juizes.py:1538`) |
+| `test_MORDE_mutante_sem_trim` | Pega mudar o juiz para não remover brancos; deixa passar uma face Q de produção errada, pois compara um Q mutante local. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:118`) |
+| `test_MORDE_mutante_com_o_barra_s_do_postgres` | Pega juiz que deixe de considerar NBSP vazio; deixa passar substituir a face de produção por `\s`, pois também usa Q mutante local. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:127`) |
+| `test_RED_so_brancos...` | Pega restaurar resposta viva sem trim em `q_vivas`; deixa passar retirar a cura de `veredito=''`. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:159`) |
+| `test_MORDE_texto_com_brancos_em_volta...` | Pega fazer a face rejeitar texto cercado de brancos; deixa passar retirar a cura de `''`. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:166`) |
+| `test_continencia_so_brancos...` | Pega remover o ramo SQL que inclui acusatório/sem célula; deixa passar o contraexemplo de pendência não booleana. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:171`) |
+| `test_RED_a_validar_nao_traz_so_brancos` | Pega retirar a face “com texto” da fila; deixa passar erro de `q_vivas` restrito a veredito vazio. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:206`) |
+| `test_universo_nao_e_vazio` da catraca | Pega perder a classe VALOR dos três sítios exigidos; deixa passar trocar outros sítios mantendo classes e cardinalidade. (`app/chamados/tests/test_e3_catraca_respondedores.py:346`) |
+| `test_MORDE_guarda_de_VALOR...` | Pega retirar reconhecimento de comparação, aritmética ou agregado; deixa passar agregado alheio dentro de subconsulta. (`app/chamados/tests/test_e3_catraca_respondedores.py:416`, `app/chamados/tests/test_e3_catraca_respondedores.py:236`) |
+
+Os testes de mutantes locais demonstram capacidade do instrumento; não substituem, isoladamente, mutação da face de produção. As comparações de equivalência são as que ligam o Q real ao juiz. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:85`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:89`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:121`)
+
+**Classes anteriores e campos com dois significados:**
+
+- **Segundo juiz / derivação paralela:** as faces de texto leem a classe de brancos do Python; não encontrei nova enumeração independente de brancos. Continua divergente o espelho da provisoriedade apontado no bloqueante 1. (`app/chamados/juizes.py:1526`, `app/chamados/juizes.py:1538`, `app/chamados/juizes.py:1546`; `app/chamados/models.py:3403`; `app/ponto/services/lastro.py:150`)
+- **Segundo escritor fora da porta:** a ampliação administrativa usa a porta existente. Os escritores do par continuam sendo nascimento/save, carimbo, descarimbo em lote, resposta humana, automática e recuperação pela trilha; a obra não acrescenta escrita nos corpos das faces Q. (`app/chamados/models.py:2865`, `app/chamados/models.py:3156`, `app/chamados/models.py:3286`, `app/chamados/models.py:3472`; `app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1659`, `app/chamados/services/disputa_emissao.py:1681`)
+- **Relógio fora da borda:** as faces novas não consultam relógio. O fechamento administrativo já obtém o instante na porta e o reutiliza no ato `SILENCIO`. (`app/chamados/juizes.py:1538`, `app/chamados/juizes.py:1546`; `app/chamados/models.py:3090`; `app/ponto/services/veredito_celula.py:196`)
+- **Quem escreve/lê `veredito=''`:** o campo permite vazio; o C6 e agora `q_vivas` o tratam como ausência de julgamento; o reconciliador também o exclui da absolvição. A porta da lavra valida vocabulários, embora possa preservar um valor anterior quando a via já é administrativa; a fixture força `''` por `update`. Origem de eventual vazio em produção: **[não verificado]**. (`app/escala/models.py:1770`; `app/chamados/juizes.py:1438`; `app/chamados/models.py:3408`; `app/chamados/reconciliador.py:640`; `app/ponto/portas/celula.py:921`, `app/ponto/portas/celula.py:927`, `app/ponto/portas/celula.py:1035`; `app/chamados/tests/test_e3_forma_sql_do_juiz.py:181`)
+- **Quem escreve/lê `respondida_em`:** os escritores exigem texto nas transições novas; os leitores ainda misturam presença do carimbo, instante e resposta válida. `respondida`, rótulos de estado e partição do app usam carimbo cru; `espera_o_texto_do_colaborador` e o juiz leem o par. O passivo inalterado continua salvável por outros campos, inclusive no fechamento administrativo. (`app/chamados/services/disputa_emissao.py:1432`, `app/chamados/services/disputa_emissao.py:1657`, `app/chamados/services/disputa_emissao.py:1677`; `app/chamados/models.py:3584`, `app/chamados/models.py:3071`, `app/chamados/models.py:3503`; `app/chamados/services/pergunta_no_app.py:71`; `app/chamados/services/fio.py:187`)
+
+Não uso os nove `isnull` nem a cura do passivo como bloqueantes desta volta. As duas falhas acima independem dessa migração. Entretanto, a inclusão de `veredito=''` já alcança o app e a escrita administrativa pelos caminhos existentes; a medida dos efeitos em produção, inclusive eventual mudança no app ou no supra-juiz, permanece **[não verificado]**. (`app/chamados/models.py:3408`; `app/chamados/services/pergunt
+
+[truncado em 20000 de 20061 caracteres]
 
 ## 12/11 21:50 · sessao 35df84d5936a · BUG-CADASTRO-C5E · construtor · origem=Code
 
@@ -798,35 +949,4 @@ Reprodução local, sem arquivos nem banco: executei accessor, tripwire com doub
 
 6. **Resíduos de indicadores.** A busca do archive encontrou `nao_medidos` apenas em três asserts negativos: `app/escala/tests/test_tipo_item3_expand_contadores.py:37`, `:39`, `:146`. `cego_orfas`: nenhuma ocorrência na busca textual do archive [nao verificado — ausência global não possui linha positiva citável]. Nenhuma saída de produção desses indicadores foi encontrada [nao verificado].
 
-## 12/11 20:25 · sessao 525ac3c7b50c · TIPO-NA-FONTE · construtor · origem=Code
-
-Entrega parcial no [relato completo](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/RELATO_TIPO_ITEM3_V3.txt:1), com alterações, leitores/escritores, REDs e comandos dos mutantes.
-
-- **92 testes passaram; 1 pulado.** [Evidência](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/TIPO_ITEM3_V3_TESTES.txt:214). [nao verificado]
-- **Pendência:** a catraca detectou cópia crua em `ponto/portas/celula.py:1083`, arquivo proibido; a meta zero permanece aberta. [Reprodução](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/TIPO_ITEM3_V3_TESTES.txt:220).
-- Suite Django: **[nao verificado]**, por ausência de `django.test`. [Tentativa](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/TIPO_ITEM3_V3_TESTES.txt:241). [nao verificado]
-
-Sem commit, conforme a proibição do envelope. [Registro](/home/ronald/wt-codex-tipo-na-fonte-184856/app/docs/RELATO_TIPO_ITEM3_V3.txt:151). [nao verificado]
-
-## 12/11 20:08 · sessao d89d76f9010a · - · - · origem=Ronald (tmux)
-
-Item 5 editado: removidos `nao_medidos` e `cego_orfas`; contadores usam `contar_orfas_da_grade`, preservando quantidade legada conhecida. Referências: `escala/services/furos_diarios.py:22`, `folha/causas.py:43`, `ponto/status_dia.py:185`, `ponto/services/bordas_realizado.py:49`, `ponto/management/commands/detectar_par_relampago.py:138`.
-
-Também removidas as saídas acrescentadas em `pos_vinculo`, esmeril, tripwire e PDF; o vigia conserva apenas seu `cego` histórico por universo. `ponto/services/vigia_pareador_celula.py:117`, `ponto/services/esmeril_espelho.py:195`, `relatorios/pdf_espelho.py:183`.
-
-Teste novo: `escala/tests/test_tipo_item3_expand_contadores.py:16`: 6 REDs e 5 mutantes mordidos — furos, status, borda, causa e score. Comando executado:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
- escala.tests.test_tipo_item3_expand_contadores \
- escala.tests.test_tipo_na_fonte_orfas_consumidores \
- folha.tests.test_causas folha.tests.test_causas_sem_previsao -q
-```
-
-Resultado observado: **35 testes OK**. O negativo de estado ilegal isola o registro esperado e verifica três sítios; `escala/tests/test_tipo_item3_expand_contadores.py:47`.
-
-Achado 6: **pre-existente, DECIDIDO PELA LEI TURNO-G5, obra própria**. Comparação por `git show 0a747193e:app/...`: naquele HEAD, `escala/utils.py:1758` guarda por dia do turno, `:1811` projeta nesse dia e `:1820` agrupa apenas sobras civis; `ponto/services/vigia_pareador_celula.py:109` procura na data civil. Equivalentes atuais: `escala/utils.py:1763`, `:1816`, `:1825` e `ponto/services/vigia_pareador_celula.py:112`. Nenhuma cura desse achado.
-
-Limite para o relato: legado conserva quantidade, porém identidade temporal segue `None`; A5, PDF e vigia não recuperam datas ausentes. Efeito em produção: **[nao verificado]**.
-
-_4439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4441 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

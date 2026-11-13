@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=577356
+ESPERANDO: codex_pergunta.sh | pid=591763
 RESPONDIDA por aval Ronald 21:48 libera B3: ERRO-BOBO TRANCA-VIVAS-08: as 3 voltas procedentes do Codex verificador foram ORACULO DE TESTE fino (resgatada exclusiva
 RESPONDIDA por aval Ronald 21:48 TIPO-ITEM3-NAO-LAVRADA=(A): lei: TIPO-NA-FONTE item 3 PARADO (12-CHAVES item 5, 3a reprovacao; preverif Codex v3 REPROVA): Celul
 RESPONDIDA por aval Ronald 21:48 E3 item (2) 4 sitios fora por nome: PERGUNTA DE DESENHO E3-FORMA-SQL item (2): 4 sitios de respondida_em em forma BOOLEANA pel
@@ -8353,3 +8353,11 @@ POUSO TIPO item 1 20:5x: commit 4533b5ae6 (instrumento, so bin/ + docs L-106, se
 - DESPACHO c5e volta 2: B1-B4 -> Codex construtor (pid 572992, wt-codex-bug-cadastro-c5e-*) | preverif v2 -> Codex | suite + opus depois
 - E3-FORMA-SQL volta 2 (opus construtor): 5319676ee na copia; RED logs/E3-FORMA-SQL/volta2/red_item1_item6.log FAILED(4) + red_item5_catraca.log FAILED(5); GREEN --only chamados Ran 4659 OK rc 0; catraca 27 sitios com classe identica. DESPACHO preverif v2 -> Codex (logs/E3-FORMA-SQL/preverif_v2/)
 - FILA (esmeril E3): chamados/management/commands/auditar_invariantes_chamados.py:1604 (vigia C2) conta celula de veredito '' como morta-por-celula, mesmo predicado curado em q_vivas -- contador so, fora do escopo literal
+
+## POUSO TRANCA-VIVAS-08 (12/11 21:5x)
+LEI-AKITA: origem=chamados/juizes.py::_toque_humano_nos_dias (etapa 2 so com a marca do ato humano), testemunha=pergunta_viva/_admin_tocou_os_dias_depois, RED=logs/TRANCA-VIVAS-08/cura/red.log (destrancou o dia), quem-mais-le=comando, API mensageria, tarefa_do_dia:422, reconciliador:668/748, juizes novos=0, padrao=Single Source of Truth
+- mudados: chamados/juizes.py::_toque_humano_nos_dias; chamados/services/competencia_trancada.py::medir/medir_frota (ficam_com_o_admin = uniao + 3 listas separadas, vivas_apesar_da_tranca = residual); commands/chamados_em_competencia_trancada; api/views_mensageria; mensageria/nucleo/ferramentas.py; docs/JUIZES.md
+- PROVA: focado v2/focado4.log Ran 34 OK; suite v2/suite4.log Ran 15494, unica falha pautas vocabulario sobre RELATO da COPIA (alheia, vivo corrigido)
+- B3 liberado por aval Ronald 21:4x (ERRO-BOBO aceito); opus final v4 APROVA (logs/TRANCA-VIVAS-08/v2/opus_final_v4.md)
+- medida: voltas Codex preverif 3 (procedentes 3, todas oraculo de teste), opus 2 (v1 reprovou, v4 aprova); opus reprovou depois do Codex aprovar: nao
+- INCOMPLETO: medir frota pos-deploy (vivas_apesar_da_tranca, vivas_tocadas_pelo_admin, universo) pelo comando em prod -> Codex --sonda; FILA opus v4 itens 1,2,4 em TRANCA-VIVAS-08-FILA
