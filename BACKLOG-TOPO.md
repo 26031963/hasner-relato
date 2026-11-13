@@ -67,7 +67,7 @@ lista — ela e o que esta EM PE._
 | **O56** | PRE-PUSH-TESTA-A-ARVORE, NAO O COMMIT | nao comecado |
 | **O57** | COMMIT-CARREGA-O-INDICE | **livre** |
 | **O58** | ESPELHO-COM-HASH-POR-PERIODO-LIVRE | espera aval |
-| **O59** | RESCISAO-LE-O-REGISTRO | **livre na parte de leitura; o hash herd |
+| **O59** | ABSORVIDA pela UI-RESCISAO (COMPLEMENTO-DESLIGAR-1311 13/11) | **livre na parte de leitura; o hash herd |
 | **O60** | ESPELHO-VERDADE-E3-COMPLETA | HEAD x novo = CURA |
 | **O61** | CANCELADA 27/09 09:4x pelo corte "competencia paga fora do sistema" | espera `!` |
 | **O62** | JUIZ-DIZ-SEM-INTERVALO-COM-CADASTRO-DE-70 | espera corte |
