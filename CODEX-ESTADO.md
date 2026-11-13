@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 14:05** · publicado em **13/11/2026 14:06** (UTC-3)
+> Ultima resposta processada: **13/11/2026 14:13** · publicado em **13/11/2026 14:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 14:13 · sessao b3b8c64d7738 · BUG-PAR-DESCONGELA · sonda · origem=Code
+
+A sonda falhou: `sonda168.py nao existe` (saída da tentativa: [nao verificado]); a verificação encerra com código 1 em `bin/sonda_leitura.sh:71`.
+
+Saída integral da tentativa [nao verificado]:
+
+```text
+sonda_leitura: sonda168.py nao existe
+```
+
+Saída integral fornecida no pedido; todo o bloco é [nao verificado], sem reexecução:
+
+```text
+sonda_leitura: sonda168.py [033fac1559a4a6d2] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO PARIDADE 244 ERROS_LAMPADA 0
+GRUPO ('chamado_encerrado', 'antes_18_10', 'apagado') respostas 11 colabs 2
+GRUPO ('chamado_encerrado', 'antes_18_10', 'nao_da_para_dizer') respostas 1 colabs 1
+GRUPO ('declaracao', 'desde_18_10', 'aceso') respostas 4 colabs 4
+GRUPO ('nulo', '-', 'aceso') respostas 2 colabs 1
+GRUPO ('nulo', '-', 'apagado') respostas 57 colabs 16
+GRUPO ('nulo', '-', 'nao_da_para_dizer') respostas 1 colabs 1
+GRUPO ('paridade_recusada', 'antes_18_10', 'aceso') respostas 41 colabs 27
+GRUPO ('paridade_recusada', 'antes_18_10', 'apagado') respostas 87 colabs 39
+GRUPO ('paridade_recusada', 'antes_18_10', 'nao_da_para_dizer') respostas 16 colabs 6
+GRUPO ('paridade_recusada', 'desde_18_10', 'aceso') respostas 24 colabs 14
+SOMA_POR_VIA {'paridade_recusada': 168, 'declaracao': 4, 'chamado_encerrado': 12, 'nulo': 60}
+SEM_CONTA (via fora de nulo/paridade_recusada) 16
+   {'pk': 32764, 'col': 824, 'motivo': 'intervalo_saida', 'data': '2026-09-17', 'via': 'declaracao', 'carimbo': '2026-11-11', 'validada': True, 'lampada': 'aceso', 'celula': 20260, 'disputa_fechada': False, 'irma': (32765, 'declaracao', True)}
+   {'pk': 34744, 'col': 879, 'motivo': 'intervalo_saida', 'data': '2026-09-21', 'via': 'chamado_encerrado', 'carimbo': '2026-09-22', 'validada': True, 'lampada': 'apagado', 'celula': 108293, 'disputa_fechada': False, 'irma': (34745, 'chamado_encerrado', True)}
+   {'pk': 34745, 'col': 879, 'motivo': 'intervalo_volta', 'data': '2026-09-21', 'via': 'chamado_encerrado', 'carimbo': '2026-09-22', 'validada': True, 'lampada': 'apagado', 'celula': 108293, 'disputa_fechada': False, 'irma': (34744, 'chamado_encerrado', True)}
+   {'pk': 36609, 'col': 821, 'motivo': 'intervalo_saida', 'data': '2026-09-26', 'via': 'chamado_encerrado', 'carimbo': '2026-09-26', 'validada': True, 'lampada': 'nao_da_para_dizer', 'celula': 115598, 'disputa_fechada': False, 'irma': (43762, 'chamado_encerrado', False)}
+   {'pk': 38260, 'col': 515, 'motivo': 'intervalo_saida', 'data': '2026-09-25', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105607, 'disputa_fechada': True, 'irma': (38261, 'chamado_encerrado', True)}
+   {'pk': 38261, 'col': 515, 'motivo': 'intervalo_volta', 'data': '2026-09-25', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105607, 'disputa_fechada': True, 'irma': (38260, 'chamado_encerrado', True)}
+   {'pk': 38264, 'col': 515, 'motivo': 'intervalo_saida', 'data': '2026-09-27', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105609, 'disputa_fechada': True, 'irma': (38265, 'declaracao', True)}
+   {'pk': 38268, 'col': 515, 'motivo': 'intervalo_saida', 'data': '2026-09-29', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105611, 'disputa_fechada': True, 'irma': (38269, 'chamado_encerrado', True)}
+   {'pk': 38269, 'col': 515, 'motivo': 'intervalo_volta', 'data': '2026-09-29', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105611, 'disputa_fechada': True, 'irma': (38268, 'chamado_encerrado', True)}
+   {'pk': 38863, 'col': 515, 'motivo': 'intervalo_saida', 'data': '2026-10-01', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105613, 'disputa_fechada': True, 'irma': (38864, 'chamado_encerrado', True)}
+   {'pk': 38864, 'col': 515, 'motivo': 'intervalo_volta', 'data': '2026-10-01', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105613, 'disputa_fechada': True, 'irma': (38863, 'chamado_encerrado', True)}
+   {'pk': 39564, 'col': 515, 'motivo': 'intervalo_saida', 'data': '2026-10-03', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105615, 'disputa_fechada': True, 'irma': (39565, 'chamado_encerrado', True)}
+   {'pk': 39565, 'col': 515, 'motivo': 'intervalo_volta', 'data': '2026-10-03', 'via': 'chamado_encerrado', 'carimbo': '2026-10-06', 'validada': True, 'lampada': 'apagado', 'celula': 105615, 'disputa_fechada': True, 'irma': (39564, 'chamado_encerrado', True)}
+   {'pk': 49126, 'col': 516, 'motivo': 'intervalo_volta', 'data': '2026-10-22', 'via': 'declaracao', 'carimbo': '2026-11-03', 'validada': True, 'lampada': 'aceso', 'celula': 137166, 'disputa_fechada': False, 'irma': (51350, 'nulo', False)}
+   {'pk': 53456, 'col': 993, 'motivo': 'intervalo_saida', 'data': '2026-10-16', 'via': 'declaracao', 'carimbo': '2026-11-03', 'validada': True, 'lampada': 'aceso', 'celula': 124768, 'disputa_fechada': False, 'irma': (53435, 'declaracao', True)}
+   {'pk': 54585, 'col': 909, 'motivo': 'intervalo_saida', 'data': '2026-11-05', 'via': 'declaracao', 'carimbo': '2026-11-06', 'validada': True, 'lampada': 'aceso', 'celula': 123856, 'disputa_fechada': False, 'irma': (54586, 'declaracao', True)}
+PKS {"('paridade_recusada', 'antes_18_10', 'apagado')": [4695, 4800, 5040, 5367, 7463, 8778, 9485, 12771, 13033, 14953, 15014, 20890, 20960, 22586, 22627, 26588, 26589, 26782, 26963, 26984, 27039, 27109, 27110, 27112, 27135, 27136, 27137, 27160, 27209, 27210, 27211, 27328, 27331, 27332, 27450, 27451, 27452, 27461, 27464, 27560, 27561, 27667, 27668, 27673, 27674, 27679, 27680, 27690, 27727, 27728, 27798, 29469, 30009, 30010, 30011, 30012, 31342, 31343, 31373, 31718, 32645, 32646, 32649, 32914, 32915, 33034, 33516, 34130, 34719, 34763, 36077, 36567, 37859, 38289, 38433, 38529, 38647, 38950, 39759, 40197, 40850, 40851, 41705, 41988, 42762, 43255, 43256], "('paridade_recusada', 'antes_18_10', 'nao_da_para_dizer')": [4797, 4798, 5346, 6228, 12770, 14356, 14359, 14363, 14365, 14368, 14960, 14963, 16327, 22470, 23137, 27439]}
+COLABS {"('paridade_recusada', 'antes_18_10', 'apagado')": [72, 82, 107, 163, 248, 252, 277, 334, 338, 340, 363, 366, 435, 438, 444, 460, 468, 489, 515, 518, 627, 723, 769, 787, 814, 825, 841, 843, 857, 859, 865, 876, 879, 889, 913, 926, 940, 941, 944], "('paridade_recusada', 'antes_18_10', 'nao_da_para_dizer')": [98, 104, 171, 334, 749, 881]}
+```
+
+1. `paridade_recusada`, `antes_18_10`: aceso 41 respostas/27 colabs; apagado 87/39; nao_da_para_dizer 16/6. [nao verificado]
+2. `paridade_recusada`, `desde_18_10`: aceso 24 respostas/14 colabs; nenhum grupo exibido para apagado ou nao_da_para_dizer. [nao verificado]
+3. `SEM_CONTA`: 16 respostas; todas com `validada=True`. Abaixo: `pk/col: via, lampada, irma=(pk,via,validada)`; D=`declaracao`, C=`chamado_encerrado`, N=`nulo`. [nao verificado]
+4. `32764/824: D, aceso, (32765,D,True)`. [nao verificado]
+5. `34744/879: C, apagado, (34745,C,True)`; `34745/879: C, apagado, (34744,C,True)`. [nao verificado]
+6. `36609/821: C, nao_da_para_dizer, (43762,C,False)`. [nao verificado]
+7. `38260/515: C, apagado, (38261,C,True)`; `38261/515: C, apagado, (38260,C,True)`. [nao verificado]
+8. `38264/515: C, apagado, (38265,D,True)`; `38268/515: C, apagado, (38269,C,True)`; `38269/515: C, apagado, (38268,C,True)`. [nao verificado]
+9. `38863/515: C, apagado, (38864,C,True)`; `38864/515: C, apagado, (38863,C,True)`. [nao verificado]
+10. `39564/515: C, apagado, (39565,C,True)`; `39565/515: C, apagado, (39564,C,True)`. [nao verificado]
+11. `49126/516: D, aceso, (51350,N,False)`; `53456/993: D, aceso, (53435,D,True)`. [nao verificado]
+12. `54585/909: D, aceso, (54586,D,True)`. [nao verificado]
 
 ## 13/11 14:05 · sessao 97c1ef4ca10a · BUG-PAR-DESCONGELA · sonda · origem=Code
 
@@ -845,34 +906,4 @@ Outros caminhos chegam ao core, mas fornecem apenas hora e não alcançam esse r
 
 `declarar_nao_trabalhou` não chama o core nem cria Ausência: atualiza contexto e anexa nota. `app/chamados/services/declaracao_texto.py:189`, `:208`, `:211`.
 
-## 13/11 12:55 · sessao 0858a2d44305 · - · - · origem=Ronald (tmux)
-
-Censo externo ao produtor e às views centrais:
-
-| Função/porta | Comportamento e alcance |
-|---|---|
-| `api_ausencias` | Lê `tipo` do POST e chama `criar_ausencia`, sem exclusão de férias; pode criar ou reabrir a linha pelo produtor. Reenvio pode anexar documento na existente. `app/api/views.py:1671`, `:1705`, `:1805`, `:1833`. Rota `ausencias/`: `app/api/urls.py:82`. |
-| `api_ausencia_documento` | Busca por PK+colaborador, sem filtro de tipo; exige estado aberto e chama `anexar_documento`. Alcança férias abertas. `app/api/views.py:3052`, `:3069`, `:3078`, `:3107`. Rota: `app/api/urls.py:83`. |
-| `veredito_celula` | Para justificado usa `tipo_ausencia` recebido e cria aprovada, sem veto próprio a férias. `app/ponto/services/veredito_celula.py:211`, `:333`, `:337`. HTTP `veredito_celula_view` aceita o tipo do POST: `app/ponto/views.py:3312`, `:3340`; rota: `app/ponto/urls.py:58`. |
-| `lancar_ausencia_porta` | Recebe qualquer tipo e cria aprovada; não veta férias. `app/ponto/services/checar_ausencia.py:43`. Chamada `_aplicar_ausencia`: `app/core/views_ia.py:971`, `:985`; despacho `:153`; HTTP `ia_perguntar`: `:859`, `:874`; rota `app/core/urls.py:15`. **O preview normal veta férias expressamente**: `app/ponto/services/checar_ausencia.py:10`, `:21`. |
-| `Ausencia.save` | Sem veto à origem derivada: carimba decisão; deriva dias do range e fim a partir dos dias quando cabível. `app/ponto/models.py:868`, `:872`, `:894`, `:902`. |
-| `curar_ausencia_sem_fim.Command.handle` | Seleciona não rejeitadas, dias>1, fim nulo e tipo fora de `EM_ABERTO`, sem excluir férias; `--apply` chama `rederivar_fim`. `app/ponto/management/commands/curar_ausencia_sem_fim.py:26`, `:29`, `:38`, `:46`. |
-| `rejulgar_status_por_tipo.Command.handle` | Seleciona `aguardando_documento`, sem filtro de tipo; `--apply` chama `rejulgar_status_pelo_tipo`. Alcança férias nesse estado. `app/ponto/management/commands/rejulgar_status_por_tipo.py:19`, `:23`, `:30`. |
-| `escalonar_documentos_ausencia.Command.handle` | Encaminha `--apply` ao escalonador geral, sem filtro próprio de tipo. `app/ponto/management/commands/escalonar_documentos_ausencia.py:24`. |
-| `zerar_dados_operacionais.Command.handle` | Exige banco de ensaio; com `--confirmar`, manda `Ausencia.objects.all()` para exclusão. Alcança férias em ensaio. `app/ponto/management/commands/zerar_dados_operacionais.py:24`, `:27`, `:71`, `:89`. |
-| `rederivar_minutos_h06_comp11.tratar_linha` | Busca por PK, compara identidade e usa editor geral sem veto próprio a férias. Porém o plano atual do comando usa lista fechada exclusivamente de atestado/falta. `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:126`, `:138`, `:142`, `:169`, `:50`, `:244`, `:265`. |
-| `_materializar_ausencia_de_resposta` | Função recebe tipo sem veto e cria pelo produtor; chamador runtime usa mapa somente falta/atestado, portanto o caminho atual não fornece férias. `app/chamados/services/materializacao.py:502`, `:527`, `:603`; chamador: `app/chamados/services/disputa_emissao.py:1425`, `:1538`. |
-
-Exclusões concretas:
-
-- `_declarar_ausencia_de_pergunta` recebe tipo de mapa exclusivamente falta/atestado: `app/chamados/services/materializacao.py:468`, `:475`; `app/chamados/models.py:3717`.
-- Regularização e abandono provisório fixam `tipo='falta'`: `app/ponto/services/regularizacao.py:118`; `app/ponto/management/commands/marcar_abandono_provisorio.py:76`.
-- `AusenciaAdmin` herda `SoLeitura`; add/change/delete retornam falso: `app/ponto/admin.py:38`; `app/core/admin.py:59`.
-- `trocar_plantao` lê/trava Ausência e altera a célula pelo `editar_dia`, sem escrever Ausência: `app/ponto/portas/celula.py:670`, `:695`, `:713`.
-- `decididos_do_periodo` e `linha_do_tempo` apenas leem e montam cartões: `app/ponto/services/dia_decidido.py:529`, `:550`, `:561`, `:566`, `:587`, `:599`.
-
-Script auxiliar que também escreve:
-
-- Código de módulo de `bin/sombra_mascara_pessoal.py` exige banco `sombra`, usa schema `juliani`, atualiza `documento` e faz `bulk_update` de `descricao`, sem filtro tipo; portanto alcança férias na sombra. `bin/sombra_mascara_pessoal.py:10`, `:16`, `:22`, `:44`, `:62`; inventário: `bin/sombra_regras_pessoais.py:64`, `:109`. Chamadas shell: `bin/sombra.sh:204`, `:272`.
-
-_4603 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4604 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

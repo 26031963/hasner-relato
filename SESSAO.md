@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 14:12:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (566.7 MB). Acoes na janela: **1383**.
+**Medido em 13/11/2026 14:17:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (566.8 MB). Acoes na janela: **1388**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:16:07 | SendMessage |  | `-` |
+| 14:15:55 | ToolSearch |  | `-` |
+| 14:15:54 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/bug_par_103_A.txt <<'EOF' aval Ronald: BUG-PAR-103=(A) (responde a PERGUNTA DE DESENHO do topo sobre as 103). UNIDADE: resposta de intervalo do colab encerrada pela recusa de paridade com lampada apagada ou nao-da-para-dizer, carimbada antes de 18/10. MEDIDO (logs/BUG-PAR-O-PAR/e3/sonda168/r.r): 244 = 60 do aval + 168 + 12 + 4; das 168, 65 acesas  ...` |
+| 14:14:10 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') L[3:3]=[ "PERGUNTA DE DESENHO BUG-PAR-168 (classe, nada reabre por codigo -- aval BUG-PAR-168-MEDE item 2): das 168 respostas de intervalo encerradas pela propria recusa de PARIDADE, 103 (87 lampada APAGADA em 39 colabs + 16 NAO-DA-PARA-DIZER em 6 colabs) sao resposta do colab que ninguem julgou, e T ...` |
+| 14:13:59 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/BUG-PAR-O-PAR/e3/sonda168; python3 - <<'EOF' import re,ast s=open('logs/BUG-PAR-O-PAR/e3/sonda168/r.r').read() for tag in ('PKS','COLABS'): m=re.search(r'^'+tag+r' (\{.*\})$',s,re.M) d=ast.literal_eval(m.group(1)) for k,v in d.items(): print(tag,k,len(v)) open('logs/BUG-PAR-O-PAR/e3/sonda168/lista_admin_'+tag.lower()+'.txt','w').write('\n'.join('%s: %s'%(k,v) fo ...` |
 | 14:12:07 | Bash |  | `cd /home/ronald/saas-hasner; until [ -e logs/BUG-PAR-O-PAR/e3/sonda168/fim ]; do /usr/bin/sleep 20; done; tail -n 2 logs/BUG-PAR-O-PAR/e3/sonda168/log; head -c 6000 logs/BUG-PAR-O-PAR/e3/sonda168/r.r` |
 | 14:12:04 | Bash |  | `cd /home/ronald/saas-hasner/app; echo "- 13/11 14:1x BUG-PAR-168-MEDE (complemento do BUG-PAR: as 168 encerradas pela propria recusa separadas pela lampada fato_do_marco_no_espelho e pela data do carimbo antes/depois de 18/10, mais os 16 sem conta, por Codex --sonda ANTES do pouso; aceso fica, apagado/nao-da-para-dizer vai a lista do admin com dono; nada reabre por codigo) -> BACKLOG PARIDADE-ABSO ...` |
 | 14:11:58 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/bug_par_168_mede.txt <<'EOF' aval Ronald: BUG-PAR-168-MEDE (complemento; nao muda o escopo da obra). UNIDADE: resposta de intervalo recusada pela guarda de paridade. MEDIDO pela sessao: 244 recusadas / 82 colabs = 60 (aval, na obra) + 168 encerradas pela propria recusa (BACKLOG) + 16 sem conta. (1) Codex --sonda, so leitura, ANTES do pouso do BUG- ...` |
