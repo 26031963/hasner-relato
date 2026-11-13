@@ -1,7 +1,213 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 20:48** · publicado em **12/11/2026 20:51** (UTC-3)
+> Ultima resposta processada: **12/11/2026 21:00** · publicado em **12/11/2026 21:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 21:00 · sessao 9ee32d89260d · E3-FORMA-SQL · verificador · origem=Code
+
+**REPROVA.** Há quebra demonstrável da continência de `q_vivas` e brechas nos dois sentidos do classificador VALOR/booleano. A ocorrência desses casos em produção é [não verificado]. (`app/chamados/models.py:3400`; `app/chamados/juizes.py:1438`; `app/chamados/tests/test_e3_catraca_respondedores.py:169`, `app/chamados/tests/test_e3_catraca_respondedores.py:208`)
+
+1. **Bloqueante: a troca de `_resposta_viva` pode esconder pergunta viva.**
+
+   Contraexemplo permitido pelo modelo: pergunta não validada, sem materialização nem via terminal, competência destrancada, resposta `'   '` com carimbo, célula com `veredito=''` e `ata={'lampadas': []}`. O campo permite veredito vazio. (`app/escala/models.py:1770`)
+
+   O Python ignora a resposta branca, ignora o veredito vazio e retorna viva por falta de materialização. O SQL considera essa célula absolvente: exige veredito não NULL, fora dos acusatórios, sem pendência. Como espaços deixaram de satisfazer `_resposta_viva`, exclui a pergunta. Antes, ela entrava pelo ramo da resposta. Isso viola o contrato declarado de continência; existência desse estado em produção é [não verificado]. (`app/chamados/juizes.py:1407`, `app/chamados/juizes.py:1438`, `app/chamados/juizes.py:1467`; `app/chamados/models.py:3391`, `app/chamados/models.py:3400`, `app/chamados/models.py:3405`)
+
+2. **A enumeração dos brancos está completa contra o Python; a equivalência integral no Postgres não foi comprovada.**
+
+   `_BRANCOS` percorre todos os pontos de código e seleciona exatamente `str.isspace()`. Avaliando essa expressão em memória, obtive 29 caracteres e nenhuma diferença entre `isspace()` e vazio por `strip()` para caracteres isolados. (`app/chamados/juizes.py:1526`)
+
+   | Entrada | Vazio no Python / pertence a `_BRANCOS` |
+   |---|---|
+   | `''`, espaços, `\x85`, U+2028, U+3000 | Sim. (`app/chamados/juizes.py:1512`, `app/chamados/juizes.py:1526`) |
+   | U+FEFF, U+200B | Não; contam como texto. (`app/chamados/juizes.py:1512`, `app/chamados/juizes.py:1526`) |
+   | `None` | Vazio por `(t or '')`; a face sem texto inclui ramo SQL NULL. (`app/chamados/juizes.py:1512`, `app/chamados/juizes.py:1538`) |
+
+   As regexes usam uma **lista explícita de caracteres**, sem `\s`, intervalos ou classe POSIX. A interpretação esperada é “somente membros dessa lista” e “existe algum caractere fora dela”; não encontrei contraexemplo textual nessa construção. Sua execução integral no Postgres é [não verificado]. (`app/chamados/juizes.py:1527`, `app/chamados/juizes.py:1528`)
+
+   A expressão não fixa `COLLATE`. Encoding, collation efetiva e comportamento do servidor são [não verificado]; a afirmação de medição em `en_US.utf8` aparece como comentário, sem resultado de execução no dado fornecido. Classes POSIX/`\s` e listas literais não devem ser confundidas, mas a semântica efetiva deste servidor permanece [não verificado]. (`app/chamados/juizes.py:1524`, `app/chamados/juizes.py:1538`, `app/chamados/juizes.py:1546`)
+
+   As faces também não respondem à mesma pergunta entre si: `q_respondida_sem_texto` corresponde ao juiz; `q_respondida_com_texto` corresponde a **carimbada com texto**, seu complemento apenas dentro das carimbadas. (`app/chamados/juizes.py:1518`, `app/chamados/juizes.py:1538`, `app/chamados/juizes.py:1542`)
+
+3. **Censo dos leitores: a alteração alcança o app e outros consumidores; “só o degrau 1 lê resposta” é falso transitivamente.**
+
+   | Leitor direto de `q_vivas` | Uso posterior |
+   |---|---|
+   | Fila de validar | Refina por `pergunta_viva`. (`app/chamados/juizes.py:1700`, `app/chamados/juizes.py:1703`) |
+   | Fio administrativo | Refina as disputas fechadas por `pergunta_viva`. (`app/chamados/services/fio.py:254`, `app/chamados/services/fio.py:268`) |
+   | Perguntas do app | Refina por `pergunta_viva`. (`app/chamados/services/pergunta_no_app.py:50`, `app/chamados/services/pergunta_no_app.py:58`) |
+   | Cobrança | Refina por espera pelo texto e `pergunta_viva`. (`app/chamados/services/cobranca.py:237`, `app/chamados/services/cobranca.py:241`) |
+   | Vigia de disputa fechada | Refina por `pergunta_viva`. (`app/chamados/services/vigia_fio.py:757`, `app/chamados/services/vigia_fio.py:764`) |
+   | Janela do colaborador | Usa diretamente os destinos para ampliar a janela. (`app/chamados/services/janela_colab.py:63`, `app/chamados/services/janela_colab.py:69`) |
+   | Raio-X | Usa o queryset e depois o veredito persistido. (`app/chamados/services/raiox.py:74`, `app/chamados/services/raiox.py:120`) |
+   | Fechamento administrativo | Entrega diretamente os resultados a `fechar_por_admin`. (`app/ponto/services/veredito_celula.py:181`, `app/ponto/services/veredito_celula.py:190`) |
+
+   Os consumidores diretos de `perguntas_respondidas_a_validar` são a API de mensageria e o classificador da fila; em `models` há reexportação. (`app/api/views_mensageria.py:540`; `app/chamados/services/validacao.py:929`; `app/chamados/models.py:4161`)
+
+   Não encontrei nesses corpos uma regra explícita exigindo “brancos = viva”. Entretanto, o filtro Python posterior não recupera uma linha já excluída pelo SQL, como no achado 1. (`app/chamados/services/pergunta_no_app.py:50`, `app/chamados/services/pergunta_no_app.py:58`; `app/chamados/models.py:3405`)
+
+   O degrau 6 também alcança a resposta: `_pergunta_viva_calc` → `_pergunta_materializada_de_fato` → `_slot_esperado`, que lê `resposta_colab` ou delega ao plantio. Essa cadeia, isoladamente, não prova quebra de continência; invalida a justificativa literal de que apenas o degrau 1 lê a resposta. (`app/chamados/juizes.py:1473`, `app/chamados/juizes.py:752`, `app/chamados/juizes.py:360`, `app/chamados/juizes.py:372`)
+
+4. **Escritores: não identifiquei escritor novo ou divergência textual comprovada contra a nova face.**
+
+   | Escritor persistente do par | Guarda/atribuição |
+   |---|---|
+   | `_nascer` | Recebe payload, verifica o par e insere. (`app/chamados/models.py:2846`, `app/chamados/models.py:2865`) |
+   | `save` | Tripwire antes da persistência. (`app/chamados/models.py:3464`, `app/chamados/models.py:3468`) |
+   | `carimbar` | Completa o instante somente havendo texto pelo juiz Python. (`app/chamados/models.py:3156`, `app/chamados/models.py:3158`) |
+   | `descarimbar_em_lote` | Verifica o par proposto e escreve por update. (`app/chamados/models.py:3286`, `app/chamados/models.py:3306`) |
+   | `responder_pergunta_disputa_core` | Aplica `strip`, recusa vazio e escreve texto/instante. (`app/chamados/services/disputa_emissao.py:1432`, `app/chamados/services/disputa_emissao.py:1467`) |
+   | `responder_automaticamente` | Consulta a recusa canônica e escreve ambos. (`app/chamados/services/disputa_emissao.py:1657`, `app/chamados/services/disputa_emissao.py:1659`) |
+   | `carimbar_resposta_pela_trilha` | Exige texto por `strip` e escreve o instante ausente. (`app/chamados/services/disputa_emissao.py:1677`, `app/chamados/services/disputa_emissao.py:1681`) |
+
+   Reabertura e ressuscitação delegam a escrita ao lote; simulação e desfazer alteram somente memória. Esses papéis estão explicitados no selo de escritores. (`app/chamados/tests/test_e3_porta_A_escritor_do_par.py:42`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:46`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:47`)
+
+   U+FEFF e U+200B podem sobreviver ao `strip` como texto; isso concorda com a enumeração nova. Divergência efetiva de escritor contra a regex do Postgres e ocorrência desses caracteres em produção são [não verificado]. (`app/chamados/services/disputa_emissao.py:1432`; `app/chamados/juizes.py:1526`)
+
+5. **Bloqueante: a catraca tem falso VALOR e falso RESPONDEDOR.**
+
+   Este booleano escapa como VALOR porque `guarda()` reconhece o campo, mas não exige o mesmo objeto: (`app/chamados/tests/test_e3_catraca_respondedores.py:150`, `app/chamados/tests/test_e3_catraca_respondedores.py:172`)
+
+   ```python
+   return p.respondida_em is not None and q.respondida_em.isoformat()
+   ```
+
+   Este também escapa: o agregado de outro queryset contamina o statement inteiro. (`app/chamados/tests/test_e3_catraca_respondedores.py:208`, `app/chamados/tests/test_e3_catraca_respondedores.py:237`)
+
+   ```python
+   return (
+       qs.filter(respondida_em__isnull=False).exists(),
+       other.aggregate(m=Max("respondida_em")),
+   )
+   ```
+
+   No sentido inverso, esta serialização recebe RESPONDEDOR, pois o classificador examina somente `IfExp.body`, ignorando `orelse`. Os exemplos novos não cobrem esses contraexemplos. (`app/chamados/tests/test_e3_catraca_respondedores.py:169`, `app/chamados/tests/test_e3_catraca_respondedores.py:388`)
+
+   ```python
+   return None if p.respondida_em is None else p.respondida_em.isoformat()
+   ```
+
+   Não encontrei falso VALOR concreto entre os sítios atuais classificados assim; os três retirados são usos legítimos de instante: resposta posterior à cobrança, máximo instante para invalidar lavra e idade da resposta. (`app/chamados/services/verbos.py:342`; `app/chamados/veredito_lavrado.py:207`; `app/chamados/services/validacao.py:932`)
+
+   | Dos quatro restantes | Pergunta efetiva |
+   |---|---|
+   | `_slot_esperado` | A resposta atual é posterior ao horizonte consultado? (`app/chamados/juizes.py:347`) |
+   | Backfill | Há projeção carimbada cujo ato legado precisa ser preservado? (`app/chamados/management/commands/backfill_decisoes_pergunta.py:56`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`) |
+   | `linhas_da_projecao_sem_linha` | Falta linha de mesmo ato e instante, inclusive quando o texto legado é vazio? (`app/chamados/models.py:3993`, `app/chamados/models.py:4009`) |
+   | Cura de limbo | O carimbo continua ausente antes da limpeza pela porta? (`app/chamados/management/commands/curar_perguntas_em_limbo.py:46`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`) |
+
+   Portanto, migrar esses quatro mecanicamente para “com texto” perderia a distinção entre validade da resposta, horizonte temporal e preservação da trilha. (`app/chamados/juizes.py:349`; `app/chamados/models.py:3995`)
+
+6. **Selos: têm controles contra vacuidade, mas não cobrem os bloqueios encontrados.**
+
+   A equivalência compara os mesmos PKs em três composições; o universo tem 20 linhas e exige ambos os resultados do juiz. O mutante sem trim exige divergência num conjunto não vazio; o mutante `\s` exige NBSP e U+001F. Execução SQL e resultado RED/GREEN são [não verificado]. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:45`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:60`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:74`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:93`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:102`)
+
+   A amostra fixa não exercita todos os brancos nem U+0085/U+2028/U+3000/U+FEFF. NULL SQL também não é exercitado: o campo é NOT NULL e o teste de `None` chama apenas Python. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:89`; `app/chamados/models.py:2468`)
+
+   A fixture está visível, recarrega o passivo e exige controle positivo na fila. O `setUp` é próprio; não identifiquei o empréstimo descrito como causador do vazamento anterior. Ausência de vazamento na suíte é [não verificado]. O caso `veredito=''` não está coberto. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:118`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:120`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:152`; `app/chamados/tests/test_viva_delega_ao_juiz.py:58`, `app/chamados/tests/test_viva_delega_ao_juiz.py:81`)
+
+7. **Classes anteriores e pré-requisito: persistem dois significados; item (3) não é o único problema de pouso.** [nao verificado]
+
+   Os corpos novos constroem filtros: não acrescentam escritor, relógio ou aquisição explícita de trava. A enumeração vem do próprio Python; não identifiquei segundo juiz independente nesses corpos. (`app/chamados/juizes.py:1526`, `app/chamados/juizes.py:1531`, `app/chamados/juizes.py:1541`; `app/chamados/models.py:3392`)
+
+   O ESMERIL reprova a uniformidade atual: `respondida`, `estado` e a separação de pendências do app usam apenas carimbo; `espera_o_texto_do_colaborador` considera carimbo sem texto como espera. O passivo inalterado continua salvável por desenho. (`app/chamados/models.py:3576`, `app/chamados/models.py:3071`, `app/chamados/models.py:3498`; `app/chamados/services/pergunta_no_app.py:71`; `app/chamados/services/fio.py:187`)
+
+   Não há no aval fornecido uma dependência explícita tornando toda entrega de (1)(2) subordinada à execução dos 17 do item (3) [não verificado em arquivo local]. Porém os nove leitores SQL foram pedidos no próprio item (1), e permanecem booleanos crus, por exemplo nos contadores de pendência; a catraca conserva 27 sítios como migração futura. Isso não demonstra cumprimento integral de (1)(2), sob a regra de escopo literal. (`app/chamados/services/acoes_disputa.py:95`; `app/chamados/services/disputa_emissao.py:1720`; `app/chamados/tests/test_e3_catraca_respondedores.py:23`, `app/chamados/tests/test_e3_catraca_respondedores.py:37`; `CLAUDE.md:37`)
+
+**Veredito final: REPROVA**, pela pergunta viva excluída de `q_vivas` e pela catraca que aceita booleanos como VALOR e rejeita usos legítimos de instante. (`app/chamados/models.py:3400`; `app/chamados/juizes.py:1438`; `app/chamados/tests/test_e3_catraca_respondedores.py:169`, `app/chamados/tests/test_e3_catraca_respondedores.py:208`)
+
+## 12/11 20:58 · sessao 365b9372c0b5 · - · - · origem=Ronald (tmux)
+
+Achado bloqueante da catraca: `guarda()` compara apenas o nome do campo, sem comprovar que é o mesmo objeto; `valor_no_orm()` procura agregado/ordenação em todo o statement, sem comprovar ligação com o filtro booleano (`app/chamados/tests/test_e3_catraca_respondedores.py:150`, `:158`, `:165`, `:194`, `:208`). Contraexemplos executados em memória:
+
+```python
+return p.respondida_em is not None and q.respondida_em.isoformat()
+```
+
+```python
+return (
+    qs.filter(respondida_em__isnull=False).exists(),
+    other.aggregate(m=Max("respondida_em")),
+)
+```
+
+Ambos recebem `VALOR` e escapam da contagem; isso decorre diretamente das regras citadas (`app/chamados/tests/test_e3_catraca_respondedores.py:172`, `:209`, `:237`). Também escapa a união `qs.filter(respondida_em__isnull=False) | qs.filter(respondida_em__gt=d)`, embora o primeiro ramo continue perguntando apenas pelo carimbo (`app/chamados/tests/test_e3_catraca_respondedores.py:212`).
+
+Há erro inverso: `return None if p.respondida_em is None else p.respondida_em.isoformat()` recebe `RESPONDEDOR`, porque a regra examina somente o `body`, nunca o `orelse`; guarda equivalente num bloco `if` também é contada (`app/chamados/tests/test_e3_catraca_respondedores.py:169`, `:178`, `:188`). Os mutantes novos cobrem pares favoráveis à implementação e não esses contraexemplos (`app/chamados/tests/test_e3_catraca_respondedores.py:388`).
+
+Os três removidos são usos legítimos de instante:
+
+- `placar_aceite`: resposta posterior à cobrança e data da resposta (`app/chamados/services/verbos.py:325`, `:342`, `:345`).
+- `marcos_do_lote`: máximo instante de resposta como insumo de invalidação da lavra (`app/chamados/veredito_lavrado.py:197`, `:207`, `:208`).
+- `fila_validar_classificada`: idade em dias da resposta (`app/chamados/services/validacao.py:929`, `:932`, `:935`).
+
+O classificador produziu oito ocorrências `VALOR`; as demais são serialização ou fotografia para trilha, sem falso VALOR concreto encontrado: `app/api/views.py:1161`, `:2559`; `app/chamados/services/disputa_emissao.py:2059`, `:2076`; `app/chamados/services/materializacao.py:675`.
+
+Os quatro restantes perguntam coisas diferentes:
+
+- `_slot_esperado`: a resposta existe hoje, mas é posterior ao horizonte consultado; nesse caso não fornece slot (`app/chamados/juizes.py:344`, `:347`, `:348`).
+- `linhas_a_criar`: pré-seleção das projeções com carimbo para reconstruir atos legados, delegada a `linhas_da_projecao_sem_linha` (`app/chamados/management/commands/backfill_decisoes_pergunta.py:47`, `:56`, `:67`).
+- `linhas_da_projecao_sem_linha`: preservar resposta/validação cuja linha de mesmo ato e instante não existe; preserva inclusive texto vazio, por ser trilha (`app/chamados/models.py:3993`, `:4002`, `:4009`, `:4011`).
+- `curar_perguntas_em_limbo`: verificar que o carimbo continua nulo antes de limpar a projeção pela porta; universo e fotografia obrigatória aparecem antes (`app/chamados/management/commands/curar_perguntas_em_limbo.py:46`, `:47`, `:69`).
+
+Executadas as oito catracas por extração AST em memória, sem importação da aplicação ou banco: passaram, com 27 sítios contados; isso confirma a insuficiência dos exemplos existentes diante dos contraexemplos acima (`app/chamados/tests/test_e3_catraca_respondedores.py:305`, `:351`, `:388`).
+
+## 12/11 20:58 · sessao 1ac4d4ffa056 · - · - · origem=Ronald (tmux)
+
+1. **Selos têm universo e controles positivos; não há vacuidade evidente no código.** São criadas 20 perguntas pelo produto de `TEXTOS × CARIMBOS`, com o passivo inserido por `update`; há verificação explícita de cardinalidade e dos dois resultados do juiz. A comparação verifica os mesmos PKs em `filter`, `exclude` e `filter(~face)`. — `app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `:45`, `:53`, `:60`, `:74`.
+
+2. **Mutante sem trim tem mordida estrutural demonstrável, execução [não verificado].** O teste exige divergência exatamente no conjunto não vazio de textos brancos carimbados; não passa com divergência vazia. O mutante `\s` exige divergência em NBSP e U+001F; que isso aconteça no Postgres/collation empregado é [não verificado]. — `app/chamados/tests/test_e3_forma_sql_do_juiz.py:93`, `:98`, `:102`, `:108`.
+
+3. **A equivalência não foi selada para todo Unicode nem NULL SQL.** A amostra fixa contém dez strings, sem U+0085, U+2028, U+3000 ou U+FEFF. O campo não admite NULL; o teste de `None` chama somente o juiz Python. A classe completa é calculada no código, mas sua interpretação integral pelo Postgres não está demonstrada pelos testes disponíveis. — `app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `:89`; `app/chamados/models.py:2468`; `app/chamados/juizes.py:1526`.
+
+4. **Fixture dos selos de integração está visível e verifica resultados reais.** A classe reutiliza apenas `_pergunta`, tem `setUp` próprio e cria o passivo por `update` seguido de `refresh_from_db`. `_confere` recarrega a pergunta e exige que o juiz produza o resultado esperado antes de conferir a propriedade/continência. A fila tem controle positivo obrigatório, impedindo aprovação por fila vazia. — `app/chamados/tests/test_e3_forma_sql_do_juiz.py:118`, `:120`, `:152`; `app/chamados/tests/test_viva_delega_ao_juiz.py:34`, `:42`, `:73`, `:81`.
+
+5. **Não encontrei o empréstimo de `setUp` responsável pelo vazamento descrito; vazamento em execução permanece [não verificado].** O comentário identifica esse defeito anterior e a implementação atual define `setUp` próprio, mantendo somente o empréstimo de `_pergunta`. — `app/chamados/tests/test_e3_forma_sql_do_juiz.py:116`, `:118`, `:120`.
+
+6. **Separar pendência do item (3) da incompletude do item (1).** O aval fornecido pede explicitamente que os nove sítios SQL leiam a face no item (1); o diff não os migra. A cópia declara as migrações restantes como obra própria e conserva `PAROU_EM = 27`. O item (3), pelo texto fornecido, exige sombra antes das migrações que movem passivo; uma dependência explícita proibindo pousar qualquer parte de (1)(2) antes dele é [não verificado]. A obrigação de cumprir literalmente o aval e incluir leitores/escritores no escopo está registrada. — `app/chamados/tests/test_e3_catraca_respondedores.py:23`, `:37`; `CLAUDE.md:37`, `:379`; aval fornecido [não verificado em arquivo local].
+
+7. **Classes estruturais no trecho novo:** as faces constroem `Q`, e o consumidor novo filtra e ordena; esses corpos não introduzem escrita, leitura de relógio ou aquisição explícita de trava. A fonte da classe de brancos é `str.isspace`, compartilhada pelos dois padrões, enquanto o juiz mantém `strip`; a equivalência efetiva da tradução SQL depende da questão Unicode/Postgres do item 1. — `app/chamados/juizes.py:1510`, `:1526`, `:1531`, `:1541`, `:1698`; `app/chamados/models.py:3392`.
+
+**Para o veredito consolidado:** estes selos sustentam os casos presentes e evitam universo/fila vazios; não certificam execução, Unicode completo, NULL SQL ou ausência de vazamento em suite. — `app/chamados/tests/test_e3_forma_sql_do_juiz.py:28`, `:74`, `:89`, `:152`; execução [não verificado].
+
+## 12/11 20:58 · sessao 0f7b5833836e · - · - · origem=Ronald (tmux)
+
+Achado principal: há contraprova estática à continência no delta. Considere pergunta não validada, sem via terminal/identidade, sem materialização, carimbada com resposta `'   '`, ligada a célula de `veredito=''` e `ata={'lampadas': []}`, sem competência trancada. Esse veredito é permitido pelo campo (`app/escala/models.py:1770`). Python ignora a resposta branca (`app/chamados/juizes.py:1407`), ignora o veredito vazio (`app/chamados/juizes.py:1438`) e retorna viva quando não materializada (`app/chamados/juizes.py:1467`). SQL considera essa célula absolvente porque exige apenas veredito não NULL e fora de `VEREDITOS_ACUSAM` (`app/chamados/models.py:3400`), e agora exclui a pergunta porque a resposta branca deixou de satisfazer `_resposta_viva` (`app/chamados/models.py:3393`, `app/chamados/models.py:3405`). A forma anterior incluía esse caso pelo ramo da resposta; existência em produção [não verificado].
+
+Leitores diretos de `q_vivas`:
+
+- Fila de validar, seguida de `pergunta_viva`: `app/chamados/juizes.py:1700`, `app/chamados/juizes.py:1703`.
+- Fio administrativo de disputa fechada, seguido de `pergunta_viva`: `app/chamados/services/fio.py:254`, `app/chamados/services/fio.py:268`.
+- Perguntas do app, seguido de `pergunta_viva`: `app/chamados/services/pergunta_no_app.py:50`, `app/chamados/services/pergunta_no_app.py:58`.
+- Cobrança, seguida de espera pelo texto e `pergunta_viva`: `app/chamados/services/cobranca.py:237`, `app/chamados/services/cobranca.py:241`.
+- Vigia de disputa fechada, seguido de `pergunta_viva`: `app/chamados/services/vigia_fio.py:757`, `app/chamados/services/vigia_fio.py:764`.
+- Janela visível do colaborador: usa diretamente os IDs resultantes, ampliando a janela; não refina com juiz Python (`app/chamados/services/janela_colab.py:63`, `app/chamados/services/janela_colab.py:69`).
+- Raio-X: usa diretamente o queryset para crédito e depois filtra pelo veredito persistido; não chama `pergunta_viva` nesse ponto (`app/chamados/services/raiox.py:74`, `app/chamados/services/raiox.py:120`).
+- Fechamento pelo admin: carimba diretamente cada resultado, sem refinamento por `pergunta_viva` (`app/ponto/services/veredito_celula.py:181`, `app/ponto/services/veredito_celula.py:190`).
+
+Não encontrei nesses corpos regra explícita “brancos significam viva”; os efeitos reais sobre seus universos em produção são [não verificado]. A contraprova acima faz os consumidores perderem uma pergunta que o juiz pode considerar viva (`app/chamados/juizes.py:1467`, `app/chamados/models.py:3405`).
+
+Leitores da fila `perguntas_respondidas_a_validar`: API de mensageria (`app/api/views_mensageria.py:540`) e classificação por lote (`app/chamados/services/validacao.py:929`); a exportação em models é somente reexportação (`app/chamados/models.py:4161`). A API usa o carimbo como instante para serialização e idade (`app/api/views_mensageria.py:569`); o classificador calcula idade, com guarda de nulo (`app/chamados/services/validacao.py:932`).
+
+A frase “só o degrau 1 lê resposta” é falsa transitivamente: degrau 6 chama `_pergunta_materializada_de_fato` (`app/chamados/juizes.py:1473`), este chama `_slot_esperado` (`app/chamados/juizes.py:752`), que lê `resposta_colab` para `data_hora` (`app/chamados/juizes.py:360`) ou delega ao plantio (`app/chamados/juizes.py:372`), que também lê o texto (`app/chamados/services/materializacao.py:359`). Só o teste explícito de vazio para promover a viva está no degrau 1 (`app/chamados/juizes.py:1407`); a cadeia posterior não prova, sozinha, quebra da continência.
+
+Escritores do par:
+
+- Nascimento: recebe o payload, recusa carimbo sem texto antes da trava e grava pelo corpo `_nascer` (`app/chamados/models.py:2846`, `app/chamados/models.py:2865`).
+- `save` genérico: consulta o tripwire antes de persistir; preserva passivo inalterado (`app/chamados/models.py:3464`, `app/chamados/models.py:3498`, `app/chamados/models.py:3501`).
+- `carimbar`: só acrescenta `respondida_em` quando há texto pelo juiz Python (`app/chamados/models.py:3156`, `app/chamados/models.py:3158`).
+- `descarimbar_em_lote`: verifica o par proposto, depois escreve via update (`app/chamados/models.py:3286`, `app/chamados/models.py:3306`).
+- Resposta humana: aplica `.strip()`, recusa vazio, atribui texto e instante (`app/chamados/services/disputa_emissao.py:1432`, `app/chamados/services/disputa_emissao.py:1467`).
+- Resposta automática: consulta `recusa_respondida_sem_texto` e escreve ambos (`app/chamados/services/disputa_emissao.py:1657`, `app/chamados/services/disputa_emissao.py:1659`).
+- Carimbo pela trilha: exige texto pelo `.strip()` e carimbo ausente; escreve o instante (`app/chamados/services/disputa_emissao.py:1677`, `app/chamados/services/disputa_emissao.py:1681`).
+
+Reabertura delega par vazio ao lote (`app/chamados/services/disputa_emissao.py:1595`, `app/chamados/services/disputa_emissao.py:1634`); ressuscitação delega limpeza de `respondida_em` (`app/chamados/models.py:1567`). As atribuições da simulação de ressuscitação e do desfazer da recusa são em memória (`app/chamados/models.py:1509`, `app/chamados/models.py:3189`). O selo declara e varre esses sete escritores, duas delegações e dois casos em memória (`app/chamados/tests/test_e3_porta_A_escritor_do_par.py:42`).
+
+Não identifiquei escritor novo deste diff; os escritores examinados usam o vazio Python ou sua porta, portanto diferença deles contra a face SQL depende da semântica efetiva da regex no Postgres [não verificado]. Os caracteres FEFF e U+200B passam como texto para esses escritores quando a modalidade aceita texto livre, pois a resposta humana só aplica `.strip()` e recusa o resultado vazio (`app/chamados/services/disputa_emissao.py:1432`); sua ocorrência em produção [não verificado].
+
+ESMERIL: o significado ainda não é uniforme entre leitores: `respondida` equivale somente a carimbo (`app/chamados/models.py:3576`), `estado` também traduz carimbo em RESPONDIDA (`app/chamados/models.py:3071`), e o app separa pendência por carimbo (`app/chamados/services/pergunta_no_app.py:71`); já `espera_o_texto_do_colaborador` inclui o carimbo sem texto como espera (`app/chamados/services/fio.py:187`). O passivo com par inalterado continua salvável por desenho (`app/chamados/models.py:3498`), portanto a divergência dos leitores não se resolve só pela porta de entrada.
+
+Meu veredito no recorte de continência: **REPROVA**, pela contraprova `veredito=''` acima (`app/chamados/juizes.py:1438`, `app/chamados/models.py:3400`).
 
 ## 12/11 20:48 · sessao 0d5c462a6a28 · TIPO-NA-FONTE · sonda · origem=Code
 
@@ -477,121 +683,4 @@ Os testes também fazem escrita direta: há um `update(resposta_colab='   ')` ex
 
 A proteção demonstrada é anterior ao save no **core**; ela não existe para o texto novo no **automático**, nem no `save` genérico. [disputa_emissao.py:1432](app/chamados/services/disputa_emissao.py:1432), [disputa_emissao.py:1652](app/chamados/services/disputa_emissao.py:1652), [models.py:3414](app/chamados/models.py:3414). Qual escritor originou registros reais, ou se algum já gravou somente espaços em produção, permanece [nao verificado].
 
-## 12/11 19:54 · sessao be142c9f6191 · - · - · origem=Ronald (tmux)
-
-Escritores indiretos e caminhos auditados:
-
-| Caminho | Evidência | Espaços + carimbo |
-|---|---|---|
-| `PerguntaDisputa._nascer` recebe `**campos`, constrói e persiste | `app/chamados/models.py:2826`, `:3015`, `:3016`, `:3018` | Pode receber `resposta_colab='   '` e `respondida_em=instante`; não faz trim. As portas `abrir`/`abrir_conversa` encaminham os campos em `:2791`/`:2803`. Os chamadores operacionais localizados não passam esse par: `app/chamados/services/disputa_emissao.py:439`, `:444`, `:837`, `:1371`; `app/chamados/services/declaracao_texto.py:376`, `:666`; `app/chamados/services/acoes_disputa.py:263`. Execução disso em produção: [não verificado]. |
-| Máscara da sombra | `bin/sombra_regras_pessoais.py:85` inventaria o campo; `bin/sombra_mascara_pessoal.py:57` atribui e `:62`/`:64` fazem `bulk_update` | Restrita ao banco `sombra` por `:10`; não usa trim, mas transforma espaços em texto com hash, conforme `bin/sombra_regras_pessoais.py:29`–`:33`, portanto não produz texto só de espaços. |
-| `PerguntaDisputa.save` | `app/chamados/models.py:3414`–`:3425` | Sem normalização/trim global: apenas identidade na inclusão e `super().save` dentro de transação. |
-| `DecisaoPergunta.registrar` | `app/chamados/models.py:3954`–`:3956` | Grava decisões e acorda células; não reescreve `PerguntaDisputa.resposta_colab`. |
-
-Entradas do escritor canônico:
-
-- O próprio core faz trim e rejeita vazio antes de atribuir/gravar: `app/chamados/services/disputa_emissao.py:1432`–`:1434`; atribui o par em `:1467`–`:1468`; salva em `:1508`.
-- Web faz trim antes da chamada: `app/chamados/views.py:1265`, `:1283`.
-- API faz trim e rejeita vazio antes da chamada: `app/api/views.py:2614`–`:2620`.
-- Correção administrativa faz trim e exige HH:MM antes da chamada: `app/chamados/services/acoes_disputa.py:334`–`:337`, `:371`.
-- Declaração de hora faz trim antes de chamar: `app/chamados/services/declaracao_texto.py:319`, `:419`.
-- Aplicação de declaração chama com hora extraída/formada como HH:MM: `app/chamados/services/declaracao_texto.py:33`–`:39`, `:611`–`:612`, `:693`.
-
-A porta automática aceita texto novo sem trim: `app/chamados/services/disputa_emissao.py:1652`–`:1655`. Seu único chamador operacional localizado passa uma constante com texto, definida em `app/api/foto_recebida.py:25` e passada em `:48`. Portanto a capacidade da função de gravar espaços é demonstrável pelo corpo; entrada de espaços pelo fluxo de foto atual não é sustentada por esse chamador. (`app/chamados/services/disputa_emissao.py:1652`–`:1655`; `app/api/foto_recebida.py:25`, `:48`.)
-
-`carimbar_resposta_pela_trilha` não escreve o campo de texto e recusa texto só de espaços antes de salvar o carimbo: `app/chamados/services/disputa_emissao.py:1670`, `:1674`–`:1676`.
-
-## 12/11 19:54 · sessao 2ca5f70d8909 · - · - · origem=Ronald (tmux)
-
-Escritores operacionais explícitos encontrados:
-
-| Função | Escrita e persistência | Só espaços com `respondida_em` preenchido? |
-|---|---|---|
-| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1467` atribui texto; `:1468` instante; `:1508` salva ambos. | **Não pelo argumento recebido**: normaliza em `:1432` com `(resposta or '').strip()` e rejeita vazio em `:1433-1434`, antes da atribuição/save. |
-| `responder_automaticamente` | Mesmo arquivo `:1652` atribui `texto` bruto; `:1653` instante; `:1655` salva ambos. | **Sim na função**, caso receba `texto='   '` e instante não nulo: não normaliza nem valida o argumento. O `strip()` de `:1647` examina **o texto antigo**, apenas impedindo sobrescrever resposta já existente. |
-| `reabrir_para_correcao` | Mesmo arquivo `:1593` prepara `resposta_colab=''` e `respondida_em=None`; persiste por `:1632` ou por `:1630` → `app/chamados/models.py:3265-3267`. | **Não**: grava vazio e remove instante; não depende de trim. |
-
-O único chamador operacional encontrado de `responder_automaticamente` é `app/api/foto_recebida.py:48`: fornece a constante não vazia `_TEXTO = '[auto] Foto recebida em upload separado.'` (`:25`) e `agora = _tz.now()` (`:42`). Portanto, possibilidade na função está demonstrada; geração de espaços por essa chamada atual não está demonstrada, pois o argumento é fixo.
-
-Também há portas genéricas que podem persistir o campo:
-
-- `PerguntaDisputa._nascer`: constrói com `**campos` em `app/chamados/models.py:3015-3016`, salva em `:3018`; recebe esses argumentos através de `abrir` (`:2777`, `:2790-2791`) ou `abrir_conversa` (`:2795`, `:2802-2803`). Não faz trim do campo; `save()` também não o faz (`:3414-3424`). Poderia receber texto de espaços e instante preenchido por esses kwargs. As chamadas operacionais examinadas não passam os campos de resposta: `disputa_emissao.py:439-452`, `:837-846`, `:1371-1378`; `declaracao_texto.py:376-377`, `:666-667`; `acoes_disputa.py:263-268`. O `**kw` de `disputa_emissao.py:845` contém apenas `chamados_relacionados_ids`, preparado em `:834-836`.
-- `PerguntaDisputa.descarimbar_em_lote`: `app/chamados/models.py:3253`, `:3265-3267` repassa `**outros` a `update`, sem trim. A chamada que passa `resposta_colab` é a reabertura acima, com `''`/`None` (`disputa_emissao.py:1593`, `:1630`); a outra chamada passa apenas `validada_em`, `validada_por`, `respondida_em` (`models.py:1567`).
-- Máscara da **sombra**: inventário `bin/sombra_regras_pessoais.py:85` inclui a coluna; executor `bin/sombra_mascara_pessoal.py:44-64` transforma valores, atribui por `setattr` (`:57`) e persiste por `bulk_update` (`:62`, `:64`). Exige banco chamado `sombra` (`:10`). Não faz trim, mas espaços viram marcador com hash conforme `bin/sombra_regras_pessoais.py:29-33`; não escreve `respondida_em`.
-
-`carimbar_resposta_pela_trilha` **não escreve `resposta_colab`**: só preenche instante em `disputa_emissao.py:1674-1676`; rejeita texto só de espaços antes disso em `:1670-1671`. `PerguntaDisputa.carimbar` também só adiciona instante com texto não vazio, usando `texto_vazio` em `models.py:3131-3134`, sem reescrever o texto.
-
-## 12/11 19:52 · sessao 31a083aa2e1d · TRANCA-VIVAS-08 · verificador · origem=Code
-
-**REPROVA — bloqueante 1: a cobertura ainda permite retirar `vivas_resgatadas` da união sem contrariar os oráculos examinados.** O caso novo mantém essa parcela em zero; falta um caso com resgatada exclusiva conferindo o total e a linha por competência. (`app/chamados/tests/test_tranca_vivas_08.py:186`; `app/chamados/services/competencia_trancada.py:351`)
-
-1. **BLOQUEIA 1: rótulos curados; prova da união ainda incompleta.**
-
-   | Campo | Quem escreve o valor | Quem lê |
-   |---|---|---|
-   | `decidir_pelo_dp` | `medir()` inclui IDs não resgatados vindos de `respostas_sem_veredito(ignorar_tranca=True)`. (`app/chamados/services/competencia_trancada.py:126`, `:137`) | Pauta do DP, comando de encerramento e agregador. (`app/chamados/services/competencia_trancada.py:246`; `app/chamados/management/commands/encerrar_por_competencia_trancada.py:38`; `app/chamados/services/competencia_trancada.py:353`) |
-   | `vivas_resgatadas` | `medir()` inclui perguntas vivas ligadas a chamados resgatados após a tranca. (`app/chamados/services/competencia_trancada.py:117`, `:132`, `:149`) | `medir_frota()` incorpora à união e conta separadamente. (`app/chamados/services/competencia_trancada.py:348`, `:353`) |
-   | `vivas_tocadas_pelo_admin` | `medir()` classifica perguntas vivas usando o helper real de toque. (`app/chamados/services/competencia_trancada.py:155`, `:158`) | `medir_frota()` incorpora à união e conta separadamente. (`app/chamados/services/competencia_trancada.py:348`, `:353`) |
-   | `ficam_com_o_admin` | `medir_frota()` calcula a cardinalidade da união por competência e acumula os totais. (`app/chamados/services/competencia_trancada.py:348`, `:351`, `:355`) | CLI, API e mensageria, pelo percurso abaixo. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `app/api/views_mensageria.py:1573`; `mensageria/nucleo/ferramentas.py:2038`) |
-
-   A CLI agora imprime a união como `ficam_com_o_admin=` e publica as três contagens separadas. A API repassa os quatro valores; `core_client` lê JSON, e a ferramenta descreve corretamente a união e devolve o payload. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `app/api/views_mensageria.py:1573`; `mensageria/nucleo/core_client.py:239`; `mensageria/nucleo/ferramentas.py:2032`)
-
-   O outro comando, `encerrar_por_competencia_trancada`, imprime `decidir_pelo_dp` como quantidade e IDs da lista de respostas; não imprime a união sob esse nome. (`app/chamados/management/commands/encerrar_por_competencia_trancada.py:36`; `app/chamados/services/competencia_trancada.py:139`)
-
-   **Não encontrei leitor da CLI alterada que dependesse de `decidir_pelo_dp=` como união:** o placar extrai exclusivamente `^chamados_em_competencia_trancada=`; o teste antigo que procura `decidir_pelo_dp=1 ids=...` chama o comando de **encerramento**; o teste novo exige a contagem separada. (`bin/placar_code.sh:287`; `app/chamados/tests/test_competencia_trancada.py:54`, `:149`; `app/chamados/tests/test_tranca_vivas_08.py:199`)
-
-   API e mensageria têm testes de contagem geral/repasse, mas suas asserções não certificam os quatro campos. (`app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:39`; `mensageria/nucleo/tests/test_ferramenta_chamados_em_competencia_trancada.py:23`)
-
-   Permanecem descrições históricas: o relato de 17/09 registra a semântica antiga do residual e sua soma em `ficam_com_o_admin`; TICKETS registra a regra antiga de escrever a via na pergunta. São registros datados, enquanto o fonte atual declara a retirada dessa escrita. (`app/docs/RELATO-ARQUIVO.md:17319`, `:17323`; `app/docs/TICKETS.md:1180`; `app/chamados/services/competencia_trancada.py:133`)
-
-   Consumidores externos, usos dinâmicos em templates e leitores não identificados pelo censo textual: **[nao verificado]**.
-
-2. **Fixture real, mordida da soma e mutante sobrevivente.**
-
-   Por leitura, a fixture monta a **mesma pergunta** nas duas listas pelo caminho real: cria pergunta sem vínculo com a célula, grava resposta sem validação, lavra a célula via admin e posiciona a trilha após a tranca. `medir()` consulta `respostas_sem_veredito`, `pergunta_viva` e o helper de toque; a asserção exige expressamente o mesmo PK nas duas listas. (`app/chamados/tests/test_c7_red_minimos.py:110`; `app/chamados/tests/test_tranca_vivas_08.py:175`, `:177`, `:49`, `:182`; `app/chamados/services/competencia_trancada.py:126`, `:144`, `:155`) Execução dessa fixture com ORM: **[nao verificado]**.
-
-   Conferi a agregação em memória, extraindo o corpo real de `medir_frota` e substituindo apenas as entradas: a âncora da união ocorre uma vez; DP `[id]`, resgatadas `[]`, tocadas `[id]` produzem **1**, enquanto a troca por concatenação produz **2**. Isso corresponde à transformação e ao resultado exigidos pelo teste. (`app/chamados/services/competencia_trancada.py:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:206`, `:211`, `:221`)
-
-   Os exemplos simples precisam desta distinção:
-
-   - União → somente DP ou somente tocadas mantém o resultado comportamental `1`, mas remove a âncora e é barrado por `fonte.count(velho) == 1`. (`app/chamados/tests/test_tranca_vivas_08.py:186`, `:221`)
-   - Cardinalidade → `len()` de DP ou tocadas preserva a âncora, mas devolve `1` quando o teste da soma exige `2`. (`app/chamados/tests/test_tranca_vivas_08.py:211`; `app/chamados/services/competencia_trancada.py:351`)
-
-   **O bloqueante é outro mutante:** substituir, na saída, `len(_com_o_admin)` por `len(_com_o_admin) - len(m['vivas_resgatadas'])`. Ele preserva a âncora, o vazio `0`, a sobreposição `1` e a soma mutada `2`; porém uma resgatada exclusiva passa de **1 para 0**. Conferi esses resultados em memória. Os oráculos examinados deixam passar a perda de uma categoria expressamente integrante da união. (`app/chamados/services/competencia_trancada.py:336`, `:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:163`, `:186`, `:189`, `:198`, `:211`)
-
-   Os testes antigos de resgate verificam desarquivamento e vida da pergunta; o teste antigo do placar confere apenas o contador geral. Não fecham essa lacuna da união. (`app/chamados/tests/test_competencia_trancada.py:164`, `:177`, `:219`) Sobrevivência na suíte Django completa: **[nao verificado]**.
-
-3. **FILA e JUIZES.md.**
-
-   O item 2 continua materialmente presente: resposta do colaborador também carimba `resgatado_em`, embora o docstring da exclusão ainda diga “RESGATADO pelo admin”. (`app/chamados/services/materializacao.py:724`; `app/chamados/services/arquivo.py:205`; `app/chamados/services/competencia_trancada.py:75`)
-
-   O item 3 permanece: o placar lê o contador geral e não extrai `vivas_apesar_da_tranca`. (`bin/placar_code.sh:287`) Registro em arquivo da cópia do encaminhamento dos itens 2, 3 e 5 para FILA, assim como medição pós-cura da frota e das quatro perguntas: **[nao verificado]**.
-
-   **O item 4 está coerente:** JUIZES.md descreve `via='admin'` ou presença de `acoes`; o filtro exige exatamente essa assinatura em um `dict`, além de usuário não nulo, diferente do sistema, e timestamp estritamente posterior à tranca. `acoes=[]` conta por presença da chave e tem caso explícito. (`app/docs/JUIZES.md:88`; `app/chamados/juizes.py:1260`, `:1298`, `:1302`; `app/ponto/services/veredito_celula.py:76`; `app/chamados/tests/test_tranca_vivas_08.py:107`)
-
-4. **Checklist do delta.**
-
-   - **Segundo juiz / derivação paralela:** não identificados nos caminhos examinados; o contador consulta as autoridades existentes, e API/CLI leem `medir_frota`. (`app/core/juizes.py:292`; `app/chamados/services/competencia_trancada.py:144`, `:155`; `app/api/views_mensageria.py:1563`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:14`)
-   - **Segundo escritor fora da porta:** não identificado nos trechos novos de produção; são agregação, projeção e impressão. (`app/chamados/services/competencia_trancada.py:341`; `app/api/views_mensageria.py:1573`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:22`)
-   - **Relógio fora da borda:** não identificado; o filtro recebe `fechado_em`, e a fixture usa relógio congelado. (`app/chamados/juizes.py:1070`, `:1302`; `app/chamados/tests/test_tranca_vivas_08.py:30`, `:49`)
-   - **Selo sem mordida:** há mordida contra soma, mas proteção incompleta contra perda de categoria — **bloqueante 1 acima**. (`app/chamados/tests/test_tranca_vivas_08.py:187`, `:211`)
-   - **Campo com dois significados:** a publicação agora distingue união e parcelas; permanece a dívida já descrita sobre a autoria do resgate. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `mensageria/nucleo/ferramentas.py:2032`; `app/chamados/services/materializacao.py:725`)
-
-Suíte completa, histórico RED/GREEN, integridade do hash e efeito em produção: **[nao verificado]**. [nao verificado]
-
-## 12/11 19:51 · sessao c5e6ab20fd86 · - · - · origem=Ronald (tmux)
-
-A fixture é consistente por leitura e percorre `medir()` real: cria uma pergunta sem `celula`, grava resposta sem validação/materialização e lavra o dia via admin; o log vai para cinco minutos após a tranca. A lista DP vem de `respostas_sem_veredito(ignorar_tranca=True)` e a mesma pergunta viva entra em tocadas pelo helper real. A asserção exige explicitamente o mesmo PK nas duas listas. (`app/chamados/tests/test_tranca_vivas_08.py:34`, `:43`, `:175`, `:182`; `app/chamados/tests/test_c7_red_minimos.py:110`; `app/chamados/models.py:1843`; `app/chamados/services/competencia_trancada.py:123`, `:137`, `:144`, `:155`.) Execução ORM: [nao verificado].
-
-Executei somente a agregação extraída por AST de `medir_frota`, em memória, substituindo import de `PeriodoFechado` e retorno de `medir`. A âncora ocorre uma vez; DP `[1]`, resgatadas `[]`, tocadas `[1]` dão união `1` e soma `2`. Isso corresponde à âncora e ao oráculo escritos no teste. (`app/chamados/services/competencia_trancada.py:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:206`, `:211`, `:221`.)
-
-Os exemplos simples **não sobrevivem à classe inteira**:
-
-- União → só DP ou só tocadas: passam o caso comportamental `1`, mas removem a âncora e falham em `fonte.count(velho) == 1`. (`app/chamados/tests/test_tranca_vivas_08.py:182`, `:221`.)
-- `len(_com_o_admin)` → `len(m['decidir_pelo_dp'])`: preserva a âncora, mas o MORDE passa a devolver `1` quando exige `2`. (`app/chamados/services/competencia_trancada.py:351`; `app/chamados/tests/test_tranca_vivas_08.py:211`.)
-
-Há, porém, um mutante ligado ao requisito que escapa aos oráculos examinados: substituir `len(_com_o_admin)` por `len(_com_o_admin) - len(m['vivas_resgatadas'])`. Mantém a âncora, preserva overlap `1`, vazio `0` e soma mutada `2`; portanto preserva as asserções da classe. Numa resgatada exclusiva, produz união `0` quando a fonte real produz `1`, contrariando a categoria declarada. (`app/chamados/services/competencia_trancada.py:336`, `:348`, `:351`; `app/chamados/tests/test_tranca_vivas_08.py:163`, `:186`, `:189`, `:198`, `:209`, `:211`.) Sobrevivência da suíte Django completa: [nao verificado].
-
-Os testes antigos citados de resgate verificam desarquivamento, vida e segunda passada; não conferem a união de `medir_frota`. O teste antigo do placar confere apenas `chamados_em_competencia_trancada`. (`app/chamados/tests/test_competencia_trancada.py:164`, `:177`, `:219`.)
-
-_4427 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4431 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
