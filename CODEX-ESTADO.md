@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 09:33** · publicado em **13/11/2026 09:34** (UTC-3)
+> Ultima resposta processada: **13/11/2026 09:34** · publicado em **13/11/2026 09:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 09:34 · sessao 25a3a732a702 · O168 · censo · origem=Code
+
+A triagem aponta **3 ERROR curadas pelo delta, 5 deslocamentos, 1 teste a atualizar por mudança deliberada, 3 falhas da entrega da obra e 1 defeito preexistente com causa exata da ocorrência ainda [nao verificado]**. As referências e ressalvas por falha seguem abaixo. [nao verificado]
+
+| Falha | Veredito | Causa e delta |
+|---|---|---|
+| `test_resposta_direta_barra` | **CURADA-PELO-DELTA** | O novo executor usa o juiz, que exige campos ausentes em `_P`. O delta acrescenta campos, PK e isolamento da tranca. `app/ponto/tests/test_supra_juiz_executor.py:14`; `app/ponto/supra_juiz.py:559`; `app/chamados/models.py:1899`. |
+| `test_resposta_na_disputa_barra` | **CURADA-PELO-DELTA** | O novo executor chama `respostas_sem_veredito()`, ausente em `_D`. O delta acrescenta a delegação ao juiz real. `app/ponto/tests/test_supra_juiz_executor.py:27`; `app/ponto/supra_juiz.py:558`. |
+| `test_sem_conversa_executa` | **CURADA-PELO-DELTA** | Mesmo método ausente em `_D`, antes de julgar a pergunta sem resposta. `app/ponto/tests/test_supra_juiz_executor.py:39`; `app/ponto/supra_juiz.py:558`. |
+| `test_MORDE_P_em_voo_COM_destino_nao_vivo_o_laco_sem_credor_pula` | **DO-DIFF-TESTE-A-ATUALIZAR** | O fixture conserva texto sem carimbo; a obra passou deliberadamente de carimbo **E** texto para carimbo **OU** texto. O HX reabre o pai e impede o laço sem credor. `app/chamados/tests/test_pep_reentrada.py:276`; `app/chamados/juizes.py:2035`; `app/chamados/services/disputa_emissao.py:2009`. Delta não cura. |
+| `test_03_a_admin_le_gravado_e_o_aviso_das_irmas` | **PRE-EXISTENTE**, com ressalva abaixo | A porta e a apresentação envolvidas não mudaram nos hunks fornecidos. Há matching por substring suscetível ao erro fictício `#999999`; colisão efetiva nesta execução: **[nao verificado]**. `app/chamados/services/validacao.py:487`; `app/chamados/tests/test_validar_diz_o_seu.py:19`. Delta não cura. |
+| `test_toda_contagem_por_status_de_pendencia_le_o_juiz_ou_esta_declarada` | **DO-DIFF-CODIGO-ERRADO** | Função nova conta diretamente por `VIVOS`, precisamente o caminho que o selo exige passar pelo juiz ou declarar. `app/chamados/juizes.py:2523`; `app/core/tests/test_tripwire_contagem_de_pendencia.py:370`. Delta não cura. |
+| `test_MORDE_o_mmd_commitado_bate_com_o_codigo` | **DO-DIFF-CODIGO-ERRADO** | Artefatos gerados ficaram inconsistentes com o registro de juízes. `app/core/juizes.py:294`; `app/docs/ARQUITETURA.mmd:340`; `app/docs/MAPA.md:88`. Delta não cura. |
+| `test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` | **DO-DIFF-CODIGO-ERRADO** | Após restaurar o original, o teste reencontra a mesma divergência preexistente naquela entrega da obra. `app/core/tests/test_selo_diagrama_do_codigo.py:95`; `app/core/tests/test_selo_diagrama_do_codigo.py:98`. Delta não cura. |
+| Selo: `ChamadoColaborador.analisar` | **DESLOCAMENTO** | Tabela: **836**; escritor: **853**. `app/chamados/tests/e4b_c12_ast.py:24`; `app/chamados/models.py:853`. Delta não cura. |
+| Selo: `ChamadoColaborador.cancelar` | **DESLOCAMENTO** | Tabela: **818**; escritor: **835**. `app/chamados/tests/e4b_c12_ast.py:23`; `app/chamados/models.py:835`. Delta não cura. |
+| Selo: `ChamadoColaborador.encerrar` | **DESLOCAMENTO** | Tabela: **1649**; escritor: **1666**. `app/chamados/tests/e4b_c12_ast.py:26`; `app/chamados/models.py:1666`. Delta não cura. |
+| Selo: `ChamadoColaborador.encerrar_por_competencia_trancada` | **DESLOCAMENTO** | Tabela: **1669**; escritor: **1686**. `app/chamados/tests/e4b_c12_ast.py:27`; `app/chamados/models.py:1686`. Delta não cura. |
+| Selo: `ChamadoColaborador.reabrir` | **DESLOCAMENTO** | Tabela: **1472**; escritor: **1489**. `app/chamados/tests/e4b_c12_ast.py:25`; `app/chamados/models.py:1489`. Delta não cura. |
+
+**As três ERROR do executor.** O hunk responsável é `ponto/supra_juiz.py @@ -536,15 +549,25 @@`: antes bastavam `perguntas.all()` e `respondida_em`; agora o executor consulta `respostas_sem_veredito()` e `sem_veredito_entre()`. Os doubles conservaram a interface antiga. A pergunta mudou deliberadamente de “há carimbo de resposta?” para “há resposta **sem veredito**, não dispensada pela tranca?”. Resposta validada ou materializada libera; texto sem carimbo também pode segurar. `app/ponto/supra_juiz.py:552`; `app/ponto/supra_juiz.py:563`; `app/chamados/models.py:1898`; `app/docs/CORTES.json:1414`.
+
+Os três asserts continuam corretos nos seus casos sem veredito; quem precisava atualização eram os doubles. O delta fornece os campos e a delegação exigidos por esse caminho. A verificação das funções reais extraídas por AST, com os doubles do delta, confirmou os seis casos em memória; execução Django e passagem da suíte completa após o delta: **[nao verificado]**. `app/ponto/tests/test_supra_juiz_executor.py:39`; `app/chamados/models.py:1899`; `app/ponto/supra_juiz.py:558`.
+
+**A irmã fora de voo.** O hunk causal é `chamados/juizes.py @@ -2019,19 +2019,20 @@`, não a guarda nova de fechamento do pai. O fixture deixa ambas as perguntas com `resposta_colab='07:00'`, embora zere `respondida_em` e `validada_em`; seu comentário “sem resposta por validar” deixou de corresponder ao novo predicado. `app/chamados/tests/test_pep_reentrada.py:277`; `app/chamados/tests/test_pep_reentrada.py:278`; `app/chamados/models.py:1900`.
+
+Com destino na P, ela entra no universo inicial, é pulada por estar em voo, mas sua disputa participa do HX. O HX consulta o juiz alterado, encontra texto sem veredito e reabre o pai. Depois, o laço sem credor pula a disputa porque o pai está vivo — **antes de chegar à irmã**. Portanto, estar fora de voo não basta para ela receber carimbo. `app/chamados/services/disputa_emissao.py:1906`; `app/chamados/services/disputa_emissao.py:1960`; `app/chamados/services/disputa_emissao.py:2003`; `app/chamados/services/disputa_emissao.py:2011`; `app/chamados/services/disputa_emissao.py:2033`.
+
+Na base fornecida, o predicado exigia `respondida_em` não nulo e texto; essas perguntas ficavam fora dele. A obra passou propositalmente a proteger também texto sem carimbo, e há teste explícito dessa mudança. Para continuar perguntando apenas pela guarda de voo, esse fixture precisa representar silêncio também no texto; a retenção de texto sem carimbo merece permanecer coberta separadamente. `app/chamados/juizes.py:2022`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:252`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:263`.
+
+**`test_validar_diz_o_seu`, test_03.** A pergunta do teste permanece: “a gravação da própria pergunta aparece como sucesso, enquanto o erro da irmã vira aviso separado?”. A obra não declara mudança dessa pergunta. `app/chamados/tests/test_validar_diz_o_seu.py:3`; `app/chamados/tests/test_validar_diz_o_seu.py:87`.
+
+A mensagem observada **não prova competência realmente aprovada/exportada**: o teste injeta exatamente um erro dessa natureza, e a casca traduz o primeiro erro retornado. `app/chamados/tests/test_validar_diz_o_seu.py:19`; `app/chamados/tests/test_validar_diz_o_seu.py:47`; `app/chamados/tests/test_validar_diz_o_seu.py:85`; `app/chamados/services/acoes_disputa.py:34`.
+
+Existe um defeito independente do diff: `marca in str(e)` considera `Pergunta #9` parte de `Pergunta #999999`. Assim, PKs **9, 99, 999, 9999 e 99999** classificariam a irmã fictícia como erro próprio, podendo produzir `nao_gravou` mesmo com materialização concluída. Outro ramo produz esse estado quando há erros e `materializada_em` continua nulo. O dado não informa qual ramo ocorreu. `app/chamados/services/validacao.py:487`; `app/chamados/services/validacao.py:490`; `app/chamados/services/validacao.py:504`.
+
+A porta real lê **timestamp → competência do fato → `FechamentoMensal.status`**; não consulta “hoje” nessa decisão. O fixture mistura data fixa de junho com `timezone.now()`, mas atribuir a ocorrência ao relógio permanece **[nao verificado]**. O gate novo também libera imediatamente a categoria desse fixture. `app/ponto/janelas.py:84`; `app/ponto/janelas.py:87`; `app/chamados/tests/test_validar_diz_o_seu.py:33`; `app/chamados/tests/test_validar_diz_o_seu.py:38`; `app/chamados/models.py:716`.
+
+Logo, **PRE-EXISTENTE** identifica o defeito e a cadeia não alterados; provar a mesma ocorrência na base, com o mesmo PK e estado de materialização, permanece **[nao verificado]**.
+
+**O contador e o universo.** O hunk novo `chamados/juizes.py @@ -2505,3 +2506,18 @@` introduziu a contagem crua. Para preservar **os candidatos da trilha**, a adaptação é passar essa seleção como `_base`, sem recalcular conversa nem acrescentar outra seleção de pais. `app/chamados/juizes.py:2520`; `app/chamados/services/painel.py:153`; `app/chamados/services/painel.py:188`.
+
+```python
+return qs_na_fila(
+    _base=ChamadoColaborador.objects.filter(pk__in=_ids)
+).count()
+```
+
+Isso preserva os candidatos, **mas não garante o mesmo total de todos os VIVOS**: `VIVOS` inclui `registrado`; o juiz da fila exclui registrados e silenciados no futuro. Preservar literalmente esse total e usar somente `qs_na_fila` são requisitos incompatíveis no código atual. A inexistência desses estados entre os pais de produção é **[nao verificado]**. `app/chamados/catalogo/motor.py:24`; `app/chamados/services/painel.py:189`.
+
+**Os cinco escritores do selo.** A obra inseriu **46 linhas** antes deles: três na decisão e 43 no novo método. O hunk da tabela atualizou apenas **29**, deixando todas as entradas 17 linhas atrás. O selo compara tuplas que incluem a linha; não surgiu escritor novo de estado nesses hunks. Ajustar somente essas cinco posições em memória fez o censo deixar de apontá-las. `app/chamados/models.py:686`; `app/chamados/models.py:699`; `app/chamados/models.py:742`; `app/chamados/tests/e4b_c12_ast.py:23`; `app/chamados/tests/e4b_c12_ast.py:222`.
+
+**O diagrama exige os dois artefatos.** O registro ganhou duas perguntas, chegando a **23** na família chamado, mas os documentos ficaram em **22**. O MAPA também conserva a formulação anterior sobre conversa e omite a pergunta de respostas sem veredito. `app/core/juizes.py:294`; `app/core/juizes.py:295`; `app/docs/ARQUITETURA.mmd:340`; `app/docs/MAPA.md:88`; `app/docs/MAPA.md:180`.
+
+Portanto, não basta regerar somente `ARQUITETURA.mmd`: o gerador compara e escreve **`ARQUITETURA.mmd` e `MAPA.md`**. A segunda falha resulta de restaurar um original já divergente, não demonstra defeito na restauração. `app/core/management/commands/gerar_diagrama.py:923`; `app/core/management/commands/gerar_diagrama.py:932`; `app/core/tests/test_selo_diagrama_do_codigo.py:95`.
 
 ## 13/11 09:33 · sessao 96e9d46f0903 · - · - · origem=Ronald (tmux)
 
@@ -803,101 +859,4 @@ vivos_creditados                                       456  amostra=[]
 total_erros=0
 ```
 
-## 13/11 08:37 · sessao 2677e37340bc · TIPO-NA-FONTE · verificador · origem=Code
-
-REPROVA — **1. Bloqueante 1 parcialmente curado:** os três acessores passaram a tratar estados nomeados, mas `_orfas_da_ata`, expressamente apontado na volta 1, continua usando valores crus com fallback sem consultar `.estado` ([leitor_celula.py:192](/home/ronald/codex_ws/ed4b38773a9d8938246fdf42f88b5ecb890de8d4/app/escala/services/leitor_celula.py:192), [leitor_celula.py:193](/home/ronald/codex_ws/ed4b38773a9d8938246fdf42f88b5ecb890de8d4/app/escala/services/leitor_celula.py:193), [leitor_celula.py:194](/home/ronald/codex_ws/ed4b38773a9d8938246fdf42f88b5ecb890de8d4/app/escala/services/leitor_celula.py:194)).
-
-**1. Estados e preservação dos valores**
-
-**Nos três acessores perguntados, a cura funciona:** todos passam pela tabela que enumera os seis estados; estado desconhecido chama `_ilegal`. O tratamento de falsos nos LEGADO está declarado nessa tabela, preservando a operação da base (`app/escala/services/ata.py:123`, `app/escala/services/ata.py:128`, `app/escala/services/ata.py:143`, `app/escala/services/ata.py:155`, `app/escala/services/ata.py:161`).
-
-Na tabela, `L` e `n` são os valores gravados; `B(x,d)` significa `x if x else d`.
-
-| Estado | `horas_orfas` | `contar_orfas` | `tem_orfas` | Referência |
-|---|---|---|---|---|
-| `NAO_LAVRADA` | `[]` | `0` | `False` | `app/escala/services/ata.py:110`, `:123`, `:124`, `:163` |
-| `LAVRADA` | `L` | `n` | `bool(L) or bool(n)` | `app/escala/services/ata.py:102`, `:135`, `:163` |
-| `LEGADO_SEM_CHAVES` | `[]` | `0` | `False` | `app/escala/services/ata.py:96`, `:123`, `:124`, `:163` |
-| `LEGADO_SO_CONTAGEM` | `[]` | `B(n,0)` | `bool(n)` | `app/escala/services/ata.py:98`, `:123`, `:137`, `:163` |
-| `LEGADO_SO_LISTA` | `B(L,[])` | `0` | `bool(L)` | `app/escala/services/ata.py:100`, `:124`, `:137`, `:163` |
-| `LEGADO_DESCASADA` | `B(L,[])` | `B(n,0)` | `bool(L) or bool(n)` | `app/escala/services/ata.py:102`, `:137`, `:163` |
-
-**A igualdade de valor e tipo permanece também para não-lista/não-int:** por exemplo, `orfas='08:00', n_orfas='2'` devolve os próprios textos; valores falsos devolvem `[]`/`0`. Não há coerção para lista ou inteiro nesses acessores (`app/escala/services/ata.py:102`, `app/escala/services/ata.py:137`).
-
-Para `None`, a resposta declarada é `[]/0/False`; a comparação com a expressão-base exige a normalização feita pelo leitor, pois `None` não possui `.get`. O vigia conserva essa normalização (`app/escala/services/ata.py:110`, `app/escala/services/ata.py:123`, `app/ponto/services/vigia_pareador_celula.py:74`).
-
-Nenhum desses seis estados chega a `_ilegal`. Chegam ali ata não mapping ou estado desconhecido; o teste produz o segundo caso artificialmente (`app/escala/services/ata.py:90`, `app/escala/services/ata.py:131`, `app/escala/tests/test_tipo_item3_v5_expand.py:351`). Igualdade aqui é de **valor**, não identidade `is`: uma lista vazia LAVRADA é devolvida diretamente, enquanto `L or []` produziria outra lista (`app/escala/services/ata.py:135`).
-
-**O resíduo do bloqueante 1 é concreto:** `_orfas_da_ata` chama `leitura_orfas`, aplica `_l.horas or []` e `_l.quantidade or 0`, e ignora o nome. Com o mesmo estado inventado usado pelo teste novo, esse leitor continua devolvendo `['08:00']`, enquanto `horas_orfas` recusa o estado. A nova proteção não alcança esse consumidor; não estou alegando divergência numérica atual (`app/escala/services/leitor_celula.py:191`, `app/escala/services/leitor_celula.py:193`, `app/escala/services/leitor_celula.py:194`, `app/escala/services/ata.py:131`, `app/escala/tests/test_tipo_item3_v5_expand.py:351`).
-
-**2. Vigia, leitores crus e selo**
-
-**O vigia preserva o conjunto da base nas entradas perguntadas**, inclusive sua dependência exclusiva da veracidade da contagem para decidir se examina a lista (`app/ponto/services/vigia_pareador_celula.py:74`, `app/ponto/services/vigia_pareador_celula.py:76`).
-
-| Entrada/estado | Resultado |
-|---|---|
-| `None`, `{}`, não-mapping falso (`[]`, `''`, `0`, `False`) | Todos viram `{}` e devolvem `set()` (`app/ponto/services/vigia_pareador_celula.py:74`, `:76`). |
-| `NAO_LAVRADA` | `None` é normalizado antes da porta; conjunto vazio (`app/ponto/services/vigia_pareador_celula.py:74`). |
-| `LAVRADA` | Contagem zero: vazio; contagem positiva: conjunto de `L` (`app/ponto/services/vigia_pareador_celula.py:76`; `app/escala/services/ata.py:135`). |
-| `LEGADO_SEM_CHAVES`, `LEGADO_SO_LISTA` | Contagem ausente: vazio, mesmo havendo lista (`app/escala/services/ata.py:124`; `app/ponto/services/vigia_pareador_celula.py:76`). |
-| `LEGADO_SO_CONTAGEM` | Lista ausente: conjunto vazio, inclusive com contagem verdadeira (`app/escala/services/ata.py:123`; `app/ponto/services/vigia_pareador_celula.py:76`). |
-| `LEGADO_DESCASADA` | Contagem falsa: vazio; verdadeira: conjunto do valor da lista, conservando também a falha de `set` para conteúdo incompatível (`app/escala/services/ata.py:137`; `app/ponto/services/vigia_pareador_celula.py:76`). |
-
-Não-mapping **verdadeiro** não produzia conjunto na expressão-base fornecida: falhava no `.get`; agora é recusado por `_ilegal` (`app/escala/services/ata.py:90`).
-
-Não identifiquei leitura produtiva literal crua dessas três chaves da **ATA** fora da porta. Os consumidores encontrados estão relacionados no item 4; acessos arbitrários por chave dinâmica permanecem **[não verificado]**.
-
-`orfas` da **GRADE** é uma lista do dia construída em memória e também recomposta pelo leitor da célula; não é acesso direto à chave da ata (`app/escala/utils.py:1814`, `app/escala/utils.py:1837`, `app/escala/services/leitor_celula.py:424`). Exemplos de consumidores desse outro vocabulário: classificação, status, calendário e PDF (`app/escala/orfa_classe.py:58`, `app/ponto/status_dia.py:188`, `app/colaboradores/services/calendario.py:380`, `app/relatorios/pdf_espelho.py:477`).
-
-**O selo morde qualquer constante literal** `n_orfas` ou `orfas_instantes` nos arquivos examinados — inclusive escrita ou texto sem relação com ata. Ele não identifica proveniência nem distingue leitura de escrita (`app/escala/tests/test_tipo_item3_v5_expand.py:361`, `app/escala/tests/test_tipo_item3_v5_expand.py:373`).
-
-**Deixa passar:** `orfas`, chaves construídas dinamicamente, a porta e os diretórios excluídos de testes, migrations, logs e media. O mutante demonstra apenas o antigo literal `a.get('n_orfas')` do vigia (`app/escala/tests/test_tipo_item3_v5_expand.py:360`, `app/escala/tests/test_tipo_item3_v5_expand.py:371`, `app/escala/tests/test_tipo_item3_v5_expand.py:388`). O descriptor continua cobrindo atributos de instâncias; não instrumenta os payloads recebidos por `values_list` (`app/escala/services/ata_ci.py:17`, `app/escala/services/ata_ci.py:37`, `app/ponto/services/vigia_pareador_celula.py:72`).
-
-**3. Helper e ocorrências ilegais**
-
-**Bloqueante 3 curado no caminho dos dois testes:** cada chamada de `_ilegal` emite um registro, mesmo quando o sítio já está no `set`; o helper exige exatamente um registro antes de limpar. Duas ocorrências no mesmo sítio falham em `len(ocorrencias) == 1` (`app/escala/services/ata.py:48`, `app/escala/services/ata.py:49`, `app/escala/tests/test_tipo_item3_v5_expand.py:263`, `app/escala/tests/test_tipo_item3_v5_expand.py:269`).
-
-`assertLogs` isolado pode aceitar várias ocorrências; quem exige uma é o helper. Zero ocorrências ilegais também reprova no helper, mesmo que outro `ERROR` tenha satisfeito o contexto (`app/escala/tests/test_tipo_item3_v5_expand.py:263`, `app/escala/tests/test_tipo_item3_v5_expand.py:264`, `app/escala/tests/test_tipo_item3_v5_expand.py:272`, `app/escala/tests/test_tipo_item3_v5_expand.py:274`).
-
-A garantia cobre a janela capturada. Os dois testes chamam o helper imediatamente depois dela, sem chamada intermediária que produza outro ilegal (`app/escala/tests/test_tipo_item3_v5_expand.py:272`, `app/escala/tests/test_tipo_item3_v5_expand.py:274`, `app/escala/tests/test_tipo_item3_v5_expand.py:303`, `app/escala/tests/test_tipo_item3_v5_expand.py:305`).
-
-Há **outro `clear()` incondicional**, no teste do estado inventado, sem fiscalização equivalente. É uma observação sobre a limpeza nova; o corpo visível contém uma única chamada esperada, e ocorrência adicional apagada nesse caminho está **[não verificado]** (`app/escala/tests/test_tipo_item3_v5_expand.py:351`, `app/escala/tests/test_tipo_item3_v5_expand.py:354`).
-
-**4. Quem escreve, quem lê e significado**
-
-| Valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| `ata.orfas`, `ata.n_orfas` | `gravar_orfas`: textos HH:MM e comprimento; alimentado pelo cartório com órfãs da grade (`app/escala/services/ata.py:355`, `:356`; `app/ponto/services/cartorio.py:772`). | `_valores_orfas`, seguido dos acessores ou do transporte cru de `LeituraOrfas` (`app/escala/services/ata.py:92`, `:140`, `:152`, `:158`; `app/escala/services/leitor_celula.py:192`). |
-| `ata.orfas_instantes` | Mesmo escritor: ISO com fuso, paralelo às horas; remove a chave quando não há instantes disponíveis (`app/escala/services/ata.py:357`, `:358`, `:360`). | `_instantes_gravados` e `instantes_orfas`, que validam paralelismo e fuso (`app/escala/services/ata.py:168`, `:176`, `:180`, `:188`). |
-| Envelope persistido | Porta de lavratura transporta, atribui e salva (`app/ponto/portas/celula.py:998`, `:1009`, `:1011`, `:1036`, `:1043`). | Vigia e censo consultam o envelope; não escrevem a entidade nesses caminhos (`app/ponto/services/vigia_pareador_celula.py:70`; `app/escala/services/ata.py:228`). |
-| `ESTADOS_LEGADOS` | `leitura_orfas` incrementa **por leitura** (`app/escala/services/ata.py:114`). | Registro diagnóstico distinto do contador de células do censo (`app/escala/services/ata.py:38`, `:231`). |
-| `CensoAta.estados` | Censo pergunta à mesma porta; conta exceções como ILEGAL e NULAS passadas pela função real (`app/escala/services/ata.py:231`, `:233`, `:234`, `:236`). | `legado`, `fora_da_forma` e publicação do comando (`app/escala/services/ata.py:212`, `:217`; `app/ponto/management/commands/tripwire_celulas.py:428`). |
-| `universo`, NULAS hoje/futuro | Consultas ORM; hoje/futuro é `nulas - passado` (`app/escala/services/ata.py:237`, `:238`). | Publicação separa essas NULAS do débito (`app/ponto/management/commands/tripwire_celulas.py:425`, `:430`). |
-| `hoje` | `_hoje()` na borda, recebido pelo `handle` (`app/ponto/management/commands/tripwire_celulas.py:357`, `:369`). | Censo e filtro `data__lt=hoje` (`app/ponto/management/commands/tripwire_celulas.py:423`; `app/escala/services/ata.py:200`). |
-| `lampadas` | Cartório produz e incorpora à ata (`app/ponto/services/cartorio.py:737`, `:739`). | Vigia mantém leitura direta dessa chave ainda não migrada e usa posição, tipo e estado aceso (`app/ponto/services/vigia_pareador_celula.py:80`, `:103`, `:109`). |
-| Registro de ilegal | `_ilegal` registra sítio e ocorrência (`app/escala/services/ata.py:48`, `:49`). | Helper, hook e runner (`app/escala/tests/test_tipo_item3_v5_expand.py:263`; `app/escala/services/ata_ci.py:62`; `app/escala/runner_ata_ci.py:11`). |
-
-Os consumidores produtivos encontrados da porta são:
-
-- Leitor da célula, chamados e materialização (`app/escala/services/leitor_celula.py:192`; `app/chamados/juizes.py:511`; `app/chamados/services/materializacao.py:182`).
-- Juiz de batida, tripwire, cartório e cluster (`app/ponto/juiz_batida.py:163`; `app/ponto/management/commands/tripwire_celulas.py:267`; `app/ponto/services/cartorio.py:841`; `app/ponto/services/cluster_espurio.py:31`).
-- Esmeril, cartão e vigia (`app/ponto/services/esmeril_espelho.py:126`; `app/relatorios/cartao_pela_celula.py:289`; `app/ponto/services/vigia_pareador_celula.py:76`).
-
-**Não há significado temporal uniforme.** A grade combina órfãs associadas ao dia do turno com sobras acrescentadas pela data civil; o vigia procura pela data civil, enquanto o supra juiz declara dia-TURNO. Isso permanece anterior ao delta (`app/escala/utils.py:1761`, `app/escala/utils.py:1814`, `app/escala/utils.py:1823`, `app/ponto/services/vigia_pareador_celula.py:111`, `app/ponto/supra_juiz.py:510`).
-
-HH:MM continua sem data/fuso no texto; o instante adicional preserva ambos. A configuração declara São Paulo, mas o fuso efetivo do processo de produção está **[não verificado]** (`app/escala/services/ata.py:75`, `app/escala/services/ata.py:358`, `app/config/settings/base.py:93`). O PDF ainda reúne HH:MM de toda a janela, defeito explicitamente preservado pelo teste anterior ao delta (`app/relatorios/pdf_espelho.py:477`, `app/escala/tests/test_tipo_item3_v5_expand.py:151`).
-
-**5. Classes de reprovação**
-
-| Classe | Resultado limitado ao delta |
-|---|---|
-| Segundo juiz registrado | Não identificado: censo chama a classificação existente; vigia conserva `turnos_do_colab` (`app/escala/services/ata.py:231`; `app/ponto/services/vigia_pareador_celula.py:99`; `app/core/juizes.py:208`). |
-| Segundo escritor produtivo fora da porta | Não identificado: novos caminhos consultam e publicam. A escrita direta de ata nova é fixture de teste (`app/escala/services/ata.py:228`; `app/ponto/management/commands/tripwire_celulas.py:424`; `app/escala/tests/test_tipo_item3_v5_expand.py:252`). |
-| Relógio fora da borda | O censo novo recebe o corte corretamente. O comando inteiro ainda chama helpers com `date.today()` próprio; são sítios anteriores ao delta (`app/ponto/management/commands/tripwire_celulas.py:423`, `:387`, `:398`, `:88`, `:250`). |
-| Derivação paralela | Não identificada no censo: reutiliza `leitura_orfas` e `contar_nao_lavrada_passado` (`app/escala/services/ata.py:231`, `:234`). |
-| Selo/RED sem mordida | Há asserções para distribuição, dívida e alarme, mas o selo tem as exclusões descritas no item 2; o teste do estado inventado cobre somente `horas_orfas` (`app/escala/tests/test_tipo_item3_v5_expand.py:275`, `:281`, `:309`, `:361`, `:353`). |
-| Campo com dois significados | Conflito turno/civil permanece; não foi introduzido pelo delta (`app/escala/utils.py:1814`, `:1823`; `app/ponto/services/vigia_pareador_celula.py:111`; `app/ponto/supra_juiz.py:510`). |
-
-Execução da suíte, mutantes e **DIFF por leitor na frota igual a zero**, exigido pelo aval: **[não verificado]**. Consistência concorrente das consultas separadas do censo: **[não verificado]** (`app/escala/services/ata.py:228`, `app/escala/services/ata.py:234`, `app/escala/services/ata.py:237`, `app/escala/services/ata.py:238`).
-
-_4528 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4529 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
