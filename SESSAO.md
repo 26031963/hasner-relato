@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 16:07:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (575.5 MB). Acoes na janela: **1702**.
+**Medido em 13/11/2026 16:12:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (575.5 MB). Acoes na janela: **1706**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:11:27 | Bash |  | `cd /home/ronald/saas-hasner; tail -n 2 logs/TIPO-NA-FONTE/item3/volta5/diff_inteiro/censo.runlog; for p in 2311684 2312221; do tr '\0' ' ' < /proc/$p/cmdline \| /bin/grep -o -- '--name [^ ]*'; done; docker ps --format '{{.Names}} {{.RunningFor}} {{.Image}}' \| head -n 20` |
+| 16:11:21 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/TIPO-NA-FONTE/item3/volta5/diff_inteiro/dentro.sh; echo ----; cat logs/TIPO-NA-FONTE/item3/volta5/diff_inteiro/encadeia.sh` |
+| 16:11:17 | Bash |  | `ps -o pid,ppid,etime,cmd --forest -g $(ps -o sid= -p 2307592 \| tr -d ' ') \| cut -c1-220` |
+| 16:09:47 | Monitor | HJ-090 green/red e mutantes | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; a=0; b=0; while true; do if [ $a = 0 ] && [ -e fim_greenred ]; then a=1; echo "FIM greenred"; fi; if [ $b = 0 ] && [ -e fim_mut ]; then b=1; echo "FIM mut"; fi; [ $a = 1 ] && [ $b = 1 ] && break; /usr/bin/sleep 30; done` |
 | 16:01:18 | SendMessage |  | `-` |
 | 16:01:11 | ToolSearch |  | `-` |
 | 16:01:07 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=13; assert L[i].startswith('lei: BUG-PAR preverif2 item 3'), L[i][:40] L[i]=L[i].replace('lei: BUG-PAR','RESPONDIDA por aval BUG-PAR-103-NA-EXPORTADA 16:00 (DECIDIDO PELA LEI L-113; logs/AVAIS-1313/bug_par_103_na_exportada.txt) -- era: BUG-PAR',1) moved=L.pop(i); L.append(moved) if False else L.in ...` |
