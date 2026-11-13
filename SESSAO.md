@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 05:45:57.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1090**.
+**Medido em 13/11/2026 05:50:57.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1085**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1095,8 +1095,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:52:09 | Bash |  | `cd /home/ronald/wt-o168v3-153055; git log --oneline -3; git status --porcelain \| head; sed -n 17p app/docs/RELATO.md \| cut -c1-400; sed -n 1,60p app/pautas/tests/test_contract_vocabulario.py \| /bin/grep -nE 'ruim\|PROIB\|re\.\|compile' \| head` |
 | 17:52:04 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 4268,4365p logs/O168/v4/suite.log` |
 | 17:52:02 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bwzr8zwr6.output; L=logs/O168/v4/suite.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran' $L \| tail -1; /bin/grep -nE '^(FAIL\|ERROR):' $L \| head` |
-| 17:48:29 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/O168/v4/suite.rc ] \|\| ! kill -0 4106522 2>/dev/null; do /usr/bin/sleep 30; done; date; ls logs/O168/v4/; cat logs/O168/v4/suite.rc 2>/dev/null` |
-| 17:48:25 | Bash |  | `cd /home/ronald/saas-hasner; date; ls logs/O168/v4/; ps -p 4106522 -o pid,etime,cmd \| cat; tail -3 logs/O168/v4/suite.log` |
-| 17:47:37 | Bash |  | `mkdir -p /home/ronald/saas-hasner/logs/TRANCA-VIVAS-08/cura; cat > /home/ronald/saas-hasner/logs/TRANCA-VIVAS-08/cura/brief.md <<'EOF' # TRANCA-VIVAS-08 cura (aval Ronald RETIRA ACERVO-TRANCA-2, item 4 = TRANCA-DE-VERDADE, lei existente) PROVA (sonda v3/v4, logs/TRANCA-VIVAS-08/sonda_v3.r, sonda_v4.r, total_erros=0): as 4 vivas de emp2 08/2026 (PF#3 fechado 16/09) #20798 #47879 #47881 #47884 ficam ...` |
-| 17:47:12 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 60,140p chamados/services/competencia_trancada.py; sed -n 1240,1300p chamados/juizes.py` |
-| 17:46:53 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/byd8u4c3j.output; cat /home/ronald/saas-hasner/logs/TRANCA-VIVAS-08/sonda_v4.r` |
