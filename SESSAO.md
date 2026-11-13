@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/11/2026 22:43:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (511.0 MB). Acoes na janela: **1929**.
+**Medido em 12/11/2026 22:49:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (511.0 MB). Acoes na janela: **1919**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1929,13 +1929,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:50:18 | Bash | Read the (a) classifications detail | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; sed -n 30,91p postmortem_c13.r \| /bin/grep -n -A8 'Item 8\\|inativos\\|recarimbo' \| cut -c1-350 \| head -60` |
 | 10:50:13 | Bash | Read c13 triage and postmortem detail | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; cat triagem_preverif_c13.txt; sed -n 1,30p postmortem_c13.r \| cut -c1-400` |
 | 10:50:09 | Bash | Read postmortem table | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; tail -2 postmortem_c13.log; /bin/grep -n '^\|' postmortem_c13.r \| tail -25` |
-| 10:45:36 | Bash | RELATO line and E3 agent progress | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('LASTRO c13 10:36')][0] L.insert(i+1,'LASTRO postmortem 10:47: Codex censo (regra CODEX 6) despachado classificando os achados do opus c13 contra todas as .q/.r c3..c13 + triagem (logs/LASTRO-FAIXA/postmortem_c13.q, pid 236425); obra segue PARADA em B3.') ...` |
-| 10:45:33 | Bash | Wait for LASTRO postmortem Codex | `until [ -e /home/ronald/saas-hasner/logs/LASTRO-FAIXA/postmortem_c13.fim ]; do /usr/bin/sleep 30; done; tail -2 /home/ronald/saas-hasner/logs/LASTRO-FAIXA/postmortem_c13.log` |
-| 10:45:30 | Bash | Build postmortem brief and launch Codex censo | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; ls triagem* ; { for c in c3 c5 c7 c10 c11 c12 c13; do echo "===== preverif_$c.q"; cat preverif_$c.q; echo "===== preverif_$c.r"; cat preverif_$c.r; done; } > postmortem_anexo_qr.txt; cat triagem*.txt > postmortem_anexo_triagem.txt; wc -c postmortem_anexo_*.txt cat > postmortem_c13.q <<'EOF' PAPEL censo (CLAUDE.md secao 7b CODEX item 6, POSTMORTEM). Ob ...` |
-| 10:45:18 | Bash | Sizes and launcher template | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; ls -la preverif_*.q preverif_*.r triagem_* opus_final_c13.txt \| awk '{print $5,$9}'; cat lanca_preverif_c13.sh` |
-| 10:45:14 | Bash | List LASTRO logs for postmortem | `cd /home/ronald/saas-hasner/logs/LASTRO-FAIXA; ls -t \| head -40; ls *.q *.r 2>/dev/null \| wc -l; du -ch *.q *.r 2>/dev/null \| tail -1` |
-| 10:45:11 | Bash | Publish ABSOLVIDA measure and update ESPERANDO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: lanca_sonda_medida3.sh') L[2]='ESPERANDO: codex_pergunta.sh \| pid=3937521' assert L[10].startswith('ABSOLVIDA-PELA-FOLGA 10:40') L[10]=('ABSOLVIDA-PELA-FOLGA 10:45: medida 1 PUBLICADA (v3, _fonte_viva + dia_do_turno_da_batida, SELECT-only): universo 931 orfao_14h  ...` |
-| 10:45:01 | Bash | Read full lines and check c3 pid | `cd /home/ronald/saas-hasner/app/docs; sed -n 11p RELATO.md; sed -n 1934p BACKLOG.md \| cut -c400-1200; date +%H:%M; ps -p 3937521 -o pid,etime,cmd \| cut -c1-120; pgrep -f 'lanca_c3.sh' \| head` |
-| 10:44:58 | Bash | Locate ABSOLVIDA lines in RELATO and BACKLOG | `cd /home/ronald/saas-hasner/app/docs; /bin/grep -n 'ABSOLVIDA' RELATO.md \| cut -c1-300; sed -n 1,6p RELATO.md \| cut -c1-250; /bin/grep -n 'ABSOLVIDA-PELA-FOLGA' BACKLOG.md \| cut -c1-400` |
-| 10:43:52 | Bash | Check 51407 and Codex analysis | `cd /home/ronald/saas-hasner/logs/ABSOLVIDA-PELA-FOLGA; /bin/grep -n '51407\\|51467\\|caso_51407' sonda_medida3.r \| cut -c1-200; tail -c +7000 sonda_medida3.r \| /bin/grep -v '"col"' \| head -c 5000` |
-| 10:43:48 | Bash | Read sonda v3 result | `cd /home/ronald/saas-hasner/logs/ABSOLVIDA-PELA-FOLGA; cat sonda_medida3.fim; head -c 7000 sonda_medida3.r` |
