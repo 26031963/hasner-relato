@@ -1,7 +1,158 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 12:40** · publicado em **13/11/2026 12:41** (UTC-3)
+> Ultima resposta processada: **13/11/2026 12:57** · publicado em **13/11/2026 12:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 12:57 · sessao 0858a2d44305 · - · - · origem=Ronald (tmux)
+
+As duas portas que fornecem resposta arbitrária ao ramo escape são:
+
+- `responder_pergunta_disputa`: recebe `resposta` do POST e chama o core. `app/chamados/views.py:1228`, `:1265`, `:1283`; rota `app/chamados/urls.py:17`.
+- `api_disputa_responder`: recebe `resposta` de `request.data` e chama o core. `app/api/views.py:2577`, `:2614`, `:2620`; rota `app/api/urls.py:93`.
+
+O core consulta `ESCAPES_QUE_VIRAM_AUSENCIA` e chama `_materializar_ausencia_de_resposta`; o mapa atual contém somente falta e atestado. `app/chamados/services/disputa_emissao.py:1538`; `app/chamados/services/materializacao.py:603`.
+
+Outros caminhos chegam ao core, mas fornecem apenas hora e não alcançam esse ramo:
+
+- `aplicar_declaracao`: passa `p['hora']`, produzida pelo parser de horas. `app/chamados/services/declaracao_texto.py:28`, `:35`, `:624`, `:635`, `:693`. HTTP `detalhe_chamado_local` com ação `aplicar_declaracao_texto`: `app/chamados/views.py:359`, `:478`; rota `app/chamados/urls.py:14`.
+- `acao_corrigir_resposta`: exige regex `HH:MM` e pergunta de hora antes de chamar o core. `app/chamados/services/acoes_disputa.py:302`, `:336`, `:349`, `:371`. Entradas: `detalhe_chamado_local` → `:536`; `fio_colaborador` → `app/chamados/views.py:674`; `modal_fio_colaborador` → `:954`; dispatcher `app/chamados/services/fio.py:485`, `:639`. Rotas `app/chamados/urls.py:14`, `:21`, `:39`.
+- `declarar_hora_colab`: chama core com `hora`. `app/chamados/services/declaracao_texto.py:306`, `:419`; entrada `responder_chamado_colaborador`: `app/chamados/views.py:1041`, `:1089`.
+
+`declarar_nao_trabalhou` não chama o core nem cria Ausência: atualiza contexto e anexa nota. `app/chamados/services/declaracao_texto.py:189`, `:208`, `:211`.
+
+## 13/11 12:55 · sessao 0858a2d44305 · - · - · origem=Ronald (tmux)
+
+Censo externo ao produtor e às views centrais:
+
+| Função/porta | Comportamento e alcance |
+|---|---|
+| `api_ausencias` | Lê `tipo` do POST e chama `criar_ausencia`, sem exclusão de férias; pode criar ou reabrir a linha pelo produtor. Reenvio pode anexar documento na existente. `app/api/views.py:1671`, `:1705`, `:1805`, `:1833`. Rota `ausencias/`: `app/api/urls.py:82`. |
+| `api_ausencia_documento` | Busca por PK+colaborador, sem filtro de tipo; exige estado aberto e chama `anexar_documento`. Alcança férias abertas. `app/api/views.py:3052`, `:3069`, `:3078`, `:3107`. Rota: `app/api/urls.py:83`. |
+| `veredito_celula` | Para justificado usa `tipo_ausencia` recebido e cria aprovada, sem veto próprio a férias. `app/ponto/services/veredito_celula.py:211`, `:333`, `:337`. HTTP `veredito_celula_view` aceita o tipo do POST: `app/ponto/views.py:3312`, `:3340`; rota: `app/ponto/urls.py:58`. |
+| `lancar_ausencia_porta` | Recebe qualquer tipo e cria aprovada; não veta férias. `app/ponto/services/checar_ausencia.py:43`. Chamada `_aplicar_ausencia`: `app/core/views_ia.py:971`, `:985`; despacho `:153`; HTTP `ia_perguntar`: `:859`, `:874`; rota `app/core/urls.py:15`. **O preview normal veta férias expressamente**: `app/ponto/services/checar_ausencia.py:10`, `:21`. |
+| `Ausencia.save` | Sem veto à origem derivada: carimba decisão; deriva dias do range e fim a partir dos dias quando cabível. `app/ponto/models.py:868`, `:872`, `:894`, `:902`. |
+| `curar_ausencia_sem_fim.Command.handle` | Seleciona não rejeitadas, dias>1, fim nulo e tipo fora de `EM_ABERTO`, sem excluir férias; `--apply` chama `rederivar_fim`. `app/ponto/management/commands/curar_ausencia_sem_fim.py:26`, `:29`, `:38`, `:46`. |
+| `rejulgar_status_por_tipo.Command.handle` | Seleciona `aguardando_documento`, sem filtro de tipo; `--apply` chama `rejulgar_status_pelo_tipo`. Alcança férias nesse estado. `app/ponto/management/commands/rejulgar_status_por_tipo.py:19`, `:23`, `:30`. |
+| `escalonar_documentos_ausencia.Command.handle` | Encaminha `--apply` ao escalonador geral, sem filtro próprio de tipo. `app/ponto/management/commands/escalonar_documentos_ausencia.py:24`. |
+| `zerar_dados_operacionais.Command.handle` | Exige banco de ensaio; com `--confirmar`, manda `Ausencia.objects.all()` para exclusão. Alcança férias em ensaio. `app/ponto/management/commands/zerar_dados_operacionais.py:24`, `:27`, `:71`, `:89`. |
+| `rederivar_minutos_h06_comp11.tratar_linha` | Busca por PK, compara identidade e usa editor geral sem veto próprio a férias. Porém o plano atual do comando usa lista fechada exclusivamente de atestado/falta. `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:126`, `:138`, `:142`, `:169`, `:50`, `:244`, `:265`. |
+| `_materializar_ausencia_de_resposta` | Função recebe tipo sem veto e cria pelo produtor; chamador runtime usa mapa somente falta/atestado, portanto o caminho atual não fornece férias. `app/chamados/services/materializacao.py:502`, `:527`, `:603`; chamador: `app/chamados/services/disputa_emissao.py:1425`, `:1538`. |
+
+Exclusões concretas:
+
+- `_declarar_ausencia_de_pergunta` recebe tipo de mapa exclusivamente falta/atestado: `app/chamados/services/materializacao.py:468`, `:475`; `app/chamados/models.py:3717`.
+- Regularização e abandono provisório fixam `tipo='falta'`: `app/ponto/services/regularizacao.py:118`; `app/ponto/management/commands/marcar_abandono_provisorio.py:76`.
+- `AusenciaAdmin` herda `SoLeitura`; add/change/delete retornam falso: `app/ponto/admin.py:38`; `app/core/admin.py:59`.
+- `trocar_plantao` lê/trava Ausência e altera a célula pelo `editar_dia`, sem escrever Ausência: `app/ponto/portas/celula.py:670`, `:695`, `:713`.
+- `decididos_do_periodo` e `linha_do_tempo` apenas leem e montam cartões: `app/ponto/services/dia_decidido.py:529`, `:550`, `:561`, `:566`, `:587`, `:599`.
+
+Script auxiliar que também escreve:
+
+- Código de módulo de `bin/sombra_mascara_pessoal.py` exige banco `sombra`, usa schema `juliani`, atualiza `documento` e faz `bulk_update` de `descricao`, sem filtro tipo; portanto alcança férias na sombra. `bin/sombra_mascara_pessoal.py:10`, `:16`, `:22`, `:44`, `:62`; inventário: `bin/sombra_regras_pessoais.py:64`, `:109`. Chamadas shell: `bin/sombra.sh:204`, `:272`.
+
+## 13/11 12:55 · sessao 7c7524a0578f · - · - · origem=Ronald (tmux)
+
+Censo das portas de `ponto`, sem alteração de arquivos. Os caminhos abaixo têm prefixo `/ponto/` em `app/config/urls.py:29`.
+
+| Porta / função | Filtro e escrita | Alcança férias derivadas |
+|---|---|---|
+| `ausencias/lote/aprovar/` → `aprovar_ausencia_lote` | Obtém por PK e `status__in=ABERTAS`, sem tipo; passa pelo gate e chama `_a4_decidir(..., 'aprovada')`. `app/ponto/urls.py:54`; `app/ponto/views.py:2282`; `app/ponto/views.py:2290` | Sim, se estiver em estado aberto e passar no gate. `app/ponto/views.py:2282`; `app/ponto/views.py:2284` |
+| `ausencias/lote/rejeitar/` → `rejeitar_ausencia_lote` | PK + estados abertos, sem tipo; rejeita e acrescenta motivo à descrição. `app/ponto/urls.py:55`; `app/ponto/views.py:2316`; `app/ponto/views.py:2319` | Sim, em estado aberto. `app/ponto/views.py:2316` |
+| `ausencias/lote/cancelar/` → `cancelar_ausencia_lote` | PK; exclui somente `rejeitada`; decide `rejeitada` e prefixa descrição. `app/ponto/urls.py:56`; `app/ponto/views.py:2345`; `app/ponto/views.py:2351` | Sim, inclusive aprovada. `app/ponto/views.py:2345` |
+| `ausencias/lancar/` → `lancar_ausencia` | Lê tipo POST e chama `criar_ausencia` com status aprovado. `app/ponto/urls.py:57`; `app/ponto/views.py:2378`; `app/ponto/views.py:2415`; `app/ponto/views.py:2420` | Pode criar `ferias` avulsa; não seleciona uma derivada existente por ID. A chamada fornece colaborador/tipo/dia, sem agendamento. `app/ponto/views.py:2415` |
+| `ausencias/submeter/` → `submeter_ausencia` | Lê tipo POST, valida catálogo e chama `criar_ausencia`, sem status explícito. `app/ponto/urls.py:64`; `app/ponto/views.py:2476`; `app/ponto/views.py:2509`; `app/ponto/views.py:2536` | Pode criar `ferias` avulsa, sujeita aos vetos de criação; não recebe agendamento. `app/ponto/views.py:2525`; `app/ponto/views.py:2536` |
+| `ausencias/<aid>/aprovar/` → `aprovar_ausencia` | PK + estados abertos; seleciona raiz/irmãos documentais abertos e aprova cada um. Sem tipo. `app/ponto/urls.py:65`; `app/ponto/views.py:2606`; `app/ponto/views.py:2616`; `app/ponto/views.py:2643` | Sim, em estado aberto, passando no gate. `app/ponto/views.py:2606`; `app/ponto/views.py:2608` |
+| `ausencias/<aid>/periodo/` → `editar_periodo_ausencia` | PK + aprovada; passa horas para `decidir`. `app/ponto/urls.py:66`; `app/ponto/views.py:2670`; `app/ponto/views.py:2673` | Não há exclusão literal de férias; exige que `cobre_parte_do_dia` seja verdadeiro. Esse juiz exige tipo parcial no catálogo vivo, dia único e `0 < minutos < 480`. `app/ponto/services/ausencia.py:888`; `app/ponto/turnos.py:2600` |
+| `ausencias/<aid>/reverter-rejeicao/` → `reverter_rejeicao_ausencia` | Obtém somente por PK e chama `reverter_rejeicao`, sem tipo. `app/ponto/urls.py:68`; `app/ponto/views.py:2583`; `app/ponto/views.py:2584` | Sim, se o serviço aceitar o estado/motivo. `app/ponto/views.py:2584` |
+| `ausencias/<aid>/anexar-documento/` → `anexar_documento_ausencia` | Obtém por PK, sem tipo/status; chama `anexar_documento`. `app/ponto/urls.py:71`; `app/ponto/views.py:2140`; `app/ponto/views.py:2151` | Sim. `app/ponto/views.py:2140` |
+| `ausencias/<aid>/rejeitar/` → `rejeitar_ausencia` | PK + estados abertos; raiz/irmãos documentais abertos; rejeita cada um. Sem tipo. `app/ponto/urls.py:74`; `app/ponto/views.py:2687`; `app/ponto/views.py:2689`; `app/ponto/views.py:2701` | Sim, em estado aberto. `app/ponto/views.py:2687` |
+| `ausencias/<aid>/cancelar/` → `cancelar_ausencia` | Obtém por PK; recusa somente rejeitada; decide rejeitada e prefixa descrição. `app/ponto/urls.py:75`; `app/ponto/views.py:2728`; `app/ponto/views.py:2729`; `app/ponto/views.py:2734` | Sim, inclusive aprovada. `app/ponto/views.py:2728` |
+| `ausencias/<aid>/editar/` → `editar_ausencia` | Obtém por PK, sem tipo/status; passa tipo, data, dias, descrição, indeterminado e minutos ao serviço. `app/ponto/urls.py:76`; `app/ponto/views.py:2761`; `app/ponto/views.py:2794` | Sim, incluindo conservar tipo férias ou trocá-lo. `app/ponto/views.py:2796`; `app/ponto/services/ausencia.py:474` |
+
+`ABERTAS` contém `aguardando_documento` e `aguardando_decisao`; o adaptador `_a4_decidir` chama `decidir`. `app/ponto/services/ausencia.py:766`; `app/ponto/views.py:82`.
+
+**Atenção ao formulário sem consumidor:** `AusenciaForm.clean_tipo` veda férias, mas as três views acima chamam os serviços diretamente; esses serviços validam o tipo pelo catálogo, sem consultar `TIPOS_VEDADOS`. `app/ponto/forms.py:65`; `app/ponto/views.py:2415`; `app/ponto/views.py:2536`; `app/ponto/views.py:2794`; `app/ponto/services/ausencia.py:194`; `app/ponto/services/ausencia.py:474`. A anotação existente também registra “AusenciaForm sem consumidor”. `app/docs/RELATO-ARQUIVO.md:17493`.
+
+O painel efetivamente renderizado é `app/templates/ponto/partials/painel_ausencia.html`. `app/ponto/views.py:2079`. Ele inclui `colaboradores/partials/_cabecalho_drawer.html` e `core/_btn_pdf.html`. `app/templates/ponto/partials/painel_ausencia.html:24`; `app/templates/ponto/partials/painel_ausencia.html:206`; `app/templates/ponto/partials/painel_ausencia.html:244`. Exibe edição quando `pode_editar`, reversão quando rejeitada e aprovação/rejeição quando aberta, sem guarda de tipo férias nesses trechos. `app/templates/ponto/partials/painel_ausencia.html:131`; `app/templates/ponto/partials/painel_ausencia.html:279`; `app/templates/ponto/partials/painel_ausencia.html:306`.
+
+A listagem de migrations termina em `0077_ausencia_minutos_help_text_grade.py` [nao verificado por arquivo:linha para a ausência de posteriores]. Essa migration depende de `0076` e altera `Ausencia.minutos`. `app/ponto/migrations/0077_ausencia_minutos_help_text_grade.py:8`; `app/ponto/migrations/0077_ausencia_minutos_help_text_grade.py:12`.
+
+## 13/11 12:54 · sessao a65599f8d14d · - · - · origem=Ronald (tmux)
+
+Censo de `ferias` e leitores de `#N`, somente por leitura estática:
+
+| Função | Efeito em Ausencia de férias | Evidência |
+|---|---|---|
+| `AgendamentoFerias._sync_ausencia` | Chama `espelhar_ferias(self)`. | `app/ferias/models.py:386`, `app/ferias/models.py:391` |
+| `AgendamentoFerias.save` | Espelha após salvar se `update_fields` é `None` ou inclui status, início, fim ou período aquisitivo. | `app/ferias/models.py:444`, `app/ferias/models.py:446`, `app/ferias/models.py:450` |
+| `AgendamentoFerias.delete` | Apaga ausências tipo férias do colaborador na janela inteira do objeto; não seleciona origem por `#N`. | `app/ferias/models.py:453`, `app/ferias/models.py:455` |
+| `agendar_ferias_porta` | Delega criação para `executar_agendamento`, que cria agendamento e dispara `save`/espelho. | `app/ferias/services.py:128`, `app/ferias/services.py:157`, `app/ferias/services.py:321` |
+| `registrar_gozo_historico` | Cria agendamento histórico e faz `ag.save()`, disparando espelho. | `app/ferias/services.py:270`, `app/ferias/services.py:278`, `app/ferias/services.py:298` |
+| `executar_agendamento` | Cria agendamento por `objects.create`. | `app/ferias/services.py:306`, `app/ferias/services.py:321` |
+| `cancelar_agendamento_dp` | Salva status cancelado; o espelho apaga férias da janela. | `app/ferias/services.py:372`, `app/ferias/services.py:384`, `app/ponto/services/ausencia.py:1189` |
+| `executar_cancelamento_admin` | Primeiro rejeita férias da janela, depois salva agendamento cancelado e o espelho as apaga. | `app/ferias/services.py:390`, `app/ferias/services.py:411`, `app/ferias/services.py:416`, `app/ponto/services/ausencia.py:1189` |
+| `_trocar_janela` | Apaga férias da janela antiga fora da nova; salva datas/status e dispara espelho na nova janela. | `app/ferias/services.py:422`, `app/ferias/services.py:445`, `app/ferias/services.py:450` |
+| `corrigir_datas_agendamento` / `remarcar_agendamento` | Ambas delegam a `_trocar_janela`. | `app/ferias/services.py:457`, `app/ferias/services.py:459`, `app/ferias/services.py:462`, `app/ferias/services.py:466` |
+| `aprovar_solicitacao` | Havendo PA e saldo, cria agendamento e faz `ag.save()`. | `app/ferias/services.py:469`, `app/ferias/services.py:483`, `app/ferias/services.py:493`, `app/ferias/services.py:503` |
+| `alinhar_status_por_data` | Relê sob trava; se não cancelado e status diverge da data, salva status e dispara espelho. | `app/ferias/services.py:588`, `app/ferias/services.py:600`, `app/ferias/services.py:602` |
+
+Todas as linhas acima alcançam o espelho de férias por código; o alcance de uma linha de produção concreta é `[nao verificado]`.
+
+Portas HTTP:
+
+| View → escritor | Evidência do chamado | Rota (prefixo `/ferias/` em `app/config/urls.py:32`) |
+|---|---|---|
+| `criar_periodo_aquisitivo` → `registrar_gozo_historico` | `app/ferias/views.py:124`, `app/ferias/views.py:128`, `app/ferias/views.py:211` | `app/ferias/urls.py:15` |
+| `agendar_ferias` → `_executar_agendamento` → `executar_agendamento` | `app/ferias/views.py:270`, `app/ferias/views.py:299`, `app/ferias/views.py:264` | `app/ferias/urls.py:16` |
+| `agendar_lote` → mesmo wrapper | `app/ferias/views.py:588`, `app/ferias/views.py:636` | `app/ferias/urls.py:10` |
+| `cancelar_agendamento` → `cancelar_agendamento_dp` | `app/ferias/views.py:322`, `app/ferias/views.py:330` | `app/ferias/urls.py:18` |
+| `cancelar_agendamento_admin` → wrapper → `executar_cancelamento_admin` | `app/ferias/views.py:345`, `app/ferias/views.py:370`, `app/ferias/views.py:531` | `app/ferias/urls.py:19` |
+| `corrigir_concluida_admin` → mesmo wrapper, `permitir_concluido=True` | `app/ferias/views.py:388`, `app/ferias/views.py:418` | `app/ferias/urls.py:20` |
+| `cancelar_admin_massa` → mesmo wrapper | `app/ferias/views.py:534`, `app/ferias/views.py:575` | `app/ferias/urls.py:9` |
+| `editar_datas_admin` → `corrigir_datas_agendamento` | `app/ferias/views.py:434`, `app/ferias/views.py:503` | `app/ferias/urls.py:21` |
+| `editar_agendamento` → `remarcar_agendamento` | `app/ferias/views.py:652`, `app/ferias/views.py:688` | `app/ferias/urls.py:22` |
+| `avaliar_solicitacao` (ação aprovar) → `aprovar_solicitacao` | `app/ferias/views.py:733`, `app/ferias/views.py:750`, `app/ferias/views.py:753` | `app/ferias/urls.py:12` |
+| `ia_perguntar` → `_aplicar_proposta` → `_aplicar_ferias` → escritor registrado `agendar_ferias_porta` | `app/core/views_ia.py:859`, `app/core/views_ia.py:871`, `app/core/views_ia.py:874`, `app/core/views_ia.py:145`, `app/core/views_ia.py:684`, `app/core/intake.py:34` | `/ia/perguntar/`, `app/core/urls.py:15`, `app/config/urls.py:39` |
+
+O comando `sincronizar_status_ferias` chama `alinhar_status_por_data` apenas com `--apply`; sem ele só relata. `app/ferias/management/commands/sincronizar_status_ferias.py:21`, `app/ferias/management/commands/sincronizar_status_ferias.py:44`, `app/ferias/management/commands/sincronizar_status_ferias.py:49`.
+
+`pedir_confirmacao` e `registrar_resposta_do_colab` salvam somente confirmação/carimbo, cujos campos não estão em `_CAMPOS_DO_ESPELHO`, portanto essas operações não disparam o espelho. `app/ferias/services.py:553`, `app/ferias/services.py:571`, `app/ferias/services.py:575`, `app/ferias/models.py:444`, `app/ferias/models.py:450`.
+
+Sobre leitores de `#N`: não encontrei no código pesquisado parser/junção que use `Ausencia.descricao` para buscar `AgendamentoFerias`; a afirmação universal de inexistência deve ficar `[nao verificado]`. Os usos concretos relevantes são:
+
+- `espelhar_ferias` **escreve** `Ferias agendamento #<pk>` na descrição, porém seleciona existentes apenas por colaborador, tipo e janela, e pula qualquer dia já presente sem comparar descrição/status/origem. `app/ponto/services/ausencia.py:1183`, `app/ponto/services/ausencia.py:1200`, `app/ponto/services/ausencia.py:1207`.
+- `AgendamentoFerias._guard_sobreposicao` chama de `_minhas` todas as ausências de férias do colaborador dentro da janela antiga; não lê `#N`. `app/ferias/models.py:427`, `app/ferias/models.py:430`.
+- `painel_ausencia` agrupa irmãos por `documento_referencia`, e o template mostra descrição como texto; não recebe agendamento de origem no contexto. `app/ponto/views.py:2073`, `app/ponto/views.py:2076`, `app/ponto/views.py:2079`, `app/templates/ponto/partials/painel_ausencia.html:57`.
+- `dias_ferias_com_batida` usa `ferias_na_janela` e datas dos agendamentos diretamente, sem casar descrição de Ausencia. `app/folha/export.py:484`, `app/folha/export.py:491`.
+
+## 13/11 12:54 · sessao 54fa72808182 · HJ-090 · sonda · origem=Code
+
+Não localizei `passivo.py`; não houve nova execução. Segue a saída integral fornecida. [nao verificado]
+
+```text
+sonda_leitura: passivo.py [eb27488373f8215e] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+HJ091 2026-11-13 12:53:06.709124-03:00
+universo ausencias_ferias 3001 agendamentos 116 dias_vivos 2943
+1 ferias_ausencia_sem_agendamento (aprovada sem agendamento vivo cobrindo) 58 colabs 53
+[(4635, 29, '2026-10-29'), (4839, 220, '2026-10-20'), (4165, 168, '2026-10-20'), (4613, 252, '2026-10-19'), (4630, 106, '2026-10-07'), (4634, 141, '2026-10-07'), (4633, 150, '2026-10-07'), (4631, 177, '2026-10-05'), (4615, 379, '2026-10-01'), (4614, 327, '2026-10-01'), (4620, 250, '2026-10-01'), (4617, 225, '2026-10-01'), (4611, 254, '2026-09-29'), (4623, 289, '2026-09-23'), (4628, 110, '2026-09-21'), (4618, 370, '2026-09-17'), (4624, 272, '2026-09-16'), (4625, 237, '2026-09-15'), (4627, 59, '2026-09-10'), (4629, 133, '2026-09-09'), (4621, 214, '2026-09-08'), (4626, 355, '2026-09-01'), (4622, 228, '2026-08-25'), (4651, 196, '2026-05-26'), (4652, 277, '2026-05-19'), (4654, 334, '2026-05-18'), (4653, 252, '2026-05-18'), (4656, 284, '2026-05-11'), (4664, 267, '2026-05-05'), (4663, 301, '2026-05-05'), (4661, 278, '2026-05-05'), (4662, 298, '2026-05-05'), (4655, 202, '2026-05-04'), (4658, 280, '2026-04-23'), (4659, 231, '2026-04-22'), (4660, 205, '2026-04-22'), (4657, 226, '2026-04-16'), (4665, 335, '2026-04-13'), (4641, 129, '2026-04-13'), (4666, 262, '2026-04-13'), (4667, 195, '2026-04-07'), (4642, 100, '2026-04-01'), (4636, 40, '2026-03-31'), (4669, 292, '2026-03-24'), (4643, 150, '2026-03-19'), (4668, 255, '2026-03-17'), (4644, 134, '2026-03-02'), (4645, 173, '2026-02-25'), (4637, 44, '2026-02-10'), (4646, 107, '2026-02-09'), (4649, 747, '2026-02-05'), (4648, 165, '2026-01-26'), (4647, 168, '2026-01-26'), (4650, 177, '2026-01-26'), (4638, 28, '2026-01-05'), (4639, 32, '2026-01-05'), (4640, 42, '2026-01-05'), (4632, 150, '0026-10-07')]
+2 ferias_dia_sem_ausencia (dia de agendamento vivo sem ausencia aprovada) 2 colabs 2
+[(127, '2026-10-02', [114]), (344, '2026-11-07', [103])]
+3 rejeitada_ou_cancelada_dentro_de_agendamento_vivo 1 colabs 1
+[(3977, 344, '2026-11-07', 'rejeitada', [103])]
+4 backfill: sem #N na descricao 58
+[(4635, 29, '2026-10-29', 'aprovada'), (4612, 354, '2026-10-29', 'rejeitada'), (4839, 220, '2026-10-20', 'aprovada'), (4613, 252, '2026-10-19', 'aprovada'), (4630, 106, '2026-10-07', 'aprovada'), (4634, 141, '2026-10-07', 'aprovada'), (4633, 150, '2026-10-07', 'aprovada'), (4631, 177, '2026-10-05', 'aprovada'), (4615, 379, '2026-10-01', 'aprovada'), (4614, 327, '2026-10-01', 'aprovada'), (4620, 250, '2026-10-01', 'aprovada'), (4617, 225, '2026-10-01', 'aprovada'), (4611, 254, '2026-09-29', 'aprovada'), (4623, 289, '2026-09-23', 'aprovada'), (4628, 110, '2026-09-21', 'aprovada'), (4618, 370, '2026-09-17', 'aprovada'), (4624, 272, '2026-09-16', 'aprovada'), (4625, 237, '2026-09-15', 'aprovada'), (4627, 59, '2026-09-10', 'aprovada'), (4629, 133, '2026-09-09', 'aprovada'), (4621, 214, '2026-09-08', 'aprovada'), (4626, 355, '2026-09-01', 'aprovada'), (4622, 228, '2026-08-25', 'aprovada'), (4651, 196, '2026-05-26', 'aprovada'), (4652, 277, '2026-05-19', 'aprovada'), (4654, 334, '2026-05-18', 'aprovada'), (4653, 252, '2026-05-18', 'aprovada'), (4656, 284, '2026-05-11', 'aprovada'), (4664, 267, '2026-05-05', 'aprovada'), (4663, 301, '2026-05-05', 'aprovada'), (4661, 278, '2026-05-05', 'aprovada'), (4662, 298, '2026-05-05', 'aprovada'), (4655, 202, '2026-05-04', 'aprovada'), (4658, 280, '2026-04-23', 'aprovada'), (4659, 231, '2026-04-22', 'aprovada'), (4660, 205, '2026-04-22', 'aprovada'), (4657, 226, '2026-04-16', 'aprovada'), (4665, 335, '2026-04-13', 'aprovada'), (4641, 129, '2026-04-13', 'aprovada'), (4666, 262, '2026-04-13', 'aprovada'), (4667, 195, '2026-04-07', 'aprovada'), (4642, 100, '2026-04-01', 'aprovada'), (4636, 40, '2026-03-31', 'aprovada'), (4669, 292, '2026-03-24', 'aprovada'), (4643, 150, '2026-03-19', 'aprovada'), (4668, 255, '2026-03-17', 'aprovada'), (4644, 134, '2026-03-02', 'aprovada'), (4645, 173, '2026-02-25', 'aprovada'), (4637, 44, '2026-02-10', 'aprovada'), (4646, 107, '2026-02-09', 'aprovada'), (4649, 747, '2026-02-05', 'aprovada'), (4648, 165, '2026-01-26', 'aprovada'), (4647, 168, '2026-01-26', 'aprovada'), (4650, 177, '2026-01-26', 'aprovada'), (4638, 28, '2026-01-05', 'aprovada'), (4639, 32, '2026-01-05', 'aprovada'), (4640, 42, '2026-01-05', 'aprovada'), (4632, 150, '0026-10-07', 'aprovada')]
+5 backfill: #N nao e agendamento vivo cobrindo o dia 2
+[(4165, 168, '2026-10-20', 'aprovada', 109), (2634, 127, '2026-09-02', 'aprovada', 77)]
+status das ausencias ferias ['aprovada', 'rejeitada']
+caso 2634 (127, '2026-09-02', 'ferias', 'aprovada', 'Cancelada pelo admin (JSP02, 05/10/2026): Cancelada pelo admin (JSP02, 01/10/2026): Ferias agendamento #77 | veredito_celula: justificado') cobre [114]
+caso 3977 (344, '2026-11-07', 'ferias', 'rejeitada', 'Cancelada pelo admin (JSP02, 13/11/2026): Ferias agendamento #103') cobre [103]
+ERROS 0
+```
+
+Totais: 1 = 58, 53 colaboradores; 2 = 2, 2 colaboradores; 3 = 1, 1 colaborador. [nao verificado]  
+Backfill: total 4 = 58; total 5 = 2. [nao verificado]  
+ERROS = 0: sim, conforme saída fornecida. [nao verificado]
 
 ## 13/11 12:40 · sessao b5801a0e755c · TIPO-NA-FONTE · leitura · origem=Code
 
@@ -933,482 +1084,4 @@ Lacunas candidatas a perguntas de lei, sem proposta:
 2. Destino/liquidação de DSR e banco da competência parcial de rescisão: porta de intervalo deliberadamente os exclui e não rateia. `app/ponto/services/dia_pago.py:755`.
 3. Valor de liquidação das férias adquiridas/vencidas: código classifica dias/status; cálculo monetário de rescisão não localizado. `app/ferias/models.py:65`, `app/ferias/models.py:216`; [nao verificado].
 
-## 13/11 12:10 · sessao f68b07bfd9af · DESLIGAR-LIQUIDA-TUDO · censo · origem=Code
-
-Censo da cópia, sem alterações. Correspondência da cópia ao HEAD/hash informado: [nao verificado]. O material fornecido não traz linhas nem contagens da frota de produção; passivo, distribuição por competência e contador atual: [nao verificado].
-
-**1. Escritores de `PerguntaDisputa.via_resolucao`**
-
-| Sítio | Escrita |
-|---|---|
-| `app/chamados/models.py:2563` | Default `''` no nascimento. |
-| `app/chamados/models.py:3015`, `app/chamados/models.py:3018` | `_nascer` insere com `**campos`; pode receber a via por esse argumento. Caller de produção fornecendo via assim: [nao verificado]. |
-| `app/chamados/models.py:3102` | `_escrever_carimbo` atribui a via recebida em memória, juntamente com materialização e autor. |
-| `app/chamados/models.py:3130`, `app/chamados/models.py:3153` | `carimbar` persiste a via recebida se o C6 considerar a pergunta morta. Identidade/tranca geram erro; pergunta ainda viva desfaz a tentativa: `app/chamados/models.py:3119`, `app/chamados/models.py:3144`. |
-| `app/chamados/models.py:3163` | `_desfazer_em_memoria` restaura a via anterior após tentativa recusada/falha; não persiste por si. |
-| `app/chamados/models.py:3184`, `app/chamados/models.py:3186`, `app/chamados/models.py:3191` | `carimbar_identidade` persiste a via recebida, restrita a `VIAS_DE_IDENTIDADE`; preserva o carimbo anterior quando solicitado. |
-| `app/chamados/models.py:3209`, `app/chamados/models.py:3213` | `descarimbar` grava `''`, limpando também materialização e autor. |
-| `app/chamados/models.py:3265` | `descarimbar_em_lote` executa `UPDATE` para `via_resolucao=''`; poupa `duplicata` e `motivo_retratado`. |
-| `app/chamados/models.py:3276` | `encerrar_por_fato_no_espelho` grava diretamente `fato_materializado`. |
-| `app/chamados/services/relavra_via.py:125`, `app/chamados/services/relavra_via.py:127` | `relavrar` troca a via pela calculada por `via_de_hoje`, somente quando a anterior é `declaracao` ou `completude_turno`. |
-
-Cada chamador que determina a escrita:
-
-| Sítio | Via gravada pela porta |
-|---|---|
-| `app/chamados/models.py:3065` | `fechar_por_admin` → `admin_decidiu`. |
-| `app/chamados/models.py:1922` | Fechamento da disputa por desligamento/admin → `fechar_por_admin` → `admin_decidiu`. |
-| `app/chamados/services/validacao.py:289` | Aceite quando o dia já é folga → `admin_decidiu`. |
-| `app/chamados/services/validacao.py:329` | Aceite que declara a folga → `admin_decidiu`. |
-| `app/ponto/services/veredito_celula.py:190` | Decisão do dia → `admin_decidiu`. |
-| `app/chamados/models.py:2062` | Remoção do motivo → `motivo_retratado`. |
-| `app/chamados/services/fio.py:1360` | Retratação da duplicata → `duplicata`. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:331` | Retratação pelo backfill → porta `retratar_para_canonica` → `duplicata`; delegação em `app/chamados/services/fio.py:1342`. |
-| `app/chamados/services/materializacao.py:930` | Recusa por paridade → `paridade_recusada`. |
-| `app/chamados/services/materializacao.py:1105` | Colisão com fato existente → `fato_ocupado`. |
-| `app/chamados/reconciliador.py:406` | Reconciliação sem turno aberto → `sem_turno_aberto`. |
-| `app/chamados/reconciliador.py:596` | Absolvição pela célula → `celula_absolveu`. |
-| `app/chamados/models.py:3288` | `encerrar_fantasma` → `fantasma`; chamado por `app/chamados/reconciliador.py:1148`. |
-| `app/chamados/services/materializacao.py:555`, `app/chamados/services/materializacao.py:567` | Absorção pela ausência → `declaracao` se declarou hora; senão `ausencia_dia`. |
-| `app/chamados/services/materializacao.py:1283` | Plantio → `declaracao` se declarou hora; senão `via_pelo_fato`, ou `chamado_encerrado` sem destino: `app/chamados/services/materializacao.py:1271`, `app/chamados/services/materializacao.py:1274`. |
-| `app/chamados/services/materializacao.py:1437` | Materialização já comprovada pelo juiz → `juiz_aprovou`. |
-| `app/chamados/services/disputa_emissao.py:1986` | Resolução pelo chamado → resultado de `via_pelo_fato`. |
-| `app/chamados/services/disputa_emissao.py:2058`, `app/chamados/services/disputa_emissao.py:2060` | Escolha sem credor → `via_pelo_fato` do pai, ou `chamado_encerrado` sem pai. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68` | Fato comprovado no espelho → `fato_materializado`. |
-| `app/chamados/models.py:1507` | Simulação da ressuscitação → `''` **somente na cópia em memória**. |
-| `app/chamados/models.py:1567` | Ressuscitação → `''` em lote. |
-| `app/chamados/services/disputa_emissao.py:1485` | Nova resposta reabre carimbo sem lastro → `''`, restrito pelas vias em `app/chamados/models.py:3314`. |
-| `app/chamados/services/disputa_emissao.py:1630` | Reabertura para correção → `''` em lote. |
-| `app/chamados/services/relavra_via.py:246` | Desfaz carimbo que o C6 considera vivo → `''`. |
-| `app/chamados/models.py:3299` | Reabre `fantasma` → `''`; caller em `app/chamados/management/commands/reabrir_orfas_enterradas.py:157`. |
-| `app/chamados/models.py:3323` | Reabre `competencia_trancada` → `''`; caller em `app/chamados/services/competencia_trancada.py:279`. |
-
-Os retornos possíveis de `via_pelo_fato` são, individualmente: `cadastro_folga` em `app/chamados/juizes.py:1749`; `adesao` em `app/chamados/juizes.py:1750`; `ausencia_dia` em `app/chamados/juizes.py:1758`; `completude_turno` em `app/chamados/juizes.py:1766`; `chamado_encerrado` em `app/chamados/juizes.py:1767`.
-
-O antigo escritor de `competencia_trancada` foi removido; a porta atual `carimbar_identidade` não aceita essa via: `app/chamados/models.py:3067`, `app/chamados/models.py:3179`.
-
-**2. Leitores de `via_resolucao`: ramo conhecido e valor novo**
-
-| Leitor | Comportamento atual; valor desconhecido |
-|---|---|
-| `app/chamados/juizes.py:679` — `_pergunta_materializada_de_fato` | Vias em `VIAS_SEM_TESTEMUNHA`, com materialização, recebem tratamento próprio. Identidade+tranca retornam verdadeiro em `app/chamados/juizes.py:691`; as demais consultam janela/lei. Desconhecida passa aos ramos por tipo: escolha aceita o carimbo; hora/data-hora procuram prova da batida; texto procura completude: `app/chamados/juizes.py:706`, `app/chamados/juizes.py:708`, `app/chamados/juizes.py:816`. |
-| `app/chamados/juizes.py:853` — memo do C6 | Inclui a via na chave. Qualquer valor é dado da chave; não classifica nem rejeita. |
-| `app/chamados/juizes.py:1386` — projeção temporal | Materialização posterior ao instante consultado é desconsiderada; a via também é apagada nessa projeção, exceto `duplicata`/`motivo_retratado`: `app/chamados/juizes.py:1394`. Nova via seria apagada nessa condição. |
-| `app/chamados/juizes.py:1412` — C6, antes da resposta | `competencia_trancada`, `duplicata`, `motivo_retratado`, com materialização, matam antes de ler a resposta. Desconhecida não entra. |
-| `app/chamados/juizes.py:1417` — C6, resposta | Resposta carimbada com texto mantém a pergunta viva, salvo decisão admin na célula ou concordância comprovada com a luz. Desconhecida não vence esse ramo: `app/chamados/juizes.py:1425`, `app/chamados/juizes.py:1429`. |
-| `app/chamados/juizes.py:1437` — C6, identidade | Identidade+tranca materializadas matam. `admin_decidiu` entra aqui **depois** do ramo da resposta. Desconhecida segue para marco/célula/lei/lastro: `app/chamados/juizes.py:1444`, `app/chamados/juizes.py:1450`, `app/chamados/juizes.py:1476`, `app/chamados/juizes.py:1483`. |
-| `app/chamados/models.py:3056` — `fechar_por_admin` | Apenas `admin_decidiu` já materializada é no-op. Outra via pode ser sobrescrita por `admin_decidiu`. |
-| `app/chamados/models.py:3119` — `carimbar` | Identidade+tranca geram `ValueError`; desconhecida é submetida ao C6. |
-| `app/chamados/models.py:3179` — `carimbar_identidade` | Qualquer via fora das cinco identidades gera `ValueError`; inclui tranca e nova desconhecida. |
-| `app/chamados/models.py:3181` — guarda de terminalidade | Linha fora do fato não recebe via que a devolva ao fato. |
-| `app/chamados/models.py:3202` — `fora_do_fato` | Verdadeiro somente para `duplicata`/`motivo_retratado`; desconhecida retorna falso. |
-| `app/chamados/models.py:3256` — descarimbo em lote | Proíbe passar `via_resolucao` em `**outros`, qualquer que seja o valor. |
-| `app/chamados/models.py:3266` — filtro do descarimbo | Poupa apenas fora-do-fato; nova via pode ser apagada se selecionada pelo chamador. |
-| `app/chamados/models.py:3274` — encerrar pelo fato | `fato_materializado` ou fora-do-fato são no-op; outra via pode ser sobrescrita. |
-| `app/chamados/models.py:3285` — encerrar fantasma | Só `fantasma` já materializada é no-op; outra via passa pela tentativa de carimbar fantasma/C6. |
-| `app/chamados/models.py:3297` — reabrir fantasma | Só toca `fantasma`; nova ignorada. |
-| `app/chamados/models.py:3314` — reabrir por resposta | Só toca `chamado_encerrado`/`legado_sem_lastro`; nova ignorada. |
-| `app/chamados/models.py:3321` — reabrir por competência | Só toca `competencia_trancada`; nova ignorada. |
-| `app/chamados/models.py:3351` — `q_vivas` | Identidade+tranca entram no teste de identidade; somente `VIAS_QUE_VENCEM_A_RESPOSTA` vencem resposta: `app/chamados/models.py:3353`. Desconhecida pode continuar no pré-filtro amplo: `app/chamados/models.py:3360`. |
-| `app/chamados/services/relavra_via.py:118` — re-lavra | Só reescreve `declaracao`/`completude_turno`; desconhecida ignorada. |
-| `app/chamados/services/relavra_via.py:155` — seleção por dia | Seleciona somente essas duas vias; desconhecida ignorada. |
-| `app/chamados/services/relavra_via.py:181` — carimbo desfazível | Protege `VIAS_DE_IDENTIDADE`; tranca/desconhecida podem ser candidatas. A decisão de desfazer exige depois C6 vivo: `app/chamados/services/relavra_via.py:242`. |
-| `app/chamados/services/materializacao.py:444` — estado de aplicação | Para pergunta de hora com texto e materialização, `paridade_recusada` vira `recusada_paridade`; **qualquer outra via, incluindo admin, tranca e desconhecida, vira `aplicada`**: `app/chamados/services/materializacao.py:448`. |
-| `app/chamados/services/materializacao.py:632` — absorvidas por ausência | Só inclui `ausencia_dia`/`declaracao`; desconhecida ignorada. |
-| `app/chamados/services/passivo_validado.py:141` — balde da recusa | Qualquer via não vazia que mudou vira `via:<valor>`, inclusive desconhecida. |
-| `app/chamados/services/fio.py:1244` — mérito perdedor | Apenas `admin_decidiu` com resposta recebe proteção de mérito contra retratação. Tranca/desconhecida não recebem. |
-| `app/chamados/services/fio.py:1351` — retratar duplicata | Só `duplicata` é no-op; desconhecida pode seguir à retratação, sujeita às guardas da porta. |
-| `app/chamados/services/fabrica_da_celula.py:149` | Exclui apenas `duplicata`; desconhecida permanece candidata. |
-| `app/chamados/services/tarefa_do_dia.py:230` | Exclui fora-do-fato, com exceção temporal da retratação. Desconhecida continua como pergunta do fato; decisões e vida C6 são lidas depois: `app/chamados/services/tarefa_do_dia.py:234`, `app/chamados/services/tarefa_do_dia.py:245`, `app/chamados/services/tarefa_do_dia.py:306`. |
-| `app/ponto/services/cartorio.py:1650` | Ramo especial exige que todas sejam `duplicata`; desconhecida impede esse ramo. |
-| `app/ponto/services/flip_auto.py:129` | Fila de inversão seleciona apenas `paridade_recusada`; desconhecida ignorada. |
-| `app/chamados/services/competencia_trancada.py:276` | Reabertura seleciona apenas `competencia_trancada`; desconhecida ignorada. |
-| `app/chamados/models.py:2056` | Remover motivo poupa quem já é `motivo_retratado`; desconhecida não é poupada por esse teste. |
-| `app/chamados/models.py:3222` | Mudança no campo integra os campos que acordam a célula, independentemente do valor. |
-
-Em cada sítio abaixo, o teste exclui **somente `duplicata`/`motivo_retratado`**. Admin, tranca e uma via nova permanecem no universo; esse teste não aceita nem recusa a resposta: [nao verificado]
-
-| Sítio | Universo afetado |
-|---|---|
-| `app/chamados/models.py:1489` | Candidatas à ressuscitação do chamado. |
-| `app/chamados/models.py:2725` | `do_fato`, ramo de episódio. |
-| `app/chamados/models.py:2756` | `q_dos_fatos`/`linhas_dos_fatos`. |
-| `app/chamados/models.py:3486` | Índice único por marco. |
-| `app/chamados/models.py:3492` | Índice único por episódio. |
-| `app/chamados/services/disputa_emissao.py:328` | Dedup de motivo sem data. |
-| `app/chamados/services/disputa_emissao.py:400` | Dedup de motivo datado. |
-| `app/chamados/services/disputa_emissao.py:419` | Dedup de furo por dia. |
-| `app/chamados/services/disputa_emissao.py:437` | Outro ramo de dedup de furo por dia. |
-| `app/chamados/services/fio.py:1101` | Contador de reuso sem rechaveamento. |
-| `app/chamados/services/fio.py:1168` | Contador de saída sem dia. |
-| `app/chamados/services/fio.py:1434` | Universo `_no_fato`. |
-| `app/chamados/services/fio.py:1854` | Contador de fecho cruzando dias. |
-| `app/chamados/services/fio.py:1890` | Contador de pergunta sobre batida retratada. |
-| `app/chamados/services/fio.py:1912` | Universo do grupo. |
-| `app/chamados/services/fio.py:1957` | Acervo considerado nas colisões. |
-
-Apresentação, auditoria e comandos:
-
-| Sítio | Comportamento; desconhecida |
-|---|---|
-| `app/templates/chamados/partials/_card_atendimento.html:186` | Frases próprias para `chamado_encerrado`, `declaracao`, `completude_turno`, `sem_turno_aberto`, `admin_decidiu`, `adesao`, `fato_ocupado`, `paridade_recusada`, `duplicata`. Demais vias não vazias usam `get_via_resolucao_display`; tranca recebe seu choice. Resultado desse método para valor sem choice na instalação: [nao verificado]. |
-| `app/chamados/services/explicador.py:93` | Se o juiz de lastro aprova, mostra resolvida/“Nada a fazer”, com display da via em `app/chamados/services/explicador.py:95`; desconhecida segue o juiz, sem ramo próprio. |
-| `app/chamados/models.py:1921`, `app/chamados/models.py:1930` | Via anterior na trilha do fechamento; qualquer valor é transportado. |
-| `app/chamados/models.py:2061` | Via anterior no texto da retratação; qualquer valor é transportado. |
-| `app/chamados/reconciliador.py:1144`, `app/chamados/reconciliador.py:1155` | Foto antes/depois do fantasma; qualquer valor é transportado. |
-| `app/chamados/services/disputa_emissao.py:2050`, `app/chamados/services/disputa_emissao.py:2065`, `app/chamados/services/disputa_emissao.py:2068` | Foto e trilha do fecho sem credor; sem classificação adicional. |
-| `app/chamados/services/materializacao.py:674` | Foto reversível da absorção; qualquer valor é transportado. |
-| `app/chamados/services/passivo_validado.py:64`, `app/chamados/services/passivo_validado.py:83` | Foto reversível; qualquer valor é transportado. |
-| `app/chamados/services/passivo_validado.py:521` | Guarda via anterior para comparar o resultado. |
-| `app/chamados/services/relavra_via.py:123`, `app/chamados/services/relavra_via.py:136` | Trilha da re-lavra; transporta os valores anterior/novo. |
-| `app/chamados/services/relavra_via.py:245`, `app/chamados/services/relavra_via.py:252` | Trilha do descarimbo; transporta a via anterior. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:101` | Seleciona `admin_decidiu` materializada sem validação para reconstruir atos; tranca/nova ignoradas. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:314` | Repete a guarda de `admin_decidiu` sob trava; nova ignorada. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:330`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:335` | Foto/trilha anterior à retratação. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:398`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:404` | Diff conserva qualquer via nas intocadas e projeta `duplicata` nas retratadas. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:504` | Carrega a via para o plano de retratação; classificação delegada às portas citadas. |
-| `app/chamados/management/commands/relavrar_via_i6.py:58` | Fora de `declaracao`/`completude_turno`, imprime “via de DECISAO, nao se re-lavra”. Nova recebe esse rótulo, mesmo sem representar decisão. |
-| `app/chamados/management/commands/relavrar_via_i6.py:88` | Conta pares de vias; admite qualquer valor. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:67` | Seleciona apenas `fantasma`; nova ignorada. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:129`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:142`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:160` | Snapshot/trilha da via. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:33` | Exclui `fato_materializado`; nova pode entrar na consulta inicial. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:40` | Só sobrescreve `''`, `legado_sem_lastro`, `None`; nova fica intocada. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:49`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:66`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:75` | Contagem e trilha das vias. |
-| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70` | Sem batida fonte, `ausencia_dia`/`declaracao` recusam como absorção; outra via recusa como `sem_fonte`: `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:72`. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:48` | Piso I6 deriva de `VIAS_SEM_TESTEMUNHA ∪ VIAS_SEM_LASTRO`. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:472` | Se uma desconhecida alcançar `_i6_pares`, fica fora do piso e cai em violação: `app/chamados/management/commands/auditar_invariantes_chamados.py:483`. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:202` | Contraprova F1t exige via preenchida e pergunta morta; nova morta recebe “carimbo/celula” se não validada/não identidade: `app/chamados/management/commands/auditar_invariantes_chamados.py:205`. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:433` | Agrupa contagem por qualquer via. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:542` | Devolve via com PK do candidato I6. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:955` | I9 acusa materializada com via vazia; nova não vazia passa nesse teste. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:1710` | Piso F1t admite via preenchida se C6 declarar morta, inclusive nova reconhecida pelo juiz. |
-
-Enumerações fechadas encontradas:
-
-| Enumeração | Conteúdo/efeito relevante |
-|---|---|
-| `app/chamados/models.py:2394` — `VIAS_FORA_DO_FATO` | `duplicata`, `motivo_retratado`; altera identidade, dedup e índices. |
-| `app/chamados/models.py:2511` — `VIAS_DE_IDENTIDADE` | `admin_decidiu`, `duplicata`, `fato_ocupado`, `paridade_recusada`, `motivo_retratado`; controla a porta de identidade. |
-| `app/chamados/models.py:2525` — `VIAS_QUE_VENCEM_A_RESPOSTA` | Tranca + fora-do-fato; fonte do ramo anterior à resposta no C6 e SQL. |
-| `app/chamados/models.py:2526` — `VIAS` | Choices do campo; inclui tranca e admin. Campo limitado a 24 caracteres: `app/chamados/models.py:2563`. |
-| `app/chamados/models.py:3096` — `vias_que_encerram_por_identidade` | Identidades + tranca; alimenta C6, SQL e `_ABSOLVEM_SEMPRE`. |
-| `app/chamados/models.py:3733` — `VIAS_SEM_TESTEMUNHA` | `completude_turno`, `fantasma`, `sem_turno_aberto`, `juiz_aprovou`, `admin_decidiu`, `paridade_recusada`, `duplicata`, `fato_ocupado`, `adesao`, `cadastro_folga`, `celula_absolveu`, `ausencia_dia`, `competencia_trancada`, `motivo_retratado`. |
-| `app/chamados/models.py:3769` — `VIAS_SEM_LASTRO` | `chamado_encerrado`, `legado_sem_lastro`; permite reabrir por resposta. |
-| `app/chamados/services/relavra_via.py:77` — `VIAS_DERIVADAS` | `declaracao`, `completude_turno`; permite reescrever a via. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:40` — `SEM_HISTORIA` | 
-
-[truncado em 20000 de 43754 caracteres]
-
-## 13/11 12:05 · sessao f2a5216fc256 · - · - · origem=Ronald (tmux)
-
-Censo de `via_resolucao`, somente leitura. Os caminhos abaixo são relativos à raiz da cópia.
-
-**Escritores físicos e portas**
-
-| Sítio | Valor gravado / comportamento |
-|---|---|
-| `app/chamados/models.py:3015`–`:3018` | `_nascer` insere a pergunta; o campo nasce `''` pelo default de `:2563`, salvo valor recebido via `**campos`. Chamador de produção passando uma via por esse `**campos`: [nao verificado]. |
-| `app/chamados/models.py:3098`–`:3102` | `_escrever_carimbo` atribui `materializada_em`, autor e a via recebida; quem persiste é a porta. |
-| `app/chamados/models.py:3104`, `:3130`, `:3153` | `carimbar(via, ...)` salva a via recebida somente se o C6 disser que a pergunta fica morta; se viva, desfaz tudo e retorna `False` (`:3144`). Recusa vias de identidade/tranca com `ValueError` (`:3119`). Via desconhecida pode ser tentada, mas passa pelo C6. |
-| `app/chamados/models.py:3169`, `:3179`, `:3184`, `:3191` | `carimbar_identidade` grava a via recebida, mas somente as cinco `VIAS_DE_IDENTIDADE`; desconhecida e `competencia_trancada` geram `ValueError`. |
-| `app/chamados/models.py:3204`–`:3213` | `descarimbar` grava `''` e limpa materialização/autor; não descarimba `duplicata`/`motivo_retratado`. |
-| `app/chamados/models.py:3253`–`:3267` | `descarimbar_em_lote` faz `UPDATE` de via para `''`, com os dois outros campos; exclui `VIAS_FORA_DO_FATO`. |
-| `app/chamados/models.py:3269`–`:3277` | `encerrar_por_fato_no_espelho` grava diretamente `fato_materializado`; recusa no-op se já nessa via ou fora do fato. |
-| `app/chamados/services/relavra_via.py:118`–`:128` | `relavrar` reescreve somente vias originais `declaracao`/`completude_turno`, para `via_de_hoje`; salva também o veredito lavrado. Destinos: `declaracao` em `:98`, ou os destinos de `via_pelo_fato` em `:103`; conversa/sem destino não são tocados (`:101`). |
-
-**Cada chamador de escrita encontrado**
-
-| Sítio | Via |
-|---|---|
-| `app/chamados/models.py:3051`–`:3065` | `fechar_por_admin` → `admin_decidiu`. |
-| `app/chamados/models.py:1922` | `DisputaSupervisao.fechar` chama `fechar_por_admin` nas perguntas selecionadas; trilha declara `admin_decidiu` em `:1931`. |
-| `app/chamados/services/validacao.py:289` | `fechar_por_admin` → `admin_decidiu`. |
-| `app/chamados/services/validacao.py:329` | Outro ramo de `validar_pergunta` chama `fechar_por_admin` → `admin_decidiu`. |
-| `app/ponto/services/veredito_celula.py:190` | `fechar_por_admin` → `admin_decidiu`. |
-| `app/chamados/models.py:2062` | `remover_motivo` → `motivo_retratado`. |
-| `app/chamados/services/fio.py:1360` | `retratar_duplicata` → `duplicata`, preservando materialização anterior quando existente. |
-| `app/chamados/services/materializacao.py:930` | Guarda de paridade → `paridade_recusada`. |
-| `app/chamados/services/materializacao.py:1105` | `_carimbar_recusa`, colisão → `fato_ocupado`. |
-| `app/chamados/reconciliador.py:406` | `sem_turno_aberto`. |
-| `app/chamados/reconciliador.py:596` | `celula_absolveu`. |
-| `app/chamados/models.py:3288` | `encerrar_fantasma` → `fantasma`; chamado no reconciliador em `app/chamados/reconciliador.py:1148`. |
-| `app/chamados/services/materializacao.py:555`, `:567` | Absorção por ausência → `declaracao` se `declarou_hora`, senão `ausencia_dia`. |
-| `app/chamados/services/materializacao.py:1283` | Materialização → `declaracao` se declarou hora; senão `via_pelo_fato` (`:1271`) ou `chamado_encerrado` sem destino (`:1274`). |
-| `app/chamados/services/materializacao.py:1437` | `juiz_aprovou`. |
-| `app/chamados/services/disputa_emissao.py:1986` | `via_pelo_fato(chamado, dia, motivo)`. |
-| `app/chamados/services/disputa_emissao.py:2058`–`:2060` | Escolha sem credor → `via_pelo_fato(pai, ...)` ou `chamado_encerrado` sem pai. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:68` | `encerrar_por_fato_no_espelho` → `fato_materializado`. |
-| `app/chamados/models.py:1507` | `perguntas_corrigiveis` limpa via **em cópia em memória**, sem persistir. |
-| `app/chamados/models.py:1567` | `ressuscitar_perguntas` → `''` em lote, junto com limpeza da resposta/validação por carimbo. |
-| `app/chamados/services/disputa_emissao.py:1485` | `reabrir_por_resposta` → `''`, somente vias `chamado_encerrado`/`legado_sem_lastro` carimbadas (`models.py:3314`). |
-| `app/chamados/services/disputa_emissao.py:1630` | `reabrir_para_correcao` → `''` em lote. |
-| `app/chamados/services/relavra_via.py:246` | `desfazer_carimbo_sem_lastro` → `''`, após C6 declarar viva (`:242`). |
-| `app/chamados/models.py:3299` | `reabrir_fantasma` → `''`; chamado em `app/chamados/management/commands/reabrir_orfas_enterradas.py:157`. |
-| `app/chamados/models.py:3323` | `reabrir_por_competencia` → `''`; chamado em `app/chamados/services/competencia_trancada.py:279`. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:331` | Chama `retratar_para_canonica`, que chama a porta de `duplicata` em `app/chamados/services/fio.py:1342`. |
-
-`via_pelo_fato` pode devolver `cadastro_folga`, `adesao`, `ausencia_dia`, `completude_turno` ou `chamado_encerrado`; cada retorno está em `app/chamados/juizes.py:1749`, `:1750`, `:1758`, `:1766`, `:1767`. O escritor antigo de `competencia_trancada` foi removido; a lápide registra isso em `app/chamados/models.py:3067`–`:3072`.
-
-**Leitores decisórios: comportamento das vias e de valor desconhecido**
-
-| Leitor | Valores conhecidos e valor novo |
-|---|---|
-| `app/chamados/juizes.py:679` | `_pergunta_materializada_de_fato`: somente `VIAS_SEM_TESTEMUNHA` + materialização entram no atalho. Dentro dele, identidade+tranca absolvem sempre (`:689`–`:692`); demais vias sem testemunha consultam lei/janela (`:693`–`:705`). Desconhecida fica fora e passa pelos ramos de tipo de resposta: escolha aceita materialização (`:706`), hora exige batida (`:708`), demais exigem testemunha de completude conforme docstring `:663`–`:669`. |
-| `app/chamados/juizes.py:853` | Chave do memo de `pergunta_viva`: qualquer string entra como dado; alteração da via invalida a identidade do memo. Não classifica nem rejeita valor novo. |
-| `app/chamados/juizes.py:1386`, `:1394` | Projeção temporal: se materialização está no futuro, zera via, exceto `duplicata`/`motivo_retratado`. Via nova seria zerada nessa projeção. |
-| `app/chamados/juizes.py:1412` | C6: `competencia_trancada`, `duplicata`, `motivo_retratado` materializadas morrem **antes da resposta**. Via nova desconhecida não entra. |
-| `app/chamados/juizes.py:1417`–`:1429` | C6: resposta com texto vence via desconhecida; continua viva salvo decisão admin na célula ou concordância com a luz. |
-| `app/chamados/juizes.py:1437`–`:1439` | C6: identidade+tranca materializadas morrem; `admin_decidiu` passa aqui, mas somente **depois** do ramo da resposta. Via desconhecida segue para fato/célula/lei/materialização (`:1444`, `:1450`, `:1476`, `:1483`). Logo não há um default único “desconhecida = morta”. |
-| `app/chamados/models.py:3056` | `fechar_por_admin`: somente `admin_decidiu` materializada é no-op; desconhecida pode ser sobrescrita por `admin_decidiu` se chegar a esta porta. |
-| `app/chamados/models.py:3119` | `carimbar`: identidade+tranca produzem erro; desconhecida segue ao C6. |
-| `app/chamados/models.py:3179` | `carimbar_identidade`: tudo fora das cinco identidades produz erro, incluindo via nova. |
-| `app/chamados/models.py:3181` | Pergunta já fora do fato não pode receber via que a devolva ao fato; desconhecida seria recusada nesse caso. |
-| `app/chamados/models.py:3202` | `fora_do_fato`: verdadeiro somente para `duplicata`/`motivo_retratado`; nova é falsa. |
-| `app/chamados/models.py:3256` | `descarimbar_em_lote` proíbe fornecer `via_resolucao` em `**outros`, independentemente do valor. |
-| `app/chamados/models.py:3266` | Descarimbo em lote poupa somente fora-do-fato; via nova fica elegível ao apagamento. |
-| `app/chamados/models.py:3274` | Encerrar por fato é no-op em `fato_materializado`/fora-do-fato; desconhecida pode ser sobrescrita pela porta. |
-| `app/chamados/models.py:3285` | Encerrar fantasma é no-op somente em `fantasma` materializada; desconhecida pode ser tentada como `fantasma`, sob C6. |
-| `app/chamados/models.py:3297` | Reabrir fantasma só toca `fantasma`; nova ignorada. |
-| `app/chamados/models.py:3314` | Reabrir por resposta só toca `chamado_encerrado`/`legado_sem_lastro`; nova ignorada. |
-| `app/chamados/models.py:3321` | Reabrir por competência só toca `competencia_trancada`; nova ignorada. |
-| `app/chamados/models.py:3348`–`:3362` | `q_vivas`: identidade+tranca sem resposta ficam excluídas por `_identidade`; só tranca+fora-do-fato vencem resposta em `_trancada`. Via nova não tem esses privilégios e pode continuar no queryset, que é pré-filtro generoso. |
-| `app/chamados/services/relavra_via.py:118` | Re-lavra apenas `declaracao`/`completude_turno`; via nova ignorada. |
-| `app/chamados/services/relavra_via.py:155` | Seleção da re-lavra por dia só inclui essas duas; via nova ignorada. |
-| `app/chamados/services/relavra_via.py:181` | `q_carimbo_desfazivel` protege apenas `VIAS_DE_IDENTIDADE`; tranca e nova podem entrar como candidatas. Depois o C6 impede desfazer carimbo legítimo (`:242`). |
-| `app/chamados/services/materializacao.py:444`–`:448` | **Risco de UI:** pergunta de hora com resposta e `materializada_em`: `paridade_recusada` vira `recusada_paridade`; **toda outra via, inclusive tranca/admin/nova desconhecida, vira `aplicada`**, sem conferir batida neste ramo. |
-| `app/chamados/services/materializacao.py:632` | `perguntas_absorvidas_por`: inclui somente `ausencia_dia`/`declaracao`; nova ignorada. |
-| `app/chamados/services/passivo_validado.py:141`–`:145` | `_balde_da_recusa`: qualquer via não vazia que mudou vira balde `via:<valor>`; nova seria classificada assim, sem enumeração. |
-| `app/chamados/services/fio.py:1244` | `merito_perdedor`: somente `admin_decidiu` com resposta é mérito que impede retratação silenciosa; nova não recebe essa proteção. |
-| `app/chamados/services/fio.py:1351` | Idempotência da retratação só reconhece `duplicata`; via nova não é no-op. |
-| `app/chamados/services/fabrica_da_celula.py:149` | Lista exclui apenas `duplicata`; nova entra, e a elegibilidade para descarimbar usa `q_carimbo_desfazivel` em `:150`. |
-| `app/chamados/services/tarefa_do_dia.py:230`–`:235` | Exclui fora-do-fato, exceto retratação posterior ao instante; via nova segue como pergunta do fato, podendo depois ser excluída por decisão `retratacao`. |
-| `app/ponto/services/cartorio.py:1650` | Reconciliação especial somente se **todas** as perguntas forem `duplicata`; nova impede esse ramo especial. |
-| `app/ponto/services/flip_auto.py:129` | Fila de inversão só seleciona `paridade_recusada`; nova ignorada. |
-| `app/chamados/services/competencia_trancada.py:276` | Reabertura seleciona apenas `competencia_trancada`; nova ignorada. |
-
-**Cada leitor de identidade/dedup/contadores que exclui fora-do-fato**
-
-Nestes sítios, `duplicata`/`motivo_retratado` são excluídas; **todos os demais valores, inclusive admin, tranca e desconhecida, continuam no universo**, sem decisão financeira por esse teste: [nao verificado]
-
-- Perguntas corrigíveis do chamado: `app/chamados/models.py:1489`.
-- `do_fato`, ramo de episódio: `app/chamados/models.py:2725`.
-- `q_dos_fatos`, usado por `linhas_dos_fatos`: `app/chamados/models.py:2756`.
-- Índice único de marco: `app/chamados/models.py:3486`.
-- Índice único de episódio: `app/chamados/models.py:3492`.
-- Dedup de motivo sem data: `app/chamados/services/disputa_emissao.py:328`.
-- Dedup de motivo datado sem destino obrigatório: `app/chamados/services/disputa_emissao.py:400`.
-- Dedup de furo por dia: `app/chamados/services/disputa_emissao.py:419`.
-- Outro dedup de furo por dia: `app/chamados/services/disputa_emissao.py:437`.
-- Contador `reuso_sem_rechave`: `app/chamados/services/fio.py:1101`.
-- Contador `sem_dia_na_saida`: `app/chamados/services/fio.py:1168`.
-- Universo `_no_fato`: `app/chamados/services/fio.py:1434`.
-- Contador `fecho_cruza_dias`: `app/chamados/services/fio.py:1854`.
-- Contador `perguntas_sobre_batida_retratada`: `app/chamados/services/fio.py:1890`.
-- `universo_do_grupo`: `app/chamados/services/fio.py:1912`.
-- Acervo no agrupamento de colisões: `app/chamados/services/fio.py:1957`.
-
-**Cada leitor de apresentação/auditoria/comandos**
-
-| Sítio | Ação e valor novo |
-|---|---|
-| `app/templates/chamados/partials/_card_atendimento.html:186` | Frases explícitas para `chamado_encerrado`, `declaracao`, `completude_turno`, `sem_turno_aberto`, `admin_decidiu`, `adesao`, `fato_ocupado`/`paridade_recusada`, `duplicata`; demais não vazias usam `get_via_resolucao_display|lower`. Tranca usa o rótulo dos choices. Valor novo sem choices aparecerá pela resolução padrão desse método [nao verificado na implementação do Django desta cópia]. |
-| `app/chamados/services/explicador.py:93`–`:95` | Se juiz de materialização aprova, apresenta resolvida/“Nada a fazer”, motivo pelo display da via; vazia vira “gravada”. Nova segue o resultado do juiz, sem ramo próprio. |
-| `app/chamados/services/materializacao.py:674` | Captura via em foto de reversão da absorção; não classifica. |
-| `app/chamados/services/passivo_validado.py:64`, `:83` | Captura via em foto reversível; qualquer valor é dado. |
-| `app/chamados/services/passivo_validado.py:521` | Guarda via anterior para comparação do resultado da tentativa; nova é dado. |
-| `app/chamados/models.py:1921`, `:1930` | Captura via anterior na trilha do fecho por admin. |
-| `app/chamados/models.py:2056` | `remover_motivo` exclui quem já é `motivo_retratado`; nova não é excluída. |
-| `app/chamados/models.py:2061` | Inclui via anterior em `recusa_motivo`; nova é texto de trilha. |
-| `app/chamados/reconciliador.py:1144`, `:1155` | Foto antes/depois do encerramento de fantasma; não classifica. |
-| `app/chamados/services/disputa_emissao.py:2050`, `:2065`, `:2068` | Antes/depois e descrição do fecho sem credor; não classifica via lida. |
-| `app/chamados/services/relavra_via.py:123`, `:134`, `:136` | Trilha da re-lavra, quaisquer valores anterior/novo. |
-| `app/chamados/services/relavra_via.py:245`, `:252` | Trilha de descarimbo, qualquer via anterior. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:101` | Seleciona somente `admin_decidiu` materializada sem validação para criar atos faltantes; nova ignorada. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:314` | Guarda repetida sob trava: fora de `admin_decidiu` ignora. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:330`, `:335` | Foto/trilha da via anterior à retratação. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:398`–`:404` | Diff do plano preserva via qualquer nas intocadas e projeta `duplicata` nas retratadas. |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:504` | Carrega campo na consulta das perguntas; comportamento seguinte depende das portas já citadas. |
-| `app/chamados/management/commands/relavrar_via_i6.py:58`–`:69` | Fora de `declaracao`/`completude_turno`, contabiliza “via de DECISAO, nao se re-lavra”. Nova cai nesse ramo, ainda que não represente decisão. |
-| `app/chamados/management/commands/relavrar_via_i6.py:88` | Conta pares de vias para apresentação. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:67` | Seleciona apenas `fantasma`; nova ignorada. |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:129`, `:142`, `:160` | Snapshot/trilha de via, sem classificar. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:33` | Exclui `fato_materializado`; nova entra na consulta. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:40`–`:43` | Só `''`, `legado_sem_lastro`, `None` podem ser sobrescritas no comando; nova fica intocada. |
-| `app/chamados/management/commands/encerrar_perguntas_com_fato.py:49`, `:66`, `:75`, `:76` | Contagem e trilha das vias; sem ramo adicional. |
-| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70`–`:72` | Sem batida fonte: `ausencia_dia`/`declaracao` recusam como “absorcao”; qualquer outra, inclusive nova, recusa como “sem_fonte”. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:47`–`:48` | Piso I6 é união de `VIAS_SEM_TESTEMUNHA` e `VIAS_SEM_LASTRO`; desconhecida fica fora desse piso. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:202`–`:207` | Contraprova F1t exige via não vazia + pergunta morta; rótulos: validação, identidade se em `VIAS_DE_IDENTIDADE`, senão “carimbo/celula”. Nova morta cai no último rótulo. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:433` | Agrupa contagem por qualquer via, nova inclusive. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:542` | Retorna via junto ao PK do universo I6; sem enumeração. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:955` | I9 acusa materializada com via vazia; nova não vazia não acusa aqui. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:1710` | Piso F1t admite qualquer via não vazia, desde que C6 declare morta; nova pode entrar. |
-| `app/chamados/models.py:3222` | `via_resolucao` consta entre campos que acordam célula; qualquer valor novo altera o mesmo campo. |
-
-**Enumerações fechadas e distinção admin/tranca**
-
-- `VIAS_FORA_DO_FATO=('duplicata','motivo_retratado')`: `app/chamados/models.py:2394`. A classe reexporta em `:2515`; mexer nela muda identidade/dedup/índices, não apenas vitalidade.
-- `VIAS_DE_IDENTIDADE=(admin_decidiu, duplicata, fato_ocupado, paridade_recusada, motivo_retratado)`: `app/chamados/models.py:2511`.
-- `VIAS_QUE_VENCEM_A_RESPOSTA=(competencia_trancada,)+VIAS_FORA_DO_FATO`: `app/chamados/models.py:2525`. Esta é indispensável para a morte anterior à resposta no C6 e em `q_vivas` (`juizes.py:1412`; `models.py:3353`).
-- `VIAS`/choices: lista em `app/chamados/models.py:2526`–`:2543`, campo com `max_length=24` em `:2563`.
-- `vias_que_encerram_por_identidade`: soma `competencia_trancada` às identidades, em `app/chamados/models.py:3096`; alimenta C6 (`juizes.py:1437`), SQL (`models.py:3348`) e `_ABSOLVEM_SEMPRE` (`juizes.py:689`).
-- `VIAS_SEM_TESTEMUNHA`: `app/chamados/models.py:3733`–`:3764`: `completude_turno`, `fantasma`, `sem_turno_aberto`, `juiz_aprovou`, `admin_decidiu`, `paridade_recusada`, `duplicata`, `fato_ocupado`, `adesao`, `cadastro_folga`, `celula_absolveu`, `ausencia_dia`, `competencia_trancada`, `motivo_retratado`.
-- `VIAS_SEM_LASTRO=(chamado_encerrado,legado_sem_lastro)`: `app/chamados/models.py:3769`.
-- `VIAS_DERIVADAS=(declaracao,completude_turno)`: `app/chamados/services/relavra_via.py:77`.
-- `SEM_HISTORIA=('',legado_sem_lastro,None)`: `app/chamados/management/commands/encerrar_perguntas_com_fato.py:40`.
-- Tupla local de absorção `(ausencia_dia,declaracao)`: `app/chamados/services/materializacao.py:632`; tupla igual para motivo de recusa de migração: `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70`.
-- `admin_decidiu` é identidade, sem testemunha e possui proteções de mérito/backfill; tranca adicionalmente vence resposta e tem reabertura própria: `models.py:2511`, `:2525`, `:3321`, `:3735`, `:3760`; `fio.py:1244`; `backfill_decisoes_pergunta.py:101`.
-- Nova via **não deve ser inserida em todas essas listas por analogia**: cada lista aciona operações diferentes, comprovadas nos leitores acima (`models.py:2756`, `:3266`, `:3314`; `relavra_via.py:118`).
-
-A busca direta pelo campo não encontrou leitores em folha/motor/TXT/inteligência; ausência absoluta de leitura indireta nesses domínios é [nao verificado]. A principal leitura indireta que eles podem receber é a decisão do C6/juiz de materialização, cujos comportamentos estão discriminados acima (`app/chamados/juizes.py:679`, `:1399`).
-
-## 13/11 12:05 · sessao 7b81833cadb3 · - · - · origem=Ronald (tmux)
-
-Q7 — auditoria `desligamento_revisao`, cada sítio:
-
-- **Emissor:** `app/colaboradores/services/desligamento.py:168` cria o chamado associado ao mesmo colaborador, área `dp_rh`, categoria `auditoria_clt`, subcategoria `registrar_resposta_oficial`, módulo `desligamento_revisao`; descrição atual contém demissão, autor, motivo e instrução de responder, mas nenhuma lista de perguntas/respostas (`:170–188`).
-- **JSON atual:** `app/colaboradores/services/desligamento.py:182` grava somente `data_demissao`, `motivo_informado`, `executado_por_username`, `executado_por_id`, `executado_em` (`:183–187`).
-- **Notificação:** `app/colaboradores/services/desligamento.py:192` envia push ao DP com URL `/chamados/local/<pk>/` (`:195`). Entrega real do push [nao verificado].
-- **Rota existente:** `app/chamados/urls.py:14` liga essa URL a `detalhe_chamado_local`.
-- **View existente:** `app/chamados/views.py:363` busca o chamado local; gestores podem acessá-lo e não gestores precisam ser o próprio colaborador (`:364–370`); contexto construído por `montar_contexto_detalhe` e renderização de `detalhe_local.html` em `:549–551`.
-- **Contexto do detalhe:** `app/chamados/services/acoes_chamado.py:409` entrega `chamado` e `followups` diretamente (`:411–412`). Perguntas mostradas pelo bloco de disputa vêm apenas da disputa **aberta** (`:345–347`) e filtradas por pergunta viva (`:357–358`); esse bloco não recuperaria automaticamente as perguntas mortas para o novo audit.
-- **Template detalhe, descrição completa:** `app/templates/chamados/detalhe_local.html:94` exibe `{{ chamado.descricao }}` sem truncamento (`:97`). É um encaixe existente para a lista textual informativa dia/pergunta/resposta.
-- **Template detalhe, timeline:** `app/templates/chamados/detalhe_local.html:112` percorre followups. Uma ocorrência informativa também aproveitaria a timeline existente, pela porta `nota.anexar_ocorrencia`, usada no próprio executor em `app/colaboradores/services/desligamento.py:163`.
-- **Painel lateral existente:** `app/chamados/views.py:347` entrega chamado/followups ao template `painel_chamado_turno.html` (`:351–355`); `app/templates/chamados/partials/painel_chamado_turno.html:33` percorre genericamente todo `contexto_json.items` (`:35–37`). Lista estruturada no JSON apareceria ali pela representação padrão do valor, sem formatação própria de itens.
-- **Modal DP existente:** `app/chamados/views.py:889` monta fio com explicação, renderizado em `:927`; `app/templates/chamados/partials/modal_fio.html:456` mostra descrição truncada em 200 caracteres. Apenas acrescentar a lista à descrição não garante lista completa nesse modal.
-- **Modal DP, timeline:** `app/templates/chamados/partials/modal_fio.html:461` percorre followups e imprime conteúdo completo em `:473`.
-- **Fio completo DP:** `app/chamados/views.py:677` monta os chamados e renderiza `fio_colaborador.html` em `:697`; `app/templates/chamados/fio_colaborador.html:231` também trunca descrição em 200 caracteres; followups entram em `:235`.
-- **Cartão de atendimento:** `app/templates/chamados/partials/_card_atendimento.html:39` mostra descrição truncada em 200 caracteres.
-- **Painel do DP:** `app/chamados/views.py:721` usa `montar_contexto_painel` (`:726–738`); `app/chamados/services/painel.py:306` aceita filtro explícito de status. Sem filtro, restringe a `COBRANCA` (`:316`), excluindo `registrado`; o drill `?status=registrado` é documentado junto à regra (`:310–312`).
-- **Natureza do audit:** `app/chamados/catalogo/natureza.py:18` inclui `desligamento_revisao` em `MODULOS_AUDITORIA` (`:20`); `eh_acionavel` retorna falso (`:36–38`) e `dono_do_chamado` retorna `registro` antes das perguntas (`:44–45`).
-- **Rótulo:** `app/chamados/services/desenlace.py:30` traduz para “Revisao de desligamento”; ramo `registro` fornece “Registro de auditoria” em `:68–71`.
-- **Texto humano de registro:** `app/chamados/services/verbos.py:176`: “Desligamento registrado aguardando conferencia de rotina do RH.”
-- **Catálogo do dia:** `app/chamados/catalogo/modulos.py:141` declara `data_demissao` como chave de data, horizonte `DIA`, dono `dp`; leitor genérico `app/chamados/juizes.py:100` passa JSON ao catálogo em `:113–114`.
-- **Tranca:** `app/chamados/catalogo/modulos.py:265` inclui esse audit em `ATOS_DO_DP_FORA_DA_TRANCA`; `fica_fora_da_tranca` reconhece-o em `:272`, e `app/chamados/models.py:1042` retorna falso para competência trancada nesse caso.
-- **App do colaborador:** `app/chamados/services/janela_colab.py:36` considera-o módulo interno; a lista do colaborador o exclui em `:74`.
-- **Resposta oficial DP:** `app/chamados/views.py:546` despacha resposta livre; `app/chamados/services/acoes_chamado.py:301` anexa ocorrência e `:322–325` permite transição de status.
-
-**Encaixe sem tela nova:** lista estruturada no `contexto_json` do audit (`desligamento.py:182`) + apresentação no detalhe já existente junto à descrição (`detalhe_local.html:94`) ou ocorrência informativa na timeline (`modal_fio.html:461–473`, `painel_chamado_turno.html:45–56`). Só preencher JSON não cria apresentação estruturada no detalhe/modal atual: o detalhe entrega o objeto (`acoes_chamado.py:411`) e seus usos específicos de JSON no template são outros blocos, enquanto o único loop genérico encontrado é `painel_chamado_turno.html:35`.
-
-**Tensão concreta com o selo:** cascade encerra os chamados preexistentes em `app/colaboradores/services/desligamento.py:155–163`; o audit nasce **depois**, em `:168`. `ChamadoColaborador.criar` deriva evento `REGISTRAR` pela natureza (`app/chamados/models.py:1047–1065`); o motor o converte para `registrado` (`app/chamados/catalogo/motor.py:133–134`). `registrado` pertence tanto a `VIVOS` (`:24`) quanto a `NAO_FECHADOS` (`:32`). Assim, quando o nascimento é permitido, o próprio ato deixa o audit do desligado não fechado; isso conflita com contador literal zero de todos os `NAO_FECHADOS` do desligado. É inferência estática desses ramos, sem contagem de frota [nao verificado].
-
-Q8 — callers e outras portas de situação:
-
-1. **UI:** `app/colaboradores/views.py:1426::desligar_colaborador`; exige `editar_cadastro` (`:1428`), chama juiz (`:1434`) e executor (`:1437`) com `hoje`.
-2. **Cron/comando:** `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38` seleciona demissão preenchida até hoje e situação diferente de desligado (`:40`); DRY sem `--apply` (`:46–47`), revalida pelo juiz (`:51–56`) e executa pela mesma porta (`:57`).
-3. **Agenda declarada:** `app/config/crons.py:440` cadastra esse comando às `06:06`, com `--apply`, log `desligamento_agendado.log` (`:441`). Execução real do cron [nao verificado].
-4. **Agendamento futuro no executor:** `app/colaboradores/services/desligamento.py:87` grava data/motivo (`:90–91`) e retorna (`:106`), sem atribuir `situacao='desligado'`; consumação concreta atribui em `:109` e persiste via `salvar_inteiro` em `:113`.
-5. **Outro escritor concreto de desligado:** nenhum encontrado fora de `executar_desligamento` na busca da cópia; ausência universal de execução dinâmica/SQL externo [nao verificado].
-6. **Porta genérica capaz de persistir situação:** `app/colaboradores/services/colaborador.py:32` permite o campo na operação `situacao`; `gravar` aplica valores por `setattr` e salva (`:55–61`). Não veta o valor `desligado` nem executa cascade.
-7. **Porta genérica com atribuição externa:** `app/colaboradores/services/colaborador.py:65–69::salvar_campos` salva campos previamente atribuídos. Também não veta desligado nem chama cascade.
-8. **Porta genérica de objeto inteiro:** `app/colaboradores/services/colaborador.py:73–76::salvar_inteiro` confere apenas nome da operação e chama `save()` completo; pode regravar situação do objeto sem cascade.
-9. **Porta genérica bulk:** `app/colaboradores/services/colaborador.py:80–88::atualizar_em_lote` aceita `situacao` pela mesma declaração e faz `qs.update(**campos)`; nenhum caller concreto fornecendo desligado encontrado.
-10. **Porta genérica criação:** `app/colaboradores/services/colaborador.py:91–93::criar_colaborador` passa `**campos` ao ORM; pode criar diretamente com desligado se assim chamada, sem cascade. Caller de admissão encontrado fixa ativo em `app/colaboradores/views.py:1208`.
-11. **Edição web:** `app/colaboradores/views.py:1314–1341` atribui campos explicitamente, sem situação, e salva inteiro em `:1345`; nenhum POST de situação encontrado nesse caminho.
-12. **Django admin:** `app/colaboradores/admin.py:48` herda `SoLeitura`; `app/core/admin.py:59–66` nega adicionar/alterar/excluir e `:68–75` torna campos somente leitura.
-13. **Escritor de afastamento, não desligamento:** `app/ponto/views.py:2435` grava `afastado`.
-14. **Reversor de afastamento, não desligamento:** `app/ponto/management/commands/reverter_situacao_afastado.py:73` grava `SITUACAO_VOLTA`; constante é `ativo` em `app/ponto/services/afastado_avisa.py:101`.
-15. **Reativação:** `app/colaboradores/services/desligamento.py:215` atribui ativo e persiste em `:219`; não é outro desligador.
-16. **Saneamento de vínculo de desligado:** `app/colaboradores/management/commands/fechar_vinculo_de_desligado.py:35` busca quem **já** está desligado para fechar vínculo; não chama executor nem grava desligado.
-17. **Outros callers de produção do executor, ModelForm/serializer gravando situação, importador gravando desligado ou `.update/bulk_update` concreto com desligado:** não encontrados nas buscas; execução externa à cópia e estado real de produção [nao verificado].
-
-## 13/11 12:04 · sessao 26f32bc54fa1 · - · - · origem=Ronald (tmux)
-
-Censo Q5/Q6, somente leitura, com caminhos relativos à raiz da cópia.
-
-**Q5 — guarda de pergunta viva e campo que mata**
-
-- `ChamadoColaborador.encerrar()` consulta o motor para `ENCERRAR`, devolve `False` se a transição não é permitida e depois consulta `_gate_pergunta_viva`; se o gate recusa, retorna `False` antes de gravar estado. O docstring “sem guard” está desatualizado em relação ao corpo. `app/chamados/models.py:1606-1621`.
-- `_ancoradas()` busca perguntas **não validadas**, ancoradas por `chamado_destino=self` ou, sem destino, pelo chamado pai da disputa. `app/chamados/models.py:336-347`.
-- `_vivas_entre()` simula o chamado no estado de destino; seleciona perguntas ainda ancoradas, cuja competência é aberta (`competencia_do_dia_entregue(...) is False`) e cujo juiz `pergunta_viva` retorna verdadeiro. `app/chamados/models.py:349-372`.
-- O gate só atua ao sair de `VIVOS` para `TERMINAIS`; sem perguntas vivas libera; se todas puderem ser reatadas a outra cobrança válida do mesmo colaborador/dia, reata e libera; caso contrário recusa com trilha `fechamento_recusado`, motivo `pergunta_viva_na_competencia_aberta`, IDs das perguntas e estados de origem/destino. `app/chamados/models.py:374-395`, `app/chamados/models.py:410-445`.
-- `pergunta_viva` é a porta com memo por instância, cujo cálculo está em `_pergunta_viva_calc`; a property `PerguntaDisputa.viva` delega diretamente a ela. `app/chamados/juizes.py:862-889`, `app/chamados/models.py:3365-3376`.
-- **`validada_em` preenchido mata imediatamente** no primeiro ramo do juiz. `via_resolucao` preenchida, sozinha, não mata. `app/chamados/juizes.py:1399-1413`.
-- A tranca do dia, por leitura da autoridade, mata antes de considerar resposta; depois, `via ∈ VIAS_QUE_VENCEM_A_RESPOSTA` com `materializada_em` preenchido também mata antes da resposta. A tupla atual é `(competencia_trancada,) + VIAS_FORA_DO_FATO`. `app/chamados/juizes.py:1403-1413`, `app/chamados/models.py:2517-2525`.
-- Resposta com `respondida_em` e texto continua viva se o admin não decidiu o dia e não existe luz concordante na célula; uma via desconhecida com carimbo **não vence esse ramo**. `app/chamados/juizes.py:1414-1429`.
-- Depois da resposta, vias retornadas por `vias_que_encerram_por_identidade()` com `materializada_em` matam; outros ramos examinam fato do marco, veredito da célula, falta do dia e lastro externo. Portanto não há um único campo universal: validação mata de imediato; fechamento terminal sem validação precisa de via reconhecida no degrau adequado e carimbo de materialização. `app/chamados/juizes.py:1430-1489`.
-- `q_vivas()` é o pré-filtro SQL amplo; exclui validadas e vias que vencem a resposta com materialização, antes de aceitar resposta preenchida. A via nova deve respeitar a mesma fonte usada pelo juiz para não haver divergência. `app/chamados/models.py:3327-3363`.
-
-**Q6 — leitores da resposta com efeito no dia/dinheiro**
-
-1. **Roteador no próprio ato da resposta:** `responder_pergunta_disputa_core` consulta `ESCAPES_QUE_VIRAM_AUSENCIA` e chama `_materializar_ausencia_de_resposta`; `FALTA_DIA → falta/aprovada`, `ATESTADO → atestado/status decidido por estado_inicial`. Isso ocorre quando o colaborador responde, independentemente de uma futura via de desligamento. `app/chamados/services/disputa_emissao.py:1536-1541`, `app/chamados/services/materializacao.py:600-606`.
-
-2. **Materialização de ausência pela resposta:** cria a `Ausencia` pela porta `criar_ausencia`, usando data da pergunta, tipo/status recebidos do roteador; não inventa minutos fixos. Também tenta carimbar irmãs do dia e registra absorção. Uma ausência já criada por esse caminho é fato anterior ao desligamento; conservar ou reverter esse fato por uma via futura é [nao verificado]. `app/chamados/services/materializacao.py:502-535`, `app/chamados/services/materializacao.py:538-579`.
-
-3. **Validação humana de folga:** `_e_aceite_de_folga` compara a resposta com `RESPOSTA_DE_FOLGA`; `_aceitar_a_folga` consulta `checar_declaracao`, carimba validação e chama `declarar_dia(..., tipo='folga')`; em sucesso, fecha a pergunta por admin; em recusa, mantém/desfaz o ato. Não é a morte da pergunta que declara a folga. `app/chamados/services/validacao.py:234-236`, `app/chamados/services/validacao.py:305-343`.
-
-4. **Validação humana geral:** `validar_pergunta` exige `respondida_em`, recusa já validada, consulta plausibilidade, carimba validação e dispara materialização/recalculo. A função não consulta `pergunta_viva` nem recusa uma via de desligamento inexistente antes de validar: um futuro acesso direto a uma pergunta morta ainda precisaria ser auditado conforme a implementação. `app/chamados/services/validacao.py:389-413`, `app/chamados/services/validacao.py:425-469`.
-
-5. **Seleção para materialização normal:** `materializar_perguntas_validadas_da_disputa` seleciona `respondida_em != NULL`, `validada_em != NULL` e `materializada_em == NULL`; somente essas passam à unidade `_materializar_uma`. Uma pergunta encerrada com `materializada_em` e sem validação não entra nesse lote. `app/chamados/services/materializacao.py:1375-1385`.
-
-6. **Unidade de materialização:** escolhe implementação por `tipo_resposta` (`hora`, `data_hora`, `escolha`); para hora/data_hora exige aprovação do juiz do lastro; reprovação levanta dentro do atomic e desfaz o plantio. Não transforma via desconhecida em aprovação automaticamente nesse despacho. `app/chamados/services/materializacao.py:1224-1249`.
-
-7. **Derivação de tipo pelo texto:** `_tipo_pelo_marco` lê a hora da resposta, compara aos marcos da grade e resolve tipo `E/S`; divergência entra em observabilidade. `app/chamados/services/materializacao.py:274-310`.
-
-8. **Derivação de instante:** `_ts_tipo_do_plantio` recusa respostas maiúsculas/`[descartado`, criva defaults de relógio incompatíveis com a régua, deriva tipo e usa a hora respondida; em intervalos fixos pode usar a hora do marco; depois ajusta overnight. É derivação reutilizada tanto para leitura quanto para plantio. `app/chamados/services/materializacao.py:354-428`.
-
-9. **Plantio de hora:** `_materializar_resposta_hora` exige texto; sem ele grava recusa e não planta; com texto deriva instante, reusa batida existente ou passa pelas guardas de plantio. A simples morte da pergunta não chama esta função. `app/chamados/services/materializacao.py:790-800`, `app/chamados/services/materializacao.py:835-865`, `app/chamados/services/materializacao.py:871-888`.
-
-10. **Plantio de data+hora/âncora:** `_materializar_resposta_data_hora` interpreta `resposta_colab` como data/hora, chama `registrar_batida` tipo `E`, já aprovada, e não escreve fase do vínculo. `app/chamados/services/materializacao.py:984-1035`.
-
-11. **Resposta de escolha/falta declarada:** `_materializar_resposta_escolha` chama `_declarar_ausencia_de_pergunta` em `motivo='declara_falta'`; esse leitor usa `_DECLARA_FALTA_MAPA.get(resp)`, cria ausência pelo tipo reconhecido e ignora resposta desconhecida/“Compareci” quando o mapa retorna `None`. `app/chamados/services/materializacao.py:468-499`, `app/chamados/services/materializacao.py:1069-1086`.
-
-12. **Recusa humana é ato próprio:** `recusar_pergunta` exige motivo, recusa já validada, grava `recusa_motivo`, chama reabertura com ato `recusa`, limpa resposta/carimbos pela porta e conserva texto anterior na trilha. Uma via de desligamento preenchida não equivale, por si só, a esse ato de recusar. `app/chamados/services/validacao.py:561-605`.
-
-13. **Juiz de slot/lastro:** `_slot_esperado` lê diretamente a resposta em `data_hora` e delega a `_ts_tipo_do_plantio` para `hora`; `_pergunta_materializada_de_fato` confronta isso com batida real/slot. Pergunta `escolha` com `materializada_em` retorna `True`, mesmo sem validação, pelo ramo próprio. Uma nova via sem tratamento pode, portanto, cair em lastro **positivo para escolha**, mas isso não cria uma ausência/batida; é leitura de resolução da pergunta. `app/chamados/juizes.py:341-374`, `app/chamados/juizes.py:662-708`, `app/chamados/juizes.py:752-761`.
-
-14. **Concordância resposta/luz:** `_resposta_concorda_com_a_luz` compara hora respondida com luz do marco pela régua classe A e exige célula sem veredito acusatório; isso pode dispensar validação quando o fato já está no espelho, não cria o fato a partir da resposta. `app/chamados/juizes.py:1342-1375`, `app/chamados/juizes.py:1425-1429`.
-
-15. **Classificação de resposta para validar:** `delta_da_resposta` compara hora do texto com marco esperado; `classificar_resposta_validacao` classifica escolha afirmativa como A, outras escolhas como B, e horas pelo delta; `motivo_implausivel_validacao` usa a mesma resposta para a recusa de implausibilidade. Não decidem dinheiro diretamente; orientam a validação que pode materializar fato. `app/chamados/juizes.py:1846-1878`, `app/chamados/juizes.py:1952-1993`.
-
-16. **Classificação de lote:** `classe_do_lote` classifica escape/posto/confirmacão sem marco em C, texto ilegível em D, sem marco em grupo próprio, horas fora do envelope/conflito em B, demais em A. A fila global de IA/lote usa `q_vivas` e confirma `pergunta_viva`, portanto uma pergunta reconhecidamente morta sai dessa fila. `app/chamados/services/validacao.py:845-877`, `app/chamados/juizes.py:1678-1684`.
-
-17. **Materializador ao fechar disputa (S144):** percorre perguntas ainda sem `materializada_em`, exige `_pergunta_materializada_de_fato` e tenta carimbar `VIA_JUIZ_APROVOU`; não fabrica batida. Se a porta de desligamento já carimbar materialização, a pergunta não entra neste laço. `app/chamados/services/materializacao.py:1414-1438`.
-
-18. **UI que diria falsamente “aplicada”: ponto crítico.** `estado_aplicacao_pergunta` ignora perguntas que não sejam `hora` ou não tenham texto. Havendo `materializada_em`, só distingue `VIA_PARIDADE_RECUSADA`; para **qualquer outra via, inclusive uma nova desconhecida, retorna `aplicada`**. O carregador do fio atribui esse resultado a `_p.estado_aplicacao`. Esse leitor precisa distinguir a via de desligamento para não apresentar encerramento informativo como hora aplicada. `app/chamados/services/materializacao.py:431-448`, `app/chamados/services/fio.py:334-338`.
-
-19. **Prévia da folha:** carrega todas as perguntas do colaborador/dia, sem filtro de vida/validação; `_material` devolve `'resposta do colaborador'` se houver texto, antes de consultar `fio_vivo`. Uma pergunta morta por desligamento continua aparecendo como material disponível, mas a função é de leitura e não aplica resposta. `app/folha/previa.py:28-31`, `app/folha/previa.py:63-67`, `app/folha/previa.py:139-146`.
-
-20. **Cartório, proteção contra ressuscitação automática:** `_tem_resposta_do_colab` olha apenas texto; o laço de fio morto pula chamado com qualquer resposta, preservando-o para materializador/admin; o mesmo predicado é reutilizado no dedup. A via nova não muda essa isenção enquanto o texto permanecer. `app/ponto/services/cartorio.py:1637-1650`, `app/ponto/services/cartorio.py:1661-1666`.
-
-21. **Cartório, efeito indireto da morte do fio:** conta chamados vivos com `fio_vivo` e entrega `cobrancas_vivas` ao `classificar_dia`. O suprajuiz usa ausência de cobrança viva em ramos de protesto do dia. Matar pergunta/chamado pode mudar o diagnóstico em relavra; não é aceitação nem recusa da resposta. `app/ponto/services/cartorio.py:1384-1389`, `app/ponto/services/cartorio.py:1464-1470`, `app/ponto/supra_juiz.py:313-316`, `app/ponto/supra_juiz.py:454-456`.
-
-22. **Retenção de export/TXT:** `motivos_retencao_celula` lê veredito/protestos da célula, não a resposta da pergunta; retém célula acusatória salvo os protestos isentos e a regra da pausa. Logo não se deve afirmar “zero efeito possível na folha” apenas por não validar: o fio participa indiretamente dos protestos, e os protestos participam da retenção. Efeito concreto no valor/TXT do caso futuro [nao verificado]. `app/folha/export.py:1176-1184`, `app/folha/export.py:1232-1266`.
-
-23. **Saída de rescisão do TXT:** `classificar_export` põe fora do TXT quem `sai_pela_rescisao`, com motivo `rescisao_modulo_proprio`; demais competências continuam pelos crivos seguintes. Não usa a resposta como fato aceito/recusado nesse gate. `app/folha/export.py:851-875`.
-
-24. **Consulta de dia do colaborador:** expõe a resposta e `ainda_viva=pergunta_viva(p)` separadamente; não infere aceite a partir de resposta/morte. `app/ponto/services/dia_do_colab.py:62-71`.
-
-**Conclusão delimitada para Q6:** encerrar com `materializada_em`, via própria e `validada_em=NULL` evita o lote normal de plantio; não equivale ao ato humano de aceite ou recusa. Entretanto existem leituras que confundiriam encerramento com aplicação (`estado_aplicacao_pergunta`), lastro de `escolha` que aceita o carimbo, material informativo da prévia que continua reconhecendo o texto e participação indireta do fio nos protestos/retencão. `app/chamados/services/materializacao.py:1375-1379`, `app/chamados/services/materializacao.py:438-448`, `app/chamados/juizes.py:706-707`, `app/folha/previa.py:139-146`, `app/ponto/services/cartorio.py:1389`, `app/folha/export.py:1241-1264`.
-
-## 13/11 12:03 · sessao c959e78cd199 · DESLIGAR-LIQUIDA-TUDO · sonda · origem=Code
-
-Não executei: `sonda1.py` não foi localizado na cópia. Transcrevo integralmente a saída fornecida, sem reexecução. [nao verificado] [nao verificado]
-
-```text
-sonda_leitura: sonda1.py [6159c0e80e54cd34] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-desligados 388
-== (a) disputas abertas de desligado 26 {'emp2 dem-comp 08/2026': 5, 'emp2 dem-comp 09/2026': 4, 'emp2 dem-comp 10/2026': 5, 'emp2 dem-comp 11/2026': 4, 'emp3 dem-comp 09/2026': 1, 'emp3 dem-comp 10/2026': 1, 'emp3 dem-comp 11/2026': 3, 'emp4 dem-comp 02/2026': 1, 'emp4 dem-comp 11/2026': 2}
-== (b) com respostas_sem_veredito 7 respostas 39 {'emp2 dem-comp 10/2026': 1, 'emp2 dem-comp 11/2026': 4, 'emp3 dem-comp 11/2026': 2}
-   col373 dem=2026-10-31 disputas=[(3676, 1)]
-   col427 dem=2026-10-28 disputas=[(5149, 16)]
-   col457 dem=2026-09-25 disputas=[(2828, 1)]
-   col752 dem=2026-10-29 disputas=[(6680, 2)]
-   col769 dem=2026-11-03 disputas=[(5100, 4)]
-   col893 dem=2026-11-03 disputas=[(4271, 14)]
-   col981 dem=2026-10-27 disputas=[(7395, 1)]
-== (c) perguntas vivas de desligado 598 com resposta 0 em disputa FECHADA 58 {'emp2 comp 09/2026': 275, 'emp2 comp 10/2026': 130, 'emp2 comp 11/2026': 126, 'emp3 comp 09/2026': 7, 'emp3 comp 10/2026': 19, 'emp3 comp 11/2026': 33, 'emp4 comp 09/2026': 1, 'emp4 comp 10/2026': 3, 'emp4 comp 11/2026': 4}
-    col42:4 col104:1 col138:1 col143:1 col270:4 col373:38 col388:1 col393:2 col417:3 col422:4 col427:124 col432:3 col437:38 col457:1 col460:21 col510:4 col518:5 col559:15 col569:6 col659:15 col666:13 col669:1 col698:5 col718:1 col752:18 col769:32 col782:55 col863:1 col878:2 col886:12 col893:150 col906:6 col925:4 col951:1 col963:2 col973:2 col981:2
-== (d) chamados nao fechados de desligado 396 {'emp1 registrado desligamento_revisao': 1, 'emp2 aberto batida_ausente': 25, 'emp2 aberto disputa_supervisao': 1, 'emp2 aberto sem_previsao_escala': 1, 'emp2 em_analise batida_ausente': 1, 'emp2 em_analise desligamento_revisao': 24, 'emp2 em_analise disputa_supervisao_manual': 2, 'emp2 em_analise sem_previsao_escala': 2, 'emp2 registrado desligamento_revisao': 88, 'emp2 resolvido ancora_limbo': 1, 'emp2 resolvido desligamento_revisao': 63, 'emp2 resolvido disputa_supervisao': 7, 'emp29 resolvido desligamento_revisao': 2, 'emp3 aberto batida_ausente': 6, 'emp3 em_analise batida_ausente': 4, 'emp3 em_analise desligamento_revisao': 4, 'emp3 registrado desligamento_revisao': 25, 'emp3 resolvido ancora_limbo': 9, 'emp3 resolvido desligamento_revisao': 22, 'emp3 resolvido disputa_supervisao': 1, 'emp3 resolvido disputa_supervisao_manual': 2, 'emp4 aberto batida_ausente': 1, 'emp4 em_analise batida_ausente': 3, 'emp4 em_analise desligamento_revisao': 3, 'emp4 registrado desligamento_revisao': 2, 'emp4 resolvido ancora_limbo': 1, 'emp4 resolvido batida_ausente': 40, 'emp4 resolvido chamados': 2, 'emp4 resolvido desligamento_revisao': 4, 'emp4 resolvido disputa_supervisao': 3, 'emp4 resolvido disputa_supervisao_manual': 20, 'emp4 resolvido entrada_bloqueada_turno_aberto': 10, 'emp4 resolvido intervalo_pendente': 2, 'emp4 resolvido justificativa': 6, 'emp4 resolvido turno_aberto': 8}
-    col31:3 col34:78 col35:1 col42:2 col46:1 col47:12 col48:1 col52:1 col57:1 col58:1 col64:1 col65:1 col68:2 col71:1 col72:1 col73:1 col74:1 col77:1 col79:1 col86:1 col88:1 col90:1 col91:1 col96:1 col102:1 col103:1 col104:1 col105:1 col122:1 col124:1 col126:1 col132:1 col135:1 col138:1 col140:1 col143:1 col147:1 col153:1 col156:2 col158:1 col160:1 col162:1 col164:1 col167:3 col172:1 col175:1 col176:1 col178:1 col179:1 col180:1 col182:1 col187:1 col208:1 col223:1 col228:1 col229:1 col240:1 col244:1 col270:1 col273:1 col295:1 col299:1 col305:1 col308:1 col311:1 col314:1 col315:1 col316:1 col318:1 col325:1 col330:1 col333:1 col338:1 col343:1 col350:1 col352:1 col353:1 col356:1 col367:1 col370:1 col372:1 col373:9 col375:1 col378:1 col381:1 col385:1 col386:1 col388:1 col393:1 col395:1 col397:1 col400:1 col403:1 col408:1 col409:1 col412:1 col417:1 col422:1 col426:1 col427:3 col429:1 col430:1 col432:1 col433:1 col437:2 col441:1 col443:1 col447:1 col448:1 col457:1 col458:1 col460:1 col462:1 col463:1 col471:1 col480:1 col481:1 col484:1 col486:1 col492:1 col494:1 col498:1 col506:1 col508:1 col509:1 col510:4 col513:1 col518:1 col519:1 col520:1 col525:1 col528:1 col535:1 col543:1 col544:1 col545:1 col554:1 col555:1 col559:1 col568:1 col569:1 col571:1 col576:1 col581:1 col593:2 col606:1 col609:1 col613:1 col621:1 col623:1 col628:1 col630:1 col640:1 col641:1 col643:1 col651:1 col652:1 col653:1 col656:1 col659:1 col660:1 col661:1 col663:1 col666:1 col669:1 col676:1 col697:1 col698:1 col699:1 col703:1 col705:1 col715:2 col718:1 col720:1 col723:1 col728:1 col729:2 col730:1 col731:2 col738:2 col740:2 col742:1 col743:1 col744:1 col745:1 col746:1 col752:1 col753:1 col754:1 col755:1 col759:1 col760:1 col761:1 col769:11 col778:1 col782:2 col783:1 col786:1 col815:1 col816:1 col817:1 col818:1 col828:1 col831:1 col837:1 col840:1 col842:2 col846:1 col847:1 col853:1 col855:1 col856:1 col858:1 col862:1 col863:1 col870:1 col875:1 col878:1 col880:1 col886:1 col890:1 col893:21 col894:1 col901:1 col904:1 col906:1 col907:1 col912:1 col914:1 col925:1 col927:1 col929:1 col931:1 col937:1 col939:1 col942:1 col943:1 col946:1 col951:1 col954:1 col955:1 col959:1 col963:1 col970:1 col973:1 col977:1 col981:1 col984:1 col997:1
-== vivos_de_desligado (a)+(c)+(d) = 1020 colabs distintos 249
-ERROS 0
-```
-
-(a) 26 disputas abertas de desligado. [nao verificado]  
-(b) 7 com respostas_sem_veredito; 39 respostas. [nao verificado]  
-(c) 598 perguntas vivas; com resposta 0; em disputa FECHADA 58. [nao verificado]  
-(d) 396 chamados não fechados de desligado. [nao verificado]  
-vivos_de_desligado: 1020; colaboradores distintos: 249; ERROS 0; nenhum traceback no dado fornecido; causa de erro não apresentada. [nao verificado]
-
-_4580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4585 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
