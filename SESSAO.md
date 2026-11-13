@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 02:10:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1645**.
+**Medido em 13/11/2026 02:15:43.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (519.8 MB). Acoes na janela: **1636**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1646,12 +1646,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:17:17 | Bash | Read v4 contract, seed, and start of verdict | `cd /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS; date; cat contrato_item3_v4.txt; echo ----; cat contrato_item3_v4_semente.txt; echo ----; head -c 9000 item3_contrato_v4.r \| head -80; ls ../QUARENTENA-REABRE/` |
 | 14:16:10 | Bash | Read rest of Codex verdict v4 | `cd /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS; tail -c +9000 item3_contrato_v4.r` |
 | 14:16:06 | Bash | Read Codex verdict on contract v4 | `cd /home/ronald/saas-hasner/logs/AUDITORIA-TRAVAS; tail -1 item3_contrato_v4.log; wc -c item3_contrato_v4.r; head -c 9000 item3_contrato_v4.r` |
-| 14:12:18 | Bash | Publish C2 result in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') l="SAIDA-NOTURNA-NA-FRENTE item 3 14:12 (sonda C2 rc=0, total_erros=0, conclusiva; logs/E3-LEITORES/quarentena/sonda_c2.r): coorte ATUAL de silencio vencido em COBRANCA = 11 (nao 12; identidade com os 12 historicos NAO verificada); visiveis ao colab no MAIN 0 -> com a b4 3 (col291/#11935, col331/#16 ...` |
-| 14:12:13 | Bash | Read C2 sonda result | `cd /home/ronald/saas-hasner/logs/E3-LEITORES/quarentena; tail -2 sonda_c2.log; head -c 4500 sonda_c2.r` |
-| 14:11:07 | Bash | Publish #10 PARAR line in RELATO | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') l="PAREI: E3-#10-respondida-sem-texto \| espera Ronald -- sonda C1 rc=0 14:10 (logs/E3-LEITORES/quarentena/sonda_c1.r, total_erros=0, conclusiva): 143 perguntas VIVAS em respondida_sem_texto (17 colabs: col60 1, col191 17, col204 4, col224 9, col310 6, col331 1, col349 10, col437 16, col446 16, col5 ...` |
-| 14:11:03 | Bash | Run C2 sonda (12 chamados x b4) | `/home/ronald/saas-hasner/logs/E3-LEITORES/quarentena/lanca_c2.sh` |
-| 14:10:59 | Bash | Read C1 sonda result | `cd /home/ronald/saas-hasner/logs/E3-LEITORES/quarentena; tail -4 sonda_c1.log; head -c 5000 sonda_c1.r` |
-| 14:10:30 | ReadNotifications |  | `-` |
-| 14:10:27 | Bash | Fix time labels and check producer | `cd /home/ronald/saas-hasner/app/docs; sed -i '4s/^E3-LEITORES #10 14:3x/E3-LEITORES #10 14:1x/;5s/^AUDITORIA item 3 14:3x/AUDITORIA item 3 14:1x/' RELATO.md; sed -i '1s/14:3x/14:1x/' ../../logs/AUDITORIA-TRAVAS/contrato_item3_v4.txt; sed -n 4,5p RELATO.md \| cut -c1-40; ps -p 106526 -o pid=,comm=` |
-| 14:10:24 | Bash | Add RELATO lines for #10 and item 3 | `cd /home/ronald/saas-hasner/app/docs; date +%H:%M; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') novas=["E3-LEITORES #10 14:3x: censo_q rc=0 (logs/E3-LEITORES/quarentena/censo_q.r): B1 8 escritores de respondida_em; 2 portas genericas aceitam carimbo sem texto (responder_automaticamente disputa_emissao.py:1652 sem validar texto novo; descarimbar_em_lote/_nascer **outros) -- uso nao ...` |
-| 14:10:17 | Bash | View RELATO top | `cd /home/ronald/saas-hasner/app/docs; sed -n 1,14p RELATO.md \| cut -c1-220` |
