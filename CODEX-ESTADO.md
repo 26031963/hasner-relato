@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 10:52** · publicado em **13/11/2026 10:54** (UTC-3)
+> Ultima resposta processada: **13/11/2026 11:10** · publicado em **13/11/2026 11:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 11:10 · sessao 554163499bde · - · - · origem=Ronald (tmux)
+
+F: **não encontrei quebra de contrato pela entrada nova**: ela declara o comando sob ordem em `FORA_DE_PIPELINE`, com motivo (`app/config/crons.py:1407`).
+
+O contrato B6.1 enumera arquivos de comandos (`app/chamados/tests/test_contract_crons.py:214`), exige casa em agendados ou `FORA_DE_PIPELINE` (`app/chamados/tests/test_contract_crons.py:220`) e proíbe entrada simultaneamente agendada ou sem arquivo vivo (`app/chamados/tests/test_contract_crons.py:230`). A fonte dos agendados contém somente `CRONS + ENCADEADOS` (`app/config/crons.py:1805`); o render percorre somente `CRONS` (`app/config/crons.py:1872`).
+
+Reproduzi essas duas operações B6.1 por `python3 -B`, compilando a fonte em memória: `sem casa=[]`, `podres=[]`; `aplicar_feriado_lei_1609` está vivo, está fora do pipeline e não está agendado. Resultado de execução transitória, sem arquivo de evidência persistido: `[nao verificado]`. Os predicados reproduzidos estão em `app/chamados/tests/test_contract_crons.py:225` e `app/chamados/tests/test_contract_crons.py:234`.
+
+Os demais contratos encontrados sobre estágio, dependências, horários e render examinam `CRONS`, portanto a entrada somente no dicionário de exclusões não os amplia (`app/chamados/tests/test_contract_crons.py:77`, `app/chamados/tests/test_contract_crons.py:269`, `app/chamados/tests/test_contract_crons.py:301`, `app/chamados/tests/test_contract_crons.py:330`).
 
 ## 13/11 10:52 · sessao bf56601fcd1a · FERIADO-NASCE-DA-ESCALA · verificador · origem=Code
 
@@ -865,75 +875,4 @@ Outros selos relevantes:
 - A geração rotineira preserva `trabalha` de células passadas já existentes; correção do cadastro usa a operação explícita de regeneração, que recalcula `trabalha`/DNA e depois rejulga. Fontes: `app/ponto/portas/celula.py:289`, `:290`, `:306`, `:392`, `:472`, `:921`, `:925`.
 - O resultado real de col148 em 02/11 e sua mudança após eventual cura não foi executado nem verificado nesta cópia; o dado recebido é a única evidência de produção disponível. [não verificado]
 
-## 13/11 09:14 · sessao 48e4be4cd89d · FERIADO-ESCALA · sonda · origem=Code
-
-Saída raspada fornecida no pedido [nao verificado]:
-
-```text
-sonda_leitura: sonda_16.py [01ee92abd7a7aa16] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-== universo ativa=True total 535
-  ciclo=12x36 base=12x36 trabalha=False : 2
-  ciclo=12x36 base=12x36 trabalha=True : 332
-  ciclo=5x2 base=comercial trabalha=False : 16
-  ciclo=5x2 base=comercial trabalha=True : 15
-  ciclo=5x2 base=turno_partido trabalha=False : 4
-  ciclo=5x2 base=turno_partido trabalha=True : 1
-  ciclo=6x1 base=comercial trabalha=False : 70
-  ciclo=6x1 base=comercial trabalha=True : 59
-  ciclo=6x1 base=turno_partido trabalha=False : 1
-  ciclo=6x1 base=turno_partido trabalha=True : 23
-  ciclo=intermitente base=intermitente trabalha=True : 8
-  ciclo=personalizado base=comercial trabalha=False : 1
-  ciclo=personalizado base=comercial trabalha=True : 3
-== universo vigente(juiza) total 536
-  ciclo=12x36 base=12x36 trabalha=False : 2
-  ciclo=12x36 base=12x36 trabalha=True : 333
-  ciclo=5x2 base=comercial trabalha=False : 16
-  ciclo=5x2 base=comercial trabalha=True : 15
-  ciclo=5x2 base=turno_partido trabalha=False : 4
-  ciclo=5x2 base=turno_partido trabalha=True : 1
-  ciclo=6x1 base=comercial trabalha=False : 70
-  ciclo=6x1 base=comercial trabalha=True : 59
-  ciclo=6x1 base=turno_partido trabalha=False : 1
-  ciclo=6x1 base=turno_partido trabalha=True : 23
-  ciclo=intermitente base=intermitente trabalha=True : 8
-  ciclo=personalizado base=comercial trabalha=False : 1
-  ciclo=personalizado base=comercial trabalha=True : 3
-== contador existente vinculos_5x2_6x1_trabalha_feriado: {'total': 98, 'declarados': 64, 'nao_declarados': 34}
-== 5x2/6x1 ativos com True: ec col te ciclo base posto posto.opera_em_feriado (sem criado_em; apos16/09 = data_inicio) data_inicio data_fim padrao_juiz nasceu_apos_16_09 vigente
-  ec203 col236 te200 5x2 comercial posto1 True - 2026-07-21 None padrao=True apos16/09=False vig=True
-  ec328 col376 te487 5x2 comercial posto491 None - 2026-07-21 None padrao=False apos16/09=False vig=True
-  ec506 col181 te249 5x2 comercial posto24 True - 2026-07-21 None padrao=True apos16/09=False vig=True
-  ec749 col142 te350 5x2 comercial posto22 True - 2026-06-01 None padrao=True apos16/09=False vig=True
-  ec813 col93 te190 5x2 comercial posto17 True - 2026-06-24 None padrao=True apos16/09=False vig=True
-  ec826 col118 te194 5x2 comercial posto17 True - 2026-06-24 None padrao=True apos16/09=False vig=True
-  ec854 col148 te200 5x2 comercial posto20 True - 2026-06-24 None padrao=True apos16/09=False vig=True
-  ec964 col709 te481 5x2 comercial posto24 True - 2026-07-21 None padrao=True apos16/09=False vig=True
-  ec1101 col902 te205 5x2 comercial posto476 True - 2026-08-17 None padrao=True apos16/09=False vig=True
-  ec1111 col712 te300 5x2 comercial posto514 None - 2026-08-03 None padrao=False apos16/09=False vig=True
-  ec1208 col940 te505 5x2 comercial posto463 None - 2026-09-11 None padrao=False apos16/09=False vig=True
-  ec1235 col857 te328 5x2 turno_partido posto514 None - 2026-08-21 None padrao=True apos16/09=False vig=True
-  ec1264 col239 te517 5x2 comercial posto463 None - 2026-09-20 None padrao=False apos16/09=True vig=True
-  ec1475 col1007 te595 5x2 comercial posto24 True - 2026-11-03 None padrao=True apos16/09=True vig=True
-  ec1492 col152 te361 5x2 comercial posto17 True - 2026-10-20 None padrao=True apos16/09=True vig=True
-  ec1524 col1025 te249 5x2 comercial posto24 True - 2026-11-02 None padrao=True apos16/09=True vig=True
-== resumo 5x2/6x1 True por (ciclo, base, posto.opera_em_feriado, padrao_juiz, nasceu_apos_16_09)
-   ('5x2', 'comercial', None, False, False) 3
-   ('5x2', 'comercial', None, False, True) 1
-   ('5x2', 'comercial', True, True, False) 8
-   ('5x2', 'comercial', True, True, True) 3
-   ('5x2', 'turno_partido', None, True, False) 1
-   ('6x1', 'comercial', None, False, False) 21
-   ('6x1', 'comercial', None, False, True) 3
-   ('6x1', 'comercial', True, True, False) 32
-   ('6x1', 'comercial', True, True, True) 3
-   ('6x1', 'turno_partido', None, True, False) 4
-   ('6x1', 'turno_partido', None, True, True) 1
-   ('6x1', 'turno_partido', True, True, False) 7
-   ('6x1', 'turno_partido', True, True, True) 11
-== ec854: col148 te200 5x2 comercial posto20 opera=True trabalha=True criado=2026-06-24 ativa=True padrao=True
-erros 0
-```
-
-_4538 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4539 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
