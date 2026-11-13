@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 18:10:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (594.0 MB). Acoes na janela: **2314**.
+**Medido em 13/11/2026 18:15:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (594.2 MB). Acoes na janela: **2322**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:15:40 | Bash |  | `cd /home/ronald/saas-hasner; g(){ git show e439fac78:$1 \| sed -n "$2p" \| cut -c1-150; }; g bin/suite.sh 170,174; echo --; g app/chamados/management/commands/vigiar_fio_morto.py 174,177; echo --; g bin/fio_estado.py 123,126` |
+| 18:15:34 | Bash |  | `cd /home/ronald/saas-hasner/logs/PREPARACAO/censos/OTIMIZA-1; sed -n 1,6p r.r; sed -n 161,240p r.r` |
+| 18:15:31 | Bash |  | `cd /home/ronald/saas-hasner/logs/PREPARACAO/censos/OTIMIZA-1; tail -n 1 log; wc -c r.r; /bin/grep -n -E "^\*\*[0-9]\|perguntas de lei" r.r \| head -n 20` |
+| 18:15:28 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() anc='PONTO 18:1x BUG-PAR POSTMORTEM' assert s.count(anc)==1 s=s.replace(anc,'PONTO 18:2x RAIA-PREPARACAO (2) CONTRATO-DE-ENTRADA-DO-FIO brief pronto (logs/PREPARACAO/censos/CONTRATO-DE-ENTRADA-DO-FIO.md; amostra 4/4): retro grava foto_ausente.batida_id, os 2 leitores do episodio (models.py:3464, disputa_emissao ...` |
+| 18:15:23 | Bash |  | `cd /home/ronald/saas-hasner; C=logs/PREPARACAO/censos; { echo "# CENSO-ANTES-DA-VAGA: CONTRATO-DE-ENTRADA-DO-FIO (13/11 18:2x)"; echo "Fonte: $C/CONTRATO-DE-ENTRADA-DO-FIO/r.r (Codex censo, HEAD e439fac78, rc 0). Amostra conferida pela sessao 4/4 no HEAD: marcar_foto_ausente_retro.py:98-101, chamados/models.py:3462-3466, disputa_emissao.py:385-388, api/views.py:758-761."; echo "- perguntas de lei: ...` |
+| 18:15:17 | Bash |  | `cd /home/ronald/saas-hasner; g(){ git show e439fac78:$1 \| sed -n "$2p" \| cut -c1-150; }; g app/ponto/management/commands/marcar_foto_ausente_retro.py 98,101; echo --; g app/chamados/models.py 3462,3466; echo --; g app/chamados/services/disputa_emissao.py 385,388; echo --; g app/api/views.py 758,761` |
+| 18:15:13 | Read |  | `/home/ronald/saas-hasner/logs/PREPARACAO/censos/CONTRATO-DE-ENTRADA-DO-FIO/r.r` |
+| 18:15:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/PREPARACAO/censos/CONTRATO-DE-ENTRADA-DO-FIO; tail -n 2 log; wc -c r.r` |
 | 18:09:18 | Bash |  | `cd /home/ronald/saas-hasner; P=$(pgrep -f "codex_pergunta.sh.*PREPARACAO/censos/HJ-091" \| head -n 1); echo P=$P; python3 - "$P" <<'EOF' import sys,re p='app/docs/RELATO.md'; s=open(p).read(); P=sys.argv[1] s=re.sub(r'ESPERANDO: codex_pergunta.sh \\| pid=\d+','ESPERANDO: codex_pergunta.sh \| pid='+P,s,count=1) anc='PONTO 18:0x RAIA-PREPARACAO (1)' assert s.count(anc)==1 s=s.replace(anc,'PONTO 18:1 ...` |
 | 18:09:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/postmortem4; cat log; wc -c r.r; tail -n 30 r.r` |
 | 18:08:09 | Bash |  | `cd /home/ronald/saas-hasner; tail -n 3 logs/O168/v9/suite/suite.log \| cut -c1-200; echo; tail -n 3 logs/HJ-090/red3/red.log 2>/dev/null \| cut -c1-200; bin/trava_teste.sh --quem 2>&1 \| tail -n 3` |
