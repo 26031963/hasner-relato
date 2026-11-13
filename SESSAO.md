@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 17:06:00.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (583.7 MB). Acoes na janela: **2010**.
+**Medido em 13/11/2026 17:11:03.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (583.8 MB). Acoes na janela: **2017**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:10:17 | Bash |  | `date +%H:%M; ps -p 2607105 -o etime= ; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; tail -n 3 /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/push/push.log \| cut -c1-200` |
+| 17:10:12 | Monitor | sonda E3 v4 (A1 resto + A2 entra) na sombra | `F=/home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto; until [ -f $F/fim_v4 ]; do /usr/bin/sleep 20; done; tail -n 1 $F/v4_det.runlog; /bin/grep -c V4_DET $F/v4_det.runlog; /bin/grep -c ERRO_ $F/v4_det.runlog; /bin/grep -E "V4_ACHADOS\|FIM_V4\|Traceback\|Error" $F/v4_det.runlog \| tail -n 5` |
+| 17:10:05 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "in ALVO\\|V4_\\|ALVO\[" logs/sombra/e3_v4_det.py \| cut -c1-150` |
+| 17:10:01 | Bash |  | `cd /home/ronald/saas-hasner; python3 -I - <<'EOF' import json P='/home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto/' v3={l.split()[1] for l in open(P+'v3_cels.txt')} alvo={} for ln in open(P+'par_det.txt'): a=json.loads(ln[len('PAR_DET '):]) cel,cid,d=a[0],a[1],a[2] if str(cel) not in v3: alvo[(cid,d)]='A1resto' n1=len(alvo) for ln in open(P+'a2_entram_saem.txt'): if ln.startswith('ENTRA '): b,c= ...` |
+| 17:09:48 | Bash |  | `cd /home/ronald/saas-hasner; python3 -I - <<'EOF' import json, collections def s(p): out={} for ln in open(p): if ln.startswith('E3DELTA_DIA ['): a=json.loads(ln[len('E3DELTA_DIA '):]); out[(a[0],a[1],a[2])]=a return out P='/home/ronald/saas-hasner/logs/E3-FORMA-SQL/' b=s(P+'diff_frota/inteiro/delta/base2.runlog'); c=s(P+'diff_frota/inteiro/delta/copia2.runlog') print(len(b),len(c), set(b)==set(c) ...` |
+| 17:09:40 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/E3-FORMA-SQL/diff_frota/inteiro/delta; python3 -I - <<'EOF' import json def s(p): out={} for ln in open(p): if ln.startswith('E3DELTA_DIA ['): a=json.loads(ln[len('E3DELTA_DIA '):]); out[a[0]]=a return out b=s('/home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/inteiro/delta/base2.runlog') c=s('/home/ronald/saas-hasner/logs/E3-FORMA-SQL/diff_frota/inteiro/del ...` |
+| 17:09:23 | Bash |  | `cat /home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto/codex/a1v3_julga.r` |
 | 17:05:11 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: push \| pid=2607105$/ESPERANDO: git \| pid=2607105/' app/docs/RELATO.md; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 17:05:07 | Bash |  | `cd /home/ronald/saas-hasner; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h for p,pid in [('git',2607105),('pre-push',2607133)]: print(p, repr(h._prova_pid(p,pid)))"; ps -p 2607133 -o cmd=` |
 | 17:05:03 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py` |

@@ -1,7 +1,231 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 17:06** · publicado em **13/11/2026 17:06** (UTC-3)
+> Ultima resposta processada: **13/11/2026 17:09** · publicado em **13/11/2026 17:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 17:09 · sessao 234786b384a9 · E3-FORMA-SQL · leitura · origem=Code
+
+**A recontagem fecha em 170 colab-dias: 62 ESTRUTURA, 34 CADASTRO e 74 BATIDA. Há 21 com ação humana e FUTURO=`nada`. Não há, pelos casos escritos solicitados e pelos fatos apresentados, colab-dia demonstrado como ATUAL obrigatório.** (`a1v3_det.txt:1–170`; `app/chamados/tests/test_e3_portas_tarefa.py:21–127`)
+
+Referências abreviadas:
+
+- **D:n** = `a1v3_det.txt:n`, contando somente as linhas `V3_DET` coladas, desde 1.
+- **T:n** = [app/chamados/tests/test_e3_portas_tarefa.py](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/tests/test_e3_portas_tarefa.py):n.
+- **S:n** = [app/chamados/services/tarefa_do_dia.py](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/services/tarefa_do_dia.py):n.
+- **P:n** = [app/chamados/management/commands/diff_e3_sombra.py](/home/ronald/codex_ws/91bed16941419bc8c2f1a97097d533ec2348b4d4/app/chamados/management/commands/diff_e3_sombra.py):n.
+
+**1. Grupo × dono L-099**
+
+Contagens calculadas sobre as 170 linhas fornecidas; os donos são os registrados no anexo. (D:1–170)
+
+| Grupo | ESTRUTURA | CADASTRO | BATIDA | None | Total |
+|---|---:|---:|---:|---:|---:|
+| G2 | 17 | 10 | 41 | 0 | 68 |
+| G3 | 18 | 3 | 9 | 0 | 30 |
+| G4 | 26 | 16 | 23 | 0 | 65 |
+| G8 | 1 | 5 | 1 | 0 | 7 |
+| **Total** | **62** | **34** | **74** | **0** | **170** |
+
+**2. Combinações de razões e cobertura pela regra escrita**
+
+O teste “só fila sem pergunta” exige uma instância com ação `perguntar/sistema/emissor`; os testes de porta humana exigem âncora concreta na própria célula ou sob B. O caso de isenção exige `isento_ponto`. Nenhum desses cenários pode ser identificado integralmente apenas pela ausência de porta no anexo. (T:21–47,57–82) [nao verificado]
+
+Nas tabelas, **SC = “sem caso escrito”; escolha ATUAL/FUTURO não determinada por esse arquivo**. As letras seguintes identificam a lacuna:
+
+| Código | Lacuna de cobertura ou fato faltante |
+|---|---|
+| **F** | Falta caso escrito para a combinação apresentada com fila/porta residual. Não reproduz o teste “sem pergunta + perguntar/sistema/emissor”, nem o de isenção. (T:32–38,57–65) | [nao verificado]
+| **H** | Há ação humana de pergunta, mas faltam **porta da ação, identidade/localização da âncora e presença na fila global** para aplicar o caso da própria célula ou A/B. O anexo registra somente `[acao,de]`. (D:1–170; T:21–47,67–82) |
+| **U** | Falta caso nesse arquivo para `ausencia_a_decidir`, inclusive sua combinação com `aceso/nao_venceu`. A ação não comprova porta de chamado: o código a cria com porta ausente. (T:21–127; S:114–115,283–291) |
+| **C** | Falta caso nesse arquivo para `celula_acusa_sem_pergunta_viva` com `validar/admin`; o código cria essa ação sem porta. (T:21–127; S:329–336) |
+
+As combinações abaixo **preservam a multiplicidade**, desconsiderando apenas a ordem. Exemplo: `A³P` significa três instâncias `aceso` e uma `passivo_sem_linha`. Todas as contagens foram calculadas sobre D:1–170; cada exemplo tem sua linha individual.
+
+Legenda:
+
+`A=aceso`; `P=passivo_sem_linha`; `R=aguarda_resposta`; `N=nao_venceu`; `U=ausencia_a_decidir`; `V=veredito_sem_lavra_vigente`; `E=efeito_sem_lampada`; `D=dia_sem_trabalho`; `C=celula_acusa_sem_pergunta_viva`; `L=aguarda_validacao`; `J=encerrada_pelo_juiz`.
+
+| Grupo G2 — combinação | n | Exemplos de celula_pk | Caso/decisão |
+|---|---:|---|---|
+| A³P | 17 | 120067 (D:1), 118928 (D:6) | SC/F |
+| A²P² | 7 | 119985 (D:2), 108826 (D:56) | SC/F |
+| AP | 15 | 140114 (D:21), 117245 (D:55) | SC/F |
+| AP³ | 1 | 108035 (D:129) | SC/F |
+| P⁴ | 3 | 108622 (D:13), 109494 (D:42) | SC/F |
+| A⁴ | 3 | 129083 (D:47), 129090 (D:48) | SC/F |
+| A³R | 4 | 118930 (D:7), 118934 (D:11) | SC/H |
+| A²R² | 5 | 118932 (D:9), 105773 (D:17) | SC/H |
+| AR³ | 2 | 129598 (D:85), 116554 (D:104) | SC/H |
+| AP²R | 1 | 118931 (D:8) | SC/H |
+| AV | 3 | 140121 (D:22), 140122 (D:23) | SC/F |
+| A³V | 1 | 130771 (D:131) | SC/F |
+| A³E | 1 | 130929 (D:89) | SC/F |
+| U⁴ | 1 | 138643 (D:98) | SC/U |
+| U² | 1 | 129575 (D:127) | SC/U |
+| CD³ | 1 | 120319 (D:150) | SC/C |
+| A³L | 1 | 141817 (D:166) | SC/H |
+| AJ | 1 | 142013 (D:167) | SC/F |
+| **Total** | **68** | D:1–170 | |
+
+| Grupo G3 — combinação | n | Exemplos de celula_pk | Caso/decisão |
+|---|---:|---|---|
+| A³R | 2 | 141714 (D:3), 141810 (D:165) | SC/H |
+| A³P | 2 | 115432 (D:33), 137166 (D:84) | SC/F |
+| A⁴P | 1 | 135811 (D:50) | SC/F |
+| A³N | 2 | 132340 (D:34), 127949 (D:130) | SC/F |
+| A²N² | 1 | 133374 (D:39) | SC/F |
+| AN³ | 1 | 130294 (D:61) | SC/F |
+| N⁴ | 2 | 129189 (D:36), 130418 (D:145) | SC/F |
+| A⁴ | 5 | 136215 (D:43), 137154 (D:53) | SC/F |
+| A² | 11 | 121500 (D:57), 138912 (D:95) | SC/F |
+| U² | 1 | 117062 (D:54) | SC/U |
+| U⁴ | 1 | 112501 (D:115) | SC/U |
+| ANU² | 1 | 127887 (D:159) | SC/U |
+| **Total** | **30** | D:1–170 | |
+
+| Grupo G4 — combinação | n | Exemplos de celula_pk | Caso/decisão |
+|---|---:|---|---|
+| A³P | 12 | 130160 (D:4), 130162 (D:5) | SC/F |
+| A²P² | 10 | 118933 (D:10), 108633 (D:14) | SC/F |
+| AP² | 1 | 139432 (D:20) | SC/F |
+| AP³ | 3 | 111346 (D:40), 122073 (D:142) | SC/F |
+| AP | 9 | 119517 (D:28), 115650 (D:35) | SC/F |
+| P⁴ | 10 | 140928 (D:26), 104784 (D:27) | SC/F |
+| P² | 4 | 116436 (D:52), 124364 (D:101) | SC/F |
+| A⁴ | 11 | 140331 (D:29), 130931 (D:90) | SC/F |
+| A² | 5 | 135067 (D:46), 110506 (D:58) | SC/F |
+| **Total** | **65** | D:1–170 | |
+
+| Grupo G8 — combinação | n | Exemplos de celula_pk | Caso/decisão |
+|---|---:|---|---|
+| N⁴ | 1 | 131162 (D:30) | SC/F |
+| D⁴ | 1 | 116182 (D:41) | SC/F |
+| A³P | 1 | 113307 (D:62) | SC/F |
+| DP | 2 | 130346 (D:117), 130348 (D:118) | SC/F |
+| P⁴ | 2 | 128533 (D:155), 127477 (D:160) | SC/F |
+| **Total** | **7** | D:1–170 | |
+
+Não aparecem razões `lampada_nao_sabe` nem `ausencia_aprovada` nestas 170 linhas. Existem instâncias com `lampada=null`, mas nelas a razão apresentada é `passivo_sem_linha`; `null` não autoriza renomear a razão. (D:1–170, particularmente D:20,50,122)
+
+**3. ATUAL obrigatório + dono ESTRUTURA**
+
+**Lista comprovada: vazia.** Isso significa **zero demonstrados**, não prova de que nenhum defeito exista: falta cobertura escrita para as combinações ou o fato da âncora exigido pelos testes. (T:21–127; D:1–170) [nao verificado]
+
+Os **sete ESTRUTURA com ação humana e FUTURO=`nada`** são os seguintes. Eles não podem ser promovidos automaticamente a “ATUAL obrigatório”. (D:8–9,17,98,115,127,150; T:40–47,67–73)
+
+| Grupo | celula_pk — lista completa dessa condição | Código que produz a redução ao FUTURO |
+|---|---|---|
+| G2 | 118931 (D:8), 118932 (D:9), 105773 (D:17) | A ação recebe âncora somente se ela estiver na fila; publicação exige porta inteira pertencente à fila global. Sem rota, retorna `None`, projetado como `nada`. (S:128–133,547–565; P:49) |
+| G2 | 138643 (D:98), 129575 (D:127) | `decidir_ausencia/admin` nasce sem porta; depois passa pela mesma redução. (S:114–115,283–291,547–565; P:49) |
+| G2 | 120319 (D:150) | `validar/admin` da acusação sem pergunta nasce sem porta; depois passa pela mesma redução. (S:335–336,547–565; P:49) |
+| G3 | 112501 (D:115) | `decidir_ausencia/admin` nasce sem porta; depois passa pela mesma redução. (S:114–115,283–291,547–565; P:49) |
+
+**4. CADASTRO e BATIDA — lista do admin**
+
+| Grupo | CADASTRO | BATIDA | Total admin |
+|---|---:|---:|---:|
+| G2 | 10 | 41 | 51 |
+| G3 | 3 | 9 | 12 |
+| G4 | 16 | 23 | 39 |
+| G8 | 5 | 1 | 6 |
+| **Total** | **34** | **74** | **108** |
+
+Contagens: D:1–170. A separação CADASTRO/BATIDA para pauta, com ESTRUTURA como fatia, está escrita em `app/ponto/services/pautas_dos_discordantes.py:40–41`.
+
+**5. FUTURO=`nada` com ação humana**
+
+**Sim: 21 colab-dias, sendo G2=16, G3=5 e G4/G8=0.** A lista completa é esta. (D:1–170)
+
+| Grupo | Ação/de | celula_pk | Escrita da ação |
+|---|---|---|---|
+| G2 | responder/colaborador | 118930 (D:7), 118931 (D:8), 118932 (D:9), 118934 (D:11), 105773 (D:17), 106286 (D:78), 129598 (D:85), 116546 (D:103), 116554 (D:104), 116542 (D:112), 103972 (D:114), 105151 (D:148) | S:130–133,308–313 |
+| G2 | decidir_ausencia/admin | 138643 (D:98), 129575 (D:127) | S:283–291 |
+| G2 | validar/admin | 120319 (D:150) | S:335–336 |
+| G2 | validar/admin | 141817 (D:166) | S:135–138,308–313 |
+| G3 | responder/colaborador | 141714 (D:3), 141810 (D:165) | S:130–133,308–313 |
+| G3 | decidir_ausencia/admin | 117062 (D:54), 112501 (D:115), 127887 (D:159) | S:283–291 |
+
+**Essa observação não demonstra contradição interna da tarefa:** seu `fio` resume os donos das ações, mesmo sem porta; a função posterior `porta_da_tarefa` devolve `None` sem rota, e a projeção da folha chama isso de `nada`. O código declara expressamente que ausência de porta não significa ausência de tarefa. (S:540–565; P:49–59)
+
+Há inclusive teste escrito admitindo `responder/colaborador` com `porta=None` quando o chamado está silenciado. (`app/chamados/tests/test_e2_tarefa_do_dia.py:396–409`)
+
+**6. Quem escreve, quem lê e significado dos campos**
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| **razao** | `_tarefa_pura` inicializa e escreve por ramo; `_pela_decisao` fornece as razões relativas à pergunta; `expor_admin` pode substituí-las. (S:118–163,249–260,262–313,318–336) | A publicação da porta não consulta razão de instância. O diff consulta somente a razão **geral da tarefa** para classificar isenção. O backfill reconhece `passivo_sem_linha` e agrega razões para explicar o resultado. (S:547–556; P:63–70; `app/chamados/management/commands/backfill_fio_morto_e4b.py:97–117`) |
+| **lampada** | `instancias_do_turno` copia `acesa_lavrada`; `_tarefa_pura` copia para a instância publicada. (S:87–105,258–260) A origem é `ata.lampadas[].acesa`, preservada pelo leitor único. (`app/escala/services/leitor_celula.py:134–137`) A ata é montada pelo cartório. (`app/ponto/services/cartorio.py:672–678,711–738`) | A tarefa distingue `True`, `None` e o ramo restante, normalmente `False`. `True` dispensa antes do teto; `None` produz `lampada_nao_sabe`; depois são examinados os valores de `vencido`. (S:262–282) |
+| **vencido** | O cartório calcula `quando + 30 minutos <= agora`; a carga fornece esse resultado, que é casado por tipo/hora e copiado para a instância. (`app/ponto/services/cartorio.py:862,882–893`; `app/ponto/turnos.py:3060–3066`; S:74–105,506–514) | A tarefa interpreta `None` como teto desconhecido e `False` como ainda não vencido. O teste ocorre depois da dispensa por dia sem trabalho/lâmpada acesa. (S:262–282) |
+| **acoes** | `_acao` define `{acao,de,porta}`, com porta padrão `None`; decisões, ausência, emissão de pergunta e acusação da célula criam as ações. (S:114–162,283–313,335–336) | `_portas_da_tarefa` reúne as ações, publica somente portas inteiras presentes na fila global e calcula o fio pelos donos. O backfill também lê ações e reconhece humanos sem porta. (S:547–556; `app/chamados/management/commands/backfill_fio_morto_e4b.py:100–115`) |
+
+**`lampada=None` não equivale a `False`.** O leitor único converte `None` em acesa para seu campo `missing`, mas mantém o valor original em `acesa_lavrada`, que é o campo usado pela tarefa. Não há essa conversão na tarefa. (`app/escala/services/leitor_celula.py:119–137`; S:87–105,272–282)
+
+**`vencido` é por instante do marco encadeado no turno, incluindo travessia da meia-noite; não é comparação por dia civil.** `data_civil` é extraída separadamente do instante casado. (`app/ponto/services/cartorio.py:865–893`; S:74–105)
+
+**`porta_da_tarefa` e as projeções do diff não reinterpretam `lampada`, `vencido` ou razão de instância: não leem esses campos.** A redução acontece na publicação da porta e descarta o fio humano quando não há rota. (S:547–565; P:46–59)
+
+Há, porém, **diferença entre descrição e predicado na pauta**: o texto diz “não estão esperando NINGUÉM”, enquanto o código seleciona ausência de porta, condição compatível com os humanos sem porta acima. A folha documenta o significado mais estreito: nenhuma ação humana exigível passa por uma porta da fila. (`app/ponto/services/pautas_dos_discordantes.py:46–56,79–84`; `app/folha/fora_da_folha.py:52–58,77–89`; S:547–565)
+
+## 13/11 17:07 · sessao 04d6f45b7ddb · - · - · origem=Ronald (tmux)
+
+Recontagem exata das 170 linhas `V3_DET`, numeradas desde 1:
+
+| Grupo | ESTRUTURA | CADASTRO | BATIDA | None | Total |
+|---|---:|---:|---:|---:|---:|
+| G2 | 17 | 10 | 41 | 0 | 68 |
+| G3 | 18 | 3 | 9 | 0 | 30 |
+| G4 | 26 | 16 | 23 | 0 | 65 |
+| G8 | 1 | 5 | 1 | 0 | 7 |
+| Total | 62 | 34 | 74 | 0 | 170 |
+
+Fonte: `a1v3_det.txt:1–170` do texto fornecido.
+
+Combinações abaixo usam **conjunto de razões distintas**, sem distinguir multiplicidade.
+
+| Grupo | Razões | n | Exemplos |
+|---|---|---:|---|
+| G2 | aceso + passivo_sem_linha | 40 | 120067 (:1), 119985 (:2) |
+| G2 | aceso + aguarda_resposta | 11 | 118930 (:7), 118932 (:9) |
+| G2 | aceso + passivo_sem_linha + aguarda_resposta | 1 | 118931 (:8) |
+| G2 | passivo_sem_linha | 3 | 108622 (:13), 109494 (:42) |
+| G2 | aceso + veredito_sem_lavra_vigente | 4 | 140121 (:22), 140122 (:23) |
+| G2 | aceso | 3 | 129083 (:47), 129090 (:48) |
+| G2 | aceso + efeito_sem_lampada | 1 | 130929 (:89) |
+| G2 | ausencia_a_decidir | 2 | 138643 (:98), 129575 (:127) |
+| G2 | celula_acusa_sem_pergunta_viva + dia_sem_trabalho | 1 | 120319 (:150) |
+| G2 | aceso + aguarda_validacao | 1 | 141817 (:166) |
+| G2 | aceso + encerrada_pelo_juiz | 1 | 142013 (:167) |
+| G3 | aceso + aguarda_resposta | 2 | 141714 (:3), 141810 (:165) |
+| G3 | aceso + passivo_sem_linha | 3 | 115432 (:33), 135811 (:50) |
+| G3 | aceso + nao_venceu | 4 | 132340 (:34), 133374 (:39) |
+| G3 | nao_venceu | 2 | 129189 (:36), 130418 (:145) |
+| G3 | aceso | 16 | 136215 (:43), 137154 (:53) |
+| G3 | ausencia_a_decidir | 2 | 117062 (:54), 112501 (:115) |
+| G3 | aceso + nao_venceu + ausencia_a_decidir | 1 | 127887 (:159) |
+| G4 | aceso + passivo_sem_linha | 35 | 130160 (:4), 130162 (:5) |
+| G4 | passivo_sem_linha | 14 | 140928 (:26), 104784 (:27) |
+| G4 | aceso | 16 | 140331 (:29), 135067 (:46) |
+| G8 | nao_venceu | 1 | 131162 (:30) |
+| G8 | dia_sem_trabalho | 1 | 116182 (:41) |
+| G8 | aceso + passivo_sem_linha | 1 | 113307 (:62) |
+| G8 | dia_sem_trabalho + passivo_sem_linha | 2 | 130346 (:117), 130348 (:118) |
+| G8 | passivo_sem_linha | 2 | 128533 (:155), 127477 (:160) |
+
+Todas as referências `:n` acima são `a1v3_det.txt:n`. Não aparecem razões `lampada_nao_sabe` nem `ausencia_aprovada` nas 170 linhas. (`a1v3_det.txt:1–170`)
+
+Ações humanas com FUTURO `nada`: **21 colab-dias**, G2=16, G3=5, G4=G8=0. (`a1v3_det.txt:1–170`)
+
+| Grupo / ação | Lista completa |
+|---|---|
+| G2 responder | 118930 (:7), 118931 (:8), 118932 (:9), 118934 (:11), 105773 (:17), 106286 (:78), 129598 (:85), 116546 (:103), 116554 (:104), 116542 (:112), 103972 (:114), 105151 (:148) |
+| G2 decidir_ausencia | 138643 (:98), 129575 (:127) |
+| G2 validar | 120319 (:150), 141817 (:166) |
+| G3 responder | 141714 (:3), 141810 (:165) |
+| G3 decidir_ausencia | 117062 (:54), 112501 (:115), 127887 (:159) |
+
+Desses, **7 têm dono ESTRUTURA**: G2=118931 (:8), 118932 (:9), 105773 (:17), 138643 (:98), 129575 (:127), 120319 (:150); G3=112501 (:115). Isso identifica fatos e donos; não determina que ATUAL seja correto. (`a1v3_det.txt:8–150`, referências individuais na lista)
+
+Lista admin CADASTRO+BATIDA: G2=51, G3=12, G4=39, G8=6, total=108. (`a1v3_det.txt:1–170`)
 
 ## 13/11 17:06 · sessao fa8f1832d687 · - · - · origem=Ronald (tmux)
 
@@ -484,99 +708,4 @@ Classes:54 `so_fila_sem_pergunta`,8 `fila_A_pergunta_B`,8 `verbos_A_B`,0 `isento
 
 Os dois PKs que explicariam a diferença para sua contagem344 —115231 e107710— **não constam na versão do prompt herdada que recebi**; não os acrescentei por sequência. [não verificado]
 
-## 13/11 16:28 · sessao 2177abea7475 · - · - · origem=Ronald (tmux)
-
-Leitura concluída. Não localizei AGENTS.md na busca por `rg --files -g AGENTS.md`; instruções em ancestrais fora da árvore [não verificado].
-
-**Incompatibilidade central entre anexo e código atual**
-
-- `diff_e3_sombra.py` não escreve `PAR_DIF` nem arrays `[copia, base]`: calcula agregado e o imprime como JSON (`app/chamados/management/commands/diff_e3_sombra.py:108`, `:118`, `:148`). Define `atual` como C17 e `futuro` como tarefa (`:127-130`), mas essa definição não confirma a ordem da versão do instrumento que produziu o anexo.
-- A tarefa atual não pode escrever fio `chamado`: escolhe somente `colab`, `admin`, `sistema`, `nao_sei`, `nada` (`app/chamados/services/tarefa_do_dia.py:553-554`); a projeção pública documenta porta com fio `colab` ou `admin` (`:559-565`). O anexo atribui `chamado` à cópia; procedência da execução [não verificado].
-- Na mesma alimentação, a fila da tarefa é subconjunto da fila C17: tarefa toma portas inteiras das ações ∩ fila global, depois ∩ chamados da célula, e filtra visíveis (`app/chamados/services/tarefa_do_dia.py:548-551`); C17 usa todos os chamados da célula e filtra visíveis (`app/chamados/juizes.py:1677-1688`). Isso impede justificar ampliações do anexo como uma identidade comprovada destes dois corpos sobre a mesma alimentação; alimentações efetivamente executadas [não verificado].
-
-**Quem escreve e lê**
-
-| Campo | Escritor lógico atual | Leitor real |
-|---|---|---|
-| fio | `_portas_da_tarefa`, prioridade de donos das ações (`app/chamados/services/tarefa_do_dia.py:552-556`); `porta_da_tarefa` só projeta (`:565`) | folha `_fio_da_porta` (`app/folha/fora_da_folha.py:86-89`); vigia `censo_alcance` (`app/chamados/services/vigia_fio.py:648-655`) |
-| fila | ações com porta, pertencimento à fila, vínculo com célula e visibilidade (`app/chamados/services/tarefa_do_dia.py:548-556`) | folha `o_que_segura` converte para lista de chamados mostrados (`app/folha/fora_da_folha.py:233-242`) |
-| rota | tarefa: tem porta exigível da célula → `porta_fila`, só âncora exigível → `porta_pergunta`, nenhuma → `None` (`app/chamados/services/tarefa_do_dia.py:548-556`) | vigia soma por rota e lista (`app/chamados/services/vigia_fio.py:652-655`) |
-| sem_porta | não é coluna persistida: o comparador fabrica `porta is None` (`app/chamados/management/commands/diff_e3_sombra.py:56`) | CXR aplica diretamente `porta_da_tarefa(...) is not None` para excluir o dia (`app/escala/services/cadastro_realidade.py:492-498`) |
-| sem_fio | não é coluna persistida: comparador fabrica `porta is None` (`app/chamados/management/commands/diff_e3_sombra.py:59`) | pauta lê `_fio_do_dia` e compara ao `FIO_SEM_PORTA` (`app/ponto/services/pautas_dos_discordantes.py:64`, `:79-84`) |
-
-Escritor lógico C17 conservado no HEAD: fio por verbo, prioridade `cobrar→colab`, `validar→admin`, demais→`chamado` (`app/chamados/juizes.py:1624-1639`); fila/rota/verbos/fio retornados juntos (`:1677-1688`). Esses são bytes da cópia, não comprovação dos bytes de `main` antes da E3 [não verificado].
-
-Os nomes de leitores no comparador não significam execução deles: a função diz expressamente “não executa os censos nem suas outras decisões” (`app/chamados/management/commands/diff_e3_sombra.py:47`).
-
-**Discordância na mesma cópia**
-
-Nenhum grupo do anexo demonstra a contradição exemplificada pelo usuário [não verificado quanto à execução real]. Neste comparador, todos os “leitores” são projeções da mesma variável `porta`: fio da folha e do vigia vêm do mesmo valor (`app/chamados/management/commands/diff_e3_sombra.py:49`, `:54`); `sem_porta` e `sem_fio` são exatamente o mesmo teste (`:56`, `:59`). Se a porta tem `fio='chamado'`, sua rota é projetada da mesma porta, não `None` (`:49-55`).
-
-Leitores reais também chamam a mesma autoridade: folha `porta_da_tarefa(carga.tarefa(...))` (`app/folha/fora_da_folha.py:71-74`), vigia (`app/chamados/services/vigia_fio.py:640-641`), CXR (`app/escala/services/cadastro_realidade.py:492-497`), pauta via folha (`app/ponto/services/pautas_dos_discordantes.py:64`, `:79-82`). Ainda faltariam execuções comparáveis, mesma entrada/instante/estado, para afirmar igualdade efetiva entre cargas independentes [não decidível]. Lei aplicável: L-002 (`app/docs/LEIS.md:60`) e propriedade “todo leitor lê o mesmo número” de L-110 (`app/docs/LEIS.md:136`).
-
-O vigia real, quando não há porta, ainda pode classificar dia de hoje/futuro ou balde de lei, em vez de contar fio morto (`app/chamados/services/vigia_fio.py:656-668`). O comparador não mede esses ramos (`app/chamados/management/commands/diff_e3_sombra.py:47`).
-
-**Semânticas**
-
-- Dia da tarefa é **dia do turno** (`app/chamados/services/tarefa_do_dia.py:573-583`); `data_evento` é explicitamente esse dia, sem reinterpretar como dia civil (`:219-222`, `:238`).
-- `data_civil` é separado, calculado pelo instante local do marco (`app/chamados/services/tarefa_do_dia.py:94-105`). Logo uma mudança turno/civil não pode ser inferida de um `PAR_DIF` sem perguntas/marcos [não decidível].
-- A tarefa busca perguntas por `data_evento` na janela e agrupa por `(colaborador, data_evento)` (`app/chamados/services/tarefa_do_dia.py:375-382`). C17 lê perguntas associadas por `celula_id` (`app/chamados/juizes.py:1599-1604`). Célula/pergunta mal associadas poderiam ser relevantes, mas o anexo não traz identidades dessas perguntas nem seus dias [não decidível].
-- `fila_ids` é global: itera `qs_na_fila()` sem recorte de datas; só `fila_cel` é restrita às células fornecidas (`app/chamados/juizes.py:1557-1567`). A partição de verbos é sobre todos os vivos, também sem janela (`:1558`). Isso é deliberado para preservar crédito do painel (`:1577-1583`).
-- A tarefa primeiro restringe `_fila` às âncoras de suas perguntas (`app/chamados/services/tarefa_do_dia.py:415-418`) e depois usa a alimentação global para expor as portas efetivamente exigíveis (`:529-534`, `:548-556`). Não é fila global de um lado versus fila temporal de outro.
-- Fila significa vivos cobrando e não silenciados no instante (`app/chamados/services/painel.py:158-190`), enquanto a tupla pública significa portas visíveis da própria célula (`app/chamados/services/tarefa_do_dia.py:550-551`; `app/chamados/juizes.py:1654-1657`). Confundir tupla pública com todas as âncoras seria significado incorreto; o código da folha preserva essa distinção (`app/folha/fora_da_folha.py:235-239`).
-
-**Classes**
-
-Atribuidor é `casos_do_par`, não os leitores (`app/chamados/management/commands/diff_e3_sombra.py:63-70`):
-
-- `todos`: sempre;
-- `so_fila_sem_pergunta`: fila da célula não vazia e nenhuma pergunta viva C6;
-- `fila_A_pergunta_B` e `verbos_A_B`: sempre juntos, se há fila da célula e âncora de pergunta viva na fila fora daquele conjunto;
-- `isento_fila_residual`: tarefa com razão `isento_ponto` e fila da célula.
-
-São etiquetas sobrepostas; o laço contabiliza uma linha em cada etiqueta aplicável (`app/chamados/management/commands/diff_e3_sombra.py:131-139`). A classe `so_fila_sem_pergunta` não prova ausência de perguntas brutas/decisões nem identifica dono L-099: “vivas” vem do C6 (`app/chamados/juizes.py:1599-1604`).
-
-## 13/11 16:28 · sessao 5c944161d1b8 · - · - · origem=Ronald (tmux)
-
-O código disponível não confirma o formato nem a ordem declarados no anexo: `diff_e3_sombra.py` escreve uma mensagem de limite e JSON agregado, sem emitir `PAR_DIF`, `PAR_TOTAL` ou listas `[valor_copia, valor_base]` (`app/chamados/management/commands/diff_e3_sombra.py:107-108,118-148`). Seu lado `antes` é C17; `depois` é a projeção da tarefa (`:126-130`). A versão da sonda que produziu o anexo e sua associação ao HEAD/base ficam [não verificado].
-
-Há incompatibilidade concreta: `tarefa_do_dia` calcula `fio` entre `colab`, `admin`, `sistema`, `nao_sei`, `nada`, nunca `chamado` (`app/chamados/services/tarefa_do_dia.py:547-556`). O anexo atribui `chamado` à posição declarada “cópia”; portanto essa posição não é confirmável como saída da tarefa desta árvore. `porta_da_tarefa` apenas retorna os campos quando existe rota (`:559-565`).
-
-| Aspecto | C17 preservado na árvore | Tarefa da cópia |
-|---|---|---|
-| Existência | Todo chamado da célula em `fila_cel` entra; perguntas acrescentam âncoras se vivas, com texto válido e no app (`app/chamados/juizes.py:1677-1684`). | Somente portas inteiras de ações exigíveis, intersectadas com `fila_ids` (`app/chamados/services/tarefa_do_dia.py:547-548`). |
-| Fila | Todos os chamados da célula visíveis na lista padrão (`app/chamados/juizes.py:1685-1688`). | Portas das ações exigíveis pertencentes à célula, visíveis na lista padrão (`app/chamados/services/tarefa_do_dia.py:550-551`). |
-| Rota | `porta_fila` quando há qualquer `_fila`; senão `porta_pergunta` (`app/chamados/juizes.py:1687`). | `porta_fila` quando há porta exigível da célula; senão `porta_pergunta` quando há outra porta exigível (`app/chamados/services/tarefa_do_dia.py:555`). |
-| Fio | Escada dos verbos: cobrar→colab, validar→admin, demais→chamado (`app/chamados/juizes.py:1624-1639,1688`). | Donos das ações: colaborador vence admin, que vence sistema (`app/chamados/services/tarefa_do_dia.py:552-556`). |
-
-A implementação C17 acima é a cópia preservada do caminho antigo, não prova da versão exata de `main` anterior à E3 [não verificado].
-
-As regras escritas são explícitas: somente fila sem pergunta não cria porta humana; fila A com pergunta sob B publica B e descarta A residual; verbo é lido do painel; isento com fila residual não tem ação ou porta (`app/chamados/tests/test_e3_portas_tarefa.py:1-8`). Os testes documentam:
-
-- Só fila: tarefa `rota=None`, `fila=()`, fio `sistema`, ação `perguntar/emissor` (`:32-38`). O contraste explícito mostra C17=`porta_fila` versus tarefa sem porta (`app/chamados/tests/test_e3_leitores_c17_chamadores.py:93-103`).
-- A/B: tarefa `porta_pergunta`, fila vazia e verbo somente de B (`app/chamados/tests/test_e3_portas_tarefa.py:40-47`).
-- Isento: sem rota, fila, verbos ou ações (`:57-65`).
-
-Essas direções são contrárias à leitura “cópia→base” declarada para exemplos do anexo. Não se deve inverter silenciosamente as colunas: falta a implementação que emitiu os pares [não decidível].
-
-As classes são atribuídas por `casos_do_par` (`app/chamados/management/commands/diff_e3_sombra.py:63-70`):
-
-| Classe | Predicado |
-|---|---|
-| `todos` | Sempre (`:68`). |
-| `so_fila_sem_pergunta` | Fila da célula não vazia e nenhuma pergunta viva C6 (`:64-68`). |
-| `fila_A_pergunta_B` | Existe fila da célula e âncora de pergunta viva na fila global fora dessa fila da célula (`:66-69`). |
-| `verbos_A_B` | Exatamente o mesmo predicado da anterior; sempre são emitidas juntas (`:69`). |
-| `isento_fila_residual` | `tarefa.razao == isento_ponto` e fila da célula não vazia (`:70`). |
-
-São classes sobrepostas; a soma de ocorrências por classe não é a quantidade de colab-dias distintos (`:68-70`).
-
-O instrumento projeta uma mesma variável `porta` para os quatro consumidores; não executa censos nem suas outras decisões (`app/chamados/management/commands/diff_e3_sombra.py:46-59`). Assim, o anexo mede projeções declaradas, não comprova execução concordante ou discordante dos leitores reais. Campos ausentes da diferença tampouco significam `None`: a comparação registra somente campos diferentes (`:133-139`).
-
-A alimentação lê fila global para `fila_ids`, mas recorta `fila_cel` às células pedidas (`app/chamados/juizes.py:1557-1567`). Verbos são particionados no universo vivo global, pois créditos dependem do conjunto (`:1575-1583`), e `qs_na_fila` exclui estados fora de cobrança e silêncio vigente (`app/chamados/services/painel.py:158-190`).
-
-A tarefa utiliza `data_evento` exclusivamente como dia do turno (`app/chamados/services/tarefa_do_dia.py:219-241`), carregando perguntas da janela (`:375-382`). O C17 recolhe perguntas por vínculo `celula_id` (`app/chamados/juizes.py:1599-1604`). Seu teste “no app” não recebe `agora` e chama `perguntas_do_app` (`:1610-1620`); o próprio comparador declara que esse lado usa relógio da máquina (`app/chamados/management/commands/diff_e3_sombra.py:107`).
-
-A lei de julgamento é L-110: comparar com a regra aplicada ao cadastro e batidas; DIFF mede impacto e não certifica o caminho novo (`CLAUDE.md:45-58`). Sem fatos de entrada individuais e sem o emissor dos pares, classificar cada assinatura como cópia certa/regressão fica [não decidível]. [nao verificado]
-
-_4685 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4687 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
