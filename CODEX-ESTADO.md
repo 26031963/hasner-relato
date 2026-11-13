@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 14:22** · publicado em **13/11/2026 14:22** (UTC-3)
+> Ultima resposta processada: **13/11/2026 14:38** · publicado em **13/11/2026 14:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 14:38 · sessao 27bbcb37f3da · HJ-092 · sonda · origem=Code
+
+**(a)** Na ATA fornecida da célula **128589 / col824**, **nenhuma lâmpada acesa tem `tipo_real` diferente do marco**: 17:00=`E/E`, 22:00=`S/S`, 23:00=`E/E`. Às 05:00, o marco é `S`, mas está apagado, com `tipo_real=null`; isso não demonstra inversão. A oposição mencionada no laudo anterior não aparece nesta ATA. [nao verificado]
+
+A origem de `tipo_real` é:
+
+- A grade monta `locs` com **`b.tipo`**, o tipo gravado da batida (`app/escala/utils.py:1323`).
+- O alinhamento passa esse valor para `_celula_do_marco`, tanto no ramo por papel quanto no ramo por custo (`app/escala/utils.py:619`, `app/escala/utils.py:631`, `app/escala/utils.py:661`).
+- A célula guarda separadamente `tipo/papel=tipo_m` e `tipo_real=tipo_real` (`app/escala/utils.py:326–327`).
+- O cartório copia `x['tipo_real']` para a lâmpada; não o substitui pelo papel (`app/ponto/services/cartorio.py:711–713`).
+
+Portanto, **`tipo_real` representa o tipo gravado da batida casada**, enquanto `tipo/papel` representa o marco. No anexo, 22:00=`S` coincide com **pk152080**, e 23:00=`E` coincide com **pk152081**. [nao verificado]
+
+**(b)** A sequência e o pareamento **efetivamente exibido em `TURNO_SEM_MARCOS`** são:
+
+| pk | Hora local | Tipo gravado | Resultado exibido |
+|---|---|---|---|
+| 143310 | 01/11 12:56:03 | E | Turno aberto. [nao verificado] |
+| 143421 | 01/11 17:00:04 | E | Turno aberto. [nao verificado] |
+| 143443 | 01/11 18:00:05 | E | Entrada do turno fechado. [nao verificado] |
+| 152080 | 01/11 22:00:00 | S | Interna: saída para intervalo. [nao verificado] |
+| 152081 | 01/11 23:00:00 | E | Interna: volta do intervalo. [nao verificado] |
+| 143650 | 02/11 01:01:06 | S | Fecha o turno iniciado em pk143443. [nao verificado] |
+
+**Sim: 17:00 e 18:00 já são entradas gravadas; 18:00 inicia o único turno fechado exibido.** [nao verificado] Uma `E` sucessiva preserva o turno anterior aberto e inicia outro (`app/ponto/turnos.py:1417–1420`). Sem marcos, o par `S22:00→E23:00` é reconhecido como intervalo pela existência da `S` posterior (`app/ponto/turnos.py:393–420`).
+
+Para a célula, a grade chama `turnos_do_colab` e entrega seus turnos a `realizado_do_dia` (`app/escala/utils.py:1898`, `app/escala/utils.py:2045–2049`). O espelho também chama esse wrapper (`app/ponto/services/espelho.py:614`, `app/ponto/services/espelho.py:675–676`). O wrapper chama `parear_turnos` com papel da ATA, marcos e DNA diário (`app/ponto/turnos.py:1939`, `app/ponto/turnos.py:1992–1994`).
+
+Com a ATA fornecida, o marco final apagado impede **esta célula** de emitir papel ao pareador; sem papel, vale o tipo gravado (`app/ponto/turnos.py:1682–1683`, `app/ponto/turnos.py:1382`). Com os marcos 22:00/23:00, essas batidas são absorvidas como intervalo (`app/ponto/turnos.py:1356–1376`).
+
+**(c)** **Sim, a reconstituição fecha em 240 + 121 = 361:**
+
+- **240 min:** pk143443 **18:00 → 22:00** pk152080. [nao verificado]
+- **121 min:** pk152081 **23:00 → 01:01 do dia seguinte** pk143650. [nao verificado]
+
+O código calcula **um turno bruto menos a pausa**: `421 − 60 = 361`; elimina segundos antes das diferenças e desconta o intervalo reconhecido (`app/ponto/turnos.py:605–606`, `app/ponto/turnos.py:740–741`, `app/ponto/turnos.py:756–771`). Os turnos abertos sem par fechado não acrescentam minutos (`app/ponto/turnos.py:735–739`).
+
+A sonda não imprime os turnos efetivos de `turnos_do_colab` com toda a alimentação da janela. Para comprovar essa execução específica, faltam seus pares/pks e o mapa efetivo de papéis, incluindo eventuais batidas e células vizinhas. [nao verificado]
+
+**(d) BATIDA — lista do admin:** há entradas consecutivas pk143310/pk143421/pk143443 e nenhuma oposição nas lâmpadas acesas da ATA apresentada [nao verificado]; `tipo_real` preserva o tipo gravado e cada nova `E` abre outro turno (`app/escala/utils.py:1323`, `app/escala/utils.py:619`, `app/ponto/turnos.py:1417–1420`).
+
+## 13/11 14:37 · sessao c02396b340e5 · - · - · origem=Ronald (tmux)
+
+A conta é **361 = 240 + 121** na reconstituição das seis BAT fornecidas: **pk143443 18:00 → pk152080 22:00 = 240 min** e **pk152081 23:00 → pk143650 01:01 do dia seguinte = 121 min**. Os vínculos pk/hora vêm exclusivamente do anexo, sem arquivo rastreável `[nao verificado]`; a regra trunca segundos (`app/ponto/turnos.py:605`), calcula bruto entrada→fim (`app/ponto/turnos.py:740`) e subtrai pausa marcada (`app/ponto/turnos.py:756`, `app/ponto/turnos.py:767`).
+
+O cálculo efetivamente implementado equivale a **421 − 60 = 361**: turno 18:00→01:01, pausa S22:00→E23:00; pausas marcadas S→E são reconhecidas em `app/ponto/turnos.py:875` e `app/ponto/turnos.py:880`, com piso de 15 minutos em `app/ponto/turnos.py:545`. A aplicação aos horários do anexo é reconstituição `[nao verificado]`.
+
+Na sequência apresentada, E12:56 e E17:00 ficam em turnos abertos quando chega a próxima E; E18:00 passa a ser a entrada do turno fechado pela S01:01 (`app/ponto/turnos.py:1417`, `app/ponto/turnos.py:1419`, `app/ponto/turnos.py:1491`). Os abertos sem fim fechado não somam minutos (`app/ponto/turnos.py:735`, `app/ponto/turnos.py:738`). Com marcos 22:00/23:00, essas duas batidas são absorvidas como intervalo interno (`app/ponto/turnos.py:1356`, `app/ponto/turnos.py:1364`, `app/ponto/turnos.py:1371`).
+
+A ATA fornecida tem saída final apagada `[nao verificado]`; nessa condição, esta célula não emite papel para substituir o tipo gravado: o mapa exige dia com entrada e saída, sem `em_aberto` (`app/ponto/turnos.py:1682`). Sem papel, o pareador usa `tipo` (`app/ponto/turnos.py:1382`).
+
+A grade chama `turnos_do_colab` com a ATA montada em memória (`app/escala/utils.py:1886`, `app/escala/utils.py:1898`), pede o realizado a partir desses turnos (`app/escala/utils.py:2045`) e publica o resultado (`app/escala/utils.py:2058`). O espelho também pede turnos (`app/ponto/services/espelho.py:614`) e calcula realizado pela mesma autoridade (`app/ponto/services/espelho.py:290`, `app/ponto/services/espelho.py:675`, `app/ponto/services/espelho.py:783`).
+
+**Limite:** a saída imprime `TURNO_SEM_MARCOS`, não os turnos efetivos de `turnos_do_colab` com toda a alimentação da janela; faltam esses turnos, o mapa de papel e eventuais BAT/células do pad para comprovar a execução concreta da produção `[nao verificado]`. O caminho efetivo recebe papel, marcos de template e DNA em `app/ponto/turnos.py:1939` e `app/ponto/turnos.py:1992`.
+
+## 13/11 14:37 · sessao fffaf9e35fce · - · - · origem=Ronald (tmux)
+
+- **Sequência fornecida:** `143310 01/11 12:56:03 E → 143421 17:00:04 E → 143443 18:00:05 E → 152080 22:00:00 S → 152081 23:00:00 E → 143650 02/11 01:01:06 S`. A ocorrência e os campos em produção provêm exclusivamente do dado fornecido, sem arquivo local correspondente. `[nao verificado]`
+
+- **Pareamento exibido em `TURNO_SEM_MARCOS`:** `143310` aberto; `143421` aberto; `143443 → 143650` fechado, contendo `152080/152081` como intervalo interno. `[nao verificado]` O código explica esse resultado: sem marcos, `_marca_intra_duracao` reconhece `S → E` em até três horas quando há `S` posterior provando continuidade (`app/ponto/turnos.py:393-420`); cada `E` sucessiva preserva o turno anterior aberto e inicia outro (`app/ponto/turnos.py:1417-1420`).
+
+- **Entrada 17:00/18:00:** ambas são entradas gravadas na saída fornecida; `143421` às 17:00 permanece aberta e `143443` às 18:00 abre o único turno fechado exibido. `[nao verificado]` Não houve necessidade de converter uma batida `S` em `E`: o pareador usa o papel da ATA quando disponível e, na ausência dele, usa `b.tipo` (`app/ponto/turnos.py:1382`).
+
+- **Caminho real da célula/espelho:** a grade chama `turnos_do_colab` (`app/escala/utils.py:1898`); esse wrapper obtém o mapa de papéis da ATA (`app/ponto/turnos.py:1939`) e chama `parear_turnos` com papel, marcos de intervalo, bordas e DNA diário (`app/ponto/turnos.py:1992-1994`). O espelho chama o mesmo wrapper (`app/ponto/services/espelho.py:611-614`), passa seus turnos à autoridade dos minutos (`app/ponto/services/espelho.py:675-676`) e publica `_real_dia.minutos` (`app/ponto/services/espelho.py:783`). O cartório chega à grade por `montar_grade_prevista_periodo` (`app/ponto/services/cartorio.py:1175`).
+
+- **Resultado esperado com DNA/ATA fornecidos:** o marco final apagado impede que essa ATA forneça papel ao pareador, pois `papel_por_minuto_da_ata` se abstém quando o dia está aberto ou falta entrada/saída (`app/ponto/turnos.py:1682-1683`). Os marcos 22:00/23:00 são absorvidos como intervalo por proximidade aos marcos, permanecendo internos ao turno (`app/ponto/turnos.py:1356-1376`); portanto a reprodução pela sequência e DNA fornecidos mantém `143443 → 143650`, sem converter 17:00/18:00. O anexo não imprime o resultado específico de `turnos_do_colab` com toda a janela e suas células vizinhas; a identidade desse resultado em produção permanece `[nao verificado]`.
+
+- **361 minutos:** são compatíveis com um único turno `143443 18:00 → 143650 01:01`, descontado o intervalo `152080 22:00 → 152081 23:00`: `421 − 60 = 361`, equivalente a `240` (`143443 → 152080`) mais `121` (`152081 → 143650`). A autoridade trunca os horários para o minuto antes da diferença (`app/ponto/turnos.py:740-741`), desconta os intervalos reconhecidos (`app/ponto/turnos.py:756-767`) e soma o líquido (`app/ponto/turnos.py:770-771`); a grade publica esse resultado (`app/escala/utils.py:2045-2058`). **Não são dois turnos fechados independentes.** `17:00 → 22:00` daria 300 minutos e não explica a parcela 240 pela mesma regra (`app/ponto/turnos.py:740-741`).
 
 ## 13/11 14:22 · sessao d07877763393 · E3-FORMA-SQL · leitura · origem=Code
 
@@ -661,159 +730,4 @@ Principais leitores PA: saldo/teto/status nos validadores `app/ferias/views.py:2
 
 Admin não abre os campos PA/AG: registro de férias é somente Afastamento (`app/ferias/admin.py:4`); AusenciaAdmin herda SoLeitura (`app/ponto/admin.py:38`). Cron de status declara apply (`app/config/crons.py:442`), mas escritor `alinhar_status_por_data` trava apenas AG, depois espelha Ausencias (`app/ferias/services.py:740`, `:744`; gancho `app/ferias/models.py:450`). Signals de Ausencia julgam consumidores (`app/ponto/signals.py:143`, `:150`); não foi encontrada escrita de PA/AG nesses signals [não verificado quanto a chamadas dinâmicas].
 
-## 13/11 13:56 · sessao 3e4521b2b598 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação:
-
-1. **BLOQUEANTE — contador fora do ESTADO e sem alarme efetivo.** `ferias_concedidos_x_soma` existe e separa os sentidos em `app/ferias/services.py:116-128`; `tripwire_status_ferias` o imprime em `app/ferias/management/commands/tripwire_status_ferias.py:35-38`, mas o exclui de `total` e retorna “OK” quando os status coincidem (`:30`, `:39-41`). `bin/gerar_estado.py:178-390` não lê esse contador, direta ou indiretamente pelos placares importados. Contraexemplo: concedidos=30, agendamento=33, status concedido coerente; tripwire pode imprimir soma_maior=1 e sair OK/rc0, sem publicação dessa divergência no ESTADO. Código do retorno: `tripwire_status_ferias.py:39-46`.
-
-2. **BLOQUEANTE — lista dos 40 usa outro universo.** O command chama a autoridade da folha (`app/ferias/management/commands/listar_ferias_com_batida.py:47`), que cruza **AgendamentoFerias** com batidas (`app/folha/export.py:491-502`; `app/ferias/services.py:49-56`). O usuário identifica o universo medido por **Ausencia**; igualdade dos universos não foi provada. Contraexemplo: Ausencia férias aprovada em D + batida em D, sem AgendamentoFerias correspondente: sonda de Ausencia conta D e esta lista o omite. Inversamente, materialização pode recusar a Ausencia e manter o agendamento: `app/ponto/services/ausencia.py:1202-1217`. Portanto obter os mesmos 40/12 colaboradores/4 da competência 11 é **[não verificado]**, sem repetir a medição pela fonte original.
-
-3. **BLOQUEANTE — encaminhamento futuro perde datas fora de HTMX.** Só a ramificação HX entrega `prefill` (`app/ferias/views.py:213-219`). Fora de HX, `_falha` redireciona ao saldo sem datas (`:135-138`); o saldo oferece link de agendamento (`app/templates/ferias/saldo.html:46-49`). Contraexemplo: POST convencional com gozo futuro 01–30/12 recebe recusa e volta ao saldo, sem abrir o agendamento preen­chido. A implementação HTMX abre e preenche os formulários (`app/templates/ferias/_secao_colab.html:57-68`).
-
-4. **BLOQUEANTE de comprovação — RED dos mesmos 32 não demonstrado.** O teste cobre um único caso sintético HTMX (`app/ferias/test_hj090_um_juiz.py:266-285`); o teste sem HTMX só verifica que não nasceu agendamento (`:287-289`). O command `--simular` consulta `_validar_agendamento` para candidatos em transação revertida (`app/ferias/management/commands/listar_ferias_dp.py:98-115`), mas a saída para os 32 casos e eventual linha `lei:` são **[não verificado]**. Nenhum resultado HJ-090 localizado em `app/docs/RELATO.md`/`RELATO-ARQUIVO.md`; ausência da medição anterior ao construtor é **[não verificado]**.
-
-5. **NAO-BLOQ isoladamente — lista preserva resposta do juiz, inclusive sem dono BATIDA/CADASTRO.** `InsumosDoDono.dono` pode devolver None sem lavra CXR (`app/ponto/management/commands/e6_oraculo.py:189-195`); o juiz pode devolver ESTRUTURA (`:106-110`). O command imprime ambos literalmente (`app/ferias/management/commands/listar_ferias_com_batida.py:59-66`). Contraexemplo: duas batidas, cadastro coerente, CXR não lavrada → None. Cumprimento de “cada um com dono BATIDA ou CADASTRO” para os 40 é **[não verificado]**; não se deve inventar um segundo juiz para coagir a resposta.
-
-6. **NAO-BLOQ — separação da véspera e ordenação existem, cobertura medida falta.** O command usa batidas apuráveis, pergunta o dia das batidas e marca véspera quando todas pertencem ao dia anterior (`app/ferias/management/commands/listar_ferias_com_batida.py:53-57`). Competência corrente é ordenada primeiro (`:64`, `:71`). Contraexemplo adversarial ausente na bateria HJ090: única saída 07h de plantão iniciado na véspera; classificação real desse caso é **[não verificado]**.
-
-7. **NAO-BLOQ — listas DP implementadas, recorte agregado solicitado não publicado.** Concedidos>soma sai com ambos os números (`app/ferias/management/commands/listar_ferias_dp.py:55-60`); POSTERIOR imprime colaborador/agendamento/PA usado/status/anteriores/saldo/origem (`:62-75`); futuro imprime colaborador/agendamento/PA/status/data do registro (`:77-84`). Origem deriva de texto livre de `obs` (`:26-32`), portanto pode ser ambígua: agendamento normal com observação contendo “gozo historico” entra como histórico. Medição dos 52 discriminados por origem × status antes do construtor é **[não verificado]**.
-
-8. **NAO-BLOQ — RED do cancelamento tem mordida de serviço, não da tela pedida.** O teste inicia concedidos=30/agendamento=33, realinha, chama cancelamento de serviço e verifica zero (`app/ferias/test_hj090_um_juiz.py:97-120`). Não faz POST na tela nesse caso. O teste do novo histórico 33 também cancela diretamente pelo serviço (`:78-85`). Execução RED anterior/GREEN atual: **[não verificado]**.
-
-Cumprimentos estáticos úteis:
-
-- Saldo negativo é apresentado sem corte em `app/templates/ferias/_secao_colab.html:50` e `app/templates/ferias/saldo.html:41`; o teste afirma -3 em `app/ferias/test_hj090_um_juiz.py:82`.
-- Realinhamento tem DRY padrão e só entra no apply com flag (`app/ferias/management/commands/realinhar_concedidos_ferias.py:57-67`); snapshot em logs antecede porta (`:69-81`), ressalvadas corridas que o parent está analisando.
-- Listagem padrão do DP não grava; a exceção explícita `--simular` só admite banco chamado sombra e usa rollback (`app/ferias/management/commands/listar_ferias_dp.py:52-53`, `:98-111`).
-- Juiz de férias com batidas da folha é reutilizado, sem clone aritmético no command (`app/ferias/management/commands/listar_ferias_com_batida.py:47`); isso não prova equivalência com o universo da sonda de Ausencia (`app/folha/export.py:491-502`).
-
-## 13/11 13:29 · sessao 05c3d77a4e24 · DESLIGADO-NAO-TRAVA · verificador · origem=Code
-
-**Pré-verificação: BLOQUEANTE. O contador `desligados_retidos`, esperado 0 e lido pelo ESTADO, não existe na cópia examinada.** `barrados_desligado` mede outra coisa: pares excluídos do comparador C5. A integração existente do ESTADO lê o carimbo de fio/C5. (`bin/gerar_estado.py:260`; `app/chamados/management/commands/vigiar_fio_morto.py:233`; `app/chamados/management/commands/disparar_perguntas_competencia.py:61`)
-
-A identidade da cópia com o commit/base informados não pôde ser conferida por Git: a cópia não contém repositório `.git`. `[nao verificado]` [nao verificado]
-
-**1. BLOQUEANTE — o informativo foi produzido, mas não integrado à apresentação do DP.**
-
-`informativo_rescisao` usa o mesmo laço do retentor e aparece no retorno de `o_que_segura`. Entretanto, o lavrador do Retrato não grava esse informativo; a tela e o drawer continuam lendo os campos antigos do Retrato. Existe acesso manual pela ferramenta; não está implementada nesses caminhos a apresentação dos dias ao DP. (`app/folha/export.py:1228`; `app/folha/fora_da_folha.py:232`; `app/folha/retrato_folha.py:1177`; `app/folha/views_retrato.py:190`; `app/colaboradores/views.py:984`)
-
-O teste comprova a chave no retorno da função, sem percorrer tela/PDF do DP. (`app/folha/tests/test_lei_desligado_nao_trava.py:100`)
-
-**2. BLOQUEANTE — desligado ainda pode sofrer trava de aprovação por outro caminho.**
-
-`classificar_export` acrescenta `turno_aberto` a `travas_aprovacao` sem excluir desligados. A aprovação individual recusa essa trava; o lote também exclui esses fechamentos. Portanto, zerar `_dias_que_retem` não zerou todas as travas da folha. (`app/folha/export.py:833`; `app/folha/export.py:848`; `app/ponto/views.py:1509`; `app/ponto/views.py:1308`)
-
-O carimbo automático na geração também conserva esse crivo. Isso **não demonstra impedimento de emissão da linha no TXT**: a montagem aceita fechamentos `aberto` e `aprovado`, selecionados pelo resultado `entra`. (`app/folha/views.py:244`; `app/folha/export.py:687`; `app/folha/export.py:716`)
-
-O teste novo verifica somente que o desligado não seja `('fora', 'furo_espelho')`; não exige ausência de `travas_aprovacao`. (`app/folha/tests/test_lei_desligado_nao_trava.py:89`)
-
-**3. BLOQUEANTE — o requisito “nenhum leitor deriva por conta própria” não está cumprido.**
-
-Há leitores fora do diff com respostas próprias:
-
-| Leitor | Derivação sobrevivente |
-|---|---|
-| `raiox_export` | Seleciona os retidos pelo export, mas reconstrói os dias com `furos_por_dia`, recortando diretamente por `data_demissao`. (`app/folha/views.py:591`; `app/folha/views.py:612`; `app/folha/views.py:616`) |
-| Preview do export | Apresenta como quantidade de dias o comprimento de `motivos_espelho`, que contém motivos, não datas. (`app/folha/views.py:398`; `app/folha/views.py:402`) |
-| Lista de fechamento | Traduz qualquer motivo não previsto no mapa para `furo_espelho`; o motivo original fica separado em `motivo_juiz`. (`app/ponto/services/fechamento_lista.py:25`; `app/ponto/services/fechamento_lista.py:36`) |
-| API de mensageria | Chama de `retidos` todos os itens `fora`, incluindo saída pelo módulo de rescisão. Esse número não é “dias desligados retidos”. (`app/api/views_mensageria.py:283`; `app/api/views_mensageria.py:301`; `app/folha/export.py:867`) |
-
-O Raio-X depende previamente do balde `furo_espelho` do export; portanto, sua derivação paralela não prova, sozinha, que o desligado voltou a reter. Prova que o censo não pode ser declarado limpo. (`app/folha/views.py:589`; `app/folha/views.py:605`)
-
-**4. BLOQUEANTE — INSS pode apagar o estado usado para reconhecer o desligado.**
-
-A lista da tela oferece apenas ativos/afastados, mas o POST busca o colaborador somente por `pk`. Após lançar INSS, grava `situacao='afastado'`, sem preservar `desligado`. A escrita passa pela porta legítima: é outro escritor semântico do campo, não escritor fora da porta. (`app/ponto/views.py:2372`; `app/ponto/views.py:2406`; `app/ponto/views.py:2433`; `app/colaboradores/services/colaborador.py:32`; `app/colaboradores/services/colaborador.py:55`)
-
-Depois dessa troca, `esta_desligado` responde falso, o retentor volta ao laço e a C5 deixa de excluir a pessoa. Contraexemplo estático: desligado com saída depois da competência, furos anteriores e INSS posterior aos furos; o lançamento pode devolver os furos à retenção. Execução desse cenário em banco/produção: `[nao verificado]`. (`app/colaboradores/services/desligamento.py:24`; `app/folha/export.py:1207`; `app/escala/services/cadastro_realidade.py:169`)
-
-O controle novo de afastado apenas cria outra pessoa com `situacao='afastado'`; não cobre essa transição nem uma ausência INSS real. (`app/folha/tests/test_lei_desligado_nao_trava.py:50`; `app/folha/tests/test_lei_desligado_nao_trava.py:79`)
-
-**5. BLOQUEANTE para declarar PRONTO — faltam as provas nominais e de produção.**
-
-O teste usa três dias da competência 10 e declara que col718/col270/col373 serão medidos por sonda no pouso. Não reproduz os RED nominais de 8/3/1 dias da competência 11. (`app/folha/tests/test_lei_desligado_nao_trava.py:8`; `app/folha/tests/test_lei_desligado_nao_trava.py:26`)
-
-RED/GREEN nominal, suíte completa, opus, pouso e medição “comp11: desligados retidos = 0” não constam do dado fornecido. `[nao verificado]` [nao verificado]
-
-Os recortes executados em memória passaram: C5 **9 testes** e matriz **20 testes**; não foi salvo registro de execução. Os módulos carregam código real por AST e declaram execução sem banco/escrita. (`app/chamados/tests/test_e4a2_c5_memoria.py:1`; `app/chamados/tests/test_e4a2_matriz_memoria.py:1`; registro persistido: `[nao verificado]`)
-
-**6. NAO-BLOQ — o mutante do retentor tem efeito, mas o FAIL exigido não foi demonstrado.**
-
-O teste chamado “mutante” força `esta_desligado=False` e **espera que os dias voltem**. Ele passa com esse comportamento; não reaplica a asserção original esperando reprovação. A asserção normal de vazio mataria essa mutação, mas sua execução sobre o mutante permanece `[nao verificado]`. (`app/folha/tests/test_lei_desligado_nao_trava.py:135`; `app/folha/tests/test_lei_desligado_nao_trava.py:67`)
-
-Já o harness C5 realmente executa a verificação original, modifica a fonte em memória e exige `AssertionError`. (`app/chamados/tests/test_e4a2_c5_memoria.py:211`)
-
-O selo AST do retentor exige apenas encontrar uma chamada chamada `esta_desligado`; aceita chamada sem influência no retorno, inclusive em ramo morto. O selo C5 possui tratamento explícito para esse caso. (`app/folha/tests/test_lei_desligado_nao_trava.py:157`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:285`)
-
-**7. NAO-BLOQ — relógio interno e lavra antiga continuam exigindo atenção.**
-
-O laço extraído lê `localdate()` quando não recebe `hoje`; `_dias_que_retem` não passa esse argumento. A C5 também mantém relógio interno opcional. Logo, não há leitura exclusivamente na borda. (`app/folha/export.py:1238`; `app/folha/fora_da_folha.py:98`; `app/escala/services/cadastro_realidade.py:161`)
-
-`julgar_desligamento`, descrito como puro, lê `date.today()` duas vezes. É problema preexistente; ocorrência de divergência temporal em produção: `[nao verificado]`. (`app/colaboradores/services/desligamento.py:3`; `app/colaboradores/services/desligamento.py:32`; `app/colaboradores/services/desligamento.py:52`)
-
-Retratos antigos continuam devolvendo o JSON gravado, sem reaplicar a cura. O indicador de frescor compara com atualização de `FechamentoMensal`, sem considerar mudança de código ou situação. Relavratura no pouso: `[nao verificado]`. (`app/folha/retrato_folha.py:110`; `app/folha/retrato_folha.py:1298`)
-
-**8. NAO-BLOQ — contraexemplos e limites do predicado.**
-
-| Caso | Resultado sustentado pelo código |
-|---|---|
-| Desligado reativado | Reativação volta a ativo e apaga demissão. Furos históricos podem voltar ao retentor/C5. Isso decorre da unidade por situação atual; não há base para exigir isenção histórica após reativação. (`app/colaboradores/services/desligamento.py:227`; `app/folha/export.py:1207`; `app/escala/services/cadastro_realidade.py:166`) |
-| Desligado com INSS já existente | Enquanto conservar `situacao='desligado'`, retorna vazio antes de examinar células/ausências. O lançamento posterior de INSS tem o risco do achado 4. (`app/folha/export.py:1207`; `app/ponto/views.py:2435`) |
-| Dois vínculos/empresas | O estado é da pessoa; o juiz não recebe vínculo/empresa. O cadastro tem uma empresa, e a demissão fecha os vínculos ativos elegíveis. Caso produtivo e regra de desligamento parcial: `[nao verificado]`. (`app/colaboradores/models.py:321`; `app/colaboradores/services/desligamento.py:24`; `app/colaboradores/services/vinculo.py:863`) |
-| Desligado sem data | O retentor retorna vazio; a C5 possui teste desse cadastro. Entretanto, o universo de fechamento exclui desligado sem data, podendo não produzir linha para o DP. (`app/folha/export.py:1207`; `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:126`; `app/ponto/services/fechamento.py:432`) |
-| Desligamento agendado | Grava data/motivo, conserva situação e retorna. Portanto, ainda pode reter como ativo; isso está de acordo com a unidade literal por situação. (`app/colaboradores/services/desligamento.py:99`; `app/colaboradores/services/desligamento.py:103`; `app/colaboradores/services/desligamento.py:118`) |
-| Dias após a saída | Com situação desligado, o retentor retorna vazio antes do laço. A trava agregada `turno_aberto` do achado 2 permanece; não oferece datas para determinar se veio de dia posterior à saída. (`app/folha/export.py:1207`; `app/folha/export.py:833`) |
-
-Não encontrei juiz **registrado** concorrente para “está desligado?”. `afastado_hoje` responde outra pergunta; `sai_pela_rescisao` decide destino da competência por data. Há comparação crua duplicada no formatador de situação exibida, mas isso não comprova uma segunda autoridade registrada. (`app/core/juizes.py:263`; `app/core/juizes.py:267`; `app/folha/export.py:60`; `app/colaboradores/services/situacao_exibida.py:56`)
-
-**9. NAO-BLOQ — mapa de escritores e leitores relevantes aos campos do diff.**
-
-| Campo/valor | Quem escreve/produz | Quem lê |
-|---|---|---|
-| `situacao` | Demissão e reativação; INSS; reversor de afastamento, pela porta. (`app/colaboradores/services/desligamento.py:121`; `:227`; `app/ponto/views.py:2435`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`) | Juiz novo; badge; universo de fechamento; guarda de vínculo. (`app/colaboradores/services/desligamento.py:24`; `app/colaboradores/services/situacao_exibida.py:56`; `app/ponto/services/fechamento.py:440`; `app/colaboradores/services/vinculo.py:91`) |
-| Data de desligamento | O campo real é `data_demissao`; agendamento/demissão escrevem, reativação limpa. (`app/colaboradores/models.py:325`; `app/colaboradores/services/desligamento.py:103`; `:122`; `:228`) | Cron; destino rescisão; teto do laço; universo; Raio-X. (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`; `app/folha/export.py:60`; `:1241`; `app/ponto/services/fechamento.py:432`; `app/folha/views.py:612`) |
-| `o_que_segura` | Produz retorno em memória, incluindo o informativo. (`app/folha/fora_da_folha.py:235`) | Teste novo; o drawer produtivo lê o Retrato, não essa função. (`app/folha/tests/test_lei_desligado_nao_trava.py:100`; `app/colaboradores/views.py:984`) |
-| `informativo_rescisao` | Produzido pelo laço compartilhado; transformado em chave de retorno. (`app/folha/export.py:1228`; `app/folha/fora_da_folha.py:233`) | `o_que_segura` e testes; integração ao DP faltante no achado 1. (`app/folha/fora_da_folha.py:234`; `app/folha/tests/test_lei_desligado_nao_trava.py:119`) |
-| `retidos` | Há métricas diferentes: lista do gerador por `furo_espelho`; API por qualquer `fora`. (`app/folha/views.py:259`; `app/api/views_mensageria.py:301`) | Mensagem do gerador, trilha e resposta da API; não equivalem ao contador solicitado. (`app/folha/views.py:293`; `app/folha/views.py:304`; `app/api/views_mensageria.py:295`) |
-| C5 `colabs_nunca_bateu` | Lê células e exclui pelo juiz; retorna mapa pessoa→datas. (`app/escala/services/cadastro_realidade.py:166`; `:169`; `:172`) | Formatador C5, contador do disparar e vigia de retido calado. (`app/escala/services/cadastro_realidade.py:179`; `app/chamados/management/commands/disparar_perguntas_competencia.py:56`; `app/folha/vigia_retido_calado.py:43`) |
-| `barrados_desligado` | Conta pares únicos excluídos antes do filtro temporal. (`app/chamados/management/commands/disparar_perguntas_competencia.py:61`; `:72`) | Viaja no bloco informativo do carimbo; não entra como contador próprio em `censo/esperado`. (`app/chamados/management/commands/vigiar_fio_morto.py:233`; `:239`; `:242`) |
-
-**10. NAO-BLOQ — balanço literal do aval, com as pendências acima.**
-
-| Item | Cumprimento |
-|---|---|
-| Lei/unidade no retentor | **Cumprido no caminho central:** situação desligado retorna vazio, inclusive com `com_dias=True`. (`app/colaboradores/services/desligamento.py:24`; `app/folha/export.py:1207`) |
-| `_dias_que_retem` e ramo do export iguais | **Cumprido por delegação:** ambos chegam a `motivos_retencao_celula`; o desligado sai antes de `_retem`. (`app/folha/fora_da_folha.py:98`; `app/folha/export.py:1307`; `app/folha/export.py:1207`) |
-| Censo de leitores | **Incompleto**, pelas derivações do achado 3. (`app/folha/views.py:616`; `app/ponto/services/fechamento_lista.py:36`) |
-| RED col718/270/373 | **Não demonstrado.** Fixture substituto comp10; sonda nominal `[nao verificado]`. (`app/folha/tests/test_lei_desligado_nao_trava.py:8`; `:26`) |
-| Ativo com mesmo furo | **Há teste de controle.** Execução ORM `[nao verificado]`. (`app/folha/tests/test_lei_desligado_nao_trava.py:79`) |
-| Afastado intocado | **Regra central preservada**, mas cobertura INSS é parcial e há o contraexemplo do achado 4. (`app/folha/export.py:1207`; `app/folha/tests/test_lei_desligado_nao_trava.py:50`; `app/ponto/views.py:2435`) |
-| Contador no ESTADO | **Não cumprido: não existe `desligados_retidos` nesta cópia.** A métrica publicada é outra. (`app/chamados/management/commands/vigiar_fio_morto.py:233`; `bin/gerar_estado.py:260`) |
-| Mutante → FAIL | **Parcial:** comportamento mutado demonstrado no teste; execução do FAIL do retentor `[nao verificado]`. (`app/folha/tests/test_lei_desligado_nao_trava.py:135`) |
-| PROIBIDOS | Os novos caminhos leem células e retornam dados; não lançam falta. O selo de imutabilidade compara somente `CelulaDia`, sem selar Batida/Ausência. (`app/folha/export.py:1247`; `app/folha/export.py:1298`; `app/folha/tests/test_lei_desligado_nao_trava.py:128`) |
-| Suíte + opus + pouso + comp11=0 | **Não demonstrado pelo material fornecido.** `[nao verificado]` | [nao verificado]
-
-## 13/11 13:26 · sessao 21c2dc54bcdf · - · - · origem=Ronald (tmux)
-
-1. **BLOQUEANTE — INSS pode apagar o estado que sustenta a isenção.** A tela só oferece ativos/afastados, mas o POST busca qualquer colaborador pelo `pk` e, se `tipo == 'afastamento_inss'`, grava `situacao='afastado'` sem preservar `desligado`: `app/ponto/views.py:2372`, `:2406`, `:2433`. A porta aceita essa escrita (`app/colaboradores/services/colaborador.py:32`, `:55`); portanto é **outro escritor semântico pela porta**, não escritor fora dela. Depois disso, `esta_desligado` responde falso (`app/colaboradores/services/desligamento.py:24`), o retentor volta ao laço (`app/folha/export.py:1207`) e a C5 volta a incluir os dias `nunca_bateu` (`app/escala/services/cadastro_realidade.py:169`). Cenário estático concreto: desligado com saída depois do fim da competência, furos antigos antes do INSS; lançar INSS posterior aos furos altera o estado e devolve os furos à retenção. Execução/banco/prod desse cenário: `[nao verificado]`. O teste só usa outro colaborador já marcado afastado, não a transição desligado→INSS (`app/folha/tests/test_lei_desligado_nao_trava.py:48`, `:79`).
-
-2. **NAO-BLOQ para o novo predicado; problema temporal preexistente — relógio fora da borda.** `julgar_desligamento`, apresentado como puro, lê `date.today()` duas vezes (`app/colaboradores/services/desligamento.py:3`, `:32`, `:52`). A view só lê `timezone.localdate()` depois, ao chamar o executor (`app/colaboradores/views.py:1434`, `:1437`); o cron lê `hoje` local e não o passa ao juiz (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `:51`). Logo, a mesma operação pode usar datas distintas na borda e no julgamento; ocorrência real `[nao verificado]`. O laço extraído ainda lê relógio internamente (`app/folha/export.py:1238`) e a C5 também (`app/escala/services/cadastro_realidade.py:161`).
-
-3. **NAO-BLOQ — não encontrei prova de juiz registrado duplicado.** O registro declara perguntas distintas para afastamento e desligamento (`app/core/juizes.py:263`, `:267`). `situacao_exibida.palavra` já repete a comparação crua para a precedência do badge (`app/colaboradores/services/situacao_exibida.py:56`), mas não achei ali uma autoridade registrada concorrente para a pergunta “desligado?”. `sai_pela_rescisao` pergunta sobre destino da competência e usa data, não situação (`app/folha/export.py:54`, `:60`); não equivale automaticamente ao novo juiz.
-
-4. **NAO-BLOQ, contraexemplo com efeito histórico — reativação.** Reativar volta a `ativo`, apaga `data_demissao` e motivo e salva pela porta (`app/colaboradores/services/desligamento.py:220`, `:227`, `:231`). Não reativa escala automaticamente (`:223`). A partir daí, os furos históricos continuam na C5 (`app/escala/services/cadastro_realidade.py:166`) e podem voltar ao retentor (`app/folha/export.py:1207`); não há recorte histórico de períodos desligados nesse predicado (`app/colaboradores/services/desligamento.py:24`). A unidade literal “colaborador com situação desligado” pode autorizar esse efeito; chamar isso de violação da lei exigiria esclarecimento `[nao verificado]`. Os novos testes não cobrem a sequência de reativação `[nao verificado]`.
-
-5. **NAO-BLOQ — aviso agendado e dia da saída.** Agendar grava data/motivo e retorna sem mudar situação (`app/colaboradores/services/desligamento.py:99`, `:102`, `:118`); a efetivação grava `desligado` (`:121`). O cron está configurado para 06:06 (`app/config/crons.py:440`). Antes da efetivação, inclusive no dia com data de saída vencida, o novo juiz ainda responde falso se a situação continua ativa (`app/colaboradores/services/desligamento.py:24`; seleção do cron em `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`). Isso segue a escolha explícita por estado atual, enquanto rescisão e teto do laço seguem data (`app/folha/export.py:60`, `:1241`). Estado real do cron/produção `[nao verificado]`.
-
-6. **NAO-BLOQ — sem data.** O campo real é `data_demissao`; `situacao` e a data são campos independentes (`app/colaboradores/models.py:323`, `:325`). `esta_desligado` não exige data (`app/colaboradores/services/desligamento.py:24`), então o retentor devolve vazio para desligado sem data (`app/folha/export.py:1207`). Entretanto, o universo de fechamento exclui desligado sem data (`app/ponto/services/fechamento.py:432`, `:439`), podendo impedir que ele tenha linha nos leitores de fechamento. O novo teste C5 cobre falta de data (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:126`); cobertura equivalente de exportação/DP para cadastro sem fechamento `[nao verificado]`.
-
-7. **NAO-BLOQ — dois vínculos/empresas não têm isolamento no estado.** Há um `Colaborador.empresa`, um estado e CPF único (`app/colaboradores/models.py:319`, `:321`, `:323`); vínculos apontam para colaborador e posto (`app/escala/models.py:872`, `:873`). A demissão fecha todos os vínculos ativos do colaborador (`app/colaboradores/services/vinculo.py:855`, `:863`) e o predicado isenta a pessoa inteira (`app/colaboradores/services/desligamento.py:24`), sem empresa ou vínculo como argumento. C5 agrupa pelo cadastro atual da empresa (`app/escala/services/cadastro_realidade.py:166`). Caso real de vínculo simultâneo noutra empresa e regra esperada para ele `[nao verificado]`.
-
-Mapa de escrita/leitura relevante:
-
-- **`situacao`**: escreve demissão/reativação (`app/colaboradores/services/desligamento.py:121`, `:227`), INSS (`app/ponto/views.py:2435`) e reversor de afastamento (`app/ponto/management/commands/reverter_situacao_afastado.py:73`), todos pela porta. Lê novo juiz (`app/colaboradores/services/desligamento.py:24`), badge (`app/colaboradores/services/situacao_exibida.py:56`), universo fechamento (`app/ponto/services/fechamento.py:439`), guarda de vínculo (`app/colaboradores/services/vinculo.py:91`), guarda de reativação ainda crua (`app/colaboradores/views.py:1417`). Admin é `SoLeitura` (`app/colaboradores/admin.py:48`).
-- **`data_demissao`**: escreve agendamento/demissão/reativação (`app/colaboradores/services/desligamento.py:103`, `:122`, `:228`). Lê cron de efetivação (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`), destino rescisão (`app/folha/export.py:60`), teto do laço (`:1241`), universo fechamento (`app/ponto/services/fechamento.py:432`), corte na tela folha (`app/folha/views.py:612`), cadastro do dia (`app/ponto/supra_juiz.py:154`, `:194`).
-- **C5**: produz `colabs_nunca_bateu` com juiz (`app/escala/services/cadastro_realidade.py:169`); formata `_nunca_bateu` (`:176`); lê contador (`app/chamados/management/commands/disparar_perguntas_competencia.py:56`).
-- **`barrados_desligado`**: produzido como quantidade de pares únicos excluídos (`app/chamados/management/commands/disparar_perguntas_competencia.py:58`, `:62`, `:72`); é contador de exclusão, não prova de desligados ainda retidos (`:61`).
-
-_4608 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
