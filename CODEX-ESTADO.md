@@ -1,7 +1,197 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 12:26** · publicado em **13/11/2026 12:25** (UTC-3)
+> Ultima resposta processada: **13/11/2026 12:28** · publicado em **13/11/2026 12:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 12:28 · sessao 9e24452e1e42 · HJ-090 · censo · origem=Code
+
+Censo da cópia: execução efetiva desse código em produção, quantidade de períodos divergentes e valores atuais dos registros: **[nao verificado]**.
+
+1. **Escritores de `dias_concedidos` e `dias_vendidos`**
+
+| Escritor | Lê → altera → grava | `atomic` | `select_for_update` do período |
+|---|---|---|---|
+| `registrar_gozo_historico` | Sim, sobre objeto recebido: `concedidos=min(direito, concedidos+ag.dias)`; `vendidos+=vendidos`. | Próprio. | Não. [services.py:270–302](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:270) |
+| `executar_agendamento` | Sim, sobre objeto recebido: cria agendamento e faz `concedidos+=dias`. | Próprio. | Não; a consulta de duplicata também não trava. [services.py:306–326](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:306) |
+| `agendar_ferias_porta` | Delega o gozo ao anterior; relê com `refresh_from_db` e faz `vendidos+=dias_vendidos`. | Próprio, envolvendo gozo e venda. | Não; `refresh_from_db` não acrescenta trava. [services.py:156–165](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:156) |
+| `cancelar_agendamento_dp` | Sim, sobre linha relida: `concedidos-=vivo.dias`. | Próprio. | **Sim**, via `_travar_agendamento`. [services.py:379–385](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:379) |
+| `executar_cancelamento_admin` | Sim, sobre linha relida: `concedidos-=vivo.dias`. | Próprio. | **Sim**, pelo mesmo helper. [services.py:402–417](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:402) |
+| `_trocar_janela` | Sim: `concedidos=concedidos-vivo.dias+novos_dias`. | Próprio. | **Sim**, já nesta cópia. [services.py:433–452](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:433) |
+| `aprovar_solicitacao` | Sim: lê período, cria agendamento e faz `concedidos+=solic.dias`. | Sem `atomic` próprio; o chamador de produção encontrado fornece `atomic`. | **Não do período**; a view trava a **solicitação**. [services.py:469–508](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:469), [views.py:739–753](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/views.py:739) |
+| `vender_dias_do_periodo` | Sim, sobre objeto recebido: `vendidos+=dias_v`. | Sem `atomic` próprio ou no chamador encontrado. | Não. [services.py:580–584](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/services.py:580), [views.py:938–958](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ferias/views.py:938) |
+
+O helper trava primeiro o agendamento, recusa pelo status relido e depois trava o período. Portanto, a proteção FERIAS-CANCELAR-2X já existe nos dois cancelamentos e na troca de janela. Cancelado é recusado; concluído também é recusado no cancelamento comum, mas pode entrar no cancelamento administrativo especial. (`app/ferias/services.py:357–369,380,406–407`; `app/ferias/models.py:302–305`)
+
+Há também **inicialização**: `garantir_periodo_aquisitivo` usa `get_or_create`, recebendo os dois contadores zerados da view; a criação dos ciclos está em `atomic`. Quando o período existe, essa porta atualiza somente status/carimbo. (`app/ferias/services.py:254–266`; `app/ferias/views.py:165,181–185`)
+
+As migrations dos campos são `CreateModel` com concedidos zero e `AddField` com vendidos zero; não calculam soma de agendamentos. O admin de férias registra apenas `Afastamento`; o `save` de período só verifica sobreposição e delega ao Django, sem recompor contadores. (`app/ferias/migrations/0001_initial.py:39–51`; `app/ferias/migrations/0004_periodoaquisitivo_dias_vendidos.py:12–16`; `app/ferias/admin.py:1–5`; `app/ferias/models.py:201–203`)
+
+Não foram localizados outros escritores desses contadores em commands, signals ou migrations de dados da cópia; escritores externos à cópia: **[nao verificado]**.
+
+O clamp relevante é o `min` do histórico: o agendamento conserva os dias integrais, mas concedidos fica limitado ao direito. **Inferência aritmética do código:** partindo de concedidos zero/direito 30, um histórico de 33 grava agendamento 33 e concedidos 30. Ocorrência concreta em produção: **[nao verificado]**. (`app/ferias/services.py:281,298–302`)
+
+Os cancelamentos subtraem os dias integrais, sem piso e sem devolver vendidos. Assim, **se** a linha travada tiver concedidos 30 e o agendamento cancelável tiver 33, o resultado gravado será **−3**, mesmo com a proteção contra segundo cancelamento. (`app/ferias/services.py:380–385,407–410`)
+
+O BACKLOG ainda descreve `_trocar_janela` como sem trava e aprovação como sem `atomic`; a implementação atual já apresenta trava na primeira e transação fornecida pela view na segunda. (`app/docs/BACKLOG.md:1849`; `app/ferias/services.py:433–434`; `app/ferias/views.py:739–753`)
+
+2. **Leitores e ESMERIL-SEMANTICA**
+
+O significado central é **concedidos = gozo reservado/consumado; vendidos separado**. O saldo é `direito − concedidos − vendidos`, sem clamp. Nenhuma dessas properties recompõe concedidos pela soma dos agendamentos. (`app/templates/ferias/_secao_colab.html:49–51`; `app/ferias/models.py:216–239`)
+
+Além das leituras dos próprios escritores inventariadas acima, os leitores diretos encontrados são:
+
+| Leitor | O que usa ou pressupõe |
+|---|---|
+| `status_de_periodo` | Calcula direito−concedidos−vendidos; saldo **≤0**, inclusive negativo, vira `concedido`. (`app/ferias/models.py:95–102`) |
+| `dias_saldo` | Retorna a diferença crua; admite negativo. (`app/ferias/models.py:216–217`) |
+| `saldo_para_remarcar` | Retorna saldo+`agendamento.dias`; pressupõe que a reserva antiga está debitada em concedidos. Não verifica soma, status ou vínculo nesse método. (`app/ferias/models.py:219–222`) |
+| `pode_agendar` | Exige status armazenado `adquirido` e saldo positivo. (`app/ferias/models.py:230–231`) |
+| `dias_vendaveis` / `pode_vender` | `max(0,...)` limita somente o teto restante de venda; vender exige adquirido, teto positivo e saldo positivo. (`app/ferias/models.py:234–239`) |
+| KPI/filtro `sem_agend` | Equipara adquirido+concedidos zero a “sem agendamento”; não consulta existência/soma e não considera vendidos nesse filtro. (`app/ferias/views.py:31,60`; `app/relatorios/services.py:290`) |
+| `_validar_agendamento` | Compara pedido ao saldo acumulado; consulta não cancelados para duplicata/fracionamento, sem recompor saldo. (`app/ferias/views.py:227–243`) |
+| `checar_ferias_com_abono` | Compara gozo+venda ao saldo; `saldo_depois` também não tem piso. (`app/ferias/services.py:195–205`) |
+| Aprovação de solicitação | Compara pedido ao saldo do primeiro período adquirido; excesso gera aviso sem materialização naquele ramo. (`app/ferias/services.py:483–506`) |
+| Correção/remarcação | Compara novos dias a `saldo_para_remarcar`. (`app/ferias/views.py:478–480,680–682`) |
+| Auditoria administrativa | Fotografa concedidos antes/depois de cancelar, desfazer concluída e corrigir datas. (`app/ferias/views.py:368,383,416,427,486,518`) |
+| Edição do período | Impede direito menor que concedidos; **não acrescenta vendidos nessa guarda**. (`app/ferias/views.py:812–813`) |
+| Venda pela tela | Compara venda ao teto vendável e ao saldo, separadamente. (`app/ferias/views.py:950–953`) |
+| `situacao_de_ferias` | Delega à property; detecta negativo como inconsistência, mas soma somente saldos positivos e devolve somente períodos positivos. (`app/ferias/situacao.py:68–69,178–189,296–297`) |
+| Avisos vencido/vencendo | Consideram somente saldo positivo. (`app/ferias/situacao.py:192–216`) |
+| `pautas_de_ferias` | Usa a property; negativo entra em cadastro inconsistente. (`app/ferias/management/commands/pautas_de_ferias.py:73,79–80,96–97`) |
+| `alertar_ferias_vencendo` | Guarda saldo cru após sincronizar status e o apresenta como dias a usar. (`app/ferias/management/commands/alertar_ferias_vencendo.py:31–41,71–83`) |
+| IA: seleção/defaults | Seleciona períodos com saldo positivo, sem exigir adquirido nessa seleção; duração padrão `min(30,saldo)`. (`app/core/views_ia.py:258–272,489–503`) |
+| IA: “vender o resto” | `max(0,saldo−dias)` corta a **venda proposta**, não o saldo individual. (`app/core/views_ia.py:532–538`) |
+| API de situação | Publica o total/lista já filtrados por `situacao_de_ferias`; mantém os avisos. (`app/api/views_mensageria.py:835–846`) |
+| API geral/ficha | Publica saldo cru dos períodos selecionados para vencimento. (`app/api/views_mensageria.py:954,1103`) |
+| PDF/CSV | Exibe saldo cru, sem recompor soma. (`app/relatorios/services.py:316`; `app/relatorios/views.py:370`) |
+| Tela de saldo | Exibe concedidos e saldo cru; botão exige adquirido+saldo positivo. (`app/templates/ferias/saldo.html:37,41,46`) |
+| Seção do colaborador | Exibe “Gozo”, saldo e vendidos separados; formulário usa `pode_agendar`, saldo como valor/max; negativo cai na mensagem genérica de indisponibilidade. (`app/templates/ferias/_secao_colab.html:49–57,67–68,77`) |
+| Listagem, formulário individual, lote e relatório HTML | Exibem saldo cru; formulário individual também usa saldo como valor/max. (`app/templates/ferias/_tabela_ferias.html:27`; `app/templates/ferias/agendar.html:7,22`; `app/templates/ferias/agendar_lote.html:40`; `app/templates/relatorios/ferias_vencendo.html:48`) |
+
+**Não é semanticamente uniforme em todos os usos:**
+
+- A tela distingue gozo de vendidos, mas o aviso de inconsistência chama **concedidos+vendidos** de “dias gozados”. (`app/templates/ferias/_secao_colab.html:49–51`; `app/ferias/situacao.py:178–183`)
+- O saldo individual negativo aparece nas telas citadas; o resumo/API **omite negativos da soma e da lista**, embora produza aviso. (`app/templates/ferias/saldo.html:41`; `app/ferias/situacao.py:178–189,296–297`; `app/api/views_mensageria.py:835–846`)
+- O docstring de `saldo_total` fala em períodos adquiridos; a implementação carrega todos os períodos e filtra apenas saldo positivo. (`app/ferias/situacao.py:146,162–163,296–297`)
+- A igualdade concedidos=soma dos não cancelados é uma pressuposição operacional das contas de devolver/substituir dias, **não uma igualdade conferida por esses leitores**. (`app/ferias/models.py:217–222`; `app/ferias/services.py:381,408,436`)
+
+3. **Duas views, entrada da porta e demais chamadores**
+
+`editar_datas_admin` consulta `saldo_para_remarcar` em 478 e chama `corrigir_datas_agendamento`; `editar_agendamento` consulta em 680 e chama `remarcar_agendamento`. Ambos os wrappers encaminham diretamente a `_trocar_janela`. (`app/ferias/views.py:478–503,680–688`; `app/ferias/services.py:457–466`)
+
+A porta recebe **quatro argumentos**: objeto de agendamento, novo início, novo fim e novos dias. Não recebe saldo, request, usuário ou motivo. Ela relê o agendamento pelo PK e obtém o período vinculado à linha relida. (`app/ferias/services.py:422,434`; `app/ferias/services.py:364–368`)
+
+O ponto correspondente à descida da pergunta descrita no aval fica **após `_travar_agendamento`, na linha 434, antes da alteração de concedidos na 436 e da substituição de `vivo.dias` na 437**: ali existem período e agendamento relidos sob trava, ainda com a reserva antiga. Atualmente esse bloco não consulta `saldo_para_remarcar`. (`app/ferias/services.py:433–437`)
+
+Os dois chamadores diretos de produção encontrados de `_trocar_janela` são esses wrappers; os testes também exercitam ambos. (`app/ferias/services.py:459,466`; `app/ferias/test_cancelar_2x.py:239–248`; `app/ferias/test_remarcar_limpa_janela_f346.py:198`)
+
+4. **Status que entram na soma “não cancelados”**
+
+O catálogo contém somente **`agendado`, `em_gozo`, `concluido`, `cancelado`**. Portanto, excluir cancelados inclui os outros três, inclusive concluídos; o fracionamento já usa explicitamente esse trio. Não há quinto status declarado. Valores fora do catálogo existentes em produção: **[nao verificado]**. (`app/ferias/models.py:293–298,360–363`)
+
+`recusado` pertence a **`confirmacao`**, não ao status do agendamento. A resposta de recusa grava apenas confirmação; não cancela nem devolve dias, portanto permanece incluída na definição “não cancelados”. (`app/ferias/models.py:321–324`; `app/ferias/services.py:567–575`)
+
+“Agendamentos vivos” em `situacao_de_ferias` é outro recorte: apenas agendado/em_gozo. Não equivale a “não cancelados”, que inclui concluído. (`app/ferias/situacao.py:164–168`; `app/ferias/models.py:293–298`)
+
+5. **Trilha e molde DRY/apply/reversão**
+
+**Existe infraestrutura compatível:** `LogAuditoria` guarda modelo, objeto, descrição, JSON antes/depois, usuário/ator e data. `core.observ.evento` aceita esses elementos sem request, identifica processo `manage.py` como `sistema:<comando>` e retorna registro ou `None`. (`app/core/models.py:295–307`; `app/core/observ.py:22–32,94–102,133–139`)
+
+Essa porta é **best effort**, com savepoint próprio; falha da trilha não desfaz automaticamente o negócio. O adaptador `registrar_log` também captura falhas e não devolve o registro. (`app/core/observ.py:105,133–139`; `app/core/auditoria.py:8–29`)
+
+Em férias, o molde de antes/depois/motivo já aparece nos cancelamentos administrativos e na correção de datas. Entretanto, os logs ficam **nas views, após a chamada ao serviço**, com o “antes” capturado anteriormente à trava; `_trocar_janela` não registra auditoria no seu próprio bloco. (`app/ferias/views.py:366–384,414–428,484–518`; `app/ferias/services.py:422–454`)
+
+O molde vizinho mais completo encontrado é **`rederivar_minutos_h06_comp11`**, pela combinação dos seguintes elementos:
+
+| Elemento existente | Evidência |
+|---|---|
+| DRY padrão, `--apply`, `--reverter SNAPSHOT`, autor obrigatório para escrita. | `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:195–214` |
+| Transação e releitura sob trava por linha; DRY retorna antes de chamar escritor. | Mesmo arquivo: `137–164`. |
+| Snapshot antes da escrita; chamada à porta existente; conferência do depois. | Mesmo arquivo: `165–180`. |
+| Auditoria antes/depois/motivo; trilha ausente provoca desfazimento da linha. | Mesmo arquivo: `181–192`. |
+| Snapshot em `logs/h12h06b`, criação exclusiva e `flush/fsync`; confirmação posterior à aplicação. | Mesmo arquivo: `215,248–257,273–274`. |
+| Reversão apenas de tentativas confirmadas, com guardas contra atos posteriores; listagem, resultado e contadores. | Mesmo arquivo: `152–159,220–241,261–288`. |
+
+No próprio férias, `sincronizar_status_ferias` fornece DRY/apply, listagem, contador e escrita pela porta, mas seu corpo não contém snapshot/reversão. (`app/ferias/management/commands/sincronizar_status_ferias.py:20–57`)
+
+Porta específica já existente para realinhar concedidos à soma e implementação do contador `ferias_concedidos_x_soma`: **não localizadas na cópia [nao verificado]**. O contador atual de divergência examina status de agendamentos/períodos. (`app/ferias/services.py:71–95`)
+
+6. **Entidade de `#103` e `#114`**
+
+**Não é possível identificar a entidade desses dois números do aval: [nao verificado].**
+
+A ocorrência exata de `#103` encontrada no repositório está em documentação sobre **disputas**, junto de `#1257`; não estabelece vínculo com HJ-090 nem prova que seja o mesmo registro citado no aval. (`app/docs/RELATO-ARQUIVO.md:2834–2837`)
+
+Não foram localizados `#114` exato, HJ-090 ou o arquivo `complemento_hj_090_1221.txt` na cópia que qualificassem esses IDs. Classificá-los como PK de período, agendamento, chamado ou HJ permanece **[nao verificado]**.
+
+## 13/11 12:27 · sessao dc1313b29315 · HJ-090 · sonda · origem=Code
+
+Não executei: `sonda2.py` não foi localizado na cópia. [nao verificado] [nao verificado]
+
+Saída integral fornecida no enunciado:
+
+```text
+sonda_leitura: sonda2.py [092f19c733df6958] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+total 52
+por origem {'agendamento': 1, 'historico': 51}
+por status do periodo usado {'concedido': 40, 'em_curso': 12}
+origem x status {'agendamento/concedido': 1, 'historico/concedido': 39, 'historico/em_curso': 12}
+ag colab inicio dias status_ag origem pa_usado status_pa anteriores_com_saldo(pa:saldo)
+12 170 2026-05-28 30 concluido agendamento 1019 concedido 1018:30
+56 95 2026-07-13 30 concluido historico 350 concedido 349:30
+57 247 2026-07-28 30 concluido historico 427 concedido 426:30
+58 369 2026-08-17 30 concluido historico 1051 concedido 631:30
+59 41 2026-07-13 30 concluido historico 74 concedido 73:30
+61 125 2026-08-03 30 concluido historico 587 concedido 586:30
+62 121 2026-08-11 30 concluido historico 547 concedido 546:30
+63 163 2026-08-13 30 concluido historico 966 concedido 965:30
+64 104 2026-07-20 30 concluido historico 398 concedido 397:30
+65 128 2026-08-06 20 concluido historico 615 em_curso 614:30
+66 138 2026-08-03 30 concluido historico 706 concedido 705:30
+67 149 2026-08-06 30 concluido historico 813 concedido 812:30
+74 70 2026-09-08 30 concluido historico 157 concedido 156:30
+75 118 2026-09-16 30 concluido historico 534 concedido 533:30
+76 136 2026-09-15 20 concluido historico 701 em_curso 700:30
+79 357 2026-07-07 20 concluido historico 387 em_curso 386:30
+81 191 2026-07-08 30 concluido historico 343 concedido 342:30
+83 219 2026-07-16 30 concluido historico 384 concedido 383:30
+84 198 2026-08-05 30 concluido historico 1005 concedido 1004:30
+87 355 2026-08-12 20 concluido historico 946 em_curso 945:30
+88 367 2026-08-06 20 concluido historico 1054 em_curso 1047:30
+89 189 2026-08-10 30 concluido historico 329 concedido 328:30
+91 340 2026-09-02 30 concluido historico 294 concedido 293:30
+92 218 2026-09-01 30 concluido historico 646 concedido 645:30
+93 187 2026-09-08 30 concluido historico 412 concedido 411:30
+94 193 2026-09-22 30 concluido historico 990 concedido 989:30
+95 325 2026-08-12 30 concluido historico 187 concedido 186:30
+96 188 2026-09-02 30 concluido historico 789 concedido 788:30
+97 245 2026-08-19 30 concluido historico 775 concedido 774:30
+98 354 2026-08-10 30 concluido historico 650 concedido 649:30
+99 341 2026-08-20 30 concluido historico 133 concedido 132:30
+100 371 2026-09-16 24 concluido historico 1056 em_curso 467:30
+101 373 2026-09-02 24 concluido historico 1058 em_curso 664:30
+102 306 2026-10-01 30 concluido historico 216 concedido 215:30
+103 344 2026-10-06 33 concluido historico 639 concedido 638:30
+104 347 2026-10-08 30 concluido historico 375 concedido 374:30
+105 303 2026-10-20 30 em_gozo historico 496 concedido 495:30
+106 274 2026-10-22 30 em_gozo historico 1059 concedido 207:30
+107 374 2026-09-15 30 concluido historico 1060 concedido 601:30
+108 236 2026-10-05 30 concluido historico 873 concedido 872:30
+109 168 2026-10-22 28 em_gozo historico 997 em_curso 996:30
+110 119 2026-10-22 30 em_gozo historico 536 concedido 535:30
+111 215 2026-10-05 30 concluido historico 544 concedido 543:30
+112 366 2026-09-01 30 concluido historico 1057 concedido 408:30
+114 127 2026-09-02 31 concluido historico 598 concedido 597:30
+115 101 2026-11-09 20 em_gozo historico 394 em_curso 393:30
+116 61 2026-11-11 30 em_gozo historico 68 concedido 67:30
+117 80 2026-11-16 24 agendado historico 238 em_curso 237:30
+118 165 2026-11-24 20 agendado historico 972 em_curso 971:30
+119 148 2026-12-14 20 agendado historico 809 em_curso 808:30
+120 93 2026-12-21 30 agendado historico 1063 concedido 319:30
+122 309 2026-10-29 30 em_gozo historico 652 concedido 1066:30
+ERROS 0
+```
 
 ## 13/11 12:26 · sessao 96d571efac7b · TIPO-NA-FONTE · censo · origem=Code
 
@@ -1127,34 +1317,4 @@ Persistem formas possíveis em código de produção que o selo não acusa e `LI
 
 Os quatro nascimentos explícitos atuais continuam corretos: pergunta ao juiz em `app/colaboradores/services/vinculo.py:287`/`:296`, cópias em `:971`/`:975`, `:1090`/`:1093`, `:1111`/`:1114`.
 
-## 13/11 11:40 · sessao 4aceadf256c0 · - · - · origem=Ronald (tmux)
-
-Censo entregue em cinco partes: **75 sítios**, com **42 leituras de `situacao`, 1 de `data_demissao` e 41 de `ativa`**; nove sítios leem dois campos. A lista completa, predicados, caminhos e exclusões estão nas mensagens anteriores. [não verificado]
-
-Achados prioritários:
-
-- `data_demissao` altera o dia para `fora_vinculo`, alcançando folha e emissão: `app/escala/services/leitor_celula.py:365`, `:389`; `app/folha/export.py:338`; `app/chamados/services/disputa_emissao.py:83`.
-- Situação atual modifica o roteamento C5 usado pelo vigia de retenção silenciosa: `app/escala/services/cadastro_realidade.py:186`, `:198`; `app/folha/vigia_retido_calado.py:43`, `:48`.
-- Situação atual corta o universo do beco cuja correção reata perguntas: `app/escala/services/cadastro_realidade.py:477`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:110`.
-- Há cortes crus nos universos de emissores e reconciliadores: `app/ponto/management/commands/reconciliar_grade.py:106`; `app/ponto/management/commands/supra_juiz.py:110`; `app/ponto/management/commands/detectar_cluster_espurio.py:72`; `app/ponto/management/commands/detectar_par_relampago.py:337`; `app/ponto/management/commands/emitir_furo_retroativo.py:52`.
-
-AST executada em memória sobre 290 arquivos do escopo delegado, sem erros de parsing; nenhum arquivo foi escrito e nenhum acesso a banco/log foi realizado. [não verificado]
-
-## 13/11 11:39 · sessao 3d4ef57f7cae · - · - · origem=Ronald (tmux)
-
-B — **A-3 sustenta-se como FILA.** Há releitura interior em `app/ponto/portas/celula.py:464`; o teto aceita exatamente uma nessa função, expressamente “fora da lista do aval” (`app/ponto/tests/test_cadastro_futuro_c5e.py:368`). A proibição de ampliar a cura está literal em `app/ponto/tests/test_cadastro_futuro_c5e.py:316`–325; a fila nomeada registra inclusive o caminho de update e essa releitura (`app/docs/BACKLOG.md:2062`). O lote lê `hoje` na borda e o passa à porta (`app/escala/management/commands/aplicar_feriado_lei_1609.py:48`, `:73`), que o transmite à regeneração (`app/colaboradores/services/vinculo.py:905`). Logo, o defeito existe no caminho, mas sua correção foi explicitamente deferida; isoladamente não bloqueia esta obra (`app/ponto/tests/test_cadastro_futuro_c5e.py:317`).
-
-**F-6 também tem fundamento de código para permanecer fora deste lote.** `cargo_e_administrativo` decide pelo cadastro de cargo (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:19`), o comando deriva `desejado` por ele (`:47`) e aplica pela porta (`:58`). O apply desta obra importa e chama diretamente `marcar_trabalha_em_feriado` (`app/escala/management/commands/aplicar_feriado_lei_1609.py:46`, `:73`); seu contador pergunta ao juiz de 16/09 (`app/escala/models.py:960`). O comando por cargo não é chamado pelo corpo do apply (`app/escala/management/commands/aplicar_feriado_lei_1609.py:43`). Sua condição histórica de “preexistente” está no anexo fornecido, mas não consegui verificá-la por histórico: a cópia não contém repositório Git [não verificado]. Nenhum registro nominal específico de F-6 foi localizado em BACKLOG/CORTES [não verificado].
-
-D — **Classes presentes nos sítios examinados, com delimitação:**
-
-- **Relógio interior:** presente, porém explicitamente em fila, conforme acima (`app/ponto/portas/celula.py:464`; `app/docs/BACKLOG.md:2062`).
-- **Outra regra para decidir a flag:** presente no comando por cargo, fora da cadeia do apply (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:47`; `app/escala/management/commands/aplicar_feriado_lei_1609.py:73`). O lote usa a autoridade existente, com posto declarado vencendo (`app/escala/models.py:911`, `:960`).
-- **Segundo escritor introduzido no apply:** não identificado; ele chama a porta (`app/escala/management/commands/aplicar_feriado_lei_1609.py:73`), e a atribuição/save ficam nela (`app/colaboradores/services/vinculo.py:893`–894).
-- **Pouso antes da reversão:** o código estabelece a ordem correta: igualdade do universo antes de prosseguir (`app/escala/management/commands/aplicar_feriado_lei_1609.py:64`), arquivo exclusivo de reversão criado e fechado antes do primeiro chamado mutador (`:69`–73). Execução efetiva e pouso não foram demonstrados pelo dado [não verificado].
-- **Ordem de trava:** a porta da flag executa em `atomic` (`app/colaboradores/services/vinculo.py:868`), salva a flag antes da regeneração (`:894`, `:905`); o suplemento futuro trava células ordenadas por data (`app/ponto/services/cadastro_futuro.py:30`, `:36`). Não foi demonstrada inversão concreta de travas nesse caminho [não verificado].
-- **Semântica/snapshot:** a promessa da porta de que “a exportada fica” é limitada à guarda da célula (`app/colaboradores/services/vinculo.py:878`, `:887`); o save dispara invalidar previsto em qualquer fechamento com carimbo (`app/escala/signals.py:137`, `:146`; `app/ponto/services/fechamento.py:1611`–1613). Portanto, não usar essa promessa como prova de que nenhum número lido muda; G precisa decidir isso pelo leitor.
-
-A fixture semanal agora declara `dias_trabalho_semana` (`app/escala/tests/test_feriado_lei_1609.py:52`), preenchimento exigido pelo modelo para semanal (`app/escala/models.py:712`). Resultado green efetivamente executado nesta cópia [não verificado].
-
-_4574 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4576 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
