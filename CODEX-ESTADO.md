@@ -1,7 +1,73 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 18:25** · publicado em **13/11/2026 18:26** (UTC-3)
+> Ultima resposta processada: **13/11/2026 18:29** · publicado em **13/11/2026 18:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 18:29 · sessao 9eac57b99568 · - · - · origem=Ronald (tmux)
+
+- **BLOQUEIA — período apagado aborta a reversão restante.** O command faz `.get(pk=item['periodo'])` sem tratar ausência; períodos anteriores podem já ter sido revertidos e posteriores deixam de ser processados (`app/ferias/management/commands/realinhar_concedidos_ferias.py:100-104`; `app/ferias/services.py:190-200`). É alcançável pela porta regular: cancelar agendamentos e excluir o PA (`app/ferias/services.py:781-794`); a trilha permanece possível porque `objeto_id` não é FK (`app/core/models.py:298`).
+
+- **A — OK nos estados examinados.** Identidade inclui `pk`, `dias`, início e fim, cobrindo remarcação que mantém datas e muda dias (`app/ferias/services.py:139-140`). A porta também atualiza concedidos pelo delta dos dias (`app/ferias/services.py:652-653`). O RED novo morde a identidade antiga `[pk,dias]`, pois troca somente datas (`app/ferias/test_hj090_volta3.py:261-268`). Execução do RED: **[nao verificado]**.
+
+- **B — OK na seleção do último ato por período.** A consulta filtra modelo e PA antes de ordenar por PK; atos intercalados de PAs distintos não se contaminam (`app/ferias/services.py:177-179`). Os testes mordem replay de A depois de B e intenção sem commit (`app/ferias/test_hj090_volta3.py:270-296`). Não cobrem retirar o filtro por PA dessa consulta (`app/ferias/test_hj090_volta3.py:270-296`). Execução: **[nao verificado]**.
+
+- **C — cura externa fecha `{}`, mas validação interna permanece incompleta.** Só exige que `vivos` seja lista; aceita `[null]`, `[[1]]` ou datas malformadas (`app/ferias/management/commands/realinhar_concedidos_ferias.py:69-71`). Esses formatos serão tratados como “linha mudou”, eventualmente depois de reverter linhas anteriores (`app/ferias/services.py:192-194`; `app/ferias/management/commands/realinhar_concedidos_ferias.py:101-104`). Confirmação com funções extraídas por AST e `BytesIO`, sem arquivo: leitor aceitou duas linhas, sendo a segunda com `vivos=[None]` **[nao verificado por arquivo de prova]**. O RED só cobre formatos externos mínimos (`app/ferias/test_hj090_volta3.py:298-309`).
+
+- **NAO-BLOQUEIA condicionado ao acervo — incompatibilidade anterior.** Registros sem `depois.ato` agora são recusados pelo validador (`app/ferias/management/commands/realinhar_concedidos_ferias.py:69-71`). Existência desses registros em produção: **[nao verificado]**.
+
+- **OK — escrita explícita e falha de trilha.** `--reverter --por` é uma porta de escrita expressamente documentada; execução normal sem `--apply` retorna antes de criar arquivos (`app/ferias/management/commands/realinhar_concedidos_ferias.py:19-24`; `app/ferias/management/commands/realinhar_concedidos_ferias.py:95-119`). `_trilha` transforma retorno `None` em erro dentro da transação (`app/ferias/services.py:421-429`; `app/ferias/services.py:153-165`).
+
+- **NAO-BLOQUEIA — deadlock específico não demonstrado.** Realinhar/reverter travam PA, mas consultam agendamentos sem `select_for_update`; a ordem agendamento→PA da remarcação não estabelece ciclo de espera com essas portas (`app/ferias/services.py:105-113`; `app/ferias/services.py:139-140`; `app/ferias/services.py:154`; `app/ferias/services.py:577-580`). Concorrência executada: **[nao verificado]**.
+
+## 13/11 18:29 · sessao a3cfceb0b3b9 · - · - · origem=Ronald (tmux)
+
+D: **BLOQUEIA pela cobertura incompleta do calendário**, embora criação e edição agora concordem: ambas usam `datas_do_ciclo` (`app/ferias/views.py:167`; `app/ferias/services.py:770`). A criação promete linha completa de ciclos (`app/ferias/views.py:157`).
+
+Contraexemplo confirmado executando somente as duas funções reais extraídas via AST, em memória: admissão em 29/02/2024 produz ciclo 28/02/2027–27/02/2028 e próximo ciclo começando em 29/02/2028; **28/02/2028 não pertence a ciclo algum**. O início é calculado pela admissão original e o fim pelo início já truncado (`app/ferias/views.py:164`; `app/ferias/services.py:742`; `app/ferias/services.py:754`). O algoritmo já existia na criação apresentada no delta; a extração conservou esse defeito. Existência desse caso em produção: [nao verificado].
+
+Esse buraco tem leitores concretos: faltas usam intervalo inclusivo e a falta desse dia fica fora de todos os PAs (`app/ferias/models.py:147`); o gozo histórico busca PA contendo `gi`, mas, sem resultado, escolhe o PA mais recente de todo o acervo, possivelmente posterior ao gozo (`app/ferias/views.py:199`; `app/ferias/views.py:203`). A porta valida futuro, intervalo e saldo, mas não a pertinência de `gi` ao PA escolhido (`app/ferias/services.py:460`; `app/ferias/services.py:475`; `app/ferias/services.py:487`).
+
+Último dia do mês: a função entrega 31/01/2024→30/01/2025, limite 30/01/2026; 31/03/2025→30/03/2026, limite 30/03/2027. Isso corresponde à fórmula documentada, aniversário menos um dia (`app/ferias/services.py:750`). Para início em 29/02/2024 entrega 27/02/2025 e limite 27/02/2026, porque primeiro trunca o aniversário para 28/02 e depois subtrai um dia (`app/ferias/services.py:743`; `app/ferias/services.py:754`).
+
+**RED D: mordida parcial.** Restaurar a antiga aritmética da edição reprovaria o teste de 01/01/2024; porém restaurar a conta independente na criação sobreviveria, pois o novo teste não chama a view. Também não cobre 29/02 ou último dia do mês (`app/ferias/test_hj090_volta3.py:316`).
+
+**Juiz: OK quanto a duplicação registrada.** As autoridades registradas são saldo, status/vencimento, abono, fracionamento, aviso e duração da ausência; nenhuma responde às datas do ciclo aquisitivo. `fim_de` trata duração da ausência, outra pergunta (`app/core/juizes.py:268`). A exigência de corte refere-se ao registro de autoridade nova em `core/juizes.py` (`CLAUDE.md:74`).
+
+Mapa dos campos de datas:
+
+- **Escritores:** criação pela porta `garantir_periodo_aquisitivo`, recebendo início e defaults (`app/ferias/services.py:378`); edição pela porta travada (`app/ferias/services.py:758`). Criação entrega as datas calculadas pela função comum (`app/ferias/views.py:164`).
+- **Leitores inclusivos:** faltas (`app/ferias/models.py:147`), sobreposição (`app/ferias/models.py:193`), PA do gozo histórico (`app/ferias/views.py:199`), PA vigente no painel (`app/ponto/views.py:2022`).
+- **Leitores de vencimento:** status considera ciclo aberto enquanto `data_fim >= hoje`, vencimento apenas quando `limite < hoje` (`app/ferias/models.py:101`); situação usa limite inclusivo para aviso e exclusivo para vencido (`app/ferias/situacao.py:193`; `app/ferias/situacao.py:209`).
+- **Leitores de apresentação/ordenação:** API (`app/api/views_mensageria.py:837`), CSV (`app/relatorios/views.py:365`), seção do colaborador (`app/templates/ferias/_secao_colab.html:41`), lista DP (`app/ferias/management/commands/listar_ferias_dp.py:66`; `app/ferias/management/commands/listar_ferias_dp.py:101`).
+- **Admin/migration/command:** admin registra somente `Afastamento` (`app/ferias/admin.py:2`); migration inicial declara os campos, sem derivação (`app/ferias/migrations/0001_initial.py:40`); cron de vencimento lê limite e delega sincronização (`app/ferias/management/commands/alertar_ferias_vencendo.py:26`). `FeriasConfig` não registra signals (`app/ferias/apps.py:3`). Não encontrei outra derivação produtiva das datas na busca integral; execução dinâmica fora dos arquivos examinados: [nao verificado].
+
+## 13/11 18:29 · sessao 81ac17b751e1 · - · - · origem=Ronald (tmux)
+
+Resultado da fatia vigia/listas, somente leitura:
+
+- **OK — merge do carimbo.** `ferias_soma_maior`, `ferias_concedidos_maior` e `desligados_retidos` aparecem em `ESPERADO_DO_CARIMBO` com zero e no `censo` com as mesmas grafias. O contador de férias é chamado diretamente, sem outra regra de saldo. `app/chamados/management/commands/vigiar_fio_morto.py:100`, `:234`, `:250`, `:252`.
+
+- **OK — leitor ESTADO.** O leitor compara genericamente todas as entradas de `esperado` com `censo`; assim lê também as três chaves do merge e publica suas divergências. A integração do ESTADO chama esse leitor. `bin/fio_estado.py:121`, `:125`, `:191`; `bin/gerar_estado.py:260`.
+
+- **NAO-BLOQUEIA — placar não alarma por essas três chaves.** `pipeline_placar` chama seu leitor somente para `fio_mudo_alvos` e `nunca_bateu_sem_adesao`; o próprio vigia também não inclui férias/desligados em seus conjuntos de alarme. Portanto coerência do carimbo não significa alarme dessas chaves no placar. `app/core/management/commands/pipeline_placar.py:135`; `app/chamados/management/commands/vigiar_fio_morto.py:84`. Leitor dessas chaves em hook externo: **[nao verificado]**; nenhum encontrado nos hooks da cópia.
+
+- **OK — escritores/leitores das chaves férias.** A autoridade produz listas de PAs em `services.py`, o vigia grava seus comprimentos; tripwire e lista DP consultam a mesma autoridade. `app/ferias/services.py:116`, `:123`; `app/chamados/management/commands/vigiar_fio_morto.py:234`; `app/ferias/management/commands/tripwire_status_ferias.py:37`; `app/ferias/management/commands/listar_ferias_dp.py:55`.
+
+- **NAO-BLOQUEIA — significado de `desligados_retidos`.** Origem conta somente colaboradores retidos por `furo_espelho` e julgados desligados; agregação soma ocorrências colaborador×competência, não pessoas únicas da frota. Há fila explícita para a amplitude do rótulo. `app/folha/fora_da_folha.py:122`, `:128`, `:143`; `app/chamados/services/vigia_fio.py:583`, `:587`; `app/docs/BACKLOG.md:736`. O merge conserva a mesma conta em censo e esperado. `app/chamados/management/commands/vigiar_fio_morto.py:102`, `:252`.
+
+- **OK — teste do carimbo tem mordida estática observável.** Cria sentidos não vazios com comprimentos diferentes, exige uma consulta à autoridade e verifica valores e esperados: retiradas, zeros fixos ou inversão dos sentidos seriam detectados. O teste completo do vigia exige também `desligados_retidos` na igualdade dos dois blocos. `app/ferias/test_hj090_volta3.py:206`, `:214`, `:221`, `:224`; `app/chamados/tests/test_o261_vigia_fio.py:819`, `:833`. Execução/RED real **[nao verificado]**.
+
+- **OK — tripwire diferencia alarme e DP.** Ambos os sentidos retiram a mensagem OK; somente divergência de status ou soma maior provoca saída 2. O caso concedidos maior é publicado como LISTA-DP. `app/ferias/management/commands/tripwire_status_ferias.py:41`, `:52`, `:56`; testes em `app/ferias/test_hj090_um_juiz.py:461`, `:470`.
+
+- **NAO-BLOQUEIA — duas leituras de relógio na lista nova.** `listar_ferias_com_batida` obtém `hoje` e `agora` separadamente. Na passagem da meia-noite pode entregar o dia anterior com um instante do dia seguinte a `InsumosDoDono`; ambos afetam classificação e ordenação da lista. É inconsistência da borda, não leitura fora dela. `app/ferias/management/commands/listar_ferias_com_batida.py:36`, `:52`, `:61`. Não existe teste da virada nessa lista; o teste apresentado cobre uma ausência sem agendamento. `app/ferias/test_hj090_um_juiz.py:478`.
+
+- **OK com limite — comandos de listas.** Caminho normal da lista DP consulta e imprime; `--simular` escreve deliberadamente na sombra dentro de transação revertida por `_Volta`, com erros impressos. Não demonstrado commit persistente sem `--apply`. `app/ferias/management/commands/listar_ferias_dp.py:52`, `:55`, `:98`, `:109`, `:112`. Efeitos externos ao banco durante signals dessa simulação: **[nao verificado]**.
+
+- **OK — universo da lista com batida declarado.** Ausência de férias sem filtro de status × batida apurável do dia civil; a informação do dia do turno serve para marcar plantão da véspera. Isso não é a pergunta de retenção do TXT. `app/ferias/management/commands/listar_ferias_com_batida.py:4`, `:40`, `:44`, `:46`, `:53`.
+
+- **OK — descarte da trava de competência fechada na materialização corresponde ao contrato local.** O próprio materializador declara que período fechado não recusa esse caminho e materializa por `criar_ausencia`. `app/ponto/services/ausencia.py:1169`, `:1203`. Não afirmo situação de produção **[nao verificado]**.
+
+Limite do exame: não há repositório `.git` na cópia; confirmação histórica de “preexistente/fora do diff”, hook instalado, execução e dados reais **[nao verificado]**.
 
 ## 13/11 18:25 · sessao 6adac308e008 · RAIA-PREPARACAO · censo · origem=Code
 
@@ -1598,199 +1664,4 @@ Quem mais lê, para caracterizar regressão:
 - Folha: filtro de aprovadas na janela e expansão delegada ao juiz (`app/folha/export.py:87`, `:70`).
 - Histórico: raízes documentais, estado, datas/dias/documento/descrição (`app/ponto/services/dia_decidido.py:593`, `:615`, `:619`, `:621`, `:623`, `:624`).
 
-## 13/11 18:12 · sessao 83dfb72e585c · - · - · origem=Ronald (tmux)
-
-AST executado com `python3 -B`: **3369 arquivos parseados, 0 erros de parse, 103 registros**; contagem derivada em memória, sem arquivo de prova. [nao verificado: resultado instrumental desta execução] Cada etapa de uma cadeia ORM aparece como chamada separada; não são 103 sítios independentes. [nao verificado]
-
-```python
-import ast, pathlib
-
-fields = {
-    'tipo', 'status', 'data_turno', 'batida_entrada', 'batida_entrada_id',
-    'saida_informada', 'batida_gerada', 'batida_gerada_id', 'aprovada_em',
-    'atualizado_em', 'criado_em',
-}
-writers = {
-    'app/api/views.py': {'j'},
-    'app/ponto/views.py': {'j'},
-    'app/ponto/services/regularizacao.py': {'j'},
-    'app/ponto/services/justificativa.py': {'j'},
-    'app/ponto/services/entrada_sincronizada.py': {'just'},
-    'app/ponto/services/triagem_batida.py': {'just'},
-    'app/chamados/reconciliador.py': {'_j'},
-}
-
-def chain(n):
-    if isinstance(n, ast.Name):
-        return n.id
-    if isinstance(n, ast.Attribute):
-        return chain(n.value) + '.' + n.attr
-    if isinstance(n, ast.Call):
-        return chain(n.func) + '()'
-    return '?'
-
-rows, parsed, errors = [], 0, []
-for p in sorted(pathlib.Path('app').rglob('*.py')):
-    try:
-        tree = ast.parse(p.read_text(), filename=str(p))
-        parsed += 1
-    except (SyntaxError, UnicodeError) as e:
-        errors.append((str(p), str(e)))
-        continue
-    parent = {c: n for n in ast.walk(tree)
-              for c in ast.iter_child_nodes(n)}
-
-    def owner(n):
-        while n in parent:
-            n = parent[n]
-            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                return n.name
-        return '<module>'
-
-    if ('tests' in p.parts or 'migrations' in p.parts
-            or p.name.startswith('test_')):
-        continue
-    for n in ast.walk(tree):
-        if (isinstance(n, ast.Call)
-                and chain(n.func).startswith('Justificativa.objects.')):
-            rows.append((
-                str(p), n.lineno, owner(n), 'ORM', chain(n.func),
-                ','.join(k.arg or '**' for k in n.keywords),
-            ))
-        if (isinstance(n, ast.Attribute)
-                and isinstance(n.ctx, ast.Store)
-                and isinstance(n.value, ast.Name)
-                and n.value.id in writers.get(str(p), set())
-                and n.attr in fields):
-            rows.append((
-                str(p), n.lineno, owner(n), 'W', chain(n), '',
-            ))
-for r in sorted(rows):
-    print('|'.join(map(str, r)))
-print('PARSED', parsed, 'ERRORS', errors, 'ROWS', len(rows))
-```
-
-Resultado agrupado, com sítios positivos:
-
-| Grupo | Sítios encontrados |
-|---|---|
-| Criação/payload | `app/api/views.py:1992`, `app/ponto/views.py:1635`, `app/ponto/services/regularizacao.py:91`, `app/ponto/management/commands/processar_alertas_turno.py:394` |
-| Alteração `tipo` | `app/api/views.py:1986`, `app/ponto/views.py:1625` |
-| Alteração `saida_informada` | `app/ponto/views.py:1628`, `app/ponto/services/regularizacao.py:103`, `app/ponto/services/justificativa.py:382` |
-| Alteração `batida_entrada` | `app/ponto/views.py:1630` |
-| Alteração `batida_gerada` | `app/ponto/services/justificativa.py:204`, `app/ponto/services/justificativa.py:381`, `app/ponto/views.py:1831` |
-| Alteração `status` | `app/ponto/services/justificativa.py:205`, `app/ponto/services/justificativa.py:283`, `app/ponto/services/justificativa.py:383`, `app/ponto/views.py:1796`, `app/ponto/views.py:1875`, `app/ponto/services/regularizacao.py:105`, `app/ponto/services/entrada_sincronizada.py:41`, `app/ponto/services/triagem_batida.py:608`, `app/chamados/reconciliador.py:533` |
-| Alteração `aprovada_em` | `app/ponto/services/justificativa.py:207`, `app/ponto/services/justificativa.py:285`, `app/ponto/services/justificativa.py:385`, `app/ponto/views.py:1798`, `app/ponto/views.py:1877` |
-| Cobertura/financeiro | `app/escala/utils.py:1197`, `app/ponto/services/efeito_ausencia.py:41`, `app/ponto/services/fechamento.py:661`, `app/relatorios/management/commands/diff_extrato_parcial.py:43` |
-| Fato novo | `app/ponto/services/cartorio.py:387` |
-| Bloqueio por turno órfão | `app/ponto/utils_turno_orfao.py:53` |
-| Telas/histórico/contadores | `app/api/views.py:2088`, `app/chamados/views.py:596`, `app/core/views.py:205`, `app/core/views.py:244`, `app/core/views.py:1191`, `app/ponto/views.py:998`, `app/ponto/views.py:1673`, `app/ponto/views.py:1704`, `app/ponto/views.py:1736`, `app/ponto/views.py:1738`, `app/ponto/views.py:1742` |
-| SLA | `app/ponto/management/commands/alertar_justificativas_sla.py:19` |
-| Comando destrutivo existente, apenas lido | `app/ponto/management/commands/zerar_dados_operacionais.py:44`, `app/ponto/management/commands/zerar_dados_operacionais.py:95` |
-
-Limites: o filtro ORM exige nome literal `Justificativa`; aliases como `_Just` não são resolvidos. Stores usam os nomes locais previamente lidos e não fazem inferência de tipos global. Não inclui templates, SQL dinâmico, defaults aninhados como Stores nem gravações indiretas; os kwargs de criação e `defaults` aparecem na linha da chamada. [nao verificado: limites do instrumento entregue]
-
-## 13/11 18:11 · sessao de30e1eb0201 · - · - · origem=Ronald (tmux)
-
-LEU — AST em `app/**/*.py` de produção, excluindo `tests/`, `migrations/` e arquivos `test*`, confirmou estes sítios:
-
-| Campo da costura | Escritores | Leitores específicos |
-|---|---|---|
-| `ultima_batida.id` | `app/api/views.py:759`; `app/api/views_core.py:753` | `app/api/foto_recebida.py:68`; `app/chamados/models.py:3464`; `app/chamados/services/disputa_emissao.py:72`, `:73`, `:387` |
-| `ultima_batida.timestamp` | `app/api/views.py:761`; `app/api/views_core.py:755` | `app/chamados/juizes.py:159`, `:160`, `:166` |
-| `ultima_batida.tipo` | `app/api/views.py:760`; `app/api/views_core.py:754` | Nenhum leitor literal específico localizado nessa varredura; consumidores dinâmicos/genéricos [nao verificado]. |
-| `foto_ausente.tipo_batida` | `app/api/views.py:453`; `app/api/views_core.py:439`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:99` | Nenhum leitor específico desse caminho localizado; consumidores dinâmicos/genéricos [nao verificado]. |
-| `foto_ausente.batida_id` | `app/ponto/management/commands/marcar_foto_ausente_retro.py:100` | Nenhum leitor específico desse caminho localizado; consumidores dinâmicos/genéricos [nao verificado]. |
-| `foto_ausente.batida_em` | `app/ponto/management/commands/marcar_foto_ausente_retro.py:101` | Nenhum leitor literal localizado; consumidores dinâmicos/genéricos [nao verificado]. |
-| `foto_ausente._por` | `app/ponto/management/commands/marcar_foto_ausente_retro.py:102` | Nenhum leitor específico desse caminho localizado; consumidores dinâmicos/genéricos [nao verificado]. |
-
-LEU — `foto_recebida` também depende da chave problemática: compara `d.contexto.ultima_batida.id` à batida recebida e depois valida todas as perguntas `foto_ausente` da disputa, ou todas as perguntas quando só resta aquele motivo. Não filtra perguntas por `batida_origem`. (`app/api/foto_recebida.py:67`, `:68`, `:73`, `:79`)
-
-INFERIU — harmonizar o emissor altera também esse caminho de upload tardio; exige cenário com duas batidas/fotos na mesma disputa e fotos recebidas em ordem diferente. A necessidade decorre do contexto mutável usado para selecionar a disputa e da validação coletiva. (`app/api/foto_recebida.py:67`, `:73`, `:79`; `app/chamados/services/disputa_emissao.py:548`)
-
-LEU — há três significados temporais diferentes:
-
-- `ultima_batida.timestamp` nos APIs recebe **agora**, o instante de recepção/processamento. (`app/api/views.py:497`, `:761`; `app/api/views_core.py:483`, `:755`)
-- `Batida.timestamp` recebe **ts_efetivo**, escolhido por `hora_do_aparelho`; pode diferir de agora. (`app/api/views.py:507`, `:654`; `app/api/views_core.py:493`, `:645`)
-- `foto_ausente.batida_em` recebe o timestamp da batida convertido para horário local. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:101`)
-
-LEU — o consumidor fraco do dia usa `datetime.fromisoformat(...).date()` sobre `ultima_batida.timestamp`; os consumidores fortes usam `ultima_batida.id` e o juiz do turno. (`app/chamados/juizes.py:159`, `:166`; `app/chamados/services/disputa_emissao.py:72`, `:76`, `:387`, `:391`)
-
-DECISÃO DE DESENHO — declarar se o payload harmonizado mantém instante de detecção e instante da batida como conceitos distintos, ou se muda o significado do timestamp existente e migra seus leitores. Não tratar `batida_em` e `ultima_batida.timestamp` como sinônimos sem essa decisão. (`app/api/views.py:761`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:101`; `app/chamados/juizes.py:166`)
-
-LEU — o selo AST existente da família verifica `Motivo(..., familia=FAMILIA_*)`; os testes dos índices verificam listas e chaves das famílias. Não examinam o contexto entregue pelos emissores. (`app/chamados/tests/test_e1_v5_familia.py:25`, `:98`, `:104`, `:111`)
-
-LEU — o selo AST da porta de disputa impede a declaração de fabricar diretamente o chamado pai; não verifica o episódio no payload dos emissores. (`app/chamados/tests/test_porta_disputa_emissao.py:144`)
-
-LEU — testes existentes constroem manualmente `ultima_batida` e testam contexto ausente como conversa; não exercitam o payload emitido pelo retro. (`app/chamados/tests/test_a2_data_evento_batida.py:21`, `:53`)
-
-Selo AST geral “todo emissor FAMILIA_BATIDA entrega episódio consumível”: não localizado por busca nominal e leitura dos selos acima; inexistência completa [nao verificado].
-
-Homônimos excluídos da costura: `tipo_batida` de ações de chamado é lido no contexto raiz, e `ultima_batida` de ficha/ranking é data ou timestamp apresentado, não o dict de disputa. (`app/chamados/services/acoes_chamado.py:30`, `:195`; `app/colaboradores/services/ficha.py:147`, `:215`; `app/escala/services/furos_diarios.py:281`)
-
-Nenhum template com caminho literal `foto_ausente.batida_id`, `foto_ausente.batida_em` ou `ultima_batida.id` foi localizado; renderização genérica de contexto [nao verificado].
-
-## 13/11 18:11 · sessao 88a38d37473c · - · - · origem=Ronald (tmux)
-
-LEU por AST (python3 -B, `ast.parse`, sem importar app): **5 sítios de chamada de produção** da porta; todos importam por `chamados.models`, que reexporta o símbolo em `app/chamados/models.py:4094`.
-
-| Sítio | Contexto entregue | Família |
-|---|---|---|
-| `app/api/views.py:764` | `contexto_anomalia`; acrescenta `ultima_batida={id:batida.pk,tipo:tipo,timestamp:agora.isoformat()}` em `:758` | Pode BATIDA; `foto_ausente` escrito em `:453`; catálogo BATIDA em `app/chamados/catalogo/motivos.py:43`. |
-| `app/api/views_core.py:758` | Mesmo formato, escrito em `:752` | Pode BATIDA; `foto_ausente` em `:439`; catálogo `motivos.py:43`. |
-| `app/ponto/management/commands/marcar_foto_ausente_retro.py:96` | Apenas `foto_ausente={tipo_batida:b.tipo,batida_id:b.pk,batida_em:localtime(b.timestamp).isoformat(),_por:...}` em `:98` | BATIDA literal (`motivos.py:43`). |
-| `app/ponto/services/triagem_batida.py:735` | `saida_sem_entrada={data:_dia_sse.isoformat(),hora_tentativa:agora_local.strftime('%H:%M')}` em `:739` | MARCO literal (`motivos.py:35`). |
-| `app/chamados/services/fabrica_da_celula.py:172` | `{motivo:{data:dia.isoformat()}}` | **INFERIU MARCO**: motivo dinâmico; fluxo `:207` → `:139` → `:62`/`:71` → tabela `app/chamados/services/declaracao_texto.py:42`, cujos quatro valores são MARCO no catálogo `motivos.py:34`, `:35`, `:48`, `:49`. |
-
-Logo, a frase do dado “outros 4 emissores cumprem” descreve quatro outros chamadores da porta, mas **não quatro outros chamadores BATIDA identificados nesta cópia**: dois são MARCO no fluxo lido; cobertura dinâmica completa [nao verificado]. Referências acima.
-
-**Desencontros e decisões de desenho, sem escolher:**
-
-1. **Episódio no caminho errado:** retro escreve `foto_ausente.batida_id` (`marcar_foto_ausente_retro.py:100`); identidade lê exclusivamente `ultima_batida.id` (`models.py:3464`) e data do turno também (`disputa_emissao.py:387`). Opções para o construtor: emissor entregar o envelope atualmente lido, ou contrato explícito de parâmetro de episódio consumido pelos dois leitores. Aval fornecido já manda cura na origem; mudança de leitores não é necessidade demonstrada pelo código. Validação de pertencimento já existe em `models.py:3468`.
-
-2. **Instante de chegada versus instante do fato:** API define `agora` em `views.py:497`, resolve `ts_efetivo` em `:507` e grava Batida com este em `:654`; porém envelope registra `timestamp=agora.isoformat()` em `:761`. Gêmeo: `views_core.py:483`, `:493`, `:645`, `:755`. Retro `batida_em` usa instante efetivo da Batida em `marcar_foto_ausente_retro.py:101`. Opções: declarar metadado como instante da chegada, distinguindo-o do fato; ou alinhar envelope ao instante da Batida. Não é apenas UTC versus local: offline permite fatos anteriores ao recebimento (`views.py:504`, `:519`). Os dois leitores principais usam o ID e consultam a Batida, não os timestamps do envelope (`models.py:3464`, `disputa_emissao.py:387`).
-
-3. **Contexto agregado versus episódio imutável:** merge sobrescreve chaves genéricas por `ctx[k]=v` em `disputa_emissao.py:561`; modelo adverte que ler contexto posteriormente pode apontar outra anomalia em `models.py:3457`. Identidade deve nascer uma vez (`models.py:3454`). Opções de desenho: garantir transporte correto no ato e preservar coluna imutável; avaliar separadamente consumidores tardios do agregado. Não retroderivar acervo pelo contexto atual: proibição expressa no comentário `models.py:3458`.
-
-4. **Upload por disputa versus pergunta por episódio:** `app/api/foto_recebida.py:67` seleciona disputa pela `ultima_batida.id`; `:73` valida todas as perguntas `foto_ausente` dela, ou `:79` todas as perguntas quando motivo único. Episódios distinguem perguntas BATIDA (`models.py:3474`, `disputa_emissao.py:321`). Opções: demonstrar por bateria que a seleção agregada preserva os episódios, ou tratar leitor por episódio numa fatia autorizada. Isso merece medição/RED; não ampliar silenciosamente a cura do emissor. Identidade por episódio já escrita, não pergunta de lei.
-
-**Sem divergência de unidade/borda no predicado de prazo lido:** cron calcula minutos reais por `total_seconds()/60` (`marcar_foto_ausente_retro.py:76`) e juiz cobra inclusive `decorrido_min >= prazo` (`registro_batida.py:91`); `tem_foto` é `FotoBatida OU Batida.foto` nos dois lados (`marcar_foto_ausente_retro.py:75`, `registro_batida.py:83`). PWA=0, APK=90 e desconhecido=APK (`registro_batida.py:72`, `:77`). `--minutos` só sobrepõe APK/NULL (`registro_batida.py:89`), período de varredura é intervalo fechado `timestamp__gte=desde, timestamp__lte=agora` (`marcar_foto_ausente_retro.py:67`). Não alterar estes parâmetros como cura de episódio.
-
-**Selos existentes lidos, não executados:** `app/ponto/tests/test_bug126_selfie_invisivel.py:65` verifica disputa e metadado `batida_id` em `:71`, mas não episódio/data da pergunta; idempotência em `:108` conta disputas (`:113`), não perguntas. `app/ponto/tests/test_selfie_ausente_juiz.py:130` usa AST para impedir `_eh_apk` próprio nas APIs; `:142` sela papel de cron/delegação. Não sela envelope BATIDA da chamada. `app/chamados/tests/test_a2_data_evento_batida.py:21` monta envelope correto `ultima_batida`, e `:53` testa sem envelope nascer conversa. **INFERIU:** selos podem estar verdes e ainda permitir o defeito do retro, pois verificam condições distintas; execução [nao verificado].
-
-Script executado (consulta, sem gravar):
-
-```python
-import ast
-from pathlib import Path
-
-for p in sorted(Path(".").rglob("*.py")):
-    if any(x in p.parts for x in (".git", "__pycache__", "tests", "migrations")):
-        continue
-    try:
-        tree = ast.parse(p.read_text())
-    except (SyntaxError, UnicodeError):
-        continue
-    aliases = {"criar_ou_atualizar_disputa"}
-    for node in ast.walk(tree):
-        if isinstance(node, ast.ImportFrom):
-            for imported in node.names:
-                if imported.name == "criar_ou_atualizar_disputa":
-                    aliases.add(imported.asname or imported.name)
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.Call):
-            continue
-        fn = node.func
-        match = (
-            isinstance(fn, ast.Name) and fn.id in aliases
-        ) or (
-            isinstance(fn, ast.Attribute)
-            and fn.attr == "criar_ou_atualizar_disputa"
-        )
-        if match:
-            print(f"{p}:{node.lineno} {ast.unparse(node)}")
-```
-
-Saída: exatamente as cinco chamadas da tabela. Limite: AST encontra nomes/atributos e aliases de import direto; despacho dinâmico, atribuição de alias e prova interprocedural [nao verificado].
-
-_4764 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4767 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
