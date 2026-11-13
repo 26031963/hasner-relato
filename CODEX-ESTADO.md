@@ -1,7 +1,196 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 15:47** · publicado em **13/11/2026 15:51** (UTC-3)
+> Ultima resposta processada: **13/11/2026 15:53** · publicado em **13/11/2026 15:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 15:53 · sessao 475ff71b94a6 · CONTRATOS-ENTRADA · censo · origem=Code
+
+**O exemplo confere:** o retro grava `foto_ausente.batida_id`; os leitores citados procuram `ultima_batida.id` (`app/ponto/management/commands/marcar_foto_ausente_retro.py:98`, `app/chamados/services/disputa_emissao.py:387`, `app/chamados/models.py:3464`).
+
+**Não fechei o censo total solicitado.** Abaixo estão 23 costuras com desencontro nominal identificado, mais os escritores, leitores e contratos adicionais rastreados. A enumeração completa de todos os pares do módulo e sua contagem global permanecem **[nao verificado]**.
+
+Método executado: busca dos JSONFields, construções e mutações de dicionários, parâmetros `**kwargs`, chamadas de portas, retornos compartilhados, eventos, auditoria, outbox, renderizações e consumidores Python/JS/templates; análise AST somente em memória e leitura dos corpos encontrados. Execução desse procedimento, ausência de alterações em arquivos e ausência de execução de testes: **[nao verificado]**. Os pontos de partida persistidos estão em `app/chamados/models.py:47`, `:1742`, `:1746`, `:2444` e `:3408`.
+
+O método não comprova os conteúdos históricos, os caminhos efetivamente executados, reflexão ou todas as chaves calculadas. Há portas que recebem estruturas abertas: `app/chamados/services/contexto.py:62`, `:82`, `:131`, `app/chamados/services/disputa_emissao.py:548` e `app/chamados/models.py:3944`. Incidência e impacto em produção: **[nao verificado]**.
+
+Nas tabelas, caminhos sem `app/` ou `bin/` são relativos a `app/chamados/`. `N*` significa **selo específico do par não localizado [nao verificado]**, e não prova de inexistência. “Classe sim” identifica repetição pelo formato/caminho do código; erro de negócio e incidência real continuam **[nao verificado]**. O dono provável ESTRUTURA decorre dessa natureza do desencontro; a separação dos donos está em `CLAUDE.md:179`.
+
+| # / estrutura | Emissor arquivo:linha | Chaves gravadas | Consumidor arquivo:linha | Chaves lidas, inclusive defaults | DESENCONTRO | Selo que prende | Dono provável / é classe |
+|---|---|---|---|---|---|---|---|
+| D01 — contexto da disputa / foto retro | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`; entrada pela porta `services/disputa_emissao.py:666` | `foto_ausente.{batida_id,batida_em,tipo_batida,_por}` | `services/disputa_emissao.py:372`, `:387` | `[motivo].data=None`; `ultima_batida.id=None`, com intermediários `{}` | A identidade gravada sob `foto_ausente` não é procurada nessas leituras | N*. O contexto canônico é exercitado em `tests/test_a2_data_evento_batida.py:22`; o retro específico, [nao verificado] | ESTRUTURA / sim |
+| D02 — mesma estrutura | Mesmo emissor de D01 | Mesmas | `models.py:3464` | `ultima_batida.id=None`, intermediário `{}` | Mesmo desencontro de identidade | N* | ESTRUTURA / sim |
+| D03 — mesma estrutura | Mesmo emissor de D01 | Mesmas | `app/api/foto_recebida.py:67` | `ultima_batida.id=None`, intermediário `{}` | A chave do retro não é procurada pelo consumidor do recebimento da foto | N* | ESTRUTURA / sim |
+| D04 — dia do chamado humano | `services/abertura.py:183`, `:191`; chave resolvida em `catalogo/modulos.py:315` | Chave catalogada; para `ausencia_colab`, `data`, declarada em `catalogo/modulos.py:120` | `juizes.py:187`, `:197`, `:226` | `data_turno=None`, `batida_id=None`; depois contexto fraco | O lote não consulta a chave catalogada que o singular consulta em `juizes.py:114` | N*. `tests/test_form_catalogo.py:76` prende módulo/data, não essa paridade | ESTRUTURA / sim |
+| D05 — dia da adesão | `services/adesao.py:79` | `adesao,data_inicio,periodo` | `juizes.py:187`, `:197`, `:226` | Mesmas de D04 | `data_inicio` não participa da leitura do lote | N* | ESTRUTURA / sim |
+| D06 — referência da ausência humana | `services/abertura.py:183`, `:191` | Metadados da abertura e `data`; não fornece `ausencia_id` | `views.py:1512` | `ausencia_id=None` | O leitor pede a referência ausente nessa forma de emissão; sem ID, segue a lista geral em `views.py:1517` | N* | ESTRUTURA / sim |
+| D07 — mesma referência | Mesmo emissor de D06 | Mesmas | `juizes.py:2331` | `ausencia_id=None` | Referência ausente nessa forma humana | N* | ESTRUTURA / sim |
+| D08 — anexo da ausência humana | Mesmo emissor de D06 | Mesmas; não fornece `tem_documento` | `app/templates/chamados/partials/_card_atendimento.html:65`, `:70` | `tem_documento`, `ausencia_id` | O cartão oferece o anexo usando o ID que essa forma de emissão não fornece | N* | ESTRUTURA / sim |
+| D09 — marco emitido pelo C2 | `reconciliador.py:708`; formato em `app/ponto/services/lastro.py:134` | `marcos_faltantes[].{hora,tipo,motivo='lampada_apagada'}` | `juizes.py:551`, `:576` | `motivo=None,hora=None,tipo=None`; qualquer motivo preenchido impede alternativa por tipo | Mesmo nome com dois significados: etiqueta da lâmpada e motivo da pergunta | N*. Escritor: `tests/test_emissor_nomeia_o_marco.py:54`; leitor: `tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py:33` | ESTRUTURA / sim |
+| D10 — marco reconstruído pelo comando | `management/commands/nomear_marco_por_lampada.py:109`; formato confirmado em `tests/test_emissor_nomeia_o_marco.py:159` | Mesmo formato de D09 | `juizes.py:551`, `:576` | Mesmas de D09 | Mesma colisão semântica, por outro emissor | N* | ESTRUTURA / sim |
+| D11 — WebPush | `push_utils.py:28` | `title,body,url,requireInteraction=True` | `app/static/sw.js:89`, `:97`, `:102` | `title || 'Hasner Ponto'`; `body || 'Nova notificação'`; `urgente || false`; clique abre `/` | Emite `requireInteraction`, lê `urgente`; `url` não governa o clique | N*. `tests/test_push_fcm.py:106` confere chamada de envio | ESTRUTURA / sim |
+| D12 — ticket formatado GLPI | `glpi_client.py:138` | `id,titulo,status_code,status_label,status_css,categoria,criado_em,atualizado_em`; `descricao` no detalhado | `app/templates/chamados/partials/tabela_chamados.html:19` | `id,assunto` com alternativa `titulo`; `colaborador_nome` com padrão `—`; `urgencia`; status/data | `urgencia` não é emitida; a apresentação termina no ramo “Normal”. Outras ausências têm alternativas explícitas | N* | ESTRUTURA / sim |
+| D13 — followup GLPI | `glpi_client.py:209`; transporte em `views.py:246`, `:262` | `id,data,conteudo` | `app/templates/chamados/detalhe.html:80` | `autor_tipo,autor_user,criado_em,conteudo` | Grava `data`, lê `criado_em`; autor/tipo pedidos não são emitidos pelo formatador | N* | ESTRUTURA / sim |
+| D14 — resposta desarquivar | `views_arquivar.py:62`, `:71`, `:89` | Recusa de área: `ok,erro`; outra recusa: `ok,erros`; sucesso: `ok` | `app/templates/chamados/partials/_lista_chamados.html:85`, `:134` | `ok`; `erros || ['Falha ao arquivar.']` | A recusa de área escreve singular `erro`; leitor procura plural `erros` | N*. `tests/test_f3_arquivar_porta.py:64` prende sucesso/trilha | ESTRUTURA / sim |
+| D15 — contexto parcial do modal | `services/fio.py:461` | Núcleo do modal e `pode_conferir_data`; não fornece os contadores nem `cor_disputas_map` | `app/templates/chamados/partials/modal_fio.html:14`, `:76` | `contador_ativos,contador_msgs_mes,contador_disputas_abertas,cor_disputas_map` | O mesmo template pede campos fornecidos apenas pelo construtor completo, em `views.py:945` | N*. O GET é exercitado em `tests/test_paridade_fio_modal_f8.py:62` | ESTRUTURA / sim |
+| D16 — contexto completo do modal | `views.py:927` | Núcleo, contadores e mapa de cores; omite `pode_conferir_data` | `app/templates/chamados/partials/modal_fio.html:172` | `pode_conferir_data` | O parcial fornece essa chave em `services/fio.py:474`; o completo a omite | N* | ESTRUTURA / sim |
+| D17 — resultado do lote JSON | `views_cobrar.py:265` | `ok,validadas,recusados,nao_gravados` | `app/templates/core/_copiloto.html:252` | `validadas`; `recusados && recusados.length` | Esse consumidor omite `nao_gravados` e escolhe “Todos entraram” quando `recusados` está vazio. A chave tem outro leitor em `app/templates/chamados/partials/_lote_preview.html:9` | N* | ESTRUTURA / sim |
+| D18 — diagnóstico de reuso | `services/fio.py:1114` | `fonte,n,esperado,motivo,pks,universo,universo_rotulo` | `management/commands/backfill_decisoes_pergunta.py:553` | Todas as listadas, exceto `fonte` | `fonte` sem leitor nominal de produção localizado nesse retorno; ausência global [nao verificado] | N*. Contador exercitado em `tests/test_e1_v15d_um_ponto_de_escrita.py:320` | ESTRUTURA / sim, literal |
+| D19 — diagnóstico sem dia | `services/fio.py:1181` | Mesmas sete de D18 | `management/commands/backfill_decisoes_pergunta.py:559` | Todas, exceto `fonte` | Mesmo desencontro nominal | N*. Contador: `tests/test_e1_v15e_contrato_de_saida.py:293` | ESTRUTURA / sim, literal |
+| D20 — diagnóstico de destino alheio | `services/fio.py:1206` | Mesmas sete de D18 | `management/commands/backfill_decisoes_pergunta.py:565` | Todas, exceto `fonte` | Mesmo desencontro nominal | N* | ESTRUTURA / sim, literal |
+| D21 — diagnóstico de batida retratada | `services/fio.py:1902` | `fonte,n,esperado,motivo,pks` | `management/commands/backfill_decisoes_pergunta.py:545` | Todas, exceto `fonte` | Mesmo desencontro nominal | N*. Contador: `tests/test_e1_v15b.py:165` | ESTRUTURA / sim, literal |
+| D22 — resultado da retratação | `services/fio.py:1342`, `:1343` | `retratadas,merito_recusado,episodios_unidos,sem_episodio_intocada,canonica_sem_episodio` | `management/commands/backfill_decisoes_pergunta.py:331` | `retratadas` | Quatro metadados sem leitura nominal localizada desse retorno; ausência global [nao verificado] | N* | ESTRUTURA / sim, literal |
+| D23 — resultado do consumidor outbox | `reconciliador.py:1340` | `eventos,colabs,rejuntados,perguntas,retratados,premissa,orfas,lastro,disputas_barradas,adiados,falhas` | `management/commands/consumir_eventos_celula.py:31` | Todas, exceto `rejuntados,perguntas,lastro` | Três contadores emitidos sem leitura nominal localizada no consumidor de produção | N* | ESTRUTURA / sim, literal |
+
+As ausências de D06–D08 distinguem dois formatos: a abertura humana acima e o emissor especializado, que fornece `ausencia_id,data,tipo,tem_documento` em `app/ponto/services/ausencia.py:672`. A equivalência de negócio entre essas formas é **[nao verificado]**.
+
+O inventário dos escritores de `contexto_json` encontrado na cópia é o seguinte; as gravações genéricas efetivas estão em `services/contexto.py:76`, `:102`, `:125`, `:161`, além do nascimento pelas portas de `models.py:834` e `:1055`.
+
+| Emissor | Chaves construídas/alteradas |
+|---|---|
+| `services/abertura.py:58` | `sistema,nome,empresa,posto,pendente_glpi=True` |
+| `services/abertura.py:116` | `pendente_glpi=False` |
+| `services/abertura.py:183` | `sistema,nome,empresa,posto,aberto_por_user_id,aberto_por,pendente_glpi`; chave catalogada de data em `:191` |
+| `services/adesao.py:79`, `:113` | `adesao,data_inicio,periodo`; depois `agrupado_em` |
+| `reconciliador.py:691`, `:708`, `:709`, `:921` | `data_turno,origem`; condicionalmente `marcos_faltantes,_marco_por` |
+| `services/disputa_emissao.py:580`, `:586`, `:630`, `:666` | Contexto arbitrário do nascimento/reuso; variante de declaração fornece `origem` |
+| `services/disputa_emissao.py:1116`, `:1122` | `chamados_orfaos_ids` |
+| `services/disputa_emissao.py:1351`, `:1357` | `origem,chamado_limbo_id`; reuso acrescenta `chamados_limbo_ids` |
+| `services/limbo_folgas.py:68` | `sugestao.{classe,dias,ndias,semanas}` |
+| `services/limbo_folgas.py:276` | `agrupado_em,defeito_cadastro` |
+| `services/declaracao_texto.py:208` | `escape_colab,escape_colab_em` |
+| `management/commands/nomear_marco_por_lampada.py:109` | `marcos_faltantes,_marco_por` |
+| `management/commands/carimbar_por_batida_coincidente.py:98` | `batida_id,data_turno,_dia_por` |
+| `management/commands/smoke_chamados.py:97`, `:102` | `{motivo:{data}}` quando o template exige data; senão `{}` |
+| `services/nota.py:110`, `:123` → `services/contexto.py:131` | `contexto_novo` arbitrário; listas unem, escalares existentes permanecem |
+| `app/colaboradores/views.py:2376` | `agenda_dia_ids` |
+| `app/colaboradores/services/vinculo.py:419` | `snapshot_ecs,ec_nova,template_id,template_nome,data_inicio` |
+| `app/colaboradores/services/desligamento.py:182` | `data_demissao,motivo_informado,executado_por_username,executado_por_id,executado_em` |
+| `app/ponto/utils.py:120` | `agendamento_pk,data_inicio,data_fim` |
+| `app/ponto/views.py:280`, `:288`, `:301` | `pendentes,total` |
+| `app/escala/regua_defesa.py:72` | `tipo_escala_id,tipo_escala_codigo,causa,data_exemplo` |
+| `app/api/views.py:714`, `app/api/views_core.py:708` | Contexto do detector acrescido de `batida_id,data_turno` |
+| `app/api/views.py:1978`, `:3120` | `data_turno`; atualização `tem_documento=True` |
+| `app/ponto/services/justificativa.py:301` | `data_turno,tipo,motivo_rejeicao,rejeitado_por` |
+| `app/ponto/services/cluster_espurio.py:211` | `data_turno,orfas,n_missing` |
+| `app/ponto/services/geofence.py:375` | `ocorrencias,alerta_geofence_id,batida_id,tipo_alerta,distancia_metros,raio_metros,posto_nome,posto_endereco,posto_lat,posto_lon,batida_lat,batida_lon,tipo_batida` |
+| `app/ponto/services/ausencia.py:672` | `ausencia_id,data,tipo,tem_documento` |
+| `app/ponto/services/triagem_batida.py:117`, `:347`, `:353`, `:470` | Variantes de `motivo,situacao,posto,tipo_batida,hora_tentativa,motivo_anuencia,foto_b64,foto_nome,hora_prevista,diferenca_minutos,escala` |
+| `app/ponto/management/commands/detectar_par_relampago.py:383` | `data_turno,par,duracao_min` |
+| `app/ponto/management/commands/processar_alertas_avancados.py:126` | `data_turno,entrada_timestamp` |
+| `app/ponto/management/commands/reconciliar_grade.py:473`, `:516` | `data_turno,origem,marcos_faltantes`; atualização `orfa_regeneracao_curada`; retirada de `orfa_regeneracao` em `:454`, `:474` |
+| `app/ponto/management/commands/detectar_ausencias.py:224`, `:294`, `:532`, `:538`, `:559`, `:706` | Variantes de identificação de escala/ciclo, `data_inicio,causa,colabs_mesmo_template,dias_sem_grade,data_turno,horario_previsto,atraso_min,marcos_faltantes,_marco_por` |
+| `app/ponto/management/commands/processar_alertas_turno.py:348` | `data_turno,entrada_timestamp,posto` |
+| `app/ponto/management/commands/gerar_celulas.py:264` | `orfa_regeneracao.{em,marcos_na_emissao}` |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:64`, `:138`, `:163`, `:179`, `:195` | `orfao_detectado,escalado_n2_1h,escalado_n3_4h,escalado_n4_comercial,escalado_n5_24h` |
+| `app/ponto/management/commands/curar_residuo_bug115.py:124` | `marcos_candidatos,_marco_por`; demais companheiras [nao verificado] |
+| `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:156` | `_ctx`; formato completo [nao verificado] |
+
+Os leitores nominais desse JSON encontrados estão abaixo. Este é um inventário de leitores, **não a expansão completa de cada escritor × leitor em costuras**; essa expansão permanece **[nao verificado]**.
+
+| Consumidor | Chaves lidas/defaults |
+|---|---|
+| `catalogo/modulos.py:225` | Chave dinâmica `m['chave_data']`, `.get(...)=None` |
+| `juizes.py:114`, `:118`, `:129`, `:159`, `:187`, `:197`, `:226` | Chave catalogada no singular; `data_turno=None,batida_id=None,ultima_batida.timestamp=None,entrada_timestamp=None`; lote conforme D04 |
+| `juizes.py:549`, `:551`, `:576`, `:579` | `marcos_faltantes or []`; itens `motivo=None,hora=None,tipo=None` |
+| `juizes.py:1723`, `:1747`, `:2163`, `:2331` | `agrupado_em=None,entrada_timestamp=None,ausencia_id=None` |
+| `models.py:816`, `:924`, `:931`, `:955`, `:1068`, `:1235`, `:1435` | `agrupado_em=None`; contexto de `defaults or {}`; `marcos_faltantes=None`; filtros `contexto_json__*`; contexto integral para dia/célula; `entrada_timestamp=None` |
+| `reconciliador.py:146`, `:198`, `:243`, `:836`, `:1589` | `entrada_timestamp=None,par=None,chamados_orfaos_ids=None`; filtros `data_turno` |
+| `data_evento.py:27` | `data_turno=None,data_batida=None,entrada_timestamp=None,pendentes=None,horario_previsto=None` |
+| `services/disputa_emissao.py:57`, `:68`, `:145`, `:733`, `:930`, `:1074`, `:1143`, `:1170`, `:1232` | Cópia integral por `items`; `entrada_sem_saida.{entrada_id,entrada_aberta_em}`; `ultima_batida.id`; `entrada_timestamp`; marcos e data catalogada |
+| `services/acoes_chamado.py:30`, `:57`, `:96`, `:144`, `:185`, `:247`, `:267`, `:371`, `:403` | `tipo_batida='E',hora_tentativa='',motivo_anuencia='',foto_b64=None,foto_nome='selfie.jpg',agenda_dia_ids=[]`; `snapshot_ecs or []`; campos geo; `batida_id=None,ocorrencias or []` |
+| `services/limbo_folgas.py:64`, `:82`, `:193`, `:253` | `tipo_escala_id=None,sugestao or {},sugestao.dias or [],sugestao.classe=None,agrupado_em=None` |
+| `services/adesao.py:111` | `agrupado_em=None` |
+| `services/declaracao_texto.py:205` | `escape_colab=None` |
+| `services/abertura.py:168` | Filtro `aberto_por_user_id` |
+| `services/contexto.py:70`, `:97`, `:118`, `:144` | Chaves dinâmicas: `.get(k)=None`, pertencimento e listas |
+| `services/feriado_reavaliar.py:78` | Filtro `data_turno__in` |
+| `services/pergunta_no_app.py:114`, `services/cobranca_folha.py:32`, `rejuncao.py:83` | Data catalogada |
+| `services/materializacao.py:135` | Estrutura entregue a `data_evento_do_contexto` |
+| `services/celula_carimbada.py:45`, `:149` | Campo completo entregue ao juiz do dia |
+| `views.py:441`, `:1512` | `tipo_escala_id=None,ausencia_id=None` |
+| `signals.py:361` | Filtro `chamados_orfaos_ids__contains` |
+| `management/commands/nomear_marco_por_lampada.py:50`, `:65`, `:70` | `marcos_faltantes or [],horario_previsto=None,origem=None` |
+| `management/commands/auditar_invariantes_chamados.py:73`, `:93`, `:104`, `:617`, `:686`, `:1016` | Filtros de `data_turno`; `entrada_timestamp=None`; chave catalogada |
+| `app/templates/chamados/partials/painel_chamado_turno.html:35` | **Todas as chaves/valores**, por `items` |
+| `app/templates/chamados/partials/modal_fio.html:481`, `:529`, `:544`, `:561`, `:588` | Coordenadas, distância, raio padrão `200`, distância padrão `0`, textos padrão `''`; `batida_id=''`; `sugestao.classe`; `classe,evidencia,destino.{codigo,n_colabs}`; anuência/tipo/hora |
+| `app/templates/chamados/partials/_relatorio_geo.html:18` | Tipo padrão `'-'`, alerta, distância, raio/posto padrão `'-'`, endereço e coordenadas |
+| `app/templates/chamados/detalhe_local.html:227`, `:245` | `tem_documento,motivo_anuencia,tipo_batida,hora_tentativa`; últimos dois padrão `'—'` |
+| `app/templates/chamados/partials/_card_atendimento.html:65`, `:232` | `tem_documento,ausencia_id,data_turno` |
+| `app/escala/utils.py:1062`, `:1066` | `agrupado_em=None,marcos_faltantes or []`; itens `tipo=None,hora=None` |
+| `app/colaboradores/services/calendario.py:438`, `:448` | Filtros `data_turno`, presença de `agrupado_em`; `.get('agrupado_em')=None` |
+| `app/colaboradores/services/pos_vinculo.py:38` | `periodo or []`, usado como intervalo quando tem dois itens |
+| `app/escala/services/regeneracao.py:149`, `:196` | `marcos_faltantes=None`; item `hora=None` |
+| `app/ponto/services/lastro.py:75` | `marcos_faltantes or []`; itens `hora=None,tipo=None` |
+| `app/ponto/services/entrada_sincronizada.py:51`, `:55` | Filtro e leitura `chamados_orfaos_ids=None` |
+| `app/ponto/services/cartorio.py:136`, `app/ponto/services/cobertura.py:230`, `app/ponto/management/commands/supra_juiz.py:200`, `app/ponto/management/commands/mapa_divergencia.py:293` | Data catalogada |
+| `app/ponto/worklist.py:54`, `app/ponto/management/commands/reconciliar_fantasmas.py:183` | `pendentes=None` |
+| `app/ponto/management/commands/reconciliar_grade.py:376`, `:445`, `:465` | `orfao_14h.{data,entradas_pendentes[].data}`; `pendentes`; `orfa_regeneracao`; `marcos_faltantes[].hora`, todos opcionais |
+| `app/ponto/management/commands/escalonar_chamados_supervisao.py:63`, `:112`, `:147`, `:172`, `:188` | Os cinco carimbos de escalada, `.get(...)=None` |
+| `app/ponto/management/commands/curar_residuo_bug115.py:76`, `:83`, `:86`, `:121` | `marcos_faltantes or [],horario_previsto=None,origem=None,marcos_candidatos=None` |
+| `app/ponto/management/commands/
+
+[truncado em 20000 de 41581 caracteres]
+
+## 13/11 15:51 · sessao 331cef45869d · CONTRATOS-ENTRADA · censo · origem=Code
+
+O desencontro mais direto confirmado em escala é este: `aplicar()` devolve `{decisao_id, saida}`, mas o fio lê `ok` com default `True` e `msg`; o roteamento resolve o escritor diretamente, sem adaptar o retorno (`app/escala/services/propositor.py:788`; `app/chamados/services/proposta_no_fio.py:151-153`; `app/core/intake.py:49-52,481-487`).
+
+**Não fecho este levantamento como o censo exaustivo pedido.** A busca encontrou outras estruturas e consumidores, mas não demonstrou **todos os escritores, todos os leitores e todos os selos de cada estrutura**; publicar um total global como fechado seria `[nao verificado]`.
+
+Método utilizado: busca dos `JSONField`, atribuições e construtores de dict; rastreamento de chamadas, imports, subscritos, `.get`, serializações, templates e testes, com AST analisada em memória. Não executei testes, banco ou logs. A resolução geral de aliases, chamadas dinâmicas, repasses transitivos e consumidores de APIs não ficou fechada `[nao verificado]`. [nao verificado]
+
+Nos quadros, **“não localizado” não significa inexistente** `[nao verificado]`. Dono **ESTRUTURA provável** é uma inferência sobre o protocolo; a classificação de qualquer ocorrência de produção pelo juiz L-099 permanece `[nao verificado]` (`app/ponto/management/commands/e6_oraculo.py:43`; `CLAUDE.md:179`).
+
+| Estrutura | Emissor arquivo:linha | Chaves gravadas | Consumidor arquivo:linha | Chaves lidas | DESENCONTRO | Selo que prende | Dono L-099 provável | É classe |
+|---|---|---|---|---|---|---|---|---|
+| Resultado de aplicar proposta | `app/escala/services/propositor.py:788` | `decisao_id, saida` | `app/chamados/services/proposta_no_fio.py:151-153` | `ok→True`, `msg→None` | `ok/msg` não são emitidos por esse escritor; ausência de `ok` é aceita como sucesso | Não localizado `[nao verificado]`; os testes de fio usam proposta substituída em `app/chamados/tests/test_proposta_no_fio.py:131-146` | ESTRUTURA provável `[nao verificado]` | **Sim** |
+| Mesmo resultado | `app/escala/services/propositor.py:788` | `decisao_id, saida` | `app/escala/management/commands/propostas_de_escala.py:68-72` | `saida, decisao_id` | Nenhum demonstrado nesse par | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Opções da correção retroativa | `app/escala/services/propositor.py:765-771` | `colab,vinculo,template,desde,ate,ancora,novo_trecho,regenerar_desde,apesar_da_lavra,apply,schema` | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:63-66,81-86,109-110,158,172,192-194,225,233` | As mesmas, exceto `schema` | `_rodar` não lê `schema`; quem o lê é `handle`, entrada evitada pelo emissor (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:48-51`; `app/escala/services/propositor.py:760-764`) | Parcial: aplicação real e decisão em `app/escala/tests/test_porta_da_proposta.py:148-166`; descarte de `schema` não preso `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, chave sem leitura nessa entrada |
+| Payload do wizard | `app/escala/views_wizard.py:20-59` | Nome, apelido, horários, duas pausas, duração, flags, extras HE, calendário, folgas, dias da semana; criação acrescenta ciclo/base/referência; HPD condicional | `app/escala/services/cadastro_tipo.py:148-267` | Campos emitidos; presença de `descricao` em `:185`; HPD por `.get` em `:217` | Wizard não emite `descricao`; HPD pode faltar. São omissões opcionais, sem dano demonstrado | **Sim, parcial**: POST→service→modelo em `app/escala/tests/test_wizard_views.py:28-67`; duração/HPD em `app/escala/tests/test_wizard_intervalo.py:76-89` | ESTRUTURA provável `[nao verificado]` | **Sim**, pelo critério literal de chave opcional |
+| Ajustes de template | `app/escala/services/escala_auto_executor.py:65-84` | A7: `_delta_blocos` e horários; A4: pausa/duração; FOLGA: `folga_dia_semana` | `app/escala/services/cadastro_tipo.py:443-445` | `_delta_blocos→0`; demais itens integralmente | A4/FOLGA omitem `_delta_blocos`; default explícito | **Sim**: executor→derivação em `app/escala/tests/test_escala_auto_executor.py:66-84` | ESTRUTURA provável `[nao verificado]` | **Sim**, opcional |
+| Proposta automática A4 | `app/escala/services/escala_auto.py:92-93,115,183-192` | Envelope da proposta; `valores.{hii,hfi}` | `app/escala/services/escala_auto_executor.py:67-84,97,109` | Envelope; A4 lê `hii` e calcula o fim com duração | `valores.hfi` emitido não é consumido pelo executor | Caminho executor em `app/escala/tests/test_escala_auto_executor.py:66-84`; descarte específico de `hfi` não preso `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, no par |
+| Resultado do executor | `app/escala/services/escala_auto_executor.py:114` | `ec_antigo,ec_novo,template_derivado,inicio,celulas,historico` | `app/escala/management/commands/ajustar_escalas_auto.py:97-99` | Todas, exceto `ec_antigo` | `ec_antigo` sem leitura nesse consumidor; outro leitor não localizado `[nao verificado]` | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| Resultado de desfazer | `app/escala/services/escala_auto_executor.py:152` | `volta,celulas,historico` | `app/escala/management/commands/ajustar_escalas_auto.py:42` | `volta,celulas` | `historico` sem leitura nesse consumidor; outro leitor não localizado `[nao verificado]` | Não localizado `[nao verificado]`; teste isolado em `app/escala/tests/test_escala_auto_executor.py:86` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| Linha de pauta da proposta | `app/escala/services/propositor.py:644-650` | `chave,n,frase,url` | `app/pautas/semanal.py:146,163-168` | `alavanca→n→0`, `frase→''`, `chave,n,url` | Não emite `alavanca`; consumidor usa `n` | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, opcional |
+| Linha de pauta da fase | `app/escala/services/fase_12x36.py:229-234,267-280` | `chave,n,frase,url` | `app/pautas/semanal.py:146,163-168` | `alavanca→n→0`, `frase→''`, `chave,n,url` | Mesma omissão opcional de `alavanca` | Pauta pela lavra em `app/escala/tests/test_o261_v_fase_na_lista.py:254`; chave exata não presa `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, opcional |
+| Partes do nome canônico | `app/escala/models.py:486-522` | `tipo,apelido,dias,horario,ciclico` | `app/core/templatetags/hasner_filters.py:72-123,207-217` | `tipo,apelido,dias,horario`; segundo leitor usa defaults `''` | `ciclico` sem leitor de produção localizado `[nao verificado]` | Produtor em `app/escala/tests/test_nome_canonico.py:77-95`; uso de `ciclico` no consumidor não preso `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| Mesmas partes | `app/escala/models.py:486-522` | As mesmas cinco chaves | `app/colaboradores/services/ficha.py:70-71,82-90` | `tipo,apelido,dias,horario`, defaults `''` | Mesmo campo sem leitor nominal localizado `[nao verificado]` | Cabeçalho em `app/colaboradores/tests/test_ficha_cabecalho_compacto.py:28-40`; não prende `ciclico` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| Rótulo da régua | `app/escala/regua_defesa.py:632` | `classe,faixa,escore,texto` | `app/escala/services/furos_diarios.py:36,305-309` | Existência e `classe`, inclusive default `''` | `faixa/escore/texto` sem consumo de produção localizado `[nao verificado]` | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| Mesmo rótulo | `app/escala/regua_defesa.py:632` | As mesmas quatro chaves | `app/chamados/juizes.py:514-516` | Apenas existência/`None` | Mesmo restante sem leitura nominal localizada `[nao verificado]` | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| POST de realocação | `app/escala/regua_defesa.py:313` | `template_id,data_inicio,modo` | `app/colaboradores/services/vinculo.py:52-59,146` | As três; `data_ancora→None`, `confirm_txt→''` | Emissor omite os dois campos opcionais | Não localizado para esse emissor `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, opcional |
+| Contexto de calendário — lista | `app/escala/views.py:294-310` | Itens `cal,tamanhos,semana_dia_rotulo,colabs,n_colabs`; tamanho `tamanho,dias,canonico` | `app/templates/escala/folga_calendarios_lista.html:12-38` | Campos do item; dos tamanhos, somente `canonico` | `tamanhos.tamanho/dias` sem leitor desse contexto localizado `[nao verificado]` | Contexto em `app/escala/tests/test_editor_folga_modo.py:66-71`; uso HTML dessas chaves não preso `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| Contexto do editor de calendário | `app/escala/views.py:363-371` | `cal,tamanhos,tipos,modo,celulas`; tamanho `tamanho,rotulo,dias_range,marcados` | `app/templates/escala/folga_calendario_editar.html:6-21,67-68` | Todas, exceto `tipos` e `tamanhos.dias_range` | Duas chaves sem leitura nesse template; outro leitor não localizado `[nao verificado]` | Contexto em `app/escala/tests/test_editor_folga_modo.py:58-64`; órfãs não presas `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, nominal |
+| JSON de aplicação do plano | `app/escala/views_plano_folgas.py:158,171-190` | Erro inicial `{erro}`; sucesso `ok,gravadas,erros,celulas_relavradas,barrados`; erro de item `ec,dia,erro` | `app/templates/escala/plano_folgas.html:174-185` | `ok`; `erro||'erro'`; `erros||[]`; itens `ec,dia,erro` | Erro inicial omite `ok`; ausência significa falso. JS não lê `gravadas/celulas_relavradas/barrados` | API em `app/escala/tests/test_bug136_plano_em_lote_relavra.py:75-81`; JS não executado pelo selo `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | **Sim**, opcional e nominal |
+
+Os JSONs persistidos abaixo tiveram escritores e leitores localizados, mas esse quadro **também não certifica a relação completa de consumidores indiretos** `[nao verificado]`.
+
+| Estrutura | Emissor arquivo:linha | Chaves gravadas | Consumidor arquivo:linha | Chaves lidas | DESENCONTRO | Selo que prende | Dono L-099 provável | É classe |
+|---|---|---|---|---|---|---|---|---|
+| `horarios_por_dia` | `app/escala/services/cadastro_tipo.py:265-267` | Dict recebido integralmente; inválido vira `{}` | `app/escala/models.py:224-239,326-342,462-471,667-695,862-866` | Weekday; `hi/hf/hii/hfi`; defaults `None`, `''` ou escalares conforme função | Nenhum demonstrado para as chaves canônicas; extras arbitrários `[nao verificado]` | Persistência em `app/escala/tests/test_cadastro_tipo_service.py:47-56`; leitores em `app/escala/tests/test_horarios_por_dia.py:37-93` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Mesmo HPD | Mesmo escritor `app/escala/services/cadastro_tipo.py:265-267` | Dict integral | `app/escala/utils.py:274-283,735-741` | `hi/hf/hii/hfi→None`; presença do mapa | Nenhum demonstrado | Leitor em `app/escala/tests/test_marcos_def_hpd.py:27-45`; travessia específica do escritor não fechada `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Mesmo HPD | Mesmo escritor `app/escala/services/cadastro_tipo.py:265-267` | Dict integral | `app/escala/views_wizard.py:80` | Serialização integral, default `{}` | Nenhum demonstrado | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Mesmo HPD | Mesmo escritor `app/escala/services/cadastro_tipo.py:265-267` | Dict integral | `app/colaboradores/services/drawer.py:99-100` | Verdade/falsidade do JSON | Nenhum demonstrado | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Mesmo HPD | Mesmo escritor `app/escala/services/cadastro_tipo.py:265-267` | Dict integral | `app/ponto/selecao_periodo.py:223-229` | Weekday string; `hi/hf`; erro vira `False` | Leitor aceita chave string; `_override_do_dia` também admite inteiro. Efeito após persistência JSON `[nao verificado]` (`app/escala/models.py:231`) | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | `[nao verificado]` |
+| `FolgaCalendario.celulas` | **Dois escritores:** `app/escala/folgas.py:584-591,654-656` | Lista de pares `[semana,weekday]`, ou `[]` | `app/escala/views.py:371` | Lista integral, default `[]` | Nenhum demonstrado | Escrita e GET em `app/escala/tests/test_editor_folga_modo.py:27-64`; ida e volta única não demonstrada `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| `FolgaCalendarioTamanho.dias` | **Dois escritores:** `app/escala/folgas.py:593-595,658-661` | Lista de dias por tamanho | `app/escala/models.py:1560,1579` | Lista integral | Nenhum demonstrado | Getter em `app/escala/tests/test_folga_models.py:13-23`; ponte específica dos escritores `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Mesmo `dias` | Mesmos escritores `app/escala/folgas.py:593-595,658-661` | Lista de dias | `app/escala/views.py:362` | Lista integral convertida em set | Nenhum demonstrado | Não localizado `[nao verificado]` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| `dias_por_tamanho()` | `app/escala/models.py:1558-1560` | `{tamanho_mes:list(dias)}` | `app/escala/folgas.py:12-15,56` | Chaves `28/30/31`; fevereiro de 29 usa 28; default `[]` | Nenhum demonstrado | **Sim:** produtor→resolvedor em `app/escala/tests/test_folga_models.py:19-23` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+| Ata efêmera | `app/escala/utils.py:1886-1898` | Somente `lampadas,orfas`; omissão de minutos explícita | `app/ponto/juiz_batida.py:157-161,190-194,215-217,230-246`, por `app/ponto/turnos.py:1631-1633` | `lampadas/orfas→[]`; lâmpada `hora,tipo,acesa,luz,tipo_real` | Nenhum demonstrado; consumidor indicado não exige minutos | **Sim:** convergência grade→ata→turno em `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:193-205` | ESTRUTURA provável `[nao verificado]` | Não demonstrada |
+
+Há estruturas gravadas sem par de leitura demonstrado nesta busca; elas **não podem entrar numa contagem de costuras comprovadas**:
+
+| Estrutura gravada | Escritores localizados | Chaves | Leitor / selo |
+|---|---|---|---|
+| `DecisaoProposta.resumo` | `app/escala/services/propositor.py:717-727,773-776` | `tipo,template,template_id,ancora,ancora_atual,template_atual,casa_hoje,casaria,sobra,aplicar_desde,dias_batidos` | Leitor não localizado `[nao verificado]`; finalidade forense declarada em `app/escala/models.py:1927-1930` |
+| Snapshot de calendário vazio | `app/escala/management/commands/lavrar_foto_folgas.py:173-183` | Mês→`vinculos,calendarios,vinculos_ids` | Leitor específico e selo não localizados `[nao verificado]` |
+| Snapshot de sobra da foto | `app/escala/management/commands/lavrar_foto_folgas.py:175-183` | Mês→`vinculos,datas,lista` | Leitor específico e selo não localizados `[nao verificado]` |
+| Fila de cobranças órfãs | `app/escala/services/regeneracao.py:189-196` | `chamado_id,colaborador_id,colaborador,data_turno,emitido_em,dna_reescrito_em,marcos_cobrados` | Consumidor de produção não localizado `[nao verificado]` |
+
+A localização do model não basta para atribuir o emissor a escala: DNA e DNA anterior são atribuídos pela porta em ponto; ata persistida é atribuída nessa porta; o model de escala declara o escritor externo do outbox (`app/ponto/portas/celula.py:261-307,629-642,827-828,917-926,1003,1064,1091`; `app/escala/models.py:1819-1828,1851`). Isso não exclui a ata **efêmera** montada em escala, registrada no quadro anterior (`app/escala/utils.py:1886-1898`).
+
+O exemplo fornecido foi conferido: o retroativo grava `foto_ausente.batida_id`, enquanto os dois leitores indicados procuram `ultima_batida.id`; não o contei como emissor de escala (`app/ponto/management/commands/marcar_foto_ausente_retro.py:98-103`; `app/chamados/services/disputa_emissao.py:372-392`; `app/chamados/models.py:3464`).
+
+**Contagem do módulo escala:** costuras totais **`[nao verificado]`**; com desencontro **`[nao verificado]`**; sem selo **`[nao verificado]`**. Os quadros acima contêm **29 pares explicitados**, mas não cobrem o universo solicitado: permanecem sem consolidação integral as grades produzidas por `leitor_celula`, os mapas de alimentação, os snapshots, os contextos de cadastro e os demais retornos de serviços (`app/escala/services/leitor_celula.py:390-445`; `app/escala/alimentacao.py:73-78,97-102,145-160,329-358`; `app/escala/services/cadastro_realidade.py:970-976`).
 
 ## 13/11 15:47 · sessao f90fd80293fd · - · - · origem=Ronald (tmux)
 
@@ -1181,42 +1370,4 @@ Adicional fora dessa contagem de 13:
 
 Correção à minha contagem anterior: os dois pares `data_turno` das APIs leves devem ser classificados como **semânticas distintas observadas**, não automaticamente defeito, porque o catálogo distingue os módulos e a consequência alcançável não foi verificada. Fontes da diversidade continuam `app/api/views.py:714-716`, `app/api/views_core.py:708-710`, `app/ponto/management/commands/processar_alertas_turno.py:349`. Assim, dos 57 pares anteriores há **4 incompatibilidades de chave demonstradas** (retro→gerador, retro→models, retro→foto_recebida, bloqueio→catálogo), mais duas diferenças semânticas cuja classificação como defeito é [não verificado].
 
-## 13/11 15:26 · sessao e5aa1e28ad97 · - · - · origem=Ronald (tmux)
-
-Ampliação: **7 pares adicionais diretos/fronteiriços de retornos de portas**, mais **2 pares do retorno enriquecido de autorização por período**. Sem chave consumida ausente demonstrada; há campos retornados sem leitor de produção localizado. O inventário negativo desses campos continua limitado à busca estática. [não verificado]
-
-| ID / estrutura | Emissor | Chaves gravadas | Consumidor | Chaves lidas/defaults | DESENCONTRO | Selo que prende | Dono provável | Classe |
-|---|---|---|---|---|---|---|---|---|
-| P41 retorno `decidir_he` | `app/ponto/portas/he.py:178`, `:203` | Ambos `{estado,minutos,criada,trocada,no_op}`; ramo idempotente `criada=False,trocada=False,no_op=True`, ramo gravado `no_op=False` | `app/ponto/views.py:529`, `:536` | Indexação de `no_op,estado`; no ramo alterado, `trocada,minutos`, `:540` | `criada` sem leitor de produção localizado; os consumidores internos de `he.py:242` e `:567` leem somente `no_op`. [não verificado] | **Sim para execução do par**, chamadas reais da view: `app/ponto/tests/test_tela_gestao_he.py:254`, `:264`; não prende a sobra `criada` [não verificado] | ESTRUTURA | sim para campo sem leitor [não verificado] |
-| P42 retorno `recusar_em_lote` | `app/ponto/portas/he.py:234`, `:240`, `:243`, `:245`, retorno `:246` | `{recusados,no_op,erros}`; erros são tuplas `(colab_id,data,msg)` | `app/ponto/views.py:614` | `recusados,no_op,erros` por indexação; erros inteiros até cinco em `:622` | Nenhuma chave usada ausente; nenhum campo excedente localizado | **Sim**: caminho real tela→porta→view, `app/ponto/tests/test_tela_gestao_he_filtros.py:223`; idempotência do retorno da porta, `app/ponto/tests/test_tela_gestao_he.py:382` | ESTRUTURA | não |
-| P43 retorno `autorizar_em_lote` | `app/ponto/portas/he.py:545`, `:565`, `:568`, `:570`, retorno `:571` | `{dias,autorizados,no_op,erros}` | `app/ponto/services/autorizacao_he_periodo.py:277` | `erros` por indexação `:282`; `autorizados` em `:299`; demais preservados para a saída; **reescreve `dias` como total dos itens recebidos**, incluindo os de fora da competência em `:281` | `dias` passa de quantidade dos itens entregues à porta (`he.py:545`) para quantidade de todos os itens do ato (`autorizacao_he_periodo.py:281`): mesmo nome com universos diferentes, transformação explícita | **Sim**: caso cinco dias e retorno, `app/ponto/tests/test_o214_item2_autorizar_periodo.py:177`; borda fora da competência, `:291` | ESTRUTURA | sim, duas definições explícitas |
-| P44 retorno `recusar_ponta_pequena` | `app/ponto/portas/he.py:330`, `:335`, `:344` | Todos `{recusada,ja_decidido,minutos}`; ramo já decidido devolve estado em `ja_decidido`; demais `None` | `app/ponto/management/commands/recusar_ponta_pequena.py:170` | `recusada` em `:179`; `minutos` em `:181` | `ja_decidido` sem leitor de produção localizado [não verificado] | **Sim para campos usados**, comando real: `app/ponto/tests/test_o214_ponta_pequena.py:411`; não prende sobra `ja_decidido` [não verificado] | ESTRUTURA | sim para campo sem leitor [não verificado] |
-| P45 retorno `revogar_recusa_do_sistema` | `app/ponto/portas/he.py:448`, `:451`, `:458`, `:464`, `:467`, `:471`, `:477` | Todos `{revogada,por_que_nao,minutos_na_decisao,minutos}`; sem decisão `minutos_na_decisao=None`; motivo textual nos cinco ramos falsos; motivo `None` nos dois verdadeiros | `app/ponto/management/commands/lavrar_he_pendente.py:59` | Somente `['revogada']` em `:60`; devolve bool ao callback de `apurar` | `por_que_nao,minutos_na_decisao,minutos` sem leitor do **retorno** em produção localizado; os campos homônimos do modelo têm outro fluxo de leitura. [não verificado] | **Sim para `revogada` e fiação**, comando fim a fim: `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:338`; não prende sobras [não verificado] | ESTRUTURA | sim para campos sem leitor [não verificado] |
-| P46 retorno `regenerar_em_exportada` | `app/ponto/portas/regen_exportada.py:221` | `{celulas,vinculos,sem_cobertura,ambiguos,hash_antes,hash_depois,antes,depois,mudou,campos_que_mudaram,regua_antes,regua_depois}` | `app/chamados/services/passivo_validado.py:444` | `.get('mudou')` em `:448`; pauta lê `.get('antes')`, `depois or {}` em `:178`; `campos_que_mudaram or []` em `:180`; `regua_antes,regua_depois` em `:189`; `hash_antes,hash_depois,celulas` em `:207`; preserva inteiro no retorno em `:400` | `vinculos,sem_cobertura,ambiguos` sem interpretação pelos consumidores localizados; dict inteiro segue no relatório, portanto “ninguém lê” absoluto **não demonstrado** | **Sim para hash/pauta**, porta real: `app/chamados/tests/test_o317_passivo_pela_porta.py:223`; números pago/devido `:631` e `:650`; régua antiga `:695` | ESTRUTURA | não demonstrada |
-| P47 mesmo retorno de regeneração, aninhado no relatório | `app/ponto/portas/regen_exportada.py:221`, repasse `app/chamados/services/passivo_validado.py:400` | Mesmo esquema de P46 | `app/chamados/management/commands/materializar_passivo_validado.py:267` | `(c['regen'] or {}).get('hash_depois','-')` em `:271`; `(c['regen'] or {}).get('mudou')` em `:287` | Nenhuma chave consumida ausente | **Não localizado**; os testes do serviço em `test_o317_passivo_pela_porta.py:223` não executam esse comando [não verificado] | ESTRUTURA | não |
-
-A mudança explícita de significado de `dias` em P43 não demonstra resultado errado: o serviço inclui os itens recusados por estarem fora da competência no total do ato e os nomeia em `erros`. É o caso literal de “mesmo nome com dois significados”, documentado pela atribuição e pelo teste de borda. `app/ponto/services/autorizacao_he_periodo.py:268`, `:281`, `:282`; `app/ponto/tests/test_o214_item2_autorizar_periodo.py:291`.
-
-| ID / estrutura adicional | Emissor | Chaves gravadas | Consumidor | Chaves lidas/defaults | Desencontro | Selo | Dono | Classe |
-|---|---|---|---|---|---|---|---|---|
-| P48 retorno enriquecido de `previa/confirmar` | `app/ponto/services/autorizacao_he_periodo.py:278`, `:281`, `:286`, `:300`, `:326`, `:356` | Base `{dias,autorizados,no_op,erros}`; acrescenta `{antes,depois,diff,exportada,periodo,previa}`; **`pauta_dp` só existe quando exportada e houve autorização**, `:299` | `app/ponto/views.py:709`, `:751` | Prévia lê `antes,depois,diff` em `:717`, `:720`; confirmação lê `autorizados,no_op,erros,exportada` em `:755`; repassa dict inteiro como `r` em `:714` | `pauta_dp` e `previa` sem leitura terminal de produção localizada [não verificado]; sua presença condicional não quebra os consumidores encontrados | **Sim para saída usada**, prévia HTML e confirmação com o formulário real: `app/ponto/tests/test_o214_item2_autorizar_periodo.py:579`, `:602`; não prende sobras [não verificado] | ESTRUTURA | sim para campos sem leitor [não verificado] |
-| P49 mesmo retorno enriquecido | `app/ponto/services/autorizacao_he_periodo.py:286`, `:326`, via `app/ponto/views.py:714` | Esquema P48 | `app/templates/ponto/gestao_he_periodo_previa.html:23` | `periodo[0:2]`; `dias` em `:27`, `:94`, `:107`; `exportada` em `:31`; `erros`, tamanho e tuplas `[1],[2]` em `:65`, `:70` | Nenhuma chave consumida ausente; campos de P48 não usados aqui | **Sim para integração da prévia**, `app/ponto/tests/test_o214_item2_autorizar_periodo.py:579` | ESTRUTURA | não |
-
-**Offline encerrado como estrutura sem leitor, não uma costura adicional:** os dois emissores estão em `app/ponto/management/commands/testar_pwa.py:240` e `:260`, com `{tipo,timestamp_dispositivo,timestamp_real,timestamp_gap_ms}`, primeiro também `latitude,longitude`. A URL é ligada diretamente à função aposentada por `app/ponto/urls.py:13`. O destino `app/ponto/views.py:419` não parseia o corpo nem lê chave alguma: devolve sempre **410** em `:426`. O instrumento espera **200/201** no primeiro cenário, `testar_pwa.py:254`, e **400** no segundo, `:271`. Não há par gravador→leitor do dict; há emissão para uma porta aposentada. `app/ponto/views.py:419`.
-
-**Contagem separada desta ampliação:** 9 pares PONTO; **1 desencontro de significado comprovado** (P43), **4 pares com campos sem leitor terminal localizado** (P41/P44/P45/P48), **1 par sem selo de execução localizado** (P47). Nos quatro pares com sobras, nenhum selo localizado prende especificamente a ausência de leitor dessas sobras. Os números de ausência são relativos à inspeção realizada, não prova universal. [não verificado]
-
-## 13/11 15:25 · sessao 6af76433e3e9 · - · - · origem=Ronald (tmux)
-
-Mudanças necessárias, por leitura da cópia:
-
-- `vigiar_fio_morto.py::ESPERADO_DO_CARIMBO`: incluir contador de férias com esperado `0` (`chamados/management/commands/vigiar_fio_morto.py:98`).
-- `vigiar_fio_morto.py::Command.handle`: chamar `ferias_concedidos_x_soma()` e levar seu resultado ao `censo`, pelo caminho já usado pelos demais contadores (`chamados/management/commands/vigiar_fio_morto.py:175`, `chamados/management/commands/vigiar_fio_morto.py:239`).
-- A função compartilhada retorna listas distintas `soma_maior` e `concedidos_maior`; o tripwire conta ambas por `len`, sem outra soma (`ferias/services.py:116`, `ferias/management/commands/tripwire_status_ferias.py:38`).
-- O item 3 pede explicitamente `concedidos_maior`; o anexo enfatiza `soma_maior`. Sugiro publicar ambos, com esperado `0`, preservando os sentidos já existentes (`ferias/services.py:117`).
-- Ajustar o teste que compara os dicionários completos: `VigiaDoFioMortoTest.test_MORDE_o_carimbo_guarda_os_CONTADORES_que_a_rodada_mediu`; incluir novos valores no `censo` e no `esperado` (`chamados/tests/test_o261_vigia_fio.py:815`, `chamados/tests/test_o261_vigia_fio.py:825`).
-- Esse teste executa o comando, que lê o relógio; adicionar `freeze_time` com instante literal ao alterá-lo (`chamados/tests/test_o261_vigia_fio.py:806`, `chamados/management/commands/vigiar_fio_morto.py:166`).
-
-Nenhuma escrita ou execução de teste realizada. Resultados de execução: [nao verificado]. [nao verificado]
-
-_4657 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4659 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
