@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 15:31:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (574.0 MB). Acoes na janela: **1647**.
+**Medido em 13/11/2026 15:36:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (574.1 MB). Acoes na janela: **1653**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:32:16 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(4,"PONTO 15:3x E3 A3 (logs/E3-FORMA-SQL/impacto/item3.md): N1-ALIMENTACAO-UNICA NAO se aplica -- carga.tarefa NAO responde o que censo_alcance le de alim (vigia_fio.py:608; amostra conferida :608-620): so fila_ids tem a mesma fonte; vivas (universo celula ...` |
+| 15:32:12 | TaskStop |  | `-` |
+| 15:32:09 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL/impacto; ls -la mem* rss* roda_mem.out 2>/dev/null; tail -n 5 roda_mem.out; ps -eo pid,sess,etime,cmd \| /bin/grep -E "roda_mem\|roda_rss\|e3_mem" \| /bin/grep -v grep \| cut -c1-140` |
+| 15:32:05 | Bash |  | `ps -p 2414964 -o pid,sess,cmd \| cut -c1-120` |
+| 15:32:01 | ToolSearch |  | `-` |
+| 15:31:55 | Bash |  | `cd /home/ronald/wt-e3-b6-114947/app 2>/dev/null \|\| cd /home/ronald/wt-e3-mem-150957/app; pwd; sed -n 606,622p chamados/services/vigia_fio.py; sed -n 1592,1622p core/juizes.py \| /bin/grep -n "alimentar_fila\\|celula_id__in\\|perguntas_do_app"` |
 | 15:25:08 | Bash |  | `ps -p 2441933 -o pid,etime,cmd \| cut -c1-120; cd /home/ronald/saas-hasner/app; sed -i '3s/^ESPERANDO: encadeia.sh \| pid=1566057$/ESPERANDO: codex_pergunta.sh \| pid=2441933/' docs/RELATO.md; sed -n 3p docs/RELATO.md` |
 | 15:25:02 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rn "vaga de construtor\\|vagas de construtor" bin/*.py \| head; /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -n 20` |
 | 15:24:58 | Bash |  | `ps -p 1566057 -o pid,etime,cmd \| cut -c1-150; cd /home/ronald/saas-hasner; /bin/grep -n "vaga de construtor" bin/hook_stop_fila1.py \| head` |

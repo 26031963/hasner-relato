@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 15:31** · publicado em **13/11/2026 15:31** (UTC-3)
+> Ultima resposta processada: **13/11/2026 15:35** · publicado em **13/11/2026 15:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 15:35 · sessao b9a9a64c7207 · HJ-090 · construtor · origem=Code
+
+Implementação entregue, com REDs e 17 mutantes em memória. Oito fontes e os 17 ASTs compilaram, sem gravar bytecode. Suíte, RED executado na base e morte dos mutantes: **[nao verificado]**. ([registro estático](ferias/HJ090_VOLTA3_ENTREGA.txt:158))
+
+- **Achado 1:** `realinhar_concedidos_ferias.py::Command.handle` mantém o atomic por período até completar `write/flush/fsync`; `_ler_registro` tolera cauda sem terminador. O desenho está no docstring. Os testes preparam falhas de disco, falha no segundo período, cauda truncada e divergência entre snapshot e linha travada. ([implementação](ferias/management/commands/realinhar_concedidos_ferias.py:8), [testes](ferias/test_hj090_volta3.py:98))
+- **Achado 2:** `services.py::editar_periodo_aquisitivo` relê pela trava comum, exige direito ≥ concedidos + vendidos e recalcula status; `views.py::editar_periodo` relata `RecusaNaPorta`. Os REDs cobrem consumo 20+10 com pedido de direito 20 e foto velha, comparando o registro inteiro antes/depois. ([porta](ferias/services.py:725), [view](ferias/views.py:844), [REDs](ferias/test_hj090_volta3.py:166))
+- **Achado 3:** `vigiar_fio_morto.py::Command.handle` publica `ferias_soma_maior` e `ferias_concedidos_maior`, ambos com esperado zero, lendo a mesma função do tripwire. O teste usa contagens distintas, 1 e 2; o teste vizinho de chaves completas foi ajustado. ([produtor](chamados/management/commands/vigiar_fio_morto.py:229), [RED](ferias/test_hj090_volta3.py:206), [vizinho](chamados/tests/test_o261_vigia_fio.py:789))
+- **Achado 5:** `RedPorValor::_recusou` aceita somente `RecusaNaPorta` com a mensagem esperada. Os testes exigem propagação de `TypeError` e rejeitam recusa por outro motivo. ([helper](ferias/test_hj090_red_por_valor.py:45), [testes](ferias/test_hj090_volta3.py:234))
+
+O **censo completo de escritores e leitores**, campo por campo, está na [entrega](ferias/HJ090_VOLTA3_ENTREGA.txt:47). Inclui:
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| Direito, datas, status e timestamp | [porta de edição](ferias/services.py:736) | [juiz de status](ferias/models.py:98), [saldo](ferias/models.py:220), telas |
+| Registro `periodo/antes/depois/vivos` | [porta produz](ferias/services.py:155); [comando persiste](ferias/management/commands/realinhar_concedidos_ferias.py:126) | [leitor do arquivo](ferias/management/commands/realinhar_concedidos_ferias.py:39), [porta de reversão](ferias/services.py:174) |
+| Contadores e esperados de férias | [vigia](chamados/management/commands/vigiar_fio_morto.py:99), [censo](chamados/management/commands/vigiar_fio_morto.py:245) | [comparação genérica do ESTADO](../bin/fio_estado.py:125), [exibição de `fora_do_esperado`](../bin/fio_estado.py:191) |
+| Recusa e mensagem | [porta](ferias/services.py:734) | [view](ferias/views.py:848), [helper RED](ferias/test_hj090_red_por_valor.py:49) |
+
+Os **labels e comandos individuais dos REDs** estão [aqui](ferias/HJ090_VOLTA3_ENTREGA.txt:101); os **17 comandos individuais dos mutantes**, [aqui](ferias/HJ090_VOLTA3_ENTREGA.txt:116). O executor considera morte somente por assertion, sem ERROR/SKIP. ([executor](ferias/hj090_volta3_mutantes.py:135))
+
+Não curei a ferramenta fora de `app/`, excluída expressamente desta volta, nem os resíduos de prefill, exclusão, relógios, tooltip e HJ-091 remetidos à fila. As pendências estão [registradas](ferias/HJ090_VOLTA3_ENTREGA.txt:161). O saldo continua sem corte no [juiz existente](ferias/models.py:220), com leitura direta na [tela](templates/ferias/_secao_colab.html:50).
 
 ## 13/11 15:31 · sessao b1ab3636f9b5 · - · - · origem=Ronald (tmux)
 
@@ -982,31 +1004,4 @@ Nos caminhos examinados, o plantio continua passando por `registro_batida`, e a 
 
 Execução de testes, mutantes e ocorrência produtiva: **[nao verificado]**. [nao verificado]
 
-## 13/11 15:12 · sessao 3777adbae6fd · HJ-093 · sonda · origem=Code
-
-Transcrição literal do anexo; `[não verificado]` aplica-se a todas as linhas abaixo quanto à confirmação independente em produção.
-
-```text
-JUST 3331 {'id': '3331', 'batida_entrada': '139122', 'data_turno': '2026-10-27', 'tipo': 'esqueci_saida', 'saida_informada': 'None', 'latitude': 'None', 'longitude': 'None', 'status': 'aprovada', 'aprovada_por': '657', 'aprovada_em': '2026-10-28 11:31:15.607936+00:00', 'motivo_rejeicao': '', 'batida_gerada': 'None', 'chamado_origem': '35329', 'criado_em': '2026-10-27 22:20:18.830771+00:00', 'atualizado_em': '2026-10-28 11:31:15.608025+00:00'}
-FROTA2 2026-11 com_justificativa 33 realizado0_COM_batida_casada 9 colabs 9 realizado0_SEM_batida 2
-FROTA2 2026-10 com_justificativa 134 realizado0_COM_batida_casada 23 colabs 21 realizado0_SEM_batida 5
-FROTA2 2026-09 com_justificativa 16 realizado0_COM_batida_casada 3 colabs 2 realizado0_SEM_batida 0
-FROTA2 2026-08 com_justificativa 24 realizado0_COM_batida_casada 10 colabs 5 realizado0_SEM_batida 0
-CASOS 2026-11 [(140889, 56, '2026-10-25', 'disp', 1, 'luz', 1, 'prev', 720), (127808, 976, '2026-10-26', 'disp', 3, 'luz', 1, 'prev', 660), (135337, 496, '2026-10-22', 'disp', 1, 'luz', 1, 'prev', 720), (140580, 750, '2026-10-26', 'disp', 1, 'luz', 1, 'prev', 720), (141802, 996, '2026-10-26', 'disp', 3, 'luz', 1, 'prev', 440), (131421, 912, '2026-10-23', 'disp', 3, 'luz', 1, 'prev', 660), (121745, 962, '2026-10-25', 'disp', 2, 'luz', 2, 'prev', 440), (129875, 932, '2026-10-27', 'disp', 1, 'luz', 1, 'prev', 720), (143004, 1004, '2026-10-27', 'disp', 3, 'luz', 1, 'prev', 660)]
-CASOS 2026-10 [(118689, 56, '2026-10-07', 'disp', 1, 'luz', 1, 'prev', 720), (112074, 567, '2026-10-12', 'disp', 3, 'luz', 1, 'prev', 660), (114134, 206, '2026-09-22', 'disp', 3, 'luz', 1, 'prev', 480), (110059, 341, '2026-10-07', 'disp', 1, 'luz', 1, 'prev', 720), (108830, 340, '2026-10-08', 'disp', 3, 'luz', 1, 'prev', 660), (113955, 438, '2026-09-23', 'disp', 3, 'luz', 1, 'prev', 660), (112352, 347, '2026-09-30', 'disp', 1, 'luz', 1, 'prev', 720), (112358, 347, '2026-10-06', 'disp', 1, 'luz', 1, 'prev', 720), (106510, 922, '2026-09-28', 'disp', 1, 'luz', 1, 'prev', 480), (106526, 922, '2026-10-14', 'disp', 1, 'luz', 1, 'prev', 480), (110352, 389, '2026-09-30', 'disp', 1, 'luz', 1, 'prev', 720), (105323, 789, '2026-10-11', 'disp', 3, 'luz', 1, 'prev', 440), (105365, 938, '2026-09-23', 'disp', 1, 'luz', 1, 'prev', 720), (33812, 564, '2026-09-24', 'disp', 3, 'luz', 1, 'prev', 480), (116944, 358, '2026-10-02', 'disp', 3, 'luz', 1, 'prev', 480), (105667, 931, '2026-09-25', 'disp', 1, 'luz', 1, 'prev', 480), (33879, 310, '2026-09-21', 'disp', 3, 'luz', 1, 'prev', 440), (104743, 228, '2026-10-01', 'disp', 1, 'luz', 1, 'prev', 720), (113727, 468, '2026-10-05', 'disp', 3, 'luz', 1, 'prev', 440), (116515, 829, '2026-09-23', 'disp', 3, 'luz', 1, 'prev', 440), (106125, 331, '2026-10-03', 'disp', 3, 'luz', 1, 'prev', 660), (118347, 643, '2026-09-25', 'disp', 1, 'luz', 1, 'prev', 720), (111910, 396, '2026-09-28', 'disp', 1, 'luz', 1, 'prev', 720)]
-CASOS 2026-09 [(24651, 697, '2026-09-01', 'disp', 3, 'luz', 1, 'prev', 540), (24660, 697, '2026-09-10', 'disp', 3, 'luz', 1, 'prev', 540), (21683, 228, '2026-09-14', 'disp', 1, 'luz', 1, 'prev', 720)]
-CASOS 2026-08 [(3283, 408, '2026-08-17', 'disp', 3, 'luz', 1, 'prev', 660), (2261, 855, '2026-08-18', 'disp', 3, 'luz', 1, 'prev', 660), (8127, 518, '2026-07-25', 'disp', 3, 'luz', 1, 'prev', 440), (8131, 518, '2026-07-29', 'disp', 3, 'luz', 1, 'prev', 440), (8148, 518, '2026-08-15', 'disp', 3, 'luz', 1, 'prev', 440), (8150, 518, '2026-08-17', 'disp', 3, 'luz', 1, 'prev', 440), (16234, 510, '2026-08-10', 'disp', 3, 'luz', 1, 'prev', 420), (1013, 863, '2026-08-10', 'disp', 3, 'luz', 1, 'prev', 660), (1021, 863, '2026-08-18', 'disp', 3, 'luz', 1, 'prev', 660), (1023, 863, '2026-08-20', 'disp', 3, 'luz', 1, 'prev', 660)]
-FIM
-```
-
-Sim: o trecho fornecido termina em `FIM`, sem erro exibido. [não verificado]
-
-`realizado0_COM_batida_casada`: realizado zero com alguma lâmpada `luz != None`, indicando batida real casada a marco, conforme a definição fornecida. [não verificado]  
-`realizado0_SEM_batida`: realizado zero no dia inteiro justificado/dispensado, sem batida; a dispensa registra `luz=None`. [não verificado]; [cartorio.py:786](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ponto/services/cartorio.py:786)  
-`acesa=True` sozinha não distingue os grupos: a dispensa também acende a lâmpada, mantendo `luz=None` e registrando `dispensada`. [cartorio.py:807](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ponto/services/cartorio.py:807)
-
-A JUST `3331` traz tipo `esqueci_saida`, status `aprovada` e turno `2026-10-27`. [não verificado] O tipo significa “Esqueci de bater saída”. [models.py:119](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ponto/models.py:119)
-
-Ela nomeia `batida_entrada=139122`; traz `saida_informada=None` e `batida_gerada=None`, sem ID ou horário explícito de marco no recorte. [não verificado] No modelo, esses campos representam, respectivamente, a batida de entrada do turno, a saída declarada e a batida de saída criada após aprovação. [models.py:139](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ponto/models.py:139), [models.py:149](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ponto/models.py:149), [models.py:167](/home/ronald/codex_ws/7621a973fc0dea79ce58ba3cb35d7a49aa98c4fe/app/ponto/models.py:167)
-
-_4642 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4643 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
