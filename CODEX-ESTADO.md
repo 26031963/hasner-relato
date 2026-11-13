@@ -1,7 +1,101 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 08:54** · publicado em **13/11/2026 08:56** (UTC-3)
+> Ultima resposta processada: **13/11/2026 09:01** · publicado em **13/11/2026 09:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 09:01 · sessao a880ed8aade7 · O168 · verificador · origem=Code
+
+**REPROVA — bloqueante no selo do item F:** o novo “fecho por chamada” segue qualquer referência `ast.Name`, permitindo contar uma auxiliar que nunca é chamada. Isso cria falso positivo que o detector anterior fornecido rejeitava. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:328`.)
+
+**A. Curas da volta 3**
+
+| Item | Resultado e mordida |
+|---|---|
+| **(1) Contrato** | **Curado.** Cobra delegação no wrapper e procura `materializada_em is None` no helper. Em memória, passa no atual e falha retirando essa condição ou substituindo a delegação por `return []`. (`app/chamados/tests/test_contract_dedup_status.py:141`; `app/chamados/tests/test_contract_dedup_status.py:143`.) |
+| **(2) Fixture** | **Curado o `AttributeError`.** Injeta o helper real sem bind; executei os quatro testes, todos passaram. (`app/chamados/tests/test_e4b_c4v14_memoria.py:50`; `app/chamados/tests/test_e4b_c4v14_memoria.py:121`; `app/chamados/tests/test_e4b_c4v14_memoria.py:143`.) |
+| **F** | **Parcialmente curado.** O teste novo morde auxiliar chamada com leitura crua, constante de módulo e juiz preservado sem referência; também aceita chamada por apelido. Executei essas asserções em memória. Continua contando auxiliar apenas referenciada, contrariando o requisito “função não chamada não conta”. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:275`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:376`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:385`.) |
+
+**B. Terminação e escapes**
+
+Termina para AST finita: há finitos nomes em `defs`; cada nome entra em `vistos` antes da expansão e só é expandido uma vez, inclusive em ciclos. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:283`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:285`.)
+
+| Caminho da leitura crua | Detector |
+|---|---|
+| Método de classe definida no módulo | **Escapa:** classe/método não entram em `defs`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
+| Lambda atribuída no módulo | **Escapa:** não é `FunctionDef`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
+| Lambda local ou função aninhada dentro de função alcançada | **Detecta:** percorre seus corpos, mesmo sem execução. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:311`.) |
+| Função importada de outro módulo | **Não inspeciona seu corpo.** (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:305`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
+
+No CSF atual, o fecho contém somente `pode_executar_csf` e `perguntas_que_seguram_csf`; obtive `raw=False`, `judge=True`. Existem chamadas aos métodos canônicos importados do juiz, sem leitura crua nesses dois corpos. (`app/ponto/supra_juiz.py:557`; `app/ponto/supra_juiz.py:558`; `app/ponto/supra_juiz.py:559`; `app/ponto/supra_juiz.py:573`.)
+
+**C. Falso positivo e comparação**
+
+**Import isolado não basta:** o detector exige `ast.Call`. Porém, `j(ch); return True` passa, embora o resultado do juiz seja descartado; origem do import e sombreamento também não são validados. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:326`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:330`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:334`.)
+
+O bloqueante mais direto é este exemplo sintético, reproduzido em memória: `_le_respondida_cru=False` e `_pergunta_ao_juiz=True`, embora nenhuma chamada ao juiz ocorra na execução. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:332`.)
+
+```python
+def _isca(ch):
+    return ch.sem_veredito_entre()
+
+def pode_executar_csf(ch):
+    _isca
+    return True
+```
+
+Na reconstrução do algoritmo anterior fornecido, esse exemplo dava `judge=False`; agora dá `True`. Há enfraquecimento nesse formato. A falta de vínculo com o retorno já existia para chamadas por atributo. Conferência contra o commit-base Git exato: **[não verificado]**. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:332`.)
+
+**D. Mutantes do contrato e da fixture**
+
+O **contrato morde** a retirada de `materializada_em is None`; a **fixture não**: os quatro testes passaram também com esse mutante. Suas perguntas começam com `materializada_em=None`, sem cenário materializado que diferencie as versões. (`app/chamados/tests/test_contract_dedup_status.py:143`; `app/chamados/tests/test_e4b_classe_e_memoria.py:285`; `app/chamados/tests/test_e4b_c4v14_memoria.py:40`.)
+
+Substituir a delegação por `return []` também deixou os quatro testes da fixture verdes; quem barrou esse mutante foi a nova asserção textual do contrato. Portanto, a fixture cura a dependência ausente, mas não certifica essas duas propriedades. (`app/chamados/tests/test_contract_dedup_status.py:141`; `app/chamados/tests/test_e4b_c4v14_memoria.py:47`; `app/chamados/tests/test_e4b_c4v14_memoria.py:50`.)
+
+**E. Outros testes** [nao verificado]
+
+Encontrei substituição do método por mock em `test_termo_fechar`; ela preserva a interface pública e não extrai o corpo. Outro extrator por fonte/AST/injeção não foi localizado; ausência absoluta, inclusive por nomes construídos dinamicamente: **[não verificado]**. (`app/chamados/tests/test_termo_fechar.py:28`.)
+
+Há ainda fixture runtime incompatível fora do delta: `_D` não fornece `respostas_sem_veredito`, e `_P` não fornece `validada_em`. Reproduzi três `AttributeError` nos casos existentes; isso não é regressão nova demonstrada deste delta. (`app/ponto/tests/test_supra_juiz_executor.py:29`; `app/ponto/tests/test_supra_juiz_executor.py:16`; `app/ponto/tests/test_supra_juiz_executor.py:40`; `app/ponto/tests/test_supra_juiz_executor.py:43`; `app/ponto/tests/test_supra_juiz_executor.py:46`; `app/chamados/models.py:1899`.)
+
+Execução Django/ORM integral, banco, logs e identidade Git do HEAD: **[não verificado]**.
+
+## 13/11 09:00 · sessao d9cdaedcce68 · - · - · origem=Ronald (tmux)
+
+**B. Termina, mas não é um fecho estrito por chamada.** `defs` contém finitos `FunctionDef` do módulo; cada nome é marcado antes de expandir e expandido uma vez, mesmo havendo recursão. Segue qualquer `ast.Name`, inclusive mera referência sem chamada. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`; `:281`; `:285`; `:287`.)
+
+Reproduzi em memória:
+
+| Caminho com leitura crua | `_le_respondida_cru` | Razão |
+|---|---:|---|
+| Método de classe definida no módulo | `False` | Classe/método ausentes de `defs`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
+| Lambda atribuída no módulo | `False` | Atribuição/lambda ausentes de `defs`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:277`.) |
+| Lambda dentro da função alcançada | `True` | `ast.walk` percorre o corpo. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:311`.) |
+| Função aninhada na função alcançada | `True` | Corpo aninhado percorrido, mesmo sem chamada. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:286`; `:311`.) |
+| Função importada de outro módulo | `False` | Seu corpo não pertence à árvore analisada. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:305`; `:277`.) |
+
+No CSF atual, o fecho resultou apenas em `pode_executar_csf` e `perguntas_que_seguram_csf`, com `raw=False` e `judge=True`; este último chama os métodos canônicos do juiz importado. Não há nesses dois corpos método cru de classe do próprio módulo, lambda, função aninhada ou auxiliar importada crua. (`app/ponto/supra_juiz.py:552`; `:557`; `:558`; `:559`; `:573`.) Runtime de outros módulos fora desses corpos: `[não verificado]`.
+
+**C. Import isolado não passa; chamada sem alimentar o retorno passa.** Existe exigência explícita de `ast.Call`, portanto `from chamados.models import sem_veredito_entre as j; def pode_executar_csf(ch): return True` devolveu `False`. Já `j(ch); return True` devolveu `True`; o detector não examina dependência do retorno, módulo de origem do import nem sombreamento do apelido. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:326`; `:330`; `:334`.)
+
+Também reproduzi `judge=True` com uma auxiliar arbitrária contendo chamada ao juiz apenas **referenciada**, nunca chamada: o fecho segue nomes, não `ast.Call`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`; `:328`.)
+
+Na reconstrução do detector anterior do anexo, a chamada descartada por apelido e a auxiliar arbitrária meramente referenciada davam `False`; agora dão `True`. Portanto há novos falsos positivos nesses formatos. A falta de vínculo com o retorno já existia para chamadas por atributo: `ch.sem_veredito_entre(ch); return True` passou nas duas versões. Comparação com commit Git exato: `[não verificado]`; algoritmo anterior reproduzido do diff fornecido, implementação atual em `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:321`.
+
+O novo selo também melhora um caso concreto: helper chamado `perguntas_que_seguram_csf`, preservado e totalmente sem referência, dava `True` antes e agora dá `False`; esse caso é cobrado pelo teste novo. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:370`; `:377`.)
+
+## 13/11 08:59 · sessao c60966cee306 · - · - · origem=Ronald (tmux)
+
+No recorte literal de E, não localizei outro teste que extraia por fonte/AST/injeção `respostas_sem_veredito` ou `sem_veredito_entre` além dos três arquivos do delta; ausência absoluta por nomes construídos dinamicamente: `[não verificado]`. O teste `test_termo_fechar` substitui o método com mock, sem extrair seu corpo. (`app/chamados/tests/test_termo_fechar.py:28`.)
+
+Há, porém, outra fixture runtime incompatível na cópia, fora do delta:
+
+- `_D` só instala `perguntas`, mas o helper exige `d.respostas_sem_veredito()`: os casos das linhas 40 e 43 levantam `AttributeError`. (`app/ponto/tests/test_supra_juiz_executor.py:27`; `app/ponto/tests/test_supra_juiz_executor.py:40`; `app/ponto/tests/test_supra_juiz_executor.py:43`; `app/ponto/supra_juiz.py:558`.)
+- `_P` só instala `respondida_em`; o caso direto da linha 46 levanta `AttributeError` em `validada_em` no corpo do juiz. (`app/ponto/tests/test_supra_juiz_executor.py:14`; `app/ponto/tests/test_supra_juiz_executor.py:46`; `app/chamados/models.py:1899`.)
+- O caso vazio retorna `True`. (`app/ponto/tests/test_supra_juiz_executor.py:49`; `app/ponto/supra_juiz.py:573`.)
+
+Reproduzi esses quatro resultados em memória extraindo via AST os corpos reais de `perguntas_que_seguram_csf`, `pode_executar_csf`, `sem_veredito_entre` e as classes reais da fixture, com `dia_da_pergunta_trancado=False`; execução Django integral: `[não verificado]`. (`app/ponto/supra_juiz.py:552`; `app/ponto/supra_juiz.py:563`; `app/chamados/models.py:1889`; `app/ponto/tests/test_supra_juiz_executor.py:14`.)
+
+Atribuir essa falha como regressão nova deste delta seria indevido: o diff fornecido altera somente os outros três testes; reprodução contra o commit-base exato: `[não verificado]`. [nao verificado]
 
 ## 13/11 08:54 · sessao e7dedf56e2fa · O168 · verificador · origem=Code
 
@@ -723,36 +817,4 @@ Não há unidade temporal comum comprovável no código:
 
 A cópia local é HEAD sem o delta fornecido: a numeração HEAD de `ata.py` depois de :175 difere da numeração nova de `diff.txt`; o censo só existe no anexo delta [não verificado como arquivo local].
 
-## 13/11 08:24 · sessao 4d8a5ac1b5a3 · - · - · origem=Ronald (tmux)
-
-**H — matriz de escrita/leitura e significado**
-
-| Campo/valor | Quem escreve | Quem lê / significado |
-|---|---|---|
-| `respondida_em` | Resposta humana: `app/chamados/services/disputa_emissao.py:1467-1469`; resposta automática: `:1652-1656`; recuperação pela trilha: `:1670-1678`; simetria com texto: `app/chamados/models.py:3160-3167`. Reabertura limpa em `disputa_emissao.py:1593`; ressuscitação limpa em `models.py:1596`. | Juiz existente aceita **carimbo OU texto**, sem validação/materialização e fora da tranca: `app/chamados/models.py:1872-1876`. C6 exige **carimbo E texto** no degrau da resposta: `app/chamados/juizes.py:1417`. Estado apresentado usa carimbo para RESPONDIDA: `app/chamados/models.py:3075-3078`. |
-| `validada_em` | Decisão humana: `app/chamados/services/validacao.py:127-141`; simetria: `app/chamados/models.py:3164-3167`. Nova resposta limpa em `disputa_emissao.py:1471-1482`; devolução em `validacao.py:195-202`; reabertura em `disputa_emissao.py:1593`; ressuscitação em `models.py:1596`. | Exclui resposta de `respostas_sem_veredito`: `app/chamados/models.py:1873`; mata a pergunta no C6: `app/chamados/juizes.py:1401-1402`; impede nova validação: `app/chamados/services/validacao.py:396-398`. |
-| `status_local` | Núcleo: `app/chamados/models.py:228`, persistência `:296`; nascimento: `:1125`. Simulação altera/restaura somente memória: `:356`, `:371`. | Motor usa o estado para RECONCILIAR: `app/chamados/models.py:674`; gate o grava no payload: `:720`; contador exige VIVOS: `app/chamados/juizes.py:2522`. Fonte dos conjuntos: `app/chamados/catalogo/motor.py:24-31`. |
-| Trilha `fechamento_recusado` / `conversa_exige_decisao_humana` | Gate → `_registrar_recusa` → `evento`: `app/chamados/models.py:718-722`, `:397-408`; escritor físico: `app/core/observ.py:134-137`. | Deduplicador compara última recusa/payload e transições posteriores: `app/chamados/models.py:403-406`; contador lê qualquer recusa histórica do motivo e cruza com estado atualmente vivo: `app/chamados/juizes.py:2519-2522`. |
-| Nota `retido_pela_conversa` | Novo gate chama a porta de nota, somente sob `registrar`: **diff `app/chamados/models.py:718`, `:728-735`**; gravação física em `app/chamados/services/nota.py:103-109`. | Timeline lê todos os Followups por data: `app/chamados/views.py:372`; apresentação percorre todos: `app/templates/chamados/detalhe_local.html:112`. Leitor específico de produção desse `tipo`: **[não verificado]**. |
-| `objeto_ref` | Novo gate monta string dos PKs ordenados: **diff `app/chamados/models.py:728`, `:735`**. | Porta transforma em hash com chamado, tipo e autor: `app/chamados/services/nota.py:62-65`, `:95-101`. **Não é campo persistido separadamente**: campos criados em `:88-89`, acrescidos de `evento_chave` em `:101`. Unicidade parcial: `app/chamados/models.py:1728-1730`. |
-
-**Não há significado universal “carimbo de validação = alguém julgou”:** o próprio contrato distingue decisão de validar de carimbos de simetria, explicitamente. Essa duplicidade preexiste ao delta; a simetria atual exige texto e passa pelo C6 antes de gravar. (`app/chamados/services/validacao.py:19-26`; `app/chamados/models.py:3160-3175`.)
-
-**Bloqueante relevante para B/I: predicado paralelo permanece no cartório.** `_tem_resposta_do_colab` pergunta apenas por texto e preserva os chamados correspondentes; o diff não modifica esse ramo. Assim, texto validado/materializado libera o novo CSF, mas continua isentando o chamado no cartório. Carimbo sem texto, sem validação/materialização, produz o inverso. (`app/ponto/services/cartorio.py:1637-1649`, `:1661-1666`; `app/chamados/models.py:1872-1876`; **diff `app/ponto/supra_juiz.py:563-569`**.)
-
-**Nota — dois limites materiais:**
-
-- O juiz pode recusar pela metade DESTINO, mas a coleta de perguntas da nota percorre somente `disputa_origem`. Nesse caso `_pend` vazio deixa a recusa sem nota. (`app/chamados/models.py:713-716`; **diff `app/ponto/supra_juiz.py:566-568`; diff `app/chamados/models.py:728-735`**.)
-- O texto “a disputa fechou” não corresponde a uma precondição do gate: uma reconciliação direta com disputa ainda aberta também pode alcançá-lo. Depois do veredito/fecho do pai, a nota continua como registro histórico; a porta apenas cria ou recupera, e a timeline não filtra por estado atual. (`app/chamados/models.py:642-655`, `:713-716`; **diff `app/chamados/models.py:732-734`**; `app/chamados/services/nota.py:103-109`; `app/chamados/views.py:372`.)
-
-**Classes I identificadas:** derivação paralela divergente para a pergunta “há resposta que impede reconciliação”; leitores dos carimbos com critérios diferentes; nota com universo menor que o da recusa. Novo escritor de estado fora da porta, relógio novo e nova aquisição de trava no delta examinado: **[não verificado]**. (`app/ponto/services/cartorio.py:1641`; `app/chamados/models.py:1872-1876`; **diff `app/chamados/models.py:728-735`; diff `app/ponto/supra_juiz.py:563-568`**.)
-
-## 13/11 08:10 · sessao fa61a1941543 · ACELERA-DIFF · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 13/11 08:05 · sessao 20612ba1fceb · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_4514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4517 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
