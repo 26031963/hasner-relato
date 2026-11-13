@@ -1,7 +1,89 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 20:06** · publicado em **13/11/2026 20:06** (UTC-3)
+> Ultima resposta processada: **13/11/2026 20:08** · publicado em **13/11/2026 20:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 20:08 · sessao f780beef7e42 · E3-FORMA-SQL · construtor · origem=Code
+
+Parei pela trava do item **(c)**. No teste existente `test_verbo_nao_e_traducao_da_acao_da_tarefa`, a entrada `responder/colaborador` com verbo `validar` muda o fio de **`colab` para `admin`** ao unificar pela escada. A reprodução foi sem ORM, com alteração só em memória ([evidência](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_portas_v5_desenho.r:2)). [nao verificado]
+
+O teste foi preservado e a cura não foi aplicada ([integridade](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_portas_v5_integridade.r:1)). [nao verificado]
+
+Os seis REDs das cinco classes falharam contra o HEAD. No recorte completo: **10 testes, 11 falhas contando subcasos, zero erros** ([resultado](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_portas_v5_red.r:1)). Diff, comandos, escritores/leitores, contraprovas e pendências estão no [relato da entrega](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_portas_v5_entrega.txt:25). [nao verificado]
+
+**Pergunta de desenho:** nessa entrada, deve prevalecer `fio='admin'`, pelo verbo `validar`, mesmo com ação `responder/colaborador`? ([caso](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_portas_tarefa.py:84))
+
+## 13/11 20:07 · sessao 25b2389f9aaa · BUG-PAR-DESCONGELA · leitura · origem=Code
+
+**1. No contrato atual, `data_evento` significa dia do turno.** Para perguntas de intervalo, os motivos correspondem aos marcos `int_ida` e `int_volta`; a porta datada exige o dia do turno. Esse dia pode ser diferente do dia civil da batida após meia-noite. (`app/chamados/services/declaracao_texto.py:42-52`; `app/chamados/models.py:2832-2844`; `app/escala/servico_jornada.py:69-94`.)
+
+**Escritores de produção do campo:**
+
+| Escritor | Valor que escreve |
+|---|---|
+| `gravar_dia_do_fato` | Única atribuição direta: `linha.data_evento = dia_do_turno`. Não calcula nem salva. `app/chamados/services/fio.py:791-802`. |
+| Nascimento, `_nascer` | Resolve `_dia_fato` por `dia_do_turno_da_linha`, entrega ao escritor único e insere a pergunta. `app/chamados/models.py:2931-2934`, `app/chamados/models.py:3070-3073`. |
+| `reapontar_resolvedora` | Quando a pergunta está sem data e recebe uma, resolve `_dia` pelo mesmo helper e salva. As atribuições de `None` nos ramos de recusa apenas desfazem a alteração em memória. `app/chamados/services/fio.py:868-880`, `app/chamados/services/fio.py:895-913`, `app/chamados/services/fio.py:928-929`. |
+| `rechavear_data_evento` | Grava exatamente `novo_dia`, recebido do chamador, junto da célula e da lavra. `app/chamados/services/fio.py:1035-1044`. |
+| Reuso de pergunta em `abrir` | Quando necessário, encaminha a mudança para `rechavear_no_reuso`, que chama o rechaveamento acima. `app/chamados/models.py:2996-3008`; `app/chamados/services/fio.py:1075`. |
+| Comando de migração/reversão | Usa o mesmo rechaveamento; seu universo normal contém `orfao_14h` e `saida_sem_entrada`, sem intervalo. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:53`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:400`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:492`. |
+
+**Origem dos valores nas perguntas de intervalo:**
+
+| Caminho | Data fornecida ao nascimento |
+|---|---|
+| Fábrica da célula/cartório | `cel.data` → contexto `{motivo: {'data': ...}}` → `gerar_perguntas_disputa` → `abrir`. `app/ponto/services/cartorio.py:1043-1045`; `app/chamados/services/fabrica_da_celula.py:172-174`, `app/chamados/services/fabrica_da_celula.py:219`; `app/chamados/services/disputa_emissao.py:372-375`, `app/chamados/services/disputa_emissao.py:424-451`. |
+| Geração sem data no contexto | Dia do turno da batida-origem, confirmado pela grade. `app/chamados/services/disputa_emissao.py:350-357`, `app/chamados/services/disputa_emissao.py:65-86`. |
+| Complementação de marcos | `dia` devolvido pelos marcos faltantes da célula; exige igualdade com o dia solicitado. `app/chamados/services/declaracao_texto.py:106-109`, `app/chamados/services/declaracao_texto.py:139`; `app/chamados/services/disputa_emissao.py:873-882`, `app/chamados/services/disputa_emissao.py:837-844`. |
+| Declaração direta do colaborador | `dia` do marco faltante casado com a hora; também pode datar pergunta existente pela costura. `app/chamados/services/declaracao_texto.py:341-346`, `app/chamados/services/declaracao_texto.py:370`, `app/chamados/services/declaracao_texto.py:376-377`. |
+| Declaração textual aplicada pelo admin | `p['dia']`, proveniente do marco faltante casado. `app/chamados/services/declaracao_texto.py:625-635`, `app/chamados/services/declaracao_texto.py:666-667`. |
+| Agrupamento legado de `intervalo_ausente` | Lê literalmente `marcos_faltantes[*]['data']`. Aqui existe outra origem semântica: o detector legado produz essa data com `localtime(marco_absoluto).date()`, portanto **dia civil do marco**. O detector atualmente suprime a emissão, mas o consumidor legado continua no agrupador. `app/chamados/services/disputa_emissao.py:1138-1154`; `app/ponto/management/commands/detectar_intervalo_ausente.py:77-87`, `app/ponto/management/commands/detectar_intervalo_ausente.py:150-157`. |
+
+`dia_do_turno_da_celula(d)` **não converte** uma data civil para dia do turno: retorna a mesma data com o tipo `DiaDoTurno`. Portanto, passar por esse helper não corrige o valor do caminho legado. (`app/ponto/turnos.py:2939-2943`.)
+
+A porta de conversa escreve `localdate()`, com significado de dia civil da conversa; o gerador impede que pergunta de hora sem dia nasça por essa alternativa. (`app/chamados/models.py:2850-2858`; `app/chamados/services/disputa_emissao.py:424-430`.) Qual desses caminhos escreveu cada PK anexado é **[nao verificado]**.
+
+**2. A tela mostra a data da pergunta, mas captura somente uma hora.**
+
+O PWA renderiza `chamados/meu_atendimento.html`, que inclui `_card_atendimento.html`. O cartão mostra **“Estamos falando do dia”**, seguido de `p.data_evento`, e depois `p.pergunta`. (`app/chamados/views.py:632-633`; `app/templates/chamados/meu_atendimento.html:127`; `app/templates/chamados/partials/_card_atendimento.html:87-93`.)
+
+Os textos canônicos pedem “saída do intervalo **no dia {data}**” e “volta do intervalo **no dia {data}**”. O formulário oferece `type="time"`; não coleta data nem deslocamento `+1`. (`app/chamados/catalogo/perguntas.py:124-134`; `app/templates/chamados/partials/_card_atendimento.html:111-134`.)
+
+O POST entrega a string ao core, que valida `HH:MM` e grava `resposta_colab`; não transforma a resposta em instante nessa etapa. **A interpretação computacional posterior é hora dentro do turno identificado por `data_evento`.** (`app/chamados/views.py:1265`, `app/chamados/views.py:1283`; `app/chamados/services/disputa_emissao.py:1441-1449`, `app/chamados/services/disputa_emissao.py:1467-1469`; `app/chamados/services/materializacao.py:419-426`.)
+
+A tela não esclarece “dia civil”, “dia do início do turno” ou “dia seguinte” nesse formulário. O entendimento do colaborador e a tela efetivamente usada em cada resposta são **[nao verificado]**. (`app/templates/chamados/partials/_card_atendimento.html:78-157`.)
+
+Além disso, o texto persistido pode conservar uma data anterior ao rechaveamento: a emissão recebe texto e data separadamente, e o rechaveamento não regrava `pergunta`. A ocorrência disso nos PKs anexados é **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:447-451`; `app/chamados/services/fio.py:1038-1044`.)
+
+**3. O avanço para o dia seguinte ocorre na cadeia de marcos e na escolha do candidato overnight.**
+
+A sequência é:
+
+1. `_ts_tipo_do_plantio` escolhe `p.data_evento`, com fallback no contexto do motivo. (`app/chamados/services/materializacao.py:345-353`.)
+2. Para intervalo, pode substituir a hora respondida pela hora do marco faltante do chamado. (`app/chamados/services/materializacao.py:409-416`.)
+3. Combina a data escolhida com essa hora e chama `_ajustar_saida_overnight`. (`app/chamados/services/materializacao.py:417-427`.)
+4. `marcos_turno` encadeia os marcos e acrescenta um dia enquanto o próximo instante for `<=` ao anterior. (`app/escala/servico_jornada.py:82-94`.)
+5. O ajuste constrói o envelope `[primeiro marco − 90 min, último marco + 90 min]`, testa primeiro **D**, depois **D+1**, com a mesma hora local, e devolve o primeiro candidato contido. Portanto, chega a D+1 quando o candidato em D não cabe e o de D+1 cabe; sem marcos ou candidato conserva o instante inicial. Vale para tipos `E` e `S`. (`app/chamados/juizes.py:312-331`.)
+
+Pelo contrato de **dia do turno**, D+1 é uma representação prevista para a madrugada daquele turno; a desigualdade entre as datas, isoladamente, não demonstra mudança do evento declarado. O próprio código exemplifica a volta `00:00` do turno de `08/08` como `09/08 00:00`. (`app/chamados/juizes.py:306-309`.)
+
+Entretanto, **o ajuste de data preserva a hora que recebeu, e essa hora já pode ter sido substituída**. No anexo, por exemplo, PK 41706 informa `01:50 → 02:00`, portanto não conserva o horário declarado **[nao verificado]**; o mecanismo correspondente está em `app/chamados/services/materializacao.py:412-419`.
+
+**4. Leitores: há uma diferença comprovada entre chave de turno e chave civil.**
+
+| Leitor | Significado utilizado |
+|---|---|
+| Paridade principal | Usa o `ts` derivado e procura vizinhas cronológicas; acompanha o ajuste do plantio, sem recombinar `data_evento`. `app/chamados/services/materializacao.py:86-105`, `app/chamados/services/materializacao.py:852`, `app/chamados/services/materializacao.py:881-883`. |
+| Exceção `_plantio_preenche_furo_na_data` | Consulta `CelulaDia.data = localtime(ts).date()`: **dia civil do plantio**, potencialmente D+1. É uma chave diferente do dia do turno; não é leitura direta de `data_evento`. `app/chamados/services/materializacao.py:157`, `app/chamados/services/materializacao.py:171-182`. |
+| `estado_aplicacao_pergunta` | Reutiliza o derivador, a paridade e essa mesma exceção; não possui outra interpretação independente. `app/chamados/services/materializacao.py:449-459`. |
+| Recusa `DATA_EM_DISPUTA` | Compara `p.data_evento` com o dia do fato do chamado, não com a data civil do `ts`. Pressupõe dia do turno. `app/chamados/services/fio.py:84-88`; `app/chamados/services/materializacao.py:1197-1204`. |
+| Texto da recusa | Diz “dia da pergunta (onde a batida nasceria)”, expressão que não distingue turno de data civil; esse texto não executa conversão. `app/chamados/catalogo/recusa.py:45-51`. |
+| Cartório | Trabalha por `cel.data` e consulta `fio_vivo`; este delega a `pergunta_viva`, cujo leitor de dia devolve `data_evento` para fatos e exclui conversas. Pressupõe dia do turno. `app/ponto/services/cartorio.py:1353-1355`, `app/ponto/services/cartorio.py:1389`; `app/chamados/juizes.py:1513`, `app/chamados/juizes.py:1464-1471`, `app/chamados/juizes.py:334-338`. |
+| Prova de materialização | Aceita batida vinculada na hora esperada em D **ou** D+1, com tolerância de 20 minutos; não exige data civil igual a `data_evento`. `app/chamados/juizes.py:267-279`, `app/chamados/juizes.py:752-761`. |
+
+O efeito concreto da consulta da paridade à célula civil D+1 depende das células e atas dessas linhas: **[nao verificado]**. A existência de batida efetivamente persistida para cada resultado calculado também é **[nao verificado]**.
+
+**Conclusão: para o conjunto, o código não permite dizer que o instante calculado seja o declarado: D significa dia do turno, a captura guarda apenas HH:MM e falta a data civil efetivamente declarada; as linhas com hora substituída já diferem no horário (`app/chamados/models.py:2839`; `app/chamados/services/disputa_emissao.py:1467`; `app/chamados/services/materializacao.py:412-427`; declaração civil por PK [nao verificado]).**
 
 ## 13/11 20:06 · sessao 21865d8212f3 · - · - · origem=Ronald (tmux)
 
@@ -1019,46 +1101,4 @@ Há efeito concreto nos leitores: uma falta nesse dia fica fora dos intervalos i
 
 **NAO-BLOQUEIA condicionado ao acervo — registros antigos.** O leitor agora exige `depois.ato`; registros anteriores sem essa chave são recusados integralmente. Existência e necessidade de reversão desses arquivos em produção: **[nao verificado]**. `app/ferias/management/commands/realinhar_concedidos_ferias.py:69`.
 
-## 13/11 18:31 · sessao 0d33144acba3 · - · - · origem=Ronald (tmux)
-
-Auditoria dos IDs **7–11**, preservando a ordem do anexo. A classificação considera caminhos vivos na cópia; ocorrência efetiva em produção permanece **[não verificado]**.
-
-| ID | Emissor / chave | Consumidor | Classe | Prova decisiva |
-|---|---|---|---|---|
-| **7** | `app/ponto/management/commands/detectar_ausencias.py:231` e `:532`; ambos escrevem `data_inicio` | `app/chamados/catalogo/modulos.py:126`, `:225` | **falso** | O catálogo declara uma **chave de data genérica**, não “início do vínculo”: `app/chamados/catalogo/modulos.py:10`. Seu leitor simplesmente devolve `contexto_json[chave_data]`: `:225`. O segundo produtor abre uma janela agregada por colaborador, iniciada pela lacuna e acrescida de ocorrências: `app/ponto/management/commands/detectar_ausencias.py:501`, `:506`, `:532`, `:538`. O anexo inferiu indevidamente que todo `data_inicio` precisaria significar início do vínculo; essa exigência não está no consumidor citado. |
-| **8** | `app/ponto/views.py:280`, renovação `:288`, nascimento `:301`; `pendentes,total`, sem `data_turno` | `app/chamados/catalogo/modulos.py:182`, `:225` | **real** | Esse emissor não fornece a chave declarada. O leitor tem efeito: o cartório seleciona os módulos de batida e só inclui chamado quando a data retorna preenchida (`app/ponto/services/cartorio.py:127`, `:135`, `:137`); `entrada_bloqueada_turno_aberto` pertence ao universo (`app/chamados/catalogo/furo_modulos.py:15`). A porta de criação resolve célula, mas não acrescenta `data_turno` ao contexto recebido (`app/chamados/models.py:1068`, `:1071`). |
-| **9** | `app/ponto/webpush.py:44`; `title,body,url` | `app/static/sw.js:88`, `:102` | **escrita morta** | `url` é transportada opacamente dentro de `options.data` (`app/static/sw.js:96`), mas o clique só foca a primeira janela ou abre `/`, sem consultar a URL (`:105`, `:106`, `:107`). A ausência de `urgente` sozinha não demonstra defeito neste produtor: ele não transmite intenção de interação obrigatória (`app/ponto/webpush.py:44`); o leitor declara `false` (`app/static/sw.js:97`). |
-| **10** | `app/ponto/management/commands/processar_alertas_avancados.py:207`, `:240`; `requireInteraction=True,url` | `app/static/sw.js:97`, `:102` | **real** | Ambos os payloads pedem interação obrigatória (`app/ponto/management/commands/processar_alertas_avancados.py:211`, `:244`), enquanto a decisão de apresentação lê `urgente`, ausente nesses payloads (`app/static/sw.js:97`). Portanto decide `false`. Os métodos têm chamadores no corpo do comando (`app/ponto/management/commands/processar_alertas_avancados.py:82`, `:144`, `:190`) e o comando está no cron (`app/config/crons.py:363`). A URL também fica sem efeito no clique (`app/static/sw.js:107`). |
-| **11** | `app/ponto/management/commands/processar_alertas_turno.py:279`; `requireInteraction,url` | `app/static/sw.js:97`, `:102` | **real** | Para `pos_10`/`pos_20`, o produtor envia `requireInteraction=True` (`app/ponto/management/commands/processar_alertas_turno.py:283`); o consumidor lê `urgente` e decide `false` (`app/static/sw.js:97`). Há chamada de `_enviar_push` pelo executor (`app/ponto/management/commands/processar_alertas_turno.py:244`), execução pelo corpo principal (`:125`, `:143`) e cron (`app/config/crons.py:362`). URL igualmente sem efeito (`app/static/sw.js:107`). |
-
-**Selos:** nenhum selo localizado demonstra integralmente as cinco costuras; inexistência global de selo é **[não verificado]**. Os limites concretos são:
-
-- **7:** o teste genérico do catálogo testa `batida_ausente` e `disputa_supervisao`, sem distinguir esses nascimentos de `sem_previsao_escala` (`app/chamados/tests/test_f4_catalogo.py:51`).
-- **8:** o selo do cartório fabrica `data_turno` no fixture, evitando o produtor real (`app/ponto/tests/test_cartorio_so_chamado_de_batida.py:43`, `:45`, `:63`). Os testes da view verificam nascimento e continuidade da batida (`app/ponto/tests/test_f7_ramo_quente.py:113`), ou deduplicação (`app/ponto/tests/test_eb_dedup.py:39`).
-- **9:** o teste do holerite substitui `push_web_colaborador` por mock e não executa o SW (`app/holerite/tests/test_selo_sem_notificacao.py:375`).
-- **10–11:** testes próximos substituem os métodos de envio, não prendendo payload ao SW (`app/ponto/tests/test_avancados_grade.py:18`; `app/ponto/tests/test_alertas_catalogo_premissa.py:99`).
-
-**Totais deste recorte:** real **3**, escrita morta **1**, ramo morto **0**, falso **1**; fundamentação nas cinco linhas acima. **10 e 11 são a mesma classe de defeito**, `requireInteraction → urgente`, compartilhando o consumidor `app/static/sw.js:97`. O **8** é ausência da chave canônica de data; os contratos examinados são questão de **ESTRUTURA**, pela separação entre coerência do sistema e dado cadastral/batida (`CLAUDE.md:179`).
-
-A rota e o registro do SW existem (`app/core/urls.py:24`; `app/static/pwa.js:14`), mas a aplicação pode servir o arquivo coletado em `/app/staticfiles`, selecionado em execução (`app/core/views.py:528`, `:570`). Identidade desse artefato implantado com a cópia auditada: **[não verificado]**.
-
-## 13/11 18:31 · sessao 47b436f171e5 · - · - · origem=Ronald (tmux)
-
-Auditoria dos IDs 1–6: **3 real; 3 falso**. Os três reais pertencem à classe já registrada **CONTRATO-DE-ENTRADA-DO-FIO**; o registro cita precisamente emissor e leitores, sem precisar aproveitar seus números históricos. (`app/docs/BACKLOG.md:2100`)
-
-| ID | Emissor / chave | Consumidor | Classe | Prova decisiva | Selo / dono |
-|---|---|---|---|---|---|
-| 1 | `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`: `foto_ausente.{batida_id,batida_em,tipo_batida,_por}` | `app/chamados/services/disputa_emissao.py:372`, `:387` | **real** | O cron está registrado com `--apply` (`app/config/crons.py:686`); o contexto é passado sem tradução à emissão (`app/chamados/services/disputa_emissao.py:662`). Sem `motivo.data` e `ultima_batida.id`, a emissão pode seguir como conversa (`app/chamados/services/disputa_emissao.py:431`, `:439`). A pergunta de selfie existe e não exige `{data}` no texto (`app/chamados/catalogo/perguntas.py:94`). | Selo do par **[não verificado]**; teste localizado verifica só a escrita de `foto_ausente.batida_id` (`app/ponto/tests/test_bug126_selfie_invisivel.py:65`). **ESTRUTURA**, por desencontro do contrato, segundo L-099 (`CLAUDE.md:179`). |
-| 2 | Mesmo emissor (`app/ponto/management/commands/marcar_foto_ausente_retro.py:98`) | `app/chamados/models.py:3464`: `ultima_batida.id` | **real** | `foto_ausente` é família BATIDA (`app/chamados/catalogo/motivos.py:43`); o derivador retorna `None` sem `ultima_batida.id` (`app/chamados/models.py:3464`). Esse derivador participa do dedup inicial (`app/chamados/services/disputa_emissao.py:325`) e do nascimento da identidade (`app/chamados/models.py:3449`); o índice de episódio requer origem preenchida (`app/chamados/models.py:3490`). | Selo do par **[não verificado]**; limite do teste em `app/ponto/tests/test_bug126_selfie_invisivel.py:70`. **ESTRUTURA** (`CLAUDE.md:179`). |
-| 3 | Mesmo emissor (`app/ponto/management/commands/marcar_foto_ausente_retro.py:98`) | `app/api/foto_recebida.py:67`: `ultima_batida.id` | **real** | A comparação que decide tratar a disputa só aceita `ultima_batida.id == batida.pk`; sem isso, pula (`app/api/foto_recebida.py:67`). Os endpoints de upload chamam o helper (`app/api/views.py:856`, `app/api/views_core.py:840`) e têm rotas (`app/api/urls.py:59`, `app/api/urls_core.py:8`). Registro anterior do mesmo defeito: `app/docs/BACKLOG.md:1720`. | Selo do par **[não verificado]**. **ESTRUTURA** (`CLAUDE.md:179`). |
-| 4 | `app/ponto/management/commands/processar_alertas_turno.py:348`: `data_turno,entrada_timestamp,posto` | Anexo apontou `_data_furo_da_grade` (`app/chamados/services/disputa_emissao.py:54`) | **falso** | O produtor chama **outra entrada do módulo**: a fábrica de chamados órfãos (`app/ponto/management/commands/processar_alertas_turno.py:385`). Ela deriva origem (`app/chamados/services/disputa_emissao.py:1187`) e dia (`:1205`), ou lê o contexto (`:1232`) pelo helper que reconhece `data_turno` (`app/chamados/data_evento.py:27`), e cria pergunta datada (`app/chamados/services/disputa_emissao.py:1244`). | Selo integral emissor→leitor **[não verificado]**. Parcial do caminho correto: `app/chamados/tests/test_cenarios_disputa.py:84`. Dono do apontamento rejeitado: **ESTRUTURA** (`CLAUDE.md:179`). |
-| 5 | `app/ponto/management/commands/processar_alertas_avancados.py:126`: `data_turno,entrada_timestamp` | Mesmo helper apontado pelo anexo (`app/chamados/services/disputa_emissao.py:54`) | **falso** | Também chama diretamente a fábrica (`app/ponto/management/commands/processar_alertas_avancados.py:159`), cujo caminho lê a data e abre pergunta datada (`app/chamados/services/disputa_emissao.py:1232`, `:1244`; `app/chamados/data_evento.py:27`). | Selo integral **[não verificado]**; parcial do caminho correto em `app/chamados/tests/test_cenarios_disputa.py:84`. **ESTRUTURA** (`CLAUDE.md:179`). |
-| 6 | `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:128`, persistência `:156` | Mesmo helper apontado pelo anexo (`app/chamados/services/disputa_emissao.py:54`) | **falso** | O comando abre chamado e trata o resultado, sem chamar o gerador ao qual pertence o helper (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151`, `:170`). O passivo encaminha chamados à mesma fábrica (`app/chamados/services/pergunta_no_app.py:238`, `:246`), que lê `data_turno` (`app/chamados/services/disputa_emissao.py:1232`; `app/chamados/data_evento.py:27`). | Teste de nascimento, não do par, em `app/ponto/tests/test_passe_turno_aberto_retroativo.py:92`. Selo integral **[não verificado]**. **ESTRUTURA** (`CLAUDE.md:179`). |
-
-**Correção importante do anexo:** `_data_furo_da_grade` realmente ignora `entrada_timestamp`, mas sua única chamada executável encontrada está no gerador de perguntas da outra porta (`app/chamados/services/disputa_emissao.py:350`); os emissores 4–6 usam os caminhos descritos acima. Portanto não são três defeitos reais demonstrados pelo mero cruzamento nominal de produtor e helper. (`app/ponto/management/commands/processar_alertas_turno.py:385`, `app/ponto/management/commands/processar_alertas_avancados.py:159`, `app/chamados/services/pergunta_no_app.py:246`)
-
-**Emissor alternativo não absolve IDs 1–3:** os kernels API gravam `ultima_batida`, mas referente à sua própria batida (`app/api/views.py:758`, `app/api/views_core.py:752`). O merge do retro preserva outras raízes sem recalcular essa referência; assim, uma raiz antiga pode apontar para outro episódio, em vez de suprir a batida que está em `foto_ausente.batida_id`. (`app/chamados/services/disputa_emissao.py:548`, `:561`)
-
-Ocorrência e frequência em produção destes resultados permanecem **[não verificado]**; o anexo fornecido não contém banco nem logs. **[não verificado]**
-
-_4790 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4792 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
