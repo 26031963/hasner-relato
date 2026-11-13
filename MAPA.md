@@ -84,7 +84,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 |---|---|---|---|---|---|---|---|
 | celula/precedencia | 10/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
-| ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
+| ausencia/ferias | 16/0 | 0 | 0 | 0 | 0 | 6 | 4 |
 | chamado | 21/0 | 0 | 0 | 0 | 0 | 3 | 12 |
 | feriado/prazo | 6/2 | 12 | 9 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
@@ -143,6 +143,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - a batida do dia esta dentro do periodo que a ausencia parcial declara? -> `ponto/turnos.py::periodo_da_parcial_no_dia` · registro 0
   - o colaborador esta de ferias hoje? -> `ferias/services.py::em_gozo_hoje` · registro 0
   - o colaborador esta afastado hoje? -> `ponto/turnos.py::afastado_hoje` · registro 0
+  - o colaborador esta desligado? -> `colaboradores/services/desligamento.py::esta_desligado` · registro 0
   - qual o saldo do periodo aquisitivo? -> `ferias/models.py::PeriodoAquisitivo.dias_saldo` · registro 0
   - o periodo venceu ou esta vencendo (art.137)? -> `ferias/models.py::status_de_periodo` · registro 0
   - quantos dias ainda podem ser vendidos (abono, 1/3)? -> `ferias/models.py::PeriodoAquisitivo.dias_vendaveis` · registro 0

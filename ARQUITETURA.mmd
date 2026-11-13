@@ -331,12 +331,12 @@ flowchart TD
     ja_escala_utils_py(["escala/utils.py"]) --- jf_turno_marcos
     ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_turno_marcos
     jmais_turno_marcos["... +1 arquivos de juiz"] --- jf_turno_marcos
-    jf_ausencia_ferias["ausencia/ferias<br/>15 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
+    jf_ausencia_ferias["ausencia/ferias<br/>16 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
+    ja_colaboradores_services_desligamento_py(["colaboradores/services/desligamento.py"]) --- jf_ausencia_ferias
     ja_ferias_models_py(["ferias/models.py"]) --- jf_ausencia_ferias
     ja_ferias_services_py(["ferias/services.py"]) --- jf_ausencia_ferias
     ja_ferias_situacao_py(["ferias/situacao.py"]) --- jf_ausencia_ferias
-    ja_ponto_catalogo_ausencias_py(["ponto/catalogo/ausencias.py"]) --- jf_ausencia_ferias
-    jmais_ausencia_ferias["... +4 arquivos de juiz"] --- jf_ausencia_ferias
+    jmais_ausencia_ferias["... +5 arquivos de juiz"] --- jf_ausencia_ferias
     jf_chamado["chamado<br/>21 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
     ja_chamados_catalogo_modulos_py(["chamados/catalogo/modulos.py"]) --- jf_chamado
     ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_chamado
