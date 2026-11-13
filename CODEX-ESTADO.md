@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 15:57** · publicado em **13/11/2026 16:01** (UTC-3)
+> Ultima resposta processada: **13/11/2026 16:22** · publicado em **13/11/2026 16:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 16:22 · sessao c2fe3b531de7 · LEI-DESLIGADO-NAO-TRAVA · censo · origem=Code
+
+As referências `q.q` e `r.r` abaixo usam linhas contadas em cada bloco fornecido, sem o cabeçalho do anexo.
+
+1. **Bloqueante 1 — (e) para `juizes novos=0`; (a) para o censo incompleto dos leitores crus.**
+
+   **Declaração `juizes novos=0`: (e), NÃO PERGUNTADO.** A pergunta trata de concorrência com juiz registrado; conferir a declaração de nascimento é outra verificação. O código contém a função e seu registro. (`q.q`, volta 1:4; `app/colaboradores/services/desligamento.py:23`; `app/core/juizes.py:267`)
+
+   - Pergunta literal: “2o juiz que duplica juiz registrado (esta_desligado x algum juiz existente de situacao/ativo)”. (`q.q`, volta 1:4)
+   - Resposta literal: “Não encontrei juiz **registrado** concorrente para ‘está desligado?’.” (`r.r`, volta 1:75)
+   - Resposta apontando especificamente o **zero falso**: **ausente**. (`r.r`, volta 1:75; volta 2, item 5; localização original deste último: [nao verificado])
+
+   **Censo dos leitores crus: (a), tema presente, levantamento incompleto.** A pergunta inclui expressamente `situacao`; a resposta identifica uma comparação crua, mas não apresenta o censo referido pelo veredito. (`q.q`, volta 1:3; `r.r`, volta 1:75; `veredito.md:2`)
+
+   - Pergunta literal: “QUEM ESCREVE e QUEM LE cada campo/valor que o diff le ou muda (situacao, data_desligamento, o_que_segura, informativo_rescisao, retidos, C5 colabs_nunca_bateu, barrados_desligado)”. (`q.q`, volta 1:3)
+   - Resposta literal: “Há comparação crua duplicada no formatador de situação exibida, mas isso não comprova uma segunda autoridade registrada.” (`r.r`, volta 1:75)
+
+2. **Bloqueante 2 — (e), NÃO PERGUNTADO, quanto à presença do corte no commit.** [nao verificado]
+
+   - Pergunta literal sobre conferir o corte em `CORTES.md` na cópia certificada: **ausente**. A pergunta próxima pede conferir o cabeçalho de bolha. (`q.q`, volta 3:5)
+   - Resposta literal identificando a ausência desse corte: **ausente**; a resposta examina a inscrição da bolha e o predicado. (Anexo `r.r`, volta 3; linha original: [nao verificado])
+
+   O selo exige a frase especificamente em `CORTES.md`; o comentário no registro não satisfaz essa busca. A cópia termina esse documento na linha 447. (`bin/tests/test_juiz_novo_tem_corte.sh:41`; `bin/tests/test_juiz_novo_tem_corte.sh:44`; `app/core/juizes.py:264`; `app/docs/CORTES.md:447`)
+
+   A **execução VERMELHA** e o estado da árvore viva são a parcela **(c)**: constam do veredito fornecido; comprovação independente: **[nao verificado]**. (`veredito.md:3`)
+
+3. **Bloqueante 3 — (e) para a auditoria financeira não perguntada; (c) para a comprovação produtiva.**
+
+   - Pergunta literal sobre impacto `fora → entra`, reversão, hashes ou regeneração do TXT: **ausente**. (Anexos `q.q`, voltas 1–3; localização original: [nao verificado])
+   - Resposta literal identificando esse bloqueante financeiro: **ausente**. (Anexos `r.r`, voltas 1–3; localização original: [nao verificado])
+   - Trecho relacionado, sem apontar o bloqueante: “a montagem aceita fechamentos `aberto` e `aprovado`, selecionados pelo resultado `entra`.” (`r.r`, volta 1:15)
+
+   A possibilidade de mudança era inspecionável no código: desligado recebe motivos vazios; motivos determinam `fora/furo_espelho`; o TXT seleciona `entra`. (`app/folha/export.py:1207`; `app/folha/export.py:970`; `app/folha/export.py:716`)
+
+   Os **18 casos em outubro, um em novembro, competências exportada/aberta e ausência de reversão/hash** constituem a parcela **(c)**, sustentada pelo veredito fornecido; não aparecem demonstrados nas verificações anteriores. (`veredito.md:4`; comprovação independente: [nao verificado])
+
+## 13/11 16:20 · sessao da8fd0b57352 · - · - · origem=Ronald (tmux)
+
+Para o bloqueante 1, recomendo **(e) para a declaração falsa `juizes novos=0`**, distinguindo **(a) para o censo incompleto dos leitores crus**. A exigência do campo está em `CLAUDE.md:63`; a função consta em `app/colaboradores/services/desligamento.py:23` e seu registro em `app/core/juizes.py:264-267`.
+
+**Declaração `juizes novos=0`: (e).** As perguntas fornecidas tratam duplicação de juiz registrado, sem pedir conferência desse campo da LEI-AKITA. O trecho mais próximo da pergunta é:
+
+> “2o juiz que duplica juiz registrado (esta_desligado x algum juiz existente de situacao/ativo)”
+
+A resposta correspondente é:
+
+> “Não encontrei juiz **registrado** concorrente para ‘está desligado?’.”
+
+O trecho da resposta que aponta a falsidade de `juizes novos=0` é **ausente**; descarte desse achado pela triagem também é **ausente**. Essa distinção se sustenta nos anexos fornecidos; referências de linha dos anexos: `[nao verificado]`.
+
+**Censo de leitores crus: (a).** Pergunta literal da volta 1:
+
+> “QUEM ESCREVE e QUEM LE cada campo/valor que o diff le ou muda (situacao, data_desligamento, o_que_segura, informativo_rescisao, retidos, C5 colabs_nunca_bateu, barrados_desligado): arquivo:linha”
+
+Resposta literal:
+
+> “Há comparação crua duplicada no formatador de situação exibida, mas isso não comprova uma segunda autoridade registrada.”
+
+A resposta identifica uma comparação crua, porém o levantamento das 32 ocorrências referido pelo veredito é **ausente** na resposta fornecida. Contagem histórica de 32: `[nao verificado]`.
+
+A referência `app/docs/RELATO.md:74` do veredito **não corresponde à obra nesta cópia**: essa linha trata outra obra; a busca literal por `LEI-DESLIGADO-NAO-TRAVA` no arquivo não retornou ocorrência. O conteúdo daquela linha no hash histórico alegado permanece `[nao verificado]`.
+
+## 13/11 16:20 · sessao bced962f87f4 · - · - · origem=Ronald (tmux)
+
+B3 deve separar duas parcelas para não atribuir ao Codex dados produtivos que ele não recebeu. A regra permite distinguir “fora do alcance” de “não perguntado”. (`CLAUDE.md:385`; `CLAUDE.md:386`)
+
+- **(c), parcela produtiva:** os 18 casos de 10/2026, o caso de 11/2026, a situação exportada/aberta e a ausência de reversão/hash só constam do veredito fornecido; não foram demonstrados pelas perguntas/respostas anteriores. (`veredito.md`, item 3 fornecido; comprovação independente: **[nao verificado]**)
+- **(e), pergunta sobre DINHEIRO:** nenhuma das três perguntas pede apuração da mudança `fora → entra`, reversão, hash antes/depois ou regeneração do TXT. Trecho literal da pergunta sobre esses pontos: **“ausente”**. Trecho literal da resposta identificando esse bloqueante financeiro: **“ausente”**. (Anexos `q.q`/`r.r`, voltas 1–3; **[nao verificado]** como arquivos locais.)
+- **Não sustenta (b):** a resposta da volta 1 distingue trava de aprovação e emissão do TXT, mas não identifica a mudança de universo com consequências financeiras: “Isso **não demonstra impedimento de emissão da linha no TXT**: a montagem aceita fechamentos `aberto` e `aprovado`, selecionados pelo resultado `entra`.” (`r.r`, volta 1, achado 2 fornecido; `app/folha/export.py:687`; `app/folha/export.py:716`)
+
+O efeito estático era inspecionável: o item nasce `entra`; os motivos o tornam `fora/furo_espelho`; desligado retorna motivos vazios; a montagem inclui os ids `entra`. Isso demonstra possibilidade condicional de entrada, sem provar quantidade produtiva ou conteúdo financeiro efetivamente alterado. (`app/folha/export.py:841`; `app/folha/export.py:968`; `app/folha/export.py:1207`; `app/folha/export.py:716`; `app/folha/export.py:726`)
+
+As exigências documentadas de reversão, hash e frota estão em `CLAUDE.md:406–414`; isso é evidência da regra, sem provar que os artefatos existiam ou faltavam. (`CLAUDE.md:407`; `CLAUDE.md:408`; `CLAUDE.md:411`; `CLAUDE.md:412`; `CLAUDE.md:414`)
+
+## 13/11 16:20 · sessao e475d03ac1aa · - · - · origem=Ronald (tmux)
+
+Bloqueante 2: **(e) NÃO PERGUNTADO**, quanto à conferência do corte em `CORTES.md` na cópia certificada. A pergunta próxima trata do cabeçalho de bolha, enquanto o selo exige a frase em outro arquivo. (`bin/tests/test_juiz_novo_tem_corte.sh:38`; `bin/tests/test_juiz_novo_tem_corte.sh:41`; `app/colaboradores/services/desligamento.py:6`)
+
+- **Pergunta sobre corte presente no commit:** ausente nas três perguntas fornecidas. `[nao verificado]` [nao verificado]
+- **Resposta apontando corte ausente do commit:** ausente nas três respostas fornecidas. `[nao verificado]` [nao verificado]
+- **Trecho próximo, pergunta da volta 3, item 3:** “O cabecalho de bolha de desligamento.py (@bolha/@entra/@sai/@invariante/@juiz-unico-de) diz a verdade sobre quem escreve/le (arquivo:linha)?” `[nao verificado]`
+- **Trecho próximo, resposta da volta 3:** “`esta_desligado` corresponde ao predicado inscrito: lê somente `situacao`.” Isso verifica o predicado, sem apontar a falta do corte em `CORTES.md`. `[nao verificado]`
+
+A cópia contém o registro e seu comentário em `app/core/juizes.py:264` e `app/core/juizes.py:267`; `app/docs/CORTES.md` termina na linha 447, sem a entrada mencionada no veredito. (`app/docs/CORTES.md:447`)
+
+O selo consulta especificamente `CORTES.md` e acusa falha quando não encontra a frase; o comentário em `juizes.py` não substitui essa busca. (`bin/tests/test_juiz_novo_tem_corte.sh:41`; `bin/tests/test_juiz_novo_tem_corte.sh:44`)
+
+**Distinção para a consolidação:** a execução VERMELHA é prova de suíte relatada pelo veredito, classe **(c)** quanto à execução; isso não transforma automaticamente a ausência estática do corte em assunto fora do alcance. Execução e estado da árvore viva externa: `[nao verificado]`. [nao verificado]
 
 ## 13/11 15:57 · sessao 07b93e1ddafe · CONTRATOS-ENTRADA · censo · origem=Code
 
@@ -1215,241 +1304,4 @@ São **3 sítios de consumo**, em **2 módulos consumidores** (`materializacao.p
 
 `app/chamados/relatorios_disputa.py:47-53` grava `buckets[classificar(d)][]` com `{disputa_id,colaborador_id,nome,dias,motivos}`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:39` lê `it['motivos']`. Falta conferir demais chaves do corpo desse comando no consolidado.
 
-## 13/11 15:41 · sessao 3a3451fa21d5 · - · - · origem=Ronald (tmux)
-
-Método: busquei JSONFields e atribuições explícitas; depois referências de atributos, acessos `.get`/`[]`, serializações e testes. Não executei testes nem consultei produção. Execução dos testes e completude diante de acessos dinâmicos: `[nao verificado]`. [nao verificado]
-
-Critério aplicado: emissor que monta a estrutura em escala conta; model de escala cuja estrutura nasce exclusivamente em ponto fica na fronteira. [nao verificado]
-
-**Inventário para consolidação — referências abaixo relativas a `app/`.**
-
-| Estrutura | Emissor e chaves | Consumidores e chaves/defaults | Desencontro | Selo |
-|---|---|---|---|---|
-| `TipoEscala.horarios_por_dia` | `escala/services/cadastro_tipo.py:265-267`: copia todo dict recebido; objeto inválido vira `{}` | `escala/models.py:224-231`: weekday string ou inteiro; default `None`; `:233-239`: `hii/hfi` default `''`; `:326-342`: `hi/hf` default escalares, `hii/hfi` default `None`; `:462-471`: `hi/hf` default `''`; `:667-695`: `hi/hf/hii/hfi` default `None`; `:862-866`: presença da chave weekday string | Nenhum desencontro demonstrado para chaves canônicas; validação exige hi/hf e par hii/hfi (`models.py:692-695`). Chaves adicionais arbitrárias preservadas pelo escritor, sem inventário finito `[nao verificado]` | Leitores: `escala/tests/test_horarios_por_dia.py:37-61,75-93`; ponte escritor: `test_cadastro_tipo_service.py:47-56` só exige `hi` persistido |
-| mesmo HPD | mesmo escritor | `escala/utils.py:274-283`: `hi/hf/hii/hfi` default `None`; `:735-741`: presença de HPD e delegação `marcos_do_dia` | Não demonstrado | `test_marcos_def_hpd.py:27-45`; `test_horarios_por_dia.py:107` inicia classe da grade |
-| mesmo HPD | mesmo escritor | `escala/views_wizard.py:80`: serialização integral, default `{}` | Não demonstrado | Específico deste retorno `[nao verificado]` |
-| mesmo HPD | mesmo escritor | `colaboradores/services/drawer.py:99-100`: apenas verdade/falsidade do JSON | Não demonstrado | `[nao verificado]` |
-| mesmo HPD | mesmo escritor | `ponto/selecao_periodo.py:223-227`: weekday string, default `None`; `hi/hf` obrigatórios; erro vira `False` (`:228-229`) | Leitor aceita somente weekday string, enquanto `_override_do_dia` também aceita inteiro (`models.py:231`); em JSON persistido transformação das chaves `[nao verificado]`, portanto não classifiquei como desencontro fechado | `[nao verificado]` |
-| `FolgaCalendario.celulas` | **dois escritores:** `escala/folgas.py:584-591`: lista de pares deduplicados/ordenados, ou `[]`; `:654-656`: `celulas or []` | **outro módulo:** `escala/views.py:371`: lista integral, default `[]` | Não demonstrado | `test_editor_folga_modo.py:27-46` cobra escrita; `:58-64` cobra leitura GET. Não é teste único da ida e volta |
-| mesmo `celulas` | mesmos escritores | **mesmo módulo, não contar como costura externa:** `escala/folgas.py:55`, `:18-39`: pares `[semana,weekday]`, iteração default `[]`, índices `[0]/[1]` convertidos para inteiro (`:29`) | Não demonstrado | `test_folga_semana_dia.py:49-59` materializa foto a partir dos pares |
-| `FolgaCalendarioTamanho.dias` | **dois escritores:** `escala/folgas.py:593-595`: dias ordenados/deduplicados por tamanho; `:658-661`: lista filtrada `d <= tamanho` | `escala/models.py:1560`: lista integral; `:1579`: lista integral para `__str__`; `escala/views.py:362`: lista integral transformada em set | Não demonstrado | GET/ida e volta deste campo `[nao verificado]`; escrita `test_editor_folga_modo.py:38-49`; model/getter `test_folga_models.py:13-23` |
-| dict de `dias_por_tamanho()` | `escala/models.py:1558-1560`: `{tamanho_mes:list(dias)}` | `escala/folgas.py:56` transporta para `folgas_do_mes`; `:12-15` lê chave `28/30/31`, 29 usa 28, default `[]` | Não demonstrado | **sim**, `test_folga_models.py:19-23` cruza produtor com resolvedor |
-| `DecisaoProposta.resumo` | **dois escritores:** `escala/services/propositor.py:717-727` e `:773-776`; chaves `tipo,template,template_id,ancora,ancora_atual,template_atual,casa_hoje,casaria,sobra,aplicar_desde,dias_batidos`, todos via `p.get(k)` | Nenhum leitor de `.resumo` localizado em produção ou template `[nao verificado]`; finalidade forense declarada em `escala/models.py:1927-1930` | Todas as chaves sem leitor localizado; **sem par, não contar costura** | `[nao verificado]` |
-| dict `nome_canonico_partes()` | `escala/models.py:486-487`: `tipo,apelido,dias,horario,ciclico`; alterações de dias/horário `:488-522` | `core/templatetags/hasner_filters.py:72-123`: tipo/apelido/dias/horario por `[]`; `:207-217`: mesmas quatro, `.get` + default `''`; `colaboradores/services/ficha.py:82-90`: dias/horario com default `''`, e `codigo_da_escala(:70-71)` lê tipo/apelido com default `''` | **`ciclico` escrito, nenhum consumidor de produção localizado** `[nao verificado]`. Os demais leitores localizados só usam quatro chaves (referências anteriores). Classe **sim**, dono provável **ESTRUTURA** `[nao verificado]` | `test_nome_canonico.py:77-95` cobra inclusive ciclico no produtor; **não prende uso no consumidor**. `colaboradores/tests/test_ficha_cabecalho_compacto.py:28-40` cobra linha da ficha, mas não ciclico |
-| contador `vinculos_5x2_6x1_trabalha_feriado()` | `escala/models.py:933`: `total,declarados,nao_declarados` | `escala/management/commands/vinculos_5x2_6x1_trabalha_feriado.py:15-17`: três chaves por `[]` | Não demonstrado | **sim**, `test_feriado_padrao_por_escala.py:100-120`: chama command e confere contagem |
-| **ata efêmera**, cópia de CelulaDia | `escala/utils.py:1886-1898`: somente `lampadas,orfas`; omissão de minutos é explícita `:1888-1891`; passa à autoridade de turnos | `ponto/turnos.py:1631-1633` passa celula a `periodos_do_dia`; leitor efetivo `ponto/juiz_batida.py:157-161`: `lampadas/orfas` com default `[]`; lâmpadas leem `hora,tipo,acesa,luz,tipo_real` em `:190-194,215-217,230-246` | Não demonstrado: minuto ausente não é lido nesse consumidor (`juiz_batida.py:157-260`). Campos de lâmpadas vêm do construtor chamado, `ponto/services/cartorio.py:599-612,672-678` | **sim**, convergência de montagem → ata → turno em `escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:176-205`; atribuição de ata no teste `:197-198` |
-
-**Fronteiras sem emissor de estrutura em escala, não adicionar à contagem deste recorte:**
-
-- DNA e dna_anterior: atribuições reais em `ponto/portas/celula.py:261-307,629-642,827-828,917-926`; montar DNA é `ponto/management/commands/gerar_celulas.py:104`.
-- Ata/protestos persistidos: `escala/models.py:1819-1828` apenas delega à porta; atribuições de ata na porta `ponto/portas/celula.py:1003,1064,1091`.
-- Outbox `EventoCelula`: escritor único externo declarado em `escala/models.py:1851`, consumidor externo declarado em `:1848`; estrutura escalar descrita em `:1857-1863`.
-
-**Orientação de contagem:** acima, HPD tem **11 funções leitoras**; `nome_canonico_partes` tem **4 funções externas leitoras** se incluir `codigo_da_escala` além de `linha_do_vinculo`; calendário tem multiplicação pelos dois escritores, e os leitores dentro do próprio `folgas.py` não satisfazem “outro módulo”. Os números dependem de consolidar funções ou módulos como identidade do par `[nao verificado]`. Não declarei total global porque os outros agentes cobrem demais estruturas.
-
-## 13/11 15:35 · sessao b9a9a64c7207 · HJ-090 · construtor · origem=Code
-
-Implementação entregue, com REDs e 17 mutantes em memória. Oito fontes e os 17 ASTs compilaram, sem gravar bytecode. Suíte, RED executado na base e morte dos mutantes: **[nao verificado]**. ([registro estático](ferias/HJ090_VOLTA3_ENTREGA.txt:158))
-
-- **Achado 1:** `realinhar_concedidos_ferias.py::Command.handle` mantém o atomic por período até completar `write/flush/fsync`; `_ler_registro` tolera cauda sem terminador. O desenho está no docstring. Os testes preparam falhas de disco, falha no segundo período, cauda truncada e divergência entre snapshot e linha travada. ([implementação](ferias/management/commands/realinhar_concedidos_ferias.py:8), [testes](ferias/test_hj090_volta3.py:98))
-- **Achado 2:** `services.py::editar_periodo_aquisitivo` relê pela trava comum, exige direito ≥ concedidos + vendidos e recalcula status; `views.py::editar_periodo` relata `RecusaNaPorta`. Os REDs cobrem consumo 20+10 com pedido de direito 20 e foto velha, comparando o registro inteiro antes/depois. ([porta](ferias/services.py:725), [view](ferias/views.py:844), [REDs](ferias/test_hj090_volta3.py:166))
-- **Achado 3:** `vigiar_fio_morto.py::Command.handle` publica `ferias_soma_maior` e `ferias_concedidos_maior`, ambos com esperado zero, lendo a mesma função do tripwire. O teste usa contagens distintas, 1 e 2; o teste vizinho de chaves completas foi ajustado. ([produtor](chamados/management/commands/vigiar_fio_morto.py:229), [RED](ferias/test_hj090_volta3.py:206), [vizinho](chamados/tests/test_o261_vigia_fio.py:789))
-- **Achado 5:** `RedPorValor::_recusou` aceita somente `RecusaNaPorta` com a mensagem esperada. Os testes exigem propagação de `TypeError` e rejeitam recusa por outro motivo. ([helper](ferias/test_hj090_red_por_valor.py:45), [testes](ferias/test_hj090_volta3.py:234))
-
-O **censo completo de escritores e leitores**, campo por campo, está na [entrega](ferias/HJ090_VOLTA3_ENTREGA.txt:47). Inclui:
-
-| Valor | Quem escreve | Quem lê |
-|---|---|---|
-| Direito, datas, status e timestamp | [porta de edição](ferias/services.py:736) | [juiz de status](ferias/models.py:98), [saldo](ferias/models.py:220), telas |
-| Registro `periodo/antes/depois/vivos` | [porta produz](ferias/services.py:155); [comando persiste](ferias/management/commands/realinhar_concedidos_ferias.py:126) | [leitor do arquivo](ferias/management/commands/realinhar_concedidos_ferias.py:39), [porta de reversão](ferias/services.py:174) |
-| Contadores e esperados de férias | [vigia](chamados/management/commands/vigiar_fio_morto.py:99), [censo](chamados/management/commands/vigiar_fio_morto.py:245) | [comparação genérica do ESTADO](../bin/fio_estado.py:125), [exibição de `fora_do_esperado`](../bin/fio_estado.py:191) |
-| Recusa e mensagem | [porta](ferias/services.py:734) | [view](ferias/views.py:848), [helper RED](ferias/test_hj090_red_por_valor.py:49) |
-
-Os **labels e comandos individuais dos REDs** estão [aqui](ferias/HJ090_VOLTA3_ENTREGA.txt:101); os **17 comandos individuais dos mutantes**, [aqui](ferias/HJ090_VOLTA3_ENTREGA.txt:116). O executor considera morte somente por assertion, sem ERROR/SKIP. ([executor](ferias/hj090_volta3_mutantes.py:135))
-
-Não curei a ferramenta fora de `app/`, excluída expressamente desta volta, nem os resíduos de prefill, exclusão, relógios, tooltip e HJ-091 remetidos à fila. As pendências estão [registradas](ferias/HJ090_VOLTA3_ENTREGA.txt:161). O saldo continua sem corte no [juiz existente](ferias/models.py:220), com leitura direta na [tela](templates/ferias/_secao_colab.html:50).
-
-## 13/11 15:31 · sessao b1ab3636f9b5 · - · - · origem=Ronald (tmux)
-
-**Complemento: 19 pares novos**, separados dos 93 anteriores. Nenhuma quebra de chave obrigatória foi confirmada neste complemento; há formatos alternativos e omissões condicionais atendidas por defaults ou discriminadores. Selos: **9 localizados; 10 não localizados**, inexistência desses dez **[não verificado]**. Atribuição por estrutura: **17 escala; 2 ponto** — os dois últimos são as trilhas `veredito_celula`. Dono provável de eventual incompatibilidade estrutural: ESTRUTURA **[não verificado]**.
-
-As linhas pendentes dos gravadores anteriores ficam verificadas:
-
-- M02: `app/escala/management/commands/lavrar_previsto_cego.py:37`, `detalhe=d`.
-- M03: `app/escala/management/commands/lavrar_vigencia_impossivel.py:39`, `detalhe=d`.
-- M04: `app/escala/management/commands/lavrar_vigencia_sem_trilha.py:33`, `detalhe=d`.
-
-**Schemas compartilhados**
-
-`F12`: o command produz o dicionário em `app/ponto/management/commands/censo_fase_12x36.py:290`; a porta persiste integralmente em `app/escala/services/fase_12x36.py:91`. Chaves: `linhas_de_desvio,linhas_medidas,colabs_de_desvio,automaticos,propostas,linhas,itens,janelas,agora,itens_reabertos,criterio,esperado`. `linhas` contém `colab,empresa,competencia,ec,template,plantoes,casados,paridade,furos,folga_trabalhada` em `:295`; os itens recebem `data,ec_do_dia,template_do_dia,tipo,aplicavel` em `:235` e `colab,empresa,competencia,dono_do_dia` em `:299`; `janelas={empresa,ini,fim,reaberta}` em `:306`. O leitor `ultimo_lavrado` copia integralmente e acrescenta `data_ref,medido_em` em `fase_12x36.py:211`; sem formato atual, retorna apenas `colabs_de_desvio,linhas,itens,sem_medida` em `:210`.
-
-`C7`: `app/escala/services/regua_na_lista.py:48` persiste `total,colabs,universo,esperado,por_colab`. Cada item é produzido em `:31` com `ec,colab,origem,classe,tipo_escala_id,tipo_escala_codigo,declarado,real,evidencia,data_exemplo,destino`. `ultimo_lavrado` acrescenta `medido_em` em `:65`; fallback com `total=None,por_colab={},esperado=0,sem_medida=True` em `:63`.
-
-| ID | Estrutura / emissor | Consumidor / chaves lidas | Desencontro / selo |
-|---|---|---|---|
-| X01 | F12 — `censo_fase_12x36.py:290` | `app/escala/services/fase_12x36.py:93`, `:106`, `:110`, `:144`, `:179`, `:207`: `colabs_de_desvio`; `janelas,agora`; janela `empresa,ini,fim`; `itens,itens_reabertos`, item `data,colab,empresa`; cópia integral | Nenhuma quebra confirmada. **Sim**: `app/escala/tests/test_o261_v_fase_na_lista.py:94`; leitura de cobertura/as-of também em `app/escala/tests/test_vfase_dono_as_of.py:83` |
-| X02 | F12 via `fase_12x36.py:211` | `app/escala/services/cadastro_realidade.py:421`: `itens` default `()`, item `colab,data,ec_do_dia,template_do_dia,dono_do_dia,aplicavel,competencia,tipo` | Nenhuma quebra confirmada. **Sim**: `app/escala/tests/test_o261_v_fase_na_lista.py:180` |
-| X03 | mesmo | `app/api/views_mensageria.py:1685`: `colabs_de_desvio,linhas_medidas,criterio,data_ref,sem_medida,linhas`, todos `.get` | Variantes normal/sem medida: `sem_medida` só no fallback; demais chaves ausentes nele usam defaults. **Sim**: `app/escala/tests/test_o261_v_fase_na_lista.py:263` |
-| X04 | mesmo | `app/chamados/services/fila_por_causa.py:184`: `colabs_de_desvio` default `()` | Nenhuma quebra confirmada. Selo não localizado **[não verificado]** |
-| X05 | mesmo | `app/escala/services/propositor.py:493`: `itens` default `()`, item `colab,ec_do_dia` via `.get` | Nenhuma quebra confirmada. Selo específico desta dependência não localizado **[não verificado]**; `test_o261_v_fase_na_lista.py:280` testa o universo do propositor, mas não demonstrei que morde retirar a leitura da lavra |
-| X06 | mesmo | `app/ponto/management/commands/vigiar_familia_escala.py:24`: `data_ref,linhas_medidas,colabs_de_desvio,criterio,linhas`; linha `colab,competencia,ec,paridade,plantoes,furos,folga_trabalhada` | Variantes sem medida atendidas por `.get`. Selo não localizado **[não verificado]** |
-| X07 | C7 — `app/escala/services/regua_na_lista.py:48` | `app/escala/services/cadastro_realidade.py:347`: `por_colab` default `{}`; item `destino,ec,tipo_escala_codigo,classe,declarado,real`; destino `codigo` | Nenhuma quebra confirmada. **Sim**: `app/escala/tests/test_termometro_vira_lista.py:51`, `:61` |
-| X08 | mesmo | `app/escala/views.py:469`: `por_colab` default `{}`, índice `str(colaborador_id)` default `[]`; item `ec,destino`; destino repassado à porta | Nenhuma quebra confirmada. Selo da realocação por esse payload não localizado **[não verificado]** |
-| X09 | retorno C7 — `app/escala/services/regua_na_lista.py:54` | `app/escala/management/commands/termometro_regua.py:94`: `total,colabs,universo` | Nenhuma quebra confirmada. **Sim**, fluxo real executado: `app/escala/tests/test_termometro_vira_lista.py:136` |
-| X10 | sugestão — `app/escala/services/fase_12x36.py:50`, `:61`, `:64`: `ancora,motivo,batidas`; `casa_hoje` em duas variantes, `casaria` só na sugestão | `app/escala/services/propositor.py:333`: `ancora` via `.get`, depois indexação sob a guarda | Consumidor lê a única chave presente em todas as variantes. Selo do produtor existe em `app/escala/tests/test_ancora_sugerida.py:43`; selo que prende o par inteiro não localizado **[não verificado]** |
-| X11 | impacto — `app/escala/services/impacto_troca.py:47`: `de,ate,furos_antes,furos_depois,dias_furo_antes,dias_furo_depois,frase`, ou `None` em `:32` | `app/colaboradores/services/vinculo.py:142`, transporta integralmente em `impacto` no retorno em `:147` | Nenhuma quebra confirmada. **Sim**: `app/colaboradores/tests/test_troca_escala_porta.py:50`, `:58` |
-| X12 | HPD JS — `app/templates/escala/wizard_tipo_escala.html:454`: weekday → `hi,hf`; `hii,hfi` condicionais em `:455`, serialização em `:459`, parâmetro em `:481` | `app/escala/views_wizard.py:53`: lê `horarios_por_dia`, `json.loads`, aceita mapa inteiro em `:57`, inválido → `{}` em `:59` | Omissão de pausa prevista. `app/escala/tests/test_wizard_intervalo.py:84` injeta JSON manual: **não prende emissão do JS**. Selo completo não localizado **[não verificado]** |
-| X13 | trilha da lavra — `app/ponto/portas/celula.py:1087`, `:1102`: `veredito,via,protestos,status_dia` | `app/chamados/juizes.py:1295`: `valor_depois`; `.get('via') == VIA_HUMANA` ou presença de `acoes` em `:1298`; `VIA_HUMANA='admin'` em `app/ponto/services/veredito_celula.py:76` | Variante da assinatura atendida pelo OR. **Sim**, escritor real→leitor: `app/chamados/tests/test_tranca_vivas_08.py:56`, `:82`, `:95`; mutante em `:300` |
-| X14 | trilha do despachante — `app/ponto/services/veredito_celula.py:356`: `veredito,acoes,erros` | mesmo consumidor `app/chamados/juizes.py:1298`: lê `via` com default `None`, ou presença de `acoes` | `via` ausente é variante deliberada: `acoes` discrimina. O ramo tem teste em `app/chamados/tests/test_tranca_vivas_08.py:101`, porém o teste grava payload manual por `registrar_log`, sem chamar o despachante inteiro. Selo completo escritor→leitor **[não verificado]** |
-| X15 | envelope EventoCelula — `app/ponto/portas/celula.py:954`: `celula_id,colaborador_id,data`; defaults do modelo em `app/escala/models.py:1860`: `criado_em,processado_em=None,tentativas=0,erro=''` | `app/chamados/reconciliador.py:1250`, `:1262`, `:1344`, `:1351`, `:1394`: `processado_em,tentativas,criado_em,pk,colaborador_id`; `celula_id` também em `:1274`, `:1296`, `:1309`; lote repassado em `:1388` | Envelope sem blob é declarado em `app/escala/models.py:1848`. Nenhuma quebra confirmada. **Sim**: `app/ponto/tests/test_o_outbox_celula.py:56`, `:163` |
-| X16 | mesmo envelope | `app/chamados/services/fabrica_da_celula.py:297`: `data`; relê célula atual por `(colab.pk,data)` em `:299` | `celula_id` antigo não decide a célula atual, explicitado em `:291`. Teste do leitor: `app/chamados/tests/test_e4_c20.py:42`; usa eventos fake. Selo completo produtor→leitor **[não verificado]** |
-| X17 | mesmo envelope | `app/ponto/services/lastro.py:422`: `colaborador_id` dos eventos pendentes; filtro de estado definido em `reconciliador.py:1250` | Nenhuma quebra confirmada. Selo específico não localizado **[não verificado]** |
-| X18 | mesmo envelope | `app/chamados/management/commands/reconciliar_chamados.py:62`: `colaborador_id` dos pendentes | Nenhuma quebra confirmada. **Sim**, evento real e mutação do estado: `app/chamados/tests/test_c20_juiz3_outbox.py:349` |
-| X19 | mesmo envelope | `app/chamados/services/foto_e4b.py:270`: filtro `colaborador_id`, `data` para alcance e registro inteiro pelo `guardar` | Nenhuma quebra confirmada. Selo específico não localizado **[não verificado]** |
-
-O envelope também tem **escritor de estado**: `app/chamados/reconciliador.py:1396` grava `tentativas,erro`; `:1402` grava `processado_em`; `:1409` aplica retenção. Esses campos participam dos filtros dos leitores X15/X17/X18; portanto não são chaves lidas sem escritor. Os demais gatilhos chamam o escritor único `emitir_evento_celula`, cujos chamadores estão declarados em `app/ponto/portas/celula.py:946` e `app/escala/models.py:1851`; não multipliquei a costura por cada gatilho que apenas chama essa porta.
-
-**Correção de classificação para o subtotal anterior:** O01 é desencontro formal com default explícito de sucesso, não quebra obrigatória demonstrada; R01/R02 são excesso sem leitor localizado, cuja ausência global continua **[não verificado]**. Assim, para os **93 anteriores + estes 19 = 112 pares localizados**, não certifique “três quebras”: são **zero quebras obrigatórias confirmadas por mim**, um casamento de schemas com defaults e dois excessos sem consumo localizado. A soma permanece um recorte, sem certidão de completude.
-
-## 13/11 15:27 · sessao b1ab3636f9b5 · - · - · origem=Ronald (tmux)
-
-Consolidei **92 pares por arquivo emissor–arquivo leitor**, agrupando operações do mesmo arquivo sobre a mesma estrutura. É **subtotal verificado, não censo total**: ainda faltam fechar retornos auxiliares, aliases, templates e chamadas dinâmicas. As contagens de desencontro e de inexistência de selo para o universo inteiro permanecem **[não verificado]**.
-
-**Convenções para consolidar**
-
-- `D`: schema produzido em `app/ponto/management/commands/gerar_celulas.py:83` e `:104`; persistido pelas operações de `app/ponto/portas/celula.py:261`, `:278`, `:294`, `:306`, `:639`, `:642`, `:827`, `:917`, `:925`. Chaves: `dna_versao,vinculo_id,tipo_escala_id,tipo_ciclo,marcos,minutos_jornada,intervalo_livre,lampadas`; `marcos={hi,hf,hii,hfi,[hii2,hfi2]}`; `lampadas=[{chave,tipo,hora,instante}]`; `extra_declarada={antes,depois}` nasce condicionalmente em `gerar_celulas.py:130`.
-- `A`: ATA produzida em `app/ponto/services/cartorio.py:738`, com `tipo_dia,lampadas,minutos_previstos,minutos_realizados,sem_ancora,n_orfas,orfas,n_missing,n_celulas`; condicionais `cobertura_parcial,periodo_parcial` em `:766`; lâmpada `{tipo,hora,acesa,luz,tipo_real}` em `:711`; `isencao` pelo `_carimbar_isencao` chamado em `:714`; `dispensada` em `:810`; `pendente` em `:915`. Persistência em `app/ponto/portas/celula.py:1064` e `:1091`; `precedencia` em `:1213`, preservada pelas lavras em `:1053`.
-- **Omissão condicional prevista** precisa ser distinguida de incompatibilidade: `extra_declarada`, segunda pausa, `isencao`, `dispensada` e `pendente` não existem em todas as variantes, mas têm leitores `.get`; isso satisfaz a definição literal de ausência de chave, sem provar falha.
-- Nas linhas abaixo, selo não indicado significa **não localizado nesta inspeção; inexistência [não verificado]**. Dono provável de incompatibilidade de forma: **ESTRUTURA [não verificado]**; não atribuí dado real a CADASTRO/BATIDA sem evidência.
-
-### Persistidos: DNA — 21 pares
-
-| ID | Estrutura/emissor | Consumidor | Chaves lidas |
-|---|---|---|---|
-| D01 | D | `app/escala/models.py:1124`, `:1189`, `:1235` | `marcos.hi,hf,hii,hfi`, todos os pares de pausa; `extra_declarada.antes,depois` com zero |
-| D02 | D | `app/escala/utils.py:53`, `:104`, `:137`, `:153` | `marcos` e pares; `lampadas` default `[]`, `hora,instante` |
-| D03 | D | `app/chamados/juizes.py:948`, `:1348` | `marcos`, chave do motivo, pares de pausa |
-| D04 | D | `app/chamados/services/adesao.py:36` | `marcos`, repassado a `CelulaDia.marcos_presentes` |
-| D05 | D | `app/ponto/juiz_batida.py:159` | `marcos.hi,hf` e todos os pares de pausa |
-| D06 | D | `app/ponto/services/cartorio.py:484`, `:615` | `dna_versao,marcos`, chaves de turno |
-| D07 | D | `app/ponto/services/dia_do_colab.py:46` | `marcos`, repassado a `marcos_presentes` |
-| D08 | D | `app/ponto/services/diagnostico_escala.py:153` | `marcos`, default `{}` |
-| D09 | D | `app/ponto/services/esmeril_espelho.py:116` | `marcos`, repassado a `marcos_presentes` |
-| D10 | D | `app/ponto/services/faltas_de_hoje.py:43` | `marcos.hi`, fallback de template em `:44` |
-| D11 | D | `app/ponto/services/veredito_celula.py:31` | `marcos.hi,hf,hii,hfi` e todos os pares |
-| D12 | D | `app/ponto/services/vigia_cadastro_futuro.py:60`, `:79` | `vinculo_id`; comparação do DNA inteiro |
-| D13 | D | `app/ponto/services/vigia_entrada.py:126` | `marcos.hi,hf`, `tipo_ciclo` |
-| D14 | D | `app/ponto/management/commands/tripwire_celulas.py:30`, `:99`, `:259` | inteiro em comparação; `marcos` |
-| D15 | D | `app/ponto/management/commands/aplicar_col900.py:76`, `:174` | inteiro em snapshot; `marcos.hi` |
-| D16 | D | `app/ponto/management/commands/censo_col900.py:119` | `marcos`, comparação integral do subdict; `hi` |
-| D17 | D | `app/ponto/management/commands/censo_fase_12x36.py:392` | inteiro em snapshot |
-| D18 | D | `app/ponto/management/commands/detectar_intervalo_ausente.py:53` | `marcos.hi,hf` e todos os pares |
-| D19 | D | `app/ponto/management/commands/backfill_b5_insumos.py:73` | inteiro para `insumos_da_ata` |
-| D20 | D | `app/ponto/management/commands/vigia_b5_ausencia.py:79` | inteiro para `insumos_da_ata` |
-| D21 | D | `app/pautas/services.py:424` | `marcos` |
-
-O produto tem teste de chaves em `app/escala/tests/test_t2_lampadas.py:28` e de seis marcos em `:34`; isso **não demonstra selo de todos esses leitores**. A comparação do blob inteiro em D12/D14 impede afirmar que suas chaves são globalmente “ninguém lê” apenas por ausência de `.get` nominal.
-
-### Persistidos: ATA — 30 pares
-
-| ID | Estrutura/emissor | Consumidor | Chaves lidas |
-|---|---|---|---|
-| A01 | A | `app/escala/services/leitor_celula.py:68`, `:91`, `:115`, `:187`, `:379` | schema base; lâmpadas `acesa` default `luz is not None`, `luz,hora,tipo,tipo_real,isencao,dispensada`; `cobertura_parcial,periodo_parcial` |
-| A02 | A | `app/chamados/juizes.py:450`, `:493`, `:966`, `:1354` | `tipo_dia,cobertura_parcial,lampadas,orfas,n_orfas`; lâmpadas `tipo,hora,acesa,luz` |
-| A03 | A | `app/chamados/reconciliador.py:701`, `:879` | presença de `lampadas`; inteiro para `parcial_so_lista` |
-| A04 | A | `app/chamados/services/disputa_emissao.py:940` | inteiro para `parcial_so_lista` |
-| A05 | A | `app/chamados/services/fabrica_da_celula.py:123` | inteiro para `parcial_so_lista` |
-| A06 | A | `app/chamados/services/materializacao.py:172` | `lampadas,orfas`; lâmpadas `tipo,hora,luz,acesa` |
-| A07 | A | `app/ponto/juiz_batida.py:157` | `lampadas,orfas`; uso das lâmpadas começa em `:190` |
-| A08 | A | `app/ponto/services/cartorio.py:451`, `:805`, `:834`, `:913` | `lampadas`, `pendente`; dispensa, insumos e teto |
-| A09 | A | `app/ponto/services/cluster_espurio.py:27` | `orfas,lampadas`; `acesa` |
-| A10 | A | `app/ponto/services/dia_do_colab.py:30` | `lampadas`; `hora,tipo,acesa,luz` |
-| A11 | A | `app/ponto/services/diagnostico_escala.py:154` | `lampadas`; `hora,tipo,acesa,luz` |
-| A12 | A | `app/ponto/services/esmeril_espelho.py:125` | `orfas,lampadas`; `luz,hora,acesa` |
-| A13 | A | `app/ponto/services/lastro.py:89`, `:113`, `:128`, `:148` | `lampadas`; `hora,tipo,acesa,pendente` |
-| A14 | A | `app/ponto/services/vigia_entrada.py:80`, `:123` | `lampadas`; `tipo,acesa` |
-| A15 | A | `app/ponto/services/vigia_pareador_celula.py:73` | `orfas,n_orfas` default zero, `lampadas` |
-| A16 | A | `app/ponto/worklist.py:22` | presença de `lampadas` |
-| A17 | A | `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:61` | `lampadas.acesa` |
-| A18 | A | `app/ponto/management/commands/backfill_b5_insumos.py:73` | inteiro para `insumos_da_ata` |
-| A19 | A | `app/ponto/management/commands/celula_veredito_velho.py:108` | inteiro em snapshot |
-| A20 | A | `app/ponto/management/commands/curar_residuo_bug115.py:45`, `:148` | presença de `lampadas` |
-| A21 | A | `app/ponto/management/commands/detectar_intervalo_ausente.py:64` | `lampadas.tipo,hora,acesa,luz`; `acesa` default `luz is not None` em `:68` |
-| A22 | A | `app/ponto/management/commands/tripwire_celulas.py:264`, `:342` | `lampadas,orfas,tipo_dia` |
-| A23 | A | `app/ponto/management/commands/vigia_b5_ausencia.py:79` | inteiro para `insumos_da_ata` |
-| A24 | A | `app/pautas/services.py:432` | `lampadas.hora,acesa` |
-| A25 | A | `app/relatorios/dia_da_frota.py:21`, `:61` | `lampadas.tipo,hora,acesa` |
-| A26 | A | `app/relatorios/cartao_pela_celula.py:287` | `orfas,lampadas.hora,isencao` |
-| A27 | A | `app/folha/previa.py:83` | `lampadas.acesa,hora,tipo` |
-| A28 | A | `app/folha/services/sem_furo.py:22` | `lampadas.acesa` |
-| A29 | A | `app/folha/validacao_pdf.py:47` | `minutos_realizados`, default zero |
-| A30 | A | `app/colaboradores/services/feriado_do_posto.py:97` | `lampadas`, processamento posterior no mesmo corpo |
-
-**Outro emissor, outro alcance:** `app/escala/utils.py:1887` fabrica **ATA em memória** apenas com `lampadas,orfas`, passando-a em `celulas=` a `turnos_do_colab` em `:1898`. Seu leitor efetivo é `app/ponto/juiz_batida.py:157`, que lê essas duas chaves. Esse é **E01**, um par adicional; não deve ser cruzado artificialmente com todos os leitores da ATA persistida.
-
-### Outros JSONFields — 16 pares
-
-| ID | Estrutura / emissor e chaves | Consumidor e leitura |
-|---|---|---|
-| P01 | `protestos`: `app/ponto/portas/celula.py:1069`, `:1092`, lista de códigos | `app/escala/services/cadastro_realidade.py:478`, `:612`, membership de códigos |
-| P02 | mesmo | `app/chamados/reconciliador.py:869`, lista |
-| P03 | mesmo | `app/folha/export.py:1173`, `:1254`, conjunto de códigos |
-| P04 | mesmo | `app/ponto/services/furos_sem_cobranca.py:57`, membership |
-| P05 | mesmo | `app/ponto/services/cartorio.py:934`, `:1084`, lista e presença |
-| P06 | mesmo | `app/ponto/management/commands/celula_veredito_velho.py:108`, inteiro |
-| P07 | mesmo | `app/ponto/management/commands/supra_juiz.py:166`, inteiro |
-| H01 | `horarios_por_dia`: `app/escala/services/cadastro_tipo.py:267`, mapa weekday → dict externo | `app/escala/models.py:231`, `:239`, `:338`, `:686`, `:864`: weekday string/int; `hi,hf,hii,hfi` |
-| H02 | mesmo | `app/escala/utils.py:274`: `hi,hf,hii,hfi`; **selo sim**, `app/escala/tests/test_marcos_def_hpd.py:35` |
-| H03 | mesmo | `app/escala/views_wizard.py:80`, serializa inteiro |
-| H04 | mesmo | `app/ponto/selecao_periodo.py:223`: weekday string, `hi,hf` |
-| H05 | mesmo | `app/colaboradores/services/drawer.py:99`, presença do mapa |
-| F01 | `FolgaCalendario.celulas`: `app/escala/folgas.py:586`, `:591`, `:656`, lista `[semana,weekday]` | `app/escala/views.py:304`, `:371`, lista e pares |
-| F02 | `FolgaCalendarioTamanho.dias`: `app/escala/folgas.py:595`, `:661`, lista de dias | `app/escala/views.py:293`, `:362`, dias |
-| F03 | mesmo | `app/escala/models.py:1560`, dias → mapa tamanho do mês |
-| S01 | `dna_anterior`: `app/ponto/portas/celula.py:262`, `:307`, cópia do DNA anterior; limpa em `:828` | `app/ponto/management/commands/aplicar_col900.py:175`, `marcos.hi` |
-
-O `horarios_por_dia` tem emissor de conteúdo no JS: `app/templates/escala/wizard_tipo_escala.html:454` grava `hi,hf`, acrescenta `hii,hfi` condicionalmente em `:455`, e serializa em `:459`; a fronteira Python o decodifica em `app/escala/views_wizard.py:53`. Não contei essa costura JS→Python no subtotal de 92.
-
-`DecisaoProposta.resumo` é escrito em `app/escala/services/propositor.py:720` e `:776`; `_resumo` grava `tipo,template,template_id,ancora,ancora_atual,template_atual,casa_hoje,casaria,sobra,aplicar_desde,dias_batidos` em `:724`. A documentação do próprio campo diz “foto … para a forense” em `app/escala/models.py:1927`. **Leitor de produção não localizado; inexistência global [não verificado]**. Como não há par localizado, não entrou nas 92 costuras.
-
-### Portas e retornos — 25 pares
-
-| ID | Estrutura / emissor | Consumidor / chaves |
-|---|---|---|
-| W01 | payload wizard, `app/escala/views_wizard.py:20`: `template_nome,apelido,hora_inicio,hora_fim,hora_inicio_intervalo,hora_fim_intervalo,hora_inicio_intervalo2,hora_fim_intervalo2,intervalo_duracao_min,noturno,permite_hora_extra,he_extra_antes_min,he_extra_depois_min,folga_calendario_padrao_id,folgas,dias_trabalho_semana`; criação acrescenta `tipo_ciclo,tipo_base,tipo_base_ref`; `horarios_por_dia` condicional em `:57` | `app/escala/services/cadastro_tipo.py:148`: mesmas chaves até `:267`, inclusive defaults; `descricao` aparece apenas em teste de presença em `:185` |
-| W02 | patch `app/chamados/services/limbo_folgas.py:92`: `template_nome,folgas` | mesma porta `cadastro_tipo.py:148`; `hora_inicio,hora_fim` lidos com `.get` em `:205`; demais alterações condicionadas à presença |
-| C01 | carimbo `app/escala/services/regeneracao.py:104`: `{data:{regenerada_em,editada_em}}` | `app/ponto/management/commands/gerar_celulas.py:257`: `**reescrita[dia]` para `cobranca_orfa`; assinatura receptora em `regeneracao.py:141` |
-| C02 | mesmo | `app/ponto/management/commands/supra_juiz.py:170`, uso em chamada de `cobranca_orfa` no laço iniciado em `:260` |
-| T01 | detector `app/escala/detector_proposta.py:123`, `:128`, `:153`: `padrao,proposta,confianca,porque`; proposta `{tipo_escala_id,codigo,descricao,ciclo,horario}`; padrão em `:63` e `:82` | `app/escala/proposta_pdf.py:75`, `:121`: outer completo, padrão `dias,marcos_moda,entrada,saida,duracao_h,dispersao_entrada_min,padrao_dias,dows`; proposta `codigo,horario,ciclo`; **selo sim**, `app/escala/tests/test_detector_proposta.py:141` |
-| T02 | mesmo | `app/escala/management/commands/propor_escala_limbo.py:38`: outer completo, padrão completo exceto `marcos_freq`, proposta `codigo,horario,ciclo` |
-| T03 | mesmo | `app/escala/services/escala_auto.py:121`: `proposta,confianca,padrao.dias,porque`; proposta `tipo_escala_id,codigo,descricao,horario` |
-| T04 | mesmo | `app/ponto/services/esmeril_espelho.py:234`: `proposta,porque,confianca`; proposta `codigo,descricao,horario` |
-| Q01 | propostas `app/escala/services/propositor.py:465`, `:539`, `:585` | `app/chamados/services/proposta_no_fio.py:67`: `n,propostas`; proposta `chamados_que_morreriam,vinculo_id,tipo,ancora,ancora_atual,template,template_atual,motivo` |
-| Q02 | mesmo | `app/chamados/services/painel.py:522`: `propostas[].colaborador_id` |
-| Q03 | mesmo | `app/colaboradores/services/ficha.py:176`: `propostas`; `tipo,template_atual,template,ancora,casa_hoje,casaria,dias_batidos,aplicar_desde,chamados_que_morreriam` |
-| Q04 | mesmo | `app/escala/management/commands/propostas_de_escala.py:39`, `:74`: `propostas,universo,n`; por proposta `colaborador_id,vinculo_id,colaborador,tipo,template_atual,ancora_atual,casa_hoje,dias_batidos,motivo,template,ancora,casaria,sobra,aplicar_desde,chamados_que_morreriam` |
-| Q05 | mesmo | `app/escala/management/commands/ritmo_discordante.py:20`: `ritmo_discordante_vinculos` default `[]`, itens `colaborador_id,ciclo,ritmo,proposta`; `ritmo_discordante` default zero |
-| Q06 | mesmo | `app/api/views_mensageria.py:2034`: `propostas` default `[]`; `colaborador,posto,ancora,template_atual,template,casa_hoje,casaria,chamados_que_morreriam,aplicar_desde,tipo` |
-| Q07 | mesmo | `app/core/views_ia.py:575`: `propostas` default `[]`, `colaborador_id`; assinatura e seleção delegadas |
-| O01 | resultado aplicar `app/escala/services/propositor.py:788`: `decisao_id,saida` | `app/chamados/services/proposta_no_fio.py:152`: **lê `ok` com default `True`, `msg` com default `None`; emissor não grava** |
-| O02 | mesmo | `app/escala/management/commands/propostas_de_escala.py:69`: `saida,decisao_id`, coincide |
-| K01 | kwargs de correção `app/escala/services/propositor.py:765`: `colab,vinculo,template,desde,ate,ancora,novo_trecho,regenerar_desde,apesar_da_lavra,apply,schema` | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:63`: `colab,vinculo,template,desde,apesar_da_lavra,ancora,apply,ate,novo_trecho,regenerar_desde`; `schema` só pertence ao wrapper `handle` em `:50` |
-| M01 | snapshot fase conflitante: schema `app/escala/services/fase_conflitante.py:92`; persistência `app/escala/management/commands/lavrar_fase_conflitante.py:35` | `app/escala/services/fase_conflitante.py:112`: cópia integral de `detalhe`, acrescenta `medido_em`; fallback `{total:None,esperado:0,sem_medida:True}` em `:111` |
-| M02 | snapshot previsto cego: schema `app/escala/services/previsto_cego.py:193`; gravador command homônimo **linha da persistência [não verificado]** | `app/escala/services/previsto_cego.py:224`: integral + `medido_em`; fallback em `:223` |
-| M03 | snapshot vigência impossível: schema `app/escala/services/vigencia_impossivel.py:48`; gravador command homônimo **linha da persistência [não verificado]** | `app/escala/services/vigencia_impossivel.py:72`: integral + `medido_em`; fallback em `:71`; **selo sim**, `app/escala/tests/test_contador_vigencia_impossivel.py:108` |
-| M04 | snapshot vigência sem trilha: schema `app/escala/services/vigencia_sem_trilha.py:79`; gravador command homônimo **linha da persistência [não verificado]** | `app/escala/services/vigencia_sem_trilha.py:98`: integral + `medido_em`; fallback em `:97` |
-| R01 | rótulo régua `app/escala/regua_defesa.py:632`: `classe,faixa,escore,texto` | `app/chamados/juizes.py:516`: só testa resultado `is None` |
-| R02 | mesmo | `app/escala/services/furos_diarios.py:36`, `:305`: presença e `classe`, com default `''` em `:306`; não lê `faixa,escore,texto` |
-
-Os campos de cada proposta Q vêm dos emissores internos de `app/escala/services/propositor.py:184`, `:191`, `:299`, `:303`, `:319`, `:339`, `:363`, `:371`, acrescidos pelo `p.update` em `:539` e `chamados_que_morreriam` em `:572`/`:575`. `motivo` e `sobra` têm variantes; o CLI só lê `sobra` no ramo que não é `grade_por_dia`, em `app/escala/management/commands/propostas_de_escala.py:87`.
-
-**Três pares com desencontro de forma confirmado, além das omissões condicionais:**
-
-1. **O01**: emissor retorna `decisao_id,saida`; consumidor consulta `ok,msg`. O default de sucesso está explícito; falha produtiva **[não verificado]**. O teste troca o retorno real por mock `{'ok': True}` em `app/chamados/tests/test_proposta_no_fio.py:112`, portanto não prende esse casamento de schemas. Dono provável ESTRUTURA; classe sim **[não verificado]**.
-2. **R01 e R02**: o produtor entrega `faixa,escore,texto`, mas os únicos chamadores de produção localizados só usam presença/`classe`, conforme as linhas acima. Ausência de outros leitores por alias **[não verificado]**. O teste `app/escala/tests/test_termometro_regua.py:177` testa o produto diretamente, não obriga consumidores a lerem essas chaves. Dono provável ESTRUTURA; classe sim **[não verificado]**.
-
-**Contagem do meu subconjunto:** 21 DNA + 30 ATA + 16 outros JSONFields + 25 portas/retornos + E01 = **93**, não 92. A diferença veio da inclusão explícita da ATA transitória E01 na consolidação. **93 costuras localizadas; 3 desencontros de forma confirmados; número adicional por omissões condicionais [não verificado]; 3 com selo de costura localizado, 90 sem selo localizado, inexistência dos 90 [não verificado].** Atribuição destas estruturas a `escala` segue o modelo proprietário, inclusive quando o escritor fica em `ponto`; se o relatório atribuir pelo arquivo emissor, precisa redistribuir.
-
-**Residual já localizado, ainda fora dessas 93:** lavra de fase em `app/escala/services/fase_12x36.py:85`, produzida pelo command `app/ponto/management/commands/censo_fase_12x36.py:279`; consumidores `app/escala/services/cadastro_realidade.py:421`, `app/api/views_mensageria.py:1685`, além dos leitores internos da lavra em `fase_12x36.py:97`, `:117`, `:197`. Lavra C7 em `app/escala/services/regua_na_lista.py:48`, consumidores `app/escala/services/cadastro_realidade.py:347` e `app/escala/views.py:469`. Há ainda `ancora_sugerida → propositor` em `app/escala/services/fase_12x36.py:50`/`:64` e `app/escala/services/propositor.py:333`, e `impacto_da_troca → julgar_vinculo` em `app/escala/services/impacto_troca.py:47` e `app/colaboradores/services/vinculo.py:142`. Essas pendências impedem chamar o subtotal de censo total.
-
-_4660 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4664 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
