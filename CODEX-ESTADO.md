@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 08:04** · publicado em **13/11/2026 08:04** (UTC-3)
+> Ultima resposta processada: **13/11/2026 08:10** · publicado em **13/11/2026 08:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 08:10 · sessao fa61a1941543 · ACELERA-DIFF · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 13/11 08:05 · sessao 20612ba1fceb · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 13/11 08:04 · sessao c7334fc8cc25 · - · - · origem=Ronald (tmux)
 
@@ -1198,83 +1206,4 @@ Essa equivalência não pode ser estendida automaticamente a toda a obra: existe
 
 **Impedimentos adicionais para certificar a obra inteira:** censo exaustivo do diff **[não verificado]**; RED atual não cobre os caminhos de releitura de produção identificados em C. Não transformo automaticamente todos os interiores permitidos pela catraca em novos bloqueantes de escopo. (`app/ponto/tests/test_cadastro_futuro_c5e.py:316`; `app/ponto/tests/test_cadastro_futuro_sem_banco.py:370,384,391`)
 
-## 13/11 00:38 · sessao 631294d63c6e · - · - · origem=Ronald (tmux)
-
-O delta cura especificamente a dupla leitura de `_ec_vigencia_regenera_celulas`: `_hoje` recebe uma única `timezone.localdate()` em `app/escala/signals.py:67`; `_ate` reutiliza esse valor em `:68`; passado e futuro recebem o mesmo dia em `:74` e `:82`. O signal entrou no universo (`app/ponto/tests/test_cadastro_futuro_c5e.py:332`) com teto 1 (`:353`).
-
-Executei somente o extrato AST, em memória, de `leituras_de_relogio` e `censo_relogio`: **44 sítios, 39 funções; contagem igual a `TETO_RELOGIO`**. A implementação do censo está em `app/ponto/tests/test_cadastro_futuro_c5e.py:575`, e as comparações em `:592`. Não executei suite nem banco. [não verificado: execução de testes]
-
-Funções do universo com mais de um sítio de relógio:
-
-| Função | Contagem | Referências e natureza |
-|---|---:|---|
-| `julgar_desligamento` | 2 | `app/colaboradores/services/desligamento.py:20`, `:40`: `date.today()`; ambas executam se colaborador não desligado e data omitida. A data escolhida pode ser D e a classificação `agendado` usar D+1 (`:58`). |
-| `reabrir_vigencia_impossivel` | 2 | `app/colaboradores/services/vinculo.py:740` (`date.today`, histórico; requer autor), `:752` (`localdate`, suplemento futuro). |
-| `regenerar_celulas_vinculo` | 2 | `app/ponto/portas/celula.py:263`, `:308`: carimbos `regenerada_em`, não escolha de dia. Recebe `hoje` em `:113`. |
-| `julgar_celula` | 3 | `app/ponto/services/cartorio.py:2016`, `:2037`, `:2040`: dia local, teste do fim do turno e instante do julgamento. As três podem executar no mesmo ato para hoje, turno já vencido e `agora` omitido. |
-
-Pertença dessas funções ao diff inteiro: **[não verificado]**, pois a cópia não contém `.git`.
-
-Funções que recebem `hoje` e também contêm leitura:
-
-| Função | Sítios | Arquivo:linha |
-|---|---:|---|
-| `aplicar_folgas_em_lote` | 1 | `app/escala/folgas.py:385`, `:401` |
-| `reparentar_folga` | 1 | `app/escala/folgas.py:512` |
-| `recusa_ancora_futura` | 1 | `app/escala/models.py:938`, `:965` |
-| `inicio_do_efeito` | 1 | `app/escala/services/escala_auto_executor.py:24`, `:29` |
-| `aplicar_no_vinculo` | 1 | `app/escala/services/escala_auto_executor.py:98` |
-| `desfazer` | 1 | `app/escala/services/escala_auto_executor.py:127` |
-| `apurar_colab` | 1 | `app/escala/services/furos_diarios.py:25`, `:31` |
-| `apurar` | 1 | `app/escala/services/furos_diarios.py:60`, `:67` |
-| `ranking` | 1 | `app/escala/services/furos_diarios.py:123`, `:130` |
-| `ranking_colabs` | 1 | `app/escala/services/furos_diarios.py:167`, `:175` |
-| `universo_empresa` | 1 | `app/escala/services/furos_diarios.py:247`, `:258` |
-| `executar_desligamento` | 1 | `app/colaboradores/services/desligamento.py:62`, `:135` (`now`, carimbo) |
-| `regenerar_celulas_vinculo` | 2 | `app/ponto/portas/celula.py:113`, `:263`, `:308` |
-| `reverter_regeneracao_dia` | 1 | `app/ponto/portas/celula.py:779`, `:834` (`now`, carimbo) |
-
-Nos fallbacks `hoje or relógio`/`if hoje is None`, fornecer um `hoje` válido evita a leitura; é preciso distinguir **sítio AST** de **leitura realmente executada**. Exemplos: `app/escala/folgas.py:401`, `app/escala/services/furos_diarios.py:30`.
-
-Há ainda uma função do mesmo arquivo de modelos **não coberta** pelo recorte `escala/models.py::recusa_ancora_futura`: `vinculos_5x2_6x1_trabalha_feriado(hoje=None)`, com uma `date.today()` em `app/escala/models.py:920`, `:926`; o universo restringe esse arquivo a uma única função em `app/ponto/tests/test_cadastro_futuro_c5e.py:331`.
-
-Arquivos candidatos da obra que leem relógio e estão fora do universo; pertença exata ao diff **[não verificado]**:
-
-| Arquivo | Leituras verificadas |
-|---|---|
-| `app/core/signals.py` | `:36`, `:43`: um `localdate` por signal. O teste carrega o módulo em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:508`. |
-| `app/escala/admin.py` | `:15`: um `localdate` em `save_model`; método real extraído em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:493`. |
-| `app/colaboradores/management/commands/corrigir_escala_retroativa.py` | `:67` em `_rodar`, `:227` em `_aplicar`; teste carrega `_aplicar` em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:623`. |
-| `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py` | `:37`: um `localdate`. |
-| `app/escala/management/commands/corrigir_vinculo_vigencia.py` | `:48`: um `localdate`. |
-| `app/chamados/management/commands/materializar_passivo_validado.py` | `:87` (`localtime` sem argumento) e `:103` (`now` no ensaio): **2 normalizadas**, **1 na lista literal do usuário**. |
-| `app/ponto/management/commands/aplicar_col900.py` | `:146` (`localdate`), `:253` (`localtime` sem argumento): **2 normalizadas**, **1 literal**; auxiliares também leem `now` em `:70`, `:102`. |
-| `app/ponto/management/commands/diff_col900.py` | `:57` (`localdate`), `:119`, `:128` (`localtime` sem argumento): **3 normalizadas**, **1 literal**. |
-| `app/ponto/management/commands/curar_residuo_bug115.py` | `:74`: um `localdate`. |
-| `app/api/views_mensageria.py` | Exemplo relevante: `api_mensageria_pessoa`, **2**, `:1026` (`localdate`) e `:1041` (`now`). Fonte lida pelo teste em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:895`. |
-| `app/colaboradores/models.py` | `Colaborador.salario_em`: uma `today` em `:471`; `LinhaTransporte.custo_mensal`: uma `now` em `:824`. |
-
-`app/chamados/signals.py` não apresentou chamada de relógio no censo AST. [não verificado: pertinência ao diff inteiro]
-
-F, **delta literal**: a única função de produção alterada é `_ec_vigencia_regenera_celulas`; escritor de `_hoje` em `app/escala/signals.py:67`, leitores em `:68`, `:72`, `:74`, `:82`. Trata-se de dia civil local que separa passado/hoje de futuro. O outro arquivo do delta altera dados da catraca, não funções que escrevam/leiam o `hoje` de produção (`app/ponto/tests/test_cadastro_futuro_c5e.py:332`, `:352`, `:353`, `:375`).
-
-Limite adversarial do RED: `MeiaNoiteNoAtoTest` reutiliza a fixture em `app/ponto/tests/test_cadastro_futuro_c5e.py:38`; essa fixture troca `_copiar_folga_padrao` por lambda (`app/ponto/tests/test_cadastro_futuro_sem_banco.py:391`), `_o_chao_do_dia_mudou` por `Mock` (`:384`) e `reconciliar_apos_vinculo` por `Mock` (`:370`). Portanto o assert de uma leitura em `app/ponto/tests/test_cadastro_futuro_c5e.py:93` verifica esse caminho reduzido; não prova uma leitura no grafo inteiro de produção. A cobertura do grafo completo é **[não verificado]**.
-
-## 13/11 00:36 · sessao eac820637f03 · - · - · origem=Ronald (tmux)
-
-Para C, tomando D como dia capturado em `executar_vinculo` e D+1 como leitura posterior à meia-noite; ocorrência real em produção [não verificado]. O executor captura D em `app/colaboradores/services/vinculo.py:194`, passa D aos dois fechamentos (`:219`, `:247`), à regeneração até D (`:328`) e ao suplemento futuro (`:339`).
-
-| Sítio | Grafo observado | Efeito concreto se sua leitura devolver D+1 |
-|---|---|---|
-| `_copiar_folga_padrao` | **Chamada direta** por `executar_vinculo`, tanto na atualização quanto na criação: `app/colaboradores/services/vinculo.py:284`, `:298`. Somente entra com calendário padrão e sem calendário já escolhido: `:157`–`:159`. | `date.today()` escolhe o **mês da foto**, não o dia-turno: `:163`–`:166`. Dentro do mesmo mês, a mudança D→D+1 não muda os dois meses escolhidos; na virada de mês troca o par mês corrente/próximo pelo novo par, deixando de fotografar o mês que continha D nesse caminho (`:164`–`:166`). `date.today()` usa data do processo; equivalência com data civil local do Django [não verificado]. |
-| `relavrar_celulas_da_foto` | **Chamada transitiva** do executor: `_copiar_folga_padrao` → `gerar_foto_folgas` (`vinculo.py:165`–`:166`) → `_gerar_foto_folgas_no_ato` (`app/escala/folgas.py:162`–`:163`) → `relavrar_celulas_da_foto` (`:215`–`:218`). | Lê seu próprio `hoje=D+1` (`folgas.py:280`), regenera `desde..D+1` como passado/hoje (`:290`–`:296`) e só seleciona futuras a partir de D+2 (`:298`–`:299`; `app/ponto/services/cadastro_futuro.py:27`). D+1 recebe DNA novo pelo caminho passado/hoje, sem a limpeza reservada a `d > hoje` (`app/ponto/portas/celula.py:289`–`:315`). Pode chegar ao julgamento de D+1 no rabo (`:392`, `:464`–`:472`); julgamento efetivo obedece às guardas descritas abaixo. |
-| `_ec_vigencia_regenera_celulas` | **Signal de `post_save`** registrado em `app/escala/signals.py:34`; no executor a atualização existente faz `save()` (`app/colaboradores/services/vinculo.py:283`). Só roda se vigência mudou e não é criação/raw (`signals.py:54`–`:59`). | Uma leitura própria D+1 (`:67`) governa **ambas** as partes: passado/hoje até D+1 (`:72`–`:75`) e futuras desde D+2 (`:81`–`:83`; `cadastro_futuro.py:27`). O buraco interno antigo entre duas leituras foi eliminado; continua tendo um dia próprio distinto do D do executor (`vinculo.py:194`). DNA de D+1 é tratado no ramo passado/hoje; seu julgamento segue as guardas do cartório (`celula.py:312`; `cartorio.py:2025`, `:2033`). |
-| `_ec_ancora_regenera_celulas` | **Outro signal de `post_save`**, `app/escala/signals.py:86`; `save()` do executor em `vinculo.py:283` pode acioná-lo quando muda a âncora. Recusa criação/raw, âncora nula ou inalterada (`signals.py:111`–`:116`). | Lê D+1 (`:119`), escolhe janela da competência por D+1 (`:120`), regenera até D+1 (`:124`–`:127`) e suplementa desde D+2 (`:132`–`:134`; `cadastro_futuro.py:27`). Na virada da competência, também muda o início da janela histórica (`signals.py:120`–`:121`). |
-| `_o_chao_do_dia_mudou` | **Chamada direta pela porta do aval** `regenerar_celulas_vinculo` (`app/ponto/portas/celula.py:392`); recebe dias tocados, **não recebe `hoje`** (`:404`–`:405`). Também chamado por edição humana (`:665`) e reversão (`:858`). | A porta usa D (`:193`), reescreve DNA futuro D+1 e desfaz julgamento (`:306`–`:315`). Depois o rabo lê D+1 (`:464`), deixa D+1 passar no filtro (`:469`) e chama o juiz (`:472`). O juiz relê o relógio (`app/ponto/services/cartorio.py:2016`), recusa futuro (`:2025`) e, para hoje com trabalho, espera fim do turno (`:2033`–`:2038`). **Contraexemplo concreto: D+1 com `trabalha=False`** não passa pela espera de turno e pode ser julgado novamente (`:2033`, `:2040`), embora seja futuro segundo o D injetado na porta. |
-| `reabrir_vigencia_impossivel` | **Outro ato**: chamador de produção encontrado é `app/escala/management/commands/corrigir_vinculo_vigencia.py:86`; recebe `ec`, `data_fim`, autor/motivo, sem `hoje` (`app/colaboradores/services/vinculo.py:674`). Não há chamada a essa função no corpo de `executar_vinculo` (`:170`–`:387`). | Com autor, grava `HistoricoVinculo.data=D` por `date.today()` (`vinculo.py:740`; escritor do campo em `app/colaboradores/services/historico_vinculo.py:15`), depois passa D+1 ao suplemento (`vinculo.py:752`), que só seleciona desde D+2 (`cadastro_futuro.py:27`). Uma célula **existente** de D+1 com DNA antigo fica fora desse suplemento e não há regeneração do passado/hoje nessa função (`vinculo.py:729`–`:753`). O `update()` não emite signal (`:730`, `:746`). O command já havia capturado outro `hoje` na borda (`corrigir_vinculo_vigencia.py:48`), usado no fechamento seguinte (`:107`–`:108`) mas não entregue à reabertura (`:86`–`:88`). |
-
-Atenção à interação: quando um caminho intermediário julga D+1, o suplemento final do executor, usando D, só limpa esse julgamento **se reescrever DNA**; o ramo exige diferença em `trabalha`, geradora ou DNA antes de chamar a limpeza (`app/ponto/portas/celula.py:297`–`:315`). Portanto um julgamento recém-criado pode permanecer se o suplemento encontrar o mesmo DNA (`:297`). Dado de produção demonstrando esse caso [não verificado].
-
-Leituras adicionais no executor: `reconciliar_apos_vinculo` é chamado diretamente sem `hoje` (`app/colaboradores/services/vinculo.py:345`–`:348`), lê D+1 (`app/colaboradores/services/pos_vinculo.py:56`), inclui D+1 no intervalo (`:57`) e tenta julgá-lo (`:64`–`:75`), além de apurar furos até esse teto (`:82`). O próprio comentário do executor declara essa releitura como sítio interior fora da cura (`vinculo.py:189`–`:192`); isso descreve o código, não resolve a interpretação do aval.
-
-_4494 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4496 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
