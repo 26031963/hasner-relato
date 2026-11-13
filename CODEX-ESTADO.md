@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 16:33** · publicado em **13/11/2026 16:34** (UTC-3)
+> Ultima resposta processada: **13/11/2026 16:39** · publicado em **13/11/2026 16:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 16:39 · sessao b13326346ebb · - · - · origem=Ronald (tmux)
+
+- **As sondas citadas não estão disponíveis na cópia**, e não pude conferir seu formato ou a emissão de `PAR_DET`; o instrumento disponível é `app/chamados/management/commands/diff_e3_sombra.py:63-70`, cujos rótulos indicam apenas fila/vivas/âncoras, não validam todas as premissas dos testes. [nao verificado: e3_par_a_par.py/e3_par_det.py]
+
+- **Caso 1:** nenhuma porta humana quando há fila sem pergunta; a tarefa deve publicar ação `perguntar/sistema/emissor`. G2/G3 sem vivas podem coincidir com a dimensão “sem pergunta”, mas ações vazias, `validar/admin/None` ou `rejulgar/sistema/cartorio` não reproduzem integralmente o caso escrito. Faltam lâmpadas, teto, vínculo, decisões E1 e razões por instância para decidir por que não há pergunta exigível. `app/chamados/tests/test_e3_portas_tarefa.py:32-38`; a ressalva explícita de que `nao_sei` por marco fora do turno **não é caso 1** está em `app/chamados/tests/test_e3_leitores_c17_chamadores.py:46-47`.
+
+- **Fila encolhendo (G1):** não há teste com duas ou mais portas da célula, com verbos diferentes ou dois `cobrar`, que escolha quais devem continuar. O teste da âncora da própria célula usa um chamado e uma pergunta, e espera `(ch.pk,)`, `cobrar`, `colab`. Para multicall: **sem caso escrito** no arquivo solicitado; faltam identidade/âncora e exigibilidade de cada porta excluída. `app/chamados/tests/test_e3_portas_tarefa.py:67-73`.
+
+- **Fila A/pergunta B:** há caso escrito para tarefa `responder/colaborador/B`, rota da pergunta, fila vazia, preservando o verbo de B; A residual sai. Quando B tem módulo `gps_fora_geofence`, a ação continua `responder` e o verbo deve ser `validar`. Essa convivência é deliberada, não prova erro de prioridade. `app/chamados/tests/test_e3_portas_tarefa.py:40-55`; `app/chamados/tests/test_e3_portas_tarefa.py:75-82`.
+
+- **G2/G3/G4 com vivas e sem porta:** o teste “só fila sem pergunta” não cobre esses fatos. A simples presença em `vivas_c17` não informa qual âncora pertence a qual pergunta, últimas decisões, passivo, estado de lâmpada, teto, posição/instância ou por que uma ação recebeu `porta=None`. **Sem caso escrito que determine ATUAL** apenas por esses campos. A produção deriva `porta_admin` da presença da âncora na fila e usa E1 para escolher a ação. `app/chamados/services/tarefa_do_dia.py:128-162`; a exigibilidade também depende de `app/chamados/services/tarefa_do_dia.py:262-313`.
+
+- **G5 responder/colaborador com verbo validar:** o arquivo escreve explicitamente essa combinação; o verbo não se traduz da ação. Isso sustenta a coexistência `fio=colab` e `verbo=validar`, mas **não resolve teste misto** com ações simultâneas `validar/admin` e `responder/colaborador`, nem prova cada caso de produção sem o módulo/âncora. `app/chamados/tests/test_e3_portas_tarefa.py:75-82`.
+
+- **Prioridade:** a escada `cobrar > validar` está em **`app/chamados/juizes.py`**, não `core/juizes.py`. O comentário escreve sua justificativa: o dia chega ao admin depois de o colaborador falar, atribuindo-a ao aval de 30/10 23:5x item (a). `app/chamados/juizes.py:1624-1628`. A tarefa documenta `colab, admin, sistema` e executa essa ordem sobre os donos das ações. `app/chamados/services/tarefa_do_dia.py:39`; `app/chamados/services/tarefa_do_dia.py:552-556`. **Não há caso no teste solicitado que decida qual escada vence quando divergem**, particularmente no caso misto; `test_verbo_nao_e_traducao_da_acao_da_tarefa` mostra que não são equivalentes. `app/chamados/tests/test_e3_portas_tarefa.py:75-82`. Outro teste escreve que o papel no vigia é o fio da tarefa, independentemente do verbo. `app/chamados/tests/test_e3_bloqueantes.py:15-16`; `app/chamados/tests/test_e3_bloqueantes.py:193-198`.
+
+- **Dono L-099 por colab-dia: [nao verificado].** O anexo não fornece os insumos exigidos por `dono_da_divergencia`: horas do dia, cadastro × realidade, folga não definida, ausência de vínculo, batida fora do turno e fase deslocada. Motivos de pergunta não substituem esses insumos julgados. `app/ponto/management/commands/e6_oraculo.py:53-54`. A ordem é cadastro prioritário por folga/vínculo; batida fora do turno; quantidade ímpar; fase deslocada; cadastro × realidade; estrutura residual. `app/ponto/management/commands/e6_oraculo.py:98-110`.
+
+- **Pergunta com status aberto:** no anexo, os campos de status mostrados são `null`; não se pode convertê-los em `aberto`. Contagem literal de status `aberto` e lista de pks dependem da recontagem; existência de status efetivamente aberto **[nao verificado]**. A escolha de uma ação `responder` tampouco significa status aberto, pois E1 permite resposta após recusa/reabertura. `app/chamados/services/tarefa_do_dia.py:139-140`.
 
 ## 13/11 16:33 · sessao 6d1c9cc531a4 · E3-FORMA-SQL · leitura · origem=Code
 
@@ -885,25 +905,4 @@ Ajustes essenciais para consolidar:
 
 Selos conferidos incluem transporte de isenção, cobertura parcial e métricas C8/C12; vários outros testes só cobrem fixtures ou leitores isolados, portanto não demonstram a costura completa. `app/ponto/tests/test_carimbo_isencao_lampada.py:144`; `app/escala/tests/test_cobparc7_leitor_transporta_a_lampada.py:29`; `app/ponto/tests/test_c2_vinculo_vira_lista.py:73`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:84`; `app/folha/tests/test_retrato_folha_quadros.py:1464`.
 
-## 13/11 15:45 · sessao 73e2ed51da70 · - · - · origem=Ronald (tmux)
-
-Complemento dos retornos, com correções para a consolidação:
-
-| Estrutura | Emissor/chaves | Consumidor/chaves | Desencontro | Selo |
-|---|---|---|---|---|
-| `com_nomes` | `ponto/services/abriu_nao_bateu.py:117`: inicia `mudos,recusados`; `:147-149` acrescenta `total,abriram,janela_horas`; retorna em `:150` | `ponto/management/commands/lavrar_abriu_nao_bateu.py:35,36,40,49,51`: `total,mudos,recusados` | **Não** quanto a `total`: o coletor de dict literal perderia a mutação incremental. | Selo desta costura **[não verificado]**. |
-| diagnóstico | `ponto/services/diagnostico_escala.py:221-247`: `colaborador,periodo,dias,so_os_dias_que_discordam,paridade_real,horario_mediano,dias_fora_do_horario,troca_de_ritmo,termometro,destino_sugerido,template,pausa_nao_cadastrada,acoes,fonte` | `api/views_mensageria.py:2008-2010`: recebe inteiro, acrescenta `ano_assumido`, serializa | Não há leitura nominal incompatível nesse consumidor. | **Sim**, `api/tests/test_diagnostico_escala.py:122-128` verifica endpoint e campos do diagnóstico. |
-| turno órfão | `ponto/utils_turno_orfao.py:37-42`: itens `pk,data,hora,horas`; envelope `tem_bloqueio,tem_regularizacao_pendente,entradas_pendentes,qtd_pendentes` em `:60-65` | `chamados/detector_anomalias.py:33-43`: flags default `None`; `entradas_pendentes=[]`; itens `horas=0,hora=None,pk=None` | Não quanto aos nomes lidos. `data` do item é civil (`utils_turno_orfao.py:39`); o consumidor deriva o dia do turno pelo `pk`, em `detector_anomalias.py:43-48`. | Selo entre estes dois módulos **[não verificado]**. Testes do produtor: `ponto/tests/test_bloqueio_orfao_nucleo.py:33-36`, `test_o247_retratada_fora_do_pareamento.py:86-114`. |
-| turno órfão | mesmo produtor | `api/views.py:327,353` | `_bloq['entradas_pendentes']` aparece sintaticamente, mas está no ramo falso do ternário: `regularizacao_obrigatoria=False` em `:330`. Leitura efetiva dessa chave nesse caminho **não acontece pelo corpo mostrado**. | `api/tests/test_api_me_nao_bloqueia.py:55-66` verifica órfão existente e resposta `entradas_pendentes=[]`. |
-| turno órfão | mesmo produtor | `api/views_core.py:315,341` | Mesma leitura nominal inativa: flag fixada em `False` em `:318`. | Selo específico deste kernel **[não verificado]**. |
-| resumo do espelho | `ponto/services/espelho.py:568`: `grade_pelo_builder=True` somente no fallback | `folha/porta_export.py:514`: `r.get('grade_pelo_builder')`, default `None` | Presença condicional; nenhum nome divergente. Se a régua contar ausência opcional como desencontro, registrar como **opcionalidade**, não como incidente. | **Sim**, `ponto/tests/test_o81_celula_da_competencia.py:59-72` prende os nomes dos dois lados. |
-| resumo do espelho | `ponto/services/espelho.py:910-912`: acumula `total_relogio` somente havendo dia dentro da janela; não inicializado em `:1230-1232` | `folha/porta_export.py:511`: `r.get('total_relogio') or 0` | Presença condicional, default explícito no leitor. Efeito problemático **[não verificado]**. | Selo exato produtor–consumidor **[não verificado]**; teste do campo no produtor em `ponto/tests/test_e5_topo_soma_das_linhas.py:30`. |
-| mesmo resumo | mesmo escritor `:910-912` | `templates/ponto/espelho.html:47-49`: testa e imprime `resumo_mes.total_relogio` | Presença condicional, condição explícita de exibição. | Selo exato desta costura **[não verificado]**. |
-| resumo do espelho | `relatorios/cartao_pela_celula.py:321-345`: acrescenta `fonte_dos_totais` só quando `_comp` existe; recebe o dict de ponto em `ponto/services/espelho.py:1283-1284` | `api/views.py:1660`: `.get('fonte_dos_totais')`, default `None` | Presença condicional; nenhuma incompatibilidade de nome. | **Sim**, `api/tests/test_bug139_espelho_app_mesma_fonte.py:109-118` sela chaves do payload; `api/tests/test_espelho_app_fonte_e_geometria.py:85-105` sela valores alternativos. |
-| mesmo resumo | mesmos escritores | `colaboradores/services/ficha.py:200-209`: `total_trabalhadas,total_extras,turnos,turnos_abertos`, todos com `or 0`; `fonte_dos_totais` default `None` | Presença condicional da fonte; nenhuma chave incompatível encontrada nesse corpo. | Selo específico da ficha **[não verificado]**. |
-
-Para o dicionário do espelho não limitar o inventário ao literal do `return`: o envelope está em `ponto/services/espelho.py:1294-1296`; `resumo` recebe mutações em `:1249-1270`, por `montar_dias` em `:1262-1266`, e por `folha_manda` em `:1283-1284`. `montar_dias` ainda grava `datas_turno_aberto` (`:471`), `datas_saida_orfa` (`:617`), somas pelas chaves de `somar_periodos` (`:441`, esquema `:77-79`) e os campos condicionais acima.
-
-Nenhum desencontro novo inequívoco confirmado nesse complemento; preservo D1–D7 do relatório anterior. Ausência global de outros desencontros **[não verificado]**.
-
-_4670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4671 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
