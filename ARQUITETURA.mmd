@@ -337,12 +337,12 @@ flowchart TD
     ja_ferias_services_py(["ferias/services.py"]) --- jf_ausencia_ferias
     ja_ferias_situacao_py(["ferias/situacao.py"]) --- jf_ausencia_ferias
     jmais_ausencia_ferias["... +5 arquivos de juiz"] --- jf_ausencia_ferias
-    jf_chamado["chamado<br/>21 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
+    jf_chamado["chamado<br/>23 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
     ja_chamados_catalogo_modulos_py(["chamados/catalogo/modulos.py"]) --- jf_chamado
     ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_chamado
     ja_chamados_catalogo_premissa_py(["chamados/catalogo/premissa.py"]) --- jf_chamado
     ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_chamado
-    jmais_chamado["... +9 arquivos de juiz"] --- jf_chamado
+    jmais_chamado["... +10 arquivos de juiz"] --- jf_chamado
     jf_feriado_prazo["feriado/prazo<br/>6 com juiz · 2 sem juiz<br/>registro: 12 sitio(s)"]
     ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_feriado_prazo
     ja_ponto_catalogo_justificativas_py(["ponto/catalogo/justificativas.py"]) --- jf_feriado_prazo

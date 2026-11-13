@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 19:02:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (598.2 MB). Acoes na janela: **2464**.
+**Medido em 13/11/2026 19:08:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (598.2 MB). Acoes na janela: **2465**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:08:04 | Bash |  | `cd /home/ronald/wt-o168v6-233014; git branch --show-current; git status --porcelain \| head -3; cd /home/ronald/saas-hasner; git log --oneline -1; ps -eo pid,args \| /bin/grep -E 'push.sh\|pre-push\|git push\|deploy.sh' \| /bin/grep -v grep \| cut -c1-120; git diff --name-only e439fac78 89a5b0d85 -- '*/migrations/*' \| head; date +%H:%M; ls logs/sombra* -d 2>/dev/null \| head -2; git status --porc ...` |
 | 18:59:16 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/.*/ESPERANDO: trava_teste.sh \| pid=2914225/' app/docs/RELATO.md; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read().split('\n') t.insert(3,'PONTO 18:5x O168 selo do diagrama VERDE na copia @89a5b0d85 (logs/O168/v9/selo_diagrama/run.log: Ran 21, OK, rc 0); arvore certificada = suite 3d02bfe43 (2 falhas so do diagrama) + 89a5b0d85 so docs. Opus final  ...` |
 | 18:59:12 | Bash |  | `cd /home/ronald/saas-hasner; ps -eo pid,etime,args \| /bin/grep -E 'trava_teste.sh\|codex_pergunta.sh' \| /bin/grep -v grep \| cut -c1-140` |
 | 18:59:09 | Agent | Opus final O168 v9 | `Obra O168-JUIZ-DO-VEREDITO (Hasner Ponto, Django em app/). Voce e o UNICO verificador opus final antes do pouso. Somente leitura. Voce nao viu a construcao; procure o que esta errado. Responda em portugues. Copia: /home/ronald/wt-o168v6-233014, final 89a5b0d85 (contem merge do main e439fac78 em 3d02bfe43). Diff total contra o main: /home/ronald/saas-hasner/logs/O168/v9/diff_final.diff (24 arquivos ...` |

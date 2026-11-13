@@ -103,6 +103,7 @@ esperam migrar -- a lista so encolhe).
 | este dia veta o nascimento/reabertura automatica de chamado de turno? | `ponto/services/furos_vetados.py::motivo_do_veto` |
 | o chamado e duplicado (mesmo fato)? | `chamados/models.py::ChamadoColaborador.abrir` |
 | o chamado esta vivo? | `chamados/catalogo/motor.py::VIVOS` |
+| o chamado tem resposta do colaborador SEM veredito e por isso nao pode ser encerrado pelo sistema? | `ponto/supra_juiz.py::pode_executar_csf` |
 | o dia da pergunta esta arquivado pela tranca da competencia (trancada e nao tocada pelo admin depois)? | `chamados/juizes.py::dia_da_pergunta_trancado` |
 | o dia passado sem turno previsto do colaborador ja esta entregue ao DP como pendencia de CADASTRO? | `chamados/services/fabrica_da_celula.py::pauta_cadastro_existente` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
@@ -110,6 +111,7 @@ esperam migrar -- a lista so encolhe).
 | por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)? | `chamados/juizes.py::porta_alcancavel_do_dia` |
 | por que o chamado vivo de furo nao tem pergunta no app? | `chamados/services/pergunta_no_app.py::retencao` |
 | quais acoes ainda sao exigiveis para cada instancia de marco do dia, de quem e por quais portas? | `chamados/services/tarefa_do_dia.py::tarefa_do_dia` |
+| quais respostas do colaborador na disputa esperam veredito (nem validadas nem materializadas)? | `chamados/models.py::DisputaSupervisao.respostas_sem_veredito` |
 | qual a competencia do chamado? | `chamados/juizes.py::competencia_do_chamado` |
 | qual o dia do chamado? | `chamados/catalogo/modulos.py::data_do_chamado` |
 | quem pode agir no chamado? | `chamados/utils.py::pode_agir_chamado` |
@@ -185,9 +187,9 @@ esperam migrar -- a lista so encolhe).
 | `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 15 | 0 | 0 |
-| `chamado` | 21 | 0 | 0 |
+| `chamado` | 23 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 12 |
 | `tela` | 11 | 1 | 109 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **95** | **5** | **245** |
+| **total** | **97** | **5** | **245** |
