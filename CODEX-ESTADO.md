@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 18:41** · publicado em **13/11/2026 18:41** (UTC-3)
+> Ultima resposta processada: **13/11/2026 18:45** · publicado em **13/11/2026 18:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 18:45 · sessao 963ccf45aa88 · HJ-090 · construtor · origem=Code
+
+Curas e testes escritos. Suíte e mordidas reais dos mutantes: **[nao verificado]**, sem execução nesta volta. [nao verificado]
+
+A [entrega completa](/home/ronald/wt-codex-hj-090-152256/app/HJ090_VOLTA5_ENTREGA.txt:6) lista os **12 arquivos alterados/adicionados** e contém o comando individual de cada teste e mutante. [nao verificado]
+
+- **C:** valida cada identidade interna, incluindo tipos e datas ISO canônicas, antes das reversões — [command:67](/home/ronald/wt-codex-hj-090-152256/app/ferias/management/commands/realinhar_concedidos_ferias.py:67).
+- **PA apagado:** confere e trava todos os PAs antes do primeiro ato; lista todos os ausentes e recusa o arquivo. A reversão passou a usar transação de lote — [command:119](/home/ronald/wt-codex-hj-090-152256/app/ferias/management/commands/realinhar_concedidos_ferias.py:119). [nao verificado]
+- **D:** criação e edição usam a admissão como âncora comum. Fora dos aniversários, o próprio início ancora o ciclo, conforme docstring — [services:752](/home/ronald/wt-codex-hj-090-152256/app/ferias/services.py:752), [views:167](/home/ronald/wt-codex-hj-090-152256/app/ferias/views.py:167).
+- **Colisão:** traduz `ValidationError` da guarda existente para `RecusaNaPorta`, dentro da transação — [services:787](/home/ronald/wt-codex-hj-090-152256/app/ferias/services.py:787).
+- **Relógio:** `hoje` obrigatório nas portas, com chamadores produtivos e testes anteriores ajustados — [services:499](/home/ronald/wt-codex-hj-090-152256/app/ferias/services.py:499), [services:636](/home/ronald/wt-codex-hj-090-152256/app/ferias/services.py:636), [entrega:25](/home/ronald/wt-codex-hj-090-152256/app/HJ090_VOLTA5_ENTREGA.txt:25). [nao verificado]
+
+Mapa preparado **teste → mutante**; confirmação RED de cada mordida: **[nao verificado]**. Os comandos individuais estão na [entrega:35](/home/ronald/wt-codex-hj-090-152256/app/HJ090_VOLTA5_ENTREGA.txt:35). [nao verificado]
+
+| Teste | Mutantes | [nao verificado]
+|---|---|
+| [Identidade inválida:42](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:42) | `c_sem_identidade_interna`, `c_sem_data_valida` |
+| [PA apagado:61](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:61) | `pa_sem_preflight`, `pa_so_um_ausente` |
+| [Outro PA não bloqueia:79](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:79) | `b_sem_filtro_pa` |
+| [Outro PA não libera replay:87](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:87) | `b_sem_guarda_ato` |
+| [Criação 29/02:137](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:137) | `d_criacao_conta_independente`, `d_edicao_sem_ancora` |
+| [Criação 31/01:140](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:140) | `d_criacao_364`, `d_fim_364`, `d_limite_365` |
+| [Início fora do aniversário:143](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:143) | `d_forca_aniversario` |
+| [Colisão sem escrita:154](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:154) | `colisao_sem_traducao` |
+| [Hoje no agendamento:172](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:172) | `hoje_ag_aviso`, `hoje_ag_status_pa` |
+| [Hoje no intake:180](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:180) | `hoje_intake_nao_propaga`, `hoje_intake_abono` |
+| [Hoje nas duas portas de troca:191](/home/ronald/wt-codex-hj-090-152256/app/ferias/test_hj090_volta5.py:191) | `hoje_troca_aviso`, `hoje_troca_status_ag`, `hoje_troca_status_pa`, `hoje_remarcar_nao_propaga`, `hoje_corrigir_nao_propaga` |
 
 ## 13/11 18:41 · sessao 0edada80a8c4 · JUSTIFICATIVA-PAGA-O-PERIODO · sonda · origem=Code
 
@@ -1025,102 +1053,4 @@ O anexo marca `main_moveu=True` nestes 24 arquivos; conflitos textuais e aplica�
 | PADRAO-DE-CIMA | Desenho por entidade/24 h (`app/docs/BACKLOG.md:836`) | **SIM** (`bin/disjuntor.py:1004`) | Causa do mutante e certificação (`app/docs/RELATO.md:1845`) | PDC-DESENHO (`app/docs/BACKLOG.md:836`) | **CONCLUIR após decisão, antes de B1** — INFERIU (`app/docs/BACKLOG.md:837`) |
 | BUG-ENC-CELULAS-FORMA | Contratos de células e pad (`app/ponto/turnos.py:2150`) | **SIM** (`app/ponto/services/vigia_de_hora.py:58`) | Singular, selos, suite/impacto (`app/docs/RELATO.md:7799`) | E4-CARGA-PARIDADE (`app/docs/BACKLOG.md:932`) | **CONCLUIR na vaga de bug** — INFERIU (`app/docs/BACKLOG.md:931`) |
 
-## 13/11 18:24 · sessao 27b58837747d · RAIA-PREPARACAO · censo · origem=Code
-
-**LEU** identifica código/documento aberto na cópia; **INFERIU** identifica conclusão da comparação. SIM/PARCIAL abaixo qualificam o código: ocorrência atual em produção, passivo e impacto financeiro são **[não verificado]**. Histórico Git, ancestralidade e aplicação mecânica das raias também são **[não verificado]**; os commits citados têm atribuição documental. [nao verificado]
-
-**O261-PAI-TERMINAL**
-
-1. **O que cura — LEU.** Disputa aberta pode conservar pai terminal: o emissor retorna a disputa existente sem verificar o estado do pai. (`app/chamados/services/disputa_emissao.py:531`, `app/chamados/services/disputa_emissao.py:566`)  
-   Pergunta sem destino continua ancorada nesse pai; a fila cobra apenas chamados vivos. (`app/chamados/services/fio.py:117`, `app/chamados/services/painel.py:155`, `app/chamados/services/painel.py:189`)
-
-2. **Ainda existe? PARCIAL — LEU.** O retorno sem conferir o pai permanece; `reabrir_sistema` reabre a disputa sem religar sua âncora, e o nascimento admite `chamado_destino=None`. (`app/chamados/services/disputa_emissao.py:566`, `app/chamados/models.py:2164`, `app/chamados/models.py:3015`) Entretanto, a O261-E já introduziu guarda no encerramento: considera perguntas da competência aberta, reata por pergunta ou recusa o fechamento. Esse sítio **proíbe expressamente `religar_pai_vivo` por não separar competências**. (`app/chamados/models.py:364`, `app/chamados/models.py:374`, `app/chamados/models.py:410`) A absorção do objetivo pela O261-E consta do BACKLOG; isso não comprova cura completa do nascimento/passivo. (`app/docs/BACKLOG.md:892`)
-
-3. **Falta / aplicação — LEU + INFERIU.** Falta resolver a âncora por pergunta/dia, preservando a separação entre aberta e exportada. A condição das disputas mistas está escrita no corte; o desenho atual já escolheu a reata por pergunta. (`app/docs/CORTES.md:397`, `app/chamados/models.py:374`)  
-   `main_moveu=True`, segundo o anexo: `app/chamados/models.py`, `app/chamados/services/acoes_disputa.py`, `app/chamados/services/vigia_fio.py`, `app/chamados/management/commands/vigiar_fio_morto.py` e `app/chamados/tests/test_o261_vigia_fio.py`. **[não verificado: comparação histórica fornecida]**  
-   **INFERIU:** há conflitos de desenho e API: a raia religa a disputa inteira, usa ordem Disputa→Colaborador e chama a antiga porta de pergunta na reabertura; o HEAD exige ordem Colaborador→Disputa→Chamado→Pergunta e usa `abrir_conversa` nesse ato. (`app/chamados/models.py:380`, `app/chamados/models.py:2834`, `app/chamados/services/acoes_disputa.py:263`; raia: anexo, **[não verificado na cópia]**)
-
-4. **Arquivos em comum.** BUG-PAR/E3: os quatro arquivos de produção acima e `test_o261_vigia_fio.py`; O168: `models.py`; HJ-090: o comando `vigiar_fio_morto.py` e `test_o261_vigia_fio.py`. **[não verificado na cópia; cruzamento dos anexos]**
-
-5. **Depende de — LEU.** Separação por competência, juízes da vida/âncora e conclusão pelo desenho O261-E/FIO; exportada deve seguir a condição específica do corte. (`app/docs/CORTES.md:397`, `app/chamados/models.py:324`, `app/chamados/models.py:377`) Tocar o gravado exportado exige `!`; religar indiscriminadamente a disputa não atende à condição escrita. (`CLAUDE.md:265`, `app/chamados/models.py:380`)
-
-6. **Proposta — INFERIU: DEMOLIR a solução antiga por disputa.** O desenho foi superado pela reata por pergunta e está explicitamente vedado no HEAD. Encaminhar o residual de nascimento/reabertura à O261-E/FIO, junto das obras em voo que tocam esses arquivos, aproveitando os casos de teste como insumo. (`app/chamados/models.py:380`, `app/docs/BACKLOG.md:892`, `app/docs/PROMPTS.md:1685`) A proposta não declara o defeito encerrado. (`app/chamados/services/disputa_emissao.py:566`)
-
-**O10-C**
-
-1. **O que cura — LEU.** Entregar ao admin os lançamentos SOLO e permitir declarar o par pela tela, usando a porta existente. Esse é o desenho da volta 2 registrado. (`app/docs/RELATO.md:1338`, `app/docs/BACKLOG.md:2082`)  
-   A operação de troca já existe, mas exige dois lados e duas cartas; SOLO é pedido, não troca confirmada. (`app/ponto/portas/celula.py:670`, `app/ponto/portas/celula.py:691`, `app/ponto/portas/celula.py:702`)
-
-2. **Ainda existe? SIM, no objetivo lista+UI — LEU + INFERIU.** A base O10-B está presente: trava as cartas e edita os dois lados no mesmo atomic. (`app/ponto/portas/celula.py:695`, `app/ponto/portas/celula.py:711`) Não foi encontrado chamador de UI na busca da cópia; a ausência global fica **[não verificado]**, apoiada pela definição, rotas abertas e registro explícito da lacuna. (`app/ponto/portas/celula.py:670`, `app/ponto/urls.py:53`, `app/docs/RELATO.md:1338`) O BACKLOG atribui a base ao merge `c3ba27d7`; não atribui a ele a entrega C. (`app/docs/BACKLOG.md:2033`)
-
-3. **Falta / aplicação — LEU + INFERIU.** Falta Pauta DP por dia com link para view/form que receba substituto, duas cartas e motivo; o caso de aceite é SOLO produzir zero edição do par e uma linha com porta alcançável. (`app/docs/RELATO.md:1338`, `app/docs/RELATO.md:1341`)  
-   `main_moveu=True`: somente `app/config/crons.py`, segundo o anexo. **[não verificado: comparação histórica fornecida]**  
-   **INFERIU:** o lote antigo pode fornecer classificação e casos, mas imprimir `so_um_lado` não entrega a lista persistida nem o formulário. A raia precisa incorporar a volta 2; a região de comandos avulsos também evoluiu. (`app/docs/RELATO.md:1338`, `app/config/crons.py:1370`; lote: anexo, **[não verificado na cópia]**)
-
-4. **Arquivos em comum.** `app/config/crons.py` com BUG-PAR e HJ-090; nenhum dos arquivos fornecidos da raia com O168/E3. **[não verificado na cópia; cruzamento dos anexos]**
-
-5. **Depende de — LEU.** O desenho SOLO já está decidido: o admin declara o par. A porta barra competência lavrada e dia sem vínculo. (`app/docs/RELATO.md:1338`, `app/ponto/portas/celula.py:606`, `app/ponto/portas/celula.py:622`) O apply em exportada tem condição própria de DRY e `!`; alteração de dado de escala/vínculo também exige `!`. (`app/docs/RELATO.md:1342`, `CLAUDE.md:265`) **INFERIU:** a UI pode chamar a porta existente sem alterar o motor. (`app/docs/RELATO.md:1338`, `app/ponto/portas/celula.py:670`)
-
-6. **Proposta — INFERIU: CONCLUIR pela volta 2.** Sugerida para a primeira vaga de negócio depois das prioridades estruturais, entregando lista e ação alcançável. O lote sozinho não satisfaz o desenho registrado. (`CLAUDE.md:291`, `app/docs/RELATO.md:1338`, `app/docs/BACKLOG.md:2082`)
-
-**O275**
-
-1. **O que cura — LEU.** Permitir que cadastro do tipo faça um feriado criar dia previsto onde o padrão semanal não previa trabalho. (`app/docs/BACKLOG.md:1557`)  
-   Hoje o semanal consulta os dias cadastrados, e o vínculo apenas pode suprimir trabalho por feriado; falta o caminho feriado `False→True`. (`app/escala/models.py:830`, `app/escala/models.py:1365`)
-
-2. **Ainda existe? SIM — LEU.** `TipoEscala` não apresenta o novo campo entre `apelido` e os campos de ciclo; o cálculo mantém a base do template e a supressão de feriado. (`app/escala/models.py:114`, `app/escala/models.py:117`, `app/escala/models.py:1365`) Payload e formulário abertos também não oferecem esse cadastro. (`app/escala/views_wizard.py:34`, `app/templates/escala/wizard_tipo_escala.html:173`) Cura equivalente ou commit que a introduziu: **[não verificado]**.
-
-3. **Falta / aplicação — LEU + INFERIU.** Falta decidir **FORMA A** — todos os ciclos menos intermitente — ou **FORMA B** — somente 6x1/5x2/semanal. O bloqueio é escolha de lei com códigos diferentes; “default desligado” não escolhe entre elas. (`app/docs/BACKLOG.md:1557`, `app/docs/RELATO-ARQUIVO.md:750`, `app/docs/RELATO-ARQUIVO.md:753`) Os 12 h × 36 h são relato histórico; reprodução atual **[não verificado]**. (`app/docs/RELATO-ARQUIVO.md:748`)  
-   `main_moveu=True`: `app/config/crons.py`, `app/escala/models.py`, `app/escala/services/cadastro_tipo.py`, `app/escala/views_wizard.py` e `app/templates/escala/tipos_lista.html`. **[não verificado: comparação histórica fornecida]**  
-   **INFERIU:** precisa conciliar o leitor/contador antigos com as autoridades atuais de lugar e cobertura do vínculo. (`app/escala/models.py:929`, `app/escala/models.py:1385`; implementação antiga: anexo, **[não verificado na cópia]**) Há também conflito de grafo: a raia acrescenta migração após `0042`, enquanto o HEAD já tem `0043_eventocelula` e uma `0044` dependente dela; será necessário reencadear a migração. (`app/escala/migrations/0043_eventocelula.py:8`, `app/escala/migrations/0044_celuladia_status_dia_celuladia_status_rotulo.py:9`; migração da raia: **[não verificado na cópia]**)
-
-4. **Arquivos em comum.** `app/config/crons.py` com BUG-PAR e HJ-090; nenhum dos arquivos fornecidos com O168/E3. **[não verificado na cópia; cruzamento dos anexos]**
-
-5. **Depende de — LEU.** Corte FORMA A/B, cadastro pela UI, derivador único e migration conciliada. O277 vem depois da O275. (`app/docs/BACKLOG.md:1557`, `app/docs/BACKLOG.md:1559`) Alterar dados de escala/vínculo exige `!`; eventual toque no motor tem aval próprio. (`CLAUDE.md:265`, `CLAUDE.md:142`)
-
-6. **Proposta — INFERIU: CONCLUIR após o corte A/B**, em vaga de negócio e antes da O277. A capacidade pedida permanece ausente; a decisão de alcance impede tratar a raia como pronta para pouso. (`app/escala/models.py:1365`, `app/docs/RELATO-ARQUIVO.md:753`, `app/docs/BACKLOG.md:1559`)
-
-**LASTRO-DEGRAU-2**
-
-1. **O que cura — LEU.** Elimina o casamento próprio de batida com marco quando falta lâmpada, fazendo o recuo ler o juiz da atribuição. (`app/docs/BACKLOG.md:1756`, `app/core/juizes.py:212`)  
-   O sítio ainda combina a hora cobrada com a data civil e busca batida do mesmo tipo pela distância linear. (`app/ponto/services/lastro.py:304`)
-
-2. **Ainda existe? SIM — LEU.** `TOLERANCIA_MIN=90` permanece e o degrau 2 ainda usa `abs(timestamp-alvo) <= tol`. (`app/ponto/services/lastro.py:59`, `app/ponto/services/lastro.py:307`) Outra parte evoluiu: LASTRO-PARTE-2 levou o fecho ao evento e tornou o comando vigia; o BACKLOG atribui isso a `a7372499`, e o código confirma o comportamento. Isso não removeu a conta linear. (`app/docs/BACKLOG.md:753`, `app/ponto/management/commands/fechar_cobranca_com_lastro.py:44`, `app/ponto/services/lastro.py:364`)
-
-3. **Falta / aplicação — LEU + INFERIU.** Falta migrar o recuo para o juiz e verificar/corrigir a invariância da grade entre janela unitária e lote. A proposta antiga de consultar somente o raio já foi explicitamente superada. (`app/docs/BACKLOG.md:1756`, `app/docs/BACKLOG.md:1066`) Parte da causa mudou: folga/ausência agora são aplicadas por pessoa e vínculo do dia; a régua ainda reúne escalas da janela. O caso histórico continua ocorrendo hoje: **[não verificado]**. (`app/escala/utils.py:1843`, `app/escala/utils.py:1313`, `app/escala/utils.py:1350`)  
-   `main_moveu=True`: `app/ponto/management/commands/fechar_cobranca_com_lastro.py`, `app/ponto/services/cartorio.py`, `app/ponto/services/lastro.py`, `app/ponto/tests/test_bug114_fechador_de_dois_dias.py`, `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py`. **[não verificado: comparação histórica fornecida]**  
-   **INFERIU:** exige recomposição: a raia usa o antigo `fechar()`, enquanto o HEAD preserva fecho por evento e o balde `retido_pelo_fechamento`; seu compositor também omite `agora`, hoje obrigatório no builder. (`app/ponto/services/lastro.py:317`, `app/ponto/services/lastro.py:364`, `app/escala/utils.py:2084`; chamadas antigas: anexo, **[não verificado na cópia]**)
-
-4. **Arquivos em comum.** Nenhum dos seis arquivos fornecidos da raia aparece nas quatro listas de obras em voo. **[não verificado na cópia; cruzamento dos anexos]**
-
-5. **Depende de — LEU.** Juiz único do marco, equivalência da grade e fechamento do grupo (1) de leitores. (`app/core/juizes.py:212`, `app/docs/BACKLOG.md:811`, `app/docs/BACKLOG.md:1756`) Eventual alteração de motor, dados escala/vínculo ou gravado exportado exige o `!` correspondente. (`CLAUDE.md:265`)
-
-6. **Proposta — INFERIU: CONCLUIR o residual**, após verificar/corrigir o construtor e antes de declarar zerado o grupo (1). Preservar fecho por evento, guardas e contagem de retidos já presentes. (`app/docs/BACKLOG.md:811`, `app/ponto/services/lastro.py:317`, `app/ponto/services/lastro.py:364`)
-
-**ATA-X-TURNO-PAUSA**
-
-1. **O que cura — LEU + INFERIU.** A pausa reconhecida pelo juiz pode perder atribuição no cluster; a reconciliação posterior trata somente as bordas do turno. (`app/escala/utils.py:561`, `app/escala/utils.py:572`, `app/escala/utils.py:1975`)  
-   Também falta publicar a acusação e os detalhes `l084_pausa` na CxR, como pede a obra. (`app/docs/BACKLOG.md:1725`, `app/ponto/services/cxr_na_lista.py:29`)
-
-2. **Ainda existe? PARCIAL — LEU.** O juiz já alinha por papel, mas o fluxo posterior termina a reconciliação das bordas sem o bloco da pausa; acusador e campos específicos também faltam. (`app/escala/utils.py:502`, `app/escala/utils.py:2039`, `app/ponto/motor_calculo_v2.py:1673`, `app/ponto/motor_calculo_v2.py:2717`, `app/ponto/services/cxr_na_lista.py:30`)  
-   A subobra JUIZ-DO-PAR-DUAS-ENTRADAS foi absorvida pela cura na fonte, documentalmente `b3bf529e`; o sítio atual confirma a atribuição dentro do juiz. Isso não absorveu a ATA-PAUSA inteira. (`app/docs/RELATO.md:212`, `app/docs/RELATO.md:2736`, `app/escala/utils.py:590`, `app/docs/RELATO.md:210`) Caso col841 e dinheiro atual: **[não verificado]**.
-
-3. **Falta / aplicação — LEU + INFERIU.** Faltam 10/10 explicados e dinheiro igual na frota; são condições, não resultados comprovados aqui. O despacho manda refazer o bloco consultando a autoridade e atualizar a fixture. (`app/docs/CORTES.md:304`, `app/docs/RELATO.md:1082`)  
-   `main_moveu=True`: `app/core/tests/test_medida_turno_do_par.py`, `app/escala/services/cadastro_realidade.py`, `app/escala/utils.py`, `app/ponto/turnos.py`. **[não verificado: comparação histórica fornecida]**  
-   **INFERIU:** recompor conservação de órfãs, reconciliação e CxR sobre os sítios atuais; reavaliar o hunk antigo que passa papel pelo motor, considerando a cura na fonte. A catraca de linhas também evoluiu. (`app/escala/utils.py:1816`, `app/escala/utils.py:1975`, `app/escala/services/cadastro_realidade.py:360`, `app/core/tests/test_medida_turno_do_par.py:253`, `app/docs/RELATO.md:212`) `main_moveu=False` no motor, informado pelo anexo, não comprova compatibilidade do desenho. **[não verificado: comparação histórica fornecida]**
-
-4. **Arquivos em comum.** `app/escala/services/cadastro_realidade.py` com BUG-PAR/E3; `app/core/tests/test_medida_turno_do_par.py` com BUG-PAR/HJ-090; nenhum com O168. **[não verificado na cópia; cruzamento dos anexos]**
-
-5. **Depende de — LEU.** O `! ATA-PAUSA-NO-MOTOR` tem escopo condicionado a 10/10 e igualdade financeira. A pergunta de desenho consta respondida, com instrução de reconstrução. (`app/docs/CORTES.md:304`, `app/docs/RELATO.md:1082`, `app/docs/RELATO.md:1090`) Ocupação e pausas devem consultar as autoridades registradas. (`app/core/juizes.py:212`, `app/core/juizes.py:214`)
-
-6. **Proposta — INFERIU: CONCLUIR**, em fila 1, depois das precedências C7/COBPARC registradas e da liberação dos arquivos comuns com E3/BUG-PAR. A conclusão destrava CXR-PRONTO1-COL841. (`app/docs/RELATO.md:1003`, `app/docs/BACKLOG.md:798`; cruzamento em voo: **[não verificado na cópia]**)
-
-| id | cura | existe no HEAD | falta | depende | proposta |
-|---|---|---|---|---|---|
-| O261-PAI-TERMINAL | Âncora viva para pergunta (`app/chamados/services/fio.py:117`) | **PARCIAL** (`app/chamados/services/disputa_emissao.py:566`) | Residual por pergunta/dia (`app/chamados/models.py:374`) | O261-E + separação de competência (`app/docs/CORTES.md:397`) | **DEMOLIR raia antiga**, desenho vedado; residual na O261-E (`app/chamados/models.py:380`) |
-| O10-C | SOLO na lista + troca pela UI (`app/docs/RELATO.md:1338`) | **SIM**; porta pronta (`app/ponto/portas/celula.py:670`) | Volta 2 UI/lista (`app/docs/BACKLOG.md:2082`) | Par declarado; vínculo/exportada (`app/ponto/portas/celula.py:606`, `app/ponto/portas/celula.py:691`) | **CONCLUIR**, vaga de negócio após estruturais — INFERIU (`CLAUDE.md:291`) |
-| O275 | Feriado cria previsto por cadastro (`app/docs/BACKLOG.md:1557`) | **SIM** (`app/escala/models.py:1365`) | A/B e migration conciliada (`app/docs/BACKLOG.md:1557`, `app/escala/migrations/0043_eventocelula.py:8`) | Corte A/B (`app/docs/RELATO-ARQUIVO.md:750`) | **CONCLUIR** após corte, antes O277 — INFERIU (`app/docs/BACKLOG.md:1559`) |
-| LASTRO-DEGRAU-2 | Recuo lê juiz do marco (`app/core/juizes.py:212`) | **SIM** (`app/ponto/services/lastro.py:304`) | Janela, evento e relógio (`app/docs/BACKLOG.md:1756`, `app/escala/utils.py:2084`) | Construtor + grupo (1) (`app/docs/BACKLOG.md:811`) | **CONCLUIR** após construtor — INFERIU (`app/docs/BACKLOG.md:1756`) |
-| ATA-X-TURNO-PAUSA | Pausa na ata e CxR (`app/docs/BACKLOG.md:1725`) | **PARCIAL** (`app/escala/utils.py:2039`, `app/ponto/services/cxr_na_lista.py:30`) | Reconstrução, 10/10, dinheiro igual (`app/docs/RELATO.md:1082`, `app/docs/CORTES.md:304`) | `!` motor condicionado; arquivos em voo **[não verificado]** | **CONCLUIR**, após precedências registradas — INFERIU (`app/docs/RELATO.md:1003`) |
-
-_4781 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4782 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
