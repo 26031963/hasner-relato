@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 15:35** · publicado em **13/11/2026 15:36** (UTC-3)
+> Ultima resposta processada: **13/11/2026 15:41** · publicado em **13/11/2026 15:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 15:41 · sessao 3a3451fa21d5 · - · - · origem=Ronald (tmux)
+
+Método: busquei JSONFields e atribuições explícitas; depois referências de atributos, acessos `.get`/`[]`, serializações e testes. Não executei testes nem consultei produção. Execução dos testes e completude diante de acessos dinâmicos: `[nao verificado]`. [nao verificado]
+
+Critério aplicado: emissor que monta a estrutura em escala conta; model de escala cuja estrutura nasce exclusivamente em ponto fica na fronteira. [nao verificado]
+
+**Inventário para consolidação — referências abaixo relativas a `app/`.**
+
+| Estrutura | Emissor e chaves | Consumidores e chaves/defaults | Desencontro | Selo |
+|---|---|---|---|---|
+| `TipoEscala.horarios_por_dia` | `escala/services/cadastro_tipo.py:265-267`: copia todo dict recebido; objeto inválido vira `{}` | `escala/models.py:224-231`: weekday string ou inteiro; default `None`; `:233-239`: `hii/hfi` default `''`; `:326-342`: `hi/hf` default escalares, `hii/hfi` default `None`; `:462-471`: `hi/hf` default `''`; `:667-695`: `hi/hf/hii/hfi` default `None`; `:862-866`: presença da chave weekday string | Nenhum desencontro demonstrado para chaves canônicas; validação exige hi/hf e par hii/hfi (`models.py:692-695`). Chaves adicionais arbitrárias preservadas pelo escritor, sem inventário finito `[nao verificado]` | Leitores: `escala/tests/test_horarios_por_dia.py:37-61,75-93`; ponte escritor: `test_cadastro_tipo_service.py:47-56` só exige `hi` persistido |
+| mesmo HPD | mesmo escritor | `escala/utils.py:274-283`: `hi/hf/hii/hfi` default `None`; `:735-741`: presença de HPD e delegação `marcos_do_dia` | Não demonstrado | `test_marcos_def_hpd.py:27-45`; `test_horarios_por_dia.py:107` inicia classe da grade |
+| mesmo HPD | mesmo escritor | `escala/views_wizard.py:80`: serialização integral, default `{}` | Não demonstrado | Específico deste retorno `[nao verificado]` |
+| mesmo HPD | mesmo escritor | `colaboradores/services/drawer.py:99-100`: apenas verdade/falsidade do JSON | Não demonstrado | `[nao verificado]` |
+| mesmo HPD | mesmo escritor | `ponto/selecao_periodo.py:223-227`: weekday string, default `None`; `hi/hf` obrigatórios; erro vira `False` (`:228-229`) | Leitor aceita somente weekday string, enquanto `_override_do_dia` também aceita inteiro (`models.py:231`); em JSON persistido transformação das chaves `[nao verificado]`, portanto não classifiquei como desencontro fechado | `[nao verificado]` |
+| `FolgaCalendario.celulas` | **dois escritores:** `escala/folgas.py:584-591`: lista de pares deduplicados/ordenados, ou `[]`; `:654-656`: `celulas or []` | **outro módulo:** `escala/views.py:371`: lista integral, default `[]` | Não demonstrado | `test_editor_folga_modo.py:27-46` cobra escrita; `:58-64` cobra leitura GET. Não é teste único da ida e volta |
+| mesmo `celulas` | mesmos escritores | **mesmo módulo, não contar como costura externa:** `escala/folgas.py:55`, `:18-39`: pares `[semana,weekday]`, iteração default `[]`, índices `[0]/[1]` convertidos para inteiro (`:29`) | Não demonstrado | `test_folga_semana_dia.py:49-59` materializa foto a partir dos pares |
+| `FolgaCalendarioTamanho.dias` | **dois escritores:** `escala/folgas.py:593-595`: dias ordenados/deduplicados por tamanho; `:658-661`: lista filtrada `d <= tamanho` | `escala/models.py:1560`: lista integral; `:1579`: lista integral para `__str__`; `escala/views.py:362`: lista integral transformada em set | Não demonstrado | GET/ida e volta deste campo `[nao verificado]`; escrita `test_editor_folga_modo.py:38-49`; model/getter `test_folga_models.py:13-23` |
+| dict de `dias_por_tamanho()` | `escala/models.py:1558-1560`: `{tamanho_mes:list(dias)}` | `escala/folgas.py:56` transporta para `folgas_do_mes`; `:12-15` lê chave `28/30/31`, 29 usa 28, default `[]` | Não demonstrado | **sim**, `test_folga_models.py:19-23` cruza produtor com resolvedor |
+| `DecisaoProposta.resumo` | **dois escritores:** `escala/services/propositor.py:717-727` e `:773-776`; chaves `tipo,template,template_id,ancora,ancora_atual,template_atual,casa_hoje,casaria,sobra,aplicar_desde,dias_batidos`, todos via `p.get(k)` | Nenhum leitor de `.resumo` localizado em produção ou template `[nao verificado]`; finalidade forense declarada em `escala/models.py:1927-1930` | Todas as chaves sem leitor localizado; **sem par, não contar costura** | `[nao verificado]` |
+| dict `nome_canonico_partes()` | `escala/models.py:486-487`: `tipo,apelido,dias,horario,ciclico`; alterações de dias/horário `:488-522` | `core/templatetags/hasner_filters.py:72-123`: tipo/apelido/dias/horario por `[]`; `:207-217`: mesmas quatro, `.get` + default `''`; `colaboradores/services/ficha.py:82-90`: dias/horario com default `''`, e `codigo_da_escala(:70-71)` lê tipo/apelido com default `''` | **`ciclico` escrito, nenhum consumidor de produção localizado** `[nao verificado]`. Os demais leitores localizados só usam quatro chaves (referências anteriores). Classe **sim**, dono provável **ESTRUTURA** `[nao verificado]` | `test_nome_canonico.py:77-95` cobra inclusive ciclico no produtor; **não prende uso no consumidor**. `colaboradores/tests/test_ficha_cabecalho_compacto.py:28-40` cobra linha da ficha, mas não ciclico |
+| contador `vinculos_5x2_6x1_trabalha_feriado()` | `escala/models.py:933`: `total,declarados,nao_declarados` | `escala/management/commands/vinculos_5x2_6x1_trabalha_feriado.py:15-17`: três chaves por `[]` | Não demonstrado | **sim**, `test_feriado_padrao_por_escala.py:100-120`: chama command e confere contagem |
+| **ata efêmera**, cópia de CelulaDia | `escala/utils.py:1886-1898`: somente `lampadas,orfas`; omissão de minutos é explícita `:1888-1891`; passa à autoridade de turnos | `ponto/turnos.py:1631-1633` passa celula a `periodos_do_dia`; leitor efetivo `ponto/juiz_batida.py:157-161`: `lampadas/orfas` com default `[]`; lâmpadas leem `hora,tipo,acesa,luz,tipo_real` em `:190-194,215-217,230-246` | Não demonstrado: minuto ausente não é lido nesse consumidor (`juiz_batida.py:157-260`). Campos de lâmpadas vêm do construtor chamado, `ponto/services/cartorio.py:599-612,672-678` | **sim**, convergência de montagem → ata → turno em `escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:176-205`; atribuição de ata no teste `:197-198` |
+
+**Fronteiras sem emissor de estrutura em escala, não adicionar à contagem deste recorte:**
+
+- DNA e dna_anterior: atribuições reais em `ponto/portas/celula.py:261-307,629-642,827-828,917-926`; montar DNA é `ponto/management/commands/gerar_celulas.py:104`.
+- Ata/protestos persistidos: `escala/models.py:1819-1828` apenas delega à porta; atribuições de ata na porta `ponto/portas/celula.py:1003,1064,1091`.
+- Outbox `EventoCelula`: escritor único externo declarado em `escala/models.py:1851`, consumidor externo declarado em `:1848`; estrutura escalar descrita em `:1857-1863`.
+
+**Orientação de contagem:** acima, HPD tem **11 funções leitoras**; `nome_canonico_partes` tem **4 funções externas leitoras** se incluir `codigo_da_escala` além de `linha_do_vinculo`; calendário tem multiplicação pelos dois escritores, e os leitores dentro do próprio `folgas.py` não satisfazem “outro módulo”. Os números dependem de consolidar funções ou módulos como identidade do par `[nao verificado]`. Não declarei total global porque os outros agentes cobrem demais estruturas.
 
 ## 13/11 15:35 · sessao b9a9a64c7207 · HJ-090 · construtor · origem=Code
 
@@ -990,18 +1022,4 @@ Nos caminhos examinados, o plantio continua passando por `registro_batida`, e a 
 
 **Fuso:** os leitores identificados usam dia civil local por `localtime(...).date()` ou `localdate()`, e a configuração da cópia é `America/Sao_Paulo`, `USE_TZ=True`. Não há divergência UTC demonstrada nesses caminhos do informativo; `timezone.now()` seguido de conversão local não produz dia UTC. Configuração efetiva produtiva e eventual ativação de outro fuso durante execução: **[nao verificado]**. (`app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/folha/management/commands/lavrar_retrato_folha.py:48`; `app/folha/export.py:1238`; `app/chamados/management/commands/vigiar_fio_morto.py:169`)
 
-## 13/11 15:12 · sessao a2457deca3e5 · - · - · origem=Ronald (tmux)
-
-- **NAO-BLOQ — inscrição de bolha descreve entradas/saídas de forma incompleta.** `@entra ... para o juiz, so o colaborador` só descreve `esta_desligado`; `julgar_desligamento` também lê POST e relógio interno. `@sai` não distingue executor agendado do imediato. Contraexemplo: agendar amanhã grava `data_demissao`/motivo agora, retorna sem encerrar vínculo e sem abrir chamado DP. (`app/colaboradores/services/desligamento.py:7`; `app/colaboradores/services/desligamento.py:35`; `app/colaboradores/services/desligamento.py:40`; `app/colaboradores/services/desligamento.py:60`; `app/colaboradores/services/desligamento.py:107`; `app/colaboradores/services/desligamento.py:110`; `app/colaboradores/services/desligamento.py:126`)
-
-- **Não comprovo segundo escritor do valor `desligado`.** O cron agendado julga e chama o mesmo executor; a atribuição produtiva literal identificada ocorre no executor, que persiste pela porta canônica. A frase “agendado só grava na data” é correta apenas para `situacao='desligado'`; é falsa para `data_demissao`, escrita antecipadamente. (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`; `app/colaboradores/services/desligamento.py:11`; `app/colaboradores/services/desligamento.py:110`; `app/colaboradores/services/desligamento.py:129`; `app/colaboradores/services/desligamento.py:133`; `app/colaboradores/services/colaborador.py:73`)
-
-- **`situacao` tem outros escritores legítimos; “um escritor” não vale para o campo inteiro.** Reativação atribui `ativo`, limpa data/motivo e persiste pela mesma porta. `data_demissao` significa data planejada enquanto ativo e data de desligamento quando consumado; o cron lê conjuntamente data e situação para distinguir os estados. (`app/colaboradores/services/desligamento.py:235`; `app/colaboradores/services/desligamento.py:239`; `app/colaboradores/services/desligamento.py:110`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`)
-
-- **NAO-BLOQ — documentação nova erra a segunda consulta do informativo.** Diz “células + férias/ausências”, mas carrega células e vínculos. Contraexemplo: mesmo sem férias/ausências, cada desligado elegível consulta `CelulaDia` e `EscalaColaborador`. (`app/folha/retrato_folha.py:1210`; `app/folha/export.py:1247`; `app/folha/export.py:1253`; `app/escala/alimentacao.py:186`; `app/escala/alimentacao.py:148`)
-
-- **O selo de mapa garante presença das etiquetas, não a verdade do contrato.** Um cabeçalho completo com entradas/saídas falsas continua satisfazendo os testes: eles consultam ausência de inscrição e estrutura do parser. (`app/core/tests/test_selo_mapa_contrato.py:41`; `app/core/tests/test_selo_mapa_contrato.py:60`)
-
-Execução de testes, mutantes e ocorrência produtiva: **[nao verificado]**. [nao verificado]
-
-_4643 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4644 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
