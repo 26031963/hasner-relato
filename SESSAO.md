@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 06:01:14.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (520.9 MB). Acoes na janela: **1095**.
+**Medido em 13/11/2026 06:06:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (520.9 MB). Acoes na janela: **1080**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1090,18 +1090,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:07:57 | TaskStop |  | `-` |
 | 18:07:56 | ToolSearch |  | `-` |
 | 18:07:53 | Bash |  | `ps -o pid,ppid,etime,cmd -p 18553,18642,18640 \| cut -c1-160; pstree -p 18553 2>/dev/null \| head -3` |
-| 18:05:31 | Bash |  | `tr '\0' ' ' < /proc/18244/cmdline \| /bin/grep -oE '\-v /home/ronald/[^ :]+' \| head -2` |
-| 18:05:28 | Bash |  | `ps -o pid,etime,cmd -p 18244 \| cut -c1-250` |
-| 18:05:25 | Bash |  | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem 2>&1 \| head -5; sed -i '3s/^ESPERANDO: .*/ESPERANDO: trava_teste.sh \| pid=18642/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 18:05:22 | Bash |  | `ps --ppid 18640 -o pid,cmd \| cut -c1-200; ps -ef --forest \| /bin/grep -A3 ' 18640 ' \| cut -c1-200 \| head; tail -3 /home/ronald/saas-hasner/logs/O168/v4b/recorte.log` |
-| 18:05:19 | Bash |  | `pgrep -af 'bin/suite.sh --dir /home/ronald/wt-o168v3' \| cut -c1-150; /bin/grep -n 'nao casa' /home/ronald/saas-hasner/bin/hook_stop_fila1.py \| head -3` |
-| 18:05:16 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n 'vaga' bin/hook_stop_fila1.py \| head -20; tail -5 logs/hook_stop_fila1.log \| cut -c1-300` |
-| 18:05:07 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('O168 v4 suite 17:51')][0] L.insert(i+1,"TIPO-NA-FONTE item1 v2 18:0x: c82f58c36 (raia/leitores-chave-171434), contar-crus ata 95 / dna 41 inalterados, selo rc0 56s; preverif v2 Codex lancado (logs/TIPO-NA-FONTE/preverif_item1_v2). INCOMPLETO: mutante RET ...` |
-| 18:05:02 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE; mkdir -p preverif_item1_v2; cd preverif_item1_v2; cp ../preverif_item1/aval.txt ../preverif_item1/contrato.txt .; git -C /home/ronald/wt-codex-leitores-chave-171434 diff f1add6e91 c82f58c36 > delta_v2.diff; wc -c delta_v2.diff; cp ../preverif_item1/preverif.r preverif_v1.r cat > preverif.q <<'EOF' PAPEL verificador, obra TIPO-NA-FONTE item 1 volta 2  ...` |
-| 18:04:52 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/preverif_item1; ls; cat lanca.sh 2>/dev/null \|\| ls ..; head -c 1500 preverif.q` |
-| 18:04:50 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs \| head -30 \| tr '\n' ' '; echo; ls logs/TIPO-NA-FONTE* 2>/dev/null \| head; find logs -maxdepth 3 -newer logs/AVAIS-1212/tipo_na_fonte_o168_teto.txt -name '*.q' \| head` |
-| 18:04:36 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 3p docs/RELATO.md; ps -p 18640 -o pid,cmd \| cat; sed -i '3s/^ESPERANDO: .*/ESPERANDO: suite.sh \| pid=18640/' docs/RELATO.md; sed -n 3p docs/RELATO.md` |
-| 18:04:33 | Bash |  | `cd /home/ronald/saas-hasner/app; /bin/grep -n '^\| TRANCA-VIVAS\\|^\| E3-MATRIZ' docs/BACKLOG.md \| cut -c1-80; /bin/grep '^\| E3-MATRIZ' docs/BACKLOG.md \| awk -F' \\\| ' '{print $NF}' \| cut -c1-200; pgrep -f 'suite.sh --dir /home/ronald/wt-o168v3' \| head -2` |
-| 18:04:30 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md'; L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('\| E3-MATRIZ-DA-RESPOSTA \|')][0] c=L[i].split(' \| ') c[-1]=c[-1].rstrip(' \|') c[-1]=('17:5x aval E3-PORTA-DA-RESPOSTA=(A): duas portas Q1+Q2, selo AST por campo + mutante, reabrir via descarimbar_em_lote; construtor na vaga sobre cb706435 \| ' ) if F ...` |
-| 18:04:22 | Bash |  | `cd /home/ronald/saas-hasner/app; /bin/grep -n 'E3-MATRIZ\\|TRANCA\\|E3-10' docs/BACKLOG.md \| cut -c1-200 \| head` |
-| 18:04:20 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('PERGUNTA DE DESENHO E3-MATRIZ-DA-RESPOSTA')][0] L[i]='RESPONDIDA por aval E3-PORTA-DA-RESPOSTA=(A) 17:5x (logs/AVAIS-1212/e3_porta_da_resposta_A.txt): '+L[i] L.insert(i+2,"E3-PORTA-DA-RESPOSTA=(A) 17:5x: as DUAS portas declaradas (core/portas.py Q1+Q2),  ...` |
