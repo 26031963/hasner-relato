@@ -1,7 +1,162 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 11:14** · publicado em **13/11/2026 11:16** (UTC-3)
+> Ultima resposta processada: **13/11/2026 11:25** · publicado em **13/11/2026 11:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 11:25 · sessao 038c6893fc6f · - · - · origem=Ronald (tmux)
+
+Confirmei em memória, com `python3 -B` e sem escrita: o helper real retorna censo **43**, soma dos tetos **43**, `TOTAL_RELOGIO=43` e igualdade exata entre censo e tetos, sem diferenças (`app/ponto/tests/test_cadastro_futuro_c5e.py:334`, `:374`, `:574`, `:591`).
+
+`marcar_trabalha_em_feriado` retorna zero leituras no scanner; a regeneração retorna os dois carimbos `now()` de `app/ponto/portas/celula.py:263` e `:308`, compatíveis com teto 2 (`app/ponto/tests/test_cadastro_futuro_c5e.py:369`).
+
+Foi execução dos helpers AST, não execução da suíte Django [nao verificado]. [nao verificado]
+
+## 13/11 11:25 · sessao 9e470830c035 · LEI-DESLIGADO-NAO-TRAVA · sonda · origem=Code
+
+Fonte: saída fornecida na mensagem, sem referência arquivo:linha; uso o marcador exigido `[nao verificado]`.
+
+(a) Casos solicitados — dias retornados por `motivos_retencao_celula` e resultado de `classificar_export`. [nao verificado]
+
+| Colaborador | situacao | data_demissao | Competência | Dias | Motivos | Export: status/motivo | Referência |
+|---|---|---|---|---:|---|---|---|
+| col718 | desligado | 2026-11-05 | 10/2026 | 12 | `espelho_furo` | `fora/furo_espelho` | [nao verificado] |
+| col718 | desligado | 2026-11-05 | 11/2026 | 8 | `espelho_furo` | `fora/rescisao_modulo_proprio` | [nao verificado] |
+| col270 | desligado | 2026-10-30 | 10/2026 | 9 | `espelho_furo` | `fora/furo_espelho` | [nao verificado] |
+| col270 | desligado | 2026-10-30 | 11/2026 | 3 | `espelho_furo` | `fora/rescisao_modulo_proprio` | [nao verificado] |
+| col373 | desligado | 2026-10-31 | 10/2026 | 8 | `espelho_cobrado`, `espelho_furo` | `fora/furo_espelho` | [nao verificado] |
+| col373 | desligado | 2026-10-31 | 11/2026 | 1 | `espelho_indefinida` | `fora/rescisao_modulo_proprio` | [nao verificado] |
+
+(b) Frota — contagens exatamente como impressas. [nao verificado]
+
+| Competência | Empresa | Desligados com célula | Retidos | Dias | Motivos e contagens | Export: status/motivo e contagens | Referência |
+|---|---|---:|---:|---:|---|---|---|
+| 10/2026 | emp2 | 77 | 42 | 228 | `espelho_furo`: 121; `espelho_fato_em_ausencia`: 2; `espelho_nunca_bateu`: 55; `espelho_indefinida`: 47; `espelho_cobrado`: 3 | `fora/furo_espelho`: 14; `fora/rescisao_modulo_proprio`: 28 | [nao verificado] |
+| 10/2026 | emp3 | 19 | 10 | 40 | `espelho_furo`: 37; `espelho_cobrado`: 2; `espelho_indefinida`: 1 | `fora/rescisao_modulo_proprio`: 7; `fora/furo_espelho`: 3 | [nao verificado] |
+| 10/2026 | emp4 | 2 | 1 | 6 | `espelho_furo`: 3; `espelho_fato_em_ausencia`: 1; `espelho_indefinida`: 2 | `fora/furo_espelho`: 1 | [nao verificado] |
+| 11/2026 | emp2 | 40 | 13 | 88 | `espelho_furo`: 45; `espelho_nunca_bateu`: 26; `espelho_fato_em_ausencia`: 3; `espelho_indefinida`: 7; `espelho_cobrado`: 7 | `fora/rescisao_modulo_proprio`: 12; `fora/furo_espelho`: 1 | [nao verificado] |
+| 11/2026 | emp3 | 15 | 6 | 21 | `espelho_furo`: 14; `espelho_cobrado`: 1; `espelho_indefinida`: 6 | `fora/rescisao_modulo_proprio`: 6 | [nao verificado] |
+| 11/2026 | emp4 | 2 | 1 | 5 | `espelho_indefinida`: 1; `espelho_furo`: 4 | `fora/rescisao_modulo_proprio`: 1 | [nao verificado] |
+
+(c) Vocabulário de `situacao`. [nao verificado]
+
+| situacao | Quantidade | Referência |
+|---|---:|---|
+| `ativo` | 547 | [nao verificado] |
+| `desligado` | 386 | [nao verificado] |
+| `afastado` | 11 | [nao verificado] |
+
+(d) A sonda informa **`ERROS 0`**. [nao verificado]
+
+## 13/11 11:24 · sessao 0faef1817065 · - · - · origem=Ronald (tmux)
+
+**Âncora/mutante curados.** A âncora de criação fora de `executar_vinculo` ocorre uma vez em `vinculo.py:975`; o teste agora exige uma ocorrência e retira a flag desse trecho, cobrando especificamente `criar_trecho_retroativo` (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:209`). Reproduzi os seis corpos de teste com armazenamento temporário em memória: passaram; o mutante do trecho retornou o achado esperado. Execução pelo runner Django original: [nao verificado].
+
+**n–s:**
+
+| Caso | O que realmente cobra |
+|---|---|
+| n | Detecta `EC.objects.all().create(...)` sem flag (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:235`, `:254`). |
+| o | Detecta cadeia `_base_manager.filter(...).get_or_create(...)` sem flag (`:236`, `:255`). |
+| p | Detecta nascimento sem flag quando só `defaults` tem a flag e `create_defaults` não tem (`:237`, `:256`). |
+| q | Controle negativo: aceita flag em `create_defaults`; não testa escrita indevida em existente (`:239`, `:257`). |
+| r | Detecta ausência de keyword literal; acusa até `**kw` correto, como declarado (`:25`, `:241`, `:257`). |
+| s | Controle negativo de receptor não identificado como modelo; não prova que `c` nunca representará um modelo (`:242`, `:257`). |
+
+São exemplos AST, não exercícios de criação no ORM: são strings entregues ao scanner (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:219`, `:243`).
+
+**Buracos não declarados, reproduzidos em memória com resultado `[]`:**
+
+1. **Atualização pelo `update_or_create`.** Exemplo:
+
+   ```python
+   EC.objects.update_or_create(
+       pk=1,
+       defaults={"trabalha_em_feriado": True},
+       create_defaults={"trabalha_em_feriado": origem.trabalha_em_feriado},
+   )
+   ```
+
+   O scanner aprova a origem do valor de nascimento e não examina a atualização de existente por essa API; só há branches de escrita para `update`, `bulk_update`, `setattr` literal e atribuição direta (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:110`, `:139`, `:147`, `:156`).
+
+2. **Prioridade incorreta de busca versus defaults.** `get_or_create(trabalha_em_feriado=origem.trabalha_em_feriado, defaults={"trabalha_em_feriado": True})` passa porque `_kw` retorna primeiro a keyword de busca (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:112`).
+
+3. **Sobreposição dentro do próprio dict.** Passam tanto `defaults={"trabalha_em_feriado": origem.trabalha_em_feriado, **kw}` como uma segunda chave literal com valor `True`: `_kw` aceita a primeira ocorrência literal e não resolve sobreposições (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:116`).
+
+4. **Gerente reverso.** `colaborador.escalas.create(posto=p, tipo_escala=t, data_inicio=d)` escapa: a relação existe (`app/escala/models.py:872`), mas `_do_gerente` exige acesso reconhecido pelo modelo e pelos nomes `objects`, `_default_manager`, `_base_manager` (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:43`, `:97`).
+
+5. **Resolução indireta do modelo/construtor.** Alias anotado (`EC: type = EscalaColaborador`), função ligada (`criar = EC.objects.create`) e modelo obtido por `apps.get_model(...)` passam. `_apelidos` só acompanha `ImportFrom` e atribuição simples cujo valor já seja reconhecido como modelo (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:57`, `:68`, `:76`).
+
+6. **APIs assíncronas.** Nomes como `acreate`, `aget_or_create`, `aupdate_or_create`, `abulk_create`, `aupdate` e `abulk_update` não entram nas listas/branches (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:42`, `:136`, `:147`, `:149`).
+
+7. **Escritas indiretas/desempacotadas.** Passam atribuição `ec.trabalha_em_feriado, ec.ativa = True, True`, `ec.__dict__["trabalha_em_feriado"] = True`, `setattr(ec, campo, True)` e `bulk_update(objs, campos)` com o nome armazenado em variável. A detecção exige alvo `ast.Attribute` direto e constantes literais nos dois últimos casos (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:149`, `:153`, `:156`).
+
+Esses limites não aparecem na lista declarada (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:24`). São possibilidades demonstradas do scanner; uso atual dessas formas para escrever a flag na produção da cópia: [nao verificado].
+
+O censo do scanner atual retorna zero achados e um escritor. Os quatro nascimentos explícitos estão em `app/colaboradores/services/vinculo.py:287`, `:971`, `:1090`, `:1111`; a atribuição direta da porta está em `:893`. Essa contagem não fecha os buracos acima, pois usa justamente o scanner limitado (`app/escala/tests/test_feriado_nasce_do_juiz_selo.py:124`).
+
+## 13/11 11:23 · sessao c09f9bf8868b · - · - · origem=Ronald (tmux)
+
+F e pontos de E/D auditados:
+
+- **4 — FILA com ressalva.** A porta salva a flag (`app/colaboradores/services/vinculo.py:894`); o signal chama a invalidação (`app/escala/signals.py:137-146`), que alcança todos os fechamentos com previsto preenchido do colaborador, sem excluir exportados (`app/ponto/services/fechamento.py:1607-1613`). Ela **zera `previsto_em`, mas atualiza `atualizado_em` para agora** (`app/ponto/services/fechamento.py:1613`). O comportamento é anterior no delta fornecido; a execução de produção é [nao verificado].
+
+- A alegação da triagem de que **“o apply mede hash do exportado antes/depois” não está implementada nesse comando**: seu corpo mede universo/contagens e escreve reversão, sem hash (`app/escala/management/commands/aplicar_feriado_lei_1609.py:43-77`). Além disso, os hashes usuais excluem deliberadamente `previsto_em` e `atualizado_em` (`app/ponto/portas/regen_exportada.py:35-38`, `app/ponto/portas/regen_exportada.py:62-74`; `app/ponto/management/commands/carimbo_gravado.py:24-36`). Portanto, mesmo um hash desses intacto não provaria preservação dos carimbos.
+
+- O motivo para tratar 4 como dívida anterior é defensável **se preservar exportada significa preservar dinheiro/TXT**, pois `previsto_em` é explicitamente o frescor do previsto, separado de `derivado_em`, carimbo do registro inteiro (`app/ponto/models.py:430-431`, `app/ponto/models.py:453-464`). Entretanto, sua alteração tem leitor real: `prontidao` abandona snapshot e recalcula ao vivo quando o campo é nulo (`app/folha/export.py:1045-1049`, `app/folha/export.py:1081`). Não declarar o fechamento inteiro literalmente intocado.
+
+- **5 — DESCARTE sustentado pelo código.** O universo usa a autoridade `q_vinculo_cobre_a_data` (`app/escala/models.py:947-950`). Cobertura exige início ≤ data, fim nulo ou ≥ data, e vigência declarada: `ativa` **ou** fim não nulo (`app/escala/alimentacao.py:195-196`, `app/escala/alimentacao.py:214-225`). Portanto, um `ativa=False` com fim hoje/futuro é vigente e entra; um `ativa=True` com início futuro não entra. As duas pontas são inclusivas (`app/escala/alimentacao.py:214-225`). Não há bloqueio autônomo de pouso demonstrado por esse descarte.
+
+- **6 — FILA sustentada quanto à anterioridade e ausência de cron**, pois o delta fornecido só injeta o dia nesse comando e o cadastro o classifica como sincronização sob ordem (`app/config/crons.py:1406`). A divergência continua viva: cargo decide o desejado (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:19-21`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:42-58`), enquanto a lei decide por posto/ciclo (`app/escala/models.py:905-917`). Exemplo lógico: cargo administrativo em posto que declara operar recebe False no sincronizador e True no juiz (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:47`; `app/escala/models.py:911-913`). É segunda derivação do desejado em sítio tocado, embora a escrita continue pela porta (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:58`).
+
+- **Ordem de trava:** comprova-se `atomic` → UPDATE vínculo → UPDATE FechamentoMensal → escrita de células / trava das futuras (`app/colaboradores/services/vinculo.py:868`, `app/colaboradores/services/vinculo.py:894`; `app/ponto/services/fechamento.py:1613`; `app/ponto/portas/celula.py:308-311`; `app/ponto/services/cadastro_futuro.py:30-36`). **Não encontrei trava de competência nesse caminho**: a guarda de exportada é consulta, seguida de `atomic`, sem `select_for_update` (`app/ponto/portas/celula.py:218-226`). O dinheiro é agendado para depois do commit (`app/ponto/portas/celula.py:483-496`; `app/ponto/services/fechamento.py:1798-1824`). Deadlock concreto/violação de ordem global: [nao verificado]. Não confundir consulta de guarda com aquisição de trava.
+
+- **Pré-requisitos:** lista esperada é conferida antes da primeira escrita; reversão é criada com modo exclusivo antes do primeiro vínculo (`app/escala/management/commands/aplicar_feriado_lei_1609.py:61-73`). O comando publica contagens por grupo e lista plana de IDs; não oferece hash, conferência explícita de 20/11 nem relatório do rejulgamento de 02/11 (`app/escala/management/commands/aplicar_feriado_lei_1609.py:36-77`). Há teste de Finados em fixture, sem equivaler a produção (`app/escala/tests/test_feriado_lei_1609.py:112-177`). Aplicação, publicação da lista, reversão efetiva, 7 casos 12x36 encaminhados, resultado de 02/11 e conferência de 20/11: [nao verificado].
+
+- **Um significado da flag:** o nascimento consulta posto em todo ciclo (`app/escala/models.py:905-917`), mas o efeito de virar folga é condicionado à mesma flag False, ciclo elegível e feriado do município do vínculo (`app/escala/models.py:1410-1432`). A precedência chama esse predicado (`app/ponto/precedencia.py:369-377`). False em 12x36 com efeito nulo está expressamente previsto, não demonstra por si campo com dois significados (`app/escala/models.py:1427-1430`).
+
+## 13/11 11:23 · sessao 038c6893fc6f · - · - · origem=Ronald (tmux)
+
+Censo C: 16 pontos de chamada, todos com `hoje` explícito; não encontrei chamador sem ele. A assinatura exige keyword sem default (`app/colaboradores/services/vinculo.py:869`).
+
+| Chamador | Origem de `hoje` | Leituras diretas para `hoje` |
+|---|---|---|
+| `app/colaboradores/management/commands/sincronizar_feriado_admin.py:58` | `timezone.localdate()` em `:56` | 1 por execução com `--apply`; 0 no DRY |
+| `app/escala/management/commands/aplicar_feriado_lei_1609.py:73` | `timezone.localdate()` em `:48` | 1 por execução, inclusive DRY; mesmo valor antes `:49` e depois `:75` |
+| `app/chamados/tests/test_jv1_feriado_vira_vigia.py:89` | `timezone.localdate()`, sob freeze de `:33`/`:38` | 1 por `_marcar`; chamadas em `:110`, `:124`, `:139`, `:147`, `:149` |
+| `app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:133` | `timezone.localdate()`, freeze em `:124` | 1 por `_marcar`; chamadas em `:154`, `:168` |
+| `app/escala/tests/test_porta_escala.py:62`, `:65` | Literal `datetime.date(2026,11,13)` | 0 |
+| `app/ponto/tests/test_cadastro_futuro_c3.py:114` | `HOJE` importado da base em `:15` | 0 |
+| `app/ponto/tests/test_cadastro_futuro_c5b.py:124`, `:138`, `:144` | `HOJE` importado da base em `:25` | 0 |
+| `app/ponto/tests/test_cadastro_futuro_sem_banco.py:446`, `:469`, `:476`, `:481`, alias `evento` em `:662`, `:664` | Literal `HOJE = date(2026,11,12)` em `:20`; alias em `:661` | 0 |
+
+Chamadores indiretos dos comandos: `call_command` de admin em `app/colaboradores/tests/test_feriado_admin_sync.py:41` e `:45` usa o relógio real do comando; aplicar é chamado em `app/escala/tests/test_feriado_lei_1609.py:102` e no helper `:140`, a segunda classe sob freeze `:112`. O helper é usado em `:150`, `:157`, `:164`, `:183`, `:189` e `:190`.
+
+A alegação “um relógio por ato” só ficou verdadeira para a captura explícita de `hoje` nessas bordas, não para a cadeia:
+
+- A porta salva a flag em `app/colaboradores/services/vinculo.py:894`; o signal `app/escala/signals.py:137` chama `invalidar_previsto` em `:146`, que lê `timezone.now()` em `app/ponto/services/fechamento.py:1613`, por vínculo alterado.
+- A regeneração carimba cada célula reescrita com `timezone.now()` em `app/ponto/portas/celula.py:308` — outro ramo em `:263`.
+- Há uma leitura **decisória**, não apenas carimbo: `_o_chao_do_dia_mudou` não recebe `hoje` em `app/ponto/portas/celula.py:404`; relê `timezone.localdate()` em `:464` e usa esse novo dia para separar passado/futuro em `:469`.
+- O suplemento futuro chama a regeneração uma vez por dia em `app/ponto/services/cadastro_futuro.py:43`; cada dia tocado pode chegar novamente à leitura de `app/ponto/portas/celula.py:464`.
+- O recalculo financeiro também não recebe o instante da borda: `app/ponto/services/fechamento.py:1798`, callback `:1807`, chamada `:1810`; lê relógio para teto do fato em `:616`, previsto em `:1086`, derivação em `:1143` ou `:1189`, atualização em `:1161`. Número total executado por ato depende das células, competências e callbacks [nao verificado].
+- O no-op retorna antes desses efeitos em `app/colaboradores/services/vinculo.py:890`.
+
+D, significado e fluxo:
+
+- `hoje` das bordas é dia civil local: `timezone.localdate` em ambos comandos; configuração `America/Sao_Paulo` e `USE_TZ=True` em `app/config/settings/base.py:93` e `:95`.
+- A porta usa `janela_anterior(hoje, empresa)` em `app/colaboradores/services/vinculo.py:900`; começa no máximo entre início do vínculo e início anterior em `:901`; vai até `hoje` em `:902`/`:906`.
+- Janelas são inclusivas: corte do mês anterior a corte−1 do mês corrente, `app/ponto/janelas.py:10` a `:21`; atual e anterior em `:60` e `:66`. A célula percorre `while d <= ate` em `app/ponto/portas/celula.py:228` e barra exportadas usando `a <= d <= z` em `:284`.
+- Futuro exclui hoje, começa em `hoje+1`, `app/ponto/services/cadastro_futuro.py:26`–`:27`; seleciona geradas existentes com `data__range` em `:31`–`:32`. Seu horizonte é união das competências correntes das empresas ativas, `app/ponto/management/commands/gerar_celulas.py:290`–`:300`, não estritamente a janela da empresa do vínculo.
+- Vigência cobre início e fim inclusivos, `app/escala/alimentacao.py:214`–`:216`; SQL equivalente em `:219`–`:225`. `ativa=False` com fim futuro pode entrar legitimamente.
+- `previsto_em` é carimbo de frescor do previsto, não garantia de frescor do registro inteiro; isso está explícito em `app/ponto/models.py:430`, `:453`–`:464`.
+- Escritores: recalculo atribui timestamp em `app/ponto/services/fechamento.py:1086`, limpa em falha `:1099`, persiste via `save` em `:1144` ou update `:1188`; invalidador limpa em `:1613`.
+- Leitor operacional da prontidão: `app/folha/export.py:1045` aceita snapshot quando `previsto_em` existe e minutos não são `None`; explica a invalidação ativa em `:1046`–`:1049`.
+- Fotografia E4B trata `previsto_em` como carimbo mutável da leitura: `app/chamados/services/foto_e4b.py:10`–`:15`.
+- Hash financeiro o exclui deliberadamente, juntamente com `atualizado_em`: `app/ponto/portas/regen_exportada.py:37`–`:38`, `:62`–`:74`.
+- Flag é lida para no-op/trilha em `app/colaboradores/services/vinculo.py:890`/`:892`; lida/copiada nos nascimentos `:975`, `:1093`, `:1114`; nascimento novo pergunta ao juiz em `:296`; escritor de alteração `:893`–`:894`.
+- Juiz padrão posto/ciclo em `app/escala/models.py:905`–`:917`; contador lê a flag em `:961`, usa esse juiz em `:960`; consumidor efetivo `feriado_vira_folga` lê a flag em `:1427` e restringe ciclos em `:1429`. O campo tem help text restrito a weekday em `:898`; a flag pode ser False em 12x36 sem tornar aquele plantão folga (`:1429`).
+- Há divisão de instante dentro do ato: hoje da borda rege universo/regeneração e o novo hoje de `celula.py:464` rege julgamento; execução atravessando meia-noite pode discordar nesses limites, pela comparação `:469`. Ocorrência real [nao verificado].
+
+F4: a justificativa “o apply mede hash do exportado antes/depois” **não aparece no comando**: `app/escala/management/commands/aplicar_feriado_lei_1609.py:43`–`:77` mede contador antes/depois, não hash. O hash padrão excluiria exatamente `previsto_em` e `atualizado_em` (`app/ponto/portas/regen_exportada.py:37`–`:38`). O signal atinge todos os fechamentos do colaborador com previsto preenchido, sem guarda de exportado/competência (`app/escala/signals.py:137`–`:146`; `app/ponto/services/fechamento.py:1610`–`:1613`). Ele zera `previsto_em`, **empurra**, não zera, `atualizado_em` (`:1613`).
 
 ## 13/11 11:14 · sessao 488ea9e39dfa · FERIADO-USA-A-LEI-DE-1609 · verificador · origem=Code
 
@@ -592,287 +747,4 @@ O matching usa substring: `marca = 'Pergunta #%s' % perg.pk` e `marca in str(e)`
 
 **PRE-EXISTENTE**: defeito de matching em código fora dos hunks da obra; o teste apresenta fixture suscetível (`app/chamados/services/validacao.py:487`; `app/chamados/tests/test_validar_diz_o_seu.py:19`). **Colisão efetiva nesta execução: [nao verificado]**, porque o dado não informa o PK da pergunta. **Relógio como causa: [nao verificado]**. A mensagem de competência pode resultar apenas da tradução do erro injetado (`app/chamados/services/acoes_disputa.py:34`; `app/chamados/catalogo/recusa.py:35`).
 
-## 13/11 09:33 · sessao a5c32dfc0772 · - · - · origem=Ronald (tmux)
-
-As cinco subfalhas de `test_RED_um_subTest_por_sitio` são **DESLOCAMENTO**: o selo inclui a linha na identidade (`app/chamados/tests/e4b_c12_ast.py:17`, `:222`), e as entradas ficaram 17 linhas atrás dos escritores reais (`:23`–`:27`).
-
-| Falha | Tabela atual | Escritor real | Veredito |
-|---|---:|---|---|
-| `analisar` | 836 (`app/chamados/tests/e4b_c12_ast.py:24`) | `app/chamados/models.py:853` | DESLOCAMENTO |
-| `cancelar` | 818 (`app/chamados/tests/e4b_c12_ast.py:23`) | `app/chamados/models.py:835` | DESLOCAMENTO |
-| `encerrar` | 1649 (`app/chamados/tests/e4b_c12_ast.py:26`) | `app/chamados/models.py:1666` | DESLOCAMENTO |
-| `encerrar_por_competencia_trancada` | 1669 (`app/chamados/tests/e4b_c12_ast.py:27`) | `app/chamados/models.py:1686` | DESLOCAMENTO |
-| `reabrir` | 1472 (`app/chamados/tests/e4b_c12_ast.py:25`) | `app/chamados/models.py:1489` | DESLOCAMENTO |
-
-A obra insere 3 linhas em `_decisao_do_fechamento` (`app/chamados/models.py:686`) e 43 linhas para `_gate_conversa_do_pai` (`app/chamados/models.py:699` até antes de `:742`): deslocamento total de +46. O hunk fornecido atualizou a tabela somente +29; faltaram +17. Os cinco escritores não foram acrescentados nesses hunks; permanecem nos métodos citados. A guarda nova lê a lista e registra recusa/nota (`app/chamados/models.py:718`, `:723`, `:735`).
-
-Executei somente o censo AST em memória: ele devolveu precisamente os cinco sítios; ajustando somente as cinco linhas de `CORPO` em memória por +17, devolveu `[]`. Isso usa o comparador que descarta o corpo nominal por tupla exata (`app/chamados/tests/e4b_c12_ast.py:222`). Nenhuma mudança em arquivo foi necessária para essa verificação; reexecução da suíte inteira [nao verificado].
-
-As duas falhas do diagrama decorrem dos artefatos desatualizados pela obra: **DO-DIFF-CODIGO-ERRADO**, entendendo “código” aqui como entrega gerada inconsistente. O teste principal exige igualdade dos artefatos com o gerador (`app/core/tests/test_selo_diagrama_do_codigo.py:44`); o segundo restaura o original e então exige a mesma igualdade (`:95`, `:98`). Portanto, a segunda falha não prova falha na restauração: restaurar um original já divergente mantém `rc=1` (`app/core/management/commands/gerar_diagrama.py:923`).
-
-Prova da divergência:
-
-- `core/juizes.py` ganhou **duas** perguntas em `app/core/juizes.py:294` e `:295`; o bloco conta `len(J.JUIZES[fam])` (`app/core/management/commands/gerar_diagrama.py:346`). A geração em memória produziu **23**, mas `app/docs/ARQUITETURA.mmd:340` mantém **22**. O número “+10 arquivos” já confere: deduplica arquivos por conjunto (`app/core/management/commands/gerar_diagrama.py:348`); as duas perguntas não significam dois arquivos novos.
-- `app/docs/MAPA.md:88` mantém **22/0**, mas a geração em memória produz **23/0** pelos critérios de `app/core/management/commands/gerar_diagrama.py:774`, `:829`.
-- `app/docs/MAPA.md:180` conserva a pergunta anterior sobre “conversa”, enquanto a fonte agora pergunta por resposta **SEM veredito** (`app/core/juizes.py:295`); falta também a pergunta de `:294`. A lista de perguntas do MAPA vem diretamente do registro (`app/core/management/commands/gerar_diagrama.py:781`, `:850`).
-
-**Não basta regerar somente `ARQUITETURA.mmd`**: `gerar(check=True)` compara os dois arquivos (`app/core/management/commands/gerar_diagrama.py:923`), e a geração normal grava ambos (`:932`). O delta fornecido não toca os selos, o registro ou esses artefatos; portanto não contém a cura dessas sete falhas [nao verificado: anexo `delta_nao_commitado.diff`, sem numeração local].
-
-## 13/11 09:33 · sessao d64075348a39 · - · - · origem=Ronald (tmux)
-
-As 3 ERROR vêm do hunk `ponto/supra_juiz.py @@ -536,15 +549,25 @@`: o executor passou dos campos crus ao juiz real; os doubles ficaram com interface antiga. A intenção está declarada em `app/docs/CORTES.md:449` e `app/core/juizes.py:294`.
-
-| Falha | Prova | Veredito |
-|---|---|---|
-| `test_resposta_direta_barra` | `_P` só oferece `respondida_em` (`app/ponto/tests/test_supra_juiz_executor.py:14`); o novo caminho exige `validada_em`, `materializada_em`, texto e PK (`app/chamados/models.py:1899`, `app/ponto/supra_juiz.py:559`). | **CURADA-PELO-DELTA** fornecido; execução Django completa [nao verificado]. |
-| `test_resposta_na_disputa_barra` | `_D` só oferece `perguntas` (`app/ponto/tests/test_supra_juiz_executor.py:27`); o novo executor chama `respostas_sem_veredito()` (`app/ponto/supra_juiz.py:558`). | **CURADA-PELO-DELTA** fornecido; execução Django completa [nao verificado]. |
-| `test_sem_conversa_executa` | Mesmo método ausente, antes de alcançar o predicado (`app/ponto/tests/test_supra_juiz_executor.py:39`, `app/ponto/supra_juiz.py:558`). | **CURADA-PELO-DELTA** fornecido; execução Django completa [nao verificado]. |
-
-A pergunta antiga era “há `respondida_em`?”; a nova é “há resposta sem validação/materialização, não dispensada pela tranca?”, abrangendo carimbo **OU** texto. A obra fez essa mudança deliberadamente (`app/chamados/models.py:1898`, `app/docs/CORTES.md:449`). Os três asserts antigos continuam corretos para perguntas sem veredito; quem precisava atualização eram seus doubles (`app/ponto/tests/test_supra_juiz_executor.py:39`).
-
-O delta acrescenta campos, PK e delegação necessários; seu mock de `dia_da_pergunta_trancado=False` isola a questão de veredito, evitando exigir a disputa e o dia reais do double (`app/chamados/models.py:1902`, `app/chamados/juizes.py:991`). Extraí por AST as funções reais e executei, exclusivamente em memória, os seis casos com os doubles do delta: resultados esperados nos três ERROR, vazio, texto sem carimbo e resposta com veredito; suíte Django integral [nao verificado].
-
-O tripwire é provocado pela função nova, cujo terminal conta diretamente `VIVOS` (`app/chamados/juizes.py:2523`), precisamente a forma proibida pelo selo (`app/core/tests/test_tripwire_contagem_de_pendencia.py:23`, `app/core/tests/test_tripwire_contagem_de_pendencia.py:370`). O delta fornecido não altera esse contador [nao verificado].
-
-A adaptação que preserva **os candidatos provenientes da trilha**, sem recalcular conversa nem acrescentar filtro de categoria, é:
-
-```python
-from chamados.services.painel import qs_na_fila
-
-return qs_na_fila(
-    _base=ChamadoColaborador.objects.filter(pk__in=_ids)
-).count()
-```
-
-A trilha permanece a definida em `app/chamados/juizes.py:2520`; `_base` é repassada até o filtro vivo (`app/chamados/services/painel.py:153`, `app/chamados/services/painel.py:188`). Validei a proposta contra o AST real do tripwire em memória: deixou de produzir sítio não conforme (`app/core/tests/test_tripwire_contagem_de_pendencia.py:350`).
-
-**Ressalva indispensável:** isso não preserva literalmente o total de **todos os VIVOS**. `VIVOS` inclui `registrado` (`app/chamados/catalogo/motor.py:24`), enquanto `qs_na_fila` limita a `COBRANCA` e remove silenciados no futuro (`app/chamados/services/painel.py:189`). Portanto “mesmos candidatos da trilha, julgados pela fila” é realizável; “mesmo total VIVOS para qualquer estado possível, usando apenas `qs_na_fila`” é incompatível com esse juiz. A inexistência de registrados/silenciados entre esses pais em produção é [nao verificado].
-
-## 13/11 09:32 · sessao 96e9d46f0903 · - · - · origem=Ronald (tmux)
-
-**`test_03`: PRE-EXISTENTE quanto à porta; causa exata da execução [nao verificado].**
-
-- A pergunta do teste é: “a gravação da própria pergunta aparece como sucesso, com o erro das irmãs separado?”. O teste espera isso em `app/chamados/tests/test_validar_diz_o_seu.py:87`; a implementação separa próprios/irmãs em `app/chamados/services/validacao.py:487`, mas, havendo erros e `materializada_em=None`, retorna `nao_gravou` mesmo sem erro próprio (`app/chamados/services/validacao.py:490`, `app/chamados/services/validacao.py:504`).
-- A mensagem **não prova competência realmente aprovada/exportada**: o próprio teste injeta `IRMA`, contendo “competencia … aprovado”, em `app/chamados/tests/test_validar_diz_o_seu.py:19`, `app/chamados/tests/test_validar_diz_o_seu.py:47`, `app/chamados/tests/test_validar_diz_o_seu.py:85`. A casca traduz o primeiro erro em `app/chamados/services/acoes_disputa.py:32`; a tradução casa qualquer marcador, incluindo “competencia”, em `app/chamados/catalogo/recusa.py:35`, `app/chamados/catalogo/recusa.py:81`.
-- A porta real lê **timestamp → competência do fato → FechamentoMensal.status**, sem consultar “hoje”: `app/ponto/janelas.py:84`, `app/ponto/janelas.py:86`, `app/ponto/janelas.py:87`; sua chamada ocorre em `app/ponto/registro_batida.py:132`. Esses arquivos não constam dos hunks fornecidos [nao verificado].
-- O gate novo não retém o chamado deste fixture: ele nasce com categoria `saida_sem_entrada` (`app/chamados/tests/test_validar_diz_o_seu.py:33`), enquanto o gate retorna `True` fora de `disputa_supervisao` (`app/chamados/models.py:716`).
-- A validação antecede a materialização (`app/chamados/services/validacao.py:435`, `app/chamados/services/validacao.py:461`), e o novo juiz exclui pergunta já validada (`app/chamados/models.py:1899`); a condição `validada_em__isnull=True` também existia no hunk anterior fornecido [nao verificado].
-- O fixture combina data literal de junho com `timezone.now()` e não declara congelamento (`app/chamados/tests/test_validar_diz_o_seu.py:7`, `app/chamados/tests/test_validar_diz_o_seu.py:23`, `app/chamados/tests/test_validar_diz_o_seu.py:38`). **Atribuir esta falha ao relógio, ou explicar por que a materialização ficou nula nesta execução, permanece [nao verificado].**
-- O delta fornecido não altera esse teste nem essa cadeia; não apresenta cura dele [nao verificado]. A reprodução da mesma falha na base também permanece [nao verificado]. [nao verificado]
-
-## 13/11 09:28 · sessao 8bbb526bb12e · FERIADO-ESCALA · sonda · origem=Code
-
-```text
-sonda_leitura: sonda2.py [b28219536c3a7380] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-== (1) ec1264
-  col239 te517 ini=2026-09-20 posto463 trabalha=True ativa=True
-  vinc ec206 te212 5x2 ini=2026-07-21 fim=2026-09-19 ativa=False trabalha=True
-  vinc ec1264 te517 5x2 ini=2026-09-20 fim=None ativa=True trabalha=True
-  hist 968 tipo=escala motivo=admissao data=2026-07-21 criado=2026-08-27 17:22:45.961147+00:00 por=None
-  hist 1849 tipo=escala motivo=mudanca data=2026-09-19 criado=2026-09-19 21:48:00.271174+00:00 por=None
-  LogAuditoria campos: ['id', 'usuario', 'acao', 'modelo', 'objeto_id', 'descricao', 'valor_antes', 'valor_depois', 'ip', 'ator', 'criado_em']
-  log 530254 regenerar_celulas_vinculo None 2026-09-19 21:48:00.267970+00:00 {'ate': '2026-09-20', 'desde': '2026-09-20', 'alteradas': 1, 'apesar_da_lavra': None, 'barrados_exportado': 0, 'cobrancas_orfas_marcadas': 0}
-== (2) sincronizar_feriado_admin restrito aos 16 (desejado = not administrativo)
-   (2, 'desejado=False') 1
-   (2, 'desejado=True') 8
-   (3, 'desejado=True') 4
-   (4, 'desejado=False') 1
-   (4, 'desejado=True') 2
-== (3) janelas e competencia fechada pelo juiz K9
-  emp2 janela 2026-09-21..2026-10-20 (mes=10/2026) fechada=[]
-  emp2 janela 2026-10-21..2026-11-20 (mes=11/2026) fechada=[]
-  emp3 janela 2026-09-21..2026-10-20 (mes=10/2026) fechada=[]
-  emp3 janela 2026-10-21..2026-11-20 (mes=11/2026) fechada=[]
-  emp4 janela 2026-09-21..2026-10-20 (mes=10/2026) fechada=[]
-  emp4 janela 2026-10-21..2026-11-20 (mes=11/2026) fechada=[]
-== (4) feriados na janela por colab dos 16 (celula trabalha/origem; fatos_do_dia faixa)
-  ec203 col236 emp2 ini=2026-07-21: 2026-10-12 cel=True/gerada faixa=ferias ; 2026-11-02 cel=True/gerada faixa=ferias ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec328 col376 emp2 ini=2026-07-21: 2026-10-12 cel=True/gerada faixa=atestado ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec506 col181 emp2 ini=2026-07-21: 2026-10-12 cel=True/gerada faixa=trabalho ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec749 col142 emp4 ini=2026-06-01: 2026-10-12 cel=True/gerada faixa=trabalho ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec813 col93 emp3 ini=2026-06-24: 2026-10-12 cel=False/gerada faixa=feriado ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec826 col118 emp3 ini=2026-06-24: 2026-10-12 cel=True/gerada faixa=ferias ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec854 col148 emp3 ini=2026-06-24: 2026-10-12 cel=False/gerada faixa=feriado ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec964 col709 emp2 ini=2026-07-21: 2026-10-12 cel=False/gerada faixa=feriado ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1101 col902 emp2 ini=2026-08-17: 2026-10-12 cel=False/gerada faixa=feriado ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1111 col712 emp4 ini=2026-08-03: 2026-10-12 cel=True/gerada faixa=trabalho ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1208 col940 emp2 ini=2026-09-11: 2026-10-12 cel=False/gerada faixa=feriado ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1235 col857 emp4 ini=2026-08-21: 2026-10-12 cel=False/gerada faixa=feriado ; 2026-11-02 cel=False/gerada faixa=feriado ; 2026-11-15 cel=False/gerada faixa=atestado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1264 col239 emp2 ini=2026-09-20: 2026-10-12 cel=True/gerada faixa=trabalho ; 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1475 col1007 emp2 ini=2026-11-03: 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1492 col152 emp3 ini=2026-10-20: 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-  ec1524 col1025 emp2 ini=2026-11-02: 2026-11-02 cel=True/gerada faixa=trabalho ; 2026-11-15 cel=False/gerada faixa=feriado ; 2026-11-20 cel=True/gerada faixa=trabalho
-== (5) vigentes por ciclo sem regra literal no aval (semanal, 24x48) e 12x36 em posto opera=False
-  semanal/24x48: 0
-  12x36 posto opera=False: 2
-erros 0
-```
-
-## 13/11 09:24 · sessao 166b54ce05bb · FERIADO-ESCALA · censo · origem=Code
-
-O Vincular já usa o juiz de 16/09 para criar vínculo; o formulário não oferece escolha de feriado e o reaproveitamento de vínculo preserva a flag existente. (`app/colaboradores/services/vinculo.py:259`, `app/colaboradores/services/vinculo.py:296`, `app/templates/colaboradores/partials/painel_vinculo.html:136`)
-
-Censo estático. Execução dos testes, identidade do HEAD por Git e resultados de produção além do raspado: **[não verificado]**. As comparações com o aval usam a transcrição fornecida; localização física de `aval.txt`: **[não verificado]**. [nao verificado]
-
-**1. Escritores — produção**
-
-| Sítio | Origem do valor | Passa por `executar_vinculo`? |
-|---|---|---|
-| `app/colaboradores/services/vinculo.py:287` — criação normal | Explícito: `padrao_trabalha_em_feriado(template, colaborador.posto)`, em `:296`. | Sim, está dentro dele, definido em `:170`. |
-| `app/colaboradores/services/vinculo.py:970` — `criar_trecho_retroativo` | Cópia de `ec.trabalha_em_feriado`, em `:974`. | Não. Chamado pelo comando de correção retroativa: `app/colaboradores/management/commands/corrigir_escala_retroativa.py:196`. |
-| `app/colaboradores/services/vinculo.py:1089` — `ajustar_vinculo_pelo_sistema` | Cópia de `ec.trabalha_em_feriado`, em `:1092`. | Não. Chamador: `app/escala/services/escala_auto_executor.py:103`. |
-| `app/colaboradores/services/vinculo.py:1110` — `desfazer_ajuste_do_sistema` | Cópia de `antigo.trabalha_em_feriado`, em `:1113`. | Não. Chamador: `app/escala/services/escala_auto_executor.py:145`. |
-| `app/colaboradores/services/vinculo.py:893` — alteração de existente | Argumento `desejado`; persiste com `save(update_fields=['trabalha_em_feriado'])`, em `:894`. | Não; usa a porta específica `marcar_trabalha_em_feriado`, definida em `:869`. |
-| `app/colaboradores/management/commands/sincronizar_feriado_admin.py:47` | Deriva `desejado = not cargo_e_administrativo(cargo)`; administrativos cadastrados em `:4` recebem `False`, demais `True`. | Não; chama `marcar_trabalha_em_feriado` em `:56`, somente com `--apply` (`:53`). |
-| `app/escala/migrations/0014_escalacolaborador_trabalha_em_feriado.py:13` | `AddField` com `default=True`, em `:16`. Aplicação dessa migration nesta produção: **[não verificado]**. | Não. |
-
-Os chamadores de produção de `executar_vinculo` são a view do Vincular, a troca pelo chat, a realocação da régua e o comando de fase: `app/colaboradores/views.py:423`; `app/colaboradores/services/troca_pelo_chat.py:75`; `app/escala/regua_defesa.py:321`; `app/ponto/management/commands/censo_fase_12x36.py:423`. O caminho do chat chega pelo executor da proposta em `app/core/views_ia.py:1008`.
-
-Há ainda escrita genérica por `**campos` em `gravar_regua`: `app/colaboradores/services/vinculo.py:1048`, `app/colaboradores/services/vinculo.py:1070`. Os chamadores atuais fornecem somente campos `regua_*`, sem a flag: `app/escala/regua_defesa.py:662`, `app/escala/regua_defesa.py:719`, `app/escala/regua_defesa.py:742`, `app/escala/regua_defesa.py:765`.
-
-Reutilizar vínculo faz `existente.save()` preservando a flag; restaurar snapshot atualiza somente tipo, início, fim e atividade. (`app/colaboradores/services/vinculo.py:259`, `app/colaboradores/services/vinculo.py:283`, `app/colaboradores/services/vinculo.py:1031`)
-
-O Django admin não cria nem altera esse modelo: `EscalaColaboradorAdmin` usa `SoLeitura`; seus fieldsets também omitem a flag. (`app/escala/admin.py:19`, `app/escala/admin.py:30`, `app/core/admin.py:59`, `app/core/admin.py:62`)
-
-Outros criadores por ModelForm, serializer, importador, fixture de produção, `get_or_create`, `update_or_create`, `bulk_create`, construtor seguido de `save`, `setattr` ou reflexão não foram localizados na busca estática; ausência universal de caminhos dinâmicos: **[não verificado]**.
-
-**Escritores — testes** [nao verificado]
-
-As criações diretas abaixo não passam por `executar_vinculo`; o inventário das omissões está no apêndice. Quando omitida, a flag recebe o default atual `True`. (`app/escala/models.py:896`)
-
-| Origem explícita | Sítios de criação |
-|---|---|
-| `False` | `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:90`; `app/ponto/tests/test_a2_precedencia.py:70`; `app/core/tests/test_contract_feriado.py:139`; `app/escala/tests/test_celula_dia.py:403`; `app/escala/tests/test_escala_models.py:268`; `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:112`; `app/chamados/tests/test_varredura_feriado_evento.py:46`. |
-| `True` | `app/colaboradores/tests/test_feriado_admin_sync.py:34`; `app/ponto/tests/test_a2_precedencia.py:283`; `app/ponto/tests/test_precedencia_vinculo_encerrado.py:43`, `:47`, `:98`; `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:57`; `app/chamados/tests/test_jv1_feriado_vira_vigia.py:56`. |
-| Parâmetro do helper | `app/colaboradores/tests/test_e4cal_l1_calendario_le_o_d4.py:82`; `app/ponto/tests/test_reavaliar_feriado_pelo_juiz.py:54`; `app/ponto/tests/test_furo_feriado_pelo_juiz.py:50`; `app/ponto/tests/test_e4cal_l1_d4_natureza.py:78`; `app/escala/tests/test_feriado_padrao_por_escala.py:109`; `app/chamados/tests/test_jv1_volta5_posto_do_dia_nos_vetos.py:41`; `app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:77`; `app/chamados/tests/test_jv1_volta4_posto_do_dia.py:38`. |
-| `**kwargs`: pode receber a flag do chamador; sem ela vale o default | `app/colaboradores/tests/test_trilha_do_vinculo.py:66`; `app/ponto/tests/test_precedencia_pela_celula.py:59`; `app/escala/tests/test_e4_parte4_cinco_copias.py:54`; `app/escala/tests/test_escala_vigente_pergunta_a_celula.py:55`; `app/escala/tests/test_e4_vinculo_cobre_a_data.py:25`; `app/escala/tests/test_e4_parte5_copias.py:66`; `app/chamados/tests/test_h06_falta_pela_grade.py:60`. Há chamada explicitando `True` em `app/escala/tests/test_e4_parte4_cinco_copias.py:131`. |
-
-Há dois `bulk_create`, com construtores que omitem a flag: `app/colaboradores/tests/test_situacional_pergunta_em_lote.py:61`, `:62`; `app/ponto/tests/test_col129_teto_vira_lista.py:280`. Outros três construtores não são salvos: `app/ponto/tests/test_r4_celula_sem_marcos.py:49`; `app/escala/tests/test_ancora_retroativa.py:124`; `app/escala/tests/test_propositor_escala.py:144`.
-
-Mutações diretas de teste: [nao verificado]
-
-- `update(False)`: `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:76`; `app/chamados/tests/test_jv1_feriado_vira_vigia.py:162`, `:182`; `app/ponto/tests/test_precedencia_vinculo_encerrado.py:69`; `app/ponto/tests/test_o280_bateria_da_lei.py:1736`.
-- Atribuição `False` seguida de `save(update_fields=...)`: `app/ponto/tests/test_a2_precedencia.py:310`, `:311`.
-- Atribuição `True` somente em memória: `app/escala/tests/test_escala_models.py:277`.
-- Pela porta da flag: `app/escala/tests/test_porta_escala.py:62`, `:65`; `app/chamados/tests/test_jv1_feriado_vira_vigia.py:89`; `app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:133`; exercício sem banco em `app/ponto/tests/test_cadastro_futuro_sem_banco.py:445`.
-
-Chamadas diretas de teste ao executor: `app/colaboradores/tests/test_pos_vinculo.py:23`; `test_vinculo_linha_do_tempo.py:148`; `test_vinculo_folga_padrao.py:49`; `test_vinculo_ancora_so.py:21`; `test_historico_vinculo.py:14`, `:23`, `:26`; `test_vinculo_ancora_geometria.py:54`; `test_trilha_do_vinculo.py:75`; `test_vinculo_regenera_celulas.py:41`, todos sob `app/colaboradores/tests/`.
-
-O modelo falso do teste sem banco declara default `True` e instala juiz falso; não é persistência de `EscalaColaborador` real. (`app/ponto/tests/test_cadastro_futuro_sem_banco.py:250`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:252`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:328`)
-
-**2. Leitores**
-
-| Leitor | Decisão |
-|---|---|
-| `app/escala/models.py:1390` | `feriado_vira_folga`: com flag verdadeira, não transforma feriado em folga; com falsa, exige ciclo permitido e feriado do lugar do vínculo (`:1392`, `:1395`). |
-| `app/escala/models.py:929` | Filtra vínculos vigentes de colaborador ativo, flag verdadeira e ciclo 5x2/6x1; separa declaração do posto em `:932`. |
-| `app/colaboradores/services/vinculo.py:890` | Idempotência da troca; lê valor anterior em `:892`, usado no motivo em `:907` e `:912`. |
-| `app/colaboradores/services/vinculo.py:974`, `:1092`, `:1113` | Lê para copiar a flag nas três criações derivadas. |
-| `app/colaboradores/management/commands/sincronizar_feriado_admin.py:48`, `:52` | Detecta divergência e imprime valor atual versus desejado por cargo. |
-| `app/escala/models.py:1369` | Pelo predicado, transforma base de trabalho `True` em `False`. |
-| `app/ponto/precedencia.py:376` | Pelo predicado do vínculo, decide se feriado suprime trabalho ou fica somente no pagamento. |
-| `app/ponto/services/fechamento.py:949` | Pelo mesmo predicado, separa feriado trabalhado de folga trabalhada; direciona HE100 em `:955` e exclui da folga em `:965`. |
-| `app/ponto/calculador/alimentacao.py:521` | Alimenta `folga_e_feriado`; a rubrica é escolhida em `app/ponto/calculador/regras.py:684`. |
-| `app/ponto/management/commands/detectar_ausencias.py:617` | Consome a faixa da precedência e veta cobrança por feriado. |
-| `app/chamados/services/feriado_reavaliar.py:34` | Consome precedência; seleciona falta espúria nas faixas feriado/folga em `:37`. O vigia conta e alarma em `app/ponto/management/commands/reavaliar_ausencias_feriado.py:39`, `:43`. |
-
-Há decisões independentes da flag: o veto por posto fechado consulta `opera_em_feriado`, e a classificação da fila marca `feriado_nao_lido` só pela data no conjunto de feriados. Esta última está registrada como pendência. (`app/colaboradores/services/feriado_do_posto.py:69`, `app/ponto/management/commands/detectar_ausencias.py:629`, `app/chamados/services/fila_por_causa.py:228`, `app/core/juizes.py:470`)
-
-O comando por cargo deriva um valor próprio para a flag; o juiz de nascimento deriva por ciclo/base/posto. (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:47`, `app/escala/models.py:911`)
-
-Leitores diretos adicionais em HTML, JS, API/serializers, forms, relatórios ou PDF não foram encontrados; negativo global: **[não verificado]**. Os consumidores indiretos de previsto/DNA não equivalem a uma nova leitura da flag: ela não está no blob produzido. (`app/ponto/management/commands/gerar_celulas.py:104`)
-
-**3. Juiz `padrao_trabalha_em_feriado`**
-
-A chamada de produção está na criação normal: `app/colaboradores/services/vinculo.py:296`. Chamadas reais de teste: `app/escala/tests/test_feriado_padrao_por_escala.py:46`, `:64`; substituição por stub: `app/ponto/tests/test_cadastro_futuro_sem_banco.py:328`.
-
-Para qualquer combinação de ciclo/base, posto declarado `True` retorna `True`; declarado `False` retorna `False`, antes de examinar o tipo. (`app/escala/models.py:911`, `app/escala/models.py:913`)
-
-Com posto `None` ou sem declaração:
-
-| `tipo_ciclo` | Base `comercial` | Bases `12x36`, `turno_partido`, `plantao`, `intermitente` |
-|---|---:|---:|
-| `5x2` | `False` | `True` |
-| `6x1` | `False` | `True` |
-| `12x36` | `True` | `True` |
-| `semanal` | `True` | `True` |
-| `24x48` | `True` | `True` |
-| `personalizado` | `True` | `True` |
-| `intermitente` | `True` | `True` |
-
-Toda a tabela decorre de `app/escala/models.py:902`, `app/escala/models.py:916`, `app/escala/models.py:917`. Sem tipo e sem declaração, retorna `True`. (`app/escala/models.py:914`)
-
-Os sete ciclos são os choices de `app/escala/models.py:36`; default de ciclo `12x36` em `:117`. As cinco bases são os choices de `app/escala/models.py:163`; default de base `12x36` em `:170`.
-
-**4. Vincular e troca da flag existente**
-
-A tela é `colaboradores/vincular.html`, servida por `vincular_colaboradores`; o painel é carregado por `painel_vinculo`. (`app/colaboradores/urls.py:9`, `app/colaboradores/views.py:126`, `app/colaboradores/views.py:262`)
-
-O formulário é HTML no partial. Expõe `q`, `template_id`, `data_ancora`, `confirm_txt`, `data_inicio` e botão `modo=direto`; os valores iniciais de escala, âncora e início vêm do vínculo ativo. **A flag não aparece e não tem valor inicial visual.** (`app/templates/colaboradores/partials/painel_vinculo.html:136`, `:149`, `:155`, `:159`, `:163`, `:167`, `:175`)
-
-O POST chega à rota `<cid>/vincular/escala/`; a view exige POST e `editar_escalas`, chama `julgar_vinculo` e, salvo `no_op`, `executar_vinculo`. O parser não recebe escolha de feriado. (`app/colaboradores/urls.py:13`, `app/colaboradores/views.py:382`, `:411`, `:416`, `:423`; `app/colaboradores/services/vinculo.py:53`, `:59`, `:144`)
-
-A troca específica de existente é `marcar_trabalha_em_feriado`. Mesmo valor retorna; valor diferente salva somente a flag. O chamador de produção encontrado é `sincronizar_feriado_admin`, sem autor/motivo explícitos. (`app/colaboradores/services/vinculo.py:869`, `:890`, `:894`; `app/colaboradores/management/commands/sincronizar_feriado_admin.py:56`)
-
-A função chama:
-
-- **Passado/hoje:** regeneração desde `max(data_inicio, início da competência anterior)` até hoje, com extensão automática desativada. (`app/colaboradores/services/vinculo.py:899`, `:900`, `:904`, `:906`)
-- **Futuro:** suplemento de células já existentes, `origem='gerada'`, de amanhã até o fim da união das competências correntes; preserva dias atribuídos a outro vínculo e chama a mesma porta por dia. (`app/colaboradores/services/vinculo.py:910`; `app/ponto/services/cadastro_futuro.py:26`, `:27`, `:31`, `:40`, `:44`; `app/ponto/management/commands/gerar_celulas.py:299`)
-
-A porta preserva células editadas e barra dias lavrados; ao reescrever geradas, guarda DNA anterior, instante e número de regenerações. (`app/ponto/portas/celula.py:118`, `:284`, `:297`, `:305`, `:310`)
-
-A trilha encontrada é **condicional à regeneração alterar células**: evento `regenerar_celulas_vinculo`, modelo/objeto do vínculo, janela e contagens no `valor_depois`; o texto do motivo contém flag antes→depois. A função de troca não grava evento próprio da flag com valores estruturados antes/depois; a fotografia geral do vínculo também não inclui a flag. (`app/ponto/portas/celula.py:369`, `:373`, `:380`; `app/colaboradores/services/vinculo.py:907`, `:912`, `:28`, `:42`)
-
-Depois, a porta rejulga dias tocados até hoje, exclui vereditos humanos, recalcula por competência e agenda os eventos de rejunção/falta espúria. (`app/ponto/portas/celula.py:460`, `:465`, `:469`, `:472`, `:494`, `:496`, `:528`, `:538`, `:540`)
-
-**5. CelulaDia, DNA e cartório**
-
-A geração chama `eh_dia_trabalho_calculado`, grava o resultado em `CelulaDia.trabalha` e o fornece ao produtor do DNA. Marcos/lâmpadas só são montados para `trabalha is True`; a flag não é congelada como chave do blob. (`app/ponto/portas/celula.py:911`, `:914`, `:917`; `app/ponto/management/commands/gerar_celulas.py:88`, `:104`)
-
-`eh_dia_trabalho_calculado` calcula pela fase/foto/template e, na parte semanal, transforma base `True` em `False` por `feriado_vira_folga`. O leitor `eh_dia_trabalho` prefere a célula existente e usa o cálculo no fallback. (`app/escala/models.py:1252`, `:1289`, `:1366`, `:1369`, `:1092`, `:1096`)
-
-`CICLOS_FERIADO_VIRA_FOLGA = (6x1, 5x2, semanal)`. O predicado exige flag falsa, ciclo nessa tupla e feriado do lugar do vínculo; `12x36`, `24x48`, personalizado e intermitente não viram folga por essa flag. (`app/escala/models.py:32`, `:1390`, `:1392`, `:1395`)
-
-`fatos_do_dia` delega ao período de um dia. A implementação escolhe o vínculo com `vinculo_do_dia`, lê `cel.trabalha` como previsto e só calcula pelo vínculo quando a célula não responde. A cláusula vigente é:
-
-`feriado and previsto is True and ec is not None and not ec.feriado_vira_folga(data)`.
-
-Portanto o código atual consulta o predicado compartilhado, além da flag e do ciclo contidos nele. (`app/ponto/precedencia.py:256`, `:349`, `:363`, `:366`, `:376`, `:377`)
-
-Para rejulgar 02/11, a porta unitária é `ponto.services.cartorio.julgar_celula(colaborador, data, apply_=True, forcar=True)`. Ela busca a célula existente, entrega-a ao julgamento e depois carimba a precedência por `fatos_do_dia`; célula futura/inexistente retorna `None`. **Rejulgar não regenera o previsto/DNA.** (`app/ponto/services/cartorio.py:2011`, `:2025`, `:2027`, `:2040`, `:2048`, `:1999`)
-
-A resposta a “célula ou vínculo?” é **ambos**: célula/DNA para o julgamento e previsto; vínculo escolhido para o dia para o predicado de feriado. (`app/ponto/services/cartorio.py:1437`, `:1465`; `app/ponto/precedencia.py:349`, `:363`, `:377`)
-
-O resultado efetivo de col148 após eventual cura, a regeneração de 20/11 e a relação individual dos outros vínculos do lote: **[não verificado]**. O raspado fornecido não contém essa relação nem o resultado posterior.
-
-**6. Contadores, ESTADO, placar e HAIKU**
-
-O contador existente seleciona vínculo que cobre hoje, colaborador ativo, ciclo 5x2/6x1 e flag `True`; não filtra base. Separa `declarados` pelo posto do vínculo com `opera_em_feriado=True`; `nao_declarados = total - declarados`. Ele não distingue origem por default, cópia ou escolha. (`app/escala/models.py:925`, `:929`, `:932`, `:933`)
-
-O command imprime as três contagens; o placar o executa e publica a linha fora do TOTAL do Code. Está declarado em `FORA_DE_PIPELINE`, com motivo para não cronificar. (`app/escala/management/commands/vinculos_5x2_6x1_trabalha_feriado.py:15`, `:16`, `:17`; `bin/placar_code.sh:298`, `:300`; `app/config/crons.py:769`, `:1227`)
-
-Publicação desse contador no ESTADO ou copiloto e existência do novo `feriado_por_padrao_5x2`: não localizadas; **[não verificado]**.
-
-Os pontos concretos de integração existentes são:
-
-| Destino | Registro/composição |
-|---|---|
-| ESTADO | `bin/gerar_estado.py:178` compõe o documento. Exemplo de contador: leitura em `:260`, posição no texto em `:329`, interpolação em `:374`. `bin/relato.sh:38` chama o gerador. |
-| Snapshot de contadores para a ponte da IA | Dicionário `saida['contadores']` em `app/api/views_mensageria.py:643`; rota em `app/api/urls.py:16`. |
-| Entrada efetiva no contexto do copiloto | `mensageria/nucleo/ferramentas.py:372`; chamadas dos blocos em `:380` e `:418`. Exemplo de pergunta roteada: reconhecimento em `:1890`, ferramenta em `:1900`, bloco em `:1912`. |
-| Cliente HTTP do bloco | Exemplo em `mensageria/nucleo/core_client.py:331`. |
-| Pergunta de avaliação HAIKU | Lista `GOLDEN` em `eval/golden.py:5`; exemplo de registro de pergunta em `:337`; medidor correspondente em `eval/oraculo.py:17`, `:62`. |
-
-A ferramenta atual `saude_da_operacao` transforma `dados['metricas']` e retorna somente as medidas de saúde; não repassa o dicionário `contadores` da API. Assim, acrescentar chave somente naquela resposta não equivale a fazê-la chegar ao contexto por essa ferramenta. (`mensageria/nucleo/ferramentas.py:265`, `:294`; `app/api/views_mensageria.py:643`)
-
-**7. Contradições/fatos a confrontar com o aval**
-
-- **(a) Posto versus ciclo:** posto declarado vence todo tipo: 5x2 com posto `True` nasce `True`; 12x36 com posto `False` nasce `False`. Isso diverge das duas atribuições incondicionais por ciclo transcritas no aval. (`app/escala/models.py:911`, `:913`; `app/escala/tests/test_feriado_padrao_por_escala.py:59`)
-- **(b) 6x1:** base comercial sem posto declarado recebe `False` automaticamente; no posto declarado `True`, nasce `True` sem escolha enviada pelo POST. (`app/escala/models.py:916`; `app/escala/tests/test_feriado_padrao_por_escala.py:73`, `:86`)
-- **(c) Intermitente/personalizado/outros:** sem declaração do posto, o juiz retorna `True` para intermitente, personalizado, semanal e 24x48; o formulário não exige escolha. A flag falsa só transforma feriado em folga nos três ciclos da tupla, excluindo intermitente/personalizado/24x48. Regra nova para semanal/24x48 no aval recebido: **[não verificado]**. (`app/escala/models.py:916`, `:32`, `:1392`; `app/templates/colaboradores/partials/painel_vinculo.html:136`)
-- **(d) Base não comercial:** 5x2 com `turno_partido`, ou qualquer base diferente de comercial, nasce `True` sem declaração; o teste fixa expressamente o turno partido. O predicado de folga, quando a flag é
-
-[truncado em 20000 de 46776 caracteres]
-
-_4542 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4547 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
