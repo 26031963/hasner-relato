@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 08:38** · publicado em **13/11/2026 08:41** (UTC-3)
+> Ultima resposta processada: **13/11/2026 08:51** · publicado em **13/11/2026 08:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 08:51 · sessao d683fdfb3c73 · - · - · origem=Ronald (tmux)
+
+B. O predicado antigo foi preservado na extração: mesmo `self.perguntas.all()`, mesmo argumento `ignorar_tranca`, mesmo filtro de validada/materializada e carimbo **OU** texto. A comparação com o baseline depende do diff fornecido; não existe `.git` nesta cópia. (`app/chamados/models.py:1886`; `app/chamados/models.py:1898`; [não verificado] para consulta independente ao commit.)
+
+Os chamadores antigos continuam usando a chamada padrão: `pode_fechar`, `fechar`, desligamento, ficha, reconciliador e fila por causa. `competencia_trancada` continua solicitando `ignorar_tranca=True`, com justificativa própria para a pauta DP. (`app/chamados/models.py:1909`; `app/chamados/models.py:1942`; `app/colaboradores/services/desligamento.py:141`; `app/colaboradores/services/ficha.py:169`; `app/chamados/reconciliador.py:1164`; `app/chamados/services/fila_por_causa.py:226`; `app/chamados/services/competencia_trancada.py:124`.)
+
+A tranca consulta o colaborador **da disputa da pergunta** e seu dia de turno; não consulta o chamado que recebe o universo. Conversa devolve dia `None`. Existe também cache por identidade da instância durante a consulta, mas essa leitura já pertence ao juiz da tranca. Nenhum chamador antigo passou a entregar outro universo ao wrapper. (`app/chamados/juizes.py:986`; `app/chamados/juizes.py:991`; `app/chamados/juizes.py:334`; `app/chamados/models.py:1886`.)
+
+C. As duas aplicações não têm predicados finais idênticos: CSF usa a tranca; retratação deliberadamente a ignora. A diferença está declarada e justificada no código, inclusive com os números fornecidos na sonda: preservar quatro chamados que a tranca soltaria e segurar dois adicionais pela passagem de **E** para **OU**. (`app/ponto/supra_juiz.py:558`; `app/ponto/supra_juiz.py:559`; `app/chamados/juizes.py:2022`; `app/chamados/juizes.py:2035`.)
+
+Não encontrei leitor executável exigindo igualdade entre os dois resultados: `_retratar` aplica a retenção mais restritiva antes de chegar à reconciliação do chamado. O teste compara a retratação com o juiz explicitamente chamado com `ignorar_tranca=True`. (`app/chamados/reconciliador.py:519`; `app/chamados/reconciliador.py:524`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:262`.)
+
+G. O teste das órfãs é coerente com B: valida explicitamente a respondida e exige que CSF a libere. `falhas == 2` conta lotes do colaborador que falharam; os IDs já lidos são excluídos da próxima rodada, permitindo duas falhas com uma tentativa por evento. A execução ORM desse teste permanece [não verificado]. (`app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:148`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:157`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:163`; `app/chamados/reconciliador.py:1344`; `app/chamados/reconciliador.py:1396`; `app/chamados/reconciliador.py:1404`.)
+
+**Bloqueante adicional confirmado: a extração quebra testes existentes.** [nao verificado]
+
+- Executei em memória, sem banco nem gravação, `PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.test_e4b_c4v14_memoria`: **quatro testes, quatro erros** por `AttributeError: 'Objeto' object has no attribute 'sem_veredito_entre'`. A fixture injeta somente `respostas_sem_veredito` e `pode_fechar`; o primeiro agora precisa também do helper. (`app/chamados/tests/test_e4b_c4v14_memoria.py:47`; `app/chamados/tests/test_e4b_c4v14_memoria.py:105`; `app/chamados/models.py:1886`; `app/chamados/models.py:1909`.)
+- A asserção de contrato exige literalmente `materializada_em is None` dentro de `inspect.getsource(DisputaSupervisao.respostas_sem_veredito)`. Confirmei por extração AST que agora resulta `False`: a expressão foi movida para o helper. A suíte ORM completa permanece [não verificado], mas essa asserção determinística está quebrada. (`app/chamados/tests/test_contract_dedup_status.py:140`; `app/chamados/models.py:1873`; `app/chamados/models.py:1886`; `app/chamados/models.py:1899`.)
 
 ## 13/11 08:38 · sessao b9fc8eea29c5 · O168 · sonda · origem=Code
 
@@ -672,18 +691,4 @@ Nas referências ao **diff**, uso a numeração de destino do anexo.
 
 8. **FILA — configuração de CPU existe; medida de parede não foi demonstrada.** O container final da sonda recebe `--cpu-shares 256`; o container anterior da lavra não recebe essa atribuição pelo ramo. O JSONL mede espera pela trava; tempo de parede da execução e ganho entre duas sondas: **[não verificado]**. (diff `bin/sombra.sh:188`, `:508–511`; HEAD `bin/sombra.sh:166`; diff `bin/sombra_trava.sh:62–66`)
 
-## 13/11 07:56 · sessao 46fd062e5518 · - · - · origem=Ronald (tmux)
-
-1. **bloqueia — a porta de leitura escreve antes da sonda.** O ramo chama `lavra_de_prod` sob trava compartilhada (`diff bin/sombra.sh:506`, `:508`); essa função sobrescreve arquivos comuns (`HEAD bin/sombra.sh:144`, `:151`) e executa dois `update_or_create` no banco (`HEAD bin/sombra.sh:157`, `:160`, `:166`). A guarda da sonda não cobre esse processo anterior (`diff bin/sombra.sh:509-510`). Duas leituras podem disputar arquivos e atualizar os mesmos registros; ocorrência concreta em produção [não verificado].
-
-2. **bloqueia — a conferência textual não prova ausência de escrita.** O `grep` exige apenas uma ocorrência textual (`diff bin/sombra.sh:504-505`). Contraexemplos que satisfazem a expressão: ocorrência dentro de string/docstring; chamada em `if False`; wrapper instalado apenas dentro de um `with`, com escrita depois; escrita por outra conexão; implementação permissiva de `guarda_sql` (`diff bin/sombra.sh:504`). Existência desses casos nas sondas reais [não verificado]. Se a guarda apenas permite prefixos SELECT/WITH, DML em CTE e funções com efeitos chamados por SELECT também precisam de análise; implementação concreta da guarda [não verificado].
-
-3. **fila — o selo verifica parte do protocolo, sem comprovar o contrato todo.** As tentativas usam subshells distintos: o pai não recebe o descritor aberto pelo filho; portanto os casos a/b/c não têm, por construção, o falso sucesso de dois `flock` sobre o mesmo descritor herdado (`diff bin/tests/test_sombra_leitura_compartilhada.sh:15-24`). Entretanto:
-   - A sobreposição depende do sinal seguido de `sleep 4`; uma pausa de escalonamento pode deixar o leitor acabar antes da segunda tentativa. O caso a isoladamente poderia passar sem simultaneidade, e b/c podem produzir falha por temporização (`diff ...:18-19`, `:26-32`).
-   - O caso d aceita qualquer falha do escritor, incluindo timeout ou outro erro, sem conferir mensagem RECUSADA ou recusa imediata (`diff ...:33-35`).
-   - O caso e verifica posições de palavras e uma grafia específica da chamada exclusiva; não executa a porta nem valida rejeição rc 2 (`diff ...:36-41`).
-   - Não existem casos para herança, repetição de aquisição, transição de versão antiga, JSONL ou `--cpu-shares` no teste proposto (`diff ...:26-43`). [nao verificado]
-
-Execução efetiva do selo e comportamento das sondas concretas [não verificado].
-
-_4510 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4511 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
