@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 16:50** · publicado em **13/11/2026 16:50** (UTC-3)
+> Ultima resposta processada: **13/11/2026 16:50** · publicado em **13/11/2026 16:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 16:50 · sessao b2ed85ab4ddc · LEI-DESLIGADO-NAO-TRAVA · sonda · origem=Code
+
+| Empresa | Competência | entra / None | fora / furo_espelho | fora / rescisao_modulo_proprio | fora / ferias_com_batida | fora / sem_codigo_dominio | Contado / CLS_TOTAL | Bate? | Referência |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|
+| 2 | 2026-10 | 239 | 178 | 59 | 0 | 1 | 477 / 477 | Sim | [nao verificado] |
+| 2 | 2026-11 | 194 | 235 | 22 | 1 | 1 | 453 / 453 | Sim | [nao verificado] |
+| 3 | 2026-10 | 80 | 26 | 11 | 1 | 1 | 119 / 119 | Sim | [nao verificado] |
+| 3 | 2026-11 | 52 | 50 | 12 | 1 | 0 | 115 / 115 | Sim | [nao verificado] |
+| 4 | 2026-10 | 14 | 8 | 1 | 0 | 1 | 24 / 24 | Sim | [nao verificado] |
+| 4 | 2026-11 | 14 | 7 | 2 | 0 | 1 | 24 / 24 | Sim | [nao verificado] |
+
+| Empresa | Linhas DESL | Referência |
+|---|---:|---|
+| 2 | 309 | [nao verificado] |
+| 3 | 60 | [nao verificado] |
+| 4 | 13 | [nao verificado] |
+
+`EXP_TOTAL 26 0` [nao verificado]
+
+## 13/11 16:50 · sessao b1896194f747 · - · - · origem=Ronald (tmux)
+
+Conferência independente confirmou: DESL empresa 2 = **309**, empresa 3 = **60**, empresa 4 = **13**; total = **382**. Transcrevi os IDs por empresa em memória e contei; quantidade de IDs únicos também foi 309/60/13. Fonte: bloco fornecido, sem arquivo:linha [nao verificado].
 
 ## 13/11 16:50 · sessao 7cbf4a9c7c5a · - · - · origem=Ronald (tmux)
 
@@ -571,42 +594,4 @@ As referências `q.q` e `r.r` abaixo usam linhas contadas em cada bloco fornecid
 
    Os **18 casos em outubro, um em novembro, competências exportada/aberta e ausência de reversão/hash** constituem a parcela **(c)**, sustentada pelo veredito fornecido; não aparecem demonstrados nas verificações anteriores. (`veredito.md:4`; comprovação independente: [nao verificado])
 
-## 13/11 16:20 · sessao da8fd0b57352 · - · - · origem=Ronald (tmux)
-
-Para o bloqueante 1, recomendo **(e) para a declaração falsa `juizes novos=0`**, distinguindo **(a) para o censo incompleto dos leitores crus**. A exigência do campo está em `CLAUDE.md:63`; a função consta em `app/colaboradores/services/desligamento.py:23` e seu registro em `app/core/juizes.py:264-267`.
-
-**Declaração `juizes novos=0`: (e).** As perguntas fornecidas tratam duplicação de juiz registrado, sem pedir conferência desse campo da LEI-AKITA. O trecho mais próximo da pergunta é:
-
-> “2o juiz que duplica juiz registrado (esta_desligado x algum juiz existente de situacao/ativo)”
-
-A resposta correspondente é:
-
-> “Não encontrei juiz **registrado** concorrente para ‘está desligado?’.”
-
-O trecho da resposta que aponta a falsidade de `juizes novos=0` é **ausente**; descarte desse achado pela triagem também é **ausente**. Essa distinção se sustenta nos anexos fornecidos; referências de linha dos anexos: `[nao verificado]`.
-
-**Censo de leitores crus: (a).** Pergunta literal da volta 1:
-
-> “QUEM ESCREVE e QUEM LE cada campo/valor que o diff le ou muda (situacao, data_desligamento, o_que_segura, informativo_rescisao, retidos, C5 colabs_nunca_bateu, barrados_desligado): arquivo:linha”
-
-Resposta literal:
-
-> “Há comparação crua duplicada no formatador de situação exibida, mas isso não comprova uma segunda autoridade registrada.”
-
-A resposta identifica uma comparação crua, porém o levantamento das 32 ocorrências referido pelo veredito é **ausente** na resposta fornecida. Contagem histórica de 32: `[nao verificado]`.
-
-A referência `app/docs/RELATO.md:74` do veredito **não corresponde à obra nesta cópia**: essa linha trata outra obra; a busca literal por `LEI-DESLIGADO-NAO-TRAVA` no arquivo não retornou ocorrência. O conteúdo daquela linha no hash histórico alegado permanece `[nao verificado]`.
-
-## 13/11 16:20 · sessao bced962f87f4 · - · - · origem=Ronald (tmux)
-
-B3 deve separar duas parcelas para não atribuir ao Codex dados produtivos que ele não recebeu. A regra permite distinguir “fora do alcance” de “não perguntado”. (`CLAUDE.md:385`; `CLAUDE.md:386`)
-
-- **(c), parcela produtiva:** os 18 casos de 10/2026, o caso de 11/2026, a situação exportada/aberta e a ausência de reversão/hash só constam do veredito fornecido; não foram demonstrados pelas perguntas/respostas anteriores. (`veredito.md`, item 3 fornecido; comprovação independente: **[nao verificado]**)
-- **(e), pergunta sobre DINHEIRO:** nenhuma das três perguntas pede apuração da mudança `fora → entra`, reversão, hash antes/depois ou regeneração do TXT. Trecho literal da pergunta sobre esses pontos: **“ausente”**. Trecho literal da resposta identificando esse bloqueante financeiro: **“ausente”**. (Anexos `q.q`/`r.r`, voltas 1–3; **[nao verificado]** como arquivos locais.)
-- **Não sustenta (b):** a resposta da volta 1 distingue trava de aprovação e emissão do TXT, mas não identifica a mudança de universo com consequências financeiras: “Isso **não demonstra impedimento de emissão da linha no TXT**: a montagem aceita fechamentos `aberto` e `aprovado`, selecionados pelo resultado `entra`.” (`r.r`, volta 1, achado 2 fornecido; `app/folha/export.py:687`; `app/folha/export.py:716`)
-
-O efeito estático era inspecionável: o item nasce `entra`; os motivos o tornam `fora/furo_espelho`; desligado retorna motivos vazios; a montagem inclui os ids `entra`. Isso demonstra possibilidade condicional de entrada, sem provar quantidade produtiva ou conteúdo financeiro efetivamente alterado. (`app/folha/export.py:841`; `app/folha/export.py:968`; `app/folha/export.py:1207`; `app/folha/export.py:716`; `app/folha/export.py:726`)
-
-As exigências documentadas de reversão, hash e frota estão em `CLAUDE.md:406–414`; isso é evidência da regra, sem provar que os artefatos existiam ou faltavam. (`CLAUDE.md:407`; `CLAUDE.md:408`; `CLAUDE.md:411`; `CLAUDE.md:412`; `CLAUDE.md:414`)
-
-_4681 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4683 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
