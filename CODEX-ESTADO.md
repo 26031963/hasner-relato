@@ -1,7 +1,159 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 08:51** · publicado em **13/11/2026 08:51** (UTC-3)
+> Ultima resposta processada: **13/11/2026 08:54** · publicado em **13/11/2026 08:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 08:54 · sessao e7dedf56e2fa · O168 · verificador · origem=Code
+
+**REPROVA: a extração do predicado quebra duas verificações existentes.** As curas dos três bloqueantes anteriores estão no código, mas ficaram estas regressões:
+
+1. `test_porta_humana_de_disputa_presta_contas` exige `materializada_em is None` no fonte de `respostas_sem_veredito`; agora essa expressão está no helper. Reproduzi a falha dessa asserção em memória. (`app/chamados/tests/test_contract_dedup_status.py:140`; `app/chamados/models.py:1886`; `app/chamados/models.py:1899`.)
+2. Os quatro testes de `test_e4b_c4v14_memoria` terminam em `AttributeError: 'Objeto' object has no attribute 'sem_veredito_entre'`: a fixture injeta somente os dois métodos antigos, e o wrapper passou a depender do terceiro. Execução realizada em memória, sem ORM. (`app/chamados/tests/test_e4b_c4v14_memoria.py:47`; `app/chamados/tests/test_e4b_c4v14_memoria.py:105`; `app/chamados/models.py:1886`.)
+
+Conferência independente do hash e do commit-base por Git, execução ORM e nova medição de produção: **[não verificado]**. A comparação abaixo usa a cópia e o diff fornecidos. [nao verificado]
+
+**A. Bloqueantes da preverif2**
+
+| Bloqueante anterior | Cura e mordida |
+|---|---|
+| **1 — critérios paralelos** | A retratação agora chama o corpo único, mantendo seu universo de crédito e explicitando `ignorar_tranca=True`. O teste novo cobra carimbo sem texto, texto sem carimbo e exclusão de validada; restaurar o antigo **E** contraria as duas primeiras asserções. Execução ORM/mutante: **[não verificado]**. (`app/chamados/juizes.py:2033`; `app/chamados/juizes.py:2035`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:259`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:263`.) |
+| **2 — nota omitia destino** | Curado: o gate calcula `_pend` uma vez e usa essa mesma lista na nota. O teste do destino exige nota contendo `p3`; voltar à enumeração exclusiva da origem contraria essa asserção. Execução ORM/mutante: **[não verificado]**. (`app/chamados/models.py:719`; `app/chamados/models.py:735`; `app/chamados/models.py:739`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:248`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:250`.) |
+| **3 — ponto fixo oscilante** | Curado pela união monotônica. O teste real de terminação passou na implementação atual e falhou, após dez segundos, contra uma reconstrução em memória do algoritmo escalar oscilante. Execução contra o commit antigo exato: **[não verificado]**. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:113`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:115`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:256`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:271`.) |
+
+O cartório **não foi migrado**. Seu descarte da triagem encontra fundamento no próprio código: ele protege resposta **com texto** contra aquele bloco de ressuscitação/dedup, inclusive depois de validação; não calcula “resposta sem veredito”. Portanto, não se deve apresentá-lo como leitor do mesmo predicado. (`app/ponto/services/cartorio.py:1637`; `app/ponto/services/cartorio.py:1641`; `app/ponto/services/cartorio.py:1648`; `app/ponto/services/cartorio.py:1665`.)
+
+**B. Preservação para os chamadores antigos**
+
+Pelo diff fornecido, a extração preserva universo, argumento e condições:
+
+```text
+validada_em é nulo
+E materializada_em é nulo
+E (respondida_em preenchido OU resposta_colab.strip() preenchido)
+E (ignorar_tranca OU dia não trancado)
+```
+
+O wrapper continua entregando `self.perguntas.all()` e encaminhando `ignorar_tranca`. (`app/chamados/models.py:1886`; `app/chamados/models.py:1898`.)
+
+Permanecem na chamada padrão: `pode_fechar`, `fechar`, desligamento, ficha, reconciliador e fila por causa; competência trancada solicita explicitamente `True`. (`app/chamados/models.py:1909`; `app/chamados/models.py:1942`; `app/colaboradores/services/desligamento.py:141`; `app/colaboradores/services/ficha.py:169`; `app/chamados/reconciliador.py:1164`; `app/chamados/services/fila_por_causa.py:226`; `app/chamados/services/competencia_trancada.py:126`.)
+
+Nenhum desses chamadores passou a fornecer outro universo ao wrapper. A tranca lê o colaborador **da disputa da pergunta** e o dia da própria pergunta; conversa fornece dia `None`. Há também consulta contextual por identidade da instância, já dentro da autoridade da tranca. A extração não troca esses insumos pelo chamado receptor. (`app/chamados/models.py:1886`; `app/chamados/juizes.py:334`; `app/chamados/juizes.py:986`; `app/chamados/juizes.py:991`.)
+
+**C. CSF e retratação**
+
+**Não devolvem necessariamente o mesmo resultado.** Compartilham o corpo parametrizado, mas CSF respeita a tranca e retratação a ignora; também usam universos diferentes. Essa diferença está declarada e justificada no código pela preservação dos quatro vivos que seriam soltos com a tranca e pelos dois adicionais retidos pelo **OU**. (`app/ponto/supra_juiz.py:558`; `app/ponto/supra_juiz.py:559`; `app/chamados/juizes.py:2012`; `app/chamados/juizes.py:2022`; `app/chamados/juizes.py:2035`.)
+
+Não encontrei exigência executável de igualdade: a retratação consulta sua retenção antes de chegar ao gate; materialização e reabertura por resposta usam o mesmo leitor de irmãs. O teste novo compara explicitamente com `respostas_sem_veredito(ignorar_tranca=True)`. (`app/chamados/reconciliador.py:519`; `app/chamados/reconciliador.py:524`; `app/chamados/services/materializacao.py:768`; `app/chamados/services/disputa_emissao.py:2009`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:262`.)
+
+**D. DESTINO de um PAI**
+
+A contradição textual foi corrigida: HEAD declara expressamente origem **e destino**, inclusive perguntas de outra disputa. (`app/chamados/models.py:705`.)
+
+O teste **fabrica diretamente o vínculo** `chamado_destino=pai`; depois exercita a cascata canônica de fechamento da origem. Ele não demonstra o produtor desse vínculo. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:230`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:233`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:241`.)
+
+Os seletores examinados excluem pais `disputa_supervisao`: derivação normal, fábrica de órfãos e HIST. (`app/chamados/services/disputa_emissao.py:198`; `app/chamados/services/disputa_emissao.py:753`; `app/chamados/services/disputa_emissao.py:1066`; `app/chamados/reconciliador.py:1587`.)
+
+A porta genérica `reapontar_resolvedora` permitiria e gravaria um destino desse tipo, sujeito às demais guardas; não há veto geral por categoria em `resolvedora_valida`. Isso prova admissibilidade pela porta, **não um fluxo produtor concreto**. Cenário de produção que efetivamente seleciona esse pai e ocorrência na frota: **[não verificado]**. (`app/chamados/services/fio.py:908`; `app/chamados/services/fio.py:926`; `app/chamados/juizes.py:2264`; `app/chamados/juizes.py:2283`.)
+
+**E. Catraca dos fechadores**
+
+Termina: existem finitos nomes e duas portas possíveis; cada passada produtiva acrescenta pelo menos um par nome–porta, sem remover pares. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:68`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:103`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:113`.)
+
+Não perde os apelidos reconhecidos pela versão escalar: importações e atributos continuam reconhecidos, e a união conserva possibilidades antes sobrescritas. Cadeias, atribuições anotadas e `getattr` literal também entram. A análise global pode superestimar possibilidades entre escopos. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:78`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:95`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:105`.)
+
+O teste de duas portas tem mordida contra a não terminação: verifica a thread após `join(10)` e depois cobra o achado `usa`; não depende apenas de o algoritmo retornar. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:268`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:271`.)
+
+**F. Detectores AST**
+
+A cobertura continua limitada:
+
+- `q.respondida_em`, mesmo com apelido na base, e `getattr(q, 'respondida_em')` são detectados. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:284`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:286`.)
+- Uma auxiliar nova — local ou importada sob apelido — pode fazer a leitura crua e escapar: `_funcoes_do_csf` seleciona somente dois nomes e não segue chamadas. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:269`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:282`.)
+- `CAMPO = 'respondida_em'` no módulo e `getattr(q, CAMPO)` também escapam dessa busca. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:272`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:286`.)
+- Uma chamada válida ao juiz como `j(ch)`, por apelido importado, não satisfaz `_pergunta_ao_juiz`: ele exige `ast.Attribute`. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:294`.)
+
+Reproduzi o escape em memória: `pode_executar_csf` delega à auxiliar crua enquanto `perguntas_que_seguram_csf`, preservada mas não utilizada, contém a chamada ao juiz. Resultado: `_le_respondida_cru=False` e `_pergunta_ao_juiz=True`. A catraca procura uma chamada independentemente de ela alimentar o resultado. Isso demonstra limite do selo; não demonstra leitura crua no runtime atual. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:272`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:294`; `app/ponto/supra_juiz.py:573`.)
+
+**G. Órfãs**
+
+Coerente com B: o teste valida a resposta antes do consumo, e o predicado exclui validadas. O assert de CSF cobra elegibilidade, **não comprova pai fechado**. (`app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:148`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:163`; `app/chamados/models.py:1899`.)
+
+Duas falhas são compatíveis com uma tentativa por evento: o consumidor exclui IDs já lidos, pode receber eventos novos na rodada seguinte e incrementa `falhas` por lote malsucedido do colaborador. O resultado ORM concreto permanece **[não verificado]**. (`app/chamados/reconciliador.py:1344`; `app/chamados/reconciliador.py:1396`; `app/chamados/reconciliador.py:1404`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:157`; `app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:168`.)
+
+**H. Escritores, leitores e significado**
+
+| Campo/valor | Escritores e leitores |
+|---|---|
+| `respondida_em` | Resposta humana, automática, recuperação pela trilha e simetria do carimbo preenchem; reabertura e ressuscitação limpam. O juiz aceita carimbo **OU** texto; C6 exige ambos naquele degrau; apresentação de estado usa o carimbo. (`app/chamados/services/disputa_emissao.py:1468`; `app/chamados/services/disputa_emissao.py:1653`; `app/chamados/services/disputa_emissao.py:1674`; `app/chamados/models.py:3188`; `app/chamados/services/disputa_emissao.py:1593`; `app/chamados/models.py:1613`; `app/chamados/models.py:1900`; `app/chamados/juizes.py:1417`; `app/chamados/models.py:3101`.) |
+| `resposta_colab` | Resposta humana/automática escrevem; reabertura limpa. Juiz, cartório e materializador leem com finalidades distintas: pendência, proteção do texto e plantio. (`app/chamados/services/disputa_emissao.py:1467`; `app/chamados/services/disputa_emissao.py:1652`; `app/chamados/services/disputa_emissao.py:1593`; `app/chamados/models.py:1901`; `app/ponto/services/cartorio.py:1641`; `app/chamados/services/materializacao.py:412`.) |
+| `validada_em` | Validação preenche; nova resposta/devolução/reabertura limpam; simetria também pode preencher. Juiz e C6 excluem preenchidas; validação evita repetição. (`app/chamados/services/validacao.py:134`; `app/chamados/services/disputa_emissao.py:1480`; `app/chamados/services/validacao.py:199`; `app/chamados/services/disputa_emissao.py:1593`; `app/chamados/models.py:3191`; `app/chamados/models.py:1899`; `app/chamados/juizes.py:1401`; `app/chamados/services/validacao.py:396`.) |
+| `materializada_em` | `_escrever_carimbo` centraliza a atribuição; portas de carimbo, descarimbo e lote a utilizam. Juiz exclui preenchidas; C6 considera também via e testemunhas; materializador seleciona pendentes. (`app/chamados/models.py:3153`; `app/chamados/models.py:3185`; `app/chamados/models.py:3264`; `app/chamados/models.py:3322`; `app/chamados/models.py:1899`; `app/chamados/juizes.py:1412`; `app/chamados/services/materializacao.py:1378`.) |
+| `chamado_destino` | Nascimento/reuso e `reapontar_resolvedora` escrevem. Fio lê como âncora; CSF lê a relação reversa; irmãs aplicam crédito; consumo procura perguntas do destino resolvido. (`app/chamados/models.py:3038`; `app/chamados/models.py:3070`; `app/chamados/services/fio.py:926`; `app/chamados/services/fio.py:117`; `app/ponto/supra_juiz.py:559`; `app/chamados/juizes.py:2034`; `app/chamados/services/disputa_emissao.py:1907`.) |
+| Trilha de recusa | Gate → `_registrar_recusa` → `evento` → `LogAuditoria`. Deduplicador lê última recusa/transições; contador lê qualquer recusa histórica do motivo. Auditoria permanece best-effort. (`app/chamados/models.py:723`; `app/chamados/models.py:403`; `app/core/observ.py:98`; `app/core/observ.py:134`; `app/chamados/juizes.py:2520`.) |
+| Nota `retido_pela_conversa` | Gate chama a porta de nota; timeline lê `FollowupChamado`. O tipo participa da chave, enquanto a nota persiste conteúdo e `evento_chave`. (`app/chamados/models.py:735`; `app/chamados/models.py:739`; `app/chamados/services/nota.py:88`; `app/chamados/services/nota.py:100`; `app/chamados/views.py:372`.) |
+| `objeto_ref` | Gate monta PKs ordenados da união origem+destino; porta incorpora o valor ao SHA256 com chamado, tipo e autor. (`app/ponto/supra_juiz.py:558`; `app/ponto/supra_juiz.py:560`; `app/chamados/models.py:739`; `app/chamados/services/nota.py:64`.) |
+
+**Não existe significado universal “validada = humano julgou” nem “materializada = batida plantada”.** A simetria da validação é declarada; carimbos de identidade também existem. São distinções preexistentes, e o novo helper preserva o critério antigo desses campos. (`app/chamados/services/validacao.py:19`; `app/chamados/models.py:3190`; `app/chamados/models.py:3224`; `app/chamados/models.py:1899`.)
+
+A dedup da nota conserva o mecanismo: mesmo conjunto ordenado, chamado, tipo e autor recupera a mesma nota; adicionar pergunta de destino pode produzir chave nova. Pergunta presente nas duas relações aparece uma vez pelo conjunto. (`app/ponto/supra_juiz.py:558`; `app/ponto/supra_juiz.py:559`; `app/chamados/services/nota.py:100`; `app/chamados/services/nota.py:108`; `app/chamados/models.py:1745`.)
+
+As identidades de recusa e nota diferem: trocar perguntas mantendo motivo/status pode criar nota nova sem recusa nova. O contador também mede **vivos com recusa histórica**, não necessariamente pendência atual; a nota permanece como histórico após fechamento. (`app/chamados/models.py:405`; `app/chamados/models.py:724`; `app/chamados/models.py:739`; `app/chamados/juizes.py:2520`; `app/chamados/views.py:372`.)
+
+**I. Classes de reprovação**
+
+Não identifiquei nesta cura segundo juiz, segundo escritor ou derivação paralela: o wrapper delega ao corpo único, CSF compõe a lista e as escritas usam as portas existentes. Também não há nova leitura de relógio ou aquisição de trava nesses corpos alterados. (`app/chamados/models.py:1886`; `app/chamados/models.py:1895`; `app/ponto/supra_juiz.py:558`; `app/chamados/models.py:723`; `app/chamados/models.py:735`.)
+
+Há **escape demonstrado da catraca AST por auxiliar**, além das duas regressões de testes que bloqueiam esta cópia; não cabe chamar todos os REDs de inertes, pois os casos direto, `getattr` e oscilação têm mordida específica. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:272`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:315`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:318`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:271`; `app/chamados/tests/test_contract_dedup_status.py:140`; `app/chamados/tests/test_e4b_c4v14_memoria.py:47`.)
+
+Pouso antes de pré-requisito, concorrência executada e ordem efetiva de implantação: **[não verificado]**. [nao verificado]
+
+## 13/11 08:52 · sessao 8bf251387a36 · - · - · origem=Ronald (tmux)
+
+- **D:** a contradição da docstring foi curada: HEAD diz expressamente que o gate lê origem **e destino**, inclusive de outra disputa. (`app/chamados/models.py:705-708`.) A fixture fabrica esse vínculo diretamente com `objects.create(chamado_destino=pai)`; depois percorre a cascata canônica da origem. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:228-241`.) Não demonstra o produtor desse estado. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:230-233`.)
+
+- Não achei um seletor normal que escolha um PAI `disputa_supervisao` como destino: o derivador exclui essa categoria, o agrupador de órfãos a recusa, o HIST também a exclui; âncora exige `ancora_limbo` e declarações exigem módulo de furo. (`app/chamados/services/disputa_emissao.py:198-201`; `app/chamados/services/disputa_emissao.py:753-754`; `app/chamados/services/disputa_emissao.py:1066`; `app/chamados/services/disputa_emissao.py:1088`; `app/chamados/reconciliador.py:1587-1590`; `app/chamados/services/disputa_emissao.py:1316-1317`; `app/chamados/services/declaracao_texto.py:320-321`; `app/chamados/services/declaracao_texto.py:603-605`.) A porta genérica permitiria o vínculo no mesmo colaborador e o grava, sem proibição por categoria; isso prova possibilidade pela porta, não um fluxo de produção que o seleciona. (`app/chamados/services/fio.py:908-929`; `app/chamados/juizes.py:2264-2287`.) Ocorrência e caminho produtor concreto: **[não verificado]**. Não afirmar impossível.
+
+- **A(2): curado no código.** `_pend` é obtido uma vez e serve à recusa e à nota; a composição une origem+destino em conjunto ordenado. (`app/chamados/models.py:719-739`; `app/ponto/supra_juiz.py:559-561`.) O teste isola origem validada, confirma retenção pelo destino e exige uma nota contendo a pergunta destino; sem a cura da lista, falharia a existência ou o conteúdo dessa nota. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:235-250`.) Execução ORM/mutante: **[não verificado]**.
+
+- **H — `chamado_destino`:** escritores persistentes são nascimento/reuso em `_nascer` e a recostura em `reapontar_resolvedora`; `SET_NULL` do banco também pode limpá-lo. (`app/chamados/models.py:3038-3039`; `app/chamados/models.py:3070`; `app/chamados/services/fio.py:808-815`; `app/chamados/services/fio.py:926-929`; `app/chamados/models.py:3441-3447`.) Leitores incluem a âncora do fio, CSF, crédito da retratação e consumo por resolução do destino. (`app/chamados/services/fio.py:97-110`; `app/ponto/supra_juiz.py:560`; `app/chamados/juizes.py:2034`; `app/chamados/services/disputa_emissao.py:1906-1910`.)
+
+- **H — nota e dedup:** o gate escreve pela porta `anexar_ocorrencia`, como sistema e com PKs ordenados em `objeto_ref`; esse valor entra em SHA256 com chamado, tipo e autor. (`app/chamados/models.py:735-739`; `app/chamados/services/nota.py:62-65`; `app/chamados/services/nota.py:95-101`.) A porta mantém o mesmo mecanismo: unique e recuperação por `evento_chave`. (`app/chamados/models.py:1745-1747`; `app/chamados/services/nota.py:105-109`.) Mesmo conjunto repetido deduplica; acrescentar destino à lista pode gerar outra chave; a relação origem/destino não integra a identidade, apenas os PKs. (`app/ponto/supra_juiz.py:559-561`; `app/chamados/models.py:739`; `app/chamados/services/nota.py:64`.)
+
+- **H — trilha:** gate → `_registrar_recusa` → `evento` → `LogAuditoria`; auditoria é best-effort. (`app/chamados/models.py:723-726`; `app/chamados/models.py:403-408`; `app/core/observ.py:94-98`; `app/core/observ.py:133-137`.) A recusa deduplica por motivo+status e transição posterior, enquanto a nota usa o conjunto de perguntas: mudar perguntas mantendo o status pode criar nota nova sem nova recusa. (`app/chamados/models.py:724`; `app/chamados/models.py:403-406`; `app/chamados/models.py:739`.) São granularidades diferentes.
+
+- **H — leitores históricos:** timeline lê todos os followups; contador lê qualquer recusa histórica do motivo e filtra chamado atualmente vivo. (`app/chamados/views.py:372`; `app/templates/chamados/detalhe_local.html:112`; `app/chamados/juizes.py:2520-2523`.) Portanto o contador não prova pendência atual e pode voltar a contar um reaberto por recusa antiga; a docstring ainda o chama de fila esperando decisão. (`app/chamados/juizes.py:2515-2517`; `app/chamados/juizes.py:2520-2523`.) Nota permanece histórica mesmo quando o veredito posterior permite fechamento por cascata. (`app/chamados/views.py:372`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:169-184`.)
+
+## 13/11 08:52 · sessao dbf201cd2e8f · - · - · origem=Ronald (tmux)
+
+**E / A(3): curado.** O mapa só acumula pares `(nome, porta)`; há duas portas e quantidade finita de nomes, portanto cada passada produtiva acrescenta pelo menos um par e o laço termina. Importações, atributos, atribuições encadeadas/anotadas e `getattr` literal continuam reconhecidos; a união conserva as portas anteriormente reconhecidas. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:68`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:78`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:95`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:103`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:113`.)
+
+Executei em memória a lista fechada e quatro testes de mutantes, todos aprovados, incluindo `test_MORDE_duas_portas_no_mesmo_nome_termina`. O método real desse teste, executado contra reconstrução do mapa escalar oscilante descrito no anexo, falhou em 10,01 segundos com `ponto fixo dos apelidos nao termina`. Execução contra o commit antigo exato: **[não verificado]**. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:171`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:221`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:234`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:256`; `app/chamados/tests/test_o168_fechadores_fora_do_gate.py:274`.)
+
+**F: cobertura incompleta, com escape reproduzido.** O detector visita somente funções cujo nome é `pode_executar_csf` ou `perguntas_que_seguram_csf`; não segue o grafo de chamadas. Assim, uma auxiliar nova pode ler `respondida_em` cru e ser chamada por `pode_executar_csf`, enquanto a antiga função da lista permanece contendo uma chamada ao juiz, embora já não seja utilizada: os dois asserts continuam passando. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:269`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:279`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:294`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:312`.)
+
+Mutante executado em memória, resultado `_le_respondida_cru=False`, `_pergunta_ao_juiz=True`:
+
+```python
+def novo(ch):
+    return ch.respondida_em is None
+
+def perguntas_que_seguram_csf(ch):
+    return ch.respostas_sem_veredito()
+
+def pode_executar_csf(ch):
+    return novo(ch)
+```
+
+O escape decorre diretamente das raízes fixas e da busca independente por qualquer chamada com aqueles nomes de atributo. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:272`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:294`.)
+
+Outras distinções verificadas em memória:
+
+- `q.respondida_em`, inclusive quando a base é um apelido, e `getattr(q, 'respondida_em')` são detectados. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:284`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:286`.)
+- `CAMPO = 'respondida_em'` no módulo seguido de `getattr(q, CAMPO)` escapa da leitura crua: a constante está fora das duas funções visitadas. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:272`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:282`.)
+- Helper importado sob apelido também escapa quando a leitura ocorre no helper; não há resolução de importações. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:269`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:283`.)
+- Chamada válida ao juiz por apelido de importação, `j(ch)`, é recusada por `_pergunta_ao_juiz`, pois o detector exige `ast.Attribute`; isso é falso negativo. Comentário/docstring deixou de bastar. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:294`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:321`.)
+
+**Classificação:** o bloqueante antigo de não terminação está curado; permanece limite demonstrado das catracas AST. Esses escapes sintéticos não provam leitura crua no código de produção atual. (`app/chamados/tests/test_o168_fechadores_fora_do_gate.py:113`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:272`; `app/ponto/supra_juiz.py:558`.)
 
 ## 13/11 08:51 · sessao d683fdfb3c73 · - · - · origem=Ronald (tmux)
 
@@ -603,92 +755,4 @@ A cópia local é HEAD sem o delta fornecido: a numeração HEAD de `ata.py` dep
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 13/11 08:04 · sessao c7334fc8cc25 · - · - · origem=Ronald (tmux)
-
-**c — BLOQUEIA:** a área comum continua gravável: `container()` monta `$SAIDA:/sombra` sem `:ro`; a sonda pode sobrescrever `lavra_prod.json`, `repor_lavra.py` ou outra sonda. `PGOPTIONS` não protege arquivos. A montagem permaneceu inalterada no diff. (HEAD `bin/sombra.sh:189-191`; diff `bin/sombra.sh:499-514` usa esse mesmo `container()`.)
-
-Escritas identificadas no caminho:
-
-- Inicialização cria `$SAIDA` quando ausente. (HEAD `bin/sombra.sh:81-84`.)
-- Trava cria `logs/`, abre/cria `sombra.lock` em append e acrescenta evento a `sombra_espera.jsonl`. (Diff `bin/sombra_trava.sh:58-65`.)
-- `tee` cria/trunca `logs/$_rot.out`; duas execuções do mesmo script sem rótulos distintos usam o mesmo destino. **FILA:** corrida introduzida pela simultaneidade, com perda/mistura dos resultados. (Diff `bin/sombra.sh:502-514`, conforme posição final a conferir; trecho novo iniciado no hunk `@@ -459,6 +479,21 @@`.)
-- Django cria `/app/logs` e abre `errors.log` e `ponto.log`; são tmpfs particulares de cada container. (HEAD `app/config/settings/saas.py:118`, `:138-139`, `:162-163`; `bin/sombra.sh:189`.)
-- Docker cria/remove o container; camada gravável local permanece permitida, pois inexiste `--read-only`; `/app` e `/sombra_bin` são mounts somente leitura, `/app/media` é tmpfs. (HEAD `bin/sombra.sh:183-191`.)
-- Portão tenta `CREATE TEMP TABLE`; escrita efetivamente aceita depende do runtime **[nao verificado]**. Não há atualização de lavra no novo ramo. (Diff `bin/sombra_confere_leitura.py:21-26`; novo ramo do diff.)
-- A sonda é código arbitrário carregado por `exec`; suas escritas concretas não constam no dado **[nao verificado]**. (Novo ramo do diff, comando `exec(open('/sombra/$_scr').read())`.)
-- `sombra_db.sh --conferir` faz inspeções e `SELECT 1`; retorna antes das rotinas de criação/update. (HEAD `bin/sombra_db.sh:57-84`, `:86-100`.)
-- `md5_lavra_prod` usa processo dentro de `saas_core`, cujo startup Django herda os handlers de arquivo; settings efetivos e escritas reais desse container **[nao verificado]**. (Diff `bin/sombra.sh:145-151`; HEAD `app/config/settings/saas.py:138-139`, `:162-163`.)
-
-**BLOQUEIA adicional:** a cura indicada pelo portão, `--lavra`, continua despachando `lavra_de_prod` sem adquirir trava. Ela pode escrever arquivos e snapshots enquanto leitores seguram a compartilhada. É defeito preexistente que passa a furar o novo contrato. (HEAD `bin/sombra.sh:462`, `:144`, `:151`, `:157-163`; diff `bin/sombra_confere_leitura.py:32-34`.)
-
-**e — FILA:** o selo verifica palavras, não comportamento da porta. Substituir integralmente `sombra_confere_leitura.py` por `print('ok')` mantém o selo verde: ele só exige existência e procura referências/flags/`&&` no shell. Também `echo RECUSADA; return 0` passa (d), e `echo NEGADA; return 0` passa os casos de recusa, que ignoram o rc. (Diff `bin/tests/test_sombra_leitura_compartilhada.sh:13-14`, `:35`, `:38`, `:41`, `:44`, `:49-50`, `:55-66`.)
-
-**f — sem regressão demonstrada nesses consumidores:**
-
-- `modo` é aceito pelo leitor conhecido: `json.loads` e `.get` ignoram campos extras; placar usa apenas a saída agregada. (HEAD `bin/sombra_trava.sh:49-57`; `bin/placar_code.sh:166`.)
-- Os outros `container()` existentes recebem array vazio quando `SOMBRA_SO_LEITURA` não existe; variável prefixada na chamada nova não muda persistentemente as chamadas seguintes. (Diff `bin/sombra.sh:200-203`; chamadas HEAD `bin/sombra.sh:166`, `:204-206`, `:266-275`, `:346`, `:351`.)
-- Selos conhecidos recortam funções/ramo por delimitadores, não números de linha; o diff preserva seus alvos. Execução contra o diff **[nao verificado]**. (HEAD `bin/tests/test_ensaio_de_dinheiro_sincroniza_lavra.sh:17-27`; `bin/tests/test_bloco_repoe_a_lavra.sh:29-48`; `bin/tests/test_sombra_guarda_num_sitio.sh:25-33`.)
-- Outros usuários de fd 8 existem; colisão em shell que sobrescreva esse descritor é anterior ao diff, pois o escritor do HEAD já usa fd 8. (HEAD `bin/sombra_trava.sh:26`; `bin/trava.sh:64`; `bin/integrador.sh:41`; `bin/codex_pergunta.sh:368`.)
-
-## 13/11 08:04 · sessao eed45d568fae · - · - · origem=Ronald (tmux)
-
-- **a — exclusão normal correta:** escritor HEAD usa `flock` exclusivo no mesmo `logs/sombra.lock`; leitor novo usa `flock -s`. Escritor herdado conserva exclusiva; leitura repetida retorna antes de reabrir fd 8; escritor novo sob leitura é recusado. `simular_folha par` conserva a herança nas duas fotos. Referências: HEAD `bin/sombra_trava.sh:16,22,26,28,38`; diff `bin/sombra_trava.sh:29,30,53,54,58,60,69`; HEAD `bin/simular_folha.sh:96-99`.
-
-- **BLOQUEIA se a alegação inclui filhos executando HEAD:** pai segura leitura nova; filho executa função escritora HEAD, que ignora `SOMBRA_TRAVA_LEITURA`, reabre seu fd 8 e espera exclusiva; pai ainda tem compartilhada e aguarda o filho. Resultado: autoespera até timeout. Isso não ocorre com escritor velho independente já rodando, que é excluído corretamente. Referências: diff `bin/sombra_trava.sh:58,60,69`; HEAD `bin/sombra_trava.sh:22,26,28`; HEAD `bin/sombra.sh:461` fornece execução síncrona do comando embrulhado. Existência de uma árvore antiga concreta disponível para esse filho: **[não verificado]**.
-
-- **BLOQUEIA — escritor fora do protocolo:** `--lavra` continua chamando diretamente `lavra_de_prod`, sem exclusiva. Portanto pode gravar durante uma leitura, embora o próprio portão mande executá-lo como remédio. Referências: HEAD `bin/sombra.sh:462`, preservado como diff `bin/sombra.sh:503`; diff `bin/sombra_confere_leitura.py:33`.
-
-- **e — FILA, falso verde de status:** mutante `echo "...RECUSADA..."; return 0` passa (d), que compara somente texto. Os chamadores reais aceitam esse retorno e prosseguem como escritores. B/C/C2/D2 também procuram `NEGADA` sem exigir rc de falha. Referências: diff `bin/tests/test_sombra_leitura_compartilhada.sh:34,37,40,43,49-50`; diff `bin/sombra_trava.sh:31`; HEAD `bin/sombra.sh:456,487`; HEAD `bin/simular_folha.sh:67,96`.
-
-- **e — FILA, corrida restante:** `segura` não segura indefinidamente até `solta`; chama `espera_arq`, que desiste após aproximadamente dez segundos. Um host atrasado pode perder o mantenedor durante os casos; `wait` não transforma sua falha em `FALHA`. Referências: diff `bin/tests/test_sombra_leitura_compartilhada.sh:18,25,35,38,41`.
-
-- **e — FILA, lacunas:** (a) realmente exige sucesso do segundo leitor; D2 verifica continuidade da trava e ausência de novo registro, mas não distingue reabertura com reaquisição imediata sem log. Mutante que reabre e readquire compartilhada sem registrar passa D2 quando nenhum escritor entra na janela. A porta (e) continua sendo verificação textual; `false && lavra_de_prod` seria rejeitado apesar de nunca escrever, enquanto escrita por função auxiliar com outro nome não é detectada. Referências: diff `bin/tests/test_sombra_leitura_compartilhada.sh:33,44-50,54-66`.
-
-- **f — compatibilidade observada:** o consumidor JSONL ignora chaves adicionais; `modo` não quebra sua leitura. O selo que conta a guarda aceita usos adicionais de `$E_SOMBRA`. Fd 8 já era ocupado pelo escritor, portanto outros usos existentes não demonstram regressão introduzida especificamente pelo leitor. Referências: HEAD `bin/sombra_trava.sh:51-57`; HEAD `bin/tests/test_sombra_guarda_num_sitio.sh:25-33`; HEAD `bin/sombra_trava.sh:26`; HEAD `bin/trava.sh:64`; HEAD `bin/codex_pergunta.sh:368-374`.
-
-Nenhum selo foi executado, porque ele cria e remove arquivos; resultados de execução: **[não verificado]**.
-
-## 13/11 07:58 · sessao 65e6cfdf0ed3 · ACELERA-DIFF · verificador · origem=Code
-
-**REPROVA.** Há quebra de exclusividade durante a transição e escrita dentro da própria porta compartilhada. (HEAD `bin/sombra_trava.sh:26–28`; diff `bin/sombra_trava.sh:61–63`; diff `bin/sombra.sh:506–508`; HEAD `bin/sombra.sh:157–166`)
-
-Nas referências ao **diff**, uso a numeração de destino do anexo.
-
-1. **BLOQUEIA — transição antigo/novo permite leitura durante `--refazer` (c).** O escritor antigo segura somente `sombra.lock`; o leitor novo disputa somente `sombra.leitura.lock`, portanto entra enquanto aquele escritor trabalha. O escritor novo independente espera primeiro `sombra.lock` e, depois, a trava dos leitores: ele permanece protegido, mas não protege retroativamente o escritor antigo. (HEAD `bin/sombra_trava.sh:26–28`; diff `bin/sombra_trava.sh:35–41`, `:61–63`)
-
-   Assim, um `--refazer` antigo pode executar `dropdb --force` durante uma leitura nova. Um filho novo do escritor antigo também retorna pelo atalho `SOMBRA_TRAVA_HERDADA=1`, sem adquirir a segunda trava. Reverter enquanto leitores novos continuam vivos recria essa incompatibilidade; o protocolo precisa de transição com drenagem. Ocorrência efetiva em produção: **[não verificado]**. (HEAD `bin/sombra.sh:255–256`; HEAD `bin/sombra_trava.sh:38`; diff `bin/sombra_trava.sh:28`, `:57`)
-
-2. **BLOQUEIA — a porta compartilhada escreve antes da sonda.** Depois de adquirir a trava de leitura, o ramo chama `lavra_de_prod`. Essa função sobrescreve os arquivos comuns `lavra_prod.json` e `repor_lavra.py` e executa dois `update_or_create` no banco. Duas “leituras” podem, portanto, disputar arquivos e modificar os registros que a outra consulta, mesmo com ambas as sondas corretamente guardadas. A guarda da sonda não cobre esse processo anterior. (diff `bin/sombra.sh:506–510`; HEAD `bin/sombra.sh:144`, `:151`, `:157–166`)
-
-3. **BLOQUEIA — o `grep` não comprova ausência de escrita (d).** A conferência exige apenas uma ocorrência textual e retorna rc 2 quando ela falta. Passam, por exemplo: uma string contendo `execute_wrapper(guarda_sql)`; uma chamada em ramo nunca executado; um wrapper ativo apenas durante parte do programa; escrita por outra conexão; ou uma `guarda_sql` permissiva. Nenhuma dessas propriedades é examinada pelo lançador. Existência desses casos nas sondas reais: **[não verificado]**. (diff `bin/sombra.sh:503–505`)
-
-4. **FILA — a ordem normal das duas travas não forma ciclo; a herança pressupõe posse válida (a).** Escritores adquirem exclusiva em 8 e depois exclusiva em 9; leitores adquirem somente compartilhada em 9. Dois escritores se serializam em 8. O orçamento restante da segunda aquisição desconta a espera da primeira, com padrão de 1800 segundos. Não aparece ciclo de aquisição nesse protocolo. (diff `bin/sombra_trava.sh:24`, `:35–41`, `:61–63`)
-
-   Depois de sucesso, repetir `trancar_sombra` no mesmo shell, ou chamá-la num filho com herança válida, retorna antes de reabrir descritores. Um escritor solicitado dentro de leitor é recusado antes da aquisição. Entretanto, a marca herdada não verifica os descritores e precede a recusa de leitura — daí a falha de transição do item 1. (diff `bin/sombra_trava.sh:28–31`, `:51–52`, `:57`)
-
-   Já repetir `trancar_sombra_leitura` reabre 9: não existe atalho para `SOMBRA_TRAVA_LEITURA=1`. Se aquela era a última referência à trava anterior, a proteção pode ser interrompida entre as duas aquisições. (diff `bin/sombra_trava.sh:57–63`, `:72`)
-
-5. **FILA — chamadores e descritor 9 (b).** Os chamadores diretos encontrados na cópia são:
-
-   - `sombra.sh`: source em `HEAD bin/sombra.sh:87`; aquisições em `:438`, `:451`, `:456`, `:487`.
-   - `simular_folha.sh`: source em `HEAD bin/simular_folha.sh:45`; aquisições em `:67`, `:96`.
-   - `diff_janela_he_total.sh`: source e aquisição em `HEAD bin/diff_janela_he_total.sh:17–18`.
-
-   `simular_folha par` inicia dois filhos `foto`, que pedem novamente a trava e dependem do atalho herdado. `--com-a-sombra` também executa um comando filho mantendo o shell pai com as travas. (HEAD `bin/simular_folha.sh:96–99`, `:67`; HEAD `bin/sombra.sh:456–461`)
-
-   Há outros protocolos usando 9, como régua e pre-push, mas isso não demonstra colisão: reabrir o descritor somente num filho não fecha a cópia mantida pelo pai. Colisão concreta nos três chamadores diretos: **[não verificado]**. (HEAD `bin/regua.sh:97–103`; HEAD `bin/pre-push.sh:80–87`; HEAD `bin/sombra.sh:461`)
-
-6. **FILA — o selo morde parte do protocolo, com lacunas (e).**
-
-   - **a/b/c:** as aquisições ocorrem em subshells distintos, abrindo seus próprios descritores; não há falso compartilhamento causado por um descritor aberto pelo filho e herdado pelo pai. Porém a sobreposição depende de sinal seguido de `sleep 4`. Uma pausa de escalonamento pode fazer **a**, isoladamente, passar sem sobreposição; nesse cenário, **b** pode tornar o selo vermelho. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:15–32`)
-   - **d:** aceita qualquer retorno diferente de zero como recusa, sem distinguir `RECUSADA`, timeout ou outro erro; também testa a chamada no mesmo shell, sem criar um filho leitor. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:33–35`)
-   - **e:** verifica posições de palavras e uma grafia específica da chamada exclusiva. Não executa a porta nem comprova rc 2 sem guarda; uma conferência textual ineficaz pode satisfazer o selo. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:36–41`)
-   - Não cobre transição de versões, herança válida, repetição da aquisição, JSONL, CPU ou a escrita da lavra. Execução efetiva do selo: **[não verificado]**. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:26–43`)
-
-7. **FILA — `"modo"` preserva o parsing, mas amplia o contador agregado (f).** O produtor atual é `trancar_sombra`; o patch acrescenta `trancar_sombra_leitura`, com `"modo":"leitura"`. `esperas_longas_hoje` considera data, `espera_s` e `ok`, ignorando campos adicionais: leituras demoradas ou negadas entram na mesma conta. (HEAD `bin/sombra_trava.sh:30–31`, `:49–60`; diff `bin/sombra_trava.sh:65–66`)
-
-   `placar_code.sh` consome esse contador sem separar modos, embora sua descrição ainda mencione somente `sombra.lock`. A recusa de escritor dentro de leitor retorna antes do registro e não entra na conta. (HEAD `bin/placar_code.sh:166–171`; diff `bin/sombra_trava.sh:28–30`, `:44–45`)
-
-8. **FILA — configuração de CPU existe; medida de parede não foi demonstrada.** O container final da sonda recebe `--cpu-shares 256`; o container anterior da lavra não recebe essa atribuição pelo ramo. O JSONL mede espera pela trava; tempo de parede da execução e ganho entre duas sondas: **[não verificado]**. (diff `bin/sombra.sh:188`, `:508–511`; HEAD `bin/sombra.sh:166`; diff `bin/sombra_trava.sh:62–66`)
-
-_4511 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
