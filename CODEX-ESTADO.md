@@ -1,7 +1,172 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 21:41** · publicado em **12/11/2026 21:45** (UTC-3)
+> Ultima resposta processada: **12/11/2026 21:50** · publicado em **12/11/2026 21:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 21:50 · sessao 35df84d5936a · BUG-CADASTRO-C5E · construtor · origem=Code
+
+B1–B4 implementados nos quatro arquivos:
+
+- [test_cadastro_futuro_c5e.py:42](ponto/tests/test_cadastro_futuro_c5e.py:42)::`_espiar`, `_vinculo_ativo_que_fecha`, `FormaDaPortaTest`, `_censo`, `leituras_de_relogio` e metatestes: inativa sobreposta, recusa de `None`, aliases atribuídos, argumentos `None` e exclusão de testes do censo.
+- [vinculo.py:1093](colaboradores/services/vinculo.py:1093)::`desfazer_ajuste_do_sistema`: guarda antes dos efeitos.
+- [passivo_validado.py:289](chamados/services/passivo_validado.py:289)::`reparar` e [`_trabalhar_o_par`:422](chamados/services/passivo_validado.py:422): mesma guarda.
+- [test_cadastro_futuro_sem_banco.py:34](ponto/tests/test_cadastro_futuro_sem_banco.py:34)::`carregar`: mutantes em memória.
+
+O censo comparado ao detector antigo não acrescentou leituras de produção; os tetos permanecem em **42**, sem ocorrências adicionais a listar. (`ponto/tests/test_cadastro_futuro_c5e.py:372`, `ponto/tests/test_cadastro_futuro_c5e.py:383`)
+
+Comandos para a sessão, executados a partir de `app/`:
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+S=ponto.tests.test_cadastro_futuro_c5e
+R=$S.CatracaDoRelogioNoInteriorTest
+C=$S.ChamadorDeProducaoPassaHojeTest
+F=$S.FormaDaPortaTest
+```
+
+B1 — metamutantes de nome atribuído, `None` posicional e `value=None`. Cada comando identifica o teste que cobra o furo. (`ponto/tests/test_cadastro_futuro_c5e.py:521`, `:533`, `:542`)
+
+```bash
+python3 -m unittest "$R.test_a_catraca_MORDE_nome_atribuido_ao_relogio"
+python3 -m unittest "$R.test_a_catraca_MORDE_none_posicional"
+python3 -m unittest "$R.test_a_catraca_MORDE_value_none"
+```
+
+B2 — mutante altera **somente a segunda** `fechar_vigencia` para D+1; o RED observa o suplemento da inativa sobreposta. (`ponto/tests/test_cadastro_futuro_sem_banco.py:34`, `ponto/tests/test_cadastro_futuro_c5e.py:82`)
+
+```bash
+MUTANTE_CADASTRO=c5e_segundo_fechamento_dia_seguinte \
+python3 -m unittest "$S.MeiaNoiteNoAtoTest.test_meia_noite_no_meio_do_salvar_um_hoje_so"
+```
+
+B3 — cada mutante remove uma guarda; os testes executam os corpos reais com `None`, verificam ausência de escrita e incluem controle com dia válido. (`ponto/tests/test_cadastro_futuro_sem_banco.py:45`, `ponto/tests/test_cadastro_futuro_c5e.py:186`, `:229`, `:239`)
+
+```bash
+MUTANTE_CADASTRO=c5e_sem_guarda_none:desfazer_ajuste_do_sistema \
+python3 -m unittest "$F.test_desfazer_none_recusa_sem_escrever"
+
+MUTANTE_CADASTRO=c5e_sem_guarda_none:reparar \
+python3 -m unittest "$F.test_reparar_none_recusa_sem_escrever"
+
+MUTANTE_CADASTRO=c5e_sem_guarda_none:_trabalhar_o_par \
+python3 -m unittest "$F.test_trabalhar_o_par_none_recusa_sem_escrever"
+```
+
+B4 — metamutantes de `hoje=None`, expansão sem `hoje=` nomeado e inclusão indevida de testes. (`ponto/tests/test_cadastro_futuro_c5e.py:294`, `:298`, `:307`)
+
+```bash
+python3 -m unittest "$C.test_selo_MORDE_hoje_none_literal"
+python3 -m unittest "$C.test_selo_MORDE_expansao_sem_hoje_nomeado"
+python3 -m unittest "$C.test_selo_MORDE_inclusao_de_arquivos_de_teste"
+```
+
+Não executei a suíte nem os testes/mutantes, conforme solicitado. A mordida em execução e a certificação ficam para a sessão: **[nao verificado]**. [nao verificado]
+
+## 12/11 21:49 · sessao a77123e17b1a · - · - · origem=Ronald (tmux)
+
+**Bloqueante persiste no classificador**, embora as três falhas literais da volta 1 estejam corrigidas: objeto por `ast.dump`, ramo do `IfExp` e escopo da cadeia. (`app/chamados/tests/test_e3_catraca_respondedores.py:173`; `app/chamados/tests/test_e3_catraca_respondedores.py:179`; `app/chamados/tests/test_e3_catraca_respondedores.py:204`)
+
+Contraexemplos reproduzidos executando o classificador extraído por AST em memória, sem Django/banco/escrita:
+
+```python
+# VALOR, mas retorna exatamente a presença do carimbo:
+return p.respondida_em is not None and (
+    True or p.respondida_em.isoformat()
+)
+```
+
+`usa()` percorre também o ramo morto e transforma a decisão em VALOR. (`app/chamados/tests/test_e3_catraca_respondedores.py:175`; `app/chamados/tests/test_e3_catraca_respondedores.py:182`)
+
+```python
+# VALOR, mas o agregado é de OUTRO queryset:
+return qs.filter(
+    respondida_em__isnull=False,
+    pk__in=other.values("pk").annotate(
+        m=Max("respondida_em")
+    ).filter(m__gt=d).values("pk"),
+).exists()
+```
+
+A cadeia agora exclui irmãos do statement, mas `ast.walk(cadeia)` invade argumentos e a subconsulta alheia. O agregado do outro queryset concede VALOR ao `isnull` externo. (`app/chamados/tests/test_e3_catraca_respondedores.py:236`; `app/chamados/tests/test_e3_catraca_respondedores.py:237`)
+
+```python
+# RESPONDEDOR, mas é serialização do instante:
+return None if not p.respondida_em else p.respondida_em.isoformat()
+
+# Também RESPONDEDOR:
+return p.respondida_em is not None and str(p.respondida_em)
+```
+
+`not` retorna DECIDE sem procurar a guarda; chamada `str()` não é reconhecida como uso de valor. (`app/chamados/tests/test_e3_catraca_respondedores.py:196`; `app/chamados/tests/test_e3_catraca_respondedores.py:158`)
+
+Reconstruí em memória os três trechos antigos conforme o delta e comparei **todos** os registros `(papel, arquivo, função, linha)`: nenhuma diferença entre volta 1 e volta 2 nos fontes atuais; portanto, mantêm os mesmos 27 sítios, sem troca escondida pela cardinalidade. O contador permanente confere apenas cardinalidade e três VALORES nomeados. (`app/chamados/tests/test_e3_catraca_respondedores.py:333`; `app/chamados/tests/test_e3_catraca_respondedores.py:350`)
+
+Os três retirados continuam VALOR legítimo: ordem posterior à cobrança, máximo instante e idade. (`app/chamados/services/verbos.py:342`; `app/chamados/veredito_lavrado.py:207`; `app/chamados/services/validacao.py:932`)
+
+Os 27 estão enumerados nas mensagens anteriores. Quatro exigem cuidado semântico: horizonte consultado, preservação do legado, correspondência ato/instante e guarda da cura; continuam RESPONDEDOR no AST, mas trocar mecanicamente pelo predicado “com texto” altera essas perguntas. (`app/chamados/juizes.py:348`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`; `app/chamados/models.py:4017`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`)
+
+Executei os nove métodos das duas classes unittest extraídos em memória: **Ran 9 tests, OK**; isso verifica o selo AST, sem certificar SQL ou produção. Os testes exercitam comparação/aritmética/agregação e os três casos antigos, mas deixam passar ramo morto e agregado em subconsulta; também não aceitam a serialização sob `not`. (`app/chamados/tests/test_e3_catraca_respondedores.py:416`; `app/chamados/tests/test_e3_catraca_respondedores.py:448`)
+
+Para o método novo da volta 2, mutante que pega: restaurar `guarda()` sem identidade do objeto ou voltar ao escopo do statement; mutante que deixa passar: tratar um agregado encontrado dentro de qualquer argumento como pertencente ao queryset externo, que é justamente o comportamento atual. (`app/chamados/tests/test_e3_catraca_respondedores.py:455`; `app/chamados/tests/test_e3_catraca_respondedores.py:459`; `app/chamados/tests/test_e3_catraca_respondedores.py:236`)
+
+## 12/11 21:48 · sessao 8b8cd1252aeb · - · - · origem=Ronald (tmux)
+
+Censo confirmado: **8 leitores diretos** de `q_vivas`, com os seguintes efeitos ao incluir células `veredito=''`. (`app/chamados/models.py:3408`)
+
+| Leitor | Efeito da lista mais larga |
+|---|---|
+| Fila de validar | Aplica também `q_respondida_com_texto` e depois `pergunta_viva`; células vazias só entram na saída quando há texto e o C6 confirma. (`app/chamados/juizes.py:1700`, `app/chamados/juizes.py:1703`) |
+| Fio administrativo | Amplia candidatos das disputas fechadas, depois filtra pelo C6; disputas abertas já eram carregadas sem `q_vivas`. (`app/chamados/services/fio.py:251`, `app/chamados/services/fio.py:254`, `app/chamados/services/fio.py:268`) |
+| Perguntas do app | Amplia candidatos, depois filtra C6; a separação pendentes/histórico ainda usa carimbo cru e disputa aberta. (`app/chamados/services/pergunta_no_app.py:50`, `app/chamados/services/pergunta_no_app.py:58`, `app/chamados/services/pergunta_no_app.py:71`) |
+| Cobrança | Amplia candidatos em disputa aberta; exige espera pelo texto e C6 antes de contar vencidos/sem canal. (`app/chamados/services/cobranca.py:237`, `app/chamados/services/cobranca.py:241`, `app/chamados/services/cobranca.py:255`) |
+| Vigia de disputa fechada | Amplia candidatos, mas só conta após C6. (`app/chamados/services/vigia_fio.py:757`, `app/chamados/services/vigia_fio.py:764`) |
+| Janela do colaborador | **Sem C6 posterior**: os destinos adicionais passam a ampliar diretamente a janela dos chamados visíveis. (`app/chamados/services/janela_colab.py:63`, `app/chamados/services/janela_colab.py:69`) |
+| Raio-X/crédito | **Sem C6 posterior**: exclui somente materializada com `VL_SIM`, depois divide o restante pelo par carimbo/texto. Pode ampliar os chamados creditados a responder/validar. (`app/chamados/services/raiox.py:74`, `app/chamados/services/raiox.py:135`, `app/chamados/services/raiox.py:143`, `app/chamados/services/raiox.py:155`) |
+| Fechamento do fio do dia | **Escreve, sem C6 posterior**: os candidatos adicionais são entregues diretamente a `fechar_por_admin`; havendo escrita, registra decisão `SILENCIO` com o instante da materialização. (`app/ponto/services/veredito_celula.py:181`, `app/ponto/services/veredito_celula.py:190`, `app/ponto/services/veredito_celula.py:195`) |
+
+O fechamento acima não introduz escritor fora da porta: `fechar_por_admin` delega à porta de identidade, que salva via/materialização/autor; sua guarda é de idempotência e a porta não consulta C6. Logo, a ampliação **não é somente de leitura**. (`app/chamados/models.py:3081`, `app/chamados/models.py:3090`, `app/chamados/models.py:3194`, `app/chamados/models.py:3206`, `app/chamados/models.py:3212`, `app/chamados/models.py:3216`)
+
+Há **três** chamadores de produção de `fechar_o_fio_do_dia`, apesar da docstring dizer “dois”: veredito da célula, declaração de folga e validação de folga já declarada. (`app/ponto/services/veredito_celula.py:163`, `app/ponto/services/veredito_celula.py:347`, `app/ponto/services/declarar_dia.py:206`, `app/chamados/services/validacao.py:298`)
+
+A mera ampliação da escrita não demonstra fechamento indevido: esses caminhos expressam decisão administrativa do fato/dia e usam a porta existente. A ocorrência, quantidade e efeito real em produção das linhas adicionais são **[não verificado]**. (`app/ponto/services/veredito_celula.py:161`, `app/ponto/services/declarar_dia.py:199`, `app/chamados/services/validacao.py:292`)
+
+Sobre os campos e as classes anteriores:
+
+- **`veredito=''`:** o modelo permite vazio e NULL. A cura passou a tratar vazio como ausência de julgamento, de acordo com o `if cel.veredito` do C6; o reconciliador já excluía explicitamente vazio. (`app/escala/models.py:1770`, `app/chamados/models.py:3408`, `app/chamados/juizes.py:1438`, `app/chamados/reconciliador.py:638`, `app/chamados/reconciliador.py:640`)
+- **Quem escreve veredito:** o método do modelo delega a `ponto.portas.celula.lavrar_veredito`; a porta valida vocabulários e escreve `v`. Não encontrei caminho explícito novo de produção atribuindo `''`; a fixture o força com `update`. Produção com esse estado: **[não verificado]**. (`app/escala/models.py:1819`, `app/ponto/portas/celula.py:923`, `app/ponto/portas/celula.py:927`, `app/ponto/portas/celula.py:1035`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:181`)
+- **`respondida_em` tem leituras distintas sobreviventes:** `respondida` e os rótulos de estado usam apenas presença do carimbo; o app também usa presença na partição. Já `espera_o_texto_do_colaborador` e `respondida_sem_texto` leem o par. Essas diferenças preexistem à volta e pertencem ao escopo explicitamente adiado quando envolvem os nove isnull/passivo. (`app/chamados/models.py:3584`, `app/chamados/models.py:3071`, `app/chamados/services/pergunta_no_app.py:71`, `app/chamados/services/fio.py:187`, `app/chamados/juizes.py:1518`)
+- **Escritores do par:** `_nascer` recusa payload ilegal; `carimbar` completa carimbo somente com texto; `descarimbar_em_lote` verifica o par; `save` aplica tripwire. Em emissão, resposta humana escreve texto/carimbo após strip; resposta automática consulta recusa canônica; recuperação pela trilha exige texto e ausência de carimbo. (`app/chamados/models.py:2865`, `app/chamados/models.py:3156`, `app/chamados/models.py:3286`, `app/chamados/models.py:3472`, `app/chamados/services/disputa_emissao.py:1432`, `app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1657`, `app/chamados/services/disputa_emissao.py:1677`)
+- **Passivo segue salvável por outros campos:** isso permite que a escrita adicional de `admin_decidiu` aconteça inclusive numa pergunta já carimbada sem texto; o tripwire não transforma esse fechamento numa cura do par. (`app/chamados/models.py:3503`, `app/chamados/models.py:3506`, `app/ponto/services/veredito_celula.py:190`)
+- **Fonte/relógio:** as faces novas derivam a classe de brancos de `isspace` e só constroem Q, sem escrita nem leitura de relógio. O relógio do fechamento já existe na porta e é usado para carimbo e ato de decisão. (`app/chamados/juizes.py:1526`, `app/chamados/juizes.py:1538`, `app/chamados/juizes.py:1546`, `app/chamados/models.py:3090`, `app/ponto/services/veredito_celula.py:196`)
+
+Não há dependência de implementação da cura de `''` na migração dos nove isnull: ela altera diretamente `q_vivas`, e os efeitos descritos já percorrem leitores e escritores existentes. Medida na sombra desses efeitos/app/supra-juiz nesta volta é **[não verificado]**. (`app/chamados/models.py:3408`, `app/chamados/models.py:3411`, `app/chamados/services/pergunta_no_app.py:50`, `app/ponto/services/veredito_celula.py:181`)
+
+## 12/11 21:48 · sessao b8304ecdee1e · - · - · origem=Ronald (tmux)
+
+Achado 1 curado no caso exato: `_celula_absolve` agora exclui `veredito=''`, alinhado ao `if cel.veredito`; o teste cria esse estado explicitamente e exige viva no juiz e incluída no SQL. (`app/chamados/models.py:3408`; `app/chamados/juizes.py:1438`; `app/chamados/tests/test_e3_forma_sql_do_juiz.py:181`, `:188`)
+
+Achado 3 curado na prosa: o comentário reconhece o caminho do degrau 6 até `_slot_esperado`; este efetivamente lê a resposta. (`app/chamados/models.py:3393`; `app/chamados/juizes.py:1473`, `:360`, `:372`)
+
+**Contraexemplo adicional permitido pelo modelo:** célula `veredito='concorde'`, `veredito_via='cartorio'`, `ata={'lampadas':[{'hora':'14:20','tipo':'S','acesa':None,'pendente':'sim'}]}`; pergunta não validada, destrancada, sem resposta, sem materialização, sem fato no marco, sem classificação acusatória do dia. O modelo permite JSON sem schema; `marcos_pendentes` aceita qualquer valor truthy de `pendente`, enquanto o SQL exige booleano `True`. O juiz continua pelos degraus inferiores e retorna viva por ausência de materialização; o SQL considera a célula absolvente e exclui. (`app/escala/models.py:1778`; `app/ponto/services/lastro.py:148`; `app/chamados/juizes.py:1452`, `:1466`; `app/chamados/models.py:3403`, `:3408`, `:3413`)
+
+Extraí e executei somente os corpos AST vivos de `marcos_pendentes`, `projecao_temporal_da_pergunta` e `_pergunta_viva_calc`, com dependências externas substituídas em memória: `pendente=True`, `'sim'` e `2` produziram viva; `False` produziu morta. A execução SQL e a ocorrência desse estado em produção são **[não verificado]**. A diferença SQL foi inferida do `contains` de booleano em `app/chamados/models.py:3403`. O escritor canônico produz `pendente=True`, portanto não há evidência de que gere o contraexemplo. (`app/ponto/services/cartorio.py:915`)
+
+Para o universo com lâmpadas canônicas booleanas, não encontrei contraexemplo adicional:
+
+| Degrau | Continência |
+|---|---|
+| 0, validada | Python e SQL excluem. (`app/chamados/juizes.py:1391`; `app/chamados/models.py:3411`) |
+| 0a, tranca por leitura | Python pode excluir mais; SQL é generoso. (`app/chamados/juizes.py:1395`; `app/chamados/models.py:3379`) |
+| 0b, via que vence resposta com materialização | Ambos excluem. Sem materialização, a via não exclui em nenhum. (`app/chamados/juizes.py:1402`; `app/chamados/models.py:3400`) |
+| 1, resposta | Carimbo com texto entra no ramo SQL; sem carimbo ou com texto vazio/branco não ganha esse ramo. Admin/luz podem matar no Python, o que somente alarga o SQL. (`app/chamados/juizes.py:1407`, `:1415`, `:1419`; `app/chamados/juizes.py:1546`; `app/chamados/models.py:3412`) |
+| 2, identidade materializada | Ambos excluem, salvo resposta que já ganhou o degrau anterior. (`app/chamados/juizes.py:1428`; `app/chamados/models.py:3398`, `:3413`) |
+| Fato do marco materializado | Python pode excluir mais; SQL continua generoso. (`app/chamados/juizes.py:1434`; `app/chamados/models.py:3413`) |
+| 3, célula | `''`, NULL e ausência de célula não absolvem no SQL; acusatório entra; não acusatório com `pendente=True` entra. Não acusatório definitivo mata no Python antes dos próximos degraus. (`app/chamados/models.py:3403`, `:3408`, `:3410`; `app/chamados/juizes.py:1438`, `:1452`) |
+| 4–6 | Só alcançados quando a célula não absolveu no Python; nas atas canônicas, `~_celula_absolve` já inclui essas perguntas, com ou sem materialização/resposta. (`app/chamados/juizes.py:1454`, `:1466`, `:1473`; `app/chamados/models.py:3413`) |
+
+Os novos testes de veredito vazio matam a remoção de `~Q(celula__veredito='')`; deixam passar a divergência `pendente='sim'`, pois suas fixtures exigem ausência de materialização e não variam o tipo da pendência. (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:184`, `:188`; `app/chamados/models.py:3408`)
+
+A assinatura histórica fornece outro limite: `pergunta_viva(agora=...)` pode ignorar validação/materialização posteriores, enquanto `q_vivas()` não recebe horizonte e lê os carimbos persistidos. Isso já existia e não fundamenta, isoladamente, reprovação desta cura; o contrato de continência temporal além do uso atual é **[não verificado]**. (`app/chamados/juizes.py:1377`, `:1382`, `:875`; `app/chamados/models.py:3368`, `:3411`)
 
 ## 12/11 21:41 · sessao a7c71ef5ca12 · BUG-CADASTRO-C5E · verificador · origem=Code
 
@@ -664,88 +829,4 @@ Achado 6: **pre-existente, DECIDIDO PELA LEI TURNO-G5, obra própria**. Compara�
 
 Limite para o relato: legado conserva quantidade, porém identidade temporal segue `None`; A5, PDF e vigia não recuperam datas ausentes. Efeito em produção: **[nao verificado]**.
 
-## 12/11 20:06 · sessao 0062468afb3b · - · - · origem=Ronald (tmux)
-
-Alterações concluídas nos arquivos autorizados:
-
-- Cinco asserts via acessor: `test_ata_x_turno_entrada.py:144`, `test_saida_valida_cross_meia_noite.py:104`, `test_juiz_do_par_ata_casa_pelo_turno.py:137`, `test_bateria_lavratura.py:639/:1060`.
-- Selo compara identidades com data/fuso: `ponto/tests/test_bateria_lavratura.py:961`.
-- Fixture ganhou `orfas=[]`: `chamados/tests/test_emis_ausencia_parcial_cobra.py:60`.
-- Fixtures de convergência usam escritor único: `escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:187/:337`.
-
-Provas em `escala/tests/test_preverif_v3_asserts.py:45`: seis testes passaram com:
-
-```sh
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest escala.tests.test_preverif_v3_asserts -v
-```
-
-Mutantes mordidos: fixture perde chave (`:78`), escritor duplica a mesma batida acesa como órfã (`:109`) e selo volta a HH:MM versus ISO (`:128`). O segundo compila o escritor real mutado em memória.
-
-AST dos seis arquivos e `git diff --check` passaram. Integração Django/ORM: [nao verificado].
-
-## 12/11 20:04 · sessao 4febaafe94c6 · - · - · origem=Ronald (tmux)
-
-Restaurei o plantio por HH:MM do HEAD; a única diferença preservada é ler órfãs por `horas_orfas(ata)` ([materializacao.py](/home/ronald/wt-codex-tipo-na-fonte-184856/app/chamados/services/materializacao.py:177)).
-
-Prova em [test_tipo_na_fonte_plantio_expand.py](/home/ronald/wt-codex-tipo-na-fonte-184856/app/chamados/tests/test_tipo_na_fonte_plantio_expand.py:74):
-
-- RED 1 executado antes da correção: falhou `False is not true`.
-- Mutante que reintroduz instantes naive executado: mordeu, confirmando a exceção `marca exige fuso` ([teste:85](/home/ronald/wt-codex-tipo-na-fonte-184856/app/chamados/tests/test_tipo_na_fonte_plantio_expand.py:85)). [nao verificado]
-- Incluídos contrastes dia completo e órfã legado/ISO ocupando a saída ([teste:77](/home/ronald/wt-codex-tipo-na-fonte-184856/app/chamados/tests/test_tipo_na_fonte_plantio_expand.py:77)). [nao verificado]
-
-Comando completo, para rodar após sua implementação de `horas_orfas`:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_tipo_na_fonte_plantio_expand -v
-```
-
-Na última execução, o RED positivo ainda falhava porque `horas_orfas` estava ausente; os outros três testes passaram. Não alterei `juiz_batida.py` nem `gerar_celulas.py`; o plantio corrigido deixou de consumir `periodos_do_dia` ([materializacao.py:179](/home/ronald/wt-codex-tipo-na-fonte-184856/app/chamados/services/materializacao.py:179)). [nao verificado]
-
-## 12/11 20:01 · sessao ab67b3003d37 · TRANCA-VIVAS-08 · verificador · origem=Code
-
-**REPROVA — bloqueante: o acumulador ainda pode perder competências sem contrariar os oráculos do arquivo.** A troca `tot[k] += linha[k]` → `tot[k] = linha[k]` sobrevive porque os casos medem uma única competência. (`app/chamados/services/competencia_trancada.py:355`; `app/chamados/tests/test_tranca_vivas_08.py:36`; `app/chamados/tests/test_tranca_vivas_08.py:244`)
-
-1. **A resgatada percorre as entradas reais de `medir()`.** A fixture cria o chamado pela porta, fornece `data_turno`, grava `resgatado_em = fechado_em + 5 minutos` e escreve `q.chamado_destino`. O leitor calcula `competencia_do_chamado`, exige `resgatado_em > fechado_em` e consulta exatamente `q.chamado_destino_id`. O resgate é montado por `update`; o ato de resgatar pela porta não é exercitado nesse teste. (`app/chamados/tests/test_tranca_vivas_08.py:226`; `app/chamados/tests/test_tranca_vivas_08.py:229`; `app/chamados/tests/test_tranca_vivas_08.py:231`; `app/chamados/services/competencia_trancada.py:105`; `app/chamados/services/competencia_trancada.py:117`; `app/chamados/services/competencia_trancada.py:132`)
-
-   A criação resolve a célula pelo dia informado, e a competência usa `dia_do_fato`. O mock não desloca essa competência por perguntas vivas: esse percurso consulta `disputa__chamado_id`, enquanto a fixture escreve somente `chamado_destino`; a disputa nasce sem chamado-pai. (`app/chamados/models.py:1067`; `app/chamados/models.py:1235`; `app/chamados/juizes.py:2359`; `app/chamados/juizes.py:2343`; `app/chamados/tests/test_c7_red_minimos.py:108`)
-
-2. **O mock altera a vida, mas não torna a agregação vácua.** `dia_da_pergunta_trancado=False` remove o degrau que mataria a pergunta pela tranca. Não substitui a formação de `resgatados`, os carimbos ou a FK. O oráculo exige explicitamente `([q.pk], [], [])` nas três parcelas e união **1**, tanto no total quanto na linha. Portanto, prova a agregação **condicionada à vida simulada**; não prova que o resgate real produz essa vida. (`app/chamados/juizes.py:1405`; `app/chamados/services/competencia_trancada.py:117`; `app/chamados/services/competencia_trancada.py:132`; `app/chamados/tests/test_tranca_vivas_08.py:239`; `app/chamados/tests/test_tranca_vivas_08.py:241`; `app/chamados/tests/test_tranca_vivas_08.py:247`)
-
-3. **A perda da resgatada está curada; permanecem sobreviventes de agregação.**
-
-   | Local | Resultado contra os oráculos |
-   |---|---|
-   | União, linha 348 | Retirar resgatadas é mordido pelo novo MORDE; trocar união por concatenação continua mordido pelo caso de sobreposição. (`app/chamados/tests/test_tranca_vivas_08.py:249`; `app/chamados/tests/test_tranca_vivas_08.py:203`) |
-   | Cardinalidade da união, linha 351 | O antigo mutante `len(_com_o_admin) - len(m['vivas_resgatadas'])` agora devolve **0** onde linha e total exigem **1**. (`app/chamados/services/competencia_trancada.py:351`; `app/chamados/tests/test_tranca_vivas_08.py:244`; `app/chamados/tests/test_tranca_vivas_08.py:247`) |
-   | Parcelas por competência, linha 353 | `len(m[k])` → `min(1, len(m[k]))` sobrevive: parcelas verificadas são zero ou um. Com duas resgatadas, publicaria parcela **1**, embora a união fosse **2**. (`app/chamados/services/competencia_trancada.py:353`; `app/chamados/tests/test_tranca_vivas_08.py:186`; `app/chamados/tests/test_tranca_vivas_08.py:244`) |
-   | Acumulador, linha 355 | `+=` → `=` sobrevive. Com duas competências contendo uma resgatada cada, o original totaliza **2** e o mutante conserva apenas **1**. (`app/chamados/services/competencia_trancada.py:355`; `app/chamados/tests/test_tranca_vivas_08.py:36`; `app/chamados/tests/test_tranca_vivas_08.py:246`) |
-
-   Os dois sobreviventes foram conferidos em memória sobre o corpo real de `medir_frota`, com entradas sintéticas; preservam os resultados dos cenários do arquivo, inclusive os MORDE. Execução Django/ORM e sobrevivência na suíte completa: **[nao verificado]**. (`app/chamados/services/competencia_trancada.py:331`; `app/chamados/tests/test_tranca_vivas_08.py:206`; `app/chamados/tests/test_tranca_vivas_08.py:251`)
-
-4. **A API morde troca entre os quatro campos.** Os valores **7, 3, 2, 4** são distintos, e cada chave é comparada com seu próprio valor; qualquer troca de pares falha. Conferi as seis trocas sobre o dicionário real da view. O residual também é certificado, com **5**. A projeção interna de `por_competencia` não recebe essa prova: o falso usa lista vazia. (`app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:57`; `app/api/tests/test_api_mensageria_chamados_em_competencia_trancada.py:64`; `app/api/views_mensageria.py:1573`)
-
-5. **Quem escreve e quem lê os valores publicados:** [nao verificado]
-
-   | Campo | Escritor do valor | Leitor |
-   |---|---|---|
-   | `decidir_pelo_dp` | `medir()` escreve IDs; agregador escreve contagens. (`app/chamados/services/competencia_trancada.py:139`; `app/chamados/services/competencia_trancada.py:353`) | União e pauta do DP. (`app/chamados/services/competencia_trancada.py:348`; `app/chamados/services/competencia_trancada.py:246`) |
-   | `vivas_resgatadas` | `medir()` escreve IDs; agregador conta. (`app/chamados/services/competencia_trancada.py:149`; `app/chamados/services/competencia_trancada.py:353`) | União. (`app/chamados/services/competencia_trancada.py:348`) |
-   | `vivas_tocadas_pelo_admin` | `medir()` escreve IDs; agregador conta. (`app/chamados/services/competencia_trancada.py:158`; `app/chamados/services/competencia_trancada.py:353`) | União. (`app/chamados/services/competencia_trancada.py:348`) |
-   | `ficam_com_o_admin` | Cardinalidade por competência e acumulação total. (`app/chamados/services/competencia_trancada.py:351`; `app/chamados/services/competencia_trancada.py:355`) | CLI e API. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:22`; `app/api/views_mensageria.py:1573`) |
-   | `vivas_apesar_da_tranca` | Classificação residual, cardinalidade e total. (`app/chamados/services/competencia_trancada.py:158`; `app/chamados/services/competencia_trancada.py:352`; `app/chamados/services/competencia_trancada.py:355`) | CLI e API. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:27`; `app/api/views_mensageria.py:1577`) |
-
-   As três parcelas também são lidas pela CLI e pela API. O cliente da mensageria recebe o JSON inteiro; a ferramenta acrescenta `cliente` e repassa o payload. (`app/chamados/management/commands/chamados_em_competencia_trancada.py:24`; `app/api/views_mensageria.py:1574`; `mensageria/nucleo/core_client.py:241`; `mensageria/nucleo/ferramentas.py:2038`)
-
-Para fechar os sobreviventes demonstrados, faltam oráculos com **duas competências positivas** e **mais de um ID numa parcela**. Os atuais conferem uma competência e parcelas zero/um. (`app/chamados/tests/test_tranca_vivas_08.py:36`; `app/chamados/tests/test_tranca_vivas_08.py:186`; `app/chamados/tests/test_tranca_vivas_08.py:244`)
-
-## 12/11 20:01 · sessao c24cf91fbb4c · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · construtor · origem=Code
-
-C5e escrita. O [relato completo](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-193752/app/docs/RELATO-BUG-CADASTRO-C5E.txt:6) contém funções alteradas, chamadores, origem/leitores de `hoje` e comandos.
-
-- **164 testes sem banco passaram**; RED da meia-noite falhou contra o corpo da base. [Evidências](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-193752/app/docs/RELATO-BUG-CADASTRO-C5E.txt:107). [nao verificado]
-- **38 mutantes morderam por asserção**, incluindo leitura nova e `desfazer_apaga_admin`. [Comandos e resultados](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-193752/app/docs/RELATO-BUG-CADASTRO-C5E.txt:162).
-- Catraca final: **31**, abaixo do teto herdado 36; sítios remanescentes enumerados. [Censo](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-193752/app/docs/RELATO-BUG-CADASTRO-C5E.txt:61).
-
-Suíte ORM: **[nao verificado]**, sem Django disponível e com acesso a banco vetado. Sem commit, pela proibição inicial. Certificação permanece com Code/suite e opus final. [nao verificado]
-
-_4435 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
