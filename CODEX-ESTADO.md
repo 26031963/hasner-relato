@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 21:54** · publicado em **12/11/2026 21:55** (UTC-3)
+> Ultima resposta processada: **12/11/2026 21:56** · publicado em **12/11/2026 22:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 21:56 · sessao 37e2d0869710 · - · - · origem=Ronald (tmux)
+
+Provas históricas lidas com `git show 0a747193e:app/<arquivo>`:
+
+| Leitor | Ata NULA | Legado HH:MM e prova na base |
+|---|---|---|
+| `leitor_celula._orfas_da_ata` | Grade normaliza para `{}` em `app/escala/services/leitor_celula.py:379`; órfãs `[]` | Repassa strings; fallback só para contagem antiga: `:187-190`. |
+| `juiz_batida.periodos_do_dia` | `orfas=[]` | Normaliza ata e repassa strings em `app/ponto/juiz_batida.py:157-164`. |
+| `cluster_espurio._leitura_da_celula` | `None` | Insumos em `app/ponto/services/cluster_espurio.py:27-32`; duas órfãs a ≤15 min e lâmpada apagada retornam `(orfas,n_missing)` em `:33-36`. |
+| `esmeril_espelho.assinaturas_do_colab` | Zero contribuição A5 | Leitura/minutos/buckets em `app/ponto/services/esmeril_espelho.py:125-128`; A5 aparece com ≥3 no bucket em `:139-141`. |
+| `vigia_pareador_celula.censo` | Zero células com órfã e zero colaboradores por essa informação | Leitura em `app/ponto/services/vigia_pareador_celula.py:73-80`; borda compara `HH:MM` em `:109-112`. |
+| `tripwire_celulas.medir_sobra_com_tipo_trocado` | Pula célula; universo zero | Gate em `app/ponto/management/commands/tripwire_celulas.py:258-263`; HH:MM chega à peneira em `:264-265`. |
+| `chamados.juizes._celula_furada` | Retorno integral **`None`**, antes de contar órfãs | Normaliza ata em `app/chamados/juizes.py:493`; ausência de lâmpadas retorna `None` em `:505-506`; órfãs/contagem entram em `:510-517`. |
+| `materializacao._plantio_preenche_furo_na_data` | Sem lâmpadas pula, terminando `False` | Gate em `app/chamados/services/materializacao.py:172-176`; HH:MM soma às marcas em `:180-183`. |
+
+Nuances para o selo:
+
+- “Sete zero” é contribuição de órfãs, não necessariamente retorno integral. `_celula_furada(None)` retorna `None`; plantio retorna `False`; tripwire retorna `([],0)`. As linhas acima comprovam.
+- ISO literal na base não tem comportamento temporal uniforme. Cluster com duas strings ISO e lâmpada apagada chega a `int(h[3:5])`, que falha em ISO `2026-...` (`app/ponto/services/cluster_espurio.py:34` da base). Uma órfã ISO evita esse ramo e retorna `()` (`:33-37`). Não afirmar igualdade universal ISO base/cópia.
+
+Restantes adaptações necessárias para HH:MM:
+
+- Propositor: recuperar validação `_tem_hora` e casadas por `hora` no ramo legado; base `app/ponto/propositor.py:24-31,52-55`. Hoje `dia_degenerado` exige `instante`. `insumos_atribuicao` deve conservar slots/marcas HH:MM para o ramo legado.
+- Classificador: strings precisam diferença de minutos; base `app/escala/orfa_classe.py:31-32,44,74`. Hoje `_runs_de_rajada` subtrai datetimes.
+- Ausência parcial: ramo string deve usar `_minutos_do_dia(str(h))`, como base `app/ponto/turnos.py:2667`; hoje exige data e subtrai datetime.
+- PDF: base compara `timezone.localtime(entrada).strftime('%H:%M')` (`app/relatorios/pdf_espelho.py:178`); ramo legado deve conservar essa comparação.
+- Calendário: legado deve respeitar órfãs da própria data e comparar HH:MM; base `app/colaboradores/services/calendario.py:622,625-627`. Hoje coleta instantes de todas as datas.
+
+Todos os oito sítios atuais ainda passam pelo acessor; vigia transforma `None` em `{}` **antes** dele (`app/ponto/services/vigia_pareador_celula.py:75-76` atual), impedindo reconhecer `NAO_LAVRADA`.
 
 ## 12/11 21:54 · sessao 2f8bf08376aa · E3-FORMA-SQL · sonda · origem=Code
 
@@ -923,30 +953,4 @@ Para HH:MM válido, as contagens permanecem conhecidas, mas os leitores temporai
 
 Reprodução local, sem arquivos nem banco: executei accessor, tripwire com doubles existentes e grade completa com carregador de previsto isolado; as três entradas `None`, `{}`, só precedência levantaram `EstadoIlegalDaAta`; HH:MM coerente retornou `None` temporal, e tripwire `( [], 0 )`. As funções reais correspondentes estão em `app/escala/services/ata.py:40`, `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:39`, `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:81`. Registro persistido dessa execução: [nao verificado].
 
-## 12/11 20:38 · sessao 54a4e982ac49 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueante — selo/mutante quebrado na árvore atual.** `test_MORDE_mutante_copia_perde_catraca` modifica a expressão de `copiar_envelope`, mas carrega somente `copiar_ata`; esta chama a implementação original de `copiar_envelope`. Portanto o mutante não atinge a cópia executada e o teste falha em seu `assertRaises` externo. Referências: `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:143`, `:146`, `:149`; `app/escala/services/ata.py:90`, `:102`.
-
-   Executei agregado de dez módulos puros com `PYTHONDONTWRITEBYTECODE=1`: **74 testes, 1 falha, 1 skipped**, falha acima. Registro persistido da execução: [nao verificado]. O skip decorre da indisponibilidade de Django/registry, prevista em `app/escala/tests/test_ata_ci.py:129`.
-
-2. **Bloqueante — selo anterior perdeu mordida pela troca de formato.** O selo O118 ainda intersecta `lampada.luz` HH:MM com as strings ISO de `ata.orfas`: `app/ponto/tests/test_o118_orfa_que_acendeu.py:89`, `:90`, `:92`; escritor ISO: `app/escala/services/ata.py:232`. Reproduzi por extração AST do método real com a mesma identidade ISO na lâmpada acesa e na lista de órfãs: o selo passou. Registro persistido dessa execução: [nao verificado]. A ata usada pelo selo nasce como dict normal de `ata_do_dia`, sem atravessar o descriptor ORM: `app/ponto/tests/test_o118_orfa_que_acendeu.py:84`; a catraca automática não cobre essa leitura.
-
-3. **Bloqueante para alegação de suite verde — fixtures incompatíveis com contrato novo.** [nao verificado]
-   - `app/escala/tests/test_t41_leitor_celula.py:88` lavra ata com `n_orfas=2` e sem `orfas`; em `:94` espera `None`. O acessor agora exige ambas as chaves e levanta por ausência: `app/escala/services/ata.py:45`, `:47`.
-   - A fixture alterada do calendário escreve ISO sem `n_orfas`: `app/colaboradores/tests/test_calendario_orfa.py:79`, `:81`; mesma rejeição em `app/escala/services/ata.py:45`.
-   - Execução Django desses cenários: [nao verificado].
-
-4. **Settings: a hipótese de suite sem ci não procede.** A execução efetiva termina em `manage.py test ... --settings=config.settings.ci`: `bin/suite.sh:232`, `:233`; saída seca também mostra ci: `bin/suite.sh:188`. O perfil ci define o runner novo e ativa a flag: `app/config/settings/ci.py:40`, `:42`. `EscalaConfig.ready` instala descriptor e hook somente quando a flag é verdadeira: `app/escala/apps.py:11`, `:13`, `:14`.
-
-   `prod` importa base, `saas` importa base e `sombra` importa saas: `app/config/settings/prod.py:1`, `app/config/settings/saas.py:10`, `app/config/settings/sombra.py:27`. Não há definição de `VIGIAR_ATA_ORFAS` nesses perfis na busca do archive; ativação normal neles é falsa pelo default explícito em `app/escala/apps.py:11`. Já depois de instalada, a instrumentação modifica a classe e `unittest.TestCase.run` permanentemente naquele processo; não existe desinstalação no código: `app/escala/services/ata_ci.py:37`, `:47`, `:72`. Uso real de troca ci→prod/sombra no mesmo processo: [nao verificado].
-
-5. **Settings de cada tipo de prova.**
-   - Selos Django lançados por `bin/suite.sh`: ci, `bin/suite.sh:233`.
-   - Testes puros por `python -m unittest`: não inicializam settings no seu carregador AST, `app/escala/tests/test_tipo_na_fonte_orfas_fluxo.py:20`, `:29`.
-   - Prova automática local de `ready`: usa `django.conf` falso com a flag escolhida pelo teste, `app/escala/tests/test_ata_ci.py:52`, `:55`.
-   - Prova de registry real: usa os settings já ativos, exige a flag e pode pular se registry/Django faltar, `app/escala/tests/test_ata_ci.py:129`, `:132`, `:135`.
-   - Prova do runner em teardown: usa pai simulado, `app/escala/tests/test_ata_ci.py:109`, `:119`; execução real paralela: [nao verificado].
-
-6. **Resíduos de indicadores.** A busca do archive encontrou `nao_medidos` apenas em três asserts negativos: `app/escala/tests/test_tipo_item3_expand_contadores.py:37`, `:39`, `:146`. `cego_orfas`: nenhuma ocorrência na busca textual do archive [nao verificado — ausência global não possui linha positiva citável]. Nenhuma saída de produção desses indicadores foi encontrada [nao verificado].
-
-_4441 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4442 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
