@@ -1,7 +1,22 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 21:56** · publicado em **12/11/2026 22:00** (UTC-3)
+> Ultima resposta processada: **12/11/2026 22:11** · publicado em **12/11/2026 22:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 22:11 · sessao 90d5d98a60c5 · TIPO-NA-FONTE · construtor · origem=Code
+
+Cura escrita, mas a **igualdade universal para ISO permanece pendente**: com duas órfãs ISO, o cluster da base lança `ValueError`; a cópia mede assinatura. [Contraexemplo executado](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_red.txt:41>).
+
+A entrega está documentada com:
+
+- [Os oito leitores: ramo NAO_LAVRADA, legado, valores e linhas da base](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_relato.txt:13>).
+- [Arquivo::função alterados, contador, fixtures e selos](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_relato.txt:42>).
+- [Cada mutante, teste que o pega e comando](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_relato.txt:85>). [nao verificado]
+- [O que não foi feito e por quê](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_relato.txt:129>).
+
+Dirigidos locais: **88 testes, um skip de ORM, rc=0**. [Resultado e comando](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_dirigidos.txt:1>). Os dois REDs reprovaram com o acessor anterior reinstalado em memória. [Registro](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_red.txt:5>). [nao verificado]
+
+Suite canônica e DIFF de frota não executados; sem certificação de pouso. [Limites](</home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_item3_volta4_relato.txt:129>). [nao verificado]
 
 ## 12/11 21:56 · sessao 37e2d0869710 · - · - · origem=Ronald (tmux)
 
@@ -914,43 +929,4 @@ Testes que consomem diretamente as portas, incluindo os existentes alterados: [n
 - `horas_orfas`: exercitado indiretamente pelo plantio em `app/chamados/tests/test_tipo_na_fonte_plantio_expand.py:74`, `:79`, `:85`.
 - `copiar_envelope`: teste direto específico: [nao verificado]; o teste de cópia atual passa por `copiar_ata` em `app/escala/tests/test_selo_tipo_na_fonte_orfas.py:131`, que delega em `app/escala/services/ata.py:102`.
 
-## 12/11 20:39 · sessao 962f0e17ae3b · - · - · origem=Ronald (tmux)
-
-Achado bloqueante: **ata ainda não lavrada passa a ser corrupção**, em caminhos sem filtro de lavra. `None` falha em `app/escala/services/ata.py:43`; `{}` e só `precedencia` falham em `app/escala/services/ata.py:47`. O transporte de precedência aceita explicitamente esses envelopes, portanto a própria fronteira reconhece sua legitimidade antes da lavra (`app/escala/services/ata.py:81`, `app/ponto/portas/celula.py:1086`).
-
-Matriz dos chamadores de produção:
-
-| Porta e chamador | Entrada possível e resultado |
-|---|---|
-| `leitura_orfas` ← `ler_orfas` | Chamada sem guarda; valida mapping e ambas as chaves (`app/escala/services/ata.py:74`, `app/escala/services/ata.py:40`). |
-| `leitura_orfas` ← `contar_orfas` | Mesmo contrato; HH:MM coerente conserva quantidade (`app/escala/services/ata.py:78`, `app/escala/services/ata.py:57`). |
-| `leitura_orfas` ← `copiar_ata` | Valida antes de transportar; `None/{}/precedencia` falham (`app/escala/services/ata.py:101`). |
-| `leitura_orfas` ← `horas_orfas` | Legado preserva HH:MM; ISO converte ao fuso local; inválido levanta (`app/escala/services/ata.py:129`). |
-| `ler_orfas` ← `orfas_da_ata` | `getattr(..., None)` permite chegar `None`; não há guarda de lavra (`app/escala/services/leitor_celula.py:186`). |
-| `contar_orfas` ← `contagem_orfas_da_ata` | Idem (`app/escala/services/leitor_celula.py:192`). |
-| `copiar_ata` ← `_ata_ate_o_teto` | Só chama com mapping e pendências; `{}`/precedência seriam rejeitados. Chamadas ordinárias fornecem `ata_do_dia` recém construída (`app/ponto/services/cartorio.py:918`, `app/ponto/services/cartorio.py:927`, `app/ponto/services/cartorio.py:1444`, `app/ponto/services/cartorio.py:1859`). |
-| `contar_orfas` ← `insumos_da_ata` | Valida incondicionalmente, mesmo quando lâmpadas seriam suficientes (`app/ponto/services/cartorio.py:841`). Cartório usa atas novas (`app/ponto/services/cartorio.py:1321`, `app/ponto/services/cartorio.py:1880`); backfill e vigia usam persistidas, filtrando `julgada_em` (`app/ponto/management/commands/backfill_b5_insumos.py:61`, `app/ponto/management/commands/backfill_b5_insumos.py:73`, `app/ponto/management/commands/vigia_b5_ausencia.py:55`, `app/ponto/management/commands/vigia_b5_ausencia.py:79`). |
-| `contagem_orfas_da_ata` ← `_celula_furada` | `None/{}/precedência` retornam `None` antes do acessor por ausência de `lampadas`; chave faltante numa ata com lâmpadas chega ao acessor salvo apagada anterior; exceção é engolida, retornando `None` (`app/chamados/juizes.py:493`, `app/chamados/juizes.py:505`, `app/chamados/juizes.py:508`, `app/chamados/juizes.py:511`, `app/chamados/juizes.py:521`). |
-| `orfas_da_ata` e contagem ← `grade_da_celula` | Célula inexistente não chama; célula existente, inclusive sem lavra, chama ambos sem guarda. `None/{}/precedência` levantam (`app/escala/services/leitor_celula.py:380`, `app/escala/services/leitor_celula.py:396`, `app/escala/services/leitor_celula.py:422`). |
-| `orfas_da_ata` ← `periodos_do_dia` | Chamada incondicional antes das verificações do DNA/lâmpadas; `None/{}/precedência` levantam (`app/ponto/juiz_batida.py:158`, `app/ponto/juiz_batida.py:163`, `app/ponto/juiz_batida.py:176`). |
-| `orfas_da_ata` ← cluster | Só dia sem trabalho retorna antes; célula de trabalho não lavrada levanta, em vez de devolver não medido (`app/ponto/services/cluster_espurio.py:25`, `app/ponto/services/cluster_espurio.py:30`). |
-| `orfas_da_ata` ← esmeril | Consulta todas as células do período; não filtra lavra. Só `so_escala=True` evita essa leitura (`app/ponto/services/esmeril_espelho.py:96`, `app/ponto/services/esmeril_espelho.py:102`, `app/ponto/services/esmeril_espelho.py:126`). |
-| `orfas_da_ata` ← vigia pareador | Consulta todas as atas da janela ampliada; transforma `None` em `{}` e chama; não filtra lavra (`app/ponto/services/vigia_pareador_celula.py:71`, `app/ponto/services/vigia_pareador_celula.py:75`, `app/ponto/services/vigia_pareador_celula.py:76`). |
-| `orfas_da_ata` ← tripwire | Consulta células `trabalha=True`; apenas menos de dois marcos evita leitura. Ata não lavrada com dois marcos levanta (`app/ponto/management/commands/tripwire_celulas.py:228`, `app/ponto/management/commands/tripwire_celulas.py:233`, `app/ponto/management/commands/tripwire_celulas.py:235`). |
-| `horas_orfas` ← plantio | `None/{}/precedência` sem lâmpadas não chega; com lâmpadas e chaves ausentes levanta e `except Exception` devolve `False` (`app/chamados/services/materializacao.py:172`, `app/chamados/services/materializacao.py:175`, `app/chamados/services/materializacao.py:182`, `app/chamados/services/materializacao.py:186`). |
-
-Propagação e mudanças silenciosas relevantes:
-
-- `periodos_do_dia` chega de `turnos`: exceção engolida exclui célula da alimentação de papéis (`app/ponto/turnos.py:1633`, `app/ponto/turnos.py:1634`); chega do motor: exceção registrada e dia ignorado (`app/ponto/motor_calculo_v2.py:616`, `app/ponto/motor_calculo_v2.py:617`); chega do censo de cadastro sem filtro de lavra e sem captura local (`app/escala/services/cadastro_realidade.py:261`, `app/escala/services/cadastro_realidade.py:266`); chega de retenção pela pausa sem captura local (`app/folha/export.py:1150`).
-- Uma célula não lavrada dentro de uma janela faz `grade_da_celula` levantar; o espelho captura e **zera a grade do período**, sem cair no builder nesse ramo (`app/ponto/services/espelho.py:519`, `app/ponto/services/espelho.py:569`); o calendário captura e perde o mapa das órfãs (`app/colaboradores/services/calendario.py:334`, `app/colaboradores/services/calendario.py:399`).
-- Calculadores de inteligência capturam a falha da grade e excluem o colaborador da métrica (`app/inteligencia/calculadores.py:42`, `app/inteligencia/calculadores.py:43`, `app/inteligencia/calculadores.py:143`, `app/inteligencia/calculadores.py:144`); materialização captura e devolve régua vazia (`app/chamados/services/materializacao.py:235`, `app/chamados/services/materializacao.py:237`).
-
-Para HH:MM válido, as contagens permanecem conhecidas, mas os leitores temporais mudam resultados:
-
-- Toda lista HH:MM não vazia vira `instantes=None` (`app/escala/services/ata.py:57`). Cluster devolve não medido, sem detectar rajada legada (`app/ponto/services/cluster_espurio.py:31`); esmeril deixa de preencher A5 (`app/ponto/services/esmeril_espelho.py:126`); tripwire exclui a célula do universo medido (`app/ponto/management/commands/tripwire_celulas.py:236`); vigia não a inclui em `celulas_com_orfa` nem em `com_orfa` (`app/ponto/services/vigia_pareador_celula.py:77`, `app/ponto/services/vigia_pareador_celula.py:79`, `app/ponto/services/vigia_pareador_celula.py:82`).
-- O propositor não avalia o legado projetado (`app/ponto/propositor.py:36`); classificador devolve `None` (`app/escala/orfa_classe.py:54`); horas da ausência parcial passam a incluir desconhecido (`app/ponto/turnos.py:2667`); PDF marca batidas `orfa=None` e não soma turnos abertos cuja classificação é desconhecida (`app/relatorios/pdf_espelho.py:183`, `app/relatorios/pdf_espelho.py:214`).
-- Essas mudanças temporais podem decorrer intencionalmente do contrato EXPAND; a perda de quantidade foi evitada nas portas escalares (`app/escala/services/ata.py:105`, `app/ponto/status_dia.py:189`, `app/ponto/services/cartorio.py:820`). O problema bloqueante distinto é aplicar corrupção às células legitimamente não lavradas (`app/escala/services/leitor_celula.py:422`, `app/escala/services/ata.py:43`).
-
-Reprodução local, sem arquivos nem banco: executei accessor, tripwire com doubles existentes e grade completa com carregador de previsto isolado; as três entradas `None`, `{}`, só precedência levantaram `EstadoIlegalDaAta`; HH:MM coerente retornou `None` temporal, e tripwire `( [], 0 )`. As funções reais correspondentes estão em `app/escala/services/ata.py:40`, `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:39`, `app/escala/tests/test_tipo_na_fonte_orfas_v2.py:81`. Registro persistido dessa execução: [nao verificado].
-
-_4442 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4443 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
