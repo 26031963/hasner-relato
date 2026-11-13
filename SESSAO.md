@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 19:35:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (599.4 MB). Acoes na janela: **2476**.
+**Medido em 13/11/2026 19:40:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (599.5 MB). Acoes na janela: **2482**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:36:26 | Bash |  | `ps -p 3001848 >/dev/null && echo vivo; tail -2 /home/ronald/saas-hasner/logs/O168/v9/push2.log \| cut -c1-150` |
+| 19:36:22 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; s=open(p).read() i=s.index('\| E4B-FILA-OPUS-C14 \|'); j=s.index('\n',i) l=('\| E4B-SCA-25-COBRANCA-INDEVIDA \| COMPLEMENTO da obra do fio E4b (aval E3-PORTA-SEM-CASO=(ii) item 3, logs/AVAIS-1313/e3_porta_sem_caso.txt): SC-A = 25 colab-dia com lampada ACESA e chamado vivo na fila = classe cobranca_indevida (o encerrador nao en ...` |
+| 19:36:14 | Bash |  | `cat /home/ronald/saas-hasner/logs/AVAIS-1313/e3_porta_sem_caso.txt; cd /home/ronald/saas-hasner/app/docs; /bin/grep -n -E '^\\| ?E4[bB]' BACKLOG.md \| cut -c1-120` |
+| 19:36:11 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; /bin/grep -n -E '^\\| E4b' BACKLOG.md \| cut -c1-160; /bin/grep -n 'SC-A' BACKLOG.md \| cut -c1-160 \| head -5; /bin/grep -rn 'SC-A' /home/ronald/saas-hasner/logs/AVAIS-1313/e3_porta_sem_caso.txt \| cut -c1-300` |
+| 19:36:07 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() anc='ESPERANDO: push.sh \| pid=3001848\n'; assert s.count(anc)==1 l=('PONTO 19:4x E3 PORTA-SEM-CASO construtor entregou na copia wt-e3-b6-114947 @e01da1d51 (cdf9ae7ee cura + e01da1d51 fio na fonte = chamados/juizes.py::fio_pelos_verbos): RED 91bed1694 Ran 12 FAILED 3; GREEN green3.log Ran 7036 OK rc 0; F5B = (i ...` |
+| 19:36:00 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL/preverif_v4; cat > preverif.q <<'EOF' PAPEL: verificador (pre-verificacao, volta 4) da obra E3-FORMA-SQL, item E3-PORTA-SEM-CASO. Copia @ e01da1d51 (delta sobre 91bed1694, que a volta 3 ja leu). Anexos: aval.txt (aval E3-PORTA-SEM-CASO=(ii)), leis_sitios.txt (grep LEIS/CORTES/DOSSIES dos sitios), juizes.md, delta.txt (91bed1694..e01da1d51, ULTIMO). Per ...` |
 | 19:35:44 | Bash |  | `cd /home/ronald/saas-hasner; P=logs/E3-FORMA-SQL/preverif_v4; mkdir -p $P; cp logs/AVAIS-1313/e3_porta_sem_caso.txt $P/aval.txt; cp app/docs/JUIZES.md $P/juizes.md; git diff 91bed1694 e01da1d51 > $P/delta.txt; git diff --stat 91bed1694 e01da1d51 \| tail -1; for f in tarefa_do_dia fora_da_folha vigia_fio fio_pelos_verbos _portas_da_tarefa; do /bin/grep -n "$f" app/docs/LEIS.md app/docs/CORTES.md ap ...` |
 | 19:35:38 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/E3-FORMA-SQL/preverif_v3/; head -c 1500 logs/E3-FORMA-SQL/preverif_v3/*.q 2>/dev/null; ls logs/E3-FORMA-SQL/preverif_v3/*.sh 2>/dev/null && cat logs/E3-FORMA-SQL/preverif_v3/*.sh \| head -20` |
 | 19:35:33 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/E3-FORMA-SQL/ \| head -30; git -C /home/ronald/wt-e3-b6-114947 log --oneline -4 \| cut -c1-90; git merge-base main e01da1d51` |

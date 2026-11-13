@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 18:45** · publicado em **13/11/2026 18:47** (UTC-3)
+> Ultima resposta processada: **13/11/2026 19:38** · publicado em **13/11/2026 19:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 19:38 · sessao c56b8a116909 · - · - · origem=Ronald (tmux)
+
+1. **Aval (ii): parcial, bloqueante nas exceções.** O delta publica porta residual apenas sem razão de dia e com todas as ações tendo `porta is None`; razão de dia e ação do sistema com porta textual continuam suprimindo a porta do vivo da fila. `ata_sem_lampadas` escreve razão de dia. (app/chamados/services/tarefa_do_dia.py:217,562-567; portas do sistema:149-151,301-305)
+
+2. **Não cria ação nem encerra chamado.** O novo ramo só monta conjuntos/mapas e atualiza `out`; ações vêm de `_acao` e do julgamento anterior. Encerramento persistente continua em `ChamadoColaborador.encerrar → _gravar_estado`. (app/chamados/services/tarefa_do_dia.py:115-116,535-578; app/chamados/models.py:1606-1620,201-228)
+
+3. **Classe nova além da antiga porta de pergunta:** pergunta exposta pela tarefa, sem ação com porta, cuja âncora está na fila, mesmo sem cumprir C6/app. C17 exigia pergunta viva, não respondida sem texto e presença no app; o fallback novo exige apenas exposição do `pergunta_id` e âncora na fila. (app/chamados/juizes.py:1599-1604,1679-1682; app/chamados/services/tarefa_do_dia.py:565-567)
+
+   Um recorte concreto definido pelo código é pergunta validada, com lavra `sim`, sem efeito, razão `encerrada_pelo_juiz`, ações vazias: a tarefa conserva `pergunta_id`, mas C6 rejeita pergunta validada. Se a âncora está em outra célula, o fallback dá porta de pergunta que C17 não dava. A existência dessa classe em produção é **[não verificado]**. (app/chamados/services/tarefa_do_dia.py:144-152,307-314,565-577; app/chamados/juizes.py:1389-1392)
+
+4. **`fio_pelos_verbos` não é novo juiz isoladamente:** é a função existente de C17, agora reutilizada; o registro vivo declara migração dos leitores C17 para C19. Entretanto, `fio` passa a ter dois critérios na própria tarefa: dono da ação no caminho principal; escada do verbo no fallback. O contrato do módulo ainda diz que `fio` resume os donos das ações e nem enumera `chamado`. (app/chamados/juizes.py:1633-1639; app/core/juizes.py:132-138,153-159; app/chamados/services/tarefa_do_dia.py:38-40,571-578)
+
+5. **Mapa dos valores:**
+
+| Valor | Escritor/fonte | Leitores relevantes |
+|---|---|---|
+| `portas` | Set local: ações inteiras ∩ `fila_ids`; fallback união célula/âncoras ∩ `fila_ids`. | `verbos`, `da_celula`, `rota`; não é campo persistente. (app/chamados/services/tarefa_do_dia.py:561-577) |
+| Ação `porta` | `_acao`; âncora inteira/None em `_pela_decisao`; portas de sistema são strings. | `_portas_da_tarefa` diferencia inteiro, None e string. (app/chamados/services/tarefa_do_dia.py:115-116,128-163,301-305,561-562) |
+| `fila_ids` | `alimentar_fila`: IDs de `qs_na_fila` que também possuem verbo; exclui ausência de verbo por corrida. | Tarefa, C17, vigia e instrumento de diff. (app/chamados/juizes.py:1559-1567,1681; app/chamados/services/tarefa_do_dia.py:561,567; app/chamados/services/vigia_fio.py:609; app/chamados/management/commands/diff_e3_sombra.py:66) |
+| `chamado_que_lista` | Função que devolve destino, senão pai; não grava estado. | Carga, `_pela_decisao`, mapa novo de âncoras e C17. (app/chamados/services/fio.py:97-117; app/chamados/services/tarefa_do_dia.py:128-130,416-419,535-536; app/chamados/juizes.py:1680) |
+| `fio` | Tarefa ou C17; fallback usa helper existente. | Projeção de porta publica o valor, sem recalcular. (app/chamados/services/tarefa_do_dia.py:572-589; app/chamados/juizes.py:1688) |
+| `nao_sei` | Corpo puro inicializa e marca desconhecimento. | `_portas_da_tarefa` lê para fio sem fallback; `porta_da_tarefa` elimina o rótulo da projeção. (app/chamados/services/tarefa_do_dia.py:185-186,208,217,253,275,279,299,312,573,589) |
+
+6. **Classes reprovadoras:** há campo com dois critérios e documentação divergente; há omissão residual de vivo nas classes explicitamente bloqueadas pelo fallback. O delta não introduz escritor persistente nem relógio novo; comprovação de merge, ordem operacional, suite inteira e opus final é **[não verificado]**. (app/chamados/services/tarefa_do_dia.py:38-40,530-578,601-607)
+
+## 13/11 19:38 · sessao 8252db73f2fc · - · - · origem=Ronald (tmux)
+
+1. **Q4 — BLOQUEIA pela regra literal do aval.** A condição `all(a['porta'] is None...)` exclui ação de sistema com `porta='emissor'`, mesmo havendo chamado vivo na fila; `not out['razao']` exclui qualquer razão de dia, inclusive `ata_sem_lampadas`. São exclusões expressas, sem encerramento do chamado: `app/chamados/services/tarefa_do_dia.py:561-567`, `:217`.
+
+   Os testes afirmam a exclusão sistema+fila em `app/chamados/tests/test_e3_portas_tarefa.py:36-42` e isento+fila em `:61-69`. Os leitores preservam essa exclusão: folha sem fio/grupo D em `app/chamados/tests/test_e3_leitores_c17_chamadores.py:124-140`; vigia `sem_porta` em `:170-175`. Os testes localizados de `ata_sem_lampadas` afirmam razão/`nao_sei`, mas não chamado na fila nem ausência de porta: `app/chamados/tests/test_e2_tarefa_do_dia.py:391-394`, `:840-847`.
+
+2. **Q7 — APROVA a mordida conjunta dos mutantes indicados, com limites.**
+
+   | Teste novo | Voltar ao anterior | Fixar fio do fallback em `admin` | [nao verificado]
+   |---|---|---|
+   | Marco aceso | Morde: exige rota/fila/verbos | Morde: sem pergunta → `decidir` → `chamado` |
+   | Passivo da célula | Morde: exige rota/fila/verbos | Sobrevive: resposta com texto → `validar` → `admin` |
+   | Passivo com âncora externa | Morde: exige `porta_pergunta` | Sobrevive: não compara `fio` |
+
+   As asserções ficam em `app/chamados/tests/test_e3_portas_tarefa.py:146-148`, `:162-166`, `:179-181`. O primeiro não cria pergunta (`:138-140`); os passivos escrevem projeção respondida via `app/chamados/tests/e3_fixtures.py:75-76`. O crédito transforma resposta com texto em `validar`: `app/chamados/services/raiox.py:139-155`, `app/chamados/catalogo/natureza.py:48-49`, `:59`; a escada resulta `admin`/`chamado` em `app/chamados/juizes.py:1628-1639`.
+
+3. **Helper F5B não perdeu a mordida contra universo errado ou `admin` falso.** Conserva comparação com verbo do painel, literal `{c.pk: 'decidir'}` e literal fio C17 `'chamado'`; passa a exigir igualdade completa entre porta da tarefa e C17, além de literal fio da folha `'chamado'`. Reversão anterior falha na igualdade de porta; fallback `admin` falha no fio. Fontes: `app/chamados/tests/test_o261e_f5b_juiz_porta.py:232-247`; os dois casos acionadores são destino silenciado e registrado em `:249-255`. A expectativa antiga `None`/`nada` foi substituída conforme o delta fornecido; isso abandona a exclusão anterior, não a proteção contra crédito errado. [anterior: dado fornecido, sem arquivo HEAD]
+
+4. **Limite da verificação:** executei somente o corpo extraído por AST em memória, sem importar projeto/ORM ou escrever arquivos; não executei os testes Django. A simulação confirmou a matriz e as exclusões do corpo em `app/chamados/services/tarefa_do_dia.py:560-578`. Execução RED/GREEN dos testes reais e suite inteira: **[não verificado]**.
+
+## 13/11 19:37 · sessao 25e4214905f7 · - · - · origem=Ronald (tmux)
+
+1. **Q3 — APROVA quanto a não duplicar a escada.** O delta chama a função existente `fio_pelos_verbos`, também usada pelo C17; não copia sua tradução `cobrar→colab`, `validar→admin`, demais→chamado. A migração dos leitores para C19 já consta no registro. (`app/chamados/services/tarefa_do_dia.py:574-576`; `app/chamados/juizes.py:1628-1639,1688`; `app/core/juizes.py:132-159,293-295`; `app/docs/JUIZES.md:78-87`.)
+
+2. **Q3 — ressalva semântica material:** `fio` continua resumindo donos de ações no caminho normal, mas passa a resumir verbos do painel no fallback. Esses critérios podem discordar: o teste existente fixa ação `responder` com verbo `validar`; o caminho normal produz `colab`, enquanto a escada daquele verbo produz `admin`. A diferença fica sem indicador de origem na projeção. (`app/chamados/services/tarefa_do_dia.py:571-589`; `app/chamados/tests/test_e3_portas_tarefa.py:79-86`; `app/chamados/juizes.py:1628-1639`.)
+
+3. **Todos usam a mesma projeção, mas não todos leem `fio`:**
+
+   - Folha devolve literalmente `porta['fio']`; o agrupamento aplica `nada→D`, `chamado→C`, `colab→B`, restante→A. (`app/folha/fora_da_folha.py:71-103`.)
+   - Vigia lê `rota` e `fio`, e define `alcance_porta_exige_o_admin` por `fio == 'admin'`. (`app/chamados/services/vigia_fio.py:640-654`.)
+   - Pauta lê o fio pela folha e seleciona somente `FIO_SEM_PORTA`. (`app/ponto/services/pautas_dos_discordantes.py:62-84`.)
+   - Furo lê existência e rota da porta; beco lê somente existência. (`app/chamados/services/furo_sem_canal.py:94-101`; `app/escala/services/cadastro_realidade.py:492-499`.)
+   - `diff_e3_sombra.candidata` é alias direto de `porta_da_tarefa`. (`app/chamados/management/commands/diff_e3_sombra.py:41-59`.)
+
+4. **Não confundir autoridades com nomes parecidos.** A entrada “FIO / DISPUTA” aponta para um lookup de disputa aberta, não para a classificação `admin/colab/chamado`. `fio_vivo` responde outra pergunta: booleano `any(pergunta_viva(...))`. (`app/docs/JUIZES.md:40`; `app/chamados/services/fio.py:120-137`; `app/chamados/juizes.py:1494-1503`; `app/core/juizes.py:291`.)
+
+5. **Q5 — BLOQUEIA a demonstração de visibilidade do rótulo.** `porta_da_tarefa` omite `nao_sei`. Existe leitor de porta que também lê esse campo: `furo_sem_canal`; contudo, ele só o conta quando **não existe porta**. Portanto, o novo passivo com porta não publica nem contabiliza seu rótulo por esse leitor. Os testes novos verificam o booleano na tarefa, não sua exposição a jusante. (`app/chamados/services/tarefa_do_dia.py:589`; `app/chamados/services/furo_sem_canal.py:94-113`; `app/chamados/tests/test_e3_portas_tarefa.py:162-166,179-181`.)
+
+6. O aval fornecido exige casos “visíveis com o rótulo nao_sei”; não especifica qual leitor ou formato deve recebê-lo. A conformidade apenas pela preservação interna não fica demonstrada. [não verificado: anexo `aval.txt` fornecido no prompt, sem arquivo local numerado.]
 
 ## 13/11 18:45 · sessao 963ccf45aa88 · HJ-090 · construtor · origem=Code
 
@@ -740,317 +805,4 @@ Mapa dos campos de datas:
 - **Leitores de apresentação/ordenação:** API (`app/api/views_mensageria.py:837`), CSV (`app/relatorios/views.py:365`), seção do colaborador (`app/templates/ferias/_secao_colab.html:41`), lista DP (`app/ferias/management/commands/listar_ferias_dp.py:66`; `app/ferias/management/commands/listar_ferias_dp.py:101`).
 - **Admin/migration/command:** admin registra somente `Afastamento` (`app/ferias/admin.py:2`); migration inicial declara os campos, sem derivação (`app/ferias/migrations/0001_initial.py:40`); cron de vencimento lê limite e delega sincronização (`app/ferias/management/commands/alertar_ferias_vencendo.py:26`). `FeriasConfig` não registra signals (`app/ferias/apps.py:3`). Não encontrei outra derivação produtiva das datas na busca integral; execução dinâmica fora dos arquivos examinados: [nao verificado].
 
-## 13/11 18:29 · sessao 81ac17b751e1 · - · - · origem=Ronald (tmux)
-
-Resultado da fatia vigia/listas, somente leitura:
-
-- **OK — merge do carimbo.** `ferias_soma_maior`, `ferias_concedidos_maior` e `desligados_retidos` aparecem em `ESPERADO_DO_CARIMBO` com zero e no `censo` com as mesmas grafias. O contador de férias é chamado diretamente, sem outra regra de saldo. `app/chamados/management/commands/vigiar_fio_morto.py:100`, `:234`, `:250`, `:252`.
-
-- **OK — leitor ESTADO.** O leitor compara genericamente todas as entradas de `esperado` com `censo`; assim lê também as três chaves do merge e publica suas divergências. A integração do ESTADO chama esse leitor. `bin/fio_estado.py:121`, `:125`, `:191`; `bin/gerar_estado.py:260`.
-
-- **NAO-BLOQUEIA — placar não alarma por essas três chaves.** `pipeline_placar` chama seu leitor somente para `fio_mudo_alvos` e `nunca_bateu_sem_adesao`; o próprio vigia também não inclui férias/desligados em seus conjuntos de alarme. Portanto coerência do carimbo não significa alarme dessas chaves no placar. `app/core/management/commands/pipeline_placar.py:135`; `app/chamados/management/commands/vigiar_fio_morto.py:84`. Leitor dessas chaves em hook externo: **[nao verificado]**; nenhum encontrado nos hooks da cópia.
-
-- **OK — escritores/leitores das chaves férias.** A autoridade produz listas de PAs em `services.py`, o vigia grava seus comprimentos; tripwire e lista DP consultam a mesma autoridade. `app/ferias/services.py:116`, `:123`; `app/chamados/management/commands/vigiar_fio_morto.py:234`; `app/ferias/management/commands/tripwire_status_ferias.py:37`; `app/ferias/management/commands/listar_ferias_dp.py:55`.
-
-- **NAO-BLOQUEIA — significado de `desligados_retidos`.** Origem conta somente colaboradores retidos por `furo_espelho` e julgados desligados; agregação soma ocorrências colaborador×competência, não pessoas únicas da frota. Há fila explícita para a amplitude do rótulo. `app/folha/fora_da_folha.py:122`, `:128`, `:143`; `app/chamados/services/vigia_fio.py:583`, `:587`; `app/docs/BACKLOG.md:736`. O merge conserva a mesma conta em censo e esperado. `app/chamados/management/commands/vigiar_fio_morto.py:102`, `:252`.
-
-- **OK — teste do carimbo tem mordida estática observável.** Cria sentidos não vazios com comprimentos diferentes, exige uma consulta à autoridade e verifica valores e esperados: retiradas, zeros fixos ou inversão dos sentidos seriam detectados. O teste completo do vigia exige também `desligados_retidos` na igualdade dos dois blocos. `app/ferias/test_hj090_volta3.py:206`, `:214`, `:221`, `:224`; `app/chamados/tests/test_o261_vigia_fio.py:819`, `:833`. Execução/RED real **[nao verificado]**.
-
-- **OK — tripwire diferencia alarme e DP.** Ambos os sentidos retiram a mensagem OK; somente divergência de status ou soma maior provoca saída 2. O caso concedidos maior é publicado como LISTA-DP. `app/ferias/management/commands/tripwire_status_ferias.py:41`, `:52`, `:56`; testes em `app/ferias/test_hj090_um_juiz.py:461`, `:470`.
-
-- **NAO-BLOQUEIA — duas leituras de relógio na lista nova.** `listar_ferias_com_batida` obtém `hoje` e `agora` separadamente. Na passagem da meia-noite pode entregar o dia anterior com um instante do dia seguinte a `InsumosDoDono`; ambos afetam classificação e ordenação da lista. É inconsistência da borda, não leitura fora dela. `app/ferias/management/commands/listar_ferias_com_batida.py:36`, `:52`, `:61`. Não existe teste da virada nessa lista; o teste apresentado cobre uma ausência sem agendamento. `app/ferias/test_hj090_um_juiz.py:478`.
-
-- **OK com limite — comandos de listas.** Caminho normal da lista DP consulta e imprime; `--simular` escreve deliberadamente na sombra dentro de transação revertida por `_Volta`, com erros impressos. Não demonstrado commit persistente sem `--apply`. `app/ferias/management/commands/listar_ferias_dp.py:52`, `:55`, `:98`, `:109`, `:112`. Efeitos externos ao banco durante signals dessa simulação: **[nao verificado]**.
-
-- **OK — universo da lista com batida declarado.** Ausência de férias sem filtro de status × batida apurável do dia civil; a informação do dia do turno serve para marcar plantão da véspera. Isso não é a pergunta de retenção do TXT. `app/ferias/management/commands/listar_ferias_com_batida.py:4`, `:40`, `:44`, `:46`, `:53`.
-
-- **OK — descarte da trava de competência fechada na materialização corresponde ao contrato local.** O próprio materializador declara que período fechado não recusa esse caminho e materializa por `criar_ausencia`. `app/ponto/services/ausencia.py:1169`, `:1203`. Não afirmo situação de produção **[nao verificado]**.
-
-Limite do exame: não há repositório `.git` na cópia; confirmação histórica de “preexistente/fora do diff”, hook instalado, execução e dados reais **[nao verificado]**.
-
-## 13/11 18:25 · sessao 6adac308e008 · RAIA-PREPARACAO · censo · origem=Code
-
-**LEU** = sítio aberto na cópia fornecida; **INFERIU** = interpretação ou proposta apoiada nos sítios citados. A identidade Git do HEAD, o histórico dos commits e a aplicação das refs são **[nao verificado]**: esta cópia não disponibiliza repositório Git. [nao verificado]
-
-Os cruzamentos e os indicadores `main_moveu` abaixo vêm dos anexos fornecidos; confirmação independente desses metadados: **[nao verificado]**. Os estados do BACKLOG são tratados como registros, sem substituir a leitura do código.
-
-## COBPARC-FILA-RELOGIO
-
-1. **O que cura — LEU.** Fora do julgamento, `agora_deste_julgamento()` pode devolver `None`; recebendo teto ausente, `houve_fato_novo` consulta novamente o relógio. Assim, chamadas do mesmo lote podem avaliar instantes diferentes. Sítios: `app/ponto/services/cartorio.py:82`, `app/ponto/services/cartorio.py:373`.
-
-2. **Existe no HEAD? SIM — LEU.** O c2 ainda passa o instante potencialmente ausente; o cluster faz o mesmo, e a retenção chega ao predicado sem instante fornecido pela borda. A guarda de reabertura também consulta fato novo sem teto explícito. Fontes: `app/chamados/reconciliador.py:877`, `app/chamados/reconciliador.py:884`, `app/ponto/services/cluster_espurio.py:164`, `app/ponto/services/cartorio.py:428`, `app/chamados/services/pergunta_no_app.py:144`, `app/chamados/services/disputa_emissao.py:940`, `app/chamados/models.py:1347`.
-
-3. **Falta / reaplicação.** O BACKLOG registra mutantes_v4, suíte, opus e resposta do padrão pendentes; o censo da raia registrado ali não prova o HEAD. Fonte: `app/docs/BACKLOG.md:860`.
-
-   **INFERIU:** exige adaptação ao caminho atual. O comando `reconciliar_chamados` agora é vigia; a retratação foi extraída para `retratar_premissa_morta_colab`, alcançada pelo consumidor. Reaplicar o antigo laço escritor do cron recuperaria um desenho ultrapassado. Fontes: `app/chamados/management/commands/reconciliar_chamados.py:1`, `app/chamados/management/commands/reconciliar_chamados.py:75`, `app/chamados/reconciliador.py:1446`, `app/chamados/reconciliador.py:1457`.
-
-   O anexo marca `main_moveu=True` nestes arquivos — **[nao verificado]** por Git:
-
-   - `app/chamados/management/commands/{disparar_perguntas_competencia,reabrir_orfas_enterradas,reconciliar_chamados,smoke_chamados}.py`;
-   - `app/chamados/{models,reconciliador}.py`;
-   - `app/chamados/services/{adesao,becos,competencia_trancada,disputa_emissao,fabrica_da_celula,pergunta_no_app}.py`;
-   - `app/chamados/tests/test_selo_universo_reconciliador.py`;
-   - `app/ponto/management/commands/{detectar_ausencias,detectar_cluster_espurio,processar_alertas_avancados,processar_alertas_turno,reconciliar_fantasmas,supra_juiz}.py`;
-   - `app/ponto/services/{cartorio,cluster_espurio,geofence,justificativa}.py`;
-   - `app/ponto/tests/test_o_outbox_celula.py` e `app/ponto/views.py`.
-
-   Aplicação limpa e conflitos textuais: **[nao verificado]**.
-
-4. **Arquivos em comum.** Comparação dos anexos: `app/chamados/models.py` com **BUG-PAR/O168/E3**; `app/chamados/services/disputa_emissao.py` com **BUG-PAR/E3**; nenhum com HJ-090. Confirmação fora dos anexos: **[nao verificado]**.
-
-5. **Depende de.** Resposta do padrão e estacionamento por aval continuam registrados; a própria linha distingue estacionamento de trava L1/contrato 20. Não registra `!` do motor como bloqueio desta obra. Fonte: `app/docs/BACKLOG.md:860`.
-
-6. **PROPOSTA — INFERIU: CONCLUIR**, após estabilizar as sobreposições com BUG-PAR/O168/E3 e resolver o estacionamento registrado, mantendo a prioridade inferior às obras bloqueantes L1/contrato 20. O defeito persiste, mas a retomada deve seguir os caminhos por evento do HEAD. Fontes: `app/docs/BACKLOG.md:860`, `app/ponto/services/cartorio.py:373`, `app/chamados/reconciliador.py:1446`.
-
-## V3-RETOMA-PERIODOS-DA-CELULA
-
-1. **O que cura — LEU.** A alimentação entrega segmentos como períodos e passa pausa agregada do núcleo; a intra perde a unidade de cada período. Além disso, a CCT é resolvida em `ini`, e o split noturno usa as extras do motor da fatia. Fontes: `app/ponto/calculador/alimentacao.py:158`, `app/ponto/calculador/alimentacao.py:515`, `app/ponto/calculador/regras.py:764`, `app/ponto/calculador/alimentacao.py:390`, `app/ponto/calculador/regras.py:827`.
-
-2. **Existe no HEAD? PARCIAL — LEU.**
-
-   - **Permanece:** segmentos em `pares_por_dia`, intra diária, CCT em `ini` e split pelos minutos do motor. Fontes: `app/ponto/calculador/alimentacao.py:158`, `app/ponto/calculador/alimentacao.py:390`, `app/ponto/calculador/regras.py:764`, `app/ponto/calculador/regras.py:827`.
-   - **P4 permanece:** período sem dia/carimbo incrementa contador e segue por `continue`; a porta inicia o cálculo sem a recusa proposta. Fontes: `app/ponto/calculador/alimentacao.py:79`, `app/ponto/calculador/alimentacao.py:91`, `app/ponto/calculador/alimentacao.py:449`.
-   - **P5 já está presente:** união dos intervalos, cortes por horas e teto no total. O RELATO atribui o pouso a **16c27de8**. Fontes: `app/ponto/motor_calculo_v2.py:162`, `app/ponto/motor_calculo_v2.py:186`, `app/ponto/motor_calculo_v2.py:196`, `app/docs/RELATO.md:7673`.
-   - **Outra cura já presente:** a dobra deixou de retornar antes da noturna/pontualidade, e os intervalos já atravessam a alimentação. O RELATO registra **424632fd**, merge de **f9a65d66**. Fontes: `app/ponto/calculador/regras.py:793`, `app/ponto/calculador/alimentacao.py:107`, `app/ponto/calculador/alimentacao.py:527`, `app/docs/RELATO.md:7720`.
-
-   Os hashes acima são atribuições documentais; ancestralidade Git: **[nao verificado]**.
-
-3. **Falta / reaplicação.** Falta concluir períodos e pausas por período, CCT do dia, distribuição reversa da HE e recusa P4, com os REDs e a catraca pedidos. Fonte: `app/docs/BACKLOG.md:964`.
-
-   **INFERIU:** P4 precisa chegar como resultado declarado ao consumidor, pois o fechamento captura genericamente falhas do oráculo. Fontes: `app/ponto/services/fechamento.py:1266`, `app/ponto/services/fechamento.py:1297`.
-
-   O anexo marca `main_moveu=True` em `app/ponto/calculador/{alimentacao,periodo,regras}.py`, `app/ponto/motor_calculo_v2.py` e `app/ponto/tests/test_v3_parei_p5_parte_menor_que_todo.py` — **[nao verificado]** por Git.
-
-   **INFERIU:** reaproveitar somente os deltas restantes, preservando P5, a retirada do retorno da dobra e o transporte atual dos intervalos. Esses trechos da raia já se sobrepõem a curas presentes. Fontes: `app/ponto/motor_calculo_v2.py:162`, `app/ponto/calculador/regras.py:793`, `app/ponto/calculador/alimentacao.py:107`. Conflitos textuais: **[nao verificado]**.
-
-4. **Arquivos em comum.** Nenhum dos arquivos da raia aparece na lista fornecida das quatro obras em voo. Confirmação fora dos anexos: **[nao verificado]**.
-
-5. **Depende de.** O desenho de períodos, ancoramento e transbordo reverso já está registrado; “espera P5” não descreve mais integralmente o código atual. Fontes: `app/docs/BACKLOG.md:964`, `app/ponto/motor_calculo_v2.py:162`.
-
-   Nova alteração do motor exige aval explícito; a troca V3 ainda tem cobertura integral do impacto e lista de `!` por exportada registradas como pendentes. RECORTE-LONGO e HE-NOTURNA-POR-PEÇA são obras distintas. Fontes: `CLAUDE.md:142`, `app/docs/BACKLOG.md:1797`, `app/docs/BACKLOG.md:966`, `app/docs/BACKLOG.md:972`.
-
-6. **PROPOSTA — INFERIU: CONCLUIR**, como restante da retomada V3, preservando as partes já recebidas. Manter a posição documentada da V3 — após O10-B, antes de OTIMIZA-3 — condicionada ao impacto completo; situação atual dessas obras antecedentes: **[nao verificado]**. Fontes: `app/docs/BACKLOG.md:1797`, `app/ponto/calculador/alimentacao.py:158`, `app/ponto/calculador/regras.py:764`.
-
-## V3-RETOMA-FILA
-
-1. **O que cura — LEU.** O instrumento descarta a lavra real e deriva sozinho o lado v2 do DIFF, sem ler HE100 de feriado nem os splits noturnos; também reúne toda folga trabalhada numa rubrica. Fontes: `app/ponto/management/commands/diff_calculador.py:123`, `app/ponto/management/commands/diff_calculador.py:137`, `app/ponto/management/commands/diff_calculador.py:245`, `app/ponto/management/commands/diff_calculador.py:263`.
-
-2. **Existe no HEAD? SIM para o instrumento — LEU.** A lavra continua substituída por `_nada`, e os laços próprios continuam formando o lado v2. A lavra verdadeira contém as rubricas e a separação de folgas omitidas. Fontes: `app/ponto/management/commands/diff_calculador.py:137`, `app/ponto/management/commands/diff_calculador.py:247`, `app/ponto/services/dia_pago.py:181`, `app/ponto/services/dia_pago.py:234`, `app/ponto/services/dia_pago.py:244`.
-
-   O item CCT em `ini` também persiste; os números de divergência e o caso nominal de cadastro dos demais itens são registros do BACKLOG, sem confirmação atual da frota. Fontes: `app/ponto/calculador/alimentacao.py:390`, `app/docs/BACKLOG.md:976`; ocorrência atual: **[nao verificado]**.
-
-3. **Falta / reaplicação.** A raia fornecida resolve o instrumento; não encerra, por si, o re-DIFF, a classificação das divergências ou o cadastro. A linha ainda registra dependência do pouso da V3. Fonte: `app/docs/BACKLOG.md:976`.
-
-   **INFERIU:** a captura precisa distinguir lavra completa, ausente e falha, porque o fechamento absorve exceções da lavratura. Fonte: `app/ponto/services/fechamento.py:1238`.
-
-   Segundo o anexo, **nenhum** dos dois arquivos tem `main_moveu=True`. Isso não certifica aplicação limpa; aplicação e conflitos textuais: **[nao verificado]**.
-
-4. **Arquivos em comum.** Nenhum dos dois arquivos da raia consta na lista das obras em voo. Confirmação fora dos anexos: **[nao verificado]**.
-
-5. **Depende de.** Pouso próprio de instrumento L-105 e dependência POUSO-DA-V3 registrada. A correção da CCT deve ser consolidada com a obra de períodos, pois ambas atingem o mesmo sítio — **INFERIU**. Fontes: `app/docs/BACKLOG.md:976`, `app/docs/BACKLOG.md:964`, `app/ponto/calculador/alimentacao.py:390`.
-
-6. **PROPOSTA — INFERIU: CONCLUIR**, em pouso de instrumento, antes do próximo DIFF usado para apresentar o impacto da V3. Essa posição sugerida precisa ser conciliada pelo chat com o bloqueio POUSO-DA-V3 registrado; não considero essa dependência revogada. Fontes: `app/docs/BACKLOG.md:976`, `app/ponto/management/commands/diff_calculador.py:247`.
-
-## OTIMIZA-1
-
-1. **O que cura — LEU.** Falta registrar as suítes inteiras e publicar inteiras por pouso no ESTADO. A trava atual mantém o dono do lock e executa o comando, sem produzir essa medição. Fontes: `app/docs/RELATO.md:1648`, `bin/trava_teste.sh:35`, `bin/trava_teste.sh:42`.
-
-2. **Existe no HEAD? SIM — LEU.** A execução termina em `"$@"`, e a composição atual do painel não inclui o quadro contratado de suítes/pouso. Fontes: `bin/trava_teste.sh:42`, `bin/gerar_estado.py:370`. Commit de eventual cura por outro caminho: **[nao verificado]**.
-
-3. **Falta / reaplicação.** Suíte, replay, verificador e pouso próprio permanecem registrados; PRONTO 5 não tem mapa histórico promovido no relato consultado. Fontes: `app/docs/BACKLOG.md:2083`, `app/docs/RELATO.md:1637`.
-
-   O anexo marca `main_moveu=True` em `bin/gerar_estado.py`, `bin/suite.sh` e `bin/tests/test_suite_sh.sh` — **[nao verificado]** por Git.
-
-   **INFERIU:** o porte deve preservar as novas seções do painel e as guardas de motivo da suíte inteira, junto do selo correspondente. Fontes: `bin/gerar_estado.py:277`, `bin/suite.sh:133`, `bin/tests/test_suite_sh.sh:31`. Conflitos textuais: **[nao verificado]**.
-
-4. **Arquivos em comum.** A raia original, composta por `bin/*`, não cruza a lista das obras em voo. O complemento de carga alcança `app/chamados/management/commands/vigiar_fio_morto.py`, comum a **BUG-PAR/HJ-090/E3** na lista raspada. Cruzamentos fora dos anexos: **[nao verificado]**. O complemento está expressamente registrado para depois da E3: `app/docs/BACKLOG.md:738`.
-
-5. **Depende de.** SUITE-POR-IMPACTO/PRONTO 5 para fechar a medição do comboio e pouso separado de instrumento pela L-105. O complemento de carga exige contrato anterior e depende da E3; isso não é evidência de implementação do complemento. Fontes: `app/docs/RELATO.md:1645`, `app/docs/LEIS.md:131`, `app/docs/BACKLOG.md:738`.
-
-6. **PROPOSTA — INFERIU: CONCLUIR**, como fechamento do mesmo comboio de SUITE-POR-IMPACTO, depois da prova PRONTO 5. Manter o complemento de carga separado como pendência pós-E3, sem declará-lo construído. Fontes: `app/docs/BACKLOG.md:2083`, `app/docs/RELATO.md:1637`, `app/docs/BACKLOG.md:738`.
-
-## SUITE-POR-IMPACTO [nao verificado]
-
-1. **O que cura — LEU.** Selecionar testes por cobertura teste→arquivo, mantendo os casos de suíte inteira e certificando a árvore do pouso. Hoje `--volta` seleciona por `vizinhos_da_volta.py`; não entrega o contrato de coverage. Fontes: `app/docs/PROMPTS.md:1682`, `bin/suite.sh:82`, `bin/suite.sh:88`.
-
-2. **Existe no HEAD? SIM no núcleo; PARCIAL nas guardas adjacentes — LEU.** A seleção por vizinhos permanece. A régua ainda possui saída “JÁ VERDE” por impressão de `.py/.html` antes dos selos de host; porém o pre-push já exige também hash da árvore. Portanto a descrição ampla do BACKLOG sobre essas duas portas envelheceu parcialmente. Fontes: `bin/suite.sh:88`, `bin/regua.sh:33`, `bin/regua.sh:84`, `bin/regua.sh:138`, `bin/pre-push.sh:65`, `app/docs/BACKLOG.md:1037`. Commit responsável: **[nao verificado]**.
-
-3. **Falta / reaplicação.** Mapa, replay PRONTO 5 e rebase continuam registrados. O diagnóstico histórico relata falhas na geração e mapa expirado; não certifica o replay. Fontes: `app/docs/BACKLOG.md:1036`, `app/docs/RELATO.md:1635`, `app/docs/RELATO.md:1637`.
-
-   O contrato exige testar alterações de testes e reproduzir a regressão com o mapa apropriado; o complemento distingue alterações de `.py` de produção que forçam inteira. Fontes: `app/docs/PROMPTS.md:1683`, `app/docs/PROMPTS.md:1686`.
-
-   Mesmos `main_moveu=True` de OTIMIZA-1: `bin/gerar_estado.py`, `bin/suite.sh`, `bin/tests/test_suite_sh.sh` — **[nao verificado]** por Git. **INFERIU:** preservar a detecção de seleção efetivamente inteira e os motivos `pre-opus|pouso`. Fontes: `bin/suite.sh:140`, `bin/suite.sh:173`, `bin/tests/test_suite_sh.sh:42`. Aplicação limpa: **[nao verificado]**.
-
-4. **Arquivos em comum.** Nenhum da raia original cruza as quatro obras em voo. O complemento DIFF-POR-IMPACTO não fornece lista de arquivos de implementação suficiente para outro cruzamento: **[nao verificado]** além dos anexos.
-
-5. **Depende de.** PRONTO 5, certificação e pouso próprio L-105; o aval original coloca o instrumento depois do CALENDÁRIO. O BACKLOG registra CALENDARIO-HOJE-MINIMO fechado, sem que isso prove ancestralidade Git nesta cópia. Fontes: `app/docs/BACKLOG.md:1036`, `app/docs/LEIS.md:131`, `app/docs/PROMPTS.md:1682`, `app/docs/BACKLOG.md:819`.
-
-   **Separação necessária:** o complemento de 13/11 entra após E3; GATE-PELA-CLASSE é descrito como lei nova que ainda exige corte. Essa pendência não equivale a falta de autorização do núcleo antigo. Fonte: `app/docs/PROMPTS.md:2243`.
-
-6. **PROPOSTA — INFERIU: CONCLUIR**, primeiro no comboio com OTIMIZA-1, começando pela recuperação de PRONTO 5 e adaptação às guardas atuais. O complemento segue na posição pós-E3 registrada, com o corte de lei pendente. Fontes: `app/docs/BACKLOG.md:1036`, `app/docs/RELATO.md:1637`, `app/docs/PROMPTS.md:2243`.
-
-## JUSTIFICATIVA-PAGA-O-PERIODO
-
-1. **O que cura — LEU.** A justificativa aprovada ainda limpa todos os marcos faltantes do dia, sem ler seu tipo; o efeito financeiro recebe a data inteira como justificada e não calcula o período da justificativa. Fontes: `app/escala/utils.py:1194`, `app/escala/utils.py:1254`, `app/ponto/services/efeito_ausencia.py:40`, `app/ponto/services/fechamento.py:660`.
-
-2. **Existe no HEAD? SIM — LEU, com correção da premissa do BACKLOG.** O código não corresponde à frase “já cobre só o marco”: a grade consulta apenas datas e limpa todos os `missing`. O acumulador parcial de `efeito_ausencia` soma Ausência, enquanto o motor distingue trabalho/abono pelos conjuntos de datas. Fontes: `app/escala/utils.py:1199`, `app/escala/utils.py:1256`, `app/ponto/services/efeito_ausencia.py:46`, `app/ponto/motor_calculo_v2.py:2600`, `app/ponto/motor_calculo_v2.py:2606`.
-
-   O caso HJ-093 e os totais de triagem são registros fornecidos; a própria linha admite outras causas possíveis. Não são contagem comprovada de ocorrências deste defeito. Fonte: `app/docs/BACKLOG.md:1872`; confirmação nominal atual: **[nao verificado]**.
-
-3. **Falta / reaplicação.** Falta ligar cobertura do marco, período pago e consumidores financeiros, produzir DIFF novo e demonstrar as condições do aval. Fontes: `app/docs/BACKLOG.md:1872`, `app/docs/CORTES.md:336`, `app/docs/CORTES.md:353`.
-
-   O anexo marca `main_moveu=True` em `app/core/juizes.py`, `app/escala/utils.py`, `app/escala/tests/test_grade_segue_a_precedencia.py`, `app/ponto/services/{cartorio,efeito_ausencia,fechamento}.py` e `app/ponto/turnos.py` — **[nao verificado]** por Git.
-
-   **INFERIU:** o porte precisa adaptar três mudanças do HEAD:
-
-   - A grade agora recebe deslocamentos da cadeia do turno, em vez de reconstruí-los pelas colunas antigas. Fonte: `app/escala/utils.py:1156`, `app/escala/utils.py:1178`.
-   - O cartório já propaga `dispensada` por marco, mecanismo a preservar na integração. Fonte: `app/ponto/services/cartorio.py:592`.
-   - O fechamento eliminou o acumulador mensal antigo e usa `creditos_por_dia`, cujo universo atual continua sendo Ausência. Somar apenas em `efeito_ausencia.min_parcial_pagos` não demonstra consumo pelo fechamento. Fontes: `app/ponto/services/fechamento.py:672`, `app/ponto/services/fechamento.py:994`, `app/ponto/services/credito_parcial.py:15`, `app/ponto/services/credito_parcial.py:26`.
-
-   Aplicação limpa e conflitos textuais: **[nao verificado]**.
-
-4. **Arquivos em comum.** `app/core/juizes.py` cruza **BUG-PAR/O168/E3**; nenhum outro arquivo da raia original cruza a lista fornecida. Confirmação fora dos anexos: **[nao verificado]**.
-
-5. **Depende de.** O desenho da cobertura e do período está registrado; o `!` do motor **já foi concedido**, com escopo específico e condições, portanto não deve ser apresentado como autorização ainda inexistente. Fontes: `app/docs/CORTES.md:319`, `app/docs/CORTES.md:336`, `app/docs/CORTES.md:353`.
-
-   Permanecem as condições: DIFF prévio das competências indicadas, nenhuma semana adicional de DSR perdida fora das exceções nomeadas e hash do TXT igual nas exportadas. CADASTRO/BATIDA seguem os destinos definidos no corte; atendimento dessas condições hoje: **[nao verificado]**. Fonte: `app/docs/CORTES.md:353`.
-
-6. **PROPOSTA — INFERIU: CONCLUIR**, imediatamente após HJ-090 na fila de negócio, como já registrado, coordenando `core/juizes.py` com BUG-PAR/O168/E3. Concluir a obra completa evita pousar isoladamente o estreitamento da cobertura, expressamente condicionado a existir quem pague o período. Fontes: `app/docs/BACKLOG.md:1872`, `app/docs/CORTES.md:330`.
-
-| id | cura | existe no HEAD | falta | depende | proposta |
-|---|---|---|---|---|---|
-| COBPARC-FILA-RELOGIO | Instante único por ato (`app/ponto/services/cartorio.py:373`) | **SIM** (`app/chamados/reconciliador.py:884`) | Porte aos eventos, mutantes/suíte/opus (`app/docs/BACKLOG.md:860`) | Padrão e estacionamento; sobreposições conforme anexos **[nao verificado]** | **CONCLUIR**, após estabilizar sobreposições — INFERIU |
-| V3-RETOMA-PERIODOS-DA-CELULA | Período/pausa/CCT diária (`app/ponto/calculador/alimentacao.py:158`) | **PARCIAL**; P5/dobra presentes (`app/ponto/motor_calculo_v2.py:162`; `app/ponto/calculador/regras.py:793`) | Períodos, intra, split e P4 (`app/docs/BACKLOG.md:964`) | Impacto integral e `!` da troca/exportadas (`app/docs/BACKLOG.md:1797`) | **CONCLUIR**, restante da retomada V3 — INFERIU |
-| V3-RETOMA-FILA | DIFF lê a lavra (`app/ponto/management/commands/diff_calculador.py:137`) | **SIM** (`app/ponto/management/commands/diff_calculador.py:247`) | Instrumento completo e re-DIFF (`app/docs/BACKLOG.md:976`) | L-105; conciliar POUSO-DA-V3 (`app/docs/BACKLOG.md:976`) | **CONCLUIR**, a
-
-[truncado em 20000 de 20942 caracteres]
-
-## 13/11 18:24 · sessao 026a019ad69b · RAIA-PREPARACAO · censo · origem=Code
-
-**LEU** indica sítio aberto na cópia; **INFERIU** indica conclusão ou proposta baseada nesses sítios. Aplicação das refs, conflitos textuais de merge, testes executados agora e situação atual de produção: **[nao verificado]**. [nao verificado]
-
-## SILENCIO-VENCIDO-VOLTA
-
-1. **O que cura — LEU.** O contador aceita silêncio vencido, mas a partição o transforma em HISTORICO e a lista o esconde (`app/chamados/services/painel.py:190`; `app/chamados/services/verbos.py:51`; `app/chamados/services/painel.py:328`).  
-   A lista do colaborador também exige prazo nulo, excluindo quem teve silêncio já vencido (`app/chamados/services/janela_colab.py:73`).
-
-2. **Existe no HEAD? SIM — LEU/INFERIU.** A contradição permanece nesses caminhos. Parte da infraestrutura já existe: `qs_na_fila` recebe `agora`, e a instância tem `silenciado_em`; isso não corrige HISTORICO nem a seleção do colaborador (`app/chamados/services/painel.py:158`; `app/chamados/models.py:508`; `app/chamados/services/verbos.py:51`). Commit de introdução dessas partes: **[nao verificado]**.
-
-3. **Falta/aplicabilidade.** A SPEC atual é o transplante b4 da E3, mais `verbos.py` e a lista do colaborador, com pouso junto da QUARENTENA (`app/docs/BACKLOG.md:782`). O registro posterior informa que b4/b6a foram retiradas da raia E3; portanto sua existência naquela raia não demonstra cura entregue (`app/docs/RELATO.md:243`). Os arquivos com `main_moveu=True` e os conflitos semânticos estão no quadro compartilhado abaixo; aplicação integral da raia: **[nao verificado]**.
-
-4. **Arquivos comuns.** São os do quadro compartilhado SILENCIO/QUARENTENA abaixo. O anexo contém uma raia cumulativa; atribuir todos esses arquivos exclusivamente à fatia SILENCIO: **[nao verificado]**.
-
-5. **Depende de.** QUARENTENA e integração da SPEC retirada da E3 (`app/docs/BACKLOG.md:782`). A regra de silêncio com prazo está na L-062 (`app/docs/LEIS.md:96`). Necessidade direta de alterar motor, gravado exportado ou dados de escala/vínculo nesta fatia: **[nao verificado]**.
-
-6. **Proposta — INFERIU: CONCLUIR junto da QUARENTENA**, após o pouso E3, conforme a condição mais recente de reabertura. O defeito continua legível; “pronta” no cadastro não basta para encerrá-lo (`app/docs/BACKLOG.md:2469`; `app/chamados/services/verbos.py:51`; `app/chamados/services/janela_colab.py:73`).
-
-## QUARENTENA-DO-COLAB
-
-1. **O que cura — LEU.** O contrato troca o silêncio escrito em cada chamado por isolamento do colaborador por período, com juiz e porta únicos (`app/docs/BACKLOG.md:783`).  
-   O sítio atual ainda aplica silêncio chamado a chamado, acionado também pelos sinais (`app/chamados/services/silencio_isentos.py:34`; `app/chamados/signals.py:270`).
-
-2. **Existe no HEAD? SIM — LEU/INFERIU.** A fila considera status e prazo; a emissão datada segue para `PerguntaDisputa.abrir`; o comando de isentos ainda escreve silêncio (`app/chamados/services/painel.py:188`; `app/chamados/services/disputa_emissao.py:443`; `app/chamados/management/commands/silenciar_chamados_isentos.py:49`). Uma cura equivalente em outro caminho não foi demonstrada: **[nao verificado]**.
-
-3. **Falta/aplicabilidade.** O HEAD manda reaplicar a versão antiga como SPEC numa cópia nova e produzir DIFF de frota (`app/docs/BACKLOG.md:783`; `app/docs/BACKLOG.md:2469`). O relato detalha oito achados: fechar a janela ao desligar isenção; vigia chegar a zero; eliminar segundo escritor; migration reversível sem importar serviço vivo; LEI-AKITA; RED da retenção; DIFF pela consulta real; início pela ligação correta (`app/docs/RELATO.md:251`). Esse mesmo registro não estabelece suite aprovada; a retomada posterior parou com apenas um RED não rodado (`app/docs/RELATO.md:251`; `app/docs/RELATO.md:190`). Aplicação limpa da raia antiga: **[nao verificado]**; divergências abaixo.
-
-4. **Arquivos comuns.** Quadro compartilhado abaixo, calculado dos anexos; comparação com as refs atuais: **[nao verificado]**.
-
-5. **Depende de.** Pouso E3 e decisão sobre início da isenção: o desenho registra última ligação versus uma janela por período da trilha, com proposta de 16 janelas em vez de 15 (`app/docs/BACKLOG.md:2469`; `app/docs/RELATO.md:191`). O contrato exige espelho, folha e TXT intactos; comprovação atual dessa invariância: **[nao verificado]** (`app/docs/BACKLOG.md:783`). Qualquer execução que alcance motor, gravado exportado ou dados de escala/vínculo entra no âmbito de `!` (`CLAUDE.md:265`).
-
-6. **Proposta — INFERIU: CONCLUIR com SILENCIO**, depois da E3 e coordenada com SAIDA-NOTURNA. Usar a raia antiga como especificação e resolver a reprovação antes de certificar; essa é a retomada registrada, já interrompida novamente (`app/docs/BACKLOG.md:2469`; `app/docs/RELATO.md:190`; `app/docs/RELATO.md:245`).
-
-**Raia compartilhada SILENCIO/QUARENTENA — ponto 3 das duas obras.**
-
-O anexo marca `main_moveu=True` nestes 24 arquivos; conflitos textuais e aplicação efetiva: **[nao verificado]**.
-
-- `app/chamados/management/commands/auditar_invariantes_chamados.py`;
-  `app/chamados/{models,signals,views_arquivar}.py`. **[nao verificado]**
-- `app/chamados/services/{aviso_pendencia,cobrar_dia,disputa_emissao,materializacao,painel,pergunta_no_app,silencio_ausencia,verbos,vigia_fio}.py`. **[nao verificado]**
-- `app/chamados/tests/test_o261_vigia_fio.py`. **[nao verificado]**
-- `app/colaboradores/services/{colaborador,ficha}.py`;
-  `app/colaboradores/views.py`. **[nao verificado]**
-- `app/core/{juizes,portas}.py`;
-  `app/core/tests/{test_selo_performance,test_tripwire_contagem_de_pendencia}.py`. **[nao verificado]**
-- `app/docs/{ARQUITETURA.mmd,MAPA.md}`;
-  `app/ponto/tests/test_selo_chokepoint_escrita.py`. **[nao verificado]**
-
-**Conflitos semânticos — INFERIU:** reaplicar corpos antigos pode desfazer a delegação do aviso a `consulta_do_app`, a trilha anterior ao cartório e a distinção entre conversa e fato datado. São pontos concretos para reconciliar, além do relógio `agora` já incorporado (`app/chamados/services/aviso_pendencia.py:7`; `app/chamados/services/cobrar_dia.py:31`; `app/chamados/services/disputa_emissao.py:424`; `app/chamados/services/painel.py:158`).
-
-**Interseção com as obras em voo — ponto 4 das duas obras, segundo os anexos:**
-
-| Em voo | Arquivos comuns à raia compartilhada |
-|---|---|
-| BUG-PAR e E3 | `app/chamados/models.py`; `app/chamados/services/{disputa_emissao,materializacao,vigia_fio}.py`; `app/chamados/tests/test_o261_vigia_fio.py`; `app/core/juizes.py`; `app/core/tests/test_tripwire_contagem_de_pendencia.py`. **[nao verificado]** |
-| O168 | `app/chamados/models.py`; `app/core/juizes.py`; `app/ponto/tests/test_selo_chokepoint_escrita.py`. **[nao verificado]** |
-| HJ-090 | `app/chamados/tests/test_o261_vigia_fio.py`. **[nao verificado]** |
-
-## V3-E1
-
-1. **O que cura — LEU.** Fecha a certificação da v3 por casos validados e propriedades fixas; o sítio de ensaio é `reler`, explicitamente destinado à bateria e ao DIFF (`app/docs/BACKLOG.md:821`; `app/ponto/calculador/periodo.py:543`).  
-   O registro específico da interrupção informa VALOR verde nos casos validados e falhas de STATUS, esclarecendo o “motivo: não sei” do cadastro (`app/docs/RELATO.md:2055`; `app/docs/BACKLOG.md:2081`).
-
-2. **Existe no HEAD? PARCIAL — LEU/INFERIU.** A bateria E1 continua descrita pelos testes atuais como pertencente a outra raia (`app/ponto/tests/test_e3_status_lavrado.py:7`). Parte dos defeitos históricos já tem resposta no HEAD: previsto sem batida com veredito acusador resulta em `irregular`; isento resulta em `ok`, com testes correspondentes (`app/ponto/status_dia.py:150`; `app/ponto/status_dia.py:154`; `app/ponto/tests/test_e3_status_lavrado.py:55`; `app/ponto/tests/test_e3_status_lavrado.py:62`). Cura dos demais casos históricos e commit responsável por cada um: **[nao verificado]**.
-
-3. **Falta/aplicabilidade.** Reconstituir a bateria sobre o HEAD, reavaliar STATUS e preservar as pendências do DP. O relato da validação inclui C05/C06/C16/C17 pendentes; a decisão C17 — HE 0/intra 60 — já está registrada (`app/docs/RELATO.md:2055`; `app/docs/RELATO.md:2064`). Conferir também o gate CCT e o impacto por rubrica, lacunas registradas (`app/docs/RELATO.md:2065`; `app/docs/BACKLOG.md:821`). No anexo, nenhum dos cinco arquivos tem `main_moveu=True`; compatibilidade atual dos testes e aplicação limpa: **[nao verificado]**. A API `reler` permanece no HEAD (`app/ponto/calculador/periodo.py:543`).
-
-4. **Arquivos comuns.** Interseção literal com BUG-PAR/O168/HJ-090/E3 vazia segundo os anexos; confirmação das raias: **[nao verificado]**.
-
-5. **Depende de.** DP/contador para os casos pendentes e certificação pela regra (`app/docs/RELATO.md:2055`; `app/docs/BACKLOG.md:821`). Alterar v2 ou dados protegidos exige `!`; a troca para v3 também está explicitamente condicionada a `!` (`CLAUDE.md:265`; `app/docs/BACKLOG.md:963`).
-
-6. **Proposta — INFERIU: CONCLUIR na pista de certificação, antes da troca v3.** A cura posterior de alguns STATUS reduz o trabalho residual, mas não substitui a bateria nem resolve as pendências do DP (`app/ponto/tests/test_e3_status_lavrado.py:7`; `app/docs/RELATO.md:2055`; `app/docs/BACKLOG.md:821`).
-
-## CODEX-CONTEXTO-DA-CASA
-
-1. **O que cura — LEU.** O contrato pede contexto gerado com hashes e brief de verificador restrito a caminhos, hash e pergunta (`app/docs/BACKLOG.md:1038`).  
-   O sítio atual monta o cabeçalho e transcreve integralmente o arquivo de pergunta (`bin/codex_pergunta.sh:335`; `bin/codex_pergunta.sh:355`).
-
-2. **Existe no HEAD? SIM — LEU/INFERIU.** A transcrição crua permanece, e a guarda do verificador nesse caminho consulta B3 (`bin/codex_pergunta.sh:355`; `bin/codex_pergunta.sh:390`). A publicação de GLOSSARIO já existe, mas não demonstra a implementação do contrato de contexto e neutralidade do brief (`bin/relato.sh:111`; `app/docs/BACKLOG.md:1038`). Commit de cura completa: **[nao verificado]**.
-
-3. **Falta/aplicabilidade.** Reconciliar briefs com a exigência `PERGUNTA:` e resolver teto/fontes: o relato documenta aproximadamente 42,7 KB para teto de 30.000 B, além da classificação das leis das seções 6b/7b (`app/docs/BACKLOG.md:1038`; `app/docs/RELATO.md:1943`). O bloqueio histórico por F1/V-FASE não comprova que esses construtores continuem em voo (`app/docs/BACKLOG.md:1038`); estado atual deles: **[nao verificado]**. O anexo marca `main_moveu=True` em `bin/{codex_limite_estado.py,codex_pergunta.sh,relato.sh}`; conflitos textuais: **[nao verificado]**. **INFERIU:** preservar o papel construtor, inventário, relógio por papel e publicação atuais ao incorporar a cura (`bin/codex_pergunta.sh:85`; `bin/codex_pergunta.sh:195`; `bin/relato.sh:111`).
-
-4. **Arquivos comuns.** Interseção literal com as quatro obras em voo vazia segundo os anexos; confirmação das raias: **[nao verificado]**.
-
-5. **Depende de.** Decisão sobre teto/fontes e pouso próprio de instrumento (`app/docs/RELATO.md:1943`; `app/docs/LEIS.md:131`). SEM-CONDUTA é complemento sucessor: o registro manda construí-lo depois de ENXUTO e DA-CASA (`app/docs/RELATO.md:1993`). Necessidade direta de `!` de motor/exportada/escala: **[nao verificado]**.
-
-6. **Proposta — INFERIU: CONCLUIR em vaga de instrumento após o produto**, reconciliando o contrato sucessor SEM-CONDUTA. A lacuna do brief permanece; o desenho de fontes/teto precisa de resolução antes da certificação (`bin/codex_pergunta.sh:355`; `app/docs/RELATO.md:1943`; `app/docs/LEIS.md:131`).
-
-## PADRAO-DE-CIMA
-
-1. **O que cura — LEU.** O contrato pede reconhecer a segunda pergunta de desenho da mesma entidade/programa em 24 horas e bloquear construtor/verificador até a decisão consumida uma vez (`app/docs/BACKLOG.md:836`).  
-   O mecanismo atual acumula e decide reprovações por obra (`bin/disjuntor.py:997`; `bin/disjuntor.py:1004`).
-
-2. **Existe no HEAD? SIM — LEU/INFERIU.** O PreToolUse aplica B3 por obra e o censo do construtor, sem realizar ali o agrupamento contratado por entidade/24 h (`bin/disjuntor.py:1826`; `bin/disjuntor.py:1842`; `bin/disjuntor.py:1850`). Também permanece o problema de prova discutido no desenho: `_mutante` aceita qualquer retorno não zero, sem identificar a causa da morte (`bin/tests/test_disjuntor.sh:1522`; `app/docs/RELATO.md:1845`). Commit de cura completa: **[nao verificado]**.
-
-3. **Falta/aplicabilidade.** Decidir como provar a causa da morte do mutante e certificar a versão escolhida. O relato distingue a versão estacionada da volta 10, que ficou sem verificador e sem opus final (`app/docs/RELATO.md:1845`). O anexo marca `main_moveu=True` em `bin/{codex_pergunta.sh,disjuntor.py,hook_stop_fila1.py}` e `bin/tests/{test_disjuntor.sh,test_hook_esperando_com_prova.sh,test_lei_akita.sh}`; aplicação limpa: **[nao verificado]**. **INFERIU:** reconciliar com CENSO-ANTES-DA-VAGA, papel construtor e recorte atual do topo (`bin/disjuntor.py:1850`; `bin/codex_pergunta.sh:195`; `bin/hook_stop_fila1.py:467`).
-
-4. **Arquivos comuns.** Interseção com BUG-PAR/O168/HJ-090/E3 vazia segundo os anexos. Entre estas interrompidas, compartilha `bin/codex_pergunta.sh` com CODEX-CONTEXTO-DA-CASA. Confirmação das refs: **[nao verificado]**.
-
-5. **Depende de.** PDC-DESENHO, contrato de instrumento e pouso separado de produto (`app/docs/RELATO.md:1845`; `CLAUDE.md:394`; `app/docs/LEIS.md:131`). B3 já possui implementação no HEAD (`bin/disjuntor.py:1004`). Necessidade direta de `!` de motor/exportada/escala: **[nao verificado]**.
-
-6. **Proposta — INFERIU: CONCLUIR após a decisão de desenho, mantendo posição antes de B1-ESPERA-OCIOSA.** O contrato ainda tem lacuna no código, e a posição relativa está registrada (`bin/disjuntor.py:1826`; `app/docs/BACKLOG.md:837`). A reprovação repetida exige resolver o desenho; não demonstra cura ou superação da necessidade (`app/docs/RELATO.md:1845`).
-
-## BUG-ENC-CELULAS-FORMA
-
-1. **O que cura — LEU.** `dias_encerrados` repassa células com chave `(colaborador_id,data)` ao pareador, cujo contrato recebe chave `data`; a conversão posterior produz chave incompatível para consultar a geradora (`app/ponto/turnos.py:2132`; `app/ponto/turnos.py:2150`; `app/ponto/turnos.py:1854`; `app/ponto/turnos.py:1956`).  
-   O cartório fornece exatamente esse mapa composto, sem `turnos`, e apenas para seu intervalo de julgamento (`app/ponto/services/cartorio.py:1131`; `app/ponto/services/cartorio.py:1154`).
-
-2. **Existe no HEAD? SIM — LEU/INFERIU.** O repasse defeituoso permanece em `app/ponto/turnos.py:2150`. O pareador só carrega sua janela com pad quando recebe `celulas=None`; o mapa fornecido impede essa carga (`app/ponto/turnos.py:1884`). A via singular do vigia também passa chave composta, que chega diretamente ao pareador (`app/ponto/services/vigia_de_hora.py:58`; `app/ponto/turnos.py:2098`). O lote já converte corretamente para chave `data`, mas isso não cura a casca (`app/ponto/turnos.py:3038`). Commit dessa implementação do lote: **[nao verificado]**.
-
-3. **Falta/aplicabilidade.** Completar a via singular; selos de booleano e pad; validação; suite; verificação final; impacto. São pendências explícitas do registro da interrupção (`app/docs/RELATO.md:7799`). E4-CARGA-PARIDADE deve preceder a cura, com fixture mista e mutante sem `mais=` (`app/docs/BACKLOG.md:932`). No anexo, somente `app/ponto/turnos.py` tem `main_moveu=True`; aplicação integral: **[nao verificado]**. **INFERIU:** o hunk fornecido ainda tem alvo reconhecível em `:2150`, mas resolve apenas a casca; a singular continua exigindo tratamento próprio (`app/ponto/turnos.py:2150`; `app/ponto/turnos.py:2098`).
-
-4. **Arquivos comuns.** Interseção literal dos três caminhos da raia com as quatro obras em voo vazia segundo os anexos; confirmação das refs: **[nao verificado]**.
-
-5. **Depende de.** E4-CARGA-PARIDADE e prova do impacto da mudança de veredito (`app/docs/BACKLOG.md:931`; `app/docs/BACKLOG.md:932`). O lote E4-7 já está implementado no HEAD (`app/ponto/turnos.py:2959`). O patch descrito toca `turnos.py`; eventual alteração de v2, gravado exportado ou dados de escala/vínculo exige `!` (`CLAUDE.md:265`). Alcance atual sobre produção: **[nao verificado]**.
-
-6. **Proposta — INFERIU: CONCLUIR na próxima vaga de bug liberada, com E4-CARGA-PARIDADE primeiro no mesmo pacote.** Há defeito estático atual em chamadores concretos, e o cadastro lhe atribui fila 1; a espera histórica por F2 era ordem de vaga, sem dependência de código provada naquele registro (`app/ponto/turnos.py:2150`; `app/ponto/services/vigia_de_hora.py:58`; `app/docs/BACKLOG.md:931`; `app/docs/RELATO.md:1824`).
-
-| id | cura | existe no HEAD | falta | depende | proposta |
-|---|---|---|---|---|---|
-| SILENCIO-VENCIDO-VOLTA | Retorno coerente do vencido (`app/chamados/services/verbos.py:51`) | **SIM** (`app/chamados/services/janela_colab.py:73`) | SPEC + verbos/lista (`app/docs/BACKLOG.md:782`) | QUARENTENA/E3 (`app/docs/BACKLOG.md:2469`) | **CONCLUIR junto, após E3** — INFERIU (`app/docs/BACKLOG.md:2469`) |
-| QUARENTENA-DO-COLAB | Isolamento por período (`app/docs/BACKLOG.md:783`) | **SIM** (`app/chamados/services/silencio_isentos.py:43`) | Oito achados, validação e DIFF (`app/docs/RELATO.md:251`) | E3; desenho 16×15 (`app/docs/BACKLOG.md:2469`; `app/docs/RELATO.md:191`) | **CONCLUIR com SILENCIO** — INFERIU (`app/docs/BACKLOG.md:2469`) |
-| V3-E1 | Certificação v3 (`app/docs/BACKLOG.md:821`) | **PARCIAL** (`app/ponto/tests/test_e3_status_lavrado.py:7`; `app/ponto/status_dia.py:150`) | Revalidar bateria/DP/CCT (`app/docs/RELATO.md:2055`; `app/docs/RELATO.md:2065`) | DP; troca com `!` (`app/docs/BACKLOG.md:963`) | **CONCLUIR antes da troca** — INFERIU (`app/docs/BACKLOG.md:821`) |
-| CODEX-CONTEXTO-DA-CASA | Contexto verificável e brief neutro (`app/docs/BACKLOG.md:1038`) | **SIM** (`bin/codex_pergunta.sh:355`) | Wrapper, fontes/teto (`app/docs/RELATO.md:1943`) | Decisão; SEM-CONDUTA sucessor (`app/docs/RELATO.md:1993`) | **CONCLUIR em vaga de instrumento** — INFERIU (`app/docs/LEIS.md:131`) |
-| PADRAO-DE-CIMA | Desenho por entidade/24 h (`app/docs/BACKLOG.md:836`) | **SIM** (`bin/disjuntor.py:1004`) | Causa do mutante e certificação (`app/docs/RELATO.md:1845`) | PDC-DESENHO (`app/docs/BACKLOG.md:836`) | **CONCLUIR após decisão, antes de B1** — INFERIU (`app/docs/BACKLOG.md:837`) |
-| BUG-ENC-CELULAS-FORMA | Contratos de células e pad (`app/ponto/turnos.py:2150`) | **SIM** (`app/ponto/services/vigia_de_hora.py:58`) | Singular, selos, suite/impacto (`app/docs/RELATO.md:7799`) | E4-CARGA-PARIDADE (`app/docs/BACKLOG.md:932`) | **CONCLUIR na vaga de bug** — INFERIU (`app/docs/BACKLOG.md:931`) |
-
-_4782 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4785 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
