@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 09:02:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (532.8 MB). Acoes na janela: **913**.
+**Medido em 13/11/2026 09:07:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (532.9 MB). Acoes na janela: **917**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:02:41 | Bash |  | `cd /home/ronald/saas-hasner/logs/O168/v6 && until [ -f suite_pre_opus/suite.fim ]; do /usr/bin/sleep 30; done; L=suite_pre_opus/suite.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep -E '^Ran [0-9]+ tests' $L \| tail -1; tail -1 $L; /bin/grep -E '^(FAIL\|ERROR):' $L \| head -40` |
+| 09:02:38 | Bash |  | `cd /home/ronald/saas-hasner/logs/O168/v6 && cat > preverif4_cura/encadeia.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner/logs/O168/v6 until [ -f suite_pre_opus/suite.fim ]; do /usr/bin/sleep 30; done preverif4_cura/rg.sh EOF chmod +x preverif4_cura/encadeia.sh; setsid nohup preverif4_cura/encadeia.sh >/dev/null 2>&1 & disown; echo ok` |
+| 09:02:33 | Bash |  | `set -e; cd /home/ronald/saas-hasner && source bin/recursos.sh && WT=/home/ronald/wt-o168v6-233014 && docker run --rm $TESTE_DOCKER -v "$WT/app":/w:ro -w /w --entrypoint sh saas-hasner-core:latest -c "ruff check --no-cache ponto/tests/test_supra_juiz_executor.py chamados/tests/test_o168_pai_com_conversa_no_gate.py" 2>&1 \| tail -2 R5=/home/ronald/wt-o168-red5-$(date +%H%M%S); mkdir $R5; git archive ...` |
+| 09:02:20 | Bash |  | `cd /home/ronald/wt-o168v6-233014/app && /bin/grep -n "pode_executar_csf\\|respondida_em\\|class \\|SimpleTestCase\\|TestCase" ponto/tests/test_t61_retratacao_em_seco.py \| head -20` |
 | 09:02:17 | Bash |  | `cd /home/ronald/wt-o168v6-233014/app && python3 - <<'EOF' p='ponto/tests/test_supra_juiz_executor.py' s=open(p).read() ini=s.index("from django.test import SimpleTestCase") novo='''from itertools import count from unittest import mock from django.test import SimpleTestCase from chamados.models import DisputaSupervisao from ponto.supra_juiz import pode_executar_csf _PK = count(1) class _P: """Pergu ...` |
 | 09:01:54 | Bash |  | `cd /home/ronald/wt-o168v6-233014/app && sed -n 1,80p ponto/tests/test_supra_juiz_executor.py; git -C .. log --oneline -3 -- app/ponto/tests/test_supra_juiz_executor.py` |
 | 09:01:48 | Bash |  | `cd /home/ronald/saas-hasner/logs/O168/v6/preverif4 && tail -1 preverif4.log; cat preverif4.r` |
