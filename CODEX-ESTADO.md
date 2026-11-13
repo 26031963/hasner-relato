@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 22:25** · publicado em **12/11/2026 22:27** (UTC-3)
+> Ultima resposta processada: **12/11/2026 22:30** · publicado em **12/11/2026 22:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 22:30 · sessao 613fa5a43db3 · TIPO-NA-FONTE · construtor · origem=Code
+
+A [tabela individual das falhas → classe → cura](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b.txt:5) contabiliza os **82 FAIL e 3 ERROR** do anexo. Nenhum caso P foi demonstrado nesses caminhos; as atas incompletas vieram das fixtures ([análise](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b.txt:57)).
+
+Produção alterada:
+
+| Arquivo::função | Cura |
+|---|---|
+| [cartorio.py::insumos_da_ata](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/services/cartorio.py:840) | `NAO_LAVRADA → (False, False)`, como a base. |
+| [leitor_celula.py::_vazia](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/services/leitor_celula.py:174) | Agregada declara `instante=None`. |
+| [calendario.py::contexto_calendario](/home/ronald/wt-codex-tipo-na-fonte-184856/app/colaboradores/services/calendario.py:298) | Inicializa `fora_map` antes do `try`. |
+
+O [RED reproduzível](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b_evidencias.txt:6) morde a volta 4. **69 testes isolados passaram**; os [comandos de cada mutante e seus resultados](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b_evidencias.txt:68) estão registrados. [nao verificado]
+
+Os 14 módulos completos pararam por falta de Django ([evidências](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b_evidencias.txt:135)). Suíte integral e DIFF da frota: **[não verificado]**. [nao verificado]
 
 ## 12/11 22:25 · sessao 4e3b7fd18bef · - · - · origem=Ronald (tmux)
 
@@ -1922,23 +1938,4 @@ B2 tem agora efeito observável nos dois fechamentos: a inativa sobreposta é cr
 
 B4 exato está corrigido: o censo exclui `tests.py` e diretórios `tests`, exige keyword `hoje` nomeado e recusa `None` literal; há metatestes para `None`, expansões e arquivos de testes. (`app/ponto/tests/test_cadastro_futuro_c5e.py:263`; `app/ponto/tests/test_cadastro_futuro_c5e.py:278`; `app/ponto/tests/test_cadastro_futuro_c5e.py:294`; `app/ponto/tests/test_cadastro_futuro_c5e.py:298`; `app/ponto/tests/test_cadastro_futuro_c5e.py:307`)
 
-## 12/11 22:12 · sessao e3dd67bb907d · - · - · origem=Ronald (tmux)
-
-Há uma regressão bloqueante no detector: `visit_Assign` visita somente o valor atribuído, sem visitar os alvos. Uma leitura direta em `cache[timezone.localdate()] = 1` desaparece do censo; em execução em memória, `leituras_de_relogio` devolveu `[]`. O caminho responsável é `app/ponto/tests/test_cadastro_futuro_c5e.py:424`, `app/ponto/tests/test_cadastro_futuro_c5e.py:434`. Resultado da execução sem artefato persistido: [nao verificado].
-
-As três guardas produtivas são a primeira instrução executável, sem decorator e antes de consultas, normalização, plantio, escrita ou delegação:
-
-- `reparar`: guarda `app/chamados/services/passivo_validado.py:316`; primeira chamada posterior `app/chamados/services/passivo_validado.py:323`.
-- `_trabalhar_o_par`: guarda `app/chamados/services/passivo_validado.py:430`; iteração e plantio posteriores `app/chamados/services/passivo_validado.py:433`.
-- `desfazer_ajuste_do_sistema`: guarda `app/colaboradores/services/vinculo.py:1096`; primeira consulta `app/colaboradores/services/vinculo.py:1101`; escritas `app/colaboradores/services/vinculo.py:1103`; delegação `app/colaboradores/services/vinculo.py:1106`.
-
-O delta produtivo não introduz juiz, escritor, campo persistido, leitura de relógio ou ordem nova de locks: acrescenta somente essas três recusas. Os efeitos posteriores conservam suas portas e campos anteriores. (`app/chamados/services/passivo_validado.py:316`; `app/chamados/services/passivo_validado.py:430`; `app/colaboradores/services/vinculo.py:1096`)
-
-`hoje` mantém significado de dia civil local nos caminhos das guardas:
-
-- Comando lê um instante local e extrai `.date()`: `app/chamados/management/commands/materializar_passivo_validado.py:87`; `app/chamados/management/commands/materializar_passivo_validado.py:89`. Passa a `reparar` em `:104` e `:113`, que passa a `_trabalhar_o_par` em `app/chamados/services/passivo_validado.py:375`, depois à exportada em `:444`, e à célula em `app/ponto/portas/regen_exportada.py:179`.
-- Executor de desfazer normaliza o dia em `app/escala/services/escala_auto_executor.py:127`, usa esse dia para prazo em `:130`, calcula separadamente `volta` em `:143` e passa `hoje` à função em `:145`. O fechamento repassa ao suplemento em `app/colaboradores/services/vinculo.py:660`, cujo futuro começa em `hoje + 1` em `app/ponto/services/cadastro_futuro.py:27`.
-
-No passivo, o dia da célula e o instante seguem campos separados: `dia` deriva em `app/chamados/services/passivo_validado.py:344`, `ts` é convertido em `:348`, e ambos permanecem distintos na tupla de `:353`. Não há novo duplo significado de `hoje` nesse delta. (`app/chamados/services/passivo_validado.py:344`; `app/chamados/services/passivo_validado.py:348`; `app/chamados/services/passivo_validado.py:353`)
-
-_4464 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4465 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
