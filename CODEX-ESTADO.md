@@ -1,7 +1,121 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **12/11/2026 21:38** · publicado em **12/11/2026 21:39** (UTC-3)
+> Ultima resposta processada: **12/11/2026 21:41** · publicado em **12/11/2026 21:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 12/11 21:41 · sessao a7c71ef5ca12 · BUG-CADASTRO-C5E · verificador · origem=Code
+
+**REPROVA.**
+
+Os bloqueantes são dos **selos exigidos pelo aval**; não estou tratando os interiores expressamente adiados como autorização para ampliar a cura. A própria catraca declara esse adiamento. (`app/ponto/tests/test_cadastro_futuro_c5e.py:207`)
+
+1. **A catraca deixa uma leitura nova sobreviver.** Acrescentar em `reconciliar_apos_vinculo`, antes da leitura existente, `_ler_dia = _tz.localdate` seguido de `_dia_extra = _ler_dia()` introduz outra leitura, mas o detector não resolve chamadas por variável atribuída: ele reconhece bases e funções provenientes de imports. O RED também não observa esse destino, substituído por `Mock`. (`app/colaboradores/services/pos_vinculo.py:56`; `app/ponto/tests/test_cadastro_futuro_c5e.py:278`; `app/ponto/tests/test_cadastro_futuro_c5e.py:303`; `app/ponto/tests/test_cadastro_futuro_c5e.py:310`; `app/ponto/tests/test_cadastro_futuro_sem_banco.py:350`)
+
+2. **O RED obrigatório não protege as duas chamadas de `fechar_vigencia`.** Trocar somente a segunda chamada para `hoje=_hoje + datetime.timedelta(days=1)` não torna a diferença observável na fixture: ela prepara o vínculo **ativo**, sem uma inativa sobreposta que produza efeito na segunda chamada. Esse mutante viola diretamente o requisito do mesmo dia nas duas chamadas. (`app/colaboradores/services/vinculo.py:239`; `app/colaboradores/services/vinculo.py:245`; `app/ponto/tests/test_cadastro_futuro_c5e.py:59`; `app/ponto/tests/test_cadastro_futuro_c5e.py:72`)
+
+Observação das execuções em memória, sem relatório persistido: suíte original **9/9 verde**; os dois mutantes acima também **9/9 verdes**. [nao verificado] [nao verificado]
+
+A seguir, caminhos relativos a `app/`.
+
+**1. Portas literais do aval**
+
+| Porta | `hoje` keyword obrigatório, sem default | Recusa `None` antes dos efeitos | Lê dia no próprio corpo? |
+|---|---|---|---|
+| `regenerar_celulas_vinculo` | Sim — `ponto/portas/celula.py:112` | Sim — `ponto/portas/celula.py:138` | Não; usa o recebido — `ponto/portas/celula.py:193` |
+| `regenerar_celulas_dia` | Sim — `ponto/portas/celula.py:741` | Por delegação imediata — `ponto/portas/celula.py:773` | Não — `ponto/portas/celula.py:773` |
+| `reverter_regeneracao_dia` | Sim — `ponto/portas/celula.py:780` | Sim — `ponto/portas/celula.py:812` | Não; usa o recebido — `ponto/portas/celula.py:839` |
+| `gerar_celulas_periodo` | Sim — `ponto/portas/celula.py:863` | Sim — `ponto/portas/celula.py:865` | Não — `ponto/portas/celula.py:908`, `ponto/portas/celula.py:921` |
+| `regenerar_futuras_do_cadastro` | Sim — `ponto/services/cadastro_futuro.py:9` | Sim — `ponto/services/cadastro_futuro.py:24` | Não — `ponto/services/cadastro_futuro.py:26` |
+| `regenerar_futuras_por_feriado` | Sim — `ponto/services/cadastro_futuro.py:49` | Sim — `ponto/services/cadastro_futuro.py:55` | Não — `ponto/services/cadastro_futuro.py:57` |
+| `fechar_vigencia` | Sim — `colaboradores/services/vinculo.py:578` | Sim — `colaboradores/services/vinculo.py:616` | Não; repassa o recebido ao suplemento — `colaboradores/services/vinculo.py:656`, `colaboradores/services/vinculo.py:661` |
+
+Os `timezone.now()` que permanecem na regeneração e reversão escrevem **instantes de regeneração**, não escolhem o dia: `ponto/portas/celula.py:263`, `ponto/portas/celula.py:308`, `ponto/portas/celula.py:834`.
+
+O selo amplia sua lista para auxiliares cujo contrato de `None` não é verdadeiro:
+
+- `desfazer_ajuste_do_sistema(..., hoje=None)` pode excluir o novo vínculo e reabrir o antigo sem recusar: o ramo `volta == novo.data_inicio` não delega ao fechamento. (`colaboradores/services/vinculo.py:1093`; `colaboradores/services/vinculo.py:1096`; `colaboradores/services/vinculo.py:1100`; `colaboradores/services/vinculo.py:1101`)
+- `_trabalhar_o_par(..., hoje=None)` planta primeiro; em competência não exportada retorna sem alcançar a guarda da regeneração. `reparar` também não valida `None` na entrada. (`chamados/services/passivo_validado.py:316`; `chamados/services/passivo_validado.py:372`; `chamados/services/passivo_validado.py:427`; `chamados/services/passivo_validado.py:429`)
+- Esses auxiliares estão em `PORTAS`, mas fora de `RECUSAM_NONE`; portanto o teste dispensa justamente a verificação necessária nesses casos. Isso é defeito da promessa adicional do selo, distinto das portas literais acima. (`ponto/tests/test_cadastro_futuro_c5e.py:104`; `ponto/tests/test_cadastro_futuro_c5e.py:108`; `ponto/tests/test_cadastro_futuro_c5e.py:112`; `ponto/tests/test_cadastro_futuro_c5e.py:138`)
+
+**2. Relógio por ato e propagação**
+
+A coluna “leituras” abaixo conta o trecho indicado; o total transitivo depende dos ramos, células e julgamentos executados. Não existe um total constante por ato completo. (`ponto/portas/celula.py:460`; `ponto/portas/celula.py:468`; `ponto/services/cartorio.py:2016`)
+
+| Ato | Leituras e propagação |
+|---|---|
+| **Salvar vínculo** | `executar_vinculo` lê uma vez e passa `_hoje` às duas chamadas de fechamento, à regeneração e ao suplemento. (`colaboradores/services/vinculo.py:192`; `colaboradores/services/vinculo.py:217`; `colaboradores/services/vinculo.py:245`; `colaboradores/services/vinculo.py:328`; `colaboradores/services/vinculo.py:337`) |
+| **Salvar completo** | A view chama antes `julgar_vinculo`, que lê `date.today()` para a janela anterior. Portanto o ato da view já pode ter duas leituras antes dos destinos adicionais. (`colaboradores/views.py:411`; `colaboradores/views.py:423`; `colaboradores/services/vinculo.py:71`) |
+| **Desligamento pela view** | O juiz lê `date.today()` uma vez, mais outra se a data foi omitida; depois a view lê `localdate()` para o executor: **duas ou três leituras de dia** nesse trecho. A decisão `agendado` vem do dia anterior à leitura injetada. (`colaboradores/services/desligamento.py:20`; `colaboradores/services/desligamento.py:40`; `colaboradores/services/desligamento.py:58`; `colaboradores/views.py:1434`; `colaboradores/views.py:1437`) |
+| **Desligamentos agendados** | Uma leitura inicial, mais uma no juiz por colaborador aplicado. O executor recebe o dia inicial do lote. (`colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`; `colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`; `colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`; `colaboradores/services/desligamento.py:40`) |
+| **Executor automático: aplicar/desfazer** | Uma leitura local se `hoje` não veio do chamador; o mesmo valor chega ao ajuste e à regeneração. `localdate(historico.criado_em)` é conversão de um instante fornecido. (`escala/services/escala_auto_executor.py:98`; `escala/services/escala_auto_executor.py:103`; `escala/services/escala_auto_executor.py:108`; `escala/services/escala_auto_executor.py:127`; `escala/services/escala_auto_executor.py:130`; `escala/services/escala_auto_executor.py:145`; `escala/services/escala_auto_executor.py:148`) |
+| **`gerar_celulas`** | Uma leitura `date.today()`; mesmo valor para vigia, regeneração de hoje, geração e lavratura. (`ponto/management/commands/gerar_celulas.py:339`; `ponto/management/commands/gerar_celulas.py:346`; `ponto/management/commands/gerar_celulas.py:348`; `ponto/management/commands/gerar_celulas.py:349`; `ponto/management/commands/gerar_celulas.py:353`) |
+| **`aplicar_col900`** | Uma leitura de dia para ambas as portas. Há leituras adicionais de instante na preparação/conclusão da reversão. (`ponto/management/commands/aplicar_col900.py:146`; `ponto/management/commands/aplicar_col900.py:186`; `ponto/management/commands/aplicar_col900.py:238`; `ponto/management/commands/aplicar_col900.py:70`; `ponto/management/commands/aplicar_col900.py:102`) |
+| **`diff_col900`** | Uma leitura de dia, capturada pela closure; JSON e impressão final leem outros instantes. (`ponto/management/commands/diff_col900.py:57`; `ponto/management/commands/diff_col900.py:75`; `ponto/management/commands/diff_col900.py:119`; `ponto/management/commands/diff_col900.py:128`) |
+| **`curar_residuo_bug115`** | Uma leitura de dia desce ao gerador; depois `_lavrar` chama o cartório sem testemunha temporal, e ele relê o dia. (`ponto/management/commands/curar_residuo_bug115.py:74`; `ponto/management/commands/curar_residuo_bug115.py:138`; `ponto/management/commands/curar_residuo_bug115.py:146`; `ponto/services/cartorio.py:2016`) |
+| **`corrigir_vinculo_vigencia`** | Uma leitura na cabeça chega aos fechamentos; o passo de reabertura lê outros dias para histórico e suplemento. (`escala/management/commands/corrigir_vinculo_vigencia.py:48`; `escala/management/commands/corrigir_vinculo_vigencia.py:86`; `escala/management/commands/corrigir_vinculo_vigencia.py:108`; `colaboradores/services/vinculo.py:738`; `colaboradores/services/vinculo.py:750`) |
+| **Passivo validado → exportada** | Uma leitura `localtime()` fornece carimbo e `hoje`; o mesmo dia desce por `reparar`, `_trabalhar_o_par`, exportada e regeneração. Ensaio acrescenta `now()` para localizar trilha. (`chamados/management/commands/materializar_passivo_validado.py:87`; `chamados/management/commands/materializar_passivo_validado.py:89`; `chamados/management/commands/materializar_passivo_validado.py:103`; `chamados/services/passivo_validado.py:373`; `chamados/services/passivo_validado.py:439`; `ponto/portas/regen_exportada.py:179`) |
+
+**Contraexemplos concretos ao “mesmo dia em todo efeito”:**
+
+- Regeneração e reversão chamam `_o_chao_do_dia_mudou` sem `hoje`. Ele relê `localdate()` e decide os dias julgáveis com esse novo valor; chama então um cartório que também lê seu próprio dia. Assim, um D+1 tratado como futuro na regeneração pode tornar-se elegível para julgamento no rabo do mesmo ato. (`ponto/portas/celula.py:312`; `ponto/portas/celula.py:392`; `ponto/portas/celula.py:464`; `ponto/portas/celula.py:469`; `ponto/portas/celula.py:472`; `ponto/portas/celula.py:858`; `ponto/services/cartorio.py:2016`)
+- O pós-vínculo não recebe `_hoje`: lê outro dia, escolhe outro teto e reapura usando esse valor. (`colaboradores/services/vinculo.py:345`; `colaboradores/services/pos_vinculo.py:56`; `colaboradores/services/pos_vinculo.py:57`; `colaboradores/services/pos_vinculo.py:82`)
+- Na edição, `existente.save()` pode alcançar os signals: o de vigência lê **duas vezes**; o de âncora lê uma vez. As portas recebem esses dias, não o da cabeça do Salvar. (`colaboradores/services/vinculo.py:281`; `escala/signals.py:67`; `escala/signals.py:68`; `escala/signals.py:74`; `escala/signals.py:82`; `escala/signals.py:119`; `escala/signals.py:126`; `escala/signals.py:133`)
+- Havendo calendário padrão a copiar, `_copiar_folga_padrao` também lê `date.today()` no meio do Salvar. (`colaboradores/services/vinculo.py:158`; `colaboradores/services/vinculo.py:163`; `colaboradores/services/vinculo.py:282`; `colaboradores/services/vinculo.py:296`)
+
+Esses interiores constam parcialmente do resíduo declarado; isso impede afirmar que a obra curou o ato inteiro, mas não autoriza exigir sua migração nesta fatia. (`ponto/tests/test_cadastro_futuro_c5e.py:207`; `ponto/tests/test_cadastro_futuro_c5e.py:229`; `ponto/tests/test_cadastro_futuro_c5e.py:230`; `ponto/tests/test_cadastro_futuro_c5e.py:257`; `ponto/tests/test_cadastro_futuro_c5e.py:261`)
+
+**3. Chamadores de produção**
+
+Não encontrei omissão nem `None` literal nos chamadores identificados abaixo. Há, porém, dias obtidos em momentos diferentes do mesmo ato, especialmente nos signals e na reabertura já apontados. O selo só verifica a presença do keyword ou de algum `**kwargs`; não verifica seu valor nem sua proveniência. (`ponto/tests/test_cadastro_futuro_c5e.py:199`; `ponto/tests/test_cadastro_futuro_c5e.py:200`; `escala/signals.py:68`; `escala/signals.py:119`; `colaboradores/services/vinculo.py:750`)
+
+Inventário completo das chamadas identificadas aos alvos do selo:
+
+| Destino | Chamadores → expressão passada em `hoje` |
+|---|---|
+| `regenerar_celulas_vinculo` | `colaboradores/management/commands/corrigir_escala_retroativa.py:231` → `hoje`; `colaboradores/services/vinculo.py:326` → `_hoje`; `colaboradores/services/vinculo.py:902`, `colaboradores/services/vinculo.py:954` → `hoje`; `escala/folgas.py:293` → `hoje`; `escala/services/cadastro_tipo.py:353` → `hoje`; `escala/services/escala_auto_executor.py:107`, `escala/services/escala_auto_executor.py:147` → `hoje`; `escala/signals.py:73`, `escala/signals.py:125` → `_hoje`; `ponto/management/commands/gerar_celulas.py:323` → `hoje`; `ponto/portas/celula.py:773` → `hoje`; `ponto/portas/regen_exportada.py:179` → `hoje`; `ponto/services/cadastro_futuro.py:44` → `hoje` |
+| `regenerar_celulas_dia` | `ponto/management/commands/aplicar_col900.py:234` → `hoje`; `ponto/management/commands/diff_col900.py:72` → `_hoje_do_ato` |
+| `reverter_regeneracao_dia` | `ponto/management/commands/aplicar_col900.py:186` → `hoje` |
+| `gerar_celulas_periodo` | `ponto/management/commands/curar_residuo_bug115.py:138`; `ponto/management/commands/gerar_celulas.py:349` → `hoje` |
+| `regenerar_futuras_do_cadastro` | `colaboradores/management/commands/corrigir_escala_retroativa.py:243` → `hoje`; `colaboradores/services/vinculo.py:336`, `colaboradores/services/vinculo.py:660`, `colaboradores/services/vinculo.py:1033` → `_hoje`; `colaboradores/services/vinculo.py:748` → `timezone.localdate()`; `colaboradores/services/vinculo.py:908`, `colaboradores/services/vinculo.py:959` → `hoje`; `escala/folgas.py:298`, `escala/folgas.py:640` → `hoje`; `escala/services/cadastro_tipo.py:376` → `hoje`; `escala/signals.py:81`, `escala/signals.py:132` → `_hoje`; `ponto/services/cadastro_futuro.py:77` → `hoje` |
+| `regenerar_futuras_por_feriado` | `core/signals.py:35`, `core/signals.py:43` → `timezone.localdate()` |
+| `fechar_vigencia` | `colaboradores/services/vinculo.py:212`, `colaboradores/services/vinculo.py:239` → `_hoje`; `colaboradores/services/vinculo.py:860`, `colaboradores/services/vinculo.py:1085`, `colaboradores/services/vinculo.py:1103` → `hoje`; `escala/management/commands/corrigir_vinculo_vigencia.py:107` → `hoje` |
+| `fechar_vinculos_ativos` | `colaboradores/services/desligamento.py:128` → `hoje` |
+| `ajustar_vinculo_pelo_sistema` | `escala/services/escala_auto_executor.py:103` → `hoje` |
+| `desfazer_ajuste_do_sistema` | `escala/services/escala_auto_executor.py:145` → `hoje` |
+| `executar_desligamento` | `colaboradores/management/commands/efetivar_desligamentos_agendados.py:57` → `hoje`; `colaboradores/views.py:1437` → `timezone.localdate()` |
+| `regenerar_em_exportada` | `chamados/services/passivo_validado.py:438` → `hoje` |
+| `reparar` | `chamados/management/commands/materializar_passivo_validado.py:104`, `chamados/management/commands/materializar_passivo_validado.py:113` → `hoje` |
+| `_trabalhar_o_par` | `chamados/services/passivo_validado.py:372` → `hoje` |
+
+O filtro textual “fora de `tests/`” ainda inclui `tenants/tests.py`, embora seja teste; essa chamada passa `data + timedelta(days=1)`. (`ponto/tests/test_cadastro_futuro_c5e.py:184`; `tenants/tests.py:56`)
+
+**4. Escritores, leitores e significados**
+
+| Valor/decisão | Escritor ou produtor → leitores; avaliação |
+|---|---|
+| **Dia do ato** | A cabeça produz `_hoje` e os destinos imediatos o leem. É um `date`; o instante separado aparece nos carimbos de regeneração. (`colaboradores/services/vinculo.py:192`; `colaboradores/services/vinculo.py:328`; `ponto/portas/celula.py:193`; `ponto/portas/celula.py:308`) |
+| **Futura versus passada** | O suplemento seleciona estritamente `d > hoje`; regeneração e reversão usam a mesma fronteira para desfazer julgamento. (`ponto/services/cadastro_futuro.py:27`; `ponto/services/cadastro_futuro.py:60`; `ponto/portas/celula.py:251`; `ponto/portas/celula.py:312`; `ponto/portas/celula.py:840`) |
+| **Desfazer julgamento** | A porta escreve os campos do julgamento como `None`, emite evento e exige trilha; recusa `cel.data <= hoje`. Veredito com via `admin` é conservado. (`ponto/portas/celula.py:1146`; `ponto/portas/celula.py:1155`; `ponto/portas/celula.py:1165`; `ponto/portas/celula.py:1168`; `ponto/portas/celula.py:1172`) |
+| **`rejulgar`** | O chamador fornece os dias; a porta filtra futuro usando o mesmo `_hoje`. O problema volta no rabo, que escolhe outro dia antes de chamar o juiz. (`escala/folgas.py:283`; `escala/folgas.py:296`; `ponto/portas/celula.py:334`; `ponto/portas/celula.py:338`; `ponto/portas/celula.py:464`) |
+| **Janela de competência** | `janela_atual(data, empresa)` continua sendo a autoridade; regeneração usa o dia recebido para o horizonte. O suplemento usa a união das janelas das empresas ativas. Não nasceu derivação paralela de corte. (`ponto/janelas.py:60`; `ponto/portas/celula.py:197`; `ponto/management/commands/gerar_celulas.py:299`; `ponto/management/commands/gerar_celulas.py:300`) |
+| **Fechamento de vigência** | `fechar_vigencia` escreve `ativa=False,data_fim`; aceita início igual ao fim, portanto o fim é inclusivo. O suplemento começa no menor fim alterado **mais um dia**. (`colaboradores/services/vinculo.py:637`; `colaboradores/services/vinculo.py:639`; `colaboradores/services/vinculo.py:659`) |
+| **Fronteira do gerador** | `d < hoje` é passado para enriquecimento; `d >= hoje` segue como vigia da existente. Já a célula ausente de vínculo inativo só nasce em `d > hoje`. São políticas distintas explícitas, não evidência isolada de erro inclusivo/exclusivo. (`ponto/portas/celula.py:908`; `ponto/portas/celula.py:921`; `ponto/portas/celula.py:930`) |
+| **Dia civil versus turno** | O cartório primeiro recusa dia civil futuro; para hoje, considera o fim do turno e o instante atual. `hoje` não substitui `agora`. (`ponto/services/cartorio.py:2025`; `ponto/services/cartorio.py:2033`; `ponto/services/cartorio.py:2037`; `ponto/services/cartorio.py:2040`) |
+| **Teto exclusivo da apuração** | O pós-vínculo passa `hoje+1` porque `apurar_colab` corta em `hoje-1`; aqui o argumento funciona como limite exclusivo. Essa diferença de significado já existe no interior. (`colaboradores/services/pos_vinculo.py:82`; `escala/services/furos_diarios.py:27`; `escala/services/furos_diarios.py:32`) |
+
+O fuso configurado é São Paulo; equivalência entre `date.today()` do processo e o dia local configurado em produção: **[nao verificado]**. (`config/settings/base.py:93`; `config/settings/base.py:95`; `ponto/management/commands/gerar_celulas.py:339`)
+
+Há ainda duas classificações de “humano”: futura conserva por `veredito_via == 'admin'`; o julgamento passado exclui pelos valores de `_HUMANOS`. A equivalência dessas populações no banco não foi demonstrada. (`ponto/portas/celula.py:1155`; `ponto/portas/celula.py:465`; `colaboradores/services/pos_vinculo.py:15`) [nao verificado]
+
+**5. Mordida dos selos**
+
+| Classe | Mutante que pega | Mutante que deixa passar |
+|---|---|---|
+| `MeiaNoiteNoAtoTest` | Leitura direta adicional em `executar_vinculo`: a contagem e os dias recebidos acusam. (`ponto/tests/test_cadastro_futuro_c5e.py:68`; `ponto/tests/test_cadastro_futuro_c5e.py:80`; `ponto/tests/test_cadastro_futuro_c5e.py:82`) | Segunda `fechar_vigencia` recebendo D+1, sem inativa sobreposta na fixture. Também não executa pós-vínculo, rabo e cópia de folga. (`ponto/tests/test_cadastro_futuro_c5e.py:59`; `ponto/tests/test_cadastro_futuro_sem_banco.py:350`; `ponto/tests/test_cadastro_futuro_sem_banco.py:364`; `ponto/tests/test_cadastro_futuro_sem_banco.py:371`) |
+| `FormaDaPortaTest` | Acrescentar default `hoje=None` à assinatura. (`ponto/tests/test_cadastro_futuro_c5e.py:130`; `ponto/tests/test_cadastro_futuro_c5e.py:131`) | Alterar a reabertura de `desfazer_ajuste_do_sistema`, ou deixá-la efetivar com `hoje=None`; essa função não recebe a cobrança de guarda. (`colaboradores/services/vinculo.py:1101`; `ponto/tests/test_cadastro_futuro_c5e.py:138`) |
+| `ChamadorDeProducaoPassaHojeTest` | Retirar o keyword `hoje` de uma chamada reconhecida. (`ponto/tests/test_cadastro_futuro_c5e.py:200`) | Passar `hoje=None`, um dia diferente, ou apenas `**{}`. O teste aceita a presença sintática, inclusive qualquer expansão. (`ponto/tests/test_cadastro_futuro_c5e.py:199`; `
+
+[truncado em 20000 de 25234 caracteres]
 
 ## 12/11 21:38 · sessao 1889c32d0c80 · - · - · origem=Ronald (tmux)
 
@@ -634,17 +748,4 @@ C5e escrita. O [relato completo](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-
 
 Suíte ORM: **[nao verificado]**, sem Django disponível e com acesso a banco vetado. Sem commit, pela proibição inicial. Certificação permanece com Code/suite e opus final. [nao verificado]
 
-## 12/11 20:00 · sessao 1286233fe78e · - · - · origem=Ronald (tmux)
-
-Há sobreviventes concretos nos oráculos do arquivo:
-
-| Local | Mutante | Por que passa | Contracaso |
-|---|---|---|---|
-| `app/chamados/services/competencia_trancada.py:355` | `tot[k] += linha[k]` → `tot[k] = linha[k]` | A fixture cria uma competência; os testes leem a linha `[0]` e o respectivo total. (`app/chamados/tests/test_tranca_vivas_08.py:36`, `:186`, `:188`, `:244`, `:246`) | Duas competências com uma resgatada cada: original **2**, mutante **1**. |
-| `app/chamados/services/competencia_trancada.py:353` | `len(m[k])` → `min(1, len(m[k]))` | As parcelas verificadas têm cardinalidade zero ou um; o MORDE da soma altera somente a união. (`app/chamados/tests/test_tranca_vivas_08.py:186`, `:206`, `:244`) | Uma competência com duas resgatadas: união **2** nos dois; parcela original **2**, mutante **1**. |
-
-Confirmei executando em memória o corpo real de `medir_frota`, extraído por AST, substituindo apenas `PeriodoFechado` e `medir`: ambos os mutantes preservaram os dicionários completos nos regimes residual, sobreposição, resgatada exclusiva, MORDE soma e MORDE sem resgatadas. A origem da função é `app/chamados/services/competencia_trancada.py:331`; execução Django/ORM e sobrevivência na suíte completa: **[nao verificado]**.
-
-Na linha da cardinalidade da união, teto **1** morre porque o MORDE soma exige **2**; teto **2** sobreviveria por leitura aos valores examinados, mas é um exemplo menos natural que a perda do acumulador. (`app/chamados/services/competencia_trancada.py:351`; `app/chamados/tests/test_tranca_vivas_08.py:211`)
-
-_4434 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4435 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
